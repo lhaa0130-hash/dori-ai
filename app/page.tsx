@@ -1,33 +1,47 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import Link from "next/link";
-
-type Post = {
-  slug: string;
-  title: string;
-  date: string;
-  description: string;
-  category: string;
-};
+import { useState } from "react";
 
 type User = { name?: string; email: string } | null;
 
 export default function Home() {
-  const [posts, setPosts] = useState<Post[]>([]);
+  // --- subscribe state ---
+  const [loading, setLoading] = useState(false);
+  const [ok, setOk] = useState<boolean | null>(null);
+
+  // --- auth state (UI only) ---
   const [user, setUser] = useState<User>(null);
   const [loginOpen, setLoginOpen] = useState(false);
   const [authLoading, setAuthLoading] = useState(false);
   const [authErr, setAuthErr] = useState<string | null>(null);
 
-  useEffect(() => {
-    fetch('/api/posts')
-      .then(res => res.json())
-      .then(data => setPosts(data))
-      .catch(err => console.error(err));
-  }, []);
-
-  const insightPosts = posts.filter(p => p.category === 'insight').slice(0, 2);
+  async function onSubscribe(e: React.FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const fd = new FormData(e.currentTarget);
+    const body = {
+      name: String(fd.get("name") || ""),
+      email: String(fd.get("email") || ""),
+      agree: fd.get("agree") === "on",
+    };
+    if (!body.email || !body.agree) {
+      alert("이메일을 입력하고, 개인정보 수신 동의에 체크해주세요.");
+      return;
+    }
+    try {
+      setLoading(true);
+      const res = await fetch("/api/subscribe", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(body),
+      });
+      setOk(res.ok);
+      (e.target as HTMLFormElement).reset();
+    } catch {
+      setOk(false);
+    } finally {
+      setLoading(false);
+    }
+  }
 
   function onOpenLogin() {
     setAuthErr(null);
@@ -57,6 +71,40 @@ export default function Home() {
     setUser(null);
   }
 
+  // ---------- 샘플 데이터 ----------
+  const studioList = [
+    { id: "VIDEO_ID_1", title: "도리도리 몽 — EP01" },
+    { id: "VIDEO_ID_2", title: "도리도리 몽 — EP02" },
+    { id: "VIDEO_ID_3", title: "도리도리 몽 — EP03" },
+    { id: "VIDEO_ID_4", title: "도리도리 몽 — EP04" },
+    { id: "VIDEO_ID_5", title: "도리도리 몽 — EP05" },
+  ];
+
+  const imagineList = [
+    { src: "/gallery/01.jpg", title: "Core Concept 01" },
+    { src: "/gallery/02.jpg", title: "Core Concept 02" },
+    { src: "/gallery/03.jpg", title: "Core Concept 03" },
+    { src: "/gallery/04.jpg", title: "Core Concept 04" },
+    { src: "/gallery/05.jpg", title: "Core Concept 05" },
+  ];
+
+  const reviewList = [
+    { href: "https://link-to-coupang-1", title: "카메라/마이크 세팅", desc: "초보도 바로 가능한 셋업" },
+    { href: "https://link-to-coupang-2", title: "라이트·소프트박스", desc: "가격대비 최고의 조합" },
+    { href: "https://link-to-coupang-3", title: "암스탠드", desc: "공간 절약형 세팅" },
+    { href: "https://link-to-coupang-4", title: "오디오 인터페이스", desc: "노이즈 최소화 팁" },
+    { href: "https://link-to-coupang-5", title: "헤드폰/모니터", desc: "믹싱에 적합한 모델" },
+  ];
+
+  const insightList = [
+    { href: "/guide/leonardo-basics", title: "Leonardo 기본기 10분", desc: "스타일·시드·업스케일 핵심" },
+    { href: "/guide/agent-automation", title: "에이전트 자동화", desc: "콘텐츠 파이프라인 만들기" },
+    { href: "/guide/runway-to-sora", title: "Runway → Sora 전환", desc: "장면 구문·모션 프롬프트" },
+    { href: "/guide/gpt-workflow", title: "GPT 워크플로우", desc: "아이디어→스크립트 자동화" },
+    { href: "/guide/sora-cinematic", title: "Sora 시네마틱 팁", desc: "카메라/렌즈/라이팅 프롬프트" },
+  ];
+  // ---------------------------------
+
   return (
     <main className="page">
       {/* HEADER */}
@@ -70,6 +118,7 @@ export default function Home() {
           <a href="#contact">Contact</a>
         </nav>
 
+        {/* RIGHT: auth area */}
         <div className="auth">
           {!user ? (
             <button className="btn small ghost" onClick={onOpenLogin}>로그인</button>
@@ -99,37 +148,28 @@ export default function Home() {
         </div>
       </section>
 
-      {/* STUDIO */}
+      {/* STUDIO — 5개 */}
       <section id="studio" className="container section">
         <div className="section-head">
           <span className="kicker">STUDIO</span>
           <h2 className="section-title">도리도리 몽</h2>
-          <p>AI로 만든 시네마틱 쇼츠 & 브랜디드 애니메이션</p>
+          <p>AI로 만든 시네마틱 쇼츠 & 브랜디드 애니메이션. 유튜브와 연동됩니다.</p>
         </div>
 
-        <div className="video-grid compact">
-          <div className="video-wrap compact">
-            <iframe
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-              title="DoriDori Mong — EP01"
-              loading="lazy"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-            <div className="video-title">도리도리 몽 — EP01</div>
-          </div>
-          <div className="video-wrap compact">
-            <iframe
-              src="https://www.youtube.com/embed/dQw4w9WgXcQ"
-              title="DoriDori Mong — EP02"
-              loading="lazy"
-              frameBorder="0"
-              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-              allowFullScreen
-            />
-            <div className="video-title">도리도리 몽 — EP02</div>
-          </div>
+        <div className="video-grid five">
+          {studioList.map((v) => (
+            <div className="video-wrap" key={v.id}>
+              <iframe
+                src={`https://www.youtube.com/embed/${v.id}`}
+                title={v.title}
+                loading="lazy"
+                frameBorder="0"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+              />
+              <div className="video-title">{v.title}</div>
+            </div>
+          ))}
         </div>
 
         <div className="row-cta">
@@ -139,17 +179,21 @@ export default function Home() {
         <div className="divider" />
       </section>
 
-      {/* IMAGINE */}
+      {/* IMAGINE — 5개 */}
       <section id="imagine" className="container section">
         <div className="section-head">
           <span className="kicker">IMAGINE</span>
           <h2 className="section-title">AI 이미지 갤러리</h2>
-          <p>새로운 시각의 아이디어</p>
+          <p>새로운 시각의 아이디어. 프롬프트와 함께 공개합니다.</p>
         </div>
 
-        <div className="gallery two">
-          <div className="thumb"><div className="placeholder">Image 01</div></div>
-          <div className="thumb"><div className="placeholder">Image 02</div></div>
+        <div className="gallery five">
+          {imagineList.map((it, i) => (
+            <figure className="thumb" key={i}>
+              <img src={it.src} alt={it.title} />
+              <figcaption className="cap">{it.title}</figcaption>
+            </figure>
+          ))}
         </div>
 
         <div className="row-cta">
@@ -159,23 +203,21 @@ export default function Home() {
         <div className="divider" />
       </section>
 
-      {/* REVIEW */}
+      {/* REVIEW — 5개 */}
       <section id="review" className="container section">
         <div className="section-head">
           <span className="kicker">REVIEW</span>
           <h2 className="section-title">도리가 쓰고 추천하는 것</h2>
-          <p>AI 크리에이터에게 도움이 되는 장비·툴 리뷰</p>
+          <p>AI 크리에이터에게 도움이 되는 장비·툴을 실제 사용 후 리뷰합니다.</p>
         </div>
 
-        <div className="cards two">
-          <a className="card" href="#" target="_blank" rel="noreferrer">
-            <div className="card-title">카메라/마이크 세팅</div>
-            <p>작업 환경 최적화 가이드</p>
-          </a>
-          <a className="card" href="#" target="_blank" rel="noreferrer">
-            <div className="card-title">라이팅/암스탠드</div>
-            <p>효율적인 조명 구성법</p>
-          </a>
+        <div className="cards five">
+          {reviewList.map((it, i) => (
+            <a className="card" href={it.href} target="_blank" rel="noreferrer" key={i}>
+              <div className="card-title">{it.title}</div>
+              <p>{it.desc}</p>
+            </a>
+          ))}
         </div>
 
         <div className="row-cta">
@@ -185,12 +227,12 @@ export default function Home() {
         <div className="divider" />
       </section>
 
-      {/* INSIGHT - 실제 블로그 글 연동 */}
+      {/* INSIGHT — 5개 */}
       <section id="insight" className="container section">
         <div className="section-head">
           <span className="kicker">INSIGHT</span>
           <h2 className="section-title">AI 활용법</h2>
-          <p>Leonardo, Runway, GPT, Sora 등 실전 워크플로우</p>
+          <p>Leonardo, Runway, GPT, Sora 등 실전 워크플로우를 짧고 명확하게.</p>
         </div>
 
         <div className="chips">
@@ -200,32 +242,36 @@ export default function Home() {
           <span className="chip">Agent</span>
         </div>
 
-        <div className="cards two">
-          {insightPosts.length > 0 ? (
-            insightPosts.map((post) => (
-              <Link key={post.slug} href={`/posts/${post.slug}`} className="card">
-                <div className="card-title">{post.title}</div>
-                <p>{post.description}</p>
-                <div className="card-date">{post.date}</div>
-              </Link>
-            ))
-          ) : (
-            <>
-              <div className="card placeholder-card">
-                <div className="card-title">글을 작성해주세요</div>
-                <p>posts 폴더에 .md 파일 추가</p>
-              </div>
-              <div className="card placeholder-card">
-                <div className="card-title">AI가 자동 생성</div>
-                <p>곧 Gemini 연동 예정</p>
-              </div>
-            </>
-          )}
+        <div className="cards five">
+          {insightList.map((it, i) => (
+            <a className="card" href={it.href} key={i}>
+              <div className="card-title">{it.title}</div>
+              <p>{it.desc}</p>
+            </a>
+          ))}
+        </div>
+      </section>
+
+      {/* SIGNUP — 이메일 구독 */}
+      <section id="signup" className="container signup">
+        <div className="section-head">
+          <span className="kicker">SIGNUP</span>
+          <h2 className="section-title">회원가입 / 뉴스레터</h2>
+          <p>도리의 새 영상·이미지·가이드를 이메일로 받아보세요.</p>
         </div>
 
-        <div className="row-cta">
-          <Link href="/blog" className="btn link">전체 글 보기</Link>
-        </div>
+        <form className="signup-form" onSubmit={onSubscribe}>
+          <input name="name" placeholder="이름 (선택)" />
+          <input name="email" type="email" placeholder="이메일 (필수)" required />
+          <label className="agree">
+            <input name="agree" type="checkbox" /> 이메일 수신 및 개인정보 처리에 동의합니다.
+          </label>
+          <button className="btn primary" disabled={loading}>
+            {loading ? "등록 중..." : "가입하기"}
+          </button>
+          {ok === true && <div className="note ok">가입이 완료되었습니다. 환영합니다!</div>}
+          {ok === false && <div className="note err">문제가 발생했습니다. 잠시 후 다시 시도해주세요.</div>}
+        </form>
       </section>
 
       {/* CONTACT */}
@@ -256,11 +302,11 @@ export default function Home() {
         .nav a:hover{color:var(--blue)}
         .auth{display:flex;align-items:center;gap:10px}
         .btn.small{padding:8px 14px;font-size:13px}
-        .btn.ghost{background:transparent;border:1px solid var(--line)}.btn.ghost:hover{border-color:var(--blue);color:var(--blue)}
+        .btn.ghost{background:transparent}.btn.ghost:hover{border-color:var(--blue);color:var(--blue)}
         .avatar-wrap{position:relative}
         .avatar{
           width:34px;height:34px;border-radius:50%;border:1px solid #dfe8ff;background:linear-gradient(180deg,#f9fbff,#eef6ff);
-          color:#0a6fb0;font-weight:700;display:flex;align-items:center;justify-content:center;cursor:pointer;
+          color:#0a6fb0;font-weight:700;display:flex;align-items:center;justify-content:center;
           box-shadow:0 2px 10px rgba(0,153,255,.08), inset 0 0 0 1px rgba(255,255,255,.7);
         }
         .avatar-wrap:hover .menu{opacity:1;pointer-events:auto;transform:translateY(0)}
@@ -270,7 +316,7 @@ export default function Home() {
           transition:.2s;
         }
         .menu-name{font-size:13px;color:#666;padding:8px 10px;border-bottom:1px solid #f0f3f8;margin-bottom:4px}
-        .menu-item{display:block;width:100%;text-align:left;padding:10px;border-radius:8px;border:none;background:transparent;color:#222;text-decoration:none;cursor:pointer}
+        .menu-item{display:block;width:100%;text-align:left;padding:10px;border-radius:8px;border:none;background:transparent;color:#222;text-decoration:none}
         .menu-item:hover{background:#f6faff}
         .menu-item.danger{color:#b00020}
 
@@ -280,7 +326,7 @@ export default function Home() {
         .sub{max-width:720px;margin:0 auto;color:var(--muted);font-size:18px}
         .cta{display:flex;justify-content:center;gap:14px;margin-top:28px}
 
-        .btn{padding:12px 20px;border-radius:999px;border:1px solid var(--line);text-decoration:none;transition:.25s;will-change:transform,box-shadow;display:inline-block}
+        .btn{padding:12px 20px;border-radius:999px;border:1px solid var(--line);text-decoration:none;transition:.25s;will-change:transform,box-shadow}
         .btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
         .btn.primary:hover{transform:translateY(-1px);box-shadow:0 8px 18px rgba(0,186,255,.25)}
         .btn.link{border-color:transparent;color:var(--blue)}
@@ -296,72 +342,73 @@ export default function Home() {
         .section-title::after{content:"";display:block;height:2px;margin-top:8px;border-radius:2px;background:linear-gradient(90deg,rgba(0,186,255,.8),rgba(0,186,255,0))}
         .section-title.center::after{margin-left:auto;margin-right:auto;width:120px}
         .divider{height:1px;margin:22px 0 0;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,.06),rgba(0,0,0,0))}
-        .row-cta{text-align:center;margin-top:18px}
 
-        .video-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:14px}
-        .video-grid.compact{justify-content:center;grid-template-columns:repeat(2,minmax(0,420px))}
+        .video-grid{display:grid;gap:14px}
+        .video-grid.five{grid-template-columns:repeat(3,1fr)}
         .video-wrap{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fafafa;transition:transform .25s,box-shadow .25s,border-color .25s}
-        .video-wrap.compact{max-width:420px}
         .video-wrap:hover{transform:translateY(-2px);border-color:#dbefff;box-shadow:0 16px 32px rgba(0,0,0,.06),0 6px 18px rgba(0,186,255,.08)}
         .video-wrap iframe{width:100%;aspect-ratio:16/9;display:block}
         .video-title{padding:10px 12px;font-size:14px;color:#333;border-top:1px solid var(--line)}
 
-        .gallery.two{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-        .gallery .thumb{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fafafa;transition:transform .25s,border-color .25s,box-shadow .25s;aspect-ratio:16/9;display:flex;align-items:center;justify-content:center}
+        .gallery.five{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+        .gallery .thumb{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fafafa;transition:transform .25s,border-color .25s,box-shadow .25s}
         .gallery .thumb:hover{transform:translateY(-2px);border-color:#e2f3ff;box-shadow:0 14px 28px rgba(0,0,0,.06),0 4px 12px rgba(0,186,255,.06)}
         .gallery img{width:100%;height:auto;display:block}
-        .placeholder{color:#999;font-size:14px}
+        .gallery .cap{padding:8px 10px;font-size:12px;color:#555}
 
-        .cards.two{display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-        .card{border:1px solid var(--line);background:#fafafa;border-radius:12px;padding:18px;text-decoration:none;color:inherit;transition:transform .25s,border-color .25s,box-shadow .25s;display:block}
+        .cards.five{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+        .card{border:1px solid var(--line);background:#fafafa;border-radius:12px;padding:18px;text-decoration:none;color:inherit;transition:transform .25s,border-color .25s,box-shadow .25s}
         .card:hover{transform:translateY(-2px);border-color:#e2f3ff;box-shadow:0 14px 28px rgba(0,0,0,.06),0 4px 12px rgba(0,186,255,.06)}
-        .card-title{font-weight:600;margin-bottom:6px;font-size:16px}
-        .card-date{font-size:12px;color:#999;margin-top:8px}
-        .placeholder-card{opacity:0.6;cursor:default}
-        .placeholder-card:hover{transform:none;border-color:var(--line);box-shadow:none}
+        .card-title{font-weight:600;margin-bottom:6px}
 
         .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
         .chip{padding:8px 12px;border-radius:999px;font-size:12px;font-weight:600;background:linear-gradient(180deg,#f9fbff,#eef6ff);border:1px solid #d8eaff;color:#106ea0;box-shadow:0 4px 12px rgba(0,153,255,.08),inset 0 0 0 1px rgba(255,255,255,.6)}
 
+        .signup{padding-bottom:8px}
+        .signup-form{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:16px;padding:16px;background:#fafafa}
+        .signup-form input[type="email"], .signup-form input[name="name"]{height:42px;border:1px solid #e5e5e5;border-radius:12px;padding:0 12px;background:#fff}
+        .signup-form .agree{grid-column:1 / -1;font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:center}
+        .note{margin-top:8px;font-size:13px}
+        .note.ok{color:#0a8a45}.note.err{color:#b00020}
+
         .contact{text-align:center;padding:56px 24px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
         .footer{display:flex;justify-content:space-between;max-width:1120px;margin:0 auto;padding:24px;color:#777;font-size:13px}
 
-        @media (max-width:1024px){
-          .video-grid.compact{grid-template-columns:1fr}
-          .gallery.two{grid-template-columns:1fr}
-          .cards.two{grid-template-columns:1fr}
+        @media (max-width:1200px){
+          .cards.five{grid-template-columns:repeat(3,1fr)}
+          .gallery.five{grid-template-columns:repeat(3,1fr)}
+          .video-grid.five{grid-template-columns:repeat(2,1fr)}
+        }
+        @media (max-width:640px){
+          .cards.five{grid-template-columns:1fr}
+          .gallery.five{grid-template-columns:1fr}
+          .video-grid.five{grid-template-columns:1fr}
         }
 
-        .modal-backdrop{
-          position:fixed; inset:0; background:rgba(0,0,0,.35);
-          display:flex; align-items:center; justify-content:center; z-index:50;
-        }
-        .modal{
-          width:min(420px,92vw); background:#fff; border-radius:16px; border:1px solid #e8eef7;
-          box-shadow:0 20px 56px rgba(0,0,0,.18); padding:18px;
-        }
+        /* --- Login Modal --- */
+        .modal-backdrop{position:fixed; inset:0; background:rgba(0,0,0,.35); display:flex; align-items:center; justify-content:center; z-index:50;}
+        .modal{width:min(420px,92vw); background:#fff; border-radius:16px; border:1px solid #e8eef7; box-shadow:0 20px 56px rgba(0,0,0,.18); padding:18px;}
         .modal h3{margin:0 0 8px; font-size:18px}
         .modal p{margin:0 0 14px; color:#666}
         .modal form{display:grid; gap:10px}
-        .modal input{
-          height:42px; border:1px solid #e5e5e5; border-radius:12px; padding:0 12px; background:#fff
-        }
+        .modal input{height:42px; border:1px solid #e5e5e5; border-radius:12px; padding:0 12px; background:#fff}
         .modal .row{display:flex; gap:8px}
         .modal .actions{display:flex; gap:8px; justify-content:flex-end; margin-top:6px}
         .btn.secondary{background:#f7f9fc; border-color:#e8eef7}
       `}</style>
 
+      {/* Login Modal */}
       {loginOpen && (
         <div className="modal-backdrop" onClick={() => setLoginOpen(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
             <h3>로그인</h3>
-            <p>이메일로 로그인하세요</p>
+            <p>이메일로 로그인하세요. (임시 UI — 나중에 인증 연동)</p>
             <form onSubmit={onLogin}>
               <div className="row">
                 <input name="name" placeholder="이름 (선택)" />
                 <input name="email" type="email" placeholder="이메일 (필수)" required />
               </div>
-              {authErr && <div style={{color:'#b00020',fontSize:'13px'}}>{authErr}</div>}
+              {authErr && <div className="note err">{authErr}</div>}
               <div className="actions">
                 <button type="button" className="btn secondary" onClick={() => setLoginOpen(false)}>취소</button>
                 <button type="submit" className="btn primary" disabled={authLoading}>

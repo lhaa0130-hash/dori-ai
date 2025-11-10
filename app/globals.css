@@ -14,8 +14,8 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #ffffff;
-  color: #171a20;
+  background: #171a20;
+  color: #ffffff;
 }
 
 .markdown-body h1 {
@@ -37,12 +37,12 @@ body {
   font-size: 1.125rem;
   line-height: 1.8;
   margin-bottom: 1.5rem;
-  color: #393c41;
+  color: #e0e0e0;
 }
 
 .markdown-body strong {
   font-weight: 600;
-  color: #171a20;
+  color: #ffffff;
 }
 
 .markdown-body ul {
@@ -61,6 +61,6 @@ body {
   content: "•";
   position: absolute;
   left: 0;
-  color: #171a20;
+  color: #ffffff;
   font-weight: bold;
 }
