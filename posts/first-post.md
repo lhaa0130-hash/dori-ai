@@ -2,6 +2,7 @@
 title: "내 첫 번째 블로그 글"
 date: "2025-11-09"
 description: "안녕하세요! 첫 블로그 글입니다."
+category: "insight"
 ---
 
 # 안녕하세요!
