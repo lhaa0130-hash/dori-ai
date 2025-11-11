@@ -117,7 +117,11 @@ export default function Home() {
         
         {/* HEADER */}
         <header className="header">
-          <img src="/logo.png" alt="DORI Logo" className="logo" />
+          {/* ⭐️ 로고 래퍼 추가 */}
+          <div className="logo-wrap">
+            <img src="/logo.png" alt="DORI Logo" className="logo" />
+          </div>
+          
           <nav className="nav">
             <div className="nav-item-wrap">
               <a href="#studio">STUDIO</a>
@@ -187,8 +191,6 @@ export default function Home() {
         {/* HERO */}
         <section className="hero">
           <img src="/hero-logo.png" alt="DORI Logo Large" className="hero-logo" />
-          {/* <h1 className="headline mod">Beyond Human Limits.</h1> <-- 삭제됨 */}
-          {/* <p className="sub">Design Of Real Intelligence — DORI-AI</p> <-- 삭제됨 */}
         </section>
       </div>
 
@@ -322,9 +324,8 @@ export default function Home() {
         }
 
         /* ⭐️ Hero 섹션의 높이만큼 공간을 띄워 스크롤 콘텐츠를 시작시키는 Spacer */
-        /* Hero 섹션 높이가 줄었으므로 Spacer 높이도 줄입니다. */
         .scroll-spacer {
-            height: 380px; /* Header(약 50px) + Hero(약 330px) = 380px (대략적인 값, 반응형 디자인에 따라 조정 필요) */
+            height: 380px; /* Header(약 50px) + Hero(약 330px) = 380px (조정 필요) */
             background: transparent;
             width: 100%;
         }
@@ -338,14 +339,22 @@ export default function Home() {
           background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
         }
         
+        /* ⭐️ 로고 래퍼: 로고가 커질 공간을 확보 */
+        .logo-wrap {
+            position: relative;
+            width: 128px; /* 로고가 커진 후 차지하는 공간 */
+            height: 48px; /* 헤더 높이와 유사하게 설정 */
+        }
+        
         /* ⭐️ 로고 크기 4배 확대 및 위치 조정 */
         .logo{
-            height:32px; /* 원본 높이 유지 */
+            height:32px; 
             width: auto;
-            transform: scale(4); /* 4배 확대 */
-            transform-origin: top left; /* 좌측 상단을 기준으로 확대 */
-            margin-left: 20px; /* 좌측 여백 추가 */
-            position: relative;
+            position: absolute;
+            top: 50%;
+            left: 0;
+            transform: translateY(-50%) scale(3.5); /* 3.5배 확대 및 수직 중앙 정렬 */
+            transform-origin: left center; /* 왼쪽 중앙을 기준으로 확대 */
             z-index: 1; 
         }
         
@@ -357,7 +366,11 @@ export default function Home() {
           position: relative;
           margin-left: 30px; 
         }
-        .nav-item-wrap:first-child{margin-left: 100px; } /* ⭐️ 커진 로고 옆으로 밀어내기 */
+        /* ⭐️ 내비게이션 시작점을 로고 래퍼 크기에 맞춰 조정 */
+        .nav-item-wrap:first-child{margin-left: 0; } 
+        .nav {
+            margin-left: 128px; /* .logo-wrap의 width만큼 밀어내기 */
+        }
 
         .nav-item-wrap > a, .nav > a{
           text-decoration:none;
@@ -448,8 +461,7 @@ export default function Home() {
             padding: 24px 24px 24px; 
             border-bottom:1px solid var(--line);
         }
-        /* 이미지 태그를 hero-logo.png 대신 적절한 이미지로 가정하고 높이 축소 */
-        .hero-logo{height:300px; width: auto; margin:0 auto;} /* 문구가 삭제되어 마진 제거 */
+        .hero-logo{height:300px; width: auto; margin:0 auto;} 
         
         /* 3. 글씨 크기 관련 스타일은 문구가 삭제되어 사용되지 않음 */
         .headline.mod{font-size:clamp(32px,5vw,48px);margin:0 0 10px}
@@ -538,7 +550,7 @@ export default function Home() {
           .video-grid.three{grid-template-columns:1fr}
           /* 좁은 화면에서 Hero 높이 조정 */
           .hero-logo{height:200px}
-          .scroll-spacer{height:300px} /* Header(약 40px) + Hero(약 260px) = 300px (조정) */
+          .scroll-spacer{height:300px} 
         }
 
         /* --- Login Modal --- */
