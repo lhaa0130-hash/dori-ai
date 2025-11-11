@@ -76,7 +76,6 @@ export default function Home() {
   }
 
   // ---------- 샘플 데이터 ----------
-  // NOTE: 카테고리 변경에 따라 데이터는 임시로 유지하거나 필요시 수정해야 합니다.
   const studioList = [
     { id: "VIDEO_ID_1", title: "도리도리 몽 — EP01" },
     { id: "VIDEO_ID_2", title: "도리도리 몽 — EP02" },
@@ -123,61 +122,66 @@ export default function Home() {
             <img src="/logo.png" alt="DORI Logo" className="logo" />
           </div>
           
-          <nav className="nav">
-            {/* 1. EDUCATION */}
-            <div className="nav-item-wrap">
-              <a href="#education">EDUCATION</a>
-              <div className="dropdown">
-                <a href="#education">English Vocabulary</a>
-                <a href="#education">Chinese Phrases</a>
-                <a href="#education">Japanese Sounds</a>
-                <a href="#education">Teaching Guides</a>
-                <a href="#education">Free Printables</a>
+          {/* ⭐️ nav를 감싸는 div를 추가하여 nav가 flex-grow:1을 갖도록 구조 변경 */}
+          <div className="nav-container">
+            <nav className="nav">
+              {/* 1. EDUCATION */}
+              <div className="nav-item-wrap">
+                <a href="#education">EDUCATION</a>
+                <div className="dropdown">
+                  <a href="#education">English Vocabulary</a>
+                  <a href="#education">Chinese Phrases</a>
+                  <a href="#education">Japanese Sounds</a>
+                  <a href="#education">Teaching Guides</a>
+                  <a href="#education">Free Printables</a>
+                </div>
               </div>
-            </div>
-            {/* 2. STUDIO */}
-            <div className="nav-item-wrap">
-              <a href="#studio">STUDIO</a>
-              <div className="dropdown">
-                <a href="#studio">YouTube Shorts</a>
-                <a href="#studio">Animated Storybook</a>
-                <a href="#studio">AI Concept Art</a>
-                <a href="#studio">Behind the Prompt</a>
-                <a href="#studio">Client Works</a>
+              {/* 2. STUDIO */}
+              <div className="nav-item-wrap">
+                <a href="#studio">STUDIO</a>
+                <div className="dropdown">
+                  <a href="#studio">YouTube Shorts</a>
+                  <a href="#studio">Animated Storybook</a>
+                  <a href="#studio">AI Concept Art</a>
+                  <a href="#studio">Behind the Prompt</a>
+                  <a href="#studio">Client Works</a>
+                </div>
               </div>
-            </div>
-            {/* 3. INSIGHT (AI 제작 기술 심화) */}
-            <div className="nav-item-wrap">
-              <a href="#insight">INSIGHT</a>
-              <div className="dropdown">
-                <a href="#insight">Prompt Deep Dive</a>
-                <a href="#insight">Tool Workflow</a>
-                <a href="#insight">Cinematic Tips</a>
-                <a href="#insight">Automation Guide</a>
-                <a href="#insight">Legal & Business</a>
+              {/* 3. INSIGHT (AI 제작 기술 심화) */}
+              <div className="nav-item-wrap">
+                <a href="#insight">INSIGHT</a>
+                <div className="dropdown">
+                  <a href="#insight">Prompt Deep Dive</a>
+                  <a href="#insight">Tool Workflow</a>
+                  <a href="#insight">Cinematic Tips</a>
+                  <a href="#insight">Automation Guide</a>
+                  <a href="#insight">Legal & Business</a>
+                </div>
               </div>
-            </div>
-            {/* 4. COMMUNITY (사용자 참여 및 공유) */}
-            <div className="nav-item-wrap">
-              <a href="#community">COMMUNITY</a>
-              <div className="dropdown">
-                <a href="#community">Share AI Video</a>
-                <a href="#community">Share AI Image/Webtoon</a>
-                <a href="#community">Share AI Music/Audio</a>
-                <a href="#community">Exchange & Feedback</a>
-                <a href="#community">User Guide & FAQs</a>
+              {/* 4. COMMUNITY (사용자 참여 및 공유) */}
+              <div className="nav-item-wrap">
+                <a href="#community">COMMUNITY</a>
+                <div className="dropdown">
+                  <a href="#community">Share AI Video</a>
+                  <a href="#community">Share AI Image/Webtoon</a>
+                  <a href="#community">Share AI Music/Audio</a>
+                  <a href="#community">Exchange & Feedback</a>
+                  <a href="#community">User Guide & FAQs</a>
+                </div>
               </div>
-            </div>
-            {/* 5. CONNECT (CONTACT 대신 비즈니스 연결) */}
-            <a href="#connect">CONNECT</a>
-            <div className="dropdown connect-dropdown">
-              <a href="#connect">Partnership</a>
-              <a href="mailto:contact@dori-ai.com">Contact Email</a>
-              <a href="#connect">Media Kit</a>
-              <a href="#connect">Career</a>
-              <a href="#connect">Newsletter</a>
-            </div>
-          </nav>
+              {/* 5. CONNECT (CONTACT 대신 비즈니스 연결) - nav-item-wrap을 사용하여 드롭다운 통합 */}
+              <div className="nav-item-wrap">
+                <a href="#connect">CONNECT</a>
+                <div className="dropdown">
+                  <a href="#connect">Partnership</a>
+                  <a href="mailto:contact@dori-ai.com">Contact Email</a>
+                  <a href="#connect">Media Kit</a>
+                  <a href="#connect">Career</a>
+                  <a href="#connect">Newsletter</a>
+                </div>
+              </div>
+            </nav>
+          </div>
 
           {/* RIGHT: auth area */}
           <div className="auth-wrap">
@@ -350,7 +354,8 @@ export default function Home() {
         .header{
           position: relative; 
           z-index: 30; 
-          display:flex;align-items:center;justify-content:space-between;
+          display:flex;align-items:center;
+          justify-content:space-between; /* 로고-메뉴-인증 영역 분리 */
           padding: 4px 28px; 
           background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
         }
@@ -358,8 +363,9 @@ export default function Home() {
         /* ⭐️ 로고 래퍼: 로고가 커질 공간을 확보 */
         .logo-wrap {
             position: relative;
-            width: 128px; /* 로고가 커진 후 차지하는 공간 */
-            height: 48px; /* 헤더 높이와 유사하게 설정 */
+            width: 128px; 
+            height: 48px; 
+            flex-shrink: 0; /* 공간을 줄이지 않음 */
         }
         
         /* ⭐️ 로고 크기 4배 확대 및 위치 조정 */
@@ -374,22 +380,27 @@ export default function Home() {
             z-index: 1; 
         }
         
-        /* 2. 내비게이션 스타일 수정 및 드롭다운 구조 추가 */
-        .nav{display:flex;align-items:center;}
+        /* 2. 메인 카테고리 중앙 정렬 및 드롭다운 위치 수정 */
+        .nav-container {
+            flex-grow: 1; /* 남은 공간을 채움 */
+            display: flex;
+            justify-content: center; /* 내부 nav를 중앙으로 정렬 */
+            margin: 0 40px; /* 로고와 인증 영역과의 간격 확보 */
+        }
+        .nav{
+            display:flex;
+            align-items:center;
+            padding: 0;
+        }
+        
         .nav a{margin-left:0;font-weight:normal} 
         .nav-item-wrap,
         .nav > a { 
           position: relative;
           margin-left: 30px; 
         }
-        .nav-item-wrap:first-child{margin-left: 30px; } /* 첫 항목 마진은 유지 */
-        .nav {
-            margin-left: 40px; /* 로고 래퍼 공간 확보 */
-            margin-right: auto;
-        }
-        .nav > a:last-child { margin-right: 0; }
-
-
+        .nav-item-wrap:first-child{margin-left: 0; } 
+        
         .nav-item-wrap > a, .nav > a{
           text-decoration:none;
           color:var(--text);
@@ -401,12 +412,13 @@ export default function Home() {
         }
         .nav-item-wrap > a:hover, .nav > a:hover{color:var(--blue)}
 
+        /* 드롭다운 스타일 */
         .dropdown{
           position: absolute;
           top: 100%;
           left: 50%;
           transform: translateX(-50%);
-          z-index: 20; 
+          z-index: 20; /* 헤더보다 낮게, 콘텐츠보다 높게 */
           width: max-content;
           background: #fff;
           border: 1px solid #e8eef7;
@@ -419,15 +431,10 @@ export default function Home() {
           margin-top: 5px; 
         }
         .nav-item-wrap:hover .dropdown, 
-        .nav > a:hover + .connect-dropdown,
-        .connect-dropdown:hover {
+        .nav > a:hover + .dropdown {
           opacity: 1;
           pointer-events: auto;
           transform: translateX(-50%) translateY(0);
-        }
-
-        .connect-dropdown { /* CONNECT 카테고리 드롭다운 위치 조정 */
-            left: 50%; 
         }
         
         .dropdown a{
@@ -452,7 +459,7 @@ export default function Home() {
           display: flex;
           align-items: center;
           gap: 20px;
-          margin-right: 20px; 
+          flex-shrink: 0;
         }
         .user-count{
           font-size: 13px;
