@@ -182,7 +182,7 @@ export default function Home() {
 
       {/* HERO */}
       <section className="hero">
-        <img src="/logo.png" alt="DORI Logo Large" className="hero-logo" />
+        <img src="/hero-logo.png" alt="DORI Logo Large" className="hero-logo" />
         <h1 className="headline mod">Beyond Human Limits.</h1>
         <p className="sub">Design Of Real Intelligence — DORI-AI</p>
       </section>
@@ -305,7 +305,7 @@ export default function Home() {
 
         .header{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;
           padding:14px 28px;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-        .logo{height:32px}
+        .logo{height:60px}
         
         /* 2. 내비게이션 스타일 수정 및 드롭다운 구조 추가 (INSIGHT-CONTACT 간격 수정 포함) */
         .nav{display:flex;align-items:center;}
@@ -400,7 +400,7 @@ export default function Home() {
         .menu-item.danger{color:#b00020}
 
         .hero{text-align:center;padding:88px 24px 24px;border-bottom:1px solid var(--line)}
-        .hero-logo{height:72px;margin-bottom:18px}
+        .hero-logo{height:160px;margin-bottom:18px}
         
         /* 3. 글씨 크기 많이 줄여줘 */
         .headline.mod{font-size:clamp(32px,5vw,48px);margin:0 0 10px}
