@@ -14,34 +14,36 @@ body {
     sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #171a20;
-  color: #ffffff;
+  background: #121212;
+  color: #e0e0e0;
 }
 
 .markdown-body h1 {
   font-size: 2.5rem;
-  font-weight: 600;
+  font-weight: 700;
   margin-bottom: 1.5rem;
   letter-spacing: -0.02em;
+  color: #ffffff;
 }
 
 .markdown-body h2 {
   font-size: 2rem;
-  font-weight: 600;
+  font-weight: 700;
   margin-top: 2rem;
   margin-bottom: 1rem;
   letter-spacing: -0.01em;
+  color: #ffffff;
 }
 
 .markdown-body p {
   font-size: 1.125rem;
   line-height: 1.8;
   margin-bottom: 1.5rem;
-  color: #e0e0e0;
+  color: #b0b0b0;
 }
 
 .markdown-body strong {
-  font-weight: 600;
+  font-weight: 700;
   color: #ffffff;
 }
 

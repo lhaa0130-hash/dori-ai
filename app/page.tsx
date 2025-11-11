@@ -111,53 +111,88 @@ export default function Home() {
       <header className="header">
         <img src="/logo.png" alt="DORI Logo" className="logo" />
         <nav className="nav">
-          <a href="#studio">Studio</a>
-          <a href="#imagine">Imagine</a>
-          <a href="#review">Review</a>
-          <a href="#insight">Insight</a>
-          <a href="#contact">Contact</a>
+          <div className="nav-item-wrap">
+            <a href="#studio">STUDIO</a>
+            <div className="dropdown">
+              <a href="#studio">AI SHORTS</a>
+              <a href="#studio">BRANDED CONTENT</a>
+              <a href="#studio">WORKFLOW</a>
+              <a href="#studio">BEHIND THE SCENE</a>
+              <a href="#studio">Q&A</a>
+            </div>
+          </div>
+          <div className="nav-item-wrap">
+            <a href="#imagine">IMAGINE</a>
+            <div className="dropdown">
+              <a href="#imagine">CONCEPT ART</a>
+              <a href="#imagine">CHARACTER DESIGN</a>
+              <a href="#imagine">LANDSCAPE</a>
+              <a href="#imagine">TYPOGRAPHY</a>
+              <a href="#imagine">ADVANCED PROMPT</a>
+            </div>
+          </div>
+          <div className="nav-item-wrap">
+            <a href="#review">REVIEW</a>
+            <div className="dropdown">
+              <a href="#review">CAMERA/MIC</a>
+              <a href="#review">LIGHTING</a>
+              <a href="#review">SOFTWARE</a>
+              <a href="#review">ACCESSORIES</a>
+              <a href="#review">TIPS</a>
+            </div>
+          </div>
+          <div className="nav-item-wrap">
+            <a href="#insight">INSIGHT</a>
+            <div className="dropdown">
+              <a href="#insight">BASIC GUIDE</a>
+              <a href="#insight">AUTOMATION</a>
+              <a href="#insight">SORA GUIDE</a>
+              <a href="#insight">GPT WORKFLOW</a>
+              <a href="#insight">CINEMATIC TIPS</a>
+            </div>
+          </div>
+          <a href="#contact">CONTACT</a>
         </nav>
 
         {/* RIGHT: auth area */}
-        <div className="auth">
-          {!user ? (
-            <button className="btn small ghost" onClick={onOpenLogin}>로그인</button>
-          ) : (
-            <div className="avatar-wrap">
-              <button className="avatar" aria-label="User menu">
-                {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
-              </button>
-              <div className="menu">
-                <div className="menu-name">{user.name || user.email}</div>
-                <a className="menu-item" href="#dashboard">대시보드 (준비중)</a>
-                <button className="menu-item danger" onClick={onLogout}>로그아웃</button>
+        <div className="auth-wrap">
+          <span className="user-count">(Today : 0 / Total : 0)</span>
+          <div className="auth">
+            {!user ? (
+              <button className="btn small ghost" onClick={onOpenLogin}>로그인</button>
+            ) : (
+              <div className="avatar-wrap">
+                <button className="avatar" aria-label="User menu">
+                  {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
+                </button>
+                <div className="menu">
+                  <div className="menu-name">{user.name || user.email}</div>
+                  <a className="menu-item" href="#dashboard">대시보드 (준비중)</a>
+                  <button className="menu-item danger" onClick={onLogout}>로그아웃</button>
+                </div>
               </div>
-            </div>
-          )}
+            )}
+          </div>
         </div>
       </header>
 
       {/* HERO */}
       <section className="hero">
         <img src="/logo.png" alt="DORI Logo Large" className="hero-logo" />
-        <h1 className="headline">Beyond Human Limits.</h1>
-        <p className="sub">Design Of Real Intelligence — 인간의 확장을 디자인하는 AI 스튜디오</p>
-        <div className="cta">
-          <a className="btn primary" href="#studio">AI STUDIO</a>
-          <a className="btn ghost" href="#contact">프로젝트 문의</a>
-        </div>
+        <h1 className="headline mod">Beyond Human Limits.</h1>
+        <p className="sub">Design Of Real Intelligence — DORI-AI</p>
+        {/* CTAs 삭제됨 */}
       </section>
 
-      {/* STUDIO — 5개 */}
+      {/* STUDIO — 3개로 변경 */}
       <section id="studio" className="container section">
         <div className="section-head">
-          <span className="kicker">STUDIO</span>
-          <h2 className="section-title">도리도리 몽</h2>
+          <span className="kicker mod">STUDIO</span>
           <p>AI로 만든 시네마틱 쇼츠 & 브랜디드 애니메이션. 유튜브와 연동됩니다.</p>
         </div>
 
-        <div className="video-grid five">
-          {studioList.map((v) => (
+        <div className="video-grid three">
+          {studioList.slice(0, 3).map((v) => (
             <div className="video-wrap" key={v.id}>
               <iframe
                 src={`https://www.youtube.com/embed/${v.id}`}
@@ -179,16 +214,15 @@ export default function Home() {
         <div className="divider" />
       </section>
 
-      {/* IMAGINE — 5개 */}
+      {/* IMAGINE — 3개로 변경 */}
       <section id="imagine" className="container section">
         <div className="section-head">
-          <span className="kicker">IMAGINE</span>
-          <h2 className="section-title">AI 이미지 갤러리</h2>
+          <span className="kicker mod">IMAGINE</span>
           <p>새로운 시각의 아이디어. 프롬프트와 함께 공개합니다.</p>
         </div>
 
-        <div className="gallery five">
-          {imagineList.map((it, i) => (
+        <div className="gallery three">
+          {imagineList.slice(0, 3).map((it, i) => (
             <figure className="thumb" key={i}>
               <img src={it.src} alt={it.title} />
               <figcaption className="cap">{it.title}</figcaption>
@@ -203,16 +237,15 @@ export default function Home() {
         <div className="divider" />
       </section>
 
-      {/* REVIEW — 5개 */}
+      {/* REVIEW — 3개로 변경 */}
       <section id="review" className="container section">
         <div className="section-head">
-          <span className="kicker">REVIEW</span>
-          <h2 className="section-title">도리가 쓰고 추천하는 것</h2>
+          <span className="kicker mod">REVIEW</span>
           <p>AI 크리에이터에게 도움이 되는 장비·툴을 실제 사용 후 리뷰합니다.</p>
         </div>
 
-        <div className="cards five">
-          {reviewList.map((it, i) => (
+        <div className="cards three">
+          {reviewList.slice(0, 3).map((it, i) => (
             <a className="card" href={it.href} target="_blank" rel="noreferrer" key={i}>
               <div className="card-title">{it.title}</div>
               <p>{it.desc}</p>
@@ -227,11 +260,10 @@ export default function Home() {
         <div className="divider" />
       </section>
 
-      {/* INSIGHT — 5개 */}
+      {/* INSIGHT — 3개로 변경 */}
       <section id="insight" className="container section">
         <div className="section-head">
-          <span className="kicker">INSIGHT</span>
-          <h2 className="section-title">AI 활용법</h2>
+          <span className="kicker mod">INSIGHT</span>
           <p>Leonardo, Runway, GPT, Sora 등 실전 워크플로우를 짧고 명확하게.</p>
         </div>
 
@@ -242,8 +274,8 @@ export default function Home() {
           <span className="chip">Agent</span>
         </div>
 
-        <div className="cards five">
-          {insightList.map((it, i) => (
+        <div className="cards three">
+          {insightList.slice(0, 3).map((it, i) => (
             <a className="card" href={it.href} key={i}>
               <div className="card-title">{it.title}</div>
               <p>{it.desc}</p>
@@ -298,8 +330,78 @@ export default function Home() {
         .header{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;
           padding:14px 28px;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
         .logo{height:32px}
-        .nav a{margin-left:20px;text-decoration:none;color:var(--text);font-weight:500}
-        .nav a:hover{color:var(--blue)}
+        
+        /* 2. 내비게이션 스타일 수정 및 드롭다운 구조 추가 */
+        .nav{display:flex;align-items:center;}
+        .nav a{margin-left:0;font-weight:normal} /* 기본 a 태그 스타일 초기화 */
+        .nav-item-wrap{
+          position: relative;
+          margin-left: 30px; /* 메인 링크 간격 */
+        }
+        .nav-item-wrap:first-child{margin-left: 0;} /* 첫 번째 링크 간격 제거 */
+
+        .nav-item-wrap > a, .nav > a{
+          text-decoration:none;
+          color:var(--text);
+          font-weight:bold; /* 볼드 */
+          letter-spacing: 0.1em; /* 간격 벌리기 */
+          font-size: 15px;
+          display: block;
+          padding: 10px 0;
+        }
+        .nav-item-wrap > a:hover, .nav > a:hover{color:var(--blue)}
+
+        .dropdown{
+          position: absolute;
+          top: 100%;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 20;
+          width: max-content;
+          background: #fff;
+          border: 1px solid #e8eef7;
+          border-radius: 8px;
+          box-shadow: 0 8px 20px rgba(0,0,0,.08);
+          padding: 8px;
+          opacity: 0;
+          pointer-events: none;
+          transition: opacity 0.2s, transform 0.2s;
+          margin-top: 10px;
+        }
+        .nav-item-wrap:hover .dropdown{
+          opacity: 1;
+          pointer-events: auto;
+          transform: translateX(-50%) translateY(0);
+        }
+        .dropdown a{
+          display: block;
+          padding: 8px 12px;
+          color: #555;
+          text-decoration: none;
+          font-weight: 500;
+          font-size: 13px;
+          white-space: nowrap;
+          border-radius: 6px;
+          margin-left: 0;
+          letter-spacing: normal;
+        }
+        .dropdown a:hover{
+          background: #f6faff;
+          color: var(--blue);
+        }
+
+        /* 1. 로그인 좌측에 카운트 표시 추가 */
+        .auth-wrap{
+          display: flex;
+          align-items: center;
+          gap: 20px;
+        }
+        .user-count{
+          font-size: 13px;
+          color: var(--muted);
+          white-space: nowrap;
+        }
+
         .auth{display:flex;align-items:center;gap:10px}
         .btn.small{padding:8px 14px;font-size:13px}
         .btn.ghost{background:transparent}.btn.ghost:hover{border-color:var(--blue);color:var(--blue)}
@@ -322,9 +424,12 @@ export default function Home() {
 
         .hero{text-align:center;padding:88px 24px 24px;border-bottom:1px solid var(--line)}
         .hero-logo{height:72px;margin-bottom:18px}
-        .headline{font-size:clamp(40px,7vw,72px);margin:0 0 10px}
+        
+        /* 3. 글씨 크기 많이 줄여줘 */
+        .headline.mod{font-size:clamp(32px,5vw,48px);margin:0 0 10px}
+        
         .sub{max-width:720px;margin:0 auto;color:var(--muted);font-size:18px}
-        .cta{display:flex;justify-content:center;gap:14px;margin-top:28px}
+        /* 6. CTA 삭제로 인해 관련 CSS 제거 */
 
         .btn{padding:12px 20px;border-radius:999px;border:1px solid var(--line);text-decoration:none;transition:.25s;will-change:transform,box-shadow}
         .btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
@@ -333,30 +438,36 @@ export default function Home() {
 
         .container{max-width:1120px;margin:0 auto;padding:0 24px}
         .section{padding-top:26px}
+        
         .section-head{display:grid;grid-template-columns:auto 1fr;gap:10px 16px;align-items:end;margin-bottom:16px}
+        
+        /* 7/8. Kicker 크기 살짝 키워줌 */
         .kicker{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;
           background:linear-gradient(180deg,#f8fdff,#eef7ff);border:1px solid #d7ecff;color:#0a84bd;
           font-weight:600;font-size:12px;letter-spacing:.08em;box-shadow:0 2px 10px rgba(0,153,255,.08),inset 0 0 0 1px rgba(255,255,255,.6)}
+        .kicker.mod{padding: 8px 16px; font-size: 14px;} /* 크기 조정 */
+        
         .kicker::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px rgba(0,186,255,.6)}
         .section-title{position:relative;margin:0;font-size:24px;align-self:end}
         .section-title::after{content:"";display:block;height:2px;margin-top:8px;border-radius:2px;background:linear-gradient(90deg,rgba(0,186,255,.8),rgba(0,186,255,0))}
         .section-title.center::after{margin-left:auto;margin-right:auto;width:120px}
         .divider{height:1px;margin:22px 0 0;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,.06),rgba(0,0,0,0))}
 
+        /* 7/8. 3개 목록을 위한 그리드 클래스 추가 */
         .video-grid{display:grid;gap:14px}
-        .video-grid.five{grid-template-columns:repeat(3,1fr)}
+        .video-grid.three{grid-template-columns:repeat(3,1fr)}
         .video-wrap{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fafafa;transition:transform .25s,box-shadow .25s,border-color .25s}
         .video-wrap:hover{transform:translateY(-2px);border-color:#dbefff;box-shadow:0 16px 32px rgba(0,0,0,.06),0 6px 18px rgba(0,186,255,.08)}
         .video-wrap iframe{width:100%;aspect-ratio:16/9;display:block}
         .video-title{padding:10px 12px;font-size:14px;color:#333;border-top:1px solid var(--line)}
 
-        .gallery.five{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+        .gallery.three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
         .gallery .thumb{border:1px solid var(--line);border-radius:12px;overflow:hidden;background:#fafafa;transition:transform .25s,border-color .25s,box-shadow .25s}
         .gallery .thumb:hover{transform:translateY(-2px);border-color:#e2f3ff;box-shadow:0 14px 28px rgba(0,0,0,.06),0 4px 12px rgba(0,186,255,.06)}
         .gallery img{width:100%;height:auto;display:block}
         .gallery .cap{padding:8px 10px;font-size:12px;color:#555}
 
-        .cards.five{display:grid;grid-template-columns:repeat(5,1fr);gap:12px}
+        .cards.three{display:grid;grid-template-columns:repeat(3,1fr);gap:12px}
         .card{border:1px solid var(--line);background:#fafafa;border-radius:12px;padding:18px;text-decoration:none;color:inherit;transition:transform .25s,border-color .25s,box-shadow .25s}
         .card:hover{transform:translateY(-2px);border-color:#e2f3ff;box-shadow:0 14px 28px rgba(0,0,0,.06),0 4px 12px rgba(0,186,255,.06)}
         .card-title{font-weight:600;margin-bottom:6px}
@@ -374,6 +485,18 @@ export default function Home() {
         .contact{text-align:center;padding:56px 24px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
         .footer{display:flex;justify-content:space-between;max-width:1120px;margin:0 auto;padding:24px;color:#777;font-size:13px}
 
+        @media (max-width:1200px){
+          .cards.three{grid-template-columns:repeat(2,1fr)}
+          .gallery.three{grid-template-columns:repeat(2,1fr)}
+          .video-grid.three{grid-template-columns:repeat(2,1fr)}
+        }
+        @media (max-width:640px){
+          .cards.three{grid-template-columns:1fr}
+          .gallery.three{grid-template-columns:1fr}
+          .video-grid.three{grid-template-columns:1fr}
+        }
+
+        /* --- 기존 .five 클래스 사용하지 않음 --- */
         @media (max-width:1200px){
           .cards.five{grid-template-columns:repeat(3,1fr)}
           .gallery.five{grid-template-columns:repeat(3,1fr)}
