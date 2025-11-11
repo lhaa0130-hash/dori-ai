@@ -307,11 +307,11 @@ export default function Home() {
           padding:14px 28px;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
         .logo{height:32px}
         
-        /* 2. 내비게이션 스타일 수정 및 드롭다운 구조 추가 */
+        /* 2. 내비게이션 스타일 수정 및 드롭다운 구조 추가 (INSIGHT-CONTACT 간격 수정 포함) */
         .nav{display:flex;align-items:center;}
         .nav a{margin-left:0;font-weight:normal} /* 기본 a 태그 스타일 초기화 */
         .nav-item-wrap,
-        .nav > a { /* INSIGHT와 CONTACT 간격 수정 포함 */
+        .nav > a { /* .nav-item-wrap과 .nav 바로 아래의 a (CONTACT)에 모두 마진 적용 */
           position: relative;
           margin-left: 30px; /* 메인 링크 간격 */
         }
@@ -423,15 +423,19 @@ export default function Home() {
           margin-bottom: 20px;
         }
         .kicker{
-          display:inline-flex;align-items:center;gap:8px;
-          padding:6px 12px;border-radius:999px;
+          display:flex; /* inline-flex에서 flex로 변경하여 width:100% 적용 */
+          align-items:center;
+          gap:8px;
+          padding:6px 12px;
+          border-radius:999px;
           background:linear-gradient(180deg,#f8fdff,#eef7ff);border:1px solid #d7ecff;color:#0a84bd;
           font-weight:600;font-size:12px;letter-spacing:.08em;
           box-shadow:0 2px 10px rgba(0,153,255,.08),inset 0 0 0 1px rgba(255,255,255,.6);
-          width: fit-content; /* 내용에 맞게 타원 크기 조절 */
+          width: 100%; /* 노란색 부분까지 연결되도록 100% 설정 */
+          box-sizing: border-box; /* padding 포함 */
         }
         .kicker.mod{
-          padding: 8px 18px; /* 크기 조정 */
+          padding: 8px 24px; /* 양쪽 여백 조정 */
           font-size: 15px; /* 글자 크기 조정 */
         }
         
