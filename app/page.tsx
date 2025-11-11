@@ -187,8 +187,8 @@ export default function Home() {
         {/* HERO */}
         <section className="hero">
           <img src="/hero-logo.png" alt="DORI Logo Large" className="hero-logo" />
-          <h1 className="headline mod">Beyond Human Limits.</h1>
-          <p className="sub">Design Of Real Intelligence — DORI-AI</p>
+          {/* <h1 className="headline mod">Beyond Human Limits.</h1> <-- 삭제됨 */}
+          {/* <p className="sub">Design Of Real Intelligence — DORI-AI</p> <-- 삭제됨 */}
         </section>
       </div>
 
@@ -322,9 +322,9 @@ export default function Home() {
         }
 
         /* ⭐️ Hero 섹션의 높이만큼 공간을 띄워 스크롤 콘텐츠를 시작시키는 Spacer */
-        /* 이 값은 .fixed-top-content의 실제 높이와 일치해야 합니다. */
+        /* Hero 섹션 높이가 줄었으므로 Spacer 높이도 줄입니다. */
         .scroll-spacer {
-            height: 500px; /* Header(약 50px) + Hero(약 450px) = 500px (대략적인 값, 반응형 디자인에 따라 조정 필요) */
+            height: 380px; /* Header(약 50px) + Hero(약 330px) = 380px (대략적인 값, 반응형 디자인에 따라 조정 필요) */
             background: transparent;
             width: 100%;
         }
@@ -332,7 +332,7 @@ export default function Home() {
         /* 1. 헤더 폭 축소 */
         .header{
           position: relative; 
-          z-index: 30; /* 드롭다운 메뉴보다 더 높게 설정 */
+          z-index: 30; 
           display:flex;align-items:center;justify-content:space-between;
           padding: 4px 28px; 
           background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
@@ -346,7 +346,7 @@ export default function Home() {
             transform-origin: top left; /* 좌측 상단을 기준으로 확대 */
             margin-left: 20px; /* 좌측 여백 추가 */
             position: relative;
-            z-index: 1; /* 내비게이션 드롭다운 위에 보이도록 */
+            z-index: 1; 
         }
         
         /* 2. 내비게이션 스타일 수정 및 드롭다운 구조 추가 (INSIGHT-CONTACT 간격 수정 포함) */
@@ -375,7 +375,7 @@ export default function Home() {
           top: 100%;
           left: 50%;
           transform: translateX(-50%);
-          z-index: 20; /* 헤더보다 낮게 (헤더 z-index:30) */
+          z-index: 20; 
           width: max-content;
           background: #fff;
           border: 1px solid #e8eef7;
@@ -414,7 +414,7 @@ export default function Home() {
           display: flex;
           align-items: center;
           gap: 20px;
-          margin-right: 20px; /* ⭐️ 우측 여백 추가 */
+          margin-right: 20px; 
         }
         .user-count{
           font-size: 13px;
@@ -449,11 +449,10 @@ export default function Home() {
             border-bottom:1px solid var(--line);
         }
         /* 이미지 태그를 hero-logo.png 대신 적절한 이미지로 가정하고 높이 축소 */
-        .hero-logo{height:300px; width: auto; margin:0 auto 18px;} 
+        .hero-logo{height:300px; width: auto; margin:0 auto;} /* 문구가 삭제되어 마진 제거 */
         
-        /* 3. 글씨 크기 많이 줄여줘 */
+        /* 3. 글씨 크기 관련 스타일은 문구가 삭제되어 사용되지 않음 */
         .headline.mod{font-size:clamp(32px,5vw,48px);margin:0 0 10px}
-        
         .sub{max-width:720px;margin:0 auto;color:var(--muted);font-size:18px}
 
         .btn{padding:12px 20px;border-radius:999px;border:1px solid var(--line);text-decoration:none;transition:.25s;will-change:transform,box-shadow}
@@ -464,7 +463,7 @@ export default function Home() {
         .container{max-width:1120px;margin:0 auto;padding:0 24px}
         .section{padding-top:26px}
         
-        /* 섹션 헤더 및 Kicker/설명 스타일 수정 */
+        /* 섹션 헤더 및 Kicker/설명 스타일 유지 */
         .section-head.mod{
           display: flex;
           flex-direction: column;
@@ -539,7 +538,7 @@ export default function Home() {
           .video-grid.three{grid-template-columns:1fr}
           /* 좁은 화면에서 Hero 높이 조정 */
           .hero-logo{height:200px}
-          .scroll-spacer{height:400px} /* Header(약 50px) + Hero(약 350px) = 400px */
+          .scroll-spacer{height:300px} /* Header(약 40px) + Hero(약 260px) = 300px (조정) */
         }
 
         /* --- Login Modal --- */
