@@ -210,14 +210,15 @@ export default function Home() {
       {/* ⭐️ 스크롤 영역 시작점 (고정된 콘텐츠 높이만큼 여백 확보) */}
       <div className="scroll-spacer" />
       
-      {/* STUDIO — 3개로 변경 (스크롤되는 콘텐츠 시작) */}
-      <section id="studio" className="container section">
+      {/* 1. EDUCATION 섹션 (기존 STUDIO 섹션 대체) */}
+      <section id="education" className="container section">
         <div className="section-head mod">
-          <span className="kicker mod">STUDIO</span>
-          <p className="kicker-desc">AI로 만든 시네마틱 쇼츠 & 브랜디드 애니메이션. 유튜브와 연동됩니다.</p>
+          <span className="kicker mod">EDUCATION</span>
+          <p className="kicker-desc">유아용 영어, 중국어, 일본어 언어 교육 자료 및 무료 학습지를 제공합니다.</p>
         </div>
 
         <div className="video-grid three">
+          {/* 이 부분은 EDUCATION 자료 (예: 유튜브 영상 또는 블로그 카드)로 대체되어야 합니다. */}
           {studioList.slice(0, 3).map((v) => (
             <div className="video-wrap" key={v.id}>
               <iframe
@@ -228,46 +229,46 @@ export default function Home() {
                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                 allowFullScreen
               />
-              <div className="video-title">{v.title}</div>
+              <div className="video-title">교육용 영상: {v.title}</div>
             </div>
           ))}
         </div>
 
         <div className="row-cta">
-          <a className="btn link" href="https://youtube.com" target="_blank" rel="noreferrer">유튜브 채널 보기</a>
+          <a className="btn link" href="#education-full">전체 교육 자료 보기</a>
         </div>
 
         <div className="divider" />
       </section>
 
-      {/* IMAGINE 섹션 (임시로 STUDIO로 대체) */}
-      <section id="imagine" className="container section">
+      {/* 2. STUDIO 섹션 (기존 IMAGINE 섹션 대체) */}
+      <section id="studio" className="container section">
         <div className="section-head mod">
-          <span className="kicker mod">IMAGINE</span>
-          <p className="kicker-desc">새로운 시각의 아이디어. 프롬프트와 함께 공개합니다.</p>
+          <span className="kicker mod">STUDIO</span>
+          <p className="kicker-desc">AI로 제작한 애니메이션 동화책, YouTube Shorts 및 컨셉 아트를 모아봤습니다.</p>
         </div>
 
         <div className="gallery three">
           {imagineList.slice(0, 3).map((it, i) => (
             <figure className="thumb" key={i}>
               <img src={it.src} alt={it.title} />
-              <figcaption className="cap">{it.title}</figcaption>
+              <figcaption className="cap">AI Concept: {it.title}</figcaption>
             </figure>
           ))}
         </div>
 
         <div className="row-cta">
-          <a className="btn link" href="/imagine">갤러리 전체보기</a>
+          <a className="btn link" href="/studio-full">전체 스튜디오 결과물 보기</a>
         </div>
 
         <div className="divider" />
       </section>
 
-      {/* REVIEW 섹션 (임시로 INSIGHT로 대체) */}
-      <section id="review" className="container section">
+      {/* 3. INSIGHT 섹션 (기존 REVIEW 섹션 대체) */}
+      <section id="insight" className="container section">
         <div className="section-head mod">
-          <span className="kicker mod">REVIEW</span>
-          <p className="kicker-desc">AI 크리에이터에게 도움이 되는 장비·툴을 실제 사용 후 리뷰합니다.</p>
+          <span className="kicker mod">INSIGHT</span>
+          <p className="kicker-desc">AI 영상 및 아트 제작 심화 기술, 툴 워크플로우, 수익화 팁을 공유합니다.</p>
         </div>
 
         <div className="cards three">
@@ -280,24 +281,24 @@ export default function Home() {
         </div>
 
         <div className="row-cta">
-          <a className="btn link" href="/review">리뷰 더보기</a>
+          <a className="btn link" href="/insight-full">INSIGHT 전체 보기</a>
         </div>
 
         <div className="divider" />
       </section>
 
-      {/* INSIGHT 섹션 */}
-      <section id="insight" className="container section">
+      {/* 4. COMMUNITY 섹션 (기존 INSIGHT 섹션 대체) */}
+      <section id="community" className="container section">
         <div className="section-head mod">
-          <span className="kicker mod">INSIGHT</span>
-          <p className="kicker-desc">Leonardo, Runway, GPT, Sora 등 실전 워크플로우를 짧고 명확하게.</p>
+          <span className="kicker mod">COMMUNITY</span>
+          <p className="kicker-desc">사용자들이 만든 AI 영상, 이미지, 음악 등을 서로 공유하고 활용하는 공간입니다.</p>
         </div>
 
         <div className="chips">
-          <span className="chip">Prompt Deep Dive</span>
-          <span className="chip">Tool Workflow</span>
-          <span className="chip">Automation Guide</span>
-          <span className="chip">Cinematic Tips</span>
+          <span className="chip">Share AI Video</span>
+          <span className="chip">Share AI Image/Webtoon</span>
+          <span className="chip">Share AI Music/Audio</span>
+          <span className="chip">Exchange & Feedback</span>
         </div>
 
         <div className="cards three">
@@ -307,6 +308,10 @@ export default function Home() {
               <p>{it.desc}</p>
             </a>
           ))}
+        </div>
+        
+        <div className="row-cta">
+          <a className="btn link" href="/community-full">COMMUNITY 바로가기</a>
         </div>
       </section>
 
