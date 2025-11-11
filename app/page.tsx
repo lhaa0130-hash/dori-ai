@@ -5,7 +5,11 @@ import { useState } from "react";
 type User = { name?: string; email: string } | null;
 
 export default function Home() {
-  // --- subscribe state ---
+  // 임시 카운트 변수 (나중에 서버에서 받아오는 상태로 변경 예정)
+  const todayCount = 125;
+  const totalCount = 4500;
+  
+  // --- subscribe state (SIGNUP 섹션 삭제로 사용되지 않으나, 로직은 유지) ---
   const [loading, setLoading] = useState(false);
   const [ok, setOk] = useState<boolean | null>(null);
 
@@ -156,7 +160,7 @@ export default function Home() {
 
         {/* RIGHT: auth area */}
         <div className="auth-wrap">
-          <span className="user-count">(Today : 0 / Total : 0)</span>
+          <span className="user-count">{`(Today : ${todayCount} / Total : ${totalCount})`}</span>
           <div className="auth">
             {!user ? (
               <button className="btn small ghost" onClick={onOpenLogin}>로그인</button>
@@ -181,14 +185,13 @@ export default function Home() {
         <img src="/logo.png" alt="DORI Logo Large" className="hero-logo" />
         <h1 className="headline mod">Beyond Human Limits.</h1>
         <p className="sub">Design Of Real Intelligence — DORI-AI</p>
-        {/* CTAs 삭제됨 */}
       </section>
 
       {/* STUDIO — 3개로 변경 */}
       <section id="studio" className="container section">
-        <div className="section-head">
+        <div className="section-head mod">
           <span className="kicker mod">STUDIO</span>
-          <p>AI로 만든 시네마틱 쇼츠 & 브랜디드 애니메이션. 유튜브와 연동됩니다.</p>
+          <p className="kicker-desc">AI로 만든 시네마틱 쇼츠 & 브랜디드 애니메이션. 유튜브와 연동됩니다.</p>
         </div>
 
         <div className="video-grid three">
@@ -216,9 +219,9 @@ export default function Home() {
 
       {/* IMAGINE — 3개로 변경 */}
       <section id="imagine" className="container section">
-        <div className="section-head">
+        <div className="section-head mod">
           <span className="kicker mod">IMAGINE</span>
-          <p>새로운 시각의 아이디어. 프롬프트와 함께 공개합니다.</p>
+          <p className="kicker-desc">새로운 시각의 아이디어. 프롬프트와 함께 공개합니다.</p>
         </div>
 
         <div className="gallery three">
@@ -239,9 +242,9 @@ export default function Home() {
 
       {/* REVIEW — 3개로 변경 */}
       <section id="review" className="container section">
-        <div className="section-head">
+        <div className="section-head mod">
           <span className="kicker mod">REVIEW</span>
-          <p>AI 크리에이터에게 도움이 되는 장비·툴을 실제 사용 후 리뷰합니다.</p>
+          <p className="kicker-desc">AI 크리에이터에게 도움이 되는 장비·툴을 실제 사용 후 리뷰합니다.</p>
         </div>
 
         <div className="cards three">
@@ -262,9 +265,9 @@ export default function Home() {
 
       {/* INSIGHT — 3개로 변경 */}
       <section id="insight" className="container section">
-        <div className="section-head">
+        <div className="section-head mod">
           <span className="kicker mod">INSIGHT</span>
-          <p>Leonardo, Runway, GPT, Sora 등 실전 워크플로우를 짧고 명확하게.</p>
+          <p className="kicker-desc">Leonardo, Runway, GPT, Sora 등 실전 워크플로우를 짧고 명확하게.</p>
         </div>
 
         <div className="chips">
@@ -284,35 +287,8 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SIGNUP — 이메일 구독 */}
-      <section id="signup" className="container signup">
-        <div className="section-head">
-          <span className="kicker">SIGNUP</span>
-          <h2 className="section-title">회원가입 / 뉴스레터</h2>
-          <p>도리의 새 영상·이미지·가이드를 이메일로 받아보세요.</p>
-        </div>
-
-        <form className="signup-form" onSubmit={onSubscribe}>
-          <input name="name" placeholder="이름 (선택)" />
-          <input name="email" type="email" placeholder="이메일 (필수)" required />
-          <label className="agree">
-            <input name="agree" type="checkbox" /> 이메일 수신 및 개인정보 처리에 동의합니다.
-          </label>
-          <button className="btn primary" disabled={loading}>
-            {loading ? "등록 중..." : "가입하기"}
-          </button>
-          {ok === true && <div className="note ok">가입이 완료되었습니다. 환영합니다!</div>}
-          {ok === false && <div className="note err">문제가 발생했습니다. 잠시 후 다시 시도해주세요.</div>}
-        </form>
-      </section>
-
-      {/* CONTACT */}
-      <section id="contact" className="contact">
-        <h2 className="section-title center">프로젝트 문의</h2>
-        <p>간단히 남겨주세요. 24시간 내 회신드립니다.</p>
-        <a className="btn primary" href="mailto:hello@dori-ai.com">hello@dori-ai.com</a>
-      </section>
-
+      {/* SIGNUP 섹션 (id="signup") 및 CONTACT 섹션 (id="contact") 삭제됨 */}
+      
       {/* FOOTER */}
       <footer className="footer">
         <span>DORI — DESIGN OF REAL INTELLIGENCE</span>
@@ -334,7 +310,8 @@ export default function Home() {
         /* 2. 내비게이션 스타일 수정 및 드롭다운 구조 추가 */
         .nav{display:flex;align-items:center;}
         .nav a{margin-left:0;font-weight:normal} /* 기본 a 태그 스타일 초기화 */
-        .nav-item-wrap{
+        .nav-item-wrap,
+        .nav > a { /* INSIGHT와 CONTACT 간격 수정 포함 */
           position: relative;
           margin-left: 30px; /* 메인 링크 간격 */
         }
@@ -429,7 +406,6 @@ export default function Home() {
         .headline.mod{font-size:clamp(32px,5vw,48px);margin:0 0 10px}
         
         .sub{max-width:720px;margin:0 auto;color:var(--muted);font-size:18px}
-        /* 6. CTA 삭제로 인해 관련 CSS 제거 */
 
         .btn{padding:12px 20px;border-radius:999px;border:1px solid var(--line);text-decoration:none;transition:.25s;will-change:transform,box-shadow}
         .btn.primary{background:var(--blue);color:#fff;border-color:var(--blue)}
@@ -439,21 +415,43 @@ export default function Home() {
         .container{max-width:1120px;margin:0 auto;padding:0 24px}
         .section{padding-top:26px}
         
-        .section-head{display:grid;grid-template-columns:auto 1fr;gap:10px 16px;align-items:end;margin-bottom:16px}
-        
-        /* 7/8. Kicker 크기 살짝 키워줌 */
-        .kicker{display:inline-flex;align-items:center;gap:8px;padding:6px 12px;border-radius:999px;
+        /* 섹션 헤더 및 Kicker/설명 스타일 수정 */
+        .section-head.mod{
+          display: flex;
+          flex-direction: column;
+          align-items: flex-start; /* kicker를 왼쪽으로 정렬 */
+          margin-bottom: 20px;
+        }
+        .kicker{
+          display:inline-flex;align-items:center;gap:8px;
+          padding:6px 12px;border-radius:999px;
           background:linear-gradient(180deg,#f8fdff,#eef7ff);border:1px solid #d7ecff;color:#0a84bd;
-          font-weight:600;font-size:12px;letter-spacing:.08em;box-shadow:0 2px 10px rgba(0,153,255,.08),inset 0 0 0 1px rgba(255,255,255,.6)}
-        .kicker.mod{padding: 8px 16px; font-size: 14px;} /* 크기 조정 */
+          font-weight:600;font-size:12px;letter-spacing:.08em;
+          box-shadow:0 2px 10px rgba(0,153,255,.08),inset 0 0 0 1px rgba(255,255,255,.6);
+          width: fit-content; /* 내용에 맞게 타원 크기 조절 */
+        }
+        .kicker.mod{
+          padding: 8px 18px; /* 크기 조정 */
+          font-size: 15px; /* 글자 크기 조정 */
+        }
         
         .kicker::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px rgba(0,186,255,.6)}
+        
+        .kicker-desc{
+          font-size: 14px;
+          color: var(--muted);
+          margin: 8px 0 0;
+          padding-left: 5px;
+        }
+
+        /* 사용되지 않는 기존 스타일 삭제 */
         .section-title{position:relative;margin:0;font-size:24px;align-self:end}
         .section-title::after{content:"";display:block;height:2px;margin-top:8px;border-radius:2px;background:linear-gradient(90deg,rgba(0,186,255,.8),rgba(0,186,255,0))}
         .section-title.center::after{margin-left:auto;margin-right:auto;width:120px}
+        
         .divider{height:1px;margin:22px 0 0;background:linear-gradient(90deg,rgba(0,0,0,0),rgba(0,0,0,.06),rgba(0,0,0,0))}
 
-        /* 7/8. 3개 목록을 위한 그리드 클래스 추가 */
+        /* 7/8. 3개 목록을 위한 그리드 클래스 */
         .video-grid{display:grid;gap:14px}
         .video-grid.three{grid-template-columns:repeat(3,1fr)}
         .video-wrap{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:#fafafa;transition:transform .25s,box-shadow .25s,border-color .25s}
@@ -475,14 +473,6 @@ export default function Home() {
         .chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px}
         .chip{padding:8px 12px;border-radius:999px;font-size:12px;font-weight:600;background:linear-gradient(180deg,#f9fbff,#eef6ff);border:1px solid #d8eaff;color:#106ea0;box-shadow:0 4px 12px rgba(0,153,255,.08),inset 0 0 0 1px rgba(255,255,255,.6)}
 
-        .signup{padding-bottom:8px}
-        .signup-form{display:grid;grid-template-columns:1fr 1fr auto;gap:10px;align-items:center;border:1px solid var(--line);border-radius:16px;padding:16px;background:#fafafa}
-        .signup-form input[type="email"], .signup-form input[name="name"]{height:42px;border:1px solid #e5e5e5;border-radius:12px;padding:0 12px;background:#fff}
-        .signup-form .agree{grid-column:1 / -1;font-size:13px;color:var(--muted);display:flex;gap:8px;align-items:center}
-        .note{margin-top:8px;font-size:13px}
-        .note.ok{color:#0a8a45}.note.err{color:#b00020}
-
-        .contact{text-align:center;padding:56px 24px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
         .footer{display:flex;justify-content:space-between;max-width:1120px;margin:0 auto;padding:24px;color:#777;font-size:13px}
 
         @media (max-width:1200px){
@@ -494,18 +484,6 @@ export default function Home() {
           .cards.three{grid-template-columns:1fr}
           .gallery.three{grid-template-columns:1fr}
           .video-grid.three{grid-template-columns:1fr}
-        }
-
-        /* --- 기존 .five 클래스 사용하지 않음 --- */
-        @media (max-width:1200px){
-          .cards.five{grid-template-columns:repeat(3,1fr)}
-          .gallery.five{grid-template-columns:repeat(3,1fr)}
-          .video-grid.five{grid-template-columns:repeat(2,1fr)}
-        }
-        @media (max-width:640px){
-          .cards.five{grid-template-columns:1fr}
-          .gallery.five{grid-template-columns:1fr}
-          .video-grid.five{grid-template-columns:1fr}
         }
 
         /* --- Login Modal --- */
