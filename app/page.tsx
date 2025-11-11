@@ -111,83 +111,91 @@ export default function Home() {
 
   return (
     <main className="page">
-      {/* HEADER */}
-      <header className="header">
-        <img src="/logo.png" alt="DORI Logo" className="logo" />
-        <nav className="nav">
-          <div className="nav-item-wrap">
-            <a href="#studio">STUDIO</a>
-            <div className="dropdown">
-              <a href="#studio">AI SHORTS</a>
-              <a href="#studio">BRANDED CONTENT</a>
-              <a href="#studio">WORKFLOW</a>
-              <a href="#studio">BEHIND THE SCENE</a>
-              <a href="#studio">Q&A</a>
-            </div>
-          </div>
-          <div className="nav-item-wrap">
-            <a href="#imagine">IMAGINE</a>
-            <div className="dropdown">
-              <a href="#imagine">CONCEPT ART</a>
-              <a href="#imagine">CHARACTER DESIGN</a>
-              <a href="#imagine">LANDSCAPE</a>
-              <a href="#imagine">TYPOGRAPHY</a>
-              <a href="#imagine">ADVANCED PROMPT</a>
-            </div>
-          </div>
-          <div className="nav-item-wrap">
-            <a href="#review">REVIEW</a>
-            <div className="dropdown">
-              <a href="#review">CAMERA/MIC</a>
-              <a href="#review">LIGHTING</a>
-              <a href="#review">SOFTWARE</a>
-              <a href="#review">ACCESSORIES</a>
-              <a href="#review">TIPS</a>
-            </div>
-          </div>
-          <div className="nav-item-wrap">
-            <a href="#insight">INSIGHT</a>
-            <div className="dropdown">
-              <a href="#insight">BASIC GUIDE</a>
-              <a href="#insight">AUTOMATION</a>
-              <a href="#insight">SORA GUIDE</a>
-              <a href="#insight">GPT WORKFLOW</a>
-              <a href="#insight">CINEMATIC TIPS</a>
-            </div>
-          </div>
-          <a href="#contact">CONTACT</a>
-        </nav>
-
-        {/* RIGHT: auth area */}
-        <div className="auth-wrap">
-          <span className="user-count">{`(Today : ${todayCount} / Total : ${totalCount})`}</span>
-          <div className="auth">
-            {!user ? (
-              <button className="btn small ghost" onClick={onOpenLogin}>로그인</button>
-            ) : (
-              <div className="avatar-wrap">
-                <button className="avatar" aria-label="User menu">
-                  {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
-                </button>
-                <div className="menu">
-                  <div className="menu-name">{user.name || user.email}</div>
-                  <a className="menu-item" href="#dashboard">대시보드 (준비중)</a>
-                  <button className="menu-item danger" onClick={onLogout}>로그아웃</button>
-                </div>
+      
+      {/* ⭐️ 고정될 상단 콘텐츠 컨테이너 */}
+      <div className="fixed-top-content">
+        
+        {/* HEADER */}
+        <header className="header">
+          <img src="/logo.png" alt="DORI Logo" className="logo" />
+          <nav className="nav">
+            <div className="nav-item-wrap">
+              <a href="#studio">STUDIO</a>
+              <div className="dropdown">
+                <a href="#studio">AI SHORTS</a>
+                <a href="#studio">BRANDED CONTENT</a>
+                <a href="#studio">WORKFLOW</a>
+                <a href="#studio">BEHIND THE SCENE</a>
+                <a href="#studio">Q&A</a>
               </div>
-            )}
+            </div>
+            <div className="nav-item-wrap">
+              <a href="#imagine">IMAGINE</a>
+              <div className="dropdown">
+                <a href="#imagine">CONCEPT ART</a>
+                <a href="#imagine">CHARACTER DESIGN</a>
+                <a href="#imagine">LANDSCAPE</a>
+                <a href="#imagine">TYPOGRAPHY</a>
+                <a href="#imagine">ADVANCED PROMPT</a>
+              </div>
+            </div>
+            <div className="nav-item-wrap">
+              <a href="#review">REVIEW</a>
+              <div className="dropdown">
+                <a href="#review">CAMERA/MIC</a>
+                <a href="#review">LIGHTING</a>
+                <a href="#review">SOFTWARE</a>
+                <a href="#review">ACCESSORIES</a>
+                <a href="#review">TIPS</a>
+              </div>
+            </div>
+            <div className="nav-item-wrap">
+              <a href="#insight">INSIGHT</a>
+              <div className="dropdown">
+                <a href="#insight">BASIC GUIDE</a>
+                <a href="#insight">AUTOMATION</a>
+                <a href="#insight">SORA GUIDE</a>
+                <a href="#insight">GPT WORKFLOW</a>
+                <a href="#insight">CINEMATIC TIPS</a>
+              </div>
+            </div>
+            <a href="#contact">CONTACT</a>
+          </nav>
+
+          {/* RIGHT: auth area */}
+          <div className="auth-wrap">
+            <span className="user-count">{`(Today : ${todayCount} / Total : ${totalCount})`}</span>
+            <div className="auth">
+              {!user ? (
+                <button className="btn small ghost" onClick={onOpenLogin}>로그인</button>
+              ) : (
+                <div className="avatar-wrap">
+                  <button className="avatar" aria-label="User menu">
+                    {user.name?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
+                  </button>
+                  <div className="menu">
+                    <div className="menu-name">{user.name || user.email}</div>
+                    <a className="menu-item" href="#dashboard">대시보드 (준비중)</a>
+                    <button className="menu-item danger" onClick={onLogout}>로그아웃</button>
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
-      </header>
+        </header>
 
-      {/* HERO */}
-      <section className="hero">
-        <img src="/hero-logo.png" alt="DORI Logo Large" className="hero-logo" />
-        <h1 className="headline mod">Beyond Human Limits.</h1>
-        <p className="sub">Design Of Real Intelligence — DORI-AI</p>
-      </section>
+        {/* HERO */}
+        <section className="hero">
+          <img src="/hero-logo.png" alt="DORI Logo Large" className="hero-logo" />
+          <h1 className="headline mod">Beyond Human Limits.</h1>
+          <p className="sub">Design Of Real Intelligence — DORI-AI</p>
+        </section>
+      </div>
 
-      {/* STUDIO — 3개로 변경 */}
+      {/* ⭐️ 스크롤 영역 시작점 (고정된 콘텐츠 높이만큼 여백 확보) */}
+      <div className="scroll-spacer" />
+      
+      {/* STUDIO — 3개로 변경 (스크롤되는 콘텐츠 시작) */}
       <section id="studio" className="container section">
         <div className="section-head mod">
           <span className="kicker mod">STUDIO</span>
@@ -299,29 +307,53 @@ export default function Home() {
       <style jsx global>{`
         :root{ --bg:#fff; --text:#222; --muted:#555; --line:#ececec; --blue:#00baff; }
         *{box-sizing:border-box}
-        html,body{ margin:0; padding:0; background:var(--bg); color:var(--text);
-          font-family:ui-sans-serif,system-ui,Apple SD Gothic Neo,Segoe UI,Roboto,Helvetica,Arial;}
-        .page{display:flex;flex-direction:column;gap:84px}
+        html,body{ margin:0; padding:0; background:var(--bg); color:var(--text); height: 100%;}
+        .page{display:flex;flex-direction:column;gap:84px; min-height: 100vh;}
 
-        .header{position:sticky;top:0;z-index:10;display:flex;align-items:center;justify-content:space-between;
-          padding:14px 28px;background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line)}
-        .logo{height:200px}
+        /* ⭐️ 상단 고정 컨테이너 */
+        .fixed-top-content {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 20; /* Hero 이미지 위에 오도록 설정 */
+            background: var(--bg);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+        }
+
+        /* ⭐️ Hero 섹션의 높이만큼 공간을 띄워 스크롤 콘텐츠를 시작시키는 Spacer */
+        /* 이 값은 .fixed-top-content의 실제 높이와 일치해야 합니다. */
+        .scroll-spacer {
+            height: 500px; /* Header(약 50px) + Hero(약 450px) = 500px (대략적인 값, 반응형 디자인에 따라 조정 필요) */
+            background: transparent;
+            width: 100%;
+        }
+
+        /* 1. 헤더 폭 축소 */
+        .header{
+          position: relative; /* fixed-top-content 내부에서 relative 유지 */
+          z-index: 10;
+          display:flex;align-items:center;justify-content:space-between;
+          padding: 4px 28px; /* 상하 폭을 크게 줄임 */
+          background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
+        }
+        .logo{height:32px; width: auto;} /* 로고 높이 조정 */
         
         /* 2. 내비게이션 스타일 수정 및 드롭다운 구조 추가 (INSIGHT-CONTACT 간격 수정 포함) */
         .nav{display:flex;align-items:center;}
-        .nav a{margin-left:0;font-weight:normal} /* 기본 a 태그 스타일 초기화 */
+        .nav a{margin-left:0;font-weight:normal} 
         .nav-item-wrap,
-        .nav > a { /* .nav-item-wrap과 .nav 바로 아래의 a (CONTACT)에 모두 마진 적용 */
+        .nav > a { 
           position: relative;
-          margin-left: 30px; /* 메인 링크 간격 */
+          margin-left: 30px; 
         }
-        .nav-item-wrap:first-child{margin-left: 0;} /* 첫 번째 링크 간격 제거 */
+        .nav-item-wrap:first-child{margin-left: 0;} 
 
         .nav-item-wrap > a, .nav > a{
           text-decoration:none;
           color:var(--text);
-          font-weight:bold; /* 볼드 */
-          letter-spacing: 0.1em; /* 간격 벌리기 */
+          font-weight:bold; 
+          letter-spacing: 0.1em; 
           font-size: 15px;
           display: block;
           padding: 10px 0;
@@ -343,7 +375,7 @@ export default function Home() {
           opacity: 0;
           pointer-events: none;
           transition: opacity 0.2s, transform 0.2s;
-          margin-top: 10px;
+          margin-top: 5px; /* 헤더가 얇아진 만큼 조정 */
         }
         .nav-item-wrap:hover .dropdown{
           opacity: 1;
@@ -399,8 +431,14 @@ export default function Home() {
         .menu-item:hover{background:#f6faff}
         .menu-item.danger{color:#b00020}
 
-        .hero{text-align:center;padding:88px 24px 24px;border-bottom:1px solid var(--line)}
-        .hero-logo{height:400px;margin-bottom:18px}
+        /* Hero 섹션 수정 */
+        .hero{
+            text-align:center;
+            padding: 24px 24px 24px; /* 상단 고정으로 인해 상단 패딩 축소 */
+            border-bottom:1px solid var(--line);
+        }
+        /* 이미지 태그를 hero-logo.png 대신 적절한 이미지로 가정하고 높이 축소 */
+        .hero-logo{height:300px; width: auto; margin:0 auto 18px;} 
         
         /* 3. 글씨 크기 많이 줄여줘 */
         .headline.mod{font-size:clamp(32px,5vw,48px);margin:0 0 10px}
@@ -419,11 +457,11 @@ export default function Home() {
         .section-head.mod{
           display: flex;
           flex-direction: column;
-          align-items: flex-start; /* kicker를 왼쪽으로 정렬 */
+          align-items: flex-start; 
           margin-bottom: 20px;
         }
         .kicker{
-          display:flex; /* inline-flex에서 flex로 변경하여 width:100% 적용 */
+          display:flex; 
           align-items:center;
           gap:8px;
           padding:6px 12px;
@@ -431,12 +469,12 @@ export default function Home() {
           background:linear-gradient(180deg,#f8fdff,#eef7ff);border:1px solid #d7ecff;color:#0a84bd;
           font-weight:600;font-size:12px;letter-spacing:.08em;
           box-shadow:0 2px 10px rgba(0,153,255,.08),inset 0 0 0 1px rgba(255,255,255,.6);
-          width: 100%; /* 노란색 부분까지 연결되도록 100% 설정 */
-          box-sizing: border-box; /* padding 포함 */
+          width: 100%; 
+          box-sizing: border-box; 
         }
         .kicker.mod{
-          padding: 8px 24px; /* 양쪽 여백 조정 */
-          font-size: 15px; /* 글자 크기 조정 */
+          padding: 8px 24px; 
+          font-size: 15px; 
         }
         
         .kicker::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--blue);box-shadow:0 0 8px rgba(0,186,255,.6)}
@@ -488,6 +526,9 @@ export default function Home() {
           .cards.three{grid-template-columns:1fr}
           .gallery.three{grid-template-columns:1fr}
           .video-grid.three{grid-template-columns:1fr}
+          /* 좁은 화면에서 Hero 높이 조정 */
+          .hero-logo{height:200px}
+          .scroll-spacer{height:400px} /* Header(약 50px) + Hero(약 350px) = 400px */
         }
 
         /* --- Login Modal --- */
