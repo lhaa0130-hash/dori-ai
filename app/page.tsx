@@ -316,7 +316,7 @@ export default function Home() {
             top: 0;
             left: 0;
             width: 100%;
-            z-index: 20; /* Hero 이미지 위에 오도록 설정 */
+            z-index: 20; 
             background: var(--bg);
             box-shadow: 0 4px 12px rgba(0,0,0,0.05);
         }
@@ -331,13 +331,23 @@ export default function Home() {
 
         /* 1. 헤더 폭 축소 */
         .header{
-          position: relative; /* fixed-top-content 내부에서 relative 유지 */
-          z-index: 10;
+          position: relative; 
+          z-index: 30; /* 드롭다운 메뉴보다 더 높게 설정 */
           display:flex;align-items:center;justify-content:space-between;
-          padding: 4px 28px; /* 상하 폭을 크게 줄임 */
+          padding: 4px 28px; 
           background:rgba(255,255,255,.85);backdrop-filter:blur(10px);border-bottom:1px solid var(--line);
         }
-        .logo{height:32px; width: auto;} /* 로고 높이 조정 */
+        
+        /* ⭐️ 로고 크기 4배 확대 및 위치 조정 */
+        .logo{
+            height:32px; /* 원본 높이 유지 */
+            width: auto;
+            transform: scale(4); /* 4배 확대 */
+            transform-origin: top left; /* 좌측 상단을 기준으로 확대 */
+            margin-left: 20px; /* 좌측 여백 추가 */
+            position: relative;
+            z-index: 1; /* 내비게이션 드롭다운 위에 보이도록 */
+        }
         
         /* 2. 내비게이션 스타일 수정 및 드롭다운 구조 추가 (INSIGHT-CONTACT 간격 수정 포함) */
         .nav{display:flex;align-items:center;}
@@ -347,7 +357,7 @@ export default function Home() {
           position: relative;
           margin-left: 30px; 
         }
-        .nav-item-wrap:first-child{margin-left: 0;} 
+        .nav-item-wrap:first-child{margin-left: 100px; } /* ⭐️ 커진 로고 옆으로 밀어내기 */
 
         .nav-item-wrap > a, .nav > a{
           text-decoration:none;
@@ -365,7 +375,7 @@ export default function Home() {
           top: 100%;
           left: 50%;
           transform: translateX(-50%);
-          z-index: 20;
+          z-index: 20; /* 헤더보다 낮게 (헤더 z-index:30) */
           width: max-content;
           background: #fff;
           border: 1px solid #e8eef7;
@@ -375,7 +385,7 @@ export default function Home() {
           opacity: 0;
           pointer-events: none;
           transition: opacity 0.2s, transform 0.2s;
-          margin-top: 5px; /* 헤더가 얇아진 만큼 조정 */
+          margin-top: 5px; 
         }
         .nav-item-wrap:hover .dropdown{
           opacity: 1;
@@ -404,6 +414,7 @@ export default function Home() {
           display: flex;
           align-items: center;
           gap: 20px;
+          margin-right: 20px; /* ⭐️ 우측 여백 추가 */
         }
         .user-count{
           font-size: 13px;
@@ -434,7 +445,7 @@ export default function Home() {
         /* Hero 섹션 수정 */
         .hero{
             text-align:center;
-            padding: 24px 24px 24px; /* 상단 고정으로 인해 상단 패딩 축소 */
+            padding: 24px 24px 24px; 
             border-bottom:1px solid var(--line);
         }
         /* 이미지 태그를 hero-logo.png 대신 적절한 이미지로 가정하고 높이 축소 */
