@@ -76,6 +76,7 @@ export default function Home() {
   }
 
   // ---------- 샘플 데이터 ----------
+  // NOTE: 카테고리 변경에 따라 데이터는 임시로 유지하거나 필요시 수정해야 합니다.
   const studioList = [
     { id: "VIDEO_ID_1", title: "도리도리 몽 — EP01" },
     { id: "VIDEO_ID_2", title: "도리도리 몽 — EP02" },
@@ -123,47 +124,59 @@ export default function Home() {
           </div>
           
           <nav className="nav">
+            {/* 1. EDUCATION */}
+            <div className="nav-item-wrap">
+              <a href="#education">EDUCATION</a>
+              <div className="dropdown">
+                <a href="#education">English Vocabulary</a>
+                <a href="#education">Chinese Phrases</a>
+                <a href="#education">Japanese Sounds</a>
+                <a href="#education">Teaching Guides</a>
+                <a href="#education">Free Printables</a>
+              </div>
+            </div>
+            {/* 2. STUDIO */}
             <div className="nav-item-wrap">
               <a href="#studio">STUDIO</a>
               <div className="dropdown">
-                <a href="#studio">AI SHORTS</a>
-                <a href="#studio">BRANDED CONTENT</a>
-                <a href="#studio">WORKFLOW</a>
-                <a href="#studio">BEHIND THE SCENE</a>
-                <a href="#studio">Q&A</a>
+                <a href="#studio">YouTube Shorts</a>
+                <a href="#studio">Animated Storybook</a>
+                <a href="#studio">AI Concept Art</a>
+                <a href="#studio">Behind the Prompt</a>
+                <a href="#studio">Client Works</a>
               </div>
             </div>
-            <div className="nav-item-wrap">
-              <a href="#imagine">IMAGINE</a>
-              <div className="dropdown">
-                <a href="#imagine">CONCEPT ART</a>
-                <a href="#imagine">CHARACTER DESIGN</a>
-                <a href="#imagine">LANDSCAPE</a>
-                <a href="#imagine">TYPOGRAPHY</a>
-                <a href="#imagine">ADVANCED PROMPT</a>
-              </div>
-            </div>
-            <div className="nav-item-wrap">
-              <a href="#review">REVIEW</a>
-              <div className="dropdown">
-                <a href="#review">CAMERA/MIC</a>
-                <a href="#review">LIGHTING</a>
-                <a href="#review">SOFTWARE</a>
-                <a href="#review">ACCESSORIES</a>
-                <a href="#review">TIPS</a>
-              </div>
-            </div>
+            {/* 3. INSIGHT (AI 제작 기술 심화) */}
             <div className="nav-item-wrap">
               <a href="#insight">INSIGHT</a>
               <div className="dropdown">
-                <a href="#insight">BASIC GUIDE</a>
-                <a href="#insight">AUTOMATION</a>
-                <a href="#insight">SORA GUIDE</a>
-                <a href="#insight">GPT WORKFLOW</a>
-                <a href="#insight">CINEMATIC TIPS</a>
+                <a href="#insight">Prompt Deep Dive</a>
+                <a href="#insight">Tool Workflow</a>
+                <a href="#insight">Cinematic Tips</a>
+                <a href="#insight">Automation Guide</a>
+                <a href="#insight">Legal & Business</a>
               </div>
             </div>
-            <a href="#contact">CONTACT</a>
+            {/* 4. COMMUNITY (사용자 참여 및 공유) */}
+            <div className="nav-item-wrap">
+              <a href="#community">COMMUNITY</a>
+              <div className="dropdown">
+                <a href="#community">Share AI Video</a>
+                <a href="#community">Share AI Image/Webtoon</a>
+                <a href="#community">Share AI Music/Audio</a>
+                <a href="#community">Exchange & Feedback</a>
+                <a href="#community">User Guide & FAQs</a>
+              </div>
+            </div>
+            {/* 5. CONNECT (CONTACT 대신 비즈니스 연결) */}
+            <a href="#connect">CONNECT</a>
+            <div className="dropdown connect-dropdown">
+              <a href="#connect">Partnership</a>
+              <a href="mailto:contact@dori-ai.com">Contact Email</a>
+              <a href="#connect">Media Kit</a>
+              <a href="#connect">Career</a>
+              <a href="#connect">Newsletter</a>
+            </div>
           </nav>
 
           {/* RIGHT: auth area */}
@@ -227,7 +240,7 @@ export default function Home() {
         <div className="divider" />
       </section>
 
-      {/* IMAGINE — 3개로 변경 */}
+      {/* IMAGINE 섹션 (임시로 STUDIO로 대체) */}
       <section id="imagine" className="container section">
         <div className="section-head mod">
           <span className="kicker mod">IMAGINE</span>
@@ -250,7 +263,7 @@ export default function Home() {
         <div className="divider" />
       </section>
 
-      {/* REVIEW — 3개로 변경 */}
+      {/* REVIEW 섹션 (임시로 INSIGHT로 대체) */}
       <section id="review" className="container section">
         <div className="section-head mod">
           <span className="kicker mod">REVIEW</span>
@@ -273,7 +286,7 @@ export default function Home() {
         <div className="divider" />
       </section>
 
-      {/* INSIGHT — 3개로 변경 */}
+      {/* INSIGHT 섹션 */}
       <section id="insight" className="container section">
         <div className="section-head mod">
           <span className="kicker mod">INSIGHT</span>
@@ -281,10 +294,10 @@ export default function Home() {
         </div>
 
         <div className="chips">
-          <span className="chip">Leonardo</span>
-          <span className="chip">Runway</span>
-          <span className="chip">Sora</span>
-          <span className="chip">Agent</span>
+          <span className="chip">Prompt Deep Dive</span>
+          <span className="chip">Tool Workflow</span>
+          <span className="chip">Automation Guide</span>
+          <span className="chip">Cinematic Tips</span>
         </div>
 
         <div className="cards three">
@@ -297,8 +310,6 @@ export default function Home() {
         </div>
       </section>
 
-      {/* SIGNUP 섹션 (id="signup") 및 CONTACT 섹션 (id="contact") 삭제됨 */}
-      
       {/* FOOTER */}
       <footer className="footer">
         <span>DORI — DESIGN OF REAL INTELLIGENCE</span>
@@ -358,7 +369,7 @@ export default function Home() {
             z-index: 1; 
         }
         
-        /* 2. 내비게이션 스타일 수정 및 드롭다운 구조 추가 (INSIGHT-CONTACT 간격 수정 포함) */
+        /* 2. 내비게이션 스타일 수정 및 드롭다운 구조 추가 */
         .nav{display:flex;align-items:center;}
         .nav a{margin-left:0;font-weight:normal} 
         .nav-item-wrap,
@@ -366,11 +377,13 @@ export default function Home() {
           position: relative;
           margin-left: 30px; 
         }
-        /* ⭐️ 내비게이션 시작점을 로고 래퍼 크기에 맞춰 조정 */
-        .nav-item-wrap:first-child{margin-left: 0; } 
+        .nav-item-wrap:first-child{margin-left: 30px; } /* 첫 항목 마진은 유지 */
         .nav {
-            margin-left: 128px; /* .logo-wrap의 width만큼 밀어내기 */
+            margin-left: 40px; /* 로고 래퍼 공간 확보 */
+            margin-right: auto;
         }
+        .nav > a:last-child { margin-right: 0; }
+
 
         .nav-item-wrap > a, .nav > a{
           text-decoration:none;
@@ -400,11 +413,18 @@ export default function Home() {
           transition: opacity 0.2s, transform 0.2s;
           margin-top: 5px; 
         }
-        .nav-item-wrap:hover .dropdown{
+        .nav-item-wrap:hover .dropdown, 
+        .nav > a:hover + .connect-dropdown,
+        .connect-dropdown:hover {
           opacity: 1;
           pointer-events: auto;
           transform: translateX(-50%) translateY(0);
         }
+
+        .connect-dropdown { /* CONNECT 카테고리 드롭다운 위치 조정 */
+            left: 50%; 
+        }
+        
         .dropdown a{
           display: block;
           padding: 8px 12px;
@@ -490,7 +510,7 @@ export default function Home() {
           border-radius:999px;
           background:linear-gradient(180deg,#f8fdff,#eef7ff);border:1px solid #d7ecff;color:#0a84bd;
           font-weight:600;font-size:12px;letter-spacing:.08em;
-          box-shadow:0 2px 10px rgba(0,153,255,.08),inset 0 0 0 1px rgba(255,255,255,.6);
+          box-shadow:0 2px 10px rgba(0,153,255,.08), inset 0 0 0 1px rgba(255,255,255,.6);
           width: 100%; 
           box-sizing: border-box; 
         }
@@ -550,7 +570,7 @@ export default function Home() {
           .video-grid.three{grid-template-columns:1fr}
           /* 좁은 화면에서 Hero 높이 조정 */
           .hero-logo{height:200px}
-          .scroll-spacer{height:300px} 
+          .scroll-spacer{height:300px} /* Header(약 40px) + Hero(약 260px) = 300px (조정) */
         }
 
         /* --- Login Modal --- */
