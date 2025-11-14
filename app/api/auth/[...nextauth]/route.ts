@@ -10,4 +10,6 @@ const handler = NextAuth({
   ],
 });
 
-export { handler as GET, handler as POST };
+// Next.js 14~16 타입 기준 맞추기
+export const GET = handler;
+export const POST = handler;
