@@ -5,25 +5,28 @@ import matter from 'gray-matter';
 
 export async function GET() {
   const postsDirectory = path.join(process.cwd(), 'posts');
-  const fileNames = fs.readdirSync(postsDirectory);
   
-  const posts = fileNames
-    .filter(fileName => fileName.endsWith('.md'))
-    .map((fileName) => {
-      const slug = fileName.replace(/\.md$/, '');
-      const fullPath = path.join(postsDirectory, fileName);
-      const fileContents = fs.readFileSync(fullPath, 'utf8');
+  if (!fs.existsSync(postsDirectory)) {
+    return NextResponse.json([]);
+  }
+
+  const filenames = fs.readdirSync(postsDirectory);
+  const posts = filenames
+    .filter(filename => filename.endsWith('.md'))
+    .map(filename => {
+      const filePath = path.join(postsDirectory, filename);
+      const fileContents = fs.readFileSync(filePath, 'utf8');
       const { data } = matter(fileContents);
-      
+      const slug = filename.replace(/\.md$/, '');
+
       return {
         slug,
         title: data.title || 'Untitled',
         date: data.date || '',
         description: data.description || '',
-        category: data.category || 'general',
       };
     })
-    .sort((a, b) => (a.date > b.date ? -1 : 1));
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime());
 
   return NextResponse.json(posts);
 }
