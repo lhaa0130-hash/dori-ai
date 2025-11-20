@@ -14,8 +14,11 @@ interface PostPageProps {
 export default async function PostPage({ params }: PostPageProps) {
   const { slug } = await params;
   
+  // URL 디코딩 추가
+  const decodedSlug = decodeURIComponent(slug);
+  
   const postsDirectory = path.join(process.cwd(), 'posts');
-  const fullPath = path.join(postsDirectory, `${slug}.md`);
+  const fullPath = path.join(postsDirectory, `${decodedSlug}.md`);
   const fileContents = fs.readFileSync(fullPath, 'utf8');
   const { data, content } = matter(fileContents);
 

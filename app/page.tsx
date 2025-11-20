@@ -12,6 +12,7 @@ export default function Home() {
 
   const [loginOpen, setLoginOpen] = useState(false);
   const [blogPosts, setBlogPosts] = useState<any[]>([]);
+  const [showAllInsights, setShowAllInsights] = useState(false);
 
   // ✅ 상단 카테고리 active 상태 (dujon 느낌)
   const [activeNav, setActiveNav] = useState<string | null>(null);
@@ -20,34 +21,15 @@ export default function Home() {
   useEffect(() => {
     fetch('/api/posts')
       .then(res => res.json())
-      .then(data => setBlogPosts(data.slice(0, 6)))
+      .then(data => setBlogPosts(data.slice(0, 20)))
       .catch(err => console.error('Failed to load posts:', err));
   }, []);
 
   // ----------------------------- 샘플 데이터 -----------------------------
-  const studioList = [
-    { id: "VIDEO_ID_1", title: "도리도리 몽 — EP01" },
-    { id: "VIDEO_ID_2", title: "도리도리 몽 — EP02" },
-    { id: "VIDEO_ID_3", title: "도리도리 몽 — EP03" },
-  ];
-
-  const imagineList = [
-    { src: "/gallery/01.jpg", title: "Core Concept 01" },
-    { src: "/gallery/02.jpg", title: "Core Concept 02" },
-    { src: "/gallery/03.jpg", title: "Core Concept 03" },
-  ];
-
-  const insightList = [
-    { href: "/guide/leonardo-basics", title: "Leonardo 기본기", desc: "스타일/시드 핵심" },
-    { href: "/guide/agent-automation", title: "에이전트 자동화", desc: "파이프라인 만들기" },
-    { href: "/guide/runway-to-sora", title: "Runway→Sora", desc: "장면·모션 프롬프트" },
-  ];
-
-  const reviewList = [
-    { href: "https://a", title: "카메라 세팅", desc: "초보도 가능" },
-    { href: "https://b", title: "라이트/소프트박스", desc: "가성비 최고" },
-    { href: "https://c", title: "암스탠드", desc: "공간 절약형" },
-  ];
+  const studioList = [];
+  const imagineList = [];
+  const insightList = [];
+  const reviewList = [];
 
   // ----------------------------- LATEST 드래그 -----------------------------
   const latestRef = useRef<HTMLDivElement | null>(null);
@@ -104,6 +86,9 @@ export default function Home() {
     }
   }
 
+  // INSIGHT 표시 개수
+  const displayedInsights = showAllInsights ? blogPosts : blogPosts.slice(0, 5);
+
   // ----------------------------- VIEW -----------------------------
   return (
     <main className="page">
@@ -112,7 +97,6 @@ export default function Home() {
         <header className="header">
           <div className="header-side header-left">
             <div className="logo-wrap">
-              {/* ✅ 로고 클릭 시 메인으로 이동 */}
               <a href="/" className="logo-link" aria-label="DORI-AI Home">
                 <img src="/logo.png" className="logo" alt="DORI Logo" />
               </a>
@@ -148,11 +132,11 @@ export default function Home() {
               >
                 <a href="#insight">INSIGHT</a>
                 <div className="dropdown">
-                  <a href="#insight">AI 툴 심화 분석</a>
-                  <a href="#insight">프롬프트/시네마틱</a>
-                  <a href="#insight">AI 자동화/비즈니스</a>
+                  <a href="#insight">AI 정보 공유</a>
                   <a href="#insight">AI 최신뉴스</a>
-                  <a href="#insight">파트너십</a>
+                  <a href="#insight">AI 자동화/비즈니스</a>
+                  <a href="#insight">AI 프롬프트/시네마틱</a>
+                  <a href="#insight">AI 파트너십</a>
                 </div>
               </div>
 
@@ -181,11 +165,6 @@ export default function Home() {
               >
                 <a href="#community">COMMUNITY</a>
                 <div className="dropdown">
-                  <a href="#community">유저 갤러리</a>
-                  <a href="#community">유저 영상</a>
-                  <a href="#community">유저 음악</a>
-                  <a href="#community">유저 웹툰</a>
-                  <a href="#community">Q&A</a>
                 </div>
               </div>
             </nav>
@@ -231,7 +210,6 @@ export default function Home() {
       <section className="container section">
         <div className="section-head mod">
           <span className="kicker mod">LATEST</span>
-          <p className="kicker-desc">최근 업로드된 글</p>
         </div>
 
         {blogPosts.length === 0 ? (
@@ -252,19 +230,23 @@ export default function Home() {
               {blogPosts.map((post) => (
                 <a className="latest-card" href={`/posts/${post.slug}`} key={post.slug}>
                   <div className="latest-thumb-wrap">
-                    <div style={{
-                      width: '100%',
-                      height: '100%',
-                      background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      color: 'white',
-                      fontSize: '3rem',
-                      fontWeight: 'bold'
-                    }}>
-                      📝
-                    </div>
+                    {post.thumbnail ? (
+                      <img src={post.thumbnail} alt={post.title} />
+                    ) : (
+                      <div style={{
+                        width: '100%',
+                        height: '100%',
+                        background: 'linear-gradient(135deg, #667eea 0%, #764ba2 100%)',
+                        display: 'flex',
+                        alignItems: 'center',
+                        justifyContent: 'center',
+                        color: 'white',
+                        fontSize: '3rem',
+                        fontWeight: 'bold'
+                      }}>
+                        📝
+                      </div>
+                    )}
                   </div>
                   <div className="latest-meta">
                     <div className="latest-card-title">{post.title}</div>
@@ -284,7 +266,6 @@ export default function Home() {
       <section id="studio" className="container section">
         <div className="section-head mod">
           <span className="kicker mod">STUDIO</span>
-          <p className="kicker-desc">제작 이미지/컨셉아트</p>
         </div>
 
         <div className="gallery three">
@@ -304,25 +285,32 @@ export default function Home() {
           <span className="kicker mod">INSIGHT</span>
         </div>
 
-        <div className="cards three">
-          {blogPosts.length > 0 ? (
-            blogPosts.slice(0, 3).map((post) => (
-              <a className="card" href={`/posts/${post.slug}`} key={post.slug}>
-                <div className="card-title">{post.title}</div>
-                <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px' }}>
-                  {post.date}
-                </p>
-              </a>
-            ))
-          ) : (
-            insightList.map((it) => (
-              <a className="card" href={it.href} key={it.href}>
-                <div className="card-title">{it.title}</div>
-                <p>{it.desc}</p>
-              </a>
-            ))
-          )}
-        </div>
+        {blogPosts.length > 0 ? (
+          <>
+            <div className="insight-list">
+              {displayedInsights.map((post, index) => (
+                <a className="insight-item" href={`/posts/${post.slug}`} key={post.slug}>
+                  <span className="insight-number">{String(index + 1).padStart(2, '0')}.</span>
+                  <span className="insight-title">{post.title}</span>
+                  <span className="insight-date">{post.date}</span>
+                </a>
+              ))}
+            </div>
+            
+            {!showAllInsights && blogPosts.length > 5 && (
+              <div className="insight-more-wrap">
+                <button 
+                  className="insight-more-btn"
+                  onClick={() => setShowAllInsights(true)}
+                >
+                  + 더보기
+                </button>
+              </div>
+            )}
+          </>
+        ) : (
+          <div className="latest-empty">글이 없습니다.</div>
+        )}
 
         <div className="divider" />
       </section>
@@ -356,11 +344,6 @@ export default function Home() {
         </div>
 
         <div className="chips">
-          <span className="chip">유저 갤러리</span>
-          <span className="chip">유저 영상</span>
-          <span className="chip">유저 음악</span>
-          <span className="chip">웹툰</span>
-          <span className="chip">Q&A</span>
         </div>
 
         <div className="cards three">
@@ -466,7 +449,6 @@ export default function Home() {
           gap: 18px;
         }
 
-        /* ✅ dujon 느낌: nav-item-wrap 전체가 hover 영역 */
         .nav-item-wrap {
           position: relative;
           padding: 6px 16px 22px;
@@ -485,7 +467,6 @@ export default function Home() {
           display: block;
         }
 
-        /* hover / focus / active 시 배경 + 텍스트 색상 변화 */
         .nav-item-wrap:hover,
         .nav-item-wrap:focus-within,
         .nav-item-wrap.active {
@@ -501,7 +482,7 @@ export default function Home() {
 
         .dropdown {
           position: absolute;
-          top: calc(100% - 6px); /* 패딩으로 이어지는 느낌 */
+          top: calc(100% - 6px);
           left: 50%;
           transform: translateX(-50%) translateY(6px);
           background: #fff;
@@ -516,7 +497,6 @@ export default function Home() {
           z-index: 30;
         }
 
-        /* ✅ hover + focus-within + active 모두 드롭다운 열기 */
         .nav-item-wrap:hover .dropdown,
         .nav-item-wrap:focus-within .dropdown,
         .nav-item-wrap.active .dropdown {
@@ -761,7 +741,79 @@ export default function Home() {
           right: 0;
         }
 
-        /* STUDIO / INSIGHT / EDUCATION / COMMUNITY 공통 */
+        /* INSIGHT LIST */
+        .insight-list {
+          display: flex;
+          flex-direction: column;
+          gap: 0;
+          background: #fafafa;
+          border: 1px solid var(--line);
+          border-radius: 12px;
+          overflow: hidden;
+        }
+
+        .insight-item {
+          display: flex;
+          align-items: center;
+          gap: 16px;
+          padding: 18px 24px;
+          text-decoration: none;
+          color: inherit;
+          border-bottom: 1px solid var(--line);
+          transition: background 0.2s;
+        }
+
+        .insight-item:last-child {
+          border-bottom: none;
+        }
+
+        .insight-item:hover {
+          background: #f0f7ff;
+        }
+
+        .insight-number {
+          font-size: 16px;
+          font-weight: 700;
+          color: var(--blue);
+          min-width: 40px;
+        }
+
+        .insight-title {
+          flex: 1;
+          font-size: 15px;
+          font-weight: 600;
+          color: var(--text);
+        }
+
+        .insight-date {
+          font-size: 13px;
+          color: var(--muted);
+        }
+
+        .insight-more-wrap {
+          display: flex;
+          justify-content: flex-end;
+          margin-top: 16px;
+        }
+
+        .insight-more-btn {
+          padding: 10px 24px;
+          background: transparent;
+          border: 1px solid var(--line);
+          border-radius: 999px;
+          font-size: 14px;
+          color: var(--text);
+          cursor: pointer;
+          transition: all 0.2s;
+        }
+
+        .insight-more-btn:hover {
+          background: #eef7ff;
+          border-color: var(--blue);
+          color: var(--blue);
+        }
+
+        /* STUDIO / EDUCATION / COMMUNITY 공통 */
         .gallery.three {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
@@ -905,6 +957,11 @@ export default function Home() {
           }
           .nav-item-wrap {
             padding: 4px 10px 18px;
+          }
+          .insight-item {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: 8px;
           }
         }
       `}</style>
