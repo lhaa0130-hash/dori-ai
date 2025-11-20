@@ -26,10 +26,10 @@ export default function Home() {
   }, []);
 
   // ----------------------------- 샘플 데이터 -----------------------------
-  const studioList = [];
-  const imagineList = [];
-  const insightList = [];
-  const reviewList = [];
+  const studioList: any[] = [];
+  const imagineList: any[] = [];
+  const insightList: any[] = [];
+  const reviewList: any[] = [];
 
   // ----------------------------- LATEST 드래그 -----------------------------
   const latestRef = useRef<HTMLDivElement | null>(null);
