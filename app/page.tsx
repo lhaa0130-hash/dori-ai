@@ -1,21 +1,43 @@
 "use client";
 
 import { useRef, useState, MouseEvent, useEffect } from "react";
-import { useSession, signIn, signOut } from "next-auth/react";
 
 export default function Home() {
-  const { data: session } = useSession();
-  const user = session?.user || null;
+  const [user, setUser] = useState<any>(null);
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [isLogin, setIsLogin] = useState(true);
+  
+  // 로그인
+  const [loginUsername, setLoginUsername] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  
+  // 회원가입
+  const [signupUsername, setSignupUsername] = useState("");
+  const [signupPassword, setSignupPassword] = useState("");
+  const [signupPasswordConfirm, setSignupPasswordConfirm] = useState("");
+  const [signupName, setSignupName] = useState("");
+  
+  const [blogPosts, setBlogPosts] = useState<any[]>([]);
+  const [showAllInsights, setShowAllInsights] = useState(false);
+  const [activeNav, setActiveNav] = useState<string | null>(null);
 
   const todayCount = 125;
   const totalCount = 4500;
 
-  const [loginOpen, setLoginOpen] = useState(false);
-  const [blogPosts, setBlogPosts] = useState<any[]>([]);
-  const [showAllInsights, setShowAllInsights] = useState(false);
+  // 사용자 정보 불러오기
+  useEffect(() => {
+    checkAuth();
+  }, []);
 
-  // ✅ 상단 카테고리 active 상태 (dujon 느낌)
-  const [activeNav, setActiveNav] = useState<string | null>(null);
+  async function checkAuth() {
+    try {
+      const res = await fetch('/api/auth/me');
+      const data = await res.json();
+      setUser(data.user);
+    } catch (err) {
+      console.error('Auth check failed:', err);
+    }
+  }
 
   // 블로그 글 가져오기
   useEffect(() => {
@@ -25,13 +47,101 @@ export default function Home() {
       .catch(err => console.error('Failed to load posts:', err));
   }, []);
 
-  // ----------------------------- 샘플 데이터 -----------------------------
-  const studioList: any[] = [];
-  const imagineList: any[] = [];
-  const insightList: any[] = [];
-  const reviewList: any[] = [];
+  // 로그인
+  async function handleLogin(e: React.FormEvent) {
+    e.preventDefault();
 
-  // ----------------------------- LATEST 드래그 -----------------------------
+    if (!loginUsername.trim() || !loginPassword.trim()) {
+      alert('아이디와 비밀번호를 입력해주세요.');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: loginUsername,
+          password: loginPassword,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert('로그인 성공!');
+        setUser(data.user);
+        setLoginOpen(false);
+        setLoginUsername("");
+        setLoginPassword("");
+      } else {
+        alert(data.error);
+      }
+    } catch (err) {
+      alert('로그인 중 오류가 발생했습니다.');
+    }
+  }
+
+  // 회원가입
+  async function handleSignup(e: React.FormEvent) {
+    e.preventDefault();
+
+    if (!signupUsername.trim() || !signupPassword.trim() || !signupName.trim()) {
+      alert('모든 필드를 입력해주세요.');
+      return;
+    }
+
+    if (signupPassword !== signupPasswordConfirm) {
+      alert('비밀번호가 일치하지 않습니다.');
+      return;
+    }
+
+    if (signupPassword.length < 6) {
+      alert('비밀번호는 최소 6자 이상이어야 합니다.');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          username: signupUsername,
+          password: signupPassword,
+          name: signupName,
+        }),
+      });
+
+      const data = await res.json();
+
+      if (res.ok) {
+        alert('회원가입이 완료되었습니다!');
+        setIsLogin(true);
+        setSignupUsername("");
+        setSignupPassword("");
+        setSignupPasswordConfirm("");
+        setSignupName("");
+      } else {
+        alert(data.error);
+      }
+    } catch (err) {
+      alert('회원가입 중 오류가 발생했습니다.');
+    }
+  }
+
+  // 로그아웃
+  async function handleLogout() {
+    try {
+      await fetch('/api/auth/logout', { method: 'POST' });
+      setUser(null);
+      alert('로그아웃 되었습니다.');
+    } catch (err) {
+      alert('로그아웃 중 오류가 발생했습니다.');
+    }
+  }
+
+  // ... (나머지 드래그, 네비게이션 함수들은 동일)
+
   const latestRef = useRef<HTMLDivElement | null>(null);
   const isDraggingRef = useRef(false);
   const dragStartXRef = useRef(0);
@@ -59,25 +169,35 @@ export default function Home() {
     box.scrollBy({ left: dir * (w + 16), behavior: "smooth" });
   }
 
-  // ----------------------------- Auth -----------------------------
-  function onOpenLogin() {
-    setLoginOpen(true);
-  }
-  function onGoogleAuth() {
-    signIn("google", { callbackUrl: "/" });
-  }
-  function onLogout() {
-    signOut({ callbackUrl: "/" });
-  }
+  function handleNavClick(id: string, e: React.MouseEvent) {
+    const target = e.target as HTMLElement;
+    if (target.tagName === 'A' && target.closest('.dropdown')) {
+      return;
+    }
 
-  // ----------------------------- NAV 핸들러 (dujon 스타일) -----------------------------
-  function handleNavClick(id: string) {
+    if (id === "community") {
+      e.preventDefault();
+      setActiveNav(activeNav === id ? null : id);
+      return;
+    }
+    
+    e.preventDefault();
     setActiveNav(id);
+    const section = document.getElementById(id);
+    if (section) {
+      section.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   }
 
   function handleNavKeyDown(id: string, e: React.KeyboardEvent<HTMLDivElement>) {
     if (e.key === "Enter" || e.key === " ") {
       e.preventDefault();
+      
+      if (id === "community") {
+        setActiveNav(activeNav === id ? null : id);
+        return;
+      }
+      
       setActiveNav(id);
       const section = document.getElementById(id);
       if (section) {
@@ -86,13 +206,13 @@ export default function Home() {
     }
   }
 
-  // INSIGHT 표시 개수
+  const studioList: any[] = [];
+  const imagineList: any[] = [];
   const displayedInsights = showAllInsights ? blogPosts : blogPosts.slice(0, 5);
 
-  // ----------------------------- VIEW -----------------------------
   return (
     <main className="page">
-      {/* -------------------- HEADER -------------------- */}
+      {/* 헤더 - 기존과 동일 */}
       <div className="fixed-top-content">
         <header className="header">
           <div className="header-side header-left">
@@ -103,13 +223,11 @@ export default function Home() {
             </div>
           </div>
 
-          {/* 정중앙 NAV */}
           <div className="nav-container">
             <nav className="nav">
-              {/* STUDIO */}
               <div
                 className={`nav-item-wrap ${activeNav === "studio" ? "active" : ""}`}
-                onClick={() => handleNavClick("studio")}
+                onClick={(e) => handleNavClick("studio", e)}
                 onKeyDown={(e) => handleNavKeyDown("studio", e)}
                 tabIndex={0}
               >
@@ -123,10 +241,9 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* INSIGHT */}
               <div
                 className={`nav-item-wrap ${activeNav === "insight" ? "active" : ""}`}
-                onClick={() => handleNavClick("insight")}
+                onClick={(e) => handleNavClick("insight", e)}
                 onKeyDown={(e) => handleNavKeyDown("insight", e)}
                 tabIndex={0}
               >
@@ -140,10 +257,9 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* EDUCATION */}
               <div
                 className={`nav-item-wrap ${activeNav === "education" ? "active" : ""}`}
-                onClick={() => handleNavClick("education")}
+                onClick={(e) => handleNavClick("education", e)}
                 onKeyDown={(e) => handleNavKeyDown("education", e)}
                 tabIndex={0}
               >
@@ -156,21 +272,23 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* COMMUNITY */}
               <div
                 className={`nav-item-wrap ${activeNav === "community" ? "active" : ""}`}
-                onClick={() => handleNavClick("community")}
+                onClick={(e) => handleNavClick("community", e)}
                 onKeyDown={(e) => handleNavKeyDown("community", e)}
                 tabIndex={0}
               >
                 <a href="#community">COMMUNITY</a>
                 <div className="dropdown">
+                  <a href="/community">자유게시판</a>
+                  <a href="/community">질문·답변</a>
+                  <a href="/community">팁·노하우</a>
+                  <a href="/community">공지사항</a>
                 </div>
               </div>
             </nav>
           </div>
 
-          {/* 우측 로그인 */}
           <div className="header-side header-right">
             <div className="auth-wrap">
               <span className="user-count">
@@ -178,7 +296,7 @@ export default function Home() {
               </span>
 
               {!user ? (
-                <button className="btn small ghost" onClick={onOpenLogin}>
+                <button className="btn small ghost" onClick={() => setLoginOpen(true)}>
                   로그인
                 </button>
               ) : (
@@ -188,7 +306,8 @@ export default function Home() {
                   </button>
                   <div className="menu">
                     <div className="menu-name">{user.name}</div>
-                    <button className="menu-item danger" onClick={onLogout}>
+                    <div className="menu-username">@{user.username}</div>
+                    <button className="menu-item danger" onClick={handleLogout}>
                       로그아웃
                     </button>
                   </div>
@@ -201,12 +320,11 @@ export default function Home() {
 
       <div className="scroll-spacer" />
 
-      {/* -------------------- HERO -------------------- */}
+      {/* 나머지 섹션들은 기존과 동일... */}
       <section className="hero">
         <img src="/hero-logo.png" className="hero-logo" alt="DORI Hero Logo" />
       </section>
 
-      {/* -------------------- LATEST -------------------- */}
       <section className="container section">
         <div className="section-head mod">
           <span className="kicker mod">LATEST</span>
@@ -262,12 +380,10 @@ export default function Home() {
         )}
       </section>
 
-      {/* -------------------- STUDIO -------------------- */}
       <section id="studio" className="container section">
         <div className="section-head mod">
           <span className="kicker mod">STUDIO</span>
         </div>
-
         <div className="gallery three">
           {imagineList.map((it) => (
             <figure className="thumb" key={it.title}>
@@ -279,7 +395,6 @@ export default function Home() {
         <div className="divider" />
       </section>
 
-      {/* -------------------- INSIGHT -------------------- */}
       <section id="insight" className="container section">
         <div className="section-head mod">
           <span className="kicker mod">INSIGHT</span>
@@ -315,7 +430,6 @@ export default function Home() {
         <div className="divider" />
       </section>
 
-      {/* -------------------- EDUCATION -------------------- */}
       <section id="education" className="container section">
         <div className="section-head mod">
           <span className="kicker mod">EDUCATION</span>
@@ -337,33 +451,14 @@ export default function Home() {
         <div className="divider" />
       </section>
 
-      {/* -------------------- COMMUNITY -------------------- */}
-      <section id="community" className="container section">
-        <div className="section-head mod">
-          <span className="kicker mod">COMMUNITY</span>
-        </div>
-
-        <div className="chips">
-        </div>
-
-        <div className="cards three">
-          {reviewList.map((it) => (
-            <a className="card" href={it.href} key={it.href}>
-              <div className="card-title">{it.title}</div>
-              <p>{it.desc}</p>
-            </a>
-          ))}
-        </div>
-      </section>
-
-      {/* -------------------- FOOTER -------------------- */}
       <footer className="footer">
         <span>DORI — DESIGN OF REAL INTELLIGENCE</span>
         <span>© {new Date().getFullYear()} DORI</span>
       </footer>
 
-      {/* -------------------- CSS 전체 -------------------- */}
+      {/* CSS - 기존과 동일하되 menu-username 추가 */}
       <style jsx global>{`
+        /* 기존 CSS 전체 유지하고 아래만 추가 */
         :root {
           --bg: #fff;
           --text: #222;
@@ -387,7 +482,6 @@ export default function Home() {
           gap: 48px;
         }
 
-        /* HEADER */
         .fixed-top-content {
           position: fixed;
           top: 0;
@@ -519,7 +613,6 @@ export default function Home() {
           color: var(--blue);
         }
 
-        /* AUTH */
         .auth-wrap {
           display: flex;
           align-items: center;
@@ -585,8 +678,14 @@ export default function Home() {
         }
         .menu-name {
           font-size: 13px;
-          color: #666;
-          padding: 8px 10px;
+          font-weight: 600;
+          color: #222;
+          padding: 8px 10px 4px;
+        }
+        .menu-username {
+          font-size: 12px;
+          color: #999;
+          padding: 0 10px 8px;
           border-bottom: 1px solid #f0f3f8;
           margin-bottom: 4px;
         }
@@ -606,7 +705,6 @@ export default function Home() {
           color: #b00020;
         }
 
-        /* HERO */
         .hero {
           text-align: center;
           padding: 0 24px 24px;
@@ -618,7 +716,6 @@ export default function Home() {
           display: block;
         }
 
-        /* SECTION */
         .container {
           max-width: 1120px;
           margin: 0 auto;
@@ -647,11 +744,6 @@ export default function Home() {
           font-size: 15px;
           width: 100%;
         }
-        .kicker-desc {
-          font-size: 14px;
-          color: var(--muted);
-          margin-top: 8px;
-        }
 
         .divider {
           height: 1px;
@@ -664,7 +756,6 @@ export default function Home() {
           );
         }
 
-        /* LATEST */
         .latest-empty {
           padding: 24px;
           border: 1px dashed var(--line);
@@ -741,7 +832,6 @@ export default function Home() {
           right: 0;
         }
 
-        /* INSIGHT LIST */
         .insight-list {
           display: flex;
           flex-direction: column;
@@ -813,7 +903,6 @@ export default function Home() {
           color: var(--blue);
         }
 
-        /* STUDIO / EDUCATION / COMMUNITY 공통 */
         .gallery.three {
           display: grid;
           grid-template-columns: repeat(3, 1fr);
@@ -832,39 +921,6 @@ export default function Home() {
           padding: 8px;
           font-size: 12px;
           color: #555;
-        }
-
-        .cards.three {
-          display: grid;
-          grid-template-columns: repeat(3, 1fr);
-          gap: 12px;
-        }
-        .card {
-          border: 1px solid var(--line);
-          border-radius: 12px;
-          background: #fafafa;
-          padding: 18px;
-          text-decoration: none;
-          color: inherit;
-        }
-        .card-title {
-          font-weight: 600;
-          margin-bottom: 6px;
-        }
-
-        .chips {
-          display: flex;
-          gap: 8px;
-          flex-wrap: wrap;
-        }
-        .chip {
-          padding: 8px 12px;
-          background: #eef7ff;
-          border: 1px solid #d8eaff;
-          color: #106ea0;
-          border-radius: 999px;
-          font-size: 12px;
-          font-weight: 600;
         }
 
         .video-grid.three {
@@ -887,7 +943,6 @@ export default function Home() {
           border-top: 1px solid var(--line);
         }
 
-        /* FOOTER */
         .footer {
           display: flex;
           justify-content: space-between;
@@ -911,41 +966,72 @@ export default function Home() {
         .modal {
           background: #fff;
           width: min(420px, 92vw);
-          padding: 20px;
+          padding: 30px;
           border-radius: 16px;
           border: 1px solid #e8eef7;
         }
-        .google-btn {
-          width: 100%;
-          height: 42px;
-          border-radius: 999px;
-          border: 1px solid #dde2f0;
+        .modal-title {
+          font-size: 1.5rem;
+          margin: 0 0 20px 0;
+          text-align: center;
+        }
+        .auth-tabs {
           display: flex;
-          align-items: center;
-          justify-content: center;
-          gap: 8px;
-          background: #fff;
-          margin-top: 10px;
+          gap: 10px;
+          margin-bottom: 20px;
+        }
+        .auth-tab {
+          flex: 1;
+          padding: 10px;
+          background: transparent;
+          border: 1px solid var(--line);
+          border-radius: 8px;
           cursor: pointer;
+          transition: all 0.2s;
+          font-weight: 600;
         }
-        .google-btn:hover {
-          background: #f7f8fd;
+        .auth-tab.active {
+          background: #eef7ff;
+          border-color: var(--blue);
+          color: var(--blue);
         }
-        .google-icon-circle {
-          width: 18px;
-          height: 18px;
-          border-radius: 50%;
-          background: conic-gradient(
-            #4285f4 0 90deg,
-            #34a853 90 180deg,
-            #fbbc05 180 270deg,
-            #ea4335 270 360deg
-          );
+        .auth-form {
+          display: flex;
+          flex-direction: column;
+          gap: 15px;
+        }
+        .form-input {
+          padding: 12px;
+          border: 1px solid var(--line);
+          border-radius: 8px;
+          font-size: 1rem;
+        }
+        .form-input:focus {
+          outline: none;
+          border-color: var(--blue);
+        }
+        .form-helper {
+          font-size: 0.85rem;
+          color: #999;
+          margin-top: -10px;
+        }
+        .submit-btn {
+          padding: 12px;
+          background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+          color: white;
+          border: none;
+          border-radius: 8px;
+          font-size: 1rem;
+          font-weight: 600;
+          cursor: pointer;
+          transition: transform 0.2s;
+        }
+        .submit-btn:hover {
+          transform: translateY(-2px);
         }
 
         @media (max-width: 640px) {
           .gallery.three,
-          .cards.three,
           .video-grid.three {
             grid-template-columns: 1fr;
           }
@@ -966,16 +1052,88 @@ export default function Home() {
         }
       `}</style>
 
-      {/* -------------------- LOGIN MODAL -------------------- */}
+      {/* 로그인/회원가입 모달 */}
       {loginOpen && (
         <div className="modal-backdrop" onClick={() => setLoginOpen(false)}>
           <div className="modal" onClick={(e) => e.stopPropagation()}>
-            <h3>로그인</h3>
-            <p>Google 계정으로 로그인합니다.</p>
-            <button className="google-btn" onClick={onGoogleAuth}>
-              <span className="google-icon-circle"></span>
-              Google 계정으로 계속하기
-            </button>
+            <h2 className="modal-title">{isLogin ? '로그인' : '회원가입'}</h2>
+            
+            <div className="auth-tabs">
+              <button
+                className={`auth-tab ${isLogin ? 'active' : ''}`}
+                onClick={() => setIsLogin(true)}
+              >
+                로그인
+              </button>
+              <button
+                className={`auth-tab ${!isLogin ? 'active' : ''}`}
+                onClick={() => setIsLogin(false)}
+              >
+                회원가입
+              </button>
+            </div>
+
+            {isLogin ? (
+              <form className="auth-form" onSubmit={handleLogin}>
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="아이디"
+                  value={loginUsername}
+                  onChange={(e) => setLoginUsername(e.target.value)}
+                  required
+                />
+                <input
+                  type="password"
+                  className="form-input"
+                  placeholder="비밀번호"
+                  value={loginPassword}
+                  onChange={(e) => setLoginPassword(e.target.value)}
+                  required
+                />
+                <button type="submit" className="submit-btn">
+                  로그인
+                </button>
+              </form>
+            ) : (
+              <form className="auth-form" onSubmit={handleSignup}>
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="아이디 (영문, 숫자 4-20자)"
+                  value={signupUsername}
+                  onChange={(e) => setSignupUsername(e.target.value)}
+                  required
+                />
+                <input
+                  type="text"
+                  className="form-input"
+                  placeholder="이름"
+                  value={signupName}
+                  onChange={(e) => setSignupName(e.target.value)}
+                  required
+                />
+                <input
+                  type="password"
+                  className="form-input"
+                  placeholder="비밀번호 (최소 6자)"
+                  value={signupPassword}
+                  onChange={(e) => setSignupPassword(e.target.value)}
+                  required
+                />
+                <input
+                  type="password"
+                  className="form-input"
+                  placeholder="비밀번호 확인"
+                  value={signupPasswordConfirm}
+                  onChange={(e) => setSignupPasswordConfirm(e.target.value)}
+                  required
+                />
+                <button type="submit" className="submit-btn">
+                  회원가입
+                </button>
+              </form>
+            )}
           </div>
         </div>
       )}
