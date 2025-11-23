@@ -1,3 +1,5 @@
+// app/blog/page.tsx
+
 "use client";
 
 import { useState, useEffect } from "react";
@@ -35,9 +37,15 @@ export default function BlogPage() {
         <Link href="/" className="back-link">
           ← 홈으로
         </Link>
-        <h1>전체 글</h1>
+        <h1>AI 정보/가이드</h1>
         <p>AI와 기술에 대한 모든 이야기</p>
       </header>
+
+      {/* 🌟 AdSense 상단 공간 (광고 코드가 들어갈 자리) 🌟 */}
+      <div className="ad-unit-top">
+          {/* [여기에 AdSense 디스플레이 광고 코드 삽입] */}
+          <p className="ad-placeholder">-- 광고 영역 (AdSense 상단) --</p>
+      </div>
 
       <div className="filter-bar">
         {categories.map((cat) => (
@@ -72,11 +80,19 @@ export default function BlogPage() {
         )}
       </div>
 
+      {/* 🌟 AdSense 하단 공간 (광고 코드가 들어갈 자리) 🌟 */}
+      <div className="ad-unit-bottom">
+          {/* [여기에 AdSense 디스플레이 광고 코드 삽입] */}
+          <p className="ad-placeholder">-- 광고 영역 (AdSense 하단) --</p>
+      </div>
+
       <style jsx global>{`
         .blog-page {
           min-height: 100vh;
           background: #fff;
           padding: 40px 24px;
+          max-width: 1200px;
+          margin: 0 auto;
         }
         .blog-header {
           max-width: 1120px;
@@ -102,6 +118,26 @@ export default function BlogPage() {
           color: #5c5e62;
           font-size: 18px;
         }
+        
+        /* 🌟 광고 공간 스타일 */
+        .ad-unit-top, .ad-unit-bottom {
+            margin: 40px auto;
+            max-width: 900px;
+            text-align: center;
+        }
+        .ad-placeholder {
+            border: 1px dashed #ccc;
+            padding: 20px;
+            color: #888;
+            font-size: 0.9rem;
+            min-height: 100px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #f9f9f9;
+            border-radius: 8px;
+        }
+
         .filter-bar {
           max-width: 1120px;
           margin: 0 auto 32px;

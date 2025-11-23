@@ -1,182 +1,230 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
-import "./community.css";
-
-interface CommunityPost {
-  id: string;
-  title: string;
-  content: string;
-  author: string;
-  createdAt: string;
-}
+import { useEffect, useState } from "react";
+import { useSession, signOut } from "next-auth/react";
+import Link from "next/link";
 
 export default function CommunityPage() {
   const { data: session } = useSession();
-  const [posts, setPosts] = useState<CommunityPost[]>([]);
-  const [isWriting, setIsWriting] = useState(false);
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
+  const user = session?.user || null;
+
+  const [posts, setPosts] = useState<any[]>([]);
+  const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("ALL");
 
   useEffect(() => {
     loadPosts();
   }, []);
 
-  async function loadPosts() {
-    try {
-      const res = await fetch("/api/community");
-      if (res.ok) {
-        const data = await res.json();
-        setPosts(data);
-      }
-    } catch (err) {
-      console.error("Failed to load posts:", err);
-    }
-  }
-
-  async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault();
+  function loadPosts() {
+    const savedPosts = JSON.parse(localStorage.getItem("dori_posts") || "[]");
     
-    if (!session) {
-      alert("로그인이 필요합니다.");
-      return;
-    }
-
-    if (!title.trim() || !content.trim()) {
-      alert("제목과 내용을 입력해주세요.");
-      return;
-    }
-
-    setIsSubmitting(true);
-
-    try {
-      const res = await fetch("/api/community", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          title,
-          content,
-          author: session.user?.name || "익명",
-        }),
-      });
-
-      if (res.ok) {
-        setTitle("");
-        setContent("");
-        setIsWriting(false);
-        loadPosts();
-      } else {
-        alert("글 작성에 실패했습니다.");
-      }
-    } catch (err) {
-      console.error("Failed to submit:", err);
-      alert("글 작성 중 오류가 발생했습니다.");
-    } finally {
-      setIsSubmitting(false);
+    if (savedPosts.length === 0) {
+      const dummy = Array.from({ length: 15 }, (_, i) => ({
+        id: i + 1,
+        title: `Midjourney V6 프롬프트 공유 #${i + 1}`,
+        author: `Creator_${i}`,
+        image: `https://picsum.photos/seed/${i + 55}/600/${600 + Math.floor(Math.random() * 400)}`,
+        date: "2025.11.23",
+        tag: i % 3 === 0 ? "Tip" : (i % 3 === 1 ? "Review" : "Prompt"),
+        likes: Math.floor(Math.random() * 200),
+        comments: Math.floor(Math.random() * 20),
+        sparks: Math.floor(Math.random() * 50),
+      }));
+      setPosts(dummy);
+      localStorage.setItem("dori_posts", JSON.stringify(dummy));
+    } else {
+      setPosts(savedPosts);
     }
   }
+
+  function onLogout() { signOut({ callbackUrl: "/" }); }
+
+  const filteredPosts = posts.filter((post) => {
+    const categoryMatch = selectedCategory === "ALL" || post.tag === selectedCategory;
+    const searchLower = searchTerm.toLowerCase();
+    const searchMatch = post.title?.toLowerCase().includes(searchLower);
+    return categoryMatch && searchMatch;
+  });
+
+  const categories = ["ALL", "Tip", "Review", "Prompt", "Question"];
 
   return (
-    <main className="community-page">
-      <header className="community-header">
-        <div className="community-container">
-          <a href="/" className="back-link">← 홈으로</a>
-          <h1 className="community-title">COMMUNITY</h1>
-          <p className="community-desc">자유롭게 소통하는 공간입니다</p>
-        </div>
-      </header>
+    <main className="page">
+      <div className="scroll-spacer" />
 
-      <div className="community-container">
-        <section className="posts-section">
-          <div className="posts-header">
-            <h2>전체 글 ({posts.length})</h2>
-          </div>
-
-          {posts.length === 0 ? (
-            <div className="empty-state">
-              <p>아직 작성된 글이 없습니다.</p>
-              <p>첫 번째 글을 작성해보세요!</p>
-            </div>
-          ) : (
-            <div className="posts-list">
-              {posts.map((post) => (
-                <a key={post.id} href={`/community/${post.id}`} className="post-item">
-                  <div className="post-item-header">
-                    <h3 className="post-item-title">{post.title}</h3>
-                    <span className="post-item-author">{post.author}</span>
-                  </div>
-                  <p className="post-item-preview">{post.content.substring(0, 100)}...</p>
-                  <span className="post-item-date">
-                    {new Date(post.createdAt).toLocaleDateString('ko-KR')}
-                  </span>
-                </a>
+      <section className="container section" style={{ minHeight: "100vh", paddingTop: "40px" }}>
+        
+        {/* 상단 필터바 + 글쓰기 버튼 */}
+        <div className="filter-header">
+          <div className="left-controls">
+            <div className="category-pills">
+              {categories.map((cat) => (
+                <button 
+                  key={cat}
+                  className={`pill-btn ${selectedCategory === cat ? 'active' : ''}`}
+                  onClick={() => setSelectedCategory(cat)}
+                >
+                  {cat}
+                </button>
               ))}
             </div>
-          )}
-        </section>
+          </div>
 
-        <section className="write-section">
-          {!isWriting ? (
-            <button
-              className="write-toggle-btn"
-              onClick={() => {
-                if (!session) {
-                  alert("로그인이 필요합니다.");
-                  return;
-                }
-                setIsWriting(true);
-              }}
-            >
-              ✏️ 글쓰기
-            </button>
-          ) : (
-            <form className="write-form" onSubmit={handleSubmit}>
-              <h3>새 글 작성</h3>
-              
-              <input
-                type="text"
-                className="write-input"
-                placeholder="제목을 입력하세요"
-                value={title}
-                onChange={(e) => setTitle(e.target.value)}
-                maxLength={100}
+          <div className="right-controls">
+            <div className="search-box">
+              <span className="search-icon">🔍</span>
+              <input 
+                type="text" 
+                placeholder="정보 검색..." 
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
               />
+            </div>
+            
+            {/* 글쓰기 버튼 */}
+            <Link href="/community/write">
+              <button className="write-btn-primary">
+                🖊️ 글쓰기
+              </button>
+            </Link>
+          </div>
+        </div>
 
-              <textarea
-                className="write-textarea"
-                placeholder="내용을 입력하세요"
-                value={content}
-                onChange={(e) => setContent(e.target.value)}
-                rows={10}
-              />
+        {/* Masonry Grid */}
+        <div className="masonry-grid">
+          {filteredPosts.slice(0).reverse().map((post) => (
+            <div key={post.id} className="pin-card-wrapper">
+              <Link href={`/community/${post.id}`}>
+                <div className="pin-card">
+                  {post.image ? (
+                    <img src={post.image} alt={post.title} />
+                  ) : (
+                    <div className="text-placeholder">
+                      <span className="text-icon">📝</span>
+                      <h3>{post.title}</h3>
+                      <p>{post.content?.substring(0, 60)}...</p>
+                    </div>
+                  )}
+                  
+                  <div className="pin-overlay">
+                    <div className="overlay-top">
+                      <span className={`tag-badge ${post.tag}`}>{post.tag || "General"}</span>
+                    </div>
+                    <div className="overlay-bottom">
+                      <h4 className="pin-title">{post.title}</h4>
+                      <div className="pin-meta">
+                        <span className="author">by {post.author}</span>
+                        <div className="stats">
+                          <span>❤️ {post.likes || 0}</span>
+                          <span>⚡ {post.sparks || 0}</span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Link>
+            </div>
+          ))}
+        </div>
 
-              <div className="write-actions">
-                <button
-                  type="button"
-                  className="write-btn cancel"
-                  onClick={() => {
-                    setIsWriting(false);
-                    setTitle("");
-                    setContent("");
-                  }}
-                  disabled={isSubmitting}
-                >
-                  취소
-                </button>
-                <button
-                  type="submit"
-                  className="write-btn submit"
-                  disabled={isSubmitting}
-                >
-                  {isSubmitting ? "작성 중..." : "작성하기"}
-                </button>
-              </div>
-            </form>
-          )}
-        </section>
-      </div>
+        {filteredPosts.length === 0 && (
+          <div className="empty-state">
+            <p>검색 결과가 없습니다.</p>
+          </div>
+        )}
+
+      </section>
+
+      <style jsx global>{`
+        /* 기본 설정 */
+        .container { max-width: 1600px; margin: 0 auto; padding: 0 24px; } 
+
+        /* Filter Header Style */
+        .filter-header { 
+          display: flex; justify-content: space-between; align-items: center; 
+          margin-bottom: 32px; gap: 20px; flex-wrap: wrap; 
+          position: sticky; top: 70px; z-index: 40; 
+          background: rgba(255,255,255,0.9); backdrop-filter: blur(10px); 
+          padding: 16px 0; border-bottom: 1px solid transparent; 
+        }
+        
+        .left-controls { flex: 1; overflow-x: auto; }
+        .right-controls { display: flex; gap: 12px; align-items: center; }
+
+        .category-pills { display: flex; gap: 8px; padding-bottom: 4px; }
+        .pill-btn { padding: 8px 20px; border-radius: 30px; border: 1px solid var(--line); background: white; font-size: 14px; font-weight: 600; color: var(--text-sub); cursor: pointer; transition: 0.2s; white-space: nowrap; }
+        .pill-btn:hover { background: #f9f9f9; color: var(--text-main); }
+        .pill-btn.active { background: var(--text-main); color: white; border-color: var(--text-main); }
+
+        .search-box { position: relative; width: 240px; }
+        .search-box input { width: 100%; padding: 10px 16px; padding-left: 36px; border-radius: 30px; border: 1px solid var(--line); font-size: 14px; outline: none; transition: 0.2s; background: #f9f9f9; }
+        .search-box input:focus { border-color: var(--blue); background: #fff; box-shadow: 0 0 0 3px rgba(0,122,255,0.1); }
+        .search-icon { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); opacity: 0.5; font-size: 14px; }
+
+        /* 글쓰기 버튼 스타일 */
+        .write-btn-primary {
+          padding: 10px 24px;
+          background-color: #007AFF !important;
+          color: #ffffff !important;
+          border: none;
+          border-radius: 30px;
+          font-weight: 700;
+          font-size: 14px;
+          cursor: pointer;
+          transition: 0.2s;
+          white-space: nowrap;
+          box-shadow: 0 4px 12px rgba(0,122,255,0.2);
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .write-btn-primary:hover {
+          background-color: #005bb5 !important;
+          transform: translateY(-2px);
+          box-shadow: 0 6px 16px rgba(0,122,255,0.3);
+        }
+
+        /* Masonry Grid */
+        .masonry-grid { column-count: 5; column-gap: 20px; }
+        .pin-card-wrapper { break-inside: avoid; margin-bottom: 20px; }
+
+        .pin-card { position: relative; border-radius: 16px; overflow: hidden; cursor: pointer; background: #f0f0f0; transform: translateZ(0); }
+        .pin-card img { width: 100%; height: auto; display: block; transition: 0.3s; }
+        
+        .text-placeholder { padding: 30px; background: white; border: 1px solid var(--line); min-height: 200px; display: flex; flex-direction: column; justify-content: center; text-align: center; }
+        .text-icon { font-size: 32px; margin-bottom: 12px; display: block; }
+        .text-placeholder h3 { font-size: 18px; margin-bottom: 8px; line-height: 1.4; }
+        .text-placeholder p { font-size: 13px; color: #666; line-height: 1.5; }
+
+        .pin-overlay { position: absolute; inset: 0; background: linear-gradient(to bottom, rgba(0,0,0,0.1), rgba(0,0,0,0.6)); opacity: 0; transition: 0.2s; display: flex; flex-direction: column; justify-content: space-between; padding: 16px; }
+        .pin-card:hover .pin-overlay { opacity: 1; }
+        
+        .overlay-top { display: flex; justify-content: flex-end; }
+        .tag-badge { background: rgba(255,255,255,0.95); padding: 4px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; color: #333; box-shadow: 0 2px 8px rgba(0,0,0,0.1); }
+        .tag-badge.Tip { color: #007AFF; }
+        .tag-badge.Prompt { color: #8B5CF6; }
+        
+        .overlay-bottom { color: white; transform: translateY(10px); transition: 0.2s; }
+        .pin-card:hover .overlay-bottom { transform: translateY(0); }
+        
+        .pin-title { font-size: 16px; font-weight: 700; margin: 0 0 6px 0; text-shadow: 0 1px 3px rgba(0,0,0,0.5); line-height: 1.3; }
+        .pin-meta { display: flex; justify-content: space-between; align-items: center; font-size: 12px; font-weight: 500; opacity: 0.95; }
+        .stats { display: flex; gap: 8px; }
+
+        .empty-state { text-align: center; padding: 60px 0; color: #999; width: 100%; }
+
+        /* 반응형 */
+        @media (max-width: 1400px) { .masonry-grid { column-count: 4; } }
+        @media (max-width: 1100px) { .masonry-grid { column-count: 3; } }
+        @media (max-width: 900px) { 
+          .masonry-grid { column-count: 2; column-gap: 12px; } 
+          .pin-card-wrapper { margin-bottom: 12px; }
+          .filter-header { flex-direction: column; align-items: stretch; gap: 16px; }
+          .right-controls { justify-content: space-between; }
+          .search-box { flex: 1; width: auto; }
+        }
+      `}</style>
     </main>
   );
 }

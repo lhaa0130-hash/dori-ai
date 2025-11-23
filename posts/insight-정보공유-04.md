@@ -283,20 +283,13 @@ Leonardo, Midjourney, Stable Diffusion 중심 정리
 
 ---
 
-### 🎯 썸네일 문구 2개
-
-1. `이미지 생성 AI 완전 정리: Midjourney · Stable Diffusion · Leonardo 비교`
-2. `썸네일부터 제품 목업까지, 이미지 생성 AI 제대로 활용하는 법`
-
----
-
-### 📝 메타 설명(약 150자)
+### 📝 메타 설명
 
 이미지 생성 AI의 개념과 작동 원리를 쉽게 정리합니다. Midjourney, Stable Diffusion, Leonardo를 중심으로 특징과 차이, 마케팅·제품·개인 브랜딩에서의 활용법, 프롬프트 작성 팁, 저작권·인물 사용 주의점까지 한 번에 살펴봅니다.
 
 ---
 
-### # 해시태그 8~12개
+### # 해시태그
 
 #이미지생성AI
 #Midjourney
@@ -309,9 +302,3 @@ Leonardo, Midjourney, Stable Diffusion 중심 정리
 #AI활용법
 #인공지능이미지
 
----
-
-### 📚 관련 글 추천 제목 2개
-
-1. `텍스트 프롬프트 잘 쓰는 법: 이미지 생성 AI 결과를 확 바꾸는 문장 구조`
-2. `영상·음성까지 확장되는 생성형 AI 워크플로우, 한 번에 이해하기`

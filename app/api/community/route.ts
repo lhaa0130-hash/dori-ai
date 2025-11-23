@@ -1,10 +1,12 @@
+// app/api/community/route.ts
+
 import { NextResponse } from 'next/server';
 import fs from 'fs';
 import path from 'path';
 
 const COMMUNITY_FILE = path.join(process.cwd(), 'data', 'community.json');
 
-// 데이터 폴더 생성
+// 데이터 폴더 및 파일이 없으면 생성하는 함수
 function ensureDataDir() {
   const dataDir = path.join(process.cwd(), 'data');
   if (!fs.existsSync(dataDir)) {
@@ -23,6 +25,7 @@ export async function GET() {
     const posts = JSON.parse(data);
     return NextResponse.json(posts);
   } catch (error) {
+    console.error("Community GET Error:", error);
     return NextResponse.json([]);
   }
 }
@@ -34,6 +37,10 @@ export async function POST(request: Request) {
     const body = await request.json();
     const { title, content, author } = body;
 
+    if (!title || !content) {
+      return NextResponse.json({ error: '제목과 내용을 입력해주세요.' }, { status: 400 });
+    }
+
     const data = fs.readFileSync(COMMUNITY_FILE, 'utf8');
     const posts = JSON.parse(data);
 
@@ -41,15 +48,17 @@ export async function POST(request: Request) {
       id: Date.now().toString(),
       title,
       content,
-      author,
+      author: author || '익명',
       createdAt: new Date().toISOString(),
     };
 
+    // 최신 글이 위로 오도록 추가
     posts.unshift(newPost);
     fs.writeFileSync(COMMUNITY_FILE, JSON.stringify(posts, null, 2), 'utf8');
 
     return NextResponse.json(newPost);
   } catch (error) {
-    return NextResponse.json({ error: 'Failed to create post' }, { status: 500 });
+    console.error("Community POST Error:", error);
+    return NextResponse.json({ error: '글 작성 중 오류가 발생했습니다.' }, { status: 500 });
   }
 }

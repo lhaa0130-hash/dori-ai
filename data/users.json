@@ -5,5 +5,12 @@
     "password": "$2b$10$jmJKmmD331DbA4S/9jCgTeTuZPEjpD/CUKMZ9K/yu9.tvCDRqSxYa",
     "name": "이진형",
     "createdAt": "2025-11-21T11:29:40.308Z"
+  },
+  {
+    "id": "1763730813801",
+    "username": "lhaa0130",
+    "password": "$2b$10$hNUoHZt6juYQab0F60L8A.fawMxE6RqnjSvbtn8cSbUT47H5aBuaa",
+    "name": "Lhaa0130",
+    "createdAt": "2025-11-21T13:13:33.801Z"
   }
 ]
