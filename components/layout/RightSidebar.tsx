@@ -3,10 +3,24 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
+// ★ 타입 정의 추가 (에러 해결의 핵심)
+type MenuItem = {
+  name: string;
+  path: string;
+  badge?: number; // 있을 수도 있고 없을 수도 있음 (?)
+  tag?: string;   // 있을 수도 있고 없을 수도 있음 (?)
+};
+
+type MenuGroup = {
+  label: string;
+  items: MenuItem[];
+};
+
 export default function RightSidebar() {
   const pathname = usePathname();
 
-  const menuGroups = [
+  // ★ 타입 적용
+  const menuGroups: MenuGroup[] = [
     {
       label: "내 워크스페이스",
       items: [
@@ -57,10 +71,10 @@ export default function RightSidebar() {
                         {/* 텍스트 */}
                         <span className="item-text">{item.name}</span>
                         
-                        {/* 뱃지 & 태그 (flex로 높이 맞춤) */}
+                        {/* 뱃지 & 태그 (타입 정의 덕분에 에러 안 남) */}
                         <div className="badge-container">
-                          {item.badge && <span className="small-badge count">{item.badge}</span>}
-                          {item.tag && <span className="small-badge tag">{item.tag}</span>}
+                          {item.badge ? <span className="small-badge count">{item.badge}</span> : null}
+                          {item.tag ? <span className="small-badge tag">{item.tag}</span> : null}
                         </div>
                         
                         {/* 활성 상태바 */}
@@ -115,20 +129,20 @@ export default function RightSidebar() {
           font-size: 13px; 
           font-weight: 800;
           color: #111;
-          margin-bottom: 12px;
-          padding-left: 16px; /* 왼쪽 정렬 보정 */
+          margin-bottom: 10px;
+          padding-left: 12px;
           letter-spacing: -0.3px;
         }
 
-        .menu-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
+        .menu-list { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 2px; }
 
-        /* ★ 메뉴 아이템 (완벽한 수직 중앙 정렬) */
+        /* 메뉴 아이템 */
         .menu-text-link {
           display: flex;
-          align-items: center; /* 수직 중앙 */
-          justify-content: space-between; /* 양끝 정렬 */
-          height: 48px; /* 높이 고정 */
-          padding: 0 16px; /* 좌우 패딩 */
+          align-items: center;
+          justify-content: space-between;
+          height: 48px;
+          padding: 0 16px;
           border-radius: 10px;
           color: #444;
           font-size: 15px;
@@ -149,40 +163,36 @@ export default function RightSidebar() {
           font-weight: 700;
         }
 
-        /* 텍스트 */
         .item-text {
-          line-height: 1; /* 줄높이 초기화 (중요) */
-          padding-top: 2px; /* 폰트 특성상 시각적 중앙 보정 */
+          line-height: 1;
+          padding-top: 2px;
         }
 
-        /* 뱃지 컨테이너 */
         .badge-container {
           display: flex;
           align-items: center;
           height: 100%;
         }
 
-        /* 뱃지 & 태그 스타일 */
         .small-badge {
           font-size: 11px;
           font-weight: 700;
           padding: 0 8px;
-          height: 22px; /* 높이 고정 */
+          height: 22px;
           border-radius: 12px;
           display: flex;
-          align-items: center; /* 뱃지 내부 텍스트 수직 중앙 */
+          align-items: center;
           justify-content: center;
           line-height: 1;
+          margin-left: auto;
         }
 
-        /* 숫자 (빨강) */
         .small-badge.count {
           background: #ff4d4f;
           color: white;
           min-width: 22px;
         }
 
-        /* 태그 (파랑) */
         .small-badge.tag {
           background: #e0f2fe;
           color: var(--primary);
