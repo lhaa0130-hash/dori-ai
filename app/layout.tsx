@@ -1,9 +1,9 @@
 import type { Metadata } from "next";
+import Script from "next/script"; // ★ Script 컴포넌트 추가
 import "./globals.css";
 import { AuthProvider } from "./providers";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
-// RightSidebar 삭제됨
 
 export const metadata: Metadata = {
   title: "DORI-AI | Create Reality",
@@ -18,26 +18,28 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        {/* Google AdSense */}
-        <script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1b50839955170851"
-          crossOrigin="anonymous"
-        ></script>
+        {/* 1. 구글 애드센스 Verification Meta Tag (사이트 확인용) */}
+        {/* pub-YOUR_PUBLISHER_ID 부분을 고객님의 코드로 교체해야 합니다. */}
+        <meta name="google-adsense-account" content="pub-1868839951780851" /> 
+        
+        {/* ★ 2. Google AdSense Main Script (광고 로딩용) */}
+        <Script 
+            async 
+            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1868839951780851" 
+            strategy="lazyOnload" 
+            crossOrigin="anonymous" 
+        />
       </head>
+
       <body suppressHydrationWarning={true}>
         <AuthProvider>
-          {/* 1. 헤더 */}
           <Header />
-
-          {/* 2. 메인 레이아웃 (사이드바 없음) */}
           <div className="main-layout">
             <div className="content-area">
               {children}
               <Footer />
             </div>
           </div>
-
         </AuthProvider>
       </body>
     </html>
