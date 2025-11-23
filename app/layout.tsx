@@ -17,11 +17,19 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko">
+      <head>
+        {/* Google AdSense */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1b50839955170851"
+          crossOrigin="anonymous"
+        ></script>
+      </head>
       <body suppressHydrationWarning={true}>
         <AuthProvider>
           {/* 1. 헤더 */}
           <Header />
-          
+
           {/* 2. 메인 레이아웃 (사이드바 없음) */}
           <div className="main-layout">
             <div className="content-area">
