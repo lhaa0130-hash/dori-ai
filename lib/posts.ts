@@ -1,70 +1,45 @@
-// lib/posts.ts
-
 import fs from 'fs';
 import path from 'path';
 import matter from 'gray-matter';
-import { remark } from 'remark';
-import html from 'remark-html';
 
+// 1. posts 디렉토리 경로 설정 (프로젝트 루트의 'posts' 폴더를 바라봄)
+// 만약 폴더명이 다르다면 'posts' 부분을 수정해주세요.
 const postsDirectory = path.join(process.cwd(), 'posts');
 
-// 파일 경로와 내용을 재귀적으로 읽어오는 헬퍼 함수
-function getAllMarkdownFiles(dir: string, fileList: string[] = []): string[] {
-  const files = fs.readdirSync(dir);
-
-  files.forEach(file => {
-    const filePath = path.join(dir, file);
-    const stat = fs.statSync(filePath);
-
-    if (stat.isDirectory()) {
-      // 디렉토리인 경우 재귀 호출
-      getAllMarkdownFiles(filePath, fileList);
-    } else if (filePath.endsWith('.md')) {
-      // 마크다운 파일만 추가
-      fileList.push(filePath);
-    }
-  });
-
-  return fileList;
+// 2. 게시물 데이터 타입 정의 (오류 해결의 핵심!)
+export interface PostData {
+  id: string;
+  date: string;
+  title: string;
+  category: string;
+  [key: string]: any; // 그 외 다른 필드 허용
 }
 
-export function getSortedPostsData() {
+export function getSortedPostsData(): PostData[] {
+  // posts 폴더가 없는 경우 빈 배열 반환 (에러 방지)
   if (!fs.existsSync(postsDirectory)) {
     return [];
   }
 
-  // posts 폴더 내 모든 마크다운 파일 경로 가져오기
-  const allFilePaths = getAllMarkdownFiles(postsDirectory);
+  // /posts 디렉토리 내의 파일 이름들을 가져옴
+  const fileNames = fs.readdirSync(postsDirectory);
+  
+  const allPostsData = fileNames.map((fileName) => {
+    // id를 가져오기 위해 파일 이름에서 ".md" 제거
+    const id = fileName.replace(/\.md$/, '');
 
-  const allPostsData = allFilePaths.map((fullPath) => {
+    // 마크다운 파일을 문자열로 읽기
+    const fullPath = path.join(postsDirectory, fileName);
     const fileContents = fs.readFileSync(fullPath, 'utf8');
+
+    // gray-matter를 사용하여 포스트의 메타데이터 파싱
     const matterResult = matter(fileContents);
 
-    // posts/를 기준으로 상대 경로 계산하여 ID로 사용
-    const relativePath = path.relative(postsDirectory, fullPath);
-    const id = relativePath.replace(/\.md$/, '');
-
-    // ★ 카테고리 명칭 통일 로직 시작
-    let categoryFromFrontmatter = (matterResult.data.category || "") as string;
-    
-    // 1. "생성형 AI 정보 공유" -> "AI 정보 공유"로 통합 (요청 반영)
-    if (categoryFromFrontmatter === "생성형 AI 정보 공유") {
-        categoryFromFrontmatter = "AI 정보 공유";
-    }
-
-    // 2. 카테고리가 없거나 비어있는 경우 기본값 설정
-    //    ID에 'news/' 경로가 포함되어 있으면 'AI 뉴스'로, 아니면 'AI 정보 공유'로 설정
-    if (!categoryFromFrontmatter) {
-        categoryFromFrontmatter = id.includes('news/') ? "AI 뉴스" : "AI 정보 공유";
-    }
-    // ★ 카테고리 명칭 통일 로직 끝
-
-    // 파일명에서 읽어온 모든 데이터 반환
+    // 데이터를 PostData 타입으로 반환
     return {
       id,
       ...matterResult.data,
-      category: categoryFromFrontmatter,
-    };
+    } as PostData;
   });
 
   // 날짜순 정렬 (최신순)
@@ -77,33 +52,33 @@ export function getSortedPostsData() {
   });
 }
 
-// 특정 ID의 포스트 데이터 가져오기 (HTML 변환 포함)
-export async function getPostData(id: string) {
-  // ID를 경로로 변환
-  const fullPath = path.join(postsDirectory, `${decodeURIComponent(id)}.md`);
+// (선택 사항) 특정 ID의 게시물 데이터를 가져오는 함수
+export function getPostData(id: string) {
+  const fullPath = path.join(postsDirectory, `${id}.md`);
   const fileContents = fs.readFileSync(fullPath, 'utf8');
 
+  // gray-matter를 사용하여 포스트의 메타데이터 파싱
   const matterResult = matter(fileContents);
 
-  // 마크다운을 HTML로 변환
-  const processedContent = await remark()
-    .use(html)
-    .process(matterResult.content);
-  const contentHtml = processedContent.toString();
-    
-  // 카테고리 데이터에도 통일된 명칭 적용 (읽는 순간 통일)
-  let category = (matterResult.data.category || "") as string;
-  if (category === "생성형 AI 정보 공유") {
-      category = "AI 정보 공유";
-  }
-  if (!category) {
-      category = id.includes('news/') ? "AI 뉴스" : "AI 정보 공유";
-  }
-
+  // 컨텐츠와 데이터를 결합하여 반환
   return {
     id,
-    contentHtml,
     ...matterResult.data,
-    category: category,
+    content: matterResult.content,
   };
+}
+
+// (선택 사항) 동적 라우팅을 위한 경로 목록 반환 함수
+export function getAllPostIds() {
+  if (!fs.existsSync(postsDirectory)) {
+    return [];
+  }
+  const fileNames = fs.readdirSync(postsDirectory);
+  return fileNames.map((fileName) => {
+    return {
+      params: {
+        id: fileName.replace(/\.md$/, ''),
+      },
+    };
+  });
 }
