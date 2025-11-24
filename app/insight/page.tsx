@@ -1,3 +1,5 @@
+// app/insight/page.tsx
+
 import { getSortedPostsData } from "@/lib/posts";
 import InsightList from "@/components/insight/InsightList";
 

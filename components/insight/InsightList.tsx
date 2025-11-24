@@ -1,3 +1,5 @@
+// components/insight/InsightList.tsx (최종)
+
 "use client";
 
 import { useState } from "react";
@@ -7,84 +9,111 @@ type Post = {
   id: string;
   title: string;
   date: string;
-  category: string;
-  thumbnail?: string; // 썸네일은 있을 수도 없을 수도 있음
+  category: string; // 이제 'AI 정보 공유' 또는 'AI 뉴스'로 통일됨
+  thumbnail?: string;
+  author?: string; 
 };
 
 export default function InsightList({ posts }: { posts: Post[] }) {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("ALL");
 
-  // 카테고리 목록
-  const categories = ["ALL", "AI 정보 공유", "TREND", "TIP", "TECH", "REVIEW", "BIZ", "NEWS"]; 
+  // ★ 탭 목록을 하드코딩된 두 카테고리로 설정
+  const categories = ["ALL", "AI 정보 공유", "AI 뉴스"]; 
 
   const filteredPosts = posts.filter((post) => {
-    const matchCat = selectedCategory === "ALL" || post.category === selectedCategory;
+    // 1. 카테고리 매칭
+    let matchCat = false;
+    if (selectedCategory === "ALL") {
+        matchCat = true;
+    } else {
+        // lib/posts.ts에서 통일된 카테고리 명칭으로 필터링
+        matchCat = post.category === selectedCategory; 
+    }
+    
+    // 2. 검색어 필터링
+    // 검색은 제목에 대해서만 진행
     const matchSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase());
+    
     return matchCat && matchSearch;
   });
 
   return (
-    <div className="insight-list-wrapper">
-      {/* 필터 및 검색 */}
-      <div className="filter-bar">
-        <div className="category-tabs">
-          {categories.map((cat) => (
-            <button 
-              key={cat} 
-              className={`tab-btn ${selectedCategory === cat ? 'active' : ''}`}
-              onClick={() => setSelectedCategory(cat)}
-            >
-              {cat}
-            </button>
-          ))}
+    <main className="page">
+      <div className="scroll-spacer" />
+
+      <section className="container section" style={{ minHeight: "80vh", paddingTop: "60px" }}>
+        
+        <div className="page-header">
+          <h1 className="page-title">Daily Insight</h1>
+          <p className="page-desc">
+            AI 기술의 최신 트렌드와 깊이 있는 분석, 실전 꿀팁.
+          </p>
         </div>
-        <div className="search-wrap">
-          <input 
-            type="text" 
-            placeholder="주제 검색..." 
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-          />
-          <span className="icon">🔍</span>
+
+        {/* 필터 및 검색 */}
+        <div className="filter-bar">
+          <div className="category-tabs">
+            {categories.map((cat) => (
+              <button 
+                key={cat} 
+                className={`tab-btn ${selectedCategory === cat ? 'active' : ''}`}
+                onClick={() => setSelectedCategory(cat)}
+              >
+                {cat}
+              </button>
+            ))}
+          </div>
+          <div className="search-wrap">
+            <input 
+              type="text" 
+              placeholder="주제 검색..." 
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+            />
+            <span className="icon">🔍</span>
+          </div>
         </div>
-      </div>
 
-      {/* 인사이트 그리드 리스트 */}
-      <div className="insight-grid">
-        {filteredPosts.length > 0 ? (
-          filteredPosts.map((item) => (
-            <Link href={`/insight/${item.id}`} key={item.id} className="insight-card">
-              
-              {/* ★ 썸네일 영역 수정됨 */}
-              <div className="card-thumb">
-                {item.thumbnail ? (
-                  <img src={item.thumbnail} alt={item.title} className="thumb-img" />
-                ) : (
-                  <span className="thumb-icon">📝</span>
-                )}
-              </div>
-
-              <div className="card-body">
-                <div className="card-meta">
-                  <span className="cat-badge">{item.category}</span>
-                  <span className="date">{item.date}</span>
+        {/* 인사이트 그리드 리스트 */}
+        <div className="insight-grid">
+          {filteredPosts.length > 0 ? (
+            filteredPosts.map((item) => (
+              <Link href={`/insight/${item.id}`} key={item.id} className="insight-card">
+                <div className="card-thumb">
+                  {item.thumbnail ? (
+                    <img src={item.thumbnail} alt={item.title} className="thumb-img" />
+                  ) : (
+                    <span className="thumb-icon">📝</span>
+                  )}
                 </div>
-                <h3 className="card-title">{item.title}</h3>
-                <p className="card-summary">클릭하여 전체 내용을 확인하세요.</p>
-                <div className="card-footer">
-                  <span className="author">By DoriMaster</span>
-                  <span className="read-more">Read more →</span>
+                <div className="card-body">
+                  <div className="card-meta">
+                    {/* 통일된 category 명칭 출력 */}
+                    <span className="cat-badge">{item.category || "General"}</span>
+                    <span className="date">{item.date}</span>
+                  </div>
+                  <h3 className="card-title">{item.title}</h3>
+                  <p className="card-summary">클릭하여 전체 내용을 확인하세요.</p>
+                  <div className="card-footer">
+                    <span className="author">By {item.author || "Unknown"}</span>
+                    <span className="read-more">Read more →</span>
+                  </div>
                 </div>
-              </div>
-            </Link>
-          ))
-        ) : (
-          <div className="empty-state">검색 결과가 없습니다.</div>
-        )}
-      </div>
+              </Link>
+            ))
+          ) : (
+            <div className="empty-state">검색 결과가 없습니다.</div>
+          )}
+        </div>
+      </section>
 
-      <style jsx>{`
+      {/* 스타일은 이전과 동일하게 유지됩니다. */}
+      <style jsx global>{`
+        .page-header { text-align: center; margin-bottom: 60px; }
+        .page-title { font-size: 42px; font-weight: 800; margin-bottom: 12px; color: var(--text-main); }
+        .page-desc { font-size: 16px; color: var(--text-sub); line-height: 1.6; }
+
         .filter-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; flex-wrap: wrap; gap: 20px; border-bottom: 1px solid var(--line); padding-bottom: 20px; }
         .category-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
         .tab-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--line); background: white; cursor: pointer; font-weight: 600; color: var(--text-sub); transition: 0.2s; font-size: 13px; white-space: nowrap; }
@@ -100,32 +129,10 @@ export default function InsightList({ posts }: { posts: Post[] }) {
         .insight-card { background: white; border: 1px solid var(--line); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); text-decoration: none; color: inherit; height: 100%; }
         .insight-card:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); border-color: var(--blue); }
 
-        /* ★ 썸네일 스타일 수정됨 */
-        .card-thumb { 
-          height: 200px; 
-          background: #f7f9fc; 
-          display: flex; 
-          align-items: center; 
-          justify-content: center; 
-          border-bottom: 1px solid var(--line);
-          overflow: hidden; /* 이미지가 넘치지 않게 */
-          position: relative;
-        }
-        
-        /* 실제 이미지 스타일 */
-        .thumb-img {
-          width: 100%;
-          height: 100%;
-          object-fit: cover; /* 비율 유지하며 꽉 채우기 */
-          transition: transform 0.5s ease;
-        }
-
-        /* 카드 호버 시 이미지 확대 효과 */
-        .insight-card:hover .thumb-img {
-          transform: scale(1.05);
-        }
-
-        .thumb-icon { font-size: 48px; } /* 이미지가 없을 때 아이콘 크기 */
+        .card-thumb { height: 200px; background: #f7f9fc; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--line); overflow: hidden; position: relative; }
+        .thumb-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
+        .insight-card:hover .thumb-img { transform: scale(1.05); }
+        .thumb-icon { font-size: 48px; }
 
         .card-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
         
@@ -147,6 +154,6 @@ export default function InsightList({ posts }: { posts: Post[] }) {
           .search-wrap { width: 100%; }
         }
       `}</style>
-    </div>
+    </main>
   );
 }
