@@ -47,13 +47,13 @@ export default function StudioPage() {
     setMyVotes(savedVotes);
 
     if (savedTools.length === 0) {
-      // ★ 70개 이상의 툴 데이터 (이전과 동일)
+      // 초기 데이터 (데이터가 없으면 이 부분을 실행)
       const initialData = [
-        // 1. [TEXT & LLM]
+        // 1. [LLM & Chatbots]
         { id: 101, title: "ChatGPT", category: "TEXT", desc: "가장 똑똑하고 범용적인 대화형 AI 표준", logo: "https://logo.clearbit.com/openai.com", price: "Freemium", rating: 0, reviews: 0, link: "https://chat.openai.com", history: "2022.11 GPT-3.5 출시\n2023.03 GPT-4 공개\n2024.05 GPT-4o 멀티모달 업데이트", news: "GPT-4o 모델 업데이트로 멀티모달 기능 강화.", commentsList: [] },
         { id: 102, title: "Claude", category: "TEXT", desc: "자연스러운 한국어와 뛰어난 코딩/작문 능력", logo: "https://logo.clearbit.com/anthropic.com", price: "Free", rating: 0, reviews: 0, link: "https://claude.ai", history: "OpenAI 출신 연구원들이 설립한 Anthropic에서 개발. 안전하고 윤리적인 AI를 지향.", news: "Claude 3.5 Sonnet 출시 이후 성능 입증.", commentsList: [] },
         { id: 103, title: "Perplexity", category: "TEXT", desc: "실시간 웹 검색 기반의 AI 검색엔진", logo: "https://logo.clearbit.com/perplexity.ai", price: "Freemium", rating: 0, reviews: 0, link: "https://www.perplexity.ai", history: "전통적인 검색엔진을 대체하기 위해 등장.", news: "최근 기업가치 급상승 및 Pro Search 기능 고도화.", commentsList: [] },
-        { id: 104, title: "Gemini", category: "TEXT", desc: "구글 생태계와 연동되는 강력한 멀티모달 AI", logo: "https://logo.clearbit.com/deepmind.google", price: "Free", rating: 0, reviews: 0, link: "https://gemini.google.com", history: "구글의 바드(Bard)가 리브랜딩됨. 워크스페이스 연동성 강점.", news: "1.5 Pro 모델 업데이트로 긴 문맥 처리 능력 향상.", commentsList: [] },
+        { id: 104, title: "Gemini", category: "TEXT", desc: "구글 생태계 연동 멀티모달 AI", logo: "https://logo.clearbit.com/deepmind.google", price: "Free", rating: 0, reviews: 0, link: "https://gemini.google.com", history: "구글의 바드(Bard)가 리브랜딩됨. 워크스페이스 연동성 강점.", news: "1.5 Pro 모델 업데이트로 긴 문맥 처리 능력 향상.", commentsList: [] },
         { id: 105, title: "Grok", category: "TEXT", desc: "X(트위터) 데이터 기반의 실시간 대화형 AI", logo: "https://logo.clearbit.com/x.ai", price: "Paid", rating: 0, reviews: 0, link: "https://grok.x.ai", history: "일론 머스크의 xAI가 개발. 유머러스하고 반항적인 성격.", news: "이미지 인식 기능 추가.", commentsList: [] },
         { id: 106, title: "Mistral", category: "TEXT", desc: "유럽 최고의 성능을 자랑하는 오픈소스 기반 모델", logo: "https://logo.clearbit.com/mistral.ai", price: "Paid", rating: 0, reviews: 0, link: "https://mistral.ai", history: "프랑스 스타트업 Mistral AI가 개발. 효율적인 파라미터 수로 높은 성능.", news: "Codestral 모델 출시.", commentsList: [] },
         { id: 107, title: "Copilot", category: "TEXT", desc: "MS Office와 결합된 생산성 향상 비서", logo: "https://logo.clearbit.com/microsoft.com", price: "Freemium", rating: 0, reviews: 0, link: "https://copilot.microsoft.com", history: "GPT-4 기술을 기반으로 윈도우 및 오피스에 통합.", news: "Copilot PC 출시.", commentsList: [] },
@@ -98,7 +98,7 @@ export default function StudioPage() {
         { id: 409, title: "Descript", category: "SOUND", desc: "텍스트 수정으로 녹음 파일 편집 (Overdub)", logo: "https://logo.clearbit.com/descript.com", price: "Paid", rating: 0, reviews: 0, link: "https://www.descript.com", history: "문서 편집하듯 오디오 편집.", news: "Eye Contact 교정 기능.", commentsList: [] },
         { id: 410, title: "Moises", category: "SOUND", desc: "뮤지션을 위한 트랙 분리 및 연습", logo: "https://logo.clearbit.com/moises.ai", price: "Free", rating: 0, reviews: 0, link: "https://moises.ai", history: "악기 연습용 음원 분리 앱.", news: "스마트 메트로놈.", commentsList: [] },
 
-        // 4. [AUTOMATION]
+        // 5. [AUTOMATION]
         { id: 501, title: "Make", category: "AUTOMATION", desc: "복잡한 워크플로우 시각적 자동화", logo: "https://logo.clearbit.com/make.com", price: "Freemium", rating: 0, reviews: 0, link: "https://www.make.com", history: "구 Integromat. 노코드 자동화의 강력한 툴.", news: "AI 에이전트 통합.", commentsList: [] },
         { id: 502, title: "Zapier", category: "AUTOMATION", desc: "앱 연동 자동화의 대명사", logo: "https://logo.clearbit.com/zapier.com", price: "Freemium", rating: 0, reviews: 0, link: "https://zapier.com", history: "가장 많은 앱 통합을 지원.", news: "Zapier Canvas(시각화 도구) 출시.", commentsList: [] },
         { id: 503, title: "n8n", category: "AUTOMATION", desc: "워크플로우 제어가 자유로운 오픈소스 자동화", logo: "https://logo.clearbit.com/n8n.io", price: "Free", rating: 0, reviews: 0, link: "https://n8n.io", history: "자체 서버 호스팅이 가능한 자동화 툴.", news: "LangChain 연동.", commentsList: [] },
@@ -255,7 +255,7 @@ export default function StudioPage() {
 
             return (
               <div key={cat.key} className="category-section">
-                <h2 className="section-title">{cat.label}</h2>
+                <h2 className="section-title" style={{ borderLeftColor: cat.text }}>{cat.label}</h2>
                 <div className="ranking-grid">
                   {categoryTools.map((item, index) => {
                     const hasRank = item.reviews > 0;
@@ -292,8 +292,10 @@ export default function StudioPage() {
                           </div>
                           <div className="vote-actions">
                             {[1, 2, 3, 4, 5].map((score) => {
-                              const isHovered = hoverState?.id === item.id && score <= hoverState.score;
+                              // ★ 타입 안전성 확보
+                              const isHovered = hoverState && hoverState.id === item.id && score <= hoverState.score;
                               const isSelected = !hoverState && (myVotes[item.id] || 0) >= score;
+                              
                               return (
                                 <button key={score} type="button" className={`star-btn ${isHovered || isSelected ? 'active' : ''}`}
                                   onClick={(e) => { e.stopPropagation(); handleVote(item.id, score); }}
@@ -345,7 +347,7 @@ export default function StudioPage() {
               </div>
             </div>
 
-            <div className="modal-tabs">
+            <div className modal-tabs>
               <button className={`m-tab ${modalTab === "INFO" ? "active" : ""}`} onClick={() => setModalTab("INFO")}>Info</button>
               <button className={`m-tab ${modalTab === "REVIEW" ? "active" : ""}`} onClick={() => setModalTab("REVIEW")}>Reviews <span className="count">{selectedTool.commentsList?.length || 0}</span></button>
             </div>
@@ -406,12 +408,12 @@ export default function StudioPage() {
                     </div>
                   </div>
 
-                  <div className review-input-box>
+                  <div className="review-input-box">
                     <textarea placeholder="Leave your honest review here." value={reviewText} onChange={(e) => setReviewText(e.target.value)} />
                     <button onClick={handleReviewSubmit}>Submit Review</button>
                   </div>
 
-                  <div className="review-list">
+                  <div className review-list>
                     {selectedTool.commentsList?.length > 0 ? selectedTool.commentsList.map((c: Comment) => (
                       <div key={c.id} className="review-bubble-row">
                         <div className="review-avatar" style={{background: c.avatarColor || '#eee'}}>
@@ -442,13 +444,14 @@ export default function StudioPage() {
         .tab-btn.active { background: var(--text-main); color: white; border-color: var(--text-main); }
         .search-wrap { position: relative; width: 260px; }
         .search-wrap input { width: 100%; padding: 10px 16px; padding-right: 40px; border: 1px solid var(--line); border-radius: 12px; font-size: 14px; outline: none; transition: 0.2s; background: #f9f9f9; }
+        .search-wrap input:focus { border-color: var(--blue); background: white; box-shadow: 0 0 0 3px rgba(0,122,255,0.1); }
         .search-wrap .icon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); opacity: 0.5; font-size: 14px; }
         
         .category-section { margin-bottom: 80px; }
         .section-title { font-size: 28px; font-weight: 800; color: var(--text-main); margin-bottom: 24px; padding-left: 12px; border-left: 5px solid var(--blue); line-height: 1.2; letter-spacing: -0.5px; }
         .ranking-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 24px; }
         .resource-card { background: white; border: 1px solid var(--line); border-radius: 20px; padding: 24px; display: flex; flex-direction: column; gap: 16px; transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); cursor: pointer; position: relative; overflow: hidden; }
-        .resource-card:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); border-color: var(--blue); }
+        .resource-card:hover { transform: translateY(-6px); box-shadow: var(--shadow-md); border-color: var(--blue); }
         
         .resource-card.rank-1 { border: 2px solid #FFD700; background: linear-gradient(to bottom right, #fff, #fffdf0); }
         .rank-badge { position: absolute; top: 0; left: 0; background: #f0f0f0; width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 800; border-bottom-right-radius: 16px; z-index: 10; }
@@ -474,7 +477,7 @@ export default function StudioPage() {
         .visit-btn { flex: 1; display: flex; align-items: center; justify-content: center; padding: 10px; background: #111; border: none; border-radius: 10px; font-weight: 600; color: white; cursor: pointer; font-size: 13px; text-decoration: none; }
         
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 200; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.2s; }
-        .modal-content { background: #fff; width: 700px; max-width: 95vw; height: 85vh; border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
+        .modal-content { background: #fff; width: 700px; max-width: 95vw; height: 85vh; border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); }
         .modal-close { position: absolute; top: 20px; right: 20px; z-index: 10; background: rgba(255,255,255,0.5); border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 20px; cursor: pointer; }
         
         .modal-header-area { position: relative; padding: 40px 30px 30px; border-bottom: 1px solid var(--line); background: #fff; overflow: hidden; display: flex; align-items: center; gap: 24px; }
@@ -491,6 +494,7 @@ export default function StudioPage() {
         .info-block { margin-bottom: 30px; }
         .info-block h4 { font-size: 16px; font-weight: 700; margin-bottom: 16px; color: #111; }
         .info-block p { font-size: 15px; color: #555; line-height: 1.6; margin: 0; }
+
         .timeline { border-left: 2px solid #eee; padding-left: 20px; margin-left: 8px; }
         .timeline-item { position: relative; margin-bottom: 16px; }
         .timeline-item .dot { position: absolute; left: -25px; top: 6px; width: 8px; height: 8px; background: var(--blue); border-radius: 50%; box-shadow: 0 0 0 4px #fff; }
