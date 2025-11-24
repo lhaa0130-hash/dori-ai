@@ -1,7 +1,7 @@
 ---
 title : "음성 AI의 발전과 개인 제작 시대"
 date : "2025-11-20"
-category : "생성형 AI 정보 공유"
+category : "AI 정보 공유"
 thumbnail : "/thumbnails/insight06.png"
 ---
 

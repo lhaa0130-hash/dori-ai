@@ -1,7 +1,7 @@
 ---
 title : "영상 AI의 현재와 미래"
 date : "2025-11-20"
-category : "생성형 AI 정보 공유"
+category : "AI 정보 공유"
 thumbnail : "/thumbnails/insight05.png"
 ---
 “요즘 광고, 뮤직비디오, 유튜브 쇼츠까지 AI로 만든 영상이 쏟아진다.”

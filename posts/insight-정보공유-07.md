@@ -1,7 +1,7 @@
 ---
 title : "AI 에이전트의 개념"
 date : "2025-11-20"
-category : "생성형 AI 정보 공유"
+category : "AI 정보 공유"
 thumbnail : "/thumbnails/insight07.png"
 ---
 

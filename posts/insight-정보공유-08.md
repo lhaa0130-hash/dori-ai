@@ -1,7 +1,7 @@
 ---
 title : "워크플로우 자동화 AI 기반 업무 자동화"
 date : "2025-11-20"
-category : "생성형 AI 정보 공유"
+category : "AI 정보 공유"
 thumbnail : "/thumbnails/insight08.png"
 ---
 

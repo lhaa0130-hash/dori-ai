@@ -1,7 +1,7 @@
 ---
 title : "생성형 AI란 무엇인가?"
 date : "2025-11-20"
-category : "생성형 AI 정보 공유"
+category : "AI 정보 공유"
 thumbnail : "/thumbnails/insight02.png"
 ---
 
