@@ -112,7 +112,7 @@ export default function StudioPage() {
       ];
       
       setTools(initialData);
-      localStorage.setItem("dori_tools_v11", JSON.stringify(initialData));
+      localStorage.setItem("dori_tools_v11", JSON.stringify(initialData)); // Update key
     } else {
       setTools(savedTools);
     }
@@ -292,10 +292,8 @@ export default function StudioPage() {
                           </div>
                           <div className="vote-actions">
                             {[1, 2, 3, 4, 5].map((score) => {
-                              // ★ 타입 안전성 확보
-                              const isHovered = hoverState && hoverState.id === item.id && score <= hoverState.score;
-                              const isSelected = !hoverState && (myVotes[item.id] || 0) >= score;
-                              
+                              const isHovered = hoverState !== null && score <= hoverState.score;
+                              const isSelected = hoverState === null && myVotes[item.id] >= score;
                               return (
                                 <button key={score} type="button" className={`star-btn ${isHovered || isSelected ? 'active' : ''}`}
                                   onClick={(e) => { e.stopPropagation(); handleVote(item.id, score); }}
@@ -347,7 +345,7 @@ export default function StudioPage() {
               </div>
             </div>
 
-            <div className modal-tabs>
+            <div className="modal-tabs">
               <button className={`m-tab ${modalTab === "INFO" ? "active" : ""}`} onClick={() => setModalTab("INFO")}>Info</button>
               <button className={`m-tab ${modalTab === "REVIEW" ? "active" : ""}`} onClick={() => setModalTab("REVIEW")}>Reviews <span className="count">{selectedTool.commentsList?.length || 0}</span></button>
             </div>
@@ -408,12 +406,12 @@ export default function StudioPage() {
                     </div>
                   </div>
 
-                  <div className="review-input-box">
+                  <div className review-input-box>
                     <textarea placeholder="Leave your honest review here." value={reviewText} onChange={(e) => setReviewText(e.target.value)} />
                     <button onClick={handleReviewSubmit}>Submit Review</button>
                   </div>
 
-                  <div className review-list>
+                  <div className="review-list">
                     {selectedTool.commentsList?.length > 0 ? selectedTool.commentsList.map((c: Comment) => (
                       <div key={c.id} className="review-bubble-row">
                         <div className="review-avatar" style={{background: c.avatarColor || '#eee'}}>
@@ -444,7 +442,6 @@ export default function StudioPage() {
         .tab-btn.active { background: var(--text-main); color: white; border-color: var(--text-main); }
         .search-wrap { position: relative; width: 260px; }
         .search-wrap input { width: 100%; padding: 10px 16px; padding-right: 40px; border: 1px solid var(--line); border-radius: 12px; font-size: 14px; outline: none; transition: 0.2s; background: #f9f9f9; }
-        .search-wrap input:focus { border-color: var(--blue); background: white; box-shadow: 0 0 0 3px rgba(0,122,255,0.1); }
         .search-wrap .icon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); opacity: 0.5; font-size: 14px; }
         
         .category-section { margin-bottom: 80px; }
