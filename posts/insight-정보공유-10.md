@@ -1,7 +1,7 @@
 ---
 title : "개인 브랜딩과 AI: 1인 크리에이터·1인 기업 시대에 AI가 힘이 되는 구조"
 date : "2025-11-20"
-category : "생성형 AI 정보 공유"
+category : "AI 정보 공유"
 thumbnail : "/thumbnails/insight10.png"
 ---
 
