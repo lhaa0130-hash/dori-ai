@@ -26,10 +26,8 @@ export default function StudioPage() {
   const [tools, setTools] = useState<any[]>([]);
   const [myVotes, setMyVotes] = useState<Record<number, number>>({});
   
-  // 별점 호버 상태
   const [hoverState, setHoverState] = useState<{id: number, score: number} | null>(null);
 
-  // 상세 모달 상태
   const [selectedTool, setSelectedTool] = useState<any | null>(null);
   const [modalTab, setModalTab] = useState("INFO");
   const [reviewText, setReviewText] = useState("");
@@ -47,7 +45,7 @@ export default function StudioPage() {
     setMyVotes(savedVotes);
 
     if (savedTools.length === 0) {
-      // 초기 데이터 (데이터가 없으면 이 부분을 실행)
+      // 초기 데이터 (70+ 툴 데이터 복구 - 코드가 길어 생략하고 데이터 배열만 유지)
       const initialData = [
         // 1. [LLM & Chatbots]
         { id: 101, title: "ChatGPT", category: "TEXT", desc: "가장 똑똑하고 범용적인 대화형 AI 표준", logo: "https://logo.clearbit.com/openai.com", price: "Freemium", rating: 0, reviews: 0, link: "https://chat.openai.com", history: "2022.11 GPT-3.5 출시\n2023.03 GPT-4 공개\n2024.05 GPT-4o 멀티모달 업데이트", news: "GPT-4o 모델 업데이트로 멀티모달 기능 강화.", commentsList: [] },
@@ -112,7 +110,7 @@ export default function StudioPage() {
       ];
       
       setTools(initialData);
-      localStorage.setItem("dori_tools_v11", JSON.stringify(initialData)); // Update key
+      localStorage.setItem("dori_tools_v11", JSON.stringify(initialData));
     } else {
       setTools(savedTools);
     }
@@ -240,7 +238,7 @@ export default function StudioPage() {
           </div>
         </div>
 
-        <div className="ranking-content">
+        <div className ranking-content>
           {activeCategories.map((cat) => {
             let categoryTools = tools.filter(t => t.category === cat.key).filter(t => t.title.toLowerCase().includes(searchTerm.toLowerCase()));
             
@@ -474,7 +472,7 @@ export default function StudioPage() {
         .visit-btn { flex: 1; display: flex; align-items: center; justify-content: center; padding: 10px; background: #111; border: none; border-radius: 10px; font-weight: 600; color: white; cursor: pointer; font-size: 13px; text-decoration: none; }
         
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); z-index: 200; display: flex; align-items: center; justify-content: center; animation: fadeIn 0.2s; }
-        .modal-content { background: #fff; width: 700px; max-width: 95vw; height: 85vh; border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.3); }
+        .modal-content { background: #fff; width: 700px; max-width: 95vw; height: 85vh; border-radius: 24px; overflow: hidden; display: flex; flex-direction: column; position: relative; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); }
         .modal-close { position: absolute; top: 20px; right: 20px; z-index: 10; background: rgba(255,255,255,0.5); border: none; width: 36px; height: 36px; border-radius: 50%; font-size: 20px; cursor: pointer; }
         
         .modal-header-area { position: relative; padding: 40px 30px 30px; border-bottom: 1px solid var(--line); background: #fff; overflow: hidden; display: flex; align-items: center; gap: 24px; }
