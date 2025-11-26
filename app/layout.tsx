@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import Script from "next/script"; // ★ Script 컴포넌트 추가
+import Script from "next/script";
 import "./globals.css";
 import { AuthProvider } from "./providers";
 import Header from "@/components/layout/Header";
@@ -18,20 +18,19 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        {/* 1. 구글 애드센스 Verification Meta Tag (사이트 확인용) */}
-        {/* pub-YOUR_PUBLISHER_ID 부분을 고객님의 코드로 교체해야 합니다. */}
-        <meta name="google-adsense-account" content="pub-1868839951780851" /> 
-        
-        {/* ★ 2. Google AdSense Main Script (광고 로딩용) */}
-        <Script 
-            async 
-            src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1868839951780851" 
-            strategy="lazyOnload" 
-            crossOrigin="anonymous" 
-        />
+        {/* 구글 애드센스 사이트 확인용 메타 태그 */}
+        <meta name="google-adsense-account" content="ca-pub-1868399517808851" />
       </head>
 
       <body suppressHydrationWarning={true}>
+        {/* 구글 애드센스 스크립트 - body 최상단에 위치 */}
+        <Script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1868399517808851"
+          crossOrigin="anonymous"
+          strategy="afterInteractive"
+        />
+        
         <AuthProvider>
           <Header />
           <div className="main-layout">
