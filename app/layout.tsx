@@ -18,19 +18,22 @@ export default function RootLayout({
   return (
     <html lang="ko">
       <head>
-        {/* 구글 애드센스 사이트 확인용 메타 태그 */}
-        <meta name="google-adsense-account" content="ca-pub-1868399517808851" />
-      </head>
+        {/* 🔥 구글 애드센스 계정 확인 메타 태그 */}
+        <meta
+          name="google-adsense-account"
+          content="ca-pub-1868399517808851"
+        />
 
-      <body suppressHydrationWarning={true}>
-        {/* 구글 애드센스 스크립트 - body 최상단에 위치 */}
+        {/* 🔥 구글 애드센스 소유권 확인 스크립트 (반드시 head 안에 있어야 함) */}
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1868399517808851"
           crossOrigin="anonymous"
           strategy="afterInteractive"
         />
-        
+      </head>
+
+      <body suppressHydrationWarning={true}>
         <AuthProvider>
           <Header />
           <div className="main-layout">
