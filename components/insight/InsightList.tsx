@@ -1,159 +1,92 @@
-// components/insight/InsightList.tsx (최종)
-
 "use client";
 
 import { useState } from "react";
-import Link from "next/link";
+import InsightCard, { InsightItem } from "./InsightCard";
+import { TEXTS } from "@/constants/texts";
 
-type Post = {
-  id: string;
-  title: string;
-  date: string;
-  category: string; // 이제 'AI 정보 공유' 또는 'AI 뉴스'로 통일됨
-  thumbnail?: string;
-  author?: string; 
-};
+// 📌 더미 데이터 (InsightItem 타입 준수)
+const INSIGHT_DATA: InsightItem[] = [
+  { id: 1, title: "AI 시대에 반드시 알아야 할 핵심 개념 10가지", summary: "LLM, RAG, Fine-tuning 등 쏟아지는 AI 용어, 초보자도 이해하기 쉽게 정리했습니다.", category: "개념", tags: ["기초", "용어"], likes: 120, date: "2024-03-20" },
+  { id: 2, title: "2024 생성형 AI 트렌드 리포트", summary: "텍스트를 넘어 비디오와 오디오로. 멀티모달 시대의 도래와 비즈니스 기회.", category: "트렌드", tags: ["Trend", "MultiModal"], likes: 245, date: "2024-03-18" },
+  { id: 3, title: "AI로 수익화하는 실전 가이드 7선", summary: "단순한 사용을 넘어 실제 돈을 버는 파이프라인 구축 방법.", category: "수익", tags: ["Monetization", "SideProject"], likes: 189, date: "2024-03-15" },
+  { id: 4, title: "RAG(검색 증강 생성) 기술의 미래", summary: "할루시네이션을 줄이고 정확도를 높이는 RAG 기술의 원리와 전망.", category: "분석", tags: ["Tech", "RAG"], likes: 98, date: "2024-03-10" },
+  { id: 5, title: "프롬프트 엔지니어링: 제로샷 vs 퓨샷", summary: "AI에게 원하는 대답을 듣기 위한 프롬프트 작성의 정석.", category: "개념", tags: ["Prompt", "Skill"], likes: 156, date: "2024-03-05" },
+  { id: 6, title: "Sora가 영상 업계에 미칠 영향", summary: "OpenAI의 Sora 공개 이후 영상 제작 시장의 변화 예측.", category: "분석", tags: ["Video", "Sora"], likes: 312, date: "2024-02-28" },
+  { id: 7, title: "노코드 툴과 AI의 결합 (n8n, Make)", summary: "코딩 없이 나만의 AI 비서를 만드는 자동화 워크플로우.", category: "기타", tags: ["Automation", "NoCode"], likes: 134, date: "2024-02-20" },
+  { id: 8, title: "오픈소스 LLM vs 상용 LLM 비교", summary: "Llama 3와 GPT-4, 내 프로젝트엔 어떤 모델이 적합할까?", category: "분석", tags: ["LLM", "OpenSource"], likes: 88, date: "2024-02-15" },
+  { id: 9, title: "AI 저작권 문제, 어디까지 왔나?", summary: "생성형 AI 결과물의 저작권 인정 여부와 법적 쟁점 정리.", category: "트렌드", tags: ["Law", "Copyright"], likes: 210, date: "2024-02-10" },
+];
 
-export default function InsightList({ posts }: { posts: Post[] }) {
-  const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("ALL");
+interface InsightListProps {
+  filters: {
+    category: string;
+    tag: string | null;
+    sort: string;
+  };
+  setFilters: (newFilters: any) => void;
+}
 
-  // ★ 탭 목록을 하드코딩된 두 카테고리로 설정
-  const categories = ["ALL", "AI 정보 공유", "AI 뉴스"]; 
+export default function InsightList({ filters, setFilters }: InsightListProps) {
+  const [visibleCount, setVisibleCount] = useState(6);
 
-  const filteredPosts = posts.filter((post) => {
-    // 1. 카테고리 매칭
-    let matchCat = false;
-    if (selectedCategory === "ALL") {
-        matchCat = true;
-    } else {
-        // lib/posts.ts에서 통일된 카테고리 명칭으로 필터링
-        matchCat = post.category === selectedCategory; 
-    }
-    
-    // 2. 검색어 필터링
-    // 검색은 제목에 대해서만 진행
-    const matchSearch = post.title.toLowerCase().includes(searchTerm.toLowerCase());
-    
-    return matchCat && matchSearch;
+  // 🏷️ 태그 클릭 핸들러 (필터 상태 업데이트)
+  const handleTagClick = (tag: string) => {
+    setFilters({ ...filters, tag });
+    // 태그 클릭 시 스크롤을 살짝 올려주는 UX 고려 가능
+  };
+
+  // 🔍 필터링 & 정렬 로직
+  const filteredData = INSIGHT_DATA.filter((item) => {
+    const matchCategory = filters.category === "All" || item.category === filters.category;
+    const matchTag = filters.tag === null || item.tags.includes(filters.tag);
+    return matchCategory && matchTag;
+  }).sort((a, b) => {
+    if (filters.sort === "popular") return b.likes - a.likes; // 인기순 (좋아요)
+    // 기본: 최신순 (날짜 내림차순)
+    return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 
+  const visibleData = filteredData.slice(0, visibleCount);
+
   return (
-    <main className="page">
-      <div className="scroll-spacer" />
-
-      <section className="container section" style={{ minHeight: "80vh", paddingTop: "60px" }}>
-        
-        <div className="page-header">
-          <h1 className="page-title">Daily Insight</h1>
-          <p className="page-desc">
-            AI 기술의 최신 트렌드와 깊이 있는 분석, 실전 꿀팁.
-          </p>
-        </div>
-
-        {/* 필터 및 검색 */}
-        <div className="filter-bar">
-          <div className="category-tabs">
-            {categories.map((cat) => (
-              <button 
-                key={cat} 
-                className={`tab-btn ${selectedCategory === cat ? 'active' : ''}`}
-                onClick={() => setSelectedCategory(cat)}
-              >
-                {cat}
-              </button>
-            ))}
-          </div>
-          <div className="search-wrap">
-            <input 
-              type="text" 
-              placeholder="주제 검색..." 
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+    <div className="w-full">
+      {/* 리스트 그리드 */}
+      {filteredData.length > 0 ? (
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {visibleData.map((item) => (
+            <InsightCard 
+              key={item.id} 
+              item={item} 
+              onTagClick={handleTagClick}
             />
-            <span className="icon">🔍</span>
-          </div>
+          ))}
         </div>
-
-        {/* 인사이트 그리드 리스트 */}
-        <div className="insight-grid">
-          {filteredPosts.length > 0 ? (
-            filteredPosts.map((item) => (
-              <Link href={`/insight/${item.id}`} key={item.id} className="insight-card">
-                <div className="card-thumb">
-                  {item.thumbnail ? (
-                    <img src={item.thumbnail} alt={item.title} className="thumb-img" />
-                  ) : (
-                    <span className="thumb-icon">📝</span>
-                  )}
-                </div>
-                <div className="card-body">
-                  <div className="card-meta">
-                    {/* 통일된 category 명칭 출력 */}
-                    <span className="cat-badge">{item.category || "General"}</span>
-                    <span className="date">{item.date}</span>
-                  </div>
-                  <h3 className="card-title">{item.title}</h3>
-                  <p className="card-summary">클릭하여 전체 내용을 확인하세요.</p>
-                  <div className="card-footer">
-                    <span className="author">By {item.author || "Unknown"}</span>
-                    <span className="read-more">Read more →</span>
-                  </div>
-                </div>
-              </Link>
-            ))
-          ) : (
-            <div className="empty-state">검색 결과가 없습니다.</div>
+      ) : (
+        <div className="text-center py-24 opacity-60 flex flex-col items-center">
+          <div className="text-4xl mb-4">📭</div>
+          <p>조건에 맞는 인사이트가 없습니다.</p>
+          {filters.tag && (
+            <button 
+              onClick={() => setFilters({...filters, tag: null})}
+              className="mt-4 text-blue-500 hover:underline"
+            >
+              태그 필터 해제하기
+            </button>
           )}
         </div>
-      </section>
+      )}
 
-      {/* 스타일은 이전과 동일하게 유지됩니다. */}
-      <style jsx global>{`
-        .page-header { text-align: center; margin-bottom: 60px; }
-        .page-title { font-size: 42px; font-weight: 800; margin-bottom: 12px; color: var(--text-main); }
-        .page-desc { font-size: 16px; color: var(--text-sub); line-height: 1.6; }
-
-        .filter-bar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; flex-wrap: wrap; gap: 20px; border-bottom: 1px solid var(--line); padding-bottom: 20px; }
-        .category-tabs { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; }
-        .tab-btn { padding: 8px 16px; border-radius: 20px; border: 1px solid var(--line); background: white; cursor: pointer; font-weight: 600; color: var(--text-sub); transition: 0.2s; font-size: 13px; white-space: nowrap; }
-        .tab-btn:hover { background: #f9f9f9; color: var(--text-main); }
-        .tab-btn.active { background: var(--text-main); color: white; border-color: var(--text-main); }
-
-        .search-wrap { position: relative; width: 260px; }
-        .search-wrap input { width: 100%; padding: 10px 16px; padding-right: 40px; border: 1px solid var(--line); border-radius: 12px; font-size: 14px; outline: none; transition: 0.2s; background: #f9f9f9; }
-        .search-wrap input:focus { border-color: var(--blue); background: white; box-shadow: 0 0 0 3px rgba(0,122,255,0.1); }
-        .search-wrap .icon { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); opacity: 0.5; font-size: 14px; }
-
-        .insight-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(340px, 1fr)); gap: 30px; }
-        .insight-card { background: white; border: 1px solid var(--line); border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); text-decoration: none; color: inherit; height: 100%; }
-        .insight-card:hover { transform: translateY(-6px); box-shadow: 0 12px 30px rgba(0,0,0,0.08); border-color: var(--blue); }
-
-        .card-thumb { height: 200px; background: #f7f9fc; display: flex; align-items: center; justify-content: center; border-bottom: 1px solid var(--line); overflow: hidden; position: relative; }
-        .thumb-img { width: 100%; height: 100%; object-fit: cover; transition: transform 0.5s ease; }
-        .insight-card:hover .thumb-img { transform: scale(1.05); }
-        .thumb-icon { font-size: 48px; }
-
-        .card-body { padding: 24px; flex: 1; display: flex; flex-direction: column; }
-        
-        .card-meta { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-        .cat-badge { font-size: 11px; font-weight: 800; padding: 4px 8px; border-radius: 6px; background: #eff6ff; color: var(--blue); }
-        .date { font-size: 12px; color: #999; }
-
-        .card-title { font-size: 18px; font-weight: 700; margin-bottom: 8px; line-height: 1.4; color: var(--text-main); }
-        .card-summary { font-size: 14px; color: var(--text-sub); line-height: 1.6; margin-bottom: 20px; flex: 1; }
-
-        .card-footer { display: flex; justify-content: space-between; align-items: center; border-top: 1px solid #f5f5f5; padding-top: 16px; margin-top: auto; }
-        .author { font-size: 12px; font-weight: 600; color: #555; }
-        .read-more { font-size: 12px; font-weight: 700; color: var(--blue); transition: 0.2s; }
-        .insight-card:hover .read-more { transform: translateX(4px); }
-        .empty-state { grid-column: 1 / -1; text-align: center; padding: 60px; color: #999; font-size: 16px; }
-
-        @media (max-width: 768px) {
-          .filter-bar { flex-direction: column-reverse; align-items: stretch; }
-          .search-wrap { width: 100%; }
-        }
-      `}</style>
-    </main>
+      {/* 더보기 버튼 */}
+      {visibleData.length < filteredData.length && (
+        <div className="flex justify-center mt-12">
+          <button 
+            onClick={() => setVisibleCount((prev) => prev + 6)}
+            className="px-8 py-3 rounded-full font-bold transition-all hover:scale-105 active:scale-95 border bg-[var(--card-bg)] border-[var(--card-border)] text-[var(--text-main)] hover:bg-gray-100 dark:hover:bg-white/10"
+          >
+            {TEXTS.insight.button.loadMore.ko} +
+          </button>
+        </div>
+      )}
+    </div>
   );
 }

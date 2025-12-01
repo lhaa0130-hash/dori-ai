@@ -15,6 +15,7 @@
     "jsonwebtoken": "^9.0.2",
     "next": "16.0.1",
     "next-auth": "^4.24.13",
+    "next-themes": "^0.4.6",
     "nodemailer": "^7.0.10",
     "openai": "^6.8.1",
     "react": "19.2.0",
@@ -24,7 +25,7 @@
     "remark-html": "^16.0.1"
   },
   "devDependencies": {
-    "@tailwindcss/postcss": "^4",
+    "@tailwindcss/postcss": "^4.1.17",
     "@types/bcryptjs": "^2.4.6",
     "@types/jsonwebtoken": "^9.0.10",
     "@types/node": "^20",

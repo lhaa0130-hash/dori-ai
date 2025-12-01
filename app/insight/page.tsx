@@ -1,22 +1,50 @@
-import { getSortedPostsData } from "@/lib/posts";
-import InsightList from "@/components/insight/InsightList";
+"use client";
 
-// ★ InsightList.tsx가 요구하는 Post 타입을 여기에 명시 (Type Safety 확보)
-type Post = {
-  id: string;
-  title: string;
-  date: string;
-  category: string;
-  thumbnail?: string;
-};
+import { useState } from "react";
+import InsightFilters from "@/components/insight/InsightFilters";
+import InsightList from "@/components/insight/InsightList";
+import { TEXTS } from "@/constants/texts";
 
 export default function InsightPage() {
-  // 1. 서버(내 컴퓨터)에서 posts 폴더의 파일들을 읽어옴
-  // ★ as Post[]로 타입 보장 (TypeScript 컴파일러 만족)
-  const allPosts = getSortedPostsData() as Post[];
+  const t = TEXTS.insight;
 
-  // 2. 읽어온 데이터를 InsightList 컴포넌트(클라이언트)에게 전달
+  // 📌 State Lifting: 필터 상태 관리
+  const [filters, setFilters] = useState<{ category: string; tag: string | null; sort: string }>({
+    category: "All",
+    tag: null,
+    sort: "newest",
+  });
+
   return (
-    <InsightList posts={allPosts} />
+    <main className="w-full min-h-screen">
+      
+      {/* 1. 상단 Hero */}
+      <section className="pt-32 pb-10 px-6 text-center">
+        <h1 
+          className="text-3xl md:text-5xl font-extrabold mb-4" 
+          style={{ color: 'var(--text-main)' }}
+        >
+          {t.heroTitle.ko}
+        </h1>
+        <p 
+          className="text-lg opacity-70 max-w-2xl mx-auto break-keep" 
+          style={{ color: 'var(--text-main)' }}
+        >
+          {t.heroSubtitle.ko}
+        </p>
+      </section>
+
+      {/* 2. 메인 컨텐츠 */}
+      <section className="container max-w-6xl mx-auto px-4 pb-24">
+        
+        {/* 필터 컴포넌트 */}
+        <InsightFilters filters={filters} setFilters={setFilters} />
+        
+        {/* 리스트 컴포넌트 (데이터 표시) */}
+        <InsightList filters={filters} setFilters={setFilters} />
+        
+      </section>
+
+    </main>
   );
 }
