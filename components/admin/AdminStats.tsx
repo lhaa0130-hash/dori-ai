@@ -1,43 +1,136 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { useSession } from "next-auth/react"; 
+import { useRouter } from "next/navigation";  
 import { TEXTS } from "@/constants/texts";
+import AdminStats from "@/components/admin/AdminStats";
+import AdminRecentCommunity, { CommunityPost } from "@/components/admin/AdminRecentCommunity";
+import AdminRecentSuggestions, { SuggestionItem } from "@/components/admin/AdminRecentSuggestions";
+import AdminSystemNotes from "@/components/admin/AdminSystemNotes";
+import AdminVisitorChart from "@/components/admin/AdminVisitorChart"; // 👈 추가
 
-interface AdminStatsProps {
-  stats: {
-    community: number;
-    suggestions: number;
-    academy: number;
-    market: number;
-  };
-}
+const ADMIN_EMAILS = [
+  "admin@dori.ai", 
+  "lhaa0130@gmail.com",
+];
 
-export default function AdminStats({ stats }: AdminStatsProps) {
-  const t = TEXTS.admin.stats;
+export default function AdminPage() {
+  const { data: session, status } = useSession();
+  const router = useRouter();
+  const t = TEXTS.admin;
 
-  const cardStyle = {
-    backgroundColor: 'var(--card-bg)',
-    borderColor: 'var(--card-border)',
-    color: 'var(--text-main)',
-  };
+  const [communityPosts, setCommunityPosts] = useState<CommunityPost[]>([]);
+  const [suggestions, setSuggestions] = useState<SuggestionItem[]>([]);
+  const [visitorStats, setVisitorStats] = useState({ today: 0, total: 0 });
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
-  const statItems = [
-    { title: t.communityCount.ko, count: stats.community, icon: "💬", color: "text-blue-500" },
-    { title: t.suggestionsCount.ko, count: stats.suggestions, icon: "📫", color: "text-red-500" },
-    { title: t.academyCount.ko, count: stats.academy, icon: "🎓", color: "text-green-500" },
-    { title: t.marketCount.ko, count: stats.market, icon: "🛒", color: "text-purple-500" },
-  ];
+  const MARKET_ITEMS_COUNT = 9;
+  const ACADEMY_ITEMS_COUNT = 9;
+
+  useEffect(() => {
+    if (status === "loading") return;
+    if (!session || !session.user?.email || !ADMIN_EMAILS.includes(session.user.email)) {
+      setIsAuthorized(false);
+    } else {
+      setIsAuthorized(true);
+    }
+  }, [session, status]);
+
+  useEffect(() => {
+    if (!isAuthorized) return;
+
+    // 데이터 로드
+    const savedPosts = localStorage.getItem("dori_community_posts");
+    if (savedPosts) {
+      const parsed = JSON.parse(savedPosts);
+      parsed.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      setCommunityPosts(parsed);
+    }
+
+    const savedSuggestions = localStorage.getItem("dori_suggestions");
+    if (savedSuggestions) {
+      const parsed = JSON.parse(savedSuggestions);
+      parsed.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
+      setSuggestions(parsed);
+    }
+
+    const today = parseInt(localStorage.getItem("dori_daily_visitors") || "0", 10);
+    const total = parseInt(localStorage.getItem("dori_total_visitors") || "0", 10);
+    setVisitorStats({ today, total });
+
+  }, [isAuthorized]);
+
+  if (status === "loading") {
+    return <div className="min-h-screen flex items-center justify-center">로딩 중...</div>;
+  }
+
+  if (!isAuthorized) {
+    return (
+      <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-center px-4">
+        <div className="text-6xl">🔒</div>
+        <h2 className="text-2xl font-bold text-red-500">접근 권한이 없습니다.</h2>
+        <p className="text-gray-500">관리자 계정으로 로그인해주세요.</p>
+        <button 
+          onClick={() => router.push("/")}
+          className="px-6 py-2 bg-black text-white dark:bg-white dark:text-black rounded-full font-bold hover:opacity-80"
+        >
+          메인으로 돌아가기
+        </button>
+      </div>
+    );
+  }
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
-      {statItems.map((item, idx) => (
-        <div key={idx} className="p-6 rounded-[1.5rem] border shadow-sm flex flex-col justify-between hover:-translate-y-1 transition-transform" style={cardStyle}>
-          <div className="flex justify-between items-start mb-4">
-            <span className="text-sm font-bold opacity-60">{item.title}</span>
-            <span className="text-2xl">{item.icon}</span>
+    <main className="w-full min-h-screen">
+      
+      <section className="pt-32 pb-10 px-6 text-center">
+        <h1 
+          className="text-3xl md:text-5xl font-extrabold mb-4" 
+          style={{ color: 'var(--text-main)' }}
+        >
+          {t.heroTitle.ko}
+        </h1>
+        <p 
+          className="text-lg opacity-70 max-w-2xl mx-auto break-keep" 
+          style={{ color: 'var(--text-main)' }}
+        >
+          {t.heroSubtitle.ko}
+        </p>
+      </section>
+
+      <section className="container max-w-6xl mx-auto px-4 pb-24">
+        
+        {/* 1. 숫자 통계 카드 */}
+        <AdminStats 
+          stats={{
+            todayVisitors: visitorStats.today,
+            totalVisitors: visitorStats.total,
+            community: communityPosts.length,
+            suggestions: suggestions.length,
+            academy: ACADEMY_ITEMS_COUNT,
+            market: MARKET_ITEMS_COUNT
+          }} 
+        />
+
+        {/* 2. [신규] 방문자 그래프 (전체 너비) */}
+        <div className="mb-6">
+          <AdminVisitorChart />
+        </div>
+
+        {/* 3. 하단 컨텐츠 그리드 */}
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="flex flex-col gap-6">
+            <AdminRecentCommunity posts={communityPosts.slice(0, 5)} />
           </div>
-          <div className={`text-3xl font-extrabold ${item.color}`}>
-            {item.count.toLocaleString()}
+          <div className="flex flex-col gap-6">
+            <AdminRecentSuggestions suggestions={suggestions.slice(0, 5)} />
+            <AdminSystemNotes />
           </div>
         </div>
-      ))}
-    </div>
+        
+      </section>
+
+    </main>
   );
 }

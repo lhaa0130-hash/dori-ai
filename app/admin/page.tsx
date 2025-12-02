@@ -8,11 +8,11 @@ import AdminStats from "@/components/admin/AdminStats";
 import AdminRecentCommunity, { CommunityPost } from "@/components/admin/AdminRecentCommunity";
 import AdminRecentSuggestions, { SuggestionItem } from "@/components/admin/AdminRecentSuggestions";
 import AdminSystemNotes from "@/components/admin/AdminSystemNotes";
+import AdminVisitorChart from "@/components/admin/AdminVisitorChart"; // 👈 추가
 
-// 🔐 [관리자 목록] 여기에 등록된 이메일만 접속 가능합니다.
 const ADMIN_EMAILS = [
   "admin@dori.ai", 
-  "lhaa0130@gmail.com", // 👈 요청하신 이메일 추가 완료!
+  "lhaa0130@gmail.com",
 ];
 
 export default function AdminPage() {
@@ -20,19 +20,16 @@ export default function AdminPage() {
   const router = useRouter();
   const t = TEXTS.admin;
 
-  // 상태 관리
   const [communityPosts, setCommunityPosts] = useState<CommunityPost[]>([]);
   const [suggestions, setSuggestions] = useState<SuggestionItem[]>([]);
-  const [isAuthorized, setIsAuthorized] = useState(false); // 권한 여부 체크
+  const [visitorStats, setVisitorStats] = useState({ today: 0, total: 0 });
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
   const MARKET_ITEMS_COUNT = 9;
   const ACADEMY_ITEMS_COUNT = 9;
 
-  // 1️⃣ 권한 체크 로직 (문지기)
   useEffect(() => {
-    if (status === "loading") return; // 로딩 중이면 대기
-
-    // 로그인을 안 했거나, 허용된 이메일이 아니면?
+    if (status === "loading") return;
     if (!session || !session.user?.email || !ADMIN_EMAILS.includes(session.user.email)) {
       setIsAuthorized(false);
     } else {
@@ -40,14 +37,13 @@ export default function AdminPage() {
     }
   }, [session, status]);
 
-  // 2️⃣ 데이터 로드 (권한 있는 사람만)
   useEffect(() => {
-    if (!isAuthorized) return; // 권한 없으면 데이터도 안 불러옴
+    if (!isAuthorized) return;
 
+    // 데이터 로드
     const savedPosts = localStorage.getItem("dori_community_posts");
     if (savedPosts) {
       const parsed = JSON.parse(savedPosts);
-      // 최신순 정렬
       parsed.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       setCommunityPosts(parsed);
     }
@@ -55,18 +51,20 @@ export default function AdminPage() {
     const savedSuggestions = localStorage.getItem("dori_suggestions");
     if (savedSuggestions) {
       const parsed = JSON.parse(savedSuggestions);
-      // 최신순 정렬
       parsed.sort((a: any, b: any) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
       setSuggestions(parsed);
     }
+
+    const today = parseInt(localStorage.getItem("dori_daily_visitors") || "0", 10);
+    const total = parseInt(localStorage.getItem("dori_total_visitors") || "0", 10);
+    setVisitorStats({ today, total });
+
   }, [isAuthorized]);
 
-  // ⏳ 로딩 중일 때 화면
   if (status === "loading") {
     return <div className="min-h-screen flex items-center justify-center">로딩 중...</div>;
   }
 
-  // 🚫 권한 없을 때 화면 (접근 차단)
   if (!isAuthorized) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center gap-4 text-center px-4">
@@ -83,11 +81,9 @@ export default function AdminPage() {
     );
   }
 
-  // ✅ 권한 있을 때만 보여주는 실제 대시보드
   return (
     <main className="w-full min-h-screen">
       
-      {/* 1. Hero 섹션 */}
       <section className="pt-32 pb-10 px-6 text-center">
         <h1 
           className="text-3xl md:text-5xl font-extrabold mb-4" 
@@ -103,12 +99,13 @@ export default function AdminPage() {
         </p>
       </section>
 
-      {/* 2. 대시보드 컨텐츠 */}
       <section className="container max-w-6xl mx-auto px-4 pb-24">
         
-        {/* 통계 카드 */}
+        {/* 1. 숫자 통계 카드 */}
         <AdminStats 
           stats={{
+            todayVisitors: visitorStats.today,
+            totalVisitors: visitorStats.total,
             community: communityPosts.length,
             suggestions: suggestions.length,
             academy: ACADEMY_ITEMS_COUNT,
@@ -116,20 +113,20 @@ export default function AdminPage() {
           }} 
         />
 
-        {/* 메인 그리드 레이아웃 (2열) */}
+        {/* 2. [신규] 방문자 그래프 (전체 너비) */}
+        <div className="mb-6">
+          <AdminVisitorChart />
+        </div>
+
+        {/* 3. 하단 컨텐츠 그리드 */}
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-          
-          {/* 왼쪽 컬럼: 최근 커뮤니티 글 */}
           <div className="flex flex-col gap-6">
             <AdminRecentCommunity posts={communityPosts.slice(0, 5)} />
           </div>
-
-          {/* 오른쪽 컬럼: 최근 건의사항 + 시스템 노트 */}
           <div className="flex flex-col gap-6">
             <AdminRecentSuggestions suggestions={suggestions.slice(0, 5)} />
             <AdminSystemNotes />
           </div>
-
         </div>
         
       </section>

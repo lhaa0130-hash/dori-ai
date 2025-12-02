@@ -1,4 +1,5 @@
 export const TEXTS = {
+  // 1. 메인 홈 (Home)
   home: {
     heroTitle: {
       ko: "AI 시대의 지식·실전·커뮤니티 플랫폼",
@@ -26,6 +27,8 @@ export const TEXTS = {
       market: { title: "Market", desc: "AI 자료 판매 + 작업 의뢰" }
     }
   },
+
+  // 2. AI Tools 페이지
   aiTools: {
     heroTitle: { ko: "AI Tools", en: "AI Tools" },
     heroSubtitle: { 
@@ -43,6 +46,8 @@ export const TEXTS = {
       loadMore: { ko: "더보기", en: "Load More" }
     }
   },
+
+  // 3. Insight 페이지
   insight: {
     heroTitle: { ko: "Insight", en: "Insight" },
     heroSubtitle: {
@@ -64,6 +69,8 @@ export const TEXTS = {
       loadMore: { ko: "더보기", en: "Load More" }
     }
   },
+
+  // 4. Academy 페이지
   academy: {
     heroTitle: { ko: "Academy", en: "Academy" },
     heroSubtitle: {
@@ -84,6 +91,8 @@ export const TEXTS = {
       loadMore: { ko: "더보기", en: "Load More" }
     }
   },
+
+  // 5. Community 페이지
   communityPage: {
     heroTitle: { ko: "Community", en: "Community" },
     heroSubtitle: {
@@ -116,6 +125,8 @@ export const TEXTS = {
       banned: { ko: "비방/욕설이 포함된 글은 등록할 수 없습니다.", en: "Content contains inappropriate words." }
     }
   },
+
+  // 6. Market 페이지
   market: {
     heroTitle: { ko: "Market", en: "Market" },
     heroSubtitle: {
@@ -144,6 +155,8 @@ export const TEXTS = {
       success: { ko: "의뢰가 접수되었습니다. 곧 연락드리겠습니다.", en: "Your request has been received. We will contact you soon." }
     }
   },
+
+  // 7. Suggestions (건의사항) 페이지
   suggestions: {
     heroTitle: { ko: "건의사항 및 버그 제보", en: "Suggestions & Bug Reports" },
     heroSubtitle: { ko: "서비스 개선을 위한 의견을 자유롭게 남겨주세요.", en: "Share your ideas and help us improve the service." },
@@ -167,13 +180,16 @@ export const TEXTS = {
       all: { ko: "전체", en: "All" }
     }
   },
+
+  // 8. Footer (하단 영역)
   footer: {
     copyright: { ko: "© 2024 DORI-AI. All rights reserved.", en: "© 2024 DORI-AI. All rights reserved." },
     privacy: { ko: "개인정보처리방침", en: "Privacy Policy" },
     terms: { ko: "이용약관", en: "Terms of Service" },
     suggestion: { ko: "건의사항", en: "Suggestions" }
   },
-  // 👇 [신규 추가] Admin 페이지 전용 텍스트
+
+  // 9. Admin Dashboard (관리자)
   admin: {
     heroTitle: { ko: "Admin Dashboard", en: "Admin Dashboard" },
     heroSubtitle: {
@@ -184,12 +200,21 @@ export const TEXTS = {
       communityCount: { ko: "커뮤니티 글 수", en: "Community Posts" },
       suggestionsCount: { ko: "건의사항 수", en: "Suggestions" },
       academyCount: { ko: "Academy 강의 수", en: "Academy Lessons" },
-      marketCount: { ko: "Market 상품 수", en: "Market Items" }
+      marketCount: { ko: "Market 상품 수", en: "Market Items" },
+      todayVisitors: { ko: "오늘 방문자", en: "Today's Visitors" },
+      totalVisitors: { ko: "누적 방문자", en: "Total Visitors" }
     },
     sections: {
       recentCommunity: { ko: "최근 커뮤니티 글", en: "Recent Community Posts" },
       recentSuggestions: { ko: "최근 건의사항", en: "Recent Suggestions" },
-      systemNotes: { ko: "시스템 노트 및 추후 계획", en: "System Notes & Future Plan" }
+      systemNotes: { ko: "시스템 노트 및 추후 계획", en: "System Notes & Future Plan" },
+      visitorChart: { ko: "방문자 통계", en: "Visitor Statistics" }
+    },
+    chart: {
+      daily: { ko: "일간", en: "Daily" },
+      weekly: { ko: "주간", en: "Weekly" },
+      monthly: { ko: "월간", en: "Monthly" },
+      yearly: { ko: "연간", en: "Yearly" }
     }
   }
 };
