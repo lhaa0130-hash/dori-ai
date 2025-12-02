@@ -1,8 +1,11 @@
 "use client";
 
 import Link from "next/link";
+import { TEXTS } from "@/constants/texts";
 
 export default function Footer() {
+  const t = TEXTS.footer;
+
   return (
     <footer className="footer-wrapper">
       <div className="footer-inner">
@@ -13,15 +16,17 @@ export default function Footer() {
             DORI-AI
           </Link>
           <p className="copyright">
-            © {new Date().getFullYear()} DORI-AI. All rights reserved.
+            {t.copyright.ko}
           </p>
         </div>
 
-        {/* 오른쪽: 이용약관 등 링크 */}
+        {/* 오른쪽: 링크 (건의사항 추가) */}
         <div className="right-area">
-          <Link href="#" className="footer-link">Privacy Policy</Link>
-          <Link href="#" className="footer-link">Terms of Service</Link>
-          <Link href="#" className="footer-link">Contact</Link>
+          <Link href="/suggestions" className="footer-link font-bold text-blue-600 dark:text-blue-400">
+            {t.suggestion.ko}
+          </Link>
+          <Link href="#" className="footer-link">{t.privacy.ko}</Link>
+          <Link href="#" className="footer-link">{t.terms.ko}</Link>
         </div>
       </div>
 
@@ -30,10 +35,10 @@ export default function Footer() {
         .footer-wrapper {
           width: 100%;
           padding: 60px 24px;
-          background-color: var(--bg-main); /* 🌞흰색 / 🌙검정 */
-          color: var(--text-main);          /* 🌞검정 / 🌙흰색 */
-          border-top: 1px solid var(--card-border); /* 테마에 맞는 테두리 */
-          margin-top: auto; /* 콘텐츠가 짧아도 바닥에 붙도록 */
+          background-color: var(--bg-main); 
+          color: var(--text-main);          
+          border-top: 1px solid var(--card-border); 
+          margin-top: auto; 
           transition: background-color 0.3s ease, color 0.3s ease;
         }
 
@@ -45,7 +50,6 @@ export default function Footer() {
           gap: 24px;
         }
 
-        /* 데스크톱 레이아웃 */
         @media (min-width: 768px) {
           .footer-inner {
             flex-direction: row;
@@ -65,7 +69,7 @@ export default function Footer() {
 
         .copyright {
           font-size: 0.875rem;
-          opacity: 0.5; /* 살짝 흐리게 */
+          opacity: 0.5; 
         }
 
         .right-area {
@@ -84,7 +88,7 @@ export default function Footer() {
 
         .footer-link:hover {
           opacity: 1;
-          color: var(--accent-color); /* 호버 시 파란색 */
+          color: var(--accent-color);
         }
       `}</style>
     </footer>

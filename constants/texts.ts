@@ -116,7 +116,6 @@ export const TEXTS = {
       banned: { ko: "비방/욕설이 포함된 글은 등록할 수 없습니다.", en: "Content contains inappropriate words." }
     }
   },
-  // 👇 [추가] Market 페이지 전용 텍스트
   market: {
     heroTitle: { ko: "Market", en: "Market" },
     heroSubtitle: {
@@ -143,6 +142,54 @@ export const TEXTS = {
       errorRequired: { ko: "필수 항목을 모두 입력해주세요.", en: "Please fill in all required fields." },
       errorBanned: { ko: "비방/욕설이 포함된 의뢰는 접수할 수 없습니다.", en: "Requests containing abusive language cannot be submitted." },
       success: { ko: "의뢰가 접수되었습니다. 곧 연락드리겠습니다.", en: "Your request has been received. We will contact you soon." }
+    }
+  },
+  suggestions: {
+    heroTitle: { ko: "건의사항 및 버그 제보", en: "Suggestions & Bug Reports" },
+    heroSubtitle: { ko: "서비스 개선을 위한 의견을 자유롭게 남겨주세요.", en: "Share your ideas and help us improve the service." },
+    form: {
+      name: { ko: "이름", en: "Name" },
+      email: { ko: "이메일 (선택)", en: "Email (optional)" },
+      type: { ko: "유형", en: "Type" },
+      priority: { ko: "우선순위", en: "Priority" },
+      message: { ko: "내용", en: "Message" },
+      needsReply: { ko: "답변이 필요합니다.", en: "I would like a response." },
+      submit: { ko: "건의 등록", en: "Submit Suggestion" },
+      errorRequired: { ko: "필수 항목을 모두 입력해주세요.", en: "Please fill in all required fields." },
+      errorTooShort: { ko: "너무 짧은 건의는 등록할 수 없습니다.", en: "The message is too short to submit." },
+      errorBanned: { ko: "비방/욕설이 포함된 건의는 등록할 수 없습니다.", en: "Suggestions containing abusive language cannot be submitted." },
+      success: { ko: "건의가 접수되었습니다. 감사합니다.", en: "Your suggestion has been received. Thank you." }
+    },
+    filters: {
+      type: { ko: "유형", en: "Type" },
+      priority: { ko: "우선순위", en: "Priority" },
+      sort: { ko: "정렬", en: "Sort" },
+      all: { ko: "전체", en: "All" }
+    }
+  },
+  footer: {
+    copyright: { ko: "© 2024 DORI-AI. All rights reserved.", en: "© 2024 DORI-AI. All rights reserved." },
+    privacy: { ko: "개인정보처리방침", en: "Privacy Policy" },
+    terms: { ko: "이용약관", en: "Terms of Service" },
+    suggestion: { ko: "건의사항", en: "Suggestions" }
+  },
+  // 👇 [신규 추가] Admin 페이지 전용 텍스트
+  admin: {
+    heroTitle: { ko: "Admin Dashboard", en: "Admin Dashboard" },
+    heroSubtitle: {
+      ko: "DORI-AI 서비스 현황을 한 눈에 확인할 수 있는 관리자 전용 화면입니다.",
+      en: "An internal view of the overall DORI-AI service status."
+    },
+    stats: {
+      communityCount: { ko: "커뮤니티 글 수", en: "Community Posts" },
+      suggestionsCount: { ko: "건의사항 수", en: "Suggestions" },
+      academyCount: { ko: "Academy 강의 수", en: "Academy Lessons" },
+      marketCount: { ko: "Market 상품 수", en: "Market Items" }
+    },
+    sections: {
+      recentCommunity: { ko: "최근 커뮤니티 글", en: "Recent Community Posts" },
+      recentSuggestions: { ko: "최근 건의사항", en: "Recent Suggestions" },
+      systemNotes: { ko: "시스템 노트 및 추후 계획", en: "System Notes & Future Plan" }
     }
   }
 };

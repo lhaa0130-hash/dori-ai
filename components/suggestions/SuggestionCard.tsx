@@ -1,0 +1,86 @@
+export type SuggestionType = "버그 제보" | "기능 요청" | "UI/디자인" | "기타";
+export type SuggestionPriority = "낮음" | "보통" | "높음";
+
+export type SuggestionItem = {
+  id: string;
+  name: string;
+  email?: string;
+  type: SuggestionType;
+  priority: SuggestionPriority;
+  message: string;
+  needsReply: boolean;
+  createdAt: string; // ISO String
+};
+
+interface SuggestionCardProps {
+  item: SuggestionItem;
+}
+
+export default function SuggestionCard({ item }: SuggestionCardProps) {
+  // 카드 스타일 (CSS 변수 활용)
+  const cardStyle = {
+    backgroundColor: 'var(--card-bg)',
+    borderColor: 'var(--card-border)',
+    color: 'var(--text-main)',
+  };
+
+  // 뱃지 색상 로직
+  const getTypeBadge = (type: SuggestionType) => {
+    switch (type) {
+      case "버그 제보": return "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-300";
+      case "기능 요청": return "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-300";
+      case "UI/디자인": return "bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-300";
+      default: return "bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-gray-300";
+    }
+  };
+
+  const getPriorityBadge = (priority: SuggestionPriority) => {
+    switch (priority) {
+      case "높음": return "text-red-500 border-red-200 dark:border-red-900";
+      case "보통": return "text-yellow-500 border-yellow-200 dark:border-yellow-900";
+      case "낮음": return "text-green-500 border-green-200 dark:border-green-900";
+    }
+  };
+
+  return (
+    <div 
+      className="relative flex flex-col p-6 rounded-[1.5rem] border transition-all duration-300 hover:-translate-y-1 hover:shadow-lg group"
+      style={cardStyle}
+    >
+      {/* 상단 뱃지 영역 */}
+      <div className="flex justify-between items-start mb-4">
+        <div className="flex gap-2">
+          <span className={`px-3 py-1 text-xs font-bold rounded-full ${getTypeBadge(item.type)}`}>
+            {item.type}
+          </span>
+          <span className={`px-3 py-1 text-xs font-bold rounded-full border ${getPriorityBadge(item.priority)}`}>
+            {item.priority}
+          </span>
+        </div>
+        {item.needsReply && (
+          <span className="text-[10px] font-semibold bg-gray-100 dark:bg-gray-800 px-2 py-1 rounded text-gray-500 border border-gray-200 dark:border-gray-700">
+            답변 필요
+          </span>
+        )}
+      </div>
+
+      {/* 내용 */}
+      <p className="text-sm opacity-80 mb-6 line-clamp-3 h-[4.5em] leading-relaxed break-words whitespace-pre-wrap" style={{ color: 'var(--text-main)' }}>
+        {item.message}
+      </p>
+
+      {/* 하단 정보 */}
+      <div className="mt-auto pt-4 border-t border-dashed flex justify-between items-center" style={{ borderColor: 'var(--card-border)' }}>
+        <div className="flex items-center gap-2">
+          <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-white/20 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300">
+            {item.name[0]}
+          </div>
+          <span className="text-xs opacity-70 font-medium">{item.name}</span>
+        </div>
+        <span className="text-xs opacity-50">
+          {new Date(item.createdAt).toLocaleDateString()}
+        </span>
+      </div>
+    </div>
+  );
+}
