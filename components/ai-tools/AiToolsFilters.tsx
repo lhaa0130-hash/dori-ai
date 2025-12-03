@@ -1,6 +1,7 @@
+import React from "react";
 import { TEXTS } from "@/constants/texts";
 
-interface ToolFiltersProps {
+interface AiToolsFiltersProps {
   filters: {
     category: string;
     price: string;
@@ -9,15 +10,14 @@ interface ToolFiltersProps {
   setFilters: (newFilters: any) => void;
 }
 
-export default function ToolFilters({ filters, setFilters }: ToolFiltersProps) {
+const AiToolsFilters = React.memo(({ filters, setFilters }: AiToolsFiltersProps) => {
   const t = TEXTS.aiTools.filters;
 
   const handleChange = (key: string, value: string) => {
     setFilters({ ...filters, [key]: value });
   };
 
-  // 공통 Select 스타일
-  const selectClass = "px-4 py-2.5 rounded-xl border outline-none text-sm font-medium transition-all cursor-pointer bg-[var(--card-bg)] border-[var(--card-border)] text-[var(--text-main)] hover:border-gray-400 dark:hover:border-gray-500";
+  const selectClass = "px-4 py-2.5 rounded-xl border outline-none text-sm font-medium transition-all cursor-pointer bg-[var(--card-bg)] border-[var(--card-border)] text-[var(--text-main)] hover:border-gray-400 dark:hover:border-gray-500 w-full md:w-auto";
 
   return (
     <div className="flex flex-col md:flex-row gap-4 mb-8">
@@ -48,7 +48,7 @@ export default function ToolFilters({ filters, setFilters }: ToolFiltersProps) {
         <option value="완전 유료">완전 유료</option>
       </select>
 
-      {/* 3. 정렬 (오른쪽 정렬을 위해 ml-auto 사용) */}
+      {/* 3. 정렬 */}
       <select 
         value={filters.sort} 
         onChange={(e) => handleChange("sort", e.target.value)}
@@ -59,4 +59,6 @@ export default function ToolFilters({ filters, setFilters }: ToolFiltersProps) {
       </select>
     </div>
   );
-}
+});
+
+export default AiToolsFilters;

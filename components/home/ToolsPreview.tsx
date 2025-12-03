@@ -1,7 +1,6 @@
 import { TEXTS } from "@/constants/texts";
 
 export default function ToolsPreview() {
-  // 📌 요청된 더미 데이터 적용
   const tools = [
     { id: 1, name: "ChatGPT", category: "LLM", rating: 4.8 },
     { id: 2, name: "Gemini", category: "LLM", rating: 4.5 },
@@ -11,7 +10,6 @@ export default function ToolsPreview() {
 
   return (
     <section className="max-w-[1200px] mx-auto px-6 mb-20">
-      {/* 📌 모바일 폰트 사이즈 조정: text-xl md:text-2xl */}
       <h2 className="text-xl md:text-2xl font-bold mb-6 flex items-center gap-2" style={{ color: 'var(--text-main)' }}>
         <span className="text-blue-500">🏆</span> {TEXTS.home.sectionTitles.tools.ko}
       </h2>
@@ -22,8 +20,8 @@ export default function ToolsPreview() {
             className="p-6 rounded-[2rem] border shadow-sm hover:-translate-y-1 transition-all cursor-pointer"
             style={{ 
               backgroundColor: 'var(--card-bg)', 
-              borderColor: 'var(--card-border)',
-              color: 'var(--text-main)'
+              borderColor: 'var(--card-border)', 
+              color: 'var(--text-main)' 
             }}
           >
             <div className="flex justify-between items-start mb-4">

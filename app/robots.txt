@@ -1,3 +1,14 @@
-User-agent: *
-Allow: /
-Sitemap: https://dori-ai.com/sitemap.xml
+import { MetadataRoute } from "next";
+
+export default function robots(): MetadataRoute.Robots {
+  const baseUrl = "https://dori-ai.com";
+
+  return {
+    rules: {
+      userAgent: "*",
+      allow: "/",
+      disallow: ["/admin", "/my"], 
+    },
+    sitemap: `${baseUrl}/sitemap.xml`,
+  };
+}

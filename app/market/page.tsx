@@ -1,64 +1,12 @@
-"use client";
+import { createMetadata } from "@/lib/seo";
+import MarketClient from "./page.client";
 
-import { useState } from "react";
-import { TEXTS } from "@/constants/texts";
-import MarketFilters from "@/components/market/MarketFilters";
-import MarketList from "@/components/market/MarketList";
-import RequestForm from "@/components/market/RequestForm";
+export const metadata = createMetadata({
+  title: "Market",
+  description: "AI 프롬프트, 템플릿 마켓 및 작업 의뢰.",
+  path: "/market",
+});
 
-export default function MarketPage() {
-  const t = TEXTS.market;
-
-  // 📌 State Lifting: 필터 상태 관리
-  const [filters, setFilters] = useState({
-    category: "All",
-    price: "All",
-    sort: "newest",
-  });
-
-  return (
-    <main className="w-full min-h-screen">
-      
-      {/* 1. 상단 Hero */}
-      <section className="pt-32 pb-16 px-6 text-center">
-        <h1 
-          className="text-3xl md:text-5xl font-extrabold mb-4" 
-          style={{ color: 'var(--text-main)' }}
-        >
-          {t.heroTitle.ko}
-        </h1>
-        <p 
-          className="text-lg opacity-70 max-w-2xl mx-auto break-keep" 
-          style={{ color: 'var(--text-main)' }}
-        >
-          {t.heroSubtitle.ko}
-        </p>
-      </section>
-
-      {/* 2. AI 자료 마켓 섹션 */}
-      <section className="container max-w-6xl mx-auto px-4 pb-24 border-b border-dashed" style={{ borderColor: 'var(--card-border)' }}>
-        <h2 className="text-2xl font-bold mb-8 flex items-center gap-2" style={{ color: 'var(--text-main)' }}>
-          🛒 {t.section.productsTitle.ko}
-        </h2>
-        
-        <MarketFilters filters={filters} setFilters={setFilters} />
-        <MarketList filters={filters} />
-      </section>
-
-      {/* 3. AI 작업 의뢰 섹션 */}
-      <section className="container max-w-4xl mx-auto px-4 py-24">
-        <div className="text-center mb-10">
-          <h2 className="text-2xl font-bold mb-2 flex items-center justify-center gap-2" style={{ color: 'var(--text-main)' }}>
-            🤝 {t.section.requestTitle.ko}
-          </h2>
-          <p className="opacity-70" style={{ color: 'var(--text-sub)' }}>
-            원하는 AI 자료가 없다면? 전문가에게 직접 의뢰해보세요.
-          </p>
-        </div>
-        
-        <RequestForm />
-      </section>
-
-    </main>
-  );
+export default function Page() {
+  return <MarketClient />;
 }

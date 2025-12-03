@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { TEXTS } from "@/constants/texts";
+import { BANNED_WORDS } from "@/constants/bannedWords"; // 👈 추가
 
-export default function RequestForm() {
+export default function MarketRequestForm() {
   const t = TEXTS.market.requestForm;
 
-  // 폼 상태
   const [formData, setFormData] = useState({
     name: "",
     email: "",
@@ -15,28 +15,23 @@ export default function RequestForm() {
     description: "",
   });
 
-  const bannedWords = ["시발", "병신", "개새끼", "좆", "fuck", "shit"];
-
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    // 1. 필수값 검사
     if (!formData.name || !formData.email || !formData.description) {
       alert(t.errorRequired.ko);
       return;
     }
 
-    // 2. 욕설 필터
-    if (bannedWords.some(word => formData.description.includes(word))) {
+    // 🚫 욕설 필터 적용
+    if (BANNED_WORDS.some(word => formData.description.includes(word))) {
       alert(t.errorBanned.ko);
       return;
     }
 
-    // 3. 제출 성공 처리
     console.log("New Request:", formData);
     alert(t.success.ko);
     
-    // 초기화
     setFormData({
       name: "",
       email: "",
@@ -53,13 +48,12 @@ export default function RequestForm() {
       className="p-8 rounded-[1.5rem] border shadow-sm max-w-3xl mx-auto"
       style={{ 
         backgroundColor: 'var(--card-bg)', 
-        borderColor: 'var(--card-border)',
+        borderColor: 'var(--card-border)', 
         color: 'var(--text-main)'
       }}
     >
       <form onSubmit={handleSubmit} className="flex flex-col gap-6">
         
-        {/* 이름 & 이메일 */}
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1">
             <label className="block text-sm font-bold mb-2 opacity-80">{t.name.ko}</label>
@@ -83,7 +77,6 @@ export default function RequestForm() {
           </div>
         </div>
 
-        {/* 의뢰 종류 & 예산 */}
         <div className="flex flex-col md:flex-row gap-6">
           <div className="flex-1">
             <label className="block text-sm font-bold mb-2 opacity-80">{t.type.ko}</label>
@@ -114,7 +107,6 @@ export default function RequestForm() {
           </div>
         </div>
 
-        {/* 상세 내용 */}
         <div>
           <label className="block text-sm font-bold mb-2 opacity-80">{t.description.ko}</label>
           <textarea 

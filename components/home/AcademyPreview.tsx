@@ -1,7 +1,6 @@
 import { TEXTS } from "@/constants/texts";
 
 export default function AcademyPreview() {
-  // 📌 요청된 더미 데이터 적용
   const courses = [
     { id: 1, title: "ChatGPT 고급 프롬프트 작성법", level: "중급", icon: "📝" },
     { id: 2, title: "Pika 영상 생성 마스터", level: "초급", icon: "🎬" },
@@ -20,8 +19,8 @@ export default function AcademyPreview() {
             className="flex items-center gap-4 p-4 rounded-2xl border transition-all hover:scale-[1.02] cursor-pointer"
             style={{ 
               backgroundColor: 'var(--card-bg)', 
-              borderColor: 'var(--card-border)',
-              color: 'var(--text-main)'
+              borderColor: 'var(--card-border)', 
+              color: 'var(--text-main)' 
             }}
           >
             <div className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl bg-gray-100 dark:bg-white/10">

@@ -1,4 +1,7 @@
+import React from "react";
 import { TEXTS } from "@/constants/texts";
+import { AiMeta } from "@/types/content"; // 👈 추가
+import { AiBadge } from "@/components/common/AiBadge"; // 👈 추가
 
 export type AiTool = {
   id: number;
@@ -9,14 +12,14 @@ export type AiTool = {
   priceType: "무료" | "부분 유료" | "완전 유료";
   rating: number;
   tags: string[];
+  aiMeta?: AiMeta; // 👈 추가
 };
 
-interface ToolCardProps {
+interface AiToolsCardProps {
   tool: AiTool;
 }
 
-export default function ToolCard({ tool }: ToolCardProps) {
-  // 카드 스타일 (globals.css 변수 활용)
+const AiToolsCard = React.memo(({ tool }: AiToolsCardProps) => {
   const cardStyle = {
     backgroundColor: 'var(--card-bg)',
     borderColor: 'var(--card-border)',
@@ -25,10 +28,9 @@ export default function ToolCard({ tool }: ToolCardProps) {
 
   return (
     <div 
-      className="relative flex flex-col p-6 rounded-[1.5rem] border transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-lg group"
+      className="relative flex flex-col p-6 rounded-[1.5rem] border transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-lg group min-h-[280px]"
       style={cardStyle}
     >
-      {/* 상단: 카테고리 & 평점 */}
       <div className="flex justify-between items-start mb-4">
         <span className="px-3 py-1 text-xs font-bold rounded-full bg-gray-100 dark:bg-white/10 text-gray-600 dark:text-gray-300 border border-gray-200 dark:border-white/5">
           {tool.category}
@@ -38,13 +40,17 @@ export default function ToolCard({ tool }: ToolCardProps) {
         </div>
       </div>
 
-      {/* 타이틀 & 설명 */}
       <h3 className="text-xl font-bold mb-2">{tool.name}</h3>
+      
+      {/* 👇 AiBadge 추가 */}
+      <div className="mb-3">
+        <AiBadge aiMeta={tool.aiMeta} />
+      </div>
+
       <p className="text-sm opacity-70 mb-4 line-clamp-2 h-10 leading-relaxed">
         {tool.description}
       </p>
 
-      {/* 태그 & 가격 */}
       <div className="flex flex-wrap gap-2 mb-6">
         {tool.tags.slice(0, 3).map((tag, idx) => (
           <span key={idx} className="text-xs opacity-60">#{tag}</span>
@@ -52,7 +58,6 @@ export default function ToolCard({ tool }: ToolCardProps) {
         {tool.tags.length > 3 && <span className="text-xs opacity-40">+{tool.tags.length - 3}</span>}
       </div>
 
-      {/* 하단: 가격뱃지 & 버튼 */}
       <div className="mt-auto flex items-center justify-between pt-4 border-t border-dashed" style={{ borderColor: 'var(--card-border)' }}>
         <span className={`text-xs font-bold px-2 py-1 rounded-md ${
           tool.priceType === '무료' ? 'text-green-500 bg-green-50 dark:bg-green-900/20' :
@@ -73,4 +78,6 @@ export default function ToolCard({ tool }: ToolCardProps) {
       </div>
     </div>
   );
-}
+});
+
+export default AiToolsCard;
