@@ -1,32 +1,11 @@
 "use client";
 
-import { useState } from "react";
-import AiToolsCard, { AiTool } from "./AiToolsCard"; // AiTool 타입 수정 필요 (아래 3-1 참고)
+import { useState, useEffect } from "react";
+import AiToolsCard, { AiTool } from "./AiToolsCard";
 import { TEXTS } from "@/constants/texts";
-import { AiMeta } from "@/types/content"; // 👈 추가
+import { AI_TOOLS_DATA } from "@/constants/aiToolsData"; 
 
-// 📌 AiToolsCard.tsx의 AiTool 타입도 수정해야 함 (3-1번 파일 참고)
-// 여기서는 데이터만 먼저 수정
-
-const TOOLS_DATA: (AiTool & { aiMeta?: AiMeta })[] = [
-  { 
-    id: 1, name: "ChatGPT", category: "LLM", description: "OpenAI가 개발한 가장 대중적인 대화형 AI.", website: "https://chat.openai.com", priceType: "부분 유료", rating: 4.9, tags: ["Chat", "Coding", "Writing"],
-    aiMeta: { creationType: "ai_generated", tools: ["GPT-4"] } // 예시: 설명문 자체를 AI로 썼다는 컨셉
-  },
-  { 
-    id: 2, name: "Midjourney", category: "Image", description: "예술적인 이미지를 생성하는 최고의 AI 도구.", website: "https://midjourney.com", priceType: "완전 유료", rating: 4.8, tags: ["Art", "High-Quality"],
-    aiMeta: { creationType: "human_only" }
-  },
-  // ... 나머지 데이터는 생략 (기존 유지하거나 추가) ...
-  // (파일 길이상 전체 데이터 생략, 기존 데이터에 aiMeta 필드만 추가하면 됨)
-  { id: 3, name: "Claude 3", category: "LLM", description: "Anthropic의 안전하고 자연스러운 대화형 AI.", website: "https://claude.ai", priceType: "부분 유료", rating: 4.7, tags: ["Writing", "Analysis"] },
-  { id: 4, name: "Runway", category: "Video", description: "텍스트나 이미지로 비디오를 생성하는 AI.", website: "https://runwayml.com", priceType: "부분 유료", rating: 4.6, tags: ["Video", "Editing"] },
-  { id: 5, name: "n8n", category: "Automation", description: "워크플로우 자동화를 위한 오픈소스 툴.", website: "https://n8n.io", priceType: "무료", rating: 4.8, tags: ["Workflow", "No-code"] },
-  { id: 6, name: "Suno", category: "Audio", description: "누구나 쉽게 고퀄리티 음악을 만드는 AI.", website: "https://suno.ai", priceType: "부분 유료", rating: 4.7, tags: ["Music", "Song"] },
-  { id: 7, name: "Perplexity", category: "LLM", description: "실시간 검색 기반의 AI 검색 엔진.", website: "https://perplexity.ai", priceType: "부분 유료", rating: 4.8, tags: ["Search", "Research"] },
-  { id: 8, name: "Leonardo.ai", category: "Image", description: "게임 에셋 및 아트 생성에 특화된 AI.", website: "https://leonardo.ai", priceType: "부분 유료", rating: 4.6, tags: ["Game Asset", "Art"] },
-  { id: 9, name: "Make", category: "Automation", description: "다양한 앱을 연결하는 시각적 자동화 도구.", website: "https://make.com", priceType: "부분 유료", rating: 4.5, tags: ["Workflow", "Integration"] },
-];
+const DISPLAY_CATEGORIES = ["llm", "image", "video", "voice", "automation", "search"];
 
 interface AiToolsListProps {
   filters: {
@@ -37,12 +16,101 @@ interface AiToolsListProps {
 }
 
 export default function AiToolsList({ filters }: AiToolsListProps) {
-  const [visibleCount, setVisibleCount] = useState(6);
+  const [tools, setTools] = useState<AiTool[]>(AI_TOOLS_DATA); 
+  const [expandedCats, setExpandedCats] = useState<Record<string, boolean>>({});
+  const [visibleCount, setVisibleCount] = useState(9); 
+  const [isLoaded, setIsLoaded] = useState(false);
 
-  const filteredTools = TOOLS_DATA.filter((tool) => {
-    const matchCat = filters.category === "All" || tool.category === filters.category;
-    const matchPrice = filters.price === "All" || tool.priceType === filters.price;
-    return matchCat && matchPrice;
+  useEffect(() => {
+    const savedRatings = JSON.parse(localStorage.getItem("dori_tool_ratings") || "{}");
+    
+    const updatedTools = AI_TOOLS_DATA.map(tool => {
+      const saved = savedRatings[tool.id];
+      if (saved) {
+        const avg = saved.count > 0 ? Number((saved.totalScore / saved.count).toFixed(1)) : 0;
+        return { ...tool, rating: avg, ratingCount: saved.count };
+      }
+      return tool; 
+    });
+
+    setTools(updatedTools);
+    setIsLoaded(true);
+  }, []);
+
+  // 가격 필터 로직 제거 (카테고리와 정렬만 확인)
+  const isOverviewMode = filters.category === "All" && filters.sort === "rating";
+
+  const toggleExpand = (cat: string) => {
+    setExpandedCats(prev => ({ ...prev, [cat]: !prev[cat] }));
+  };
+
+  const currentTools = isLoaded ? tools : AI_TOOLS_DATA;
+
+  if (isOverviewMode) {
+    return (
+      <div className="w-full flex flex-col gap-16 animate-[fadeInUp_0.5s_ease-out]">
+        {DISPLAY_CATEGORIES.map((cat) => {
+          const catTools = currentTools
+            .filter(t => t.category.toLowerCase() === cat)
+            .sort((a, b) => b.rating - a.rating); 
+
+          if (catTools.length === 0) return null;
+
+          const top3 = catTools.slice(0, 3);
+          const rest = catTools.slice(3);
+          const isExpanded = expandedCats[cat];
+
+          return (
+            <div key={cat} className="flex flex-col md:flex-row gap-6 items-start border-b border-dashed border-[var(--card-border)] pb-12 last:border-0">
+              {/* 좌측 타이틀 영역 */}
+              <div className="w-full md:w-48 flex-shrink-0 sticky top-24">
+                <div className="flex md:flex-col items-baseline md:items-start gap-3">
+                  <h2 className="text-4xl font-black text-[var(--text-main)] uppercase tracking-tighter">
+                    {cat}
+                  </h2>
+                  <span className="text-sm font-bold text-blue-600 bg-blue-50 dark:text-blue-300 dark:bg-blue-900/30 px-2 py-1 rounded">
+                    Top Ranking
+                  </span>
+                  {/* 📌 [수정] 텍스트 가독성 개선 (밝은 회색 -> 선명한 색상) */}
+                  <p className="text-sm text-gray-600 dark:text-gray-200 mt-3 hidden md:block leading-relaxed font-medium opacity-90">
+                    {cat.toUpperCase()} 분야의 주요 AI 툴을 확인하세요.
+                  </p>
+                </div>
+              </div>
+
+              {/* 우측 리스트 영역 */}
+              <div className="flex-1 w-full">
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                  {top3.map((tool, idx) => (
+                    <AiToolsCard key={tool.id} tool={tool} rank={idx + 1} />
+                  ))}
+                  
+                  {isExpanded && rest.map((tool, idx) => (
+                    <AiToolsCard key={tool.id} tool={tool} rank={idx + 4} />
+                  ))}
+                </div>
+
+                {rest.length > 0 && (
+                  <div className="mt-8 text-center">
+                    <button 
+                      onClick={() => toggleExpand(cat)}
+                      className="px-6 py-3 rounded-full font-bold text-sm transition-all hover:scale-105 active:scale-95 bg-[var(--bg-soft)] text-[var(--text-main)] border border-[var(--card-border)] hover:bg-gray-100 dark:hover:bg-white/10 flex items-center gap-2 mx-auto"
+                    >
+                      {isExpanded ? "접기 ▲" : `+ ${cat.toUpperCase()} 툴 더보기 (${rest.length})`}
+                    </button>
+                  </div>
+                )}
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    );
+  }
+
+  const filteredTools = currentTools.filter((tool) => {
+    const matchCat = filters.category === "All" || tool.category.toLowerCase() === filters.category.toLowerCase();
+    return matchCat;
   }).sort((a, b) => {
     if (filters.sort === "rating") return b.rating - a.rating;
     if (filters.sort === "name") return a.name.localeCompare(b.name);
@@ -52,18 +120,24 @@ export default function AiToolsList({ filters }: AiToolsListProps) {
   const visibleTools = filteredTools.slice(0, visibleCount);
 
   return (
-    <div className="w-full">
+    <div className="w-full animate-[fadeInUp_0.5s_ease-out]">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {visibleTools.map((tool) => (
           <AiToolsCard key={tool.id} tool={tool} />
         ))}
       </div>
-      
+
+      {filteredTools.length === 0 && (
+        <div className="text-center py-20 opacity-60">
+          <p>조건에 맞는 툴이 없습니다. 😢</p>
+        </div>
+      )}
+
       {visibleTools.length < filteredTools.length && (
-        <div className="flex justify-center mt-12">
+        <div className="flex justify-center mt-16 mb-10">
           <button 
-            onClick={() => setVisibleCount((prev) => prev + 6)}
-            className="px-8 py-3 rounded-full font-bold transition-all hover:scale-105 active:scale-95 border bg-[var(--card-bg)] border-[var(--card-border)] text-[var(--text-main)] hover:bg-gray-100 dark:hover:bg-white/10"
+            onClick={() => setVisibleCount((prev) => prev + 9)}
+            className="px-10 py-4 rounded-full font-bold text-lg bg-[var(--card-bg)] border border-[var(--card-border)] text-[var(--text-main)] shadow-md hover:shadow-lg"
           >
             {TEXTS.aiTools.button.loadMore.ko} +
           </button>

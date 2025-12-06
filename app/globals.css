@@ -2,15 +2,16 @@
 
 @layer base {
   :root {
-    /* 🌞 [라이트 모드] 헤더: 밝게! 글씨: 검정! */
+    /* 🌞 [라이트 모드] */
     --bg-main: #ffffff;
-    --bg-header: rgba(255, 255, 255, 0.9); /* 👈 여기가 핵심 (흰색) */
-    --text-header: #000000;                /* 👈 여기가 핵심 (검정) */
+    --bg-header: rgba(255, 255, 255, 0.9);
+    --text-header: #000000;
     
     --text-main: #1a1a1a;
     --text-sub: #52525b;
     
-    --card-bg: #ffffff;
+    /* 카드: 흰색 배경 */
+    --card-bg: #ffffff; 
     --card-border: #e4e4e7;
     --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
     
@@ -18,17 +19,18 @@
   }
 
   :root:where(.dark) {
-    /* 🌙 [다크 모드] 헤더: 어둡게! 글씨: 흰색! */
-    --bg-main: #09090b;
-    --bg-header: rgba(0, 0, 0, 0.85);      /* 👈 다크일 땐 검정 */
-    --text-header: #ffffff;                /* 👈 다크일 땐 흰색 */
+    /* 🌙 [다크 모드] */
+    --bg-main: #000000;
+    --bg-header: rgba(0, 0, 0, 0.85);
+    --text-header: #ffffff;
     
     --text-main: #ffffff;
     --text-sub: #a1a1aa;
     
-    --card-bg: #121212;
-    --card-border: #27272a;
-    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+    /* 🎨 [핵심 수정] 카드 배경을 완전 검정(#000000)으로 설정 */
+    --card-bg: #000000; 
+    --card-border: #333333;
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
     
     --accent-color: #60a5fa;
   }
