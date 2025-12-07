@@ -4,7 +4,6 @@ import { TEXTS } from "@/constants/texts";
 interface AiToolsFiltersProps {
   filters: {
     category: string;
-    // price 제거됨
     sort: string;
   };
   setFilters: (newFilters: any) => void;
@@ -34,7 +33,11 @@ const AiToolsFilters = React.memo(({ filters, setFilters }: AiToolsFiltersProps)
         <option value="Voice">Voice / Audio</option>
         <option value="Automation">Automation</option>
         <option value="Search">Search</option>
-        <option value="Other">Other</option>
+        {/* 👇 [추가] 신규 카테고리 옵션 */}
+        <option value="Agent">Agent (Autonomous)</option>
+        <option value="Coding">Coding Assistant</option>
+        <option value="Design">Design & 3D</option>
+        <option value="Productivity">Productivity</option>
       </select>
 
       {/* 3. 정렬 */}

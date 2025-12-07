@@ -8,11 +8,11 @@ import { AiMeta } from "@/types/content"; // 👈 추가
 // 📌 더미 데이터 (aiMeta 추가)
 const INSIGHT_DATA: (InsightItem & { aiMeta?: AiMeta })[] = [
   { 
-    id: 1, title: "AI 시대에 반드시 알아야 할 핵심 개념 10가지", summary: "LLM, RAG, Fine-tuning 등 쏟아지는 AI 용어 정리.", category: "개념", tags: ["기초", "용어"], likes: 120, date: "2024-03-20",
+    id: 1, title: "AI 시대에 반드시 알아야 할 핵심 개념 10가지", summary: "LLM, RAG, Fine-tuning 등 쏟아지는 AI 용어 정리.", category: "가이드", tags: ["기초", "용어"], likes: 0, date: "2024-03-20",
     aiMeta: { creationType: "ai_assisted", tools: ["Claude 3"] } 
   },
   { 
-    id: 2, title: "2024 생성형 AI 트렌드 리포트", summary: "텍스트를 넘어 비디오와 오디오로. 멀티모달 시대의 도래.", category: "트렌드", tags: ["Trend", "MultiModal"], likes: 245, date: "2024-03-18",
+    id: 2, title: "2024 생성형 AI 트렌드 리포트", summary: "텍스트를 넘어 비디오와 오디오로. 멀티모달 시대의 도래.", category: "가이드", tags: ["Trend", "MultiModal"], likes: 0, date: "2024-03-18",
     aiMeta: { creationType: "human_only" }
   },
   // ... 나머지 데이터 생략 (동일 패턴으로 추가 가능) ...

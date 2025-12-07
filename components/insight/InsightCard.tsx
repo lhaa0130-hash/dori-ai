@@ -7,7 +7,7 @@ export type InsightItem = {
   id: number;
   title: string;
   summary: string;
-  category: "개념" | "트렌드" | "분석" | "수익" | "기타";
+  category: "트렌드" | "큐레이션" | "가이드" | "리포트" | "분석";
   tags: string[];
   likes: number;
   date: string;

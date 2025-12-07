@@ -67,20 +67,19 @@ export default function AiToolsCard({ tool, rank }: AiToolsCardProps) {
           </div>
 
           {/* 카테고리 + 평점 */}
-          {/* 배경을 밝게(bg-gray-50) 유지하여 검정 글씨가 잘 보이도록 함 */}
-          <div className="flex items-center gap-2 bg-gray-50 px-3 py-1.5 rounded-full border border-gray-200 dark:border-gray-700 shadow-sm">
-            <span className="text-[11px] font-extrabold text-blue-600 uppercase tracking-wider">
+          <div className="flex items-center gap-2 bg-gray-50 dark:bg-white/10 px-3 py-1.5 rounded-full border border-gray-200 dark:border-white/10 shadow-sm">
+            <span className="text-[11px] font-extrabold text-blue-600 dark:text-blue-300 uppercase tracking-wider">
               {tool.category}
             </span>
-            <div className="w-px h-3 bg-gray-300"></div>
+            <div className="w-px h-3 bg-gray-300 dark:bg-gray-600"></div>
             <div className="flex items-center gap-1">
               <span className="text-yellow-500 text-xs">★</span>
               {/* 평점 점수 (검정) */}
-              <span className="text-xs font-bold text-black">
+              <span className="text-xs font-bold text-black dark:text-white">
                 {currentRating > 0 ? currentRating.toFixed(1) : "0.0"}
               </span>
-              {/* 평점 개수 (검정 + 투명도) - 요청하신 부분 */}
-              <span className="text-[10px] text-black opacity-60">
+              {/* 평점 개수 (검정 + 투명도) 👈 수정됨 */}
+              <span className="text-[10px] text-black dark:text-white opacity-60">
                 ({currentCount})
               </span>
             </div>

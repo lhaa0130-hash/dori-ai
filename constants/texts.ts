@@ -12,8 +12,8 @@ export const TEXTS = {
     menu: { ko: "메뉴", en: "Menu" }
   },
   home: {
-    heroTitle: { ko: "AI 시대의 지식·실전·커뮤니티 플랫폼", en: "AI Knowledge, Workflow & Community Platform" },
-    heroSubtitle: { ko: "설계는 GPT, 실행은 Gemini, 그리고 당신", en: "Designed by GPT, Executed with Gemini, Empowered by You" },
+    heroTitle: { ko: "작은 시작을 함께 만들어갑니다", en: "AI Knowledge, Workflow & Community Platform" },
+    heroSubtitle: { ko: "AI가 처음이어도, 누구나 배우고 성장할 수 있는 공간", en: "Designed by GPT, Executed with Gemini, Empowered by You" },
     sectionTitles: {
       tools: { ko: "AI Tools 인기", en: "Popular AI Tools" },
       insight: { ko: "최신 인사이트", en: "Latest Insights" },
@@ -25,7 +25,7 @@ export const TEXTS = {
       writeFirst: { ko: "첫 번째 글의 주인공이 되어보세요!", en: "Be the first to write!" }
     },
     bento: {
-      tools: { title: "AI Tools", desc: { ko: "평점·리뷰 포함", en: "Ratings & Reviews" }, detail: { ko: "수천 개의 AI 툴 중 진짜만 엄선했습니다.\n실시간 순위와 유저들의 솔직한 평가를 확인하세요.", en: "Curated list of the best AI tools.\nCheck real-time rankings and honest reviews." }, linkText: { ko: "랭킹 보러가기 →", en: "View Rankings →" } },
+      tools: { title: "AI Tools", desc: { ko: "평점·리뷰 포함", en: "Ratings & Reviews" }, detail: { ko: "다양한 분야에서 활용되는 AI를 한눈에 탐색하세요.\n원하는 툴을 찾고, 실제 사용자들의 평가와 활용 경험을 확인할 수 있습니다.", en: "Curated list of the best AI tools.\nCheck real-time rankings and honest reviews." }, linkText: { ko: "AI 랭킹 확인", en: "View Rankings →" } },
       insight: { title: "Insight", desc: { ko: "AI 인사이트 / 개념 / 트렌드", en: "AI Concepts / Trends / Insights" } },
       academy: { title: "Academy", desc: { ko: "실전 튜토리얼 / 팁 / 유튜브 참고자료", en: "Tutorials / Tips / References" } },
       community: { title: "Community", desc: { ko: "잡담 / 질문 / 정보 공유", en: "Chat / Q&A / Information Sharing" }, detail: { ko: "혼자 고민하지 마세요. 작품 자랑부터 에러 해결 질문까지, DORI-AI 멤버들과 함께 성장하는 자유로운 소통 공간입니다.", en: "Don't struggle alone. Share your work, ask questions, and grow together with DORI-AI members." } },

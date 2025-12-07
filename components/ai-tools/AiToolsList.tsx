@@ -5,12 +5,23 @@ import AiToolsCard, { AiTool } from "./AiToolsCard";
 import { TEXTS } from "@/constants/texts";
 import { AI_TOOLS_DATA } from "@/constants/aiToolsData"; 
 
-const DISPLAY_CATEGORIES = ["llm", "image", "video", "voice", "automation", "search"];
+// 📌 [수정] 표시할 카테고리 순서 정의 (10개로 확장)
+const DISPLAY_CATEGORIES = [
+  "llm", 
+  "image", 
+  "video", 
+  "voice", 
+  "automation", 
+  "search", 
+  "agent",        // 👈 추가
+  "coding",       // 👈 추가
+  "design",       // 👈 추가
+  "productivity"  // 👈 추가
+];
 
 interface AiToolsListProps {
   filters: {
     category: string;
-    price: string;
     sort: string;
   };
 }
@@ -37,7 +48,6 @@ export default function AiToolsList({ filters }: AiToolsListProps) {
     setIsLoaded(true);
   }, []);
 
-  // 가격 필터 로직 제거 (카테고리와 정렬만 확인)
   const isOverviewMode = filters.category === "All" && filters.sort === "rating";
 
   const toggleExpand = (cat: string) => {
@@ -46,12 +56,13 @@ export default function AiToolsList({ filters }: AiToolsListProps) {
 
   const currentTools = isLoaded ? tools : AI_TOOLS_DATA;
 
+  // --- [1] 개요 모드 렌더링 (카테고리별 랭킹 섹션) ---
   if (isOverviewMode) {
     return (
       <div className="w-full flex flex-col gap-16 animate-[fadeInUp_0.5s_ease-out]">
         {DISPLAY_CATEGORIES.map((cat) => {
           const catTools = currentTools
-            .filter(t => t.category.toLowerCase() === cat)
+            .filter(t => t.category.toLowerCase() === cat.toLowerCase()) // 대소문자 매칭 안전하게
             .sort((a, b) => b.rating - a.rating); 
 
           if (catTools.length === 0) return null;
@@ -71,8 +82,7 @@ export default function AiToolsList({ filters }: AiToolsListProps) {
                   <span className="text-sm font-bold text-blue-600 bg-blue-50 dark:text-blue-300 dark:bg-blue-900/30 px-2 py-1 rounded">
                     Top Ranking
                   </span>
-                  {/* 📌 [수정] 텍스트 가독성 개선 (밝은 회색 -> 선명한 색상) */}
-                  <p className="text-sm text-gray-600 dark:text-gray-200 mt-3 hidden md:block leading-relaxed font-medium opacity-90">
+                  <p className="text-sm text-gray-700 dark:text-gray-300 mt-2 hidden md:block leading-relaxed font-medium">
                     {cat.toUpperCase()} 분야의 주요 AI 툴을 확인하세요.
                   </p>
                 </div>
@@ -108,6 +118,7 @@ export default function AiToolsList({ filters }: AiToolsListProps) {
     );
   }
 
+  // --- [2] 필터 모드 렌더링 ---
   const filteredTools = currentTools.filter((tool) => {
     const matchCat = filters.category === "All" || tool.category.toLowerCase() === filters.category.toLowerCase();
     return matchCat;

@@ -30,11 +30,11 @@ export default function InsightFilters({ filters, setFilters }: InsightFiltersPr
           className={`w-full md:w-auto ${selectClass}`}
         >
           <option value="All">{t.category.ko}: {t.all.ko}</option>
-          <option value="개념">개념 (Concept)</option>
-          <option value="트렌드">트렌드 (Trend)</option>
-          <option value="분석">분석 (Analysis)</option>
-          <option value="수익">수익 (Revenue)</option>
-          <option value="기타">기타 (Other)</option>
+          <option value="트렌드">트렌드</option>
+          <option value="큐레이션">큐레이션</option>
+          <option value="가이드">가이드</option>
+          <option value="리포트">리포트</option>
+          <option value="분석">분석</option>
         </select>
       </div>
 

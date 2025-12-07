@@ -27,20 +27,23 @@ export type UserRating = {
 export type AiTool = {
   id: string;
   name: string;
-  category: "llm" | "image" | "video" | "voice" | "code" | "agent" | "search" | "motion";
+  // 👇 [수정] 새로운 카테고리 추가 (coding, design, productivity)
+  category: "llm" | "image" | "video" | "voice" | "automation" | "search" | "agent" | "coding" | "design" | "productivity" | "other";
   summary: string;
   description: string;
   releaseDate: string;
   website: string;
-  pricing: string; // 예: "Free / $20 mo"
+  pricing: string; 
   tags: string[];
-  thumbnail: string; // 로컬 경로 or 외부 URL
+  thumbnail: string;
+  
+  // 추가 정보
+  priceType?: string; // "무료", "부분 유료" 등 (필터용)
 
-  // 동적 데이터 (초기값은 0/빈배열이나 LocalStorage와 병합됨)
   rating: number;
   ratingCount: number;
   userRatings: UserRating[];
   comments: AiToolComment[];
   
-  aiMeta?: AiMeta; // 기존 뱃지 호환
+  aiMeta?: AiMeta;
 };

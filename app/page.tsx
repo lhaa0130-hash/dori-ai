@@ -3,7 +3,7 @@ import HomeClient from "./page.client";
 
 export const metadata = createMetadata({
   title: "홈",
-  description: "AI 시대의 지식, 실전, 커뮤니티 플랫폼 DORI-AI입니다.",
+  description: "작은 시작을 함께 만들어갑니다(DORI-AI).",
   path: "/",
 });
 
