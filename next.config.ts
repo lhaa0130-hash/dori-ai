@@ -9,11 +9,10 @@ const nextConfig: NextConfig = {
       },
       {
         protocol: "https",
-        hostname: "logo.clearbit.com", // 👈 [추가] 로고 이미지 API
+        hostname: "logo.clearbit.com", // AI 툴 로고
       },
     ],
   },
-  /* 배포 시 에러 무시 설정 (선택 사항) */
   eslint: {
     ignoreDuringBuilds: true,
   },

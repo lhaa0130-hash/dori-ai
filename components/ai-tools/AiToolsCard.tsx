@@ -27,7 +27,6 @@ export default function AiToolsCard({ tool, rank }: AiToolsCardProps) {
     setCurrentCount(newCount);
   };
 
-  // 랭킹 뱃지
   const getRankBadge = (r: number) => {
     if (r === 1) return <div className="absolute -top-3 -left-3 w-14 h-14 bg-gradient-to-br from-yellow-400 to-yellow-600 text-white rounded-full flex items-center justify-center font-black text-base shadow-lg border-4 border-white dark:border-black z-20 transform -rotate-12">1위</div>;
     if (r === 2) return <div className="absolute -top-3 -left-3 w-12 h-12 bg-gradient-to-br from-gray-300 to-gray-500 text-white rounded-full flex items-center justify-center font-black text-sm shadow-lg border-4 border-white dark:border-black z-20 transform -rotate-12">2위</div>;
@@ -37,7 +36,6 @@ export default function AiToolsCard({ tool, rank }: AiToolsCardProps) {
 
   return (
     <div 
-      // 🎨 스타일 강제 적용
       style={{
         backgroundColor: 'var(--card-bg)',
         borderColor: 'var(--card-border)',
@@ -54,7 +52,6 @@ export default function AiToolsCard({ tool, rank }: AiToolsCardProps) {
         
         {/* 상단 헤더 */}
         <div className="flex justify-between items-start mb-4 gap-4">
-          {/* 로고 */}
           <div className="relative w-16 h-16 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm bg-white flex-shrink-0">
             <Image
               src={tool.thumbnail}
@@ -66,7 +63,6 @@ export default function AiToolsCard({ tool, rank }: AiToolsCardProps) {
             />
           </div>
 
-          {/* 카테고리 + 평점 */}
           <div className="flex items-center gap-2 bg-gray-50 dark:bg-white/10 px-3 py-1.5 rounded-full border border-gray-200 dark:border-white/10 shadow-sm">
             <span className="text-[11px] font-extrabold text-blue-600 dark:text-blue-300 uppercase tracking-wider">
               {tool.category}
@@ -74,11 +70,10 @@ export default function AiToolsCard({ tool, rank }: AiToolsCardProps) {
             <div className="w-px h-3 bg-gray-300 dark:bg-gray-600"></div>
             <div className="flex items-center gap-1">
               <span className="text-yellow-500 text-xs">★</span>
-              {/* 평점 점수 (검정) */}
               <span className="text-xs font-bold text-black dark:text-white">
                 {currentRating > 0 ? currentRating.toFixed(1) : "0.0"}
               </span>
-              {/* 평점 개수 (검정 + 투명도) 👈 수정됨 */}
+              {/* 👇 [수정] 참여자 수 색상을 진하게 변경 */}
               <span className="text-[10px] text-black dark:text-white opacity-60">
                 ({currentCount})
               </span>
