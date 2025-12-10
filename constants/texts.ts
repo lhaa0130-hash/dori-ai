@@ -26,10 +26,10 @@ export const TEXTS = {
     },
     bento: {
       tools: { title: "AI Tools", desc: { ko: "평점·리뷰 포함", en: "Ratings & Reviews" }, detail: { ko: "다양한 분야에서 활용되는 AI를 한눈에 탐색하세요.\n원하는 툴을 찾고, 실제 사용자들의 평가와 활용 경험을 확인할 수 있습니다.", en: "Curated list of the best AI tools.\nCheck real-time rankings and honest reviews." }, linkText: { ko: "AI 랭킹 확인", en: "View Rankings →" } },
-      insight: { title: "Insight", desc: { ko: "AI 인사이트 / 개념 / 트렌드", en: "AI Concepts / Trends / Insights" } },
-      academy: { title: "Academy", desc: { ko: "실전 튜토리얼 / 팁 / 유튜브 참고자료", en: "Tutorials / Tips / References" } },
-      community: { title: "Community", desc: { ko: "잡담 / 질문 / 정보 공유", en: "Chat / Q&A / Information Sharing" }, detail: { ko: "혼자 고민하지 마세요. 작품 자랑부터 에러 해결 질문까지, DORI-AI 멤버들과 함께 성장하는 자유로운 소통 공간입니다.", en: "Don't struggle alone. Share your work, ask questions, and grow together with DORI-AI members." } },
-      market: { title: "Market", desc: { ko: "AI 자료 판매 + 작업 의뢰", en: "Asset Market + Work Requests" } }
+      insight: { title: "Insight", desc: { ko: "트렌드 / 큐레이션 / 가이드 / 리포트 / 분석", en: "AI Concepts / Trends / Insights" } },
+      academy: { title: "Academy", desc: { ko: "참고영상(youtube) / AI사용법", en: "Tutorials / Tips / References" } },
+      community: { title: "Community", desc: { ko: "잡담 / 질문 / 정보 공유", en: "Chat / Q&A / Information Sharing" }, detail: { ko: "혼자 고민하지 마세요. AI에 관련된 이야기를 함께 공유해주세요.", en: "Don't struggle alone. Share your work, ask questions, and grow together with DORI-AI members." } },
+      market: { title: "Market(준비중)", desc: { ko: "AI 작업 의뢰 / AI 자료 판매", en: "Asset Market + Work Requests" } }
     }
   },
   aiTools: {
@@ -74,7 +74,7 @@ export const TEXTS = {
     filters: { type: { ko: "유형", en: "Type" }, priority: { ko: "우선순위", en: "Priority" }, sort: { ko: "정렬", en: "Sort" }, all: { ko: "전체", en: "All" } }
   },
   footer: {
-    copyright: { ko: "© 2024 DORI-AI. All rights reserved.", en: "© 2024 DORI-AI. All rights reserved." },
+    copyright: { ko: "© 2026 DORI-AI. All rights reserved.", en: "© 2024 DORI-AI. All rights reserved." },
     privacy: { ko: "개인정보처리방침", en: "Privacy Policy" },
     terms: { ko: "이용약관", en: "Terms of Service" },
     suggestion: { ko: "건의사항", en: "Suggestions" }
