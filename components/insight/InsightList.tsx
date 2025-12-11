@@ -4,27 +4,29 @@ import { useState } from "react";
 import Link from "next/link";
 import InsightCard from "./InsightCard";
 import { TEXTS } from "@/constants/texts";
-// 👇 [중요] 내부에 데이터를 적지 않고, 아까 만든 데이터 파일에서 불러옵니다.
-import { INSIGHT_DATA } from "@/constants/insightData"; 
+import { InsightItem } from "@/types/content";
+
+// ❌ 기존에 있던 const INSIGHT_DATA = [...] 부분은 삭제했습니다!
+// 이제 이 컴포넌트는 오직 '받아온 데이터'만 보여줍니다.
 
 interface InsightListProps {
   filters: { category: string; tag: string | null; sort: string; };
   setFilters: (newFilters: any) => void;
+  posts: InsightItem[]; // 👈 부모(Page)에서 읽어온 파일 데이터를 여기서 받습니다.
 }
 
-export default function InsightList({ filters, setFilters }: InsightListProps) {
+export default function InsightList({ filters, setFilters, posts }: InsightListProps) {
   const [visibleCount, setVisibleCount] = useState(6);
   const handleTagClick = (tag: string) => setFilters({ ...filters, tag });
 
-  // 🔍 필터링 & 정렬 로직
-  // (이제 INSIGHT_DATA는 외부 파일에서 가져온 것을 씁니다)
-  const filteredData = INSIGHT_DATA.filter((item) => {
+  // 받아온 posts 데이터를 필터링
+  const filteredData = posts.filter((item) => {
     const matchCategory = filters.category === "All" || item.category === filters.category;
     const matchTag = filters.tag === null || item.tags.includes(filters.tag);
     return matchCategory && matchTag;
   }).sort((a, b) => {
     if (filters.sort === "popular") return b.likes - a.likes;
-    // 최신순 정렬
+    // 날짜 최신순
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 
@@ -35,7 +37,6 @@ export default function InsightList({ filters, setFilters }: InsightListProps) {
       {filteredData.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {visibleData.map((item) => (
-            // 👇 클릭하면 상세 페이지(/insight/아이디)로 이동
             <Link key={item.id} href={`/insight/${item.id}`} className="block group">
               <InsightCard item={item} onTagClick={handleTagClick} />
             </Link>
@@ -53,7 +54,6 @@ export default function InsightList({ filters, setFilters }: InsightListProps) {
         </div>
       )}
 
-      {/* 더보기 버튼 */}
       {visibleData.length < filteredData.length && (
         <div className="flex justify-center mt-12">
            <button 

@@ -1,17 +1,19 @@
 import React from "react";
 import { TEXTS } from "@/constants/texts";
-import { AiMeta } from "@/types/content"; // 👈 추가
-import { AiBadge } from "@/components/common/AiBadge"; // 👈 추가
+import { AiMeta } from "@/types/content";
+import { AiBadge } from "@/components/common/AiBadge";
 
 export type InsightItem = {
   id: number;
   title: string;
   summary: string;
-  category: "트렌드" | "큐레이션" | "가이드" | "리포트" | "분석";
+  category: "개념" | "트렌드" | "분석" | "수익" | "기타" | "가이드";
   tags: string[];
   likes: number;
-  date: string;
-  aiMeta?: AiMeta; // 👈 추가
+  date: string; 
+  aiMeta?: AiMeta; 
+  content?: string;
+  image?: string;
 };
 
 interface InsightCardProps {
@@ -35,14 +37,19 @@ const InsightCard = React.memo(({ item, onTagClick }: InsightCardProps) => {
         <span className="px-3 py-1 text-xs font-bold rounded-full bg-purple-50 dark:bg-purple-900/20 text-purple-600 dark:text-purple-300 border border-purple-100 dark:border-purple-500/20">
           {item.category}
         </span>
-        <span className="text-xs opacity-50" style={{ color: 'var(--text-sub)' }}>
+        
+        {/* 👇 [수정] 날짜 에러 방지용 코드 추가 */}
+        <span 
+          className="text-xs opacity-50" 
+          style={{ color: 'var(--text-sub)' }}
+          suppressHydrationWarning={true}
+        >
           {new Date(item.date).toLocaleDateString()}
         </span>
       </div>
 
       <h3 className="text-xl font-bold mb-2 leading-snug break-keep">{item.title}</h3>
       
-      {/* 👇 AiBadge 추가 */}
       <div className="mb-3">
         <AiBadge aiMeta={item.aiMeta} />
       </div>
