@@ -2,7 +2,7 @@ import { AiTool } from "@/types/content";
 
 export const AI_TOOLS_DATA: AiTool[] = [
   // =====================================================================================
-  // 1. LLM (대화형/언어모델) - 총 20개 (기존 10 + 신규 10)
+  // 1. LLM (대화형/언어모델) - 총 20개
   // =====================================================================================
   {
     id: "llm-01", name: "ChatGPT", category: "llm",
@@ -29,13 +29,12 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   { id: "llm-04", name: "Perplexity", category: "llm", summary: "실시간 검색 기반 답변 엔진.", description: "출처를 명시하는 검색 중심의 AI로, 최신 정보를 빠르게 찾는 데 최적화되어 있습니다.", releaseDate: "2022.08", website: "https://perplexity.ai", pricing: "Free / $20 mo", tags: ["Search", "Citations"], thumbnail: "https://logo.clearbit.com/perplexity.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-05", name: "Mistral", category: "llm", summary: "유럽 최고의 오픈소스 모델.", description: "효율적이고 강력한 성능을 자랑하는 프랑스발 오픈소스 LLM입니다.", releaseDate: "2023.09", website: "https://mistral.ai", pricing: "Open Source", rating: 0, ratingCount: 0, tags: ["Open Source", "Efficient"], thumbnail: "https://logo.clearbit.com/mistral.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-06", name: "Llama 3", category: "llm", summary: "Meta의 강력한 오픈소스 모델.", description: "개인 및 상업적 용도로 사용 가능한 고성능 언어 모델입니다.", releaseDate: "2024.04", website: "https://llama.meta.com", pricing: "Open Source", rating: 0, ratingCount: 0, tags: ["Meta", "Local LLM"], thumbnail: "https://logo.clearbit.com/meta.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-07", name: "Grok", category: "llm", summary: "xAI의 위트 있는 AI.", description: "X(트위터) 데이터를 실시간으로 반영하며, 약간의 유머감각을 가진 AI입니다.", releaseDate: "2023.11", website: "https://x.ai", pricing: "Paid (X Premium)", rating: 0, ratingCount: 0, tags: ["Real-time", "Humor"], thumbnail: "https://logo.clearbit.com/x.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-08", name: "Cohere", category: "llm", summary: "기업용 RAG 특화 모델.", description: "기업 데이터 연결 및 검색 증강 생성(RAG)에 최적화된 엔터프라이즈 모델입니다.", releaseDate: "2022.06", website: "https://cohere.com", pricing: "API Pricing", rating: 0, ratingCount: 0, tags: ["Enterprise", "RAG"], thumbnail: "https://logo.clearbit.com/cohere.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-09", name: "Pi", category: "llm", summary: "감성적인 대화 파트너.", description: "사용자의 감정을 이해하고 공감하는 데 초점을 맞춘 개인 비서 AI입니다.", releaseDate: "2023.05", website: "https://pi.ai", pricing: "Free", rating: 0, ratingCount: 0, tags: ["Emotional", "Chat"], thumbnail: "https://logo.clearbit.com/pi.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-10", name: "HyperCLOVA X", category: "llm", summary: "한국어에 가장 강한 AI.", description: "네이버가 개발한 한국어 특화 거대언어모델로, 한국 문화와 맥락을 깊이 이해합니다.", releaseDate: "2023.08", website: "https://clova.ai", pricing: "Enterprise", rating: 0, ratingCount: 0, tags: ["Korean", "Naver"], thumbnail: "https://logo.clearbit.com/navercorp.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  // 신규 추가 LLM
+  { id: "llm-05", name: "Mistral", category: "llm", summary: "유럽 최고의 오픈소스 모델.", description: "효율적이고 강력한 성능을 자랑하는 프랑스발 오픈소스 LLM입니다.", releaseDate: "2023.09", website: "https://mistral.ai", pricing: "Open Source", tags: ["Open Source", "Efficient"], thumbnail: "https://logo.clearbit.com/mistral.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-06", name: "Llama 3", category: "llm", summary: "Meta의 강력한 오픈소스 모델.", description: "개인 및 상업적 용도로 사용 가능한 고성능 언어 모델입니다.", releaseDate: "2024.04", website: "https://llama.meta.com", pricing: "Open Source", tags: ["Meta", "Local LLM"], thumbnail: "https://logo.clearbit.com/meta.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-07", name: "Grok", category: "llm", summary: "xAI의 위트 있는 AI.", description: "X(트위터) 데이터를 실시간으로 반영하며, 약간의 유머감각을 가진 AI입니다.", releaseDate: "2023.11", website: "https://x.ai", pricing: "Paid (X Premium)", tags: ["Real-time", "Humor"], thumbnail: "https://logo.clearbit.com/x.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-08", name: "Cohere", category: "llm", summary: "기업용 RAG 특화 모델.", description: "기업 데이터 연결 및 검색 증강 생성(RAG)에 최적화된 엔터프라이즈 모델입니다.", releaseDate: "2022.06", website: "https://cohere.com", pricing: "API Pricing", tags: ["Enterprise", "RAG"], thumbnail: "https://logo.clearbit.com/cohere.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-09", name: "Pi", category: "llm", summary: "감성적인 대화 파트너.", description: "사용자의 감정을 이해하고 공감하는 데 초점을 맞춘 개인 비서 AI입니다.", releaseDate: "2023.05", website: "https://pi.ai", pricing: "Free", tags: ["Emotional", "Chat"], thumbnail: "https://logo.clearbit.com/pi.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-10", name: "HyperCLOVA X", category: "llm", summary: "한국어에 가장 강한 AI.", description: "네이버가 개발한 한국어 특화 거대언어모델로, 한국 문화와 맥락을 깊이 이해합니다.", releaseDate: "2023.08", website: "https://clova.ai", pricing: "Enterprise", tags: ["Korean", "Naver"], thumbnail: "https://logo.clearbit.com/navercorp.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "llm-11", name: "Falcon 180B", category: "llm", summary: "가장 강력한 오픈소스 모델 중 하나.", description: "UAE TII에서 개발한 초대형 오픈소스 모델로 상업적 활용이 가능합니다.", website: "https://falconllm.tii.ae", releaseDate: "2023.09", pricing: "Open Source", tags: ["Open Source", "High Perf"], thumbnail: "https://logo.clearbit.com/tii.ae", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "llm-12", name: "Qwen", category: "llm", summary: "Alibaba의 고성능 LLM.", description: "다국어 지원 및 수학/코딩 능력이 뛰어난 알리바바의 오픈 모델입니다.", website: "https://qwenlm.github.io", releaseDate: "2023.08", pricing: "Open Source", tags: ["Alibaba", "Coding"], thumbnail: "https://logo.clearbit.com/alibaba.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "llm-13", name: "Yi", category: "llm", summary: "01.AI의 강력한 이중언어 모델.", description: "영어와 중국어에 특화된 고성능 모델로 긴 문맥 처리가 가능합니다.", website: "https://01.ai", releaseDate: "2023.11", pricing: "Open Source", tags: ["Bilingual", "Long Context"], thumbnail: "https://logo.clearbit.com/01.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
@@ -49,7 +48,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
 
 
   // =====================================================================================
-  // 2. Image (이미지 생성) - 총 20개 (기존 10 + 신규 10)
+  // 2. Image (이미지 생성) - 총 20개
   // =====================================================================================
   {
     id: "img-01", name: "Midjourney", category: "image",
@@ -68,7 +67,6 @@ export const AI_TOOLS_DATA: AiTool[] = [
   { id: "img-08", name: "Magnific AI", category: "image", summary: "이미지 디테일 업스케일러.", description: "저화질 이미지를 상상력을 더해 초고화질로 변환해줍니다.", releaseDate: "2023.12", website: "https://magnific.ai", pricing: "Paid", tags: ["Upscale", "Detail"], thumbnail: "https://logo.clearbit.com/magnific.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "img-09", name: "Playground AI", category: "image", summary: "사용하기 쉬운 웹 생성기.", description: "필터 기능이 강력하고 커뮤니티 기능이 잘 되어 있습니다.", releaseDate: "2022.10", website: "https://playgroundai.com", pricing: "Free / Paid", tags: ["Web-based", "Filters"], thumbnail: "https://logo.clearbit.com/playground.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "img-10", name: "Recraft", category: "image", summary: "벡터 이미지 생성 특화.", description: "SVG 포맷으로 저장 가능한 벡터 그래픽과 아이콘을 생성합니다.", releaseDate: "2023.05", website: "https://recraft.ai", pricing: "Free / Paid", tags: ["Vector", "Icon"], thumbnail: "https://logo.clearbit.com/recraft.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  // 신규 추가 Image
   { id: "img-11", name: "Bing Image Creator", category: "image", summary: "DALL-E 3 기반 무료 생성기.", description: "MS 계정만 있으면 무료로 고품질 이미지를 생성할 수 있습니다.", website: "https://bing.com/images/create", releaseDate: "2023.03", pricing: "Free", tags: ["Microsoft", "Free"], thumbnail: "https://logo.clearbit.com/bing.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "img-12", name: "Clipdrop", category: "image", summary: "이미지 편집 및 생성 도구 모음.", description: "배경 제거, 조명 조절 등 다양한 AI 편집 도구를 제공합니다.", website: "https://clipdrop.co", releaseDate: "2020.07", pricing: "Free / Paid", tags: ["Editing", "Tools"], thumbnail: "https://logo.clearbit.com/clipdrop.co", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "img-13", name: "NightCafe", category: "image", summary: "커뮤니티 중심의 아트 생성기.", description: "다양한 알고리즘을 지원하며 일일 무료 크레딧을 제공합니다.", website: "https://creator.nightcafe.studio", releaseDate: "2019.11", pricing: "Free / Paid", tags: ["Community", "Art"], thumbnail: "https://logo.clearbit.com/nightcafe.studio", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
@@ -80,10 +78,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   { id: "img-19", name: "Kaiber", category: "image", summary: "애니메이션 스타일 생성.", description: "이미지나 영상을 몽환적인 애니메이션 스타일로 변환합니다.", website: "https://kaiber.ai", releaseDate: "2023", pricing: "Paid", tags: ["Animation", "Style"], thumbnail: "https://logo.clearbit.com/kaiber.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "img-20", name: "Getimg.ai", category: "image", summary: "올인원 이미지 생성 및 편집.", description: "생성, 인페인팅, 아웃페인팅 등 다양한 기능을 한곳에서 제공합니다.", website: "https://getimg.ai", releaseDate: "2022", pricing: "Free / Paid", tags: ["Editor", "Suite"], thumbnail: "https://logo.clearbit.com/getimg.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
 
-
-  // =====================================================================================
-  // 3. Video (비디오 생성) - 총 20개 (기존 10 + 신규 10)
-  // =====================================================================================
+  // 3. Video (영상 생성) - 총 20개
   {
     id: "vid-01", name: "Runway", category: "video",
     summary: "영상 생성 AI의 선두주자.",
@@ -92,9 +87,8 @@ export const AI_TOOLS_DATA: AiTool[] = [
     thumbnail: "https://logo.clearbit.com/runwayml.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
-  { id: "vid-02", name: "Pika", category: "video", summary: "애니메이션에 강한 생성기.", description: "사용하기 쉽고 특히 애니메이션 스타일 영상 생성에 강점이 있습니다.", releaseDate: "2023.12", website: "https://pika.art", pricing: "Free / Paid", tags: ["Animation", "Easy"], thumbnail: "https://logo.clearbit.com/pika.art", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "vid-03", name: "Sora", category: "video", summary: "OpenAI의 혁명적 비디오 모델.", description: "최대 1분 길이의 고해상도 영상을 물리 법칙에 맞게 생성합니다. (현재 제한적 공개)", releaseDate: "2024.02", website: "https://openai.com/sora", pricing: "Unreleased", tags: ["Realistic", "OpenAI"], thumbnail: "https://logo.clearbit.com/openai.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "vid-11", name: "Hailuo AI", category: "video", summary: "MiniMax의 고성능 비디오 생성 AI.", description: "텍스트를 고품질의 비디오로 변환해주는 MiniMax사의 최신 비디오 생성 모델입니다. 자연스러운 움직임이 특징입니다.", releaseDate: "2024.09", website: "https://hailuoai.com", pricing: "Free / Paid", tags: ["Video", "MiniMax", "High Quality"], thumbnail: "https://logo.clearbit.com/hailuoai.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "vid-02", name: "Pika", category: "video", summary: "애니메이션에 강한 생성기.", description: "누구나 쉽게 사용하는 영상 생성.", website: "https://pika.art", releaseDate: "2023.12", pricing: "Free / Paid", tags: ["Animation", "Easy"], thumbnail: "https://logo.clearbit.com/pika.art", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "vid-03", name: "Sora", category: "video", summary: "OpenAI의 혁명적 비디오 모델.", description: "최대 1분 길이의 고해상도 영상을 물리 법칙에 맞게 생성합니다. (현재 제한적 공개)", releaseDate: "2024.02", pricing: "Unreleased", tags: ["Realistic", "OpenAI"], thumbnail: "https://logo.clearbit.com/openai.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "vid-04", name: "Luma Dream Machine", category: "video", summary: "고퀄리티 무료 영상 생성.", description: "빠른 생성 속도와 높은 퀄리티를 무료로 체험할 수 있습니다.", releaseDate: "2024.06", website: "https://lumalabs.ai", pricing: "Free / Paid", tags: ["High Quality", "Fast"], thumbnail: "https://logo.clearbit.com/lumalabs.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "vid-05", name: "Kling", category: "video", summary: "중국의 고성능 비디오 모델.", description: "Sora에 버금가는 긴 영상 생성 능력과 자연스러운 움직임을 보여줍니다.", releaseDate: "2024.06", website: "https://kling.kuaishou.com", pricing: "Free / Paid", tags: ["Long Video", "Realistic"], thumbnail: "https://logo.clearbit.com/kuaishou.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "vid-06", name: "HeyGen", category: "video", summary: "AI 아바타 영상 제작.", description: "텍스트만 입력하면 실제 사람이 말하는 듯한 영상을 만들어줍니다.", releaseDate: "2022.09", website: "https://heygen.com", pricing: "Paid", tags: ["Avatar", "Marketing"], thumbnail: "https://logo.clearbit.com/heygen.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
@@ -102,7 +96,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   { id: "vid-08", name: "Kaiber", category: "video", summary: "스타일리시한 영상 변환.", description: "기존 영상을 애니메이션이나 특정 스타일로 변환하는 데 특화되어 있습니다.", releaseDate: "2023.01", website: "https://kaiber.ai", pricing: "Paid", tags: ["Style Transfer", "Music Video"], thumbnail: "https://logo.clearbit.com/kaiber.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "vid-09", name: "Leonardo Motion", category: "video", summary: "이미지를 영상으로.", description: "레오나르도 AI에서 생성한 이미지에 자연스러운 움직임을 부여합니다.", releaseDate: "2023.12", website: "https://leonardo.ai", pricing: "Credits", tags: ["Image-to-Video"], thumbnail: "https://logo.clearbit.com/leonardo.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "vid-10", name: "Topaz Video AI", category: "video", summary: "AI 영상 업스케일링.", description: "저화질 영상을 고화질로 복원하고 프레임 속도를 부드럽게 만듭니다.", releaseDate: "2020.05", website: "https://topazlabs.com", pricing: "One-time", tags: ["Upscale", "Restoration"], thumbnail: "https://logo.clearbit.com/topazlabs.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  // 신규 추가 Video
+  { id: "vid-11", name: "Hailuo AI", category: "video", summary: "MiniMax의 고성능 비디오 생성 AI.", description: "텍스트를 고품질의 비디오로 변환해주는 MiniMax사의 최신 비디오 생성 모델입니다.", releaseDate: "2024.09", website: "https://hailuoai.com", pricing: "Free / Paid", tags: ["Video", "MiniMax", "High Quality"], thumbnail: "https://logo.clearbit.com/hailuoai.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "vid-12", name: "Veed.io", category: "video", summary: "AI 기반 온라인 영상 편집기.", description: "자동 자막, 컷 편집 등 AI 기능을 갖춘 웹 기반 에디터입니다.", website: "https://veed.io", releaseDate: "2018", pricing: "Free / Paid", tags: ["Editing", "Subtitles"], thumbnail: "https://logo.clearbit.com/veed.io", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "vid-13", name: "InVideo", category: "video", summary: "텍스트로 비디오 만들기.", description: "스크립트만 입력하면 스톡 영상을 조합해 비디오를 완성해줍니다.", website: "https://invideo.io", releaseDate: "2017", pricing: "Free / Paid", tags: ["Marketing", "Text-to-Video"], thumbnail: "https://logo.clearbit.com/invideo.io", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "vid-14", name: "Fliki", category: "video", summary: "텍스트를 비디오와 음성으로.", description: "블로그 글이나 트윗을 영상으로 빠르게 변환해주는 툴입니다.", website: "https://fliki.ai", releaseDate: "2022", pricing: "Free / Paid", tags: ["Blog-to-Video", "Social"], thumbnail: "https://logo.clearbit.com/fliki.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
@@ -113,10 +107,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   { id: "vid-19", name: "D-ID", category: "video", summary: "사진을 말하게 만들기.", description: "정지된 인물 사진에 대사를 입력하면 입 모양을 움직여 말하게 합니다.", website: "https://d-id.com", releaseDate: "2017", pricing: "Free Trial / Paid", tags: ["Animation", "Photo"], thumbnail: "https://logo.clearbit.com/d-id.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "vid-20", name: "Wondershare Filmora", category: "video", summary: "AI 기능이 탑재된 편집기.", description: "초보자도 쉽게 쓸 수 있는 편집기에 다양한 AI 도구가 추가되었습니다.", website: "https://filmora.wondershare.com", releaseDate: "2015", pricing: "Paid", tags: ["Editor", "Desktop"], thumbnail: "https://logo.clearbit.com/wondershare.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
 
-
-  // =====================================================================================
-  // 4. Voice (음성/음악) - 총 20개 (기존 10 + 신규 10)
-  // =====================================================================================
+  // 4. Voice (음성/음악) - 총 20개
   {
     id: "voice-01", name: "ElevenLabs", category: "voice",
     summary: "가장 자연스러운 TTS.",
@@ -134,7 +125,6 @@ export const AI_TOOLS_DATA: AiTool[] = [
   { id: "voice-08", name: "Voiser", category: "voice", summary: "한국어 특화 AI 성우 서비스.", description: "자연스러운 한국어 발음과 다양한 캐릭터 보이스.", website: "https://voiser.co.kr", releaseDate: "2021.03", pricing: "Free / Paid", tags: ["Korean", "Voice Actor"], thumbnail: "https://logo.clearbit.com/voiser.co.kr", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "voice-09", name: "Resemble AI", category: "voice", summary: "실시간 음성 변조 및 클로닝.", description: "게임 및 보안용 음성 복제 기술.", website: "https://resemble.ai", releaseDate: "2019.02", pricing: "Paid", tags: ["Cloning", "Security"], thumbnail: "https://logo.clearbit.com/resemble.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "voice-10", name: "Descript", category: "voice", summary: "오디오 편집을 문서 편집처럼.", description: "텍스트를 수정하면 오디오도 수정되는 편집 툴.", website: "https://descript.com", releaseDate: "2017.12", pricing: "Free / Paid", tags: ["Editing", "Podcast"], thumbnail: "https://logo.clearbit.com/descript.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  // 신규 추가 Voice
   { id: "voice-11", name: "Riffusion", category: "voice", summary: "이미지에서 음악을 생성.", description: "소펙트로그램 이미지를 통해 음악을 생성하는 독특한 AI입니다.", website: "https://www.riffusion.com", releaseDate: "2022", pricing: "Free", tags: ["Experimental", "Music"], thumbnail: "https://logo.clearbit.com/riffusion.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "voice-12", name: "Soundraw", category: "voice", summary: "저작권 없는 AI 음악 생성.", description: "영상 배경음악으로 쓰기 좋은 음악을 커스터마이징합니다.", website: "https://soundraw.io", releaseDate: "2020", pricing: "Free / Paid", tags: ["BGM", "Creator"], thumbnail: "https://logo.clearbit.com/soundraw.io", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "voice-13", name: "AIVA", category: "voice", summary: "클래식 및 영화 음악 작곡.", description: "감동적인 오케스트라 및 영화 음악 스타일에 강점이 있습니다.", website: "https://aiva.ai", releaseDate: "2016", pricing: "Free / Paid", tags: ["Composer", "Orchestra"], thumbnail: "https://logo.clearbit.com/aiva.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
@@ -148,7 +138,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
 
 
   // =====================================================================================
-  // 5. Automation (자동화) - 총 15개 (기존 10 + 신규 5)
+  // 5. Automation (자동화) - 총 20개
   // =====================================================================================
   {
     id: "auto-01", name: "n8n", category: "automation",
@@ -167,16 +157,20 @@ export const AI_TOOLS_DATA: AiTool[] = [
   { id: "auto-08", name: "Workato", category: "automation", summary: "비즈니스 프로세스 통합.", description: "IT와 비즈니스 팀을 위한 강력한 통합 툴.", website: "https://workato.com", releaseDate: "2013", pricing: "Enterprise", tags: ["Integration", "Business"], thumbnail: "https://logo.clearbit.com/workato.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "auto-09", name: "Tray.io", category: "automation", summary: "로우코드 자동화 플랫폼.", description: "유연하고 확장성 높은 워크플로우 구축.", website: "https://tray.io", releaseDate: "2012", pricing: "Paid", tags: ["Low-code", "API"], thumbnail: "https://logo.clearbit.com/tray.io", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "auto-10", name: "Relay.app", category: "automation", summary: "사람 개입 워크플로우 자동화.", description: "AI와 사람이 협업하는 자동화 프로세스.", website: "https://relay.app", releaseDate: "2023", pricing: "Free / Paid", tags: ["Collaboration", "Human-in-the-loop"], thumbnail: "https://logo.clearbit.com/relay.app", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  // 신규 추가 Automation
   { id: "auto-11", name: "ActivePieces", category: "automation", summary: "오픈소스 올인원 자동화.", description: "Zapier의 오픈소스 대안으로 주목받는 툴입니다.", website: "https://activepieces.com", releaseDate: "2022", pricing: "Open Source / Paid", tags: ["Open Source", "Self-hosted"], thumbnail: "https://logo.clearbit.com/activepieces.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "auto-12", name: "Pipedream", category: "automation", summary: "개발자를 위한 연동 플랫폼.", description: "코드 레벨에서 상세한 제어가 가능한 자동화 툴입니다.", website: "https://pipedream.com", releaseDate: "2019", pricing: "Free / Paid", tags: ["Developer", "API"], thumbnail: "https://logo.clearbit.com/pipedream.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "auto-13", name: "CheatLayer", category: "automation", summary: "GPT-4 기반 자동화 에이전트.", description: "자연어로 명령하면 자동화 스크립트를 짜주는 도구입니다.", website: "https://cheatlayer.com", releaseDate: "2021", pricing: "Paid", tags: ["GPT-4", "Scripting"], thumbnail: "https://logo.clearbit.com/cheatlayer.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "auto-14", name: "Gumloop", category: "automation", summary: "AI 흐름 자동화 빌더.", description: "LLM 노드를 연결하여 복잡한 AI 작업을 자동화합니다.", website: "https://gumloop.com", releaseDate: "2023", pricing: "Free / Paid", tags: ["AI Flow", "Drag-drop"], thumbnail: "https://logo.clearbit.com/gumloop.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "auto-15", name: "Axiom", category: "automation", summary: "브라우저 자동화 확장프로그램.", description: "반복적인 웹 작업을 녹화하여 자동 수행합니다.", website: "https://axiom.ai", releaseDate: "2019", pricing: "Free / Paid", tags: ["Browser", "No-code"], thumbnail: "https://logo.clearbit.com/axiom.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "auto-16", name: "Browse AI", category: "automation", summary: "웹 데이터 추출 자동화.", description: "어떤 웹사이트든 모니터링하고 데이터를 추출합니다.", website: "https://browse.ai", releaseDate: "2021", pricing: "Free / Paid", tags: ["Scraping", "Data"], thumbnail: "https://logo.clearbit.com/browse.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "auto-17", name: "Levity", category: "automation", summary: "비정형 데이터 워크플로우.", description: "이메일, 이미지, 텍스트 분류 등 AI 작업을 자동화합니다.", website: "https://levity.ai", releaseDate: "2020", pricing: "Paid", tags: ["Classification", "Workflow"], thumbnail: "https://logo.clearbit.com/levity.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "auto-18", name: "Hexomatic", category: "automation", summary: "웹 스크래핑 및 자동화.", description: "노코드로 웹 데이터를 수집하고 가공하는 플랫폼.", website: "https://hexomatic.com", releaseDate: "2021", pricing: "Paid", tags: ["Scraping", "No-code"], thumbnail: "https://logo.clearbit.com/hexomatic.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "auto-19", name: "Parabola", category: "automation", summary: "이커머스 데이터 자동화.", description: "쇼핑몰 운영에 필요한 데이터 처리를 자동화합니다.", website: "https://parabola.io", releaseDate: "2017", pricing: "Paid", tags: ["Ecommerce", "Data"], thumbnail: "https://logo.clearbit.com/parabola.io", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "auto-20", name: "Appy Pie", category: "automation", summary: "노코드 앱 및 자동화 빌더.", description: "앱 개발부터 업무 자동화까지 하나로 해결.", website: "https://appypie.com", releaseDate: "2015", pricing: "Free / Paid", tags: ["App Builder", "No-code"], thumbnail: "https://logo.clearbit.com/appypie.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
 
 
   // =====================================================================================
-  // 6. Search (검색) - 총 15개 (기존 10 + 신규 5)
+  // 6. Search (검색) - 총 20개 (기존 15 + 신규 5)
   // =====================================================================================
   {
     id: "search-01", name: "Perplexity", category: "search",
@@ -195,12 +189,16 @@ export const AI_TOOLS_DATA: AiTool[] = [
   { id: "search-08", name: "Andi", category: "search", summary: "친근한 대화형 검색 챗봇.", description: "광고 없이 정보를 요약해주는 검색 친구.", website: "https://andisearch.com", releaseDate: "2022", pricing: "Free", tags: ["Chat", "Visual"], thumbnail: "https://logo.clearbit.com/andisearch.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "search-09", name: "Metaphor", category: "search", summary: "LLM을 위해 설계된 검색 API.", description: "AI가 이해하기 쉬운 형태의 검색 결과.", website: "https://exa.ai", releaseDate: "2023", pricing: "API", tags: ["API", "LLM"], thumbnail: "https://logo.clearbit.com/exa.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "search-10", name: "Consensus", category: "search", summary: "AI 기반 과학 논문 검색.", description: "연구 결과와 논문에서 신뢰할 수 있는 답변 추출.", website: "https://consensus.app", releaseDate: "2022", pricing: "Free / Paid", tags: ["Academic", "Science"], thumbnail: "https://logo.clearbit.com/consensus.app", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  // 신규 추가 Search
   { id: "search-11", name: "Elicit", category: "search", summary: "연구 논문 분석 비서.", description: "논문을 검색하고 핵심 내용을 요약해줍니다.", website: "https://elicit.com", releaseDate: "2021", pricing: "Free / Paid", tags: ["Research", "Paper"], thumbnail: "https://logo.clearbit.com/elicit.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "search-12", name: "SciSpace", category: "search", summary: "과학 논문 검색 및 이해.", description: "복잡한 논문을 쉽게 설명해주는 연구 도구입니다.", website: "https://typeset.io", releaseDate: "2020", pricing: "Free / Paid", tags: ["Science", "Explanation"], thumbnail: "https://logo.clearbit.com/typeset.io", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "search-13", name: "Tavily", category: "search", summary: "AI 에이전트를 위한 검색 API.", description: "LLM이 실시간 정보를 정확하게 검색하도록 돕습니다.", website: "https://tavily.com", releaseDate: "2023", pricing: "API", tags: ["Agent", "API"], thumbnail: "https://logo.clearbit.com/tavily.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "search-14", name: "SearchGPT", category: "search", summary: "OpenAI의 검색 프로토타입.", description: "대화형 AI와 실시간 검색의 결합 (정식 출시 대기 중).", website: "https://openai.com", releaseDate: "2024", pricing: "Waitlist", tags: ["OpenAI", "Prototype"], thumbnail: "https://logo.clearbit.com/openai.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "search-15", name: "Gemini App", category: "search", summary: "Google 검색이 통합된 앱.", description: "구글 검색 결과와 생성형 답변을 동시에 제공합니다.", website: "https://gemini.google.com", releaseDate: "2024", pricing: "Free", tags: ["Google", "Integrated"], thumbnail: "https://logo.clearbit.com/google.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "search-16", name: "Brave Search AI", category: "search", summary: "개인정보 보호 AI 검색.", description: "추적 없이 요약된 검색 결과를 제공합니다.", website: "https://search.brave.com", releaseDate: "2023", pricing: "Free", tags: ["Privacy", "Summary"], thumbnail: "https://logo.clearbit.com/brave.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "search-17", name: "NeevaAI", category: "search", summary: "광고 없는 검색 (Snowflake 인수).", description: "신뢰할 수 있는 소스 기반의 요약 답변.", website: "https://neeva.com", releaseDate: "2023", pricing: "Shutdown", tags: ["Ad-free", "Citation"], thumbnail: "https://logo.clearbit.com/snowflake.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "search-18", name: "Waldo", category: "search", summary: "전문가를 위한 정밀 검색.", description: "데이터 포인트와 트렌드를 깊이 있게 검색합니다.", website: "https://www.waldo.fyi", releaseDate: "2022", pricing: "Paid", tags: ["Professional", "Deep"], thumbnail: "https://logo.clearbit.com/waldo.fyi", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "search-19", name: "Yep", category: "search", summary: "크리에이터 수익 공유 검색.", description: "Ahrefs가 만든, 콘텐츠 제작자를 지원하는 검색 엔진.", website: "https://yep.com", releaseDate: "2022", pricing: "Free", tags: ["Creator", "Fair"], thumbnail: "https://logo.clearbit.com/yep.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "search-20", name: "Globe Explorer", category: "search", summary: "시각적 지식 탐색 엔진.", description: "트리 구조로 정보를 시각화하여 탐색합니다.", website: "https://explorer.globe.engineer", releaseDate: "2023", pricing: "Free", tags: ["Visual", "Knowledge"], thumbnail: "https://logo.clearbit.com/globe.engineer", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
 
 
   // =====================================================================================

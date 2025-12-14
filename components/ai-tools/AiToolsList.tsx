@@ -3,48 +3,53 @@
 import { useState, useEffect } from "react";
 import AiToolsCard, { AiTool } from "./AiToolsCard";
 import { TEXTS } from "@/constants/texts";
-import { AI_TOOLS_DATA } from "@/constants/aiToolsData";
+import { AI_TOOLS_DATA } from "@/constants/aiToolsData"; 
 
-// 📌 표시할 카테고리 순서 정의 (6줄)
-const DISPLAY_CATEGORIES = ["llm", "image", "video", "voice", "automation", "search"];
+// 📌 [수정] 10개 카테고리 모두 표시하도록 확장
+const DISPLAY_CATEGORIES = [
+  "llm", 
+  "image", 
+  "video", 
+  "voice", 
+  "automation", 
+  "search", 
+  "agent",        // 👈 추가됨
+  "coding",       // 👈 추가됨
+  "design",       // 👈 추가됨
+  "productivity"  // 👈 추가됨
+];
 
 interface AiToolsListProps {
   filters: {
     category: string;
-    price: string;
+    // price 제거됨
     sort: string;
   };
 }
 
 export default function AiToolsList({ filters }: AiToolsListProps) {
-  const [tools, setTools] = useState<AiTool[]>(AI_TOOLS_DATA);
+  const [tools, setTools] = useState<AiTool[]>(AI_TOOLS_DATA); 
   const [expandedCats, setExpandedCats] = useState<Record<string, boolean>>({});
-  const [visibleCount, setVisibleCount] = useState(9);
+  const [visibleCount, setVisibleCount] = useState(9); 
   const [isLoaded, setIsLoaded] = useState(false);
 
-  // -----------------------------------------------------
-  // ⭐ 로컬 저장된 평점 데이터 불러오기 → 적용
-  // -----------------------------------------------------
   useEffect(() => {
     const savedRatings = JSON.parse(localStorage.getItem("dori_tool_ratings") || "{}");
-
+    
     const updatedTools = AI_TOOLS_DATA.map(tool => {
       const saved = savedRatings[tool.id];
       if (saved) {
         const avg = saved.count > 0 ? Number((saved.totalScore / saved.count).toFixed(1)) : 0;
         return { ...tool, rating: avg, ratingCount: saved.count };
       }
-      return tool;
+      return tool; 
     });
 
     setTools(updatedTools);
     setIsLoaded(true);
   }, []);
 
-  const isOverviewMode =
-    filters.category === "All" &&
-    filters.price === "All" &&
-    filters.sort === "rating";
+  const isOverviewMode = filters.category === "All" && filters.sort === "rating";
 
   const toggleExpand = (cat: string) => {
     setExpandedCats(prev => ({ ...prev, [cat]: !prev[cat] }));
@@ -52,23 +57,14 @@ export default function AiToolsList({ filters }: AiToolsListProps) {
 
   const currentTools = isLoaded ? tools : AI_TOOLS_DATA;
 
-  // -----------------------------------------------------
-  // ⭐ [핵심] 평점순 내림차순 정렬 (전역 정렬)
-  // -----------------------------------------------------
-  const sortedTools = currentTools
-    .slice()
-    .sort((a, b) => b.rating - a.rating);
-
-  // -----------------------------------------------------
-  // ⭐ [1] “전체 개요 모드” — 카테고리별 TOP 3 + 펼치기
-  // -----------------------------------------------------
+  // --- [1] 개요 모드 렌더링 (카테고리별 랭킹 섹션) ---
   if (isOverviewMode) {
     return (
       <div className="w-full flex flex-col gap-16 animate-[fadeInUp_0.5s_ease-out]">
         {DISPLAY_CATEGORIES.map((cat) => {
-          const catTools = sortedTools.filter(
-            t => t.category.toLowerCase() === cat.toLowerCase()
-          );
+          const catTools = currentTools
+            .filter(t => t.category.toLowerCase() === cat.toLowerCase())
+            .sort((a, b) => b.rating - a.rating); 
 
           if (catTools.length === 0) return null;
 
@@ -77,11 +73,8 @@ export default function AiToolsList({ filters }: AiToolsListProps) {
           const isExpanded = expandedCats[cat];
 
           return (
-            <div
-              key={cat}
-              className="flex flex-col md:flex-row gap-6 items-start border-b border-dashed border-[var(--card-border)] pb-12 last:border-0"
-            >
-              {/* 좌측 타이틀 */}
+            <div key={cat} className="flex flex-col md:flex-row gap-6 items-start border-b border-dashed border-[var(--card-border)] pb-12 last:border-0">
+              {/* 좌측 타이틀 영역 */}
               <div className="w-full md:w-48 flex-shrink-0 sticky top-24">
                 <div className="flex md:flex-col items-baseline md:items-start gap-3">
                   <h2 className="text-4xl font-black text-[var(--text-main)] uppercase tracking-tighter">
@@ -96,28 +89,25 @@ export default function AiToolsList({ filters }: AiToolsListProps) {
                 </div>
               </div>
 
-              {/* 우측 리스트 */}
+              {/* 우측 리스트 영역 */}
               <div className="flex-1 w-full">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
                   {top3.map((tool, idx) => (
                     <AiToolsCard key={tool.id} tool={tool} rank={idx + 1} />
                   ))}
-
-                  {isExpanded &&
-                    rest.map((tool, idx) => (
-                      <AiToolsCard key={tool.id} tool={tool} rank={idx + 4} />
-                    ))}
+                  
+                  {isExpanded && rest.map((tool, idx) => (
+                    <AiToolsCard key={tool.id} tool={tool} rank={idx + 4} />
+                  ))}
                 </div>
 
                 {rest.length > 0 && (
                   <div className="mt-8 text-center">
-                    <button
+                    <button 
                       onClick={() => toggleExpand(cat)}
                       className="px-6 py-3 rounded-full font-bold text-sm transition-all hover:scale-105 active:scale-95 bg-[var(--bg-soft)] text-[var(--text-main)] border border-[var(--card-border)] hover:bg-gray-100 dark:hover:bg-white/10 flex items-center gap-2 mx-auto"
                     >
-                      {isExpanded
-                        ? "접기 ▲"
-                        : `+ ${cat.toUpperCase()} 툴 더보기 (${rest.length})`}
+                      {isExpanded ? "접기 ▲" : `+ ${cat.toUpperCase()} 툴 더보기 (${rest.length}개)`}
                     </button>
                   </div>
                 )}
@@ -129,21 +119,15 @@ export default function AiToolsList({ filters }: AiToolsListProps) {
     );
   }
 
-  // -----------------------------------------------------
-  // ⭐ [2] 필터 모드 렌더링
-  // -----------------------------------------------------
-  const filteredTools = sortedTools
-    .filter((tool) => {
-      const matchCat =
-        filters.category === "All" ||
-        tool.category.toLowerCase() === filters.category.toLowerCase();
-      return matchCat;
-    })
-    .sort((a, b) => {
-      if (filters.sort === "rating") return b.rating - a.rating;
-      if (filters.sort === "name") return a.name.localeCompare(b.name);
-      return 0;
-    });
+  // --- [2] 필터 모드 렌더링 ---
+  const filteredTools = currentTools.filter((tool) => {
+    const matchCat = filters.category === "All" || tool.category.toLowerCase() === filters.category.toLowerCase();
+    return matchCat;
+  }).sort((a, b) => {
+    if (filters.sort === "rating") return b.rating - a.rating;
+    if (filters.sort === "name") return a.name.localeCompare(b.name);
+    return 0;
+  });
 
   const visibleTools = filteredTools.slice(0, visibleCount);
 
@@ -163,7 +147,7 @@ export default function AiToolsList({ filters }: AiToolsListProps) {
 
       {visibleTools.length < filteredTools.length && (
         <div className="flex justify-center mt-16 mb-10">
-          <button
+          <button 
             onClick={() => setVisibleCount((prev) => prev + 9)}
             className="px-10 py-4 rounded-full font-bold text-lg bg-[var(--card-bg)] border border-[var(--card-border)] text-[var(--text-main)] shadow-md hover:shadow-lg"
           >
