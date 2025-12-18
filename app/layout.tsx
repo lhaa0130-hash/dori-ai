@@ -4,7 +4,7 @@ import "./globals.css";
 import { AuthProvider } from "./providers";
 import Header from "@/components/layout/Header"; 
 import Footer from "@/components/layout/Footer";
-import VisitorTracker from "@/components/VisitorTracker"; // 👈 추가
+import VisitorTracker from "@/components/VisitorTracker";
 import { createMetadata } from "@/lib/seo";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -32,7 +32,15 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="ko" suppressHydrationWarning>
-      <body className={inter.className} suppressHydrationWarning={true}>
+      {/* [핵심 수정] 
+        배경색을 div가 아닌 body 태그에 직접 줍니다. 
+        이것이 가장 근본적인 배경색이 되며, 자식 페이지에서 배경색을 
+        따로 지정하지 않으면(투명하면) 이 색을 따르게 됩니다.
+      */}
+      <body 
+        className={`${inter.className} transition-colors duration-300 bg-white text-black dark:bg-black dark:text-white`} 
+        suppressHydrationWarning={true}
+      >
         
         <Script
           async
@@ -43,7 +51,7 @@ export default function RootLayout({
 
         <AuthProvider>
           <VisitorTracker /> 
-          <div className="flex flex-col min-h-screen transition-colors duration-300">
+          <div className="flex flex-col min-h-screen">
             <Header />
             <main className="flex-grow w-full pt-20">
               {children}

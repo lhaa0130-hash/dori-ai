@@ -1,46 +1,85 @@
 @import "tailwindcss";
 
+
+
 @layer base {
+
   :root {
+
     /* 🌞 [라이트 모드] */
+
     --bg-main: #ffffff;
+
     --bg-header: rgba(255, 255, 255, 0.9);
+
     --text-header: #000000;
-    
+
+   
+
     --text-main: #1a1a1a;
+
     --text-sub: #52525b;
-    
+
+   
+
     /* 카드: 흰색 배경 */
-    --card-bg: #ffffff; 
+
+    --card-bg: #ffffff;
+
     --card-border: #e4e4e7;
+
     --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
-    
+
+   
+
     --accent-color: #3b82f6;
+
   }
+
+
 
   :root:where(.dark) {
+
     /* 🌙 [다크 모드] */
+
     --bg-main: #000000;
+
     --bg-header: rgba(0, 0, 0, 0.85);
+
     --text-header: #ffffff;
-    
+
+   
+
     --text-main: #ffffff;
+
     --text-sub: #a1a1aa;
-    
+
+   
+
     /* 🎨 [핵심 수정] 카드 배경을 완전 검정(#000000)으로 설정 */
-    --card-bg: #000000; 
+
+    --card-bg: #000000;
+
     --card-border: #333333;
+
     --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
-    
+
+   
+
     --accent-color: #60a5fa;
+
   }
+
+
 
   body {
-    background-color: var(--bg-main) !important;
-    color: var(--text-main) !important;
-    transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s ease;
-  }
-}
 
-@keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-@keyframes modalUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+    background-color: var(--bg-main) !important;
+
+    color: var(--text-main) !important;
+
+    transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s ease;
+
+  }
+
+}

@@ -14,8 +14,10 @@ export default function Footer() {
           <p className="copyright">{t.copyright.ko}</p>
           {/* 👇 [추가] AI 투명성 문구 */}
           <p className="text-xs opacity-40 mt-2 max-w-md leading-relaxed">
-            DORI-AI는 AI로 제작된 콘텐츠에 AI 사용 사실을 명시하는 것을 원칙으로 합니다.<br/>
-            숨기는 것이 가짜입니다. 우리는 AI 사용을 숨기지 않습니다.
+            DORI-AI는 AI로 제작된 사이트 입니다.<br/>
+            DORI-AI는 AI 사용 사실을 명시하는 것을 원칙으로 합니다.<br/>
+            숨기는 것이 가짜입니다. 우리는 AI 사용을 숨기지 않습니다.<br/>
+            문의사항 : lhaa0130@gmail.com
           </p>
         </div>
 
