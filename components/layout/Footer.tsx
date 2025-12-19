@@ -29,15 +29,109 @@ export default function Footer() {
       </div>
 
       <style jsx>{`
-        /* 기존 스타일 유지 */
-        .footer-wrapper { width: 100%; padding: 60px 24px; background-color: var(--bg-main); color: var(--text-main); border-top: 1px solid var(--card-border); margin-top: auto; transition: background-color 0.3s ease, color 0.3s ease; }
-        .footer-inner { max-width: 1200px; margin: 0 auto; display: flex; flex-direction: column; gap: 24px; }
-        @media (min-width: 768px) { .footer-inner { flex-direction: row; justify-content: space-between; align-items: flex-end; } }
-        .logo-text { font-weight: 800; font-size: 1.25rem; margin-bottom: 8px; display: inline-block; color: inherit; text-decoration: none; }
-        .copyright { font-size: 0.875rem; opacity: 0.5; }
-        .right-area { display: flex; gap: 24px; flex-wrap: wrap; }
-        .footer-link { font-size: 0.875rem; opacity: 0.6; text-decoration: none; color: inherit; transition: 0.2s; }
-        .footer-link:hover { opacity: 1; color: var(--accent-color); }
+        .footer-wrapper { 
+          width: 100%; 
+          padding: 60px 24px; 
+          margin-top: auto; 
+          transition: all 0.3s ease;
+          font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif;
+        }
+        :global(.dark) .footer-wrapper {
+          background-color: #000000;
+          color: #ffffff;
+          border-top: 1px solid rgba(255, 255, 255, 0.08);
+        }
+        :global(.light) .footer-wrapper, :global([data-theme="light"]) .footer-wrapper {
+          background-color: #ffffff;
+          color: #1d1d1f;
+          border-top: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        .footer-inner { 
+          max-width: 1200px; 
+          margin: 0 auto; 
+          display: flex; 
+          flex-direction: column; 
+          gap: 32px; 
+        }
+        @media (min-width: 768px) { 
+          .footer-inner { 
+            flex-direction: row; 
+            justify-content: space-between; 
+            align-items: flex-end; 
+          } 
+        }
+        .logo-text { 
+          font-weight: 700; 
+          font-size: 20px; 
+          letter-spacing: -0.02em;
+          margin-bottom: 12px; 
+          display: inline-block; 
+          text-decoration: none;
+          background: linear-gradient(to right, #2563eb, #7c3aed);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        .copyright { 
+          font-size: 14px; 
+          font-weight: 400;
+          letter-spacing: -0.01em;
+          margin-bottom: 12px;
+        }
+        :global(.dark) .copyright {
+          color: rgba(255, 255, 255, 0.7);
+        }
+        :global(.light) .copyright, :global([data-theme="light"]) .copyright {
+          color: rgba(0, 0, 0, 0.5);
+        }
+        .left-area p {
+          font-size: 12px;
+          font-weight: 400;
+          letter-spacing: -0.01em;
+          line-height: 1.6;
+        }
+        :global(.dark) .left-area p {
+          color: rgba(255, 255, 255, 0.7);
+        }
+        :global(.light) .left-area p, :global([data-theme="light"]) .left-area p {
+          color: rgba(0, 0, 0, 0.4);
+        }
+        .right-area { 
+          display: flex; 
+          gap: 24px; 
+          flex-wrap: wrap; 
+        }
+        .footer-link { 
+          font-size: 14px; 
+          font-weight: 500;
+          letter-spacing: -0.01em;
+          text-decoration: none; 
+          transition: all 0.2s ease;
+        }
+        :global(.dark) .footer-link {
+          color: rgba(255, 255, 255, 0.7);
+        }
+        :global(.light) .footer-link, :global([data-theme="light"]) .footer-link {
+          color: rgba(0, 0, 0, 0.6);
+        }
+        .footer-link:hover { 
+          transform: translateY(-1px);
+        }
+        :global(.dark) .footer-link:hover {
+          color: #ffffff;
+        }
+        :global(.light) .footer-link:hover, :global([data-theme="light"]) .footer-link:hover {
+          color: #1d1d1f;
+        }
+        .footer-link.font-bold {
+          font-weight: 600;
+        }
+        :global(.dark) .footer-link.font-bold {
+          color: #60a5fa;
+        }
+        :global(.light) .footer-link.font-bold, :global([data-theme="light"]) .footer-link.font-bold {
+          color: #2563eb;
+        }
       `}</style>
     </footer>
   );

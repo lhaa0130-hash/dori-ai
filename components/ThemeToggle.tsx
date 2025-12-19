@@ -18,20 +18,55 @@ export default function ThemeToggle() {
   const isDark = theme === "dark";
 
   return (
-    <button
-      onClick={() => setTheme(isDark ? "light" : "dark")}
-      // 🚨 [핵심 수정] Header의 투명화 스타일을 이기기 위해 직접 style 속성으로 색상을 지정합니다.
-      // 라이트모드(!isDark) -> 배경: 검정 (#000) / 글씨: 흰색 (#fff)
-      // 다크모드(isDark)   -> 배경: 흰색 (#fff) / 글씨: 검정 (#000)
-      style={{
-        backgroundColor: isDark ? "#ffffff" : "#000000",
-        color: isDark ? "#000000" : "#ffffff",
-        borderColor: isDark ? "#ffffff" : "#000000",
-      }}
-      className="p-2 rounded-full transition-all border flex items-center justify-center w-9 h-9 shadow-md hover:opacity-80"
-      aria-label="Toggle Dark Mode"
-    >
-      {isDark ? "🌞" : "🌙"}
-    </button>
+    <>
+      <button
+        onClick={() => setTheme(isDark ? "light" : "dark")}
+        className="theme-toggle-btn"
+        style={{
+          backgroundColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.04)',
+          border: isDark ? '1px solid rgba(255, 255, 255, 0.15)' : '1px solid rgba(0, 0, 0, 0.08)',
+        }}
+        aria-label="Toggle Dark Mode"
+      >
+        <span 
+          className={`theme-icon ${isDark ? 'moon-icon' : 'sun-icon'}`}
+        >
+          {isDark ? "🌙" : "☀️"}
+        </span>
+      </button>
+      <style jsx>{`
+        .theme-toggle-btn {
+          width: 36px;
+          height: 36px;
+          border-radius: 10px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          transition: all 0.2s ease;
+          cursor: pointer;
+          padding: 0;
+        }
+        .theme-toggle-btn:hover {
+          transform: translateY(-1px);
+        }
+        :global(.dark) .theme-toggle-btn:hover {
+          background-color: rgba(255, 255, 255, 0.12) !important;
+        }
+        :global(.light) .theme-toggle-btn:hover, :global([data-theme="light"]) .theme-toggle-btn:hover {
+          background-color: rgba(0, 0, 0, 0.06) !important;
+        }
+        .theme-icon {
+          font-size: 18px;
+          line-height: 1;
+          display: block;
+        }
+        .moon-icon {
+          filter: brightness(2) contrast(1.2) drop-shadow(0 0 3px rgba(255, 255, 255, 0.6));
+        }
+        .sun-icon {
+          filter: brightness(0.2) contrast(1.5) drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
+        }
+      `}</style>
+    </>
   );
 }
