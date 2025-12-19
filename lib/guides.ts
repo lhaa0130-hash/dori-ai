@@ -11,6 +11,8 @@ export interface GuidePost {
   category: string;
   author: string;
   content: string;
+  tags?: string[];
+  subtitle?: string;
 }
 
 // 📌 Frontmatter 파싱 함수 (가장 유연하게 설계)
@@ -111,6 +113,8 @@ export function getGuideBySlug(slug: string): GuidePost | null {
     category: metadata.category || '기타',
     author: metadata.author || 'AI Canvas Editor',
     content: content,
+    tags: metadata.tags || [],
+    subtitle: metadata.subtitle,
   };
 }
 

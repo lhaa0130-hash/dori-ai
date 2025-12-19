@@ -40,12 +40,12 @@ export default async function GuideDetailPage({ params }: Props) {
            </a>
            
            <div className="flex flex-wrap items-center gap-2 mb-6">
-             {post.tags.map(tag => (
+             {post.tags && post.tags.length > 0 && post.tags.map(tag => (
                <span key={tag} className="px-3 py-1 text-sm font-bold rounded-full bg-blue-50 text-blue-600 dark:bg-gray-800 dark:text-blue-400">
                  {tag}
                </span>
              ))}
-             <span className="pl-3 ml-1 text-sm border-l border-gray-300 text-gray-400 dark:border-gray-700 dark:text-gray-500">
+             <span className={`text-sm text-gray-400 dark:text-gray-500 ${post.tags && post.tags.length > 0 ? 'pl-3 ml-1 border-l border-gray-300 dark:border-gray-700' : ''}`}>
                {post.date}
              </span>
            </div>
