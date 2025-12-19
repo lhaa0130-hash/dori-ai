@@ -15,6 +15,7 @@ export default function CommunityDetailPage() {
   const [post, setPost] = useState<any>(null);
   const [comment, setComment] = useState("");
   const [isSparked, setIsSparked] = useState(false);
+  const [isBookmarked, setIsBookmarked] = useState(false);
   const hasViewed = useRef(false);
 
   useEffect(() => {
@@ -28,6 +29,14 @@ export default function CommunityDetailPage() {
         savedPosts[foundIndex] = found;
         localStorage.setItem("dori_posts", JSON.stringify(savedPosts));
         hasViewed.current = true;
+        
+        // 최근 본 글 기록
+        if (user?.email) {
+          const recentViews = JSON.parse(localStorage.getItem(`dori_recent_views_${user.email}`) || "[]");
+          const filtered = recentViews.filter((id: string) => id !== String(postId));
+          const updated = [String(postId), ...filtered].slice(0, 50); // 최대 50개
+          localStorage.setItem(`dori_recent_views_${user.email}`, JSON.stringify(updated));
+        }
       }
       if (!found.commentsList) found.commentsList = [];
       if (!found.sparks) found.sparks = 0;
@@ -35,8 +44,14 @@ export default function CommunityDetailPage() {
 
       const mySparks = JSON.parse(localStorage.getItem("dori_my_sparks") || "[]");
       if (mySparks.includes(String(postId))) setIsSparked(true);
+      
+      // 북마크 확인
+      if (user?.email) {
+        const bookmarks = JSON.parse(localStorage.getItem(`dori_bookmarks_${user.email}`) || "[]");
+        if (bookmarks.includes(String(postId))) setIsBookmarked(true);
+      }
     }
-  }, [postId]);
+  }, [postId, user]);
 
   function handleSpark() {
     if (!post) return;
@@ -165,6 +180,15 @@ export default function CommunityDetailPage() {
                   <button className={`action-btn spark-btn ${isSparked ? 'active' : ''}`} onClick={handleSpark}>
                     ⚡️ 유레카 {post.sparks || 0}
                   </button>
+                  {user && (
+                    <button 
+                      className={`action-btn ${isBookmarked ? 'active' : ''}`} 
+                      onClick={handleBookmark}
+                      style={{ backgroundColor: isBookmarked ? '#fbbf24' : 'transparent' }}
+                    >
+                      {isBookmarked ? '⭐ 북마크됨' : '⭐ 북마크'}
+                    </button>
+                  )}
                   <button className="action-btn">🔗 공유하기</button>
               </div>
             </div>

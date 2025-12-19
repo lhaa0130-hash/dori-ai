@@ -221,22 +221,6 @@ export default function PremiumDesignPage() {
             />
           </div>
           
-          <div 
-            className={`text-3xl md:text-4xl lg:text-5xl mb-6 transition-all duration-1000 ${
-              visibleSections.has('hero')
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-8'
-            }`}
-            style={{
-              color: isDark ? '#ffffff' : '#1d1d1f',
-              fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-              fontWeight: 600,
-              letterSpacing: '-0.02em',
-            }}
-          >
-            DORI-AI
-          </div>
-
           {/* 서브타이틀 */}
           <div 
             className={`mb-8 max-w-2xl mx-auto space-y-2 transition-all duration-1000 delay-100 ${
@@ -254,7 +238,7 @@ export default function PremiumDesignPage() {
                 letterSpacing: '-0.01em',
               }}
             >
-              작은 시작을 함께 만들어갑니다
+              작은 시작을 함께 만들어갑니다. <span className={`gradient-text ${isDark ? 'gradient-dark' : 'gradient-light'}`}>DORI-AI</span>
             </p>
             <p 
               className="text-sm md:text-base leading-relaxed"
@@ -709,6 +693,30 @@ export default function PremiumDesignPage() {
 
         details summary::-webkit-details-marker {
           display: none;
+        }
+
+        .gradient-text {
+          background-position: 0% 50%;
+          background-size: 100% 100%;
+          background-repeat: no-repeat;
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          color: transparent;
+          display: inline-block;
+          position: relative;
+          z-index: 1;
+          font-weight: inherit;
+          font-size: inherit;
+          line-height: inherit;
+        }
+
+        .gradient-text.gradient-dark {
+          background-image: linear-gradient(90deg, #60a5fa 0%, #818cf8 12.5%, #a78bfa 25%, #c084fc 37.5%, #ec4899 50%, #f472b6 62.5%, #f59e0b 75%, #fbbf24 87.5%, #10b981 100%);
+        }
+
+        .gradient-text.gradient-light {
+          background-image: linear-gradient(90deg, #2563eb 0%, #4f46e5 12.5%, #7c3aed 25%, #9333ea 37.5%, #db2777 50%, #e11d48 62.5%, #d97706 75%, #f59e0b 87.5%, #059669 100%);
         }
       `}</style>
     </div>

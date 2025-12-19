@@ -28,7 +28,7 @@ export default function BentoSection() {
   `;
 
   return (
-    <div className="max-w-[1200px] mx-auto px-6 mb-24 animate-[fadeInUp_0.8s_ease-out_0.1s_forwards] opacity-0">
+    <div className="max-w-[1200px] mx-auto px-6 mb-24 mt-0 animate-[fadeInUp_0.8s_ease-out_0.1s_forwards] opacity-0">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(260px,auto)]">
         
         <Link href="/ai-tools" className={`md:col-span-2 md:row-span-2 ${cardClasses}`}

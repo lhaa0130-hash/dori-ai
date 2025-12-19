@@ -68,7 +68,13 @@ export default function Header() {
                   </div>
                 </div>
               )}
-              <button className="hamburger-btn mobile-only" onClick={() => setIsMobileMenuOpen(true)}>☰</button>
+              <button 
+                className="hamburger-btn mobile-only" 
+                onClick={() => setIsMobileMenuOpen(true)}
+                aria-label="메뉴 열기"
+              >
+                ☰
+              </button>
             </div>
           </div>
         </div>
@@ -85,26 +91,50 @@ export default function Header() {
             </div>
           </div>
           
-          <nav className="mobile-nav flex flex-col gap-2">
-             <Link href="/ai-tools" className={`m-link ${isActive('/ai-tools')}`}>{t.aiTools.ko}</Link>
-             <Link href="/insight" className={`m-link ${isActive('/insight')}`}>{t.insight.ko}</Link>
-             <Link href="/academy" className={`m-link ${isActive('/academy')}`}>{t.academy.ko}</Link>
-             <Link href="/community" className={`m-link ${isActive('/community')}`}>{t.community.ko}</Link>
-             <Link href="/market" className={`m-link ${isActive('/market')}`}>{t.market.ko}</Link>
+          <nav className="mobile-nav">
+             <Link href="/ai-tools" className={`m-link ${isActive('/ai-tools')}`} onClick={() => setIsMobileMenuOpen(false)}>
+               <span className="m-link-icon">🤖</span>
+               <span>{t.aiTools.ko}</span>
+             </Link>
+             <Link href="/insight" className={`m-link ${isActive('/insight')}`} onClick={() => setIsMobileMenuOpen(false)}>
+               <span className="m-link-icon">💡</span>
+               <span>{t.insight.ko}</span>
+             </Link>
+             <Link href="/academy" className={`m-link ${isActive('/academy')}`} onClick={() => setIsMobileMenuOpen(false)}>
+               <span className="m-link-icon">🎓</span>
+               <span>{t.academy.ko}</span>
+             </Link>
+             <Link href="/community" className={`m-link ${isActive('/community')}`} onClick={() => setIsMobileMenuOpen(false)}>
+               <span className="m-link-icon">💬</span>
+               <span>{t.community.ko}</span>
+             </Link>
+             <Link href="/market" className={`m-link ${isActive('/market')}`} onClick={() => setIsMobileMenuOpen(false)}>
+               <span className="m-link-icon">🛒</span>
+               <span>{t.market.ko}</span>
+             </Link>
           </nav>
 
-          <div className="mt-auto border-t border-dashed pt-4" style={{ borderColor: 'var(--card-border)' }}>
+          <div className="mobile-footer">
             {!user ? (
-              <Link href="/login" className="block w-full text-center py-3 rounded-xl font-bold bg-blue-600 text-white">
+              <Link href="/login" className="mobile-login-btn" onClick={() => setIsMobileMenuOpen(false)}>
                 {t.login.ko}
               </Link>
             ) : (
-              <>
-                <Link href="/my" className="m-link">{t.myPage.ko}</Link>
-                <button onClick={() => signOut({ callbackUrl: "/" })} className="m-link text-red-500 w-full text-left">
-                  {t.logout.ko}
+              <div className="mobile-user-section">
+                <div className="mobile-user-info">
+                  <div className="mobile-avatar">{user.name?.[0]?.toUpperCase() || "U"}</div>
+                  <div>
+                    <div className="mobile-user-name">{user.name}</div>
+                    <div className="mobile-user-email">{user.email}</div>
+                  </div>
+                </div>
+                <Link href="/my" className="mobile-footer-link" onClick={() => setIsMobileMenuOpen(false)}>
+                  <span>👤</span> {t.myPage.ko}
+                </Link>
+                <button onClick={() => { signOut({ callbackUrl: "/" }); setIsMobileMenuOpen(false); }} className="mobile-footer-link danger">
+                  <span>🚪</span> {t.logout.ko}
                 </button>
-              </>
+              </div>
             )}
           </div>
         </div>
@@ -432,6 +462,11 @@ export default function Header() {
           border: none; 
           cursor: pointer;
           padding: 8px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          min-width: 40px;
+          min-height: 40px;
         }
         :global(.dark) .hamburger-btn {
           color: #ffffff;
@@ -509,28 +544,195 @@ export default function Header() {
           align-items: center; 
           gap: 10px; 
         }
+        .mobile-nav {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+          margin-bottom: 24px;
+        }
         .m-link { 
-          display: block; 
-          padding: 12px 0; 
-          font-size: 16px; 
+          display: flex; 
+          align-items: center;
+          gap: 12px;
+          padding: 14px 16px; 
+          font-size: 15px; 
           font-weight: 500; 
-          letter-spacing: -0.01em;
+          letter-spacing: -0.01em; 
           text-decoration: none;
+          border-radius: 12px;
+          transition: all 0.2s ease;
+        }
+        .m-link-icon {
+          font-size: 20px;
+          width: 24px;
+          text-align: center;
         }
         :global(.dark) .m-link {
-          color: rgba(255, 255, 255, 0.7);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+          color: rgba(255, 255, 255, 0.8);
+          background: rgba(255, 255, 255, 0.03);
+          border: 1px solid rgba(255, 255, 255, 0.08);
         }
         :global(.light) .m-link, :global([data-theme="light"]) .m-link {
-          color: rgba(0, 0, 0, 0.6);
-          border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+          color: rgba(0, 0, 0, 0.7);
+          background: rgba(0, 0, 0, 0.02);
+          border: 1px solid rgba(0, 0, 0, 0.06);
+        }
+        .m-link:hover {
+          transform: translateX(4px);
+        }
+        :global(.dark) .m-link:hover {
+          background: rgba(255, 255, 255, 0.08);
+          color: #ffffff;
+        }
+        :global(.light) .m-link:hover, :global([data-theme="light"]) .m-link:hover {
+          background: rgba(0, 0, 0, 0.05);
+          color: #1d1d1f;
         }
         .m-link.active { 
-          color: #2563eb; 
+          background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(124, 58, 237, 0.15));
+          border-color: rgba(37, 99, 235, 0.3);
         }
-        @media (max-width: 820px) { 
+        :global(.dark) .m-link.active {
+          color: #60a5fa;
+        }
+        :global(.light) .m-link.active, :global([data-theme="light"]) .m-link.active {
+          color: #2563eb;
+        }
+        .mobile-footer {
+          margin-top: auto;
+          padding-top: 24px;
+          border-top: 1px solid;
+        }
+        :global(.dark) .mobile-footer {
+          border-color: rgba(255, 255, 255, 0.1);
+        }
+        :global(.light) .mobile-footer, :global([data-theme="light"]) .mobile-footer {
+          border-color: rgba(0, 0, 0, 0.08);
+        }
+        .mobile-login-btn {
+          display: block;
+          width: 100%;
+          padding: 14px;
+          text-align: center;
+          border-radius: 12px;
+          font-weight: 600;
+          font-size: 15px;
+          text-decoration: none;
+          background: linear-gradient(135deg, #2563eb, #7c3aed);
+          color: #ffffff;
+          transition: all 0.2s ease;
+        }
+        .mobile-login-btn:hover {
+          transform: translateY(-2px);
+          box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
+        }
+        .mobile-user-section {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .mobile-user-info {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 12px;
+          border-radius: 12px;
+          margin-bottom: 8px;
+        }
+        :global(.dark) .mobile-user-info {
+          background: rgba(255, 255, 255, 0.05);
+        }
+        :global(.light) .mobile-user-info, :global([data-theme="light"]) .mobile-user-info {
+          background: rgba(0, 0, 0, 0.03);
+        }
+        .mobile-avatar {
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+          color: #ffffff;
+          font-weight: 600;
+          font-size: 16px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          flex-shrink: 0;
+        }
+        .mobile-user-name {
+          font-size: 14px;
+          font-weight: 600;
+          margin-bottom: 2px;
+        }
+        :global(.dark) .mobile-user-name {
+          color: #ffffff;
+        }
+        :global(.light) .mobile-user-name, :global([data-theme="light"]) .mobile-user-name {
+          color: #1d1d1f;
+        }
+        .mobile-user-email {
+          font-size: 12px;
+          opacity: 0.6;
+        }
+        .mobile-footer-link {
+          display: flex;
+          align-items: center;
+          gap: 10px;
+          padding: 12px 16px;
+          border-radius: 10px;
+          font-size: 14px;
+          font-weight: 500;
+          text-decoration: none;
+          border: none;
+          background: transparent;
+          cursor: pointer;
+          width: 100%;
+          text-align: left;
+          transition: all 0.2s ease;
+        }
+        .mobile-footer-link span {
+          font-size: 18px;
+        }
+        :global(.dark) .mobile-footer-link {
+          color: rgba(255, 255, 255, 0.7);
+        }
+        :global(.light) .mobile-footer-link, :global([data-theme="light"]) .mobile-footer-link {
+          color: rgba(0, 0, 0, 0.6);
+        }
+        .mobile-footer-link:hover {
+          transform: translateX(4px);
+        }
+        :global(.dark) .mobile-footer-link:hover {
+          background: rgba(255, 255, 255, 0.05);
+          color: #ffffff;
+        }
+        :global(.light) .mobile-footer-link:hover, :global([data-theme="light"]) .mobile-footer-link:hover {
+          background: rgba(0, 0, 0, 0.03);
+          color: #1d1d1f;
+        }
+        .mobile-footer-link.danger:hover {
+          background: rgba(239, 68, 68, 0.1);
+          color: #ef4444;
+        }
+        @media (max-width: 1024px) { 
+          .nav-area { 
+            gap: 20px; 
+          }
+          .nav-link { 
+            font-size: 13px; 
+          }
+        }
+        @media (max-width: 768px) { 
           .desktop-only { display: none !important; } 
-          .mobile-only { display: block !important; } 
+          .mobile-only { display: flex !important; } 
+          .header-inner { 
+            padding: 0 16px; 
+          }
+          .logo-text { 
+            font-size: 18px; 
+          }
+          .hamburger-btn {
+            display: flex !important;
+          }
         }
       `}</style>
     </>

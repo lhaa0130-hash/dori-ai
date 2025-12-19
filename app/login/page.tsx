@@ -1,19 +1,42 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { signIn } from "next-auth/react";
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
 export default function LoginPage() {
   const router = useRouter();
+  const searchParams = useSearchParams();
   const [isLoading, setIsLoading] = useState(false);
-  const [email, setEmail] = useState(""); // username -> email 변경
+  const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
+
+  useEffect(() => {
+    const errorParam = searchParams.get("error");
+    if (errorParam) {
+      if (errorParam === "Configuration" || errorParam.includes("deleted_client")) {
+        setError("구글 OAuth 클라이언트가 삭제되었거나 설정이 올바르지 않습니다. 새로운 클라이언트 ID를 생성하고 .env.local 파일을 업데이트해주세요.");
+      } else if (errorParam === "AccessDenied") {
+        setError("접근이 거부되었습니다.");
+      } else {
+        setError(`로그인 중 오류가 발생했습니다: ${errorParam}`);
+      }
+    }
+  }, [searchParams]);
 
   const handleGoogleLogin = () => {
     setIsLoading(true);
-    signIn("google", { callbackUrl: "/" });
+    setError("");
+    signIn("google", { 
+      callbackUrl: "/",
+      redirect: true,
+    }).catch((error) => {
+      console.error("Google login error:", error);
+      setError("구글 로그인 중 오류가 발생했습니다.");
+      setIsLoading(false);
+    });
   };
 
   const handleCredentialLogin = async (e: React.FormEvent) => {
@@ -44,6 +67,19 @@ export default function LoginPage() {
         </div>
 
         <div className="login-body">
+          {error && (
+            <div className="error-message" style={{
+              padding: "12px",
+              marginBottom: "16px",
+              borderRadius: "8px",
+              backgroundColor: "#fee",
+              color: "#c33",
+              fontSize: "14px",
+              textAlign: "center"
+            }}>
+              {error}
+            </div>
+          )}
           <button className="google-btn" onClick={handleGoogleLogin} disabled={isLoading}>
             <span className="g-icon">G</span> 
             {isLoading ? "연결 중..." : "Google 계정으로 계속하기"}

@@ -1,108 +1,822 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
+import { useTheme } from "next-themes";
+import Header from "@/components/layout/Header";
 
 export default function MyPage() {
   const { data: session } = useSession();
   const user = session?.user || null;
-  const router = useRouter();
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
 
   const [myPosts, setMyPosts] = useState<any[]>([]);
   const [sparkedPosts, setSparkedPosts] = useState<any[]>([]);
-  const [activeTab, setActiveTab] = useState("posts"); // 'posts' or 'sparks'
+  const [myComments, setMyComments] = useState<any[]>([]);
+  const [bookmarkedPosts, setBookmarkedPosts] = useState<any[]>([]);
+  const [recentViews, setRecentViews] = useState<any[]>([]);
+  const [activeTab, setActiveTab] = useState("posts");
+  const [isEditingName, setIsEditingName] = useState(false);
+  const [isEditingBio, setIsEditingBio] = useState(false);
+  const [displayName, setDisplayName] = useState("");
+  const [bio, setBio] = useState("");
+
+  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
+    if (user?.name && user?.email) {
+      const savedName = localStorage.getItem(`dori_user_name_${user.email}`);
+      if (savedName) {
+        setDisplayName(savedName);
+      } else {
+        setDisplayName(user.name);
+      }
+      
+      const savedBio = localStorage.getItem(`dori_user_bio_${user.email}`);
+      if (savedBio) {
+        setBio(savedBio);
+      } else {
+        setBio("");
+      }
+    } else {
+      setDisplayName("");
+      setBio("");
+    }
+  }, [user?.name, user?.email]);
+
+  useEffect(() => {
+    if (!user || !user.email) return;
+    
+    const currentName = displayName || user?.name || "";
+    
     // 데이터 불러오기
     const savedPosts = JSON.parse(localStorage.getItem("dori_posts") || "[]");
     const mySparksIds = JSON.parse(localStorage.getItem("dori_my_sparks") || "[]");
 
     // 1. 내가 쓴 글 필터링
-    const mine = savedPosts.filter((p: any) => p.author === user?.name);
+    const mine = savedPosts.filter((p: any) => 
+      p.author === currentName || p.nickname === currentName || 
+      p.author === user?.name || p.nickname === user?.name
+    );
     
     // 2. 내가 유레카(좋아요)한 글 필터링
     const sparked = savedPosts.filter((p: any) => mySparksIds.includes(String(p.id)));
 
+    // 3. 내가 작성한 댓글 수집
+    const comments: any[] = [];
+    savedPosts.forEach((post: any) => {
+      if (post.commentsList && Array.isArray(post.commentsList)) {
+        post.commentsList.forEach((comment: any) => {
+          if (comment.author === currentName || comment.author === user?.name) {
+            comments.push({
+              ...comment,
+              postId: post.id,
+              postTitle: post.title,
+              postUrl: `/community/${post.id}`,
+            });
+          }
+        });
+      }
+    });
+    comments.sort((a, b) => {
+      const dateA = new Date(a.date || a.createdAt || 0).getTime();
+      const dateB = new Date(b.date || b.createdAt || 0).getTime();
+      return dateB - dateA;
+    });
+
+    // 4. 북마크한 게시글
+    const bookmarks = JSON.parse(localStorage.getItem(`dori_bookmarks_${user.email}`) || "[]");
+    const bookmarked = savedPosts.filter((p: any) => bookmarks.includes(String(p.id)));
+
+    // 5. 최근 본 게시글
+    const recentViewIds = JSON.parse(localStorage.getItem(`dori_recent_views_${user.email}`) || "[]");
+    const recent = savedPosts
+      .filter((p: any) => recentViewIds.includes(String(p.id)))
+      .slice(0, 10)
+      .map((p: any) => ({ ...p, viewedAt: recentViewIds.indexOf(String(p.id)) }))
+      .sort((a: any, b: any) => b.viewedAt - a.viewedAt);
+
     setMyPosts(mine);
     setSparkedPosts(sparked);
-  }, [session, user]);
+    setMyComments(comments);
+    setBookmarkedPosts(bookmarked);
+    setRecentViews(recent);
+  }, [session, user?.name, user?.email, displayName]);
 
-  function onLogout() { signOut({ callbackUrl: "/" }); }
+  const getDisplayList = () => {
+    switch(activeTab) {
+      case "posts": return myPosts;
+      case "comments": return myComments;
+      case "bookmarks": return bookmarkedPosts;
+      case "recent": return recentViews;
+      default: return sparkedPosts;
+    }
+  };
+  const displayList = getDisplayList();
+  const isDark = mounted && theme === 'dark';
+  const totalSparks = myPosts.reduce((acc, p) => acc + (p.sparks || 0), 0);
+  const totalComments = myComments.length;
 
-  // 현재 탭에 따라 보여줄 리스트 결정
-  const displayList = activeTab === "posts" ? myPosts : sparkedPosts;
+  const handleNameSave = () => {
+    if (!displayName.trim()) {
+      alert("이름을 입력해주세요.");
+      return;
+    }
+    if (user?.email) {
+      localStorage.setItem(`dori_user_name_${user.email}`, displayName.trim());
+      // 모든 게시글과 댓글의 작성자 이름 업데이트
+      const savedPosts = JSON.parse(localStorage.getItem("dori_posts") || "[]");
+      const updatedPosts = savedPosts.map((p: any) => {
+        if (p.author === user?.name || p.nickname === user?.name) {
+          p.author = displayName.trim();
+          p.nickname = displayName.trim();
+        }
+        if (p.commentsList) {
+          p.commentsList = p.commentsList.map((c: any) => {
+            if (c.author === user?.name) {
+              c.author = displayName.trim();
+            }
+            return c;
+          });
+        }
+        return p;
+      });
+      localStorage.setItem("dori_posts", JSON.stringify(updatedPosts));
+      setIsEditingName(false);
+      alert("이름이 변경되었습니다.");
+    }
+  };
+
+  const handleBioSave = () => {
+    if (user?.email) {
+      localStorage.setItem(`dori_user_bio_${user.email}`, bio.trim());
+      setIsEditingBio(false);
+      alert("소개글이 저장되었습니다.");
+    }
+  };
 
   return (
-    <main className="page">
-      {/* HEADER */}
-      <div className="fixed-top-content">
-        <header className="header">
-          <div className="header-side header-left">
-            <div className="logo-wrap">
-              <Link href="/" className="logo-link"><img src="/logo.png" className="logo" alt="DORI Logo" /></Link>
+    <main style={{
+      backgroundColor: isDark ? '#000000' : '#ffffff',
+      fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+      minHeight: '100vh',
+      paddingTop: '70px',
+    }}>
+      <Header />
+
+      {/* 다크모드 배경 효과 */}
+      {isDark && (
+        <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+          <div className="absolute top-0 left-[20%] w-[500px] h-[500px] rounded-full blur-[100px] opacity-40 bg-blue-900 mix-blend-screen animate-pulse" />
+          <div className="absolute top-[100px] right-[20%] w-[450px] h-[450px] rounded-full blur-[100px] opacity-40 bg-purple-900 mix-blend-screen animate-pulse" style={{ animationDelay: '1s' }} />
             </div>
-          </div>
-          <div className="nav-container">
-            <nav className="nav">
-              <div className="nav-item-wrap"><Link href="/#studio">STUDIO</Link></div>
-              <div className="nav-item-wrap"><Link href="/#insight">INSIGHT</Link></div>
-              <div className="nav-item-wrap"><Link href="/#education">EDUCATION</Link></div>
-              <div className="nav-item-wrap active"><Link href="/community">COMMUNITY</Link></div>
-            </nav>
-          </div>
-          <div className="header-side header-right">
-            <div className="auth-wrap">
-              {!user ? (
-                <Link href="/" className="btn small ghost">로그인</Link>
-              ) : (
-                <div className="avatar-wrap">
-                  <button className="avatar">{user.name?.[0]?.toUpperCase()}</button>
-                  <div className="menu">
-                    <div className="menu-name">{user.name}</div>
-                    {/* 마이페이지 버튼 */}
-                    <Link href="/my" style={{textDecoration:'none'}}>
-                       <button className="menu-item">마이페이지</button>
-                    </Link>
-                    <button className="menu-item danger" onClick={onLogout}>로그아웃</button>
-                  </div>
-                </div>
               )}
-            </div>
-          </div>
-        </header>
-      </div>
-      <div className="scroll-spacer" />
 
       {/* MY PAGE CONTENT */}
-      <section className="container section" style={{ minHeight: "60vh", paddingTop: "40px" }}>
+      <section className="relative z-10" style={{ 
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '4rem 1.5rem',
+        minHeight: 'calc(100vh - 70px)',
+      }}>
         
         {/* 프로필 카드 */}
-        <div className="profile-card">
-          <div className="profile-avatar">{user?.name?.[0]?.toUpperCase() || "G"}</div>
-          <div className="profile-info">
-            <h1 className="username">{user?.name || "게스트"}</h1>
-            <p className="user-desc">DORI AI 크리에이터</p>
-            <div className="user-stats">
-              <span>작성글 <strong>{myPosts.length}</strong></span>
-              <span className="divider">·</span>
-              <span>받은 유레카 <strong>{myPosts.reduce((acc, p) => acc + (p.sparks || 0), 0)}</strong></span>
+        <div style={{
+          backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
+          border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7'}`,
+          borderRadius: '1.5rem',
+          padding: '3rem 2rem',
+          marginBottom: '3rem',
+          boxShadow: isDark ? '0 4px 20px rgba(0, 0, 0, 0.5)' : '0 4px 20px rgba(0, 0, 0, 0.05)',
+          transition: 'all 0.3s ease',
+          textAlign: 'center',
+        }}>
+          <div style={{
+            width: '100px',
+            height: '100px',
+            borderRadius: '50%',
+            background: isDark 
+              ? 'linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(168, 85, 247, 0.2))'
+              : 'linear-gradient(135deg, #eef6ff, #f3e8ff)',
+            color: isDark ? '#60a5fa' : '#2563eb',
+            fontSize: '2.5rem',
+            fontWeight: '700',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            border: `2px solid ${isDark ? 'rgba(96, 165, 250, 0.3)' : '#dbeafe'}`,
+            boxShadow: isDark 
+              ? '0 4px 20px rgba(96, 165, 250, 0.3)'
+              : '0 4px 20px rgba(37, 99, 235, 0.2)',
+            margin: '0 auto 1.5rem',
+          }}>
+            {user?.name?.[0]?.toUpperCase() || "G"}
+          </div>
+          {isEditingName ? (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center', marginBottom: '0.5rem' }}>
+              <input
+                type="text"
+                value={displayName}
+                onChange={(e) => setDisplayName(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter') handleNameSave();
+                  if (e.key === 'Escape') {
+                    setIsEditingName(false);
+                    setDisplayName(user?.name || "");
+                  }
+                }}
+                autoFocus
+                style={{
+                  fontSize: '2rem',
+                  fontWeight: '700',
+                  letterSpacing: '-0.03em',
+                  color: isDark ? '#ffffff' : '#1d1d1f',
+                  background: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
+                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'}`,
+                  borderRadius: '0.5rem',
+                  padding: '0.5rem 1rem',
+                  textAlign: 'center',
+                  fontFamily: 'inherit',
+                  outline: 'none',
+                  maxWidth: '300px',
+                }}
+              />
+              <button
+                onClick={handleNameSave}
+                style={{
+                  padding: '0.5rem 1rem',
+                  borderRadius: '0.5rem',
+                  background: 'linear-gradient(135deg, #2563eb, #7c3aed)',
+                  color: '#ffffff',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                  fontSize: '0.875rem',
+                  fontFamily: 'inherit',
+                }}
+              >
+                저장
+              </button>
+              <button
+                onClick={() => {
+                  setIsEditingName(false);
+                  setDisplayName(user?.name || "");
+                }}
+                style={{
+                  padding: '0.5rem 1rem',
+                  borderRadius: '0.5rem',
+                  background: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+                  color: isDark ? '#ffffff' : '#1d1d1f',
+                  border: 'none',
+                  cursor: 'pointer',
+                  fontWeight: '600',
+                  fontSize: '0.875rem',
+                  fontFamily: 'inherit',
+                }}
+              >
+                취소
+              </button>
+          </div>
+          ) : (
+            <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', justifyContent: 'center', marginBottom: '0.5rem' }}>
+              <h1 style={{
+                margin: 0,
+                fontSize: '2rem',
+                fontWeight: '700',
+                letterSpacing: '-0.03em',
+                color: isDark ? '#ffffff' : '#1d1d1f',
+              }}>
+                {displayName || user?.name || "게스트"}
+              </h1>
+              <button
+                onClick={() => setIsEditingName(true)}
+                style={{
+                  padding: '0.375rem 0.75rem',
+                  borderRadius: '0.5rem',
+                  background: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
+                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
+                  color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+                  cursor: 'pointer',
+                  fontSize: '0.75rem',
+                  fontFamily: 'inherit',
+                  fontWeight: '500',
+                }}
+                title="이름 수정"
+              >
+                ✏️
+              </button>
+            </div>
+          )}
+          {isEditingBio ? (
+            <div style={{ marginBottom: '2rem', maxWidth: '500px', margin: '0 auto 2rem' }}>
+              <textarea
+                value={bio}
+                onChange={(e) => setBio(e.target.value)}
+                placeholder="소개글을 입력하세요..."
+                rows={3}
+                style={{
+                  width: '100%',
+                  padding: '0.75rem',
+                  borderRadius: '0.75rem',
+                  background: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
+                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'}`,
+                  color: isDark ? '#ffffff' : '#1d1d1f',
+                  fontFamily: 'inherit',
+                  fontSize: '0.9375rem',
+                  resize: 'vertical',
+                  outline: 'none',
+                }}
+              />
+              <div style={{ display: 'flex', gap: '0.5rem', justifyContent: 'center', marginTop: '0.5rem' }}>
+                <button
+                  onClick={handleBioSave}
+                  style={{
+                    padding: '0.5rem 1rem',
+                    borderRadius: '0.5rem',
+                    background: 'linear-gradient(135deg, #2563eb, #7c3aed)',
+                    color: '#ffffff',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontWeight: '600',
+                    fontSize: '0.875rem',
+                    fontFamily: 'inherit',
+                  }}
+                >
+                  저장
+                </button>
+                <button
+                  onClick={() => {
+                    setIsEditingBio(false);
+                    setBio(localStorage.getItem(`dori_user_bio_${user?.email}`) || "");
+                  }}
+                  style={{
+                    padding: '0.5rem 1rem',
+                    borderRadius: '0.5rem',
+                    background: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+                    color: isDark ? '#ffffff' : '#1d1d1f',
+                    border: 'none',
+                    cursor: 'pointer',
+                    fontWeight: '600',
+                    fontSize: '0.875rem',
+                    fontFamily: 'inherit',
+                  }}
+                >
+                  취소
+                </button>
+                  </div>
+                </div>
+          ) : (
+            <div style={{ marginBottom: '2rem', maxWidth: '500px', margin: '0 auto 2rem', position: 'relative' }}>
+              <p style={{
+                color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+                margin: 0,
+                fontSize: '1rem',
+                fontWeight: '400',
+                letterSpacing: '-0.01em',
+                minHeight: '3rem',
+                padding: '0.75rem',
+                borderRadius: '0.75rem',
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)',
+              }}>
+                {bio || "DORI AI 크리에이터"}
+              </p>
+              <button
+                onClick={() => setIsEditingBio(true)}
+                style={{
+                  position: 'absolute',
+                  top: '0.5rem',
+                  right: '0.5rem',
+                  padding: '0.375rem 0.75rem',
+                  borderRadius: '0.5rem',
+                  background: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
+                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
+                  color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+                  cursor: 'pointer',
+                  fontSize: '0.75rem',
+                  fontFamily: 'inherit',
+                  fontWeight: '500',
+                }}
+                title="소개글 수정"
+              >
+                ✏️
+              </button>
+                </div>
+              )}
+          <div style={{
+            display: 'flex',
+            gap: '1rem',
+            justifyContent: 'center',
+            flexWrap: 'wrap',
+          }}>
+            <div style={{
+              padding: '1rem 1.5rem',
+              borderRadius: '1rem',
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
+              border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
+              minWidth: '120px',
+            }}>
+              <div style={{ 
+                color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)', 
+                fontSize: '0.875rem',
+                fontWeight: '500',
+                marginBottom: '0.5rem',
+              }}>
+                작성글
+              </div>
+              <div className={isDark ? 'gradient-text gradient-dark' : 'gradient-text gradient-light'} style={{
+                fontSize: '1.75rem',
+                fontWeight: '700',
+                letterSpacing: '-0.02em',
+              }}>
+                {myPosts.length}
+              </div>
+            </div>
+            <div style={{
+              padding: '1rem 1.5rem',
+              borderRadius: '1rem',
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
+              border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
+              minWidth: '120px',
+            }}>
+              <div style={{ 
+                color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)', 
+                fontSize: '0.875rem',
+                fontWeight: '500',
+                marginBottom: '0.5rem',
+              }}>
+                받은 유레카
+              </div>
+              <div className={isDark ? 'gradient-text gradient-dark' : 'gradient-text gradient-light'} style={{
+                fontSize: '1.75rem',
+                fontWeight: '700',
+                letterSpacing: '-0.02em',
+              }}>
+                {totalSparks}
+              </div>
+            </div>
+            <div style={{
+              padding: '1rem 1.5rem',
+              borderRadius: '1rem',
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
+              border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
+              minWidth: '120px',
+            }}>
+              <div style={{ 
+                color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)', 
+                fontSize: '0.875rem',
+                fontWeight: '500',
+                marginBottom: '0.5rem',
+              }}>
+                작성 댓글
+              </div>
+              <div className={isDark ? 'gradient-text gradient-dark' : 'gradient-text gradient-light'} style={{
+                fontSize: '1.75rem',
+                fontWeight: '700',
+                letterSpacing: '-0.02em',
+              }}>
+                {totalComments}
+              </div>
+            </div>
+          </div>
+          
+          {/* 추가 정보 */}
+          <div style={{
+            marginTop: '2rem',
+            paddingTop: '2rem',
+            borderTop: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7'}`,
+            display: 'grid',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+            gap: '1rem',
+          }}>
+            <div style={{
+              padding: '1rem',
+              borderRadius: '0.75rem',
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)',
+              border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)'}`,
+            }}>
+              <div style={{
+                fontSize: '0.75rem',
+                color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.5)',
+                marginBottom: '0.5rem',
+                fontWeight: '500',
+              }}>
+                이메일
+              </div>
+              <div style={{
+                fontSize: '0.875rem',
+                color: isDark ? '#ffffff' : '#1d1d1f',
+                fontWeight: '500',
+                wordBreak: 'break-all',
+              }}>
+                {user?.email || "로그인 필요"}
+              </div>
+            </div>
+            <div style={{
+              padding: '1rem',
+              borderRadius: '0.75rem',
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)',
+              border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)'}`,
+            }}>
+              <div style={{
+                fontSize: '0.75rem',
+                color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.5)',
+                marginBottom: '0.5rem',
+                fontWeight: '500',
+              }}>
+                가입일
+              </div>
+              <div style={{
+                fontSize: '0.875rem',
+                color: isDark ? '#ffffff' : '#1d1d1f',
+                fontWeight: '500',
+              }}>
+                {user ? new Date().toLocaleDateString('ko-KR') : "-"}
+              </div>
+            </div>
+            <div style={{
+              padding: '1rem',
+              borderRadius: '0.75rem',
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)',
+              border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)'}`,
+            }}>
+              <div style={{
+                fontSize: '0.75rem',
+                color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.5)',
+                marginBottom: '0.5rem',
+                fontWeight: '500',
+              }}>
+                활동 점수
+              </div>
+              <div className={isDark ? 'gradient-text gradient-dark' : 'gradient-text gradient-light'} style={{
+                fontSize: '1.125rem',
+                fontWeight: '700',
+                letterSpacing: '-0.02em',
+              }}>
+                {(myPosts.length * 10 + totalComments * 3 + totalSparks).toLocaleString()}
+            </div>
+          </div>
+      </div>
+          
+          {/* 빠른 링크 */}
+          <div style={{
+            marginTop: '2rem',
+            paddingTop: '2rem',
+            borderTop: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7'}`,
+          }}>
+            <h3 style={{
+              fontSize: '1.125rem',
+              fontWeight: '600',
+              letterSpacing: '-0.01em',
+              color: isDark ? '#ffffff' : '#1d1d1f',
+              marginBottom: '1rem',
+            }}>
+              빠른 링크
+            </h3>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
+              gap: '0.75rem',
+            }}>
+              {[
+                { href: '/community/write', label: '✍️ 글쓰기', icon: '✍️' },
+                { href: '/community', label: '💬 커뮤니티', icon: '💬' },
+                { href: '/ai-tools', label: '🤖 AI 도구', icon: '🤖' },
+                { href: '/insight', label: '💡 인사이트', icon: '💡' },
+                { href: '/academy', label: '🎓 아카데미', icon: '🎓' },
+                { href: '/suggestions', label: '📫 제안하기', icon: '📫' },
+              ].map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  style={{
+                    padding: '0.875rem 1rem',
+                    borderRadius: '0.75rem',
+                    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)',
+                    border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)'}`,
+                    textDecoration: 'none',
+                    color: isDark ? '#ffffff' : '#1d1d1f',
+                    fontSize: '0.875rem',
+                    fontWeight: '500',
+                    letterSpacing: '-0.01em',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.5rem',
+                    transition: 'all 0.2s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)';
+                  }}
+                >
+                  <span>{link.icon}</span>
+                  <span>{link.label.replace(link.icon + ' ', '')}</span>
+                </Link>
+              ))}
+            </div>
+          </div>
+          
+          {/* 활동 통계 */}
+          <div style={{
+            marginTop: '2rem',
+            paddingTop: '2rem',
+            borderTop: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7'}`,
+          }}>
+            <h3 style={{
+              fontSize: '1.125rem',
+              fontWeight: '600',
+              letterSpacing: '-0.01em',
+              color: isDark ? '#ffffff' : '#1d1d1f',
+              marginBottom: '1rem',
+            }}>
+              활동 통계
+            </h3>
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: '1rem',
+            }}>
+              <div style={{
+                padding: '1rem',
+                borderRadius: '0.75rem',
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)',
+                border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)'}`,
+              }}>
+                <div style={{
+                  fontSize: '0.75rem',
+                  color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.5)',
+                  marginBottom: '0.5rem',
+                  fontWeight: '500',
+                }}>
+                  총 조회수
+                </div>
+                <div style={{
+                  fontSize: '1.25rem',
+                  fontWeight: '700',
+                  color: isDark ? '#ffffff' : '#1d1d1f',
+                }}>
+                  {myPosts.reduce((acc, p) => acc + (p.views || 0), 0).toLocaleString()}
+                </div>
+              </div>
+              <div style={{
+                padding: '1rem',
+                borderRadius: '0.75rem',
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)',
+                border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)'}`,
+              }}>
+                <div style={{
+                  fontSize: '0.75rem',
+                  color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.5)',
+                  marginBottom: '0.5rem',
+                  fontWeight: '500',
+                }}>
+                  평균 유레카
+                </div>
+                <div style={{
+                  fontSize: '1.25rem',
+                  fontWeight: '700',
+                  color: isDark ? '#ffffff' : '#1d1d1f',
+                }}>
+                  {myPosts.length > 0 
+                    ? (totalSparks / myPosts.length).toFixed(1)
+                    : '0.0'}
+                </div>
+              </div>
+              <div style={{
+                padding: '1rem',
+                borderRadius: '0.75rem',
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)',
+                border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)'}`,
+              }}>
+                <div style={{
+                  fontSize: '0.75rem',
+                  color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.5)',
+                  marginBottom: '0.5rem',
+                  fontWeight: '500',
+                }}>
+                  북마크 수
+                </div>
+                <div style={{
+                  fontSize: '1.25rem',
+                  fontWeight: '700',
+                  color: isDark ? '#ffffff' : '#1d1d1f',
+                }}>
+                  {bookmarkedPosts.length}
+                </div>
+              </div>
             </div>
           </div>
         </div>
 
         {/* 탭 메뉴 */}
-        <div className="tabs">
+        <div style={{
+          display: 'flex',
+          gap: '0.5rem',
+          borderBottom: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7'}`,
+          marginBottom: '2rem',
+        }}>
           <button 
-            className={`tab-btn ${activeTab === "posts" ? "active" : ""}`} 
             onClick={() => setActiveTab("posts")}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: '0.875rem 1.5rem',
+              cursor: 'pointer',
+              fontSize: '0.9375rem',
+              fontWeight: '500',
+              letterSpacing: '-0.01em',
+              color: activeTab === "posts" 
+                ? (isDark ? '#ffffff' : '#1d1d1f')
+                : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)'),
+              borderBottom: `2px solid ${activeTab === "posts" ? (isDark ? '#ffffff' : '#1d1d1f') : 'transparent'}`,
+              transition: 'all 0.2s ease',
+              fontFamily: 'inherit',
+            }}
           >
             내가 쓴 글 ({myPosts.length})
           </button>
           <button 
-            className={`tab-btn ${activeTab === "sparks" ? "active" : ""}`} 
+            onClick={() => setActiveTab("comments")}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: '0.875rem 1.5rem',
+              cursor: 'pointer',
+              fontSize: '0.9375rem',
+              fontWeight: '500',
+              letterSpacing: '-0.01em',
+              color: activeTab === "comments" 
+                ? (isDark ? '#ffffff' : '#1d1d1f')
+                : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)'),
+              borderBottom: `2px solid ${activeTab === "comments" ? (isDark ? '#ffffff' : '#1d1d1f') : 'transparent'}`,
+              transition: 'all 0.2s ease',
+              fontFamily: 'inherit',
+            }}
+          >
+            💬 내 댓글 ({myComments.length})
+          </button>
+          <button 
+            onClick={() => setActiveTab("bookmarks")}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: '0.875rem 1.5rem',
+              cursor: 'pointer',
+              fontSize: '0.9375rem',
+              fontWeight: '500',
+              letterSpacing: '-0.01em',
+              color: activeTab === "bookmarks" 
+                ? (isDark ? '#ffffff' : '#1d1d1f')
+                : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)'),
+              borderBottom: `2px solid ${activeTab === "bookmarks" ? (isDark ? '#ffffff' : '#1d1d1f') : 'transparent'}`,
+              transition: 'all 0.2s ease',
+              fontFamily: 'inherit',
+            }}
+          >
+            ⭐ 북마크 ({bookmarkedPosts.length})
+          </button>
+          <button 
+            onClick={() => setActiveTab("recent")}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: '0.875rem 1.5rem',
+              cursor: 'pointer',
+              fontSize: '0.9375rem',
+              fontWeight: '500',
+              letterSpacing: '-0.01em',
+              color: activeTab === "recent" 
+                ? (isDark ? '#ffffff' : '#1d1d1f')
+                : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)'),
+              borderBottom: `2px solid ${activeTab === "recent" ? (isDark ? '#ffffff' : '#1d1d1f') : 'transparent'}`,
+              transition: 'all 0.2s ease',
+              fontFamily: 'inherit',
+            }}
+          >
+            👁️ 최근 본 글 ({recentViews.length})
+          </button>
+          <button 
             onClick={() => setActiveTab("sparks")}
+            style={{
+              background: 'none',
+              border: 'none',
+              padding: '0.875rem 1.5rem',
+              cursor: 'pointer',
+              fontSize: '0.9375rem',
+              fontWeight: '500',
+              letterSpacing: '-0.01em',
+              color: activeTab === "sparks" 
+                ? (isDark ? '#ffffff' : '#1d1d1f')
+                : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)'),
+              borderBottom: `2px solid ${activeTab === "sparks" ? (isDark ? '#ffffff' : '#1d1d1f') : 'transparent'}`,
+              transition: 'all 0.2s ease',
+              fontFamily: 'inherit',
+            }}
           >
             ⚡️ 유레카한 글 ({sparkedPosts.length})
           </button>
@@ -111,137 +825,287 @@ export default function MyPage() {
         {/* 리스트 영역 */}
         <div className="post-list">
           {displayList.length === 0 ? (
-            <div className="empty-state">
-              {activeTab === "posts" ? "작성한 글이 없습니다." : "아직 유레카를 누른 글이 없습니다."}
+            <div className="empty-state" style={{
+              textAlign: 'center',
+              padding: '4rem 0',
+              color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+            }}>
+              {activeTab === "posts" ? "작성한 글이 없습니다." : 
+               activeTab === "comments" ? "작성한 댓글이 없습니다." :
+               activeTab === "bookmarks" ? "북마크한 글이 없습니다." :
+               activeTab === "recent" ? "최근 본 글이 없습니다." :
+               "아직 유레카를 누른 글이 없습니다."}
               <br />
-              <Link href="/community" style={{ color: '#00baff', marginTop: '10px', display: 'inline-block' }}>
+              <Link href="/community" style={{ 
+                color: isDark ? '#60a5fa' : '#2563eb', 
+                marginTop: '1rem', 
+                display: 'inline-block',
+                fontWeight: '600',
+                textDecoration: 'none',
+              }}>
                 커뮤니티 둘러보기 →
               </Link>
             </div>
-          ) : (
-            displayList.slice(0).reverse().map((post) => (
-              <Link href={`/community/${post.id}`} key={post.id} style={{ textDecoration: 'none', color: 'inherit' }}>
-                <div className="post-item">
-                  <div className="post-info">
-                    <span className="post-tag">{post.tag || "자유"}</span>
-                    <h3 className="post-title">
-                      {post.title}
-                      {post.image && <span style={{marginLeft:'8px', fontSize:'14px'}}>📷</span>}
+          ) : activeTab === "comments" ? (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {displayList.map((comment: any) => (
+                <Link 
+                  href={comment.postUrl || `/community/${comment.postId}`} 
+                  key={comment.id} 
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <div style={{
+                    padding: '1.5rem',
+                    borderRadius: '1rem',
+                    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
+                    border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7'}`,
+                    boxShadow: isDark ? '0 2px 10px rgba(0, 0, 0, 0.3)' : '0 2px 10px rgba(0, 0, 0, 0.05)',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = isDark 
+                      ? '0 8px 24px rgba(0, 0, 0, 0.5)' 
+                      : '0 8px 24px rgba(0, 0, 0, 0.1)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = isDark 
+                      ? '0 2px 10px rgba(0, 0, 0, 0.3)' 
+                      : '0 2px 10px rgba(0, 0, 0, 0.05)';
+                  }}
+                  >
+                    <div style={{ 
+                      fontSize: '0.8125rem',
+                      color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                      marginBottom: '0.5rem',
+                      fontWeight: '400',
+                      letterSpacing: '-0.01em',
+                    }}>
+                      {comment.date || new Date(comment.createdAt || Date.now()).toLocaleDateString()}
+                    </div>
+                    <h3 style={{
+                      margin: '0 0 0.75rem 0',
+                      fontSize: '0.9375rem',
+                      fontWeight: '600',
+                      letterSpacing: '-0.01em',
+                      color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)',
+                    }}>
+                      {comment.postTitle || "게시글"}
                     </h3>
-                    <p className="post-meta">작성자: {post.author} | {post.date} | 👁️ {post.views || 0}</p>
+                    <p style={{
+                      margin: '0 0 0.75rem 0',
+                      fontSize: '0.9375rem',
+                      fontWeight: '400',
+                      letterSpacing: '-0.01em',
+                      color: isDark ? '#ffffff' : '#1d1d1f',
+                      lineHeight: '1.6',
+                      padding: '0.75rem',
+                      borderRadius: '0.5rem',
+                      backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)',
+                    }}>
+                      {comment.text || comment.content}
+                    </p>
+                    <div style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: '0.5rem',
+                      fontSize: '0.8125rem',
+                      color: isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)',
+                    }}>
+                      <span>💬</span>
+                      <span>댓글 보기 →</span>
+                    </div>
                   </div>
-                  <div className="post-stats">
-                    <span>💬 {post.comments || 0}</span>
-                    <span style={{color: post.sparks > 0 ? '#d4b106' : '#888'}}>
-                      ⚡️ {post.sparks || 0}
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              {displayList.slice(0).reverse().map((post) => (
+                <Link 
+                  href={`/community/${post.id}`} 
+                  key={post.id} 
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <div className="post-item" style={{
+                    padding: '1.5rem',
+                    borderRadius: '1rem',
+                    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
+                    border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7'}`,
+                    boxShadow: isDark ? '0 2px 10px rgba(0, 0, 0, 0.3)' : '0 2px 10px rgba(0, 0, 0, 0.05)',
+                    cursor: 'pointer',
+                    transition: 'all 0.3s ease',
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    gap: '1.5rem',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                    e.currentTarget.style.boxShadow = isDark 
+                      ? '0 8px 24px rgba(0, 0, 0, 0.5)' 
+                      : '0 8px 24px rgba(0, 0, 0, 0.1)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = 'translateY(0)';
+                    e.currentTarget.style.boxShadow = isDark 
+                      ? '0 2px 10px rgba(0, 0, 0, 0.3)' 
+                      : '0 2px 10px rgba(0, 0, 0, 0.05)';
+                  }}
+                  >
+                    <div className="post-info" style={{ flex: 1, minWidth: 0 }}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
+                        <span className="post-tag" style={{
+                          fontSize: '0.75rem',
+                          background: isDark 
+                            ? 'linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(168, 85, 247, 0.2))'
+                            : 'linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(124, 58, 237, 0.1))',
+                          padding: '0.375rem 0.875rem',
+                          borderRadius: '0.75rem',
+                          color: isDark ? '#60a5fa' : '#2563eb',
+                          display: 'inline-block',
+                          fontWeight: '600',
+                          border: `1px solid ${isDark ? 'rgba(96, 165, 250, 0.3)' : 'rgba(37, 99, 235, 0.2)'}`,
+                        }}>
+                          {post.tag || "자유"}
+                        </span>
+                        {post.image && (
+                          <span style={{
+                            fontSize: '0.875rem',
+                            opacity: 0.7,
+                          }}>📷</span>
+                        )}
+                        <span style={{
+                          fontSize: '0.75rem',
+                          color: isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)',
+                          marginLeft: 'auto',
+                        }}>
+                          {post.date || new Date(post.createdAt || Date.now()).toLocaleDateString()}
+                        </span>
+                      </div>
+                      <h3 style={{
+                        margin: '0 0 0.5rem 0',
+                        fontSize: '1.0625rem',
+                        fontWeight: '600',
+                        letterSpacing: '-0.01em',
+                        color: isDark ? '#ffffff' : '#1d1d1f',
+                        lineHeight: '1.5',
+                        overflow: 'hidden',
+                        textOverflow: 'ellipsis',
+                        display: '-webkit-box',
+                        WebkitLineClamp: 2,
+                        WebkitBoxOrient: 'vertical',
+                      }}>
+                      {post.title}
+                    </h3>
+                      <div style={{ 
+                        display: 'flex', 
+                        alignItems: 'center', 
+                        gap: '0.75rem', 
+                        flexWrap: 'wrap',
+                        fontSize: '0.8125rem',
+                        fontWeight: '400',
+                        letterSpacing: '-0.01em',
+                      }}>
+                        <span style={{
+                          color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                        }}>
+                          {post.author || post.nickname || "익명"}
+                        </span>
+                        <span style={{
+                          color: isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)',
+                        }}>•</span>
+                        <span style={{
+                          color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                        }}>
+                          👁️ {post.views || 0}
                     </span>
+                      </div>
+                    </div>
+                    <div className="post-stats" style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: '0.5rem',
+                      fontSize: '0.875rem',
+                      alignItems: 'flex-end',
+                      flexShrink: 0,
+                    }}>
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.375rem',
+                        padding: '0.375rem 0.75rem',
+                        borderRadius: '0.5rem',
+                        backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
+                        color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+                      }}>
+                        <span>💬</span>
+                        <span style={{ fontWeight: '600' }}>{post.comments || 0}</span>
+                      </div>
+                      <div style={{
+                        display: 'flex',
+                        alignItems: 'center',
+                        gap: '0.375rem',
+                        padding: '0.375rem 0.75rem',
+                        borderRadius: '0.5rem',
+                        backgroundColor: post.sparks > 0 
+                          ? (isDark ? 'rgba(251, 191, 36, 0.15)' : 'rgba(212, 177, 6, 0.1)')
+                          : (isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)'),
+                        color: post.sparks > 0 
+                          ? (isDark ? '#fbbf24' : '#d4b106') 
+                          : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)'),
+                        border: post.sparks > 0 
+                          ? `1px solid ${isDark ? 'rgba(251, 191, 36, 0.3)' : 'rgba(212, 177, 6, 0.2)'}`
+                          : 'none',
+                      }}>
+                        <span>⚡️</span>
+                        <span style={{ fontWeight: '600' }}>{post.sparks || 0}</span>
+                      </div>
                   </div>
                 </div>
               </Link>
-            ))
+              ))}
+            </div>
           )}
         </div>
 
       </section>
 
-      {/* FOOTER */}
-      <footer className="footer">
-        <span>DORI — DESIGN OF REAL INTELLIGENCE</span>
-        <span>© {new Date().getFullYear()} DORI</span>
-      </footer>
 
       <style jsx global>{`
-        :root { --bg: #fff; --text: #222; --muted: #555; --line: #ececec; --blue: #00baff; --yellow: #FFD700; }
-        * { box-sizing: border-box; }
-        html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: sans-serif; }
-        .page { display: flex; flex-direction: column; gap: 48px; }
-        .fixed-top-content { position: fixed; top: 0; left: 0; width: 100%; z-index: 20; background: #fff; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-        .scroll-spacer { height: 64px; }
-        .header { display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; padding: 4px 28px; border-bottom: 1px solid var(--line); }
-        .logo-wrap { width: 128px; height: 48px; position: relative; }
-        .logo { height: 32px; position: absolute; top: 50%; transform: translateY(-50%) scale(3.5); transform-origin: left; }
-        .nav { display: flex; gap: 18px; }
-        .nav-item-wrap { padding: 6px 16px 22px; cursor: pointer; border-radius: 999px; position: relative; }
-        .nav-item-wrap > a { text-decoration: none; color: var(--text); font-weight: bold; font-size: 15px; display: block; }
-        .nav-item-wrap:hover, .nav-item-wrap.active { background: #eef7ff; }
-        .nav-item-wrap:hover > a, .nav-item-wrap.active > a { color: var(--blue); }
-        .auth-wrap { display: flex; align-items: center; gap: 20px; }
-        .btn { padding: 8px 14px; border-radius: 999px; border: 1px solid var(--line); cursor: pointer; background: transparent; font-size: 13px; text-decoration: none; color: var(--text); }
-        
-        /* ★ 아바타 래퍼 */
-        .avatar-wrap { 
-          position: relative; 
-          height: 48px; /* 헤더 높이에 맞춰 고정 */
-          display: flex; 
-          align-items: center; 
+        .gradient-text {
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+          color: transparent;
+          display: inline-block;
+          background-position: 0% 50%;
+          background-size: 100% 100%;
+          background-repeat: no-repeat;
         }
-        
-        .avatar { width: 34px; height: 34px; border-radius: 50%; background: #eef6ff; border: 1px solid #dfe8ff; display: flex; align-items: center; justify-content: center; color: #0a6fb0; font-weight: bold; cursor: pointer; }
-        
-        /* ★ 메뉴 스타일 개선 (끊김 방지 핵심 수정) */
-        .menu { 
-          position: absolute; 
-          right: 0; 
-          top: 40px; /* 아바타 바로 밑으로 위치 고정 */
-          width: 180px; 
-          background: #fff; 
-          border: 1px solid #e8eef7; 
-          border-radius: 8px; 
-          padding: 8px; 
-          opacity: 0; 
-          pointer-events: none; 
-          box-shadow: 0 4px 12px rgba(0,0,0,0.1); 
-          transition: 0.2s;
-          z-index: 100; /* 다른 요소 위에 뜨도록 */
+        .gradient-light {
+          background-image: linear-gradient(90deg, #2563eb 0%, #4f46e5 12.5%, #7c3aed 25%, #9333ea 37.5%, #db2777 50%, #e11d48 62.5%, #d97706 75%, #f59e0b 87.5%, #059669 100%);
         }
-        
-        /* 마우스가 아바타나 메뉴 위에 있을 때 보임 */
-        .avatar-wrap:hover .menu, .menu:hover { 
-          opacity: 1; 
-          pointer-events: auto; 
+        .gradient-dark {
+          background-image: linear-gradient(90deg, #60a5fa 0%, #818cf8 12.5%, #a78bfa 25%, #c084fc 37.5%, #ec4899 50%, #f472b6 62.5%, #f59e0b 75%, #fbbf24 87.5%, #10b981 100%);
         }
-
-        /* ★ 투명 다리 (Bridge): 틈새를 메워주는 보이지 않는 영역 */
-        .menu::before {
-          content: "";
-          position: absolute;
-          top: -20px; /* 메뉴 위쪽으로 20px 확장 */
-          left: 0;
-          width: 100%;
-          height: 20px;
-          background: transparent;
+        .container {
+          max-width: 900px;
+          margin: 0 auto;
+          padding: 0 1.5rem;
         }
-
-        .menu-name { padding: 8px; border-bottom: 1px solid #f0f3f8; font-size: 13px; color: #666; }
-        .menu-item { width: 100%; padding: 10px; border: none; background: transparent; text-align: left; cursor: pointer; border-radius: 4px; }
-        .menu-item:hover { background: #f6faff; }
-        .menu-item.danger { color: #b00020; }
-        .container { max-width: 800px; margin: 0 auto; padding: 0 24px; }
-        .footer { padding: 40px 24px; text-align: center; color: #999; font-size: 13px; display: flex; justify-content: space-between; max-width: 1120px; margin: 0 auto; }
-        
-        /* 마이페이지 스타일 */
-        .profile-card { display: flex; align-items: center; gap: 24px; padding: 32px; background: #f9fbfd; border-radius: 16px; margin-bottom: 40px; }
-        .profile-avatar { width: 80px; height: 80px; border-radius: 50%; background: #eef6ff; color: #00baff; font-size: 32px; font-weight: bold; display: flex; align-items: center; justify-content: center; border: 2px solid #fff; box-shadow: 0 4px 12px rgba(0,186,255, 0.2); }
-        .profile-info h1 { margin: 0 0 4px 0; font-size: 24px; }
-        .user-desc { color: #666; margin: 0 0 12px 0; font-size: 14px; }
-        .user-stats { display: flex; gap: 8px; color: #555; font-size: 14px; }
-        .divider { color: #ddd; }
-
-        .tabs { display: flex; gap: 20px; border-bottom: 1px solid #ececec; margin-bottom: 20px; }
-        .tab-btn { background: none; border: none; padding: 12px 4px; cursor: pointer; font-size: 16px; color: #888; border-bottom: 2px solid transparent; font-weight: 500; }
-        .tab-btn:hover { color: #333; }
-        .tab-btn.active { color: #333; border-bottom-color: #333; }
-
-        .post-list { border-top: 1px solid transparent; }
-        .post-item { padding: 20px 0; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; cursor: pointer; transition: 0.2s; }
-        .post-item:hover { background: #f9fcfd; padding-left: 10px; padding-right: 10px; }
-        .post-tag { font-size: 12px; background: #f0f0f0; padding: 4px 8px; border-radius: 4px; color: #666; margin-bottom: 6px; display: inline-block; }
-        .post-title { margin: 0 0 6px 0; font-size: 16px; color: var(--text); }
-        .post-meta { font-size: 12px; color: #999; }
-        .post-stats { font-size: 13px; color: #888; display: flex; gap: 10px; }
-        .empty-state { text-align: center; padding: 60px 0; color: #999; }
-
-        @media (max-width: 640px) { .nav { overflow-x: auto; padding-bottom: 4px; } .profile-card { flex-direction: column; text-align: center; } }
+        @media (max-width: 768px) {
+          .profile-card {
+            flex-direction: column;
+            text-align: center;
+          }
+          .post-item {
+            flex-direction: column;
+            align-items: flex-start !important;
+          }
+        }
       `}</style>
     </main>
   );
