@@ -1,30 +1,35 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { signIn } from "next-auth/react";
 import { useRouter, useSearchParams } from "next/navigation";
 import Link from "next/link";
 
-export default function LoginPage() {
-  const router = useRouter();
+function ErrorHandler({ onError }: { onError: (error: string) => void }) {
   const searchParams = useSearchParams();
-  const [isLoading, setIsLoading] = useState(false);
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [error, setError] = useState("");
 
   useEffect(() => {
     const errorParam = searchParams.get("error");
     if (errorParam) {
       if (errorParam === "Configuration" || errorParam.includes("deleted_client")) {
-        setError("구글 OAuth 클라이언트가 삭제되었거나 설정이 올바르지 않습니다. 새로운 클라이언트 ID를 생성하고 .env.local 파일을 업데이트해주세요.");
+        onError("구글 OAuth 클라이언트가 삭제되었거나 설정이 올바르지 않습니다. 새로운 클라이언트 ID를 생성하고 .env.local 파일을 업데이트해주세요.");
       } else if (errorParam === "AccessDenied") {
-        setError("접근이 거부되었습니다.");
+        onError("접근이 거부되었습니다.");
       } else {
-        setError(`로그인 중 오류가 발생했습니다: ${errorParam}`);
+        onError(`로그인 중 오류가 발생했습니다: ${errorParam}`);
       }
     }
-  }, [searchParams]);
+  }, [searchParams, onError]);
+
+  return null;
+}
+
+export default function LoginPage() {
+  const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
 
   const handleGoogleLogin = () => {
     setIsLoading(true);
@@ -67,6 +72,9 @@ export default function LoginPage() {
         </div>
 
         <div className="login-body">
+          <Suspense fallback={null}>
+            <ErrorHandler onError={setError} />
+          </Suspense>
           {error && (
             <div className="error-message" style={{
               padding: "12px",
