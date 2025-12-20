@@ -2,7 +2,6 @@ import Script from "next/script";
 import "./globals.css";
 import { AuthProvider } from "./providers";
 import Header from "@/components/layout/Header"; 
-import Footer from "@/components/layout/Footer";
 import VisitorTracker from "@/components/VisitorTracker";
 import { createMetadata } from "@/lib/seo";
 
@@ -65,7 +64,6 @@ export default function RootLayout({
             <main className="flex-grow w-full pt-20">
               {children}
             </main>
-            <Footer />
           </div>
         </AuthProvider>
       </body>

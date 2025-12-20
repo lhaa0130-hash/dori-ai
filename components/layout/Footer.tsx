@@ -23,16 +23,17 @@ export default function Footer() {
 
         <div className="right-area">
           <Link href="/suggestions" className="footer-link font-bold text-blue-600 dark:text-blue-400">{t.suggestion.ko}</Link>
-          <Link href="#" className="footer-link">{t.privacy.ko}</Link>
-          <Link href="#" className="footer-link">{t.terms.ko}</Link>
+          <Link href="/legal/privacy" className="footer-link">{t.privacy.ko}</Link>
+          <Link href="/legal/terms" className="footer-link">{t.terms.ko}</Link>
         </div>
       </div>
 
       <style jsx>{`
         .footer-wrapper { 
           width: 100%; 
-          padding: 60px 24px; 
-          margin-top: auto; 
+          padding: 40px 24px 20px 24px; 
+          margin-top: 0; 
+          margin-bottom: 0;
           transition: all 0.3s ease;
           font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif;
         }

@@ -3,6 +3,7 @@
 import { useEffect, useState, useRef } from "react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import Footer from "@/components/layout/Footer";
 
 export default function PremiumDesignPage() {
   const { theme } = useTheme();
@@ -81,11 +82,138 @@ export default function PremiumDesignPage() {
     { id: 'faq', label: 'FAQ' },
   ];
 
+  useEffect(() => {
+    if (typeof document !== 'undefined' && typeof window !== 'undefined') {
+      const html = document.documentElement;
+      const body = document.body;
+      
+      // CSS 스크롤 스냅 설정
+      html.style.setProperty('scroll-snap-type', 'y mandatory', 'important');
+      html.style.setProperty('scroll-behavior', 'smooth', 'important');
+      
+      body.style.setProperty('scroll-snap-type', 'y mandatory', 'important');
+      body.style.setProperty('scroll-behavior', 'smooth', 'important');
+      
+      // JavaScript로 스크롤 스냅 강제 구현
+      let isScrolling = false;
+      let scrollTimeout: NodeJS.Timeout;
+      
+      const handleWheel = (e: WheelEvent) => {
+        if (isScrolling) {
+    e.preventDefault();
+          return;
+        }
+        
+        const sections = ['hero', 'features', 'gallery', 'testimonials', 'faq'];
+        const currentScroll = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        
+        let targetSection: string | null = null;
+        let targetScroll = 0;
+        
+        // 현재 보이는 섹션 찾기
+        for (let i = 0; i < sections.length; i++) {
+          const section = sectionRefs.current[sections[i]];
+          if (!section) continue;
+          
+          const rect = section.getBoundingClientRect();
+          const sectionTop = rect.top + currentScroll;
+          const sectionBottom = sectionTop + rect.height;
+          
+          // 현재 뷰포트 중앙이 섹션 내에 있는지 확인
+          const viewportCenter = currentScroll + viewportHeight / 2;
+          
+          if (viewportCenter >= sectionTop && viewportCenter <= sectionBottom) {
+            // 아래로 스크롤
+            if (e.deltaY > 0 && i < sections.length - 1) {
+              const nextSection = sectionRefs.current[sections[i + 1]];
+              if (nextSection) {
+                targetSection = sections[i + 1];
+                targetScroll = nextSection.offsetTop;
+              }
+            }
+            // 위로 스크롤
+            else if (e.deltaY < 0 && i > 0) {
+              const prevSection = sectionRefs.current[sections[i - 1]];
+              if (prevSection) {
+                targetSection = sections[i - 1];
+                targetScroll = prevSection.offsetTop;
+              }
+            }
+            break;
+          }
+        }
+        
+        // 섹션 경계 근처에서 스크롤할 때
+        if (!targetSection) {
+          for (let i = 0; i < sections.length; i++) {
+            const section = sectionRefs.current[sections[i]];
+            if (!section) continue;
+            
+            const rect = section.getBoundingClientRect();
+            const sectionTop = rect.top + currentScroll;
+            
+            // 아래로 스크롤하고 섹션 상단 근처에 있을 때
+            if (e.deltaY > 0 && rect.top < viewportHeight * 0.3 && rect.top > -viewportHeight * 0.3) {
+              if (i < sections.length - 1) {
+                const nextSection = sectionRefs.current[sections[i + 1]];
+                if (nextSection) {
+                  targetSection = sections[i + 1];
+                  targetScroll = nextSection.offsetTop;
+                }
+              }
+              break;
+            }
+            // 위로 스크롤하고 섹션 하단 근처에 있을 때
+            else if (e.deltaY < 0 && rect.bottom > viewportHeight * 0.7 && rect.bottom < viewportHeight * 1.3) {
+              if (i > 0) {
+                const prevSection = sectionRefs.current[sections[i - 1]];
+                if (prevSection) {
+                  targetSection = sections[i - 1];
+                  targetScroll = prevSection.offsetTop;
+                }
+              }
+              break;
+            }
+          }
+        }
+        
+        if (targetSection && targetScroll !== currentScroll) {
+          e.preventDefault();
+          isScrolling = true;
+          
+          window.scrollTo({
+            top: targetScroll,
+            behavior: 'smooth'
+          });
+          
+          scrollTimeout = setTimeout(() => {
+            isScrolling = false;
+          }, 800);
+        }
+      };
+      
+      window.addEventListener('wheel', handleWheel, { passive: false });
+      
+      return () => {
+        window.removeEventListener('wheel', handleWheel);
+        clearTimeout(scrollTimeout);
+        html.style.removeProperty('scroll-snap-type');
+        html.style.removeProperty('scroll-behavior');
+        body.style.removeProperty('scroll-snap-type');
+        body.style.removeProperty('scroll-behavior');
+      };
+    }
+  }, []);
+
   return (
-    <div className="relative min-h-screen" style={{
-      backgroundColor: isDark ? '#000000' : '#ffffff',
-      fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-    }}>
+    <div 
+      className="relative min-h-screen overflow-x-hidden" 
+      style={{
+        backgroundColor: isDark ? '#000000' : '#ffffff',
+        fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+      }}
+    >
       {/* 좌측 사이드바 네비게이션 */}
       <aside 
         className="fixed left-0 top-1/2 -translate-y-1/2 z-50 hidden lg:block"
@@ -93,7 +221,7 @@ export default function PremiumDesignPage() {
           transform: `translateY(calc(-50% + ${scrollY * 0.1}px))`,
         }}
       >
-        <nav className="ml-8">
+        <nav className="ml-6">
           <div 
             className="flex flex-col gap-3 p-4 rounded-2xl backdrop-blur-xl transition-all duration-500"
             style={{
@@ -173,9 +301,16 @@ export default function PremiumDesignPage() {
       {/* 히어로 섹션 */}
       <section 
         id="hero"
-        className="relative min-h-screen flex items-center justify-center px-6 pt-20"
+        className="relative flex items-center justify-center px-6 lg:pl-32"
         ref={(el) => { sectionRefs.current['hero'] = el; }}
         data-section-id="hero"
+        style={{
+          height: 'calc(100vh - 80px)',
+          minHeight: 'calc(100vh - 80px)',
+          scrollSnapAlign: 'start',
+          scrollSnapStop: 'always',
+          scrollMarginTop: '80px',
+        }}
       >
         <div className="max-w-6xl mx-auto text-center">
           {/* 메인 타이틀 */}
@@ -280,14 +415,19 @@ export default function PremiumDesignPage() {
       {/* 기능 섹션 */}
       <section 
         id="features"
-        className="relative py-20 md:py-28 px-6"
+        className="relative flex items-center justify-center px-6 lg:pl-32"
         ref={(el) => { sectionRefs.current['features'] = el; }}
         data-section-id="features"
         style={{
+          height: '100vh',
+          minHeight: '100vh',
           backgroundColor: isDark ? '#000000' : '#ffffff',
+          scrollSnapAlign: 'start',
+          scrollSnapStop: 'always',
+          scrollMarginTop: '0px',
         }}
       >
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto w-full">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
               { icon: "🚀", title: "AI 도구", desc: "최신 AI 도구를 탐색하고 비교하여 여러분의 작업에 가장 적합한 도구를 찾아보세요", color: "#3b82f6" },
@@ -371,16 +511,21 @@ export default function PremiumDesignPage() {
       {/* 갤러리 섹션 */}
       <section 
         id="gallery"
-        className="relative py-20 md:py-28 px-6"
+        className="relative flex items-center justify-center px-6 lg:pl-32"
         ref={(el) => { sectionRefs.current['gallery'] = el; }}
         data-section-id="gallery"
         style={{
+          height: '100vh',
+          minHeight: '100vh',
           backgroundColor: isDark ? '#000000' : '#ffffff',
+          scrollSnapAlign: 'start',
+          scrollSnapStop: 'always',
+          scrollMarginTop: '0px',
         }}
       >
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto w-full">
           <div 
-            className={`text-center mb-12 transition-all duration-1000 ${
+            className={`text-center mb-6 transition-all duration-1000 ${
               visibleSections.has('gallery')
                 ? 'opacity-100 translate-y-0'
                 : 'opacity-0 translate-y-8'
@@ -411,11 +556,11 @@ export default function PremiumDesignPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3 max-w-5xl mx-auto">
             {[1, 2, 3, 4, 5, 6].map((item, idx) => (
               <div
                 key={idx}
-                className={`group relative aspect-[4/3] rounded-3xl overflow-hidden transition-all duration-700 ${
+                className={`group relative aspect-[5/3] rounded-2xl overflow-hidden transition-all duration-700 ${
                   visibleSections.has('gallery')
                     ? 'opacity-100 translate-y-0'
                     : 'opacity-0 translate-y-8'
@@ -434,7 +579,7 @@ export default function PremiumDesignPage() {
                 />
                 <div className="absolute inset-0 flex items-center justify-center">
                   <div 
-                    className="text-6xl opacity-50 transition-transform duration-700 group-hover:scale-125"
+                    className="text-5xl opacity-50 transition-transform duration-700 group-hover:scale-125"
                     style={{
                       transform: `rotate(${idx * 15}deg)`,
                     }}
@@ -443,13 +588,13 @@ export default function PremiumDesignPage() {
                   </div>
                 </div>
                 <div 
-                  className="absolute bottom-0 left-0 right-0 p-6 transition-transform duration-700 group-hover:translate-y-0 translate-y-full"
+                  className="absolute bottom-0 left-0 right-0 p-4 transition-transform duration-700 group-hover:translate-y-0 translate-y-full"
                   style={{
                     background: isDark ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.9)',
                   }}
                 >
                   <h3 
-                    className="text-lg mb-2"
+                    className="text-base mb-1.5"
                     style={{
                       color: isDark ? '#ffffff' : '#1d1d1f',
                       fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
@@ -460,7 +605,7 @@ export default function PremiumDesignPage() {
                     프로젝트 {item}
                   </h3>
                   <p 
-                    className="text-sm"
+                    className="text-xs"
                     style={{
                       color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
                       fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
@@ -480,16 +625,24 @@ export default function PremiumDesignPage() {
       {/* 커뮤니티 섹션 */}
       <section 
         id="testimonials"
-        className="relative py-20 md:py-28 px-6"
+        className="relative flex items-center justify-center px-6 lg:pl-32"
         ref={(el) => { sectionRefs.current['testimonials'] = el; }}
         data-section-id="testimonials"
         style={{
+          height: '100vh',
+          minHeight: '100vh',
           backgroundColor: isDark ? '#000000' : '#f5f5f7',
+          scrollSnapAlign: 'start',
+          scrollSnapStop: 'always',
+          scrollMarginTop: '0px',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
         }}
       >
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto w-full">
           <div 
-            className={`text-center mb-12 transition-all duration-1000 ${
+            className={`text-center mb-6 transition-all duration-1000 ${
               visibleSections.has('testimonials')
                 ? 'opacity-100 translate-y-0'
                 : 'opacity-0 translate-y-8'
@@ -509,11 +662,14 @@ export default function PremiumDesignPage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
               { name: "김철수", role: "디자이너", text: "정말 놀라운 경험이었습니다. 직관적이고 세련된 인터페이스가 인상적이에요." },
               { name: "이영희", role: "개발자", text: "AI 도구 탐색이 이렇게 쉬울 줄 몰랐어요. 정말 유용한 플랫폼입니다." },
               { name: "박민수", role: "기획자", text: "커뮤니티가 활발하고 정보가 풍부해서 정말 만족스럽습니다." },
+              { name: "최지영", role: "마케터", text: "다양한 AI 도구를 한 곳에서 비교할 수 있어서 업무 효율이 크게 향상되었어요." },
+              { name: "정수진", role: "콘텐츠 크리에이터", text: "인사이트 섹션이 정말 도움이 됩니다. 최신 트렌드를 빠르게 파악할 수 있어요." },
+              { name: "한동욱", role: "프로덕트 매니저", text: "커뮤니티에서 얻은 정보로 프로젝트를 성공적으로 완료할 수 있었습니다." },
             ].map((testimonial, idx) => (
               <div
                 key={idx}
@@ -582,16 +738,23 @@ export default function PremiumDesignPage() {
       {/* FAQ 섹션 */}
       <section 
         id="faq"
-        className="relative py-20 md:py-28 px-6"
+        className="relative px-6 lg:pl-32"
         ref={(el) => { sectionRefs.current['faq'] = el; }}
         data-section-id="faq"
         style={{
+          minHeight: '100vh',
           backgroundColor: isDark ? '#000000' : '#ffffff',
+          scrollSnapAlign: 'start',
+          scrollSnapStop: 'always',
+          scrollMarginTop: '0px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'center',
         }}
       >
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto w-full py-12">
           <div 
-            className={`text-center mb-12 transition-all duration-1000 ${
+            className={`text-center mb-8 transition-all duration-1000 ${
               visibleSections.has('faq')
                 ? 'opacity-100 translate-y-0'
                 : 'opacity-0 translate-y-8'
@@ -611,7 +774,7 @@ export default function PremiumDesignPage() {
             </h2>
           </div>
 
-          <div className="space-y-3">
+          <div className="space-y-3 mb-8">
             {[
               { q: "어떤 AI 도구를 추천하시나요?", a: "사용 목적에 따라 다릅니다. 텍스트 생성에는 ChatGPT, 이미지 생성에는 Midjourney를 추천합니다." },
               { q: "무료로 사용할 수 있나요?", a: "네, 기본 기능은 무료로 사용하실 수 있습니다. 프리미엄 기능은 유료 플랜을 이용하시면 됩니다." },
@@ -657,7 +820,18 @@ export default function PremiumDesignPage() {
               </details>
             ))}
           </div>
-        </div>
+
+          {/* Footer */}
+          <div 
+            className={`mt-8 transition-all duration-1000 ${
+              visibleSections.has('faq')
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 translate-y-8'
+            }`}
+          >
+            <Footer />
+          </div>
+      </div>
       </section>
 
 

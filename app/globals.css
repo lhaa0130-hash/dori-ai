@@ -1,5 +1,17 @@
 @import "tailwindcss";
 
+/* 스크롤 스냅 강제 적용 */
+html {
+  scroll-snap-type: y mandatory !important;
+  scroll-behavior: smooth !important;
+  overflow-y: scroll !important;
+}
+
+body {
+  scroll-snap-type: y mandatory !important;
+  scroll-behavior: smooth !important;
+}
+
 
 
 @layer base {
