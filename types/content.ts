@@ -23,6 +23,20 @@ export type UserRating = {
   score: number;
 };
 
+// 인사이트 아이템 타입
+export type InsightItem = {
+  id: number;
+  title: string;
+  summary: string;
+  category: "개념" | "트렌드" | "분석" | "수익" | "기타" | "가이드";
+  tags: string[];
+  likes: number;
+  date: string; // ISO 날짜 문자열
+  aiMeta?: AiMeta;
+  content?: string; // HTML 콘텐츠
+  image?: string; // 썸네일 이미지 경로
+};
+
 // 핵심 AI Tool 타입
 export type AiTool = {
   id: string;

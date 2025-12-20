@@ -109,8 +109,8 @@ export function getGuideBySlug(slug: string): GuidePost | null {
     // [보장] description 또는 subtitle이 없으면 '내용 없음' 사용
     description: metadata.description || metadata.subtitle || '내용이 없습니다.',
     date: metadata.date || new Date().toISOString().slice(0, 10),
-    // [보장] 카테고리가 없으면 '기타'로 분류
-    category: metadata.category || '기타',
+    // 모든 글을 '가이드' 카테고리로 강제 설정
+    category: '가이드',
     author: metadata.author || 'AI Canvas Editor',
     content: content,
     tags: metadata.tags || [],

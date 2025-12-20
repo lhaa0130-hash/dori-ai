@@ -22,16 +22,16 @@ const DISPLAY_CATEGORIES = [
 interface AiToolsListProps {
   filters: {
     category: string;
-    // price 제거됨
-    sort: string;
   };
+  sectionRefs?: React.MutableRefObject<{ [key: string]: HTMLElement | null }>;
 }
 
-export default function AiToolsList({ filters }: AiToolsListProps) {
+export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) {
   const [tools, setTools] = useState<AiTool[]>(AI_TOOLS_DATA); 
   const [expandedCats, setExpandedCats] = useState<Record<string, boolean>>({});
   const [visibleCount, setVisibleCount] = useState(9); 
   const [isLoaded, setIsLoaded] = useState(false);
+  const [expandedTools, setExpandedTools] = useState<Record<string, number>>({});
 
   useEffect(() => {
     const savedRatings = JSON.parse(localStorage.getItem("dori_tool_ratings") || "{}");
@@ -49,10 +49,17 @@ export default function AiToolsList({ filters }: AiToolsListProps) {
     setIsLoaded(true);
   }, []);
 
-  const isOverviewMode = filters.category === "All" && filters.sort === "rating";
+  const isOverviewMode = filters.category === "All";
 
   const toggleExpand = (cat: string) => {
     setExpandedCats(prev => ({ ...prev, [cat]: !prev[cat] }));
+  };
+
+  const loadMoreTools = (cat: string) => {
+    setExpandedTools(prev => ({
+      ...prev,
+      [cat]: (prev[cat] || 6) + 6
+    }));
   };
 
   const currentTools = isLoaded ? tools : AI_TOOLS_DATA;
@@ -60,59 +67,80 @@ export default function AiToolsList({ filters }: AiToolsListProps) {
   // --- [1] 개요 모드 렌더링 (카테고리별 랭킹 섹션) ---
   if (isOverviewMode) {
     return (
-      <div className="w-full flex flex-col gap-16 animate-[fadeInUp_0.5s_ease-out]">
-        {DISPLAY_CATEGORIES.map((cat) => {
+      <div className="w-full flex flex-col animate-[fadeInUp_0.5s_ease-out]">
+        {DISPLAY_CATEGORIES.map((cat, catIdx) => {
           const catTools = currentTools
             .filter(t => t.category.toLowerCase() === cat.toLowerCase())
             .sort((a, b) => b.rating - a.rating); 
 
           if (catTools.length === 0) return null;
 
-          const top3 = catTools.slice(0, 3);
-          const rest = catTools.slice(3);
-          const isExpanded = expandedCats[cat];
+          // 각 카테고리에서 표시할 개수 (기본 6개, 더보기 클릭 시 증가)
+          const displayCount = expandedTools[cat] || 6;
+          const displayTools = catTools.slice(0, displayCount);
+          const top3 = displayTools.slice(0, 3);
+          const rest = displayTools.slice(3);
+          const hasMore = catTools.length > displayCount;
 
           return (
-            <div key={cat} className="flex flex-col md:flex-row gap-6 items-start border-b border-dashed border-[var(--card-border)] pb-12 last:border-0">
-              {/* 좌측 타이틀 영역 */}
-              <div className="w-full md:w-48 flex-shrink-0 sticky top-24">
-                <div className="flex md:flex-col items-baseline md:items-start gap-3">
-                  <h2 className="text-4xl font-black text-[var(--text-main)] uppercase tracking-tighter">
+            <section
+              key={cat}
+              id={`category-${cat}`}
+              ref={(el) => {
+                if (sectionRefs) {
+                  sectionRefs.current[`category-${cat}`] = el;
+                }
+              }}
+              className="min-h-screen flex flex-col justify-center py-20 px-4 md:px-6"
+              style={{
+                scrollSnapAlign: 'start',
+                scrollSnapStop: 'always',
+                scrollMarginTop: '80px',
+              }}
+            >
+              <div className="max-w-7xl mx-auto w-full">
+                {/* 카테고리 헤더 */}
+                <div className="mb-12 text-center">
+                  <h2 
+                    className="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4"
+                    style={{ color: 'var(--text-main)' }}
+                  >
                     {cat}
                   </h2>
-                  <span className="text-sm font-bold text-blue-600 bg-blue-50 dark:text-blue-300 dark:bg-blue-900/30 px-2 py-1 rounded">
-                    Top Ranking
-                  </span>
-                  <p className="text-sm text-gray-700 dark:text-gray-300 mt-2 hidden md:block leading-relaxed font-medium">
+                  <p 
+                    className="text-base md:text-lg font-medium opacity-70"
+                    style={{ color: 'var(--text-sub)' }}
+                  >
                     {cat.toUpperCase()} 분야의 주요 AI 툴을 확인하세요.
                   </p>
                 </div>
-              </div>
 
-              {/* 우측 리스트 영역 */}
-              <div className="flex-1 w-full">
-                <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                {/* 카드 그리드 */}
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                  {/* 1-3위 (rank 표시) */}
                   {top3.map((tool, idx) => (
                     <AiToolsCard key={tool.id} tool={tool} rank={idx + 1} />
                   ))}
                   
-                  {isExpanded && rest.map((tool, idx) => (
-                    <AiToolsCard key={tool.id} tool={tool} rank={idx + 4} />
+                  {/* 4위 이후 (rank 없음) */}
+                  {rest.map((tool) => (
+                    <AiToolsCard key={tool.id} tool={tool} />
                   ))}
                 </div>
 
-                {rest.length > 0 && (
-                  <div className="mt-8 text-center">
+                {/* 더보기 버튼 */}
+                {hasMore && (
+                  <div className="mt-12 text-center">
                     <button 
-                      onClick={() => toggleExpand(cat)}
-                      className="px-6 py-3 rounded-full font-bold text-sm transition-all hover:scale-105 active:scale-95 bg-[var(--bg-soft)] text-[var(--text-main)] border border-[var(--card-border)] hover:bg-gray-100 dark:hover:bg-white/10 flex items-center gap-2 mx-auto"
+                      onClick={() => loadMoreTools(cat)}
+                      className="px-8 py-4 rounded-full font-bold text-base transition-all hover:scale-105 active:scale-95 bg-[var(--card-bg)] text-[var(--text-main)] border-2 border-[var(--card-border)] hover:bg-gray-100 dark:hover:bg-white/10 shadow-md hover:shadow-lg"
                     >
-                      {isExpanded ? "접기 ▲" : `+ ${cat.toUpperCase()} 툴 더보기 (${rest.length}개)`}
+                      + {cat.toUpperCase()} 툴 더보기 ({catTools.length - displayCount}개 남음)
                     </button>
                   </div>
                 )}
               </div>
-            </div>
+            </section>
           );
         })}
       </div>
@@ -123,17 +151,13 @@ export default function AiToolsList({ filters }: AiToolsListProps) {
   const filteredTools = currentTools.filter((tool) => {
     const matchCat = filters.category === "All" || tool.category.toLowerCase() === filters.category.toLowerCase();
     return matchCat;
-  }).sort((a, b) => {
-    if (filters.sort === "rating") return b.rating - a.rating;
-    if (filters.sort === "name") return a.name.localeCompare(b.name);
-    return 0;
-  });
+  }).sort((a, b) => b.rating - a.rating); // 기본적으로 평점순 정렬
 
   const visibleTools = filteredTools.slice(0, visibleCount);
 
   return (
     <div className="w-full animate-[fadeInUp_0.5s_ease-out]">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
         {visibleTools.map((tool) => (
           <AiToolsCard key={tool.id} tool={tool} />
         ))}

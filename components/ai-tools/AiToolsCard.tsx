@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from "react";
 import Image from "next/image";
-import { AiTool } from "@/types/content";
+import { AiTool, AiToolComment } from "@/types/content";
 import { AiBadge } from "@/components/common/AiBadge";
 import AiToolsRating from "./AiToolsRating";
 import AiToolsComments from "./AiToolsComments";
@@ -16,15 +16,72 @@ export default function AiToolsCard({ tool, rank }: AiToolsCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentRating, setCurrentRating] = useState(tool.rating);
   const [currentCount, setCurrentCount] = useState(tool.ratingCount);
+  const [imageError, setImageError] = useState(false);
+  const [imageSrc, setImageSrc] = useState(tool.thumbnail);
+  const [bestComments, setBestComments] = useState<AiToolComment[]>([]);
 
   useEffect(() => {
     setCurrentRating(tool.rating);
     setCurrentCount(tool.ratingCount);
-  }, [tool.rating, tool.ratingCount]);
+    setImageSrc(tool.thumbnail);
+    setImageError(false);
+    
+    // 베스트 댓글 3개 로드 (최신순)
+    const savedData = JSON.parse(localStorage.getItem("dori_tool_comments") || "{}");
+    if (savedData[tool.id]) {
+      const comments = savedData[tool.id] as AiToolComment[];
+      // 최신순으로 정렬하여 상위 3개만
+      const sorted = [...comments].sort((a, b) => 
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      setBestComments(sorted.slice(0, 3));
+    }
+  }, [tool.rating, tool.ratingCount, tool.thumbnail, tool.id]);
+
+  // 이미지 URL 생성 함수
+  const getImageUrl = () => {
+    if (imageError || !imageSrc) {
+      // Fallback: 도메인에서 직접 로고 가져오기 시도
+      try {
+        const url = new URL(tool.website);
+        const domain = url.hostname.replace('www.', '');
+        return `https://www.google.com/s2/favicons?domain=${domain}&sz=128`;
+      } catch {
+        return '/images/placeholder-tool.png';
+      }
+    }
+    return imageSrc;
+  };
+
+  const handleImageError = () => {
+    if (!imageError) {
+      setImageError(true);
+      // clearbit 실패 시 Google favicon 시도
+      try {
+        const url = new URL(tool.website);
+        const domain = url.hostname.replace('www.', '');
+        setImageSrc(`https://www.google.com/s2/favicons?domain=${domain}&sz=128`);
+      } catch {
+        setImageSrc('/images/placeholder-tool.png');
+      }
+    }
+  };
 
   const handleRatingUpdate = (newRating: number, newCount: number) => {
     setCurrentRating(newRating);
     setCurrentCount(newCount);
+  };
+
+  const handleCommentUpdate = () => {
+    // 댓글이 업데이트되면 베스트 댓글 다시 로드
+    const savedData = JSON.parse(localStorage.getItem("dori_tool_comments") || "{}");
+    if (savedData[tool.id]) {
+      const comments = savedData[tool.id] as AiToolComment[];
+      const sorted = [...comments].sort((a, b) => 
+        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
+      setBestComments(sorted.slice(0, 3));
+    }
   };
 
   const getRankBadge = (r: number) => {
@@ -55,8 +112,9 @@ export default function AiToolsCard({ tool, rank }: AiToolsCardProps) {
         backgroundColor: "var(--card-bg)",
         borderColor: "var(--card-border)",
         color: "var(--text-main)",
+        boxShadow: "0 4px 20px rgba(0, 0, 0, 0.05)",
       }}
-      className={`relative flex flex-col rounded-3xl border transition-all duration-300 group hover:shadow-lg hover:-translate-y-1`}
+      className={`relative flex flex-col rounded-3xl border-2 transition-all duration-300 group hover:shadow-2xl hover:-translate-y-2 hover:scale-[1.02] min-h-[300px]`}
     >
       {/* ⭐ 전체 클릭 오버레이 */}
       <a
@@ -67,106 +125,147 @@ export default function AiToolsCard({ tool, rank }: AiToolsCardProps) {
       />
 
       {/* ⭐ 콘텐츠는 z-20로 올려서 버튼 클릭 정상 작동 */}
-      <div className="p-6 flex flex-col h-full relative z-20">
+      <div className="p-5 flex flex-col h-full relative z-20">
         {rank && getRankBadge(rank)}
 
-        {/* 상단 헤더 */}
-        <div className="flex justify-between items-start mb-4 gap-4">
-          <div className="relative w-16 h-16 rounded-2xl overflow-hidden border border-gray-200 dark:border-gray-800 shadow-sm bg-white flex-shrink-0">
-            <Image
-              src={tool.thumbnail}
-              alt={tool.name}
-              layout="fill"
-              objectFit="cover"
-              className="transition-transform duration-500 group-hover:scale-110"
-              placeholder="empty"
-            />
+        {/* 상단: 이미지 옆에 카테고리와 평점 */}
+        <div className="flex items-start gap-3 mb-4">
+          {/* 이미지 */}
+          <div className="relative w-16 h-16 rounded-xl overflow-hidden border-2 flex-shrink-0 transition-all duration-300 group-hover:scale-110 group-hover:shadow-lg bg-gradient-to-br from-blue-50 to-purple-50 dark:from-blue-900/20 dark:to-purple-900/20"
+            style={{
+              borderColor: "var(--card-border)",
+            }}
+          >
+            {imageSrc ? (
+              <Image
+                src={getImageUrl()}
+                alt={tool.name}
+                fill
+                sizes="64px"
+                className="object-cover transition-transform duration-500 group-hover:scale-110"
+                onError={handleImageError}
+                unoptimized={imageSrc.includes('google.com/s2/favicons')}
+              />
+            ) : (
+              <div className="w-full h-full flex items-center justify-center text-2xl">
+                🤖
+              </div>
+            )}
           </div>
 
-          <div className="flex items-center gap-2 bg-gray-50 dark:bg-white/10 px-3 py-1.5 rounded-full border border-gray-200 dark:border-white/10 shadow-sm">
-            <span className="text-[11px] font-extrabold text-blue-600 dark:text-blue-300 uppercase tracking-wider">
+          {/* 카테고리와 평점 네모박스 */}
+          <div className="flex items-center gap-3 flex-1">
+            {/* 카테고리 네모박스 */}
+            <span 
+              className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-1.5 rounded-md border"
+              style={{
+                backgroundColor: "var(--bg-main)",
+                borderColor: "var(--card-border)",
+                color: "var(--accent-color)",
+              }}
+            >
               {tool.category}
             </span>
-            <div className="w-px h-3 bg-gray-300 dark:bg-gray-600" />
+            
+            {/* 평점 */}
             <div className="flex items-center gap-1">
-              <span className="text-yellow-500 text-xs">★</span>
-              <span className="text-xs font-bold text-black dark:text-white">
+              <span className="text-yellow-500 text-sm">★</span>
+              <span 
+                className="text-sm font-bold"
+                style={{
+                  color: "var(--text-main)",
+                }}
+              >
                 {currentRating > 0 ? currentRating.toFixed(1) : "0.0"}
-              </span>
-              <span className="text-[10px] text-black dark:text-white opacity-60">
-                ({currentCount})
               </span>
             </div>
           </div>
         </div>
 
-        {/* 타이틀 */}
+        {/* AI 이름 */}
         <div className="mb-3">
-          <h3 className="text-2xl font-black leading-tight break-words group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
+          <h3 
+            className="text-xl md:text-2xl font-black leading-tight break-words transition-colors duration-300"
+            style={{
+              color: "var(--text-main)",
+              lineHeight: '1.2',
+            }}
+          >
             {tool.name}
           </h3>
-          <div className="mt-2">
-            <AiBadge aiMeta={tool.aiMeta} />
+        </div>
+
+        {/* 베스트 댓글 3개 */}
+        <div className="mb-4 flex-1">
+          <h4 className="text-[10px] font-bold text-[var(--text-sub)] mb-2 uppercase tracking-wider">
+            베스트 댓글
+          </h4>
+          <div className="flex flex-col gap-1.5">
+            {bestComments.length === 0 ? (
+              <div className="text-center py-2 border border-dashed border-[var(--card-border)] rounded-lg">
+                <p className="text-[10px] text-gray-400">아직 댓글이 없습니다.</p>
+              </div>
+            ) : (
+              bestComments.map((comment) => (
+                <div 
+                  key={comment.id} 
+                  className="rounded-md border border-[var(--card-border)] bg-[var(--bg-main)] p-2"
+                >
+                  <div className="flex justify-between items-start mb-0.5">
+                    <div className="flex items-center gap-1.5">
+                      <span className="text-[9px] font-bold text-[var(--text-main)]">{comment.userName}</span>
+                      <span className="text-[8px] opacity-50 text-[var(--text-sub)]">
+                        {new Date(comment.createdAt).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })}
+                      </span>
+                    </div>
+                  </div>
+                  <p className="text-[10px] leading-relaxed opacity-90 whitespace-pre-wrap text-[var(--text-main)] line-clamp-2">
+                    {comment.content}
+                  </p>
+                </div>
+              ))
+            )}
           </div>
         </div>
 
-        {/* 설명 */}
-        <p className="text-sm opacity-70 leading-relaxed mb-5 line-clamp-2">
-          {tool.summary}
-        </p>
-
-        {/* 태그 */}
-        <div className="flex flex-wrap gap-2 mb-6">
-          {tool.tags.slice(0, 3).map((tag, idx) => (
-            <span
-              key={idx}
-              className="text-[11px] font-medium px-2.5 py-1 rounded-md border opacity-80"
-              style={{
-                backgroundColor: "var(--bg-main)",
-                borderColor: "var(--card-border)",
-                color: "var(--text-main)",
-              }}
-            >
-              #{tag}
-            </span>
-          ))}
-        </div>
-
-        {/* 하단 액션 */}
+        {/* 하단 액션 버튼: 리뷰쓰기와 바로가기 */}
         <div
-          className="mt-auto pt-4 border-t border-dashed flex items-center justify-between"
+          className="mt-auto pt-3 border-t border-dashed flex items-center gap-2"
           style={{ borderColor: "var(--card-border)" }}
         >
-          {/* 리뷰 버튼 - 링크 방지 */}
+          {/* 리뷰쓰기 버튼 */}
           <button
             onClick={(e) => {
               e.stopPropagation();
               setIsOpen(!isOpen);
             }}
-            className="px-4 py-2.5 rounded-xl text-xs font-bold border transition-colors hover:opacity-80"
+            className="flex-1 px-3 py-2 rounded-lg text-xs font-bold border transition-all duration-200 hover:scale-105"
             style={{
               borderColor: "var(--card-border)",
               color: "var(--text-main)",
               backgroundColor: "transparent",
             }}
           >
-            {isOpen ? "닫기" : "리뷰/평가"}
+            {isOpen ? "닫기" : "리뷰쓰기"}
           </button>
 
-          {/* 바로가기 버튼 - 링크 방해 방지 */}
+          {/* 바로가기 버튼 */}
           <a
             href={tool.website}
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className="px-4 py-2.5 rounded-xl text-xs font-bold hover:opacity-80 transition-opacity shadow-sm"
-            style={{ backgroundColor: "var(--text-main)", color: "var(--card-bg)" }}
+            className="flex-1 px-3 py-2 rounded-lg text-xs font-bold transition-all duration-200 hover:scale-105 shadow-md text-center"
+            style={{ 
+              backgroundColor: "var(--text-main)", 
+              color: "var(--card-bg)",
+            }}
           >
             바로가기 →
           </a>
         </div>
 
-        {/* 확장 영역 */}
+        {/* 확장 영역: 리뷰 작성 및 전체 댓글 */}
         {isOpen && (
           <div
             className="mt-5 pt-5 border-t animate-[fadeInUp_0.2s_ease-out]"
@@ -179,7 +278,11 @@ export default function AiToolsCard({ tool, rank }: AiToolsCardProps) {
               onRatingUpdate={handleRatingUpdate}
               compact={true}
             />
-            <AiToolsComments toolId={tool.id} compact={true} />
+            <AiToolsComments 
+              toolId={tool.id} 
+              compact={true}
+              onCommentUpdate={handleCommentUpdate}
+            />
           </div>
         )}
       </div>

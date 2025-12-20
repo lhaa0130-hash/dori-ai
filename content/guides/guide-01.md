@@ -1,10 +1,14 @@
-# 가이드 1 — AI 입문서: 처음 시작하는 사람을 위한 가이드
-
-**AI란 무엇이며, 왜 지금 반드시 알아야 하는가**
-
+---
+title: AI 입문서: 처음 시작하는 사람을 위한 가이드
+subtitle: AI란 무엇이며, 왜 지금 반드시 알아야 하는가
+description: 전문가가 아닌 사람을 위한 AI 입문 가이드로, 기술 설명보다 전체 그림을 이해하는 것에 집중합니다. AI의 기본 개념부터 현재 AI의 전체 지도까지 한눈에 정리합니다.
+category: 가이드
+date: 2024-01-15
+author: DORI-AI
+tags: [AI 입문, AI 기초, AI 개념]
 ---
 
-## 들어가며: 왜 지금 ‘AI 입문서’가 필요한가
+## 들어가며: 왜 지금 'AI 입문서'가 필요한가
 
 요즘 우리는 매일 **AI**라는 단어를 듣습니다.
 뉴스, 유튜브, 회사 보고서, 심지어 아이들 숙제 이야기까지 AI가 등장합니다.
@@ -21,15 +25,6 @@
 
 ---
 
-## 🖼️ 이미지 영역 ① (AI 개념 이미지)
-
-**이미지 위치:** 이 섹션 바로 아래
-
-**Gemini 이미지 프롬프트:**
-
-> "A clean, modern illustration explaining artificial intelligence concept, showing a human and AI collaborating, minimal flat design, white background, soft blue accents, educational infographic style"
-
----
 
 ## 1. AI란 무엇인가 — 가장 정확한 정의
 
@@ -71,15 +66,6 @@ AI는 흔히 세 가지로 나뉩니다.
 
 ---
 
-## 🖼️ 이미지 영역 ② (AI 분류 다이어그램)
-
-**이미지 위치:** AI 분류 설명 뒤
-
-**Gemini 이미지 프롬프트:**
-
-> "Simple diagram illustrating three types of AI: Narrow AI, Generative AI, AGI, clean infographic style, labeled sections, white background, professional educational design"
-
----
 
 ## 3. 현재 AI의 전체 지도 (AI Landscape)
 
@@ -97,15 +83,6 @@ AI는 기능 기준으로 보면 다음 영역으로 나뉩니다.
 
 ---
 
-## 🖼️ 이미지 영역 ③ (AI 분야 지도)
-
-**이미지 위치:** AI Landscape 설명 아래
-
-**Gemini 이미지 프롬프트:**
-
-> "AI landscape map showing categories like LLM, Image, Video, Voice, Search, Automation, clean tech illustration, modern flat design, infographic layout"
-
----
 
 ## 4. AI가 요즘 더욱 중요해진 이유
 

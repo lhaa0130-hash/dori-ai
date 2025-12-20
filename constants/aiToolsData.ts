@@ -1,20 +1,34 @@
 import { AiTool } from "@/types/content";
 
+/**
+ * AI Tools 데이터 목록
+ * 
+ * @description AI Tools 페이지에 표시될 도구 데이터입니다.
+ * 각 항목은 AiTool 타입을 따르며, 카테고리별로 분류되어 있습니다.
+ */
 export const AI_TOOLS_DATA: AiTool[] = [
   // =====================================================================================
-  // 1. LLM (대화형/언어모델) - 총 20개
+  // 1. LLM (대화형/언어모델)
   // =====================================================================================
   {
-    id: "llm-01", name: "ChatGPT", category: "llm",
-    description: "OpenAI가 개발한 가장 대중적인 대화형 AI.",
+    id: "llm-01",
+    name: "ChatGPT",
+    category: "llm",
+    description: "OpenAI가 개발한 가장 대중적인 대화형 AI로, GPT-4o 모델을 기반으로 텍스트 생성, 코딩, 번역, 분석 등 다양한 작업을 수행합니다. 직관적인 인터페이스와 강력한 성능으로 전 세계 수억 명이 사용하고 있습니다.",
     summary: "대화형 AI의 표준, GPT-4o 탑재",
-    website: "https://chat.openai.com", releaseDate: "2022.11", pricing: "Free / $20 mo", tags: ["Chat", "Coding", "Writing"],
+    website: "https://chat.openai.com",
+    releaseDate: "2022.11",
+    pricing: "Free / $20 mo",
+    tags: ["Chat", "Coding", "Writing"],
     thumbnail: "https://logo.clearbit.com/openai.com",
-    rating: 0, ratingCount: 0, userRatings: [], comments: []
+    rating: 0,
+    ratingCount: 0,
+    userRatings: [],
+    comments: []
   },
   {
     id: "llm-02", name: "Claude 3", category: "llm",
-    description: "Anthropic의 인간다운 대화형 AI.",
+    description: "Anthropic이 개발한 인간다운 대화형 AI로, 특히 긴 문서 분석과 정확한 문맥 이해에 뛰어납니다. 안전성과 정직성을 중시하는 설계 철학으로 신뢰할 수 있는 AI 어시스턴트 역할을 합니다.",
     summary: "가장 인간다운 문맥 이해력을 가진 AI",
     website: "https://claude.ai", releaseDate: "2024.03", pricing: "Free / $20 mo", tags: ["Writing", "Analysis", "Long-context"],
     thumbnail: "https://logo.clearbit.com/anthropic.com",
@@ -22,29 +36,29 @@ export const AI_TOOLS_DATA: AiTool[] = [
   },
   {
     id: "llm-03", name: "Gemini", category: "llm",
-    description: "Google의 멀티모달 AI 모델.",
+    description: "Google이 개발한 멀티모달 AI 모델로, 텍스트, 이미지, 음성을 동시에 처리할 수 있습니다. Gmail, Google Docs, YouTube 등 구글 서비스와 완벽하게 통합되어 생산성을 극대화합니다.",
     summary: "구글 생태계와 완벽하게 연동되는 멀티모달",
     website: "https://gemini.google.com", releaseDate: "2023.12", pricing: "Free / $20 mo", tags: ["Multimodal", "Google"],
     thumbnail: "https://logo.clearbit.com/google.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
-  { id: "llm-04", name: "Perplexity", category: "llm", summary: "실시간 검색 기반 답변 엔진.", description: "출처를 명시하는 검색 중심의 AI로, 최신 정보를 빠르게 찾는 데 최적화되어 있습니다.", releaseDate: "2022.08", website: "https://perplexity.ai", pricing: "Free / $20 mo", tags: ["Search", "Citations"], thumbnail: "https://logo.clearbit.com/perplexity.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-05", name: "Mistral", category: "llm", summary: "유럽 최고의 오픈소스 모델.", description: "효율적이고 강력한 성능을 자랑하는 프랑스발 오픈소스 LLM입니다.", releaseDate: "2023.09", website: "https://mistral.ai", pricing: "Open Source", tags: ["Open Source", "Efficient"], thumbnail: "https://logo.clearbit.com/mistral.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-06", name: "Llama 3", category: "llm", summary: "Meta의 강력한 오픈소스 모델.", description: "개인 및 상업적 용도로 사용 가능한 고성능 언어 모델입니다.", releaseDate: "2024.04", website: "https://llama.meta.com", pricing: "Open Source", tags: ["Meta", "Local LLM"], thumbnail: "https://logo.clearbit.com/meta.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-07", name: "Grok", category: "llm", summary: "xAI의 위트 있는 AI.", description: "X(트위터) 데이터를 실시간으로 반영하며, 약간의 유머감각을 가진 AI입니다.", releaseDate: "2023.11", website: "https://x.ai", pricing: "Paid (X Premium)", tags: ["Real-time", "Humor"], thumbnail: "https://logo.clearbit.com/x.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-08", name: "Cohere", category: "llm", summary: "기업용 RAG 특화 모델.", description: "기업 데이터 연결 및 검색 증강 생성(RAG)에 최적화된 엔터프라이즈 모델입니다.", releaseDate: "2022.06", website: "https://cohere.com", pricing: "API Pricing", tags: ["Enterprise", "RAG"], thumbnail: "https://logo.clearbit.com/cohere.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-09", name: "Pi", category: "llm", summary: "감성적인 대화 파트너.", description: "사용자의 감정을 이해하고 공감하는 데 초점을 맞춘 개인 비서 AI입니다.", releaseDate: "2023.05", website: "https://pi.ai", pricing: "Free", tags: ["Emotional", "Chat"], thumbnail: "https://logo.clearbit.com/pi.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-10", name: "HyperCLOVA X", category: "llm", summary: "한국어에 가장 강한 AI.", description: "네이버가 개발한 한국어 특화 거대언어모델로, 한국 문화와 맥락을 깊이 이해합니다.", releaseDate: "2023.08", website: "https://clova.ai", pricing: "Enterprise", tags: ["Korean", "Naver"], thumbnail: "https://logo.clearbit.com/navercorp.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-11", name: "Falcon 180B", category: "llm", summary: "가장 강력한 오픈소스 모델 중 하나.", description: "UAE TII에서 개발한 초대형 오픈소스 모델로 상업적 활용이 가능합니다.", website: "https://falconllm.tii.ae", releaseDate: "2023.09", pricing: "Open Source", tags: ["Open Source", "High Perf"], thumbnail: "https://logo.clearbit.com/tii.ae", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-12", name: "Qwen", category: "llm", summary: "Alibaba의 고성능 LLM.", description: "다국어 지원 및 수학/코딩 능력이 뛰어난 알리바바의 오픈 모델입니다.", website: "https://qwenlm.github.io", releaseDate: "2023.08", pricing: "Open Source", tags: ["Alibaba", "Coding"], thumbnail: "https://logo.clearbit.com/alibaba.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-13", name: "Yi", category: "llm", summary: "01.AI의 강력한 이중언어 모델.", description: "영어와 중국어에 특화된 고성능 모델로 긴 문맥 처리가 가능합니다.", website: "https://01.ai", releaseDate: "2023.11", pricing: "Open Source", tags: ["Bilingual", "Long Context"], thumbnail: "https://logo.clearbit.com/01.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-14", name: "DeepSeek", category: "llm", summary: "코딩에 강한 오픈소스 LLM.", description: "코딩 및 수학 문제 해결에 탁월한 성능을 보여주는 오픈소스 모델입니다.", website: "https://deepseek.com", releaseDate: "2023.11", pricing: "Open Source", tags: ["Coding", "Math"], thumbnail: "https://logo.clearbit.com/deepseek.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-15", name: "Solar", category: "llm", summary: "업스테이지의 한국어 특화 LLM.", description: "한국어와 영어 성능이 뛰어나며 경량화에 성공한 고성능 모델입니다.", website: "https://upstage.ai", releaseDate: "2023.12", pricing: "API", tags: ["Korean", "Efficient"], thumbnail: "https://logo.clearbit.com/upstage.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-16", name: "ChatGLM", category: "llm", summary: "칭화대의 다국어 대화 모델.", description: "중국어와 영어 대화에 최적화된 경량화 모델로 로컬 구동에 유리합니다.", website: "https://chatglm.cn", releaseDate: "2023", pricing: "Open Source", tags: ["Bilingual", "Local"], thumbnail: "https://logo.clearbit.com/tsinghua.edu.cn", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-17", name: "Vicuna", category: "llm", summary: "GPT-4 수준의 오픈소스 챗봇.", description: "Llama를 기반으로 파인튜닝된 고성능 오픈소스 대화 모델입니다.", website: "https://lmsys.org", releaseDate: "2023.03", pricing: "Open Source", tags: ["Chat", "Fine-tuned"], thumbnail: "https://logo.clearbit.com/lmsys.org", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-18", name: "WizardLM", category: "llm", summary: "복잡한 지시사항을 잘 따르는 AI.", description: "Evol-Instruct 방식을 통해 복잡한 명령 수행 능력을 향상시킨 모델입니다.", website: "https://wizardlm.github.io", releaseDate: "2023.04", pricing: "Open Source", tags: ["Instruction", "Complex"], thumbnail: "https://logo.clearbit.com/microsoft.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-19", name: "Orca 2", category: "llm", summary: "Microsoft의 추론 강화 모델.", description: "작은 크기임에도 불구하고 강력한 추론 능력을 가진 소형 모델입니다.", website: "https://microsoft.com", releaseDate: "2023.11", pricing: "Open Source", tags: ["Reasoning", "Small"], thumbnail: "https://logo.clearbit.com/microsoft.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-20", name: "Gemma", category: "llm", summary: "Google의 경량화 오픈 모델.", description: "Gemini 기술을 기반으로 만든 고성능 경량 오픈소스 모델입니다.", website: "https://ai.google.dev/gemma", releaseDate: "2024.02", pricing: "Open Source", tags: ["Google", "Lightweight"], thumbnail: "https://logo.clearbit.com/google.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-04", name: "Perplexity", category: "llm", summary: "실시간 검색 기반 답변 엔진.", description: "실시간 웹 검색과 AI 답변을 결합한 혁신적인 검색 엔진입니다. 모든 답변에 출처를 명시하여 신뢰성을 보장하며, 최신 정보를 빠르게 찾아 요약해줍니다.", releaseDate: "2022.08", website: "https://perplexity.ai", pricing: "Free / $20 mo", tags: ["Search", "Citations"], thumbnail: "https://logo.clearbit.com/perplexity.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-05", name: "Mistral", category: "llm", summary: "유럽 최고의 오픈소스 모델.", description: "프랑스 Mistral AI가 개발한 고성능 오픈소스 LLM으로, 작은 모델 크기 대비 뛰어난 성능을 보여줍니다. 상업적 이용이 자유롭고 API와 로컬 배포를 모두 지원합니다.", releaseDate: "2023.09", website: "https://mistral.ai", pricing: "Open Source", tags: ["Open Source", "Efficient"], thumbnail: "https://logo.clearbit.com/mistral.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-06", name: "Llama 3", category: "llm", summary: "Meta의 강력한 오픈소스 모델.", description: "Meta가 공개한 최신 오픈소스 언어 모델로, 8B부터 405B까지 다양한 크기를 제공합니다. 개인 및 상업적 용도로 자유롭게 사용 가능하며 로컬 구동이 가능합니다.", releaseDate: "2024.04", website: "https://llama.meta.com", pricing: "Open Source", tags: ["Meta", "Local LLM"], thumbnail: "https://logo.clearbit.com/meta.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-07", name: "Grok", category: "llm", summary: "xAI의 위트 있는 AI.", description: "엘론 머스크의 xAI가 개발한 AI로, X(트위터)의 실시간 데이터에 접근할 수 있어 최신 트렌드와 뉴스를 반영합니다. 유머러스하고 솔직한 답변 스타일이 특징입니다.", releaseDate: "2023.11", website: "https://x.ai", pricing: "Paid (X Premium)", tags: ["Real-time", "Humor"], thumbnail: "https://logo.clearbit.com/x.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-08", name: "Cohere", category: "llm", summary: "기업용 RAG 특화 모델.", description: "기업의 내부 데이터베이스와 문서를 연결하여 정확한 답변을 제공하는 RAG(검색 증강 생성) 특화 모델입니다. 데이터 프라이버시와 보안을 중시하는 엔터프라이즈 솔루션입니다.", releaseDate: "2022.06", website: "https://cohere.com", pricing: "API Pricing", tags: ["Enterprise", "RAG"], thumbnail: "https://logo.clearbit.com/cohere.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-09", name: "Pi", category: "llm", summary: "감성적인 대화 파트너.", description: "Inflection AI가 개발한 감성 지능이 뛰어난 AI로, 사용자의 감정 상태를 파악하고 공감하는 대화를 이어갑니다. 일상적인 대화와 정서적 지원에 최적화된 개인 비서입니다.", releaseDate: "2023.05", website: "https://pi.ai", pricing: "Free", tags: ["Emotional", "Chat"], thumbnail: "https://logo.clearbit.com/pi.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-10", name: "HyperCLOVA X", category: "llm", summary: "한국어에 가장 강한 AI.", description: "네이버가 개발한 한국어 특화 거대언어모델로, 한국어의 뉘앙스와 문화적 맥락을 깊이 이해합니다. 네이버 서비스 전반에 통합되어 검색, 쇼핑, 지식백과 등에서 활용됩니다.", releaseDate: "2023.08", website: "https://clova.ai", pricing: "Enterprise", tags: ["Korean", "Naver"], thumbnail: "https://logo.clearbit.com/navercorp.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-11", name: "Falcon 180B", category: "llm", summary: "가장 강력한 오픈소스 모델 중 하나.", description: "UAE 기술혁신연구소(TII)가 개발한 1800억 파라미터 규모의 초대형 오픈소스 모델입니다. 상업적 이용이 자유롭고 GPT-3.5 수준의 성능을 보여줍니다.", website: "https://falconllm.tii.ae", releaseDate: "2023.09", pricing: "Open Source", tags: ["Open Source", "High Perf"], thumbnail: "https://logo.clearbit.com/tii.ae", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-12", name: "Qwen", category: "llm", summary: "Alibaba의 고성능 LLM.", description: "알리바바가 개발한 다국어 오픈소스 모델로, 중국어와 영어를 비롯한 다양한 언어를 지원합니다. 수학 문제 해결과 코드 생성 능력이 특히 뛰어납니다.", website: "https://qwenlm.github.io", releaseDate: "2023.08", pricing: "Open Source", tags: ["Alibaba", "Coding"], thumbnail: "https://logo.clearbit.com/alibaba.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-13", name: "Yi", category: "llm", summary: "01.AI의 강력한 이중언어 모델.", description: "01.AI가 개발한 영어와 중국어에 특화된 고성능 모델입니다. 최대 200K 토큰의 긴 문맥을 처리할 수 있어 긴 문서 분석과 대화에 적합합니다.", website: "https://01.ai", releaseDate: "2023.11", pricing: "Open Source", tags: ["Bilingual", "Long Context"], thumbnail: "https://logo.clearbit.com/01.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-14", name: "DeepSeek", category: "llm", summary: "코딩에 강한 오픈소스 LLM.", description: "코딩과 수학 문제 해결에 특화된 중국산 오픈소스 모델입니다. GitHub Copilot 수준의 코드 생성 능력을 보여주며, 복잡한 수학 문제도 정확하게 풀어냅니다.", website: "https://deepseek.com", releaseDate: "2023.11", pricing: "Open Source", tags: ["Coding", "Math"], thumbnail: "https://logo.clearbit.com/deepseek.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-15", name: "Solar", category: "llm", summary: "업스테이지의 한국어 특화 LLM.", description: "업스테이지가 개발한 한국어와 영어에 최적화된 고성능 모델입니다. 작은 모델 크기 대비 뛰어난 성능을 자랑하며, API를 통해 쉽게 통합할 수 있습니다.", website: "https://upstage.ai", releaseDate: "2023.12", pricing: "API", tags: ["Korean", "Efficient"], thumbnail: "https://logo.clearbit.com/upstage.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-16", name: "ChatGLM", category: "llm", summary: "칭화대의 다국어 대화 모델.", description: "칭화대학이 개발한 중국어와 영어 대화에 특화된 경량화 모델입니다. 6B 파라미터로 작은 크기임에도 뛰어난 성능을 보이며, 개인 PC에서도 구동 가능합니다.", website: "https://chatglm.cn", releaseDate: "2023", pricing: "Open Source", tags: ["Bilingual", "Local"], thumbnail: "https://logo.clearbit.com/tsinghua.edu.cn", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-17", name: "Vicuna", category: "llm", summary: "GPT-4 수준의 오픈소스 챗봇.", description: "UC Berkeley의 LMSYS가 개발한 Llama 기반 파인튜닝 모델로, GPT-4의 90% 이상 성능을 보여줍니다. 대화형 챗봇 구축에 최적화된 오픈소스 솔루션입니다.", website: "https://lmsys.org", releaseDate: "2023.03", pricing: "Open Source", tags: ["Chat", "Fine-tuned"], thumbnail: "https://logo.clearbit.com/lmsys.org", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-18", name: "WizardLM", category: "llm", summary: "복잡한 지시사항을 잘 따르는 AI.", description: "Microsoft가 개발한 Evol-Instruct 방식으로 훈련된 모델로, 복잡하고 다단계 지시사항을 정확하게 이해하고 수행합니다. 코드 생성과 문제 해결에 특히 강점이 있습니다.", website: "https://wizardlm.github.io", releaseDate: "2023.04", pricing: "Open Source", tags: ["Instruction", "Complex"], thumbnail: "https://logo.clearbit.com/microsoft.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-19", name: "Orca 2", category: "llm", summary: "Microsoft의 추론 강화 모델.", description: "Microsoft가 개발한 소형 모델로, 7B와 13B 크기임에도 복잡한 추론 작업을 잘 수행합니다. 단계별 사고 과정을 학습하여 논리적 문제 해결 능력이 뛰어납니다.", website: "https://microsoft.com", releaseDate: "2023.11", pricing: "Open Source", tags: ["Reasoning", "Small"], thumbnail: "https://logo.clearbit.com/microsoft.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "llm-20", name: "Gemma", category: "llm", summary: "Google의 경량화 오픈 모델.", description: "Google이 Gemini 기술을 기반으로 개발한 오픈소스 모델로, 2B와 7B 두 가지 크기를 제공합니다. 작은 크기 대비 뛰어난 성능으로 개인 개발자와 연구자들에게 인기입니다.", website: "https://ai.google.dev/gemma", releaseDate: "2024.02", pricing: "Open Source", tags: ["Google", "Lightweight"], thumbnail: "https://logo.clearbit.com/google.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
 
 
   // =====================================================================================
@@ -53,15 +67,15 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "img-01", name: "Midjourney", category: "image",
     summary: "가장 예술적인 이미지 생성기.",
-    description: "Discord 기반으로 동작하며, 현존하는 AI 중 가장 뛰어난 예술적 화질을 자랑합니다.",
+    description: "Discord 봇 형태로 동작하는 이미지 생성 AI로, 현존하는 AI 중 가장 뛰어난 예술적 화질과 창의성을 자랑합니다. 미술, 일러스트, 컨셉 아트 제작에 최적화되어 있습니다.",
     releaseDate: "2022.07", website: "https://midjourney.com", pricing: "$10~$120 mo", tags: ["High Quality", "Art"],
     thumbnail: "https://logo.clearbit.com/midjourney.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
-  { id: "img-02", name: "Stable Diffusion", category: "image", summary: "로컬 설치 가능한 오픈소스.", description: "PC에 직접 설치하여 제약 없이 이미지를 생성할 수 있는 강력한 도구입니다.", releaseDate: "2022.08", website: "https://stability.ai", pricing: "Free (Open Source)", tags: ["Local", "ControlNet"], thumbnail: "https://logo.clearbit.com/stability.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "img-03", name: "Leonardo.ai", category: "image", summary: "게임 에셋과 아트에 특화.", description: "다양한 모델을 제공하며 특히 게임 아이템이나 캐릭터 생성에 탁월합니다.", releaseDate: "2022.12", website: "https://leonardo.ai", pricing: "Free / Paid", tags: ["Game Asset", "Easy UI"], thumbnail: "https://logo.clearbit.com/leonardo.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "img-04", name: "DALL-E 3", category: "image", summary: "ChatGPT 안에서 그리는 그림.", description: "프롬프트를 정확하게 이해하고 텍스트 묘사 능력이 뛰어납니다.", releaseDate: "2023.10", website: "https://openai.com/dall-e-3", pricing: "Included in ChatGPT Plus", tags: ["Simple", "Text Rendering"], thumbnail: "https://logo.clearbit.com/openai.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "img-05", name: "Adobe Firefly", category: "image", summary: "상업적 사용이 안전한 AI.", description: "어도비 스톡 이미지로 학습되어 저작권 문제 없이 상업적 이용이 가능합니다.", releaseDate: "2023.03", website: "https://firefly.adobe.com", pricing: "Free / Credits", tags: ["Commercial", "Photoshop"], thumbnail: "https://logo.clearbit.com/adobe.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "img-02", name: "Stable Diffusion", category: "image", summary: "로컬 설치 가능한 오픈소스.", description: "Stability AI가 개발한 오픈소스 이미지 생성 모델로, PC에 직접 설치하여 무료로 무제한 이미지를 생성할 수 있습니다. ControlNet, LoRA 등 다양한 확장 기능을 지원합니다.", releaseDate: "2022.08", website: "https://stability.ai", pricing: "Free (Open Source)", tags: ["Local", "ControlNet"], thumbnail: "https://logo.clearbit.com/stability.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "img-03", name: "Leonardo.ai", category: "image", summary: "게임 에셋과 아트에 특화.", description: "게임 개발자와 아티스트를 위한 이미지 생성 플랫폼으로, 다양한 커스텀 모델을 제공합니다. 게임 아이템, 캐릭터, 배경 등 게임 에셋 제작에 최적화되어 있으며 직관적인 UI를 제공합니다.", releaseDate: "2022.12", website: "https://leonardo.ai", pricing: "Free / Paid", tags: ["Game Asset", "Easy UI"], thumbnail: "https://logo.clearbit.com/leonardo.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "img-04", name: "DALL-E 3", category: "image", summary: "ChatGPT 안에서 그리는 그림.", description: "OpenAI가 개발한 이미지 생성 AI로, ChatGPT Plus 구독 시 사용할 수 있습니다. 프롬프트를 정확하게 이해하며 이미지 내 텍스트 렌더링 능력이 뛰어나 로고나 포스터 제작에 적합합니다.", releaseDate: "2023.10", website: "https://openai.com/dall-e-3", pricing: "Included in ChatGPT Plus", tags: ["Simple", "Text Rendering"], thumbnail: "https://logo.clearbit.com/openai.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  { id: "img-05", name: "Adobe Firefly", category: "image", summary: "상업적 사용이 안전한 AI.", description: "Adobe가 개발한 상업적 이용이 안전한 이미지 생성 AI로, Adobe Stock 이미지로만 학습되어 저작권 문제가 없습니다. Photoshop, Illustrator 등 어도비 제품군과 완벽하게 통합됩니다.", releaseDate: "2023.03", website: "https://firefly.adobe.com", pricing: "Free / Credits", tags: ["Commercial", "Photoshop"], thumbnail: "https://logo.clearbit.com/adobe.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "img-06", name: "Ideogram", category: "image", summary: "텍스트 타이포그래피 최강자.", description: "이미지 내에 정확한 글자를 삽입하는 능력이 매우 뛰어납니다.", releaseDate: "2023.08", website: "https://ideogram.ai", pricing: "Free / Paid", tags: ["Typography", "Logo"], thumbnail: "https://logo.clearbit.com/ideogram.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "img-07", name: "Krea AI", category: "image", summary: "실시간 드로잉 & 업스케일.", description: "그리는 즉시 AI가 이미지를 완성해주는 실시간 기능을 제공합니다.", releaseDate: "2023.11", website: "https://krea.ai", pricing: "Free / Paid", tags: ["Real-time", "Upscale"], thumbnail: "https://logo.clearbit.com/krea.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
   { id: "img-08", name: "Magnific AI", category: "image", summary: "이미지 디테일 업스케일러.", description: "저화질 이미지를 상상력을 더해 초고화질로 변환해줍니다.", releaseDate: "2023.12", website: "https://magnific.ai", pricing: "Paid", tags: ["Upscale", "Detail"], thumbnail: "https://logo.clearbit.com/magnific.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },

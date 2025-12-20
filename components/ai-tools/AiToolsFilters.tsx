@@ -4,8 +4,6 @@ import { TEXTS } from "@/constants/texts";
 interface AiToolsFiltersProps {
   filters: {
     category: string;
-    // price 제거됨
-    sort: string;
   };
   setFilters: (newFilters: any) => void;
 }
@@ -17,10 +15,10 @@ const AiToolsFilters = React.memo(({ filters, setFilters }: AiToolsFiltersProps)
     setFilters({ ...filters, [key]: value });
   };
 
-  const selectClass = "px-4 py-2.5 rounded-xl border outline-none text-sm font-medium transition-all cursor-pointer bg-[var(--card-bg)] border-[var(--card-border)] text-[var(--text-main)] hover:border-gray-400 dark:hover:border-gray-500 w-full md:w-auto";
+  const selectClass = "px-5 py-3 rounded-xl border outline-none text-sm font-semibold transition-all duration-200 cursor-pointer bg-[var(--card-bg)] border-[var(--card-border)] text-[var(--text-main)] hover:shadow-md hover:scale-105 w-full md:w-auto";
 
   return (
-    <div className="flex flex-col md:flex-row gap-4 mb-8 justify-between">
+    <div className="flex flex-col md:flex-row gap-4 mb-12 justify-between items-stretch md:items-center">
       {/* 1. 카테고리 필터 */}
       <select 
         value={filters.category} 
@@ -39,16 +37,6 @@ const AiToolsFilters = React.memo(({ filters, setFilters }: AiToolsFiltersProps)
         <option value="Coding">Coding Assistant</option>
         <option value="Design">Design & 3D</option>
         <option value="Productivity">Productivity</option>
-      </select>
-
-      {/* 3. 정렬 */}
-      <select 
-        value={filters.sort} 
-        onChange={(e) => handleChange("sort", e.target.value)}
-        className={`${selectClass} md:ml-auto`}
-      >
-        <option value="rating">{t.sortBy.ko}: 평점순</option>
-        <option value="name">{t.sortBy.ko}: 이름순</option>
       </select>
     </div>
   );

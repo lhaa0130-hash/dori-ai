@@ -11,7 +11,16 @@ const nextConfig: NextConfig = {
         protocol: "https",
         hostname: "logo.clearbit.com", // AI 툴 로고
       },
+      {
+        protocol: "https",
+        hostname: "www.google.com", // Google Favicon
+      },
+      {
+        protocol: "https",
+        hostname: "**.google.com", // Google 서브도메인
+      },
     ],
+    unoptimized: false,
   },
   typescript: {
     ignoreBuildErrors: true,

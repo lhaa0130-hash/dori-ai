@@ -7,9 +7,10 @@ import { AiToolComment } from "@/types/content";
 interface AiToolsCommentsProps {
   toolId: string;
   compact?: boolean; // 👈 카드용 컴팩트 모드
+  onCommentUpdate?: () => void; // 댓글 업데이트 콜백
 }
 
-export default function AiToolsComments({ toolId, compact = false }: AiToolsCommentsProps) {
+export default function AiToolsComments({ toolId, compact = false, onCommentUpdate }: AiToolsCommentsProps) {
   const { data: session } = useSession();
   const [comments, setComments] = useState<AiToolComment[]>([]);
   const [newComment, setNewComment] = useState("");
@@ -41,6 +42,11 @@ export default function AiToolsComments({ toolId, compact = false }: AiToolsComm
     const savedData = JSON.parse(localStorage.getItem("dori_tool_comments") || "{}");
     savedData[toolId] = updatedComments;
     localStorage.setItem("dori_tool_comments", JSON.stringify(savedData));
+    
+    // 부모 컴포넌트에 업데이트 알림
+    if (onCommentUpdate) {
+      onCommentUpdate();
+    }
   };
 
   const handleDelete = (id: string) => {
@@ -51,6 +57,11 @@ export default function AiToolsComments({ toolId, compact = false }: AiToolsComm
     const savedData = JSON.parse(localStorage.getItem("dori_tool_comments") || "{}");
     savedData[toolId] = updatedComments;
     localStorage.setItem("dori_tool_comments", JSON.stringify(savedData));
+    
+    // 부모 컴포넌트에 업데이트 알림
+    if (onCommentUpdate) {
+      onCommentUpdate();
+    }
   };
 
   return (

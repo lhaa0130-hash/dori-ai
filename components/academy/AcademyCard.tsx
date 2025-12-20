@@ -25,15 +25,38 @@ const AcademyCard = React.memo(({ item }: AcademyCardProps) => {
     borderColor: 'var(--card-border)',
     color: 'var(--text-main)',
   };
-  const thumbnailSrc = item.thumbnail ? item.thumbnail : item.youtubeId ? `https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg` : '/images/placeholder-academy.jpg'; 
+  const thumbnailSrc = item.thumbnail ? item.thumbnail : item.youtubeId ? `https://img.youtube.com/vi/${item.youtubeId}/hqdefault.jpg` : '/images/placeholder-academy.jpg';
+  const [imageError, setImageError] = React.useState(false);
+
+  const handleImageError = () => {
+    setImageError(true);
+  };
 
   return (
     <div 
-      className="relative flex flex-col rounded-[1.5rem] border overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] hover:shadow-lg group cursor-pointer min-h-[400px]"
+      className="relative flex flex-col rounded-3xl border overflow-hidden transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-xl group cursor-pointer min-h-[400px]"
       style={cardStyle}
     >
-      <div className="relative w-full aspect-video bg-gray-100 dark:bg-gray-800 overflow-hidden">
-        <Image src={thumbnailSrc} alt={item.title} layout="fill" objectFit="cover" placeholder="empty" className="transition-transform duration-500 group-hover:scale-110" />
+      <div 
+        className="relative w-full aspect-video overflow-hidden"
+        style={{
+          backgroundColor: 'var(--bg-main)',
+        }}
+      >
+        {!imageError ? (
+          <Image 
+            src={thumbnailSrc} 
+            alt={item.title} 
+            fill
+            sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
+            className="object-cover transition-transform duration-500 group-hover:scale-110" 
+            onError={handleImageError}
+          />
+        ) : (
+          <div className="w-full h-full flex items-center justify-center text-6xl bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20">
+            🎓
+          </div>
+        )}
         <div className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/10 transition-colors z-10">
           <div className="w-12 h-12 rounded-full bg-white/90 flex items-center justify-center pl-1 shadow-lg backdrop-blur-sm">
             <svg className="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
@@ -43,21 +66,53 @@ const AcademyCard = React.memo(({ item }: AcademyCardProps) => {
       </div>
 
       <div className="flex flex-col p-6 flex-1">
-        <div className="flex items-center gap-2 mb-3">
-          <span className="text-xs font-bold px-2 py-1 rounded-md bg-green-50 dark:bg-green-900/20 text-green-600 dark:text-green-300 border border-green-100 dark:border-green-500/20">{item.category}</span>
+        <div className="flex items-center gap-2 mb-4">
+          <span 
+            className="text-xs font-bold px-3 py-1 rounded-full border"
+            style={{
+              backgroundColor: 'var(--bg-main)',
+              borderColor: 'var(--card-border)',
+              color: 'var(--accent-color)',
+            }}
+          >
+            {item.category}
+          </span>
+          <span 
+            className="text-xs font-bold px-2 py-1 rounded-md"
+            style={{
+              backgroundColor: 'var(--bg-main)',
+              color: 'var(--text-sub)',
+            }}
+          >
+            {item.level}
+          </span>
         </div>
 
-        <h3 className="text-lg font-bold mb-2 line-clamp-2 leading-snug">{item.title}</h3>
+        <h3 
+          className="text-xl font-black mb-3 line-clamp-2 leading-snug"
+          style={{ color: 'var(--text-main)' }}
+        >
+          {item.title}
+        </h3>
         
-        {/* 👇 AiBadge 추가 */}
-        <div className="mb-2">
+        <div className="mb-4">
           <AiBadge aiMeta={item.aiMeta} />
         </div>
 
-        <p className="text-sm opacity-70 line-clamp-2 mb-4 flex-1 h-10 leading-relaxed" style={{ color: 'var(--text-sub)' }}>{item.description}</p>
+        <p 
+          className="text-sm line-clamp-2 mb-5 flex-1 leading-relaxed" 
+          style={{ color: 'var(--text-sub)' }}
+        >
+          {item.description}
+        </p>
 
-        <div className="mt-auto pt-4 border-t border-dashed w-full" style={{ borderColor: 'var(--card-border)' }}>
-          <span className="text-sm font-semibold text-green-500 hover:underline flex items-center gap-1">{TEXTS.academy.button.watch.ko} →</span>
+        <div className="mt-auto pt-5 border-t border-dashed w-full" style={{ borderColor: 'var(--card-border)' }}>
+          <span 
+            className="text-sm font-semibold transition-all duration-200 hover:scale-105 flex items-center gap-1"
+            style={{ color: 'var(--accent-color)' }}
+          >
+            {TEXTS.academy.button.watch.ko} →
+          </span>
         </div>
       </div>
     </div>

@@ -1,21 +1,22 @@
 import { InsightItem } from "@/types/content";
 
+/**
+ * 인사이트 데이터 목록
+ * 
+ * @description 인사이트 페이지에 표시될 콘텐츠 데이터입니다.
+ * 각 항목은 InsightItem 타입을 따르며, HTML 콘텐츠를 포함할 수 있습니다.
+ */
 export const INSIGHT_DATA: InsightItem[] = [
-  // 👇 [신규 추가] 가이드 01편
   {
-    id: 101, // 겹치지 않는 숫자
+    id: 101,
     title: "📘 GUIDE 01 — AI 기본 기능 완전 정복하기",
     summary: "검색, 이미지, 영상, 음성, 텍스트 변환까지! 초보자가 가장 먼저 익혀야 할 5가지 핵심 AI 기능을 실전 예시와 함께 정리했습니다.",
     category: "가이드",
     tags: ["AI기초", "가이드", "초보자", "Tip"],
     likes: 0,
-    date: new Date().toISOString(), // 오늘 날짜
+    date: "2024-12-20T00:00:00.000Z",
     aiMeta: { creationType: "human_only" },
-    image: "/images/insight/guide/guide-01-cover.jpg", // (없으면 생략 가능)
-    
-    // 👇 여기가 본문입니다 (HTML로 변환됨)
-    // ⚠️ 중요: 이미지 경로를 '/images/insight/guide/...' 로 수정했습니다.
-    // ⚠️ 중요: 실제 파일이 public/images/insight/guide/ 폴더 안에 있어야 합니다.
+    image: "/images/insight/guide/guide-01-cover.jpg",
     content: `
       <h2># AI를 처음 배우는 사람을 위한 ‘핵심 5대 기능’ 안내서</h2>
       <p>AI를 처음 접하는 많은 사람들은 “무엇부터 해야 할지”에서 막힙니다. 하지만 AI의 본질은 어렵지 않습니다. 딱 5가지 기능만 이해하면 <strong>AI 활용의 70% 이상</strong>을 이미 몸에 익히게 됩니다.</p>
@@ -137,14 +138,4 @@ export const INSIGHT_DATA: InsightItem[] = [
       <p>AI의 기초는 간단합니다. <strong>검색 → 이미지 → 영상 → 음성 → 텍스트 변환</strong>. 이 다섯 가지를 자유롭게 다룰 수 있으면 이미 AI 전체를 70% 이상 활용하는 단계에 도달한 것입니다.</p>
     `
   },
-
-  // ... (기존 데이터들: 1~9번 등은 아래에 그대로 유지) ...
-  { 
-    id: 1, title: "AI 시대에 반드시 알아야 할 핵심 개념 10가지", 
-    summary: "LLM, RAG, Fine-tuning 등 쏟아지는 AI 용어 정리.", 
-    content: "...", // 기존 내용 생략
-    category: "개념", tags: ["기초", "용어"], likes: 120, date: "2024-03-20",
-    aiMeta: { creationType: "ai_assisted", tools: ["Claude 3"] } 
-  },
-  // ...
 ];

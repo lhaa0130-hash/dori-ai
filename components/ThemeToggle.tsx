@@ -64,7 +64,7 @@ export default function ThemeToggle() {
           filter: brightness(2) contrast(1.2) drop-shadow(0 0 3px rgba(255, 255, 255, 0.6));
         }
         .sun-icon {
-          filter: brightness(0.2) contrast(1.5) drop-shadow(0 0 2px rgba(0, 0, 0, 0.5));
+          filter: brightness(1.2) saturate(1.5) drop-shadow(0 0 4px rgba(255, 193, 7, 0.8));
         }
       `}</style>
     </>
