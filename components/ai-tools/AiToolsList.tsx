@@ -56,9 +56,13 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
   };
 
   const loadMoreTools = (cat: string) => {
+    const catTools = currentTools
+      .filter(t => t.category.toLowerCase() === cat.toLowerCase())
+      .sort((a, b) => b.rating - a.rating);
+    
     setExpandedTools(prev => ({
       ...prev,
-      [cat]: (prev[cat] || 6) + 6
+      [cat]: catTools.length
     }));
   };
 
@@ -91,8 +95,9 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
                   sectionRefs.current[`category-${cat}`] = el;
                 }
               }}
-              className="min-h-screen flex flex-col justify-center py-20 px-4 md:px-6"
+              className="relative flex items-center justify-center px-6 lg:pl-10 py-20"
               style={{
+                minHeight: '100vh',
                 scrollSnapAlign: 'start',
                 scrollSnapStop: 'always',
                 scrollMarginTop: '80px',
@@ -116,16 +121,18 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
                 </div>
 
                 {/* 카드 그리드 */}
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {/* 1-3위 (rank 표시) */}
-                  {top3.map((tool, idx) => (
-                    <AiToolsCard key={tool.id} tool={tool} rank={idx + 1} />
-                  ))}
-                  
-                  {/* 4위 이후 (rank 없음) */}
-                  {rest.map((tool) => (
-                    <AiToolsCard key={tool.id} tool={tool} />
-                  ))}
+                <div className="flex justify-center">
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 w-full max-w-6xl">
+                    {/* 1-3위 (rank 표시) */}
+                    {top3.map((tool, idx) => (
+                      <AiToolsCard key={tool.id} tool={tool} rank={idx + 1} />
+                    ))}
+                    
+                    {/* 4위 이후 (rank 없음) */}
+                    {rest.map((tool) => (
+                      <AiToolsCard key={tool.id} tool={tool} />
+                    ))}
+                  </div>
                 </div>
 
                 {/* 더보기 버튼 */}
@@ -157,10 +164,12 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
 
   return (
     <div className="w-full animate-[fadeInUp_0.5s_ease-out]">
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {visibleTools.map((tool) => (
-          <AiToolsCard key={tool.id} tool={tool} />
-        ))}
+      <div className="flex justify-center">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 w-full max-w-5xl">
+          {visibleTools.map((tool) => (
+            <AiToolsCard key={tool.id} tool={tool} />
+          ))}
+        </div>
       </div>
 
       {filteredTools.length === 0 && (

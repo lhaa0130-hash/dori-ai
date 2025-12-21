@@ -112,6 +112,16 @@ export default function InsightPageClient({ guides, currentCategory, categories 
         </nav>
       </aside>
 
+      {/* 우측 빈 사이드바 */}
+      <aside 
+        className="fixed right-0 z-50 hidden lg:block"
+        style={{
+          top: '50%',
+          transform: 'translateY(-50%)',
+          width: '140px',
+        }}
+      />
+
       {/* 배경 효과 */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         {mounted && theme === "dark" && (
@@ -169,7 +179,7 @@ export default function InsightPageClient({ guides, currentCategory, categories 
             <p 
               className="text-lg md:text-xl font-medium opacity-70 break-keep leading-relaxed"
               style={{ 
-                color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
+                color: isDark ? '#ffffff' : 'rgba(0, 0, 0, 0.7)',
                 fontWeight: 500,
                 letterSpacing: '-0.01em',
               }}
@@ -192,6 +202,17 @@ export default function InsightPageClient({ guides, currentCategory, categories 
                 color: 'var(--text-main)',
               }}
             >
+              {/* 썸네일 이미지 */}
+              {post.thumbnail && (
+                <div className="mb-5 overflow-hidden rounded-2xl">
+                  <img 
+                    src={post.thumbnail} 
+                    alt={post.title}
+                    className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
+                  />
+                </div>
+              )}
+              
               <div className="mb-5">
                  {/* 1. 카테고리 뱃지 */}
                  <div className="mb-4">

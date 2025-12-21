@@ -41,8 +41,8 @@ export default function SuggestionsClient() {
     });
 
   return (
-    <main className="w-full min-h-screen">
-      <section className="pt-32 pb-16 px-6 text-center">
+    <main className="w-full min-h-screen" style={{ paddingTop: 0 }}>
+      <section className="pt-20 pb-16 px-6 text-center">
         <h1 className="text-3xl md:text-5xl font-extrabold mb-4" style={{ color: 'var(--text-main)' }}>{t.heroTitle.ko}</h1>
         <p className="text-lg opacity-70 max-w-2xl mx-auto break-keep" style={{ color: 'var(--text-main)' }}>{t.heroSubtitle.ko}</p>
       </section>

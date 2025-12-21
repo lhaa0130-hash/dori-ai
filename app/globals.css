@@ -64,7 +64,7 @@ body {
 
     --text-main: #ffffff;
 
-    --text-sub: #a1a1aa;
+    --text-sub: #ffffff;
 
    
 
@@ -92,6 +92,35 @@ body {
 
     transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s ease;
 
+  }
+
+  /* 다크모드에서 가이드 글 텍스트 강제 흰색 */
+  :root:where(.dark) article p,
+  :root:where(.dark) article h1,
+  :root:where(.dark) article h2,
+  :root:where(.dark) article h3,
+  :root:where(.dark) article h4,
+  :root:where(.dark) article h5,
+  :root:where(.dark) article h6,
+  :root:where(.dark) article li,
+  :root:where(.dark) article ul,
+  :root:where(.dark) article ol,
+  :root:where(.dark) article blockquote,
+  :root:where(.dark) article em,
+  :root:where(.dark) article del {
+    color: #ffffff !important;
+  }
+
+  /* 다크모드에서 강조 텍스트(strong) 배경과 텍스트 색상 */
+  :root:where(.dark) article strong {
+    background-color: rgba(234, 179, 8, 0.3) !important;
+    color: #fef08a !important;
+  }
+
+  /* 다크모드에서 인용문(blockquote) 배경색 */
+  :root:where(.dark) article blockquote {
+    background-color: rgba(31, 41, 55, 0.8) !important;
+    border-left-color: #60a5fa !important;
   }
 
 }

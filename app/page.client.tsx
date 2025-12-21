@@ -217,9 +217,6 @@ export default function PremiumDesignPage() {
       {/* 좌측 사이드바 네비게이션 */}
       <aside 
         className="fixed left-0 top-1/2 -translate-y-1/2 z-50 hidden lg:block"
-        style={{
-          transform: `translateY(calc(-50% + ${scrollY * 0.1}px))`,
-        }}
       >
         <nav className="ml-6">
           <div 
@@ -270,6 +267,14 @@ export default function PremiumDesignPage() {
           </div>
         </nav>
       </aside>
+
+      {/* 우측 빈 사이드바 */}
+      <aside 
+        className="fixed right-0 top-1/2 -translate-y-1/2 z-50 hidden lg:block"
+        style={{
+          width: '140px',
+        }}
+      />
 
       {/* 배경 효과 */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">

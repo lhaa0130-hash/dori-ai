@@ -192,6 +192,16 @@ export default function AiToolsCard({ tool, rank }: AiToolsCardProps) {
             }}
           >
             {tool.name}
+            {tool.company && (
+              <span 
+                className="text-sm md:text-base font-normal ml-2 opacity-70"
+                style={{
+                  color: "var(--text-sub)",
+                }}
+              >
+                ({tool.company})
+              </span>
+            )}
           </h3>
         </div>
 

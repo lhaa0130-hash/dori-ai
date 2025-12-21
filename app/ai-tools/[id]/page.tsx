@@ -21,7 +21,7 @@ export default function AiToolDetailPage({ params }: Props) {
   }
 
   return (
-    <main className="w-full min-h-screen pt-32">
+    <main className="w-full min-h-screen" style={{ paddingTop: 0 }}>
       <AiToolsDetail tool={tool} />
     </main>
   );

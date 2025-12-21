@@ -11,7 +11,6 @@ export default function Header() {
   const { data: session } = useSession();
   const user = session?.user || null;
   const pathname = usePathname(); 
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   
   // 🌍 언어 상태 제거, 한국어(.ko) 고정
@@ -27,7 +26,7 @@ export default function Header() {
       <header className="header-wrapper">
         <div className="header-inner">
           <div className="logo-area">
-            <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link href="/">
               <span className="logo-text">DORI-AI</span>
             </Link>
           </div>
@@ -68,77 +67,10 @@ export default function Header() {
                   </div>
                 </div>
               )}
-              <button 
-                className="hamburger-btn mobile-only" 
-                onClick={() => setIsMobileMenuOpen(true)}
-                aria-label="메뉴 열기"
-              >
-                ☰
-              </button>
             </div>
           </div>
         </div>
       </header>
-
-      {/* 모바일 메뉴 */}
-      <div className={`mobile-menu-overlay ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
-        <div className="mobile-menu-content" onClick={(e) => e.stopPropagation()}>
-          <div className="mobile-header">
-            <span className="mobile-title">{t.menu.ko}</span>
-            <div className="mobile-header-actions">
-              <ThemeToggle />
-              <button className="close-btn" onClick={() => setIsMobileMenuOpen(false)}>✕</button>
-            </div>
-          </div>
-          
-          <nav className="mobile-nav">
-             <Link href="/ai-tools" className={`m-link ${isActive('/ai-tools')}`} onClick={() => setIsMobileMenuOpen(false)}>
-               <span className="m-link-icon">🤖</span>
-               <span>{t.aiTools.ko}</span>
-             </Link>
-             <Link href="/insight" className={`m-link ${isActive('/insight')}`} onClick={() => setIsMobileMenuOpen(false)}>
-               <span className="m-link-icon">💡</span>
-               <span>{t.insight.ko}</span>
-             </Link>
-             <Link href="/academy" className={`m-link ${isActive('/academy')}`} onClick={() => setIsMobileMenuOpen(false)}>
-               <span className="m-link-icon">🎓</span>
-               <span>{t.academy.ko}</span>
-             </Link>
-             <Link href="/community" className={`m-link ${isActive('/community')}`} onClick={() => setIsMobileMenuOpen(false)}>
-               <span className="m-link-icon">💬</span>
-               <span>{t.community.ko}</span>
-             </Link>
-             <Link href="/market" className={`m-link ${isActive('/market')}`} onClick={() => setIsMobileMenuOpen(false)}>
-               <span className="m-link-icon">🛒</span>
-               <span>{t.market.ko}</span>
-             </Link>
-          </nav>
-
-          <div className="mobile-footer">
-            {!user ? (
-              <Link href="/login" className="mobile-login-btn" onClick={() => setIsMobileMenuOpen(false)}>
-                {t.login.ko}
-              </Link>
-            ) : (
-              <div className="mobile-user-section">
-                <div className="mobile-user-info">
-                  <div className="mobile-avatar">{user.name?.[0]?.toUpperCase() || "U"}</div>
-                  <div>
-                    <div className="mobile-user-name">{user.name}</div>
-                    <div className="mobile-user-email">{user.email}</div>
-                  </div>
-                </div>
-                <Link href="/my" className="mobile-footer-link" onClick={() => setIsMobileMenuOpen(false)}>
-                  <span>👤</span> {t.myPage.ko}
-                </Link>
-                <button onClick={() => { signOut({ callbackUrl: "/" }); setIsMobileMenuOpen(false); }} className="mobile-footer-link danger">
-                  <span>🚪</span> {t.logout.ko}
-                </button>
-              </div>
-            )}
-          </div>
-        </div>
-      </div>
 
       <style jsx>{`
         .header-wrapper { 
@@ -456,282 +388,12 @@ export default function Header() {
           background: rgba(239, 68, 68, 0.1); 
           color: #ef4444; 
         }
-        .hamburger-btn { 
-          font-size: 24px; 
-          background: none; 
-          border: none; 
-          cursor: pointer;
-          padding: 8px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          min-width: 40px;
-          min-height: 40px;
-        }
-        :global(.dark) .hamburger-btn {
-          color: #ffffff;
-        }
-        :global(.light) .hamburger-btn, :global([data-theme="light"]) .hamburger-btn {
-          color: #1d1d1f;
-        }
-        .mobile-menu-overlay { 
-          position: fixed; 
-          top: 0; 
-          right: 0; 
-          width: 100%; 
-          height: 100vh; 
-          z-index: 200; 
-          opacity: 0; 
-          visibility: hidden; 
-          transition: all 0.3s ease;
-        }
-        :global(.dark) .mobile-menu-overlay {
-          background: rgba(0, 0, 0, 0.7);
-        }
-        :global(.light) .mobile-menu-overlay, :global([data-theme="light"]) .mobile-menu-overlay {
-          background: rgba(0, 0, 0, 0.3);
-        }
-        .mobile-menu-overlay.open { 
-          opacity: 1; 
-          visibility: visible; 
-        }
-        .mobile-menu-content { 
-          position: absolute; 
-          top: 0; 
-          right: 0; 
-          width: 280px; 
-          height: 100%; 
-          padding: 24px; 
-          box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1); 
-          transform: translateX(100%); 
-          transition: all 0.3s ease; 
-          display: flex; 
-          flex-direction: column;
-          backdrop-filter: blur(20px) saturate(180%);
-          -webkit-backdrop-filter: blur(20px) saturate(180%);
-        }
-        :global(.dark) .mobile-menu-content {
-          background: rgba(0, 0, 0, 0.9);
-          color: #ffffff;
-        }
-        :global(.light) .mobile-menu-content, :global([data-theme="light"]) .mobile-menu-content {
-          background: rgba(255, 255, 255, 0.95);
-          color: #1d1d1f;
-        }
-        .mobile-menu-overlay.open .mobile-menu-content { 
-          transform: translateX(0); 
-        }
-        .mobile-header { 
-          display: flex; 
-          justify-content: space-between; 
-          align-items: center; 
-          margin-bottom: 20px; 
-        }
-        .close-btn { 
-          font-size: 20px; 
-          background: none; 
-          border: none; 
-          cursor: pointer;
-        }
-        :global(.dark) .close-btn {
-          color: #ffffff;
-        }
-        :global(.light) .close-btn, :global([data-theme="light"]) .close-btn {
-          color: #1d1d1f;
-        }
-        .mobile-header-actions { 
-          display: flex; 
-          align-items: center; 
-          gap: 10px; 
-        }
-        .mobile-nav {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-          margin-bottom: 24px;
-        }
-        .m-link { 
-          display: flex; 
-          align-items: center;
-          gap: 12px;
-          padding: 14px 16px; 
-          font-size: 15px; 
-          font-weight: 500; 
-          letter-spacing: -0.01em; 
-          text-decoration: none;
-          border-radius: 12px;
-          transition: all 0.2s ease;
-        }
-        .m-link-icon {
-          font-size: 20px;
-          width: 24px;
-          text-align: center;
-        }
-        :global(.dark) .m-link {
-          color: rgba(255, 255, 255, 0.8);
-          background: rgba(255, 255, 255, 0.03);
-          border: 1px solid rgba(255, 255, 255, 0.08);
-        }
-        :global(.light) .m-link, :global([data-theme="light"]) .m-link {
-          color: rgba(0, 0, 0, 0.7);
-          background: rgba(0, 0, 0, 0.02);
-          border: 1px solid rgba(0, 0, 0, 0.06);
-        }
-        .m-link:hover {
-          transform: translateX(4px);
-        }
-        :global(.dark) .m-link:hover {
-          background: rgba(255, 255, 255, 0.08);
-          color: #ffffff;
-        }
-        :global(.light) .m-link:hover, :global([data-theme="light"]) .m-link:hover {
-          background: rgba(0, 0, 0, 0.05);
-          color: #1d1d1f;
-        }
-        .m-link.active { 
-          background: linear-gradient(135deg, rgba(37, 99, 235, 0.15), rgba(124, 58, 237, 0.15));
-          border-color: rgba(37, 99, 235, 0.3);
-        }
-        :global(.dark) .m-link.active {
-          color: #60a5fa;
-        }
-        :global(.light) .m-link.active, :global([data-theme="light"]) .m-link.active {
-          color: #2563eb;
-        }
-        .mobile-footer {
-          margin-top: auto;
-          padding-top: 24px;
-          border-top: 1px solid;
-        }
-        :global(.dark) .mobile-footer {
-          border-color: rgba(255, 255, 255, 0.1);
-        }
-        :global(.light) .mobile-footer, :global([data-theme="light"]) .mobile-footer {
-          border-color: rgba(0, 0, 0, 0.08);
-        }
-        .mobile-login-btn {
-          display: block;
-          width: 100%;
-          padding: 14px;
-          text-align: center;
-          border-radius: 12px;
-          font-weight: 600;
-          font-size: 15px;
-          text-decoration: none;
-          background: linear-gradient(135deg, #2563eb, #7c3aed);
-          color: #ffffff;
-          transition: all 0.2s ease;
-        }
-        .mobile-login-btn:hover {
-          transform: translateY(-2px);
-          box-shadow: 0 8px 20px rgba(37, 99, 235, 0.3);
-        }
-        .mobile-user-section {
-          display: flex;
-          flex-direction: column;
-          gap: 8px;
-        }
-        .mobile-user-info {
-          display: flex;
-          align-items: center;
-          gap: 12px;
-          padding: 12px;
-          border-radius: 12px;
-          margin-bottom: 8px;
-        }
-        :global(.dark) .mobile-user-info {
-          background: rgba(255, 255, 255, 0.05);
-        }
-        :global(.light) .mobile-user-info, :global([data-theme="light"]) .mobile-user-info {
-          background: rgba(0, 0, 0, 0.03);
-        }
-        .mobile-avatar {
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-          color: #ffffff;
-          font-weight: 600;
-          font-size: 16px;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-shrink: 0;
-        }
-        .mobile-user-name {
-          font-size: 14px;
-          font-weight: 600;
-          margin-bottom: 2px;
-        }
-        :global(.dark) .mobile-user-name {
-          color: #ffffff;
-        }
-        :global(.light) .mobile-user-name, :global([data-theme="light"]) .mobile-user-name {
-          color: #1d1d1f;
-        }
-        .mobile-user-email {
-          font-size: 12px;
-          opacity: 0.6;
-        }
-        .mobile-footer-link {
-          display: flex;
-          align-items: center;
-          gap: 10px;
-          padding: 12px 16px;
-          border-radius: 10px;
-          font-size: 14px;
-          font-weight: 500;
-          text-decoration: none;
-          border: none;
-          background: transparent;
-          cursor: pointer;
-          width: 100%;
-          text-align: left;
-          transition: all 0.2s ease;
-        }
-        .mobile-footer-link span {
-          font-size: 18px;
-        }
-        :global(.dark) .mobile-footer-link {
-          color: rgba(255, 255, 255, 0.7);
-        }
-        :global(.light) .mobile-footer-link, :global([data-theme="light"]) .mobile-footer-link {
-          color: rgba(0, 0, 0, 0.6);
-        }
-        .mobile-footer-link:hover {
-          transform: translateX(4px);
-        }
-        :global(.dark) .mobile-footer-link:hover {
-          background: rgba(255, 255, 255, 0.05);
-          color: #ffffff;
-        }
-        :global(.light) .mobile-footer-link:hover, :global([data-theme="light"]) .mobile-footer-link:hover {
-          background: rgba(0, 0, 0, 0.03);
-          color: #1d1d1f;
-        }
-        .mobile-footer-link.danger:hover {
-          background: rgba(239, 68, 68, 0.1);
-          color: #ef4444;
-        }
         @media (max-width: 1024px) { 
           .nav-area { 
             gap: 20px; 
           }
           .nav-link { 
             font-size: 13px; 
-          }
-        }
-        @media (max-width: 768px) { 
-          .desktop-only { display: none !important; } 
-          .mobile-only { display: flex !important; } 
-          .header-inner { 
-            padding: 0 16px; 
-          }
-          .logo-text { 
-            font-size: 18px; 
-          }
-          .hamburger-btn {
-            display: flex !important;
           }
         }
       `}</style>

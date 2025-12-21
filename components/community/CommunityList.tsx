@@ -20,14 +20,16 @@ export default function CommunityList({ posts, onLike }: CommunityListProps) {
   }
 
   return (
-    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
-      {posts.map((post) => (
-        <CommunityCard 
-          key={post.id} 
-          post={post} 
-          onLike={onLike} 
-        />
-      ))}
+    <div className="flex justify-center">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl">
+        {posts.map((post) => (
+          <CommunityCard 
+            key={post.id} 
+            post={post} 
+            onLike={onLike} 
+          />
+        ))}
+      </div>
     </div>
   );
 }

@@ -112,12 +112,14 @@ export default function AiToolsClient() {
           transform: 'translateY(-50%)',
         }}
       >
-        <nav className="ml-6">
+        <nav className="ml-4 lg:ml-6">
           <div 
             className="flex flex-col gap-3 p-4 rounded-2xl backdrop-blur-xl transition-all duration-500 max-h-[80vh] overflow-y-auto"
             style={{
               backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
               border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
+              minWidth: '140px',
+              maxWidth: '180px',
             }}
           >
             {DISPLAY_CATEGORIES.map((cat) => (
@@ -136,7 +138,7 @@ export default function AiToolsClient() {
                 }}
               >
                 <div 
-                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 flex-shrink-0 ${
                     activeCategory === cat ? 'scale-150' : 'scale-100'
                   }`}
                   style={{
@@ -146,7 +148,7 @@ export default function AiToolsClient() {
                   }}
                 />
                 <span 
-                  className="text-xs font-medium transition-all duration-300"
+                  className="text-xs font-medium transition-all duration-300 flex-shrink-0 min-w-0"
                   style={{
                     color: activeCategory === cat 
                       ? (isDark ? '#ffffff' : '#000000')
@@ -161,6 +163,16 @@ export default function AiToolsClient() {
           </div>
         </nav>
       </aside>
+
+      {/* 우측 빈 사이드바 */}
+      <aside 
+        className="fixed right-0 z-50 hidden lg:block"
+        style={{
+          top: '50%',
+          transform: 'translateY(-50%)',
+          width: '180px',
+        }}
+      />
 
       {/* 배경 효과 */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
@@ -181,7 +193,7 @@ export default function AiToolsClient() {
       </div>
 
       {/* 히어로 섹션 */}
-      <section className="relative pt-20 pb-12 px-6 text-center overflow-hidden">
+      <section className="relative pt-20 pb-12 px-6 lg:pl-10 text-center overflow-hidden">
         <div className="max-w-4xl mx-auto animate-[fadeInUp_0.8s_ease-out_forwards]">
           <h1 
             className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight"
@@ -229,7 +241,7 @@ export default function AiToolsClient() {
       </section>
 
       {/* 메인 콘텐츠 */}
-      <div className="container max-w-7xl mx-auto px-4 md:px-6 pb-24 relative lg:pl-32">
+      <div className="container max-w-7xl mx-auto px-4 md:px-6 pb-24 relative lg:pl-10">
         <AiToolsList filters={filters} sectionRefs={sectionRefs} />
       </div>
 

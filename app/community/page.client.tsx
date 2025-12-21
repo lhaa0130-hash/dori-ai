@@ -19,16 +19,9 @@ export default function CommunityClient() {
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    const saved = localStorage.getItem("dori_community_posts");
-    if (saved) setPosts(JSON.parse(saved));
-    else {
-      const dummy: CommunityPost[] = [
-        { id: 1, nickname: "DORI", title: "커뮤니티 오픈!", content: "자유롭게 글을 남겨주세요.", tag: "정보", likes: 10, createdAt: new Date().toISOString() },
-        { id: 2, nickname: "유저1", title: "ChatGPT 질문있어요", content: "프롬프트 어떻게 짜나요?", tag: "질문", likes: 2, createdAt: new Date(Date.now() - 86400000).toISOString() },
-      ];
-      setPosts(dummy);
-      localStorage.setItem("dori_community_posts", JSON.stringify(dummy));
-    }
+    // 더미 데이터 강제 삭제
+    localStorage.setItem("dori_community_posts", JSON.stringify([]));
+    setPosts([]);
     setIsLoaded(true);
   }, []);
 
@@ -113,10 +106,72 @@ export default function CommunityClient() {
           </p>
         </div>
       </section>
+      {/* 좌측 사이드바 네비게이션 */}
+      <aside 
+        className="fixed left-0 top-1/2 -translate-y-1/2 z-50 hidden lg:block"
+      >
+        <nav className="ml-6">
+          <div 
+            className="flex flex-col gap-3 p-4 rounded-2xl backdrop-blur-xl transition-all duration-500"
+            style={{
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
+              border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
+            }}
+          >
+            {(["All", "질문", "정보", "자랑", "잡담"] as (CommunityTag | "All")[]).map((tag) => (
+              <a
+                key={tag}
+                href="#"
+                className="group relative flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 cursor-pointer"
+                style={{
+                  backgroundColor: filterTag === tag 
+                    ? (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)')
+                    : 'transparent',
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  setFilterTag(tag);
+                }}
+              >
+                <div 
+                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                    filterTag === tag ? 'scale-150' : 'scale-100'
+                  }`}
+                  style={{
+                    backgroundColor: filterTag === tag 
+                      ? (isDark ? '#ffffff' : '#000000')
+                      : (isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)'),
+                  }}
+                />
+                <span 
+                  className="text-xs font-medium transition-all duration-300"
+                  style={{
+                    color: filterTag === tag 
+                      ? (isDark ? '#ffffff' : '#000000')
+                      : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)'),
+                    transform: filterTag === tag ? 'translateX(4px)' : 'translateX(0)',
+                  }}
+                >
+                  {tag === "All" ? "전체" : tag}
+                </span>
+              </a>
+            ))}
+          </div>
+        </nav>
+      </aside>
+
+      {/* 우측 빈 사이드바 */}
+      <aside 
+        className="fixed right-0 top-1/2 -translate-y-1/2 z-50 hidden lg:block"
+        style={{
+          width: '140px',
+        }}
+      />
+
       {/* 메인 콘텐츠 */}
-      <section className="container max-w-7xl mx-auto px-4 md:px-6 pb-24 relative">
+      <section className="container max-w-7xl mx-auto px-4 md:px-6 pb-24 relative lg:pl-32">
         <CommunityForm onAddPost={handleAddPost} />
-        <CommunityFilters filterTag={filterTag} setFilterTag={setFilterTag} sort={sort} setSort={setSort} />
+        <CommunityFilters sort={sort} setSort={setSort} />
         <CommunityList posts={filteredPosts} onLike={handleLike} />
       </section>
 

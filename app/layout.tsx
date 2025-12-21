@@ -61,7 +61,7 @@ export default function RootLayout({
           <VisitorTracker /> 
           <div className="flex flex-col min-h-screen">
             <Header />
-            <main className="flex-grow w-full pt-20">
+            <main className="flex-grow w-full" style={{ paddingTop: '70px' }}>
               {children}
             </main>
           </div>

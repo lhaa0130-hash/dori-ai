@@ -50,6 +50,7 @@ export type AiTool = {
   pricing: string; 
   tags: string[];
   thumbnail: string;
+  company?: string; // 개발사 이름
   
   // 추가 정보
   priceType?: string; // "무료", "부분 유료" 등 (필터용)

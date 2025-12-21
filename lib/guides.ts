@@ -13,6 +13,7 @@ export interface GuidePost {
   content: string;
   tags?: string[];
   subtitle?: string;
+  thumbnail?: string;
 }
 
 // 📌 Frontmatter 파싱 함수 (가장 유연하게 설계)
@@ -115,6 +116,7 @@ export function getGuideBySlug(slug: string): GuidePost | null {
     content: content,
     tags: metadata.tags || [],
     subtitle: metadata.subtitle,
+    thumbnail: metadata.thumbnail,
   };
 }
 
@@ -123,6 +125,6 @@ export function getAllGuides(): GuidePost[] {
   const posts = slugs
     .map((slug) => getGuideBySlug(slug))
     .filter((post): post is GuidePost => post !== null)
-    .sort((post1, post2) => (post1.date > post2.date ? -1 : 1));
+    .sort((post1, post2) => (post1.date < post2.date ? -1 : 1)); // 오래된 순으로 정렬
   return posts;
 }

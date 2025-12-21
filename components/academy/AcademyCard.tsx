@@ -62,31 +62,9 @@ const AcademyCard = React.memo(({ item }: AcademyCardProps) => {
             <svg className="w-6 h-6 text-black" fill="currentColor" viewBox="0 0 24 24"><path d="M8 5v14l11-7z"/></svg>
           </div>
         </div>
-        <div className="absolute top-3 left-3 px-3 py-1 rounded-full text-xs font-bold bg-black/60 text-white backdrop-blur-md border border-white/20 z-20">{item.level}</div>
       </div>
 
       <div className="flex flex-col p-6 flex-1">
-        <div className="flex items-center gap-2 mb-4">
-          <span 
-            className="text-xs font-bold px-3 py-1 rounded-full border"
-            style={{
-              backgroundColor: 'var(--bg-main)',
-              borderColor: 'var(--card-border)',
-              color: 'var(--accent-color)',
-            }}
-          >
-            {item.category}
-          </span>
-          <span 
-            className="text-xs font-bold px-2 py-1 rounded-md"
-            style={{
-              backgroundColor: 'var(--bg-main)',
-              color: 'var(--text-sub)',
-            }}
-          >
-            {item.level}
-          </span>
-        </div>
 
         <h3 
           className="text-xl font-black mb-3 line-clamp-2 leading-snug"

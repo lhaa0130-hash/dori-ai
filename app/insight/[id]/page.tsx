@@ -30,8 +30,8 @@ export default async function InsightDetailPage({ params }: Props) {
 
     return (
       <main 
-        className="w-full min-h-screen pt-32 pb-24 px-6 transition-colors duration-300"
-        style={pageStyle} 
+        className="w-full min-h-screen pb-24 px-6 transition-colors duration-300"
+        style={{ ...pageStyle, paddingTop: 0 }} 
       >
         <article className="max-w-3xl mx-auto">
           
@@ -40,7 +40,7 @@ export default async function InsightDetailPage({ params }: Props) {
               <span className="px-3 py-1 rounded-full bg-purple-100 dark:bg-purple-900/40 text-purple-700 dark:text-purple-200 text-xs font-bold uppercase tracking-wide border border-purple-200 dark:border-purple-800">
                 {post.category}
               </span>
-              <span className="text-sm opacity-60 font-medium">
+              <span className="text-sm opacity-60 font-medium dark:text-white">
                 {new Date(post.date).toLocaleDateString()}
               </span>
             </div>
@@ -51,7 +51,7 @@ export default async function InsightDetailPage({ params }: Props) {
   
             <div className="flex items-center justify-between">
               <AiBadge aiMeta={post.aiMeta} />
-              <div className="flex items-center gap-2 text-sm opacity-60 font-medium">
+              <div className="flex items-center gap-2 text-sm opacity-60 font-medium dark:text-white">
                 <span>❤️ {post.likes}명이 좋아함</span>
               </div>
             </div>

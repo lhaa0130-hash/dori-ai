@@ -2,7 +2,6 @@
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import AcademySearch from "@/components/academy/AcademySearch";
-import AcademyFilters from "@/components/academy/AcademyFilters";
 import AcademyList from "@/components/academy/AcademyList";
 import { TEXTS } from "@/constants/texts";
 
@@ -11,7 +10,6 @@ export default function AcademyClient() {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [searchTerm, setSearchTerm] = useState("");
-  const [filters, setFilters] = useState({ level: "All", category: "All" });
 
   useEffect(() => setMounted(true), []);
 
@@ -93,8 +91,7 @@ export default function AcademyClient() {
       </section>
       {/* 메인 콘텐츠 */}
       <section className="container max-w-7xl mx-auto px-4 md:px-6 pb-24 relative">
-        <AcademyFilters filters={filters} setFilters={setFilters} />
-        <AcademyList searchTerm={searchTerm} filters={filters} />
+        <AcademyList searchTerm={searchTerm} />
       </section>
 
       {/* 스타일 */}
