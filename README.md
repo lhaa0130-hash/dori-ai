@@ -29,6 +29,24 @@ To learn more about Next.js, take a look at the following resources:
 
 You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
 
+## 배포 (Deployment)
+
+이 프로젝트를 배포하는 방법은 [DEPLOYMENT.md](./DEPLOYMENT.md) 파일을 참고하세요.
+
+### 빠른 배포 (Vercel)
+
+1. [Vercel](https://vercel.com)에 가입
+2. GitHub 저장소 연결
+3. 환경 변수 설정:
+   - `NEXTAUTH_SECRET`
+   - `NEXTAUTH_URL`
+   - `GOOGLE_CLIENT_ID`
+   - `GOOGLE_CLIENT_SECRET`
+   - `JWT_SECRET`
+4. 배포 버튼 클릭
+
+자세한 내용은 [DEPLOYMENT.md](./DEPLOYMENT.md)를 참고하세요.
+
 ## Deploy on Vercel
 
 The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
