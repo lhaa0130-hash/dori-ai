@@ -4,9 +4,11 @@ import { TEXTS } from "@/constants/texts";
 interface CommunityListProps {
   posts: CommunityPost[];
   onLike: (id: number) => void;
+  onPostUpdate?: (updatedPost: CommunityPost) => void;
+  onPostDelete?: (postId: number) => void;
 }
 
-export default function CommunityList({ posts, onLike }: CommunityListProps) {
+export default function CommunityList({ posts, onLike, onPostUpdate, onPostDelete }: CommunityListProps) {
   const t = TEXTS.home.sectionTitles;
 
   if (posts.length === 0) {
@@ -26,7 +28,9 @@ export default function CommunityList({ posts, onLike }: CommunityListProps) {
           <CommunityCard 
             key={post.id} 
             post={post} 
-            onLike={onLike} 
+            onLike={onLike}
+            onPostUpdate={onPostUpdate}
+            onPostDelete={onPostDelete}
           />
         ))}
       </div>

@@ -161,3 +161,6 @@ Vercel 대시보드에서 "Settings" > "Environment Variables"에서 다음 변�
 - [Vercel 배포 가이드](https://vercel.com/docs)
 - [NextAuth.js 배포 가이드](https://next-auth.js.org/configuration/options#nextauth_url)
 
+
+
+

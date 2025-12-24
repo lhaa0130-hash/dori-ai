@@ -19,16 +19,47 @@ export default function CommunityClient() {
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    // 더미 데이터 강제 삭제
-    localStorage.setItem("dori_community_posts", JSON.stringify([]));
-    setPosts([]);
+    // localStorage에서 포스트 로드
+    const savedPosts = JSON.parse(localStorage.getItem("dori_posts") || "[]");
+    setPosts(savedPosts);
     setIsLoaded(true);
   }, []);
 
-  useEffect(() => { if (isLoaded) localStorage.setItem("dori_community_posts", JSON.stringify(posts)); }, [posts, isLoaded]);
+  useEffect(() => { 
+    if (isLoaded) {
+      localStorage.setItem("dori_posts", JSON.stringify(posts));
+    }
+  }, [posts, isLoaded]);
+  
+  const handlePostUpdate = (updatedPost: CommunityPost) => {
+    setPosts(posts.map(p => p.id === updatedPost.id ? updatedPost : p));
+  };
 
   const handleAddPost = (newPost: CommunityPost) => setPosts([newPost, ...posts]);
-  const handleLike = (id: number) => setPosts(posts.map(p => p.id === id ? { ...p, likes: p.likes + 1 } : p));
+  
+  const handlePostDelete = (postId: number) => {
+    setPosts(posts.filter(p => p.id !== postId));
+  };
+  
+  const handleLike = (id: number) => {
+    // 좋아요 토글: localStorage에 좋아요한 글 ID 저장
+    const likedPosts = JSON.parse(localStorage.getItem("dori_liked_posts") || "[]");
+    const postIdStr = String(id);
+    let updatedLikedPosts = [...likedPosts];
+    let isLiked = likedPosts.includes(postIdStr);
+    
+    if (isLiked) {
+      // 좋아요 취소
+      updatedLikedPosts = updatedLikedPosts.filter((pid: string) => pid !== postIdStr);
+      setPosts(posts.map(p => p.id === id ? { ...p, likes: Math.max(0, p.likes - 1) } : p));
+    } else {
+      // 좋아요 추가
+      updatedLikedPosts.push(postIdStr);
+      setPosts(posts.map(p => p.id === id ? { ...p, likes: p.likes + 1 } : p));
+    }
+    
+    localStorage.setItem("dori_liked_posts", JSON.stringify(updatedLikedPosts));
+  };
   const filteredPosts = posts.filter(p => filterTag === "All" || p.tag === filterTag).sort((a, b) => sort === "likes" ? b.likes - a.likes : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
 
   const isDark = mounted && theme === 'dark';
@@ -172,7 +203,7 @@ export default function CommunityClient() {
       <section className="container max-w-7xl mx-auto px-4 md:px-6 pb-24 relative lg:pl-32">
         <CommunityForm onAddPost={handleAddPost} />
         <CommunityFilters sort={sort} setSort={setSort} />
-        <CommunityList posts={filteredPosts} onLike={handleLike} />
+        <CommunityList posts={filteredPosts} onLike={handleLike} onPostUpdate={handlePostUpdate} onPostDelete={handlePostDelete} />
       </section>
 
       {/* 스타일 */}

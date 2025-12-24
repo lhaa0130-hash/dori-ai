@@ -4,6 +4,7 @@ import { useParams, useRouter } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
 import { useEffect, useState, useRef } from "react";
+import { addUserScore } from "@/lib/userProfile";
 
 export default function CommunityDetailPage() {
   const params = useParams(); 
@@ -16,6 +17,7 @@ export default function CommunityDetailPage() {
   const [comment, setComment] = useState("");
   const [isSparked, setIsSparked] = useState(false);
   const [isBookmarked, setIsBookmarked] = useState(false);
+  const [isLiked, setIsLiked] = useState(false);
   const hasViewed = useRef(false);
 
   useEffect(() => {
@@ -45,6 +47,10 @@ export default function CommunityDetailPage() {
       const mySparks = JSON.parse(localStorage.getItem("dori_my_sparks") || "[]");
       if (mySparks.includes(String(postId))) setIsSparked(true);
       
+      // 좋아요 확인
+      const likedPosts = JSON.parse(localStorage.getItem("dori_liked_posts") || "[]");
+      if (likedPosts.includes(String(postId))) setIsLiked(true);
+      
       // 북마크 확인
       if (user?.email) {
         const bookmarks = JSON.parse(localStorage.getItem(`dori_bookmarks_${user.email}`) || "[]");
@@ -52,6 +58,38 @@ export default function CommunityDetailPage() {
       }
     }
   }, [postId, user]);
+
+  function handleLike() {
+    if (!post || !user) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+    
+    const likedPosts = JSON.parse(localStorage.getItem("dori_liked_posts") || "[]");
+    const postIdStr = String(postId);
+    let newLikesCount = post.likes || 0;
+    let updatedLikedPosts = [...likedPosts];
+    
+    if (isLiked) {
+      // 좋아요 취소
+      newLikesCount = Math.max(0, newLikesCount - 1);
+      updatedLikedPosts = updatedLikedPosts.filter((id: string) => id !== postIdStr);
+      setIsLiked(false);
+    } else {
+      // 좋아요 추가
+      newLikesCount += 1;
+      updatedLikedPosts.push(postIdStr);
+      setIsLiked(true);
+    }
+    
+    localStorage.setItem("dori_liked_posts", JSON.stringify(updatedLikedPosts));
+    
+    const updatedPost = { ...post, likes: newLikesCount };
+    const savedPosts = JSON.parse(localStorage.getItem("dori_posts") || "[]");
+    const updatedList = savedPosts.map((p: any) => String(p.id) === String(postId) ? updatedPost : p);
+    localStorage.setItem("dori_posts", JSON.stringify(updatedList));
+    setPost(updatedPost);
+  }
 
   function handleSpark() {
     if (!post) return;
@@ -74,6 +112,25 @@ export default function CommunityDetailPage() {
     setPost(updatedPost);
   }
 
+  function handleBookmark() {
+    if (!user?.email) {
+      alert("로그인이 필요합니다.");
+      return;
+    }
+    
+    const bookmarks = JSON.parse(localStorage.getItem(`dori_bookmarks_${user.email}`) || "[]");
+    const postIdStr = String(postId);
+    
+    if (isBookmarked) {
+      const updated = bookmarks.filter((id: string) => id !== postIdStr);
+      localStorage.setItem(`dori_bookmarks_${user.email}`, JSON.stringify(updated));
+      setIsBookmarked(false);
+    } else {
+      localStorage.setItem(`dori_bookmarks_${user.email}`, JSON.stringify([...bookmarks, postIdStr]));
+      setIsBookmarked(true);
+    }
+  }
+
   function handleDelete() {
     if (!confirm("정말 이 글을 삭제하시겠습니까?")) return;
     const savedPosts = JSON.parse(localStorage.getItem("dori_posts") || "[]");
@@ -86,11 +143,22 @@ export default function CommunityDetailPage() {
   function handleCommentSubmit() {
     if (!comment.trim()) return alert("댓글 내용을 입력해주세요.");
     if (!user) return alert("로그인이 필요합니다.");
-    const newComment = { id: Date.now(), text: comment, author: user.name || "익명", date: new Date().toLocaleDateString() };
+    const newComment = { 
+      id: Date.now(), 
+      text: comment, 
+      author: user.name || user.email?.split('@')[0] || "익명", // 사용자 프로필 아이디 사용
+      date: new Date().toLocaleDateString() 
+    };
     const updatedPost = { ...post, commentsList: [...(post.commentsList || []), newComment], comments: (post.comments || 0) + 1 };
     const savedPosts = JSON.parse(localStorage.getItem("dori_posts") || "[]");
     const updatedList = savedPosts.map((p: any) => String(p.id) === String(postId) ? updatedPost : p);
     localStorage.setItem("dori_posts", JSON.stringify(updatedList));
+    
+    // 댓글 작성 시 점수 증가
+    if (user.email) {
+      addUserScore(user.email, "comment");
+    }
+    
     setPost(updatedPost);
     setComment(""); 
   }
@@ -168,15 +236,38 @@ export default function CommunityDetailPage() {
               </div>
               
               <div className="post-content">
+                {post.images && post.images.length > 0 && (
+                  <div className="post-images-wrap">
+                    {post.images.map((img: string, idx: number) => (
+                      <img key={idx} src={img} alt={`첨부 이미지 ${idx + 1}`} className="post-image" />
+                    ))}
+                  </div>
+                )}
                 {post.image && (
                   <div className="post-image-wrap">
                     <img src={post.image} alt="첨부 이미지" />
                   </div>
                 )}
-                <div style={{ whiteSpace: "pre-wrap" }}>{post.content}</div>
+                <div 
+                  className="post-content-html"
+                  dangerouslySetInnerHTML={{ __html: post.content }}
+                />
               </div>
 
               <div className="post-actions">
+                  {user && (
+                    <button 
+                      className={`action-btn like-btn ${isLiked ? 'active' : ''}`} 
+                      onClick={handleLike}
+                      style={{ 
+                        backgroundColor: isLiked ? 'rgba(255, 77, 79, 0.1)' : 'transparent',
+                        color: isLiked ? '#ff4d4f' : 'inherit',
+                        cursor: 'pointer'
+                      }}
+                    >
+                      {isLiked ? '❤️' : '🤍'} 좋아요 {post.likes || 0}
+                    </button>
+                  )}
                   <button className={`action-btn spark-btn ${isSparked ? 'active' : ''}`} onClick={handleSpark}>
                     ⚡️ 유레카 {post.sparks || 0}
                   </button>
@@ -201,7 +292,7 @@ export default function CommunityDetailPage() {
                     <div key={c.id} className="comment-item">
                       <div style={{display:'flex', justifyContent:'space-between'}}>
                         <div className="comment-author">{c.author} <span style={{fontSize:'12px', color:'#999', fontWeight:'normal'}}>{c.date}</span></div>
-                        {(user?.name === c.author || user?.name === "관리자" || true) && <button onClick={() => handleCommentDelete(c.id)} className="comment-del-btn">✕</button>}
+                        {(user?.name === c.author || user?.name === "관리자") && <button onClick={() => handleCommentDelete(c.id)} className="comment-del-btn">✕</button>}
                       </div>
                       <div className="comment-text">{c.text}</div>
                     </div>
@@ -266,9 +357,14 @@ export default function CommunityDetailPage() {
         .meta { font-size: 14px; color: #888; display: flex; gap: 10px; align-items: center; }
         .divider { color: #ddd; font-size: 10px; }
         .post-content { font-size: 16px; line-height: 1.7; color: #333; min-height: 200px; }
+        .post-content-html { word-break: break-word; }
+        .post-content-html :global(img) { max-width: 100%; height: auto; border-radius: 8px; margin: 10px 0; }
+        .post-content-html :global(video) { max-width: 100%; border-radius: 8px; margin: 10px 0; }
+        .post-content-html :global(iframe) { max-width: 100%; border-radius: 8px; margin: 10px 0; }
         
+        .post-images-wrap { display: flex; flex-direction: column; gap: 12px; margin-bottom: 24px; }
         .post-image-wrap { margin-bottom: 24px; text-align: center; }
-        .post-image-wrap img { max-width: 100%; max-height: 500px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        .post-image-wrap img, .post-image { max-width: 100%; max-height: 500px; border-radius: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
 
         .post-actions { margin-top: 40px; display: flex; gap: 10px; justify-content: center; }
         .action-btn { padding: 10px 20px; border-radius: 999px; border: 1px solid #ddd; background: #fff; cursor: pointer; font-size: 14px; transition: 0.2s; display: flex; align-items: center; gap: 6px; }

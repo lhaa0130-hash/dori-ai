@@ -94,9 +94,46 @@ export function createDefaultProfile(userId: string, email: string, nickname: st
 export const ACTIVITY_SCORES = {
   post: 10,
   comment: 3,
-  like: 0, // 받은 좋아요는 별도 계산
+  like: 0, // 좋아요는 점수 없음
   receivedLike: 3,
   guide: 20,
   report: -10,
 };
+
+// 사용자 점수 증가 함수
+export function addUserScore(email: string, activityType: "post" | "comment"): void {
+  if (!email) return;
+  
+  const scoreDelta = activityType === "post" ? ACTIVITY_SCORES.post : ACTIVITY_SCORES.comment;
+  
+  try {
+    const profileKey = `dori_profile_${email}`;
+    const profileData = localStorage.getItem(profileKey);
+    
+    if (profileData) {
+      const profile: UserProfile = JSON.parse(profileData);
+      const newScore = profile.doriScore + scoreDelta;
+      const newTier = calculateTier(newScore);
+      const newLevel = calculateLevel(newScore * 10);
+      
+      const updatedProfile: UserProfile = {
+        ...profile,
+        doriScore: newScore,
+        tier: newTier,
+        level: newLevel,
+      };
+      
+      localStorage.setItem(profileKey, JSON.stringify(updatedProfile));
+    } else {
+      // 프로필이 없으면 기본 프로필 생성
+      const defaultProfile = createDefaultProfile(email, email, email.split('@')[0] || "익명");
+      defaultProfile.doriScore = scoreDelta;
+      defaultProfile.tier = calculateTier(scoreDelta);
+      defaultProfile.level = calculateLevel(scoreDelta * 10);
+      localStorage.setItem(profileKey, JSON.stringify(defaultProfile));
+    }
+  } catch (error) {
+    console.error("점수 업데이트 중 오류:", error);
+  }
+}
 

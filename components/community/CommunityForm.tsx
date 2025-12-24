@@ -1,21 +1,32 @@
 "use client";
 
 import { useState } from "react";
+import { useSession } from "next-auth/react";
 import { TEXTS } from "@/constants/texts";
 import { CommunityPost, CommunityTag } from "./CommunityCard";
 import { BANNED_WORDS } from "@/constants/bannedWords";
-import { AiCreationType, AiMeta } from "@/types/content"; // 👈 추가
+import { AiCreationType, AiMeta } from "@/types/content";
+import RichTextEditor from "./RichTextEditor";
+import { addUserScore } from "@/lib/userProfile";
+
+const CATEGORIES = [
+  { value: "잡담" as CommunityTag, label: "☕ 잡담", icon: "☕" },
+  { value: "질문" as CommunityTag, label: "❓ 질문", icon: "❓" },
+  { value: "정보" as CommunityTag, label: "💡 정보", icon: "💡" },
+  { value: "자랑" as CommunityTag, label: "✨ 자랑", icon: "✨" },
+];
 
 interface CommunityFormProps {
   onAddPost: (newPost: CommunityPost) => void;
 }
 
 export default function CommunityForm({ onAddPost }: CommunityFormProps) {
+  const { data: session } = useSession();
+  const user = session?.user || null;
   const t = TEXTS.communityPage.form;
   const tErr = TEXTS.communityPage.errors;
 
   const [isOpen, setIsOpen] = useState(false);
-  const [nickname, setNickname] = useState("");
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tag, setTag] = useState<CommunityTag>("잡담");
@@ -27,32 +38,41 @@ export default function CommunityForm({ onAddPost }: CommunityFormProps) {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (title.length < 2 || content.length < 5) { alert(tErr.short.ko); return; }
-    const combinedText = title + content + nickname;
-    if (BANNED_WORDS.some((word) => combinedText.includes(word))) { alert(tErr.banned.ko); return; }
+    // HTML 태그 제거한 순수 텍스트로 검증
+    const textContent = content.replace(/<[^>]*>/g, '').trim();
 
-    // AI 메타데이터 구성
-    const aiMeta: AiMeta | undefined = creationType !== "human_only" ? {
-      creationType,
-      tools: aiTools ? aiTools.split(",").map(t => t.trim()) : undefined
-    } : undefined;
+    if (!title || title.trim().length < 1) { 
+      alert("제목을 입력해주세요."); 
+      return; 
+    }
+    
+    const combinedText = title + textContent;
+    if (BANNED_WORDS.some((word) => combinedText.includes(word))) { 
+      alert(tErr.banned.ko); 
+      return; 
+    }
 
     const newPost: CommunityPost = {
       id: Date.now(),
-      nickname: nickname || "익명",
+      nickname: user?.name || user?.email?.split('@')[0] || "익명", // 사용자 프로필 아이디 사용
       title,
-      content,
+      content, // HTML 형식으로 저장
       tag,
       likes: 0,
       createdAt: new Date().toISOString(),
-      aiMeta, // 👈 저장
     };
 
     onAddPost(newPost);
     
+    // 글 작성 시 점수 증가
+    if (user?.email) {
+      addUserScore(user.email, "post");
+    }
+    
     // 초기화
-    setNickname(""); setTitle(""); setContent(""); setTag("잡담");
-    setCreationType("human_only"); setAiTools("");
+    setTitle(""); 
+    setContent(""); 
+    setTag("잡담");
     setIsOpen(false);
   };
 
@@ -73,43 +93,51 @@ export default function CommunityForm({ onAddPost }: CommunityFormProps) {
           <h3 className="text-xl font-bold mb-4" style={{ color: 'var(--text-main)' }}>📝 글쓰기</h3>
           <form onSubmit={handleSubmit} className="flex flex-col gap-4">
             
-            <div className="flex gap-4">
-              <input type="text" placeholder={t.nickname.ko} value={nickname} onChange={(e) => setNickname(e.target.value)} className={`w-1/3 ${inputClass}`} maxLength={10} />
-              <select value={tag} onChange={(e) => setTag(e.target.value as CommunityTag)} className={`w-1/3 ${inputClass} cursor-pointer`}>
-                <option value="잡담">☕ 잡담</option>
-                <option value="질문">❓ 질문</option>
-                <option value="정보">💡 정보</option>
-                <option value="자랑">✨ 자랑</option>
-              </select>
-            </div>
-
-            {/* 👇 [추가] AI 사용 여부 선택 */}
-            <div className="flex flex-col gap-2 p-4 rounded-xl bg-gray-50 dark:bg-white/5 border border-gray-100 dark:border-white/10">
-              <span className="text-sm font-bold opacity-80">🤖 AI 사용 여부 (투명성 표시)</span>
-              <div className="flex gap-4 text-sm">
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="radio" name="creationType" value="human_only" checked={creationType === "human_only"} onChange={() => setCreationType("human_only")} /> 사람만 작성
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="radio" name="creationType" value="ai_assisted" checked={creationType === "ai_assisted"} onChange={() => setCreationType("ai_assisted")} /> AI 보조 사용
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer">
-                  <input type="radio" name="creationType" value="ai_generated" checked={creationType === "ai_generated"} onChange={() => setCreationType("ai_generated")} /> AI가 생성
-                </label>
+            {/* 카테고리 선택 */}
+            <div className="flex flex-col gap-2">
+              <label className="text-sm font-semibold" style={{ color: 'var(--text-main)' }}>카테고리</label>
+              <div className="flex flex-wrap gap-2">
+                {CATEGORIES.map((cat) => (
+                  <button
+                    key={cat.value}
+                    type="button"
+                    onClick={() => setTag(cat.value)}
+                    className={`px-4 py-2 rounded-lg border transition-all text-sm font-medium ${
+                      tag === cat.value 
+                        ? 'bg-blue-600 text-white border-blue-600' 
+                        : 'bg-[var(--bg-soft)] border-[var(--card-border)] text-[var(--text-main)] hover:border-blue-500'
+                    }`}
+                  >
+                    {cat.label}
+                  </button>
+                ))}
               </div>
-              {creationType !== "human_only" && (
-                <input 
-                  type="text" 
-                  placeholder="사용 도구 (예: ChatGPT, Gemini)" 
-                  value={aiTools} 
-                  onChange={(e) => setAiTools(e.target.value)} 
-                  className={`mt-2 ${inputClass} py-2 text-sm`} 
-                />
-              )}
             </div>
 
-            <input type="text" placeholder={t.title.ko} value={title} onChange={(e) => setTitle(e.target.value)} className={inputClass} maxLength={50} />
-            <textarea rows={5} placeholder={t.content.ko} value={content} onChange={(e) => setContent(e.target.value)} className={`${inputClass} resize-none`} />
+            {/* 제목 */}
+            <input 
+              type="text" 
+              placeholder={t.title.ko} 
+              value={title} 
+              onChange={(e) => setTitle(e.target.value)} 
+              className={inputClass} 
+              maxLength={100}
+            />
+
+            {/* 리치 텍스트 에디터 */}
+            <div className="flex flex-col gap-2">
+              <div className="flex items-center justify-between">
+                <label className="text-sm font-semibold" style={{ color: 'var(--text-main)' }}>내용</label>
+                <div className="text-xs" style={{ color: 'var(--text-sub)' }}>
+                  💡 <strong>폰트 설정:</strong> 에디터 상단 툴바에서 폰트 크기, 색상, 굵기 등을 설정할 수 있습니다
+                </div>
+              </div>
+              <RichTextEditor 
+                value={content} 
+                onChange={setContent}
+                placeholder="내용을 입력하세요. 에디터 상단 툴바에서 폰트, 색상, 이미지 등을 추가할 수 있습니다."
+              />
+            </div>
 
             <div className="flex gap-3 mt-2">
               <button type="button" onClick={() => setIsOpen(false)} className="flex-1 py-3 rounded-xl font-bold border transition-colors hover:bg-gray-100 dark:hover:bg-white/10" style={{ borderColor: 'var(--card-border)', color: 'var(--text-sub)' }}>취소</button>
