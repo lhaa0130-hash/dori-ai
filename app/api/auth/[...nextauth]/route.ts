@@ -7,39 +7,81 @@ const ADMIN_EMAILS = [
   "lhaa0130@gmail.com",
 ];
 
+// NEXTAUTH_URL 자동 감지
+const getNextAuthUrl = () => {
+  if (process.env.NEXTAUTH_URL) {
+    return process.env.NEXTAUTH_URL;
+  }
+  // 개발 환경에서 자동 감지
+  if (process.env.NODE_ENV === "development") {
+    const host = process.env.VERCEL_URL 
+      ? `https://${process.env.VERCEL_URL}`
+      : process.env.PORT
+      ? `http://localhost:${process.env.PORT}`
+      : "http://localhost:3000";
+    return host;
+  }
+  // 프로덕션에서는 환경 변수 필수
+  return undefined;
+};
+
+const nextAuthUrl = getNextAuthUrl();
+
 // 환경 변수 체크 및 로깅
 if (process.env.NODE_ENV === "development") {
+  console.log("🔍 NextAuth 설정 확인:");
+  console.log(`  NEXTAUTH_URL: ${nextAuthUrl || "⚠️ 설정되지 않음"}`);
+  console.log(`  GOOGLE_CLIENT_ID: ${process.env.GOOGLE_CLIENT_ID ? "✅ 설정됨" : "⚠️ 설정되지 않음"}`);
+  console.log(`  GOOGLE_CLIENT_SECRET: ${process.env.GOOGLE_CLIENT_SECRET ? "✅ 설정됨" : "⚠️ 설정되지 않음"}`);
+  console.log(`  NEXTAUTH_SECRET: ${process.env.NEXTAUTH_SECRET ? "✅ 설정됨" : "⚠️ 기본값 사용"}`);
+  
   if (!process.env.GOOGLE_CLIENT_ID || !process.env.GOOGLE_CLIENT_SECRET) {
-    console.warn("⚠️ GOOGLE_CLIENT_ID 또는 GOOGLE_CLIENT_SECRET이 설정되지 않았습니다.");
-  } else {
-    console.log("✅ 구글 로그인 환경 변수가 설정되어 있습니다.");
+    console.warn("\n⚠️ 구글 로그인을 사용하려면 .env.local 파일에 다음을 추가하세요:");
+    console.warn("   GOOGLE_CLIENT_ID=your-client-id");
+    console.warn("   GOOGLE_CLIENT_SECRET=your-client-secret");
+    console.warn("   NEXTAUTH_URL=http://localhost:3000");
+    console.warn("   NEXTAUTH_SECRET=your-secret-key\n");
   }
 }
 
-const handler = NextAuth({
-  providers: [
-    CredentialsProvider({
-      name: "Credentials",
-      credentials: {
-        email: { label: "Email", type: "text" },
-        password: { label: "Password", type: "password" }
-      },
-      async authorize(credentials, req) {
-        if (credentials?.email && credentials?.password) {
-          return {
-            id: "1",
-            name: credentials.email.split("@")[0], 
-            email: credentials.email,
-          };
-        }
-        return null;
+// 구글 프로바이더 설정
+const googleClientId = process.env.GOOGLE_CLIENT_ID?.trim();
+const googleClientSecret = process.env.GOOGLE_CLIENT_SECRET?.trim();
+
+const providers = [
+  CredentialsProvider({
+    name: "Credentials",
+    credentials: {
+      email: { label: "Email", type: "text" },
+      password: { label: "Password", type: "password" }
+    },
+    async authorize(credentials, req) {
+      if (credentials?.email && credentials?.password) {
+        return {
+          id: "1",
+          name: credentials.email.split("@")[0], 
+          email: credentials.email,
+        };
       }
-    }),
+      return null;
+    }
+  }),
+];
+
+// 구글 프로바이더 추가 (환경 변수가 있을 때만)
+if (googleClientId && googleClientSecret) {
+  providers.push(
     GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID || "",
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET || "",
-    }),
-  ],
+      clientId: googleClientId,
+      clientSecret: googleClientSecret,
+    })
+  );
+} else if (process.env.NODE_ENV === "development") {
+  console.warn("⚠️ 구글 프로바이더가 비활성화되었습니다. GOOGLE_CLIENT_ID와 GOOGLE_CLIENT_SECRET을 확인하세요.");
+}
+
+const handler = NextAuth({
+  providers,
   pages: {
     signIn: '/login',
     error: '/login',
@@ -49,6 +91,7 @@ const handler = NextAuth({
   debug: process.env.NODE_ENV === "development",
   trustHost: true,
   useSecureCookies: process.env.NODE_ENV === "production",
+  ...(nextAuthUrl && { url: nextAuthUrl }),
   callbacks: {
     async session({ session, token }) {
       if (session.user) {
@@ -80,14 +123,23 @@ const handler = NextAuth({
       if (account?.provider === "google") {
         // 구글 로그인 에러 로깅
         if (process.env.NODE_ENV === "development") {
-          console.log("Google sign in attempt:", { 
+          console.log("✅ Google sign in success:", { 
             hasUser: !!user, 
             hasAccount: !!account,
-            userEmail: user?.email 
+            userEmail: user?.email,
+            accountId: account?.providerAccountId
           });
         }
       }
       return true;
+    },
+    async redirect({ url, baseUrl }) {
+      // 상대 경로인 경우 baseUrl과 결합
+      if (url.startsWith("/")) return `${baseUrl}${url}`;
+      // 같은 도메인이면 허용
+      if (new URL(url).origin === baseUrl) return url;
+      // 기본적으로 baseUrl로 리디렉션
+      return baseUrl;
     }
   }
 });

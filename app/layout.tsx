@@ -1,15 +1,15 @@
 import Script from "next/script";
 import "./globals.css";
 import { AuthProvider } from "./providers";
-import Header from "@/components/layout/Header"; 
+import LayoutClient from "@/components/layout/LayoutClient";
 import VisitorTracker from "@/components/VisitorTracker";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata = {
   ...createMetadata({
-    title: "Create Reality",
-    description: "AI Tools, Insight, Academy, Community - All in one AI Platform.",
-    path: "/",
+  title: "Create Reality",
+  description: "AI Tools, Insight, Academy, Community - All in one AI Platform.",
+  path: "/",
   }),
   other: {
     'pretendard-font': 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css',
@@ -59,12 +59,9 @@ export default function RootLayout({
 
         <AuthProvider>
           <VisitorTracker /> 
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex-grow w-full" style={{ paddingTop: '70px' }}>
+          <LayoutClient>
               {children}
-            </main>
-          </div>
+          </LayoutClient>
         </AuthProvider>
       </body>
     </html>

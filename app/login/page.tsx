@@ -11,10 +11,18 @@ function ErrorHandler({ onError }: { onError: (error: string) => void }) {
   useEffect(() => {
     const errorParam = searchParams.get("error");
     if (errorParam) {
-      if (errorParam === "Configuration" || errorParam.includes("deleted_client")) {
-        onError("구글 OAuth 클라이언트가 삭제되었거나 설정이 올바르지 않습니다. 새로운 클라이언트 ID를 생성하고 .env.local 파일을 업데이트해주세요.");
+      if (errorParam === "Configuration" || errorParam.includes("deleted_client") || errorParam.includes("client")) {
+        onError("구글 OAuth 클라이언트가 삭제되었거나 설정이 올바르지 않습니다. .env.local 파일에 GOOGLE_CLIENT_ID와 GOOGLE_CLIENT_SECRET을 확인해주세요.");
       } else if (errorParam === "AccessDenied") {
-        onError("접근이 거부되었습니다.");
+        onError("접근이 거부되었습니다. 구글 계정 권한을 확인해주세요.");
+      } else if (errorParam === "OAuthAccountNotLinked") {
+        onError("이 이메일은 이미 다른 로그인 방식으로 가입되어 있습니다.");
+      } else if (errorParam === "OAuthSignin") {
+        onError("구글 로그인 초기화 중 오류가 발생했습니다. 다시 시도해주세요.");
+      } else if (errorParam === "OAuthCallback") {
+        onError("구글 로그인 콜백 처리 중 오류가 발생했습니다. 다시 시도해주세요.");
+      } else if (errorParam === "OAuthCreateAccount") {
+        onError("계정 생성 중 오류가 발생했습니다. 다시 시도해주세요.");
       } else {
         onError(`로그인 중 오류가 발생했습니다: ${errorParam}`);
       }
@@ -31,17 +39,37 @@ export default function LoginPage() {
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
 
-  const handleGoogleLogin = () => {
+  const handleGoogleLogin = async () => {
     setIsLoading(true);
     setError("");
-    signIn("google", { 
-      callbackUrl: "/",
-      redirect: true,
-    }).catch((error) => {
-      console.error("Google login error:", error);
-      setError("구글 로그인 중 오류가 발생했습니다.");
-      setIsLoading(false);
-    });
+    
+    try {
+      const result = await signIn("google", { 
+        callbackUrl: "/",
+        redirect: false, // 먼저 redirect: false로 시도하여 에러 확인
+      });
+      
+      if (result?.error) {
+        console.error("Google login error:", result.error);
+        // 에러 타입에 따라 메시지 설정
+        if (result.error === "Configuration") {
+          setError("구글 로그인 설정이 올바르지 않습니다. .env.local 파일의 GOOGLE_CLIENT_ID와 GOOGLE_CLIENT_SECRET을 확인해주세요.");
+        } else {
+          setError(`구글 로그인 중 오류가 발생했습니다: ${result.error}`);
+        }
+        setIsLoading(false);
+      } else if (result?.ok) {
+        // 성공 시 리디렉션
+        router.push("/");
+      }
+    } catch (error: any) {
+      console.error("Google login exception:", error);
+      // redirect 에러는 정상적인 리디렉션이므로 무시
+      if (!error?.message?.includes("redirect") && !error?.message?.includes("Navigation")) {
+        setError("구글 로그인 중 예상치 못한 오류가 발생했습니다.");
+        setIsLoading(false);
+      }
+    }
   };
 
   const handleCredentialLogin = async (e: React.FormEvent) => {
