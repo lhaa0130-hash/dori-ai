@@ -8,7 +8,6 @@ thumbnail: /thumbnails/guide/guide04.png
 tags: ["AI실무", "구조설계", "업무활용", "실전편"]
 ---
 
-# 가이드 4 — AI를 실무에 쓰기 시작할 때 반드시 정리해야 할 구조
 ![썸네일 이미지](/thumbnails/guide/guide04.png)
 
 가이드 3까지 왔다면, 당신은 이미 AI를 “한 번만 써본 사람”은 아닐것이다.

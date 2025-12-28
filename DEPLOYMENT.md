@@ -165,3 +165,12 @@ Vercel 대시보드에서 "Settings" > "Environment Variables"에서 다음 변�
 
 
 
+
+
+
+
+
+
+
+
+

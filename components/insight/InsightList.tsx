@@ -26,7 +26,16 @@ export default function InsightList({ filters, setFilters, posts }: InsightListP
     return matchCategory && matchTag;
   }).sort((a, b) => {
     if (filters.sort === "popular") return b.likes - a.likes;
-    // 날짜 최신순
+    
+    // 가이드 글은 옛날순으로 정렬 (날짜 오름차순)
+    if (a.category === '가이드' && b.category === '가이드') {
+      return new Date(a.date).getTime() - new Date(b.date).getTime();
+    }
+    // 가이드 글은 항상 앞에 배치
+    if (a.category === '가이드' && b.category !== '가이드') return -1;
+    if (a.category !== '가이드' && b.category === '가이드') return 1;
+    
+    // 일반 글은 날짜 최신순 (내림차순)
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 
@@ -36,11 +45,18 @@ export default function InsightList({ filters, setFilters, posts }: InsightListP
     <div className="w-full">
       {filteredData.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {visibleData.map((item) => (
-            <Link key={item.id} href={`/insight/${item.id}`} className="block group">
-              <InsightCard item={item} onTagClick={handleTagClick} />
-            </Link>
-          ))}
+          {visibleData.map((item) => {
+            // 가이드 글은 /insight/guide/[slug] 경로 사용
+            const href = item.category === '가이드' && item.slug 
+              ? `/insight/guide/${item.slug}` 
+              : `/insight/${item.id}`;
+            
+            return (
+              <Link key={item.id} href={href} className="block group">
+                <InsightCard item={item} onTagClick={handleTagClick} />
+              </Link>
+            );
+          })}
         </div>
       ) : (
         <div className="text-center py-24 opacity-60 flex flex-col items-center">

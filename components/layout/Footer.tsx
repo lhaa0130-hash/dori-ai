@@ -22,9 +22,24 @@ export default function Footer() {
         </div>
 
         <div className="right-area">
-          <Link href="/suggestions" className="footer-link font-bold text-blue-600 dark:text-blue-400">{t.suggestion.ko}</Link>
-          <Link href="/legal/privacy" className="footer-link">{t.privacy.ko}</Link>
-          <Link href="/legal/terms" className="footer-link">{t.terms.ko}</Link>
+          <Link 
+            href="/suggestions" 
+            className="footer-link font-bold text-blue-600 dark:text-blue-400"
+          >
+            {t.suggestion.ko}
+          </Link>
+          <Link 
+            href="/legal/privacy" 
+            className="footer-link"
+          >
+            {t.privacy.ko}
+          </Link>
+          <Link 
+            href="/legal/terms" 
+            className="footer-link"
+          >
+            {t.terms.ko}
+          </Link>
         </div>
       </div>
 
@@ -36,6 +51,8 @@ export default function Footer() {
           margin-bottom: 0;
           transition: all 0.3s ease;
           font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif;
+          position: relative;
+          z-index: 10;
         }
         :global(.dark) .footer-wrapper {
           background-color: #000000;
@@ -108,6 +125,11 @@ export default function Footer() {
           letter-spacing: -0.01em;
           text-decoration: none; 
           transition: all 0.2s ease;
+          cursor: pointer;
+          position: relative;
+          z-index: 10;
+          pointer-events: auto;
+          display: inline-block;
         }
         :global(.dark) .footer-link {
           color: rgba(255, 255, 255, 0.7);

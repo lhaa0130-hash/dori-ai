@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import Image from "next/image";
 import { AiTool, AiToolComment } from "@/types/content";
 import { AiBadge } from "@/components/common/AiBadge";
@@ -12,7 +12,7 @@ interface AiToolsCardProps {
   rank?: number;
 }
 
-export default function AiToolsCard({ tool, rank }: AiToolsCardProps) {
+const AiToolsCard = React.memo(function AiToolsCard({ tool, rank }: AiToolsCardProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [currentRating, setCurrentRating] = useState(tool.rating);
   const [currentCount, setCurrentCount] = useState(tool.ratingCount);
@@ -38,8 +38,8 @@ export default function AiToolsCard({ tool, rank }: AiToolsCardProps) {
     }
   }, [tool.rating, tool.ratingCount, tool.thumbnail, tool.id]);
 
-  // 이미지 URL 생성 함수
-  const getImageUrl = () => {
+  // 이미지 URL 생성 함수 (useMemo로 최적화)
+  const imageUrl = useMemo(() => {
     if (imageError || !imageSrc) {
       // Fallback: 도메인에서 직접 로고 가져오기 시도
       try {
@@ -51,9 +51,9 @@ export default function AiToolsCard({ tool, rank }: AiToolsCardProps) {
       }
     }
     return imageSrc;
-  };
+  }, [imageError, imageSrc, tool.website]);
 
-  const handleImageError = () => {
+  const handleImageError = useCallback(() => {
     if (!imageError) {
       setImageError(true);
       // clearbit 실패 시 Google favicon 시도
@@ -65,14 +65,14 @@ export default function AiToolsCard({ tool, rank }: AiToolsCardProps) {
         setImageSrc('/images/placeholder-tool.png');
       }
     }
-  };
+  }, [imageError, tool.website]);
 
-  const handleRatingUpdate = (newRating: number, newCount: number) => {
+  const handleRatingUpdate = useCallback((newRating: number, newCount: number) => {
     setCurrentRating(newRating);
     setCurrentCount(newCount);
-  };
+  }, []);
 
-  const handleCommentUpdate = () => {
+  const handleCommentUpdate = useCallback(() => {
     // 댓글이 업데이트되면 베스트 댓글 다시 로드
     const savedData = JSON.parse(localStorage.getItem("dori_tool_comments") || "{}");
     if (savedData[tool.id]) {
@@ -82,9 +82,11 @@ export default function AiToolsCard({ tool, rank }: AiToolsCardProps) {
       );
       setBestComments(sorted.slice(0, 3));
     }
-  };
+  }, [tool.id]);
 
-  const getRankBadge = (r: number) => {
+  const rankBadge = useMemo(() => {
+    if (!rank) return null;
+    const r = rank;
     if (r === 1)
       return (
         <div className="absolute -top-3 -left-3 w-14 h-14 bg-gradient-to-br from-yellow-400 to-yellow-600 text-white rounded-full flex items-center justify-center font-black text-base shadow-lg border-4 border-white dark:border-black z-30 transform -rotate-12">
@@ -104,7 +106,7 @@ export default function AiToolsCard({ tool, rank }: AiToolsCardProps) {
         </div>
       );
     return null;
-  };
+  }, [rank]);
 
   return (
     <div
@@ -126,7 +128,7 @@ export default function AiToolsCard({ tool, rank }: AiToolsCardProps) {
 
       {/* ⭐ 콘텐츠는 z-20로 올려서 버튼 클릭 정상 작동 */}
       <div className="p-5 flex flex-col h-full relative z-20">
-        {rank && getRankBadge(rank)}
+        {rankBadge}
 
         {/* 상단: 이미지 옆에 카테고리와 평점 */}
         <div className="flex items-start gap-3 mb-4">
@@ -138,13 +140,14 @@ export default function AiToolsCard({ tool, rank }: AiToolsCardProps) {
           >
             {imageSrc ? (
               <Image
-                src={getImageUrl()}
+                src={imageUrl}
                 alt={tool.name}
                 fill
                 sizes="64px"
                 className="object-cover transition-transform duration-500 group-hover:scale-110"
                 onError={handleImageError}
                 unoptimized={imageSrc.includes('google.com/s2/favicons')}
+                loading="lazy"
               />
             ) : (
               <div className="w-full h-full flex items-center justify-center text-2xl">
@@ -298,4 +301,8 @@ export default function AiToolsCard({ tool, rank }: AiToolsCardProps) {
       </div>
     </div>
   );
-}
+});
+
+AiToolsCard.displayName = 'AiToolsCard';
+
+export default AiToolsCard;

@@ -51,6 +51,7 @@ const AcademyCard = React.memo(({ item }: AcademyCardProps) => {
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
             className="object-cover transition-transform duration-500 group-hover:scale-110" 
             onError={handleImageError}
+            loading="lazy"
           />
         ) : (
           <div className="w-full h-full flex items-center justify-center text-6xl bg-gradient-to-br from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20">

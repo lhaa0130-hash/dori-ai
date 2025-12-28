@@ -28,7 +28,7 @@ export default function BentoSection() {
   `;
 
   return (
-    <div className="max-w-[1200px] mx-auto px-6 mb-24 mt-0 animate-[fadeInUp_0.8s_ease-out_0.1s_forwards] opacity-0">
+    <div className="max-w-[1200px] mx-auto px-6 mb-24 animate-[fadeInUp_0.8s_ease-out_0.1s_forwards] opacity-0">
       <div className="grid grid-cols-1 md:grid-cols-3 gap-6 auto-rows-[minmax(260px,auto)]">
         
         <Link href="/ai-tools" className={`md:col-span-2 md:row-span-2 ${cardClasses}`}
@@ -56,14 +56,6 @@ export default function BentoSection() {
             <div className={iconClasses}>🧠</div>
             <h3 className="text-xl font-bold mb-2">{t.insight.title}</h3>
             <p className="text-sm opacity-70 leading-relaxed">{t.insight.desc.ko}</p>
-          </div>
-        </Link>
-
-        <Link href="/academy" className={cardClasses} style={cardStyle}>
-          <div>
-            <div className={iconClasses}>🎓</div>
-            <h3 className="text-xl font-bold mb-2">{t.academy.title}</h3>
-            <p className="text-sm opacity-70 leading-relaxed">{t.academy.desc.ko}</p>
           </div>
         </Link>
 

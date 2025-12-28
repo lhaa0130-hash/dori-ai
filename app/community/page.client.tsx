@@ -1,68 +1,54 @@
 "use client";
-import { useState, useEffect } from "react";
+
 import { useTheme } from "next-themes";
-import { TEXTS } from "@/constants/texts";
+import { useEffect, useState } from "react";
+import Link from "next/link";
 import CommunityForm from "@/components/community/CommunityForm";
-import CommunityFilters from "@/components/community/CommunityFilters";
-import CommunityList from "@/components/community/CommunityList";
-import { CommunityPost, CommunityTag } from "@/components/community/CommunityCard";
+import { CommunityPost } from "@/components/community/CommunityCard";
 
 export default function CommunityClient() {
-  const t = TEXTS.communityPage;
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [activeCategory, setActiveCategory] = useState("전체");
   const [posts, setPosts] = useState<CommunityPost[]>([]);
-  const [filterTag, setFilterTag] = useState<CommunityTag | "All">("All");
-  const [sort, setSort] = useState<"newest" | "likes">("newest");
-  const [isLoaded, setIsLoaded] = useState(false);
-
-  useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    // localStorage에서 포스트 로드
-    const savedPosts = JSON.parse(localStorage.getItem("dori_posts") || "[]");
-    setPosts(savedPosts);
-    setIsLoaded(true);
+    setMounted(true);
+    
+    // localStorage에서 글 불러오기
+    if (typeof window !== 'undefined') {
+      const savedPosts = localStorage.getItem("dori_community_posts");
+      if (savedPosts) {
+        try {
+          const parsedPosts: CommunityPost[] = JSON.parse(savedPosts);
+          setPosts(parsedPosts);
+        } catch (e) {
+          console.error('Failed to parse posts:', e);
+        }
+      }
+    }
   }, []);
 
-  useEffect(() => { 
-    if (isLoaded) {
-      localStorage.setItem("dori_posts", JSON.stringify(posts));
-    }
-  }, [posts, isLoaded]);
-  
-  const handlePostUpdate = (updatedPost: CommunityPost) => {
-    setPosts(posts.map(p => p.id === updatedPost.id ? updatedPost : p));
-  };
-
-  const handleAddPost = (newPost: CommunityPost) => setPosts([newPost, ...posts]);
-  
-  const handlePostDelete = (postId: number) => {
-    setPosts(posts.filter(p => p.id !== postId));
-  };
-  
-  const handleLike = (id: number) => {
-    // 좋아요 토글: localStorage에 좋아요한 글 ID 저장
-    const likedPosts = JSON.parse(localStorage.getItem("dori_liked_posts") || "[]");
-    const postIdStr = String(id);
-    let updatedLikedPosts = [...likedPosts];
-    let isLiked = likedPosts.includes(postIdStr);
-    
-    if (isLiked) {
-      // 좋아요 취소
-      updatedLikedPosts = updatedLikedPosts.filter((pid: string) => pid !== postIdStr);
-      setPosts(posts.map(p => p.id === id ? { ...p, likes: Math.max(0, p.likes - 1) } : p));
-    } else {
-      // 좋아요 추가
-      updatedLikedPosts.push(postIdStr);
-      setPosts(posts.map(p => p.id === id ? { ...p, likes: p.likes + 1 } : p));
-    }
-    
-    localStorage.setItem("dori_liked_posts", JSON.stringify(updatedLikedPosts));
-  };
-  const filteredPosts = posts.filter(p => filterTag === "All" || p.tag === filterTag).sort((a, b) => sort === "likes" ? b.likes - a.likes : new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime());
-
   const isDark = mounted && theme === 'dark';
+
+  const categories = [
+    { id: '전체', label: '전체' },
+    { id: '질문', label: '질문' },
+    { id: '정보', label: '정보' },
+    { id: '자랑', label: '자랑' },
+    { id: '잡담', label: '잡담' },
+  ];
+
+  const handleAddPost = (newPost: CommunityPost) => {
+    setPosts([newPost, ...posts]);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("dori_community_posts", JSON.stringify([newPost, ...posts]));
+    }
+  };
+
+  const filteredPosts = activeCategory === "전체" 
+    ? posts 
+    : posts.filter(post => post.tag === activeCategory);
 
   return (
     <main 
@@ -72,6 +58,60 @@ export default function CommunityClient() {
         fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
       }}
     >
+      {/* 좌측 사이드바 카테고리 필터 */}
+      <aside 
+        className="fixed left-0 z-50 hidden lg:block"
+        style={{
+          top: '50%',
+          transform: 'translateY(-50%)',
+        }}
+      >
+        <nav className="ml-8">
+          <div 
+            className="flex flex-col gap-3 p-4 rounded-2xl backdrop-blur-xl transition-all duration-500"
+            style={{
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
+              border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
+            }}
+          >
+            {categories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => setActiveCategory(category.id)}
+                className="group relative flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 text-left"
+                style={{
+                  backgroundColor: activeCategory === category.id
+                    ? (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)')
+                    : 'transparent',
+                }}
+              >
+                <div 
+                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 flex-shrink-0 ${
+                    activeCategory === category.id ? 'scale-150' : 'scale-100'
+                  }`}
+                  style={{
+                    backgroundColor: activeCategory === category.id
+                      ? (isDark ? '#ffffff' : '#000000')
+                      : (isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)'),
+                  }}
+                />
+                <span 
+                  className="text-xs font-medium transition-all duration-300"
+                  style={{
+                    color: activeCategory === category.id
+                      ? (isDark ? '#ffffff' : '#000000')
+                      : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)'),
+                    transform: activeCategory === category.id ? 'translateX(4px)' : 'translateX(0)',
+                  }}
+                >
+                  {category.label}
+                </span>
+              </button>
+            ))}
+          </div>
+        </nav>
+      </aside>
+
       {/* 배경 효과 */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         {mounted && theme === "dark" && (
@@ -91,7 +131,7 @@ export default function CommunityClient() {
       </div>
 
       {/* 히어로 섹션 */}
-      <section className="relative pt-20 pb-12 px-6 text-center overflow-hidden">
+      <section className="relative pt-20 pb-12 px-6 lg:pl-12 text-center overflow-hidden">
         <div className="max-w-4xl mx-auto animate-[fadeInUp_0.8s_ease-out_forwards]">
           <h1 
             className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight"
@@ -101,7 +141,7 @@ export default function CommunityClient() {
               letterSpacing: '-0.03em',
             }}
           >
-            {t.heroTitle.ko}
+            Community
           </h1>
           
           {/* 그라데이션 바 */}
@@ -114,7 +154,7 @@ export default function CommunityClient() {
             }}
           >
             <div 
-              className="h-full rounded-full"
+              className="gradient-flow h-full rounded-full"
               style={{
                 backgroundImage: isDark
                   ? 'linear-gradient(90deg, #60a5fa 0%, #818cf8 12.5%, #a78bfa 25%, #c084fc 37.5%, #ec4899 50%, #f472b6 62.5%, #f59e0b 75%, #fbbf24 87.5%, #10b981 100%, #60a5fa 100%)'
@@ -133,77 +173,133 @@ export default function CommunityClient() {
               letterSpacing: '-0.01em',
             }}
           >
-            {t.heroSubtitle.ko}
+            자유롭게 질문하고 정보를 공유하는 공간입니다
           </p>
         </div>
       </section>
-      {/* 좌측 사이드바 네비게이션 */}
-      <aside 
-        className="fixed left-0 top-1/2 -translate-y-1/2 z-50 hidden lg:block"
+      
+      {/* 메인 콘텐츠 */}
+      <section 
+        id="list"
+        className="container max-w-7xl mx-auto px-4 md:px-6 lg:pl-12 pb-24 border-b border-dashed relative" 
+        style={{ 
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)',
+        }}
       >
-        <nav className="ml-6">
-          <div 
-            className="flex flex-col gap-3 p-4 rounded-2xl backdrop-blur-xl transition-all duration-500"
-            style={{
-              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
-              border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
-            }}
-          >
-            {(["All", "질문", "정보", "자랑", "잡담"] as (CommunityTag | "All")[]).map((tag) => (
-              <a
-                key={tag}
-                href="#"
-                className="group relative flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 cursor-pointer"
-                style={{
-                  backgroundColor: filterTag === tag 
-                    ? (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)')
-                    : 'transparent',
-                }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  setFilterTag(tag);
-                }}
-              >
-                <div 
-                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                    filterTag === tag ? 'scale-150' : 'scale-100'
-                  }`}
+        {/* 글 쓰기 폼 */}
+        <div className="mb-12">
+          <CommunityForm onAddPost={handleAddPost} />
+        </div>
+        
+        {/* 글 목록 또는 빈 상태 메시지 */}
+        {filteredPosts.length > 0 ? (
+          <div className="space-y-3">
+            {filteredPosts.map((post) => {
+              // HTML 태그 제거하고 텍스트만 추출
+              const textContent = post.content.replace(/<[^>]*>/g, '').trim();
+              const preview = textContent.length > 100 ? textContent.substring(0, 100) + '...' : textContent;
+              
+              return (
+                <Link
+                  key={post.id}
+                  href={`/community/${post.id}`}
+                  className="block p-5 rounded-xl border transition-all hover:shadow-md hover:opacity-90 cursor-pointer"
                   style={{
-                    backgroundColor: filterTag === tag 
-                      ? (isDark ? '#ffffff' : '#000000')
-                      : (isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)'),
-                  }}
-                />
-                <span 
-                  className="text-xs font-medium transition-all duration-300"
-                  style={{
-                    color: filterTag === tag 
-                      ? (isDark ? '#ffffff' : '#000000')
-                      : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)'),
-                    transform: filterTag === tag ? 'translateX(4px)' : 'translateX(0)',
+                    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.01)',
+                    borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)',
                   }}
                 >
-                  {tag === "All" ? "전체" : tag}
-                </span>
-              </a>
-            ))}
+                  <div className="flex items-start justify-between mb-2">
+                    <div className="flex items-center gap-2.5">
+                      <span 
+                        className="px-2.5 py-0.5 text-xs font-medium rounded-md"
+                        style={{
+                          backgroundColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.05)',
+                          color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
+                        }}
+                      >
+                        {post.tag}
+                      </span>
+                      <span 
+                        className="text-xs font-medium"
+                        style={{
+                          color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
+                        }}
+                      >
+                        {post.nickname || "익명"}
+                      </span>
+                    </div>
+                    <span 
+                      className="text-xs"
+                      style={{
+                        color: isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)',
+                      }}
+                    >
+                      {new Date(post.createdAt).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })}
+                    </span>
+                  </div>
+                  <h3 
+                    className="text-base font-semibold mb-1.5 line-clamp-1"
+                    style={{
+                      color: isDark ? '#ffffff' : '#000000',
+                    }}
+                  >
+                    {post.title}
+                  </h3>
+                  <p 
+                    className="text-sm leading-relaxed line-clamp-2 mb-2"
+                    style={{
+                      color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)',
+                    }}
+                  >
+                    {preview}
+                  </p>
+                  <div className="flex items-center gap-3">
+                    <span 
+                      className="text-xs flex items-center gap-1"
+                      style={{
+                        color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                      }}
+                    >
+                      ❤️ {post.likes}
+                    </span>
+                  </div>
+                </Link>
+              );
+            })}
           </div>
-        </nav>
-      </aside>
-
-      {/* 우측 빈 사이드바 */}
-      <aside 
-        className="fixed right-0 top-1/2 -translate-y-1/2 z-50 hidden lg:block"
-        style={{
-          width: '140px',
-        }}
-      />
-
-      {/* 메인 콘텐츠 */}
-      <section className="container max-w-7xl mx-auto px-4 md:px-6 pb-24 relative lg:pl-32">
-        <CommunityForm onAddPost={handleAddPost} />
-        <CommunityFilters sort={sort} setSort={setSort} />
-        <CommunityList posts={filteredPosts} onLike={handleLike} onPostUpdate={handlePostUpdate} onPostDelete={handlePostDelete} />
+        ) : (
+          <div className="text-center py-24">
+            <div 
+              className="text-6xl mb-6 opacity-40"
+              style={{
+                color: isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)',
+              }}
+            >
+              💬
+            </div>
+            <p 
+              className="text-lg mb-2"
+              style={{
+                color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+                fontWeight: 500,
+              }}
+            >
+              아직 작성된 글이 없습니다
+            </p>
+            <p 
+              className="text-sm"
+              style={{
+                color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+                fontWeight: 400,
+              }}
+            >
+              첫 번째 글을 작성해보세요
+            </p>
+          </div>
+        )}
       </section>
 
       {/* 스타일 */}

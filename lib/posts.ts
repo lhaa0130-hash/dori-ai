@@ -31,24 +31,59 @@ function getAllMdFiles(dirPath: string, arrayOfFiles: string[] = []) {
 
 // 1. 모든 글 목록 가져오기 (리스트용)
 export function getSortedPostsData(): InsightItem[] {
-  // 전체 파일 탐색
-  const allFiles = getAllMdFiles(postsDirectory);
-  
-  const allPostsData = allFiles.map((fullPath) => {
-    // 파일명(101.md)에서 확장자 제거 -> ID(101)
-    const id = path.basename(fullPath).replace(/\.md$/, ''); 
-    const fileContents = fs.readFileSync(fullPath, 'utf8');
-    const matterResult = matter(fileContents);
+  try {
+    // posts 디렉토리가 없으면 빈 배열 반환
+    if (!fs.existsSync(postsDirectory)) {
+      return [];
+    }
 
-    return {
-      id: parseInt(id),
-      ...matterResult.data,
-      content: "", // 리스트엔 본문 불필요
-    } as InsightItem;
-  });
+    // 전체 파일 탐색
+    const allFiles = getAllMdFiles(postsDirectory);
+    
+    if (allFiles.length === 0) {
+      return [];
+    }
 
-  // 날짜 최신순 정렬
-  return allPostsData.sort((a, b) => (a.date < b.date ? 1 : -1));
+    const allPostsData = allFiles
+      .map((fullPath) => {
+        try {
+          // 파일명(101.md)에서 확장자 제거 -> ID(101)
+          const id = path.basename(fullPath).replace(/\.md$/, ''); 
+          const fileContents = fs.readFileSync(fullPath, 'utf8');
+          const matterResult = matter(fileContents);
+
+          // 필수 필드 확인
+          const postData = {
+            id: parseInt(id) || 0,
+            title: matterResult.data.title || '제목 없음',
+            summary: matterResult.data.summary || matterResult.data.description || '',
+            category: matterResult.data.category || '기타',
+            tags: Array.isArray(matterResult.data.tags) ? matterResult.data.tags : [],
+            likes: matterResult.data.likes || 0,
+            date: matterResult.data.date || new Date().toISOString().split('T')[0],
+            content: "", // 리스트엔 본문 불필요
+            ...(matterResult.data.image && { image: matterResult.data.image }),
+            ...(matterResult.data.aiMeta && { aiMeta: matterResult.data.aiMeta }),
+          } as InsightItem;
+
+          return postData;
+        } catch (error) {
+          console.error(`Error reading file ${fullPath}:`, error);
+          return null;
+        }
+      })
+      .filter((post): post is InsightItem => post !== null);
+
+    // 날짜 최신순 정렬
+    return allPostsData.sort((a, b) => {
+      const dateA = a.date ? new Date(a.date).getTime() : 0;
+      const dateB = b.date ? new Date(b.date).getTime() : 0;
+      return dateB - dateA;
+    });
+  } catch (error) {
+    console.error('Error in getSortedPostsData:', error);
+    return [];
+  }
 }
 
 // 2. 특정 글 내용 가져오기 (상세 페이지용)

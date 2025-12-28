@@ -2,7 +2,6 @@
 
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
-import InsightFilters from "@/components/insight/InsightFilters";
 import InsightList from "@/components/insight/InsightList";
 import { TEXTS } from "@/constants/texts";
 import { InsightItem } from "@/types/content";
@@ -26,6 +25,7 @@ export default function InsightClient({ initialPosts }: { initialPosts: InsightI
   const t = TEXTS.insight;
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [activeCategory, setActiveCategory] = useState("All");
   const [filters, setFilters] = useState<{ category: string; tag: string | null; sort: string }>({
     category: "All",
     tag: null,
@@ -34,12 +34,30 @@ export default function InsightClient({ initialPosts }: { initialPosts: InsightI
 
   useEffect(() => setMounted(true), []);
 
+
   // 1. 받아온 데이터가 있으면 그거 쓰고, 없으면 비상용 데이터 사용
-  const postsToDisplay = (initialPosts && initialPosts.length > 0) 
+  // initialPosts가 undefined이거나 null일 수 있으므로 안전하게 처리
+  const postsToDisplay = (initialPosts && Array.isArray(initialPosts) && initialPosts.length > 0) 
     ? initialPosts 
     : FALLBACK_POSTS;
 
   const isDark = mounted && theme === 'dark';
+
+  // 카테고리 목록
+  const categories = [
+    { id: "All", label: "전체" },
+    { id: "트렌드", label: "트렌드" },
+    { id: "큐레이션", label: "큐레이션" },
+    { id: "가이드", label: "가이드" },
+    { id: "리포트", label: "리포트" },
+    { id: "분석", label: "분석" },
+  ];
+
+  const handleCategoryClick = (category: string) => {
+    setActiveCategory(category);
+    setFilters({ ...filters, category });
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
 
   return (
     <main 
@@ -49,6 +67,64 @@ export default function InsightClient({ initialPosts }: { initialPosts: InsightI
         fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
       }}
     >
+      {/* 좌측 사이드바 네비게이션 */}
+      <aside 
+        className="fixed left-0 z-50 hidden lg:block"
+        style={{
+          top: '50%',
+          transform: 'translateY(-50%)',
+        }}
+      >
+        <nav className="ml-8">
+          <div 
+            className="flex flex-col gap-3 p-4 rounded-2xl backdrop-blur-xl transition-all duration-500"
+            style={{
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
+              border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
+            }}
+          >
+            {categories.map((item) => (
+              <a
+                key={item.id}
+                href="#"
+                className="group relative flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 cursor-pointer"
+                style={{
+                  backgroundColor: activeCategory === item.id 
+                    ? (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)')
+                    : 'transparent',
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleCategoryClick(item.id);
+                }}
+              >
+                <div 
+                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                    activeCategory === item.id ? 'scale-150' : 'scale-100'
+                  }`}
+                  style={{
+                    backgroundColor: activeCategory === item.id 
+                      ? (isDark ? '#ffffff' : '#000000')
+                      : (isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)'),
+                  }}
+                />
+                <span 
+                  className="text-xs font-medium transition-all duration-300"
+                  style={{
+                    color: activeCategory === item.id 
+                      ? (isDark ? '#ffffff' : '#000000')
+                      : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)'),
+                    transform: activeCategory === item.id ? 'translateX(4px)' : 'translateX(0)',
+                  }}
+                >
+                  {item.label}
+                </span>
+              </a>
+            ))}
+          </div>
+        </nav>
+      </aside>
+
       {/* 배경 효과 */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         {mounted && theme === "dark" && (
@@ -68,7 +144,7 @@ export default function InsightClient({ initialPosts }: { initialPosts: InsightI
       </div>
 
       {/* 히어로 섹션 */}
-      <section className="relative pt-20 pb-12 px-6 text-center overflow-hidden">
+      <section className="relative pt-20 pb-12 px-6 lg:pl-12 text-center overflow-hidden">
         <div className="max-w-4xl mx-auto animate-[fadeInUp_0.8s_ease-out_forwards]">
           <h1 
             className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight"
@@ -91,7 +167,7 @@ export default function InsightClient({ initialPosts }: { initialPosts: InsightI
             }}
           >
             <div 
-              className="h-full rounded-full"
+              className="gradient-flow h-full rounded-full"
               style={{
                 backgroundImage: isDark
                   ? 'linear-gradient(90deg, #60a5fa 0%, #818cf8 12.5%, #a78bfa 25%, #c084fc 37.5%, #ec4899 50%, #f472b6 62.5%, #f59e0b 75%, #fbbf24 87.5%, #10b981 100%, #60a5fa 100%)'
@@ -116,8 +192,23 @@ export default function InsightClient({ initialPosts }: { initialPosts: InsightI
       </section>
       
       {/* 메인 콘텐츠 */}
-      <section className="container max-w-7xl mx-auto px-4 md:px-6 pb-24 relative">
-        <InsightFilters filters={filters} setFilters={setFilters} />
+      <section 
+        id="list"
+        className="container max-w-7xl mx-auto px-4 md:px-6 lg:pl-12 pb-24 border-b border-dashed relative" 
+        style={{ 
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)',
+        }}
+      >
+        <h2 
+          className="text-2xl font-bold mb-8 flex items-center gap-2" 
+          style={{ 
+            color: isDark ? '#ffffff' : '#1d1d1f',
+            fontWeight: 700,
+            letterSpacing: '-0.02em',
+          }}
+        >
+          🧠 인사이트 목록
+        </h2>
         
         {/* 👇 리스트에 데이터 전달 */}
         <InsightList filters={filters} setFilters={setFilters} posts={postsToDisplay} />

@@ -7,8 +7,6 @@ category: 가이드
 thumbnail: /thumbnails/guide/guide02.png
 tags: ["초급", "사용법", "프롬프트", "워크플로우", "검증"]
 ---
-
-# 가이드 2 — AI 입문서 02 : 초보자가 가장 먼저 익혀야 할 7가지
 ![썸네일 이미지](/thumbnails/guide/guide02.png)
 
 AI를 쓰는 사람을 오래 지켜보면, 딱 두 부류로 나뉩니다.

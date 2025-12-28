@@ -10,11 +10,25 @@ export default function MarketClient() {
   const t = TEXTS.market;
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [activeSection, setActiveSection] = useState("products");
   const [filters, setFilters] = useState({ category: "All", price: "All", sort: "newest" });
 
   useEffect(() => setMounted(true), []);
 
   const isDark = mounted && theme === 'dark';
+
+  const navItems = [
+    { id: 'products', label: 'AI 자료 마켓' },
+    { id: 'request', label: 'AI 작업 의뢰' },
+  ];
+
+  const handleNavClick = (id: string) => {
+    const element = document.getElementById(id);
+    if (element) {
+      element.scrollIntoView({ behavior: 'smooth' });
+    }
+    setActiveSection(id);
+  };
 
   return (
     <main 
@@ -24,6 +38,64 @@ export default function MarketClient() {
         fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
       }}
     >
+      {/* 좌측 사이드바 네비게이션 */}
+      <aside 
+        className="fixed left-0 z-50 hidden lg:block"
+        style={{
+          top: '50%',
+          transform: 'translateY(-50%)',
+        }}
+      >
+        <nav className="ml-8">
+          <div 
+            className="flex flex-col gap-3 p-4 rounded-2xl backdrop-blur-xl transition-all duration-500"
+            style={{
+              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
+              border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
+            }}
+          >
+            {navItems.map((item) => (
+              <a
+                key={item.id}
+                href={`#${item.id}`}
+                className="group relative flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 cursor-pointer"
+                style={{
+                  backgroundColor: activeSection === item.id 
+                    ? (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)')
+                    : 'transparent',
+                }}
+                onClick={(e) => {
+                  e.preventDefault();
+                  handleNavClick(item.id);
+                }}
+              >
+                <div 
+                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                    activeSection === item.id ? 'scale-150' : 'scale-100'
+                  }`}
+                  style={{
+                    backgroundColor: activeSection === item.id 
+                      ? (isDark ? '#ffffff' : '#000000')
+                      : (isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)'),
+                  }}
+                />
+                <span 
+                  className="text-xs font-medium transition-all duration-300"
+                  style={{
+                    color: activeSection === item.id 
+                      ? (isDark ? '#ffffff' : '#000000')
+                      : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)'),
+                    transform: activeSection === item.id ? 'translateX(4px)' : 'translateX(0)',
+                  }}
+                >
+                  {item.label}
+                </span>
+              </a>
+            ))}
+          </div>
+        </nav>
+      </aside>
+
       {/* 배경 효과 */}
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         {mounted && theme === "dark" && (
@@ -43,7 +115,7 @@ export default function MarketClient() {
       </div>
 
       {/* 히어로 섹션 */}
-      <section className="relative pt-20 pb-12 px-6 text-center overflow-hidden">
+      <section className="relative pt-20 pb-12 px-6 lg:pl-12 text-center overflow-hidden">
         <div className="max-w-4xl mx-auto animate-[fadeInUp_0.8s_ease-out_forwards]">
           <h1 
             className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight"
@@ -66,7 +138,7 @@ export default function MarketClient() {
             }}
           >
             <div 
-              className="h-full rounded-full"
+              className="gradient-flow h-full rounded-full"
               style={{
                 backgroundImage: isDark
                   ? 'linear-gradient(90deg, #60a5fa 0%, #818cf8 12.5%, #a78bfa 25%, #c084fc 37.5%, #ec4899 50%, #f472b6 62.5%, #f59e0b 75%, #fbbf24 87.5%, #10b981 100%, #60a5fa 100%)'
@@ -91,7 +163,8 @@ export default function MarketClient() {
       </section>
       {/* 메인 콘텐츠 */}
       <section 
-        className="container max-w-7xl mx-auto px-4 md:px-6 pb-24 border-b border-dashed relative" 
+        id="products"
+        className="container max-w-7xl mx-auto px-4 md:px-6 lg:pl-12 pb-24 border-b border-dashed relative" 
         style={{ 
           borderColor: 'var(--card-border)',
         }}
@@ -106,7 +179,7 @@ export default function MarketClient() {
         <MarketList filters={filters} />
       </section>
       
-      <section className="container max-w-4xl mx-auto px-4 md:px-6 py-24 relative">
+      <section id="request" className="container max-w-4xl mx-auto px-4 md:px-6 lg:pl-12 py-24 relative">
         <div className="text-center mb-10">
           <h2 
             className="text-2xl font-bold mb-2 flex items-center justify-center gap-2" 

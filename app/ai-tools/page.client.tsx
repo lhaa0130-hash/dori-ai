@@ -112,14 +112,12 @@ export default function AiToolsClient() {
           transform: 'translateY(-50%)',
         }}
       >
-        <nav className="ml-4 lg:ml-6">
+        <nav className="ml-8">
           <div 
-            className="flex flex-col gap-3 p-4 rounded-2xl backdrop-blur-xl transition-all duration-500 max-h-[80vh] overflow-y-auto"
+            className="flex flex-col gap-3 p-4 rounded-2xl backdrop-blur-xl transition-all duration-500"
             style={{
               backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
               border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
-              minWidth: '140px',
-              maxWidth: '180px',
             }}
           >
             {DISPLAY_CATEGORIES.map((cat) => (
@@ -138,7 +136,7 @@ export default function AiToolsClient() {
                 }}
               >
                 <div 
-                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 flex-shrink-0 ${
+                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
                     activeCategory === cat ? 'scale-150' : 'scale-100'
                   }`}
                   style={{
@@ -148,7 +146,7 @@ export default function AiToolsClient() {
                   }}
                 />
                 <span 
-                  className="text-xs font-medium transition-all duration-300 flex-shrink-0 min-w-0"
+                  className="text-xs font-medium transition-all duration-300"
                   style={{
                     color: activeCategory === cat 
                       ? (isDark ? '#ffffff' : '#000000')
@@ -216,7 +214,7 @@ export default function AiToolsClient() {
             }}
           >
             <div 
-              className="h-full rounded-full"
+              className="gradient-flow h-full rounded-full"
               style={{
                 backgroundImage: isDark
                   ? 'linear-gradient(90deg, #60a5fa 0%, #818cf8 12.5%, #a78bfa 25%, #c084fc 37.5%, #ec4899 50%, #f472b6 62.5%, #f59e0b 75%, #fbbf24 87.5%, #10b981 100%, #60a5fa 100%)'

@@ -4,16 +4,6 @@ import { useEffect, useState } from "react";
 import { useRouter, useParams } from "next/navigation";
 import { useSession, signOut } from "next-auth/react";
 import Link from "next/link";
-import RichTextEditor from "@/components/community/RichTextEditor";
-
-const CATEGORIES = [
-  { value: "잡담", label: "☕ 잡담", icon: "☕" },
-  { value: "질문", label: "❓ 질문", icon: "❓" },
-  { value: "정보 공유", label: "💡 정보 공유", icon: "💡" },
-  { value: "자랑", label: "✨ 자랑", icon: "✨" },
-  { value: "후기", label: "📝 후기", icon: "📝" },
-  { value: "팁", label: "💡 팁", icon: "💡" },
-];
 
 export default function CommunityEditPage() {
   const { data: session } = useSession();
@@ -24,52 +14,34 @@ export default function CommunityEditPage() {
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
-  const [category, setCategory] = useState("잡담");
 
   useEffect(() => {
     const savedPosts = JSON.parse(localStorage.getItem("dori_posts") || "[]");
     const found = savedPosts.find((p: any) => String(p.id) === String(postId));
 
     if (found) {
-      // 본인 글인지 확인
-      const isOwner = user && (user.name === found.author || user.name === found.nickname || user.name === "관리자");
-      if (!isOwner) {
-        alert("본인의 글만 수정할 수 있습니다.");
-        router.back();
-        return;
-      }
-      
       setTitle(found.title);
-      setContent(found.content || "");
-      setCategory(found.tag || "잡담");
+      setContent(found.content);
     } else {
       alert("글을 찾을 수 없습니다.");
       router.back();
     }
-  }, [postId, router, user]);
+  }, [postId, router]);
 
   function onLogout() { signOut({ callbackUrl: "/" }); }
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
 
-    // HTML 태그 제거한 순수 텍스트로 검증
-    const textContent = content.replace(/<[^>]*>/g, '').trim();
-    
-    if (!title || title.trim().length < 1) {
-      alert("제목을 입력해주세요.");
+    if (!title || !content) {
+      alert("제목과 내용을 모두 입력해주세요.");
       return;
     }
 
     const savedPosts = JSON.parse(localStorage.getItem("dori_posts") || "[]");
     const updatedPosts = savedPosts.map((p: any) => {
       if (String(p.id) === String(postId)) {
-        return { 
-          ...p, 
-          title: title.trim(), 
-          content: content,
-          tag: category
-        };
+        return { ...p, title: title, content: content };
       }
       return p;
     });
@@ -123,45 +95,14 @@ export default function CommunityEditPage() {
         </div>
 
         <form className="write-form" onSubmit={handleSubmit}>
-          {/* 카테고리 선택 */}
-          <div className="form-group">
-            <label>카테고리</label>
-            <div className="category-selector">
-              {CATEGORIES.map((cat) => (
-                <button
-                  key={cat.value}
-                  type="button"
-                  className={`category-btn ${category === cat.value ? 'active' : ''}`}
-                  onClick={() => setCategory(cat.value)}
-                >
-                  <span className="category-icon">{cat.icon}</span>
-                  <span>{cat.label.replace(cat.icon, '').trim()}</span>
-                </button>
-              ))}
-            </div>
-          </div>
-
-          {/* 제목 */}
           <div className="form-group">
             <label>제목</label>
-            <input 
-              type="text" 
-              placeholder="제목을 입력하세요" 
-              value={title} 
-              onChange={(e) => setTitle(e.target.value)}
-              maxLength={100}
-            />
-            <span className="char-count">{title.length}/100</span>
+            <input type="text" value={title} onChange={(e) => setTitle(e.target.value)} />
           </div>
           
-          {/* 리치 텍스트 에디터 */}
           <div className="form-group">
             <label>내용</label>
-            <RichTextEditor 
-              value={content} 
-              onChange={setContent}
-              placeholder="내용을 입력하세요. 텍스트 서식, 이미지, 비디오 등을 추가할 수 있습니다."
-            />
+            <textarea value={content} onChange={(e) => setContent(e.target.value)} />
           </div>
 
           <div className="form-actions">
@@ -210,16 +151,9 @@ export default function CommunityEditPage() {
         .write-form { display: flex; flex-direction: column; gap: 24px; background: #fff; border: 1px solid var(--line); padding: 40px; border-radius: 16px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
         .form-group { display: flex; flex-direction: column; gap: 8px; }
         .form-group label { font-weight: bold; font-size: 14px; color: #333; }
-        .form-group input, .form-group textarea, .select-input { padding: 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; transition: 0.2s; width: 100%; }
+        .form-group input, .form-group textarea, .select-input { padding: 14px; border: 1px solid #ddd; border-radius: 8px; font-size: 16px; transition: 0.2s; }
         .form-group input:focus, .form-group textarea:focus, .select-input:focus { outline: none; border-color: var(--blue); box-shadow: 0 0 0 3px rgba(0,186,255, 0.1); }
-        .char-count { font-size: 12px; color: #999; text-align: right; margin-top: 4px; }
-        
-        /* 카테고리 선택 */
-        .category-selector { display: flex; flex-wrap: wrap; gap: 8px; }
-        .category-btn { display: flex; align-items: center; gap: 6px; padding: 10px 16px; border: 2px solid #ddd; border-radius: 8px; background: white; cursor: pointer; transition: all 0.2s; font-size: 14px; }
-        .category-btn:hover { border-color: var(--blue); background: #f0f7ff; }
-        .category-btn.active { border-color: var(--blue); background: var(--blue); color: white; }
-        .category-icon { font-size: 18px; }
+        .form-group textarea { height: 300px; resize: none; }
         .form-actions { display: flex; justify-content: flex-end; gap: 12px; margin-top: 10px; }
         .cancel-btn { padding: 12px 24px; background: #f0f0f0; border: none; border-radius: 8px; font-size: 16px; cursor: pointer; }
         .submit-btn { padding: 12px 24px; background: var(--blue); color: white; border: none; border-radius: 8px; font-size: 16px; font-weight: bold; cursor: pointer; }

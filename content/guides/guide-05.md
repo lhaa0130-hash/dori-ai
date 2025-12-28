@@ -7,8 +7,6 @@ category: 가이드
 thumbnail: /thumbnails/guide/guide05.png
 tags: ["AI실무", "사고정리", "프롬프트", "기준설정"]
 ---
-
-# 가이드 5 — AI에게 일을 맡기기 전에 사람이 반드시 정해야 할 것
 ![썸네일 이미지](/thumbnails/guide/guide05.png)
 
 AI를 쓰다 보면 이런 생각이 든다.

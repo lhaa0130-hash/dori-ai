@@ -65,7 +65,7 @@ export default function AcademyClient() {
             }}
           >
             <div 
-              className="h-full rounded-full"
+              className="gradient-flow h-full rounded-full"
               style={{
                 backgroundImage: isDark
                   ? 'linear-gradient(90deg, #60a5fa 0%, #818cf8 12.5%, #a78bfa 25%, #c084fc 37.5%, #ec4899 50%, #f472b6 62.5%, #f59e0b 75%, #fbbf24 87.5%, #10b981 100%, #60a5fa 100%)'

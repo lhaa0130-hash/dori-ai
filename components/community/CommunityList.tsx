@@ -4,11 +4,9 @@ import { TEXTS } from "@/constants/texts";
 interface CommunityListProps {
   posts: CommunityPost[];
   onLike: (id: number) => void;
-  onPostUpdate?: (updatedPost: CommunityPost) => void;
-  onPostDelete?: (postId: number) => void;
 }
 
-export default function CommunityList({ posts, onLike, onPostUpdate, onPostDelete }: CommunityListProps) {
+export default function CommunityList({ posts, onLike }: CommunityListProps) {
   const t = TEXTS.home.sectionTitles;
 
   if (posts.length === 0) {
@@ -22,18 +20,14 @@ export default function CommunityList({ posts, onLike, onPostUpdate, onPostDelet
   }
 
   return (
-    <div className="flex justify-center">
-      <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full max-w-5xl">
-        {posts.map((post) => (
-          <CommunityCard 
-            key={post.id} 
-            post={post} 
-            onLike={onLike}
-            onPostUpdate={onPostUpdate}
-            onPostDelete={onPostDelete}
-          />
-        ))}
-      </div>
+    <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
+      {posts.map((post) => (
+        <CommunityCard 
+          key={post.id} 
+          post={post} 
+          onLike={onLike} 
+        />
+      ))}
     </div>
   );
 }

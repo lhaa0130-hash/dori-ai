@@ -10,7 +10,12 @@ interface SuggestionFiltersProps {
 }
 
 export default function SuggestionFilters({ filters, setFilters }: SuggestionFiltersProps) {
-  const t = TEXTS.suggestions.filters;
+  const t = (TEXTS && TEXTS.suggestions && TEXTS.suggestions.filters) ? TEXTS.suggestions.filters : {
+    type: { ko: "유형" },
+    priority: { ko: "우선순위" },
+    sort: { ko: "정렬" },
+    all: { ko: "전체" }
+  };
 
   const handleChange = (key: string, value: string) => {
     setFilters({ ...filters, [key]: value });

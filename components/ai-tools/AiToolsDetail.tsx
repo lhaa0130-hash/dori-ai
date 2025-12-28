@@ -33,9 +33,10 @@ export default function AiToolsDetail({ tool }: AiToolsDetailProps) {
               <Image 
                 src={tool.thumbnail} 
                 alt={tool.name} 
-                layout="fill" 
-                objectFit="cover" 
-                className="hover:scale-105 transition-transform duration-700"
+                fill
+                sizes="(max-width: 768px) 100vw, 300px"
+                className="object-cover hover:scale-105 transition-transform duration-700"
+                priority
               />
            ) : (
              <span className="text-4xl font-bold text-gray-400">{tool.name[0]}</span>

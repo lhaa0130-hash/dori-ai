@@ -1,6 +1,12 @@
 import { getGuideBySlug, getGuideSlugs } from '@/lib/guides';
 import { notFound } from 'next/navigation';
-import ReactMarkdown from 'react-markdown'; 
+import dynamic from 'next/dynamic';
+
+// ReactMarkdown을 동적 임포트로 로드 (코드 스플리팅)
+const ReactMarkdown = dynamic(() => import('react-markdown'), {
+  ssr: true,
+  loading: () => <div className="animate-pulse">로딩 중...</div>,
+}); 
 
 interface Props {
   params: Promise<{

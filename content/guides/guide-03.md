@@ -8,7 +8,6 @@ thumbnail: /thumbnails/guide/guide03.png
 tags: ["AI입문", "실전활용", "업무자동화", "초보자"]
 ---
 
-# 가이드 3 — 초보가 실무에서 바로 써먹는 AI 사용법
 ![썸네일 이미지](/thumbnails/guide/guide03.png)
 
 AI를 처음 써본 사람들의 공통된 반응이 있습니다.

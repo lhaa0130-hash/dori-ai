@@ -7,8 +7,6 @@ category: 가이드
 thumbnail: /thumbnails/guide/guide01.png
 tags: [AI기초, AI입문, 인공지능개념, 생성형AI]
 ---
-
-# 가이드 1 — AI 입문서 01 : 처음 시작하는 사람을 위한 가이드  
 ![썸네일 이미지](/thumbnails/guide/guide01.png)
 ---
 

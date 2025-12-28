@@ -6,7 +6,6 @@ import Hero from "@/components/home/Hero";
 import BentoSection from "@/components/home/BentoSection";
 import ToolsPreview from "@/components/home/ToolsPreview";
 import InsightPreview from "@/components/home/InsightPreview";
-import AcademyPreview from "@/components/home/AcademyPreview";
 import CommunityPreview from "@/components/home/CommunityPreview";
 
 export default function HomeContainer() {
@@ -55,7 +54,6 @@ export default function HomeContainer() {
       <ToolsPreview />
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-[1200px] mx-auto px-6 mb-20">
         <InsightPreview />
-        <AcademyPreview />
       </div>
       <CommunityPreview />
       

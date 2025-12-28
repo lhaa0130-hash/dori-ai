@@ -20,6 +20,21 @@ const InsightCard = React.memo(({ item, onTagClick }: InsightCardProps) => {
       className="relative flex flex-col p-6 rounded-3xl border transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-xl group cursor-pointer min-h-[300px]"
       style={cardStyle}
     >
+      {/* 썸네일 이미지 */}
+      {item.image && (
+        <div className="w-full h-48 mb-4 rounded-2xl overflow-hidden relative">
+          <img 
+            src={item.image} 
+            alt={item.title}
+            className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+            onError={(e) => {
+              // 이미지 로드 실패 시 숨김
+              e.currentTarget.style.display = 'none';
+            }}
+          />
+        </div>
+      )}
+
       <div className="flex justify-between items-start mb-5">
         <span 
           className="px-3 py-1 text-xs font-bold rounded-full border"

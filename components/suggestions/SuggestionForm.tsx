@@ -9,7 +9,19 @@ interface SuggestionFormProps {
 }
 
 export default function SuggestionForm({ onAddSuggestion }: SuggestionFormProps) {
-  const t = TEXTS.suggestions.form;
+  const t = (TEXTS && TEXTS.suggestions && TEXTS.suggestions.form) ? TEXTS.suggestions.form : {
+    name: { ko: "이름" },
+    email: { ko: "이메일 (선택)" },
+    type: { ko: "유형" },
+    priority: { ko: "우선순위" },
+    message: { ko: "내용" },
+    needsReply: { ko: "답변이 필요합니다." },
+    submit: { ko: "건의 등록" },
+    errorRequired: { ko: "필수 항목을 모두 입력해주세요." },
+    errorTooShort: { ko: "너무 짧은 건의는 등록할 수 없습니다." },
+    errorBanned: { ko: "비방/욕설이 포함된 건의는 등록할 수 없습니다." },
+    success: { ko: "건의가 접수되었습니다. 감사합니다." }
+  };
 
   // 폼 상태
   const [formData, setFormData] = useState({

@@ -35,6 +35,7 @@ export type InsightItem = {
   aiMeta?: AiMeta;
   content?: string; // HTML 콘텐츠
   image?: string; // 썸네일 이미지 경로
+  slug?: string; // 가이드 글의 경우 slug (예: "guide-01")
 };
 
 // 핵심 AI Tool 타입
