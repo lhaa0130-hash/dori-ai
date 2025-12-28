@@ -42,6 +42,15 @@ const nextConfig: NextConfig = {
     optimizePackageImports: ['recharts', 'react-markdown', 'quill'],
   },
   
+  // 서버리스 함수에서 제외할 파일 (이미지는 정적 파일로 제공)
+  outputFileTracingExcludes: {
+    '*': [
+      'public/images/**/*',
+      'public/thumbnails/**/*',
+      'public/hero-logo.png',
+    ],
+  },
+  
   // Turbopack 설정 (Next.js 16 기본값)
   // webpack 설정 제거 - Turbopack과 충돌 방지
 };

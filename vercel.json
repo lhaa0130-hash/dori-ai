@@ -6,6 +6,14 @@
   "regions": ["icn1"],
   "env": {
     "NODE_ENV": "production"
+  },
+  "functions": {
+    "app/project/[id]/page.tsx": {
+      "maxDuration": 30
+    },
+    "app/project/page.tsx": {
+      "maxDuration": 30
+    }
   }
 }
 

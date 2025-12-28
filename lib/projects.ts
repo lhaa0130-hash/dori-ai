@@ -157,4 +157,3 @@ export async function getProjectData(id: string) {
     throw error;
   }
 }
-
