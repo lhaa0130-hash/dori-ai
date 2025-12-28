@@ -35,6 +35,12 @@ export function getProjectFiles() {
       .map(file => {
         const filePath = path.join(projectsDirectory, file);
         const fileContents = fs.readFileSync(filePath, 'utf8');
+        
+        // 빈 파일 건너뛰기
+        if (!fileContents || fileContents.trim().length === 0) {
+          return null;
+        }
+        
         const matterResult = matter(fileContents);
         
         // 파일명에서 ID 추출 (project01-1.md -> project01-1)
@@ -48,6 +54,7 @@ export function getProjectFiles() {
           ...matterResult.data,
         };
       })
+      .filter((file): file is NonNullable<typeof file> => file !== null) // null 제거
       .sort((a, b) => {
         // 파일명 순서로 정렬
         return a.id.localeCompare(b.id);
@@ -79,9 +86,25 @@ export async function getProjectData(id: string) {
 
     const fileContents = fs.readFileSync(filePath, 'utf8');
     
+    // 빈 파일이거나 공백만 있는 경우 기본 내용 반환
     if (!fileContents || fileContents.trim().length === 0) {
-      console.error(`Project file is empty: ${filePath}`);
-      throw new Error(`Project file is empty: ${id}`);
+      console.warn(`Project file is empty: ${filePath}, returning default content`);
+      return {
+        id,
+        contentHtml: '<p>콘텐츠 준비 중입니다.</p>',
+        contentMarkdown: '콘텐츠 준비 중입니다.',
+        title: id,
+        date: '',
+        description: '',
+      } as {
+        id: string;
+        contentHtml: string;
+        contentMarkdown: string;
+        title: string;
+        date: string;
+        description: string;
+        [key: string]: any;
+      };
     }
     
     // contentReference 같은 특수 문법 제거 (remark에서 처리되지 않는 문법)
@@ -114,14 +137,16 @@ export async function getProjectData(id: string) {
       contentHtml = `<pre>${matterResult.content.replace(/</g, '&lt;').replace(/>/g, '&gt;')}</pre>`;
     }
 
+    const data = matterResult.data as { title?: string; date?: string; description?: string; [key: string]: any };
+    
     return {
       id,
       contentHtml,
       contentMarkdown: matterResult.content, // 마크다운 원본 추가
-      title: matterResult.data.title || id,
-      date: matterResult.data.date || '',
-      description: matterResult.data.description || '',
-      ...matterResult.data,
+      title: data.title || id,
+      date: data.date || '',
+      description: data.description || '',
+      ...data,
     };
   } catch (error) {
     console.error('Error reading project:', error);
