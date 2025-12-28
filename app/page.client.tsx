@@ -25,7 +25,7 @@ export default function PremiumDesignPage() {
       setScrollY(window.scrollY);
       
       // 활성 섹션 감지
-      const sections = ['hero', 'features', 'insight', 'gallery', 'testimonials', 'faq'];
+      const sections = ['hero', 'features', 'gallery', 'faq'];
       const current = sections.find(section => {
         const el = sectionRefs.current[section];
         if (!el) return false;
@@ -102,7 +102,6 @@ export default function PremiumDesignPage() {
     { id: 'hero', label: '홈' },
     { id: 'features', label: '기능' },
     { id: 'gallery', label: '프로젝트' },
-    { id: 'testimonials', label: '커뮤니티' },
     { id: 'faq', label: 'FAQ' },
   ];
 
@@ -219,10 +218,10 @@ export default function PremiumDesignPage() {
       {/* 히어로 섹션 */}
       <section 
         id="hero"
-        className="relative min-h-screen flex items-center justify-center px-6 lg:pl-12 pt-20"
+        className="relative min-h-screen flex items-center justify-center px-6 lg:pl-12"
         ref={(el) => { sectionRefs.current['hero'] = el; }}
         data-section-id="hero"
-        style={{ scrollSnapAlign: 'start' }}
+        style={{ scrollSnapAlign: 'center' }}
       >
         <div className="max-w-6xl mx-auto text-center">
           {/* 메인 타이틀 */}
@@ -355,10 +354,10 @@ export default function PremiumDesignPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
               { icon: "🚀", title: "AI 도구", desc: "최신 AI 도구를 탐색하고 비교하여 여러분의 작업에 가장 적합한 도구를 찾아보세요", color: "#3b82f6", href: "/ai-tools", isAnchor: false },
-              { icon: "🧠", title: "인사이트", desc: "AI 트렌드와 분석을 통해 최신 동향을 파악하세요", color: "#8b5cf6", href: "#insight", isAnchor: true },
-              { icon: "🛒", title: "마켓", desc: "다양한 제품과 서비스를 만나보세요", color: "#10b981", href: "/market", isAnchor: false },
+              { icon: "🧠", title: "인사이트", desc: "AI 트렌드와 분석을 통해 최신 동향을 파악하세요", color: "#8b5cf6", href: "/insight", isAnchor: false },
+              { icon: "📊", title: "프로젝트", desc: "데이터와 인사이트로 더 나은 결정을 내리세요", color: "#ec4899", href: "/project", isAnchor: false },
               { icon: "💬", title: "커뮤니티", desc: "소통과 공유를 통해 함께 성장하세요", color: "#f59e0b", href: "/community", isAnchor: false },
-              { icon: "📊", title: "분석", desc: "데이터와 인사이트로 더 나은 결정을 내리세요", color: "#ec4899", href: "#insight", isAnchor: true },
+              { icon: "🛒", title: "마켓", desc: "다양한 제품과 서비스를 만나보세요", color: "#10b981", href: "/market", isAnchor: false },
             ].map((item, idx) => {
               const handleClick = (e: React.MouseEvent) => {
                 if (item.isAnchor) {
@@ -446,138 +445,15 @@ export default function PremiumDesignPage() {
         </div>
       </section>
 
-      {/* 인사이트 섹션 */}
-      <section 
-        id="insight"
-        className="relative py-20 md:py-28 px-6 lg:pl-12"
-        ref={(el) => { sectionRefs.current['insight'] = el; }}
-        data-section-id="insight"
-        style={{
-          backgroundColor: isDark ? '#000000' : '#ffffff',
-          scrollSnapAlign: 'none',
-        }}
-      >
-        <div className="max-w-7xl mx-auto">
-          <div 
-            className={`text-center mb-12 transition-all duration-1000 ${
-              visibleSections.has('insight')
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-8'
-            }`}
-          >
-            <h2 
-              className="text-4xl md:text-5xl mb-3"
-              style={{
-                color: isDark ? '#ffffff' : '#1d1d1f',
-                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                fontWeight: 700,
-                letterSpacing: '-0.03em',
-                lineHeight: '1.1',
-              }}
-            >
-              인사이트
-            </h2>
-            <p 
-              className="text-lg"
-              style={{
-                color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
-                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                fontWeight: 400,
-                letterSpacing: '-0.01em',
-              }}
-            >
-              AI 트렌드와 심층 분석을 만나보세요
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[
-              { title: "AI 시대에 반드시 알아야 할 개념 10가지", summary: "초보자도 이해하는 핵심 AI 개념.", category: "트렌드" },
-              { title: "AI로 돈 버는 7가지 방법", summary: "수익 구조 명확히 정의.", category: "비즈니스" },
-              { title: "업무 자동화 기초", summary: "n8n, Make, GPT로 자동화.", category: "튜토리얼" },
-            ].map((item, idx) => (
-              <div
-                key={idx}
-                className={`group relative rounded-3xl overflow-hidden transition-all duration-500 cursor-pointer ${
-                  visibleSections.has('insight')
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-8'
-                }`}
-                style={{
-                  transitionDelay: `${idx * 100}ms`,
-                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.3)' : '#e5e5e7'}`,
-                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
-                }}
-                onClick={() => window.location.href = '/insight'}
-              >
-                <div className="p-6 h-full flex flex-col">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span 
-                      className="text-xs px-3 py-1 rounded-full font-medium"
-                      style={{
-                        backgroundColor: isDark ? 'rgba(139, 92, 246, 0.2)' : 'rgba(139, 92, 246, 0.1)',
-                        color: isDark ? '#a78bfa' : '#8b5cf6',
-                      }}
-                    >
-                      {item.category}
-                    </span>
-                  </div>
-                  <h3 
-                    className="text-xl mb-2"
-                    style={{
-                      color: isDark ? '#ffffff' : '#1d1d1f',
-                      fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                      fontWeight: 600,
-                      letterSpacing: '-0.02em',
-                    }}
-                  >
-                    {item.title}
-                  </h3>
-                  <p 
-                    className="text-sm leading-relaxed flex-grow"
-                    style={{
-                      color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
-                      fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                      fontWeight: 400,
-                      letterSpacing: '-0.01em',
-                      lineHeight: '1.6',
-                    }}
-                  >
-                    {item.summary}
-                  </p>
-                  <div 
-                    className="flex items-center gap-2 mt-4 text-sm font-medium transition-all duration-300 group-hover:gap-3"
-                    style={{
-                      color: '#8b5cf6',
-                    }}
-                  >
-                    <span>자세히 보기</span>
-                    <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
-                  </div>
-                </div>
-                
-                {/* 호버 효과 */}
-                <div 
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{
-                    background: 'radial-gradient(circle at center, rgba(139, 92, 246, 0.1) 0%, transparent 70%)',
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
       {/* 프로젝트 섹션 */}
       <section 
         id="gallery"
-        className="relative py-20 md:py-28 px-6 lg:pl-12"
+        className="relative min-h-screen flex items-center justify-center py-20 md:py-28 px-6 lg:pl-12"
         ref={(el) => { sectionRefs.current['gallery'] = el; }}
         data-section-id="gallery"
         style={{
           backgroundColor: isDark ? '#000000' : '#ffffff',
-          scrollSnapAlign: 'start',
+          scrollSnapAlign: 'center',
         }}
       >
         <div className="max-w-7xl mx-auto">
@@ -614,135 +490,51 @@ export default function PremiumDesignPage() {
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-            {[1, 2, 3, 4, 5, 6].map((item, idx) => (
-              <div
-                key={idx}
-                className={`group relative aspect-[4/3] rounded-3xl overflow-hidden transition-all duration-700 ${
-                  visibleSections.has('gallery')
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-8'
-                }`}
-                style={{
-                  transitionDelay: `${idx * 50}ms`,
-                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.3)' : '#e5e5e7'}`,
-                }}
-              >
-                <div 
-                  className="absolute inset-0 transition-transform duration-700 group-hover:scale-110"
+            {[
+              { id: 1, title: "프로젝트 1", desc: "세련된 디자인과 혁신적인 솔루션", isSite: false },
+              { id: 2, title: "프로젝트 2", desc: "세련된 디자인과 혁신적인 솔루션", isSite: false },
+              { id: 3, title: "프로젝트 3", desc: "세련된 디자인과 혁신적인 솔루션", isSite: false },
+              { id: 4, title: "프로젝트 4", desc: "세련된 디자인과 혁신적인 솔루션", isSite: false },
+              { id: 5, title: "프로젝트 5", desc: "세련된 디자인과 혁신적인 솔루션", isSite: false },
+              { id: 6, title: "사이트", desc: "외부 사이트로 이동", isSite: true, url: "https://example.com" },
+            ].map((item, idx) => {
+              const CardContent = (
+                <div
+                  className={`group relative aspect-[4/3] rounded-3xl overflow-hidden transition-all duration-700 cursor-pointer ${
+                    visibleSections.has('gallery')
+                      ? 'opacity-100 translate-y-0'
+                      : 'opacity-0 translate-y-8'
+                  }`}
                   style={{
-                    background: `linear-gradient(135deg, ${isDark ? '#1e3a8a' : '#3b82f6'} 0%, ${isDark ? '#581c87' : '#8b5cf6'} 100%)`,
-                    opacity: 0.8,
-                  }}
-                />
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div 
-                    className="text-6xl opacity-50 transition-transform duration-700 group-hover:scale-125"
-                    style={{
-                      transform: `rotate(${idx * 15}deg)`,
-                    }}
-                  >
-                    ✨
-                  </div>
-                </div>
-                <div 
-                  className="absolute bottom-0 left-0 right-0 p-6 transition-transform duration-700 group-hover:translate-y-0 translate-y-full"
-                  style={{
-                    background: isDark ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.9)',
+                    transitionDelay: `${idx * 50}ms`,
+                    border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.3)' : '#e5e5e7'}`,
                   }}
                 >
-                  <h3 
-                    className="text-lg mb-2"
-                    style={{
-                      color: isDark ? '#ffffff' : '#1d1d1f',
-                      fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                      fontWeight: 600,
-                      letterSpacing: '-0.01em',
-                    }}
-                  >
-                    프로젝트 {item}
-                  </h3>
-                  <p 
-                    className="text-sm"
-                    style={{
-                      color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
-                      fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                      fontWeight: 400,
-                      letterSpacing: '0',
-                    }}
-                  >
-                    세련된 디자인과 혁신적인 솔루션
-                  </p>
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 커뮤니티 섹션 */}
-      <section 
-        id="testimonials"
-        className="relative min-h-screen flex items-center justify-center py-20 md:py-28 px-6 lg:pl-12"
-        ref={(el) => { sectionRefs.current['testimonials'] = el; }}
-        data-section-id="testimonials"
-        style={{
-          backgroundColor: isDark ? '#000000' : '#f5f5f7',
-          scrollSnapAlign: 'center',
-        }}
-      >
-        <div className="max-w-6xl mx-auto">
-          <div 
-            className={`text-center mb-12 transition-all duration-1000 ${
-              visibleSections.has('testimonials')
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-8'
-            }`}
-          >
-            <h2 
-              className="text-4xl md:text-5xl mb-3"
-              style={{
-                color: isDark ? '#ffffff' : '#1d1d1f',
-                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                fontWeight: 700,
-                letterSpacing: '-0.03em',
-                lineHeight: '1.1',
-              }}
-            >
-              커뮤니티
-            </h2>
-          </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-            {[
-              { name: "김철수", role: "디자이너", text: "정말 놀라운 경험이었습니다. 직관적이고 세련된 인터페이스가 인상적이에요." },
-              { name: "이영희", role: "개발자", text: "AI 도구 탐색이 이렇게 쉬울 줄 몰랐어요. 정말 유용한 플랫폼입니다." },
-              { name: "박민수", role: "기획자", text: "커뮤니티가 활발하고 정보가 풍부해서 정말 만족스럽습니다." },
-            ].map((testimonial, idx) => (
-              <div
-                key={idx}
-                className={`p-6 rounded-3xl transition-all duration-700 ${
-                  visibleSections.has('testimonials')
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-8'
-                }`}
-                style={{
-                  transitionDelay: `${idx * 100}ms`,
-                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.3)' : '#e5e5e7'}`,
-                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
-                }}
-              >
-                <div className="flex items-center gap-3 mb-3">
                   <div 
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-lg"
+                    className="absolute inset-0 transition-transform duration-700 group-hover:scale-110"
                     style={{
-                      background: `linear-gradient(135deg, #3b82f6, #8b5cf6)`,
+                      background: `linear-gradient(135deg, ${isDark ? '#1e3a8a' : '#3b82f6'} 0%, ${isDark ? '#581c87' : '#8b5cf6'} 100%)`,
+                      opacity: 0.8,
+                    }}
+                  />
+                  <div className="absolute inset-0 flex items-center justify-center">
+                    <div 
+                      className="text-6xl opacity-50 transition-transform duration-700 group-hover:scale-125"
+                      style={{
+                        transform: `rotate(${idx * 15}deg)`,
+                      }}
+                    >
+                      {item.isSite ? '🌐' : '✨'}
+                    </div>
+                  </div>
+                  <div 
+                    className="absolute bottom-0 left-0 right-0 p-6 transition-transform duration-700 group-hover:translate-y-0 translate-y-full"
+                    style={{
+                      background: isDark ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.9)',
                     }}
                   >
-                    {testimonial.name[0]}
-                  </div>
-                  <div>
-                    <div 
-                      className=""
+                    <h3 
+                      className="text-lg mb-2"
                       style={{
                         color: isDark ? '#ffffff' : '#1d1d1f',
                         fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
@@ -750,34 +542,43 @@ export default function PremiumDesignPage() {
                         letterSpacing: '-0.01em',
                       }}
                     >
-                      {testimonial.name}
-                    </div>
-                    <div 
+                      {item.title}
+                    </h3>
+                    <p 
                       className="text-sm"
                       style={{
                         color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
                         fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
                         fontWeight: 400,
+                        letterSpacing: '0',
                       }}
                     >
-                      {testimonial.role}
-                    </div>
+                      {item.desc}
+                    </p>
                   </div>
                 </div>
-                <p 
-                  className="leading-relaxed"
-                  style={{
-                    color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)',
-                    fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                    fontWeight: 400,
-                    letterSpacing: '-0.01em',
-                    lineHeight: '1.6',
-                  }}
-                >
-                  {testimonial.text}
-                </p>
-              </div>
-            ))}
+              );
+
+              if (item.isSite) {
+                return (
+                  <a
+                    key={item.id}
+                    href={item.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{ textDecoration: 'none' }}
+                  >
+                    {CardContent}
+                  </a>
+                );
+              }
+
+              return (
+                <div key={item.id}>
+                  {CardContent}
+                </div>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -785,7 +586,7 @@ export default function PremiumDesignPage() {
       {/* FAQ 섹션 */}
       <section 
         id="faq"
-        className="relative min-h-screen flex flex-col justify-between py-24 md:py-32 px-6"
+        className="relative min-h-screen flex items-center justify-center py-24 md:py-32 px-6"
         ref={(el) => { sectionRefs.current['faq'] = el; }}
         data-section-id="faq"
         style={{
@@ -793,8 +594,8 @@ export default function PremiumDesignPage() {
           scrollSnapAlign: 'center',
         }}
       >
-        <div className="max-w-5xl mx-auto flex-1 flex flex-col">
-          <div className="flex-1">
+        <div className="max-w-5xl mx-auto w-full">
+          <div>
             <h2 
               className="text-3xl md:text-4xl font-medium mb-16 text-center"
               style={{
@@ -887,11 +688,11 @@ export default function PremiumDesignPage() {
               ))}
             </div>
           </div>
-        </div>
-
-        {/* Footer */}
-        <div className="mt-auto">
-          <Footer />
+          
+          {/* Footer */}
+          <div className="mt-16">
+            <Footer />
+          </div>
         </div>
       </section>
 
@@ -939,6 +740,16 @@ export default function PremiumDesignPage() {
             transform: translateY(0);
           }
         }
+
+        @keyframes nodePulse {
+          0%, 100% {
+            transform: scale(1);
+          }
+          50% {
+            transform: scale(1.05);
+          }
+        }
+
 
         .animate-scroll {
           animation: scroll 2s ease-in-out infinite;

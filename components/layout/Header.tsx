@@ -11,7 +11,6 @@ export default function Header() {
   const { data: session } = useSession();
   const user = session?.user || null;
   const pathname = usePathname(); 
-  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
   
   // 🌍 언어 상태 제거, 한국어(.ko) 고정
@@ -27,17 +26,17 @@ export default function Header() {
       <header className="header-wrapper">
         <div className="header-inner">
           <div className="logo-area">
-            <Link href="/" onClick={() => setIsMobileMenuOpen(false)}>
+            <Link href="/">
               <span className="logo-text">DORI-AI</span>
             </Link>
           </div>
 
           <nav className="nav-area desktop-only">
-            {/* 👇 [lang] 대신 .ko 사용 */}
-            <Link href="/ai-tools" className={`nav-link ${isActive('/ai-tools')}`}>{t.aiTools.ko}</Link>
-            <Link href="/insight" className={`nav-link ${isActive('/insight')}`}>{t.insight.ko}</Link>
-            <Link href="/community" className={`nav-link ${isActive('/community')}`}>{t.community.ko}</Link>
-            <Link href="/market" className={`nav-link ${isActive('/market')}`}>{t.market.ko}</Link>
+            <Link href="/ai-tools" className={`nav-link ${isActive('/ai-tools')}`}>AI TOOLS</Link>
+            <Link href="/insight" className={`nav-link ${isActive('/insight')}`}>INSIGHT</Link>
+            <Link href="/project" className={`nav-link ${isActive('/project')}`}>PROJECT</Link>
+            <Link href="/community" className={`nav-link ${isActive('/community')}`}>COMMUNITY</Link>
+            <Link href="/market" className={`nav-link ${isActive('/market')}`}>MARKET</Link>
           </nav>
 
           <div className="right-area">
@@ -67,46 +66,10 @@ export default function Header() {
                   </div>
                 </div>
               )}
-              <button className="hamburger-btn mobile-only" onClick={() => setIsMobileMenuOpen(true)}>☰</button>
             </div>
           </div>
         </div>
       </header>
-
-      {/* 모바일 메뉴 */}
-      <div className={`mobile-menu-overlay ${isMobileMenuOpen ? 'open' : ''}`} onClick={() => setIsMobileMenuOpen(false)}>
-        <div className="mobile-menu-content" onClick={(e) => e.stopPropagation()}>
-          <div className="mobile-header">
-            <span className="mobile-title">{t.menu.ko}</span>
-            <div className="mobile-header-actions">
-              <ThemeToggle />
-              <button className="close-btn" onClick={() => setIsMobileMenuOpen(false)}>✕</button>
-            </div>
-          </div>
-          
-          <nav className="mobile-nav flex flex-col gap-2">
-             <Link href="/ai-tools" className={`m-link ${isActive('/ai-tools')}`}>{t.aiTools.ko}</Link>
-             <Link href="/insight" className={`m-link ${isActive('/insight')}`}>{t.insight.ko}</Link>
-             <Link href="/community" className={`m-link ${isActive('/community')}`}>{t.community.ko}</Link>
-             <Link href="/market" className={`m-link ${isActive('/market')}`}>{t.market.ko}</Link>
-          </nav>
-
-          <div className="mt-auto border-t border-dashed pt-4" style={{ borderColor: 'var(--card-border)' }}>
-            {!user ? (
-              <Link href="/login" className="block w-full text-center py-3 rounded-xl font-bold bg-blue-600 text-white">
-                {t.login.ko}
-              </Link>
-            ) : (
-              <>
-                <Link href="/my" className="m-link">{t.myPage.ko}</Link>
-                <button onClick={() => signOut({ callbackUrl: "/" })} className="m-link text-red-500 w-full text-left">
-                  {t.logout.ko}
-                </button>
-              </>
-            )}
-          </div>
-        </div>
-      </div>
 
       <style jsx>{`
         .header-wrapper { 
@@ -423,112 +386,6 @@ export default function Header() {
         .menu-item.danger:hover { 
           background: rgba(239, 68, 68, 0.1); 
           color: #ef4444; 
-        }
-        .hamburger-btn { 
-          font-size: 24px; 
-          background: none; 
-          border: none; 
-          cursor: pointer;
-          padding: 8px;
-        }
-        :global(.dark) .hamburger-btn {
-          color: #ffffff;
-        }
-        :global(.light) .hamburger-btn, :global([data-theme="light"]) .hamburger-btn {
-          color: #1d1d1f;
-        }
-        .mobile-menu-overlay { 
-          position: fixed; 
-          top: 0; 
-          right: 0; 
-          width: 100%; 
-          height: 100vh; 
-          z-index: 200; 
-          opacity: 0; 
-          visibility: hidden; 
-          transition: all 0.3s ease;
-        }
-        :global(.dark) .mobile-menu-overlay {
-          background: rgba(0, 0, 0, 0.7);
-        }
-        :global(.light) .mobile-menu-overlay, :global([data-theme="light"]) .mobile-menu-overlay {
-          background: rgba(0, 0, 0, 0.3);
-        }
-        .mobile-menu-overlay.open { 
-          opacity: 1; 
-          visibility: visible; 
-        }
-        .mobile-menu-content { 
-          position: absolute; 
-          top: 0; 
-          right: 0; 
-          width: 280px; 
-          height: 100%; 
-          padding: 24px; 
-          box-shadow: -5px 0 20px rgba(0, 0, 0, 0.1); 
-          transform: translateX(100%); 
-          transition: all 0.3s ease; 
-          display: flex; 
-          flex-direction: column;
-          backdrop-filter: blur(20px) saturate(180%);
-          -webkit-backdrop-filter: blur(20px) saturate(180%);
-        }
-        :global(.dark) .mobile-menu-content {
-          background: rgba(0, 0, 0, 0.9);
-          color: #ffffff;
-        }
-        :global(.light) .mobile-menu-content, :global([data-theme="light"]) .mobile-menu-content {
-          background: rgba(255, 255, 255, 0.95);
-          color: #1d1d1f;
-        }
-        .mobile-menu-overlay.open .mobile-menu-content { 
-          transform: translateX(0); 
-        }
-        .mobile-header { 
-          display: flex; 
-          justify-content: space-between; 
-          align-items: center; 
-          margin-bottom: 20px; 
-        }
-        .close-btn { 
-          font-size: 20px; 
-          background: none; 
-          border: none; 
-          cursor: pointer;
-        }
-        :global(.dark) .close-btn {
-          color: #ffffff;
-        }
-        :global(.light) .close-btn, :global([data-theme="light"]) .close-btn {
-          color: #1d1d1f;
-        }
-        .mobile-header-actions { 
-          display: flex; 
-          align-items: center; 
-          gap: 10px; 
-        }
-        .m-link { 
-          display: block; 
-          padding: 12px 0; 
-          font-size: 16px; 
-          font-weight: 500; 
-          letter-spacing: -0.01em;
-          text-decoration: none;
-        }
-        :global(.dark) .m-link {
-          color: rgba(255, 255, 255, 0.7);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-        }
-        :global(.light) .m-link, :global([data-theme="light"]) .m-link {
-          color: rgba(0, 0, 0, 0.6);
-          border-bottom: 1px solid rgba(0, 0, 0, 0.08);
-        }
-        .m-link.active { 
-          color: #2563eb; 
-        }
-        @media (max-width: 820px) { 
-          .desktop-only { display: none !important; } 
-          .mobile-only { display: block !important; } 
         }
       `}</style>
     </>
