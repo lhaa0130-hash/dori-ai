@@ -13,9 +13,12 @@ interface InsightListProps {
   filters: { category: string; tag: string | null; sort: string; };
   setFilters: (newFilters: any) => void;
   posts: InsightItem[]; // 👈 부모(Page)에서 읽어온 파일 데이터를 여기서 받습니다.
+  isOwner?: (item: InsightItem) => boolean;
+  onEdit?: (item: InsightItem) => void;
+  onDelete?: (id: number) => void;
 }
 
-export default function InsightList({ filters, setFilters, posts }: InsightListProps) {
+export default function InsightList({ filters, setFilters, posts, isOwner, onEdit, onDelete }: InsightListProps) {
   const [visibleCount, setVisibleCount] = useState(6);
   const handleTagClick = (tag: string) => setFilters({ ...filters, tag });
 
@@ -52,9 +55,17 @@ export default function InsightList({ filters, setFilters, posts }: InsightListP
               : `/insight/${item.id}`;
             
             return (
-              <Link key={item.id} href={href} className="block group">
-                <InsightCard item={item} onTagClick={handleTagClick} />
-              </Link>
+              <div key={item.id} className="relative group">
+                <Link href={href} className="block">
+                  <InsightCard 
+                    item={item} 
+                    onTagClick={handleTagClick}
+                    isOwner={isOwner ? isOwner(item) : false}
+                    onEdit={onEdit}
+                    onDelete={onDelete}
+                  />
+                </Link>
+              </div>
             );
           })}
         </div>

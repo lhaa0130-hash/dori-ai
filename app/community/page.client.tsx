@@ -22,6 +22,24 @@ export default function CommunityClient() {
         try {
           const parsedPosts: CommunityPost[] = JSON.parse(savedPosts);
           setPosts(parsedPosts);
+          
+          // 수정 모드 확인 (posts가 로드된 후)
+          const editPostId = sessionStorage.getItem('dori_edit_community_post');
+          if (editPostId) {
+            const postId = parseInt(editPostId);
+            const postToEdit = parsedPosts.find(p => p.id === postId);
+            if (postToEdit) {
+              setEditingPost(postToEdit);
+              sessionStorage.removeItem('dori_edit_community_post');
+              // 폼으로 스크롤
+              setTimeout(() => {
+                const formElement = document.querySelector('[data-community-form]');
+                if (formElement) {
+                  formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                }
+              }, 100);
+            }
+          }
         } catch (e) {
           console.error('Failed to parse posts:', e);
         }
@@ -39,11 +57,122 @@ export default function CommunityClient() {
     { id: '잡담', label: '잡담' },
   ];
 
-  const handleAddPost = (newPost: CommunityPost) => {
-    setPosts([newPost, ...posts]);
-    if (typeof window !== 'undefined') {
-      localStorage.setItem("dori_community_posts", JSON.stringify([newPost, ...posts]));
+  // 작성자 ID 생성 및 관리 유틸리티
+  const getAuthorId = (): string => {
+    if (typeof window === 'undefined') return '';
+    
+    let authorId = sessionStorage.getItem('dori_community_author_id');
+    if (!authorId) {
+      authorId = crypto.randomUUID();
+      sessionStorage.setItem('dori_community_author_id', authorId);
     }
+    return authorId;
+  };
+
+  // 본인이 작성한 커뮤니티 글 ID 목록 가져오기
+  const getMyPostIds = (): Set<number> => {
+    if (typeof window === 'undefined') return new Set();
+    
+    const saved = localStorage.getItem('dori_my_community_posts');
+    if (saved) {
+      try {
+        return new Set(JSON.parse(saved));
+      } catch (e) {
+        return new Set();
+      }
+    }
+    return new Set();
+  };
+
+  // 본인이 작성한 커뮤니티 글 ID 목록에 추가
+  const addMyPostId = (id: number) => {
+    if (typeof window === 'undefined') return;
+    
+    const myIds = getMyPostIds();
+    myIds.add(id);
+    localStorage.setItem('dori_my_community_posts', JSON.stringify(Array.from(myIds)));
+  };
+
+  // 본인이 작성한 커뮤니티 글 ID 목록에서 제거
+  const removeMyPostId = (id: number) => {
+    if (typeof window === 'undefined') return;
+    
+    const myIds = getMyPostIds();
+    myIds.delete(id);
+    localStorage.setItem('dori_my_community_posts', JSON.stringify(Array.from(myIds)));
+  };
+
+  const [editingPost, setEditingPost] = useState<CommunityPost | null>(null);
+
+  // 작성자 ID 가져오기
+  const authorId = mounted ? getAuthorId() : '';
+  const myPostIds = mounted ? getMyPostIds() : new Set<number>();
+
+  // 본인 글인지 확인
+  const isOwner = (post: CommunityPost): boolean => {
+    if (!mounted) return false;
+    
+    const currentAuthorId = authorId || getAuthorId();
+    const currentMyPostIds = myPostIds.size > 0 ? myPostIds : getMyPostIds();
+    
+    // authorId가 있으면 authorId로 확인, 없으면 myPostIds로 확인 (기존 데이터 호환성)
+    if (post.authorId) {
+      return post.authorId === currentAuthorId;
+    }
+    return currentMyPostIds.has(post.id);
+  };
+
+  const handleAddPost = (newPost: CommunityPost) => {
+    // 작성자 ID 추가 (mounted가 false일 때를 대비)
+    const currentAuthorId = mounted ? authorId : getAuthorId();
+    const postWithAuthor: CommunityPost = {
+      ...newPost,
+      authorId: currentAuthorId,
+    };
+    
+    const updated = [postWithAuthor, ...posts];
+    setPosts(updated);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("dori_community_posts", JSON.stringify(updated));
+      // 본인 작성 목록에 추가
+      addMyPostId(newPost.id);
+    }
+  };
+
+  const handleUpdatePost = (updatedPost: CommunityPost) => {
+    // authorId 유지 (수정 시에도 작성자 정보 보존)
+    const currentAuthorId = mounted ? authorId : getAuthorId();
+    const postToUpdate = posts.find(p => p.id === updatedPost.id);
+    const updated = posts.map(post => 
+      post.id === updatedPost.id 
+        ? { ...updatedPost, authorId: postToUpdate?.authorId || currentAuthorId }
+        : post
+    );
+    setPosts(updated);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("dori_community_posts", JSON.stringify(updated));
+    }
+    setEditingPost(null);
+  };
+
+  const handleDeletePost = (id: number) => {
+    const updated = posts.filter(post => post.id !== id);
+    setPosts(updated);
+    if (typeof window !== 'undefined') {
+      localStorage.setItem("dori_community_posts", JSON.stringify(updated));
+      removeMyPostId(id);
+    }
+  };
+
+  const handleEditPost = (post: CommunityPost) => {
+    setEditingPost(post);
+    // 폼으로 스크롤
+    setTimeout(() => {
+      const formElement = document.querySelector('[data-community-form]');
+      if (formElement) {
+        formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }, 100);
   };
 
   const filteredPosts = activeCategory === "전체" 
@@ -187,8 +316,13 @@ export default function CommunityClient() {
         }}
       >
         {/* 글 쓰기 폼 */}
-        <div className="mb-12">
-          <CommunityForm onAddPost={handleAddPost} />
+        <div className="mb-12" data-community-form>
+          <CommunityForm 
+            onAddPost={handleAddPost}
+            initialData={editingPost}
+            onCancel={() => setEditingPost(null)}
+            onUpdate={handleUpdatePost}
+          />
         </div>
         
         {/* 글 목록 또는 빈 상태 메시지 */}
@@ -200,71 +334,118 @@ export default function CommunityClient() {
               const preview = textContent.length > 100 ? textContent.substring(0, 100) + '...' : textContent;
               
               return (
-                <Link
+                <div
                   key={post.id}
-                  href={`/community/${post.id}`}
-                  className="block p-5 rounded-xl border transition-all hover:shadow-md hover:opacity-90 cursor-pointer"
+                  className="relative p-5 rounded-xl border transition-all hover:shadow-md hover:opacity-90"
                   style={{
                     backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.01)',
                     borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)',
                   }}
                 >
-                  <div className="flex items-start justify-between mb-2">
-                    <div className="flex items-center gap-2.5">
+                  <Link
+                    href={`/community/${post.id}`}
+                    className="block"
+                    onClick={(e) => {
+                      // 수정/삭제 버튼 영역 클릭 시 링크 동작 방지
+                      const target = e.target as HTMLElement;
+                      if (target.closest('.edit-delete-buttons')) {
+                        e.preventDefault();
+                      }
+                    }}
+                  >
+                    <div className="flex items-start justify-between mb-2">
+                      <div className="flex items-center gap-2.5">
+                        <span 
+                          className="px-2.5 py-0.5 text-xs font-medium rounded-md"
+                          style={{
+                            backgroundColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.05)',
+                            color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
+                          }}
+                        >
+                          {post.tag}
+                        </span>
+                        <span 
+                          className="text-xs font-medium"
+                          style={{
+                            color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
+                          }}
+                        >
+                          {post.nickname || "익명"}
+                        </span>
+                      </div>
                       <span 
-                        className="px-2.5 py-0.5 text-xs font-medium rounded-md"
+                        className="text-xs"
                         style={{
-                          backgroundColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.05)',
-                          color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
+                          color: isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)',
                         }}
                       >
-                        {post.tag}
-                      </span>
-                      <span 
-                        className="text-xs font-medium"
-                        style={{
-                          color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
-                        }}
-                      >
-                        {post.nickname || "익명"}
+                        {new Date(post.createdAt).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })}
                       </span>
                     </div>
-                    <span 
-                      className="text-xs"
+                    <h3 
+                      className="text-base font-semibold mb-1.5 line-clamp-1"
                       style={{
-                        color: isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)',
+                        color: isDark ? '#ffffff' : '#000000',
                       }}
                     >
-                      {new Date(post.createdAt).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })}
-                    </span>
-                  </div>
-                  <h3 
-                    className="text-base font-semibold mb-1.5 line-clamp-1"
-                    style={{
-                      color: isDark ? '#ffffff' : '#000000',
-                    }}
-                  >
-                    {post.title}
-                  </h3>
-                  <p 
-                    className="text-sm leading-relaxed line-clamp-2 mb-2"
-                    style={{
-                      color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)',
-                    }}
-                  >
-                    {preview}
-                  </p>
-                  <div className="flex items-center gap-3">
-                    <span 
-                      className="text-xs flex items-center gap-1"
+                      {post.title}
+                    </h3>
+                    <p 
+                      className="text-sm leading-relaxed line-clamp-2 mb-2"
                       style={{
-                        color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                        color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)',
                       }}
                     >
-                      ❤️ {post.likes}
-                    </span>
-                  </div>
-                </Link>
+                      {preview}
+                    </p>
+                    <div className="flex items-center justify-between">
+                      <span 
+                        className="text-xs flex items-center gap-1"
+                        style={{
+                          color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                        }}
+                      >
+                        ❤️ {post.likes}
+                      </span>
+                    </div>
+                  </Link>
+                  
+                  {/* 본인 글인 경우 수정/삭제 버튼 (Link 밖에 배치) */}
+                  {isOwner(post) && (
+                    <div className="flex gap-2 mt-3 pt-3 border-t border-dashed edit-delete-buttons" style={{ borderColor: isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)' }}>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleEditPost(post);
+                        }}
+                        className="flex-1 px-3 py-1.5 text-xs font-medium rounded-lg transition-all hover:scale-105"
+                        style={{
+                          backgroundColor: 'var(--card-border)',
+                          color: 'var(--text-main)',
+                        }}
+                      >
+                        ✏️ 수정
+                      </button>
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          if (confirm('정말 삭제하시겠습니까?')) {
+                            handleDeletePost(post.id);
+                          }
+                        }}
+                        className="flex-1 px-3 py-1.5 text-xs font-medium rounded-lg transition-all hover:scale-105"
+                        style={{
+                          backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                          color: '#ef4444',
+                        }}
+                      >
+                        🗑️ 삭제
+                      </button>
+                    </div>
+                  )}
+                </div>
               );
             })}
           </div>

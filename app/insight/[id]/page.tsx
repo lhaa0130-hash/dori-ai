@@ -2,6 +2,8 @@ import { getPostData, getSortedPostsData } from "@/lib/posts";
 import { AiBadge } from "@/components/common/AiBadge";
 import { notFound } from "next/navigation";
 import Link from "next/link";
+import InsightLikeButton from "@/components/insight/InsightLikeButton";
+import InsightEditButtons from "@/components/insight/InsightEditButtons";
 
 // 정적 경로 생성 (빌드 최적화)
 export async function generateStaticParams() {
@@ -51,10 +53,9 @@ export default async function InsightDetailPage({ params }: Props) {
   
             <div className="flex items-center justify-between">
               <AiBadge aiMeta={post.aiMeta} />
-              <div className="flex items-center gap-2 text-sm opacity-60 font-medium dark:text-white">
-                <span>❤️ {post.likes}명이 좋아함</span>
-              </div>
+              <InsightLikeButton postId={post.id} initialLikes={post.likes} />
             </div>
+            <InsightEditButtons postId={post.id} />
           </header>
   
           {/* 본문 영역 (HTML) */}

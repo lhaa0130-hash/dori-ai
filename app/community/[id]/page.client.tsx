@@ -6,6 +6,33 @@ import { useParams, useRouter } from "next/navigation";
 import Link from "next/link";
 import { CommunityPost } from "@/components/community/CommunityCard";
 
+// 작성자 ID 생성 및 관리 유틸리티
+const getAuthorId = (): string => {
+  if (typeof window === 'undefined') return '';
+  
+  let authorId = sessionStorage.getItem('dori_community_author_id');
+  if (!authorId) {
+    authorId = crypto.randomUUID();
+    sessionStorage.setItem('dori_community_author_id', authorId);
+  }
+  return authorId;
+};
+
+// 본인이 작성한 커뮤니티 글 ID 목록 가져오기
+const getMyPostIds = (): Set<number> => {
+  if (typeof window === 'undefined') return new Set();
+  
+  const saved = localStorage.getItem('dori_my_community_posts');
+  if (saved) {
+    try {
+      return new Set(JSON.parse(saved));
+    } catch (e) {
+      return new Set();
+    }
+  }
+  return new Set();
+};
+
 export default function CommunityPostDetail() {
   const { theme } = useTheme();
   const params = useParams();
@@ -17,6 +44,42 @@ export default function CommunityPostDetail() {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // 작성자 ID 가져오기
+  const authorId = mounted ? getAuthorId() : '';
+  const myPostIds = mounted ? getMyPostIds() : new Set<number>();
+
+  // 본인 글인지 확인
+  const isOwner = (post: CommunityPost | null): boolean => {
+    if (!mounted || !post) return false;
+    
+    const currentAuthorId = authorId || getAuthorId();
+    const currentMyPostIds = myPostIds.size > 0 ? myPostIds : getMyPostIds();
+    
+    // authorId가 있으면 authorId로 확인, 없으면 myPostIds로 확인 (기존 데이터 호환성)
+    if (post.authorId) {
+      return post.authorId === currentAuthorId;
+    }
+    return currentMyPostIds.has(post.id);
+  };
+
+  const handleDeletePost = (id: number) => {
+    if (typeof window === 'undefined') return;
+    
+    const savedPosts = localStorage.getItem("dori_community_posts");
+    if (savedPosts) {
+      const posts: CommunityPost[] = JSON.parse(savedPosts);
+      const updated = posts.filter(p => p.id !== id);
+      localStorage.setItem("dori_community_posts", JSON.stringify(updated));
+      
+      // 본인 작성 목록에서 제거
+      const myIds = getMyPostIds();
+      myIds.delete(id);
+      localStorage.setItem('dori_my_community_posts', JSON.stringify(Array.from(myIds)));
+      
+      router.push('/community');
+    }
+  };
 
   useEffect(() => {
     if (!mounted) return;
@@ -224,6 +287,47 @@ export default function CommunityPostDetail() {
                   ❤️ {post.likes}
                 </button>
               </div>
+              
+              {/* 본인 글인 경우 수정/삭제 버튼 */}
+              {isOwner(post) && (
+                <div className="flex gap-2">
+                  <button
+                    onClick={() => {
+                      router.push(`/community`);
+                      // 목록 페이지에서 수정 모드로 전환하기 위해 sessionStorage 사용
+                      sessionStorage.setItem('dori_edit_community_post', post.id.toString());
+                      // 페이지 로드 후 스크롤
+                      setTimeout(() => {
+                        const formElement = document.querySelector('[data-community-form]');
+                        if (formElement) {
+                          formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                        }
+                      }, 100);
+                    }}
+                    className="px-4 py-2 text-sm font-medium rounded-lg transition-all hover:scale-105"
+                    style={{
+                      backgroundColor: 'var(--card-border)',
+                      color: 'var(--text-main)',
+                    }}
+                  >
+                    ✏️ 수정
+                  </button>
+                  <button
+                    onClick={() => {
+                      if (confirm('정말 삭제하시겠습니까?')) {
+                        handleDeletePost(post.id);
+                      }
+                    }}
+                    className="px-4 py-2 text-sm font-medium rounded-lg transition-all hover:scale-105"
+                    style={{
+                      backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                      color: '#ef4444',
+                    }}
+                  >
+                    🗑️ 삭제
+                  </button>
+                </div>
+              )}
             </div>
           </article>
         </div>

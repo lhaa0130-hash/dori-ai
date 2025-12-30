@@ -1,4 +1,6 @@
-import React from "react";
+"use client";
+
+import React, { useState, useEffect } from "react";
 import { TEXTS } from "@/constants/texts";
 import { InsightItem } from "@/types/content";
 import { AiBadge } from "@/components/common/AiBadge";
@@ -6,9 +8,68 @@ import { AiBadge } from "@/components/common/AiBadge";
 interface InsightCardProps {
   item: InsightItem;
   onTagClick: (tag: string) => void;
+  onLikeChange?: (id: number, newLikes: number) => void;
+  isOwner?: boolean; // 본인 글인지 여부
+  onEdit?: (item: InsightItem) => void;
+  onDelete?: (id: number) => void;
 }
 
-const InsightCard = React.memo(({ item, onTagClick }: InsightCardProps) => {
+const InsightCard = React.memo(({ item, onTagClick, onLikeChange, isOwner = false, onEdit, onDelete }: InsightCardProps) => {
+  const [isLiked, setIsLiked] = useState(false);
+  const [likes, setLikes] = useState(item.likes);
+  const [mounted, setMounted] = useState(false);
+
+  useEffect(() => {
+    setMounted(true);
+    // 로컬스토리지에서 좋아요 상태 확인
+    const likedPosts = JSON.parse(localStorage.getItem('dori_liked_insights') || '[]');
+    setIsLiked(likedPosts.includes(item.id));
+    
+    // 로컬스토리지에서 좋아요 수 확인
+    const likesData = JSON.parse(localStorage.getItem('dori_insight_likes') || '{}');
+    if (likesData[item.id] !== undefined) {
+      setLikes(likesData[item.id]);
+    }
+  }, [item.id]);
+
+  const handleLikeClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!mounted) return;
+
+    const newIsLiked = !isLiked;
+    setIsLiked(newIsLiked);
+    
+    // 좋아요한 글 ID 목록 업데이트
+    const likedPosts = JSON.parse(localStorage.getItem('dori_liked_insights') || '[]');
+    if (newIsLiked) {
+      if (!likedPosts.includes(item.id)) {
+        likedPosts.push(item.id);
+      }
+    } else {
+      const index = likedPosts.indexOf(item.id);
+      if (index > -1) {
+        likedPosts.splice(index, 1);
+      }
+    }
+    localStorage.setItem('dori_liked_insights', JSON.stringify(likedPosts));
+    
+    // 좋아요 수 업데이트
+    const newLikes = newIsLiked ? likes + 1 : Math.max(0, likes - 1);
+    setLikes(newLikes);
+    
+    // 로컬스토리지에 좋아요 수 저장
+    const likesData = JSON.parse(localStorage.getItem('dori_insight_likes') || '{}');
+    likesData[item.id] = newLikes;
+    localStorage.setItem('dori_insight_likes', JSON.stringify(likesData));
+    
+    // 부모 컴포넌트에 변경 알림
+    if (onLikeChange) {
+      onLikeChange(item.id, newLikes);
+    }
+  };
+
   const cardStyle = {
     backgroundColor: 'var(--card-bg)',
     borderColor: 'var(--card-border)',
@@ -102,19 +163,68 @@ const InsightCard = React.memo(({ item, onTagClick }: InsightCardProps) => {
         </div>
       </div>
 
-      <div className="mt-auto pt-5 border-t border-dashed flex items-center justify-between" style={{ borderColor: 'var(--card-border)' }}>
-        <span 
-          className="font-semibold text-sm transition-all duration-200 hover:scale-105"
-          style={{ color: 'var(--accent-color)' }}
-        >
-          {TEXTS.insight.button.readMore.ko} →
-        </span>
-        <div 
-          className="flex items-center gap-1 text-xs opacity-60"
-          style={{ color: 'var(--text-sub)' }}
-        >
-          <span>❤️</span> {item.likes}
+      <div className="mt-auto pt-5 border-t border-dashed" style={{ borderColor: 'var(--card-border)' }}>
+        <div className="flex items-center justify-between mb-3">
+          <span 
+            className="font-semibold text-sm transition-all duration-200 hover:scale-105"
+            style={{ color: 'var(--accent-color)' }}
+          >
+            {TEXTS.insight.button.readMore.ko} →
+          </span>
+          <button
+            onClick={handleLikeClick}
+            className="flex items-center gap-1.5 text-xs transition-all duration-200 hover:scale-110 active:scale-95"
+            style={{ 
+              color: isLiked ? '#ef4444' : 'var(--text-sub)',
+              opacity: isLiked ? 1 : 0.6,
+            }}
+          >
+            <span className="text-base transition-transform duration-200" style={{ transform: isLiked ? 'scale(1.2)' : 'scale(1)' }}>
+              {isLiked ? '❤️' : '🤍'}
+            </span>
+            <span>{likes}</span>
+          </button>
         </div>
+        
+        {/* 본인 글인 경우 수정/삭제 버튼 */}
+        {isOwner && (onEdit || onDelete) && (
+          <div className="flex gap-2 pt-3 border-t border-dashed" style={{ borderColor: 'var(--card-border)' }}>
+            {onEdit && (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  onEdit(item);
+                }}
+                className="flex-1 px-3 py-1.5 text-xs font-medium rounded-lg transition-all hover:scale-105"
+                style={{
+                  backgroundColor: 'var(--card-border)',
+                  color: 'var(--text-main)',
+                }}
+              >
+                ✏️ 수정
+              </button>
+            )}
+            {onDelete && (
+              <button
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (confirm('정말 삭제하시겠습니까?')) {
+                    onDelete(item.id);
+                  }
+                }}
+                className="flex-1 px-3 py-1.5 text-xs font-medium rounded-lg transition-all hover:scale-105"
+                style={{
+                  backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                  color: '#ef4444',
+                }}
+              >
+                🗑️ 삭제
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

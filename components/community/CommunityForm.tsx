@@ -11,9 +11,12 @@ import { AiCreationType, AiMeta } from "@/types/content";
 
 interface CommunityFormProps {
   onAddPost: (newPost: CommunityPost) => void;
+  initialData?: CommunityPost | null; // 수정 모드용 초기 데이터
+  onCancel?: () => void; // 수정 취소
+  onUpdate?: (updatedPost: CommunityPost) => void; // 수정 핸들러
 }
 
-export default function CommunityForm({ onAddPost }: CommunityFormProps) {
+export default function CommunityForm({ onAddPost, initialData, onCancel, onUpdate }: CommunityFormProps) {
   const { theme } = useTheme();
   const { data: session, status } = useSession();
   const router = useRouter();
@@ -21,7 +24,8 @@ export default function CommunityForm({ onAddPost }: CommunityFormProps) {
   const tErr = TEXTS.communityPage.errors;
 
   const [mounted, setMounted] = useState(false);
-  const [isOpen, setIsOpen] = useState(false);
+  const isEditMode = !!initialData;
+  const [isOpen, setIsOpen] = useState(isEditMode); // 수정 모드면 자동으로 열림
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
   const [tag, setTag] = useState<CommunityTag>("잡담");
@@ -44,6 +48,19 @@ export default function CommunityForm({ onAddPost }: CommunityFormProps) {
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // 수정 모드일 때 초기 데이터 설정
+  useEffect(() => {
+    if (initialData) {
+      setTitle(initialData.title);
+      setContent(initialData.content);
+      setTag(initialData.tag);
+      setCreationType(initialData.aiMeta?.creationType || "human_only");
+      setAiTools(initialData.aiMeta?.tools?.join(", ") || "");
+      // 이미지는 수정 시에는 초기화 (필요시 추가 구현)
+      setImages([]);
+    }
+  }, [initialData]);
 
   // 로그인하지 않았으면 로그인 페이지로 리디렉션
   const handleOpenForm = () => {
@@ -202,18 +219,33 @@ export default function CommunityForm({ onAddPost }: CommunityFormProps) {
       tools: aiTools ? aiTools.split(",").map(t => t.trim()) : undefined
     } : undefined;
 
-    const newPost: CommunityPost = {
-      id: Date.now(),
-      nickname: nickname || "익명",
-      title,
-      content: finalContent,
-      tag,
-      likes: 0,
-      createdAt: new Date().toISOString(),
-      aiMeta,
-    };
+    if (isEditMode && initialData && onUpdate) {
+      // 수정 모드
+      const updatedPost: CommunityPost = {
+        ...initialData,
+        title,
+        content: finalContent,
+        tag,
+        aiMeta,
+        // authorId와 createdAt은 유지
+      };
+      onUpdate(updatedPost);
+      if (onCancel) onCancel();
+    } else {
+      // 새로 작성 모드
+      const newPost: CommunityPost = {
+        id: Date.now(),
+        nickname: nickname || "익명",
+        title,
+        content: finalContent,
+        tag,
+        likes: 0,
+        createdAt: new Date().toISOString(),
+        aiMeta,
+      };
 
-    onAddPost(newPost);
+      onAddPost(newPost);
+    }
     
     // 초기화
     setTitle(""); 
@@ -288,10 +320,13 @@ export default function CommunityForm({ onAddPost }: CommunityFormProps) {
               className="text-base font-medium"
               style={{ color: isDark ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.9)' }}
             >
-              글쓰기
+              {isEditMode ? "✏️ 글 수정" : "글쓰기"}
             </h3>
             <button
-              onClick={() => setIsOpen(false)}
+              onClick={() => {
+                setIsOpen(false);
+                if (isEditMode && onCancel) onCancel();
+              }}
               className="text-lg hover:opacity-50 transition-opacity"
               style={{ color: isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)' }}
             >
@@ -679,7 +714,7 @@ export default function CommunityForm({ onAddPost }: CommunityFormProps) {
                 type="submit" 
                 className="flex-1 py-2 rounded-md font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-85 transition-all"
               >
-                {t.submit.ko}
+                {isEditMode ? "수정하기" : t.submit.ko}
               </button>
             </div>
           </form>

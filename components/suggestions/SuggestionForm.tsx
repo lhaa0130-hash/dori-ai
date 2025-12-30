@@ -1,27 +1,19 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { TEXTS } from "@/constants/texts";
 import { SuggestionItem, SuggestionType, SuggestionPriority } from "./SuggestionCard";
 
 interface SuggestionFormProps {
   onAddSuggestion: (newItem: SuggestionItem) => void;
+  initialData?: SuggestionItem | null; // 수정 모드용 초기 데이터
+  onCancel?: () => void; // 수정 취소
+  onUpdate?: (updatedItem: SuggestionItem) => void; // 수정 핸들러
 }
 
-export default function SuggestionForm({ onAddSuggestion }: SuggestionFormProps) {
-  const t = (TEXTS && TEXTS.suggestions && TEXTS.suggestions.form) ? TEXTS.suggestions.form : {
-    name: { ko: "이름" },
-    email: { ko: "이메일 (선택)" },
-    type: { ko: "유형" },
-    priority: { ko: "우선순위" },
-    message: { ko: "내용" },
-    needsReply: { ko: "답변이 필요합니다." },
-    submit: { ko: "건의 등록" },
-    errorRequired: { ko: "필수 항목을 모두 입력해주세요." },
-    errorTooShort: { ko: "너무 짧은 건의는 등록할 수 없습니다." },
-    errorBanned: { ko: "비방/욕설이 포함된 건의는 등록할 수 없습니다." },
-    success: { ko: "건의가 접수되었습니다. 감사합니다." }
-  };
+export default function SuggestionForm({ onAddSuggestion, initialData, onCancel, onUpdate }: SuggestionFormProps) {
+  const t = TEXTS.suggestions.form;
+  const isEditMode = !!initialData;
 
   // 폼 상태
   const [formData, setFormData] = useState({
@@ -32,6 +24,20 @@ export default function SuggestionForm({ onAddSuggestion }: SuggestionFormProps)
     message: "",
     needsReply: false,
   });
+
+  // 수정 모드일 때 초기 데이터 설정
+  useEffect(() => {
+    if (initialData) {
+      setFormData({
+        name: initialData.name,
+        email: initialData.email || "",
+        type: initialData.type,
+        priority: initialData.priority,
+        message: initialData.message,
+        needsReply: initialData.needsReply,
+      });
+    }
+  }, [initialData]);
 
   const bannedWords = ["시발", "병신", "개새끼", "좆", "fuck", "shit"];
 
@@ -59,20 +65,38 @@ export default function SuggestionForm({ onAddSuggestion }: SuggestionFormProps)
       return;
     }
 
-    // 3. 데이터 생성
-    const newItem: SuggestionItem = {
-      id: crypto.randomUUID(),
-      name: formData.name,
-      email: formData.email,
-      type: formData.type,
-      priority: formData.priority,
-      message: formData.message,
-      needsReply: formData.needsReply,
-      createdAt: new Date().toISOString(),
-    };
+    // 3. 데이터 생성 또는 수정
+    if (isEditMode && initialData && onUpdate) {
+      // 수정 모드 - authorId와 createdAt 유지
+      const updatedItem: SuggestionItem = {
+        ...initialData,
+        name: formData.name,
+        email: formData.email,
+        type: formData.type,
+        priority: formData.priority,
+        message: formData.message,
+        needsReply: formData.needsReply,
+        // authorId와 createdAt은 유지
+      };
+      onUpdate(updatedItem);
+      alert("건의사항이 수정되었습니다.");
+      if (onCancel) onCancel();
+    } else {
+      // 새로 작성 모드
+      const newItem: SuggestionItem = {
+        id: crypto.randomUUID(),
+        name: formData.name,
+        email: formData.email,
+        type: formData.type,
+        priority: formData.priority,
+        message: formData.message,
+        needsReply: formData.needsReply,
+        createdAt: new Date().toISOString(),
+      };
 
-    onAddSuggestion(newItem);
-    alert(t.success.ko);
+      onAddSuggestion(newItem);
+      alert(t.success.ko);
+    }
 
     // 초기화
     setFormData({
@@ -96,7 +120,9 @@ export default function SuggestionForm({ onAddSuggestion }: SuggestionFormProps)
         color: 'var(--text-main)'
       }}
     >
-      <h3 className="text-xl font-bold mb-6">📝 {t.submit.ko}</h3>
+      <h3 className="text-xl font-bold mb-6">
+        {isEditMode ? "✏️ 건의사항 수정" : `📝 ${t.submit.ko}`}
+      </h3>
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
         
         {/* 이름 & 이메일 */}
@@ -176,12 +202,27 @@ export default function SuggestionForm({ onAddSuggestion }: SuggestionFormProps)
             <span className="text-sm font-medium opacity-80">{t.needsReply.ko}</span>
           </label>
 
-          <button 
-            type="submit" 
-            className="px-8 py-3 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-700 transition-colors shadow-md"
-          >
-            {t.submit.ko}
-          </button>
+          <div className="flex gap-3">
+            {isEditMode && onCancel && (
+              <button 
+                type="button"
+                onClick={onCancel}
+                className="px-6 py-3 rounded-xl font-bold transition-colors shadow-md"
+                style={{
+                  backgroundColor: 'var(--card-border)',
+                  color: 'var(--text-main)',
+                }}
+              >
+                취소
+              </button>
+            )}
+            <button 
+              type="submit" 
+              className="px-8 py-3 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-700 transition-colors shadow-md"
+            >
+              {isEditMode ? "수정하기" : t.submit.ko}
+            </button>
+          </div>
         </div>
 
       </form>

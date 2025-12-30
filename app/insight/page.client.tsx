@@ -34,12 +34,90 @@ export default function InsightClient({ initialPosts }: { initialPosts: InsightI
 
   useEffect(() => setMounted(true), []);
 
+  // 작성자 ID 생성 및 관리 유틸리티
+  const getAuthorId = (): string => {
+    if (typeof window === 'undefined') return '';
+    
+    let authorId = sessionStorage.getItem('dori_insight_author_id');
+    if (!authorId) {
+      authorId = crypto.randomUUID();
+      sessionStorage.setItem('dori_insight_author_id', authorId);
+    }
+    return authorId;
+  };
 
-  // 1. 받아온 데이터가 있으면 그거 쓰고, 없으면 비상용 데이터 사용
-  // initialPosts가 undefined이거나 null일 수 있으므로 안전하게 처리
-  const postsToDisplay = (initialPosts && Array.isArray(initialPosts) && initialPosts.length > 0) 
+  // 본인이 작성한 인사이트 글 ID 목록 가져오기
+  const getMyInsightIds = (): Set<number> => {
+    if (typeof window === 'undefined') return new Set();
+    
+    const saved = localStorage.getItem('dori_my_insights');
+    if (saved) {
+      try {
+        return new Set(JSON.parse(saved));
+      } catch (e) {
+        return new Set();
+      }
+    }
+    return new Set();
+  };
+
+  // 본인이 작성한 인사이트 글 ID 목록에 추가
+  const addMyInsightId = (id: number) => {
+    if (typeof window === 'undefined') return;
+    
+    const myIds = getMyInsightIds();
+    myIds.add(id);
+    localStorage.setItem('dori_my_insights', JSON.stringify(Array.from(myIds)));
+  };
+
+  // 본인이 작성한 인사이트 글 ID 목록에서 제거
+  const removeMyInsightId = (id: number) => {
+    if (typeof window === 'undefined') return;
+    
+    const myIds = getMyInsightIds();
+    myIds.delete(id);
+    localStorage.setItem('dori_my_insights', JSON.stringify(Array.from(myIds)));
+  };
+
+  // 로컬스토리지에서 사용자가 작성한 인사이트 글 가져오기
+  const [userPosts, setUserPosts] = useState<InsightItem[]>([]);
+  const [editingPost, setEditingPost] = useState<InsightItem | null>(null);
+
+  useEffect(() => {
+    if (!mounted) return;
+    
+    // 로컬스토리지에서 사용자가 작성한 글 불러오기
+    const savedUserPosts = localStorage.getItem("dori_user_insights");
+    if (savedUserPosts) {
+      try {
+        const parsed: InsightItem[] = JSON.parse(savedUserPosts);
+        setUserPosts(parsed);
+      } catch (e) {
+        console.error('Failed to parse user insights:', e);
+      }
+    }
+  }, [mounted]);
+
+  // 작성자 ID 가져오기
+  const authorId = mounted ? getAuthorId() : '';
+  const myInsightIds = mounted ? getMyInsightIds() : new Set<number>();
+
+  // 본인 글인지 확인
+  const isOwner = (item: InsightItem): boolean => {
+    if (!mounted) return false;
+    // authorId가 있으면 authorId로 확인, 없으면 myInsightIds로 확인 (기존 데이터 호환성)
+    if (item.authorId) {
+      return item.authorId === authorId;
+    }
+    return myInsightIds.has(item.id);
+  };
+
+  // 1. 받아온 데이터와 사용자가 작성한 글 합치기
+  const basePosts = (initialPosts && Array.isArray(initialPosts) && initialPosts.length > 0) 
     ? initialPosts 
     : FALLBACK_POSTS;
+  
+  const postsToDisplay = [...userPosts, ...basePosts];
 
   const isDark = mounted && theme === 'dark';
 
@@ -211,7 +289,28 @@ export default function InsightClient({ initialPosts }: { initialPosts: InsightI
         </h2>
         
         {/* 👇 리스트에 데이터 전달 */}
-        <InsightList filters={filters} setFilters={setFilters} posts={postsToDisplay} />
+        <InsightList 
+          filters={filters} 
+          setFilters={setFilters} 
+          posts={postsToDisplay}
+          isOwner={isOwner}
+          onEdit={(item) => {
+            setEditingPost(item);
+            // 폼으로 스크롤 (나중에 폼 추가 시)
+            setTimeout(() => {
+              const formElement = document.querySelector('[data-insight-form]');
+              if (formElement) {
+                formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+              }
+            }, 100);
+          }}
+          onDelete={(id) => {
+            const updated = userPosts.filter(post => post.id !== id);
+            setUserPosts(updated);
+            localStorage.setItem("dori_user_insights", JSON.stringify(updated));
+            removeMyInsightId(id);
+          }}
+        />
       </section>
 
       {/* 스타일 */}

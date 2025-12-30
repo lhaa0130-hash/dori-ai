@@ -10,13 +10,17 @@ export type SuggestionItem = {
   message: string;
   needsReply: boolean;
   createdAt: string; // ISO String
+  authorId?: string; // 작성자 식별자 (선택적, 기존 데이터 호환성)
 };
 
 interface SuggestionCardProps {
   item: SuggestionItem;
+  isOwner?: boolean; // 본인 글인지 여부
+  onEdit?: (item: SuggestionItem) => void;
+  onDelete?: (id: string) => void;
 }
 
-export default function SuggestionCard({ item }: SuggestionCardProps) {
+export default function SuggestionCard({ item, isOwner = false, onEdit, onDelete }: SuggestionCardProps) {
   // 카드 스타일 (CSS 변수 활용)
   const cardStyle = {
     backgroundColor: 'var(--card-bg)',
@@ -70,16 +74,52 @@ export default function SuggestionCard({ item }: SuggestionCardProps) {
       </p>
 
       {/* 하단 정보 */}
-      <div className="mt-auto pt-4 border-t border-dashed flex justify-between items-center" style={{ borderColor: 'var(--card-border)' }}>
-        <div className="flex items-center gap-2">
-          <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-white/20 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300">
-            {item.name[0]}
+      <div className="mt-auto pt-4 border-t border-dashed" style={{ borderColor: 'var(--card-border)' }}>
+        <div className="flex justify-between items-center mb-3">
+          <div className="flex items-center gap-2">
+            <div className="w-6 h-6 rounded-full bg-gray-200 dark:bg-white/20 flex items-center justify-center text-xs font-bold text-gray-600 dark:text-gray-300">
+              {item.name[0]}
+            </div>
+            <span className="text-xs opacity-70 font-medium">{item.name}</span>
           </div>
-          <span className="text-xs opacity-70 font-medium">{item.name}</span>
+          <span className="text-xs opacity-50">
+            {new Date(item.createdAt).toLocaleDateString()}
+          </span>
         </div>
-        <span className="text-xs opacity-50">
-          {new Date(item.createdAt).toLocaleDateString()}
-        </span>
+        
+        {/* 본인 글인 경우 수정/삭제 버튼 */}
+        {isOwner && (onEdit || onDelete) && (
+          <div className="flex gap-2 pt-2 border-t border-dashed" style={{ borderColor: 'var(--card-border)' }}>
+            {onEdit && (
+              <button
+                onClick={() => onEdit(item)}
+                className="flex-1 px-3 py-1.5 text-xs font-medium rounded-lg transition-all hover:scale-105"
+                style={{
+                  backgroundColor: 'var(--card-border)',
+                  color: 'var(--text-main)',
+                }}
+              >
+                ✏️ 수정
+              </button>
+            )}
+            {onDelete && (
+              <button
+                onClick={() => {
+                  if (confirm('정말 삭제하시겠습니까?')) {
+                    onDelete(item.id);
+                  }
+                }}
+                className="flex-1 px-3 py-1.5 text-xs font-medium rounded-lg transition-all hover:scale-105"
+                style={{
+                  backgroundColor: 'rgba(239, 68, 68, 0.1)',
+                  color: '#ef4444',
+                }}
+              >
+                🗑️ 삭제
+              </button>
+            )}
+          </div>
+        )}
       </div>
     </div>
   );

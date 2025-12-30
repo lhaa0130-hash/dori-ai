@@ -3,7 +3,6 @@
 import { useEffect, useState, useRef } from "react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import Footer from "@/components/layout/Footer";
 
 export default function PremiumDesignPage() {
   const { theme } = useTheme();
@@ -12,39 +11,114 @@ export default function PremiumDesignPage() {
   const [activeSection, setActiveSection] = useState("hero");
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
+  const [isScrolling, setIsScrolling] = useState(false);
   const sectionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
+  const rootContainerRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     setMounted(true);
-  }, []);
-
-  useEffect(() => {
-    if (!mounted) return;
     
     const handleScroll = () => {
       setScrollY(window.scrollY);
       
-      // 활성 섹션 감지
-      const sections = ['hero', 'features', 'gallery', 'faq'];
-      const current = sections.find(section => {
+      // 프로그래밍 방식 스크롤 중이면 감지하지 않음
+      if (isScrolling) return;
+      
+      // 활성 섹션 감지 - 화면 중앙에 가장 가까운 섹션 찾기 (스크롤스냅 center와 호환)
+      const sections = ['hero', 'features', 'gallery', 'testimonials', 'faq'];
+      const viewportCenter = window.innerHeight / 2;
+      let closestSection = null;
+      let closestDistance = Infinity;
+      
+      sections.forEach(section => {
         const el = sectionRefs.current[section];
-        if (!el) return false;
+        if (!el) return;
         const rect = el.getBoundingClientRect();
-        return rect.top <= 200 && rect.bottom >= 200;
+        const sectionCenter = rect.top + rect.height / 2;
+        const distance = Math.abs(sectionCenter - viewportCenter);
+        
+        // 섹션이 화면에 보이고 중앙에 가장 가까운 경우 (중앙에서 40% 이내)
+        const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
+        const isNearCenter = distance < window.innerHeight * 0.4;
+        
+        if (isInViewport && isNearCenter && distance < closestDistance) {
+          closestDistance = distance;
+          closestSection = section;
+        }
       });
-      if (current) setActiveSection(current);
+      
+      if (closestSection) {
+        setActiveSection(closestSection);
+      }
     };
-
+    
     const handleMouseMove = (e: MouseEvent) => {
       setMousePosition({ x: e.clientX, y: e.clientY });
     };
     
     if (typeof window !== 'undefined') {
-      window.addEventListener("scroll", handleScroll, { passive: true });
+      let scrollTimeout: NodeJS.Timeout;
+      
+      const handleScrollWithDebounce = () => {
+        handleScroll();
+        // 스크롤이 멈춘 후에도 한 번 더 체크
+        clearTimeout(scrollTimeout);
+        scrollTimeout = setTimeout(() => {
+          handleScroll();
+        }, 150);
+      };
+      
+      window.addEventListener("scroll", handleScrollWithDebounce, { passive: true });
       window.addEventListener("mousemove", handleMouseMove);
       
-      // Intersection Observer
-      const observer = new IntersectionObserver(
+      // Intersection Observer - 활성 섹션 감지용 (스크롤스냅 center와 호환)
+      const activeObserver = new IntersectionObserver(
+        (entries) => {
+          // 프로그래밍 방식 스크롤 중이면 감지하지 않음
+          if (isScrolling) return;
+          
+          // 화면 중앙에 가장 가까운 섹션 찾기
+          let bestSection = null;
+          let bestScore = 0;
+          
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const sectionId = entry.target.getAttribute('data-section-id');
+              if (!sectionId) return;
+              
+              const rect = entry.boundingClientRect;
+              const viewportCenter = window.innerHeight / 2;
+              const sectionCenter = rect.top + rect.height / 2;
+              const distanceFromCenter = Math.abs(sectionCenter - viewportCenter);
+              
+              // 중앙에 가까울수록, 많이 보일수록 높은 점수
+              // 화면 중앙 40% 영역 내에 있으면 우선순위 높음
+              const isInCenterZone = distanceFromCenter < window.innerHeight * 0.2;
+              const centerScore = isInCenterZone ? 2 : 1;
+              const visibilityScore = entry.intersectionRatio;
+              const distanceScore = 1 / (1 + distanceFromCenter / 100);
+              
+              const totalScore = centerScore * visibilityScore * distanceScore;
+              
+              if (totalScore > bestScore) {
+                bestScore = totalScore;
+                bestSection = sectionId;
+              }
+            }
+          });
+          
+          if (bestSection) {
+            setActiveSection(bestSection);
+          }
+        },
+        { 
+          threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
+          rootMargin: '-30% 0px -30% 0px' // 화면 상하 30% 제외한 중앙 40% 영역만 감지
+        }
+      );
+
+      // Intersection Observer - 가시성 감지용
+      const visibilityObserver = new IntersectionObserver(
         (entries) => {
           entries.forEach((entry) => {
             if (entry.isIntersecting) {
@@ -60,7 +134,10 @@ export default function PremiumDesignPage() {
 
       const observeSections = () => {
         Object.values(sectionRefs.current).forEach((ref) => {
-          if (ref) observer.observe(ref);
+          if (ref) {
+            activeObserver.observe(ref);
+            visibilityObserver.observe(ref);
+          }
         });
       };
 
@@ -68,33 +145,15 @@ export default function PremiumDesignPage() {
       const timeoutId = setTimeout(observeSections, 100);
 
       return () => {
-        window.removeEventListener("scroll", handleScroll);
+        window.removeEventListener("scroll", handleScrollWithDebounce);
         window.removeEventListener("mousemove", handleMouseMove);
         clearTimeout(timeoutId);
-        observer.disconnect();
+        clearTimeout(scrollTimeout);
+        activeObserver.disconnect();
+        visibilityObserver.disconnect();
       };
     }
-  }, [mounted]);
-
-  useEffect(() => {
-    if (!mounted || typeof document === 'undefined' || typeof window === 'undefined') return;
-
-    // 스크롤 스냅 설정
-    const html = document.documentElement;
-    const body = document.body;
-    
-    html.style.setProperty('scroll-snap-type', 'y mandatory', 'important');
-    html.style.setProperty('scroll-behavior', 'smooth', 'important');
-    body.style.setProperty('scroll-snap-type', 'y mandatory', 'important');
-    body.style.setProperty('scroll-behavior', 'smooth', 'important');
-    
-    return () => {
-      html.style.removeProperty('scroll-snap-type');
-      html.style.removeProperty('scroll-behavior');
-      body.style.removeProperty('scroll-snap-type');
-      body.style.removeProperty('scroll-behavior');
-    };
-  }, [mounted]);
+  }, [isScrolling]);
 
   const isDark = mounted && theme === 'dark';
 
@@ -102,20 +161,27 @@ export default function PremiumDesignPage() {
     { id: 'hero', label: '홈' },
     { id: 'features', label: '기능' },
     { id: 'gallery', label: '프로젝트' },
+    { id: 'testimonials', label: '커뮤니티' },
     { id: 'faq', label: 'FAQ' },
   ];
 
   return (
-    <div className="relative min-h-screen" style={{
-      backgroundColor: isDark ? '#000000' : '#ffffff',
-      fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-    }}>
-      {/* 좌측 정 중앙 사이드바 네비게이션 */}
+    <div 
+      ref={(el) => { rootContainerRef.current = el; }}
+      className="relative min-h-screen"
+      style={{
+        backgroundColor: isDark ? '#000000' : '#ffffff',
+        fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+        scrollSnapType: isScrolling ? 'none' : 'y mandatory',
+        overflowY: 'scroll',
+        height: '100vh',
+      }}
+    >
+      {/* 좌측 사이드바 네비게이션 */}
       <aside 
-        className="fixed left-0 z-50 hidden lg:block"
+        className="fixed left-0 top-1/2 -translate-y-1/2 z-50 hidden lg:block"
         style={{
-          top: '50%',
-          transform: `translateY(-50%)`,
+          transform: `translateY(calc(-50% + ${scrollY * 0.1}px))`,
         }}
       >
         <nav className="ml-8">
@@ -138,27 +204,61 @@ export default function PremiumDesignPage() {
                 }}
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
+                  
                   const targetElement = document.getElementById(item.id);
-                  if (targetElement) {
-                    // 스크롤 스냅을 일시적으로 비활성화
-                    const html = document.documentElement;
-                    const body = document.body;
-                    html.style.setProperty('scroll-snap-type', 'none', 'important');
-                    body.style.setProperty('scroll-snap-type', 'none', 'important');
-                    
-                    // 스크롤 실행
-                    const targetPosition = targetElement.offsetTop;
-                    window.scrollTo({
-                      top: targetPosition,
-                      behavior: 'smooth'
-                    });
-                    
-                    // 스크롤 완료 후 스크롤 스냅 복원
-                    setTimeout(() => {
-                      html.style.setProperty('scroll-snap-type', 'y mandatory', 'important');
-                      body.style.setProperty('scroll-snap-type', 'y mandatory', 'important');
-                    }, 1000);
+                  if (!targetElement) return;
+                  
+                  // 루트 컨테이너의 스크롤스냅 직접 비활성화
+                  if (rootContainerRef.current) {
+                    rootContainerRef.current.style.scrollSnapType = 'none';
                   }
+                  
+                  // 스크롤 상태 설정
+                  setIsScrolling(true);
+                  setActiveSection(item.id);
+                  
+                  // 섹션을 화면 정중앙에 오도록 scrollIntoView 사용
+                  targetElement.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'center',
+                    inline: 'nearest'
+                  });
+                  
+                  // 스크롤 완료 확인
+                  const checkComplete = () => {
+                    const rect = targetElement.getBoundingClientRect();
+                    const viewportCenter = window.innerHeight / 2;
+                    const sectionCenter = rect.top + rect.height / 2;
+                    const distance = Math.abs(sectionCenter - viewportCenter);
+                    
+                    if (distance < 50) {
+                      // 스크롤 완료
+                      setIsScrolling(false);
+                      setActiveSection(item.id);
+                      // 스크롤스냅 다시 활성화
+                      if (rootContainerRef.current) {
+                        rootContainerRef.current.style.scrollSnapType = 'y mandatory';
+                      }
+                    } else {
+                      // 아직 스크롤 중
+                      requestAnimationFrame(checkComplete);
+                    }
+                  };
+                  
+                  // 스크롤 시작 후 확인 시작
+                  setTimeout(() => {
+                    checkComplete();
+                  }, 200);
+                  
+                  // 타임아웃 안전장치
+                  setTimeout(() => {
+                    setIsScrolling(false);
+                    setActiveSection(item.id);
+                    if (rootContainerRef.current) {
+                      rootContainerRef.current.style.scrollSnapType = 'y mandatory';
+                    }
+                  }, 2000);
                 }}
               >
                 <div 
@@ -218,10 +318,10 @@ export default function PremiumDesignPage() {
       {/* 히어로 섹션 */}
       <section 
         id="hero"
-        className="relative min-h-screen flex items-center justify-center px-6 lg:pl-12"
+        className="relative min-h-screen flex items-center justify-center px-6 pt-20"
         ref={(el) => { sectionRefs.current['hero'] = el; }}
         data-section-id="hero"
-        style={{ scrollSnapAlign: 'center' }}
+        style={{ scrollSnapAlign: 'center', scrollSnapStop: 'always' }}
       >
         <div className="max-w-6xl mx-auto text-center">
           {/* 메인 타이틀 */}
@@ -243,7 +343,7 @@ export default function PremiumDesignPage() {
           
           {/* DORI-AI 그라데이션 바 */}
           <div 
-            className={`w-full max-w-2xl mx-auto h-1 md:h-1.5 mb-6 rounded-full overflow-hidden ${
+            className={`w-full max-w-2xl mx-auto h-1 md:h-1.5 mb-4 rounded-full overflow-hidden ${
               visibleSections.has('hero')
                 ? 'opacity-100 translate-y-0'
                 : 'opacity-0 translate-y-8'
@@ -342,39 +442,28 @@ export default function PremiumDesignPage() {
       {/* 기능 섹션 */}
       <section 
         id="features"
-        className="relative min-h-screen flex items-center justify-center py-20 md:py-28 px-6 lg:pl-12"
+        className="relative py-20 md:py-28 px-6 min-h-screen flex items-center"
         ref={(el) => { sectionRefs.current['features'] = el; }}
         data-section-id="features"
         style={{
           backgroundColor: isDark ? '#000000' : '#ffffff',
           scrollSnapAlign: 'center',
+          scrollSnapStop: 'always',
         }}
       >
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
             {[
-              { icon: "🚀", title: "AI 도구", desc: "최신 AI 도구를 탐색하고 비교하여 여러분의 작업에 가장 적합한 도구를 찾아보세요", color: "#3b82f6", href: "/ai-tools", isAnchor: false },
-              { icon: "🧠", title: "인사이트", desc: "AI 트렌드와 분석을 통해 최신 동향을 파악하세요", color: "#8b5cf6", href: "/insight", isAnchor: false },
-              { icon: "📊", title: "프로젝트", desc: "데이터와 인사이트로 더 나은 결정을 내리세요", color: "#ec4899", href: "/project", isAnchor: false },
-              { icon: "💬", title: "커뮤니티", desc: "소통과 공유를 통해 함께 성장하세요", color: "#f59e0b", href: "/community", isAnchor: false },
-              { icon: "🛒", title: "마켓", desc: "다양한 제품과 서비스를 만나보세요", color: "#10b981", href: "/market", isAnchor: false },
-            ].map((item, idx) => {
-              const handleClick = (e: React.MouseEvent) => {
-                if (item.isAnchor) {
-                  e.preventDefault();
-                  const element = document.getElementById(item.href.replace('#', ''));
-                  if (element) {
-                    element.scrollIntoView({ behavior: 'smooth' });
-                  }
-                }
-              };
-              
-              return (
-              <Link
+              { icon: "🚀", title: "AI 도구", desc: "최신 AI 도구를 탐색하고 비교하여 여러분의 작업에 가장 적합한 도구를 찾아보세요", color: "#3b82f6" },
+              { icon: "🧠", title: "인사이트", desc: "AI 트렌드와 분석을 통해 최신 동향을 파악하세요", color: "#8b5cf6" },
+              { icon: "🎓", title: "아카데미", desc: "교육 자료와 강의를 통해 지식을 습득하세요", color: "#06b6d4" },
+              { icon: "🛒", title: "마켓", desc: "다양한 제품과 서비스를 만나보세요", color: "#10b981" },
+              { icon: "💬", title: "커뮤니티", desc: "소통과 공유를 통해 함께 성장하세요", color: "#f59e0b" },
+              { icon: "📊", title: "분석", desc: "데이터와 인사이트로 더 나은 결정을 내리세요", color: "#ec4899" },
+            ].map((item, idx) => (
+              <div
                 key={idx}
-                href={item.href}
-                onClick={handleClick}
-                className={`group relative rounded-3xl overflow-hidden transition-all duration-500 cursor-pointer ${
+                className={`group relative rounded-3xl overflow-hidden transition-all duration-500 ${
                   visibleSections.has('features')
                     ? 'opacity-100 translate-y-0'
                     : 'opacity-0 translate-y-8'
@@ -383,7 +472,6 @@ export default function PremiumDesignPage() {
                   transitionDelay: `${idx * 50}ms`,
                   border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.3)' : '#e5e5e7'}`,
                   backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
-                  textDecoration: 'none',
                 }}
               >
                 <div className="p-6 h-full flex flex-col">
@@ -391,7 +479,7 @@ export default function PremiumDesignPage() {
                     className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-4 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
                     style={{
                       backgroundColor: isDark 
-                        ? `rgba(${item.color === '#3b82f6' ? '59, 130, 246' : item.color === '#8b5cf6' ? '139, 92, 246' : item.color === '#10b981' ? '16, 185, 129' : item.color === '#f59e0b' ? '245, 158, 11' : '236, 72, 153'}, 0.1)`
+                        ? `rgba(${item.color === '#3b82f6' ? '59, 130, 246' : item.color === '#8b5cf6' ? '139, 92, 246' : '6, 182, 212'}, 0.1)`
                         : `${item.color}15`,
                     }}
                   >
@@ -438,9 +526,8 @@ export default function PremiumDesignPage() {
                     background: `radial-gradient(circle at center, ${item.color}10 0%, transparent 70%)`,
                   }}
                 />
-              </Link>
-            );
-            })}
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -448,12 +535,13 @@ export default function PremiumDesignPage() {
       {/* 프로젝트 섹션 */}
       <section 
         id="gallery"
-        className="relative min-h-screen flex items-center justify-center py-20 md:py-28 px-6 lg:pl-12"
+        className="relative py-20 md:py-28 px-6 min-h-screen flex items-center"
         ref={(el) => { sectionRefs.current['gallery'] = el; }}
         data-section-id="gallery"
         style={{
           backgroundColor: isDark ? '#000000' : '#ffffff',
           scrollSnapAlign: 'center',
+          scrollSnapStop: 'always',
         }}
       >
         <div className="max-w-7xl mx-auto">
@@ -489,52 +577,173 @@ export default function PremiumDesignPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-7xl mx-auto">
             {[
-              { id: 1, title: "프로젝트 1", desc: "세련된 디자인과 혁신적인 솔루션", isSite: false },
-              { id: 2, title: "프로젝트 2", desc: "세련된 디자인과 혁신적인 솔루션", isSite: false },
-              { id: 3, title: "프로젝트 3", desc: "세련된 디자인과 혁신적인 솔루션", isSite: false },
-              { id: 4, title: "프로젝트 4", desc: "세련된 디자인과 혁신적인 솔루션", isSite: false },
-              { id: 5, title: "프로젝트 5", desc: "세련된 디자인과 혁신적인 솔루션", isSite: false },
-              { id: 6, title: "사이트", desc: "외부 사이트로 이동", isSite: true, url: "https://example.com" },
-            ].map((item, idx) => {
-              const CardContent = (
-                <div
-                  className={`group relative aspect-[4/3] rounded-3xl overflow-hidden transition-all duration-700 cursor-pointer ${
-                    visibleSections.has('gallery')
-                      ? 'opacity-100 translate-y-0'
-                      : 'opacity-0 translate-y-8'
-                  }`}
-                  style={{
-                    transitionDelay: `${idx * 50}ms`,
-                    border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.3)' : '#e5e5e7'}`,
-                  }}
-                >
-                  <div 
-                    className="absolute inset-0 transition-transform duration-700 group-hover:scale-110"
-                    style={{
-                      background: `linear-gradient(135deg, ${isDark ? '#1e3a8a' : '#3b82f6'} 0%, ${isDark ? '#581c87' : '#8b5cf6'} 100%)`,
-                      opacity: 0.8,
-                    }}
-                  />
-                  <div className="absolute inset-0 flex items-center justify-center">
+              { icon: "🌐", title: "SITE", desc: "DORI-AI", status: "진행중", color: "#3b82f6", span: 2 },
+              { icon: "📱", title: "APPLICATION", desc: "DORI (Android 작업중)", status: "작업중", color: "#8b5cf6", span: 1 },
+              { icon: "🎬", title: "YOUTUBE SHORTS", desc: "미정", status: "미정", color: "#06b6d4", span: 1 },
+              { icon: "🎨", title: "YOUTUBE ANIMATION", desc: "미정", status: "미정", color: "#10b981", span: 2 },
+              { icon: "⚙️", title: "MAKE / N8N", desc: "미정", status: "미정", color: "#f59e0b", span: 2 },
+              { icon: "🛒", title: "GUMROAD", desc: "미정", status: "미정", color: "#ec4899", span: 1 },
+            ].map((item, idx) => (
+              <div
+                key={idx}
+                className={`group relative rounded-3xl overflow-hidden transition-all duration-500 ${
+                  visibleSections.has('gallery')
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 translate-y-8'
+                } ${item.span === 2 ? 'md:col-span-2' : ''}`}
+                style={{
+                  transitionDelay: `${idx * 50}ms`,
+                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.3)' : '#e5e5e7'}`,
+                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
+                }}
+              >
+                <div className="p-6 h-full flex flex-col">
+                  <div className="flex items-center justify-between mb-4">
                     <div 
-                      className="text-6xl opacity-50 transition-transform duration-700 group-hover:scale-125"
+                      className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
                       style={{
-                        transform: `rotate(${idx * 15}deg)`,
+                        backgroundColor: isDark 
+                          ? `rgba(${item.color === '#3b82f6' ? '59, 130, 246' : item.color === '#8b5cf6' ? '139, 92, 246' : item.color === '#06b6d4' ? '6, 182, 212' : item.color === '#10b981' ? '16, 185, 129' : item.color === '#f59e0b' ? '245, 158, 11' : '236, 72, 153'}, 0.1)`
+                          : `${item.color}15`,
                       }}
                     >
-                      {item.isSite ? '🌐' : '✨'}
+                      {item.icon}
+                    </div>
+                    <div 
+                      className="px-2.5 py-1 rounded-full text-[10px] font-semibold"
+                      style={{
+                        backgroundColor: item.status === '완료' 
+                          ? (isDark ? 'rgba(16, 185, 129, 0.2)' : 'rgba(16, 185, 129, 0.1)')
+                          : item.status === '작업중' || item.status === '진행중'
+                          ? (isDark ? 'rgba(59, 130, 246, 0.2)' : 'rgba(59, 130, 246, 0.1)')
+                          : (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'),
+                        color: item.status === '완료'
+                          ? '#10b981'
+                          : item.status === '작업중' || item.status === '진행중'
+                          ? '#3b82f6'
+                          : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)'),
+                      }}
+                    >
+                      {item.status}
                     </div>
                   </div>
-                  <div 
-                    className="absolute bottom-0 left-0 right-0 p-6 transition-transform duration-700 group-hover:translate-y-0 translate-y-full"
+                  
+                  <h3 
+                    className="text-xl mb-2"
                     style={{
-                      background: isDark ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.9)',
+                      color: isDark ? '#ffffff' : '#1d1d1f',
+                      fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+                      fontWeight: 600,
+                      letterSpacing: '-0.02em',
                     }}
                   >
-                    <h3 
-                      className="text-lg mb-2"
+                    {item.title}
+                  </h3>
+                  
+                  <p 
+                    className="text-sm leading-relaxed flex-grow"
+                    style={{
+                      color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+                      fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+                      fontWeight: 400,
+                      letterSpacing: '-0.01em',
+                      lineHeight: '1.6',
+                    }}
+                  >
+                    {item.desc}
+                  </p>
+                  
+                  <div 
+                    className="flex items-center gap-2 mt-4 text-sm font-medium transition-all duration-300 group-hover:gap-3"
+                    style={{
+                      color: item.color,
+                    }}
+                  >
+                    <span>자세히 보기</span>
+                    <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                  </div>
+                </div>
+                
+                {/* 호버 효과 */}
+                <div 
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{
+                    background: `radial-gradient(circle at center, ${item.color}10 0%, transparent 70%)`,
+                  }}
+                />
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 커뮤니티 섹션 */}
+      <section 
+        id="testimonials"
+        className="relative py-20 md:py-28 px-6 min-h-screen flex items-center"
+        ref={(el) => { sectionRefs.current['testimonials'] = el; }}
+        data-section-id="testimonials"
+        style={{
+          backgroundColor: isDark ? '#000000' : '#f5f5f7',
+          scrollSnapAlign: 'center',
+          scrollSnapStop: 'always',
+        }}
+      >
+        <div className="max-w-6xl mx-auto">
+          <div 
+            className={`text-center mb-12 transition-all duration-1000 ${
+              visibleSections.has('testimonials')
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 translate-y-8'
+            }`}
+          >
+            <h2 
+              className="text-4xl md:text-5xl mb-3"
+              style={{
+                color: isDark ? '#ffffff' : '#1d1d1f',
+                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+                fontWeight: 700,
+                letterSpacing: '-0.03em',
+                lineHeight: '1.1',
+              }}
+            >
+              커뮤니티
+            </h2>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { name: "김철수", role: "디자이너", text: "정말 놀라운 경험이었습니다. 직관적이고 세련된 인터페이스가 인상적이에요." },
+              { name: "이영희", role: "개발자", text: "AI 도구 탐색이 이렇게 쉬울 줄 몰랐어요. 정말 유용한 플랫폼입니다." },
+              { name: "박민수", role: "기획자", text: "커뮤니티가 활발하고 정보가 풍부해서 정말 만족스럽습니다." },
+            ].map((testimonial, idx) => (
+              <div
+                key={idx}
+                className={`p-6 rounded-3xl transition-all duration-700 ${
+                  visibleSections.has('testimonials')
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 translate-y-8'
+                }`}
+                style={{
+                  transitionDelay: `${idx * 100}ms`,
+                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.3)' : '#e5e5e7'}`,
+                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
+                }}
+              >
+                <div className="flex items-center gap-3 mb-3">
+                  <div 
+                    className="w-10 h-10 rounded-full flex items-center justify-center text-lg"
+                    style={{
+                      background: `linear-gradient(135deg, #3b82f6, #8b5cf6)`,
+                    }}
+                  >
+                    {testimonial.name[0]}
+                  </div>
+                  <div>
+                    <div 
+                      className=""
                       style={{
                         color: isDark ? '#ffffff' : '#1d1d1f',
                         fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
@@ -542,43 +751,34 @@ export default function PremiumDesignPage() {
                         letterSpacing: '-0.01em',
                       }}
                     >
-                      {item.title}
-                    </h3>
-                    <p 
+                      {testimonial.name}
+                    </div>
+                    <div 
                       className="text-sm"
                       style={{
                         color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
                         fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
                         fontWeight: 400,
-                        letterSpacing: '0',
                       }}
                     >
-                      {item.desc}
-                    </p>
+                      {testimonial.role}
+                    </div>
                   </div>
                 </div>
-              );
-
-              if (item.isSite) {
-                return (
-                  <a
-                    key={item.id}
-                    href={item.url}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    style={{ textDecoration: 'none' }}
-                  >
-                    {CardContent}
-                  </a>
-                );
-              }
-
-              return (
-                <div key={item.id}>
-                  {CardContent}
-                </div>
-              );
-            })}
+                <p 
+                  className="leading-relaxed"
+                  style={{
+                    color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)',
+                    fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+                    fontWeight: 400,
+                    letterSpacing: '-0.01em',
+                    lineHeight: '1.6',
+                  }}
+                >
+                  {testimonial.text}
+                </p>
+              </div>
+            ))}
           </div>
         </div>
       </section>
@@ -586,126 +786,91 @@ export default function PremiumDesignPage() {
       {/* FAQ 섹션 */}
       <section 
         id="faq"
-        className="relative min-h-screen flex items-center justify-center py-24 md:py-32 px-6"
+        className="relative py-20 md:py-28 px-6 min-h-screen flex items-center"
         ref={(el) => { sectionRefs.current['faq'] = el; }}
         data-section-id="faq"
         style={{
           backgroundColor: isDark ? '#000000' : '#ffffff',
           scrollSnapAlign: 'center',
+          scrollSnapStop: 'always',
         }}
       >
-        <div className="max-w-5xl mx-auto w-full">
-          <div>
+        <div className="max-w-4xl mx-auto">
+          <div 
+            className={`text-center mb-12 transition-all duration-1000 ${
+              visibleSections.has('faq')
+                ? 'opacity-100 translate-y-0'
+                : 'opacity-0 translate-y-8'
+            }`}
+          >
             <h2 
-              className="text-3xl md:text-4xl font-medium mb-16 text-center"
+              className="text-4xl md:text-5xl mb-3"
               style={{
-                color: isDark ? '#ffffff' : '#000000',
-                fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-                fontWeight: 500,
+                color: isDark ? '#ffffff' : '#1d1d1f',
+                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+                fontWeight: 700,
                 letterSpacing: '-0.03em',
+                lineHeight: '1.1',
               }}
             >
               자주 묻는 질문
             </h2>
-            <div className="space-y-1">
-              {[
-                { 
-                  q: "DORI-AI는 어떤 서비스인가요?", 
-                  a: "DORI-AI는 AI 도구 탐색, 인사이트 제공, 커뮤니티 소통을 한 곳에서 제공하는 플랫폼입니다. 수천 개의 AI 도구를 카테고리별로 탐색하고 비교할 수 있으며, 최신 AI 트렌드와 분석을 확인하고, 다른 사용자들과 정보를 공유할 수 있습니다." 
-                },
-                { 
-                  q: "회원가입 없이 사용할 수 있나요?", 
-                  a: "네, AI 도구 탐색과 인사이트 읽기는 회원가입 없이도 이용하실 수 있습니다. 다만 커뮤니티 글 작성, 좋아요, 댓글 등 일부 기능은 회원가입이 필요합니다." 
-                },
-                { 
-                  q: "AI 도구 정보는 어떻게 업데이트되나요?", 
-                  a: "AI 도구 정보는 정기적으로 업데이트되며, 사용자들의 리뷰와 평점을 통해 실시간으로 반영됩니다. 새로운 AI 도구가 출시되면 빠르게 추가됩니다." 
-                },
-                { 
-                  q: "인사이트는 누가 작성하나요?", 
-                  a: "인사이트는 DORI-AI 운영진이 매일 최신 AI 트렌드와 심층 분석을 정리하여 제공합니다. 큐레이션, 리포트, 가이드, 분석, 트렌드 등 다양한 형식으로 제공됩니다." 
-                },
-                { 
-                  q: "커뮤니티에서 부적절한 글을 발견하면 어떻게 하나요?", 
-                  a: "커뮤니티에서 부적절한 내용을 발견하시면 건의사항 페이지를 통해 신고해주세요. 자동 필터링 시스템과 함께 운영진이 검토하여 적절한 조치를 취하겠습니다." 
-                },
-              ].map((faq, idx) => (
-                <details
-                  key={idx}
-                  className="group"
+          </div>
+
+          <div className="space-y-3">
+            {[
+              { q: "DORI-AI는 어떤 서비스인가요?", a: "DORI-AI는 AI 도구 탐색, 인사이트 제공, 교육 자료, 커뮤니티 등 AI 관련 정보를 한 곳에서 제공하는 통합 플랫폼입니다. AI가 처음이어도 쉽게 시작할 수 있도록 도와드립니다." },
+              { q: "회원가입이 필요한가요?", a: "기본 기능은 회원가입 없이도 이용 가능합니다. 커뮤니티 참여, 건의사항 제출, 개인화된 추천 등의 기능을 이용하려면 회원가입이 필요합니다." },
+              { q: "어떤 AI 도구를 추천하시나요?", a: "사용 목적에 따라 다릅니다. 텍스트 생성에는 ChatGPT, 이미지 생성에는 Midjourney나 DALL-E, 코딩에는 GitHub Copilot을 추천합니다. 각 도구의 상세 정보는 AI 도구 페이지에서 확인하실 수 있습니다." },
+              { q: "무료로 사용할 수 있나요?", a: "네, DORI-AI 플랫폼 자체는 완전 무료입니다. 다만 일부 추천하는 외부 AI 도구들은 유료 플랜이 있을 수 있으며, 각 도구의 가격 정보는 해당 페이지에서 확인하실 수 있습니다." },
+              { q: "건의사항이나 버그를 제보하려면 어떻게 하나요?", a: "건의사항 페이지에서 자유롭게 의견을 남겨주실 수 있습니다. 버그 제보, 기능 요청, UI/디자인 개선 등 모든 의견을 환영합니다. 빠른 검토 후 반영하도록 노력하겠습니다." },
+            ].map((faq, idx) => (
+              <details
+                key={idx}
+                className={`group rounded-2xl overflow-hidden transition-all duration-500 ${
+                  visibleSections.has('faq')
+                    ? 'opacity-100 translate-y-0'
+                    : 'opacity-0 translate-y-8'
+                }`}
+                style={{
+                  transitionDelay: `${idx * 100}ms`,
+                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.3)' : '#e5e5e7'}`,
+                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
+                }}
+              >
+                <summary 
+                  className="p-5 cursor-pointer list-none flex items-center justify-between"
                   style={{
-                    backgroundColor: 'transparent',
-                    borderBottom: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)'}`,
-                    padding: '24px 0',
-                    marginBottom: '0',
-                    transition: 'all 0.2s ease',
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderBottomColor = isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.15)';
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderBottomColor = isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.08)';
+                    color: isDark ? '#ffffff' : '#1d1d1f',
+                    fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+                    fontWeight: 500,
+                    letterSpacing: '-0.01em',
                   }}
                 >
-                  <summary 
-                    className="cursor-pointer list-none flex items-center justify-between gap-6 py-0"
-                    style={{
-                      color: isDark ? '#ffffff' : '#000000',
-                      fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-                      fontWeight: 500,
-                      fontSize: '17px',
-                      letterSpacing: '-0.02em',
-                      lineHeight: '1.5',
-                      transition: 'color 0.2s ease',
-                    }}
-                  >
-                    <span className="group-hover:opacity-70 transition-opacity duration-200">{faq.q}</span>
-                    <span 
-                      className="text-xl transition-all duration-300 group-open:rotate-45 flex-shrink-0 flex items-center justify-center w-5 h-5"
-                      style={{
-                        color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
-                        fontSize: '18px',
-                        fontWeight: 300,
-                      }}
-                    >
-                      +
-                    </span>
-                  </summary>
-                  <div 
-                    className="pt-6 pb-2 leading-relaxed"
-                    style={{
-                      color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.65)',
-                      fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
-                      fontWeight: 400,
-                      fontSize: '15px',
-                      letterSpacing: '-0.01em',
-                      lineHeight: '1.8',
-                    }}
-                  >
-                    {faq.a}
-                  </div>
-                </details>
-              ))}
-            </div>
-          </div>
-          
-          {/* Footer */}
-          <div className="mt-16">
-            <Footer />
+                  <span>{faq.q}</span>
+                  <span className="text-xl transition-transform duration-300 group-open:rotate-180">▼</span>
+                </summary>
+                <div 
+                  className="px-5 pb-5 leading-relaxed"
+                  style={{
+                    color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+                    fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+                    fontWeight: 400,
+                    letterSpacing: '-0.01em',
+                    lineHeight: '1.6',
+                  }}
+                >
+                  {faq.a}
+                </div>
+              </details>
+            ))}
           </div>
         </div>
       </section>
 
+
       {/* 스타일 */}
       <style jsx global>{`
-        html {
-          scroll-snap-type: y mandatory !important;
-          scroll-behavior: smooth !important;
-        }
-        body {
-          scroll-snap-type: y mandatory !important;
-          scroll-behavior: smooth !important;
-        }
         @keyframes scroll {
           0% {
             transform: translateY(0);
@@ -729,27 +894,6 @@ export default function PremiumDesignPage() {
             background-position: 200% 50%;
           }
         }
-
-        @keyframes fadeIn {
-          0% {
-            opacity: 0;
-            transform: translateY(-8px);
-          }
-          100% {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes nodePulse {
-          0%, 100% {
-            transform: scale(1);
-          }
-          50% {
-            transform: scale(1.05);
-          }
-        }
-
 
         .animate-scroll {
           animation: scroll 2s ease-in-out infinite;

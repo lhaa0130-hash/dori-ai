@@ -2,9 +2,12 @@ import SuggestionCard, { SuggestionItem } from "./SuggestionCard";
 
 interface SuggestionListProps {
   suggestions: SuggestionItem[];
+  isOwner?: (item: SuggestionItem) => boolean;
+  onEdit?: (item: SuggestionItem) => void;
+  onDelete?: (id: string) => void;
 }
 
-export default function SuggestionList({ suggestions }: SuggestionListProps) {
+export default function SuggestionList({ suggestions, isOwner, onEdit, onDelete }: SuggestionListProps) {
   
   if (suggestions.length === 0) {
     return (
@@ -19,7 +22,13 @@ export default function SuggestionList({ suggestions }: SuggestionListProps) {
   return (
     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 w-full">
       {suggestions.map((item) => (
-        <SuggestionCard key={item.id} item={item} />
+        <SuggestionCard 
+          key={item.id} 
+          item={item}
+          isOwner={isOwner ? isOwner(item) : false}
+          onEdit={onEdit}
+          onDelete={onDelete}
+        />
       ))}
     </div>
   );

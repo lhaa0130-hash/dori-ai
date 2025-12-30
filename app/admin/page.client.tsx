@@ -125,10 +125,19 @@ export default function AdminClient() {
       }
     }
 
-    // 방문자 통계
-    const today = parseInt(localStorage.getItem("dori_daily_visitors") || "0", 10);
-    const total = parseInt(localStorage.getItem("dori_total_visitors") || "0", 10);
-    setVisitorStats({ today, total });
+    // 방문자 통계 - 실시간 업데이트를 위해 함수로 분리
+    const updateVisitorStats = () => {
+      const today = parseInt(localStorage.getItem("dori_daily_visitors") || "0", 10);
+      const total = parseInt(localStorage.getItem("dori_total_visitors") || "0", 10);
+      setVisitorStats({ today, total });
+    };
+    
+    updateVisitorStats();
+    
+    // 주기적으로 방문자 통계 업데이트 (5초마다)
+    const intervalId = setInterval(updateVisitorStats, 5000);
+    
+    return () => clearInterval(intervalId);
   }, [isAuthorized]);
 
   const isDark = mounted && theme === 'dark';
@@ -191,7 +200,7 @@ export default function AdminClient() {
 
       <main className="w-full min-h-screen relative">
         {/* 히어로 섹션 */}
-        <section className="relative pt-20 pb-8 px-6 text-center overflow-hidden">
+        <section className="relative pt-20 pb-12 px-6 text-center overflow-hidden">
           <div className="max-w-4xl mx-auto">
             <h1 
               className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 tracking-tight leading-tight transition-all duration-1000"
@@ -204,6 +213,28 @@ export default function AdminClient() {
             >
               {t.heroTitle.ko}
             </h1>
+            
+            {/* 그라데이션 바 */}
+            <div 
+              className="w-full max-w-2xl mx-auto h-1 md:h-1.5 mb-6 rounded-full overflow-hidden"
+              style={{
+                boxShadow: isDark 
+                  ? '0 0 30px rgba(96, 165, 250, 0.4), 0 4px 20px rgba(96, 165, 250, 0.2)'
+                  : '0 0 20px rgba(37, 99, 235, 0.3), 0 4px 15px rgba(37, 99, 235, 0.2)',
+              }}
+            >
+              <div 
+                className="gradient-flow h-full rounded-full"
+                style={{
+                  backgroundImage: isDark
+                    ? 'linear-gradient(90deg, #60a5fa 0%, #818cf8 12.5%, #a78bfa 25%, #c084fc 37.5%, #ec4899 50%, #f472b6 62.5%, #f59e0b 75%, #fbbf24 87.5%, #10b981 100%, #60a5fa 100%)'
+                    : 'linear-gradient(90deg, #2563eb 0%, #4f46e5 12.5%, #7c3aed 25%, #9333ea 37.5%, #db2777 50%, #e11d48 62.5%, #d97706 75%, #f59e0b 87.5%, #059669 100%, #2563eb 100%)',
+                  backgroundSize: '200% 100%',
+                  animation: 'gradientFlow 4s linear infinite',
+                }}
+              />
+            </div>
+            
             <p 
               className="text-lg md:text-xl opacity-70 max-w-2xl mx-auto break-keep transition-all duration-1000"
               style={{ 
@@ -219,15 +250,32 @@ export default function AdminClient() {
         </section>
 
         {/* 컨텐츠 섹션 */}
-        <section className="container max-w-6xl mx-auto px-4 pb-24 relative z-10">
+        <section className="container max-w-7xl mx-auto px-4 md:px-6 pb-24 relative z-10">
           <AdminStats stats={{ todayVisitors: visitorStats.today, totalVisitors: visitorStats.total, community: communityPosts.length, suggestions: suggestions.length, academy: ACADEMY_ITEMS_COUNT, market: MARKET_ITEMS_COUNT }} />
           <div className="mb-8"><AdminVisitorChart /></div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
-            <div className="flex flex-col gap-6"><AdminRecentCommunity posts={communityPosts.slice(0, 5)} /></div>
-            <div className="flex flex-col gap-6"><AdminRecentSuggestions suggestions={suggestions.slice(0, 5)} /><AdminSystemNotes /></div>
+            <div className="flex flex-col gap-6">
+              <AdminRecentCommunity posts={communityPosts.slice(0, 5)} />
+            </div>
+            <div className="flex flex-col gap-6">
+              <AdminRecentSuggestions suggestions={suggestions.slice(0, 5)} />
+              <AdminSystemNotes />
+            </div>
           </div>
         </section>
       </main>
+
+      {/* 스타일 */}
+      <style jsx global>{`
+        @keyframes gradientFlow {
+          0% {
+            background-position: 0% 50%;
+          }
+          100% {
+            background-position: 200% 50%;
+          }
+        }
+      `}</style>
     </div>
   );
 }
