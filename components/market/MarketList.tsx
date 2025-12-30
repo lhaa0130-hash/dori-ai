@@ -4,18 +4,8 @@ import { useState } from "react";
 import MarketCard, { MarketProduct } from "./MarketCard";
 import { TEXTS } from "@/constants/texts";
 
-// 📌 더미 데이터
-const MARKET_DATA: MarketProduct[] = [
-  { id: "1", title: "블로그용 GPT 프롬프트 패키지", description: "SEO 최적화된 블로그 글쓰기를 위한 프롬프트 모음집입니다.", type: "프롬프트", priceLabel: "₩9,900", isFree: false, rating: 4.8, tags: ["GPT", "Blog", "SEO"] },
-  { id: "2", title: "유튜브 썸네일 이미지 번들", description: "클릭률을 높이는 고퀄리티 AI 이미지 소스 50종.", type: "이미지", priceLabel: "무료", isFree: true, rating: 4.5, tags: ["YouTube", "Thumbnail"] },
-  { id: "3", title: "Pika 영상 생성 프리셋", description: "영화 같은 연출을 위한 Pika 카메라 무빙 프리셋.", type: "영상", priceLabel: "₩15,000", isFree: false, rating: 4.9, tags: ["Pika", "Video", "Preset"] },
-  { id: "4", title: "n8n 자동화 워크플로우 스타터 킷", description: "이메일 마케팅 자동화를 위한 n8n 템플릿.", type: "워크플로우", priceLabel: "무료", isFree: true, rating: 4.7, tags: ["n8n", "Automation"] },
-  { id: "5", title: "노션 AI 업무 템플릿", description: "회의록 요약 및 일정 관리를 위한 노션 템플릿.", type: "템플릿", priceLabel: "₩5,000", isFree: false, rating: 4.6, tags: ["Notion", "Productivity"] },
-  { id: "6", title: "미드저니 실사 스타일 프롬프트", description: "사진 같은 퀄리티를 뽑아내는 미드저니 비법 프롬프트.", type: "프롬프트", priceLabel: "₩12,000", isFree: false, rating: 4.8, tags: ["Midjourney", "Photo"] },
-  { id: "7", title: "Suno AI 작곡 가이드북", description: "원하는 장르와 분위기를 완벽하게 구현하는 작곡 팁.", type: "기타", priceLabel: "무료", isFree: true, rating: 4.4, tags: ["Music", "Suno"] },
-  { id: "8", title: "상세페이지 디자인 템플릿", description: "스마트스토어용 상세페이지 기획 및 디자인 템플릿.", type: "템플릿", priceLabel: "₩29,000", isFree: false, rating: 4.9, tags: ["Design", "Commerce"] },
-  { id: "9", title: "ComfyUI 워크플로우 (인물 보정)", description: "스테이블 디퓨전 ComfyUI 인물 피부 보정 워크플로우.", type: "워크플로우", priceLabel: "₩30,000", isFree: false, rating: 4.7, tags: ["StableDiffusion", "ComfyUI"] },
-];
+// 마켓 데이터 (현재 비어있음)
+const MARKET_DATA: MarketProduct[] = [];
 
 interface MarketListProps {
   filters: {
