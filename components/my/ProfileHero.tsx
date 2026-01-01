@@ -3,7 +3,7 @@
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import ProfileImageSelector from "./ProfileImageSelector";
-import { UserProfile, TIER_INFO, calculateLevel, getNextLevelExp } from "@/lib/userProfile";
+import { UserProfile, TIER_INFO, calculateLevel, getNextLevelExp, getNextTierScore, TIER_THRESHOLDS } from "@/lib/userProfile";
 
 interface ProfileHeroProps {
   profile: UserProfile;
@@ -27,6 +27,7 @@ export default function ProfileHero({
   const tierInfo = TIER_INFO[profile.tier];
   const currentLevel = calculateLevel(profile.doriScore * 10); // 경험치 = 점수 * 10
   const nextLevelExp = getNextLevelExp(currentLevel);
+  const nextTierScore = getNextTierScore(profile.tier, profile.doriScore);
 
   return (
     <div
@@ -127,24 +128,36 @@ export default function ProfileHero({
               </div>
             </div>
 
-            {/* DORI Score */}
-            <div style={{ marginBottom: "1rem" }}>
-              <div style={{ display: "flex", alignItems: "baseline", gap: "0.5rem" }}>
-                <span
-                  style={{
-                    fontSize: "1.5rem",
-                    fontWeight: "800",
-                    background: isDark
-                      ? "linear-gradient(135deg, #60a5fa, #a78bfa)"
-                      : "linear-gradient(135deg, #2563eb, #7c3aed)",
-                    WebkitBackgroundClip: "text",
-                    WebkitTextFillColor: "transparent",
-                    backgroundClip: "text",
-                  }}
-                >
-                  DORI Score {profile.doriScore.toLocaleString()}
-                </span>
-              </div>
+            {/* DORI Score & Point */}
+            <div style={{ marginBottom: "1rem", display: "flex", alignItems: "baseline", gap: "2rem", flexWrap: "wrap" }}>
+              <span
+                style={{
+                  fontSize: "1.5rem",
+                  fontWeight: "800",
+                  background: isDark
+                    ? "linear-gradient(135deg, #60a5fa, #a78bfa)"
+                    : "linear-gradient(135deg, #2563eb, #7c3aed)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                DORI Score {profile.doriScore.toLocaleString()}
+              </span>
+              <span
+                style={{
+                  fontSize: "1.5rem",
+                  fontWeight: "800",
+                  background: isDark
+                    ? "linear-gradient(135deg, #34d399, #10b981)"
+                    : "linear-gradient(135deg, #059669, #047857)",
+                  WebkitBackgroundClip: "text",
+                  WebkitTextFillColor: "transparent",
+                  backgroundClip: "text",
+                }}
+              >
+                Point {(profile.point || 0).toLocaleString()}
+              </span>
             </div>
 
             {/* 상태 메시지 */}
@@ -180,8 +193,8 @@ export default function ProfileHero({
           </div>
         </div>
 
-        {/* 레벨 진행 바 */}
-        {currentLevel < 100 && (
+        {/* 등급 진행 바 */}
+        {profile.tier < 5 && nextTierScore > 0 && (
           <div style={{ marginTop: "1.5rem" }}>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
               <span
@@ -191,7 +204,7 @@ export default function ProfileHero({
                   fontWeight: "500",
                 }}
               >
-                다음 레벨까지
+                다음 등급까지
               </span>
               <span
                 style={{
@@ -200,7 +213,7 @@ export default function ProfileHero({
                   fontWeight: "500",
                 }}
               >
-                {nextLevelExp > 0 ? `${nextLevelExp.toLocaleString()} EXP` : "최고 레벨"}
+                {nextTierScore > 0 ? `${nextTierScore.toLocaleString()}점` : "최고 등급"}
               </span>
             </div>
             <div
@@ -215,7 +228,14 @@ export default function ProfileHero({
               <div
                 style={{
                   height: "100%",
-                  width: `${Math.min((profile.doriScore * 10 / nextLevelExp) * 100, 100)}%`,
+                  width: `${(() => {
+                    if (profile.tier >= 5) return 100;
+                    const nextTier = (profile.tier + 1) as UserProfile['tier'];
+                    const nextTierThreshold = TIER_THRESHOLDS[nextTier];
+                    const currentTierThreshold = TIER_THRESHOLDS[profile.tier];
+                    const progress = ((profile.doriScore - currentTierThreshold) / (nextTierThreshold - currentTierThreshold)) * 100;
+                    return Math.min(Math.max(progress, 0), 100);
+                  })()}%`,
                   background: isDark
                     ? "linear-gradient(90deg, #60a5fa, #a78bfa)"
                     : "linear-gradient(90deg, #2563eb, #7c3aed)",

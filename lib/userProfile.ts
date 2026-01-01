@@ -13,6 +13,7 @@ export interface UserProfile {
   tier: UserTier;
   level: number;
   doriScore: number;
+  point: number; // 나중에 사용할 포인트
   createdAt: string;
 }
 
@@ -86,6 +87,7 @@ export function createDefaultProfile(userId: string, email: string, nickname: st
     tier: 1,
     level: 1,
     doriScore: 0,
+    point: 0, // 나중에 사용할 포인트
     createdAt: new Date().toISOString(),
   };
 }

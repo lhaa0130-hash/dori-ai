@@ -81,6 +81,75 @@ export default function CommunityPostDetail() {
     }
   };
 
+  // 좋아요 핸들러 - 작성자 포인트 증가 포함
+  const handleLike = () => {
+    if (typeof window === 'undefined' || !post) return;
+    
+    // 좋아요 상태 확인
+    const likedPosts = JSON.parse(localStorage.getItem('dori_liked_community_posts') || '[]');
+    const isLiked = likedPosts.includes(post.id);
+    const newIsLiked = !isLiked;
+
+    // 좋아요 상태 업데이트
+    if (newIsLiked) {
+      if (!likedPosts.includes(post.id)) {
+        likedPosts.push(post.id);
+      }
+    } else {
+      const index = likedPosts.indexOf(post.id);
+      if (index > -1) {
+        likedPosts.splice(index, 1);
+      }
+    }
+    localStorage.setItem('dori_liked_community_posts', JSON.stringify(likedPosts));
+
+    // 좋아요 수 업데이트
+    const savedPosts = localStorage.getItem("dori_community_posts");
+    if (savedPosts) {
+      const posts: CommunityPost[] = JSON.parse(savedPosts);
+      const updatedPosts = posts.map(p => {
+        if (p.id === post.id) {
+          const newLikes = newIsLiked ? p.likes + 1 : Math.max(0, p.likes - 1);
+          
+          // 좋아요를 누를 때만 작성자 포인트 증가
+          if (newIsLiked && post.nickname) {
+            // 모든 사용자 프로필에서 작성자 찾기
+            const allKeys = Object.keys(localStorage);
+            for (const key of allKeys) {
+              if (key.startsWith('dori_profile_')) {
+                try {
+                  const profile = JSON.parse(localStorage.getItem(key) || '{}');
+                  if (profile.nickname === post.nickname) {
+                    // 포인트 증가
+                    const updatedProfile = {
+                      ...profile,
+                      point: (profile.point || 0) + 1,
+                    };
+                    localStorage.setItem(key, JSON.stringify(updatedProfile));
+                    break;
+                  }
+                } catch (e) {
+                  console.error('Failed to parse profile:', e);
+                }
+              }
+            }
+          }
+          
+          return { ...p, likes: newLikes };
+        }
+        return p;
+      });
+      
+      localStorage.setItem("dori_community_posts", JSON.stringify(updatedPosts));
+      
+      // 현재 포스트 업데이트
+      const updatedPost = updatedPosts.find(p => p.id === post.id);
+      if (updatedPost) {
+        setPost(updatedPost);
+      }
+    }
+  };
+
   useEffect(() => {
     if (!mounted) return;
     
@@ -279,6 +348,7 @@ export default function CommunityPostDetail() {
             >
               <div className="flex items-center gap-4">
                 <button 
+                  onClick={handleLike}
                   className="flex items-center gap-2 text-sm font-medium transition-all hover:opacity-70"
                   style={{
                     color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)',

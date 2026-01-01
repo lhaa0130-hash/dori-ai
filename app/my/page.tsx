@@ -51,6 +51,7 @@ export default function MyPage() {
           bio,
           statusMessage,
           profileImageUrl,
+          point: parsed.point || 0, // point 필드가 없으면 0으로 초기화
         });
       } catch {
         // 파싱 실패 시 기본값 사용
@@ -148,6 +149,7 @@ export default function MyPage() {
         doriScore,
         tier: newTier,
         level: newLevel,
+        point: profile.point || 0, // point 필드 유지
       };
       setProfile(updatedProfile);
       localStorage.setItem(`dori_profile_${user.email}`, JSON.stringify(updatedProfile));
@@ -158,9 +160,7 @@ export default function MyPage() {
     switch (activeTab) {
       case "posts": return myPosts;
       case "comments": return myComments;
-      case "bookmarks": return bookmarkedPosts;
-      case "recent": return recentViews;
-      default: return sparkedPosts;
+      default: return myPosts;
     }
   };
   const displayList = getDisplayList();
@@ -306,9 +306,6 @@ export default function MyPage() {
             {[
               { id: "posts", label: `내가 쓴 글 (${myPosts.length})` },
               { id: "comments", label: `💬 내 댓글 (${myComments.length})` },
-              { id: "bookmarks", label: `⭐ 북마크 (${bookmarkedPosts.length})` },
-              { id: "recent", label: `👁️ 최근 본 글 (${recentViews.length})` },
-              { id: "sparks", label: `⚡️ 유레카한 글 (${sparkedPosts.length})` },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -342,11 +339,7 @@ export default function MyPage() {
                 padding: '4rem 0',
                 color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
               }}>
-                {activeTab === "posts" ? "작성한 글이 없습니다." :
-                  activeTab === "comments" ? "작성한 댓글이 없습니다." :
-                    activeTab === "bookmarks" ? "북마크한 글이 없습니다." :
-                      activeTab === "recent" ? "최근 본 글이 없습니다." :
-                        "아직 유레카를 누른 글이 없습니다."}
+                아직 활동이 없습니다.
                 <br />
                 <Link href="/community" style={{
                   color: isDark ? '#60a5fa' : '#2563eb',
@@ -355,7 +348,7 @@ export default function MyPage() {
                   fontWeight: '600',
                   textDecoration: 'none',
                 }}>
-                  커뮤니티 둘러보기 →
+                  커뮤니티 글 쓰러 가기 →
                 </Link>
               </div>
             ) : activeTab === "comments" ? (

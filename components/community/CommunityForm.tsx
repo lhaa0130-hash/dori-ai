@@ -42,12 +42,26 @@ export default function CommunityForm({ onAddPost, initialData, onCancel, onUpda
   const [textColor, setTextColor] = useState("#000000");
   const [bgColor, setBgColor] = useState("#ffffff");
 
-  // 로그인한 사용자의 아이디
-  const nickname = session?.user?.name || session?.user?.email?.split('@')[0] || "";
+  // 로그인한 사용자의 아이디 (localStorage에서 설정된 닉네임 우선 사용)
+  const [nickname, setNickname] = useState<string>("");
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  // localStorage에서 설정된 닉네임 가져오기
+  useEffect(() => {
+    if (session?.user?.email) {
+      const savedName = localStorage.getItem(`dori_user_name_${session.user.email}`);
+      if (savedName) {
+        setNickname(savedName);
+      } else {
+        setNickname(session.user?.name || session.user?.email?.split('@')[0] || "");
+      }
+    } else {
+      setNickname("");
+    }
+  }, [session?.user?.email, session?.user?.name]);
 
   // 수정 모드일 때 초기 데이터 설정
   useEffect(() => {

@@ -160,71 +160,184 @@ export default function GrowthGuide({ profile, activityStats }: GrowthGuideProps
             </div>
           </div>
 
-          {/* 추천 활동 */}
-          <div>
+          {/* 점수 및 포인트 획득 방법 */}
+          <div
+            style={{
+              padding: "1.5rem",
+              borderRadius: "1rem",
+              background: isDark 
+                ? "linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(168, 85, 247, 0.1))"
+                : "linear-gradient(135deg, rgba(37, 99, 235, 0.05), rgba(124, 58, 237, 0.05))",
+              border: `1px solid ${isDark ? "rgba(96, 165, 250, 0.2)" : "rgba(37, 99, 235, 0.15)"}`,
+            }}
+          >
             <h4
               style={{
                 fontSize: "0.9375rem",
-                fontWeight: "600",
-                color: isDark ? "rgba(255, 255, 255, 0.8)" : "rgba(0, 0, 0, 0.7)",
+                fontWeight: "700",
+                color: isDark ? "#ffffff" : "#1d1d1f",
                 marginBottom: "1rem",
+                display: "flex",
+                alignItems: "center",
+                gap: "0.5rem",
               }}
             >
-              다음 등급까지 남은 조건
+              <span>💡</span>
+              <span>점수 및 포인트 획득 방법</span>
             </h4>
-            <div style={{ display: "flex", flexDirection: "column", gap: "0.75rem" }}>
-              {recommendations.map((rec, index) => (
+            <div
+              style={{
+                display: "flex",
+                flexDirection: "column",
+                gap: "0.75rem",
+              }}
+            >
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.75rem",
+                  padding: "0.75rem",
+                  borderRadius: "0.5rem",
+                  background: isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(255, 255, 255, 0.8)",
+                }}
+              >
                 <div
-                  key={index}
                   style={{
-                    padding: "0.875rem 1rem",
-                    borderRadius: "0.75rem",
-                    background: isDark ? "rgba(255, 255, 255, 0.03)" : "rgba(0, 0, 0, 0.02)",
-                    border: `1px solid ${isDark ? "rgba(255, 255, 255, 0.08)" : "rgba(0, 0, 0, 0.06)"}`,
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "0.5rem",
+                    background: isDark
+                      ? "rgba(37, 99, 235, 0.2)"
+                      : "rgba(37, 99, 235, 0.1)",
                     display: "flex",
                     alignItems: "center",
-                    gap: "0.75rem",
+                    justifyContent: "center",
+                    fontSize: "1.25rem",
+                    flexShrink: 0,
                   }}
                 >
+                  ✍️
+                </div>
+                <div style={{ flex: 1 }}>
                   <div
                     style={{
-                      width: "32px",
-                      height: "32px",
-                      borderRadius: "50%",
-                      background: isDark
-                        ? "rgba(96, 165, 250, 0.2)"
-                        : "rgba(37, 99, 235, 0.1)",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      fontSize: "1rem",
-                      flexShrink: 0,
+                      fontSize: "0.875rem",
+                      fontWeight: "600",
+                      color: isDark ? "#ffffff" : "#1d1d1f",
+                      marginBottom: "0.25rem",
                     }}
                   >
-                    {rec.type === "guide" ? "📚" : rec.type === "comment" ? "💬" : "✍️"}
+                    글 작성
                   </div>
-                  <div style={{ flex: 1 }}>
-                    <div
-                      style={{
-                        fontSize: "0.9375rem",
-                        fontWeight: "600",
-                        color: isDark ? "#ffffff" : "#1d1d1f",
-                        marginBottom: "0.25rem",
-                      }}
-                    >
-                      {rec.action}
-                    </div>
-                    <div
-                      style={{
-                        fontSize: "0.8125rem",
-                        color: isDark ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)",
-                      }}
-                    >
-                      +{rec.score}점 획득
-                    </div>
+                  <div
+                    style={{
+                      fontSize: "0.8125rem",
+                      color: isDark ? "rgba(255, 255, 255, 0.6)" : "rgba(0, 0, 0, 0.6)",
+                    }}
+                  >
+                    <span style={{ color: tierInfo.color, fontWeight: "700" }}>10점</span> 획득
                   </div>
                 </div>
-              ))}
+              </div>
+              
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.75rem",
+                  padding: "0.75rem",
+                  borderRadius: "0.5rem",
+                  background: isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(255, 255, 255, 0.8)",
+                }}
+              >
+                <div
+                  style={{
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "0.5rem",
+                    background: isDark
+                      ? "rgba(34, 211, 238, 0.2)"
+                      : "rgba(34, 211, 238, 0.1)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "1.25rem",
+                    flexShrink: 0,
+                  }}
+                >
+                  💬
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div
+                    style={{
+                      fontSize: "0.875rem",
+                      fontWeight: "600",
+                      color: isDark ? "#ffffff" : "#1d1d1f",
+                      marginBottom: "0.25rem",
+                    }}
+                  >
+                    댓글 작성
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "0.8125rem",
+                      color: isDark ? "rgba(255, 255, 255, 0.6)" : "rgba(0, 0, 0, 0.6)",
+                    }}
+                  >
+                    <span style={{ color: tierInfo.color, fontWeight: "700" }}>3점</span> 획득
+                  </div>
+                </div>
+              </div>
+              
+              <div
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "0.75rem",
+                  padding: "0.75rem",
+                  borderRadius: "0.5rem",
+                  background: isDark ? "rgba(255, 255, 255, 0.05)" : "rgba(255, 255, 255, 0.8)",
+                }}
+              >
+                <div
+                  style={{
+                    width: "36px",
+                    height: "36px",
+                    borderRadius: "0.5rem",
+                    background: isDark
+                      ? "rgba(34, 197, 94, 0.2)"
+                      : "rgba(34, 197, 94, 0.1)",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    fontSize: "1.25rem",
+                    flexShrink: 0,
+                  }}
+                >
+                  ❤️
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div
+                    style={{
+                      fontSize: "0.875rem",
+                      fontWeight: "600",
+                      color: isDark ? "#ffffff" : "#1d1d1f",
+                      marginBottom: "0.25rem",
+                    }}
+                  >
+                    좋아요 받기
+                  </div>
+                  <div
+                    style={{
+                      fontSize: "0.8125rem",
+                      color: isDark ? "rgba(255, 255, 255, 0.6)" : "rgba(0, 0, 0, 0.6)",
+                    }}
+                  >
+                    <span style={{ color: "#10b981", fontWeight: "700" }}>1포인트</span> 획득
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </>

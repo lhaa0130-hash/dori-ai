@@ -182,6 +182,69 @@ export default function CommunityClient() {
     }, 100);
   };
 
+  // 좋아요 핸들러 - 작성자 포인트 증가 포함
+  const handleLike = (postId: number) => {
+    if (typeof window === 'undefined') return;
+    
+    const post = posts.find(p => p.id === postId);
+    if (!post) return;
+
+    // 좋아요 상태 확인
+    const likedPosts = JSON.parse(localStorage.getItem('dori_liked_community_posts') || '[]');
+    const isLiked = likedPosts.includes(postId);
+    const newIsLiked = !isLiked;
+
+    // 좋아요 상태 업데이트
+    if (newIsLiked) {
+      if (!likedPosts.includes(postId)) {
+        likedPosts.push(postId);
+      }
+    } else {
+      const index = likedPosts.indexOf(postId);
+      if (index > -1) {
+        likedPosts.splice(index, 1);
+      }
+    }
+    localStorage.setItem('dori_liked_community_posts', JSON.stringify(likedPosts));
+
+    // 좋아요 수 업데이트
+    const updatedPosts = posts.map(p => {
+      if (p.id === postId) {
+        const newLikes = newIsLiked ? p.likes + 1 : Math.max(0, p.likes - 1);
+        
+        // 좋아요를 누를 때만 작성자 포인트 증가
+        if (newIsLiked && post.nickname) {
+          // 모든 사용자 프로필에서 작성자 찾기
+          const allKeys = Object.keys(localStorage);
+          for (const key of allKeys) {
+            if (key.startsWith('dori_profile_')) {
+              try {
+                const profile = JSON.parse(localStorage.getItem(key) || '{}');
+                if (profile.nickname === post.nickname) {
+                  // 포인트 증가
+                  const updatedProfile = {
+                    ...profile,
+                    point: (profile.point || 0) + 1,
+                  };
+                  localStorage.setItem(key, JSON.stringify(updatedProfile));
+                  break;
+                }
+              } catch (e) {
+                console.error('Failed to parse profile:', e);
+              }
+            }
+          }
+        }
+        
+        return { ...p, likes: newLikes };
+      }
+      return p;
+    });
+    
+    setPosts(updatedPosts);
+    localStorage.setItem("dori_community_posts", JSON.stringify(updatedPosts));
+  };
+
   const filteredPosts = activeCategory === "전체" 
     ? posts 
     : posts.filter(post => post.tag === activeCategory);
@@ -406,14 +469,19 @@ export default function CommunityClient() {
                       {preview}
                     </p>
                     <div className="flex items-center justify-between">
-                      <span 
-                        className="text-xs flex items-center gap-1"
+                      <button
+                        onClick={(e) => {
+                          e.preventDefault();
+                          e.stopPropagation();
+                          handleLike(post.id);
+                        }}
+                        className="text-xs flex items-center gap-1 hover:opacity-70 transition-opacity"
                         style={{
                           color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
                         }}
                       >
                         ❤️ {post.likes}
-                      </span>
+                      </button>
                     </div>
                   </Link>
                   

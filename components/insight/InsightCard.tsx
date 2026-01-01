@@ -64,6 +64,30 @@ const InsightCard = React.memo(({ item, onTagClick, onLikeChange, isOwner = fals
     likesData[item.id] = newLikes;
     localStorage.setItem('dori_insight_likes', JSON.stringify(likesData));
     
+    // 좋아요를 누를 때만 작성자 포인트 증가
+    if (newIsLiked && item.author) {
+      // 모든 사용자 프로필에서 작성자 찾기
+      const allKeys = Object.keys(localStorage);
+      for (const key of allKeys) {
+        if (key.startsWith('dori_profile_')) {
+          try {
+            const profile = JSON.parse(localStorage.getItem(key) || '{}');
+            if (profile.nickname === item.author) {
+              // 포인트 증가
+              const updatedProfile = {
+                ...profile,
+                point: (profile.point || 0) + 1,
+              };
+              localStorage.setItem(key, JSON.stringify(updatedProfile));
+              break;
+            }
+          } catch (e) {
+            console.error('Failed to parse profile:', e);
+          }
+        }
+      }
+    }
+    
     // 부모 컴포넌트에 변경 알림
     if (onLikeChange) {
       onLikeChange(item.id, newLikes);

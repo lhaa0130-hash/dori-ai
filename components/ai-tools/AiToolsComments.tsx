@@ -14,6 +14,7 @@ export default function AiToolsComments({ toolId, compact = false, onCommentUpda
   const { data: session } = useSession();
   const [comments, setComments] = useState<AiToolComment[]>([]);
   const [newComment, setNewComment] = useState("");
+  const [userName, setUserName] = useState<string>("");
 
   useEffect(() => {
     const savedData = JSON.parse(localStorage.getItem("dori_tool_comments") || "{}");
@@ -21,6 +22,20 @@ export default function AiToolsComments({ toolId, compact = false, onCommentUpda
       setComments(savedData[toolId]);
     }
   }, [toolId]);
+
+  // localStorage에서 설정된 닉네임 가져오기
+  useEffect(() => {
+    if (session?.user?.email) {
+      const savedName = localStorage.getItem(`dori_user_name_${session.user.email}`);
+      if (savedName) {
+        setUserName(savedName);
+      } else {
+        setUserName(session.user?.name || "User");
+      }
+    } else {
+      setUserName("");
+    }
+  }, [session?.user?.email, session?.user?.name]);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -30,7 +45,7 @@ export default function AiToolsComments({ toolId, compact = false, onCommentUpda
     const commentObj: AiToolComment = {
       id: Date.now().toString(),
       userId: session.user?.email || "anonymous",
-      userName: session.user?.name || "User",
+      userName: userName || "User",
       content: newComment,
       createdAt: new Date().toISOString(),
     };

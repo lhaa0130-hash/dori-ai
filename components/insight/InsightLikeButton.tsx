@@ -53,6 +53,36 @@ export default function InsightLikeButton({ postId, initialLikes }: InsightLikeB
     const likesData = JSON.parse(localStorage.getItem('dori_insight_likes') || '{}');
     likesData[postId] = newLikes;
     localStorage.setItem('dori_insight_likes', JSON.stringify(likesData));
+    
+    // 좋아요를 누를 때만 작성자 포인트 증가
+    // 인사이트 글의 작성자 정보는 localStorage에서 찾아야 함
+    if (newIsLiked) {
+      // 인사이트 글 데이터에서 작성자 찾기
+      const savedPosts = JSON.parse(localStorage.getItem('dori_posts') || '[]');
+      const post = savedPosts.find((p: any) => p.id === postId);
+      if (post && post.author) {
+        // 모든 사용자 프로필에서 작성자 찾기
+        const allKeys = Object.keys(localStorage);
+        for (const key of allKeys) {
+          if (key.startsWith('dori_profile_')) {
+            try {
+              const profile = JSON.parse(localStorage.getItem(key) || '{}');
+              if (profile.nickname === post.author) {
+                // 포인트 증가
+                const updatedProfile = {
+                  ...profile,
+                  point: (profile.point || 0) + 1,
+                };
+                localStorage.setItem(key, JSON.stringify(updatedProfile));
+                break;
+              }
+            } catch (e) {
+              console.error('Failed to parse profile:', e);
+            }
+          }
+        }
+      }
+    }
   };
 
   if (!mounted) {
@@ -79,6 +109,7 @@ export default function InsightLikeButton({ postId, initialLikes }: InsightLikeB
     </button>
   );
 }
+
 
 
 

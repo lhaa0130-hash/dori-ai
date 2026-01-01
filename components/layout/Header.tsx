@@ -12,11 +12,27 @@ export default function Header() {
   const user = session?.user || null;
   const pathname = usePathname(); 
   const [mounted, setMounted] = useState(false);
+  const [displayName, setDisplayName] = useState<string>("");
   
   // 🌍 언어 상태 제거, 한국어(.ko) 고정
   const t = TEXTS.nav;
 
   useEffect(() => setMounted(true), []);
+
+  // localStorage에서 설정된 닉네임 가져오기
+  useEffect(() => {
+    if (user?.email) {
+      const savedName = localStorage.getItem(`dori_user_name_${user.email}`);
+      if (savedName) {
+        setDisplayName(savedName);
+      } else {
+        setDisplayName(user.name || "사용자");
+      }
+    } else {
+      setDisplayName("");
+    }
+  }, [user?.email, user?.name]);
+
   const isActive = (path: string) => pathname.startsWith(path) ? "active" : "";
 
   if (!mounted) return <header className="header-wrapper" />; 
@@ -47,8 +63,8 @@ export default function Header() {
               ) : (
                 <div className="profile-dropdown-container desktop-only">
                   <button className="profile-pill-btn">
-                    <div className="avatar-circle">{user.name?.[0]?.toUpperCase() || "U"}</div>
-                    <span className="user-name-text">{user.name}</span>
+                    <div className="avatar-circle">{displayName?.[0]?.toUpperCase() || "U"}</div>
+                    <span className="user-name-text">{displayName}</span>
                     <span className="dropdown-icon">▼</span>
                   </button>
                   <div className="dropdown-menu">
