@@ -30,15 +30,28 @@ export default function InsightList({ filters, setFilters, posts, isOwner, onEdi
   }).sort((a, b) => {
     if (filters.sort === "popular") return b.likes - a.likes;
     
-    // 가이드 글은 옛날순으로 정렬 (날짜 오름차순)
-    if (a.category === '가이드' && b.category === '가이드') {
-      return new Date(a.date).getTime() - new Date(b.date).getTime();
+    // 전체 필터일 때는 모든 글을 최신순으로 정렬
+    if (filters.category === "All") {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
     }
-    // 가이드 글은 항상 앞에 배치
+    
+    // 특정 카테고리 필터일 때만 가이드는 옛날순으로 정렬
+    if (filters.category === "가이드") {
+      if (a.category === '가이드' && b.category === '가이드') {
+        return new Date(a.date).getTime() - new Date(b.date).getTime();
+      }
+    }
+    
+    // 가이드가 아닌 카테고리 필터일 때는 최신순
+    if (a.category !== '가이드' && b.category !== '가이드') {
+      return new Date(b.date).getTime() - new Date(a.date).getTime();
+    }
+    
+    // 가이드와 다른 카테고리 섞일 때는 가이드 우선 배치
     if (a.category === '가이드' && b.category !== '가이드') return -1;
     if (a.category !== '가이드' && b.category === '가이드') return 1;
     
-    // 일반 글은 날짜 최신순 (내림차순)
+    // 기본적으로 최신순
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 
@@ -50,9 +63,15 @@ export default function InsightList({ filters, setFilters, posts, isOwner, onEdi
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {visibleData.map((item) => {
             // 가이드 글은 /insight/guide/[slug] 경로 사용
-            const href = item.category === '가이드' && item.slug 
-              ? `/insight/guide/${item.slug}` 
-              : `/insight/${item.id}`;
+            // 트렌드 글은 /insight/trend/[slug] 경로 사용
+            let href = `/insight/${item.id}`;
+            if (item.slug) {
+              if (item.category === '가이드') {
+                href = `/insight/guide/${item.slug}`;
+              } else if (item.category === '트렌드') {
+                href = `/insight/trend/${item.slug}`;
+              }
+            }
             
             return (
               <div key={item.id} className="relative group">

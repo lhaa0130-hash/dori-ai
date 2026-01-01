@@ -4,7 +4,7 @@ import { getProjectFiles } from "@/lib/projects";
 
 export const metadata = createMetadata({
   title: "Project",
-  description: "데이터와 인사이트로 더 나은 결정을 내리세요.",
+  description: "우리들의 프로젝트를 공유합니다",
   path: "/project",
 });
 

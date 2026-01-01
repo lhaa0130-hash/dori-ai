@@ -52,16 +52,22 @@ export default function Header() {
                     <span className="dropdown-icon">▼</span>
                   </button>
                   <div className="dropdown-menu">
-                    <div className="menu-header-info">
-                      <span className="info-label">ID</span>
-                      <span className="info-value email">{user.email || "user@dori.ai"}</span>
-                      <span className="info-label" style={{marginTop:'8px'}}>Role</span>
-                      <span className="info-value role">Creator</span>
+                    <div className="menu-header-section">
+                      <div className="user-info-group">
+                        <div className="user-email">{user.email || "user@dori.ai"}</div>
+                        <div className="user-role-badge">Creator</div>
+                      </div>
                     </div>
-                    <div className="menu-divider"></div>
-                    <div className="menu-links-wrapper">
-                      <Link href="/my" className="menu-item">{t.myPage.ko}</Link>
-                      <button onClick={() => signOut({ callbackUrl: "/" })} className="menu-item danger">{t.logout.ko}</button>
+                    <div className="menu-divider-line"></div>
+                    <div className="menu-actions">
+                      <Link href="/my" className="menu-action-item">
+                        <span className="menu-icon">👤</span>
+                        <span>{t.myPage.ko}</span>
+                      </Link>
+                      <button onClick={() => signOut({ callbackUrl: "/" })} className="menu-action-item danger">
+                        <span className="menu-icon">🚪</span>
+                        <span>{t.logout.ko}</span>
+                      </button>
                     </div>
                   </div>
                 </div>
@@ -267,125 +273,142 @@ export default function Header() {
         }
         .dropdown-menu { 
           position: absolute; 
-          top: 60px; 
+          top: 64px; 
           right: 0; 
           width: 240px; 
           border-radius: 16px; 
-          box-shadow: 0 10px 40px rgba(0, 0, 0, 0.1);
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
           padding: 16px; 
           opacity: 0; 
           visibility: hidden; 
-          transform: translateY(10px); 
-          transition: all 0.2s ease; 
+          transform: translateY(-4px) scale(0.98); 
+          transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1); 
           display: flex; 
           flex-direction: column;
           backdrop-filter: blur(20px) saturate(180%);
           -webkit-backdrop-filter: blur(20px) saturate(180%);
+          font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif;
         }
         :global(.dark) .dropdown-menu {
-          background: rgba(0, 0, 0, 0.8);
+          background: rgba(20, 20, 20, 0.95);
           border: 1px solid rgba(255, 255, 255, 0.1);
         }
         :global(.light) .dropdown-menu, :global([data-theme="light"]) .dropdown-menu {
-          background: rgba(255, 255, 255, 0.9);
+          background: rgba(255, 255, 255, 0.98);
           border: 1px solid rgba(0, 0, 0, 0.08);
         }
         .profile-dropdown-container:hover .dropdown-menu { 
           opacity: 1; 
           visibility: visible; 
-          transform: translateY(0); 
+          transform: translateY(0) scale(1); 
         }
-        .menu-header-info { 
+        .menu-header-section { 
+          margin-bottom: 14px; 
+        }
+        .user-info-group { 
           display: flex; 
           flex-direction: column; 
-          margin-bottom: 12px; 
+          gap: 10px;
         }
-        .info-label { 
-          font-size: 11px; 
-          font-weight: 500; 
-          letter-spacing: 0;
-          margin-bottom: 4px; 
-        }
-        :global(.dark) .info-label {
-          color: rgba(255, 255, 255, 0.5);
-        }
-        :global(.light) .info-label, :global([data-theme="light"]) .info-label {
-          color: rgba(0, 0, 0, 0.5);
-        }
-        .info-value { 
-          font-size: 14px; 
+        .user-email { 
+          font-size: 13px; 
           font-weight: 500; 
           letter-spacing: -0.01em;
+          word-break: break-all;
+          line-height: 1.4;
         }
-        :global(.dark) .info-value {
-          color: #ffffff;
+        :global(.dark) .user-email {
+          color: rgba(255, 255, 255, 0.9);
         }
-        :global(.light) .info-value, :global([data-theme="light"]) .info-value {
-          color: #1d1d1f;
+        :global(.light) .user-email, :global([data-theme="light"]) .user-email {
+          color: rgba(0, 0, 0, 0.8);
         }
-        .info-value.role { 
-          display: inline-block; 
+        .user-role-badge { 
+          display: inline-flex; 
+          align-items: center;
           align-self: flex-start; 
-          padding: 2px 8px; 
-          border-radius: 4px; 
-          font-size: 12px; 
+          padding: 4px 10px; 
+          border-radius: 8px; 
+          font-size: 11px; 
           font-weight: 600; 
-          background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-          color: #ffffff;
+          letter-spacing: 0.03em;
+          text-transform: uppercase;
         }
-        .menu-divider { 
+        :global(.dark) .user-role-badge {
+          background: rgba(59, 130, 246, 0.2);
+          color: rgba(147, 197, 253, 0.95);
+          border: 1px solid rgba(59, 130, 246, 0.3);
+        }
+        :global(.light) .user-role-badge, :global([data-theme="light"]) .user-role-badge {
+          background: rgba(37, 99, 235, 0.1);
+          color: #2563eb;
+          border: 1px solid rgba(37, 99, 235, 0.2);
+        }
+        .menu-divider-line { 
           height: 1px; 
-          margin: 0 0 8px 0; 
+          margin: 0 0 10px 0; 
           width: 100%; 
         }
-        :global(.dark) .menu-divider {
-          background: rgba(255, 255, 255, 0.1);
+        :global(.dark) .menu-divider-line {
+          background: rgba(255, 255, 255, 0.08);
         }
-        :global(.light) .menu-divider, :global([data-theme="light"]) .menu-divider {
+        :global(.light) .menu-divider-line, :global([data-theme="light"]) .menu-divider-line {
           background: rgba(0, 0, 0, 0.08);
         }
-        .menu-links-wrapper { 
+        .menu-actions { 
           display: flex; 
           flex-direction: column; 
           gap: 4px; 
         }
-        .menu-item { 
+        .menu-action-item { 
           display: flex; 
           align-items: center; 
+          gap: 10px;
           width: 100%; 
-          height: 40px; 
+          height: 38px; 
           padding: 0 12px; 
-          font-size: 14px; 
-          font-weight: 400; 
+          font-size: 13px; 
+          font-weight: 500; 
           letter-spacing: -0.01em;
           border-radius: 8px; 
           background: transparent; 
           border: none; 
           cursor: pointer; 
-          transition: all 0.2s ease; 
+          transition: all 0.15s ease; 
           text-align: left;
           text-decoration: none;
         }
-        :global(.dark) .menu-item {
-          color: rgba(255, 255, 255, 0.7);
+        .menu-icon {
+          font-size: 13px;
+          opacity: 0.6;
+          transition: opacity 0.15s ease;
         }
-        :global(.light) .menu-item, :global([data-theme="light"]) .menu-item {
-          color: rgba(0, 0, 0, 0.6);
+        :global(.dark) .menu-action-item {
+          color: rgba(255, 255, 255, 0.8);
         }
-        .menu-item:hover { 
+        :global(.light) .menu-action-item, :global([data-theme="light"]) .menu-action-item {
+          color: rgba(0, 0, 0, 0.7);
+        }
+        .menu-action-item:hover { 
           font-weight: 500;
         }
-        :global(.dark) .menu-item:hover {
-          background: rgba(255, 255, 255, 0.05);
+        .menu-action-item:hover .menu-icon {
+          opacity: 1;
+        }
+        :global(.dark) .menu-action-item:hover {
+          background: rgba(255, 255, 255, 0.08);
           color: #ffffff;
         }
-        :global(.light) .menu-item:hover, :global([data-theme="light"]) .menu-item:hover {
-          background: rgba(0, 0, 0, 0.03);
+        :global(.light) .menu-action-item:hover, :global([data-theme="light"]) .menu-action-item:hover {
+          background: rgba(0, 0, 0, 0.05);
           color: #1d1d1f;
         }
-        .menu-item.danger:hover { 
+        .menu-action-item.danger:hover { 
           background: rgba(239, 68, 68, 0.1); 
           color: #ef4444; 
+        }
+        .menu-action-item.danger:hover .menu-icon {
+          opacity: 1;
         }
       `}</style>
     </>

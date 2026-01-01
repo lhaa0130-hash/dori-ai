@@ -21,6 +21,13 @@ export default function CommunityClient() {
       if (savedPosts) {
         try {
           const parsedPosts: CommunityPost[] = JSON.parse(savedPosts);
+          // 첫 번째 글 제거 (한 번만 실행)
+          const hasRemovedFirst = sessionStorage.getItem("dori_removed_first_community_post");
+          if (!hasRemovedFirst && parsedPosts.length > 0) {
+            parsedPosts.shift();
+            localStorage.setItem("dori_community_posts", JSON.stringify(parsedPosts));
+            sessionStorage.setItem("dori_removed_first_community_post", "true");
+          }
           setPosts(parsedPosts);
           
           // 수정 모드 확인 (posts가 로드된 후)

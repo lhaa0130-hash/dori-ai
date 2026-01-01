@@ -308,7 +308,7 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
               letterSpacing: '-0.01em',
             }}
           >
-            데이터와 인사이트로 더 나은 결정을 내리세요.
+            우리들의 프로젝트를 공유합니다
           </p>
         </div>
       </section>

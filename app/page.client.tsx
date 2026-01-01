@@ -585,45 +585,54 @@ export default function PremiumDesignPage() {
               { icon: "🎨", title: "YOUTUBE ANIMATION", desc: "미정", status: "미정", color: "#10b981", span: 2 },
               { icon: "⚙️", title: "MAKE / N8N", desc: "미정", status: "미정", color: "#f59e0b", span: 2 },
               { icon: "🛒", title: "GUMROAD", desc: "미정", status: "미정", color: "#ec4899", span: 1 },
-            ].map((item, idx) => (
-              <div
-                key={idx}
-                className={`group relative rounded-3xl overflow-hidden transition-all duration-500 ${
-                  visibleSections.has('gallery')
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-8'
-                } ${item.span === 2 ? 'md:col-span-2' : ''}`}
-                style={{
-                  transitionDelay: `${idx * 50}ms`,
-                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.3)' : '#e5e5e7'}`,
-                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
-                }}
-              >
-                <div className="p-6 h-full flex flex-col">
-                  <div className="flex items-center justify-between mb-4">
+            ].map((item, idx) => {
+              const CardContent = (
+                <div
+                  className={`group relative rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-2xl ${
+                    visibleSections.has('gallery')
+                      ? 'opacity-100 translate-y-0'
+                      : 'opacity-0 translate-y-8'
+                  } ${item.span === 2 ? 'md:col-span-2' : ''}`}
+                  style={{
+                    transitionDelay: `${idx * 50}ms`,
+                    border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.08)'}`,
+                    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : '#ffffff',
+                    boxShadow: isDark 
+                      ? '0 4px 20px rgba(0, 0, 0, 0.2)'
+                      : '0 4px 20px rgba(0, 0, 0, 0.04)',
+                  }}
+                >
+                <div className="p-8 h-full flex flex-col">
+                  <div className="flex items-center justify-between mb-6">
                     <div 
-                      className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
+                      className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-lg"
                       style={{
-                        backgroundColor: isDark 
-                          ? `rgba(${item.color === '#3b82f6' ? '59, 130, 246' : item.color === '#8b5cf6' ? '139, 92, 246' : item.color === '#06b6d4' ? '6, 182, 212' : item.color === '#10b981' ? '16, 185, 129' : item.color === '#f59e0b' ? '245, 158, 11' : '236, 72, 153'}, 0.1)`
-                          : `${item.color}15`,
+                        background: isDark 
+                          ? `linear-gradient(135deg, rgba(${item.color === '#3b82f6' ? '59, 130, 246' : item.color === '#8b5cf6' ? '139, 92, 246' : item.color === '#06b6d4' ? '6, 182, 212' : item.color === '#10b981' ? '16, 185, 129' : item.color === '#f59e0b' ? '245, 158, 11' : '236, 72, 153'}, 0.2), rgba(${item.color === '#3b82f6' ? '59, 130, 246' : item.color === '#8b5cf6' ? '139, 92, 246' : item.color === '#06b6d4' ? '6, 182, 212' : item.color === '#10b981' ? '16, 185, 129' : item.color === '#f59e0b' ? '245, 158, 11' : '236, 72, 153'}, 0.1))`
+                          : `linear-gradient(135deg, ${item.color}20, ${item.color}10)`,
+                        border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : `${item.color}30`}`,
                       }}
                     >
                       {item.icon}
                     </div>
                     <div 
-                      className="px-2.5 py-1 rounded-full text-[10px] font-semibold"
+                      className="px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider"
                       style={{
-                        backgroundColor: item.status === '완료' 
-                          ? (isDark ? 'rgba(16, 185, 129, 0.2)' : 'rgba(16, 185, 129, 0.1)')
+                        background: item.status === '완료' 
+                          ? (isDark ? 'rgba(16, 185, 129, 0.25)' : 'rgba(16, 185, 129, 0.15)')
                           : item.status === '작업중' || item.status === '진행중'
-                          ? (isDark ? 'rgba(59, 130, 246, 0.2)' : 'rgba(59, 130, 246, 0.1)')
-                          : (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'),
+                          ? (isDark ? 'rgba(59, 130, 246, 0.25)' : 'rgba(59, 130, 246, 0.15)')
+                          : (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'),
                         color: item.status === '완료'
                           ? '#10b981'
                           : item.status === '작업중' || item.status === '진행중'
                           ? '#3b82f6'
-                          : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)'),
+                          : (isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.5)'),
+                        border: `1px solid ${item.status === '완료' 
+                          ? (isDark ? 'rgba(16, 185, 129, 0.3)' : 'rgba(16, 185, 129, 0.2)')
+                          : item.status === '작업중' || item.status === '진행중'
+                          ? (isDark ? 'rgba(59, 130, 246, 0.3)' : 'rgba(59, 130, 246, 0.2)')
+                          : (isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.1)')}`,
                       }}
                     >
                       {item.status}
@@ -631,32 +640,32 @@ export default function PremiumDesignPage() {
                   </div>
                   
                   <h3 
-                    className="text-xl mb-2"
+                    className="text-2xl mb-3 font-bold"
                     style={{
                       color: isDark ? '#ffffff' : '#1d1d1f',
                       fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                      fontWeight: 600,
-                      letterSpacing: '-0.02em',
+                      fontWeight: 700,
+                      letterSpacing: '-0.03em',
                     }}
                   >
                     {item.title}
                   </h3>
                   
                   <p 
-                    className="text-sm leading-relaxed flex-grow"
+                    className="text-base leading-relaxed flex-grow mb-6"
                     style={{
-                      color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+                      color: isDark ? 'rgba(255, 255, 255, 0.75)' : 'rgba(0, 0, 0, 0.65)',
                       fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                      fontWeight: 400,
+                      fontWeight: 500,
                       letterSpacing: '-0.01em',
-                      lineHeight: '1.6',
+                      lineHeight: '1.7',
                     }}
                   >
                     {item.desc}
                   </p>
                   
                   <div 
-                    className="flex items-center gap-2 mt-4 text-sm font-medium transition-all duration-300 group-hover:gap-3"
+                    className="flex items-center gap-2 mt-auto text-sm font-semibold transition-all duration-300 group-hover:gap-3"
                     style={{
                       color: item.color,
                     }}
@@ -670,11 +679,34 @@ export default function PremiumDesignPage() {
                 <div 
                   className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                   style={{
-                    background: `radial-gradient(circle at center, ${item.color}10 0%, transparent 70%)`,
+                    background: `radial-gradient(circle at center, ${item.color}15 0%, transparent 70%)`,
                   }}
                 />
-              </div>
-            ))}
+                {/* 그라데이션 오버레이 */}
+                <div 
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  style={{
+                    background: `linear-gradient(135deg, ${item.color}08 0%, transparent 50%)`,
+                  }}
+                />
+                </div>
+              );
+
+              // 첫 번째 항목(SITE: DORI-AI)만 클릭 가능하도록
+              if (idx === 0) {
+                return (
+                  <div 
+                    key={idx}
+                    onClick={() => window.location.href = '/project'}
+                    style={{ cursor: 'pointer' }}
+                  >
+                    {CardContent}
+                  </div>
+                );
+              }
+
+              return <div key={idx}>{CardContent}</div>;
+            })}
           </div>
         </div>
       </section>

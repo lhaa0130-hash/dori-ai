@@ -1,5 +1,6 @@
 import { getSortedPostsData } from '@/lib/posts';
 import { getAllGuides } from '@/lib/guides';
+import { getAllTrends } from '@/lib/trends';
 import InsightClient from './page.client';
 import { InsightItem } from '@/types/content';
 
@@ -10,6 +11,9 @@ export default async function InsightPage() {
     
     // content/guides 폴더에서 가이드 글 가져오기
     const guides = getAllGuides();
+    
+    // content/trend 폴더에서 트렌드 글 가져오기
+    const trends = getAllTrends();
     
     // 가이드를 InsightItem 형식으로 변환
     const guideItems: InsightItem[] = guides.map((guide, index) => {
@@ -31,6 +35,26 @@ export default async function InsightPage() {
       };
     });
     
+    // 트렌드를 InsightItem 형식으로 변환
+    const trendItems: InsightItem[] = trends.map((trend, index) => {
+      // slug에서 숫자 추출 (예: "trend-01" -> 1) 또는 인덱스 기반 ID 생성
+      const slugNumber = trend.slug.match(/\d+/)?.[0];
+      const id = slugNumber ? parseInt(slugNumber) + 2000 : 2000 + index;
+      
+      return {
+        id: id,
+        title: trend.title,
+        summary: trend.description || '',
+        category: (trend.category || '트렌드') as const,
+        tags: trend.tags || [],
+        likes: 0,
+        date: trend.date || new Date().toISOString().split('T')[0],
+        content: trend.content,
+        slug: trend.slug, // 트렌드 slug 추가
+        ...(trend.thumbnail && { image: trend.thumbnail }),
+      };
+    });
+    
     // 가이드 글은 옛날순으로 정렬 (날짜 오름차순)
     const sortedGuides = guideItems.sort((a, b) => {
       const dateA = a.date ? new Date(a.date).getTime() : 0;
@@ -45,8 +69,15 @@ export default async function InsightPage() {
       return dateB - dateA; // 최신순 (내림차순)
     });
     
-    // 가이드 글을 앞쪽에 배치
-    const combinedPosts = [...sortedGuides, ...sortedPosts];
+    // 트렌드 글은 최신순으로 정렬 (날짜 내림차순)
+    const sortedTrends = trendItems.sort((a, b) => {
+      const dateA = a.date ? new Date(a.date).getTime() : 0;
+      const dateB = b.date ? new Date(b.date).getTime() : 0;
+      return dateB - dateA; // 최신순 (내림차순)
+    });
+    
+    // 가이드 글을 앞쪽에 배치, 그 다음 트렌드, 그 다음 일반 글
+    const combinedPosts = [...sortedGuides, ...sortedTrends, ...sortedPosts];
     
     return <InsightClient initialPosts={combinedPosts || []} />;
   } catch (error) {
