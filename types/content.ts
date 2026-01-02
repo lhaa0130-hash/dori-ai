@@ -43,8 +43,8 @@ export type InsightItem = {
 export type AiTool = {
   id: string;
   name: string;
-  // 👇 [수정] 새로운 카테고리 추가 (coding, design, productivity)
-  category: "llm" | "image" | "video" | "voice" | "automation" | "search" | "agent" | "coding" | "design" | "productivity" | "other";
+  // 👇 [수정] 세분화된 카테고리
+  category: "llm" | "image-generation" | "image-editing" | "video-generation" | "video-editing" | "voice-tts" | "music" | "automation" | "search" | "agent" | "coding" | "design" | "3d" | "writing" | "translation" | "presentation" | "other";
   summary: string;
   description: string;
   releaseDate: string;
@@ -53,6 +53,7 @@ export type AiTool = {
   tags: string[];
   thumbnail: string;
   company?: string; // 개발사 이름
+  strength?: string; // AI의 주요 강점 (한 줄)
   
   // 추가 정보
   priceType?: string; // "무료", "부분 유료" 등 (필터용)

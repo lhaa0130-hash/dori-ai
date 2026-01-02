@@ -5,19 +5,65 @@ import AiToolsCard, { AiTool } from "./AiToolsCard";
 import { TEXTS } from "@/constants/texts";
 import { AI_TOOLS_DATA } from "@/constants/aiToolsData"; 
 
-// 📌 [수정] 10개 카테고리 모두 표시하도록 확장
+// 📌 [수정] 세분화된 카테고리 모두 표시
 const DISPLAY_CATEGORIES = [
   "llm", 
-  "image", 
-  "video", 
-  "voice", 
+  "image-generation",
+  "image-editing",
+  "video-generation",
+  "video-editing",
+  "voice-tts",
+  "music",
   "automation", 
   "search", 
-  "agent",        // 👈 추가됨
-  "coding",       // 👈 추가됨
-  "design",       // 👈 추가됨
-  "productivity"  // 👈 추가됨
+  "agent",
+  "coding",
+  "design",
+  "3d",
+  "writing",
+  "translation",
+  "presentation"
 ];
+
+// 카테고리별 레이블
+const CATEGORY_LABELS: Record<string, string> = {
+  "llm": "LLM",
+  "image-generation": "Image Gen",
+  "image-editing": "Image Edit",
+  "video-generation": "Video Gen",
+  "video-editing": "Video Edit",
+  "voice-tts": "Voice TTS",
+  "music": "Music",
+  "automation": "Automation",
+  "search": "Search",
+  "agent": "Agent",
+  "coding": "Coding",
+  "design": "Design",
+  "3d": "3D",
+  "writing": "Writing",
+  "translation": "Translation",
+  "presentation": "Presentation"
+};
+
+// 카테고리별 주요 기능 설명
+const CATEGORY_DESCRIPTIONS: Record<string, string> = {
+  "llm": "대화형 AI, 텍스트 생성, 코딩 지원, 번역, 문서 분석, 질문 답변",
+  "image-generation": "텍스트로 이미지 생성, 프롬프트 기반 아트 제작, 로고 및 일러스트 생성",
+  "image-editing": "배경 제거, 이미지 향상, 필터 적용, 자동 편집, 포토샵 대체",
+  "video-generation": "텍스트 투 비디오, 이미지 투 비디오, 애니메이션 생성, 영상 제작",
+  "video-editing": "자동 자막 생성, 컷 편집, 텍스트 기반 편집, 영상 합성",
+  "voice-tts": "텍스트 음성 변환, 보이스 클로닝, 감정 표현, 내레이션 생성",
+  "music": "AI 작곡, 음악 생성, 배경음악 제작, 노래 생성, 멜로디 생성",
+  "automation": "워크플로우 자동화, 앱 연동, 반복 작업 자동화, 스크래핑",
+  "search": "AI 검색, 실시간 정보 검색, 출처 제공, 대화형 검색",
+  "agent": "자율 AI 에이전트, 작업 자동 실행, 목표 달성, 페르소나 챗봇",
+  "coding": "코드 자동 완성, 코드 리뷰, 디버깅, 코드 생성, 개발 지원",
+  "design": "UI/UX 디자인, 로고 생성, 그래픽 디자인, 프로토타입 제작",
+  "3d": "3D 모델 생성, 텍스트 투 3D, 이미지 투 3D, 3D 자산 제작",
+  "writing": "글쓰기 지원, 마케팅 콘텐츠, 문법 교정, 패러프레이징, 카피라이팅",
+  "translation": "다국어 번역, 뉘앙스 보존, 실시간 번역, 문서 번역",
+  "presentation": "슬라이드 자동 생성, 프레젠테이션 디자인, 스토리텔링, PPT 제작"
+};
 
 interface AiToolsListProps {
   filters: {
@@ -27,7 +73,7 @@ interface AiToolsListProps {
 }
 
 export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) {
-  const [tools, setTools] = useState<AiTool[]>(AI_TOOLS_DATA); 
+  const [tools, setTools] = useState<AiTool[]>([]); 
   const [expandedCats, setExpandedCats] = useState<Record<string, boolean>>({});
   const [visibleCount, setVisibleCount] = useState(9); 
   const [isLoaded, setIsLoaded] = useState(false);
@@ -57,7 +103,7 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
 
   const loadMoreTools = (cat: string) => {
     const catTools = currentTools
-      .filter(t => t.category.toLowerCase() === cat.toLowerCase())
+      .filter(t => t.category === cat)
       .sort((a, b) => b.rating - a.rating);
     
     setExpandedTools(prev => ({
@@ -66,18 +112,21 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
     }));
   };
 
-  const currentTools = isLoaded ? tools : AI_TOOLS_DATA;
+  const currentTools = isLoaded && tools.length > 0 ? tools : AI_TOOLS_DATA;
 
   // --- [1] 개요 모드 렌더링 (카테고리별 랭킹 섹션) ---
   if (isOverviewMode) {
     return (
       <div className="w-full flex flex-col animate-[fadeInUp_0.5s_ease-out]">
         {DISPLAY_CATEGORIES.map((cat, catIdx) => {
+          // 필터링: 정확한 문자열 매칭
           const catTools = currentTools
-            .filter(t => t.category.toLowerCase() === cat.toLowerCase())
+            .filter(t => String(t.category) === String(cat))
             .sort((a, b) => b.rating - a.rating); 
 
-          if (catTools.length === 0) return null;
+          if (catTools.length === 0) {
+            return null;
+          }
 
           // 각 카테고리에서 표시할 개수 (기본 6개, 더보기 클릭 시 증가)
           const displayCount = expandedTools[cat] || 6;
@@ -110,13 +159,13 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
                     className="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4"
                     style={{ color: 'var(--text-main)' }}
                   >
-                    {cat}
+                    {CATEGORY_LABELS[cat] || cat.toUpperCase()}
                   </h2>
                   <p 
                     className="text-base md:text-lg font-medium opacity-70"
                     style={{ color: 'var(--text-sub)' }}
                   >
-                    {cat.toUpperCase()} 분야의 주요 AI 툴을 확인하세요.
+                    {CATEGORY_DESCRIPTIONS[cat] || `${cat.toUpperCase()} 분야의 주요 AI 툴을 확인하세요.`}
                   </p>
                 </div>
 

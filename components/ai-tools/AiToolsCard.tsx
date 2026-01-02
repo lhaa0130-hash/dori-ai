@@ -208,6 +208,20 @@ const AiToolsCard = React.memo(function AiToolsCard({ tool, rank }: AiToolsCardP
           </h3>
         </div>
 
+        {/* AI 강점 (한 줄) */}
+        {tool.strength && (
+          <div className="mb-3">
+            <p 
+              className="text-sm font-medium opacity-80 leading-relaxed"
+              style={{
+                color: "var(--text-sub)",
+              }}
+            >
+              {tool.strength}
+            </p>
+          </div>
+        )}
+
         {/* 베스트 댓글 3개 */}
         <div className="mb-4 flex-1">
           <h4 className="text-[10px] font-bold text-[var(--text-sub)] mb-2 uppercase tracking-wider">

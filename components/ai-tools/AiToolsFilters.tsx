@@ -26,17 +26,22 @@ const AiToolsFilters = React.memo(({ filters, setFilters }: AiToolsFiltersProps)
         className={selectClass}
       >
         <option value="All">{t.category.ko}: {t.all.ko}</option>
-        <option value="LLM">LLM (Chat)</option>
-        <option value="Image">Image Gen</option>
-        <option value="Video">Video Gen</option>
-        <option value="Voice">Voice / Audio</option>
-        <option value="Automation">Automation</option>
-        <option value="Search">Search</option>
-        {/* 👇 [추가] 신규 카테고리 */}
-        <option value="Agent">Agent (Autonomous)</option>
-        <option value="Coding">Coding Assistant</option>
-        <option value="Design">Design & 3D</option>
-        <option value="Productivity">Productivity</option>
+        <option value="llm">LLM (Chat)</option>
+        <option value="image-generation">Image Generation</option>
+        <option value="image-editing">Image Editing</option>
+        <option value="video-generation">Video Generation</option>
+        <option value="video-editing">Video Editing</option>
+        <option value="voice-tts">Voice TTS</option>
+        <option value="music">Music</option>
+        <option value="automation">Automation</option>
+        <option value="search">Search</option>
+        <option value="agent">Agent (Autonomous)</option>
+        <option value="coding">Coding Assistant</option>
+        <option value="design">Design</option>
+        <option value="3d">3D Generation</option>
+        <option value="writing">Writing</option>
+        <option value="translation">Translation</option>
+        <option value="presentation">Presentation</option>
       </select>
     </div>
   );

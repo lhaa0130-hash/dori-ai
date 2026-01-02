@@ -7,28 +7,40 @@ import { TEXTS } from "@/constants/texts";
 
 const DISPLAY_CATEGORIES = [
   "llm", 
-  "image", 
-  "video", 
-  "voice", 
+  "image-generation",
+  "image-editing",
+  "video-generation",
+  "video-editing",
+  "voice-tts",
+  "music",
   "automation", 
   "search", 
   "agent",
   "coding",
   "design",
-  "productivity"
+  "3d",
+  "writing",
+  "translation",
+  "presentation"
 ];
 
 const CATEGORY_LABELS: Record<string, string> = {
   llm: "LLM",
-  image: "Image",
-  video: "Video",
-  voice: "Voice",
+  "image-generation": "Image Gen",
+  "image-editing": "Image Edit",
+  "video-generation": "Video Gen",
+  "video-editing": "Video Edit",
+  "voice-tts": "Voice TTS",
+  music: "Music",
   automation: "Automation",
   search: "Search",
   agent: "Agent",
   coding: "Coding",
   design: "Design",
-  productivity: "Productivity",
+  "3d": "3D",
+  writing: "Writing",
+  translation: "Translation",
+  presentation: "Presentation",
 };
 
 export default function AiToolsClient() {

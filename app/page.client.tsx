@@ -577,7 +577,7 @@ export default function PremiumDesignPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
             {[
               { icon: "🌐", title: "SITE", desc: "DORI-AI", status: "진행중", color: "#3b82f6", span: 2 },
               { icon: "📱", title: "APPLICATION", desc: "DORI (Android 작업중)", status: "작업중", color: "#8b5cf6", span: 1 },
@@ -588,105 +588,121 @@ export default function PremiumDesignPage() {
             ].map((item, idx) => {
               const CardContent = (
                 <div
-                  className={`group relative rounded-3xl overflow-hidden transition-all duration-500 hover:shadow-2xl ${
+                  className={`group relative rounded-3xl overflow-hidden transition-all duration-600 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-2 ${
                     visibleSections.has('gallery')
                       ? 'opacity-100 translate-y-0'
                       : 'opacity-0 translate-y-8'
                   } ${item.span === 2 ? 'md:col-span-2' : ''}`}
                   style={{
                     transitionDelay: `${idx * 50}ms`,
-                    border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.08)'}`,
-                    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.03)' : '#ffffff',
+                    border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)'}`,
+                    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.015)' : '#ffffff',
                     boxShadow: isDark 
-                      ? '0 4px 20px rgba(0, 0, 0, 0.2)'
-                      : '0 4px 20px rgba(0, 0, 0, 0.04)',
+                      ? '0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)'
+                      : '0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1)',
                   }}
                 >
-                <div className="p-8 h-full flex flex-col">
-                  <div className="flex items-center justify-between mb-6">
+                {/* 좌측 세로 액센트 라인 */}
+                <div 
+                  className="absolute left-0 top-0 bottom-0 w-1 origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-600 ease-[cubic-bezier(0.4,0,0.2,1)]"
+                  style={{
+                    background: `linear-gradient(180deg, ${item.color}, ${item.color}80)`,
+                  }}
+                />
+                
+                {/* 배경 그라데이션 - 우측 하단에서 시작 */}
+                <div 
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-600 pointer-events-none"
+                  style={{
+                    background: `radial-gradient(circle at 85% 85%, ${item.color}10 0%, transparent 50%)`,
+                  }}
+                />
+
+                <div className="p-7 h-full flex flex-col relative z-10">
+                  {/* 상태 태그 - 우측 상단 */}
+                  <div 
+                    className="absolute top-5 right-5 px-3 py-1 rounded-full text-[10px] font-medium tracking-wide backdrop-blur-md transition-all duration-400"
+                    style={{
+                      background: item.status === '완료' 
+                        ? (isDark ? 'rgba(16, 185, 129, 0.18)' : 'rgba(16, 185, 129, 0.1)')
+                        : item.status === '작업중' || item.status === '진행중'
+                        ? (isDark ? 'rgba(59, 130, 246, 0.18)' : 'rgba(59, 130, 246, 0.1)')
+                        : (isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.05)'),
+                      color: item.status === '완료'
+                        ? '#10b981'
+                        : item.status === '작업중' || item.status === '진행중'
+                        ? '#3b82f6'
+                        : (isDark ? 'rgba(255, 255, 255, 0.55)' : 'rgba(0, 0, 0, 0.45)'),
+                      border: `1px solid ${item.status === '완료' 
+                        ? (isDark ? 'rgba(16, 185, 129, 0.2)' : 'rgba(16, 185, 129, 0.12)')
+                        : item.status === '작업중' || item.status === '진행중'
+                        ? (isDark ? 'rgba(59, 130, 246, 0.2)' : 'rgba(59, 130, 246, 0.12)')
+                        : (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.06)')}`,
+                    }}
+                  >
+                    {item.status}
+                  </div>
+
+                  {/* 아이콘과 제목을 한 줄에 */}
+                  <div className="flex items-start gap-4 mb-5">
                     <div 
-                      className="w-16 h-16 rounded-2xl flex items-center justify-center text-3xl transition-all duration-300 group-hover:scale-110 group-hover:rotate-3 shadow-lg"
+                      className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 transition-all duration-500 group-hover:scale-105 group-hover:rotate-3"
                       style={{
                         background: isDark 
-                          ? `linear-gradient(135deg, rgba(${item.color === '#3b82f6' ? '59, 130, 246' : item.color === '#8b5cf6' ? '139, 92, 246' : item.color === '#06b6d4' ? '6, 182, 212' : item.color === '#10b981' ? '16, 185, 129' : item.color === '#f59e0b' ? '245, 158, 11' : '236, 72, 153'}, 0.2), rgba(${item.color === '#3b82f6' ? '59, 130, 246' : item.color === '#8b5cf6' ? '139, 92, 246' : item.color === '#06b6d4' ? '6, 182, 212' : item.color === '#10b981' ? '16, 185, 129' : item.color === '#f59e0b' ? '245, 158, 11' : '236, 72, 153'}, 0.1))`
-                          : `linear-gradient(135deg, ${item.color}20, ${item.color}10)`,
-                        border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : `${item.color}30`}`,
+                          ? `rgba(${item.color === '#3b82f6' ? '59, 130, 246' : item.color === '#8b5cf6' ? '139, 92, 246' : item.color === '#06b6d4' ? '6, 182, 212' : item.color === '#10b981' ? '16, 185, 129' : item.color === '#f59e0b' ? '245, 158, 11' : '236, 72, 153'}, 0.1)`
+                          : `${item.color}0d`,
+                        border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.05)' : `${item.color}15`}`,
                       }}
                     >
                       {item.icon}
                     </div>
-                    <div 
-                      className="px-3 py-1.5 rounded-full text-[11px] font-bold uppercase tracking-wider"
-                      style={{
-                        background: item.status === '완료' 
-                          ? (isDark ? 'rgba(16, 185, 129, 0.25)' : 'rgba(16, 185, 129, 0.15)')
-                          : item.status === '작업중' || item.status === '진행중'
-                          ? (isDark ? 'rgba(59, 130, 246, 0.25)' : 'rgba(59, 130, 246, 0.15)')
-                          : (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'),
-                        color: item.status === '완료'
-                          ? '#10b981'
-                          : item.status === '작업중' || item.status === '진행중'
-                          ? '#3b82f6'
-                          : (isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.5)'),
-                        border: `1px solid ${item.status === '완료' 
-                          ? (isDark ? 'rgba(16, 185, 129, 0.3)' : 'rgba(16, 185, 129, 0.2)')
-                          : item.status === '작업중' || item.status === '진행중'
-                          ? (isDark ? 'rgba(59, 130, 246, 0.3)' : 'rgba(59, 130, 246, 0.2)')
-                          : (isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.1)')}`,
-                      }}
-                    >
-                      {item.status}
+                    
+                    <div className="flex-1 min-w-0">
+                      <h3 
+                        className="text-lg mb-1 font-bold leading-tight"
+                        style={{
+                          color: isDark ? '#ffffff' : '#1d1d1f',
+                          fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+                          fontWeight: 700,
+                          letterSpacing: '-0.02em',
+                        }}
+                      >
+                        {item.title}
+                      </h3>
                     </div>
                   </div>
                   
-                  <h3 
-                    className="text-2xl mb-3 font-bold"
-                    style={{
-                      color: isDark ? '#ffffff' : '#1d1d1f',
-                      fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                      fontWeight: 700,
-                      letterSpacing: '-0.03em',
-                    }}
-                  >
-                    {item.title}
-                  </h3>
-                  
                   <p 
-                    className="text-base leading-relaxed flex-grow mb-6"
+                    className="text-sm leading-relaxed flex-grow mb-5"
                     style={{
-                      color: isDark ? 'rgba(255, 255, 255, 0.75)' : 'rgba(0, 0, 0, 0.65)',
+                      color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.55)',
                       fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                      fontWeight: 500,
+                      fontWeight: 400,
                       letterSpacing: '-0.01em',
-                      lineHeight: '1.7',
+                      lineHeight: '1.65',
                     }}
                   >
                     {item.desc}
                   </p>
                   
                   <div 
-                    className="flex items-center gap-2 mt-auto text-sm font-semibold transition-all duration-300 group-hover:gap-3"
+                    className="flex items-center gap-2 mt-auto text-xs font-medium transition-all duration-400 group-hover:gap-2.5"
                     style={{
                       color: item.color,
                     }}
                   >
-                    <span>자세히 보기</span>
-                    <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
+                    <span className="tracking-wide">자세히 보기</span>
+                    <span className="group-hover:translate-x-1 transition-transform duration-400 text-base">→</span>
                   </div>
                 </div>
                 
-                {/* 호버 효과 */}
+                {/* 호버 시 부드러운 그림자 */}
                 <div 
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
+                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-600 pointer-events-none rounded-3xl"
                   style={{
-                    background: `radial-gradient(circle at center, ${item.color}15 0%, transparent 70%)`,
-                  }}
-                />
-                {/* 그라데이션 오버레이 */}
-                <div 
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{
-                    background: `linear-gradient(135deg, ${item.color}08 0%, transparent 50%)`,
+                    boxShadow: isDark 
+                      ? `0 12px 40px rgba(${item.color === '#3b82f6' ? '59, 130, 246' : item.color === '#8b5cf6' ? '139, 92, 246' : item.color === '#06b6d4' ? '6, 182, 212' : item.color === '#10b981' ? '16, 185, 129' : item.color === '#f59e0b' ? '245, 158, 11' : '236, 72, 153'}, 0.2)`
+                      : `0 12px 40px ${item.color}18`,
                   }}
                 />
                 </div>
