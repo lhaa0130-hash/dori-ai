@@ -69,12 +69,61 @@ export default function AdminVisitorChart() {
         });
       }
     } else if (period === "weekly") {
-      // 최근 4주 (간단하게 주차별 합계 시뮬레이션)
+      // 최근 4주 데이터 생성
       for (let i = 3; i >= 0; i--) {
-        result.push({ name: `${i === 0 ? '이번주' : i + '주 전'}`, count: 0 }); 
+        const weekStart = new Date(today);
+        weekStart.setDate(today.getDate() - (i * 7) - (today.getDay() || 7) + 1); // 월요일 기준
+        
+        let weekCount = 0;
+        for (let j = 0; j < 7; j++) {
+          const d = new Date(weekStart);
+          d.setDate(weekStart.getDate() + j);
+          const key = d.toISOString().split("T")[0];
+          weekCount += history[key] || 0;
+        }
+        
+        const weekLabel = i === 0 
+          ? '이번주' 
+          : `${weekStart.getMonth() + 1}/${weekStart.getDate()}주`;
+        result.push({ name: weekLabel, count: weekCount });
       }
-    } 
-    // ... 월간/연간 로직 확장 가능
+    } else if (period === "monthly") {
+      // 최근 6개월 데이터 생성
+      for (let i = 5; i >= 0; i--) {
+        const monthDate = new Date(today.getFullYear(), today.getMonth() - i, 1);
+        const monthKey = `${monthDate.getFullYear()}-${String(monthDate.getMonth() + 1).padStart(2, '0')}`;
+        
+        let monthCount = 0;
+        for (const [dateStr, count] of Object.entries(history)) {
+          if (dateStr.startsWith(monthKey)) {
+            monthCount += count;
+          }
+        }
+        
+        result.push({
+          name: `${monthDate.getMonth() + 1}월`,
+          count: monthCount
+        });
+      }
+    } else if (period === "yearly") {
+      // 최근 5년 데이터 생성
+      const currentYear = today.getFullYear();
+      for (let i = 4; i >= 0; i--) {
+        const year = currentYear - i;
+        let yearCount = 0;
+        
+        for (const [dateStr, count] of Object.entries(history)) {
+          if (dateStr.startsWith(String(year))) {
+            yearCount += count;
+          }
+        }
+        
+        result.push({
+          name: `${year}년`,
+          count: yearCount
+        });
+      }
+    }
 
     return result;
   };
@@ -101,8 +150,9 @@ export default function AdminVisitorChart() {
         </h3>
         <div className="flex gap-2">
           <button onClick={() => setPeriod("daily")} className={btnClass(period === "daily")}>{t.daily.ko}</button>
-          {/* 주간/월간 등은 데이터가 충분히 쌓여야 의미가 있으므로 일단 UI만 둡니다 */}
-          {/* <button onClick={() => setPeriod("weekly")} className={btnClass(period === "weekly")}>{t.weekly.ko}</button> */}
+          <button onClick={() => setPeriod("weekly")} className={btnClass(period === "weekly")}>{t.weekly.ko}</button>
+          <button onClick={() => setPeriod("monthly")} className={btnClass(period === "monthly")}>{t.monthly.ko}</button>
+          <button onClick={() => setPeriod("yearly")} className={btnClass(period === "yearly")}>{t.yearly.ko}</button>
         </div>
       </div>
 

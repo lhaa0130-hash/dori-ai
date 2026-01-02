@@ -6,10 +6,10 @@ import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { TEXTS } from "@/constants/texts";
 import AdminStats from "@/components/admin/AdminStats";
-import AdminRecentCommunity, { CommunityPost } from "@/components/admin/AdminRecentCommunity";
 import AdminRecentSuggestions, { SuggestionItem } from "@/components/admin/AdminRecentSuggestions";
 import AdminSystemNotes from "@/components/admin/AdminSystemNotes";
 import AdminVisitorChart from "@/components/admin/AdminVisitorChart";
+import AdminVisitorsList from "@/components/admin/AdminVisitorsList";
 
 const ADMIN_EMAILS = [
   "admin@dori.ai", 
@@ -22,9 +22,8 @@ export default function AdminClient() {
   const router = useRouter();
   const { theme } = useTheme();
   const t = TEXTS.admin;
-  const [communityPosts, setCommunityPosts] = useState<CommunityPost[]>([]);
   const [suggestions, setSuggestions] = useState<SuggestionItem[]>([]);
-  const [visitorStats, setVisitorStats] = useState({ today: 0, total: 0 });
+  const [visitorStats, setVisitorStats] = useState({ today: 0, weekly: 0, monthly: 0, total: 0 });
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [mounted, setMounted] = useState(false);
   const MARKET_ITEMS_COUNT = 9;
@@ -54,61 +53,6 @@ export default function AdminClient() {
   useEffect(() => {
     if (!isAuthorized) return;
     
-    // 커뮤니티 게시글: 두 키 모두 확인 (dori_community_posts와 dori_posts)
-    const communityPostsData = localStorage.getItem("dori_community_posts");
-    const postsData = localStorage.getItem("dori_posts");
-    
-    let allPosts: any[] = [];
-    
-    // dori_community_posts 데이터 처리
-    if (communityPostsData) {
-      try {
-        const parsed = JSON.parse(communityPostsData);
-        const converted = parsed.map((p: any) => ({
-          id: p.id,
-          nickname: p.nickname || p.author || "익명",
-          title: p.title,
-          content: p.content || "",
-          tag: p.tag || "잡담",
-          likes: p.likes || 0,
-          createdAt: p.createdAt || p.date || new Date().toISOString(),
-        }));
-        allPosts = [...allPosts, ...converted];
-      } catch (e) {
-        console.error("Error parsing dori_community_posts:", e);
-      }
-    }
-    
-    // dori_posts 데이터 처리 (더 일반적으로 사용되는 키)
-    if (postsData) {
-      try {
-        const parsed = JSON.parse(postsData);
-        const converted = parsed.map((p: any) => ({
-          id: p.id,
-          nickname: p.author || p.nickname || "익명",
-          title: p.title,
-          content: p.content || "",
-          tag: p.tag || "잡담",
-          likes: p.likes || p.sparks || 0,
-          createdAt: p.createdAt || (p.date ? new Date(p.date).toISOString() : new Date().toISOString()),
-        }));
-        allPosts = [...allPosts, ...converted];
-      } catch (e) {
-        console.error("Error parsing dori_posts:", e);
-      }
-    }
-    
-    // 중복 제거 (id 기준) 및 정렬
-    const uniquePosts = Array.from(
-      new Map(allPosts.map(p => [p.id, p])).values()
-    ).sort((a: any, b: any) => {
-      const dateA = new Date(a.createdAt).getTime();
-      const dateB = new Date(b.createdAt).getTime();
-      return dateB - dateA;
-    });
-    
-    setCommunityPosts(uniquePosts);
-    
     // 제안 데이터
     const savedSuggestions = localStorage.getItem("dori_suggestions");
     if (savedSuggestions) {
@@ -125,11 +69,157 @@ export default function AdminClient() {
       }
     }
 
-    // 방문자 통계 - 실시간 업데이트를 위해 함수로 분리
+    // 방문자 통계 - 실제 방문자 목록을 기반으로 계산 (정확도 향상)
     const updateVisitorStats = () => {
-      const today = parseInt(localStorage.getItem("dori_daily_visitors") || "0", 10);
-      const total = parseInt(localStorage.getItem("dori_total_visitors") || "0", 10);
-      setVisitorStats({ today, total });
+      const now = new Date();
+      const todayKey = now.toISOString().split("T")[0]; // YYYY-MM-DD
+      
+      // 실제 방문자 목록 가져오기 (IP 정보가 있는 실제 방문자)
+      let visitorsList: any[] = [];
+      try {
+        const visitorsData = localStorage.getItem("dori_visitors_list");
+        if (visitorsData) {
+          visitorsList = JSON.parse(visitorsData);
+          if (!Array.isArray(visitorsList)) {
+            visitorsList = [];
+          }
+        }
+      } catch (e) {
+        console.error("방문자 목록 파싱 오류:", e);
+        visitorsList = [];
+      }
+      
+      // 히스토리 데이터도 함께 사용 (API 호출 실패 시 대비)
+      const history = JSON.parse(localStorage.getItem("dori_visitor_history") || "{}");
+      const storedTotal = parseInt(localStorage.getItem("dori_total_visitors") || "0", 10);
+      
+      // 오늘 방문자: 실제 목록에서 오늘 날짜로 필터링
+      const todayVisitors = visitorsList.filter(v => {
+        try {
+          if (!v || !v.timestamp) return false;
+          const visitorDate = new Date(v.timestamp).toISOString().split("T")[0];
+          return visitorDate === todayKey;
+        } catch (e) {
+          return false;
+        }
+      });
+      // 오늘 방문자 수는 무조건 실제 목록 개수 사용 (목록과 일치시키기 위해)
+      const finalToday = todayVisitors.length;
+      
+      // 주간 방문자: 최근 7일 방문자 (중복 IP 제거)
+      const weekAgo = new Date(now);
+      weekAgo.setDate(now.getDate() - 7);
+      weekAgo.setHours(0, 0, 0, 0);
+      
+      const weeklyVisitors = visitorsList.filter(v => {
+        try {
+          if (!v || !v.timestamp) return false;
+          const visitorDate = new Date(v.timestamp);
+          return visitorDate >= weekAgo;
+        } catch (e) {
+          return false;
+        }
+      });
+      
+      // 주간 방문자 수 (중복 IP 제거)
+      const weeklyUniqueIPs = new Set(weeklyVisitors.map(v => v?.ip).filter(Boolean));
+      let weekly = weeklyUniqueIPs.size;
+      
+      // 월간 방문자: 이번 달 방문자 (중복 IP 제거)
+      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+      monthStart.setHours(0, 0, 0, 0);
+      
+      const monthlyVisitors = visitorsList.filter(v => {
+        try {
+          if (!v || !v.timestamp) return false;
+          const visitorDate = new Date(v.timestamp);
+          return visitorDate >= monthStart;
+        } catch (e) {
+          return false;
+        }
+      });
+      
+      // 월간 방문자 수 (중복 IP 제거)
+      const monthlyUniqueIPs = new Set(monthlyVisitors.map(v => v?.ip).filter(Boolean));
+      let monthly = monthlyUniqueIPs.size;
+      
+      // 누적 방문자: 전체 목록의 고유 IP 수
+      const totalUniqueIPs = new Set(visitorsList.map(v => v?.ip).filter(Boolean));
+      let total = totalUniqueIPs.size;
+      
+      // 히스토리 기반 백업 계산 (주간/월간/누적만 사용, 오늘은 제외)
+      let weeklyFromHistory = 0;
+      for (let i = 0; i < 7; i++) {
+        const d = new Date(now);
+        d.setDate(now.getDate() - i);
+        d.setHours(0, 0, 0, 0);
+        const key = d.toISOString().split("T")[0];
+        weeklyFromHistory += history[key] || 0;
+      }
+      
+      // 주간/월간/누적은 히스토리와 비교하여 더 큰 값 사용 (오늘 제외)
+      const finalWeekly = Math.max(weekly, weeklyFromHistory);
+      
+      // 월간은 히스토리에서 계산
+      let monthlyFromHistory = 0;
+      for (const [dateStr, count] of Object.entries(history)) {
+        if (dateStr && dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
+          try {
+            const [year, month, day] = dateStr.split('-').map(Number);
+            const date = new Date(year, month - 1, day);
+            date.setHours(0, 0, 0, 0);
+            if (date >= monthStart) {
+              monthlyFromHistory += (count as number);
+            }
+          } catch (e) {
+            // 무시
+          }
+        }
+      }
+      const finalMonthly = Math.max(monthly, monthlyFromHistory);
+      
+      // 누적은 localStorage 값과 비교하여 더 큰 값 사용
+      let historyTotal = 0;
+      for (const count of Object.values(history)) {
+        if (typeof count === 'number') {
+          historyTotal += count;
+        }
+      }
+      const finalTotal = Math.max(total, storedTotal, historyTotal);
+      
+      // 논리 검증: 누적 >= 월간 >= 주간 >= 오늘
+      let validatedToday = finalToday;
+      let validatedWeekly = Math.max(finalWeekly, validatedToday);
+      let validatedMonthly = Math.max(finalMonthly, validatedWeekly);
+      let validatedTotal = Math.max(finalTotal, validatedMonthly);
+      
+      console.log('방문자 통계 계산:', {
+        '실제 목록 기반': {
+          today: finalToday,
+          weekly,
+          monthly,
+          total,
+        },
+        '히스토리 기반': {
+          weeklyFromHistory,
+          monthlyFromHistory,
+          historyTotal,
+        },
+        '최종 결과': {
+          validatedToday,
+          validatedWeekly,
+          validatedMonthly,
+          validatedTotal,
+        },
+        '목록 개수': visitorsList.length,
+      });
+      
+      setVisitorStats({ 
+        today: validatedToday, 
+        weekly: validatedWeekly, 
+        monthly: validatedMonthly, 
+        total: validatedTotal 
+      });
     };
     
     updateVisitorStats();
@@ -251,14 +341,14 @@ export default function AdminClient() {
 
         {/* 컨텐츠 섹션 */}
         <section className="container max-w-7xl mx-auto px-4 md:px-6 pb-24 relative z-10">
-          <AdminStats stats={{ todayVisitors: visitorStats.today, totalVisitors: visitorStats.total, community: communityPosts.length, suggestions: suggestions.length, academy: ACADEMY_ITEMS_COUNT, market: MARKET_ITEMS_COUNT }} />
+          <AdminStats stats={{ todayVisitors: visitorStats.today, weeklyVisitors: visitorStats.weekly, monthlyVisitors: visitorStats.monthly, totalVisitors: visitorStats.total, community: 0, suggestions: suggestions.length, academy: ACADEMY_ITEMS_COUNT, market: MARKET_ITEMS_COUNT }} />
           <div className="mb-8"><AdminVisitorChart /></div>
+          <div className="mb-8"><AdminVisitorsList /></div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
             <div className="flex flex-col gap-6">
-              <AdminRecentCommunity posts={communityPosts.slice(0, 5)} />
+              <AdminRecentSuggestions suggestions={suggestions.slice(0, 5)} />
             </div>
             <div className="flex flex-col gap-6">
-              <AdminRecentSuggestions suggestions={suggestions.slice(0, 5)} />
               <AdminSystemNotes />
             </div>
           </div>

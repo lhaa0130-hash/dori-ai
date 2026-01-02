@@ -134,6 +134,8 @@ export const TEXTS = {
       academyCount: { ko: "Academy 강의 수", en: "Academy Lessons" },
       marketCount: { ko: "Market 상품 수", en: "Market Items" },
       todayVisitors: { ko: "오늘 방문자", en: "Today's Visitors" },
+      weeklyVisitors: { ko: "주간 방문자", en: "Weekly Visitors" },
+      monthlyVisitors: { ko: "월간 방문자", en: "Monthly Visitors" },
       totalVisitors: { ko: "누적 방문자", en: "Total Visitors" }
     },
     sections: {

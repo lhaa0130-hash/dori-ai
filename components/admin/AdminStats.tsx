@@ -11,6 +11,8 @@ interface AdminStatsProps {
     academy: number;
     market: number;
     todayVisitors: number;
+    weeklyVisitors: number;
+    monthlyVisitors: number;
     totalVisitors: number;
   };
 }
@@ -26,6 +28,8 @@ export default function AdminStats({ stats }: AdminStatsProps) {
 
   const statItems = [
     { title: t.todayVisitors.ko, count: stats.todayVisitors, icon: "🔥", gradient: "from-orange-500 to-red-500" },
+    { title: t.weeklyVisitors.ko, count: stats.weeklyVisitors, icon: "📅", gradient: "from-blue-500 to-indigo-500" },
+    { title: t.monthlyVisitors.ko, count: stats.monthlyVisitors, icon: "📊", gradient: "from-purple-500 to-pink-500" },
     { title: t.totalVisitors.ko, count: stats.totalVisitors, icon: "👥", gradient: "from-indigo-500 to-purple-500" },
     { title: t.communityCount.ko, count: stats.community, icon: "💬", gradient: "from-blue-500 to-cyan-500" },
     { title: t.suggestionsCount.ko, count: stats.suggestions, icon: "📫", gradient: "from-red-500 to-pink-500" },
@@ -34,7 +38,7 @@ export default function AdminStats({ stats }: AdminStatsProps) {
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-3 gap-4 mb-8">
+    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
       {statItems.map((item, idx) => (
         <div 
           key={idx} 
