@@ -99,3 +99,5 @@ npm run build
 - Google OAuth 리디렉션 URI 확인
 - `NEXTAUTH_SECRET` 설정 확인
 
+
+
