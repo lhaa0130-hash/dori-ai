@@ -207,7 +207,7 @@ export default function AiToolsClient() {
       </div>
 
       {/* 히어로 섹션 */}
-      <section className="relative pt-20 pb-8 sm:pb-12 px-4 sm:px-6 xl:pl-10 text-center overflow-hidden">
+      <section className="relative pt-20 sm:pt-24 pb-8 sm:pb-12 px-4 sm:px-6 xl:pl-10 text-center overflow-hidden">
         <div className="max-w-4xl mx-auto animate-[fadeInUp_0.8s_ease-out_forwards]">
           <h1 
             className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 tracking-tight leading-tight px-2"
@@ -255,21 +255,50 @@ export default function AiToolsClient() {
       </section>
 
       {/* 모바일/태블릿 카테고리 필터 (상단) */}
-      <div className="lg:hidden sticky top-[70px] z-40 bg-inherit border-b mb-4" style={{ borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)' }}>
-        <div className="overflow-x-auto scrollbar-hide px-4 py-3">
-          <div className="flex gap-2 min-w-max">
+      <div 
+        className="lg:hidden sticky top-[70px] z-[99] mb-4"
+        style={{ 
+          borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)',
+          borderBottom: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
+          backgroundColor: isDark ? 'rgba(0, 0, 0, 0.95)' : 'rgba(255, 255, 255, 0.98)',
+          backdropFilter: 'blur(20px) saturate(180%)',
+          WebkitBackdropFilter: 'blur(20px) saturate(180%)',
+        }}
+      >
+        <div className="relative overflow-x-auto scrollbar-hide">
+          {/* 좌측 그라데이션 인디케이터 */}
+          <div 
+            className="absolute left-0 top-0 bottom-0 w-8 z-10 pointer-events-none"
+            style={{
+              background: `linear-gradient(to right, ${isDark ? 'rgba(0, 0, 0, 0.95)' : 'rgba(255, 255, 255, 0.98)'}, transparent)`,
+            }}
+          />
+          {/* 우측 그라데이션 인디케이터 */}
+          <div 
+            className="absolute right-0 top-0 bottom-0 w-8 z-10 pointer-events-none"
+            style={{
+              background: `linear-gradient(to left, ${isDark ? 'rgba(0, 0, 0, 0.95)' : 'rgba(255, 255, 255, 0.98)'}, transparent)`,
+            }}
+          />
+          <div className="flex gap-2.5 min-w-max px-4 py-3.5">
             {DISPLAY_CATEGORIES.map((cat) => (
               <button
                 key={cat}
                 onClick={() => handleCategoryClick(cat)}
-                className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
-                  activeCategory === cat ? 'opacity-100' : 'opacity-60'
+                className={`px-4 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition-all min-h-[44px] flex items-center ${
+                  activeCategory === cat ? 'opacity-100 scale-105' : 'opacity-70'
                 }`}
                 style={{
                   backgroundColor: activeCategory === cat 
-                    ? (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)')
-                    : 'transparent',
+                    ? (isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.08)')
+                    : (isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)'),
                   color: isDark ? '#ffffff' : '#000000',
+                  border: `1px solid ${activeCategory === cat 
+                    ? (isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)')
+                    : 'transparent'}`,
+                  boxShadow: activeCategory === cat 
+                    ? (isDark ? '0 2px 8px rgba(255, 255, 255, 0.1)' : '0 2px 8px rgba(0, 0, 0, 0.05)')
+                    : 'none',
                 }}
               >
                 {CATEGORY_LABELS[cat] || cat.toUpperCase()}

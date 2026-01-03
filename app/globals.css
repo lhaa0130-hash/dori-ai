@@ -4,12 +4,17 @@
 html {
   scroll-snap-type: y mandatory !important;
   scroll-behavior: smooth !important;
-  overflow-y: scroll !important;
+  overflow-y: auto !important;
+  height: 100%;
 }
 
 body {
   scroll-snap-type: y mandatory !important;
   scroll-behavior: smooth !important;
+  overflow: hidden !important;
+  height: 100%;
+  margin: 0;
+  padding: 0;
 }
 
 /* 모바일 최적화 */

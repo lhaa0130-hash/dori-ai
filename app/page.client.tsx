@@ -173,8 +173,6 @@ export default function PremiumDesignPage() {
         backgroundColor: isDark ? '#000000' : '#ffffff',
         fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
         scrollSnapType: isScrolling ? 'none' : 'y mandatory',
-        overflowY: 'scroll',
-        height: '100vh',
       }}
     >
       {/* 좌측 사이드바 네비게이션 */}

@@ -1,4 +1,4 @@
-Title :구글 gemini 3 Sets New Benchmark for Cognitive Intelligence with IQ 130 Achievement  
+title : 구글 gemini 3 Sets New Benchmark for Cognitive Intelligence with IQ 130 Achievement  
 description: 구글의 AI 모델 Gemini 3가 IQ 130을 기록하며 인공지능 인지 능력의 새로운 기준을 제시했다. 이 성과는 AI의 고도화와 관련 산업의 생산성 향상에 기여할 것으로 보인다.  
 date: 2026-01-03
 author: DORI-AI  
