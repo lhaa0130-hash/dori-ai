@@ -122,21 +122,25 @@ export default function AiToolsClient() {
         style={{
           top: '50%',
           transform: 'translateY(-50%)',
+          maxHeight: '90vh',
+          overflowY: 'auto',
+          overflowX: 'hidden',
         }}
       >
-        <nav className="ml-8">
+        <nav className="ml-4 lg:ml-8">
           <div 
-            className="flex flex-col gap-3 p-4 rounded-2xl backdrop-blur-xl transition-all duration-500"
+            className="flex flex-col gap-2 lg:gap-3 p-3 lg:p-4 rounded-2xl backdrop-blur-xl transition-all duration-500"
             style={{
               backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
               border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
+              maxHeight: 'calc(90vh - 20px)',
             }}
           >
             {DISPLAY_CATEGORIES.map((cat) => (
               <a
                 key={cat}
                 href={`#category-${cat}`}
-                className="group relative flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 cursor-pointer"
+                className="group relative flex items-center gap-2 lg:gap-3 px-2 lg:px-3 py-1.5 lg:py-2 rounded-xl transition-all duration-300 cursor-pointer whitespace-nowrap"
                 style={{
                   backgroundColor: activeCategory === cat 
                     ? (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)')
@@ -148,7 +152,7 @@ export default function AiToolsClient() {
                 }}
               >
                 <div 
-                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
+                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 flex-shrink-0 ${
                     activeCategory === cat ? 'scale-150' : 'scale-100'
                   }`}
                   style={{
@@ -158,7 +162,7 @@ export default function AiToolsClient() {
                   }}
                 />
                 <span 
-                  className="text-xs font-medium transition-all duration-300"
+                  className="text-[10px] lg:text-xs font-medium transition-all duration-300"
                   style={{
                     color: activeCategory === cat 
                       ? (isDark ? '#ffffff' : '#000000')
@@ -180,7 +184,7 @@ export default function AiToolsClient() {
         style={{
           top: '50%',
           transform: 'translateY(-50%)',
-          width: '180px',
+          width: '120px',
         }}
       />
 
@@ -203,10 +207,10 @@ export default function AiToolsClient() {
       </div>
 
       {/* 히어로 섹션 */}
-      <section className="relative pt-20 pb-12 px-6 lg:pl-10 text-center overflow-hidden">
+      <section className="relative pt-20 pb-8 sm:pb-12 px-4 sm:px-6 xl:pl-10 text-center overflow-hidden">
         <div className="max-w-4xl mx-auto animate-[fadeInUp_0.8s_ease-out_forwards]">
           <h1 
-            className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 tracking-tight leading-tight px-2"
             style={{ 
               color: isDark ? '#ffffff' : '#1d1d1f',
               fontWeight: 700,
@@ -218,7 +222,7 @@ export default function AiToolsClient() {
           
           {/* 그라데이션 바 */}
           <div 
-            className="w-full max-w-2xl mx-auto h-1 md:h-1.5 mb-6 rounded-full overflow-hidden"
+            className="w-full max-w-2xl mx-auto h-1 sm:h-1.5 mb-4 sm:mb-6 rounded-full overflow-hidden"
             style={{
               boxShadow: isDark 
                 ? '0 0 30px rgba(96, 165, 250, 0.4), 0 4px 20px rgba(96, 165, 250, 0.2)'
@@ -238,7 +242,7 @@ export default function AiToolsClient() {
           </div>
 
           <p 
-            className="text-lg md:text-xl font-medium opacity-70 break-keep leading-relaxed"
+            className="text-base sm:text-lg md:text-xl font-medium opacity-70 break-keep leading-relaxed px-4"
             style={{ 
               color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
               fontWeight: 500,
@@ -250,8 +254,33 @@ export default function AiToolsClient() {
         </div>
       </section>
 
+      {/* 모바일/태블릿 카테고리 필터 (상단) */}
+      <div className="lg:hidden sticky top-[70px] z-40 bg-inherit border-b mb-4" style={{ borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)' }}>
+        <div className="overflow-x-auto scrollbar-hide px-4 py-3">
+          <div className="flex gap-2 min-w-max">
+            {DISPLAY_CATEGORIES.map((cat) => (
+              <button
+                key={cat}
+                onClick={() => handleCategoryClick(cat)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
+                  activeCategory === cat ? 'opacity-100' : 'opacity-60'
+                }`}
+                style={{
+                  backgroundColor: activeCategory === cat 
+                    ? (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)')
+                    : 'transparent',
+                  color: isDark ? '#ffffff' : '#000000',
+                }}
+              >
+                {CATEGORY_LABELS[cat] || cat.toUpperCase()}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* 메인 콘텐츠 */}
-      <div className="container max-w-7xl mx-auto px-4 md:px-6 pb-24 relative lg:pl-10">
+      <div className="container max-w-7xl mx-auto px-4 sm:px-6 pb-16 sm:pb-24 relative lg:pl-10">
         <AiToolsList filters={filters} sectionRefs={sectionRefs} />
       </div>
 

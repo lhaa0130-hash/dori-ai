@@ -12,6 +12,46 @@ body {
   scroll-behavior: smooth !important;
 }
 
+/* 모바일 최적화 */
+@media (max-width: 640px) {
+  html {
+    font-size: 14px;
+  }
+  
+  /* 터치 타겟 최소 크기 */
+  button, a, input, select, textarea {
+    min-height: 44px;
+    min-width: 44px;
+  }
+  
+  /* 작은 버튼 예외 */
+  button.text-xs, a.text-xs {
+    min-height: 36px;
+    min-width: 36px;
+  }
+}
+
+/* 모바일에서 스크롤 스냅 완화 */
+@media (max-width: 1024px) {
+  html {
+    scroll-snap-type: y proximity;
+  }
+  
+  body {
+    scroll-snap-type: y proximity;
+  }
+}
+
+/* 스크롤바 숨기기 유틸리티 */
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
 
 
 @layer base {

@@ -13,6 +13,7 @@ export default function Header() {
   const pathname = usePathname(); 
   const [mounted, setMounted] = useState(false);
   const [displayName, setDisplayName] = useState<string>("");
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   
   // 🌍 언어 상태 제거, 한국어(.ko) 고정
   const t = TEXTS.nav;
@@ -33,6 +34,18 @@ export default function Header() {
     }
   }, [user?.email, user?.name]);
 
+  // 모바일 메뉴 열릴 때 body 스크롤 방지
+  useEffect(() => {
+    if (mobileMenuOpen) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = '';
+    }
+    return () => {
+      document.body.style.overflow = '';
+    };
+  }, [mobileMenuOpen]);
+
   const isActive = (path: string) => pathname.startsWith(path) ? "active" : "";
 
   if (!mounted) return <header className="header-wrapper" />; 
@@ -48,48 +61,163 @@ export default function Header() {
           </div>
 
           <nav className="nav-area desktop-only">
-            <Link href="/ai-tools" className={`nav-link ${isActive('/ai-tools')}`}>AI TOOLS</Link>
-            <Link href="/insight" className={`nav-link ${isActive('/insight')}`}>INSIGHT</Link>
-            <Link href="/project" className={`nav-link ${isActive('/project')}`}>PROJECT</Link>
-            <Link href="/community" className={`nav-link ${isActive('/community')}`}>COMMUNITY</Link>
-            <Link href="/market" className={`nav-link ${isActive('/market')}`}>MARKET</Link>
+            <div className="nav-scroll-container">
+              <Link href="/ai-tools" className={`nav-link ${isActive('/ai-tools')}`}>AI TOOLS</Link>
+              <Link href="/insight" className={`nav-link ${isActive('/insight')}`}>INSIGHT</Link>
+              <Link href="/project" className={`nav-link ${isActive('/project')}`}>PROJECT</Link>
+              <Link href="/community" className={`nav-link ${isActive('/community')}`}>COMMUNITY</Link>
+              <Link href="/market" className={`nav-link ${isActive('/market')}`}>MARKET</Link>
+            </div>
           </nav>
 
           <div className="right-area">
             <div className="user-area">
               <ThemeToggle />
               {!user ? (
-                <Link href="/login" className="login-btn desktop-only">{t.login.ko}</Link>
+                <Link href="/login" className="login-btn">{t.login.ko}</Link>
               ) : (
-                <div className="profile-dropdown-container desktop-only">
-                  <button className="profile-pill-btn">
-                    <div className="avatar-circle">{displayName?.[0]?.toUpperCase() || "U"}</div>
-                    <span className="user-name-text">{displayName}</span>
-                    <span className="dropdown-icon">▼</span>
-                  </button>
-                  <div className="dropdown-menu">
-                    <div className="menu-header-section">
-                      <div className="user-info-group">
-                        <div className="user-email">{user.email || "user@dori.ai"}</div>
-                        <div className="user-role-badge">Creator</div>
+                <>
+                  <div className="profile-dropdown-container desktop-only">
+                    <button className="profile-pill-btn">
+                      <div className="avatar-circle">{displayName?.[0]?.toUpperCase() || "U"}</div>
+                      <span className="user-name-text">{displayName}</span>
+                      <span className="dropdown-icon">▼</span>
+                    </button>
+                    <div className="dropdown-menu">
+                      <div className="menu-header-section">
+                        <div className="user-info-group">
+                          <div className="user-email">{user.email || "user@dori.ai"}</div>
+                          <div className="user-role-badge">Creator</div>
+                        </div>
+                      </div>
+                      <div className="menu-divider-line"></div>
+                      <div className="menu-actions">
+                        <Link href="/my" className="menu-action-item">
+                          <span className="menu-icon">👤</span>
+                          <span>{t.myPage.ko}</span>
+                        </Link>
+                        <button onClick={() => signOut({ callbackUrl: "/" })} className="menu-action-item danger">
+                          <span className="menu-icon">🚪</span>
+                          <span>{t.logout.ko}</span>
+                        </button>
                       </div>
                     </div>
-                    <div className="menu-divider-line"></div>
-                    <div className="menu-actions">
-                      <Link href="/my" className="menu-action-item">
+                  </div>
+                  {/* 모바일 프로필 버튼 */}
+                  <button 
+                    className="mobile-profile-btn mobile-only"
+                    onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                  >
+                    <div className="avatar-circle">{displayName?.[0]?.toUpperCase() || "U"}</div>
+                  </button>
+                </>
+              )}
+              {/* 모바일 햄버거 메뉴 버튼 */}
+              <button 
+                className="mobile-menu-btn mobile-only"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+                aria-label="메뉴 열기"
+              >
+                <span className={`hamburger-line ${mobileMenuOpen ? 'open' : ''}`}></span>
+                <span className={`hamburger-line ${mobileMenuOpen ? 'open' : ''}`}></span>
+                <span className={`hamburger-line ${mobileMenuOpen ? 'open' : ''}`}></span>
+              </button>
+            </div>
+          </div>
+
+          {/* 모바일 메뉴 오버레이 */}
+          {mobileMenuOpen && (
+            <div 
+              className="mobile-menu-overlay"
+              onClick={() => setMobileMenuOpen(false)}
+            >
+              <div 
+                className="mobile-menu-content"
+                onClick={(e) => e.stopPropagation()}
+              >
+                <div className="mobile-menu-header">
+                  <div className="logo-text">DORI-AI</div>
+                  <button 
+                    className="mobile-menu-close"
+                    onClick={() => setMobileMenuOpen(false)}
+                    aria-label="메뉴 닫기"
+                  >
+                    ✕
+                  </button>
+                </div>
+                
+                <nav className="mobile-nav">
+                  <Link 
+                    href="/ai-tools" 
+                    className={`mobile-nav-link ${isActive('/ai-tools')}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    AI TOOLS
+                  </Link>
+                  <Link 
+                    href="/insight" 
+                    className={`mobile-nav-link ${isActive('/insight')}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    INSIGHT
+                  </Link>
+                  <Link 
+                    href="/project" 
+                    className={`mobile-nav-link ${isActive('/project')}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    PROJECT
+                  </Link>
+                  <Link 
+                    href="/community" 
+                    className={`mobile-nav-link ${isActive('/community')}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    COMMUNITY
+                  </Link>
+                  <Link 
+                    href="/market" 
+                    className={`mobile-nav-link ${isActive('/market')}`}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    MARKET
+                  </Link>
+                </nav>
+
+                {user && (
+                  <div className="mobile-user-section">
+                    <div className="mobile-user-info">
+                      <div className="avatar-circle">{displayName?.[0]?.toUpperCase() || "U"}</div>
+                      <div>
+                        <div className="user-name-text">{displayName}</div>
+                        <div className="user-email">{user.email || "user@dori.ai"}</div>
+                      </div>
+                    </div>
+                    <div className="mobile-menu-actions">
+                      <Link 
+                        href="/my" 
+                        className="mobile-menu-action-item"
+                        onClick={() => setMobileMenuOpen(false)}
+                      >
                         <span className="menu-icon">👤</span>
                         <span>{t.myPage.ko}</span>
                       </Link>
-                      <button onClick={() => signOut({ callbackUrl: "/" })} className="menu-action-item danger">
+                      <button 
+                        onClick={() => {
+                          signOut({ callbackUrl: "/" });
+                          setMobileMenuOpen(false);
+                        }} 
+                        className="mobile-menu-action-item danger"
+                      >
                         <span className="menu-icon">🚪</span>
                         <span>{t.logout.ko}</span>
                       </button>
                     </div>
                   </div>
-                </div>
-              )}
+                )}
+              </div>
             </div>
-          </div>
+          )}
         </div>
       </header>
 
@@ -120,11 +248,16 @@ export default function Header() {
           max-width: 1280px; 
           margin: 0 auto; 
           height: 100%; 
-          padding: 0 24px; 
+          padding: 0 16px; 
           display: flex; 
           align-items: center; 
           justify-content: space-between; 
           position: relative;
+        }
+        @media (min-width: 768px) {
+          .header-inner {
+            padding: 0 24px;
+          }
         }
         .logo-area {
           flex: 0 0 auto;
@@ -143,17 +276,55 @@ export default function Header() {
           position: absolute;
           left: 50%;
           transform: translateX(-50%);
+          width: 100%;
+          max-width: calc(100% - 200px);
+          display: flex;
+          justify-content: center;
+        }
+        .nav-scroll-container {
           display: flex; 
-          gap: 32px; 
+          gap: 12px;
+          overflow-x: auto;
+          overflow-y: hidden;
+          scrollbar-width: none;
+          -ms-overflow-style: none;
+          padding: 0 8px;
+        }
+        .nav-scroll-container::-webkit-scrollbar {
+          display: none;
+        }
+        @media (min-width: 768px) {
+          .nav-scroll-container {
+            gap: 20px;
+          }
+        }
+        @media (min-width: 1024px) {
+          .nav-scroll-container {
+            gap: 32px;
+          }
         }
         .nav-link { 
-          font-size: 14px; 
+          font-size: 12px;
           font-weight: 500; 
           letter-spacing: -0.01em;
           position: relative; 
-          padding: 8px 0; 
+          padding: 8px 4px; 
           transition: all 0.2s ease;
           text-decoration: none;
+          white-space: nowrap;
+          flex-shrink: 0;
+          min-width: fit-content;
+        }
+        @media (min-width: 768px) {
+          .nav-link {
+            font-size: 13px;
+            padding: 8px 0;
+          }
+        }
+        @media (min-width: 1024px) {
+          .nav-link {
+            font-size: 14px;
+          }
         }
         :global(.dark) .nav-link {
           color: rgba(255, 255, 255, 0.7);
@@ -194,13 +365,20 @@ export default function Header() {
           flex-shrink: 0;
         }
         .login-btn { 
-          padding: 8px 20px; 
+          padding: 8px 16px; 
           border-radius: 20px; 
           font-size: 14px; 
           font-weight: 500; 
           letter-spacing: -0.01em;
           transition: all 0.2s ease;
           text-decoration: none;
+          white-space: nowrap;
+        }
+        @media (max-width: 640px) {
+          .login-btn {
+            padding: 8px 12px;
+            font-size: 13px;
+          }
         }
         :global(.dark) .login-btn {
           color: #ffffff;
@@ -425,6 +603,176 @@ export default function Header() {
         }
         .menu-action-item.danger:hover .menu-icon {
           opacity: 1;
+        }
+        /* 모바일 전용 스타일 */
+        .mobile-only {
+          display: none;
+        }
+        @media (max-width: 1023px) {
+          .desktop-only {
+            display: none !important;
+          }
+          .mobile-only {
+            display: block;
+          }
+        }
+        .mobile-menu-btn {
+          display: flex;
+          flex-direction: column;
+          gap: 5px;
+          padding: 8px;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+          z-index: 101;
+        }
+        .hamburger-line {
+          width: 24px;
+          height: 2px;
+          background: var(--text-main);
+          transition: all 0.3s ease;
+          border-radius: 2px;
+        }
+        .hamburger-line.open:nth-child(1) {
+          transform: rotate(45deg) translate(7px, 7px);
+        }
+        .hamburger-line.open:nth-child(2) {
+          opacity: 0;
+        }
+        .hamburger-line.open:nth-child(3) {
+          transform: rotate(-45deg) translate(7px, -7px);
+        }
+        .mobile-profile-btn {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          padding: 4px;
+          background: transparent;
+          border: none;
+          cursor: pointer;
+        }
+        .mobile-menu-overlay {
+          position: fixed;
+          top: 0;
+          left: 0;
+          right: 0;
+          bottom: 0;
+          background: rgba(0, 0, 0, 0.5);
+          backdrop-filter: blur(4px);
+          z-index: 1000;
+          animation: fadeIn 0.2s ease;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; }
+          to { opacity: 1; }
+        }
+        .mobile-menu-content {
+          position: fixed;
+          top: 0;
+          right: 0;
+          width: 85%;
+          max-width: 320px;
+          height: 100vh;
+          background: var(--bg-main);
+          box-shadow: -4px 0 24px rgba(0, 0, 0, 0.15);
+          display: flex;
+          flex-direction: column;
+          animation: slideIn 0.3s ease;
+          overflow-y: auto;
+        }
+        @keyframes slideIn {
+          from { transform: translateX(100%); }
+          to { transform: translateX(0); }
+        }
+        .mobile-menu-header {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 20px 16px;
+          border-bottom: 1px solid var(--card-border);
+        }
+        .mobile-menu-close {
+          width: 40px;
+          height: 40px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: transparent;
+          border: none;
+          font-size: 24px;
+          color: var(--text-main);
+          cursor: pointer;
+          border-radius: 8px;
+          transition: background 0.2s;
+        }
+        .mobile-menu-close:hover {
+          background: var(--card-border);
+        }
+        .mobile-nav {
+          display: flex;
+          flex-direction: column;
+          padding: 16px 0;
+        }
+        .mobile-nav-link {
+          padding: 16px 20px;
+          font-size: 16px;
+          font-weight: 500;
+          color: var(--text-main);
+          text-decoration: none;
+          border-bottom: 1px solid var(--card-border);
+          transition: background 0.2s;
+        }
+        .mobile-nav-link:active,
+        .mobile-nav-link.active {
+          background: var(--card-border);
+          color: var(--accent-color);
+        }
+        .mobile-user-section {
+          margin-top: auto;
+          padding: 20px 16px;
+          border-top: 1px solid var(--card-border);
+        }
+        .mobile-user-info {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 16px;
+        }
+        .mobile-user-info .avatar-circle {
+          width: 48px;
+          height: 48px;
+          font-size: 18px;
+        }
+        .mobile-menu-actions {
+          display: flex;
+          flex-direction: column;
+          gap: 8px;
+        }
+        .mobile-menu-action-item {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          padding: 14px 16px;
+          font-size: 15px;
+          font-weight: 500;
+          color: var(--text-main);
+          background: transparent;
+          border: 1px solid var(--card-border);
+          border-radius: 12px;
+          cursor: pointer;
+          transition: all 0.2s;
+          text-align: left;
+        }
+        .mobile-menu-action-item:active {
+          background: var(--card-border);
+          transform: scale(0.98);
+        }
+        .mobile-menu-action-item.danger {
+          color: #ef4444;
+          border-color: rgba(239, 68, 68, 0.3);
+        }
+        .mobile-menu-action-item.danger:active {
+          background: rgba(239, 68, 68, 0.1);
         }
       `}</style>
     </>

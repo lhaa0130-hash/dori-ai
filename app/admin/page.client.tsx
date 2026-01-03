@@ -290,10 +290,10 @@ export default function AdminClient() {
 
       <main className="w-full min-h-screen relative">
         {/* 히어로 섹션 */}
-        <section className="relative pt-20 pb-12 px-6 text-center overflow-hidden">
+        <section className="relative pt-20 pb-8 sm:pb-12 px-4 sm:px-6 text-center overflow-hidden">
           <div className="max-w-4xl mx-auto">
             <h1 
-              className="text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 tracking-tight leading-tight transition-all duration-1000"
+              className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 tracking-tight leading-tight transition-all duration-1000 px-2"
               style={{ 
                 color: isDark ? '#ffffff' : '#1d1d1f',
                 fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
@@ -306,7 +306,7 @@ export default function AdminClient() {
             
             {/* 그라데이션 바 */}
             <div 
-              className="w-full max-w-2xl mx-auto h-1 md:h-1.5 mb-6 rounded-full overflow-hidden"
+              className="w-full max-w-2xl mx-auto h-1 sm:h-1.5 mb-4 sm:mb-6 rounded-full overflow-hidden"
               style={{
                 boxShadow: isDark 
                   ? '0 0 30px rgba(96, 165, 250, 0.4), 0 4px 20px rgba(96, 165, 250, 0.2)'
@@ -326,7 +326,7 @@ export default function AdminClient() {
             </div>
             
             <p 
-              className="text-lg md:text-xl opacity-70 max-w-2xl mx-auto break-keep transition-all duration-1000"
+              className="text-base sm:text-lg md:text-xl opacity-70 max-w-2xl mx-auto break-keep transition-all duration-1000 px-4"
               style={{ 
                 color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
                 fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
@@ -340,11 +340,11 @@ export default function AdminClient() {
         </section>
 
         {/* 컨텐츠 섹션 */}
-        <section className="container max-w-7xl mx-auto px-4 md:px-6 pb-24 relative z-10">
+        <section className="container max-w-7xl mx-auto px-4 sm:px-6 pb-16 sm:pb-24 relative z-10">
           <AdminStats stats={{ todayVisitors: visitorStats.today, weeklyVisitors: visitorStats.weekly, monthlyVisitors: visitorStats.monthly, totalVisitors: visitorStats.total, community: 0, suggestions: suggestions.length, academy: ACADEMY_ITEMS_COUNT, market: MARKET_ITEMS_COUNT }} />
-          <div className="mb-8"><AdminVisitorChart /></div>
-          <div className="mb-8"><AdminVisitorsList /></div>
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
+          <div className="mb-6 sm:mb-8"><AdminVisitorChart /></div>
+          <div className="mb-6 sm:mb-8"><AdminVisitorsList /></div>
+          <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
             <div className="flex flex-col gap-6">
               <AdminRecentSuggestions suggestions={suggestions.slice(0, 5)} />
             </div>

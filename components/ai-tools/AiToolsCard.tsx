@@ -266,7 +266,7 @@ const AiToolsCard = React.memo(function AiToolsCard({ tool, rank }: AiToolsCardP
               e.stopPropagation();
               setIsOpen(!isOpen);
             }}
-            className="flex-1 px-3 py-2 rounded-lg text-xs font-bold border transition-all duration-200 hover:scale-105"
+            className="flex-1 px-3 py-2.5 sm:py-2 rounded-lg text-xs sm:text-sm font-bold border transition-all duration-200 hover:scale-105 active:scale-95 min-h-[44px] sm:min-h-0"
             style={{
               borderColor: "var(--card-border)",
               color: "var(--text-main)",
@@ -282,7 +282,7 @@ const AiToolsCard = React.memo(function AiToolsCard({ tool, rank }: AiToolsCardP
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className="flex-1 px-3 py-2 rounded-lg text-xs font-bold transition-all duration-200 hover:scale-105 shadow-md text-center"
+            className="flex-1 px-3 py-2.5 sm:py-2 rounded-lg text-xs sm:text-sm font-bold transition-all duration-200 hover:scale-105 active:scale-95 shadow-md text-center min-h-[44px] sm:min-h-0 flex items-center justify-center"
             style={{ 
               backgroundColor: "var(--text-main)", 
               color: "var(--card-bg)",

@@ -38,11 +38,11 @@ export default function AdminStats({ stats }: AdminStatsProps) {
   ];
 
   return (
-    <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 mb-8">
+    <div className="grid grid-cols-2 sm:grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6 sm:mb-8">
       {statItems.map((item, idx) => (
         <div 
           key={idx} 
-          className="group relative p-6 rounded-3xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02]"
+          className="group relative p-4 sm:p-6 rounded-2xl sm:rounded-3xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02]"
           style={{
             border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
             backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
@@ -54,17 +54,17 @@ export default function AdminStats({ stats }: AdminStatsProps) {
           />
           
           <div className="relative z-10 flex flex-col justify-between h-full">
-            <div className="flex justify-between items-start mb-4">
+            <div className="flex justify-between items-start mb-3 sm:mb-4">
               <span 
-                className="text-sm font-bold"
+                className="text-xs sm:text-sm font-bold leading-tight"
                 style={{ color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)' }}
               >
                 {item.title}
               </span>
-              <span className="text-2xl">{item.icon}</span>
+              <span className="text-xl sm:text-2xl">{item.icon}</span>
             </div>
             <div 
-              className={`text-3xl font-extrabold bg-gradient-to-r ${item.gradient} bg-clip-text text-transparent`}
+              className={`text-2xl sm:text-3xl font-extrabold bg-gradient-to-r ${item.gradient} bg-clip-text text-transparent`}
             >
               {item.count.toLocaleString()}
             </div>

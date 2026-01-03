@@ -263,21 +263,25 @@ export default function CommunityClient() {
         style={{
           top: '50%',
           transform: 'translateY(-50%)',
+          maxHeight: '90vh',
+          overflowY: 'auto',
+          overflowX: 'hidden',
         }}
       >
-        <nav className="ml-8">
+        <nav className="ml-4 lg:ml-8">
           <div 
-            className="flex flex-col gap-3 p-4 rounded-2xl backdrop-blur-xl transition-all duration-500"
+            className="flex flex-col gap-2 lg:gap-3 p-3 lg:p-4 rounded-2xl backdrop-blur-xl transition-all duration-500"
             style={{
               backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
               border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
+              maxHeight: 'calc(90vh - 20px)',
             }}
           >
             {categories.map((category) => (
               <button
                 key={category.id}
                 onClick={() => setActiveCategory(category.id)}
-                className="group relative flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 text-left"
+                className="group relative flex items-center gap-2 lg:gap-3 px-2 lg:px-3 py-1.5 lg:py-2 rounded-xl transition-all duration-300 text-left whitespace-nowrap"
                 style={{
                   backgroundColor: activeCategory === category.id
                     ? (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)')
@@ -295,7 +299,7 @@ export default function CommunityClient() {
                   }}
                 />
                 <span 
-                  className="text-xs font-medium transition-all duration-300"
+                  className="text-[10px] lg:text-xs font-medium transition-all duration-300"
                   style={{
                     color: activeCategory === category.id
                       ? (isDark ? '#ffffff' : '#000000')
@@ -330,10 +334,10 @@ export default function CommunityClient() {
       </div>
 
       {/* 히어로 섹션 */}
-      <section className="relative pt-20 pb-12 px-6 lg:pl-12 text-center overflow-hidden">
+      <section className="relative pt-20 pb-8 sm:pb-12 px-4 sm:px-6 xl:pl-12 text-center overflow-hidden">
         <div className="max-w-4xl mx-auto animate-[fadeInUp_0.8s_ease-out_forwards]">
           <h1 
-            className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight"
+            className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold mb-4 tracking-tight leading-tight px-2"
             style={{ 
               color: isDark ? '#ffffff' : '#1d1d1f',
               fontWeight: 700,
@@ -345,7 +349,7 @@ export default function CommunityClient() {
           
           {/* 그라데이션 바 */}
           <div 
-            className="w-full max-w-2xl mx-auto h-1 md:h-1.5 mb-6 rounded-full overflow-hidden"
+            className="w-full max-w-2xl mx-auto h-1 sm:h-1.5 mb-4 sm:mb-6 rounded-full overflow-hidden"
             style={{
               boxShadow: isDark 
                 ? '0 0 30px rgba(96, 165, 250, 0.4), 0 4px 20px rgba(96, 165, 250, 0.2)'
@@ -365,7 +369,7 @@ export default function CommunityClient() {
           </div>
 
           <p 
-            className="text-lg md:text-xl font-medium opacity-70 break-keep leading-relaxed"
+            className="text-base sm:text-lg md:text-xl font-medium opacity-70 break-keep leading-relaxed px-4"
             style={{ 
               color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
               fontWeight: 500,
@@ -377,16 +381,41 @@ export default function CommunityClient() {
         </div>
       </section>
       
+      {/* 모바일/태블릿 카테고리 필터 (상단) */}
+      <div className="lg:hidden sticky top-[70px] z-40 bg-inherit border-b mb-4" style={{ borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)' }}>
+        <div className="overflow-x-auto scrollbar-hide px-4 py-3">
+          <div className="flex gap-2 min-w-max">
+            {categories.map((category) => (
+              <button
+                key={category.id}
+                onClick={() => setActiveCategory(category.id)}
+                className={`px-3 py-1.5 rounded-lg text-xs font-medium whitespace-nowrap transition-all ${
+                  activeCategory === category.id ? 'opacity-100' : 'opacity-60'
+                }`}
+                style={{
+                  backgroundColor: activeCategory === category.id 
+                    ? (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)')
+                    : 'transparent',
+                  color: isDark ? '#ffffff' : '#000000',
+                }}
+              >
+                {category.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
       {/* 메인 콘텐츠 */}
       <section 
         id="list"
-        className="container max-w-7xl mx-auto px-4 md:px-6 lg:pl-12 pb-24 border-b border-dashed relative" 
+        className="container max-w-7xl mx-auto px-4 sm:px-6 lg:pl-12 pb-16 sm:pb-24 border-b border-dashed relative" 
         style={{ 
           borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)',
         }}
       >
         {/* 글 쓰기 폼 */}
-        <div className="mb-12" data-community-form>
+        <div className="mb-8 sm:mb-12" data-community-form>
           <CommunityForm 
             onAddPost={handleAddPost}
             initialData={editingPost}
@@ -397,7 +426,7 @@ export default function CommunityClient() {
         
         {/* 글 목록 또는 빈 상태 메시지 */}
         {filteredPosts.length > 0 ? (
-          <div className="space-y-3">
+          <div className="space-y-3 sm:space-y-4">
             {filteredPosts.map((post) => {
               // HTML 태그 제거하고 텍스트만 추출
               const textContent = post.content.replace(/<[^>]*>/g, '').trim();

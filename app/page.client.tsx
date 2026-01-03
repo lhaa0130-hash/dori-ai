@@ -182,21 +182,25 @@ export default function PremiumDesignPage() {
         className="fixed left-0 top-1/2 -translate-y-1/2 z-50 hidden lg:block"
         style={{
           transform: `translateY(calc(-50% + ${scrollY * 0.1}px))`,
+          maxHeight: '90vh',
+          overflowY: 'auto',
+          overflowX: 'hidden',
         }}
       >
-        <nav className="ml-8">
+        <nav className="ml-4 lg:ml-8">
           <div 
-            className="flex flex-col gap-3 p-4 rounded-2xl backdrop-blur-xl transition-all duration-500"
+            className="flex flex-col gap-2 lg:gap-3 p-3 lg:p-4 rounded-2xl backdrop-blur-xl transition-all duration-500"
             style={{
               backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
               border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
+              maxHeight: 'calc(90vh - 20px)',
             }}
           >
             {navItems.map((item) => (
               <a
                 key={item.id}
                 href={`#${item.id}`}
-                className="group relative flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300"
+                className="group relative flex items-center gap-2 lg:gap-3 px-2 lg:px-3 py-1.5 lg:py-2 rounded-xl transition-all duration-300 whitespace-nowrap"
                 style={{
                   backgroundColor: activeSection === item.id 
                     ? (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)')
@@ -272,7 +276,7 @@ export default function PremiumDesignPage() {
                   }}
                 />
                 <span 
-                  className="text-xs font-medium transition-all duration-300"
+                  className="text-[10px] lg:text-xs font-medium transition-all duration-300"
                   style={{
                     color: activeSection === item.id 
                       ? (isDark ? '#ffffff' : '#000000')
@@ -318,15 +322,15 @@ export default function PremiumDesignPage() {
       {/* 히어로 섹션 */}
       <section 
         id="hero"
-        className="relative min-h-screen flex items-center justify-center px-6 pt-20"
+        className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 pt-20 pb-12"
         ref={(el) => { sectionRefs.current['hero'] = el; }}
         data-section-id="hero"
         style={{ scrollSnapAlign: 'center', scrollSnapStop: 'always' }}
       >
-        <div className="max-w-6xl mx-auto text-center">
+        <div className="max-w-6xl mx-auto text-center w-full">
           {/* 메인 타이틀 */}
           <h1 
-            className={`text-5xl md:text-6xl lg:text-7xl mb-4 leading-[1.05] tracking-[-0.03em] transition-all duration-1000 ${
+            className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl mb-4 leading-[1.05] tracking-[-0.03em] transition-all duration-1000 px-2 ${
               visibleSections.has('hero')
                 ? 'opacity-100 translate-y-0'
                 : 'opacity-0 translate-y-8'
@@ -368,7 +372,7 @@ export default function PremiumDesignPage() {
           </div>
           
           <div 
-            className={`text-3xl md:text-4xl lg:text-5xl mb-6 transition-all duration-1000 ${
+            className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-6 transition-all duration-1000 px-2 ${
               visibleSections.has('hero')
                 ? 'opacity-100 translate-y-0'
                 : 'opacity-0 translate-y-8'
@@ -385,14 +389,14 @@ export default function PremiumDesignPage() {
 
           {/* 서브타이틀 */}
           <div 
-            className={`mb-8 max-w-2xl mx-auto space-y-2 transition-all duration-1000 delay-100 ${
+            className={`mb-8 max-w-2xl mx-auto space-y-2 transition-all duration-1000 delay-100 px-4 ${
               visibleSections.has('hero')
                 ? 'opacity-100 translate-y-0'
                 : 'opacity-0 translate-y-8'
             }`}
           >
             <p 
-              className="text-lg md:text-xl leading-relaxed"
+              className="text-base sm:text-lg md:text-xl leading-relaxed"
               style={{
                 color: isDark ? '#ffffff' : '#1d1d1f',
                 fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
@@ -403,7 +407,7 @@ export default function PremiumDesignPage() {
               작은 시작을 함께 만들어갑니다
             </p>
             <p 
-              className="text-sm md:text-base leading-relaxed"
+              className="text-sm sm:text-base leading-relaxed"
               style={{
                 color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
                 fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
@@ -442,7 +446,7 @@ export default function PremiumDesignPage() {
       {/* 기능 섹션 */}
       <section 
         id="features"
-        className="relative py-20 md:py-28 px-6 min-h-screen flex items-center"
+        className="relative py-12 sm:py-16 md:py-20 lg:py-28 px-4 sm:px-6 min-h-screen flex items-center"
         ref={(el) => { sectionRefs.current['features'] = el; }}
         data-section-id="features"
         style={{
@@ -451,8 +455,8 @@ export default function PremiumDesignPage() {
           scrollSnapStop: 'always',
         }}
       >
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div className="max-w-7xl mx-auto w-full">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {[
               { icon: "🚀", title: "AI 도구", desc: "최신 AI 도구를 탐색하고 비교하여 여러분의 작업에 가장 적합한 도구를 찾아보세요", color: "#3b82f6" },
               { icon: "🧠", title: "인사이트", desc: "AI 트렌드와 분석을 통해 최신 동향을 파악하세요", color: "#8b5cf6" },
@@ -535,7 +539,7 @@ export default function PremiumDesignPage() {
       {/* 프로젝트 섹션 */}
       <section 
         id="gallery"
-        className="relative py-20 md:py-28 px-6 min-h-screen flex items-center"
+        className="relative py-12 sm:py-16 md:py-20 lg:py-28 px-4 sm:px-6 min-h-screen flex items-center"
         ref={(el) => { sectionRefs.current['gallery'] = el; }}
         data-section-id="gallery"
         style={{
@@ -544,16 +548,16 @@ export default function PremiumDesignPage() {
           scrollSnapStop: 'always',
         }}
       >
-        <div className="max-w-7xl mx-auto">
+        <div className="max-w-7xl mx-auto w-full">
           <div 
-            className={`text-center mb-12 transition-all duration-1000 ${
+            className={`text-center mb-8 sm:mb-12 transition-all duration-1000 ${
               visibleSections.has('gallery')
                 ? 'opacity-100 translate-y-0'
                 : 'opacity-0 translate-y-8'
             }`}
           >
             <h2 
-              className="text-4xl md:text-5xl mb-3"
+              className="text-3xl sm:text-4xl md:text-5xl mb-3"
               style={{
                 color: isDark ? '#ffffff' : '#1d1d1f',
                 fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
@@ -565,7 +569,7 @@ export default function PremiumDesignPage() {
               프로젝트
             </h2>
             <p 
-              className="text-lg"
+              className="text-base sm:text-lg"
               style={{
                 color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
                 fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
@@ -577,7 +581,7 @@ export default function PremiumDesignPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 max-w-7xl mx-auto">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-7xl mx-auto">
             {[
               { icon: "🌐", title: "SITE", desc: "DORI-AI", status: "진행중", color: "#3b82f6", span: 2 },
               { icon: "📱", title: "APPLICATION", desc: "DORI (Android 작업중)", status: "작업중", color: "#8b5cf6", span: 1 },
@@ -730,7 +734,7 @@ export default function PremiumDesignPage() {
       {/* 커뮤니티 섹션 */}
       <section 
         id="testimonials"
-        className="relative py-20 md:py-28 px-6 min-h-screen flex items-center"
+        className="relative py-12 sm:py-16 md:py-20 lg:py-28 px-4 sm:px-6 min-h-screen flex items-center"
         ref={(el) => { sectionRefs.current['testimonials'] = el; }}
         data-section-id="testimonials"
         style={{
@@ -739,16 +743,16 @@ export default function PremiumDesignPage() {
           scrollSnapStop: 'always',
         }}
       >
-        <div className="max-w-6xl mx-auto">
+        <div className="max-w-6xl mx-auto w-full">
           <div 
-            className={`text-center mb-12 transition-all duration-1000 ${
+            className={`text-center mb-8 sm:mb-12 transition-all duration-1000 ${
               visibleSections.has('testimonials')
                 ? 'opacity-100 translate-y-0'
                 : 'opacity-0 translate-y-8'
             }`}
           >
             <h2 
-              className="text-4xl md:text-5xl mb-3"
+              className="text-3xl sm:text-4xl md:text-5xl mb-3"
               style={{
                 color: isDark ? '#ffffff' : '#1d1d1f',
                 fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
@@ -761,7 +765,7 @@ export default function PremiumDesignPage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
             {[
               { name: "김철수", role: "디자이너", text: "정말 놀라운 경험이었습니다. 직관적이고 세련된 인터페이스가 인상적이에요." },
               { name: "이영희", role: "개발자", text: "AI 도구 탐색이 이렇게 쉬울 줄 몰랐어요. 정말 유용한 플랫폼입니다." },
@@ -834,7 +838,7 @@ export default function PremiumDesignPage() {
       {/* FAQ 섹션 */}
       <section 
         id="faq"
-        className="relative py-20 md:py-28 px-6 min-h-screen flex items-center"
+        className="relative py-12 sm:py-16 md:py-20 lg:py-28 px-4 sm:px-6 min-h-screen flex items-center"
         ref={(el) => { sectionRefs.current['faq'] = el; }}
         data-section-id="faq"
         style={{
@@ -843,16 +847,16 @@ export default function PremiumDesignPage() {
           scrollSnapStop: 'always',
         }}
       >
-        <div className="max-w-4xl mx-auto">
+        <div className="max-w-4xl mx-auto w-full">
           <div 
-            className={`text-center mb-12 transition-all duration-1000 ${
+            className={`text-center mb-8 sm:mb-12 transition-all duration-1000 ${
               visibleSections.has('faq')
                 ? 'opacity-100 translate-y-0'
                 : 'opacity-0 translate-y-8'
             }`}
           >
             <h2 
-              className="text-4xl md:text-5xl mb-3"
+              className="text-3xl sm:text-4xl md:text-5xl mb-3"
               style={{
                 color: isDark ? '#ffffff' : '#1d1d1f',
                 fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
