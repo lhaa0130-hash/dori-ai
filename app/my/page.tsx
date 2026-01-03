@@ -24,8 +24,118 @@ export default function MyPage() {
   const [bookmarkedPosts, setBookmarkedPosts] = useState<any[]>([]);
   const [recentViews, setRecentViews] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState("posts");
+  const [memberList, setMemberList] = useState<any[]>([]);
+  const isAdmin = user?.email?.toLowerCase() === "lhaa0130@gmail.com";
 
   useEffect(() => setMounted(true), []);
+
+  // 관리자 회원정보 로드
+  useEffect(() => {
+    if (!isAdmin || !mounted) return;
+    
+    const membersMap = new Map<string, any>();
+    
+    // 1. localStorage에서 모든 프로필 데이터 수집 (dori_profile_)
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith("dori_profile_")) {
+        try {
+          const email = key.replace("dori_profile_", "");
+          const profileData = JSON.parse(localStorage.getItem(key) || "{}");
+          const userName = localStorage.getItem(`dori_user_name_${email}`) || email.split("@")[0];
+          
+          membersMap.set(email, {
+            email,
+            id: profileData.id || email,
+            nickname: profileData.nickname || userName,
+            tier: profileData.tier || "Explorer",
+            level: profileData.level || 1,
+            doriScore: profileData.doriScore || 0,
+            createdAt: profileData.createdAt || "알 수 없음",
+          });
+        } catch (e) {
+          console.error("프로필 파싱 오류:", key, e);
+        }
+      }
+    }
+    
+    // 2. localStorage에서 사용자 이름 데이터 수집 (dori_user_name_) - 프로필이 없어도 이름이 있으면 회원으로 간주
+    for (let i = 0; i < localStorage.length; i++) {
+      const key = localStorage.key(i);
+      if (key && key.startsWith("dori_user_name_")) {
+        try {
+          const email = key.replace("dori_user_name_", "");
+          
+          // 이미 프로필로 추가된 경우 스킵
+          if (membersMap.has(email)) continue;
+          
+          const userName = localStorage.getItem(key) || email.split("@")[0];
+          const profileData = JSON.parse(localStorage.getItem(`dori_profile_${email}`) || "{}");
+          
+          membersMap.set(email, {
+            email,
+            id: email,
+            nickname: userName,
+            tier: profileData.tier || "Explorer",
+            level: profileData.level || 1,
+            doriScore: profileData.doriScore || 0,
+            createdAt: profileData.createdAt || "알 수 없음",
+          });
+        } catch (e) {
+          console.error("사용자 이름 파싱 오류:", key, e);
+        }
+      }
+    }
+    
+    // 3. 커뮤니티 글에서 작성자 이메일 수집
+    try {
+      const savedPosts = JSON.parse(localStorage.getItem("dori_community_posts") || "[]");
+      savedPosts.forEach((post: any) => {
+        if (post.authorEmail && !membersMap.has(post.authorEmail)) {
+          membersMap.set(post.authorEmail, {
+            email: post.authorEmail,
+            id: post.authorEmail,
+            nickname: post.author || post.nickname || post.authorEmail.split("@")[0],
+            tier: "Explorer",
+            level: 1,
+            doriScore: 0,
+            createdAt: "알 수 없음",
+          });
+        }
+      });
+    } catch (e) {
+      console.error("커뮤니티 글 파싱 오류:", e);
+    }
+    
+    // 4. AI 도구 댓글에서 사용자 이메일 수집
+    try {
+      const toolComments = JSON.parse(localStorage.getItem("dori_tool_comments") || "{}");
+      Object.values(toolComments).forEach((comments: any) => {
+        if (Array.isArray(comments)) {
+          comments.forEach((comment: any) => {
+            if (comment.userId && comment.userId !== "anonymous" && !membersMap.has(comment.userId)) {
+              membersMap.set(comment.userId, {
+                email: comment.userId,
+                id: comment.userId,
+                nickname: comment.userName || comment.userId.split("@")[0],
+                tier: "Explorer",
+                level: 1,
+                doriScore: 0,
+                createdAt: "알 수 없음",
+              });
+            }
+          });
+        }
+      });
+    } catch (e) {
+      console.error("AI 도구 댓글 파싱 오류:", e);
+    }
+    
+    // 배열로 변환하고 이메일 순으로 정렬
+    const members = Array.from(membersMap.values());
+    members.sort((a, b) => a.email.localeCompare(b.email));
+    setMemberList(members);
+  }, [isAdmin, mounted]);
 
   // 프로필 데이터 로드 및 초기화
   useEffect(() => {
@@ -218,7 +328,8 @@ export default function MyPage() {
     );
   }
 
-  if (!profile) {
+  // 관리자인 경우 프로필 없이도 진행
+  if (!isAdmin && !profile) {
     return (
       <main style={{
         backgroundColor: isDark ? '#000000' : '#ffffff',
@@ -267,25 +378,205 @@ export default function MyPage() {
       }}>
 
         {/* 프로필 Hero 영역 */}
-        <ProfileHero
-          profile={profile}
-          onImageChange={handleImageChange}
-          onNicknameChange={handleNicknameChange}
-          onBioChange={handleBioChange}
-          onStatusMessageChange={handleStatusMessageChange}
-        />
+        {profile && (
+          <>
+            <ProfileHero
+              profile={profile}
+              onImageChange={handleImageChange}
+              onNicknameChange={handleNicknameChange}
+              onBioChange={handleBioChange}
+              onStatusMessageChange={handleStatusMessageChange}
+            />
 
-        {/* 성장 가이드 */}
-        <GrowthGuide profile={profile} activityStats={activityStats} />
+            {/* 성장 가이드 */}
+            <GrowthGuide profile={profile} activityStats={activityStats} />
+          </>
+        )}
+
+        {/* 관리자 회원정보 섹션 */}
+        {isAdmin && (
+          <div style={{ marginTop: profile ? '3rem' : '0' }}>
+            <h1 style={{
+              fontSize: '2rem',
+              fontWeight: '700',
+              color: isDark ? '#ffffff' : '#1d1d1f',
+              marginBottom: '2rem',
+            }}>
+              회원 관리
+            </h1>
+
+            {/* 회원 통계 */}
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+              gap: '1rem',
+              marginBottom: '2rem',
+            }}>
+              <div style={{
+                padding: '1.5rem',
+                borderRadius: '1rem',
+                background: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
+                border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7'}`,
+              }}>
+                <div style={{
+                  fontSize: '0.875rem',
+                  color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)',
+                  marginBottom: '0.5rem',
+                }}>
+                  총 회원수
+                </div>
+                <div style={{
+                  fontSize: '2rem',
+                  fontWeight: '700',
+                  color: isDark ? '#ffffff' : '#1d1d1f',
+                }}>
+                  {memberList.length}명
+                </div>
+              </div>
+            </div>
+
+            {/* 회원 목록 */}
+            <div style={{
+              background: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
+              border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7'}`,
+              borderRadius: '1.5rem',
+              padding: '2rem',
+              marginBottom: '3rem',
+            }}>
+              <h2 style={{
+                fontSize: '1.25rem',
+                fontWeight: '700',
+                color: isDark ? '#ffffff' : '#1d1d1f',
+                marginBottom: '1.5rem',
+              }}>
+                회원 목록
+              </h2>
+
+              {memberList.length === 0 ? (
+                <div style={{
+                  textAlign: 'center',
+                  padding: '4rem 0',
+                  color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                }}>
+                  등록된 회원이 없습니다.
+                </div>
+              ) : (
+                <div style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '1rem',
+                }}>
+                  {memberList.map((member) => (
+                    <div
+                      key={member.email}
+                      style={{
+                        padding: '1.5rem',
+                        borderRadius: '1rem',
+                        background: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
+                        border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7'}`,
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
+                        gap: '1rem',
+                      }}
+                    >
+                      <div>
+                        <div style={{
+                          fontSize: '0.75rem',
+                          color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                          marginBottom: '0.25rem',
+                        }}>
+                          이메일
+                        </div>
+                        <div style={{
+                          fontSize: '0.9375rem',
+                          fontWeight: '600',
+                          color: isDark ? '#ffffff' : '#1d1d1f',
+                          wordBreak: 'break-all',
+                        }}>
+                          {member.email}
+                        </div>
+                      </div>
+                      <div>
+                        <div style={{
+                          fontSize: '0.75rem',
+                          color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                          marginBottom: '0.25rem',
+                        }}>
+                          닉네임
+                        </div>
+                        <div style={{
+                          fontSize: '0.9375rem',
+                          fontWeight: '500',
+                          color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)',
+                        }}>
+                          {member.nickname}
+                        </div>
+                      </div>
+                      <div>
+                        <div style={{
+                          fontSize: '0.75rem',
+                          color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                          marginBottom: '0.25rem',
+                        }}>
+                          티어
+                        </div>
+                        <div style={{
+                          fontSize: '0.9375rem',
+                          fontWeight: '500',
+                          color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)',
+                        }}>
+                          {member.tier}
+                        </div>
+                      </div>
+                      <div>
+                        <div style={{
+                          fontSize: '0.75rem',
+                          color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                          marginBottom: '0.25rem',
+                        }}>
+                          레벨
+                        </div>
+                        <div style={{
+                          fontSize: '0.9375rem',
+                          fontWeight: '500',
+                          color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)',
+                        }}>
+                          Lv.{member.level}
+                        </div>
+                      </div>
+                      <div>
+                        <div style={{
+                          fontSize: '0.75rem',
+                          color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                          marginBottom: '0.25rem',
+                        }}>
+                          DORI 점수
+                        </div>
+                        <div style={{
+                          fontSize: '0.9375rem',
+                          fontWeight: '500',
+                          color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)',
+                        }}>
+                          {member.doriScore.toLocaleString()}
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
 
         {/* 활동 히스토리 섹션 */}
-        <div style={{
-          marginTop: '3rem',
-          background: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
-          border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7'}`,
-          borderRadius: '1.5rem',
-          padding: '2rem',
-        }}>
+        {profile && (
+            <div style={{
+              marginTop: '3rem',
+              background: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
+              border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7'}`,
+              borderRadius: '1.5rem',
+              padding: '2rem',
+            }}>
           <h3 style={{
             fontSize: '1.25rem',
             fontWeight: '700',
@@ -576,6 +867,7 @@ export default function MyPage() {
             )}
           </div>
         </div>
+        )}
 
       </section>
 

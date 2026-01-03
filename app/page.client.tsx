@@ -14,9 +14,50 @@ export default function PremiumDesignPage() {
   const [isScrolling, setIsScrolling] = useState(false);
   const sectionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const rootContainerRef = useRef<HTMLDivElement | null>(null);
+  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const isUserScrollingRef = useRef(false);
+  const currentSectionIndexRef = useRef(0);
+  const isWheelingRef = useRef(false);
 
   useEffect(() => {
     setMounted(true);
+    
+    // 스크롤 스냅 강제 활성화
+    if (typeof document !== 'undefined') {
+      const html = document.documentElement;
+      
+      // html에 스크롤 스냅 설정 (스크롤이 html에서 일어남)
+      html.style.setProperty('scroll-snap-type', 'y mandatory', 'important');
+      html.style.setProperty('scroll-behavior', 'smooth', 'important');
+      
+      // 모든 섹션에 스크롤 스냅 정렬 강제 적용
+      const applyScrollSnap = () => {
+        const sections = ['hero', 'features', 'gallery', 'testimonials', 'faq'];
+        sections.forEach(sectionId => {
+          const section = document.getElementById(sectionId);
+          if (section) {
+            section.style.setProperty('scroll-snap-align', 'center', 'important');
+            section.style.setProperty('scroll-snap-stop', 'always', 'important');
+            section.style.setProperty('scroll-margin-top', '0', 'important');
+            section.style.setProperty('scroll-margin-bottom', '0', 'important');
+          }
+        });
+        
+        // 모든 section 태그에도 적용
+        const allSections = document.querySelectorAll('section[id]');
+        allSections.forEach(section => {
+          (section as HTMLElement).style.setProperty('scroll-snap-align', 'center', 'important');
+          (section as HTMLElement).style.setProperty('scroll-snap-stop', 'always', 'important');
+        });
+      };
+      
+      // 즉시 적용
+      applyScrollSnap();
+      
+      // DOM이 완전히 로드된 후 다시 적용
+      setTimeout(applyScrollSnap, 100);
+      setTimeout(applyScrollSnap, 500);
+    }
     
     const handleScroll = () => {
       setScrollY(window.scrollY);
@@ -59,16 +100,133 @@ export default function PremiumDesignPage() {
     if (typeof window !== 'undefined') {
       let scrollTimeout: NodeJS.Timeout;
       
+      // 스크롤 스냅 구현 - 스크롤이 멈출 때 가장 가까운 섹션으로 이동
+      const handleScrollSnap = () => {
+        if (isScrolling || isUserScrollingRef.current) return;
+        
+        const sections = ['hero', 'features', 'gallery', 'testimonials', 'faq'];
+        const viewportCenter = window.innerHeight / 2;
+        let closestSection: string | null = null;
+        let closestDistance = Infinity;
+        let closestElement: HTMLElement | null = null;
+        
+        sections.forEach(sectionId => {
+          const el = document.getElementById(sectionId);
+          if (!el) return;
+          
+          const rect = el.getBoundingClientRect();
+          const sectionCenter = rect.top + rect.height / 2;
+          const distance = Math.abs(sectionCenter - viewportCenter);
+          
+          // 섹션이 화면에 보이는 경우
+          if (rect.top < window.innerHeight && rect.bottom > 0) {
+            if (distance < closestDistance) {
+              closestDistance = distance;
+              closestSection = sectionId;
+              closestElement = el;
+            }
+          }
+        });
+        
+        // 가장 가까운 섹션이 있고, 중앙에서 일정 거리 이상 떨어져 있으면 스냅
+        if (closestElement && closestDistance > 50) {
+          setIsScrolling(true);
+          isUserScrollingRef.current = true;
+          
+          const targetY = closestElement.offsetTop + closestElement.offsetHeight / 2 - window.innerHeight / 2;
+          
+          window.scrollTo({
+            top: Math.max(0, targetY),
+            behavior: 'smooth'
+          });
+          
+          setTimeout(() => {
+            setIsScrolling(false);
+            isUserScrollingRef.current = false;
+          }, 500);
+        }
+      };
+      
       const handleScrollWithDebounce = () => {
         handleScroll();
-        // 스크롤이 멈춘 후에도 한 번 더 체크
-        clearTimeout(scrollTimeout);
-        scrollTimeout = setTimeout(() => {
+        
+        // 스크롤 스냅 트리거
+        if (scrollTimeoutRef.current) {
+          clearTimeout(scrollTimeoutRef.current);
+        }
+        
+        scrollTimeoutRef.current = setTimeout(() => {
           handleScroll();
+          handleScrollSnap();
         }, 150);
       };
       
+      // 휠 이벤트 가로채서 섹션 단위로 스크롤
+      let wheelTimeout: NodeJS.Timeout;
+      const handleWheel = (e: WheelEvent) => {
+        if (isScrolling || isWheelingRef.current) {
+          e.preventDefault();
+          return;
+        }
+        
+        const sections = ['hero', 'features', 'gallery', 'testimonials', 'faq'];
+        const currentScroll = window.scrollY;
+        const viewportHeight = window.innerHeight;
+        
+        // 현재 섹션 찾기
+        let currentIndex = 0;
+        sections.forEach((sectionId, index) => {
+          const el = document.getElementById(sectionId);
+          if (el) {
+            const rect = el.getBoundingClientRect();
+            if (rect.top <= viewportHeight / 2 && rect.bottom >= viewportHeight / 2) {
+              currentIndex = index;
+            }
+          }
+        });
+        
+        // 스크롤 방향에 따라 다음/이전 섹션으로 이동
+        if (e.deltaY > 0 && currentIndex < sections.length - 1) {
+          // 아래로 스크롤
+          isWheelingRef.current = true;
+          setIsScrolling(true);
+          const nextSection = document.getElementById(sections[currentIndex + 1]);
+          if (nextSection) {
+            const targetY = nextSection.offsetTop + nextSection.offsetHeight / 2 - viewportHeight / 2;
+            window.scrollTo({
+              top: Math.max(0, targetY),
+              behavior: 'smooth'
+            });
+            currentSectionIndexRef.current = currentIndex + 1;
+          }
+          setTimeout(() => {
+            isWheelingRef.current = false;
+            setIsScrolling(false);
+          }, 800);
+          e.preventDefault();
+        } else if (e.deltaY < 0 && currentIndex > 0) {
+          // 위로 스크롤
+          isWheelingRef.current = true;
+          setIsScrolling(true);
+          const prevSection = document.getElementById(sections[currentIndex - 1]);
+          if (prevSection) {
+            const targetY = prevSection.offsetTop + prevSection.offsetHeight / 2 - viewportHeight / 2;
+            window.scrollTo({
+              top: Math.max(0, targetY),
+              behavior: 'smooth'
+            });
+            currentSectionIndexRef.current = currentIndex - 1;
+          }
+          setTimeout(() => {
+            isWheelingRef.current = false;
+            setIsScrolling(false);
+          }, 800);
+          e.preventDefault();
+        }
+      };
+      
       window.addEventListener("scroll", handleScrollWithDebounce, { passive: true });
+      window.addEventListener("wheel", handleWheel, { passive: false });
       window.addEventListener("mousemove", handleMouseMove);
       
       // Intersection Observer - 활성 섹션 감지용 (스크롤스냅 center와 호환)
@@ -146,9 +304,12 @@ export default function PremiumDesignPage() {
 
       return () => {
         window.removeEventListener("scroll", handleScrollWithDebounce);
+        window.removeEventListener("wheel", handleWheel);
         window.removeEventListener("mousemove", handleMouseMove);
         clearTimeout(timeoutId);
         clearTimeout(scrollTimeout);
+        if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
+        if (wheelTimeout) clearTimeout(wheelTimeout);
         activeObserver.disconnect();
         visibilityObserver.disconnect();
       };
@@ -172,14 +333,13 @@ export default function PremiumDesignPage() {
       style={{
         backgroundColor: isDark ? '#000000' : '#ffffff',
         fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-        scrollSnapType: isScrolling ? 'none' : 'y mandatory',
+        scrollSnapType: 'y mandatory',
       }}
     >
       {/* 좌측 사이드바 네비게이션 */}
       <aside 
         className="fixed left-0 top-1/2 -translate-y-1/2 z-50 hidden lg:block"
         style={{
-          transform: `translateY(calc(-50% + ${scrollY * 0.1}px))`,
           maxHeight: '90vh',
           overflowY: 'auto',
           overflowX: 'hidden',
@@ -415,6 +575,17 @@ export default function PremiumDesignPage() {
             >
               AI가 처음이어도, 누구나 배우고 성장할 수 있는 공간
             </p>
+            <p 
+              className="text-sm sm:text-base leading-relaxed"
+              style={{
+                color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+                fontWeight: 400,
+                letterSpacing: '-0.01em',
+              }}
+            >
+              AI로 뭐든 만드는 사이트 입니다.
+            </p>
           </div>
 
 
@@ -438,6 +609,7 @@ export default function PremiumDesignPage() {
               />
             </div>
           </div>
+
         </div>
       </section>
 
@@ -763,72 +935,29 @@ export default function PremiumDesignPage() {
             </h2>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {[
-              { name: "김철수", role: "디자이너", text: "정말 놀라운 경험이었습니다. 직관적이고 세련된 인터페이스가 인상적이에요." },
-              { name: "이영희", role: "개발자", text: "AI 도구 탐색이 이렇게 쉬울 줄 몰랐어요. 정말 유용한 플랫폼입니다." },
-              { name: "박민수", role: "기획자", text: "커뮤니티가 활발하고 정보가 풍부해서 정말 만족스럽습니다." },
-            ].map((testimonial, idx) => (
-              <div
-                key={idx}
-                className={`p-6 rounded-3xl transition-all duration-700 ${
-                  visibleSections.has('testimonials')
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-8'
-                }`}
-                style={{
-                  transitionDelay: `${idx * 100}ms`,
-                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.3)' : '#e5e5e7'}`,
-                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
-                }}
-              >
-                <div className="flex items-center gap-3 mb-3">
-                  <div 
-                    className="w-10 h-10 rounded-full flex items-center justify-center text-lg"
-                    style={{
-                      background: `linear-gradient(135deg, #3b82f6, #8b5cf6)`,
-                    }}
-                  >
-                    {testimonial.name[0]}
-                  </div>
-                  <div>
-                    <div 
-                      className=""
-                      style={{
-                        color: isDark ? '#ffffff' : '#1d1d1f',
-                        fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                        fontWeight: 600,
-                        letterSpacing: '-0.01em',
-                      }}
-                    >
-                      {testimonial.name}
-                    </div>
-                    <div 
-                      className="text-sm"
-                      style={{
-                        color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
-                        fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                        fontWeight: 400,
-                      }}
-                    >
-                      {testimonial.role}
-                    </div>
-                  </div>
-                </div>
-                <p 
-                  className="leading-relaxed"
-                  style={{
-                    color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)',
-                    fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                    fontWeight: 400,
-                    letterSpacing: '-0.01em',
-                    lineHeight: '1.6',
-                  }}
-                >
-                  {testimonial.text}
-                </p>
-              </div>
-            ))}
+          <div className="text-center">
+            <p 
+              className="text-base sm:text-lg"
+              style={{
+                color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+                fontWeight: 400,
+                letterSpacing: '-0.01em',
+              }}
+            >
+              커뮤니티에서 다양한 이야기를 나눠보세요
+            </p>
+            <Link 
+              href="/community"
+              className="inline-block mt-6 px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105"
+              style={{
+                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+                color: isDark ? '#ffffff' : '#1d1d1f',
+                border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'}`,
+              }}
+            >
+              커뮤니티로 이동 →
+            </Link>
           </div>
         </div>
       </section>

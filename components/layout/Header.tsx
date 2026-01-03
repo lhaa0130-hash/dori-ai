@@ -1,18 +1,22 @@
 "use client";
 
 import Link from "next/link";
-import { useSession, signOut } from "next-auth/react";
+import { useSession } from "next-auth/react";
 import { usePathname } from "next/navigation"; 
 import { useState, useEffect } from "react";
-import ThemeToggle from "@/components/ThemeToggle"; 
-import { TEXTS } from "@/constants/texts"; 
+import { useTheme } from "next-themes";
+import { TEXTS } from "@/constants/texts";
+import AccountMenu from "./AccountMenu"; 
 
 export default function Header() {
   const { data: session } = useSession();
   const user = session?.user || null;
   const pathname = usePathname(); 
+  const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [displayName, setDisplayName] = useState<string>("");
+  const [userPoints, setUserPoints] = useState(0);
+  const [userLevel, setUserLevel] = useState(1);
   
   // 🌍 언어 상태 제거, 한국어(.ko) 고정
   const t = TEXTS.nav;
@@ -27,6 +31,19 @@ export default function Header() {
         setDisplayName(savedName);
       } else {
         setDisplayName(user.name || "사용자");
+      }
+
+      // 포인트와 레벨 정보 가져오기
+      try {
+        const profileKey = `dori_profile_${user.email}`;
+        const savedProfile = localStorage.getItem(profileKey);
+        if (savedProfile) {
+          const profile = JSON.parse(savedProfile);
+          setUserPoints(profile.point || 0);
+          setUserLevel(profile.level || 1);
+        }
+      } catch (e) {
+        console.error('프로필 로드 오류:', e);
       }
     } else {
       setDisplayName("");
@@ -58,39 +75,16 @@ export default function Header() {
           </nav>
 
           <div className="right-area">
-            <div className="user-area">
-              <ThemeToggle />
-              {!user ? (
-                <Link href="/login" className="login-btn">{t.login.ko}</Link>
-              ) : (
-                <div className="profile-dropdown-container">
-                  <button className="profile-pill-btn">
-                    <div className="avatar-circle">{displayName?.[0]?.toUpperCase() || "U"}</div>
-                    <span className="user-name-text">{displayName}</span>
-                    <span className="dropdown-icon">▼</span>
-                  </button>
-                  <div className="dropdown-menu">
-                    <div className="menu-header-section">
-                      <div className="user-info-group">
-                        <div className="user-email">{user.email || "user@dori.ai"}</div>
-                        <div className="user-role-badge">Creator</div>
-                      </div>
-                    </div>
-                    <div className="menu-divider-line"></div>
-                    <div className="menu-actions">
-                      <Link href="/my" className="menu-action-item">
-                        <span className="menu-icon">👤</span>
-                        <span>{t.myPage.ko}</span>
-                      </Link>
-                      <button onClick={() => signOut({ callbackUrl: "/" })} className="menu-action-item danger">
-                        <span className="menu-icon">🚪</span>
-                        <span>{t.logout.ko}</span>
-                      </button>
-                    </div>
-                  </div>
-                </div>
-              )}
-            </div>
+            {!user ? (
+              <Link href="/login" className="login-btn">{t.login.ko}</Link>
+            ) : (
+              <AccountMenu
+                user={user}
+                displayName={displayName}
+                points={userPoints}
+                level={userLevel}
+              />
+            )}
           </div>
         </div>
       </header>
@@ -101,28 +95,28 @@ export default function Header() {
           top: 0; 
           left: 0; 
           width: 100%; 
-          height: 70px; 
+          height: 64px; 
           z-index: 100; 
           backdrop-filter: blur(20px) saturate(180%);
           -webkit-backdrop-filter: blur(20px) saturate(180%);
-          transition: all 0.3s ease;
+          transition: all 0.2s ease;
           font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif;
         }
         :global(.dark) .header-wrapper {
-          background: rgba(0, 0, 0, 0.7);
-          border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+          background: rgba(0, 0, 0, 0.8);
+          border-bottom: 1px solid rgba(255, 255, 255, 0.05);
           color: #ffffff;
         }
         :global(.light) .header-wrapper, :global([data-theme="light"]) .header-wrapper {
-          background: #ffffff;
-          border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+          background: rgba(255, 255, 255, 0.9);
+          border-bottom: 1px solid rgba(0, 0, 0, 0.05);
           color: #1d1d1f;
         }
         .header-inner { 
           max-width: 1280px; 
           margin: 0 auto; 
           height: 100%; 
-          padding: 0 16px; 
+          padding: 0 20px; 
           display: flex; 
           align-items: center; 
           justify-content: space-between; 
@@ -130,7 +124,7 @@ export default function Header() {
         }
         @media (min-width: 768px) {
           .header-inner {
-            padding: 0 24px;
+            padding: 0 32px;
           }
         }
         .logo-area {
@@ -140,11 +134,15 @@ export default function Header() {
           font-size: 20px; 
           font-weight: 700; 
           letter-spacing: -0.02em;
-          background: linear-gradient(to right, #2563eb, #7c3aed);
+          background: linear-gradient(135deg, #2563eb, #7c3aed);
           -webkit-background-clip: text;
           -webkit-text-fill-color: transparent;
           background-clip: text;
           text-decoration: none;
+          transition: opacity 0.2s ease;
+        }
+        .logo-text:hover {
+          opacity: 0.8;
         }
         .nav-area { 
           position: absolute;
@@ -157,7 +155,7 @@ export default function Header() {
         }
         .nav-scroll-container {
           display: flex; 
-          gap: 12px;
+          gap: 4px;
           overflow-x: auto;
           overflow-y: hidden;
           scrollbar-width: none;
@@ -169,35 +167,37 @@ export default function Header() {
         }
         @media (min-width: 768px) {
           .nav-scroll-container {
-            gap: 20px;
+            gap: 8px;
           }
         }
         @media (min-width: 1024px) {
           .nav-scroll-container {
-            gap: 32px;
+            gap: 12px;
           }
         }
         .nav-link { 
-          font-size: 12px;
+          font-size: 13px;
           font-weight: 500; 
           letter-spacing: -0.01em;
           position: relative; 
-          padding: 8px 4px; 
+          padding: 8px 12px; 
           transition: all 0.2s ease;
           text-decoration: none;
           white-space: nowrap;
           flex-shrink: 0;
           min-width: fit-content;
+          border-radius: 8px;
         }
         @media (min-width: 768px) {
           .nav-link {
-            font-size: 13px;
-            padding: 8px 0;
+            font-size: 14px;
+            padding: 8px 16px;
           }
         }
         @media (min-width: 1024px) {
           .nav-link {
             font-size: 14px;
+            padding: 8px 20px;
           }
         }
         :global(.dark) .nav-link {
@@ -206,13 +206,19 @@ export default function Header() {
         :global(.light) .nav-link, :global([data-theme="light"]) .nav-link {
           color: rgba(0, 0, 0, 0.6);
         }
-        .nav-link:hover, .nav-link.active { 
+        .nav-link:hover { 
           opacity: 1;
         }
-        :global(.dark) .nav-link:hover, :global(.dark) .nav-link.active {
+        :global(.dark) .nav-link:hover {
           color: #ffffff;
         }
-        :global(.light) .nav-link:hover, :global(.light) .nav-link.active, :global([data-theme="light"]) .nav-link:hover, :global([data-theme="light"]) .nav-link.active {
+        :global(.light) .nav-link:hover, :global([data-theme="light"]) .nav-link:hover {
+          color: #1d1d1f;
+        }
+        :global(.dark) .nav-link.active {
+          color: #ffffff;
+        }
+        :global(.light) .nav-link.active, :global([data-theme="light"]) .nav-link.active {
           color: #1d1d1f;
         }
         .nav-link.active::after { 
@@ -222,25 +228,142 @@ export default function Header() {
           left: 0; 
           width: 100%; 
           height: 2px; 
-          background: linear-gradient(to right, #2563eb, #7c3aed);
-          border-radius: 2px; 
+          background: linear-gradient(90deg, #2563eb, #7c3aed);
+          border-radius: 2px 2px 0 0; 
         }
         .right-area {
           flex: 0 0 auto;
           display: flex;
           align-items: center;
         }
-        .user-area { 
-          display: flex; 
-          align-items: center; 
-          gap: 10px; 
+        .menu-search-section {
+          margin: 4px 0;
         }
-        .user-area :global(button) {
+        .menu-search-section .search-container {
+          position: relative;
+        }
+        .menu-search-section .search-form {
+          display: flex;
+          align-items: center;
+          position: relative;
+        }
+        .menu-search-input {
+          width: 100%;
+          padding: 10px 36px 10px 12px;
+          border-radius: 8px;
+          font-size: 13px;
+          font-weight: 400;
+          letter-spacing: -0.01em;
+          transition: all 0.2s ease;
+          border: none;
+          outline: none;
+          font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif;
+        }
+        :global(.dark) .menu-search-input {
+          background: rgba(255, 255, 255, 0.05);
+          color: rgba(255, 255, 255, 0.9);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        :global(.light) .menu-search-input, :global([data-theme="light"]) .menu-search-input {
+          background: rgba(0, 0, 0, 0.03);
+          color: rgba(0, 0, 0, 0.8);
+          border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        .menu-search-input:focus {
+          border-color: rgba(37, 99, 235, 0.3);
+        }
+        :global(.dark) .menu-search-input:focus {
+          background: rgba(255, 255, 255, 0.08);
+          border-color: rgba(255, 255, 255, 0.2);
+        }
+        :global(.light) .menu-search-input:focus, :global([data-theme="light"]) .menu-search-input:focus {
+          background: rgba(0, 0, 0, 0.05);
+          border-color: rgba(37, 99, 235, 0.3);
+        }
+        .menu-search-button {
+          position: absolute;
+          right: 8px;
+          top: 50%;
+          transform: translateY(-50%);
+          background: none;
+          border: none;
+          cursor: pointer;
+          font-size: 16px;
+          opacity: 0.6;
+          transition: opacity 0.2s ease;
+          padding: 4px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+        }
+        .menu-search-button:hover {
+          opacity: 1;
+        }
+        .menu-search-results {
+          margin-top: 8px;
+          max-height: 300px;
+          overflow-y: auto;
+          border-radius: 8px;
+          padding: 4px;
+        }
+        :global(.dark) .menu-search-results {
+          background: rgba(255, 255, 255, 0.03);
+        }
+        :global(.light) .menu-search-results, :global([data-theme="light"]) .menu-search-results {
+          background: rgba(0, 0, 0, 0.02);
+        }
+        .menu-search-result-item {
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+          padding: 10px;
+          border-radius: 6px;
+          text-decoration: none;
+          transition: all 0.15s ease;
+          cursor: pointer;
+        }
+        :global(.dark) .menu-search-result-item {
+          color: rgba(255, 255, 255, 0.9);
+        }
+        :global(.light) .menu-search-result-item, :global([data-theme="light"]) .menu-search-result-item {
+          color: rgba(0, 0, 0, 0.8);
+        }
+        .menu-search-result-item:hover {
+          background: rgba(59, 130, 246, 0.1);
+        }
+        .menu-theme-section {
+          margin: 4px 0;
+        }
+        .search-result-type {
+          font-size: 18px;
           flex-shrink: 0;
+        }
+        .search-result-content {
+          flex: 1;
+          min-width: 0;
+        }
+        .search-result-title {
+          font-size: 13px;
+          font-weight: 600;
+          letter-spacing: -0.01em;
+          margin-bottom: 4px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .search-result-desc {
+          font-size: 11px;
+          opacity: 0.7;
+          line-height: 1.4;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
         }
         .login-btn { 
           padding: 8px 16px; 
-          border-radius: 20px; 
+          border-radius: 10px; 
           font-size: 14px; 
           font-weight: 500; 
           letter-spacing: -0.01em;
@@ -343,10 +466,10 @@ export default function Header() {
           position: absolute; 
           top: 64px; 
           right: 0; 
-          width: 240px; 
-          border-radius: 16px; 
+          width: 280px; 
+          border-radius: 12px; 
           box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
-          padding: 16px; 
+          padding: 12px; 
           opacity: 0; 
           visibility: hidden; 
           transform: translateY(-4px) scale(0.98); 
@@ -356,6 +479,8 @@ export default function Header() {
           backdrop-filter: blur(20px) saturate(180%);
           -webkit-backdrop-filter: blur(20px) saturate(180%);
           font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif;
+          max-height: calc(100vh - 80px);
+          overflow-y: auto;
         }
         :global(.dark) .dropdown-menu {
           background: rgba(20, 20, 20, 0.95);
@@ -371,15 +496,16 @@ export default function Header() {
           transform: translateY(0) scale(1); 
         }
         .menu-header-section { 
-          margin-bottom: 14px; 
+          margin-bottom: 12px; 
+          padding: 0 4px;
         }
         .user-info-group { 
           display: flex; 
           flex-direction: column; 
-          gap: 10px;
+          gap: 8px;
         }
         .user-email { 
-          font-size: 13px; 
+          font-size: 14px; 
           font-weight: 500; 
           letter-spacing: -0.01em;
           word-break: break-all;
@@ -389,32 +515,32 @@ export default function Header() {
           color: rgba(255, 255, 255, 0.9);
         }
         :global(.light) .user-email, :global([data-theme="light"]) .user-email {
-          color: rgba(0, 0, 0, 0.8);
+          color: rgba(0, 0, 0, 0.85);
         }
         .user-role-badge { 
           display: inline-flex; 
           align-items: center;
           align-self: flex-start; 
-          padding: 4px 10px; 
-          border-radius: 8px; 
+          padding: 4px 12px; 
+          border-radius: 6px; 
           font-size: 11px; 
           font-weight: 600; 
-          letter-spacing: 0.03em;
+          letter-spacing: 0.05em;
           text-transform: uppercase;
         }
         :global(.dark) .user-role-badge {
-          background: rgba(59, 130, 246, 0.2);
-          color: rgba(147, 197, 253, 0.95);
-          border: 1px solid rgba(59, 130, 246, 0.3);
+          background: rgba(59, 130, 246, 0.15);
+          color: rgba(147, 197, 253, 1);
+          border: 1px solid rgba(59, 130, 246, 0.25);
         }
         :global(.light) .user-role-badge, :global([data-theme="light"]) .user-role-badge {
-          background: rgba(37, 99, 235, 0.1);
+          background: rgba(37, 99, 235, 0.08);
           color: #2563eb;
-          border: 1px solid rgba(37, 99, 235, 0.2);
+          border: 1px solid rgba(37, 99, 235, 0.15);
         }
         .menu-divider-line { 
           height: 1px; 
-          margin: 0 0 10px 0; 
+          margin: 8px 0; 
           width: 100%; 
         }
         :global(.dark) .menu-divider-line {
@@ -426,36 +552,40 @@ export default function Header() {
         .menu-actions { 
           display: flex; 
           flex-direction: column; 
-          gap: 4px; 
+          gap: 2px; 
         }
         .menu-action-item { 
           display: flex; 
           align-items: center; 
-          gap: 10px;
+          gap: 12px;
           width: 100%; 
-          height: 38px; 
+          height: 40px; 
           padding: 0 12px; 
-          font-size: 13px; 
+          font-size: 14px; 
           font-weight: 500; 
           letter-spacing: -0.01em;
           border-radius: 8px; 
           background: transparent; 
           border: none; 
           cursor: pointer; 
-          transition: all 0.15s ease; 
+          transition: all 0.2s ease; 
           text-align: left;
           text-decoration: none;
         }
         .menu-icon {
-          font-size: 13px;
-          opacity: 0.6;
-          transition: opacity 0.15s ease;
+          font-size: 16px;
+          width: 20px;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          opacity: 0.7;
+          transition: opacity 0.2s ease;
         }
         :global(.dark) .menu-action-item {
-          color: rgba(255, 255, 255, 0.8);
+          color: rgba(255, 255, 255, 0.85);
         }
         :global(.light) .menu-action-item, :global([data-theme="light"]) .menu-action-item {
-          color: rgba(0, 0, 0, 0.7);
+          color: rgba(0, 0, 0, 0.75);
         }
         .menu-action-item:hover { 
           font-weight: 500;

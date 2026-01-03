@@ -4,17 +4,35 @@
 html {
   scroll-snap-type: y mandatory !important;
   scroll-behavior: smooth !important;
-  overflow-y: auto !important;
+  overflow-y: scroll !important;
   height: 100%;
 }
 
 body {
-  scroll-snap-type: y mandatory !important;
   scroll-behavior: smooth !important;
-  overflow: hidden !important;
-  height: 100%;
+  overflow-x: hidden !important;
+  overflow-y: visible !important;
+  min-height: 100%;
   margin: 0;
   padding: 0;
+}
+
+/* 모든 섹션에 스크롤 스냅 정렬 적용 */
+section[id] {
+  scroll-snap-align: center !important;
+  scroll-snap-stop: always !important;
+  scroll-margin: 0 !important;
+}
+
+/* 메인페이지 섹션 높이 보장 */
+#hero,
+#features,
+#gallery,
+#testimonials,
+#faq {
+  min-height: 100vh !important;
+  scroll-snap-align: center !important;
+  scroll-snap-stop: always !important;
 }
 
 /* 모바일 최적화 */
@@ -39,11 +57,7 @@ body {
 /* 모바일에서 스크롤 스냅 완화 */
 @media (max-width: 1024px) {
   html {
-    scroll-snap-type: y proximity;
-  }
-  
-  body {
-    scroll-snap-type: y proximity;
+    scroll-snap-type: y proximity !important;
   }
 }
 
