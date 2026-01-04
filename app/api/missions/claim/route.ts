@@ -1,7 +1,8 @@
 import { NextResponse } from 'next/server';
 import { getServerSession } from 'next-auth';
 import { getDb } from '@/lib/db';
-import { getPeriodKeyForMission, getTodayPointsTotal } from '@/lib/missions';
+import { getPeriodKeyForMission, getTodayPointsTotal, getTodayDateKey } from '@/lib/missions';
+import { DAILY_MISSIONS } from '@/constants/missions';
 
 // Rate limiting을 위한 간단한 메모리 저장소
 const rateLimitMap = new Map<string, { count: number; resetAt: number }>();
@@ -104,8 +105,8 @@ export async function POST(request: Request) {
 
     // 트랜잭션으로 처리
     const result = db.transaction(() => {
-      // 미션 정보 조회
-      const mission = db.prepare(`
+      // 미션 정보 조회 (DB에 없으면 상수에서 찾아서 DB에 생성)
+      let mission = db.prepare(`
         SELECT code, title, points, reset_type
         FROM missions
         WHERE code = ? AND is_active = 1
@@ -117,35 +118,72 @@ export async function POST(request: Request) {
       } | undefined;
 
       if (!mission) {
-        throw new Error('존재하지 않거나 비활성화된 미션입니다.');
-      }
-
-      const periodKey = getPeriodKeyForMission(mission.reset_type as 'daily' | 'weekly');
-
-      // 이미 수령했는지 확인
-      const existingClaim = db.prepare(`
-        SELECT id
-        FROM user_mission_claims
-        WHERE user_id = ? AND mission_code = ? AND period_key = ?
-      `).get(userId, missionCode, periodKey);
-
-      if (existingClaim) {
-        throw new Error('ALREADY_CLAIMED');
-      }
-
-      // 일일 포인트 제한 확인 (30P)
-      if (mission.reset_type === 'daily') {
-        const todayTotal = getTodayPointsTotal(db, userId);
-        if (todayTotal + mission.points > 30) {
-          throw new Error('DAILY_CAP_REACHED');
+        const missionDef = DAILY_MISSIONS.find(m => m.code === missionCode);
+        if (missionDef) {
+          db.prepare(`
+            INSERT OR REPLACE INTO missions (code, title, points, reset_type, is_active, updated_at)
+            VALUES (?, ?, ?, 'daily', 1, datetime('now'))
+          `).run(missionDef.code, missionDef.title, missionDef.points);
+          
+          mission = {
+            code: missionDef.code,
+            title: missionDef.title,
+            points: missionDef.points,
+            reset_type: 'daily',
+          };
+        } else {
+          throw new Error('존재하지 않거나 비활성화된 미션입니다.');
         }
       }
 
-      // 미션 수령 기록
-      db.prepare(`
-        INSERT INTO user_mission_claims (user_id, mission_code, period_key)
-        VALUES (?, ?, ?)
-      `).run(userId, missionCode, periodKey);
+      const periodKey = getPeriodKeyForMission(mission.reset_type as 'daily' | 'weekly');
+      const todayKey = getTodayDateKey();
+
+      // 일일 미션의 경우 user_missions 테이블 확인
+      if (mission.reset_type === 'daily') {
+        const userMission = db.prepare(`
+          SELECT status
+          FROM user_missions
+          WHERE user_id = ? AND mission_code = ? AND date_yyyymmdd = ?
+        `).get(userId, missionCode, todayKey) as { status: string } | undefined;
+
+        if (!userMission || userMission.status === 'pending') {
+          throw new Error('MISSION_NOT_COMPLETED');
+        }
+
+        if (userMission.status === 'claimed') {
+          throw new Error('ALREADY_CLAIMED');
+        }
+
+        // 일일 포인트 제한 확인 (50P)
+        const todayTotal = getTodayPointsTotal(db, userId);
+        if (todayTotal + mission.points > 50) {
+          throw new Error('DAILY_CAP_REACHED');
+        }
+
+        // user_missions 테이블 업데이트
+        db.prepare(`
+          UPDATE user_missions
+          SET status = 'claimed', claimed_at = datetime('now')
+          WHERE user_id = ? AND mission_code = ? AND date_yyyymmdd = ?
+        `).run(userId, missionCode, todayKey);
+      } else {
+        // 주간 미션은 기존 로직 사용
+        const existingClaim = db.prepare(`
+          SELECT id
+          FROM user_mission_claims
+          WHERE user_id = ? AND mission_code = ? AND period_key = ?
+        `).get(userId, missionCode, periodKey);
+
+        if (existingClaim) {
+          throw new Error('ALREADY_CLAIMED');
+        }
+
+        db.prepare(`
+          INSERT INTO user_mission_claims (user_id, mission_code, period_key)
+          VALUES (?, ?, ?)
+        `).run(userId, missionCode, periodKey);
+      }
 
       // 포인트 지급 기록
       db.prepare(`
@@ -188,10 +226,17 @@ export async function POST(request: Request) {
         { status: 409 }
       );
     }
+
+    if (error.message === 'MISSION_NOT_COMPLETED') {
+      return NextResponse.json(
+        { ok: false, code: 'MISSION_NOT_COMPLETED', error: '미션을 먼저 완료해주세요.' },
+        { status: 400 }
+      );
+    }
     
     if (error.message === 'DAILY_CAP_REACHED') {
       return NextResponse.json(
-        { ok: false, code: 'DAILY_CAP_REACHED', error: '일일 포인트 한도(30P)를 초과했습니다.' },
+        { ok: false, code: 'DAILY_CAP_REACHED', error: '일일 포인트 한도(50P)를 초과했습니다.' },
         { status: 403 }
       );
     }

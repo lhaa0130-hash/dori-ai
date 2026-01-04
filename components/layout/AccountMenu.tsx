@@ -5,6 +5,7 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
+import DailyMissions from "@/components/mission/DailyMissions";
 
 interface AccountMenuProps {
   user: {
@@ -25,10 +26,17 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
   const [searchQuery, setSearchQuery] = useState("");
   const [isSearchFocused, setIsSearchFocused] = useState(false);
   const [searchResults, setSearchResults] = useState<any[]>([]);
+  const [isMissionsExpanded, setIsMissionsExpanded] = useState(false);
+  const [userPoints, setUserPoints] = useState(points);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => setMounted(true), []);
+
+  // 포인트 업데이트
+  useEffect(() => {
+    setUserPoints(points);
+  }, [points]);
 
   useEffect(() => {
     if (!searchQuery.trim()) {
@@ -251,7 +259,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                         color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
                       }}
                     >
-                      Points {points.toLocaleString()}
+                      Points {userPoints.toLocaleString()}
                     </div>
                   </div>
                   {/* Level Indicator */}
@@ -294,10 +302,10 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
             </div>
 
             {/* Quick Actions */}
-            <div className="grid grid-cols-2 gap-2 mb-4">
+            <div className="grid grid-cols-1 gap-2 mb-4">
               <button
                 onClick={() => handleNavigate('/my')}
-                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
                 style={{
                   background: isDark
                     ? 'rgba(255, 255, 255, 0.08)'
@@ -315,26 +323,62 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                   My Page
                 </span>
               </button>
-              <button
-                onClick={() => handleNavigate('/missions')}
-                className="flex items-center justify-center gap-2 px-4 py-2.5 rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
-                style={{
-                  background: isDark
-                    ? 'rgba(255, 255, 255, 0.05)'
-                    : 'rgba(0, 0, 0, 0.03)',
-                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)'}`,
-                }}
-              >
-                <span className="text-base">🎯</span>
-                <span
-                  className="text-sm font-medium"
+              <div className="w-full">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setIsMissionsExpanded(!isMissionsExpanded);
+                  }}
+                  className="w-full flex items-center justify-between gap-2 px-4 py-2 rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
                   style={{
-                    color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
+                    background: isDark
+                      ? 'rgba(255, 255, 255, 0.05)'
+                      : 'rgba(0, 0, 0, 0.03)',
+                    border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)'}`,
                   }}
                 >
-                  Missions
-                </span>
-              </button>
+                  <div className="flex items-center gap-2">
+                    <span className="text-base">🎯</span>
+                    <span
+                      className="text-sm font-medium"
+                      style={{
+                        color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
+                      }}
+                    >
+                      Missions
+                    </span>
+                  </div>
+                  <svg
+                    width="10"
+                    height="6"
+                    viewBox="0 0 10 6"
+                    fill="none"
+                    className={`transition-transform duration-200 ${isMissionsExpanded ? 'rotate-180' : ''}`}
+                    style={{
+                      color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                    }}
+                  >
+                    <path
+                      d="M1 1L5 5L9 1"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </button>
+
+                {/* Daily Missions 아코디언 콘텐츠 - 항상 표시 */}
+                <div className="mt-2 pl-2">
+                  <DailyMissions
+                    isDark={isDark}
+                    onPointsUpdate={(newPoints) => {
+                      setUserPoints(newPoints);
+                      // 부모 컴포넌트에 포인트 업데이트 알림 (필요시)
+                    }}
+                  />
+                </div>
+              </div>
             </div>
 
             {/* Search */}

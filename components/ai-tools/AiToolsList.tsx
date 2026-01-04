@@ -78,8 +78,20 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
   const [visibleCount, setVisibleCount] = useState(9); 
   const [isLoaded, setIsLoaded] = useState(false);
   const [expandedTools, setExpandedTools] = useState<Record<string, number>>({});
+  
+  // 초기 표시 개수를 6개로 설정
+  useEffect(() => {
+    const initialExpanded: Record<string, number> = {};
+    DISPLAY_CATEGORIES.forEach(cat => {
+      initialExpanded[cat] = 6;
+    });
+    setExpandedTools(initialExpanded);
+  }, []);
 
   useEffect(() => {
+    console.log('AI_TOOLS_DATA length:', AI_TOOLS_DATA.length);
+    console.log('AI_TOOLS_DATA sample:', AI_TOOLS_DATA.slice(0, 3));
+    
     const savedRatings = JSON.parse(localStorage.getItem("dori_tool_ratings") || "{}");
     
     const updatedTools = AI_TOOLS_DATA.map(tool => {
@@ -91,6 +103,7 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
       return tool; 
     });
 
+    console.log('Updated tools length:', updatedTools.length);
     setTools(updatedTools);
     setIsLoaded(true);
   }, []);
@@ -113,6 +126,10 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
   };
 
   const currentTools = isLoaded && tools.length > 0 ? tools : AI_TOOLS_DATA;
+  
+  console.log('Current tools length:', currentTools.length);
+  console.log('Filters:', filters);
+  console.log('Is overview mode:', isOverviewMode);
 
   // --- [1] 개요 모드 렌더링 (카테고리별 랭킹 섹션) ---
   if (isOverviewMode) {
@@ -128,8 +145,8 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
             return null;
           }
 
-          // 각 카테고리에서 표시할 개수 (기본 6개, 더보기 클릭 시 증가)
-          const displayCount = expandedTools[cat] || 6;
+          // 각 카테고리에서 표시할 개수 (최소 6개, 더보기 클릭 시 증가)
+          const displayCount = Math.max(expandedTools[cat] || 6, 6);
           const displayTools = catTools.slice(0, displayCount);
           const top3 = displayTools.slice(0, 3);
           const rest = displayTools.slice(3);

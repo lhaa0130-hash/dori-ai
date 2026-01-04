@@ -47,6 +47,27 @@ function initializeTables(database: Database.Database) {
     )
   `);
 
+  // user_missions 테이블: 사용자별 미션 완료/수령 상태 추적
+  database.exec(`
+    CREATE TABLE IF NOT EXISTS user_missions (
+      id INTEGER PRIMARY KEY AUTOINCREMENT,
+      user_id TEXT NOT NULL,
+      mission_code TEXT NOT NULL,
+      date_yyyymmdd TEXT NOT NULL, -- 'YYYYMMDD' format for KST
+      status TEXT NOT NULL DEFAULT 'pending', -- 'pending' | 'completed' | 'claimed'
+      completed_at TEXT,
+      claimed_at TEXT,
+      UNIQUE(user_id, mission_code, date_yyyymmdd)
+    )
+  `);
+
+  // 인덱스 추가
+  database.exec(`
+    CREATE INDEX IF NOT EXISTS idx_user_missions_user_id ON user_missions(user_id);
+    CREATE INDEX IF NOT EXISTS idx_user_missions_date ON user_missions(date_yyyymmdd);
+    CREATE INDEX IF NOT EXISTS idx_user_missions_code ON user_missions(mission_code);
+  `);
+
   // point_ledger 테이블: 포인트 지급 내역 (auditable)
   database.exec(`
     CREATE TABLE IF NOT EXISTS point_ledger (
@@ -76,20 +97,20 @@ function seedMissions(database: Database.Database) {
   const missions = [
     {
       code: 'DAILY_CHECKIN',
-      title: 'Daily Check-in',
-      points: 2,
+      title: '출석 체크',
+      points: 10,
       reset_type: 'daily',
     },
     {
-      code: 'DAILY_CHEER',
-      title: 'Cheer for DORI',
-      points: 1,
+      code: 'WRITE_POST_1',
+      title: '글 쓰기 1회',
+      points: 10,
       reset_type: 'daily',
     },
     {
-      code: 'DAILY_TIP',
-      title: "Get today's AI tip",
-      points: 2,
+      code: 'WRITE_COMMENT_3',
+      title: '댓글 쓰기 3회',
+      points: 10,
       reset_type: 'daily',
     },
     {
@@ -101,8 +122,8 @@ function seedMissions(database: Database.Database) {
   ];
 
   const stmt = database.prepare(`
-    INSERT OR IGNORE INTO missions (code, title, points, reset_type, is_active)
-    VALUES (?, ?, ?, ?, 1)
+    INSERT OR REPLACE INTO missions (code, title, points, reset_type, is_active, updated_at)
+    VALUES (?, ?, ?, ?, 1, datetime('now'))
   `);
 
   const insertMany = database.transaction((missions) => {

@@ -4,6 +4,7 @@ import { useIsApp } from "@/hooks/useIsApp";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import AppLayoutWrapper from "@/components/layout/AppLayoutWrapper";
+import { useMissionAutoComplete } from "@/hooks/useMissionAutoComplete";
 
 interface LayoutClientProps {
   children: React.ReactNode;
@@ -15,6 +16,9 @@ interface LayoutClientProps {
  */
 export default function LayoutClient({ children }: LayoutClientProps) {
   const isAppEnv = useIsApp();
+  
+  // 전역 미션 자동 완료 (출석 체크, 페이지 방문 등)
+  useMissionAutoComplete();
 
   // 앱 환경: Header/Footer 숨기고 AppLayoutWrapper 사용
   if (isAppEnv) {

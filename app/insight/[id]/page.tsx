@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import InsightLikeButton from "@/components/insight/InsightLikeButton";
 import InsightEditButtons from "@/components/insight/InsightEditButtons";
+import InsightDetailClient from "./page.client";
 
 // 정적 경로 생성 (빌드 최적화)
 export async function generateStaticParams() {
@@ -58,6 +59,9 @@ export default async function InsightDetailPage({ params }: Props) {
             <InsightEditButtons postId={post.id} />
           </header>
   
+          {/* 미션 타이머 (30초 읽기) */}
+          <InsightDetailClient />
+
           {/* 본문 영역 (HTML) */}
           <div 
             className="

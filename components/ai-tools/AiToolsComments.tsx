@@ -58,6 +58,13 @@ export default function AiToolsComments({ toolId, compact = false, onCommentUpda
     savedData[toolId] = updatedComments;
     localStorage.setItem("dori_tool_comments", JSON.stringify(savedData));
     
+    // 댓글 작성 미션 진행도 업데이트
+    if (session?.user?.email) {
+      import('@/lib/missionProgress').then(({ handleCommentMission }) => {
+        handleCommentMission().catch(err => console.error('미션 진행도 업데이트 오류:', err));
+      });
+    }
+    
     // 부모 컴포넌트에 업데이트 알림
     if (onCommentUpdate) {
       onCommentUpdate();

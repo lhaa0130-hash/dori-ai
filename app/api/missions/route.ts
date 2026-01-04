@@ -12,7 +12,7 @@ export async function GET() {
     const db = getDb();
 
     // 활성 미션 목록 가져오기
-    const missions = db.prepare(`
+    let missions = db.prepare(`
       SELECT code, title, points, reset_type
       FROM missions
       WHERE is_active = 1
@@ -23,6 +23,42 @@ export async function GET() {
       points: number;
       reset_type: string;
     }>;
+
+    // 미션이 없으면 자동으로 생성
+    if (missions.length === 0) {
+      const seedMissions = [
+        { code: 'DAILY_CHECKIN', title: '출석 체크', points: 10, reset_type: 'daily' },
+        { code: 'WRITE_POST_1', title: '글 쓰기 1회', points: 10, reset_type: 'daily' },
+        { code: 'WRITE_COMMENT_3', title: '댓글 쓰기 3회', points: 10, reset_type: 'daily' },
+        { code: 'WEEKLY_BONUS', title: 'Weekly Bonus', points: 10, reset_type: 'weekly' },
+      ];
+
+      const stmt = db.prepare(`
+        INSERT OR REPLACE INTO missions (code, title, points, reset_type, is_active, updated_at)
+        VALUES (?, ?, ?, ?, 1, datetime('now'))
+      `);
+
+      const insertMany = db.transaction((missions) => {
+        for (const mission of missions) {
+          stmt.run(mission.code, mission.title, mission.points, mission.reset_type);
+        }
+      });
+
+      insertMany(seedMissions);
+
+      // 다시 조회
+      missions = db.prepare(`
+        SELECT code, title, points, reset_type
+        FROM missions
+        WHERE is_active = 1
+        ORDER BY reset_type DESC, code
+      `).all() as Array<{
+        code: string;
+        title: string;
+        points: number;
+        reset_type: string;
+      }>;
+    }
 
     if (!session?.user?.email) {
       // 비로그인: locked 상태로 반환

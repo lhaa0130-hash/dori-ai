@@ -52,3 +52,16 @@ export function getTodayPointsTotal(db: any, userId: string): number {
   return result?.total || 0;
 }
 
+/**
+ * KST 기준 오늘 날짜를 YYYYMMDD 형식으로 반환
+ */
+export function getTodayDateKey(): string {
+  const now = new Date();
+  // Asia/Seoul은 UTC+9
+  const seoulTime = new Date(now.getTime() + (9 * 60 * 60 * 1000));
+  const year = seoulTime.getUTCFullYear();
+  const month = String(seoulTime.getUTCMonth() + 1).padStart(2, '0');
+  const day = String(seoulTime.getUTCDate()).padStart(2, '0');
+  return `${year}${month}${day}`;
+}
+

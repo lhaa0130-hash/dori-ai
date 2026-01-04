@@ -279,8 +279,10 @@ export default function MissionPanel() {
                   {claiming === mission.code
                     ? '...'
                     : mission.status === 'claimed'
-                    ? 'Completed'
-                    : 'Claim'}
+                    ? '완료'
+                    : mission.code === 'DAILY_CHECKIN'
+                    ? '체크'
+                    : '수령'}
                 </button>
               </div>
             )) : (

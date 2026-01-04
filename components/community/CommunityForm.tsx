@@ -259,6 +259,13 @@ export default function CommunityForm({ onAddPost, initialData, onCancel, onUpda
       };
 
       onAddPost(newPost);
+
+      // 게시글 작성 미션 자동 완료
+      if (session?.user?.email) {
+        import('@/lib/missionProgress').then(({ handlePostMission }) => {
+          handlePostMission().catch(err => console.error('미션 완료 오류:', err));
+        });
+      }
     }
     
     // 초기화
