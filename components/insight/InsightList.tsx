@@ -1,5 +1,6 @@
 "use client";
 
+import { useMemo, useCallback } from "react";
 import Link from "next/link";
 import InsightCard from "./InsightCard";
 import { TEXTS } from "@/constants/texts";
@@ -18,40 +19,50 @@ interface InsightListProps {
 }
 
 export default function InsightList({ filters, setFilters, posts, isOwner, onEdit, onDelete }: InsightListProps) {
-  const handleTagClick = (tag: string) => setFilters({ ...filters, tag });
-
-  // 받아온 posts 데이터를 필터링
-  const filteredData = posts.filter((item) => {
-    const matchCategory = filters.category === "All" || item.category === filters.category;
-    const matchTag = filters.tag === null || item.tags.includes(filters.tag);
-    return matchCategory && matchTag;
-  }).sort((a, b) => {
-    if (filters.sort === "popular") return b.likes - a.likes;
-    
-    // 전체 필터일 때는 모든 글을 최신순으로 정렬
-    if (filters.category === "All") {
-      return new Date(b.date).getTime() - new Date(a.date).getTime();
-    }
-    
-    // 특정 카테고리 필터일 때만 가이드는 옛날순으로 정렬
-    if (filters.category === "가이드") {
-      if (a.category === '가이드' && b.category === '가이드') {
-        return new Date(a.date).getTime() - new Date(b.date).getTime();
+  // 받아온 posts 데이터를 필터링 및 정렬 (useMemo로 최적화)
+  const filteredData = useMemo(() => {
+    return posts.filter((item) => {
+      const matchCategory = filters.category === "All" || item.category === filters.category;
+      const matchTag = filters.tag === null || item.tags.includes(filters.tag);
+      return matchCategory && matchTag;
+    }).sort((a, b) => {
+      if (filters.sort === "popular") return b.likes - a.likes;
+      
+      // 전체 필터일 때는 모든 글을 최신순으로 정렬
+      if (filters.category === "All") {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
       }
-    }
-    
-    // 가이드가 아닌 카테고리 필터일 때는 최신순
-    if (a.category !== '가이드' && b.category !== '가이드') {
+      
+      // 특정 카테고리 필터일 때만 가이드는 옛날순으로 정렬
+      if (filters.category === "가이드") {
+        if (a.category === '가이드' && b.category === '가이드') {
+          return new Date(a.date).getTime() - new Date(b.date).getTime();
+        }
+      }
+      
+      // 가이드가 아닌 카테고리 필터일 때는 최신순
+      if (a.category !== '가이드' && b.category !== '가이드') {
+        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      }
+      
+      // 가이드와 다른 카테고리 섞일 때는 가이드 우선 배치
+      if (a.category === '가이드' && b.category !== '가이드') return -1;
+      if (a.category !== '가이드' && b.category === '가이드') return 1;
+      
+      // 기본적으로 최신순
       return new Date(b.date).getTime() - new Date(a.date).getTime();
-    }
-    
-    // 가이드와 다른 카테고리 섞일 때는 가이드 우선 배치
-    if (a.category === '가이드' && b.category !== '가이드') return -1;
-    if (a.category !== '가이드' && b.category === '가이드') return 1;
-    
-    // 기본적으로 최신순
-    return new Date(b.date).getTime() - new Date(a.date).getTime();
-  });
+    });
+  }, [posts, filters.category, filters.tag, filters.sort]);
+
+  // 태그 클릭 핸들러 (useCallback으로 최적화)
+  const handleTagClick = useCallback((tag: string) => {
+    setFilters({ ...filters, tag });
+  }, [filters, setFilters]);
+
+  // 태그 필터 해제 핸들러
+  const handleTagFilterRemove = useCallback(() => {
+    setFilters({ ...filters, tag: null });
+  }, [filters, setFilters]);
 
   return (
     <div className="w-full">
@@ -89,7 +100,7 @@ export default function InsightList({ filters, setFilters, posts, isOwner, onEdi
           <div className="text-4xl mb-4">📭</div>
           <p>조건에 맞는 인사이트가 없습니다.</p>
           {filters.tag && (
-            <button onClick={() => setFilters({...filters, tag: null})} className="mt-4 text-blue-500 hover:underline">
+            <button onClick={handleTagFilterRemove} className="mt-4 text-blue-500 hover:underline">
               태그 필터 해제하기
             </button>
           )}
