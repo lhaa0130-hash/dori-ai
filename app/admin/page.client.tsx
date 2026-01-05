@@ -35,6 +35,10 @@ export default function AdminClient() {
     if (status === "loading") return;
     if (!session || !session.user?.email) {
       setIsAuthorized(false);
+      if (status === "unauthenticated") {
+        // 로그인하지 않은 경우 메인으로 리디렉션
+        router.push("/");
+      }
       return;
     }
     
@@ -44,11 +48,20 @@ export default function AdminClient() {
     
     setIsAuthorized(isAdmin);
     
-    // 디버깅: 콘솔에 이메일 출력 (개발 환경에서만)
-    if (process.env.NODE_ENV === 'development') {
-      console.log('Admin check:', { userEmail, isAdmin, ADMIN_EMAILS });
+    // 디버깅: 콘솔에 이메일 출력
+    console.log('Admin check:', { 
+      userEmail, 
+      isAdmin, 
+      ADMIN_EMAILS,
+      sessionUser: session.user,
+      isAdminFromSession: (session.user as any)?.isAdmin
+    });
+    
+    // 관리자가 아닌 경우 메인으로 리디렉션
+    if (!isAdmin) {
+      router.push("/");
     }
-  }, [session, status]);
+  }, [session, status, router]);
 
   useEffect(() => {
     if (!isAuthorized) return;

@@ -13,28 +13,48 @@ export default function SignupPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
+  const [gender, setGender] = useState<"male" | "female" | "">("");
+  const [ageGroup, setAgeGroup] = useState<"10s" | "20s" | "30s" | "40s" | "">("");
 
   // 회원가입 처리
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !password || !name) return alert("모든 필드를 입력해주세요.");
+    if (!email || !password || !name || !gender || !ageGroup) return alert("모든 필드를 입력해주세요.");
     if (password !== confirmPassword) return alert("비밀번호가 일치하지 않습니다.");
     if (password.length < 6) return alert("비밀번호는 6자 이상이어야 합니다.");
 
     setIsLoading(true);
 
     try {
-      // API로 이메일, 비번, 이름 전송
+      // API로 이메일, 비번, 이름, 성별, 연령층 전송
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, name }),
+        body: JSON.stringify({ email, password, name, gender, ageGroup }),
       });
 
       if (!res.ok) {
-        throw new Error("가입 처리 중 오류가 발생했습니다.");
+        const errorData = await res.json();
+        throw new Error(errorData.error || "가입 처리 중 오류가 발생했습니다.");
       }
+
+      // localStorage에 프로필 생성
+      const profileData = {
+        id: email, // 이메일을 ID로 사용하여 일관성 유지
+        email: email,
+        nickname: name,
+        gender: gender,
+        ageGroup: ageGroup,
+        tier: 1,
+        level: 1,
+        doriScore: 0,
+        point: 0,
+        createdAt: new Date().toISOString(),
+      };
+
+      localStorage.setItem(`dori_profile_${email}`, JSON.stringify(profileData));
+      localStorage.setItem(`dori_user_name_${email}`, name);
 
       alert("회원가입이 완료되었습니다! 로그인해주세요.");
       router.push("/login");
@@ -100,6 +120,72 @@ export default function SignupPage() {
                 value={name} 
                 onChange={(e) => setName(e.target.value)} 
               />
+            </div>
+
+            <div className="input-group">
+              <label>성별 <span style={{ color: '#ff4d4f' }}>*</span></label>
+              <select 
+                value={gender} 
+                onChange={(e) => setGender(e.target.value as "male" | "female" | "")}
+                style={{
+                  padding: '14px',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '12px',
+                  fontSize: '15px',
+                  transition: '0.2s',
+                  outline: 'none',
+                  background: '#fcfcfc',
+                  width: '100%',
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#007AFF';
+                  e.target.style.background = '#fff';
+                  e.target.style.boxShadow = '0 0 0 4px rgba(0,122,255,0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#e5e7eb';
+                  e.target.style.background = '#fcfcfc';
+                  e.target.style.boxShadow = 'none';
+                }}
+              >
+                <option value="">선택해주세요</option>
+                <option value="male">남성</option>
+                <option value="female">여성</option>
+              </select>
+            </div>
+
+            <div className="input-group">
+              <label>연령층 <span style={{ color: '#ff4d4f' }}>*</span></label>
+              <select 
+                value={ageGroup} 
+                onChange={(e) => setAgeGroup(e.target.value as "10s" | "20s" | "30s" | "40s" | "")}
+                style={{
+                  padding: '14px',
+                  border: '1px solid #e5e7eb',
+                  borderRadius: '12px',
+                  fontSize: '15px',
+                  transition: '0.2s',
+                  outline: 'none',
+                  background: '#fcfcfc',
+                  width: '100%',
+                }}
+                onFocus={(e) => {
+                  e.target.style.borderColor = '#007AFF';
+                  e.target.style.background = '#fff';
+                  e.target.style.boxShadow = '0 0 0 4px rgba(0,122,255,0.1)';
+                }}
+                onBlur={(e) => {
+                  e.target.style.borderColor = '#e5e7eb';
+                  e.target.style.background = '#fcfcfc';
+                  e.target.style.boxShadow = 'none';
+                }}
+              >
+                <option value="">선택해주세요</option>
+                <option value="10s">10대</option>
+                <option value="20s">20대</option>
+                <option value="30s">30대</option>
+                <option value="40s">40대</option>
+              </select>
             </div>
 
             <button type="submit" className="submit-btn" disabled={isLoading}>

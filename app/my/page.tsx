@@ -46,10 +46,12 @@ export default function MyPage() {
           
           membersMap.set(email, {
             email,
-            id: profileData.id || email,
+            id: email, // 이메일을 ID로 사용하여 일관성 유지
             nickname: profileData.nickname || userName,
             tier: profileData.tier || "Explorer",
             level: profileData.level || 1,
+            gender: profileData.gender || "알 수 없음",
+            ageGroup: profileData.ageGroup || "알 수 없음",
             doriScore: profileData.doriScore || 0,
             createdAt: profileData.createdAt || "알 수 없음",
           });
@@ -78,6 +80,8 @@ export default function MyPage() {
             nickname: userName,
             tier: profileData.tier || "Explorer",
             level: profileData.level || 1,
+            gender: profileData.gender || "알 수 없음",
+            ageGroup: profileData.ageGroup || "알 수 없음",
             doriScore: profileData.doriScore || 0,
             createdAt: profileData.createdAt || "알 수 없음",
           });
@@ -98,6 +102,8 @@ export default function MyPage() {
             nickname: post.author || post.nickname || post.authorEmail.split("@")[0],
             tier: "Explorer",
             level: 1,
+            gender: "알 수 없음",
+            ageGroup: "알 수 없음",
             doriScore: 0,
             createdAt: "알 수 없음",
           });
@@ -120,6 +126,8 @@ export default function MyPage() {
                 nickname: comment.userName || comment.userId.split("@")[0],
                 tier: "Explorer",
                 level: 1,
+                gender: "알 수 없음",
+                ageGroup: "알 수 없음",
                 doriScore: 0,
                 createdAt: "알 수 없음",
               });
@@ -181,6 +189,16 @@ export default function MyPage() {
         statusMessage,
         profileImageUrl,
       });
+      // 프로필이 없으면 localStorage에 저장 (구글 로그인 등으로 자동 회원 등록)
+      localStorage.setItem(`dori_profile_${user.email}`, JSON.stringify({
+        ...defaultProfile,
+        bio,
+        statusMessage,
+        profileImageUrl,
+      }));
+      if (!savedName) {
+        localStorage.setItem(`dori_user_name_${user.email}`, nickname);
+      }
     }
   }, [user?.email, user?.name]);
 
@@ -542,6 +560,38 @@ export default function MyPage() {
                           color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)',
                         }}>
                           Lv.{member.level}
+                        </div>
+                      </div>
+                      <div>
+                        <div style={{
+                          fontSize: '0.75rem',
+                          color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                          marginBottom: '0.25rem',
+                        }}>
+                          성별
+                        </div>
+                        <div style={{
+                          fontSize: '0.9375rem',
+                          fontWeight: '500',
+                          color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)',
+                        }}>
+                          {member.gender === "male" ? "남성" : member.gender === "female" ? "여성" : member.gender || "알 수 없음"}
+                        </div>
+                      </div>
+                      <div>
+                        <div style={{
+                          fontSize: '0.75rem',
+                          color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                          marginBottom: '0.25rem',
+                        }}>
+                          연령층
+                        </div>
+                        <div style={{
+                          fontSize: '0.9375rem',
+                          fontWeight: '500',
+                          color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)',
+                        }}>
+                          {member.ageGroup === "10s" ? "10대" : member.ageGroup === "20s" ? "20대" : member.ageGroup === "30s" ? "30대" : member.ageGroup === "40s" ? "40대" : member.ageGroup || "알 수 없음"}
                         </div>
                       </div>
                       <div>

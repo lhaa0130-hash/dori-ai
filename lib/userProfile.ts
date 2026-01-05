@@ -10,6 +10,8 @@ export interface UserProfile {
   profileImageUrl?: string;
   statusMessage?: string;
   bio?: string;
+  gender?: "male" | "female";
+  ageGroup?: "10s" | "20s" | "30s" | "40s";
   tier: UserTier;
   level: number;
   doriScore: number;
@@ -79,11 +81,13 @@ export function calculateActivityScore(activities: UserActivity[]): number {
 }
 
 // 기본 프로필 데이터 생성
-export function createDefaultProfile(userId: string, email: string, nickname: string): UserProfile {
+export function createDefaultProfile(userId: string, email: string, nickname: string, gender?: "male" | "female", ageGroup?: "10s" | "20s" | "30s" | "40s"): UserProfile {
   return {
-    id: userId,
+    id: email, // 이메일을 ID로 사용하여 일관성 유지
     email,
     nickname,
+    gender,
+    ageGroup,
     tier: 1,
     level: 1,
     doriScore: 0,

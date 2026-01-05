@@ -575,17 +575,6 @@ export default function PremiumDesignPage() {
             >
               AI가 처음이어도, 누구나 배우고 성장할 수 있는 공간
             </p>
-            <p 
-              className="text-sm sm:text-base leading-relaxed"
-              style={{
-                color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
-                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                fontWeight: 400,
-                letterSpacing: '-0.01em',
-              }}
-            >
-              AI로 뭐든 만드는 사이트 입니다.
-            </p>
           </div>
 
 
