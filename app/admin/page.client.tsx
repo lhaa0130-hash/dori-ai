@@ -24,6 +24,7 @@ export default function AdminClient() {
   const t = TEXTS.admin;
   const [suggestions, setSuggestions] = useState<SuggestionItem[]>([]);
   const [visitorStats, setVisitorStats] = useState({ today: 0, weekly: 0, monthly: 0, total: 0 });
+  const [communityCount, setCommunityCount] = useState(0);
   const [isAuthorized, setIsAuthorized] = useState(false);
   const [mounted, setMounted] = useState(false);
   const MARKET_ITEMS_COUNT = 9;
@@ -64,7 +65,7 @@ export default function AdminClient() {
   }, [session, status, router]);
 
   useEffect(() => {
-    if (!isAuthorized) return;
+    if (!mounted) return;
     
     // 제안 데이터
     const savedSuggestions = localStorage.getItem("dori_suggestions");
@@ -80,168 +81,102 @@ export default function AdminClient() {
         console.error("Error parsing dori_suggestions:", e);
         setSuggestions([]);
       }
+    } else {
+      setSuggestions([]);
     }
 
-    // 방문자 통계 - 실제 방문자 목록을 기반으로 계산 (정확도 향상)
+    // 커뮤니티 글 카운트
+    try {
+      const savedPosts = localStorage.getItem("dori_community_posts");
+      if (savedPosts) {
+        const parsed = JSON.parse(savedPosts);
+        const count = Array.isArray(parsed) ? parsed.length : 0;
+        setCommunityCount(count);
+      } else {
+        setCommunityCount(0);
+      }
+    } catch (e) {
+      console.error("Error parsing community posts:", e);
+      setCommunityCount(0);
+    }
+  }, [mounted]);
+
+  useEffect(() => {
+    if (!isAuthorized || !mounted) return;
+
+    // 방문자 통계 계산 - 즉시 실행
     const updateVisitorStats = () => {
-      const now = new Date();
-      const todayKey = now.toISOString().split("T")[0]; // YYYY-MM-DD
-      
-      // 실제 방문자 목록 가져오기 (IP 정보가 있는 실제 방문자)
-      let visitorsList: any[] = [];
       try {
-        const visitorsData = localStorage.getItem("dori_visitors_list");
-        if (visitorsData) {
-          visitorsList = JSON.parse(visitorsData);
-          if (!Array.isArray(visitorsList)) {
-            visitorsList = [];
-          }
+        const now = new Date();
+        const todayKey = now.toISOString().split("T")[0]; // YYYY-MM-DD
+        
+        // localStorage에서 데이터 가져오기
+        const history = JSON.parse(localStorage.getItem("dori_visitor_history") || "{}");
+        const storedTotal = parseInt(localStorage.getItem("dori_total_visitors") || "0", 10);
+        const storedDaily = parseInt(localStorage.getItem("dori_daily_visitors") || "0", 10);
+        
+        // 오늘 방문자 수
+        const todayFromHistory = history[todayKey] || 0;
+        const today = Math.max(todayFromHistory, storedDaily, 0);
+        
+        // 주간 방문자 수 (최근 7일)
+        let weekly = 0;
+        for (let i = 0; i < 7; i++) {
+          const d = new Date(now);
+          d.setDate(now.getDate() - i);
+          const key = d.toISOString().split("T")[0];
+          weekly += history[key] || 0;
         }
-      } catch (e) {
-        console.error("방문자 목록 파싱 오류:", e);
-        visitorsList = [];
-      }
-      
-      // 히스토리 데이터도 함께 사용 (API 호출 실패 시 대비)
-      const history = JSON.parse(localStorage.getItem("dori_visitor_history") || "{}");
-      const storedTotal = parseInt(localStorage.getItem("dori_total_visitors") || "0", 10);
-      
-      // 오늘 방문자: 실제 목록에서 오늘 날짜로 필터링
-      const todayVisitors = visitorsList.filter(v => {
-        try {
-          if (!v || !v.timestamp) return false;
-          const visitorDate = new Date(v.timestamp).toISOString().split("T")[0];
-          return visitorDate === todayKey;
-        } catch (e) {
-          return false;
-        }
-      });
-      // 오늘 방문자 수는 무조건 실제 목록 개수 사용 (목록과 일치시키기 위해)
-      const finalToday = todayVisitors.length;
-      
-      // 주간 방문자: 최근 7일 방문자 (중복 IP 제거)
-      const weekAgo = new Date(now);
-      weekAgo.setDate(now.getDate() - 7);
-      weekAgo.setHours(0, 0, 0, 0);
-      
-      const weeklyVisitors = visitorsList.filter(v => {
-        try {
-          if (!v || !v.timestamp) return false;
-          const visitorDate = new Date(v.timestamp);
-          return visitorDate >= weekAgo;
-        } catch (e) {
-          return false;
-        }
-      });
-      
-      // 주간 방문자 수 (중복 IP 제거)
-      const weeklyUniqueIPs = new Set(weeklyVisitors.map(v => v?.ip).filter(Boolean));
-      let weekly = weeklyUniqueIPs.size;
-      
-      // 월간 방문자: 이번 달 방문자 (중복 IP 제거)
-      const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
-      monthStart.setHours(0, 0, 0, 0);
-      
-      const monthlyVisitors = visitorsList.filter(v => {
-        try {
-          if (!v || !v.timestamp) return false;
-          const visitorDate = new Date(v.timestamp);
-          return visitorDate >= monthStart;
-        } catch (e) {
-          return false;
-        }
-      });
-      
-      // 월간 방문자 수 (중복 IP 제거)
-      const monthlyUniqueIPs = new Set(monthlyVisitors.map(v => v?.ip).filter(Boolean));
-      let monthly = monthlyUniqueIPs.size;
-      
-      // 누적 방문자: 전체 목록의 고유 IP 수
-      const totalUniqueIPs = new Set(visitorsList.map(v => v?.ip).filter(Boolean));
-      let total = totalUniqueIPs.size;
-      
-      // 히스토리 기반 백업 계산 (주간/월간/누적만 사용, 오늘은 제외)
-      let weeklyFromHistory = 0;
-      for (let i = 0; i < 7; i++) {
-        const d = new Date(now);
-        d.setDate(now.getDate() - i);
-        d.setHours(0, 0, 0, 0);
-        const key = d.toISOString().split("T")[0];
-        weeklyFromHistory += history[key] || 0;
-      }
-      
-      // 주간/월간/누적은 히스토리와 비교하여 더 큰 값 사용 (오늘 제외)
-      const finalWeekly = Math.max(weekly, weeklyFromHistory);
-      
-      // 월간은 히스토리에서 계산
-      let monthlyFromHistory = 0;
-      for (const [dateStr, count] of Object.entries(history)) {
-        if (dateStr && dateStr.match(/^\d{4}-\d{2}-\d{2}$/)) {
-          try {
-            const [year, month, day] = dateStr.split('-').map(Number);
-            const date = new Date(year, month - 1, day);
-            date.setHours(0, 0, 0, 0);
-            if (date >= monthStart) {
-              monthlyFromHistory += (count as number);
+        weekly = Math.max(weekly, today, 0);
+        
+        // 월간 방문자 수 (이번 달)
+        const monthStart = new Date(now.getFullYear(), now.getMonth(), 1);
+        let monthly = 0;
+        for (const [dateStr, count] of Object.entries(history)) {
+          if (dateStr && typeof count === 'number') {
+            try {
+              const [year, month] = dateStr.split('-').map(Number);
+              if (year === now.getFullYear() && month === now.getMonth() + 1) {
+                monthly += count;
+              }
+            } catch (e) {
+              // 무시
             }
-          } catch (e) {
-            // 무시
           }
         }
-      }
-      const finalMonthly = Math.max(monthly, monthlyFromHistory);
-      
-      // 누적은 localStorage 값과 비교하여 더 큰 값 사용
-      let historyTotal = 0;
-      for (const count of Object.values(history)) {
-        if (typeof count === 'number') {
-          historyTotal += count;
+        monthly = Math.max(monthly, weekly, 0);
+        
+        // 전체 방문자 수
+        let total = 0;
+        for (const count of Object.values(history)) {
+          if (typeof count === 'number') {
+            total += count;
+          }
         }
+        total = Math.max(total, storedTotal, monthly, 0);
+        
+        console.log('방문자 통계:', { today, weekly, monthly, total, history, storedDaily, storedTotal });
+        
+        setVisitorStats({ 
+          today, 
+          weekly, 
+          monthly, 
+          total 
+        });
+      } catch (error) {
+        console.error('방문자 통계 계산 오류:', error);
+        setVisitorStats({ today: 0, weekly: 0, monthly: 0, total: 0 });
       }
-      const finalTotal = Math.max(total, storedTotal, historyTotal);
-      
-      // 논리 검증: 누적 >= 월간 >= 주간 >= 오늘
-      let validatedToday = finalToday;
-      let validatedWeekly = Math.max(finalWeekly, validatedToday);
-      let validatedMonthly = Math.max(finalMonthly, validatedWeekly);
-      let validatedTotal = Math.max(finalTotal, validatedMonthly);
-      
-      console.log('방문자 통계 계산:', {
-        '실제 목록 기반': {
-          today: finalToday,
-          weekly,
-          monthly,
-          total,
-        },
-        '히스토리 기반': {
-          weeklyFromHistory,
-          monthlyFromHistory,
-          historyTotal,
-        },
-        '최종 결과': {
-          validatedToday,
-          validatedWeekly,
-          validatedMonthly,
-          validatedTotal,
-        },
-        '목록 개수': visitorsList.length,
-      });
-      
-      setVisitorStats({ 
-        today: validatedToday, 
-        weekly: validatedWeekly, 
-        monthly: validatedMonthly, 
-        total: validatedTotal 
-      });
     };
     
+    // 즉시 실행
     updateVisitorStats();
     
-    // 주기적으로 방문자 통계 업데이트 (5초마다)
-    const intervalId = setInterval(updateVisitorStats, 5000);
+    // 주기적으로 업데이트 (3초마다)
+    const intervalId = setInterval(updateVisitorStats, 3000);
     
     return () => clearInterval(intervalId);
-  }, [isAuthorized]);
+  }, [isAuthorized, mounted]);
 
   const isDark = mounted && theme === 'dark';
 
@@ -354,7 +289,7 @@ export default function AdminClient() {
 
         {/* 컨텐츠 섹션 */}
         <section className="container max-w-7xl mx-auto px-4 sm:px-6 pb-16 sm:pb-24 relative z-10">
-          <AdminStats stats={{ todayVisitors: visitorStats.today, weeklyVisitors: visitorStats.weekly, monthlyVisitors: visitorStats.monthly, totalVisitors: visitorStats.total, community: 0, suggestions: suggestions.length, academy: ACADEMY_ITEMS_COUNT, market: MARKET_ITEMS_COUNT }} />
+          <AdminStats stats={{ todayVisitors: visitorStats.today, weeklyVisitors: visitorStats.weekly, monthlyVisitors: visitorStats.monthly, totalVisitors: visitorStats.total, community: communityCount, suggestions: suggestions.length, academy: ACADEMY_ITEMS_COUNT, market: MARKET_ITEMS_COUNT }} />
           <div className="mb-6 sm:mb-8"><AdminVisitorChart /></div>
           <div className="mb-6 sm:mb-8"><AdminVisitorsList /></div>
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">

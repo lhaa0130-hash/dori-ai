@@ -25,7 +25,8 @@ export default function MyPage() {
   const [recentViews, setRecentViews] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState("posts");
   const [memberList, setMemberList] = useState<any[]>([]);
-  const isAdmin = user?.email?.toLowerCase() === "lhaa0130@gmail.com";
+  const ADMIN_EMAILS = ["admin@dori.ai", "lhaa0130@gmail.com"];
+  const isAdmin = user?.email && (ADMIN_EMAILS.some(email => email.toLowerCase() === user.email.toLowerCase()) || (user as any)?.isAdmin === true);
 
   useEffect(() => setMounted(true), []);
 
@@ -404,6 +405,7 @@ export default function MyPage() {
               onNicknameChange={handleNicknameChange}
               onBioChange={handleBioChange}
               onStatusMessageChange={handleStatusMessageChange}
+              isAdmin={isAdmin}
             />
 
             {/* 성장 가이드 */}
@@ -414,14 +416,56 @@ export default function MyPage() {
         {/* 관리자 회원정보 섹션 */}
         {isAdmin && (
           <div style={{ marginTop: profile ? '3rem' : '0' }}>
-            <h1 style={{
-              fontSize: '2rem',
-              fontWeight: '700',
-              color: isDark ? '#ffffff' : '#1d1d1f',
+            <div style={{
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
               marginBottom: '2rem',
+              flexWrap: 'wrap',
+              gap: '1rem',
             }}>
-              회원 관리
-            </h1>
+              <h1 style={{
+                fontSize: '2rem',
+                fontWeight: '700',
+                color: isDark ? '#ffffff' : '#1d1d1f',
+                margin: 0,
+              }}>
+                회원 관리
+              </h1>
+              <Link
+                href="/admin"
+                style={{
+                  padding: '0.75rem 1.5rem',
+                  borderRadius: '0.75rem',
+                  background: isDark 
+                    ? 'linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2))' 
+                    : 'linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(124, 58, 237, 0.1))',
+                  border: `1px solid ${isDark ? 'rgba(59, 130, 246, 0.3)' : 'rgba(37, 99, 235, 0.2)'}`,
+                  color: isDark ? '#60a5fa' : '#2563eb',
+                  textDecoration: 'none',
+                  fontSize: '0.9375rem',
+                  fontWeight: '600',
+                  transition: 'all 0.2s ease',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = isDark 
+                    ? '0 4px 12px rgba(59, 130, 246, 0.3)' 
+                    : '0 4px 12px rgba(37, 99, 235, 0.2)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.transform = 'translateY(0)';
+                  e.currentTarget.style.boxShadow = 'none';
+                }}
+              >
+                <span>⚙️</span>
+                <span>관리자 페이지</span>
+                <span>→</span>
+              </Link>
+            </div>
 
             {/* 회원 통계 */}
             <div style={{

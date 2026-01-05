@@ -1,6 +1,5 @@
 "use client";
 
-import { useState } from "react";
 import Link from "next/link";
 import InsightCard from "./InsightCard";
 import { TEXTS } from "@/constants/texts";
@@ -19,7 +18,6 @@ interface InsightListProps {
 }
 
 export default function InsightList({ filters, setFilters, posts, isOwner, onEdit, onDelete }: InsightListProps) {
-  const [visibleCount, setVisibleCount] = useState(6);
   const handleTagClick = (tag: string) => setFilters({ ...filters, tag });
 
   // 받아온 posts 데이터를 필터링
@@ -55,13 +53,11 @@ export default function InsightList({ filters, setFilters, posts, isOwner, onEdi
     return new Date(b.date).getTime() - new Date(a.date).getTime();
   });
 
-  const visibleData = filteredData.slice(0, visibleCount);
-
   return (
     <div className="w-full">
       {filteredData.length > 0 ? (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-          {visibleData.map((item) => {
+          {filteredData.map((item) => {
             // 가이드 글은 /insight/guide/[slug] 경로 사용
             // 트렌드 글은 /insight/trend/[slug] 경로 사용
             let href = `/insight/${item.id}`;
@@ -97,17 +93,6 @@ export default function InsightList({ filters, setFilters, posts, isOwner, onEdi
               태그 필터 해제하기
             </button>
           )}
-        </div>
-      )}
-
-      {visibleData.length < filteredData.length && (
-        <div className="flex justify-center mt-12">
-           <button 
-             onClick={() => setVisibleCount(p => p+6)} 
-             className="px-8 py-3 rounded-full font-bold transition-all hover:scale-105 border bg-[var(--card-bg)] border-[var(--card-border)] text-[var(--text-main)]"
-           >
-             {TEXTS.insight.button.loadMore.ko} +
-           </button>
         </div>
       )}
     </div>

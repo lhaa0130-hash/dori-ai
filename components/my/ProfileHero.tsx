@@ -12,6 +12,7 @@ interface ProfileHeroProps {
   onBioChange?: (bio: string) => void;
   onStatusMessageChange?: (message: string) => void;
   isEditing?: boolean;
+  isAdmin?: boolean;
 }
 
 export default function ProfileHero({
@@ -21,6 +22,7 @@ export default function ProfileHero({
   onBioChange,
   onStatusMessageChange,
   isEditing = false,
+  isAdmin = false,
 }: ProfileHeroProps) {
   const { theme } = useTheme();
   const isDark = theme === "dark";
@@ -106,6 +108,40 @@ export default function ProfileHero({
               >
                 ✏️ 편집
               </Link>
+              {isAdmin && (
+                <Link
+                  href="/admin"
+                  style={{
+                    padding: "0.5rem 1rem",
+                    borderRadius: "0.5rem",
+                    background: isDark 
+                      ? "linear-gradient(135deg, rgba(59, 130, 246, 0.2), rgba(139, 92, 246, 0.2))" 
+                      : "linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(124, 58, 237, 0.1))",
+                    border: `1px solid ${isDark ? "rgba(59, 130, 246, 0.3)" : "rgba(37, 99, 235, 0.2)"}`,
+                    color: isDark ? "#60a5fa" : "#2563eb",
+                    textDecoration: "none",
+                    fontSize: "0.875rem",
+                    fontWeight: "600",
+                    transition: "all 0.2s ease",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "0.375rem",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.transform = "translateY(-2px)";
+                    e.currentTarget.style.boxShadow = isDark 
+                      ? "0 4px 12px rgba(59, 130, 246, 0.3)" 
+                      : "0 4px 12px rgba(37, 99, 235, 0.2)";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.transform = "translateY(0)";
+                    e.currentTarget.style.boxShadow = "none";
+                  }}
+                >
+                  <span>⚙️</span>
+                  <span>관리자</span>
+                </Link>
+              )}
               <div
                 style={{
                   padding: "0.375rem 0.875rem",
