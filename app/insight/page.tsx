@@ -55,29 +55,12 @@ export default async function InsightPage() {
       };
     });
     
-    // 가이드 글은 옛날순으로 정렬 (날짜 오름차순)
-    const sortedGuides = guideItems.sort((a, b) => {
-      const dateA = a.date ? new Date(a.date).getTime() : 0;
-      const dateB = b.date ? new Date(b.date).getTime() : 0;
-      return dateA - dateB; // 옛날순 (오름차순)
-    });
-    
-    // 일반 인사이트 글은 최신순으로 정렬 (날짜 내림차순)
-    const sortedPosts = allPosts.sort((a, b) => {
+    // 모든 글을 합치고 날짜 기준으로 최신순 정렬 (최신 글이 최상단에)
+    const combinedPosts = [...guideItems, ...trendItems, ...allPosts].sort((a, b) => {
       const dateA = a.date ? new Date(a.date).getTime() : 0;
       const dateB = b.date ? new Date(b.date).getTime() : 0;
       return dateB - dateA; // 최신순 (내림차순)
     });
-    
-    // 트렌드 글은 최신순으로 정렬 (날짜 내림차순)
-    const sortedTrends = trendItems.sort((a, b) => {
-      const dateA = a.date ? new Date(a.date).getTime() : 0;
-      const dateB = b.date ? new Date(b.date).getTime() : 0;
-      return dateB - dateA; // 최신순 (내림차순)
-    });
-    
-    // 가이드 글을 앞쪽에 배치, 그 다음 트렌드, 그 다음 일반 글
-    const combinedPosts = [...sortedGuides, ...sortedTrends, ...sortedPosts];
     
     return <InsightClient initialPosts={combinedPosts || []} />;
   } catch (error) {

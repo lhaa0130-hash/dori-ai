@@ -16,8 +16,22 @@ export function createMetadata({
   description,
   path,
   image = DEFAULT_OG_IMAGE,
-}: CreateMetadataProps): Metadata {
+  keywords,
+}: CreateMetadataProps & { keywords?: string[] }): Metadata {
   const fullUrl = `${SITE_URL}${path}`;
+  const defaultKeywords = [
+    "AI",
+    "인공지능",
+    "AI 도구",
+    "AI 활용",
+    "AI 커뮤니티",
+    "AI 가이드",
+    "AI 트렌드",
+    "AI 튜토리얼",
+    "생성형 AI",
+    "ChatGPT",
+    "DORI-AI",
+  ];
 
   return {
     title: {
@@ -25,6 +39,7 @@ export function createMetadata({
       template: `%s | ${SITE_NAME}`,
     },
     description,
+    keywords: keywords ? keywords.join(", ") : defaultKeywords.join(", "),
     applicationName: SITE_NAME,
     authors: [{ name: "DORI Team", url: SITE_URL }],
     creator: "DORI Team",
@@ -53,6 +68,7 @@ export function createMetadata({
       title: `${title} | ${SITE_NAME}`,
       description,
       images: [image],
+      creator: "@DORI-AI",
     },
     robots: {
       index: true,
@@ -64,6 +80,9 @@ export function createMetadata({
         "max-image-preview": "large",
         "max-snippet": -1,
       },
+    },
+    verification: {
+      google: "your-google-verification-code", // Google Search Console에서 받은 코드로 교체
     },
   };
 }

@@ -26,31 +26,22 @@ export default function InsightList({ filters, setFilters, posts, isOwner, onEdi
       const matchTag = filters.tag === null || item.tags.includes(filters.tag);
       return matchCategory && matchTag;
     }).sort((a, b) => {
-      if (filters.sort === "popular") return b.likes - a.likes;
-      
-      // 전체 필터일 때는 모든 글을 최신순으로 정렬
-      if (filters.category === "All") {
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
+      // 인기순 정렬
+      if (filters.sort === "popular") {
+        return b.likes - a.likes;
       }
       
-      // 특정 카테고리 필터일 때만 가이드는 옛날순으로 정렬
+      // 가이드 카테고리 필터일 때만 옛날순으로 정렬
       if (filters.category === "가이드") {
-        if (a.category === '가이드' && b.category === '가이드') {
-          return new Date(a.date).getTime() - new Date(b.date).getTime();
-        }
+        const dateA = a.date ? new Date(a.date).getTime() : 0;
+        const dateB = b.date ? new Date(b.date).getTime() : 0;
+        return dateA - dateB; // 옛날순 (오름차순)
       }
       
-      // 가이드가 아닌 카테고리 필터일 때는 최신순
-      if (a.category !== '가이드' && b.category !== '가이드') {
-        return new Date(b.date).getTime() - new Date(a.date).getTime();
-      }
-      
-      // 가이드와 다른 카테고리 섞일 때는 가이드 우선 배치
-      if (a.category === '가이드' && b.category !== '가이드') return -1;
-      if (a.category !== '가이드' && b.category === '가이드') return 1;
-      
-      // 기본적으로 최신순
-      return new Date(b.date).getTime() - new Date(a.date).getTime();
+      // 그 외의 경우는 모두 최신순으로 정렬 (최신 글이 최상단)
+      const dateA = a.date ? new Date(a.date).getTime() : 0;
+      const dateB = b.date ? new Date(b.date).getTime() : 0;
+      return dateB - dateA; // 최신순 (내림차순)
     });
   }, [posts, filters.category, filters.tag, filters.sort]);
 

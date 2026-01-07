@@ -2,8 +2,8 @@
 
 import Link from "next/link";
 import { useSession } from "next-auth/react";
-import { usePathname } from "next/navigation"; 
-import { useState, useEffect } from "react";
+import { usePathname, useRouter } from "next/navigation"; 
+import { useState, useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
 import { TEXTS } from "@/constants/texts";
 import AccountMenu from "./AccountMenu"; 
@@ -11,17 +11,174 @@ import AccountMenu from "./AccountMenu";
 export default function Header() {
   const { data: session } = useSession();
   const user = session?.user || null;
-  const pathname = usePathname(); 
+  const pathname = usePathname();
+  const router = useRouter();
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [displayName, setDisplayName] = useState<string>("");
   const [userPoints, setUserPoints] = useState(0);
   const [userLevel, setUserLevel] = useState(1);
+  const [searchQuery, setSearchQuery] = useState("");
+  const [isSearchFocused, setIsSearchFocused] = useState(false);
+  const [searchResults, setSearchResults] = useState<any[]>([]);
+  const searchRef = useRef<HTMLDivElement>(null);
   
   // 🌍 언어 상태 제거, 한국어(.ko) 고정
   const t = TEXTS.nav;
 
   useEffect(() => setMounted(true), []);
+
+  // 검색 기능
+  useEffect(() => {
+    if (!searchQuery.trim()) {
+      setSearchResults([]);
+      return;
+    }
+
+    const performSearch = async () => {
+      const query = searchQuery.trim();
+      const results: any[] = [];
+
+      try {
+        // 1. 인사이트 글 검색 (API 호출)
+        const insightResponse = await fetch(`/api/search?q=${encodeURIComponent(query)}`);
+        if (insightResponse.ok) {
+          const insightData = await insightResponse.json();
+          results.push(...(insightData.results || []));
+        }
+      } catch (e) {
+        console.error('Error searching insights:', e);
+      }
+
+      try {
+        // 2. AI 툴 검색
+        const toolsData = localStorage.getItem("dori_tools_v11");
+        if (toolsData) {
+          const tools = JSON.parse(toolsData);
+          const matchedTools = tools
+            .filter((tool: any) => {
+              const queryLower = query.toLowerCase();
+              return (
+                tool.name?.toLowerCase().includes(queryLower) ||
+                tool.description?.toLowerCase().includes(queryLower) ||
+                tool.summary?.toLowerCase().includes(queryLower) ||
+                tool.tags?.some((tag: string) => tag.toLowerCase().includes(queryLower)) ||
+                tool.category?.toLowerCase().includes(queryLower)
+              );
+            })
+            .slice(0, 4)
+            .map((tool: any) => ({
+              type: 'ai-tool',
+              icon: '🤖',
+              title: tool.name,
+              description: tool.summary || tool.description,
+              category: tool.category,
+              url: `/ai-tools#${tool.id}`,
+            }));
+          results.push(...matchedTools);
+        }
+      } catch (e) {
+        console.error('Error searching tools:', e);
+      }
+
+      try {
+        // 3. 커뮤니티 글 검색
+        const postsData = localStorage.getItem("dori_community_posts");
+        if (postsData) {
+          const posts = JSON.parse(postsData);
+          const queryLower = query.toLowerCase();
+          const matchedPosts = posts
+            .filter((post: any) => 
+              post.title?.toLowerCase().includes(queryLower) ||
+              post.content?.toLowerCase().includes(queryLower) ||
+              post.tags?.some((tag: string) => tag.toLowerCase().includes(queryLower))
+            )
+            .slice(0, 4)
+            .map((post: any) => ({
+              type: 'community',
+              icon: '💬',
+              title: post.title,
+              description: post.content?.substring(0, 60) + (post.content?.length > 60 ? '...' : ''),
+              url: `/community/${post.id}`,
+            }));
+          results.push(...matchedPosts);
+        }
+      } catch (e) {
+        console.error('Error searching community:', e);
+      }
+
+      try {
+        // 4. 아카데미 검색
+        const academyData = localStorage.getItem("dori_academy");
+        if (academyData) {
+          const academy = JSON.parse(academyData);
+          const queryLower = query.toLowerCase();
+          const matchedAcademy = academy
+            .filter((item: any) => 
+              item.title?.toLowerCase().includes(queryLower) ||
+              item.description?.toLowerCase().includes(queryLower) ||
+              item.category?.toLowerCase().includes(queryLower)
+            )
+            .slice(0, 3)
+            .map((item: any) => ({
+              type: 'academy',
+              icon: '🎓',
+              title: item.title,
+              description: item.description || '',
+              url: `/academy/${item.id}`,
+            }));
+          results.push(...matchedAcademy);
+        }
+      } catch (e) {
+        console.error('Error searching academy:', e);
+      }
+
+      try {
+        // 5. 마켓 상품 검색
+        const marketData = localStorage.getItem("dori_market");
+        if (marketData) {
+          const market = JSON.parse(marketData);
+          const queryLower = query.toLowerCase();
+          const matchedMarket = market
+            .filter((item: any) => 
+              item.name?.toLowerCase().includes(queryLower) ||
+              item.description?.toLowerCase().includes(queryLower) ||
+              item.category?.toLowerCase().includes(queryLower)
+            )
+            .slice(0, 3)
+            .map((item: any) => ({
+              type: 'market',
+              icon: '🛒',
+              title: item.name,
+              description: item.description || '',
+              url: `/market/${item.id}`,
+            }));
+          results.push(...matchedMarket);
+        }
+      } catch (e) {
+        console.error('Error searching market:', e);
+      }
+
+      setSearchResults(results.slice(0, 10));
+    };
+
+    const timer = setTimeout(performSearch, 300);
+    return () => clearTimeout(timer);
+  }, [searchQuery]);
+
+  // 외부 클릭 시 검색 결과 닫기
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (searchRef.current && !searchRef.current.contains(event.target as Node)) {
+        setIsSearchFocused(false);
+      }
+    };
+
+    if (isSearchFocused) {
+      document.addEventListener('mousedown', handleClickOutside);
+      return () => document.removeEventListener('mousedown', handleClickOutside);
+    }
+  }, [isSearchFocused]);
 
   // localStorage에서 설정된 닉네임 가져오기
   useEffect(() => {
@@ -51,6 +208,7 @@ export default function Header() {
   }, [user?.email, user?.name]);
 
   const isActive = (path: string) => pathname.startsWith(path) ? "active" : "";
+  const isDark = mounted && theme === 'dark';
 
   if (!mounted) return <header className="header-wrapper" />; 
 
@@ -75,6 +233,76 @@ export default function Header() {
           </nav>
 
           <div className="right-area">
+            {user && (
+              <div className="header-search-container" ref={searchRef}>
+                <div className="header-search-wrapper">
+                  <input
+                    type="text"
+                    placeholder="검색..."
+                    value={searchQuery}
+                    onChange={(e) => setSearchQuery(e.target.value)}
+                    onFocus={() => setIsSearchFocused(true)}
+                    className="header-search-input"
+                  />
+                  <svg
+                    className="header-search-icon"
+                    width="16"
+                    height="16"
+                    viewBox="0 0 16 16"
+                    fill="none"
+                  >
+                    <path
+                      d="M7.333 12.667A5.333 5.333 0 1 0 7.333 2a5.333 5.333 0 0 0 0 10.667ZM14 14l-2.9-2.9"
+                      stroke="currentColor"
+                      strokeWidth="1.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                    />
+                  </svg>
+                </div>
+                {isSearchFocused && searchResults.length > 0 && (
+                  <div className="header-search-results">
+                    {searchResults.map((result, index) => (
+                      <Link
+                        key={index}
+                        href={result.url}
+                        className="header-search-result-item"
+                        onClick={() => {
+                          setSearchQuery("");
+                          setIsSearchFocused(false);
+                        }}
+                      >
+                        <span className="search-result-icon">{result.icon}</span>
+                        <div className="search-result-content">
+                          <div className="flex items-center gap-2">
+                            <div className="search-result-title">{result.title}</div>
+                            {result.category && (
+                              <span 
+                                className="text-[10px] px-1.5 py-0.5 rounded opacity-60"
+                                style={{
+                                  background: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+                                  color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+                                }}
+                              >
+                                {result.category}
+                              </span>
+                            )}
+                          </div>
+                          {result.description && (
+                            <div className="search-result-desc">{result.description}</div>
+                          )}
+                        </div>
+                      </Link>
+                    ))}
+                  </div>
+                )}
+                {isSearchFocused && searchQuery.trim() && searchResults.length === 0 && (
+                  <div className="header-search-results">
+                    <div className="header-search-empty">검색 결과가 없습니다.</div>
+                  </div>
+                )}
+              </div>
+            )}
             {!user ? (
               <Link href="/login" className="login-btn">{t.login.ko}</Link>
             ) : (
@@ -235,6 +463,151 @@ export default function Header() {
           flex: 0 0 auto;
           display: flex;
           align-items: center;
+          gap: 12px;
+        }
+        .header-search-container {
+          position: relative;
+        }
+        .header-search-wrapper {
+          position: relative;
+          display: flex;
+          align-items: center;
+        }
+        .header-search-input {
+          width: 200px;
+          padding: 8px 32px 8px 12px;
+          border-radius: 20px;
+          font-size: 13px;
+          font-weight: 400;
+          letter-spacing: -0.01em;
+          transition: all 0.2s ease;
+          border: none;
+          outline: none;
+          font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif;
+        }
+        @media (max-width: 768px) {
+          .header-search-input {
+            width: 150px;
+            font-size: 12px;
+          }
+        }
+        :global(.dark) .header-search-input {
+          background: rgba(255, 255, 255, 0.05);
+          color: rgba(255, 255, 255, 0.9);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        :global(.light) .header-search-input, :global([data-theme="light"]) .header-search-input {
+          background: rgba(0, 0, 0, 0.03);
+          color: rgba(0, 0, 0, 0.8);
+          border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        .header-search-input:focus {
+          width: 280px;
+        }
+        @media (max-width: 768px) {
+          .header-search-input:focus {
+            width: 200px;
+          }
+        }
+        :global(.dark) .header-search-input:focus {
+          background: rgba(255, 255, 255, 0.08);
+          border-color: rgba(255, 255, 255, 0.2);
+        }
+        :global(.light) .header-search-input:focus, :global([data-theme="light"]) .header-search-input:focus {
+          background: rgba(0, 0, 0, 0.05);
+          border-color: rgba(37, 99, 235, 0.3);
+        }
+        .header-search-icon {
+          position: absolute;
+          right: 10px;
+          pointer-events: none;
+          opacity: 0.5;
+        }
+        :global(.dark) .header-search-icon {
+          color: rgba(255, 255, 255, 0.5);
+        }
+        :global(.light) .header-search-icon, :global([data-theme="light"]) .header-search-icon {
+          color: rgba(0, 0, 0, 0.5);
+        }
+        .header-search-results {
+          position: absolute;
+          top: calc(100% + 8px);
+          right: 0;
+          width: 320px;
+          max-height: 400px;
+          overflow-y: auto;
+          border-radius: 12px;
+          padding: 8px;
+          box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+          backdrop-filter: blur(20px) saturate(180%);
+          -webkit-backdrop-filter: blur(20px) saturate(180%);
+          z-index: 1000;
+        }
+        :global(.dark) .header-search-results {
+          background: rgba(20, 20, 20, 0.95);
+          border: 1px solid rgba(255, 255, 255, 0.1);
+        }
+        :global(.light) .header-search-results, :global([data-theme="light"]) .header-search-results {
+          background: rgba(255, 255, 255, 0.98);
+          border: 1px solid rgba(0, 0, 0, 0.08);
+        }
+        .header-search-result-item {
+          display: flex;
+          align-items: flex-start;
+          gap: 12px;
+          padding: 10px;
+          border-radius: 8px;
+          text-decoration: none;
+          transition: all 0.15s ease;
+          cursor: pointer;
+        }
+        :global(.dark) .header-search-result-item {
+          color: rgba(255, 255, 255, 0.9);
+        }
+        :global(.light) .header-search-result-item, :global([data-theme="light"]) .header-search-result-item {
+          color: rgba(0, 0, 0, 0.8);
+        }
+        .header-search-result-item:hover {
+          background: rgba(59, 130, 246, 0.1);
+        }
+        .search-result-icon {
+          font-size: 18px;
+          flex-shrink: 0;
+        }
+        .search-result-content {
+          flex: 1;
+          min-width: 0;
+        }
+        .search-result-title {
+          font-size: 13px;
+          font-weight: 600;
+          letter-spacing: -0.01em;
+          margin-bottom: 4px;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          white-space: nowrap;
+        }
+        .search-result-desc {
+          font-size: 11px;
+          opacity: 0.7;
+          line-height: 1.4;
+          overflow: hidden;
+          text-overflow: ellipsis;
+          display: -webkit-box;
+          -webkit-line-clamp: 2;
+          -webkit-box-orient: vertical;
+        }
+        .header-search-empty {
+          padding: 20px;
+          text-align: center;
+          font-size: 13px;
+          opacity: 0.6;
+        }
+        :global(.dark) .header-search-empty {
+          color: rgba(255, 255, 255, 0.6);
+        }
+        :global(.light) .header-search-empty, :global([data-theme="light"]) .header-search-empty {
+          color: rgba(0, 0, 0, 0.6);
         }
         .menu-search-section {
           margin: 4px 0;

@@ -3,13 +3,26 @@ import "./globals.css";
 import { AuthProvider } from "./providers";
 import LayoutClient from "@/components/layout/LayoutClient";
 import VisitorTracker from "@/components/VisitorTracker";
+import StructuredData from "@/components/SEO/StructuredData";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata = {
   ...createMetadata({
-  title: "Create Reality",
-  description: "AI Tools, Insight, Academy, Community - All in one AI Platform.",
-  path: "/",
+    title: "DORI-AI - AI 활용 방법을 함께 연구하는 커뮤니티 플랫폼",
+    description: "AI 도구, 인사이트, 아카데미, 커뮤니티를 한 곳에서. AI 활용 방법을 함께 연구하고 실전으로 적용해보는 최신 트렌드와 인사이트를 공유하는 커뮤니티 플랫폼입니다.",
+    path: "/",
+    keywords: [
+      "AI 도구",
+      "AI 커뮤니티",
+      "인공지능",
+      "AI 가이드",
+      "AI 트렌드",
+      "AI 튜토리얼",
+      "생성형 AI",
+      "ChatGPT",
+      "AI 활용",
+      "AI 연구",
+    ],
   }),
   other: {
     'pretendard-font': 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css',
@@ -43,6 +56,7 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
         />
+        <StructuredData />
       </head>
       {/* [핵심 수정] 
         배경색을 div가 아닌 body 태그에 직접 줍니다. 

@@ -4,11 +4,18 @@ export default function robots(): MetadataRoute.Robots {
   const baseUrl = "https://dori-ai.com";
 
   return {
-    rules: {
-      userAgent: "*",
-      allow: "/",
-      disallow: ["/admin", "/my"], 
-    },
+    rules: [
+      {
+        userAgent: "*",
+        allow: "/",
+        disallow: ["/admin", "/my", "/api/", "/_next/", "/studio"],
+      },
+      {
+        userAgent: "Googlebot",
+        allow: "/",
+        disallow: ["/admin", "/my", "/api/", "/_next/", "/studio"],
+      },
+    ],
     sitemap: `${baseUrl}/sitemap.xml`,
   };
 }

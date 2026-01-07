@@ -64,11 +64,11 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
 
   // ✅ 1) 고정 페이지
   const staticPages: MetadataRoute.Sitemap = [
-    { url: `${baseUrl}/`, lastModified: now, changeFrequency: "daily", priority: 1 },
-    { url: `${baseUrl}/ai-tools`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/insight`, lastModified: now, changeFrequency: "daily", priority: 0.8 },
+    { url: `${baseUrl}/`, lastModified: now, changeFrequency: "daily", priority: 1.0 },
+    { url: `${baseUrl}/ai-tools`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
+    { url: `${baseUrl}/insight`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
     { url: `${baseUrl}/academy`, lastModified: now, changeFrequency: "daily", priority: 0.8 },
-    { url: `${baseUrl}/community`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
+    { url: `${baseUrl}/community`, lastModified: now, changeFrequency: "daily", priority: 0.7 },
     { url: `${baseUrl}/market`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
     { url: `${baseUrl}/suggestions`, lastModified: now, changeFrequency: "weekly", priority: 0.5 },
   ];

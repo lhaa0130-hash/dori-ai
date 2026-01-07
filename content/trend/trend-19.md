@@ -1,3 +1,4 @@
+---
 title : 방대한 학습 데이터의 필요성을 뒤집는 AI 훈련 효율성 혁신  
 description: AI 훈련에 필요한 방대한 데이터 의존도를 줄이는 기술들이 다수 공개되었으며, 이는 AI 개발의 비용과 시간을 크게 단축하는 효과로 나타나고 있다. 이와 관련된 기업 및 기관 연구 결과들이 점차 공개되면서 AI 훈련 효율성 혁신이 중요한 트렌드로 부각되고 있다.  
 date: 2026-01-05
@@ -5,10 +6,6 @@ author: DORI-AI
 category: 트렌드  
 thumbnail: /thumbnails/trend/trend019.png  
 tags: [AI트렌드, 생산성, 노동구조, 조직변화]  
----
-
-![썸네일 이미지](/thumbnails/trend/main.png)
-
 ---
 
 ## 핵심 요약

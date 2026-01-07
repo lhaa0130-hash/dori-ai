@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import AppLayoutWrapper from "@/components/layout/AppLayoutWrapper";
 import { useMissionAutoComplete } from "@/hooks/useMissionAutoComplete";
+import OpenPopup from "@/components/layout/OpenPopup";
 
 interface LayoutClientProps {
   children: React.ReactNode;
@@ -33,6 +34,7 @@ export default function LayoutClient({ children }: LayoutClientProps) {
         {children}
       </main>
       <Footer />
+      <OpenPopup />
     </div>
   );
 }
