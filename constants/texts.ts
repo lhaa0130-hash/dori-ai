@@ -119,39 +119,5 @@ export const TEXTS = {
     privacy: { ko: "개인정보처리방침", en: "Privacy Policy" },
     terms: { ko: "이용약관", en: "Terms of Service" },
     suggestion: { ko: "건의사항", en: "Suggestions" }
-  },
-
-  // 9. Admin Dashboard (관리자) - 방문자 및 리셋 포함
-  admin: {
-    heroTitle: { ko: "Admin Dashboard", en: "Admin Dashboard" },
-    heroSubtitle: {
-      ko: "DORI-AI 서비스 현황을 한 눈에 확인할 수 있는 관리자 전용 화면입니다.",
-      en: "An internal view of the overall DORI-AI service status."
-    },
-    stats: {
-      communityCount: { ko: "커뮤니티 글 수", en: "Community Posts" },
-      suggestionsCount: { ko: "건의사항 수", en: "Suggestions" },
-      academyCount: { ko: "Academy 강의 수", en: "Academy Lessons" },
-      marketCount: { ko: "Market 상품 수", en: "Market Items" },
-      todayVisitors: { ko: "오늘 방문자", en: "Today's Visitors" },
-      weeklyVisitors: { ko: "주간 방문자", en: "Weekly Visitors" },
-      monthlyVisitors: { ko: "월간 방문자", en: "Monthly Visitors" },
-      totalVisitors: { ko: "누적 방문자", en: "Total Visitors" }
-    },
-    sections: {
-      recentCommunity: { ko: "최근 커뮤니티 글", en: "Recent Community Posts" },
-      recentSuggestions: { ko: "최근 건의사항", en: "Recent Suggestions" },
-      systemNotes: { ko: "시스템 노트 및 추후 계획", en: "System Notes & Future Plan" },
-      visitorChart: { ko: "방문자 통계", en: "Visitor Statistics" },
-      dataManagement: { ko: "데이터 관리", en: "Data Management" },
-      resetButton: { ko: "모든 데이터 초기화 (Reset)", en: "Reset All Data" },
-      resetConfirm: { ko: "정말 초기화하시겠습니까? 작성한 글과 평점이 모두 사라집니다.", en: "Are you sure? All data will be lost." }
-    },
-    chart: {
-      daily: { ko: "일간", en: "Daily" },
-      weekly: { ko: "주간", en: "Weekly" },
-      monthly: { ko: "월간", en: "Monthly" },
-      yearly: { ko: "연간", en: "Yearly" }
-    }
   }
 };

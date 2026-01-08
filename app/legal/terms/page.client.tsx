@@ -1,0 +1,253 @@
+"use client";
+
+import { useTheme } from "next-themes";
+import { useEffect, useState } from "react";
+import Link from "next/link";
+
+export default function TermsClient() {
+  const { theme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
+
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  useEffect(() => {
+    if (!mounted) return;
+    
+    const handleMouseMove = (e: MouseEvent) => {
+      setMousePosition({ x: e.clientX, y: e.clientY });
+    };
+    
+    if (typeof window !== 'undefined') {
+      window.addEventListener("mousemove", handleMouseMove);
+      return () => {
+        window.removeEventListener("mousemove", handleMouseMove);
+      };
+    }
+  }, [mounted]);
+
+  const isDark = mounted && theme === 'dark';
+
+  return (
+    <div className="relative min-h-screen" style={{
+      backgroundColor: isDark ? '#000000' : '#ffffff',
+      fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+    }}>
+      {/* 배경 효과 */}
+      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
+        <div 
+          className="absolute inset-0 transition-all duration-1000"
+          style={{
+            background: isDark
+              ? 'radial-gradient(ellipse at top, rgba(30, 58, 138, 0.08) 0%, transparent 50%), radial-gradient(ellipse at bottom, rgba(88, 28, 135, 0.05) 0%, transparent 50%), #000000'
+              : 'radial-gradient(ellipse at top, rgba(59, 130, 246, 0.03) 0%, transparent 50%), #ffffff',
+          }}
+        />
+        
+        {/* 마우스 추적 그라데이션 */}
+        {mounted && (
+          <div 
+            className="absolute w-[500px] h-[500px] rounded-full blur-[100px] transition-all duration-1000 ease-out opacity-20"
+            style={{
+              background: isDark
+                ? 'radial-gradient(circle, rgba(59, 130, 246, 0.2) 0%, transparent 70%)'
+                : 'radial-gradient(circle, rgba(59, 130, 246, 0.1) 0%, transparent 70%)',
+              left: `${mousePosition.x - 250}px`,
+              top: `${mousePosition.y - 250}px`,
+              transform: 'translate(-50%, -50%)',
+            }}
+          />
+        )}
+      </div>
+
+      {/* 히어로 섹션 */}
+      <section 
+        className="relative min-h-screen flex items-center justify-center px-6 pt-20 pb-32"
+      >
+        <div className="max-w-4xl mx-auto w-full">
+          {/* 홈으로 돌아가기 링크 */}
+          <div className="mb-16">
+            <Link 
+              href="/"
+              className="inline-flex items-center gap-2 text-sm font-medium transition-all hover:opacity-70"
+              style={{
+                color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.5)',
+                textDecoration: 'none',
+                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+                fontWeight: 400,
+              }}
+            >
+              ← 홈으로 돌아가기
+            </Link>
+          </div>
+
+          <div className="text-center mb-20">
+            {/* 메인 타이틀 */}
+            <h1 
+              className="text-4xl md:text-5xl lg:text-6xl mb-3 leading-[1.1] tracking-[-0.04em]"
+              style={{
+                color: isDark ? '#ffffff' : '#1d1d1f',
+                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+                fontWeight: 600,
+                letterSpacing: '-0.04em',
+              }}
+            >
+              이용약관
+            </h1>
+            
+            {/* 그라데이션 바 */}
+            <div 
+              className="w-full max-w-2xl mx-auto h-1 md:h-1.5 mb-6 rounded-full overflow-hidden"
+              style={{
+                boxShadow: isDark 
+                  ? '0 0 30px rgba(96, 165, 250, 0.4), 0 4px 20px rgba(96, 165, 250, 0.2)'
+                  : '0 0 20px rgba(37, 99, 235, 0.3), 0 4px 15px rgba(37, 99, 235, 0.2)',
+              }}
+            >
+              <div 
+                className="gradient-flow h-full rounded-full"
+                style={{
+                  backgroundImage: isDark
+                    ? 'linear-gradient(90deg, #60a5fa 0%, #818cf8 12.5%, #a78bfa 25%, #c084fc 37.5%, #ec4899 50%, #f472b6 62.5%, #f59e0b 75%, #fbbf24 87.5%, #10b981 100%, #60a5fa 100%)'
+                    : 'linear-gradient(90deg, #2563eb 0%, #4f46e5 12.5%, #7c3aed 25%, #9333ea 37.5%, #db2777 50%, #e11d48 62.5%, #d97706 75%, #f59e0b 87.5%, #059669 100%, #2563eb 100%)',
+                  backgroundSize: '200% 100%',
+                  animation: 'gradientFlow 4s linear infinite',
+                }}
+              />
+            </div>
+            
+            {/* 서브타이틀 */}
+            <p 
+              className="text-sm md:text-base"
+              style={{
+                color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+                fontWeight: 400,
+                letterSpacing: '-0.01em',
+              }}
+            >
+              최종 수정일: 2025년 1월 15일
+            </p>
+          </div>
+
+          {/* FAQ 스타일 아코디언 */}
+          <div className="space-y-0">
+            {[
+              {
+                q: "1. 목적",
+                a: "본 약관은 DORI-AI(이하 \"회사\")가 제공하는 서비스의 이용과 관련하여 회사와 이용자 간의 권리, 의무 및 책임사항, 기타 필요한 사항을 규정함을 목적으로 합니다."
+              },
+              {
+                q: "2. 용어의 정의",
+                a: "본 약관에서 사용하는 용어의 정의는 다음과 같습니다.\n\n• 서비스: 회사가 제공하는 모든 온라인 서비스를 의미합니다.\n• 이용자: 본 약관에 동의하고 회사가 제공하는 서비스를 이용하는 자를 의미합니다.\n• 회원: 회사에 개인정보를 제공하여 회원등록을 한 자로서, 회사의 정보를 지속적으로 제공받으며, 회사가 제공하는 서비스를 계속적으로 이용할 수 있는 자를 의미합니다.\n• 비회원: 회원에 가입하지 않고 회사가 제공하는 서비스를 이용하는 자를 의미합니다."
+              },
+              {
+                q: "3. 약관의 게시와 개정",
+                a: "회사는 본 약관의 내용을 이용자가 쉽게 알 수 있도록 서비스 초기 화면에 게시합니다.\n\n• 약관의 효력: 본 약관은 이용자가 회원가입 시 동의함으로써 효력이 발생합니다.\n• 약관의 개정: 회사는 필요하다고 인정되는 경우 본 약관을 개정할 수 있으며, 개정된 약관은 공지사항을 통해 안내합니다.\n• 약관 변경 시: 약관이 변경되는 경우 변경 사항의 시행 7일 전부터 공지사항을 통해 고지합니다."
+              },
+              {
+                q: "4. 서비스의 제공 및 변경",
+                a: "회사는 다음과 같은 서비스를 제공합니다.\n\n• AI 도구 정보 제공 및 검색 서비스\n• AI 인사이트 및 가이드 제공 서비스\n• 기타 회사가 추가 개발하거나 제휴계약 등을 통해 제공하는 일체의 서비스"
+              },
+              {
+                q: "5. 이용자의 의무",
+                a: "이용자는 다음 행위를 하여서는 안 됩니다. 서비스 이용 중 다음 행위를 한 경우 회사는 이용자의 서비스 이용을 제한하거나 이용계약을 해지할 수 있습니다.\n\n• 타인의 정보 도용\n• 허위 정보의 등록\n• 서비스의 안정적 운영을 방해하는 행위\n• 기타 법령에 위반되는 행위"
+              },
+              {
+                q: "6. 회사의 의무",
+                a: "회사는 법령과 본 약관이 금지하거나 공서양속에 반하는 행위를 하지 않으며, 지속적이고 안정적으로 서비스를 제공하기 위하여 최선을 다하여 노력합니다."
+              },
+              {
+                q: "7. 손해배상",
+                a: "회사는 무료로 제공되는 서비스와 관련하여 회원에게 어떠한 손해가 발생하더라도 동 손해가 회사의 중대한 과실에 의한 경우를 제외하고 이에 대하여 책임을 부담하지 아니합니다.\n\n면책사항: 회사는 천재지변 또는 이에 준하는 불가항력으로 인하여 서비스를 제공할 수 없는 경우에는 서비스 제공에 관한 책임이 면제됩니다."
+              },
+              {
+                q: "8. 광고 게재",
+                a: "회사는 서비스 제공을 위해 Google AdSense를 포함한 제3자 광고 서비스를 사용할 수 있습니다. 이러한 광고는 본인의 관심사에 맞춰 표시될 수 있으며, 광고 클릭 시 해당 광고주로 이동하게 됩니다.\n\n회사는 광고 게재와 관련하여 다음과 같은 사항을 안내합니다:\n• 광고는 Google AdSense 및 기타 제3자 광고 네트워크를 통해 제공됩니다.\n• 광고 내용은 회사가 직접 제어하지 않으며, 광고주가 책임을 집니다.\n• 광고 클릭 시 발생하는 거래는 해당 광고주와 이용자 간의 거래이며, 회사는 이에 대한 책임을 지지 않습니다.\n• 광고 관련 문의는 해당 광고주 또는 Google AdSense 정책(https://support.google.com/adsense)을 참고하시기 바랍니다."
+              },
+              {
+                q: "9. 기타",
+                a: "본 약관에 명시되지 않은 사항은 전기통신사업법 등 관계법령과 상관례에 따릅니다. 본 약관에 대한 이의가 있으신 경우 이메일(lhaa0130@gmail.com)로 문의해주시기 바랍니다."
+              },
+            ].map((item, idx) => (
+              <details
+                key={idx}
+                className="group"
+                style={{
+                  backgroundColor: 'transparent',
+                  borderBottom: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)'}`,
+                  padding: '20px 0',
+                  marginBottom: '0',
+                  transition: 'all 0.2s ease',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderBottomColor = isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.12)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderBottomColor = isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)';
+                }}
+              >
+                <summary 
+                  className="cursor-pointer list-none flex items-center justify-between gap-6 py-0"
+                  style={{
+                    color: isDark ? '#ffffff' : '#000000',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                    fontWeight: 500,
+                    fontSize: '16px',
+                    letterSpacing: '-0.02em',
+                    lineHeight: '1.5',
+                    transition: 'color 0.2s ease',
+                  }}
+                >
+                  <span className="group-hover:opacity-70 transition-opacity duration-200">{item.q}</span>
+                  <span 
+                    className="text-lg transition-all duration-300 group-open:rotate-45 flex-shrink-0 flex items-center justify-center w-4 h-4"
+                    style={{
+                      color: isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)',
+                      fontSize: '16px',
+                      fontWeight: 300,
+                    }}
+                  >
+                    +
+                  </span>
+                </summary>
+                <div 
+                  className="pt-5 pb-1 leading-relaxed"
+                  style={{
+                    color: isDark ? 'rgba(255, 255, 255, 0.65)' : 'rgba(0, 0, 0, 0.6)',
+                    fontFamily: '-apple-system, BlinkMacSystemFont, "SF Pro Display", "SF Pro Text", system-ui, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif',
+                    fontWeight: 400,
+                    fontSize: '14px',
+                    letterSpacing: '-0.01em',
+                    lineHeight: '1.75',
+                    whiteSpace: 'pre-line',
+                  }}
+                >
+                  {item.a}
+                </div>
+              </details>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* 스타일 */}
+      <style jsx global>{`
+        @keyframes gradientFlow {
+          0% {
+            background-position: 0% 50%;
+          }
+          100% {
+            background-position: 200% 50%;
+          }
+        }
+        details summary::-webkit-details-marker {
+          display: none;
+        }
+      `}</style>
+    </div>
+  );
+}
+

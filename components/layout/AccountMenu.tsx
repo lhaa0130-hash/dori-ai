@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
-import NewDailyMissions from "@/components/mission/NewDailyMissions";
+import DailyMissions from "@/components/mission/DailyMissions";
 
 interface AccountMenuProps {
   user: {
@@ -368,12 +368,16 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                   </svg>
                 </button>
 
-                {/* Daily Missions 아코디언 콘텐츠 - 확장 시에만 표시 */}
-                {isMissionsExpanded && (
-                  <div className="mt-2 pl-2">
-                    <NewDailyMissions />
-                  </div>
-                )}
+                {/* Daily Missions 아코디언 콘텐츠 - 항상 표시 */}
+                <div className="mt-2 pl-2">
+                  <DailyMissions
+                    isDark={isDark}
+                    onPointsUpdate={(newPoints) => {
+                      setUserPoints(newPoints);
+                      // 부모 컴포넌트에 포인트 업데이트 알림 (필요시)
+                    }}
+                  />
+                </div>
               </div>
             </div>
 

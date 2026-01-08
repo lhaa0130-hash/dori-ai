@@ -41,8 +41,54 @@ export default function MarketList({ filters }: MarketListProps) {
           ))}
         </div>
       ) : (
-        <div className="text-center py-20 opacity-60">
-          <p>조건에 맞는 상품이 없습니다.</p>
+        <div className="max-w-4xl mx-auto py-20">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            {/* DORI-AI 비전 카드 */}
+            <div 
+              className="p-8 rounded-2xl border transition-all duration-300 hover:scale-[1.02]"
+              style={{
+                backgroundColor: 'var(--card-bg)',
+                borderColor: 'var(--card-border)',
+              }}
+            >
+              <div className="text-4xl mb-4">🤖</div>
+              <h3 
+                className="text-xl font-bold mb-3"
+                style={{ color: 'var(--text-main)' }}
+              >
+                AI 교육 플랫폼
+              </h3>
+              <p 
+                className="text-sm leading-relaxed opacity-80"
+                style={{ color: 'var(--text-sub)' }}
+              >
+                DORI-AI는 AI가 처음인 분들도 쉽게 배우고 성장할 수 있는 교육 플랫폼입니다. 프롬프트 작성부터 자동화 워크플로우까지, 실전 중심의 가이드를 제공합니다.
+              </p>
+            </div>
+
+            {/* 캐릭터 제작 비전 카드 */}
+            <div 
+              className="p-8 rounded-2xl border transition-all duration-300 hover:scale-[1.02]"
+              style={{
+                backgroundColor: 'var(--card-bg)',
+                borderColor: 'var(--card-border)',
+              }}
+            >
+              <div className="text-4xl mb-4">🎨</div>
+              <h3 
+                className="text-xl font-bold mb-3"
+                style={{ color: 'var(--text-main)' }}
+              >
+                프레리독 애니메이션
+              </h3>
+              <p 
+                className="text-sm leading-relaxed opacity-80"
+                style={{ color: 'var(--text-sub)' }}
+              >
+                AI를 활용한 캐릭터 제작과 애니메이션 제작 가이드를 제공합니다. 도리 캐릭터를 통해 AI 기반 콘텐츠 제작의 모든 과정을 배울 수 있습니다.
+              </p>
+            </div>
+          </div>
         </div>
       )}
 

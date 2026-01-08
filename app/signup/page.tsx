@@ -14,13 +14,13 @@ export default function SignupPage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [name, setName] = useState("");
   const [gender, setGender] = useState<"male" | "female" | "">("");
-  const [birthYear, setBirthYear] = useState<string>("");
+  const [ageGroup, setAgeGroup] = useState<"10s" | "20s" | "30s" | "40s" | "">("");
 
   // 회원가입 처리
   const handleRegister = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (!email || !password || !name || !gender || !birthYear) return alert("모든 필드를 입력해주세요.");
+    if (!email || !password || !name || !gender || !ageGroup) return alert("모든 필드를 입력해주세요.");
     if (password !== confirmPassword) return alert("비밀번호가 일치하지 않습니다.");
     if (password.length < 6) return alert("비밀번호는 6자 이상이어야 합니다.");
 
@@ -31,7 +31,7 @@ export default function SignupPage() {
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email, password, name, gender, birthYear: parseInt(birthYear) }),
+        body: JSON.stringify({ email, password, name, gender, ageGroup }),
       });
 
       if (!res.ok) {
@@ -45,7 +45,7 @@ export default function SignupPage() {
         email: email,
         nickname: name,
         gender: gender,
-        birthYear: parseInt(birthYear),
+        ageGroup: ageGroup,
         tier: 1,
         level: 1,
         doriScore: 0,
@@ -155,10 +155,10 @@ export default function SignupPage() {
             </div>
 
             <div className="input-group">
-              <label>출생년도 <span style={{ color: '#ff4d4f' }}>*</span></label>
+              <label>연령층 <span style={{ color: '#ff4d4f' }}>*</span></label>
               <select 
-                value={birthYear} 
-                onChange={(e) => setBirthYear(e.target.value)}
+                value={ageGroup} 
+                onChange={(e) => setAgeGroup(e.target.value as "10s" | "20s" | "30s" | "40s" | "")}
                 style={{
                   padding: '14px',
                   border: '1px solid #e5e7eb',
@@ -181,14 +181,10 @@ export default function SignupPage() {
                 }}
               >
                 <option value="">선택해주세요</option>
-                {Array.from({ length: 2026 - 1900 + 1 }, (_, i) => {
-                  const year = 2026 - i;
-                  return (
-                    <option key={year} value={year.toString()}>
-                      {year}년
-                    </option>
-                  );
-                })}
+                <option value="10s">10대</option>
+                <option value="20s">20대</option>
+                <option value="30s">30대</option>
+                <option value="40s">40대</option>
               </select>
             </div>
 

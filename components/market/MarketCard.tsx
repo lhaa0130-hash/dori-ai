@@ -106,14 +106,14 @@ const MarketCard = React.memo(({ product }: MarketCardProps) => {
           {product.priceLabel}
         </span>
         <button 
-          onClick={() => alert("준비중")} 
+          onClick={() => window.location.href = '/suggestions'} 
           className="px-4 py-2.5 rounded-xl text-xs font-bold transition-all duration-200 hover:scale-105 shadow-sm"
           style={{ 
             backgroundColor: 'var(--text-main)', 
             color: 'var(--card-bg)',
           }}
         >
-          구매하기
+          문의하기
         </button>
       </div>
     </div>

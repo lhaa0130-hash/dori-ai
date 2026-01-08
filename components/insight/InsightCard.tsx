@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback, useMemo } from "react";
+import React, { useState, useEffect } from "react";
 import { TEXTS } from "@/constants/texts";
 import { InsightItem } from "@/types/content";
 import { AiBadge } from "@/components/common/AiBadge";
@@ -32,7 +32,7 @@ const InsightCard = React.memo(({ item, onTagClick, onLikeChange, isOwner = fals
     }
   }, [item.id]);
 
-  const handleLikeClick = useCallback((e: React.MouseEvent) => {
+  const handleLikeClick = (e: React.MouseEvent) => {
     e.preventDefault();
     e.stopPropagation();
     
@@ -92,20 +92,13 @@ const InsightCard = React.memo(({ item, onTagClick, onLikeChange, isOwner = fals
     if (onLikeChange) {
       onLikeChange(item.id, newLikes);
     }
-    
-    // 좋아요 미션 진행도 업데이트 (좋아요를 누를 때만)
-    if (newIsLiked && typeof window !== 'undefined') {
-      import('@/lib/dailyMissions').then(({ updateCountMission }) => {
-        updateCountMission('LIKE_POST');
-      });
-    }
-  }, [mounted, isLiked, likes, item.id, item.author, onLikeChange]);
+  };
 
-  const cardStyle = useMemo(() => ({
+  const cardStyle = {
     backgroundColor: 'var(--card-bg)',
     borderColor: 'var(--card-border)',
     color: 'var(--text-main)',
-  }), []);
+  };
 
   return (
     <div 
@@ -119,8 +112,6 @@ const InsightCard = React.memo(({ item, onTagClick, onLikeChange, isOwner = fals
             src={item.image} 
             alt={item.title}
             className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-            loading="lazy"
-            decoding="async"
             onError={(e) => {
               // 이미지 로드 실패 시 숨김
               e.currentTarget.style.display = 'none';

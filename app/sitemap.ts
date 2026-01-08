@@ -71,6 +71,8 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
     { url: `${baseUrl}/community`, lastModified: now, changeFrequency: "daily", priority: 0.7 },
     { url: `${baseUrl}/market`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
     { url: `${baseUrl}/suggestions`, lastModified: now, changeFrequency: "weekly", priority: 0.5 },
+    { url: `${baseUrl}/legal/privacy`, lastModified: now, changeFrequency: "monthly", priority: 0.3 },
+    { url: `${baseUrl}/legal/terms`, lastModified: now, changeFrequency: "monthly", priority: 0.3 },
   ];
 
   // ✅ 2) contents 폴더 자동 탐지

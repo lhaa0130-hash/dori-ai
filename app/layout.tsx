@@ -22,6 +22,11 @@ export const metadata = {
       "ChatGPT",
       "AI 활용",
       "AI 연구",
+      "AI 자동화",
+      "캐릭터 제작 가이드",
+      "프레리독 애니메이션",
+      "AI 교육 도구",
+      "dori-ai",
     ],
   }),
   other: {
