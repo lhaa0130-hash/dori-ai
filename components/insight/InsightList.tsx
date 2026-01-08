@@ -55,10 +55,24 @@ export default function InsightList({ filters, setFilters, posts, isOwner, onEdi
     setFilters({ ...filters, tag: null });
   }, [filters, setFilters]);
 
+  // 카테고리별 색상
+  const getCategoryColor = (category: string) => {
+    switch (category) {
+      case '트렌드':
+        return { bg: 'rgba(59, 130, 246, 0.1)', text: '#3b82f6' };
+      case '가이드':
+        return { bg: 'rgba(139, 92, 246, 0.1)', text: '#8b5cf6' };
+      case '인사이트':
+        return { bg: 'rgba(236, 72, 153, 0.1)', text: '#ec4899' };
+      default:
+        return { bg: 'rgba(0, 0, 0, 0.05)', text: 'rgba(0, 0, 0, 0.7)' };
+    }
+  };
+
   return (
     <div className="w-full">
       {filteredData.length > 0 ? (
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="flex flex-col gap-3">
           {filteredData.map((item) => {
             // 가이드 글은 /insight/guide/[slug] 경로 사용
             // 트렌드 글은 /insight/trend/[slug] 경로 사용
@@ -70,19 +84,133 @@ export default function InsightList({ filters, setFilters, posts, isOwner, onEdi
                 href = `/insight/trend/${item.slug}`;
               }
             }
-            
+
+            const categoryColor = getCategoryColor(item.category);
+            const likedPosts = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('dori_liked_insights') || '[]') : [];
+            const likesData = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('dori_insight_likes') || '{}') : {};
+            const isLiked = likedPosts.includes(item.id);
+            const likes = likesData[item.id] !== undefined ? likesData[item.id] : item.likes;
+
             return (
-              <div key={item.id} className="relative group">
-                <Link href={href} className="block">
-                  <InsightCard 
-                    item={item} 
-                    onTagClick={handleTagClick}
-                    isOwner={isOwner ? isOwner(item) : false}
-                    onEdit={onEdit}
-                    onDelete={onDelete}
-                  />
-                </Link>
-              </div>
+              <Link 
+                key={item.id} 
+                href={href}
+                className="group block"
+              >
+                <div
+                  className="flex gap-4 p-3 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                  style={{
+                    backgroundColor: 'var(--card-bg)',
+                    borderColor: 'var(--card-border)',
+                  }}
+                >
+                  {/* 좌측 이미지 */}
+                  <div
+                    className="w-[160px] h-[80px] rounded-xl overflow-hidden flex-shrink-0 relative"
+                    style={{
+                      backgroundColor: 'var(--card-border)',
+                    }}
+                  >
+                    {item.image ? (
+                      <img
+                        src={item.image}
+                        alt={item.title}
+                        className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                        loading="lazy"
+                        decoding="async"
+                        onError={(e) => {
+                          e.currentTarget.style.display = 'none';
+                        }}
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-4xl opacity-30">
+                        📝
+                      </div>
+                    )}
+                  </div>
+
+                  {/* 우측 내용 */}
+                  <div className="flex-1 flex flex-col gap-1.5 min-w-0">
+                    {/* 카테고리 & 날짜 */}
+                    <div className="flex items-center gap-3">
+                      <span
+                        className="px-2 py-0.5 rounded-full text-[10px] font-semibold"
+                        style={{
+                          backgroundColor: categoryColor.bg,
+                          color: categoryColor.text,
+                        }}
+                      >
+                        {item.category}
+                      </span>
+                      <span 
+                        className="text-xs opacity-60"
+                        style={{ color: 'var(--text-sub)' }}
+                        suppressHydrationWarning={true}
+                      >
+                        {new Date(item.date).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })}
+                      </span>
+                    </div>
+
+                    {/* 제목 */}
+                    <h3
+                      className="text-base font-bold leading-tight break-keep line-clamp-1"
+                      style={{ color: 'var(--text-main)' }}
+                    >
+                      {item.title}
+                    </h3>
+
+                    {/* 요약 */}
+                    <p
+                      className="text-xs leading-relaxed line-clamp-1"
+                      style={{ color: 'var(--text-sub)' }}
+                    >
+                      {item.summary}
+                    </p>
+
+                    {/* 태그 & 좋아요 */}
+                    <div className="flex items-center justify-between mt-auto">
+                      <div className="flex gap-1.5 flex-wrap">
+                        {item.tags.slice(0, 3).map((tag) => (
+                          <span
+                            key={tag}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              e.stopPropagation();
+                              handleTagClick(tag);
+                            }}
+                            className="text-[10px] px-1.5 py-0.5 rounded-md border cursor-pointer transition-all hover:scale-105"
+                            style={{
+                              backgroundColor: 'var(--bg-main)',
+                              borderColor: 'var(--card-border)',
+                              color: 'var(--text-sub)',
+                            }}
+                          >
+                            #{tag}
+                          </span>
+                        ))}
+                        {item.tags.length > 3 && (
+                          <span 
+                            className="text-[10px] opacity-60"
+                            style={{ color: 'var(--text-sub)' }}
+                          >
+                            +{item.tags.length - 3}
+                          </span>
+                        )}
+                      </div>
+                      <div 
+                        className="flex items-center gap-1 text-xs"
+                        style={{ 
+                          color: isLiked ? '#ef4444' : 'var(--text-sub)',
+                          opacity: isLiked ? 1 : 0.6,
+                        }}
+                      >
+                        <span className="text-sm">{isLiked ? '❤️' : '🤍'}</span>
+                        <span>{likes}</span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </Link>
             );
           })}
         </div>

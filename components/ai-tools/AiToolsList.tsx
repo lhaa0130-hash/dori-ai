@@ -28,21 +28,21 @@ const DISPLAY_CATEGORIES = [
 // 카테고리별 레이블
 const CATEGORY_LABELS: Record<string, string> = {
   "llm": "LLM",
-  "image-generation": "Image Gen",
-  "image-editing": "Image Edit",
-  "video-generation": "Video Gen",
-  "video-editing": "Video Edit",
-  "voice-tts": "Voice TTS",
-  "music": "Music",
-  "automation": "Automation",
-  "search": "Search",
-  "agent": "Agent",
-  "coding": "Coding",
-  "design": "Design",
+  "image-generation": "이미지 생성",
+  "image-editing": "이미지 편집",
+  "video-generation": "영상 생성",
+  "video-editing": "영상 편집",
+  "voice-tts": "음성/TTS",
+  "music": "음악",
+  "automation": "자동화",
+  "search": "검색",
+  "agent": "에이전트",
+  "coding": "코딩",
+  "design": "디자인",
   "3d": "3D",
-  "writing": "Writing",
-  "translation": "Translation",
-  "presentation": "Presentation"
+  "writing": "글쓰기",
+  "translation": "번역",
+  "presentation": "프레젠테이션"
 };
 
 // 카테고리별 주요 기능 설명
@@ -173,10 +173,10 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
                 {/* 카테고리 헤더 */}
                 <div className="mb-12 text-center">
                   <h2 
-                    className="text-4xl md:text-5xl font-black uppercase tracking-tighter mb-4"
+                    className="text-4xl md:text-5xl font-black tracking-tighter mb-4"
                     style={{ color: 'var(--text-main)' }}
                   >
-                    {CATEGORY_LABELS[cat] || cat.toUpperCase()}
+                    {CATEGORY_LABELS[cat] || cat}
                   </h2>
                   <p 
                     className="text-base md:text-lg font-medium opacity-70"
