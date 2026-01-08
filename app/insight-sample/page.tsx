@@ -1,10 +1,6 @@
-import { createMetadata } from "@/lib/seo";
+"use client";
 
-export const metadata = createMetadata({
-  title: "인사이트 샘플",
-  description: "인사이트 페이지 리스트형 레이아웃 샘플",
-  path: "/insight-sample",
-});
+import { createMetadata } from "@/lib/seo";
 
 export default function InsightSamplePage() {
   return (
