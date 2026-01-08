@@ -12,6 +12,8 @@ export default function PremiumDesignPage() {
   const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
   const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
   const [isScrolling, setIsScrolling] = useState(false);
+  const [comingSoonModal, setComingSoonModal] = useState<{ open: boolean; title: string }>({ open: false, title: '' });
+  const [notificationEmail, setNotificationEmail] = useState('');
   const sectionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
   const rootContainerRef = useRef<HTMLDivElement | null>(null);
   const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -480,15 +482,36 @@ export default function PremiumDesignPage() {
       {/* 히어로 섹션 */}
       <section 
         id="hero"
-        className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 pt-20 pb-12"
+        className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 pt-20 pb-12 overflow-hidden"
         ref={(el) => { sectionRefs.current['hero'] = el; }}
         data-section-id="hero"
         style={{ scrollSnapAlign: 'center', scrollSnapStop: 'always' }}
       >
-        <div className="max-w-6xl mx-auto text-center w-full">
-          {/* 메인 타이틀 */}
+        {/* 배경 그라데이션 애니메이션 */}
+        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
+          <div 
+            className="absolute inset-0 opacity-30"
+            style={{
+              background: isDark
+                ? 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(59, 130, 246, 0.3), transparent 70%), radial-gradient(ellipse 80% 50% at 50% 100%, rgba(139, 92, 246, 0.3), transparent 70%)'
+                : 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(37, 99, 235, 0.15), transparent 70%), radial-gradient(ellipse 80% 50% at 50% 100%, rgba(124, 58, 237, 0.15), transparent 70%)',
+            }}
+          />
+          <div 
+            className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full blur-[120px] animate-pulse"
+            style={{
+              background: isDark
+                ? 'radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, rgba(139, 92, 246, 0.2) 50%, transparent 70%)'
+                : 'radial-gradient(circle, rgba(37, 99, 235, 0.2) 0%, rgba(124, 58, 237, 0.1) 50%, transparent 70%)',
+              animation: 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+            }}
+          />
+        </div>
+
+        <div className="max-w-6xl mx-auto text-center w-full relative z-10">
+          {/* 메인 카피 */}
           <h1 
-            className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl mb-4 leading-[1.05] tracking-[-0.03em] transition-all duration-1000 px-2 ${
+            className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl mb-6 leading-[1.1] tracking-[-0.03em] transition-all duration-1000 px-2 ${
               visibleSections.has('hero')
                 ? 'opacity-100 translate-y-0'
                 : 'opacity-0 translate-y-8'
@@ -496,85 +519,99 @@ export default function PremiumDesignPage() {
             style={{
               color: isDark ? '#ffffff' : '#1d1d1f',
               fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-              fontWeight: 700,
+              fontWeight: 800,
               letterSpacing: '-0.03em',
+              lineHeight: '1.1',
             }}
           >
-            Creative Studio
-          </h1>
-          
-          {/* DORI-AI 그라데이션 바 */}
-          <div 
-            className={`w-full max-w-2xl mx-auto h-1 md:h-1.5 mb-4 rounded-full overflow-hidden ${
-              visibleSections.has('hero')
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-8'
-            }`}
-            style={{
-              boxShadow: isDark 
-                ? '0 0 30px rgba(96, 165, 250, 0.4), 0 4px 20px rgba(96, 165, 250, 0.2)'
-                : '0 0 20px rgba(37, 99, 235, 0.3), 0 4px 15px rgba(37, 99, 235, 0.2)',
-              transition: 'opacity 1s ease, transform 1s ease',
-            }}
-          >
-            <div 
-              className="gradient-flow h-full rounded-full"
+            AI와 함께하는 작은 시작,<br className="hidden sm:block" />
+            <span 
+              className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient"
               style={{
                 backgroundImage: isDark
-                  ? 'linear-gradient(90deg, #60a5fa 0%, #818cf8 12.5%, #a78bfa 25%, #c084fc 37.5%, #ec4899 50%, #f472b6 62.5%, #f59e0b 75%, #fbbf24 87.5%, #10b981 100%, #60a5fa 100%)'
-                  : 'linear-gradient(90deg, #2563eb 0%, #4f46e5 12.5%, #7c3aed 25%, #9333ea 37.5%, #db2777 50%, #e11d48 62.5%, #d97706 75%, #f59e0b 87.5%, #059669 100%, #2563eb 100%)',
-                backgroundSize: '200% 100%',
-                animation: 'gradientFlow 4s linear infinite',
+                  ? 'linear-gradient(90deg, #60a5fa 0%, #818cf8 25%, #a78bfa 50%, #818cf8 75%, #60a5fa 100%)'
+                  : 'linear-gradient(90deg, #2563eb 0%, #4f46e5 25%, #7c3aed 50%, #4f46e5 75%, #2563eb 100%)',
+                backgroundSize: '200% auto',
+                WebkitBackgroundClip: 'text',
+                WebkitTextFillColor: 'transparent',
+                backgroundClip: 'text',
               }}
-            />
-          </div>
-          
-          <div 
-            className={`text-2xl sm:text-3xl md:text-4xl lg:text-5xl mb-6 transition-all duration-1000 px-2 ${
+            >
+              DORI-AI
+            </span>
+            가 앞당깁니다.
+          </h1>
+
+          {/* 서브 카피 */}
+          <p 
+            className={`text-base sm:text-lg md:text-xl lg:text-2xl mb-10 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-100 px-4 ${
               visibleSections.has('hero')
                 ? 'opacity-100 translate-y-0'
                 : 'opacity-0 translate-y-8'
             }`}
             style={{
-              color: isDark ? '#ffffff' : '#1d1d1f',
+              color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
               fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-              fontWeight: 600,
-              letterSpacing: '-0.02em',
+              fontWeight: 400,
+              letterSpacing: '-0.01em',
+              lineHeight: '1.7',
             }}
           >
-            DORI-AI
-          </div>
+            당신에게 꼭 필요한 AI 도구 탐색부터 실무 활용 인사이트까지,<br className="hidden md:block" />
+            입문자를 위한 가장 친절한 가이드.
+          </p>
 
-          {/* 서브타이틀 */}
+          {/* CTA 버튼 */}
           <div 
-            className={`mb-8 max-w-2xl mx-auto space-y-2 transition-all duration-1000 delay-100 px-4 ${
+            className={`flex flex-col sm:flex-row items-center justify-center gap-4 transition-all duration-1000 delay-200 ${
               visibleSections.has('hero')
                 ? 'opacity-100 translate-y-0'
                 : 'opacity-0 translate-y-8'
             }`}
           >
-            <p 
-              className="text-base sm:text-lg md:text-xl leading-relaxed"
+            <Link
+              href="/ai-tools"
+              className="group relative px-8 py-4 rounded-xl font-semibold text-base transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] overflow-hidden"
               style={{
+                background: isDark
+                  ? 'linear-gradient(135deg, #3b82f6, #8b5cf6)'
+                  : 'linear-gradient(135deg, #2563eb, #7c3aed)',
+                color: '#ffffff',
+                boxShadow: isDark
+                  ? '0 4px 20px rgba(59, 130, 246, 0.4)'
+                  : '0 4px 20px rgba(37, 99, 235, 0.3)',
+              }}
+            >
+              <span className="relative z-10">AI 도구 탐색하기</span>
+              <div 
+                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
+                style={{
+                  background: isDark
+                    ? 'linear-gradient(135deg, #60a5fa, #a78bfa)'
+                    : 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+                }}
+              />
+            </Link>
+            
+            <Link
+              href="/community"
+              className="group px-8 py-4 rounded-xl font-semibold text-base transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+              style={{
+                background: 'transparent',
+                border: `2px solid ${isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'}`,
                 color: isDark ? '#ffffff' : '#1d1d1f',
-                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                fontWeight: 500,
-                letterSpacing: '-0.01em',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.borderColor = isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.2)';
+                e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.borderColor = isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)';
+                e.currentTarget.style.background = 'transparent';
               }}
             >
-              작은 시작을 함께 만들어갑니다
-            </p>
-            <p 
-              className="text-sm sm:text-base leading-relaxed"
-              style={{
-                color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
-                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                fontWeight: 400,
-                letterSpacing: '-0.01em',
-              }}
-            >
-              AI가 처음이어도, 누구나 배우고 성장할 수 있는 공간
-            </p>
+              커뮤니티 참여
+            </Link>
           </div>
 
 
@@ -602,6 +639,157 @@ export default function PremiumDesignPage() {
         </div>
       </section>
 
+      {/* AI 도구 큐레이션 TOP 3 섹션 */}
+      <section 
+        id="ai-tools-curation"
+        className="relative py-12 sm:py-16 md:py-20 lg:py-28 px-4 sm:px-6"
+        style={{
+          backgroundColor: isDark ? '#000000' : '#ffffff',
+          fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+        }}
+      >
+        <div className="max-w-7xl mx-auto">
+          <div className="text-center mb-12">
+            <h2 
+              className="text-3xl sm:text-4xl md:text-5xl mb-4 font-bold"
+              style={{
+                color: isDark ? '#ffffff' : '#1d1d1f',
+                fontWeight: 700,
+                letterSpacing: '-0.03em',
+                lineHeight: '1.1',
+              }}
+            >
+              인기 AI 도구 TOP 3
+            </h2>
+            <p 
+              className="text-base sm:text-lg max-w-2xl mx-auto"
+              style={{
+                color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+                fontWeight: 400,
+                letterSpacing: '-0.01em',
+                lineHeight: '1.6',
+              }}
+            >
+              가장 많이 사용되는 AI 도구들을 만나보세요
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
+            {[
+              {
+                name: 'Midjourney',
+                category: '이미지 생성',
+                description: '텍스트로부터 고품질 이미지를 생성하는 AI 도구',
+                tags: ['#이미지', '#생산성', '#디자인'],
+                icon: '🎨',
+                color: '#10b981',
+                link: '/ai-tools',
+              },
+              {
+                name: 'ChatGPT',
+                category: '텍스트',
+                description: '대화형 AI 어시스턴트로 다양한 작업을 도와주는 도구',
+                tags: ['#텍스트', '#생산성', '#자동화'],
+                icon: '💬',
+                color: '#3b82f6',
+                link: '/ai-tools',
+              },
+              {
+                name: 'n8n',
+                category: '자동화',
+                description: '워크플로우 자동화를 위한 강력한 노코드 플랫폼',
+                tags: ['#자동화', '#워크플로우', '#생산성'],
+                icon: '⚙️',
+                color: '#8b5cf6',
+                link: '/ai-tools',
+              },
+            ].map((tool, idx) => (
+              <Link
+                key={idx}
+                href={tool.link}
+                className="group relative rounded-2xl p-6 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                style={{
+                  background: isDark 
+                    ? 'rgba(255, 255, 255, 0.02)'
+                    : '#ffffff',
+                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
+                  boxShadow: isDark
+                    ? '0 4px 20px rgba(0, 0, 0, 0.2)'
+                    : '0 4px 20px rgba(0, 0, 0, 0.08)',
+                }}
+              >
+                <div className="flex items-start gap-4 mb-4">
+                  <div 
+                    className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 transition-all duration-300 group-hover:scale-110"
+                    style={{
+                      background: isDark
+                        ? `rgba(${tool.color === '#10b981' ? '16, 185, 129' : tool.color === '#3b82f6' ? '59, 130, 246' : '139, 92, 246'}, 0.15)`
+                        : `${tool.color}15`,
+                      border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : `${tool.color}20`}`,
+                    }}
+                  >
+                    {tool.icon}
+                  </div>
+                  <div className="flex-1 min-w-0">
+                    <div 
+                      className="text-xs font-medium mb-1"
+                      style={{
+                        color: tool.color,
+                        fontWeight: 600,
+                      }}
+                    >
+                      {tool.category}
+                    </div>
+                    <h3 
+                      className="text-lg font-bold mb-1"
+                      style={{
+                        color: isDark ? '#ffffff' : '#1d1d1f',
+                        fontWeight: 700,
+                        letterSpacing: '-0.02em',
+                      }}
+                    >
+                      {tool.name}
+                    </h3>
+                  </div>
+                </div>
+                
+                <p 
+                  className="text-sm mb-4 leading-relaxed"
+                  style={{
+                    color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+                    fontWeight: 400,
+                    letterSpacing: '-0.01em',
+                    lineHeight: '1.6',
+                  }}
+                >
+                  {tool.description}
+                </p>
+                
+                <div className="flex flex-wrap gap-2">
+                  {tool.tags.map((tag, tagIdx) => (
+                    <span
+                      key={tagIdx}
+                      className="px-2.5 py-1 rounded-md text-[10px] font-medium"
+                      style={{
+                        background: isDark 
+                          ? 'rgba(255, 255, 255, 0.05)'
+                          : 'rgba(0, 0, 0, 0.03)',
+                        color: isDark 
+                          ? 'rgba(255, 255, 255, 0.6)'
+                          : 'rgba(0, 0, 0, 0.5)',
+                        border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
+                      }}
+                    >
+                      {tag}
+                    </span>
+                  ))}
+                </div>
+              </Link>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* 기능 섹션 */}
       <section 
         id="features"
@@ -626,15 +814,18 @@ export default function PremiumDesignPage() {
             ].map((item, idx) => (
               <div
                 key={idx}
-                className={`group relative rounded-3xl overflow-hidden transition-all duration-500 ${
+                className={`group relative rounded-3xl overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] ${
                   visibleSections.has('features')
                     ? 'opacity-100 translate-y-0'
                     : 'opacity-0 translate-y-8'
                 }`}
                 style={{
                   transitionDelay: `${idx * 50}ms`,
-                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.3)' : '#e5e5e7'}`,
+                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7'}`,
                   backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
+                  boxShadow: isDark
+                    ? '0 4px 20px rgba(0, 0, 0, 0.2)'
+                    : '0 4px 20px rgba(0, 0, 0, 0.08)',
                 }}
               >
                 <div className="p-6 h-full flex flex-col">
@@ -742,27 +933,44 @@ export default function PremiumDesignPage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-7xl mx-auto">
             {[
-              { icon: "🌐", title: "SITE", desc: "DORI-AI", status: "진행중", color: "#3b82f6", span: 2 },
-              { icon: "📱", title: "APPLICATION", desc: "DORI (Android 작업중)", status: "작업중", color: "#8b5cf6", span: 1 },
-              { icon: "🎬", title: "YOUTUBE SHORTS", desc: "미정", status: "미정", color: "#06b6d4", span: 1 },
-              { icon: "🎨", title: "YOUTUBE ANIMATION", desc: "미정", status: "미정", color: "#10b981", span: 2 },
-              { icon: "⚙️", title: "MAKE / N8N", desc: "미정", status: "미정", color: "#f59e0b", span: 2 },
-              { icon: "🛒", title: "GUMROAD", desc: "미정", status: "미정", color: "#ec4899", span: 1 },
+              { icon: "🌐", title: "SITE", desc: "DORI-AI", status: "진행중", color: "#3b82f6", span: 2, isComingSoon: false },
+              { icon: "📱", title: "APPLICATION", desc: "DORI (Android 작업중)", status: "작업중", color: "#8b5cf6", span: 1, isComingSoon: false },
+              { icon: "🎬", title: "YOUTUBE SHORTS", desc: "Coming Soon", status: "Coming Soon", color: "#06b6d4", span: 1, isComingSoon: true },
+              { icon: "🎨", title: "YOUTUBE ANIMATION", desc: "Coming Soon", status: "Coming Soon", color: "#10b981", span: 2, isComingSoon: true },
+              { icon: "⚙️", title: "MAKE / N8N", desc: "Coming Soon", status: "Coming Soon", color: "#f59e0b", span: 2, isComingSoon: true },
+              { icon: "🛒", title: "GUMROAD", desc: "Coming Soon", status: "Coming Soon", color: "#ec4899", span: 1, isComingSoon: true },
             ].map((item, idx) => {
               const CardContent = (
                 <div
-                  className={`group relative rounded-3xl overflow-hidden transition-all duration-600 ease-[cubic-bezier(0.4,0,0.2,1)] hover:-translate-y-2 ${
+                  className={`group relative rounded-3xl overflow-hidden transition-all duration-300 ease-out cursor-pointer hover:scale-[1.02] ${
                     visibleSections.has('gallery')
                       ? 'opacity-100 translate-y-0'
                       : 'opacity-0 translate-y-8'
                   } ${item.span === 2 ? 'md:col-span-2' : ''}`}
                   style={{
                     transitionDelay: `${idx * 50}ms`,
-                    border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)'}`,
-                    backgroundColor: isDark ? 'rgba(255, 255, 255, 0.015)' : '#ffffff',
-                    boxShadow: isDark 
-                      ? '0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)'
-                      : '0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1)',
+                    border: item.isComingSoon 
+                      ? `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`
+                      : `1px solid ${isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)'}`,
+                    backgroundColor: item.isComingSoon
+                      ? isDark 
+                        ? 'rgba(255, 255, 255, 0.05)'
+                        : 'rgba(255, 255, 255, 0.8)'
+                      : isDark ? 'rgba(255, 255, 255, 0.015)' : '#ffffff',
+                    backdropFilter: item.isComingSoon ? 'blur(20px)' : 'none',
+                    WebkitBackdropFilter: item.isComingSoon ? 'blur(20px)' : 'none',
+                    boxShadow: item.isComingSoon
+                      ? isDark
+                        ? '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
+                        : '0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8)'
+                      : isDark 
+                        ? '0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)'
+                        : '0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1)',
+                  }}
+                  onClick={() => {
+                    if (item.isComingSoon) {
+                      setComingSoonModal({ open: true, title: item.title });
+                    }
                   }}
                 >
                 {/* 좌측 세로 액센트 라인 */}
@@ -790,16 +998,22 @@ export default function PremiumDesignPage() {
                         ? (isDark ? 'rgba(16, 185, 129, 0.18)' : 'rgba(16, 185, 129, 0.1)')
                         : item.status === '작업중' || item.status === '진행중'
                         ? (isDark ? 'rgba(59, 130, 246, 0.18)' : 'rgba(59, 130, 246, 0.1)')
+                        : item.status === 'Coming Soon'
+                        ? (isDark ? 'rgba(139, 92, 246, 0.2)' : 'rgba(139, 92, 246, 0.15)')
                         : (isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.05)'),
                       color: item.status === '완료'
                         ? '#10b981'
                         : item.status === '작업중' || item.status === '진행중'
                         ? '#3b82f6'
+                        : item.status === 'Coming Soon'
+                        ? '#a78bfa'
                         : (isDark ? 'rgba(255, 255, 255, 0.55)' : 'rgba(0, 0, 0, 0.45)'),
                       border: `1px solid ${item.status === '완료' 
                         ? (isDark ? 'rgba(16, 185, 129, 0.2)' : 'rgba(16, 185, 129, 0.12)')
                         : item.status === '작업중' || item.status === '진행중'
                         ? (isDark ? 'rgba(59, 130, 246, 0.2)' : 'rgba(59, 130, 246, 0.12)')
+                        : item.status === 'Coming Soon'
+                        ? (isDark ? 'rgba(139, 92, 246, 0.3)' : 'rgba(139, 92, 246, 0.2)')
                         : (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.06)')}`,
                     }}
                   >
@@ -851,10 +1065,10 @@ export default function PremiumDesignPage() {
                   <div 
                     className="flex items-center gap-2 mt-auto text-xs font-medium transition-all duration-400 group-hover:gap-2.5"
                     style={{
-                      color: item.color,
+                      color: item.isComingSoon ? (isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)') : item.color,
                     }}
                   >
-                    <span className="tracking-wide">자세히 보기</span>
+                    <span className="tracking-wide">{item.isComingSoon ? '오픈 알림 신청' : '자세히 보기'}</span>
                     <span className="group-hover:translate-x-1 transition-transform duration-400 text-base">→</span>
                   </div>
                 </div>
@@ -1037,6 +1251,120 @@ export default function PremiumDesignPage() {
       </section>
 
 
+      {/* Coming Soon 모달 */}
+      {comingSoonModal.open && (
+        <div 
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          style={{
+            background: 'rgba(0, 0, 0, 0.6)',
+            backdropFilter: 'blur(8px)',
+            WebkitBackdropFilter: 'blur(8px)',
+          }}
+          onClick={() => setComingSoonModal({ open: false, title: '' })}
+        >
+          <div 
+            className="relative w-full max-w-md rounded-2xl p-8 transition-all duration-300 hover:scale-[1.02]"
+            style={{
+              background: isDark 
+                ? 'rgba(15, 15, 15, 0.95)'
+                : 'rgba(255, 255, 255, 0.98)',
+              border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+              boxShadow: isDark
+                ? '0 20px 60px rgba(0, 0, 0, 0.5)'
+                : '0 20px 60px rgba(0, 0, 0, 0.15)',
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+            }}
+            onClick={(e) => e.stopPropagation()}
+          >
+            <button
+              onClick={() => setComingSoonModal({ open: false, title: '' })}
+              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-lg transition-all hover:scale-110"
+              style={{
+                background: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+                color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
+              }}
+            >
+              ✕
+            </button>
+            
+            <h3 
+              className="text-2xl font-bold mb-2"
+              style={{
+                color: isDark ? '#ffffff' : '#1d1d1f',
+                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+                fontWeight: 700,
+                letterSpacing: '-0.02em',
+              }}
+            >
+              {comingSoonModal.title} 오픈 알림
+            </h3>
+            
+            <p 
+              className="text-sm mb-6"
+              style={{
+                color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)',
+                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+                lineHeight: '1.6',
+              }}
+            >
+              서비스가 오픈되면 이메일로 알려드리겠습니다.
+            </p>
+            
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                if (notificationEmail) {
+                  // 이메일 저장 로직 (localStorage 또는 API)
+                  const notifications = JSON.parse(localStorage.getItem('dori_notifications') || '[]');
+                  notifications.push({
+                    email: notificationEmail,
+                    service: comingSoonModal.title,
+                    date: new Date().toISOString(),
+                  });
+                  localStorage.setItem('dori_notifications', JSON.stringify(notifications));
+                  alert('알림 신청이 완료되었습니다!');
+                  setComingSoonModal({ open: false, title: '' });
+                  setNotificationEmail('');
+                }
+              }}
+              className="space-y-4"
+            >
+              <input
+                type="email"
+                value={notificationEmail}
+                onChange={(e) => setNotificationEmail(e.target.value)}
+                placeholder="이메일 주소를 입력하세요"
+                required
+                className="w-full px-4 py-3 rounded-xl text-sm transition-all focus:outline-none focus:ring-2"
+                style={{
+                  background: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
+                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+                  color: isDark ? '#ffffff' : '#1d1d1f',
+                  fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+                }}
+              />
+              
+              <button
+                type="submit"
+                className="w-full px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
+                style={{
+                  background: isDark
+                    ? 'linear-gradient(135deg, #3b82f6, #8b5cf6)'
+                    : 'linear-gradient(135deg, #2563eb, #7c3aed)',
+                  color: '#ffffff',
+                  boxShadow: isDark
+                    ? '0 4px 20px rgba(59, 130, 246, 0.4)'
+                    : '0 4px 20px rgba(37, 99, 235, 0.3)',
+                }}
+              >
+                알림 받기
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
+
       {/* 스타일 */}
       <style jsx global>{`
         @keyframes scroll {
@@ -1063,8 +1391,21 @@ export default function PremiumDesignPage() {
           }
         }
 
+        @keyframes gradient {
+          0%, 100% {
+            background-position: 0% 50%;
+          }
+          50% {
+            background-position: 100% 50%;
+          }
+        }
+
         .animate-scroll {
           animation: scroll 2s ease-in-out infinite;
+        }
+
+        .animate-gradient {
+          animation: gradient 3s ease infinite;
         }
 
         details summary::-webkit-details-marker {
