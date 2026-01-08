@@ -60,8 +60,8 @@ export default function AiToolsComments({ toolId, compact = false, onCommentUpda
     
     // 댓글 작성 미션 진행도 업데이트
     if (session?.user?.email) {
-      import('@/lib/missionProgress').then(({ handleCommentMission }) => {
-        handleCommentMission().catch(err => console.error('미션 진행도 업데이트 오류:', err));
+      import('@/lib/dailyMissions').then(({ updateCountMission }) => {
+        updateCountMission('WRITE_COMMENT');
       });
     }
     

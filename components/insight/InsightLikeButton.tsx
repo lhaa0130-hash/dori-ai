@@ -54,6 +54,13 @@ export default function InsightLikeButton({ postId, initialLikes }: InsightLikeB
     likesData[postId] = newLikes;
     localStorage.setItem('dori_insight_likes', JSON.stringify(likesData));
     
+    // 좋아요 미션 진행도 업데이트 (좋아요를 누를 때만)
+    if (newIsLiked && typeof window !== 'undefined') {
+      import('@/lib/dailyMissions').then(({ updateCountMission }) => {
+        updateCountMission('LIKE_POST');
+      });
+    }
+    
     // 좋아요를 누를 때만 작성자 포인트 증가
     // 인사이트 글의 작성자 정보는 localStorage에서 찾아야 함
     if (newIsLiked) {

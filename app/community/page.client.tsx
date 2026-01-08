@@ -243,6 +243,13 @@ export default function CommunityClient() {
     
     setPosts(updatedPosts);
     localStorage.setItem("dori_community_posts", JSON.stringify(updatedPosts));
+    
+    // 좋아요 미션 진행도 업데이트 (좋아요를 누를 때만)
+    if (newIsLiked && session?.user?.email) {
+      import('@/lib/dailyMissions').then(({ updateCountMission }) => {
+        updateCountMission('LIKE_POST');
+      });
+    }
   };
 
   const filteredPosts = activeCategory === "전체" 

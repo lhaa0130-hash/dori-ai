@@ -26,7 +26,10 @@ export default function MyPage() {
   const [activeTab, setActiveTab] = useState("posts");
   const [memberList, setMemberList] = useState<any[]>([]);
   const ADMIN_EMAILS = ["admin@dori.ai", "lhaa0130@gmail.com"];
-  const isAdmin = user?.email && (ADMIN_EMAILS.some(email => email.toLowerCase() === user.email.toLowerCase()) || (user as any)?.isAdmin === true);
+  const isAdmin = mounted && user?.email && (
+    ADMIN_EMAILS.some(email => email.toLowerCase() === user.email?.toLowerCase()) || 
+    (user as any)?.isAdmin === true
+  );
 
   useEffect(() => setMounted(true), []);
 
@@ -52,7 +55,7 @@ export default function MyPage() {
             tier: profileData.tier || "Explorer",
             level: profileData.level || 1,
             gender: profileData.gender || "알 수 없음",
-            ageGroup: profileData.ageGroup || "알 수 없음",
+            birthYear: profileData.birthYear || null,
             doriScore: profileData.doriScore || 0,
             createdAt: profileData.createdAt || "알 수 없음",
           });
@@ -82,7 +85,7 @@ export default function MyPage() {
             tier: profileData.tier || "Explorer",
             level: profileData.level || 1,
             gender: profileData.gender || "알 수 없음",
-            ageGroup: profileData.ageGroup || "알 수 없음",
+            birthYear: profileData.birthYear || null,
             doriScore: profileData.doriScore || 0,
             createdAt: profileData.createdAt || "알 수 없음",
           });
@@ -104,7 +107,7 @@ export default function MyPage() {
             tier: "Explorer",
             level: 1,
             gender: "알 수 없음",
-            ageGroup: "알 수 없음",
+            birthYear: null,
             doriScore: 0,
             createdAt: "알 수 없음",
           });
@@ -128,7 +131,7 @@ export default function MyPage() {
                 tier: "Explorer",
                 level: 1,
                 gender: "알 수 없음",
-                ageGroup: "알 수 없음",
+                birthYear: null,
                 doriScore: 0,
                 createdAt: "알 수 없음",
               });
@@ -628,14 +631,14 @@ export default function MyPage() {
                           color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
                           marginBottom: '0.25rem',
                         }}>
-                          연령층
+                          출생년도
                         </div>
                         <div style={{
                           fontSize: '0.9375rem',
                           fontWeight: '500',
                           color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.8)',
                         }}>
-                          {member.ageGroup === "10s" ? "10대" : member.ageGroup === "20s" ? "20대" : member.ageGroup === "30s" ? "30대" : member.ageGroup === "40s" ? "40대" : member.ageGroup || "알 수 없음"}
+                          {member.birthYear ? `${member.birthYear}년` : "알 수 없음"}
                         </div>
                       </div>
                       <div>
