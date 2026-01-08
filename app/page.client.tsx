@@ -1,428 +1,201 @@
 "use client";
 
-import { useEffect, useState, useRef } from "react";
-import { useTheme } from "next-themes";
+import { useRef, useState, MouseEvent, useEffect } from "react";
+import { useSession, signIn } from "next-auth/react";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 
-export default function PremiumDesignPage() {
+export default function HomePageClient() {
+  const { data: session } = useSession();
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [scrollY, setScrollY] = useState(0);
-  const [activeSection, setActiveSection] = useState("hero");
-  const [mousePosition, setMousePosition] = useState({ x: 0, y: 0 });
-  const [visibleSections, setVisibleSections] = useState<Set<string>>(new Set());
-  const [isScrolling, setIsScrolling] = useState(false);
-  const [comingSoonModal, setComingSoonModal] = useState<{ open: boolean; title: string }>({ open: false, title: '' });
-  const [notificationEmail, setNotificationEmail] = useState('');
-  const sectionRefs = useRef<{ [key: string]: HTMLDivElement | null }>({});
-  const rootContainerRef = useRef<HTMLDivElement | null>(null);
-  const scrollTimeoutRef = useRef<NodeJS.Timeout | null>(null);
-  const isUserScrollingRef = useRef(false);
-  const currentSectionIndexRef = useRef(0);
-  const isWheelingRef = useRef(false);
+  const user = session?.user || null;
 
   useEffect(() => {
     setMounted(true);
-    
-    // 스크롤 스냅 강제 활성화
-    if (typeof document !== 'undefined') {
-      const html = document.documentElement;
-      
-      // html에 스크롤 스냅 설정 (스크롤이 html에서 일어남)
-      html.style.setProperty('scroll-snap-type', 'y mandatory', 'important');
-      html.style.setProperty('scroll-behavior', 'smooth', 'important');
-      
-      // 모든 섹션에 스크롤 스냅 정렬 강제 적용
-      const applyScrollSnap = () => {
-        const sections = ['hero', 'features', 'gallery', 'testimonials', 'faq'];
-        sections.forEach(sectionId => {
-          const section = document.getElementById(sectionId);
-          if (section) {
-            section.style.setProperty('scroll-snap-align', 'center', 'important');
-            section.style.setProperty('scroll-snap-stop', 'always', 'important');
-            section.style.setProperty('scroll-margin-top', '0', 'important');
-            section.style.setProperty('scroll-margin-bottom', '0', 'important');
-          }
-        });
-        
-        // 모든 section 태그에도 적용
-        const allSections = document.querySelectorAll('section[id]');
-        allSections.forEach(section => {
-          (section as HTMLElement).style.setProperty('scroll-snap-align', 'center', 'important');
-          (section as HTMLElement).style.setProperty('scroll-snap-stop', 'always', 'important');
-        });
-      };
-      
-      // 즉시 적용
-      applyScrollSnap();
-      
-      // DOM이 완전히 로드된 후 다시 적용
-      setTimeout(applyScrollSnap, 100);
-      setTimeout(applyScrollSnap, 500);
-    }
-    
-    const handleScroll = () => {
-      setScrollY(window.scrollY);
-      
-      // 프로그래밍 방식 스크롤 중이면 감지하지 않음
-      if (isScrolling) return;
-      
-      // 활성 섹션 감지 - 화면 중앙에 가장 가까운 섹션 찾기 (스크롤스냅 center와 호환)
-      const sections = ['hero', 'features', 'gallery', 'testimonials', 'faq'];
-      const viewportCenter = window.innerHeight / 2;
-      let closestSection = null;
-      let closestDistance = Infinity;
-      
-      sections.forEach(section => {
-        const el = sectionRefs.current[section];
-        if (!el) return;
-        const rect = el.getBoundingClientRect();
-        const sectionCenter = rect.top + rect.height / 2;
-        const distance = Math.abs(sectionCenter - viewportCenter);
-        
-        // 섹션이 화면에 보이고 중앙에 가장 가까운 경우 (중앙에서 40% 이내)
-        const isInViewport = rect.top < window.innerHeight && rect.bottom > 0;
-        const isNearCenter = distance < window.innerHeight * 0.4;
-        
-        if (isInViewport && isNearCenter && distance < closestDistance) {
-          closestDistance = distance;
-          closestSection = section;
-        }
-      });
-      
-      if (closestSection) {
-        setActiveSection(closestSection);
-      }
-    };
-    
-    const handleMouseMove = (e: MouseEvent) => {
-      setMousePosition({ x: e.clientX, y: e.clientY });
-    };
-    
-    if (typeof window !== 'undefined') {
-      let scrollTimeout: NodeJS.Timeout;
-      
-      // 스크롤 스냅 구현 - 스크롤이 멈출 때 가장 가까운 섹션으로 이동
-      const handleScrollSnap = () => {
-        if (isScrolling || isUserScrollingRef.current) return;
-        
-        const sections = ['hero', 'features', 'gallery', 'testimonials', 'faq'];
-        const viewportCenter = window.innerHeight / 2;
-        let closestSection: string | null = null;
-        let closestDistance = Infinity;
-        let closestElement: HTMLElement | null = null;
-        
-        sections.forEach(sectionId => {
-          const el = document.getElementById(sectionId);
-          if (!el) return;
-          
-          const rect = el.getBoundingClientRect();
-          const sectionCenter = rect.top + rect.height / 2;
-          const distance = Math.abs(sectionCenter - viewportCenter);
-          
-          // 섹션이 화면에 보이는 경우
-          if (rect.top < window.innerHeight && rect.bottom > 0) {
-            if (distance < closestDistance) {
-              closestDistance = distance;
-              closestSection = sectionId;
-              closestElement = el;
-            }
-          }
-        });
-        
-        // 가장 가까운 섹션이 있고, 중앙에서 일정 거리 이상 떨어져 있으면 스냅
-        if (closestElement && closestDistance > 50) {
-          setIsScrolling(true);
-          isUserScrollingRef.current = true;
-          
-          const targetY = closestElement.offsetTop + closestElement.offsetHeight / 2 - window.innerHeight / 2;
-          
-          window.scrollTo({
-            top: Math.max(0, targetY),
-            behavior: 'smooth'
-          });
-          
-          setTimeout(() => {
-            setIsScrolling(false);
-            isUserScrollingRef.current = false;
-          }, 500);
-        }
-      };
-      
-      const handleScrollWithDebounce = () => {
-        handleScroll();
-        
-        // 스크롤 스냅 트리거
-        if (scrollTimeoutRef.current) {
-          clearTimeout(scrollTimeoutRef.current);
-        }
-        
-        scrollTimeoutRef.current = setTimeout(() => {
-          handleScroll();
-          handleScrollSnap();
-        }, 150);
-      };
-      
-      // 휠 이벤트 가로채서 섹션 단위로 스크롤
-      let wheelTimeout: NodeJS.Timeout;
-      const handleWheel = (e: WheelEvent) => {
-        if (isScrolling || isWheelingRef.current) {
-          e.preventDefault();
-          return;
-        }
-        
-        const sections = ['hero', 'features', 'gallery', 'testimonials', 'faq'];
-        const currentScroll = window.scrollY;
-        const viewportHeight = window.innerHeight;
-        
-        // 현재 섹션 찾기
-        let currentIndex = 0;
-        sections.forEach((sectionId, index) => {
-          const el = document.getElementById(sectionId);
-          if (el) {
-            const rect = el.getBoundingClientRect();
-            if (rect.top <= viewportHeight / 2 && rect.bottom >= viewportHeight / 2) {
-              currentIndex = index;
-            }
-          }
-        });
-        
-        // 스크롤 방향에 따라 다음/이전 섹션으로 이동
-        if (e.deltaY > 0 && currentIndex < sections.length - 1) {
-          // 아래로 스크롤
-          isWheelingRef.current = true;
-          setIsScrolling(true);
-          const nextSection = document.getElementById(sections[currentIndex + 1]);
-          if (nextSection) {
-            const targetY = nextSection.offsetTop + nextSection.offsetHeight / 2 - viewportHeight / 2;
-            window.scrollTo({
-              top: Math.max(0, targetY),
-              behavior: 'smooth'
-            });
-            currentSectionIndexRef.current = currentIndex + 1;
-          }
-          setTimeout(() => {
-            isWheelingRef.current = false;
-            setIsScrolling(false);
-          }, 800);
-          e.preventDefault();
-        } else if (e.deltaY < 0 && currentIndex > 0) {
-          // 위로 스크롤
-          isWheelingRef.current = true;
-          setIsScrolling(true);
-          const prevSection = document.getElementById(sections[currentIndex - 1]);
-          if (prevSection) {
-            const targetY = prevSection.offsetTop + prevSection.offsetHeight / 2 - viewportHeight / 2;
-            window.scrollTo({
-              top: Math.max(0, targetY),
-              behavior: 'smooth'
-            });
-            currentSectionIndexRef.current = currentIndex - 1;
-          }
-          setTimeout(() => {
-            isWheelingRef.current = false;
-            setIsScrolling(false);
-          }, 800);
-          e.preventDefault();
-        }
-      };
-      
-      window.addEventListener("scroll", handleScrollWithDebounce, { passive: true });
-      window.addEventListener("wheel", handleWheel, { passive: false });
-      window.addEventListener("mousemove", handleMouseMove);
-      
-      // Intersection Observer - 활성 섹션 감지용 (스크롤스냅 center와 호환)
-      const activeObserver = new IntersectionObserver(
-        (entries) => {
-          // 프로그래밍 방식 스크롤 중이면 감지하지 않음
-          if (isScrolling) return;
-          
-          // 화면 중앙에 가장 가까운 섹션 찾기
-          let bestSection = null;
-          let bestScore = 0;
-          
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const sectionId = entry.target.getAttribute('data-section-id');
-              if (!sectionId) return;
-              
-              const rect = entry.boundingClientRect;
-              const viewportCenter = window.innerHeight / 2;
-              const sectionCenter = rect.top + rect.height / 2;
-              const distanceFromCenter = Math.abs(sectionCenter - viewportCenter);
-              
-              // 중앙에 가까울수록, 많이 보일수록 높은 점수
-              // 화면 중앙 40% 영역 내에 있으면 우선순위 높음
-              const isInCenterZone = distanceFromCenter < window.innerHeight * 0.2;
-              const centerScore = isInCenterZone ? 2 : 1;
-              const visibilityScore = entry.intersectionRatio;
-              const distanceScore = 1 / (1 + distanceFromCenter / 100);
-              
-              const totalScore = centerScore * visibilityScore * distanceScore;
-              
-              if (totalScore > bestScore) {
-                bestScore = totalScore;
-                bestSection = sectionId;
-              }
-            }
-          });
-          
-          if (bestSection) {
-            setActiveSection(bestSection);
-          }
-        },
-        { 
-          threshold: [0, 0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0],
-          rootMargin: '-30% 0px -30% 0px' // 화면 상하 30% 제외한 중앙 40% 영역만 감지
-        }
-      );
-
-      // Intersection Observer - 가시성 감지용
-      const visibilityObserver = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting) {
-              const sectionId = entry.target.getAttribute('data-section-id');
-              if (sectionId) {
-                setVisibleSections((prev) => new Set(prev).add(sectionId));
-              }
-            }
-          });
-        },
-        { threshold: 0.2, rootMargin: '0px 0px -100px 0px' }
-      );
-
-      const observeSections = () => {
-        Object.values(sectionRefs.current).forEach((ref) => {
-          if (ref) {
-            activeObserver.observe(ref);
-            visibilityObserver.observe(ref);
-          }
-        });
-      };
-
-      observeSections();
-      const timeoutId = setTimeout(observeSections, 100);
-
-      return () => {
-        window.removeEventListener("scroll", handleScrollWithDebounce);
-        window.removeEventListener("wheel", handleWheel);
-        window.removeEventListener("mousemove", handleMouseMove);
-        clearTimeout(timeoutId);
-        clearTimeout(scrollTimeout);
-        if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current);
-        if (wheelTimeout) clearTimeout(wheelTimeout);
-        activeObserver.disconnect();
-        visibilityObserver.disconnect();
-      };
-    }
-  }, [isScrolling]);
+  }, []);
 
   const isDark = mounted && theme === 'dark';
 
+  // --- 상태 관리 ---
+  const [loginOpen, setLoginOpen] = useState(false);
+  const [isLoginMode, setIsLoginMode] = useState(true);
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
+  const [name, setName] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
+  const [blogPosts, setBlogPosts] = useState<any[]>([]);
+
+  // --- 데이터 로딩 (커뮤니티 글) ---
+  useEffect(() => {
+    // 커뮤니티 글 불러오기 (좋아요 순으로 정렬)
+    const savedPosts = JSON.parse(localStorage.getItem("dori_community_posts") || "[]");
+    if (savedPosts.length > 0) {
+      // 좋아요 순으로 정렬하고 상위 5개만 가져오기
+      const sortedPosts = [...savedPosts]
+        .sort((a: any, b: any) => (b.likes || 0) - (a.likes || 0))
+        .slice(0, 5);
+      setBlogPosts(sortedPosts); 
+    }
+  }, []);
+
+  // --- 가로 스크롤 드래그 핸들러 ---
+  const latestRef = useRef<HTMLDivElement | null>(null);
+  const isDraggingRef = useRef(false);
+  const dragStartXRef = useRef(0);
+  const dragScrollLeftRef = useRef(0);
+
+  function onLatestMouseDown(e: MouseEvent<HTMLDivElement>) {
+    if (!latestRef.current) return;
+    isDraggingRef.current = true;
+    dragStartXRef.current = e.clientX;
+    dragScrollLeftRef.current = latestRef.current.scrollLeft;
+  }
+  function onLatestMouseMove(e: MouseEvent<HTMLDivElement>) {
+    if (!isDraggingRef.current || !latestRef.current) return;
+    const dx = e.clientX - dragStartXRef.current;
+    latestRef.current.scrollLeft = dragScrollLeftRef.current - dx;
+  }
+  function endLatestDrag() { isDraggingRef.current = false; }
+  function scrollLatestBy(dir: 1 | -1) {
+    const box = latestRef.current;
+    if (!box) return;
+    box.scrollBy({ left: dir * 320, behavior: "smooth" });
+  }
+
+  // --- 로그인/회원가입 로직 ---
+  async function handleCredentialLogin(e: React.FormEvent) {
+    e.preventDefault();
+    if (!username || !password) return alert("아이디와 비밀번호를 입력해주세요.");
+    setIsLoading(true);
+    
+    const res = await signIn("credentials", { 
+      redirect: false, 
+      username, 
+      password 
+    });
+    
+    setIsLoading(false);
+    if (res?.error) {
+      alert("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.");
+    } else { 
+      setLoginOpen(false); 
+      window.location.reload(); 
+    }
+  }
+
+  async function handleRegister(e: React.FormEvent) {
+          e.preventDefault();
+    if (!username || !password || !name) return alert("모든 필드를 입력해주세요.");
+    setIsLoading(true);
+    
+    try {
+      const res = await fetch("/api/auth/register", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ username, password, name }),
+      });
+      
+      if (!res.ok) throw new Error("회원가입 실패");
+      
+      alert("가입 성공! 로그인해주세요.");
+      setIsLoginMode(true);
+    } catch (err) { 
+      alert("회원가입 중 오류가 발생했습니다."); 
+    } finally { 
+      setIsLoading(false); 
+    }
+  }
+
+  // 좌측 사이드바 네비게이션 아이템
+  const [activeSection, setActiveSection] = useState('home');
+  const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
+  
   const navItems = [
-    { id: 'hero', label: '홈' },
-    { id: 'features', label: '기능' },
-    { id: 'gallery', label: '프로젝트' },
-    { id: 'testimonials', label: '커뮤니티' },
-    { id: 'faq', label: 'FAQ' },
+    { id: 'home', label: '홈', href: '#home' },
+    { id: 'features', label: '기능', href: '#features' },
+    { id: 'insight', label: '인사이트', href: '#insight' },
+    { id: 'community', label: '커뮤니티', href: '#community' },
+    { id: 'faq', label: 'FAQ', href: '#faq' },
   ];
 
+  // 스크롤 감지로 활성 섹션 업데이트
+  useEffect(() => {
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY + 200; // 헤더 높이 고려
+
+      for (const item of navItems) {
+        if (item.href.startsWith('#')) {
+          const sectionId = item.href.substring(1);
+          const element = sectionRefs.current[sectionId];
+          
+          if (element) {
+            const { offsetTop, offsetHeight } = element;
+            if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
+              setActiveSection(item.id);
+              break;
+            }
+          }
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // 초기 실행
+    
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [mounted]);
+
   return (
-    <div 
-      ref={(el) => { rootContainerRef.current = el; }}
-      className="relative min-h-screen"
-      style={{
-        backgroundColor: isDark ? '#000000' : '#ffffff',
-        fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-        scrollSnapType: 'y mandatory',
-      }}
-    >
+    <main className="page scroll-container">
+      <div className="scroll-spacer" />
+
       {/* 좌측 사이드바 네비게이션 */}
+      {mounted && (
       <aside 
-        className="fixed left-0 top-1/2 -translate-y-1/2 z-50 hidden lg:block"
+          className="fixed left-0 z-50 hidden lg:block"
         style={{
-          maxHeight: '90vh',
-          overflowY: 'auto',
-          overflowX: 'hidden',
+            top: '50%',
+            transform: 'translateY(-50%)',
         }}
       >
-        <nav className="ml-4 lg:ml-8">
+          <nav className="ml-8">
           <div 
-            className="flex flex-col gap-2 lg:gap-3 p-3 lg:p-4 rounded-2xl backdrop-blur-xl transition-all duration-500"
+              className="flex flex-col gap-3 p-4 rounded-2xl backdrop-blur-xl transition-all duration-500"
             style={{
               backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
               border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
-              maxHeight: 'calc(90vh - 20px)',
             }}
           >
             {navItems.map((item) => (
               <a
                 key={item.id}
-                href={`#${item.id}`}
-                className="group relative flex items-center gap-2 lg:gap-3 px-2 lg:px-3 py-1.5 lg:py-2 rounded-xl transition-all duration-300 whitespace-nowrap"
+                  href={item.href}
+                  className="group relative flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 cursor-pointer"
                 style={{
                   backgroundColor: activeSection === item.id 
                     ? (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)')
                     : 'transparent',
                 }}
                 onClick={(e) => {
+                    if (item.href.startsWith('#')) {
                   e.preventDefault();
-                  e.stopPropagation();
-                  
-                  const targetElement = document.getElementById(item.id);
-                  if (!targetElement) return;
-                  
-                  // 루트 컨테이너의 스크롤스냅 직접 비활성화
-                  if (rootContainerRef.current) {
-                    rootContainerRef.current.style.scrollSnapType = 'none';
-                  }
-                  
-                  // 스크롤 상태 설정
-                  setIsScrolling(true);
-                  setActiveSection(item.id);
-                  
-                  // 섹션을 화면 정중앙에 오도록 scrollIntoView 사용
-                  targetElement.scrollIntoView({
-                    behavior: 'smooth',
-                    block: 'center',
-                    inline: 'nearest'
-                  });
-                  
-                  // 스크롤 완료 확인
-                  const checkComplete = () => {
-                    const rect = targetElement.getBoundingClientRect();
-                    const viewportCenter = window.innerHeight / 2;
-                    const sectionCenter = rect.top + rect.height / 2;
-                    const distance = Math.abs(sectionCenter - viewportCenter);
-                    
-                    if (distance < 50) {
-                      // 스크롤 완료
-                      setIsScrolling(false);
-                      setActiveSection(item.id);
-                      // 스크롤스냅 다시 활성화
-                      if (rootContainerRef.current) {
-                        rootContainerRef.current.style.scrollSnapType = 'y mandatory';
+                      const sectionId = item.href.substring(1);
+                      const element = sectionRefs.current[sectionId];
+                      if (element) {
+                        const headerOffset = 80;
+                        const elementPosition = element.getBoundingClientRect().top;
+                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+                        window.scrollTo({
+                          top: offsetPosition,
+                          behavior: 'smooth'
+                        });
                       }
                     } else {
-                      // 아직 스크롤 중
-                      requestAnimationFrame(checkComplete);
+                      // 외부 링크는 그대로 이동
+                      return;
                     }
-                  };
-                  
-                  // 스크롤 시작 후 확인 시작
-                  setTimeout(() => {
-                    checkComplete();
-                  }, 200);
-                  
-                  // 타임아웃 안전장치
-                  setTimeout(() => {
-                    setIsScrolling(false);
                     setActiveSection(item.id);
-                    if (rootContainerRef.current) {
-                      rootContainerRef.current.style.scrollSnapType = 'y mandatory';
-                    }
-                  }, 2000);
                 }}
               >
                 <div 
@@ -436,7 +209,7 @@ export default function PremiumDesignPage() {
                   }}
                 />
                 <span 
-                  className="text-[10px] lg:text-xs font-medium transition-all duration-300"
+                    className="text-xs font-medium transition-all duration-300"
                   style={{
                     color: activeSection === item.id 
                       ? (isDark ? '#ffffff' : '#000000')
@@ -451,967 +224,797 @@ export default function PremiumDesignPage() {
           </div>
         </nav>
       </aside>
+      )}
 
-      {/* 배경 효과 */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        <div 
-          className="absolute inset-0 transition-all duration-1000"
-          style={{
-            background: isDark
-              ? 'radial-gradient(ellipse at top, rgba(30, 58, 138, 0.15) 0%, transparent 50%), radial-gradient(ellipse at bottom, rgba(88, 28, 135, 0.1) 0%, transparent 50%), #000000'
-              : 'radial-gradient(ellipse at top, rgba(59, 130, 246, 0.05) 0%, transparent 50%), #ffffff',
-          }}
-        />
-        
-        {/* 마우스 추적 그라데이션 */}
-        {mounted && (
-          <div 
-            className="absolute w-[600px] h-[600px] rounded-full blur-[120px] transition-all duration-1000 ease-out opacity-30"
-            style={{
-              background: isDark
-                ? 'radial-gradient(circle, rgba(59, 130, 246, 0.3) 0%, transparent 70%)'
-                : 'radial-gradient(circle, rgba(59, 130, 246, 0.15) 0%, transparent 70%)',
-              left: `${mousePosition.x - 300}px`,
-              top: `${mousePosition.y - 300}px`,
-              transform: 'translate(-50%, -50%)',
-            }}
-          />
-        )}
-      </div>
-
-      {/* 히어로 섹션 */}
+      {/* --- Home Section (Hero) --- */}
       <section 
-        id="hero"
-        className="relative min-h-screen flex items-center justify-center px-4 sm:px-6 pt-20 pb-12 overflow-hidden"
-        ref={(el) => { sectionRefs.current['hero'] = el; }}
-        data-section-id="hero"
-        style={{ scrollSnapAlign: 'center', scrollSnapStop: 'always' }}
+        id="home" 
+        className="top-section snap-section"
+        ref={(el) => { sectionRefs.current['home'] = el; }}
       >
-        {/* 배경 그라데이션 애니메이션 */}
-        <div className="absolute inset-0 -z-10 overflow-hidden pointer-events-none">
-          <div 
-            className="absolute inset-0 opacity-30"
-            style={{
-              background: isDark
-                ? 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(59, 130, 246, 0.3), transparent 70%), radial-gradient(ellipse 80% 50% at 50% 100%, rgba(139, 92, 246, 0.3), transparent 70%)'
-                : 'radial-gradient(ellipse 80% 50% at 50% 0%, rgba(37, 99, 235, 0.15), transparent 70%), radial-gradient(ellipse 80% 50% at 50% 100%, rgba(124, 58, 237, 0.15), transparent 70%)',
-            }}
-          />
-          <div 
-            className="absolute top-0 left-1/2 -translate-x-1/2 w-[800px] h-[800px] rounded-full blur-[120px] animate-pulse"
-            style={{
-              background: isDark
-                ? 'radial-gradient(circle, rgba(59, 130, 246, 0.4) 0%, rgba(139, 92, 246, 0.2) 50%, transparent 70%)'
-                : 'radial-gradient(circle, rgba(37, 99, 235, 0.2) 0%, rgba(124, 58, 237, 0.1) 50%, transparent 70%)',
-              animation: 'pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite',
-            }}
-          />
-        </div>
-
-        <div className="max-w-6xl mx-auto text-center w-full relative z-10">
-          {/* 메인 카피 */}
-          <h1 
-            className={`text-3xl sm:text-4xl md:text-5xl lg:text-6xl xl:text-7xl mb-6 leading-[1.1] tracking-[-0.03em] transition-all duration-1000 px-2 ${
-              visibleSections.has('hero')
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-8'
-            }`}
-            style={{
-              color: isDark ? '#ffffff' : '#1d1d1f',
-              fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-              fontWeight: 800,
-              letterSpacing: '-0.03em',
-              lineHeight: '1.1',
-            }}
-          >
-            AI와 함께하는 작은 시작,<br className="hidden sm:block" />
-            <span 
-              className="bg-gradient-to-r from-blue-600 via-purple-600 to-blue-600 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient"
-              style={{
-                backgroundImage: isDark
-                  ? 'linear-gradient(90deg, #60a5fa 0%, #818cf8 25%, #a78bfa 50%, #818cf8 75%, #60a5fa 100%)'
-                  : 'linear-gradient(90deg, #2563eb 0%, #4f46e5 25%, #7c3aed 50%, #4f46e5 75%, #2563eb 100%)',
-                backgroundSize: '200% auto',
-                WebkitBackgroundClip: 'text',
-                WebkitTextFillColor: 'transparent',
-                backgroundClip: 'text',
-              }}
-            >
-              DORI-AI
-            </span>
-            가 앞당깁니다.
-          </h1>
-
-          {/* 서브 카피 */}
-          <p 
-            className={`text-base sm:text-lg md:text-xl lg:text-2xl mb-10 max-w-3xl mx-auto leading-relaxed transition-all duration-1000 delay-100 px-4 ${
-              visibleSections.has('hero')
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-8'
-            }`}
-            style={{
-              color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
-              fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-              fontWeight: 400,
-              letterSpacing: '-0.01em',
-              lineHeight: '1.7',
-            }}
-          >
-            당신에게 꼭 필요한 AI 도구 탐색부터 실무 활용 인사이트까지,<br className="hidden md:block" />
-            입문자를 위한 가장 친절한 가이드.
-          </p>
-
-          {/* CTA 버튼 */}
-          <div 
-            className={`flex flex-col sm:flex-row items-center justify-center gap-4 transition-all duration-1000 delay-200 ${
-              visibleSections.has('hero')
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-8'
-            }`}
-          >
-            <Link
-              href="/ai-tools"
-              className="group relative px-8 py-4 rounded-xl font-semibold text-base transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] overflow-hidden"
-              style={{
-                background: isDark
-                  ? 'linear-gradient(135deg, #3b82f6, #8b5cf6)'
-                  : 'linear-gradient(135deg, #2563eb, #7c3aed)',
-                color: '#ffffff',
-                boxShadow: isDark
-                  ? '0 4px 20px rgba(59, 130, 246, 0.4)'
-                  : '0 4px 20px rgba(37, 99, 235, 0.3)',
-              }}
-            >
-              <span className="relative z-10">AI 도구 탐색하기</span>
-              <div 
-                className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-300"
-                style={{
-                  background: isDark
-                    ? 'linear-gradient(135deg, #60a5fa, #a78bfa)'
-                    : 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
-                }}
-              />
-            </Link>
-            
-            <Link
-              href="/community"
-              className="group px-8 py-4 rounded-xl font-semibold text-base transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-              style={{
-                background: 'transparent',
-                border: `2px solid ${isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'}`,
-                color: isDark ? '#ffffff' : '#1d1d1f',
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.2)';
-                e.currentTarget.style.background = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)';
-                e.currentTarget.style.background = 'transparent';
-              }}
-            >
-              커뮤니티 참여
-            </Link>
+        {/* 오로라 배경 효과 */}
+        <div className="aurora-bg">
+          <div className="blob blob-1"></div>
+          <div className="blob blob-2"></div>
+          </div>
+          
+        <div className="top-header fade-in-up">
+          <h1>Creative Studio</h1>
+          
+          {/* 알록달록 움직이는 그라데이션 바 */}
+          <div className="colorful-bar fade-in-up delay-1">
+            <div className="gradient-bar animated-gradient"></div>
           </div>
 
-
-          {/* 스크롤 인디케이터 */}
-          <div 
-            className={`absolute bottom-12 left-1/2 -translate-x-1/2 transition-all duration-500 ${
-              scrollY > 100 ? 'opacity-0' : 'opacity-100'
-            }`}
-          >
-            <div 
-              className="w-px h-16 flex items-start justify-center"
-              style={{
-                borderLeft: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)'}`,
-              }}
-            >
-              <div 
-                className="w-1 h-12 rounded-full animate-scroll"
-                style={{
-                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)',
-                }}
-              />
+          <h2 className="sub-title">DORI-AI</h2>
+          <div className="description">
+            <p>작은 시작을 함께 만들어갑니다</p>
+            <p>AI가 처음이어도, 누구나 배우고 성장할 수 있는 공간</p>
             </div>
-          </div>
-
         </div>
       </section>
 
-      {/* AI 도구 큐레이션 TOP 3 섹션 */}
+      {/* --- Features Section --- */}
       <section 
-        id="ai-tools-curation"
-        className="relative py-12 sm:py-16 md:py-20 lg:py-28 px-4 sm:px-6"
-        style={{
-          backgroundColor: isDark ? '#000000' : '#ffffff',
-          fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-        }}
+        id="features" 
+        className="container section snap-section"
+        ref={(el) => { sectionRefs.current['features'] = el; }}
       >
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-12">
-            <h2 
-              className="text-3xl sm:text-4xl md:text-5xl mb-4 font-bold"
-              style={{
-                color: isDark ? '#ffffff' : '#1d1d1f',
-                fontWeight: 700,
-                letterSpacing: '-0.03em',
-                lineHeight: '1.1',
-              }}
-            >
-              인기 AI 도구 TOP 3
-            </h2>
-            <p 
-              className="text-base sm:text-lg max-w-2xl mx-auto"
-              style={{
-                color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
-                fontWeight: 400,
-                letterSpacing: '-0.01em',
-                lineHeight: '1.6',
-              }}
-            >
-              가장 많이 사용되는 AI 도구들을 만나보세요
-            </p>
-          </div>
+        <div className="section-header">
+          <h2>기능</h2>
+          <p>DORI-AI의 다양한 기능을 탐색해보세요</p>
+        </div>
+        <div className="features-grid">
+          <Link href="/ai-tools" className="feature-card">
+            <div className="feature-icon">🤖</div>
+            <h3>AI Tools</h3>
+            <p>수천 개의 AI 도구를 카테고리별로 탐색하고 비교해보세요</p>
+          </Link>
+          <Link href="/insight" className="feature-card">
+            <div className="feature-icon">🧠</div>
+            <h3>인사이트</h3>
+            <p>AI 업계 트렌드와 실무 활용 가이드를 확인하세요</p>
+          </Link>
+          <Link href="/project" className="feature-card">
+            <div className="feature-icon">🎨</div>
+            <h3>프로젝트</h3>
+            <p>AI를 활용한 창작 프로젝트를 둘러보고 영감을 얻으세요</p>
+          </Link>
+          <Link href="/community" className="feature-card">
+            <div className="feature-icon">💬</div>
+            <h3>커뮤니티</h3>
+            <p>멤버들과 소통하고 질문과 답변을 나누세요</p>
+          </Link>
+          <Link href="/market" className="feature-card">
+            <div className="feature-icon">🛒</div>
+            <h3>마켓</h3>
+            <p>AI 관련 제품과 서비스를 구매하고 판매하세요</p>
+          </Link>
+        </div>
+      </section>
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-            {[
-              {
-                name: 'Midjourney',
-                category: '이미지 생성',
-                description: '텍스트로부터 고품질 이미지를 생성하는 AI 도구',
-                tags: ['#이미지', '#생산성', '#디자인'],
-                icon: '🎨',
-                color: '#10b981',
-                link: '/ai-tools',
-              },
-              {
-                name: 'ChatGPT',
-                category: '텍스트',
-                description: '대화형 AI 어시스턴트로 다양한 작업을 도와주는 도구',
-                tags: ['#텍스트', '#생산성', '#자동화'],
-                icon: '💬',
-                color: '#3b82f6',
-                link: '/ai-tools',
-              },
-              {
-                name: 'n8n',
-                category: '자동화',
-                description: '워크플로우 자동화를 위한 강력한 노코드 플랫폼',
-                tags: ['#자동화', '#워크플로우', '#생산성'],
-                icon: '⚙️',
-                color: '#8b5cf6',
-                link: '/ai-tools',
-              },
-            ].map((tool, idx) => (
-              <Link
-                key={idx}
-                href={tool.link}
-                className="group relative rounded-2xl p-6 transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-                style={{
-                  background: isDark 
-                    ? 'rgba(255, 255, 255, 0.02)'
-                    : '#ffffff',
-                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
-                  boxShadow: isDark
-                    ? '0 4px 20px rgba(0, 0, 0, 0.2)'
-                    : '0 4px 20px rgba(0, 0, 0, 0.08)',
-                }}
+      {/* --- Insight Section --- */}
+      <section 
+        id="insight" 
+        className="container section snap-section"
+        ref={(el) => { sectionRefs.current['insight'] = el; }}
+      >
+        <div className="section-header">
+          <h2>인사이트</h2>
+          <p>AI 업계 속보와 심층 칼럼을 만나보세요</p>
+        </div>
+        <div className="insight-preview">
+          <div className="insight-cards">
+            <Link href="/insight/trend" className="insight-card">
+              <div className="insight-icon">📈</div>
+              <h3>트렌드</h3>
+              <p>최신 AI 기술 동향과 업계 트렌드를 확인하세요</p>
+              <span className="insight-link">트렌드 보기 →</span>
+            </Link>
+            <Link href="/insight/guide" className="insight-card">
+              <div className="insight-icon">📚</div>
+              <h3>가이드</h3>
+              <p>AI 도구를 실무에 바로 적용하는 실용적인 가이드</p>
+              <span className="insight-link">가이드 보기 →</span>
+            </Link>
+            <Link href="/insight" className="insight-card">
+              <div className="insight-icon">🎯</div>
+              <h3>큐레이션</h3>
+              <p>엄선된 AI 도구와 리소스를 한눈에 확인하세요</p>
+              <span className="insight-link">큐레이션 보기 →</span>
+            </Link>
+            <Link href="/insight" className="insight-card">
+              <div className="insight-icon">📊</div>
+              <h3>분석</h3>
+              <p>AI 시장과 기술에 대한 깊이 있는 분석 자료</p>
+              <span className="insight-link">분석 보기 →</span>
+            </Link>
+            <Link href="/insight" className="insight-card">
+              <div className="insight-icon">📄</div>
+              <h3>리포트</h3>
+              <p>AI 업계 전문 리포트와 통계 자료를 확인하세요</p>
+              <span className="insight-link">리포트 보기 →</span>
+            </Link>
+          </div>
+        </div>
+      </section>
+
+      {/* --- Community Section (Hot Posts) --- */}
+      <section 
+        id="community" 
+        className="container section snap-section fade-in-up delay-2"
+        ref={(el) => { sectionRefs.current['community'] = el; }}
+      >
+        <div className="section-header left-align">
+          <div>
+            <h2>핫한 글</h2>
+            <p>커뮤니티에서 지금 가장 인기 있는 글</p>
+          </div>
+          <Link href="/community" className="view-all">전체보기 →</Link>
+        </div>
+                
+        {blogPosts.length === 0 ? (
+          <div className="latest-empty">
+            <p>아직 등록된 글이 없습니다.</p>
+            <Link href="/community/write" className="link-text">첫 번째 글의 주인공이 되어보세요!</Link>
+          </div>
+        ) : (
+          <div className="community-hot-posts">
+            {blogPosts.map((post: any, index: number) => (
+              <Link 
+                className="hot-post-card" 
+                href={`/community/${post.id}`} 
+                key={post.id}
               >
-                <div className="flex items-start gap-4 mb-4">
-                  <div 
-                    className="w-12 h-12 rounded-xl flex items-center justify-center text-2xl flex-shrink-0 transition-all duration-300 group-hover:scale-110"
-                    style={{
-                      background: isDark
-                        ? `rgba(${tool.color === '#10b981' ? '16, 185, 129' : tool.color === '#3b82f6' ? '59, 130, 246' : '139, 92, 246'}, 0.15)`
-                        : `${tool.color}15`,
-                      border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : `${tool.color}20`}`,
-                    }}
-                  >
-                    {tool.icon}
+                <div className="hot-post-rank">{index + 1}</div>
+                <div className="hot-post-content">
+                  <div className="hot-post-title">{post.title || '제목 없음'}</div>
+                  <div className="hot-post-meta">
+                    <span className="hot-post-author">{post.author || '익명'}</span>
+                    <span className="hot-post-likes">❤️ {post.likes || 0}</span>
+                    {post.category && (
+                      <span className="hot-post-category">{post.category}</span>
+                    )}
                   </div>
-                  <div className="flex-1 min-w-0">
-                    <div 
-                      className="text-xs font-medium mb-1"
-                      style={{
-                        color: tool.color,
-                        fontWeight: 600,
-                      }}
-                    >
-                      {tool.category}
-                    </div>
-                    <h3 
-                      className="text-lg font-bold mb-1"
-                      style={{
-                        color: isDark ? '#ffffff' : '#1d1d1f',
-                        fontWeight: 700,
-                        letterSpacing: '-0.02em',
-                      }}
-                    >
-                      {tool.name}
-                    </h3>
-                  </div>
-                </div>
-                
-                <p 
-                  className="text-sm mb-4 leading-relaxed"
-                  style={{
-                    color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
-                    fontWeight: 400,
-                    letterSpacing: '-0.01em',
-                    lineHeight: '1.6',
-                  }}
-                >
-                  {tool.description}
-                </p>
-                
-                <div className="flex flex-wrap gap-2">
-                  {tool.tags.map((tag, tagIdx) => (
-                    <span
-                      key={tagIdx}
-                      className="px-2.5 py-1 rounded-md text-[10px] font-medium"
-                      style={{
-                        background: isDark 
-                          ? 'rgba(255, 255, 255, 0.05)'
-                          : 'rgba(0, 0, 0, 0.03)',
-                        color: isDark 
-                          ? 'rgba(255, 255, 255, 0.6)'
-                          : 'rgba(0, 0, 0, 0.5)',
-                        border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
-                      }}
-                    >
-                      {tag}
-                    </span>
-                  ))}
                 </div>
               </Link>
             ))}
           </div>
-        </div>
+        )}
       </section>
 
-      {/* 기능 섹션 */}
+      {/* --- FAQ Section --- */}
       <section 
-        id="features"
-        className="relative py-12 sm:py-16 md:py-20 lg:py-28 px-4 sm:px-6 min-h-screen flex items-center"
-        ref={(el) => { sectionRefs.current['features'] = el; }}
-        data-section-id="features"
-        style={{
-          backgroundColor: isDark ? '#000000' : '#ffffff',
-          scrollSnapAlign: 'center',
-          scrollSnapStop: 'always',
-        }}
-      >
-        <div className="max-w-7xl mx-auto w-full">
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-            {[
-              { icon: "🚀", title: "AI 도구", desc: "최신 AI 도구를 탐색하고 비교하여 여러분의 작업에 가장 적합한 도구를 찾아보세요", color: "#3b82f6" },
-              { icon: "🧠", title: "인사이트", desc: "AI 트렌드와 분석을 통해 최신 동향을 파악하세요", color: "#8b5cf6" },
-              { icon: "🎓", title: "아카데미", desc: "교육 자료와 강의를 통해 지식을 습득하세요", color: "#06b6d4" },
-              { icon: "🛒", title: "마켓", desc: "다양한 제품과 서비스를 만나보세요", color: "#10b981" },
-              { icon: "💬", title: "커뮤니티", desc: "소통과 공유를 통해 함께 성장하세요", color: "#f59e0b" },
-              { icon: "📊", title: "분석", desc: "데이터와 인사이트로 더 나은 결정을 내리세요", color: "#ec4899" },
-            ].map((item, idx) => (
-              <div
-                key={idx}
-                className={`group relative rounded-3xl overflow-hidden transition-all duration-300 hover:scale-[1.02] active:scale-[0.98] ${
-                  visibleSections.has('features')
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-8'
-                }`}
-                style={{
-                  transitionDelay: `${idx * 50}ms`,
-                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7'}`,
-                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
-                  boxShadow: isDark
-                    ? '0 4px 20px rgba(0, 0, 0, 0.2)'
-                    : '0 4px 20px rgba(0, 0, 0, 0.08)',
-                }}
-              >
-                <div className="p-6 h-full flex flex-col">
-                  <div 
-                    className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl mb-4 transition-all duration-300 group-hover:scale-110 group-hover:rotate-3"
-                    style={{
-                      backgroundColor: isDark 
-                        ? `rgba(${item.color === '#3b82f6' ? '59, 130, 246' : item.color === '#8b5cf6' ? '139, 92, 246' : '6, 182, 212'}, 0.1)`
-                        : `${item.color}15`,
-                    }}
-                  >
-                    {item.icon}
-                  </div>
-                  <h3 
-                    className="text-xl mb-2"
-                    style={{
-                      color: isDark ? '#ffffff' : '#1d1d1f',
-                      fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                      fontWeight: 600,
-                      letterSpacing: '-0.02em',
-                    }}
-                  >
-                    {item.title}
-                  </h3>
-                  <p 
-                    className="text-sm leading-relaxed flex-grow"
-                    style={{
-                      color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
-                      fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                      fontWeight: 400,
-                      letterSpacing: '-0.01em',
-                      lineHeight: '1.6',
-                    }}
-                  >
-                    {item.desc}
-                  </p>
-                  <div 
-                    className="flex items-center gap-2 mt-4 text-sm font-medium transition-all duration-300 group-hover:gap-3"
-                    style={{
-                      color: item.color,
-                    }}
-                  >
-                    <span>자세히 보기</span>
-                    <span className="group-hover:translate-x-1 transition-transform duration-300">→</span>
-                  </div>
-                </div>
-                
-                {/* 호버 효과 */}
-                <div 
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
-                  style={{
-                    background: `radial-gradient(circle at center, ${item.color}10 0%, transparent 70%)`,
-                  }}
-                />
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 프로젝트 섹션 */}
-      <section 
-        id="gallery"
-        className="relative py-12 sm:py-16 md:py-20 lg:py-28 px-4 sm:px-6 min-h-screen flex items-center"
-        ref={(el) => { sectionRefs.current['gallery'] = el; }}
-        data-section-id="gallery"
-        style={{
-          backgroundColor: isDark ? '#000000' : '#ffffff',
-          scrollSnapAlign: 'center',
-          scrollSnapStop: 'always',
-        }}
-      >
-        <div className="max-w-7xl mx-auto w-full">
-          <div 
-            className={`text-center mb-8 sm:mb-12 transition-all duration-1000 ${
-              visibleSections.has('gallery')
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-8'
-            }`}
-          >
-            <h2 
-              className="text-3xl sm:text-4xl md:text-5xl mb-3"
-              style={{
-                color: isDark ? '#ffffff' : '#1d1d1f',
-                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                fontWeight: 700,
-                letterSpacing: '-0.03em',
-                lineHeight: '1.1',
-              }}
-            >
-              프로젝트
-            </h2>
-            <p 
-              className="text-base sm:text-lg"
-              style={{
-                color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
-                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                fontWeight: 400,
-                letterSpacing: '-0.01em',
-              }}
-            >
-              우리의 작업을 확인해보세요
-            </p>
-          </div>
-
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 max-w-7xl mx-auto">
-            {[
-              { icon: "🌐", title: "SITE", desc: "DORI-AI", status: "진행중", color: "#3b82f6", span: 2, isComingSoon: false },
-              { icon: "📱", title: "APPLICATION", desc: "DORI (Android 작업중)", status: "작업중", color: "#8b5cf6", span: 1, isComingSoon: false },
-              { icon: "🎬", title: "YOUTUBE SHORTS", desc: "Coming Soon", status: "Coming Soon", color: "#06b6d4", span: 1, isComingSoon: true },
-              { icon: "🎨", title: "YOUTUBE ANIMATION", desc: "Coming Soon", status: "Coming Soon", color: "#10b981", span: 2, isComingSoon: true },
-              { icon: "⚙️", title: "MAKE / N8N", desc: "Coming Soon", status: "Coming Soon", color: "#f59e0b", span: 2, isComingSoon: true },
-              { icon: "🛒", title: "GUMROAD", desc: "Coming Soon", status: "Coming Soon", color: "#ec4899", span: 1, isComingSoon: true },
-            ].map((item, idx) => {
-              const CardContent = (
-                <div
-                  className={`group relative rounded-3xl overflow-hidden transition-all duration-300 ease-out cursor-pointer hover:scale-[1.02] ${
-                    visibleSections.has('gallery')
-                      ? 'opacity-100 translate-y-0'
-                      : 'opacity-0 translate-y-8'
-                  } ${item.span === 2 ? 'md:col-span-2' : ''}`}
-                  style={{
-                    transitionDelay: `${idx * 50}ms`,
-                    border: item.isComingSoon 
-                      ? `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`
-                      : `1px solid ${isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.04)'}`,
-                    backgroundColor: item.isComingSoon
-                      ? isDark 
-                        ? 'rgba(255, 255, 255, 0.05)'
-                        : 'rgba(255, 255, 255, 0.8)'
-                      : isDark ? 'rgba(255, 255, 255, 0.015)' : '#ffffff',
-                    backdropFilter: item.isComingSoon ? 'blur(20px)' : 'none',
-                    WebkitBackdropFilter: item.isComingSoon ? 'blur(20px)' : 'none',
-                    boxShadow: item.isComingSoon
-                      ? isDark
-                        ? '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.1)'
-                        : '0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.8)'
-                      : isDark 
-                        ? '0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24)'
-                        : '0 1px 3px rgba(0, 0, 0, 0.05), 0 1px 2px rgba(0, 0, 0, 0.1)',
-                  }}
-                  onClick={() => {
-                    if (item.isComingSoon) {
-                      setComingSoonModal({ open: true, title: item.title });
-                    }
-                  }}
-                >
-                {/* 좌측 세로 액센트 라인 */}
-                <div 
-                  className="absolute left-0 top-0 bottom-0 w-1 origin-top scale-y-0 group-hover:scale-y-100 transition-transform duration-600 ease-[cubic-bezier(0.4,0,0.2,1)]"
-                  style={{
-                    background: `linear-gradient(180deg, ${item.color}, ${item.color}80)`,
-                  }}
-                />
-                
-                {/* 배경 그라데이션 - 우측 하단에서 시작 */}
-                <div 
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-600 pointer-events-none"
-                  style={{
-                    background: `radial-gradient(circle at 85% 85%, ${item.color}10 0%, transparent 50%)`,
-                  }}
-                />
-
-                <div className="p-7 h-full flex flex-col relative z-10">
-                  {/* 상태 태그 - 우측 상단 */}
-                  <div 
-                    className="absolute top-5 right-5 px-3 py-1 rounded-full text-[10px] font-medium tracking-wide backdrop-blur-md transition-all duration-400"
-                    style={{
-                      background: item.status === '완료' 
-                        ? (isDark ? 'rgba(16, 185, 129, 0.18)' : 'rgba(16, 185, 129, 0.1)')
-                        : item.status === '작업중' || item.status === '진행중'
-                        ? (isDark ? 'rgba(59, 130, 246, 0.18)' : 'rgba(59, 130, 246, 0.1)')
-                        : item.status === 'Coming Soon'
-                        ? (isDark ? 'rgba(139, 92, 246, 0.2)' : 'rgba(139, 92, 246, 0.15)')
-                        : (isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.05)'),
-                      color: item.status === '완료'
-                        ? '#10b981'
-                        : item.status === '작업중' || item.status === '진행중'
-                        ? '#3b82f6'
-                        : item.status === 'Coming Soon'
-                        ? '#a78bfa'
-                        : (isDark ? 'rgba(255, 255, 255, 0.55)' : 'rgba(0, 0, 0, 0.45)'),
-                      border: `1px solid ${item.status === '완료' 
-                        ? (isDark ? 'rgba(16, 185, 129, 0.2)' : 'rgba(16, 185, 129, 0.12)')
-                        : item.status === '작업중' || item.status === '진행중'
-                        ? (isDark ? 'rgba(59, 130, 246, 0.2)' : 'rgba(59, 130, 246, 0.12)')
-                        : item.status === 'Coming Soon'
-                        ? (isDark ? 'rgba(139, 92, 246, 0.3)' : 'rgba(139, 92, 246, 0.2)')
-                        : (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.06)')}`,
-                    }}
-                  >
-                    {item.status}
-                  </div>
-
-                  {/* 아이콘과 제목을 한 줄에 */}
-                  <div className="flex items-start gap-4 mb-5">
-                    <div 
-                      className="w-14 h-14 rounded-2xl flex items-center justify-center text-2xl flex-shrink-0 transition-all duration-500 group-hover:scale-105 group-hover:rotate-3"
-                      style={{
-                        background: isDark 
-                          ? `rgba(${item.color === '#3b82f6' ? '59, 130, 246' : item.color === '#8b5cf6' ? '139, 92, 246' : item.color === '#06b6d4' ? '6, 182, 212' : item.color === '#10b981' ? '16, 185, 129' : item.color === '#f59e0b' ? '245, 158, 11' : '236, 72, 153'}, 0.1)`
-                          : `${item.color}0d`,
-                        border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.05)' : `${item.color}15`}`,
-                      }}
-                    >
-                      {item.icon}
-                    </div>
-                    
-                    <div className="flex-1 min-w-0">
-                      <h3 
-                        className="text-lg mb-1 font-bold leading-tight"
-                        style={{
-                          color: isDark ? '#ffffff' : '#1d1d1f',
-                          fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                          fontWeight: 700,
-                          letterSpacing: '-0.02em',
-                        }}
-                      >
-                        {item.title}
-                      </h3>
-                    </div>
-                  </div>
-                  
-                  <p 
-                    className="text-sm leading-relaxed flex-grow mb-5"
-                    style={{
-                      color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.55)',
-                      fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                      fontWeight: 400,
-                      letterSpacing: '-0.01em',
-                      lineHeight: '1.65',
-                    }}
-                  >
-                    {item.desc}
-                  </p>
-                  
-                  <div 
-                    className="flex items-center gap-2 mt-auto text-xs font-medium transition-all duration-400 group-hover:gap-2.5"
-                    style={{
-                      color: item.isComingSoon ? (isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)') : item.color,
-                    }}
-                  >
-                    <span className="tracking-wide">{item.isComingSoon ? '오픈 알림 신청' : '자세히 보기'}</span>
-                    <span className="group-hover:translate-x-1 transition-transform duration-400 text-base">→</span>
-                  </div>
-                </div>
-                
-                {/* 호버 시 부드러운 그림자 */}
-                <div 
-                  className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-600 pointer-events-none rounded-3xl"
-                  style={{
-                    boxShadow: isDark 
-                      ? `0 12px 40px rgba(${item.color === '#3b82f6' ? '59, 130, 246' : item.color === '#8b5cf6' ? '139, 92, 246' : item.color === '#06b6d4' ? '6, 182, 212' : item.color === '#10b981' ? '16, 185, 129' : item.color === '#f59e0b' ? '245, 158, 11' : '236, 72, 153'}, 0.2)`
-                      : `0 12px 40px ${item.color}18`,
-                  }}
-                />
-                </div>
-              );
-
-              // 첫 번째 항목(SITE: DORI-AI)만 클릭 가능하도록
-              if (idx === 0) {
-                return (
-                  <div 
-                    key={idx}
-                    onClick={() => window.location.href = '/project'}
-                    style={{ cursor: 'pointer' }}
-                  >
-                    {CardContent}
-                  </div>
-                );
-              }
-
-              return <div key={idx}>{CardContent}</div>;
-            })}
-          </div>
-        </div>
-      </section>
-
-      {/* 커뮤니티 섹션 */}
-      <section 
-        id="testimonials"
-        className="relative py-12 sm:py-16 md:py-20 lg:py-28 px-4 sm:px-6 min-h-screen flex items-center"
-        ref={(el) => { sectionRefs.current['testimonials'] = el; }}
-        data-section-id="testimonials"
-        style={{
-          backgroundColor: isDark ? '#000000' : '#f5f5f7',
-          scrollSnapAlign: 'center',
-          scrollSnapStop: 'always',
-        }}
-      >
-        <div className="max-w-6xl mx-auto w-full">
-          <div 
-            className={`text-center mb-8 sm:mb-12 transition-all duration-1000 ${
-              visibleSections.has('testimonials')
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-8'
-            }`}
-          >
-            <h2 
-              className="text-3xl sm:text-4xl md:text-5xl mb-3"
-              style={{
-                color: isDark ? '#ffffff' : '#1d1d1f',
-                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                fontWeight: 700,
-                letterSpacing: '-0.03em',
-                lineHeight: '1.1',
-              }}
-            >
-              커뮤니티
-            </h2>
-          </div>
-
-          <div className="text-center">
-            <p 
-              className="text-base sm:text-lg"
-              style={{
-                color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
-                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                fontWeight: 400,
-                letterSpacing: '-0.01em',
-              }}
-            >
-              커뮤니티에서 다양한 이야기를 나눠보세요
-            </p>
-            <Link 
-              href="/community"
-              className="inline-block mt-6 px-6 py-3 rounded-xl font-medium transition-all duration-300 hover:scale-105"
-              style={{
-                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
-                color: isDark ? '#ffffff' : '#1d1d1f',
-                border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'}`,
-              }}
-            >
-              커뮤니티로 이동 →
-            </Link>
-          </div>
-        </div>
-      </section>
-
-      {/* FAQ 섹션 */}
-      <section 
-        id="faq"
-        className="relative py-12 sm:py-16 md:py-20 lg:py-28 px-4 sm:px-6 min-h-screen flex items-center"
+        id="faq" 
+        className="container section snap-section fade-in-up delay-2"
         ref={(el) => { sectionRefs.current['faq'] = el; }}
-        data-section-id="faq"
-        style={{
-          backgroundColor: isDark ? '#000000' : '#ffffff',
-          scrollSnapAlign: 'center',
-          scrollSnapStop: 'always',
-        }}
       >
-        <div className="max-w-4xl mx-auto w-full">
-          <div 
-            className={`text-center mb-8 sm:mb-12 transition-all duration-1000 ${
-              visibleSections.has('faq')
-                ? 'opacity-100 translate-y-0'
-                : 'opacity-0 translate-y-8'
-            }`}
-          >
-            <h2 
-              className="text-3xl sm:text-4xl md:text-5xl mb-3"
-              style={{
-                color: isDark ? '#ffffff' : '#1d1d1f',
-                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                fontWeight: 700,
-                letterSpacing: '-0.03em',
-                lineHeight: '1.1',
-              }}
-            >
-              자주 묻는 질문
-            </h2>
+        <div className="section-header">
+          <h2>자주 묻는 질문</h2>
+          <p>DORI-AI에 대해 궁금한 점을 확인하세요</p>
+        </div>
+        <div className="faq-content">
+          <div className="faq-item">
+            <h3 className="faq-question">DORI-AI는 무엇인가요?</h3>
+            <p className="faq-answer">DORI-AI는 AI 도구 탐색부터 실무 활용 인사이트까지 제공하는 종합 플랫폼입니다. AI 입문자부터 전문가까지 누구나 쉽게 AI를 배우고 활용할 수 있는 공간입니다.</p>
           </div>
-
-          <div className="space-y-3">
-            {[
-              { q: "DORI-AI는 어떤 서비스인가요?", a: "DORI-AI는 AI 도구 탐색, 인사이트 제공, 교육 자료, 커뮤니티 등 AI 관련 정보를 한 곳에서 제공하는 통합 플랫폼입니다. AI가 처음이어도 쉽게 시작할 수 있도록 도와드립니다." },
-              { q: "회원가입이 필요한가요?", a: "기본 기능은 회원가입 없이도 이용 가능합니다. 커뮤니티 참여, 건의사항 제출, 개인화된 추천 등의 기능을 이용하려면 회원가입이 필요합니다." },
-              { q: "어떤 AI 도구를 추천하시나요?", a: "사용 목적에 따라 다릅니다. 텍스트 생성에는 ChatGPT, 이미지 생성에는 Midjourney나 DALL-E, 코딩에는 GitHub Copilot을 추천합니다. 각 도구의 상세 정보는 AI 도구 페이지에서 확인하실 수 있습니다." },
-              { q: "무료로 사용할 수 있나요?", a: "네, DORI-AI 플랫폼 자체는 완전 무료입니다. 다만 일부 추천하는 외부 AI 도구들은 유료 플랜이 있을 수 있으며, 각 도구의 가격 정보는 해당 페이지에서 확인하실 수 있습니다." },
-              { q: "건의사항이나 버그를 제보하려면 어떻게 하나요?", a: "건의사항 페이지에서 자유롭게 의견을 남겨주실 수 있습니다. 버그 제보, 기능 요청, UI/디자인 개선 등 모든 의견을 환영합니다. 빠른 검토 후 반영하도록 노력하겠습니다." },
-            ].map((faq, idx) => (
-              <details
-                key={idx}
-                className={`group rounded-2xl overflow-hidden transition-all duration-500 ${
-                  visibleSections.has('faq')
-                    ? 'opacity-100 translate-y-0'
-                    : 'opacity-0 translate-y-8'
-                }`}
-                style={{
-                  transitionDelay: `${idx * 100}ms`,
-                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.3)' : '#e5e5e7'}`,
-                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
-                }}
-              >
-                <summary 
-                  className="p-5 cursor-pointer list-none flex items-center justify-between"
-                  style={{
-                    color: isDark ? '#ffffff' : '#1d1d1f',
-                    fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                    fontWeight: 500,
-                    letterSpacing: '-0.01em',
-                  }}
-                >
-                  <span>{faq.q}</span>
-                  <span className="text-xl transition-transform duration-300 group-open:rotate-180">▼</span>
-                </summary>
-                <div 
-                  className="px-5 pb-5 leading-relaxed"
-                  style={{
-                    color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
-                    fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                    fontWeight: 400,
-                    letterSpacing: '-0.01em',
-                    lineHeight: '1.6',
-                  }}
-                >
-                  {faq.a}
-                </div>
-              </details>
-            ))}
+          <div className="faq-item">
+            <h3 className="faq-question">회원가입이 필수인가요?</h3>
+            <p className="faq-answer">기본적인 AI 도구 탐색과 인사이트 읽기는 회원가입 없이도 가능합니다. 다만 커뮤니티 참여, 프로젝트 공유, 좋아요 및 댓글 기능을 사용하려면 회원가입이 필요합니다.</p>
+          </div>
+          <div className="faq-item">
+            <h3 className="faq-question">AI 도구는 어떻게 추천되나요?</h3>
+            <p className="faq-answer">AI 도구는 카테고리별로 분류되어 있으며, 사용자 평가와 실시간 순위를 기반으로 추천됩니다. 각 도구의 상세 정보, 가격, 사용 후기를 확인할 수 있습니다.</p>
+          </div>
+          <div className="faq-item">
+            <h3 className="faq-question">커뮤니티 글 작성은 누구나 가능한가요?</h3>
+            <p className="faq-answer">네, 회원가입 후 누구나 커뮤니티에 글을 작성할 수 있습니다. 질문, 정보 공유, 작품 자랑 등 다양한 주제로 소통할 수 있습니다.</p>
+          </div>
+          <div className="faq-item">
+            <h3 className="faq-question">인사이트 콘텐츠는 얼마나 자주 업데이트되나요?</h3>
+            <p className="faq-answer">인사이트 섹션은 매일 최신 AI 업계 동향과 트렌드를 업데이트합니다. 트렌드, 가이드, 큐레이션, 분석, 리포트 등 다양한 형태의 콘텐츠를 제공합니다.</p>
+          </div>
+          <div className="faq-item">
+            <h3 className="faq-question">프로젝트를 공유하려면 어떻게 해야 하나요?</h3>
+            <p className="faq-answer">프로젝트 페이지에서 '새 프로젝트' 버튼을 클릭하여 AI를 활용한 창작 프로젝트를 업로드할 수 있습니다. 이미지, 설명, 사용한 AI 도구 등을 포함하여 공유하세요.</p>
           </div>
         </div>
       </section>
 
+      {/* --- Login Modal --- */}
+      {loginOpen && (
+        <div className="modal-backdrop" onClick={() => setLoginOpen(false)}>
+          <div className="modal" onClick={(e) => e.stopPropagation()}>
+            <div className="modal-header">
+              <h3>{isLoginMode ? "환영합니다!" : "회원가입"}</h3>
+              <p>{isLoginMode ? "로그인하여 DORI-AI를 이용하세요." : "회원가입하고 모든 기능을 이용하세요."}</p>
+                </div>
+            
+            {isLoginMode ? (
+              <div className="login-body">
+                {/* 구글 로그인 */}
+                <button className="google-btn" onClick={() => signIn("google", { callbackUrl: "/" })} disabled={isLoading}>
+                  <span className="g-icon">G</span> Google로 계속하기
+                </button>
+                
+                <div className="divider"><span>또는 아이디로 로그인</span></div>
 
-      {/* Coming Soon 모달 */}
-      {comingSoonModal.open && (
-        <div 
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          style={{
-            background: 'rgba(0, 0, 0, 0.6)',
-            backdropFilter: 'blur(8px)',
-            WebkitBackdropFilter: 'blur(8px)',
-          }}
-          onClick={() => setComingSoonModal({ open: false, title: '' })}
-        >
-          <div 
-            className="relative w-full max-w-md rounded-2xl p-8 transition-all duration-300 hover:scale-[1.02]"
-            style={{
-              background: isDark 
-                ? 'rgba(15, 15, 15, 0.95)'
-                : 'rgba(255, 255, 255, 0.98)',
-              border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
-              boxShadow: isDark
-                ? '0 20px 60px rgba(0, 0, 0, 0.5)'
-                : '0 20px 60px rgba(0, 0, 0, 0.15)',
-              backdropFilter: 'blur(20px)',
-              WebkitBackdropFilter: 'blur(20px)',
-            }}
-            onClick={(e) => e.stopPropagation()}
-          >
-            <button
-              onClick={() => setComingSoonModal({ open: false, title: '' })}
-              className="absolute top-4 right-4 w-8 h-8 flex items-center justify-center rounded-lg transition-all hover:scale-110"
-              style={{
-                background: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
-                color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
-              }}
-            >
-              ✕
-            </button>
-            
-            <h3 
-              className="text-2xl font-bold mb-2"
-              style={{
-                color: isDark ? '#ffffff' : '#1d1d1f',
-                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                fontWeight: 700,
-                letterSpacing: '-0.02em',
-              }}
-            >
-              {comingSoonModal.title} 오픈 알림
-            </h3>
-            
-            <p 
-              className="text-sm mb-6"
-              style={{
-                color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)',
-                fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                lineHeight: '1.6',
-              }}
-            >
-              서비스가 오픈되면 이메일로 알려드리겠습니다.
-            </p>
-            
-            <form
-              onSubmit={(e) => {
-                e.preventDefault();
-                if (notificationEmail) {
-                  // 이메일 저장 로직 (localStorage 또는 API)
-                  const notifications = JSON.parse(localStorage.getItem('dori_notifications') || '[]');
-                  notifications.push({
-                    email: notificationEmail,
-                    service: comingSoonModal.title,
-                    date: new Date().toISOString(),
-                  });
-                  localStorage.setItem('dori_notifications', JSON.stringify(notifications));
-                  alert('알림 신청이 완료되었습니다!');
-                  setComingSoonModal({ open: false, title: '' });
-                  setNotificationEmail('');
-                }
-              }}
-              className="space-y-4"
-            >
-              <input
-                type="email"
-                value={notificationEmail}
-                onChange={(e) => setNotificationEmail(e.target.value)}
-                placeholder="이메일 주소를 입력하세요"
-                required
-                className="w-full px-4 py-3 rounded-xl text-sm transition-all focus:outline-none focus:ring-2"
-                style={{
-                  background: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
-                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
-                  color: isDark ? '#ffffff' : '#1d1d1f',
-                  fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                }}
-              />
-              
-              <button
-                type="submit"
-                className="w-full px-6 py-3 rounded-xl font-semibold text-sm transition-all duration-300 hover:scale-[1.02] active:scale-[0.98]"
-                style={{
-                  background: isDark
-                    ? 'linear-gradient(135deg, #3b82f6, #8b5cf6)'
-                    : 'linear-gradient(135deg, #2563eb, #7c3aed)',
-                  color: '#ffffff',
-                  boxShadow: isDark
-                    ? '0 4px 20px rgba(59, 130, 246, 0.4)'
-                    : '0 4px 20px rgba(37, 99, 235, 0.3)',
-                }}
-              >
-                알림 받기
-              </button>
-            </form>
+                <form onSubmit={handleCredentialLogin} className="auth-form">
+                  <input type="text" placeholder="아이디" value={username} onChange={e=>setUsername(e.target.value)} className="input-field"/>
+                  <input type="password" placeholder="비밀번호" value={password} onChange={e=>setPassword(e.target.value)} className="input-field"/>
+                  <button type="submit" className="submit-btn" disabled={isLoading}>
+                    {isLoading ? "로그인 중..." : "로그인"}
+                  </button>
+                </form>
+                <div className="switch-mode">
+                  계정이 없으신가요? <span onClick={()=>setIsLoginMode(false)}>회원가입</span>
+          </div>
+        </div>
+            ) : (
+              <form onSubmit={handleRegister} className="auth-form">
+                <input type="text" placeholder="아이디" value={username} onChange={e=>setUsername(e.target.value)} className="input-field"/>
+                <input type="password" placeholder="비밀번호 (6자 이상)" value={password} onChange={e=>setPassword(e.target.value)} className="input-field"/>
+                <input type="text" placeholder="닉네임" value={name} onChange={e=>setName(e.target.value)} className="input-field"/>
+                <button type="submit" className="submit-btn" disabled={isLoading}>
+                  {isLoading ? "가입 처리 중..." : "회원가입"}
+                </button>
+                <div className="switch-mode">
+                  이미 계정이 있으신가요? <span onClick={()=>setIsLoginMode(true)}>로그인</span>
+                </div>
+              </form>
+            )}
           </div>
         </div>
       )}
 
-      {/* 스타일 */}
+      {/* --- Global Styles --- */}
       <style jsx global>{`
-        @keyframes scroll {
-          0% {
-            transform: translateY(0);
-            opacity: 1;
-          }
-          50% {
-            transform: translateY(20px);
-            opacity: 0.3;
-          }
-          100% {
-            transform: translateY(0);
-            opacity: 1;
-          }
+        :root { --bg: #ffffff; --text: #111; --gray: #666; --line: #e5e5e5; --blue: #007AFF; }
+        * { box-sizing: border-box; }
+        html { 
+          scroll-snap-type: y mandatory !important;
+          scroll-behavior: smooth;
+          scroll-padding-top: 0;
+          overflow-y: auto;
+          overflow-x: hidden;
+        }
+        body { 
+          margin: 0; 
+          padding: 0; 
+          background: var(--bg); 
+          color: var(--text); 
+          font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+          overflow-x: hidden;
+        }
+        .page { 
+          display: flex; 
+          flex-direction: column; 
+          min-height: 100vh; 
+          width: 100%; 
+          overflow-x: hidden; 
+          position: relative; 
+        }
+        .snap-section { 
+          scroll-snap-align: start !important; 
+          scroll-snap-stop: always !important;
+          scroll-margin-top: 0;
+          min-height: 100vh;
+          height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          position: relative;
+        }
+        
+        
+        /* Animations */
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes modalUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes gradientMove {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        
+        .fade-in-up { animation: fadeInUp 0.8s ease-out forwards; opacity: 0; }
+        .delay-1 { animation-delay: 0.1s; }
+        .delay-2 { animation-delay: 0.2s; }
+
+        /* Layout Utilities */
+        .container { max-width: 1000px; margin: 0 auto; padding: 0 24px; }
+        .section { padding: 80px 24px; }
+
+        /* Top Section */
+        .top-section {
+          position: relative;
+          padding: 100px 24px; 
+          max-width: 1200px; 
+          margin: 0 auto;
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
         }
 
-        @keyframes gradientFlow {
-          0% {
-            background-position: 0% 50%;
-          }
-          100% {
-            background-position: 200% 50%;
-          }
+        /* Hero Text */
+        .top-header { text-align: center; margin-bottom: 0; }
+        .top-header h1 { 
+          font-size: 64px; 
+          font-weight: 700; 
+          margin-bottom: 32px; 
+          color: #111; 
+          letter-spacing: -0.03em; 
+          line-height: 1.1;
+        }
+        .top-header .sub-title {
+          font-size: 48px;
+          font-weight: 600;
+          color: #111;
+          margin: 32px 0 40px 0;
+          letter-spacing: -0.02em;
+          line-height: 1.1;
+        }
+        .top-header .description {
+          display: flex;
+          flex-direction: column;
+          gap: 10px;
+        }
+        .top-header .description p {
+          font-size: 18px;
+          font-weight: 400;
+          color: rgba(0, 0, 0, 0.7);
+          margin: 0;
+          line-height: 1.7;
+          letter-spacing: -0.01em;
         }
 
-        @keyframes gradient {
-          0%, 100% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
+        /* 알록달록 움직이는 그라데이션 바 */
+        .colorful-bar {
+          max-width: 700px;
+          margin: 0 auto 36px;
+          padding: 0;
+        }
+        .gradient-bar {
+          width: 100%;
+          height: 5px;
+          border-radius: 3px;
+          background: linear-gradient(90deg, 
+            #ff6b9d 0%, 
+            #ff8c42 25%, 
+            #ffd23f 50%, 
+            #06ffa5 75%, 
+            #4ecdc4 100%
+          );
+          background-size: 200% 100%;
+          box-shadow: 0 2px 12px rgba(0,0,0,0.1);
+        }
+        .animated-gradient {
+          animation: gradientMove 3s ease infinite;
         }
 
-        .animate-scroll {
-          animation: scroll 2s ease-in-out infinite;
+        /* Aurora Background - 미니멀하게 제거 */
+        .aurora-bg { display: none; }
+
+        /* 🔥 Bento Grid Services (3열 그리드 시스템) */
+        .bento-grid { 
+          display: grid; 
+          grid-template-columns: repeat(3, 1fr); 
+          grid-auto-rows: minmax(240px, auto); 
+          gap: 24px; 
+          margin-bottom: 80px;
         }
 
-        .animate-gradient {
-          animation: gradient 3s ease infinite;
+        /* [1] Studio: 2x2 대형 카드 */
+        .bento-card.studio { 
+          grid-column: span 2; 
+          grid-row: span 2; 
+          background: #111; 
+          color: white; 
+          border: none;
+          position: relative; 
+          overflow: hidden;
         }
 
-        details summary::-webkit-details-marker {
-          display: none;
+        /* [5] Community: 가로 2칸 와이드 카드 */
+        .bento-card.community {
+          grid-column: span 2; 
+        }
+
+        /* Studio 카드 전용 스타일 */
+        .bento-card.studio .card-bg-glow { 
+          position: absolute; top: -50%; right: -20%; width: 100%; height: 100%; 
+          background: radial-gradient(circle, rgba(0,122,255,0.4) 0%, transparent 70%); 
+          filter: blur(60px); z-index: 0; pointer-events: none; 
+        }
+        .bento-card.studio .card-content { 
+          position: relative; z-index: 1; height: 100%; 
+          display: flex; flex-direction: column; justify-content: center; 
+        }
+        .bento-card.studio h3 { font-size: 32px; margin-bottom: 12px; font-weight: 800; }
+        .bento-card.studio p { font-size: 16px; color: rgba(255,255,255,0.8); line-height: 1.6; }
+        .bento-card.studio .card-arrow { 
+          position: absolute; bottom: 30px; right: 30px; 
+          color: white; border: 1px solid rgba(255,255,255,0.3); 
+          padding: 10px 24px; border-radius: 30px; font-weight: 600; 
+          transition: 0.2s; font-size: 14px;
+        }
+        .bento-card.studio:hover .card-arrow { background: white; color: #111; }
+
+        /* 일반 카드 공통 스타일 */
+        .bento-card { 
+          background: white; 
+          border: 1px solid #eee; 
+          border-radius: 24px; 
+          padding: 28px; 
+          display: flex; 
+          flex-direction: column; 
+          justify-content: space-between; 
+          position: relative; 
+          text-decoration: none; 
+          color: inherit; 
+          z-index: 1; 
+          transition: 0.3s cubic-bezier(0.2, 0.8, 0.2, 1); 
+          box-shadow: 0 4px 20px rgba(0,0,0,0.02); 
+        }
+        .bento-card:hover { transform: translateY(-6px); box-shadow: 0 20px 40px rgba(0,0,0,0.08); border-color: transparent; }
+
+        /* 아이콘 박스 */
+        .icon-box { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 26px; margin-bottom: 20px; }
+        .icon-box.glass { background: #f5f7fa; color: #333; }
+        .icon-box.dark { background: rgba(255,255,255,0.2); color: white; }
+        
+        .bento-card h3 { font-size: 20px; font-weight: 700; margin-bottom: 8px; color: #111; }
+        .bento-card p { font-size: 15px; color: #666; line-height: 1.5; margin: 0; word-break: keep-all; }
+
+        /* Latest Posts Styles */
+        .section-header { text-align: center; margin-bottom: 0; }
+        .section-header.left-align { text-align: left; display: flex; justify-content: space-between; align-items: flex-end; }
+        .section-header h2 { font-size: 28px; font-weight: 500; margin-bottom: 8px; letter-spacing: -0.02em; color: #111; }
+        .section-header p { color: #666; font-size: 14px; font-weight: 400; }
+        .view-all { font-size: 12px; color: #666; font-weight: 300; cursor: pointer; transition: 0.2s; }
+        .view-all:hover { color: #111; }
+
+        .latest-wrapper { position: relative; }
+        .latest-scroller { display: flex; gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 30px; user-select: none; }
+        .latest-scroller::-webkit-scrollbar { display: none; }
+        .latest-card { flex: 0 0 300px; background: white; border-radius: 20px; overflow: hidden; scroll-snap-align: start; text-decoration: none; color: inherit; transition: 0.3s cubic-bezier(0.25, 0.8, 0.25, 1); box-shadow: 0 4px 10px rgba(0,0,0,0.03); border: 1px solid #f0f0f0; }
+        .latest-card:hover { transform: translateY(-8px); box-shadow: 0 15px 30px rgba(0,0,0,0.08); }
+        
+        .latest-thumb-wrap { width: 100%; aspect-ratio: 16/10; background: #f0f0f0; position: relative; overflow: hidden; }
+        .latest-thumb-wrap img { width: 100%; height: 100%; object-fit: cover; transition: 0.5s; }
+        .latest-card:hover .latest-thumb-wrap img { transform: scale(1.05); }
+        .card-gradient-overlay { position: absolute; inset: 0; background: linear-gradient(to top, rgba(0,0,0,0.1), transparent); opacity: 0; transition: 0.3s; }
+        .latest-card:hover .card-gradient-overlay { opacity: 1; }
+        .placeholder-thumb { display: flex; align-items: center; justify-content: center; height: 100%; font-size: 40px; color: #ccc; }
+        
+        .latest-meta { padding: 20px; }
+        .latest-title { font-weight: 700; font-size: 17px; margin-bottom: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: #111; }
+        .latest-info { display: flex; justify-content: space-between; align-items: center; font-size: 13px; color: #888; }
+        
+        .latest-arrow { position: absolute; top: 40%; transform: translateY(-50%); width: 48px; height: 48px; border-radius: 50%; background: white; border: 1px solid #eee; box-shadow: 0 4px 20px rgba(0,0,0,0.08); display: flex; align-items: center; justify-content: center; cursor: pointer; z-index: 2; transition: 0.2s; font-size: 20px; color: #333; }
+        .latest-arrow:hover { background: #111; color: white; border-color: #111; }
+        .latest-arrow.left { left: -24px; }
+        .latest-arrow.right { right: -24px; }
+        
+        .latest-empty { text-align: center; padding: 60px; background: #f9fafb; border-radius: 20px; color: #666; border: 1px dashed #ddd; }
+        .link-text { color: var(--blue); text-decoration: underline; font-weight: 600; cursor: pointer; }
+
+        /* Features Section */
+        .features-grid {
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+          gap: 28px;
+          margin-top: 80px;
+        }
+        .feature-card {
+          background: #fff;
+          border: 1px solid #e8e8e8;
+          border-radius: 20px;
+          padding: 48px 32px;
+          text-decoration: none;
+          color: inherit;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          text-align: center;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .feature-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, #3b82f6, #8b5cf6);
+          transform: scaleX(0);
+          transition: transform 0.4s ease;
+        }
+        .feature-card:hover {
+          border-color: #d1d1d1;
+          transform: translateY(-6px);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+        .feature-card:hover::before {
+          transform: scaleX(1);
+        }
+        .feature-icon {
+          font-size: 44px;
+          margin-bottom: 24px;
+          transition: transform 0.4s ease;
+          filter: grayscale(0.2);
+        }
+        .feature-card:hover .feature-icon {
+          transform: scale(1.05);
+          filter: grayscale(0);
+        }
+        .feature-card h3 {
+          font-size: 20px;
+          font-weight: 500;
+          margin-bottom: 12px;
+          color: #111;
+          letter-spacing: -0.01em;
+        }
+        .feature-card p {
+          font-size: 14px;
+          color: #666;
+          line-height: 1.6;
+          font-weight: 400;
+        }
+
+        /* Insight Section */
+        .insight-preview { margin-top: 80px; }
+        .insight-cards { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 28px; }
+        .insight-card { 
+          background: #fff; 
+          border: 1px solid #e8e8e8; 
+          border-radius: 20px; 
+          padding: 48px 32px; 
+          text-decoration: none; 
+          color: inherit; 
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          display: flex;
+          flex-direction: column;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .insight-card::before {
+          content: '';
+          position: absolute;
+          top: 0;
+          left: 0;
+          right: 0;
+          height: 2px;
+          background: linear-gradient(90deg, #ec4899, #8b5cf6);
+          transform: scaleX(0);
+          transition: transform 0.4s ease;
+        }
+        .insight-card:hover { 
+          border-color: #d1d1d1;
+          transform: translateY(-6px);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+        }
+        .insight-card:hover::before {
+          transform: scaleX(1);
+        }
+        .insight-icon { 
+          font-size: 44px; 
+          margin-bottom: 24px; 
+          transition: transform 0.4s ease;
+          filter: grayscale(0.2);
+        }
+        .insight-card:hover .insight-icon {
+          transform: scale(1.05);
+          filter: grayscale(0);
+        }
+        .insight-card h3 { 
+          font-size: 20px; 
+          font-weight: 500; 
+          margin-bottom: 12px; 
+          color: #111; 
+          letter-spacing: -0.01em;
+        }
+        .insight-card p { 
+          font-size: 14px; 
+          color: #666; 
+          line-height: 1.6; 
+          margin-bottom: 24px; 
+          flex: 1;
+          font-weight: 400;
+        }
+        .insight-link { 
+          color: #666; 
+          font-weight: 400; 
+          font-size: 13px; 
+          transition: color 0.3s ease;
+        }
+        .insight-card:hover .insight-link {
+          color: #3b82f6;
+        }
+
+        /* Community Hot Posts */
+        .community-hot-posts {
+          display: flex;
+          flex-direction: column;
+          gap: 12px;
+          margin-top: 80px;
+        }
+        .hot-post-card {
+          background: #fff;
+          border: 1px solid #e8e8e8;
+          border-radius: 16px;
+          padding: 28px 32px;
+          text-decoration: none;
+          color: inherit;
+          transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+          display: flex;
+          align-items: center;
+          gap: 28px;
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 1px 3px rgba(0,0,0,0.05);
+        }
+        .hot-post-card::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 3px;
+          background: linear-gradient(180deg, #3b82f6, #8b5cf6);
+          transform: scaleY(0);
+          transition: transform 0.4s ease;
+        }
+        .hot-post-card:hover {
+          border-color: #d1d1d1;
+          transform: translateX(6px);
+          box-shadow: 0 4px 16px rgba(0,0,0,0.08);
+        }
+        .hot-post-card:hover::before {
+          transform: scaleY(1);
+        }
+        .hot-post-rank {
+          font-size: 22px;
+          font-weight: 500;
+          color: #999;
+          min-width: 36px;
+          text-align: center;
+          transition: all 0.3s ease;
+        }
+        .hot-post-card:hover .hot-post-rank {
+          color: #3b82f6;
+          font-weight: 600;
+        }
+        .hot-post-content {
+          flex: 1;
+        }
+        .hot-post-title {
+          font-size: 17px;
+          font-weight: 500;
+          margin-bottom: 10px;
+          color: #111;
+          transition: color 0.3s ease;
+          letter-spacing: -0.01em;
+        }
+        .hot-post-card:hover .hot-post-title {
+          color: #3b82f6;
+        }
+        .hot-post-meta {
+          display: flex;
+          align-items: center;
+          gap: 14px;
+          font-size: 13px;
+          color: #999;
+        }
+        .hot-post-author {
+          font-weight: 400;
+        }
+        .hot-post-likes {
+          color: #e91e63;
+          font-weight: 400;
+        }
+        .hot-post-category {
+          background: #f5f5f5;
+          padding: 3px 10px;
+          border-radius: 4px;
+          font-size: 11px;
+          font-weight: 400;
+          color: #666;
+        }
+
+        /* FAQ Section */
+        .faq-content {
+          margin-top: 60px;
+          max-width: 700px;
+          margin-left: auto;
+          margin-right: auto;
+        }
+        .faq-item {
+          background: #fff;
+          border: 1px solid #e5e5e5;
+          border-radius: 16px;
+          padding: 28px;
+          margin-bottom: 16px;
+          transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+          position: relative;
+          overflow: hidden;
+          box-shadow: 0 2px 8px rgba(0,0,0,0.04);
+        }
+        .faq-item:last-child {
+          margin-bottom: 0;
+        }
+        .faq-item::before {
+          content: '';
+          position: absolute;
+          left: 0;
+          top: 0;
+          bottom: 0;
+          width: 4px;
+          background: linear-gradient(180deg, #10b981, #3b82f6);
+          transform: scaleY(0);
+          transition: transform 0.3s ease;
+        }
+        .faq-item:hover {
+          border-color: #111;
+          transform: translateX(4px);
+          box-shadow: 0 8px 24px rgba(0,0,0,0.12);
+        }
+        .faq-item:hover::before {
+          transform: scaleY(1);
+        }
+        .faq-question {
+          font-size: 17px;
+          font-weight: 600;
+          margin-bottom: 12px;
+          color: #111;
+        }
+        .faq-answer {
+          font-size: 14px;
+          color: #666;
+          line-height: 1.7;
+          margin: 0;
+          font-weight: 400;
+        }
+
+        /* Login Modal */
+        .modal-backdrop { position: fixed; inset: 0; background: rgba(0,0,0,0.6); backdrop-filter: blur(8px); display: flex; align-items: center; justify-content: center; z-index: 200; }
+        .modal { background: white; width: 420px; padding: 40px; border-radius: 24px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); animation: modalUp 0.3s ease; }
+        .modal-header { text-align: center; margin-bottom: 32px; }
+        .modal-header h3 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
+        .modal-header p { color: #666; font-size: 15px; }
+        
+        .google-btn { display: flex; align-items: center; justify-content: center; width: 100%; padding: 14px; background: white; border: 1px solid #ddd; border-radius: 12px; font-size: 15px; font-weight: 600; color: #333; cursor: pointer; transition: 0.2s; margin-bottom: 20px; }
+        .google-btn:hover { background: #f9f9f9; border-color: #ccc; }
+        .g-icon { font-weight: 900; color: #4285F4; margin-right: 8px; font-size: 18px; font-family: sans-serif; }
+        
+        .divider { display: flex; align-items: center; text-align: center; color: #aaa; font-size: 12px; margin: 20px 0; }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #eee; }
+        .divider span { padding: 0 10px; }
+
+        .auth-form { display: flex; flex-direction: column; gap: 16px; }
+        .input-field { padding: 16px; border: 1px solid #e0e0e0; border-radius: 12px; font-size: 16px; transition: 0.2s; background: #f9f9f9; }
+        .input-field:focus { outline: none; border-color: var(--blue); background: white; box-shadow: 0 0 0 4px rgba(0,122,255,0.1); }
+        .submit-btn { padding: 16px; background: #111; color: white; border-radius: 12px; font-size: 16px; font-weight: 700; border: none; cursor: pointer; transition: 0.2s; }
+        .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
+        .switch-mode { text-align: center; font-size: 14px; margin-top: 20px; color: #666; }
+        .switch-mode span { color: var(--blue); font-weight: 700; cursor: pointer; margin-left: 6px; }
+
+        /* 모바일 반응형: 모든 그리드를 1열로 변경 */
+        @media (max-width: 768px) {
+          .top-header h1 { font-size: 42px; }
+          .top-header .sub-title { font-size: 32px; }
+          .bento-grid { grid-template-columns: 1fr; grid-template-rows: auto; }
+          .bento-card.studio { grid-column: span 1; grid-row: span 1; height: 320px; }
+          .bento-card.community { grid-column: span 1; }
+          .bento-card.studio h3 { font-size: 26px; }
+          .latest-arrow { display: none; }
+          .colorful-bar { margin-bottom: 20px; }
         }
       `}</style>
-    </div>
+    </main>
   );
 }

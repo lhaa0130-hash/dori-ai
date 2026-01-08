@@ -1,5 +1,5 @@
 import { createMetadata } from "@/lib/seo";
-import PremiumDesignPage from "./page.client";
+import HomePageClient from "./page.client";
 
 export const metadata = createMetadata({
   title: "홈",
@@ -8,5 +8,5 @@ export const metadata = createMetadata({
 });
 
 export default function Page() {
-  return <PremiumDesignPage />;
+  return <HomePageClient />;
 }
