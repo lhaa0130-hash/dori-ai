@@ -67,29 +67,7 @@ export default function GrowthGuide({ profile, activityStats }: GrowthGuideProps
   const recommendations = getRecommendations();
 
   return (
-    <div
-      style={{
-        background: isDark ? "rgba(255, 255, 255, 0.02)" : "#ffffff",
-        border: `1px solid ${isDark ? "rgba(255, 255, 255, 0.1)" : "#e5e5e7"}`,
-        borderRadius: "1.5rem",
-        padding: "2rem",
-        marginTop: "2rem",
-      }}
-    >
-      <h3
-        style={{
-          fontSize: "1.25rem",
-          fontWeight: "700",
-          color: isDark ? "#ffffff" : "#1d1d1f",
-          marginBottom: "1rem",
-          display: "flex",
-          alignItems: "center",
-          gap: "0.5rem",
-        }}
-      >
-        <span>📈</span>
-        <span>성장 가이드</span>
-      </h3>
+    <div>
 
       {currentTier >= 5 ? (
         <div
@@ -163,7 +141,7 @@ export default function GrowthGuide({ profile, activityStats }: GrowthGuideProps
           {/* 점수 및 포인트 획득 방법 */}
           <div
             style={{
-              padding: "1.5rem",
+              padding: "1.25rem",
               borderRadius: "1rem",
               background: isDark 
                 ? "linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(168, 85, 247, 0.1))"

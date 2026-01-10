@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useCallback } from "react";
+import { useMemo, useCallback, useState, useEffect } from "react";
 import Link from "next/link";
 import InsightCard from "./InsightCard";
 import { TEXTS } from "@/constants/texts";
@@ -19,6 +19,18 @@ interface InsightListProps {
 }
 
 export default function InsightList({ filters, setFilters, posts, isOwner, onEdit, onDelete }: InsightListProps) {
+  const [mounted, setMounted] = useState(false);
+  const [likedPosts, setLikedPosts] = useState<number[]>([]);
+  const [likesData, setLikesData] = useState<Record<number, number>>({});
+
+  useEffect(() => {
+    setMounted(true);
+    const liked = JSON.parse(localStorage.getItem('dori_liked_insights') || '[]');
+    const likes = JSON.parse(localStorage.getItem('dori_insight_likes') || '{}');
+    setLikedPosts(liked);
+    setLikesData(likes);
+  }, []);
+
   // 받아온 posts 데이터를 필터링 및 정렬 (useMemo로 최적화)
   const filteredData = useMemo(() => {
     return posts.filter((item) => {
@@ -86,10 +98,8 @@ export default function InsightList({ filters, setFilters, posts, isOwner, onEdi
             }
 
             const categoryColor = getCategoryColor(item.category);
-            const likedPosts = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('dori_liked_insights') || '[]') : [];
-            const likesData = typeof window !== 'undefined' ? JSON.parse(localStorage.getItem('dori_insight_likes') || '{}') : {};
-            const isLiked = likedPosts.includes(item.id);
-            const likes = likesData[item.id] !== undefined ? likesData[item.id] : item.likes;
+            const isLiked = mounted && likedPosts.includes(item.id);
+            const likes = mounted && likesData[item.id] !== undefined ? likesData[item.id] : item.likes;
 
             return (
               <Link 

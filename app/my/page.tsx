@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
 import ProfileHero from "@/components/my/ProfileHero";
 import GrowthGuide from "@/components/my/GrowthGuide";
+import DailyMissions from "@/components/mission/DailyMissions";
 import { UserProfile, createDefaultProfile, calculateTier, calculateLevel, ACTIVITY_SCORES } from "@/lib/userProfile";
 
 export default function MyPage() {
@@ -24,6 +25,7 @@ export default function MyPage() {
   const [bookmarkedPosts, setBookmarkedPosts] = useState<any[]>([]);
   const [recentViews, setRecentViews] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState("posts");
+  const [showMissions, setShowMissions] = useState(false);
   const ADMIN_EMAILS = ["admin@dori.ai", "lhaa0130@gmail.com"];
   const isAdmin = user?.email && (ADMIN_EMAILS.some(email => email.toLowerCase() === user.email.toLowerCase()) || (user as any)?.isAdmin === true);
 
@@ -283,17 +285,213 @@ export default function MyPage() {
         {/* 프로필 Hero 영역 */}
         {profile && (
           <>
-            <ProfileHero
-              profile={profile}
-              onImageChange={handleImageChange}
-              onNicknameChange={handleNicknameChange}
-              onBioChange={handleBioChange}
-              onStatusMessageChange={handleStatusMessageChange}
-              isAdmin={isAdmin}
-            />
+            <div
+              onClick={() => setShowMissions(!showMissions)}
+              style={{
+                cursor: 'pointer',
+              }}
+            >
+              <ProfileHero
+                profile={profile}
+                onImageChange={handleImageChange}
+                onNicknameChange={handleNicknameChange}
+                onBioChange={handleBioChange}
+                onStatusMessageChange={handleStatusMessageChange}
+                isAdmin={isAdmin}
+              />
+            </div>
 
-            {/* 성장 가이드 */}
-            <GrowthGuide profile={profile} activityStats={activityStats} />
+            {/* Bento 스타일 그리드: 미션 & 성장 가이드 */}
+            {showMissions && (
+            <div style={{
+              display: 'grid',
+              gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 350px), 1fr))',
+              gap: '1.5rem',
+              marginTop: '2rem',
+              animation: 'fadeInUp 0.4s ease-out',
+            }}
+            className="profile-grid"
+            >
+              {/* 일일 미션 카드 */}
+              <div style={{
+                background: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
+                border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7'}`,
+                borderRadius: '1.5rem',
+                padding: '2rem',
+                position: 'relative',
+                overflow: 'hidden',
+                transition: 'all 0.3s ease',
+                boxShadow: isDark ? '0 4px 20px rgba(0, 0, 0, 0.3)' : '0 4px 20px rgba(0, 0, 0, 0.05)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-4px)';
+                e.currentTarget.style.boxShadow = isDark
+                  ? '0 12px 40px rgba(0, 0, 0, 0.5)'
+                  : '0 12px 40px rgba(0, 0, 0, 0.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = isDark
+                  ? '0 4px 20px rgba(0, 0, 0, 0.3)'
+                  : '0 4px 20px rgba(0, 0, 0, 0.05)';
+              }}
+              >
+                {/* 배경 장식 */}
+                <div style={{
+                  position: 'absolute',
+                  top: '-50%',
+                  right: '-20%',
+                  width: '200px',
+                  height: '200px',
+                  borderRadius: '50%',
+                  background: isDark
+                    ? 'radial-gradient(circle, rgba(34, 211, 238, 0.1), transparent)'
+                    : 'radial-gradient(circle, rgba(34, 211, 238, 0.05), transparent)',
+                  filter: 'blur(60px)',
+                  pointerEvents: 'none',
+                }} />
+                
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    marginBottom: '1.5rem',
+                  }}>
+                    <div style={{
+                      width: '48px',
+                      height: '48px',
+                      borderRadius: '1rem',
+                      background: isDark
+                        ? 'rgba(34, 211, 238, 0.2)'
+                        : 'rgba(34, 211, 238, 0.1)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '1.5rem',
+                      border: `1px solid ${isDark ? 'rgba(34, 211, 238, 0.3)' : 'rgba(34, 211, 238, 0.2)'}`,
+                    }}>
+                      🎯
+                    </div>
+                    <div>
+                      <h3 style={{
+                        fontSize: '1.25rem',
+                        fontWeight: '700',
+                        color: isDark ? '#ffffff' : '#1d1d1f',
+                        margin: 0,
+                        marginBottom: '0.25rem',
+                      }}>
+                        일일 미션
+                      </h3>
+                      <p style={{
+                        fontSize: '0.8125rem',
+                        color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                        margin: 0,
+                      }}>
+                        매일 새로운 도전을 시작하세요
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <DailyMissions 
+                    isDark={isDark}
+                    onPointsUpdate={(newPoints) => {
+                      if (profile && user?.email) {
+                        const updated = { ...profile, point: newPoints };
+                        setProfile(updated);
+                        localStorage.setItem(`dori_profile_${user.email}`, JSON.stringify(updated));
+                      }
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* 성장 가이드 카드 */}
+              <div style={{
+                background: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
+                border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7'}`,
+                borderRadius: '1.5rem',
+                padding: '2rem',
+                position: 'relative',
+                overflow: 'hidden',
+                transition: 'all 0.3s ease',
+                boxShadow: isDark ? '0 4px 20px rgba(0, 0, 0, 0.3)' : '0 4px 20px rgba(0, 0, 0, 0.05)',
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.transform = 'translateY(-4px)';
+                e.currentTarget.style.boxShadow = isDark
+                  ? '0 12px 40px rgba(0, 0, 0, 0.5)'
+                  : '0 12px 40px rgba(0, 0, 0, 0.1)';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = isDark
+                  ? '0 4px 20px rgba(0, 0, 0, 0.3)'
+                  : '0 4px 20px rgba(0, 0, 0, 0.05)';
+              }}
+              >
+                {/* 배경 장식 */}
+                <div style={{
+                  position: 'absolute',
+                  top: '-50%',
+                  left: '-20%',
+                  width: '200px',
+                  height: '200px',
+                  borderRadius: '50%',
+                  background: isDark
+                    ? 'radial-gradient(circle, rgba(168, 85, 247, 0.1), transparent)'
+                    : 'radial-gradient(circle, rgba(168, 85, 247, 0.05), transparent)',
+                  filter: 'blur(60px)',
+                  pointerEvents: 'none',
+                }} />
+                
+                <div style={{ position: 'relative', zIndex: 1 }}>
+                  <div style={{
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '0.75rem',
+                    marginBottom: '1.5rem',
+                  }}>
+                    <div style={{
+                      width: '48px',
+                      height: '48px',
+                      borderRadius: '1rem',
+                      background: isDark
+                        ? 'rgba(168, 85, 247, 0.2)'
+                        : 'rgba(168, 85, 247, 0.1)',
+                      display: 'flex',
+                      alignItems: 'center',
+                      justifyContent: 'center',
+                      fontSize: '1.5rem',
+                      border: `1px solid ${isDark ? 'rgba(168, 85, 247, 0.3)' : 'rgba(168, 85, 247, 0.2)'}`,
+                    }}>
+                      📈
+                    </div>
+                    <div>
+                      <h3 style={{
+                        fontSize: '1.25rem',
+                        fontWeight: '700',
+                        color: isDark ? '#ffffff' : '#1d1d1f',
+                        margin: 0,
+                        marginBottom: '0.25rem',
+                      }}>
+                        성장 가이드
+                      </h3>
+                      <p style={{
+                        fontSize: '0.8125rem',
+                        color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                        margin: 0,
+                      }}>
+                        다음 등급을 향한 여정
+                      </p>
+                    </div>
+                  </div>
+                  
+                  <GrowthGuide profile={profile} activityStats={activityStats} />
+                </div>
+              </div>
+            </div>
+            )}
           </>
         )}
 
@@ -602,10 +800,23 @@ export default function MyPage() {
       </section>
 
       <style jsx global>{`
+        @keyframes fadeInUp {
+          from {
+            opacity: 0;
+            transform: translateY(20px);
+          }
+          to {
+            opacity: 1;
+            transform: translateY(0);
+          }
+        }
         @media (max-width: 768px) {
           .post-item {
             flex-direction: column;
             align-items: flex-start !important;
+          }
+          .profile-grid {
+            grid-template-columns: 1fr !important;
           }
         }
       `}</style>

@@ -42,6 +42,20 @@ export default function ProfileHero({
         border: `1px solid ${isDark ? "rgba(255, 255, 255, 0.1)" : "#e5e5e7"}`,
         position: "relative",
         overflow: "hidden",
+        boxShadow: isDark ? "0 4px 20px rgba(0, 0, 0, 0.3)" : "0 4px 20px rgba(0, 0, 0, 0.05)",
+        transition: "all 0.3s ease",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "translateY(-2px)";
+        e.currentTarget.style.boxShadow = isDark
+          ? "0 8px 30px rgba(0, 0, 0, 0.4)"
+          : "0 8px 30px rgba(0, 0, 0, 0.1)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "translateY(0)";
+        e.currentTarget.style.boxShadow = isDark
+          ? "0 4px 20px rgba(0, 0, 0, 0.3)"
+          : "0 4px 20px rgba(0, 0, 0, 0.05)";
       }}
     >
       {/* 배경 장식 */}
@@ -248,6 +262,32 @@ export default function ProfileHero({
             </div>
           </div>
         )}
+
+        {/* 클릭 힌트 */}
+        <div style={{
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "flex-end",
+          gap: "0.5rem",
+          marginTop: "1.5rem",
+          paddingTop: "1rem",
+          borderTop: `1px solid ${isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"}`,
+        }}>
+          <span style={{
+            fontSize: "0.8125rem",
+            color: isDark ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)",
+            fontWeight: "500",
+          }}>
+            미션 보기
+          </span>
+          <span style={{
+            fontSize: "1rem",
+            color: isDark ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)",
+            transition: "transform 0.2s ease",
+          }}>
+            ↓
+          </span>
+        </div>
       </div>
     </div>
   );
