@@ -5,7 +5,7 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
-import DailyMissions from "@/components/mission/DailyMissions";
+import { CheckCircle2, Circle, Gift } from 'lucide-react';
 
 interface AccountMenuProps {
   user: {
@@ -23,8 +23,17 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [isMissionsExpanded, setIsMissionsExpanded] = useState(false);
+  const [isMissionsExpanded, setIsMissionsExpanded] = useState(true);
   const [userPoints, setUserPoints] = useState(points);
+  
+  // 미션 데이터
+  const [missions, setMissions] = useState([
+    { id: 1, title: "로그인 출석체크", point: 10, isCompleted: false, progress: null },
+    { id: 2, title: "글 3개 작성", point: 10, isCompleted: false, progress: { current: 0, total: 3 } },
+    { id: 3, title: "댓글 5회 작성", point: 2, isCompleted: false, progress: { current: 0, total: 5 } },
+    { id: 4, title: "좋아요 10개", point: 1, isCompleted: false, progress: { current: 0, total: 10 } },
+    { id: 5, title: "사이트 공유", point: 10, isCompleted: false, progress: null },
+  ]);
   const menuRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
 
@@ -34,6 +43,99 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
   useEffect(() => {
     setUserPoints(points);
   }, [points]);
+
+  // 로그인 시 출석체크 미션 처리
+  useEffect(() => {
+    if (!mounted || !user?.email || typeof window === 'undefined') return;
+    
+    const { handleCheckinMission } = require('@/lib/missionProgress');
+    handleCheckinMission().catch(err => console.error('출석체크 미션 오류:', err));
+  }, [mounted, user?.email]);
+
+  // 미션 진행도 로드 및 업데이트
+  useEffect(() => {
+    if (!mounted || typeof window === 'undefined') return;
+
+    // localStorage에서 미션 진행도 로드
+    const loadMissionProgress = () => {
+      const { getMissionProgress } = require('@/lib/missionProgress');
+      
+      setMissions(prev => prev.map(mission => {
+        if (mission.id === 1) {
+          // 출석체크 미션
+          const todayKey = new Date().toISOString().split('T')[0].replace(/-/g, '');
+          const checkinKey = `mission_checkin_${todayKey}`;
+          const isCompleted = localStorage.getItem(checkinKey) === 'true';
+          return { ...mission, isCompleted };
+        } else if (mission.id === 2) {
+          // 글 작성 미션
+          const progress = getMissionProgress('post');
+          return { 
+            ...mission, 
+            progress: { current: Math.min(progress, 3), total: 3 },
+            isCompleted: progress >= 3
+          };
+        } else if (mission.id === 3) {
+          // 댓글 작성 미션
+          const progress = getMissionProgress('comment');
+          return { 
+            ...mission, 
+            progress: { current: Math.min(progress, 5), total: 5 },
+            isCompleted: progress >= 5
+          };
+        } else if (mission.id === 4) {
+          // 좋아요 미션
+          const progress = getMissionProgress('like');
+          return { 
+            ...mission, 
+            progress: { current: Math.min(progress, 10), total: 10 },
+            isCompleted: progress >= 10
+          };
+        } else if (mission.id === 5) {
+          // 사이트 공유 미션
+          const todayKey = new Date().toISOString().split('T')[0].replace(/-/g, '');
+          const shareKey = `mission_share_${todayKey}`;
+          const isCompleted = localStorage.getItem(shareKey) === 'true';
+          return { ...mission, isCompleted };
+        }
+        return mission;
+      }));
+    };
+
+    loadMissionProgress();
+
+    // 미션 진행도 업데이트 이벤트 리스너
+    const handleMissionUpdate = () => {
+      loadMissionProgress();
+    };
+
+    // 포인트 추가 이벤트 리스너
+    const handlePointsAdded = () => {
+      loadMissionProgress();
+    };
+
+    // 포인트 업데이트 이벤트 리스너
+    const handlePointsUpdated = (e: CustomEvent) => {
+      if (e.detail?.points !== undefined) {
+        setUserPoints(e.detail.points);
+      }
+      loadMissionProgress();
+    };
+
+    window.addEventListener('missionUpdate', handleMissionUpdate);
+    window.addEventListener('pointsAdded', handlePointsAdded as EventListener);
+    window.addEventListener('pointsUpdated', handlePointsUpdated as EventListener);
+
+    // 주기적으로 미션 진행도 확인 (1초마다)
+    const interval = setInterval(loadMissionProgress, 1000);
+
+    return () => {
+      window.removeEventListener('missionUpdate', handleMissionUpdate);
+      window.removeEventListener('pointsAdded', handlePointsAdded as EventListener);
+      window.removeEventListener('pointsUpdated', handlePointsUpdated as EventListener);
+      clearInterval(interval);
+    };
+  }, [mounted]);
 
 
   useEffect(() => {
@@ -305,16 +407,115 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                   </svg>
                 </button>
 
-                {/* Daily Missions 아코디언 콘텐츠 - 항상 표시 */}
-                <div className="mt-2 pl-2">
-                  <DailyMissions
-                    isDark={isDark}
-                    onPointsUpdate={(newPoints) => {
-                      setUserPoints(newPoints);
-                      // 부모 컴포넌트에 포인트 업데이트 알림 (필요시)
-                    }}
-                  />
-                </div>
+                {/* Daily Missions 아코디언 콘텐츠 */}
+                {isMissionsExpanded && (
+                  <div className="mt-2" style={{ 
+                    padding: '8px',
+                    background: isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.01)',
+                    borderRadius: '0.75rem',
+                  }}>
+                    {missions.length > 0 ? (
+                      <ul className="space-y-1">
+                        {missions.map((mission) => (
+                          <li 
+                            key={mission.id}
+                            className="flex items-center justify-between p-2 rounded-lg transition-all"
+                            style={{
+                              background: mission.isCompleted 
+                                ? (isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.01)')
+                                : (isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)'),
+                              opacity: mission.isCompleted ? 0.6 : 1,
+                            }}
+                          >
+                            <div className="flex items-center gap-2 flex-1 min-w-0">
+                              {mission.isCompleted ? (
+                                <CheckCircle2 className="w-4 h-4 flex-shrink-0" style={{ color: '#10b981' }} />
+                              ) : (
+                                <Circle className="w-4 h-4 flex-shrink-0" style={{ color: isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)' }} />
+                              )}
+                              <div className="flex flex-col min-w-0 flex-1">
+                                <span 
+                                  className="text-xs font-medium truncate"
+                                  style={{
+                                    textDecoration: mission.isCompleted ? 'line-through' : 'none',
+                                    color: mission.isCompleted 
+                                      ? (isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)')
+                                      : (isDark ? '#ffffff' : '#1d1d1f'),
+                                  }}
+                                >
+                                  {mission.title} {mission.progress ? `(${mission.progress.current}/${mission.progress.total})` : ''}
+                                </span>
+                                <span 
+                                  className="text-[10px] flex items-center gap-1"
+                                  style={{
+                                    color: isDark ? 'rgba(59, 130, 246, 0.8)' : '#2563eb',
+                                  }}
+                                >
+                                  <Gift className="w-3 h-3" /> 
+                                  {mission.progress 
+                                    ? `하나당 ${mission.point}포인트 (총 ${mission.point * mission.progress.total}포인트)`
+                                    : `+${mission.point} 포인트`
+                                  }
+                                </span>
+                              </div>
+                            </div>
+                            
+                            {!mission.isCompleted && (
+                              <button 
+                                className="text-[10px] px-2 py-1 rounded-md transition-colors flex-shrink-0 ml-2"
+                                style={{
+                                  background: isDark 
+                                    ? 'rgba(59, 130, 246, 0.2)' 
+                                    : 'rgba(37, 99, 235, 0.1)',
+                                  color: isDark ? '#93c5fd' : '#2563eb',
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.background = isDark 
+                                    ? 'rgba(59, 130, 246, 0.3)' 
+                                    : 'rgba(37, 99, 235, 0.15)';
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.background = isDark 
+                                    ? 'rgba(59, 130, 246, 0.2)' 
+                                    : 'rgba(37, 99, 235, 0.1)';
+                                }}
+                              >
+                                수행하기
+                              </button>
+                            )}
+                          </li>
+                        ))}
+                      </ul>
+                    ) : (
+                      <div className="flex flex-col items-center justify-center py-6 text-center">
+                        <div 
+                          className="w-10 h-10 rounded-full flex items-center justify-center mb-2"
+                          style={{
+                            background: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
+                          }}
+                        >
+                          <span className="text-lg" style={{ color: isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)' }}>∅</span>
+                        </div>
+                        <p 
+                          className="text-xs font-medium"
+                          style={{
+                            color: isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)',
+                          }}
+                        >
+                          현재 진행 가능한 미션이 없습니다.
+                        </p>
+                        <p 
+                          className="text-[10px] mt-1"
+                          style={{
+                            color: isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)',
+                          }}
+                        >
+                          새로운 미션을 기다려주세요!
+                        </p>
+                      </div>
+                    )}
+                  </div>
+                )}
               </div>
             </div>
 

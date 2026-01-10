@@ -86,6 +86,11 @@ const InsightCard = React.memo(({ item, onTagClick, onLikeChange, isOwner = fals
           }
         }
       }
+      
+      // 좋아요 미션 진행도 업데이트
+      import('@/lib/missionProgress').then(({ handleLikeMission }) => {
+        handleLikeMission().catch(err => console.error('좋아요 미션 오류:', err));
+      });
     }
     
     // 부모 컴포넌트에 변경 알림

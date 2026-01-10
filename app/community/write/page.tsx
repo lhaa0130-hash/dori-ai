@@ -83,6 +83,14 @@ export default function CommunityWritePage() {
     try {
       const existingPosts = JSON.parse(localStorage.getItem("dori_posts") || "[]");
       localStorage.setItem("dori_posts", JSON.stringify([newPost, ...existingPosts]));
+      
+      // 글 작성 미션 진행도 업데이트
+      if (user?.email) {
+        import('@/lib/missionProgress').then(({ handlePostMission }) => {
+          handlePostMission().catch(err => console.error('미션 완료 오류:', err));
+        });
+      }
+      
       alert("게시글이 등록되었습니다!");
       router.push("/community");
     } catch (err) {

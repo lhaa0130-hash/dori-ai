@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useSession } from "next-auth/react";
 import { useTheme } from "next-themes";
+import { DAILY_MISSIONS } from "@/constants/missions";
 
 interface Mission {
   code: string;
@@ -16,95 +17,52 @@ interface DailyMissionsProps {
   onPointsUpdate?: (newPoints: number) => void;
 }
 
+// 하드코딩된 미션 목록 (무조건 표시)
+const HARDCODED_MISSIONS = [
+  { code: "DAILY_CHECKIN", title: "출석 체크", points: 10, status: "pending" as const },
+  { code: "WRITE_POST_1", title: "글 쓰기 1회", points: 15, status: "pending" as const },
+  { code: "WRITE_POST_3", title: "글 쓰기 3회", points: 30, status: "pending" as const },
+  { code: "WRITE_COMMENT_3", title: "댓글 쓰기 3회", points: 15, status: "pending" as const },
+  { code: "WRITE_COMMENT_5", title: "댓글 쓰기 5회", points: 25, status: "pending" as const },
+  { code: "LIKE_5", title: "좋아요 5개", points: 10, status: "pending" as const },
+  { code: "LIKE_10", title: "좋아요 10개", points: 20, status: "pending" as const },
+  { code: "BOOKMARK_3", title: "북마크 3개", points: 15, status: "pending" as const },
+  { code: "VISIT_AI_TOOLS", title: "AI 도구 페이지 방문", points: 10, status: "pending" as const },
+  { code: "VISIT_COMMUNITY", title: "커뮤니티 페이지 방문", points: 10, status: "pending" as const },
+  { code: "VISIT_STUDIO", title: "스튜디오 페이지 방문", points: 10, status: "pending" as const },
+  { code: "SHARE_POST", title: "게시글 공유하기", points: 20, status: "pending" as const },
+];
+
 export default function DailyMissions({ isDark, onPointsUpdate }: DailyMissionsProps) {
   const { data: session } = useSession();
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [missions, setMissions] = useState<Mission[]>([]);
-  const [progress, setProgress] = useState({ completed: 0, total: 0 });
-  const [loading, setLoading] = useState(true);
+  const [missions, setMissions] = useState<Mission[]>(HARDCODED_MISSIONS);
+  const [progress, setProgress] = useState({ completed: 0, total: HARDCODED_MISSIONS.length });
   const [completing, setCompleting] = useState<string | null>(null);
   const [claiming, setClaiming] = useState<string | null>(null);
 
   useEffect(() => setMounted(true), []);
 
   useEffect(() => {
-    if (mounted) {
-      // 마운트 시 즉시 미션 로드
-      loadMissions();
-      
-      // 추가로 seed API도 호출하여 미션 생성 보장
-      fetch('/api/missions/seed', { method: 'POST' })
+    if (mounted && session?.user) {
+      // 백그라운드에서 API 호출 (선택적)
+      fetch('/api/missions/today', {
+        cache: 'no-store',
+      })
         .then(res => res.json())
         .then(data => {
-          console.log('Seed API 응답:', data);
-          if (data.ok) {
-            // seed 후 미션 다시 로드
-            setTimeout(() => loadMissions(), 300);
+          if (data.missions && data.missions.length > 0) {
+            setMissions(data.missions);
+            setProgress(data.progress || { completed: 0, total: data.missions.length });
           }
         })
-        .catch(err => console.error('Seed API 오류:', err));
+        .catch(err => {
+          console.error('미션 API 오류:', err);
+          // 에러가 발생해도 하드코딩된 미션은 유지
+        });
     }
   }, [mounted, session]);
-
-  const loadMissions = async () => {
-    try {
-      setLoading(true);
-      const res = await fetch('/api/missions/today', {
-        cache: 'no-store',
-        headers: {
-          'Cache-Control': 'no-cache',
-        },
-      });
-      
-      if (!res.ok) {
-        console.error('미션 API HTTP 오류:', res.status, res.statusText);
-        setMissions([]);
-        setLoading(false);
-        return;
-      }
-      
-      const data = await res.json();
-      console.log('[DailyMissions] API 응답:', data);
-      console.log('[DailyMissions] 미션 개수:', (data.missions || []).length);
-      
-      if (data.error) {
-        console.error('[DailyMissions] API 오류:', data.error);
-        setMissions([]);
-      } else {
-        const missionList = data.missions || [];
-        console.log('[DailyMissions] 미션 목록:', missionList);
-        setMissions(missionList);
-        setProgress(data.progress || { completed: 0, total: missionList.length });
-        
-        // 미션이 없으면 seed API 호출
-        if (missionList.length === 0) {
-          console.log('[DailyMissions] 미션이 없어서 seed API를 호출합니다...');
-          try {
-            const seedRes = await fetch('/api/missions/seed', { 
-              method: 'POST',
-              cache: 'no-store',
-            });
-            const seedData = await seedRes.json();
-            console.log('[DailyMissions] Seed API 응답:', seedData);
-            
-            // seed 후 다시 로드
-            setTimeout(() => {
-              console.log('[DailyMissions] Seed 후 미션 다시 로드...');
-              loadMissions();
-            }, 800);
-          } catch (seedError) {
-            console.error('[DailyMissions] Seed API 오류:', seedError);
-          }
-        }
-      }
-    } catch (error) {
-      console.error('[DailyMissions] 미션 로드 오류:', error);
-      setMissions([]);
-    } finally {
-      setLoading(false);
-    }
-  };
 
   const handleComplete = async (missionCode: string) => {
     if (completing || !session?.user) return;
@@ -120,7 +78,6 @@ export default function DailyMissions({ isDark, onPointsUpdate }: DailyMissionsP
       const result = await res.json();
 
       if (result.ok) {
-        // 낙관적 UI 업데이트
         setMissions(prev => prev.map(m =>
           m.code === missionCode ? { ...m, status: 'completed' as const } : m
         ));
@@ -149,19 +106,14 @@ export default function DailyMissions({ isDark, onPointsUpdate }: DailyMissionsP
       const result = await res.json();
 
       if (result.ok) {
-        // 낙관적 UI 업데이트
         setMissions(prev => prev.map(m =>
           m.code === missionCode ? { ...m, status: 'claimed' as const } : m
         ));
         setProgress(prev => ({ ...prev, completed: prev.completed + 1 }));
 
-        // 포인트 업데이트 콜백
         if (onPointsUpdate && result.points !== undefined) {
           onPointsUpdate(result.points);
         }
-
-        // 미션 상태 갱신
-        await loadMissions();
       } else {
         alert(result.error || '보상 수령에 실패했습니다.');
       }
@@ -173,7 +125,7 @@ export default function DailyMissions({ isDark, onPointsUpdate }: DailyMissionsP
     }
   };
 
-  if (!mounted || loading) {
+  if (!mounted) {
     return (
       <div className="py-2">
         <div
@@ -203,21 +155,8 @@ export default function DailyMissions({ isDark, onPointsUpdate }: DailyMissionsP
     );
   }
 
-  // 미션이 없을 때도 표시
-  if (missions.length === 0 && !loading) {
-    return (
-      <div className="py-2">
-        <div
-          className="text-xs text-center"
-          style={{
-            color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
-          }}
-        >
-          미션이 없습니다
-        </div>
-      </div>
-    );
-  }
+  // 무조건 하드코딩된 미션 표시
+  const displayMissions = missions.length > 0 ? missions : HARDCODED_MISSIONS;
 
   return (
     <div className="space-y-2">
@@ -241,9 +180,9 @@ export default function DailyMissions({ isDark, onPointsUpdate }: DailyMissionsP
         </div>
       </div>
 
-      {/* 미션 목록 */}
+      {/* 미션 목록 - 무조건 표시 */}
       <div className="space-y-1.5">
-        {missions.length > 0 ? missions.map((mission) => (
+        {displayMissions.map((mission) => (
           <div
             key={mission.code}
             className="flex items-center gap-2 p-2 rounded-lg"
@@ -362,18 +301,8 @@ export default function DailyMissions({ isDark, onPointsUpdate }: DailyMissionsP
               </button>
             )}
           </div>
-        )) : (
-          <div
-            className="text-xs text-center py-2"
-            style={{
-              color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
-            }}
-          >
-            미션이 없습니다
-          </div>
-        )}
+        ))}
       </div>
     </div>
   );
 }
-

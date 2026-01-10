@@ -234,6 +234,11 @@ export default function CommunityClient() {
               }
             }
           }
+          
+          // 좋아요 미션 진행도 업데이트
+          import('@/lib/missionProgress').then(({ handleLikeMission }) => {
+            handleLikeMission().catch(err => console.error('좋아요 미션 오류:', err));
+          });
         }
         
         return { ...p, likes: newLikes };
