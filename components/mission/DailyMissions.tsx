@@ -30,19 +30,76 @@ export default function DailyMissions({ isDark, onPointsUpdate }: DailyMissionsP
 
   useEffect(() => {
     if (mounted) {
+      // 마운트 시 즉시 미션 로드
       loadMissions();
+      
+      // 추가로 seed API도 호출하여 미션 생성 보장
+      fetch('/api/missions/seed', { method: 'POST' })
+        .then(res => res.json())
+        .then(data => {
+          console.log('Seed API 응답:', data);
+          if (data.ok) {
+            // seed 후 미션 다시 로드
+            setTimeout(() => loadMissions(), 300);
+          }
+        })
+        .catch(err => console.error('Seed API 오류:', err));
     }
   }, [mounted, session]);
 
   const loadMissions = async () => {
     try {
-      const res = await fetch('/api/missions/today');
+      setLoading(true);
+      const res = await fetch('/api/missions/today', {
+        cache: 'no-store',
+        headers: {
+          'Cache-Control': 'no-cache',
+        },
+      });
+      
+      if (!res.ok) {
+        console.error('미션 API HTTP 오류:', res.status, res.statusText);
+        setMissions([]);
+        setLoading(false);
+        return;
+      }
+      
       const data = await res.json();
-      console.log('Daily Missions API 응답:', data);
-      setMissions(data.missions || []);
-      setProgress(data.progress || { completed: 0, total: 0 });
+      console.log('[DailyMissions] API 응답:', data);
+      console.log('[DailyMissions] 미션 개수:', (data.missions || []).length);
+      
+      if (data.error) {
+        console.error('[DailyMissions] API 오류:', data.error);
+        setMissions([]);
+      } else {
+        const missionList = data.missions || [];
+        console.log('[DailyMissions] 미션 목록:', missionList);
+        setMissions(missionList);
+        setProgress(data.progress || { completed: 0, total: missionList.length });
+        
+        // 미션이 없으면 seed API 호출
+        if (missionList.length === 0) {
+          console.log('[DailyMissions] 미션이 없어서 seed API를 호출합니다...');
+          try {
+            const seedRes = await fetch('/api/missions/seed', { 
+              method: 'POST',
+              cache: 'no-store',
+            });
+            const seedData = await seedRes.json();
+            console.log('[DailyMissions] Seed API 응답:', seedData);
+            
+            // seed 후 다시 로드
+            setTimeout(() => {
+              console.log('[DailyMissions] Seed 후 미션 다시 로드...');
+              loadMissions();
+            }, 800);
+          } catch (seedError) {
+            console.error('[DailyMissions] Seed API 오류:', seedError);
+          }
+        }
+      }
     } catch (error) {
-      console.error('미션 로드 오류:', error);
+      console.error('[DailyMissions] 미션 로드 오류:', error);
       setMissions([]);
     } finally {
       setLoading(false);
@@ -172,7 +229,7 @@ export default function DailyMissions({ isDark, onPointsUpdate }: DailyMissionsP
             color: isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)',
           }}
         >
-          Daily Missions
+          일일 미션
         </div>
         <div
           className="text-[10px] font-medium"

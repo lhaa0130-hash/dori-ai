@@ -263,31 +263,6 @@ export default function ProfileHero({
           </div>
         )}
 
-        {/* 클릭 힌트 */}
-        <div style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "flex-end",
-          gap: "0.5rem",
-          marginTop: "1.5rem",
-          paddingTop: "1rem",
-          borderTop: `1px solid ${isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"}`,
-        }}>
-          <span style={{
-            fontSize: "0.8125rem",
-            color: isDark ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)",
-            fontWeight: "500",
-          }}>
-            미션 보기
-          </span>
-          <span style={{
-            fontSize: "1rem",
-            color: isDark ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)",
-            transition: "transform 0.2s ease",
-          }}>
-            ↓
-          </span>
-        </div>
       </div>
     </div>
   );

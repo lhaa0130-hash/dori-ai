@@ -23,9 +23,6 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
   const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const [searchQuery, setSearchQuery] = useState("");
-  const [isSearchFocused, setIsSearchFocused] = useState(false);
-  const [searchResults, setSearchResults] = useState<any[]>([]);
   const [isMissionsExpanded, setIsMissionsExpanded] = useState(false);
   const [userPoints, setUserPoints] = useState(points);
   const menuRef = useRef<HTMLDivElement>(null);
@@ -38,60 +35,6 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
     setUserPoints(points);
   }, [points]);
 
-  useEffect(() => {
-    if (!searchQuery.trim()) {
-      setSearchResults([]);
-      return;
-    }
-
-    const performSearch = async () => {
-      const query = searchQuery.toLowerCase().trim();
-      const results: any[] = [];
-
-      try {
-        const toolsData = localStorage.getItem("dori_tools_v11");
-        if (toolsData) {
-          const tools = JSON.parse(toolsData);
-          const matchedTools = tools
-            .filter((tool: any) => 
-              tool.name?.toLowerCase().includes(query) ||
-              tool.description?.toLowerCase().includes(query)
-            )
-            .slice(0, 3)
-            .map((tool: any) => ({
-              type: 'ai-tool',
-              title: tool.name,
-              url: `/ai-tools/${tool.id}`,
-            }));
-          results.push(...matchedTools);
-        }
-      } catch (e) {}
-
-      try {
-        const postsData = localStorage.getItem("dori_community_posts");
-        if (postsData) {
-          const posts = JSON.parse(postsData);
-          const matchedPosts = posts
-            .filter((post: any) => 
-              post.title?.toLowerCase().includes(query) ||
-              post.content?.toLowerCase().includes(query)
-            )
-            .slice(0, 3)
-            .map((post: any) => ({
-              type: 'community',
-              title: post.title,
-              url: `/community/${post.id}`,
-            }));
-          results.push(...matchedPosts);
-        }
-      } catch (e) {}
-
-      setSearchResults(results.slice(0, 5));
-    };
-
-    const timer = setTimeout(performSearch, 300);
-    return () => clearTimeout(timer);
-  }, [searchQuery]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -131,12 +74,6 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
     }
   };
 
-  const handleSearchSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (searchQuery.trim() && searchResults.length > 0) {
-      handleNavigate(searchResults[0].url);
-    }
-  };
 
   if (!mounted) return null;
 
@@ -170,7 +107,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
             color: isDark ? '#ffffff' : '#1d1d1f',
           }}
         >
-          {displayName || "User"}
+          {displayName || "사용자"}
         </span>
         <svg
           width="10"
@@ -221,7 +158,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                     boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
                   }}
                 >
-                  {displayName?.[0]?.toUpperCase() || "U"}
+                  {displayName?.[0]?.toUpperCase() || "사"}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div
@@ -230,7 +167,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                       color: isDark ? '#ffffff' : '#1d1d1f',
                     }}
                   >
-                    {displayName || "User"}
+                    {displayName || "사용자"}
                   </div>
                   <div
                     className="text-xs mb-2 truncate"
@@ -251,7 +188,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                         border: `1px solid ${isDark ? 'rgba(59, 130, 246, 0.25)' : 'rgba(37, 99, 235, 0.2)'}`,
                       }}
                     >
-                      Creator
+                      크리에이터
                     </span>
                     <div
                       className="text-xs font-medium ml-auto"
@@ -259,7 +196,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                         color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
                       }}
                     >
-                      Points {userPoints.toLocaleString()}
+                      포인트 {userPoints.toLocaleString()}
                     </div>
                   </div>
                   {/* Level Indicator */}
@@ -271,7 +208,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                           color: isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)',
                         }}
                       >
-                        Level {level}
+                        레벨 {level}
                       </span>
                       <span
                         className="text-[10px] font-medium"
@@ -320,7 +257,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                     color: isDark ? '#ffffff' : '#1d1d1f',
                   }}
                 >
-                  My Page
+                  내 페이지
                 </span>
               </button>
               <div className="w-full">
@@ -345,7 +282,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                         color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
                       }}
                     >
-                      Missions
+                      미션
                     </span>
                   </div>
                   <svg
@@ -381,98 +318,6 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
               </div>
             </div>
 
-            {/* Search */}
-            <div className="mb-4">
-              <form onSubmit={handleSearchSubmit} className="relative">
-                <div className="absolute left-3 top-1/2 -translate-y-1/2 text-base opacity-40 pointer-events-none">
-                  🔍
-                </div>
-                <input
-                  type="text"
-                  placeholder="Search menu..."
-                  value={searchQuery}
-                  onChange={(e) => setSearchQuery(e.target.value)}
-                  onFocus={() => setIsSearchFocused(true)}
-                  onBlur={() => setTimeout(() => setIsSearchFocused(false), 200)}
-                  className="w-full h-9 pl-10 pr-3 rounded-lg text-sm transition-all duration-200 focus:outline-none focus:ring-2"
-                  style={{
-                    background: isDark
-                      ? 'rgba(255, 255, 255, 0.05)'
-                      : 'rgba(0, 0, 0, 0.03)',
-                    border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)'}`,
-                    color: isDark ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.8)',
-                  }}
-                  onFocus={(e) => {
-                    setIsSearchFocused(true);
-                    e.currentTarget.style.borderColor = isDark
-                      ? 'rgba(255, 255, 255, 0.2)'
-                      : 'rgba(37, 99, 235, 0.3)';
-                    e.currentTarget.style.background = isDark
-                      ? 'rgba(255, 255, 255, 0.08)'
-                      : 'rgba(0, 0, 0, 0.05)';
-                  }}
-                  onBlur={(e) => {
-                    setTimeout(() => setIsSearchFocused(false), 200);
-                    e.currentTarget.style.borderColor = isDark
-                      ? 'rgba(255, 255, 255, 0.08)'
-                      : 'rgba(0, 0, 0, 0.06)';
-                    e.currentTarget.style.background = isDark
-                      ? 'rgba(255, 255, 255, 0.05)'
-                      : 'rgba(0, 0, 0, 0.03)';
-                  }}
-                />
-                {isSearchFocused && searchResults.length > 0 && (
-                  <div
-                    className="absolute top-full left-0 right-0 mt-1 rounded-lg overflow-hidden border max-h-64 overflow-y-auto"
-                    style={{
-                      background: isDark
-                        ? 'rgba(20, 20, 20, 0.98)'
-                        : 'rgba(255, 255, 255, 0.98)',
-                      borderColor: isDark
-                        ? 'rgba(255, 255, 255, 0.1)'
-                        : 'rgba(0, 0, 0, 0.08)',
-                      boxShadow: '0 8px 24px rgba(0, 0, 0, 0.15)',
-                    }}
-                  >
-                    {searchResults.map((result, index) => (
-                      <Link
-                        key={index}
-                        href={result.url}
-                        onClick={() => {
-                          setSearchQuery("");
-                          setIsSearchFocused(false);
-                          setIsOpen(false);
-                        }}
-                        className="flex items-center gap-3 px-3 py-2.5 hover:bg-opacity-50 transition-colors"
-                        style={{
-                          background: isDark
-                            ? 'transparent'
-                            : 'transparent',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background = isDark
-                            ? 'rgba(255, 255, 255, 0.08)'
-                            : 'rgba(0, 0, 0, 0.04)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = 'transparent';
-                        }}
-                      >
-                        <span className="text-base">{result.type === 'ai-tool' ? '🛠️' : '💬'}</span>
-                        <span
-                          className="text-sm font-medium truncate"
-                          style={{
-                            color: isDark ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.8)',
-                          }}
-                        >
-                          {result.title}
-                        </span>
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </form>
-            </div>
 
             {/* Menu Groups */}
             <div className="space-y-1">
@@ -484,7 +329,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                     color: isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)',
                   }}
                 >
-                  Preferences
+                  설정
                 </div>
                 <button
                   onClick={handleThemeToggle}
@@ -509,7 +354,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                         color: isDark ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.8)',
                       }}
                     >
-                      Theme
+                      테마
                     </span>
                   </div>
                   <div
@@ -538,7 +383,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                     color: isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)',
                   }}
                 >
-                  Account
+                  계정
                 </div>
                 <div className="space-y-0.5">
                   <button
@@ -561,7 +406,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                         color: '#ef4444',
                       }}
                     >
-                      Logout
+                      로그아웃
                     </span>
                   </button>
                 </div>

@@ -27,30 +27,71 @@ export async function GET() {
 
     // DB에 미션이 없으면 상수에서 가져와서 DB에 생성
     if (missions.length === 0) {
-      const stmt = db.prepare(`
-        INSERT OR REPLACE INTO missions (code, title, points, reset_type, is_active, updated_at)
-        VALUES (?, ?, ?, 'daily', 1, datetime('now'))
-      `);
+      console.log('[미션 자동 생성] DB에 미션이 없어서 자동 생성합니다...');
+      console.log(`[미션 자동 생성] DAILY_MISSIONS 개수: ${DAILY_MISSIONS.length}`);
       
-      const insertMany = db.transaction((missions) => {
-        for (const m of missions) {
-          stmt.run(m.code, m.title, m.points);
+      try {
+        const stmt = db.prepare(`
+          INSERT OR REPLACE INTO missions (code, title, points, reset_type, is_active, updated_at)
+          VALUES (?, ?, ?, 'daily', 1, datetime('now'))
+        `);
+        
+        const insertMany = db.transaction((missionList) => {
+          for (const m of missionList) {
+            try {
+              stmt.run(m.code, m.title, m.points);
+              console.log(`[미션 자동 생성] 미션 생성: ${m.code} - ${m.title}`);
+            } catch (insertError) {
+              console.error(`[미션 자동 생성] 미션 생성 실패 (${m.code}):`, insertError);
+            }
+          }
+        });
+        
+        insertMany(DAILY_MISSIONS);
+        console.log(`[미션 자동 생성] ${DAILY_MISSIONS.length}개의 미션 생성 시도 완료`);
+        
+        // 즉시 다시 조회
+        missions = db.prepare(`
+          SELECT code, title, points
+          FROM missions
+          WHERE is_active = 1 AND reset_type = 'daily'
+          ORDER BY code
+        `).all() as Array<{
+          code: string;
+          title: string;
+          points: number;
+        }>;
+        console.log(`[미션 자동 생성] 재조회 결과: ${missions.length}개의 미션을 찾았습니다.`);
+        
+        // 여전히 미션이 없으면 에러 반환
+        if (missions.length === 0) {
+          console.error('[미션 자동 생성] 경고: 미션 생성 후에도 미션이 없습니다!');
+          // 상수에서 직접 반환
+          return NextResponse.json({
+            missions: DAILY_MISSIONS.map(m => ({
+              code: m.code,
+              title: m.title,
+              points: m.points,
+              status: session?.user?.email ? 'pending' as const : 'locked' as const,
+            })),
+            progress: { completed: 0, total: DAILY_MISSIONS.length },
+            _fallback: true, // 상수에서 가져온 것임을 표시
+          });
         }
-      });
-      
-      insertMany(DAILY_MISSIONS);
-      
-      // 다시 조회
-      missions = db.prepare(`
-        SELECT code, title, points
-        FROM missions
-        WHERE is_active = 1 AND reset_type = 'daily'
-        ORDER BY code
-      `).all() as Array<{
-        code: string;
-        title: string;
-        points: number;
-      }>;
+      } catch (seedError) {
+        console.error('[미션 자동 생성] 오류:', seedError);
+        // 에러 발생 시 상수에서 직접 반환
+        return NextResponse.json({
+          missions: DAILY_MISSIONS.map(m => ({
+            code: m.code,
+            title: m.title,
+            points: m.points,
+            status: session?.user?.email ? 'pending' as const : 'locked' as const,
+          })),
+          progress: { completed: 0, total: DAILY_MISSIONS.length },
+          _fallback: true,
+        });
+      }
     }
 
     if (!session?.user?.email) {
