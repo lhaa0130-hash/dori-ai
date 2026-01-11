@@ -23,15 +23,23 @@ export default function AiToolsComments({ toolId, compact = false, onCommentUpda
     }
   }, [toolId]);
 
-  // localStorage에서 설정된 닉네임 가져오기
+  // localStorage에서 설정된 닉네임 가져오기 (일관된 이름 사용)
   useEffect(() => {
     if (session?.user?.email) {
-      const savedName = localStorage.getItem(`dori_user_name_${session.user.email}`);
-      if (savedName) {
-        setUserName(savedName);
-      } else {
-        setUserName(session.user?.name || "User");
+      // localStorage에 저장된 이름을 우선 사용
+      let savedName = localStorage.getItem(`dori_user_name_${session.user.email}`);
+      
+      if (!savedName && session.user?.name) {
+        // localStorage에 없으면 세션 이름을 저장하고 사용
+        savedName = session.user.name;
+        localStorage.setItem(`dori_user_name_${session.user.email}`, session.user.name);
+      } else if (!savedName) {
+        // 세션 이름도 없으면 이메일 앞부분 사용
+        savedName = session.user.email.split("@")[0];
+        localStorage.setItem(`dori_user_name_${session.user.email}`, savedName);
       }
+      
+      setUserName(savedName || "User");
     } else {
       setUserName("");
     }

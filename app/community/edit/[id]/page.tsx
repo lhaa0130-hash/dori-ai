@@ -11,6 +11,29 @@ export default function CommunityEditPage() {
   const router = useRouter();
   const params = useParams();
   const postId = params.id;
+  const [displayName, setDisplayName] = useState<string>("");
+
+  // localStorage에서 설정된 이름 가져오기 (일관된 이름 사용)
+  useEffect(() => {
+    if (user?.email) {
+      // localStorage에 저장된 이름을 우선 사용
+      let savedName = localStorage.getItem(`dori_user_name_${user.email}`);
+      
+      if (!savedName && user.name) {
+        // localStorage에 없으면 세션 이름을 저장하고 사용
+        savedName = user.name;
+        localStorage.setItem(`dori_user_name_${user.email}`, user.name);
+      } else if (!savedName) {
+        // 세션 이름도 없으면 이메일 앞부분 사용
+        savedName = user.email.split("@")[0];
+        localStorage.setItem(`dori_user_name_${user.email}`, savedName);
+      }
+      
+      setDisplayName(savedName || "사용자");
+    } else {
+      setDisplayName("");
+    }
+  }, [user?.email, user?.name]);
 
   const [title, setTitle] = useState("");
   const [content, setContent] = useState("");
@@ -73,9 +96,9 @@ export default function CommunityEditPage() {
             <div className="auth-wrap">
               {!user ? <Link href="/" className="btn small ghost">로그인</Link> : (
                 <div className="avatar-wrap">
-                  <button className="avatar">{user.name?.[0]}</button>
+                  <button className="avatar">{displayName?.[0] || "사"}</button>
                   <div className="menu">
-                    <div className="menu-name">{user.name}</div>
+                    <div className="menu-name">{displayName || "사용자"}</div>
                     <Link href="/my" style={{textDecoration:'none'}}><button className="menu-item">마이페이지</button></Link>
                     <button className="menu-item danger" onClick={onLogout}>로그아웃</button>
                   </div>

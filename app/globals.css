@@ -1,20 +1,16 @@
 @import "tailwindcss";
 
-/* 스크롤 스냅 강제 적용 */
+/* 기본 스크롤 설정 */
 html {
-  scroll-snap-type: y mandatory !important;
-  scroll-behavior: smooth !important;
-  overflow-y: scroll !important;
-  height: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
-  scroll-behavior: smooth !important;
-  overflow-x: hidden !important;
-  overflow-y: visible !important;
-  min-height: 100%;
+  scroll-behavior: smooth;
+  overflow-x: hidden;
   margin: 0;
   padding: 0;
+  min-height: 100vh;
 }
 
 /* 모든 섹션에 스크롤 스냅 정렬 적용 */

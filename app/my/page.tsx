@@ -145,20 +145,28 @@ export default function MyPage() {
     setBookmarkedPosts(bookmarked);
     setRecentViews(recent);
 
-    // 점수 계산 및 업데이트
+    // 경험치 계산 및 업데이트
     const totalSparks = mine.reduce((acc, p) => acc + (p.sparks || 0), 0);
-    const doriScore =
+    const activityExp =
       mine.length * ACTIVITY_SCORES.post +
       comments.length * ACTIVITY_SCORES.comment +
       totalSparks * ACTIVITY_SCORES.receivedLike;
+    
+    // 미션 완료 경험치 추가 (프로필에 이미 반영되어 있을 수 있지만, 혹시 모를 경우를 대비)
+    const missionExpKey = `dori_mission_exp_${user.email}`;
+    const missionExp = parseInt(localStorage.getItem(missionExpKey) || '0', 10);
+    const doriExp = activityExp + missionExp;
+    
+    // 프로필의 doriExp가 더 크면 프로필 값을 우선 사용 (이미 미션 경험치가 반영된 경우)
+    const finalDoriExp = Math.max(profile.doriExp || 0, doriExp);
 
-    const newTier = calculateTier(doriScore);
-    const newLevel = calculateLevel(doriScore * 10);
+    const newTier = calculateTier(finalDoriExp);
+    const newLevel = calculateLevel(finalDoriExp * 10);
 
-    if (profile.doriScore !== doriScore || profile.tier !== newTier || profile.level !== newLevel) {
+    if (profile.doriExp !== finalDoriExp || profile.tier !== newTier || profile.level !== newLevel) {
       const updatedProfile: UserProfile = {
         ...profile,
-        doriScore,
+        doriExp: finalDoriExp,
         tier: newTier,
         level: newLevel,
         point: profile.point || 0, // point 필드 유지
@@ -166,7 +174,7 @@ export default function MyPage() {
       setProfile(updatedProfile);
       localStorage.setItem(`dori_profile_${user.email}`, JSON.stringify(updatedProfile));
     }
-  }, [user?.email, user?.name, profile?.nickname, profile?.doriScore, profile?.tier, profile?.level]);
+  }, [user?.email, user?.name, profile?.nickname, profile?.doriExp, profile?.tier, profile?.level]);
 
   const getDisplayList = () => {
     switch (activeTab) {
@@ -185,6 +193,12 @@ export default function MyPage() {
     setProfile(updated);
     localStorage.setItem(`dori_image_${user.email}`, imageUrl);
     localStorage.setItem(`dori_profile_${user.email}`, JSON.stringify(updated));
+    
+    // 프로필 이미지 변경 이벤트 발생 (헤더의 AccountMenu가 업데이트되도록)
+    window.dispatchEvent(new CustomEvent('profileImageUpdated', { 
+      detail: { imageUrl, email: user.email } 
+    }));
+    window.dispatchEvent(new CustomEvent('profileUpdated'));
   };
 
   const handleNicknameChange = (nickname: string) => {

@@ -4,7 +4,7 @@ import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import ProfileImageSelector from "./ProfileImageSelector";
-import { UserProfile, TIER_INFO, calculateLevel, getNextLevelExp, getNextTierScore, TIER_THRESHOLDS } from "@/lib/userProfile";
+import { UserProfile, TIER_INFO, calculateLevel, getNextLevelExp, getNextTierExp, getCurrentLevelStartExp, TIER_THRESHOLDS } from "@/lib/userProfile";
 
 interface ProfileHeroProps {
   profile: UserProfile;
@@ -50,15 +50,13 @@ export default function ProfileHero({
   
   const isDark = mounted && theme === "dark";
   const tierInfo = TIER_INFO[profile.tier];
-  const currentLevel = calculateLevel(profile.doriScore * 10); // 경험치 = 점수 * 10
+  const currentExp = profile.doriExp * 10; // 경험치 = EXP * 10
+  const currentLevel = calculateLevel(currentExp);
   const nextLevelExp = getNextLevelExp(currentLevel);
-  const nextTierScore = getNextTierScore(profile.tier, profile.doriScore);
+  const nextTierExp = getNextTierExp(profile.tier, profile.doriExp);
   
   // 경험치 계산
-  // 레벨 n의 시작 경험치 = (n-1)^2 * 100
-  // 레벨 n의 끝 경험치 = n^2 * 100
-  const currentLevelStartExp = (currentLevel - 1) * (currentLevel - 1) * 100;
-  const currentExp = profile.doriScore * 10;
+  const currentLevelStartExp = getCurrentLevelStartExp(currentLevel);
   const levelProgress = currentLevel >= 100 ? 100 : Math.max(0, Math.min(100, ((currentExp - currentLevelStartExp) / (nextLevelExp - currentLevelStartExp)) * 100));
 
   // 테마가 변경되지 않았거나 마운트되지 않았으면 빈 div 반환
@@ -192,7 +190,7 @@ export default function ProfileHero({
               </div>
             </div>
 
-            {/* DORI Score & Point */}
+            {/* DORI EXP & Point */}
             <div style={{ marginBottom: "1rem", display: "flex", alignItems: "baseline", gap: "2rem", flexWrap: "wrap" }}>
               <span
                 style={{
@@ -206,7 +204,7 @@ export default function ProfileHero({
                   backgroundClip: "text",
                 }}
               >
-                DORI Score {profile.doriScore.toLocaleString()}
+                DORI EXP {profile.doriExp.toLocaleString()}
               </span>
               <span
                 style={{
@@ -455,7 +453,7 @@ export default function ProfileHero({
         )}
 
         {/* 등급 진행 바 */}
-        {profile.tier < 10 && nextTierScore > 0 && (
+        {profile.tier < 10 && nextTierExp > 0 && (
           <div style={{ marginTop: "1rem", marginBottom: "1.5rem" }}>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
               <span
@@ -474,7 +472,7 @@ export default function ProfileHero({
                   fontWeight: "500",
                 }}
               >
-                {nextTierScore > 0 ? `${nextTierScore.toLocaleString()}점` : "최고 등급"}
+                {nextTierExp > 0 ? `${nextTierExp.toLocaleString()}EXP` : "최고 등급"}
               </span>
             </div>
             <div
@@ -495,7 +493,7 @@ export default function ProfileHero({
                     const nextTier = (profile.tier + 1) as UserProfile['tier'];
                     const nextTierThreshold = TIER_THRESHOLDS[nextTier];
                     const currentTierThreshold = TIER_THRESHOLDS[profile.tier];
-                    const progress = ((profile.doriScore - currentTierThreshold) / (nextTierThreshold - currentTierThreshold)) * 100;
+                    const progress = ((profile.doriExp - currentTierThreshold) / (nextTierThreshold - currentTierThreshold)) * 100;
                     return Math.min(Math.max(progress, 0), 100);
                   })()}%`,
                   background: isDark

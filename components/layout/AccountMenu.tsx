@@ -6,7 +6,135 @@ import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { CheckCircle2, Circle, Gift } from 'lucide-react';
-import { UserProfile, TIER_INFO, calculateLevel, getNextLevelExp, getNextTierScore, TIER_THRESHOLDS } from "@/lib/userProfile";
+import { UserProfile, TIER_INFO, calculateLevel, getNextLevelExp, getNextTierExp, getCurrentLevelStartExp, TIER_THRESHOLDS } from "@/lib/userProfile";
+
+// 아바타 옵션 (ProfileImageSelector와 동일 - 전체 목록)
+const AVATAR_OPTIONS = [
+  // 미니멀
+  { id: "minimal-1", emoji: "👤", category: "미니멀" },
+  { id: "minimal-2", emoji: "👥", category: "미니멀" },
+  { id: "minimal-3", emoji: "🧑", category: "미니멀" },
+  { id: "minimal-4", emoji: "👨", category: "미니멀" },
+  { id: "minimal-5", emoji: "👩", category: "미니멀" },
+  { id: "minimal-6", emoji: "🧑‍💼", category: "미니멀" },
+  { id: "minimal-7", emoji: "🧑‍🎓", category: "미니멀" },
+  { id: "minimal-8", emoji: "🧑‍🔬", category: "미니멀" },
+  { id: "minimal-9", emoji: "🧑‍🎨", category: "미니멀" },
+  { id: "minimal-10", emoji: "🧑‍💻", category: "미니멀" },
+  
+  // 캐릭터 (동물 포함)
+  { id: "char-1", emoji: "🤖", category: "캐릭터" },
+  { id: "char-2", emoji: "🎭", category: "캐릭터" },
+  { id: "char-3", emoji: "🦄", category: "캐릭터" },
+  { id: "char-4", emoji: "🐱", category: "캐릭터" },
+  { id: "char-5", emoji: "🐼", category: "캐릭터" },
+  { id: "char-6", emoji: "🐻", category: "캐릭터" },
+  { id: "char-7", emoji: "🐨", category: "캐릭터" },
+  { id: "char-8", emoji: "🦊", category: "캐릭터" },
+  { id: "char-9", emoji: "🐰", category: "캐릭터" },
+  { id: "char-10", emoji: "🐯", category: "캐릭터" },
+  { id: "char-11", emoji: "🦁", category: "캐릭터" },
+  { id: "char-12", emoji: "🐸", category: "캐릭터" },
+  { id: "char-13", emoji: "🐷", category: "캐릭터" },
+  { id: "char-14", emoji: "🐶", category: "캐릭터" },
+  { id: "char-15", emoji: "🦉", category: "캐릭터" },
+  
+  // 추상
+  { id: "abstract-1", emoji: "✨", category: "추상" },
+  { id: "abstract-2", emoji: "🌟", category: "추상" },
+  { id: "abstract-3", emoji: "💫", category: "추상" },
+  { id: "abstract-4", emoji: "🔮", category: "추상" },
+  { id: "abstract-5", emoji: "🎨", category: "추상" },
+  { id: "abstract-6", emoji: "🎭", category: "추상" },
+  { id: "abstract-7", emoji: "🎪", category: "추상" },
+  { id: "abstract-8", emoji: "🎬", category: "추상" },
+  { id: "abstract-9", emoji: "🎯", category: "추상" },
+  { id: "abstract-10", emoji: "🎲", category: "추상" },
+  
+  // 자연
+  { id: "nature-1", emoji: "🌺", category: "자연" },
+  { id: "nature-2", emoji: "🌻", category: "자연" },
+  { id: "nature-3", emoji: "🌷", category: "자연" },
+  { id: "nature-4", emoji: "🌹", category: "자연" },
+  { id: "nature-5", emoji: "🌵", category: "자연" },
+  { id: "nature-6", emoji: "🌴", category: "자연" },
+  { id: "nature-7", emoji: "🌲", category: "자연" },
+  { id: "nature-8", emoji: "🍀", category: "자연" },
+  { id: "nature-9", emoji: "🌿", category: "자연" },
+  { id: "nature-10", emoji: "🌾", category: "자연" },
+  
+  // 음식
+  { id: "food-1", emoji: "🍎", category: "음식" },
+  { id: "food-2", emoji: "🍊", category: "음식" },
+  { id: "food-3", emoji: "🍋", category: "음식" },
+  { id: "food-4", emoji: "🍌", category: "음식" },
+  { id: "food-5", emoji: "🍉", category: "음식" },
+  { id: "food-6", emoji: "🍇", category: "음식" },
+  { id: "food-7", emoji: "🍓", category: "음식" },
+  { id: "food-8", emoji: "🍑", category: "음식" },
+  { id: "food-9", emoji: "🥝", category: "음식" },
+  { id: "food-10", emoji: "🍒", category: "음식" },
+  
+  // 스포츠 & 활동
+  { id: "sports-1", emoji: "⚽", category: "스포츠" },
+  { id: "sports-2", emoji: "🏀", category: "스포츠" },
+  { id: "sports-3", emoji: "🏈", category: "스포츠" },
+  { id: "sports-4", emoji: "⚾", category: "스포츠" },
+  { id: "sports-5", emoji: "🎾", category: "스포츠" },
+  { id: "sports-6", emoji: "🏐", category: "스포츠" },
+  { id: "sports-7", emoji: "🏓", category: "스포츠" },
+  { id: "sports-8", emoji: "🏸", category: "스포츠" },
+  { id: "sports-9", emoji: "🥊", category: "스포츠" },
+  { id: "sports-10", emoji: "🎯", category: "스포츠" },
+  
+  // 음악 & 예술
+  { id: "music-1", emoji: "🎵", category: "음악" },
+  { id: "music-2", emoji: "🎶", category: "음악" },
+  { id: "music-3", emoji: "🎤", category: "음악" },
+  { id: "music-4", emoji: "🎧", category: "음악" },
+  { id: "music-5", emoji: "🎸", category: "음악" },
+  { id: "music-6", emoji: "🎹", category: "음악" },
+  { id: "music-7", emoji: "🥁", category: "음악" },
+  { id: "music-8", emoji: "🎺", category: "음악" },
+  { id: "music-9", emoji: "🎻", category: "음악" },
+  { id: "music-10", emoji: "🎼", category: "음악" },
+  
+  // 기술 & 과학
+  { id: "tech-1", emoji: "💻", category: "기술" },
+  { id: "tech-2", emoji: "📱", category: "기술" },
+  { id: "tech-3", emoji: "⌚", category: "기술" },
+  { id: "tech-4", emoji: "📷", category: "기술" },
+  { id: "tech-5", emoji: "🎥", category: "기술" },
+  { id: "tech-6", emoji: "🔬", category: "기술" },
+  { id: "tech-7", emoji: "🔭", category: "기술" },
+  { id: "tech-8", emoji: "⚗️", category: "기술" },
+  { id: "tech-9", emoji: "🧪", category: "기술" },
+  { id: "tech-10", emoji: "🔧", category: "기술" },
+  
+  // 여행 & 장소
+  { id: "travel-1", emoji: "✈️", category: "여행" },
+  { id: "travel-2", emoji: "🚀", category: "여행" },
+  { id: "travel-3", emoji: "🚢", category: "여행" },
+  { id: "travel-4", emoji: "🚗", category: "여행" },
+  { id: "travel-5", emoji: "🚲", category: "여행" },
+  { id: "travel-6", emoji: "🏖️", category: "여행" },
+  { id: "travel-7", emoji: "🏔️", category: "여행" },
+  { id: "travel-8", emoji: "🌋", category: "여행" },
+  { id: "travel-9", emoji: "🗻", category: "여행" },
+  { id: "travel-10", emoji: "🏕️", category: "여행" },
+  
+  // 감정 & 표현
+  { id: "emotion-1", emoji: "😊", category: "감정" },
+  { id: "emotion-2", emoji: "😎", category: "감정" },
+  { id: "emotion-3", emoji: "🤩", category: "감정" },
+  { id: "emotion-4", emoji: "😍", category: "감정" },
+  { id: "emotion-5", emoji: "🥳", category: "감정" },
+  { id: "emotion-6", emoji: "😇", category: "감정" },
+  { id: "emotion-7", emoji: "🤗", category: "감정" },
+  { id: "emotion-8", emoji: "😌", category: "감정" },
+  { id: "emotion-9", emoji: "🤔", category: "감정" },
+  { id: "emotion-10", emoji: "😏", category: "감정" },
+];
 
 interface AccountMenuProps {
   user: {
@@ -27,6 +155,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
   const [isMissionsExpanded, setIsMissionsExpanded] = useState(true);
   const [userPoints, setUserPoints] = useState(points);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
+  const [profileImageUrl, setProfileImageUrl] = useState<string | undefined>(undefined);
   
   // 미션 데이터
   const [missions, setMissions] = useState([
@@ -46,17 +175,22 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
     setUserPoints(points);
   }, [points]);
 
-  // 프로필 데이터 로드 (티어, 레벨, DORI Score)
+  // 프로필 데이터 로드 (티어, 레벨, DORI EXP, 프로필 이미지)
   useEffect(() => {
     if (!mounted || !user?.email || typeof window === 'undefined') return;
 
     try {
       const profileKey = `dori_profile_${user.email}`;
       const savedProfile = localStorage.getItem(profileKey);
+      const savedImageUrl = localStorage.getItem(`dori_image_${user.email}`);
+      
       if (savedProfile) {
         const profile: UserProfile = JSON.parse(savedProfile);
         setUserProfile(profile);
         setUserPoints(profile.point || 0);
+        setProfileImageUrl(profile.profileImageUrl || savedImageUrl || undefined);
+      } else if (savedImageUrl) {
+        setProfileImageUrl(savedImageUrl);
       }
     } catch (e) {
       console.error('프로필 로드 오류:', e);
@@ -67,29 +201,66 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
       try {
         const profileKey = `dori_profile_${user.email}`;
         const savedProfile = localStorage.getItem(profileKey);
+        const savedImageUrl = localStorage.getItem(`dori_image_${user.email}`);
+        
         if (savedProfile) {
           const profile: UserProfile = JSON.parse(savedProfile);
           setUserProfile(profile);
           setUserPoints(profile.point || 0);
+          setProfileImageUrl(profile.profileImageUrl || savedImageUrl || undefined);
+        } else if (savedImageUrl) {
+          setProfileImageUrl(savedImageUrl);
         }
       } catch (e) {
         console.error('프로필 업데이트 오류:', e);
       }
     };
 
+    // 프로필 이미지 변경 이벤트 리스너
+    const handleProfileImageUpdate = (e: CustomEvent) => {
+      try {
+        const { imageUrl, email } = e.detail || {};
+        if (email === user.email && imageUrl !== profileImageUrl) {
+          setProfileImageUrl(imageUrl);
+        }
+      } catch (e) {
+        // 무시
+      }
+    };
+
+    // 프로필 이미지 변경 감지를 위한 주기적 확인
+    const checkProfileImage = () => {
+      try {
+        const savedImageUrl = localStorage.getItem(`dori_image_${user.email}`);
+        const profileKey = `dori_profile_${user.email}`;
+        const savedProfile = localStorage.getItem(profileKey);
+        
+        if (savedProfile) {
+          const profile: UserProfile = JSON.parse(savedProfile);
+          const currentImage = profile.profileImageUrl || savedImageUrl || undefined;
+          if (currentImage !== profileImageUrl) {
+            setProfileImageUrl(currentImage);
+          }
+        } else if (savedImageUrl && savedImageUrl !== profileImageUrl) {
+          setProfileImageUrl(savedImageUrl);
+        }
+      } catch (e) {
+        // 무시
+      }
+    };
+
     window.addEventListener('profileUpdated', handleProfileUpdate);
+    window.addEventListener('profileImageUpdated', handleProfileImageUpdate as EventListener);
+    const imageCheckInterval = setInterval(checkProfileImage, 500);
+    
     return () => {
       window.removeEventListener('profileUpdated', handleProfileUpdate);
+      window.removeEventListener('profileImageUpdated', handleProfileImageUpdate as EventListener);
+      clearInterval(imageCheckInterval);
     };
   }, [mounted, user?.email]);
 
-  // 로그인 시 출석체크 미션 처리
-  useEffect(() => {
-    if (!mounted || !user?.email || typeof window === 'undefined') return;
-    
-    const { handleCheckinMission } = require('@/lib/missionProgress');
-    handleCheckinMission().catch(err => console.error('출석체크 미션 오류:', err));
-  }, [mounted, user?.email]);
+  // 출석체크 미션은 수동으로 처리하도록 변경 (자동 호출 제거)
 
   // 미션 진행도 로드 및 업데이트
   useEffect(() => {
@@ -222,15 +393,16 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
   
   // 프로필 정보 계산
   const currentTier = userProfile?.tier || 1;
-  const currentLevel = userProfile ? calculateLevel(userProfile.doriScore * 10) : level;
-  const doriScore = userProfile?.doriScore || 0;
+  const currentLevel = userProfile ? calculateLevel(userProfile.doriExp * 10) : level;
+  const doriExp = userProfile?.doriExp || 0;
   const tierInfo = TIER_INFO[currentTier as keyof typeof TIER_INFO];
-  const nextTierScore = userProfile ? getNextTierScore(currentTier, doriScore) : 0;
+  const nextTierExp = userProfile ? getNextTierExp(currentTier, doriExp) : 0;
   
   // 레벨 진행도 계산
-  const currentLevelExp = currentLevel * currentLevel * 100;
+  const currentExp = doriExp * 10;
+  const currentLevelStartExp = getCurrentLevelStartExp(currentLevel);
   const nextLevelExp = getNextLevelExp(currentLevel);
-  const levelProgress = currentLevel >= 100 ? 100 : ((doriScore * 10 - currentLevelExp) / (nextLevelExp - currentLevelExp)) * 100;
+  const levelProgress = currentLevel >= 100 ? 100 : Math.max(0, Math.min(100, ((currentExp - currentLevelStartExp) / (nextLevelExp - currentLevelStartExp)) * 100));
 
   return (
     <div className="relative">
@@ -246,12 +418,25 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
         aria-expanded={isOpen}
       >
         <div
-          className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold text-white flex-shrink-0"
+          className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold text-white flex-shrink-0 overflow-hidden"
           style={{
-            background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+            background: profileImageUrl?.startsWith("avatar:")
+              ? (isDark
+                  ? "linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(168, 85, 247, 0.2))"
+                  : "linear-gradient(135deg, #eef6ff, #f3e8ff)")
+              : profileImageUrl
+              ? `url(${profileImageUrl}) center/cover`
+              : 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+            border: `2px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'}`,
           }}
         >
-          {displayName?.[0]?.toUpperCase() || "U"}
+          {profileImageUrl?.startsWith("avatar:") ? (
+            <span style={{ fontSize: '1rem' }}>
+              {AVATAR_OPTIONS.find(a => a.id === profileImageUrl.replace("avatar:", ""))?.emoji || "👤"}
+            </span>
+          ) : profileImageUrl ? null : (
+            displayName?.[0]?.toUpperCase() || "U"
+          )}
         </div>
         <span
           className="text-sm font-medium hidden sm:block"
@@ -304,13 +489,26 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
             <div className="mb-4">
               <div className="flex items-start gap-3 mb-3">
                 <div
-                  className="w-12 h-12 rounded-full flex items-center justify-center text-base font-bold text-white flex-shrink-0"
+                  className="w-12 h-12 rounded-full flex items-center justify-center text-base font-bold text-white flex-shrink-0 overflow-hidden"
                   style={{
-                    background: 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+                    background: profileImageUrl?.startsWith("avatar:")
+                      ? (isDark
+                          ? "linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(168, 85, 247, 0.2))"
+                          : "linear-gradient(135deg, #eef6ff, #f3e8ff)")
+                      : profileImageUrl
+                      ? `url(${profileImageUrl}) center/cover`
+                      : 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
                     boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
+                    border: `2px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'}`,
                   }}
                 >
-                  {displayName?.[0]?.toUpperCase() || "사"}
+                  {profileImageUrl?.startsWith("avatar:") ? (
+                    <span style={{ fontSize: '1.5rem' }}>
+                      {AVATAR_OPTIONS.find(a => a.id === profileImageUrl.replace("avatar:", ""))?.emoji || "👤"}
+                    </span>
+                  ) : profileImageUrl ? null : (
+                    displayName?.[0]?.toUpperCase() || "사"
+                  )}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div
@@ -364,7 +562,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                     </div>
                   </div>
                   
-                  {/* DORI Score 표시 */}
+                  {/* DORI EXP 표시 */}
                   <div className="mt-2 mb-2">
                     <div className="flex items-center justify-between">
                       <span
@@ -373,7 +571,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                           color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
                         }}
                       >
-                        DORI Score
+                        DORI EXP
                       </span>
                       <span
                         className="text-xs font-bold"
@@ -386,13 +584,13 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                           backgroundClip: 'text',
                         }}
                       >
-                        {doriScore.toLocaleString()}
+                        {doriExp.toLocaleString()}
                       </span>
                     </div>
                   </div>
 
                   {/* 티어 진행 바 */}
-                  {currentTier < 10 && nextTierScore > 0 && (
+                  {currentTier < 10 && nextTierExp > 0 && (
                     <div className="mt-2 mb-2.5">
                       <div className="flex items-center justify-between mb-1">
                         <span
@@ -409,7 +607,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                             color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
                           }}
                         >
-                          {nextTierScore.toLocaleString()}점
+                          {nextTierExp.toLocaleString()}EXP
                         </span>
                       </div>
                       <div
@@ -426,7 +624,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                               const nextTier = (currentTier + 1) as keyof typeof TIER_THRESHOLDS;
                               const nextTierThreshold = TIER_THRESHOLDS[nextTier];
                               const currentTierThreshold = TIER_THRESHOLDS[currentTier as keyof typeof TIER_THRESHOLDS];
-                              const progress = ((doriScore - currentTierThreshold) / (nextTierThreshold - currentTierThreshold)) * 100;
+                              const progress = ((doriExp - currentTierThreshold) / (nextTierThreshold - currentTierThreshold)) * 100;
                               return Math.min(Math.max(progress, 0), 100);
                             })()}%`,
                             background: `linear-gradient(90deg, ${tierInfo.color}, ${TIER_INFO[Math.min(currentTier + 1, 5) as keyof typeof TIER_INFO].color})`,
@@ -602,8 +800,8 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                                 >
                                   <Gift className="w-3 h-3" /> 
                                   {mission.progress 
-                                    ? `하나당 ${mission.point}스코어 (총 ${mission.point * mission.progress.total}스코어)`
-                                    : `+${mission.point} 스코어`
+                                    ? `하나당 ${mission.point}EXP (총 ${mission.point * mission.progress.total}EXP)`
+                                    : `+${mission.point} EXP`
                                   }
                                 </span>
                               </div>
@@ -618,24 +816,46 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                                     : 'rgba(37, 99, 235, 0.1)',
                                   color: isDark ? '#93c5fd' : '#2563eb',
                                 }}
-                                onClick={() => {
-                                  // 중간 3개 미션 (글 작성, 댓글 작성, 좋아요)은 커뮤니티 페이지로 이동
-                                  if (mission.id === 2 || mission.id === 3 || mission.id === 4) {
+                                onClick={async () => {
+                                  if (mission.id === 1) {
+                                    // 출석체크 미션 처리
+                                    try {
+                                      const { handleCheckinMission } = require('@/lib/missionProgress');
+                                      await handleCheckinMission(user?.email || undefined);
+                                      alert('출석체크 완료! +10 EXP를 획득했습니다.');
+                                      // 미션 상태 업데이트를 위해 이벤트 발생
+                                      window.dispatchEvent(new CustomEvent('missionUpdate'));
+                                    } catch (err) {
+                                      console.error('출석체크 미션 오류:', err);
+                                      alert('출석체크 처리 중 오류가 발생했습니다.');
+                                    }
+                                  } else if (mission.id === 2 || mission.id === 3 || mission.id === 4) {
+                                    // 중간 3개 미션 (글 작성, 댓글 작성, 좋아요)은 커뮤니티 페이지로 이동
                                     handleNavigate('/community');
                                   } else if (mission.id === 5) {
                                     // 사이트 공유 미션 처리
-                                    if (navigator.share) {
-                                      navigator.share({
-                                        title: 'Dori AI',
-                                        text: 'Dori AI를 확인해보세요!',
-                                        url: window.location.origin,
-                                      }).catch(() => {
-                                        // 공유 실패 시 무시
-                                      });
-                                    } else {
-                                      // 공유 API가 없는 경우 클립보드에 복사
-                                      navigator.clipboard.writeText(window.location.origin);
-                                      alert('링크가 클립보드에 복사되었습니다!');
+                                    try {
+                                      const { handleShareMission } = require('@/lib/missionProgress');
+                                      if (navigator.share) {
+                                        await navigator.share({
+                                          title: 'Dori AI',
+                                          text: 'Dori AI를 확인해보세요!',
+                                          url: window.location.origin,
+                                        });
+                                        await handleShareMission();
+                                        alert('공유 완료! +10 EXP를 획득했습니다.');
+                                        window.dispatchEvent(new CustomEvent('missionUpdate'));
+                                      } else {
+                                        // 공유 API가 없는 경우 클립보드에 복사
+                                        navigator.clipboard.writeText(window.location.origin);
+                                        await handleShareMission();
+                                        alert('링크가 클립보드에 복사되었습니다! +10 EXP를 획득했습니다.');
+                                        window.dispatchEvent(new CustomEvent('missionUpdate'));
+                                      }
+                                    } catch (err) {
+                                      if (err.name !== 'AbortError') {
+                                        console.error('공유 미션 오류:', err);
+                                      }
                                     }
                                   }
                                 }}

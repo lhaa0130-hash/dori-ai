@@ -1,7 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useTheme } from "next-themes";
+import { useSearchParams } from "next/navigation";
 import InsightList from "@/components/insight/InsightList";
 import { TEXTS } from "@/constants/texts";
 import { InsightItem } from "@/types/content";
@@ -24,15 +25,34 @@ const FALLBACK_POSTS: InsightItem[] = [
 export default function InsightClient({ initialPosts }: { initialPosts: InsightItem[] }) {
   const t = TEXTS.insight;
   const { theme } = useTheme();
+  const searchParams = useSearchParams();
   const [mounted, setMounted] = useState(false);
-  const [activeCategory, setActiveCategory] = useState("All");
+  
+  // URL 쿼리 파라미터에서 카테고리 읽기
+  const categoryFromUrl = searchParams?.get('category') || "All";
+  
+  const [activeCategory, setActiveCategory] = useState(categoryFromUrl);
   const [filters, setFilters] = useState<{ category: string; tag: string | null; sort: string }>({
-    category: "All",
+    category: categoryFromUrl,
     tag: null,
     sort: "newest",
   });
 
-  useEffect(() => setMounted(true), []);
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+
+  // URL 파라미터가 변경될 때만 필터 업데이트 (초기 로드 시에만)
+  useEffect(() => {
+    if (!mounted) return;
+    const category = searchParams?.get('category');
+    if (category && category !== filters.category) {
+      setActiveCategory(category);
+      setFilters(prev => ({ ...prev, category }));
+    }
+  }, [searchParams]); // filters.category 의존성 제거
+
+  // 필터 변경 시 activeCategory 동기화 (제거 - handleCategoryClick에서 직접 관리)
 
   // 작성자 ID 생성 및 관리 유틸리티
   const getAuthorId = (): string => {
@@ -132,9 +152,40 @@ export default function InsightClient({ initialPosts }: { initialPosts: InsightI
   ];
 
   const handleCategoryClick = (category: string) => {
-    setActiveCategory(category);
-    setFilters({ ...filters, category });
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    console.log('=== 사이드바 클릭 ===', category);
+    // 카테고리 필터링 업데이트
+    const newCategory = category === "All" ? "All" : category;
+    console.log('새 카테고리:', newCategory);
+    
+    // 상태 업데이트를 동시에 수행 - 강제로 새 객체 생성
+    setActiveCategory(newCategory);
+    setFilters({
+      category: newCategory,
+      tag: null,
+      sort: "newest",
+    });
+    
+    console.log('상태 업데이트 완료 - 필터:', newCategory);
+    
+    // 강제 리렌더링을 위한 약간의 지연
+    setTimeout(() => {
+      console.log('필터링 후 필터 상태 확인');
+      // 인사이트 목록 섹션으로 스크롤
+      const listSection = document.getElementById('list');
+      if (listSection) {
+        const headerOffset = 80;
+        const elementPosition = listSection.getBoundingClientRect().top;
+        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
+        
+        window.scrollTo({
+          top: offsetPosition,
+          behavior: 'smooth'
+        });
+      } else {
+        // 섹션이 없으면 상단으로 스크롤
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }, 50);
   };
 
   return (
@@ -147,33 +198,46 @@ export default function InsightClient({ initialPosts }: { initialPosts: InsightI
     >
       {/* 좌측 사이드바 네비게이션 */}
       <aside 
-        className="fixed left-0 z-50 hidden lg:block"
+        className="fixed left-0 hidden lg:block"
         style={{
           top: '50%',
           transform: 'translateY(-50%)',
+          zIndex: 9999,
+          pointerEvents: 'auto',
         }}
       >
-        <nav className="ml-8">
+        <nav className="ml-8" style={{ pointerEvents: 'auto' }}>
           <div 
             className="flex flex-col gap-3 p-4 rounded-2xl backdrop-blur-xl transition-all duration-500"
             style={{
               backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
               border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
+              pointerEvents: 'auto',
             }}
           >
             {categories.map((item) => (
-              <a
+              <button
                 key={item.id}
-                href="#"
-                className="group relative flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 cursor-pointer"
+                type="button"
+                className="group relative flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 cursor-pointer w-full text-left"
                 style={{
                   backgroundColor: activeCategory === item.id 
                     ? (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)')
                     : 'transparent',
+                  border: 'none',
+                  outline: 'none',
+                  pointerEvents: 'auto',
+                  cursor: 'pointer',
                 }}
                 onClick={(e) => {
                   e.preventDefault();
+                  e.stopPropagation();
+                  console.log('사이드바 클릭:', item.id);
                   handleCategoryClick(item.id);
+                }}
+                onMouseDown={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
                 }}
               >
                 <div 
@@ -197,7 +261,7 @@ export default function InsightClient({ initialPosts }: { initialPosts: InsightI
                 >
                   {item.label}
                 </span>
-              </a>
+              </button>
             ))}
           </div>
         </nav>

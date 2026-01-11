@@ -74,6 +74,73 @@ export default function AiToolsClient() {
     }
   }, [mounted, session]);
 
+  // 스크롤 감지로 활성 카테고리 업데이트
+  useEffect(() => {
+    if (!mounted) return;
+
+    const observers: IntersectionObserver[] = [];
+
+    DISPLAY_CATEGORIES.forEach((cat) => {
+      const refKey = `category-${cat}`;
+      const element = sectionRefs.current[refKey];
+
+      if (element) {
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+                setActiveCategory(cat);
+              }
+            });
+          },
+          {
+            threshold: [0, 0.25, 0.5, 0.75, 1],
+            rootMargin: '-20% 0px -20% 0px',
+          }
+        );
+
+        observer.observe(element);
+        observers.push(observer);
+      }
+    });
+
+    // "전체" 카테고리 감지 (상단 히어로 섹션)
+    const heroSection = document.querySelector('section:first-of-type');
+    if (heroSection) {
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+              // 다른 카테고리 섹션이 보이지 않으면 "전체" 활성화
+              const anyCategoryVisible = DISPLAY_CATEGORIES.some((cat) => {
+                const refKey = `category-${cat}`;
+                const element = sectionRefs.current[refKey];
+                if (element) {
+                  const rect = element.getBoundingClientRect();
+                  return rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2;
+                }
+                return false;
+              });
+              if (!anyCategoryVisible) {
+                setActiveCategory(null);
+              }
+            }
+          });
+        },
+        {
+          threshold: [0, 0.25, 0.5, 0.75, 1],
+          rootMargin: '-20% 0px -20% 0px',
+        }
+      );
+      observer.observe(heroSection);
+      observers.push(observer);
+    }
+
+    return () => {
+      observers.forEach((observer) => observer.disconnect());
+    };
+  }, [mounted]);
+
   const isDark = mounted && theme === 'dark';
 
   const handleCategoryClick = (category: string) => {

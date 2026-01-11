@@ -5,6 +5,7 @@ import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
 import AppLayoutWrapper from "@/components/layout/AppLayoutWrapper";
 import { useMissionAutoComplete } from "@/hooks/useMissionAutoComplete";
+import { useAutoLogout } from "@/hooks/useAutoLogout";
 import OpenPopup from "@/components/layout/OpenPopup";
 
 interface LayoutClientProps {
@@ -20,6 +21,9 @@ export default function LayoutClient({ children }: LayoutClientProps) {
   
   // 전역 미션 자동 완료 (출석 체크, 페이지 방문 등)
   useMissionAutoComplete();
+  
+  // 10분간 비활성 시 자동 로그아웃
+  useAutoLogout();
 
   // 앱 환경: Header/Footer 숨기고 AppLayoutWrapper 사용
   if (isAppEnv) {

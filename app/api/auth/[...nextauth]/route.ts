@@ -86,7 +86,7 @@ const handler = NextAuth({
     signIn: '/login',
     error: '/login',
   },
-  session: { strategy: "jwt", maxAge: 30 * 24 * 60 * 60 },
+  session: { strategy: "jwt", maxAge: 10 * 60 }, // 10분 (600초)
   secret: process.env.NEXTAUTH_SECRET || "fallback-secret-key-change-in-production",
   debug: process.env.NODE_ENV === "development",
   trustHost: true,
@@ -109,11 +109,14 @@ const handler = NextAuth({
     },
     async jwt({ token, user, account }) {
       if (user) {
-        token.name = user.name;
         token.email = user.email;
+        // 이름은 클라이언트에서 localStorage를 통해 관리하므로
+        // 여기서는 기본값만 설정 (실제로는 클라이언트에서 덮어씀)
+        token.name = user.name;
       }
       if (account?.provider === "google" && user?.email) {
         token.email = user.email;
+        // Google 로그인 시에도 클라이언트에서 localStorage 확인 후 설정
         token.name = user.name;
       }
       return token;

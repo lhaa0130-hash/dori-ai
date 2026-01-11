@@ -96,7 +96,14 @@ export default function EditProfilePage() {
     localStorage.setItem(`dori_status_${user.email}`, statusMessage.trim());
     if (profileImageUrl) {
       localStorage.setItem(`dori_image_${user.email}`, profileImageUrl);
+      // 프로필 이미지 변경 이벤트 발생 (헤더의 AccountMenu가 즉시 업데이트되도록)
+      window.dispatchEvent(new CustomEvent('profileImageUpdated', { 
+        detail: { imageUrl: profileImageUrl, email: user.email } 
+      }));
     }
+    
+    // 프로필 업데이트 이벤트 발생
+    window.dispatchEvent(new CustomEvent('profileUpdated'));
 
     // 모든 게시글과 댓글의 작성자 이름 업데이트
     const savedPosts = JSON.parse(localStorage.getItem("dori_posts") || "[]");
@@ -166,6 +173,8 @@ export default function EditProfilePage() {
       fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
       minHeight: '100vh',
       paddingTop: '70px',
+      overflowY: 'auto',
+      position: 'relative',
     }}>
       <Header />
 
@@ -180,7 +189,7 @@ export default function EditProfilePage() {
       <section className="relative z-10" style={{
         maxWidth: '800px',
         margin: '0 auto',
-        padding: '4rem 1.5rem',
+        padding: '4rem 1.5rem 6rem 1.5rem',
         minHeight: 'calc(100vh - 70px)',
       }}>
         <div style={{
@@ -213,7 +222,15 @@ export default function EditProfilePage() {
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <ProfileImageSelector
                 currentImageUrl={profileImageUrl}
-                onImageChange={setProfileImageUrl}
+                onImageChange={(imageUrl) => {
+                  setProfileImageUrl(imageUrl);
+                  // 프로필 이미지 변경 이벤트 발생 (헤더의 AccountMenu가 즉시 업데이트되도록)
+                  if (user?.email) {
+                    window.dispatchEvent(new CustomEvent('profileImageUpdated', { 
+                      detail: { imageUrl, email: user.email } 
+                    }));
+                  }
+                }}
               />
             </div>
           </div>
@@ -383,21 +400,33 @@ export default function EditProfilePage() {
                   color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
                   marginBottom: '0.25rem',
                 }}>
-                  DORI Score
+                  DORI EXP
                 </div>
                 <div style={{
                   fontSize: '0.9375rem',
                   color: isDark ? '#ffffff' : '#1d1d1f',
                   fontWeight: '500',
                 }}>
-                  {profile.doriScore.toLocaleString()}점
+                  {profile.doriExp.toLocaleString()}EXP
                 </div>
               </div>
             </div>
           </div>
 
           {/* 버튼 */}
-          <div style={{ display: 'flex', gap: '1rem', justifyContent: 'flex-end' }}>
+          <div style={{ 
+            display: 'flex', 
+            gap: '1rem', 
+            justifyContent: 'flex-end',
+            marginTop: '2rem',
+            paddingTop: '2rem',
+            borderTop: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+            position: 'sticky',
+            bottom: '1rem',
+            background: isDark ? 'rgba(0, 0, 0, 0.8)' : 'rgba(255, 255, 255, 0.95)',
+            backdropFilter: 'blur(10px)',
+            zIndex: 10,
+          }}>
             <button
               onClick={() => router.back()}
               disabled={isSaving}
@@ -412,6 +441,17 @@ export default function EditProfilePage() {
                 fontWeight: '600',
                 fontFamily: 'inherit',
                 opacity: isSaving ? 0.5 : 1,
+                transition: 'all 0.2s',
+              }}
+              onMouseEnter={(e) => {
+                if (!isSaving) {
+                  e.currentTarget.style.opacity = '0.8';
+                  e.currentTarget.style.transform = 'translateY(-1px)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = isSaving ? '0.5' : '1';
+                e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
               취소
@@ -432,6 +472,20 @@ export default function EditProfilePage() {
                 fontWeight: '600',
                 fontFamily: 'inherit',
                 opacity: isSaving ? 0.7 : 1,
+                transition: 'all 0.2s',
+                boxShadow: isSaving ? 'none' : '0 4px 12px rgba(37, 99, 235, 0.3)',
+              }}
+              onMouseEnter={(e) => {
+                if (!isSaving) {
+                  e.currentTarget.style.opacity = '1';
+                  e.currentTarget.style.transform = 'translateY(-2px)';
+                  e.currentTarget.style.boxShadow = '0 6px 16px rgba(37, 99, 235, 0.4)';
+                }
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.opacity = isSaving ? '0.7' : '1';
+                e.currentTarget.style.transform = 'translateY(0)';
+                e.currentTarget.style.boxShadow = isSaving ? 'none' : '0 4px 12px rgba(37, 99, 235, 0.3)';
               }}
             >
               {isSaving ? '저장 중...' : '저장하기'}

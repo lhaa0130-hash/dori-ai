@@ -48,7 +48,7 @@ export default function SignupPage() {
         ageGroup: ageGroup,
         tier: 1,
         level: 1,
-        doriScore: 0,
+        doriExp: 0,
         point: 0,
         createdAt: new Date().toISOString(),
       };

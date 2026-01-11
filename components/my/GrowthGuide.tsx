@@ -1,7 +1,7 @@
 "use client";
 
 import { useTheme } from "next-themes";
-import { UserProfile, TIER_INFO, getNextTierScore, ACTIVITY_SCORES } from "@/lib/userProfile";
+import { UserProfile, TIER_INFO, getNextTierExp, ACTIVITY_SCORES } from "@/lib/userProfile";
 
 interface GrowthGuideProps {
   profile: UserProfile;
@@ -18,7 +18,7 @@ export default function GrowthGuide({ profile, activityStats }: GrowthGuideProps
   const isDark = theme === "dark";
   const currentTier = profile.tier;
   const tierInfo = TIER_INFO[currentTier];
-  const nextTierScore = getNextTierScore(currentTier, profile.doriScore);
+  const nextTierExp = getNextTierExp(currentTier, profile.doriExp);
 
   // 다음 등급 달성을 위한 추천 활동 계산
   const getRecommendations = () => {
@@ -29,11 +29,11 @@ export default function GrowthGuide({ profile, activityStats }: GrowthGuideProps
     }
 
     const recommendations = [];
-    const neededScore = nextTierScore;
+    const neededExp = nextTierExp;
 
-    // 가이드 작성 추천 (높은 점수)
-    if (neededScore >= ACTIVITY_SCORES.guide) {
-      const guidesNeeded = Math.ceil(neededScore / ACTIVITY_SCORES.guide);
+    // 가이드 작성 추천 (높은 경험치)
+    if (neededExp >= ACTIVITY_SCORES.guide) {
+      const guidesNeeded = Math.ceil(neededExp / ACTIVITY_SCORES.guide);
       recommendations.push({
         action: `가이드 글 ${guidesNeeded}개 작성`,
         score: ACTIVITY_SCORES.guide * guidesNeeded,
@@ -42,8 +42,8 @@ export default function GrowthGuide({ profile, activityStats }: GrowthGuideProps
     }
 
     // 좋은 답변 추천 (댓글)
-    if (neededScore >= ACTIVITY_SCORES.comment) {
-      const commentsNeeded = Math.ceil(neededScore / ACTIVITY_SCORES.comment);
+    if (neededExp >= ACTIVITY_SCORES.comment) {
+      const commentsNeeded = Math.ceil(neededExp / ACTIVITY_SCORES.comment);
       recommendations.push({
         action: `좋은 답변 ${commentsNeeded}개 작성`,
         score: ACTIVITY_SCORES.comment * commentsNeeded,
@@ -52,8 +52,8 @@ export default function GrowthGuide({ profile, activityStats }: GrowthGuideProps
     }
 
     // 글 작성 추천
-    if (neededScore >= ACTIVITY_SCORES.post) {
-      const postsNeeded = Math.ceil(neededScore / ACTIVITY_SCORES.post);
+    if (neededExp >= ACTIVITY_SCORES.post) {
+      const postsNeeded = Math.ceil(neededExp / ACTIVITY_SCORES.post);
       recommendations.push({
         action: `글 ${postsNeeded}개 작성`,
         score: ACTIVITY_SCORES.post * postsNeeded,
@@ -134,7 +134,7 @@ export default function GrowthGuide({ profile, activityStats }: GrowthGuideProps
                 color: isDark ? "rgba(255, 255, 255, 0.6)" : "rgba(0, 0, 0, 0.5)",
               }}
             >
-              다음 등급까지: <strong>{nextTierScore.toLocaleString()}점</strong> 필요
+              다음 등급까지: <strong>{nextTierExp.toLocaleString()}EXP</strong> 필요
             </div>
           </div>
 
@@ -214,7 +214,7 @@ export default function GrowthGuide({ profile, activityStats }: GrowthGuideProps
                       color: isDark ? "rgba(255, 255, 255, 0.6)" : "rgba(0, 0, 0, 0.6)",
                     }}
                   >
-                    <span style={{ color: tierInfo.color, fontWeight: "700" }}>10점</span> 획득
+                    <span style={{ color: tierInfo.color, fontWeight: "700" }}>10EXP</span> 획득
                   </div>
                 </div>
               </div>
@@ -263,7 +263,7 @@ export default function GrowthGuide({ profile, activityStats }: GrowthGuideProps
                       color: isDark ? "rgba(255, 255, 255, 0.6)" : "rgba(0, 0, 0, 0.6)",
                     }}
                   >
-                    <span style={{ color: tierInfo.color, fontWeight: "700" }}>3점</span> 획득
+                    <span style={{ color: tierInfo.color, fontWeight: "700" }}>3EXP</span> 획득
                   </div>
                 </div>
               </div>

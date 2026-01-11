@@ -108,10 +108,15 @@ export default function StudioPage() {
     if (!user) return alert("로그인이 필요합니다.");
     if (!reviewText.trim()) return alert("리뷰 내용을 입력해주세요.");
     
+    // localStorage에서 설정된 이름 가져오기 (일관된 이름 사용)
+    const savedName = user?.email 
+      ? localStorage.getItem(`dori_user_name_${user.email}`) || user.name || "익명"
+      : "익명";
+    
     const colors = ["#FFADAD", "#FFD6A5", "#FDFFB6", "#CAFFBF", "#9BF6FF", "#A0C4FF", "#BDB2FF"];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     const newComment: Comment = {
-      id: Date.now(), user: user.name || "익명", text: reviewText,
+      id: Date.now(), user: savedName, text: reviewText,
       date: new Date().toLocaleDateString(), rating: reviewRating, avatarColor: randomColor
     };
 

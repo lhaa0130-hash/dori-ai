@@ -14,6 +14,39 @@ export default function CommunityClient() {
 
   useEffect(() => {
     setMounted(true);
+  }, []);
+
+  // 스크롤 감지로 활성 카테고리 업데이트
+  useEffect(() => {
+    if (!mounted) return;
+
+    const listSection = document.getElementById('list');
+    if (!listSection) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting && entry.intersectionRatio > 0.3) {
+            // 리스트 섹션이 보이면 현재 필터된 카테고리를 활성화
+            // (사이드바 클릭으로 변경된 경우를 고려하여 activeCategory는 유지)
+          }
+        });
+      },
+      {
+        threshold: [0, 0.3, 0.5, 0.7, 1],
+        rootMargin: '-20% 0px -20% 0px',
+      }
+    );
+
+    observer.observe(listSection);
+
+    return () => {
+      observer.disconnect();
+    };
+  }, [mounted]);
+
+  useEffect(() => {
+    if (!mounted) return;
     
     // localStorage에서 글 불러오기
     if (typeof window !== 'undefined') {
@@ -465,7 +498,7 @@ export default function CommunityClient() {
         
         {/* 글 목록 또는 빈 상태 메시지 */}
         {filteredPosts.length > 0 ? (
-          <div className="space-y-3 sm:space-y-4">
+          <div className="space-y-3 sm:space-y-4" data-community-posts>
             {filteredPosts.map((post) => {
               // HTML 태그 제거하고 텍스트만 추출
               const textContent = post.content.replace(/<[^>]*>/g, '').trim();

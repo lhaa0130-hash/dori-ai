@@ -132,10 +132,16 @@ export default function HomePageClient() {
     { id: 'faq', label: 'FAQ', href: '#faq' },
   ];
 
-  // 스크롤 감지로 활성 섹션 업데이트
+  // 스크롤 감지로 활성 섹션 업데이트 (스크롤 스냅 대응)
   useEffect(() => {
+    if (!mounted) return;
+
     const handleScroll = () => {
-      const scrollPosition = window.scrollY + 200; // 헤더 높이 고려
+      const scrollPosition = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const threshold = viewportHeight * 0.5; // 화면 중앙 기준
+
+      let currentActive = 'home';
 
       for (const item of navItems) {
         if (item.href.startsWith('#')) {
@@ -143,21 +149,59 @@ export default function HomePageClient() {
           const element = sectionRefs.current[sectionId];
           
           if (element) {
-            const { offsetTop, offsetHeight } = element;
-            if (scrollPosition >= offsetTop && scrollPosition < offsetTop + offsetHeight) {
-              setActiveSection(item.id);
-              break;
+            const rect = element.getBoundingClientRect();
+            const elementTop = rect.top + scrollPosition;
+            const elementBottom = elementTop + rect.height;
+            
+            // 현재 스크롤 위치가 섹션 범위 내에 있고, 화면 중앙에 가까운 섹션 선택
+            if (scrollPosition + threshold >= elementTop && scrollPosition + threshold < elementBottom) {
+              currentActive = item.id;
             }
           }
         }
       }
+
+      setActiveSection(currentActive);
     };
 
-    window.addEventListener('scroll', handleScroll);
+    // Intersection Observer를 사용하여 더 정확한 감지
+    const observers: IntersectionObserver[] = [];
+    
+    navItems.forEach((item) => {
+      if (item.href.startsWith('#')) {
+        const sectionId = item.href.substring(1);
+        const element = sectionRefs.current[sectionId];
+        
+        if (element) {
+          const observer = new IntersectionObserver(
+            (entries) => {
+              entries.forEach((entry) => {
+                if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
+                  setActiveSection(item.id);
+                }
+              });
+            },
+            {
+              threshold: [0, 0.25, 0.5, 0.75, 1],
+              rootMargin: '-20% 0px -20% 0px', // 화면 중앙 60% 영역
+            }
+          );
+          
+          observer.observe(element);
+          observers.push(observer);
+        }
+      }
+    });
+
+    // 폴백으로 스크롤 이벤트도 추가
+    window.addEventListener('scroll', handleScroll, { passive: true });
     handleScroll(); // 초기 실행
     
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [mounted]);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      observers.forEach((observer) => observer.disconnect());
+    };
+  }, [mounted, navItems]);
 
   return (
     <main 
@@ -167,6 +211,7 @@ export default function HomePageClient() {
         overflowY: 'auto',
         scrollSnapType: 'y mandatory',
         scrollBehavior: 'smooth',
+        scrollbarWidth: 'thin',
       }}
     >
       <div className="scroll-spacer" />
@@ -204,19 +249,20 @@ export default function HomePageClient() {
                       const sectionId = item.href.substring(1);
                       const element = sectionRefs.current[sectionId];
                       if (element) {
-                        const headerOffset = 80;
-                        const elementPosition = element.getBoundingClientRect().top;
-                        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-                        window.scrollTo({
-                          top: offsetPosition,
-                          behavior: 'smooth'
+                        // 스크롤 스냅을 고려한 정확한 스크롤 이동
+                        element.scrollIntoView({
+                          behavior: 'smooth',
+                          block: 'start',
+                          inline: 'nearest'
                         });
+                        
+                        // 즉시 활성 섹션 업데이트
+                        setActiveSection(item.id);
                       }
                     } else {
                       // 외부 링크는 그대로 이동
                       return;
                     }
-                    setActiveSection(item.id);
                 }}
               >
                 <div 
@@ -616,7 +662,7 @@ export default function HomePageClient() {
               id: "trend",
               title: "트렌드",
               description: "최신 AI 기술 동향과 업계 트렌드를 확인하세요",
-              href: "/insight/trend",
+              href: "/insight?category=트렌드",
               icon: <TrendingUp className="w-5 h-5" />,
               color: "#ef4444",
               glowColor: "rgba(239, 68, 68, 0.3)",
@@ -626,7 +672,7 @@ export default function HomePageClient() {
               id: "guide",
               title: "가이드",
               description: "AI 도구를 실무에 바로 적용하는 실용적인 가이드",
-              href: "/insight/guide",
+              href: "/insight?category=가이드",
               icon: <BookOpen className="w-5 h-5" />,
               color: "#3b82f6",
               glowColor: "rgba(59, 130, 246, 0.3)",
@@ -636,7 +682,7 @@ export default function HomePageClient() {
               id: "curation",
               title: "큐레이션",
               description: "엄선된 AI 도구와 리소스를 한눈에 확인하세요",
-              href: "/insight",
+              href: "/insight?category=큐레이션",
               icon: <Target className="w-5 h-5" />,
               color: "#a855f7",
               glowColor: "rgba(168, 85, 247, 0.3)",
@@ -646,7 +692,7 @@ export default function HomePageClient() {
               id: "analysis",
               title: "분석",
               description: "AI 시장과 기술에 대한 깊이 있는 분석 자료",
-              href: "/insight",
+              href: "/insight?category=분석",
               icon: <BarChart3 className="w-5 h-5" />,
               color: "#06b6d4",
               glowColor: "rgba(6, 182, 212, 0.3)",
@@ -656,7 +702,7 @@ export default function HomePageClient() {
               id: "report",
               title: "리포트",
               description: "AI 업계 전문 리포트와 통계 자료를 확인하세요",
-              href: "/insight",
+              href: "/insight?category=리포트",
               icon: <FileText className="w-5 h-5" />,
               color: "#10b981",
               glowColor: "rgba(16, 185, 129, 0.3)",
