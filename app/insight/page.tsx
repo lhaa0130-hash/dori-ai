@@ -1,8 +1,12 @@
+import { Suspense } from 'react';
 import { getSortedPostsData } from '@/lib/posts';
 import { getAllGuides } from '@/lib/guides';
 import { getAllTrends } from '@/lib/trends';
 import InsightClient from './page.client';
 import { InsightItem } from '@/types/content';
+
+// Force dynamic rendering to avoid static generation issues with useSearchParams
+export const dynamic = 'force-dynamic';
 
 export default async function InsightPage() {
   try {
@@ -62,9 +66,17 @@ export default async function InsightPage() {
       return dateB - dateA; // 최신순 (내림차순)
     });
     
-    return <InsightClient initialPosts={combinedPosts || []} />;
+    return (
+      <Suspense fallback={<div>Loading...</div>}>
+        <InsightClient initialPosts={combinedPosts || []} />
+      </Suspense>
+    );
   } catch (error) {
     console.error('Error loading insight posts:', error);
-    return <InsightClient initialPosts={[]} />;
+    return (
+      <Suspense fallback={<div>Loading...</div>}>
+        <InsightClient initialPosts={[]} />
+      </Suspense>
+    );
   }
 }
