@@ -51,8 +51,8 @@ export async function handleCheckinMission(): Promise<void> {
   // 출석체크 완료 표시
   localStorage.setItem(key, 'true');
   
-  // 포인트 적립 (10포인트)
-  await addPoints(10, '출석체크');
+  // DORI Score 증가 (미션 완료는 스코어로)
+  await addDoriScore(10, '출석체크 미션 완료');
 }
 
 /**
@@ -64,14 +64,16 @@ export async function handlePostMission(): Promise<void> {
   const progress = incrementMissionProgress('post');
   const totalNeeded = 3;
   
-  // 글 작성 시마다 포인트 적립 (각 10포인트)
-  await addPoints(10, '글 작성');
+  // 글 작성 시마다 DORI Score 증가 (글 작성은 스코어로)
+  await addDoriScore(10, '글 작성');
   
   // 3개 모두 완료했는지 확인 (UI 업데이트용)
   if (progress >= totalNeeded) {
     const todayKey = getTodayDateKey();
     const completedKey = `mission_completed_post_${todayKey}`;
     localStorage.setItem(completedKey, 'true');
+    // 미션 완료 보너스 스코어
+    await addDoriScore(30, '글 3개 작성 미션 완료');
   }
 }
 
@@ -84,14 +86,16 @@ export async function handleCommentMission(): Promise<void> {
   const progress = incrementMissionProgress('comment');
   const totalNeeded = 5;
   
-  // 댓글 작성 시마다 포인트 적립 (각 2포인트)
-  await addPoints(2, '댓글 작성');
+  // 댓글 작성 시마다 DORI Score 증가 (댓글 작성은 스코어로)
+  await addDoriScore(3, '댓글 작성');
   
   // 5개 모두 완료했는지 확인 (UI 업데이트용)
   if (progress >= totalNeeded) {
     const todayKey = getTodayDateKey();
     const completedKey = `mission_completed_comment_${todayKey}`;
     localStorage.setItem(completedKey, 'true');
+    // 미션 완료 보너스 스코어
+    await addDoriScore(10, '댓글 5회 작성 미션 완료');
   }
 }
 
@@ -104,14 +108,15 @@ export async function handleLikeMission(): Promise<void> {
   const progress = incrementMissionProgress('like');
   const totalNeeded = 10;
   
-  // 좋아요 시마다 포인트 적립 (각 1포인트)
-  await addPoints(1, '좋아요');
+  // 좋아요는 미션 진행도만 업데이트 (포인트는 받는 사람이 받음)
   
   // 10개 모두 완료했는지 확인 (UI 업데이트용)
   if (progress >= totalNeeded) {
     const todayKey = getTodayDateKey();
     const completedKey = `mission_completed_like_${todayKey}`;
     localStorage.setItem(completedKey, 'true');
+    // 미션 완료 보너스 스코어
+    await addDoriScore(10, '좋아요 10개 미션 완료');
   }
 }
 
@@ -130,44 +135,46 @@ export async function handleShareMission(): Promise<void> {
   // 공유 완료 표시
   localStorage.setItem(key, 'true');
   
-  // 포인트 적립 (10포인트)
-  await addPoints(10, '사이트 공유');
+  // DORI Score 증가 (미션 완료는 스코어로)
+  await addDoriScore(10, '사이트 공유 미션 완료');
 }
 
 /**
- * 포인트 추가
+ * DORI Score 추가 (미션 완료 시)
  */
-async function addPoints(points: number, reason: string): Promise<void> {
+async function addDoriScore(score: number, reason: string): Promise<void> {
   if (typeof window === 'undefined') return;
   
   try {
     // 미션 업데이트 이벤트 발생
     window.dispatchEvent(new CustomEvent('missionUpdate'));
     
+    // DORI Score 업데이트 이벤트 발생
+    window.dispatchEvent(new CustomEvent('doriScoreAdded', { 
+      detail: { score, reason } 
+    }));
+    
+    // 프로필 업데이트 이벤트 발생 (프로필이 자동으로 재계산됨)
+    window.dispatchEvent(new CustomEvent('profileUpdated'));
+  } catch (error) {
+    console.error('DORI Score 적립 오류:', error);
+  }
+}
+
+/**
+ * 포인트 추가 (좋아요 받을 때)
+ */
+export async function addPoints(points: number, reason: string): Promise<void> {
+  if (typeof window === 'undefined') return;
+  
+  try {
     // 포인트 추가 이벤트 발생
     window.dispatchEvent(new CustomEvent('pointsAdded', { 
       detail: { points, reason } 
     }));
     
-    // 서버에 포인트 업데이트 요청 (선택적)
-    try {
-      const response = await fetch('/api/user/points', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ points, reason }),
-      });
-      
-      if (response.ok) {
-        const data = await response.json();
-        // 포인트 업데이트 이벤트 발생
-        window.dispatchEvent(new CustomEvent('pointsUpdated', { 
-          detail: { points: data.points } 
-        }));
-      }
-    } catch (apiError) {
-      // API 호출 실패해도 로컬에서 포인트 업데이트는 진행
-      console.error('포인트 API 오류:', apiError);
-    }
+    // 프로필 업데이트 이벤트 발생
+    window.dispatchEvent(new CustomEvent('profileUpdated'));
   } catch (error) {
     console.error('포인트 적립 오류:', error);
   }

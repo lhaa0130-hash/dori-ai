@@ -288,6 +288,7 @@ export default function MyPage() {
             onBioChange={handleBioChange}
             onStatusMessageChange={handleStatusMessageChange}
             isAdmin={isAdmin}
+            activityStats={activityStats}
           />
         )}
 

@@ -6,6 +6,7 @@ import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { CheckCircle2, Circle, Gift } from 'lucide-react';
+import { UserProfile, TIER_INFO, calculateLevel, getNextLevelExp, getNextTierScore, TIER_THRESHOLDS } from "@/lib/userProfile";
 
 interface AccountMenuProps {
   user: {
@@ -25,6 +26,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
   const [isOpen, setIsOpen] = useState(false);
   const [isMissionsExpanded, setIsMissionsExpanded] = useState(true);
   const [userPoints, setUserPoints] = useState(points);
+  const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   
   // 미션 데이터
   const [missions, setMissions] = useState([
@@ -43,6 +45,43 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
   useEffect(() => {
     setUserPoints(points);
   }, [points]);
+
+  // 프로필 데이터 로드 (티어, 레벨, DORI Score)
+  useEffect(() => {
+    if (!mounted || !user?.email || typeof window === 'undefined') return;
+
+    try {
+      const profileKey = `dori_profile_${user.email}`;
+      const savedProfile = localStorage.getItem(profileKey);
+      if (savedProfile) {
+        const profile: UserProfile = JSON.parse(savedProfile);
+        setUserProfile(profile);
+        setUserPoints(profile.point || 0);
+      }
+    } catch (e) {
+      console.error('프로필 로드 오류:', e);
+    }
+
+    // 프로필 업데이트 이벤트 리스너
+    const handleProfileUpdate = () => {
+      try {
+        const profileKey = `dori_profile_${user.email}`;
+        const savedProfile = localStorage.getItem(profileKey);
+        if (savedProfile) {
+          const profile: UserProfile = JSON.parse(savedProfile);
+          setUserProfile(profile);
+          setUserPoints(profile.point || 0);
+        }
+      } catch (e) {
+        console.error('프로필 업데이트 오류:', e);
+      }
+    };
+
+    window.addEventListener('profileUpdated', handleProfileUpdate);
+    return () => {
+      window.removeEventListener('profileUpdated', handleProfileUpdate);
+    };
+  }, [mounted, user?.email]);
 
   // 로그인 시 출석체크 미션 처리
   useEffect(() => {
@@ -180,7 +219,18 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
   if (!mounted) return null;
 
   const isDark = theme === 'dark';
-  const levelProgress = ((level % 10) / 10) * 100;
+  
+  // 프로필 정보 계산
+  const currentTier = userProfile?.tier || 1;
+  const currentLevel = userProfile ? calculateLevel(userProfile.doriScore * 10) : level;
+  const doriScore = userProfile?.doriScore || 0;
+  const tierInfo = TIER_INFO[currentTier as keyof typeof TIER_INFO];
+  const nextTierScore = userProfile ? getNextTierScore(currentTier, doriScore) : 0;
+  
+  // 레벨 진행도 계산
+  const currentLevelExp = currentLevel * currentLevel * 100;
+  const nextLevelExp = getNextLevelExp(currentLevel);
+  const levelProgress = currentLevel >= 100 ? 100 : ((doriScore * 10 - currentLevelExp) / (nextLevelExp - currentLevelExp)) * 100;
 
   return (
     <div className="relative">
@@ -284,13 +334,25 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                       className="px-2 py-0.5 rounded-md text-[10px] font-semibold uppercase tracking-wider"
                       style={{
                         background: isDark
+                          ? `${tierInfo.color}20`
+                          : `${tierInfo.color}15`,
+                        color: tierInfo.color,
+                        border: `1px solid ${tierInfo.color}40`,
+                      }}
+                    >
+                      {tierInfo.name}
+                    </span>
+                    <span
+                      className="px-2 py-0.5 rounded-md text-[10px] font-semibold"
+                      style={{
+                        background: isDark
                           ? 'rgba(59, 130, 246, 0.15)'
                           : 'rgba(37, 99, 235, 0.1)',
                         color: isDark ? '#93c5fd' : '#2563eb',
                         border: `1px solid ${isDark ? 'rgba(59, 130, 246, 0.25)' : 'rgba(37, 99, 235, 0.2)'}`,
                       }}
                     >
-                      크리에이터
+                      Lv.{currentLevel}
                     </span>
                     <div
                       className="text-xs font-medium ml-auto"
@@ -301,6 +363,79 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                       포인트 {userPoints.toLocaleString()}
                     </div>
                   </div>
+                  
+                  {/* DORI Score 표시 */}
+                  <div className="mt-2 mb-2">
+                    <div className="flex items-center justify-between">
+                      <span
+                        className="text-xs font-semibold"
+                        style={{
+                          color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
+                        }}
+                      >
+                        DORI Score
+                      </span>
+                      <span
+                        className="text-xs font-bold"
+                        style={{
+                          background: isDark
+                            ? 'linear-gradient(135deg, #60a5fa, #a78bfa)'
+                            : 'linear-gradient(135deg, #2563eb, #7c3aed)',
+                          WebkitBackgroundClip: 'text',
+                          WebkitTextFillColor: 'transparent',
+                          backgroundClip: 'text',
+                        }}
+                      >
+                        {doriScore.toLocaleString()}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* 티어 진행 바 */}
+                  {currentTier < 10 && nextTierScore > 0 && (
+                    <div className="mt-2 mb-2.5">
+                      <div className="flex items-center justify-between mb-1">
+                        <span
+                          className="text-[10px] font-medium"
+                          style={{
+                            color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                          }}
+                        >
+                          다음 티어까지
+                        </span>
+                        <span
+                          className="text-[10px] font-medium"
+                          style={{
+                            color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                          }}
+                        >
+                          {nextTierScore.toLocaleString()}점
+                        </span>
+                      </div>
+                      <div
+                        className="h-1 rounded-full overflow-hidden"
+                        style={{
+                          background: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                        }}
+                      >
+                        <div
+                          className="h-full rounded-full transition-all duration-300"
+                          style={{
+                            width: `${(() => {
+                              if (currentTier >= 10) return 100;
+                              const nextTier = (currentTier + 1) as keyof typeof TIER_THRESHOLDS;
+                              const nextTierThreshold = TIER_THRESHOLDS[nextTier];
+                              const currentTierThreshold = TIER_THRESHOLDS[currentTier as keyof typeof TIER_THRESHOLDS];
+                              const progress = ((doriScore - currentTierThreshold) / (nextTierThreshold - currentTierThreshold)) * 100;
+                              return Math.min(Math.max(progress, 0), 100);
+                            })()}%`,
+                            background: `linear-gradient(90deg, ${tierInfo.color}, ${TIER_INFO[Math.min(currentTier + 1, 5) as keyof typeof TIER_INFO].color})`,
+                          }}
+                        />
+                      </div>
+                    </div>
+                  )}
+
                   {/* Level Indicator */}
                   <div className="mt-2.5">
                     <div className="flex items-center justify-between mb-1">
@@ -310,7 +445,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                           color: isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)',
                         }}
                       >
-                        레벨 {level}
+                        레벨 {currentLevel}
                       </span>
                       <span
                         className="text-[10px] font-medium"
@@ -318,7 +453,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                           color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
                         }}
                       >
-                        {Math.round(levelProgress)}%
+                        {Math.min(Math.max(Math.round(levelProgress), 0), 100)}%
                       </span>
                     </div>
                     <div
@@ -330,7 +465,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                       <div
                         className="h-full rounded-full transition-all duration-300"
                         style={{
-                          width: `${levelProgress}%`,
+                          width: `${Math.min(Math.max(levelProgress, 0), 100)}%`,
                           background: 'linear-gradient(90deg, #3b82f6, #8b5cf6)',
                         }}
                       />
@@ -344,19 +479,26 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
             <div className="grid grid-cols-1 gap-2 mb-4">
               <button
                 onClick={() => handleNavigate('/my')}
-                className="w-full flex items-center justify-center gap-2 px-4 py-2 rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                className="w-full flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
                 style={{
                   background: isDark
                     ? 'rgba(255, 255, 255, 0.08)'
                     : 'rgba(0, 0, 0, 0.04)',
                   border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
+                  fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
                 }}
               >
-                <span className="text-base">👤</span>
+                <span className="text-base" style={{ fontSize: '16px' }}>👤</span>
                 <span
-                  className="text-sm font-medium"
                   style={{
                     color: isDark ? '#ffffff' : '#1d1d1f',
+                    fontSize: '14px',
+                    fontWeight: 600,
+                    letterSpacing: '-0.015em',
+                    lineHeight: '1.4',
+                    WebkitFontSmoothing: 'antialiased',
+                    MozOsxFontSmoothing: 'grayscale',
+                    textRendering: 'optimizeLegibility',
                   }}
                 >
                   내 페이지
@@ -368,20 +510,27 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                     e.preventDefault();
                     setIsMissionsExpanded(!isMissionsExpanded);
                   }}
-                  className="w-full flex items-center justify-between gap-2 px-4 py-2 rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98]"
+                  className="w-full flex items-center justify-center gap-2.5 px-4 py-2.5 rounded-xl transition-all duration-200 hover:scale-[1.02] active:scale-[0.98] relative"
                   style={{
                     background: isDark
                       ? 'rgba(255, 255, 255, 0.05)'
                       : 'rgba(0, 0, 0, 0.03)',
                     border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.08)' : 'rgba(0, 0, 0, 0.06)'}`,
+                    fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
                   }}
                 >
-                  <div className="flex items-center gap-2">
-                    <span className="text-base">🎯</span>
+                  <div className="flex items-center gap-2.5">
+                    <span style={{ fontSize: '16px' }}>🎯</span>
                     <span
-                      className="text-sm font-medium"
                       style={{
-                        color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
+                        color: isDark ? '#ffffff' : '#1d1d1f',
+                        fontSize: '14px',
+                        fontWeight: 600,
+                        letterSpacing: '-0.015em',
+                        lineHeight: '1.4',
+                        WebkitFontSmoothing: 'antialiased',
+                        MozOsxFontSmoothing: 'grayscale',
+                        textRendering: 'optimizeLegibility',
                       }}
                     >
                       미션
@@ -392,7 +541,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                     height="6"
                     viewBox="0 0 10 6"
                     fill="none"
-                    className={`transition-transform duration-200 ${isMissionsExpanded ? 'rotate-180' : ''}`}
+                    className={`transition-transform duration-200 absolute right-4 ${isMissionsExpanded ? 'rotate-180' : ''}`}
                     style={{
                       color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
                     }}
@@ -453,8 +602,8 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                                 >
                                   <Gift className="w-3 h-3" /> 
                                   {mission.progress 
-                                    ? `하나당 ${mission.point}포인트 (총 ${mission.point * mission.progress.total}포인트)`
-                                    : `+${mission.point} 포인트`
+                                    ? `하나당 ${mission.point}스코어 (총 ${mission.point * mission.progress.total}스코어)`
+                                    : `+${mission.point} 스코어`
                                   }
                                 </span>
                               </div>
@@ -468,6 +617,27 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                                     ? 'rgba(59, 130, 246, 0.2)' 
                                     : 'rgba(37, 99, 235, 0.1)',
                                   color: isDark ? '#93c5fd' : '#2563eb',
+                                }}
+                                onClick={() => {
+                                  // 중간 3개 미션 (글 작성, 댓글 작성, 좋아요)은 커뮤니티 페이지로 이동
+                                  if (mission.id === 2 || mission.id === 3 || mission.id === 4) {
+                                    handleNavigate('/community');
+                                  } else if (mission.id === 5) {
+                                    // 사이트 공유 미션 처리
+                                    if (navigator.share) {
+                                      navigator.share({
+                                        title: 'Dori AI',
+                                        text: 'Dori AI를 확인해보세요!',
+                                        url: window.location.origin,
+                                      }).catch(() => {
+                                        // 공유 실패 시 무시
+                                      });
+                                    } else {
+                                      // 공유 API가 없는 경우 클립보드에 복사
+                                      navigator.clipboard.writeText(window.location.origin);
+                                      alert('링크가 클립보드에 복사되었습니다!');
+                                    }
+                                  }
                                 }}
                                 onMouseEnter={(e) => {
                                   e.currentTarget.style.background = isDark 

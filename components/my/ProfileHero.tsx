@@ -1,6 +1,7 @@
 "use client";
 
 import { useTheme } from "next-themes";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import ProfileImageSelector from "./ProfileImageSelector";
 import { UserProfile, TIER_INFO, calculateLevel, getNextLevelExp, getNextTierScore, TIER_THRESHOLDS } from "@/lib/userProfile";
@@ -13,6 +14,12 @@ interface ProfileHeroProps {
   onStatusMessageChange?: (message: string) => void;
   isEditing?: boolean;
   isAdmin?: boolean;
+  activityStats?: {
+    posts: number;
+    comments: number;
+    receivedLikes: number;
+    guides: number;
+  };
 }
 
 export default function ProfileHero({
@@ -23,16 +30,45 @@ export default function ProfileHero({
   onStatusMessageChange,
   isEditing = false,
   isAdmin = false,
+  activityStats,
 }: ProfileHeroProps) {
   const { theme } = useTheme();
-  const isDark = theme === "dark";
+  const [mounted, setMounted] = useState(false);
+  const [forceUpdate, setForceUpdate] = useState(0);
+  
+  useEffect(() => {
+    setMounted(true);
+  }, []);
+  
+  // 테마 변경 시 강제 리렌더링
+  useEffect(() => {
+    if (mounted) {
+      // 테마 변경 감지 시 강제 업데이트
+      setForceUpdate(prev => prev + 1);
+    }
+  }, [theme, mounted]);
+  
+  const isDark = mounted && theme === "dark";
   const tierInfo = TIER_INFO[profile.tier];
   const currentLevel = calculateLevel(profile.doriScore * 10); // 경험치 = 점수 * 10
   const nextLevelExp = getNextLevelExp(currentLevel);
   const nextTierScore = getNextTierScore(profile.tier, profile.doriScore);
+  
+  // 경험치 계산
+  // 레벨 n의 시작 경험치 = (n-1)^2 * 100
+  // 레벨 n의 끝 경험치 = n^2 * 100
+  const currentLevelStartExp = (currentLevel - 1) * (currentLevel - 1) * 100;
+  const currentExp = profile.doriScore * 10;
+  const levelProgress = currentLevel >= 100 ? 100 : Math.max(0, Math.min(100, ((currentExp - currentLevelStartExp) / (nextLevelExp - currentLevelStartExp)) * 100));
+
+  // 테마가 변경되지 않았거나 마운트되지 않았으면 빈 div 반환
+  if (!mounted) {
+    return <div style={{ minHeight: '200px' }} />;
+  }
 
   return (
     <div
+      key={`profile-hero-${theme}-${forceUpdate}`}
       style={{
         background: isDark
           ? "linear-gradient(135deg, rgba(96, 165, 250, 0.1), rgba(168, 85, 247, 0.1))"
@@ -124,23 +160,35 @@ export default function ProfileHero({
               </Link>
               <div
                 style={{
-                  padding: "0.375rem 0.875rem",
+                  padding: "0.5rem 1rem",
                   borderRadius: "1rem",
                   background: isDark
-                    ? `rgba(${tierInfo.color}, 0.2)`
-                    : `${tierInfo.color}15`,
-                  border: `1px solid ${tierInfo.color}40`,
+                    ? `linear-gradient(135deg, ${tierInfo.color}30, ${tierInfo.color}15)`
+                    : `linear-gradient(135deg, ${tierInfo.color}20, ${tierInfo.color}10)`,
+                  border: `2px solid ${tierInfo.color}60`,
                   color: tierInfo.color,
                   fontSize: "0.875rem",
                   fontWeight: "700",
                   display: "flex",
                   alignItems: "center",
-                  gap: "0.375rem",
+                  gap: "0.5rem",
+                  boxShadow: `0 0 20px ${tierInfo.color}30`,
+                  position: "relative",
+                  overflow: "hidden",
                 }}
               >
+                <span style={{ 
+                  fontSize: "1rem",
+                  filter: "drop-shadow(0 0 4px currentColor)",
+                }}>⭐</span>
                 <span>{tierInfo.name}</span>
                 <span style={{ opacity: 0.7 }}>·</span>
-                <span>Lv.{currentLevel}</span>
+                <span style={{ 
+                  background: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.05)",
+                  padding: "0.125rem 0.5rem",
+                  borderRadius: "0.5rem",
+                  fontWeight: "800",
+                }}>Lv.{currentLevel}</span>
               </div>
             </div>
 
@@ -209,9 +257,206 @@ export default function ProfileHero({
           </div>
         </div>
 
+        {/* RPG 스타일 경험치 바 */}
+        {currentLevel < 100 && (
+          <div style={{ 
+            marginTop: "1.5rem", 
+            marginBottom: "1.5rem",
+            background: isDark ? "rgba(0, 0, 0, 0.2)" : "rgba(0, 0, 0, 0.02)",
+            border: `2px solid ${isDark ? "rgba(251, 191, 36, 0.3)" : "rgba(251, 191, 36, 0.2)"}`,
+            borderRadius: "1rem",
+            padding: "1.25rem",
+            position: "relative",
+            overflow: "hidden",
+          }}>
+            {/* 배경 패턴 */}
+            <div style={{
+              position: "absolute",
+              top: 0,
+              left: 0,
+              right: 0,
+              bottom: 0,
+              background: isDark 
+                ? "radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.1), transparent)"
+                : "radial-gradient(circle at 50% 50%, rgba(251, 191, 36, 0.05), transparent)",
+              opacity: 0.5,
+            }} />
+            
+            <div style={{ position: "relative", zIndex: 1 }}>
+              <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.75rem", alignItems: "center", flexWrap: "wrap", gap: "0.5rem" }}>
+                <div style={{ display: "flex", alignItems: "center", gap: "0.75rem" }}>
+                  <div style={{
+                    fontSize: "1.5rem",
+                    filter: "drop-shadow(0 0 8px rgba(251, 191, 36, 0.8))",
+                    animation: "sparkle 2s ease-in-out infinite",
+                  }}>
+                    ⚡
+                  </div>
+                  <div>
+                    <div style={{ 
+                      fontSize: "0.875rem", 
+                      color: isDark ? "rgba(255, 255, 255, 0.9)" : "rgba(0, 0, 0, 0.8)", 
+                      fontWeight: "700",
+                      letterSpacing: "0.05em",
+                    }}>
+                      경험치
+                    </div>
+                    <div style={{ 
+                      fontSize: "0.6875rem", 
+                      color: isDark ? "rgba(255, 255, 255, 0.6)" : "rgba(0, 0, 0, 0.5)",
+                      marginTop: "0.125rem",
+                    }}>
+                      Level {currentLevel} → {currentLevel + 1}
+                    </div>
+                  </div>
+                </div>
+                <div style={{
+                  background: isDark ? "rgba(251, 191, 36, 0.15)" : "rgba(251, 191, 36, 0.1)",
+                  border: `1px solid ${isDark ? "rgba(251, 191, 36, 0.3)" : "rgba(251, 191, 36, 0.2)"}`,
+                  padding: "0.5rem 0.875rem",
+                  borderRadius: "0.75rem",
+                  fontSize: "0.75rem",
+                  fontWeight: "600",
+                  color: isDark ? "#fbbf24" : "#d97706",
+                }}>
+                  {Math.max(0, Math.floor(currentExp - currentLevelStartExp))} / {Math.floor(nextLevelExp - currentLevelStartExp)} EXP
+                </div>
+              </div>
+              
+              {/* 경험치 바 컨테이너 */}
+              <div
+                style={{
+                  width: "100%",
+                  height: "20px",
+                  borderRadius: "10px",
+                  background: isDark ? "rgba(0, 0, 0, 0.4)" : "rgba(0, 0, 0, 0.1)",
+                  overflow: "hidden",
+                  position: "relative",
+                  border: `2px solid ${isDark ? "rgba(251, 191, 36, 0.4)" : "rgba(251, 191, 36, 0.3)"}`,
+                  boxShadow: isDark 
+                    ? "inset 0 2px 4px rgba(0, 0, 0, 0.3), 0 0 20px rgba(251, 191, 36, 0.2)"
+                    : "inset 0 2px 4px rgba(0, 0, 0, 0.1), 0 0 10px rgba(251, 191, 36, 0.1)",
+                }}
+              >
+                {/* 경험치 바 */}
+                <div
+                  style={{
+                    height: "100%",
+                    width: `${Math.min(Math.max(levelProgress, 0), 100)}%`,
+                    background: isDark
+                      ? "linear-gradient(90deg, #fbbf24, #f59e0b, #f97316, #f59e0b, #fbbf24)"
+                      : "linear-gradient(90deg, #fbbf24, #f59e0b, #f97316, #f59e0b, #fbbf24)",
+                    backgroundSize: "200% 100%",
+                    borderRadius: "8px",
+                    transition: "width 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
+                    position: "relative",
+                    boxShadow: `0 0 20px ${isDark ? "rgba(251, 191, 36, 0.6)" : "rgba(251, 191, 36, 0.4)"}, inset 0 0 10px rgba(255, 255, 255, 0.2)`,
+                    animation: "expBarFlow 3s linear infinite",
+                  }}
+                >
+                  {/* 상단 하이라이트 */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      height: "40%",
+                      background: "linear-gradient(180deg, rgba(255, 255, 255, 0.4), transparent)",
+                      borderRadius: "8px 8px 0 0",
+                    }}
+                  />
+                  
+                  {/* 반짝이는 효과 */}
+                  <div
+                    style={{
+                      position: "absolute",
+                      top: 0,
+                      left: 0,
+                      right: 0,
+                      bottom: 0,
+                      background: "linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent)",
+                      animation: "shimmer 2s infinite",
+                    }}
+                  />
+                  
+                  {/* 파티클 효과 */}
+                  {levelProgress > 0 && (
+                    <>
+                      <div style={{
+                        position: "absolute",
+                        right: "10%",
+                        top: "20%",
+                        width: "4px",
+                        height: "4px",
+                        background: "#ffffff",
+                        borderRadius: "50%",
+                        boxShadow: "0 0 8px #fbbf24",
+                        animation: "particleFloat 2s ease-in-out infinite",
+                      }} />
+                      <div style={{
+                        position: "absolute",
+                        right: "30%",
+                        top: "60%",
+                        width: "3px",
+                        height: "3px",
+                        background: "#ffffff",
+                        borderRadius: "50%",
+                        boxShadow: "0 0 6px #f59e0b",
+                        animation: "particleFloat 2.5s ease-in-out infinite 0.5s",
+                      }} />
+                      <div style={{
+                        position: "absolute",
+                        right: "50%",
+                        top: "30%",
+                        width: "3px",
+                        height: "3px",
+                        background: "#ffffff",
+                        borderRadius: "50%",
+                        boxShadow: "0 0 6px #f97316",
+                        animation: "particleFloat 2.2s ease-in-out infinite 1s",
+                      }} />
+                    </>
+                  )}
+                </div>
+                
+                {/* 진행률 텍스트 */}
+                <div style={{
+                  position: "absolute",
+                  top: "50%",
+                  left: "50%",
+                  transform: "translate(-50%, -50%)",
+                  fontSize: "0.6875rem",
+                  fontWeight: "800",
+                  color: isDark ? "#ffffff" : "#1d1d1f",
+                  textShadow: "0 0 8px rgba(251, 191, 36, 0.8), 0 2px 4px rgba(0, 0, 0, 0.5)",
+                  pointerEvents: "none",
+                  letterSpacing: "0.05em",
+                }}>
+                  {Math.round(levelProgress)}%
+                </div>
+              </div>
+              
+              {/* 다음 레벨까지 남은 경험치 */}
+              <div style={{
+                marginTop: "0.75rem",
+                textAlign: "right",
+                fontSize: "0.75rem",
+                color: isDark ? "rgba(255, 255, 255, 0.6)" : "rgba(0, 0, 0, 0.5)",
+                fontWeight: "500",
+              }}>
+                다음 레벨까지 <span style={{ 
+                  color: isDark ? "#fbbf24" : "#d97706",
+                  fontWeight: "700",
+                }}>{Math.ceil(nextLevelExp - currentExp)} EXP</span> 필요
+              </div>
+            </div>
+          </div>
+        )}
+
         {/* 등급 진행 바 */}
-        {profile.tier < 5 && nextTierScore > 0 && (
-          <div style={{ marginTop: "1.5rem" }}>
+        {profile.tier < 10 && nextTierScore > 0 && (
+          <div style={{ marginTop: "1rem", marginBottom: "1.5rem" }}>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
               <span
                 style={{
@@ -239,13 +484,14 @@ export default function ProfileHero({
                 borderRadius: "4px",
                 background: isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.05)",
                 overflow: "hidden",
+                position: "relative",
               }}
             >
               <div
                 style={{
                   height: "100%",
                   width: `${(() => {
-                    if (profile.tier >= 5) return 100;
+                    if (profile.tier >= 10) return 100;
                     const nextTier = (profile.tier + 1) as UserProfile['tier'];
                     const nextTierThreshold = TIER_THRESHOLDS[nextTier];
                     const currentTierThreshold = TIER_THRESHOLDS[profile.tier];
@@ -253,17 +499,82 @@ export default function ProfileHero({
                     return Math.min(Math.max(progress, 0), 100);
                   })()}%`,
                   background: isDark
-                    ? "linear-gradient(90deg, #60a5fa, #a78bfa)"
-                    : "linear-gradient(90deg, #2563eb, #7c3aed)",
+                    ? `linear-gradient(90deg, ${tierInfo.color}, ${TIER_INFO[Math.min(profile.tier + 1, 10) as keyof typeof TIER_INFO].color})`
+                    : `linear-gradient(90deg, ${tierInfo.color}, ${TIER_INFO[Math.min(profile.tier + 1, 10) as keyof typeof TIER_INFO].color})`,
                   borderRadius: "4px",
                   transition: "width 0.3s ease",
+                  boxShadow: `0 0 10px ${tierInfo.color}40`,
                 }}
               />
             </div>
           </div>
         )}
 
+        {/* 포인트 상점 - 미구현 */}
+        {/* <div style={{ marginTop: "2rem" }}>
+          <div style={{
+            padding: "1rem",
+            background: isDark ? "rgba(255, 255, 255, 0.03)" : "rgba(0, 0, 0, 0.02)",
+            border: `1px solid ${isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.1)"}`,
+            borderRadius: "1rem",
+            textAlign: "center",
+            color: isDark ? "rgba(255, 255, 255, 0.5)" : "rgba(0, 0, 0, 0.5)",
+            fontSize: "0.875rem",
+          }}>
+            🎨 포인트 상점 (준비 중)
+          </div>
+        </div> */}
+
       </div>
+
+      <style jsx>{`
+        @keyframes shimmer {
+          0% {
+            transform: translateX(-100%);
+          }
+          100% {
+            transform: translateX(100%);
+          }
+        }
+        @keyframes frameGlow {
+          0%, 100% {
+            opacity: 1;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.8;
+            transform: scale(1.02);
+          }
+        }
+        @keyframes sparkle {
+          0%, 100% {
+            transform: scale(1) rotate(0deg);
+            filter: drop-shadow(0 0 8px rgba(251, 191, 36, 0.8));
+          }
+          50% {
+            transform: scale(1.1) rotate(180deg);
+            filter: drop-shadow(0 0 12px rgba(251, 191, 36, 1));
+          }
+        }
+        @keyframes expBarFlow {
+          0% {
+            background-position: 0% 50%;
+          }
+          100% {
+            background-position: 200% 50%;
+          }
+        }
+        @keyframes particleFloat {
+          0%, 100% {
+            transform: translateY(0) scale(1);
+            opacity: 0.8;
+          }
+          50% {
+            transform: translateY(-8px) scale(1.2);
+            opacity: 1;
+          }
+        }
+      `}</style>
     </div>
   );
 }

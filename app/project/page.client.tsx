@@ -3,267 +3,201 @@
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import { 
+  Globe, 
+  Smartphone, 
+  Video, 
+  Film, 
+  ShoppingBag,
+  CheckCircle2,
+  Clock,
+  Sparkles,
+  ArrowRight,
+  Zap,
+  Workflow,
+  Database,
+  Bot,
+  FileText,
+  Code,
+  Palette,
+  Brain,
+  Settings,
+  BookOpen
+} from "lucide-react";
 
 interface Project {
   id: string;
   title: string;
-  date?: string;
-  description?: string;
-  [key: string]: any;
+  subtitle: string;
+  description: string;
+  detail: string;
+  status: "ACTIVE" | "COMING SOON" | "UPCOMING" | "CREATIVE" | "AUTOMATION";
+  statusLabel: string;
+  tech: string[] | Array<{ name: string; icon: React.ReactNode }>;
+  icon: React.ReactNode;
+  color: string;
+  glowColor: string;
+  size: "large" | "medium" | "small";
+  workflow?: Array<{ step: string; icon: React.ReactNode }>;
 }
 
-interface ProjectClientProps {
-  initialProjects: Project[];
-}
-
-const PROJECTS = [
-  { id: 'site', title: 'SITE: DORI-AI(진행중)', status: 'active' },
-  { id: 'app', title: 'APPLICATION: DORI(Android 작업중)', status: 'progress' },
-  { id: 'shorts', title: 'YOUTUBE SHORTS: 미정', status: 'pending' },
-  { id: 'animation', title: 'YOUTUBE ANIMATION : 미정', status: 'pending' },
-  { id: 'make', title: 'MAKE / N8N: 미정', status: 'pending' },
-  { id: 'gumroad', title: 'GUMROAD: 미정', status: 'pending' },
+const PROJECTS: Project[] = [
+  {
+    id: "site",
+    title: "SITE: DORI-AI",
+    subtitle: "AI 커뮤니티 플랫폼",
+    description: "AI 커뮤니티 및 정보 공유 플랫폼",
+    detail: "기획 배경부터 제작 공정, n8n을 활용한 콘텐츠 수집 및 포스팅 자동화 워크플로우 포함",
+    status: "ACTIVE",
+    statusLabel: "진행 중",
+    tech: [
+      { name: "Next.js", icon: <Code className="w-3.5 h-3.5" /> },
+      { name: "Tailwind CSS", icon: <Palette className="w-3.5 h-3.5" /> },
+      { name: "Gemini API", icon: <Brain className="w-3.5 h-3.5" /> },
+      { name: "n8n Automation", icon: <Settings className="w-3.5 h-3.5" /> },
+    ],
+    icon: <Globe className="w-7 h-7" />,
+    color: "#06b6d4",
+    glowColor: "rgba(6, 182, 212, 0.4)",
+    size: "large",
+    workflow: [
+      { step: "콘텐츠 수집", icon: <Database className="w-4 h-4" /> },
+      { step: "AI 가공", icon: <Bot className="w-4 h-4" /> },
+      { step: "자동 포스팅", icon: <FileText className="w-4 h-4" /> },
+      { step: "배포 완료", icon: <CheckCircle2 className="w-4 h-4" /> },
+    ],
+  },
+  {
+    id: "app",
+    title: "APPLICATION",
+    subtitle: "모바일 앱",
+    description: "DORI-AI 모바일 전용 앱",
+    detail: "PC 환경의 제약을 넘어선 사용자 접근성 강화",
+    status: "COMING SOON",
+    statusLabel: "예정",
+    tech: [
+      { name: "Android", icon: <Smartphone className="w-3.5 h-3.5" /> },
+      { name: "iOS", icon: <Smartphone className="w-3.5 h-3.5" /> },
+      { name: "React Native", icon: <Code className="w-3.5 h-3.5" /> },
+    ],
+    icon: <Smartphone className="w-6 h-6" />,
+    color: "#3b82f6",
+    glowColor: "rgba(59, 130, 246, 0.3)",
+    size: "medium",
+  },
+  {
+    id: "shorts",
+    title: "YOUTUBE SHORTS",
+    subtitle: "AI 뉴스 채널",
+    description: "매일 업데이트되는 AI 최신 뉴스",
+    detail: "자동 가공하여 숏폼 영상으로 업로드",
+    status: "UPCOMING",
+    statusLabel: "예정",
+    tech: [
+      { name: "YouTube API", icon: <Video className="w-3.5 h-3.5" /> },
+      { name: "AI Video", icon: <Bot className="w-3.5 h-3.5" /> },
+      { name: "Automation", icon: <Zap className="w-3.5 h-3.5" /> },
+    ],
+    icon: <Video className="w-6 h-6" />,
+    color: "#ef4444",
+    glowColor: "rgba(239, 68, 68, 0.3)",
+    size: "medium",
+  },
+  {
+    id: "animation",
+    title: "YOUTUBE ANIMATION",
+    subtitle: "키즈 채널",
+    description: "도리(Dori) & 라라(Lara) 키즈 채널",
+    detail: "AI를 활용한 유아용 교육 애니메이션",
+    status: "CREATIVE",
+    statusLabel: "예정",
+    tech: [
+      { name: "AI Animation", icon: <Film className="w-3.5 h-3.5" /> },
+      { name: "Storytelling", icon: <FileText className="w-3.5 h-3.5" /> },
+      { name: "Education", icon: <BookOpen className="w-3.5 h-3.5" /> },
+    ],
+    icon: <Film className="w-6 h-6" />,
+    color: "#a855f7",
+    glowColor: "rgba(168, 85, 247, 0.3)",
+    size: "small",
+  },
+  {
+    id: "gumroad",
+    title: "GUMROAD MARKET",
+    subtitle: "디지털 마켓",
+    description: "디지털 에셋 및 교육 자료 마켓",
+    detail: "AI로 생성한 동화책 및 학습 교안 판매",
+    status: "AUTOMATION",
+    statusLabel: "예정",
+    tech: [
+      { name: "Gumroad API", icon: <ShoppingBag className="w-3.5 h-3.5" /> },
+      { name: "AI Content", icon: <Bot className="w-3.5 h-3.5" /> },
+      { name: "E-commerce", icon: <ShoppingBag className="w-3.5 h-3.5" /> },
+    ],
+    icon: <ShoppingBag className="w-6 h-6" />,
+    color: "#f59e0b",
+    glowColor: "rgba(245, 158, 11, 0.3)",
+    size: "small",
+  },
 ];
 
-// 프로젝트별 마인드맵 설정
-const MINDMAP_CONFIG: {
-  [key: string]: {
-    centerTitle: string;
-    centerSubtitle: string;
-    centerStatus: string;
-    centerStatusColor: string;
-    centerTech: string[];
-    items: Array<{
-      id: string;
-      title: string;
-      projectId: string;
-      category: string;
-    }>;
-  };
-} = {
-  site: {
-    centerTitle: 'SITE: DORI-AI',
-    centerSubtitle: 'PROJECT',
-    centerStatus: '진행중',
-    centerStatusColor: '#10b981',
-    centerTech: ['Next.js', 'TypeScript', 'Tailwind CSS'],
-    items: [
-      { id: 'overview', title: '개요 및 개발 배경', projectId: 'project01-1', category: 'OVERVIEW' },
-      { id: 'method', title: '개발 방법 및 제작 구조', projectId: 'project01-2', category: 'DEVELOPMENT' },
-      { id: 'future', title: '향후 계획 및 확장 방향', projectId: 'project01-3', category: 'ROADMAP' },
-    ],
+const STATUS_CONFIG = {
+  ACTIVE: {
+    icon: <CheckCircle2 className="w-3.5 h-3.5" />,
+    text: "text-cyan-400",
   },
-  app: {
-    centerTitle: 'APPLICATION: DORI',
-    centerSubtitle: 'PROJECT',
-    centerStatus: 'Android 작업중',
-    centerStatusColor: '#3b82f6',
-    centerTech: ['Android', 'Kotlin', 'Jetpack Compose'],
-    items: [
-      { id: 'overview', title: '개요 및 개발 배경', projectId: 'project02-1', category: 'OVERVIEW' },
-      { id: 'method', title: '개발 방법 및 제작 구조', projectId: 'project02-2', category: 'DEVELOPMENT' },
-      { id: 'future', title: '향후 계획 및 확장 방향', projectId: 'project02-3', category: 'ROADMAP' },
-    ],
+  "COMING SOON": {
+    icon: <Clock className="w-3.5 h-3.5" />,
+    text: "text-blue-400",
+  },
+  UPCOMING: {
+    icon: <Sparkles className="w-3.5 h-3.5" />,
+    text: "text-red-400",
+  },
+  CREATIVE: {
+    icon: <Film className="w-3.5 h-3.5" />,
+    text: "text-purple-400",
+  },
+  AUTOMATION: {
+    icon: <Zap className="w-3.5 h-3.5" />,
+    text: "text-amber-400",
   },
 };
+
+interface ProjectClientProps {
+  initialProjects?: any[];
+}
 
 export default function ProjectClient({ initialProjects }: ProjectClientProps) {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [activeProject, setActiveProject] = useState('site');
 
   useEffect(() => {
     setMounted(true);
   }, []);
 
-  useEffect(() => {
-    if (!mounted) return;
-    
-    // 연결선 그리기 함수
-    const drawConnections = () => {
-      if (typeof window === 'undefined') return;
-      
-      requestAnimationFrame(() => {
-        const container = document.getElementById('mindmap-container');
-        const centerBox = document.getElementById('center-box');
-        const svg = document.getElementById('connection-svg');
-        
-        if (!container || !centerBox || !svg) return;
-        
-        const containerRect = container.getBoundingClientRect();
-        const svgRect = svg.getBoundingClientRect();
-        const centerRect = centerBox.getBoundingClientRect();
-        
-        // 중앙 박스의 오른쪽 중앙점 (SVG 좌표계 기준)
-        const centerX = centerRect.right - svgRect.left;
-        const centerY = centerRect.top - svgRect.top + centerRect.height / 2;
-        
-        const currentConfig = MINDMAP_CONFIG[activeProject];
-        if (!currentConfig) return;
-        
-        currentConfig.items.forEach((item) => {
-          const box = document.getElementById(`box-${item.id}`);
-          if (!box) return;
-          
-          const boxRect = box.getBoundingClientRect();
-          // 오른쪽 박스의 왼쪽 중앙점 (SVG 좌표계 기준)
-          const boxX = boxRect.left - svgRect.left;
-          const boxY = boxRect.top - svgRect.top + boxRect.height / 2;
-          
-          // SVG 경로 계산
-          const startX = centerX;
-          const startY = centerY;
-          const endX = boxX;
-          const endY = boxY;
-          
-          // 곡선 제어점 (부드러운 곡선)
-          const dx = endX - startX;
-          const controlX1 = startX + Math.abs(dx) * 0.5;
-          const controlY1 = startY;
-          const controlX2 = endX - Math.abs(dx) * 0.15;
-          const controlY2 = endY;
-          
-          const path = document.getElementById(`line-${item.id}`);
-          if (path) {
-            path.setAttribute('d', `M ${startX} ${startY} C ${controlX1} ${controlY1}, ${controlX2} ${controlY2}, ${endX} ${endY}`);
-          }
-        });
-      });
-    };
-    
-    // 초기 그리기 (여러 번 시도하여 DOM이 완전히 렌더링된 후 그리기)
-    const timeouts = [
-      setTimeout(drawConnections, 100),
-      setTimeout(drawConnections, 300),
-      setTimeout(drawConnections, 500),
-      setTimeout(drawConnections, 800),
-      setTimeout(drawConnections, 1200),
-      setTimeout(drawConnections, 2000),
-    ];
-    
-    // IntersectionObserver로 컨테이너가 보일 때 다시 그리기
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setTimeout(drawConnections, 50);
-          }
-        });
-      },
-      { threshold: 0.1, rootMargin: '50px' }
-    );
-    
-    const container = document.getElementById('mindmap-container');
-    if (container) {
-      observer.observe(container);
-    }
-    
-    const handleResize = () => {
-      setTimeout(drawConnections, 100);
-    };
-    
-    const handleScroll = () => {
-      requestAnimationFrame(drawConnections);
-    };
-    
-      window.addEventListener('resize', handleResize);
-      window.addEventListener('scroll', handleScroll, { passive: true });
-      
-      return () => {
-        timeouts.forEach(clearTimeout);
-        window.removeEventListener('resize', handleResize);
-        window.removeEventListener('scroll', handleScroll);
-        if (container) {
-          observer.unobserve(container);
-        }
-      };
-    }, [mounted, activeProject]);
-
-  const isDark = mounted && theme === 'dark';
-  const currentMindmap = MINDMAP_CONFIG[activeProject] || MINDMAP_CONFIG.site;
+  const isDark = mounted && theme === "dark";
 
   return (
     <main 
       className="w-full min-h-screen relative overflow-x-hidden" 
       style={{
         backgroundColor: isDark ? '#000000' : '#ffffff',
-        fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+        fontFamily: '"Pretendard", "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif',
+        position: 'relative',
       }}
     >
-      {/* 좌측 사이드바 */}
-      <aside 
-        className="fixed left-0 z-50 hidden lg:block"
+      {/* 배경 노이즈 텍스처 */}
+      <div 
+        className="fixed inset-0 -z-10 opacity-30"
         style={{
-          top: '50%',
-          transform: 'translateY(-50%)',
+          backgroundImage: isDark 
+            ? 'radial-gradient(circle at 20% 50%, rgba(6, 182, 212, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%)'
+            : 'radial-gradient(circle at 20% 50%, rgba(6, 182, 212, 0.05) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 50%)',
+          backgroundSize: '200% 200%',
+          animation: 'gradientShift 20s ease infinite',
         }}
-      >
-        <nav className="ml-8">
-          <div 
-            className="flex flex-col gap-2 p-4 rounded-2xl backdrop-blur-xl transition-all duration-500 min-w-[200px]"
-            style={{
-              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
-              border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
-            }}
-          >
-            {PROJECTS.map((project) => {
-              const isActive = activeProject === project.id;
-              return (
-                <button
-                  key={project.id}
-                  onClick={() => setActiveProject(project.id)}
-                  className="group relative flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 text-left"
-                  style={{
-                    backgroundColor: isActive
-                      ? (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)')
-                      : 'transparent',
-                  }}
-                >
-                  <div 
-                    className={`w-1.5 h-1.5 rounded-full transition-all duration-300 flex-shrink-0 ${
-                      isActive ? 'scale-150' : 'scale-100'
-                    }`}
-                    style={{
-                      backgroundColor: isActive
-                        ? (isDark ? '#ffffff' : '#000000')
-                        : (isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)'),
-                    }}
-                  />
-                  <span 
-                    className="text-xs font-medium transition-all duration-300"
-                    style={{
-                      color: isActive
-                        ? (isDark ? '#ffffff' : '#000000')
-                        : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)'),
-                      transform: isActive ? 'translateX(4px)' : 'translateX(0)',
-                    }}
-                  >
-                    {project.title}
-                  </span>
-                </button>
-              );
-            })}
-          </div>
-        </nav>
-      </aside>
-
-      {/* 배경 효과 */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        {mounted && theme === "dark" && (
-          <>
-            <div className="absolute top-[-200px] left-[20%] w-[500px] h-[500px] rounded-full blur-[100px] opacity-40 bg-blue-900 mix-blend-screen animate-pulse" />
-            <div className="absolute top-[100px] right-[20%] w-[450px] h-[450px] rounded-full blur-[100px] opacity-40 bg-purple-900 mix-blend-screen animate-pulse" style={{ animationDelay: '1s' }} />
-          </>
-        )}
-        {mounted && theme === "light" && (
-          <div 
-            className="absolute inset-0 transition-all duration-1000"
-            style={{
-              background: 'radial-gradient(ellipse at top, rgba(59, 130, 246, 0.05) 0%, transparent 50%), #ffffff',
-            }}
-          />
-        )}
-      </div>
+      />
 
       {/* 히어로 섹션 */}
       <section className="relative pt-20 pb-12 px-6 lg:pl-12 text-center overflow-hidden">
@@ -308,186 +242,627 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
               letterSpacing: '-0.01em',
             }}
           >
-            우리들의 프로젝트를 공유합니다
+            AI 기술 블로그 및 커뮤니티 플랫폼을 위한 프로젝트 포트폴리오
           </p>
         </div>
       </section>
       
-      {/* 마인드맵 섹션 */}
-      <section 
-        className="container max-w-7xl mx-auto px-4 md:px-6 lg:pl-12 pb-24 relative"
-      >
-        <div className="flex items-center justify-center min-h-[600px] pt-20">
-          <div className="relative w-full" style={{ maxWidth: '1200px', height: '600px' }} id="mindmap-container">
-            {/* 중앙 박스 - 동적 표시 */}
-            <div className="absolute left-0 top-1/2 transform -translate-y-1/2 z-10" id="center-box">
-              <div 
-                className="relative px-10 py-8 rounded-2xl transition-all duration-300 hover:scale-[1.02] group"
+      {/* Bento Grid 섹션 */}
+      <section className="container max-w-7xl mx-auto px-6 lg:px-12 pb-24 relative z-10">
+        <div className="bento-grid">
+          {PROJECTS.map((project, index) => {
+            const statusConfig = STATUS_CONFIG[project.status];
+            const isMain = project.size === "large";
+            
+            return (
+              <div
+                key={project.id}
+                className={`bento-item ${project.size}`}
                 style={{
-                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.03)',
-                  border: `2px solid ${isDark ? 'rgba(99, 102, 241, 0.3)' : 'rgba(99, 102, 241, 0.2)'}`,
-                  boxShadow: isDark 
-                    ? '0 8px 32px rgba(0, 0, 0, 0.3), 0 0 0 1px rgba(99, 102, 241, 0.1)'
-                    : '0 8px 32px rgba(99, 102, 241, 0.1), 0 0 0 1px rgba(99, 102, 241, 0.05)',
+                  animation: `fadeInUp 0.8s ease-out ${index * 0.15}s both`,
                 }}
               >
-                {/* 상태 배지 */}
-                <div 
-                  className="absolute -top-2 -right-2 px-3 py-1 rounded-full text-xs font-bold"
+                <div
+                  className={`relative h-full rounded-2xl p-6 md:p-8 transition-all duration-500 cursor-pointer overflow-hidden group ${isMain ? 'main-card' : ''}`}
                   style={{
-                    backgroundColor: currentMindmap.centerStatusColor,
-                    color: '#ffffff',
-                    boxShadow: `0 2px 8px ${currentMindmap.centerStatusColor}40`,
+                    background: isDark
+                      ? isMain
+                        ? 'rgba(255, 255, 255, 0.03)'
+                        : 'rgba(255, 255, 255, 0.02)'
+                      : isMain
+                        ? 'rgba(0, 0, 0, 0.02)'
+                        : 'rgba(0, 0, 0, 0.01)',
+                    border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+                    backdropFilter: isMain ? 'blur(20px)' : 'blur(12px)',
+                    WebkitBackdropFilter: isMain ? 'blur(20px)' : 'blur(12px)',
+                    boxShadow: isMain
+                      ? isDark
+                        ? `0 0 80px ${project.glowColor}, 0 0 40px ${project.glowColor}60, 0 12px 48px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08)`
+                        : `0 0 60px ${project.glowColor}50, 0 0 30px ${project.glowColor}30, 0 12px 48px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.9)`
+                      : isDark
+                        ? '0 4px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.03)'
+                        : '0 4px 24px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
+                  }}
+                  onMouseEnter={(e) => {
+                    if (isMain) {
+                      e.currentTarget.style.boxShadow = isDark
+                        ? `0 0 120px ${project.glowColor}80, 0 0 60px ${project.glowColor}70, 0 16px 64px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12)`
+                        : `0 0 80px ${project.glowColor}70, 0 0 50px ${project.glowColor}50, 0 16px 64px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 1)`;
+                      e.currentTarget.style.transform = 'translateY(-8px) scale(1.01)';
+                      // 데이터 스트림 속도 증가
+                      const workflowContainer = e.currentTarget.querySelector('.workflow-container');
+                      if (workflowContainer) {
+                        (workflowContainer as HTMLElement).style.setProperty('--stream-speed', '0.8s');
+                      }
+                    } else {
+                      e.currentTarget.style.boxShadow = isDark
+                        ? `0 0 40px ${project.glowColor}, 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05)`
+                        : `0 0 30px ${project.glowColor}60, 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9)`;
+                      e.currentTarget.style.transform = 'translateY(-4px)';
+                    }
+                  }}
+                  onMouseLeave={(e) => {
+                    if (isMain) {
+                      e.currentTarget.style.boxShadow = isDark
+                        ? `0 0 80px ${project.glowColor}, 0 0 40px ${project.glowColor}60, 0 12px 48px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08)`
+                        : `0 0 60px ${project.glowColor}50, 0 0 30px ${project.glowColor}30, 0 12px 48px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.9)`;
+                      e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                      // 데이터 스트림 속도 원복
+                      const workflowContainer = e.currentTarget.querySelector('.workflow-container');
+                      if (workflowContainer) {
+                        (workflowContainer as HTMLElement).style.setProperty('--stream-speed', '2s');
+                      }
+                    } else {
+                      e.currentTarget.style.boxShadow = isDark
+                        ? '0 4px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.03)'
+                        : '0 4px 24px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9)';
+                      e.currentTarget.style.transform = 'translateY(0)';
+                    }
                   }}
                 >
-                  {currentMindmap.centerStatus}
-                </div>
-                
-                <div className="flex items-center gap-3 mb-2">
+                  {/* 다층 글래스 효과 - 레이어 1 (가장 뒤) */}
+                  {isMain && (
+                    <div 
+                      className="absolute inset-0 rounded-2xl pointer-events-none"
+                      style={{
+                        background: isDark
+                          ? 'rgba(255, 255, 255, 0.01)'
+                          : 'rgba(255, 255, 255, 0.3)',
+                        backdropFilter: 'blur(8px)',
+                        WebkitBackdropFilter: 'blur(8px)',
+                        transform: 'translateZ(-10px)',
+                        opacity: 0.5,
+                      }}
+                    />
+                  )}
+
+                  {/* 다층 글래스 효과 - 레이어 2 (중간) */}
+                  {isMain && (
+                    <div 
+                      className="absolute inset-0 rounded-2xl pointer-events-none"
+                      style={{
+                        background: isDark
+                          ? 'rgba(255, 255, 255, 0.02)'
+                          : 'rgba(255, 255, 255, 0.4)',
+                        backdropFilter: 'blur(4px)',
+                        WebkitBackdropFilter: 'blur(4px)',
+                        transform: 'translateZ(-5px)',
+                        opacity: 0.7,
+                      }}
+                    />
+                  )}
+
+                  {/* Specular Highlights - 상단/왼쪽 가장자리 */}
+                  {isMain && (
+                    <>
+                      <div 
+                        className="absolute top-0 left-0 right-0 h-1/3 rounded-t-2xl pointer-events-none"
+                        style={{
+                          background: isDark
+                            ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, transparent 100%)'
+                            : 'linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, transparent 100%)',
+                          opacity: 0.6,
+                        }}
+                      />
+                      <div 
+                        className="absolute top-0 left-0 bottom-0 w-1/3 rounded-l-2xl pointer-events-none"
+                        style={{
+                          background: isDark
+                            ? 'linear-gradient(90deg, rgba(255, 255, 255, 0.12) 0%, transparent 100%)'
+                            : 'linear-gradient(90deg, rgba(255, 255, 255, 0.7) 0%, transparent 100%)',
+                          opacity: 0.5,
+                        }}
+                      />
+                    </>
+                  )}
+
+                  {/* 강화된 엣지 글로우 */}
+                  {isMain && (
+                    <div 
+                      className="absolute -inset-1 rounded-2xl pointer-events-none"
+                      style={{
+                        background: `linear-gradient(135deg, ${project.color}40, ${project.color}20, ${project.color}40)`,
+                        filter: 'blur(20px)',
+                        opacity: 0.6,
+                        animation: 'edgeGlow 4s ease-in-out infinite',
+                      }}
+                    />
+                  )}
+
+                  {/* Glassmorphism 오버레이 - 메인 레이어 */}
                   <div 
-                    className="w-3 h-3 rounded-full"
+                    className="absolute inset-0 rounded-2xl pointer-events-none"
                     style={{
-                      backgroundColor: '#6366f1',
-                      boxShadow: '0 0 8px rgba(99, 102, 241, 0.6)',
+                      background: isDark
+                        ? 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, transparent 50%, rgba(0, 0, 0, 0.15) 100%)'
+                        : 'linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, transparent 50%, rgba(0, 0, 0, 0.03) 100%)',
                     }}
                   />
-                  <span 
-                    className="text-xs font-semibold uppercase tracking-wider"
-                    style={{
-                      color: isDark ? 'rgba(99, 102, 241, 0.8)' : 'rgba(99, 102, 241, 0.7)',
-                    }}
-                  >
-                    {currentMindmap.centerSubtitle}
-                  </span>
-                </div>
-                
-                <h2 
-                  className="text-2xl md:text-3xl font-bold"
-                  style={{
-                    color: isDark ? '#ffffff' : '#1d1d1f',
-                    fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                    fontWeight: 700,
-                    letterSpacing: '-0.03em',
-                    lineHeight: '1.2',
-                  }}
-                >
-                  {currentMindmap.centerTitle}
-                </h2>
-                
-                <div className="mt-4 flex items-center gap-4 text-xs" style={{ color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)' }}>
-                  {currentMindmap.centerTech.map((tech, idx) => (
-                    <span key={tech}>
-                      {tech}
-                      {idx < currentMindmap.centerTech.length - 1 && <span className="mx-2">•</span>}
-                    </span>
-                  ))}
-                </div>
-              </div>
-            </div>
 
-            {/* 연결선 SVG - 동적 위치 계산 */}
-            <svg 
-              className="absolute inset-0 w-full h-full pointer-events-none z-0"
-              style={{ overflow: 'visible' }}
-              id="connection-svg"
-              preserveAspectRatio="none"
-            >
-              {currentMindmap.items.map((item, index) => (
-                <path
-                  key={item.id}
-                  id={`line-${item.id}`}
-                  fill="none"
-                  stroke={isDark ? 'rgba(99, 102, 241, 0.4)' : 'rgba(99, 102, 241, 0.3)'}
-                  strokeWidth="2"
-                  strokeLinecap="round"
-                />
-              ))}
-            </svg>
+                  {/* 메인 프로젝트 특별 스타일 */}
+                  {isMain && (
+                    <>
+                      {/* 고품질 Automation Workflow 컴포넌트 */}
+                      {project.workflow && (
+                        <div className="workflow-container mb-8 relative z-10" style={{ '--stream-speed': '2s' } as React.CSSProperties}>
+                          {/* 헤더 */}
+                          <div className="flex items-center gap-2.5 mb-6">
+                            <Workflow className="w-4 h-4" style={{ color: isDark ? '#94a3b8' : '#64748b' }} />
+                            <span 
+                              className="text-xs font-semibold uppercase tracking-wider"
+                              style={{ 
+                                color: isDark ? '#94a3b8' : '#64748b',
+                                letterSpacing: '0.1em',
+                              }}
+                            >
+                              AUTOMATION WORKFLOW
+                            </span>
+                          </div>
+                          
+                          {/* 워크플로우 스텝 */}
+                          <div className="flex items-center justify-between relative">
+                            {project.workflow.map((step, idx) => (
+                              <div key={idx} className="flex-1 flex flex-col items-center relative">
+                                {/* 연결선 (왼쪽에서 오른쪽으로 그려지는 애니메이션) */}
+                                {idx < project.workflow!.length - 1 && (
+                                  <div 
+                                    className="workflow-connector absolute top-6 left-[calc(50%+28px)] right-[-28px] h-[1px]"
+                                    style={{ 
+                                      zIndex: 0,
+                                      animation: `drawLine 1.5s ease-out ${idx * 0.3 + 0.5}s both`,
+                                    }}
+                                  >
+                                    {/* 정적 배경선 */}
+                                    <div 
+                                      className="absolute inset-0"
+                                      style={{
+                                        background: isDark
+                                          ? 'linear-gradient(90deg, rgba(6, 182, 212, 0.3), rgba(6, 182, 212, 0.1))'
+                                          : 'linear-gradient(90deg, rgba(6, 182, 212, 0.2), rgba(6, 182, 212, 0.1))',
+                                      }}
+                                    />
+                                    {/* 애니메이션 데이터 스트림 */}
+                                    <div 
+                                      className="data-stream-line absolute inset-0 overflow-hidden"
+                                      style={{
+                                        background: `linear-gradient(90deg, transparent, ${project.color}, ${project.color}80, transparent)`,
+                                        width: '60%',
+                                        animation: `dataStreamFlow var(--stream-speed, 2s) linear infinite ${idx * 0.2}s`,
+                                        filter: `blur(1px)`,
+                                        boxShadow: `0 0 8px ${project.color}50`,
+                                      }}
+                                    />
+                                  </div>
+                                )}
+                                
+                                {/* 아이콘 컨테이너 */}
+                                <div className="relative z-10">
+                                  <div
+                                    className="workflow-icon w-14 h-14 rounded-full flex items-center justify-center relative"
+                                    style={{
+                                      background: isDark
+                                        ? 'rgba(15, 23, 42, 0.6)'
+                                        : 'rgba(255, 255, 255, 0.8)',
+                                      border: isDark
+                                        ? `1.5px solid rgba(6, 182, 212, 0.4)`
+                                        : `1.5px solid rgba(6, 182, 212, 0.3)`,
+                                      color: project.color,
+                                      boxShadow: isDark
+                                        ? `0 0 20px ${project.color}40, 0 0 40px ${project.color}20, inset 0 0 20px ${project.color}10`
+                                        : `0 0 15px ${project.color}30, 0 0 30px ${project.color}15`,
+                                      animation: `workflowIconPulse 2.5s ease-in-out infinite ${idx * 0.4}s`,
+                                      transition: 'all 0.3s ease',
+                                    }}
+                                    onMouseEnter={(e) => {
+                                      e.currentTarget.style.transform = 'scale(1.1)';
+                                      e.currentTarget.style.boxShadow = isDark
+                                        ? `0 0 30px ${project.color}60, 0 0 60px ${project.color}40, inset 0 0 30px ${project.color}20`
+                                        : `0 0 25px ${project.color}50, 0 0 50px ${project.color}30`;
+                                    }}
+                                    onMouseLeave={(e) => {
+                                      e.currentTarget.style.transform = 'scale(1)';
+                                      e.currentTarget.style.boxShadow = isDark
+                                        ? `0 0 20px ${project.color}40, 0 0 40px ${project.color}20, inset 0 0 20px ${project.color}10`
+                                        : `0 0 15px ${project.color}30, 0 0 30px ${project.color}15`;
+                                    }}
+                                  >
+                                    {/* 아이콘 */}
+                                    <div className="relative z-10">
+                                      {step.icon}
+                                    </div>
+                                    
+                                    {/* 내부 글로우 레이어 */}
+                                    <div 
+                                      className="absolute inset-0 rounded-full"
+                                      style={{
+                                        background: `radial-gradient(circle at center, ${project.color}25, transparent 70%)`,
+                                        animation: `workflowInnerGlow 2.5s ease-in-out infinite ${idx * 0.4}s`,
+                                        opacity: 0.6,
+                                      }}
+                                    />
+                                    
+                                    {/* 외부 글로우 링 */}
+                                    <div 
+                                      className="absolute -inset-1 rounded-full"
+                                      style={{
+                                        background: `radial-gradient(circle, ${project.color}30, transparent 70%)`,
+                                        filter: 'blur(8px)',
+                                        animation: `workflowOuterGlow 2.5s ease-in-out infinite ${idx * 0.4}s`,
+                                        opacity: 0.4,
+                                      }}
+                                    />
+                                  </div>
+                                </div>
+                                
+                                {/* 라벨 */}
+                                <span 
+                                  className="text-xs font-medium text-center mt-4 whitespace-nowrap"
+                                  style={{
+                                    color: isDark ? '#ffffff' : '#1d1d1f',
+                                    letterSpacing: '0.02em',
+                                    fontFamily: '"Pretendard", "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif',
+                                  }}
+                                >
+                                  {step.step}
+                                </span>
+                              </div>
+                            ))}
+                          </div>
+                        </div>
+                      )}
+                    </>
+                  )}
 
-            {/* 오른쪽 박스들 */}
-            <div className="absolute right-0 top-1/2 transform -translate-y-1/2 z-10 flex flex-col gap-8">
-              {currentMindmap.items.map((item, index) => (
-                <div
-                  key={item.id}
-                  className="relative group"
-                  id={`box-${item.id}`}
-                  style={{
-                    animation: `fadeInUp 0.5s ease-out ${index * 0.1}s both`,
-                    width: '380px',
-                  }}
-                >
-                  <Link href={`/project/${item.projectId}`}>
-                    <div 
-                      className="relative px-5 py-3.5 rounded-lg transition-all duration-300 hover:scale-[1.02] hover:-translate-y-0.5 cursor-pointer border-l-4"
+                  {/* 헤더 */}
+                  <div className="flex items-start justify-between mb-4 relative z-10">
+                    <div
+                      className="p-3 rounded-xl transition-all duration-300"
                       style={{
-                        backgroundColor: isDark ? 'rgba(255, 255, 255, 0.04)' : 'rgba(0, 0, 0, 0.02)',
-                        borderLeftColor: isDark ? 'rgba(99, 102, 241, 0.5)' : 'rgba(99, 102, 241, 0.4)',
-                        borderTop: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
-                        borderRight: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
-                        borderBottom: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
-                        boxShadow: isDark 
-                          ? '0 2px 12px rgba(0, 0, 0, 0.15)'
-                          : '0 2px 12px rgba(0, 0, 0, 0.03)',
+                        background: isDark
+                          ? `linear-gradient(135deg, ${project.color}20, ${project.color}10)`
+                          : `linear-gradient(135deg, ${project.color}15, ${project.color}08)`,
+                        border: `1px solid ${project.color}30`,
+                        color: project.color,
                       }}
                     >
-                      {/* 카테고리 라벨 */}
-                      <div className="flex items-center gap-1.5 mb-1.5">
-                        <div 
-                          className="w-1.5 h-1.5 rounded-full"
+                      {project.icon}
+            </div>
+
+                    {/* Status Badge */}
+                    <div
+                      className={`px-3 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-bold ${statusConfig.text}`}
+                      style={{
+                        background: isDark
+                          ? 'rgba(255, 255, 255, 0.05)'
+                          : 'rgba(0, 0, 0, 0.03)',
+                        border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+                      }}
+                    >
+                      {statusConfig.icon}
+                      <span>{project.statusLabel}</span>
+                    </div>
+                  </div>
+
+                  {/* 제목 */}
+                  <h3
+                    className="text-2xl md:text-3xl font-black mb-2 relative z-10"
+                  style={{
+                      color: isDark ? '#ffffff' : '#000000',
+                      fontWeight: 900,
+                      letterSpacing: '-0.03em',
+                      lineHeight: '1.2',
+                    }}
+                  >
+                    {project.title}
+                  </h3>
+
+                  {/* 서브타이틀 */}
+                  {project.subtitle && (
+                    <p
+                      className="text-sm mb-3 relative z-10"
+                      style={{
+                        color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                        fontWeight: 500,
+                        letterSpacing: '-0.01em',
+                      }}
+                    >
+                      {project.subtitle}
+                    </p>
+                  )}
+
+                  {/* 설명 */}
+                  <p
+                    className={`mb-4 relative z-10 ${isMain ? 'text-base' : 'text-sm'}`}
                           style={{
-                            backgroundColor: isDark ? 'rgba(99, 102, 241, 0.6)' : 'rgba(99, 102, 241, 0.5)',
-                          }}
-                        />
-                        <span 
-                          className="text-[10px] font-semibold uppercase tracking-wider"
+                      color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)',
+                      lineHeight: '1.6',
+                    }}
+                  >
+                    {project.description}
+                  </p>
+
+                  {/* 상세 설명 (메인만) */}
+                  {isMain && (
+                    <p
+                      className="text-sm mb-6 relative z-10"
                           style={{
-                            color: isDark ? 'rgba(99, 102, 241, 0.7)' : 'rgba(99, 102, 241, 0.6)',
-                          }}
-                        >
-                          {item.category}
-                        </span>
-                      </div>
-                      
-                      <p 
-                        className="text-sm font-semibold leading-tight"
+                        color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+                        lineHeight: '1.5',
+                      }}
+                    >
+                      {project.detail}
+                    </p>
+                  )}
+
+                  {/* Tech Stack with Icons */}
+                  <div className="flex flex-wrap gap-2.5 mb-6 relative z-10">
+                    {(Array.isArray(project.tech) && typeof project.tech[0] === 'object' 
+                      ? project.tech 
+                      : project.tech.map(name => ({ name, icon: null }))
+                    ).map((tech: any, idx: number) => (
+                      <span
+                        key={idx}
+                        className="px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all duration-300"
                         style={{
-                          color: isDark ? 'rgba(255, 255, 255, 0.95)' : 'rgba(0, 0, 0, 0.85)',
-                          fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-                          fontWeight: 600,
-                          letterSpacing: '-0.02em',
-                          lineHeight: '1.3',
+                          background: isDark
+                            ? 'rgba(255, 255, 255, 0.06)'
+                            : 'rgba(0, 0, 0, 0.04)',
+                          border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.12)'}`,
+                          color: isDark ? 'rgba(255, 255, 255, 0.85)' : 'rgba(0, 0, 0, 0.75)',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.background = isDark
+                            ? 'rgba(255, 255, 255, 0.1)'
+                            : 'rgba(0, 0, 0, 0.06)';
+                          e.currentTarget.style.transform = 'translateY(-2px)';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = isDark
+                            ? 'rgba(255, 255, 255, 0.06)'
+                            : 'rgba(0, 0, 0, 0.04)';
+                          e.currentTarget.style.transform = 'translateY(0)';
                         }}
                       >
-                        {item.title}
-                      </p>
-                    </div>
-                  </Link>
+                        {tech.icon && (
+                          <span style={{ color: project.color, display: 'flex', alignItems: 'center' }}>
+                            {tech.icon}
+                          </span>
+                        )}
+                        <span>{tech.name || tech}</span>
+                      </span>
+                    ))}
+                  </div>
+
+                  {/* 프리미엄 EXPLORE 버튼 */}
+                  <div className="relative z-10">
+                    <button
+                      className="explore-btn px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all duration-300 relative overflow-hidden group"
+                      style={{
+                        background: isMain
+                          ? `linear-gradient(135deg, ${project.color}, ${project.color}80)`
+                          : 'transparent',
+                        border: isMain ? 'none' : `1.5px solid ${project.color}50`,
+                        color: isMain ? '#ffffff' : project.color,
+                        boxShadow: isMain
+                          ? `0 4px 20px ${project.color}50, inset 0 1px 0 rgba(255, 255, 255, 0.2)`
+                          : 'none',
+                      }}
+                      onMouseEnter={(e) => {
+                        if (isMain) {
+                          e.currentTarget.style.boxShadow = `0 6px 30px ${project.color}70, inset 0 1px 0 rgba(255, 255, 255, 0.3)`;
+                          e.currentTarget.style.transform = 'translateY(-2px) scale(1.02)';
+                        } else {
+                          e.currentTarget.style.background = `linear-gradient(135deg, ${project.color}20, ${project.color}10)`;
+                          e.currentTarget.style.boxShadow = `0 0 20px ${project.color}30`;
+                        }
+                      }}
+                      onMouseLeave={(e) => {
+                        if (isMain) {
+                          e.currentTarget.style.boxShadow = `0 4px 20px ${project.color}50, inset 0 1px 0 rgba(255, 255, 255, 0.2)`;
+                          e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                        } else {
+                          e.currentTarget.style.background = 'transparent';
+                          e.currentTarget.style.boxShadow = 'none';
+                        }
+                      }}
+                    >
+                      {/* 버튼 내부 글로우 */}
+                      {isMain && (
+                        <div 
+                          className="absolute inset-0 rounded-xl"
+                          style={{
+                            background: `linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent)`,
+                            opacity: 0.6,
+                          }}
+                        />
+                      )}
+                      <span>Explore</span>
+                      <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                    </button>
+                  </div>
+
+                  {/* 메인 카드 글로우 효과 */}
+                  {isMain && (
+                    <div 
+                      className="absolute -inset-1 rounded-2xl opacity-50 blur-xl pointer-events-none"
+                      style={{
+                        background: `radial-gradient(circle, ${project.color}40, transparent 70%)`,
+                        animation: 'pulseGlow 3s ease-in-out infinite',
+                      }}
+                    />
+                  )}
                 </div>
-              ))}
             </div>
-          </div>
+            );
+          })}
         </div>
       </section>
 
       {/* 스타일 */}
       <style jsx global>{`
-        @keyframes gradientFlow {
-          0% {
+        @keyframes gradientShift {
+          0%, 100% {
             background-position: 0% 50%;
           }
-          100% {
-            background-position: 200% 50%;
+          50% {
+            background-position: 100% 50%;
           }
         }
         
         @keyframes fadeInUp {
           from {
             opacity: 0;
-            transform: translateY(20px);
+            transform: translateY(40px);
           }
           to {
             opacity: 1;
             transform: translateY(0);
+          }
+        }
+
+        @keyframes pulseGlow {
+          0%, 100% {
+            opacity: 0.5;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.8;
+            transform: scale(1.05);
+          }
+        }
+
+        @keyframes workflowIconPulse {
+          0%, 100% {
+            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4), 0 0 40px rgba(6, 182, 212, 0.2), inset 0 0 20px rgba(6, 182, 212, 0.1);
+            transform: scale(1);
+          }
+          50% {
+            box-shadow: 0 0 30px rgba(6, 182, 212, 0.6), 0 0 60px rgba(6, 182, 212, 0.4), inset 0 0 30px rgba(6, 182, 212, 0.2);
+            transform: scale(1.02);
+          }
+        }
+
+        @keyframes workflowInnerGlow {
+          0%, 100% {
+            opacity: 0.4;
+          }
+          50% {
+            opacity: 0.8;
+          }
+        }
+
+        @keyframes workflowOuterGlow {
+          0%, 100% {
+            opacity: 0.3;
+            transform: scale(1);
+          }
+          50% {
+            opacity: 0.6;
+            transform: scale(1.1);
+          }
+        }
+
+        @keyframes drawLine {
+          from {
+            width: 0;
+            opacity: 0;
+          }
+          to {
+            width: 100%;
+            opacity: 1;
+          }
+        }
+
+        @keyframes dataStreamFlow {
+          0% {
+            transform: translateX(-100%);
+            opacity: 0;
+          }
+          10% {
+            opacity: 1;
+          }
+          90% {
+            opacity: 1;
+          }
+          100% {
+            transform: translateX(200%);
+            opacity: 0;
+          }
+        }
+
+        .bento-grid {
+          display: grid;
+          grid-template-columns: repeat(12, 1fr);
+          grid-auto-rows: minmax(200px, auto);
+          gap: 1.5rem;
+        }
+
+        .bento-item.large {
+          grid-column: span 12;
+          grid-row: span 2;
+          min-height: 400px;
+        }
+
+        .bento-item.medium {
+          grid-column: span 6;
+          grid-row: span 1;
+          min-height: 280px;
+        }
+
+        .bento-item.small {
+          grid-column: span 6;
+          grid-row: span 1;
+          min-height: 240px;
+        }
+
+        @media (min-width: 1024px) {
+          .bento-item.large {
+            grid-column: span 8;
+            grid-row: span 2;
+          }
+
+          .bento-item.medium {
+            grid-column: span 4;
+            grid-row: span 1;
+          }
+
+          .bento-item.small {
+            grid-column: span 4;
+            grid-row: span 1;
+          }
+        }
+
+        @media (max-width: 768px) {
+          .bento-grid {
+            grid-template-columns: 1fr;
+          }
+
+          .bento-item.large,
+          .bento-item.medium,
+          .bento-item.small {
+            grid-column: span 1;
+            grid-row: span 1;
+            min-height: 300px;
           }
         }
       `}</style>

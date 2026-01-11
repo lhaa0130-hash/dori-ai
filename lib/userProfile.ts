@@ -1,7 +1,17 @@
 // 사용자 프로필 관련 타입 및 유틸리티
 
-export type UserTier = 1 | 2 | 3 | 4 | 5;
-export type TierName = "Explorer" | "Contributor" | "Curator" | "Guide" | "Architect";
+export type UserTier = 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10;
+export type TierName = 
+  | "Beginner" 
+  | "Explorer" 
+  | "Contributor" 
+  | "Active Contributor"
+  | "Curator" 
+  | "Senior Curator"
+  | "Guide" 
+  | "Senior Guide"
+  | "Architect" 
+  | "Master Architect";
 
 export interface UserProfile {
   id: string;
@@ -29,31 +39,46 @@ export interface UserActivity {
 
 // 등급 정보
 export const TIER_INFO: Record<UserTier, { name: TierName; color: string; description: string }> = {
-  1: { name: "Explorer", color: "#60a5fa", description: "탐험가" },
-  2: { name: "Contributor", color: "#34d399", description: "기여자" },
-  3: { name: "Curator", color: "#a78bfa", description: "큐레이터" },
-  4: { name: "Guide", color: "#f59e0b", description: "가이드" },
-  5: { name: "Architect", color: "#ec4899", description: "건축가" },
+  1: { name: "Beginner", color: "#94a3b8", description: "초보자" },
+  2: { name: "Explorer", color: "#60a5fa", description: "탐험가" },
+  3: { name: "Contributor", color: "#34d399", description: "기여자" },
+  4: { name: "Active Contributor", color: "#22c55e", description: "활발한 기여자" },
+  5: { name: "Curator", color: "#a78bfa", description: "큐레이터" },
+  6: { name: "Senior Curator", color: "#8b5cf6", description: "시니어 큐레이터" },
+  7: { name: "Guide", color: "#f59e0b", description: "가이드" },
+  8: { name: "Senior Guide", color: "#f97316", description: "시니어 가이드" },
+  9: { name: "Architect", color: "#ec4899", description: "건축가" },
+  10: { name: "Master Architect", color: "#f43f5e", description: "마스터 건축가" },
 };
 
-// 등급별 최소 점수 (예시)
+// 등급별 최소 점수
 export const TIER_THRESHOLDS: Record<UserTier, number> = {
-  1: 0,
-  2: 100,
-  3: 500,
-  4: 2000,
-  5: 5000,
+  1: 0,        // Beginner
+  2: 50,       // Explorer
+  3: 150,      // Contributor
+  4: 350,      // Active Contributor
+  5: 700,      // Curator
+  6: 1500,     // Senior Curator
+  7: 3000,     // Guide
+  8: 5000,     // Senior Guide
+  9: 8000,     // Architect
+  10: 12000,   // Master Architect
 };
 
 // 다음 등급까지 필요한 점수 계산
 export function getNextTierScore(currentTier: UserTier, currentScore: number): number {
-  if (currentTier >= 5) return 0; // 최고 등급
+  if (currentTier >= 10) return 0; // 최고 등급
   const nextTier = (currentTier + 1) as UserTier;
   return TIER_THRESHOLDS[nextTier] - currentScore;
 }
 
 // 현재 등급 계산 (점수 기반)
 export function calculateTier(score: number): UserTier {
+  if (score >= TIER_THRESHOLDS[10]) return 10;
+  if (score >= TIER_THRESHOLDS[9]) return 9;
+  if (score >= TIER_THRESHOLDS[8]) return 8;
+  if (score >= TIER_THRESHOLDS[7]) return 7;
+  if (score >= TIER_THRESHOLDS[6]) return 6;
   if (score >= TIER_THRESHOLDS[5]) return 5;
   if (score >= TIER_THRESHOLDS[4]) return 4;
   if (score >= TIER_THRESHOLDS[3]) return 3;

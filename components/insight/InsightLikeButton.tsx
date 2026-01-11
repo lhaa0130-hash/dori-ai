@@ -68,12 +68,17 @@ export default function InsightLikeButton({ postId, initialLikes }: InsightLikeB
             try {
               const profile = JSON.parse(localStorage.getItem(key) || '{}');
               if (profile.nickname === post.author) {
-                // 포인트 증가
+                // 포인트 증가 (좋아요 받을 때 1포인트)
                 const updatedProfile = {
                   ...profile,
                   point: (profile.point || 0) + 1,
                 };
                 localStorage.setItem(key, JSON.stringify(updatedProfile));
+                
+                // 포인트 추가 이벤트 발생
+                import('@/lib/missionProgress').then(({ addPoints }) => {
+                  addPoints(1, '글 좋아요 받음');
+                });
                 break;
               }
             } catch (e) {
