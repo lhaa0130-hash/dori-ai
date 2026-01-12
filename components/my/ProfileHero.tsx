@@ -4,7 +4,7 @@ import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import ProfileImageSelector from "./ProfileImageSelector";
-import { UserProfile, TIER_INFO, calculateLevel, getNextLevelExp, getNextTierExp, getCurrentLevelStartExp, TIER_THRESHOLDS } from "@/lib/userProfile";
+import { UserProfile, TIER_INFO, calculateLevel, getNextLevelExp, getNextTierExp, getCurrentLevelStartExp, TIER_THRESHOLDS, calculateLevelProgress } from "@/lib/userProfile";
 
 interface ProfileHeroProps {
   profile: UserProfile;
@@ -72,12 +72,8 @@ export default function ProfileHero({
   // 현재 레벨 구간에서의 경험치 (현재 경험치 - 현재 레벨 시작 경험치)
   const currentLevelExp = Math.max(0, currentExp - finalCurrentLevelStartExp);
   
-  // 진행률 계산: (현재 레벨 구간 경험치) / (다음 레벨까지 필요한 경험치)
-  const levelProgress = currentLevel >= 100 
-    ? 100 
-    : finalNextLevelExpRequired > 0
-      ? Math.max(0, Math.min(100, (currentLevelExp / finalNextLevelExpRequired) * 100))
-      : 100;
+  // 진행률 계산 (공통 함수 사용)
+  const levelProgress = calculateLevelProgress(currentExp, currentLevel);
   
   // 다음 레벨까지 남은 경험치
   const remainingExp = Math.max(0, finalNextLevelStartExp - currentExp);

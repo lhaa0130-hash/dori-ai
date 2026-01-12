@@ -6,7 +6,7 @@ import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { signOut } from "next-auth/react";
 import { CheckCircle2, Circle, Gift } from 'lucide-react';
-import { UserProfile, TIER_INFO, calculateLevel, getNextLevelExp, getNextTierExp, getCurrentLevelStartExp, TIER_THRESHOLDS } from "@/lib/userProfile";
+import { UserProfile, TIER_INFO, calculateLevel, getNextLevelExp, getNextTierExp, getCurrentLevelStartExp, TIER_THRESHOLDS, calculateLevelProgress } from "@/lib/userProfile";
 
 // 아바타 옵션 (ProfileImageSelector와 동일 - 전체 목록)
 const AVATAR_OPTIONS = [
@@ -398,11 +398,9 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
   const tierInfo = TIER_INFO[currentTier as keyof typeof TIER_INFO];
   const nextTierExp = userProfile ? getNextTierExp(currentTier, doriExp) : 0;
   
-  // 레벨 진행도 계산
+  // 레벨 진행도 계산 (공통 함수 사용)
   const currentExp = doriExp * 10;
-  const currentLevelStartExp = getCurrentLevelStartExp(currentLevel);
-  const nextLevelExp = getNextLevelExp(currentLevel);
-  const levelProgress = currentLevel >= 100 ? 100 : Math.max(0, Math.min(100, ((currentExp - currentLevelStartExp) / (nextLevelExp - currentLevelStartExp)) * 100));
+  const levelProgress = calculateLevelProgress(currentExp, currentLevel);
 
   return (
     <div className="relative">

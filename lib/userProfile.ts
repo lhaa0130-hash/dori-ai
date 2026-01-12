@@ -133,6 +133,25 @@ export function getCurrentLevelStartExp(currentLevel: number): number {
   return totalExp;
 }
 
+// 레벨 진행률 계산 공통 함수
+// 공식: ((현재 EXP - 현재 레벨 시작 EXP) / (다음 레벨 목표 EXP - 현재 레벨 시작 EXP)) * 100
+export function calculateLevelProgress(currentExp: number, currentLevel: number): number {
+  if (currentLevel >= 100) return 100;
+  
+  const currentLevelStartExp = getCurrentLevelStartExp(currentLevel);
+  const nextLevelExpRequired = getNextLevelExp(currentLevel); // 다음 레벨까지 필요한 경험치 (레벨당 필요량)
+  const nextLevelStartExp = currentLevelStartExp + nextLevelExpRequired; // 다음 레벨 시작 경험치
+  
+  // 현재 레벨 구간에서의 경험치 (현재 경험치 - 현재 레벨 시작 경험치)
+  const currentLevelExp = Math.max(0, currentExp - currentLevelStartExp);
+  
+  // 진행률 계산: (현재 레벨 구간 경험치) / (다음 레벨까지 필요한 경험치)
+  if (nextLevelExpRequired <= 0) return 100;
+  
+  const progress = (currentLevelExp / nextLevelExpRequired) * 100;
+  return Math.max(0, Math.min(100, progress));
+}
+
 // 활동 점수 계산
 export function calculateActivityScore(activities: UserActivity[]): number {
   return activities.reduce((sum, activity) => sum + activity.scoreDelta, 0);
