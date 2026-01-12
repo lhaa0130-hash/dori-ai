@@ -10,7 +10,7 @@ import ProfileHero from "@/components/my/ProfileHero";
 import { UserProfile, createDefaultProfile, calculateTier, calculateLevel, ACTIVITY_SCORES } from "@/lib/userProfile";
 
 export default function MyPage() {
-  const { data: session } = useSession();
+  const { data: session, status } = useSession();
   const user = session?.user || null;
   const { theme } = useTheme();
   const router = useRouter();
@@ -24,39 +24,51 @@ export default function MyPage() {
   const [recentViews, setRecentViews] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState("posts");
   const ADMIN_EMAILS = ["admin@dori.ai", "lhaa0130@gmail.com"];
-  const isAdmin = user?.email && (ADMIN_EMAILS.some(email => email.toLowerCase() === user.email.toLowerCase()) || (user as any)?.isAdmin === true);
+  const isAdmin = !!(user && user.email && (ADMIN_EMAILS.some(email => email.toLowerCase() === user.email.toLowerCase()) || (user as any)?.isAdmin === true));
 
   useEffect(() => setMounted(true), []);
 
 
   // 프로필 데이터 로드 및 초기화
   useEffect(() => {
-    if (!user?.email) return;
+    if (!mounted || status === 'loading') return;
+    if (!user || !user.email) return;
+    if (typeof window === 'undefined') return;
 
-    const savedProfile = localStorage.getItem(`dori_profile_${user.email}`);
-    const savedName = localStorage.getItem(`dori_user_name_${user.email}`);
-    const savedBio = localStorage.getItem(`dori_user_bio_${user.email}`);
-    const savedStatusMessage = localStorage.getItem(`dori_status_${user.email}`);
-    const savedImageUrl = localStorage.getItem(`dori_image_${user.email}`);
+    try {
+      const savedProfile = localStorage.getItem(`dori_profile_${user.email}`);
+      const savedName = localStorage.getItem(`dori_user_name_${user.email}`);
+      const savedBio = localStorage.getItem(`dori_user_bio_${user.email}`);
+      const savedStatusMessage = localStorage.getItem(`dori_status_${user.email}`);
+      const savedImageUrl = localStorage.getItem(`dori_image_${user.email}`);
 
-    const nickname = savedName || user.name || "사용자";
-    const bio = savedBio || "";
-    const statusMessage = savedStatusMessage || "";
-    const profileImageUrl = savedImageUrl || undefined;
+      const nickname = savedName || user.name || "사용자";
+      const bio = savedBio || "";
+      const statusMessage = savedStatusMessage || "";
+      const profileImageUrl = savedImageUrl || undefined;
 
-    if (savedProfile) {
-      try {
-        const parsed = JSON.parse(savedProfile);
-        setProfile({
-          ...parsed,
-          nickname,
-          bio,
-          statusMessage,
-          profileImageUrl,
-          point: parsed.point || 0, // point 필드가 없으면 0으로 초기화
-        });
-      } catch {
-        // 파싱 실패 시 기본값 사용
+      if (savedProfile) {
+        try {
+          const parsed = JSON.parse(savedProfile);
+          setProfile({
+            ...parsed,
+            nickname,
+            bio,
+            statusMessage,
+            profileImageUrl,
+            point: parsed.point || 0, // point 필드가 없으면 0으로 초기화
+          });
+        } catch {
+          // 파싱 실패 시 기본값 사용
+          const defaultProfile = createDefaultProfile(user.email, user.email, nickname);
+          setProfile({
+            ...defaultProfile,
+            bio,
+            statusMessage,
+            profileImageUrl,
+          });
+        }
+      } else {
         const defaultProfile = createDefaultProfile(user.email, user.email, nickname);
         setProfile({
           ...defaultProfile,
@@ -64,42 +76,47 @@ export default function MyPage() {
           statusMessage,
           profileImageUrl,
         });
+        // 프로필이 없으면 localStorage에 저장 (구글 로그인 등으로 자동 회원 등록)
+        localStorage.setItem(`dori_profile_${user.email}`, JSON.stringify({
+          ...defaultProfile,
+          bio,
+          statusMessage,
+          profileImageUrl,
+        }));
+        if (!savedName) {
+          localStorage.setItem(`dori_user_name_${user.email}`, nickname);
+        }
       }
-    } else {
-      const defaultProfile = createDefaultProfile(user.email, user.email, nickname);
-      setProfile({
-        ...defaultProfile,
-        bio,
-        statusMessage,
-        profileImageUrl,
-      });
-      // 프로필이 없으면 localStorage에 저장 (구글 로그인 등으로 자동 회원 등록)
-      localStorage.setItem(`dori_profile_${user.email}`, JSON.stringify({
-        ...defaultProfile,
-        bio,
-        statusMessage,
-        profileImageUrl,
-      }));
-      if (!savedName) {
-        localStorage.setItem(`dori_user_name_${user.email}`, nickname);
-      }
+    } catch (error) {
+      console.error('프로필 로드 중 오류:', error);
     }
-  }, [user?.email, user?.name]);
+  }, [mounted, status, user?.email, user?.name]);
 
   // 활동 데이터 로드 및 점수 계산
   useEffect(() => {
-    if (!user?.email || !profile) return;
+    if (!mounted || status === 'loading') return;
+    if (!user || !user.email || !profile) return;
+    if (typeof window === 'undefined') return;
 
-    const currentName = profile.nickname || user?.name || "";
+    try {
+      const currentName = profile.nickname || (user && user.name) || "";
 
-    // 데이터 불러오기
-    const savedPosts = JSON.parse(localStorage.getItem("dori_posts") || "[]");
-    const mySparksIds = JSON.parse(localStorage.getItem("dori_my_sparks") || "[]");
+      // 데이터 불러오기
+      const savedPostsStr = localStorage.getItem("dori_community_posts") || "[]";
+      const mySparksIdsStr = localStorage.getItem("dori_liked_community_posts") || "[]";
+      
+      const savedPosts = JSON.parse(savedPostsStr);
+      const mySparksIds = JSON.parse(mySparksIdsStr);
+      
+      if (!Array.isArray(savedPosts) || !Array.isArray(mySparksIds)) {
+        console.error('Invalid data format');
+        return;
+      }
 
     // 1. 내가 쓴 글 필터링
     const mine = savedPosts.filter((p: any) =>
       p.author === currentName || p.nickname === currentName ||
-      p.author === user?.name || p.nickname === user?.name
+          p.author === (user && user.name) || p.nickname === (user && user.name)
     );
 
     // 2. 내가 유레카(좋아요)한 글 필터링
@@ -110,7 +127,7 @@ export default function MyPage() {
     savedPosts.forEach((post: any) => {
       if (post.commentsList && Array.isArray(post.commentsList)) {
         post.commentsList.forEach((comment: any) => {
-          if (comment.author === currentName || comment.author === user?.name) {
+          if (comment.author === currentName || comment.author === (user && user.name)) {
             comments.push({
               ...comment,
               postId: post.id,
@@ -176,7 +193,10 @@ export default function MyPage() {
       setProfile(updatedProfile);
       localStorage.setItem(`dori_profile_${user.email}`, JSON.stringify(updatedProfile));
     }
-  }, [user?.email, user?.name, profile?.nickname, profile?.doriExp, profile?.tier, profile?.level]);
+    } catch (error) {
+      console.error('활동 데이터 로드 중 오류:', error);
+    }
+  }, [mounted, status, user?.email, user?.name, profile?.nickname, profile?.doriExp, profile?.tier, profile?.level]);
 
   const getDisplayList = () => {
     switch (activeTab) {
@@ -187,10 +207,10 @@ export default function MyPage() {
   };
   const displayList = getDisplayList();
   const isDark = mounted && theme === 'dark';
-  const totalSparks = myPosts.reduce((acc, p) => acc + (p.sparks || 0), 0);
+  const totalSparks = Array.isArray(myPosts) ? myPosts.reduce((acc, p) => acc + (p.sparks || p.likes || 0), 0) : 0;
 
   const handleImageChange = (imageUrl: string) => {
-    if (!user?.email || !profile) return;
+    if (!user || !user.email || !profile) return;
     const updated = { ...profile, profileImageUrl: imageUrl };
     setProfile(updated);
     localStorage.setItem(`dori_image_${user.email}`, imageUrl);
@@ -204,7 +224,7 @@ export default function MyPage() {
   };
 
   const handleNicknameChange = (nickname: string) => {
-    if (!user?.email || !profile) return;
+    if (!user || !user.email || !profile) return;
     const updated = { ...profile, nickname };
     setProfile(updated);
     localStorage.setItem(`dori_user_name_${user.email}`, nickname);
@@ -212,7 +232,7 @@ export default function MyPage() {
   };
 
   const handleBioChange = (bio: string) => {
-    if (!user?.email || !profile) return;
+    if (!user || !user.email || !profile) return;
     const updated = { ...profile, bio };
     setProfile(updated);
     localStorage.setItem(`dori_user_bio_${user.email}`, bio);
@@ -220,17 +240,59 @@ export default function MyPage() {
   };
 
   const handleStatusMessageChange = (statusMessage: string) => {
-    if (!user?.email || !profile) return;
+    if (!user || !user.email || !profile) return;
     const updated = { ...profile, statusMessage };
     setProfile(updated);
     localStorage.setItem(`dori_status_${user.email}`, statusMessage);
     localStorage.setItem(`dori_profile_${user.email}`, JSON.stringify(updated));
   };
 
-  if (!mounted || !user) {
+  // 세션 로딩 중일 때 처리
+  if (status === 'loading' || !mounted) {
     return (
       <main style={{
         backgroundColor: isDark ? '#000000' : '#ffffff',
+        minHeight: '100vh',
+        paddingTop: '70px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        <Header />
+        <div style={{ textAlign: 'center', padding: '2rem' }}>
+          {/* 스켈레톤 로딩 */}
+          <div style={{
+            width: '60px',
+            height: '60px',
+            border: '4px solid',
+            borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : '#f3f3f3',
+            borderTopColor: isDark ? '#3b82f6' : '#2563eb',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 1rem',
+          }} />
+          <p style={{ 
+            marginTop: '1rem', 
+            color: isDark ? 'rgba(255, 255, 255, 0.7)' : '#666',
+            fontSize: '14px',
+          }}>로딩 중...</p>
+        </div>
+        <style jsx>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
+      </main>
+    );
+  }
+
+  // 로그인이 필요한 경우 (세션이 없고 로딩이 완료된 경우)
+  if (status === 'unauthenticated' || !user || !session?.user) {
+    return (
+      <main style={{
+        backgroundColor: '#ffffff',
         minHeight: '100vh',
         paddingTop: '70px',
         display: 'flex',
@@ -264,8 +326,8 @@ export default function MyPage() {
   }
 
   const activityStats = {
-    posts: myPosts.length,
-    comments: myComments.length,
+    posts: Array.isArray(myPosts) ? myPosts.length : 0,
+    comments: Array.isArray(myComments) ? myComments.length : 0,
     receivedLikes: totalSparks,
     guides: 0, // 가이드 기능이 추가되면 업데이트
   };
@@ -587,18 +649,18 @@ export default function MyPage() {
                           gap: '0.375rem',
                           padding: '0.375rem 0.75rem',
                           borderRadius: '0.5rem',
-                          background: post.sparks > 0
+                          background: (post.sparks || post.likes || 0) > 0
                             ? (isDark ? 'rgba(251, 191, 36, 0.15)' : 'rgba(212, 177, 6, 0.1)')
                             : (isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)'),
-                          color: post.sparks > 0
+                          color: (post.sparks || post.likes || 0) > 0
                             ? (isDark ? '#fbbf24' : '#d4b106')
                             : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)'),
-                          border: post.sparks > 0
+                          border: (post.sparks || post.likes || 0) > 0
                             ? `1px solid ${isDark ? 'rgba(251, 191, 36, 0.3)' : 'rgba(212, 177, 6, 0.2)'}`
                             : 'none',
                         }}>
                           <span>⚡️</span>
-                          <span style={{ fontWeight: '600' }}>{post.sparks || 0}</span>
+                          <span style={{ fontWeight: '600' }}>{post.sparks || post.likes || 0}</span>
                         </div>
                       </div>
                     </div>

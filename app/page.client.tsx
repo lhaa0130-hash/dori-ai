@@ -16,12 +16,10 @@ import {
   Target,
   BarChart3,
   FileText,
-  ArrowRight,
-  ChevronLeft,
-  ChevronRight
+  ArrowRight
 } from "lucide-react";
 
-export default function HomePageClient({ initialPosts = [] }: { initialPosts?: any[] }) {
+export default function HomePageClient() {
   const { data: session } = useSession();
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -42,23 +40,6 @@ export default function HomePageClient({ initialPosts = [] }: { initialPosts?: a
   const [isLoading, setIsLoading] = useState(false);
   const [blogPosts, setBlogPosts] = useState<any[]>([]);
   
-  // --- 트렌드 스크롤 관련 ---
-  const trendRef = useRef<HTMLDivElement | null>(null);
-  const scrollTrends = (dir: 1 | -1) => { 
-    if (trendRef.current) { 
-      trendRef.current.scrollBy({ left: dir * 350, behavior: "smooth" }); 
-    } 
-  };
-
-  // --- initialPosts 데이터 확인 ---
-  useEffect(() => {
-    console.log('🔍 [HomePageClient] initialPosts 데이터 확인:', {
-      hasData: !!initialPosts,
-      length: initialPosts?.length || 0,
-      data: initialPosts,
-      firstItem: initialPosts?.[0] || null,
-    });
-  }, [initialPosts]);
 
   // --- 데이터 로딩 (커뮤니티 글) ---
   useEffect(() => {
@@ -174,7 +155,6 @@ export default function HomePageClient({ initialPosts = [] }: { initialPosts?: a
         flexDirection: 'column',
       }}
     >
-
       {/* 좌측 사이드바 네비게이션 */}
       {mounted && (
       <aside 
@@ -568,11 +548,9 @@ export default function HomePageClient({ initialPosts = [] }: { initialPosts?: a
           boxSizing: 'border-box',
           paddingTop: '120px',
           paddingBottom: '120px',
-          zIndex: 5,
-          overflow: 'visible',
         }}
       >
-        <div className="container max-w-7xl mx-auto px-6 lg:px-12 py-24" style={{ width: '100%', overflow: 'visible', position: 'relative', zIndex: 5 }}>
+        <div className="container max-w-7xl mx-auto px-6 lg:px-12 py-24" style={{ width: '100%' }}>
         <div className="max-w-4xl mx-auto mb-16 text-center">
           <h2 
             className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight"
@@ -617,195 +595,6 @@ export default function HomePageClient({ initialPosts = [] }: { initialPosts?: a
             AI 업계 속보와 심층 칼럼을 만나보세요
           </p>
         </div>
-
-        {/* 🔍 진단용 코드 - 데이터 확인 */}
-        {initialPosts && Array.isArray(initialPosts) && initialPosts.length > 0 && (
-          <pre
-            style={{
-              backgroundColor: '#ff0000',
-              color: '#ffffff',
-              padding: '20px',
-              fontSize: '24px',
-              fontWeight: 'bold',
-              margin: '20px auto',
-              maxWidth: '800px',
-              border: '5px solid #ffff00',
-              borderRadius: '10px',
-              zIndex: 9999,
-              position: 'relative',
-              opacity: 1,
-              visibility: 'visible',
-              display: 'block',
-            }}
-          >
-            🔍 진단: {JSON.stringify(initialPosts[0].title)}
-          </pre>
-        )}
-
-        {/* 인사이트 가로 스크롤 카드 레이아웃 */}
-        {initialPosts && Array.isArray(initialPosts) && initialPosts.length > 0 && (
-          <div 
-            className="relative mb-16"
-            style={{
-              opacity: 1,
-              zIndex: 10,
-              position: 'relative',
-            }}
-          >
-            <div className="relative" style={{ zIndex: 10 }}>
-              {/* 좌측 스크롤 버튼 */}
-              <button
-                onClick={() => scrollTrends(-1)}
-                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300"
-                style={{
-                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
-                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'}`,
-                  color: isDark ? '#ffffff' : '#000000',
-                  boxShadow: isDark ? '0 4px 20px rgba(0,0,0,0.3)' : '0 4px 20px rgba(0,0,0,0.08)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
-                }}
-              >
-                <ChevronLeft className="w-6 h-6" />
-              </button>
-
-              {/* 가로 스크롤 컨테이너 */}
-              <div
-                ref={trendRef}
-                className="flex gap-6 overflow-x-auto scrollbar-hide px-14"
-                style={{
-                  display: 'flex',
-                  minHeight: '450px',
-                  opacity: 1,
-                  zIndex: 10,
-                  position: 'relative',
-                }}
-              >
-                {initialPosts.map((post: any, index: number) => {
-                  console.log(`📄 [Insight Card ${index}] Post 데이터:`, {
-                    id: post.id,
-                    title: post.title,
-                    thumbnail_url: post.thumbnail_url,
-                    hasThumbnail: !!post.thumbnail_url,
-                    fullPost: post,
-                  });
-                  
-                  return (
-                  <Link
-                    key={post.id || index}
-                    href={`/post/${post.id}`}
-                    className="flex-shrink-0 w-80 rounded-2xl overflow-hidden transition-all duration-300"
-                    style={{
-                      backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
-                      border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
-                      boxShadow: isDark ? '0 4px 20px rgba(0,0,0,0.3)' : '0 4px 20px rgba(0,0,0,0.05)',
-                      opacity: 1,
-                      zIndex: 10,
-                      position: 'relative',
-                      visibility: 'visible',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.transform = 'translateY(-8px)';
-                      e.currentTarget.style.boxShadow = isDark 
-                        ? '0 15px 40px rgba(0,0,0,0.5)' 
-                        : '0 15px 40px rgba(0,0,0,0.12)';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.transform = 'translateY(0)';
-                      e.currentTarget.style.boxShadow = isDark 
-                        ? '0 4px 20px rgba(0,0,0,0.3)' 
-                        : '0 4px 20px rgba(0,0,0,0.05)';
-                    }}
-                  >
-                    {/* 썸네일 이미지 */}
-                    <div 
-                      className="w-full aspect-video relative overflow-hidden"
-                      style={{
-                        backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : '#f0f0f0',
-                      }}
-                    >
-                      {post.thumbnail_url ? (
-                        <img
-                          src={post.thumbnail_url}
-                          alt={post.title || '인사이트'}
-                          className="w-full h-full object-cover transition-transform duration-500"
-                          style={{
-                            transform: 'scale(1)',
-                          }}
-                          onMouseEnter={(e) => {
-                            e.currentTarget.style.transform = 'scale(1.05)';
-                          }}
-                          onMouseLeave={(e) => {
-                            e.currentTarget.style.transform = 'scale(1)';
-                          }}
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center">
-                          <span style={{ color: isDark ? 'rgba(255, 255, 255, 0.3)' : '#ccc', fontSize: '40px' }}>📄</span>
-                        </div>
-                      )}
-                    </div>
-
-                    {/* 카드 내용 */}
-                    <div className="p-5">
-                      <h3
-                        className="line-clamp-2 font-bold mb-3 transition-colors duration-300"
-                        style={{
-                          color: isDark ? '#ffffff' : '#111',
-                          fontSize: '18px',
-                          lineHeight: '1.4',
-                          minHeight: '50px',
-                        }}
-                      >
-                        {post.title || '제목 없음'}
-                      </h3>
-                      <span
-                        className="inline-flex items-center gap-2 text-sm font-semibold transition-all duration-300 cursor-pointer"
-                        style={{
-                          color: isDark ? 'rgba(255, 255, 255, 0.8)' : '#3b82f6',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.gap = '6px';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.gap = '4px';
-                        }}
-                      >
-                        자세히 보기
-                        <ArrowRight className="w-4 h-4" />
-                      </span>
-                    </div>
-                  </Link>
-                  );
-                })}
-              </div>
-
-              {/* 우측 스크롤 버튼 */}
-              <button
-                onClick={() => scrollTrends(1)}
-                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300"
-                style={{
-                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
-                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'}`,
-                  color: isDark ? '#ffffff' : '#000000',
-                  boxShadow: isDark ? '0 4px 20px rgba(0,0,0,0.3)' : '0 4px 20px rgba(0,0,0,0.08)',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)';
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
-                }}
-              >
-                <ChevronRight className="w-6 h-6" />
-              </button>
-            </div>
-          </div>
-        )}
 
         {/* Insight Workflow Grid */}
         <div className="insight-workflow-container relative">

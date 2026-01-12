@@ -74,8 +74,23 @@ if (googleClientId && googleClientSecret) {
     GoogleProvider({
       clientId: googleClientId,
       clientSecret: googleClientSecret,
+      authorization: {
+        params: {
+          prompt: "consent",
+          access_type: "offline",
+          response_type: "code"
+        }
+      },
+      checks: ["pkce", "state"]
     })
   );
+  
+  // 개발 환경에서 콜백 URL 안내
+  if (process.env.NODE_ENV === "development" && nextAuthUrl) {
+    console.log(`\n📋 Google OAuth 콜백 URL 설정 안내:`);
+    console.log(`   Google Cloud Console에서 다음 URL을 승인된 리디렉션 URI에 추가하세요:`);
+    console.log(`   ${nextAuthUrl}/api/auth/callback/google\n`);
+  }
 } else if (process.env.NODE_ENV === "development") {
   console.warn("⚠️ 구글 프로바이더가 비활성화되었습니다. GOOGLE_CLIENT_ID와 GOOGLE_CLIENT_SECRET을 확인하세요.");
 }
@@ -114,7 +129,11 @@ const handler = NextAuth({
         // 여기서는 기본값만 설정 (실제로는 클라이언트에서 덮어씀)
         token.name = user.name;
       }
-      if (account?.provider === "google" && user?.email) {
+      if (account?.provider === "google") {
+        if (!user?.email) {
+          console.error("❌ Google OAuth callback error: user email is missing in JWT callback");
+          throw new Error("OAuthCallback: User email is missing");
+        }
         token.email = user.email;
         // Google 로그인 시에도 클라이언트에서 localStorage 확인 후 설정
         token.name = user.name;
@@ -132,6 +151,12 @@ const handler = NextAuth({
             userEmail: user?.email,
             accountId: account?.providerAccountId
           });
+        }
+        
+        // Google OAuth 콜백 검증
+        if (!user?.email) {
+          console.error("❌ Google OAuth callback error: user email is missing");
+          return false;
         }
       }
       return true;

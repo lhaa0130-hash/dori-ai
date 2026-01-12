@@ -17,6 +17,7 @@ const hideScrollbarStyle = `
 export default function RightSideAd() {
   const adTopRef = useRef<HTMLDivElement>(null);
   const adBottomRef = useRef<HTMLDivElement>(null);
+  const containerRef = useRef<HTMLElement>(null);
   const adTopInitialized = useRef(false);
   const adBottomInitialized = useRef(false);
 
@@ -34,23 +35,37 @@ export default function RightSideAd() {
     const checkAndInit = () => {
       if (typeof window === "undefined") return;
 
+      // 컨테이너가 실제로 보이는지 확인 (너비가 0보다 큰지)
+      const isVisible = containerRef.current && containerRef.current.offsetWidth > 0;
+      if (!isVisible) {
+        // 보이지 않으면 재시도 (화면 크기가 변경될 수 있음)
+        setTimeout(checkAndInit, 500);
+        return;
+      }
+
       // 상단 광고 초기화
       if (!adTopInitialized.current && (window as any).adsbygoogle && adTopRef.current) {
-        try {
-          ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
-          adTopInitialized.current = true;
-        } catch (e) {
-          console.error("AdSense top ad initialization error:", e);
+        const adElement = adTopRef.current.querySelector('.adsbygoogle') as HTMLElement;
+        if (adElement && adElement.offsetWidth > 0) {
+          try {
+            ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+            adTopInitialized.current = true;
+          } catch (e) {
+            console.error("AdSense top ad initialization error:", e);
+          }
         }
       }
 
       // 하단 광고 초기화
       if (!adBottomInitialized.current && (window as any).adsbygoogle && adBottomRef.current) {
-        try {
-          ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
-          adBottomInitialized.current = true;
-        } catch (e) {
-          console.error("AdSense bottom ad initialization error:", e);
+        const adElement = adBottomRef.current.querySelector('.adsbygoogle') as HTMLElement;
+        if (adElement && adElement.offsetWidth > 0) {
+          try {
+            ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
+            adBottomInitialized.current = true;
+          } catch (e) {
+            console.error("AdSense bottom ad initialization error:", e);
+          }
         }
       }
 
@@ -66,6 +81,7 @@ export default function RightSideAd() {
 
   return (
     <aside
+      ref={containerRef}
       className="right-side-ad-container fixed right-6 top-1/2 -translate-y-1/2 hidden xl:flex flex-col z-40"
       style={{
         width: "160px",

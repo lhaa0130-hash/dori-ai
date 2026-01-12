@@ -67,6 +67,39 @@ export default function InsightList({ filters, setFilters, posts, isOwner, onEdi
     setFilters({ ...filters, tag: null });
   }, [filters, setFilters]);
 
+  // 하트 클릭 핸들러
+  const handleLikeClick = useCallback((e: React.MouseEvent, itemId: number) => {
+    e.preventDefault();
+    e.stopPropagation();
+    
+    if (!mounted) return;
+
+    const currentLikedPosts = [...likedPosts];
+    const isCurrentlyLiked = currentLikedPosts.includes(itemId);
+    const newIsLiked = !isCurrentlyLiked;
+    
+    // 좋아요한 글 ID 목록 업데이트
+    let updatedLikedPosts: number[];
+    if (newIsLiked) {
+      if (!currentLikedPosts.includes(itemId)) {
+        updatedLikedPosts = [...currentLikedPosts, itemId];
+      } else {
+        updatedLikedPosts = currentLikedPosts;
+      }
+    } else {
+      updatedLikedPosts = currentLikedPosts.filter(id => id !== itemId);
+    }
+    setLikedPosts(updatedLikedPosts);
+    localStorage.setItem('dori_liked_insights', JSON.stringify(updatedLikedPosts));
+    
+    // 좋아요 수 업데이트
+    const currentLikes = likesData[itemId] !== undefined ? likesData[itemId] : (posts.find(p => p.id === itemId)?.likes || 0);
+    const newLikes = newIsLiked ? currentLikes + 1 : Math.max(0, currentLikes - 1);
+    const updatedLikesData = { ...likesData, [itemId]: newLikes };
+    setLikesData(updatedLikesData);
+    localStorage.setItem('dori_insight_likes', JSON.stringify(updatedLikesData));
+  }, [mounted, likedPosts, likesData, posts]);
+
   // 카테고리별 색상
   const getCategoryColor = (category: string) => {
     switch (category) {
@@ -207,16 +240,24 @@ export default function InsightList({ filters, setFilters, posts, isOwner, onEdi
                           </span>
                         )}
                       </div>
-                      <div 
-                        className="flex items-center gap-1 text-xs"
+                      <button
+                        type="button"
+                        onClick={(e) => handleLikeClick(e, item.id)}
+                        className="flex items-center gap-1 text-xs cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95"
                         style={{ 
                           color: isLiked ? '#ef4444' : 'var(--text-sub)',
                           opacity: isLiked ? 1 : 0.6,
+                          background: 'none',
+                          border: 'none',
+                          padding: 0,
+                          margin: 0,
                         }}
                       >
-                        <span className="text-sm">{isLiked ? '❤️' : '🤍'}</span>
+                        <span className="text-sm transition-transform duration-200" style={{ transform: isLiked ? 'scale(1.2)' : 'scale(1)' }}>
+                          {isLiked ? '❤️' : '🤍'}
+                        </span>
                         <span>{likes}</span>
-                      </div>
+                      </button>
                     </div>
                   </div>
                 </div>

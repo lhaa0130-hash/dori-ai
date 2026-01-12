@@ -1,314 +1,159 @@
 "use client";
 
-import { useState, useEffect, useCallback, Suspense } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useTheme } from "next-themes";
-import { useSearchParams } from "next/navigation";
-import InsightList from "@/components/insight/InsightList";
-import { TEXTS } from "@/constants/texts";
-import { InsightItem } from "@/types/content";
+import Link from "next/link";
+import Header from "@/components/layout/Header";
 
-// 📌 [비상용] 파일이 없을 때 보여줄 임시 데이터
-const FALLBACK_POSTS: InsightItem[] = [
-  {
-    id: 999,
-    title: "📢 게시글을 불러오지 못했습니다.",
-    summary: "posts 폴더에 .md 파일이 없거나, 서버가 파일을 찾지 못했습니다. 터미널을 껐다가 다시 켜보세요!",
-    category: "기타", // 있는 카테고리 중 하나여야 함
-    tags: ["System", "Check"],
-    likes: 0,
-    date: new Date().toISOString(),
-    content: "<p>폴더 위치를 다시 확인해주세요: 프로젝트최상위/posts/insight/...</p>",
-    aiMeta: { creationType: "human_only" }
-  }
-];
-
-// SearchParams를 읽는 컴포넌트 (Suspense로 감싸야 함)
-function SearchParamsReader({ 
-  onCategoryChange 
-}: { 
-  onCategoryChange: (category: string) => void 
-}) {
-  const searchParams = useSearchParams();
-  
-  useEffect(() => {
-    const category = searchParams?.get('category') || "All";
-    onCategoryChange(category);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [searchParams]);
-  
-  return null;
+interface Post {
+  id: string;
+  title: string;
+  thumbnail_url?: string;
+  content?: string;
+  created_at?: string;
+  category?: string;
+  tags?: string[];
+  likes?: number;
+  slug?: string;
 }
 
-function InsightClientContent({ 
-  initialPosts, 
-  initialCategory 
-}: { 
-  initialPosts: InsightItem[];
-  initialCategory: string;
-}) {
-  const t = TEXTS.insight;
+interface InsightPageClientProps {
+  initialPosts: Post[];
+}
+
+export default function InsightPageClient({ initialPosts = [] }: InsightPageClientProps) {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  
-  // URL 쿼리 파라미터에서 카테고리 읽기
-  const categoryFromUrl = initialCategory;
-  
-  const [activeCategory, setActiveCategory] = useState(categoryFromUrl);
-  const [filters, setFilters] = useState<{ category: string; tag: string | null; sort: string }>({
-    category: categoryFromUrl,
-    tag: null,
-    sort: "newest",
-  });
+  const [likedPosts, setLikedPosts] = useState<number[]>([]);
+  const [likesData, setLikesData] = useState<Record<string, number>>({});
 
   useEffect(() => {
     setMounted(true);
+    if (typeof window !== 'undefined') {
+      try {
+        const liked = JSON.parse(localStorage.getItem('dori_liked_insights') || '[]');
+        const likes = JSON.parse(localStorage.getItem('dori_insight_likes') || '{}');
+        setLikedPosts(liked);
+        setLikesData(likes);
+      } catch (e) {
+        console.error("Failed to parse localStorage for likes:", e);
+      }
+    }
   }, []);
-
-  // URL 파라미터가 변경될 때만 필터 업데이트 (초기 로드 시에만)
-  useEffect(() => {
-    if (!mounted) return;
-    if (initialCategory && initialCategory !== filters.category) {
-      setActiveCategory(initialCategory);
-      setFilters(prev => ({ ...prev, category: initialCategory }));
-    }
-  }, [initialCategory, mounted]); // filters.category 의존성 제거
-
-  // 필터 변경 시 activeCategory 동기화 (제거 - handleCategoryClick에서 직접 관리)
-
-  // 작성자 ID 생성 및 관리 유틸리티
-  const getAuthorId = (): string => {
-    if (typeof window === 'undefined') return '';
-    
-    let authorId = sessionStorage.getItem('dori_insight_author_id');
-    if (!authorId) {
-      authorId = crypto.randomUUID();
-      sessionStorage.setItem('dori_insight_author_id', authorId);
-    }
-    return authorId;
-  };
-
-  // 본인이 작성한 인사이트 글 ID 목록 가져오기
-  const getMyInsightIds = (): Set<number> => {
-    if (typeof window === 'undefined') return new Set();
-    
-    const saved = localStorage.getItem('dori_my_insights');
-    if (saved) {
-      try {
-        return new Set(JSON.parse(saved));
-      } catch (e) {
-        return new Set();
-      }
-    }
-    return new Set();
-  };
-
-  // 본인이 작성한 인사이트 글 ID 목록에 추가
-  const addMyInsightId = (id: number) => {
-    if (typeof window === 'undefined') return;
-    
-    const myIds = getMyInsightIds();
-    myIds.add(id);
-    localStorage.setItem('dori_my_insights', JSON.stringify(Array.from(myIds)));
-  };
-
-  // 본인이 작성한 인사이트 글 ID 목록에서 제거
-  const removeMyInsightId = (id: number) => {
-    if (typeof window === 'undefined') return;
-    
-    const myIds = getMyInsightIds();
-    myIds.delete(id);
-    localStorage.setItem('dori_my_insights', JSON.stringify(Array.from(myIds)));
-  };
-
-  // 로컬스토리지에서 사용자가 작성한 인사이트 글 가져오기
-  const [userPosts, setUserPosts] = useState<InsightItem[]>([]);
-  const [editingPost, setEditingPost] = useState<InsightItem | null>(null);
-
-  useEffect(() => {
-    if (!mounted) return;
-    
-    // 로컬스토리지에서 사용자가 작성한 글 불러오기
-    const savedUserPosts = localStorage.getItem("dori_user_insights");
-    if (savedUserPosts) {
-      try {
-        const parsed: InsightItem[] = JSON.parse(savedUserPosts);
-        setUserPosts(parsed);
-      } catch (e) {
-        console.error('Failed to parse user insights:', e);
-      }
-    }
-  }, [mounted]);
-
-  // 작성자 ID 가져오기
-  const authorId = mounted ? getAuthorId() : '';
-  const myInsightIds = mounted ? getMyInsightIds() : new Set<number>();
-
-  // 본인 글인지 확인
-  const isOwner = (item: InsightItem): boolean => {
-    if (!mounted) return false;
-    // authorId가 있으면 authorId로 확인, 없으면 myInsightIds로 확인 (기존 데이터 호환성)
-    if (item.authorId) {
-      return item.authorId === authorId;
-    }
-    return myInsightIds.has(item.id);
-  };
-
-  // 1. 받아온 데이터와 사용자가 작성한 글 합치기
-  const basePosts = (initialPosts && Array.isArray(initialPosts) && initialPosts.length > 0) 
-    ? initialPosts 
-    : FALLBACK_POSTS;
-  
-  const postsToDisplay = [...userPosts, ...basePosts];
 
   const isDark = mounted && theme === 'dark';
 
-  // 카테고리 목록
-  const categories = [
-    { id: "All", label: "전체" },
-    { id: "트렌드", label: "트렌드" },
-    { id: "큐레이션", label: "큐레이션" },
-    { id: "가이드", label: "가이드" },
-    { id: "리포트", label: "리포트" },
-    { id: "분석", label: "분석" },
-  ];
+  // 하트 클릭 핸들러
+  const handleLikeClick = useCallback((e: React.MouseEvent, postId: string, currentLikes: number) => {
+    e.preventDefault();
+    e.stopPropagation();
 
-  const handleCategoryClick = (category: string) => {
-    console.log('=== 사이드바 클릭 ===', category);
-    // 카테고리 필터링 업데이트
-    const newCategory = category === "All" ? "All" : category;
-    console.log('새 카테고리:', newCategory);
+    if (!mounted) return;
+
+    const postIdNum = parseInt(postId);
+    const newIsLiked = !likedPosts.includes(postIdNum);
+    const updatedLikedPosts = newIsLiked
+      ? [...likedPosts, postIdNum]
+      : likedPosts.filter(id => id !== postIdNum);
+
+    setLikedPosts(updatedLikedPosts);
+    localStorage.setItem('dori_liked_insights', JSON.stringify(updatedLikedPosts));
+
+    const newLikes = newIsLiked ? currentLikes + 1 : Math.max(0, currentLikes - 1);
+    const updatedLikesData = { ...likesData, [postId]: newLikes };
+    setLikesData(updatedLikesData);
+    localStorage.setItem('dori_insight_likes', JSON.stringify(updatedLikesData));
+  }, [mounted, likedPosts, likesData]);
+
+  // 카테고리별 색상
+  const getCategoryColor = (category?: string) => {
+    switch (category) {
+      case '트렌드':
+      case 'trend':
+        return { bg: 'rgba(59, 130, 246, 0.1)', text: '#3b82f6' };
+      case '가이드':
+        return { bg: 'rgba(139, 92, 246, 0.1)', text: '#8b5cf6' };
+      case '큐레이션':
+        return { bg: 'rgba(236, 72, 153, 0.1)', text: '#ec4899' };
+      case '분석':
+        return { bg: 'rgba(6, 182, 212, 0.1)', text: '#06b6d4' };
+      case '리포트':
+        return { bg: 'rgba(16, 185, 129, 0.1)', text: '#10b981' };
+      default:
+        return { bg: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)', text: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)' };
+    }
+  };
+
+  // 본문 요약 추출 (HTML 태그 제거 및 시스템 메시지 필터링)
+  const getSummary = (content?: string) => {
+    if (!content) return '';
     
-    // 상태 업데이트를 동시에 수행 - 강제로 새 객체 생성
-    setActiveCategory(newCategory);
-    setFilters({
-      category: newCategory,
-      tag: null,
-      sort: "newest",
+    // HTML 태그 제거
+    let text = content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
+    
+    // 시스템 메시지 및 마크다운 메타데이터 제거
+    const systemPatterns = [
+      /^물론입니다\.\s*/i,
+      /^---\s*title:.*?---\s*/s,
+      /^#+\s*title:.*?\n/s,
+      /^AI 전문 블로그.*?\n/i,
+      /^---\s*[\s\S]*?---\s*/,
+      /^```[\s\S]*?```\s*/,
+      /^\[.*?\]\(.*?\)\s*/g,
+      /^#+\s+/gm,
+    ];
+    
+    systemPatterns.forEach(pattern => {
+      text = text.replace(pattern, '');
     });
     
-    console.log('상태 업데이트 완료 - 필터:', newCategory);
+    // 실제 본문 시작점 찾기 (첫 번째 문장이 의미있는 내용인지 확인)
+    const sentences = text.split(/[.!?]\s+/).filter(s => s.trim().length > 10);
+    if (sentences.length > 0) {
+      text = sentences.join('. ');
+    }
     
-    // 강제 리렌더링을 위한 약간의 지연
-    setTimeout(() => {
-      console.log('필터링 후 필터 상태 확인');
-      // 인사이트 목록 섹션으로 스크롤
-      const listSection = document.getElementById('list');
-      if (listSection) {
-        const headerOffset = 80;
-        const elementPosition = listSection.getBoundingClientRect().top;
-        const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-        
-        window.scrollTo({
-          top: offsetPosition,
-          behavior: 'smooth'
-        });
-      } else {
-        // 섹션이 없으면 상단으로 스크롤
-        window.scrollTo({ top: 0, behavior: 'smooth' });
-      }
-    }, 50);
+    text = text.trim();
+    
+    // 최종 정제: 너무 짧거나 의미없는 텍스트 제거
+    if (text.length < 20) return '';
+    
+    return text.length > 150 ? text.substring(0, 150) + '...' : text;
+  };
+
+  // 카테고리 표시명 변환 (trend → 트렌드)
+  const getCategoryDisplay = (category?: string) => {
+    if (!category) return '';
+    if (category.toLowerCase() === 'trend') return '트렌드';
+    return category;
   };
 
   return (
-    <main 
-      className="w-full min-h-screen relative overflow-x-hidden" 
-      style={{
-        backgroundColor: isDark ? '#000000' : '#ffffff',
-        fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-      }}
-    >
-      {/* 좌측 사이드바 네비게이션 */}
-      <aside 
-        className="fixed left-0 hidden lg:block"
-        style={{
-          top: '50%',
-          transform: 'translateY(-50%)',
-          zIndex: 9999,
-          pointerEvents: 'auto',
-        }}
-      >
-        <nav className="ml-8" style={{ pointerEvents: 'auto' }}>
-          <div 
-            className="flex flex-col gap-3 p-4 rounded-2xl backdrop-blur-xl transition-all duration-500"
-            style={{
-              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
-              border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
-              pointerEvents: 'auto',
-            }}
-          >
-            {categories.map((item) => (
-              <button
-                key={item.id}
-                type="button"
-                className="group relative flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 cursor-pointer w-full text-left"
-                style={{
-                  backgroundColor: activeCategory === item.id 
-                    ? (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)')
-                    : 'transparent',
-                  border: 'none',
-                  outline: 'none',
-                  pointerEvents: 'auto',
-                  cursor: 'pointer',
-                }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  console.log('사이드바 클릭:', item.id);
-                  handleCategoryClick(item.id);
-                }}
-                onMouseDown={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                }}
-              >
-                <div 
-                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                    activeCategory === item.id ? 'scale-150' : 'scale-100'
-                  }`}
-                  style={{
-                    backgroundColor: activeCategory === item.id 
-                      ? (isDark ? '#ffffff' : '#000000')
-                      : (isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)'),
-                  }}
-                />
-                <span 
-                  className="text-xs font-medium transition-all duration-300"
-                  style={{
-                    color: activeCategory === item.id 
-                      ? (isDark ? '#ffffff' : '#000000')
-                      : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)'),
-                    transform: activeCategory === item.id ? 'translateX(4px)' : 'translateX(0)',
-                  }}
-                >
-                  {item.label}
-                </span>
-              </button>
-            ))}
-          </div>
-        </nav>
-      </aside>
+    <main style={{
+      backgroundColor: isDark ? '#000000' : '#ffffff',
+      fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
+      minHeight: '100vh',
+      paddingTop: '70px',
+    }}>
+      <Header />
 
-      {/* 배경 효과 */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        {mounted && theme === "dark" && (
-          <>
-            <div className="absolute top-[-200px] left-[20%] w-[500px] h-[500px] rounded-full blur-[100px] opacity-40 bg-blue-900 mix-blend-screen animate-pulse" />
-            <div className="absolute top-[100px] right-[20%] w-[450px] h-[450px] rounded-full blur-[100px] opacity-40 bg-purple-900 mix-blend-screen animate-pulse" style={{ animationDelay: '1s' }} />
-          </>
-        )}
-        {mounted && theme === "light" && (
-          <div 
-            className="absolute inset-0 transition-all duration-1000"
-            style={{
-              background: 'radial-gradient(ellipse at top, rgba(59, 130, 246, 0.05) 0%, transparent 50%), #ffffff',
-            }}
-          />
-        )}
-      </div>
+      {/* 다크모드 배경 효과 */}
+      {isDark && (
+        <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
+          <div className="absolute top-0 left-[20%] w-[500px] h-[500px] rounded-full blur-[100px] opacity-40 bg-blue-900 mix-blend-screen animate-pulse" />
+          <div className="absolute top-[100px] right-[20%] w-[450px] h-[450px] rounded-full blur-[100px] opacity-40 bg-purple-900 mix-blend-screen animate-pulse" style={{ animationDelay: '1s' }} />
+        </div>
+      )}
 
-      {/* 히어로 섹션 */}
-      <section className="relative pt-20 pb-12 px-6 lg:pl-12 text-center overflow-hidden">
-        <div className="max-w-4xl mx-auto animate-[fadeInUp_0.8s_ease-out_forwards]">
+      {/* 인사이트 페이지 콘텐츠 */}
+      <section className="relative z-10" style={{
+        maxWidth: '1200px',
+        margin: '0 auto',
+        padding: '2rem 1.5rem',
+        minHeight: 'calc(100vh - 70px)',
+      }}>
+        {/* 헤더 */}
+        <div className="max-w-4xl mx-auto mb-8 text-center">
           <h1 
             className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight"
             style={{ 
@@ -317,10 +162,10 @@ function InsightClientContent({
               letterSpacing: '-0.03em',
             }}
           >
-            {t.heroTitle.ko}
+            인사이트
           </h1>
           
-          {/* 그라데이션 바 */}
+          {/* 그라데이션 구분선 */}
           <div 
             className="w-full max-w-2xl mx-auto h-1 md:h-1.5 mb-6 rounded-full overflow-hidden"
             style={{
@@ -349,56 +194,177 @@ function InsightClientContent({
               letterSpacing: '-0.01em',
             }}
           >
-            {t.heroSubtitle.ko}
+            AI 업계 속보와 심층 칼럼을 만나보세요
           </p>
         </div>
-      </section>
-      
-      {/* 메인 콘텐츠 */}
-      <section 
-        id="list"
-        className="container max-w-7xl mx-auto px-4 md:px-6 lg:pl-12 pb-24 border-b border-dashed relative" 
-        style={{ 
-          borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)',
-        }}
-      >
-        <h2 
-          className="text-2xl font-bold mb-8 flex items-center gap-2" 
-          style={{ 
-            color: isDark ? '#ffffff' : '#1d1d1f',
-            fontWeight: 700,
-            letterSpacing: '-0.02em',
-          }}
-        >
-          🧠 인사이트 목록
-        </h2>
-        
-        {/* 👇 리스트에 데이터 전달 */}
-        <InsightList 
-          filters={filters} 
-          setFilters={setFilters} 
-          posts={postsToDisplay}
-          isOwner={isOwner}
-          onEdit={(item) => {
-            setEditingPost(item);
-            // 폼으로 스크롤 (나중에 폼 추가 시)
-            setTimeout(() => {
-              const formElement = document.querySelector('[data-insight-form]');
-              if (formElement) {
-                formElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+
+        {/* 리스트 레이아웃 - InsightList.tsx와 동일한 구조 */}
+        {initialPosts.length > 0 ? (
+          <div className="flex flex-col gap-3">
+            {initialPosts.map((post) => {
+              const categoryColor = getCategoryColor(post.category);
+              const summary = getSummary(post.content);
+              const categoryDisplay = getCategoryDisplay(post.category);
+              const postId = String(post.id || '');
+              const isPostLiked = likedPosts.includes(parseInt(postId));
+              const currentLikes = likesData[postId] !== undefined ? likesData[postId] : (post.likes || 0);
+              
+              // 경로 결정: slug가 있으면 가이드/트렌드 경로 사용, 없으면 DB 포스트 경로 사용
+              let href = `/post/${postId}`;
+              if (post.slug) {
+                if (post.category === '가이드') {
+                  href = `/insight/guide/${post.slug}`;
+                } else if (post.category === '트렌드' || post.category?.toLowerCase() === 'trend') {
+                  href = `/insight/trend/${post.slug}`;
+                }
               }
-            }, 100);
-          }}
-          onDelete={(id) => {
-            const updated = userPosts.filter(post => post.id !== id);
-            setUserPosts(updated);
-            localStorage.setItem("dori_user_insights", JSON.stringify(updated));
-            removeMyInsightId(id);
-          }}
-        />
+              
+              return (
+                <Link
+                  key={postId}
+                  href={href}
+                  className="group block"
+                  style={{ textDecoration: 'none', color: 'inherit' }}
+                >
+                  <div
+                    className="flex gap-4 p-3 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
+                    style={{
+                      backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
+                      borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7',
+                    }}
+                  >
+                    {/* 좌측 이미지 */}
+                    <div
+                      className="w-[160px] h-[80px] rounded-xl overflow-hidden flex-shrink-0 relative"
+                      style={{
+                        backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : '#f0f0f0',
+                      }}
+                    >
+                      {post.thumbnail_url ? (
+                        <img
+                          src={post.thumbnail_url}
+                          alt={post.title}
+                          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                          loading="lazy"
+                          decoding="async"
+                          onError={(e) => {
+                            e.currentTarget.style.display = 'none';
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center text-4xl opacity-30">
+                          📝
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 우측 내용 */}
+                    <div className="flex-1 flex flex-col gap-1.5 min-w-0">
+                      {/* 카테고리 & 날짜 */}
+                      <div className="flex items-center gap-3">
+                        {categoryDisplay && (
+                          <span
+                            className="px-2 py-0.5 rounded-full text-[10px] font-semibold"
+                            style={{
+                              backgroundColor: categoryColor.bg,
+                              color: categoryColor.text,
+                            }}
+                          >
+                            {categoryDisplay}
+                          </span>
+                        )}
+                        {post.created_at && (
+                          <span 
+                            className="text-xs opacity-60"
+                            style={{ color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)' }}
+                            suppressHydrationWarning={true}
+                          >
+                            {new Date(post.created_at).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })}
+                          </span>
+                        )}
+                      </div>
+
+                      {/* 제목 */}
+                      <h3
+                        className="text-base font-bold leading-tight break-keep line-clamp-1"
+                        style={{ 
+                          color: isDark ? '#ffffff' : '#1d1d1f',
+                        }}
+                      >
+                        {post.title || '제목 없음'}
+                      </h3>
+
+                      {/* 요약 */}
+                      <p
+                        className="text-xs leading-relaxed line-clamp-1"
+                        style={{ 
+                          color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)',
+                        }}
+                      >
+                        {summary || post.summary || ''}
+                      </p>
+
+                      {/* 태그 & 좋아요 */}
+                      <div className="flex items-center justify-between mt-auto">
+                        <div className="flex gap-1.5 flex-wrap">
+                          {post.tags && post.tags.length > 0 && post.tags.slice(0, 3).map((tag, idx) => (
+                            <span
+                              key={idx}
+                              className="text-[10px] px-1.5 py-0.5 rounded-md border"
+                              style={{
+                                backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
+                                borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+                                color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)',
+                              }}
+                            >
+                              #{tag}
+                            </span>
+                          ))}
+                          {post.tags && post.tags.length > 3 && (
+                            <span 
+                              className="text-[10px] opacity-60"
+                              style={{ color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)' }}
+                            >
+                              +{post.tags.length - 3}
+                            </span>
+                          )}
+                        </div>
+                        <button
+                          type="button"
+                          onClick={(e) => handleLikeClick(e, postId, currentLikes)}
+                          className="flex items-center gap-1 text-xs cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95"
+                          style={{ 
+                            color: isPostLiked ? '#ef4444' : (isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)'),
+                            opacity: isPostLiked ? 1 : 0.6,
+                            background: 'none',
+                            border: 'none',
+                            padding: 0,
+                            margin: 0,
+                          }}
+                        >
+                          <span className="text-sm transition-transform duration-200" style={{ transform: isPostLiked ? 'scale(1.2)' : 'scale(1)' }}>
+                            {isPostLiked ? '❤️' : '🤍'}
+                          </span>
+                          <span>{currentLikes}</span>
+                        </button>
+                      </div>
+                    </div>
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
+        ) : (
+          <div style={{
+            textAlign: 'center',
+            padding: '4rem 0',
+            color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
+          }}>
+            아직 게시글이 없습니다.
+          </div>
+        )}
       </section>
 
-      {/* 스타일 */}
       <style jsx global>{`
         @keyframes gradientFlow {
           0% {
@@ -410,22 +376,5 @@ function InsightClientContent({
         }
       `}</style>
     </main>
-  );
-}
-
-export default function InsightClient({ initialPosts }: { initialPosts: InsightItem[] }) {
-  const [category, setCategory] = useState("All");
-  
-  const handleCategoryChange = useCallback((newCategory: string) => {
-    setCategory(newCategory);
-  }, []);
-  
-  return (
-    <>
-      <Suspense fallback={null}>
-        <SearchParamsReader onCategoryChange={handleCategoryChange} />
-      </Suspense>
-      <InsightClientContent initialPosts={initialPosts} initialCategory={category} />
-    </>
   );
 }
