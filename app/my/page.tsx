@@ -249,9 +249,14 @@ export default function MyPage() {
 
   // 세션 로딩 중일 때 처리
   if (status === 'loading' || !mounted) {
+    const loadingBgColor = mounted && theme === 'dark' ? '#000000' : '#ffffff';
+    const loadingTextColor = mounted && theme === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#666';
+    const loadingBorderColor = mounted && theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : '#f3f3f3';
+    const loadingBorderTopColor = mounted && theme === 'dark' ? '#3b82f6' : '#2563eb';
+    
     return (
       <main style={{
-        backgroundColor: isDark ? '#000000' : '#ffffff',
+        backgroundColor: loadingBgColor,
         minHeight: '100vh',
         paddingTop: '70px',
         display: 'flex',
@@ -266,17 +271,17 @@ export default function MyPage() {
             width: '60px',
             height: '60px',
             border: '4px solid',
-            borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : '#f3f3f3',
-            borderTopColor: isDark ? '#3b82f6' : '#2563eb',
+            borderColor: loadingBorderColor,
+            borderTopColor: loadingBorderTopColor,
             borderRadius: '50%',
             animation: 'spin 1s linear infinite',
             margin: '0 auto 1rem',
           }} />
           <p style={{ 
             marginTop: '1rem', 
-            color: isDark ? 'rgba(255, 255, 255, 0.7)' : '#666',
+            color: loadingTextColor,
             fontSize: '14px',
-          }}>로딩 중...</p>
+          }}>사용자 정보를 불러오는 중입니다...</p>
         </div>
         <style jsx>{`
           @keyframes spin {
@@ -289,20 +294,57 @@ export default function MyPage() {
   }
 
   // 로그인이 필요한 경우 (세션이 없고 로딩이 완료된 경우)
-  if (status === 'unauthenticated' || !user || !session?.user) {
+  if (status === 'unauthenticated' || !session || !session.user || !user || !user.email) {
+    const unAuthBgColor = mounted && theme === 'dark' ? '#000000' : '#ffffff';
+    const unAuthTextColor = mounted && theme === 'dark' ? 'rgba(255, 255, 255, 0.8)' : '#1d1d1f';
+    const unAuthLinkColor = mounted && theme === 'dark' ? '#60a5fa' : '#2563eb';
+    
     return (
       <main style={{
-        backgroundColor: '#ffffff',
+        backgroundColor: unAuthBgColor,
         minHeight: '100vh',
         paddingTop: '70px',
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
       }}>
         <Header />
-        <div style={{ textAlign: 'center' }}>
-          <p>로그인이 필요합니다.</p>
-          <Link href="/login" style={{ color: '#2563eb' }}>로그인하기</Link>
+        <div style={{ 
+          textAlign: 'center',
+          padding: '2rem',
+        }}>
+          <p style={{
+            color: unAuthTextColor,
+            fontSize: '16px',
+            marginBottom: '1.5rem',
+          }}>
+            로그인이 필요합니다.
+          </p>
+          <Link 
+            href="/login" 
+            style={{ 
+              color: unAuthLinkColor,
+              fontSize: '16px',
+              fontWeight: '600',
+              textDecoration: 'none',
+              padding: '0.75rem 1.5rem',
+              borderRadius: '0.5rem',
+              border: `1px solid ${unAuthLinkColor}`,
+              display: 'inline-block',
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = mounted && theme === 'dark' 
+                ? 'rgba(96, 165, 250, 0.1)' 
+                : 'rgba(37, 99, 235, 0.1)';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = 'transparent';
+            }}
+          >
+            로그인하기
+          </Link>
         </div>
       </main>
     );
@@ -316,21 +358,82 @@ export default function MyPage() {
         minHeight: '100vh',
         paddingTop: '70px',
         display: 'flex',
+        flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'center',
       }}>
         <Header />
-        <div>로딩 중...</div>
+        <div style={{ textAlign: 'center', padding: '2rem' }}>
+          <div style={{
+            width: '60px',
+            height: '60px',
+            border: '4px solid',
+            borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : '#f3f3f3',
+            borderTopColor: isDark ? '#3b82f6' : '#2563eb',
+            borderRadius: '50%',
+            animation: 'spin 1s linear infinite',
+            margin: '0 auto 1rem',
+          }} />
+          <p style={{ 
+            marginTop: '1rem', 
+            color: isDark ? 'rgba(255, 255, 255, 0.7)' : '#666',
+            fontSize: '14px',
+          }}>프로필을 불러오는 중입니다...</p>
+        </div>
+        <style jsx>{`
+          @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+          }
+        `}</style>
       </main>
     );
   }
 
+  // 안전한 activityStats 계산
   const activityStats = {
     posts: Array.isArray(myPosts) ? myPosts.length : 0,
     comments: Array.isArray(myComments) ? myComments.length : 0,
     receivedLikes: totalSparks,
     guides: 0, // 가이드 기능이 추가되면 업데이트
   };
+
+  // 최종 안전성 체크: user와 profile이 반드시 존재해야 함
+  if (!user || !user.email) {
+    return (
+      <main style={{
+        backgroundColor: isDark ? '#000000' : '#ffffff',
+        minHeight: '100vh',
+        paddingTop: '70px',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+      }}>
+        <Header />
+        <div style={{ textAlign: 'center', padding: '2rem' }}>
+          <p style={{
+            color: isDark ? 'rgba(255, 255, 255, 0.7)' : '#666',
+            fontSize: '14px',
+          }}>
+            사용자 정보를 불러올 수 없습니다.
+          </p>
+          <Link 
+            href="/login" 
+            style={{ 
+              color: isDark ? '#60a5fa' : '#2563eb',
+              marginTop: '1rem',
+              display: 'inline-block',
+              fontSize: '14px',
+              fontWeight: '600',
+            }}
+          >
+            다시 로그인하기
+          </Link>
+        </div>
+      </main>
+    );
+  }
 
   return (
     <main style={{
@@ -358,7 +461,7 @@ export default function MyPage() {
       }}>
 
         {/* 프로필 Hero 영역 */}
-        {profile && (
+        {profile && user && user.email && (
           <ProfileHero
             profile={profile}
             onImageChange={handleImageChange}
@@ -372,7 +475,7 @@ export default function MyPage() {
 
 
         {/* 활동 히스토리 섹션 */}
-        {profile && (
+        {profile && user && user.email && (
             <div style={{
               marginTop: '3rem',
               background: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
