@@ -49,11 +49,24 @@ export default function ProfileHero({
   }, [theme, mounted]);
   
   const isDark = mounted && theme === "dark";
-  const tierInfo = TIER_INFO[profile.tier];
-  const currentExp = profile.doriExp * 10; // 경험치 = EXP * 10
+  
+  // 프로필 데이터 안전성 체크
+  const safeProfile = {
+    tier: profile?.tier || 1,
+    doriExp: profile?.doriExp || 0,
+    level: profile?.level || 1,
+    nickname: profile?.nickname || "사용자",
+    bio: profile?.bio || "",
+    statusMessage: profile?.statusMessage || "",
+    profileImageUrl: profile?.profileImageUrl,
+    point: profile?.point || 0,
+  };
+  
+  const tierInfo = TIER_INFO[safeProfile.tier];
+  const currentExp = safeProfile.doriExp * 10; // 경험치 = EXP * 10
   
   // 레벨 계산 (AccountMenu와 동일한 방식으로 계산)
-  const currentLevel = calculateLevel(currentExp);
+  const currentLevel = safeProfile.level || calculateLevel(currentExp);
   
   // 진행률 계산 (공통 함수 사용 - AccountMenu와 동일)
   const levelProgress = calculateLevelProgress(currentExp, currentLevel);
@@ -64,7 +77,13 @@ export default function ProfileHero({
   const nextLevelStartExp = currentLevelStartExp + nextLevelExpRequired;
   const remainingExp = Math.max(0, nextLevelStartExp - currentExp);
   
-  const nextTierExp = getNextTierExp(profile.tier, profile.doriExp);
+  // 현재 레벨에서의 경험치 (현재 경험치 - 현재 레벨 시작 경험치)
+  const currentLevelExp = Math.max(0, currentExp - currentLevelStartExp);
+  
+  // 다음 레벨까지 필요한 경험치 (최종값)
+  const finalNextLevelExpRequired = nextLevelExpRequired;
+  
+  const nextTierExp = getNextTierExp(safeProfile.tier, safeProfile.doriExp);
 
   // 테마가 변경되지 않았거나 마운트되지 않았으면 빈 div 반환
   if (!mounted) {
@@ -119,7 +138,7 @@ export default function ProfileHero({
         {/* 프로필 이미지 및 기본 정보 */}
         <div style={{ display: "flex", gap: "2rem", alignItems: "flex-start", marginBottom: "2rem" }}>
           <ProfileImageSelector
-            currentImageUrl={profile.profileImageUrl}
+            currentImageUrl={safeProfile.profileImageUrl}
             onImageChange={onImageChange}
           />
 
@@ -135,7 +154,7 @@ export default function ProfileHero({
                   margin: 0,
                 }}
               >
-                {profile.nickname}
+                {safeProfile.nickname}
               </h1>
               <Link
                 href="/my/edit"
@@ -211,7 +230,7 @@ export default function ProfileHero({
                   backgroundClip: "text",
                 }}
               >
-                DORI EXP {profile.doriExp.toLocaleString()}
+                      DORI EXP {safeProfile.doriExp.toLocaleString()}
               </span>
               <span
                 style={{
@@ -225,12 +244,12 @@ export default function ProfileHero({
                   backgroundClip: "text",
                 }}
               >
-                Point {(profile.point || 0).toLocaleString()}
+                Point {safeProfile.point.toLocaleString()}
               </span>
             </div>
 
             {/* 상태 메시지 */}
-            {profile.statusMessage && (
+            {safeProfile.statusMessage && (
               <div
                 style={{
                   padding: "0.5rem 0.875rem",
@@ -243,7 +262,7 @@ export default function ProfileHero({
                   marginBottom: "1rem",
                 }}
               >
-                {profile.statusMessage}
+                {safeProfile.statusMessage}
               </div>
             )}
 
@@ -257,7 +276,7 @@ export default function ProfileHero({
                 maxWidth: "600px",
               }}
             >
-              {profile.bio || "DORI AI 크리에이터"}
+              {safeProfile.bio || "DORI AI 크리에이터"}
             </p>
           </div>
         </div>
@@ -474,7 +493,7 @@ export default function ProfileHero({
         )}
 
         {/* 등급 진행 바 */}
-        {profile.tier < 10 && nextTierExp > 0 && (
+        {safeProfile.tier < 10 && nextTierExp > 0 && (
           <div style={{ marginTop: "1rem", marginBottom: "1.5rem" }}>
             <div style={{ display: "flex", justifyContent: "space-between", marginBottom: "0.5rem" }}>
               <span
@@ -510,16 +529,17 @@ export default function ProfileHero({
                 style={{
                   height: "100%",
                   width: `${(() => {
-                    if (profile.tier >= 10) return 100;
-                    const nextTier = (profile.tier + 1) as UserProfile['tier'];
-                    const nextTierThreshold = TIER_THRESHOLDS[nextTier];
-                    const currentTierThreshold = TIER_THRESHOLDS[profile.tier];
-                    const progress = ((profile.doriExp - currentTierThreshold) / (nextTierThreshold - currentTierThreshold)) * 100;
+                    if (safeProfile.tier >= 10) return 100;
+                    const nextTier = (safeProfile.tier + 1) as UserProfile['tier'];
+                    const nextTierThreshold = TIER_THRESHOLDS[nextTier] || TIER_THRESHOLDS[10];
+                    const currentTierThreshold = TIER_THRESHOLDS[safeProfile.tier] || 0;
+                    const currentDoriExp = safeProfile.doriExp || 0;
+                    const progress = ((currentDoriExp - currentTierThreshold) / (nextTierThreshold - currentTierThreshold)) * 100;
                     return Math.min(Math.max(progress, 0), 100);
                   })()}%`,
                   background: isDark
-                    ? `linear-gradient(90deg, ${tierInfo.color}, ${TIER_INFO[Math.min(profile.tier + 1, 10) as keyof typeof TIER_INFO].color})`
-                    : `linear-gradient(90deg, ${tierInfo.color}, ${TIER_INFO[Math.min(profile.tier + 1, 10) as keyof typeof TIER_INFO].color})`,
+                    ? `linear-gradient(90deg, ${tierInfo.color}, ${TIER_INFO[Math.min(safeProfile.tier + 1, 10) as keyof typeof TIER_INFO].color})`
+                    : `linear-gradient(90deg, ${tierInfo.color}, ${TIER_INFO[Math.min(safeProfile.tier + 1, 10) as keyof typeof TIER_INFO].color})`,
                   borderRadius: "4px",
                   transition: "width 0.3s ease",
                   boxShadow: `0 0 10px ${tierInfo.color}40`,
