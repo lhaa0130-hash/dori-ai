@@ -7,6 +7,7 @@ import AppLayoutWrapper from "@/components/layout/AppLayoutWrapper";
 import { useMissionAutoComplete } from "@/hooks/useMissionAutoComplete";
 import { useAutoLogout } from "@/hooks/useAutoLogout";
 import OpenPopup from "@/components/layout/OpenPopup";
+import RightSideAd from "@/components/ads/RightSideAd";
 
 interface LayoutClientProps {
   children: React.ReactNode;
@@ -39,6 +40,7 @@ export default function LayoutClient({ children }: LayoutClientProps) {
       </main>
       <Footer />
       <OpenPopup />
+      <RightSideAd />
     </div>
   );
 }

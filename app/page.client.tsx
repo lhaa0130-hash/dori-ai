@@ -4,6 +4,7 @@ import { useRef, useState, MouseEvent, useEffect } from "react";
 import { useSession, signIn } from "next-auth/react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
+import { useScrollSpy } from "@/hooks/useScrollSpy";
 import { 
   Sparkles, 
   Brain, 
@@ -121,7 +122,6 @@ export default function HomePageClient() {
   }
 
   // 좌측 사이드바 네비게이션 아이템
-  const [activeSection, setActiveSection] = useState('home');
   const sectionRefs = useRef<{ [key: string]: HTMLElement | null }>({});
   
   const navItems = [
@@ -132,89 +132,28 @@ export default function HomePageClient() {
     { id: 'faq', label: 'FAQ', href: '#faq' },
   ];
 
-  // 스크롤 감지로 활성 섹션 업데이트 (스크롤 스냅 대응)
-  useEffect(() => {
-    if (!mounted) return;
-
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      const viewportHeight = window.innerHeight;
-      const threshold = viewportHeight * 0.5; // 화면 중앙 기준
-
-      let currentActive = 'home';
-
-      for (const item of navItems) {
-        if (item.href.startsWith('#')) {
-          const sectionId = item.href.substring(1);
-          const element = sectionRefs.current[sectionId];
-          
-          if (element) {
-            const rect = element.getBoundingClientRect();
-            const elementTop = rect.top + scrollPosition;
-            const elementBottom = elementTop + rect.height;
-            
-            // 현재 스크롤 위치가 섹션 범위 내에 있고, 화면 중앙에 가까운 섹션 선택
-            if (scrollPosition + threshold >= elementTop && scrollPosition + threshold < elementBottom) {
-              currentActive = item.id;
-            }
-          }
-        }
-      }
-
-      setActiveSection(currentActive);
-    };
-
-    // Intersection Observer를 사용하여 더 정확한 감지
-    const observers: IntersectionObserver[] = [];
-    
-    navItems.forEach((item) => {
-      if (item.href.startsWith('#')) {
-        const sectionId = item.href.substring(1);
-        const element = sectionRefs.current[sectionId];
-        
-        if (element) {
-          const observer = new IntersectionObserver(
-            (entries) => {
-              entries.forEach((entry) => {
-                if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-                  setActiveSection(item.id);
-                }
-              });
-            },
-            {
-              threshold: [0, 0.25, 0.5, 0.75, 1],
-              rootMargin: '-20% 0px -20% 0px', // 화면 중앙 60% 영역
-            }
-          );
-          
-          observer.observe(element);
-          observers.push(observer);
-        }
-      }
-    });
-
-    // 폴백으로 스크롤 이벤트도 추가
-    window.addEventListener('scroll', handleScroll, { passive: true });
-    handleScroll(); // 초기 실행
-    
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-      observers.forEach((observer) => observer.disconnect());
-    };
-  }, [mounted, navItems]);
+  // 스크롤 스파이: Intersection Observer를 사용하여 현재 보이는 섹션 감지
+  const activeSection = useScrollSpy({
+    items: navItems.map(item => ({
+      sectionId: item.href.startsWith('#') ? item.href.substring(1) : item.href,
+      menuId: item.id,
+    })),
+    sectionRefs,
+    threshold: 0.5, // 섹션이 화면의 50% 이상 보일 때 활성화
+    rootMargin: '-20% 0px -20% 0px', // 화면 중앙 60% 영역에서 감지
+    mounted,
+  }) || 'home'; // 기본값은 'home'
 
   return (
     <main 
       className="page scroll-container"
       style={{
-        height: '100vh',
-        overflowY: 'auto',
-        scrollSnapType: 'y mandatory',
-        scrollBehavior: 'smooth',
-        scrollbarWidth: 'thin',
+        width: '100%',
+        minHeight: '100vh',
+        display: 'flex',
+        flexDirection: 'column',
       }}
     >
-      <div className="scroll-spacer" />
 
       {/* 좌측 사이드바 네비게이션 */}
       {mounted && (
@@ -249,15 +188,12 @@ export default function HomePageClient() {
                       const sectionId = item.href.substring(1);
                       const element = sectionRefs.current[sectionId];
                       if (element) {
-                        // 스크롤 스냅을 고려한 정확한 스크롤 이동
+                        // 부드러운 스크롤 이동
                         element.scrollIntoView({
                           behavior: 'smooth',
                           block: 'start',
                           inline: 'nearest'
                         });
-                        
-                        // 즉시 활성 섹션 업데이트
-                        setActiveSection(item.id);
                       }
                     } else {
                       // 외부 링크는 그대로 이동
@@ -296,16 +232,18 @@ export default function HomePageClient() {
       {/* --- Home Section (Hero) --- */}
       <section 
         id="home" 
-        className="top-section snap-section"
+        className="top-section"
         ref={(el) => { sectionRefs.current['home'] = el; }}
         style={{
-          height: '100vh',
+          minHeight: '100vh',
           width: '100%',
-          scrollSnapAlign: 'start',
-          scrollSnapStop: 'always',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
+          position: 'relative',
+          boxSizing: 'border-box',
+          paddingTop: '80px',
+          paddingBottom: '80px',
         }}
       >
         {/* 오로라 배경 효과 */}
@@ -333,19 +271,20 @@ export default function HomePageClient() {
       {/* --- Features Section (Bento Grid Style) --- */}
       <section 
         id="features" 
-        className="container max-w-7xl mx-auto px-6 lg:px-12 py-24 snap-section"
         ref={(el) => { sectionRefs.current['features'] = el; }}
         style={{
-          height: '100vh',
           width: '100%',
-          scrollSnapAlign: 'start',
-          scrollSnapStop: 'always',
           backgroundColor: isDark ? '#000000' : '#ffffff',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
+          position: 'relative',
+          boxSizing: 'border-box',
+          paddingTop: '120px',
+          paddingBottom: '120px',
         }}
       >
+        <div className="container max-w-7xl mx-auto px-6 lg:px-12 py-24" style={{ width: '100%' }}>
         <div className="max-w-4xl mx-auto mb-16 text-center">
           <h2 
             className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight"
@@ -590,26 +529,28 @@ export default function HomePageClient() {
                 />
               </div>
             </Link>
-          ))}
+          ))} 
+        </div>
         </div>
       </section>
 
       {/* --- Insight Section (Premium Glassmorphism) --- */}
       <section 
         id="insight" 
-        className="container max-w-7xl mx-auto px-6 lg:px-12 py-24 snap-section"
         ref={(el) => { sectionRefs.current['insight'] = el; }}
         style={{
-          height: '100vh',
           width: '100%',
-          scrollSnapAlign: 'start',
-          scrollSnapStop: 'always',
           backgroundColor: isDark ? '#000000' : '#ffffff',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
+          position: 'relative',
+          boxSizing: 'border-box',
+          paddingTop: '120px',
+          paddingBottom: '120px',
         }}
       >
+        <div className="container max-w-7xl mx-auto px-6 lg:px-12 py-24" style={{ width: '100%' }}>
         <div className="max-w-4xl mx-auto mb-16 text-center">
           <h2 
             className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight"
@@ -928,25 +869,28 @@ export default function HomePageClient() {
               </div>
             </Link>
             </div>
-          ))}
+          ))} 
+        </div>
         </div>
       </section>
 
       {/* --- Community Section (Hot Posts) --- */}
       <section 
         id="community" 
-        className="container section snap-section fade-in-up delay-2"
+        className="fade-in-up delay-2"
         ref={(el) => { sectionRefs.current['community'] = el; }}
         style={{
-          height: '100vh',
           width: '100%',
-          scrollSnapAlign: 'start',
-          scrollSnapStop: 'always',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
+          position: 'relative',
+          boxSizing: 'border-box',
+          paddingTop: '120px',
+          paddingBottom: '120px',
         }}
       >
+        <div className="container section" style={{ width: '100%' }}>
         <div className="section-header left-align">
           <div>
             <h2>핫한 글</h2>
@@ -983,23 +927,26 @@ export default function HomePageClient() {
             ))}
           </div>
         )}
+        </div>
       </section>
 
       {/* --- FAQ Section --- */}
       <section 
         id="faq" 
-        className="container section snap-section fade-in-up delay-2"
+        className="fade-in-up delay-2"
         ref={(el) => { sectionRefs.current['faq'] = el; }}
         style={{
-          height: '100vh',
           width: '100%',
-          scrollSnapAlign: 'start',
-          scrollSnapStop: 'always',
           display: 'flex',
           flexDirection: 'column',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
+          position: 'relative',
+          boxSizing: 'border-box',
+          paddingTop: '120px',
+          paddingBottom: '120px',
         }}
       >
+        <div className="container section" style={{ width: '100%' }}>
         <div className="section-header">
           <h2>자주 묻는 질문</h2>
           <p>DORI-AI에 대해 궁금한 점을 확인하세요</p>
@@ -1030,7 +977,9 @@ export default function HomePageClient() {
             <p className="faq-answer">프로젝트 페이지에서 '새 프로젝트' 버튼을 클릭하여 AI를 활용한 창작 프로젝트를 업로드할 수 있습니다. 이미지, 설명, 사용한 AI 도구 등을 포함하여 공유하세요.</p>
           </div>
         </div>
+        </div>
       </section>
+
 
       {/* --- Login Modal --- */}
       {loginOpen && (
@@ -1082,12 +1031,9 @@ export default function HomePageClient() {
       <style jsx global>{`
         :root { --bg: #ffffff; --text: #111; --gray: #666; --line: #e5e5e5; --blue: #007AFF; }
         * { box-sizing: border-box; }
+        /* 이 페이지 전용 스타일 - 다른 페이지에 영향 없음 */
         html { 
-          scroll-snap-type: y mandatory !important;
           scroll-behavior: smooth;
-          scroll-padding-top: 0;
-          overflow-y: auto;
-          overflow-x: hidden;
         }
         body { 
           margin: 0; 
@@ -1095,25 +1041,13 @@ export default function HomePageClient() {
           background: var(--bg); 
           color: var(--text); 
           font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-          overflow-x: hidden;
         }
         .page { 
           display: flex; 
           flex-direction: column; 
-          min-height: 100vh; 
+          min-height: 100vh;
           width: 100%; 
           overflow-x: hidden; 
-          position: relative; 
-        }
-        .snap-section { 
-          scroll-snap-align: start !important; 
-          scroll-snap-stop: always !important;
-          scroll-margin-top: 0;
-          min-height: 100vh;
-          height: 100vh;
-          display: flex;
-          flex-direction: column;
-          justify-content: center;
           position: relative;
         }
         
@@ -1145,6 +1079,73 @@ export default function HomePageClient() {
           display: flex;
           flex-direction: column;
           justify-content: center;
+        }
+        
+        /* 사이드바가 있을 때 콘텐츠 왼쪽 여백 추가 */
+        @media (min-width: 1024px) {
+          /* Hero 섹션 */
+          #home.top-section {
+            margin-left: 180px;
+            width: calc(100% - 180px);
+            max-width: calc(100% - 180px);
+          }
+          
+          /* Features 섹션 */
+          #features {
+            margin-left: 180px;
+            width: calc(100% - 180px);
+            max-width: calc(100% - 180px);
+          }
+          #features > div {
+            padding-left: 48px;
+            padding-right: 48px;
+          }
+          
+          /* Insight 섹션 */
+          #insight {
+            margin-left: 180px;
+            width: calc(100% - 180px);
+            max-width: calc(100% - 180px);
+          }
+          #insight > div {
+            padding-left: 48px;
+            padding-right: 48px;
+          }
+          
+          /* Community 섹션 */
+          #community {
+            margin-left: 180px;
+            width: calc(100% - 180px);
+            max-width: calc(100% - 180px);
+          }
+          #community > div {
+            padding-left: 48px;
+            padding-right: 48px;
+          }
+          
+          /* FAQ 섹션 */
+          #faq {
+            margin-left: 180px;
+            width: calc(100% - 180px);
+            max-width: calc(100% - 180px);
+          }
+          #faq > div {
+            padding-left: 48px;
+            padding-right: 48px;
+          }
+          
+          /* 푸터 여백 조정 */
+          footer,
+          .footer-wrapper {
+            margin-left: 180px;
+            width: calc(100% - 180px);
+          }
+        }
+        
+        /* 푸터 스타일 - 자연스러운 배치 */
+        footer {
+          position: relative;
+          margin-top: auto;
         }
 
         /* Hero Text */

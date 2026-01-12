@@ -160,15 +160,17 @@ export default function MyPage() {
     // 프로필의 doriExp가 더 크면 프로필 값을 우선 사용 (이미 미션 경험치가 반영된 경우)
     const finalDoriExp = Math.max(profile.doriExp || 0, doriExp);
 
+    // 레벨 및 등급 자동 계산 (경험치 기반)
     const newTier = calculateTier(finalDoriExp);
-    const newLevel = calculateLevel(finalDoriExp * 10);
+    const newLevel = calculateLevel(finalDoriExp * 10); // 경험치 = EXP * 10
 
+    // 레벨업이 발생한 경우 프로필 업데이트
     if (profile.doriExp !== finalDoriExp || profile.tier !== newTier || profile.level !== newLevel) {
       const updatedProfile: UserProfile = {
         ...profile,
         doriExp: finalDoriExp,
         tier: newTier,
-        level: newLevel,
+        level: newLevel, // 자동 레벨업 반영
         point: profile.point || 0, // point 필드 유지
       };
       setProfile(updatedProfile);

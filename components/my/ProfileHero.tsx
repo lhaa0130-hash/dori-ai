@@ -51,13 +51,38 @@ export default function ProfileHero({
   const isDark = mounted && theme === "dark";
   const tierInfo = TIER_INFO[profile.tier];
   const currentExp = profile.doriExp * 10; // 경험치 = EXP * 10
-  const currentLevel = calculateLevel(currentExp);
-  const nextLevelExp = getNextLevelExp(currentLevel);
-  const nextTierExp = getNextTierExp(profile.tier, profile.doriExp);
   
-  // 경험치 계산
+  // 레벨 계산 (자동 레벨업 처리)
+  let currentLevel = calculateLevel(currentExp);
   const currentLevelStartExp = getCurrentLevelStartExp(currentLevel);
-  const levelProgress = currentLevel >= 100 ? 100 : Math.max(0, Math.min(100, ((currentExp - currentLevelStartExp) / (nextLevelExp - currentLevelStartExp)) * 100));
+  const nextLevelExpRequired = getNextLevelExp(currentLevel); // 다음 레벨까지 필요한 경험치 (레벨당 필요량)
+  const nextLevelStartExp = currentLevelStartExp + nextLevelExpRequired; // 다음 레벨 시작 경험치
+  
+  // 현재 경험치가 다음 레벨 시작 경험치를 초과한 경우, 레벨업 처리
+  // (calculateLevel이 이미 올바르게 계산하지만, UI 표시를 위해 재확인)
+  if (currentExp >= nextLevelStartExp && currentLevel < 100) {
+    currentLevel = calculateLevel(currentExp);
+  }
+  
+  // 레벨업 후 다시 계산
+  const finalCurrentLevelStartExp = getCurrentLevelStartExp(currentLevel);
+  const finalNextLevelExpRequired = getNextLevelExp(currentLevel);
+  const finalNextLevelStartExp = finalCurrentLevelStartExp + finalNextLevelExpRequired;
+  
+  // 현재 레벨 구간에서의 경험치 (현재 경험치 - 현재 레벨 시작 경험치)
+  const currentLevelExp = Math.max(0, currentExp - finalCurrentLevelStartExp);
+  
+  // 진행률 계산: (현재 레벨 구간 경험치) / (다음 레벨까지 필요한 경험치)
+  const levelProgress = currentLevel >= 100 
+    ? 100 
+    : finalNextLevelExpRequired > 0
+      ? Math.max(0, Math.min(100, (currentLevelExp / finalNextLevelExpRequired) * 100))
+      : 100;
+  
+  // 다음 레벨까지 남은 경험치
+  const remainingExp = Math.max(0, finalNextLevelStartExp - currentExp);
+  
+  const nextTierExp = getNextTierExp(profile.tier, profile.doriExp);
 
   // 테마가 변경되지 않았거나 마운트되지 않았으면 빈 div 반환
   if (!mounted) {
@@ -317,7 +342,7 @@ export default function ProfileHero({
                   fontWeight: "600",
                   color: isDark ? "#fbbf24" : "#d97706",
                 }}>
-                  {Math.max(0, Math.floor(currentExp - currentLevelStartExp))} / {Math.floor(nextLevelExp - currentLevelStartExp)} EXP
+                  {Math.floor(currentLevelExp)} / {Math.floor(finalNextLevelExpRequired)} EXP
                 </div>
               </div>
               
@@ -443,10 +468,24 @@ export default function ProfileHero({
                 color: isDark ? "rgba(255, 255, 255, 0.6)" : "rgba(0, 0, 0, 0.5)",
                 fontWeight: "500",
               }}>
-                다음 레벨까지 <span style={{ 
-                  color: isDark ? "#fbbf24" : "#d97706",
-                  fontWeight: "700",
-                }}>{Math.ceil(nextLevelExp - currentExp)} EXP</span> 필요
+                {remainingExp > 0 ? (
+                  <>
+                    다음 레벨까지 <span style={{ 
+                      color: isDark ? "#fbbf24" : "#d97706",
+                      fontWeight: "700",
+                    }}>{Math.ceil(remainingExp)} EXP</span> 필요
+                  </>
+                ) : currentLevel < 100 ? (
+                  <span style={{ 
+                    color: isDark ? "#fbbf24" : "#d97706",
+                    fontWeight: "700",
+                  }}>레벨업 가능!</span>
+                ) : (
+                  <span style={{ 
+                    color: isDark ? "#fbbf24" : "#d97706",
+                    fontWeight: "700",
+                  }}>최대 레벨 달성</span>
+                )}
               </div>
             </div>
           </div>

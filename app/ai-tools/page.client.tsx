@@ -6,6 +6,7 @@ import { useSession } from "next-auth/react";
 import AiToolsList from "@/components/ai-tools/AiToolsList";
 import { TEXTS } from "@/constants/texts";
 import { completeMission, isMissionCompletedToday, markMissionCompletedToday } from "@/lib/missionHelpers";
+import { useScrollSpy } from "@/hooks/useScrollSpy";
 
 const DISPLAY_CATEGORIES = [
   "llm", 
@@ -74,72 +75,26 @@ export default function AiToolsClient() {
     }
   }, [mounted, session]);
 
-  // 스크롤 감지로 활성 카테고리 업데이트
+  // 스크롤 스파이: Intersection Observer를 사용하여 현재 보이는 카테고리 감지
+  const scrollSpyItems = DISPLAY_CATEGORIES.map(cat => ({
+    sectionId: `category-${cat}`,
+    menuId: cat,
+  }));
+
+  const activeCategoryFromSpy = useScrollSpy({
+    items: scrollSpyItems,
+    sectionRefs,
+    threshold: 0.5, // 카테고리 섹션이 화면의 50% 이상 보일 때 활성화
+    rootMargin: '-20% 0px -20% 0px', // 화면 중앙 60% 영역에서 감지
+    mounted,
+  });
+
+  // 스크롤 스파이 결과를 activeCategory에 반영
   useEffect(() => {
-    if (!mounted) return;
-
-    const observers: IntersectionObserver[] = [];
-
-    DISPLAY_CATEGORIES.forEach((cat) => {
-      const refKey = `category-${cat}`;
-      const element = sectionRefs.current[refKey];
-
-      if (element) {
-        const observer = new IntersectionObserver(
-          (entries) => {
-            entries.forEach((entry) => {
-              if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-                setActiveCategory(cat);
-              }
-            });
-          },
-          {
-            threshold: [0, 0.25, 0.5, 0.75, 1],
-            rootMargin: '-20% 0px -20% 0px',
-          }
-        );
-
-        observer.observe(element);
-        observers.push(observer);
-      }
-    });
-
-    // "전체" 카테고리 감지 (상단 히어로 섹션)
-    const heroSection = document.querySelector('section:first-of-type');
-    if (heroSection) {
-      const observer = new IntersectionObserver(
-        (entries) => {
-          entries.forEach((entry) => {
-            if (entry.isIntersecting && entry.intersectionRatio > 0.5) {
-              // 다른 카테고리 섹션이 보이지 않으면 "전체" 활성화
-              const anyCategoryVisible = DISPLAY_CATEGORIES.some((cat) => {
-                const refKey = `category-${cat}`;
-                const element = sectionRefs.current[refKey];
-                if (element) {
-                  const rect = element.getBoundingClientRect();
-                  return rect.top < window.innerHeight * 0.8 && rect.bottom > window.innerHeight * 0.2;
-                }
-                return false;
-              });
-              if (!anyCategoryVisible) {
-                setActiveCategory(null);
-              }
-            }
-          });
-        },
-        {
-          threshold: [0, 0.25, 0.5, 0.75, 1],
-          rootMargin: '-20% 0px -20% 0px',
-        }
-      );
-      observer.observe(heroSection);
-      observers.push(observer);
+    if (mounted && activeCategoryFromSpy) {
+      setActiveCategory(activeCategoryFromSpy);
     }
-
-    return () => {
-      observers.forEach((observer) => observer.disconnect());
-    };
-  }, [mounted]);
+  }, [mounted, activeCategoryFromSpy]);
 
   const isDark = mounted && theme === 'dark';
 
