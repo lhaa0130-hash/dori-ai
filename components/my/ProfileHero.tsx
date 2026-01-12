@@ -52,31 +52,17 @@ export default function ProfileHero({
   const tierInfo = TIER_INFO[profile.tier];
   const currentExp = profile.doriExp * 10; // 경험치 = EXP * 10
   
-  // 레벨 계산 (자동 레벨업 처리)
-  let currentLevel = calculateLevel(currentExp);
-  const currentLevelStartExp = getCurrentLevelStartExp(currentLevel);
-  const nextLevelExpRequired = getNextLevelExp(currentLevel); // 다음 레벨까지 필요한 경험치 (레벨당 필요량)
-  const nextLevelStartExp = currentLevelStartExp + nextLevelExpRequired; // 다음 레벨 시작 경험치
+  // 레벨 계산 (AccountMenu와 동일한 방식으로 계산)
+  const currentLevel = calculateLevel(currentExp);
   
-  // 현재 경험치가 다음 레벨 시작 경험치를 초과한 경우, 레벨업 처리
-  // (calculateLevel이 이미 올바르게 계산하지만, UI 표시를 위해 재확인)
-  if (currentExp >= nextLevelStartExp && currentLevel < 100) {
-    currentLevel = calculateLevel(currentExp);
-  }
-  
-  // 레벨업 후 다시 계산
-  const finalCurrentLevelStartExp = getCurrentLevelStartExp(currentLevel);
-  const finalNextLevelExpRequired = getNextLevelExp(currentLevel);
-  const finalNextLevelStartExp = finalCurrentLevelStartExp + finalNextLevelExpRequired;
-  
-  // 현재 레벨 구간에서의 경험치 (현재 경험치 - 현재 레벨 시작 경험치)
-  const currentLevelExp = Math.max(0, currentExp - finalCurrentLevelStartExp);
-  
-  // 진행률 계산 (공통 함수 사용)
+  // 진행률 계산 (공통 함수 사용 - AccountMenu와 동일)
   const levelProgress = calculateLevelProgress(currentExp, currentLevel);
   
-  // 다음 레벨까지 남은 경험치
-  const remainingExp = Math.max(0, finalNextLevelStartExp - currentExp);
+  // 다음 레벨까지 남은 경험치 계산 (UI 표시용)
+  const currentLevelStartExp = getCurrentLevelStartExp(currentLevel);
+  const nextLevelExpRequired = getNextLevelExp(currentLevel);
+  const nextLevelStartExp = currentLevelStartExp + nextLevelExpRequired;
+  const remainingExp = Math.max(0, nextLevelStartExp - currentExp);
   
   const nextTierExp = getNextTierExp(profile.tier, profile.doriExp);
 

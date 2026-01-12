@@ -70,23 +70,13 @@ export default function RightSideAd() {
       style={{
         width: "160px",
         maxWidth: "200px",
-        maxHeight: "calc(100vh - 100px)",
+        maxHeight: "90vh",
         gap: "1.5rem",
         overflowY: "auto",
         overflowX: "hidden",
         // 스크롤바 숨김 처리
         scrollbarWidth: "none", // Firefox
         msOverflowStyle: "none", // IE/Edge
-        // 작은 화면 대비 스케일 조정
-        transform: "translateY(-50%) scale(0.95)",
-        transformOrigin: "center center",
-        transition: "transform 0.2s ease",
-      }}
-      onMouseEnter={(e) => {
-        e.currentTarget.style.transform = "translateY(-50%) scale(1)";
-      }}
-      onMouseLeave={(e) => {
-        e.currentTarget.style.transform = "translateY(-50%) scale(0.95)";
       }}
     >
       {/* 상단 광고 컨테이너 */}
@@ -119,13 +109,14 @@ export default function RightSideAd() {
         </div>
 
         {/* 상단 애드센스 광고 영역 */}
-        <div ref={adTopRef} style={{ minHeight: "250px", width: "100%" }}>
+        <div ref={adTopRef} style={{ minHeight: "300px", height: "auto", width: "100%" }}>
           <ins
             className="adsbygoogle"
             style={{
               display: "block",
               width: "100%",
-              minHeight: "250px",
+              minHeight: "300px",
+              height: "auto",
             }}
             data-ad-client="ca-pub-1868839951780851"
             data-ad-slot="5937639143"
@@ -165,13 +156,14 @@ export default function RightSideAd() {
         </div>
 
         {/* 하단 애드센스 광고 영역 */}
-        <div ref={adBottomRef} style={{ minHeight: "250px", width: "100%" }}>
+        <div ref={adBottomRef} style={{ minHeight: "300px", height: "auto", width: "100%" }}>
           <ins
             className="adsbygoogle"
             style={{
               display: "block",
               width: "100%",
-              minHeight: "250px",
+              minHeight: "300px",
+              height: "auto",
             }}
             data-ad-client="ca-pub-1868839951780851"
             data-ad-slot="8647740571"
