@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, Suspense } from "react";
 import { useTheme } from "next-themes";
 import { useSearchParams } from "next/navigation";
 import InsightList from "@/components/insight/InsightList";
@@ -22,14 +22,36 @@ const FALLBACK_POSTS: InsightItem[] = [
   }
 ];
 
-export default function InsightClient({ initialPosts }: { initialPosts: InsightItem[] }) {
+// SearchParams를 읽는 컴포넌트 (Suspense로 감싸야 함)
+function SearchParamsReader({ 
+  onCategoryChange 
+}: { 
+  onCategoryChange: (category: string) => void 
+}) {
+  const searchParams = useSearchParams();
+  
+  useEffect(() => {
+    const category = searchParams?.get('category') || "All";
+    onCategoryChange(category);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams]);
+  
+  return null;
+}
+
+function InsightClientContent({ 
+  initialPosts, 
+  initialCategory 
+}: { 
+  initialPosts: InsightItem[];
+  initialCategory: string;
+}) {
   const t = TEXTS.insight;
   const { theme } = useTheme();
-  const searchParams = useSearchParams();
   const [mounted, setMounted] = useState(false);
   
   // URL 쿼리 파라미터에서 카테고리 읽기
-  const categoryFromUrl = searchParams?.get('category') || "All";
+  const categoryFromUrl = initialCategory;
   
   const [activeCategory, setActiveCategory] = useState(categoryFromUrl);
   const [filters, setFilters] = useState<{ category: string; tag: string | null; sort: string }>({
@@ -45,12 +67,11 @@ export default function InsightClient({ initialPosts }: { initialPosts: InsightI
   // URL 파라미터가 변경될 때만 필터 업데이트 (초기 로드 시에만)
   useEffect(() => {
     if (!mounted) return;
-    const category = searchParams?.get('category');
-    if (category && category !== filters.category) {
-      setActiveCategory(category);
-      setFilters(prev => ({ ...prev, category }));
+    if (initialCategory && initialCategory !== filters.category) {
+      setActiveCategory(initialCategory);
+      setFilters(prev => ({ ...prev, category: initialCategory }));
     }
-  }, [searchParams]); // filters.category 의존성 제거
+  }, [initialCategory, mounted]); // filters.category 의존성 제거
 
   // 필터 변경 시 activeCategory 동기화 (제거 - handleCategoryClick에서 직접 관리)
 
@@ -389,5 +410,22 @@ export default function InsightClient({ initialPosts }: { initialPosts: InsightI
         }
       `}</style>
     </main>
+  );
+}
+
+export default function InsightClient({ initialPosts }: { initialPosts: InsightItem[] }) {
+  const [category, setCategory] = useState("All");
+  
+  const handleCategoryChange = useCallback((newCategory: string) => {
+    setCategory(newCategory);
+  }, []);
+  
+  return (
+    <>
+      <Suspense fallback={null}>
+        <SearchParamsReader onCategoryChange={handleCategoryChange} />
+      </Suspense>
+      <InsightClientContent initialPosts={initialPosts} initialCategory={category} />
+    </>
   );
 }

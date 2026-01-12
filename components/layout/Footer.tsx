@@ -51,7 +51,7 @@ export default function Footer() {
         </div>
       </div>
 
-      {/* 문의처 및 링크 그리드 */}
+      {/* 문의처 */}
       <div className="footer-grid">
         <div className="footer-grid-item">
           <div className="footer-grid-label">문의</div>
@@ -61,18 +61,6 @@ export default function Footer() {
           >
             lhaa0130@gmail.com
           </a>
-        </div>
-        <div className="footer-grid-item">
-          <div className="footer-grid-label">법적 정보</div>
-          <div className="footer-grid-links">
-            <Link href="/legal/privacy" className="footer-grid-link">
-              개인정보처리방침
-            </Link>
-            <span className="footer-grid-separator">·</span>
-            <Link href="/legal/terms" className="footer-grid-link">
-              이용약관
-            </Link>
-          </div>
         </div>
       </div>
 

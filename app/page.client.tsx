@@ -50,6 +50,16 @@ export default function HomePageClient({ initialPosts = [] }: { initialPosts?: a
     } 
   };
 
+  // --- initialPosts 데이터 확인 ---
+  useEffect(() => {
+    console.log('🔍 [HomePageClient] initialPosts 데이터 확인:', {
+      hasData: !!initialPosts,
+      length: initialPosts?.length || 0,
+      data: initialPosts,
+      firstItem: initialPosts?.[0] || null,
+    });
+  }, [initialPosts]);
+
   // --- 데이터 로딩 (커뮤니티 글) ---
   useEffect(() => {
     // 커뮤니티 글 불러오기 (좋아요 순으로 정렬)
@@ -558,9 +568,11 @@ export default function HomePageClient({ initialPosts = [] }: { initialPosts?: a
           boxSizing: 'border-box',
           paddingTop: '120px',
           paddingBottom: '120px',
+          zIndex: 5,
+          overflow: 'visible',
         }}
       >
-        <div className="container max-w-7xl mx-auto px-6 lg:px-12 py-24" style={{ width: '100%' }}>
+        <div className="container max-w-7xl mx-auto px-6 lg:px-12 py-24" style={{ width: '100%', overflow: 'visible', position: 'relative', zIndex: 5 }}>
         <div className="max-w-4xl mx-auto mb-16 text-center">
           <h2 
             className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight"
@@ -606,10 +618,41 @@ export default function HomePageClient({ initialPosts = [] }: { initialPosts?: a
           </p>
         </div>
 
+        {/* 🔍 진단용 코드 - 데이터 확인 */}
+        {initialPosts && Array.isArray(initialPosts) && initialPosts.length > 0 && (
+          <pre
+            style={{
+              backgroundColor: '#ff0000',
+              color: '#ffffff',
+              padding: '20px',
+              fontSize: '24px',
+              fontWeight: 'bold',
+              margin: '20px auto',
+              maxWidth: '800px',
+              border: '5px solid #ffff00',
+              borderRadius: '10px',
+              zIndex: 9999,
+              position: 'relative',
+              opacity: 1,
+              visibility: 'visible',
+              display: 'block',
+            }}
+          >
+            🔍 진단: {JSON.stringify(initialPosts[0].title)}
+          </pre>
+        )}
+
         {/* 인사이트 가로 스크롤 카드 레이아웃 */}
-        {initialPosts && initialPosts.length > 0 && (
-          <div className="relative mb-16">
-            <div className="relative">
+        {initialPosts && Array.isArray(initialPosts) && initialPosts.length > 0 && (
+          <div 
+            className="relative mb-16"
+            style={{
+              opacity: 1,
+              zIndex: 10,
+              position: 'relative',
+            }}
+          >
+            <div className="relative" style={{ zIndex: 10 }}>
               {/* 좌측 스크롤 버튼 */}
               <button
                 onClick={() => scrollTrends(-1)}
@@ -634,16 +677,36 @@ export default function HomePageClient({ initialPosts = [] }: { initialPosts?: a
               <div
                 ref={trendRef}
                 className="flex gap-6 overflow-x-auto scrollbar-hide px-14"
+                style={{
+                  display: 'flex',
+                  minHeight: '450px',
+                  opacity: 1,
+                  zIndex: 10,
+                  position: 'relative',
+                }}
               >
-                {initialPosts.map((post: any) => (
+                {initialPosts.map((post: any, index: number) => {
+                  console.log(`📄 [Insight Card ${index}] Post 데이터:`, {
+                    id: post.id,
+                    title: post.title,
+                    thumbnail_url: post.thumbnail_url,
+                    hasThumbnail: !!post.thumbnail_url,
+                    fullPost: post,
+                  });
+                  
+                  return (
                   <Link
-                    key={post.id}
+                    key={post.id || index}
                     href={`/post/${post.id}`}
                     className="flex-shrink-0 w-80 rounded-2xl overflow-hidden transition-all duration-300"
                     style={{
                       backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
                       border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
                       boxShadow: isDark ? '0 4px 20px rgba(0,0,0,0.3)' : '0 4px 20px rgba(0,0,0,0.05)',
+                      opacity: 1,
+                      zIndex: 10,
+                      position: 'relative',
+                      visibility: 'visible',
                     }}
                     onMouseEnter={(e) => {
                       e.currentTarget.style.transform = 'translateY(-8px)';
@@ -700,9 +763,8 @@ export default function HomePageClient({ initialPosts = [] }: { initialPosts?: a
                       >
                         {post.title || '제목 없음'}
                       </h3>
-                      <Link
-                        href={`/post/${post.id}`}
-                        className="inline-flex items-center gap-2 text-sm font-semibold transition-all duration-300"
+                      <span
+                        className="inline-flex items-center gap-2 text-sm font-semibold transition-all duration-300 cursor-pointer"
                         style={{
                           color: isDark ? 'rgba(255, 255, 255, 0.8)' : '#3b82f6',
                         }}
@@ -715,10 +777,11 @@ export default function HomePageClient({ initialPosts = [] }: { initialPosts?: a
                       >
                         자세히 보기
                         <ArrowRight className="w-4 h-4" />
-                      </Link>
+                      </span>
                     </div>
                   </Link>
-                ))}
+                  );
+                })}
               </div>
 
               {/* 우측 스크롤 버튼 */}
