@@ -2,6 +2,13 @@
 
 import { useEffect, useRef } from "react";
 
+// 스크롤바 숨김을 위한 CSS 스타일 추가
+const hideScrollbarStyle = `
+  .right-side-ad-container::-webkit-scrollbar {
+    display: none;
+  }
+`;
+
 /**
  * 우측 듀얼 플로팅 광고 섹션 컴포넌트
  * 좌측 사이드바와 대칭을 이루는 디자인
@@ -14,6 +21,15 @@ export default function RightSideAd() {
   const adBottomInitialized = useRef(false);
 
   useEffect(() => {
+    // 스크롤바 숨김 스타일 추가
+    const styleId = "right-side-ad-scrollbar-hide";
+    if (typeof document !== "undefined" && !document.getElementById(styleId)) {
+      const style = document.createElement("style");
+      style.id = styleId;
+      style.textContent = hideScrollbarStyle;
+      document.head.appendChild(style);
+    }
+
     // 애드센스 스크립트가 이미 로드되어 있는지 확인하고 각 광고를 독립적으로 초기화
     const checkAndInit = () => {
       if (typeof window === "undefined") return;
@@ -50,11 +66,27 @@ export default function RightSideAd() {
 
   return (
     <aside
-      className="fixed right-6 top-1/2 -translate-y-1/2 hidden xl:flex flex-col z-40"
+      className="right-side-ad-container fixed right-6 top-1/2 -translate-y-1/2 hidden xl:flex flex-col z-40"
       style={{
         width: "160px",
         maxWidth: "200px",
+        maxHeight: "calc(100vh - 100px)",
         gap: "1.5rem",
+        overflowY: "auto",
+        overflowX: "hidden",
+        // 스크롤바 숨김 처리
+        scrollbarWidth: "none", // Firefox
+        msOverflowStyle: "none", // IE/Edge
+        // 작은 화면 대비 스케일 조정
+        transform: "translateY(-50%) scale(0.95)",
+        transformOrigin: "center center",
+        transition: "transform 0.2s ease",
+      }}
+      onMouseEnter={(e) => {
+        e.currentTarget.style.transform = "translateY(-50%) scale(1)";
+      }}
+      onMouseLeave={(e) => {
+        e.currentTarget.style.transform = "translateY(-50%) scale(0.95)";
       }}
     >
       {/* 상단 광고 컨테이너 */}
