@@ -16,10 +16,12 @@ import {
   Target,
   BarChart3,
   FileText,
-  ArrowRight
+  ArrowRight,
+  ChevronLeft,
+  ChevronRight
 } from "lucide-react";
 
-export default function HomePageClient() {
+export default function HomePageClient({ initialPosts = [] }: { initialPosts?: any[] }) {
   const { data: session } = useSession();
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
@@ -39,6 +41,14 @@ export default function HomePageClient() {
   const [name, setName] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [blogPosts, setBlogPosts] = useState<any[]>([]);
+  
+  // --- 트렌드 스크롤 관련 ---
+  const trendRef = useRef<HTMLDivElement | null>(null);
+  const scrollTrends = (dir: 1 | -1) => { 
+    if (trendRef.current) { 
+      trendRef.current.scrollBy({ left: dir * 350, behavior: "smooth" }); 
+    } 
+  };
 
   // --- 데이터 로딩 (커뮤니티 글) ---
   useEffect(() => {
@@ -595,6 +605,144 @@ export default function HomePageClient() {
             AI 업계 속보와 심층 칼럼을 만나보세요
           </p>
         </div>
+
+        {/* 인사이트 가로 스크롤 카드 레이아웃 */}
+        {initialPosts && initialPosts.length > 0 && (
+          <div className="relative mb-16">
+            <div className="relative">
+              {/* 좌측 스크롤 버튼 */}
+              <button
+                onClick={() => scrollTrends(-1)}
+                className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300"
+                style={{
+                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'}`,
+                  color: isDark ? '#ffffff' : '#000000',
+                  boxShadow: isDark ? '0 4px 20px rgba(0,0,0,0.3)' : '0 4px 20px rgba(0,0,0,0.08)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+                }}
+              >
+                <ChevronLeft className="w-6 h-6" />
+              </button>
+
+              {/* 가로 스크롤 컨테이너 */}
+              <div
+                ref={trendRef}
+                className="flex gap-6 overflow-x-auto scrollbar-hide px-14"
+              >
+                {initialPosts.map((post: any) => (
+                  <Link
+                    key={post.id}
+                    href={`/post/${post.id}`}
+                    className="flex-shrink-0 w-80 rounded-2xl overflow-hidden transition-all duration-300"
+                    style={{
+                      backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
+                      border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+                      boxShadow: isDark ? '0 4px 20px rgba(0,0,0,0.3)' : '0 4px 20px rgba(0,0,0,0.05)',
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.transform = 'translateY(-8px)';
+                      e.currentTarget.style.boxShadow = isDark 
+                        ? '0 15px 40px rgba(0,0,0,0.5)' 
+                        : '0 15px 40px rgba(0,0,0,0.12)';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.transform = 'translateY(0)';
+                      e.currentTarget.style.boxShadow = isDark 
+                        ? '0 4px 20px rgba(0,0,0,0.3)' 
+                        : '0 4px 20px rgba(0,0,0,0.05)';
+                    }}
+                  >
+                    {/* 썸네일 이미지 */}
+                    <div 
+                      className="w-full aspect-video relative overflow-hidden"
+                      style={{
+                        backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : '#f0f0f0',
+                      }}
+                    >
+                      {post.thumbnail_url ? (
+                        <img
+                          src={post.thumbnail_url}
+                          alt={post.title || '인사이트'}
+                          className="w-full h-full object-cover transition-transform duration-500"
+                          style={{
+                            transform: 'scale(1)',
+                          }}
+                          onMouseEnter={(e) => {
+                            e.currentTarget.style.transform = 'scale(1.05)';
+                          }}
+                          onMouseLeave={(e) => {
+                            e.currentTarget.style.transform = 'scale(1)';
+                          }}
+                        />
+                      ) : (
+                        <div className="w-full h-full flex items-center justify-center">
+                          <span style={{ color: isDark ? 'rgba(255, 255, 255, 0.3)' : '#ccc', fontSize: '40px' }}>📄</span>
+                        </div>
+                      )}
+                    </div>
+
+                    {/* 카드 내용 */}
+                    <div className="p-5">
+                      <h3
+                        className="line-clamp-2 font-bold mb-3 transition-colors duration-300"
+                        style={{
+                          color: isDark ? '#ffffff' : '#111',
+                          fontSize: '18px',
+                          lineHeight: '1.4',
+                          minHeight: '50px',
+                        }}
+                      >
+                        {post.title || '제목 없음'}
+                      </h3>
+                      <Link
+                        href={`/post/${post.id}`}
+                        className="inline-flex items-center gap-2 text-sm font-semibold transition-all duration-300"
+                        style={{
+                          color: isDark ? 'rgba(255, 255, 255, 0.8)' : '#3b82f6',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.gap = '6px';
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.gap = '4px';
+                        }}
+                      >
+                        자세히 보기
+                        <ArrowRight className="w-4 h-4" />
+                      </Link>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+
+              {/* 우측 스크롤 버튼 */}
+              <button
+                onClick={() => scrollTrends(1)}
+                className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-12 h-12 rounded-full flex items-center justify-center transition-all duration-300"
+                style={{
+                  backgroundColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)',
+                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)'}`,
+                  color: isDark ? '#ffffff' : '#000000',
+                  boxShadow: isDark ? '0 4px 20px rgba(0,0,0,0.3)' : '0 4px 20px rgba(0,0,0,0.08)',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.1)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)';
+                }}
+              >
+                <ChevronRight className="w-6 h-6" />
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* Insight Workflow Grid */}
         <div className="insight-workflow-container relative">
@@ -1652,6 +1800,15 @@ export default function HomePageClient() {
         .submit-btn:hover { transform: translateY(-2px); box-shadow: 0 8px 20px rgba(0,0,0,0.2); }
         .switch-mode { text-align: center; font-size: 14px; margin-top: 20px; color: #666; }
         .switch-mode span { color: var(--blue); font-weight: 700; cursor: pointer; margin-left: 6px; }
+
+        /* 스크롤바 숨김 */
+        .scrollbar-hide {
+          -ms-overflow-style: none;
+          scrollbar-width: none;
+        }
+        .scrollbar-hide::-webkit-scrollbar {
+          display: none;
+        }
 
         /* 모바일 반응형: 모든 그리드를 1열로 변경 */
         @media (max-width: 768px) {
