@@ -9,7 +9,7 @@ import ProfileImageSelector from "@/components/my/ProfileImageSelector";
 import { UserProfile, createDefaultProfile } from "@/lib/userProfile";
 
 export default function EditProfilePage() {
-  const { data: session } = useSession();
+  const { data: session, update } = useSession();
   const user = session?.user || null;
   const { theme } = useTheme();
   const router = useRouter();
@@ -64,7 +64,7 @@ export default function EditProfilePage() {
     }
   }, [user?.email, user?.name]);
 
-  const handleSave = () => {
+  const handleSave = async () => {
     if (!user?.email || !profile) return;
     if (!nickname.trim()) {
       alert("닉네임을 입력해주세요.");
@@ -81,54 +81,85 @@ export default function EditProfilePage() {
 
     setIsSaving(true);
 
-    const updated: UserProfile = {
-      ...profile,
-      nickname: nickname.trim(),
-      bio: bio.trim(),
-      statusMessage: statusMessage.trim(),
-      profileImageUrl,
-    };
+    try {
+      // 1. 서버 API 호출 (DB 업데이트 + 캐시 무효화)
+      const response = await fetch("/api/user/profile", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          nickname: nickname.trim(),
+          bio: bio.trim(),
+          statusMessage: statusMessage.trim(),
+          profileImageUrl,
+        }),
+      });
 
-    // localStorage에 저장
-    localStorage.setItem(`dori_profile_${user.email}`, JSON.stringify(updated));
-    localStorage.setItem(`dori_user_name_${user.email}`, nickname.trim());
-    localStorage.setItem(`dori_user_bio_${user.email}`, bio.trim());
-    localStorage.setItem(`dori_status_${user.email}`, statusMessage.trim());
-    if (profileImageUrl) {
-      localStorage.setItem(`dori_image_${user.email}`, profileImageUrl);
-      // 프로필 이미지 변경 이벤트 발생 (헤더의 AccountMenu가 즉시 업데이트되도록)
-      window.dispatchEvent(new CustomEvent('profileImageUpdated', { 
-        detail: { imageUrl: profileImageUrl, email: user.email } 
-      }));
-    }
-    
-    // 프로필 업데이트 이벤트 발생
-    window.dispatchEvent(new CustomEvent('profileUpdated'));
-
-    // 모든 게시글과 댓글의 작성자 이름 업데이트
-    const savedPosts = JSON.parse(localStorage.getItem("dori_posts") || "[]");
-    const updatedPosts = savedPosts.map((p: any) => {
-      if (p.author === profile.nickname || p.nickname === profile.nickname || p.author === user?.name) {
-        p.author = nickname.trim();
-        p.nickname = nickname.trim();
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(errorData.error || "프로필 업데이트 실패");
       }
-      if (p.commentsList) {
-        p.commentsList = p.commentsList.map((c: any) => {
-          if (c.author === profile.nickname || c.author === user?.name) {
-            c.author = nickname.trim();
-          }
-          return c;
-        });
-      }
-      return p;
-    });
-    localStorage.setItem("dori_posts", JSON.stringify(updatedPosts));
 
-    setTimeout(() => {
+      const updated: UserProfile = {
+        ...profile,
+        nickname: nickname.trim(),
+        bio: bio.trim(),
+        statusMessage: statusMessage.trim(),
+        profileImageUrl,
+      };
+
+      // 2. localStorage에 저장 (클라이언트 캐시)
+      localStorage.setItem(`dori_profile_${user.email}`, JSON.stringify(updated));
+      localStorage.setItem(`dori_user_name_${user.email}`, nickname.trim());
+      localStorage.setItem(`dori_user_bio_${user.email}`, bio.trim());
+      localStorage.setItem(`dori_status_${user.email}`, statusMessage.trim());
+      if (profileImageUrl) {
+        localStorage.setItem(`dori_image_${user.email}`, profileImageUrl);
+        // 프로필 이미지 변경 이벤트 발생 (헤더의 AccountMenu가 즉시 업데이트되도록)
+        window.dispatchEvent(new CustomEvent('profileImageUpdated', { 
+          detail: { imageUrl: profileImageUrl, email: user.email } 
+        }));
+      }
+      
+      // 3. 프로필 업데이트 이벤트 발생
+      window.dispatchEvent(new CustomEvent('profileUpdated'));
+
+      // 4. 모든 게시글과 댓글의 작성자 이름 업데이트
+      const savedPosts = JSON.parse(localStorage.getItem("dori_posts") || "[]");
+      const updatedPosts = savedPosts.map((p: any) => {
+        if (p.author === profile.nickname || p.nickname === profile.nickname || p.author === user?.name) {
+          p.author = nickname.trim();
+          p.nickname = nickname.trim();
+        }
+        if (p.commentsList) {
+          p.commentsList = p.commentsList.map((c: any) => {
+            if (c.author === profile.nickname || c.author === user?.name) {
+              c.author = nickname.trim();
+            }
+            return c;
+          });
+        }
+        return p;
+      });
+      localStorage.setItem("dori_posts", JSON.stringify(updatedPosts));
+
+      // 5. NextAuth 세션 강제 업데이트 - 모든 기기에서 동기화되도록
+      await update({
+        name: nickname.trim(),
+      });
+
+      // 6. 페이지 리로드로 서버 캐시 갱신 확인
+      router.refresh();
+
       setIsSaving(false);
       alert("프로필이 저장되었습니다.");
       router.push("/my");
-    }, 500);
+    } catch (error) {
+      console.error("프로필 저장 오류:", error);
+      setIsSaving(false);
+      alert(error instanceof Error ? error.message : "프로필 저장 중 오류가 발생했습니다.");
+    }
   };
 
   const isDark = mounted && theme === "dark";

@@ -10,7 +10,7 @@ import ProfileHero from "@/components/my/ProfileHero";
 import { UserProfile, createDefaultProfile, calculateTier, calculateLevel, ACTIVITY_SCORES } from "@/lib/userProfile";
 
 export default function MyPage() {
-  const { data: session, status } = useSession();
+  const { data: session, status, update } = useSession();
   const user = session?.user || null;
   const { theme } = useTheme();
   const router = useRouter();
@@ -223,12 +223,21 @@ export default function MyPage() {
     window.dispatchEvent(new CustomEvent('profileUpdated'));
   };
 
-  const handleNicknameChange = (nickname: string) => {
+  const handleNicknameChange = async (nickname: string) => {
     if (!user || !user.email || !profile) return;
     const updated = { ...profile, nickname };
     setProfile(updated);
     localStorage.setItem(`dori_user_name_${user.email}`, nickname);
     localStorage.setItem(`dori_profile_${user.email}`, JSON.stringify(updated));
+    
+    // NextAuth 세션 업데이트 - 모든 기기에서 동기화되도록
+    try {
+      await update({
+        name: nickname,
+      });
+    } catch (error) {
+      console.error("세션 업데이트 실패:", error);
+    }
   };
 
   const handleBioChange = (bio: string) => {

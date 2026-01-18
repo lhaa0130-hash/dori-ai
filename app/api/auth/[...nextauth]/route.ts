@@ -95,40 +95,76 @@ if (googleClientId && googleClientSecret) {
   console.warn("⚠️ 구글 프로바이더가 비활성화되었습니다. GOOGLE_CLIENT_ID와 GOOGLE_CLIENT_SECRET을 확인하세요.");
 }
 
-const handler = NextAuth({
+export const authOptions = {
   providers,
   pages: {
     signIn: '/login',
     error: '/login',
   },
-  session: { strategy: "jwt", maxAge: 10 * 60 }, // 10분 (600초)
+  session: { 
+    strategy: "jwt" as const, 
+    maxAge: 30 * 24 * 60 * 60, // 30일 (모바일 브라우저 대응)
+    updateAge: 24 * 60 * 60, // 24시간마다 세션 갱신
+  },
   secret: process.env.NEXTAUTH_SECRET || "fallback-secret-key-change-in-production",
   debug: process.env.NODE_ENV === "development",
   trustHost: true,
   useSecureCookies: process.env.NODE_ENV === "production",
+  cookies: {
+    sessionToken: {
+      name: `${process.env.NODE_ENV === "production" ? "__Secure-" : ""}next-auth.session-token`,
+      options: {
+        httpOnly: true,
+        sameSite: "lax",
+        path: "/",
+        secure: process.env.NODE_ENV === "production",
+        // 모바일 브라우저 대응: SameSite 설정으로 크로스 사이트 요청 허용
+        maxAge: 30 * 24 * 60 * 60, // 30일
+      },
+    },
+  },
   ...(nextAuthUrl && { url: nextAuthUrl }),
   callbacks: {
     async session({ session, token }) {
       if (session.user) {
+        // JWT token에서 최신 정보 반영 (프로필 수정 후 update() 호출 시 반영됨)
         if (token.name) {
           session.user.name = token.name as string;
         }
         if (token.email) {
           session.user.email = token.email as string;
         }
+        
+        // TODO: DB에서 최신 프로필 정보 가져오기 (필요한 경우)
+        // 실제 DB를 사용할 때 아래 주석을 해제하고 구현
+        // const userEmail = token.email as string;
+        // if (userEmail) {
+        //   const userProfile = await db.user.findUnique({
+        //     where: { email: userEmail },
+        //     select: { name: true, profileImageUrl: true }
+        //   });
+        //   if (userProfile) {
+        //     session.user.name = userProfile.name || session.user.name;
+        //     (session.user as any).profileImageUrl = userProfile.profileImageUrl;
+        //   }
+        // }
+        
         // 관리자 권한 추가
         const userEmail = (token.email as string)?.toLowerCase() || "";
         (session.user as any).isAdmin = ADMIN_EMAILS.some(email => email.toLowerCase() === userEmail);
       }
       return session;
     },
-    async jwt({ token, user, account }) {
+    async jwt({ token, user, account, trigger, session }) {
+      // 초기 로그인 시
       if (user) {
         token.email = user.email;
         // 이름은 클라이언트에서 localStorage를 통해 관리하므로
         // 여기서는 기본값만 설정 (실제로는 클라이언트에서 덮어씀)
         token.name = user.name;
       }
+      
+      // Google 로그인 시
       if (account?.provider === "google") {
         if (!user?.email) {
           console.error("❌ Google OAuth callback error: user email is missing in JWT callback");
@@ -138,6 +174,15 @@ const handler = NextAuth({
         // Google 로그인 시에도 클라이언트에서 localStorage 확인 후 설정
         token.name = user.name;
       }
+      
+      // 세션 업데이트 트리거 시 (프로필 수정 후 update() 호출 시)
+      if (trigger === "update" && session) {
+        // 클라이언트에서 전달된 최신 이름을 반영
+        if (session.name) {
+          token.name = session.name as string;
+        }
+      }
+      
       return token;
     },
     async signIn({ user, account, profile }) {
@@ -170,6 +215,8 @@ const handler = NextAuth({
       return baseUrl;
     }
   }
-});
+};
+
+const handler = NextAuth(authOptions);
 
 export { handler as GET, handler as POST };

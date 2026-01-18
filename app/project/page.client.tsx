@@ -39,6 +39,7 @@ interface Project {
   glowColor: string;
   size: "large" | "medium" | "small";
   workflow?: Array<{ step: string; icon: React.ReactNode }>;
+  href?: string;
 }
 
 const PROJECTS: Project[] = [
@@ -138,6 +139,32 @@ const PROJECTS: Project[] = [
     color: "#f59e0b",
     glowColor: "rgba(245, 158, 11, 0.3)",
     size: "small",
+  },
+  {
+    id: "animal",
+    title: "DORI'S 동물도감",
+    subtitle: "AI 기반 맞춤형 동물 백과사전",
+    description: "아이들의 상상력을 자극하는 AI 기반 맞춤형 동물 백과사전",
+    detail: "Notion DB와 연동하여 다양한 동물 정보를 AI 이미지 생성 및 도감 레이아웃으로 자동 구성",
+    status: "CREATIVE",
+    statusLabel: "진행 중",
+    tech: [
+      { name: "Notion API", icon: <Database className="w-3.5 h-3.5" /> },
+      { name: "AI Image", icon: <Bot className="w-3.5 h-3.5" /> },
+      { name: "Next.js", icon: <Code className="w-3.5 h-3.5" /> },
+      { name: "Tailwind CSS", icon: <Palette className="w-3.5 h-3.5" /> },
+    ],
+    icon: <BookOpen className="w-6 h-6" />,
+    color: "#10b981",
+    glowColor: "rgba(16, 185, 129, 0.4)",
+    size: "medium",
+    href: "/animal",
+    workflow: [
+      { step: "동물 데이터 수집", icon: <Database className="w-4 h-4" /> },
+      { step: "AI 이미지 생성", icon: <Bot className="w-4 h-4" /> },
+      { step: "도감 레이아웃 구성", icon: <FileText className="w-4 h-4" /> },
+      { step: "도감 완성", icon: <CheckCircle2 className="w-4 h-4" /> },
+    ],
   },
 ];
 
@@ -655,50 +682,99 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
 
                   {/* 프리미엄 EXPLORE 버튼 */}
                   <div className="relative z-10">
-                    <button
-                      className="explore-btn px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all duration-300 relative overflow-hidden group"
-                      style={{
-                        background: isMain
-                          ? `linear-gradient(135deg, ${project.color}, ${project.color}80)`
-                          : 'transparent',
-                        border: isMain ? 'none' : `1.5px solid ${project.color}50`,
-                        color: isMain ? '#ffffff' : project.color,
-                        boxShadow: isMain
-                          ? `0 4px 20px ${project.color}50, inset 0 1px 0 rgba(255, 255, 255, 0.2)`
-                          : 'none',
-                      }}
-                      onMouseEnter={(e) => {
-                        if (isMain) {
-                          e.currentTarget.style.boxShadow = `0 6px 30px ${project.color}70, inset 0 1px 0 rgba(255, 255, 255, 0.3)`;
-                          e.currentTarget.style.transform = 'translateY(-2px) scale(1.02)';
-                        } else {
-                          e.currentTarget.style.background = `linear-gradient(135deg, ${project.color}20, ${project.color}10)`;
-                          e.currentTarget.style.boxShadow = `0 0 20px ${project.color}30`;
-                        }
-                      }}
-                      onMouseLeave={(e) => {
-                        if (isMain) {
-                          e.currentTarget.style.boxShadow = `0 4px 20px ${project.color}50, inset 0 1px 0 rgba(255, 255, 255, 0.2)`;
-                          e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                        } else {
-                          e.currentTarget.style.background = 'transparent';
-                          e.currentTarget.style.boxShadow = 'none';
-                        }
-                      }}
-                    >
-                      {/* 버튼 내부 글로우 */}
-                      {isMain && (
-                        <div 
-                          className="absolute inset-0 rounded-xl"
+                    {project.href ? (
+                      <Link href={project.href}>
+                        <button
+                          className="explore-btn px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all duration-300 relative overflow-hidden group w-full"
                           style={{
-                            background: `linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent)`,
-                            opacity: 0.6,
+                            background: isMain
+                              ? `linear-gradient(135deg, ${project.color}, ${project.color}80)`
+                              : 'transparent',
+                            border: isMain ? 'none' : `1.5px solid ${project.color}50`,
+                            color: isMain ? '#ffffff' : project.color,
+                            boxShadow: isMain
+                              ? `0 4px 20px ${project.color}50, inset 0 1px 0 rgba(255, 255, 255, 0.2)`
+                              : 'none',
                           }}
-                        />
-                      )}
-                      <span>Explore</span>
-                      <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                    </button>
+                          onMouseEnter={(e) => {
+                            if (isMain) {
+                              e.currentTarget.style.boxShadow = `0 6px 30px ${project.color}70, inset 0 1px 0 rgba(255, 255, 255, 0.3)`;
+                              e.currentTarget.style.transform = 'translateY(-2px) scale(1.02)';
+                            } else {
+                              e.currentTarget.style.background = `linear-gradient(135deg, ${project.color}20, ${project.color}10)`;
+                              e.currentTarget.style.boxShadow = `0 0 20px ${project.color}30`;
+                            }
+                          }}
+                          onMouseLeave={(e) => {
+                            if (isMain) {
+                              e.currentTarget.style.boxShadow = `0 4px 20px ${project.color}50, inset 0 1px 0 rgba(255, 255, 255, 0.2)`;
+                              e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                            } else {
+                              e.currentTarget.style.background = 'transparent';
+                              e.currentTarget.style.boxShadow = 'none';
+                            }
+                          }}
+                        >
+                          {/* 버튼 내부 글로우 */}
+                          {isMain && (
+                            <div 
+                              className="absolute inset-0 rounded-xl"
+                              style={{
+                                background: `linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent)`,
+                                opacity: 0.6,
+                              }}
+                            />
+                          )}
+                          <span>Explore</span>
+                          <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                        </button>
+                      </Link>
+                    ) : (
+                      <button
+                        className="explore-btn px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all duration-300 relative overflow-hidden group"
+                        style={{
+                          background: isMain
+                            ? `linear-gradient(135deg, ${project.color}, ${project.color}80)`
+                            : 'transparent',
+                          border: isMain ? 'none' : `1.5px solid ${project.color}50`,
+                          color: isMain ? '#ffffff' : project.color,
+                          boxShadow: isMain
+                            ? `0 4px 20px ${project.color}50, inset 0 1px 0 rgba(255, 255, 255, 0.2)`
+                            : 'none',
+                        }}
+                        onMouseEnter={(e) => {
+                          if (isMain) {
+                            e.currentTarget.style.boxShadow = `0 6px 30px ${project.color}70, inset 0 1px 0 rgba(255, 255, 255, 0.3)`;
+                            e.currentTarget.style.transform = 'translateY(-2px) scale(1.02)';
+                          } else {
+                            e.currentTarget.style.background = `linear-gradient(135deg, ${project.color}20, ${project.color}10)`;
+                            e.currentTarget.style.boxShadow = `0 0 20px ${project.color}30`;
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (isMain) {
+                            e.currentTarget.style.boxShadow = `0 4px 20px ${project.color}50, inset 0 1px 0 rgba(255, 255, 255, 0.2)`;
+                            e.currentTarget.style.transform = 'translateY(0) scale(1)';
+                          } else {
+                            e.currentTarget.style.background = 'transparent';
+                            e.currentTarget.style.boxShadow = 'none';
+                          }
+                        }}
+                      >
+                        {/* 버튼 내부 글로우 */}
+                        {isMain && (
+                          <div 
+                            className="absolute inset-0 rounded-xl"
+                            style={{
+                              background: `linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent)`,
+                              opacity: 0.6,
+                            }}
+                          />
+                        )}
+                        <span>Explore</span>
+                        <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                      </button>
+                    )}
                   </div>
 
                   {/* 메인 카드 글로우 효과 */}
