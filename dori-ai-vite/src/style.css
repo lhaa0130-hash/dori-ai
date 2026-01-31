@@ -1,0 +1,218 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+
+  :root {
+
+    /* 🌞 [라이트 모드] */
+
+    --bg-main: #ffffff;
+
+    --bg-header: rgba(255, 255, 255, 0.9);
+
+    --text-header: #000000;
+
+   
+
+    --text-main: #1a1a1a;
+
+    --text-sub: #52525b;
+
+   
+
+    /* 카드: 흰색 배경 */
+
+    --card-bg: #ffffff;
+
+    --card-border: #e4e4e7;
+
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.05);
+
+   
+
+    --accent-color: #3b82f6;
+
+  }
+
+
+
+  :root:where(.dark) {
+
+    /* 🌙 [다크 모드] */
+
+    --bg-main: #000000;
+
+    --bg-header: rgba(0, 0, 0, 0.85);
+
+    --text-header: #ffffff;
+
+   
+
+    --text-main: #ffffff;
+
+    --text-sub: #ffffff;
+
+   
+
+    /* 🎨 [핵심 수정] 카드 배경을 완전 검정(#000000)으로 설정 */
+
+    --card-bg: #000000;
+
+    --card-border: #333333;
+
+    --card-shadow: 0 4px 20px rgba(0, 0, 0, 0.5);
+
+   
+
+    --accent-color: #60a5fa;
+
+  }
+
+
+
+  body {
+
+    background-color: var(--bg-main) !important;
+
+    color: var(--text-main) !important;
+
+    transition: background-color 0.4s cubic-bezier(0.4, 0, 0.2, 1), color 0.4s ease;
+
+  }
+  /* 다크모드에서 가이드 글 텍스트 강제 흰색 */
+  :root:where(.dark) article p,
+  :root:where(.dark) article h1,
+  :root:where(.dark) article h2,
+  :root:where(.dark) article h3,
+  :root:where(.dark) article h4,
+  :root:where(.dark) article h5,
+  :root:where(.dark) article h6,
+  :root:where(.dark) article li,
+  :root:where(.dark) article ul,
+  :root:where(.dark) article ol,
+  :root:where(.dark) article blockquote,
+  :root:where(.dark) article em,
+  :root:where(.dark) article del {
+    color: #ffffff !important;
+  }
+
+  /* 다크모드에서 강조 텍스트(strong) 배경과 텍스트 색상 */
+  :root:where(.dark) article strong {
+    background-color: rgba(234, 179, 8, 0.3) !important;
+    color: #fef08a !important;
+  }
+
+  /* 다크모드에서 인용문(blockquote) 배경색 */
+  :root:where(.dark) article blockquote {
+    background-color: rgba(31, 41, 55, 0.8) !important;
+    border-left-color: #60a5fa !important;
+  }
+
+}
+
+@keyframes gradientFlow {
+  0% {
+    background-position: 0% 50%;
+  }
+  100% {
+    background-position: 200% 50%;
+  }
+}
+
+@keyframes popupSlideUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px) scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+@keyframes float {
+  0%,
+  100% {
+    transform: translate(0, 0) scale(1);
+  }
+  25% {
+    transform: translate(10px, -10px) scale(1.05);
+  }
+  50% {
+    transform: translate(-5px, 5px) scale(0.95);
+  }
+  75% {
+    transform: translate(-10px, -5px) scale(1.02);
+  }
+}
+@keyframes rotate {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+@keyframes pulse {
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 8px 40px rgba(59, 130, 246, 0.6),
+      0 0 60px rgba(139, 92, 246, 0.4), 0 0 100px rgba(236, 72, 153, 0.2);
+  }
+  50% {
+    transform: scale(1.05);
+    box-shadow: 0 12px 50px rgba(59, 130, 246, 0.8),
+      0 0 80px rgba(139, 92, 246, 0.6), 0 0 120px rgba(236, 72, 153, 0.4);
+  }
+}
+@keyframes bounce {
+  0%,
+  100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
+}
+@keyframes shimmer {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+@keyframes gradientShift {
+  0%,
+  100% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+}
+
+/* 전역 UI 개선 */
+* {
+  font-family: "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif;
+  letter-spacing: -0.01em;
+}
+
+/* 카드 및 버튼 호버 효과 */
+.card-hover,
+button,
+a[class*="card"],
+[class*="Card"] {
+  transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1), 
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              opacity 0.3s ease;
+}
+
+.card-hover:hover,
+button:hover:not(:disabled),
+a[class*="card"]:hover,
+[class*="Card"]:hover {
+  transform: scale(1.02);
+}

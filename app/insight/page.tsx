@@ -5,8 +5,7 @@ import { getAllGuides } from '@/lib/guides';
 import { getAllTrends } from '@/lib/trends';
 import InsightPageClient from './page.client';
 
-// Force dynamic rendering
-export const dynamic = 'force-dynamic';
+
 
 export default async function InsightPage() {
   try {

@@ -1,0 +1,32 @@
+[
+  {
+    "name": "사막여우",
+    "image": "https://images.unsplash.com/photo-1596799321484-5a93d186fe1e?q=80&w=2070&auto=format&fit=crop",
+    "description": "세상에서 가장 작은 여우예요."
+  },
+  {
+    "name": "북극곰",
+    "image": "https://images.unsplash.com/photo-1562913259-7f8473c44a49?q=80&w=2071&auto=format&fit=crop",
+    "description": "얼음 위에서 사는 용감한 사냥꾼이에요."
+  },
+  {
+    "name": "판다",
+    "image": "https://images.unsplash.com/photo-1564754944885-35a7f4577b90?q=80&w=2070&auto=format&fit=crop",
+    "description": "대나무를 정말 좋아하는 친구랍니다."
+  },
+  {
+    "name": "고래",
+    "image": "https://images.unsplash.com/photo-1467431244794-6d9b4a43402a?q=80&w=2070&auto=format&fit=crop",
+    "description": "바다에서 가장 큰 포유류예요."
+  },
+  {
+    "name": "펭귄",
+    "image": "https://images.unsplash.com/photo-1552984643-0d3a1a5b8146?q=80&w=2070&auto=format&fit=crop",
+    "description": "남극의 신사, 추운 곳을 좋아해요."
+  },
+  {
+    "name": "코알라",
+    "image": "https://images.unsplash.com/photo-1557053503-bf61a6b4129b?q=80&w=2070&auto=format&fit=crop",
+    "description": "유칼립투스 잎을 먹고 잠자는 것을 좋아해요."
+  }
+]

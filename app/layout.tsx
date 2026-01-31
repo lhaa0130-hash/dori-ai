@@ -68,12 +68,21 @@ export default function RootLayout({
         이것이 가장 근본적인 배경색이 되며, 자식 페이지에서 배경색을 
         따로 지정하지 않으면(투명하면) 이 색을 따르게 됩니다.
       */}
-      <body 
-        className="transition-colors duration-300 bg-white text-black dark:bg-black dark:text-white" 
+      <body
+        className="transition-colors duration-300 bg-white text-black dark:bg-black dark:text-white"
         suppressHydrationWarning={true}
         style={{ fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif' }}
       >
-        
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-SRFLY185NT" strategy="afterInteractive" />
+        <Script id="google-analytics" strategy="afterInteractive">
+          {`
+                window.dataLayer = window.dataLayer || [];
+                function gtag(){dataLayer.push(arguments);}
+                gtag('js', new Date());
+                gtag('config', 'G-SRFLY185NT');
+            `}
+        </Script>
+
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1868839951780851"
@@ -82,9 +91,9 @@ export default function RootLayout({
         />
 
         <AuthProvider>
-          <VisitorTracker /> 
+          <VisitorTracker />
           <LayoutClient>
-              {children}
+            {children}
           </LayoutClient>
         </AuthProvider>
       </body>

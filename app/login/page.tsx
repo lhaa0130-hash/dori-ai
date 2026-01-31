@@ -14,7 +14,13 @@ function ErrorHandler({ onError }: { onError: (error: string) => void }) {
       if (errorParam === "Configuration" || errorParam.includes("deleted_client")) {
         onError("구글 OAuth 클라이언트가 삭제되었거나 설정이 올바르지 않습니다. 새로운 클라이언트 ID를 생성하고 .env.local 파일을 업데이트해주세요.");
       } else if (errorParam === "OAuthCallback") {
-        onError("구글 로그인 콜백 처리 중 오류가 발생했습니다. 다음을 확인해주세요:\n1. Google Cloud Console에서 리디렉션 URI가 올바르게 설정되었는지 확인\n2. NEXTAUTH_URL 환경 변수가 올바르게 설정되었는지 확인\n3. 브라우저 쿠키를 삭제하고 다시 시도");
+        onError(
+  "구글 로그인 콜백 처리 중 오류가 발생했습니다. 다음을 확인해주세요:\n" +
+  "1. Google Cloud Console에서 리디렉션 URI가 올바르게 설정되었는지 확인\n" +
+  "2. .env.local 파일에 GOOGLE_CLIENT_ID와 GOOGLE_CLIENT_SECRET가 올바르게 설정되었는지 확인\n" +
+  "3. NEXTAUTH_URL 환경 변수가 올바르게 설정되었는지 확인\n" +
+  "4. 브라우저 쿠키를 삭제하고 다시 시도"
+);
       } else if (errorParam === "AccessDenied") {
         onError("접근이 거부되었습니다.");
       } else if (errorParam === "OAuthAccountNotLinked") {
@@ -60,7 +66,7 @@ export default function LoginPage() {
     });
 
     if (res?.error) {
-      alert("로그인 실패: 이메일과 비밀번호를 확인해주세요.");
+      setError("로그인 실패: 이메일과 비밀번호를 확인해주세요.");
       setIsLoading(false);
     } else {
       router.push("/");
