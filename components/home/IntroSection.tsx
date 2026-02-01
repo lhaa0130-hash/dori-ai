@@ -7,8 +7,8 @@ export function IntroSection() {
     return (
         <section className="relative w-full py-20 px-6 flex flex-col items-center justify-center text-center overflow-hidden bg-background">
             {/* Background - 다크모드 그라데이션 강화 */}
-            {/* Background - semantic gradient */}
-            <div className="absolute inset-0 bg-gradient-to-b from-orange-50 via-background to-background dark:from-zinc-950 dark:via-background dark:to-background" />
+            {/* Background - semantic gradient - Darker for dark mode */}
+            <div className="absolute inset-0 bg-gradient-to-b from-orange-50 via-background to-background dark:from-black dark:via-zinc-950 dark:to-background" />
 
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -60,7 +60,7 @@ export function IntroSection() {
                     <br />
                     <span className="font-semibold text-orange-600 dark:text-orange-400">가능성으로 향하는 길</span>을 함께 만들어갑니다
                     <br />
-                    <span className="text-sm mt-3 block opacity-80 text-neutral-600 dark:text-neutral-400">지식이 아닌 경험을, 도구가 아닌 연결을, 결과가 아닌 과정을 나누는 공간</span>
+                    <span className="text-sm mt-3 block opacity-80 text-muted-foreground">지식이 아닌 경험을, 도구가 아닌 연결을, 결과가 아닌 과정을 나누는 공간</span>
                 </motion.p>
 
                 {/* 포인트 강조 */}
@@ -68,7 +68,7 @@ export function IntroSection() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.6, duration: 0.8 }}
-                    className="mt-8 flex flex-wrap items-center justify-center gap-4 text-sm text-neutral-700 dark:text-neutral-300"
+                    className="mt-8 flex flex-wrap items-center justify-center gap-4 text-sm text-foreground/80"
                 >
                     <span className="flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />

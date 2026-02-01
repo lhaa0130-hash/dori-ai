@@ -42,7 +42,7 @@ export default function Header() {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 font-sans",
         // Force background color to prevent transparency issues
-        "bg-white dark:bg-black border-b border-neutral-200 dark:border-white/10"
+        "bg-background/80 backdrop-blur-md border-b border-border"
       )}
     >
       {/* 
@@ -65,7 +65,7 @@ export default function Header() {
           <Link
             key={item.name}
             href={item.href}
-            className="flex-shrink-0 text-sm font-medium text-neutral-900 dark:text-neutral-100 hover:text-orange-600 dark:hover:text-orange-500 transition-colors whitespace-nowrap"
+            className="flex-shrink-0 text-sm font-medium text-foreground hover:text-orange-600 dark:hover:text-orange-500 transition-colors whitespace-nowrap"
           >
             {item.name}
           </Link>
@@ -74,7 +74,7 @@ export default function Header() {
         {/* 8. Search Icon */}
         <button
           aria-label="Search"
-          className="flex-shrink-0 w-10 h-10 flex items-center justify-center hover:opacity-70 transition-opacity text-neutral-900 dark:text-neutral-100"
+          className="flex-shrink-0 w-10 h-10 flex items-center justify-center hover:opacity-70 transition-opacity text-foreground"
         >
           <Search className="w-5 h-5" strokeWidth={2.5} />
         </button>
@@ -94,7 +94,7 @@ export default function Header() {
           {session?.user ? (
             <button
               onClick={handleSignOut}
-              className="px-4 py-2 rounded-full bg-neutral-100 dark:bg-neutral-800 text-xs font-bold text-black dark:text-white hover:bg-neutral-200 dark:hover:bg-neutral-700 transition-colors whitespace-nowrap"
+              className="px-4 py-2 rounded-full bg-secondary text-xs font-bold text-secondary-foreground hover:bg-secondary/80 transition-colors whitespace-nowrap"
             >
               로그아웃
             </button>
