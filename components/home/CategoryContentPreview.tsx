@@ -133,9 +133,9 @@ const insightPreviews = [
 // 프로젝트 미리보기 컴포넌트 - 확장된 버전
 export function ProjectPreview() {
     return (
-        <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-zinc-800">
+        <div className="mt-6 pt-6 border-t border-border">
             <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                     <Cog className="w-4 h-4 text-orange-500" />
                     진행 중인 프로젝트
                 </h3>
@@ -154,19 +154,19 @@ export function ProjectPreview() {
                         viewport={{ once: true }}
                     >
                         <Link href="/project" className="group block">
-                            <div className="p-3.5 rounded-lg bg-neutral-50 dark:bg-zinc-900/50 border border-neutral-200 dark:border-zinc-800 hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-md">
+                            <div className="p-3.5 rounded-lg bg-card/50 border border-border hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-md">
                                 <div className="flex items-start justify-between mb-2">
                                     <div className="flex-1 min-w-0">
-                                        <h4 className="text-sm font-semibold text-neutral-900 dark:text-white group-hover:text-orange-500 transition-colors line-clamp-1 mb-1">
+                                        <h4 className="text-sm font-semibold text-foreground group-hover:text-orange-500 transition-colors line-clamp-1 mb-1">
                                             {project.title}
                                         </h4>
-                                        <p className="text-xs text-neutral-600 dark:text-neutral-400 line-clamp-1 mb-2">
+                                        <p className="text-xs text-muted-foreground line-clamp-1 mb-2">
                                             {project.description}
                                         </p>
                                     </div>
                                     <span className={`text-[10px] px-2 py-0.5 rounded-full flex-shrink-0 ml-2 ${project.status === "진행중"
-                                            ? "bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400"
-                                            : "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
+                                        ? "bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400"
+                                        : "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
                                         }`}>
                                         {project.status}
                                     </span>
@@ -174,7 +174,7 @@ export function ProjectPreview() {
 
                                 {/* Progress Bar */}
                                 <div className="mb-2">
-                                    <div className="h-1.5 bg-neutral-200 dark:bg-zinc-800 rounded-full overflow-hidden">
+                                    <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
                                         <div
                                             className="h-full bg-gradient-to-r from-orange-400 to-orange-500 rounded-full transition-all"
                                             style={{ width: `${project.progress}%` }}
@@ -184,11 +184,11 @@ export function ProjectPreview() {
 
                                 <div className="flex items-center justify-between text-[11px]">
                                     <div className="flex items-center gap-3">
-                                        <span className="flex items-center gap-1 text-neutral-600 dark:text-neutral-400">
+                                        <span className="flex items-center gap-1 text-muted-foreground">
                                             <Users className="w-3 h-3" />
                                             {project.participants}명
                                         </span>
-                                        <span className="text-neutral-500 dark:text-neutral-500">
+                                        <span className="text-muted-foreground">
                                             {project.category}
                                         </span>
                                     </div>
@@ -217,9 +217,9 @@ export function MinigamePreview() {
     };
 
     return (
-        <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-zinc-800">
+        <div className="mt-6 pt-6 border-t border-border">
             <div className="flex items-center justify-between mb-4">
-                <h3 className="text-sm font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                     <Gamepad2 className="w-4 h-4 text-orange-500" />
                     인기 미니게임
                 </h3>
@@ -238,22 +238,22 @@ export function MinigamePreview() {
                         viewport={{ once: true }}
                     >
                         <Link href="/minigame" className="group block">
-                            <div className="p-3 rounded-lg bg-gradient-to-br from-orange-50 to-pink-50 dark:from-zinc-900 dark:to-zinc-900 border border-orange-200 dark:border-zinc-800 hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-md">
+                            <div className="p-3 rounded-lg bg-card border border-border hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-md">
                                 <div className="flex items-start gap-2 mb-2">
                                     <div className="text-2xl">{game.icon}</div>
                                     <div className="flex-1 min-w-0">
-                                        <h4 className="text-xs font-semibold text-neutral-900 dark:text-white line-clamp-1 mb-0.5">
+                                        <h4 className="text-xs font-semibold text-foreground line-clamp-1 mb-0.5">
                                             {game.name}
                                         </h4>
                                         <div className="flex items-center gap-1 mb-1">
                                             <Star className="w-2.5 h-2.5 text-yellow-500 fill-yellow-500" />
-                                            <span className="text-[10px] text-neutral-600 dark:text-neutral-400">
+                                            <span className="text-[10px] text-muted-foreground">
                                                 {game.rating}
                                             </span>
                                         </div>
                                     </div>
                                 </div>
-                                <p className="text-[10px] text-neutral-600 dark:text-neutral-400 mb-2 line-clamp-1">
+                                <p className="text-[10px] text-muted-foreground mb-2 line-clamp-1">
                                     {game.description}
                                 </p>
                                 <div className="flex items-center justify-between text-[10px]">
@@ -287,9 +287,9 @@ export function AIToolsPreview() {
     };
 
     return (
-        <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-zinc-800">
+        <div className="mt-6 pt-6 border-t border-border">
             <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-orange-500" />
                     추천 AI 도구
                 </h3>
@@ -308,16 +308,16 @@ export function AIToolsPreview() {
                         viewport={{ once: true }}
                     >
                         <Link href="/ai-tools" className="group">
-                            <div className="px-3 py-2 rounded-lg bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-sm">
+                            <div className="px-3 py-2 rounded-lg bg-card border border-border hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-sm">
                                 <div className="flex items-center gap-2">
-                                    <span className="text-xs font-semibold text-neutral-900 dark:text-white group-hover:text-orange-500 transition-colors">
+                                    <span className="text-xs font-semibold text-foreground group-hover:text-orange-500 transition-colors">
                                         {tool.name}
                                     </span>
                                     <span className={`text-[9px] px-1.5 py-0.5 rounded font-medium ${getBadgeColor(tool.color)}`}>
                                         {tool.badge}
                                     </span>
                                 </div>
-                                <span className="text-[10px] text-neutral-500 dark:text-neutral-500 mt-0.5 block">
+                                <span className="text-[10px] text-muted-foreground mt-0.5 block">
                                     {tool.category}
                                 </span>
                             </div>
@@ -332,9 +332,9 @@ export function AIToolsPreview() {
 // 인사이트 미리보기 컴포넌트 - 확장된 버전
 export function InsightPreview() {
     return (
-        <div className="mt-6 pt-6 border-t border-neutral-200 dark:border-zinc-800">
+        <div className="mt-6 pt-6 border-t border-border">
             <div className="flex items-center justify-between mb-3">
-                <h3 className="text-sm font-semibold text-neutral-900 dark:text-white flex items-center gap-2">
+                <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                     <Lightbulb className="w-4 h-4 text-orange-500" />
                     최신 인사이트
                 </h3>
@@ -352,16 +352,16 @@ export function InsightPreview() {
                         transition={{ delay: index * 0.08 }}
                         viewport={{ once: true }}
                     >
-                        <Link href="/insight" className="group block p-2.5 rounded-lg hover:bg-neutral-50 dark:hover:bg-zinc-900/50 transition-colors">
+                        <Link href="/insight" className="group block p-2.5 rounded-lg hover:bg-muted/50 transition-colors">
                             <div className="flex items-start justify-between gap-2 mb-1">
-                                <h4 className="text-xs font-medium text-neutral-900 dark:text-white group-hover:text-orange-500 transition-colors line-clamp-1 flex-1">
+                                <h4 className="text-xs font-medium text-foreground group-hover:text-orange-500 transition-colors line-clamp-1 flex-1">
                                     {insight.title}
                                 </h4>
                                 <span className="text-[9px] px-1.5 py-0.5 rounded bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 flex-shrink-0">
                                     {insight.category}
                                 </span>
                             </div>
-                            <div className="flex items-center gap-3 text-[10px] text-neutral-500 dark:text-neutral-500">
+                            <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
                                 <span className="flex items-center gap-1">
                                     <Clock className="w-3 h-3" />
                                     {insight.date}

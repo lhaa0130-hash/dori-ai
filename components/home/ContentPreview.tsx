@@ -52,23 +52,23 @@ function ToolCarousel({ category, tools }: { category: string; tools: typeof AI_
     return (
         <div className="relative">
             <div className="flex items-center justify-between mb-3">
-                <h3 className="text-base font-semibold text-neutral-900 dark:text-white">
+                <h3 className="text-base font-semibold text-foreground">
                     {categoryLabels[category]}
                 </h3>
                 <div className="flex gap-1.5">
                     <button
                         onClick={() => scroll("left")}
-                        className="p-1.5 rounded-lg bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 hover:border-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/10 transition-colors"
+                        className="p-1.5 rounded-lg bg-card border border-border hover:border-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/10 transition-colors"
                         aria-label="이전"
                     >
-                        <ChevronLeft className="w-3.5 h-3.5 text-neutral-600 dark:text-neutral-400" />
+                        <ChevronLeft className="w-3.5 h-3.5 text-muted-foreground" />
                     </button>
                     <button
                         onClick={() => scroll("right")}
-                        className="p-1.5 rounded-lg bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 hover:border-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/10 transition-colors"
+                        className="p-1.5 rounded-lg bg-card border border-border hover:border-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/10 transition-colors"
                         aria-label="다음"
                     >
-                        <ChevronRight className="w-3.5 h-3.5 text-neutral-600 dark:text-neutral-400" />
+                        <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
                     </button>
                 </div>
             </div>
@@ -88,7 +88,7 @@ function ToolCarousel({ category, tools }: { category: string; tools: typeof AI_
                         className="flex-shrink-0 w-48"
                     >
                         <Link href="/ai-tools" className="group block h-full">
-                            <div className="h-full bg-white dark:bg-zinc-900 rounded-lg p-3.5 border border-neutral-200 dark:border-zinc-800 hover:border-orange-400 dark:hover:border-orange-500 transition-all duration-200 hover:shadow-md">
+                            <div className="h-full bg-card rounded-lg p-3.5 border border-border hover:border-orange-400 dark:hover:border-orange-500 transition-all duration-200 hover:shadow-md">
 
                                 {/* 헤더: 아이콘 + 이름 + 태그 */}
                                 <div className="flex items-start gap-2.5 mb-2">
@@ -113,7 +113,7 @@ function ToolCarousel({ category, tools }: { category: string; tools: typeof AI_
                                     </div>
 
                                     <div className="flex-1 min-w-0">
-                                        <h4 className="text-sm font-semibold text-neutral-900 dark:text-white group-hover:text-orange-500 transition-colors line-clamp-1 leading-tight">
+                                        <h4 className="text-sm font-semibold text-card-foreground group-hover:text-orange-500 transition-colors line-clamp-1 leading-tight">
                                             {tool.name}
                                         </h4>
                                         <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 inline-block mt-1">
@@ -123,14 +123,14 @@ function ToolCarousel({ category, tools }: { category: string; tools: typeof AI_
                                 </div>
 
                                 {/* 설명 */}
-                                <p className="text-xs text-neutral-600 dark:text-neutral-400 line-clamp-2 leading-relaxed mb-2">
+                                <p className="text-xs text-muted-foreground line-clamp-2 leading-relaxed mb-2">
                                     {tool.summary}
                                 </p>
 
                                 {/* 하단: 가격 */}
                                 {tool.pricing && (
-                                    <div className="pt-2 border-t border-neutral-100 dark:border-zinc-800">
-                                        <p className="text-[10px] text-neutral-500 dark:text-neutral-500 font-medium">
+                                    <div className="pt-2 border-t border-border">
+                                        <p className="text-[10px] text-muted-foreground font-medium">
                                             💰 {tool.pricing}
                                         </p>
                                     </div>
@@ -163,16 +163,16 @@ export function ContentPreview() {
     ];
 
     return (
-        <section className="w-full px-6 py-16 bg-neutral-50 dark:bg-zinc-950">
+        <section className="w-full px-6 py-16 bg-background">
             <div className="max-w-7xl mx-auto">
                 {/* AI 도구 섹션 - 카테고리별 캐러셀 */}
                 <div>
                     <div className="flex items-center justify-between mb-6">
                         <div>
-                            <h2 className="text-2xl md:text-3xl font-bold text-neutral-900 dark:text-white mb-1">
+                            <h2 className="text-2xl md:text-3xl font-bold text-foreground mb-1">
                                 추천 AI 도구
                             </h2>
-                            <p className="text-sm text-neutral-500 dark:text-neutral-400">
+                            <p className="text-sm text-muted-foreground">
                                 카테고리별로 엄선된 AI 도구를 살펴보세요
                             </p>
                         </div>

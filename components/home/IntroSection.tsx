@@ -7,7 +7,8 @@ export function IntroSection() {
     return (
         <section className="relative w-full py-20 px-6 flex flex-col items-center justify-center text-center overflow-hidden bg-background">
             {/* Background - 다크모드 그라데이션 강화 */}
-            <div className="absolute inset-0 bg-gradient-to-b from-orange-50 via-white to-white dark:from-zinc-900 dark:via-black dark:to-black" />
+            {/* Background - semantic gradient */}
+            <div className="absolute inset-0 bg-gradient-to-b from-orange-50 via-background to-background dark:from-zinc-950 dark:via-background dark:to-background" />
 
             <motion.div
                 initial={{ opacity: 0, y: 20 }}
@@ -43,7 +44,7 @@ export function IntroSection() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.4, duration: 0.8 }}
-                    className="text-xl md:text-2xl font-medium text-neutral-800 dark:text-neutral-200 mb-4"
+                    className="text-xl md:text-2xl font-medium text-foreground/80 mb-4"
                 >
                     Design Of Real Intelligence
                 </motion.p>
@@ -53,7 +54,7 @@ export function IntroSection() {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.5, duration: 0.8 }}
-                    className="text-base md:text-lg text-neutral-700 dark:text-neutral-300 max-w-2xl mx-auto leading-relaxed"
+                    className="text-base md:text-lg text-muted-foreground max-w-2xl mx-auto leading-relaxed"
                 >
                     AI라는 새로운 영역 앞에서 주저하는 당신에게,
                     <br />
