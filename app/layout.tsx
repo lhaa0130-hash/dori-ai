@@ -73,13 +73,23 @@ export default function RootLayout({
         suppressHydrationWarning={true}
         style={{ fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif' }}
       >
-        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-SRFLY185NT" strategy="afterInteractive" />
+        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-RKN3F8V01C" strategy="afterInteractive" />
         <Script id="google-analytics" strategy="afterInteractive">
-          {`
+            {`
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
-                gtag('config', 'G-SRFLY185NT');
+                gtag('config', 'G-RKN3F8V01C');
+            `}
+        </Script>
+        {/* Microsoft Clarity */}
+        <Script id="microsoft-clarity" strategy="afterInteractive">
+            {`
+                (function(c,l,a,r,i,t,y){
+                    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+                    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+                    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+                })(window, document, "clarity", "script", "va2qmv3mwz");
             `}
         </Script>
 

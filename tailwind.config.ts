@@ -8,17 +8,97 @@ const config: Config = {
     "./pages/**/*.{js,ts,jsx,tsx,mdx}",
     "./components/**/*.{js,ts,jsx,tsx,mdx}",
     "./app/**/*.{js,ts,jsx,tsx,mdx}",
-    "./lib/**/*.{js,ts,jsx,tsx,mdx}", // lib 폴더도 스타일 적용 대상에 추가
-    "./content/**/*.{md,mdx}",        // 마크다운 파일도 추가
+    "./src/**/*.{ts,tsx}",
+    "./lib/**/*.{js,ts,jsx,tsx,mdx}",
+    "./dori-ai-vite/**/*.{js,ts,jsx,tsx,mdx}", // verifying if any stray files here
   ],
+  prefix: "", // shadcn/ui prefix
   theme: {
+    container: { // shadcn/ui container
+      center: true,
+      padding: "2rem",
+      screens: {
+        "2xl": "1400px",
+      },
+    },
     extend: {
       colors: {
-        // 다크모드용 변수 연결 (globals.css에서 정의함)
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        // shadcn/ui colors
+        border: "hsl(var(--border))",
+        input: "hsl(var(--input))",
+        ring: "hsl(var(--ring))",
+        // existing colors
+        background: "hsl(var(--background))",
+        foreground: "hsl(var(--foreground))",
+        // shadcn/ui primary, secondary etc.
+        primary: {
+          DEFAULT: "hsl(var(--primary))",
+          foreground: "hsl(var(--primary-foreground))",
+        },
+        secondary: {
+          DEFAULT: "hsl(var(--secondary))",
+          foreground: "hsl(var(--secondary-foreground))",
+        },
+        destructive: {
+          DEFAULT: "hsl(var(--destructive))",
+          foreground: "hsl(var(--destructive-foreground))",
+        },
+        muted: {
+          DEFAULT: "hsl(var(--muted))",
+          foreground: "hsl(var(--muted-foreground))",
+        },
+        accent: {
+          DEFAULT: "hsl(var(--accent))",
+          foreground: "hsl(var(--accent-foreground))",
+        },
+        popover: {
+          DEFAULT: "hsl(var(--popover))",
+          foreground: "hsl(var(--popover-foreground))",
+        },
+        card: {
+          DEFAULT: "hsl(var(--card))",
+          foreground: "hsl(var(--card-foreground))",
+        },
       },
-      // 마크다운 스타일링을 위한 설정 (typography)
+      borderRadius: { // shadcn/ui border radius
+        lg: "var(--radius)",
+        md: "calc(var(--radius) - 2px)",
+        sm: "calc(var(--radius) - 4px)",
+      },
+      keyframes: { // shadcn/ui keyframes
+        "accordion-down": {
+          from: { height: "0" },
+          to: { height: "var(--radix-accordion-content-height)" },
+        },
+        "accordion-up": {
+          from: { height: "var(--radix-accordion-content-height)" },
+          to: { height: "0" },
+        },
+        "mesh-gradient-animation": {
+          "0%": {
+            "background-position": "0% 0%",
+          },
+          "100%": {
+            "background-position": "100% 100%",
+          },
+        },
+        "gradient-x": {
+          "0%, 100%": {
+            "background-size": "200% 200%",
+            "background-position": "left center",
+          },
+          "50%": {
+            "background-size": "200% 200%",
+            "background-position": "right center",
+          },
+        },
+      },
+      animation: { // shadcn/ui animation
+        "accordion-down": "accordion-down 0.2s ease-out",
+        "accordion-up": "accordion-up 0.2s ease-out",
+        "gradient-x": "gradient-x 3s ease infinite",
+      },
+      // existing typography
       typography: {
         DEFAULT: {
           css: {
@@ -29,8 +109,10 @@ const config: Config = {
     },
   },
   plugins: [
-    // 마크다운 예쁘게 보여주는 플러그인 (없으면 npm install -D @tailwindcss/typography 실행 필요)
-    require('@tailwindcss/typography'), 
+    // existing typography plugin
+    require('@tailwindcss/typography'),
+    // shadcn/ui plugins
+    require("tailwindcss-animate"),
   ],
 };
 export default config;

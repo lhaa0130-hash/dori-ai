@@ -75,6 +75,7 @@ export default async function InsightPage() {
         created_at: post.date || new Date().toISOString(),
         content: '',
         thumbnail_url: post.image,
+        slug: String(post.id), // Add slug based on id
       }));
 
       filePosts = [...guideItems, ...trendItems, ...insightItems];
@@ -118,6 +119,7 @@ export default async function InsightPage() {
         created_at: post.created_at || new Date().toISOString(),
         content: cleanContent,
         thumbnail_url: post.thumbnail_url,
+        slug: String(post.id), // Add slug based on id
       };
     });
 

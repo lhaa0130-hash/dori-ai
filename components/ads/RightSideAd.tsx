@@ -16,10 +16,8 @@ const hideScrollbarStyle = `
  */
 export default function RightSideAd() {
   const adTopRef = useRef<HTMLDivElement>(null);
-  const adBottomRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLElement>(null);
   const adTopInitialized = useRef(false);
-  const adBottomInitialized = useRef(false);
 
   useEffect(() => {
     // 스크롤바 숨김 스타일 추가
@@ -31,7 +29,7 @@ export default function RightSideAd() {
       document.head.appendChild(style);
     }
 
-    // 애드센스 스크립트가 이미 로드되어 있는지 확인하고 각 광고를 독립적으로 초기화
+    // 애드센스 스크립트가 이미 로드되어 있는지 확인하고 초기화
     const checkAndInit = () => {
       if (typeof window === "undefined") return;
 
@@ -43,7 +41,7 @@ export default function RightSideAd() {
         return;
       }
 
-      // 상단 광고 초기화
+      // 광고 초기화
       if (!adTopInitialized.current && (window as any).adsbygoogle && adTopRef.current) {
         const adElement = adTopRef.current.querySelector('.adsbygoogle') as HTMLElement;
         if (adElement && adElement.offsetWidth > 0) {
@@ -56,21 +54,8 @@ export default function RightSideAd() {
         }
       }
 
-      // 하단 광고 초기화
-      if (!adBottomInitialized.current && (window as any).adsbygoogle && adBottomRef.current) {
-        const adElement = adBottomRef.current.querySelector('.adsbygoogle') as HTMLElement;
-        if (adElement && adElement.offsetWidth > 0) {
-          try {
-            ((window as any).adsbygoogle = (window as any).adsbygoogle || []).push({});
-            adBottomInitialized.current = true;
-          } catch (e) {
-            console.error("AdSense bottom ad initialization error:", e);
-          }
-        }
-      }
-
-      // 둘 다 초기화되지 않았으면 재시도
-      if (!adTopInitialized.current || !adBottomInitialized.current) {
+      // 초기화되지 않았으면 재시도
+      if (!adTopInitialized.current) {
         setTimeout(checkAndInit, 100);
       }
     };
@@ -87,102 +72,35 @@ export default function RightSideAd() {
         width: "160px",
         maxWidth: "200px",
         maxHeight: "90vh",
-        gap: "1.5rem",
         overflowY: "auto",
         overflowX: "hidden",
-        // 스크롤바 숨김 처리
-        scrollbarWidth: "none", // Firefox
-        msOverflowStyle: "none", // IE/Edge
+        scrollbarWidth: "none",
+        msOverflowStyle: "none",
       }}
     >
-      {/* 상단 광고 컨테이너 */}
+      {/* 단일 광고 컨테이너 */}
       <div
-        className="bg-zinc-900/50 backdrop-blur-md border border-zinc-800 rounded-2xl p-4"
-        style={{
-          background: "rgba(39, 39, 42, 0.5)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          border: "1px solid rgba(63, 63, 70, 1)",
-          borderRadius: "1rem",
-          padding: "1rem",
-          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
-        }}
+        className="bg-white/80 dark:bg-zinc-900/50 backdrop-blur-md border border-orange-500 dark:border-orange-500 rounded-2xl p-4 shadow-xl dark:shadow-black/50 transition-colors duration-300"
       >
         {/* ADVERTISEMENT 라벨 */}
         <div
-          className="text-[10px] text-zinc-500 tracking-widest uppercase text-center mb-3"
-          style={{
-            fontSize: "10px",
-            color: "rgba(161, 161, 170, 1)",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            textAlign: "center",
-            marginBottom: "0.75rem",
-            fontWeight: "500",
-          }}
+          className="text-[10px] text-orange-500 dark:text-orange-500 tracking-widest uppercase text-center mb-3 font-medium"
         >
           ADVERTISEMENT
         </div>
 
-        {/* 상단 애드센스 광고 영역 */}
-        <div ref={adTopRef} style={{ minHeight: "300px", height: "auto", width: "100%" }}>
+        {/* 애드센스 광고 영역 */}
+        <div ref={adTopRef} style={{ minHeight: "600px", height: "auto", width: "100%" }}>
           <ins
             className="adsbygoogle"
             style={{
               display: "block",
               width: "100%",
-              minHeight: "300px",
+              minHeight: "600px",
               height: "auto",
             }}
             data-ad-client="ca-pub-1868839951780851"
             data-ad-slot="5937639143"
-            data-ad-format="auto"
-            data-full-width-responsive="false"
-          />
-        </div>
-      </div>
-
-      {/* 하단 광고 컨테이너 */}
-      <div
-        className="bg-zinc-900/50 backdrop-blur-md border border-zinc-800 rounded-2xl p-4"
-        style={{
-          background: "rgba(39, 39, 42, 0.5)",
-          backdropFilter: "blur(12px)",
-          WebkitBackdropFilter: "blur(12px)",
-          border: "1px solid rgba(63, 63, 70, 1)",
-          borderRadius: "1rem",
-          padding: "1rem",
-          boxShadow: "0 4px 20px rgba(0, 0, 0, 0.3)",
-        }}
-      >
-        {/* ADVERTISEMENT 라벨 */}
-        <div
-          className="text-[10px] text-zinc-500 tracking-widest uppercase text-center mb-3"
-          style={{
-            fontSize: "10px",
-            color: "rgba(161, 161, 170, 1)",
-            letterSpacing: "0.1em",
-            textTransform: "uppercase",
-            textAlign: "center",
-            marginBottom: "0.75rem",
-            fontWeight: "500",
-          }}
-        >
-          ADVERTISEMENT
-        </div>
-
-        {/* 하단 애드센스 광고 영역 */}
-        <div ref={adBottomRef} style={{ minHeight: "300px", height: "auto", width: "100%" }}>
-          <ins
-            className="adsbygoogle"
-            style={{
-              display: "block",
-              width: "100%",
-              minHeight: "300px",
-              height: "auto",
-            }}
-            data-ad-client="ca-pub-1868839951780851"
-            data-ad-slot="8647740571"
             data-ad-format="auto"
             data-full-width-responsive="false"
           />

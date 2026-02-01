@@ -210,7 +210,7 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
               const currentLikes = likesData[postId] !== undefined ? likesData[postId] : (post.likes || 0);
               
               // 경로 결정: slug가 있으면 가이드/트렌드 경로 사용, 없으면 DB 포스트 경로 사용
-              let href = `/post/${postId}`;
+              let href = `/insight/article/${post.slug}`; // Default to article
               if (post.slug) {
                 if (post.category === '가이드') {
                   href = `/insight/guide/${post.slug}`;

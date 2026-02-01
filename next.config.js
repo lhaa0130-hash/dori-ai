@@ -1,6 +1,7 @@
 /** @type {import('next').NextConfig} */
 const nextConfig = {
-  output: 'standalone',
+  output: 'export',
+
   // 문법 검사기가 깐깐하게 굴어도 무시하고 빌드해라!
   typescript: {
     ignoreBuildErrors: true,
