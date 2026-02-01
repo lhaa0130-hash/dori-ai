@@ -80,7 +80,7 @@ export default function RightSideAd() {
     >
       {/* 단일 광고 컨테이너 */}
       <div
-        className="bg-white/80 dark:bg-zinc-900/50 backdrop-blur-md border border-orange-500 dark:border-orange-500 rounded-2xl p-4 shadow-xl dark:shadow-black/50 transition-colors duration-300"
+        className="bg-white/80 dark:bg-black/50 backdrop-blur-md border border-orange-500 dark:border-orange-500 rounded-2xl p-4 shadow-xl dark:shadow-black/50 transition-colors duration-300"
       >
         {/* ADVERTISEMENT 라벨 */}
         <div

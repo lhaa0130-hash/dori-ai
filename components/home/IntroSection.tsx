@@ -5,10 +5,10 @@ import { Sparkles } from "lucide-react";
 
 export function IntroSection() {
     return (
-        <section className="relative w-full py-20 px-6 flex flex-col items-center justify-center text-center overflow-hidden bg-background">
+        <section className="relative w-full py-20 px-6 flex flex-col items-center justify-center text-center overflow-hidden bg-background dark:!bg-black">
             {/* Background - 다크모드 그라데이션 강화 */}
             {/* Background - semantic gradient - Darker for dark mode */}
-            <div className="absolute inset-0 bg-gradient-to-b from-orange-50 via-background to-background dark:from-black dark:via-zinc-950 dark:to-background" />
+            <div className="absolute inset-0 intro-gradient" />
 
             <motion.div
                 initial={{ opacity: 0, y: 20 }}

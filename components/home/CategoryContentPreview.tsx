@@ -133,7 +133,7 @@ const insightPreviews = [
 // 프로젝트 미리보기 컴포넌트 - 확장된 버전
 export function ProjectPreview() {
     return (
-        <div className="mt-6 pt-6 border-t border-border">
+        <div className="mt-6 pt-6 border-t border-strict">
             <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                     <Cog className="w-4 h-4 text-orange-500" />
@@ -154,7 +154,7 @@ export function ProjectPreview() {
                         viewport={{ once: true }}
                     >
                         <Link href="/project" className="group block">
-                            <div className="p-3.5 rounded-lg bg-card/50 border border-border hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-md">
+                            <div className="p-3.5 rounded-lg bg-card/50 border border-strict hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-md">
                                 <div className="flex items-start justify-between mb-2">
                                     <div className="flex-1 min-w-0">
                                         <h4 className="text-sm font-semibold text-foreground group-hover:text-orange-500 transition-colors line-clamp-1 mb-1">
@@ -217,7 +217,7 @@ export function MinigamePreview() {
     };
 
     return (
-        <div className="mt-6 pt-6 border-t border-border">
+        <div className="mt-6 pt-6 border-t border-strict">
             <div className="flex items-center justify-between mb-4">
                 <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                     <Gamepad2 className="w-4 h-4 text-orange-500" />
@@ -238,7 +238,7 @@ export function MinigamePreview() {
                         viewport={{ once: true }}
                     >
                         <Link href="/minigame" className="group block">
-                            <div className="p-3 rounded-lg bg-card border border-border hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-md">
+                            <div className="p-3 rounded-lg bg-card border border-strict hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-md">
                                 <div className="flex items-start gap-2 mb-2">
                                     <div className="text-2xl">{game.icon}</div>
                                     <div className="flex-1 min-w-0">
@@ -282,12 +282,12 @@ export function AIToolsPreview() {
             case "blue": return "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400";
             case "orange": return "bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400";
             case "pink": return "bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400";
-            default: return "bg-neutral-100 dark:bg-neutral-900/30 text-neutral-600 dark:text-neutral-400";
+            default: return "bg-neutral-100 dark:bg-black text-neutral-600 dark:text-neutral-400";
         }
     };
 
     return (
-        <div className="mt-6 pt-6 border-t border-border">
+        <div className="mt-6 pt-6 border-t border-strict">
             <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-orange-500" />
@@ -308,7 +308,7 @@ export function AIToolsPreview() {
                         viewport={{ once: true }}
                     >
                         <Link href="/ai-tools" className="group">
-                            <div className="px-3 py-2 rounded-lg bg-card border border-border hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-sm">
+                            <div className="px-3 py-2 rounded-lg bg-card border border-strict hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-sm">
                                 <div className="flex items-center gap-2">
                                     <span className="text-xs font-semibold text-foreground group-hover:text-orange-500 transition-colors">
                                         {tool.name}
@@ -332,7 +332,7 @@ export function AIToolsPreview() {
 // 인사이트 미리보기 컴포넌트 - 확장된 버전
 export function InsightPreview() {
     return (
-        <div className="mt-6 pt-6 border-t border-border">
+        <div className="mt-6 pt-6 border-t border-strict">
             <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                     <Lightbulb className="w-4 h-4 text-orange-500" />

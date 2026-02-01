@@ -27,6 +27,7 @@ const categories = [
         href: "/project",
         icon: Rocket,
         gradient: "from-orange-400 to-orange-500",
+        iconBorder: "border-orange-500 dark:border-orange-500 bg-orange-50 dark:bg-black", // Fixed orange border & bg for Rocket
         previewComponent: ProjectPreview,
         stats: {
             count: "12+",
@@ -92,6 +93,7 @@ const categories = [
         href: "/market",
         icon: ShoppingBag,
         gradient: "from-orange-600 to-red-600",
+        iconBorder: "group-hover:border-orange-600 dark:group-hover:border-orange-600", // Hover color
         previewComponent: null, // 마켓은 미리보기 없음
         stats: {
             count: "200+",
@@ -135,7 +137,7 @@ export function CategoryGrid() {
     const isInView = useInView(ref, { once: true, amount: 0.2 });
 
     return (
-        <section className="w-full px-6 py-16 bg-background">
+        <section className="w-full px-6 py-16 bg-background dark:!bg-black">
             <div className="max-w-7xl mx-auto">
 
                 {/* 카테고리 그리드 */}
@@ -161,14 +163,14 @@ export function CategoryGrid() {
                             >
                                 {/* 메인 카드 */}
                                 <Link href={category.href} className="group relative block">
-                                    <div className="relative bg-white dark:bg-zinc-950 border border-neutral-200 dark:border-zinc-800 rounded-2xl p-6 overflow-hidden transition-all duration-300 hover:border-orange-500/50 hover:shadow-2xl dark:hover:shadow-orange-500/10">
+                                    <div className="relative bg-strict-black border border-strict rounded-2xl p-6 overflow-hidden transition-all duration-300 hover:border-orange-500/50 hover:shadow-2xl dark:hover:shadow-orange-500/10">
                                         {/* Gradient Background Effect - Reduced opacity */}
                                         <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${category.gradient} opacity-0 group-hover:opacity-5 blur-3xl transition-opacity duration-500 rounded-full`} />
 
                                         {/* Icon Container - Outline Style */}
                                         <div className="relative mb-4">
-                                            <div className="w-14 h-14 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 flex items-center justify-center group-hover:border-orange-500 dark:group-hover:border-orange-500 transition-all duration-300 group-hover:scale-105 group-hover:shadow-md">
-                                                <category.icon className={`w-7 h-7 text-neutral-700 dark:text-neutral-300 group-hover:text-orange-500 transition-colors`} />
+                                            <div className="w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:shadow-md border border-orange-500 dark:border-orange-500 bg-orange-50 dark:bg-black">
+                                                <category.icon className="w-7 h-7 text-orange-500 dark:text-orange-500 transition-colors" />
                                             </div>
 
                                             {/* Arrow Icon */}
@@ -226,7 +228,7 @@ export function CategoryGrid() {
 
                                 {/* 콘텐츠 미리보기 (카드 하단에 배치) */}
                                 {PreviewComponent && (
-                                    <div className="bg-muted/50 border border-t-0 border-border rounded-b-2xl p-6 -mt-2">
+                                    <div className="bg-muted/50 dark:!bg-black border border-t-0 border-strict rounded-b-2xl p-6 -mt-2">
                                         <PreviewComponent />
                                     </div>
                                 )}

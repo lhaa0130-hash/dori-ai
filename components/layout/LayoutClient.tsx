@@ -36,7 +36,7 @@ export default function LayoutClient({ children }: LayoutClientProps) {
 
   // 웹 환경: Header/Footer 표시 및 Sidebar 추가
   return (
-    <div className="flex flex-col min-h-screen bg-background text-foreground transition-colors duration-300">
+    <div className="flex flex-col min-h-screen bg-background dark:!bg-black text-foreground transition-colors duration-300">
       <Header />
       <LeftSideAd />
       <main className="flex-grow w-full pt-[100px] pb-[200px] xl:px-[260px] px-6 relative z-0">
