@@ -161,16 +161,14 @@ export function CategoryGrid() {
                             >
                                 {/* 메인 카드 */}
                                 <Link href={category.href} className="group relative block">
-                                    <div className="relative bg-card border border-border rounded-2xl p-6 overflow-hidden transition-all duration-300 hover:border-orange-500/50 hover:shadow-2xl dark:hover:shadow-orange-500/10">
-                                        {/* Gradient Background Effect */}
-                                        <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${category.gradient} opacity-0 group-hover:opacity-10 blur-3xl transition-opacity duration-500 rounded-full`} />
+                                    <div className="relative bg-white dark:bg-zinc-950 border border-neutral-200 dark:border-zinc-800 rounded-2xl p-6 overflow-hidden transition-all duration-300 hover:border-orange-500/50 hover:shadow-2xl dark:hover:shadow-orange-500/10">
+                                        {/* Gradient Background Effect - Reduced opacity */}
+                                        <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${category.gradient} opacity-0 group-hover:opacity-5 blur-3xl transition-opacity duration-500 rounded-full`} />
 
-                                        {/* Icon Container with Gradient */}
+                                        {/* Icon Container - Outline Style */}
                                         <div className="relative mb-4">
-                                            <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${category.gradient} p-0.5 group-hover:scale-110 transition-transform duration-300`}>
-                                                <div className="w-full h-full bg-card rounded-[10px] flex items-center justify-center">
-                                                    <category.icon className="w-7 h-7 text-foreground" />
-                                                </div>
+                                            <div className="w-14 h-14 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 flex items-center justify-center group-hover:border-orange-500 dark:group-hover:border-orange-500 transition-all duration-300 group-hover:scale-105 group-hover:shadow-md">
+                                                <category.icon className={`w-7 h-7 text-neutral-700 dark:text-neutral-300 group-hover:text-orange-500 transition-colors`} />
                                             </div>
 
                                             {/* Arrow Icon */}

@@ -25,7 +25,7 @@ export default function ThemeToggle() {
 
   return (
     <button
-      className="w-9 h-9 flex items-center justify-center hover:opacity-70 transition-opacity focus:outline-none text-neutral-900 dark:text-neutral-100"
+      className="w-9 h-9 flex items-center justify-center hover:opacity-70 transition-opacity focus:outline-none text-foreground"
       onClick={() => {
         const newTheme = isDark ? "light" : "dark";
         setTheme(newTheme);

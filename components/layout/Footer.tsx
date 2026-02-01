@@ -4,7 +4,7 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="fixed bottom-0 left-0 w-full z-50 bg-background/90 backdrop-blur-md border-t border-border transition-colors duration-300">
+    <footer className="fixed bottom-0 left-0 w-full z-50 bg-white dark:bg-zinc-950 border-t border-neutral-200 dark:border-zinc-800 transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-6 py-6">
 
         {/* Row 1: Logo, Copyright, Links (One Line on Desktop) */}

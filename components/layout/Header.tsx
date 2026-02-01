@@ -42,7 +42,7 @@ export default function Header() {
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 font-sans",
         // Force background color to prevent transparency issues
-        "bg-background/80 backdrop-blur-md border-b border-border"
+        "bg-white dark:bg-zinc-950 border-b border-neutral-200 dark:border-zinc-800"
       )}
     >
       {/* 
