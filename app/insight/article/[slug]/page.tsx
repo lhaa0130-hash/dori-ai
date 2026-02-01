@@ -56,19 +56,19 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
     },
     // Image 컴포넌트 사용 예시 (Next.js Image 최적화 활용)
     img: ({ src, alt, ...props }: any) => (
-      <Image 
-        src={src} 
-        alt={alt || ''} 
+      <Image
+        src={src}
+        alt={alt || ''}
         width={700} // 적절한 width 지정
         height={400} // 적절한 height 지정
         layout="responsive" // 반응형 레이아웃
-        {...props} 
+        {...props}
       />
     ),
     // 커스텀 컴포넌트를 여기에 추가할 수 있습니다.
     // h1: (props: any) => <h1 className="text-3xl font-bold my-4" {...props} />,
   };
-  
+
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -80,12 +80,12 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
           </h1>
           {post.thumbnail_url && (
             <div className="mb-8 rounded-lg overflow-hidden">
-              <Image 
-                src={post.thumbnail_url} 
-                alt={post.title || '썸네일 이미지'} 
+              <Image
+                src={post.thumbnail_url}
+                alt={post.title || '썸네일 이미지'}
                 width={1200} // 썸네일에 맞는 적절한 width
                 height={600} // 썸네일에 맞는 적절한 height
-                layout="responsive" 
+                layout="responsive"
                 objectFit="cover" // 이미지가 컨테이너를 채우도록
               />
             </div>
@@ -107,11 +107,26 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
 // 동적 라우트 세그먼트를 위한 generateStaticParams 함수
 // 이 함수는 빌드 시점에 어떤 slug 값을 미리 렌더링할지 Next.js에 알려줍니다.
 export async function generateStaticParams() {
-  const { getSortedPostsData } = await import('@/lib/posts');
-  const posts = getSortedPostsData();
+  try {
+    const { getSortedPostsData } = await import('@/lib/posts');
+    const posts = getSortedPostsData();
 
-  // 각 포스트의 id를 slug로 사용하여 params 객체 배열을 반환합니다.
-  return posts.map((post) => ({
-    slug: String(post.id), // id를 slug로 사용
-  }));
+    // 빌드 타임 디버깅
+    console.log('📝 Found posts for static generation:', posts.length);
+
+    // 포스트가 없으면 fallback 경로 제공
+    if (posts.length === 0) {
+      console.warn('⚠️ No posts found. Providing fallback params.');
+      return [{ slug: 'placeholder' }];
+    }
+
+    // 각 포스트의 id를 slug로 사용하여 params 객체 배열을 반환
+    return posts.map((post) => ({
+      slug: String(post.id),
+    }));
+  } catch (error) {
+    console.error('❌ Error in generateStaticParams:', error);
+    // 에러 시에도 fallback 제공
+    return [{ slug: 'placeholder' }];
+  }
 }

@@ -39,4 +39,6 @@ yarn-error.log*
 # typescript
 *.tsbuildinfo
 next-env.d.ts
-.env*.local
+# open-next (Cloudflare Pages build artifacts)
+.open-next/
+dori-ai-vite/
