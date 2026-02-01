@@ -2,15 +2,27 @@
 
 import { ThemeProvider } from "next-themes";
 import { SessionProvider } from "next-auth/react";
+import { useEffect } from "react";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
+  useEffect(() => {
+    // 강제로 dark 클래스 확인
+    console.log("HTML classList:", document.documentElement.classList.toString());
+    console.log("Current theme:", document.documentElement.getAttribute("data-theme"));
+  }, []);
+
   return (
-    <SessionProvider 
-      refetchInterval={0} // 자동 세션 갱신 비활성화
-      refetchOnWindowFocus={false} // 윈도우 포커스 시 자동 갱신 비활성화
+    <SessionProvider
+      refetchInterval={0}
+      refetchOnWindowFocus={false}
     >
-      {/* attribute="class"가 있어야 tailwind의 darkMode: "class"와 연결됩니다 */}
-      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="light"
+        enableSystem={false}
+        storageKey="dori-ai-theme"
+        disableTransitionOnChange={false}
+      >
         {children}
       </ThemeProvider>
     </SessionProvider>
