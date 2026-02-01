@@ -135,7 +135,7 @@ export function CategoryGrid() {
     const isInView = useInView(ref, { once: true, amount: 0.2 });
 
     return (
-        <section className="w-full px-6 py-16 bg-white dark:bg-black">
+        <section className="w-full px-6 py-16 bg-white dark:bg-zinc-950">
             <div className="max-w-7xl mx-auto">
 
                 {/* 카테고리 그리드 */}
@@ -161,15 +161,15 @@ export function CategoryGrid() {
                             >
                                 {/* 메인 카드 */}
                                 <Link href={category.href} className="group relative block">
-                                    <div className="relative bg-gradient-to-br from-white to-neutral-50 dark:from-zinc-900 dark:to-zinc-950 border border-neutral-200 dark:border-zinc-800 rounded-2xl p-6 overflow-hidden transition-all duration-300 hover:border-neutral-300 dark:hover:border-zinc-700 hover:shadow-2xl dark:hover:shadow-orange-500/20">
+                                    <div className="relative bg-gradient-to-br from-white to-neutral-50 dark:from-zinc-800 dark:to-zinc-900 border border-neutral-200 dark:border-zinc-700 rounded-2xl p-6 overflow-hidden transition-all duration-300 hover:border-neutral-300 dark:hover:border-orange-500/50 hover:shadow-2xl dark:hover:shadow-orange-500/20">
                                         {/* Gradient Background Effect */}
                                         <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${category.gradient} opacity-0 group-hover:opacity-10 blur-3xl transition-opacity duration-500 rounded-full`} />
 
                                         {/* Icon Container with Gradient */}
                                         <div className="relative mb-4">
                                             <div className={`w-14 h-14 rounded-xl bg-gradient-to-br ${category.gradient} p-0.5 group-hover:scale-110 transition-transform duration-300`}>
-                                                <div className="w-full h-full bg-white dark:bg-zinc-900 rounded-[10px] flex items-center justify-center">
-                                                    <category.icon className="w-7 h-7 text-neutral-700 dark:text-white" />
+                                                <div className="w-full h-full bg-white dark:bg-zinc-800 rounded-[10px] flex items-center justify-center">
+                                                    <category.icon className="w-7 h-7 text-neutral-800 dark:text-neutral-100" />
                                                 </div>
                                             </div>
 
@@ -228,7 +228,7 @@ export function CategoryGrid() {
 
                                 {/* 콘텐츠 미리보기 (카드 하단에 배치) */}
                                 {PreviewComponent && (
-                                    <div className="bg-neutral-50 dark:bg-zinc-950 border border-t-0 border-neutral-200 dark:border-zinc-800 rounded-b-2xl p-6 -mt-2">
+                                    <div className="bg-neutral-50 dark:bg-zinc-900 border border-t-0 border-neutral-200 dark:border-zinc-700 rounded-b-2xl p-6 -mt-2">
                                         <PreviewComponent />
                                     </div>
                                 )}

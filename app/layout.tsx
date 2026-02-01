@@ -69,13 +69,13 @@ export default function RootLayout({
         따로 지정하지 않으면(투명하면) 이 색을 따르게 됩니다.
       */}
       <body
-        className="transition-colors duration-300 bg-white text-black dark:bg-black dark:text-white"
+        className="transition-colors duration-300 bg-white text-black dark:bg-zinc-950 dark:text-white"
         suppressHydrationWarning={true}
         style={{ fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif' }}
       >
         <Script async src="https://www.googletagmanager.com/gtag/js?id=G-RKN3F8V01C" strategy="afterInteractive" />
         <Script id="google-analytics" strategy="afterInteractive">
-            {`
+          {`
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
                 gtag('js', new Date());
@@ -84,7 +84,7 @@ export default function RootLayout({
         </Script>
         {/* Microsoft Clarity */}
         <Script id="microsoft-clarity" strategy="afterInteractive">
-            {`
+          {`
                 (function(c,l,a,r,i,t,y){
                     c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
                     t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
