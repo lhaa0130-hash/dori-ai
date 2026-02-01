@@ -18,8 +18,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     >
       <ThemeProvider
         attribute="class"
-        defaultTheme="light"
+        defaultTheme="dark"
         enableSystem={false}
+        forcedTheme="dark"
         storageKey="dori-ai-theme"
         disableTransitionOnChange={false}
       >
