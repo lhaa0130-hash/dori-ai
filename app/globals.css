@@ -135,8 +135,27 @@ section[id] {
   }
 
   /* Force override specificity issues - Moved to Pure Black (#000000) per user request */
-  .dark .bg-strict-black {
+  /* NUCLEAR OPTION: Enforce pure black on all major layout blocks in dark mode */
+  .dark body,
+  .dark main,
+  .dark header,
+  .dark footer,
+  .dark aside,
+  .dark section,
+  .dark .bg-background,
+  .dark .bg-white,
+  .dark .bg-strict-black,
+  .dark .bg-muted\/50,
+  .dark .bg-card,
+  .dark .bg-card\/50 {
     background-color: #000000 !important;
+  }
+
+  /* Force dark gray border in dark mode */
+  .dark .border-strict,
+  .dark .border-neutral-200 {
+    border-color: #27272a !important;
+    /* Zinc-800 */
   }
 
   .border-strict {

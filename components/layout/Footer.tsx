@@ -4,11 +4,11 @@ import Link from "next/link";
 
 export default function Footer() {
   return (
-    <footer className="fixed bottom-0 left-0 w-full z-50 bg-strict-black border-t border-strict transition-colors duration-300">
+    <footer className="fixed bottom-0 left-0 w-full z-50 bg-white border-t border-neutral-200 dark:border-[#27272a] transition-colors duration-300">
       <div className="max-w-6xl mx-auto px-6 py-6">
 
         {/* Row 1: Logo, Copyright, Links (One Line on Desktop) */}
-        <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 mb-4 border-b border-border pb-4">
+        <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 mb-4 border-b border-neutral-200 dark:border-[#27272a] pb-4">
           <div className="flex items-center gap-4">
             <Link href="/" className="text-xl font-bold whitespace-nowrap bg-[linear-gradient(to_right,#facc15,#f97316_20%,#f97316_80%,#ef4444)] bg-clip-text text-transparent animate-gradient-x hover:opacity-80 transition-opacity">
               DORI-AI

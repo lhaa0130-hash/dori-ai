@@ -137,7 +137,7 @@ export function CategoryGrid() {
     const isInView = useInView(ref, { once: true, amount: 0.2 });
 
     return (
-        <section className="w-full px-6 py-16 bg-background dark:!bg-black">
+        <section className="w-full px-6 py-16 bg-background">
             <div className="max-w-7xl mx-auto">
 
                 {/* 카테고리 그리드 */}

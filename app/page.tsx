@@ -4,7 +4,7 @@ import { CategoryGrid } from "@/components/home/CategoryGrid";
 
 export default function Home() {
   return (
-    <main className="min-h-screen bg-background dark:!bg-black">
+    <main className="min-h-screen bg-background">
       <IntroSection />
       <CategoryGrid />
     </main>

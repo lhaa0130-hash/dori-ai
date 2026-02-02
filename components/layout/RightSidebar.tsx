@@ -61,7 +61,7 @@ export default function RightSidebar() {
           {menuGroups.map((group, idx) => (
             <div key={idx} className="menu-group">
               <h3 className="group-header">{group.label}</h3>
-              
+
               <ul className="menu-list">
                 {group.items.map((item) => {
                   const active = isActive(item.path);
@@ -70,13 +70,13 @@ export default function RightSidebar() {
                       <Link href={item.path} className={`menu-text-link ${active ? 'active' : ''}`}>
                         {/* 텍스트 */}
                         <span className="item-text">{item.name}</span>
-                        
+
                         {/* 뱃지 & 태그 (타입 정의 덕분에 에러 안 남) */}
                         <div className="badge-container">
                           {item.badge ? <span className="small-badge count">{item.badge}</span> : null}
                           {item.tag ? <span className="small-badge tag">{item.tag}</span> : null}
                         </div>
-                        
+
                         {/* 활성 상태바 */}
                         {active && <div className="active-bar"></div>}
                       </Link>
@@ -87,12 +87,12 @@ export default function RightSidebar() {
             </div>
           ))}
         </div>
-        
+
         {/* 하단 배너 */}
         <div className="sidebar-footer">
           <div className="simple-banner">
-             <strong>Pro 업그레이드</strong>
-             <p>무제한 기능을 사용해보세요.</p>
+            <strong>Pro 업그레이드</strong>
+            <p>무제한 기능을 사용해보세요.</p>
           </div>
         </div>
       </aside>
@@ -106,12 +106,11 @@ export default function RightSidebar() {
           right: 0;
           width: 260px;
           height: calc(100vh - 70px);
-          background: #ffffff;
-          border-left: 1px solid var(--line);
+          background: var(--background);
+          border-left: 1px solid var(--border);
           z-index: 40;
           display: flex;
           flex-direction: column;
-          background-color: #fdfdfd;
         }
 
         .sidebar-scroll {
@@ -128,7 +127,7 @@ export default function RightSidebar() {
         .group-header {
           font-size: 13px; 
           font-weight: 800;
-          color: #111;
+          color: var(--foreground);
           margin-bottom: 10px;
           padding-left: 12px;
           letter-spacing: -0.3px;
@@ -144,7 +143,7 @@ export default function RightSidebar() {
           height: 48px;
           padding: 0 16px;
           border-radius: 10px;
-          color: #444;
+          color: var(--muted-foreground);
           font-size: 15px;
           font-weight: 500;
           transition: all 0.2s ease;
@@ -153,12 +152,12 @@ export default function RightSidebar() {
         }
 
         .menu-text-link:hover {
-          background: #f3f4f6;
-          color: #000;
+          background: var(--secondary);
+          color: var(--foreground);
         }
 
         .menu-text-link.active {
-          background: #eff6ff;
+          background: var(--secondary);
           color: var(--primary);
           font-weight: 700;
         }
@@ -194,7 +193,7 @@ export default function RightSidebar() {
         }
 
         .small-badge.tag {
-          background: #e0f2fe;
+          background: var(--secondary);
           color: var(--primary);
         }
 
@@ -211,13 +210,14 @@ export default function RightSidebar() {
 
         .sidebar-footer {
           padding: 24px;
-          border-top: 1px solid var(--line);
-          background: #fff;
+          border-top: 1px solid var(--border);
+          background: var(--background);
         }
 
         .simple-banner {
-          background: #111;
-          color: white;
+          background: var(--card);
+          border: 1px solid var(--border);
+          color: var(--foreground);
           padding: 20px;
           border-radius: 16px;
           text-align: center;
@@ -227,7 +227,7 @@ export default function RightSidebar() {
         .simple-banner:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.1); }
         
         .simple-banner strong { display: block; font-size: 14px; margin-bottom: 4px; }
-        .simple-banner p { font-size: 12px; color: #aaa; margin: 0; }
+        .simple-banner p { font-size: 12px; color: var(--muted-foreground); margin: 0; }
 
         @media (max-width: 1024px) { .right-sidebar { display: none; } }
       `}</style>
