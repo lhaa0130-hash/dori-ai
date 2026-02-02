@@ -3,11 +3,11 @@
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import { 
-  Globe, 
-  Smartphone, 
-  Video, 
-  Film, 
+import {
+  Globe,
+  Smartphone,
+  Video,
+  Film,
   ShoppingBag,
   CheckCircle2,
   Clock,
@@ -206,8 +206,8 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
   const isDark = mounted && theme === "dark";
 
   return (
-    <main 
-      className="w-full min-h-screen relative overflow-x-hidden" 
+    <main
+      className="w-full min-h-screen relative overflow-x-hidden"
       style={{
         backgroundColor: isDark ? '#000000' : '#ffffff',
         fontFamily: '"Pretendard", "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif',
@@ -215,10 +215,10 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
       }}
     >
       {/* 배경 노이즈 텍스처 */}
-      <div 
+      <div
         className="fixed inset-0 -z-10 opacity-30"
         style={{
-          backgroundImage: isDark 
+          backgroundImage: isDark
             ? 'radial-gradient(circle at 20% 50%, rgba(6, 182, 212, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%)'
             : 'radial-gradient(circle at 20% 50%, rgba(6, 182, 212, 0.05) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 50%)',
           backgroundSize: '200% 200%',
@@ -229,9 +229,9 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
       {/* 히어로 섹션 */}
       <section className="relative pt-20 pb-12 px-6 lg:pl-12 text-center overflow-hidden">
         <div className="max-w-4xl mx-auto animate-[fadeInUp_0.8s_ease-out_forwards]">
-          <h1 
+          <h1
             className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight"
-            style={{ 
+            style={{
               color: isDark ? '#ffffff' : '#1d1d1f',
               fontWeight: 700,
               letterSpacing: '-0.03em',
@@ -239,17 +239,17 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
           >
             Project
           </h1>
-          
+
           {/* 그라데이션 바 */}
-          <div 
+          <div
             className="w-full max-w-2xl mx-auto h-1 md:h-1.5 mb-6 rounded-full overflow-hidden"
             style={{
-              boxShadow: isDark 
+              boxShadow: isDark
                 ? '0 0 30px rgba(96, 165, 250, 0.4), 0 4px 20px rgba(96, 165, 250, 0.2)'
                 : '0 0 20px rgba(37, 99, 235, 0.3), 0 4px 15px rgba(37, 99, 235, 0.2)',
             }}
           >
-            <div 
+            <div
               className="gradient-flow h-full rounded-full"
               style={{
                 backgroundImage: isDark
@@ -261,9 +261,9 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
             />
           </div>
 
-          <p 
+          <p
             className="text-lg md:text-xl font-medium opacity-70 break-keep leading-relaxed"
-            style={{ 
+            style={{
               color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
               fontWeight: 500,
               letterSpacing: '-0.01em',
@@ -273,14 +273,14 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
           </p>
         </div>
       </section>
-      
+
       {/* Bento Grid 섹션 */}
       <section className="container max-w-7xl mx-auto px-6 lg:px-12 pb-24 relative z-10">
         <div className="bento-grid">
           {PROJECTS.map((project, index) => {
             const statusConfig = STATUS_CONFIG[project.status];
             const isMain = project.size === "large";
-            
+
             return (
               <div
                 key={project.id}
@@ -293,13 +293,11 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
                   className={`relative h-full rounded-2xl p-6 md:p-8 transition-all duration-500 cursor-pointer overflow-hidden group ${isMain ? 'main-card' : ''}`}
                   style={{
                     background: isDark
-                      ? isMain
-                        ? 'rgba(255, 255, 255, 0.03)'
-                        : 'rgba(255, 255, 255, 0.02)'
+                      ? '#000000'
                       : isMain
                         ? 'rgba(0, 0, 0, 0.02)'
                         : 'rgba(0, 0, 0, 0.01)',
-                    border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
+                    border: `1px solid ${isDark ? '#27272a' : 'rgba(0, 0, 0, 0.1)'}`,
                     backdropFilter: isMain ? 'blur(20px)' : 'blur(12px)',
                     WebkitBackdropFilter: isMain ? 'blur(20px)' : 'blur(12px)',
                     boxShadow: isMain
@@ -349,7 +347,7 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
                 >
                   {/* 다층 글래스 효과 - 레이어 1 (가장 뒤) */}
                   {isMain && (
-                    <div 
+                    <div
                       className="absolute inset-0 rounded-2xl pointer-events-none"
                       style={{
                         background: isDark
@@ -365,7 +363,7 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
 
                   {/* 다층 글래스 효과 - 레이어 2 (중간) */}
                   {isMain && (
-                    <div 
+                    <div
                       className="absolute inset-0 rounded-2xl pointer-events-none"
                       style={{
                         background: isDark
@@ -382,7 +380,7 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
                   {/* Specular Highlights - 상단/왼쪽 가장자리 */}
                   {isMain && (
                     <>
-                      <div 
+                      <div
                         className="absolute top-0 left-0 right-0 h-1/3 rounded-t-2xl pointer-events-none"
                         style={{
                           background: isDark
@@ -391,7 +389,7 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
                           opacity: 0.6,
                         }}
                       />
-                      <div 
+                      <div
                         className="absolute top-0 left-0 bottom-0 w-1/3 rounded-l-2xl pointer-events-none"
                         style={{
                           background: isDark
@@ -405,7 +403,7 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
 
                   {/* 강화된 엣지 글로우 */}
                   {isMain && (
-                    <div 
+                    <div
                       className="absolute -inset-1 rounded-2xl pointer-events-none"
                       style={{
                         background: `linear-gradient(135deg, ${project.color}40, ${project.color}20, ${project.color}40)`,
@@ -417,7 +415,7 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
                   )}
 
                   {/* Glassmorphism 오버레이 - 메인 레이어 */}
-                  <div 
+                  <div
                     className="absolute inset-0 rounded-2xl pointer-events-none"
                     style={{
                       background: isDark
@@ -435,9 +433,9 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
                           {/* 헤더 */}
                           <div className="flex items-center gap-2.5 mb-6">
                             <Workflow className="w-4 h-4" style={{ color: isDark ? '#94a3b8' : '#64748b' }} />
-                            <span 
+                            <span
                               className="text-xs font-semibold uppercase tracking-wider"
-                              style={{ 
+                              style={{
                                 color: isDark ? '#94a3b8' : '#64748b',
                                 letterSpacing: '0.1em',
                               }}
@@ -445,22 +443,22 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
                               AUTOMATION WORKFLOW
                             </span>
                           </div>
-                          
+
                           {/* 워크플로우 스텝 */}
                           <div className="flex items-center justify-between relative">
                             {project.workflow.map((step, idx) => (
                               <div key={idx} className="flex-1 flex flex-col items-center relative">
                                 {/* 연결선 (왼쪽에서 오른쪽으로 그려지는 애니메이션) */}
                                 {idx < project.workflow!.length - 1 && (
-                                  <div 
+                                  <div
                                     className="workflow-connector absolute top-6 left-[calc(50%+28px)] right-[-28px] h-[1px]"
-                                    style={{ 
+                                    style={{
                                       zIndex: 0,
                                       animation: `drawLine 1.5s ease-out ${idx * 0.3 + 0.5}s both`,
                                     }}
                                   >
                                     {/* 정적 배경선 */}
-                                    <div 
+                                    <div
                                       className="absolute inset-0"
                                       style={{
                                         background: isDark
@@ -469,7 +467,7 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
                                       }}
                                     />
                                     {/* 애니메이션 데이터 스트림 */}
-                                    <div 
+                                    <div
                                       className="data-stream-line absolute inset-0 overflow-hidden"
                                       style={{
                                         background: `linear-gradient(90deg, transparent, ${project.color}, ${project.color}80, transparent)`,
@@ -481,7 +479,7 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
                                     />
                                   </div>
                                 )}
-                                
+
                                 {/* 아이콘 컨테이너 */}
                                 <div className="relative z-10">
                                   <div
@@ -517,9 +515,9 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
                                     <div className="relative z-10">
                                       {step.icon}
                                     </div>
-                                    
+
                                     {/* 내부 글로우 레이어 */}
-                                    <div 
+                                    <div
                                       className="absolute inset-0 rounded-full"
                                       style={{
                                         background: `radial-gradient(circle at center, ${project.color}25, transparent 70%)`,
@@ -527,9 +525,9 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
                                         opacity: 0.6,
                                       }}
                                     />
-                                    
+
                                     {/* 외부 글로우 링 */}
-                                    <div 
+                                    <div
                                       className="absolute -inset-1 rounded-full"
                                       style={{
                                         background: `radial-gradient(circle, ${project.color}30, transparent 70%)`,
@@ -540,9 +538,9 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
                                     />
                                   </div>
                                 </div>
-                                
+
                                 {/* 라벨 */}
-                                <span 
+                                <span
                                   className="text-xs font-medium text-center mt-4 whitespace-nowrap"
                                   style={{
                                     color: isDark ? '#ffffff' : '#1d1d1f',
@@ -573,7 +571,7 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
                       }}
                     >
                       {project.icon}
-            </div>
+                    </div>
 
                     {/* Status Badge */}
                     <div
@@ -593,7 +591,7 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
                   {/* 제목 */}
                   <h3
                     className="text-2xl md:text-3xl font-black mb-2 relative z-10"
-                  style={{
+                    style={{
                       color: isDark ? '#ffffff' : '#000000',
                       fontWeight: 900,
                       letterSpacing: '-0.03em',
@@ -620,7 +618,7 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
                   {/* 설명 */}
                   <p
                     className={`mb-4 relative z-10 ${isMain ? 'text-base' : 'text-sm'}`}
-                          style={{
+                    style={{
                       color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)',
                       lineHeight: '1.6',
                     }}
@@ -632,7 +630,7 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
                   {isMain && (
                     <p
                       className="text-sm mb-6 relative z-10"
-                          style={{
+                      style={{
                         color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
                         lineHeight: '1.5',
                       }}
@@ -643,8 +641,8 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
 
                   {/* Tech Stack with Icons */}
                   <div className="flex flex-wrap gap-2.5 mb-6 relative z-10">
-                    {(Array.isArray(project.tech) && typeof project.tech[0] === 'object' 
-                      ? project.tech 
+                    {(Array.isArray(project.tech) && typeof project.tech[0] === 'object'
+                      ? project.tech
                       : project.tech.map(name => ({ name, icon: null }))
                     ).map((tech: any, idx: number) => (
                       <span
@@ -717,7 +715,7 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
                         >
                           {/* 버튼 내부 글로우 */}
                           {isMain && (
-                            <div 
+                            <div
                               className="absolute inset-0 rounded-xl"
                               style={{
                                 background: `linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent)`,
@@ -763,7 +761,7 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
                       >
                         {/* 버튼 내부 글로우 */}
                         {isMain && (
-                          <div 
+                          <div
                             className="absolute inset-0 rounded-xl"
                             style={{
                               background: `linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent)`,
@@ -779,7 +777,7 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
 
                   {/* 메인 카드 글로우 효과 */}
                   {isMain && (
-                    <div 
+                    <div
                       className="absolute -inset-1 rounded-2xl opacity-50 blur-xl pointer-events-none"
                       style={{
                         background: `radial-gradient(circle, ${project.color}40, transparent 70%)`,
@@ -788,7 +786,7 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
                     />
                   )}
                 </div>
-            </div>
+              </div>
             );
           })}
         </div>

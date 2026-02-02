@@ -15,6 +15,7 @@ interface Post {
   tags?: string[];
   likes?: number;
   slug?: string;
+  summary?: string;
 }
 
 interface InsightPageClientProps {
@@ -87,10 +88,10 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
   // 본문 요약 추출 (HTML 태그 제거 및 시스템 메시지 필터링)
   const getSummary = (content?: string) => {
     if (!content) return '';
-    
+
     // HTML 태그 제거
     let text = content.replace(/<[^>]*>/g, '').replace(/\s+/g, ' ').trim();
-    
+
     // 시스템 메시지 및 마크다운 메타데이터 제거
     const systemPatterns = [
       /^물론입니다\.\s*/i,
@@ -102,22 +103,22 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
       /^\[.*?\]\(.*?\)\s*/g,
       /^#+\s+/gm,
     ];
-    
+
     systemPatterns.forEach(pattern => {
       text = text.replace(pattern, '');
     });
-    
+
     // 실제 본문 시작점 찾기 (첫 번째 문장이 의미있는 내용인지 확인)
     const sentences = text.split(/[.!?]\s+/).filter(s => s.trim().length > 10);
     if (sentences.length > 0) {
       text = sentences.join('. ');
     }
-    
+
     text = text.trim();
-    
+
     // 최종 정제: 너무 짧거나 의미없는 텍스트 제거
     if (text.length < 20) return '';
-    
+
     return text.length > 150 ? text.substring(0, 150) + '...' : text;
   };
 
@@ -154,9 +155,9 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
       }}>
         {/* 헤더 */}
         <div className="max-w-4xl mx-auto mb-8 text-center">
-          <h1 
+          <h1
             className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight"
-            style={{ 
+            style={{
               color: isDark ? '#ffffff' : '#1d1d1f',
               fontWeight: 700,
               letterSpacing: '-0.03em',
@@ -164,17 +165,17 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
           >
             인사이트
           </h1>
-          
+
           {/* 그라데이션 구분선 */}
-          <div 
+          <div
             className="w-full max-w-2xl mx-auto h-1 md:h-1.5 mb-6 rounded-full overflow-hidden"
             style={{
-              boxShadow: isDark 
+              boxShadow: isDark
                 ? '0 0 30px rgba(96, 165, 250, 0.4), 0 4px 20px rgba(96, 165, 250, 0.2)'
                 : '0 0 20px rgba(37, 99, 235, 0.3), 0 4px 15px rgba(37, 99, 235, 0.2)',
             }}
           >
-            <div 
+            <div
               className="gradient-flow h-full rounded-full"
               style={{
                 backgroundImage: isDark
@@ -186,9 +187,9 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
             />
           </div>
 
-          <p 
+          <p
             className="text-lg md:text-xl font-medium opacity-70 break-keep leading-relaxed"
-            style={{ 
+            style={{
               color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
               fontWeight: 500,
               letterSpacing: '-0.01em',
@@ -208,9 +209,11 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
               const postId = String(post.id || '');
               const isPostLiked = likedPosts.includes(parseInt(postId));
               const currentLikes = likesData[postId] !== undefined ? likesData[postId] : (post.likes || 0);
-              
+
               // 경로 결정: slug가 있으면 가이드/트렌드 경로 사용, 없으면 DB 포스트 경로 사용
-              let href = `/insight/article/${post.slug}`; // Default to article
+              let href = `/insight/article/${post.slug || post.id}`; // Always route to article to avoid 404
+              // Separate folders for guide/trend do not exist, so we unify routing.
+              /*
               if (post.slug) {
                 if (post.category === '가이드') {
                   href = `/insight/guide/${post.slug}`;
@@ -218,7 +221,8 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
                   href = `/insight/trend/${post.slug}`;
                 }
               }
-              
+              */
+
               return (
                 <Link
                   key={postId}
@@ -229,8 +233,8 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
                   <div
                     className="flex gap-4 p-3 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
                     style={{
-                      backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
-                      borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7',
+                      backgroundColor: isDark ? '#000000' : '#ffffff',
+                      borderColor: isDark ? '#27272a' : '#e5e5e7',
                     }}
                   >
                     {/* 좌측 이미지 */}
@@ -274,7 +278,7 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
                           </span>
                         )}
                         {post.created_at && (
-                          <span 
+                          <span
                             className="text-xs opacity-60"
                             style={{ color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)' }}
                             suppressHydrationWarning={true}
@@ -287,7 +291,7 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
                       {/* 제목 */}
                       <h3
                         className="text-base font-bold leading-tight break-keep line-clamp-1"
-                        style={{ 
+                        style={{
                           color: isDark ? '#ffffff' : '#1d1d1f',
                         }}
                       >
@@ -297,7 +301,7 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
                       {/* 요약 */}
                       <p
                         className="text-xs leading-relaxed line-clamp-1"
-                        style={{ 
+                        style={{
                           color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)',
                         }}
                       >
@@ -321,7 +325,7 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
                             </span>
                           ))}
                           {post.tags && post.tags.length > 3 && (
-                            <span 
+                            <span
                               className="text-[10px] opacity-60"
                               style={{ color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)' }}
                             >
@@ -333,7 +337,7 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
                           type="button"
                           onClick={(e) => handleLikeClick(e, postId, currentLikes)}
                           className="flex items-center gap-1 text-xs cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95"
-                          style={{ 
+                          style={{
                             color: isPostLiked ? '#ef4444' : (isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)'),
                             opacity: isPostLiked ? 1 : 0.6,
                             background: 'none',
