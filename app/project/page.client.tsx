@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
+import { motion } from "framer-motion";
 import {
   Globe,
   Smartphone,
@@ -45,37 +46,62 @@ interface Project {
 const PROJECTS: Project[] = [
   {
     id: "site",
-    title: "SITE: DORI-AI",
+    title: "사이트: DORI-AI",
     subtitle: "AI 커뮤니티 플랫폼",
-    description: "AI 커뮤니티 및 정보 공유 플랫폼",
-    detail: "기획 배경부터 제작 공정, n8n을 활용한 콘텐츠 수집 및 포스팅 자동화 워크플로우 포함",
+    description: "AI 정보를 공유하고 소통하는 커뮤니티 플랫폼입니다.",
+    detail: "기획부터 제작, 자동화 워크플로우까지 모든 공정을 포함합니다.",
     status: "ACTIVE",
     statusLabel: "진행 중",
     tech: [
       { name: "Next.js", icon: <Code className="w-3.5 h-3.5" /> },
-      { name: "Tailwind CSS", icon: <Palette className="w-3.5 h-3.5" /> },
-      { name: "Gemini API", icon: <Brain className="w-3.5 h-3.5" /> },
-      { name: "n8n Automation", icon: <Settings className="w-3.5 h-3.5" /> },
+      { name: "Tailwind", icon: <Palette className="w-3.5 h-3.5" /> },
+      { name: "Gemini", icon: <Brain className="w-3.5 h-3.5" /> },
+      { name: "n8n 자동화", icon: <Settings className="w-3.5 h-3.5" /> },
     ],
     icon: <Globe className="w-7 h-7" />,
     color: "#06b6d4",
     glowColor: "rgba(6, 182, 212, 0.4)",
     size: "large",
     workflow: [
-      { step: "콘텐츠 수집", icon: <Database className="w-4 h-4" /> },
-      { step: "AI 가공", icon: <Bot className="w-4 h-4" /> },
-      { step: "자동 포스팅", icon: <FileText className="w-4 h-4" /> },
-      { step: "배포 완료", icon: <CheckCircle2 className="w-4 h-4" /> },
+      { step: "수집", icon: <Database className="w-4 h-4" /> },
+      { step: "가공", icon: <Bot className="w-4 h-4" /> },
+      { step: "생성", icon: <FileText className="w-4 h-4" /> },
+      { step: "배포", icon: <CheckCircle2 className="w-4 h-4" /> },
+    ],
+  },
+  {
+    id: "animal",
+    title: "동물 도감",
+    subtitle: "맞춤형 AI 백과사전",
+    description: "아이들의 상상력을 자극하는 나만의 동물 도감입니다.",
+    detail: "원하는 동물을 AI가 생성하고 도감 형태로 만들어줍니다.",
+    status: "ACTIVE",
+    statusLabel: "진행 중",
+    tech: [
+      { name: "Notion API", icon: <Database className="w-3.5 h-3.5" /> },
+      { name: "AI 이미지", icon: <Bot className="w-3.5 h-3.5" /> },
+      { name: "Next.js", icon: <Code className="w-3.5 h-3.5" /> },
+    ],
+    icon: <BookOpen className="w-6 h-6" />,
+    color: "#10b981",
+    glowColor: "rgba(16, 185, 129, 0.4)",
+    size: "medium",
+    href: "/animal",
+    workflow: [
+      { step: "데이터", icon: <Database className="w-4 h-4" /> },
+      { step: "이미지", icon: <Bot className="w-4 h-4" /> },
+      { step: "편집", icon: <FileText className="w-4 h-4" /> },
+      { step: "완성", icon: <CheckCircle2 className="w-4 h-4" /> },
     ],
   },
   {
     id: "app",
-    title: "APPLICATION",
-    subtitle: "모바일 앱",
-    description: "DORI-AI 모바일 전용 앱",
-    detail: "PC 환경의 제약을 넘어선 사용자 접근성 강화",
+    title: "애플리케이션",
+    subtitle: "전용 모바일 앱",
+    description: "언제 어디서나 접근 가능한 DORI-AI 전용 앱입니다.",
+    detail: "PC를 넘어 모바일에서도 최적화된 경험을 제공합니다.",
     status: "COMING SOON",
-    statusLabel: "예정",
+    statusLabel: "준비 중",
     tech: [
       { name: "Android", icon: <Smartphone className="w-3.5 h-3.5" /> },
       { name: "iOS", icon: <Smartphone className="w-3.5 h-3.5" /> },
@@ -85,85 +111,83 @@ const PROJECTS: Project[] = [
     color: "#3b82f6",
     glowColor: "rgba(59, 130, 246, 0.3)",
     size: "medium",
+    workflow: [
+      { step: "기획", icon: <FileText className="w-4 h-4" /> },
+      { step: "디자인", icon: <Palette className="w-4 h-4" /> },
+      { step: "개발", icon: <Code className="w-4 h-4" /> },
+      { step: "출시", icon: <Smartphone className="w-4 h-4" /> },
+    ],
   },
   {
     id: "shorts",
-    title: "YOUTUBE SHORTS",
+    title: "유튜브 숏츠",
     subtitle: "AI 뉴스 채널",
-    description: "매일 업데이트되는 AI 최신 뉴스",
-    detail: "자동 가공하여 숏폼 영상으로 업로드",
-    status: "UPCOMING",
-    statusLabel: "예정",
+    description: "매일 업데이트되는 최신 AI 뉴스를 전해드립니다.",
+    detail: "대본 작성부터 영상 편집까지 AI 자동화로 이루어집니다.",
+    status: "COMING SOON",
+    statusLabel: "준비 중",
     tech: [
       { name: "YouTube API", icon: <Video className="w-3.5 h-3.5" /> },
       { name: "AI Video", icon: <Bot className="w-3.5 h-3.5" /> },
-      { name: "Automation", icon: <Zap className="w-3.5 h-3.5" /> },
+      { name: "자동화", icon: <Zap className="w-3.5 h-3.5" /> },
     ],
     icon: <Video className="w-6 h-6" />,
     color: "#ef4444",
     glowColor: "rgba(239, 68, 68, 0.3)",
     size: "medium",
+    workflow: [
+      { step: "기획", icon: <Brain className="w-4 h-4" /> },
+      { step: "대본", icon: <FileText className="w-4 h-4" /> },
+      { step: "생성", icon: <Bot className="w-4 h-4" /> },
+      { step: "업로드", icon: <Video className="w-4 h-4" /> },
+    ],
   },
   {
     id: "animation",
-    title: "YOUTUBE ANIMATION",
-    subtitle: "키즈 채널",
-    description: "도리(Dori) & 라라(Lara) 키즈 채널",
-    detail: "AI를 활용한 유아용 교육 애니메이션",
-    status: "CREATIVE",
-    statusLabel: "예정",
+    title: "유튜브 애니메이션",
+    subtitle: "키즈 교육 채널",
+    description: "도리(Dori)와 라라(Lara)가 함께하는 교육 애니메이션입니다.",
+    detail: "아이들의 눈높이에 맞춘 AI 기반 스토리텔링 콘텐츠입니다.",
+    status: "COMING SOON",
+    statusLabel: "준비 중",
     tech: [
-      { name: "AI Animation", icon: <Film className="w-3.5 h-3.5" /> },
-      { name: "Storytelling", icon: <FileText className="w-3.5 h-3.5" /> },
-      { name: "Education", icon: <BookOpen className="w-3.5 h-3.5" /> },
+      { name: "AI 애니메이션", icon: <Film className="w-3.5 h-3.5" /> },
+      { name: "스토리텔링", icon: <FileText className="w-3.5 h-3.5" /> },
+      { name: "교육", icon: <BookOpen className="w-3.5 h-3.5" /> },
     ],
     icon: <Film className="w-6 h-6" />,
     color: "#a855f7",
     glowColor: "rgba(168, 85, 247, 0.3)",
     size: "small",
+    workflow: [
+      { step: "시나리오", icon: <BookOpen className="w-4 h-4" /> },
+      { step: "콘티", icon: <Palette className="w-4 h-4" /> },
+      { step: "생성", icon: <Bot className="w-4 h-4" /> },
+      { step: "편집", icon: <Film className="w-4 h-4" /> },
+    ],
   },
   {
     id: "gumroad",
-    title: "GUMROAD MARKET",
-    subtitle: "디지털 마켓",
-    description: "디지털 에셋 및 교육 자료 마켓",
-    detail: "AI로 생성한 동화책 및 학습 교안 판매",
-    status: "AUTOMATION",
-    statusLabel: "예정",
+    title: "디지털 마켓",
+    subtitle: "에셋 & 교육 자료",
+    description: "AI로 생성한 고품질 디지털 에셋과 교육 자료를 판매합니다.",
+    detail: "전자책, 학습 교안, 프롬프트 템플릿 등을 만나보세요.",
+    status: "COMING SOON",
+    statusLabel: "준비 중",
     tech: [
       { name: "Gumroad API", icon: <ShoppingBag className="w-3.5 h-3.5" /> },
-      { name: "AI Content", icon: <Bot className="w-3.5 h-3.5" /> },
-      { name: "E-commerce", icon: <ShoppingBag className="w-3.5 h-3.5" /> },
+      { name: "AI 콘텐츠", icon: <Bot className="w-3.5 h-3.5" /> },
+      { name: "이커머스", icon: <ShoppingBag className="w-3.5 h-3.5" /> },
     ],
     icon: <ShoppingBag className="w-6 h-6" />,
     color: "#f59e0b",
     glowColor: "rgba(245, 158, 11, 0.3)",
     size: "small",
-  },
-  {
-    id: "animal",
-    title: "DORI'S 동물도감",
-    subtitle: "AI 기반 맞춤형 동물 백과사전",
-    description: "아이들의 상상력을 자극하는 AI 기반 맞춤형 동물 백과사전",
-    detail: "Notion DB와 연동하여 다양한 동물 정보를 AI 이미지 생성 및 도감 레이아웃으로 자동 구성",
-    status: "CREATIVE",
-    statusLabel: "진행 중",
-    tech: [
-      { name: "Notion API", icon: <Database className="w-3.5 h-3.5" /> },
-      { name: "AI Image", icon: <Bot className="w-3.5 h-3.5" /> },
-      { name: "Next.js", icon: <Code className="w-3.5 h-3.5" /> },
-      { name: "Tailwind CSS", icon: <Palette className="w-3.5 h-3.5" /> },
-    ],
-    icon: <BookOpen className="w-6 h-6" />,
-    color: "#10b981",
-    glowColor: "rgba(16, 185, 129, 0.4)",
-    size: "medium",
-    href: "/animal",
     workflow: [
-      { step: "동물 데이터 수집", icon: <Database className="w-4 h-4" /> },
-      { step: "AI 이미지 생성", icon: <Bot className="w-4 h-4" /> },
-      { step: "도감 레이아웃 구성", icon: <FileText className="w-4 h-4" /> },
-      { step: "도감 완성", icon: <CheckCircle2 className="w-4 h-4" /> },
+      { step: "기획", icon: <Brain className="w-4 h-4" /> },
+      { step: "제작", icon: <Palette className="w-4 h-4" /> },
+      { step: "등록", icon: <Database className="w-4 h-4" /> },
+      { step: "판매", icon: <ShoppingBag className="w-4 h-4" /> },
     ],
   },
 ];
@@ -171,23 +195,28 @@ const PROJECTS: Project[] = [
 const STATUS_CONFIG = {
   ACTIVE: {
     icon: <CheckCircle2 className="w-3.5 h-3.5" />,
-    text: "text-cyan-400",
+    label: "진행 중",
+    style: "bg-orange-50 dark:bg-black text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-800",
   },
   "COMING SOON": {
     icon: <Clock className="w-3.5 h-3.5" />,
-    text: "text-blue-400",
+    label: "준비 중",
+    style: "bg-neutral-100 dark:bg-black text-neutral-500 dark:text-neutral-400 border border-neutral-200 dark:border-zinc-800",
   },
   UPCOMING: {
     icon: <Sparkles className="w-3.5 h-3.5" />,
-    text: "text-red-400",
+    label: "출시 예정",
+    style: "bg-neutral-100 dark:bg-black text-neutral-500 dark:text-neutral-400 border border-neutral-200 dark:border-zinc-800",
   },
   CREATIVE: {
     icon: <Film className="w-3.5 h-3.5" />,
-    text: "text-purple-400",
+    label: "제작 중",
+    style: "bg-orange-50 dark:bg-black text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-800",
   },
   AUTOMATION: {
     icon: <Zap className="w-3.5 h-3.5" />,
-    text: "text-amber-400",
+    label: "자동화",
+    style: "bg-orange-50 dark:bg-black text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-800",
   },
 };
 
@@ -207,739 +236,210 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
 
   return (
     <main
-      className="w-full min-h-screen relative overflow-x-hidden"
+      className="w-full min-h-screen relative overflow-x-hidden bg-white dark:!bg-black transition-colors duration-500"
       style={{
-        backgroundColor: isDark ? '#000000' : '#ffffff',
         fontFamily: '"Pretendard", "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif',
-        position: 'relative',
       }}
     >
-      {/* 배경 노이즈 텍스처 */}
-      <div
-        className="fixed inset-0 -z-10 opacity-30"
-        style={{
-          backgroundImage: isDark
-            ? 'radial-gradient(circle at 20% 50%, rgba(6, 182, 212, 0.1) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.1) 0%, transparent 50%)'
-            : 'radial-gradient(circle at 20% 50%, rgba(6, 182, 212, 0.05) 0%, transparent 50%), radial-gradient(circle at 80% 80%, rgba(168, 85, 247, 0.05) 0%, transparent 50%)',
-          backgroundSize: '200% 200%',
-          animation: 'gradientShift 20s ease infinite',
-        }}
-      />
+      {/* 배경 그라데이션 (Main Page Style - Explicit & Visible) */}
+      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-orange-100/40 via-orange-50/20 to-transparent dark:hidden pointer-events-none z-0" />
 
-      {/* 히어로 섹션 */}
-      <section className="relative pt-20 pb-12 px-6 lg:pl-12 text-center overflow-hidden">
-        <div className="max-w-4xl mx-auto animate-[fadeInUp_0.8s_ease-out_forwards]">
-          <h1
-            className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight"
-            style={{
-              color: isDark ? '#ffffff' : '#1d1d1f',
-              fontWeight: 700,
-              letterSpacing: '-0.03em',
-            }}
-          >
-            Project
-          </h1>
-
-          {/* 그라데이션 바 */}
-          <div
-            className="w-full max-w-2xl mx-auto h-1 md:h-1.5 mb-6 rounded-full overflow-hidden"
-            style={{
-              boxShadow: isDark
-                ? '0 0 30px rgba(96, 165, 250, 0.4), 0 4px 20px rgba(96, 165, 250, 0.2)'
-                : '0 0 20px rgba(37, 99, 235, 0.3), 0 4px 15px rgba(37, 99, 235, 0.2)',
-            }}
-          >
-            <div
-              className="gradient-flow h-full rounded-full"
-              style={{
-                backgroundImage: isDark
-                  ? 'linear-gradient(90deg, #60a5fa 0%, #818cf8 12.5%, #a78bfa 25%, #c084fc 37.5%, #ec4899 50%, #f472b6 62.5%, #f59e0b 75%, #fbbf24 87.5%, #10b981 100%, #60a5fa 100%)'
-                  : 'linear-gradient(90deg, #2563eb 0%, #4f46e5 12.5%, #7c3aed 25%, #9333ea 37.5%, #db2777 50%, #e11d48 62.5%, #d97706 75%, #f59e0b 87.5%, #059669 100%, #2563eb 100%)',
-                backgroundSize: '200% 100%',
-                animation: 'gradientFlow 4s linear infinite',
-              }}
-            />
+      {/* 히어로 섹션 (Minimal & Compact - Enhanced) */}
+      <section className="relative pt-32 pb-16 px-6 text-center z-10">
+        <div className="max-w-3xl mx-auto animate-fade-in flex flex-col items-center">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 dark:bg-zinc-900/50 border border-orange-200 dark:border-zinc-800 text-orange-600 dark:text-orange-400 text-xs font-bold mb-6">
+            <Sparkles className="w-3 h-3" />
+            <span>Project Gallery</span>
           </div>
 
-          <p
-            className="text-lg md:text-xl font-medium opacity-70 break-keep leading-relaxed"
-            style={{
-              color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
-              fontWeight: 500,
-              letterSpacing: '-0.01em',
-            }}
-          >
-            AI 기술 블로그 및 커뮤니티 플랫폼을 위한 프로젝트 포트폴리오
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
+            <span className="bg-gradient-to-r from-orange-500 via-pink-500 to-orange-500 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+              프로젝트
+            </span>
+          </h1>
+          <p className={`text-base md:text-lg font-medium break-keep leading-relaxed max-w-xl ${isDark ? "text-white" : "text-neutral-600"}`}>
+            DORI-AI의 여정과 다양한 <span className="text-orange-500">기술적 실험</span>들을 기록합니다.
           </p>
         </div>
       </section>
 
-      {/* Bento Grid 섹션 */}
-      <section className="container max-w-7xl mx-auto px-6 lg:px-12 pb-24 relative z-10">
-        <div className="bento-grid">
+      {/* 프로젝트 그리드 */}
+      <section className="container max-w-7xl mx-auto px-6 lg:px-12 pb-32 relative z-10">
+        <div className="grid grid-cols-1 gap-6">
           {PROJECTS.map((project, index) => {
-            const statusConfig = STATUS_CONFIG[project.status];
+            const statusStyle = STATUS_CONFIG[project.status];
             const isMain = project.size === "large";
 
             return (
               <div
                 key={project.id}
-                className={`bento-item ${project.size}`}
+                className={`group relative rounded-[2rem] p-6 transition-all duration-500 bg-white dark:!bg-black backdrop-blur-xl border border-neutral-200 dark:border-neutral-800 hover:border-orange-500/30 dark:hover:border-orange-500/50 hover:shadow-2xl hover:shadow-orange-500/10 hover:-translate-y-1 hover:scale-[1.01] flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-8`}
                 style={{
-                  animation: `fadeInUp 0.8s ease-out ${index * 0.15}s both`,
+                  animation: `slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.1}s both`,
                 }}
               >
+                {/* Icon Section - Unified Orange Style (Main Page Match) */}
                 <div
-                  className={`relative h-full rounded-2xl p-6 md:p-8 transition-all duration-500 cursor-pointer overflow-hidden group ${isMain ? 'main-card' : ''}`}
-                  style={{
-                    background: isDark
-                      ? '#000000'
-                      : isMain
-                        ? 'rgba(0, 0, 0, 0.02)'
-                        : 'rgba(0, 0, 0, 0.01)',
-                    border: `1px solid ${isDark ? '#27272a' : 'rgba(0, 0, 0, 0.1)'}`,
-                    backdropFilter: isMain ? 'blur(20px)' : 'blur(12px)',
-                    WebkitBackdropFilter: isMain ? 'blur(20px)' : 'blur(12px)',
-                    boxShadow: isMain
-                      ? isDark
-                        ? `0 0 80px ${project.glowColor}, 0 0 40px ${project.glowColor}60, 0 12px 48px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08)`
-                        : `0 0 60px ${project.glowColor}50, 0 0 30px ${project.glowColor}30, 0 12px 48px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.9)`
-                      : isDark
-                        ? '0 4px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.03)'
-                        : '0 4px 24px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
-                  }}
-                  onMouseEnter={(e) => {
-                    if (isMain) {
-                      e.currentTarget.style.boxShadow = isDark
-                        ? `0 0 120px ${project.glowColor}80, 0 0 60px ${project.glowColor}70, 0 16px 64px rgba(0, 0, 0, 0.6), inset 0 1px 0 rgba(255, 255, 255, 0.12)`
-                        : `0 0 80px ${project.glowColor}70, 0 0 50px ${project.glowColor}50, 0 16px 64px rgba(0, 0, 0, 0.2), inset 0 1px 0 rgba(255, 255, 255, 1)`;
-                      e.currentTarget.style.transform = 'translateY(-8px) scale(1.01)';
-                      // 데이터 스트림 속도 증가
-                      const workflowContainer = e.currentTarget.querySelector('.workflow-container');
-                      if (workflowContainer) {
-                        (workflowContainer as HTMLElement).style.setProperty('--stream-speed', '0.8s');
-                      }
-                    } else {
-                      e.currentTarget.style.boxShadow = isDark
-                        ? `0 0 40px ${project.glowColor}, 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 1px 0 rgba(255, 255, 255, 0.05)`
-                        : `0 0 30px ${project.glowColor}60, 0 8px 32px rgba(0, 0, 0, 0.1), inset 0 1px 0 rgba(255, 255, 255, 0.9)`;
-                      e.currentTarget.style.transform = 'translateY(-4px)';
-                    }
-                  }}
-                  onMouseLeave={(e) => {
-                    if (isMain) {
-                      e.currentTarget.style.boxShadow = isDark
-                        ? `0 0 80px ${project.glowColor}, 0 0 40px ${project.glowColor}60, 0 12px 48px rgba(0, 0, 0, 0.5), inset 0 1px 0 rgba(255, 255, 255, 0.08)`
-                        : `0 0 60px ${project.glowColor}50, 0 0 30px ${project.glowColor}30, 0 12px 48px rgba(0, 0, 0, 0.15), inset 0 1px 0 rgba(255, 255, 255, 0.9)`;
-                      e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                      // 데이터 스트림 속도 원복
-                      const workflowContainer = e.currentTarget.querySelector('.workflow-container');
-                      if (workflowContainer) {
-                        (workflowContainer as HTMLElement).style.setProperty('--stream-speed', '2s');
-                      }
-                    } else {
-                      e.currentTarget.style.boxShadow = isDark
-                        ? '0 4px 24px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.03)'
-                        : '0 4px 24px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9)';
-                      e.currentTarget.style.transform = 'translateY(0)';
-                    }
-                  }}
+                  className="w-16 h-16 shrink-0 rounded-2xl flex items-center justify-center border transition-all duration-500 group-hover:scale-105 group-hover:shadow-md bg-orange-50 dark:bg-neutral-900 border-orange-200 dark:border-neutral-800 text-orange-600 dark:text-orange-500 shadow-[0_0_20px_rgba(249,115,22,0.1)] dark:shadow-none"
                 >
-                  {/* 다층 글래스 효과 - 레이어 1 (가장 뒤) */}
-                  {isMain && (
-                    <div
-                      className="absolute inset-0 rounded-2xl pointer-events-none"
-                      style={{
-                        background: isDark
-                          ? 'rgba(255, 255, 255, 0.01)'
-                          : 'rgba(255, 255, 255, 0.3)',
-                        backdropFilter: 'blur(8px)',
-                        WebkitBackdropFilter: 'blur(8px)',
-                        transform: 'translateZ(-10px)',
-                        opacity: 0.5,
-                      }}
-                    />
-                  )}
+                  {project.icon}
+                </div>
 
-                  {/* 다층 글래스 효과 - 레이어 2 (중간) */}
-                  {isMain && (
-                    <div
-                      className="absolute inset-0 rounded-2xl pointer-events-none"
-                      style={{
-                        background: isDark
-                          ? 'rgba(255, 255, 255, 0.02)'
-                          : 'rgba(255, 255, 255, 0.4)',
-                        backdropFilter: 'blur(4px)',
-                        WebkitBackdropFilter: 'blur(4px)',
-                        transform: 'translateZ(-5px)',
-                        opacity: 0.7,
-                      }}
-                    />
-                  )}
-
-                  {/* Specular Highlights - 상단/왼쪽 가장자리 */}
-                  {isMain && (
-                    <>
-                      <div
-                        className="absolute top-0 left-0 right-0 h-1/3 rounded-t-2xl pointer-events-none"
-                        style={{
-                          background: isDark
-                            ? 'linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, transparent 100%)'
-                            : 'linear-gradient(180deg, rgba(255, 255, 255, 0.8) 0%, transparent 100%)',
-                          opacity: 0.6,
-                        }}
-                      />
-                      <div
-                        className="absolute top-0 left-0 bottom-0 w-1/3 rounded-l-2xl pointer-events-none"
-                        style={{
-                          background: isDark
-                            ? 'linear-gradient(90deg, rgba(255, 255, 255, 0.12) 0%, transparent 100%)'
-                            : 'linear-gradient(90deg, rgba(255, 255, 255, 0.7) 0%, transparent 100%)',
-                          opacity: 0.5,
-                        }}
-                      />
-                    </>
-                  )}
-
-                  {/* 강화된 엣지 글로우 */}
-                  {isMain && (
-                    <div
-                      className="absolute -inset-1 rounded-2xl pointer-events-none"
-                      style={{
-                        background: `linear-gradient(135deg, ${project.color}40, ${project.color}20, ${project.color}40)`,
-                        filter: 'blur(20px)',
-                        opacity: 0.6,
-                        animation: 'edgeGlow 4s ease-in-out infinite',
-                      }}
-                    />
-                  )}
-
-                  {/* Glassmorphism 오버레이 - 메인 레이어 */}
-                  <div
-                    className="absolute inset-0 rounded-2xl pointer-events-none"
-                    style={{
-                      background: isDark
-                        ? 'linear-gradient(135deg, rgba(255, 255, 255, 0.04) 0%, transparent 50%, rgba(0, 0, 0, 0.15) 100%)'
-                        : 'linear-gradient(135deg, rgba(255, 255, 255, 0.6) 0%, transparent 50%, rgba(0, 0, 0, 0.03) 100%)',
-                    }}
-                  />
-
-                  {/* 메인 프로젝트 특별 스타일 */}
-                  {isMain && (
-                    <>
-                      {/* 고품질 Automation Workflow 컴포넌트 */}
-                      {project.workflow && (
-                        <div className="workflow-container mb-8 relative z-10" style={{ '--stream-speed': '2s' } as React.CSSProperties}>
-                          {/* 헤더 */}
-                          <div className="flex items-center gap-2.5 mb-6">
-                            <Workflow className="w-4 h-4" style={{ color: isDark ? '#94a3b8' : '#64748b' }} />
-                            <span
-                              className="text-xs font-semibold uppercase tracking-wider"
-                              style={{
-                                color: isDark ? '#94a3b8' : '#64748b',
-                                letterSpacing: '0.1em',
-                              }}
-                            >
-                              AUTOMATION WORKFLOW
-                            </span>
-                          </div>
-
-                          {/* 워크플로우 스텝 */}
-                          <div className="flex items-center justify-between relative">
-                            {project.workflow.map((step, idx) => (
-                              <div key={idx} className="flex-1 flex flex-col items-center relative">
-                                {/* 연결선 (왼쪽에서 오른쪽으로 그려지는 애니메이션) */}
-                                {idx < project.workflow!.length - 1 && (
-                                  <div
-                                    className="workflow-connector absolute top-6 left-[calc(50%+28px)] right-[-28px] h-[1px]"
-                                    style={{
-                                      zIndex: 0,
-                                      animation: `drawLine 1.5s ease-out ${idx * 0.3 + 0.5}s both`,
-                                    }}
-                                  >
-                                    {/* 정적 배경선 */}
-                                    <div
-                                      className="absolute inset-0"
-                                      style={{
-                                        background: isDark
-                                          ? 'linear-gradient(90deg, rgba(6, 182, 212, 0.3), rgba(6, 182, 212, 0.1))'
-                                          : 'linear-gradient(90deg, rgba(6, 182, 212, 0.2), rgba(6, 182, 212, 0.1))',
-                                      }}
-                                    />
-                                    {/* 애니메이션 데이터 스트림 */}
-                                    <div
-                                      className="data-stream-line absolute inset-0 overflow-hidden"
-                                      style={{
-                                        background: `linear-gradient(90deg, transparent, ${project.color}, ${project.color}80, transparent)`,
-                                        width: '60%',
-                                        animation: `dataStreamFlow var(--stream-speed, 2s) linear infinite ${idx * 0.2}s`,
-                                        filter: `blur(1px)`,
-                                        boxShadow: `0 0 8px ${project.color}50`,
-                                      }}
-                                    />
-                                  </div>
-                                )}
-
-                                {/* 아이콘 컨테이너 */}
-                                <div className="relative z-10">
-                                  <div
-                                    className="workflow-icon w-14 h-14 rounded-full flex items-center justify-center relative"
-                                    style={{
-                                      background: isDark
-                                        ? 'rgba(15, 23, 42, 0.6)'
-                                        : 'rgba(255, 255, 255, 0.8)',
-                                      border: isDark
-                                        ? `1.5px solid rgba(6, 182, 212, 0.4)`
-                                        : `1.5px solid rgba(6, 182, 212, 0.3)`,
-                                      color: project.color,
-                                      boxShadow: isDark
-                                        ? `0 0 20px ${project.color}40, 0 0 40px ${project.color}20, inset 0 0 20px ${project.color}10`
-                                        : `0 0 15px ${project.color}30, 0 0 30px ${project.color}15`,
-                                      animation: `workflowIconPulse 2.5s ease-in-out infinite ${idx * 0.4}s`,
-                                      transition: 'all 0.3s ease',
-                                    }}
-                                    onMouseEnter={(e) => {
-                                      e.currentTarget.style.transform = 'scale(1.1)';
-                                      e.currentTarget.style.boxShadow = isDark
-                                        ? `0 0 30px ${project.color}60, 0 0 60px ${project.color}40, inset 0 0 30px ${project.color}20`
-                                        : `0 0 25px ${project.color}50, 0 0 50px ${project.color}30`;
-                                    }}
-                                    onMouseLeave={(e) => {
-                                      e.currentTarget.style.transform = 'scale(1)';
-                                      e.currentTarget.style.boxShadow = isDark
-                                        ? `0 0 20px ${project.color}40, 0 0 40px ${project.color}20, inset 0 0 20px ${project.color}10`
-                                        : `0 0 15px ${project.color}30, 0 0 30px ${project.color}15`;
-                                    }}
-                                  >
-                                    {/* 아이콘 */}
-                                    <div className="relative z-10">
-                                      {step.icon}
-                                    </div>
-
-                                    {/* 내부 글로우 레이어 */}
-                                    <div
-                                      className="absolute inset-0 rounded-full"
-                                      style={{
-                                        background: `radial-gradient(circle at center, ${project.color}25, transparent 70%)`,
-                                        animation: `workflowInnerGlow 2.5s ease-in-out infinite ${idx * 0.4}s`,
-                                        opacity: 0.6,
-                                      }}
-                                    />
-
-                                    {/* 외부 글로우 링 */}
-                                    <div
-                                      className="absolute -inset-1 rounded-full"
-                                      style={{
-                                        background: `radial-gradient(circle, ${project.color}30, transparent 70%)`,
-                                        filter: 'blur(8px)',
-                                        animation: `workflowOuterGlow 2.5s ease-in-out infinite ${idx * 0.4}s`,
-                                        opacity: 0.4,
-                                      }}
-                                    />
-                                  </div>
-                                </div>
-
-                                {/* 라벨 */}
-                                <span
-                                  className="text-xs font-medium text-center mt-4 whitespace-nowrap"
-                                  style={{
-                                    color: isDark ? '#ffffff' : '#1d1d1f',
-                                    letterSpacing: '0.02em',
-                                    fontFamily: '"Pretendard", "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif',
-                                  }}
-                                >
-                                  {step.step}
-                                </span>
-                              </div>
-                            ))}
-                          </div>
-                        </div>
-                      )}
-                    </>
-                  )}
-
-                  {/* 헤더 */}
-                  <div className="flex items-start justify-between mb-4 relative z-10">
-                    <div
-                      className="p-3 rounded-xl transition-all duration-300"
-                      style={{
-                        background: isDark
-                          ? `linear-gradient(135deg, ${project.color}20, ${project.color}10)`
-                          : `linear-gradient(135deg, ${project.color}15, ${project.color}08)`,
-                        border: `1px solid ${project.color}30`,
-                        color: project.color,
-                      }}
-                    >
-                      {project.icon}
-                    </div>
-
-                    {/* Status Badge */}
-                    <div
-                      className={`px-3 py-1.5 rounded-full flex items-center gap-1.5 text-xs font-bold ${statusConfig.text}`}
-                      style={{
-                        background: isDark
-                          ? 'rgba(255, 255, 255, 0.05)'
-                          : 'rgba(0, 0, 0, 0.03)',
-                        border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
-                      }}
-                    >
-                      {statusConfig.icon}
-                      <span>{project.statusLabel}</span>
+                {/* Main Info Section */}
+                <div className="flex-1 min-w-0 flex flex-col justify-center">
+                  <div className="flex items-center gap-3 mb-2">
+                    <h3 className={`text-xl font-bold group-hover:text-orange-500 transition-colors duration-300 truncate ${isDark ? "text-white" : "text-neutral-900"}`}>
+                      {project.title}
+                    </h3>
+                    <div className={`px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider flex items-center gap-1 ${statusStyle.style}`}>
+                      {statusStyle.icon}
+                      <span className="hidden sm:inline">{statusStyle.label}</span>
                     </div>
                   </div>
 
-                  {/* 제목 */}
-                  <h3
-                    className="text-2xl md:text-3xl font-black mb-2 relative z-10"
-                    style={{
-                      color: isDark ? '#ffffff' : '#000000',
-                      fontWeight: 900,
-                      letterSpacing: '-0.03em',
-                      lineHeight: '1.2',
-                    }}
-                  >
-                    {project.title}
-                  </h3>
-
-                  {/* 서브타이틀 */}
-                  {project.subtitle && (
-                    <p
-                      className="text-sm mb-3 relative z-10"
-                      style={{
-                        color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
-                        fontWeight: 500,
-                        letterSpacing: '-0.01em',
-                      }}
-                    >
-                      {project.subtitle}
-                    </p>
-                  )}
-
-                  {/* 설명 */}
                   <p
-                    className={`mb-4 relative z-10 ${isMain ? 'text-base' : 'text-sm'}`}
-                    style={{
-                      color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)',
-                      lineHeight: '1.6',
-                    }}
+                    className={`text-sm line-clamp-1 mb-3 ${isDark ? "text-white" : "text-neutral-600"}`}
                   >
                     {project.description}
                   </p>
 
-                  {/* 상세 설명 (메인만) */}
-                  {isMain && (
-                    <p
-                      className="text-sm mb-6 relative z-10"
-                      style={{
-                        color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
-                        lineHeight: '1.5',
-                      }}
-                    >
-                      {project.detail}
-                    </p>
-                  )}
-
-                  {/* Tech Stack with Icons */}
-                  <div className="flex flex-wrap gap-2.5 mb-6 relative z-10">
+                  {/* Minimal Tags */}
+                  <div className="flex flex-wrap gap-1.5">
                     {(Array.isArray(project.tech) && typeof project.tech[0] === 'object'
                       ? project.tech
                       : project.tech.map(name => ({ name, icon: null }))
                     ).map((tech: any, idx: number) => (
                       <span
                         key={idx}
-                        className="px-3.5 py-2 rounded-lg text-xs font-semibold flex items-center gap-2 transition-all duration-300"
-                        style={{
-                          background: isDark
-                            ? 'rgba(255, 255, 255, 0.06)'
-                            : 'rgba(0, 0, 0, 0.04)',
-                          border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.12)' : 'rgba(0, 0, 0, 0.12)'}`,
-                          color: isDark ? 'rgba(255, 255, 255, 0.85)' : 'rgba(0, 0, 0, 0.75)',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.background = isDark
-                            ? 'rgba(255, 255, 255, 0.1)'
-                            : 'rgba(0, 0, 0, 0.06)';
-                          e.currentTarget.style.transform = 'translateY(-2px)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.background = isDark
-                            ? 'rgba(255, 255, 255, 0.06)'
-                            : 'rgba(0, 0, 0, 0.04)';
-                          e.currentTarget.style.transform = 'translateY(0)';
-                        }}
+                        className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-colors ${isDark
+                          ? "bg-neutral-800 text-white hover:bg-black"
+                          : "bg-neutral-100/50 text-neutral-500 hover:bg-white"
+                          }`}
                       >
-                        {tech.icon && (
-                          <span style={{ color: project.color, display: 'flex', alignItems: 'center' }}>
-                            {tech.icon}
-                          </span>
-                        )}
-                        <span>{tech.name || tech}</span>
+                        {tech.name || tech}
                       </span>
                     ))}
                   </div>
+                </div>
 
-                  {/* 프리미엄 EXPLORE 버튼 */}
-                  <div className="relative z-10">
+                {/* Right Side: Workflow or Placeholder + Action */}
+                <div className="w-full lg:w-auto flex items-center justify-between lg:justify-end gap-6 lg:mx-4">
+
+                  {/* Workflow Animation (Dynamic & Colorful) */}
+                  {project.workflow && (
+                    <div className="flex-1 lg:w-[280px] hidden sm:flex items-center justify-between relative px-2 py-3 bg-neutral-50/30 dark:!bg-black rounded-xl border border-transparent dark:border-neutral-800">
+                      {/* 1. Base Track */}
+                      <div className="absolute top-1/2 left-0 right-0 h-1 bg-neutral-100 dark:bg-neutral-800 -translate-y-1/2 rounded-full" />
+
+                      {/* 2. Swirling Particle (SVG Animation) */}
+                      <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-30" style={{ filter: 'drop-shadow(0 0 2px rgba(255,165,0,0.5))' }}>
+                        <svg className="w-full h-full overflow-visible" viewBox="0 0 280 56">
+                          <defs>
+                            <radialGradient id="particleGlow" cx="50%" cy="50%" r="50%">
+                              <stop offset="0%" stopColor="white" stopOpacity="1" />
+                              <stop offset="100%" stopColor="orange" stopOpacity="0" />
+                            </radialGradient>
+                            <filter id="glow">
+                              <feGaussianBlur stdDeviation="1.5" result="coloredBlur" />
+                              <feMerge>
+                                <feMergeNode in="coloredBlur" />
+                                <feMergeNode in="SourceGraphic" />
+                              </feMerge>
+                            </filter>
+                          </defs>
+
+                          {/* 
+                                Precise Swirl Path Calculation:
+                                Container Width: 280px. 4 Icons spaced evenly.
+                                Centers: 24, 101, 179, 256. Radius: 18.
+                                Pattern: Line -> 1.5 Loop (540deg) -> Line -> ...
+                            */}
+                          <path
+                            id="swirlPath"
+                            d="M 0 28 L 6 28 a 18 18 0 1 1 36 0 a 18 18 0 1 1 -36 0 a 18 18 0 1 1 36 0 L 83 28 a 18 18 0 1 1 36 0 a 18 18 0 1 1 -36 0 a 18 18 0 1 1 36 0 L 161 28 a 18 18 0 1 1 36 0 a 18 18 0 1 1 -36 0 a 18 18 0 1 1 36 0 L 238 28 a 18 18 0 1 1 36 0 a 18 18 0 1 1 -36 0 a 18 18 0 1 1 36 0 L 280 28"
+                            fill="none"
+                            stroke="none"
+                          />
+
+                          {/* Main Particle */}
+                          <circle r="3" filter="url(#glow)">
+                            <animate attributeName="fill" values="#FF00FF;#00FFFF;#00FF00;#FFFF00;#FF0000;#BF00FF;#FF00FF" dur="2s" repeatCount="indefinite" />
+                            <animateMotion dur="6s" repeatCount="indefinite" rotate="auto">
+                              <mpath href="#swirlPath" />
+                            </animateMotion>
+                          </circle>
+
+                          {/* Trail Particle 1 */}
+                          <circle r="2" opacity="0.9">
+                            <animate attributeName="fill" values="#00FFFF;#00FF00;#FFFF00;#FF0000;#BF00FF;#FF00FF;#00FFFF" dur="2s" repeatCount="indefinite" />
+                            <animateMotion dur="6s" repeatCount="indefinite" rotate="auto" begin="0.1s">
+                              <mpath href="#swirlPath" />
+                            </animateMotion>
+                          </circle>
+
+                          {/* Trail Particle 2 */}
+                          <circle r="1" opacity="0.8">
+                            <animate attributeName="fill" values="#00FF00;#FFFF00;#FF0000;#BF00FF;#FF00FF;#00FFFF;#00FF00" dur="2s" repeatCount="indefinite" />
+                            <animateMotion dur="6s" repeatCount="indefinite" rotate="auto" begin="0.2s">
+                              <mpath href="#swirlPath" />
+                            </animateMotion>
+                          </circle>
+                        </svg>
+                      </div>
+
+                      {/* 3. Steps Icons */}
+                      {project.workflow.map((step, idx) => (
+                        <div key={idx} className="relative z-20 group/step">
+                          <motion.div
+                            className={`w-8 h-8 rounded-full border-2 flex items-center justify-center relative overflow-hidden ${isDark
+                              ? "bg-black border-neutral-800 text-white"
+                              : "bg-white border-neutral-100 text-neutral-400"
+                              }`}
+                            whileHover={{ scale: 1.15, rotate: 5 }}
+                          >
+                            {/* Icon Background Glow */}
+                            <motion.div
+                              className="absolute inset-0 bg-gradient-to-tr from-orange-100 to-pink-100 dark:from-orange-900/30 dark:to-pink-900/30 opacity-0 group-hover/step:opacity-100 transition-opacity duration-300"
+                            />
+
+                            <div className="relative z-10 group-hover/step:text-transparent group-hover/step:bg-clip-text group-hover/step:bg-gradient-to-r group-hover/step:from-orange-500 group-hover/step:to-pink-500 transition-all duration-300">
+                              {step.icon}
+                            </div>
+                          </motion.div>
+
+                          {/* Label */}
+                          <span
+                            className={`absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold opacity-0 group-hover/step:opacity-100 transition-all duration-300 whitespace-nowrap group-hover/step:-translate-y-1 ${isDark ? "text-white" : "text-neutral-400"
+                              }`}
+                          >
+                            {step.step}
+                          </span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+
+                  {/* Action Button */}
+                  <div className="shrink-0 ml-auto lg:ml-0">
                     {project.href ? (
                       <Link href={project.href}>
-                        <button
-                          className="explore-btn px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all duration-300 relative overflow-hidden group w-full"
-                          style={{
-                            background: isMain
-                              ? `linear-gradient(135deg, ${project.color}, ${project.color}80)`
-                              : 'transparent',
-                            border: isMain ? 'none' : `1.5px solid ${project.color}50`,
-                            color: isMain ? '#ffffff' : project.color,
-                            boxShadow: isMain
-                              ? `0 4px 20px ${project.color}50, inset 0 1px 0 rgba(255, 255, 255, 0.2)`
-                              : 'none',
-                          }}
-                          onMouseEnter={(e) => {
-                            if (isMain) {
-                              e.currentTarget.style.boxShadow = `0 6px 30px ${project.color}70, inset 0 1px 0 rgba(255, 255, 255, 0.3)`;
-                              e.currentTarget.style.transform = 'translateY(-2px) scale(1.02)';
-                            } else {
-                              e.currentTarget.style.background = `linear-gradient(135deg, ${project.color}20, ${project.color}10)`;
-                              e.currentTarget.style.boxShadow = `0 0 20px ${project.color}30`;
-                            }
-                          }}
-                          onMouseLeave={(e) => {
-                            if (isMain) {
-                              e.currentTarget.style.boxShadow = `0 4px 20px ${project.color}50, inset 0 1px 0 rgba(255, 255, 255, 0.2)`;
-                              e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                            } else {
-                              e.currentTarget.style.background = 'transparent';
-                              e.currentTarget.style.boxShadow = 'none';
-                            }
-                          }}
-                        >
-                          {/* 버튼 내부 글로우 */}
-                          {isMain && (
-                            <div
-                              className="absolute inset-0 rounded-xl"
-                              style={{
-                                background: `linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent)`,
-                                opacity: 0.6,
-                              }}
-                            />
-                          )}
-                          <span>Explore</span>
-                          <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
+                        <button className="w-10 h-10 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-black flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-orange-500/20 group-hover:bg-orange-500 group-hover:text-white">
+                          <ArrowRight className="w-4 h-4" />
                         </button>
                       </Link>
                     ) : (
-                      <button
-                        className="explore-btn px-6 py-3 rounded-xl text-xs font-bold uppercase tracking-wider flex items-center gap-2 transition-all duration-300 relative overflow-hidden group"
-                        style={{
-                          background: isMain
-                            ? `linear-gradient(135deg, ${project.color}, ${project.color}80)`
-                            : 'transparent',
-                          border: isMain ? 'none' : `1.5px solid ${project.color}50`,
-                          color: isMain ? '#ffffff' : project.color,
-                          boxShadow: isMain
-                            ? `0 4px 20px ${project.color}50, inset 0 1px 0 rgba(255, 255, 255, 0.2)`
-                            : 'none',
-                        }}
-                        onMouseEnter={(e) => {
-                          if (isMain) {
-                            e.currentTarget.style.boxShadow = `0 6px 30px ${project.color}70, inset 0 1px 0 rgba(255, 255, 255, 0.3)`;
-                            e.currentTarget.style.transform = 'translateY(-2px) scale(1.02)';
-                          } else {
-                            e.currentTarget.style.background = `linear-gradient(135deg, ${project.color}20, ${project.color}10)`;
-                            e.currentTarget.style.boxShadow = `0 0 20px ${project.color}30`;
-                          }
-                        }}
-                        onMouseLeave={(e) => {
-                          if (isMain) {
-                            e.currentTarget.style.boxShadow = `0 4px 20px ${project.color}50, inset 0 1px 0 rgba(255, 255, 255, 0.2)`;
-                            e.currentTarget.style.transform = 'translateY(0) scale(1)';
-                          } else {
-                            e.currentTarget.style.background = 'transparent';
-                            e.currentTarget.style.boxShadow = 'none';
-                          }
-                        }}
-                      >
-                        {/* 버튼 내부 글로우 */}
-                        {isMain && (
-                          <div
-                            className="absolute inset-0 rounded-xl"
-                            style={{
-                              background: `linear-gradient(135deg, rgba(255, 255, 255, 0.2), transparent)`,
-                              opacity: 0.6,
-                            }}
-                          />
-                        )}
-                        <span>Explore</span>
-                        <ArrowRight className="w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-                      </button>
+                      <div className="w-10 h-10 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-300 dark:text-neutral-600 flex items-center justify-center cursor-not-allowed">
+                        <Clock className="w-4 h-4" />
+                      </div>
                     )}
                   </div>
-
-                  {/* 메인 카드 글로우 효과 */}
-                  {isMain && (
-                    <div
-                      className="absolute -inset-1 rounded-2xl opacity-50 blur-xl pointer-events-none"
-                      style={{
-                        background: `radial-gradient(circle, ${project.color}40, transparent 70%)`,
-                        animation: 'pulseGlow 3s ease-in-out infinite',
-                      }}
-                    />
-                  )}
                 </div>
               </div>
             );
           })}
         </div>
       </section>
-
-      {/* 스타일 */}
-      <style jsx global>{`
-        @keyframes gradientShift {
-          0%, 100% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-        }
-        
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(40px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-
-        @keyframes pulseGlow {
-          0%, 100% {
-            opacity: 0.5;
-            transform: scale(1);
-          }
-          50% {
-            opacity: 0.8;
-            transform: scale(1.05);
-          }
-        }
-
-        @keyframes workflowIconPulse {
-          0%, 100% {
-            box-shadow: 0 0 20px rgba(6, 182, 212, 0.4), 0 0 40px rgba(6, 182, 212, 0.2), inset 0 0 20px rgba(6, 182, 212, 0.1);
-            transform: scale(1);
-          }
-          50% {
-            box-shadow: 0 0 30px rgba(6, 182, 212, 0.6), 0 0 60px rgba(6, 182, 212, 0.4), inset 0 0 30px rgba(6, 182, 212, 0.2);
-            transform: scale(1.02);
-          }
-        }
-
-        @keyframes workflowInnerGlow {
-          0%, 100% {
-            opacity: 0.4;
-          }
-          50% {
-            opacity: 0.8;
-          }
-        }
-
-        @keyframes workflowOuterGlow {
-          0%, 100% {
-            opacity: 0.3;
-            transform: scale(1);
-          }
-          50% {
-            opacity: 0.6;
-            transform: scale(1.1);
-          }
-        }
-
-        @keyframes drawLine {
-          from {
-            width: 0;
-            opacity: 0;
-          }
-          to {
-            width: 100%;
-            opacity: 1;
-          }
-        }
-
-        @keyframes dataStreamFlow {
-          0% {
-            transform: translateX(-100%);
-            opacity: 0;
-          }
-          10% {
-            opacity: 1;
-          }
-          90% {
-            opacity: 1;
-          }
-          100% {
-            transform: translateX(200%);
-            opacity: 0;
-          }
-        }
-
-        .bento-grid {
-          display: grid;
-          grid-template-columns: repeat(12, 1fr);
-          grid-auto-rows: minmax(200px, auto);
-          gap: 1.5rem;
-        }
-
-        .bento-item.large {
-          grid-column: span 12;
-          grid-row: span 2;
-          min-height: 400px;
-        }
-
-        .bento-item.medium {
-          grid-column: span 6;
-          grid-row: span 1;
-          min-height: 280px;
-        }
-
-        .bento-item.small {
-          grid-column: span 6;
-          grid-row: span 1;
-          min-height: 240px;
-        }
-
-        @media (min-width: 1024px) {
-          .bento-item.large {
-            grid-column: span 8;
-            grid-row: span 2;
-          }
-
-          .bento-item.medium {
-            grid-column: span 4;
-            grid-row: span 1;
-          }
-
-          .bento-item.small {
-            grid-column: span 4;
-            grid-row: span 1;
-          }
-        }
-
-        @media (max-width: 768px) {
-          .bento-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .bento-item.large,
-          .bento-item.medium,
-          .bento-item.small {
-            grid-column: span 1;
-            grid-row: span 1;
-            min-height: 300px;
-          }
-        }
-      `}</style>
     </main>
   );
 }

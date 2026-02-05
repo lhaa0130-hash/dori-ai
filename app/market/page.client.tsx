@@ -31,15 +31,17 @@ export default function MarketClient() {
   };
 
   return (
-    <main 
-      className="w-full min-h-screen relative overflow-x-hidden" 
+    <main
+      className="w-full min-h-screen relative overflow-x-hidden bg-white dark:bg-black transition-colors duration-500"
       style={{
-        backgroundColor: isDark ? '#000000' : '#ffffff',
         fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
       }}
     >
+      {/* 배경 그라데이션 (Standard) */}
+      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-orange-100/40 via-orange-50/20 to-transparent dark:from-orange-900/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
+
       {/* 좌측 사이드바 네비게이션 */}
-      <aside 
+      <aside
         className="fixed left-0 z-50 hidden lg:block"
         style={{
           top: '50%',
@@ -47,7 +49,7 @@ export default function MarketClient() {
         }}
       >
         <nav className="ml-8">
-          <div 
+          <div
             className="flex flex-col gap-3 p-4 rounded-2xl backdrop-blur-xl transition-all duration-500"
             style={{
               backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
@@ -60,7 +62,7 @@ export default function MarketClient() {
                 href={`#${item.id}`}
                 className="group relative flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 cursor-pointer"
                 style={{
-                  backgroundColor: activeSection === item.id 
+                  backgroundColor: activeSection === item.id
                     ? (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)')
                     : 'transparent',
                 }}
@@ -69,20 +71,19 @@ export default function MarketClient() {
                   handleNavClick(item.id);
                 }}
               >
-                <div 
-                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${
-                    activeSection === item.id ? 'scale-150' : 'scale-100'
-                  }`}
+                <div
+                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${activeSection === item.id ? 'scale-150' : 'scale-100'
+                    }`}
                   style={{
-                    backgroundColor: activeSection === item.id 
+                    backgroundColor: activeSection === item.id
                       ? (isDark ? '#ffffff' : '#000000')
                       : (isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)'),
                   }}
                 />
-                <span 
+                <span
                   className="text-xs font-medium transition-all duration-300"
                   style={{
-                    color: activeSection === item.id 
+                    color: activeSection === item.id
                       ? (isDark ? '#ffffff' : '#000000')
                       : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)'),
                     transform: activeSection === item.id ? 'translateX(4px)' : 'translateX(0)',
@@ -96,81 +97,38 @@ export default function MarketClient() {
         </nav>
       </aside>
 
-      {/* 배경 효과 */}
-      <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
-        {mounted && theme === "dark" && (
-          <>
-            <div className="absolute top-[-200px] left-[20%] w-[500px] h-[500px] rounded-full blur-[100px] opacity-40 bg-blue-900 mix-blend-screen animate-pulse" />
-            <div className="absolute top-[100px] right-[20%] w-[450px] h-[450px] rounded-full blur-[100px] opacity-40 bg-purple-900 mix-blend-screen animate-pulse" style={{ animationDelay: '1s' }} />
-          </>
-        )}
-        {mounted && theme === "light" && (
-          <div 
-            className="absolute inset-0 transition-all duration-1000"
-            style={{
-              background: 'radial-gradient(ellipse at top, rgba(59, 130, 246, 0.05) 0%, transparent 50%), #ffffff',
-            }}
-          />
-        )}
-      </div>
-
-      {/* 히어로 섹션 */}
-      <section className="relative pt-20 pb-12 px-6 lg:pl-12 text-center overflow-hidden">
-        <div className="max-w-4xl mx-auto animate-[fadeInUp_0.8s_ease-out_forwards]">
-          <h1 
-            className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight"
-            style={{ 
-              color: isDark ? '#ffffff' : '#1d1d1f',
-              fontWeight: 700,
-              letterSpacing: '-0.03em',
-            }}
-          >
-            {t.heroTitle.ko}
-          </h1>
-          
-          {/* 그라데이션 바 */}
-          <div 
-            className="w-full max-w-2xl mx-auto h-1 md:h-1.5 mb-6 rounded-full overflow-hidden"
-            style={{
-              boxShadow: isDark 
-                ? '0 0 30px rgba(96, 165, 250, 0.4), 0 4px 20px rgba(96, 165, 250, 0.2)'
-                : '0 0 20px rgba(37, 99, 235, 0.3), 0 4px 15px rgba(37, 99, 235, 0.2)',
-            }}
-          >
-            <div 
-              className="gradient-flow h-full rounded-full"
-              style={{
-                backgroundImage: isDark
-                  ? 'linear-gradient(90deg, #60a5fa 0%, #818cf8 12.5%, #a78bfa 25%, #c084fc 37.5%, #ec4899 50%, #f472b6 62.5%, #f59e0b 75%, #fbbf24 87.5%, #10b981 100%, #60a5fa 100%)'
-                  : 'linear-gradient(90deg, #2563eb 0%, #4f46e5 12.5%, #7c3aed 25%, #9333ea 37.5%, #db2777 50%, #e11d48 62.5%, #d97706 75%, #f59e0b 87.5%, #059669 100%, #2563eb 100%)',
-                backgroundSize: '200% 100%',
-                animation: 'gradientFlow 4s linear infinite',
-              }}
-            />
+      {/* 히어로 섹션 (Standard) */}
+      <section className="relative pt-32 pb-16 px-6 lg:pl-12 text-center overflow-hidden z-10">
+        <div className="max-w-3xl mx-auto animate-fade-in flex flex-col items-center">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800 text-orange-600 dark:text-orange-400 text-xs font-bold mb-6">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+            </span>
+            <span>Digital Market</span>
           </div>
 
-          <p 
-            className="text-lg md:text-xl font-medium opacity-70 break-keep leading-relaxed"
-            style={{ 
-              color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
-              fontWeight: 500,
-              letterSpacing: '-0.01em',
-            }}
-          >
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
+            <span className="bg-gradient-to-r from-orange-500 via-pink-500 to-orange-500 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+              {t.heroTitle.ko}
+            </span>
+          </h1>
+          <p className="text-base md:text-lg font-medium text-neutral-600 dark:text-neutral-300 break-keep leading-relaxed max-w-xl">
             {t.heroSubtitle.ko}
           </p>
         </div>
       </section>
       {/* 메인 콘텐츠 */}
-      <section 
+      <section
         id="products"
-        className="container max-w-7xl mx-auto px-4 md:px-6 lg:pl-12 pb-24 border-b border-dashed relative" 
-        style={{ 
+        className="container max-w-7xl mx-auto px-4 md:px-6 lg:pl-12 pb-24 border-b border-dashed relative"
+        style={{
           borderColor: 'var(--card-border)',
         }}
       >
-        <h2 
-          className="text-2xl font-bold mb-8 flex items-center gap-2" 
+        <h2
+          className="text-2xl font-bold mb-8 flex items-center gap-2"
           style={{ color: 'var(--text-main)' }}
         >
           🛒 {t.section.productsTitle.ko}
@@ -178,17 +136,17 @@ export default function MarketClient() {
         <MarketFilters filters={filters} setFilters={setFilters} />
         <MarketList filters={filters} />
       </section>
-      
+
       <section id="request" className="container max-w-4xl mx-auto px-4 md:px-6 lg:pl-12 py-24 relative">
         <div className="text-center mb-10">
-          <h2 
-            className="text-2xl font-bold mb-2 flex items-center justify-center gap-2" 
+          <h2
+            className="text-2xl font-bold mb-2 flex items-center justify-center gap-2"
             style={{ color: 'var(--text-main)' }}
           >
             🤝 {t.section.requestTitle.ko}
           </h2>
-          <p 
-            className="opacity-70" 
+          <p
+            className="opacity-70"
             style={{ color: 'var(--text-sub)' }}
           >
             원하는 AI 자료가 없다면? 전문가에게 직접 의뢰해보세요.

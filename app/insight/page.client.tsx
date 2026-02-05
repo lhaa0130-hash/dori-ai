@@ -66,20 +66,24 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
     localStorage.setItem('dori_insight_likes', JSON.stringify(updatedLikesData));
   }, [mounted, likedPosts, likesData]);
 
-  // 카테고리별 색상
+  // 카테고리 목록 정의
+  const CATEGORIES = ['전체', '트렌드', '가이드', '분석', '리포트', '큐레이션'];
+  const [selectedCategory, setSelectedCategory] = useState('전체');
+
+  // 카테고리별 색상 (주황색 테마 기반)
   const getCategoryColor = (category?: string) => {
     switch (category) {
       case '트렌드':
       case 'trend':
-        return { bg: 'rgba(59, 130, 246, 0.1)', text: '#3b82f6' };
+        return { bg: 'rgba(249, 115, 22, 0.1)', text: '#f97316' }; // Orange-500
       case '가이드':
-        return { bg: 'rgba(139, 92, 246, 0.1)', text: '#8b5cf6' };
-      case '큐레이션':
-        return { bg: 'rgba(236, 72, 153, 0.1)', text: '#ec4899' };
+        return { bg: 'rgba(234, 88, 12, 0.1)', text: '#ea580c' }; // Orange-600
       case '분석':
-        return { bg: 'rgba(6, 182, 212, 0.1)', text: '#06b6d4' };
+        return { bg: 'rgba(251, 146, 60, 0.1)', text: '#fb923c' }; // Orange-400
       case '리포트':
-        return { bg: 'rgba(16, 185, 129, 0.1)', text: '#10b981' };
+        return { bg: 'rgba(194, 65, 12, 0.1)', text: '#c2410c' }; // Orange-700
+      case '큐레이션':
+        return { bg: 'rgba(253, 186, 116, 0.1)', text: '#fdba74' }; // Orange-300
       default:
         return { bg: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)', text: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)' };
     }
@@ -95,8 +99,8 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
     // 시스템 메시지 및 마크다운 메타데이터 제거
     const systemPatterns = [
       /^물론입니다\.\s*/i,
-      /^---\s*title:.*?---\s*/s,
-      /^#+\s*title:.*?\n/s,
+      /^---\s*title:[\s\S]*?---\s*/,
+      /^#+\s*title:[\s\S]*?\n/,
       /^AI 전문 블로그.*?\n/i,
       /^---\s*[\s\S]*?---\s*/,
       /^```[\s\S]*?```\s*/,
@@ -129,22 +133,18 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
     return category;
   };
 
+  const filteredPosts = initialPosts.filter(post => {
+    if (selectedCategory === '전체') return true;
+    const cat = getCategoryDisplay(post.category);
+    return cat === selectedCategory;
+  });
+
   return (
-    <main style={{
-      backgroundColor: isDark ? '#000000' : '#ffffff',
-      fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-      minHeight: '100vh',
-      paddingTop: '70px',
-    }}>
+    <main className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-500 relative overflow-x-hidden" style={{ paddingTop: '70px' }}>
       <Header />
 
-      {/* 다크모드 배경 효과 */}
-      {isDark && (
-        <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
-          <div className="absolute top-0 left-[20%] w-[500px] h-[500px] rounded-full blur-[100px] opacity-40 bg-blue-900 mix-blend-screen animate-pulse" />
-          <div className="absolute top-[100px] right-[20%] w-[450px] h-[450px] rounded-full blur-[100px] opacity-40 bg-purple-900 mix-blend-screen animate-pulse" style={{ animationDelay: '1s' }} />
-        </div>
-      )}
+      {/* 배경 그라데이션 (Standard) */}
+      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-orange-100/40 via-orange-50/20 to-transparent dark:from-orange-900/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
 
       {/* 인사이트 페이지 콘텐츠 */}
       <section className="relative z-10" style={{
@@ -153,56 +153,47 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
         padding: '2rem 1.5rem',
         minHeight: 'calc(100vh - 70px)',
       }}>
-        {/* 헤더 */}
-        <div className="max-w-4xl mx-auto mb-8 text-center">
-          <h1
-            className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight"
-            style={{
-              color: isDark ? '#ffffff' : '#1d1d1f',
-              fontWeight: 700,
-              letterSpacing: '-0.03em',
-            }}
-          >
-            인사이트
-          </h1>
-
-          {/* 그라데이션 구분선 */}
-          <div
-            className="w-full max-w-2xl mx-auto h-1 md:h-1.5 mb-6 rounded-full overflow-hidden"
-            style={{
-              boxShadow: isDark
-                ? '0 0 30px rgba(96, 165, 250, 0.4), 0 4px 20px rgba(96, 165, 250, 0.2)'
-                : '0 0 20px rgba(37, 99, 235, 0.3), 0 4px 15px rgba(37, 99, 235, 0.2)',
-            }}
-          >
-            <div
-              className="gradient-flow h-full rounded-full"
-              style={{
-                backgroundImage: isDark
-                  ? 'linear-gradient(90deg, #60a5fa 0%, #818cf8 12.5%, #a78bfa 25%, #c084fc 37.5%, #ec4899 50%, #f472b6 62.5%, #f59e0b 75%, #fbbf24 87.5%, #10b981 100%, #60a5fa 100%)'
-                  : 'linear-gradient(90deg, #2563eb 0%, #4f46e5 12.5%, #7c3aed 25%, #9333ea 37.5%, #db2777 50%, #e11d48 62.5%, #d97706 75%, #f59e0b 87.5%, #059669 100%, #2563eb 100%)',
-                backgroundSize: '200% 100%',
-                animation: 'gradientFlow 4s linear infinite',
-              }}
-            />
+        {/* 헤더 (Standard) */}
+        <div className="max-w-3xl mx-auto mb-12 text-center pt-20 flex flex-col items-center">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800 text-orange-600 dark:text-orange-400 text-xs font-bold mb-6">
+            <span className="relative flex h-2 w-2">
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+            </span>
+            <span>Insight Center</span>
           </div>
 
-          <p
-            className="text-lg md:text-xl font-medium opacity-70 break-keep leading-relaxed"
-            style={{
-              color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
-              fontWeight: 500,
-              letterSpacing: '-0.01em',
-            }}
-          >
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
+            <span className="bg-gradient-to-r from-orange-500 via-pink-500 to-orange-500 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+              인사이트
+            </span>
+          </h1>
+          <p className="text-base md:text-lg font-medium text-neutral-600 dark:text-neutral-300 break-keep leading-relaxed max-w-xl">
             AI 업계 속보와 심층 칼럼을 만나보세요
           </p>
         </div>
 
-        {/* 리스트 레이아웃 - InsightList.tsx와 동일한 구조 */}
-        {initialPosts.length > 0 ? (
-          <div className="flex flex-col gap-3">
-            {initialPosts.map((post) => {
+        {/* 카테고리 필터 */}
+        <div className="flex flex-wrap justify-center gap-2 mb-12">
+          {CATEGORIES.map((cat) => (
+            <button
+              key={cat}
+              onClick={() => setSelectedCategory(cat)}
+              className={`px-4 py-2 rounded-full text-sm font-bold transition-all duration-300 border ${selectedCategory === cat
+                ? 'bg-orange-500 border-orange-500 text-white shadow-lg shadow-orange-500/30'
+                : 'bg-white dark:bg-black border-neutral-200 dark:border-zinc-800 text-neutral-600 dark:text-neutral-400 hover:border-orange-500/50 hover:text-orange-500 dark:hover:text-orange-400'
+                }`}
+            >
+              {cat}
+            </button>
+          ))}
+        </div>
+
+        {/* 리스트 레이아웃 */}
+        {filteredPosts.length > 0 ? (
+          <div className="flex flex-col gap-4">
+            {filteredPosts.map((post) => {
               const categoryColor = getCategoryColor(post.category);
               const summary = getSummary(post.content);
               const categoryDisplay = getCategoryDisplay(post.category);
@@ -210,18 +201,7 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
               const isPostLiked = likedPosts.includes(parseInt(postId));
               const currentLikes = likesData[postId] !== undefined ? likesData[postId] : (post.likes || 0);
 
-              // 경로 결정: slug가 있으면 가이드/트렌드 경로 사용, 없으면 DB 포스트 경로 사용
-              let href = `/insight/article/${post.slug || post.id}`; // Always route to article to avoid 404
-              // Separate folders for guide/trend do not exist, so we unify routing.
-              /*
-              if (post.slug) {
-                if (post.category === '가이드') {
-                  href = `/insight/guide/${post.slug}`;
-                } else if (post.category === '트렌드' || post.category?.toLowerCase() === 'trend') {
-                  href = `/insight/trend/${post.slug}`;
-                }
-              }
-              */
+              let href = `/insight/article/${post.slug || post.id}`;
 
               return (
                 <Link
@@ -231,11 +211,7 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
                   style={{ textDecoration: 'none', color: 'inherit' }}
                 >
                   <div
-                    className="flex gap-4 p-3 rounded-2xl border transition-all duration-300 hover:-translate-y-1 hover:shadow-lg"
-                    style={{
-                      backgroundColor: isDark ? '#000000' : '#ffffff',
-                      borderColor: isDark ? '#27272a' : '#e5e5e7',
-                    }}
+                    className="flex gap-4 p-4 rounded-[2rem] border transition-all duration-300 hover:-translate-y-1 hover:shadow-lg bg-white/80 dark:bg-zinc-900/40 backdrop-blur-xl border-neutral-200 dark:border-zinc-800 hover:border-orange-500/30 dark:hover:border-orange-500/30 hover:shadow-orange-500/10"
                   >
                     {/* 좌측 이미지 */}
                     <div
@@ -290,7 +266,7 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
 
                       {/* 제목 */}
                       <h3
-                        className="text-base font-bold leading-tight break-keep line-clamp-1"
+                        className="text-base font-bold leading-tight break-keep line-clamp-1 group-hover:text-orange-500 transition-colors"
                         style={{
                           color: isDark ? '#ffffff' : '#1d1d1f',
                         }}

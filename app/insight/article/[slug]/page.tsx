@@ -3,36 +3,18 @@ import { Suspense } from 'react';
 import Header from "@/components/layout/Header"; // Header 컴포넌트 임포트
 import Image from 'next/image'; // Image 컴포넌트 임포트
 import { useTheme } from 'next-themes'; // useTheme 훅 임포트
-import { MDXRemote } from 'next-mdx-remote'; // MDXRemote 임포트
-import { serialize } from 'next-mdx-remote/serialize'; // serialize 임포트
+import { MDXRemote } from 'next-mdx-remote/rsc'; // MDXRemote (RSC) 임포트
 import rehypeHighlight from 'rehype-highlight'; // 코드 하이라이팅 플러그인 임포트
 import rehypeSlug from 'rehype-slug'; // 제목에 id를 붙여주는 플러그인
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'; // 제목에 링크를 붙여주는 플러그인
+import Link from 'next/link'; // Link 컴포넌트 임포트
 import remarkGfm from 'remark-gfm'; // GFM (GitHub Flavored Markdown) 지원
 
 export default async function InsightArticlePage({ params }: { params: { slug: string } }) {
   let post;
-  let mdxSource;
 
   try {
-    // getPostData는 id(slug)를 기반으로 post 데이터를 가져옵니다.
-    // contentHtml 필드를 가지고 있습니다.
     post = await getPostData(params.slug);
-
-    // MDXRemote를 사용하여 마크다운을 렌더링하기 위해 contentHtml을 직렬화합니다.
-    mdxSource = await serialize(post.contentHtml || post.content || '', {
-      mdxOptions: {
-        remarkPlugins: [remarkGfm],
-        rehypePlugins: [
-          rehypeHighlight, // 코드 하이라이팅
-          rehypeSlug, // Heading에 id 자동 추가
-          [rehypeAutolinkHeadings, { behavior: 'wrap' }], // Heading에 링크 자동 추가
-        ],
-      },
-      // scope: post.data, // frontmatter 데이터를 스코프로 전달
-    });
-
-
   } catch (error) {
     console.error('Error loading insight article:', error);
     return (
@@ -47,7 +29,7 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
   const components = {
     // Link 컴포넌트 사용 예시
     a: ({ href, ...props }: any) => {
-      if (href.startsWith('/')) {
+      if (href && href.startsWith('/')) {
         return (
           <Link href={href} {...props} />
         );
@@ -57,18 +39,24 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
     // Image 컴포넌트 사용 예시 (Next.js Image 최적화 활용)
     img: ({ src, alt, ...props }: any) => (
       <Image
-        src={src}
+        src={src || ''}
         alt={alt || ''}
         width={700} // 적절한 width 지정
         height={400} // 적절한 height 지정
-        layout="responsive" // 반응형 레이아웃
+        style={{ width: '100%', height: 'auto' }} // Responsive style
         {...props}
       />
     ),
-    // 커스텀 컴포넌트를 여기에 추가할 수 있습니다.
-    // h1: (props: any) => <h1 className="text-3xl font-bold my-4" {...props} />,
   };
 
+  const mdxOptions = {
+    remarkPlugins: [remarkGfm],
+    rehypePlugins: [
+      rehypeHighlight, // 코드 하이라이팅
+      rehypeSlug, // Heading에 id 자동 추가
+      [rehypeAutolinkHeadings, { behavior: 'wrap' }], // Heading에 링크 자동 추가
+    ],
+  };
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -79,14 +67,13 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
             {post.title}
           </h1>
           {post.thumbnail_url && (
-            <div className="mb-8 rounded-lg overflow-hidden">
+            <div className="mb-8 rounded-lg overflow-hidden relative w-full h-[400px]">
               <Image
                 src={post.thumbnail_url}
                 alt={post.title || '썸네일 이미지'}
-                width={1200} // 썸네일에 맞는 적절한 width
-                height={600} // 썸네일에 맞는 적절한 height
-                layout="responsive"
-                objectFit="cover" // 이미지가 컨테이너를 채우도록
+                fill
+                style={{ objectFit: 'cover' }}
+                priority
               />
             </div>
           )}
@@ -95,8 +82,12 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
             {post.author && <span> by {post.author}</span>}
           </div>
           <div className="prose dark:prose-invert max-w-none">
-            {/* {post.contentHtml && <div dangerouslySetInnerHTML={{ __html: post.contentHtml }} />} */}
-            {mdxSource && <MDXRemote {...mdxSource} components={components} />}
+            {/* Server Component version of MDXRemote */}
+            <MDXRemote
+              source={post.content || ''}
+              components={components}
+              options={{ mdxOptions }}
+            />
           </div>
         </article>
       </main>
@@ -105,25 +96,53 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
 }
 
 // 동적 라우트 세그먼트를 위한 generateStaticParams 함수
-// 이 함수는 빌드 시점에 어떤 slug 값을 미리 렌더링할지 Next.js에 알려줍니다.
 export async function generateStaticParams() {
   try {
     const { getSortedPostsData } = await import('@/lib/posts');
+    const { getAllTrends } = await import('@/lib/trends');
+    const { getAllGuides } = await import('@/lib/guides');
+
     const posts = getSortedPostsData();
+    const trends = getAllTrends();
+    const guides = getAllGuides();
 
     // 빌드 타임 디버깅
-    console.log('📝 Found posts for static generation:', posts.length);
+    console.log('📝 Found posts:', posts.length);
+    console.log('📝 Found trends:', trends.length);
+    console.log('📝 Found guides:', guides.length);
 
-    // 포스트가 없으면 fallback 경로 제공
-    if (posts.length === 0) {
-      console.warn('⚠️ No posts found. Providing fallback params.');
+    let params: { slug: string }[] = [];
+
+    // 1. 일반 포스트 slugs
+    if (posts.length > 0) {
+      posts.forEach((post) => {
+        params.push({ slug: String(post.id) });
+      });
+    }
+
+    // 2. 트렌드 slugs
+    if (trends.length > 0) {
+      trends.forEach((trend) => {
+        // slug가 있으면 사용, 없으면 id 사용? id가 없으므로 slug 사용
+        // 주의: getPostData에서 slug를 어떻게 찾는지 확인 필요
+        params.push({ slug: trend.slug });
+      });
+    }
+
+    // 3. 가이드 slugs
+    if (guides.length > 0) {
+      guides.forEach((guide) => {
+        params.push({ slug: guide.slug });
+      });
+    }
+
+    // 포스트가 하나도 없으면 fallback 경로 제공 (빌드 에러 방지)
+    if (params.length === 0) {
+      console.warn('⚠️ No posts/trends/guides found. Providing fallback params.');
       return [{ slug: 'placeholder' }];
     }
 
-    // 각 포스트의 id를 slug로 사용하여 params 객체 배열을 반환
-    return posts.map((post) => ({
-      slug: String(post.id),
-    }));
+    return params;
   } catch (error) {
     console.error('❌ Error in generateStaticParams:', error);
     // 에러 시에도 fallback 제공

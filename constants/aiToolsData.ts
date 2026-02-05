@@ -1,234 +1,1687 @@
 import { AiTool } from "@/types/content";
 
 /**
- * AI Tools 데이터 목록
- * 
- * @description AI Tools 페이지에 표시될 도구 데이터입니다.
- * 각 항목은 AiTool 타입을 따르며, 카테고리별로 분류되어 있습니다.
- * 대중적이고 널리 사용되는 AI 도구만 포함합니다.
+ * AI Tools 데이터 목록 (100+ items)
+ * Updated: 2026-02-04
  */
 export const AI_TOOLS_DATA: AiTool[] = [
-  // =====================================================================================
-  // 1. LLM (대화형/언어모델) - 대중적인 4개
-  // =====================================================================================
+  // ===========================================
+  // 1. LLM
+  // ===========================================
   {
-    id: "llm-01",
-    name: "ChatGPT",
-    category: "llm",
-    description: "OpenAI가 개발한 가장 대중적인 대화형 AI로, GPT-4o 모델을 기반으로 텍스트 생성, 코딩, 번역, 분석 등 다양한 작업을 수행합니다. 직관적인 인터페이스와 강력한 성능으로 전 세계 수억 명이 사용하고 있습니다.",
-    summary: "대화형 AI의 표준, GPT-4o 탑재",
-    strength: "다양한 작업을 통합적으로 처리하는 범용성과 직관적인 인터페이스",
-    website: "https://chat.openai.com",
-    releaseDate: "2022.11",
-    pricing: "Free / $20 mo",
-    tags: ["Chat", "Coding", "Writing"],
-    thumbnail: "https://logo.clearbit.com/openai.com",
-    company: "OpenAI",
-    rating: 0,
-    ratingCount: 0,
-    userRatings: [],
-    comments: []
-  },
-  {
-    id: "llm-02", name: "Claude 3", category: "llm",
-    description: "Anthropic이 개발한 인간다운 대화형 AI로, 특히 긴 문서 분석과 정확한 문맥 이해에 뛰어납니다. 안전성과 정직성을 중시하는 설계 철학으로 신뢰할 수 있는 AI 어시스턴트 역할을 합니다.",
-    summary: "가장 인간다운 문맥 이해력을 가진 AI",
-    strength: "긴 문서 분석과 정확한 문맥 이해, 안전성과 신뢰성",
-    website: "https://claude.ai", releaseDate: "2024.03", pricing: "Free / $20 mo", tags: ["Writing", "Analysis", "Long-context"],
-    thumbnail: "https://logo.clearbit.com/anthropic.com",
-    company: "Anthropic",
+    id: "llm-chatgpt", name: "ChatGPT", category: "llm",
+    summary: "AI의 표준, 가장 무난하고 강력함",
+    description: "AI의 표준, 가장 무난하고 강력함",
+    website: "https://chatgpt.com",
+    thumbnail: "https://logo.clearbit.com/chatgpt.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "llm-03", name: "Gemini", category: "llm",
-    description: "Google이 개발한 멀티모달 AI 모델로, 텍스트, 이미지, 음성을 동시에 처리할 수 있습니다. Gmail, Google Docs, YouTube 등 구글 서비스와 완벽하게 통합되어 생산성을 극대화합니다.",
-    summary: "구글 생태계와 완벽하게 연동되는 멀티모달",
-    strength: "텍스트, 이미지, 음성을 동시에 처리하는 멀티모달 능력과 구글 서비스 통합",
-    website: "https://gemini.google.com", releaseDate: "2023.12", pricing: "Free / $20 mo", tags: ["Multimodal", "Google"],
+    id: "llm-claude", name: "Claude", category: "llm",
+    summary: "글쓰기와 코딩 능력이 인간에 가장 가까움",
+    description: "글쓰기와 코딩 능력이 인간에 가장 가까움",
+    website: "https://claude.ai",
+    thumbnail: "https://logo.clearbit.com/claude.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "llm-gemini", name: "Gemini", category: "llm",
+    summary: "구글 서비스 연동 최강, 긴 글 요약 잘함",
+    description: "구글 서비스 연동 최강, 긴 글 요약 잘함",
+    website: "https://gemini.google.com",
     thumbnail: "https://logo.clearbit.com/google.com",
-    company: "Google",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
-  { id: "llm-04", name: "Perplexity", category: "llm", summary: "실시간 검색 기반 답변 엔진.", description: "실시간 웹 검색과 AI 답변을 결합한 혁신적인 검색 엔진입니다. 모든 답변에 출처를 명시하여 신뢰성을 보장하며, 최신 정보를 빠르게 찾아 요약해줍니다.", strength: "실시간 검색과 출처 명시로 신뢰할 수 있는 최신 정보 제공", releaseDate: "2022.08", website: "https://perplexity.ai", pricing: "Free / $20 mo", tags: ["Search", "Citations"], thumbnail: "https://logo.clearbit.com/perplexity.ai", company: "Perplexity", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "llm-05", name: "Grok", category: "llm", summary: "xAI의 위트 있는 AI.", description: "엘론 머스크의 xAI가 개발한 AI로, X(트위터)의 실시간 데이터에 접근할 수 있어 최신 트렌드와 뉴스를 반영합니다. 유머러스하고 솔직한 답변 스타일이 특징입니다.", strength: "X(트위터) 실시간 데이터 접근과 유머러스한 답변 스타일", releaseDate: "2023.11", website: "https://x.ai", pricing: "Paid (X Premium)", tags: ["Real-time", "Humor"], thumbnail: "https://logo.clearbit.com/x.ai", company: "xAI", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-
-  // =====================================================================================
-  // 2. Image Generation (이미지 생성) - 대중적인 7개
-  // =====================================================================================
   {
-    id: "img-gen-01", name: "Midjourney", category: "image-generation",
-    summary: "가장 예술적인 이미지 생성기.",
-    description: "Discord 봇 형태로 동작하는 이미지 생성 AI로, 현존하는 AI 중 가장 뛰어난 예술적 화질과 창의성을 자랑합니다. 미술, 일러스트, 컨셉 아트 제작에 최적화되어 있습니다.",
-    strength: "현존 최고 수준의 예술적 화질과 창의적인 이미지 생성",
-    releaseDate: "2022.07", website: "https://midjourney.com", pricing: "$10~$120 mo", tags: ["High Quality", "Art"],
-    thumbnail: "https://logo.clearbit.com/midjourney.com",
-    company: "Midjourney",
-    rating: 0, ratingCount: 0, userRatings: [], comments: []
-  },
-  { id: "img-gen-02", name: "DALL-E 3", category: "image-generation", summary: "ChatGPT 안에서 그리는 그림.", description: "OpenAI가 개발한 이미지 생성 AI로, ChatGPT Plus 구독 시 사용할 수 있습니다. 프롬프트를 정확하게 이해하며 이미지 내 텍스트 렌더링 능력이 뛰어나 로고나 포스터 제작에 적합합니다.", strength: "프롬프트 정확한 이해와 이미지 내 텍스트 렌더링 능력", releaseDate: "2023.10", website: "https://openai.com/dall-e-3", pricing: "Included in ChatGPT Plus", tags: ["Simple", "Text Rendering"], thumbnail: "https://logo.clearbit.com/openai.com", company: "OpenAI", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "img-gen-03", name: "Stable Diffusion", category: "image-generation", summary: "로컬 설치 가능한 오픈소스.", description: "Stability AI가 개발한 오픈소스 이미지 생성 모델로, PC에 직접 설치하여 무료로 무제한 이미지를 생성할 수 있습니다. ControlNet, LoRA 등 다양한 확장 기능을 지원합니다.", strength: "로컬 설치 가능한 오픈소스와 무제한 무료 생성, 확장 기능 풍부", releaseDate: "2022.08", website: "https://stability.ai", pricing: "Free (Open Source)", tags: ["Local", "ControlNet"], thumbnail: "https://logo.clearbit.com/stability.ai", company: "Stability AI", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "img-gen-04", name: "Leonardo.ai", category: "image-generation", summary: "게임 에셋과 아트에 특화.", description: "게임 개발자와 아티스트를 위한 이미지 생성 플랫폼으로, 다양한 커스텀 모델을 제공합니다. 게임 아이템, 캐릭터, 배경 등 게임 에셋 제작에 최적화되어 있으며 직관적인 UI를 제공합니다.", strength: "게임 에셋 제작 최적화와 직관적인 UI, 다양한 커스텀 모델", releaseDate: "2022.12", website: "https://leonardo.ai", pricing: "Free / Paid", tags: ["Game Asset", "Easy UI"], thumbnail: "https://logo.clearbit.com/leonardo.ai", company: "Leonardo.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "img-gen-05", name: "Adobe Firefly", category: "image-generation", summary: "상업적 사용이 안전한 AI.", description: "Adobe가 개발한 상업적 이용이 안전한 이미지 생성 AI로, Adobe Stock 이미지로만 학습되어 저작권 문제가 없습니다. Photoshop, Illustrator 등 어도비 제품군과 완벽하게 통합됩니다.", strength: "상업적 사용 안전성과 어도비 제품군 완벽 통합", releaseDate: "2023.03", website: "https://firefly.adobe.com", pricing: "Free / Credits", tags: ["Commercial", "Photoshop"], thumbnail: "https://logo.clearbit.com/adobe.com", company: "Adobe", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "img-gen-06", name: "Ideogram", category: "image-generation", summary: "텍스트 타이포그래피 최강자.", description: "이미지 내에 정확한 글자를 삽입하는 능력이 매우 뛰어납니다.", strength: "이미지 내 정확한 텍스트 삽입 능력", releaseDate: "2023.08", website: "https://ideogram.ai", pricing: "Free / Paid", tags: ["Typography", "Logo"], thumbnail: "https://logo.clearbit.com/ideogram.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "img-gen-07", name: "Bing Image Creator", category: "image-generation", summary: "DALL-E 3 기반 무료 생성기.", description: "MS 계정만 있으면 무료로 고품질 이미지를 생성할 수 있습니다.", strength: "MS 계정만으로 무료 고품질 이미지 생성", website: "https://bing.com/images/create", releaseDate: "2023.03", pricing: "Free", tags: ["Microsoft", "Free"], thumbnail: "https://logo.clearbit.com/bing.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-
-  // =====================================================================================
-  // 3. Image Editing (이미지 편집) - 대중적인 5개
-  // =====================================================================================
-  { id: "img-edit-01", name: "Clipdrop", category: "image-editing", summary: "이미지 편집 및 생성 도구 모음.", description: "배경 제거, 조명 조절 등 다양한 AI 편집 도구를 제공합니다.", strength: "다양한 AI 편집 도구를 한곳에 모은 올인원 솔루션", website: "https://clipdrop.co", releaseDate: "2020.07", pricing: "Free / Paid", tags: ["Editing", "Tools"], thumbnail: "https://logo.clearbit.com/clipdrop.co", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "img-edit-02", name: "Getimg.ai", category: "image-editing", summary: "올인원 이미지 생성 및 편집.", description: "생성, 인페인팅, 아웃페인팅 등 다양한 기능을 한곳에서 제공합니다.", strength: "이미지 생성부터 편집까지 모든 기능을 통합 제공", website: "https://getimg.ai", releaseDate: "2022", pricing: "Free / Paid", tags: ["Editor", "Suite"], thumbnail: "https://logo.clearbit.com/getimg.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "img-edit-03", name: "Remove.bg", category: "image-editing", summary: "AI 배경 제거 전문 도구.", description: "한 번의 클릭으로 이미지 배경을 완벽하게 제거하는 가장 인기 있는 도구입니다.", strength: "한 번의 클릭으로 완벽한 배경 제거, 가장 정확한 결과", website: "https://remove.bg", releaseDate: "2018", pricing: "Free / Paid", tags: ["Background", "Removal"], thumbnail: "https://logo.clearbit.com/remove.bg", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "img-edit-04", name: "Photopea", category: "image-editing", summary: "웹 기반 무료 포토샵 대체.", description: "브라우저에서 실행되는 강력한 이미지 편집 도구로, Photoshop과 유사한 기능을 무료로 제공합니다.", strength: "브라우저에서 실행되는 무료 포토샵 대체 도구", website: "https://photopea.com", releaseDate: "2013", pricing: "Free", tags: ["Web", "Photoshop"], thumbnail: "https://logo.clearbit.com/photopea.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "img-edit-05", name: "Canva Photo Editor", category: "image-editing", summary: "캔바의 AI 이미지 편집 기능.", description: "Canva 플랫폼 내에서 배경 제거, 자동 향상, 필터 등 다양한 AI 편집 기능을 제공합니다.", strength: "Canva 플랫폼과 통합된 간편한 AI 편집 기능", website: "https://canva.com", releaseDate: "2023", pricing: "Free / Paid", tags: ["Canva", "Easy"], thumbnail: "https://logo.clearbit.com/canva.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-
-  // =====================================================================================
-  // 4. Video Generation (영상 생성) - 대중적인 5개
-  // =====================================================================================
-  {
-    id: "vid-gen-01", name: "Runway", category: "video-generation",
-    summary: "영상 생성 AI의 선두주자.",
-    description: "텍스트 투 비디오, 모션 브러쉬 등 다양한 제어 기능을 제공합니다.",
-    strength: "텍스트 투 비디오와 모션 브러쉬 등 정밀한 제어 기능",
-    releaseDate: "2023.06", website: "https://runwayml.com", pricing: "Free Trial / Paid", tags: ["Gen-2", "Motion Brush"],
-    thumbnail: "https://logo.clearbit.com/runwayml.com",
-    company: "Runway",
-    rating: 0, ratingCount: 0, userRatings: [], comments: []
-  },
-  { id: "vid-gen-02", name: "Pika", category: "video-generation", summary: "애니메이션에 강한 생성기.", description: "누구나 쉽게 사용하는 영상 생성.", strength: "애니메이션 생성에 특화된 쉬운 사용성", website: "https://pika.art", releaseDate: "2023.12", pricing: "Free / Paid", tags: ["Animation", "Easy"], thumbnail: "https://logo.clearbit.com/pika.art", company: "Pika", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "vid-gen-03", name: "Sora", category: "video-generation", summary: "OpenAI의 혁명적 비디오 모델.", description: "최대 1분 길이의 고해상도 영상을 물리 법칙에 맞게 생성합니다. (현재 제한적 공개)", strength: "물리 법칙을 따르는 최대 1분 고해상도 영상 생성", releaseDate: "2024.02", pricing: "Unreleased", tags: ["Realistic", "OpenAI"], thumbnail: "https://logo.clearbit.com/openai.com", company: "OpenAI", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "vid-gen-04", name: "Luma Dream Machine", category: "video-generation", summary: "고퀄리티 무료 영상 생성.", description: "빠른 생성 속도와 높은 퀄리티를 무료로 체험할 수 있습니다.", strength: "빠른 생성 속도와 높은 퀄리티를 무료로 제공", releaseDate: "2024.06", website: "https://lumalabs.ai", pricing: "Free / Paid", tags: ["High Quality", "Fast"], thumbnail: "https://logo.clearbit.com/lumalabs.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "vid-gen-05", name: "Kling", category: "video-generation", summary: "중국의 고성능 비디오 모델.", description: "Sora에 버금가는 긴 영상 생성 능력과 자연스러운 움직임을 보여줍니다.", strength: "긴 영상 생성 능력과 자연스러운 움직임 표현", releaseDate: "2024.06", website: "https://kling.kuaishou.com", pricing: "Free / Paid", tags: ["Long Video", "Realistic"], thumbnail: "https://logo.clearbit.com/kuaishou.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-
-  // =====================================================================================
-  // 5. Video Editing (영상 편집) - 대중적인 5개
-  // =====================================================================================
-  { id: "vid-edit-01", name: "Veed.io", category: "video-editing", summary: "AI 기반 온라인 영상 편집기.", description: "자동 자막, 컷 편집 등 AI 기능을 갖춘 웹 기반 에디터입니다.", strength: "자동 자막 생성과 AI 기반 편집 기능이 강점인 웹 에디터", website: "https://veed.io", releaseDate: "2018", pricing: "Free / Paid", tags: ["Editing", "Subtitles"], thumbnail: "https://logo.clearbit.com/veed.io", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "vid-edit-02", name: "InVideo", category: "video-editing", summary: "텍스트로 비디오 만들기.", description: "스크립트만 입력하면 스톡 영상을 조합해 비디오를 완성해줍니다.", strength: "스크립트만으로 스톡 영상을 자동 조합하여 비디오 생성", website: "https://invideo.io", releaseDate: "2017", pricing: "Free / Paid", tags: ["Marketing", "Text-to-Video"], thumbnail: "https://logo.clearbit.com/invideo.io", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "vid-edit-03", name: "CapCut", category: "video-editing", summary: "바이트댄스의 무료 영상 편집기.", description: "모바일과 데스크톱 모두 지원하는 강력한 무료 영상 편집 도구로, AI 기능이 풍부합니다.", strength: "모바일과 데스크톱 모두 지원하는 무료 AI 편집 도구", website: "https://capcut.com", releaseDate: "2020", pricing: "Free", tags: ["Free", "Mobile"], thumbnail: "https://logo.clearbit.com/capcut.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "vid-edit-04", name: "Descript", category: "video-editing", summary: "오디오/영상 편집을 문서처럼.", description: "텍스트를 수정하면 영상도 수정되는 혁신적인 편집 방식입니다.", strength: "텍스트 수정으로 영상을 편집하는 혁신적인 방식", website: "https://descript.com", releaseDate: "2017.12", pricing: "Free / Paid", tags: ["Text-based", "Editing"], thumbnail: "https://logo.clearbit.com/descript.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "vid-edit-05", name: "Fliki", category: "video-editing", summary: "텍스트를 비디오와 음성으로.", description: "블로그 글이나 트윗을 영상으로 빠르게 변환해주는 툴입니다.", strength: "블로그 글이나 트윗을 영상으로 빠르게 변환", website: "https://fliki.ai", releaseDate: "2022", pricing: "Free / Paid", tags: ["Blog-to-Video", "Social"], thumbnail: "https://logo.clearbit.com/fliki.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-
-  // =====================================================================================
-  // 6. Voice TTS (음성 변환) - 대중적인 5개
-  // =====================================================================================
-  {
-    id: "voice-tts-01", name: "ElevenLabs", category: "voice-tts",
-    summary: "가장 자연스러운 TTS.",
-    description: "감정 표현이 가능한 최고의 텍스트 음성 변환 AI입니다.",
-    strength: "감정 표현이 가능한 가장 자연스러운 음성 생성",
-    website: "https://elevenlabs.io", releaseDate: "2023.01", pricing: "Free / Paid", tags: ["TTS", "Voice Cloning"],
-    thumbnail: "https://logo.clearbit.com/elevenlabs.io",
-    rating: 0, ratingCount: 0, userRatings: [], comments: []
-  },
-  { id: "voice-tts-02", name: "Murf AI", category: "voice-tts", summary: "스튜디오 품질의 AI 보이스오버.", description: "영상 내레이션 및 프레젠테이션용 보이스 생성.", strength: "스튜디오 품질의 전문적인 보이스오버 생성", website: "https://murf.ai", releaseDate: "2020.10", pricing: "Free / Paid", tags: ["Voiceover", "Studio"], thumbnail: "https://logo.clearbit.com/murf.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "voice-tts-03", name: "PlayHT", category: "voice-tts", summary: "초현실적인 AI 음성 생성기.", description: "팟캐스트 및 오디오북 제작에 최적화되어 있습니다.", strength: "팟캐스트와 오디오북 제작에 최적화된 초현실적 음성", website: "https://play.ht", releaseDate: "2020.08", pricing: "Free / Paid", tags: ["Podcast", "Ultra Realistic"], thumbnail: "https://logo.clearbit.com/play.ht", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "voice-tts-04", name: "Lovo", category: "voice-tts", summary: "감정 표현이 풍부한 AI 성우.", description: "다양한 감정과 스타일의 목소리를 제공합니다.", strength: "다양한 감정과 스타일을 표현하는 AI 성우", website: "https://lovo.ai", releaseDate: "2019.11", pricing: "Free / Paid", tags: ["Genny", "Emotion"], thumbnail: "https://logo.clearbit.com/lovo.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "voice-tts-05", name: "Speechify", category: "voice-tts", summary: "텍스트를 오디오로 읽어주는 도구.", description: "문서, 웹페이지를 듣기 편한 음성으로 변환합니다.", strength: "문서와 웹페이지를 듣기 편한 음성으로 변환", website: "https://speechify.com", releaseDate: "2017.01", pricing: "Free / Paid", tags: ["Productivity", "Reading"], thumbnail: "https://logo.clearbit.com/speechify.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-
-  // =====================================================================================
-  // 7. Music (음악 생성) - 대중적인 5개
-  // =====================================================================================
-  { id: "music-01", name: "Suno", category: "music", summary: "AI 작곡 혁명.", description: "가사와 스타일만 입력하면 노래를 작곡하고 불러줍니다.", strength: "가사와 스타일만으로 완성된 노래를 작곡하고 불러주는 능력", website: "https://suno.com", releaseDate: "2023.12", pricing: "Free / Paid", tags: ["Music", "Song"], thumbnail: "https://logo.clearbit.com/suno.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "music-02", name: "Udio", category: "music", summary: "고음질 음악 생성.", description: "음질이 뛰어나고 음악적 구조가 탄탄한 노래를 생성합니다.", strength: "뛰어난 음질과 탄탄한 음악적 구조의 노래 생성", website: "https://udio.com", releaseDate: "2024.04", pricing: "Free / Paid", tags: ["High Fidelity", "Music"], thumbnail: "https://logo.clearbit.com/udio.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "music-03", name: "Soundraw", category: "music", summary: "저작권 없는 AI 음악 생성.", description: "영상 배경음악으로 쓰기 좋은 음악을 커스터마이징합니다.", strength: "저작권 없는 영상 배경음악 커스터마이징", website: "https://soundraw.io", releaseDate: "2020", pricing: "Free / Paid", tags: ["BGM", "Creator"], thumbnail: "https://logo.clearbit.com/soundraw.io", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "music-04", name: "AIVA", category: "music", summary: "클래식 및 영화 음악 작곡.", description: "감동적인 오케스트라 및 영화 음악 스타일에 강점이 있습니다.", strength: "오케스트라와 영화 음악 스타일의 전문 작곡", website: "https://aiva.ai", releaseDate: "2016", pricing: "Free / Paid", tags: ["Composer", "Orchestra"], thumbnail: "https://logo.clearbit.com/aiva.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "music-05", name: "Boomy", category: "music", summary: "누구나 쉽게 노래 만들기.", description: "몇 번의 클릭으로 노래를 만들고 스트리밍 사이트에 배포까지 가능합니다.", strength: "몇 번의 클릭으로 노래 제작부터 배포까지 원스톱", website: "https://boomy.com", releaseDate: "2019", pricing: "Free / Paid", tags: ["Easy", "Distribution"], thumbnail: "https://logo.clearbit.com/boomy.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-
-  // =====================================================================================
-  // 8. Automation (자동화) - 대중적인 5개
-  // =====================================================================================
-  {
-    id: "auto-01", name: "n8n", category: "automation",
-    description: "워크플로우 자동화를 위한 공정한 코드 기반 툴.",
-    summary: "복잡한 업무 자동화도 노코드로 해결",
-    strength: "복잡한 워크플로우를 노코드로 자동화하는 강력한 도구",
-    website: "https://n8n.io", releaseDate: "2019.10", pricing: "Free / Enterprise", tags: ["Workflow", "No-code"],
-    thumbnail: "https://logo.clearbit.com/n8n.io",
-    rating: 0, ratingCount: 0, userRatings: [], comments: []
-  },
-  { id: "auto-02", name: "Make", category: "automation", summary: "시각적 자동화 도구.", description: "직관적인 비주얼 오토메이션 플랫폼.", strength: "직관적인 비주얼 인터페이스로 복잡한 자동화 구축", website: "https://make.com", releaseDate: "2016", pricing: "Free / Paid", tags: ["Workflow", "Integration"], thumbnail: "https://logo.clearbit.com/make.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "auto-03", name: "Zapier", category: "automation", summary: "가장 많은 앱을 연동하는 자동화.", description: "5000개 이상의 앱을 손쉽게 연결.", strength: "5000개 이상의 앱을 연결하는 가장 넓은 통합 범위", website: "https://zapier.com", releaseDate: "2011.08", pricing: "Free / Paid", tags: ["Integration", "Easy"], thumbnail: "https://logo.clearbit.com/zapier.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "auto-04", name: "IFTTT", category: "automation", summary: "간단한 조건문 자동화.", description: "일상 생활 자동화에 최적화된 서비스.", strength: "간단한 조건문으로 일상 생활 자동화에 최적화", website: "https://ifttt.com", releaseDate: "2010.12", pricing: "Free / Paid", tags: ["IoT", "Personal"], thumbnail: "https://logo.clearbit.com/ifttt.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "auto-05", name: "Bardeen", category: "automation", summary: "브라우저 기반 AI 자동화.", description: "웹 브라우저에서 반복 작업을 대신해주는 AI.", strength: "브라우저에서 반복 작업을 자동화하는 AI 어시스턴트", website: "https://bardeen.ai", releaseDate: "2020.05", pricing: "Free / Paid", tags: ["Browser", "Scraping"], thumbnail: "https://logo.clearbit.com/bardeen.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-
-  // =====================================================================================
-  // 9. Search (검색) - 대중적인 5개
-  // =====================================================================================
-  {
-    id: "search-01", name: "Perplexity", category: "search",
-    description: "답변과 함께 출처를 제공하는 AI 검색.",
-    summary: "신뢰할 수 있는 대화형 검색 엔진",
-    strength: "실시간 검색과 출처 명시로 신뢰할 수 있는 정보 제공",
-    website: "https://perplexity.ai", releaseDate: "2022.08", pricing: "Free / $20", tags: ["Search", "Citations"],
+    id: "llm-perplexity", name: "Perplexity", category: "llm",
+    summary: "검색과 답변을 동시에, 출처를 찾아줌",
+    description: "검색과 답변을 동시에, 출처를 찾아줌",
+    website: "https://perplexity.ai",
     thumbnail: "https://logo.clearbit.com/perplexity.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
-  { id: "search-02", name: "Bing Chat", category: "search", summary: "GPT-4 기반 마이크로소프트 검색.", description: "웹 검색과 결합된 강력한 생성형 답변.", strength: "웹 검색과 결합된 강력한 생성형 답변 제공", website: "https://bing.com/chat", releaseDate: "2023.02", pricing: "Free", tags: ["Microsoft", "GPT-4"], thumbnail: "https://logo.clearbit.com/bing.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "search-03", name: "You.com", category: "search", summary: "개인화된 AI 검색 어시스턴트.", description: "다양한 모드를 제공하는 사생활 보호 검색.", strength: "개인화된 검색과 사생활 보호 기능", website: "https://you.com", releaseDate: "2021.11", pricing: "Free / Paid", tags: ["Private", "Assistant"], thumbnail: "https://logo.clearbit.com/you.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "search-04", name: "Arc Search", category: "search", summary: "브라우저가 대신 검색.", description: "여러 페이지를 읽고 요약해주는 모바일 검색.", strength: "여러 페이지를 읽고 요약해주는 스마트 검색", website: "https://arc.net", releaseDate: "2024.01", pricing: "Free", tags: ["Browser", "Summary"], thumbnail: "https://logo.clearbit.com/arc.net", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "search-05", name: "Phind", category: "search", summary: "개발자를 위한 AI 검색.", description: "코딩 질문에 최적화된 답변 제공.", strength: "개발자와 코딩 질문에 특화된 검색 엔진", website: "https://phind.com", releaseDate: "2023", pricing: "Free / Paid", tags: ["Developer", "Coding"], thumbnail: "https://logo.clearbit.com/phind.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "search-06", name: "Google Anti Gravity", category: "search", summary: "구글의 실험적 검색 AI.", description: "Google이 개발한 혁신적인 검색 기술로, 중력처럼 정보를 끌어당기는 방식으로 관련성 높은 결과를 제공합니다.", strength: "중력처럼 정보를 끌어당기는 혁신적인 검색 기술", website: "https://google.com", releaseDate: "2024", pricing: "Free", tags: ["Google", "Experimental", "Search"], thumbnail: "https://logo.clearbit.com/google.com", company: "Google", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  {
+    id: "llm-copilot", name: "Microsoft Copilot", category: "llm",
+    summary: "엑셀, PPT 등 오피스 업무에 최적화",
+    description: "엑셀, PPT 등 오피스 업무에 최적화",
+    website: "https://copilot.microsoft.com",
+    thumbnail: "https://logo.clearbit.com/microsoft.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "llm-grok", name: "Grok", category: "llm",
+    summary: "트위터 정보 실시간 반영, 솔직한 답변",
+    description: "트위터 정보 실시간 반영, 솔직한 답변",
+    website: "https://x.ai",
+    thumbnail: "https://logo.clearbit.com/x.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "llm-llama", name: "Llama", category: "llm",
+    summary: "내 컴퓨터에 설치해서 쓰는 무료 AI 최강자",
+    description: "내 컴퓨터에 설치해서 쓰는 무료 AI 최강자",
+    website: "https://llama.meta.com",
+    thumbnail: "https://logo.clearbit.com/meta.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "llm-mistral", name: "Mistral", category: "llm",
+    summary: "가볍고 빠름, 유럽에서 만든 고성능 AI",
+    description: "가볍고 빠름, 유럽에서 만든 고성능 AI",
+    website: "https://mistral.ai",
+    thumbnail: "https://logo.clearbit.com/mistral.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "llm-deepseek", name: "DeepSeek", category: "llm",
+    summary: "개발자 사이에서 핫한 가성비 코딩 AI",
+    description: "개발자 사이에서 핫한 가성비 코딩 AI",
+    website: "https://deepseek.com",
+    thumbnail: "https://logo.clearbit.com/deepseek.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "llm-notebooklm", name: "NotebookLM", category: "llm",
+    summary: "내 자료만 학습해서 알려주는 똑똑한 비서",
+    description: "내 자료만 학습해서 알려주는 똑똑한 비서",
+    website: "https://notebooklm.google.com",
+    thumbnail: "https://logo.clearbit.com/google.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
 
-  // =====================================================================================
-  // 10. Agent (AI 에이전트) - 대중적인 5개
-  // =====================================================================================
-  { id: "agent-01", name: "AutoGPT", category: "agent", summary: "자율 AI 에이전트의 시초.", description: "목표를 설정하면 스스로 계획을 세우고 실행하는 오픈소스 에이전트.", strength: "목표 설정만으로 자율적으로 계획 수립 및 실행", website: "https://news.agpt.co", releaseDate: "2023.03", pricing: "Open Source", tags: ["Autonomous", "Open Source"], thumbnail: "https://logo.clearbit.com/github.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "agent-02", name: "AgentGPT", category: "agent", summary: "웹에서 실행하는 자율 에이전트.", description: "브라우저에서 바로 목표를 입력하고 실행 과정을 지켜볼 수 있습니다.", strength: "브라우저에서 바로 실행 가능한 쉬운 자율 에이전트", website: "https://agentgpt.reworkd.ai", releaseDate: "2023.04", pricing: "Free / Paid", tags: ["Web", "Easy"], thumbnail: "https://logo.clearbit.com/reworkd.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "agent-03", name: "Character.ai", category: "agent", summary: "페르소나 챗봇.", description: "다양한 캐릭터와 대화할 수 있는 엔터테인먼트 에이전트.", strength: "다양한 캐릭터와의 대화형 엔터테인먼트 경험", website: "https://character.ai", releaseDate: "2022", pricing: "Free / Paid", tags: ["Chat", "Fun"], thumbnail: "https://logo.clearbit.com/character.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "agent-04", name: "BabyAGI", category: "agent", summary: "간결한 작업 관리 에이전트.", description: "작업을 생성하고 우선순위를 정해 실행하는 파이썬 스크립트.", strength: "작업 생성과 우선순위 자동 관리", website: "https://github.com/yoheinakajima/babyagi", releaseDate: "2023.03", pricing: "Open Source", tags: ["Task", "Python"], thumbnail: "https://logo.clearbit.com/github.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "agent-05", name: "Lindy", category: "agent", summary: "모든 업무를 처리하는 AI 비서.", description: "이메일 관리, 일정 예약 등 개인 비서 역할을 수행합니다.", strength: "이메일 관리와 일정 예약 등 종합적인 비서 기능", website: "https://lindy.ai", releaseDate: "2023", pricing: "Paid", tags: ["Assistant", "Task"], thumbnail: "https://logo.clearbit.com/lindy.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  // ===========================================
+  // 2. Image Generation
+  // ===========================================
+  {
+    id: "img-midjourney", name: "Midjourney", category: "image-generation",
+    summary: "현존 최고의 예술적 화질 (동물도감용)",
+    description: "현존 최고의 예술적 화질 (동물도감용)",
+    website: "https://midjourney.com",
+    thumbnail: "https://logo.clearbit.com/midjourney.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "img-stablediffusion", name: "Stable Diffusion", category: "image-generation",
+    summary: "내 맘대로 설치/개조 가능한 끝판왕",
+    description: "내 맘대로 설치/개조 가능한 끝판왕",
+    website: "https://stability.ai",
+    thumbnail: "https://logo.clearbit.com/stability.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "img-dalle3", name: "DALL-E 3", category: "image-generation",
+    summary: "챗지피티 안에서 말로 편하게 그림",
+    description: "챗지피티 안에서 말로 편하게 그림",
+    website: "https://openai.com/dall-e-3",
+    thumbnail: "https://logo.clearbit.com/openai.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "img-flux", name: "Flux", category: "image-generation",
+    summary: "최근 미드저니를 위협하는 신흥 강자",
+    description: "최근 미드저니를 위협하는 신흥 강자",
+    website: "https://blackforestlabs.ai",
+    thumbnail: "https://logo.clearbit.com/blackforestlabs.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "img-ideogram", name: "Ideogram", category: "image-generation",
+    summary: "그림 속에 '글자(텍스트)'를 완벽하게 넣음",
+    description: "그림 속에 '글자(텍스트)'를 완벽하게 넣음",
+    website: "https://ideogram.ai",
+    thumbnail: "https://logo.clearbit.com/ideogram.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "img-leonardo", name: "Leonardo.ai", category: "image-generation",
+    summary: "무료 크레딧 많이 줌, 웹에서 쓰기 편함",
+    description: "무료 크레딧 많이 줌, 웹에서 쓰기 편함",
+    website: "https://leonardo.ai",
+    thumbnail: "https://logo.clearbit.com/leonardo.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "img-firefly", name: "Adobe Firefly", category: "image-generation",
+    summary: "포토샵 저작권 걱정 없는 안전한 생성",
+    description: "포토샵 저작권 걱정 없는 안전한 생성",
+    website: "https://firefly.adobe.com",
+    thumbnail: "https://logo.clearbit.com/adobe.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "img-krea", name: "Krea AI", category: "image-generation",
+    summary: "내가 대충 그린 낙서를 실시간으로 고퀄 변환",
+    description: "내가 대충 그린 낙서를 실시간으로 고퀄 변환",
+    website: "https://krea.ai",
+    thumbnail: "https://logo.clearbit.com/krea.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "img-civitai", name: "Civitai", category: "image-generation",
+    summary: "다양한 그림체(모델)를 공유하는 거대 커뮤니티",
+    description: "다양한 그림체(모델)를 공유하는 거대 커뮤니티",
+    website: "https://civitai.com",
+    thumbnail: "https://logo.clearbit.com/civitai.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "img-runway", name: "Runway", category: "image-generation",
+    summary: "이미지뿐만 아니라 영상 생성의 선두주자",
+    description: "이미지뿐만 아니라 영상 생성의 선두주자",
+    website: "https://runwayml.com", // Fixed shady link from user input
+    thumbnail: "https://logo.clearbit.com/runwayml.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
 
-  // =====================================================================================
-  // 11. Coding (코딩 보조) - 대중적인 5개
-  // =====================================================================================
-  { id: "code-01", name: "GitHub Copilot", category: "coding", summary: "AI 코딩 파트너.", description: "가장 널리 쓰이는 코드 자동 완성 및 제안 도구.", strength: "가장 널리 사용되는 코드 자동 완성 및 제안", website: "https://github.com/features/copilot", releaseDate: "2021", pricing: "Paid", tags: ["Completion", "Microsoft"], thumbnail: "https://logo.clearbit.com/github.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "code-02", name: "Cursor", category: "coding", summary: "AI 네이티브 코드 에디터.", description: "VS Code 기반으로 AI 기능이 내장된 강력한 에디터.", strength: "VS Code 기반의 AI 네이티브 통합 에디터", website: "https://cursor.sh", releaseDate: "2023", pricing: "Free / Paid", tags: ["Editor", "Chat"], thumbnail: "https://logo.clearbit.com/cursor.sh", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "code-03", name: "Tabnine", category: "coding", summary: "프라이버시 중심 코드 완성.", description: "개인정보 보호를 중시하는 AI 코딩 어시스턴트.", strength: "개인정보 보호를 중시하는 안전한 코드 완성", website: "https://tabnine.com", releaseDate: "2018", pricing: "Free / Paid", tags: ["Privacy", "Completion"], thumbnail: "https://logo.clearbit.com/tabnine.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "code-04", name: "Codeium", category: "coding", summary: "빠르고 무료인 코딩 도구.", description: "개인 개발자에게 무료로 제공되는 고성능 자동 완성.", strength: "개인 개발자에게 무료로 제공되는 고성능 자동 완성", website: "https://codeium.com", releaseDate: "2022", pricing: "Free / Enterprise", tags: ["Free", "Fast"], thumbnail: "https://logo.clearbit.com/codeium.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "code-05", name: "Claude Code", category: "coding", summary: "Anthropic의 코딩 특화 AI.", description: "Claude 모델을 기반으로 한 코딩에 최적화된 AI 어시스턴트로, 코드 생성, 리뷰, 디버깅 등 개발 작업을 효율적으로 지원합니다.", strength: "코드 생성, 리뷰, 디버깅을 통합 지원하는 코딩 특화 AI", website: "https://claude.ai", releaseDate: "2024", pricing: "Free / Paid", tags: ["Coding", "Anthropic", "Code Review"], thumbnail: "https://logo.clearbit.com/anthropic.com", company: "Anthropic", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  // ===========================================
+  // 3. Image Editing
+  // ===========================================
+  {
+    id: "edit-magnific", name: "Magnific AI", category: "image-editing",
+    summary: "흐릿한 사진을 초고화질로 업스케일링 (마법 수준)",
+    description: "흐릿한 사진을 초고화질로 업스케일링 (마법 수준)",
+    website: "https://magnific.ai",
+    thumbnail: "https://logo.clearbit.com/magnific.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edit-canva", name: "Canva", category: "image-editing",
+    summary: "매직 이레이저 등 AI 기능이 탑재된 국민 디자인 툴",
+    description: "매직 이레이저 등 AI 기능이 탑재된 국민 디자인 툴",
+    website: "https://canva.com",
+    thumbnail: "https://logo.clearbit.com/canva.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edit-photoroom", name: "Photoroom", category: "image-editing",
+    summary: "쇼핑몰 상품 사진 배경 제거나 합성에 최적화",
+    description: "쇼핑몰 상품 사진 배경 제거나 합성에 최적화",
+    website: "https://photoroom.com",
+    thumbnail: "https://logo.clearbit.com/photoroom.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edit-clipdrop", name: "Clipdrop", category: "image-editing",
+    summary: "조명 변경, 배경 제거 등 이미지 조작 종합 선물세트",
+    description: "조명 변경, 배경 제거 등 이미지 조작 종합 선물세트",
+    website: "https://clipdrop.co",
+    thumbnail: "https://logo.clearbit.com/clipdrop.co",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edit-topaz", name: "Topaz Photo AI", category: "image-editing",
+    summary: "노이즈 제거와 선명도 개선 끝판왕 (사진가용)",
+    description: "노이즈 제거와 선명도 개선 끝판왕 (사진가용)",
+    website: "https://topazlabs.com",
+    thumbnail: "https://logo.clearbit.com/topazlabs.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edit-cleanup", name: "Cleanup.pictures", category: "image-editing",
+    summary: "사진에서 원하지 않는 사람이나 물건만 쏙 지움",
+    description: "사진에서 원하지 않는 사람이나 물건만 쏙 지움",
+    website: "https://cleanup.pictures",
+    thumbnail: "https://logo.clearbit.com/cleanup.pictures",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edit-pixelcut", name: "Pixelcut", category: "image-editing",
+    summary: "모바일 친화적인 AI 배경 제거 및 디자인 편집",
+    description: "모바일 친화적인 AI 배경 제거 및 디자인 편집",
+    website: "https://pixelcut.ai",
+    thumbnail: "https://logo.clearbit.com/pixelcut.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edit-upscayl", name: "Upscayl", category: "image-editing",
+    summary: "내 컴퓨터에 설치해 쓰는 무료 AI 화질 개선기",
+    description: "내 컴퓨터에 설치해 쓰는 무료 AI 화질 개선기",
+    website: "https://upscayl.org",
+    thumbnail: "https://logo.clearbit.com/upscayl.org",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edit-removebg", name: "Remove.bg", category: "image-editing",
+    summary: "배경 제거 분야의 근본, 빠르고 정확함",
+    description: "배경 제거 분야의 근본, 빠르고 정확함",
+    website: "https://remove.bg",
+    thumbnail: "https://logo.clearbit.com/remove.bg",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edit-photoshop", name: "Photoshop (AI)", category: "image-editing",
+    summary: "생성형 채우기 기능으로 없던 배경도 만들어냄",
+    description: "생성형 채우기 기능으로 없던 배경도 만들어냄",
+    website: "https://adobe.com",
+    thumbnail: "https://logo.clearbit.com/adobe.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
 
-  // =====================================================================================
-  // 12. Design (디자인) - 대중적인 5개
-  // =====================================================================================
-  { id: "design-01", name: "Canva", category: "design", summary: "누구나 쉽게 하는 AI 디자인.", description: "Magic Studio 기능을 통해 이미지, 텍스트 등을 AI로 편집.", strength: "누구나 쉽게 사용할 수 있는 AI 디자인 도구", website: "https://canva.com", releaseDate: "2013", pricing: "Free / Paid", tags: ["Easy", "Graphic"], thumbnail: "https://logo.clearbit.com/canva.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "design-02", name: "Figma AI", category: "design", summary: "UI/UX 디자인의 미래.", description: "디자인 자동화 및 생성 기능을 갖춘 협업 툴.", strength: "디자인 자동화와 협업 기능이 강점인 UI/UX 툴", website: "https://figma.com", releaseDate: "2016", pricing: "Free / Paid", tags: ["UI/UX", "Pro"], thumbnail: "https://logo.clearbit.com/figma.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "design-03", name: "Uizard", category: "design", summary: "스케치를 UI로 변환.", description: "손그림이나 텍스트로 앱/웹 디자인 시안을 생성.", strength: "손그림이나 텍스트를 UI 디자인으로 자동 변환", website: "https://uizard.io", releaseDate: "2018", pricing: "Free / Paid", tags: ["Prototype", "Wireframe"], thumbnail: "https://logo.clearbit.com/uizard.io", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "design-04", name: "Looka", category: "design", summary: "AI 로고 메이커.", description: "브랜드 아이덴티티에 맞는 로고와 브랜드 키트 생성.", strength: "브랜드 아이덴티티에 맞는 로고와 브랜드 키트 자동 생성", website: "https://looka.com", releaseDate: "2016", pricing: "Paid", tags: ["Logo", "Brand"], thumbnail: "https://logo.clearbit.com/looka.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "design-05", name: "Galileo AI", category: "design", summary: "텍스트 투 UI 디자인.", description: "설명만으로 고퀄리티 인터페이스 디자인을 생성.", strength: "텍스트 설명만으로 고퀄리티 UI 디자인 생성", website: "https://usegalileo.ai", releaseDate: "2023", pricing: "Paid", tags: ["Generative UI", "Figma"], thumbnail: "https://logo.clearbit.com/usegalileo.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  // ===========================================
+  // 4. Video Generation
+  // ===========================================
+  {
+    id: "vid-runway-gen3", name: "Runway (Gen-3)", category: "video-generation",
+    summary: "사실적인 영상 생성의 선두주자, 영화 제작용",
+    description: "사실적인 영상 생성의 선두주자, 영화 제작용",
+    website: "https://runwayml.com",
+    thumbnail: "https://logo.clearbit.com/runwayml.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vid-luma", name: "Luma Dream Machine", category: "video-generation",
+    summary: "무료로도 꽤 쓸만한 고퀄리티 영상 생성",
+    description: "무료로도 꽤 쓸만한 고퀄리티 영상 생성",
+    website: "https://lumalabs.ai",
+    thumbnail: "https://logo.clearbit.com/lumalabs.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vid-kling", name: "Kling", category: "video-generation",
+    summary: "최근 혜성처럼 등장한 중국발 리얼한 영상 AI",
+    description: "최근 혜성처럼 등장한 중국발 리얼한 영상 AI",
+    website: "https://kling.kuaishou.com",
+    thumbnail: "https://logo.clearbit.com/kuaishou.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vid-pika", name: "Pika", category: "video-generation",
+    summary: "애니메이션 스타일이나 부드러운 움직임에 강점",
+    description: "애니메이션 스타일이나 부드러운 움직임에 강점",
+    website: "https://pika.art",
+    thumbnail: "https://logo.clearbit.com/pika.art",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vid-sora", name: "Sora", category: "video-generation",
+    summary: "(출시 예정) 공개되자마자 업계를 뒤집어놓은 OpenAI 모델",
+    description: "(출시 예정) 공개되자마자 업계를 뒤집어놓은 OpenAI 모델",
+    website: "https://openai.com/sora",
+    thumbnail: "https://logo.clearbit.com/openai.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vid-haiper", name: "Haiper", category: "video-generation",
+    summary: "짧지만 임팩트 있는 고해상도 비디오 생성",
+    description: "짧지만 임팩트 있는 고해상도 비디오 생성",
+    website: "https://haiper.ai",
+    thumbnail: "https://logo.clearbit.com/haiper.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vid-stablevideo", name: "Stable Video", category: "video-generation",
+    summary: "이미지 한 장으로 영상 만들기 좋은 오픈소스 기반",
+    description: "이미지 한 장으로 영상 만들기 좋은 오픈소스 기반",
+    website: "https://stability.ai",
+    thumbnail: "https://logo.clearbit.com/stability.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vid-vidu", name: "Vidu", category: "video-generation",
+    summary: "일관성 있는 캐릭터 움직임 표현에 좋음",
+    description: "일관성 있는 캐릭터 움직임 표현에 좋음",
+    website: "https://vidu.studio",
+    thumbnail: "https://logo.clearbit.com/vidu.studio",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vid-minimax", name: "Minimax", category: "video-generation",
+    summary: "화려한 이펙트와 역동적인 장면에 강함",
+    description: "화려한 이펙트와 역동적인 장면에 강함",
+    website: "https://hailuoai.com",
+    thumbnail: "https://logo.clearbit.com/hailuoai.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vid-veo", name: "Veo", category: "video-generation",
+    summary: "구글이 작정하고 만든 영상 생성 모델 (곧 유튜브 쇼츠 탑재)",
+    description: "구글이 작정하고 만든 영상 생성 모델 (곧 유튜브 쇼츠 탑재)",
+    website: "https://deepmind.google/technologies/veo",
+    thumbnail: "https://logo.clearbit.com/google.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
 
-  // =====================================================================================
-  // 13. 3D (3D 생성) - 대중적인 5개
-  // =====================================================================================
-  { id: "3d-01", name: "Meshy AI 3D", category: "3d", summary: "AI 기반 3D 모델 생성.", description: "텍스트나 이미지로부터 고품질 3D 모델을 생성하는 AI 도구로, 게임 개발, AR/VR, 제품 디자인 등 다양한 분야에서 활용됩니다.", strength: "텍스트나 이미지로부터 고품질 3D 모델 생성", website: "https://meshy.ai", releaseDate: "2023", pricing: "Free / Paid", tags: ["3D", "Modeling", "Text-to-3D"], thumbnail: "https://logo.clearbit.com/meshy.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "3d-02", name: "Luma Genie", category: "3d", summary: "3D 모델 생성 AI.", description: "텍스트로 3D 자산을 빠르게 생성합니다.", strength: "텍스트로 3D 자산을 빠르게 생성하는 능력", website: "https://lumalabs.ai/genie", releaseDate: "2023", pricing: "Free / Paid", tags: ["3D", "Asset"], thumbnail: "https://logo.clearbit.com/lumalabs.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "3d-03", name: "Spline AI", category: "3d", summary: "AI 3D 디자인 툴.", description: "프롬프트로 3D 씬과 객체를 생성하고 편집.", strength: "프롬프트로 3D 씬과 객체를 생성하고 편집하는 통합 도구", website: "https://spline.design/ai", releaseDate: "2023", pricing: "Free / Paid", tags: ["3D", "Web"], thumbnail: "https://logo.clearbit.com/spline.design", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "3d-04", name: "Rodin", category: "3d", summary: "고품질 3D 모델 생성 AI.", description: "이미지나 텍스트로부터 사실적인 3D 모델을 생성하는 도구입니다.", strength: "이미지나 텍스트로부터 사실적인 고품질 3D 모델 생성", website: "https://rodin.ai", releaseDate: "2024", pricing: "Free / Paid", tags: ["3D", "High Quality"], thumbnail: "https://logo.clearbit.com/rodin.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "3d-05", name: "CSM AI", category: "3d", summary: "3D 자산 생성 플랫폼.", description: "게임 개발자와 디자이너를 위한 3D 모델 생성 도구입니다.", strength: "게임 개발자와 디자이너를 위한 전문 3D 자산 생성", website: "https://csm.ai", releaseDate: "2023", pricing: "Free / Paid", tags: ["3D", "Game Asset"], thumbnail: "https://logo.clearbit.com/csm.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  // ===========================================
+  // 5. Video Editing
+  // ===========================================
+  {
+    id: "vedit-capcut", name: "CapCut", category: "video-editing",
+    summary: "AI 자막, 효과 등 숏폼 편집의 필수품",
+    description: "AI 자막, 효과 등 숏폼 편집의 필수품",
+    website: "https://capcut.com",
+    thumbnail: "https://logo.clearbit.com/capcut.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vedit-opus", name: "Opus Clip", category: "video-editing",
+    summary: "긴 유튜브 영상을 알아서 하이라이트 쇼츠로 잘라줌",
+    description: "긴 유튜브 영상을 알아서 하이라이트 쇼츠로 잘라줌",
+    website: "https://opus.pro",
+    thumbnail: "https://logo.clearbit.com/opus.pro",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vedit-vrew", name: "Vrew", category: "video-editing",
+    summary: "음성을 분석해 자동으로 자막을 달아주는 국산 꿀템",
+    description: "음성을 분석해 자동으로 자막을 달아주는 국산 꿀템",
+    website: "https://vrew.ai",
+    thumbnail: "https://logo.clearbit.com/vrew.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vedit-descript", name: "Descript", category: "video-editing",
+    summary: "영상을 워드 문서처럼 텍스트로 편집함",
+    description: "영상을 워드 문서처럼 텍스트로 편집함",
+    website: "https://descript.com",
+    thumbnail: "https://logo.clearbit.com/descript.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vedit-invideo", name: "InVideo", category: "video-editing",
+    summary: "텍스트만 주면 영상+자막+음성까지 풀세트로 제작",
+    description: "텍스트만 주면 영상+자막+음성까지 풀세트로 제작",
+    website: "https://invideo.io",
+    thumbnail: "https://logo.clearbit.com/invideo.io",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vedit-premiere", name: "Premiere Pro", category: "video-editing",
+    summary: "어도비 AI 기능으로 편집 시간 단축 (전문가용)",
+    description: "어도비 AI 기능으로 편집 시간 단축 (전문가용)",
+    website: "https://adobe.com",
+    thumbnail: "https://logo.clearbit.com/adobe.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vedit-munch", name: "Munch", category: "video-editing",
+    summary: "트렌드를 분석해서 가장 뜰만한 구간을 숏폼으로 제작",
+    description: "트렌드를 분석해서 가장 뜰만한 구간을 숏폼으로 제작",
+    website: "https://getmunch.com",
+    thumbnail: "https://logo.clearbit.com/getmunch.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vedit-filmora", name: "Wondershare Filmora", category: "video-editing",
+    summary: "초보자도 쓰기 쉬운 AI 편집 효과가 많음",
+    description: "초보자도 쓰기 쉬운 AI 편집 효과가 많음",
+    website: "https://filmora.wondershare.com",
+    thumbnail: "https://logo.clearbit.com/wondershare.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vedit-kapwing", name: "Kapwing", category: "video-editing",
+    summary: "웹에서 바로 쓰는 협업 가능한 영상 편집기",
+    description: "웹에서 바로 쓰는 협업 가능한 영상 편집기",
+    website: "https://kapwing.com",
+    thumbnail: "https://logo.clearbit.com/kapwing.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vedit-autocut", name: "AutoCut", category: "video-editing",
+    summary: "영상 속의 무음 구간(침묵)을 자동으로 삭제",
+    description: "영상 속의 무음 구간(침묵)을 자동으로 삭제",
+    website: "https://autocut.com",
+    thumbnail: "https://logo.clearbit.com/autocut.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
 
-  // =====================================================================================
-  // 14. Writing (글쓰기) - 대중적인 5개
-  // =====================================================================================
-  { id: "writing-01", name: "Jasper", category: "writing", summary: "마케팅 콘텐츠 생성.", description: "블로그, 광고 문구 등 마케팅에 특화된 글쓰기 AI.", strength: "마케팅 콘텐츠와 카피라이팅에 특화된 전문 도구", website: "https://jasper.ai", releaseDate: "2021.01", pricing: "Paid", tags: ["Marketing", "Copywriting"], thumbnail: "https://logo.clearbit.com/jasper.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "writing-02", name: "Copy.ai", category: "writing", summary: "카피라이팅 자동화.", description: "다양한 템플릿으로 빠른 카피라이팅 지원.", strength: "다양한 템플릿으로 빠른 카피라이팅 자동화", website: "https://copy.ai", releaseDate: "2020.10", pricing: "Free / Paid", tags: ["Copywriting", "Social"], thumbnail: "https://logo.clearbit.com/copy.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "writing-03", name: "GrammarlyGO", category: "writing", summary: "AI 문법 교정 및 작성.", description: "영어 문법 교정을 넘어 문맥에 맞는 글쓰기 제안.", strength: "문법 교정을 넘어 문맥에 맞는 글쓰기 제안", website: "https://grammarly.com", releaseDate: "2023", pricing: "Free / Paid", tags: ["Grammar", "Correction"], thumbnail: "https://logo.clearbit.com/grammarly.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "writing-04", name: "Quillbot", category: "writing", summary: "패러프레이징 도구.", description: "문장을 재구성하여 표절을 피하고 표현을 다듬는 툴.", strength: "문장 재구성으로 표절 방지와 표현 개선", website: "https://quillbot.com", releaseDate: "2017", pricing: "Free / Paid", tags: ["Paraphrase", "Writing"], thumbnail: "https://logo.clearbit.com/quillbot.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "writing-05", name: "Writesonic", category: "writing", summary: "SEO 최적화 글쓰기.", description: "검색 엔진 상위 노출을 위한 콘텐츠 작성.", strength: "SEO 최적화된 콘텐츠 작성으로 검색 상위 노출", website: "https://writesonic.com", releaseDate: "2020", pricing: "Free / Paid", tags: ["SEO", "Blog"], thumbnail: "https://logo.clearbit.com/writesonic.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  // ===========================================
+  // 6. Coding
+  // ===========================================
+  {
+    id: "code-cursor", name: "Cursor", category: "coding",
+    summary: "VS Code 기반, AI가 코드를 통째로 작성/수정해 줌",
+    description: "VS Code 기반, AI가 코드를 통째로 작성/수정해 줌",
+    website: "https://cursor.com",
+    thumbnail: "https://logo.clearbit.com/cursor.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "code-github", name: "GitHub Copilot", category: "coding",
+    summary: "개발자의 영혼의 단짝, 코드 자동 완성 표준",
+    description: "개발자의 영혼의 단짝, 코드 자동 완성 표준",
+    website: "https://github.com/features/copilot",
+    thumbnail: "https://logo.clearbit.com/github.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "code-replit", name: "Replit", category: "coding",
+    summary: "설치 없이 웹에서 바로 코딩하고 배포까지 한 번에",
+    description: "설치 없이 웹에서 바로 코딩하고 배포까지 한 번에",
+    website: "https://replit.com",
+    thumbnail: "https://logo.clearbit.com/replit.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "code-supermaven", name: "Supermaven", category: "coding",
+    summary: "엄청나게 빠른 속도와 긴 문맥을 자랑하는 코딩 비서",
+    description: "엄청나게 빠른 속도와 긴 문맥을 자랑하는 코딩 비서",
+    website: "https://supermaven.com",
+    thumbnail: "https://logo.clearbit.com/supermaven.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "code-devin", name: "Devin", category: "coding",
+    summary: "(초대형 루키) 스스로 계획하고 버그까지 잡는 완전 자율 AI 엔지니어",
+    description: "(초대형 루키) 스스로 계획하고 버그까지 잡는 완전 자율 AI 엔지니어",
+    website: "https://cognition.ai",
+    thumbnail: "https://logo.clearbit.com/cognition.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "code-codeium", name: "Codeium", category: "coding",
+    summary: "개인 사용자에게 무료로 풀린 고성능 코딩 도구",
+    description: "개인 사용자에게 무료로 풀린 고성능 코딩 도구",
+    website: "https://codeium.com",
+    thumbnail: "https://logo.clearbit.com/codeium.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "code-tabnine", name: "Tabnine", category: "coding",
+    summary: "기업 보안에 민감하다면 추천하는 안전한 코딩 AI",
+    description: "기업 보안에 민감하다면 추천하는 안전한 코딩 AI",
+    website: "https://tabnine.com",
+    thumbnail: "https://logo.clearbit.com/tabnine.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "code-amazonq", name: "Amazon Q", category: "coding",
+    summary: "AWS 클라우드 관련 코딩과 문제 해결에 특화",
+    description: "AWS 클라우드 관련 코딩과 문제 해결에 특화",
+    website: "https://aws.amazon.com/q",
+    thumbnail: "https://logo.clearbit.com/amazon.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "code-jetbrains", name: "JetBrains AI", category: "coding",
+    summary: "IntelliJ 등을 쓴다면 가장 궁합이 좋은 내장 AI",
+    description: "IntelliJ 등을 쓴다면 가장 궁합이 좋은 내장 AI",
+    website: "https://jetbrains.com/ai",
+    thumbnail: "https://logo.clearbit.com/jetbrains.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "code-cody", name: "Cody", category: "coding",
+    summary: "전체 코드베이스를 이해하고 답변해 주는 똑똑한 녀석",
+    description: "전체 코드베이스를 이해하고 답변해 주는 똑똑한 녀석",
+    website: "https://sourcegraph.com/cody",
+    thumbnail: "https://logo.clearbit.com/sourcegraph.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
 
-  // =====================================================================================
-  // 15. Translation (번역) - 대중적인 5개
-  // =====================================================================================
-  { id: "translation-01", name: "DeepL", category: "translation", summary: "가장 자연스러운 번역기.", description: "뉘앙스를 살리는 고품질 AI 번역.", strength: "뉘앙스를 살리는 가장 자연스러운 고품질 번역", website: "https://deepl.com", releaseDate: "2017.08", pricing: "Free / Paid", tags: ["Translation", "Language"], thumbnail: "https://logo.clearbit.com/deepl.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "translation-02", name: "Google Translate", category: "translation", summary: "가장 널리 쓰이는 번역기.", description: "100개 이상의 언어를 지원하는 구글의 무료 번역 서비스입니다.", strength: "100개 이상의 언어를 지원하는 가장 널리 쓰이는 번역기", website: "https://translate.google.com", releaseDate: "2006", pricing: "Free", tags: ["Google", "Multi-language"], thumbnail: "https://logo.clearbit.com/google.com", company: "Google", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "translation-03", name: "Microsoft Translator", category: "translation", summary: "마이크로소프트의 번역 서비스.", description: "다양한 플랫폼과 앱에서 사용 가능한 번역 도구입니다.", strength: "다양한 플랫폼과 앱에서 사용 가능한 통합 번역 도구", website: "https://translator.microsoft.com", releaseDate: "2011", pricing: "Free / Paid", tags: ["Microsoft", "API"], thumbnail: "https://logo.clearbit.com/microsoft.com", company: "Microsoft", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "translation-04", name: "Papago", category: "translation", summary: "네이버의 한국어 특화 번역기.", description: "한국어 번역에 특화된 네이버의 AI 번역 서비스입니다.", strength: "한국어 번역에 특화된 정확한 번역 서비스", website: "https://papago.naver.com", releaseDate: "2017", pricing: "Free", tags: ["Korean", "Naver"], thumbnail: "https://logo.clearbit.com/navercorp.com", company: "Naver", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "translation-05", name: "Reverso", category: "translation", summary: "컨텍스트 기반 번역 도구.", description: "문맥과 예문을 함께 제공하는 고급 번역 서비스입니다.", strength: "문맥과 예문을 함께 제공하는 컨텍스트 기반 번역", website: "https://reverso.net", releaseDate: "1998", pricing: "Free / Paid", tags: ["Context", "Examples"], thumbnail: "https://logo.clearbit.com/reverso.net", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  // ===========================================
+  // 7. Voice (TTS/Cloning)
+  // ===========================================
+  {
+    id: "voice-elevenlabs", name: "ElevenLabs", category: "voice-tts",
+    summary: "현존 최고의 자연스러운 목소리 복제 및 생성",
+    description: "현존 최고의 자연스러운 목소리 복제 및 생성",
+    website: "https://elevenlabs.io",
+    thumbnail: "https://logo.clearbit.com/elevenlabs.io",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "voice-murf", name: "Murf.ai", category: "voice-tts",
+    summary: "스튜디오 품질의 성우 내레이션 생성",
+    description: "스튜디오 품질의 성우 내레이션 생성",
+    website: "https://murf.ai",
+    thumbnail: "https://logo.clearbit.com/murf.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "voice-playht", name: "Play.ht", category: "voice-tts",
+    summary: "감정 표현이 풍부하고 실시간 대화도 가능한 AI 음성",
+    description: "감정 표현이 풍부하고 실시간 대화도 가능한 AI 음성",
+    website: "https://play.ht",
+    thumbnail: "https://logo.clearbit.com/play.ht",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "voice-openai", name: "OpenAI Voice", category: "voice-tts",
+    summary: "챗지피티의 그 목소리, API로 활용 가능",
+    description: "챗지피티의 그 목소리, API로 활용 가능",
+    website: "https://openai.com",
+    thumbnail: "https://logo.clearbit.com/openai.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "voice-speechify", name: "Speechify", category: "voice-tts",
+    summary: "난독증 환자를 위해 만든, 뭐든지 읽어주는 리더기",
+    description: "난독증 환자를 위해 만든, 뭐든지 읽어주는 리더기",
+    website: "https://speechify.com",
+    thumbnail: "https://logo.clearbit.com/speechify.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "voice-lovo", name: "LOVO", category: "voice-tts",
+    summary: "영상 제작자를 위한 다양한 감정의 AI 성우",
+    description: "영상 제작자를 위한 다양한 감정의 AI 성우",
+    website: "https://lovo.ai",
+    thumbnail: "https://logo.clearbit.com/lovo.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "voice-rvc", name: "RVC (Model)", category: "voice-tts",
+    summary: "내 목소리를 유명 가수나 캐릭터로 변조 (오픈소스)",
+    description: "내 목소리를 유명 가수나 캐릭터로 변조 (오픈소스)",
+    website: "https://github.com/RVC-Project",
+    thumbnail: "https://logo.clearbit.com/github.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "voice-overdub", name: "Descript Overdub", category: "voice-tts",
+    summary: "내 목소리를 학습시켜 오타 수정하듯 음성 수정",
+    description: "내 목소리를 학습시켜 오타 수정하듯 음성 수정",
+    website: "https://descript.com",
+    thumbnail: "https://logo.clearbit.com/descript.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "voice-gcloud", name: "Google Cloud TTS", category: "voice-tts",
+    summary: "가장 안정적이고 다양한 언어를 지원하는 구글 엔진",
+    description: "가장 안정적이고 다양한 언어를 지원하는 구글 엔진",
+    website: "https://cloud.google.com/text-to-speech",
+    thumbnail: "https://logo.clearbit.com/google.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "voice-typecast", name: "Typecast", category: "voice-tts",
+    summary: "한국어 발음이 가장 자연스러운 국내 원탑 서비스",
+    description: "한국어 발음이 가장 자연스러운 국내 원탑 서비스",
+    website: "https://typecast.ai",
+    thumbnail: "https://logo.clearbit.com/typecast.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
 
-  // =====================================================================================
-  // 16. Presentation (프레젠테이션) - 대중적인 5개
-  // =====================================================================================
-  { id: "presentation-01", name: "Gamma", category: "presentation", summary: "AI 프레젠테이션 생성.", description: "텍스트만 입력하면 디자인된 슬라이드와 문서를 생성.", strength: "텍스트만으로 디자인된 슬라이드와 문서 자동 생성", website: "https://gamma.app", releaseDate: "2022", pricing: "Free / Paid", tags: ["Slide", "Design"], thumbnail: "https://logo.clearbit.com/gamma.app", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "presentation-02", name: "Tome", category: "presentation", summary: "스토리텔링 형식의 슬라이드.", description: "모바일 친화적이고 인터랙티브한 스토리북 생성.", strength: "모바일 친화적이고 인터랙티브한 스토리텔링 슬라이드", website: "https://tome.app", releaseDate: "2022", pricing: "Free / Paid", tags: ["Storytelling", "Slide"], thumbnail: "https://logo.clearbit.com/tome.app", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "presentation-03", name: "Beautiful.ai", category: "presentation", summary: "자동 디자인 슬라이드.", description: "내용을 넣으면 레이아웃을 알아서 잡아주는 PPT 툴.", strength: "내용 입력만으로 자동 레이아웃 디자인", website: "https://beautiful.ai", releaseDate: "2016", pricing: "Paid", tags: ["Presentation", "Design"], thumbnail: "https://logo.clearbit.com/beautiful.ai", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "presentation-04", name: "Decktopus", category: "presentation", summary: "가장 빠른 PPT 생성기.", description: "주제만 입력하면 완벽한 구조의 프레젠테이션 완성.", strength: "주제만으로 완벽한 구조의 프레젠테이션 빠른 생성", website: "https://decktopus.com", releaseDate: "2020", pricing: "Free / Paid", tags: ["Fast", "PPT"], thumbnail: "https://logo.clearbit.com/decktopus.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
-  { id: "presentation-05", name: "Pitch", category: "presentation", summary: "협업 중심 프레젠테이션 도구.", description: "팀 협업에 최적화된 현대적인 프레젠테이션 플랫폼입니다.", strength: "팀 협업에 최적화된 현대적인 프레젠테이션 플랫폼", website: "https://pitch.com", releaseDate: "2019", pricing: "Free / Paid", tags: ["Collaboration", "Modern"], thumbnail: "https://logo.clearbit.com/pitch.com", rating: 0, ratingCount: 0, userRatings: [], comments: [] },
+  // ===========================================
+  // 8. 3D Generation
+  // ===========================================
+  {
+    id: "3d-meshy", name: "Meshy", category: "3d",
+    summary: "텍스트나 이미지를 넣으면 1분 만에 3D 모델 생성",
+    description: "텍스트나 이미지를 넣으면 1분 만에 3D 모델 생성",
+    website: "https://meshy.ai",
+    thumbnail: "https://logo.clearbit.com/meshy.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "3d-tripo", name: "Tripo AI", category: "3d",
+    summary: "빠르고 가볍게 3D 에셋을 뽑아내는 도구",
+    description: "빠르고 가볍게 3D 에셋을 뽑아내는 도구",
+    website: "https://tripo3d.ai",
+    thumbnail: "https://logo.clearbit.com/tripo3d.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "3d-csm", name: "CSM", category: "3d",
+    summary: "단 한 장의 사진으로 360도 회전하는 3D 큐브 생성",
+    description: "단 한 장의 사진으로 360도 회전하는 3D 큐브 생성",
+    website: "https://csm.ai",
+    thumbnail: "https://logo.clearbit.com/csm.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "3d-spline", name: "Spline AI", category: "3d",
+    summary: "웹에서 바로 3D 디자인을 하고 AI로 수정",
+    description: "웹에서 바로 3D 디자인을 하고 AI로 수정",
+    website: "https://spline.design",
+    thumbnail: "https://logo.clearbit.com/spline.design",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "3d-lumagenie", name: "Luma Genie", category: "3d",
+    summary: "디스코드에서 명령어로 뚝딱 만드는 3D 모델",
+    description: "디스코드에서 명령어로 뚝딱 만드는 3D 모델",
+    website: "https://lumalabs.ai",
+    thumbnail: "https://logo.clearbit.com/lumalabs.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "3d-rodin", name: "Rodin", category: "3d",
+    summary: "3D 피규어나 캐릭터 생성에 특화된 고퀄리티 모델",
+    description: "3D 피규어나 캐릭터 생성에 특화된 고퀄리티 모델",
+    website: "https://hyperhuman.deemos.com",
+    thumbnail: "https://logo.clearbit.com/deemos.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "3d-masterpiece", name: "Masterpiece X", category: "3d",
+    summary: "VR 기기 끼고 들어가서 AI와 함께 조각하듯 만듦",
+    description: "VR 기기 끼고 들어가서 AI와 함께 조각하듯 만듦",
+    website: "https://masterpiecex.com",
+    thumbnail: "https://logo.clearbit.com/masterpiecex.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "3d-leonardo", name: "Leonardo 3D", category: "3d",
+    summary: "2D 그림을 3D 텍스처로 입혀주는 기능 보유",
+    description: "2D 그림을 3D 텍스처로 입혀주는 기능 보유",
+    website: "https://leonardo.ai",
+    thumbnail: "https://logo.clearbit.com/leonardo.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "3d-shape", name: "Shap-E", category: "3d",
+    summary: "오픈AI가 만든 3D 생성 오픈소스 모델",
+    description: "오픈AI가 만든 3D 생성 오픈소스 모델",
+    website: "https://github.com/openai/shap-e",
+    thumbnail: "https://logo.clearbit.com/openai.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "3d-blockade", name: "Blockade Labs", category: "3d",
+    summary: "360도 파노라마 배경(스카이박스)을 순식간에 생성",
+    description: "360도 파노라마 배경(스카이박스)을 순식간에 생성",
+    website: "https://skybox.blockadelabs.com",
+    thumbnail: "https://logo.clearbit.com/blockadelabs.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+
+  // ===========================================
+  // 9. Automation
+  // ===========================================
+  {
+    id: "auto-n8n", name: "n8n", category: "automation",
+    summary: "무료로 자체 서버에 구축 가능한 무제한 자동화 툴",
+    description: "무료로 자체 서버에 구축 가능한 무제한 자동화 툴",
+    website: "https://n8n.io",
+    thumbnail: "https://logo.clearbit.com/n8n.io",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "auto-zapier", name: "Zapier", category: "automation",
+    summary: "가장 유명하고 쉬운 자동화, 연동되는 앱이 제일 많음",
+    description: "가장 유명하고 쉬운 자동화, 연동되는 앱이 제일 많음",
+    website: "https://zapier.com",
+    thumbnail: "https://logo.clearbit.com/zapier.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "auto-make", name: "Make", category: "automation",
+    summary: "복잡한 시각적 워크플로우를 짜기에 가장 좋음",
+    description: "복잡한 시각적 워크플로우를 짜기에 가장 좋음",
+    website: "https://make.com",
+    thumbnail: "https://logo.clearbit.com/make.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "auto-bardeen", name: "Bardeen", category: "automation",
+    summary: "웹 브라우저에서 버튼 한 번으로 데이터 긁어오기 최강",
+    description: "웹 브라우저에서 버튼 한 번으로 데이터 긁어오기 최강",
+    website: "https://bardeen.ai",
+    thumbnail: "https://logo.clearbit.com/bardeen.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "auto-gumloop", name: "Gumloop", category: "automation",
+    summary: "AI 기능(LLM)을 활용한 자동화 파이프라인 구축에 특화",
+    description: "AI 기능(LLM)을 활용한 자동화 파이프라인 구축에 특화",
+    website: "https://gumloop.com",
+    thumbnail: "https://logo.clearbit.com/gumloop.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "auto-ifttt", name: "IFTTT", category: "automation",
+    summary: "이거 하면 저거 해 식의 초간단 생활 밀착형 자동화",
+    description: "이거 하면 저거 해 식의 초간단 생활 밀착형 자동화",
+    website: "https://ifttt.com",
+    thumbnail: "https://logo.clearbit.com/ifttt.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "auto-powerauto", name: "Power Automate", category: "automation",
+    summary: "엑셀, 아웃룩 등 MS 오피스 업무 자동화 필수품",
+    description: "엑셀, 아웃룩 등 MS 오피스 업무 자동화 필수품",
+    website: "https://microsoft.com",
+    thumbnail: "https://logo.clearbit.com/microsoft.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "auto-relay", name: "Relay.app", category: "automation",
+    summary: "사람의 개입(승인)이 필요한 업무 자동화에 좋음",
+    description: "사람의 개입(승인)이 필요한 업무 자동화에 좋음",
+    website: "https://relay.app",
+    thumbnail: "https://logo.clearbit.com/relay.app",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "auto-pabbly", name: "Pabbly", category: "automation",
+    summary: "한 번 결제로 평생 쓰는 가성비 자동화 도구",
+    description: "한 번 결제로 평생 쓰는 가성비 자동화 도구",
+    website: "https://pabbly.com",
+    thumbnail: "https://logo.clearbit.com/pabbly.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "auto-active", name: "ActivePieces", category: "automation",
+    summary: "n8n처럼 오픈소스로 쓸 수 있는 가벼운 대안",
+    description: "n8n처럼 오픈소스로 쓸 수 있는 가벼운 대안",
+    website: "https://activepieces.com",
+    thumbnail: "https://logo.clearbit.com/activepieces.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+
+  // ===========================================
+  // 10. Music
+  // ===========================================
+  {
+    id: "music-suno", name: "Suno", category: "music",
+    summary: "가사만 넣으면 라디오 퀄리티 노래 뚝딱 (현재 1타)",
+    description: "가사만 넣으면 라디오 퀄리티 노래 뚝딱 (현재 1타)",
+    website: "https://suno.com",
+    thumbnail: "https://logo.clearbit.com/suno.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "music-udio", name: "Udio", category: "music",
+    summary: "음악적 완성도가 높고 편집 기능이 강력한 경쟁자",
+    description: "음악적 완성도가 높고 편집 기능이 강력한 경쟁자",
+    website: "https://udio.com",
+    thumbnail: "https://logo.clearbit.com/udio.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "music-stable", name: "Stable Audio", category: "music",
+    summary: "고품질 배경음악과 효과음 생성에 최적화",
+    description: "고품질 배경음악과 효과음 생성에 최적화",
+    website: "https://stability.ai",
+    thumbnail: "https://logo.clearbit.com/stability.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "music-soundraw", name: "Soundraw", category: "music",
+    summary: "저작권 걱정 없는 유튜브 BGM 커스텀 생성기",
+    description: "저작권 걱정 없는 유튜브 BGM 커스텀 생성기",
+    website: "https://soundraw.io",
+    thumbnail: "https://logo.clearbit.com/soundraw.io",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "music-riffusion", name: "Riffusion", category: "music",
+    summary: "텍스트를 입력하면 짧은 리프(멜로디)를 생성",
+    description: "텍스트를 입력하면 짧은 리프(멜로디)를 생성",
+    website: "https://riffusion.com",
+    thumbnail: "https://logo.clearbit.com/riffusion.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "music-aiva", name: "AIVA", category: "music",
+    summary: "클래식이나 영화 음악 같은 감성적인 작곡에 강함",
+    description: "클래식이나 영화 음악 같은 감성적인 작곡에 강함",
+    website: "https://aiva.ai",
+    thumbnail: "https://logo.clearbit.com/aiva.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "music-mubert", name: "Mubert", category: "music",
+    summary: "스트리밍이나 게임에 쓸 실시간 생성 배경음악",
+    description: "스트리밍이나 게임에 쓸 실시간 생성 배경음악",
+    website: "https://mubert.com",
+    thumbnail: "https://logo.clearbit.com/mubert.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "music-boomy", name: "Boomy", category: "music",
+    summary: "초보자도 몇 초 만에 노래 만들고 스포티파이 등록 가능",
+    description: "초보자도 몇 초 만에 노래 만들고 스포티파이 등록 가능",
+    website: "https://boomy.com",
+    thumbnail: "https://logo.clearbit.com/boomy.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "music-beatoven", name: "Beatoven", category: "music",
+    summary: "영상 분위기에 맞춰 감정을 조절하는 BGM 생성",
+    description: "영상 분위기에 맞춰 감정을 조절하는 BGM 생성",
+    website: "https://beatoven.ai",
+    thumbnail: "https://logo.clearbit.com/beatoven.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "music-loudly", name: "Loudly", category: "music",
+    summary: "방대한 AI 음악 라이브러리와 생성 엔진 제공",
+    description: "방대한 AI 음악 라이브러리와 생성 엔진 제공",
+    website: "https://loudly.com",
+    thumbnail: "https://logo.clearbit.com/loudly.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+
+  // ===========================================
+  // 11. Presentation
+  // ===========================================
+  {
+    id: "ppt-gamma", name: "Gamma", category: "presentation",
+    summary: "주제만 주면 디자인까지 끝난 PPT 자동 완성 (강추)",
+    description: "주제만 주면 디자인까지 끝난 PPT 자동 완성 (강추)",
+    website: "https://gamma.app",
+    thumbnail: "https://logo.clearbit.com/gamma.app",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "ppt-tome", name: "Tome", category: "presentation",
+    summary: "스토리텔링이 있는 세련된 슬라이드 제작",
+    description: "스토리텔링이 있는 세련된 슬라이드 제작",
+    website: "https://tome.app",
+    thumbnail: "https://logo.clearbit.com/tome.app",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "ppt-beautiful", name: "Beautiful.ai", category: "presentation",
+    summary: "디자인 감각 없어도 전문가처럼 배치해 주는 툴",
+    description: "디자인 감각 없어도 전문가처럼 배치해 주는 툴",
+    website: "https://beautiful.ai",
+    thumbnail: "https://logo.clearbit.com/beautiful.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "ppt-slidesai", name: "SlidesAI", category: "presentation",
+    summary: "구글 슬라이드 안에서 텍스트를 장표로 변환",
+    description: "구글 슬라이드 안에서 텍스트를 장표로 변환",
+    website: "https://slidesai.io",
+    thumbnail: "https://logo.clearbit.com/slidesai.io",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "ppt-pitch", name: "Pitch", category: "presentation",
+    summary: "협업과 AI 생성이 결합된 현대적인 프레젠테이션",
+    description: "협업과 AI 생성이 결합된 현대적인 프레젠테이션",
+    website: "https://pitch.com",
+    thumbnail: "https://logo.clearbit.com/pitch.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "ppt-napkin", name: "Napkin", category: "presentation",
+    summary: "텍스트를 넣으면 귀여운 손그림 다이어그램으로 변환",
+    description: "텍스트를 넣으면 귀여운 손그림 다이어그램으로 변환",
+    website: "https://napkin.ai",
+    thumbnail: "https://logo.clearbit.com/napkin.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "ppt-decktopus", name: "Decktopus", category: "presentation",
+    summary: "발표 대본과 Q&A 예상 질문까지 뽑아주는 AI",
+    description: "발표 대본과 Q&A 예상 질문까지 뽑아주는 AI",
+    website: "https://decktopus.com",
+    thumbnail: "https://logo.clearbit.com/decktopus.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "ppt-msdesigner", name: "Microsoft Designer", category: "presentation",
+    summary: "PPT 표지나 이미지를 AI로 즉석 생성",
+    description: "PPT 표지나 이미지를 AI로 즉석 생성",
+    website: "https://designer.microsoft.com",
+    thumbnail: "https://logo.clearbit.com/microsoft.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "ppt-prezi", name: "Prezi (AI)", category: "presentation",
+    summary: "줌인/줌아웃 효과에 AI 텍스트 생성 기능 추가",
+    description: "줌인/줌아웃 효과에 AI 텍스트 생성 기능 추가",
+    website: "https://prezi.com",
+    thumbnail: "https://logo.clearbit.com/prezi.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "ppt-popai", name: "PopAi", category: "presentation",
+    summary: "논문이나 PDF를 넣으면 발표 자료로 요약 변환",
+    description: "논문이나 PDF를 넣으면 발표 자료로 요약 변환",
+    website: "https://popai.pro",
+    thumbnail: "https://logo.clearbit.com/popai.pro",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+
+  // ===========================================
+  // 12. Meeting Notes
+  // ===========================================
+  {
+    id: "meet-otter", name: "Otter.ai", category: "meeting-notes",
+    summary: "영어 회의 녹음 및 실시간 텍스트 변환의 원조",
+    description: "영어 회의 녹음 및 실시간 텍스트 변환의 원조",
+    website: "https://otter.ai",
+    thumbnail: "https://logo.clearbit.com/otter.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "meet-lilys", name: "Lilys", category: "meeting-notes",
+    summary: "긴 유튜브 영상이나 녹음 파일을 블로그 글처럼 요약 (국산)",
+    description: "긴 유튜브 영상이나 녹음 파일을 블로그 글처럼 요약 (국산)",
+    website: "https://lilys.ai",
+    thumbnail: "https://logo.clearbit.com/lilys.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "meet-fireflies", name: "Fireflies.ai", category: "meeting-notes",
+    summary: "줌, 구글밋 등 화상회의에 자동 참여해 회의록 작성",
+    description: "줌, 구글밋 등 화상회의에 자동 참여해 회의록 작성",
+    website: "https://fireflies.ai",
+    thumbnail: "https://logo.clearbit.com/fireflies.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "meet-tldv", name: "tl;dv", category: "meeting-notes",
+    summary: "회의 내용을 녹화하고 중요한 순간을 자동 태깅",
+    description: "회의 내용을 녹화하고 중요한 순간을 자동 태깅",
+    website: "https://tldv.io",
+    thumbnail: "https://logo.clearbit.com/tldv.io",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "meet-fathom", name: "Fathom", category: "meeting-notes",
+    summary: "무료로 쓰는 줌/팀즈 회의 녹화 및 요약 비서",
+    description: "무료로 쓰는 줌/팀즈 회의 녹화 및 요약 비서",
+    website: "https://fathom.video",
+    thumbnail: "https://logo.clearbit.com/fathom.video",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "meet-krisp", name: "Krisp", category: "meeting-notes",
+    summary: "통화 중 주변 소음(개 짖는 소리 등) 완벽 제거",
+    description: "통화 중 주변 소음(개 짖는 소리 등) 완벽 제거",
+    website: "https://krisp.ai",
+    thumbnail: "https://logo.clearbit.com/krisp.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "meet-supernormal", name: "Supernormal", category: "meeting-notes",
+    summary: "회의 끝나자마자 깔끔한 포맷의 회의록 자동 발송",
+    description: "회의 끝나자마자 깔끔한 포맷의 회의록 자동 발송",
+    website: "https://supernormal.com",
+    thumbnail: "https://logo.clearbit.com/supernormal.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "meet-daglo", name: "Daglo", category: "meeting-notes",
+    summary: "한국어 음성 인식률이 매우 뛰어난 받아쓰기 툴",
+    description: "한국어 음성 인식률이 매우 뛰어난 받아쓰기 툴",
+    website: "https://daglo.ai",
+    thumbnail: "https://logo.clearbit.com/daglo.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "meet-meetgeek", name: "MeetGeek", category: "meeting-notes",
+    summary: "회의 내용을 분석해 팀의 강점과 약점까지 인사이트 제공",
+    description: "회의 내용을 분석해 팀의 강점과 약점까지 인사이트 제공",
+    website: "https://meetgeek.ai",
+    thumbnail: "https://logo.clearbit.com/meetgeek.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "meet-speakapp", name: "SpeakApp", category: "meeting-notes",
+    summary: "아이폰 통화 녹음과 AI 텍스트 변환을 한 번에 (국산)",
+    description: "아이폰 통화 녹음과 AI 텍스트 변환을 한 번에 (국산)",
+    website: "https://speakapp.co.kr",
+    thumbnail: "https://logo.clearbit.com/speakapp.co.kr",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+
+  // ===========================================
+  // 13. Etc (Productivity)
+  // ===========================================
+  {
+    id: "etc-deepl", name: "DeepL", category: "etc",
+    summary: "구글 번역기를 뛰어넘는 가장 자연스러운 AI 번역",
+    description: "구글 번역기를 뛰어넘는 가장 자연스러운 AI 번역",
+    website: "https://deepl.com",
+    thumbnail: "https://logo.clearbit.com/deepl.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "etc-grammarly", name: "Grammarly", category: "etc",
+    summary: "영어 이메일이나 문서의 문법과 톤을 교정",
+    description: "영어 이메일이나 문서의 문법과 톤을 교정",
+    website: "https://grammarly.com",
+    thumbnail: "https://logo.clearbit.com/grammarly.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "etc-quillbot", name: "Quillbot", category: "etc",
+    summary: "어색한 문장을 유창하게 바꿔주는 패러프레이징 툴",
+    description: "어색한 문장을 유창하게 바꿔주는 패러프레이징 툴",
+    website: "https://quillbot.com",
+    thumbnail: "https://logo.clearbit.com/quillbot.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "etc-chatpdf", name: "ChatPDF", category: "etc",
+    summary: "PDF 파일을 올리면 챗봇처럼 대화하며 내용 파악",
+    description: "PDF 파일을 올리면 챗봇처럼 대화하며 내용 파악",
+    website: "https://chatpdf.com",
+    thumbnail: "https://logo.clearbit.com/chatpdf.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "etc-excelbot", name: "Excel Formula Bot", category: "etc",
+    summary: "말로 설명하면 복잡한 엑셀 수식을 짜주는 비서",
+    description: "말로 설명하면 복잡한 엑셀 수식을 짜주는 비서",
+    website: "https://excelformulabot.com",
+    thumbnail: "https://logo.clearbit.com/excelformulabot.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "etc-goblin", name: "Goblin Tools", category: "etc",
+    summary: "밥 차리기라고 쓰면 장보기부터 요리까지 할 일 쪼개줌",
+    description: "밥 차리기라고 쓰면 장보기부터 요리까지 할 일 쪼개줌",
+    website: "https://goblin.tools",
+    thumbnail: "https://logo.clearbit.com/goblin.tools",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "etc-pdfai", name: "PDF.ai", category: "etc",
+    summary: "논문이나 계약서 등 문서를 분석하고 인용구 찾아줌",
+    description: "논문이나 계약서 등 문서를 분석하고 인용구 찾아줌",
+    website: "https://pdf.ai",
+    thumbnail: "https://logo.clearbit.com/pdf.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "etc-monica", name: "Monica", category: "etc",
+    summary: "웹 브라우저 어디서나 쓸 수 있는 사이드바 AI 비서",
+    description: "웹 브라우저 어디서나 쓸 수 있는 사이드바 AI 비서",
+    website: "https://monica.im",
+    thumbnail: "https://logo.clearbit.com/monica.im",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "etc-arc", name: "Arc Search", category: "etc",
+    summary: "검색하면 AI가 여러 사이트를 읽고 결과를 요약해 줌",
+    description: "검색하면 AI가 여러 사이트를 읽고 결과를 요약해 줌",
+    website: "https://arc.net",
+    thumbnail: "https://logo.clearbit.com/arc.net",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "etc-copyai", name: "Copy.ai", category: "etc",
+    summary: "마케팅 문구, 블로그 글 등 상업적 글쓰기 자동화",
+    description: "마케팅 문구, 블로그 글 등 상업적 글쓰기 자동화",
+    website: "https://copy.ai",
+    thumbnail: "https://logo.clearbit.com/copy.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+
+  // ===========================================
+  // 14. Marketing
+  // ===========================================
+  {
+    id: "mkt-jasper", name: "Jasper", category: "marketing",
+    summary: "마케팅 문구 작성의 원조, 브랜드 톤앤매너 학습 가능",
+    description: "마케팅 문구 작성의 원조, 브랜드 톤앤매너 학습 가능",
+    website: "https://jasper.ai",
+    thumbnail: "https://logo.clearbit.com/jasper.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "mkt-surfer", name: "Surfer SEO", category: "marketing",
+    summary: "구글 상위 노출을 위한 글쓰기 가이드를 실시간 제공",
+    description: "구글 상위 노출을 위한 글쓰기 가이드를 실시간 제공",
+    website: "https://surferseo.com",
+    thumbnail: "https://logo.clearbit.com/surferseo.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "mkt-adcreative", name: "AdCreative.ai", category: "marketing",
+    summary: "클릭률 높은 광고 배너와 문구를 수백 개 자동 생성",
+    description: "클릭률 높은 광고 배너와 문구를 수백 개 자동 생성",
+    website: "https://adcreative.ai",
+    thumbnail: "https://logo.clearbit.com/adcreative.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "mkt-semrush", name: "Semrush", category: "marketing",
+    summary: "경쟁사 분석부터 키워드 추천까지 SEO의 모든 것",
+    description: "경쟁사 분석부터 키워드 추천까지 SEO의 모든 것",
+    website: "https://semrush.com",
+    thumbnail: "https://logo.clearbit.com/semrush.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "mkt-predis", name: "Predis.ai", category: "marketing",
+    summary: "인스타그램/틱톡용 영상과 포스팅을 한 번에 생성",
+    description: "인스타그램/틱톡용 영상과 포스팅을 한 번에 생성",
+    website: "https://predis.ai",
+    thumbnail: "https://logo.clearbit.com/predis.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "mkt-anyword", name: "Anyword", category: "marketing",
+    summary: "어떤 문구가 클릭을 부를지 미리 예측 점수 제공",
+    description: "어떤 문구가 클릭을 부를지 미리 예측 점수 제공",
+    website: "https://anyword.com",
+    thumbnail: "https://logo.clearbit.com/anyword.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "mkt-scalenut", name: "Scalenut", category: "marketing",
+    summary: "긴 블로그 글 작성과 SEO 최적화를 동시에 해결",
+    description: "긴 블로그 글 작성과 SEO 최적화를 동시에 해결",
+    website: "https://scalenut.com",
+    thumbnail: "https://logo.clearbit.com/scalenut.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "mkt-marketmuse", name: "MarketMuse", category: "marketing",
+    summary: "내 콘텐츠의 권위와 경쟁력을 분석해 전략 수립",
+    description: "내 콘텐츠의 권위와 경쟁력을 분석해 전략 수립",
+    website: "https://marketmuse.com",
+    thumbnail: "https://logo.clearbit.com/marketmuse.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "mkt-writer", name: "Writer", category: "marketing",
+    summary: "기업용 마케팅 글쓰기, 보안과 가이드라인 준수",
+    description: "기업용 마케팅 글쓰기, 보안과 가이드라인 준수",
+    website: "https://writer.com",
+    thumbnail: "https://logo.clearbit.com/writer.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "mkt-phrasee", name: "Phrasee", category: "marketing",
+    summary: "이메일 오픈율을 높여주는 AI 카피라이팅",
+    description: "이메일 오픈율을 높여주는 AI 카피라이팅",
+    website: "https://phrasee.co",
+    thumbnail: "https://logo.clearbit.com/phrasee.co",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+
+  // ===========================================
+  // 15. Writing
+  // ===========================================
+  {
+    id: "write-rytr", name: "Rytr", category: "writing",
+    summary: "가성비 최고, 한국어 지원 잘 되는 글쓰기 도구",
+    description: "가성비 최고, 한국어 지원 잘 되는 글쓰기 도구",
+    website: "https://rytr.me",
+    thumbnail: "https://logo.clearbit.com/rytr.me",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "write-writesonic", name: "Writesonic", category: "writing",
+    summary: "최신 구글 데이터 기반으로 블로그 글 작성",
+    description: "최신 구글 데이터 기반으로 블로그 글 작성",
+    website: "https://writesonic.com",
+    thumbnail: "https://logo.clearbit.com/writesonic.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "write-sudowrite", name: "Sudowrite", category: "writing",
+    summary: "소설가들을 위한 창작 도우미 (묘사, 전개 추천)",
+    description: "소설가들을 위한 창작 도우미 (묘사, 전개 추천)",
+    website: "https://sudowrite.com",
+    thumbnail: "https://logo.clearbit.com/sudowrite.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "write-novelai", name: "NovelAI", category: "writing",
+    summary: "내 취향대로 소설을 이어 써주는 서브컬처 특화 AI",
+    description: "내 취향대로 소설을 이어 써주는 서브컬처 특화 AI",
+    website: "https://novelai.net",
+    thumbnail: "https://logo.clearbit.com/novelai.net",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "write-wordtune", name: "Wordtune", category: "writing",
+    summary: "밋밋한 문장을 다채롭고 세련되게 바꿔줌",
+    description: "밋밋한 문장을 다채롭고 세련되게 바꿔줌",
+    website: "https://wordtune.com",
+    thumbnail: "https://logo.clearbit.com/wordtune.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "write-jenni", name: "Jenni AI", category: "writing",
+    summary: "논문이나 에세이 작성 시 문장 추천 및 출처 관리",
+    description: "논문이나 에세이 작성 시 문장 추천 및 출처 관리",
+    website: "https://jenni.ai",
+    thumbnail: "https://logo.clearbit.com/jenni.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "write-type", name: "Type.ai", category: "writing",
+    summary: "타자 치는 속도에 맞춰 문장을 미리 예측해 줌",
+    description: "타자 치는 속도에 맞춰 문장을 미리 예측해 줌",
+    website: "https://type.ai",
+    thumbnail: "https://logo.clearbit.com/type.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "write-hemingway", name: "Hemingway (Plus)", category: "writing",
+    summary: "복잡한 문장을 간결하고 읽기 쉽게 교정",
+    description: "복잡한 문장을 간결하고 읽기 쉽게 교정",
+    website: "https://hemingwayapp.com",
+    thumbnail: "https://logo.clearbit.com/hemingwayapp.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "write-hypefury", name: "Hypefury", category: "writing",
+    summary: "트위터(X)에서 바이럴 되기 좋은 스레드 작성",
+    description: "트위터(X)에서 바이럴 되기 좋은 스레드 작성",
+    website: "https://hypefury.com",
+    thumbnail: "https://logo.clearbit.com/hypefury.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "write-blaze", name: "TextBlaze", category: "writing",
+    summary: "자주 쓰는 문구를 단축키로 자동 완성 (AI 포함)",
+    description: "자주 쓰는 문구를 단축키로 자동 완성 (AI 포함)",
+    website: "https://blaze.today",
+    thumbnail: "https://logo.clearbit.com/blaze.today",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+
+  // ===========================================
+  // 16. Education / Research
+  // ===========================================
+  {
+    id: "edu-scispace", name: "Scispace", category: "education",
+    summary: "논문 검색부터 분석, 요약까지 연구자를 위한 AI",
+    description: "논문 검색부터 분석, 요약까지 연구자를 위한 AI",
+    website: "https://typeset.io",
+    thumbnail: "https://logo.clearbit.com/typeset.io",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edu-elicit", name: "Elicit", category: "education",
+    summary: "연구 질문을 던지면 관련 논문을 찾아 답을 정리",
+    description: "연구 질문을 던지면 관련 논문을 찾아 답을 정리",
+    website: "https://elicit.com",
+    thumbnail: "https://logo.clearbit.com/elicit.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edu-consensus", name: "Consensus", category: "education",
+    summary: "과학적 근거가 필요한 질문에 논문 기반으로 답변",
+    description: "과학적 근거가 필요한 질문에 논문 기반으로 답변",
+    website: "https://consensus.app",
+    thumbnail: "https://logo.clearbit.com/consensus.app",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edu-khan", name: "Khanmigo", category: "education",
+    summary: "칸아카데미가 만든 소크라테스식 1:1 학습 튜터",
+    description: "칸아카데미가 만든 소크라테스식 1:1 학습 튜터",
+    website: "https://khanacademy.org",
+    thumbnail: "https://logo.clearbit.com/khanacademy.org",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edu-quivr", name: "Quivr", category: "education",
+    summary: "내 컴퓨터의 파일(지식)을 학습시켜 만드는 제2의 두뇌",
+    description: "내 컴퓨터의 파일(지식)을 학습시켜 만드는 제2의 두뇌",
+    website: "https://quivr.app",
+    thumbnail: "https://logo.clearbit.com/quivr.app",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edu-humata", name: "Humata", category: "education",
+    summary: "수백 페이지 PDF를 순식간에 읽고 질문에 답함",
+    description: "수백 페이지 PDF를 순식간에 읽고 질문에 답함",
+    website: "https://humata.ai",
+    thumbnail: "https://logo.clearbit.com/humata.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edu-scholarcy", name: "Scholarcy", category: "education",
+    summary: "복잡한 논문을 플래시카드 형태로 핵심만 요약",
+    description: "복잡한 논문을 플래시카드 형태로 핵심만 요약",
+    website: "https://scholarcy.com",
+    thumbnail: "https://logo.clearbit.com/scholarcy.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edu-gradescope", name: "Gradescope", category: "education",
+    summary: "수학, 코딩 등 시험 채점을 AI로 자동화 (교사용)",
+    description: "수학, 코딩 등 시험 채점을 AI로 자동화 (교사용)",
+    website: "https://gradescope.com",
+    thumbnail: "https://logo.clearbit.com/gradescope.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edu-socratic", name: "Socratic", category: "education",
+    summary: "구글이 만든 숙제 도우미, 사진 찍으면 풀이 검색",
+    description: "구글이 만든 숙제 도우미, 사진 찍으면 풀이 검색",
+    website: "https://socratic.org",
+    thumbnail: "https://logo.clearbit.com/socratic.org",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edu-photomath", name: "Photomath", category: "education",
+    summary: "수학 문제를 카메라로 비추면 풀이 과정까지 보여줌",
+    description: "수학 문제를 카메라로 비추면 풀이 과정까지 보여줌",
+    website: "https://photomath.com",
+    thumbnail: "https://logo.clearbit.com/photomath.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+
+  // ===========================================
+  // 17. Chatbot / Persona
+  // ===========================================
+  {
+    id: "chat-chatbase", name: "Chatbase", category: "chatbot",
+    summary: "내 데이터를 넣으면 고객 응대용 챗봇 뚝딱 완성",
+    description: "내 데이터를 넣으면 고객 응대용 챗봇 뚝딱 완성",
+    website: "https://chatbase.co",
+    thumbnail: "https://logo.clearbit.com/chatbase.co",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "chat-botsonic", name: "Botsonic", category: "chatbot",
+    summary: "기업용 AI 챗봇 빌더, 코딩 없이 쉽게 제작",
+    description: "기업용 AI 챗봇 빌더, 코딩 없이 쉽게 제작",
+    website: "https://writesonic.com/botsonic",
+    thumbnail: "https://logo.clearbit.com/writesonic.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "chat-dante", name: "Dante AI", category: "chatbot",
+    summary: "GPT-4 기반의 커스텀 데이터 훈련 챗봇 플랫폼",
+    description: "GPT-4 기반의 커스텀 데이터 훈련 챗봇 플랫폼",
+    website: "https://dante-ai.com",
+    thumbnail: "https://logo.clearbit.com/dante-ai.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "chat-myshell", name: "MyShell", category: "chatbot",
+    summary: "다양한 목소리와 성격을 가진 봇을 만들고 공유",
+    description: "다양한 목소리와 성격을 가진 봇을 만들고 공유",
+    website: "https://myshell.ai",
+    thumbnail: "https://logo.clearbit.com/myshell.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "chat-poe", name: "Poe", category: "chatbot",
+    summary: "여러 LLM 모델을 한곳에서 쓰고 봇도 만드는 플랫폼",
+    description: "여러 LLM 모델을 한곳에서 쓰고 봇도 만드는 플랫폼",
+    website: "https://poe.com",
+    thumbnail: "https://logo.clearbit.com/poe.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "chat-character", name: "Character.ai", category: "chatbot",
+    summary: "유명인, 애니 캐릭터와 대화하는 가장 핫한 놀이터",
+    description: "유명인, 애니 캐릭터와 대화하는 가장 핫한 놀이터",
+    website: "https://character.ai",
+    thumbnail: "https://logo.clearbit.com/character.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "chat-janitor", name: "JanitorAI", category: "chatbot",
+    summary: "규제 없이 자유로운 대화가 가능한 캐릭터 챗봇",
+    description: "규제 없이 자유로운 대화가 가능한 캐릭터 챗봇",
+    website: "https://janitorai.com",
+    thumbnail: "https://logo.clearbit.com/janitorai.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "chat-replika", name: "Replika", category: "chatbot",
+    summary: "나와 감정적인 유대를 쌓는 가장 오래된 AI 친구",
+    description: "나와 감정적인 유대를 쌓는 가장 오래된 AI 친구",
+    website: "https://replika.com",
+    thumbnail: "https://logo.clearbit.com/replika.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "chat-talkie", name: "Talkie", category: "chatbot",
+    summary: "모바일에서 인기 있는 감성 대화 및 캐릭터 수집",
+    description: "모바일에서 인기 있는 감성 대화 및 캐릭터 수집",
+    website: "https://talkie-ai.com",
+    thumbnail: "https://logo.clearbit.com/talkie-ai.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "chat-crushon", name: "CrushOn.AI", category: "chatbot",
+    summary: "검열 없는 로맨스/롤플레잉 특화 대화 서비스",
+    description: "검열 없는 로맨스/롤플레잉 특화 대화 서비스",
+    website: "https://crushon.ai",
+    thumbnail: "https://logo.clearbit.com/crushon.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+
+  // ===========================================
+  // 18. Avatar
+  // ===========================================
+  {
+    id: "avatar-heygen", name: "HeyGen", category: "avatar",
+    summary: "사진 한 장으로 말하는 영상 생성, 입모양 싱크 최강",
+    description: "사진 한 장으로 말하는 영상 생성, 입모양 싱크 최강",
+    website: "https://heygen.com",
+    thumbnail: "https://logo.clearbit.com/heygen.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "avatar-did", name: "D-ID", category: "avatar",
+    summary: "말하는 얼굴 생성 API 분야의 전통 강자",
+    description: "말하는 얼굴 생성 API 분야의 전통 강자",
+    website: "https://d-id.com",
+    thumbnail: "https://logo.clearbit.com/d-id.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "avatar-synthesia", name: "Synthesia", category: "avatar",
+    summary: "기업용 교육/홍보 영상에 쓰는 전문 AI 아바타",
+    description: "기업용 교육/홍보 영상에 쓰는 전문 AI 아바타",
+    website: "https://synthesia.io",
+    thumbnail: "https://logo.clearbit.com/synthesia.io",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "avatar-akool", name: "Akool", category: "avatar",
+    summary: "얼굴 바꾸기(딥페이크)와 아바타 생성 고품질 툴",
+    description: "얼굴 바꾸기(딥페이크)와 아바타 생성 고품질 툴",
+    website: "https://akool.com",
+    thumbnail: "https://logo.clearbit.com/akool.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "avatar-hedra", name: "Hedra", category: "avatar",
+    summary: "감정 표현과 고개 돌림이 자유로운 차세대 아바타",
+    description: "감정 표현과 고개 돌림이 자유로운 차세대 아바타",
+    website: "https://hedra.com",
+    thumbnail: "https://logo.clearbit.com/hedra.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "avatar-virbo", name: "Wondershare Virbo", category: "avatar",
+    summary: "글로벌 상업용 영상 제작을 위한 가성비 아바타",
+    description: "글로벌 상업용 영상 제작을 위한 가성비 아바타",
+    website: "https://virbo.wondershare.com",
+    thumbnail: "https://logo.clearbit.com/wondershare.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "avatar-argil", name: "Argil", category: "avatar",
+    summary: "인플루언서를 위한 딥페이크 복제 및 영상 생성",
+    description: "인플루언서를 위한 딥페이크 복제 및 영상 생성",
+    website: "https://argil.ai",
+    thumbnail: "https://logo.clearbit.com/argil.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "avatar-pipio", name: "Pipio", category: "avatar",
+    summary: "배우 섭외 없이 텍스트로 영상 만드는 플랫폼",
+    description: "배우 섭외 없이 텍스트로 영상 만드는 플랫폼",
+    website: "https://pipio.ai",
+    thumbnail: "https://logo.clearbit.com/pipio.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "avatar-colossyan", name: "Colossyan", category: "avatar",
+    summary: "직장 내 교육(L&D) 영상 제작에 특화된 아바타",
+    description: "직장 내 교육(L&D) 영상 제작에 특화된 아바타",
+    website: "https://colossyan.com",
+    thumbnail: "https://logo.clearbit.com/colossyan.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "avatar-hourone", name: "Hour One", category: "avatar",
+    summary: "뉴스나 방송 스타일의 고화질 가상 인간 생성",
+    description: "뉴스나 방송 스타일의 고화질 가상 인간 생성",
+    website: "https://hourone.ai",
+    thumbnail: "https://logo.clearbit.com/hourone.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+
+  // ===========================================
+  // 19. Web Builder
+  // ===========================================
+  {
+    id: "web-framer", name: "Framer", category: "web-builder",
+    summary: "디자이너가 코딩 없이 고퀄 웹사이트를 만드는 툴",
+    description: "디자이너가 코딩 없이 고퀄 웹사이트를 만드는 툴",
+    website: "https://framer.com",
+    thumbnail: "https://logo.clearbit.com/framer.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "web-v0", name: "v0 (Vercel)", category: "web-builder",
+    summary: "텍스트로 설명하면 리액트 코드를 즉시 짜줌",
+    description: "텍스트로 설명하면 리액트 코드를 즉시 짜줌",
+    website: "https://v0.dev",
+    thumbnail: "https://logo.clearbit.com/vercel.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "web-websim", name: "WebSim", category: "web-builder",
+    summary: "상상하는 모든 인터넷 사이트를 시뮬레이션해 줌",
+    description: "상상하는 모든 인터넷 사이트를 시뮬레이션해 줌",
+    website: "https://websim.ai",
+    thumbnail: "https://logo.clearbit.com/websim.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "web-create", name: "Create", category: "web-builder",
+    summary: "앱 개발 프로세스 전체를 자동화하려는 시도",
+    description: "앱 개발 프로세스 전체를 자동화하려는 시도",
+    website: "https://create.xyz",
+    thumbnail: "https://logo.clearbit.com/create.xyz",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "web-relume", name: "Relume", category: "web-builder",
+    summary: "피그마와 웹플로우용 사이트맵/와이어프레임 생성",
+    description: "피그마와 웹플로우용 사이트맵/와이어프레임 생성",
+    website: "https://relume.io",
+    thumbnail: "https://logo.clearbit.com/relume.io",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "web-mixo", name: "Mixo", category: "web-builder",
+    summary: "아이디어 한 줄이면 랜딩 페이지가 뚝딱 나옴",
+    description: "아이디어 한 줄이면 랜딩 페이지가 뚝딱 나옴",
+    website: "https://mixo.io",
+    thumbnail: "https://logo.clearbit.com/mixo.io",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "web-dora", name: "Dora", category: "web-builder",
+    summary: "화려한 3D 웹사이트를 글자로 명령해서 만듦",
+    description: "화려한 3D 웹사이트를 글자로 명령해서 만듦",
+    website: "https://dora.run",
+    thumbnail: "https://logo.clearbit.com/dora.run",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "web-10web", name: "10Web", category: "web-builder",
+    summary: "워드프레스 사이트를 AI가 자동으로 구축 및 관리",
+    description: "워드프레스 사이트를 AI가 자동으로 구축 및 관리",
+    website: "https://10web.io",
+    thumbnail: "https://logo.clearbit.com/10web.io",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "web-pineapple", name: "Pineapple", category: "web-builder",
+    summary: "블로그나 포트폴리오 사이트를 빠르게 생성",
+    description: "블로그나 포트폴리오 사이트를 빠르게 생성",
+    website: "https://pineapplebuilder.com",
+    thumbnail: "https://logo.clearbit.com/pineapplebuilder.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "web-galileo", name: "Galileo AI", category: "web-builder",
+    summary: "텍스트에서 모바일 UI 디자인(피그마) 생성",
+    description: "텍스트에서 모바일 UI 디자인(피그마) 생성",
+    website: "https://usegalileo.ai",
+    thumbnail: "https://logo.clearbit.com/usegalileo.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+
+  // ===========================================
+  // 20. Game
+  // ===========================================
+  {
+    id: "game-rosebud", name: "Rosebud AI", category: "game",
+    summary: "코딩 몰라도 말로 설명해서 게임 만드는 플랫폼",
+    description: "코딩 몰라도 말로 설명해서 게임 만드는 플랫폼",
+    website: "https://rosebud.ai",
+    thumbnail: "https://logo.clearbit.com/rosebud.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "game-scenario", name: "Scenario", category: "game",
+    summary: "내 게임 아트 스타일을 학습시켜 무한 생성",
+    description: "내 게임 아트 스타일을 학습시켜 무한 생성",
+    website: "https://scenario.com",
+    thumbnail: "https://logo.clearbit.com/scenario.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "game-layer", name: "Layer.ai", category: "game",
+    summary: "게임 에셋 제작에 특화된 전문가용 생성 툴",
+    description: "게임 에셋 제작에 특화된 전문가용 생성 툴",
+    website: "https://layer.ai",
+    thumbnail: "https://logo.clearbit.com/layer.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "game-inworld", name: "Inworld", category: "game",
+    summary: "NPC에게 지능과 성격을 부여해 대화 가능하게 함",
+    description: "NPC에게 지능과 성격을 부여해 대화 가능하게 함",
+    website: "https://inworld.ai",
+    thumbnail: "https://logo.clearbit.com/inworld.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "game-leonardo", name: "Leonardo.ai (Game)", category: "game",
+    summary: "게임 아이템, 텍스처 생성에 강력한 모델 보유",
+    description: "게임 아이템, 텍스처 생성에 강력한 모델 보유",
+    website: "https://leonardo.ai",
+    thumbnail: "https://logo.clearbit.com/leonardo.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "game-skybox", name: "Blockade Skybox", category: "game",
+    summary: "게임 배경(스카이박스) 360도 이미지 생성",
+    description: "게임 배경(스카이박스) 360도 이미지 생성",
+    website: "https://skybox.blockadelabs.com",
+    thumbnail: "https://logo.clearbit.com/blockadelabs.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "game-meshy", name: "Meshy (Game)", category: "game",
+    summary: "3D 게임 오브젝트를 텍스트로 빠르게 생성",
+    description: "3D 게임 오브젝트를 텍스트로 빠르게 생성",
+    website: "https://meshy.ai",
+    thumbnail: "https://logo.clearbit.com/meshy.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "game-promethean", name: "Promethean AI", category: "game",
+    summary: "게임 속 환경(맵)을 알아서 배치하고 채워줌",
+    description: "게임 속 환경(맵)을 알아서 배치하고 채워줌",
+    website: "https://prometheanai.com",
+    thumbnail: "https://logo.clearbit.com/prometheanai.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "game-charisma", name: "Charisma.ai", category: "game",
+    summary: "인터랙티브 스토리 게임을 위한 캐릭터 대화 엔진",
+    description: "인터랙티브 스토리 게임을 위한 캐릭터 대화 엔진",
+    website: "https://charisma.ai",
+    thumbnail: "https://logo.clearbit.com/charisma.ai",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "game-replica", name: "Replica Studios", category: "game",
+    summary: "게임 캐릭터 목소리 연기를 AI로 해결",
+    description: "게임 캐릭터 목소리 연기를 AI로 해결",
+    website: "https://replicastudios.com",
+    thumbnail: "https://logo.clearbit.com/replicastudios.com",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
 ];

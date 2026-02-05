@@ -30,9 +30,9 @@ const categories = [
         iconBorder: "border-orange-500 dark:border-orange-500 bg-orange-50 dark:bg-black", // Fixed orange border & bg for Rocket
         previewComponent: ProjectPreview,
         stats: {
-            count: "12+",
+            count: "2개",
             label: "진행 중인 프로젝트",
-            trend: "+3 이번 달"
+            trend: "+4개 준비 중"
         }
     },
     {
@@ -43,9 +43,9 @@ const categories = [
         gradient: "from-orange-500 to-orange-600",
         previewComponent: MinigamePreview,
         stats: {
-            count: "8+",
-            label: "플레이 가능한 게임",
-            trend: "신규 게임 출시"
+            count: "3개",
+            label: "미니게임",
+            trend: "+1개 준비 중"
         }
     },
     {
@@ -56,7 +56,7 @@ const categories = [
         gradient: "from-orange-300 to-orange-500",
         previewComponent: AIToolsPreview,
         stats: {
-            count: "50+",
+            count: "80+",
             label: "큐레이션된 도구",
             trend: "매주 업데이트"
         }
@@ -69,7 +69,7 @@ const categories = [
         gradient: "from-amber-400 to-orange-500",
         previewComponent: InsightPreview,
         stats: {
-            count: "100+",
+            count: "50+",
             label: "인사이트 아티클",
             trend: "주간 업데이트"
         }
@@ -82,9 +82,9 @@ const categories = [
         gradient: "from-orange-500 to-red-500",
         previewComponent: null, // 커뮤니티는 미리보기 없음
         stats: {
-            count: "1.2K+",
-            label: "활성 멤버",
-            trend: "+250 이번 달"
+            count: "Beta",
+            label: "초기 멤버 모집",
+            trend: "Join Now"
         }
     },
     {
@@ -96,9 +96,9 @@ const categories = [
         iconBorder: "group-hover:border-orange-600 dark:group-hover:border-orange-600", // Hover color
         previewComponent: null, // 마켓은 미리보기 없음
         stats: {
-            count: "200+",
+            count: "준비 중",
             label: "리소스 아이템",
-            trend: "신규 입점"
+            trend: "Coming Soon"
         }
     },
 ];
@@ -228,7 +228,7 @@ export function CategoryGrid() {
 
                                 {/* 콘텐츠 미리보기 (카드 하단에 배치) */}
                                 {PreviewComponent && (
-                                    <div className="bg-muted/50 dark:!bg-black border border-t-0 border-strict rounded-b-2xl p-6 -mt-2">
+                                    <div className="bg-muted/50 dark:!bg-black border border-t-0 border-strict rounded-b-2xl p-4 -mt-2">
                                         <PreviewComponent />
                                     </div>
                                 )}

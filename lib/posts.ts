@@ -10,10 +10,10 @@ const postsDirectory = path.join(process.cwd(), 'posts');
 // 🔍 [핵심] 폴더 속의 폴더까지 뒤져서 모든 .md 파일 경로를 찾아내는 함수 (재귀)
 function getAllMdFiles(dirPath: string, arrayOfFiles: string[] = []) {
   if (!fs.existsSync(dirPath)) return arrayOfFiles;
-  
+
   const files = fs.readdirSync(dirPath);
 
-  files.forEach(function(file) {
+  files.forEach(function (file) {
     const fullPath = path.join(dirPath, file);
     if (fs.statSync(fullPath).isDirectory()) {
       // 폴더면 안으로 더 들어감
@@ -39,7 +39,7 @@ export function getSortedPostsData(): InsightItem[] {
 
     // 전체 파일 탐색
     const allFiles = getAllMdFiles(postsDirectory);
-    
+
     if (allFiles.length === 0) {
       return [];
     }
@@ -48,7 +48,7 @@ export function getSortedPostsData(): InsightItem[] {
       .map((fullPath) => {
         try {
           // 파일명(101.md)에서 확장자 제거 -> ID(101)
-          const id = path.basename(fullPath).replace(/\.md$/, ''); 
+          const id = path.basename(fullPath).replace(/\.md$/, '');
           const fileContents = fs.readFileSync(fullPath, 'utf8');
           const matterResult = matter(fileContents);
 
@@ -88,26 +88,58 @@ export function getSortedPostsData(): InsightItem[] {
 
 // 2. 특정 글 내용 가져오기 (상세 페이지용)
 export async function getPostData(id: string) {
+  // 1. 일반 포스트에서 찾기
   const allFiles = getAllMdFiles(postsDirectory);
-  
-  // ID와 일치하는 파일명을 가진 파일 찾기 (폴더가 어디든 상관없음)
   const targetFile = allFiles.find(file => path.basename(file) === `${id}.md`);
 
-  if (!targetFile) {
-    throw new Error(`Post not found: ${id}`);
+  if (targetFile) {
+    const fileContents = fs.readFileSync(targetFile, 'utf8');
+    const matterResult = matter(fileContents);
+    // MDX 사용을 위해 raw content 반환
+    return {
+      id: parseInt(id) || 0,
+      content: matterResult.content, // Raw Markdown
+      contentHtml: '', // Legacy support
+      ...matterResult.data,
+      thumbnail_url: matterResult.data.image, // Map image to thumbnail_url
+      author: matterResult.data.author || 'DORI-AI', // Default author
+      date: matterResult.data.date || new Date().toISOString(),
+    } as any;
   }
 
-  const fileContents = fs.readFileSync(targetFile, 'utf8');
-  const matterResult = matter(fileContents);
+  // 2. 트렌드에서 찾기
+  const { getTrendBySlug } = await import('@/lib/trends');
+  const trend = getTrendBySlug(id);
+  if (trend) {
+    return {
+      id: id,
+      content: trend.content, // Raw Markdown
+      contentHtml: '',
+      title: trend.title,
+      date: trend.date,
+      category: trend.category,
+      author: trend.author,
+      thumbnail_url: trend.thumbnail,
+      tags: trend.tags,
+    } as any;
+  }
 
-  const processedContent = await remark()
-    .use(html)
-    .process(matterResult.content);
-  const contentHtml = processedContent.toString();
+  // 3. 가이드에서 찾기
+  const { getGuideBySlug } = await import('@/lib/guides');
+  const guide = getGuideBySlug(id);
+  if (guide) {
+    return {
+      id: id,
+      content: guide.content, // Raw Markdown
+      contentHtml: '',
+      title: guide.title,
+      date: guide.date,
+      category: guide.category,
+      author: guide.author,
+      thumbnail_url: guide.thumbnail,
+      tags: guide.tags,
+    } as any;
+  }
 
-  return {
-    id: parseInt(id),
-    contentHtml,
-    ...matterResult.data,
-  } as InsightItem & { contentHtml: string };
+  throw new Error(`Post not found: ${id}`);
 }

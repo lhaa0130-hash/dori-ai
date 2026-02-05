@@ -92,11 +92,31 @@ const config: Config = {
             "background-position": "right center",
           },
         },
+        "shimmer-line": {
+          "0%": { transform: "translateX(-100%)" },
+          "100%": { transform: "translateX(100%)" },
+        },
+        "slide-up": {
+          "from": { opacity: "0", transform: "translateY(20px)" },
+          "to": { opacity: "1", transform: "translateY(0)" },
+        },
+        "fade-in": {
+          "from": { opacity: "0" },
+          "to": { opacity: "1" },
+        },
+        "pop-in": {
+          "0%": { opacity: "0", transform: "scale(0.5)" },
+          "100%": { opacity: "1", transform: "scale(1)" },
+        },
       },
       animation: { // shadcn/ui animation
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
         "gradient-x": "gradient-x 3s ease infinite",
+        "shimmer-line": "shimmer-line 2s linear infinite",
+        "slide-up": "slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) both",
+        "fade-in": "fade-in 1s ease-out forwards",
+        "pop-in": "pop-in 0.5s cubic-bezier(0.175, 0.885, 0.32, 1.275) both",
       },
       // existing typography
       typography: {

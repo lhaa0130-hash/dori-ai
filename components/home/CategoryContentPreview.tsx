@@ -2,89 +2,96 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Users, Clock, Gamepad2, Lightbulb, Cog, Sparkles, TrendingUp, Star } from "lucide-react";
+import { ArrowRight, Users, Clock, Gamepad2, Lightbulb, Cog, Sparkles, TrendingUp, Star, Globe, BookOpen, Smartphone, Video, Film, ShoppingBag, Timer, Swords, BrainCircuit, MousePointer2 } from "lucide-react";
 
 // 프로젝트 미리보기 데이터 (실제로는 API나 파일에서 가져와야 함)
+// 프로젝트 미리보기 데이터 (프로젝트 페이지와 동기화)
 const projectPreviews = [
     {
-        id: 1,
-        title: "DORI 캐릭터 생성 프로젝트",
-        status: "진행중",
-        participants: 12,
-        progress: 65,
-        description: "AI를 활용한 DORI 브랜드 캐릭터 디자인 및 생성",
-        category: "이미지 생성",
-        daysLeft: 12
+        id: "site",
+        title: "사이트: DORI-AI",
+        description: "AI 정보를 공유하고 소통하는 커뮤니티 플랫폼",
+        status: "ACTIVE",
+        statusLabel: "진행 중",
+        category: "Web Platform",
+        icon: <Globe className="w-5 h-5 text-orange-500" />
     },
     {
-        id: 2,
-        title: "AI 자동화 워크플로우",
-        status: "모집중",
-        participants: 8,
-        progress: 30,
-        description: "n8n을 활용한 업무 자동화 시스템 구축",
-        category: "자동화",
-        daysLeft: 25
+        id: "animal",
+        title: "동물 도감",
+        description: "아이들의 상상력을 자극하는 나만의 동물 도감",
+        status: "ACTIVE",
+        statusLabel: "진행 중",
+        category: "AI Service",
+        icon: <BookOpen className="w-5 h-5 text-orange-500" />
     },
     {
-        id: 3,
-        title: "프롬프트 템플릿 라이브러리",
-        status: "진행중",
-        participants: 15,
-        progress: 85,
-        description: "다양한 시나리오별 고품질 프롬프트 템플릿 큐레이션",
-        category: "글쓰기",
-        daysLeft: 5
+        id: "app",
+        title: "애플리케이션",
+        description: "언제 어디서나 접근 가능한 DORI-AI 전용 앱",
+        status: "COMING SOON",
+        statusLabel: "준비 중",
+        category: "Mobile App",
+        icon: <Smartphone className="w-5 h-5 text-neutral-400" />
     },
     {
-        id: 4,
-        title: "AI 음성 콘텐츠 제작",
-        status: "모집중",
-        participants: 6,
-        progress: 20,
-        description: "ElevenLabs를 활용한 팟캐스트 자동 생성",
-        category: "음성",
-        daysLeft: 30
+        id: "shorts",
+        title: "유튜브 숏츠",
+        description: "매일 업데이트되는 최신 AI 뉴스",
+        status: "COMING SOON",
+        statusLabel: "준비 중",
+        category: "Content",
+        icon: <Video className="w-5 h-5 text-neutral-400" />
+    },
+    {
+        id: "animation",
+        title: "유튜브 애니메이션",
+        description: "도리와 라라가 함께하는 교육 애니메이션",
+        status: "COMING SOON",
+        statusLabel: "준비 중",
+        category: "Kids Tech",
+        icon: <Film className="w-5 h-5 text-neutral-400" />
+    },
+    {
+        id: "gumroad",
+        title: "디지털 마켓",
+        description: "AI로 생성한 고품질 디지털 에셋과 교육 자료",
+        status: "COMING SOON",
+        statusLabel: "준비 중",
+        category: "Marketplace",
+        icon: <ShoppingBag className="w-5 h-5 text-neutral-400" />
     }
 ];
 
-// 미니게임 미리보기 데이터
+// 미니게임 미리보기 데이터 (실제 게임 데이터로 교체)
+// 미니게임 미리보기 데이터 (실제 게임 데이터로 교체)
 const minigamePreviews = [
     {
-        id: 1,
-        name: "AI 퀴즈 챌린지",
-        icon: "🎯",
+        id: "quiz",
+        name: "AI 상식 퀴즈",
+        icon: <BrainCircuit className="w-5 h-5 text-orange-500" />,
         plays: 1234,
         rating: 4.8,
-        description: "AI 지식을 테스트하세요",
+        description: "AI 관련 상식을 테스트하는 퀴즈",
         difficulty: "쉬움"
     },
     {
-        id: 2,
-        name: "프롬프트 배틀",
-        icon: "⚔️",
-        plays: 856,
-        rating: 4.6,
-        description: "최고의 프롬프트를 겨루세요",
+        id: "memory",
+        name: "카드 뒤집기",
+        icon: <Gamepad2 className="w-5 h-5 text-orange-500" />,
+        plays: 0,
+        rating: 0,
+        description: "Dori 캐릭터 카드 짝 맞추기",
         difficulty: "보통"
     },
     {
-        id: 3,
-        name: "이미지 추리 게임",
-        icon: "🎨",
-        plays: 2103,
-        rating: 4.9,
-        description: "AI가 생성한 이미지 맞추기",
-        difficulty: "어려움"
-    },
-    {
-        id: 4,
-        name: "AI 음악 맞추기",
-        icon: "🎵",
-        plays: 542,
-        rating: 4.5,
-        description: "AI가 작곡한 음악 장르 맞추기",
-        difficulty: "보통"
+        id: "reaction",
+        name: "반응속도 테스트",
+        icon: <MousePointer2 className="w-5 h-5 text-neutral-400" />,
+        plays: 0,
+        rating: 0,
+        description: "당신의 반사신경을 테스트하세요 (준비중)",
+        difficulty: "준비중"
     }
 ];
 
@@ -101,40 +108,40 @@ const aiToolsPreviews = [
 // 인사이트 미리보기 데이터
 const insightPreviews = [
     {
-        title: "2024년 AI 트렌드: 생성형 AI의 진화",
-        date: "2일 전",
-        views: 1240,
+        title: "한국의 국가대표 AI 모델 'K-AI GPT' 공개와 미래 전략",
+        date: "2025.12.31",
+        views: 5120,
         category: "트렌드",
-        readTime: "5분"
+        readTime: "10분"
     },
     {
-        title: "프롬프트 엔지니어링 마스터 가이드",
-        date: "5일 전",
-        views: 2103,
-        category: "가이드",
-        readTime: "8분"
-    },
-    {
-        title: "AI 이미지 생성 도구 비교 분석",
-        date: "1주일 전",
-        views: 856,
-        category: "분석",
+        title: "메타, $20억 규모의 AI 에이전트 스타트업 '마누스' 인수",
+        date: "2025.12.31",
+        views: 4150,
+        category: "트렌드",
         readTime: "12분"
     },
     {
-        title: "AI 자동화로 생산성 10배 높이기",
-        date: "2주일 전",
-        views: 3421,
-        category: "튜토리얼",
+        title: "머스크의 승부수: 2026년 ‘뉴럴링크’ 양산과 뇌-컴퓨터 시대",
+        date: "2026.01.05",
+        views: 6720,
+        category: "트렌드",
         readTime: "15분"
+    },
+    {
+        title: "AI가 처음인 사람을 위한 인공지능 기초 안내서",
+        date: "2025.12.01",
+        views: 3240,
+        category: "가이드",
+        readTime: "7분"
     }
 ];
 
 // 프로젝트 미리보기 컴포넌트 - 확장된 버전
 export function ProjectPreview() {
     return (
-        <div className="mt-6 pt-6 border-t border-strict">
-            <div className="flex items-center justify-between mb-4">
+        <div className="pt-1">
+            <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                     <Cog className="w-4 h-4 text-orange-500" />
                     진행 중인 프로젝트
@@ -144,7 +151,7 @@ export function ProjectPreview() {
                     <ArrowRight className="w-3 h-3" />
                 </Link>
             </div>
-            <div className="grid grid-cols-1 gap-3">
+            <div className="grid grid-cols-1 gap-1.5">
                 {projectPreviews.map((project, index) => (
                     <motion.div
                         key={project.id}
@@ -154,47 +161,35 @@ export function ProjectPreview() {
                         viewport={{ once: true }}
                     >
                         <Link href="/project" className="group block">
-                            <div className="p-3.5 rounded-lg bg-card/50 border border-strict hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-md">
-                                <div className="flex items-start justify-between mb-2">
+                            <div className="py-2 px-3 rounded-lg bg-card/50 border border-strict hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-md">
+                                <div className="flex items-start gap-2.5 mb-0.5">
+                                    <div className="shrink-0 mt-0.5">
+                                        {project.icon}
+                                    </div>
                                     <div className="flex-1 min-w-0">
-                                        <h4 className="text-sm font-semibold text-foreground group-hover:text-orange-500 transition-colors line-clamp-1 mb-1">
-                                            {project.title}
-                                        </h4>
-                                        <p className="text-xs text-muted-foreground line-clamp-1 mb-2">
+                                        <div className="flex items-start justify-between">
+                                            <h4 className="text-sm font-semibold text-foreground group-hover:text-orange-500 transition-colors line-clamp-1">
+                                                {project.title}
+                                            </h4>
+                                            <span className={`text-[9px] px-1.5 py-0 rounded-full flex-shrink-0 ml-2 border ${project.status === "ACTIVE"
+                                                ? "bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 border-orange-100 dark:border-orange-900/30"
+                                                : "bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 border-neutral-100 dark:border-neutral-700"
+                                                }`}>
+                                                {project.statusLabel}
+                                            </span>
+                                        </div>
+                                        <p className="text-[11px] text-muted-foreground line-clamp-1 mt-0.5">
                                             {project.description}
                                         </p>
                                     </div>
-                                    <span className={`text-[10px] px-2 py-0.5 rounded-full flex-shrink-0 ml-2 ${project.status === "진행중"
-                                        ? "bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400"
-                                        : "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400"
-                                        }`}>
-                                        {project.status}
-                                    </span>
                                 </div>
 
-                                {/* Progress Bar */}
-                                <div className="mb-2">
-                                    <div className="h-1.5 bg-secondary rounded-full overflow-hidden">
-                                        <div
-                                            className="h-full bg-gradient-to-r from-orange-400 to-orange-500 rounded-full transition-all"
-                                            style={{ width: `${project.progress}%` }}
-                                        />
-                                    </div>
-                                </div>
-
-                                <div className="flex items-center justify-between text-[11px]">
-                                    <div className="flex items-center gap-3">
-                                        <span className="flex items-center gap-1 text-muted-foreground">
-                                            <Users className="w-3 h-3" />
-                                            {project.participants}명
-                                        </span>
-                                        <span className="text-muted-foreground">
-                                            {project.category}
-                                        </span>
-                                    </div>
-                                    <span className="text-orange-600 dark:text-orange-400 font-medium">
-                                        D-{project.daysLeft}
+                                <div className="flex items-center justify-between text-[10px] text-muted-foreground mt-1 pl-7">
+                                    <span className="flex items-center gap-1">
+                                        <Users className="w-2.5 h-2.5" />
+                                        <span>DORI Team</span>
                                     </span>
+                                    <span>{project.category}</span>
                                 </div>
                             </div>
                         </Link>
@@ -209,16 +204,16 @@ export function ProjectPreview() {
 export function MinigamePreview() {
     const getDifficultyColor = (difficulty: string) => {
         switch (difficulty) {
-            case "쉬움": return "text-green-600 dark:text-green-400";
-            case "보통": return "text-yellow-600 dark:text-yellow-400";
-            case "어려움": return "text-red-600 dark:text-red-400";
-            default: return "text-neutral-600 dark:text-neutral-400";
+            case "쉬움": return "text-neutral-400 dark:text-neutral-500";
+            case "보통": return "text-neutral-600 dark:text-neutral-400";
+            case "어려움": return "text-orange-500 dark:text-orange-400";
+            default: return "text-neutral-400";
         }
     };
 
     return (
-        <div className="mt-6 pt-6 border-t border-strict">
-            <div className="flex items-center justify-between mb-4">
+        <div className="pt-1">
+            <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                     <Gamepad2 className="w-4 h-4 text-orange-500" />
                     인기 미니게임
@@ -228,7 +223,7 @@ export function MinigamePreview() {
                     <ArrowRight className="w-3 h-3" />
                 </Link>
             </div>
-            <div className="grid grid-cols-2 gap-2.5">
+            <div className="grid grid-cols-2 gap-1.5">
                 {minigamePreviews.map((game, index) => (
                     <motion.div
                         key={game.id}
@@ -238,27 +233,29 @@ export function MinigamePreview() {
                         viewport={{ once: true }}
                     >
                         <Link href="/minigame" className="group block">
-                            <div className="p-3 rounded-lg bg-card border border-strict hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-md">
-                                <div className="flex items-start gap-2 mb-2">
-                                    <div className="text-2xl">{game.icon}</div>
+                            <div className="py-2 px-3 rounded-lg bg-card border border-strict hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-md">
+                                <div className="flex items-start gap-2 mb-1">
+                                    <div className="shrink-0 mt-0.5">{game.icon}</div>
                                     <div className="flex-1 min-w-0">
-                                        <h4 className="text-xs font-semibold text-foreground line-clamp-1 mb-0.5">
+                                        <h4 className="text-xs font-semibold text-foreground line-clamp-1 mb-0">
                                             {game.name}
                                         </h4>
-                                        <div className="flex items-center gap-1 mb-1">
-                                            <Star className="w-2.5 h-2.5 text-yellow-500 fill-yellow-500" />
-                                            <span className="text-[10px] text-muted-foreground">
-                                                {game.rating}
-                                            </span>
-                                        </div>
+                                        {game.rating > 0 && (
+                                            <div className="flex items-center gap-0.5">
+                                                <Star className="w-2 h-2 text-yellow-500 fill-yellow-500" />
+                                                <span className="text-[9px] text-muted-foreground">
+                                                    {game.rating}
+                                                </span>
+                                            </div>
+                                        )}
                                     </div>
                                 </div>
-                                <p className="text-[10px] text-muted-foreground mb-2 line-clamp-1">
+                                <p className="text-[10px] text-muted-foreground mb-1.5 line-clamp-1">
                                     {game.description}
                                 </p>
-                                <div className="flex items-center justify-between text-[10px]">
+                                <div className="flex items-center justify-between text-[9px]">
                                     <span className="text-orange-600 dark:text-orange-400 font-medium">
-                                        🎮 {game.plays.toLocaleString()}회
+                                        {game.plays > 0 ? `🎮 ${game.plays.toLocaleString()}` : "🚧 준비중"}
                                     </span>
                                     <span className={`font-medium ${getDifficultyColor(game.difficulty)}`}>
                                         {game.difficulty}
@@ -275,19 +272,15 @@ export function MinigamePreview() {
 
 // AI 도구 미리보기 컴포넌트 - 확장된 버전
 export function AIToolsPreview() {
-    const getBadgeColor = (color: string) => {
-        switch (color) {
-            case "green": return "bg-green-100 dark:bg-green-900/30 text-green-600 dark:text-green-400";
-            case "purple": return "bg-purple-100 dark:bg-purple-900/30 text-purple-600 dark:text-purple-400";
-            case "blue": return "bg-blue-100 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400";
-            case "orange": return "bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400";
-            case "pink": return "bg-pink-100 dark:bg-pink-900/30 text-pink-600 dark:text-pink-400";
-            default: return "bg-neutral-100 dark:bg-black text-neutral-600 dark:text-neutral-400";
+    const getBadgeColor = (badge: string) => {
+        if (["HOT", "인기", "추천", "트렌딩"].includes(badge)) {
+            return "bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 border border-orange-100 dark:border-orange-900/30";
         }
+        return "bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 border border-neutral-100 dark:border-neutral-700";
     };
 
     return (
-        <div className="mt-6 pt-6 border-t border-strict">
+        <div className="pt-1">
             <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-orange-500" />
@@ -308,16 +301,16 @@ export function AIToolsPreview() {
                         viewport={{ once: true }}
                     >
                         <Link href="/ai-tools" className="group">
-                            <div className="px-3 py-2 rounded-lg bg-card border border-strict hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-sm">
-                                <div className="flex items-center gap-2">
+                            <div className="px-3 py-1.5 rounded-lg bg-card border border-strict hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-sm">
+                                <div className="flex items-center gap-1.5">
                                     <span className="text-xs font-semibold text-foreground group-hover:text-orange-500 transition-colors">
                                         {tool.name}
                                     </span>
-                                    <span className={`text-[9px] px-1.5 py-0.5 rounded font-medium ${getBadgeColor(tool.color)}`}>
+                                    <span className={`text-[8px] px-1 py-0 rounded font-medium ${getBadgeColor(tool.badge)}`}>
                                         {tool.badge}
                                     </span>
                                 </div>
-                                <span className="text-[10px] text-muted-foreground mt-0.5 block">
+                                <span className="text-[9px] text-muted-foreground block">
                                     {tool.category}
                                 </span>
                             </div>
@@ -332,7 +325,7 @@ export function AIToolsPreview() {
 // 인사이트 미리보기 컴포넌트 - 확장된 버전
 export function InsightPreview() {
     return (
-        <div className="mt-6 pt-6 border-t border-strict">
+        <div className="pt-1">
             <div className="flex items-center justify-between mb-3">
                 <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                     <Lightbulb className="w-4 h-4 text-orange-500" />
@@ -352,12 +345,12 @@ export function InsightPreview() {
                         transition={{ delay: index * 0.08 }}
                         viewport={{ once: true }}
                     >
-                        <Link href="/insight" className="group block p-2.5 rounded-lg hover:bg-muted/50 transition-colors">
-                            <div className="flex items-start justify-between gap-2 mb-1">
-                                <h4 className="text-xs font-medium text-foreground group-hover:text-orange-500 transition-colors line-clamp-1 flex-1">
+                        <Link href="/insight" className="group block p-3 rounded-lg bg-card border border-strict hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-md">
+                            <div className="flex items-start justify-between gap-2 mb-1.5">
+                                <h4 className="text-xs font-semibold text-foreground group-hover:text-orange-500 transition-colors line-clamp-1 flex-1">
                                     {insight.title}
                                 </h4>
-                                <span className="text-[9px] px-1.5 py-0.5 rounded bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 flex-shrink-0">
+                                <span className="text-[9px] px-1.5 py-0.5 rounded bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 flex-shrink-0 border border-orange-200 dark:border-orange-800">
                                     {insight.category}
                                 </span>
                             </div>

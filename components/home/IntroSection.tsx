@@ -72,15 +72,15 @@ export function IntroSection() {
                 >
                     <span className="flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
-                        50+ AI 도구
+                        80+ AI 도구
                     </span>
                     <span className="flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-pink-500" />
-                        100+ 인사이트
+                        50+ 인사이트
                     </span>
                     <span className="flex items-center gap-1.5">
                         <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />
-                        1.2K+ 멤버
+                        Open Beta
                     </span>
                 </motion.div>
             </motion.div>
