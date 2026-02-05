@@ -307,3 +307,124 @@ h6 {
 .animate-border-glow {
   animation: border-glow 2s infinite alternate;
 }
+
+/* -------------------------------------------------------------------------- */
+/*  PREMIUM ARTICLE TYPOGRAPHY (INSIGHT)                                      */
+/* -------------------------------------------------------------------------- */
+@layer components {
+
+  .prose-premium h1,
+  .prose-premium h2,
+  .prose-premium h3,
+  .prose-premium h4 {
+    @apply font-bold tracking-tight text-gray-900 dark:text-gray-100;
+    margin-top: 2.5em;
+    margin-bottom: 1em;
+    line-height: 1.3;
+  }
+
+  .prose-premium h1 {
+    @apply text-3xl md:text-4xl;
+  }
+
+  .prose-premium h2 {
+    @apply text-2xl md:text-3xl border-b border-gray-100 dark:border-gray-800 pb-3;
+  }
+
+  .prose-premium h3 {
+    @apply text-xl md:text-2xl;
+  }
+
+  /* Paragraphs */
+  .prose-premium p {
+    @apply text-gray-700 dark:text-gray-300;
+    font-size: 1.125rem;
+    /* 18px */
+    line-height: 1.8;
+    margin-bottom: 1.75em;
+    word-break: keep-all;
+    /* Korean word-break */
+    overflow-wrap: break-word;
+  }
+
+  /* Strong/Bold */
+  .prose-premium strong {
+    @apply font-bold text-gray-900 dark:text-white;
+  }
+
+  /* Blockquotes */
+  .prose-premium blockquote {
+    @apply border-l-4 border-orange-500 bg-orange-50 dark:bg-orange-950/20 pl-6 py-4 my-8 rounded-r-lg italic;
+    color: #4b5563;
+    /* gray-600 */
+  }
+
+  .dark .prose-premium blockquote {
+    color: #d1d5db;
+    /* gray-300 */
+  }
+
+  /* Lists */
+  .prose-premium ul {
+    @apply list-disc list-outside ml-6 mb-8 marker:text-orange-500;
+  }
+
+  .prose-premium ol {
+    @apply list-decimal list-outside ml-6 mb-8 marker:text-orange-500;
+  }
+
+  .prose-premium li {
+    @apply mb-3 pl-2 text-lg text-gray-700 dark:text-gray-300 leading-relaxed;
+  }
+
+  /* Inline Code */
+  .prose-premium :not(pre)>code {
+    @apply font-mono text-sm px-1.5 py-0.5 rounded-md text-orange-600 bg-orange-50 border border-orange-100;
+  }
+
+  .dark .prose-premium :not(pre)>code {
+    @apply text-orange-400 bg-orange-900/10 border-orange-800/20;
+  }
+
+  /* Code Blocks */
+  /* Code Blocks */
+  .prose-premium pre {
+    @apply rounded-xl overflow-x-auto my-8 p-5 border border-gray-200 dark:border-gray-800 bg-gray-900;
+  }
+
+  .prose-premium pre code {
+    @apply text-sm md:text-base font-mono leading-relaxed text-gray-200 bg-transparent p-0 border-0 rounded-none;
+  }
+
+  /* Images */
+  .prose-premium img {
+    @apply rounded-xl shadow-lg my-10 w-full object-cover border border-gray-100 dark:border-gray-800;
+  }
+
+  /* Links */
+  .prose-premium a {
+    @apply text-blue-600 dark:text-blue-400 font-medium underline decoration-2 underline-offset-4 decoration-blue-200 dark:decoration-blue-800 transition-colors;
+  }
+
+  .prose-premium a:hover {
+    @apply text-blue-700 dark:text-blue-300 decoration-blue-500;
+  }
+
+  /* Horizontal Rule */
+  .prose-premium hr {
+    @apply my-12 border-gray-200 dark:border-gray-800;
+  }
+
+  /* Table */
+  .prose-premium table {
+    @apply w-full my-8 text-left border-collapse;
+  }
+
+  .prose-premium th {
+    @apply bg-gray-50 dark:bg-zinc-900 p-4 font-semibold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800;
+  }
+
+  .prose-premium td {
+    @apply p-4 border-b border-gray-100 dark:border-gray-900 text-gray-700 dark:text-gray-300;
+  }
+}

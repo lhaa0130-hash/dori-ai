@@ -54,7 +54,7 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
     rehypePlugins: [
       rehypeHighlight, // 코드 하이라이팅
       rehypeSlug, // Heading에 id 자동 추가
-      [rehypeAutolinkHeadings, { behavior: 'wrap' }], // Heading에 링크 자동 추가
+      // [rehypeAutolinkHeadings, { behavior: 'wrap' }], // Heading에 링크 자동 추가 (User requested removal)
     ],
   };
 
@@ -81,7 +81,9 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
             <time dateTime={post.date}>{new Date(post.date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
             {post.author && <span> by {post.author}</span>}
           </div>
-          <div className="prose dark:prose-invert max-w-none">
+
+          {/* Modified: Apply Premium Prose Styles */}
+          <div className="prose-premium max-w-none">
             {/* Server Component version of MDXRemote */}
             <MDXRemote
               source={post.content || ''}
