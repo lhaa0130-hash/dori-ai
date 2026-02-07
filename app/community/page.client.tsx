@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useEffect, useCallback } from 'react';
+import Link from 'next/link';
+import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
-import { PlusCircle, Send, X } from 'lucide-react';
+import { PlusCircle } from 'lucide-react';
 
 // Post-interface. I a todolist kan have en mere detaljeret beskrivelse.
 interface Post {
@@ -25,7 +26,6 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [posts, setPosts] = useState<Post[]>(initialPosts);
-  const [isModalOpen, setIsModalOpen] = useState(false);
 
   useEffect(() => {
     setMounted(true);
@@ -39,28 +39,6 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
       console.error("Failed to load community posts from localStorage", e);
     }
   }, []);
-
-  const handleNewPost = (newPost: { title: string, content: string, tags: string[] }) => {
-    const post: Post = {
-      id: new Date().toISOString(),
-      author: 'Current User', // Placeholder
-      avatar: `https://i.pravatar.cc/40?u=${new Date().toISOString()}`, // Placeholder
-      title: newPost.title,
-      content: newPost.content,
-      tags: newPost.tags,
-      likes: 0,
-      comments: 0,
-      createdAt: new Date().toISOString(),
-    };
-    const updatedPosts = [post, ...posts];
-    setPosts(updatedPosts);
-    try {
-      localStorage.setItem('dori_community_posts', JSON.stringify(updatedPosts));
-    } catch (e) {
-      console.error("Failed to save community posts to localStorage", e);
-    }
-    setIsModalOpen(false);
-  };
 
   const isDark = mounted && theme === 'dark';
 
@@ -96,13 +74,13 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
 
         <section className="container max-w-5xl mx-auto px-6 pb-20">
           <div className="flex justify-end mb-6">
-            <button
-              onClick={() => setIsModalOpen(true)}
+            <Link
+              href="/community/write"
               className="flex items-center gap-2 px-5 py-2.5 bg-neutral-900 dark:bg-white text-white dark:text-black rounded-full font-bold text-sm tracking-wide hover:opacity-80 transition-all shadow-lg hover:shadow-orange-500/20"
             >
               <PlusCircle size={18} />
               <span>새 글 작성</span>
-            </button>
+            </Link>
           </div>
 
           <div className="space-y-4">
@@ -117,7 +95,9 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
                     </div>
                   </div>
                   <h2 className="text-xl font-bold mb-3 text-neutral-900 dark:text-white">{post.title}</h2>
-                  <p className="text-sm text-neutral-600 dark:text-neutral-300 line-clamp-2 mb-4 leading-relaxed">{post.content}</p>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-300 line-clamp-2 mb-4 leading-relaxed">
+                    {post.content.replace(/<[^>]*>?/gm, '')}
+                  </p>
                   <div className="flex justify-between items-center pt-4 border-t border-neutral-100 dark:border-white/5">
                     <div className="flex gap-2">
                       {post.tags.map(tag => (
@@ -141,67 +121,8 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
         </section>
       </div>
 
-      {isModalOpen && (
-        <PostModal onClose={() => setIsModalOpen(false)} onSubmit={handleNewPost} isDark={isDark} />
-      )}
     </main>
   );
 }
 
-// Modal Component (Standardized)
-function PostModal({ onClose, onSubmit, isDark }: { onClose: () => void; onSubmit: (post: any) => void, isDark: boolean }) {
-  const [title, setTitle] = useState('');
-  const [content, setContent] = useState('');
-  const [tags, setTags] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!title.trim() || !content.trim()) return;
-    onSubmit({ title, content, tags: tags.split(',').map(t => t.trim()).filter(Boolean) });
-  };
-
-  return (
-    <div className="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 flex items-center justify-center p-4">
-      <div className="rounded-2xl p-6 w-full max-w-2xl bg-white dark:bg-black border border-neutral-200 dark:border-zinc-800 shadow-2xl animate-pop-in">
-        <div className="flex justify-between items-center mb-6">
-          <h2 className="text-xl font-bold text-neutral-900 dark:text-white">새 글 작성</h2>
-          <button onClick={onClose} className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-zinc-800 transition-colors">
-            <X size={20} className="text-neutral-500" />
-          </button>
-        </div>
-        <form onSubmit={handleSubmit} className="space-y-4">
-          <input
-            type="text"
-            placeholder="제목"
-            value={title}
-            onChange={(e) => setTitle(e.target.value)}
-            className="w-full p-4 rounded-xl bg-neutral-50 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 focus:outline-none focus:border-orange-500 dark:focus:border-orange-500 transition-colors"
-          />
-          <textarea
-            placeholder="내용을 입력하세요..."
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-            rows={8}
-            className="w-full p-4 rounded-xl bg-neutral-50 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 focus:outline-none focus:border-orange-500 dark:focus:border-orange-500 transition-colors resize-none"
-          />
-          <input
-            type="text"
-            placeholder="태그 (쉼표로 구분)"
-            value={tags}
-            onChange={(e) => setTags(e.target.value)}
-            className="w-full p-4 rounded-xl bg-neutral-50 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 focus:outline-none focus:border-orange-500 dark:focus:border-orange-500 transition-colors"
-          />
-          <div className="flex justify-end pt-2">
-            <button
-              type="submit"
-              className="flex items-center gap-2 px-6 py-3 bg-neutral-900 dark:bg-white text-white dark:text-black rounded-xl font-bold hover:opacity-90 transition-opacity"
-            >
-              <Send size={18} />
-              <span>게시하기</span>
-            </button>
-          </div>
-        </form>
-      </div>
-    </div>
-  );
-}
