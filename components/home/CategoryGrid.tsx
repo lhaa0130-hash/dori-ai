@@ -43,9 +43,9 @@ const categories = [
         gradient: "from-orange-500 to-orange-600",
         previewComponent: MinigamePreview,
         stats: {
-            count: "3개",
+            count: "10개",
             label: "미니게임",
-            trend: "+1개 준비 중"
+            trend: "10개 플레이 가능"
         }
     },
     {
@@ -228,7 +228,7 @@ export function CategoryGrid() {
 
                                 {/* 콘텐츠 미리보기 (카드 하단에 배치) */}
                                 {PreviewComponent && (
-                                    <div className="bg-muted/50 dark:!bg-black border border-t-0 border-strict rounded-b-2xl p-4 -mt-2">
+                                    <div className="category-preview-container bg-muted/50 dark:!bg-black border border-t-0 border-strict rounded-b-2xl p-4 -mt-2 flex-1">
                                         <PreviewComponent />
                                     </div>
                                 )}
@@ -237,6 +237,22 @@ export function CategoryGrid() {
                     })}
                 </motion.div>
             </div>
+
+            <style jsx global>{`
+                .category-preview-container::-webkit-scrollbar {
+                    width: 6px;
+                }
+                .category-preview-container::-webkit-scrollbar-track {
+                    background: transparent;
+                }
+                .category-preview-container::-webkit-scrollbar-thumb {
+                    background: rgba(251, 146, 60, 0.3);
+                    border-radius: 3px;
+                }
+                .category-preview-container::-webkit-scrollbar-thumb:hover {
+                    background: rgba(251, 146, 60, 0.5);
+                }
+            `}</style>
         </section>
     );
 }

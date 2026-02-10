@@ -241,26 +241,45 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
         fontFamily: '"Pretendard", "Inter", -apple-system, BlinkMacSystemFont, system-ui, sans-serif',
       }}
     >
-      {/* 배경 그라데이션 (Main Page Style - Explicit & Visible) */}
-      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-orange-100/40 via-orange-50/20 to-transparent dark:hidden pointer-events-none z-0" />
+      {/* Clean Pastel Orange Background */}
+      <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-orange-50 via-orange-50/30 to-transparent dark:from-orange-950/10 dark:via-transparent pointer-events-none z-0" />
 
-      {/* 히어로 섹션 (Minimal & Compact - Enhanced) */}
-      <section className="relative pt-32 pb-16 px-6 text-center z-10">
-        <div className="max-w-3xl mx-auto animate-fade-in flex flex-col items-center">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 dark:bg-zinc-900/50 border border-orange-200 dark:border-zinc-800 text-orange-600 dark:text-orange-400 text-xs font-bold mb-6">
-            <Sparkles className="w-3 h-3" />
-            <span>Project Gallery</span>
+      {/* 히어로 섹션 - Minimal & Clean */}
+      <section className="relative pt-40 pb-20 px-6 text-center z-10">
+        <div className="max-w-2xl mx-auto flex flex-col items-center space-y-6">
+          {/* Simple Badge */}
+          <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-orange-50 dark:bg-orange-950/30 border border-orange-100 dark:border-orange-900/30 text-orange-500 dark:text-orange-400 text-sm font-medium">
+            <Sparkles className="w-4 h-4" />
+            <span>Projects</span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-            <span className="bg-gradient-to-r from-orange-500 via-pink-500 to-orange-500 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-              프로젝트
-            </span>
+          <h1 className="text-5xl md:text-6xl font-bold tracking-tight text-neutral-900 dark:text-white">
+            프로젝트
           </h1>
-          <p className={`text-base md:text-lg font-medium break-keep leading-relaxed max-w-xl ${isDark ? "text-white" : "text-neutral-600"}`}>
-            DORI-AI의 여정과 다양한 <span className="text-orange-500">기술적 실험</span>들을 기록합니다.
+
+          <p className="text-lg text-neutral-600 dark:text-neutral-400 max-w-lg leading-relaxed">
+            DORI-AI의 여정과 기술적 실험들
           </p>
+
+          {/* Clean Statistics */}
+          <div className="flex items-center gap-12 mt-8 pt-8 border-t border-neutral-200 dark:border-neutral-800">
+            <div className="text-center">
+              <div className="text-4xl font-bold text-orange-500 mb-1">
+                {PROJECTS.filter(p => p.status === "ACTIVE").length}
+              </div>
+              <div className="text-sm text-neutral-500 dark:text-neutral-400">
+                진행중
+              </div>
+            </div>
+            <div className="text-center">
+              <div className="text-4xl font-bold text-orange-500 mb-1">
+                {PROJECTS.length}
+              </div>
+              <div className="text-sm text-neutral-500 dark:text-neutral-400">
+                전체
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -272,50 +291,48 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
             const isMain = project.size === "large";
 
             return (
-              <div
+              <motion.div
                 key={project.id}
-                className={`group relative rounded-[2rem] p-6 transition-all duration-500 bg-white dark:!bg-black backdrop-blur-xl border border-neutral-200 dark:border-neutral-800 hover:border-orange-500/30 dark:hover:border-orange-500/50 hover:shadow-2xl hover:shadow-orange-500/10 hover:-translate-y-1 hover:scale-[1.01] flex flex-col lg:flex-row items-start lg:items-center gap-6 lg:gap-8`}
-                style={{
-                  animation: `slide-up 0.8s cubic-bezier(0.16, 1, 0.3, 1) ${index * 0.1}s both`,
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{
+                  duration: 0.5,
+                  delay: index * 0.1,
+                  ease: "easeOut",
                 }}
+                className="group relative rounded-3xl p-8 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 hover:border-orange-200 dark:hover:border-orange-900/50 hover:shadow-xl hover:shadow-orange-100/50 dark:hover:shadow-orange-950/20 transition-all duration-300 flex flex-col lg:flex-row items-start lg:items-center gap-6"
               >
-                {/* Icon Section - Unified Orange Style (Main Page Match) */}
-                <div
-                  className="w-16 h-16 shrink-0 rounded-2xl flex items-center justify-center border transition-all duration-500 group-hover:scale-105 group-hover:shadow-md bg-orange-50 dark:bg-neutral-900 border-orange-200 dark:border-neutral-800 text-orange-600 dark:text-orange-500 shadow-[0_0_20px_rgba(249,115,22,0.1)] dark:shadow-none"
-                >
+                {/* Clean Icon */}
+                <div className="w-14 h-14 shrink-0 rounded-2xl flex items-center justify-center bg-orange-50 dark:bg-orange-950/30 border border-orange-100 dark:border-orange-900/30 text-orange-500 group-hover:scale-105 transition-transform duration-300">
                   {project.icon}
                 </div>
 
-                {/* Main Info Section */}
-                <div className="flex-1 min-w-0 flex flex-col justify-center">
-                  <div className="flex items-center gap-3 mb-2">
-                    <h3 className={`text-xl font-bold group-hover:text-orange-500 transition-colors duration-300 truncate ${isDark ? "text-white" : "text-neutral-900"}`}>
+                {/* Main Info - Clean & Minimal */}
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-start justify-between gap-4 mb-3">
+                    <h3 className="text-xl font-bold text-neutral-900 dark:text-white">
                       {project.title}
                     </h3>
-                    <div className={`px-2 py-0.5 rounded-full text-[10px] font-bold tracking-wider flex items-center gap-1 ${statusStyle.style}`}>
+                    <div className={`px-3 py-1 rounded-full text-xs font-medium ${statusStyle.style} flex items-center gap-1.5 shrink-0`}>
                       {statusStyle.icon}
-                      <span className="hidden sm:inline">{statusStyle.label}</span>
+                      <span>{statusStyle.label}</span>
                     </div>
                   </div>
 
-                  <p
-                    className={`text-sm line-clamp-1 mb-3 ${isDark ? "text-white" : "text-neutral-600"}`}
-                  >
+                  <p className="text-sm text-neutral-600 dark:text-neutral-400 mb-4 line-clamp-2">
                     {project.description}
                   </p>
 
-                  {/* Minimal Tags */}
-                  <div className="flex flex-wrap gap-1.5">
+                  {/* Simple Tech Tags */}
+                  <div className="flex flex-wrap gap-2">
                     {(Array.isArray(project.tech) && typeof project.tech[0] === 'object'
                       ? project.tech
                       : project.tech.map(name => ({ name, icon: null }))
                     ).map((tech: any, idx: number) => (
                       <span
                         key={idx}
-                        className={`px-2 py-0.5 rounded-md text-[10px] font-semibold transition-colors ${isDark
-                          ? "bg-neutral-800 text-white hover:bg-black"
-                          : "bg-neutral-100/50 text-neutral-500 hover:bg-white"
-                          }`}
+                        className="px-3 py-1 rounded-lg text-xs font-medium bg-neutral-50 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 border border-neutral-100 dark:border-neutral-700"
                       >
                         {tech.name || tech}
                       </span>
@@ -323,119 +340,21 @@ export default function ProjectClient({ initialProjects }: ProjectClientProps) {
                   </div>
                 </div>
 
-                {/* Right Side: Workflow or Placeholder + Action */}
-                <div className="w-full lg:w-auto flex items-center justify-between lg:justify-end gap-6 lg:mx-4">
-
-                  {/* Workflow Animation (Dynamic & Colorful) */}
-                  {project.workflow && (
-                    <div className="flex-1 lg:w-[280px] hidden sm:flex items-center justify-between relative px-2 py-3 bg-neutral-50/30 dark:!bg-black rounded-xl border border-transparent dark:border-neutral-800">
-                      {/* 1. Base Track */}
-                      <div className="absolute top-1/2 left-0 right-0 h-1 bg-neutral-100 dark:bg-neutral-800 -translate-y-1/2 rounded-full" />
-
-                      {/* 2. Swirling Particle (SVG Animation) */}
-                      <div className="absolute top-0 left-0 w-full h-full pointer-events-none z-30" style={{ filter: 'drop-shadow(0 0 2px rgba(255,165,0,0.5))' }}>
-                        <svg className="w-full h-full overflow-visible" viewBox="0 0 280 56">
-                          <defs>
-                            <radialGradient id="particleGlow" cx="50%" cy="50%" r="50%">
-                              <stop offset="0%" stopColor="white" stopOpacity="1" />
-                              <stop offset="100%" stopColor="orange" stopOpacity="0" />
-                            </radialGradient>
-                            <filter id="glow">
-                              <feGaussianBlur stdDeviation="1.5" result="coloredBlur" />
-                              <feMerge>
-                                <feMergeNode in="coloredBlur" />
-                                <feMergeNode in="SourceGraphic" />
-                              </feMerge>
-                            </filter>
-                          </defs>
-
-                          {/* 
-                                Precise Swirl Path Calculation:
-                                Container Width: 280px. 4 Icons spaced evenly.
-                                Centers: 24, 101, 179, 256. Radius: 18.
-                                Pattern: Line -> 1.5 Loop (540deg) -> Line -> ...
-                            */}
-                          <path
-                            id="swirlPath"
-                            d="M 0 28 L 6 28 a 18 18 0 1 1 36 0 a 18 18 0 1 1 -36 0 a 18 18 0 1 1 36 0 L 83 28 a 18 18 0 1 1 36 0 a 18 18 0 1 1 -36 0 a 18 18 0 1 1 36 0 L 161 28 a 18 18 0 1 1 36 0 a 18 18 0 1 1 -36 0 a 18 18 0 1 1 36 0 L 238 28 a 18 18 0 1 1 36 0 a 18 18 0 1 1 -36 0 a 18 18 0 1 1 36 0 L 280 28"
-                            fill="none"
-                            stroke="none"
-                          />
-
-                          {/* Main Particle */}
-                          <circle r="3" filter="url(#glow)">
-                            <animate attributeName="fill" values="#FF00FF;#00FFFF;#00FF00;#FFFF00;#FF0000;#BF00FF;#FF00FF" dur="2s" repeatCount="indefinite" />
-                            <animateMotion dur="6s" repeatCount="indefinite" rotate="auto">
-                              <mpath href="#swirlPath" />
-                            </animateMotion>
-                          </circle>
-
-                          {/* Trail Particle 1 */}
-                          <circle r="2" opacity="0.9">
-                            <animate attributeName="fill" values="#00FFFF;#00FF00;#FFFF00;#FF0000;#BF00FF;#FF00FF;#00FFFF" dur="2s" repeatCount="indefinite" />
-                            <animateMotion dur="6s" repeatCount="indefinite" rotate="auto" begin="0.1s">
-                              <mpath href="#swirlPath" />
-                            </animateMotion>
-                          </circle>
-
-                          {/* Trail Particle 2 */}
-                          <circle r="1" opacity="0.8">
-                            <animate attributeName="fill" values="#00FF00;#FFFF00;#FF0000;#BF00FF;#FF00FF;#00FFFF;#00FF00" dur="2s" repeatCount="indefinite" />
-                            <animateMotion dur="6s" repeatCount="indefinite" rotate="auto" begin="0.2s">
-                              <mpath href="#swirlPath" />
-                            </animateMotion>
-                          </circle>
-                        </svg>
-                      </div>
-
-                      {/* 3. Steps Icons */}
-                      {project.workflow.map((step, idx) => (
-                        <div key={idx} className="relative z-20 group/step">
-                          <motion.div
-                            className={`w-8 h-8 rounded-full border-2 flex items-center justify-center relative overflow-hidden ${isDark
-                              ? "bg-black border-neutral-800 text-white"
-                              : "bg-white border-neutral-100 text-neutral-400"
-                              }`}
-                            whileHover={{ scale: 1.15, rotate: 5 }}
-                          >
-                            {/* Icon Background Glow */}
-                            <motion.div
-                              className="absolute inset-0 bg-gradient-to-tr from-orange-100 to-pink-100 dark:from-orange-900/30 dark:to-pink-900/30 opacity-0 group-hover/step:opacity-100 transition-opacity duration-300"
-                            />
-
-                            <div className="relative z-10 group-hover/step:text-transparent group-hover/step:bg-clip-text group-hover/step:bg-gradient-to-r group-hover/step:from-orange-500 group-hover/step:to-pink-500 transition-all duration-300">
-                              {step.icon}
-                            </div>
-                          </motion.div>
-
-                          {/* Label */}
-                          <span
-                            className={`absolute -bottom-6 left-1/2 -translate-x-1/2 text-[10px] font-bold opacity-0 group-hover/step:opacity-100 transition-all duration-300 whitespace-nowrap group-hover/step:-translate-y-1 ${isDark ? "text-white" : "text-neutral-400"
-                              }`}
-                          >
-                            {step.step}
-                          </span>
-                        </div>
-                      ))}
+                {/* Simple Action Button */}
+                <div className="shrink-0 ml-auto">
+                  {project.href ? (
+                    <Link href={project.href}>
+                      <button className="w-10 h-10 rounded-full bg-orange-500 hover:bg-orange-600 text-white flex items-center justify-center transition-all duration-200 hover:scale-110 hover:shadow-lg hover:shadow-orange-200 dark:hover:shadow-orange-900/50">
+                        <ArrowRight className="w-4 h-4" />
+                      </button>
+                    </Link>
+                  ) : (
+                    <div className="w-10 h-10 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-300 dark:text-neutral-600 flex items-center justify-center">
+                      <Clock className="w-4 h-4" />
                     </div>
                   )}
-
-                  {/* Action Button */}
-                  <div className="shrink-0 ml-auto lg:ml-0">
-                    {project.href ? (
-                      <Link href={project.href}>
-                        <button className="w-10 h-10 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-black flex items-center justify-center transition-all duration-300 hover:scale-110 hover:shadow-xl hover:shadow-orange-500/20 group-hover:bg-orange-500 group-hover:text-white">
-                          <ArrowRight className="w-4 h-4" />
-                        </button>
-                      </Link>
-                    ) : (
-                      <div className="w-10 h-10 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-300 dark:text-neutral-600 flex items-center justify-center cursor-not-allowed">
-                        <Clock className="w-4 h-4" />
-                      </div>
-                    )}
-                  </div>
                 </div>
-              </div>
+              </motion.div>
             );
           })}
         </div>

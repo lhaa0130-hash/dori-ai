@@ -1,6 +1,6 @@
 "use client";
 
-import { Sparkles, Gamepad2, Play, Star, Trophy, Swords, BrainCircuit, MousePointer2 } from "lucide-react";
+import { Sparkles, Gamepad2, Play, Star, Trophy, Swords, BrainCircuit, MousePointer2, Coins, Target, Dices, Hand, Zap, Palette, Sword } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
@@ -25,13 +25,76 @@ const GAMES = [
         href: "/minigame/memory"
     },
     {
-        id: "reaction",
-        title: "반응속도 테스트",
-        description: "당신의 순발력을 테스트해보세요. (준비 중)",
-        icon: <MousePointer2 className="w-8 h-8" />,
+        id: "ladder",
+        title: "사다리 타기",
+        description: "내기를 할 때 필수! 스릴 넘치는 사다리 게임.",
+        icon: <Swords className="w-8 h-8" />,
+        color: "#10b981",
+        status: "PLAY",
+        href: "/minigame/ladder"
+    },
+    {
+        id: "coinflip",
+        title: "동전 던지기",
+        description: "3D 회전으로 짜릿한 동전 던지기 게임!",
+        icon: <Coins className="w-8 h-8" />,
+        color: "#fbbf24",
+        status: "PLAY",
+        href: "/minigame/coinflip"
+    },
+    {
+        id: "guess",
+        title: "숫자 맞추기",
+        description: "힌트를 받으며 숨겨진 숫자를 찾아보세요.",
+        icon: <Target className="w-8 h-8" />,
+        color: "#a855f7",
+        status: "PLAY",
+        href: "/minigame/guess"
+    },
+    {
+        id: "dice",
+        title: "주사위 굴리기",
+        description: "1-6개의 주사위를 굴려 행운을 시험하세요!",
+        icon: <Dices className="w-8 h-8" />,
         color: "#ef4444",
-        status: "COMING SOON",
-        href: "#"
+        status: "PLAY",
+        href: "/minigame/dice"
+    },
+    {
+        id: "roulette",
+        title: "룰렛",
+        description: "룰렛을 돌려 행운을 시험해보세요!",
+        icon: <Trophy className="w-8 h-8" />,
+        color: "#ec4899",
+        status: "PLAY",
+        href: "/minigame/roulette"
+    },
+    {
+        id: "rps",
+        title: "가위바위보",
+        description: "컴퓨터와 대결하는 가위바위보 게임!",
+        icon: <Hand className="w-8 h-8" />,
+        color: "#06b6d4",
+        status: "PLAY",
+        href: "/minigame/rps"
+    },
+    {
+        id: "typingspeed",
+        title: "타이핑 속도",
+        description: "당신의 타이핑 실력을 측정해보세요.",
+        icon: <Zap className="w-8 h-8" />,
+        color: "#fbbf24",
+        status: "PLAY",
+        href: "/minigame/typingspeed"
+    },
+    {
+        id: "colormatch",
+        title: "색깔 맞추기",
+        description: "30초 안에 색깔을 맞춰보세요!",
+        icon: <Palette className="w-8 h-8" />,
+        color: "#ec4899",
+        status: "PLAY",
+        href: "/minigame/colormatch"
     }
 ];
 

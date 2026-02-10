@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowRight, Users, Clock, Gamepad2, Lightbulb, Cog, Sparkles, TrendingUp, Star, Globe, BookOpen, Smartphone, Video, Film, ShoppingBag, Timer, Swords, BrainCircuit, MousePointer2 } from "lucide-react";
+import { ArrowRight, Users, Clock, Gamepad2, Lightbulb, Cog, Sparkles, TrendingUp, Star, Globe, BookOpen, Smartphone, Video, Film, ShoppingBag, Timer, Swords, BrainCircuit, MousePointer2, Coins, Target, Dices, Hand, Zap, Palette, Sword } from "lucide-react";
 
 // 프로젝트 미리보기 데이터 (실제로는 API나 파일에서 가져와야 함)
 // 프로젝트 미리보기 데이터 (프로젝트 페이지와 동기화)
@@ -72,68 +72,167 @@ const minigamePreviews = [
         icon: <BrainCircuit className="w-5 h-5 text-orange-500" />,
         plays: 1234,
         rating: 4.8,
-        description: "AI 관련 상식을 테스트하는 퀴즈",
+        description: "AI 관련 상식을 테스트",
+        difficulty: "쉬움"
+    },
+    {
+        id: "ladder",
+        name: "사다리 타기",
+        icon: <Swords className="w-5 h-5 text-orange-500" />,
+        plays: 856,
+        rating: 4.9,
+        description: "스릴 넘치는 사다리 게임",
+        difficulty: "보통"
+    },
+    {
+        id: "roulette",
+        name: "룰렛",
+        icon: <Timer className="w-5 h-5 text-orange-500" />,
+        plays: 692,
+        rating: 4.7,
+        description: "행운의 룰렛을 돌려보세요",
         difficulty: "쉬움"
     },
     {
         id: "memory",
         name: "카드 뒤집기",
         icon: <Gamepad2 className="w-5 h-5 text-orange-500" />,
-        plays: 0,
-        rating: 0,
-        description: "Dori 캐릭터 카드 짝 맞추기",
+        plays: 543,
+        rating: 4.6,
+        description: "카드 짝 맞추기",
         difficulty: "보통"
     },
     {
-        id: "reaction",
-        name: "반응속도 테스트",
-        icon: <MousePointer2 className="w-5 h-5 text-neutral-400" />,
-        plays: 0,
-        rating: 0,
-        description: "당신의 반사신경을 테스트하세요 (준비중)",
-        difficulty: "준비중"
+        id: "coinflip",
+        name: "동전 던지기",
+        icon: <Coins className="w-5 h-5 text-orange-500" />,
+        plays: 478,
+        rating: 4.5,
+        description: "3D 회전 동전 게임",
+        difficulty: "쉬움"
+    },
+    {
+        id: "guess",
+        name: "숫자 맞추기",
+        icon: <Target className="w-5 h-5 text-orange-500" />,
+        plays: 412,
+        rating: 4.7,
+        description: "힌트로 숫자 찾기",
+        difficulty: "보통"
+    },
+    {
+        id: "dice",
+        name: "주사위 굴리기",
+        icon: <Dices className="w-5 h-5 text-orange-500" />,
+        plays: 389,
+        rating: 4.6,
+        description: "1-6개 주사위 게임",
+        difficulty: "쉬움"
+    },
+    {
+        id: "rps",
+        name: "가위바위보",
+        icon: <Hand className="w-5 h-5 text-orange-500" />,
+        plays: 325,
+        rating: 4.4,
+        description: "AI와 가위바위보 대결",
+        difficulty: "쉬움"
+    },
+    {
+        id: "typingspeed",
+        name: "타이핑 속도",
+        icon: <Zap className="w-5 h-5 text-orange-500" />,
+        plays: 298,
+        rating: 4.5,
+        description: "WPM 타이핑 테스트",
+        difficulty: "보통"
+    },
+    {
+        id: "colormatch",
+        name: "색깔 맞추기",
+        icon: <Palette className="w-5 h-5 text-orange-500" />,
+        plays: 267,
+        rating: 4.8,
+        description: "30초 색깔 도전",
+        difficulty: "어려움"
     }
 ];
 
-// AI 도구 미리보기 데이터
-const aiToolsPreviews = [
-    { name: "ChatGPT", category: "대화형", badge: "인기", color: "green" },
-    { name: "Midjourney", category: "이미지", badge: "추천", color: "purple" },
-    { name: "Runway", category: "영상", badge: "신규", color: "blue" },
-    { name: "ElevenLabs", category: "음성", badge: "Hot", color: "orange" },
-    { name: "Claude", category: "대화형", badge: "최신", color: "blue" },
-    { name: "Suno", category: "음악", badge: "트렌딩", color: "pink" }
+
+// AI 도구 미리보기 데이터 - 카테고리별 TOP 3
+const aiToolsByCategory = [
+    {
+        category: "대화형 AI",
+        tools: [
+            { rank: 1, name: "ChatGPT", rating: 4.9 },
+            { rank: 2, name: "Claude", rating: 4.8 },
+            { rank: 3, name: "Gemini", rating: 4.7 }
+        ]
+    },
+    {
+        category: "이미지 생성",
+        tools: [
+            { rank: 1, name: "Midjourney", rating: 4.9 },
+            { rank: 2, name: "DALL-E 3", rating: 4.7 },
+            { rank: 3, name: "Stable Diffusion", rating: 4.6 }
+        ]
+    },
+    {
+        category: "영상 제작",
+        tools: [
+            { rank: 1, name: "Runway", rating: 4.8 },
+            { rank: 2, name: "Pika", rating: 4.6 },
+            { rank: 3, name: "Luma Dream", rating: 4.5 }
+        ]
+    },
+    {
+        category: "코딩 AI",
+        tools: [
+            { rank: 1, name: "Cursor", rating: 4.9 },
+            { rank: 2, name: "GitHub Copilot", rating: 4.8 },
+            { rank: 3, name: "Replit", rating: 4.6 }
+        ]
+    },
+    {
+        category: "음악 생성",
+        tools: [
+            { rank: 1, name: "Suno", rating: 4.8 },
+            { rank: 2, name: "Udio", rating: 4.7 },
+            { rank: 3, name: "Stable Audio", rating: 4.5 }
+        ]
+    },
+    {
+        category: "자동화",
+        tools: [
+            { rank: 1, name: "n8n", rating: 4.8 },
+            { rank: 2, name: "Zapier", rating: 4.7 },
+            { rank: 3, name: "Make", rating: 4.6 }
+        ]
+    }
 ];
 
-// 인사이트 미리보기 데이터
-const insightPreviews = [
+// 인사이트 미리보기 데이터 - 카테고리별 최신글 2개
+const insightsByCategory = [
     {
-        title: "한국의 국가대표 AI 모델 'K-AI GPT' 공개와 미래 전략",
-        date: "2025.12.31",
-        views: 5120,
-        category: "트렌드",
-        readTime: "10분"
+        category: "AI 트렌드",
+        articles: [
+            { title: "2026년 주목할 AI 기술 트렌드", date: "2026.02.05" },
+            { title: "생성형 AI의 새로운 패러다임", date: "2026.02.01" }
+        ]
     },
     {
-        title: "메타, $20억 규모의 AI 에이전트 스타트업 '마누스' 인수",
-        date: "2025.12.31",
-        views: 4150,
-        category: "트렌드",
-        readTime: "12분"
+        category: "실전 가이드",
+        articles: [
+            { title: "ChatGPT 프롬프트 작성 완벽 가이드", date: "2026.02.03" },
+            { title: "이미지 생성 AI 활용법", date: "2026.01.28" }
+        ]
     },
     {
-        title: "머스크의 승부수: 2026년 ‘뉴럴링크’ 양산과 뇌-컴퓨터 시대",
-        date: "2026.01.05",
-        views: 6720,
-        category: "트렌드",
-        readTime: "15분"
-    },
-    {
-        title: "AI가 처음인 사람을 위한 인공지능 기초 안내서",
-        date: "2025.12.01",
-        views: 3240,
-        category: "가이드",
-        readTime: "7분"
+        category: "도구 리뷰",
+        articles: [
+            { title: "최신 AI 코딩 도구 비교 분석", date: "2026.02.02" },
+            { title: "무료 AI 도구 TOP 10", date: "2026.01.30" }
+        ]
     }
 ];
 
@@ -270,51 +369,77 @@ export function MinigamePreview() {
     );
 }
 
-// AI 도구 미리보기 컴포넌트 - 확장된 버전
+// AI 도구 미리보기 컴포넌트 - 카테고리별 랭킹
 export function AIToolsPreview() {
-    const getBadgeColor = (badge: string) => {
-        if (["HOT", "인기", "추천", "트렌딩"].includes(badge)) {
-            return "bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 border border-orange-100 dark:border-orange-900/30";
+    const getRankColor = (rank: number) => {
+        switch (rank) {
+            case 1: return "text-yellow-500"; // 금메달
+            case 2: return "text-neutral-400"; // 은메달
+            case 3: return "text-orange-600"; // 동메달
+            default: return "text-neutral-400";
         }
-        return "bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 border border-neutral-100 dark:border-neutral-700";
+    };
+
+    const getRankEmoji = (rank: number) => {
+        switch (rank) {
+            case 1: return "🥇";
+            case 2: return "🥈";
+            case 3: return "🥉";
+            default: return "";
+        }
     };
 
     return (
         <div className="pt-1">
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-2">
                 <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                     <Sparkles className="w-4 h-4 text-orange-500" />
-                    추천 AI 도구
+                    카테고리별 TOP 3
                 </h3>
                 <Link href="/ai-tools" className="text-xs text-orange-500 hover:text-orange-600 flex items-center gap-1 transition-colors">
                     전체 보기
                     <ArrowRight className="w-3 h-3" />
                 </Link>
             </div>
-            <div className="flex flex-wrap gap-2">
-                {aiToolsPreviews.map((tool, index) => (
+            <div className="space-y-1.5">
+                {aiToolsByCategory.map((categoryData, categoryIndex) => (
                     <motion.div
-                        key={index}
+                        key={categoryData.category}
                         initial={{ opacity: 0, y: 10 }}
                         whileInView={{ opacity: 1, y: 0 }}
-                        transition={{ delay: index * 0.05 }}
+                        transition={{ delay: categoryIndex * 0.05 }}
                         viewport={{ once: true }}
                     >
-                        <Link href="/ai-tools" className="group">
-                            <div className="px-3 py-1.5 rounded-lg bg-card border border-strict hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-sm">
-                                <div className="flex items-center gap-1.5">
-                                    <span className="text-xs font-semibold text-foreground group-hover:text-orange-500 transition-colors">
-                                        {tool.name}
-                                    </span>
-                                    <span className={`text-[8px] px-1 py-0 rounded font-medium ${getBadgeColor(tool.badge)}`}>
-                                        {tool.badge}
-                                    </span>
-                                </div>
-                                <span className="text-[9px] text-muted-foreground block">
-                                    {tool.category}
-                                </span>
+                        <div className="bg-card/30 border border-neutral-200/50 dark:border-zinc-800/50 rounded-lg p-1.5">
+                            <h4 className="text-[9px] font-bold text-orange-500 mb-1 flex items-center gap-1 tracking-tight px-1">
+                                <span className="w-0.5 h-0.5 bg-orange-500 rounded-full" />
+                                {categoryData.category}
+                            </h4>
+                            <div className="grid grid-cols-3 gap-1">
+                                {categoryData.tools.map((tool, toolIndex) => (
+                                    <Link
+                                        key={tool.rank}
+                                        href="/ai-tools"
+                                        className="group flex items-center gap-1 p-1.5 hover:bg-orange-50 dark:hover:bg-orange-950/20 rounded transition-all"
+                                    >
+                                        <span className={`text-xs flex-shrink-0 ${getRankColor(tool.rank)}`}>
+                                            {getRankEmoji(tool.rank)}
+                                        </span>
+                                        <div className="flex-1 min-w-0">
+                                            <span className="text-[10px] font-bold text-foreground group-hover:text-orange-500 transition-colors truncate block leading-tight">
+                                                {tool.name}
+                                            </span>
+                                            <div className="flex items-center gap-0.5 mt-0.5">
+                                                <Star className="w-2 h-2 text-yellow-500 fill-yellow-500" />
+                                                <span className="text-[8px] text-muted-foreground font-semibold">
+                                                    {tool.rating}
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </Link>
+                                ))}
                             </div>
-                        </Link>
+                        </div>
                     </motion.div>
                 ))}
             </div>
@@ -322,11 +447,11 @@ export function AIToolsPreview() {
     );
 }
 
-// 인사이트 미리보기 컴포넌트 - 확장된 버전
+// 인사이트 미리보기 컴포넌트 - 카테고리별 최신글
 export function InsightPreview() {
     return (
         <div className="pt-1">
-            <div className="flex items-center justify-between mb-3">
+            <div className="flex items-center justify-between mb-2">
                 <h3 className="text-sm font-semibold text-foreground flex items-center gap-2">
                     <Lightbulb className="w-4 h-4 text-orange-500" />
                     최신 인사이트
@@ -336,36 +461,40 @@ export function InsightPreview() {
                     <ArrowRight className="w-3 h-3" />
                 </Link>
             </div>
-            <div className="space-y-2">
-                {insightPreviews.map((insight, index) => (
+            <div className="space-y-1.5">
+                {insightsByCategory.map((categoryData, categoryIndex) => (
                     <motion.div
-                        key={index}
-                        initial={{ opacity: 0, x: -10 }}
-                        whileInView={{ opacity: 1, x: 0 }}
-                        transition={{ delay: index * 0.08 }}
+                        key={categoryData.category}
+                        initial={{ opacity: 0, y: 10 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        transition={{ delay: categoryIndex * 0.05 }}
                         viewport={{ once: true }}
                     >
-                        <Link href="/insight" className="group block p-3 rounded-lg bg-card border border-strict hover:border-orange-400 dark:hover:border-orange-500 transition-all hover:shadow-md">
-                            <div className="flex items-start justify-between gap-2 mb-1.5">
-                                <h4 className="text-xs font-semibold text-foreground group-hover:text-orange-500 transition-colors line-clamp-1 flex-1">
-                                    {insight.title}
-                                </h4>
-                                <span className="text-[9px] px-1.5 py-0.5 rounded bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 flex-shrink-0 border border-orange-200 dark:border-orange-800">
-                                    {insight.category}
-                                </span>
+                        <div className="bg-card/30 border border-neutral-200/50 dark:border-zinc-800/50 rounded-lg p-1.5">
+                            <h4 className="text-[9px] font-bold text-orange-500 mb-1 flex items-center gap-1 tracking-tight px-1">
+                                <span className="w-0.5 h-0.5 bg-orange-500 rounded-full" />
+                                {categoryData.category}
+                            </h4>
+                            <div className="space-y-1">
+                                {categoryData.articles.map((article, articleIndex) => (
+                                    <Link
+                                        key={articleIndex}
+                                        href="/insight"
+                                        className="group block p-1.5 hover:bg-orange-50 dark:hover:bg-orange-950/20 rounded transition-all"
+                                    >
+                                        <h5 className="text-[10px] font-bold text-foreground group-hover:text-orange-500 transition-colors line-clamp-1 leading-tight mb-0.5">
+                                            {article.title}
+                                        </h5>
+                                        <div className="flex items-center gap-1">
+                                            <Clock className="w-2 h-2 text-muted-foreground" />
+                                            <span className="text-[8px] text-muted-foreground font-semibold">
+                                                {article.date}
+                                            </span>
+                                        </div>
+                                    </Link>
+                                ))}
                             </div>
-                            <div className="flex items-center gap-3 text-[10px] text-muted-foreground">
-                                <span className="flex items-center gap-1">
-                                    <Clock className="w-3 h-3" />
-                                    {insight.date}
-                                </span>
-                                <span className="flex items-center gap-1">
-                                    <TrendingUp className="w-3 h-3" />
-                                    {insight.views.toLocaleString()} 조회
-                                </span>
-                                <span>📖 {insight.readTime}</span>
-                            </div>
-                        </Link>
+                        </div>
                     </motion.div>
                 ))}
             </div>
