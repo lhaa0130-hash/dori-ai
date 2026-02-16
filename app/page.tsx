@@ -1,12 +1,12 @@
 // app/page.tsx
 import { IntroSection } from "@/components/home/IntroSection";
-import { CategoryGrid } from "@/components/home/CategoryGrid";
+import { ProjectListSection } from "@/components/home/ProjectListSection";
 
 export default function Home() {
   return (
     <main className="min-h-screen bg-background">
       <IntroSection />
-      <CategoryGrid />
+      <ProjectListSection />
     </main>
   );
 }

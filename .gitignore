@@ -42,3 +42,5 @@ next-env.d.ts
 # open-next (Cloudflare Pages build artifacts)
 .open-next/
 dori-ai-vite/
+antigravity-awesome-skills/
+install-companion
