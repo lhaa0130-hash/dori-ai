@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "next-themes";
 import { DAILY_MISSIONS } from "@/constants/missions";
 
@@ -34,7 +34,7 @@ const HARDCODED_MISSIONS = [
 ];
 
 export default function DailyMissions({ isDark, onPointsUpdate }: DailyMissionsProps) {
-  const { data: session } = useSession();
+  const { session } = useAuth();
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
   const [missions, setMissions] = useState<Mission[]>(HARDCODED_MISSIONS);
@@ -296,8 +296,8 @@ export default function DailyMissions({ isDark, onPointsUpdate }: DailyMissionsP
                 {completing === mission.code
                   ? '...'
                   : mission.code === 'DAILY_CHECKIN'
-                  ? '체크'
-                  : '완료'}
+                    ? '체크'
+                    : '완료'}
               </button>
             )}
           </div>

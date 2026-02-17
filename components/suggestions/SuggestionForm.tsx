@@ -112,10 +112,10 @@ export default function SuggestionForm({ onAddSuggestion, initialData, onCancel,
   const inputClass = "w-full px-4 py-3 rounded-xl border outline-none transition-all bg-[var(--bg-main)] border-[var(--card-border)] text-[var(--text-main)] focus:border-blue-500 placeholder:text-gray-400";
 
   return (
-    <div 
+    <div
       className="p-8 rounded-[1.5rem] border shadow-sm max-w-3xl mx-auto mb-16"
-      style={{ 
-        backgroundColor: 'var(--card-bg)', 
+      style={{
+        backgroundColor: 'var(--card-bg)',
         borderColor: 'var(--card-border)',
         color: 'var(--text-main)'
       }}
@@ -124,25 +124,25 @@ export default function SuggestionForm({ onAddSuggestion, initialData, onCancel,
         {isEditMode ? "✏️ 건의사항 수정" : `📝 ${t.submit.ko}`}
       </h3>
       <form onSubmit={handleSubmit} className="flex flex-col gap-5">
-        
+
         {/* 이름 & 이메일 */}
         <div className="flex flex-col md:flex-row gap-5">
           <div className="flex-1">
             <label className="block text-sm font-bold mb-2 opacity-80">{t.name.ko} *</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               value={formData.name}
-              onChange={(e) => setFormData({...formData, name: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, name: e.target.value })}
               className={inputClass}
               placeholder="홍길동"
             />
           </div>
           <div className="flex-1">
             <label className="block text-sm font-bold mb-2 opacity-80">{t.email.ko}</label>
-            <input 
-              type="text" 
+            <input
+              type="text"
               value={formData.email}
-              onChange={(e) => setFormData({...formData, email: e.target.value})}
+              onChange={(e) => setFormData({ ...formData, email: e.target.value })}
               className={inputClass}
               placeholder="contact@example.com"
             />
@@ -153,9 +153,9 @@ export default function SuggestionForm({ onAddSuggestion, initialData, onCancel,
         <div className="flex flex-col md:flex-row gap-5">
           <div className="flex-1">
             <label className="block text-sm font-bold mb-2 opacity-80">{t.type.ko} *</label>
-            <select 
+            <select
               value={formData.type}
-              onChange={(e) => setFormData({...formData, type: e.target.value as SuggestionType})}
+              onChange={(e) => setFormData({ ...formData, type: e.target.value as SuggestionType })}
               className={`${inputClass} cursor-pointer`}
             >
               <option>버그 제보</option>
@@ -166,9 +166,9 @@ export default function SuggestionForm({ onAddSuggestion, initialData, onCancel,
           </div>
           <div className="flex-1">
             <label className="block text-sm font-bold mb-2 opacity-80">{t.priority.ko} *</label>
-            <select 
+            <select
               value={formData.priority}
-              onChange={(e) => setFormData({...formData, priority: e.target.value as SuggestionPriority})}
+              onChange={(e) => setFormData({ ...formData, priority: e.target.value as SuggestionPriority })}
               className={`${inputClass} cursor-pointer`}
             >
               <option>낮음</option>
@@ -181,10 +181,10 @@ export default function SuggestionForm({ onAddSuggestion, initialData, onCancel,
         {/* 내용 */}
         <div>
           <label className="block text-sm font-bold mb-2 opacity-80">{t.message.ko} *</label>
-          <textarea 
+          <textarea
             rows={4}
             value={formData.message}
-            onChange={(e) => setFormData({...formData, message: e.target.value})}
+            onChange={(e) => setFormData({ ...formData, message: e.target.value })}
             className={`${inputClass} resize-none`}
             placeholder="자유롭게 의견을 남겨주세요. (10자 이상)"
           />
@@ -193,10 +193,10 @@ export default function SuggestionForm({ onAddSuggestion, initialData, onCancel,
         {/* 체크박스 & 버튼 */}
         <div className="flex items-center justify-between pt-2">
           <label className="flex items-center gap-2 cursor-pointer select-none">
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               checked={formData.needsReply}
-              onChange={(e) => setFormData({...formData, needsReply: e.target.checked})}
+              onChange={(e) => setFormData({ ...formData, needsReply: e.target.checked })}
               className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
             />
             <span className="text-sm font-medium opacity-80">{t.needsReply.ko}</span>
@@ -204,7 +204,7 @@ export default function SuggestionForm({ onAddSuggestion, initialData, onCancel,
 
           <div className="flex gap-3">
             {isEditMode && onCancel && (
-              <button 
+              <button
                 type="button"
                 onClick={onCancel}
                 className="px-6 py-3 rounded-xl font-bold transition-colors shadow-md"
@@ -216,8 +216,8 @@ export default function SuggestionForm({ onAddSuggestion, initialData, onCancel,
                 취소
               </button>
             )}
-            <button 
-              type="submit" 
+            <button
+              type="submit"
               className="px-8 py-3 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-700 transition-colors shadow-md"
             >
               {isEditMode ? "수정하기" : t.submit.ko}

@@ -1,6 +1,6 @@
 "use client";
 
-import { Sparkles, Gamepad2, Play, Star, Trophy, Swords, BrainCircuit, MousePointer2, Coins, Target, Dices, Hand, Zap, Palette, Sword, ArrowUpRight } from "lucide-react";
+import { Sparkles, Gamepad2, Play, Star, Trophy, Swords, BrainCircuit, MousePointer2, Coins, Target, Dices, Hand, Zap, Palette, Sword, ArrowUpRight, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
@@ -86,7 +86,47 @@ const GAMES = [
         icon: <Palette className="w-5 h-5" />,
         status: "PLAY",
         href: "/minigame/colormatch"
-    }
+    },
+    {
+        id: "slot",
+        title: "🎰 슬롯머신",
+        description: "가상 코인으로 즐기는 3릴 슬롯머신!",
+        icon: <Star className="w-5 h-5" />,
+        status: "PLAY",
+        href: "/minigame/slot"
+    },
+    {
+        id: "blackjack",
+        title: "🃏 블랙잭",
+        description: "딜러와 21점을 겨루는 카드 게임!",
+        icon: <Sword className="w-5 h-5" />,
+        status: "PLAY",
+        href: "/minigame/blackjack"
+    },
+    {
+        id: "highlow",
+        title: "🔮 하이로우",
+        description: "다음 카드의 숫자를 예측하세요!",
+        icon: <Sparkles className="w-5 h-5" />,
+        status: "PLAY",
+        href: "/minigame/highlow"
+    },
+    {
+        id: "crash",
+        title: "📈 크래시",
+        description: "배수가 터지기 전에 캐시아웃하세요!",
+        icon: <TrendingUp className="w-5 h-5" />,
+        status: "PLAY",
+        href: "/minigame/crash"
+    },
+    {
+        id: "baccarat",
+        title: "🃏 바카라",
+        description: "플레이어 vs 뱅커, 실제 룰의 바카라!",
+        icon: <MousePointer2 className="w-5 h-5" />,
+        status: "PLAY",
+        href: "/minigame/baccarat"
+    },
 ];
 
 export default function MinigamePage() {

@@ -1,11 +1,11 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 
 export default function EducationPage() {
-  const { data: session } = useSession();
+  const { session, logout } = useAuth();
   const user = session?.user || null;
   const [displayName, setDisplayName] = useState<string>("");
 
@@ -14,7 +14,7 @@ export default function EducationPage() {
     if (user?.email) {
       // localStorage에 저장된 이름을 우선 사용
       let savedName = localStorage.getItem(`dori_user_name_${user.email}`);
-      
+
       if (!savedName && user.name) {
         // localStorage에 없으면 세션 이름을 저장하고 사용
         savedName = user.name;
@@ -24,14 +24,14 @@ export default function EducationPage() {
         savedName = user.email.split("@")[0];
         localStorage.setItem(`dori_user_name_${user.email}`, savedName);
       }
-      
+
       setDisplayName(savedName || "사용자");
     } else {
       setDisplayName("");
     }
   }, [user?.email, user?.name]);
 
-  function onLogout() { signOut({ callbackUrl: "/" }); }
+  function onLogout() { logout(); }
 
   return (
     <main className="page">
@@ -55,7 +55,7 @@ export default function EducationPage() {
                   <button className="avatar">{displayName?.[0] || "사"}</button>
                   <div className="menu">
                     <div className="menu-name">{displayName || "사용자"}</div>
-                    <Link href="/my" style={{textDecoration:'none'}}><button className="menu-item">마이페이지</button></Link>
+                    <Link href="/my" style={{ textDecoration: 'none' }}><button className="menu-item">마이페이지</button></Link>
                     <button className="menu-item danger" onClick={onLogout}>로그아웃</button>
                   </div>
                 </div>
@@ -84,10 +84,10 @@ export default function EducationPage() {
               <p>5분 만에 배우는 기본 기능 완전 정복</p>
             </div>
           </div>
-          
+
           {/* 카드 2 */}
           <div className="edu-card">
-            <div className="thumb-area" style={{background:'#333'}}>
+            <div className="thumb-area" style={{ background: '#333' }}>
               <div className="play-icon">▶</div>
             </div>
             <div className="edu-content">
@@ -99,7 +99,7 @@ export default function EducationPage() {
 
           {/* 카드 3 */}
           <div className="edu-card">
-            <div className="thumb-area" style={{background:'#555'}}>
+            <div className="thumb-area" style={{ background: '#555' }}>
               <div className="play-icon">▶</div>
             </div>
             <div className="edu-content">

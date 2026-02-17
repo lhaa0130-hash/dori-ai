@@ -1,14 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { useSession, signIn, signOut } from "next-auth/react";
+import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
 import { Search } from "lucide-react";
 import { cn } from "@/lib/utils";
+import { useRouter } from "next/navigation";
 
 export default function Header() {
-  const { data: session } = useSession(); // Removed 'status' to avoid loading states
+  const { session, logout } = useAuth();
+  const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
 
   useEffect(() => {
@@ -20,37 +22,32 @@ export default function Header() {
   }, []);
 
   const handleSignIn = () => {
-    signIn();
+    router.push("/login");
   };
 
-  const handleSignOut = async () => {
-    await signOut({ callbackUrl: '/' });
+  const handleSignOut = () => {
+    logout();
+    router.push("/");
   };
 
   const navItems = [
-    { name: "프로젝트", href: "/project" },
+    { name: "공지사항", href: "/notice" },
     { name: "미니게임", href: "/minigame" },
     { name: "AI 도구", href: "/ai-tools" },
     { name: "인사이트", href: "/insight" },
     { name: "커뮤니티", href: "/community" },
     { name: "마켓", href: "/market" },
     { name: "건의사항", href: "/suggestion" },
+    { name: "FAQ", href: "/faq" },
   ];
 
   return (
     <header
       className={cn(
         "fixed top-0 left-0 right-0 z-50 transition-all duration-300 font-sans",
-        // Force background color to prevent transparency issues
         "bg-white dark:bg-[#000000] border-b border-neutral-200 dark:border-[#27272a]"
       )}
     >
-      {/* 
-        Robust Layout:
-        - w-full: Full width.
-        - justify-center: Center items.
-        - gap-6: Fixed spacing between items.
-      */}
       <div className="w-full h-16 flex items-center justify-center gap-8 px-4">
 
         {/* 1. Logo */}
@@ -84,12 +81,7 @@ export default function Header() {
           <ThemeToggle />
         </div>
 
-        {/* 
-           10. Login Button 
-           REMOVED loading check. 
-           Always renders a button. Default: Login. 
-           This fixes the "only box is visible" issue.
-        */}
+        {/* 10. Login Button */}
         <div className="flex-shrink-0 min-w-[70px] flex items-center justify-center ml-2">
           {session?.user ? (
             <button

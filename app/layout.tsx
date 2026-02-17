@@ -1,6 +1,6 @@
 import Script from "next/script";
 import "./globals.css";
-import { AuthProvider } from "./providers";
+import { Providers } from "./providers";
 import LayoutClient from "@/components/layout/LayoutClient";
 import VisitorTracker from "@/components/VisitorTracker";
 import StructuredData from "@/components/SEO/StructuredData";
@@ -100,12 +100,12 @@ export default function RootLayout({
           strategy="afterInteractive"
         />
 
-        <AuthProvider>
+        <Providers>
           <VisitorTracker />
           <LayoutClient>
             {children}
           </LayoutClient>
-        </AuthProvider>
+        </Providers>
       </body>
     </html>
   );

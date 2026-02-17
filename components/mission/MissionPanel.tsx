@@ -1,9 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/contexts/AuthContext";
 import { useTheme } from "next-themes";
-import { signIn } from "next-auth/react";
+import { useRouter } from "next/navigation";
 
 interface Mission {
   code: string;
@@ -19,8 +19,9 @@ interface MissionsResponse {
 }
 
 export default function MissionPanel() {
-  const { data: session } = useSession();
+  const { session } = useAuth();
   const { theme } = useTheme();
+  const router = useRouter();
   const [mounted, setMounted] = useState(false);
   const [data, setData] = useState<MissionsResponse>({ points: null, missions: [] });
   const [loading, setLoading] = useState(true);
@@ -33,7 +34,7 @@ export default function MissionPanel() {
   useEffect(() => {
     if (!mounted) return;
     loadMissions();
-    
+
     // 10초마다 미션 상태 갱신
     const interval = setInterval(loadMissions, 10000);
     return () => clearInterval(interval);
@@ -57,7 +58,7 @@ export default function MissionPanel() {
 
   const handleClaim = async (missionCode: string) => {
     if (claiming || !session?.user) return;
-    
+
     setClaiming(missionCode);
     try {
       const res = await fetch('/api/missions/claim', {
@@ -67,11 +68,11 @@ export default function MissionPanel() {
       });
 
       const result = await res.json();
-      
+
       if (result.ok) {
         // 미션 상태 갱신
         await loadMissions();
-        
+
         // 프로필 포인트 업데이트 (클라이언트 사이드)
         if (session?.user?.email) {
           const profileKey = `dori_profile_${session.user.email}`;
@@ -217,7 +218,7 @@ export default function MissionPanel() {
               </div>
             )}
             <button
-              onClick={() => signIn()}
+              onClick={() => router.push('/login')}
               className="w-full mt-4 py-3 rounded-lg font-medium text-sm transition-all hover:scale-[1.02] active:scale-[0.98]"
               style={{
                 background: isDark
@@ -269,8 +270,8 @@ export default function MissionPanel() {
                       mission.status === 'claimed'
                         ? (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)')
                         : (isDark
-                            ? 'linear-gradient(135deg, #34d399, #10b981)'
-                            : 'linear-gradient(135deg, #059669, #047857)'),
+                          ? 'linear-gradient(135deg, #34d399, #10b981)'
+                          : 'linear-gradient(135deg, #059669, #047857)'),
                     color: mission.status === 'claimed'
                       ? (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)')
                       : '#ffffff',
@@ -279,10 +280,10 @@ export default function MissionPanel() {
                   {claiming === mission.code
                     ? '...'
                     : mission.status === 'claimed'
-                    ? '완료'
-                    : mission.code === 'DAILY_CHECKIN'
-                    ? '체크'
-                    : '수령'}
+                      ? '완료'
+                      : mission.code === 'DAILY_CHECKIN'
+                        ? '체크'
+                        : '수령'}
                 </button>
               </div>
             )) : (

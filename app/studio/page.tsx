@@ -1,8 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession, signOut } from "next-auth/react";
-import { useRouter } from "next/navigation"; 
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
 
 // 댓글 타입 정의
 type Comment = {
@@ -16,15 +16,15 @@ type Comment = {
 
 export default function StudioPage() {
   const router = useRouter();
-  const { data: session } = useSession();
+  const { session } = useAuth();
   const user = session?.user || null;
 
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("ALL");
-  
+
   const [tools, setTools] = useState<any[]>([]);
   const [myVotes, setMyVotes] = useState<Record<number, number>>({});
-  const [hoverState, setHoverState] = useState<{id: number, score: number} | null>(null);
+  const [hoverState, setHoverState] = useState<{ id: number, score: number } | null>(null);
 
   // 상세 모달 상태
   const [selectedTool, setSelectedTool] = useState<any | null>(null);
@@ -44,21 +44,21 @@ export default function StudioPage() {
 
     if (savedTools.length === 0) {
       // 데이터가 없으면 초기 데이터 로드 (데이터 내용은 기존과 동일하므로 생략하지 않고 포함)
-       const initialData = [
+      const initialData = [
         // 1. [LLM & Chatbots]
         { id: 101, title: "ChatGPT", category: "TEXT", desc: "가장 똑똑하고 범용적인 대화형 AI 표준", logo: "https://logo.clearbit.com/openai.com", price: "Freemium", rating: 0, reviews: 0, link: "https://chat.openai.com", history: "2022.11 GPT-3.5 출시\n2023.03 GPT-4 공개\n2024.05 GPT-4o 멀티모달 업데이트", news: "GPT-4o 모델 업데이트로 멀티모달 기능 강화.", commentsList: [] },
         { id: 102, title: "Claude", category: "TEXT", desc: "자연스러운 한국어와 뛰어난 코딩/작문 능력", logo: "https://logo.clearbit.com/anthropic.com", price: "Free", rating: 0, reviews: 0, link: "https://claude.ai", history: "OpenAI 출신 연구원들이 설립한 Anthropic에서 개발.", news: "Claude 3.5 Sonnet 출시 이후 성능 입증.", commentsList: [] },
         { id: 103, title: "Perplexity", category: "TEXT", desc: "실시간 웹 검색 기반의 AI 검색엔진", logo: "https://logo.clearbit.com/perplexity.ai", price: "Freemium", rating: 0, reviews: 0, link: "https://www.perplexity.ai", history: "전통적인 검색엔진을 대체하기 위해 등장.", news: "Pro Search 기능 고도화.", commentsList: [] },
         { id: 104, title: "Gemini", category: "TEXT", desc: "구글 생태계 연동 멀티모달 AI", logo: "https://logo.clearbit.com/deepmind.google", price: "Free", rating: 0, reviews: 0, link: "https://gemini.google.com", history: "구글의 바드(Bard) 리브랜딩.", news: "1.5 Pro 모델 업데이트.", commentsList: [] },
-        
+
         // 2. [IMAGE Generation]
         { id: 201, title: "Midjourney", category: "IMAGE", desc: "예술적 퀄리티가 압도적인 생성 툴", logo: "https://logo.clearbit.com/midjourney.com", price: "Paid", rating: 0, reviews: 0, link: "https://midjourney.com", history: "디스코드 기반 독보적 화풍.", news: "웹사이트 생성 기능 오픈.", commentsList: [] },
         { id: 202, title: "Stable Diffusion", category: "IMAGE", desc: "내 PC에 설치해 제한 없이 쓰는 강력한 도구", logo: "https://logo.clearbit.com/stability.ai", price: "Free", rating: 0, reviews: 0, link: "https://stability.ai", history: "오픈소스 생성형 AI 표준.", news: "SD3 모델 발표.", commentsList: [] },
-        
+
         // 3. [VIDEO Creation]
         { id: 301, title: "Runway", category: "VIDEO", desc: "텍스트로 영화 같은 영상 제작", logo: "https://logo.clearbit.com/runwayml.com", price: "Freemium", rating: 0, reviews: 0, link: "https://runwayml.com", history: "영상 생성 AI 선구자.", news: "Gen-3 Alpha 공개.", commentsList: [] },
         { id: 302, title: "Pika", category: "VIDEO", desc: "이미지 움직임 효과 최강자", logo: "https://logo.clearbit.com/pika.art", price: "Free", rating: 0, reviews: 0, link: "https://pika.art", history: "애니메이션 스타일 강점.", news: "Lip Sync 기능.", commentsList: [] },
-        
+
         // 4. [SOUND]
         { id: 401, title: "Suno", category: "SOUND", desc: "가사만 입력하면 작곡/보컬까지 완성", logo: "https://logo.clearbit.com/suno.com", price: "Free", rating: 0, reviews: 0, link: "https://suno.com", history: "음악 생성의 혁명.", news: "v3.5 모델 업데이트.", commentsList: [] },
         { id: 402, title: "ElevenLabs", category: "SOUND", desc: "자연스러운 TTS 및 보이스 클로닝", logo: "https://logo.clearbit.com/elevenlabs.io", price: "Freemium", rating: 0, reviews: 0, link: "https://elevenlabs.io", history: "AI 음성 합성 1위.", news: "다국어 더빙 기능.", commentsList: [] },
@@ -83,14 +83,14 @@ export default function StudioPage() {
         if (previousVote) {
           const currentTotal = tool.rating * tool.reviews;
           const newTotal = currentTotal - previousVote + score;
-          newReviewCount = tool.reviews; 
+          newReviewCount = tool.reviews;
           newRating = newTotal / newReviewCount;
         } else {
           const currentTotal = tool.rating * tool.reviews;
           newReviewCount = tool.reviews + 1;
           newRating = (currentTotal + score) / newReviewCount;
         }
-        if(isNaN(newRating)) newRating = score;
+        if (isNaN(newRating)) newRating = score;
         return { ...tool, rating: parseFloat(newRating.toFixed(2)), reviews: newReviewCount };
       }
       return tool;
@@ -107,12 +107,12 @@ export default function StudioPage() {
   const handleReviewSubmit = () => {
     if (!user) return alert("로그인이 필요합니다.");
     if (!reviewText.trim()) return alert("리뷰 내용을 입력해주세요.");
-    
+
     // localStorage에서 설정된 이름 가져오기 (일관된 이름 사용)
-    const savedName = user?.email 
+    const savedName = user?.email
       ? localStorage.getItem(`dori_user_name_${user.email}`) || user.name || "익명"
       : "익명";
-    
+
     const colors = ["#FFADAD", "#FFD6A5", "#FDFFB6", "#CAFFBF", "#9BF6FF", "#A0C4FF", "#BDB2FF"];
     const randomColor = colors[Math.floor(Math.random() * colors.length)];
     const newComment: Comment = {
@@ -249,22 +249,22 @@ export default function StudioPage() {
                   <div className="info-box">
                     <h4>History</h4>
                     <ul className="timeline">
-                      {selectedTool.history?.split('\n').map((line:string, i:number) => <li key={i}>{line}</li>)}
+                      {selectedTool.history?.split('\n').map((line: string, i: number) => <li key={i}>{line}</li>)}
                     </ul>
                   </div>
                   <div className="info-box"><h4>Latest News</h4><p>{selectedTool.news}</p></div>
                 </div>
               ) : (
                 <div className="review-tab">
-                   <div className="review-input-box"> {/* 🔥 className 수정 완료 */}
+                  <div className="review-input-box"> {/* 🔥 className 수정 완료 */}
                     <textarea placeholder="이 툴에 대한 솔직한 리뷰를 남겨주세요." value={reviewText} onChange={(e) => setReviewText(e.target.value)} />
                     <div className="review-actions">
                       <div className="stars-input">
-                        {[1,2,3,4,5].map(s => (
-                          <span key={s} 
+                        {[1, 2, 3, 4, 5].map(s => (
+                          <span key={s}
                             className={`star ${s <= (hoverState?.score || reviewRating) ? 'on' : ''}`}
                             onClick={() => setReviewRating(s)}
-                            onMouseEnter={() => setHoverState({id:0, score:s})}
+                            onMouseEnter={() => setHoverState({ id: 0, score: s })}
                             onMouseLeave={() => setHoverState(null)}
                           >★</span>
                         ))}
@@ -273,9 +273,9 @@ export default function StudioPage() {
                     </div>
                   </div>
                   <div className="review-list">
-                    {selectedTool.commentsList?.map((c:Comment) => (
+                    {selectedTool.commentsList?.map((c: Comment) => (
                       <div key={c.id} className="review-item">
-                        <div className="avatar" style={{background: c.avatarColor}}>{c.user[0]}</div>
+                        <div className="avatar" style={{ background: c.avatarColor }}>{c.user[0]}</div>
                         <div className="content">
                           <div className="head"><span className="name">{c.user}</span><span className="date">{c.date}</span></div>
                           <div className="stars">{"⭐".repeat(c.rating)}</div>

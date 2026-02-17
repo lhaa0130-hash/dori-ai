@@ -11,7 +11,7 @@ import { SuggestionItem } from "@/components/suggestions/SuggestionCard";
 // 작성자 ID 생성 및 관리 유틸리티
 const getAuthorId = (): string => {
   if (typeof window === 'undefined') return '';
-  
+
   let authorId = sessionStorage.getItem('dori_author_id');
   if (!authorId) {
     authorId = crypto.randomUUID();
@@ -23,7 +23,7 @@ const getAuthorId = (): string => {
 // 본인이 작성한 건의사항 ID 목록 가져오기
 const getMySuggestionIds = (): Set<string> => {
   if (typeof window === 'undefined') return new Set();
-  
+
   const saved = localStorage.getItem('dori_my_suggestions');
   if (saved) {
     try {
@@ -38,7 +38,7 @@ const getMySuggestionIds = (): Set<string> => {
 // 본인이 작성한 건의사항 ID 목록에 추가
 const addMySuggestionId = (id: string) => {
   if (typeof window === 'undefined') return;
-  
+
   const myIds = getMySuggestionIds();
   myIds.add(id);
   localStorage.setItem('dori_my_suggestions', JSON.stringify(Array.from(myIds)));
@@ -47,7 +47,7 @@ const addMySuggestionId = (id: string) => {
 // 본인이 작성한 건의사항 ID 목록에서 제거
 const removeMySuggestionId = (id: string) => {
   if (typeof window === 'undefined') return;
-  
+
   const myIds = getMySuggestionIds();
   myIds.delete(id);
   localStorage.setItem('dori_my_suggestions', JSON.stringify(Array.from(myIds)));
@@ -99,17 +99,17 @@ export default function SuggestionsClient() {
       ...newItem,
       authorId: authorId,
     };
-    
+
     const updated = [itemWithAuthor, ...suggestions];
     setSuggestions(updated);
     localStorage.setItem("dori_suggestions", JSON.stringify(updated));
-    
+
     // 본인 작성 목록에 추가
     addMySuggestionId(newItem.id);
   };
 
   const handleUpdateSuggestion = (updatedItem: SuggestionItem) => {
-    const updated = suggestions.map(item => 
+    const updated = suggestions.map(item =>
       item.id === updatedItem.id ? updatedItem : item
     );
     setSuggestions(updated);
@@ -153,8 +153,8 @@ export default function SuggestionsClient() {
   const isDark = mounted && theme === 'dark';
 
   return (
-    <main 
-      className="w-full min-h-screen relative overflow-x-hidden" 
+    <main
+      className="w-full min-h-screen relative overflow-x-hidden"
       style={{
         backgroundColor: isDark ? '#000000' : '#ffffff',
         fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
@@ -169,7 +169,7 @@ export default function SuggestionsClient() {
           </>
         )}
         {mounted && theme === "light" && (
-          <div 
+          <div
             className="absolute inset-0 transition-all duration-1000"
             style={{
               background: 'radial-gradient(ellipse at top, rgba(59, 130, 246, 0.05) 0%, transparent 50%), #ffffff',
@@ -181,9 +181,9 @@ export default function SuggestionsClient() {
       {/* 히어로 섹션 */}
       <section className="relative pt-20 pb-12 px-6 text-center overflow-hidden">
         <div className="max-w-4xl mx-auto">
-          <h1 
+          <h1
             className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight"
-            style={{ 
+            style={{
               color: isDark ? '#ffffff' : '#1d1d1f',
               fontWeight: 700,
               letterSpacing: '-0.03em',
@@ -191,17 +191,17 @@ export default function SuggestionsClient() {
           >
             {TEXTS.suggestions.heroTitle.ko}
           </h1>
-          
+
           {/* 그라데이션 바 */}
-          <div 
+          <div
             className="w-full max-w-2xl mx-auto h-1 md:h-1.5 mb-6 rounded-full overflow-hidden"
             style={{
-              boxShadow: isDark 
+              boxShadow: isDark
                 ? '0 0 30px rgba(96, 165, 250, 0.4), 0 4px 20px rgba(96, 165, 250, 0.2)'
                 : '0 0 20px rgba(37, 99, 235, 0.3), 0 4px 15px rgba(37, 99, 235, 0.2)',
             }}
           >
-            <div 
+            <div
               className="gradient-flow h-full rounded-full"
               style={{
                 backgroundImage: isDark
@@ -213,9 +213,9 @@ export default function SuggestionsClient() {
             />
           </div>
 
-          <p 
+          <p
             className="text-lg md:text-xl font-medium opacity-70 break-keep leading-relaxed"
-            style={{ 
+            style={{
               color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
               fontWeight: 500,
               letterSpacing: '-0.01em',
@@ -225,12 +225,12 @@ export default function SuggestionsClient() {
           </p>
         </div>
       </section>
-      
+
       {/* 메인 콘텐츠 */}
       <section className="container max-w-7xl mx-auto px-4 md:px-6 pb-24">
         {/* 건의사항 폼 */}
         <div data-suggestion-form>
-          <SuggestionForm 
+          <SuggestionForm
             onAddSuggestion={handleAddSuggestion}
             initialData={editingItem}
             onCancel={() => setEditingItem(null)}
@@ -244,7 +244,7 @@ export default function SuggestionsClient() {
         </div>
 
         {/* 건의사항 목록 */}
-        <SuggestionList 
+        <SuggestionList
           suggestions={filteredSuggestions}
           isOwner={isOwner}
           onEdit={handleEditSuggestion}

@@ -25,10 +25,10 @@ export default function SuggestionFilters({ filters, setFilters }: SuggestionFil
 
   return (
     <div className="flex flex-col md:flex-row gap-4 mb-8">
-      
+
       {/* 1. 유형 필터 */}
-      <select 
-        value={filters.type} 
+      <select
+        value={filters.type}
         onChange={(e) => handleChange("type", e.target.value)}
         className={selectClass}
       >
@@ -40,8 +40,8 @@ export default function SuggestionFilters({ filters, setFilters }: SuggestionFil
       </select>
 
       {/* 2. 우선순위 필터 */}
-      <select 
-        value={filters.priority} 
+      <select
+        value={filters.priority}
         onChange={(e) => handleChange("priority", e.target.value)}
         className={selectClass}
       >
@@ -52,8 +52,8 @@ export default function SuggestionFilters({ filters, setFilters }: SuggestionFil
       </select>
 
       {/* 3. 정렬 */}
-      <select 
-        value={filters.sort} 
+      <select
+        value={filters.sort}
         onChange={(e) => handleChange("sort", e.target.value)}
         className={`${selectClass} md:ml-auto`}
       >

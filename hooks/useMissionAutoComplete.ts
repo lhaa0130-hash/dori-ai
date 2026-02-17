@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/contexts/AuthContext";
 import { usePathname } from "next/navigation";
 import { DAILY_MISSIONS } from "@/constants/missions";
 
@@ -12,7 +12,7 @@ import { DAILY_MISSIONS } from "@/constants/missions";
  * - timer 타입: 페이지에서 일정 시간 머물면 완료
  */
 export function useMissionAutoComplete() {
-  const { data: session } = useSession();
+  const { session } = useAuth();
   const pathname = usePathname();
 
   useEffect(() => {
@@ -23,7 +23,7 @@ export function useMissionAutoComplete() {
     if (checkinMission) {
       const todayKey = new Date().toISOString().split("T")[0].replace(/-/g, "");
       const checkinKey = `mission_auto_${checkinMission.code}_${todayKey}`;
-      
+
       // 오늘 이미 체크했는지 확인
       if (!localStorage.getItem(checkinKey)) {
         // 자동 완료 처리
@@ -43,7 +43,7 @@ export function useMissionAutoComplete() {
       if (mission.meta?.path && pathname === mission.meta.path) {
         const todayKey = new Date().toISOString().split("T")[0].replace(/-/g, "");
         const visitKey = `mission_visit_${mission.code}_${todayKey}`;
-        
+
         if (!localStorage.getItem(visitKey)) {
           fetch("/api/missions/complete", {
             method: "POST",
@@ -62,7 +62,7 @@ export function useMissionAutoComplete() {
  * 타이머 기반 미션 완료 훅 (30초 읽기 등)
  */
 export function useMissionTimer(missionCode: string, secondsRequired: number) {
-  const { data: session } = useSession();
+  const { session } = useAuth();
   const [startTime] = useState<number>(Date.now());
   const [completed, setCompleted] = useState(false);
 
@@ -71,7 +71,7 @@ export function useMissionTimer(missionCode: string, secondsRequired: number) {
 
     const todayKey = new Date().toISOString().split("T")[0].replace(/-/g, "");
     const timerKey = `mission_timer_${missionCode}_${todayKey}`;
-    
+
     // 이미 완료했는지 확인
     if (localStorage.getItem(timerKey)) {
       setCompleted(true);

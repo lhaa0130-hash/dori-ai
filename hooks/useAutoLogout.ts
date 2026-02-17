@@ -1,20 +1,20 @@
 "use client";
 
 import { useEffect, useRef } from "react";
-import { useSession, signOut } from "next-auth/react";
+import { useAuth } from "@/contexts/AuthContext";
 
 /**
  * 10분간 비활성 시 자동 로그아웃 훅
  */
 export function useAutoLogout() {
-  const { data: session } = useSession();
+  const { session, logout } = useAuth();
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
   const lastActivityRef = useRef<number>(Date.now());
 
   // 활동 감지 이벤트
   const resetTimer = () => {
     lastActivityRef.current = Date.now();
-    
+
     // 기존 타이머 클리어
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
@@ -24,7 +24,7 @@ export function useAutoLogout() {
     if (session) {
       // 10분(600초) 후 자동 로그아웃
       timeoutRef.current = setTimeout(() => {
-        signOut({ callbackUrl: "/" });
+        logout();
       }, 10 * 60 * 1000);
     }
   };

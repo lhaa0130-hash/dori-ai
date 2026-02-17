@@ -1,11 +1,11 @@
 "use client";
 
 import { useRef, useState, MouseEvent, useEffect } from "react";
-import { useSession, signIn } from "next-auth/react";
+import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 
 export default function Home() {
-  const { data: session } = useSession();
+  const { session, login, signup } = useAuth();
   const user = session?.user || null;
 
   // --- 상태 관리 ---
@@ -21,7 +21,7 @@ export default function Home() {
   useEffect(() => {
     const savedPosts = JSON.parse(localStorage.getItem("dori_posts") || "[]");
     if (savedPosts.length > 0) {
-      setBlogPosts(savedPosts.slice(0, 8)); 
+      setBlogPosts(savedPosts.slice(0, 8));
     }
   }, []);
 
@@ -54,19 +54,15 @@ export default function Home() {
     e.preventDefault();
     if (!username || !password) return alert("아이디와 비밀번호를 입력해주세요.");
     setIsLoading(true);
-    
-    const res = await signIn("credentials", { 
-      redirect: false, 
-      username, 
-      password 
-    });
-    
+
+    const res = await login(username, password);
+
     setIsLoading(false);
-    if (res?.error) {
-      alert("로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.");
-    } else { 
-      setLoginOpen(false); 
-      window.location.reload(); 
+    if (!res.success) {
+      alert(res.error || "로그인에 실패했습니다. 아이디와 비밀번호를 확인해주세요.");
+    } else {
+      setLoginOpen(false);
+      window.location.reload();
     }
   }
 
@@ -74,22 +70,17 @@ export default function Home() {
     e.preventDefault();
     if (!username || !password || !name) return alert("모든 필드를 입력해주세요.");
     setIsLoading(true);
-    
+
     try {
-      const res = await fetch("/api/auth/register", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password, name }),
-      });
-      
-      if (!res.ok) throw new Error("회원가입 실패");
-      
+      const res = await signup({ email: username, password, name });
+      if (!res.success) throw new Error(res.error || "회원가입 실패");
+
       alert("가입 성공! 로그인해주세요.");
       setIsLoginMode(true);
-    } catch (err) { 
-      alert("회원가입 중 오류가 발생했습니다."); 
-    } finally { 
-      setIsLoading(false); 
+    } catch (err) {
+      alert("회원가입 중 오류가 발생했습니다.");
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -109,17 +100,17 @@ export default function Home() {
           <h1>Creative Studio <span className="text-gradient">DORI-AI</span></h1>
           <p>상상을 현실로 만드는 모든 AI 도구를 만나보세요.</p>
         </div>
-        
+
         {/* 🔥 5개 카테고리 벤토 그리드 (3열 구조) */}
         <div className="bento-grid fade-in-up delay-1">
-          
+
           {/* [1. Studio] AI 툴 랭킹 (좌측 상단, 2x2 대형) */}
           <Link href="/studio" className="bento-card studio">
             <div className="card-bg-glow"></div>
             <div className="card-content">
               <div className="icon-box dark">🏆</div>
               <h3>AI 툴 랭킹</h3>
-              <p>수천 개의 AI 툴 중 진짜만 엄선했습니다.<br/>실시간 순위와 유저들의 솔직한 평가를 확인하세요.</p>
+              <p>수천 개의 AI 툴 중 진짜만 엄선했습니다.<br />실시간 순위와 유저들의 솔직한 평가를 확인하세요.</p>
             </div>
             <div className="card-arrow">랭킹 보러가기 →</div>
           </Link>
@@ -129,7 +120,7 @@ export default function Home() {
             <div className="card-content">
               <div className="icon-box glass">🧠</div>
               <h3>인사이트</h3>
-              <p>운영자가 매일 아침 정리하는<br/>AI 업계 속보와 심층 칼럼.</p>
+              <p>운영자가 매일 아침 정리하는<br />AI 업계 속보와 심층 칼럼.</p>
             </div>
           </Link>
 
@@ -138,7 +129,7 @@ export default function Home() {
             <div className="card-content">
               <div className="icon-box glass">🎓</div>
               <h3>아카데미</h3>
-              <p>검증된 유튜브 강의 큐레이션과<br/>핵심 튜토리얼 가이드.</p>
+              <p>검증된 유튜브 강의 큐레이션과<br />핵심 튜토리얼 가이드.</p>
             </div>
           </Link>
 
@@ -147,7 +138,7 @@ export default function Home() {
             <div className="card-content">
               <div className="icon-box glass">📂</div>
               <h3>무료 자료실</h3>
-              <p>프롬프트, 치트시트, 전자책 등<br/>실무에 바로 쓰는 자료 공유.</p>
+              <p>프롬프트, 치트시트, 전자책 등<br />실무에 바로 쓰는 자료 공유.</p>
             </div>
           </Link>
 
@@ -156,7 +147,7 @@ export default function Home() {
             <div className="card-content">
               <div className="icon-box glass">💬</div>
               <h3>커뮤니티</h3>
-              <p>혼자 고민하지 마세요. 작품 자랑부터 에러 해결 질문까지,<br/>DORI-AI 멤버들과 함께 성장하는 자유로운 소통 공간입니다.</p>
+              <p>혼자 고민하지 마세요. 작품 자랑부터 에러 해결 질문까지,<br />DORI-AI 멤버들과 함께 성장하는 자유로운 소통 공간입니다.</p>
             </div>
           </Link>
 
@@ -181,12 +172,12 @@ export default function Home() {
         ) : (
           <div className="latest-wrapper">
             <button className="latest-arrow left" onClick={() => scrollLatestBy(-1)}>←</button>
-            <div 
-              className="latest-scroller" 
-              ref={latestRef} 
-              onMouseDown={onLatestMouseDown} 
-              onMouseMove={onLatestMouseMove} 
-              onMouseUp={endLatestDrag} 
+            <div
+              className="latest-scroller"
+              ref={latestRef}
+              onMouseDown={onLatestMouseDown}
+              onMouseMove={onLatestMouseMove}
+              onMouseUp={endLatestDrag}
               onMouseLeave={endLatestDrag}
             >
               {blogPosts.map((post) => (
@@ -223,37 +214,37 @@ export default function Home() {
               <h3>{isLoginMode ? "환영합니다!" : "회원가입"}</h3>
               <p>{isLoginMode ? "로그인하여 DORI-AI를 이용하세요." : "회원가입하고 모든 기능을 이용하세요."}</p>
             </div>
-            
+
             {isLoginMode ? (
               <div className="login-body">
                 {/* 구글 로그인 */}
-                <button className="google-btn" onClick={() => signIn("google", { callbackUrl: "/" })} disabled={isLoading}>
+                <button className="google-btn" onClick={() => window.location.href = '/login'} disabled={isLoading}>
                   <span className="g-icon">G</span> Google로 계속하기
                 </button>
-                
+
                 <div className="divider"><span>또는 아이디로 로그인</span></div>
 
                 <form onSubmit={handleCredentialLogin} className="auth-form">
-                  <input type="text" placeholder="아이디" value={username} onChange={e=>setUsername(e.target.value)} className="input-field"/>
-                  <input type="password" placeholder="비밀번호" value={password} onChange={e=>setPassword(e.target.value)} className="input-field"/>
+                  <input type="text" placeholder="아이디" value={username} onChange={e => setUsername(e.target.value)} className="input-field" />
+                  <input type="password" placeholder="비밀번호" value={password} onChange={e => setPassword(e.target.value)} className="input-field" />
                   <button type="submit" className="submit-btn" disabled={isLoading}>
                     {isLoading ? "로그인 중..." : "로그인"}
                   </button>
                 </form>
                 <div className="switch-mode">
-                  계정이 없으신가요? <span onClick={()=>setIsLoginMode(false)}>회원가입</span>
+                  계정이 없으신가요? <span onClick={() => setIsLoginMode(false)}>회원가입</span>
                 </div>
               </div>
             ) : (
               <form onSubmit={handleRegister} className="auth-form">
-                <input type="text" placeholder="아이디" value={username} onChange={e=>setUsername(e.target.value)} className="input-field"/>
-                <input type="password" placeholder="비밀번호 (6자 이상)" value={password} onChange={e=>setPassword(e.target.value)} className="input-field"/>
-                <input type="text" placeholder="닉네임" value={name} onChange={e=>setName(e.target.value)} className="input-field"/>
+                <input type="text" placeholder="아이디" value={username} onChange={e => setUsername(e.target.value)} className="input-field" />
+                <input type="password" placeholder="비밀번호 (6자 이상)" value={password} onChange={e => setPassword(e.target.value)} className="input-field" />
+                <input type="text" placeholder="닉네임" value={name} onChange={e => setName(e.target.value)} className="input-field" />
                 <button type="submit" className="submit-btn" disabled={isLoading}>
                   {isLoading ? "가입 처리 중..." : "회원가입"}
                 </button>
                 <div className="switch-mode">
-                  이미 계정이 있으신가요? <span onClick={()=>setIsLoginMode(true)}>로그인</span>
+                  이미 계정이 있으신가요? <span onClick={() => setIsLoginMode(true)}>로그인</span>
                 </div>
               </form>
             )}

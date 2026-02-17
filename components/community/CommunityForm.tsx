@@ -2,7 +2,7 @@
 
 import { useState, useRef, useEffect } from "react";
 import { useTheme } from "next-themes";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { TEXTS } from "@/constants/texts";
 import { CommunityPost, CommunityTag } from "./CommunityCard";
@@ -18,7 +18,7 @@ interface CommunityFormProps {
 
 export default function CommunityForm({ onAddPost, initialData, onCancel, onUpdate }: CommunityFormProps) {
   const { theme } = useTheme();
-  const { data: session, status } = useSession();
+  const { session, status } = useAuth();
   const router = useRouter();
   const t = TEXTS.communityPage.form;
   const tErr = TEXTS.communityPage.errors;
@@ -54,7 +54,7 @@ export default function CommunityForm({ onAddPost, initialData, onCancel, onUpda
     if (session?.user?.email) {
       // localStorage에 저장된 이름을 우선 사용
       let savedName = localStorage.getItem(`dori_user_name_${session.user.email}`);
-      
+
       if (!savedName && session.user?.name) {
         // localStorage에 없으면 세션 이름을 저장하고 사용
         savedName = session.user.name;
@@ -66,7 +66,7 @@ export default function CommunityForm({ onAddPost, initialData, onCancel, onUpda
           localStorage.setItem(`dori_user_name_${session.user.email}`, savedName);
         }
       }
-      
+
       setNickname(savedName || "");
     } else {
       setNickname("");
@@ -126,7 +126,7 @@ export default function CommunityForm({ onAddPost, initialData, onCancel, onUpda
     const newText = before + selectedText + after;
     const newContent = content.substring(0, start) + newText + content.substring(end);
     setContent(newContent);
-    
+
     // 커서 위치 조정
     setTimeout(() => {
       textarea.focus();
@@ -220,14 +220,14 @@ export default function CommunityForm({ onAddPost, initialData, onCancel, onUpda
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    if (title.length < 1 || content.length < 5) { 
-      alert(tErr.short.ko); 
-      return; 
+    if (title.length < 1 || content.length < 5) {
+      alert(tErr.short.ko);
+      return;
     }
     const combinedText = title + content + nickname;
-    if (BANNED_WORDS.some((word) => combinedText.includes(word))) { 
-      alert(tErr.banned.ko); 
-      return; 
+    if (BANNED_WORDS.some((word) => combinedText.includes(word))) {
+      alert(tErr.banned.ko);
+      return;
     }
 
     // 이미지를 content에 포함
@@ -277,32 +277,31 @@ export default function CommunityForm({ onAddPost, initialData, onCancel, onUpda
         });
       }
     }
-    
+
     // 초기화
-    setTitle(""); 
-    setContent(""); 
+    setTitle("");
+    setContent("");
     setTag("잡담");
-    setCreationType("human_only"); 
+    setCreationType("human_only");
     setAiTools("");
     setImages([]);
     setIsOpen(false);
   };
 
   const baseInputClass = "w-full px-3 py-2 rounded-md border outline-none transition-all focus:ring-1 focus:ring-blue-500/20";
-  const inputClass = `${baseInputClass} ${
-    isDark 
-      ? 'bg-white/2 border-white/6 text-white placeholder:text-white/30' 
+  const inputClass = `${baseInputClass} ${isDark
+      ? 'bg-white/2 border-white/6 text-white placeholder:text-white/30'
       : 'bg-white border-gray-200/60 text-gray-900 placeholder:text-gray-400'
-  }`;
+    }`;
 
   // 로그인하지 않았으면 글 작성 버튼 비활성화
   if (status === "unauthenticated") {
     return (
       <div className="mb-10 w-full max-w-4xl mx-auto">
-        <button 
+        <button
           onClick={() => router.push("/login")}
           className="w-full py-4 rounded-xl border border-dashed text-base font-medium hover:opacity-80 transition-all flex items-center justify-center gap-2"
-          style={{ 
+          style={{
             borderColor: isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.08)',
             color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
             backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.01)',
@@ -317,9 +316,9 @@ export default function CommunityForm({ onAddPost, initialData, onCancel, onUpda
   if (status === "loading") {
     return (
       <div className="mb-10 w-full max-w-4xl mx-auto">
-        <div 
+        <div
           className="w-full py-4 rounded-xl border border-dashed text-base font-medium text-center"
-          style={{ 
+          style={{
             borderColor: isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.08)',
             color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
           }}
@@ -333,10 +332,10 @@ export default function CommunityForm({ onAddPost, initialData, onCancel, onUpda
   return (
     <div className="mb-10 w-full max-w-4xl mx-auto">
       {!isOpen ? (
-        <button 
+        <button
           onClick={handleOpenForm}
           className="w-full py-4 rounded-xl border border-dashed text-base font-medium hover:opacity-80 transition-all flex items-center justify-center gap-2"
-          style={{ 
+          style={{
             borderColor: isDark ? 'rgba(255, 255, 255, 0.15)' : 'rgba(0, 0, 0, 0.08)',
             color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
             backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.01)',
@@ -347,7 +346,7 @@ export default function CommunityForm({ onAddPost, initialData, onCancel, onUpda
       ) : (
         <div className="animate-[fadeInUp_0.3s_ease-out]">
           <div className="flex items-center justify-between mb-4">
-            <h3 
+            <h3
               className="text-base font-medium"
               style={{ color: isDark ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.9)' }}
             >
@@ -367,9 +366,9 @@ export default function CommunityForm({ onAddPost, initialData, onCancel, onUpda
 
           <form onSubmit={handleSubmit} className="flex flex-col gap-3">
             {/* 카테고리 */}
-            <select 
-              value={tag} 
-              onChange={(e) => setTag(e.target.value as CommunityTag)} 
+            <select
+              value={tag}
+              onChange={(e) => setTag(e.target.value as CommunityTag)}
               className={`${inputClass} cursor-pointer`}
             >
               <option value="잡담">카테고리(선택)</option>
@@ -380,17 +379,17 @@ export default function CommunityForm({ onAddPost, initialData, onCancel, onUpda
             </select>
 
             {/* 제목 */}
-            <input 
-              type="text" 
-              placeholder="제목" 
-              value={title} 
-              onChange={(e) => setTitle(e.target.value)} 
-              className={`${inputClass}`} 
-              maxLength={50} 
+            <input
+              type="text"
+              placeholder="제목"
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+              className={`${inputClass}`}
+              maxLength={50}
             />
 
             {/* 텍스트 포맷팅 툴바 */}
-            <div 
+            <div
               className="flex items-center gap-1 p-2 rounded-md border flex-wrap"
               style={{
                 backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.01)',
@@ -471,7 +470,7 @@ export default function CommunityForm({ onAddPost, initialData, onCancel, onUpda
                   placeholder="16"
                   title="글씨 크기 (px)"
                 />
-                <span 
+                <span
                   className="absolute right-2 text-xs pointer-events-none"
                   style={{ color: isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)' }}
                 >
@@ -634,13 +633,13 @@ export default function CommunityForm({ onAddPost, initialData, onCancel, onUpda
             </div>
 
             {/* 내용 입력 */}
-            <textarea 
+            <textarea
               ref={textareaRef}
-              rows={14} 
+              rows={14}
               name="content"
-              placeholder={t.content.ko} 
-              value={content} 
-              onChange={(e) => setContent(e.target.value)} 
+              placeholder={t.content.ko}
+              value={content}
+              onChange={(e) => setContent(e.target.value)}
               className={`${inputClass} resize-none text-sm leading-relaxed`}
             />
 
@@ -649,8 +648,8 @@ export default function CommunityForm({ onAddPost, initialData, onCancel, onUpda
               <div className="grid grid-cols-2 md:grid-cols-3 gap-2.5">
                 {images.map((img, index) => (
                   <div key={index} className="relative group">
-                    <img 
-                      src={img} 
+                    <img
+                      src={img}
                       alt={`업로드 ${index + 1}`}
                       className="w-full h-24 object-cover rounded-md border"
                       style={{ borderColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)' }}
@@ -668,14 +667,14 @@ export default function CommunityForm({ onAddPost, initialData, onCancel, onUpda
             )}
 
             {/* AI 사용 여부 선택 */}
-            <div 
+            <div
               className="flex flex-col gap-2 p-2.5 rounded-md border"
               style={{
                 backgroundColor: isDark ? 'rgba(255, 255, 255, 0.01)' : 'rgba(0, 0, 0, 0.01)',
                 borderColor: isDark ? 'rgba(255, 255, 255, 0.06)' : 'rgba(0, 0, 0, 0.06)',
               }}
             >
-              <span 
+              <span
                 className="text-xs font-medium"
                 style={{ color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)' }}
               >
@@ -683,33 +682,33 @@ export default function CommunityForm({ onAddPost, initialData, onCancel, onUpda
               </span>
               <div className="flex gap-2.5 text-xs flex-wrap">
                 <label className="flex items-center gap-1 cursor-pointer">
-                  <input 
-                    type="radio" 
-                    name="creationType" 
-                    value="human_only" 
-                    checked={creationType === "human_only"} 
+                  <input
+                    type="radio"
+                    name="creationType"
+                    value="human_only"
+                    checked={creationType === "human_only"}
                     onChange={() => setCreationType("human_only")}
                     className="cursor-pointer"
                   />
                   <span style={{ color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)' }}>사람만</span>
                 </label>
                 <label className="flex items-center gap-1 cursor-pointer">
-                  <input 
-                    type="radio" 
-                    name="creationType" 
-                    value="ai_assisted" 
-                    checked={creationType === "ai_assisted"} 
+                  <input
+                    type="radio"
+                    name="creationType"
+                    value="ai_assisted"
+                    checked={creationType === "ai_assisted"}
                     onChange={() => setCreationType("ai_assisted")}
                     className="cursor-pointer"
                   />
                   <span style={{ color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)' }}>AI 보조</span>
                 </label>
                 <label className="flex items-center gap-1 cursor-pointer">
-                  <input 
-                    type="radio" 
-                    name="creationType" 
-                    value="ai_generated" 
-                    checked={creationType === "ai_generated"} 
+                  <input
+                    type="radio"
+                    name="creationType"
+                    value="ai_generated"
+                    checked={creationType === "ai_generated"}
                     onChange={() => setCreationType("ai_generated")}
                     className="cursor-pointer"
                   />
@@ -717,23 +716,23 @@ export default function CommunityForm({ onAddPost, initialData, onCancel, onUpda
                 </label>
               </div>
               {creationType !== "human_only" && (
-                <input 
-                  type="text" 
-                  placeholder="사용 도구 (예: ChatGPT, Gemini)" 
-                  value={aiTools} 
-                  onChange={(e) => setAiTools(e.target.value)} 
-                  className={`${inputClass} py-2 text-xs`} 
+                <input
+                  type="text"
+                  placeholder="사용 도구 (예: ChatGPT, Gemini)"
+                  value={aiTools}
+                  onChange={(e) => setAiTools(e.target.value)}
+                  className={`${inputClass} py-2 text-xs`}
                 />
               )}
             </div>
 
             {/* 버튼 */}
             <div className="flex gap-2 mt-0.5">
-              <button 
-                type="button" 
-                onClick={() => setIsOpen(false)} 
+              <button
+                type="button"
+                onClick={() => setIsOpen(false)}
                 className="flex-1 py-2 rounded-md font-medium border transition-all hover:opacity-70"
-                style={{ 
+                style={{
                   borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
                   color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)',
                   backgroundColor: isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.02)',
@@ -741,8 +740,8 @@ export default function CommunityForm({ onAddPost, initialData, onCancel, onUpda
               >
                 취소
               </button>
-              <button 
-                type="submit" 
+              <button
+                type="submit"
                 className="flex-1 py-2 rounded-md font-medium text-white bg-gradient-to-r from-blue-600 to-purple-600 hover:opacity-85 transition-all"
               >
                 {isEditMode ? "수정하기" : t.submit.ko}

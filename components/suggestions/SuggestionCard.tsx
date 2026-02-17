@@ -47,7 +47,7 @@ export default function SuggestionCard({ item, isOwner = false, onEdit, onDelete
   };
 
   return (
-    <div 
+    <div
       className="relative flex flex-col p-6 rounded-[1.5rem] border transition-all duration-300 hover:-translate-y-1 hover:shadow-lg group"
       style={cardStyle}
     >
@@ -86,7 +86,7 @@ export default function SuggestionCard({ item, isOwner = false, onEdit, onDelete
             {new Date(item.createdAt).toLocaleDateString()}
           </span>
         </div>
-        
+
         {/* 본인 글인 경우 수정/삭제 버튼 */}
         {isOwner && (onEdit || onDelete) && (
           <div className="flex gap-2 pt-2 border-t border-dashed" style={{ borderColor: 'var(--card-border)' }}>

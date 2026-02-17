@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession, signIn } from "next-auth/react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
 
 interface AiToolsRatingProps {
   toolId: string;
@@ -12,7 +13,8 @@ interface AiToolsRatingProps {
 }
 
 export default function AiToolsRating({ toolId, initialRating, initialCount, onRatingUpdate, compact = false }: AiToolsRatingProps) {
-  const { data: session } = useSession();
+  const { session } = useAuth();
+  const router = useRouter();
   const [myScore, setMyScore] = useState<number | null>(null);
   const [hoverScore, setHoverScore] = useState<number | null>(null);
 
@@ -27,13 +29,13 @@ export default function AiToolsRating({ toolId, initialRating, initialCount, onR
 
   const handleRate = (score: number) => {
     if (!session) {
-      if (confirm("로그인이 필요한 서비스입니다. 로그인하시겠습니까?")) signIn();
+      if (confirm("로그인이 필요한 서비스입니다. 로그인하시겠습니까?")) router.push('/login');
       return;
     }
 
     const savedData = JSON.parse(localStorage.getItem("dori_tool_ratings") || "{}");
     const toolData = savedData[toolId] || { totalScore: initialRating * initialCount, count: initialCount, users: {} };
-    
+
     const prevScore = toolData.users[session.user.email!] || 0;
     let newTotalScore = toolData.totalScore;
     let newCount = toolData.count;
@@ -67,7 +69,7 @@ export default function AiToolsRating({ toolId, initialRating, initialCount, onR
           <span className="text-[10px] text-gray-400">미참여</span>
         )}
       </div>
-      
+
       <div className="flex justify-center w-full gap-1.5">
         {[1, 2, 3, 4, 5].map((score) => (
           <button
@@ -75,9 +77,8 @@ export default function AiToolsRating({ toolId, initialRating, initialCount, onR
             onMouseEnter={() => setHoverScore(score)}
             onMouseLeave={() => setHoverScore(null)}
             onClick={() => handleRate(score)}
-            className={`text-2xl transition-transform hover:scale-110 ${
-              score <= (hoverScore || myScore || 0) ? "text-yellow-400" : "text-gray-300 dark:text-gray-700"
-            }`}
+            className={`text-2xl transition-transform hover:scale-110 ${score <= (hoverScore || myScore || 0) ? "text-yellow-400" : "text-gray-300 dark:text-gray-700"
+              }`}
           >
             ★
           </button>

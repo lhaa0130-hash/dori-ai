@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSession, signIn } from "next-auth/react";
+import { useAuth } from "@/contexts/AuthContext";
+import { useRouter } from "next/navigation";
 import { AiToolComment } from "@/types/content";
 
 interface AiToolsCommentsProps {
@@ -11,7 +12,8 @@ interface AiToolsCommentsProps {
 }
 
 export default function AiToolsComments({ toolId, compact = false, onCommentUpdate }: AiToolsCommentsProps) {
-  const { data: session } = useSession();
+  const { session } = useAuth();
+  const router = useRouter();
   const [comments, setComments] = useState<AiToolComment[]>([]);
   const [newComment, setNewComment] = useState("");
   const [userName, setUserName] = useState<string>("");
@@ -28,7 +30,7 @@ export default function AiToolsComments({ toolId, compact = false, onCommentUpda
     if (session?.user?.email) {
       // localStorage에 저장된 이름을 우선 사용
       let savedName = localStorage.getItem(`dori_user_name_${session.user.email}`);
-      
+
       if (!savedName && session.user?.name) {
         // localStorage에 없으면 세션 이름을 저장하고 사용
         savedName = session.user.name;
@@ -38,7 +40,7 @@ export default function AiToolsComments({ toolId, compact = false, onCommentUpda
         savedName = session.user.email.split("@")[0];
         localStorage.setItem(`dori_user_name_${session.user.email}`, savedName);
       }
-      
+
       setUserName(savedName || "User");
     } else {
       setUserName("");
@@ -47,7 +49,7 @@ export default function AiToolsComments({ toolId, compact = false, onCommentUpda
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!session) return signIn();
+    if (!session) { router.push('/login'); return; }
     if (!newComment.trim()) return;
 
     const commentObj: AiToolComment = {
@@ -65,14 +67,14 @@ export default function AiToolsComments({ toolId, compact = false, onCommentUpda
     const savedData = JSON.parse(localStorage.getItem("dori_tool_comments") || "{}");
     savedData[toolId] = updatedComments;
     localStorage.setItem("dori_tool_comments", JSON.stringify(savedData));
-    
+
     // 댓글 작성 미션 진행도 업데이트
     if (session?.user?.email) {
       import('@/lib/missionProgress').then(({ handleCommentMission }) => {
         handleCommentMission().catch(err => console.error('미션 진행도 업데이트 오류:', err));
       });
     }
-    
+
     // 부모 컴포넌트에 업데이트 알림
     if (onCommentUpdate) {
       onCommentUpdate();
@@ -87,7 +89,7 @@ export default function AiToolsComments({ toolId, compact = false, onCommentUpda
     const savedData = JSON.parse(localStorage.getItem("dori_tool_comments") || "{}");
     savedData[toolId] = updatedComments;
     localStorage.setItem("dori_tool_comments", JSON.stringify(savedData));
-    
+
     // 부모 컴포넌트에 업데이트 알림
     if (onCommentUpdate) {
       onCommentUpdate();
@@ -109,7 +111,7 @@ export default function AiToolsComments({ toolId, compact = false, onCommentUpda
           className={`w-full rounded-xl bg-[var(--bg-soft)] border border-[var(--card-border)] focus:border-blue-500 outline-none resize-none text-[var(--text-main)] placeholder-gray-400 transition-all ${compact ? 'p-3 min-h-[80px] text-sm' : 'p-5 min-h-[120px]'}`}
           disabled={!session}
         />
-        <button 
+        <button
           type="submit"
           disabled={!session || !newComment.trim()}
           className={`absolute bottom-3 right-3 bg-blue-600 text-white rounded-lg font-bold disabled:opacity-50 hover:opacity-80 transition-opacity ${compact ? 'px-3 py-1.5 text-xs' : 'px-5 py-2 text-sm'}`}
@@ -141,7 +143,7 @@ export default function AiToolsComments({ toolId, compact = false, onCommentUpda
           ))
         )}
         {compact && comments.length > 3 && (
-           <p className="text-center text-xs text-gray-400 mt-1">... 외 {comments.length - 3}개 더보기</p>
+          <p className="text-center text-xs text-gray-400 mt-1">... 외 {comments.length - 3}개 더보기</p>
         )}
       </div>
     </div>

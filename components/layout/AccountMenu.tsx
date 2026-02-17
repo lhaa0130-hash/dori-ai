@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
-import { signOut } from "next-auth/react";
+import { useAuth } from "@/contexts/AuthContext";
 import { CheckCircle2, Circle, Gift } from 'lucide-react';
 import { UserProfile, TIER_INFO, calculateLevel, getNextLevelExp, getNextTierExp, getCurrentLevelStartExp, TIER_THRESHOLDS, calculateLevelProgress } from "@/lib/userProfile";
 
@@ -21,7 +21,7 @@ const AVATAR_OPTIONS = [
   { id: "minimal-8", emoji: "🧑‍🔬", category: "미니멀" },
   { id: "minimal-9", emoji: "🧑‍🎨", category: "미니멀" },
   { id: "minimal-10", emoji: "🧑‍💻", category: "미니멀" },
-  
+
   // 캐릭터 (동물 포함)
   { id: "char-1", emoji: "🤖", category: "캐릭터" },
   { id: "char-2", emoji: "🎭", category: "캐릭터" },
@@ -38,7 +38,7 @@ const AVATAR_OPTIONS = [
   { id: "char-13", emoji: "🐷", category: "캐릭터" },
   { id: "char-14", emoji: "🐶", category: "캐릭터" },
   { id: "char-15", emoji: "🦉", category: "캐릭터" },
-  
+
   // 추상
   { id: "abstract-1", emoji: "✨", category: "추상" },
   { id: "abstract-2", emoji: "🌟", category: "추상" },
@@ -50,7 +50,7 @@ const AVATAR_OPTIONS = [
   { id: "abstract-8", emoji: "🎬", category: "추상" },
   { id: "abstract-9", emoji: "🎯", category: "추상" },
   { id: "abstract-10", emoji: "🎲", category: "추상" },
-  
+
   // 자연
   { id: "nature-1", emoji: "🌺", category: "자연" },
   { id: "nature-2", emoji: "🌻", category: "자연" },
@@ -62,7 +62,7 @@ const AVATAR_OPTIONS = [
   { id: "nature-8", emoji: "🍀", category: "자연" },
   { id: "nature-9", emoji: "🌿", category: "자연" },
   { id: "nature-10", emoji: "🌾", category: "자연" },
-  
+
   // 음식
   { id: "food-1", emoji: "🍎", category: "음식" },
   { id: "food-2", emoji: "🍊", category: "음식" },
@@ -74,7 +74,7 @@ const AVATAR_OPTIONS = [
   { id: "food-8", emoji: "🍑", category: "음식" },
   { id: "food-9", emoji: "🥝", category: "음식" },
   { id: "food-10", emoji: "🍒", category: "음식" },
-  
+
   // 스포츠 & 활동
   { id: "sports-1", emoji: "⚽", category: "스포츠" },
   { id: "sports-2", emoji: "🏀", category: "스포츠" },
@@ -86,7 +86,7 @@ const AVATAR_OPTIONS = [
   { id: "sports-8", emoji: "🏸", category: "스포츠" },
   { id: "sports-9", emoji: "🥊", category: "스포츠" },
   { id: "sports-10", emoji: "🎯", category: "스포츠" },
-  
+
   // 음악 & 예술
   { id: "music-1", emoji: "🎵", category: "음악" },
   { id: "music-2", emoji: "🎶", category: "음악" },
@@ -98,7 +98,7 @@ const AVATAR_OPTIONS = [
   { id: "music-8", emoji: "🎺", category: "음악" },
   { id: "music-9", emoji: "🎻", category: "음악" },
   { id: "music-10", emoji: "🎼", category: "음악" },
-  
+
   // 기술 & 과학
   { id: "tech-1", emoji: "💻", category: "기술" },
   { id: "tech-2", emoji: "📱", category: "기술" },
@@ -110,7 +110,7 @@ const AVATAR_OPTIONS = [
   { id: "tech-8", emoji: "⚗️", category: "기술" },
   { id: "tech-9", emoji: "🧪", category: "기술" },
   { id: "tech-10", emoji: "🔧", category: "기술" },
-  
+
   // 여행 & 장소
   { id: "travel-1", emoji: "✈️", category: "여행" },
   { id: "travel-2", emoji: "🚀", category: "여행" },
@@ -122,7 +122,7 @@ const AVATAR_OPTIONS = [
   { id: "travel-8", emoji: "🌋", category: "여행" },
   { id: "travel-9", emoji: "🗻", category: "여행" },
   { id: "travel-10", emoji: "🏕️", category: "여행" },
-  
+
   // 감정 & 표현
   { id: "emotion-1", emoji: "😊", category: "감정" },
   { id: "emotion-2", emoji: "😎", category: "감정" },
@@ -150,13 +150,14 @@ interface AccountMenuProps {
 export default function AccountMenu({ user, displayName, points = 0, level = 1, onNavigate }: AccountMenuProps) {
   const { theme, setTheme } = useTheme();
   const router = useRouter();
+  const { logout } = useAuth();
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isMissionsExpanded, setIsMissionsExpanded] = useState(true);
   const [userPoints, setUserPoints] = useState(points);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [profileImageUrl, setProfileImageUrl] = useState<string | undefined>(undefined);
-  
+
   // 미션 데이터
   const [missions, setMissions] = useState([
     { id: 1, title: "로그인 출석체크", point: 10, isCompleted: false, progress: null },
@@ -183,7 +184,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
       const profileKey = `dori_profile_${user.email}`;
       const savedProfile = localStorage.getItem(profileKey);
       const savedImageUrl = localStorage.getItem(`dori_image_${user.email}`);
-      
+
       if (savedProfile) {
         const profile: UserProfile = JSON.parse(savedProfile);
         setUserProfile(profile);
@@ -202,7 +203,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
         const profileKey = `dori_profile_${user.email}`;
         const savedProfile = localStorage.getItem(profileKey);
         const savedImageUrl = localStorage.getItem(`dori_image_${user.email}`);
-        
+
         if (savedProfile) {
           const profile: UserProfile = JSON.parse(savedProfile);
           setUserProfile(profile);
@@ -234,7 +235,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
         const savedImageUrl = localStorage.getItem(`dori_image_${user.email}`);
         const profileKey = `dori_profile_${user.email}`;
         const savedProfile = localStorage.getItem(profileKey);
-        
+
         if (savedProfile) {
           const profile: UserProfile = JSON.parse(savedProfile);
           const currentImage = profile.profileImageUrl || savedImageUrl || undefined;
@@ -252,7 +253,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
     window.addEventListener('profileUpdated', handleProfileUpdate);
     window.addEventListener('profileImageUpdated', handleProfileImageUpdate as EventListener);
     const imageCheckInterval = setInterval(checkProfileImage, 500);
-    
+
     return () => {
       window.removeEventListener('profileUpdated', handleProfileUpdate);
       window.removeEventListener('profileImageUpdated', handleProfileImageUpdate as EventListener);
@@ -269,7 +270,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
     // localStorage에서 미션 진행도 로드
     const loadMissionProgress = () => {
       const { getMissionProgress } = require('@/lib/missionProgress');
-      
+
       setMissions(prev => prev.map(mission => {
         if (mission.id === 1) {
           // 출석체크 미션
@@ -280,24 +281,24 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
         } else if (mission.id === 2) {
           // 글 작성 미션
           const progress = getMissionProgress('post');
-          return { 
-            ...mission, 
+          return {
+            ...mission,
             progress: { current: Math.min(progress, 3), total: 3 },
             isCompleted: progress >= 3
           };
         } else if (mission.id === 3) {
           // 댓글 작성 미션
           const progress = getMissionProgress('comment');
-          return { 
-            ...mission, 
+          return {
+            ...mission,
             progress: { current: Math.min(progress, 5), total: 5 },
             isCompleted: progress >= 5
           };
         } else if (mission.id === 4) {
           // 좋아요 미션
           const progress = getMissionProgress('like');
-          return { 
-            ...mission, 
+          return {
+            ...mission,
             progress: { current: Math.min(progress, 10), total: 10 },
             isCompleted: progress >= 10
           };
@@ -377,7 +378,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
 
   const handleLogout = () => {
     setIsOpen(false);
-    signOut({ callbackUrl: "/" });
+    logout();
   };
 
   const handleThemeToggle = () => {
@@ -390,14 +391,14 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
   if (!mounted) return null;
 
   const isDark = theme === 'dark';
-  
+
   // 프로필 정보 계산
   const currentTier = userProfile?.tier || 1;
   const currentLevel = userProfile ? calculateLevel(userProfile.doriExp * 10) : level;
   const doriExp = userProfile?.doriExp || 0;
   const tierInfo = TIER_INFO[currentTier as keyof typeof TIER_INFO];
   const nextTierExp = userProfile ? getNextTierExp(currentTier, doriExp) : 0;
-  
+
   // 레벨 진행도 계산 (공통 함수 사용)
   const currentExp = doriExp * 10;
   const levelProgress = calculateLevelProgress(currentExp, currentLevel);
@@ -420,11 +421,11 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
           style={{
             background: profileImageUrl?.startsWith("avatar:")
               ? (isDark
-                  ? "linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(168, 85, 247, 0.2))"
-                  : "linear-gradient(135deg, #eef6ff, #f3e8ff)")
+                ? "linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(168, 85, 247, 0.2))"
+                : "linear-gradient(135deg, #eef6ff, #f3e8ff)")
               : profileImageUrl
-              ? `url(${profileImageUrl}) center/cover`
-              : 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+                ? `url(${profileImageUrl}) center/cover`
+                : 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
             border: `2px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'}`,
           }}
         >
@@ -491,11 +492,11 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                   style={{
                     background: profileImageUrl?.startsWith("avatar:")
                       ? (isDark
-                          ? "linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(168, 85, 247, 0.2))"
-                          : "linear-gradient(135deg, #eef6ff, #f3e8ff)")
+                        ? "linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(168, 85, 247, 0.2))"
+                        : "linear-gradient(135deg, #eef6ff, #f3e8ff)")
                       : profileImageUrl
-                      ? `url(${profileImageUrl}) center/cover`
-                      : 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
+                        ? `url(${profileImageUrl}) center/cover`
+                        : 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
                     boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
                     border: `2px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'}`,
                   }}
@@ -559,7 +560,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                       포인트 {userPoints.toLocaleString()}
                     </div>
                   </div>
-                  
+
                   {/* DORI EXP 표시 */}
                   <div className="mt-2 mb-2">
                     <div className="flex items-center justify-between">
@@ -754,7 +755,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
 
                 {/* Daily Missions 아코디언 콘텐츠 */}
                 {isMissionsExpanded && (
-                  <div className="mt-2" style={{ 
+                  <div className="mt-2" style={{
                     padding: '8px',
                     background: isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.01)',
                     borderRadius: '0.75rem',
@@ -762,11 +763,11 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                     {missions.length > 0 ? (
                       <ul className="space-y-1">
                         {missions.map((mission) => (
-                          <li 
+                          <li
                             key={mission.id}
                             className="flex items-center justify-between p-2 rounded-lg transition-all"
                             style={{
-                              background: mission.isCompleted 
+                              background: mission.isCompleted
                                 ? (isDark ? 'rgba(255, 255, 255, 0.02)' : 'rgba(0, 0, 0, 0.01)')
                                 : (isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)'),
                               opacity: mission.isCompleted ? 0.6 : 1,
@@ -779,38 +780,38 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                                 <Circle className="w-4 h-4 flex-shrink-0" style={{ color: isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)' }} />
                               )}
                               <div className="flex flex-col min-w-0 flex-1">
-                                <span 
+                                <span
                                   className="text-xs font-medium truncate"
                                   style={{
                                     textDecoration: mission.isCompleted ? 'line-through' : 'none',
-                                    color: mission.isCompleted 
+                                    color: mission.isCompleted
                                       ? (isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)')
                                       : (isDark ? '#ffffff' : '#1d1d1f'),
                                   }}
                                 >
                                   {mission.title} {mission.progress ? `(${mission.progress.current}/${mission.progress.total})` : ''}
                                 </span>
-                                <span 
+                                <span
                                   className="text-[10px] flex items-center gap-1"
                                   style={{
                                     color: isDark ? 'rgba(59, 130, 246, 0.8)' : '#2563eb',
                                   }}
                                 >
-                                  <Gift className="w-3 h-3" /> 
-                                  {mission.progress 
+                                  <Gift className="w-3 h-3" />
+                                  {mission.progress
                                     ? `하나당 ${mission.point}EXP (총 ${mission.point * mission.progress.total}EXP)`
                                     : `+${mission.point} EXP`
                                   }
                                 </span>
                               </div>
                             </div>
-                            
+
                             {!mission.isCompleted && (
-                              <button 
+                              <button
                                 className="text-[10px] px-2 py-1 rounded-md transition-colors flex-shrink-0 ml-2"
                                 style={{
-                                  background: isDark 
-                                    ? 'rgba(59, 130, 246, 0.2)' 
+                                  background: isDark
+                                    ? 'rgba(59, 130, 246, 0.2)'
                                     : 'rgba(37, 99, 235, 0.1)',
                                   color: isDark ? '#93c5fd' : '#2563eb',
                                 }}
@@ -850,7 +851,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                                         alert('링크가 클립보드에 복사되었습니다! +10 EXP를 획득했습니다.');
                                         window.dispatchEvent(new CustomEvent('missionUpdate'));
                                       }
-                                    } catch (err) {
+                                    } catch (err: any) {
                                       if (err.name !== 'AbortError') {
                                         console.error('공유 미션 오류:', err);
                                       }
@@ -858,13 +859,13 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                                   }
                                 }}
                                 onMouseEnter={(e) => {
-                                  e.currentTarget.style.background = isDark 
-                                    ? 'rgba(59, 130, 246, 0.3)' 
+                                  e.currentTarget.style.background = isDark
+                                    ? 'rgba(59, 130, 246, 0.3)'
                                     : 'rgba(37, 99, 235, 0.15)';
                                 }}
                                 onMouseLeave={(e) => {
-                                  e.currentTarget.style.background = isDark 
-                                    ? 'rgba(59, 130, 246, 0.2)' 
+                                  e.currentTarget.style.background = isDark
+                                    ? 'rgba(59, 130, 246, 0.2)'
                                     : 'rgba(37, 99, 235, 0.1)';
                                 }}
                               >
@@ -876,7 +877,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                       </ul>
                     ) : (
                       <div className="flex flex-col items-center justify-center py-6 text-center">
-                        <div 
+                        <div
                           className="w-10 h-10 rounded-full flex items-center justify-center mb-2"
                           style={{
                             background: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
@@ -884,7 +885,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                         >
                           <span className="text-lg" style={{ color: isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)' }}>∅</span>
                         </div>
-                        <p 
+                        <p
                           className="text-xs font-medium"
                           style={{
                             color: isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)',
@@ -892,7 +893,7 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                         >
                           현재 진행 가능한 미션이 없습니다.
                         </p>
-                        <p 
+                        <p
                           className="text-[10px] mt-1"
                           style={{
                             color: isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)',

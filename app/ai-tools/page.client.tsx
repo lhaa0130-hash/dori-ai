@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/contexts/AuthContext";
 import AiToolsList from "@/components/ai-tools/AiToolsList";
 import { TEXTS } from "@/constants/texts";
 import { completeMission, isMissionCompletedToday, markMissionCompletedToday } from "@/lib/missionHelpers";
@@ -14,7 +14,7 @@ import { DISPLAY_CATEGORIES, CATEGORY_LABELS } from "@/constants/aiCategories";
 export default function AiToolsClient() {
   const t = TEXTS.aiTools;
   const { theme } = useTheme();
-  const { data: session } = useSession();
+  const { session } = useAuth();
   const [mounted, setMounted] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [filters, setFilters] = useState({

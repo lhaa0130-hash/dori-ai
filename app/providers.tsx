@@ -1,21 +1,13 @@
 "use client";
 
 import { ThemeProvider } from "next-themes";
-import { SessionProvider } from "next-auth/react";
-import { useEffect } from "react";
+import { AuthProvider } from "@/contexts/AuthContext";
 
-export function AuthProvider({ children }: { children: React.ReactNode }) {
-  useEffect(() => {
-    // 강제로 dark 클래스 확인
-    console.log("HTML classList:", document.documentElement.classList.toString());
-    console.log("Current theme:", document.documentElement.getAttribute("data-theme"));
-  }, []);
+export { AuthProvider };
 
+export function Providers({ children }: { children: React.ReactNode }) {
   return (
-    <SessionProvider
-      refetchInterval={0}
-      refetchOnWindowFocus={false}
-    >
+    <AuthProvider>
       <ThemeProvider
         attribute="class"
         defaultTheme="system"
@@ -25,6 +17,6 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       >
         {children}
       </ThemeProvider>
-    </SessionProvider>
+    </AuthProvider>
   );
 }

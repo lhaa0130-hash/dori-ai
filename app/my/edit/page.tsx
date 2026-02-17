@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import Header from "@/components/layout/Header";
@@ -9,7 +9,7 @@ import ProfileImageSelector from "@/components/my/ProfileImageSelector";
 import { UserProfile, createDefaultProfile } from "@/lib/userProfile";
 
 export default function EditProfilePage() {
-  const { data: session, update } = useSession();
+  const { session, update } = useAuth();
   const user = session?.user || null;
   const { theme } = useTheme();
   const router = useRouter();
@@ -82,24 +82,7 @@ export default function EditProfilePage() {
     setIsSaving(true);
 
     try {
-      // 1. 서버 API 호출 (DB 업데이트 + 캐시 무효화)
-      const response = await fetch("/api/user/profile", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          nickname: nickname.trim(),
-          bio: bio.trim(),
-          statusMessage: statusMessage.trim(),
-          profileImageUrl,
-        }),
-      });
-
-      if (!response.ok) {
-        const errorData = await response.json();
-        throw new Error(errorData.error || "프로필 업데이트 실패");
-      }
+      // 클라이언트 사이드 저장 (정적 사이트이므로 API 호출 없음)
 
       const updated: UserProfile = {
         ...profile,
@@ -117,11 +100,11 @@ export default function EditProfilePage() {
       if (profileImageUrl) {
         localStorage.setItem(`dori_image_${user.email}`, profileImageUrl);
         // 프로필 이미지 변경 이벤트 발생 (헤더의 AccountMenu가 즉시 업데이트되도록)
-        window.dispatchEvent(new CustomEvent('profileImageUpdated', { 
-          detail: { imageUrl: profileImageUrl, email: user.email } 
+        window.dispatchEvent(new CustomEvent('profileImageUpdated', {
+          detail: { imageUrl: profileImageUrl, email: user.email }
         }));
       }
-      
+
       // 3. 프로필 업데이트 이벤트 발생
       window.dispatchEvent(new CustomEvent('profileUpdated'));
 
@@ -144,8 +127,8 @@ export default function EditProfilePage() {
       });
       localStorage.setItem("dori_posts", JSON.stringify(updatedPosts));
 
-      // 5. NextAuth 세션 강제 업데이트 - 모든 기기에서 동기화되도록
-      await update({
+      // NextAuth 대신 자체 인증 세션 업데이트
+      update({
         name: nickname.trim(),
       });
 
@@ -257,8 +240,8 @@ export default function EditProfilePage() {
                   setProfileImageUrl(imageUrl);
                   // 프로필 이미지 변경 이벤트 발생 (헤더의 AccountMenu가 즉시 업데이트되도록)
                   if (user?.email) {
-                    window.dispatchEvent(new CustomEvent('profileImageUpdated', { 
-                      detail: { imageUrl, email: user.email } 
+                    window.dispatchEvent(new CustomEvent('profileImageUpdated', {
+                      detail: { imageUrl, email: user.email }
                     }));
                   }
                 }}
@@ -445,9 +428,9 @@ export default function EditProfilePage() {
           </div>
 
           {/* 버튼 */}
-          <div style={{ 
-            display: 'flex', 
-            gap: '1rem', 
+          <div style={{
+            display: 'flex',
+            gap: '1rem',
             justifyContent: 'flex-end',
             marginTop: '2rem',
             paddingTop: '2rem',

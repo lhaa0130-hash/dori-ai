@@ -1,9 +1,9 @@
 "use client";
 
-import { useSession } from "next-auth/react";
+import { useAuth } from "@/contexts/AuthContext";
 
 export default function DebugAuthPage() {
-  const { data: session, status } = useSession();
+  const { session, status } = useAuth();
 
   return (
     <div style={{ padding: "40px", fontFamily: "monospace" }}>
