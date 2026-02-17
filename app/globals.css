@@ -1,4 +1,8 @@
 @import "tailwindcss";
+@config "../tailwind.config.ts";
+@source "../components";
+@source "../app";
+@source "../lib";
 
 /* 기본 스크롤 설정 */
 html {
