@@ -1,0 +1,154 @@
+{
+    "name": "DORI-AI Auto Post",
+    "nodes": [
+        {
+            "parameters": {},
+            "name": "Start",
+            "type": "n8n-nodes-base.start",
+            "typeVersion": 1,
+            "position": [
+                250,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://techcrunch.com/category/artificial-intelligence/feed/",
+                "options": {}
+            },
+            "name": "Fetch AI News (RSS)",
+            "type": "n8n-nodes-base.rssFeedRead",
+            "typeVersion": 1,
+            "position": [
+                450,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "functionCode": "const item = items[0].json;\n\n// 썸네일 이미지 추출 시도 (없으면 기본 이미지)\nlet imageUrl = 'https://images.unsplash.com/photo-1677442136019-21780ecad995?auto=format&fit=crop&q=80&w=1000';\nif (item.content && item.content.match(/src=\"([^\"]+)\"/)) {\n  imageUrl = item.content.match(/src=\"([^\"]+)\"/)[1];\n}\n\nreturn [{\n  json: {\n    title: item.title,\n    content: item.contentSnippet || item.content,\n    summary: item.contentSnippet,\n    category: \"AI 트렌드\",\n    tags: [\"TechCrunch\", \"AI\", \"News\"],\n    thumbnail_url: imageUrl,\n    link: item.link\n  }\n}];"
+            },
+            "name": "Format Data",
+            "type": "n8n-nodes-base.function",
+            "typeVersion": 1,
+            "position": [
+                650,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "requestMethod": "POST",
+                "url": "http://localhost:3000/api/webhook/n8n/insight",
+                "options": {},
+                "bodyParametersUi": {
+                    "parameter": [
+                        {
+                            "name": "title",
+                            "value": "={{$node[\"Format Data\"].json[\"title\"]}}"
+                        },
+                        {
+                            "name": "content",
+                            "value": "={{$node[\"Format Data\"].json[\"content\"]}}<br><br><a href=\"{{$node[\"Format Data\"].json[\"link\"]}}\" target=\"_blank\">원문 보기</a>"
+                        },
+                        {
+                            "name": "summary",
+                            "value": "={{$node[\"Format Data\"].json[\"summary\"]}}"
+                        },
+                        {
+                            "name": "category",
+                            "value": "={{$node[\"Format Data\"].json[\"category\"]}}"
+                        },
+                        {
+                            "name": "tags",
+                            "value": "={{$node[\"Format Data\"].json[\"tags\"]}}"
+                        },
+                        {
+                            "name": "thumbnail_url",
+                            "value": "={{$node[\"Format Data\"].json[\"thumbnail_url\"]}}"
+                        }
+                    ]
+                },
+                "headerParametersUi": {
+                    "parameter": [
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer dori_ai_n8n_secret_key_1234"
+                        }
+                    ]
+                }
+            },
+            "name": "Post to DORI-AI",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 1,
+            "position": [
+                850,
+                300
+            ]
+        },
+        {
+            "parameters": {
+                "triggerTimes": {
+                    "item": [
+                        {
+                            "hour": 9
+                        }
+                    ]
+                }
+            },
+            "name": "Schedule (Daily 9AM)",
+            "type": "n8n-nodes-base.cron",
+            "typeVersion": 1,
+            "position": [
+                250,
+                500
+            ]
+        }
+    ],
+    "connections": {
+        "Start": {
+            "main": [
+                [
+                    {
+                        "node": "Fetch AI News (RSS)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Schedule (Daily 9AM)": {
+            "main": [
+                [
+                    {
+                        "node": "Fetch AI News (RSS)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Fetch AI News (RSS)": {
+            "main": [
+                [
+                    {
+                        "node": "Format Data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Format Data": {
+            "main": [
+                [
+                    {
+                        "node": "Post to DORI-AI",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

@@ -429,7 +429,7 @@ export default function WriteClient() {
                                     whileTap={{ scale: 0.98 }}
                                     onClick={submitPost}
                                     disabled={isLoading}
-                                    className="flex-1 px-6 py-3 bg-gradient-to-r from-[#F9954E] to-pink-500 text-white rounded-xl font-bold shadow-xl shadow-[#F9954E]/20 flex items-center justify-center gap-2"
+                                    className="flex-1 px-6 py-3 bg-gradient-to-r from-[#F9954E] to-[#E8832E] text-white rounded-xl font-bold shadow-xl shadow-[#F9954E]/20 flex items-center justify-center gap-2"
                                 >
                                     {isLoading ? '저장 중...' : '게시글 등록하기'}
                                 </motion.button>

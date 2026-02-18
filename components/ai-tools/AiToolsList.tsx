@@ -18,19 +18,7 @@ interface AiToolsListProps {
 
 export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) {
   const [tools, setTools] = useState<AiTool[]>([]);
-  const [expandedCats, setExpandedCats] = useState<Record<string, boolean>>({});
-  const [visibleCount, setVisibleCount] = useState(10);
   const [isLoaded, setIsLoaded] = useState(false);
-  const [expandedTools, setExpandedTools] = useState<Record<string, number>>({});
-
-  // 초기 표시 개수를 6개로 설정
-  useEffect(() => {
-    const initialExpanded: Record<string, number> = {};
-    DISPLAY_CATEGORIES.forEach(cat => {
-      initialExpanded[cat] = 10;
-    });
-    setExpandedTools(initialExpanded);
-  }, []);
 
   useEffect(() => {
     console.log('AI_TOOLS_DATA length:', AI_TOOLS_DATA.length);
@@ -54,21 +42,6 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
 
   const isOverviewMode = filters.category === "All";
 
-  const toggleExpand = (cat: string) => {
-    setExpandedCats(prev => ({ ...prev, [cat]: !prev[cat] }));
-  };
-
-  const loadMoreTools = (cat: string) => {
-    const catTools = currentTools
-      .filter(t => t.category === cat)
-      .sort((a, b) => b.rating - a.rating);
-
-    setExpandedTools(prev => ({
-      ...prev,
-      [cat]: catTools.length
-    }));
-  };
-
   const currentTools = isLoaded && tools.length > 0 ? tools : AI_TOOLS_DATA;
 
   console.log('Current tools length:', currentTools.length);
@@ -89,12 +62,11 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
             return null;
           }
 
-          // 각 카테고리에서 표시할 개수 (최소 6개, 더보기 클릭 시 증가)
-          const displayCount = Math.max(expandedTools[cat] || 10, 10);
-          const displayTools = catTools.slice(0, displayCount);
+          // 각 카테고리에서 표시할 개수 (최소 5개, 더보기 클릭 시 증가)
+          // 모든 아이템 표시 (더보기 제거)
+          const displayTools = catTools;
           const top3 = displayTools.slice(0, 3);
           const rest = displayTools.slice(3);
-          const hasMore = catTools.length > displayCount;
 
           return (
             <section
@@ -105,7 +77,7 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
                   sectionRefs.current[`category-${cat}`] = el;
                 }
               }}
-              className="relative flex items-center justify-center px-6 lg:pl-10 py-20"
+              className="relative flex items-center justify-center px-6 lg:pl-10 py-10"
               style={{
                 minHeight: '100vh',
                 scrollSnapAlign: 'start',
@@ -146,16 +118,7 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
                 </div>
 
                 {/* 더보기 버튼 */}
-                {hasMore && (
-                  <div className="mt-12 text-center">
-                    <button
-                      onClick={() => loadMoreTools(cat)}
-                      className="px-8 py-4 rounded-full font-bold text-base transition-all hover:scale-105 active:scale-95 bg-[var(--card-bg)] text-[var(--text-main)] border-2 border-[var(--card-border)] hover:bg-gray-100 dark:hover:bg-white/10 shadow-md hover:shadow-lg"
-                    >
-                      + {cat.toUpperCase()} 툴 더보기 ({catTools.length - displayCount}개 남음)
-                    </button>
-                  </div>
-                )}
+                {/* 더보기 버튼 제거됨 */}
               </div>
             </section>
           );
@@ -170,14 +133,14 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
     return matchCat;
   }).sort((a, b) => b.rating - a.rating); // 기본적으로 평점순 정렬
 
-  const visibleTools = filteredTools.slice(0, visibleCount);
+  const visibleTools = filteredTools; // 전체 표시
 
   return (
     <div className="w-full animate-[fadeInUp_0.5s_ease-out]">
       <div className="flex justify-center">
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 2xl:grid-cols-5 gap-3 w-full max-w-full px-4">
-          {visibleTools.map((tool) => (
-            <AiToolsCard key={tool.id} tool={tool} />
+        <div className="grid grid-cols-1 gap-3 w-full max-w-5xl px-4 md:px-0">
+          {visibleTools.map((tool, idx) => (
+            <AiToolsCard key={tool.id} tool={tool} rank={idx + 1} />
           ))}
         </div>
       </div>
@@ -188,16 +151,7 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
         </div>
       )}
 
-      {visibleTools.length < filteredTools.length && (
-        <div className="flex justify-center mt-16 mb-10">
-          <button
-            onClick={() => setVisibleCount((prev) => prev + 10)}
-            className="px-10 py-4 rounded-full font-bold text-lg bg-[var(--card-bg)] border border-[var(--card-border)] text-[var(--text-main)] shadow-md hover:shadow-lg"
-          >
-            {TEXTS.aiTools.button.loadMore.ko} +
-          </button>
-        </div>
-      )}
+
     </div>
   );
 }

@@ -1,14 +1,10 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
-import { 
-  Database, 
-  Image as ImageIcon, 
-  Layout, 
-  BookOpen,
-  Sparkles
-} from "lucide-react";
+import { motion } from "framer-motion";
+import { Database, Image as ImageIcon, Layout, BookOpen, Sparkles, ArrowRight, Search, Loader2 } from "lucide-react";
+import Link from "next/link";
 
 export default function AnimalPageClient() {
   const { theme } = useTheme();
@@ -18,696 +14,224 @@ export default function AnimalPageClient() {
     setMounted(true);
   }, []);
 
-  const isDark = mounted && theme === 'dark';
+  if (!mounted) return null;
 
-  // 워크플로우 단계
   const workflowSteps = [
     {
       id: "collect",
-      label: "동물 데이터 수집",
-      icon: <Database className="w-6 h-6" />,
-      color: "#3b82f6",
-      glowColor: "rgba(59, 130, 246, 0.4)",
+      label: "STEP 1",
+      title: "동물 데이터 수집",
+      description: "전 세계의 다양한 동물 데이터를 AI가 실시간으로 분석하고 수집합니다.",
+      icon: Database,
+      color: "text-blue-500",
+      bg: "bg-blue-50 dark:bg-blue-900/20",
     },
     {
       id: "generate",
-      label: "AI 이미지 생성",
-      icon: <ImageIcon className="w-6 h-6" />,
-      color: "#8b5cf6",
-      glowColor: "rgba(139, 92, 246, 0.4)",
+      label: "STEP 2",
+      title: "AI 이미지 생성",
+      description: "사용자의 상상력을 바탕으로 고품질의 동물 이미지를 생성합니다.",
+      icon: ImageIcon,
+      color: "text-purple-500",
+      bg: "bg-purple-50 dark:bg-purple-900/20",
     },
     {
       id: "layout",
-      label: "도감 레이아웃 구성",
-      icon: <Layout className="w-6 h-6" />,
-      color: "#ec4899",
-      glowColor: "rgba(236, 72, 153, 0.4)",
+      label: "STEP 3",
+      title: "도감 레이아웃",
+      description: "생성된 이미지와 정보를 보기 좋은 도감 형태로 자동 구성합니다.",
+      icon: Layout,
+      color: "text-pink-500",
+      bg: "bg-pink-50 dark:bg-pink-900/20",
     },
     {
       id: "complete",
-      label: "도감 완성",
-      icon: <BookOpen className="w-6 h-6" />,
-      color: "#10b981",
-      glowColor: "rgba(16, 185, 129, 0.4)",
+      label: "STEP 4",
+      title: "나만의 도감 완성",
+      description: "세상에 하나뿐인 나만의 동물 도감이 완성됩니다.",
+      icon: BookOpen,
+      color: "text-emerald-500",
+      bg: "bg-emerald-50 dark:bg-emerald-900/20",
     },
   ];
 
   return (
-    <main 
-      className="animal-page"
-      style={{
-        width: '100%',
-        minHeight: '100vh',
-        display: 'flex',
-        flexDirection: 'column',
-        position: 'relative',
-        paddingTop: '80px',
-      }}
-    >
-      {/* 오로라 배경 효과 */}
-      <div className="aurora-bg">
-        <div className="blob blob-1"></div>
-        <div className="blob blob-2"></div>
+    <main className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-500 relative overflow-x-hidden font-sans">
+
+      {/* Background Gradients (Unified Style) */}
+      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
+
+      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-32 pb-20">
+
+        {/* Header Section (Unified Style) */}
+        <section className="text-center mb-32 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="flex flex-col items-center"
+          >
+            {/* Standard Badge Style */}
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
+              <BookOpen className="w-3 h-3" />
+              <span>Animal Encyclopedia</span>
+            </div>
+
+            {/* Title with Gradient */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-6 text-neutral-900 dark:text-white">
+              상상이 현실이 되는<br className="hidden md:block" />
+              <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+                AI 동물 도감
+              </span>
+            </h1>
+
+            {/* Description */}
+            <p className="text-base md:text-lg font-medium text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto leading-relaxed mb-12 break-keep">
+              아이들이 꿈꾸는 동물을 텍스트로 설명하면, <br className="hidden md:block" />
+              AI가 즉시 생생한 이미지와 정보가 담긴 도감으로 만들어줍니다.
+            </p>
+
+            {/* Search Bar Placeholder (Refined Style) */}
+            <div className="w-full max-w-lg relative group mb-8">
+              <div className="relative bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-full p-1.5 pl-6 flex items-center shadow-sm transition-all duration-300 group-hover:border-[#F9954E] group-hover:shadow-md group-hover:shadow-[#F9954E]/5">
+                <Search className="w-5 h-5 text-neutral-400 mr-3" />
+                <input
+                  type="text"
+                  placeholder="어떤 동물을 찾고 있나요?"
+                  className="w-full bg-transparent border-none focus:ring-0 text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm md:text-base outline-none"
+                  disabled
+                />
+                <button className="bg-[#F9954E] hover:bg-[#E8832E] text-white px-6 py-2.5 rounded-full font-bold text-sm transition-all shadow-lg shadow-[#F9954E]/20 hover:scale-105 active:scale-95 disabled:opacity-70 disabled:hover:scale-100 flex items-center gap-2">
+                  <span>Search</span>
+                </button>
+              </div>
+            </div>
+
+            <p className="text-xs text-neutral-500 dark:text-neutral-500 flex items-center gap-1.5 bg-neutral-100 dark:bg-zinc-900 px-3 py-1.5 rounded-full border border-neutral-200 dark:border-zinc-800">
+              <Loader2 className="w-3 h-3 animate-spin text-[#F9954E]" />
+              <span>현재 AI 모델 연동 준비 중입니다</span>
+            </p>
+
+          </motion.div>
+        </section>
+
+
+        {/* Workflow Section (Clean Card Style) */}
+        <section className="mb-40 relative z-10">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.6 }}
+            className="text-center mb-16"
+          >
+            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-neutral-900 dark:text-white">How it Works</h2>
+            <p className="text-neutral-500 dark:text-neutral-400">DORI AI가상상 속 동물을 현실로 만드는 과정입니다.</p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
+
+            {/* Connecting Line (Desktop) - Adjusted Color */}
+            <div className="hidden lg:block absolute top-[22%] left-0 right-0 h-px bg-gradient-to-r from-transparent via-neutral-200 dark:via-zinc-800 to-transparent -z-10" />
+
+            {workflowSteps.map((step, index) => (
+              <motion.div
+                key={step.id}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                className="group relative h-full"
+              >
+                <div className="bg-white dark:bg-zinc-900/50 backdrop-blur-sm rounded-2xl p-8 h-full border border-neutral-200 dark:border-zinc-800 relative group-hover:border-[#F9954E] dark:group-hover:border-[#F9954E] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#F9954E]/5 flex flex-col items-center text-center">
+
+                  {/* Icon */}
+                  <div className={`w-14 h-14 rounded-2xl ${step.bg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 relative z-10`}>
+                    <step.icon className={`w-6 h-6 ${step.color}`} strokeWidth={1.5} />
+                  </div>
+
+                  <div className="space-y-3 relative z-10">
+                    <div className="text-[10px] font-bold tracking-widest uppercase text-neutral-400 dark:text-neutral-500 group-hover:text-[#F9954E] transition-colors">
+                      {step.label}
+                    </div>
+                    <h3 className="text-lg font-bold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors">{step.title}</h3>
+                    <p className="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed font-medium break-keep">
+                      {step.description}
+                    </p>
+                  </div>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+        </section>
+
+        {/* Gallery Preview Section (Clean Card Style) */}
+        <section className="relative z-10">
+          <div className="flex items-end justify-between mb-12 px-2">
+            <div>
+              <div className="text-[#F9954E] text-xs font-bold tracking-widest uppercase mb-2">Portfolio</div>
+              <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white">Recent Discoveries</h2>
+            </div>
+            <Link href="#" className="hidden md:flex items-center gap-2 text-sm font-bold text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition-colors px-4 py-2 rounded-full hover:bg-neutral-100 dark:hover:bg-zinc-800">
+              View All Collection <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
+            {[1, 2, 3].map((item, i) => (
+              <motion.div
+                key={item}
+                initial={{ opacity: 0, scale: 0.95 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: i * 0.1 }}
+                className="group aspect-[3/4] bg-neutral-100 dark:bg-zinc-900 rounded-3xl border border-neutral-200 dark:border-zinc-800 relative overflow-hidden hover:border-[#F9954E] dark:hover:border-[#F9954E] transition-all duration-300 hover:shadow-xl hover:shadow-[#F9954E]/10"
+              >
+                {/* Placeholder Content */}
+                <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
+                  <div className="w-16 h-16 rounded-full bg-white dark:bg-zinc-800 flex items-center justify-center mb-4 border border-neutral-200 dark:border-zinc-700 group-hover:scale-110 transition-transform duration-300 group-hover:border-[#F9954E]/30">
+                    <Sparkles className="w-6 h-6 text-neutral-400 dark:text-neutral-500 group-hover:text-[#F9954E] transition-colors" />
+                  </div>
+                  <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors">Coming Soon</p>
+                </div>
+
+                {/* Shimmer Effect - Adjusted for light mode */}
+                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/40 dark:via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer z-0" style={{ animationDuration: '1.5s' }} />
+
+                {/* Bottom Info */}
+                <div className="absolute bottom-0 left-0 right-0 p-6 bg-white/90 dark:bg-black/90 backdrop-blur-sm border-t border-neutral-100 dark:border-zinc-800 translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20">
+                  <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-1">Mystic Creature #{item}</h3>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400">AI Generated • 2024</p>
+                </div>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="mt-8 text-center md:hidden">
+            <Link href="#" className="inline-flex items-center gap-2 text-sm font-bold text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition-colors px-6 py-3 rounded-full bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800">
+              View All Collection <ArrowRight className="w-4 h-4" />
+            </Link>
+          </div>
+        </section>
+
       </div>
 
-      {/* Hero Section */}
-      <section 
-        className="animal-hero-section"
-        style={{
-          minHeight: '60vh',
-          width: '100%',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'center',
-          justifyContent: 'center',
-          position: 'relative',
-          padding: '80px 24px',
-        }}
-      >
-        <div className="animal-header fade-in-up">
-          <h1>DORI'S 동물도감</h1>
-          
-          {/* 알록달록 움직이는 그라데이션 바 */}
-          <div className="colorful-bar fade-in-up delay-1">
-            <div className="gradient-bar animated-gradient"></div>
-          </div>
-
-          <p className="animal-description">
-            아이들의 상상력을 자극하는 AI 기반 맞춤형 동물 백과사전
-          </p>
-        </div>
-
-        {/* 워크플로우 애니메이션 */}
-        <div className="workflow-container fade-in-up delay-2">
-          <div className="workflow-steps">
-            {workflowSteps.map((step, index) => (
-              <div key={step.id} className="workflow-step-wrapper">
-                {/* 워크플로우 아이템 */}
-                <div 
-                  className="workflow-step"
-                  style={{
-                    animation: `fadeInUpStagger 0.8s ease-out ${index * 0.2 + 0.5}s both`,
-                  }}
-                >
-                  <div
-                    className="workflow-icon-container"
-                    style={{
-                      background: isDark
-                        ? 'rgba(15, 23, 42, 0.6)'
-                        : 'rgba(255, 255, 255, 0.8)',
-                      border: isDark
-                        ? `1.5px solid ${step.color}40`
-                        : `1.5px solid ${step.color}30`,
-                      color: step.color,
-                      boxShadow: isDark
-                        ? `0 0 20px ${step.color}40, 0 0 40px ${step.color}20, inset 0 0 20px ${step.color}10`
-                        : `0 0 15px ${step.color}30, 0 0 30px ${step.color}15`,
-                      animation: `workflowIconPulse 2.5s ease-in-out infinite ${index * 0.4}s`,
-                    }}
-                  >
-                    {step.icon}
-                    {/* 내부 글로우 */}
-                    <div 
-                      className="workflow-inner-glow"
-                      style={{
-                        background: `radial-gradient(circle at center, ${step.color}25, transparent 70%)`,
-                        animation: `workflowInnerGlow 2.5s ease-in-out infinite ${index * 0.4}s`,
-                        opacity: 0.6,
-                      }}
-                    />
-                    {/* 외부 글로우 링 */}
-                    <div 
-                      className="workflow-outer-glow"
-                      style={{
-                        background: `radial-gradient(circle, ${step.color}30, transparent 70%)`,
-                        filter: 'blur(8px)',
-                        animation: `workflowOuterGlow 2.5s ease-in-out infinite ${index * 0.4}s`,
-                        opacity: 0.4,
-                      }}
-                    />
-                  </div>
-                  <span 
-                    className="workflow-label"
-                    style={{
-                      color: isDark ? 'rgba(255, 255, 255, 0.9)' : 'rgba(0, 0, 0, 0.8)',
-                    }}
-                  >
-                    {step.label}
-                  </span>
-                </div>
-
-                {/* 연결선 및 애니메이션 글로우 */}
-                {index < workflowSteps.length - 1 && (
-                  <div className="workflow-connector-wrapper">
-                    {/* 정적 배경선 */}
-                    <div 
-                      className="workflow-line-bg"
-                      style={{
-                        background: isDark
-                          ? `linear-gradient(90deg, ${step.color}30, ${workflowSteps[index + 1].color}30)`
-                          : `linear-gradient(90deg, ${step.color}20, ${workflowSteps[index + 1].color}20)`,
-                      }}
-                    />
-                    {/* 애니메이션 글로우 (동글동글한 효과) */}
-                    <div
-                      className="workflow-glow-animation"
-                      style={{
-                        background: `radial-gradient(circle, ${step.color}, transparent)`,
-                        animation: `workflowGlowMove 3s ease-in-out infinite ${index * 0.3}s`,
-                        filter: 'blur(12px)',
-                        opacity: 0.6,
-                      }}
-                    />
-                  </div>
-                )}
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 갤러리 섹션 (Placeholder) */}
-      <section 
-        className="animal-gallery-section"
-        style={{
-          width: '100%',
-          padding: '80px 24px',
-          position: 'relative',
-        }}
-      >
-        <div className="container max-w-7xl mx-auto">
-          <div className="gallery-header">
-            <h2 
-              className="gallery-title"
-              style={{
-                color: isDark ? '#ffffff' : '#1d1d1f',
-              }}
-            >
-              동물 도감 갤러리
-            </h2>
-            <p 
-              className="gallery-subtitle"
-              style={{
-                color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)',
-              }}
-            >
-              곧 Notion DB와 연결되어 다양한 동물 정보를 만나볼 수 있습니다
-            </p>
-          </div>
-
-          {/* Skeleton 카드 그리드 */}
-          <div className="gallery-grid">
-            {[...Array(6)].map((_, index) => (
-              <div
-                key={index}
-                className="gallery-card-skeleton"
-                style={{
-                  background: isDark
-                    ? 'rgba(255, 255, 255, 0.02)'
-                    : 'rgba(0, 0, 0, 0.01)',
-                  border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)'}`,
-                  backdropFilter: 'blur(12px)',
-                  WebkitBackdropFilter: 'blur(12px)',
-                  boxShadow: isDark
-                    ? '0 8px 32px rgba(0, 0, 0, 0.3), inset 0 1px 0 rgba(255, 255, 255, 0.03)'
-                    : '0 8px 32px rgba(0, 0, 0, 0.05), inset 0 1px 0 rgba(255, 255, 255, 0.9)',
-                  animation: `fadeInUpStagger 0.8s ease-out ${index * 0.1 + 1}s both`,
-                }}
-              >
-                {/* Glassmorphism 오버레이 */}
-                <div 
-                  className="absolute inset-0 rounded-2xl pointer-events-none"
-                  style={{
-                    background: isDark
-                      ? 'linear-gradient(135deg, rgba(255, 255, 255, 0.03) 0%, transparent 50%, rgba(0, 0, 0, 0.1) 100%)'
-                      : 'linear-gradient(135deg, rgba(255, 255, 255, 0.5) 0%, transparent 50%, rgba(0, 0, 0, 0.02) 100%)',
-                  }}
-                />
-                
-                {/* 이미지 placeholder */}
-                <div 
-                  className="skeleton-image"
-                  style={{
-                    background: isDark
-                      ? 'rgba(255, 255, 255, 0.05)'
-                      : 'rgba(0, 0, 0, 0.03)',
-                  }}
-                >
-                  <Sparkles 
-                    className="w-12 h-12"
-                    style={{
-                      color: isDark ? 'rgba(255, 255, 255, 0.2)' : 'rgba(0, 0, 0, 0.2)',
-                    }}
-                  />
-                </div>
-                
-                {/* 텍스트 placeholder */}
-                <div className="skeleton-content">
-                  <div 
-                    className="skeleton-line skeleton-title"
-                    style={{
-                      background: isDark
-                        ? 'rgba(255, 255, 255, 0.1)'
-                        : 'rgba(0, 0, 0, 0.08)',
-                    }}
-                  />
-                  <div 
-                    className="skeleton-line skeleton-text"
-                    style={{
-                      background: isDark
-                        ? 'rgba(255, 255, 255, 0.05)'
-                        : 'rgba(0, 0, 0, 0.05)',
-                    }}
-                  />
-                  <div 
-                    className="skeleton-line skeleton-text short"
-                    style={{
-                      background: isDark
-                        ? 'rgba(255, 255, 255, 0.05)'
-                        : 'rgba(0, 0, 0, 0.05)',
-                    }}
-                  />
-                </div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 스타일 */}
       <style jsx global>{`
-        /* Animations */
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+        @keyframes gradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
-
-        @keyframes fadeInUpStagger {
-          from {
-            opacity: 0;
-            transform: translateY(30px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+        .animate-gradient {
+          animation: gradient 3s ease infinite;
         }
-
-        @keyframes gradientMove {
-          0% {
-            background-position: 0% 50%;
-          }
-          50% {
-            background-position: 100% 50%;
-          }
-          100% {
-            background-position: 0% 50%;
-          }
+        @keyframes shimmer {
+          100% { transform: translateX(100%); }
         }
-
-        @keyframes workflowIconPulse {
-          0%, 100% {
-            box-shadow: 0 0 20px rgba(59, 130, 246, 0.4), 0 0 40px rgba(59, 130, 246, 0.2), inset 0 0 20px rgba(59, 130, 246, 0.1);
-            transform: scale(1);
-          }
-          50% {
-            box-shadow: 0 0 30px rgba(59, 130, 246, 0.6), 0 0 60px rgba(59, 130, 246, 0.4), inset 0 0 30px rgba(59, 130, 246, 0.2);
-            transform: scale(1.02);
-          }
-        }
-
-        @keyframes workflowInnerGlow {
-          0%, 100% {
-            opacity: 0.4;
-          }
-          50% {
-            opacity: 0.8;
-          }
-        }
-
-        @keyframes workflowOuterGlow {
-          0%, 100% {
-            opacity: 0.3;
-            transform: scale(1);
-          }
-          50% {
-            opacity: 0.6;
-            transform: scale(1.1);
-          }
-        }
-
-        @keyframes workflowGlowMove {
-          0% {
-            transform: translateX(-100%) scale(1);
-            opacity: 0;
-          }
-          50% {
-            transform: translateX(0%) scale(1.5);
-            opacity: 0.8;
-          }
-          100% {
-            transform: translateX(100%) scale(1);
-            opacity: 0;
-          }
-        }
-
-        .fade-in-up {
-          animation: fadeInUp 0.8s ease-out forwards;
-          opacity: 0;
-        }
-
-        .delay-1 {
-          animation-delay: 0.1s;
-        }
-
-        .delay-2 {
-          animation-delay: 0.2s;
-        }
-
-        /* Aurora Background */
-        .aurora-bg {
-          position: fixed;
-          inset: 0;
-          z-index: 0;
-          pointer-events: none;
-          overflow: hidden;
-        }
-
-        .blob {
-          position: absolute;
-          border-radius: 50%;
-          filter: blur(80px);
-          opacity: 0.3;
-          animation: blobFloat 20s ease-in-out infinite;
-        }
-
-        .blob-1 {
-          width: 500px;
-          height: 500px;
-          background: linear-gradient(135deg, #60a5fa, #a78bfa);
-          top: -200px;
-          left: -200px;
-        }
-
-        .blob-2 {
-          width: 450px;
-          height: 450px;
-          background: linear-gradient(135deg, #ec4899, #f472b6);
-          bottom: -200px;
-          right: -200px;
-          animation-delay: 2s;
-        }
-
-        @keyframes blobFloat {
-          0%, 100% {
-            transform: translate(0, 0) scale(1);
-          }
-          33% {
-            transform: translate(50px, -50px) scale(1.1);
-          }
-          66% {
-            transform: translate(-50px, 50px) scale(0.9);
-          }
-        }
-
-        /* Hero Section */
-        .animal-header {
-          text-align: center;
-          margin-bottom: 60px;
-        }
-
-        .animal-header h1 {
-          font-size: 64px;
-          font-weight: 700;
-          margin-bottom: 32px;
-          color: ${isDark ? '#ffffff' : '#111'};
-          letter-spacing: -0.03em;
-          line-height: 1.1;
-        }
-
-        .animal-description {
-          font-size: 20px;
-          font-weight: 400;
-          color: ${isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)'};
-          margin: 0;
-          line-height: 1.7;
-          letter-spacing: -0.01em;
-        }
-
-        /* 알록달록 움직이는 그라데이션 바 */
-        .colorful-bar {
-          max-width: 700px;
-          margin: 0 auto 36px;
-          padding: 0;
-        }
-
-        .gradient-bar {
-          width: 100%;
-          height: 5px;
-          border-radius: 3px;
-          background: linear-gradient(90deg, 
-            #ff6b9d 0%, 
-            #ff8c42 25%, 
-            #ffd23f 50%, 
-            #06ffa5 75%, 
-            #4ecdc4 100%
-          );
-          background-size: 200% 100%;
-          box-shadow: 0 2px 12px rgba(0,0,0,0.1);
-        }
-
-        .animated-gradient {
-          animation: gradientMove 3s ease infinite;
-        }
-
-        /* Workflow Container */
-        .workflow-container {
-          width: 100%;
-          max-width: 1200px;
-          margin: 0 auto;
-          padding: 40px 24px;
-        }
-
-        .workflow-steps {
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          flex-wrap: wrap;
-          gap: 2rem;
-          position: relative;
-        }
-
-        .workflow-step-wrapper {
-          display: flex;
-          align-items: center;
-          gap: 2rem;
-        }
-
-        .workflow-step {
-          display: flex;
-          flex-direction: column;
-          align-items: center;
-          gap: 1rem;
-          position: relative;
-          z-index: 1;
-        }
-
-        .workflow-icon-container {
-          width: 80px;
-          height: 80px;
-          border-radius: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
-          transition: all 0.3s ease;
-        }
-
-        .workflow-inner-glow,
-        .workflow-outer-glow {
-          position: absolute;
-          inset: 0;
-          border-radius: 50%;
-          pointer-events: none;
-        }
-
-        .workflow-label {
-          font-size: 14px;
-          font-weight: 600;
-          text-align: center;
-          letter-spacing: -0.01em;
-          white-space: nowrap;
-        }
-
-        /* Workflow Connector */
-        .workflow-connector-wrapper {
-          position: relative;
-          width: 120px;
-          height: 2px;
-          min-width: 80px;
-        }
-
-        .workflow-line-bg {
-          position: absolute;
-          inset: 0;
-          border-radius: 2px;
-        }
-
-        .workflow-glow-animation {
-          position: absolute;
-          width: 40px;
-          height: 40px;
-          border-radius: 50%;
-          top: 50%;
-          left: 0;
-          transform: translateY(-50%);
-        }
-
-        /* Gallery Section */
-        .gallery-header {
-          text-align: center;
-          margin-bottom: 60px;
-        }
-
-        .gallery-title {
-          font-size: 48px;
-          font-weight: 700;
-          margin-bottom: 16px;
-          letter-spacing: -0.03em;
-        }
-
-        .gallery-subtitle {
-          font-size: 18px;
-          font-weight: 400;
-          letter-spacing: -0.01em;
-        }
-
-        .gallery-grid {
-          display: grid;
-          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-          gap: 2rem;
-        }
-
-        .gallery-card-skeleton {
-          border-radius: 1.5rem;
-          padding: 1.5rem;
-          position: relative;
-          overflow: hidden;
-          min-height: 400px;
-          display: flex;
-          flex-direction: column;
-          gap: 1.5rem;
-        }
-
-        .skeleton-image {
-          width: 100%;
-          aspect-ratio: 16 / 10;
-          border-radius: 1rem;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
-        }
-
-        .skeleton-content {
-          display: flex;
-          flex-direction: column;
-          gap: 0.75rem;
-          flex: 1;
-        }
-
-        .skeleton-line {
-          height: 1rem;
-          border-radius: 0.5rem;
-          animation: skeletonPulse 2s ease-in-out infinite;
-        }
-
-        .skeleton-title {
-          height: 1.5rem;
-          width: 70%;
-        }
-
-        .skeleton-text {
-          width: 100%;
-        }
-
-        .skeleton-text.short {
-          width: 60%;
-        }
-
-        @keyframes skeletonPulse {
-          0%, 100% {
-            opacity: 1;
-          }
-          50% {
-            opacity: 0.5;
-          }
-        }
-
-        /* 반응형 */
-        @media (max-width: 768px) {
-          .animal-header h1 {
-            font-size: 42px;
-          }
-
-          .animal-description {
-            font-size: 16px;
-          }
-
-          .workflow-steps {
-            flex-direction: column;
-            gap: 3rem;
-          }
-
-          .workflow-step-wrapper {
-            flex-direction: column;
-            gap: 1rem;
-          }
-
-          .workflow-connector-wrapper {
-            width: 2px;
-            height: 60px;
-            transform: rotate(90deg);
-          }
-
-          .workflow-glow-animation {
-            width: 40px;
-            height: 40px;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-          }
-
-          .gallery-grid {
-            grid-template-columns: 1fr;
-          }
-
-          .gallery-title {
-            font-size: 32px;
-          }
-        }
-
-        @media (min-width: 769px) and (max-width: 1024px) {
-          .workflow-steps {
-            gap: 1.5rem;
-          }
-
-          .workflow-connector-wrapper {
-            width: 100px;
-          }
-
-          .gallery-grid {
-            grid-template-columns: repeat(2, 1fr);
-          }
+        .animate-shimmer {
+            animation: shimmer 1.5s infinite;
         }
       `}</style>
     </main>
   );
 }
-

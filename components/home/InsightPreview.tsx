@@ -10,17 +10,17 @@ export default function InsightPreview() {
   return (
     <section className="w-full h-full flex flex-col">
       <h2 className="text-xl md:text-2xl font-bold mb-6 flex items-center gap-2" style={{ color: 'var(--text-main)' }}>
-        <span className="text-purple-500">🧠</span> {TEXTS.home.sectionTitles.insight.ko}
+        <span className="text-[#F9954E]">🧠</span> {TEXTS.home.sectionTitles.insight.ko}
       </h2>
-      
+
       <div className="flex flex-col gap-3 h-full">
         {insights.map((item) => (
-          <div key={item.id} 
+          <div key={item.id}
             className="flex flex-col justify-center p-5 rounded-2xl border transition-colors hover:bg-gray-50 dark:hover:bg-white/5 cursor-pointer"
-            style={{ 
-              backgroundColor: 'var(--card-bg)', 
-              borderColor: 'var(--card-border)', 
-              color: 'var(--text-main)' 
+            style={{
+              backgroundColor: 'var(--card-bg)',
+              borderColor: 'var(--card-border)',
+              color: 'var(--text-main)'
             }}
           >
             <h3 className="font-bold text-lg mb-1 truncate">{item.title}</h3>

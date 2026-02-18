@@ -31,18 +31,18 @@ export default function SuggestionCard({ item, isOwner = false, onEdit, onDelete
   // 뱃지 색상 로직
   const getTypeBadge = (type: SuggestionType) => {
     switch (type) {
-      case "버그 제보": return "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-300";
-      case "기능 요청": return "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-300";
-      case "UI/디자인": return "bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-300";
+      case "버그 제보": return "bg-[#FFF5EB] text-[#E8832E] dark:bg-[#8F4B10]/20 dark:text-[#FBAA60]";
+      case "기능 요청": return "bg-[#FEEBD0] text-[#D4711A] dark:bg-[#8F4B10]/30 dark:text-[#FCC07A]";
+      case "UI/디자인": return "bg-[#FFF5EB] text-[#B35E15] dark:bg-[#8F4B10]/20 dark:text-[#FBAA60]";
       default: return "bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-gray-300";
     }
   };
 
   const getPriorityBadge = (priority: SuggestionPriority) => {
     switch (priority) {
-      case "높음": return "text-red-500 border-red-200 dark:border-red-900";
-      case "보통": return "text-yellow-500 border-yellow-200 dark:border-yellow-900";
-      case "낮음": return "text-green-500 border-green-200 dark:border-green-900";
+      case "높음": return "text-[#E8832E] border-[#FEEBD0] dark:border-[#8F4B10]";
+      case "보통": return "text-[#F9954E] border-[#FDD5A5] dark:border-[#B35E15]";
+      case "낮음": return "text-[#FBAA60] border-[#FFF5EB] dark:border-[#8F4B10]/50";
     }
   };
 
@@ -111,8 +111,8 @@ export default function SuggestionCard({ item, isOwner = false, onEdit, onDelete
                 }}
                 className="flex-1 px-3 py-1.5 text-xs font-medium rounded-lg transition-all hover:scale-105"
                 style={{
-                  backgroundColor: 'rgba(239, 68, 68, 0.1)',
-                  color: '#ef4444',
+                  backgroundColor: 'rgba(249, 149, 78, 0.1)',
+                  color: '#E8832E',
                 }}
               >
                 🗑️ 삭제

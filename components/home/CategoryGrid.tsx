@@ -66,7 +66,7 @@ const categories = [
         description: "최신 AI 트렌드와 기술 분석 아티클",
         href: "/insight",
         icon: Lightbulb,
-        gradient: "from-amber-400 to-[#F9954E]",
+        gradient: "from-[#FBAA60] to-[#F9954E]",
         previewComponent: InsightPreview,
         stats: {
             count: "50+",
@@ -79,7 +79,7 @@ const categories = [
         description: "함께 성장하는 AI 크리에이터들의 모임",
         href: "/community",
         icon: Users,
-        gradient: "from-[#F9954E] to-red-500",
+        gradient: "from-[#F9954E] to-[#D4711A]",
         previewComponent: null, // 커뮤니티는 미리보기 없음
         stats: {
             count: "Beta",
@@ -92,7 +92,7 @@ const categories = [
         description: "프롬프트, 에셋 등 AI 리소스 마켓플레이스",
         href: "/market",
         icon: ShoppingBag,
-        gradient: "from-[#E8832E] to-red-600",
+        gradient: "from-[#E8832E] to-[#B35E15]",
         iconBorder: "group-hover:border-[#E8832E] dark:group-hover:border-[#E8832E]", // Hover color
         previewComponent: null, // 마켓은 미리보기 없음
         stats: {
@@ -175,7 +175,7 @@ export function CategoryGrid() {
 
                                             {/* Arrow Icon */}
                                             <motion.div
-                                                className="absolute -top-1 -right-1 w-8 h-8 bg-gradient-to-br from-[#F9954E] to-pink-500 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300"
+                                                className="absolute -top-1 -right-1 w-8 h-8 bg-gradient-to-br from-[#F9954E] to-[#E8832E] rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300"
                                                 initial={{ rotate: 0, scale: 0 }}
                                                 whileHover={{ rotate: 45, scale: 1 }}
                                             >
@@ -200,7 +200,7 @@ export function CategoryGrid() {
                                             <div className="space-y-2">
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex items-center gap-2">
-                                                        <Star className="w-4 h-4 text-yellow-500" />
+                                                        <Star className="w-4 h-4 text-[#F9954E]" />
                                                         <span className="text-xs font-semibold text-neutral-900 dark:text-white">
                                                             {category.stats.count}
                                                         </span>
@@ -211,8 +211,8 @@ export function CategoryGrid() {
                                                 </div>
 
                                                 <div className="flex items-center gap-1.5">
-                                                    <TrendingUp className="w-3.5 h-3.5 text-emerald-500" />
-                                                    <span className="text-xs text-emerald-600 dark:text-emerald-400 font-medium">
+                                                    <TrendingUp className="w-3.5 h-3.5 text-[#F9954E]" />
+                                                    <span className="text-xs text-[#E8832E] dark:text-[#FBAA60] font-medium">
                                                         {category.stats.trend}
                                                     </span>
                                                 </div>

@@ -130,7 +130,7 @@ export default function SuggestionPage() {
                     </div>
 
                     <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-                        <span className="bg-gradient-to-r from-[#F9954E] via-pink-500 to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+                        <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
                             건의사항
                         </span>
                     </h1>
@@ -229,7 +229,7 @@ export default function SuggestionPage() {
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-6 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-[#F9954E] to-pink-500 hover:from-[#E8832E] hover:to-pink-600 shadow-lg shadow-[#F9954E]/20 transition-all duration-200 hover:shadow-[#F9954E]/30"
+                                    className="px-6 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-[#F9954E] to-[#E8832E] hover:from-[#E8832E] hover:to-[#D4711A] shadow-lg shadow-[#F9954E]/20 transition-all duration-200 hover:shadow-[#F9954E]/30"
                                 >
                                     등록하기
                                 </button>

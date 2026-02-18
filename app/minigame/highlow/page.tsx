@@ -86,7 +86,7 @@ export default function HighLowPage() {
                 setCoins(prev => prev + bonus);
                 setMessage(`정답! +${bonus} 코인 🎉 (${newStreak}연속)`);
 
-                if (newStreak >= 3) confetti({ particleCount: 50 + newStreak * 20, spread: 60, origin: { y: 0.6 } });
+                if (newStreak >= 3) confetti({ particleCount: 50 + newStreak * 20, spread: 60, origin: { y: 0.6 }, colors: ['#F9954E', '#FBAA60', '#E8832E'] });
 
                 // 다음 카드로
                 setCurrentCard(next);
@@ -108,12 +108,12 @@ export default function HighLowPage() {
     const isDark = mounted && theme === "dark";
 
     const CardDisplay = ({ card, hidden }: { card: Card | null; hidden?: boolean }) => (
-        <div className={`w-28 h-40 md:w-36 md:h-48 rounded-2xl shadow-2xl flex flex-col items-center justify-center font-bold transition-all duration-300 ${hidden || !card
-                ? "bg-gradient-to-br from-indigo-600 to-purple-800 border-2 border-indigo-400"
-                : "bg-white dark:bg-zinc-100 border-2 border-neutral-200"
+        <div className={`w-28 h-40 md:w-36 md:h-48 rounded-2xl shadow-xl flex flex-col items-center justify-center font-bold transition-all duration-300 ${hidden || !card
+            ? "bg-gradient-to-br from-[#F9954E] to-[#c2410c] border-2 border-[#F9954E]"
+            : "bg-white dark:bg-zinc-100 border-2 border-neutral-200"
             }`}>
             {hidden || !card ? (
-                <span className="text-4xl">?</span>
+                <span className="text-4xl text-white opacity-50">?</span>
             ) : (
                 <>
                     <span className={`text-sm ${isRed(card.suit) ? "text-red-500" : "text-neutral-800"}`}>{card.rank}</span>
@@ -137,8 +137,8 @@ export default function HighLowPage() {
             <div className="pt-24 pb-12 px-4 max-w-lg mx-auto">
                 <div className="animate-fade-in">
                     <div className="flex items-center justify-center gap-2 mb-6">
-                        <Coins className="w-5 h-5 text-yellow-500" />
-                        <span className="text-2xl font-bold text-yellow-500">{coins.toLocaleString()}</span>
+                        <Coins className="w-5 h-5 text-[#F9954E]" />
+                        <span className="text-2xl font-bold text-[#F9954E]">{coins.toLocaleString()}</span>
                         <span className="text-sm text-neutral-500">코인</span>
                     </div>
 
@@ -176,8 +176,9 @@ export default function HighLowPage() {
                         <AnimatePresence>
                             {message && (
                                 <motion.div initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.8, opacity: 0 }}
-                                    className={`text-center p-4 rounded-2xl mb-6 font-bold ${message.includes("정답") ? "bg-green-50 dark:bg-green-500/10 text-green-600 dark:text-green-400"
-                                            : "bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400"}`}>
+                                    className={`text-center p-4 rounded-2xl mb-6 font-bold ${message.includes("정답")
+                                        ? "bg-[#F9954E]/10 text-[#F9954E]"
+                                        : "bg-neutral-100 dark:bg-white/5 text-neutral-500 dark:text-neutral-400"}`}>
                                     {message}
                                 </motion.div>
                             )}
@@ -189,18 +190,20 @@ export default function HighLowPage() {
                                 <div className="flex gap-2 mb-4">
                                     {[10, 50, 100, 200].map(a => (
                                         <button key={a} onClick={() => setBet(Math.min(a, coins))} disabled={coins < a}
-                                            className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${bet === a ? "bg-yellow-500 text-white" : "bg-neutral-100 dark:bg-zinc-800 text-neutral-500 disabled:opacity-30"}`}>
+                                            className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${bet === a
+                                                ? "bg-[#F9954E] text-white shadow-lg shadow-[#F9954E]/20"
+                                                : "bg-neutral-100 dark:bg-zinc-800 text-neutral-500 disabled:opacity-30"}`}>
                                             {a}
                                         </button>
                                     ))}
                                 </div>
                                 <button onClick={startGame} disabled={coins < bet}
-                                    className="w-full py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-purple-500 to-indigo-600 text-white shadow-lg shadow-purple-500/20 hover:from-purple-600 hover:to-indigo-700 active:scale-[0.98] transition-all disabled:opacity-30">
+                                    className="w-full py-4 rounded-2xl font-bold text-lg bg-[#F9954E] hover:bg-[#E8832E] text-white shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all disabled:opacity-30">
                                     🔮 게임 시작 (배팅: {bet})
                                 </button>
                                 {coins < 10 && (
                                     <button onClick={() => { setCoins(1000); setTotalGames(0); setTotalWins(0); }}
-                                        className="w-full mt-3 py-3 rounded-2xl bg-neutral-100 dark:bg-zinc-800 text-sm font-bold flex items-center justify-center gap-2">
+                                        className="w-full mt-3 py-3 rounded-2xl bg-neutral-100 dark:bg-zinc-800 text-sm font-bold flex items-center justify-center gap-2 hover:bg-neutral-200 dark:hover:bg-zinc-700 transition-colors">
                                         <RotateCcw className="w-4 h-4" /> 1,000 코인으로 다시 시작
                                     </button>
                                 )}
@@ -210,15 +213,15 @@ export default function HighLowPage() {
                                 <p className="text-center text-sm font-bold text-neutral-500 mb-2">다음 카드는?</p>
                                 <div className="grid grid-cols-3 gap-3">
                                     <button onClick={() => guess("high")}
-                                        className="py-4 rounded-2xl font-bold bg-gradient-to-b from-red-500 to-red-600 text-white shadow-lg shadow-red-500/20 hover:from-red-600 hover:to-red-700 active:scale-[0.98] transition-all flex flex-col items-center gap-1">
+                                        className="py-4 rounded-2xl font-bold bg-white dark:bg-zinc-800 border-2 border-[#F9954E] text-[#F9954E] hover:bg-[#F9954E] hover:text-white active:scale-[0.98] transition-all flex flex-col items-center gap-1">
                                         <ArrowUp className="w-5 h-5" /> 높다
                                     </button>
                                     <button onClick={() => guess("same")}
-                                        className="py-4 rounded-2xl font-bold bg-gradient-to-b from-yellow-500 to-yellow-600 text-white shadow-lg shadow-yellow-500/20 hover:from-yellow-600 hover:to-yellow-700 active:scale-[0.98] transition-all flex flex-col items-center gap-1">
+                                        className="py-4 rounded-2xl font-bold bg-white dark:bg-zinc-800 border-2 border-neutral-300 dark:border-zinc-700 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-zinc-700 active:scale-[0.98] transition-all flex flex-col items-center gap-1">
                                         <Equal className="w-5 h-5" /> 같다 (×5)
                                     </button>
                                     <button onClick={() => guess("low")}
-                                        className="py-4 rounded-2xl font-bold bg-gradient-to-b from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/20 hover:from-blue-600 hover:to-blue-700 active:scale-[0.98] transition-all flex flex-col items-center gap-1">
+                                        className="py-4 rounded-2xl font-bold bg-white dark:bg-zinc-800 border-2 border-[#E8832E] text-[#E8832E] hover:bg-[#E8832E] hover:text-white active:scale-[0.98] transition-all flex flex-col items-center gap-1">
                                         <ArrowDown className="w-5 h-5" /> 낮다
                                     </button>
                                 </div>
@@ -232,15 +235,14 @@ export default function HighLowPage() {
                             <div className="text-xs text-neutral-500">게임</div>
                         </div>
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 text-center border border-neutral-100 dark:border-white/5">
-                            <div className="text-2xl font-bold text-green-500">{totalWins}</div>
+                            <div className="text-2xl font-bold text-[#E8832E]">{totalWins}</div>
                             <div className="text-xs text-neutral-500">정답</div>
                         </div>
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 text-center border border-neutral-100 dark:border-white/5">
-                            <div className="text-2xl font-bold text-purple-500">{bestStreak}</div>
+                            <div className="text-2xl font-bold text-[#FBAA60]">{bestStreak}</div>
                             <div className="text-xs text-neutral-500">최고 연속</div>
                         </div>
                     </div>
-                    <p className="text-[10px] text-center text-neutral-400 mt-6">※ 가상 코인 게임이며, 실제 금전 거래와 무관합니다.</p>
                 </div>
             </div>
         </main>

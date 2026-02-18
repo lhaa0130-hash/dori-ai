@@ -1,161 +1,107 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { useAuth } from "@/contexts/AuthContext";
+import { GraduationCap, Play, BookOpen, Users, Star } from "lucide-react";
 import Link from "next/link";
+import { TEXTS } from "@/constants/texts";
 
 export default function EducationPage() {
-  const { session, logout } = useAuth();
-  const user = session?.user || null;
-  const [displayName, setDisplayName] = useState<string>("");
+  const t = TEXTS.academy;
 
-  // localStorage에서 설정된 이름 가져오기 (일관된 이름 사용)
-  useEffect(() => {
-    if (user?.email) {
-      // localStorage에 저장된 이름을 우선 사용
-      let savedName = localStorage.getItem(`dori_user_name_${user.email}`);
-
-      if (!savedName && user.name) {
-        // localStorage에 없으면 세션 이름을 저장하고 사용
-        savedName = user.name;
-        localStorage.setItem(`dori_user_name_${user.email}`, user.name);
-      } else if (!savedName) {
-        // 세션 이름도 없으면 이메일 앞부분 사용
-        savedName = user.email.split("@")[0];
-        localStorage.setItem(`dori_user_name_${user.email}`, savedName);
-      }
-
-      setDisplayName(savedName || "사용자");
-    } else {
-      setDisplayName("");
-    }
-  }, [user?.email, user?.name]);
-
-  function onLogout() { logout(); }
+  const guides = [
+    {
+      id: 1,
+      tag: "오리엔테이션",
+      title: "시작하기 가이드",
+      desc: "5분 만에 배우는 DORI-AI 기본 기능 완전 정복",
+      icon: <Star className="w-5 h-5" />,
+      color: "bg-yellow-100 text-yellow-600 dark:bg-yellow-900/30 dark:text-yellow-400",
+      thumbnail: "bg-neutral-800",
+    },
+    {
+      id: 2,
+      tag: "프롬프트",
+      title: "프롬프트 마스터 클래스",
+      desc: "원하는 스타일을 정확히 뽑아내는 프롬프트 작성 비결",
+      icon: <BookOpen className="w-5 h-5" />,
+      color: "bg-blue-100 text-blue-600 dark:bg-blue-900/30 dark:text-blue-400",
+      thumbnail: "bg-neutral-700",
+    },
+    {
+      id: 3,
+      tag: "커뮤니티",
+      title: "커뮤니티 활용법",
+      desc: "전 세계 크리에이터와 소통하며 성장하는 방법",
+      icon: <Users className="w-5 h-5" />,
+      color: "bg-purple-100 text-purple-600 dark:bg-purple-900/30 dark:text-purple-400",
+      thumbnail: "bg-neutral-600",
+    },
+  ];
 
   return (
-    <main className="page">
-      <div className="fixed-top-content">
-        <header className="header">
-          <div className="header-side header-left">
-            <div className="logo-wrap"><Link href="/"><img src="/logo.png" className="logo" alt="DORI Logo" /></Link></div>
-          </div>
-          <div className="nav-container">
-            <nav className="nav">
-              <div className="nav-item-wrap"><Link href="/studio">STUDIO</Link></div>
-              <div className="nav-item-wrap"><Link href="/insight">INSIGHT</Link></div>
-              <div className="nav-item-wrap active"><Link href="/education">EDUCATION</Link></div>
-              <div className="nav-item-wrap"><Link href="/community">COMMUNITY</Link></div>
-            </nav>
-          </div>
-          <div className="header-side header-right">
-            <div className="auth-wrap">
-              {!user ? <Link href="/" className="btn small ghost">로그인</Link> : (
-                <div className="avatar-wrap">
-                  <button className="avatar">{displayName?.[0] || "사"}</button>
-                  <div className="menu">
-                    <div className="menu-name">{displayName || "사용자"}</div>
-                    <Link href="/my" style={{ textDecoration: 'none' }}><button className="menu-item">마이페이지</button></Link>
-                    <button className="menu-item danger" onClick={onLogout}>로그아웃</button>
-                  </div>
-                </div>
-              )}
-            </div>
-          </div>
-        </header>
-      </div>
-      <div className="scroll-spacer" />
+    <main className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-500 relative overflow-x-hidden">
+      {/* 배경 그라데이션 (Standard) */}
+      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
 
-      <section className="container section" style={{ minHeight: "80vh", paddingTop: "60px" }}>
-        <div className="page-header">
-          <h1 className="page-title">Education</h1>
-          <p className="page-desc">DORI-AI 마스터가 되기 위한 단계별 가이드.</p>
-        </div>
-
-        <div className="edu-grid">
-          {/* 카드 1 */}
-          <div className="edu-card">
-            <div className="thumb-area">
-              <div className="play-icon">▶</div>
-            </div>
-            <div className="edu-content">
-              <div className="tag">초급</div>
-              <h3>시작하기 가이드</h3>
-              <p>5분 만에 배우는 기본 기능 완전 정복</p>
-            </div>
+      {/* 히어로 섹션 */}
+      <section className="relative pt-32 pb-16 px-6 text-center z-10">
+        <div className="max-w-3xl mx-auto animate-fade-in flex flex-col items-center">
+          {/* Badge */}
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
+            <GraduationCap className="w-3 h-3" />
+            <span>Academy Center</span>
           </div>
 
-          {/* 카드 2 */}
-          <div className="edu-card">
-            <div className="thumb-area" style={{ background: '#333' }}>
-              <div className="play-icon">▶</div>
-            </div>
-            <div className="edu-content">
-              <div className="tag">중급</div>
-              <h3>프롬프트 마스터 클래스</h3>
-              <p>원하는 스타일을 정확히 뽑아내는 비결</p>
-            </div>
-          </div>
-
-          {/* 카드 3 */}
-          <div className="edu-card">
-            <div className="thumb-area" style={{ background: '#555' }}>
-              <div className="play-icon">▶</div>
-            </div>
-            <div className="edu-content">
-              <div className="tag">고급</div>
-              <h3>커뮤니티 활용법</h3>
-              <p>전 세계 크리에이터와 소통하는 방법</p>
-            </div>
-          </div>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
+            <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+              {t.heroTitle.ko}
+            </span>
+          </h1>
+          <p className="text-base md:text-lg font-medium text-neutral-600 dark:text-neutral-300 break-keep leading-relaxed max-w-xl">
+            {t.heroSubtitle.ko}
+          </p>
         </div>
       </section>
 
-      <footer className="footer"><span>© DORI — DESIGN OF REAL INTELLIGENCE</span></footer>
+      {/* 카드 그리드 */}
+      <section className="container max-w-5xl mx-auto px-6 pb-24 relative z-10">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {guides.map((guide) => (
+            <div
+              key={guide.id}
+              className="group cursor-pointer rounded-[1.5rem] border border-neutral-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/40 backdrop-blur-xl overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:shadow-lg hover:shadow-[#F9954E]/10 hover:border-[#F9954E]/30 dark:hover:border-[#F9954E]/30"
+            >
+              <div className={`h-40 ${guide.thumbnail} flex items-center justify-center relative overflow-hidden`}>
+                <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors" />
+                <div className="w-12 h-12 rounded-full bg-white/20 backdrop-blur-md flex items-center justify-center text-white border border-white/30 transition-transform duration-300 group-hover:scale-110">
+                  <Play className="w-5 h-5 fill-white" />
+                </div>
+              </div>
+              <div className="p-6">
+                <div className={`inline-flex items-center gap-1.5 px-2.5 py-0.5 rounded-full text-[10px] font-bold mb-3 ${guide.color}`}>
+                  {guide.icon}
+                  <span>{guide.tag}</span>
+                </div>
+                <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-2 group-hover:text-[#F9954E] transition-colors">
+                  {guide.title}
+                </h3>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed">
+                  {guide.desc}
+                </p>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
-      {/* ★ 스타일 복사 (레이아웃 통일) */}
       <style jsx global>{`
-        /* 공통 스타일 (반복) */
-        :root { --bg: #ffffff; --text: #111; --gray: #666; --light-gray: #f5f5f7; --blue: #0071e3; --line: #e5e5e5; }
-        * { box-sizing: border-box; }
-        html, body { margin: 0; padding: 0; background: var(--bg); color: var(--text); font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; }
-        .page { display: flex; flex-direction: column; min-height: 100vh; }
-        .fixed-top-content { position: fixed; top: 0; left: 0; width: 100%; z-index: 50; background: rgba(255, 255, 255, 0.8); backdrop-filter: blur(12px); border-bottom: 1px solid rgba(0,0,0,0.05); }
-        .scroll-spacer { height: 70px; }
-        .header { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr auto 1fr; align-items: center; height: 70px; padding: 0 24px; }
-        .logo-wrap img { height: 24px; object-fit: contain; }
-        .nav { display: flex; gap: 32px; }
-        .nav-item-wrap a { text-decoration: none; color: var(--gray); font-weight: 500; font-size: 14px; transition: 0.2s; }
-        .nav-item-wrap:hover a, .nav-item-wrap.active a { color: var(--blue); }
-        .auth-wrap { display: flex; justify-content: flex-end; }
-        .avatar-wrap { position: relative; height: 70px; display: flex; align-items: center; }
-        .avatar { width: 36px; height: 36px; border-radius: 50%; background: #f0f0f0; border: 1px solid #ddd; cursor: pointer; color: #333; font-weight: bold; display: flex; align-items: center; justify-content: center; }
-        .menu { position: absolute; right: 0; top: 60px; width: 160px; background: #fff; border: 1px solid #eee; border-radius: 12px; padding: 8px; opacity: 0; pointer-events: none; box-shadow: 0 10px 30px rgba(0,0,0,0.1); transition: 0.2s; z-index: 100; }
-        .avatar-wrap:hover .menu, .menu:hover { opacity: 1; pointer-events: auto; top: 55px; }
-        .menu::before { content: ""; position: absolute; top: -20px; left: 0; width: 100%; height: 20px; background: transparent; }
-        .menu-name { padding: 8px 12px; font-size: 13px; font-weight: 600; border-bottom: 1px solid #f5f5f5; color: #333; }
-        .menu-item { width: 100%; padding: 10px 12px; background: transparent; border: none; text-align: left; cursor: pointer; font-size: 14px; color: #555; border-radius: 6px; transition: 0.1s; }
-        .menu-item:hover { background: #f5f5f7; color: #000; }
-        .menu-item.danger { color: #ff3b30; }
-        .menu-item.danger:hover { background: #fff0f0; }
-        .container { max-width: 1120px; margin: 0 auto; padding: 0 24px; }
-        .page-header { text-align: center; margin-bottom: 60px; }
-        .page-title { font-size: 48px; font-weight: 800; margin-bottom: 16px; letter-spacing: -0.5px; }
-        .page-desc { font-size: 18px; color: var(--gray); }
-        .footer { padding: 60px 0; text-align: center; font-size: 13px; color: #888; border-top: 1px solid var(--line); margin-top: 80px; }
-
-        /* Education Unique */
-        .edu-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 30px; }
-        .edu-card { border-radius: 16px; overflow: hidden; cursor: pointer; transition: 0.3s; background: #fff; border: 1px solid var(--line); }
-        .edu-card:hover { transform: translateY(-5px); box-shadow: 0 10px 30px rgba(0,0,0,0.08); }
-        .thumb-area { height: 180px; background: #222; display: flex; align-items: center; justify-content: center; color: #fff; }
-        .play-icon { width: 50px; height: 50px; background: rgba(255,255,255,0.2); border-radius: 50%; display: flex; align-items: center; justify-content: center; backdrop-filter: blur(4px); font-size: 20px; padding-left: 4px; }
-        .edu-content { padding: 24px; }
-        .tag { display: inline-block; font-size: 12px; font-weight: 600; color: var(--blue); background: #eef7ff; padding: 4px 10px; border-radius: 20px; margin-bottom: 10px; }
-        .edu-content h3 { margin: 0 0 8px 0; font-size: 18px; font-weight: 700; }
-        .edu-content p { margin: 0; font-size: 14px; color: #666; }
-
-        @media (max-width: 768px) { .nav { display: none; } }
+        @keyframes gradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
+        }
+        .animate-gradient {
+          animation: gradient 3s ease infinite;
+        }
       `}</style>
     </main>
   );

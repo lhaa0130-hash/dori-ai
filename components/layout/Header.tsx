@@ -52,7 +52,7 @@ export default function Header() {
 
         {/* 1. Logo */}
         <Link href="/" aria-label="DORI-AI Home" className="flex-shrink-0 hover:opacity-70 transition-opacity">
-          <span className="font-bold text-lg whitespace-nowrap bg-[linear-gradient(to_right,#facc15,#F9954E_20%,#F9954E_80%,#ef4444)] bg-clip-text text-transparent animate-gradient-x">
+          <span className="font-bold text-lg whitespace-nowrap bg-[linear-gradient(to_right,#FBAA60,#F9954E_30%,#F9954E_70%,#E8832E)] bg-clip-text text-transparent animate-gradient-x">
             DORI-AI
           </span>
         </Link>

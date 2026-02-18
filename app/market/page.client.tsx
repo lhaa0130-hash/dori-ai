@@ -1,34 +1,20 @@
 "use client";
-import { useState, useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { TEXTS } from "@/constants/texts";
-import MarketFilters from "@/components/market/MarketFilters";
 import MarketList from "@/components/market/MarketList";
 import MarketRequestForm from "@/components/market/MarketRequestForm";
+import { ShoppingBag, PenTool } from "lucide-react";
 
 export default function MarketClient() {
   const t = TEXTS.market;
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [activeSection, setActiveSection] = useState("products");
-  const [filters, setFilters] = useState({ category: "All", price: "All", sort: "newest" });
+  const [activeTab, setActiveTab] = useState<'products' | 'request'>('products'); // 탭 상태 관리
 
   useEffect(() => setMounted(true), []);
 
   const isDark = mounted && theme === 'dark';
-
-  const navItems = [
-    { id: 'products', label: 'AI 자료 마켓' },
-    { id: 'request', label: 'AI 작업 의뢰' },
-  ];
-
-  const handleNavClick = (id: string) => {
-    const element = document.getElementById(id);
-    if (element) {
-      element.scrollIntoView({ behavior: 'smooth' });
-    }
-    setActiveSection(id);
-  };
 
   return (
     <main
@@ -40,77 +26,17 @@ export default function MarketClient() {
       {/* 배경 그라데이션 (Standard) */}
       <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
 
-      {/* 좌측 사이드바 네비게이션 */}
-      <aside
-        className="fixed left-0 z-50 hidden lg:block"
-        style={{
-          top: '50%',
-          transform: 'translateY(-50%)',
-        }}
-      >
-        <nav className="ml-8">
-          <div
-            className="flex flex-col gap-3 p-4 rounded-2xl backdrop-blur-xl transition-all duration-500"
-            style={{
-              backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
-              border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.08)'}`,
-            }}
-          >
-            {navItems.map((item) => (
-              <a
-                key={item.id}
-                href={`#${item.id}`}
-                className="group relative flex items-center gap-3 px-3 py-2 rounded-xl transition-all duration-300 cursor-pointer"
-                style={{
-                  backgroundColor: activeSection === item.id
-                    ? (isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)')
-                    : 'transparent',
-                }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick(item.id);
-                }}
-              >
-                <div
-                  className={`w-1.5 h-1.5 rounded-full transition-all duration-300 ${activeSection === item.id ? 'scale-150' : 'scale-100'
-                    }`}
-                  style={{
-                    backgroundColor: activeSection === item.id
-                      ? (isDark ? '#ffffff' : '#000000')
-                      : (isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)'),
-                  }}
-                />
-                <span
-                  className="text-xs font-medium transition-all duration-300"
-                  style={{
-                    color: activeSection === item.id
-                      ? (isDark ? '#ffffff' : '#000000')
-                      : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)'),
-                    transform: activeSection === item.id ? 'translateX(4px)' : 'translateX(0)',
-                  }}
-                >
-                  {item.label}
-                </span>
-              </a>
-            ))}
-          </div>
-        </nav>
-      </aside>
-
       {/* 히어로 섹션 (Standard) */}
-      <section className="relative pt-32 pb-16 px-6 lg:pl-12 text-center overflow-hidden z-10">
+      <section className="relative pt-32 pb-12 px-6 text-center z-10">
         <div className="max-w-3xl mx-auto animate-fade-in flex flex-col items-center">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FBAA60] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#F9954E]"></span>
-            </span>
-            <span>Digital Market</span>
+            <ShoppingBag className="w-3 h-3" />
+            <span>Marketplace</span>
           </div>
 
           <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-            <span className="bg-gradient-to-r from-[#F9954E] via-pink-500 to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+            <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
               {t.heroTitle.ko}
             </span>
           </h1>
@@ -119,51 +45,73 @@ export default function MarketClient() {
           </p>
         </div>
       </section>
-      {/* 메인 콘텐츠 */}
-      <section
-        id="products"
-        className="container max-w-7xl mx-auto px-4 md:px-6 lg:pl-12 pb-24 border-b border-dashed relative"
-        style={{
-          borderColor: 'var(--card-border)',
-        }}
-      >
-        <h2
-          className="text-2xl font-bold mb-8 flex items-center gap-2"
-          style={{ color: 'var(--text-main)' }}
-        >
-          🛒 {t.section.productsTitle.ko}
-        </h2>
-        <MarketFilters filters={filters} setFilters={setFilters} />
-        <MarketList filters={filters} />
-      </section>
 
-      <section id="request" className="container max-w-4xl mx-auto px-4 md:px-6 lg:pl-12 py-24 relative">
-        <div className="text-center mb-10">
-          <h2
-            className="text-2xl font-bold mb-2 flex items-center justify-center gap-2"
-            style={{ color: 'var(--text-main)' }}
-          >
-            🤝 {t.section.requestTitle.ko}
-          </h2>
-          <p
-            className="opacity-70"
-            style={{ color: 'var(--text-sub)' }}
-          >
-            원하는 AI 자료가 없다면? 전문가에게 직접 의뢰해보세요.
-          </p>
+      {/* 탭 네비게이션 */}
+      <section className="container max-w-5xl mx-auto px-6 mb-12 relative z-10">
+        <div className="flex justify-center mb-8">
+          <div className="inline-flex p-1 rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
+            <button
+              onClick={() => setActiveTab('products')}
+              className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 flex items-center gap-2 ${activeTab === 'products'
+                ? 'bg-white dark:bg-neutral-800 text-[#F9954E] shadow-sm'
+                : 'text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200'
+                }`}
+            >
+              <ShoppingBag className="w-4 h-4" />
+              {t.section.productsTitle.ko}
+            </button>
+            <button
+              onClick={() => setActiveTab('request')}
+              className={`px-6 py-2.5 rounded-full text-sm font-bold transition-all duration-300 flex items-center gap-2 ${activeTab === 'request'
+                ? 'bg-white dark:bg-neutral-800 text-[#F9954E] shadow-sm'
+                : 'text-neutral-500 hover:text-neutral-700 dark:text-neutral-400 dark:hover:text-neutral-200'
+                }`}
+            >
+              <PenTool className="w-4 h-4" />
+              {t.section.requestTitle.ko}
+            </button>
+          </div>
         </div>
-        <MarketRequestForm />
+
+        {/* 탭 컨텐츠 */}
+        <div className="animate-fade-in">
+          {activeTab === 'products' && (
+            <div className="flex flex-col gap-8">
+              <MarketList />
+            </div>
+          )}
+
+          {activeTab === 'request' && (
+            <div className="max-w-3xl mx-auto">
+              <div className="text-center mb-10">
+                <h2 className="text-2xl font-bold mb-3 flex items-center justify-center gap-2 text-neutral-900 dark:text-white">
+                  🤝 전문가에게 의뢰하기
+                </h2>
+                <p className="text-neutral-600 dark:text-neutral-400">
+                  원하는 AI 자료가 없다면? 전문가에게 직접 의뢰해보세요.
+                </p>
+              </div>
+              <MarketRequestForm />
+            </div>
+          )}
+        </div>
       </section>
 
       {/* 스타일 */}
       <style jsx global>{`
         @keyframes gradientFlow {
-          0% {
-            background-position: 0% 50%;
-          }
-          100% {
-            background-position: 200% 50%;
-          }
+          0% { background-position: 0% 50%; }
+          100% { background-position: 200% 50%; }
+        }
+        .animate-gradient {
+          animation: gradientFlow 3s linear infinite;
+        }
+        .animate-fade-in {
+          animation: fadeIn 0.5s ease-out forwards;
+        }
+        @keyframes fadeIn {
+          from { opacity: 0; transform: translateY(10px); }
+          to { opacity: 1; transform: translateY(0); }
         }
       `}</style>
     </main>

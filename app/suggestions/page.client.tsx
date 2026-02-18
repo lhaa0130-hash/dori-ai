@@ -164,15 +164,15 @@ export default function SuggestionsClient() {
       <div className="fixed inset-0 -z-10 overflow-hidden pointer-events-none">
         {mounted && theme === "dark" && (
           <>
-            <div className="absolute top-[-200px] left-[20%] w-[500px] h-[500px] rounded-full blur-[100px] opacity-40 bg-blue-900 mix-blend-screen animate-pulse" />
-            <div className="absolute top-[100px] right-[20%] w-[450px] h-[450px] rounded-full blur-[100px] opacity-40 bg-purple-900 mix-blend-screen animate-pulse" style={{ animationDelay: '1s' }} />
+            <div className="absolute top-[-200px] left-[20%] w-[500px] h-[500px] rounded-full blur-[100px] opacity-20 bg-[#F9954E] mix-blend-screen animate-pulse" />
+            <div className="absolute top-[100px] right-[20%] w-[450px] h-[450px] rounded-full blur-[100px] opacity-15 bg-[#E8832E] mix-blend-screen animate-pulse" style={{ animationDelay: '1s' }} />
           </>
         )}
         {mounted && theme === "light" && (
           <div
             className="absolute inset-0 transition-all duration-1000"
             style={{
-              background: 'radial-gradient(ellipse at top, rgba(59, 130, 246, 0.05) 0%, transparent 50%), #ffffff',
+              background: 'radial-gradient(ellipse at top, rgba(249, 149, 78, 0.05) 0%, transparent 50%), #ffffff',
             }}
           />
         )}
@@ -182,7 +182,7 @@ export default function SuggestionsClient() {
       <section className="relative pt-20 pb-12 px-6 text-center overflow-hidden">
         <div className="max-w-4xl mx-auto">
           <h1
-            className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight"
+            className="text-3xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight"
             style={{
               color: isDark ? '#ffffff' : '#1d1d1f',
               fontWeight: 700,
@@ -197,16 +197,14 @@ export default function SuggestionsClient() {
             className="w-full max-w-2xl mx-auto h-1 md:h-1.5 mb-6 rounded-full overflow-hidden"
             style={{
               boxShadow: isDark
-                ? '0 0 30px rgba(96, 165, 250, 0.4), 0 4px 20px rgba(96, 165, 250, 0.2)'
-                : '0 0 20px rgba(37, 99, 235, 0.3), 0 4px 15px rgba(37, 99, 235, 0.2)',
+                ? '0 0 30px rgba(249, 149, 78, 0.4), 0 4px 20px rgba(249, 149, 78, 0.2)'
+                : '0 0 20px rgba(249, 149, 78, 0.3), 0 4px 15px rgba(249, 149, 78, 0.2)',
             }}
           >
             <div
               className="gradient-flow h-full rounded-full"
               style={{
-                backgroundImage: isDark
-                  ? 'linear-gradient(90deg, #60a5fa 0%, #818cf8 12.5%, #a78bfa 25%, #c084fc 37.5%, #ec4899 50%, #f472b6 62.5%, #f59e0b 75%, #fbbf24 87.5%, #10b981 100%, #60a5fa 100%)'
-                  : 'linear-gradient(90deg, #2563eb 0%, #4f46e5 12.5%, #7c3aed 25%, #9333ea 37.5%, #db2777 50%, #e11d48 62.5%, #d97706 75%, #f59e0b 87.5%, #059669 100%, #2563eb 100%)',
+                backgroundImage: 'linear-gradient(90deg, #FBAA60 0%, #F9954E 50%, #E8832E 100%, #FBAA60 100%)',
                 backgroundSize: '200% 100%',
                 animation: 'gradientFlow 4s linear infinite',
               }}
@@ -266,4 +264,3 @@ export default function SuggestionsClient() {
     </main>
   );
 }
-

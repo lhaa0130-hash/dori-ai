@@ -1,12 +1,68 @@
 "use client";
 
-import { Sparkles, Gamepad2, Play, Star, Trophy, Swords, BrainCircuit, MousePointer2, Coins, Target, Dices, Hand, Zap, Palette, Sword, ArrowUpRight, TrendingUp } from "lucide-react";
+import { Sparkles, Gamepad2, Play, Star, Trophy, Swords, BrainCircuit, MousePointer2, Coins, Target, Dices, Hand, Zap, Palette, Sword, ArrowUpRight, TrendingUp, Skull, Hammer, LayoutGrid, ImageIcon, Flame, Crown } from "lucide-react";
 import Link from "next/link";
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
 
 const GAMES = [
+    {
+        id: "dungeon",
+        title: "던전 RPG",
+        description: "전략적인 턴제 전투로 던전을 정복하세요!",
+        icon: <Skull className="w-5 h-5" />,
+        status: "NEW",
+        href: "/minigame/dungeon"
+    },
+    {
+        id: "clicker",
+        title: "보스 클릭커",
+        description: "클릭으로 몬스터를 처치하고 성장하세요!",
+        icon: <Hammer className="w-5 h-5" />,
+        status: "NEW",
+        href: "/minigame/clicker"
+    },
+    {
+        id: "tetris",
+        title: "테트리스",
+        description: "블록을 쌓아 라인을 제거하세요!",
+        icon: <LayoutGrid className="w-5 h-5" />,
+        status: "NEW",
+        href: "/minigame/tetris"
+    },
+    {
+        id: "game2048",
+        title: "2048",
+        description: "숫자를 합쳐 2048을 만드세요!",
+        icon: <Crown className="w-5 h-5" />,
+        status: "NEW",
+        href: "/minigame/2048"
+    },
+    {
+        id: "snake",
+        title: "스네이크",
+        description: "뱀을 길게 키우는 고전 게임!",
+        icon: <Trophy className="w-5 h-5" />,
+        status: "NEW",
+        href: "/minigame/snake"
+    },
+    {
+        id: "match3",
+        title: "매치 3 퍼즐",
+        description: "3개의 블록을 맞춰 터뜨리세요!",
+        icon: <Flame className="w-5 h-5" />,
+        status: "NEW",
+        href: "/minigame/match3"
+    },
+    {
+        id: "puzzle",
+        title: "슬라이드 퍼즐",
+        description: "조각을 움직여 그림을 완성하세요!",
+        icon: <ImageIcon className="w-5 h-5" />,
+        status: "NEW",
+        href: "/minigame/puzzle"
+    },
     {
         id: "quiz",
         title: "AI 상식 퀴즈",
@@ -89,7 +145,7 @@ const GAMES = [
     },
     {
         id: "slot",
-        title: "🎰 슬롯머신",
+        title: "슬롯머신",
         description: "가상 코인으로 즐기는 3릴 슬롯머신!",
         icon: <Star className="w-5 h-5" />,
         status: "PLAY",
@@ -97,7 +153,7 @@ const GAMES = [
     },
     {
         id: "blackjack",
-        title: "🃏 블랙잭",
+        title: "블랙잭",
         description: "딜러와 21점을 겨루는 카드 게임!",
         icon: <Sword className="w-5 h-5" />,
         status: "PLAY",
@@ -105,7 +161,7 @@ const GAMES = [
     },
     {
         id: "highlow",
-        title: "🔮 하이로우",
+        title: "하이로우",
         description: "다음 카드의 숫자를 예측하세요!",
         icon: <Sparkles className="w-5 h-5" />,
         status: "PLAY",
@@ -113,7 +169,7 @@ const GAMES = [
     },
     {
         id: "crash",
-        title: "📈 크래시",
+        title: "크래시",
         description: "배수가 터지기 전에 캐시아웃하세요!",
         icon: <TrendingUp className="w-5 h-5" />,
         status: "PLAY",
@@ -121,7 +177,7 @@ const GAMES = [
     },
     {
         id: "baccarat",
-        title: "🃏 바카라",
+        title: "바카라",
         description: "플레이어 vs 뱅커, 실제 룰의 바카라!",
         icon: <MousePointer2 className="w-5 h-5" />,
         status: "PLAY",
@@ -133,36 +189,32 @@ export default function MinigamePage() {
     return (
         <main className="min-h-screen bg-background relative overflow-hidden">
 
-            {/* Background Gradient */}
-            <div className="absolute inset-0 intro-gradient -z-10" />
+            {/* 배경 그라데이션 (공지사항 스타일) */}
+            <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
 
-            {/* Header Section */}
-            <section className="relative pt-32 pb-10 px-6 text-center z-10">
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.8 }}
-                    className="max-w-3xl mx-auto flex flex-col items-center"
-                >
+            {/* 히어로 섹션 */}
+            <section className="relative pt-32 pb-16 px-6 text-center z-10">
+                <div className="max-w-3xl mx-auto flex flex-col items-center">
                     {/* Badge */}
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-[#FEEBD0] to-pink-100 dark:from-orange-950/40 dark:to-pink-950/40 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FCC07A] rounded-full text-[10px] font-bold mb-4 shadow-sm uppercase tracking-wider">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
                         <Gamepad2 className="w-3 h-3" />
                         <span>Arcade Center</span>
                     </div>
 
-                    <h1 className="text-3xl md:text-5xl font-bold mb-3 tracking-tight text-foreground">
-                        Mini Games
+                    <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
+                        <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+                            미니게임
+                        </span>
                     </h1>
-
-                    <p className="text-sm md:text-base text-muted-foreground max-w-lg mx-auto leading-relaxed">
-                        가볍게 즐기며 AI의 원리를 체험해보세요
+                    <p className="text-base md:text-lg font-medium text-neutral-600 dark:text-neutral-300 break-keep leading-relaxed max-w-xl">
+                        가볍게 즐기며 AI의 원리를 체험해보세요.
                     </p>
-                </motion.div>
+                </div>
             </section>
 
             {/* Game Grid - Compact Design */}
             <section className="container max-w-5xl mx-auto px-6 pb-32 relative z-10">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
                     {GAMES.map((game, index) => (
                         <motion.div
                             key={game.id}
@@ -172,7 +224,7 @@ export default function MinigamePage() {
                             className="group"
                         >
                             <Link href={game.href} className="block h-full">
-                                <div className="h-full flex items-center gap-5 p-5 
+                                <div className="h-full flex items-center gap-4 md:gap-5 p-4 md:p-5  
                                     bg-white/50 dark:bg-zinc-900/40 backdrop-blur-md 
                                     border border-neutral-200/60 dark:border-white/5 
                                     rounded-2xl 

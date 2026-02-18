@@ -1,5 +1,6 @@
 import { initializeApp, getApps, FirebaseApp } from "firebase/app";
 import { getAuth, GoogleAuthProvider, Auth } from "firebase/auth";
+import { getFirestore, Firestore } from "firebase/firestore";
 
 const firebaseConfig = {
     apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "",
@@ -10,28 +11,43 @@ const firebaseConfig = {
     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "",
 };
 
-// 클라이언트에서만 초기화 (SSR/프리렌더링 시 에러 방지)
+// 클라이언트/서버 공용 싱글톤
 let app: FirebaseApp | null = null;
 let auth: Auth | null = null;
+let firestore: Firestore | null = null;
 let googleProvider: GoogleAuthProvider | null = null;
 
+function getFirebaseApp(): FirebaseApp {
+    if (!app) {
+        app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+    }
+    return app;
+}
+
 function getFirebaseAuth(): Auth {
-    if (typeof window === "undefined") {
-        throw new Error("Firebase auth is only available on client side");
+    if (typeof window === "undefined" && !process.env.NEXT_RUNTIME) {
+        // 엣지 런타임이나 서버 환경에서는 체크 필요하나, 기본적으로 초기화 시도
     }
     if (!auth) {
-        app = getApps().length === 0 ? initializeApp(firebaseConfig) : getApps()[0];
+        const app = getFirebaseApp();
         auth = getAuth(app);
-        googleProvider = new GoogleAuthProvider();
     }
     return auth;
 }
 
-function getGoogleProvider(): GoogleAuthProvider {
-    if (!googleProvider) {
-        getFirebaseAuth(); // auth 초기화 시 provider도 같이 생성
+function getFirebaseFirestore(): Firestore {
+    if (!firestore) {
+        const app = getFirebaseApp();
+        firestore = getFirestore(app);
     }
-    return googleProvider!;
+    return firestore;
 }
 
-export { getFirebaseAuth, getGoogleProvider };
+function getGoogleProvider(): GoogleAuthProvider {
+    if (!googleProvider) {
+        googleProvider = new GoogleAuthProvider();
+    }
+    return googleProvider;
+}
+
+export { getFirebaseAuth, getGoogleProvider, getFirebaseFirestore };

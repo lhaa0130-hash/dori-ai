@@ -69,7 +69,7 @@ export default function BlackjackPage() {
     useEffect(() => { setMounted(true); }, []);
 
     const triggerConfetti = () => {
-        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ["#f59e0b", "#22c55e", "#10b981"] });
+        confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 }, colors: ["#F9954E", "#FBAA60", "#E8832E"] });
     };
 
     const deal = () => {
@@ -186,12 +186,12 @@ export default function BlackjackPage() {
             animate={{ scale: 1, rotate: 0 }}
             transition={{ delay: delay * 0.15, type: "spring", stiffness: 200 }}
             className={`relative w-16 h-24 md:w-20 md:h-28 rounded-xl shadow-lg flex flex-col items-center justify-center font-bold ${card.hidden
-                ? "bg-gradient-to-br from-blue-600 to-blue-800 border-2 border-blue-400"
+                ? "bg-gradient-to-br from-[#F9954E] to-[#c2410c] border-2 border-[#F9954E]"
                 : "bg-white dark:bg-zinc-100 border-2 border-neutral-200"
                 }`}
         >
             {card.hidden ? (
-                <span className="text-2xl">🂠</span>
+                <span className="text-2xl text-white opacity-50">🂠</span>
             ) : (
                 <>
                     <span className={`text-xs absolute top-1 left-2 ${isRed(card.suit) ? "text-red-500" : "text-neutral-800"}`}>
@@ -224,8 +224,8 @@ export default function BlackjackPage() {
 
                     {/* 코인 잔액 */}
                     <div className="flex items-center justify-center gap-2 mb-6">
-                        <Coins className="w-5 h-5 text-yellow-500" />
-                        <span className="text-2xl font-bold text-yellow-500">{coins.toLocaleString()}</span>
+                        <Coins className="w-5 h-5 text-[#F9954E]" />
+                        <span className="text-2xl font-bold text-[#F9954E]">{coins.toLocaleString()}</span>
                         <span className="text-sm text-neutral-500">코인</span>
                     </div>
 
@@ -233,14 +233,16 @@ export default function BlackjackPage() {
                     <div className="bg-white dark:bg-zinc-900 rounded-3xl p-6 md:p-8 shadow-xl shadow-neutral-200/50 dark:shadow-none border border-neutral-100 dark:border-white/5">
 
                         {/* 게임 테이블 */}
-                        <div className="bg-gradient-to-b from-green-700 to-green-900 rounded-2xl p-6 mb-6 min-h-[320px] flex flex-col justify-between">
+                        <div className="bg-neutral-800 dark:bg-black rounded-2xl p-6 mb-6 min-h-[320px] flex flex-col justify-between border border-neutral-700 dark:border-neutral-800 relative overflow-hidden">
+                            {/* 테이블 오렌지 라인 장식 */}
+                            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-[#F9954E] to-transparent opacity-50" />
 
                             {/* 딜러 핸드 */}
-                            <div className="mb-6">
+                            <div className="mb-6 z-10">
                                 <div className="flex items-center justify-between mb-3">
-                                    <span className="text-xs font-bold text-green-200">딜러</span>
+                                    <span className="text-xs font-bold text-neutral-400">딜러</span>
                                     {dealerHand.length > 0 && (
-                                        <span className="text-xs font-bold text-white bg-black/30 px-2 py-0.5 rounded-full">
+                                        <span className="text-xs font-bold text-white bg-neutral-700 px-2 py-0.5 rounded-full">
                                             {calculateHand(dealerHand)}
                                         </span>
                                     )}
@@ -250,24 +252,24 @@ export default function BlackjackPage() {
                                         <CardComponent key={i} card={card} index={i} delay={i} />
                                     ))}
                                     {dealerHand.length === 0 && (
-                                        <div className="w-16 h-24 md:w-20 md:h-28 rounded-xl border-2 border-dashed border-green-500/30" />
+                                        <div className="w-16 h-24 md:w-20 md:h-28 rounded-xl border-2 border-dashed border-neutral-600" />
                                     )}
                                 </div>
                             </div>
 
                             {/* 구분선 */}
-                            <div className="border-t border-dashed border-green-500/30 my-2" />
+                            <div className="border-t border-dashed border-neutral-700 my-2" />
 
                             {/* 플레이어 핸드 */}
-                            <div className="mt-4">
+                            <div className="mt-4 z-10">
                                 <div className="flex items-center justify-between mb-3">
-                                    <span className="text-xs font-bold text-green-200">플레이어</span>
+                                    <span className="text-xs font-bold text-neutral-400">플레이어</span>
                                     {playerHand.length > 0 && (
-                                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${calculateHand(playerHand) > 21
-                                            ? "bg-red-500 text-white"
+                                        <span className={`text-xs font-bold px-2 py-0.5 rounded-full text-white ${calculateHand(playerHand) > 21
+                                            ? "bg-red-500" // 위험/버스트는 빨강 유지
                                             : calculateHand(playerHand) === 21
-                                                ? "bg-yellow-500 text-black"
-                                                : "bg-black/30 text-white"
+                                                ? "bg-[#F9954E]" // 블랙잭은 오렌지
+                                                : "bg-[#000000]/50"
                                             }`}>
                                             {calculateHand(playerHand)}
                                         </span>
@@ -278,7 +280,7 @@ export default function BlackjackPage() {
                                         <CardComponent key={i} card={card} index={i} delay={i + 2} />
                                     ))}
                                     {playerHand.length === 0 && (
-                                        <div className="w-16 h-24 md:w-20 md:h-28 rounded-xl border-2 border-dashed border-green-500/30" />
+                                        <div className="w-16 h-24 md:w-20 md:h-28 rounded-xl border-2 border-dashed border-neutral-600" />
                                     )}
                                 </div>
                             </div>
@@ -292,10 +294,10 @@ export default function BlackjackPage() {
                                     animate={{ scale: 1, opacity: 1 }}
                                     exit={{ scale: 0.8, opacity: 0 }}
                                     className={`text-center p-4 rounded-2xl mb-6 font-bold text-lg ${resultMessage.includes("승리") || resultMessage.includes("블랙잭")
-                                        ? "bg-gradient-to-r from-yellow-400/20 to-green-400/20 text-green-600 dark:text-green-400"
+                                        ? "bg-[#F9954E]/10 text-[#F9954E]"
                                         : resultMessage.includes("무승부") || resultMessage.includes("반환")
-                                            ? "bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400"
-                                            : "bg-red-50 dark:bg-red-500/10 text-red-600 dark:text-red-400"
+                                            ? "bg-neutral-100 dark:bg-zinc-800 text-neutral-500"
+                                            : "bg-neutral-100 dark:bg-zinc-800 text-neutral-500"
                                         }`}
                                 >
                                     {resultMessage}
@@ -313,7 +315,7 @@ export default function BlackjackPage() {
                                             className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-zinc-700 flex items-center justify-center disabled:opacity-30 transition-colors">
                                             <Minus className="w-3 h-3" />
                                         </button>
-                                        <span className="text-xl font-bold text-yellow-500 w-16 text-center">{bet}</span>
+                                        <span className="text-xl font-bold text-[#F9954E] w-16 text-center">{bet}</span>
                                         <button onClick={() => adjustBet(10)} disabled={bet >= coins}
                                             className="w-8 h-8 rounded-full bg-neutral-200 dark:bg-zinc-700 flex items-center justify-center disabled:opacity-30 transition-colors">
                                             <Plus className="w-3 h-3" />
@@ -323,14 +325,16 @@ export default function BlackjackPage() {
                                 <div className="flex gap-2 mb-4">
                                     {[10, 50, 100, 200].map(amount => (
                                         <button key={amount} onClick={() => setBet(Math.min(amount, coins))} disabled={coins < amount}
-                                            className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${bet === amount ? "bg-yellow-500 text-white" : "bg-neutral-100 dark:bg-zinc-800 text-neutral-500 disabled:opacity-30"
+                                            className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${bet === amount
+                                                ? "bg-[#F9954E] text-white"
+                                                : "bg-neutral-100 dark:bg-zinc-800 text-neutral-500 disabled:opacity-30"
                                                 }`}>
                                             {amount}
                                         </button>
                                     ))}
                                 </div>
                                 <button onClick={deal} disabled={coins < bet}
-                                    className="w-full py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/20 hover:from-green-600 hover:to-emerald-700 active:scale-[0.98] transition-all disabled:opacity-30 disabled:cursor-not-allowed">
+                                    className="w-full py-4 rounded-2xl font-bold text-lg bg-[#F9954E] hover:bg-[#E8832E] text-white shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all disabled:opacity-30 disabled:cursor-not-allowed">
                                     🃏 딜!
                                 </button>
                             </>
@@ -340,11 +344,11 @@ export default function BlackjackPage() {
                         {gameState === "PLAYING" && (
                             <div className="flex gap-3">
                                 <button onClick={hit}
-                                    className="flex-1 py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-blue-500 to-blue-600 text-white shadow-lg shadow-blue-500/20 hover:from-blue-600 hover:to-blue-700 active:scale-[0.98] transition-all">
+                                    className="flex-1 py-4 rounded-2xl font-bold text-lg bg-neutral-100 dark:bg-zinc-800 text-neutral-800 dark:text-white hover:bg-neutral-200 dark:hover:bg-zinc-700 active:scale-[0.98] transition-all">
                                     히트 (카드 받기)
                                 </button>
                                 <button onClick={stand}
-                                    className="flex-1 py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-[#F9954E] to-[#E8832E] text-white shadow-lg shadow-[#F9954E]/20 hover:from-[#E8832E] hover:to-[#D4711A] active:scale-[0.98] transition-all">
+                                    className="flex-1 py-4 rounded-2xl font-bold text-lg bg-[#F9954E] hover:bg-[#E8832E] text-white shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all">
                                     스탠드 (멈추기)
                                 </button>
                             </div>
@@ -360,7 +364,7 @@ export default function BlackjackPage() {
                         {/* 게임 종료 */}
                         {gameState === "FINISHED" && (
                             <button onClick={() => { setGameState("BETTING"); setPlayerHand([]); setDealerHand([]); setResultMessage(""); }}
-                                className="w-full py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-green-500 to-emerald-600 text-white shadow-lg shadow-green-500/20 hover:from-green-600 hover:to-emerald-700 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
+                                className="w-full py-4 rounded-2xl font-bold text-lg bg-[#F9954E] hover:bg-[#E8832E] text-white shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2">
                                 <RotateCcw className="w-5 h-5" />
                                 다음 게임
                             </button>
@@ -383,11 +387,11 @@ export default function BlackjackPage() {
                             <div className="text-xs text-neutral-500">총 게임</div>
                         </div>
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 text-center border border-neutral-100 dark:border-white/5">
-                            <div className="text-2xl font-bold text-green-500">{totalWins}</div>
+                            <div className="text-2xl font-bold text-[#E8832E]">{totalWins}</div>
                             <div className="text-xs text-neutral-500">승리</div>
                         </div>
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 text-center border border-neutral-100 dark:border-white/5">
-                            <div className="text-2xl font-bold text-purple-500">
+                            <div className="text-2xl font-bold text-[#FBAA60]">
                                 {totalGames > 0 ? Math.round((totalWins / totalGames) * 100) : 0}%
                             </div>
                             <div className="text-xs text-neutral-500">승률</div>

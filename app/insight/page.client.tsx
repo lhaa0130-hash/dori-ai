@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import Header from "@/components/layout/Header";
+import { Sparkles } from "lucide-react";
 
 interface Post {
   id: string;
@@ -70,20 +71,20 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
   const CATEGORIES = ['전체', '트렌드', '가이드', '분석', '리포트', '큐레이션'];
   const [selectedCategory, setSelectedCategory] = useState('전체');
 
-  // 카테고리별 색상 (주황색 테마 기반)
+  // 카테고리별 색상 (주황색 테마 기반 톤온톤)
   const getCategoryColor = (category?: string) => {
     switch (category) {
       case '트렌드':
       case 'trend':
-        return { bg: 'rgba(249, 115, 22, 0.1)', text: '#F9954E' }; // Orange-500
+        return { bg: 'rgba(249, 149, 78, 0.15)', text: '#F9954E' }; // Main Orange
       case '가이드':
-        return { bg: 'rgba(234, 88, 12, 0.1)', text: '#ea580c' }; // Orange-600
+        return { bg: 'rgba(232, 131, 46, 0.15)', text: '#E8832E' }; // Darker Orange
       case '분석':
-        return { bg: 'rgba(251, 146, 60, 0.1)', text: '#fb923c' }; // Orange-400
+        return { bg: 'rgba(251, 170, 96, 0.15)', text: '#FBAA60' }; // Lighter Orange
       case '리포트':
-        return { bg: 'rgba(194, 65, 12, 0.1)', text: '#c2410c' }; // Orange-700
+        return { bg: 'rgba(194, 65, 12, 0.1)', text: '#c2410c' }; // Deep Burnt Orange
       case '큐레이션':
-        return { bg: 'rgba(253, 186, 116, 0.1)', text: '#fdba74' }; // Orange-300
+        return { bg: 'rgba(255, 247, 237, 1)', text: '#9a3412' }; // Light beige bg, dark text
       default:
         return { bg: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)', text: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)' };
     }
@@ -157,15 +158,12 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
         <div className="max-w-3xl mx-auto mb-12 text-center pt-20 flex flex-col items-center">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FBAA60] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#F9954E]"></span>
-            </span>
+            <Sparkles className="w-3 h-3" />
             <span>Insight Center</span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-            <span className="bg-gradient-to-r from-[#F9954E] via-pink-500 to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+          <h1 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
+            <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
               인사이트
             </span>
           </h1>
@@ -211,11 +209,11 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
                   style={{ textDecoration: 'none', color: 'inherit' }}
                 >
                   <div
-                    className="flex gap-4 p-4 rounded-[2rem] border transition-all duration-300 hover:-translate-y-1 hover:shadow-lg bg-white/80 dark:bg-zinc-900/40 backdrop-blur-xl border-neutral-200 dark:border-zinc-800 hover:border-[#F9954E]/30 dark:hover:border-[#F9954E]/30 hover:shadow-[#F9954E]/10"
+                    className="flex gap-3 md:gap-4 p-3 md:p-4 rounded-[1.5rem] md:rounded-[2rem] border transition-all duration-300 hover:-translate-y-1 hover:shadow-lg bg-white/80 dark:bg-zinc-900/40 backdrop-blur-xl border-neutral-200 dark:border-zinc-800 hover:border-[#F9954E]/30 dark:hover:border-[#F9954E]/30 hover:shadow-[#F9954E]/10"
                   >
                     {/* 좌측 이미지 */}
                     <div
-                      className="w-[160px] h-[80px] rounded-xl overflow-hidden flex-shrink-0 relative"
+                      className="w-[100px] md:w-[160px] h-[70px] md:h-[80px] rounded-lg md:rounded-xl overflow-hidden flex-shrink-0 relative"
                       style={{
                         backgroundColor: isDark ? 'rgba(255, 255, 255, 0.05)' : '#f0f0f0',
                       }}
@@ -266,7 +264,7 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
 
                       {/* 제목 */}
                       <h3
-                        className="text-base font-bold leading-tight break-keep line-clamp-1 group-hover:text-[#F9954E] transition-colors"
+                        className="text-sm md:text-base font-bold leading-tight break-keep line-clamp-2 md:line-clamp-1 group-hover:text-[#F9954E] transition-colors"
                         style={{
                           color: isDark ? '#ffffff' : '#1d1d1f',
                         }}
@@ -314,7 +312,7 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
                           onClick={(e) => handleLikeClick(e, postId, currentLikes)}
                           className="flex items-center gap-1 text-xs cursor-pointer transition-all duration-200 hover:scale-110 active:scale-95"
                           style={{
-                            color: isPostLiked ? '#ef4444' : (isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)'),
+                            color: isPostLiked ? '#F9954E' : (isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.6)'),
                             opacity: isPostLiked ? 1 : 0.6,
                             background: 'none',
                             border: 'none',

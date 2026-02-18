@@ -34,28 +34,28 @@ export const TEXTS = {
       writeFirst: { ko: "첫 번째 글의 주인공이 되어보세요!", en: "Be the first to write!" }
     },
     bento: {
-      tools: { 
-        title: "AI Tools", 
-        desc: { ko: "평점·리뷰 포함", en: "Ratings & Reviews" }, 
-        detail: { ko: "다양한 분야에서 활용되는 AI를 한눈에 탐색하세요.\n원하는 툴을 찾고, 실제 사용자들의 평가와 활용 경험을 확인할 수 있습니다.", en: "Curated list of the best AI tools.\nCheck real-time rankings and honest reviews." }, 
-        linkText: { ko: "AI 랭킹 확인", en: "View Rankings →" } 
+      tools: {
+        title: "AI Tools",
+        desc: { ko: "평점·리뷰 포함", en: "Ratings & Reviews" },
+        detail: { ko: "다양한 분야에서 활용되는 AI를 한눈에 탐색하세요.\n원하는 툴을 찾고, 실제 사용자들의 평가와 활용 경험을 확인할 수 있습니다.", en: "Curated list of the best AI tools.\nCheck real-time rankings and honest reviews." },
+        linkText: { ko: "AI 랭킹 확인", en: "View Rankings →" }
       },
-      insight: { 
-        title: "Insight", 
-        desc: { ko: "트렌드 / 큐레이션 / 가이드 / 리포트 / 분석", en: "AI Concepts / Trends / Insights" } 
+      insight: {
+        title: "Insight",
+        desc: { ko: "트렌드 / 큐레이션 / 가이드 / 리포트 / 분석", en: "AI Concepts / Trends / Insights" }
       },
-      academy: { 
-        title: "Academy", 
-        desc: { ko: "참고영상(youtube) / AI사용법", en: "Tutorials / Tips / References" } 
+      academy: {
+        title: "Academy",
+        desc: { ko: "참고영상(youtube) / AI사용법", en: "Tutorials / Tips / References" }
       },
-      community: { 
-        title: "Community", 
-        desc: { ko: "잡담 / 질문 / 정보 공유", en: "Chat / Q&A / Information Sharing" }, 
-        detail: { ko: "혼자 고민하지 마세요. AI에 관련된 이야기를 함께 공유해주세요.", en: "Don't struggle alone. Share your work, ask questions, and grow together with DORI-AI members." } 
+      community: {
+        title: "Community",
+        desc: { ko: "잡담 / 질문 / 정보 공유", en: "Chat / Q&A / Information Sharing" },
+        detail: { ko: "혼자 고민하지 마세요. AI에 관련된 이야기를 함께 공유해주세요.", en: "Don't struggle alone. Share your work, ask questions, and grow together with DORI-AI members." }
       },
-      market: { 
-        title: "Market(준비중)", 
-        desc: { ko: "AI 작업 의뢰 / AI 자료 판매", en: "Asset Market + Work Requests" } 
+      market: {
+        title: "Market(준비중)",
+        desc: { ko: "AI 작업 의뢰 / AI 자료 판매", en: "Asset Market + Work Requests" }
       }
     }
   },
@@ -98,7 +98,7 @@ export const TEXTS = {
 
   // 6. Market 페이지
   market: {
-    heroTitle: { ko: "Market", en: "Market" },
+    heroTitle: { ko: "AI 마켓 & 의뢰", en: "Market" },
     heroSubtitle: { ko: "프롬프트, 템플릿, 워크플로우부터 AI 작업 의뢰까지 한 곳에서.", en: "From prompts and templates to custom AI work requests in one place." },
     section: { productsTitle: { ko: "AI 자료 마켓", en: "AI Asset Market" }, requestTitle: { ko: "AI 작업 의뢰", en: "AI Work Request" } },
     filters: { category: { ko: "카테고리", en: "Category" }, price: { ko: "가격", en: "Price" }, sort: { ko: "정렬", en: "Sort" }, all: { ko: "전체", en: "All" } },

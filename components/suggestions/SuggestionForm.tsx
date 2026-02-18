@@ -109,7 +109,7 @@ export default function SuggestionForm({ onAddSuggestion, initialData, onCancel,
     });
   };
 
-  const inputClass = "w-full px-4 py-3 rounded-xl border outline-none transition-all bg-[var(--bg-main)] border-[var(--card-border)] text-[var(--text-main)] focus:border-blue-500 placeholder:text-gray-400";
+  const inputClass = "w-full px-4 py-3 rounded-xl border outline-none transition-all bg-[var(--bg-main)] border-[var(--card-border)] text-[var(--text-main)] focus:border-[#F9954E] placeholder:text-gray-400";
 
   return (
     <div
@@ -197,7 +197,7 @@ export default function SuggestionForm({ onAddSuggestion, initialData, onCancel,
               type="checkbox"
               checked={formData.needsReply}
               onChange={(e) => setFormData({ ...formData, needsReply: e.target.checked })}
-              className="w-5 h-5 rounded border-gray-300 text-blue-600 focus:ring-blue-500"
+              className="w-5 h-5 rounded border-gray-300 text-[#F9954E] focus:ring-[#F9954E]"
             />
             <span className="text-sm font-medium opacity-80">{t.needsReply.ko}</span>
           </label>
@@ -218,7 +218,7 @@ export default function SuggestionForm({ onAddSuggestion, initialData, onCancel,
             )}
             <button
               type="submit"
-              className="px-8 py-3 rounded-xl font-bold text-white bg-blue-600 hover:bg-blue-700 transition-colors shadow-md"
+              className="px-8 py-3 rounded-xl font-bold text-white bg-[#F9954E] hover:bg-[#E8832E] transition-colors shadow-md"
             >
               {isEditMode ? "수정하기" : t.submit.ko}
             </button>

@@ -8,6 +8,7 @@ import { TEXTS } from "@/constants/texts";
 import { completeMission, isMissionCompletedToday, markMissionCompletedToday } from "@/lib/missionHelpers";
 import { useScrollSpy } from "@/hooks/useScrollSpy";
 import { DISPLAY_CATEGORIES, CATEGORY_LABELS } from "@/constants/aiCategories";
+import { Wand2 } from "lucide-react";
 
 
 
@@ -54,39 +55,29 @@ export default function AiToolsClient() {
     mounted,
   });
 
-  // 스크롤 스파이 결과를 activeCategory에 반영
+  // 스크롤 스파이 결과를 activeCategory에 반영 (단, 전체보기 모드일 때만)
   useEffect(() => {
-    if (mounted && activeCategoryFromSpy) {
+    if (mounted && activeCategoryFromSpy && filters.category === 'All') {
       setActiveCategory(activeCategoryFromSpy);
     }
-  }, [mounted, activeCategoryFromSpy]);
+  }, [mounted, activeCategoryFromSpy, filters.category]);
 
   const isDark = mounted && theme === 'dark';
 
   const handleCategoryClick = (category: string) => {
-    if (category === "all") {
+    // 이미 선택된 카테고리 클릭 시 선택 해제 (전체보기로 복귀)
+    if (activeCategory === category) {
       setActiveCategory(null);
-      window.scrollTo({ top: 0, behavior: 'smooth' });
+      setFilters(prev => ({ ...prev, category: "All" }));
       return;
     }
 
-    setActiveCategory(category === activeCategory ? null : category);
+    // 새로운 카테고리 선택 (필터링 적용)
+    setActiveCategory(category);
+    setFilters(prev => ({ ...prev, category: category }));
 
-    // ref 키는 "category-{cat}" 형식
-    const refKey = `category-${category}`;
-    const element = sectionRefs.current[refKey];
-
-    if (element) {
-      // 헤더 높이를 고려한 스크롤
-      const headerOffset = 80;
-      const elementPosition = element.getBoundingClientRect().top;
-      const offsetPosition = elementPosition + window.pageYOffset - headerOffset;
-
-      window.scrollTo({
-        top: offsetPosition,
-        behavior: 'smooth'
-      });
-    }
+    // 필터링된 리스트 상단으로 스크롤 보정 (선택 사항)
+    // window.scrollTo({ top: 400, behavior: 'smooth' });
   };
 
   return (
@@ -102,19 +93,18 @@ export default function AiToolsClient() {
 
 
       {/* 히어로 섹션 (Standard) */}
-      <section className="relative pt-32 pb-16 px-6 text-center z-10">
-        <div className="max-w-3xl mx-auto animate-fade-in flex flex-col items-center">
+      <section className="relative pt-20 pb-8 px-6 text-center z-10">
+        <div className="max-w-xl mx-auto animate-fade-in flex flex-col items-center">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
-            <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FBAA60] opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#F9954E]"></span>
-            </span>
+            <Wand2 className="w-3 h-3" />
             <span>AI Tool Collection</span>
           </div>
 
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight text-neutral-900 dark:text-white">
-            AI 도구
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
+            <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+              AI 도구
+            </span>
           </h1>
 
           <p className={`text-base md:text-lg font-medium break-keep leading-relaxed max-w-xl ${isDark ? "text-white" : "text-neutral-600"}`}>

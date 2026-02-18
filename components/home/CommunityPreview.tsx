@@ -12,16 +12,16 @@ export default function CommunityPreview() {
   useEffect(() => {
     const savedPosts = JSON.parse(localStorage.getItem("dori_community_posts") || "[]");
     if (savedPosts.length > 0) {
-      setBlogPosts(savedPosts.slice(0, 8)); 
+      setBlogPosts(savedPosts.slice(0, 8));
     } else {
-        const dummy = [
-            { id: 1, title: "방금 Leonardo로 만든 이미지", author: "user1", likes: 12 },
-            { id: 2, title: "Gemini랑 자동화 짜봤다", author: "user9", likes: 30 },
-            { id: 3, title: "내 프롬프트 공유합니다", author: "user7", likes: 18 },
-            { id: 4, title: "Runway vs Pika 비교", author: "user4", likes: 22 },
-            { id: 5, title: "AI 뉴스 요약봇 만들기", author: "user2", likes: 15 },
-        ];
-        setBlogPosts(dummy);
+      const dummy = [
+        { id: 1, title: "방금 Leonardo로 만든 이미지", author: "user1", likes: 12 },
+        { id: 2, title: "Gemini랑 자동화 짜봤다", author: "user9", likes: 30 },
+        { id: 3, title: "내 프롬프트 공유합니다", author: "user7", likes: 18 },
+        { id: 4, title: "Runway vs Pika 비교", author: "user4", likes: 22 },
+        { id: 5, title: "AI 뉴스 요약봇 만들기", author: "user2", likes: 15 },
+      ];
+      setBlogPosts(dummy);
     }
   }, []);
 
@@ -42,7 +42,7 @@ export default function CommunityPreview() {
     if (!isDragging || !scrollRef.current) return;
     e.preventDefault();
     const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = (x - startX) * 2; 
+    const walk = (x - startX) * 2;
     scrollRef.current.scrollLeft = scrollLeft - walk;
   };
   const scroll = (direction: 'left' | 'right') => {
@@ -59,19 +59,19 @@ export default function CommunityPreview() {
           <h2 className="text-2xl md:text-3xl font-extrabold mb-2" style={{ color: 'var(--text-main)' }}>{t.community.ko}</h2>
           <p style={{ color: 'var(--text-sub)' }}>{t.communityDesc.ko}</p>
         </div>
-        
+
         <div className="flex items-center gap-4">
           <div className="hidden md:flex gap-2">
             <button onClick={() => scroll('left')} className="p-2 rounded-full border hover:bg-gray-100 dark:hover:bg-white/10 transition-colors" style={{ borderColor: 'var(--card-border)', color: 'var(--text-main)' }}>←</button>
             <button onClick={() => scroll('right')} className="p-2 rounded-full border hover:bg-gray-100 dark:hover:bg-white/10 transition-colors" style={{ borderColor: 'var(--card-border)', color: 'var(--text-main)' }}>→</button>
           </div>
-          <Link href="/community" className="font-semibold text-sm hover:underline text-blue-600">
+          <Link href="/community" className="font-semibold text-sm hover:underline text-[#F9954E]">
             {t.viewAll.ko}
           </Link>
         </div>
       </div>
 
-      <div 
+      <div
         className="flex gap-4 overflow-x-auto pb-4 scroll-smooth no-scrollbar select-none cursor-grab active:cursor-grabbing"
         ref={scrollRef}
         onMouseDown={onMouseDown}
@@ -80,16 +80,16 @@ export default function CommunityPreview() {
         onMouseMove={onMouseMove}
       >
         {blogPosts.map((post) => (
-          <Link href={`/community`} key={post.id} 
+          <Link href={`/community`} key={post.id}
             className="flex-none w-[280px] md:w-[320px] rounded-[2rem] border overflow-hidden shadow-sm hover:-translate-y-2 hover:shadow-xl transition-all duration-300 group"
-            style={{ 
-              backgroundColor: 'var(--card-bg)', 
-              borderColor: 'var(--card-border)', 
-              color: 'var(--text-main)' 
+            style={{
+              backgroundColor: 'var(--card-bg)',
+              borderColor: 'var(--card-border)',
+              color: 'var(--text-main)'
             }}
           >
             <div className="relative w-full aspect-[16/10] bg-gray-100 dark:bg-gray-800 overflow-hidden flex items-center justify-center">
-               <span className="text-4xl">💬</span>
+              <span className="text-4xl">💬</span>
             </div>
             <div className="p-6">
               <div className="font-bold text-lg mb-2 truncate">{post.title}</div>

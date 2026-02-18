@@ -1,0 +1,495 @@
+{
+    "name": "trend_v2_auto",
+    "nodes": [
+        {
+            "parameters": {},
+            "id": "manual-trigger",
+            "name": "Manual Trigger",
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                0,
+                0
+            ]
+        },
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "cronExpression",
+                            "expression": "0 0,5,10 * * *"
+                        }
+                    ]
+                }
+            },
+            "id": "schedule-trigger",
+            "name": "Schedule Trigger",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "authentication": "oAuth2",
+                "resource": "file",
+                "operation": "list",
+                "owner": "YOUR_GITHUB_USERNAME",
+                "repository": "Dori-ai",
+                "filePath": "content/trend"
+            },
+            "id": "get-last-id",
+            "name": "Get Last Trend ID",
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1,
+            "position": [
+                220,
+                100
+            ],
+            "credentials": {
+                "githubOAuth2Api": {
+                    "id": "YOUR_GITHUB_CREDENTIAL_ID",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "jsCode": "const files = items.map(item => item.json.name);\nconst trendFiles = files.filter(name => name.startsWith('trend-') && name.endsWith('.md'));\nlet maxId = 0;\n\nif (trendFiles.length > 0) {\n  const ids = trendFiles.map(name => parseInt(name.replace('trend-', '').replace('.md', '')));\n  maxId = Math.max(...ids);\n}\n\nconst nextId = maxId > 0 ? maxId + 1 : 1;\nreturn { json: { nextId: nextId } };"
+            },
+            "id": "calc-next-id",
+            "name": "Calculate Next ID",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                440,
+                100
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://news.hada.io/rss"
+            },
+            "id": "fetch-geeknews",
+            "name": "Fetch GeekNews",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                660,
+                100
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://techcrunch.com/feed/"
+            },
+            "id": "fetch-techcrunch",
+            "name": "Fetch TechCrunch",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                880,
+                100
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const geekNews = $('Fetch GeekNews').first().json.rss.channel.item || [];\nconst techCrunch = items[0].json.rss.channel.item || [];\n\nconst allNews = [...geekNews, ...techCrunch].slice(0, 20);\n\nconst newsText = allNews.map((item, index) => `${index + 1}. ${item.title} - ${item.link}`).join('\\n');\n\nreturn { json: { newsText: newsText, nextId: $('Calculate Next ID').first().json.nextId } };"
+            },
+            "id": "aggregate-news",
+            "name": "Aggregate News",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1100,
+                100
+            ]
+        },
+        {
+            "parameters": {
+                "authentication": "headerAuth",
+                "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=YOUR_API_KEY",
+                "method": "POST",
+                "sendBody": true,
+                "contentType": "json",
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "contents",
+                            "value": "={{ [{\n  \"parts\": [{\n    \"text\": \"당신은 DORI-AI의 전문 IT 파워블로거입니다.\\n다음 뉴스 리스트를 바탕으로 'Trend 리포트-\" + $json.nextId + \"'를 작성해주세요.\\n\\n뉴스 리스트:\\n\" + $json.newsText + \"\\n\\n필수 포함 항목:\\n- title: 흥미로운 제목\\n- description: 2-3문장 요약\\n- date: \" + $now.format('YYYY-MM-DD') + \"\\n- author: DORI-AI\\n- category: 트렌드\\n- thumbnail: /thumbnails/trend/trend-\" + $json.nextId + \".png\\n- tags: [IT, 트렌드, ...]\\n\\n본문 구조:\\n## 핵심 요약\\n## 주요 내용 (각 뉴스 기반 섹션)\\n(중간에 이미지 삽입: ![image](/images/trend/trend-\" + $json.nextId + \"-1.png))\\n## 에디터 인사이트\\n## 핵심 용어\\n## 출처\\n\\n형식은 마크다운(Frontmatter 포함)으로 작성해주세요.\\nStart with ---\\nEnd with the last line of the markdown.\" \n  }]\n}] }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "gemini-content",
+            "name": "Generate Content (Gemini)",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                1320,
+                100
+            ]
+        },
+        {
+            "parameters": {
+                "authentication": "headerAuth",
+                "url": "https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash-exp:generateContent?key=YOUR_API_KEY",
+                "method": "POST",
+                "sendBody": true,
+                "contentType": "json",
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "contents",
+                            "value": "={{ [{\n  \"parts\": [{\n    \"text\": \"위에서 작성한 블로그 글의 내용을 바탕으로 DALL-E 3 이미지 생성 프롬프트를 2개 작성해주세요.\\n\\nJSON 형식으로:\\n{\\n  \\\"thumbnail_prompt\\\": \\\"...\\\",\\n  \\\"body_image_prompt\\\": \\\"...\\\"\\n}\\n\\n블로그 글 내용:\\n\" + $json.candidates[0].content.parts[0].text\n  }]\n}] }}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "id": "gemini-prompts",
+            "name": "Generate Image Prompts (Gemini)",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                1540,
+                100
+            ]
+        },
+        {
+            "parameters": {
+                "authentication": "headerAuth",
+                "resource": "image",
+                "prompt": "={{ JSON.parse($json.candidates[0].content.parts[0].text.replace(/```json/g, '').replace(/```/g, '')).thumbnail_prompt }}",
+                "n": 1,
+                "size": "1024x1024",
+                "responseFormat": "url"
+            },
+            "id": "dalle-thumbnail",
+            "name": "Generate Thumbnail (DALL-E)",
+            "type": "n8n-nodes-base.openAi",
+            "typeVersion": 1,
+            "position": [
+                1760,
+                100
+            ],
+            "credentials": {
+                "openAiApi": {
+                    "id": "YOUR_OPENAI_CREDENTIAL_ID",
+                    "name": "OpenAI account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.url }}",
+                "responseFormat": "file",
+                "fileName": "={{ 'trend-' + $('Calculate Next ID').first().json.nextId + '.png' }}"
+            },
+            "id": "download-thumbnail",
+            "name": "Download Thumbnail",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                1980,
+                100
+            ]
+        },
+        {
+            "parameters": {
+                "authentication": "oAuth2",
+                "resource": "file",
+                "operation": "create",
+                "owner": "YOUR_GITHUB_USERNAME",
+                "repository": "Dori-ai",
+                "filePath": "={{ 'public/thumbnails/trend/trend-' + $('Calculate Next ID').first().json.nextId + '.png' }}",
+                "binaryData": true,
+                "commitMessage": "={{ 'feat: Add thumbnail for trend-' + $('Calculate Next ID').first().json.nextId }}"
+            },
+            "id": "commit-thumbnail",
+            "name": "Commit Thumbnail",
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1,
+            "position": [
+                2200,
+                100
+            ],
+            "credentials": {
+                "githubOAuth2Api": {
+                    "id": "YOUR_GITHUB_CREDENTIAL_ID",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "authentication": "headerAuth",
+                "resource": "image",
+                "prompt": "={{ JSON.parse($('Generate Image Prompts (Gemini)').first().json.candidates[0].content.parts[0].text.replace(/```json/g, '').replace(/```/g, '')).body_image_prompt }}",
+                "n": 1,
+                "size": "1024x1024",
+                "responseFormat": "url"
+            },
+            "id": "dalle-body",
+            "name": "Generate Body Image (DALL-E)",
+            "type": "n8n-nodes-base.openAi",
+            "typeVersion": 1,
+            "position": [
+                2420,
+                100
+            ],
+            "credentials": {
+                "openAiApi": {
+                    "id": "YOUR_OPENAI_CREDENTIAL_ID",
+                    "name": "OpenAI account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "url": "={{ $json.url }}",
+                "responseFormat": "file",
+                "fileName": "={{ 'trend-' + $('Calculate Next ID').first().json.nextId + '-1.png' }}"
+            },
+            "id": "download-body",
+            "name": "Download Body Image",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 4.1,
+            "position": [
+                2640,
+                100
+            ]
+        },
+        {
+            "parameters": {
+                "authentication": "oAuth2",
+                "resource": "file",
+                "operation": "create",
+                "owner": "YOUR_GITHUB_USERNAME",
+                "repository": "Dori-ai",
+                "filePath": "={{ 'public/images/trend/trend-' + $('Calculate Next ID').first().json.nextId + '-1.png' }}",
+                "binaryData": true,
+                "commitMessage": "={{ 'feat: Add body image for trend-' + $('Calculate Next ID').first().json.nextId }}"
+            },
+            "id": "commit-body",
+            "name": "Commit Body Image",
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1,
+            "position": [
+                2860,
+                100
+            ],
+            "credentials": {
+                "githubOAuth2Api": {
+                    "id": "YOUR_GITHUB_CREDENTIAL_ID",
+                    "name": "GitHub account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "authentication": "oAuth2",
+                "resource": "file",
+                "operation": "create",
+                "owner": "YOUR_GITHUB_USERNAME",
+                "repository": "Dori-ai",
+                "filePath": "={{ 'content/trend/trend-' + $('Calculate Next ID').first().json.nextId + '.md' }}",
+                "fileContent": "={{ $('Generate Content (Gemini)').first().json.candidates[0].content.parts[0].text }}",
+                "commitMessage": "={{ 'feat: Add article trend-' + $('Calculate Next ID').first().json.nextId }}"
+            },
+            "id": "commit-article",
+            "name": "Commit Article",
+            "type": "n8n-nodes-base.github",
+            "typeVersion": 1,
+            "position": [
+                3080,
+                100
+            ],
+            "credentials": {
+                "githubOAuth2Api": {
+                    "id": "YOUR_GITHUB_CREDENTIAL_ID",
+                    "name": "GitHub account"
+                }
+            }
+        }
+    ],
+    "connections": {
+        "Manual Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Get Last Trend ID",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Schedule Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Get Last Trend ID",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Get Last Trend ID": {
+            "main": [
+                [
+                    {
+                        "node": "Calculate Next ID",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Calculate Next ID": {
+            "main": [
+                [
+                    {
+                        "node": "Fetch GeekNews",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Fetch GeekNews": {
+            "main": [
+                [
+                    {
+                        "node": "Fetch TechCrunch",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Fetch TechCrunch": {
+            "main": [
+                [
+                    {
+                        "node": "Aggregate News",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Aggregate News": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Content (Gemini)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Content (Gemini)": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Image Prompts (Gemini)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Image Prompts (Gemini)": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Thumbnail (DALL-E)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Thumbnail (DALL-E)": {
+            "main": [
+                [
+                    {
+                        "node": "Download Thumbnail",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Download Thumbnail": {
+            "main": [
+                [
+                    {
+                        "node": "Commit Thumbnail",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Commit Thumbnail": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Body Image (DALL-E)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Body Image (DALL-E)": {
+            "main": [
+                [
+                    {
+                        "node": "Download Body Image",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Download Body Image": {
+            "main": [
+                [
+                    {
+                        "node": "Commit Body Image",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Commit Body Image": {
+            "main": [
+                [
+                    {
+                        "node": "Commit Article",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    },
+    "settings": {
+        "executionOrder": "v1"
+    },
+    "staticData": null,
+    "meta": {
+        "templateId": "trend_v2_auto"
+    },
+    "pinData": {}
+}

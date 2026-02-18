@@ -1,0 +1,303 @@
+{
+    "name": "DORI-AI: Pro IT Blogger (Gemini + DALL-E)",
+    "nodes": [
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "cronExpression",
+                            "expression": "0 9,14,19 * * *"
+                        }
+                    ]
+                }
+            },
+            "name": "하루 3번 실행 (9, 14, 19시)",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1.1,
+            "position": [
+                0,
+                0
+            ]
+        },
+        {
+            "parameters": {},
+            "name": "수동 실행 (테스트용)",
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                0,
+                200
+            ]
+        },
+        {
+            "parameters": {
+                "url": "https://techcrunch.com/category/artificial-intelligence/feed/, https://www.wired.com/feed/category/ai/latest/rss, https://www.theverge.com/rss/index.xml"
+            },
+            "name": "글로벌 IT 뉴스 수집 (RSS)",
+            "type": "n8n-nodes-base.rssFeedRead",
+            "typeVersion": 1,
+            "position": [
+                250,
+                100
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "limit",
+                "maxItems": 20
+            },
+            "name": "최신 20개만 선택",
+            "type": "n8n-nodes-base.itemLists",
+            "typeVersion": 3,
+            "position": [
+                450,
+                100
+            ]
+        },
+        {
+            "parameters": {
+                "prompt": {
+                    "messages": [
+                        {
+                            "role": "user",
+                            "content": "=다음은 최신 IT/AI 뉴스 제목과 내용들입니다:\n\n{{ $json[\"title\"] }} - {{ $json[\"contentSnippet\"] }}\n\n---\n\n당신은 \"IT 전문 파워블로거\"입니다. 복잡한 기술 내용을 일반인도 이해하기 쉽게 간략하고 명쾌하게 전달하는 것이 당신의 특기입니다.\n\n위 뉴스들 중에서 한국 독자들이 가장 흥미로워할 만한 시의성 있는 주제 **하나만** 선정하여 블로그 글을 작성해주세요.\n\n**작성 조건**:\n1. 글의 제목은 한국어 클릭베이트 스타일로 매력적으로 지어주세요.\n2. 본문은 **마크다운(Markdown)** 형식으로 작성하세요.\n3. 서론 - 핵심 요약 - 상세 내용 - 결론 및 인사이트 순서로 작성하세요.\n4. 문체는 \"~해요\", \"~입니다\" 체를 섞어서 친근하지만 전문성 있게 써주세요.\n5. 본문 내용 중간에 적절한 위치에 **[IMG_BODY_1]** 이라는 텍스트를 딱 한 번 삽입하세요. (이미지가 들어갈 자리입니다)\n6. 마지막에는 JSON 형식으로 출력해주세요.\n\n**출력 JSON 포맷**:\n```json\n{\n  \"title\": \"글 제목\",\n  \"content\": \"마크다운 본문 내용\",\n  \"summary\": \"3줄 요약\",\n  \"tags\": [\"태그1\", \"태그2\"],\n  \"thumbnail_prompt\": \"DALL-E에게 요청할 썸네일 이미지 프롬프트 (영어)\",\n  \"body_image_prompt\": \"DALL-E에게 요청할 본문 삽입 이미지 프롬프트 (영어)\"\n}\n```"
+                        }
+                    ]
+                },
+                "modelId": {
+                    "id": "gemini-pro",
+                    "name": "Gemini Pro"
+                },
+                "options": {}
+            },
+            "name": "Gemini: 주제 선정 및 글 작성",
+            "type": "n8n-nodes-base.googleGeminiChat",
+            "typeVersion": 1,
+            "position": [
+                700,
+                100
+            ],
+            "notes": "Credential 연결 필요 (Google AI Studio)"
+        },
+        {
+            "parameters": {
+                "jsCode": "// Gemini의 응답에서 JSON 추출\nconst text = items[0].json.message.content;\n\n// 마크다운 코드 블록 제거 및 JSON 파싱\nconst jsonMatch = text.match(/\\{,?[\\s\\S]*\\}/);\nif (jsonMatch) {\n  const data = JSON.parse(jsonMatch[0]);\n  return [{ json: data }];\n}\n\nreturn [{ json: { error: \"Failed to parse JSON\", raw: text } }];"
+            },
+            "name": "JSON 파싱",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                950,
+                100
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "image",
+                "prompt": "={{ $json.thumbnail_prompt }}",
+                "n": 1,
+                "size": "1024x1024",
+                "options": {
+                    "quality": "standard",
+                    "style": "vivid"
+                }
+            },
+            "name": "DALL-E: 썸네일 생성",
+            "type": "n8n-nodes-base.openAi",
+            "typeVersion": 1,
+            "position": [
+                1200,
+                0
+            ],
+            "notes": "Credential 연결 필요 (OpenAI)"
+        },
+        {
+            "parameters": {
+                "resource": "image",
+                "prompt": "={{ $json.body_image_prompt }}",
+                "n": 1,
+                "size": "1024x1024",
+                "options": {
+                    "quality": "standard"
+                }
+            },
+            "name": "DALL-E: 본문 이미지 생성",
+            "type": "n8n-nodes-base.openAi",
+            "typeVersion": 1,
+            "position": [
+                1200,
+                250
+            ],
+            "notes": "Credential 연결 필요 (OpenAI)"
+        },
+        {
+            "parameters": {
+                "jsCode": "// 이미지 URL과 본문 합치기\nconst postData = $(\"JSON 파싱\").first().json;\nconst thumbUrl = $(\"DALL-E: 썸네일 생성\").first().json.url;\nconst bodyImgUrl = $(\"DALL-E: 본문 이미지 생성\").first().json.url;\n\n// 본문 내 플레이스홀더 치환\nlet content = postData.content;\ncontent = content.replace(\"[IMG_BODY_1]\", `![${postData.title} 상세](${bodyImgUrl})`);\n\nreturn [{\n  json: {\n    title: postData.title,\n    content: content,\n    summary: postData.summary,\n    category: \"트렌드\",\n    tags: postData.tags,\n    thumbnail_url: thumbUrl\n  }\n}];"
+            },
+            "name": "데이터 최종 병합",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1450,
+                150
+            ]
+        },
+        {
+            "parameters": {
+                "requestMethod": "POST",
+                "url": "http://localhost:3000/api/webhook/n8n/insight",
+                "options": {},
+                "bodyParametersUi": {
+                    "parameter": [
+                        {
+                            "name": "title",
+                            "value": "={{ $json.title }}"
+                        },
+                        {
+                            "name": "content",
+                            "value": "={{ $json.content }}"
+                        },
+                        {
+                            "name": "summary",
+                            "value": "={{ $json.summary }}"
+                        },
+                        {
+                            "name": "category",
+                            "value": "={{ $json.category }}"
+                        },
+                        {
+                            "name": "tags",
+                            "value": "={{ $json.tags }}"
+                        },
+                        {
+                            "name": "thumbnail_url",
+                            "value": "={{ $json.thumbnail_url }}"
+                        }
+                    ]
+                },
+                "headerParametersUi": {
+                    "parameter": [
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer dori_ai_n8n_secret_key_1234"
+                        }
+                    ]
+                }
+            },
+            "name": "Post to DORI-AI",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 1,
+            "position": [
+                1650,
+                150
+            ]
+        }
+    ],
+    "connections": {
+        "하루 3번 실행 (9, 14, 19시)": {
+            "main": [
+                [
+                    {
+                        "node": "글로벌 IT 뉴스 수집 (RSS)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "수동 실행 (테스트용)": {
+            "main": [
+                [
+                    {
+                        "node": "글로벌 IT 뉴스 수집 (RSS)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "글로벌 IT 뉴스 수집 (RSS)": {
+            "main": [
+                [
+                    {
+                        "node": "최신 20개만 선택",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "최신 20개만 선택": {
+            "main": [
+                [
+                    {
+                        "node": "Gemini: 주제 선정 및 글 작성",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Gemini: 주제 선정 및 글 작성": {
+            "main": [
+                [
+                    {
+                        "node": "JSON 파싱",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "JSON 파싱": {
+            "main": [
+                [
+                    {
+                        "node": "DALL-E: 썸네일 생성",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "DALL-E: 본문 이미지 생성",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "DALL-E: 썸네일 생성": {
+            "main": [
+                [
+                    {
+                        "node": "데이터 최종 병합",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "DALL-E: 본문 이미지 생성": {
+            "main": [
+                [
+                    {
+                        "node": "데이터 최종 병합",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "데이터 최종 병합": {
+            "main": [
+                [
+                    {
+                        "node": "Post to DORI-AI",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

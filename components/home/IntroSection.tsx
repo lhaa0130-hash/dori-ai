@@ -23,7 +23,7 @@ export function IntroSection() {
                     transition={{ delay: 0.3, duration: 0.8 }}
                     className="text-5xl md:text-7xl font-bold tracking-tight"
                 >
-                    <span className="bg-gradient-to-r from-[#F9954E] via-pink-500 to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+                    <span className="bg-gradient-to-r from-[#FBAA60] via-[#F9954E] to-[#E8832E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
                         DORI-AI
                     </span>
                 </motion.h1>
@@ -58,26 +58,6 @@ export function IntroSection() {
                     지식이 아닌 경험을, 도구가 아닌 연결을, 결과가 아닌 과정을 나누는 공간
                 </motion.p>
 
-                {/* Points */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.7, duration: 0.8 }}
-                    className="mt-6 flex flex-wrap items-center justify-center gap-4 text-sm text-foreground/80"
-                >
-                    <span className="flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-[#F9954E]" />
-                        80+ AI 도구
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-pink-500" />
-                        50+ 인사이트
-                    </span>
-                    <span className="flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-purple-500" />
-                        Open Beta
-                    </span>
-                </motion.div>
             </motion.div>
 
             {/* CSS for gradient animation */}

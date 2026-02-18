@@ -1,0 +1,337 @@
+{
+    "name": "DORI-AI: Pro IT Blogger (v2: Gemini API Direct)",
+    "nodes": [
+        {
+            "parameters": {
+                "rule": {
+                    "interval": [
+                        {
+                            "field": "cronExpression",
+                            "expression": "0 9,14,19 * * *"
+                        }
+                    ]
+                }
+            },
+            "name": "Schedule (Daily 3 Times)",
+            "type": "n8n-nodes-base.scheduleTrigger",
+            "typeVersion": 1,
+            "position": [
+                250,
+                300
+            ]
+        },
+        {
+            "parameters": {},
+            "name": "Manual Trigger",
+            "type": "n8n-nodes-base.manualTrigger",
+            "typeVersion": 1,
+            "position": [
+                250,
+                500
+            ]
+        },
+        {
+            "parameters": {
+                "values": {
+                    "string": [
+                        {
+                            "name": "GEMINI_API_KEY",
+                            "value": "YOUR_GEMINI_KEY"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "name": "Set Gemini Key",
+            "type": "n8n-nodes-base.set",
+            "typeVersion": 1,
+            "position": [
+                450,
+                400
+            ],
+            "notes": "여기에 키를 입력하세요"
+        },
+        {
+            "parameters": {
+                "url": "https://techcrunch.com/category/artificial-intelligence/feed/, https://www.wired.com/feed/category/ai/latest/rss, https://www.theverge.com/rss/index.xml"
+            },
+            "name": "Fetch AI News (RSS)",
+            "type": "n8n-nodes-base.rssFeedRead",
+            "typeVersion": 1,
+            "position": [
+                650,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "operation": "limit",
+                "maxItems": 20
+            },
+            "name": "Limit to 20",
+            "type": "n8n-nodes-base.itemLists",
+            "typeVersion": 1,
+            "position": [
+                850,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "method": "POST",
+                "url": "=https://generativelanguage.googleapis.com/v1beta/models/gemini-1.5-flash:generateContent?key={{$node[\"Set Gemini Key\"].json[\"GEMINI_API_KEY\"]}}",
+                "sendBody": true,
+                "contentType": "json",
+                "bodyParameters": {
+                    "parameters": [
+                        {
+                            "name": "contents",
+                            "value": "={{[{\"role\": \"user\", \"parts\": [{\"text\": \"다음 뉴스 목록에서 한국 독자들이 가장 흥미로워할 만한 주제 하나를 선정하여 전문 블로거 스타일로 글을 작성해주세요.\\n\\n뉴스 목록:\\n\" + $json[\"title\"] + \" - \" + $json[\"contentSnippet\"] + \"\\n\\n조건:\\n1. 제목은 자극적이고 매력적으로.\\n2. 본문은 마크다운 형식.\\n3. 서론-본론-결론 구조.\\n4. 본문 중간에 [IMG_BODY_1] 이라는 텍스트를 반드시 포함.\\n5. 반환 형식은 오직 JSON:\\n{\\n  \\\"title\\\": \\\"...\\\",\\n  \\\"content\\\": \\\"...\\\",\\n  \\\"summary\\\": \\\"...\\\",\\n  \\\"tags\\\": [\\\"...\\\"],\\n  \\\"thumbnail_prompt\\\": \\\"... (English)\\\",\\n  \\\"body_image_prompt\\\": \\\"... (English)\\\"\\n}\"}]}]}}"
+                        }
+                    ]
+                },
+                "options": {}
+            },
+            "name": "Generate Post via Gemini API",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 1,
+            "position": [
+                1050,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "jsCode": "const response = items[0].json.candidates[0].content.parts[0].text;\nconst jsonMatch = response.match(/\\{,?[\\s\\S]*\\}/);\nif (jsonMatch) {\n  const data = JSON.parse(jsonMatch[0]);\n  return [{ json: data }];\n}\nreturn [{ json: { error: \"Failed to parse JSON\", raw: response } }];"
+            },
+            "name": "Parse Gemini Response",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1250,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "resource": "image",
+                "prompt": "={{$json[\"thumbnail_prompt\"]}}",
+                "n": 1,
+                "size": "1024x1024"
+            },
+            "name": "DALL-E: Thumbnail",
+            "type": "n8n-nodes-base.openAi",
+            "typeVersion": 1,
+            "position": [
+                1450,
+                300
+            ],
+            "credentials": {
+                "openAiApi": {
+                    "id": "YOUR_CREDENTIAL_ID_IF_EXISTS",
+                    "name": "OpenAI account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "resource": "image",
+                "prompt": "={{$json[\"body_image_prompt\"]}}",
+                "n": 1,
+                "size": "1024x1024"
+            },
+            "name": "DALL-E: Body Image",
+            "type": "n8n-nodes-base.openAi",
+            "typeVersion": 1,
+            "position": [
+                1450,
+                500
+            ],
+            "credentials": {
+                "openAiApi": {
+                    "id": "YOUR_CREDENTIAL_ID_IF_EXISTS",
+                    "name": "OpenAI account"
+                }
+            }
+        },
+        {
+            "parameters": {
+                "jsCode": "const postData = $(\"Parse Gemini Response\").first().json;\nconst thumbUrl = $(\"DALL-E: Thumbnail\").first().json.data[0].url;\nconst bodyImgUrl = $(\"DALL-E: Body Image\").first().json.data[0].url;\n\nlet content = postData.content;\ncontent = content.replace(\"[IMG_BODY_1]\", `![${postData.title} 상세](${bodyImgUrl})`);\n\nreturn [{\n  json: {\n    title: postData.title,\n    content: content,\n    summary: postData.summary,\n    category: \"트렌드\",\n    tags: postData.tags,\n    thumbnail_url: thumbUrl\n  }\n}];"
+            },
+            "name": "Merge Data",
+            "type": "n8n-nodes-base.code",
+            "typeVersion": 2,
+            "position": [
+                1650,
+                400
+            ]
+        },
+        {
+            "parameters": {
+                "requestMethod": "POST",
+                "url": "http://localhost:3000/api/webhook/n8n/insight",
+                "options": {},
+                "bodyParametersUi": {
+                    "parameter": [
+                        {
+                            "name": "title",
+                            "value": "={{$node[\"Merge Data\"].json[\"title\"]}}"
+                        },
+                        {
+                            "name": "content",
+                            "value": "={{$node[\"Merge Data\"].json[\"content\"]}}"
+                        },
+                        {
+                            "name": "summary",
+                            "value": "={{$node[\"Merge Data\"].json[\"summary\"]}}"
+                        },
+                        {
+                            "name": "category",
+                            "value": "={{$node[\"Merge Data\"].json[\"category\"]}}"
+                        },
+                        {
+                            "name": "tags",
+                            "value": "={{$node[\"Merge Data\"].json[\"tags\"]}}"
+                        },
+                        {
+                            "name": "thumbnail_url",
+                            "value": "={{$node[\"Merge Data\"].json[\"thumbnail_url\"]}}"
+                        }
+                    ]
+                },
+                "headerParametersUi": {
+                    "parameter": [
+                        {
+                            "name": "Authorization",
+                            "value": "Bearer dori_ai_n8n_secret_key_1234"
+                        }
+                    ]
+                }
+            },
+            "name": "Post to DORI-AI",
+            "type": "n8n-nodes-base.httpRequest",
+            "typeVersion": 1,
+            "position": [
+                1850,
+                400
+            ]
+        }
+    ],
+    "connections": {
+        "Schedule (Daily 3 Times)": {
+            "main": [
+                [
+                    {
+                        "node": "Set Gemini Key",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Manual Trigger": {
+            "main": [
+                [
+                    {
+                        "node": "Set Gemini Key",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Set Gemini Key": {
+            "main": [
+                [
+                    {
+                        "node": "Fetch AI News (RSS)",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Fetch AI News (RSS)": {
+            "main": [
+                [
+                    {
+                        "node": "Limit to 20",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Limit to 20": {
+            "main": [
+                [
+                    {
+                        "node": "Generate Post via Gemini API",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Generate Post via Gemini API": {
+            "main": [
+                [
+                    {
+                        "node": "Parse Gemini Response",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Parse Gemini Response": {
+            "main": [
+                [
+                    {
+                        "node": "DALL-E: Thumbnail",
+                        "type": "main",
+                        "index": 0
+                    },
+                    {
+                        "node": "DALL-E: Body Image",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "DALL-E: Thumbnail": {
+            "main": [
+                [
+                    {
+                        "node": "Merge Data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "DALL-E: Body Image": {
+            "main": [
+                [
+                    {
+                        "node": "Merge Data",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        },
+        "Merge Data": {
+            "main": [
+                [
+                    {
+                        "node": "Post to DORI-AI",
+                        "type": "main",
+                        "index": 0
+                    }
+                ]
+            ]
+        }
+    }
+}

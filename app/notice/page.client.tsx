@@ -2,13 +2,14 @@
 
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
-import { Megaphone, Pin, Clock } from "lucide-react";
+import { Megaphone, Pin, Clock, Tag } from "lucide-react";
 
 type NoticeType = "공지" | "업데이트" | "이벤트" | "점검";
 
 interface NoticeItem {
     id: number;
     type: NoticeType;
+    version?: string;
     title: string;
     content: string;
     date: string;
@@ -17,34 +18,29 @@ interface NoticeItem {
 
 const notices: NoticeItem[] = [
     {
-        id: 1,
-        type: "공지",
-        title: "DORI-AI 서비스 오픈 안내",
-        content: "안녕하세요! DORI-AI가 정식 오픈했습니다. 🎉\n\nDORI-AI는 최신 AI 도구 정보, 인사이트, 커뮤니티, 교육 콘텐츠를 한곳에서 제공하는 종합 AI 플랫폼입니다.\n\n현재 제공되는 서비스:\n• AI 도구 검색 및 비교\n• AI 인사이트 기사\n• 커뮤니티 게시판\n• 미니게임\n• 건의사항\n\n앞으로도 지속적으로 새로운 기능과 콘텐츠를 추가할 예정입니다. 많은 관심과 피드백 부탁드립니다!",
-        date: "2026-02-16",
+        id: 5,
+        type: "업데이트",
+        version: "v2.0.0",
+        title: "대규모 업데이트: 오렌지 테마 및 자동화 시스템 도입",
+        content: "안녕하세요, DORI-AI 팀입니다.\n사용자 경험 향상을 위한 대규모 업데이트(v2.0)가 적용되었습니다.\n\n🍊 1. 디자인 리뉴얼 (Orange Theme)\n• 사이트 전반의 메인 컬러가 따뜻하고 활기찬 오렌지(#F9954E)로 변경되었습니다.\n• Hero 섹션, 프로필, 미니게임 등 모든 페이지에 일관된 디자인 시스템이 적용되었습니다.\n• 다크 모드에서도 눈이 편안하도록 최적화되었습니다.\n\n🤖 2. 자동화 시스템 (n8n & AI)\n• 글로벌 IT 뉴스를 수집하고 분석하여 자동으로 포스팅하는 시스템이 구축되었습니다.\n• 전문 블로거 페르소나를 가진 AI가 양질의 콘텐츠를 제공합니다.\n\n🃏 3. 미니게임 UI 개선\n• HighLow 및 Blackjack 게임의 인터페이스가 더욱 직관적이고 세련되게 변경되었습니다.\n\n앞으로도 더 나은 서비스를 위해 노력하겠습니다.\n감사합니다.",
+        date: "2026-02-18",
         pinned: true,
     },
     {
-        id: 2,
-        type: "업데이트",
-        title: "건의사항 페이지 글쓰기 기능 추가",
-        content: "건의사항 페이지에 글쓰기 기능이 추가되었습니다.\n\n주요 변경 사항:\n• 건의사항 작성 폼 (이름, 유형, 우선순위, 내용)\n• 작성한 건의사항 목록 표시\n• 삭제 기능\n\n여러분의 소중한 의견을 기다립니다. 자유롭게 건의사항을 남겨주세요!",
-        date: "2026-02-16",
-        pinned: false,
-    },
-    {
-        id: 3,
-        type: "업데이트",
-        title: "개인정보처리방침 및 이용약관 업데이트",
-        content: "개인정보처리방침과 이용약관이 업데이트되었습니다.\n\n• 개인정보처리방침: 12개 조항으로 한국 개인정보보호법 기준을 충족하도록 보강\n• 이용약관: 17개 조항으로 전자상거래법 등 관련법 기준 반영\n\n자세한 내용은 각 페이지에서 확인하실 수 있습니다.",
-        date: "2026-02-16",
-        pinned: false,
-    },
-    {
         id: 4,
+        type: "업데이트",
+        version: "v1.1.0",
+        title: "기능 추가: 건의사항 글쓰기 및 FAQ 오픈",
+        content: "서비스 안정화 및 기능 추가 업데이트가 진행되었습니다.\n\n• 건의사항: 글쓰기 기능 추가 (사용자 피드백 수렴 강화)\n• FAQ & 공지사항: 신규 페이지 오픈\n• 이용약관: 개인정보처리방침 및 서비스 약관 개정\n\n지속적인 사용성 개선을 위해 노력하겠습니다.",
+        date: "2026-02-16",
+        pinned: false,
+    },
+    {
+        id: 1,
         type: "공지",
-        title: "FAQ 페이지 및 공지사항 페이지 오픈",
-        content: "자주 묻는 질문(FAQ) 페이지와 공지사항 페이지가 새롭게 오픈되었습니다.\n\n• FAQ: 서비스 이용 관련 자주 묻는 질문과 답변\n• 공지사항: 서비스 업데이트, 이벤트, 점검 안내\n\n궁금한 점은 FAQ에서 먼저 확인해보시고, 찾지 못한 내용은 건의사항으로 문의해주세요!",
+        version: "v1.0.0",
+        title: "DORI-AI 서비스 정식 오픈 안내",
+        content: "안녕하세요! DORI-AI가 정식 오픈했습니다. 🎉\n\nDORI-AI는 최신 AI 도구 정보, 인사이트, 커뮤니티, 교육 콘텐츠를 한곳에서 제공하는 종합 AI 플랫폼입니다.\n\n현재 제공되는 서비스 (v1.0):\n• AI 도구 검색 및 비교\n• AI 인사이트 기사\n• 커뮤니티 게시판\n• 미니게임 (베타)\n\n앞으로도 지속적으로 새로운 기능과 콘텐츠를 추가할 예정입니다. 많은 관심과 피드백 부탁드립니다!",
         date: "2026-02-16",
         pinned: false,
     },
@@ -92,12 +88,12 @@ export default function NoticeClient() {
                     </div>
 
                     <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-                        <span className="bg-gradient-to-r from-[#F9954E] via-pink-500 to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+                        <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
                             공지사항
                         </span>
                     </h1>
                     <p className="text-base md:text-lg font-medium text-neutral-600 dark:text-neutral-300 break-keep leading-relaxed max-w-xl">
-                        DORI-AI의 최신 소식과 업데이트를 확인하세요.
+                        DORI-AI의 최신 소식과 버전 업데이트를 확인하세요.
                     </p>
                 </div>
             </section>
@@ -113,8 +109,8 @@ export default function NoticeClient() {
                         <details
                             key={item.id}
                             className={`group rounded-[1.5rem] border overflow-hidden transition-all duration-300 hover:shadow-md backdrop-blur-xl shadow-sm ${item.pinned
-                                    ? "border-[#FCC07A] dark:border-[#B35E15] bg-[#FFF5EB]/30 dark:bg-orange-950/10 hover:shadow-[#F9954E]/10"
-                                    : "border-neutral-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/40 hover:shadow-[#F9954E]/5"
+                                ? "border-[#FCC07A] dark:border-[#B35E15] bg-[#FFF5EB]/30 dark:bg-orange-950/10 hover:shadow-[#F9954E]/10"
+                                : "border-neutral-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/40 hover:shadow-[#F9954E]/5"
                                 }`}
                         >
                             <summary className="cursor-pointer list-none p-5 md:p-6">
@@ -127,6 +123,12 @@ export default function NoticeClient() {
                                             <span className={`px-2.5 py-0.5 text-[11px] font-bold rounded-full ${getTypeBadge(item.type)}`}>
                                                 {item.type}
                                             </span>
+                                            {item.version && (
+                                                <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-500 flex items-center gap-1">
+                                                    <Tag className="w-2.5 h-2.5" />
+                                                    {item.version}
+                                                </span>
+                                            )}
                                         </div>
                                         <h3 className="font-bold text-[15px] text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors duration-200 leading-snug">
                                             {item.title}

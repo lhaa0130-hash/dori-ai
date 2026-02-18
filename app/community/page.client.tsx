@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
-import { PlusCircle } from 'lucide-react';
+import { PlusCircle, Users } from 'lucide-react';
 
 // Post-interface. I a todolist kan have en mere detaljeret beskrivelse.
 interface Post {
@@ -54,15 +54,12 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
           <div className="max-w-3xl mx-auto animate-fade-in flex flex-col items-center">
             {/* Badge */}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FBAA60] opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#F9954E]"></span>
-              </span>
-              <span>Community</span>
+              <Users className="w-3 h-3" />
+              <span>Community Center</span>
             </div>
 
             <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-              <span className="bg-gradient-to-r from-[#F9954E] via-pink-500 to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+              <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
                 커뮤니티
               </span>
             </h1>
@@ -76,7 +73,7 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
           <div className="flex justify-end mb-6">
             <Link
               href="/community/write"
-              className="flex items-center gap-2 px-5 py-2.5 bg-neutral-900 dark:bg-white text-white dark:text-black rounded-full font-bold text-sm tracking-wide hover:opacity-80 transition-all shadow-lg hover:shadow-[#F9954E]/20"
+              className="flex items-center gap-2 px-5 py-2.5 bg-[#F9954E] hover:bg-[#E8832E] text-white rounded-full font-bold text-sm tracking-wide transition-all shadow-lg shadow-[#F9954E]/20 hover:shadow-[#F9954E]/40"
             >
               <PlusCircle size={18} />
               <span>새 글 작성</span>
@@ -124,5 +121,3 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
     </main>
   );
 }
-
-

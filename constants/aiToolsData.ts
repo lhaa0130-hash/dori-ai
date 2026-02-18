@@ -88,6 +88,66 @@ export const AI_TOOLS_DATA: AiTool[] = [
     thumbnail: "https://logo.clearbit.com/google.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
+  {
+    id: "llm-gpt4o", name: "GPT-4o", category: "llm",
+    summary: "듣고 보고 말하는 옴니모델, 가장 빠르고 똑똑함",
+    description: "듣고 보고 말하는 옴니모델, 가장 빠르고 똑똑함",
+    website: "https://openai.com", thumbnail: "https://logo.clearbit.com/openai.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "llm-claude-3-5", name: "Claude 3.5 Sonnet", category: "llm",
+    summary: "코딩과 뉘앙스 파악 능력에서 GPT-4o를 위협함",
+    description: "코딩과 뉘앙스 파악 능력에서 GPT-4o를 위협함",
+    website: "https://claude.ai", thumbnail: "https://logo.clearbit.com/anthropic.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "llm-gemini-1-5", name: "Gemini 1.5 Pro", category: "llm",
+    summary: "책 수백 권 분량을 한 번에 기억하는 괴물 용량",
+    description: "책 수백 권 분량을 한 번에 기억하는 괴물 용량",
+    website: "https://gemini.google.com", thumbnail: "https://logo.clearbit.com/google.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "llm-cohere", name: "Cohere Command R+", category: "llm",
+    summary: "기업용 검색 증강 생성(RAG)에 특화된 모델",
+    description: "기업용 검색 증강 생성(RAG)에 특화된 모델",
+    website: "https://cohere.com", thumbnail: "https://logo.clearbit.com/cohere.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "llm-solar", name: "Solar (Upstage)", category: "llm",
+    summary: "한국 스타트업이 만든 세계 최고 수준의 경량 모델",
+    description: "한국 스타트업이 만든 세계 최고 수준의 경량 모델",
+    website: "https://upstage.ai", thumbnail: "https://logo.clearbit.com/upstage.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "llm-hyperclova", name: "HyperCLOVA X", category: "llm",
+    summary: "한국어와 한국 문화를 가장 잘 이해하는 네이버 AI",
+    description: "한국어와 한국 문화를 가장 잘 이해하는 네이버 AI",
+    website: "https://clova.ai", thumbnail: "https://logo.clearbit.com/navercorp.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "llm-qwen", name: "Qwen", category: "llm",
+    summary: "알리바바가 만든 성능 좋은 오픈소스 모델",
+    description: "알리바바가 만든 성능 좋은 오픈소스 모델",
+    website: "https://github.com/QwenLM", thumbnail: "https://logo.clearbit.com/alibaba.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "llm-yi", name: "Yi-34B", category: "llm",
+    summary: "01.AI가 만든 가성비 좋은 오픈 모델",
+    description: "01.AI가 만든 가성비 좋은 오픈 모델",
+    website: "https://01.ai", thumbnail: "https://logo.clearbit.com/01.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "llm-huggingchat", name: "HuggingChat", category: "llm",
+    summary: "다양한 오픈소스 모델을 무료로 써볼 수 있는 곳",
+    description: "다양한 오픈소스 모델을 무료로 써볼 수 있는 곳",
+    website: "https://huggingface.co/chat", thumbnail: "https://logo.clearbit.com/huggingface.co", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "llm-poe-plus", name: "Poe+", category: "llm",
+    summary: "여러 봇을 빠르게 전환하며 쓸 수 있는 플랫폼",
+    description: "여러 봇을 빠르게 전환하며 쓸 수 있는 플랫폼",
+    website: "https://poe.com", thumbnail: "https://logo.clearbit.com/poe.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
 
   // ===========================================
   // 2. Image Generation
@@ -171,6 +231,66 @@ export const AI_TOOLS_DATA: AiTool[] = [
     website: "https://runwayml.com", // Fixed shady link from user input
     thumbnail: "https://logo.clearbit.com/runwayml.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "img-playground", name: "Playground AI", category: "image-generation",
+    summary: "하루 1000장 무료 생성, 미드저니만큼 좋음",
+    description: "하루 1000장 무료 생성, 미드저니만큼 좋음",
+    website: "https://playgroundai.com", thumbnail: "https://logo.clearbit.com/playgroundai.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "img-bluewillow", name: "BlueWillow", category: "image-generation",
+    summary: "미드저니의 무료 대안으로 떠오른 디스코드 봇",
+    description: "미드저니의 무료 대안으로 떠오른 디스코드 봇",
+    website: "https://bluewillow.ai", thumbnail: "https://logo.clearbit.com/bluewillow.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "img-tensor", name: "Tensor.art", category: "image-generation",
+    summary: "스테이블 디퓨전 모델을 웹에서 바로 돌려봄",
+    description: "스테이블 디퓨전 모델을 웹에서 바로 돌려봄",
+    website: "https://tensor.art", thumbnail: "https://logo.clearbit.com/tensor.art", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "img-dreamstudio", name: "DreamStudio", category: "image-generation",
+    summary: "스테빌리티 AI의 공식 웹 생성 도구",
+    description: "스테빌리티 AI의 공식 웹 생성 도구",
+    website: "https://dreamstudio.ai", thumbnail: "https://logo.clearbit.com/stability.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "img-imagefx", name: "ImageFX", category: "image-generation",
+    summary: "구글의 최신 이미지 생성기, 칩으로 수정 가능",
+    description: "구글의 최신 이미지 생성기, 칩으로 수정 가능",
+    website: "https://aitestkitchen.withgoogle.com/tools/image-fx", thumbnail: "https://logo.clearbit.com/google.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "img-bing", name: "Bing Image Creator", category: "image-generation",
+    summary: "달리3 기반으로 무료로 그림 그려줌 (MS 계정)",
+    description: "달리3 기반으로 무료로 그림 그려줌 (MS 계정)",
+    website: "https://bing.com/create", thumbnail: "https://logo.clearbit.com/bing.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "img-picfinder", name: "PicFinder", category: "image-generation",
+    summary: "검색하듯이 무한으로 이미지를 쏟아내는 생성기",
+    description: "검색하듯이 무한으로 이미지를 쏟아내는 생성기",
+    website: "https://picfinder.ai", thumbnail: "https://logo.clearbit.com/picfinder.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "img-stockimg", name: "Stockimg.ai", category: "image-generation",
+    summary: "로고, 포스터, 책 표지 등 상업용 디자인 생성",
+    description: "로고, 포스터, 책 표지 등 상업용 디자인 생성",
+    website: "https://stockimg.ai", thumbnail: "https://logo.clearbit.com/stockimg.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "img-getimg", name: "Getimg.ai", category: "image-generation",
+    summary: "이미지 생성부터 아웃페인팅 편집까지 한 곳에서",
+    description: "이미지 생성부터 아웃페인팅 편집까지 한 곳에서",
+    website: "https://getimg.ai", thumbnail: "https://logo.clearbit.com/getimg.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "img-seaart", name: "SeaArt", category: "image-generation",
+    summary: "중국발 고퀄리티 실사/반실사 특화 생성 툴",
+    description: "중국발 고퀄리티 실사/반실사 특화 생성 툴",
+    website: "https://seaart.ai", thumbnail: "https://logo.clearbit.com/seaart.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
   // ===========================================
@@ -256,6 +376,66 @@ export const AI_TOOLS_DATA: AiTool[] = [
     thumbnail: "https://logo.clearbit.com/adobe.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
+  {
+    id: "edit-magiceraser", name: "Magic Eraser", category: "image-editing",
+    summary: "로그인도 필요 없는 초간단 지우개",
+    description: "로그인도 필요 없는 초간단 지우개",
+    website: "https://magicstudio.com/magiceraser", thumbnail: "https://logo.clearbit.com/magicstudio.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edit-hama", name: "Hama", category: "image-editing",
+    summary: "드래그 한 번으로 깔끔하게 지워주는 무료 툴",
+    description: "드래그 한 번으로 깔끔하게 지워주는 무료 툴",
+    website: "https://hama.app", thumbnail: "https://logo.clearbit.com/hama.app", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edit-watermark", name: "WatermarkRemover", category: "image-editing",
+    summary: "유료 이미지의 워터마크를 감쪽같이 삭제 (주의)",
+    description: "유료 이미지의 워터마크를 감쪽같이 삭제 (주의)",
+    website: "https://watermarkremover.io", thumbnail: "https://logo.clearbit.com/pixelbin.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edit-bigjpg", name: "BigJPG", category: "image-editing",
+    summary: "애니메이션 그림 확대에 특화된 업스케일러",
+    description: "애니메이션 그림 확대에 특화된 업스케일러",
+    website: "https://bigjpg.com", thumbnail: "https://logo.clearbit.com/bigjpg.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edit-waifu2x", name: "Waifu2x", category: "image-editing",
+    summary: "덕후들을 위한 고전 명작 2배 확대기",
+    description: "덕후들을 위한 고전 명작 2배 확대기",
+    website: "https://waifu2x.udp.jp", thumbnail: "https://logo.clearbit.com/udp.jp", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edit-vance", name: "VanceAI", category: "image-editing",
+    summary: "흐린 사진 복구, 흑백 컬러링 등 기능이 다양함",
+    description: "흐린 사진 복구, 흑백 컬러링 등 기능이 다양함",
+    website: "https://vanceai.com", thumbnail: "https://logo.clearbit.com/vanceai.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edit-photoai", name: "PhotoAI", category: "image-editing",
+    summary: "내 사진을 학습해 다양한 컨셉의 프로필 사진 생성",
+    description: "내 사진을 학습해 다양한 컨셉의 프로필 사진 생성",
+    website: "https://photoai.com", thumbnail: "https://logo.clearbit.com/photoai.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edit-retouch4me", name: "Retouch4me", category: "image-editing",
+    summary: "피부 보정, 잡티 제거 등 인물 사진 보정 끝판왕",
+    description: "피부 보정, 잡티 제거 등 인물 사진 보정 끝판왕",
+    website: "https://retouch4me.com", thumbnail: "https://logo.clearbit.com/retouch4me.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edit-evoto", name: "Evoto", category: "image-editing",
+    summary: "웨딩 사진 보정에 혁명을 일으킨 AI 툴",
+    description: "웨딩 사진 보정에 혁명을 일으킨 AI 툴",
+    website: "https://evoto.ai", thumbnail: "https://logo.clearbit.com/evoto.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "edit-cutout", name: "Cutout.pro", category: "image-editing",
+    summary: "동영상 배경 제거부터 증명사진 만들기까지 다 됨",
+    description: "동영상 배경 제거부터 증명사진 만들기까지 다 됨",
+    website: "https://cutout.pro", thumbnail: "https://logo.clearbit.com/cutout.pro", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
 
   // ===========================================
   // 4. Video Generation
@@ -339,6 +519,66 @@ export const AI_TOOLS_DATA: AiTool[] = [
     website: "https://deepmind.google/technologies/veo",
     thumbnail: "https://logo.clearbit.com/google.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vid-morph", name: "Morph Studio", category: "video-generation",
+    summary: "텍스트 투 비디오 모델을 스토리보드처럼 연결",
+    description: "텍스트 투 비디오 모델을 스토리보드처럼 연결",
+    website: "https://morphstudio.com", thumbnail: "https://logo.clearbit.com/morphstudio.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vid-moonvalley", name: "Moonvalley", category: "video-generation",
+    summary: "디스코드에서 고퀄리티 시네마틱 영상 생성",
+    description: "디스코드에서 고퀄리티 시네마틱 영상 생성",
+    website: "https://moonvalley.ai", thumbnail: "https://logo.clearbit.com/moonvalley.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vid-genmo", name: "Genmo", category: "video-generation",
+    summary: "2D 이미지를 3D 영상처럼 입체적으로 움직이게 함",
+    description: "2D 이미지를 3D 영상처럼 입체적으로 움직이게 함",
+    website: "https://genmo.ai", thumbnail: "https://logo.clearbit.com/genmo.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vid-deforum", name: "Deforum", category: "video-generation",
+    summary: "음악에 맞춰 춤추는 듯한 기하학적 영상 생성",
+    description: "음악에 맞춰 춤추는 듯한 기하학적 영상 생성",
+    website: "https://deforum.art", thumbnail: "https://logo.clearbit.com/deforum.art", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vid-kaiber", name: "Kaiber", category: "video-generation",
+    summary: "린킨파크 뮤비 제작에 쓰인 감각적인 AI",
+    description: "린킨파크 뮤비 제작에 쓰인 감각적인 AI",
+    website: "https://kaiber.ai", thumbnail: "https://logo.clearbit.com/kaiber.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vid-zeroscope", name: "Zeroscope", category: "video-generation",
+    summary: "워터마크 없는 무료 오픈소스 텍스트-비디오 모델",
+    description: "워터마크 없는 무료 오픈소스 텍스트-비디오 모델",
+    website: "https://huggingface.co/cerspense/zeroscope_v2_576w", thumbnail: "https://logo.clearbit.com/huggingface.co", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vid-modelscope", name: "ModelScope", category: "video-generation",
+    summary: "짧고 기괴하지만 밈(Meme) 만들기에 최적화됨",
+    description: "짧고 기괴하지만 밈(Meme) 만들기에 최적화됨",
+    website: "https://modelscope.cn", thumbnail: "https://logo.clearbit.com/modelscope.cn", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vid-animatediff", name: "AnimateDiff", category: "video-generation",
+    summary: "스테이블 디퓨전 그림을 부드럽게 움직이게 만듦",
+    description: "스테이블 디퓨전 그림을 부드럽게 움직이게 만듦",
+    website: "https://animatediff.com", thumbnail: "https://logo.clearbit.com/github.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vid-hotshot", name: "Hotshot", category: "video-generation",
+    summary: "GIF 만들기에 특화된 가볍고 빠른 생성기",
+    description: "GIF 만들기에 특화된 가볍고 빠른 생성기",
+    website: "https://hotshot.co", thumbnail: "https://logo.clearbit.com/hotshot.co", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vid-neverends", name: "Neverends", category: "video-generation",
+    summary: "내가 올린 사진 속 인물이 춤추고 연기하게 만듦",
+    description: "내가 올린 사진 속 인물이 춤추고 연기하게 만듦",
+    website: "https://neverends.ai", thumbnail: "https://logo.clearbit.com/neverends.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
   // ===========================================
@@ -424,6 +664,66 @@ export const AI_TOOLS_DATA: AiTool[] = [
     thumbnail: "https://logo.clearbit.com/autocut.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
+  {
+    id: "vedit-wisecut", name: "Wisecut", category: "video-editing",
+    summary: "긴 영상을 짧은 쇼츠로 만들고 음악까지 자동 삽입",
+    description: "긴 영상을 짧은 쇼츠로 만들고 음악까지 자동 삽입",
+    website: "https://wisecut.video", thumbnail: "https://logo.clearbit.com/wisecut.video", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vedit-rawshorts", name: "RawShorts", category: "video-editing",
+    summary: "텍스트 스크립트를 입력하면 애니메이션 영상 제작",
+    description: "텍스트 스크립트를 입력하면 애니메이션 영상 제작",
+    website: "https://rawshorts.com", thumbnail: "https://logo.clearbit.com/rawshorts.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vedit-pictory", name: "Pictory", category: "video-editing",
+    summary: "블로그 글 주소를 넣으면 영상으로 변환해 줌",
+    description: "블로그 글 주소를 넣으면 영상으로 변환해 줌",
+    website: "https://pictory.ai", thumbnail: "https://logo.clearbit.com/pictory.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vedit-gliacloud", name: "Gliacloud", category: "video-editing",
+    summary: "뉴스 기사를 영상 뉴스로 자동 변환 (전통 강자)",
+    description: "뉴스 기사를 영상 뉴스로 자동 변환 (전통 강자)",
+    website: "https://gliacloud.com", thumbnail: "https://logo.clearbit.com/gliacloud.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vedit-elai", name: "Elai.io", category: "video-editing",
+    summary: "PPT를 영상으로 만들고 아바타가 발표하게 함",
+    description: "PPT를 영상으로 만들고 아바타가 발표하게 함",
+    website: "https://elai.io", thumbnail: "https://logo.clearbit.com/elai.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vedit-deepbrain", name: "DeepBrain AI", category: "video-editing",
+    summary: "방송국 수준의 가상 앵커 영상 제작 (국산)",
+    description: "방송국 수준의 가상 앵커 영상 제작 (국산)",
+    website: "https://deepbrain.io", thumbnail: "https://logo.clearbit.com/deepbrain.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vedit-hourone", name: "Hour One", category: "video-editing",
+    summary: "텍스트만 있으면 뉴스 리포트 영상 뚝딱",
+    description: "텍스트만 있으면 뉴스 리포트 영상 뚝딱",
+    website: "https://hourone.ai", thumbnail: "https://logo.clearbit.com/hourone.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vedit-synthesia-edit", name: "Synthesia (Edit)", category: "video-editing",
+    summary: "영상 편집 기술 없이도 텍스트로 영상 수정",
+    description: "영상 편집 기술 없이도 텍스트로 영상 수정",
+    website: "https://synthesia.io", thumbnail: "https://logo.clearbit.com/synthesia.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vedit-heygen-trans", name: "HeyGen Video Translate", category: "video-editing",
+    summary: "내 영상의 언어를 입모양까지 맞춰서 번역해 줌",
+    description: "내 영상의 언어를 입모양까지 맞춰서 번역해 줌",
+    website: "https://heygen.com", thumbnail: "https://logo.clearbit.com/heygen.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "vedit-rask", name: "Rask.ai", category: "video-editing",
+    summary: "영상 더빙과 번역을 한 번에 해결하는 툴",
+    description: "영상 더빙과 번역을 한 번에 해결하는 툴",
+    website: "https://rask.ai", thumbnail: "https://logo.clearbit.com/rask.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
 
   // ===========================================
   // 6. Coding
@@ -501,12 +801,80 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
+    id: "code-v0", name: "v0.dev", category: "coding",
+    summary: "말만 하면 웹사이트 UI를 뚝딱 만들어주는 생성기",
+    description: "말만 하면 웹사이트 UI를 뚝딱 만들어주는 생성기",
+    website: "https://v0.dev",
+    thumbnail: "https://logo.clearbit.com/v0.dev",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
     id: "code-cody", name: "Cody", category: "coding",
     summary: "전체 코드베이스를 이해하고 답변해 주는 똑똑한 녀석",
     description: "전체 코드베이스를 이해하고 답변해 주는 똑똑한 녀석",
     website: "https://sourcegraph.com/cody",
     thumbnail: "https://logo.clearbit.com/sourcegraph.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "code-blackbox", name: "Blackbox AI", category: "coding",
+    summary: "코딩 질문을 위해 복사/붙여넣기 할 필요 없는 AI",
+    description: "코딩 질문을 위해 복사/붙여넣기 할 필요 없는 AI",
+    website: "https://useblackbox.io", thumbnail: "https://logo.clearbit.com/useblackbox.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "code-codium", name: "CodiumAI", category: "coding",
+    summary: "버그 없는 코드를 위해 테스트 케이스를 자동 생성",
+    description: "버그 없는 코드를 위해 테스트 케이스를 자동 생성",
+    website: "https://codium.ai", thumbnail: "https://logo.clearbit.com/codium.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "code-sourcery", name: "Sourcery", category: "coding",
+    summary: "지저분한 파이썬 코드를 깔끔하게 리팩토링",
+    description: "지저분한 파이썬 코드를 깔끔하게 리팩토링",
+    website: "https://sourcery.ai", thumbnail: "https://logo.clearbit.com/sourcery.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "code-mintlify", name: "Mintlify", category: "coding",
+    summary: "코드만 짜면 문서(Docs)는 알아서 만들어 줌",
+    description: "코드만 짜면 문서(Docs)는 알아서 만들어 줌",
+    website: "https://mintlify.com", thumbnail: "https://logo.clearbit.com/mintlify.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "code-adrenaline", name: "Adrenaline", category: "coding",
+    summary: "스택오버플로우 대신 내 코드를 바로 고쳐주는 디버거",
+    description: "스택오버플로우 대신 내 코드를 바로 고쳐주는 디버거",
+    website: "https://useadrenaline.com", thumbnail: "https://logo.clearbit.com/useadrenaline.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "code-figstack", name: "Figstack", category: "coding",
+    summary: "난해한 코드를 쉬운 영어(한글)로 해석해 줌",
+    description: "난해한 코드를 쉬운 영어(한글)로 해석해 줌",
+    website: "https://figstack.com", thumbnail: "https://logo.clearbit.com/figstack.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "code-kodezi", name: "Kodezi", category: "coding",
+    summary: "학생들이 코딩 배울 때 쓰기 좋은 자동 수정 툴",
+    description: "학생들이 코딩 배울 때 쓰기 좋은 자동 수정 툴",
+    website: "https://kodezi.com", thumbnail: "https://logo.clearbit.com/kodezi.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "code-safurai", name: "Safurai", category: "coding",
+    summary: "개인 정보 유출 걱정 없는 로컬 기반 코딩 비서",
+    description: "개인 정보 유출 걱정 없는 로컬 기반 코딩 비서",
+    website: "https://safurai.com", thumbnail: "https://logo.clearbit.com/safurai.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "code-askcodi", name: "AskCodi", category: "coding",
+    summary: "노션이나 VS Code 안에서 바로 쓰는 코딩 질문 봇",
+    description: "노션이나 VS Code 안에서 바로 쓰는 코딩 질문 봇",
+    website: "https://askcodi.com", thumbnail: "https://logo.clearbit.com/askcodi.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "code-whatthediff", name: "What The Diff", category: "coding",
+    summary: "PR(풀 리퀘스트) 내용을 요약해서 코드 리뷰 시간 단축",
+    description: "PR(풀 리퀘스트) 내용을 요약해서 코드 리뷰 시간 단축",
+    website: "https://whatthediff.ai", thumbnail: "https://logo.clearbit.com/whatthediff.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
   // ===========================================
@@ -592,6 +960,66 @@ export const AI_TOOLS_DATA: AiTool[] = [
     thumbnail: "https://logo.clearbit.com/typecast.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
+  {
+    id: "voice-resemble", name: "Resemble AI", category: "voice-tts",
+    summary: "딥페이크 탐지 기능까지 갖춘 음성 복제 도구",
+    description: "딥페이크 탐지 기능까지 갖춘 음성 복제 도구",
+    website: "https://resemble.ai", thumbnail: "https://logo.clearbit.com/resemble.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "voice-wellsaid", name: "WellSaid Labs", category: "voice-tts",
+    summary: "사람과 구별하기 힘든 기업용 내레이션 생성",
+    description: "사람과 구별하기 힘든 기업용 내레이션 생성",
+    website: "https://wellsaidlabs.com", thumbnail: "https://logo.clearbit.com/wellsaidlabs.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "voice-replica", name: "Replica Studios", category: "voice-tts",
+    summary: "게임이나 영화 캐릭터 연기에 특화된 AI 성우",
+    description: "게임이나 영화 캐릭터 연기에 특화된 AI 성우",
+    website: "https://replicastudios.com", thumbnail: "https://logo.clearbit.com/replicastudios.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "voice-uberduck", name: "Uberduck", category: "voice-tts",
+    summary: "래퍼 목소리로 랩을 시키는 재미있는 음성 생성",
+    description: "래퍼 목소리로 랩을 시키는 재미있는 음성 생성",
+    website: "https://uberduck.ai", thumbnail: "https://logo.clearbit.com/uberduck.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "voice-voicify", name: "Voicify.ai", category: "voice-tts",
+    summary: "유명 가수 목소리로 커버곡을 만드는 도구",
+    description: "유명 가수 목소리로 커버곡을 만드는 도구",
+    website: "https://voicify.ai", thumbnail: "https://logo.clearbit.com/voicify.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "voice-kits", name: "Kits.ai", category: "voice-tts",
+    summary: "음악가를 위한 로열티 프리 AI 목소리 라이브러리",
+    description: "음악가를 위한 로열티 프리 AI 목소리 라이브러리",
+    website: "https://kits.ai", thumbnail: "https://logo.clearbit.com/kits.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "voice-altered", name: "Altered", category: "voice-tts",
+    summary: "내 목소리를 전문 성우처럼 바꿔주는 보이스 체인저",
+    description: "내 목소리를 전문 성우처럼 바꿔주는 보이스 체인저",
+    website: "https://altered.ai", thumbnail: "https://logo.clearbit.com/altered.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "voice-metavoice", name: "Metavoice", category: "voice-tts",
+    summary: "실시간으로 감정까지 전달하는 고성능 음성 변환",
+    description: "실시간으로 감정까지 전달하는 고성능 음성 변환",
+    website: "https://metavoice.xyz", thumbnail: "https://logo.clearbit.com/metavoice.xyz", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "voice-voiceai", name: "Voice.ai", category: "voice-tts",
+    summary: "디스코드나 게임에서 실시간으로 목소리 변조",
+    description: "디스코드나 게임에서 실시간으로 목소리 변조",
+    website: "https://voice.ai", thumbnail: "https://logo.clearbit.com/voice.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "voice-coqui", name: "Coqui (TTS)", category: "voice-tts",
+    summary: "오픈소스 음성 합성의 근본, 텍스트 투 스피치",
+    description: "오픈소스 음성 합성의 근본, 텍스트 투 스피치",
+    website: "https://coqui.ai", thumbnail: "https://logo.clearbit.com/coqui.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
 
   // ===========================================
   // 8. 3D Generation
@@ -676,6 +1104,66 @@ export const AI_TOOLS_DATA: AiTool[] = [
     thumbnail: "https://logo.clearbit.com/blockadelabs.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
+  {
+    id: "3d-kaedim", name: "Kaedim", category: "3d",
+    summary: "2D 이미지를 넣으면 즉시 3D 모델로 변환",
+    description: "2D 이미지를 넣으면 즉시 3D 모델로 변환",
+    website: "https://kaedim3d.com", thumbnail: "https://logo.clearbit.com/kaedim3d.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "3d-polycam", name: "Polycam", category: "3d",
+    summary: "아이폰 라이다 센서로 사물을 스캔해 3D화",
+    description: "아이폰 라이다 센서로 사물을 스캔해 3D화",
+    website: "https://poly.cam", thumbnail: "https://logo.clearbit.com/poly.cam", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "3d-kiri", name: "KIRI Engine", category: "3d",
+    summary: "안드로이드에서도 가능한 3D 스캔 앱",
+    description: "안드로이드에서도 가능한 3D 스캔 앱",
+    website: "https://kiriengine.app", thumbnail: "https://logo.clearbit.com/kiriengine.app", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "3d-sloyd", name: "Sloyd", category: "3d",
+    summary: "게임을 위한 3D 소품(오브젝트) 생성에 특화",
+    description: "게임을 위한 3D 소품(오브젝트) 생성에 특화",
+    website: "https://sloyd.ai", thumbnail: "https://logo.clearbit.com/sloyd.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "3d-genie", name: "Luma Genie", category: "3d",
+    summary: "텍스트로 3D 모델을 만드는 루마 랩스의 도구",
+    description: "텍스트로 3D 모델을 만드는 루마 랩스의 도구",
+    website: "https://lumalabs.ai", thumbnail: "https://logo.clearbit.com/lumalabs.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "3d-3dfy", name: "3DFY.ai", category: "3d",
+    summary: "고품질 3D 모델을 대량으로 생성하는 솔루션",
+    description: "고품질 3D 모델을 대량으로 생성하는 솔루션",
+    website: "https://3dfy.ai", thumbnail: "https://logo.clearbit.com/3dfy.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "3d-alpha3d", name: "Alpha3D", category: "3d",
+    summary: "증강현실(AR) 용 3D 에셋을 빠르게 제작",
+    description: "증강현실(AR) 용 3D 에셋을 빠르게 제작",
+    website: "https://alpha3d.io", thumbnail: "https://logo.clearbit.com/alpha3d.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "3d-ponzu", name: "Ponzu", category: "3d",
+    summary: "3D 텍스처(재질)를 AI로 생성하는 도구",
+    description: "3D 텍스처(재질)를 AI로 생성하는 도구",
+    website: "https://ponzu.ai", thumbnail: "https://logo.clearbit.com/ponzu.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "3d-latent", name: "Latent Labs", category: "3d",
+    summary: "360도 스카이박스 이미지를 생성하는 또 다른 강자",
+    description: "360도 스카이박스 이미지를 생성하는 또 다른 강자",
+    website: "https://latent.gg", thumbnail: "https://logo.clearbit.com/latent.gg", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "3d-csm-ai", name: "Common Sense Machines", category: "3d",
+    summary: "사진을 3D 게임 에셋으로 바꿔주는 플랫폼",
+    description: "사진을 3D 게임 에셋으로 바꿔주는 플랫폼",
+    website: "https://csm.ai", thumbnail: "https://logo.clearbit.com/csm.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
 
   // ===========================================
   // 9. Automation
@@ -753,12 +1241,80 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
+    id: "prod-gamma", name: "Gamma", category: "automation",
+    summary: "PPT, 문서, 웹사이트를 1분 만에 디자인해주는 마법",
+    description: "PPT, 문서, 웹사이트를 1분 만에 디자인해주는 마법",
+    website: "https://gamma.app",
+    thumbnail: "https://logo.clearbit.com/gamma.app",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
     id: "auto-active", name: "ActivePieces", category: "automation",
     summary: "n8n처럼 오픈소스로 쓸 수 있는 가벼운 대안",
     description: "n8n처럼 오픈소스로 쓸 수 있는 가벼운 대안",
     website: "https://activepieces.com",
     thumbnail: "https://logo.clearbit.com/activepieces.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "auto-cheatlayer", name: "Cheat Layer", category: "automation",
+    summary: "GPT-4를 이용해 어떤 웹사이트든 자동화 가능",
+    description: "GPT-4를 이용해 어떤 웹사이트든 자동화 가능",
+    website: "https://cheatlayer.com", thumbnail: "https://logo.clearbit.com/cheatlayer.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "auto-browse", name: "Browse AI", category: "automation",
+    summary: "웹사이트 변경 사항을 감지하고 데이터를 추출",
+    description: "웹사이트 변경 사항을 감지하고 데이터를 추출",
+    website: "https://browse.ai", thumbnail: "https://logo.clearbit.com/browse.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "auto-levity", name: "Levity", category: "automation",
+    summary: "이메일 분류 같은 반복 업무를 AI가 학습해서 처리",
+    description: "이메일 분류 같은 반복 업무를 AI가 학습해서 처리",
+    website: "https://levity.ai", thumbnail: "https://logo.clearbit.com/levity.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "auto-axiom", name: "Axiom", category: "automation",
+    summary: "브라우저 행동을 녹화해서 반복 실행하는 매크로",
+    description: "브라우저 행동을 녹화해서 반복 실행하는 매크로",
+    website: "https://axiom.ai", thumbnail: "https://logo.clearbit.com/axiom.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "auto-hexomatic", name: "Hexomatic", category: "automation",
+    summary: "웹 스크래핑과 업무 자동화를 동시에",
+    description: "웹 스크래핑과 업무 자동화를 동시에",
+    website: "https://hexomatic.com", thumbnail: "https://logo.clearbit.com/hexomatic.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "auto-robomotion", name: "Robomotion", category: "automation",
+    summary: "RPA(로봇 프로세스 자동화)를 웹에서 쉽게 구현",
+    description: "RPA(로봇 프로세스 자동화)를 웹에서 쉽게 구현",
+    website: "https://robomotion.io", thumbnail: "https://logo.clearbit.com/robomotion.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "auto-automa", name: "Automa", category: "automation",
+    summary: "크롬 확장 프로그램으로 브라우저 작업 자동화 (오픈소스)",
+    description: "크롬 확장 프로그램으로 브라우저 작업 자동화 (오픈소스)",
+    website: "https://automa.site", thumbnail: "https://logo.clearbit.com/automa.site", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "auto-uibot", name: "UIBot", category: "automation",
+    summary: "윈도우, 맥 가리지 않고 화면 클릭 자동화",
+    description: "윈도우, 맥 가리지 않고 화면 클릭 자동화",
+    website: "https://uibot.com.cn", thumbnail: "https://logo.clearbit.com/uibot.com.cn", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "auto-magical", name: "Magical", category: "automation",
+    summary: "복잡한 데이터 입력 작업을 마법처럼 자동화",
+    description: "복잡한 데이터 입력 작업을 마법처럼 자동화",
+    website: "https://getmagical.com", thumbnail: "https://logo.clearbit.com/getmagical.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "auto-harpa", name: "Harpa AI", category: "automation",
+    summary: "웹 페이지 감시 및 자동화 최강의 크롬 확장",
+    description: "웹 페이지 감시 및 자동화 최강의 크롬 확장",
+    website: "https://harpa.ai", thumbnail: "https://logo.clearbit.com/harpa.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
   // ===========================================
@@ -844,6 +1400,78 @@ export const AI_TOOLS_DATA: AiTool[] = [
     thumbnail: "https://logo.clearbit.com/loudly.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
+  {
+    id: "music-ecrett", name: "Ecrett Music", category: "music",
+    summary: "영상 제작자를 위한 직관적인 BGM 생성",
+    description: "영상 제작자를 위한 직관적인 BGM 생성",
+    website: "https://ecrettmusic.com", thumbnail: "https://logo.clearbit.com/ecrettmusic.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "music-cassette", name: "CassetteAI", category: "music",
+    summary: "머신러닝으로 만드는 나만의 비트",
+    description: "머신러닝으로 만드는 나만의 비트",
+    website: "https://cassetteai.com", thumbnail: "https://logo.clearbit.com/cassetteai.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "music-splash", name: "Splash Pro", category: "music",
+    summary: "로블록스 음악 게임으로 유명한 회사의 생성 AI",
+    description: "로블록스 음악 게임으로 유명한 회사의 생성 AI",
+    website: "https://splashmusic.com", thumbnail: "https://logo.clearbit.com/splashmusic.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "music-musiclm", name: "MusicLM", category: "music",
+    summary: "구글이 연구용으로 공개한 고성능 음악 AI",
+    description: "구글이 연구용으로 공개한 고성능 음악 AI",
+    website: "https://aitestkitchen.withgoogle.com", thumbnail: "https://logo.clearbit.com/google.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "music-songr", name: "SongR", category: "music",
+    summary: "가사만 입력하면 노래를 불러주는 무료 사이트",
+    description: "가사만 입력하면 노래를 불러주는 무료 사이트",
+    website: "https://songr.ai", thumbnail: "https://logo.clearbit.com/songr.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "music-voicemod", name: "Voicemod", category: "music",
+    summary: "텍스트를 노래로 바꿔주는 AI 싱어 기능 탑재",
+    description: "텍스트를 노래로 바꿔주는 AI 싱어 기능 탑재",
+    website: "https://voicemod.net", thumbnail: "https://logo.clearbit.com/voicemod.net", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "music-koe", name: "Koe Recast", category: "music",
+    summary: "내 목소리를 다른 스타일의 목소리로 변환",
+    description: "내 목소리를 다른 스타일의 목소리로 변환",
+    website: "https://koe.ai", thumbnail: "https://logo.clearbit.com/koe.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "music-voiceswap", name: "VoiceSwap", category: "music",
+    summary: "아티스트의 목소리로 내 데모 곡을 바꿔봄 (합법)",
+    description: "아티스트의 목소리로 내 데모 곡을 바꿔봄 (합법)",
+    website: "https://voiceswap.ai", thumbnail: "https://logo.clearbit.com/voiceswap.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "music-moises", name: "Moises", category: "music",
+    summary: "음악에서 보컬, 드럼 등 악기 소리를 분리 (최강)",
+    description: "음악에서 보컬, 드럼 등 악기 소리를 분리 (최강)",
+    website: "https://moises.ai", thumbnail: "https://logo.clearbit.com/moises.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "music-lalal", name: "Lalal.ai", category: "music",
+    summary: "고품질 음원 분리 및 보컬 제거",
+    description: "고품질 음원 분리 및 보컬 제거",
+    website: "https://lalal.ai", thumbnail: "https://logo.clearbit.com/lalal.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "music-splitter", name: "Splitter.ai", category: "music",
+    summary: "2스템부터 5스템까지 세밀하게 악기 분리",
+    description: "2스템부터 5스템까지 세밀하게 악기 분리",
+    website: "https://splitter.ai", thumbnail: "https://logo.clearbit.com/splitter.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "music-audioshake", name: "AudioShake", category: "music",
+    summary: "기업용 고품질 음원 분리 솔루션",
+    description: "기업용 고품질 음원 분리 솔루션",
+    website: "https://audioshake.ai", thumbnail: "https://logo.clearbit.com/audioshake.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
 
   // ===========================================
   // 11. Presentation
@@ -927,6 +1555,66 @@ export const AI_TOOLS_DATA: AiTool[] = [
     website: "https://popai.pro",
     thumbnail: "https://logo.clearbit.com/popai.pro",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "ppt-sendsteps", name: "Sendsteps", category: "presentation",
+    summary: "청중과 실시간으로 소통하는 인터랙티브 PPT 생성",
+    description: "청중과 실시간으로 소통하는 인터랙티브 PPT 생성",
+    website: "https://sendsteps.com", thumbnail: "https://logo.clearbit.com/sendsteps.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "ppt-slido", name: "Slido", category: "presentation",
+    summary: "발표 도중 투표와 Q&A를 진행하는 최고의 도구",
+    description: "발표 도중 투표와 Q&A를 진행하는 최고의 도구",
+    website: "https://slido.com", thumbnail: "https://logo.clearbit.com/slido.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "ppt-deckrobot", name: "DeckRobot", category: "presentation",
+    summary: "회사 브랜드 가이드라인에 맞춰 PPT 자동 정렬",
+    description: "회사 브랜드 가이드라인에 맞춰 PPT 자동 정렬",
+    website: "https://deckrobot.com", thumbnail: "https://logo.clearbit.com/deckrobot.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "ppt-slidebean", name: "Slidebean", category: "presentation",
+    summary: "스타트업 피치덱(투자 유치용) 제작에 특화",
+    description: "스타트업 피치덱(투자 유치용) 제작에 특화",
+    website: "https://slidebean.com", thumbnail: "https://logo.clearbit.com/slidebean.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "ppt-powerpresenter", name: "PowerPresenter", category: "presentation",
+    summary: "발표와 동시에 AI 코칭을 받아 실력 향상",
+    description: "발표와 동시에 AI 코칭을 받아 실력 향상",
+    website: "https://powerpresenter.ai", thumbnail: "https://logo.clearbit.com/powerpresenter.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "ppt-prezent", name: "Prezent", category: "presentation",
+    summary: "기업용 지능형 프레젠테이션 플랫폼",
+    description: "기업용 지능형 프레젠테이션 플랫폼",
+    website: "https://prezent.ai", thumbnail: "https://logo.clearbit.com/prezent.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "ppt-visme", name: "Visme", category: "presentation",
+    summary: "인포그래픽과 데이터 시각화가 강력한 툴",
+    description: "인포그래픽과 데이터 시각화가 강력한 툴",
+    website: "https://visme.co", thumbnail: "https://logo.clearbit.com/visme.co", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "ppt-zoho", name: "Zoho Show", category: "presentation",
+    summary: "팀원들과 실시간 협업이 가능한 무료 PPT 도구",
+    description: "팀원들과 실시간 협업이 가능한 무료 PPT 도구",
+    website: "https://zoho.com/show", thumbnail: "https://logo.clearbit.com/zoho.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "ppt-haikudeck", name: "Haiku Deck", category: "presentation",
+    summary: "심플하고 감성적인 슬라이드를 빠르게 제작",
+    description: "심플하고 감성적인 슬라이드를 빠르게 제작",
+    website: "https://haikudeck.com", thumbnail: "https://logo.clearbit.com/haikudeck.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "ppt-sway", name: "Sway", category: "presentation",
+    summary: "마이크로소프트의 웹 기반 스토리텔링 툴",
+    description: "마이크로소프트의 웹 기반 스토리텔링 툴",
+    website: "https://sway.office.com", thumbnail: "https://logo.clearbit.com/microsoft.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
   // ===========================================
@@ -1012,6 +1700,66 @@ export const AI_TOOLS_DATA: AiTool[] = [
     thumbnail: "https://logo.clearbit.com/speakapp.co.kr",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
+  {
+    id: "meet-jamie", name: "Jamie", category: "meeting-notes",
+    summary: "맥북 메뉴바에 상주하며 모든 회의를 요약",
+    description: "맥북 메뉴바에 상주하며 모든 회의를 요약",
+    website: "https://meetjamie.ai", thumbnail: "https://logo.clearbit.com/meetjamie.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "meet-beulr", name: "Beulr", category: "meeting-notes",
+    summary: "Zoom 회의에 봇을 대신 보내고 나는 땡땡이 침",
+    description: "Zoom 회의에 봇을 대신 보내고 나는 땡땡이 침",
+    website: "https://beulr.com", thumbnail: "https://logo.clearbit.com/beulr.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "meet-avoma", name: "Avoma", category: "meeting-notes",
+    summary: "영업 미팅과 고객 관리(CRM)에 최적화된 노트",
+    description: "영업 미팅과 고객 관리(CRM)에 최적화된 노트",
+    website: "https://avoma.com", thumbnail: "https://logo.clearbit.com/avoma.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "meet-grain", name: "Grain", category: "meeting-notes",
+    summary: "고객 인터뷰 영상을 공유하고 분석하기 좋음",
+    description: "고객 인터뷰 영상을 공유하고 분석하기 좋음",
+    website: "https://grain.com", thumbnail: "https://logo.clearbit.com/grain.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "meet-assembly", name: "AssemblyAI", category: "meeting-notes",
+    summary: "개발자를 위한 강력한 음성 인식 API",
+    description: "개발자를 위한 강력한 음성 인식 API",
+    website: "https://assemblyai.com", thumbnail: "https://logo.clearbit.com/assemblyai.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "meet-sybill", name: "Sybill", category: "meeting-notes",
+    summary: "상대방의 표정과 제스처까지 읽어 감정 분석",
+    description: "상대방의 표정과 제스처까지 읽어 감정 분석",
+    website: "https://sybill.ai", thumbnail: "https://logo.clearbit.com/sybill.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "meet-nyota", name: "Nyota", category: "meeting-notes",
+    summary: "노션과 완벽하게 연동되는 회의록 도우미",
+    description: "노션과 완벽하게 연동되는 회의록 도우미",
+    website: "https://nyota.ai", thumbnail: "https://logo.clearbit.com/nyota.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "meet-tactiq", name: "Tactiq", category: "meeting-notes",
+    summary: "구글밋 자막을 실시간으로 캡처해서 저장",
+    description: "구글밋 자막을 실시간으로 캡처해서 저장",
+    website: "https://tactiq.io", thumbnail: "https://logo.clearbit.com/tactiq.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "meet-sembly", name: "Sembly", category: "meeting-notes",
+    summary: "회의에서 결정된 행동 강령(Action Item) 자동 정리",
+    description: "회의에서 결정된 행동 강령(Action Item) 자동 정리",
+    website: "https://sembly.ai", thumbnail: "https://logo.clearbit.com/sembly.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "meet-airgram", name: "Airgram", category: "meeting-notes",
+    summary: "회의 녹화, 스크립트, 공유를 한 번에 해결",
+    description: "회의 녹화, 스크립트, 공유를 한 번에 해결",
+    website: "https://airgram.io", thumbnail: "https://logo.clearbit.com/airgram.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
 
   // ===========================================
   // 13. Etc (Productivity)
@@ -1095,6 +1843,66 @@ export const AI_TOOLS_DATA: AiTool[] = [
     website: "https://copy.ai",
     thumbnail: "https://logo.clearbit.com/copy.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "etc-notion", name: "Notion AI", category: "etc",
+    summary: "노션 안에서 글쓰기, 요약, 번역을 한 번에",
+    description: "노션 안에서 글쓰기, 요약, 번역을 한 번에",
+    website: "https://notion.so", thumbnail: "https://logo.clearbit.com/notion.so", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "etc-mem", name: "Mem", category: "etc",
+    summary: "내 생각을 알아서 정리해 주는 AI 메모 앱",
+    description: "내 생각을 알아서 정리해 주는 AI 메모 앱",
+    website: "https://mem.ai", thumbnail: "https://logo.clearbit.com/mem.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "etc-rewind", name: "Rewind", category: "etc",
+    summary: "내 화면의 모든 것을 기억하고 검색해 주는 도구",
+    description: "내 화면의 모든 것을 기억하고 검색해 주는 도구",
+    website: "https://rewind.ai", thumbnail: "https://logo.clearbit.com/rewind.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "etc-taskade", name: "Taskade", category: "etc",
+    summary: "프로젝트 관리부터 마인드맵까지 AI로 해결",
+    description: "프로젝트 관리부터 마인드맵까지 AI로 해결",
+    website: "https://taskade.com", thumbnail: "https://logo.clearbit.com/taskade.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "etc-todoist", name: "Todoist (AI)", category: "etc",
+    summary: "할 일 목록을 AI가 분석해 우선순위 추천",
+    description: "할 일 목록을 AI가 분석해 우선순위 추천",
+    website: "https://todoist.com", thumbnail: "https://logo.clearbit.com/todoist.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "etc-morgen", name: "Morgen", category: "etc",
+    summary: "모든 캘린더를 통합하고 AI로 일정 관리",
+    description: "모든 캘린더를 통합하고 AI로 일정 관리",
+    website: "https://morgen.so", thumbnail: "https://logo.clearbit.com/morgen.so", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "etc-reclaim", name: "Reclaim", category: "etc",
+    summary: "빈 시간을 찾아 업무와 휴식 시간을 자동 배치",
+    description: "빈 시간을 찾아 업무와 휴식 시간을 자동 배치",
+    website: "https://reclaim.ai", thumbnail: "https://logo.clearbit.com/reclaim.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "etc-clockwise", name: "Clockwise", category: "etc",
+    summary: "팀원들의 일정을 조율해 집중 근무 시간 확보",
+    description: "팀원들의 일정을 조율해 집중 근무 시간 확보",
+    website: "https://getclockwise.com", thumbnail: "https://logo.clearbit.com/getclockwise.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "etc-motion", name: "Motion", category: "etc",
+    summary: "일정을 자동으로 계획해 주는 지능형 캘린더",
+    description: "일정을 자동으로 계획해 주는 지능형 캘린더",
+    website: "https://usemotion.com", thumbnail: "https://logo.clearbit.com/usemotion.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "etc-trevor", name: "Trevor AI", category: "etc",
+    summary: "하루 계획을 드래그 앤 드롭으로 쉽게 짜는 툴",
+    description: "하루 계획을 드래그 앤 드롭으로 쉽게 짜는 툴",
+    website: "https://trevorai.com", thumbnail: "https://logo.clearbit.com/trevorai.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
   // ===========================================

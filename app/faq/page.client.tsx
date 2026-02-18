@@ -114,7 +114,7 @@ export default function FAQClient() {
                     </div>
 
                     <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-                        <span className="bg-gradient-to-r from-[#F9954E] via-pink-500 to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+                        <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
                             자주 묻는 질문
                         </span>
                     </h1>
@@ -172,7 +172,7 @@ export default function FAQClient() {
                     </p>
                     <a
                         href="/suggestion"
-                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#F9954E] to-pink-500 text-white text-sm font-bold shadow-lg shadow-[#F9954E]/20 hover:shadow-[#F9954E]/30 transition-all duration-200 hover:scale-[1.02]"
+                        className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-gradient-to-r from-[#F9954E] to-[#E8832E] text-white text-sm font-bold shadow-lg shadow-[#F9954E]/20 hover:shadow-[#F9954E]/30 transition-all duration-200 hover:scale-[1.02]"
                     >
                         건의사항 남기기 →
                     </a>

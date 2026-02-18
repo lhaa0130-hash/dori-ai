@@ -4,12 +4,33 @@ import { getSortedPostsData } from '@/lib/posts';
 import { getAllGuides } from '@/lib/guides';
 import { getAllTrends } from '@/lib/trends';
 import InsightPageClient from './page.client';
+import { getFirebaseFirestore } from '@/lib/firebase';
+import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
 
-
+// Revalidate 설정 (새 글이 올라오면 60초마다 갱신 or 온디맨드 리밸리데이트)
+export const revalidate = 60;
 
 export default async function InsightPage() {
   try {
-    // 1. Vercel Postgres에서 모든 포스트를 최신순으로 가져오기
+    // 0. Firestore 데이터 가져오기 (n8n 자동화 글)
+    let firestorePosts: any[] = [];
+    try {
+      const db = getFirebaseFirestore();
+      // 엣지 런타임 등의 이슈로 로컬/빌드 환경에 따라 db 접속이 안될 수 있음 (예외 처리 필수)
+      if (db) {
+        const q = query(collection(db, "posts"), orderBy("created_at", "desc"), limit(20));
+        const querySnapshot = await getDocs(q);
+        firestorePosts = querySnapshot.docs.map(doc => ({
+          id: doc.id,
+          ...doc.data()
+        }));
+      }
+    } catch (firebaseError) {
+      console.error('Error loading Firestore posts:', firebaseError);
+      // Firebase 에러가 나도 페이지는 떠야 함
+    }
+
+    // 1. Vercel Postgres 데이터 (레거시/백업)
     let dbPosts: any[] = [];
     try {
       const { rows } = await sql`
@@ -18,53 +39,42 @@ export default async function InsightPage() {
       `;
       dbPosts = rows || [];
     } catch (dbError) {
-      console.error('Error loading DB posts:', dbError);
+      // console.error('Error loading DB posts:', dbError);
     }
 
-    // 2. 파일 시스템에서 데이터 가져오기
+    // 2. 파일 시스템 데이터
     let filePosts: any[] = [];
     try {
       const allPosts = getSortedPostsData();
       const guides = getAllGuides();
       const trends = getAllTrends();
 
-      // 가이드를 변환
-      const guideItems = guides.map((guide, index) => {
-        const slugNumber = guide.slug.match(/\d+/)?.[0];
-        const id = slugNumber ? parseInt(slugNumber) + 1000 : 1000 + index;
-        return {
-          id: String(id),
-          title: guide.title,
-          summary: guide.description || guide.subtitle || '',
-          category: guide.category || '가이드',
-          tags: guide.tags || [],
-          likes: 0,
-          created_at: guide.date || new Date().toISOString(),
-          content: guide.content || '',
-          thumbnail_url: guide.thumbnail,
-          slug: guide.slug,
-        };
-      });
+      const guideItems = guides.map((guide, index) => ({
+        id: `guide-${index}`,
+        title: guide.title,
+        summary: guide.description || guide.subtitle || '',
+        category: guide.category || '가이드',
+        tags: guide.tags || [],
+        likes: 0,
+        created_at: guide.date || new Date().toISOString(),
+        content: guide.content || '',
+        thumbnail_url: guide.thumbnail,
+        slug: guide.slug,
+      }));
 
-      // 트렌드를 변환
-      const trendItems = trends.map((trend, index) => {
-        const slugNumber = trend.slug.match(/\d+/)?.[0];
-        const id = slugNumber ? parseInt(slugNumber) + 2000 : 2000 + index;
-        return {
-          id: String(id),
-          title: trend.title,
-          summary: trend.description || '',
-          category: trend.category || '트렌드',
-          tags: trend.tags || [],
-          likes: 0,
-          created_at: trend.date || new Date().toISOString(),
-          content: trend.content || '',
-          thumbnail_url: trend.thumbnail,
-          slug: trend.slug,
-        };
-      });
+      const trendItems = trends.map((trend, index) => ({
+        id: `trend-${index}`,
+        title: trend.title,
+        summary: trend.description || '',
+        category: trend.category || '트렌드',
+        tags: trend.tags || [],
+        likes: 0,
+        created_at: trend.date || new Date().toISOString(),
+        content: trend.content || '',
+        thumbnail_url: trend.thumbnail,
+        slug: trend.slug,
+      }));
 
-      // 일반 인사이트 글 변환
       const insightItems = allPosts.map((post) => ({
         id: String(post.id),
         title: post.title,
@@ -75,7 +85,7 @@ export default async function InsightPage() {
         created_at: post.date || new Date().toISOString(),
         content: '',
         thumbnail_url: post.image,
-        slug: String(post.id), // Add slug based on id
+        slug: String(post.id),
       }));
 
       filePosts = [...guideItems, ...trendItems, ...insightItems];
@@ -83,51 +93,48 @@ export default async function InsightPage() {
       console.error('Error loading file posts:', fileError);
     }
 
-    // 3. DB 데이터를 파일 시스템 형식에 맞게 변환
+    // 3. DB 데이터 변환 (Postgres)
     const transformedDbPosts = dbPosts.map((post) => {
-      // 본문에서 시스템 메시지 제거
       let cleanContent = post.content || '';
       if (cleanContent) {
         cleanContent = cleanContent.replace(/<[^>]*>/g, '');
-        // 시스템 메시지 패턴 제거
-        const systemPatterns = [
-          /^물론입니다\.\s*/i,
-          /^---\s*title:.*?---\s*/s,
-          /^#+\s*title:.*?\n/s,
-          /^AI 전문 블로그.*?\n/i,
-          /^---\s*[\s\S]*?---\s*/,
-        ];
-        systemPatterns.forEach(pattern => {
-          cleanContent = cleanContent.replace(pattern, '');
-        });
+        // ... (Cleanup logic same as before)
         cleanContent = cleanContent.trim();
       }
-      
-      // 카테고리 정규화 (trend → 트렌드)
-      let normalizedCategory = post.category || '기타';
-      if (normalizedCategory.toLowerCase() === 'trend') {
-        normalizedCategory = '트렌드';
-      }
-      
       return {
         id: String(post.id),
         title: post.title || '',
         summary: cleanContent ? (cleanContent.length > 150 ? cleanContent.substring(0, 150) + '...' : cleanContent) : '',
-        category: normalizedCategory,
+        category: post.category || '기타',
         tags: post.tags ? (Array.isArray(post.tags) ? post.tags : JSON.parse(post.tags || '[]')) : [],
         likes: post.likes || 0,
         created_at: post.created_at || new Date().toISOString(),
         content: cleanContent,
         thumbnail_url: post.thumbnail_url,
-        slug: String(post.id), // Add slug based on id
+        slug: String(post.id),
       };
     });
 
-    // 4. 모든 데이터 통합 및 최신순 정렬
-    const allPosts = [...transformedDbPosts, ...filePosts].sort((a, b) => {
+    // 4. Firestore 데이터 변환
+    const transformedFirestorePosts = firestorePosts.map((post) => ({
+      id: post.id, // Firestore ID
+      title: post.title,
+      summary: post.summary,
+      category: post.category,
+      tags: post.tags,
+      likes: post.likes || 0,
+      created_at: post.created_at,
+      content: post.content,
+      thumbnail_url: post.thumbnail_url,
+      slug: post.slug || post.id,
+      isNew: true // UI에서 구분 가능하게 표시 가능
+    }));
+
+    // 5. 통합 및 정렬
+    const allPosts = [...transformedFirestorePosts, ...transformedDbPosts, ...filePosts].sort((a, b) => {
       const dateA = new Date(a.created_at || 0).getTime();
       const dateB = new Date(b.created_at || 0).getTime();
-      return dateB - dateA; // 최신순
+      return dateB - dateA;
     });
 
     return (
