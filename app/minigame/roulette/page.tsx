@@ -19,7 +19,7 @@ interface RouletteItem {
 // ---- Constants ----
 const ITEM_COLORS = [
     "#ef4444", // red
-    "#f97316", // orange
+    "#F9954E", // orange
     "#f59e0b", // amber
     "#84cc16", // lime
     "#10b981", // emerald
@@ -277,7 +277,7 @@ export default function RoulettePage() {
                                     <Minus className="w-5 h-5" />
                                 </button>
                                 <div className="text-center w-24">
-                                    <span className="text-4xl font-bold text-orange-500">{itemCount}</span>
+                                    <span className="text-4xl font-bold text-[#F9954E]">{itemCount}</span>
                                     <span className="text-sm text-neutral-400 block mt-1">항목</span>
                                 </div>
                                 <button
@@ -301,7 +301,7 @@ export default function RoulettePage() {
                                             value={item.name}
                                             onChange={(e) => handleUpdateItemName(i, e.target.value)}
                                             placeholder={`항목 ${i + 1}`}
-                                            className="flex-1 bg-neutral-50 dark:bg-black border border-neutral-200 dark:border-zinc-800 rounded-xl px-4 py-3 focus:outline-none focus:border-orange-500 dark:focus:border-orange-500 transition-colors"
+                                            className="flex-1 bg-neutral-50 dark:bg-black border border-neutral-200 dark:border-zinc-800 rounded-xl px-4 py-3 focus:outline-none focus:border-[#F9954E] dark:focus:border-[#F9954E] transition-colors"
                                         />
                                     </div>
                                 ))}
@@ -309,7 +309,7 @@ export default function RoulettePage() {
 
                             <button
                                 onClick={startGame}
-                                className="w-full py-4 bg-orange-500 hover:bg-orange-600 active:scale-[0.98] text-white rounded-2xl font-bold text-lg shadow-lg shadow-orange-500/20 transition-all flex items-center justify-center gap-2"
+                                className="w-full py-4 bg-[#F9954E] hover:bg-[#E8832E] active:scale-[0.98] text-white rounded-2xl font-bold text-lg shadow-lg shadow-[#F9954E]/20 transition-all flex items-center justify-center gap-2"
                             >
                                 <Play className="w-5 h-5 fill-current" />
                                 시작하기
@@ -351,7 +351,7 @@ export default function RoulettePage() {
                                         repeatType: "reverse"
                                     }}
                                 >
-                                    <div className="w-0 h-0 border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-t-[30px] border-t-orange-500 drop-shadow-lg" />
+                                    <div className="w-0 h-0 border-l-[20px] border-l-transparent border-r-[20px] border-r-transparent border-t-[30px] border-t-[#F9954E] drop-shadow-lg" />
                                 </motion.div>
 
                                 {/* Wheel Container */}
@@ -389,7 +389,7 @@ export default function RoulettePage() {
                                             cx="50"
                                             cy="50"
                                             r="4"
-                                            fill="#f97316"
+                                            fill="#F9954E"
                                         />
                                     </svg>
                                 </div>
@@ -401,7 +401,7 @@ export default function RoulettePage() {
                                         disabled={isSpinning}
                                         initial={{ scale: 0 }}
                                         animate={{ scale: 1 }}
-                                        className="px-12 py-4 bg-orange-500 hover:bg-orange-600 active:scale-95 text-white rounded-full font-bold text-xl shadow-2xl hover:shadow-orange-500/50 transition-all flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
+                                        className="px-12 py-4 bg-[#F9954E] hover:bg-[#E8832E] active:scale-95 text-white rounded-full font-bold text-xl shadow-2xl hover:shadow-[#F9954E]/50 transition-all flex items-center gap-3 disabled:opacity-50 disabled:cursor-not-allowed"
                                     >
                                         <Sparkles className="w-6 h-6" />
                                         SPIN!
@@ -415,7 +415,7 @@ export default function RoulettePage() {
                                         <motion.div
                                             initial={{ scale: 0, opacity: 0 }}
                                             animate={{ scale: 1, opacity: 1 }}
-                                            className="mt-4 p-6 bg-gradient-to-br from-orange-400 to-orange-600 rounded-2xl shadow-2xl text-center"
+                                            className="mt-4 p-6 bg-gradient-to-br from-[#FBAA60] to-[#E8832E] rounded-2xl shadow-2xl text-center"
                                         >
                                             <div className="flex items-center justify-center gap-2 mb-2">
                                                 <Trophy className="w-6 h-6 text-white" />

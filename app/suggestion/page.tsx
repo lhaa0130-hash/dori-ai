@@ -97,7 +97,7 @@ export default function SuggestionPage() {
 
     const getTypeBadge = (t: SuggestionType) => {
         switch (t) {
-            case "건의사항": return "bg-orange-50 text-orange-600 dark:bg-orange-900/20 dark:text-orange-300";
+            case "건의사항": return "bg-[#FFF5EB] text-[#E8832E] dark:bg-[#8F4B10]/20 dark:text-[#FCC07A]";
             case "버그 제보": return "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-300";
             case "기능 요청": return "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-300";
             default: return "bg-gray-100 text-gray-600 dark:bg-white/10 dark:text-gray-300";
@@ -112,25 +112,25 @@ export default function SuggestionPage() {
         }
     };
 
-    const inputClass = "w-full px-4 py-3 rounded-xl border outline-none transition-all bg-white dark:bg-zinc-900 border-neutral-200 dark:border-zinc-700 text-neutral-900 dark:text-white focus:border-orange-400 dark:focus:border-orange-500 placeholder:text-neutral-400 text-sm";
+    const inputClass = "w-full px-4 py-3 rounded-xl border outline-none transition-all bg-white dark:bg-zinc-900 border-neutral-200 dark:border-zinc-700 text-neutral-900 dark:text-white focus:border-[#FBAA60] dark:focus:border-[#F9954E] placeholder:text-neutral-400 text-sm";
 
     return (
         <main className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-500 relative overflow-x-hidden">
 
             {/* 배경 그라데이션 */}
-            <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-orange-100/40 via-orange-50/20 to-transparent dark:from-orange-900/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
+            <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
 
             {/* 히어로 섹션 */}
             <section className="relative pt-32 pb-16 px-6 text-center z-10">
                 <div className="max-w-3xl mx-auto animate-fade-in flex flex-col items-center">
                     {/* Badge */}
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800 text-orange-600 dark:text-orange-400 text-xs font-bold mb-6">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
                         <MessageSquarePlus className="w-3 h-3" />
                         <span>Feedback</span>
                     </div>
 
                     <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-                        <span className="bg-gradient-to-r from-orange-500 via-pink-500 to-orange-500 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+                        <span className="bg-gradient-to-r from-[#F9954E] via-pink-500 to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
                             건의사항
                         </span>
                     </h1>
@@ -146,15 +146,15 @@ export default function SuggestionPage() {
                 {!showForm ? (
                     <button
                         onClick={() => setShowForm(true)}
-                        className="w-full p-5 rounded-[2rem] border border-dashed border-orange-300 dark:border-orange-800 bg-orange-50/50 dark:bg-orange-950/10 text-orange-600 dark:text-orange-400 font-bold text-sm flex items-center justify-center gap-2 hover:bg-orange-100/60 dark:hover:bg-orange-950/20 transition-all duration-200 mb-8"
+                        className="w-full p-5 rounded-[2rem] border border-dashed border-[#FCC07A] dark:border-[#B35E15] bg-[#FFF5EB]/50 dark:bg-orange-950/10 text-[#E8832E] dark:text-[#FBAA60] font-bold text-sm flex items-center justify-center gap-2 hover:bg-[#FEEBD0]/60 dark:hover:bg-orange-950/20 transition-all duration-200 mb-8"
                     >
                         <Send className="w-4 h-4" />
                         건의사항 작성하기
                     </button>
                 ) : (
-                    <div className="p-6 md:p-8 rounded-[2rem] bg-white/80 dark:bg-zinc-900/40 backdrop-blur-xl border border-neutral-200 dark:border-zinc-800 shadow-xl shadow-orange-500/5 mb-8">
+                    <div className="p-6 md:p-8 rounded-[2rem] bg-white/80 dark:bg-zinc-900/40 backdrop-blur-xl border border-neutral-200 dark:border-zinc-800 shadow-xl shadow-[#F9954E]/5 mb-8">
                         <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-6 flex items-center gap-2">
-                            <Send className="w-4 h-4 text-orange-500" />
+                            <Send className="w-4 h-4 text-[#F9954E]" />
                             건의사항 작성
                         </h3>
                         <form onSubmit={handleSubmit} className="flex flex-col gap-5">
@@ -229,7 +229,7 @@ export default function SuggestionPage() {
                                 </button>
                                 <button
                                     type="submit"
-                                    className="px-6 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-orange-500 to-pink-500 hover:from-orange-600 hover:to-pink-600 shadow-lg shadow-orange-500/20 transition-all duration-200 hover:shadow-orange-500/30"
+                                    className="px-6 py-2.5 rounded-xl text-sm font-bold text-white bg-gradient-to-r from-[#F9954E] to-pink-500 hover:from-[#E8832E] hover:to-pink-600 shadow-lg shadow-[#F9954E]/20 transition-all duration-200 hover:shadow-[#F9954E]/30"
                                 >
                                     등록하기
                                 </button>
@@ -243,7 +243,7 @@ export default function SuggestionPage() {
             <section className="container max-w-2xl mx-auto px-6 pb-24 relative z-10">
                 {suggestions.length === 0 ? (
                     <div className="text-center py-16">
-                        <div className="w-16 h-16 mx-auto rounded-2xl bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center mb-5 text-orange-500">
+                        <div className="w-16 h-16 mx-auto rounded-2xl bg-[#FFF5EB] dark:bg-[#F9954E]/10 flex items-center justify-center mb-5 text-[#F9954E]">
                             <MessageSquarePlus className="w-7 h-7" />
                         </div>
                         <h3 className="text-lg font-bold mb-2 text-neutral-900 dark:text-white">아직 건의사항이 없습니다</h3>
@@ -259,7 +259,7 @@ export default function SuggestionPage() {
                         {suggestions.map((item) => (
                             <div
                                 key={item.id}
-                                className="p-5 md:p-6 rounded-[1.5rem] border border-neutral-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/40 backdrop-blur-xl shadow-sm hover:shadow-md hover:shadow-orange-500/5 transition-all duration-300 hover:-translate-y-0.5"
+                                className="p-5 md:p-6 rounded-[1.5rem] border border-neutral-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/40 backdrop-blur-xl shadow-sm hover:shadow-md hover:shadow-[#F9954E]/5 transition-all duration-300 hover:-translate-y-0.5"
                             >
                                 {/* 상단: 뱃지 + 삭제 */}
                                 <div className="flex items-center justify-between mb-3">
@@ -288,7 +288,7 @@ export default function SuggestionPage() {
                                 {/* 하단: 작성자 + 날짜 */}
                                 <div className="flex items-center justify-between pt-3 border-t border-dashed border-neutral-200 dark:border-zinc-800">
                                     <div className="flex items-center gap-2">
-                                        <div className="w-5 h-5 rounded-full bg-orange-100 dark:bg-orange-500/20 flex items-center justify-center text-[10px] font-bold text-orange-600 dark:text-orange-400">
+                                        <div className="w-5 h-5 rounded-full bg-[#FEEBD0] dark:bg-[#F9954E]/20 flex items-center justify-center text-[10px] font-bold text-[#E8832E] dark:text-[#FBAA60]">
                                             {item.name[0]}
                                         </div>
                                         <span className="text-xs text-neutral-500 font-medium">{item.name}</span>

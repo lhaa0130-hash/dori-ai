@@ -34,7 +34,7 @@ interface Bridge {
 // ---- Constants ----
 const PLAYER_COLORS = [
     "#ef4444", // red
-    "#f97316", // orange
+    "#F9954E", // orange
     "#f59e0b", // amber
     "#84cc16", // lime
     "#10b981", // emerald
@@ -350,7 +350,7 @@ export default function LadderGamePage() {
                                     <span className="text-2xl font-light">-</span>
                                 </button>
                                 <div className="text-center w-24">
-                                    <span className="text-4xl font-bold text-orange-500">{playerCount}</span>
+                                    <span className="text-4xl font-bold text-[#F9954E]">{playerCount}</span>
                                     <span className="text-sm text-neutral-400 block mt-1">명</span>
                                 </div>
                                 <button
@@ -374,7 +374,7 @@ export default function LadderGamePage() {
                                             value={playerNames[i]}
                                             onChange={(e) => handleUpdateName(i, e.target.value)}
                                             placeholder={`참가자 ${i + 1}`}
-                                            className="w-full bg-neutral-50 dark:bg-black border border-neutral-200 dark:border-zinc-800 rounded-xl px-4 py-3 text-center focus:outline-none focus:border-orange-500 dark:focus:border-orange-500 transition-colors"
+                                            className="w-full bg-neutral-50 dark:bg-black border border-neutral-200 dark:border-zinc-800 rounded-xl px-4 py-3 text-center focus:outline-none focus:border-[#F9954E] dark:focus:border-[#F9954E] transition-colors"
                                         />
                                         <div className="w-8 flex justify-center text-neutral-300">
                                             <Shuffle className="w-4 h-4" />
@@ -384,7 +384,7 @@ export default function LadderGamePage() {
                                             value={results[i]}
                                             onChange={(e) => handleUpdateResult(i, e.target.value)}
                                             placeholder={i === 0 ? "당첨" : "꽝"}
-                                            className="w-full bg-neutral-50 dark:bg-black border border-neutral-200 dark:border-zinc-800 rounded-xl px-4 py-3 text-center focus:outline-none focus:border-orange-500 dark:focus:border-orange-500 transition-colors"
+                                            className="w-full bg-neutral-50 dark:bg-black border border-neutral-200 dark:border-zinc-800 rounded-xl px-4 py-3 text-center focus:outline-none focus:border-[#F9954E] dark:focus:border-[#F9954E] transition-colors"
                                         />
                                     </div>
                                 ))}
@@ -392,7 +392,7 @@ export default function LadderGamePage() {
 
                             <button
                                 onClick={generateLadder}
-                                className="w-full py-4 bg-orange-500 hover:bg-orange-600 active:scale-[0.98] text-white rounded-2xl font-bold text-lg shadow-lg shadow-orange-500/20 transition-all flex items-center justify-center gap-2"
+                                className="w-full py-4 bg-[#F9954E] hover:bg-[#E8832E] active:scale-[0.98] text-white rounded-2xl font-bold text-lg shadow-lg shadow-[#F9954E]/20 transition-all flex items-center justify-center gap-2"
                             >
                                 <Play className="w-5 h-5 fill-current" />
                                 게임 시작
@@ -594,14 +594,14 @@ export default function LadderGamePage() {
                                                         animate={{ scale: 1, rotateY: 0 }}
                                                         className="flex flex-col items-center pointer-events-none"
                                                     >
-                                                        <div className="text-sm font-bold text-neutral-900 dark:text-white whitespace-nowrap px-3 py-1.5 rounded-lg bg-orange-100 dark:bg-orange-900/30 border border-orange-200 dark:border-orange-500/30 shadow-sm">
+                                                        <div className="text-sm font-bold text-neutral-900 dark:text-white whitespace-nowrap px-3 py-1.5 rounded-lg bg-[#FEEBD0] dark:bg-[#8F4B10]/30 border border-[#FDD5A5] dark:border-[#F9954E]/30 shadow-sm">
                                                             {results[i]}
                                                         </div>
                                                         {winner && (
                                                             <motion.div
                                                                 initial={{ opacity: 0, y: -10 }}
                                                                 animate={{ opacity: 1, y: 0 }}
-                                                                className="mt-1 text-xs text-orange-500 font-bold whitespace-nowrap"
+                                                                className="mt-1 text-xs text-[#F9954E] font-bold whitespace-nowrap"
                                                             >
                                                                 {winner.name}
                                                             </motion.div>

@@ -204,14 +204,14 @@ export default function LoginPage() {
             <Sparkles
               size={24}
               style={{
-                color: "#f97316",
+                color: "#F9954E",
               }}
             />
             <span
               style={{
                 fontSize: "24px",
                 fontWeight: 800,
-                background: "linear-gradient(135deg, #facc15, #f97316 50%, #ef4444)",
+                background: "linear-gradient(135deg, #facc15, #F9954E 50%, #ef4444)",
                 WebkitBackgroundClip: "text",
                 WebkitTextFillColor: "transparent",
               }}
@@ -267,7 +267,7 @@ export default function LoginPage() {
                 color: mode === "login"
                   ? isDark
                     ? "#fb923c"
-                    : "#f97316"
+                    : "#F9954E"
                   : isDark
                     ? "rgba(255,255,255,0.4)"
                     : "rgba(0,0,0,0.4)",
@@ -300,7 +300,7 @@ export default function LoginPage() {
                 color: mode === "signup"
                   ? isDark
                     ? "#fb923c"
-                    : "#f97316"
+                    : "#F9954E"
                   : isDark
                     ? "rgba(255,255,255,0.4)"
                     : "rgba(0,0,0,0.4)",
@@ -431,7 +431,7 @@ export default function LoginPage() {
                       boxSizing: "border-box",
                     }}
                     onFocus={(e) => {
-                      e.target.style.borderColor = "#f97316";
+                      e.target.style.borderColor = "#F9954E";
                       e.target.style.boxShadow = "0 0 0 3px rgba(249,115,22,0.1)";
                     }}
                     onBlur={(e) => {
@@ -488,7 +488,7 @@ export default function LoginPage() {
                       boxSizing: "border-box",
                     }}
                     onFocus={(e) => {
-                      e.target.style.borderColor = "#f97316";
+                      e.target.style.borderColor = "#F9954E";
                       e.target.style.boxShadow = "0 0 0 3px rgba(249,115,22,0.1)";
                     }}
                     onBlur={(e) => {
@@ -525,7 +525,7 @@ export default function LoginPage() {
                   padding: "16px",
                   borderRadius: "12px",
                   border: "none",
-                  background: "linear-gradient(135deg, #f97316, #ea580c)",
+                  background: "linear-gradient(135deg, #F9954E, #ea580c)",
                   color: "#fff",
                   fontSize: "15px",
                   fontWeight: 700,
@@ -702,7 +702,7 @@ export default function LoginPage() {
                       boxSizing: "border-box",
                     }}
                     onFocus={(e) => {
-                      e.target.style.borderColor = "#f97316";
+                      e.target.style.borderColor = "#F9954E";
                       e.target.style.boxShadow = "0 0 0 3px rgba(249,115,22,0.1)";
                     }}
                     onBlur={(e) => {
@@ -759,7 +759,7 @@ export default function LoginPage() {
                       boxSizing: "border-box",
                     }}
                     onFocus={(e) => {
-                      e.target.style.borderColor = "#f97316";
+                      e.target.style.borderColor = "#F9954E";
                       e.target.style.boxShadow = "0 0 0 3px rgba(249,115,22,0.1)";
                     }}
                     onBlur={(e) => {
@@ -816,7 +816,7 @@ export default function LoginPage() {
                       boxSizing: "border-box",
                     }}
                     onFocus={(e) => {
-                      e.target.style.borderColor = "#f97316";
+                      e.target.style.borderColor = "#F9954E";
                       e.target.style.boxShadow = "0 0 0 3px rgba(249,115,22,0.1)";
                     }}
                     onBlur={(e) => {
@@ -922,7 +922,7 @@ export default function LoginPage() {
                       boxSizing: "border-box",
                     }}
                     onFocus={(e) => {
-                      e.target.style.borderColor = "#f97316";
+                      e.target.style.borderColor = "#F9954E";
                       e.target.style.boxShadow = "0 0 0 3px rgba(249,115,22,0.1)";
                     }}
                     onBlur={(e) => {
@@ -973,7 +973,7 @@ export default function LoginPage() {
                           padding: "12px",
                           borderRadius: "10px",
                           border: `1px solid ${gender === opt.value
-                            ? "#f97316"
+                            ? "#F9954E"
                             : isDark
                               ? "rgba(255,255,255,0.1)"
                               : "#e5e7eb"
@@ -988,7 +988,7 @@ export default function LoginPage() {
                                 : "#fafafa",
                           color:
                             gender === opt.value
-                              ? "#f97316"
+                              ? "#F9954E"
                               : isDark
                                 ? "rgba(255,255,255,0.6)"
                                 : "#666",
@@ -1064,7 +1064,7 @@ export default function LoginPage() {
                   padding: "16px",
                   borderRadius: "12px",
                   border: "none",
-                  background: "linear-gradient(135deg, #f97316, #ea580c)",
+                  background: "linear-gradient(135deg, #F9954E, #ea580c)",
                   color: "#fff",
                   fontSize: "15px",
                   fontWeight: 700,

@@ -145,7 +145,7 @@ export default function MinigamePage() {
                     className="max-w-3xl mx-auto flex flex-col items-center"
                 >
                     {/* Badge */}
-                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-orange-100 to-pink-100 dark:from-orange-950/40 dark:to-pink-950/40 border border-orange-200 dark:border-orange-800 text-orange-600 dark:text-orange-300 rounded-full text-[10px] font-bold mb-4 shadow-sm uppercase tracking-wider">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 bg-gradient-to-r from-[#FEEBD0] to-pink-100 dark:from-orange-950/40 dark:to-pink-950/40 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FCC07A] rounded-full text-[10px] font-bold mb-4 shadow-sm uppercase tracking-wider">
                         <Gamepad2 className="w-3 h-3" />
                         <span>Arcade Center</span>
                     </div>
@@ -177,22 +177,22 @@ export default function MinigamePage() {
                                     border border-neutral-200/60 dark:border-white/5 
                                     rounded-2xl 
                                     hover:bg-white/80 dark:hover:bg-zinc-800/60 
-                                    hover:border-orange-500/30 dark:hover:border-orange-500/30
-                                    hover:shadow-lg hover:shadow-orange-500/5 
+                                    hover:border-[#F9954E]/30 dark:hover:border-[#F9954E]/30
+                                    hover:shadow-lg hover:shadow-[#F9954E]/5 
                                     transition-all duration-300 transform hover:-translate-y-0.5">
 
                                     {/* Icon Box */}
-                                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-orange-50 dark:bg-zinc-800 border border-orange-100 dark:border-zinc-700 text-orange-500 flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:bg-orange-500 group-hover:text-white group-hover:border-orange-500">
+                                    <div className="flex-shrink-0 w-12 h-12 rounded-xl bg-[#FFF5EB] dark:bg-zinc-800 border border-[#FEEBD0] dark:border-zinc-700 text-[#F9954E] flex items-center justify-center transition-all duration-300 group-hover:scale-110 group-hover:bg-[#F9954E] group-hover:text-white group-hover:border-[#F9954E]">
                                         {game.icon}
                                     </div>
 
                                     {/* Content */}
                                     <div className="flex-grow min-w-0">
                                         <div className="flex items-center justify-between mb-1">
-                                            <h3 className="text-base font-bold text-foreground group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors truncate">
+                                            <h3 className="text-base font-bold text-foreground group-hover:text-[#E8832E] dark:group-hover:text-[#FBAA60] transition-colors truncate">
                                                 {game.title}
                                             </h3>
-                                            <ArrowUpRight className="w-4 h-4 text-neutral-300 dark:text-neutral-600 group-hover:text-orange-500 transition-colors" />
+                                            <ArrowUpRight className="w-4 h-4 text-neutral-300 dark:text-neutral-600 group-hover:text-[#F9954E] transition-colors" />
                                         </div>
                                         <p className="text-xs text-muted-foreground/80 line-clamp-1 group-hover:text-foreground/70 transition-colors">
                                             {game.description}

@@ -182,7 +182,7 @@ export default function SlotMachinePage() {
                                     animate={{ scale: 1, opacity: 1 }}
                                     exit={{ scale: 0.8, opacity: 0 }}
                                     className={`text-center p-4 rounded-2xl mb-6 font-bold ${result.win
-                                            ? "bg-gradient-to-r from-yellow-400/20 to-orange-400/20 text-yellow-600 dark:text-yellow-400"
+                                            ? "bg-gradient-to-r from-yellow-400/20 to-[#FBAA60]/20 text-yellow-600 dark:text-yellow-400"
                                             : result.payout > 0
                                                 ? "bg-blue-50 dark:bg-blue-500/10 text-blue-600 dark:text-blue-400"
                                                 : "bg-neutral-100 dark:bg-zinc-800 text-neutral-500"
@@ -243,7 +243,7 @@ export default function SlotMachinePage() {
                                     ? "bg-neutral-300 dark:bg-zinc-700 text-neutral-500 cursor-not-allowed"
                                     : coins < bet
                                         ? "bg-neutral-300 dark:bg-zinc-700 text-neutral-500 cursor-not-allowed"
-                                        : "bg-gradient-to-r from-yellow-500 to-orange-500 text-white hover:from-yellow-600 hover:to-orange-600 active:scale-[0.98] shadow-yellow-500/20"
+                                        : "bg-gradient-to-r from-yellow-500 to-[#F9954E] text-white hover:from-yellow-600 hover:to-[#E8832E] active:scale-[0.98] shadow-yellow-500/20"
                                 }`}
                         >
                             {spinning ? (
@@ -273,7 +273,7 @@ export default function SlotMachinePage() {
                     {/* 통계 */}
                     <div className="mt-6 grid grid-cols-3 gap-3">
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 text-center border border-neutral-100 dark:border-white/5">
-                            <div className="text-2xl font-bold text-orange-500">{totalSpins}</div>
+                            <div className="text-2xl font-bold text-[#F9954E]">{totalSpins}</div>
                             <div className="text-xs text-neutral-500">총 스핀</div>
                         </div>
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 text-center border border-neutral-100 dark:border-white/5">
@@ -310,7 +310,7 @@ export default function SlotMachinePage() {
                                         {Object.entries(PAYOUTS).map(([symbols, multiplier]) => (
                                             <div key={symbols} className="flex items-center justify-between p-2 rounded-lg bg-neutral-50 dark:bg-zinc-800">
                                                 <span className="text-xl tracking-wider">{symbols.match(/.{2}/g)?.join(" ")}</span>
-                                                <span className={`font-bold text-sm ${multiplier >= 30 ? "text-yellow-500" : multiplier >= 10 ? "text-orange-500" : "text-neutral-600 dark:text-neutral-400"
+                                                <span className={`font-bold text-sm ${multiplier >= 30 ? "text-yellow-500" : multiplier >= 10 ? "text-[#F9954E]" : "text-neutral-600 dark:text-neutral-400"
                                                     }`}>×{multiplier}</span>
                                             </div>
                                         ))}

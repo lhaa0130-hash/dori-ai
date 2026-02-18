@@ -37,7 +37,7 @@ export const HeroSection = () => {
               className="text-5xl md:text-8xl font-bold tracking-tight text-neutral-900 dark:text-white"
             >
               {word === "DORI-AI" ? (
-                <span className="bg-clip-text text-transparent bg-gradient-to-r from-orange-500 to-amber-600">
+                <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#F9954E] to-amber-600">
                   {word}
                 </span>
               ) : (

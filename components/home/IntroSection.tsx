@@ -23,7 +23,7 @@ export function IntroSection() {
                     transition={{ delay: 0.3, duration: 0.8 }}
                     className="text-5xl md:text-7xl font-bold tracking-tight"
                 >
-                    <span className="bg-gradient-to-r from-orange-500 via-pink-500 to-orange-500 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+                    <span className="bg-gradient-to-r from-[#F9954E] via-pink-500 to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
                         DORI-AI
                     </span>
                 </motion.h1>
@@ -45,7 +45,7 @@ export function IntroSection() {
                     transition={{ delay: 0.5, duration: 0.8 }}
                     className="text-base md:text-lg text-muted-foreground leading-relaxed"
                 >
-                    AI라는 새로운 영역 앞에서 주저하는 당신에게, <span className="font-semibold text-orange-600 dark:text-orange-400">가능성으로 향하는 길</span>을 함께 만들어갑니다
+                    AI라는 새로운 영역 앞에서 주저하는 당신에게, <span className="font-semibold text-[#E8832E] dark:text-[#FBAA60]">가능성으로 향하는 길</span>을 함께 만들어갑니다
                 </motion.p>
 
                 {/* 4. Description Line 2 */}
@@ -66,7 +66,7 @@ export function IntroSection() {
                     className="mt-6 flex flex-wrap items-center justify-center gap-4 text-sm text-foreground/80"
                 >
                     <span className="flex items-center gap-1.5">
-                        <span className="w-1.5 h-1.5 rounded-full bg-orange-500" />
+                        <span className="w-1.5 h-1.5 rounded-full bg-[#F9954E]" />
                         80+ AI 도구
                     </span>
                     <span className="flex items-center gap-1.5">

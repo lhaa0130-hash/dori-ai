@@ -88,14 +88,15 @@ section[id] {
     --card-foreground: 0 0% 9%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 9%;
-    --primary: 24.6 95% 53.1%;
-    /* Orange-500/600 approx #f97316 */
-    --primary-foreground: 0 0% 98%;
-    --secondary: 210 40% 96.1%;
+    --primary: 25 94% 64%;
+    /* Main Color #F9954E */
+    --primary-foreground: 0 0% 100%;
+    --secondary: 210 14% 95%;
+    /* Sub Color #EFF1F3 */
     --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 40% 96.1%;
+    --muted: 210 14% 95%;
     --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 40% 96.1%;
+    --accent: 210 14% 95%;
     --accent-foreground: 222.2 47.4% 11.2%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
@@ -115,8 +116,8 @@ section[id] {
     --card-foreground: 0 0% 98%;
     --popover: 0 0% 0%;
     --popover-foreground: 210 40% 98%;
-    --primary: 24.6 95% 53.1%;
-    /* Orange-500 */
+    --primary: 25 94% 64%;
+    /* Main Color #F9954E */
     --primary-foreground: 0 0% 9%;
     --secondary: 217.2 32.6% 17.5%;
     --secondary-foreground: 210 40% 98%;
@@ -358,7 +359,7 @@ h6 {
 
   /* Blockquotes */
   .prose-premium blockquote {
-    @apply border-l-4 border-orange-500 bg-orange-50 dark:bg-orange-950/20 pl-6 py-4 my-8 rounded-r-lg italic;
+    @apply border-l-4 border-[#F9954E] bg-[#FFF5EB] dark:bg-orange-950/20 pl-6 py-4 my-8 rounded-r-lg italic;
     color: #4b5563;
     /* gray-600 */
   }
@@ -370,11 +371,11 @@ h6 {
 
   /* Lists */
   .prose-premium ul {
-    @apply list-disc list-outside ml-6 mb-8 marker:text-orange-500;
+    @apply list-disc list-outside ml-6 mb-8 marker:text-[#F9954E];
   }
 
   .prose-premium ol {
-    @apply list-decimal list-outside ml-6 mb-8 marker:text-orange-500;
+    @apply list-decimal list-outside ml-6 mb-8 marker:text-[#F9954E];
   }
 
   .prose-premium li {
@@ -383,11 +384,11 @@ h6 {
 
   /* Inline Code */
   .prose-premium :not(pre)>code {
-    @apply font-mono text-sm px-1.5 py-0.5 rounded-md text-orange-600 bg-orange-50 border border-orange-100;
+    @apply font-mono text-sm px-1.5 py-0.5 rounded-md text-[#E8832E] bg-[#FFF5EB] border border-[#FEEBD0];
   }
 
   .dark .prose-premium :not(pre)>code {
-    @apply text-orange-400 bg-orange-900/10 border-orange-800/20;
+    @apply text-[#FBAA60] bg-[#8F4B10]/10 border-[#B35E15]/20;
   }
 
   /* Code Blocks */

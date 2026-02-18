@@ -170,7 +170,7 @@ export default function TypingSpeedPage() {
                                 <h2 className="text-3xl font-bold mb-8">완료!</h2>
 
                                 <div className="grid grid-cols-2 gap-6 mb-8">
-                                    <div className="p-6 bg-gradient-to-br from-yellow-400 to-orange-500 rounded-2xl text-white">
+                                    <div className="p-6 bg-gradient-to-br from-yellow-400 to-[#F9954E] rounded-2xl text-white">
                                         <div className="text-sm mb-2">타이핑 속도</div>
                                         <div className="text-5xl font-bold">{wpm}</div>
                                         <div className="text-sm mt-2">WPM</div>

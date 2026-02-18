@@ -39,14 +39,14 @@ export const Sidebar = () => {
               className={cn(
                 "relative flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors duration-200 group text-[14px] font-medium tracking-tight",
                 isActive
-                  ? "text-orange-600 dark:text-orange-500"
+                  ? "text-[#E8832E] dark:text-[#F9954E]"
                   : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200"
               )}
             >
               {isActive && (
                 <motion.div
                   layoutId="sidebar-active"
-                  className="absolute inset-0 bg-orange-50 dark:bg-orange-500/10 rounded-2xl"
+                  className="absolute inset-0 bg-[#FFF5EB] dark:bg-[#F9954E]/10 rounded-2xl"
                   initial={false}
                   transition={{
                     type: "spring",
@@ -58,7 +58,7 @@ export const Sidebar = () => {
 
               <item.icon className={cn(
                 "w-5 h-5 relative z-10 transition-transform duration-200 group-hover:scale-110",
-                isActive ? "text-orange-600 dark:text-orange-500" : "text-neutral-500 dark:text-neutral-500 group-hover:text-neutral-800 dark:group-hover:text-neutral-200"
+                isActive ? "text-[#E8832E] dark:text-[#F9954E]" : "text-neutral-500 dark:text-neutral-500 group-hover:text-neutral-800 dark:group-hover:text-neutral-200"
               )} />
 
               <span className="relative z-10">{item.name}</span>

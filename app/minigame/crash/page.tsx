@@ -87,7 +87,7 @@ export default function CrashPage() {
         if (gameState === "CRASHED") return "text-red-500";
         if (gameState === "CASHED_OUT") return "text-green-500";
         if (multiplier >= 5) return "text-yellow-400";
-        if (multiplier >= 3) return "text-orange-500";
+        if (multiplier >= 3) return "text-[#F9954E]";
         if (multiplier >= 2) return "text-green-500";
         return "text-white";
     };
@@ -193,7 +193,7 @@ export default function CrashPage() {
                                     ))}
                                 </div>
                                 <button onClick={startGame} disabled={coins < bet}
-                                    className="w-full py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-orange-500 to-red-500 text-white shadow-lg shadow-orange-500/20 hover:from-orange-600 hover:to-red-600 active:scale-[0.98] transition-all disabled:opacity-30">
+                                    className="w-full py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-[#F9954E] to-red-500 text-white shadow-lg shadow-[#F9954E]/20 hover:from-[#E8832E] hover:to-red-600 active:scale-[0.98] transition-all disabled:opacity-30">
                                     🚀 배팅하기
                                 </button>
                                 {coins < 10 && (
@@ -224,7 +224,7 @@ export default function CrashPage() {
 
                     <div className="mt-4 grid grid-cols-3 gap-3">
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 text-center border border-neutral-100 dark:border-white/5">
-                            <div className="text-2xl font-bold text-orange-500">{totalGames}</div>
+                            <div className="text-2xl font-bold text-[#F9954E]">{totalGames}</div>
                             <div className="text-xs text-neutral-500">게임</div>
                         </div>
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 text-center border border-neutral-100 dark:border-white/5">

@@ -62,7 +62,7 @@ export default function NoticeClient() {
 
     const getTypeBadge = (t: NoticeType) => {
         switch (t) {
-            case "공지": return "bg-orange-50 text-orange-600 dark:bg-orange-900/20 dark:text-orange-300";
+            case "공지": return "bg-[#FFF5EB] text-[#E8832E] dark:bg-[#8F4B10]/20 dark:text-[#FCC07A]";
             case "업데이트": return "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-300";
             case "이벤트": return "bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-300";
             case "점검": return "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-300";
@@ -80,19 +80,19 @@ export default function NoticeClient() {
         <main className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-500 relative overflow-x-hidden">
 
             {/* 배경 그라데이션 */}
-            <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-orange-100/40 via-orange-50/20 to-transparent dark:from-orange-900/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
+            <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
 
             {/* 히어로 섹션 */}
             <section className="relative pt-32 pb-16 px-6 text-center z-10">
                 <div className="max-w-3xl mx-auto animate-fade-in flex flex-col items-center">
                     {/* Badge */}
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800 text-orange-600 dark:text-orange-400 text-xs font-bold mb-6">
+                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
                         <Megaphone className="w-3 h-3" />
                         <span>Notice</span>
                     </div>
 
                     <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-                        <span className="bg-gradient-to-r from-orange-500 via-pink-500 to-orange-500 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+                        <span className="bg-gradient-to-r from-[#F9954E] via-pink-500 to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
                             공지사항
                         </span>
                     </h1>
@@ -113,8 +113,8 @@ export default function NoticeClient() {
                         <details
                             key={item.id}
                             className={`group rounded-[1.5rem] border overflow-hidden transition-all duration-300 hover:shadow-md backdrop-blur-xl shadow-sm ${item.pinned
-                                    ? "border-orange-300 dark:border-orange-800 bg-orange-50/30 dark:bg-orange-950/10 hover:shadow-orange-500/10"
-                                    : "border-neutral-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/40 hover:shadow-orange-500/5"
+                                    ? "border-[#FCC07A] dark:border-[#B35E15] bg-[#FFF5EB]/30 dark:bg-orange-950/10 hover:shadow-[#F9954E]/10"
+                                    : "border-neutral-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/40 hover:shadow-[#F9954E]/5"
                                 }`}
                         >
                             <summary className="cursor-pointer list-none p-5 md:p-6">
@@ -122,13 +122,13 @@ export default function NoticeClient() {
                                     <div className="flex-1 min-w-0">
                                         <div className="flex items-center gap-2 mb-2.5">
                                             {item.pinned && (
-                                                <Pin className="w-3 h-3 text-orange-500 flex-shrink-0" />
+                                                <Pin className="w-3 h-3 text-[#F9954E] flex-shrink-0" />
                                             )}
                                             <span className={`px-2.5 py-0.5 text-[11px] font-bold rounded-full ${getTypeBadge(item.type)}`}>
                                                 {item.type}
                                             </span>
                                         </div>
-                                        <h3 className="font-bold text-[15px] text-neutral-900 dark:text-white group-hover:text-orange-500 transition-colors duration-200 leading-snug">
+                                        <h3 className="font-bold text-[15px] text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors duration-200 leading-snug">
                                             {item.title}
                                         </h3>
                                         <div className="flex items-center gap-1.5 mt-2 text-[12px] text-neutral-400">
@@ -136,7 +136,7 @@ export default function NoticeClient() {
                                             <span>{new Date(item.date).toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })}</span>
                                         </div>
                                     </div>
-                                    <span className="text-lg transition-all duration-300 group-open:rotate-45 flex-shrink-0 w-6 h-6 rounded-full bg-orange-50 dark:bg-orange-500/10 flex items-center justify-center text-orange-500 text-sm font-light mt-1">
+                                    <span className="text-lg transition-all duration-300 group-open:rotate-45 flex-shrink-0 w-6 h-6 rounded-full bg-[#FFF5EB] dark:bg-[#F9954E]/10 flex items-center justify-center text-[#F9954E] text-sm font-light mt-1">
                                         +
                                     </span>
                                 </div>

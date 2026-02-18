@@ -71,7 +71,7 @@ export default function OpenPopup() {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Background Decoration */}
-            <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-orange-50/50 to-transparent dark:from-orange-950/20 pointer-events-none" />
+            <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#FFF5EB]/50 to-transparent dark:from-orange-950/20 pointer-events-none" />
 
             <div className="relative p-6 px-8 flex flex-col items-center text-center">
 
@@ -85,10 +85,10 @@ export default function OpenPopup() {
 
               {/* Icon / Date Badge */}
               <div className="mb-6 mt-2 relative">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-orange-100 to-pink-100 dark:from-orange-900/30 dark:to-pink-900/30 flex items-center justify-center text-orange-500 shadow-lg mb-4 mx-auto transform rotate-3">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#FEEBD0] to-pink-100 dark:from-[#8F4B10]/30 dark:to-pink-900/30 flex items-center justify-center text-[#F9954E] shadow-lg mb-4 mx-auto transform rotate-3">
                   <PartyPopper className="w-8 h-8" strokeWidth={1.5} />
                 </div>
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-orange-50 dark:bg-orange-950/50 border border-orange-100 dark:border-orange-900/50 text-[11px] font-bold text-orange-600 dark:text-orange-400 uppercase tracking-wide">
+                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/50 border border-[#FEEBD0] dark:border-[#8F4B10]/50 text-[11px] font-bold text-[#E8832E] dark:text-[#FBAA60] uppercase tracking-wide">
                   <Sparkles className="w-3 h-3" />
                   <span>2026.01.01 Open</span>
                 </div>
@@ -102,14 +102,14 @@ export default function OpenPopup() {
               <div className="text-sm text-muted-foreground leading-relaxed space-y-1 mb-8">
                 <p>AI 활용 방법을 함께 연구하고 실전으로 적용해보는</p>
                 <p>최신 트렌드와 인사이트를 공유하며 함께 성장하는</p>
-                <p className="font-medium text-orange-600 dark:text-orange-400">커뮤니티 플랫폼입니다</p>
+                <p className="font-medium text-[#E8832E] dark:text-[#FBAA60]">커뮤니티 플랫폼입니다</p>
               </div>
 
               {/* Actions */}
               <div className="flex flex-col gap-2.5 w-full">
                 <button
                   onClick={handleClose}
-                  className="w-full py-3 rounded-xl bg-gradient-to-r from-orange-500 to-pink-500 text-white font-semibold text-sm shadow-lg shadow-orange-500/20 hover:shadow-orange-500/30 hover:scale-[1.02] active:scale-[0.98] transition-all"
+                  className="w-full py-3 rounded-xl bg-gradient-to-r from-[#F9954E] to-pink-500 text-white font-semibold text-sm shadow-lg shadow-[#F9954E]/20 hover:shadow-[#F9954E]/30 hover:scale-[1.02] active:scale-[0.98] transition-all"
                 >
                   닫기
                 </button>

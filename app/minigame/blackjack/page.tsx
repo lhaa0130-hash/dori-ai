@@ -344,7 +344,7 @@ export default function BlackjackPage() {
                                     히트 (카드 받기)
                                 </button>
                                 <button onClick={stand}
-                                    className="flex-1 py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-orange-500 to-orange-600 text-white shadow-lg shadow-orange-500/20 hover:from-orange-600 hover:to-orange-700 active:scale-[0.98] transition-all">
+                                    className="flex-1 py-4 rounded-2xl font-bold text-lg bg-gradient-to-r from-[#F9954E] to-[#E8832E] text-white shadow-lg shadow-[#F9954E]/20 hover:from-[#E8832E] hover:to-[#D4711A] active:scale-[0.98] transition-all">
                                     스탠드 (멈추기)
                                 </button>
                             </div>
@@ -379,7 +379,7 @@ export default function BlackjackPage() {
                     {/* 통계 */}
                     <div className="mt-6 grid grid-cols-3 gap-3">
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 text-center border border-neutral-100 dark:border-white/5">
-                            <div className="text-2xl font-bold text-orange-500">{totalGames}</div>
+                            <div className="text-2xl font-bold text-[#F9954E]">{totalGames}</div>
                             <div className="text-xs text-neutral-500">총 게임</div>
                         </div>
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 text-center border border-neutral-100 dark:border-white/5">

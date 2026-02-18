@@ -13,7 +13,7 @@ const ICON_POOL = [
     { id: "globe", icon: <Globe className="w-8 h-8" />, color: "text-sky-500" },
     { id: "phone", icon: <Smartphone className="w-8 h-8" />, color: "text-violet-500" },
     { id: "video", icon: <Video className="w-8 h-8" />, color: "text-red-500" },
-    { id: "film", icon: <Film className="w-8 h-8" />, color: "text-orange-500" },
+    { id: "film", icon: <Film className="w-8 h-8" />, color: "text-[#F9954E]" },
     { id: "sparkles", icon: <Sparkles className="w-8 h-8" />, color: "text-yellow-500" },
     { id: "zap", icon: <Zap className="w-8 h-8" />, color: "text-amber-500" },
     { id: "cpu", icon: <Cpu className="w-8 h-8" />, color: "text-indigo-500" },
@@ -294,7 +294,7 @@ export default function MemoryGamePage() {
                             )}
 
                             {isPreviewing && (
-                                <div className="text-orange-500 font-bold animate-pulse flex items-center gap-2">
+                                <div className="text-[#F9954E] font-bold animate-pulse flex items-center gap-2">
                                     <Eye className="w-4 h-4" />
                                     외우세요!
                                 </div>
@@ -398,7 +398,7 @@ export default function MemoryGamePage() {
 
                 {gameState === "GAME_PASS" && (
                     <div className="text-center py-10 animate-slide-up">
-                        <h2 className="text-4xl font-bold mb-4 text-orange-500">🏆 ALL CLEARED!</h2>
+                        <h2 className="text-4xl font-bold mb-4 text-[#F9954E]">🏆 ALL CLEARED!</h2>
                         <p className="text-xl mb-8">당신은 진정한 기억력의 신입니다!</p>
                         <Link href="/minigame">
                             <button className="px-8 py-3 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-black font-bold hover:scale-105 transition-transform">

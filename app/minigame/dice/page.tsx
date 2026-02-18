@@ -19,7 +19,7 @@ const DICE_FACES = [
     [{ x: 30, y: 30 }, { x: 70, y: 30 }, { x: 30, y: 50 }, { x: 70, y: 50 }, { x: 30, y: 70 }, { x: 70, y: 70 }], // 6
 ];
 
-const DICE_COLORS = ["#ef4444", "#f97316", "#f59e0b", "#84cc16", "#3b82f6", "#8b5cf6"];
+const DICE_COLORS = ["#ef4444", "#F9954E", "#f59e0b", "#84cc16", "#3b82f6", "#8b5cf6"];
 
 export default function DiceRollPage() {
     const { theme } = useTheme();
@@ -214,7 +214,7 @@ export default function DiceRollPage() {
                                             animate={{ opacity: 1, scale: 1 }}
                                             className="text-center mb-8"
                                         >
-                                            <div className="bg-gradient-to-br from-red-50 to-orange-50 dark:from-red-900/20 dark:to-orange-900/20 rounded-2xl p-8 mb-6">
+                                            <div className="bg-gradient-to-br from-red-50 to-[#FFF5EB] dark:from-red-900/20 dark:to-[#8F4B10]/20 rounded-2xl p-8 mb-6">
                                                 <div className="text-sm text-neutral-600 dark:text-zinc-400 mb-2">
                                                     합계
                                                 </div>

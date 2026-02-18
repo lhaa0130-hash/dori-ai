@@ -112,12 +112,12 @@ export function ProjectListSection() {
                     className="mb-12"
                 >
                     <div className="flex items-center gap-4 mb-6">
-                        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-orange-500/50 to-transparent opacity-30" />
-                        <span className="text-sm font-bold tracking-widest text-orange-500 uppercase flex items-center gap-2">
-                            <span className="w-2 h-2 rounded-full bg-orange-500 animate-pulse" />
+                        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#F9954E]/50 to-transparent opacity-30" />
+                        <span className="text-sm font-bold tracking-widest text-[#F9954E] uppercase flex items-center gap-2">
+                            <span className="w-2 h-2 rounded-full bg-[#F9954E] animate-pulse" />
                             Live Service
                         </span>
-                        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-orange-500/50 to-transparent opacity-30" />
+                        <div className="h-px flex-1 bg-gradient-to-r from-transparent via-[#F9954E]/50 to-transparent opacity-30" />
                     </div>
 
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6 max-w-5xl mx-auto">
@@ -133,26 +133,26 @@ export function ProjectListSection() {
                                         border border-white/40 dark:border-white/10 
                                         shadow-[0_6px_25px_rgb(0,0,0,0.04)] dark:shadow-none 
                                         hover:shadow-[0_18px_45px_rgba(249,115,22,0.22)] dark:hover:shadow-[0_18px_35px_rgba(249,115,22,0.12)] 
-                                        hover:border-orange-500/40 
-                                        hover:bg-gradient-to-br hover:from-white/80 hover:to-orange-50/40 dark:hover:from-zinc-900 dark:hover:to-orange-900/10
+                                        hover:border-[#F9954E]/40 
+                                        hover:bg-gradient-to-br hover:from-white/80 hover:to-[#FFF5EB]/40 dark:hover:from-zinc-900 dark:hover:to-[#8F4B10]/10
                                         transition-all duration-500 transform group-hover:-translate-y-1.5 group-hover:scale-[1.015]">
 
-                                        <div className="absolute top-8 right-8 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 -translate-y-2 group-hover:translate-x-0 group-hover:translate-y-0 text-orange-500">
+                                        <div className="absolute top-8 right-8 opacity-0 group-hover:opacity-100 transition-all duration-300 transform translate-x-2 -translate-y-2 group-hover:translate-x-0 group-hover:translate-y-0 text-[#F9954E]">
                                             <ArrowUpRight className="w-7 h-7" />
                                         </div>
 
                                         <div className="mb-6">
-                                            <div className="w-16 h-16 rounded-[1.8rem] bg-orange-50 dark:bg-orange-900/10 text-orange-500 dark:text-orange-400 flex items-center justify-center transition-all duration-500 group-hover:bg-orange-500 group-hover:text-white group-hover:shadow-[0_8px_22px_rgba(249,115,22,0.35)] group-hover:scale-110 group-hover:rotate-3 border border-orange-100 dark:border-orange-500/10">
+                                            <div className="w-16 h-16 rounded-[1.8rem] bg-[#FFF5EB] dark:bg-[#8F4B10]/10 text-[#F9954E] dark:text-[#FBAA60] flex items-center justify-center transition-all duration-500 group-hover:bg-[#F9954E] group-hover:text-white group-hover:shadow-[0_8px_22px_rgba(249,115,22,0.35)] group-hover:scale-110 group-hover:rotate-3 border border-[#FEEBD0] dark:border-[#F9954E]/10">
                                                 <project.icon className="w-8 h-8 transition-transform duration-500 group-hover:rotate-[-3deg]" strokeWidth={1.5} />
                                             </div>
                                         </div>
 
                                         <div className="space-y-3">
-                                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 dark:bg-orange-900/20 w-fit backdrop-blur-sm border border-orange-100 dark:border-orange-500/10">
-                                                <span className="text-[11px] font-bold tracking-widest uppercase text-orange-600 dark:text-orange-400">{project.category}</span>
+                                            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-[#8F4B10]/20 w-fit backdrop-blur-sm border border-[#FEEBD0] dark:border-[#F9954E]/10">
+                                                <span className="text-[11px] font-bold tracking-widest uppercase text-[#E8832E] dark:text-[#FBAA60]">{project.category}</span>
                                             </div>
 
-                                            <h3 className="text-2xl font-bold text-foreground group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors tracking-tight">
+                                            <h3 className="text-2xl font-bold text-foreground group-hover:text-[#E8832E] dark:group-hover:text-[#FBAA60] transition-colors tracking-tight">
                                                 {project.title}
                                             </h3>
 
@@ -193,7 +193,7 @@ export function ProjectListSection() {
                                         hover:bg-white/60 dark:hover:bg-zinc-900/60 transition-all duration-500">
 
                                         <div className="mb-4 opacity-70 group-hover:opacity-100 transition-opacity">
-                                            <div className="w-12 h-12 rounded-[1.2rem] bg-neutral-100 dark:bg-neutral-800 text-neutral-400 flex items-center justify-center transition-all duration-500 group-hover:bg-orange-50 dark:group-hover:bg-orange-900/10 group-hover:text-orange-500">
+                                            <div className="w-12 h-12 rounded-[1.2rem] bg-neutral-100 dark:bg-neutral-800 text-neutral-400 flex items-center justify-center transition-all duration-500 group-hover:bg-[#FFF5EB] dark:group-hover:bg-[#8F4B10]/10 group-hover:text-[#F9954E]">
                                                 <project.icon className="w-6 h-6" strokeWidth={1.5} />
                                             </div>
                                         </div>

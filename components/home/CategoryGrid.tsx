@@ -26,8 +26,8 @@ const categories = [
         description: "DORI-AI가 진행하는 다양한 AI 프로젝트",
         href: "/project",
         icon: Rocket,
-        gradient: "from-orange-400 to-orange-500",
-        iconBorder: "border-orange-500 dark:border-orange-500 bg-orange-50 dark:bg-black", // Fixed orange border & bg for Rocket
+        gradient: "from-[#FBAA60] to-[#F9954E]",
+        iconBorder: "border-[#F9954E] dark:border-[#F9954E] bg-[#FFF5EB] dark:bg-black", // Fixed orange border & bg for Rocket
         previewComponent: ProjectPreview,
         stats: {
             count: "2개",
@@ -40,7 +40,7 @@ const categories = [
         description: "AI와 함께 즐기는 인터랙티브 게임",
         href: "/minigame",
         icon: Gamepad2,
-        gradient: "from-orange-500 to-orange-600",
+        gradient: "from-[#F9954E] to-[#E8832E]",
         previewComponent: MinigamePreview,
         stats: {
             count: "10개",
@@ -53,7 +53,7 @@ const categories = [
         description: "실전에서 유용한 최고의 AI 툴 모음",
         href: "/ai-tools",
         icon: Wrench,
-        gradient: "from-orange-300 to-orange-500",
+        gradient: "from-[#FCC07A] to-[#F9954E]",
         previewComponent: AIToolsPreview,
         stats: {
             count: "80+",
@@ -66,7 +66,7 @@ const categories = [
         description: "최신 AI 트렌드와 기술 분석 아티클",
         href: "/insight",
         icon: Lightbulb,
-        gradient: "from-amber-400 to-orange-500",
+        gradient: "from-amber-400 to-[#F9954E]",
         previewComponent: InsightPreview,
         stats: {
             count: "50+",
@@ -79,7 +79,7 @@ const categories = [
         description: "함께 성장하는 AI 크리에이터들의 모임",
         href: "/community",
         icon: Users,
-        gradient: "from-orange-500 to-red-500",
+        gradient: "from-[#F9954E] to-red-500",
         previewComponent: null, // 커뮤니티는 미리보기 없음
         stats: {
             count: "Beta",
@@ -92,8 +92,8 @@ const categories = [
         description: "프롬프트, 에셋 등 AI 리소스 마켓플레이스",
         href: "/market",
         icon: ShoppingBag,
-        gradient: "from-orange-600 to-red-600",
-        iconBorder: "group-hover:border-orange-600 dark:group-hover:border-orange-600", // Hover color
+        gradient: "from-[#E8832E] to-red-600",
+        iconBorder: "group-hover:border-[#E8832E] dark:group-hover:border-[#E8832E]", // Hover color
         previewComponent: null, // 마켓은 미리보기 없음
         stats: {
             count: "준비 중",
@@ -163,19 +163,19 @@ export function CategoryGrid() {
                             >
                                 {/* 메인 카드 */}
                                 <Link href={category.href} className="group relative block">
-                                    <div className="relative bg-strict-black border border-strict rounded-2xl p-6 overflow-hidden transition-all duration-300 hover:border-orange-500/50 hover:shadow-2xl dark:hover:shadow-orange-500/10">
+                                    <div className="relative bg-strict-black border border-strict rounded-2xl p-6 overflow-hidden transition-all duration-300 hover:border-[#F9954E]/50 hover:shadow-2xl dark:hover:shadow-[#F9954E]/10">
                                         {/* Gradient Background Effect - Reduced opacity */}
                                         <div className={`absolute top-0 right-0 w-32 h-32 bg-gradient-to-br ${category.gradient} opacity-0 group-hover:opacity-5 blur-3xl transition-opacity duration-500 rounded-full`} />
 
                                         {/* Icon Container - Outline Style */}
                                         <div className="relative mb-4">
-                                            <div className="w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:shadow-md border border-orange-500 dark:border-orange-500 bg-orange-50 dark:bg-black">
-                                                <category.icon className="w-7 h-7 text-orange-500 dark:text-orange-500 transition-colors" />
+                                            <div className="w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:shadow-md border border-[#F9954E] dark:border-[#F9954E] bg-[#FFF5EB] dark:bg-black">
+                                                <category.icon className="w-7 h-7 text-[#F9954E] dark:text-[#F9954E] transition-colors" />
                                             </div>
 
                                             {/* Arrow Icon */}
                                             <motion.div
-                                                className="absolute -top-1 -right-1 w-8 h-8 bg-gradient-to-br from-orange-500 to-pink-500 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300"
+                                                className="absolute -top-1 -right-1 w-8 h-8 bg-gradient-to-br from-[#F9954E] to-pink-500 rounded-lg flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300"
                                                 initial={{ rotate: 0, scale: 0 }}
                                                 whileHover={{ rotate: 45, scale: 1 }}
                                             >
@@ -185,7 +185,7 @@ export function CategoryGrid() {
 
                                         {/* Content */}
                                         <div className="relative z-10">
-                                            <h3 className="text-xl font-bold text-card-foreground mb-2 group-hover:text-orange-500 transition-colors duration-300">
+                                            <h3 className="text-xl font-bold text-card-foreground mb-2 group-hover:text-[#F9954E] transition-colors duration-300">
                                                 {category.title}
                                             </h3>
 

@@ -127,7 +127,7 @@ export default function GuessNumberPage() {
         if (attemptCount <= 5) return { text: "대단해요!", color: "text-blue-500" };
         if (attemptCount <= 8) return { text: "훌륭해요!", color: "text-green-500" };
         if (attemptCount <= 12) return { text: "좋아요!", color: "text-yellow-500" };
-        return { text: "다시 도전!", color: "text-orange-500" };
+        return { text: "다시 도전!", color: "text-[#F9954E]" };
     };
 
     const isDark = mounted && theme === "dark";
@@ -210,7 +210,7 @@ export default function GuessNumberPage() {
                                     </div>
                                     <div className="h-12 w-px bg-neutral-200 dark:bg-zinc-700" />
                                     <div className="text-center">
-                                        <div className="text-4xl font-bold text-orange-500">
+                                        <div className="text-4xl font-bold text-[#F9954E]">
                                             {DIFFICULTY_CONFIG[difficulty].max}
                                         </div>
                                         <div className="text-sm text-neutral-500 dark:text-zinc-400">

@@ -11,7 +11,7 @@ type GameMode = "rgb" | "name";
 
 const COLOR_NAMES = [
     { name: "빨강", rgb: "#EF4444", kr: "빨강" },
-    { name: "주황", rgb: "#F97316", kr: "주황" },
+    { name: "주황", rgb: "#F9954E", kr: "주황" },
     { name: "노랑", rgb: "#F59E0B", kr: "노랑" },
     { name: "초록", rgb: "#10B981", kr: "초록" },
     { name: "파랑", rgb: "#3B82F6", kr: "파랑" },
@@ -147,9 +147,9 @@ export default function ColorMatchPage() {
                                         <div className="text-sm text-neutral-600 dark:text-zinc-400 mb-1">점수</div>
                                         <div className="text-4xl font-bold text-pink-600">{score}</div>
                                     </div>
-                                    <div className="text-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-xl">
+                                    <div className="text-center p-4 bg-[#FFF5EB] dark:bg-[#8F4B10]/20 rounded-xl">
                                         <div className="text-sm text-neutral-600 dark:text-zinc-400 mb-1">남은 시간</div>
-                                        <div className="text-4xl font-bold text-orange-600">{timeLeft}초</div>
+                                        <div className="text-4xl font-bold text-[#E8832E]">{timeLeft}초</div>
                                     </div>
                                 </div>
 

@@ -10,7 +10,7 @@ export default function Footer() {
         {/* Row 1: Logo, Copyright, Links (One Line on Desktop) */}
         <div className="flex flex-col md:flex-row md:items-center gap-4 md:gap-8 mb-4 border-b border-neutral-200 dark:border-[#27272a] pb-4">
           <div className="flex items-center gap-4">
-            <Link href="/" className="text-xl font-bold whitespace-nowrap bg-[linear-gradient(to_right,#facc15,#f97316_20%,#f97316_80%,#ef4444)] bg-clip-text text-transparent animate-gradient-x hover:opacity-80 transition-opacity">
+            <Link href="/" className="text-xl font-bold whitespace-nowrap bg-[linear-gradient(to_right,#facc15,#F9954E_20%,#F9954E_80%,#ef4444)] bg-clip-text text-transparent animate-gradient-x hover:opacity-80 transition-opacity">
               DORI-AI
             </Link>
             <p className="text-xs text-muted-foreground whitespace-nowrap">

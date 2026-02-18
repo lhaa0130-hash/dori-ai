@@ -303,7 +303,7 @@ export default function BaccaratPage() {
 
                     <div className="mt-4 grid grid-cols-3 gap-3">
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 text-center border border-neutral-100 dark:border-white/5">
-                            <div className="text-2xl font-bold text-orange-500">{totalGames}</div>
+                            <div className="text-2xl font-bold text-[#F9954E]">{totalGames}</div>
                             <div className="text-xs text-neutral-500">게임</div>
                         </div>
                         <div className="bg-white dark:bg-zinc-900 rounded-2xl p-4 text-center border border-neutral-100 dark:border-white/5">

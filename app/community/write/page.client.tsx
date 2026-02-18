@@ -89,7 +89,7 @@ export default function WriteClient() {
             document.head.appendChild(styleEl);
         }
 
-        const accentColor = "#f97316"; // Orange-500
+        const accentColor = "#F9954E"; // Orange-500
 
         // Picker Label CSS Generation
         const fontSizeCss = fontSizeArr.map(size =>
@@ -278,14 +278,14 @@ export default function WriteClient() {
 
                 <div className="flex items-center gap-3">
                     <div className="hidden md:flex items-center text-xs text-neutral-400 mr-2">
-                        <Sparkles size={14} className="mr-1 text-orange-400" />
+                        <Sparkles size={14} className="mr-1 text-[#FBAA60]" />
                         <span>자동 저장 켜짐</span>
                     </div>
                     <motion.button
                         whileHover={{ scale: 1.05 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={handlePublish}
-                        className="px-5 py-2 bg-gradient-to-r from-orange-400 to-orange-600 text-white rounded-full text-sm font-bold shadow-lg shadow-orange-500/30 hover:shadow-orange-500/40 transition-all flex items-center gap-1.5"
+                        className="px-5 py-2 bg-gradient-to-r from-[#FBAA60] to-[#E8832E] text-white rounded-full text-sm font-bold shadow-lg shadow-[#F9954E]/30 hover:shadow-[#F9954E]/40 transition-all flex items-center gap-1.5"
                     >
                         <span>발행</span>
                     </motion.button>
@@ -302,10 +302,10 @@ export default function WriteClient() {
                             initial={{ opacity: 0, x: 20 }}
                             animate={{ opacity: 1, x: 0 }}
                             exit={{ opacity: 0, x: 20 }}
-                            className="absolute top-8 -right-48 w-40 bg-white dark:bg-zinc-900 p-3 rounded-xl shadow-xl border border-orange-100 dark:border-orange-900/30 hidden xl:block"
+                            className="absolute top-8 -right-48 w-40 bg-white dark:bg-zinc-900 p-3 rounded-xl shadow-xl border border-[#FEEBD0] dark:border-[#8F4B10]/30 hidden xl:block"
                         >
                             <p className="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed">
-                                <span className="font-bold text-orange-500">Tip.</span><br />
+                                <span className="font-bold text-[#F9954E]">Tip.</span><br />
                                 Tab키를 눌러서 도구창으로 이동할 수 있어요!
                             </p>
                             <button
@@ -338,7 +338,7 @@ export default function WriteClient() {
                     initial={{ scaleX: 0 }}
                     animate={{ scaleX: 1 }}
                     transition={{ delay: 0.3, duration: 0.8 }}
-                    className="w-24 h-1.5 bg-orange-500 rounded-full mb-10 opacity-80"
+                    className="w-24 h-1.5 bg-[#F9954E] rounded-full mb-10 opacity-80"
                     style={{ transformOrigin: "left" }}
                 />
 
@@ -372,7 +372,7 @@ export default function WriteClient() {
                         >
                             <div className="p-8 pb-0">
                                 <div className="text-center mb-6">
-                                    <div className="w-16 h-16 bg-orange-100 dark:bg-orange-900/20 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
+                                    <div className="w-16 h-16 bg-[#FEEBD0] dark:bg-[#8F4B10]/20 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
                                         📝
                                     </div>
                                     <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">발행하시겠습니까?</h3>
@@ -390,7 +390,7 @@ export default function WriteClient() {
                                                 whileTap={{ scale: 0.95 }}
                                                 onClick={() => setSelectedTag(tag)}
                                                 className={`py-2 px-4 rounded-full text-sm font-bold transition-all ${selectedTag === tag
-                                                    ? 'bg-orange-500 text-white shadow-lg shadow-orange-500/30 ring-2 ring-orange-500 ring-offset-2 ring-offset-white dark:ring-offset-black'
+                                                    ? 'bg-[#F9954E] text-white shadow-lg shadow-[#F9954E]/30 ring-2 ring-[#F9954E] ring-offset-2 ring-offset-white dark:ring-offset-black'
                                                     : 'bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-zinc-700'
                                                     }`}
                                             >
@@ -408,7 +408,7 @@ export default function WriteClient() {
                                         <div className="flex-1 min-w-0">
                                             <h4 className="font-bold text-neutral-900 dark:text-white truncate mb-1">{title || '제목 없는 글'}</h4>
                                             <div className="text-xs text-neutral-400 dark:text-neutral-500 flex items-center gap-1">
-                                                <span className="text-orange-500 font-medium">#{selectedTag}</span>
+                                                <span className="text-[#F9954E] font-medium">#{selectedTag}</span>
                                                 <span>•</span>
                                                 <span>방금 전</span>
                                             </div>
@@ -429,7 +429,7 @@ export default function WriteClient() {
                                     whileTap={{ scale: 0.98 }}
                                     onClick={submitPost}
                                     disabled={isLoading}
-                                    className="flex-1 px-6 py-3 bg-gradient-to-r from-orange-500 to-pink-500 text-white rounded-xl font-bold shadow-xl shadow-orange-500/20 flex items-center justify-center gap-2"
+                                    className="flex-1 px-6 py-3 bg-gradient-to-r from-[#F9954E] to-pink-500 text-white rounded-xl font-bold shadow-xl shadow-[#F9954E]/20 flex items-center justify-center gap-2"
                                 >
                                     {isLoading ? '저장 중...' : '게시글 등록하기'}
                                 </motion.button>

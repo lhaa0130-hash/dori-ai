@@ -88,12 +88,12 @@ export default function QuizGamePage() {
     return (
         <main className="min-h-screen bg-white dark:bg-black text-neutral-900 dark:text-white relative overflow-hidden flex flex-col items-center justify-center p-6">
             {/* 배경 그라데이션 */}
-            <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-orange-100/40 via-orange-50/20 to-transparent dark:from-orange-900/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
+            <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
 
             <div className="relative z-10 w-full max-w-2xl">
                 {/* 헤더 */}
                 <div className="flex items-center justify-between mb-8">
-                    <Link href="/minigame" className="flex items-center gap-2 text-neutral-500 hover:text-orange-500 transition-colors">
+                    <Link href="/minigame" className="flex items-center gap-2 text-neutral-500 hover:text-[#F9954E] transition-colors">
                         <ArrowLeft className="w-5 h-5" />
                         <span>나가기</span>
                     </Link>
@@ -101,7 +101,7 @@ export default function QuizGamePage() {
                         <div className="px-3 py-1 rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-500 text-xs font-bold">
                             Total Score: {totalScore}
                         </div>
-                        <div className="px-3 py-1 rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 text-xs font-bold">
+                        <div className="px-3 py-1 rounded-full bg-[#FEEBD0] dark:bg-[#8F4B10]/30 text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold">
                             Round {round}
                         </div>
                     </div>
@@ -112,7 +112,7 @@ export default function QuizGamePage() {
 
                     {gameState === "START" && (
                         <div className="text-center py-12">
-                            <Brain className="w-20 h-20 mx-auto text-orange-500 mb-6" />
+                            <Brain className="w-20 h-20 mx-auto text-[#F9954E] mb-6" />
                             <h1 className="text-3xl font-bold mb-4">AI 상식 퀴즈 서바이벌</h1>
                             <p className="text-neutral-600 dark:text-neutral-400 mb-8 max-w-md mx-auto leading-relaxed">
                                 5문제를 모두 맞춰야 다음 라운드로 넘어갈 수 있습니다.<br />
@@ -120,7 +120,7 @@ export default function QuizGamePage() {
                             </p>
                             <button
                                 onClick={startNewGame}
-                                className="px-8 py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold transition-all shadow-lg hover:shadow-orange-500/30 hover:-translate-y-1"
+                                className="px-8 py-3 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold transition-all shadow-lg hover:shadow-[#F9954E]/30 hover:-translate-y-1"
                             >
                                 도전하기
                             </button>
@@ -132,13 +132,13 @@ export default function QuizGamePage() {
                             {/* 진행바 */}
                             <div className="flex items-center justify-between mb-6 text-sm font-medium text-neutral-500">
                                 <span>Round {round} - Q{currentQuestionIndex + 1}</span>
-                                <span className={score === currentQuestionIndex ? "text-orange-500" : "text-neutral-400"}>
+                                <span className={score === currentQuestionIndex ? "text-[#F9954E]" : "text-neutral-400"}>
                                     현재 {score} / {QUESTIONS_PER_ROUND} 정답
                                 </span>
                             </div>
                             <div className="w-full h-2 bg-neutral-100 dark:bg-zinc-800 rounded-full mb-8 overflow-hidden">
                                 <div
-                                    className="h-full bg-orange-500 transition-all duration-500 ease-out"
+                                    className="h-full bg-[#F9954E] transition-all duration-500 ease-out"
                                     style={{ width: `${((currentQuestionIndex + 1) / QUESTIONS_PER_ROUND) * 100}%` }}
                                 />
                             </div>
@@ -161,13 +161,13 @@ export default function QuizGamePage() {
                                     const isSelected = selectedOption === idx;
                                     const isCorrect = idx === currentQuestions[currentQuestionIndex].answer;
 
-                                    let buttonStyle = "border-neutral-200 dark:border-zinc-700 hover:border-orange-500 hover:bg-orange-50 dark:hover:bg-orange-950/20";
+                                    let buttonStyle = "border-neutral-200 dark:border-zinc-700 hover:border-[#F9954E] hover:bg-[#FFF5EB] dark:hover:bg-orange-950/20";
                                     if (isAnswerChecked) {
                                         if (isCorrect) buttonStyle = "border-green-500 bg-green-50 dark:bg-green-950/20 text-green-700 dark:text-green-400";
                                         else if (isSelected) buttonStyle = "border-red-500 bg-red-50 dark:bg-red-950/20 text-red-700 dark:text-red-400";
                                         else buttonStyle = "border-neutral-200 dark:border-zinc-800 opacity-50";
                                     } else if (isSelected) {
-                                        buttonStyle = "border-orange-500 bg-orange-50 dark:bg-orange-950/20 ring-1 ring-orange-500 text-orange-700 dark:text-orange-400";
+                                        buttonStyle = "border-[#F9954E] bg-[#FFF5EB] dark:bg-orange-950/20 ring-1 ring-[#F9954E] text-[#D4711A] dark:text-[#FBAA60]";
                                     }
 
                                     return (
@@ -192,7 +192,7 @@ export default function QuizGamePage() {
                                 onClick={submitAnswer}
                                 disabled={selectedOption === null || isAnswerChecked}
                                 className={`w-full mt-8 py-3 rounded-xl font-bold text-white transition-all 
-                                    ${selectedOption === null ? 'bg-neutral-300 dark:bg-zinc-700 cursor-not-allowed' : 'bg-orange-500 hover:bg-orange-600 shadow-lg hover:shadow-orange-500/30'}
+                                    ${selectedOption === null ? 'bg-neutral-300 dark:bg-zinc-700 cursor-not-allowed' : 'bg-[#F9954E] hover:bg-[#E8832E] shadow-lg hover:shadow-[#F9954E]/30'}
                                     ${isAnswerChecked ? 'opacity-0 pointer-events-none' : ''}
                                 `}
                             >
@@ -212,7 +212,7 @@ export default function QuizGamePage() {
                                     </p>
                                     <button
                                         onClick={handleNextRound}
-                                        className="w-full sm:w-auto px-8 py-4 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold transition-all shadow-lg hover:shadow-orange-500/30 flex items-center justify-center gap-2 mx-auto"
+                                        className="w-full sm:w-auto px-8 py-4 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold transition-all shadow-lg hover:shadow-[#F9954E]/30 flex items-center justify-center gap-2 mx-auto"
                                     >
                                         <span>다음 라운드 도전</span>
                                         <ArrowRight className="w-5 h-5" />
@@ -225,13 +225,13 @@ export default function QuizGamePage() {
                                     </div>
                                     <h2 className="text-3xl font-bold mb-2">Game Over</h2>
                                     <p className="text-lg text-neutral-600 dark:text-neutral-400 mb-8 max-w-sm mx-auto">
-                                        아쉽네요. <span className="text-orange-500 font-bold">{score}</span>문제만 맞추셨습니다.<br />
+                                        아쉽네요. <span className="text-[#F9954E] font-bold">{score}</span>문제만 맞추셨습니다.<br />
                                         다음 라운드로 가려면 5문제를 모두 맞춰야 합니다.
                                     </p>
                                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
                                         <button
                                             onClick={startNewGame}
-                                            className="px-6 py-3 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold transition-all shadow-lg hover:shadow-orange-500/30 flex items-center justify-center gap-2"
+                                            className="px-6 py-3 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold transition-all shadow-lg hover:shadow-[#F9954E]/30 flex items-center justify-center gap-2"
                                         >
                                             <RefreshCw className="w-5 h-5" />
                                             처음부터 다시하기
@@ -258,11 +258,11 @@ export default function QuizGamePage() {
                                 당신은 진정한 AI 마스터입니다!
                             </p>
                             <div className="text-2xl font-bold mb-8">
-                                최종 점수: <span className="text-orange-500">{totalScore}</span> 점
+                                최종 점수: <span className="text-[#F9954E]">{totalScore}</span> 점
                             </div>
                             <Link
                                 href="/minigame"
-                                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-orange-500 hover:bg-orange-600 text-white font-bold transition-all shadow-lg hover:shadow-orange-500/30"
+                                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold transition-all shadow-lg hover:shadow-[#F9954E]/30"
                             >
                                 <ArrowLeft className="w-5 h-5" />
                                 메인으로 돌아가기

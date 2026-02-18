@@ -46,23 +46,23 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
     <main className="flex flex-col w-full min-h-screen bg-white dark:bg-black transition-colors duration-500 relative overflow-x-hidden">
 
       {/* 배경 그라데이션 (Standard) */}
-      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-orange-100/40 via-orange-50/20 to-transparent dark:from-orange-900/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
+      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
 
       <div className="flex-grow z-10">
         {/* 히어로 섹션 (Standard) */}
         <section className="relative pt-32 pb-16 px-6 text-center">
           <div className="max-w-3xl mx-auto animate-fade-in flex flex-col items-center">
             {/* Badge */}
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800 text-orange-600 dark:text-orange-400 text-xs font-bold mb-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
               <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FBAA60] opacity-75"></span>
+                <span className="relative inline-flex rounded-full h-2 w-2 bg-[#F9954E]"></span>
               </span>
               <span>Community</span>
             </div>
 
             <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-              <span className="bg-gradient-to-r from-orange-500 via-pink-500 to-orange-500 bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+              <span className="bg-gradient-to-r from-[#F9954E] via-pink-500 to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
                 커뮤니티
               </span>
             </h1>
@@ -76,7 +76,7 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
           <div className="flex justify-end mb-6">
             <Link
               href="/community/write"
-              className="flex items-center gap-2 px-5 py-2.5 bg-neutral-900 dark:bg-white text-white dark:text-black rounded-full font-bold text-sm tracking-wide hover:opacity-80 transition-all shadow-lg hover:shadow-orange-500/20"
+              className="flex items-center gap-2 px-5 py-2.5 bg-neutral-900 dark:bg-white text-white dark:text-black rounded-full font-bold text-sm tracking-wide hover:opacity-80 transition-all shadow-lg hover:shadow-[#F9954E]/20"
             >
               <PlusCircle size={18} />
               <span>새 글 작성</span>
@@ -86,7 +86,7 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
           <div className="space-y-4">
             {posts.length > 0 ? (
               posts.map(post => (
-                <div key={post.id} className="p-6 rounded-[2rem] bg-white/80 dark:bg-zinc-900/40 backdrop-blur-xl border border-neutral-200 dark:border-zinc-800 transition-all duration-300 hover:border-orange-500/30 dark:hover:border-orange-500/30 hover:shadow-lg hover:shadow-orange-500/5">
+                <div key={post.id} className="p-6 rounded-[2rem] bg-white/80 dark:bg-zinc-900/40 backdrop-blur-xl border border-neutral-200 dark:border-zinc-800 transition-all duration-300 hover:border-[#F9954E]/30 dark:hover:border-[#F9954E]/30 hover:shadow-lg hover:shadow-[#F9954E]/5">
                   <div className="flex items-center gap-3 mb-4">
                     <img src={post.avatar} alt={post.author} className="w-10 h-10 rounded-full border border-neutral-100 dark:border-zinc-700" />
                     <div className="flex flex-col">

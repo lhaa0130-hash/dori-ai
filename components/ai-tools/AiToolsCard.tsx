@@ -114,7 +114,7 @@ const AiToolsCard = React.memo(function AiToolsCard({ tool, rank }: AiToolsCardP
       );
     if (r === 3)
       return (
-        <div className="absolute -top-3 -left-3 w-12 h-12 bg-gradient-to-br from-orange-400 to-orange-600 text-white rounded-full flex items-center justify-center font-black text-sm shadow-lg border-4 border-white dark:border-black z-30 transform -rotate-12">
+        <div className="absolute -top-3 -left-3 w-12 h-12 bg-gradient-to-br from-[#FBAA60] to-[#E8832E] text-white rounded-full flex items-center justify-center font-black text-sm shadow-lg border-4 border-white dark:border-black z-30 transform -rotate-12">
           3위
         </div>
       );
@@ -123,7 +123,7 @@ const AiToolsCard = React.memo(function AiToolsCard({ tool, rank }: AiToolsCardP
 
   return (
     <div
-      className={`relative flex flex-col rounded-lg bg-card border border-strict transition-all duration-300 group hover:border-orange-400 dark:hover:border-orange-500 hover:shadow-md overflow-hidden`}
+      className={`relative flex flex-col rounded-lg bg-card border border-strict transition-all duration-300 group hover:border-[#FBAA60] dark:hover:border-[#F9954E] hover:shadow-md overflow-hidden`}
     >
       {/* ⭐ 전체 클릭 오버레이 (웹사이트 이동) */}
       <a
@@ -138,7 +138,7 @@ const AiToolsCard = React.memo(function AiToolsCard({ tool, rank }: AiToolsCardP
         {rankBadge}
 
         {/* 1. 이미지 (작게) */}
-        <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-lg overflow-hidden border flex-shrink-0 bg-orange-50/50 dark:bg-orange-900/10 border-orange-100/50 dark:border-orange-900/20">
+        <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-lg overflow-hidden border flex-shrink-0 bg-[#FFF5EB]/50 dark:bg-[#8F4B10]/10 border-[#FEEBD0]/50 dark:border-[#8F4B10]/20">
           {imageSrc ? (
             <Image
               src={imageUrl}
@@ -159,10 +159,10 @@ const AiToolsCard = React.memo(function AiToolsCard({ tool, rank }: AiToolsCardP
         <div className="flex items-center flex-1 min-w-0 gap-3">
           {/* 이름 & 카테고리 */}
           <div className="flex items-center gap-2 flex-shrink-0">
-            <h3 className={`text-sm sm:text-base font-bold truncate max-w-[120px] sm:max-w-[200px] transition-colors group-hover:text-orange-500 ${isDark ? "text-white" : "text-neutral-900"}`}>
+            <h3 className={`text-sm sm:text-base font-bold truncate max-w-[120px] sm:max-w-[200px] transition-colors group-hover:text-[#F9954E] ${isDark ? "text-white" : "text-neutral-900"}`}>
               {tool.name}
             </h3>
-            <span className={`text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap hidden sm:inline-block bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 border-orange-100 dark:border-orange-900/30`}>
+            <span className={`text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap hidden sm:inline-block bg-[#FFF5EB] dark:bg-[#8F4B10]/20 text-[#E8832E] dark:text-[#FBAA60] border-[#FEEBD0] dark:border-[#8F4B10]/30`}>
               {CATEGORY_LABELS[tool.category] || tool.category}
             </span>
           </div>
@@ -173,9 +173,9 @@ const AiToolsCard = React.memo(function AiToolsCard({ tool, rank }: AiToolsCardP
           </p>
 
           {/* 평점 (우측 정렬 전) */}
-          <div className="flex items-center gap-0.5 ml-auto sm:ml-0 bg-orange-50 dark:bg-orange-900/20 px-1.5 rounded-sm flex-shrink-0 border border-orange-100/50 dark:border-orange-900/30">
-            <span className="text-orange-400 text-[10px]">★</span>
-            <span className={`text-[10px] font-bold ${isDark ? "text-orange-400" : "text-orange-600"}`}>
+          <div className="flex items-center gap-0.5 ml-auto sm:ml-0 bg-[#FFF5EB] dark:bg-[#8F4B10]/20 px-1.5 rounded-sm flex-shrink-0 border border-[#FEEBD0]/50 dark:border-[#8F4B10]/30">
+            <span className="text-[#FBAA60] text-[10px]">★</span>
+            <span className={`text-[10px] font-bold ${isDark ? "text-[#FBAA60]" : "text-[#E8832E]"}`}>
               {currentRating > 0 ? currentRating.toFixed(1) : "0.0"}
             </span>
           </div>
@@ -188,7 +188,7 @@ const AiToolsCard = React.memo(function AiToolsCard({ tool, rank }: AiToolsCardP
               e.stopPropagation();
               setIsOpen(!isOpen);
             }}
-            className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 ${isOpen ? "text-orange-500 bg-orange-50 dark:bg-orange-900/20" : "text-neutral-500 dark:text-neutral-400 bg-neutral-100 dark:bg-neutral-900"}`}
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:bg-neutral-100 dark:hover:bg-neutral-800 ${isOpen ? "text-[#F9954E] bg-[#FFF5EB] dark:bg-[#8F4B10]/20" : "text-neutral-500 dark:text-neutral-400 bg-neutral-100 dark:bg-neutral-900"}`}
             title="리뷰 보기"
           >
             <span>평가하기</span>
@@ -202,7 +202,7 @@ const AiToolsCard = React.memo(function AiToolsCard({ tool, rank }: AiToolsCardP
             target="_blank"
             rel="noopener noreferrer"
             onClick={(e) => e.stopPropagation()}
-            className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 group-hover:bg-orange-500 group-hover:text-white ${isDark ? "bg-neutral-900 text-neutral-300" : "bg-neutral-100 text-neutral-600"}`}
+            className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 group-hover:bg-[#F9954E] group-hover:text-white ${isDark ? "bg-neutral-900 text-neutral-300" : "bg-neutral-100 text-neutral-600"}`}
           >
             <span className="whitespace-nowrap">바로가기</span>
             <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">

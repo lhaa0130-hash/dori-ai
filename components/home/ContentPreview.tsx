@@ -58,14 +58,14 @@ function ToolCarousel({ category, tools }: { category: string; tools: typeof AI_
                 <div className="flex gap-1.5">
                     <button
                         onClick={() => scroll("left")}
-                        className="p-1.5 rounded-lg bg-card border border-border hover:border-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/10 transition-colors"
+                        className="p-1.5 rounded-lg bg-card border border-border hover:border-[#F9954E] hover:bg-[#FFF5EB] dark:hover:bg-[#8F4B10]/10 transition-colors"
                         aria-label="이전"
                     >
                         <ChevronLeft className="w-3.5 h-3.5 text-muted-foreground" />
                     </button>
                     <button
                         onClick={() => scroll("right")}
-                        className="p-1.5 rounded-lg bg-card border border-border hover:border-orange-500 hover:bg-orange-50 dark:hover:bg-orange-900/10 transition-colors"
+                        className="p-1.5 rounded-lg bg-card border border-border hover:border-[#F9954E] hover:bg-[#FFF5EB] dark:hover:bg-[#8F4B10]/10 transition-colors"
                         aria-label="다음"
                     >
                         <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
@@ -88,11 +88,11 @@ function ToolCarousel({ category, tools }: { category: string; tools: typeof AI_
                         className="flex-shrink-0 w-48"
                     >
                         <Link href="/ai-tools" className="group block h-full">
-                            <div className="h-full bg-card rounded-lg p-3.5 border border-border hover:border-orange-400 dark:hover:border-orange-500 transition-all duration-200 hover:shadow-md">
+                            <div className="h-full bg-card rounded-lg p-3.5 border border-border hover:border-[#FBAA60] dark:hover:border-[#F9954E] transition-all duration-200 hover:shadow-md">
 
                                 {/* 헤더: 아이콘 + 이름 + 태그 */}
                                 <div className="flex items-start gap-2.5 mb-2">
-                                    <div className="w-8 h-8 rounded-md bg-gradient-to-br from-orange-400 to-orange-500 flex items-center justify-center overflow-hidden flex-shrink-0">
+                                    <div className="w-8 h-8 rounded-md bg-gradient-to-br from-[#FBAA60] to-[#F9954E] flex items-center justify-center overflow-hidden flex-shrink-0">
                                         {tool.thumbnail ? (
                                             <img
                                                 src={tool.thumbnail}
@@ -113,10 +113,10 @@ function ToolCarousel({ category, tools }: { category: string; tools: typeof AI_
                                     </div>
 
                                     <div className="flex-1 min-w-0">
-                                        <h4 className="text-sm font-semibold text-card-foreground group-hover:text-orange-500 transition-colors line-clamp-1 leading-tight">
+                                        <h4 className="text-sm font-semibold text-card-foreground group-hover:text-[#F9954E] transition-colors line-clamp-1 leading-tight">
                                             {tool.name}
                                         </h4>
-                                        <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-orange-50 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 inline-block mt-1">
+                                        <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-[#FFF5EB] dark:bg-[#8F4B10]/20 text-[#E8832E] dark:text-[#FBAA60] inline-block mt-1">
                                             {tool.tags?.[0] || "AI"}
                                         </span>
                                     </div>
@@ -178,7 +178,7 @@ export function ContentPreview() {
                         </div>
                         <Link
                             href="/ai-tools"
-                            className="flex items-center gap-1.5 text-sm text-orange-500 hover:text-orange-600 transition-colors font-medium"
+                            className="flex items-center gap-1.5 text-sm text-[#F9954E] hover:text-[#E8832E] transition-colors font-medium"
                         >
                             전체 보기
                             <ArrowRight className="w-4 h-4" />

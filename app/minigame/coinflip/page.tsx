@@ -95,7 +95,7 @@ export default function CoinFlipPage() {
                         {/* Stats */}
                         <div className="flex items-center justify-center gap-8 mb-8">
                             <div className="text-center">
-                                <div className="text-3xl font-bold text-orange-500">{flipCount}</div>
+                                <div className="text-3xl font-bold text-[#F9954E]">{flipCount}</div>
                                 <div className="text-sm text-neutral-500 dark:text-zinc-400">총 던진 횟수</div>
                             </div>
                             <div className="h-12 w-px bg-neutral-200 dark:bg-zinc-700" />

@@ -52,7 +52,7 @@ export default function Header() {
 
         {/* 1. Logo */}
         <Link href="/" aria-label="DORI-AI Home" className="flex-shrink-0 hover:opacity-70 transition-opacity">
-          <span className="font-bold text-lg whitespace-nowrap bg-[linear-gradient(to_right,#facc15,#f97316_20%,#f97316_80%,#ef4444)] bg-clip-text text-transparent animate-gradient-x">
+          <span className="font-bold text-lg whitespace-nowrap bg-[linear-gradient(to_right,#facc15,#F9954E_20%,#F9954E_80%,#ef4444)] bg-clip-text text-transparent animate-gradient-x">
             DORI-AI
           </span>
         </Link>
@@ -62,7 +62,7 @@ export default function Header() {
           <Link
             key={item.name}
             href={item.href}
-            className="flex-shrink-0 text-sm font-medium text-foreground hover:text-orange-600 dark:hover:text-orange-500 transition-colors whitespace-nowrap"
+            className="flex-shrink-0 text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap"
           >
             {item.name}
           </Link>
@@ -93,7 +93,7 @@ export default function Header() {
           ) : (
             <button
               onClick={handleSignIn}
-              className="px-4 py-2 rounded-full bg-orange-500 hover:bg-orange-600 text-xs font-bold text-white transition-colors whitespace-nowrap shadow-md hover:shadow-lg"
+              className="px-4 py-2 rounded-full bg-[#F9954E] hover:bg-[#E8832E] text-xs font-bold text-white transition-colors whitespace-nowrap shadow-md hover:shadow-lg"
             >
               로그인
             </button>

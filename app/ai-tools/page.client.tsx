@@ -97,7 +97,7 @@ export default function AiToolsClient() {
       }}
     >
       {/* 배경 그라데이션 (Standard) */}
-      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-orange-100/40 via-orange-50/20 to-transparent dark:hidden pointer-events-none z-0" />
+      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:hidden pointer-events-none z-0" />
 
 
 
@@ -105,10 +105,10 @@ export default function AiToolsClient() {
       <section className="relative pt-32 pb-16 px-6 text-center z-10">
         <div className="max-w-3xl mx-auto animate-fade-in flex flex-col items-center">
           {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-orange-50 dark:bg-orange-950/30 border border-orange-200 dark:border-orange-800 text-orange-600 dark:text-orange-400 text-xs font-bold mb-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
             <span className="relative flex h-2 w-2">
-              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-orange-400 opacity-75"></span>
-              <span className="relative inline-flex rounded-full h-2 w-2 bg-orange-500"></span>
+              <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-[#FBAA60] opacity-75"></span>
+              <span className="relative inline-flex rounded-full h-2 w-2 bg-[#F9954E]"></span>
             </span>
             <span>AI Tool Collection</span>
           </div>
@@ -128,10 +128,10 @@ export default function AiToolsClient() {
                 key={cat}
                 onClick={() => handleCategoryClick(cat)}
                 className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200 ${activeCategory === cat
-                  ? "bg-orange-500 border-orange-500 text-white"
+                  ? "bg-[#F9954E] border-[#F9954E] text-white"
                   : isDark
-                    ? "bg-neutral-900 border-neutral-800 text-neutral-400 hover:border-orange-500/50 hover:text-white"
-                    : "bg-white border-neutral-200 text-neutral-600 hover:border-orange-500/50 hover:text-neutral-900"
+                    ? "bg-neutral-900 border-neutral-800 text-neutral-400 hover:border-[#F9954E]/50 hover:text-white"
+                    : "bg-white border-neutral-200 text-neutral-600 hover:border-[#F9954E]/50 hover:text-neutral-900"
                   }`}
               >
                 {CATEGORY_LABELS[cat]}

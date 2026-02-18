@@ -46,7 +46,7 @@ export const TIER_INFO: Record<UserTier, { name: TierName; color: string; descri
   5: { name: "Curator", color: "#a78bfa", description: "큐레이터" },
   6: { name: "Senior Curator", color: "#8b5cf6", description: "시니어 큐레이터" },
   7: { name: "Guide", color: "#f59e0b", description: "가이드" },
-  8: { name: "Senior Guide", color: "#f97316", description: "시니어 가이드" },
+  8: { name: "Senior Guide", color: "#F9954E", description: "시니어 가이드" },
   9: { name: "Architect", color: "#ec4899", description: "건축가" },
   10: { name: "Master Architect", color: "#f43f5e", description: "마스터 건축가" },
 };

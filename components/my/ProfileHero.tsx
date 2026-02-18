@@ -368,8 +368,8 @@ export default function ProfileHero({
                     height: "100%",
                     width: `${Math.min(Math.max(levelProgress, 0), 100)}%`,
                     background: isDark
-                      ? "linear-gradient(90deg, #fbbf24, #f59e0b, #f97316, #f59e0b, #fbbf24)"
-                      : "linear-gradient(90deg, #fbbf24, #f59e0b, #f97316, #f59e0b, #fbbf24)",
+                      ? "linear-gradient(90deg, #fbbf24, #f59e0b, #F9954E, #f59e0b, #fbbf24)"
+                      : "linear-gradient(90deg, #fbbf24, #f59e0b, #F9954E, #f59e0b, #fbbf24)",
                     backgroundSize: "200% 100%",
                     borderRadius: "8px",
                     transition: "width 0.8s cubic-bezier(0.4, 0, 0.2, 1)",
@@ -437,7 +437,7 @@ export default function ProfileHero({
                         height: "3px",
                         background: "#ffffff",
                         borderRadius: "50%",
-                        boxShadow: "0 0 6px #f97316",
+                        boxShadow: "0 0 6px #F9954E",
                         animation: "particleFloat 2.2s ease-in-out infinite 1s",
                       }} />
                     </>
