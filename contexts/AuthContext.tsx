@@ -9,6 +9,12 @@ interface AuthUser {
     image?: string;
 }
 
+declare global {
+    interface Window {
+        google: any;
+    }
+}
+
 interface AuthSession {
     user: AuthUser;
 }
