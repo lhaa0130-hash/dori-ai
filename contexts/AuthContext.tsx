@@ -176,11 +176,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             if (err?.code === "auth/popup-closed-by-user") {
                 return { success: false, error: "로그인이 취소되었습니다." };
             }
-            if (err?.code === "auth/api-key-not-valid.-please-pass-a-valid-api-key.") {
-                return { success: false, error: "Firebase 설정이 필요합니다. .env.local 파일을 확인하세요." };
-            }
             console.error("Google login error:", err);
-            return { success: false, error: "Google 로그인 중 오류가 발생했습니다." };
+            // 구체적인 에러 메시지 반환 (디버깅용)
+            if (err?.code === "auth/unauthorized-domain") {
+                return { success: false, error: "현재 도메인이 Firebase 승인 도메인에 등록되지 않았습니다." };
+            }
+            if (err?.code === "auth/operation-not-allowed") {
+                return { success: false, error: "Google 로그인 제공업체가 활성화되지 않았습니다." };
+            }
+            return { success: false, error: `Google 로그인 오류 (${err.code}): 관리자에게 문의하세요.` };
         }
     }, []);
 
