@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
-import { Search } from "lucide-react";
+import { Search, ChevronDown, User, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
@@ -81,19 +81,36 @@ export default function Header() {
           <ThemeToggle />
         </div>
 
-        {/* 10. Login Button */}
-        <div className="flex-shrink-0 min-w-[70px] flex items-center justify-center ml-2">
+        {/* 10. User Menu / Login Button */}
+        <div className="flex-shrink-0 flex items-center ml-2 relative group">
           {session?.user ? (
-            <button
-              onClick={handleSignOut}
-              className="px-4 py-2 rounded-full bg-secondary text-xs font-bold text-secondary-foreground hover:bg-secondary/80 transition-colors whitespace-nowrap"
-            >
-              로그아웃
-            </button>
+            <div className="relative">
+              <Link
+                href="/my"
+                className="flex items-center gap-2 px-5 py-2 rounded-full bg-secondary hover:bg-secondary/80 text-xs font-black text-secondary-foreground transition-all active:scale-95 whitespace-nowrap"
+              >
+                <User className="w-3.5 h-3.5" />
+                <span>마이페이지</span>
+                <ChevronDown className="w-3 h-3 opacity-50 group-hover:rotate-180 transition-transform duration-300" />
+              </Link>
+
+              {/* Hover Dropdown */}
+              <div className="absolute top-full right-0 mt-2 w-32 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
+                <div className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden backdrop-blur-xl bg-opacity-90 dark:bg-opacity-90">
+                  <button
+                    onClick={handleSignOut}
+                    className="w-full flex items-center gap-2 px-4 py-3 text-xs font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"
+                  >
+                    <LogOut className="w-3.5 h-3.5" />
+                    <span>로그아웃</span>
+                  </button>
+                </div>
+              </div>
+            </div>
           ) : (
             <button
               onClick={handleSignIn}
-              className="px-4 py-2 rounded-full bg-[#F9954E] hover:bg-[#E8832E] text-xs font-bold text-white transition-colors whitespace-nowrap shadow-md hover:shadow-lg"
+              className="px-6 py-2.5 rounded-full bg-[#F9954E] hover:bg-[#E8832E] text-xs font-black text-white transition-all shadow-md hover:shadow-lg active:scale-95 whitespace-nowrap"
             >
               로그인
             </button>

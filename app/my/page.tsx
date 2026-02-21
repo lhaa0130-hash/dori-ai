@@ -258,143 +258,59 @@ export default function MyPage() {
 
   // 세션 로딩 중일 때 처리
   if (status === 'loading' || !mounted) {
-    const loadingBgColor = mounted && theme === 'dark' ? '#000000' : '#ffffff';
-    const loadingTextColor = mounted && theme === 'dark' ? 'rgba(255, 255, 255, 0.7)' : '#666';
-    const loadingBorderColor = mounted && theme === 'dark' ? 'rgba(255, 255, 255, 0.1)' : '#f3f3f3';
-    const loadingBorderTopColor = mounted && theme === 'dark' ? '#3b82f6' : '#2563eb';
-
     return (
-      <main style={{
-        backgroundColor: loadingBgColor,
-        minHeight: '100vh',
-        paddingTop: '70px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
+      <main className="w-full min-h-screen bg-white dark:bg-black flex flex-col items-center justify-center relative overflow-hidden">
         <Header />
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          {/* 스켈레톤 로딩 */}
-          <div style={{
-            width: '60px',
-            height: '60px',
-            border: '4px solid',
-            borderColor: loadingBorderColor,
-            borderTopColor: loadingBorderTopColor,
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 1rem',
-          }} />
-          <p style={{
-            marginTop: '1rem',
-            color: loadingTextColor,
-            fontSize: '14px',
-          }}>사용자 정보를 불러오는 중입니다...</p>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FEEBD0]/20 via-[#FFF5EB]/10 to-transparent dark:from-[#8F4B10]/5 pointer-events-none z-0" />
+        <div className="relative z-10 flex flex-col items-center">
+          <div className="w-12 h-12 border-4 border-neutral-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-6" />
+          <p className="text-neutral-500 dark:text-zinc-400 font-bold tracking-tight animate-pulse">
+            사용자 정보를 불러오는 중입니다
+          </p>
         </div>
-        <style jsx>{`
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}</style>
       </main>
     );
   }
 
   // 로그인이 필요한 경우 (세션이 없고 로딩이 완료된 경우)
   if (status === 'unauthenticated' || !session || !session.user || !user || !user.email) {
-    const unAuthBgColor = mounted && theme === 'dark' ? '#000000' : '#ffffff';
-    const unAuthTextColor = mounted && theme === 'dark' ? 'rgba(255, 255, 255, 0.8)' : '#1d1d1f';
-    const unAuthLinkColor = mounted && theme === 'dark' ? '#60a5fa' : '#2563eb';
-
     return (
-      <main style={{
-        backgroundColor: unAuthBgColor,
-        minHeight: '100vh',
-        paddingTop: '70px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
+      <main className="w-full min-h-screen bg-white dark:bg-black flex flex-col items-center justify-center relative overflow-hidden">
         <Header />
-        <div style={{
-          textAlign: 'center',
-          padding: '2rem',
-        }}>
-          <p style={{
-            color: unAuthTextColor,
-            fontSize: '16px',
-            marginBottom: '1.5rem',
-          }}>
-            로그인이 필요합니다.
+        {/* Background Decorative Gradient */}
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FEEBD0]/30 via-[#FFF5EB]/10 to-transparent dark:from-[#8F4B10]/5 pointer-events-none z-0" />
+
+        <div className="relative z-10 p-12 rounded-[2.5rem] bg-white/50 dark:bg-zinc-900/30 backdrop-blur-2xl border border-neutral-200 dark:border-zinc-800 shadow-2xl flex flex-col items-center text-center max-w-sm mx-6">
+          <div className="w-16 h-16 rounded-3xl bg-orange-50 dark:bg-orange-500/10 border border-orange-100 dark:border-orange-500/20 flex items-center justify-center text-2xl mb-6 shadow-glow">
+            🔒
+          </div>
+          <h2 className="text-2xl font-black text-neutral-900 dark:text-white mb-3 tracking-tight">서비스 이용 제한</h2>
+          <p className="text-sm font-medium text-neutral-500 dark:text-zinc-400 mb-8 leading-relaxed">
+            마이페이지는 로그인 후<br />이용하실 수 있습니다.
           </p>
           <Link
             href="/login"
-            style={{
-              color: unAuthLinkColor,
-              fontSize: '16px',
-              fontWeight: '600',
-              textDecoration: 'none',
-              padding: '0.75rem 1.5rem',
-              borderRadius: '0.5rem',
-              border: `1px solid ${unAuthLinkColor}`,
-              display: 'inline-block',
-              transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = mounted && theme === 'dark'
-                ? 'rgba(96, 165, 250, 0.1)'
-                : 'rgba(37, 99, 235, 0.1)';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = 'transparent';
-            }}
+            className="w-full py-4 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-black text-sm transition-all shadow-lg shadow-orange-500/20 active:scale-95"
           >
-            로그인하기
+            로그인하러 가기
           </Link>
         </div>
       </main>
     );
   }
 
-  // 관리자인 경우 프로필 없이도 진행
+  // 프로필 데이터 로딩 중
   if (!isAdmin && !profile) {
     return (
-      <main style={{
-        backgroundColor: isDark ? '#000000' : '#ffffff',
-        minHeight: '100vh',
-        paddingTop: '70px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
+      <main className="w-full min-h-screen bg-white dark:bg-black flex flex-col items-center justify-center relative overflow-hidden">
         <Header />
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <div style={{
-            width: '60px',
-            height: '60px',
-            border: '4px solid',
-            borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : '#f3f3f3',
-            borderTopColor: isDark ? '#3b82f6' : '#2563eb',
-            borderRadius: '50%',
-            animation: 'spin 1s linear infinite',
-            margin: '0 auto 1rem',
-          }} />
-          <p style={{
-            marginTop: '1rem',
-            color: isDark ? 'rgba(255, 255, 255, 0.7)' : '#666',
-            fontSize: '14px',
-          }}>프로필을 불러오는 중입니다...</p>
+        <div className="absolute inset-0 bg-gradient-to-b from-[#FEEBD0]/20 via-[#FFF5EB]/10 to-transparent dark:from-[#8F4B10]/5 pointer-events-none z-0" />
+        <div className="relative z-10 flex flex-col items-center">
+          <div className="w-12 h-12 border-4 border-neutral-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-6" />
+          <p className="text-neutral-500 dark:text-zinc-400 font-bold tracking-tight animate-pulse">
+            프로필을 로드하는 중입니다
+          </p>
         </div>
-        <style jsx>{`
-          @keyframes spin {
-            0% { transform: rotate(0deg); }
-            100% { transform: rotate(360deg); }
-          }
-        `}</style>
       </main>
     );
   }
@@ -404,39 +320,17 @@ export default function MyPage() {
     posts: Array.isArray(myPosts) ? myPosts.length : 0,
     comments: Array.isArray(myComments) ? myComments.length : 0,
     receivedLikes: totalSparks,
-    guides: 0, // 가이드 기능이 추가되면 업데이트
+    guides: 0,
   };
 
   // 최종 안전성 체크: user와 profile이 반드시 존재해야 함
   if (!user || !user.email) {
     return (
-      <main style={{
-        backgroundColor: isDark ? '#000000' : '#ffffff',
-        minHeight: '100vh',
-        paddingTop: '70px',
-        display: 'flex',
-        flexDirection: 'column',
-        alignItems: 'center',
-        justifyContent: 'center',
-      }}>
+      <main className="w-full min-h-screen pt-20 flex flex-col items-center justify-center bg-white dark:bg-black">
         <Header />
-        <div style={{ textAlign: 'center', padding: '2rem' }}>
-          <p style={{
-            color: isDark ? 'rgba(255, 255, 255, 0.7)' : '#666',
-            fontSize: '14px',
-          }}>
-            사용자 정보를 불러올 수 없습니다.
-          </p>
-          <Link
-            href="/login"
-            style={{
-              color: isDark ? '#60a5fa' : '#2563eb',
-              marginTop: '1rem',
-              display: 'inline-block',
-              fontSize: '14px',
-              fontWeight: '600',
-            }}
-          >
+        <div className="text-center p-8 bg-neutral-50 dark:bg-zinc-900 rounded-3xl border border-neutral-200 dark:border-zinc-800 shadow-sm">
+          <p className="text-neutral-500 dark:text-zinc-400 font-medium mb-6">사용자 정보를 찾을 수 없습니다.</p>
+          <Link href="/login" className="px-6 py-3 rounded-full bg-[#F9954E] text-white font-bold hover:bg-[#E8832E] transition-all">
             다시 로그인하기
           </Link>
         </div>
@@ -445,366 +339,166 @@ export default function MyPage() {
   }
 
   return (
-    <main style={{
-      backgroundColor: isDark ? '#000000' : '#ffffff',
-      fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-      minHeight: '100vh',
-      paddingTop: '70px',
-    }}>
+    <main className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-500 relative">
       <Header />
 
-      {/* 다크모드 배경 효과 */}
-      {isDark && (
-        <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
-          <div className="absolute top-0 left-[20%] w-[500px] h-[500px] rounded-full blur-[100px] opacity-40 bg-blue-900 mix-blend-screen animate-pulse" />
-          <div className="absolute top-[100px] right-[20%] w-[450px] h-[450px] rounded-full blur-[100px] opacity-40 bg-purple-900 mix-blend-screen animate-pulse" style={{ animationDelay: '1s' }} />
+      {/* Background Decorative Gradient */}
+      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
+
+      {/* Hero Section */}
+      <section className="relative pt-32 pb-12 px-6 text-center z-10">
+        <div className="max-w-3xl mx-auto flex flex-col items-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
+            <span className="w-2 h-2 rounded-full bg-current animate-pulse" />
+            <span>My Profile</span>
+          </div>
+
+          <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
+            <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+              마이페이지
+            </span>
+          </h1>
+          <p className="text-sm md:text-base font-medium text-neutral-500 dark:text-zinc-400 max-w-lg">
+            회원님의 활동 내역과 프로필 정보를 한눈에 관리하세요.
+          </p>
         </div>
-      )}
+      </section>
 
-      {/* MY PAGE CONTENT */}
-      <section className="relative z-10" style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        padding: '4rem 1.5rem',
-        minHeight: 'calc(100vh - 70px)',
-      }}>
+      {/* Main Content Area */}
+      <section className="container max-w-6xl mx-auto px-6 pb-24 relative z-10">
 
-        {/* 프로필 Hero 영역 */}
-        {profile && user && user.email && (
-          <ProfileHero
-            profile={profile}
-            onImageChange={handleImageChange}
-            onNicknameChange={handleNicknameChange}
-            onBioChange={handleBioChange}
-            onStatusMessageChange={handleStatusMessageChange}
-            isAdmin={isAdmin}
-            activityStats={activityStats}
-          />
-        )}
-
-
-        {/* 활동 히스토리 섹션 */}
-        {profile && user && user.email && (
-          <div style={{
-            marginTop: '3rem',
-            background: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
-            border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7'}`,
-            borderRadius: '1.5rem',
-            padding: '2rem',
-          }}>
-            <h3 style={{
-              fontSize: '1.25rem',
-              fontWeight: '700',
-              color: isDark ? '#ffffff' : '#1d1d1f',
-              marginBottom: '1.5rem',
-            }}>
-              활동 히스토리
-            </h3>
-
-            {/* 탭 메뉴 */}
-            <div style={{
-              display: 'flex',
-              gap: '0.5rem',
-              borderBottom: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7'}`,
-              marginBottom: '2rem',
-              flexWrap: 'wrap',
-            }}>
-              {[
-                { id: "posts", label: `내가 쓴 글 (${myPosts.length})` },
-                { id: "comments", label: `💬 내 댓글 (${myComments.length})` },
-              ].map((tab) => (
-                <button
-                  key={tab.id}
-                  onClick={() => setActiveTab(tab.id)}
-                  style={{
-                    background: 'none',
-                    border: 'none',
-                    padding: '0.875rem 1.5rem',
-                    cursor: 'pointer',
-                    fontSize: '0.9375rem',
-                    fontWeight: '500',
-                    letterSpacing: '-0.01em',
-                    color: activeTab === tab.id
-                      ? (isDark ? '#ffffff' : '#1d1d1f')
-                      : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)'),
-                    borderBottom: `2px solid ${activeTab === tab.id ? (isDark ? '#ffffff' : '#1d1d1f') : 'transparent'}`,
-                    transition: 'all 0.2s ease',
-                    fontFamily: 'inherit',
-                  }}
-                >
-                  {tab.label}
-                </button>
-              ))}
-            </div>
-
-            {/* 리스트 영역 */}
-            <div className="post-list">
-              {displayList.length === 0 ? (
-                <div className="empty-state" style={{
-                  textAlign: 'center',
-                  padding: '4rem 0',
-                  color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
-                }}>
-                  아직 활동이 없습니다.
-                  <br />
-                  <Link href="/community" style={{
-                    color: isDark ? '#60a5fa' : '#2563eb',
-                    marginTop: '1rem',
-                    display: 'inline-block',
-                    fontWeight: '600',
-                    textDecoration: 'none',
-                  }}>
-                    커뮤니티 글 쓰러 가기 →
-                  </Link>
-                </div>
-              ) : activeTab === "comments" ? (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  {displayList.map((comment: any) => (
-                    <Link
-                      href={comment.postUrl || `/community/${comment.postId}`}
-                      key={comment.id}
-                      style={{ textDecoration: 'none', color: 'inherit' }}
-                    >
-                      <div style={{
-                        padding: '1.5rem',
-                        borderRadius: '1rem',
-                        background: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
-                        border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7'}`,
-                        boxShadow: isDark ? '0 2px 10px rgba(0, 0, 0, 0.3)' : '0 2px 10px rgba(0, 0, 0, 0.05)',
-                        cursor: 'pointer',
-                        transition: 'all 0.3s ease',
-                      }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.transform = 'translateY(-2px)';
-                          e.currentTarget.style.boxShadow = isDark
-                            ? '0 8px 24px rgba(0, 0, 0, 0.5)'
-                            : '0 8px 24px rgba(0, 0, 0, 0.1)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.transform = 'translateY(0)';
-                          e.currentTarget.style.boxShadow = isDark
-                            ? '0 2px 10px rgba(0, 0, 0, 0.3)'
-                            : '0 2px 10px rgba(0, 0, 0, 0.05)';
-                        }}
-                      >
-                        <div style={{
-                          fontSize: '0.8125rem',
-                          color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
-                          marginBottom: '0.5rem',
-                          fontWeight: '400',
-                          letterSpacing: '-0.01em',
-                        }}>
-                          {comment.date || new Date(comment.createdAt || Date.now()).toLocaleDateString()}
-                        </div>
-                        <h3 style={{
-                          margin: '0 0 0.75rem 0',
-                          fontSize: '0.9375rem',
-                          fontWeight: '600',
-                          letterSpacing: '-0.01em',
-                          color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)',
-                        }}>
-                          {comment.postTitle || "게시글"}
-                        </h3>
-                        <p style={{
-                          margin: '0 0 0.75rem 0',
-                          fontSize: '0.9375rem',
-                          fontWeight: '400',
-                          letterSpacing: '-0.01em',
-                          color: isDark ? '#ffffff' : '#1d1d1f',
-                          lineHeight: '1.6',
-                          padding: '0.75rem',
-                          borderRadius: '0.5rem',
-                          background: isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.02)',
-                        }}>
-                          {comment.text || comment.content}
-                        </p>
-                        <div style={{
-                          display: 'flex',
-                          alignItems: 'center',
-                          gap: '0.5rem',
-                          fontSize: '0.8125rem',
-                          color: isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)',
-                        }}>
-                          <span>💬</span>
-                          <span>댓글 보기 →</span>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              ) : (
-                <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
-                  {displayList.slice(0).reverse().map((post) => (
-                    <Link
-                      href={`/community/${post.id}`}
-                      key={post.id}
-                      style={{ textDecoration: 'none', color: 'inherit' }}
-                    >
-                      <div className="post-item" style={{
-                        padding: '1.5rem',
-                        borderRadius: '1rem',
-                        background: isDark ? 'rgba(255, 255, 255, 0.02)' : '#ffffff',
-                        border: `1px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : '#e5e5e7'}`,
-                        boxShadow: isDark ? '0 2px 10px rgba(0, 0, 0, 0.3)' : '0 2px 10px rgba(0, 0, 0, 0.05)',
-                        cursor: 'pointer',
-                        transition: 'all 0.3s ease',
-                        display: 'flex',
-                        justifyContent: 'space-between',
-                        alignItems: 'center',
-                        gap: '1.5rem',
-                      }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.transform = 'translateY(-2px)';
-                          e.currentTarget.style.boxShadow = isDark
-                            ? '0 8px 24px rgba(0, 0, 0, 0.5)'
-                            : '0 8px 24px rgba(0, 0, 0, 0.1)';
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.transform = 'translateY(0)';
-                          e.currentTarget.style.boxShadow = isDark
-                            ? '0 2px 10px rgba(0, 0, 0, 0.3)'
-                            : '0 2px 10px rgba(0, 0, 0, 0.05)';
-                        }}
-                      >
-                        <div className="post-info" style={{ flex: 1, minWidth: 0 }}>
-                          <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.75rem', flexWrap: 'wrap' }}>
-                            <span className="post-tag" style={{
-                              fontSize: '0.75rem',
-                              background: isDark
-                                ? 'linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(168, 85, 247, 0.2))'
-                                : 'linear-gradient(135deg, rgba(37, 99, 235, 0.1), rgba(124, 58, 237, 0.1))',
-                              padding: '0.375rem 0.875rem',
-                              borderRadius: '0.75rem',
-                              color: isDark ? '#60a5fa' : '#2563eb',
-                              display: 'inline-block',
-                              fontWeight: '600',
-                              border: `1px solid ${isDark ? 'rgba(96, 165, 250, 0.3)' : 'rgba(37, 99, 235, 0.2)'}`,
-                            }}>
-                              {post.tag || "자유"}
-                            </span>
-                            {post.image && (
-                              <span style={{
-                                fontSize: '0.875rem',
-                                opacity: 0.7,
-                              }}>📷</span>
-                            )}
-                            <span style={{
-                              fontSize: '0.75rem',
-                              color: isDark ? 'rgba(255, 255, 255, 0.4)' : 'rgba(0, 0, 0, 0.4)',
-                              marginLeft: 'auto',
-                            }}>
-                              {post.date || new Date(post.createdAt || Date.now()).toLocaleDateString()}
-                            </span>
-                          </div>
-                          <h3 style={{
-                            margin: '0 0 0.5rem 0',
-                            fontSize: '1.0625rem',
-                            fontWeight: '600',
-                            letterSpacing: '-0.01em',
-                            color: isDark ? '#ffffff' : '#1d1d1f',
-                            lineHeight: '1.5',
-                            overflow: 'hidden',
-                            textOverflow: 'ellipsis',
-                            display: '-webkit-box',
-                            WebkitLineClamp: 2,
-                            WebkitBoxOrient: 'vertical',
-                          }}>
-                            {post.title}
-                          </h3>
-                          <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.75rem',
-                            flexWrap: 'wrap',
-                            fontSize: '0.8125rem',
-                            fontWeight: '400',
-                            letterSpacing: '-0.01em',
-                          }}>
-                            <span style={{
-                              color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
-                            }}>
-                              {post.author || post.nickname || "익명"}
-                            </span>
-                            <span style={{
-                              color: isDark ? 'rgba(255, 255, 255, 0.3)' : 'rgba(0, 0, 0, 0.3)',
-                            }}>•</span>
-                            <span style={{
-                              color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
-                            }}>
-                              👁️ {post.views || 0}
-                            </span>
-                          </div>
-                        </div>
-                        <div className="post-stats" style={{
-                          display: 'flex',
-                          flexDirection: 'column',
-                          gap: '0.5rem',
-                          fontSize: '0.875rem',
-                          alignItems: 'flex-end',
-                          flexShrink: 0,
-                        }}>
-                          <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.375rem',
-                            padding: '0.375rem 0.75rem',
-                            borderRadius: '0.5rem',
-                            background: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)',
-                            color: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.6)',
-                          }}>
-                            <span>💬</span>
-                            <span style={{ fontWeight: '600' }}>{post.comments || 0}</span>
-                          </div>
-                          <div style={{
-                            display: 'flex',
-                            alignItems: 'center',
-                            gap: '0.375rem',
-                            padding: '0.375rem 0.75rem',
-                            borderRadius: '0.5rem',
-                            background: (post.sparks || post.likes || 0) > 0
-                              ? (isDark ? 'rgba(251, 191, 36, 0.15)' : 'rgba(212, 177, 6, 0.1)')
-                              : (isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.03)'),
-                            color: (post.sparks || post.likes || 0) > 0
-                              ? (isDark ? '#fbbf24' : '#d4b106')
-                              : (isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)'),
-                            border: (post.sparks || post.likes || 0) > 0
-                              ? `1px solid ${isDark ? 'rgba(251, 191, 36, 0.3)' : 'rgba(212, 177, 6, 0.2)'}`
-                              : 'none',
-                          }}>
-                            <span>⚡️</span>
-                            <span style={{ fontWeight: '600' }}>{post.sparks || post.likes || 0}</span>
-                          </div>
-                        </div>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
+        {/* Profile Details (Hero Component) */}
+        {profile && user && (
+          <div className="mb-12">
+            <ProfileHero
+              profile={profile}
+              onImageChange={handleImageChange}
+              onNicknameChange={handleNicknameChange}
+              onBioChange={handleBioChange}
+              onStatusMessageChange={handleStatusMessageChange}
+              isAdmin={isAdmin}
+              activityStats={activityStats}
+            />
           </div>
         )}
 
+        {/* Activity Section */}
+        <div className="bg-white/50 dark:bg-zinc-900/30 backdrop-blur-xl rounded-[2.5rem] border border-neutral-200 dark:border-zinc-800/50 p-6 md:p-10 shadow-sm">
+          <div className="flex items-center justify-between mb-8">
+            <h3 className="text-xl font-extrabold text-neutral-900 dark:text-white flex items-center gap-2">
+              <span className="w-1.5 h-6 bg-[#F9954E] rounded-full" />
+              활동 히스토리
+            </h3>
+          </div>
+
+          {/* New Tab UI */}
+          <div className="flex gap-2 p-1 bg-neutral-100 dark:bg-zinc-950 rounded-2xl mb-10 w-fit mx-auto sm:mx-0">
+            {[
+              { id: "posts", label: "내가 작성한 글", count: myPosts.length },
+              { id: "comments", label: "내 댓글 내역", count: myComments.length }
+            ].map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-black transition-all duration-300 ${activeTab === tab.id
+                  ? "bg-white dark:bg-zinc-800 text-[#F9954E] shadow-sm"
+                  : "text-neutral-500 hover:text-neutral-700 dark:text-zinc-500 dark:hover:text-zinc-300"
+                  }`}
+              >
+                {tab.label}
+                <span className={`px-2 py-0.5 rounded-md text-[10px] ${activeTab === tab.id ? "bg-orange-100 dark:bg-orange-500/20" : "bg-neutral-200 dark:bg-zinc-900"
+                  }`}>
+                  {tab.count}
+                </span>
+              </button>
+            ))}
+          </div>
+
+          {/* Content List */}
+          <div className="space-y-4">
+            {displayList.length === 0 ? (
+              <div className="text-center py-20 bg-neutral-50/50 dark:bg-zinc-950/20 rounded-3xl border border-dashed border-neutral-200 dark:border-zinc-800">
+                <div className="text-4xl mb-4 opacity-20">📭</div>
+                <p className="text-neutral-400 dark:text-zinc-500 font-medium mb-6">아직 활동 정보가 없네요!</p>
+                <Link href="/community" className="text-[#F9954E] font-bold text-sm hover:underline">
+                  첫 게시글 작성하러 가기 →
+                </Link>
+              </div>
+            ) : activeTab === "comments" ? (
+              <div className="grid gap-4">
+                {displayList.map((comment: any) => (
+                  <Link
+                    href={comment.postUrl || `/community/${comment.postId}`}
+                    key={comment.id}
+                    className="block group"
+                  >
+                    <div className="p-6 rounded-[1.5rem] border bg-white dark:bg-zinc-900/50 border-neutral-200 dark:border-zinc-800 transition-all duration-300 group-hover:border-[#F9954E] group-hover:shadow-lg group-hover:shadow-orange-500/5">
+                      <div className="flex items-center gap-2 mb-3">
+                        <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">{comment.date || 'RECENT'}</span>
+                        <span className="w-1 h-1 rounded-full bg-neutral-300 dark:bg-zinc-700" />
+                        <span className="text-[11px] font-bold text-[#F9954E] truncate max-w-[200px]">{comment.postTitle}</span>
+                      </div>
+                      <p className="text-sm text-neutral-700 dark:text-zinc-300 leading-relaxed font-medium line-clamp-2">
+                        {comment.text || comment.content}
+                      </p>
+                      <div className="mt-4 flex items-center justify-end text-[10px] font-bold text-neutral-400 group-hover:text-[#F9954E] transition-colors">
+                        본문 확인하기 →
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            ) : (
+              <div className="grid gap-4">
+                {displayList.map((post: any) => (
+                  <Link
+                    href={`/community/${post.id}`}
+                    key={post.id}
+                    className="block group"
+                  >
+                    <div className="p-6 rounded-[2rem] border bg-white dark:bg-zinc-900/50 border-neutral-200 dark:border-zinc-800 transition-all duration-300 group-hover:border-[#F9954E] group-hover:shadow-xl group-hover:shadow-orange-500/5 flex flex-col sm:flex-row sm:items-center gap-6">
+
+                      <div className="flex-1 min-w-0">
+                        <div className="flex items-center gap-3 mb-3">
+                          <span className="px-2.5 py-0.5 rounded-full bg-orange-50 dark:bg-orange-500/10 text-[#F9954E] text-[10px] font-black border border-orange-100 dark:border-orange-500/20">
+                            {post.tag || "자유"}
+                          </span>
+                          <span className="text-[10px] font-bold text-neutral-400 tracking-tighter uppercase">
+                            {post.date || 'RECENT'}
+                          </span>
+                        </div>
+                        <h4 className="text-base font-bold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors line-clamp-1 mb-2">
+                          {post.title}
+                        </h4>
+                        <div className="flex items-center gap-4 text-[10px] font-bold text-neutral-400">
+                          <span className="flex items-center gap-1">👀 {post.views || 0}</span>
+                          <span className="flex items-center gap-1">💬 {post.comments || 0}</span>
+                          <span className="flex items-center gap-1">⚡ {post.sparks || 0}</span>
+                        </div>
+                      </div>
+
+                      <div className="flex-shrink-0 flex items-center gap-2 sm:self-center">
+                        <div className="w-10 h-10 rounded-full bg-neutral-50 dark:bg-zinc-800 border border-neutral-100 dark:border-zinc-700 flex items-center justify-center text-neutral-300 group-hover:text-[#F9954E] group-hover:border-[#F9954E]/30 transition-all">
+                          →
+                        </div>
+                      </div>
+                    </div>
+                  </Link>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
       </section>
 
       <style jsx global>{`
-        @keyframes fadeInUp {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
+        @keyframes gradient {
+          0% { background-position: 0% 50%; }
+          50% { background-position: 100% 50%; }
+          100% { background-position: 0% 50%; }
         }
-        @media (max-width: 768px) {
-          .post-item {
-            flex-direction: column;
-            align-items: flex-start !important;
-          }
-          .profile-grid {
-            grid-template-columns: 1fr !important;
-          }
+        .animate-gradient {
+          animation: gradient 3s ease infinite;
         }
       `}</style>
     </main>
