@@ -345,21 +345,15 @@ export default function MyPage() {
       {/* Background Decorative Gradient */}
       <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
 
-      {/* Hero Section */}
-      <section className="relative pt-32 pb-12 px-6 text-center z-10">
+      {/* Hero Section - Simplified Header */}
+      <section className="relative pt-32 pb-8 px-6 text-center z-10">
         <div className="max-w-3xl mx-auto flex flex-col items-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
-            <span className="w-2 h-2 rounded-full bg-current animate-pulse" />
-            <span>My Profile</span>
-          </div>
-
-          <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
-            <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-              마이페이지
-            </span>
+          <h1 className="text-4xl font-black mb-4 tracking-tighter text-neutral-900 dark:text-white">
+            마이페이지
           </h1>
-          <p className="text-sm md:text-base font-medium text-neutral-500 dark:text-zinc-400 max-w-lg">
-            회원님의 활동 내역과 프로필 정보를 한눈에 관리하세요.
+          <div className="w-8 h-1 bg-[#F9954E] rounded-full mb-4" />
+          <p className="text-sm font-medium text-neutral-500 dark:text-zinc-400">
+            나의 활동과 프로필 정보를 정밀하게 관리합니다.
           </p>
         </div>
       </section>
@@ -391,25 +385,25 @@ export default function MyPage() {
             </h3>
           </div>
 
-          {/* New Tab UI */}
-          <div className="flex gap-2 p-1 bg-neutral-100 dark:bg-zinc-950 rounded-2xl mb-10 w-fit mx-auto sm:mx-0">
+          {/* Refined Tab UI */}
+          <div className="flex gap-4 border-b border-neutral-100 dark:border-zinc-800 mb-10">
             {[
-              { id: "posts", label: "내가 작성한 글", count: myPosts.length },
-              { id: "comments", label: "내 댓글 내역", count: myComments.length }
+              { id: "posts", label: "작성한 글", count: myPosts.length },
+              { id: "comments", label: "댓글 내역", count: myComments.length }
             ].map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`flex items-center gap-2 px-6 py-3 rounded-xl text-sm font-black transition-all duration-300 ${activeTab === tab.id
-                  ? "bg-white dark:bg-zinc-800 text-[#F9954E] shadow-sm"
-                  : "text-neutral-500 hover:text-neutral-700 dark:text-zinc-500 dark:hover:text-zinc-300"
+                className={`relative pb-4 text-sm font-bold transition-all ${activeTab === tab.id
+                  ? "text-[#F9954E]"
+                  : "text-neutral-400 hover:text-neutral-600 dark:text-zinc-500 dark:hover:text-zinc-300"
                   }`}
               >
                 {tab.label}
-                <span className={`px-2 py-0.5 rounded-md text-[10px] ${activeTab === tab.id ? "bg-orange-100 dark:bg-orange-500/20" : "bg-neutral-200 dark:bg-zinc-900"
-                  }`}>
-                  {tab.count}
-                </span>
+                <span className="ml-1.5 text-[10px] opacity-50">{tab.count}</span>
+                {activeTab === tab.id && (
+                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-[#F9954E] rounded-full" />
+                )}
               </button>
             ))}
           </div>
@@ -432,18 +426,14 @@ export default function MyPage() {
                     key={comment.id}
                     className="block group"
                   >
-                    <div className="p-6 rounded-[1.5rem] border bg-white dark:bg-zinc-900/50 border-neutral-200 dark:border-zinc-800 transition-all duration-300 group-hover:border-[#F9954E] group-hover:shadow-lg group-hover:shadow-orange-500/5">
-                      <div className="flex items-center gap-2 mb-3">
-                        <span className="text-[10px] font-bold text-neutral-400 uppercase tracking-widest">{comment.date || 'RECENT'}</span>
-                        <span className="w-1 h-1 rounded-full bg-neutral-300 dark:bg-zinc-700" />
-                        <span className="text-[11px] font-bold text-[#F9954E] truncate max-w-[200px]">{comment.postTitle}</span>
+                    <div className="p-5 rounded-2xl border bg-white dark:bg-zinc-900/30 border-neutral-100 dark:border-zinc-800/50 transition-all duration-300 group-hover:border-[#F9954E]/30 group-hover:shadow-sm">
+                      <div className="flex items-center gap-2 mb-2">
+                        <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-tighter">{comment.date || 'RECENT'}</span>
+                        <span className="text-[10px] font-bold text-[#F9954E] truncate max-w-[200px]">{comment.postTitle}</span>
                       </div>
-                      <p className="text-sm text-neutral-700 dark:text-zinc-300 leading-relaxed font-medium line-clamp-2">
+                      <p className="text-sm text-neutral-600 dark:text-zinc-400 leading-relaxed font-medium line-clamp-1">
                         {comment.text || comment.content}
                       </p>
-                      <div className="mt-4 flex items-center justify-end text-[10px] font-bold text-neutral-400 group-hover:text-[#F9954E] transition-colors">
-                        본문 확인하기 →
-                      </div>
                     </div>
                   </Link>
                 ))}
@@ -456,31 +446,23 @@ export default function MyPage() {
                     key={post.id}
                     className="block group"
                   >
-                    <div className="p-6 rounded-[2rem] border bg-white dark:bg-zinc-900/50 border-neutral-200 dark:border-zinc-800 transition-all duration-300 group-hover:border-[#F9954E] group-hover:shadow-xl group-hover:shadow-orange-500/5 flex flex-col sm:flex-row sm:items-center gap-6">
-
+                    <div className="p-5 rounded-2xl border bg-white dark:bg-zinc-900/30 border-neutral-100 dark:border-zinc-800/50 transition-all duration-300 group-hover:border-[#F9954E]/30 group-hover:shadow-sm flex items-center gap-4">
                       <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-3 mb-3">
-                          <span className="px-2.5 py-0.5 rounded-full bg-orange-50 dark:bg-orange-500/10 text-[#F9954E] text-[10px] font-black border border-orange-100 dark:border-orange-500/20">
+                        <div className="flex items-center gap-2 mb-1">
+                          <span className="text-[#F9954E] text-[9px] font-black uppercase tracking-tighter">
                             {post.tag || "자유"}
                           </span>
-                          <span className="text-[10px] font-bold text-neutral-400 tracking-tighter uppercase">
+                          <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-tighter">
                             {post.date || 'RECENT'}
                           </span>
                         </div>
-                        <h4 className="text-base font-bold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors line-clamp-1 mb-2">
+                        <h4 className="text-sm font-bold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors line-clamp-1">
                           {post.title}
                         </h4>
-                        <div className="flex items-center gap-4 text-[10px] font-bold text-neutral-400">
-                          <span className="flex items-center gap-1">👀 {post.views || 0}</span>
-                          <span className="flex items-center gap-1">💬 {post.comments || 0}</span>
-                          <span className="flex items-center gap-1">⚡ {post.sparks || 0}</span>
-                        </div>
                       </div>
-
-                      <div className="flex-shrink-0 flex items-center gap-2 sm:self-center">
-                        <div className="w-10 h-10 rounded-full bg-neutral-50 dark:bg-zinc-800 border border-neutral-100 dark:border-zinc-700 flex items-center justify-center text-neutral-300 group-hover:text-[#F9954E] group-hover:border-[#F9954E]/30 transition-all">
-                          →
-                        </div>
+                      <div className="flex items-center gap-3 text-[10px] font-bold text-neutral-400">
+                        <span className="flex items-center gap-1">👀 {post.views || 0}</span>
+                        <span className="flex items-center gap-1">⚡ {post.sparks || 0}</span>
                       </div>
                     </div>
                   </Link>
