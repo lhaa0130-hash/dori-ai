@@ -2,25 +2,35 @@
 
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { ArrowUpRight, BookOpen, Smartphone, Video, Film, ShoppingBag } from "lucide-react";
+import { ArrowUpRight, BookOpen, Smartphone, Video, Film, ShoppingBag, Box } from "lucide-react";
 
 // 프로젝트 데이터
 const projects = [
     {
+        id: "dori-ai",
+        title: "Dori-AI",
+        description: "창의적인 상상력을 현실로 구현하는 차세대 AI 에듀테크 통합 플랫폼. 다채로운 인공지능 기반 서비스와 교육 콘텐츠 경험을 제공합니다.",
+        status: "ACTIVE",
+        category: "Web Platform",
+        icon: Box,
+        href: "/",
+        tags: ["Platform", "AI"]
+    },
+    {
         id: "animal",
         title: "나만의 동물 도감",
         description: "아이들의 상상력을 자극하는 AI 기반 동물 도감 서비스. 텍스트 설명으로 나만의 동물을 만들어보세요.",
-        status: "ACTIVE",
+        status: "COMING SOON",
         category: "AI Service",
         icon: BookOpen,
-        href: "/animal",
+        href: "#",
         tags: ["GenAI", "Kids", "Education"]
     },
     {
         id: "animal-bot",
         title: "Animal Bot Tactics",
         description: "나만의 봇을 조립하고 전략을 펼치는 모바일 택틱스 게임.",
-        status: "ACTIVE",
+        status: "COMING SOON",
         category: "Mobile Game",
         icon: Smartphone,
         href: "#",
@@ -47,14 +57,54 @@ const projects = [
         tags: ["YouTube", "Trend"]
     },
     {
-        id: "animation",
-        title: "Dori & Lara Animation",
-        description: "쉽고 재미있게 배우는 인공지능 기초 교육 애니메이션.",
+        id: "dori-story",
+        title: "Tale-Weaver",
+        description: "아이들이 입력한 단어와 주제로 세상에 하나뿐인 커스텀 맞춤형 동화를 생성해 주는 AI 스토리북 서비스.",
         status: "COMING SOON",
-        category: "Kids Tech",
-        icon: Film,
+        category: "AI Storybook",
+        icon: BookOpen,
         href: "#",
-        tags: ["Education", "Character"]
+        tags: ["GenAI", "Story", "Kids"]
+    },
+    {
+        id: "dori-coding",
+        title: "Block-Logic",
+        description: "어려운 코드 대신 직관적인 블록 코딩과 AI 상호작용을 통해 컴퓨팅 사고력을 놀이처럼 배우는 교육 플랫폼.",
+        status: "COMING SOON",
+        category: "Edu-Tech",
+        icon: Box,
+        href: "#",
+        tags: ["Education", "Coding", "Play"]
+    },
+    {
+        id: "dori-art",
+        title: "V-Gallery",
+        description: "아이들이 AI와 함께 그린 그림이나 생성한 동물을 3D 가상 공간에 전시하고 친구들과 공유하는 메타버스 미술관.",
+        status: "COMING SOON",
+        category: "Metaverse",
+        icon: Smartphone,
+        href: "#",
+        tags: ["3D", "Metaverse", "Art"]
+    },
+    {
+        id: "dori-tutor",
+        title: "Ask-Migo",
+        description: "호기심 많은 아이들의 끊임없는 '왜?'라는 질문에, 아이들의 눈높이에 맞춰 친절하게 대답해 주는 음성 기반 AI 튜터.",
+        status: "COMING SOON",
+        category: "Voice AI",
+        icon: Smartphone,
+        href: "#",
+        tags: ["Voice AI", "Tutor", "Edu"]
+    },
+    {
+        id: "dori-music",
+        title: "Tune-Craft",
+        description: "몇 가지 분위기나 악기를 고르면 아이들의 감성을 담은 백그라운드 음악을 AI가 자동으로 만들어 주는 서비스.",
+        status: "COMING SOON",
+        category: "Audio AI",
+        icon: Video,
+        href: "#",
+        tags: ["Audio AI", "Music", "Create"]
     },
     {
         id: "gumroad",
@@ -65,6 +115,16 @@ const projects = [
         icon: ShoppingBag,
         href: "#",
         tags: ["Commerce", "Asset"]
+    },
+    {
+        id: "flat-form",
+        title: "Flat-Form",
+        description: "평면도를 3D 작업부터 입면도까지 완성해주는 건축 프로그램.",
+        status: "COMING SOON",
+        category: "Architecture",
+        icon: Box,
+        href: "#",
+        tags: ["3D", "Design", "Tool"]
     }
 ];
 

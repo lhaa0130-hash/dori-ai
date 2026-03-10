@@ -25,7 +25,7 @@ export interface UserProfile {
   tier: UserTier;
   level: number;
   doriExp: number;
-  point: number; // 나중에 사용할 포인트
+  cottonCandy: number; // 솜사탕 잔액
   createdAt: string;
 }
 
@@ -168,7 +168,7 @@ export function createDefaultProfile(userId: string, email: string, nickname: st
     tier: 1,
     level: 1,
     doriExp: 0,
-    point: 0, // 나중에 사용할 포인트
+    cottonCandy: 0, // 솜사탕 초기 지급량 변경 필요 시 함께 수정
     createdAt: new Date().toISOString(),
   };
 }

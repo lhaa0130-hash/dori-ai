@@ -46,7 +46,7 @@ export default function ProfileHero({
     bio: profile?.bio || "",
     statusMessage: profile?.statusMessage || "",
     profileImageUrl: profile?.profileImageUrl,
-    point: profile?.point || 0,
+    cottonCandy: profile?.cottonCandy || 0,
     email: profile?.email || "",
   };
 
@@ -142,11 +142,20 @@ export default function ProfileHero({
               </span>
             </div>
 
-            <div className="flex flex-col">
-              <span className="text-[9px] font-bold text-neutral-400 dark:text-zinc-500 uppercase tracking-tighter mb-1">POINTS</span>
-              <span className="text-xl font-black text-neutral-900 dark:text-white">
-                {safeProfile.point.toLocaleString()}
-              </span>
+            <div className="flex flex-col relative group">
+              <span className="text-[9px] font-bold text-neutral-400 dark:text-zinc-500 uppercase tracking-tighter mb-1 select-none">솜사탕</span>
+              <div className="flex items-center gap-2">
+                <span className="text-xl font-black text-pink-400 dark:text-pink-300">
+                  {safeProfile.cottonCandy.toLocaleString()}
+                  <span className="text-sm ml-1 opacity-70">🍬</span>
+                </span>
+                <button
+                  onClick={() => alert('솜사탕 녹이기 팝업을 준비 중입니다!')}
+                  className="px-2.5 py-1 bg-pink-50 hover:bg-pink-100 dark:bg-pink-500/10 dark:hover:bg-pink-500/20 text-pink-500 text-[10px] font-bold rounded-full transition-colors border border-pink-100 dark:border-pink-500/20"
+                >
+                  녹이기
+                </button>
+              </div>
             </div>
 
             {activityStats && (

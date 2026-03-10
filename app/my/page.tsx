@@ -56,7 +56,7 @@ export default function MyPage() {
             bio,
             statusMessage,
             profileImageUrl,
-            point: parsed.point || 0, // point 필드가 없으면 0으로 초기화
+            cottonCandy: parsed.cottonCandy || parsed.point || 0, // 하위 호환성 유지
           });
         } catch {
           // 파싱 실패 시 기본값 사용
@@ -188,7 +188,7 @@ export default function MyPage() {
           doriExp: finalDoriExp,
           tier: newTier,
           level: newLevel, // 자동 레벨업 반영
-          point: profile.point || 0, // point 필드 유지
+          cottonCandy: profile.cottonCandy || 0, // cottonCandy 필드 유지
         };
         setProfile(updatedProfile);
         localStorage.setItem(`dori_profile_${user.email}`, JSON.stringify(updatedProfile));
@@ -202,10 +202,13 @@ export default function MyPage() {
     switch (activeTab) {
       case "posts": return myPosts;
       case "comments": return myComments;
+      case "sparked": return sparkedPosts;
+      case "bookmarked": return bookmarkedPosts;
+      case "recent": return recentViews;
       default: return myPosts;
     }
   };
-  const displayList = getDisplayList();
+  const displayList = getDisplayList() || [];
   const isDark = mounted && theme === 'dark';
   const totalSparks = Array.isArray(myPosts) ? myPosts.reduce((acc, p) => acc + (p.sparks || p.likes || 0), 0) : 0;
 
@@ -386,15 +389,18 @@ export default function MyPage() {
           </div>
 
           {/* Refined Tab UI */}
-          <div className="flex gap-4 border-b border-neutral-100 dark:border-zinc-800 mb-10">
+          <div className="flex gap-4 border-b border-neutral-100 dark:border-zinc-800 mb-10 overflow-x-auto whitespace-nowrap scrollbar-hide pb-1">
             {[
               { id: "posts", label: "작성한 글", count: myPosts.length },
-              { id: "comments", label: "댓글 내역", count: myComments.length }
+              { id: "comments", label: "댓글 내역", count: myComments.length },
+              { id: "sparked", label: "받은 유레카", count: sparkedPosts.length },
+              { id: "bookmarked", label: "북마크", count: bookmarkedPosts.length },
+              { id: "recent", label: "최근 본 글", count: recentViews.length }
             ].map((tab) => (
               <button
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
-                className={`relative pb-4 text-sm font-bold transition-all ${activeTab === tab.id
+                className={`relative pb-3 text-sm font-bold transition-all ${activeTab === tab.id
                   ? "text-[#F9954E]"
                   : "text-neutral-400 hover:text-neutral-600 dark:text-zinc-500 dark:hover:text-zinc-300"
                   }`}
@@ -402,7 +408,7 @@ export default function MyPage() {
                 {tab.label}
                 <span className="ml-1.5 text-[10px] opacity-50">{tab.count}</span>
                 {activeTab === tab.id && (
-                  <div className="absolute bottom-0 left-0 w-full h-0.5 bg-[#F9954E] rounded-full" />
+                  <div className="absolute bottom-[-4px] left-0 w-full h-0.5 bg-[#F9954E] rounded-full" />
                 )}
               </button>
             ))}
