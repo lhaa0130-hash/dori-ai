@@ -5,9 +5,12 @@ import { useTheme } from "next-themes";
 import Link from "next/link";
 import { ArrowLeft, CheckCircle2, XCircle, Trophy, RefreshCw, ArrowRight, Brain } from "lucide-react";
 import { QUIZ_POOL, QuizQuestion } from "./data";
+import { useAuth } from "@/contexts/AuthContext";
+import { addCottonCandy, incrementMinigamePlays, incrementQuizCorrect } from "@/lib/cottonCandy";
 
 export default function QuizGamePage() {
     const { theme } = useTheme();
+    const { session } = useAuth();
     const [gameState, setGameState] = useState<"START" | "PLAY" | "RESULT" | "CLEAR">("START");
     const [currentQuestions, setCurrentQuestions] = useState<QuizQuestion[]>([]);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -69,9 +72,15 @@ export default function QuizGamePage() {
         if (selectedOption === null) return;
 
         setIsAnswerChecked(true);
-        if (selectedOption === currentQuestions[currentQuestionIndex].answer) {
+        const isCorrect = selectedOption === currentQuestions[currentQuestionIndex].answer;
+        if (isCorrect) {
             setScore(prev => prev + 1);
             setTotalScore(prev => prev + 1);
+            // 솜사탕 지급 및 퀴즈 정답 카운트
+            if (session?.user?.email) {
+                addCottonCandy(session.user.email, 10, "퀴즈 정답");
+                incrementQuizCorrect(session.user.email);
+            }
         }
 
         setTimeout(() => {
@@ -80,6 +89,10 @@ export default function QuizGamePage() {
                 setSelectedOption(null);
                 setIsAnswerChecked(false);
             } else {
+                // 라운드 완료 시 미니게임 플레이 카운트
+                if (session?.user?.email) {
+                    incrementMinigamePlays(session.user.email);
+                }
                 setGameState("RESULT");
             }
         }, 1500);

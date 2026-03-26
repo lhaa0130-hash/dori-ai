@@ -47,7 +47,7 @@ export type AiTool = {
   id: string;
   name: string;
   // 👇 [수정] 세분화된 카테고리
-  category: "llm" | "image-generation" | "image-editing" | "video-generation" | "video-editing" | "coding" | "voice-tts" | "3d" | "automation" | "music" | "presentation" | "meeting-notes" | "marketing" | "writing" | "education" | "chatbot" | "avatar" | "web-builder" | "game" | "etc";
+  category: "agent" | "llm" | "image-generation" | "image-editing" | "video-generation" | "video-editing" | "coding" | "voice-tts" | "3d" | "automation" | "music" | "presentation" | "meeting-notes" | "marketing" | "writing" | "education" | "chatbot" | "avatar" | "web-builder" | "game" | "etc";
   summary: string;
   description: string;
   releaseDate?: string;
@@ -67,4 +67,11 @@ export type AiTool = {
   comments: AiToolComment[];
 
   aiMeta?: AiMeta;
+
+  // AI 에이전트 카테고리 전용 필드
+  pros?: string[];
+  cons?: string[];
+  userReview?: string;
+  topPick?: boolean;
+  topRank?: number;
 };

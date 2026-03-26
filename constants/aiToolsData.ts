@@ -6,6 +6,94 @@ import { AiTool } from "@/types/content";
  */
 export const AI_TOOLS_DATA: AiTool[] = [
   // ===========================================
+  // 0. AI AGENTS (최상단)
+  // ===========================================
+  {
+    id: "agent-cursor", name: "Cursor", category: "agent",
+    summary: "AI가 코드를 직접 작성하는 개발자용 에디터",
+    description: "AI가 코드를 직접 작성하는 개발자용 에디터",
+    website: "https://cursor.sh",
+    thumbnail: "https://logo.clearbit.com/cursor.sh",
+    strength: "자율 코딩, 컨텍스트 이해 최강",
+    rating: 0, ratingCount: 0, userRatings: [], comments: [],
+    pros: ["파일 전체를 이해하고 코드 작성", "자연어 명령으로 리팩토링", "무료 플랜 제공"],
+    cons: ["고급 기능은 유료 ($20/월)", "대형 프로젝트에서 느릴 수 있음"],
+    userReview: "한 번 쓰면 못 돌아가요. 코딩 속도가 3배는 빨라집니다.",
+    topPick: true, topRank: 1
+  },
+  {
+    id: "agent-devin", name: "Devin", category: "agent",
+    summary: "세계 최초 완전 자율 AI 소프트웨어 엔지니어",
+    description: "세계 최초 완전 자율 AI 소프트웨어 엔지니어",
+    website: "https://devin.ai",
+    thumbnail: "https://logo.clearbit.com/devin.ai",
+    strength: "엔드투엔드 개발, 버그 수정, 배포까지 자율 처리",
+    rating: 0, ratingCount: 0, userRatings: [], comments: [],
+    pros: ["전체 개발 프로세스 자동화", "GitHub 이슈 자동 해결", "24시간 개발 가능"],
+    cons: ["월 $500 이상 고가", "복잡한 비즈니스 로직은 아직 한계"],
+    userReview: "PR 올리고 자고 일어나면 머지 준비 완료. 미래에서 온 것 같음.",
+    topPick: true, topRank: 2
+  },
+  {
+    id: "agent-manus", name: "Manus", category: "agent",
+    summary: "웹 서핑, 파일 작업, 코딩을 혼자 다 해주는 범용 AI 에이전트",
+    description: "웹 서핑, 파일 작업, 코딩을 혼자 다 해주는 범용 AI 에이전트",
+    website: "https://manus.im",
+    thumbnail: "https://logo.clearbit.com/manus.im",
+    strength: "브라우저 조작, 파일 처리, 코드 실행 멀티태스킹",
+    rating: 0, ratingCount: 0, userRatings: [], comments: [],
+    pros: ["완전 자율 멀티태스킹", "실제 컴퓨터처럼 작업 수행", "복잡한 리서치 자동화"],
+    cons: ["현재 대기자 초대 방식", "긴 작업은 비용 증가"],
+    userReview: "리서치 보고서 작성 시켰더니 출처까지 찾아서 완성해줬어요.",
+    topPick: true, topRank: 3
+  },
+  {
+    id: "agent-n8n", name: "n8n", category: "agent",
+    summary: "노코드로 AI 워크플로우 자동화",
+    description: "노코드로 AI 워크플로우 자동화",
+    website: "https://n8n.io",
+    thumbnail: "https://logo.clearbit.com/n8n.io",
+    userReview: "ChatGPT + 슬랙 + 노션 연동을 30분 만에 완성했어요.",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "agent-langchain", name: "LangChain", category: "agent",
+    summary: "개발자용 AI 에이전트 프레임워크",
+    description: "개발자용 AI 에이전트 프레임워크",
+    website: "https://langchain.com",
+    thumbnail: "https://logo.clearbit.com/langchain.com",
+    userReview: "RAG 파이프라인 구축할 때 없으면 안 되는 존재.",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "agent-autogpt", name: "AutoGPT", category: "agent",
+    summary: "목표만 주면 스스로 계획하고 실행하는 오픈소스 에이전트",
+    description: "목표만 주면 스스로 계획하고 실행하는 오픈소스 에이전트",
+    website: "https://agpt.co",
+    thumbnail: "https://logo.clearbit.com/agpt.co",
+    userReview: "완전 자율은 아직 멀었지만, 반복 작업 자동화엔 충분해요.",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "agent-perplexity-agent", name: "Perplexity Agent", category: "agent",
+    summary: "실시간 웹 검색 + 리서치 자동화 에이전트",
+    description: "실시간 웹 검색 + 리서치 자동화 에이전트",
+    website: "https://perplexity.ai",
+    thumbnail: "https://logo.clearbit.com/perplexity.ai",
+    userReview: "경쟁사 분석이나 시장 조사할 때 ChatGPT보다 훨씬 유용해요.",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "agent-claude-code", name: "Claude Code", category: "agent",
+    summary: "터미널에서 동작하는 Anthropic의 코딩 에이전트",
+    description: "터미널에서 동작하는 Anthropic의 코딩 에이전트",
+    website: "https://claude.ai",
+    thumbnail: "https://logo.clearbit.com/claude.ai",
+    userReview: "복잡한 리팩토링도 컨텍스트를 잘 유지해서 믿고 맡길 수 있어요.",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+
+  // ===========================================
   // 1. LLM
   // ===========================================
   {

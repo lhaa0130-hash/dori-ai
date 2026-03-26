@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
+import { useAuth } from "@/contexts/AuthContext";
+import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 type Choice = "rock" | "paper" | "scissors";
 type Result = "win" | "lose" | "draw";
@@ -19,6 +21,7 @@ const EMOJIS = {
 
 export default function RockPaperScissorsPage() {
     const { theme } = useTheme();
+    const { session } = useAuth();
     const [mounted, setMounted] = useState(false);
 
     const [playerChoice, setPlayerChoice] = useState<Choice | null>(null);
@@ -71,6 +74,11 @@ export default function RockPaperScissorsPage() {
 
             if (gameResult === "win") {
                 triggerConfetti();
+                // 승리 시 솜사탕 지급 및 미니게임 플레이 카운트
+                if (session?.user?.email) {
+                    addCottonCandy(session.user.email, 15, "가위바위보 승리");
+                    incrementMinigamePlays(session.user.email);
+                }
             }
 
             setIsPlaying(false);

@@ -113,20 +113,30 @@ export default function AiToolsClient() {
 
           {/* Quick Category Nav */}
           <div className="flex flex-wrap gap-2 justify-center mt-8 max-w-4xl">
-            {DISPLAY_CATEGORIES.map((cat) => (
-              <button
-                key={cat}
-                onClick={() => handleCategoryClick(cat)}
-                className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200 ${activeCategory === cat
-                  ? "bg-[#F9954E] border-[#F9954E] text-white"
-                  : isDark
-                    ? "bg-neutral-900 border-neutral-800 text-neutral-400 hover:border-[#F9954E]/50 hover:text-white"
-                    : "bg-white border-neutral-200 text-neutral-600 hover:border-[#F9954E]/50 hover:text-neutral-900"
+            {DISPLAY_CATEGORIES.map((cat) => {
+              const isAgent = cat === "agent";
+              const isActive = activeCategory === cat;
+              return (
+                <button
+                  key={cat}
+                  onClick={() => handleCategoryClick(cat)}
+                  className={`px-3 py-1.5 rounded-full text-xs font-semibold border transition-all duration-200 ${
+                    isActive
+                      ? "bg-[#F9954E] border-[#F9954E] text-white"
+                      : isAgent
+                        ? isDark
+                          ? "bg-orange-950/40 border-orange-500/60 text-orange-400 hover:bg-orange-500 hover:border-orange-500 hover:text-white"
+                          : "bg-orange-50 border-orange-400 text-orange-600 hover:bg-[#F9954E] hover:border-[#F9954E] hover:text-white"
+                        : isDark
+                          ? "bg-neutral-900 border-neutral-800 text-neutral-400 hover:border-[#F9954E]/50 hover:text-white"
+                          : "bg-white border-neutral-200 text-neutral-600 hover:border-[#F9954E]/50 hover:text-neutral-900"
                   }`}
-              >
-                {CATEGORY_LABELS[cat]}
-              </button>
-            ))}
+                >
+                  {isAgent && !isActive && <span className="mr-1">🆕</span>}
+                  {CATEGORY_LABELS[cat]}
+                </button>
+              );
+            })}
           </div>
         </div>
       </section>

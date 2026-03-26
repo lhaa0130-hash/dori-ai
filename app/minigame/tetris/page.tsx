@@ -4,6 +4,7 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { ArrowLeft, RotateCw, ArrowDown, ArrowRight, ArrowLeft as ArrowLeftIcon, Trophy, RefreshCw, Play } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
+import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 // ----------------------------------------------------------------------
 // Constants & Types
@@ -209,6 +210,10 @@ export default function TetrisGame() {
                 }
                 return newLines;
             });
+            // 솜사탕 지급 (줄 제거 시)
+            if (session?.user?.email) {
+                addCottonCandy(session.user.email, rowCount * 5, "테트리스 줄 제거");
+            }
         }
     };
 
@@ -232,6 +237,10 @@ export default function TetrisGame() {
         if (collide(grid.current, piece.current)) {
             setGameState("GAME_OVER");
             if (requestRef.current) cancelAnimationFrame(requestRef.current);
+            // 게임오버 시 미니게임 플레이 카운트
+            if (session?.user?.email) {
+                incrementMinigamePlays(session.user.email);
+            }
         }
     };
 

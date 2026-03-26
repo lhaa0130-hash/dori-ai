@@ -1,4 +1,5 @@
 export const DISPLAY_CATEGORIES = [
+    "agent",
     "llm",
     "image-generation",
     "image-editing",
@@ -22,6 +23,7 @@ export const DISPLAY_CATEGORIES = [
 ] as const;
 
 export const CATEGORY_LABELS: Record<string, string> = {
+    "agent": "AI 에이전트",
     "llm": "LLM",
     "image-generation": "이미지 생성",
     "image-editing": "이미지 편집",
@@ -45,6 +47,7 @@ export const CATEGORY_LABELS: Record<string, string> = {
 };
 
 export const CATEGORY_DESCRIPTIONS: Record<string, string> = {
+    "agent": "자율적으로 작업을 계획하고 실행하는 차세대 AI 에이전트",
     "llm": "AI의 표준, 가장 무난하고 강력한 대화형 모델",
     "image-generation": "텍스트로 예술적인 이미지를 만들어내는 도구",
     "image-editing": "사진의 배경 제거, 화질 개선 등 마법 같은 편집",

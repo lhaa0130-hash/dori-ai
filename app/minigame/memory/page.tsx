@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { ArrowLeft, RefreshCw, Sparkles, Brain, Code, Database, Globe, Smartphone, Video, Film, Check, Zap, Cpu, Server, Wifi, Lock, Search, Command, Activity, Layers, Box, Key, Mail, Map, Music, Monitor, Ghost, Bomb, Skull, Heart, Eye } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 // 카드 아이콘 데이터 풀
 const ICON_POOL = [
@@ -74,6 +76,7 @@ const STAGES = [
 
 export default function MemoryGamePage() {
     const { theme } = useTheme();
+    const { session } = useAuth();
     const [cards, setCards] = useState<Card[]>([]);
     const [flippedCards, setFlippedCards] = useState<number[]>([]);
     const [matchedCount, setMatchedCount] = useState(0);
@@ -194,8 +197,18 @@ export default function MemoryGamePage() {
                         if (newCount === stageConfig.pairs) {
                             if (currentStage === 10) {
                                 setGameState("GAME_PASS");
+                                // 전체 클리어 시 솜사탕 지급
+                                if (session?.user?.email) {
+                                    addCottonCandy(session.user.email, 30, "기억력 게임 완료");
+                                    incrementMinigamePlays(session.user.email);
+                                }
                             } else {
                                 setGameState("STAGE_CLEAR");
+                                // 스테이지 클리어 시 솜사탕 지급
+                                if (session?.user?.email) {
+                                    addCottonCandy(session.user.email, 30, "기억력 게임 완료");
+                                    incrementMinigamePlays(session.user.email);
+                                }
                             }
                         }
                         return newCount;

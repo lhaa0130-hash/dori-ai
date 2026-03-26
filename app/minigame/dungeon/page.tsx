@@ -5,6 +5,7 @@ import { ArrowLeft, Sword, Shield, Heart, Zap, RefreshCw, Skull, Trophy, Coins, 
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
+import { addCottonCandy, getCottonCandyBalance, incrementMinigamePlays, spendCottonCandy } from "@/lib/cottonCandy";
 
 // ----------------------------------------------------------------------
 // Types & Constants
@@ -83,29 +84,16 @@ export default function DungeonGame() {
     // 1. 사용자 포인트 로드
     useEffect(() => {
         if (session?.user?.email) {
-            const profileKey = `dori_profile_${session.user.email}`;
-            const savedProfile = localStorage.getItem(profileKey);
-            if (savedProfile) {
-                const parsed = JSON.parse(savedProfile);
-                setUserPoints(parsed.point || 0);
-            }
+            setUserPoints(getCottonCandyBalance(session.user.email));
         }
     }, [session]);
 
-    // 포인트 업데이트 함수
-    const updateUserPoints = (newPoints: number) => {
-        setUserPoints(newPoints);
-        if (session?.user?.email) {
-            const profileKey = `dori_profile_${session.user.email}`;
-            const savedProfile = localStorage.getItem(profileKey);
-            if (savedProfile) {
-                const parsed = JSON.parse(savedProfile);
-                parsed.point = newPoints;
-                localStorage.setItem(profileKey, JSON.stringify(parsed));
-                // 이벤트 발생시켜 다른 컴포넌트(헤더 등)에 알림
-                window.dispatchEvent(new Event("point-updated"));
-            }
-        }
+    // 포인트 업데이트 함수 (delta: 증가분, reason: 사유)
+    const updateUserPoints = (delta: number, reason: string) => {
+        if (!session?.user?.email || delta <= 0) return;
+        const newBalance = addCottonCandy(session.user.email, delta, reason);
+        setUserPoints(newBalance);
+        window.dispatchEvent(new Event("point-updated"));
     };
 
     useEffect(() => {
@@ -125,7 +113,15 @@ export default function DungeonGame() {
             addLog("🚫 포인트가 부족합니다!");
             return;
         }
-        updateUserPoints(userPoints - POTION_PRICE);
+        if (session?.user?.email) {
+            const ok = spendCottonCandy(session.user.email, POTION_PRICE, "던전 물약 구매");
+            if (!ok) {
+                addLog("🚫 포인트가 부족합니다!");
+                return;
+            }
+            setUserPoints(getCottonCandyBalance(session.user.email));
+            window.dispatchEvent(new Event("point-updated"));
+        }
         setPlayer(prev => ({ ...prev, potions: prev.potions + 1 }));
         addLog(`🧪 물약을 구매했습니다. (보유: ${player.potions + 1})`);
     };
@@ -227,11 +223,14 @@ export default function DungeonGame() {
             setGameState("DEFEAT");
             addLog("💀 눈앞이 깜깜해졌습니다... 패배했습니다.");
 
-            // 패배 시에도 획득한 골드의 절반은 포인트로 적립 (위로금)
+            // 패배 시에도 획득한 골드의 절반은 솜사탕으로 적립 (위로금)
             if (player.gold > 0) {
                 const savePoint = Math.floor(player.gold / 2);
-                updateUserPoints(userPoints + savePoint);
-                addLog(`💰 획득한 골드의 일부(${savePoint}P)가 포인트로 적립되었습니다.`);
+                updateUserPoints(savePoint, "던전RPG 패배 위로금");
+                addLog(`💰 획득한 골드의 일부(${savePoint}P)가 솜사탕으로 적립되었습니다.`);
+            }
+            if (session?.user?.email) {
+                incrementMinigamePlays(session.user.email);
             }
         }
     };
@@ -244,8 +243,11 @@ export default function DungeonGame() {
         const expGain = monster.exp;
         const goldGain = monster.gold;
 
-        // 포인트 즉시 적립
-        updateUserPoints(userPoints + goldGain);
+        // 솜사탕 즉시 적립
+        updateUserPoints(goldGain, "던전RPG 클리어");
+        if (session?.user?.email) {
+            incrementMinigamePlays(session.user.email);
+        }
 
         // 레벨업 체크
         let newLevel = player.level;

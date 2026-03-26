@@ -5,6 +5,8 @@ import { ArrowLeft, Zap, Coins, Hammer, Crown, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
+import { useAuth } from "@/contexts/AuthContext";
+import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 // ----------------------------------------------------------------------
 // Constants
@@ -28,6 +30,7 @@ const MONSTER_LIST = [
 // ----------------------------------------------------------------------
 
 export default function ClickerGame() {
+    const { session } = useAuth();
     const [stage, setStage] = useState(0);
     const [currentHp, setCurrentHp] = useState(MONSTER_LIST[0].hp);
     const [gold, setGold] = useState(0);
@@ -77,6 +80,11 @@ export default function ClickerGame() {
     const handleKill = () => {
         const reward = Math.floor(MONSTER_LIST[stage].hp * 0.2); // 최대 체력의 20% 보너스
         setGold((prev) => prev + reward);
+        // 솜사탕 지급 및 미니게임 플레이 카운트
+        if (session?.user?.email) {
+            addCottonCandy(session.user.email, 20, "클릭커 스테이지 클리어");
+            incrementMinigamePlays(session.user.email);
+        }
 
         // 이펙트
         confetti({

@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import confetti from "canvas-confetti";
+import { useAuth } from "@/contexts/AuthContext";
+import { incrementMinigamePlays } from "@/lib/cottonCandy";
 
 // ---- Types ----
 type GameState = "SETUP" | "READY" | "SPINNING" | "FINISHED";
@@ -37,6 +39,7 @@ const MAX_ITEMS = 12;
 
 export default function RoulettePage() {
     const { theme } = useTheme();
+    const { session } = useAuth();
     const [mounted, setMounted] = useState(false);
     const [gameState, setGameState] = useState<GameState>("SETUP");
 
@@ -164,6 +167,10 @@ export default function RoulettePage() {
                 setGameState("FINISHED");
                 triggerShake();
                 triggerConfetti();
+                // 스핀 완료 시 미니게임 플레이 카운트
+                if (session?.user?.email) {
+                    incrementMinigamePlays(session.user.email);
+                }
             }
         };
 

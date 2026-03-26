@@ -118,7 +118,11 @@ export default function MyPage() {
     if (!user?.email) return;
     const done = completeMission(user.email, missionId, reward, `미션 완료: ${label}`);
     if (done) {
-      loadCandyData();
+      loadCandyData(); // 잔액 즉시 갱신
+      setAchievementToast({ name: `${label} 완료!`, reward });
+      setTimeout(() => setAchievementToast(null), 3000);
+    } else {
+      alert("오늘 이미 완료한 미션입니다!");
     }
   };
 
@@ -128,7 +132,10 @@ export default function MyPage() {
     const result = checkAttendance(user.email);
     if (result.success) {
       setAttendanceDone(true);
+      setAttendanceStreak(prev => prev + 1);
       loadCandyData();
+      setAchievementToast({ name: "출석 체크 완료!", reward: result.earned });
+      setTimeout(() => setAchievementToast(null), 3000);
     }
   };
 

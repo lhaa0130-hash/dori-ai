@@ -4,6 +4,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { ArrowLeft, RefreshCw, Trophy, Crown } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
+import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 // ----------------------------------------------------------------------
 // Constants & Types
@@ -29,6 +31,7 @@ const TILE_COLORS: Record<number, string> = {
 };
 
 export default function Game2048() {
+    const { session } = useAuth();
     const [grid, setGrid] = useState<Grid>(createEmptyGrid());
     const [score, setScore] = useState(0);
     const [bestScore, setBestScore] = useState(0);
@@ -120,8 +123,20 @@ export default function Game2048() {
             });
 
             // Check Win/Loss
-            if (newGrid.flat().includes(2048) && !won) setWon(true);
-            if (checkGameOver(newGrid)) setGameOver(true);
+            if (newGrid.flat().includes(2048) && !won) {
+                setWon(true);
+                // 2048 달성 시 솜사탕 지급
+                if (session?.user?.email) {
+                    addCottonCandy(session.user.email, 100, "2048 달성!");
+                }
+            }
+            if (checkGameOver(newGrid)) {
+                setGameOver(true);
+                // 게임 종료 시 미니게임 플레이 카운트
+                if (session?.user?.email) {
+                    incrementMinigamePlays(session.user.email);
+                }
+            }
         }
     };
 

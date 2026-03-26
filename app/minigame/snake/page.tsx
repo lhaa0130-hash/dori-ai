@@ -3,6 +3,8 @@
 import { useState, useEffect, useRef, useCallback } from "react";
 import { ArrowLeft, RefreshCw, Trophy, Play } from "lucide-react";
 import Link from "next/link";
+import { useAuth } from "@/contexts/AuthContext";
+import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 // ----------------------------------------------------------------------
 // Constants & Types
@@ -18,6 +20,7 @@ const SPEED = 100; // ms
 type Point = { x: number; y: number };
 
 export default function SnakeGame() {
+    const { session } = useAuth();
     const canvasRef = useRef<HTMLCanvasElement>(null);
     const [gameState, setGameState] = useState<"READY" | "PLAYING" | "GAME_OVER">("READY");
     const [score, setScore] = useState(0);
@@ -103,6 +106,14 @@ export default function SnakeGame() {
             if (currentScore > highScore) {
                 setHighScore(currentScore);
                 localStorage.setItem("snake_highscore", currentScore.toString());
+            }
+            // 솜사탕 지급 및 미니게임 플레이 카운트
+            if (session?.user?.email) {
+                const candy = Math.min(currentScore * 2, 50);
+                if (candy > 0) {
+                    addCottonCandy(session.user.email, candy, "스네이크 게임");
+                }
+                incrementMinigamePlays(session.user.email);
             }
             return currentScore;
         });
