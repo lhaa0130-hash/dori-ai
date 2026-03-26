@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import { useTheme } from "next-themes";
@@ -8,6 +8,22 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
 import ProfileHero from "@/components/my/ProfileHero";
 import { UserProfile, createDefaultProfile, calculateTier, calculateLevel, ACTIVITY_SCORES } from "@/lib/userProfile";
+import {
+  getCottonCandyBalance,
+  getTodayEarned,
+  getMonthEarned,
+  getCottonCandyHistory,
+  getAttendanceData,
+  checkAttendance,
+  isMissionCompletedToday,
+  completeMission,
+  ACHIEVEMENTS,
+  getClaimedAchievements,
+  claimAchievement,
+  checkNewAchievements,
+  type AchievementStats,
+  type CottonCandyHistoryEntry,
+} from "@/lib/cottonCandy";
 
 export default function MyPage() {
   const { session, status, update } = useAuth();
@@ -26,8 +42,95 @@ export default function MyPage() {
   const ADMIN_EMAILS = ["admin@dori.ai", "lhaa0130@gmail.com"];
   const isAdmin = !!(user && user.email && (ADMIN_EMAILS.some(email => email.toLowerCase() === user.email.toLowerCase()) || (user as any)?.isAdmin === true));
 
+  // 솜사탕 시스템 state
+  const [candyBalance, setCandyBalance] = useState(0);
+  const [todayEarned, setTodayEarned] = useState(0);
+  const [monthEarned, setMonthEarned] = useState(0);
+  const [candyHistory, setCandyHistory] = useState<CottonCandyHistoryEntry[]>([]);
+  const [claimedAchievements, setClaimedAchievements] = useState<string[]>([]);
+  const [achievementToast, setAchievementToast] = useState<{ name: string; reward: number } | null>(null);
+  const [attendanceStreak, setAttendanceStreak] = useState(0);
+  const [attendanceDone, setAttendanceDone] = useState(false);
+
+  // 일일 미션 정의
+  const DAILY_MISSIONS = [
+    { id: "attendance", label: "출석 체크", reward: 50, emoji: "📅" },
+    { id: "read_trend", label: "트렌드 기사 읽기", reward: 30, emoji: "📰" },
+    { id: "write_post", label: "커뮤니티 글쓰기", reward: 80, emoji: "📝" },
+    { id: "write_comment", label: "댓글 달기", reward: 30, emoji: "💬" },
+    { id: "play_minigame", label: "미니게임 1판", reward: 40, emoji: "🎮" },
+    { id: "quiz_correct", label: "AI 퀴즈 풀기", reward: 50, emoji: "🧠" },
+  ];
+
   useEffect(() => setMounted(true), []);
 
+  // 솜사탕 데이터 로드
+  const loadCandyData = useCallback(() => {
+    if (!user?.email) return;
+    const email = user.email;
+    setCandyBalance(getCottonCandyBalance(email));
+    setTodayEarned(getTodayEarned(email));
+    setMonthEarned(getMonthEarned(email));
+    setCandyHistory(getCottonCandyHistory(email).slice(0, 30));
+    setClaimedAchievements(getClaimedAchievements(email));
+    const att = getAttendanceData(email);
+    setAttendanceStreak(att.streak || 0);
+    const today = new Date().toISOString().split("T")[0];
+    setAttendanceDone(att.lastChecked === today);
+  }, [user?.email]);
+
+  useEffect(() => {
+    if (mounted && user?.email) {
+      loadCandyData();
+    }
+  }, [mounted, user?.email, loadCandyData]);
+
+  // 업적 자동 체크
+  useEffect(() => {
+    if (!mounted || !user?.email || !profile) return;
+    const email = user.email;
+    const stats: AchievementStats = {
+      totalPosts: myPosts.length,
+      totalComments: myComments.length,
+      totalReceivedLikes: myPosts.reduce((a, p) => a + (p.sparks || p.likes || 0), 0),
+      streak: attendanceStreak,
+      totalAttendanceDays: getAttendanceData(email).totalDays || 0,
+      level: profile.level || 1,
+      minigamePlays: parseInt(localStorage.getItem(`dori_minigame_plays_${email}`) || "0", 10),
+      quizCorrect: parseInt(localStorage.getItem(`dori_quiz_correct_${email}`) || "0", 10),
+      cottonCandyTotal: candyBalance,
+    };
+    const newAchievements = checkNewAchievements(email, stats);
+    if (newAchievements.length > 0) {
+      newAchievements.forEach((ach) => {
+        const reward = claimAchievement(email, ach.id);
+        if (reward > 0) {
+          setAchievementToast({ name: ach.name, reward });
+          setTimeout(() => setAchievementToast(null), 4000);
+        }
+      });
+      loadCandyData();
+    }
+  }, [mounted, user?.email, profile, myPosts, myComments, attendanceStreak, candyBalance, loadCandyData]);
+
+  // 미션 완료 처리
+  const handleMissionClaim = (missionId: string, reward: number, label: string) => {
+    if (!user?.email) return;
+    const done = completeMission(user.email, missionId, reward, `미션 완료: ${label}`);
+    if (done) {
+      loadCandyData();
+    }
+  };
+
+  // 출석 체크
+  const handleAttendance = () => {
+    if (!user?.email || attendanceDone) return;
+    const result = checkAttendance(user.email);
+    if (result.success) {
+      setAttendanceDone(true);
+      loadCandyData();
+    }
+  };
 
   // 프로필 데이터 로드 및 초기화
   useEffect(() => {
@@ -348,6 +451,13 @@ export default function MyPage() {
       {/* Background Decorative Gradient */}
       <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
 
+      {/* 업적 달성 토스트 */}
+      {achievementToast && (
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 bg-amber-500 text-white px-6 py-3 rounded-2xl font-bold text-sm shadow-2xl flex items-center gap-2 animate-bounce">
+          🏆 업적 달성! {achievementToast.name} +{achievementToast.reward} 🍭
+        </div>
+      )}
+
       {/* Hero Section - Simplified Header */}
       <section className="relative pt-32 pb-8 px-6 text-center z-10">
         <div className="max-w-3xl mx-auto flex flex-col items-center">
@@ -366,7 +476,7 @@ export default function MyPage() {
 
         {/* Profile Details (Hero Component) */}
         {profile && user && (
-          <div className="mb-12">
+          <div className="mb-8">
             <ProfileHero
               profile={profile}
               onImageChange={handleImageChange}
@@ -378,6 +488,42 @@ export default function MyPage() {
             />
           </div>
         )}
+
+        {/* ── 솜사탕 현황 카드 ── */}
+        <div className="mb-8 bg-gradient-to-br from-orange-50 to-pink-50 dark:from-orange-950/30 dark:to-pink-950/20 rounded-[2rem] border border-orange-100 dark:border-orange-900/30 p-6 md:p-8 shadow-sm">
+          <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+            <div>
+              <div className="flex items-center gap-2 mb-1">
+                <span className="text-2xl">🍭</span>
+                <h3 className="text-lg font-black text-neutral-900 dark:text-white">내 솜사탕</h3>
+              </div>
+              <p className="text-3xl font-black text-[#F9954E]">
+                {candyBalance.toLocaleString()}개
+              </p>
+              <div className="flex gap-4 mt-2 text-xs font-bold text-neutral-500 dark:text-zinc-400">
+                <span>오늘 획득: <span className="text-green-500">+{todayEarned}</span>개</span>
+                <span>이번 달: <span className="text-[#F9954E]">+{monthEarned.toLocaleString()}</span>개</span>
+                {attendanceStreak > 0 && (
+                  <span>연속 출석: <span className="text-amber-500">🔥 {attendanceStreak}일</span></span>
+                )}
+              </div>
+            </div>
+            <div className="flex gap-3">
+              <button
+                onClick={() => setActiveTab("candy_history")}
+                className="px-4 py-2 rounded-xl border border-orange-200 dark:border-orange-800 text-[#F9954E] text-xs font-black hover:bg-orange-50 dark:hover:bg-orange-950/30 transition-all"
+              >
+                획득 내역 보기
+              </button>
+              <Link
+                href="/shop"
+                className="px-4 py-2 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-white text-xs font-black transition-all shadow-sm shadow-orange-500/20"
+              >
+                포인트 상점 →
+              </Link>
+            </div>
+          </div>
+        </div>
 
         {/* Activity Section */}
         <div className="bg-white/50 dark:bg-zinc-900/30 backdrop-blur-xl rounded-[2.5rem] border border-neutral-200 dark:border-zinc-800/50 p-6 md:p-10 shadow-sm">
@@ -395,7 +541,9 @@ export default function MyPage() {
               { id: "comments", label: "댓글 내역", count: myComments.length },
               { id: "sparked", label: "받은 유레카", count: sparkedPosts.length },
               { id: "bookmarked", label: "북마크", count: bookmarkedPosts.length },
-              { id: "recent", label: "최근 본 글", count: recentViews.length }
+              { id: "recent", label: "최근 본 글", count: recentViews.length },
+              { id: "missions", label: "미션/업적", count: null },
+              { id: "candy_history", label: "포인트 내역", count: null },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -406,7 +554,9 @@ export default function MyPage() {
                   }`}
               >
                 {tab.label}
-                <span className="ml-1.5 text-[10px] opacity-50">{tab.count}</span>
+                {tab.count !== null && (
+                  <span className="ml-1.5 text-[10px] opacity-50">{tab.count}</span>
+                )}
                 {activeTab === tab.id && (
                   <div className="absolute bottom-[-4px] left-0 w-full h-0.5 bg-[#F9954E] rounded-full" />
                 )}
@@ -414,68 +564,191 @@ export default function MyPage() {
             ))}
           </div>
 
-          {/* Content List */}
-          <div className="space-y-4">
-            {displayList.length === 0 ? (
-              <div className="text-center py-20 bg-neutral-50/50 dark:bg-zinc-950/20 rounded-3xl border border-dashed border-neutral-200 dark:border-zinc-800">
-                <div className="text-4xl mb-4 opacity-20">📭</div>
-                <p className="text-neutral-400 dark:text-zinc-500 font-medium mb-6">아직 활동 정보가 없네요!</p>
-                <Link href="/community" className="text-[#F9954E] font-bold text-sm hover:underline">
-                  첫 게시글 작성하러 가기 →
-                </Link>
-              </div>
-            ) : activeTab === "comments" ? (
-              <div className="grid gap-4">
-                {displayList.map((comment: any) => (
-                  <Link
-                    href={comment.postUrl || `/community/${comment.postId}`}
-                    key={comment.id}
-                    className="block group"
-                  >
-                    <div className="p-5 rounded-2xl border bg-white dark:bg-zinc-900/30 border-neutral-100 dark:border-zinc-800/50 transition-all duration-300 group-hover:border-[#F9954E]/30 group-hover:shadow-sm">
-                      <div className="flex items-center gap-2 mb-2">
-                        <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-tighter">{comment.date || 'RECENT'}</span>
-                        <span className="text-[10px] font-bold text-[#F9954E] truncate max-w-[200px]">{comment.postTitle}</span>
+          {/* ── 미션/업적 탭 ── */}
+          {activeTab === "missions" && (
+            <div className="space-y-8">
+              {/* 일일 미션 */}
+              <div>
+                <h4 className="text-base font-black text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
+                  <span>📋</span> 일일 미션
+                  <span className="text-xs font-medium text-neutral-400 dark:text-zinc-500 ml-1">매일 자정 초기화</span>
+                </h4>
+                <div className="grid gap-3">
+                  {DAILY_MISSIONS.map((mission) => {
+                    const done = mission.id === "attendance"
+                      ? attendanceDone
+                      : (user?.email ? isMissionCompletedToday(user.email, mission.id) : false);
+                    return (
+                      <div
+                        key={mission.id}
+                        className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${
+                          done
+                            ? "bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-900/30"
+                            : "bg-white dark:bg-zinc-900/30 border-neutral-100 dark:border-zinc-800/50"
+                        }`}
+                      >
+                        <div className="flex items-center gap-3">
+                          <span className="text-xl">{mission.emoji}</span>
+                          <div>
+                            <p className={`text-sm font-bold ${done ? "text-neutral-400 dark:text-zinc-500 line-through" : "text-neutral-800 dark:text-white"}`}>
+                              {mission.label}
+                            </p>
+                            <p className="text-[11px] font-black text-[#F9954E]">🍭 +{mission.reward}</p>
+                          </div>
+                        </div>
+                        {done ? (
+                          <span className="text-green-500 text-xs font-black flex items-center gap-1">✓ 완료</span>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              if (mission.id === "attendance") {
+                                handleAttendance();
+                              } else {
+                                handleMissionClaim(mission.id, mission.reward, mission.label);
+                              }
+                            }}
+                            className="px-3 py-1.5 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-white text-xs font-black transition-all active:scale-95"
+                          >
+                            받기
+                          </button>
+                        )}
                       </div>
-                      <p className="text-sm text-neutral-600 dark:text-zinc-400 leading-relaxed font-medium line-clamp-1">
-                        {comment.text || comment.content}
+                    );
+                  })}
+                </div>
+              </div>
+
+              {/* 업적 */}
+              <div>
+                <h4 className="text-base font-black text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
+                  <span>🏆</span> 업적
+                  <span className="text-xs font-medium text-neutral-400 dark:text-zinc-500 ml-1">{claimedAchievements.length}/{ACHIEVEMENTS.length} 달성</span>
+                </h4>
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                  {ACHIEVEMENTS.map((ach) => {
+                    const claimed = claimedAchievements.includes(ach.id);
+                    return (
+                      <div
+                        key={ach.id}
+                        className={`flex items-center gap-4 p-4 rounded-2xl border transition-all ${
+                          claimed
+                            ? "bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900/30"
+                            : "bg-white dark:bg-zinc-900/30 border-neutral-100 dark:border-zinc-800/50 opacity-60"
+                        }`}
+                      >
+                        <span className="text-2xl">{ach.emoji}</span>
+                        <div className="flex-1 min-w-0">
+                          <p className="text-sm font-bold text-neutral-800 dark:text-white">{ach.name}</p>
+                          <p className="text-[11px] text-neutral-500 dark:text-zinc-400 truncate">{ach.description}</p>
+                          <p className="text-[11px] font-black text-[#F9954E]">🍭 +{ach.reward}</p>
+                        </div>
+                        {claimed && (
+                          <span className="text-amber-500 text-xs font-black">✓</span>
+                        )}
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            </div>
+          )}
+
+          {/* ── 포인트 내역 탭 ── */}
+          {activeTab === "candy_history" && (
+            <div className="space-y-2">
+              {candyHistory.length === 0 ? (
+                <div className="text-center py-20 bg-neutral-50/50 dark:bg-zinc-950/20 rounded-3xl border border-dashed border-neutral-200 dark:border-zinc-800">
+                  <div className="text-4xl mb-4 opacity-20">🍭</div>
+                  <p className="text-neutral-400 dark:text-zinc-500 font-medium">아직 솜사탕 내역이 없네요!</p>
+                  <p className="text-xs text-neutral-400 dark:text-zinc-600 mt-2">미션을 완료하고 솜사탕을 모아보세요.</p>
+                </div>
+              ) : (
+                candyHistory.map((entry, idx) => (
+                  <div
+                    key={idx}
+                    className="flex items-center justify-between p-4 rounded-2xl border bg-white dark:bg-zinc-900/30 border-neutral-100 dark:border-zinc-800/50"
+                  >
+                    <div>
+                      <p className="text-sm font-bold text-neutral-800 dark:text-white">{entry.reason}</p>
+                      <p className="text-[11px] text-neutral-400 dark:text-zinc-500">
+                        {new Date(entry.date).toLocaleString("ko-KR", {
+                          month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
+                        })}
                       </p>
                     </div>
+                    <span className={`text-sm font-black ${entry.amount > 0 ? "text-green-500" : "text-red-500"}`}>
+                      {entry.amount > 0 ? "+" : ""}{entry.amount} 🍭
+                    </span>
+                  </div>
+                ))
+              )}
+            </div>
+          )}
+
+          {/* ── 기존 활동 탭 콘텐츠 ── */}
+          {activeTab !== "missions" && activeTab !== "candy_history" && (
+            <div className="space-y-4">
+              {displayList.length === 0 ? (
+                <div className="text-center py-20 bg-neutral-50/50 dark:bg-zinc-950/20 rounded-3xl border border-dashed border-neutral-200 dark:border-zinc-800">
+                  <div className="text-4xl mb-4 opacity-20">📭</div>
+                  <p className="text-neutral-400 dark:text-zinc-500 font-medium mb-6">아직 활동 정보가 없네요!</p>
+                  <Link href="/community" className="text-[#F9954E] font-bold text-sm hover:underline">
+                    첫 게시글 작성하러 가기 →
                   </Link>
-                ))}
-              </div>
-            ) : (
-              <div className="grid gap-4">
-                {displayList.map((post: any) => (
-                  <Link
-                    href={`/community/${post.id}`}
-                    key={post.id}
-                    className="block group"
-                  >
-                    <div className="p-5 rounded-2xl border bg-white dark:bg-zinc-900/30 border-neutral-100 dark:border-zinc-800/50 transition-all duration-300 group-hover:border-[#F9954E]/30 group-hover:shadow-sm flex items-center gap-4">
-                      <div className="flex-1 min-w-0">
-                        <div className="flex items-center gap-2 mb-1">
-                          <span className="text-[#F9954E] text-[9px] font-black uppercase tracking-tighter">
-                            {post.tag || "자유"}
-                          </span>
-                          <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-tighter">
-                            {post.date || 'RECENT'}
-                          </span>
+                </div>
+              ) : activeTab === "comments" ? (
+                <div className="grid gap-4">
+                  {displayList.map((comment: any) => (
+                    <Link
+                      href={comment.postUrl || `/community/${comment.postId}`}
+                      key={comment.id}
+                      className="block group"
+                    >
+                      <div className="p-5 rounded-2xl border bg-white dark:bg-zinc-900/30 border-neutral-100 dark:border-zinc-800/50 transition-all duration-300 group-hover:border-[#F9954E]/30 group-hover:shadow-sm">
+                        <div className="flex items-center gap-2 mb-2">
+                          <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-tighter">{comment.date || 'RECENT'}</span>
+                          <span className="text-[10px] font-bold text-[#F9954E] truncate max-w-[200px]">{comment.postTitle}</span>
                         </div>
-                        <h4 className="text-sm font-bold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors line-clamp-1">
-                          {post.title}
-                        </h4>
+                        <p className="text-sm text-neutral-600 dark:text-zinc-400 leading-relaxed font-medium line-clamp-1">
+                          {comment.text || comment.content}
+                        </p>
                       </div>
-                      <div className="flex items-center gap-3 text-[10px] font-bold text-neutral-400">
-                        <span className="flex items-center gap-1">👀 {post.views || 0}</span>
-                        <span className="flex items-center gap-1">⚡ {post.sparks || 0}</span>
+                    </Link>
+                  ))}
+                </div>
+              ) : (
+                <div className="grid gap-4">
+                  {displayList.map((post: any) => (
+                    <Link
+                      href={`/community/${post.id}`}
+                      key={post.id}
+                      className="block group"
+                    >
+                      <div className="p-5 rounded-2xl border bg-white dark:bg-zinc-900/30 border-neutral-100 dark:border-zinc-800/50 transition-all duration-300 group-hover:border-[#F9954E]/30 group-hover:shadow-sm flex items-center gap-4">
+                        <div className="flex-1 min-w-0">
+                          <div className="flex items-center gap-2 mb-1">
+                            <span className="text-[#F9954E] text-[9px] font-black uppercase tracking-tighter">
+                              {post.tag || "자유"}
+                            </span>
+                            <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-tighter">
+                              {post.date || 'RECENT'}
+                            </span>
+                          </div>
+                          <h4 className="text-sm font-bold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors line-clamp-1">
+                            {post.title}
+                          </h4>
+                        </div>
+                        <div className="flex items-center gap-3 text-[10px] font-bold text-neutral-400">
+                          <span className="flex items-center gap-1">👀 {post.views || 0}</span>
+                          <span className="flex items-center gap-1">⚡ {post.sparks || 0}</span>
+                        </div>
                       </div>
-                    </div>
-                  </Link>
-                ))}
-              </div>
-            )}
-          </div>
+                    </Link>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </section>
 

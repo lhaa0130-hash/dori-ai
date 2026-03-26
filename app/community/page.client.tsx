@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useTheme } from 'next-themes';
 import { PlusCircle, Users } from 'lucide-react';
 
-// Post-interface. I a todolist kan have en mere detaljeret beskrivelse.
+// Post interface
 interface Post {
   id: string;
   author: string;
@@ -15,7 +15,11 @@ interface Post {
   tags: string[];
   likes: number;
   comments: number;
+  commentsList?: any[];
   createdAt: string;
+  date?: string;
+  views?: number;
+  sparks?: number;
 }
 
 interface CommunityClientProps {
@@ -29,12 +33,26 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
 
   useEffect(() => {
     setMounted(true);
-    // Load posts from localStorage if available
+    // Load posts from localStorage, seed if empty
     try {
       const savedPosts = localStorage.getItem('dori_community_posts');
       if (savedPosts) {
-        setPosts(JSON.parse(savedPosts));
+        const parsed: Post[] = JSON.parse(savedPosts);
+        if (parsed.length > 0) {
+          setPosts(parsed);
+          return;
+        }
       }
+      // localStorage가 비어 있으면 시딩 API로 초기화
+      fetch('/api/seed-community')
+        .then((r) => r.json())
+        .then((data) => {
+          if (data.posts && Array.isArray(data.posts)) {
+            localStorage.setItem('dori_community_posts', JSON.stringify(data.posts));
+            setPosts(data.posts);
+          }
+        })
+        .catch((e) => console.error('Failed to seed community posts', e));
     } catch (e) {
       console.error("Failed to load community posts from localStorage", e);
     }
@@ -85,7 +103,9 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
               posts.map(post => (
                 <div key={post.id} className="p-6 rounded-[2rem] bg-white/80 dark:bg-zinc-900/40 backdrop-blur-xl border border-neutral-200 dark:border-zinc-800 transition-all duration-300 hover:border-[#F9954E]/30 dark:hover:border-[#F9954E]/30 hover:shadow-lg hover:shadow-[#F9954E]/5">
                   <div className="flex items-center gap-3 mb-4">
-                    <img src={post.avatar} alt={post.author} className="w-10 h-10 rounded-full border border-neutral-100 dark:border-zinc-700" />
+                    <div className="w-10 h-10 rounded-full border border-neutral-100 dark:border-zinc-700 flex items-center justify-center text-lg bg-neutral-50 dark:bg-zinc-800">
+                      {post.avatar && !post.avatar.startsWith('http') ? post.avatar : '👤'}
+                    </div>
                     <div className="flex flex-col">
                       <span className="font-bold text-sm text-neutral-900 dark:text-white">{post.author}</span>
                       <span className="text-xs text-neutral-500 dark:text-neutral-400">{new Date(post.createdAt).toLocaleDateString('ko-KR')}</span>
