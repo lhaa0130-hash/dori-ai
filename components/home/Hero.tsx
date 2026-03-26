@@ -1,8 +1,14 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { ArrowRight, Sparkles, Zap, Cpu } from "lucide-react";
+import { ArrowRight, Sparkles, Zap, TrendingUp, Wrench, Gamepad2 } from "lucide-react";
 import Link from "next/link";
+
+const stats = [
+  { label: "트렌드 기사", value: "46+", icon: TrendingUp },
+  { label: "AI 도구", value: "100+", icon: Wrench },
+  { label: "미니게임", value: "23+", icon: Gamepad2 },
+];
 
 export default function Hero() {
   return (
@@ -40,8 +46,28 @@ export default function Hero() {
               교육, 게임, 유틸리티까지 - AI 기술로 확장되는 무한한 가능성을 경험하세요.
             </p>
 
+            {/* 실시간 통계 뱃지 */}
+            <div className="flex flex-wrap items-center justify-center md:justify-start gap-2 mt-5">
+              {stats.map((stat) => {
+                const Icon = stat.icon;
+                return (
+                  <motion.div
+                    key={stat.label}
+                    initial={{ opacity: 0, scale: 0.9 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    transition={{ duration: 0.4, delay: 0.2 }}
+                    className="flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 shadow-sm"
+                  >
+                    <Icon className="w-3.5 h-3.5 text-[#F9954E]" />
+                    <span className="text-xs font-bold text-[#F9954E]">{stat.value}</span>
+                    <span className="text-xs font-medium text-neutral-500 dark:text-neutral-400">{stat.label}</span>
+                  </motion.div>
+                );
+              })}
+            </div>
+
             {/* 정보 태그 (PC 전용) */}
-            <div className="hidden md:flex flex-wrap gap-2 mt-6">
+            <div className="hidden md:flex flex-wrap gap-2 mt-4">
               {['#AI_Native', '#Education', '#Game', '#Utility'].map((tag) => (
                 <span key={tag} className="text-xs text-neutral-400 font-medium bg-neutral-100 dark:bg-neutral-800 px-2 py-1 rounded-md">
                   {tag}
@@ -50,21 +76,31 @@ export default function Hero() {
             </div>
           </motion.div>
 
-          {/* Right: CTA & Info Cards (오른쪽 영역을 활용해 정보 전달) */}
+          {/* Right: CTA */}
           <motion.div
             initial={{ opacity: 0, x: 10 }}
             animate={{ opacity: 1, x: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="shrink-0 flex flex-col items-center md:items-end gap-3"
           >
-            <button
-              onClick={() => alert("현재 AI 서비스 기능은 준비 중입니다. 조금만 기다려주세요! 🚀")}
+            {/* 최신 트렌드 보기 */}
+            <Link
+              href="/insight"
               className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-[#F9954E] text-white text-sm font-bold shadow-lg shadow-[#F9954E]/20 hover:bg-[#E8832E] hover:scale-105 transition-all duration-300"
             >
               <Sparkles className="w-4 h-4 fill-white/20" />
-              <span>AI 서비스 시작하기</span>
+              <span>최신 트렌드 보기</span>
               <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
-            </button>
+            </Link>
+
+            {/* AI 도구 탐색 */}
+            <Link
+              href="/ai-tools"
+              className="group inline-flex items-center gap-2 px-6 py-3 rounded-full bg-white dark:bg-neutral-900 text-neutral-700 dark:text-neutral-300 text-sm font-bold border border-neutral-200 dark:border-neutral-700 hover:border-[#F9954E] dark:hover:border-[#F9954E] hover:text-[#F9954E] hover:scale-105 transition-all duration-300"
+            >
+              <span>AI 도구 탐색</span>
+              <ArrowRight className="w-4 h-4 transition-transform group-hover:translate-x-1" />
+            </Link>
 
             <p className="text-[10px] text-neutral-400 font-medium flex items-center gap-1.5">
               <Zap className="w-3 h-3 text-[#F9954E]" />

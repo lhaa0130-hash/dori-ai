@@ -1,14 +1,18 @@
 import { getPostData } from '@/lib/posts';
+import { getAllTrends } from '@/lib/trends';
 import { Suspense } from 'react';
-import Header from "@/components/layout/Header"; // Header 컴포넌트 임포트
-import Image from 'next/image'; // Image 컴포넌트 임포트
-import { MDXRemote } from 'next-mdx-remote/rsc'; // MDXRemote (RSC) 임포트
-import rehypeHighlight from 'rehype-highlight'; // 코드 하이라이팅 플러그인 임포트
-import rehypeSlug from 'rehype-slug'; // 제목에 id를 붙여주는 플러그인
-import rehypeAutolinkHeadings from 'rehype-autolink-headings'; // 제목에 링크를 붙여주는 플러그인
-import Link from 'next/link'; // Link 컴포넌트 임포트
-import remarkGfm from 'remark-gfm'; // GFM (GitHub Flavored Markdown) 지원
+import Header from "@/components/layout/Header";
+import Image from 'next/image';
+import { MDXRemote } from 'next-mdx-remote/rsc';
+import rehypeHighlight from 'rehype-highlight';
+import rehypeSlug from 'rehype-slug';
+import rehypeAutolinkHeadings from 'rehype-autolink-headings';
+import Link from 'next/link';
+import remarkGfm from 'remark-gfm';
 import type { Metadata } from 'next';
+import ShareButtons from '@/components/article/ShareButtons';
+import ReadingProgress from '@/components/article/ReadingProgress';
+import RelatedArticles from '@/components/article/RelatedArticles';
 
 const SITE_URL = "https://dori-ai.com";
 
@@ -69,9 +73,13 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
     );
   }
 
+  // 연관 기사용 전체 트렌드 가져오기
+  const allTrends = getAllTrends();
+  const articleUrl = `${SITE_URL}/insight/article/${params.slug}`;
+  const postTags: string[] = Array.isArray(post.tags) ? post.tags : (post.tags ? [post.tags] : []);
+
   // Next.js Link 컴포넌트에는 href 속성이 필수입니다.
   const components = {
-    // Link 컴포넌트 사용 예시
     a: ({ href, ...props }: any) => {
       if (href && href.startsWith('/')) {
         return (
@@ -80,14 +88,13 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
       }
       return <a href={href} {...props} target="_blank" rel="noopener noreferrer" />;
     },
-    // Image 컴포넌트 사용 예시 (Next.js Image 최적화 활용)
     img: ({ src, alt, ...props }: any) => (
       <Image
         src={src || ''}
         alt={alt || ''}
-        width={700} // 적절한 width 지정
-        height={400} // 적절한 height 지정
-        style={{ width: '100%', height: 'auto' }} // Responsive style
+        width={700}
+        height={400}
+        style={{ width: '100%', height: 'auto' }}
         {...props}
       />
     ),
@@ -96,14 +103,16 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
   const mdxOptions = {
     remarkPlugins: [remarkGfm],
     rehypePlugins: [
-      rehypeHighlight, // 코드 하이라이팅
-      rehypeSlug, // Heading에 id 자동 추가
-      // [rehypeAutolinkHeadings, { behavior: 'wrap' }], // Heading에 링크 자동 추가 (User requested removal)
+      rehypeHighlight,
+      rehypeSlug,
     ],
   };
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
+      {/* 읽기 진행 바 (상단 고정) */}
+      <ReadingProgress />
+
       <main style={{ minHeight: '100vh', paddingTop: '70px' }}>
         <Header />
         <article className="max-w-4xl mx-auto p-4 md:p-8">
@@ -121,20 +130,36 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
               />
             </div>
           )}
-          <div className="text-gray-600 dark:text-gray-400 text-sm text-center mb-8">
+          <div className="text-gray-600 dark:text-gray-400 text-sm text-center mb-4">
             <time dateTime={post.date}>{new Date(post.date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
             {post.author && <span> by {post.author}</span>}
           </div>
 
-          {/* Modified: Apply Premium Prose Styles */}
+          {/* 소셜 공유 버튼 */}
+          <div className="flex justify-center mb-8">
+            <ShareButtons url={articleUrl} title={post.title || 'DORI-AI 기사'} />
+          </div>
+
+          {/* 기사 본문 */}
           <div className="prose-premium max-w-none">
-            {/* Server Component version of MDXRemote */}
             <MDXRemote
               source={post.content || ''}
               components={components}
               options={{ mdxOptions }}
             />
           </div>
+
+          {/* 하단 공유 버튼 */}
+          <div className="mt-10 pt-6 border-t border-neutral-200 dark:border-neutral-800">
+            <ShareButtons url={articleUrl} title={post.title || 'DORI-AI 기사'} />
+          </div>
+
+          {/* 연관 기사 추천 */}
+          <RelatedArticles
+            currentSlug={params.slug}
+            currentTags={postTags}
+            allTrends={allTrends}
+          />
         </article>
       </main>
     </Suspense>
