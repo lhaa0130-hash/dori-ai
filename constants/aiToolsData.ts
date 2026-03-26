@@ -817,14 +817,6 @@ export const AI_TOOLS_DATA: AiTool[] = [
   // 6. Coding
   // ===========================================
   {
-    id: "code-cursor", name: "Cursor", category: "coding",
-    summary: "VS Code 기반, AI가 코드를 통째로 작성/수정해 줌",
-    description: "VS Code 기반, AI가 코드를 통째로 작성/수정해 줌",
-    website: "https://cursor.com",
-    thumbnail: "https://logo.clearbit.com/cursor.com",
-    rating: 0, ratingCount: 0, userRatings: [], comments: []
-  },
-  {
     id: "code-github", name: "GitHub Copilot", category: "coding",
     summary: "개발자의 영혼의 단짝, 코드 자동 완성 표준",
     description: "개발자의 영혼의 단짝, 코드 자동 완성 표준",
@@ -846,14 +838,6 @@ export const AI_TOOLS_DATA: AiTool[] = [
     description: "엄청나게 빠른 속도와 긴 문맥을 자랑하는 코딩 비서",
     website: "https://supermaven.com",
     thumbnail: "https://logo.clearbit.com/supermaven.com",
-    rating: 0, ratingCount: 0, userRatings: [], comments: []
-  },
-  {
-    id: "code-devin", name: "Devin", category: "coding",
-    summary: "(초대형 루키) 스스로 계획하고 버그까지 잡는 완전 자율 AI 엔지니어",
-    description: "(초대형 루키) 스스로 계획하고 버그까지 잡는 완전 자율 AI 엔지니어",
-    website: "https://cognition.ai",
-    thumbnail: "https://logo.clearbit.com/cognition.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
