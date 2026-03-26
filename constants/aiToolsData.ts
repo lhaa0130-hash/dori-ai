@@ -49,8 +49,8 @@ export const AI_TOOLS_DATA: AiTool[] = [
   },
   {
     id: "agent-n8n", name: "n8n", category: "agent",
-    summary: "노코드로 AI 워크플로우 자동화",
-    description: "노코드로 AI 워크플로우 자동화",
+    summary: "노코드로 ChatGPT·슬랙·노션 연결. 자동화 입문자에게 추천",
+    description: "노코드로 ChatGPT·슬랙·노션 연결. 자동화 입문자에게 추천",
     website: "https://n8n.io",
     thumbnail: "https://logo.clearbit.com/n8n.io",
     userReview: "ChatGPT + 슬랙 + 노션 연동을 30분 만에 완성했어요.",
@@ -58,8 +58,8 @@ export const AI_TOOLS_DATA: AiTool[] = [
   },
   {
     id: "agent-langchain", name: "LangChain", category: "agent",
-    summary: "개발자용 AI 에이전트 프레임워크",
-    description: "개발자용 AI 에이전트 프레임워크",
+    summary: "AI 에이전트 개발 시 필수 라이브러리. 1억 다운로드 돌파",
+    description: "AI 에이전트 개발 시 필수 라이브러리. 1억 다운로드 돌파",
     website: "https://langchain.com",
     thumbnail: "https://logo.clearbit.com/langchain.com",
     userReview: "RAG 파이프라인 구축할 때 없으면 안 되는 존재.",
@@ -67,8 +67,8 @@ export const AI_TOOLS_DATA: AiTool[] = [
   },
   {
     id: "agent-autogpt", name: "AutoGPT", category: "agent",
-    summary: "목표만 주면 스스로 계획하고 실행하는 오픈소스 에이전트",
-    description: "목표만 주면 스스로 계획하고 실행하는 오픈소스 에이전트",
+    summary: "목표 주면 스스로 검색·코딩·실행. 아직 발전 중이지만 잠재력 큼",
+    description: "목표 주면 스스로 검색·코딩·실행. 아직 발전 중이지만 잠재력 큼",
     website: "https://agpt.co",
     thumbnail: "https://logo.clearbit.com/agpt.co",
     userReview: "완전 자율은 아직 멀었지만, 반복 작업 자동화엔 충분해요.",
@@ -76,8 +76,8 @@ export const AI_TOOLS_DATA: AiTool[] = [
   },
   {
     id: "agent-perplexity-agent", name: "Perplexity Agent", category: "agent",
-    summary: "실시간 웹 검색 + 리서치 자동화 에이전트",
-    description: "실시간 웹 검색 + 리서치 자동화 에이전트",
+    summary: "실시간 웹 정보 + 딥리서치 자동화. 조사 업무 시간 80% 절감",
+    description: "실시간 웹 정보 + 딥리서치 자동화. 조사 업무 시간 80% 절감",
     website: "https://perplexity.ai",
     thumbnail: "https://logo.clearbit.com/perplexity.ai",
     userReview: "경쟁사 분석이나 시장 조사할 때 ChatGPT보다 훨씬 유용해요.",
@@ -92,130 +92,157 @@ export const AI_TOOLS_DATA: AiTool[] = [
     userReview: "복잡한 리팩토링도 컨텍스트를 잘 유지해서 믿고 맡길 수 있어요.",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
+  {
+    id: "agent-genspark", name: "Genspark", category: "agent",
+    summary: "검색·리서치·슬라이드·영상까지 한 번에 처리하는 올인원 AI 에이전트",
+    description: "검색·리서치·슬라이드·영상까지 한 번에 처리하는 올인원 AI 에이전트",
+    website: "https://genspark.ai",
+    thumbnail: "https://logo.clearbit.com/genspark.ai",
+    userReview: "리서치부터 PPT 완성까지 한 번의 프롬프트로 끝납니다. 업무 시간이 반으로 줄었어요.",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "agent-openai-operator", name: "OpenAI Operator", category: "agent",
+    summary: "웹 브라우저를 직접 조작해 예약·쇼핑·양식 작성을 자동으로 처리",
+    description: "웹 브라우저를 직접 조작해 예약·쇼핑·양식 작성을 자동으로 처리",
+    website: "https://openai.com",
+    thumbnail: "https://logo.clearbit.com/openai.com",
+    userReview: "항공권 예약을 그냥 시켜봤는데 진짜 다 해줬어요. 소름 돋음.",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
+  {
+    id: "agent-zapier-ai", name: "Zapier AI", category: "agent",
+    summary: "7,000개 앱 연동 + AI로 자동화 로직을 자연어로 생성",
+    description: "7,000개 앱 연동 + AI로 자동화 로직을 자연어로 생성",
+    website: "https://zapier.com",
+    thumbnail: "https://logo.clearbit.com/zapier.com",
+    userReview: "코딩 몰라도 Gmail→Slack→Notion 자동화를 5분 만에 만들었어요.",
+    rating: 0, ratingCount: 0, userRatings: [], comments: []
+  },
 
   // ===========================================
   // 1. LLM
   // ===========================================
   {
     id: "llm-chatgpt", name: "ChatGPT", category: "llm",
-    summary: "AI의 표준, 가장 무난하고 강력함",
-    description: "AI의 표준, 가장 무난하고 강력함",
+    summary: "뭘 물어봐도 잘 답해줌. AI 처음 쓴다면 무조건 여기서 시작",
+    description: "뭘 물어봐도 잘 답해줌. AI 처음 쓴다면 무조건 여기서 시작",
     website: "https://chatgpt.com",
     thumbnail: "https://logo.clearbit.com/chatgpt.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-claude", name: "Claude", category: "llm",
-    summary: "글쓰기와 코딩 능력이 인간에 가장 가까움",
-    description: "글쓰기와 코딩 능력이 인간에 가장 가까움",
+    summary: "긴 글 맥락을 귀신같이 잡아냄. 보고서 쓸 때 진짜 갑임",
+    description: "긴 글 맥락을 귀신같이 잡아냄. 보고서 쓸 때 진짜 갑임",
     website: "https://claude.ai",
     thumbnail: "https://logo.clearbit.com/claude.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-gemini", name: "Gemini", category: "llm",
-    summary: "구글 서비스 연동 최강, 긴 글 요약 잘함",
-    description: "구글 서비스 연동 최강, 긴 글 요약 잘함",
+    summary: "구글 드라이브 문서 바로 요약. 구글 생태계 쓰는 분께 추천",
+    description: "구글 드라이브 문서 바로 요약. 구글 생태계 쓰는 분께 추천",
     website: "https://gemini.google.com",
     thumbnail: "https://logo.clearbit.com/google.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-perplexity", name: "Perplexity", category: "llm",
-    summary: "검색과 답변을 동시에, 출처를 찾아줌",
-    description: "검색과 답변을 동시에, 출처를 찾아줌",
+    summary: "구글 대신 쓰기 딱 좋음. 출처 링크가 함께 나와서 믿음직함",
+    description: "구글 대신 쓰기 딱 좋음. 출처 링크가 함께 나와서 믿음직함",
     website: "https://perplexity.ai",
     thumbnail: "https://logo.clearbit.com/perplexity.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-copilot", name: "Microsoft Copilot", category: "llm",
-    summary: "엑셀, PPT 등 오피스 업무에 최적화",
-    description: "엑셀, PPT 등 오피스 업무에 최적화",
+    summary: "Word·Excel에 AI가 붙어서 편집이 진짜 편해짐",
+    description: "Word·Excel에 AI가 붙어서 편집이 진짜 편해짐",
     website: "https://copilot.microsoft.com",
     thumbnail: "https://logo.clearbit.com/microsoft.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-grok", name: "Grok", category: "llm",
-    summary: "트위터 정보 실시간 반영, 솔직한 답변",
-    description: "트위터 정보 실시간 반영, 솔직한 답변",
+    summary: "X(트위터) 실시간 정보 반영. 검열 없이 직설적으로 답해줌",
+    description: "X(트위터) 실시간 정보 반영. 검열 없이 직설적으로 답해줌",
     website: "https://x.ai",
     thumbnail: "https://logo.clearbit.com/x.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-llama", name: "Llama", category: "llm",
-    summary: "내 컴퓨터에 설치해서 쓰는 무료 AI 최강자",
-    description: "내 컴퓨터에 설치해서 쓰는 무료 AI 최강자",
+    summary: "로컬에서 돌리는 무료 AI. 개인 정보 유출 걱정 없이 쓸 수 있음",
+    description: "로컬에서 돌리는 무료 AI. 개인 정보 유출 걱정 없이 쓸 수 있음",
     website: "https://llama.meta.com",
     thumbnail: "https://logo.clearbit.com/meta.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-mistral", name: "Mistral", category: "llm",
-    summary: "가볍고 빠름, 유럽에서 만든 고성능 AI",
-    description: "가볍고 빠름, 유럽에서 만든 고성능 AI",
+    summary: "유럽산 오픈소스 AI. 빠르고 가벼워서 서버 비용 아끼기 좋음",
+    description: "유럽산 오픈소스 AI. 빠르고 가벼워서 서버 비용 아끼기 좋음",
     website: "https://mistral.ai",
     thumbnail: "https://logo.clearbit.com/mistral.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-deepseek", name: "DeepSeek", category: "llm",
-    summary: "개발자 사이에서 핫한 가성비 코딩 AI",
-    description: "개발자 사이에서 핫한 가성비 코딩 AI",
+    summary: "GPT-4 수준인데 거의 무료. 개발자 커뮤니티에서 핫한 이유 있음",
+    description: "GPT-4 수준인데 거의 무료. 개발자 커뮤니티에서 핫한 이유 있음",
     website: "https://deepseek.com",
     thumbnail: "https://logo.clearbit.com/deepseek.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-notebooklm", name: "NotebookLM", category: "llm",
-    summary: "내 자료만 학습해서 알려주는 똑똑한 비서",
-    description: "내 자료만 학습해서 알려주는 똑똑한 비서",
+    summary: "PDF 올리면 그 문서 기반으로만 답해줌. 내부 자료 분석에 최고",
+    description: "PDF 올리면 그 문서 기반으로만 답해줌. 내부 자료 분석에 최고",
     website: "https://notebooklm.google.com",
     thumbnail: "https://logo.clearbit.com/google.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-gpt4o", name: "GPT-4o", category: "llm",
-    summary: "듣고 보고 말하는 옴니모델, 가장 빠르고 똑똑함",
-    description: "듣고 보고 말하는 옴니모델, 가장 빠르고 똑똑함",
+    summary: "이미지·음성·텍스트 동시 처리. 제일 빠른 GPT 모델",
+    description: "이미지·음성·텍스트 동시 처리. 제일 빠른 GPT 모델",
     website: "https://openai.com", thumbnail: "https://logo.clearbit.com/openai.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-claude-3-5", name: "Claude 3.5 Sonnet", category: "llm",
-    summary: "코딩과 뉘앙스 파악 능력에서 GPT-4o를 위협함",
-    description: "코딩과 뉘앙스 파악 능력에서 GPT-4o를 위협함",
+    summary: "코딩 실력은 GPT-4o랑 쌍벽. 긴 대화도 맥락을 절대 안 잃어버림",
+    description: "코딩 실력은 GPT-4o랑 쌍벽. 긴 대화도 맥락을 절대 안 잃어버림",
     website: "https://claude.ai", thumbnail: "https://logo.clearbit.com/anthropic.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-gemini-1-5", name: "Gemini 1.5 Pro", category: "llm",
-    summary: "책 수백 권 분량을 한 번에 기억하는 괴물 용량",
-    description: "책 수백 권 분량을 한 번에 기억하는 괴물 용량",
+    summary: "100만 토큰 컨텍스트. 책 한 권 통째로 분석 가능",
+    description: "100만 토큰 컨텍스트. 책 한 권 통째로 분석 가능",
     website: "https://gemini.google.com", thumbnail: "https://logo.clearbit.com/google.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-cohere", name: "Cohere Command R+", category: "llm",
-    summary: "기업용 검색 증강 생성(RAG)에 특화된 모델",
-    description: "기업용 검색 증강 생성(RAG)에 특화된 모델",
+    summary: "기업 문서 검색 연동에 특화. B2B 서비스 만들 때 유용함",
+    description: "기업 문서 검색 연동에 특화. B2B 서비스 만들 때 유용함",
     website: "https://cohere.com", thumbnail: "https://logo.clearbit.com/cohere.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-solar", name: "Solar (Upstage)", category: "llm",
-    summary: "한국 스타트업이 만든 세계 최고 수준의 경량 모델",
-    description: "한국 스타트업이 만든 세계 최고 수준의 경량 모델",
+    summary: "한국 스타트업 Upstage 작품. 작은 사이즈에 성능이 놀라움",
+    description: "한국 스타트업 Upstage 작품. 작은 사이즈에 성능이 놀라움",
     website: "https://upstage.ai", thumbnail: "https://logo.clearbit.com/upstage.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-hyperclova", name: "HyperCLOVA X", category: "llm",
-    summary: "한국어와 한국 문화를 가장 잘 이해하는 네이버 AI",
-    description: "한국어와 한국 문화를 가장 잘 이해하는 네이버 AI",
+    summary: "한국어 맥락 이해는 최고. 국내 서비스 개발할 때 고려할 것",
+    description: "한국어 맥락 이해는 최고. 국내 서비스 개발할 때 고려할 것",
     website: "https://clova.ai", thumbnail: "https://logo.clearbit.com/navercorp.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-qwen", name: "Qwen", category: "llm",
-    summary: "알리바바가 만든 성능 좋은 오픈소스 모델",
-    description: "알리바바가 만든 성능 좋은 오픈소스 모델",
+    summary: "알리바바 오픈소스 모델. GPT-4급 성능에 무료로 사용 가능",
+    description: "알리바바 오픈소스 모델. GPT-4급 성능에 무료로 사용 가능",
     website: "https://github.com/QwenLM", thumbnail: "https://logo.clearbit.com/alibaba.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
@@ -226,14 +253,14 @@ export const AI_TOOLS_DATA: AiTool[] = [
   },
   {
     id: "llm-huggingchat", name: "HuggingChat", category: "llm",
-    summary: "다양한 오픈소스 모델을 무료로 써볼 수 있는 곳",
-    description: "다양한 오픈소스 모델을 무료로 써볼 수 있는 곳",
+    summary: "수십 개 오픈소스 모델을 한 곳에서. 모델 비교할 때 자주 들름",
+    description: "수십 개 오픈소스 모델을 한 곳에서. 모델 비교할 때 자주 들름",
     website: "https://huggingface.co/chat", thumbnail: "https://logo.clearbit.com/huggingface.co", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-poe-plus", name: "Poe+", category: "llm",
-    summary: "여러 봇을 빠르게 전환하며 쓸 수 있는 플랫폼",
-    description: "여러 봇을 빠르게 전환하며 쓸 수 있는 플랫폼",
+    summary: "GPT·Claude·Gemini를 한 화면에서 비교. 모델마다 답변 스타일 차이가 재미있음",
+    description: "GPT·Claude·Gemini를 한 화면에서 비교. 모델마다 답변 스타일 차이가 재미있음",
     website: "https://poe.com", thumbnail: "https://logo.clearbit.com/poe.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
@@ -242,142 +269,142 @@ export const AI_TOOLS_DATA: AiTool[] = [
   // ===========================================
   {
     id: "img-midjourney", name: "Midjourney", category: "image-generation",
-    summary: "현존 최고의 예술적 화질 (동물도감용)",
-    description: "현존 최고의 예술적 화질 (동물도감용)",
+    summary: "예술적 화질은 압도적 1위. 프로 디자이너들이 가장 많이 씀",
+    description: "예술적 화질은 압도적 1위. 프로 디자이너들이 가장 많이 씀",
     website: "https://midjourney.com",
     thumbnail: "https://logo.clearbit.com/midjourney.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-stablediffusion", name: "Stable Diffusion", category: "image-generation",
-    summary: "내 맘대로 설치/개조 가능한 끝판왕",
-    description: "내 맘대로 설치/개조 가능한 끝판왕",
+    summary: "내 PC에 설치해서 무한 생성. 모델 교체로 화풍을 마음대로 바꿈",
+    description: "내 PC에 설치해서 무한 생성. 모델 교체로 화풍을 마음대로 바꿈",
     website: "https://stability.ai",
     thumbnail: "https://logo.clearbit.com/stability.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-dalle3", name: "DALL-E 3", category: "image-generation",
-    summary: "챗지피티 안에서 말로 편하게 그림",
-    description: "챗지피티 안에서 말로 편하게 그림",
+    summary: "ChatGPT Plus 구독하면 바로 사용. 복잡한 설정 없이 즉시 시작",
+    description: "ChatGPT Plus 구독하면 바로 사용. 복잡한 설정 없이 즉시 시작",
     website: "https://openai.com/dall-e-3",
     thumbnail: "https://logo.clearbit.com/openai.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-flux", name: "Flux", category: "image-generation",
-    summary: "최근 미드저니를 위협하는 신흥 강자",
-    description: "최근 미드저니를 위협하는 신흥 강자",
+    summary: "미드저니 대비 저렴하고 빠름. 상업 프로젝트에도 무난히 사용 가능",
+    description: "미드저니 대비 저렴하고 빠름. 상업 프로젝트에도 무난히 사용 가능",
     website: "https://blackforestlabs.ai",
     thumbnail: "https://logo.clearbit.com/blackforestlabs.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-ideogram", name: "Ideogram", category: "image-generation",
-    summary: "그림 속에 '글자(텍스트)'를 완벽하게 넣음",
-    description: "그림 속에 '글자(텍스트)'를 완벽하게 넣음",
+    summary: "이미지에 텍스트를 완벽하게 렌더링. 썸네일·로고 제작에 강추",
+    description: "이미지에 텍스트를 완벽하게 렌더링. 썸네일·로고 제작에 강추",
     website: "https://ideogram.ai",
     thumbnail: "https://logo.clearbit.com/ideogram.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-leonardo", name: "Leonardo.ai", category: "image-generation",
-    summary: "무료 크레딧 많이 줌, 웹에서 쓰기 편함",
-    description: "무료 크레딧 많이 줌, 웹에서 쓰기 편함",
+    summary: "무료 크레딧이 후함. 웹에서 로그인 없이 바로 생성 가능",
+    description: "무료 크레딧이 후함. 웹에서 로그인 없이 바로 생성 가능",
     website: "https://leonardo.ai",
     thumbnail: "https://logo.clearbit.com/leonardo.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-firefly", name: "Adobe Firefly", category: "image-generation",
-    summary: "포토샵 저작권 걱정 없는 안전한 생성",
-    description: "포토샵 저작권 걱정 없는 안전한 생성",
+    summary: "Adobe 정품 사용자라면 추가 비용 없이 사용. 저작권 안전",
+    description: "Adobe 정품 사용자라면 추가 비용 없이 사용. 저작권 안전",
     website: "https://firefly.adobe.com",
     thumbnail: "https://logo.clearbit.com/adobe.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-krea", name: "Krea AI", category: "image-generation",
-    summary: "내가 대충 그린 낙서를 실시간으로 고퀄 변환",
-    description: "내가 대충 그린 낙서를 실시간으로 고퀄 변환",
+    summary: "낙서 수준 스케치를 실시간으로 고화질 변환. 아이디어 시각화 최고",
+    description: "낙서 수준 스케치를 실시간으로 고화질 변환. 아이디어 시각화 최고",
     website: "https://krea.ai",
     thumbnail: "https://logo.clearbit.com/krea.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-civitai", name: "Civitai", category: "image-generation",
-    summary: "다양한 그림체(모델)를 공유하는 거대 커뮤니티",
-    description: "다양한 그림체(모델)를 공유하는 거대 커뮤니티",
+    summary: "수천 개 커스텀 모델을 무료로 다운. 원하는 화풍 뭐든 있음",
+    description: "수천 개 커스텀 모델을 무료로 다운. 원하는 화풍 뭐든 있음",
     website: "https://civitai.com",
     thumbnail: "https://logo.clearbit.com/civitai.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-runway", name: "Runway", category: "image-generation",
-    summary: "이미지뿐만 아니라 영상 생성의 선두주자",
-    description: "이미지뿐만 아니라 영상 생성의 선두주자",
+    summary: "이미지+영상 모두 가능. 크리에이티브 작업의 전천후 도구",
+    description: "이미지+영상 모두 가능. 크리에이티브 작업의 전천후 도구",
     website: "https://runwayml.com", // Fixed shady link from user input
     thumbnail: "https://logo.clearbit.com/runwayml.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-playground", name: "Playground AI", category: "image-generation",
-    summary: "하루 1000장 무료 생성, 미드저니만큼 좋음",
-    description: "하루 1000장 무료 생성, 미드저니만큼 좋음",
+    summary: "하루 1,000장 무료. 품질도 미드저니급이라 가성비 최고",
+    description: "하루 1,000장 무료. 품질도 미드저니급이라 가성비 최고",
     website: "https://playgroundai.com", thumbnail: "https://logo.clearbit.com/playgroundai.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-bluewillow", name: "BlueWillow", category: "image-generation",
-    summary: "미드저니의 무료 대안으로 떠오른 디스코드 봇",
-    description: "미드저니의 무료 대안으로 떠오른 디스코드 봇",
+    summary: "디스코드에서 무료로 사용. 미드저니 못지않은 퀄리티",
+    description: "디스코드에서 무료로 사용. 미드저니 못지않은 퀄리티",
     website: "https://bluewillow.ai", thumbnail: "https://logo.clearbit.com/bluewillow.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-tensor", name: "Tensor.art", category: "image-generation",
-    summary: "스테이블 디퓨전 모델을 웹에서 바로 돌려봄",
-    description: "스테이블 디퓨전 모델을 웹에서 바로 돌려봄",
+    summary: "설치 없이 웹에서 SD 모델 실행. 빠른 프로토타이핑에 유용",
+    description: "설치 없이 웹에서 SD 모델 실행. 빠른 프로토타이핑에 유용",
     website: "https://tensor.art", thumbnail: "https://logo.clearbit.com/tensor.art", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-dreamstudio", name: "DreamStudio", category: "image-generation",
-    summary: "스테빌리티 AI의 공식 웹 생성 도구",
-    description: "스테빌리티 AI의 공식 웹 생성 도구",
+    summary: "Stability AI 공식 서비스. 최신 SD 모델을 API로 바로 쓸 수 있음",
+    description: "Stability AI 공식 서비스. 최신 SD 모델을 API로 바로 쓸 수 있음",
     website: "https://dreamstudio.ai", thumbnail: "https://logo.clearbit.com/stability.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-imagefx", name: "ImageFX", category: "image-generation",
-    summary: "구글의 최신 이미지 생성기, 칩으로 수정 가능",
-    description: "구글의 최신 이미지 생성기, 칩으로 수정 가능",
+    summary: "Google 생태계 안에서 이미지 생성. Gemini와 연동이 매끄러움",
+    description: "Google 생태계 안에서 이미지 생성. Gemini와 연동이 매끄러움",
     website: "https://aitestkitchen.withgoogle.com/tools/image-fx", thumbnail: "https://logo.clearbit.com/google.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-bing", name: "Bing Image Creator", category: "image-generation",
-    summary: "달리3 기반으로 무료로 그림 그려줌 (MS 계정)",
-    description: "달리3 기반으로 무료로 그림 그려줌 (MS 계정)",
+    summary: "MS 계정만 있으면 무료. DALL-E 3 기반이라 품질도 좋음",
+    description: "MS 계정만 있으면 무료. DALL-E 3 기반이라 품질도 좋음",
     website: "https://bing.com/create", thumbnail: "https://logo.clearbit.com/bing.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-picfinder", name: "PicFinder", category: "image-generation",
-    summary: "검색하듯이 무한으로 이미지를 쏟아내는 생성기",
-    description: "검색하듯이 무한으로 이미지를 쏟아내는 생성기",
+    summary: "클릭 한 번에 이미지 무한 생성. 빠른 아이디어 스케치에 딱임",
+    description: "클릭 한 번에 이미지 무한 생성. 빠른 아이디어 스케치에 딱임",
     website: "https://picfinder.ai", thumbnail: "https://logo.clearbit.com/picfinder.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-stockimg", name: "Stockimg.ai", category: "image-generation",
-    summary: "로고, 포스터, 책 표지 등 상업용 디자인 생성",
-    description: "로고, 포스터, 책 표지 등 상업용 디자인 생성",
+    summary: "상업용 디자인 특화. 로고·포스터·책 표지를 분 단위로 완성",
+    description: "상업용 디자인 특화. 로고·포스터·책 표지를 분 단위로 완성",
     website: "https://stockimg.ai", thumbnail: "https://logo.clearbit.com/stockimg.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-getimg", name: "Getimg.ai", category: "image-generation",
-    summary: "이미지 생성부터 아웃페인팅 편집까지 한 곳에서",
-    description: "이미지 생성부터 아웃페인팅 편집까지 한 곳에서",
+    summary: "생성+편집이 한 플랫폼에. 워크플로우를 따로 분리할 필요가 없음",
+    description: "생성+편집이 한 플랫폼에. 워크플로우를 따로 분리할 필요가 없음",
     website: "https://getimg.ai", thumbnail: "https://logo.clearbit.com/getimg.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-seaart", name: "SeaArt", category: "image-generation",
-    summary: "중국발 고퀄리티 실사/반실사 특화 생성 툴",
-    description: "중국발 고퀄리티 실사/반실사 특화 생성 툴",
+    summary: "실사 사진 퀄리티가 압도적. 인물 이미지 생성에서 특히 강함",
+    description: "실사 사진 퀄리티가 압도적. 인물 이미지 생성에서 특히 강함",
     website: "https://seaart.ai", thumbnail: "https://logo.clearbit.com/seaart.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
@@ -386,40 +413,40 @@ export const AI_TOOLS_DATA: AiTool[] = [
   // ===========================================
   {
     id: "edit-magnific", name: "Magnific AI", category: "image-editing",
-    summary: "흐릿한 사진을 초고화질로 업스케일링 (마법 수준)",
-    description: "흐릿한 사진을 초고화질로 업스케일링 (마법 수준)",
+    summary: "흐릿한 사진을 4K로 복원. 옛날 사진 되살릴 때 마법 같음",
+    description: "흐릿한 사진을 4K로 복원. 옛날 사진 되살릴 때 마법 같음",
     website: "https://magnific.ai",
     thumbnail: "https://logo.clearbit.com/magnific.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "edit-canva", name: "Canva", category: "image-editing",
-    summary: "매직 이레이저 등 AI 기능이 탑재된 국민 디자인 툴",
-    description: "매직 이레이저 등 AI 기능이 탑재된 국민 디자인 툴",
+    summary: "디자인의 기본. AI 배경 제거와 마법 지우개로 편집이 너무 쉬움",
+    description: "디자인의 기본. AI 배경 제거와 마법 지우개로 편집이 너무 쉬움",
     website: "https://canva.com",
     thumbnail: "https://logo.clearbit.com/canva.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "edit-photoroom", name: "Photoroom", category: "image-editing",
-    summary: "쇼핑몰 상품 사진 배경 제거나 합성에 최적화",
-    description: "쇼핑몰 상품 사진 배경 제거나 합성에 최적화",
+    summary: "쇼핑몰 상품 사진 배경 1초 제거. 사진작가 없이 혼자 운영 가능",
+    description: "쇼핑몰 상품 사진 배경 1초 제거. 사진작가 없이 혼자 운영 가능",
     website: "https://photoroom.com",
     thumbnail: "https://logo.clearbit.com/photoroom.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "edit-clipdrop", name: "Clipdrop", category: "image-editing",
-    summary: "조명 변경, 배경 제거 등 이미지 조작 종합 선물세트",
-    description: "조명 변경, 배경 제거 등 이미지 조작 종합 선물세트",
+    summary: "조명 추가, 배경 변경, 얼굴 수정까지. 사진 편집 올인원 도구",
+    description: "조명 추가, 배경 변경, 얼굴 수정까지. 사진 편집 올인원 도구",
     website: "https://clipdrop.co",
     thumbnail: "https://logo.clearbit.com/clipdrop.co",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "edit-topaz", name: "Topaz Photo AI", category: "image-editing",
-    summary: "노이즈 제거와 선명도 개선 끝판왕 (사진가용)",
-    description: "노이즈 제거와 선명도 개선 끝판왕 (사진가용)",
+    summary: "노이즈 제거 성능은 업계 1위. 사진작가들이 Lightroom 다음으로 씀",
+    description: "노이즈 제거 성능은 업계 1위. 사진작가들이 Lightroom 다음으로 씀",
     website: "https://topazlabs.com",
     thumbnail: "https://logo.clearbit.com/topazlabs.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -818,48 +845,48 @@ export const AI_TOOLS_DATA: AiTool[] = [
   // ===========================================
   {
     id: "code-github", name: "GitHub Copilot", category: "coding",
-    summary: "개발자의 영혼의 단짝, 코드 자동 완성 표준",
-    description: "개발자의 영혼의 단짝, 코드 자동 완성 표준",
+    summary: "탭 한 번에 코드 한 블록. 안 쓰는 개발자가 없을 정도",
+    description: "탭 한 번에 코드 한 블록. 안 쓰는 개발자가 없을 정도",
     website: "https://github.com/features/copilot",
     thumbnail: "https://logo.clearbit.com/github.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "code-replit", name: "Replit", category: "coding",
-    summary: "설치 없이 웹에서 바로 코딩하고 배포까지 한 번에",
-    description: "설치 없이 웹에서 바로 코딩하고 배포까지 한 번에",
+    summary: "브라우저에서 바로 코딩+배포. 포트폴리오 사이트 1시간에 완성",
+    description: "브라우저에서 바로 코딩+배포. 포트폴리오 사이트 1시간에 완성",
     website: "https://replit.com",
     thumbnail: "https://logo.clearbit.com/replit.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "code-supermaven", name: "Supermaven", category: "coding",
-    summary: "엄청나게 빠른 속도와 긴 문맥을 자랑하는 코딩 비서",
-    description: "엄청나게 빠른 속도와 긴 문맥을 자랑하는 코딩 비서",
+    summary: "GitHub Copilot보다 빠름. 코드 완성 속도 차이가 느껴짐",
+    description: "GitHub Copilot보다 빠름. 코드 완성 속도 차이가 느껴짐",
     website: "https://supermaven.com",
     thumbnail: "https://logo.clearbit.com/supermaven.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "code-codeium", name: "Codeium", category: "coding",
-    summary: "개인 사용자에게 무료로 풀린 고성능 코딩 도구",
-    description: "개인 사용자에게 무료로 풀린 고성능 코딩 도구",
+    summary: "무료인데 Copilot 수준. 학생이나 개인 개발자에게 강추",
+    description: "무료인데 Copilot 수준. 학생이나 개인 개발자에게 강추",
     website: "https://codeium.com",
     thumbnail: "https://logo.clearbit.com/codeium.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "code-tabnine", name: "Tabnine", category: "coding",
-    summary: "기업 보안에 민감하다면 추천하는 안전한 코딩 AI",
-    description: "기업 보안에 민감하다면 추천하는 안전한 코딩 AI",
+    summary: "코드가 외부에 안 나감. 회사에서 보안 이슈 없이 쓰고 싶다면",
+    description: "코드가 외부에 안 나감. 회사에서 보안 이슈 없이 쓰고 싶다면",
     website: "https://tabnine.com",
     thumbnail: "https://logo.clearbit.com/tabnine.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "code-amazonq", name: "Amazon Q", category: "coding",
-    summary: "AWS 클라우드 관련 코딩과 문제 해결에 특화",
-    description: "AWS 클라우드 관련 코딩과 문제 해결에 특화",
+    summary: "AWS 서비스 코드 작성에 특화. 클라우드 인프라 작업할 때 유용함",
+    description: "AWS 서비스 코드 작성에 특화. 클라우드 인프라 작업할 때 유용함",
     website: "https://aws.amazon.com/q",
     thumbnail: "https://logo.clearbit.com/amazon.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
