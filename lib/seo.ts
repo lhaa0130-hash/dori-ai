@@ -32,9 +32,12 @@ export function createMetadata({
     "ChatGPT",
     "DORI-AI",
     "AI 자동화",
-    "캐릭터 제작 가이드",
-    "프레리독 애니메이션",
-    "AI 교육 도구",
+    "AI 교육",
+    "AI 도구 모음",
+    "AI 뉴스",
+    "AI 커뮤니티 플랫폼",
+    "무료 AI 도구",
+    "AI 활용 방법",
   ];
 
   return {

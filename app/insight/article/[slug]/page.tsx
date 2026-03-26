@@ -2,13 +2,57 @@ import { getPostData } from '@/lib/posts';
 import { Suspense } from 'react';
 import Header from "@/components/layout/Header"; // Header 컴포넌트 임포트
 import Image from 'next/image'; // Image 컴포넌트 임포트
-import { useTheme } from 'next-themes'; // useTheme 훅 임포트
 import { MDXRemote } from 'next-mdx-remote/rsc'; // MDXRemote (RSC) 임포트
 import rehypeHighlight from 'rehype-highlight'; // 코드 하이라이팅 플러그인 임포트
 import rehypeSlug from 'rehype-slug'; // 제목에 id를 붙여주는 플러그인
 import rehypeAutolinkHeadings from 'rehype-autolink-headings'; // 제목에 링크를 붙여주는 플러그인
 import Link from 'next/link'; // Link 컴포넌트 임포트
 import remarkGfm from 'remark-gfm'; // GFM (GitHub Flavored Markdown) 지원
+import type { Metadata } from 'next';
+
+const SITE_URL = "https://dori-ai.com";
+
+// ✅ 아티클별 개별 메타데이터 생성 (SEO 핵심)
+export async function generateMetadata(
+  { params }: { params: { slug: string } }
+): Promise<Metadata> {
+  try {
+    const post = await getPostData(params.slug);
+    const title = post.title || "DORI-AI 인사이트";
+    const description = post.summary || post.description || `${title} - DORI-AI에서 최신 AI 트렌드와 인사이트를 확인하세요.`;
+    const image = post.thumbnail_url || `${SITE_URL}/og-default.png`;
+    const url = `${SITE_URL}/insight/article/${params.slug}`;
+    const tags = post.tags || [];
+
+    return {
+      title: `${title} | DORI-AI`,
+      description,
+      keywords: ["AI 트렌드", "인공지능", "DORI-AI", "AI 인사이트", ...tags].join(", "),
+      alternates: { canonical: url },
+      openGraph: {
+        title: `${title} | DORI-AI`,
+        description,
+        url,
+        siteName: "DORI-AI",
+        images: [{ url: image, width: 1200, height: 630, alt: title }],
+        locale: "ko_KR",
+        type: "article",
+        publishedTime: post.date,
+      },
+      twitter: {
+        card: "summary_large_image",
+        title: `${title} | DORI-AI`,
+        description,
+        images: [image],
+      },
+    };
+  } catch {
+    return {
+      title: "DORI-AI 인사이트",
+      description: "AI 트렌드와 인사이트를 확인하세요.",
+    };
+  }
+}
 
 export default async function InsightArticlePage({ params }: { params: { slug: string } }) {
   let post;
