@@ -4,7 +4,7 @@ description: "Cognizant의 최신 연구에 따르면 AI는 미국 일자리의 
 date: 2026-03-22
 author: DORI-AI
 category: 트렌드
-thumbnail: /images/thumbnails/trend/trend-46.png
+thumbnail: /thumbnails/trend/trend-46.png
 tags:
   - AI노동시장
   - 자동화
