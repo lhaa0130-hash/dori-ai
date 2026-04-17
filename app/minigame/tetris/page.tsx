@@ -55,6 +55,7 @@ export default function TetrisGame() {
     const lastTime = useRef(0);
     const requestRef = useRef<number>();
     const blockSizeRef = useRef(30);
+    const gameStateRef = useRef<GameState>("READY");
 
     // Responsive Block Size
     useEffect(() => {
@@ -97,6 +98,12 @@ export default function TetrisGame() {
 
     const [blockSize, setBlockSize] = useState(30);
 
+    // setGameState를 감싸서 ref도 동시에 업데이트
+    const setGameStateAndRef = (state: GameState) => {
+        gameStateRef.current = state;
+        setGameState(state);
+    };
+
     // ----------------------------------------------------------------------
     // Game Logic
     // ----------------------------------------------------------------------
@@ -123,7 +130,7 @@ export default function TetrisGame() {
         setLevel(1);
         dropInterval.current = 1000;
         dropCounter.current = 0;
-        setGameState("PLAYING");
+        setGameStateAndRef("PLAYING");
         lastTime.current = 0;
 
         if (requestRef.current) cancelAnimationFrame(requestRef.current);
@@ -235,7 +242,7 @@ export default function TetrisGame() {
     const createNewPiece = () => {
         piece.current = createPiece(Math.floor(Math.random() * 7) + 1);
         if (collide(grid.current, piece.current)) {
-            setGameState("GAME_OVER");
+            setGameStateAndRef("GAME_OVER");
             if (requestRef.current) cancelAnimationFrame(requestRef.current);
             // 게임오버 시 미니게임 플레이 카운트
             if (session?.user?.email) {
@@ -246,7 +253,7 @@ export default function TetrisGame() {
 
     // Update Loop
     const update = (time = 0) => {
-        if (gameState !== "PLAYING") return;
+        if (gameStateRef.current !== "PLAYING") return;
 
         const deltaTime = time - lastTime.current;
         lastTime.current = time;
@@ -304,7 +311,7 @@ export default function TetrisGame() {
 
     // Controls
     const handleKeyDown = useCallback((e: KeyboardEvent) => {
-        if (gameState !== "PLAYING" || !piece.current) return;
+        if (gameStateRef.current !== "PLAYING" || !piece.current) return;
 
         if (e.key === "ArrowLeft") {
             piece.current.x--;
@@ -317,22 +324,19 @@ export default function TetrisGame() {
         } else if (e.key === "ArrowUp") {
             playerRotate(1);
         }
-    }, [gameState]);
+    }, []);
 
     useEffect(() => {
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
     }, [handleKeyDown]);
 
-    // Start/Restart
+    // Start/Restart - rAF cleanup on unmount
     useEffect(() => {
-        if (gameState === "PLAYING") {
-            requestRef.current = requestAnimationFrame(update);
-        }
         return () => {
             if (requestRef.current) cancelAnimationFrame(requestRef.current);
         };
-    }, [gameState]);
+    }, []);
 
     // Initial Highscore Load
     useEffect(() => {

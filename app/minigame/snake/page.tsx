@@ -208,7 +208,8 @@ export default function SnakeGame() {
                     ref={canvasRef}
                     width={CANVAS_SIZE}
                     height={CANVAS_SIZE}
-                    className="block max-w-full max-h-[60vh] aspect-square shadow-2xl rounded-lg border-4 border-slate-700"
+                    className="block shadow-2xl rounded-lg border-4 border-slate-700"
+                    style={{ width: '100%', maxWidth: `${CANVAS_SIZE}px`, height: 'auto', aspectRatio: '1' }}
                 />
 
                 {gameState === "READY" && (

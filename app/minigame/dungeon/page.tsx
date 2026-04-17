@@ -165,8 +165,9 @@ export default function DungeonGame() {
         if (newMonsterHp === 0) {
             handleVictory();
         } else {
-            // 2. 몬스터 턴 (약간의 딜레이)
-            setTimeout(() => monsterTurn(newMonsterHp), 500);
+            // 2. 몬스터 턴 (약간의 딜레이) - 현재 player를 파라미터로 전달해 stale closure 방지
+            const currentPlayer = player;
+            setTimeout(() => monsterTurn(newMonsterHp, currentPlayer), 500);
         }
     };
 
@@ -189,7 +190,8 @@ export default function DungeonGame() {
         if (newMonsterHp === 0) {
             handleVictory();
         } else {
-            setTimeout(() => monsterTurn(newMonsterHp), 500);
+            const currentPlayer = player;
+            setTimeout(() => monsterTurn(newMonsterHp, currentPlayer), 500);
         }
     };
 
@@ -206,15 +208,17 @@ export default function DungeonGame() {
         setPlayer((prev) => ({ ...prev, hp: newHp, potions: prev.potions - 1 }));
         addLog(`🧪 포션을 사용하여 체력을 ${healAmount} 회복했습니다.`);
 
-        setTimeout(() => monsterTurn(monster!.hp), 500);
+        // 회복 후 player 상태를 반영해서 monsterTurn에 전달
+        const healedPlayer = { ...player, hp: newHp, potions: player.potions - 1 };
+        setTimeout(() => monsterTurn(monster!.hp, healedPlayer), 500);
     };
 
     // 몬스터 공격 턴
-    const monsterTurn = (currentMonsterHp: number) => {
+    const monsterTurn = (currentMonsterHp: number, currentPlayer: Player) => {
         if (!monster || currentMonsterHp <= 0) return;
 
-        const damage = Math.max(0, Math.floor(monster.str * (0.8 + Math.random() * 0.4)) - player.def);
-        const newPlayerHp = Math.max(0, player.hp - damage);
+        const damage = Math.max(0, Math.floor(monster.str * (0.8 + Math.random() * 0.4)) - currentPlayer.def);
+        const newPlayerHp = Math.max(0, currentPlayer.hp - damage);
 
         setPlayer((prev) => ({ ...prev, hp: newPlayerHp }));
         addLog(`🛡️ ${monster.name}의 공격! 당신은 ${damage}의 피해를 입었습니다.`);
@@ -224,8 +228,8 @@ export default function DungeonGame() {
             addLog("💀 눈앞이 깜깜해졌습니다... 패배했습니다.");
 
             // 패배 시에도 획득한 골드의 절반은 솜사탕으로 적립 (위로금)
-            if (player.gold > 0) {
-                const savePoint = Math.floor(player.gold / 2);
+            if (currentPlayer.gold > 0) {
+                const savePoint = Math.floor(currentPlayer.gold / 2);
                 updateUserPoints(savePoint, "던전RPG 패배 위로금");
                 addLog(`💰 획득한 골드의 일부(${savePoint}P)가 솜사탕으로 적립되었습니다.`);
             }

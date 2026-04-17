@@ -36,6 +36,7 @@ export default function Match3Game() {
     const [score, setScore] = useState(0);
     const [moves, setMoves] = useState(20);
     const [isGameOver, setIsGameOver] = useState(false);
+    const [touchStart, setTouchStart] = useState<{id: number, x: number, y: number} | null>(null);
 
     // Check for column of 3
     const checkForColumnOfThree = useCallback(() => {
@@ -153,9 +154,6 @@ export default function Match3Game() {
         const validMove = validMoves.includes(squareBeingReplacedId);
 
         if (validMove) {
-            currentColorArrangement[squareBeingReplacedId] = squareBeingDragged.getAttribute('style').backgroundColor; // Problematic: color stored in state, not dom
-            // Better implementation: Swap in state
-
             const colorDragged = currentColorArrangement[squareBeingDraggedId];
             const colorReplaced = currentColorArrangement[squareBeingReplacedId];
 
@@ -178,6 +176,57 @@ export default function Match3Game() {
                 setCurrentColorArrangement([...currentColorArrangement]);
             }
         }
+    };
+
+    // Touch handlers for swipe support
+    const handleTouchStart = (e: React.TouchEvent, id: number) => {
+        const touch = e.touches[0];
+        setTouchStart({ id, x: touch.clientX, y: touch.clientY });
+    };
+
+    const handleTouchEnd = (e: React.TouchEvent) => {
+        if (!touchStart) return;
+        const touch = e.changedTouches[0];
+        const dx = touch.clientX - touchStart.x;
+        const dy = touch.clientY - touchStart.y;
+
+        if (Math.abs(dx) < 10 && Math.abs(dy) < 10) { setTouchStart(null); return; }
+
+        let targetId: number;
+        if (Math.abs(dx) > Math.abs(dy)) {
+            targetId = touchStart.id + (dx > 0 ? 1 : -1);
+        } else {
+            targetId = touchStart.id + (dy > 0 ? WIDTH : -WIDTH);
+        }
+
+        // 유효한 범위인지 체크
+        if (targetId < 0 || targetId >= WIDTH * WIDTH) { setTouchStart(null); return; }
+        // 가로 이동 시 행 바뀌는 wrapping 방지
+        if (Math.abs(dx) > Math.abs(dy)) {
+            if (Math.floor(touchStart.id / WIDTH) !== Math.floor(targetId / WIDTH)) {
+                setTouchStart(null); return;
+            }
+        }
+
+        const colorDragged = currentColorArrangement[touchStart.id];
+        const colorReplaced = currentColorArrangement[targetId];
+
+        currentColorArrangement[targetId] = colorDragged;
+        currentColorArrangement[touchStart.id] = colorReplaced;
+
+        const isFourRow = checkForRowOfFour();
+        const isFourCol = checkForColumnOfFour();
+        const isThreeRow = checkForRowOfThree();
+        const isThreeCol = checkForColumnOfThree();
+
+        if (isFourRow || isFourCol || isThreeRow || isThreeCol) {
+            setMoves(prev => prev - 1);
+        } else {
+            currentColorArrangement[targetId] = colorReplaced;
+            currentColorArrangement[touchStart.id] = colorDragged;
+            setCurrentColorArrangement([...currentColorArrangement]);
+        }
+        setTouchStart(null);
     };
 
     // Create Board
@@ -265,11 +314,8 @@ export default function Match3Game() {
                                 onDragLeave={(e) => e.preventDefault()}
                                 onDrop={dragDrop}
                                 onDragEnd={dragEnd}
-                                onTouchStart={(e) => setSquareBeingDragged(e.target)} // Simple touch support attempt
-                                onTouchEnd={(e) => {
-                                    // Touch logic is complex for grid swap, omitted for simplified version
-                                    // Ideally would calculate swipe direction
-                                }}
+                                onTouchStart={(e) => handleTouchStart(e, index)}
+                                onTouchEnd={handleTouchEnd}
                             >
                                 {candyColor && (
                                     <motion.div

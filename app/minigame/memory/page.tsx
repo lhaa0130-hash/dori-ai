@@ -426,7 +426,7 @@ export default function MemoryGamePage() {
                 .perspective-1000 { perspective: 1000px; }
                 .rotate-y-180 { transform: rotateY(180deg); }
                 .transform-style-3d { transform-style: preserve-3d; }
-                .backface-hidden { backface-visibility: hidden; }
+                .backface-hidden { backface-visibility: hidden; -webkit-backface-visibility: hidden; }
                 @keyframes bounce-short {
                     0%, 100% { transform: translateY(-25%) scale(1.1); animation-timing-function: cubic-bezier(0.8,0,1,1); }
                     50% { transform: translateY(0) scale(1); animation-timing-function: cubic-bezier(0,0,0.2,1); }

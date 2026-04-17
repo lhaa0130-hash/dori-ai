@@ -57,12 +57,12 @@ export default function ColorMatchPage() {
 
     const generateQuestion = () => {
         const shuffled = [...COLOR_NAMES].sort(() => Math.random() - 0.5);
-        const target = shuffled[0];
-        const textColorObj = shuffled[1];
+        const correctColor = shuffled[0]; // 정답 색상 (버튼으로 눌러야 할 것)
+        const textColorObj = shuffled[1]; // 글자에 적용할 색상 (혼동용)
 
-        setTargetColor(target);
-        setDisplayText(textColorObj.kr);
-        setTextColor(textColorObj.rgb);
+        setTargetColor(correctColor);
+        setDisplayText(correctColor.kr); // 화면에 보이는 글자 = 정답 색 이름
+        setTextColor(textColorObj.rgb);  // 글자 색 = 혼동용 다른 색
         setOptions(shuffled.slice(0, 4).sort(() => Math.random() - 0.5));
     };
 

@@ -1,4 +1,5 @@
 import type { Config } from "tailwindcss";
+import plugin from "tailwindcss/plugin";
 
 const config: Config = {
   // [핵심] 다크모드를 'class' 기준으로 작동하게 설정합니다.
@@ -133,6 +134,18 @@ const config: Config = {
     require('@tailwindcss/typography'),
     // shadcn/ui plugins
     require("tailwindcss-animate"),
+    // 3D transform utilities for card flip animation
+    plugin(function({ addUtilities }) {
+      addUtilities({
+        '.rotate-y-180': { transform: 'rotateY(180deg)' },
+        '.transform-style-3d': { 'transform-style': 'preserve-3d' },
+        '.backface-hidden': {
+          'backface-visibility': 'hidden',
+          '-webkit-backface-visibility': 'hidden',
+        },
+        '.perspective-1000': { perspective: '1000px' },
+      });
+    }),
   ],
 };
 export default config;

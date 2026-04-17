@@ -37,6 +37,7 @@ export default function Game2048() {
     const [bestScore, setBestScore] = useState(0);
     const [gameOver, setGameOver] = useState(false);
     const [won, setWon] = useState(false);
+    const touchStartRef = useRef<{x: number, y: number} | null>(null);
 
     // Initialize Game
     useEffect(() => {
@@ -76,7 +77,7 @@ export default function Game2048() {
     }
 
     // Move Logic
-    const move = (direction: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT') => {
+    const move = useCallback((direction: 'UP' | 'DOWN' | 'LEFT' | 'RIGHT') => {
         if (gameOver || (won && score < WIN_SCORE)) return;
 
         let newGrid = grid.map(row => [...row]);
@@ -138,7 +139,7 @@ export default function Game2048() {
                 }
             }
         }
-    };
+    }, [grid, gameOver, won, bestScore, score, session]);
 
     function checkGameOver(currentGrid: Grid): boolean {
         // Check for empty cells
@@ -166,7 +167,7 @@ export default function Game2048() {
         };
         window.addEventListener("keydown", handleKeyDown);
         return () => window.removeEventListener("keydown", handleKeyDown);
-    }, [grid, gameOver, won]);
+    }, [move]);
 
     return (
         <div className="h-screen w-full bg-slate-900 text-white font-sans selection:bg-yellow-500/30 flex flex-col items-center justify-center p-4 overflow-hidden touch-none">
@@ -188,7 +189,23 @@ export default function Game2048() {
                 </div>
             </header>
 
-            <div className="relative bg-slate-800 p-2 rounded-lg" style={{ touchAction: "none" }}>
+            <div className="relative bg-slate-800 p-2 rounded-lg" style={{ touchAction: "none" }}
+                onTouchStart={(e) => {
+                    touchStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
+                }}
+                onTouchEnd={(e) => {
+                    if (!touchStartRef.current) return;
+                    const dx = e.changedTouches[0].clientX - touchStartRef.current.x;
+                    const dy = e.changedTouches[0].clientY - touchStartRef.current.y;
+                    touchStartRef.current = null;
+                    if (Math.abs(dx) < 20 && Math.abs(dy) < 20) return;
+                    if (Math.abs(dx) > Math.abs(dy)) {
+                        move(dx > 0 ? 'RIGHT' : 'LEFT');
+                    } else {
+                        move(dy > 0 ? 'DOWN' : 'UP');
+                    }
+                }}
+            >
 
                 <div className="grid grid-cols-4 gap-2 bg-slate-700 p-2 rounded">
                     {grid.map((row, i) =>
