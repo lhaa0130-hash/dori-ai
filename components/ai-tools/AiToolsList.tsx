@@ -74,23 +74,30 @@ function HighlightCard({ tool }: { tool: AiTool }) {
         </a>
       </div>
 
-      {/* 한줄 요약 (pros/cons 없을 때 대체) */}
-      {!tool.pros && !tool.cons && tool.summary && (
-        <p className="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed">
-          {tool.summary}
-        </p>
-      )}
+      {/* 장단점 (데이터가 없는 경우에도 이미지처럼 통일 표시) */}
+      {(() => {
+        const displayPros =
+          tool.pros?.length
+            ? tool.pros
+            : tool.strength
+              ? [tool.strength]
+              : tool.summary
+                ? [tool.summary]
+                : ["핵심 기능 요약"]; 
 
-      {/* 장단점 */}
-      {(tool.pros || tool.cons) && (
-        <div className="grid grid-cols-2 gap-3 text-sm">
-          {tool.pros && (
+        const displayCons =
+          tool.cons?.length
+            ? tool.cons
+            : ["세부 플랜/제한은 확인 필요"];
+
+        return (
+          <div className="grid grid-cols-2 gap-3 text-sm">
             <div>
               <p className="font-semibold text-green-600 dark:text-green-400 mb-1 text-xs">
                 ✅ 장점
               </p>
               <ul className="space-y-0.5">
-                {tool.pros.map((p, i) => (
+                {displayPros.map((p, i) => (
                   <li
                     key={i}
                     className="text-neutral-700 dark:text-neutral-300 flex items-start gap-1 text-xs"
@@ -101,14 +108,13 @@ function HighlightCard({ tool }: { tool: AiTool }) {
                 ))}
               </ul>
             </div>
-          )}
-          {tool.cons && (
+
             <div>
               <p className="font-semibold text-red-500 dark:text-red-400 mb-1 text-xs">
                 ❌ 단점
               </p>
               <ul className="space-y-0.5">
-                {tool.cons.map((c, i) => (
+                {displayCons.map((c, i) => (
                   <li
                     key={i}
                     className="text-neutral-700 dark:text-neutral-300 flex items-start gap-1 text-xs"
@@ -119,9 +125,9 @@ function HighlightCard({ tool }: { tool: AiTool }) {
                 ))}
               </ul>
             </div>
-          )}
-        </div>
-      )}
+          </div>
+        );
+      })()}
 
       {/* 실사용 후기 */}
       {tool.userReview && (
