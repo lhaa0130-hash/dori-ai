@@ -8,10 +8,13 @@ import { Search, ChevronDown, User, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter } from "next/navigation";
 
+const ADMIN_EMAIL = "lhaa0130@gmail.com";
+
 export default function Header() {
   const { session, logout } = useAuth();
   const router = useRouter();
   const [scrolled, setScrolled] = useState(false);
+  const isAdmin = session?.user?.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -95,8 +98,17 @@ export default function Header() {
               </Link>
 
               {/* Hover Dropdown */}
-              <div className="absolute top-full right-0 mt-2 w-32 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
+              <div className="absolute top-full right-0 mt-2 w-40 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
                 <div className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden backdrop-blur-xl bg-opacity-90 dark:bg-opacity-90">
+                  {isAdmin && (
+                    <Link
+                      href="/admin"
+                      className="w-full flex items-center gap-2 px-4 py-3 text-xs font-bold text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-500/10 transition-colors"
+                    >
+                      <span>🛡️</span>
+                      <span>관리자 패널</span>
+                    </Link>
+                  )}
                   <button
                     onClick={handleSignOut}
                     className="w-full flex items-center gap-2 px-4 py-3 text-xs font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors"

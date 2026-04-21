@@ -397,20 +397,37 @@ export function getPurchasedItems(email: string): string[] {
   }
 }
 
-export function purchaseItem(email: string, itemId: string, price: number): { success: boolean; message: string } {
-  const balance = getCottonCandyBalance(email);
-  if (balance < price) {
-    return { success: false, message: `솜사탕이 부족합니다. (현재 ${balance.toLocaleString()}개, 필요 ${price.toLocaleString()}개)` };
+/** 프리미엄(무료 이용) 여부 확인 */
+export function isPremiumUser(email: string): boolean {
+  if (typeof window === "undefined") return false;
+  try {
+    const raw = localStorage.getItem(PROFILE_KEY(email));
+    if (!raw) return false;
+    return JSON.parse(raw)?.isPremium === true;
+  } catch {
+    return false;
   }
+}
+
+export function purchaseItem(email: string, itemId: string, price: number): { success: boolean; message: string } {
   const purchased = getPurchasedItems(email);
   if (purchased.includes(itemId)) {
     return { success: false, message: "이미 구매한 아이템입니다." };
   }
 
-  spendCottonCandy(email, price, `상점 구매: ${itemId}`);
+  // 💎 프리미엄 회원은 무료로 구매
+  const premium = isPremiumUser(email);
+  if (!premium) {
+    const balance = getCottonCandyBalance(email);
+    if (balance < price) {
+      return { success: false, message: `솜사탕이 부족합니다. (현재 ${balance.toLocaleString()}개, 필요 ${price.toLocaleString()}개)` };
+    }
+    spendCottonCandy(email, price, `상점 구매: ${itemId}`);
+  }
+
   purchased.push(itemId);
   localStorage.setItem(SHOP_KEY(email), JSON.stringify(purchased));
-  return { success: true, message: "구매 완료!" };
+  return { success: true, message: premium ? "💎 프리미엄 혜택으로 무료 구매!" : "구매 완료!" };
 }
 
 // ─── 미니게임 / 퀴즈 통계 ─────────────────────────────────────────

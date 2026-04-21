@@ -8,6 +8,7 @@ import {
   getCottonCandyBalance,
   getPurchasedItems,
   purchaseItem,
+  isPremiumUser,
 } from "@/lib/cottonCandy";
 
 // ─── 상품 데이터 ────────────────────────────────────────────────────
@@ -66,6 +67,7 @@ export default function ShopPage() {
   const [purchased, setPurchased] = useState<string[]>([]);
   const [toast, setToast] = useState<{ type: "success" | "error"; msg: string } | null>(null);
   const [confirmItem, setConfirmItem] = useState<ShopItem | null>(null);
+  const [isPremium, setIsPremium] = useState(false);
 
   useEffect(() => setMounted(true), []);
 
@@ -73,6 +75,7 @@ export default function ShopPage() {
     if (!user?.email) return;
     setBalance(getCottonCandyBalance(user.email));
     setPurchased(getPurchasedItems(user.email));
+    setIsPremium(isPremiumUser(user.email));
   }, [user?.email]);
 
   useEffect(() => {
@@ -189,14 +192,22 @@ export default function ShopPage() {
             <p className="text-sm text-neutral-500 dark:text-zinc-400 text-center mb-6">
               {confirmItem.description}
             </p>
-            <div className="flex items-center justify-between bg-orange-50 dark:bg-orange-950/30 rounded-2xl p-4 mb-6 border border-orange-100 dark:border-orange-900/30">
-              <span className="text-sm font-bold text-neutral-600 dark:text-zinc-300">구매 금액</span>
-              <span className="font-black text-[#F9954E] text-lg">🍭 {confirmItem.price.toLocaleString()}개</span>
-            </div>
-            <div className="flex items-center justify-between text-xs text-neutral-400 dark:text-zinc-500 mb-6">
-              <span>현재 잔액</span>
-              <span>🍭 {balance.toLocaleString()}개 → <span className={balance < confirmItem.price ? "text-red-500" : "text-green-500"}>🍭 {(balance - confirmItem.price).toLocaleString()}개</span></span>
-            </div>
+            {isPremium ? (
+              <div className="bg-yellow-500/10 border border-yellow-500/30 rounded-2xl p-4 mb-6 text-center">
+                <span className="text-yellow-400 font-bold text-sm">💎 프리미엄 혜택 — 무료 구매!</span>
+              </div>
+            ) : (
+              <>
+                <div className="flex items-center justify-between bg-orange-50 dark:bg-orange-950/30 rounded-2xl p-4 mb-4 border border-orange-100 dark:border-orange-900/30">
+                  <span className="text-sm font-bold text-neutral-600 dark:text-zinc-300">구매 금액</span>
+                  <span className="font-black text-[#F9954E] text-lg">🍭 {confirmItem.price.toLocaleString()}개</span>
+                </div>
+                <div className="flex items-center justify-between text-xs text-neutral-400 dark:text-zinc-500 mb-6">
+                  <span>현재 잔액</span>
+                  <span>🍭 {balance.toLocaleString()}개 → <span className={balance < confirmItem.price ? "text-red-500" : "text-green-500"}>🍭 {(balance - confirmItem.price).toLocaleString()}개</span></span>
+                </div>
+              </>
+            )}
             <div className="flex gap-3">
               <button
                 onClick={() => setConfirmItem(null)}
@@ -229,18 +240,26 @@ export default function ShopPage() {
 
           {/* 잔액 표시 */}
           {user ? (
-            <div className="inline-flex items-center gap-3 bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl border border-orange-100 dark:border-orange-900/30 rounded-2xl px-6 py-3 shadow-sm">
-              <span className="text-2xl">🍭</span>
-              <div className="text-left">
-                <p className="text-[10px] font-bold text-neutral-400 dark:text-zinc-500 uppercase tracking-widest">내 솜사탕</p>
-                <p className="text-xl font-black text-[#F9954E]">{balance.toLocaleString()}개</p>
+            <div className="flex flex-col items-center gap-3">
+              {isPremium && (
+                <div className="inline-flex items-center gap-2 bg-yellow-500/10 border border-yellow-500/30 rounded-2xl px-5 py-2">
+                  <span className="text-lg">💎</span>
+                  <span className="text-sm font-bold text-yellow-400">프리미엄 회원 — 모든 아이템 무료</span>
+                </div>
+              )}
+              <div className="inline-flex items-center gap-3 bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl border border-orange-100 dark:border-orange-900/30 rounded-2xl px-6 py-3 shadow-sm">
+                <span className="text-2xl">🍭</span>
+                <div className="text-left">
+                  <p className="text-[10px] font-bold text-neutral-400 dark:text-zinc-500 uppercase tracking-widest">내 솜사탕</p>
+                  <p className="text-xl font-black text-[#F9954E]">{balance.toLocaleString()}개</p>
+                </div>
+                <Link
+                  href="/my"
+                  className="ml-4 px-4 py-2 rounded-xl bg-orange-50 dark:bg-orange-950/30 text-[#F9954E] text-xs font-black hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-all"
+                >
+                  더 모으기 →
+                </Link>
               </div>
-              <Link
-                href="/my"
-                className="ml-4 px-4 py-2 rounded-xl bg-orange-50 dark:bg-orange-950/30 text-[#F9954E] text-xs font-black hover:bg-orange-100 dark:hover:bg-orange-900/30 transition-all"
-              >
-                더 모으기 →
-              </Link>
             </div>
           ) : (
             <div className="inline-flex items-center gap-3 bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl border border-neutral-200 dark:border-zinc-800 rounded-2xl px-6 py-3">
