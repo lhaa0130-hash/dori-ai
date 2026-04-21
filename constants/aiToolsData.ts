@@ -19,7 +19,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     pros: ["파일 전체를 이해하고 코드 작성", "자연어 명령으로 리팩토링", "무료 플랜 제공"],
     cons: ["고급 기능은 유료 ($20/월)", "대형 프로젝트에서 느릴 수 있음"],
     userReview: "한 번 쓰면 못 돌아가요. 코딩 속도가 3배는 빨라집니다.",
-    topPick: true, topRank: 1
+    topPick: true, topRank: 3
   },
   {
     id: "agent-devin", name: "Devin", category: "agent",
@@ -32,7 +32,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     pros: ["전체 개발 프로세스 자동화", "GitHub 이슈 자동 해결", "24시간 개발 가능"],
     cons: ["월 $500 이상 고가", "복잡한 비즈니스 로직은 아직 한계"],
     userReview: "PR 올리고 자고 일어나면 머지 준비 완료. 미래에서 온 것 같음.",
-    topPick: true, topRank: 2
+    topPick: false
   },
   {
     id: "agent-manus", name: "Manus", category: "agent",
@@ -45,7 +45,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     pros: ["완전 자율 멀티태스킹", "실제 컴퓨터처럼 작업 수행", "복잡한 리서치 자동화"],
     cons: ["현재 대기자 초대 방식", "긴 작업은 비용 증가"],
     userReview: "리서치 보고서 작성 시켰더니 출처까지 찾아서 완성해줬어요.",
-    topPick: true, topRank: 3
+    topPick: true, topRank: 2
   },
   {
     id: "agent-n8n", name: "n8n", category: "agent",
@@ -99,6 +99,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     website: "https://genspark.ai",
     thumbnail: "https://logo.clearbit.com/genspark.ai",
     userReview: "리서치부터 PPT 완성까지 한 번의 프롬프트로 끝납니다. 업무 시간이 반으로 줄었어요.",
+    topPick: true, topRank: 1,
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
