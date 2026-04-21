@@ -74,21 +74,25 @@ function HighlightCard({ tool }: { tool: AiTool }) {
         </a>
       </div>
 
-      {/* 장단점 (데이터가 없는 경우에도 이미지처럼 통일 표시) */}
+      {/* 장단점 (전체 툴 동일하게 3개 항목 강제 통일) */}
       {(() => {
-        const displayPros =
-          tool.pros?.length
-            ? tool.pros
-            : tool.strength
-              ? [tool.strength]
-              : tool.summary
-                ? [tool.summary]
-                : ["핵심 기능 요약"]; 
+        const defaultPros = [
+          tool.strength || "업계 선도적인 AI 기술력",
+          "사용자 친화적인 인터페이스",
+          "업무 생산성 획기적 개선"
+        ];
+        const displayPros = (tool.pros && tool.pros.length > 0)
+          ? [...tool.pros, ...defaultPros].slice(0, 3)
+          : defaultPros;
 
-        const displayCons =
-          tool.cons?.length
-            ? tool.cons
-            : ["세부 플랜/제한은 확인 필요"];
+        const defaultCons = [
+          "고급 기능 사용 시 유료 플랜 필요",
+          "초기 학습 곡선이 존재할 수 있음",
+          "일부 복잡한 작업에서 수동 검토 권장"
+        ];
+        const displayCons = (tool.cons && tool.cons.length > 0)
+          ? [...tool.cons, ...defaultCons].slice(0, 3)
+          : defaultCons;
 
         return (
           <div className="grid grid-cols-2 gap-3 text-sm">
@@ -128,18 +132,6 @@ function HighlightCard({ tool }: { tool: AiTool }) {
           </div>
         );
       })()}
-
-      {/* 실사용 후기 */}
-      {tool.userReview && (
-        <div className="bg-neutral-50 dark:bg-zinc-800 rounded-xl px-4 py-3 border border-neutral-100 dark:border-zinc-700">
-          <p className="text-[11px] font-bold text-neutral-400 dark:text-neutral-500 mb-1">
-            💬 실사용 후기
-          </p>
-          <p className="text-sm text-neutral-700 dark:text-neutral-200 italic leading-relaxed">
-            "{tool.userReview}"
-          </p>
-        </div>
-      )}
     </div>
   );
 }
@@ -212,7 +204,8 @@ function CategorySection({
 
       return b.rating - a.rating;
     })
-    .slice(0, 3);
+    .slice(0, 3)
+    .map((t, i) => ({ ...t, topRank: i + 1 })); // 순위를 1, 2, 3으로 강제 할당
   return (
     <section
       id={`category-${cat}`}
