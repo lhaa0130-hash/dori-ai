@@ -346,7 +346,7 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
 
   useEffect(() => {
     setMounted(true);
-    const CURRENT_SEED_VERSION = "v2-2026-04-22";
+    const CURRENT_SEED_VERSION = "v3-2026-04-22";
     try {
       const savedVersion = localStorage.getItem('dori_community_version');
       const savedPosts = localStorage.getItem('dori_community_posts');
