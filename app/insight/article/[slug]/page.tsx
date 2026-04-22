@@ -172,51 +172,33 @@ export async function generateStaticParams() {
     const { getSortedPostsData } = await import('@/lib/posts');
     const { getAllTrends } = await import('@/lib/trends');
     const { getAllGuides } = await import('@/lib/guides');
+    const { getAllAnalyses } = await import('@/lib/analysis');
+    const { getAllReports } = await import('@/lib/reports');
+    const { getAllCurations } = await import('@/lib/curation');
 
     const posts = getSortedPostsData();
     const trends = getAllTrends();
     const guides = getAllGuides();
-
-    // 빌드 타임 디버깅
-    console.log('📝 Found posts:', posts.length);
-    console.log('📝 Found trends:', trends.length);
-    console.log('📝 Found guides:', guides.length);
+    const analyses = getAllAnalyses();
+    const reports = getAllReports();
+    const curations = getAllCurations();
 
     let params: { slug: string }[] = [];
 
-    // 1. 일반 포스트 slugs
-    if (posts.length > 0) {
-      posts.forEach((post) => {
-        params.push({ slug: String(post.id) });
-      });
-    }
+    posts.forEach((post) => params.push({ slug: String(post.id) }));
+    trends.forEach((trend) => params.push({ slug: trend.slug }));
+    guides.forEach((guide) => params.push({ slug: guide.slug }));
+    analyses.forEach((item) => params.push({ slug: item.slug }));
+    reports.forEach((item) => params.push({ slug: item.slug }));
+    curations.forEach((item) => params.push({ slug: item.slug }));
 
-    // 2. 트렌드 slugs
-    if (trends.length > 0) {
-      trends.forEach((trend) => {
-        // slug가 있으면 사용, 없으면 id 사용? id가 없으므로 slug 사용
-        // 주의: getPostData에서 slug를 어떻게 찾는지 확인 필요
-        params.push({ slug: trend.slug });
-      });
-    }
-
-    // 3. 가이드 slugs
-    if (guides.length > 0) {
-      guides.forEach((guide) => {
-        params.push({ slug: guide.slug });
-      });
-    }
-
-    // 포스트가 하나도 없으면 fallback 경로 제공 (빌드 에러 방지)
     if (params.length === 0) {
-      console.warn('⚠️ No posts/trends/guides found. Providing fallback params.');
       return [{ slug: 'placeholder' }];
     }
 
     return params;
   } catch (error) {
     console.error('❌ Error in generateStaticParams:', error);
-    // 에러 시에도 fallback 제공
     return [{ slug: 'placeholder' }];
   }
 }
