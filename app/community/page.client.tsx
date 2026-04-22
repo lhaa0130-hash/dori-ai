@@ -33,22 +33,25 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
 
   useEffect(() => {
     setMounted(true);
-    // Load posts from localStorage, seed if empty
+    // Load posts from localStorage, seed if empty or version mismatch
+    const CURRENT_SEED_VERSION = "v2-2026-04-22";
     try {
+      const savedVersion = localStorage.getItem('dori_community_version');
       const savedPosts = localStorage.getItem('dori_community_posts');
-      if (savedPosts) {
+      if (savedPosts && savedVersion === CURRENT_SEED_VERSION) {
         const parsed: Post[] = JSON.parse(savedPosts);
         if (parsed.length > 0) {
           setPosts(parsed);
           return;
         }
       }
-      // localStorage가 비어 있으면 시딩 API로 초기화
+      // 버전 불일치 또는 비어있으면 시딩 API로 초기화
       fetch('/api/seed-community')
         .then((r) => r.json())
         .then((data) => {
           if (data.posts && Array.isArray(data.posts)) {
             localStorage.setItem('dori_community_posts', JSON.stringify(data.posts));
+            localStorage.setItem('dori_community_version', CURRENT_SEED_VERSION);
             setPosts(data.posts);
           }
         })
