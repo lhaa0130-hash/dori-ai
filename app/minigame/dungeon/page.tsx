@@ -91,9 +91,11 @@ const WEAPON_INFO: Record<WeaponType, { range: number; dmgType: "p" | "m"; passi
 // ============================================================================
 
 export default function DoriCraft() {
-  const { session } = useAuth();
+  const { session, status } = useAuth();
+  const isLoggedIn = status === "authenticated" && !!session;
   const [screen, setScreen] = useState<GameScreen>("TITLE");
   const [userPoints, setUserPoints] = useState(0);
+  const [showSignupNudge, setShowSignupNudge] = useState(false);
   const [player, setPlayer] = useState<Player>(() => ({
     level: 1,
     exp: 0,
@@ -141,9 +143,11 @@ export default function DoriCraft() {
     }
   }, [session]);
 
-  const saveProgress = (email: string) => {
-    const data = JSON.stringify({ player, zone: player.zone });
-    localStorage.setItem(`dori_craft_${email}`, data);
+  const saveProgress = (p: Player) => {
+    // 로그인한 경우에만 저장
+    if (!session?.user?.email) return;
+    const data = JSON.stringify({ player: p });
+    localStorage.setItem(`dori_craft_${session.user.email}`, data);
   };
 
   const loadProgress = (email: string) => {
@@ -153,7 +157,7 @@ export default function DoriCraft() {
         const { player: saved } = JSON.parse(data);
         setPlayer(saved);
         setScreen("GAME");
-        addLog(`✅ 게임 데이터 로드됨. Zone ${saved.zone + 1}`);
+        addLog(`✅ 저장된 데이터 로드됨. Zone ${saved.zone + 1}`);
       } catch (e) {
         console.error("Load error:", e);
       }
@@ -274,9 +278,11 @@ export default function DoriCraft() {
 
   const nextZone = () => {
     if (player.zone < 9) {
-      setPlayer((prev) => ({ ...prev, zone: prev.zone + 1, x: 7, y: 7 }));
-      if (session?.user?.email) saveProgress(session.user.email);
-      addLog(`➡️ Zone ${player.zone + 2}로 이동!`);
+      const updated = { ...player, zone: player.zone + 1, x: 7, y: 7 };
+      setPlayer(updated);
+      saveProgress(updated);
+      if (isLoggedIn) addLog(`💾 저장됨 | ➡️ Zone ${player.zone + 2}로 이동!`);
+      else addLog(`➡️ Zone ${player.zone + 2}로 이동! (저장 안 됨 — 로그인 필요)`);
     } else {
       addLog("🏆 모든 존을 클리어했습니다!");
     }
@@ -304,17 +310,55 @@ export default function DoriCraft() {
 
   if (screen === "TITLE") {
     return (
-      <div className="h-screen w-full bg-gradient-to-b from-slate-950 to-black flex items-center justify-center">
-        <div className="text-center max-w-md px-4">
+      <div className="h-screen w-full bg-gradient-to-b from-slate-950 to-black flex items-center justify-center px-4">
+        <div className="text-center max-w-md w-full">
           <div className="text-7xl mb-4">⚔️</div>
           <h1 className="text-5xl font-bold text-white mb-2 tracking-wider">도리 크래프트</h1>
           <p className="text-slate-400 mb-8">성장형 자동 RPG 게임</p>
-          <button
-            onClick={() => setScreen("GAME")}
-            className="w-full bg-orange-600 hover:bg-orange-500 text-white font-bold py-4 rounded-xl text-lg shadow-lg active:scale-95 transition-all"
-          >
-            시작하기
-          </button>
+
+          {isLoggedIn ? (
+            // 로그인 상태
+            <div className="space-y-3">
+              <div className="bg-emerald-900/30 border border-emerald-700/40 rounded-xl px-4 py-3 mb-4 text-sm text-emerald-300 flex items-center gap-2">
+                <span>💾</span>
+                <span><span className="font-bold">{session!.user.name}</span>님, 진행 상황이 자동 저장됩니다.</span>
+              </div>
+              <button
+                onClick={() => setScreen("GAME")}
+                className="w-full bg-orange-600 hover:bg-orange-500 text-white font-bold py-4 rounded-xl text-lg shadow-lg active:scale-95 transition-all"
+              >
+                시작하기
+              </button>
+            </div>
+          ) : (
+            // 비로그인 상태
+            <div className="space-y-3">
+              <div className="bg-slate-800/60 border border-slate-700 rounded-xl px-4 py-4 mb-2 text-sm text-slate-300 space-y-1">
+                <p className="text-base font-bold text-white mb-2">🔒 로그인하면 게임이 저장돼요</p>
+                <p className="text-slate-400 text-xs">로그인 없이도 플레이할 수 있지만,<br/>앱을 닫으면 진행 상황이 사라집니다.</p>
+              </div>
+              <div className="grid grid-cols-2 gap-2">
+                <Link
+                  href="/login?redirect=/minigame/dungeon"
+                  className="flex-1 bg-orange-600 hover:bg-orange-500 text-white font-bold py-3 rounded-xl text-sm text-center active:scale-95 transition-all"
+                >
+                  로그인하고 시작
+                </Link>
+                <Link
+                  href="/signup?redirect=/minigame/dungeon"
+                  className="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-bold py-3 rounded-xl text-sm text-center active:scale-95 transition-all"
+                >
+                  회원가입
+                </Link>
+              </div>
+              <button
+                onClick={() => setScreen("GAME")}
+                className="w-full text-slate-500 hover:text-slate-300 text-sm py-2 transition-colors"
+              >
+                저장 없이 그냥 플레이 →
+              </button>
+            </div>
+          )}
         </div>
       </div>
     );
@@ -372,7 +416,7 @@ export default function DoriCraft() {
 
   return (
     <div className="h-screen w-full bg-slate-950 text-white font-sans overflow-hidden">
-      <div className="max-w-md mx-auto h-full flex flex-col bg-black border-x border-slate-800">
+      <div className="max-w-md mx-auto h-full flex flex-col bg-black border-x border-slate-800 relative">
         {/* HEADER */}
         <div className="flex items-center justify-between p-4 bg-slate-900/50 border-b border-slate-800">
           <Link href="/minigame" className="p-2 hover:bg-slate-800 rounded-lg transition-colors">
@@ -383,6 +427,51 @@ export default function DoriCraft() {
             <span className="text-xs text-yellow-500 font-bold">{userPoints}</span>
           </div>
         </div>
+
+        {/* 비로그인 경고 배너 */}
+        {!isLoggedIn && (
+          <div
+            className="flex items-center justify-between px-4 py-2 bg-amber-900/30 border-b border-amber-700/30 cursor-pointer"
+            onClick={() => setShowSignupNudge(v => !v)}
+          >
+            <span className="text-amber-300 text-xs font-bold">⚠️ 저장 안 됨 — 로그인하면 자동 저장</span>
+            <span className="text-amber-400 text-xs">가입하기 →</span>
+          </div>
+        )}
+
+        {/* 회원가입 유도 팝업 */}
+        <AnimatePresence>
+          {showSignupNudge && !isLoggedIn && (
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              className="absolute top-20 left-4 right-4 z-50 bg-slate-900 border border-amber-600/50 rounded-2xl p-4 shadow-2xl"
+            >
+              <button
+                onClick={() => setShowSignupNudge(false)}
+                className="absolute top-3 right-3 text-slate-500 hover:text-white text-xs"
+              >✕</button>
+              <p className="text-2xl mb-2">💾</p>
+              <p className="text-white font-bold text-sm mb-1">지금 진행 상황을 저장하세요</p>
+              <p className="text-slate-400 text-xs mb-4">로그인하지 않으면 게임을 닫을 때<br/>모든 진행 상황이 사라집니다.</p>
+              <div className="flex gap-2">
+                <Link
+                  href="/signup?redirect=/minigame/dungeon"
+                  className="flex-1 bg-orange-600 hover:bg-orange-500 text-white font-bold py-2 rounded-xl text-xs text-center transition-all"
+                >
+                  회원가입
+                </Link>
+                <Link
+                  href="/login?redirect=/minigame/dungeon"
+                  className="flex-1 bg-slate-700 hover:bg-slate-600 text-white font-bold py-2 rounded-xl text-xs text-center transition-all"
+                >
+                  로그인
+                </Link>
+              </div>
+            </motion.div>
+          )}
+        </AnimatePresence>
 
         {/* GAME WORLD */}
         <div className="flex-1 relative bg-gradient-to-b from-slate-900 to-black overflow-hidden">
