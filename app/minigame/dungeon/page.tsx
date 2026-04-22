@@ -1,490 +1,506 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { ArrowLeft, Sword, Shield, Heart, Zap, RefreshCw, Skull, Trophy, Coins, Plus } from "lucide-react";
+import { ArrowLeft, Sword, Shield, Zap, Heart, MapPin, Package, Settings, Plus } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { addCottonCandy, getCottonCandyBalance, incrementMinigamePlays, spendCottonCandy } from "@/lib/cottonCandy";
 
-// ----------------------------------------------------------------------
-// Types & Constants
-// ----------------------------------------------------------------------
+// ============================================================================
+// TYPES & CONSTANTS
+// ============================================================================
 
-type GameState = "READY" | "BATTLE" | "VICTORY" | "DEFEAT" | "LEVEL_UP";
+type GameScreen = "TITLE" | "GAME" | "INVENTORY" | "SPECIAL_DUNGEON";
+type WeaponType = "검" | "마단도" | "활" | "지팡이";
+type Grade = "Z" | "Y" | "X" | "W" | "V" | "U" | "T" | "S" | "R" | "Q" | "P" | "O" | "N" | "M" | "L" | "K" | "J" | "I" | "H" | "G" | "F" | "E" | "D" | "C" | "B" | "A";
+
+const GRADE_ORDER: Grade[] = ["Z", "Y", "X", "W", "V", "U", "T", "S", "R", "Q", "P", "O", "N", "M", "L", "K", "J", "I", "H", "G", "F", "E", "D", "C", "B", "A"];
+
+interface Weapon {
+  id: string;
+  type: WeaponType;
+  grade: Grade;
+  enhancement: number; // 0~100
+  orbs: string[]; // 오행 구슬 ids
+  passives: string[]; // 패시브 이름들
+}
+
+interface PlayerStats {
+  hp: number;
+  maxHp: number;
+  mp: number;
+  maxMp: number;
+  pAtk: number;
+  mAtk: number;
+  critRate: number; // 0~100 %
+  evasion: number; // 0~50 %
+  moveSpeed: number; // 1~500 %
+  atkSpeed: number; // 1~1000 %
+  critDmg: number; // 100~300 %
+}
 
 interface Player {
-    level: number;
-    hp: number;
-    maxHp: number;
-    mp: number;
-    maxMp: number;
-    exp: number;
-    maxExp: number;
-    str: number;
-    def: number;
-    gold: number; // 게임 내 획득 골드 (누적)
-    potions: number;
+  level: number;
+  exp: number;
+  maxExp: number;
+  stats: PlayerStats;
+  weapon: Weapon;
+  zone: number;
+  gold: number;
+  essences: number; // 정수
+  x: number;
+  y: number;
 }
 
-interface Monster {
-    id: number;
-    name: string;
-    emoji: string;
-    hp: number;
-    maxHp: number;
-    str: number;
-    exp: number;
-    gold: number;
+interface Enemy {
+  id: string;
+  type: string;
+  zone: number;
+  hp: number;
+  maxHp: number;
+  pAtk: number;
+  mAtk: number;
+  x: number;
+  y: number;
+  isBoss: boolean;
 }
 
-const INITIAL_PLAYER: Player = {
-    level: 1,
-    hp: 100,
-    maxHp: 100,
-    mp: 50,
-    maxMp: 50,
-    exp: 0,
-    maxExp: 100,
-    str: 10,
-    def: 2,
-    gold: 0,
-    potions: 3,
-};
-
-const MONSTERS: Monster[] = [
-    { id: 1, name: "슬라임", emoji: "💧", hp: 30, maxHp: 30, str: 5, exp: 20, gold: 10 },
-    { id: 2, name: "고블린", emoji: "👺", hp: 60, maxHp: 60, str: 10, exp: 40, gold: 25 },
-    { id: 3, name: "스켈레톤", emoji: "💀", hp: 100, maxHp: 100, str: 15, exp: 70, gold: 50 },
-    { id: 4, name: "오크 전사", emoji: "👹", hp: 200, maxHp: 200, str: 25, exp: 120, gold: 100 },
-    { id: 5, name: "다크 나이트", emoji: "👿", hp: 400, maxHp: 400, str: 40, exp: 250, gold: 300 },
-    { id: 6, name: "레드 드래곤", emoji: "🐲", hp: 1000, maxHp: 1000, str: 80, exp: 1000, gold: 1000 },
+const ZONES_DATA = [
+  { name: "초원", bosses: ["슬라임 킹"], color: "bg-green-900/20", enemyTypes: ["슬라임", "스라임"] },
+  { name: "숲", bosses: ["고블린 우두머리"], color: "bg-emerald-900/20", enemyTypes: ["고블린", "고블린 검사"] },
+  { name: "동굴", bosses: ["스켈레톤 로드"], color: "bg-slate-900/40", enemyTypes: ["스켈레톤", "해골 마법사"] },
+  { name: "화산", bosses: ["불의 정령"], color: "bg-red-900/20", enemyTypes: ["불 원소", "라바 골렘"] },
+  { name: "얼음 산맥", bosses: ["빙설의 여왕"], color: "bg-blue-900/20", enemyTypes: ["얼음 정령", "빙결 공룡"] },
+  { name: "어두운 숲", bosses: ["밤의 군주"], color: "bg-purple-900/20", enemyTypes: ["어둠 해골", "환상의 사냥꾼"] },
+  { name: "비의 늪", bosses: ["늪의 타이탄"], color: "bg-lime-900/20", enemyTypes: ["독 거미", "습지 괴물"] },
+  { name: "하늘 성", bosses: ["천사 기사"], color: "bg-cyan-900/20", enemyTypes: ["빛의 영혼", "천상의 수호자"] },
+  { name: "지옥 문", bosses: ["악마 군장"], color: "bg-orange-900/20", enemyTypes: ["악마", "불타는 악마"] },
+  { name: "신의 영역", bosses: ["신의 화신"], color: "bg-indigo-900/30", enemyTypes: ["신성한 존재", "차원의 틈"] },
 ];
 
-const POTION_PRICE = 100; // 물약 가격 (포인트)
+const WEAPON_INFO: Record<WeaponType, { range: number; dmgType: "p" | "m"; passives: string[] }> = {
+  "검": { range: 3, dmgType: "p", passives: ["공격력 증가", "거인 베기", "갑옷 파괴", "휩쓸기", "처형"] },
+  "마단도": { range: 3, dmgType: "m", passives: ["마법 공속 증가", "마력 역류", "잔상 베기", "마력 약화", "무아지경"] },
+  "활": { range: 8, dmgType: "p", passives: ["공격 속도 증가", "더블 샷", "급소 사격", "발목 저격", "집중력 유지"] },
+  "지팡이": { range: 8, dmgType: "m", passives: ["마법 공격력 증가", "마력 폭발", "원소 과부하", "정신 집중", "보호막"] },
+};
 
-// ----------------------------------------------------------------------
-// Main Component
-// ----------------------------------------------------------------------
+// ============================================================================
+// GAME COMPONENT
+// ============================================================================
 
-export default function DungeonGame() {
-    const { session } = useAuth();
-    const [gameState, setGameState] = useState<GameState>("READY");
-    const [player, setPlayer] = useState<Player>(INITIAL_PLAYER);
-    const [monster, setMonster] = useState<Monster | null>(null);
-    const [floor, setFloor] = useState(1);
-    const [logs, setLogs] = useState<string[]>([]);
+export default function DoriCraft() {
+  const { session } = useAuth();
+  const [screen, setScreen] = useState<GameScreen>("TITLE");
+  const [userPoints, setUserPoints] = useState(0);
+  const [player, setPlayer] = useState<Player>(() => ({
+    level: 1,
+    exp: 0,
+    maxExp: 100,
+    stats: {
+      hp: 100,
+      maxHp: 100,
+      mp: 100,
+      maxMp: 100,
+      pAtk: 1,
+      mAtk: 1,
+      critRate: 0,
+      evasion: 0,
+      moveSpeed: 100,
+      atkSpeed: 100,
+      critDmg: 100,
+    },
+    weapon: {
+      id: "sword-z-0",
+      type: "검",
+      grade: "Z",
+      enhancement: 0,
+      orbs: [],
+      passives: WEAPON_INFO["검"].passives,
+    },
+    zone: 0,
+    gold: 0,
+    essences: 0,
+    x: 7,
+    y: 7,
+  }));
 
-    // 실제 사용자 포인트
-    const [userPoints, setUserPoints] = useState(0);
+  const [enemies, setEnemies] = useState<Enemy[]>([]);
+  const [logs, setLogs] = useState<string[]>([]);
+  const gameLoopRef = useRef<NodeJS.Timeout>();
+  const keysPressed = useRef<Set<string>>(new Set());
+  const lastAttackRef = useRef<number>(0);
 
-    // 스크롤 자동 이동을 위한 Ref
-    const logContainerRef = useRef<HTMLDivElement>(null);
+  // ========== INITIALIZATION & SAVE/LOAD ==========
 
-    // 1. 사용자 포인트 로드
-    useEffect(() => {
-        if (session?.user?.email) {
-            setUserPoints(getCottonCandyBalance(session.user.email));
-        }
-    }, [session]);
+  useEffect(() => {
+    if (session?.user?.email) {
+      setUserPoints(getCottonCandyBalance(session.user.email));
+      loadProgress(session.user.email);
+    }
+  }, [session]);
 
-    // 포인트 업데이트 함수 (delta: 증가분, reason: 사유)
-    const updateUserPoints = (delta: number, reason: string) => {
-        if (!session?.user?.email || delta <= 0) return;
-        const newBalance = addCottonCandy(session.user.email, delta, reason);
-        setUserPoints(newBalance);
-        window.dispatchEvent(new Event("point-updated"));
-    };
+  const saveProgress = (email: string) => {
+    const data = JSON.stringify({ player, zone: player.zone });
+    localStorage.setItem(`dori_craft_${email}`, data);
+  };
 
-    useEffect(() => {
-        if (logContainerRef.current) {
-            logContainerRef.current.scrollTop = logContainerRef.current.scrollHeight;
-        }
-    }, [logs]);
+  const loadProgress = (email: string) => {
+    const data = localStorage.getItem(`dori_craft_${email}`);
+    if (data) {
+      try {
+        const { player: saved } = JSON.parse(data);
+        setPlayer(saved);
+        setScreen("GAME");
+        addLog(`✅ 게임 데이터 로드됨. Zone ${saved.zone + 1}`);
+      } catch (e) {
+        console.error("Load error:", e);
+      }
+    }
+  };
 
-    // 게임 로그 추가 (최대 10개로 제한)
-    const addLog = (message: string) => {
-        setLogs((prev) => [...prev, message].slice(-10));
-    };
+  // ========== GAME LOOP ==========
 
-    // 물약 구매
-    const buyPotion = () => {
-        if (userPoints < POTION_PRICE) {
-            addLog("🚫 포인트가 부족합니다!");
-            return;
-        }
-        if (session?.user?.email) {
-            const ok = spendCottonCandy(session.user.email, POTION_PRICE, "던전 물약 구매");
-            if (!ok) {
-                addLog("🚫 포인트가 부족합니다!");
-                return;
-            }
-            setUserPoints(getCottonCandyBalance(session.user.email));
-            window.dispatchEvent(new Event("point-updated"));
-        }
-        setPlayer(prev => ({ ...prev, potions: prev.potions + 1 }));
-        addLog(`🧪 물약을 구매했습니다. (보유: ${player.potions + 1})`);
-    };
+  useEffect(() => {
+    if (screen !== "GAME") return;
 
-    // 게임 시작 (층 이동)
-    const startGame = () => {
-        const monsterIdx = Math.min(Math.floor((floor - 1) / 5), MONSTERS.length - 1);
-        let targetMonster = MONSTERS[Math.min(floor - 1, MONSTERS.length - 1)];
+    const handleKeyDown = (e: KeyboardEvent) => keysPressed.current.add(e.key.toUpperCase());
+    const handleKeyUp = (e: KeyboardEvent) => keysPressed.current.delete(e.key.toUpperCase());
 
-        // 몬스터 체력은 층이 올라갈수록 조금씩 증가
-        const statMultiplier = 1 + (floor - 1) * 0.1;
+    window.addEventListener("keydown", handleKeyDown);
+    window.addEventListener("keyup", handleKeyUp);
 
-        setMonster({
-            ...targetMonster,
-            maxHp: Math.floor(targetMonster.maxHp * statMultiplier),
-            hp: Math.floor(targetMonster.maxHp * statMultiplier),
-            str: Math.floor(targetMonster.str * statMultiplier),
-            exp: Math.floor(targetMonster.exp * statMultiplier),
-            gold: Math.floor(targetMonster.gold * statMultiplier),
+    gameLoopRef.current = setInterval(() => {
+      setPlayer((prev) => {
+        let newX = prev.x;
+        let newY = prev.y;
+        const moveSpeed = prev.stats.moveSpeed / 100;
+
+        if (keysPressed.current.has("W") && newY > 0) newY -= moveSpeed;
+        if (keysPressed.current.has("S") && newY < 14) newY += moveSpeed;
+        if (keysPressed.current.has("A") && newX > 0) newX -= moveSpeed;
+        if (keysPressed.current.has("D") && newX < 14) newX += moveSpeed;
+
+        return { ...prev, x: newX, y: newY };
+      });
+
+      // Auto-attack enemies in range
+      const now = Date.now();
+      if (now - lastAttackRef.current > 500) {
+        setPlayer((prev) => {
+          const range = WEAPON_INFO[prev.weapon.type].range;
+          const nearby = enemies.filter(
+            (e) => Math.hypot(e.x - prev.x, e.y - prev.y) <= range
+          );
+
+          if (nearby.length > 0) {
+            const target = nearby[0];
+            const dmgType = WEAPON_INFO[prev.weapon.type].dmgType;
+            const atk = dmgType === "p" ? prev.stats.pAtk : prev.stats.mAtk;
+            const baseDmg = atk * (0.8 + Math.random() * 0.4) * (prev.stats.atkSpeed / 100);
+            const isCrit = Math.random() * 100 < prev.stats.critRate;
+            const finalDmg = isCrit ? baseDmg * (prev.stats.critDmg / 100) : baseDmg;
+
+            setEnemies((prev) =>
+              prev
+                .map((e) =>
+                  e.id === target.id ? { ...e, hp: Math.max(0, e.hp - finalDmg) } : e
+                )
+                .filter((e) => e.hp > 0 || !e.isBoss)
+            );
+
+            addLog(`⚔️ ${isCrit ? "[크리티컬!] " : ""}${target.type}에게 ${Math.floor(finalDmg)} 피해!`);
+            lastAttackRef.current = now;
+          }
+
+          return prev;
         });
+      }
+    }, 50);
 
-        setGameState("BATTLE");
-        addLog(`=== ${floor}층에 진입했습니다 ===`);
-        addLog(`야생의 ${targetMonster.name}(이)가 나타났다!`);
+    return () => {
+      window.removeEventListener("keydown", handleKeyDown);
+      window.removeEventListener("keyup", handleKeyUp);
+      if (gameLoopRef.current) clearInterval(gameLoopRef.current);
     };
+  }, [screen, enemies]);
 
-    // 플레이어 공격
-    const handleAttack = () => {
-        if (!monster || gameState !== "BATTLE") return;
+  // ========== SPAWN ENEMIES ==========
 
-        // 1. 플레이어 턴
-        const damage = Math.floor(player.str * (0.9 + Math.random() * 0.2));
-        const isCritical = Math.random() < 0.15;
-        const finalDamage = isCritical ? Math.floor(damage * 1.5) : damage;
+  useEffect(() => {
+    if (screen === "GAME") {
+      const zoneData = ZONES_DATA[player.zone];
+      const newEnemies: Enemy[] = [];
 
-        const newMonsterHp = Math.max(0, monster.hp - finalDamage);
-        setMonster((prev) => prev ? { ...prev, hp: newMonsterHp } : null);
+      for (let i = 0; i < 3 + player.zone; i++) {
+        newEnemies.push({
+          id: `${player.zone}-${i}`,
+          type: zoneData.enemyTypes[Math.floor(Math.random() * zoneData.enemyTypes.length)],
+          zone: player.zone,
+          hp: 50 + player.zone * 30,
+          maxHp: 50 + player.zone * 30,
+          pAtk: 5 + player.zone * 2,
+          mAtk: 5 + player.zone * 2,
+          x: Math.random() * 15,
+          y: Math.random() * 15,
+          isBoss: false,
+        });
+      }
 
-        addLog(`⚔️ ${isCritical ? "[크리티컬!] " : ""}당신은 ${monster.name}에게 ${finalDamage}의 피해를 입혔습니다.`);
+      // Add boss
+      newEnemies.push({
+        id: "boss",
+        type: zoneData.bosses[0],
+        zone: player.zone,
+        hp: 200 + player.zone * 100,
+        maxHp: 200 + player.zone * 100,
+        pAtk: 20 + player.zone * 10,
+        mAtk: 20 + player.zone * 10,
+        x: 7,
+        y: 7,
+        isBoss: true,
+      });
 
-        if (newMonsterHp === 0) {
-            handleVictory();
-        } else {
-            // 2. 몬스터 턴 (약간의 딜레이) - 현재 player를 파라미터로 전달해 stale closure 방지
-            const currentPlayer = player;
-            setTimeout(() => monsterTurn(newMonsterHp, currentPlayer), 500);
-        }
-    };
+      setEnemies(newEnemies);
+    }
+  }, [screen, player.zone]);
 
-    // 스킬 공격
-    const handleSkill = () => {
-        if (!monster || gameState !== "BATTLE") return;
-        if (player.mp < 10) {
-            addLog("🚫 마나가 부족합니다!");
-            return;
-        }
+  // ========== HELPERS ==========
 
-        setPlayer((prev) => ({ ...prev, mp: prev.mp - 10 }));
+  const addLog = (msg: string) => {
+    setLogs((prev) => [...prev, msg].slice(-8));
+  };
 
-        const damage = Math.floor(player.str * 2.5); // 250% 데미지
-        const newMonsterHp = Math.max(0, monster.hp - damage);
-        setMonster((prev) => prev ? { ...prev, hp: newMonsterHp } : null);
+  const nextZone = () => {
+    if (player.zone < 9) {
+      setPlayer((prev) => ({ ...prev, zone: prev.zone + 1, x: 7, y: 7 }));
+      if (session?.user?.email) saveProgress(session.user.email);
+      addLog(`➡️ Zone ${player.zone + 2}로 이동!`);
+    } else {
+      addLog("🏆 모든 존을 클리어했습니다!");
+    }
+  };
 
-        addLog(`⚡ 스킬 발동! ${monster.name}에게 ${damage}의 엄청난 피해를 입혔습니다!`);
+  const enhanceWeapon = () => {
+    if (player.gold < 100) {
+      addLog("💰 강화석이 부족합니다!");
+      return;
+    }
 
-        if (newMonsterHp === 0) {
-            handleVictory();
-        } else {
-            const currentPlayer = player;
-            setTimeout(() => monsterTurn(newMonsterHp, currentPlayer), 500);
-        }
-    };
+    setPlayer((prev) => ({
+      ...prev,
+      weapon:
+        prev.weapon.enhancement < 100
+          ? { ...prev.weapon, enhancement: prev.weapon.enhancement + 1 }
+          : { ...prev.weapon, grade: GRADE_ORDER[GRADE_ORDER.indexOf(prev.weapon.grade) + 1] || "A", enhancement: 0 },
+      gold: prev.gold - 100,
+    }));
 
-    // 회복
-    const handleHeal = () => {
-        if (player.potions <= 0) {
-            addLog("🚫 포션이 없습니다!");
-            return;
-        }
+    addLog("✨ 무기가 강화되었습니다!");
+  };
 
-        const healAmount = Math.floor(player.maxHp * 0.4);
-        const newHp = Math.min(player.maxHp, player.hp + healAmount);
+  // ========== UI ==========
 
-        setPlayer((prev) => ({ ...prev, hp: newHp, potions: prev.potions - 1 }));
-        addLog(`🧪 포션을 사용하여 체력을 ${healAmount} 회복했습니다.`);
-
-        // 회복 후 player 상태를 반영해서 monsterTurn에 전달
-        const healedPlayer = { ...player, hp: newHp, potions: player.potions - 1 };
-        setTimeout(() => monsterTurn(monster!.hp, healedPlayer), 500);
-    };
-
-    // 몬스터 공격 턴
-    const monsterTurn = (currentMonsterHp: number, currentPlayer: Player) => {
-        if (!monster || currentMonsterHp <= 0) return;
-
-        const damage = Math.max(0, Math.floor(monster.str * (0.8 + Math.random() * 0.4)) - currentPlayer.def);
-        const newPlayerHp = Math.max(0, currentPlayer.hp - damage);
-
-        setPlayer((prev) => ({ ...prev, hp: newPlayerHp }));
-        addLog(`🛡️ ${monster.name}의 공격! 당신은 ${damage}의 피해를 입었습니다.`);
-
-        if (newPlayerHp === 0) {
-            setGameState("DEFEAT");
-            addLog("💀 눈앞이 깜깜해졌습니다... 패배했습니다.");
-
-            // 패배 시에도 획득한 골드의 절반은 솜사탕으로 적립 (위로금)
-            if (currentPlayer.gold > 0) {
-                const savePoint = Math.floor(currentPlayer.gold / 2);
-                updateUserPoints(savePoint, "던전RPG 패배 위로금");
-                addLog(`💰 획득한 골드의 일부(${savePoint}P)가 솜사탕으로 적립되었습니다.`);
-            }
-            if (session?.user?.email) {
-                incrementMinigamePlays(session.user.email);
-            }
-        }
-    };
-
-    // 승리 처리
-    const handleVictory = () => {
-        if (!monster) return;
-
-        setGameState("VICTORY");
-        const expGain = monster.exp;
-        const goldGain = monster.gold;
-
-        // 솜사탕 즉시 적립
-        updateUserPoints(goldGain, "던전RPG 클리어");
-        if (session?.user?.email) {
-            incrementMinigamePlays(session.user.email);
-        }
-
-        // 레벨업 체크
-        let newLevel = player.level;
-        let newExp = player.exp + expGain;
-        let newMaxExp = player.maxExp;
-        let newStr = player.str;
-        let newMaxHp = player.maxHp;
-        let newHp = player.hp;
-
-        let levelUpOccurred = false;
-
-        while (newExp >= newMaxExp) {
-            newExp -= newMaxExp;
-            newLevel += 1;
-            newMaxExp = Math.floor(newMaxExp * 1.2);
-            newStr += 2;
-            newMaxHp += 20;
-            newHp = newMaxHp; // 레벨업 시 체력 100% 회복
-            levelUpOccurred = true;
-        }
-
-        setPlayer((prev) => ({
-            ...prev,
-            level: newLevel,
-            exp: newExp,
-            maxExp: newMaxExp,
-            str: newStr,
-            maxHp: newMaxHp,
-            hp: newHp,
-            gold: prev.gold + goldGain,
-        }));
-
-        addLog(`🎉 승리했습니다! 경험치 +${expGain}, 포인트 +${goldGain} 획득.`);
-        if (levelUpOccurred) {
-            addLog(`🆙 레벨업! Lv.${newLevel}이 되었습니다.`);
-        }
-
-        setTimeout(() => {
-            setFloor((prev) => prev + 1);
-        }, 1500);
-    };
-
-    // 재시작
-    const handleRestart = () => {
-        setPlayer(INITIAL_PLAYER);
-        setFloor(1);
-        setLogs([]);
-        setGameState("READY");
-    };
-
+  if (screen === "TITLE") {
     return (
-        <div className="h-screen w-full bg-slate-900 text-white font-sans selection:bg-orange-500/30 overflow-hidden">
-            <div className="max-w-md mx-auto h-full bg-black flex flex-col relative shadow-2xl border-x border-slate-800 overflow-hidden">
-
-                {/* Header */}
-                <header className="flex items-center justify-between p-4 bg-slate-900/80 backdrop-blur-md border-b border-slate-800 sticky top-0 z-50">
-                    <Link href="/minigame" className="p-2 hover:bg-slate-800 rounded-lg transition-colors">
-                        <ArrowLeft className="w-5 h-5 text-slate-400" />
-                    </Link>
-                    <div className="font-bold text-lg text-orange-500 tracking-wider">DUNGEON</div>
-
-                    {/* 포인트 표시 */}
-                    <div className="flex items-center gap-1.5 bg-slate-800 px-3 py-1.5 rounded-full border border-slate-700">
-                        <Coins className="w-3.5 h-3.5 text-yellow-500" />
-                        <span className="text-sm font-bold text-white">{userPoints.toLocaleString()}</span>
-                    </div>
-                </header>
-
-                {/* Game Area */}
-                <div className="flex-1 flex flex-col p-4 gap-4 overflow-y-auto">
-
-                    {/* 1. Floor Info */}
-                    <div className="text-center py-2 relative">
-                        <span className="bg-slate-800 text-slate-300 px-4 py-1.5 rounded-full text-sm font-bold border border-slate-700">
-                            B{floor} Floor
-                        </span>
-
-                        {/* 물약 구매 버튼 (우측 상단) */}
-                        <button
-                            onClick={buyPotion}
-                            className="absolute right-0 top-1/2 -translate-y-1/2 bg-green-900/50 hover:bg-green-900 text-green-400 text-xs px-2 py-1 rounded border border-green-800 flex items-center gap-1 transition-colors"
-                        >
-                            <Plus className="w-3 h-3" />
-                            물약 ({POTION_PRICE}P)
-                        </button>
-                    </div>
-
-                    {/* 2. Monster Scene */}
-                    <div className="relative h-48 bg-gradient-to-b from-slate-900 to-slate-800 rounded-2xl border border-slate-700 flex flex-col items-center justify-center p-6 shadow-inner">
-                        <AnimatePresence mode="wait">
-                            {gameState === "BATTLE" && monster ? (
-                                <motion.div
-                                    key="monster"
-                                    initial={{ scale: 0.8, opacity: 0 }}
-                                    animate={{ scale: 1, opacity: 1 }}
-                                    exit={{ scale: 0.8, opacity: 0 }}
-                                    className="text-center"
-                                >
-                                    <div className="text-6xl mb-4 animate-bounce-slow filter drop-shadow-lg">{monster.emoji}</div>
-                                    <h3 className="font-bold text-lg text-slate-200 mb-2">{monster.name}</h3>
-                                    <div className="w-48 h-3 bg-slate-900 rounded-full overflow-hidden border border-slate-700">
-                                        <motion.div
-                                            className="h-full bg-red-500"
-                                            initial={{ width: "100%" }}
-                                            animate={{ width: `${(monster.hp / monster.maxHp) * 100}%` }}
-                                        />
-                                    </div>
-                                    <div className="text-xs text-slate-400 mt-1">{monster.hp} / {monster.maxHp}</div>
-                                </motion.div>
-                            ) : gameState === "READY" ? (
-                                <div className="text-center text-slate-500">
-                                    <div className="text-5xl mb-3 opacity-50">🏰</div>
-                                    <p>던전에 입장할 준비가 되었습니다.</p>
-                                </div>
-                            ) : gameState === "VICTORY" ? (
-                                <div className="text-center text-yellow-500">
-                                    <div className="text-5xl mb-3">✨</div>
-                                    <p className="font-bold">VICTORY!</p>
-                                </div>
-                            ) : (
-                                <div className="text-center text-red-500">
-                                    <div className="text-5xl mb-3">☠️</div>
-                                    <p className="font-bold">GAME OVER</p>
-                                </div>
-                            )}
-                        </AnimatePresence>
-                    </div>
-
-                    {/* 3. Log Console */}
-                    <div
-                        ref={logContainerRef}
-                        className="flex-1 bg-black/50 rounded-xl border border-slate-800 p-4 overflow-y-auto h-40 text-sm space-y-2 font-mono scrollbar-hide"
-                    >
-                        {logs.length === 0 ? (
-                            <p className="text-slate-600 italic text-center text-xs mt-10">전투 기록이 여기에 표시됩니다.</p>
-                        ) : (
-                            logs.map((log, idx) => (
-                                <p key={idx} className="text-slate-300 border-b border-slate-800/50 pb-1 last:border-0 transform transition-all animate-fade-in-up">
-                                    {log}
-                                </p>
-                            ))
-                        )}
-                    </div>
-
-                </div>
-
-                {/* Controls */}
-                <div className="bg-slate-900 p-6 border-t border-slate-800 rounded-t-3xl shadow-[0_-5px_20px_rgba(0,0,0,0.5)] z-20">
-
-                    {/* Player Stats Compact */}
-                    <div className="flex items-center justify-between mb-6 text-sm">
-                        <div className="flex items-center gap-3">
-                            <div className="bg-orange-600 w-10 h-10 rounded-full flex items-center justify-center font-bold text-white shadow-lg border-2 border-orange-400">
-                                {player.level}
-                            </div>
-                            <div>
-                                <div className="flex items-center gap-2 mb-1">
-                                    <div className="w-24 h-2 bg-slate-800 rounded-full overflow-hidden">
-                                        <div className="h-full bg-green-500" style={{ width: `${(player.hp / player.maxHp) * 100}%` }} />
-                                    </div>
-                                    <span className="text-xs text-slate-400">{player.hp}/{player.maxHp}</span>
-                                </div>
-                                <div className="flex items-center gap-2">
-                                    <div className="w-24 h-1.5 bg-slate-800 rounded-full overflow-hidden">
-                                        <div className="h-full bg-blue-500" style={{ width: `${(player.mp / player.maxMp) * 100}%` }} />
-                                    </div>
-                                    <span className="text-[10px] text-slate-500">MP {player.mp}</span>
-                                </div>
-                            </div>
-                        </div>
-                        <div className="text-right">
-                            <div className="text-yellow-500 font-bold mb-1 flex items-center justify-end gap-1">
-                                <span className="text-xs">💰</span> {player.gold}
-                            </div>
-                            <div className="text-slate-400 text-xs flex items-center gap-1 justify-end">
-                                Potions: <span className="text-white font-bold">{player.potions}</span>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/* Action Buttons */}
-                    <div className="grid grid-cols-2 gap-3">
-                        {gameState === "READY" || gameState === "VICTORY" ? (
-                            <button
-                                onClick={startGame}
-                                className="col-span-2 bg-orange-600 hover:bg-orange-500 text-white py-4 rounded-xl font-bold text-lg shadow-lg shadow-orange-900/20 active:scale-95 transition-all flex items-center justify-center gap-2"
-                            >
-                                {gameState === "READY" ? "던전 입장하기" : "다음 층으로 이동"}
-                                <ArrowLeft className="w-5 h-5 rotate-180" />
-                            </button>
-                        ) : gameState === "DEFEAT" ? (
-                            <button
-                                onClick={handleRestart}
-                                className="col-span-2 bg-slate-700 hover:bg-slate-600 text-white py-4 rounded-xl font-bold text-lg shadow-lg active:scale-95 transition-all flex items-center justify-center gap-2"
-                            >
-                                처음부터 다시하기
-                                <RefreshCw className="w-5 h-5" />
-                            </button>
-                        ) : (
-                            <>
-                                <button
-                                    onClick={handleAttack}
-                                    className="bg-slate-800 hover:bg-slate-700 text-white py-4 rounded-xl font-bold text-base border border-slate-700 shadow-md active:scale-95 transition-all flex flex-col items-center gap-1 group"
-                                >
-                                    <Sword className="w-5 h-5 text-red-500 group-hover:scale-110 transition-transform" />
-                                    공격
-                                </button>
-                                <button
-                                    onClick={handleSkill}
-                                    className="bg-slate-800 hover:bg-slate-700 text-white py-4 rounded-xl font-bold text-base border border-slate-700 shadow-md active:scale-95 transition-all flex flex-col items-center gap-1 group"
-                                >
-                                    <Zap className="w-5 h-5 text-blue-500 group-hover:scale-110 transition-transform" />
-                                    스킬 (MP 10)
-                                </button>
-                                <button
-                                    onClick={handleHeal}
-                                    className="bg-slate-800 hover:bg-slate-700 text-white py-4 rounded-xl font-bold text-base border border-slate-700 shadow-md active:scale-95 transition-all flex flex-col items-center gap-1 group"
-                                >
-                                    <Heart className="w-5 h-5 text-green-500 group-hover:scale-110 transition-transform" />
-                                    회복 ({player.potions})
-                                </button>
-                                <button
-                                    onClick={() => addLog("🏃 도망칠 수 없습니다!")}
-                                    className="bg-slate-800 hover:bg-slate-700 text-slate-400 py-4 rounded-xl font-bold text-base border border-slate-700 shadow-md active:scale-95 transition-all flex flex-col items-center gap-1 group"
-                                >
-                                    <Shield className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                                    도망
-                                </button>
-                            </>
-                        )}
-                    </div>
-                </div>
-            </div>
+      <div className="h-screen w-full bg-gradient-to-b from-slate-950 to-black flex items-center justify-center">
+        <div className="text-center max-w-md px-4">
+          <div className="text-7xl mb-4">⚔️</div>
+          <h1 className="text-5xl font-bold text-white mb-2 tracking-wider">도리 크래프트</h1>
+          <p className="text-slate-400 mb-8">성장형 자동 RPG 게임</p>
+          <button
+            onClick={() => setScreen("GAME")}
+            className="w-full bg-orange-600 hover:bg-orange-500 text-white font-bold py-4 rounded-xl text-lg shadow-lg active:scale-95 transition-all"
+          >
+            시작하기
+          </button>
         </div>
+      </div>
     );
+  }
+
+  if (screen === "INVENTORY") {
+    return (
+      <div className="h-screen w-full bg-black flex items-center justify-center">
+        <div className="max-w-md w-full mx-auto p-6 bg-slate-900 rounded-2xl border border-slate-800">
+          <div className="flex items-center justify-between mb-6">
+            <h2 className="text-2xl font-bold text-white">⚔️ 무기 관리</h2>
+            <button onClick={() => setScreen("GAME")} className="text-slate-400 hover:text-white">
+              ✕
+            </button>
+          </div>
+
+          <div className="bg-slate-800/50 p-4 rounded-lg mb-4 border border-slate-700">
+            <p className="text-slate-300 text-sm mb-2">현재 무기</p>
+            <p className="text-xl font-bold text-white mb-1">
+              {player.weapon.type} {player.weapon.grade}+{player.weapon.enhancement}
+            </p>
+            <p className="text-slate-400 text-sm">P.ATK: {player.stats.pAtk} | M.ATK: {player.stats.mAtk}</p>
+          </div>
+
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-2">
+              <span className="text-slate-300 text-sm">강화 수치</span>
+              <span className="text-white font-bold">{player.weapon.enhancement}/100</span>
+            </div>
+            <div className="w-full h-2 bg-slate-800 rounded-full overflow-hidden">
+              <div
+                className="h-full bg-orange-500 transition-all"
+                style={{ width: `${player.weapon.enhancement}%` }}
+              />
+            </div>
+          </div>
+
+          <button
+            onClick={enhanceWeapon}
+            className="w-full bg-orange-600 hover:bg-orange-500 text-white font-bold py-3 rounded-lg active:scale-95 transition-all mb-4"
+          >
+            강화하기 (비용: 100)
+          </button>
+
+          <div className="text-slate-400 text-sm">
+            <p>💰 소유 골드: {player.gold}</p>
+            <p>정수: {player.essences}</p>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  const zoneData = ZONES_DATA[player.zone];
+
+  return (
+    <div className="h-screen w-full bg-slate-950 text-white font-sans overflow-hidden">
+      <div className="max-w-md mx-auto h-full flex flex-col bg-black border-x border-slate-800">
+        {/* HEADER */}
+        <div className="flex items-center justify-between p-4 bg-slate-900/50 border-b border-slate-800">
+          <Link href="/minigame" className="p-2 hover:bg-slate-800 rounded-lg transition-colors">
+            <ArrowLeft className="w-5 h-5 text-slate-400" />
+          </Link>
+          <span className="font-bold text-orange-500">Zone {player.zone + 1}</span>
+          <div className="flex items-center gap-2 bg-slate-800 px-3 py-1.5 rounded-full">
+            <span className="text-xs text-yellow-500 font-bold">{userPoints}</span>
+          </div>
+        </div>
+
+        {/* GAME WORLD */}
+        <div className="flex-1 relative bg-gradient-to-b from-slate-900 to-black overflow-hidden">
+          <div className={`absolute inset-0 ${zoneData.color} transition-all`} />
+
+          {/* GRID */}
+          <div className="absolute inset-0 opacity-10">
+            {Array.from({ length: 16 }).map((_, i) => (
+              <div
+                key={`h-${i}`}
+                className="absolute w-full h-px bg-slate-700"
+                style={{ top: `${(i / 15) * 100}%` }}
+              />
+            ))}
+            {Array.from({ length: 16 }).map((_, i) => (
+              <div
+                key={`v-${i}`}
+                className="absolute h-full w-px bg-slate-700"
+                style={{ left: `${(i / 15) * 100}%` }}
+              />
+            ))}
+          </div>
+
+          {/* ENEMIES */}
+          {enemies.map((enemy) => (
+            <div
+              key={enemy.id}
+              className={`absolute w-8 h-8 flex items-center justify-center rounded transition-all ${
+                enemy.isBoss ? "text-2xl animate-pulse" : "text-lg"
+              }`}
+              style={{
+                left: `${(enemy.x / 15) * 100}%`,
+                top: `${(enemy.y / 15) * 100}%`,
+                transform: "translate(-50%, -50%)",
+              }}
+            >
+              {enemy.isBoss ? "👹" : ["💧", "👺", "💀", "👹"][Math.floor(Math.random() * 4)]}
+              <div className="absolute bottom-full mb-1 text-xs text-red-400 font-bold">
+                {Math.floor(enemy.hp)}
+              </div>
+            </div>
+          ))}
+
+          {/* PLAYER */}
+          <motion.div
+            className="absolute w-6 h-6 bg-white rounded flex items-center justify-center text-xs font-bold"
+            animate={{ x: `${(player.x / 15) * 100}%`, y: `${(player.y / 15) * 100}%` }}
+            transition={{ type: "linear", duration: 0.05 }}
+            style={{ transform: "translate(-50%, -50%)" }}
+          >
+            {player.weapon.type === "검" ? "⚔️" : player.weapon.type === "활" ? "🏹" : "🔱"}
+          </motion.div>
+
+          {/* RANGE INDICATOR */}
+          <div
+            className="absolute border-2 border-white/20 rounded-full pointer-events-none"
+            style={{
+              width: `${(WEAPON_INFO[player.weapon.type].range / 15) * 100}%`,
+              height: `${(WEAPON_INFO[player.weapon.type].range / 15) * 100}%`,
+              left: `${(player.x / 15) * 100}%`,
+              top: `${(player.y / 15) * 100}%`,
+              transform: "translate(-50%, -50%)",
+            }}
+          />
+        </div>
+
+        {/* STATS PANEL */}
+        <div className="bg-slate-900/50 border-t border-slate-800 p-4 text-xs space-y-2">
+          <div className="flex justify-between">
+            <span className="text-slate-400">HP</span>
+            <div className="flex-1 mx-2 h-1.5 bg-slate-800 rounded overflow-hidden">
+              <div className="h-full bg-red-500" style={{ width: `${(player.stats.hp / player.stats.maxHp) * 100}%` }} />
+            </div>
+            <span className="text-red-400 font-bold">{Math.floor(player.stats.hp)}</span>
+          </div>
+          <div className="flex justify-between">
+            <span className="text-slate-400">MP</span>
+            <div className="flex-1 mx-2 h-1.5 bg-slate-800 rounded overflow-hidden">
+              <div className="h-full bg-blue-500" style={{ width: `${(player.stats.mp / player.stats.maxMp) * 100}%` }} />
+            </div>
+            <span className="text-blue-400 font-bold">{Math.floor(player.stats.mp)}</span>
+          </div>
+          <div className="grid grid-cols-2 gap-2 text-slate-300">
+            <div>Lv. {player.level}</div>
+            <div>💰 {player.gold}</div>
+            <div>P.ATK {Math.floor(player.stats.pAtk)}</div>
+            <div>M.ATK {Math.floor(player.stats.mAtk)}</div>
+          </div>
+        </div>
+
+        {/* CONTROLS */}
+        <div className="bg-slate-900/80 border-t border-slate-800 p-4 space-y-3">
+          <div className="text-xs text-slate-400 text-center">WASD: 이동 | 자동 공격</div>
+
+          <div className="grid grid-cols-2 gap-2">
+            <button
+              onClick={() => setScreen("INVENTORY")}
+              className="bg-slate-800 hover:bg-slate-700 text-white py-2 rounded font-bold text-sm active:scale-95 transition-all flex items-center justify-center gap-1"
+            >
+              <Package className="w-4 h-4" /> 무기
+            </button>
+            <button
+              onClick={nextZone}
+              className="bg-orange-600 hover:bg-orange-500 text-white py-2 rounded font-bold text-sm active:scale-95 transition-all"
+            >
+              다음 존
+            </button>
+          </div>
+
+          <div className="bg-slate-800/30 rounded p-2 max-h-16 overflow-y-auto text-xs space-y-1">
+            {logs.map((log, i) => (
+              <p key={i} className="text-slate-300">
+                {log}
+              </p>
+            ))}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
 }
