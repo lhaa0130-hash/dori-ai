@@ -3,6 +3,9 @@ import { sql } from "@vercel/postgres";
 import { getSortedPostsData } from '@/lib/posts';
 import { getAllGuides } from '@/lib/guides';
 import { getAllTrends } from '@/lib/trends';
+import { getAllAnalyses } from '@/lib/analysis';
+import { getAllReports } from '@/lib/reports';
+import { getAllCurations } from '@/lib/curation';
 import InsightPageClient from './page.client';
 import { getFirebaseFirestore } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
@@ -48,6 +51,9 @@ export default async function InsightPage() {
       const allPosts = getSortedPostsData();
       const guides = getAllGuides();
       const trends = getAllTrends();
+      const analyses = getAllAnalyses();
+      const reports = getAllReports();
+      const curations = getAllCurations();
 
       const guideItems = guides.map((guide, index) => ({
         id: `guide-${index}`,
@@ -88,7 +94,46 @@ export default async function InsightPage() {
         slug: String(post.id),
       }));
 
-      filePosts = [...guideItems, ...trendItems, ...insightItems];
+      const analysisItems = analyses.map((item, index) => ({
+        id: `analysis-${index}`,
+        title: item.title,
+        summary: item.description || '',
+        category: item.category || '분석',
+        tags: item.tags || [],
+        likes: 0,
+        created_at: item.date || new Date().toISOString(),
+        content: item.content || '',
+        thumbnail_url: item.thumbnail,
+        slug: item.slug,
+      }));
+
+      const reportItems = reports.map((item, index) => ({
+        id: `report-${index}`,
+        title: item.title,
+        summary: item.description || '',
+        category: item.category || '리포트',
+        tags: item.tags || [],
+        likes: 0,
+        created_at: item.date || new Date().toISOString(),
+        content: item.content || '',
+        thumbnail_url: item.thumbnail,
+        slug: item.slug,
+      }));
+
+      const curationItems = curations.map((item, index) => ({
+        id: `curation-${index}`,
+        title: item.title,
+        summary: item.description || '',
+        category: item.category || '큐레이션',
+        tags: item.tags || [],
+        likes: 0,
+        created_at: item.date || new Date().toISOString(),
+        content: item.content || '',
+        thumbnail_url: item.thumbnail,
+        slug: item.slug,
+      }));
+
+      filePosts = [...guideItems, ...trendItems, ...analysisItems, ...reportItems, ...curationItems, ...insightItems];
     } catch (fileError) {
       console.error('Error loading file posts:', fileError);
     }
