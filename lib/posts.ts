@@ -141,5 +141,56 @@ export async function getPostData(id: string) {
     } as any;
   }
 
+  // 4. 분석에서 찾기
+  const { getAnalysisBySlug } = await import('@/lib/analysis');
+  const analysis = getAnalysisBySlug(id);
+  if (analysis) {
+    return {
+      id: id,
+      content: analysis.content,
+      contentHtml: '',
+      title: analysis.title,
+      date: analysis.date,
+      category: analysis.category,
+      author: analysis.author,
+      thumbnail_url: analysis.thumbnail,
+      tags: analysis.tags,
+    } as any;
+  }
+
+  // 5. 리포트에서 찾기
+  const { getReportBySlug } = await import('@/lib/reports');
+  const report = getReportBySlug(id);
+  if (report) {
+    return {
+      id: id,
+      content: report.content,
+      contentHtml: '',
+      title: report.title,
+      date: report.date,
+      category: report.category,
+      author: report.author,
+      thumbnail_url: report.thumbnail,
+      tags: report.tags,
+    } as any;
+  }
+
+  // 6. 큐레이션에서 찾기
+  const { getCurationBySlug } = await import('@/lib/curation');
+  const curation = getCurationBySlug(id);
+  if (curation) {
+    return {
+      id: id,
+      content: curation.content,
+      contentHtml: '',
+      title: curation.title,
+      date: curation.date,
+      category: curation.category,
+      author: curation.author,
+      thumbnail_url: curation.thumbnail,
+      tags: curation.tags,
+    } as any;
+  }
+
   throw new Error(`Post not found: ${id}`);
 }
