@@ -9,8 +9,8 @@ import { motion } from "framer-motion";
 const GAMES = [
     {
         id: "dungeon",
-        title: "던전 RPG",
-        description: "전략적인 턴제 전투로 던전을 정복하세요!",
+        title: "도리 크래프트",
+        description: "WASD로 이동하며 몬스터를 처치하는 성장형 RPG!",
         icon: <Skull className="w-5 h-5" />,
         status: "NEW",
         href: "/minigame/dungeon"

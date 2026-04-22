@@ -7,9 +7,9 @@ import { ArrowRight, Play } from "lucide-react";
 const games = [
   {
     emoji: "⚔️",
-    title: "던전 RPG",
-    description: "AI 던전을 탐험하고 몬스터를 처치하세요",
-    href: "/minigame/dungeon-rpg",
+    title: "도리 크래프트",
+    description: "성장형 자동 RPG — WASD로 이동하며 몬스터를 처치하세요",
+    href: "/minigame/dungeon",
     candy: "+100",
     color: "from-red-500/10 to-orange-500/10",
     border: "hover:border-red-300 dark:hover:border-red-700",
