@@ -3,6 +3,7 @@
 import Link from 'next/link';
 import { useState, useEffect, useRef } from 'react';
 import { useTheme } from 'next-themes';
+import { useAuth } from '@/contexts/AuthContext';
 import { PlusCircle, Users, Eye, Heart, MessageCircle, TrendingUp, Clock, X, Share2, Bookmark, Send, Trash2 } from 'lucide-react';
 
 // ── 타입 ──────────────────────────────────────────────────
@@ -343,6 +344,9 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
   const [posts, setPosts] = useState<Post[]>(initialPosts);
   const [activeTab, setActiveTab] = useState<'trending' | 'latest'>('trending');
   const [selectedPost, setSelectedPost] = useState<Post | null>(null);
+  const [showLoginNudge, setShowLoginNudge] = useState(false);
+  const { session, status } = useAuth();
+  const isLoggedIn = status === 'authenticated' && !!session;
 
   useEffect(() => {
     setMounted(true);
@@ -447,9 +451,35 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
                   <Clock className="w-3.5 h-3.5" />최신
                 </button>
               </div>
-              <Link href="/community/write" className="flex items-center gap-2 px-5 py-2.5 bg-[#F9954E] hover:bg-[#E8832E] text-white rounded-full font-bold text-sm transition-all shadow-lg active:scale-95">
-                <PlusCircle size={16} /><span>새 글 작성</span>
-              </Link>
+              {isLoggedIn ? (
+                <Link href="/community/write" className="flex items-center gap-2 px-5 py-2.5 bg-[#F9954E] hover:bg-[#E8832E] text-white rounded-full font-bold text-sm transition-all shadow-lg active:scale-95">
+                  <PlusCircle size={16} /><span>새 글 작성</span>
+                </Link>
+              ) : (
+                <div className="relative">
+                  <button
+                    onClick={() => setShowLoginNudge(v => !v)}
+                    className="flex items-center gap-2 px-5 py-2.5 bg-neutral-200 dark:bg-zinc-800 hover:bg-neutral-300 dark:hover:bg-zinc-700 text-neutral-500 dark:text-neutral-400 rounded-full font-bold text-sm transition-all"
+                  >
+                    <PlusCircle size={16} /><span>새 글 작성</span>
+                  </button>
+                  {showLoginNudge && (
+                    <div className="absolute right-0 top-12 z-50 w-60 bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 rounded-2xl shadow-xl p-4 text-center">
+                      <p className="text-2xl mb-2">🔒</p>
+                      <p className="text-sm font-bold text-neutral-900 dark:text-white mb-1">로그인이 필요해요</p>
+                      <p className="text-xs text-neutral-500 mb-3">글을 작성하려면 먼저 로그인해 주세요.</p>
+                      <div className="flex gap-2">
+                        <Link href="/login" className="flex-1 py-2 bg-[#F9954E] hover:bg-[#E8832E] text-white rounded-xl text-xs font-bold transition-all text-center">
+                          로그인
+                        </Link>
+                        <Link href="/signup" className="flex-1 py-2 bg-neutral-100 dark:bg-zinc-800 hover:bg-neutral-200 text-neutral-700 dark:text-neutral-300 rounded-xl text-xs font-bold transition-all text-center">
+                          회원가입
+                        </Link>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              )}
             </div>
 
             {posts.length === 0 ? (

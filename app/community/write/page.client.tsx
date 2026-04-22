@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
+import { useAuth } from '@/contexts/AuthContext';
 import { ChevronLeft, Image as ImageIcon, MoreHorizontal, HelpCircle, Sparkles } from 'lucide-react';
 import Quill from 'quill';
 import "quill/dist/quill.snow.css";
@@ -28,6 +29,7 @@ export default function WriteClient() {
     const quillRef = useRef<Quill | null>(null);
     const editorRef = useRef<HTMLDivElement>(null);
     const [isPublishModalOpen, setIsPublishModalOpen] = useState(false);
+    const { session, status } = useAuth();
 
     // Publish State
     const [selectedTag, setSelectedTag] = useState('잡담');
@@ -42,6 +44,13 @@ export default function WriteClient() {
         const timer = setTimeout(() => setShowTip(false), 5000);
         return () => clearTimeout(timer);
     }, []);
+
+    // 비로그인 접근 차단
+    useEffect(() => {
+        if (status === 'unauthenticated') {
+            router.replace('/login?redirect=/community/write');
+        }
+    }, [status, router]);
 
     // Font Configuration
     const fontSizeArr = ['10px', '11px', '12px', '14px', '16px', '18px', '20px', '22px', '24px', '26px', '28px', '36px', '48px', '60px', '72px'];
@@ -214,8 +223,8 @@ export default function WriteClient() {
 
                 const newPost = {
                     id: Date.now().toString(),
-                    author: 'Current User',
-                    avatar: `https://i.pravatar.cc/40?u=${Date.now()}`,
+                    author: session?.user?.name || '익명',
+                    avatar: '😊',
                     title,
                     content,
                     tags: [selectedTag],
@@ -238,7 +247,8 @@ export default function WriteClient() {
         }, 1000);
     };
 
-    if (!mounted) return null;
+    if (!mounted || status === 'loading') return null;
+    if (status === 'unauthenticated') return null;
 
     return (
         <motion.div
