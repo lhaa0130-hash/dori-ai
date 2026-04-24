@@ -48,13 +48,13 @@ export default function SNSBanner() {
 
               {/* 인스타그램 */}
               <a
-                href="https://www.instagram.com/dori_ai"
+                href="https://www.instagram.com/lhaa0130/"
                 target="_blank"
                 rel="noopener noreferrer"
                 className="group flex items-center gap-2.5 px-5 py-3 rounded-2xl bg-white/20 text-white font-bold text-sm hover:bg-white hover:text-neutral-900 transition-all duration-200 hover:scale-105 shadow-lg shadow-black/10 border border-white/30"
               >
                 <Instagram className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                <span>@dori_ai</span>
+                <span>@lhaa0130</span>
                 <ExternalLink className="w-3.5 h-3.5 opacity-50" />
               </a>
             </div>
