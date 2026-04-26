@@ -1,10 +1,10 @@
----
+﻿---
 title: AI 규제의 시대가 온다 — 2026년 글로벌 AI 거버넌스 완전 분석
 description: EU AI Act 시행부터 한국·미국·중국의 AI 규제 전략까지, 기업과 개인이 알아야 할 2026년 AI 법·제도 변화를 총정리한다.
 date: 2026-04-26
 author: DORI-AI
 category: 리포트
-thumbnail: /thumbnails/report/report-02.png
+thumbnail: /thumbnails/trend/report-02.png
 tags: [AI규제, EU_AI_Act, AI거버넌스, AI법제도, AI정책]
 ---
 

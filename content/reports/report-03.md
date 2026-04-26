@@ -1,10 +1,10 @@
----
+﻿---
 title: 2026 AI 인프라 전쟁 — 전력·칩·데이터센터가 AI 패권을 결정한다
 description: AI 성능 경쟁이 알고리즘을 넘어 전력망·반도체·클라우드 인프라 싸움으로 번진 2026년, 그 구조와 국내 영향을 완전 분석한다.
 date: 2026-04-26
 author: DORI-AI
 category: 리포트
-thumbnail: /thumbnails/report/report-03.png
+thumbnail: /thumbnails/trend/report-03.png
 tags: [AI인프라, AI반도체, 데이터센터, 전력위기, NVIDIA, AI패권]
 ---
 

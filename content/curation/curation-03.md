@@ -1,10 +1,10 @@
----
+﻿---
 title: AI 흐름을 놓치지 않는 법 — 국내외 AI 뉴스레터·미디어 완전 가이드 2026
 description: 매일 쏟아지는 AI 뉴스 중 신뢰할 수 있는 것만 골랐다. 한국어·영어별, 수준별로 구분한 2026년 최신 AI 미디어·뉴스레터 큐레이션.
 date: 2026-04-26
 author: DORI-AI
 category: 큐레이션
-thumbnail: /thumbnails/curation/curation-03.png
+thumbnail: /thumbnails/trend/curation-03.png
 tags: [AI뉴스레터, AI미디어, AI정보, AI학습, AI트렌드추적]
 ---
 

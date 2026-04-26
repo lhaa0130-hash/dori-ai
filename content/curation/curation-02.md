@@ -1,10 +1,10 @@
----
+﻿---
 title: 복붙만 해도 결과물이 달라지는 프롬프트 템플릿 30선
 description: 업무·글쓰기·분석·아이디어 발상 등 실제 쓸 수 있는 AI 프롬프트 템플릿을 상황별로 엄선해 정리했다.
 date: 2026-04-26
 author: DORI-AI
 category: 큐레이션
-thumbnail: /thumbnails/curation/curation-02.png
+thumbnail: /thumbnails/trend/curation-02.png
 tags: [프롬프트, ChatGPT활용, AI실무, 프롬프트템플릿, AI업무효율]
 ---
 

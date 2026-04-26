@@ -1,10 +1,10 @@
----
+﻿---
 title: AI는 정말 내 일자리를 빼앗나? — 2026년 직업 대체 실태 완전 분석
 description: AI가 실제로 어떤 직업을 얼마나 대체하고 있는지, 국내외 데이터를 바탕으로 직군별·연령별로 분석한다.
 date: 2026-04-26
 author: DORI-AI
 category: 분석
-thumbnail: /thumbnails/analysis/analysis-02.png
+thumbnail: /thumbnails/trend/analysis-02.png
 tags: [AI직업대체, 자동화, 노동시장, 화이트칼라, 미래직업]
 ---
 

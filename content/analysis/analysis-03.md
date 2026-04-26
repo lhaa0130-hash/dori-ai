@@ -1,10 +1,10 @@
----
+﻿---
 title: AI 쓰는 게 공짜가 아니다 — 2026년 AI 구독·운영 비용 완전 해부
 description: ChatGPT, Claude, Gemini부터 기업용 API까지, 실제로 AI를 쓰는 데 얼마나 드는지 개인·팀·기업 규모별로 분석한다.
 date: 2026-04-26
 author: DORI-AI
 category: 분석
-thumbnail: /thumbnails/analysis/analysis-03.png
+thumbnail: /thumbnails/trend/analysis-03.png
 tags: [AI비용, AI구독료, ChatGPT요금, Claude요금, 기업AI도입비용]
 ---
 
