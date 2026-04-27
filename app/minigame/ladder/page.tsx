@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import confetti from "canvas-confetti";
+import { useAuth } from "@/contexts/AuthContext";
+import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 // ---- Types ----
 type GameState = "SETUP" | "READY" | "PLAYING" | "FINISHED";
@@ -50,6 +52,7 @@ const MAX_PLAYERS = 10;
 const LADDER_PADDING = 15; // Bridges only appear within this range (15-85%)
 
 export default function LadderGamePage() {
+    const { session } = useAuth();
     const { theme } = useTheme();
     const [mounted, setMounted] = useState(false);
     const [gameState, setGameState] = useState<GameState>("SETUP");
@@ -259,6 +262,10 @@ export default function LadderGamePage() {
                     setGameState("FINISHED");
                     setRevealedResults(new Array(playerCount).fill(true));
                     triggerConfetti();
+                    if (session?.user?.email) {
+                        addCottonCandy(session.user.email, 15, "사다리 타기 완료");
+                        incrementMinigamePlays(session.user.email);
+                    }
                 } else {
                     setPlayers(prev => prev.map((p, idx) => {
                         if (idx === playerIndex) return { ...p, finished: true, progress: 1 };

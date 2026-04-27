@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
+import { useAuth } from "@/contexts/AuthContext";
+import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 type BetType = "플레이어" | "뱅커" | "타이";
 
@@ -51,6 +53,7 @@ const shouldBankerDraw = (bankerTotal: number, playerThird: Card | null): boolea
 };
 
 export default function BaccaratPage() {
+    const { session } = useAuth();
     const { theme } = useTheme();
     const [mounted, setMounted] = useState(false);
     const [coins, setCoins] = useState(1000);
@@ -139,6 +142,10 @@ export default function BaccaratPage() {
                 setResult(`${winner} 승! ${betType === "타이" ? "×9 " : ""}당첨! 🎉 (+${winAmount - bet})`);
                 if (betType === "타이") confetti({ particleCount: 200, spread: 90, origin: { y: 0.6 } });
                 else confetti({ particleCount: 80, spread: 60, origin: { y: 0.6 } });
+                if (session?.user?.email) {
+                    addCottonCandy(session.user.email, 20, "바카라 베팅 승리");
+                    incrementMinigamePlays(session.user.email);
+                }
             } else if (winner === "타이" && betType !== "타이") {
                 setResult(`타이! 배팅금 반환 🤝`);
             } else {

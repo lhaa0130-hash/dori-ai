@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
+import { useAuth } from "@/contexts/AuthContext";
+import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 const RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
 const SUITS = ["♠", "♥", "♦", "♣"];
@@ -29,6 +31,7 @@ const createDeck = (): Card[] => {
 const isRed = (suit: string) => suit === "♥" || suit === "♦";
 
 export default function HighLowPage() {
+    const { session } = useAuth();
     const { theme } = useTheme();
     const [mounted, setMounted] = useState(false);
     const [coins, setCoins] = useState(1000);
@@ -80,6 +83,10 @@ export default function HighLowPage() {
                 setStreak(newStreak);
                 if (newStreak > bestStreak) setBestStreak(newStreak);
                 setTotalWins(prev => prev + 1);
+                if (session?.user?.email) {
+                    addCottonCandy(session.user.email, 10, "하이로우 정답");
+                    incrementMinigamePlays(session.user.email);
+                }
 
                 // 연속 정답 보너스
                 const bonus = Math.floor(bet * (0.5 + newStreak * 0.5) * multiplier);

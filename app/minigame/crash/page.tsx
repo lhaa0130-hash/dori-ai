@@ -6,8 +6,11 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
 import confetti from "canvas-confetti";
+import { useAuth } from "@/contexts/AuthContext";
+import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 export default function CrashPage() {
+    const { session } = useAuth();
     const { theme } = useTheme();
     const [mounted, setMounted] = useState(false);
     const [coins, setCoins] = useState(1000);
@@ -77,7 +80,12 @@ export default function CrashPage() {
         if (multiplier >= 3) {
             confetti({ particleCount: Math.min(multiplier * 30, 200), spread: 70, origin: { y: 0.6 } });
         }
-    }, [gameState, bet, multiplier, crashPoint]);
+        if (session?.user?.email) {
+            const candy = Math.max(1, Math.floor(bet / 20));
+            addCottonCandy(session.user.email, candy, "크래시 캐시아웃 성공");
+            incrementMinigamePlays(session.user.email);
+        }
+    }, [gameState, bet, multiplier, crashPoint, session]);
 
     useEffect(() => {
         return () => cancelAnimationFrame(animRef.current);

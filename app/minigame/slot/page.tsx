@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
+import { useAuth } from "@/contexts/AuthContext";
+import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 // 슬롯 심볼
 const SYMBOLS = ["🍒", "🍋", "🍊", "🍇", "⭐", "💎", "7️⃣"];
@@ -23,6 +25,7 @@ const PAYOUTS: Record<string, number> = {
 };
 
 export default function SlotMachinePage() {
+    const { session } = useAuth();
     const { theme } = useTheme();
     const [mounted, setMounted] = useState(false);
     const [coins, setCoins] = useState(1000);
@@ -88,6 +91,11 @@ export default function SlotMachinePage() {
                 setTotalWins(prev => prev + 1);
                 setResult({ win: true, payout: winAmount, message: `${payoutMultiplier}배 당첨! 🎉` });
                 triggerConfetti(payoutMultiplier);
+                if (session?.user?.email) {
+                    const candy = Math.max(1, Math.floor(winAmount / 10));
+                    addCottonCandy(session.user.email, candy, "슬롯머신 당첨");
+                    incrementMinigamePlays(session.user.email);
+                }
             } else if (finalReels[0] === finalReels[1] || finalReels[1] === finalReels[2]) {
                 // 2개 일치 - 배팅금 반환
                 setCoins(prev => prev + bet);

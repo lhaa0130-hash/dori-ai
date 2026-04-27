@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
+import { useAuth } from "@/contexts/AuthContext";
+import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 type GameMode = "rgb" | "name";
 
@@ -20,6 +22,7 @@ const COLOR_NAMES = [
 ];
 
 export default function ColorMatchPage() {
+    const { session } = useAuth();
     const { theme } = useTheme();
     const [mounted, setMounted] = useState(false);
 
@@ -44,6 +47,11 @@ export default function ColorMatchPage() {
         } else if (timeLeft === 0) {
             setIsGameOver(true);
             setIsPlaying(false);
+            if (session?.user?.email) {
+                const candy = Math.max(1, Math.floor(score / 2));
+                addCottonCandy(session.user.email, candy, "색깔 맞추기 게임 완료");
+                incrementMinigamePlays(session.user.email);
+            }
         }
     }, [isPlaying, timeLeft]);
 

@@ -6,12 +6,15 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
+import { useAuth } from "@/contexts/AuthContext";
+import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 // ---- Types ----
 type GameState = "SETUP" | "FLIPPING" | "FINISHED";
 type CoinSide = "앞면" | "뒷면";
 
 export default function CoinFlipPage() {
+    const { session } = useAuth();
     const { theme } = useTheme();
     const [mounted, setMounted] = useState(false);
     const [gameState, setGameState] = useState<GameState>("SETUP");
@@ -55,6 +58,11 @@ export default function CoinFlipPage() {
         setTimeout(() => {
             const coinResult: CoinSide = Math.random() > 0.5 ? "앞면" : "뒷면";
             const won = coinResult === selectedBet;
+
+            if (won && session?.user?.email) {
+                addCottonCandy(session.user.email, 10, "동전 던지기 승리");
+                incrementMinigamePlays(session.user.email);
+            }
 
             setResult(coinResult);
             setIsWinner(won);

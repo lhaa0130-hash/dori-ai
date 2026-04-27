@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
+import { useAuth } from "@/contexts/AuthContext";
+import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 // ---- Types ----
 type GameState = "SETUP" | "ROLLING" | "FINISHED";
@@ -22,6 +24,7 @@ const DICE_FACES = [
 const DICE_COLORS = ["#ef4444", "#F9954E", "#f59e0b", "#84cc16", "#3b82f6", "#8b5cf6"];
 
 export default function DiceRollPage() {
+    const { session } = useAuth();
     const { theme } = useTheme();
     const [mounted, setMounted] = useState(false);
     const [gameState, setGameState] = useState<GameState>("SETUP");
@@ -65,6 +68,11 @@ export default function DiceRollPage() {
             setDiceResults(results);
             setIsRolling(false);
             setGameState("FINISHED");
+
+            if (session?.user?.email) {
+                addCottonCandy(session.user.email, 5, "주사위 굴리기");
+                incrementMinigamePlays(session.user.email);
+            }
 
             // Trigger confetti if all dice show the same number (special case)
             if (results.every(r => r === results[0])) {

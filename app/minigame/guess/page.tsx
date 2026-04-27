@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
+import { useAuth } from "@/contexts/AuthContext";
+import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 // ---- Types ----
 type GameState = "SETUP" | "PLAYING" | "WON";
@@ -23,6 +25,7 @@ const DIFFICULTY_CONFIG = {
 };
 
 export default function GuessNumberPage() {
+    const { session } = useAuth();
     const { theme } = useTheme();
     const [mounted, setMounted] = useState(false);
     const [gameState, setGameState] = useState<GameState>("SETUP");
@@ -91,6 +94,10 @@ export default function GuessNumberPage() {
             newMessage = `축하합니다! ${attempts.length + 1}번 만에 맞추셨습니다!`;
             setGameState("WON");
             triggerConfetti();
+            if (session?.user?.email) {
+                addCottonCandy(session.user.email, 20, "숫자 맞추기 성공");
+                incrementMinigamePlays(session.user.email);
+            }
         } else {
             const diff = Math.abs(guess - secretNumber);
             const percentage = (diff / max) * 100;

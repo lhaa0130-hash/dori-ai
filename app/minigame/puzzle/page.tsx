@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { ArrowLeft, RefreshCw, Trophy, ImageIcon, HelpCircle } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
+import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 // ----------------------------------------------------------------------
 // Constants & Types
@@ -22,6 +24,7 @@ type Tile = {
 };
 
 export default function SlidePuzzleGame() {
+    const { session } = useAuth();
     const [tiles, setTiles] = useState<Tile[]>([]);
     const [isSolved, setIsSolved] = useState(false);
     const [moves, setMoves] = useState(0);
@@ -119,6 +122,10 @@ export default function SlidePuzzleGame() {
         if (isWin) {
             setIsSolved(true);
             setIsPlaying(false);
+            if (session?.user?.email) {
+                addCottonCandy(session.user.email, 30, "퍼즐 완성");
+                incrementMinigamePlays(session.user.email);
+            }
         }
     };
 

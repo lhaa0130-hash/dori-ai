@@ -5,6 +5,8 @@ import { ArrowLeft, Play, RotateCcw, Zap } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
+import { useAuth } from "@/contexts/AuthContext";
+import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 const SAMPLE_TEXTS = [
     "빠른 갈색 여우가 게으른 개를 뛰어넘습니다",
@@ -15,6 +17,7 @@ const SAMPLE_TEXTS = [
 ];
 
 export default function TypingSpeedPage() {
+    const { session } = useAuth();
     const { theme } = useTheme();
     const [mounted, setMounted] = useState(false);
 
@@ -57,6 +60,11 @@ export default function TypingSpeedPage() {
             setWpm(calculatedWpm);
             setIsFinished(true);
             setIsStarted(false);
+            if (session?.user?.email) {
+                const candy = Math.max(1, Math.floor(calculatedWpm / 10));
+                addCottonCandy(session.user.email, candy, "타이핑 속도 테스트 완료");
+                incrementMinigamePlays(session.user.email);
+            }
         }
 
         // Calculate accuracy

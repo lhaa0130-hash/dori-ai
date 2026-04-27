@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
+import { useAuth } from "@/contexts/AuthContext";
+import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 // 카드 관련
 const SUITS = ["♠", "♥", "♦", "♣"];
@@ -54,6 +56,7 @@ const isRed = (suit: string) => suit === "♥" || suit === "♦";
 type GameState = "BETTING" | "PLAYING" | "DEALER_TURN" | "FINISHED";
 
 export default function BlackjackPage() {
+    const { session } = useAuth();
     const { theme } = useTheme();
     const [mounted, setMounted] = useState(false);
     const [coins, setCoins] = useState(1000);
@@ -102,6 +105,10 @@ export default function BlackjackPage() {
                 setTotalWins(prev => prev + 1);
                 setGameState("FINISHED");
                 triggerConfetti();
+                if (session?.user?.email) {
+                    addCottonCandy(session.user.email, 20, "블랙잭 승리");
+                    incrementMinigamePlays(session.user.email);
+                }
             }
         } else {
             setGameState("PLAYING");
@@ -155,11 +162,19 @@ export default function BlackjackPage() {
                         setCoins(prev => prev + bet * 2);
                         setTotalWins(prev => prev + 1);
                         triggerConfetti();
+                        if (session?.user?.email) {
+                            addCottonCandy(session.user.email, 20, "블랙잭 승리");
+                            incrementMinigamePlays(session.user.email);
+                        }
                     } else if (playerTotal > dealerTotal) {
                         setResultMessage("승리! 🎉");
                         setCoins(prev => prev + bet * 2);
                         setTotalWins(prev => prev + 1);
                         triggerConfetti();
+                        if (session?.user?.email) {
+                            addCottonCandy(session.user.email, 20, "블랙잭 승리");
+                            incrementMinigamePlays(session.user.email);
+                        }
                     } else if (playerTotal === dealerTotal) {
                         setResultMessage("무승부! 배팅금 반환 🤝");
                         setCoins(prev => prev + bet);
