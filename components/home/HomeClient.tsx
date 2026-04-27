@@ -97,6 +97,13 @@ export default function HomeClient() {
 
   if (status === "loading") return null;
 
+  const CANDY_WAYS = [
+    { emoji: "📅", label: "출석 체크", desc: "매일 +50개", color: "text-orange-500" },
+    { emoji: "🎮", label: "미니게임", desc: "게임마다 상이", color: "text-blue-500" },
+    { emoji: "🧩", label: "퀴즈 정답", desc: "정답마다 +10개", color: "text-green-500" },
+    { emoji: "🛒", label: "마켓 사용", desc: "솜사탕으로 구매", color: "text-purple-500" },
+  ];
+
   return (
     <section className="w-full px-6 py-6">
       <div className="max-w-7xl mx-auto">
@@ -172,6 +179,22 @@ export default function HomeClient() {
                     {checking ? "처리 중..." : "오늘 출석 체크 +50 🍭"}
                   </button>
                 )}
+              </div>
+            </div>
+
+            {/* 솜사탕 획득 방법 안내 */}
+            <div className="mt-4 pt-4 border-t border-[#F9954E]/10">
+              <p className="text-xs font-bold text-neutral-500 dark:text-neutral-400 mb-3">🍭 솜사탕 획득 방법</p>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
+                {CANDY_WAYS.map((way) => (
+                  <div key={way.label} className="flex items-center gap-2 bg-white/60 dark:bg-black/30 rounded-xl px-3 py-2">
+                    <span className="text-lg">{way.emoji}</span>
+                    <div>
+                      <p className="text-xs font-bold text-foreground">{way.label}</p>
+                      <p className={`text-[10px] font-semibold ${way.color}`}>{way.desc}</p>
+                    </div>
+                  </div>
+                ))}
               </div>
             </div>
           </motion.div>
