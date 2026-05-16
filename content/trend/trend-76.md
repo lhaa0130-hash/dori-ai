@@ -1,7 +1,7 @@
 ---
 title: "GPT-4.1 mini 전면 출시·코딩 에이전트 경쟁 격화 — 2025년 5월 셋째 주 AI 뉴스 총정리"
 description: "OpenAI가 GPT-4.1 mini를 ChatGPT 전 사용자에게 개방하고 코딩 에이전트 경쟁이 본격화됐다. 이번 주 가장 중요한 AI 뉴스 5가지를 빠르게 정리한다."
-date: "2025-05-16"
+date: "2026-05-16"
 author: "DORI-AI"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-76.png"
