@@ -39,22 +39,6 @@ export default function SignupPage() {
         throw new Error(errorData.error || "가입 처리 중 오류가 발생했습니다.");
       }
 
-      // localStorage에 프로필 생성
-      const profileData = {
-        id: email, // 이메일을 ID로 사용하여 일관성 유지
-        email: email,
-        nickname: name,
-        gender: gender,
-        ageGroup: ageGroup,
-        tier: 1,
-        level: 1,
-        doriExp: 0,
-        point: 0,
-        createdAt: new Date().toISOString(),
-      };
-
-      localStorage.setItem(`dori_profile_${email}`, JSON.stringify(profileData));
-      localStorage.setItem(`dori_user_name_${email}`, name);
 
       alert("회원가입이 완료되었습니다! 로그인해주세요.");
       router.push("/login");
