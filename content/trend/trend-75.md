@@ -1,7 +1,7 @@
 ---
 title: "2025년 5월 AI 트렌드: 에이전트 AI·대선·로봇까지, 지금 알아야 할 5가지"
 description: "에이전틱 AI의 본격 확산부터 한국 대선의 AI 정책 화두, 물류 현장을 바꾸는 AI 로봇까지 — 2025년 5월 현재 가장 주목해야 할 AI 트렌드 5가지를 정리했다."
-date: "2025-05-16"
+date: "2026-05-16"
 author: "DORI-AI"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-75.png"
