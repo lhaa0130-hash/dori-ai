@@ -123,7 +123,7 @@ export default function HomeClient() {
               </div>
             </div>
             <Link
-              href="/auth/login"
+              href="/login"
               className="shrink-0 px-5 py-2 rounded-full bg-[#F9954E] text-white text-sm font-bold hover:bg-[#E8832E] transition-colors"
             >
               로그인하고 솜사탕 받기 →
