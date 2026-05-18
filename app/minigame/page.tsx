@@ -10,6 +10,7 @@ const GAMES = [
     {
         id: "dungeon",
         title: "도리 크래프트",
+        hidden: true,
         description: "WASD로 이동하며 몬스터를 처치하는 성장형 RPG!",
         icon: <Skull className="w-5 h-5" />,
         status: "NEW",
@@ -26,6 +27,7 @@ const GAMES = [
     {
         id: "tetris",
         title: "테트리스",
+        hidden: true,
         description: "블록을 쌓아 라인을 제거하세요!",
         icon: <LayoutGrid className="w-5 h-5" />,
         status: "NEW",
@@ -215,7 +217,7 @@ export default function MinigamePage() {
             {/* Game Grid - Compact Design */}
             <section className="container max-w-5xl mx-auto px-6 pb-32 relative z-10">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3 md:gap-4">
-                    {GAMES.map((game, index) => (
+                    {GAMES.filter(g => !g.hidden).map((game, index) => (
                         <motion.div
                             key={game.id}
                             initial={{ opacity: 0, y: 20 }}
