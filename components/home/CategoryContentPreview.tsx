@@ -245,7 +245,7 @@ export function ProjectPreview() {
                     <Cog className="w-4 h-4 text-[#F9954E]" />
                     진행 중인 프로젝트
                 </h3>
-                <Link href="/project" className="text-xs text-[#F9954E] hover:text-[#E8832E] flex items-center gap-1 transition-colors">
+                <Link href="/studio" className="text-xs text-[#F9954E] hover:text-[#E8832E] flex items-center gap-1 transition-colors">
                     전체 보기
                     <ArrowRight className="w-3 h-3" />
                 </Link>
@@ -259,7 +259,7 @@ export function ProjectPreview() {
                         transition={{ delay: index * 0.08 }}
                         viewport={{ once: true }}
                     >
-                        <Link href="/project" className="group block">
+                        <Link href="/studio" className="group block">
                             <div className="py-2 px-3 rounded-lg bg-card/50 border border-strict hover:border-[#FBAA60] dark:hover:border-[#F9954E] transition-all hover:shadow-md">
                                 <div className="flex items-start gap-2.5 mb-0.5">
                                     <div className="shrink-0 mt-0.5">
