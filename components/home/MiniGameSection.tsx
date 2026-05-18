@@ -6,10 +6,10 @@ import { ArrowRight, Play } from "lucide-react";
 
 const games = [
   {
-    emoji: "⚔️",
-    title: "도리 크래프트",
-    description: "성장형 자동 RPG — WASD로 이동하며 몬스터를 처치하세요",
-    href: "/minigame/dungeon",
+    emoji: "🎯",
+    title: "보스 클릭커",
+    description: "클릭으로 몬스터를 처치하고 강해지세요",
+    href: "/minigame/clicker",
     candy: "+100",
     color: "from-red-500/10 to-orange-500/10",
     border: "hover:border-red-300 dark:hover:border-red-700",
@@ -17,10 +17,10 @@ const games = [
     badgeColor: "bg-red-500",
   },
   {
-    emoji: "🟦",
-    title: "테트리스",
-    description: "클래식 블록 퍼즐로 집중력을 높이세요",
-    href: "/minigame/tetris",
+    emoji: "🐍",
+    title: "스네이크",
+    description: "뱀을 길게 키우는 고전 아케이드 게임",
+    href: "/minigame/snake",
     candy: "+50",
     color: "from-blue-500/10 to-cyan-500/10",
     border: "hover:border-blue-300 dark:hover:border-blue-700",
@@ -42,7 +42,7 @@ const games = [
     emoji: "⌨️",
     title: "타이핑 게임",
     description: "AI 용어 타이핑으로 빠른 손가락을 만드세요",
-    href: "/minigame/typing",
+    href: "/minigame/typingspeed",
     candy: "+40",
     color: "from-green-500/10 to-teal-500/10",
     border: "hover:border-green-300 dark:hover:border-green-700",
