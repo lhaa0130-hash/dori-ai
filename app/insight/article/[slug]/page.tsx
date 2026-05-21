@@ -78,6 +78,25 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
   const articleUrl = `${SITE_URL}/insight/article/${params.slug}`;
   const postTags: string[] = Array.isArray(post.tags) ? post.tags : (post.tags ? [post.tags] : []);
 
+  // ✅ JSON-LD 구조화 데이터 (구글 리치 결과 - 썸네일/날짜/작성자 노출)
+  const jsonLd = {
+    "@context": "https://schema.org",
+    "@type": "Article",
+    "headline": post.title,
+    "description": post.summary || post.description || post.title,
+    "image": post.thumbnail_url || `${SITE_URL}/og-default.png`,
+    "datePublished": post.date,
+    "dateModified": post.date,
+    "author": { "@type": "Organization", "name": "DORI-AI", "url": SITE_URL },
+    "publisher": {
+      "@type": "Organization",
+      "name": "DORI-AI",
+      "logo": { "@type": "ImageObject", "url": `${SITE_URL}/icon.svg` },
+    },
+    "mainEntityOfPage": { "@type": "WebPage", "@id": articleUrl },
+    ...(postTags.length > 0 ? { "keywords": postTags.join(", ") } : {}),
+  };
+
   // Next.js Link 컴포넌트에는 href 속성이 필수입니다.
   const components = {
     a: ({ href, ...props }: any) => {
@@ -110,6 +129,11 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
+      {/* JSON-LD 구조화 데이터 */}
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       {/* 읽기 진행 바 (상단 고정) */}
       <ReadingProgress />
 
