@@ -4,6 +4,8 @@ import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/layout/Header";
 import { useRouter } from "next/navigation";
+import { collection, getDocs } from "firebase/firestore";
+import { getFirebaseFirestore } from "@/lib/firebase";
 
 // ─── 관리자 이메일 (단 1명만) ─────────────────────────────────────
 const ADMIN_EMAIL = "lhaa0130@gmail.com";
@@ -87,11 +89,11 @@ export default function AdminPage() {
     }
   }, [mounted, status, user, router]);
 
-  // ── localStorage에서 데이터 로드 ──
-  const loadData = useCallback(() => {
+  // ── 데이터 로드 (회원=Firestore, 방문자/커뮤니티=localStorage) ──
+  const loadData = useCallback(async () => {
     if (typeof window === "undefined") return;
 
-    // 방문자 통계
+    // 방문자 통계 (localStorage 기반 유지)
     setDailyVisitors(parseInt(localStorage.getItem("dori_daily_visitors") || "0", 10));
     setTotalVisitors(parseInt(localStorage.getItem("dori_total_visitors") || "0", 10));
     try {
@@ -103,22 +105,29 @@ export default function AdminPage() {
       setVisitorsList(vList);
     } catch {}
 
-    // 사용자 목록: 모든 dori_profile_ 키 스캔
-    const userList: UserData[] = [];
-    const premiumList: string[] = [];
-    for (let i = 0; i < localStorage.length; i++) {
-      const key = localStorage.key(i);
-      if (key && key.startsWith("dori_profile_")) {
-        try {
-          const data = JSON.parse(localStorage.getItem(key) || "{}");
-          const email = key.replace("dori_profile_", "");
-          userList.push({ email, ...data });
-          if (data.isPremium) premiumList.push(email);
-        } catch {}
-      }
+    // 사용자 목록: Firestore users 컬렉션 (기기 무관 정확한 회원수)
+    try {
+      const db = getFirebaseFirestore();
+      const snap = await getDocs(collection(db, "users"));
+      const userList: UserData[] = [];
+      const premiumList: string[] = [];
+      snap.forEach((d) => {
+        const data = d.data() as Record<string, unknown>;
+        const email = (data.email as string) || d.id;
+        userList.push({ email, ...data } as UserData);
+        if (data.isPremium) premiumList.push(email);
+      });
+      // 가입일 최신순 정렬
+      userList.sort((a: any, b: any) => {
+        const ta = a.createdAt?.seconds ? a.createdAt.seconds : (a.createdAt ? new Date(a.createdAt).getTime() / 1000 : 0);
+        const tb = b.createdAt?.seconds ? b.createdAt.seconds : (b.createdAt ? new Date(b.createdAt).getTime() / 1000 : 0);
+        return tb - ta;
+      });
+      setUsers(userList);
+      setPremiumUsers(premiumList);
+    } catch (e) {
+      console.warn("[admin] Firestore 회원 로드 실패:", e);
     }
-    setUsers(userList);
-    setPremiumUsers(premiumList);
 
     // 커뮤니티 포스트 스캔
     const posts: CommunityPost[] = [];
