@@ -40,6 +40,7 @@ export const metadata = {
   },
   other: {
     'pretendard-font': 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css',
+    'naver-site-verification': 'fc6aff074a85b391562bd15daa80e96e0f2a946a',
   },
 };
 
