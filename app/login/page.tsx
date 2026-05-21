@@ -32,7 +32,7 @@ export default function LoginPage() {
   const [showSignupPassword, setShowSignupPassword] = useState(false);
   const [name, setName] = useState("");
   const [gender, setGender] = useState<"male" | "female" | "">("");
-  const [ageGroup, setAgeGroup] = useState<"10s" | "20s" | "30s" | "40s" | "">("");
+  const [ageGroup, setAgeGroup] = useState<"10s" | "20s" | "30s" | "40s" | "50s" | "60s+" | "">("");
 
   useEffect(() => setMounted(true), []);
 
@@ -42,6 +42,14 @@ export default function LoginPage() {
       router.push("/");
     }
   }, [session, router]);
+
+  // /login?tab=signup 으로 들어오면 회원가입 탭 자동 선택 (/signup 통합)
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      const params = new URLSearchParams(window.location.search);
+      if (params.get("tab") === "signup") setMode("signup");
+    }
+  }, []);
 
   const isDark = mounted && theme === "dark";
 
@@ -91,7 +99,7 @@ export default function LoginPage() {
       password: signupPassword,
       name,
       gender: gender as "male" | "female",
-      ageGroup: ageGroup as "10s" | "20s" | "30s" | "40s",
+      ageGroup: ageGroup as "10s" | "20s" | "30s" | "40s" | "50s" | "60s+",
     });
 
     if (result.success) {
@@ -1022,7 +1030,7 @@ export default function LoginPage() {
                   <select
                     value={ageGroup}
                     onChange={(e) =>
-                      setAgeGroup(e.target.value as "10s" | "20s" | "30s" | "40s" | "")
+                      setAgeGroup(e.target.value as "10s" | "20s" | "30s" | "40s" | "50s" | "60s+" | "")
                     }
                     style={{
                       width: "100%",
@@ -1050,7 +1058,9 @@ export default function LoginPage() {
                     <option value="10s">10대</option>
                     <option value="20s">20대</option>
                     <option value="30s">30대</option>
-                    <option value="40s">40대 이상</option>
+                    <option value="40s">40대</option>
+                    <option value="50s">50대</option>
+                    <option value="60s+">60대 이상</option>
                   </select>
                 </div>
               </div>

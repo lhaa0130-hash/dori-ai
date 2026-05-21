@@ -38,7 +38,7 @@ export interface SignupData {
     password: string;
     name: string;
     gender?: "male" | "female";
-    ageGroup?: "10s" | "20s" | "30s" | "40s";
+    ageGroup?: "10s" | "20s" | "30s" | "40s" | "50s" | "60s+";
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
