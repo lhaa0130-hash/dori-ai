@@ -1,18 +1,22 @@
 "use client";
 
 import { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
+import {
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    signInWithPopup,
+    signOut,
+    onAuthStateChanged,
+    updateProfile,
+    User as FirebaseUser,
+} from "firebase/auth";
+import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
+import { getFirebaseAuth, getFirebaseFirestore, getGoogleProvider } from "@/lib/firebase";
 
-// next-auth 호환 세션 형식
 interface AuthUser {
     email: string;
     name: string;
     image?: string;
-}
-
-declare global {
-    interface Window {
-        google: any;
-    }
 }
 
 interface AuthSession {
@@ -37,58 +41,63 @@ export interface SignupData {
     ageGroup?: "10s" | "20s" | "30s" | "40s";
 }
 
-interface StoredUser {
-    email: string;
-    name: string;
-    passwordHash: string;
-    gender: "male" | "female";
-    ageGroup: "10s" | "20s" | "30s" | "40s";
-    createdAt: string;
-}
-
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
-// 간단한 해싱 (SHA-256)
-async function hashPassword(password: string): Promise<string> {
-    const encoder = new TextEncoder();
-    const data = encoder.encode(password + "_dori_salt_2024");
-    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
-    const hashArray = Array.from(new Uint8Array(hashBuffer));
-    return hashArray.map((b) => b.toString(16).padStart(2, "0")).join("");
+// Firebase User → 세션 형식 매핑
+function mapUser(fu: FirebaseUser): AuthSession {
+    return {
+        user: {
+            email: fu.email || "",
+            name: fu.displayName || (fu.email ? fu.email.split("@")[0] : "사용자"),
+            image: fu.photoURL || undefined,
+        },
+    };
 }
 
-const SESSION_KEY = "dori_auth_session";
-const USERS_KEY = "dori_auth_users";
-
-function getStoredUsers(): StoredUser[] {
-    if (typeof window === "undefined") return [];
-    try {
-        return JSON.parse(localStorage.getItem(USERS_KEY) || "[]");
-    } catch {
-        return [];
+// Firebase 에러코드 → 한국어 메시지
+function mapError(e: any): string {
+    const code = e?.code || "";
+    switch (code) {
+        case "auth/email-already-in-use": return "이미 등록된 이메일입니다.";
+        case "auth/invalid-email": return "올바르지 않은 이메일 형식입니다.";
+        case "auth/weak-password": return "비밀번호는 6자 이상이어야 합니다.";
+        case "auth/user-not-found": return "등록되지 않은 이메일입니다.";
+        case "auth/wrong-password":
+        case "auth/invalid-credential": return "이메일 또는 비밀번호가 일치하지 않습니다.";
+        case "auth/popup-closed-by-user": return "로그인 창이 닫혔습니다.";
+        case "auth/too-many-requests": return "잠시 후 다시 시도해주세요.";
+        case "auth/network-request-failed": return "네트워크 오류입니다.";
+        default: return e?.message || "오류가 발생했습니다.";
     }
 }
 
-function saveStoredUsers(users: StoredUser[]) {
-    localStorage.setItem(USERS_KEY, JSON.stringify(users));
-}
-
-function getStoredSession(): AuthSession | null {
-    if (typeof window === "undefined") return null;
+// Firestore에 회원 프로필 보장 (없으면 생성) — 회원수 집계의 기준
+async function ensureProfile(fu: FirebaseUser, extra?: Partial<SignupData>) {
     try {
-        const stored = localStorage.getItem(SESSION_KEY);
-        if (!stored) return null;
-        return JSON.parse(stored);
-    } catch {
-        return null;
-    }
-}
-
-function saveSession(session: AuthSession | null) {
-    if (session) {
-        localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-    } else {
-        localStorage.removeItem(SESSION_KEY);
+        const db = getFirebaseFirestore();
+        const ref = doc(db, "users", fu.uid);
+        const snap = await getDoc(ref);
+        if (!snap.exists()) {
+            await setDoc(ref, {
+                uid: fu.uid,
+                email: fu.email || "",
+                name: fu.displayName || extra?.name || (fu.email ? fu.email.split("@")[0] : "사용자"),
+                gender: extra?.gender || null,
+                ageGroup: extra?.ageGroup || null,
+                tier: 1,
+                level: 1,
+                doriExp: 0,
+                point: 0,
+                provider: fu.providerData[0]?.providerId || "password",
+                createdAt: serverTimestamp(),
+            });
+        }
+        // 로컬 프로필 호환 (기존 컴포넌트들이 참조)
+        if (typeof window !== "undefined" && fu.email) {
+            localStorage.setItem(`dori_user_name_${fu.email}`, fu.displayName || extra?.name || fu.email.split("@")[0]);
+        }
+    } catch (err) {
+        console.warn("ensureProfile 실패:", err);
     }
 }
 
@@ -96,179 +105,84 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     const [session, setSession] = useState<AuthSession | null>(null);
     const [status, setStatus] = useState<"loading" | "authenticated" | "unauthenticated">("loading");
 
-    // 초기 세션 복원
+    // Firebase 인증 상태 구독 (기기/탭 무관하게 서버 기준 세션 복원)
     useEffect(() => {
-        const stored = getStoredSession();
-        if (stored) {
-            setSession(stored);
-            setStatus("authenticated");
-        } else {
+        let unsub = () => {};
+        try {
+            const auth = getFirebaseAuth();
+            unsub = onAuthStateChanged(auth, (fu) => {
+                if (fu) {
+                    setSession(mapUser(fu));
+                    setStatus("authenticated");
+                } else {
+                    setSession(null);
+                    setStatus("unauthenticated");
+                }
+            });
+        } catch (err) {
+            console.error("Firebase auth 초기화 실패 (환경변수 확인 필요):", err);
             setStatus("unauthenticated");
         }
+        return () => unsub();
     }, []);
 
     const login = useCallback(async (email: string, password: string) => {
         try {
-            const users = getStoredUsers();
-            const user = users.find((u) => u.email.toLowerCase() === email.toLowerCase());
-
-            if (!user) {
-                return { success: false, error: "등록되지 않은 이메일입니다." };
-            }
-
-            const hash = await hashPassword(password);
-            if (hash !== user.passwordHash) {
-                return { success: false, error: "비밀번호가 일치하지 않습니다." };
-            }
-
-            const newSession: AuthSession = {
-                user: {
-                    email: user.email,
-                    name: user.name,
-                },
-            };
-
-            setSession(newSession);
-            setStatus("authenticated");
-            saveSession(newSession);
-
+            const auth = getFirebaseAuth();
+            const cred = await signInWithEmailAndPassword(auth, email, password);
+            await ensureProfile(cred.user);
             return { success: true };
         } catch (err) {
-            return { success: false, error: "로그인 중 오류가 발생했습니다." };
+            return { success: false, error: mapError(err) };
         }
     }, []);
 
     const loginWithGoogle = useCallback(async () => {
         try {
-            // Google GIS SDK 로드 대기
-            if (!window.google) {
-                await new Promise((resolve, reject) => {
-                    const script = document.createElement("script");
-                    script.src = "https://accounts.google.com/gsi/client";
-                    script.onload = resolve;
-                    script.onerror = reject;
-                    document.head.appendChild(script);
-                });
-            }
-
-            return new Promise<{ success: boolean; error?: string }>((resolve) => {
-                const client = window.google.accounts.oauth2.initCodeClient({
-                    client_id: process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID || "521494096910-p5ft4jshv4e9amh9upm1jbs6f1a552ov.apps.googleusercontent.com",
-                    scope: "openid email profile",
-                    ux_mode: "popup",
-                    callback: async (response: any) => {
-                        if (response.code) {
-                            try {
-                                // 구글 유저 정보 가져오기 (원래는 서버에서 해야하지만 정적 사이트이므로 클라이언트에서 간소화)
-                                // 실제로는 여기서 코드를 서버로 보내야 하지만, 여기서는 직접 유저 정보 세팅 시뮬레이션
-                                // (이후에 실제 API 연동이 필요할 수 있음)
-
-                                // 임시로 이름만 "Google User"로 설정 (실제 구현 시 토큰 디코딩 필요)
-                                const decodedEmail = "google_user@gmail.com";
-
-                                const newSession: AuthSession = {
-                                    user: {
-                                        email: decodedEmail,
-                                        name: "Google 사용자",
-                                    },
-                                };
-
-                                setSession(newSession);
-                                setStatus("authenticated");
-                                saveSession(newSession);
-                                resolve({ success: true });
-                            } catch (e) {
-                                resolve({ success: false, error: "구글 프로필 정보 획득 실패" });
-                            }
-                        }
-                    },
-                    error_callback: (err: any) => {
-                        resolve({ success: false, error: err.message || "Google 로그인 실패" });
-                    }
-                });
-                client.requestCode();
-            });
-
-        } catch (err: any) {
-            console.error("Google login error:", err);
-            return { success: false, error: "Google 로그인 중 오류가 발생했습니다." };
+            const auth = getFirebaseAuth();
+            const result = await signInWithPopup(auth, getGoogleProvider());
+            await ensureProfile(result.user);
+            return { success: true };
+        } catch (err) {
+            return { success: false, error: mapError(err) };
         }
     }, []);
 
     const signup = useCallback(async (data: SignupData) => {
         try {
-            const users = getStoredUsers();
-
-            // 이메일 중복 확인
-            if (users.find((u) => u.email.toLowerCase() === data.email.toLowerCase())) {
-                return { success: false, error: "이미 등록된 이메일입니다." };
-            }
-
-            const passwordHash = await hashPassword(data.password);
-
-            const newUser: StoredUser = {
-                email: data.email,
-                name: data.name,
-                passwordHash,
-                gender: data.gender || "male",
-                ageGroup: data.ageGroup || "10s",
-                createdAt: new Date().toISOString(),
-            };
-
-            users.push(newUser);
-            saveStoredUsers(users);
-
-            // 프로필 데이터도 생성
-            const profileData = {
-                id: data.email,
-                email: data.email,
-                nickname: data.name,
-                gender: data.gender,
-                ageGroup: data.ageGroup,
-                tier: 1,
-                level: 1,
-                doriExp: 0,
-                point: 0,
-                createdAt: newUser.createdAt,
-            };
-            localStorage.setItem(`dori_profile_${data.email}`, JSON.stringify(profileData));
-            localStorage.setItem(`dori_user_name_${data.email}`, data.name);
-
-            // 자동 로그인
-            const newSession: AuthSession = {
-                user: {
-                    email: data.email,
-                    name: data.name,
-                },
-            };
-
-            setSession(newSession);
+            const auth = getFirebaseAuth();
+            const cred = await createUserWithEmailAndPassword(auth, data.email, data.password);
+            await updateProfile(cred.user, { displayName: data.name });
+            await ensureProfile(cred.user, data);
+            // 즉시 세션 반영 (onAuthStateChanged보다 빠르게)
+            setSession({ user: { email: data.email, name: data.name } });
             setStatus("authenticated");
-            saveSession(newSession);
-
             return { success: true };
         } catch (err) {
-            return { success: false, error: "회원가입 중 오류가 발생했습니다." };
+            return { success: false, error: mapError(err) };
         }
     }, []);
 
     const logout = useCallback(async () => {
-        // Firebase 로그아웃 제거
+        try {
+            await signOut(getFirebaseAuth());
+        } catch (err) {
+            console.warn("logout 실패:", err);
+        }
         setSession(null);
         setStatus("unauthenticated");
-        saveSession(null);
     }, []);
 
-    const update = useCallback((data: Partial<AuthUser>) => {
-        setSession((prev) => {
-            if (!prev) return prev;
-            const updated = {
-                ...prev,
-                user: { ...prev.user, ...data },
-            };
-            saveSession(updated);
-            return updated;
-        });
+    const update = useCallback(async (data: Partial<AuthUser>) => {
+        try {
+            const auth = getFirebaseAuth();
+            if (auth.currentUser && data.name) {
+                await updateProfile(auth.currentUser, { displayName: data.name });
+            }
+        } catch (err) {
+            console.warn("update 실패:", err);
+        }
+        setSession((prev) => (prev ? { ...prev, user: { ...prev.user, ...data } } : prev));
     }, []);
 
     return (
@@ -286,7 +200,7 @@ export function useAuth() {
     return context;
 }
 
-// next-auth 호환 래퍼 (기존 코드 마이그레이션을 최소화)
+// next-auth 호환 래퍼 (기존 코드 마이그레이션 최소화)
 export function useSession() {
     const { session, status } = useAuth();
     return {
