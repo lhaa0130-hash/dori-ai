@@ -97,6 +97,17 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
     ...(postTags.length > 0 ? { "keywords": postTags.join(", ") } : {}),
   };
 
+  // ✅ BreadcrumbList (구글 검색결과에 경로 노출 → 클릭률↑)
+  const breadcrumbLd = {
+    "@context": "https://schema.org",
+    "@type": "BreadcrumbList",
+    "itemListElement": [
+      { "@type": "ListItem", "position": 1, "name": "홈", "item": SITE_URL },
+      { "@type": "ListItem", "position": 2, "name": "AI 인사이트", "item": `${SITE_URL}/insight` },
+      { "@type": "ListItem", "position": 3, "name": post.title, "item": articleUrl },
+    ],
+  };
+
   // Next.js Link 컴포넌트에는 href 속성이 필수입니다.
   const components = {
     a: ({ href, ...props }: any) => {
@@ -133,6 +144,10 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }}
       />
       {/* 읽기 진행 바 (상단 고정) */}
       <ReadingProgress />

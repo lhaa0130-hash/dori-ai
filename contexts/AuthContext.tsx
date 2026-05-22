@@ -88,8 +88,8 @@ async function ensureProfile(fu: FirebaseUser, extra?: Partial<SignupData>) {
                 tier: 1,
                 level: 1,
                 doriExp: 0,
-                cottonCandy: 0,
-                cottonCandyTotal: 0,
+                cottonCandy: 100, // 가입 환영 솜사탕
+                cottonCandyTotal: 100,
                 attendance: { lastChecked: "", streak: 0, weekDays: [], totalDays: 0 },
                 provider: fu.providerData[0]?.providerId || "password",
                 createdAt: serverTimestamp(),

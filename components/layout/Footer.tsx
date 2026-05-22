@@ -31,6 +31,12 @@ export default function Footer() {
           {/* Right: Links & Contact */}
           <div className="flex flex-col md:items-end gap-4 justify-between">
             <div className="flex flex-wrap gap-4 text-xs font-medium text-neutral-600 dark:text-neutral-400">
+              <Link href="/legal/about" className="hover:text-[#F9954E] transition-colors">
+                회사 소개
+              </Link>
+              <Link href="/legal/contact" className="hover:text-[#F9954E] transition-colors">
+                문의하기
+              </Link>
               <Link href="/notice" className="hover:text-[#F9954E] transition-colors">
                 공지사항
               </Link>
