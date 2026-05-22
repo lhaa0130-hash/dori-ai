@@ -1,4 +1,16 @@
 // 솜사탕(CottonCandy) 포인트 시스템 헬퍼 함수
+// ──────────────────────────────────────────────────────────────────
+// [이관] 회원 인증이 Firebase로 옮겨가면서, 솜사탕/출석도 Firestore users/{uid}에
+// 영구 저장(기기 무관)되도록 변경했습니다.
+// - localStorage = 즉시 동기 읽기용 캐시 (UI 깜빡임 방지)
+// - Firestore   = 진짜 저장소 (다른 기기/브라우저에서도 동일하게 유지)
+// 기존 페이지(마이페이지·미니게임 22개·상점 등)는 함수 시그니처가 그대로라 수정 불필요.
+// 로그인하면 hydrateGameData()가 Firestore → localStorage로 동기화하고
+// "dori-gamedata-synced" 이벤트를 쏩니다. 화면은 이 이벤트로 잔액을 다시 읽습니다.
+
+import { doc, getDoc, setDoc, increment, serverTimestamp } from "firebase/firestore";
+import { onAuthStateChanged } from "firebase/auth";
+import { getFirebaseFirestore, getFirebaseAuth } from "@/lib/firebase";
 
 export interface CottonCandyHistoryEntry {
   date: string;       // ISO 날짜 문자열
@@ -6,22 +18,158 @@ export interface CottonCandyHistoryEntry {
   reason: string;     // 지급/차감 사유
 }
 
-const PROFILE_KEY = (email: string) => `dori_profile_${email}`;
+// ─── localStorage 키 ───────────────────────────────────────────────
+const PROFILE_KEY = (email: string) => `dori_profile_${email}`;          // 레거시(구버전 호환)
+const CC_KEY = (email: string) => `dori_cc_${email}`;                    // 솜사탕 잔액 캐시
+const CC_TOTAL_KEY = (email: string) => `dori_cc_total_${email}`;        // 누적 획득량 캐시
+const GAME_PROFILE_KEY = (email: string) => `dori_game_profile_${email}`;// Firestore 프로필 캐시(티어/레벨/경험치)
 const CANDY_HISTORY_KEY = (email: string) => `dori_candy_history_${email}`;
 const TODAY_EARNED_KEY = (email: string) => `dori_candy_today_${email}`;
+const ATTENDANCE_KEY = (email: string) => `dori_attendance_${email}`;
 
 function getTodayDateStr(): string {
   return new Date().toISOString().split("T")[0]; // YYYY-MM-DD
 }
 
-/** 현재 솜사탕 잔액 반환 */
+// ─── Firestore 연동(쓰기는 fire-and-forget, 실패해도 화면은 정상) ────
+function currentUid(): string | null {
+  try {
+    return getFirebaseAuth().currentUser?.uid || null;
+  } catch {
+    return null;
+  }
+}
+
+function fsAddCandy(amount: number) {
+  const uid = currentUid();
+  if (!uid || amount === 0) return;
+  try {
+    const db = getFirebaseFirestore();
+    setDoc(
+      doc(db, "users", uid),
+      {
+        cottonCandy: increment(amount),
+        ...(amount > 0 ? { cottonCandyTotal: increment(amount) } : {}),
+        lastActiveAt: serverTimestamp(),
+      },
+      { merge: true }
+    ).catch(() => {});
+  } catch {
+    /* noop */
+  }
+}
+
+function fsSetAttendance(att: AttendanceData) {
+  const uid = currentUid();
+  if (!uid) return;
+  try {
+    const db = getFirebaseFirestore();
+    setDoc(
+      doc(db, "users", uid),
+      { attendance: att, lastActiveAt: serverTimestamp() },
+      { merge: true }
+    ).catch(() => {});
+  } catch {
+    /* noop */
+  }
+}
+
+/**
+ * 로그인 직후 Firestore → localStorage 동기화 (Firestore가 진짜 값).
+ * 새 기기/브라우저에서 로그인해도 솜사탕·출석이 그대로 따라옵니다.
+ * 끝나면 "dori-gamedata-synced" 이벤트를 발생시켜 화면이 다시 읽도록 합니다.
+ */
+export async function hydrateGameData(): Promise<void> {
+  if (typeof window === "undefined") return;
+  let user;
+  try {
+    user = getFirebaseAuth().currentUser;
+  } catch {
+    return;
+  }
+  if (!user || !user.email) return;
+  const email = user.email;
+  try {
+    const db = getFirebaseFirestore();
+    const snap = await getDoc(doc(db, "users", user.uid));
+    if (!snap.exists()) return;
+    const d: any = snap.data();
+
+    if (typeof d.cottonCandy === "number") localStorage.setItem(CC_KEY(email), String(d.cottonCandy));
+    if (typeof d.cottonCandyTotal === "number") localStorage.setItem(CC_TOTAL_KEY(email), String(d.cottonCandyTotal));
+    if (d.attendance) localStorage.setItem(ATTENDANCE_KEY(email), JSON.stringify(d.attendance));
+
+    // 마이페이지/프로필 카드용 캐시 (티어·레벨·경험치)
+    localStorage.setItem(
+      GAME_PROFILE_KEY(email),
+      JSON.stringify({
+        cottonCandy: d.cottonCandy || 0,
+        doriExp: d.doriExp || 0,
+        tier: d.tier || 1,
+        level: d.level || 1,
+        nickname: d.name || undefined,
+        gender: d.gender || undefined,
+        ageGroup: d.ageGroup || undefined,
+      })
+    );
+
+    window.dispatchEvent(new Event("dori-gamedata-synced"));
+  } catch (e) {
+    console.warn("[cottonCandy] hydrate fail:", e);
+  }
+}
+
+/** Firestore에서 동기화해 둔 프로필(티어/레벨/경험치) 캐시 읽기 (동기) */
+export function getCachedGameProfile(
+  email: string
+): { cottonCandy: number; doriExp: number; tier: number; level: number; nickname?: string; gender?: string; ageGroup?: string } | null {
+  if (typeof window === "undefined") return null;
+  try {
+    const raw = localStorage.getItem(GAME_PROFILE_KEY(email));
+    if (!raw) return null;
+    return JSON.parse(raw);
+  } catch {
+    return null;
+  }
+}
+
+// 로그인 상태가 바뀌면 자동으로 Firestore 값을 끌어옵니다.
+if (typeof window !== "undefined") {
+  try {
+    onAuthStateChanged(getFirebaseAuth(), (u) => {
+      if (u) hydrateGameData();
+    });
+  } catch {
+    /* noop */
+  }
+}
+
+// ─── 솜사탕 잔액 ───────────────────────────────────────────────────
+
+/** 현재 솜사탕 잔액 반환 (localStorage 캐시 기준, 동기) */
 export function getCottonCandyBalance(email: string): number {
   if (typeof window === "undefined") return 0;
   try {
+    const v = localStorage.getItem(CC_KEY(email));
+    if (v != null) return parseInt(v, 10) || 0;
+    // 레거시: 구버전이 프로필에 박아둔 솜사탕 → 1회 승계
     const raw = localStorage.getItem(PROFILE_KEY(email));
-    if (!raw) return 0;
-    const parsed = JSON.parse(raw);
-    return parsed.cottonCandy || 0;
+    if (raw) {
+      const legacy = JSON.parse(raw)?.cottonCandy || 0;
+      if (legacy > 0) localStorage.setItem(CC_KEY(email), String(legacy));
+      return legacy;
+    }
+    return 0;
+  } catch {
+    return 0;
+  }
+}
+
+/** 누적 획득 솜사탕 (업적 판정용) */
+export function getCottonCandyTotal(email: string): number {
+  if (typeof window === "undefined") return 0;
+  try {
+    return parseInt(localStorage.getItem(CC_TOTAL_KEY(email)) || "0", 10) || 0;
   } catch {
     return 0;
   }
@@ -33,22 +181,18 @@ export function addCottonCandy(email: string, amount: number, reason: string): n
   if (amount <= 0) return getCottonCandyBalance(email);
 
   try {
-    // 프로필 업데이트
-    const raw = localStorage.getItem(PROFILE_KEY(email));
-    const profile = raw ? JSON.parse(raw) : {};
-    const newBalance = (profile.cottonCandy || 0) + amount;
-    profile.cottonCandy = newBalance;
-    localStorage.setItem(PROFILE_KEY(email), JSON.stringify(profile));
+    const newBalance = getCottonCandyBalance(email) + amount;
+    localStorage.setItem(CC_KEY(email), String(newBalance));
+    localStorage.setItem(CC_TOTAL_KEY(email), String(getCottonCandyTotal(email) + amount));
 
     // 히스토리 추가
     const historyRaw = localStorage.getItem(CANDY_HISTORY_KEY(email));
     const history: CottonCandyHistoryEntry[] = historyRaw ? JSON.parse(historyRaw) : [];
     history.unshift({ date: new Date().toISOString(), amount, reason });
-    // 최근 200건만 유지
     if (history.length > 200) history.splice(200);
     localStorage.setItem(CANDY_HISTORY_KEY(email), JSON.stringify(history));
 
-    // 오늘 획득량 업데이트
+    // 오늘 획득량
     const todayStr = getTodayDateStr();
     const todayRaw = localStorage.getItem(TODAY_EARNED_KEY(email));
     const todayData = todayRaw ? JSON.parse(todayRaw) : {};
@@ -59,6 +203,7 @@ export function addCottonCandy(email: string, amount: number, reason: string): n
     todayData.earned = (todayData.earned || 0) + amount;
     localStorage.setItem(TODAY_EARNED_KEY(email), JSON.stringify(todayData));
 
+    fsAddCandy(amount); // Firestore 영구 저장
     return newBalance;
   } catch {
     return getCottonCandyBalance(email);
@@ -71,22 +216,19 @@ export function spendCottonCandy(email: string, amount: number, reason: string):
   if (amount <= 0) return true;
 
   try {
-    const raw = localStorage.getItem(PROFILE_KEY(email));
-    const profile = raw ? JSON.parse(raw) : {};
-    const current = profile.cottonCandy || 0;
+    const current = getCottonCandyBalance(email);
     if (current < amount) return false;
 
     const newBalance = current - amount;
-    profile.cottonCandy = newBalance;
-    localStorage.setItem(PROFILE_KEY(email), JSON.stringify(profile));
+    localStorage.setItem(CC_KEY(email), String(newBalance));
 
-    // 히스토리 추가 (음수)
     const historyRaw = localStorage.getItem(CANDY_HISTORY_KEY(email));
     const history: CottonCandyHistoryEntry[] = historyRaw ? JSON.parse(historyRaw) : [];
     history.unshift({ date: new Date().toISOString(), amount: -amount, reason });
     if (history.length > 200) history.splice(200);
     localStorage.setItem(CANDY_HISTORY_KEY(email), JSON.stringify(history));
 
+    fsAddCandy(-amount); // Firestore 영구 저장
     return true;
   } catch {
     return false;
@@ -146,8 +288,6 @@ export interface AttendanceData {
   totalDays: number;
 }
 
-const ATTENDANCE_KEY = (email: string) => `dori_attendance_${email}`;
-
 export function getAttendanceData(email: string): AttendanceData {
   if (typeof window === "undefined") {
     return { lastChecked: "", streak: 0, weekDays: [], totalDays: 0 };
@@ -155,7 +295,17 @@ export function getAttendanceData(email: string): AttendanceData {
   try {
     const raw = localStorage.getItem(ATTENDANCE_KEY(email));
     if (!raw) return { lastChecked: "", streak: 0, weekDays: [], totalDays: 0 };
-    return JSON.parse(raw);
+    const parsed = JSON.parse(raw);
+    // 구버전 홈 화면이 {lastDate, streak}로 저장한 경우 호환 변환
+    if (parsed && parsed.lastChecked === undefined && parsed.lastDate !== undefined) {
+      return { lastChecked: parsed.lastDate || "", streak: parsed.streak || 0, weekDays: [], totalDays: parsed.streak || 0 };
+    }
+    return {
+      lastChecked: parsed.lastChecked || "",
+      streak: parsed.streak || 0,
+      weekDays: parsed.weekDays || [],
+      totalDays: parsed.totalDays || 0,
+    };
   } catch {
     return { lastChecked: "", streak: 0, weekDays: [], totalDays: 0 };
   }
@@ -177,35 +327,17 @@ export function checkAttendance(email: string): { success: boolean; bonus: boole
     const last = new Date(data.lastChecked);
     const today = new Date(todayStr);
     const diffDays = Math.floor((today.getTime() - last.getTime()) / (1000 * 60 * 60 * 24));
-    if (diffDays === 1) {
-      newStreak = data.streak + 1;
-    } else {
-      newStreak = 1;
-    }
+    newStreak = diffDays === 1 ? data.streak + 1 : 1;
   }
 
-  // 이번 주 날짜 계산 (월~일)
+  // 이번 주(월요일 기준) 출석 날짜 갱신
   const today = new Date(todayStr);
-  const dayOfWeek = today.getDay(); // 0=일, 1=월, ...6=토
+  const dayOfWeek = today.getDay(); // 0=일
   const mondayOffset = dayOfWeek === 0 ? -6 : 1 - dayOfWeek;
   const monday = new Date(today);
   monday.setDate(today.getDate() + mondayOffset);
-
-  const weekDays: string[] = [];
-  for (let i = 0; i < 7; i++) {
-    const d = new Date(monday);
-    d.setDate(monday.getDate() + i);
-    const ds = d.toISOString().split("T")[0];
-    if (ds <= todayStr && data.weekDays?.includes(ds)) {
-      weekDays.push(ds);
-    } else if (ds === todayStr) {
-      weekDays.push(ds);
-    } else if (ds <= todayStr && data.weekDays?.includes(ds)) {
-      weekDays.push(ds);
-    }
-  }
-  // 기존 이번 주 출석에서 오늘 날짜 추가
-  const prevWeekDays = (data.weekDays || []).filter((d) => d >= monday.toISOString().split("T")[0]);
+  const mondayStr = monday.toISOString().split("T")[0];
+  const prevWeekDays = (data.weekDays || []).filter((d) => d >= mondayStr);
   if (!prevWeekDays.includes(todayStr)) prevWeekDays.push(todayStr);
 
   const newData: AttendanceData = {
@@ -215,13 +347,12 @@ export function checkAttendance(email: string): { success: boolean; bonus: boole
     totalDays: (data.totalDays || 0) + 1,
   };
   localStorage.setItem(ATTENDANCE_KEY(email), JSON.stringify(newData));
+  fsSetAttendance(newData); // Firestore 영구 저장
 
-  // 솜사탕 지급
+  // 솜사탕 지급 (50 + 7일 연속 보너스 200) — addCottonCandy가 Firestore에도 반영
   let earned = 50;
   let bonus = false;
   addCottonCandy(email, 50, "출석 체크");
-
-  // 7일 연속 보너스
   if (newStreak > 0 && newStreak % 7 === 0) {
     addCottonCandy(email, 200, `${newStreak}일 연속 출석 보너스`);
     earned += 200;
@@ -401,6 +532,8 @@ export function getPurchasedItems(email: string): string[] {
 export function isPremiumUser(email: string): boolean {
   if (typeof window === "undefined") return false;
   try {
+    const cached = getCachedGameProfile(email) as any;
+    if (cached?.isPremium === true) return true;
     const raw = localStorage.getItem(PROFILE_KEY(email));
     if (!raw) return false;
     return JSON.parse(raw)?.isPremium === true;

@@ -12,6 +12,7 @@ import {
 } from "firebase/auth";
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { getFirebaseAuth, getFirebaseFirestore, getGoogleProvider } from "@/lib/firebase";
+import { hydrateGameData } from "@/lib/cottonCandy";
 
 interface AuthUser {
     email: string;
@@ -87,7 +88,9 @@ async function ensureProfile(fu: FirebaseUser, extra?: Partial<SignupData>) {
                 tier: 1,
                 level: 1,
                 doriExp: 0,
-                point: 0,
+                cottonCandy: 0,
+                cottonCandyTotal: 0,
+                attendance: { lastChecked: "", streak: 0, weekDays: [], totalDays: 0 },
                 provider: fu.providerData[0]?.providerId || "password",
                 createdAt: serverTimestamp(),
             });
@@ -114,6 +117,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                 if (fu) {
                     setSession(mapUser(fu));
                     setStatus("authenticated");
+                    hydrateGameData(); // Firestore → localStorage 솜사탕/출석 동기화
                 } else {
                     setSession(null);
                     setStatus("unauthenticated");

@@ -82,6 +82,13 @@ export default function ShopPage() {
     if (mounted) loadData();
   }, [mounted, loadData]);
 
+  // 다른 기기 로그인 등 Firestore 동기화 완료 시 잔액 갱신
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    window.addEventListener("dori-gamedata-synced", loadData);
+    return () => window.removeEventListener("dori-gamedata-synced", loadData);
+  }, [loadData]);
+
   const showToast = (type: "success" | "error", msg: string) => {
     setToast({ type, msg });
     setTimeout(() => setToast(null), 3000);

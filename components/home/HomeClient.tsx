@@ -4,65 +4,40 @@ import { useEffect, useState } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
-
-interface AttendanceData {
-  lastDate: string;
-  streak: number;
-}
-
-interface ProfileData {
-  cottonCandy?: number;
-  [key: string]: unknown;
-}
+import { getCottonCandyBalance, getAttendanceData, checkAttendance } from "@/lib/cottonCandy";
 
 function getTodayStr(): string {
   return new Date().toISOString().slice(0, 10);
 }
 
-function getAttendance(email: string): AttendanceData {
-  try {
-    const raw = localStorage.getItem(`dori_attendance_${email}`);
-    if (!raw) return { lastDate: "", streak: 0 };
-    return JSON.parse(raw) as AttendanceData;
-  } catch {
-    return { lastDate: "", streak: 0 };
-  }
-}
-
-function saveAttendance(email: string, data: AttendanceData) {
-  localStorage.setItem(`dori_attendance_${email}`, JSON.stringify(data));
-}
-
-function getProfile(email: string): ProfileData {
-  try {
-    const raw = localStorage.getItem(`dori_profile_${email}`);
-    if (!raw) return {};
-    return JSON.parse(raw) as ProfileData;
-  } catch {
-    return {};
-  }
-}
-
-function saveProfile(email: string, profile: ProfileData) {
-  localStorage.setItem(`dori_profile_${email}`, JSON.stringify(profile));
-}
-
 export default function HomeClient() {
   const { session, status } = useAuth();
-  const [attendance, setAttendance] = useState<AttendanceData>({ lastDate: "", streak: 0 });
+  const [attendance, setAttendance] = useState<{ streak: number }>({ streak: 0 });
   const [cottonCandy, setCottonCandy] = useState<number>(0);
   const [checkedToday, setCheckedToday] = useState(false);
   const [checking, setChecking] = useState(false);
   const [showConfetti, setShowConfetti] = useState(false);
 
+  // 마이페이지와 동일한 솜사탕/출석 시스템(Firestore 연동)을 공유
+  const refresh = (email: string) => {
+    const att = getAttendanceData(email);
+    setAttendance({ streak: att.streak || 0 });
+    setCottonCandy(getCottonCandyBalance(email));
+    setCheckedToday(att.lastChecked === getTodayStr());
+  };
+
   useEffect(() => {
-    if (session?.user?.email) {
-      const att = getAttendance(session.user.email);
-      const profile = getProfile(session.user.email);
-      setAttendance(att);
-      setCottonCandy(profile.cottonCandy ?? 0);
-      setCheckedToday(att.lastDate === getTodayStr());
-    }
+    if (session?.user?.email) refresh(session.user.email);
+  }, [session?.user?.email]);
+
+  // 다른 기기 로그인 등 Firestore 동기화가 끝나면 화면 갱신
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onSync = () => {
+      if (session?.user?.email) refresh(session.user.email);
+    };
+    window.addEventListener("dori-gamedata-synced", onSync);
+    return () => window.removeEventListener("dori-gamedata-synced", onSync);
   }, [session?.user?.email]);
 
   const handleAttendance = () => {
@@ -70,29 +45,13 @@ export default function HomeClient() {
     setChecking(true);
 
     const email = session.user.email;
-    const today = getTodayStr();
-    const att = getAttendance(email);
-
-    // 연속 출석 계산
-    const yesterday = new Date();
-    yesterday.setDate(yesterday.getDate() - 1);
-    const yesterdayStr = yesterday.toISOString().slice(0, 10);
-    const newStreak = att.lastDate === yesterdayStr ? att.streak + 1 : 1;
-
-    const newAtt: AttendanceData = { lastDate: today, streak: newStreak };
-    saveAttendance(email, newAtt);
-
-    // 솜사탕 지급
-    const profile = getProfile(email);
-    const newCandy = (profile.cottonCandy ?? 0) + 50;
-    saveProfile(email, { ...profile, cottonCandy: newCandy });
-
-    setAttendance(newAtt);
-    setCottonCandy(newCandy);
-    setCheckedToday(true);
+    const result = checkAttendance(email); // 솜사탕 지급 + Firestore 저장까지 처리
+    if (result.success) {
+      refresh(email);
+      setShowConfetti(true);
+      setTimeout(() => setShowConfetti(false), 2000);
+    }
     setChecking(false);
-    setShowConfetti(true);
-    setTimeout(() => setShowConfetti(false), 2000);
   };
 
   if (status === "loading") return null;

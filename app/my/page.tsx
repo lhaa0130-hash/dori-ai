@@ -10,6 +10,7 @@ import ProfileHero from "@/components/my/ProfileHero";
 import { UserProfile, createDefaultProfile, calculateTier, calculateLevel, ACTIVITY_SCORES } from "@/lib/userProfile";
 import {
   getCottonCandyBalance,
+  getCachedGameProfile,
   getTodayEarned,
   getMonthEarned,
   getCottonCandyHistory,
@@ -51,6 +52,15 @@ export default function MyPage() {
   const [achievementToast, setAchievementToast] = useState<{ name: string; reward: number } | null>(null);
   const [attendanceStreak, setAttendanceStreak] = useState(0);
   const [attendanceDone, setAttendanceDone] = useState(false);
+  // Firestore 동기화(다른 기기 로그인 등) 완료 시 화면 갱신용 트리거
+  const [syncTick, setSyncTick] = useState(0);
+
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onSync = () => setSyncTick((t) => t + 1);
+    window.addEventListener("dori-gamedata-synced", onSync);
+    return () => window.removeEventListener("dori-gamedata-synced", onSync);
+  }, []);
 
   // 일일 미션 정의
   const DAILY_MISSIONS = [
@@ -83,7 +93,7 @@ export default function MyPage() {
     if (mounted && user?.email) {
       loadCandyData();
     }
-  }, [mounted, user?.email, loadCandyData]);
+  }, [mounted, user?.email, loadCandyData, syncTick]);
 
   // 업적 자동 체크
   useEffect(() => {
@@ -146,7 +156,6 @@ export default function MyPage() {
     if (typeof window === 'undefined') return;
 
     try {
-      const savedProfile = localStorage.getItem(`dori_profile_${user.email}`);
       const savedName = localStorage.getItem(`dori_user_name_${user.email}`);
       const savedBio = localStorage.getItem(`dori_user_bio_${user.email}`);
       const savedStatusMessage = localStorage.getItem(`dori_status_${user.email}`);
@@ -157,50 +166,27 @@ export default function MyPage() {
       const statusMessage = savedStatusMessage || "";
       const profileImageUrl = savedImageUrl || undefined;
 
-      if (savedProfile) {
-        try {
-          const parsed = JSON.parse(savedProfile);
-          setProfile({
-            ...parsed,
-            nickname,
-            bio,
-            statusMessage,
-            profileImageUrl,
-            cottonCandy: parsed.cottonCandy || parsed.point || 0, // 하위 호환성 유지
-          });
-        } catch {
-          // 파싱 실패 시 기본값 사용
-          const defaultProfile = createDefaultProfile(user.email, user.email, nickname);
-          setProfile({
-            ...defaultProfile,
-            bio,
-            statusMessage,
-            profileImageUrl,
-          });
-        }
-      } else {
-        const defaultProfile = createDefaultProfile(user.email, user.email, nickname);
-        setProfile({
-          ...defaultProfile,
-          bio,
-          statusMessage,
-          profileImageUrl,
-        });
-        // 프로필이 없으면 localStorage에 저장 (구글 로그인 등으로 자동 회원 등록)
-        localStorage.setItem(`dori_profile_${user.email}`, JSON.stringify({
-          ...defaultProfile,
-          bio,
-          statusMessage,
-          profileImageUrl,
-        }));
-        if (!savedName) {
-          localStorage.setItem(`dori_user_name_${user.email}`, nickname);
-        }
+      // 티어/레벨/경험치/솜사탕은 Firestore(서버) 값을 사용 — 기기 무관 동일
+      const game = getCachedGameProfile(user.email);
+      const base = createDefaultProfile(user.email, user.email, nickname);
+      setProfile({
+        ...base,
+        nickname,
+        bio,
+        statusMessage,
+        profileImageUrl,
+        tier: (game?.tier as UserProfile["tier"]) || base.tier,
+        level: game?.level || base.level,
+        doriExp: game?.doriExp || 0,
+        cottonCandy: getCottonCandyBalance(user.email),
+      });
+      if (!savedName) {
+        localStorage.setItem(`dori_user_name_${user.email}`, nickname);
       }
     } catch (error) {
       console.error('프로필 로드 중 오류:', error);
     }
-  }, [mounted, status, user?.email, user?.name]);
+  }, [mounted, status, user?.email, user?.name, syncTick]);
 
   // 활동 데이터 로드 및 점수 계산
   useEffect(() => {
