@@ -173,13 +173,14 @@ export function createDefaultProfile(userId: string, email: string, nickname: st
   };
 }
 
-// 활동 타입별 점수 가중치
+// 활동 타입별 점수 가중치 (밸런스 조정: 고품질 기여 보상 강화, 좋아요 인플레 억제)
 export const ACTIVITY_SCORES = {
-  post: 10,
-  comment: 3,
-  like: 0, // 받은 좋아요는 별도 계산
-  receivedLike: 3,
-  guide: 20,
-  report: -10,
+  post: 15,        // 글 작성 (10 → 15)
+  comment: 5,      // 댓글 (3 → 5)
+  like: 0,         // 좋아요 누름 (보상 없음 유지 - 남발 방지)
+  receivedLike: 2, // 받은 좋아요 (3 → 2, 인플레 억제)
+  guide: 30,       // 가이드 작성 (20 → 30, 고품질 기여 우대)
+  attendance: 5,   // 출석 (신규: 매일 꾸준한 방문 보상 → 독자 티어 정체 해소)
+  report: -10,     // 신고당함 (페널티 유지)
 };
 
