@@ -323,8 +323,8 @@ h6 {
   .prose-premium h3,
   .prose-premium h4 {
     @apply font-bold tracking-tight text-gray-900 dark:text-gray-100;
-    margin-top: 2.5em;
-    margin-bottom: 1em;
+    margin-top: 2em;
+    margin-bottom: 0.75em;
     line-height: 1.3;
   }
 
@@ -346,7 +346,7 @@ h6 {
     font-size: 1.125rem;
     /* 18px */
     line-height: 1.8;
-    margin-bottom: 1.75em;
+    margin-bottom: 1.25em;
     word-break: keep-all;
     /* Korean word-break */
     overflow-wrap: break-word;
@@ -417,7 +417,7 @@ h6 {
 
   /* Horizontal Rule */
   .prose-premium hr {
-    @apply my-12 border-gray-200 dark:border-gray-800;
+    @apply my-5 border-gray-200 dark:border-gray-800;
   }
 
   /* Table */
