@@ -40,7 +40,7 @@ async function verifyAdminToken(idToken: string): Promise<boolean> {
 }
 
 // GitHub 파일 SHA 조회
-async function getFileSha(filePath: string, token: string): Promise<{ sha: string } | null> {
+async function getFileSha(filePath: string, token: string): Promise<{ sha: string; _status?: number; _error?: string } | null> {
   const res = await fetch(
     `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${filePath}`,
     {
@@ -51,7 +51,10 @@ async function getFileSha(filePath: string, token: string): Promise<{ sha: strin
       },
     }
   );
-  if (!res.ok) return null;
+  if (!res.ok) {
+    const errText = await res.text().catch(() => '');
+    return { sha: '', _status: res.status, _error: errText.substring(0, 200) };
+  }
   const data: any = await res.json();
   return { sha: data.sha };
 }
@@ -103,8 +106,12 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
 
     // GitHub 파일 SHA 조회
     const fileInfo = await getFileSha(filePath, GITHUB_TOKEN);
-    if (!fileInfo) {
-      return json({ error: `파일을 찾을 수 없음: ${filePath}` }, 404);
+    if (!fileInfo || !fileInfo.sha) {
+      const status = fileInfo?._status ?? 'fetch실패';
+      const ghErr = fileInfo?._error ?? '';
+      return json({
+        error: `GitHub API ${status} | 경로: ${filePath} | 토큰길이: ${GITHUB_TOKEN.length} | ${ghErr}`,
+      }, 404);
     }
 
     if (action === 'delete') {
