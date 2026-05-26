@@ -48,7 +48,7 @@ export default function Header() {
     {
       name: "동물도감",
       emoji: "🐾",
-      desc: "AI가 만드는 나만의 동물 도감",
+      desc: "포켓몬처럼, 진짜 동물을 배워요",
       href: "/animal",
       color: "from-emerald-500 to-teal-500",
       bg: "bg-emerald-50 dark:bg-emerald-900/20",
