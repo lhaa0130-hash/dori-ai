@@ -13,7 +13,7 @@ import { getAllReports } from "@/lib/reports";
 
 export default async function Home() {
   // 서버 컴포넌트에서 카테고리별 최신 글 가져오기
-  const latestTrends = getAllTrends().slice(0, 6);
+  const latestTrends = getAllTrends().slice(0, 3);
   const latestCurations = getAllCurations().slice(0, 3);
   const latestAnalyses = getAllAnalyses().slice(0, 3);
   const latestReports = getAllReports().slice(0, 3);
