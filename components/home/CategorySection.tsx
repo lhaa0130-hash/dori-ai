@@ -53,14 +53,14 @@ export default function CategorySection({
 
         {/* 카드 그리드 */}
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-          {posts.map((post) => (
+          {posts.slice(0, 3).map((post) => (
             <Link
               key={post.slug}
               href={`/insight/article/${post.slug}`}
               className="group block bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-100 dark:border-neutral-800 overflow-hidden hover:border-[#F9954E] dark:hover:border-[#F9954E] hover:shadow-lg hover:shadow-[#F9954E]/5 transition-all duration-300 hover:-translate-y-0.5"
             >
               {/* 썸네일 */}
-              <div className="relative w-full h-44 bg-gradient-to-br from-[#F9954E]/10 to-[#FF7B54]/5 overflow-hidden">
+              <div className="relative w-full h-[140px] bg-gradient-to-br from-[#F9954E]/10 to-[#FF7B54]/5 overflow-hidden">
                 {post.thumbnail ? (
                   <Image
                     src={post.thumbnail}
