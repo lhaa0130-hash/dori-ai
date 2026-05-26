@@ -13,6 +13,23 @@ import type { Metadata } from 'next';
 import ShareButtons from '@/components/article/ShareButtons';
 import ReadingProgress from '@/components/article/ReadingProgress';
 import RelatedArticles from '@/components/article/RelatedArticles';
+import AdminArticleBar from '@/components/admin/AdminArticleBar';
+import fs from 'fs';
+import path from 'path';
+
+// slug → 로컬 마크다운 파일 원본 읽기
+function getRawMarkdown(slug: string): string {
+  const candidates = [
+    path.join(process.cwd(), 'content/trend', `${slug}.md`),
+    path.join(process.cwd(), 'content/analysis', `${slug}.md`),
+    path.join(process.cwd(), 'content/curation', `${slug}.md`),
+    path.join(process.cwd(), 'content/reports', `${slug}.md`),
+  ];
+  for (const p of candidates) {
+    if (fs.existsSync(p)) return fs.readFileSync(p, 'utf-8');
+  }
+  return '';
+}
 
 const SITE_URL = "https://dori-ai.com";
 
@@ -60,6 +77,7 @@ export async function generateMetadata(
 
 export default async function InsightArticlePage({ params }: { params: { slug: string } }) {
   let post;
+  const rawMarkdown = getRawMarkdown(params.slug);
 
   try {
     post = await getPostData(params.slug);
@@ -201,6 +219,15 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
           />
         </article>
       </main>
+
+      {/* 관리자 전용 편집/삭제 바 */}
+      {rawMarkdown && (
+        <AdminArticleBar
+          slug={params.slug}
+          title={post.title || params.slug}
+          rawMarkdown={rawMarkdown}
+        />
+      )}
     </Suspense>
   );
 }

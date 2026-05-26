@@ -1,0 +1,190 @@
+'use client';
+
+import { useState } from 'react';
+import { useAuth } from '@/contexts/AuthContext';
+import { getAuth } from 'firebase/auth';
+import { useRouter } from 'next/navigation';
+
+const ADMIN_EMAIL = 'lhaa0130@gmail.com';
+
+interface Props {
+  slug: string;
+  title: string;
+  rawMarkdown: string;
+}
+
+export default function AdminArticleBar({ slug, title, rawMarkdown }: Props) {
+  const { session } = useAuth();
+  const user = session?.user || null;
+  const router = useRouter();
+
+  const [showEditModal, setShowEditModal] = useState(false);
+  const [editContent, setEditContent] = useState(rawMarkdown);
+  const [loading, setLoading] = useState(false);
+  const [toast, setToast] = useState<{ type: 'success' | 'error'; msg: string } | null>(null);
+
+  // 관리자 여부 확인
+  const isAdmin = user?.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+  if (!isAdmin) return null;
+
+  const showMsg = (type: 'success' | 'error', msg: string) => {
+    setToast({ type, msg });
+    setTimeout(() => setToast(null), 3500);
+  };
+
+  // Firebase ID 토큰 가져오기
+  const getIdToken = async (): Promise<string> => {
+    const auth = getAuth();
+    const currentUser = auth.currentUser;
+    if (!currentUser) throw new Error('로그인 상태가 아닙니다');
+    return await currentUser.getIdToken();
+  };
+
+  // ── 삭제 ──────────────────────────────────────────────────────────
+  const handleDelete = async () => {
+    if (!confirm(`"${title}"\n\n이 글을 삭제하시겠습니까?\nGitHub에서 파일이 제거되고 사이트가 재빌드됩니다.`)) return;
+    setLoading(true);
+    try {
+      const idToken = await getIdToken();
+      const res = await fetch('/api/admin/article', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'delete', slug, idToken }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || '삭제 실패');
+      showMsg('success', '삭제 완료. 사이트 재빌드 중... (약 5분 소요)');
+      setTimeout(() => router.push('/insight'), 2000);
+    } catch (err: any) {
+      showMsg('error', err.message || '삭제 중 오류 발생');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  // ── 수정 저장 ──────────────────────────────────────────────────────
+  const handleSave = async () => {
+    if (!editContent.trim()) {
+      showMsg('error', '내용을 입력해주세요');
+      return;
+    }
+    setLoading(true);
+    try {
+      const idToken = await getIdToken();
+      const res = await fetch('/api/admin/article', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ action: 'update', slug, content: editContent, idToken }),
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || '수정 실패');
+      setShowEditModal(false);
+      showMsg('success', '수정 완료. 사이트 재빌드 중... (약 5분 소요)');
+    } catch (err: any) {
+      showMsg('error', err.message || '수정 중 오류 발생');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  return (
+    <>
+      {/* 토스트 */}
+      {toast && (
+        <div
+          className={`fixed top-20 left-1/2 -translate-x-1/2 z-[9999] px-6 py-3 rounded-xl shadow-2xl font-medium text-white text-sm transition-all ${
+            toast.type === 'success' ? 'bg-green-600' : 'bg-red-600'
+          }`}
+        >
+          {toast.type === 'success' ? '✅ ' : '❌ '}{toast.msg}
+        </div>
+      )}
+
+      {/* 관리자 플로팅 바 */}
+      <div className="fixed bottom-6 right-6 z-50 flex flex-col gap-2">
+        {/* 관리자 배지 */}
+        <div className="flex items-center justify-end">
+          <span className="bg-purple-600 text-white text-xs px-2 py-0.5 rounded-full font-medium">
+            🔑 관리자
+          </span>
+        </div>
+
+        {/* 버튼 */}
+        <div className="flex gap-2">
+          <button
+            onClick={() => { setEditContent(rawMarkdown); setShowEditModal(true); }}
+            disabled={loading}
+            className="flex items-center gap-1.5 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-lg transition-all disabled:opacity-50"
+          >
+            ✏️ 수정
+          </button>
+          <button
+            onClick={handleDelete}
+            disabled={loading}
+            className="flex items-center gap-1.5 bg-red-600 hover:bg-red-700 text-white text-sm font-medium px-4 py-2.5 rounded-xl shadow-lg transition-all disabled:opacity-50"
+          >
+            {loading ? '⏳' : '🗑️'} 삭제
+          </button>
+        </div>
+      </div>
+
+      {/* 수정 모달 */}
+      {showEditModal && (
+        <div className="fixed inset-0 z-[9998] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
+          <div className="bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+            {/* 모달 헤더 */}
+            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700">
+              <div>
+                <h2 className="text-white font-bold text-lg">✏️ 글 수정</h2>
+                <p className="text-gray-400 text-sm mt-0.5 truncate max-w-md">{title}</p>
+              </div>
+              <button
+                onClick={() => setShowEditModal(false)}
+                className="text-gray-400 hover:text-white text-2xl leading-none px-2"
+              >
+                ×
+              </button>
+            </div>
+
+            {/* 에디터 */}
+            <div className="flex-1 overflow-hidden p-4">
+              <p className="text-gray-500 text-xs mb-2">
+                마크다운 형식으로 편집하세요. 저장 시 GitHub에 커밋되고 사이트가 재빌드됩니다. (약 5분 소요)
+              </p>
+              <textarea
+                value={editContent}
+                onChange={(e) => setEditContent(e.target.value)}
+                className="w-full h-full min-h-[55vh] bg-gray-800 text-gray-100 text-sm font-mono p-4 rounded-xl border border-gray-600 focus:border-blue-500 focus:outline-none resize-none leading-relaxed"
+                placeholder="마크다운 내용을 입력하세요..."
+                spellCheck={false}
+              />
+            </div>
+
+            {/* 모달 푸터 */}
+            <div className="flex items-center justify-between px-6 py-4 border-t border-gray-700">
+              <span className="text-gray-500 text-xs">
+                {editContent.length.toLocaleString()}자
+              </span>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowEditModal(false)}
+                  disabled={loading}
+                  className="px-5 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-xl transition-all"
+                >
+                  취소
+                </button>
+                <button
+                  onClick={handleSave}
+                  disabled={loading}
+                  className="px-5 py-2 bg-blue-600 hover:bg-blue-700 text-white text-sm font-medium rounded-xl transition-all disabled:opacity-50 flex items-center gap-2"
+                >
+                  {loading ? '⏳ 저장 중...' : '💾 저장'}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </>
+  );
+}
