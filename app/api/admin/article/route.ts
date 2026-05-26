@@ -117,7 +117,8 @@ export async function POST(req: NextRequest) {
 
     } else {
       // ── 수정 ───────────────────────────────────────────────────────
-      const contentBase64 = Buffer.from(content, 'utf-8').toString('base64');
+      // Buffer는 Node.js 전용 → Cloudflare Workers 호환 btoa 사용 (한국어 포함)
+      const contentBase64 = btoa(unescape(encodeURIComponent(content)));
       const res = await fetch(
         `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${filePath}`,
         {
