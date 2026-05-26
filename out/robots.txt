@@ -1,0 +1,15 @@
+User-Agent: *
+Allow: /
+Disallow: /my
+Disallow: /api/
+Disallow: /_next/
+Disallow: /studio
+
+User-Agent: Googlebot
+Allow: /
+Disallow: /my
+Disallow: /api/
+Disallow: /_next/
+Disallow: /studio
+
+Sitemap: https://dori-ai.com/sitemap.xml
