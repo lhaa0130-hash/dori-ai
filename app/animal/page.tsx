@@ -3,7 +3,7 @@ import AnimalPageClient from "./page.client";
 
 export const metadata = createMetadata({
   title: "동물도감 — DORI-AI",
-  description: "다양한 동물들을 포켓몬처럼 배워요. 포유류·조류·파충류·어류·곤충까지, 동물이 무엇을 먹고 어떻게 사는지 아이들이 쉽게 알아가는 동물 백과사전.",
+  description: "먹이·색깔·크기·서식지 등 다양한 속성으로 동물을 검색하고 분류하는 어린이 동물 백과사전. 곤충을 먹는 동물, 분홍색 동물, 손보다 작은 동물 등 원하는 기준으로 찾아보세요.",
   path: "/animal",
 });
 
