@@ -130,17 +130,17 @@ export default function AdminArticleBar({ slug, title, rawMarkdown }: Props) {
 
       {/* 수정 모달 */}
       {showEditModal && (
-        <div className="fixed inset-0 z-[9998] flex items-center justify-center bg-black/70 backdrop-blur-sm p-4">
-          <div className="bg-gray-900 border border-gray-700 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
+        <div className="fixed inset-0 z-[9998] flex items-center justify-center bg-black/60 dark:bg-black/70 backdrop-blur-sm p-4">
+          <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-700 rounded-2xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col">
             {/* 모달 헤더 */}
-            <div className="flex items-center justify-between px-6 py-4 border-b border-gray-700">
+            <div className="flex items-center justify-between px-6 py-4 border-b border-neutral-200 dark:border-neutral-700">
               <div>
-                <h2 className="text-white font-bold text-lg">✏️ 글 수정</h2>
-                <p className="text-gray-400 text-sm mt-0.5 truncate max-w-md">{title}</p>
+                <h2 className="text-foreground font-bold text-lg">✏️ 글 수정</h2>
+                <p className="text-neutral-500 dark:text-neutral-400 text-sm mt-0.5 truncate max-w-md">{title}</p>
               </div>
               <button
                 onClick={() => setShowEditModal(false)}
-                className="text-gray-400 hover:text-white text-2xl leading-none px-2"
+                className="text-neutral-400 hover:text-foreground text-2xl leading-none px-2 transition-colors"
               >
                 ×
               </button>
@@ -148,28 +148,28 @@ export default function AdminArticleBar({ slug, title, rawMarkdown }: Props) {
 
             {/* 에디터 */}
             <div className="flex-1 overflow-hidden p-4">
-              <p className="text-gray-500 text-xs mb-2">
+              <p className="text-neutral-400 dark:text-neutral-500 text-xs mb-2">
                 마크다운 형식으로 편집하세요. 저장 시 GitHub에 커밋되고 사이트가 재빌드됩니다. (약 5분 소요)
               </p>
               <textarea
                 value={editContent}
                 onChange={(e) => setEditContent(e.target.value)}
-                className="w-full h-full min-h-[55vh] bg-gray-800 text-gray-100 text-sm font-mono p-4 rounded-xl border border-gray-600 focus:border-blue-500 focus:outline-none resize-none leading-relaxed"
+                className="w-full h-full min-h-[55vh] bg-neutral-50 dark:bg-neutral-800 text-neutral-900 dark:text-neutral-100 text-sm font-mono p-4 rounded-xl border border-neutral-200 dark:border-neutral-600 focus:border-blue-500 focus:outline-none resize-none leading-relaxed"
                 placeholder="마크다운 내용을 입력하세요..."
                 spellCheck={false}
               />
             </div>
 
             {/* 모달 푸터 */}
-            <div className="flex items-center justify-between px-6 py-4 border-t border-gray-700">
-              <span className="text-gray-500 text-xs">
+            <div className="flex items-center justify-between px-6 py-4 border-t border-neutral-200 dark:border-neutral-700">
+              <span className="text-neutral-400 dark:text-neutral-500 text-xs">
                 {editContent.length.toLocaleString()}자
               </span>
               <div className="flex gap-3">
                 <button
                   onClick={() => setShowEditModal(false)}
                   disabled={loading}
-                  className="px-5 py-2 bg-gray-700 hover:bg-gray-600 text-white text-sm rounded-xl transition-all"
+                  className="px-5 py-2 bg-neutral-100 dark:bg-neutral-700 hover:bg-neutral-200 dark:hover:bg-neutral-600 text-foreground text-sm rounded-xl transition-all"
                 >
                   취소
                 </button>
