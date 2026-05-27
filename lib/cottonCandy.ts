@@ -9,7 +9,6 @@
 // "dori-gamedata-synced" 이벤트를 쏩니다. 화면은 이 이벤트로 잔액을 다시 읽습니다.
 
 import { doc, getDoc, setDoc, increment, serverTimestamp } from "firebase/firestore";
-import { onAuthStateChanged } from "firebase/auth";
 import { getFirebaseFirestore, getFirebaseAuth } from "@/lib/firebase";
 
 export interface CottonCandyHistoryEntry {
@@ -28,7 +27,13 @@ const TODAY_EARNED_KEY = (email: string) => `dori_candy_today_${email}`;
 const ATTENDANCE_KEY = (email: string) => `dori_attendance_${email}`;
 
 function getTodayDateStr(): string {
-  return new Date().toISOString().split("T")[0]; // YYYY-MM-DD
+  // ⚠️ toISOString()은 UTC 기준 → 한국(UTC+9) 자정~오전9시 사이엔 어제 날짜 반환
+  // 로컬 날짜로 계산해야 정확함
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
 }
 
 // ─── Firestore 연동(쓰기는 fire-and-forget, 실패해도 화면은 정상) ────
@@ -95,9 +100,29 @@ export async function hydrateGameData(): Promise<void> {
     if (!snap.exists()) return;
     const d: any = snap.data();
 
-    if (typeof d.cottonCandy === "number") localStorage.setItem(CC_KEY(email), String(d.cottonCandy));
-    if (typeof d.cottonCandyTotal === "number") localStorage.setItem(CC_TOTAL_KEY(email), String(d.cottonCandyTotal));
-    if (d.attendance) localStorage.setItem(ATTENDANCE_KEY(email), JSON.stringify(d.attendance));
+    // ── 솜사탕 잔액: 로컬이 더 크면 (방금 출석 등 써서 아직 Firestore에 반영 전) 덮어쓰지 않음
+    if (typeof d.cottonCandy === "number") {
+      const localCandy = getCottonCandyBalance(email);
+      // Firestore 값이 더 크거나 로컬에 없을 때만 업데이트 (race condition 방지)
+      if (d.cottonCandy >= localCandy) {
+        localStorage.setItem(CC_KEY(email), String(d.cottonCandy));
+      }
+    }
+    if (typeof d.cottonCandyTotal === "number") {
+      const localTotal = getCottonCandyTotal(email);
+      if (d.cottonCandyTotal >= localTotal) {
+        localStorage.setItem(CC_TOTAL_KEY(email), String(d.cottonCandyTotal));
+      }
+    }
+    // ── 출석: Firestore의 lastChecked가 로컬보다 같거나 최신일 때만 업데이트
+    if (d.attendance) {
+      const localAtt = getAttendanceData(email);
+      const fsChecked = d.attendance.lastChecked || "";
+      const localChecked = localAtt.lastChecked || "";
+      if (fsChecked >= localChecked) {
+        localStorage.setItem(ATTENDANCE_KEY(email), JSON.stringify(d.attendance));
+      }
+    }
 
     // 마이페이지/프로필 카드용 캐시 (티어·레벨·경험치)
     localStorage.setItem(
@@ -133,16 +158,9 @@ export function getCachedGameProfile(
   }
 }
 
-// 로그인 상태가 바뀌면 자동으로 Firestore 값을 끌어옵니다.
-if (typeof window !== "undefined") {
-  try {
-    onAuthStateChanged(getFirebaseAuth(), (u) => {
-      if (u) hydrateGameData();
-    });
-  } catch {
-    /* noop */
-  }
-}
+// ⚠️ 중복 제거: hydrateGameData()는 AuthContext.tsx의 onAuthStateChanged에서 이미 호출됨
+// 여기서 또 onAuthStateChanged를 등록하면 로그인 시 2번 Firestore 읽기 → race condition 발생
+// (이전 코드 삭제됨)
 
 // ─── 솜사탕 잔액 ───────────────────────────────────────────────────
 
@@ -346,17 +364,52 @@ export function checkAttendance(email: string): { success: boolean; bonus: boole
     weekDays: prevWeekDays,
     totalDays: (data.totalDays || 0) + 1,
   };
-  localStorage.setItem(ATTENDANCE_KEY(email), JSON.stringify(newData));
-  fsSetAttendance(newData); // Firestore 영구 저장
-
-  // 솜사탕 지급 (50 + 7일 연속 보너스 200) — addCottonCandy가 Firestore에도 반영
+  // 솜사탕 지급량 먼저 계산
   let earned = 50;
   let bonus = false;
-  addCottonCandy(email, 50, "출석 체크");
   if (newStreak > 0 && newStreak % 7 === 0) {
-    addCottonCandy(email, 200, `${newStreak}일 연속 출석 보너스`);
     earned += 200;
     bonus = true;
+  }
+
+  // ── localStorage 먼저 업데이트 (즉각 UI 반영)
+  localStorage.setItem(ATTENDANCE_KEY(email), JSON.stringify(newData));
+  const newBalance = getCottonCandyBalance(email) + earned;
+  localStorage.setItem(CC_KEY(email), String(newBalance));
+  localStorage.setItem(CC_TOTAL_KEY(email), String(getCottonCandyTotal(email) + earned));
+
+  // 히스토리 추가
+  const historyRaw = localStorage.getItem(CANDY_HISTORY_KEY(email));
+  const history: CottonCandyHistoryEntry[] = historyRaw ? JSON.parse(historyRaw) : [];
+  history.unshift({ date: new Date().toISOString(), amount: earned, reason: bonus ? `출석 체크 (${newStreak}일 연속 보너스 포함)` : "출석 체크" });
+  if (history.length > 200) history.splice(200);
+  localStorage.setItem(CANDY_HISTORY_KEY(email), JSON.stringify(history));
+
+  // 오늘 획득량
+  const todayEarnedRaw = localStorage.getItem(TODAY_EARNED_KEY(email));
+  const todayEarnedData = todayEarnedRaw ? JSON.parse(todayEarnedRaw) : {};
+  if (todayEarnedData.date !== todayStr) { todayEarnedData.date = todayStr; todayEarnedData.earned = 0; }
+  todayEarnedData.earned = (todayEarnedData.earned || 0) + earned;
+  localStorage.setItem(TODAY_EARNED_KEY(email), JSON.stringify(todayEarnedData));
+
+  // ── Firestore: 출석 + 솜사탕을 단일 write로 처리 (race condition 방지)
+  const uid = currentUid();
+  if (uid) {
+    try {
+      const db = getFirebaseFirestore();
+      setDoc(
+        doc(db, "users", uid),
+        {
+          attendance: newData,
+          cottonCandy: increment(earned),
+          cottonCandyTotal: increment(earned),
+          lastActiveAt: serverTimestamp(),
+        },
+        { merge: true }
+      ).catch((e) => console.warn("[출석] Firestore 저장 실패:", e));
+    } catch (e) {
+      console.warn("[출석] Firestore 저장 예외:", e);
+    }
   }
 
   return { success: true, bonus, message: "출석 완료!", earned };

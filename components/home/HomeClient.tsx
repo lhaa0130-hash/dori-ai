@@ -7,7 +7,12 @@ import { useAuth } from "@/contexts/AuthContext";
 import { getCottonCandyBalance, getAttendanceData, checkAttendance } from "@/lib/cottonCandy";
 
 function getTodayStr(): string {
-  return new Date().toISOString().slice(0, 10);
+  // toISOString()은 UTC 기준 → 한국 자정~오전9시 사이에 어제 날짜 반환하는 버그 방지
+  const d = new Date();
+  const y = d.getFullYear();
+  const m = String(d.getMonth() + 1).padStart(2, "0");
+  const day = String(d.getDate()).padStart(2, "0");
+  return `${y}-${m}-${day}`;
 }
 
 export default function HomeClient() {
