@@ -1,163 +1,216 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
-import { Database, Image as ImageIcon, Layout, BookOpen, Sparkles, ArrowRight, Search, Loader2 } from "lucide-react";
-import Link from "next/link";
+import { BookOpen, Sparkles, Search } from "lucide-react";
+
+// ── 동물 분류 카테고리 ────────────────────────────────────────────
+const CATEGORIES = [
+  {
+    id: "mammal",
+    emoji: "🦁",
+    name: "포유류",
+    desc: "새끼를 낳고 젖을 먹여 키워요",
+    color: "from-amber-400 to-orange-400",
+    bg: "bg-amber-50 dark:bg-amber-900/20",
+    border: "border-amber-200 dark:border-amber-800",
+    examples: ["사자", "코끼리", "고래", "토끼", "박쥐"],
+    count: 0,
+  },
+  {
+    id: "bird",
+    emoji: "🦅",
+    name: "조류",
+    desc: "깃털이 있고 알을 낳아요",
+    color: "from-sky-400 to-blue-400",
+    bg: "bg-sky-50 dark:bg-sky-900/20",
+    border: "border-sky-200 dark:border-sky-800",
+    examples: ["독수리", "펭귄", "앵무새", "공작", "올빼미"],
+    count: 0,
+  },
+  {
+    id: "reptile",
+    emoji: "🦎",
+    name: "파충류",
+    desc: "비늘이 있고 변온동물이에요",
+    color: "from-green-400 to-emerald-400",
+    bg: "bg-green-50 dark:bg-green-900/20",
+    border: "border-green-200 dark:border-green-800",
+    examples: ["악어", "거북", "카멜레온", "왕도마뱀", "코모도드래곤"],
+    count: 0,
+  },
+  {
+    id: "fish",
+    emoji: "🐟",
+    name: "어류",
+    desc: "아가미로 숨 쉬며 물속에 살아요",
+    color: "from-cyan-400 to-teal-400",
+    bg: "bg-cyan-50 dark:bg-cyan-900/20",
+    border: "border-cyan-200 dark:border-cyan-800",
+    examples: ["상어", "만타가오리", "해마", "피라냐", "흰동가리"],
+    count: 0,
+  },
+  {
+    id: "amphibian",
+    emoji: "🐸",
+    name: "양서류",
+    desc: "물과 육지 두 곳에서 살아요",
+    color: "from-lime-400 to-green-400",
+    bg: "bg-lime-50 dark:bg-lime-900/20",
+    border: "border-lime-200 dark:border-lime-800",
+    examples: ["청개구리", "도롱뇽", "두꺼비", "아홀로틀", "독화살개구리"],
+    count: 0,
+  },
+  {
+    id: "insect",
+    emoji: "🦋",
+    name: "곤충 & 절지류",
+    desc: "다리가 6개 이상이에요",
+    color: "from-purple-400 to-pink-400",
+    bg: "bg-purple-50 dark:bg-purple-900/20",
+    border: "border-purple-200 dark:border-purple-800",
+    examples: ["나비", "사마귀", "장수풍뎅이", "전갈", "타란툴라"],
+    count: 0,
+  },
+];
+
+// ── 도감에서 배울 수 있는 정보 ──────────────────────────────────────
+const LEARN_ITEMS = [
+  { emoji: "🍖", title: "무엇을 먹나요?", desc: "초식·육식·잡식으로 나뉘는 동물의 먹이와 사냥 방식을 배워요." },
+  { emoji: "🌍", title: "어디에 사나요?", desc: "열대우림, 사막, 바다, 극지방 등 서식지 환경을 알아봐요." },
+  { emoji: "🐣", title: "어떻게 새끼를 낳나요?", desc: "알을 낳는 동물, 새끼를 낳는 동물의 번식 방법을 비교해요." },
+  { emoji: "🛡️", title: "어떻게 자신을 지키나요?", desc: "보호색, 독, 갑옷, 빠른 도주 등 생존 전략을 살펴봐요." },
+  { emoji: "📏", title: "얼마나 크나요?", desc: "세상에서 가장 작은 동물과 가장 큰 동물을 비교해봐요." },
+  { emoji: "💡", title: "재미있는 사실", desc: "각 동물만의 독특한 능력과 놀라운 생태 특징을 소개해요." },
+];
+
+// ── 주목할 만한 동물 미리보기 ──────────────────────────────────────
+const SPOTLIGHT = [
+  { emoji: "🦁", name: "아프리카사자", latin: "Panthera leo", tag: "포유류", fact: "하루 최대 20시간 잠을 자요" },
+  { emoji: "🦋", name: "모나크나비", latin: "Danaus plexippus", tag: "곤충", fact: "무려 4,500km를 이동해요" },
+  { emoji: "🐙", name: "문어", latin: "Octopus vulgaris", tag: "연체동물", fact: "심장이 3개예요" },
+  { emoji: "🦒", name: "기린", latin: "Giraffa camelopardalis", tag: "포유류", fact: "혀의 길이가 45cm예요" },
+  { emoji: "🐧", name: "황제펭귄", latin: "Aptenodytes forsteri", tag: "조류", fact: "영하 60°C에서도 살아요" },
+  { emoji: "🦈", name: "백상아리", latin: "Carcharodon carcharias", tag: "어류", fact: "이빨이 평생 계속 자라요" },
+];
 
 export default function AnimalPageClient() {
-  const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
-
+  useEffect(() => { setMounted(true); }, []);
   if (!mounted) return null;
-
-  const workflowSteps = [
-    {
-      id: "collect",
-      label: "STEP 1",
-      title: "동물 데이터 수집",
-      description: "전 세계의 다양한 동물 데이터를 AI가 실시간으로 분석하고 수집합니다.",
-      icon: Database,
-      color: "text-blue-500",
-      bg: "bg-blue-50 dark:bg-blue-900/20",
-    },
-    {
-      id: "generate",
-      label: "STEP 2",
-      title: "AI 이미지 생성",
-      description: "사용자의 상상력을 바탕으로 고품질의 동물 이미지를 생성합니다.",
-      icon: ImageIcon,
-      color: "text-purple-500",
-      bg: "bg-purple-50 dark:bg-purple-900/20",
-    },
-    {
-      id: "layout",
-      label: "STEP 3",
-      title: "도감 레이아웃",
-      description: "생성된 이미지와 정보를 보기 좋은 도감 형태로 자동 구성합니다.",
-      icon: Layout,
-      color: "text-pink-500",
-      bg: "bg-pink-50 dark:bg-pink-900/20",
-    },
-    {
-      id: "complete",
-      label: "STEP 4",
-      title: "나만의 도감 완성",
-      description: "세상에 하나뿐인 나만의 동물 도감이 완성됩니다.",
-      icon: BookOpen,
-      color: "text-emerald-500",
-      bg: "bg-emerald-50 dark:bg-emerald-900/20",
-    },
-  ];
 
   return (
     <main className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-500 relative overflow-x-hidden font-sans">
 
-      {/* Background Gradients (Unified Style) */}
-      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
+      {/* 배경 그라디언트 */}
+      <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-6 pt-32 pb-20">
+      <div className="relative z-10 max-w-6xl mx-auto px-6 pt-32 pb-24">
 
-        {/* Header Section (Unified Style) */}
-        <section className="text-center mb-32 relative z-10">
+        {/* ── 히어로 ── */}
+        <section className="text-center mb-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.6 }}
             className="flex flex-col items-center"
           >
-            {/* Standard Badge Style */}
+            {/* 뱃지 */}
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
               <BookOpen className="w-3 h-3" />
-              <span>Animal Encyclopedia</span>
+              <span>DORI'S 동물도감</span>
             </div>
 
-            {/* Title with Gradient */}
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-6 text-neutral-900 dark:text-white">
-              상상이 현실이 되는<br className="hidden md:block" />
+            {/* 타이틀 */}
+            <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-5 text-neutral-900 dark:text-white">
+              세상의 동물을<br className="hidden md:block" />
               <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-                AI 동물 도감
+                포켓몬처럼 배워요
               </span>
             </h1>
 
-            {/* Description */}
-            <p className="text-base md:text-lg font-medium text-neutral-600 dark:text-neutral-400 max-w-2xl mx-auto leading-relaxed mb-12 break-keep">
-              아이들이 꿈꾸는 동물을 텍스트로 설명하면, <br className="hidden md:block" />
-              AI가 즉시 생생한 이미지와 정보가 담긴 도감으로 만들어줍니다.
+            {/* 설명 */}
+            <p className="text-base md:text-lg font-medium text-neutral-600 dark:text-neutral-400 max-w-xl mx-auto leading-relaxed mb-10 break-keep">
+              요즘 아이들이 직접 접하는 동물이 점점 줄고 있어요.<br className="hidden md:block" />
+              다양한 동물들이 무엇을 먹고, 어디에 살고, 어떻게 자라는지<br className="hidden md:block" />
+              쉽고 재미있게 알아가는 진짜 동물 백과사전이에요.
             </p>
 
-            {/* Search Bar Placeholder (Refined Style) */}
-            <div className="w-full max-w-lg relative group mb-8">
-              <div className="relative bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-full p-1.5 pl-6 flex items-center shadow-sm transition-all duration-300 group-hover:border-[#F9954E] group-hover:shadow-md group-hover:shadow-[#F9954E]/5">
-                <Search className="w-5 h-5 text-neutral-400 mr-3" />
+            {/* 검색바 (준비 중) */}
+            <div className="w-full max-w-md relative mb-5">
+              <div className="flex items-center bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-full px-5 py-3 shadow-sm gap-3">
+                <Search className="w-4 h-4 text-neutral-400 flex-shrink-0" />
                 <input
                   type="text"
-                  placeholder="어떤 동물을 찾고 있나요?"
-                  className="w-full bg-transparent border-none focus:ring-0 text-neutral-900 dark:text-white placeholder:text-neutral-400 text-sm md:text-base outline-none"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="동물 이름을 검색해보세요..."
+                  className="flex-1 bg-transparent text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 outline-none"
                   disabled
                 />
-                <button className="bg-[#F9954E] hover:bg-[#E8832E] text-white px-6 py-2.5 rounded-full font-bold text-sm transition-all shadow-lg shadow-[#F9954E]/20 hover:scale-105 active:scale-95 disabled:opacity-70 disabled:hover:scale-100 flex items-center gap-2">
-                  <span>Search</span>
-                </button>
               </div>
             </div>
 
-            <p className="text-xs text-neutral-500 dark:text-neutral-500 flex items-center gap-1.5 bg-neutral-100 dark:bg-zinc-900 px-3 py-1.5 rounded-full border border-neutral-200 dark:border-zinc-800">
-              <Loader2 className="w-3 h-3 animate-spin text-[#F9954E]" />
-              <span>현재 AI 모델 연동 준비 중입니다</span>
-            </p>
-
+            {/* 준비 중 안내 */}
+            <div className="inline-flex items-center gap-2 text-xs text-neutral-500 dark:text-neutral-400 bg-neutral-100 dark:bg-zinc-900 px-4 py-2 rounded-full border border-neutral-200 dark:border-zinc-800">
+              <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse flex-shrink-0" />
+              콘텐츠를 열심히 채우는 중이에요 — 빠르게 만나볼 수 있어요!
+            </div>
           </motion.div>
         </section>
 
-
-        {/* Workflow Section (Clean Card Style) */}
-        <section className="mb-40 relative z-10">
+        {/* ── 동물 분류 카테고리 ── */}
+        <section className="mb-20">
           <motion.div
-            initial={{ opacity: 0, y: 20 }}
+            initial={{ opacity: 0, y: 16 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ duration: 0.6 }}
-            className="text-center mb-16"
+            transition={{ duration: 0.5 }}
+            className="mb-10"
           >
-            <h2 className="text-2xl md:text-3xl font-bold mb-4 text-neutral-900 dark:text-white">How it Works</h2>
-            <p className="text-neutral-500 dark:text-neutral-400">DORI AI가상상 속 동물을 현실로 만드는 과정입니다.</p>
+            <h2 className="text-2xl md:text-3xl font-bold text-neutral-900 dark:text-white mb-2">
+              🐾 어떤 동물들이 있나요?
+            </h2>
+            <p className="text-neutral-500 dark:text-neutral-400 text-sm font-medium">
+              6가지 분류로 지구의 모든 동물을 탐험해보세요
+            </p>
           </motion.div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 relative">
-
-            {/* Connecting Line (Desktop) - Adjusted Color */}
-            <div className="hidden lg:block absolute top-[22%] left-0 right-0 h-px bg-gradient-to-r from-transparent via-neutral-200 dark:via-zinc-800 to-transparent -z-10" />
-
-            {workflowSteps.map((step, index) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {CATEGORIES.map((cat, i) => (
               <motion.div
-                key={step.id}
+                key={cat.id}
                 initial={{ opacity: 0, y: 20 }}
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: index * 0.1 }}
-                className="group relative h-full"
+                transition={{ duration: 0.4, delay: i * 0.07 }}
+                className={`group relative bg-white dark:bg-zinc-900 border ${cat.border} rounded-2xl p-5 overflow-hidden hover:shadow-lg transition-all duration-300 hover:-translate-y-0.5`}
               >
-                <div className="bg-white dark:bg-zinc-900/50 backdrop-blur-sm rounded-2xl p-8 h-full border border-neutral-200 dark:border-zinc-800 relative group-hover:border-[#F9954E] dark:group-hover:border-[#F9954E] transition-all duration-300 hover:-translate-y-1 hover:shadow-xl hover:shadow-[#F9954E]/5 flex flex-col items-center text-center">
+                {/* 배경 그라디언트 */}
+                <div className={`absolute inset-0 bg-gradient-to-br ${cat.color} opacity-0 group-hover:opacity-5 transition-opacity duration-300`} />
 
-                  {/* Icon */}
-                  <div className={`w-14 h-14 rounded-2xl ${step.bg} flex items-center justify-center mb-6 group-hover:scale-110 transition-transform duration-300 relative z-10`}>
-                    <step.icon className={`w-6 h-6 ${step.color}`} strokeWidth={1.5} />
+                <div className="flex items-start gap-4 relative">
+                  {/* 아이콘 */}
+                  <div className={`w-14 h-14 rounded-2xl ${cat.bg} flex items-center justify-center text-3xl flex-shrink-0 group-hover:scale-110 transition-transform duration-300`}>
+                    {cat.emoji}
                   </div>
 
-                  <div className="space-y-3 relative z-10">
-                    <div className="text-[10px] font-bold tracking-widest uppercase text-neutral-400 dark:text-neutral-500 group-hover:text-[#F9954E] transition-colors">
-                      {step.label}
+                  <div className="flex-1 min-w-0">
+                    <div className="flex items-center justify-between mb-1">
+                      <h3 className="text-base font-bold text-neutral-900 dark:text-white">{cat.name}</h3>
+                      <span className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-zinc-800 px-2 py-0.5 rounded-full">준비 중</span>
                     </div>
-                    <h3 className="text-lg font-bold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors">{step.title}</h3>
-                    <p className="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed font-medium break-keep">
-                      {step.description}
-                    </p>
+                    <p className="text-xs text-neutral-500 dark:text-neutral-400 mb-3">{cat.desc}</p>
+                    {/* 예시 동물 태그 */}
+                    <div className="flex flex-wrap gap-1">
+                      {cat.examples.map((ex) => (
+                        <span key={ex} className={`text-[10px] font-medium px-2 py-0.5 rounded-full ${cat.bg} ${cat.border} border text-neutral-600 dark:text-neutral-300`}>
+                          {ex}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
               </motion.div>
@@ -165,53 +218,102 @@ export default function AnimalPageClient() {
           </div>
         </section>
 
-        {/* Gallery Preview Section (Clean Card Style) */}
-        <section className="relative z-10">
-          <div className="flex items-end justify-between mb-12 px-2">
-            <div>
-              <div className="text-[#F9954E] text-xs font-bold tracking-widest uppercase mb-2">Portfolio</div>
-              <h2 className="text-3xl md:text-4xl font-bold text-neutral-900 dark:text-white">Recent Discoveries</h2>
-            </div>
-            <Link href="#" className="hidden md:flex items-center gap-2 text-sm font-bold text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition-colors px-4 py-2 rounded-full hover:bg-neutral-100 dark:hover:bg-zinc-800">
-              View All Collection <ArrowRight className="w-4 h-4" />
-            </Link>
-          </div>
+        {/* ── 도감에서 배울 수 있는 정보 ── */}
+        <section className="mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="mb-10"
+          >
+            <h2 className="text-2xl md:text-3xl font-bold text-neutral-900 dark:text-white mb-2">
+              📖 동물마다 이런 걸 배워요
+            </h2>
+            <p className="text-neutral-500 dark:text-neutral-400 text-sm font-medium">
+              각 동물 카드에는 6가지 핵심 정보가 담겨 있어요
+            </p>
+          </motion.div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
-            {[1, 2, 3].map((item, i) => (
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+            {LEARN_ITEMS.map((item, i) => (
               <motion.div
-                key={item}
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
+                key={item.title}
+                initial={{ opacity: 0, y: 16 }}
+                whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
-                transition={{ duration: 0.5, delay: i * 0.1 }}
-                className="group aspect-[3/4] bg-neutral-100 dark:bg-zinc-900 rounded-3xl border border-neutral-200 dark:border-zinc-800 relative overflow-hidden hover:border-[#F9954E] dark:hover:border-[#F9954E] transition-all duration-300 hover:shadow-xl hover:shadow-[#F9954E]/10"
+                transition={{ duration: 0.4, delay: i * 0.07 }}
+                className="flex items-start gap-4 bg-white dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 rounded-2xl p-5"
               >
-                {/* Placeholder Content */}
-                <div className="absolute inset-0 flex flex-col items-center justify-center z-10">
-                  <div className="w-16 h-16 rounded-full bg-white dark:bg-zinc-800 flex items-center justify-center mb-4 border border-neutral-200 dark:border-zinc-700 group-hover:scale-110 transition-transform duration-300 group-hover:border-[#F9954E]/30">
-                    <Sparkles className="w-6 h-6 text-neutral-400 dark:text-neutral-500 group-hover:text-[#F9954E] transition-colors" />
-                  </div>
-                  <p className="text-sm font-medium text-neutral-500 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors">Coming Soon</p>
-                </div>
-
-                {/* Shimmer Effect - Adjusted for light mode */}
-                <div className="absolute inset-0 bg-gradient-to-tr from-transparent via-white/40 dark:via-white/5 to-transparent -translate-x-full group-hover:animate-shimmer z-0" style={{ animationDuration: '1.5s' }} />
-
-                {/* Bottom Info */}
-                <div className="absolute bottom-0 left-0 right-0 p-6 bg-white/90 dark:bg-black/90 backdrop-blur-sm border-t border-neutral-100 dark:border-zinc-800 translate-y-full group-hover:translate-y-0 transition-transform duration-300 z-20">
-                  <h3 className="text-lg font-bold text-neutral-900 dark:text-white mb-1">Mystic Creature #{item}</h3>
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">AI Generated • 2024</p>
+                <div className="text-3xl flex-shrink-0">{item.emoji}</div>
+                <div>
+                  <h3 className="text-sm font-bold text-neutral-900 dark:text-white mb-1">{item.title}</h3>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed">{item.desc}</p>
                 </div>
               </motion.div>
             ))}
           </div>
+        </section>
 
-          <div className="mt-8 text-center md:hidden">
-            <Link href="#" className="inline-flex items-center gap-2 text-sm font-bold text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition-colors px-6 py-3 rounded-full bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800">
-              View All Collection <ArrowRight className="w-4 h-4" />
-            </Link>
+        {/* ── 주목할 동물 스포트라이트 ── */}
+        <section className="mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="mb-10"
+          >
+            <h2 className="text-2xl md:text-3xl font-bold text-neutral-900 dark:text-white mb-2">
+              ✨ 이런 동물들이 기다리고 있어요
+            </h2>
+            <p className="text-neutral-500 dark:text-neutral-400 text-sm font-medium">
+              도감에 수록될 동물들을 미리 만나보세요
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+            {SPOTLIGHT.map((animal, i) => (
+              <motion.div
+                key={animal.name}
+                initial={{ opacity: 0, scale: 0.92 }}
+                whileInView={{ opacity: 1, scale: 1 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.06 }}
+                className="group bg-white dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 rounded-2xl p-4 text-center hover:border-[#F9954E] dark:hover:border-[#F9954E] hover:shadow-md hover:shadow-[#F9954E]/5 transition-all duration-300 hover:-translate-y-0.5"
+              >
+                <div className="text-4xl mb-2 group-hover:scale-110 transition-transform duration-300">{animal.emoji}</div>
+                <div className="text-xs font-bold text-neutral-900 dark:text-white mb-0.5">{animal.name}</div>
+                <div className="text-[10px] italic text-neutral-400 dark:text-neutral-500 mb-2 truncate">{animal.latin}</div>
+                <div className="text-[10px] font-medium text-[#F9954E] bg-[#F9954E]/10 px-2 py-0.5 rounded-full inline-block mb-2">{animal.tag}</div>
+                <div className="text-[10px] text-neutral-500 dark:text-neutral-400 leading-relaxed">{animal.fact}</div>
+              </motion.div>
+            ))}
           </div>
+        </section>
+
+        {/* ── 하단 CTA ── */}
+        <section>
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="bg-gradient-to-br from-[#FFF5EB] to-[#FEEBD0] dark:from-orange-950/30 dark:to-orange-900/10 border border-[#FDD5A5] dark:border-orange-800/30 rounded-3xl p-10 text-center"
+          >
+            <div className="text-5xl mb-4">🐾</div>
+            <h2 className="text-2xl md:text-3xl font-bold text-neutral-900 dark:text-white mb-3">
+              동물도감, 함께 만들어가요
+            </h2>
+            <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed max-w-md mx-auto mb-2 break-keep">
+              포유류부터 곤충까지, 지구의 다양한 생명체를 아이들이<br className="hidden md:block" />
+              쉽고 재미있게 만나볼 수 있도록 차근차근 채워가고 있어요.
+            </p>
+            <p className="text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold flex items-center justify-center gap-1.5">
+              <Sparkles className="w-3 h-3" />
+              콘텐츠 업로드가 시작되면 알림으로 알려드릴게요
+            </p>
+          </motion.div>
         </section>
 
       </div>
@@ -222,15 +324,7 @@ export default function AnimalPageClient() {
           50% { background-position: 100% 50%; }
           100% { background-position: 0% 50%; }
         }
-        .animate-gradient {
-          animation: gradient 3s ease infinite;
-        }
-        @keyframes shimmer {
-          100% { transform: translateX(100%); }
-        }
-        .animate-shimmer {
-            animation: shimmer 1.5s infinite;
-        }
+        .animate-gradient { animation: gradient 3s ease infinite; }
       `}</style>
     </main>
   );
