@@ -15,13 +15,29 @@ const projects = [
     tagColor: "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400",
     desc: "포켓몬처럼, 진짜 동물을 배워요",
     longDesc:
-      "요즘 아이들이 접하는 동물의 수는 점점 줄고 있어요. 동물도감은 아이들이 다양한 동물을 포켓몬처럼 친숙하게 알아가고, 그 동물이 무엇을 먹고 어떻게 사는지 자연스럽게 배울 수 있도록 만든 교육 프로젝트입니다.",
+      "요즘 아이들이 접하는 동물의 수는 점점 줄고 있어요. 동물도감은 아이들이 다양한 동물을 포켓몬처럼 친숙하게 알아가고, 엑셀처럼 셀을 클릭해서 원하는 조건의 동물을 찾을 수 있도록 만든 교육 프로젝트입니다.",
     href: "/animal",
     gradient: "from-emerald-400 via-teal-400 to-cyan-400",
     iconBg: "bg-emerald-50 dark:bg-emerald-900/20",
-    tags: ["어린이 교육", "동물 생태", "도감"],
+    tags: ["어린이 교육", "동물 생태", "셀 검색"],
     status: "준비 중",
     statusColor: "bg-amber-100 dark:bg-amber-900/30 text-amber-700 dark:text-amber-400",
+  },
+  {
+    id: "family",
+    name: "가족기록",
+    emoji: "👨‍👩‍👧‍👦",
+    tag: "2nd Project",
+    tagColor: "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400",
+    desc: "가족의 모든 것을 하나의 앱으로",
+    longDesc:
+      "일정·사진·건강·추억·할 일까지, 가족 구성원 모두가 실시간으로 공유하는 가족 전용 플랫폼이에요. 카카오에 흩어진 사진, 각자의 캘린더, 메모장의 건강 기록을 한곳에 모아 온 가족이 함께 볼 수 있게 만들어드려요.",
+    href: "/family",
+    gradient: "from-purple-400 via-fuchsia-400 to-pink-400",
+    iconBg: "bg-purple-50 dark:bg-purple-900/20",
+    tags: ["가족 공유", "추억 기록", "AI 요약"],
+    status: "기획 중",
+    statusColor: "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400",
   },
   // 추가 프로젝트는 이곳에
 ];

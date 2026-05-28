@@ -6,7 +6,39 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Thu, 28 May 2026 01:23:45 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 28 May 2026 08:12:26 GMT</lastBuildDate>
+    <item>
+      <title>Aetina의 물리적 AI와 비전 AI, COMPUTEX 2026에서의 새로운 패러다임</title>
+      <link>https://dori-ai.com/insight/article/trend-89</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-89</guid>
+      <category>트렌드</category>
+      <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
+      <description>Aetina가 COMPUTEX 2026에서 물리적 AI, 비전 AI, 에이전틱 AI 솔루션을 선보이며 산업 혁신을 예고했습니다.</description>
+    </item>
+    <item>
+      <title>NEXCOM, COMPUTEX 2026에서 물리적 AI로 스마트 제조 혁신 이끌다</title>
+      <link>https://dori-ai.com/insight/article/trend-86</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-86</guid>
+      <category>트렌드</category>
+      <pubDate>Wed, 27 May 2026 00:00:00 GMT</pubDate>
+      <description>NEXCOM이 COMPUTEX 2026에서 물리적 AI를 활용한 스마트 제조 솔루션을 발표하며 제조업의 패러다임을 바꾸고 있다.</description>
+    </item>
+    <item>
+      <title>오픈 소스 패키지의 숨겨진 위협 — 수백만 AI 에이전트가 위험에 처하다</title>
+      <link>https://dori-ai.com/insight/article/trend-87</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-87</guid>
+      <category>트렌드</category>
+      <pubDate>Wed, 27 May 2026 00:00:00 GMT</pubDate>
+      <description>오픈 소스 소프트웨어의 취약점이 수백만 개의 AI 에이전트를 위협하고 있으며, 그로 인해 발생하는 문제의 심각성을 탐구합니다.</description>
+    </item>
+    <item>
+      <title>COMPUTEX 2026에서 NEXCOM이 보여준 물리적 AI의 혁신</title>
+      <link>https://dori-ai.com/insight/article/trend-88</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-88</guid>
+      <category>트렌드</category>
+      <pubDate>Wed, 27 May 2026 00:00:00 GMT</pubDate>
+      <description>NEXCOM이 COMPUTEX 2026에서 물리적 AI를 활용한 스마트 제조 혁신을 발표하며 주목받고 있다. 이 기술이 제조업계에 미치는 영향과 그 필요성에 대해 살펴본다.</description>
+    </item>
     <item>
       <title>넥사르, 머신러닝 혁신으로 2026년 AI 기술상 수상</title>
       <link>https://dori-ai.com/insight/article/trend-83</link>
@@ -294,38 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
       <description>AI 초보자부터 실무자까지, 검증된 학습 리소스만 엄선했습니다. 유튜브 채널, 책, 무료 강의, 뉴스레터까지 카테고리별로 바로 써먹을 수 있는 리스트입니다.</description>
-    </item>
-    <item>
-      <title>2026년 한국인의 AI 사용 실태 분석 — 누가, 얼마나, 어떻게 쓰고 있나</title>
-      <link>https://dori-ai.com/insight/article/analysis-01</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/analysis-01</guid>
-      <category>분석</category>
-      <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
-      <description>연령대·직군·목적별 AI 도구 사용 현황을 데이터로 분석합니다. 한국인 3,000명 설문 기반의 AI 침투 현황과 변화 트렌드를 확인해 보세요.</description>
-    </item>
-    <item>
-      <title>AI 에이전트의 시대가 온다 — 2026년 하반기 가장 주목해야 할 기술 변화 완전 분석</title>
-      <link>https://dori-ai.com/insight/article/report-01</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/report-01</guid>
-      <category>리포트</category>
-      <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
-      <description>단순 챗봇을 넘어 스스로 계획하고 실행하는 AI 에이전트. 개념부터 국내외 사례, 직업 영향, 개인과 기업의 대응 전략까지 심층 분석합니다.</description>
-    </item>
-    <item>
-      <title>Anthropic, 사이버보안 특화 AI 모델 'Claude Mythos' 공개 — 해킹도 막고 해킹도 한다</title>
-      <link>https://dori-ai.com/insight/article/trend-63</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-63</guid>
-      <category>트렌드</category>
-      <pubDate>Mon, 20 Apr 2026 00:00:00 GMT</pubDate>
-      <description>Anthropic이 역대 가장 강력한 AI 모델 'Claude Mythos Preview'를 공개했다. 사이버보안 분야에서 초인적 수준의 취약점 탐지 능력을 보여주지만, 동시에 강력한 사이버공격 도구로 악용될 수 있다는 우려로 제한적 배포가 결정됐다.</description>
-    </item>
-    <item>
-      <title>직장인 절반이 AI를 쓴다 — 2026년, 'AI 도구' 없이는 못 일하는 시대 도래</title>
-      <link>https://dori-ai.com/insight/article/trend-64</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-64</guid>
-      <category>트렌드</category>
-      <pubDate>Mon, 20 Apr 2026 00:00:00 GMT</pubDate>
-      <description>2026년 현재 미국 직장인의 절반 이상이 AI 도구를 업무에 활용하고 있다는 조사 결과가 잇따라 발표됐다. Gallup, Deloitte, PwC 등의 데이터가 한 방향을 가리키고 있다 — AI는 이미 선택이 아닌 생존 도구다.</description>
     </item>
   </channel>
 </rss>
