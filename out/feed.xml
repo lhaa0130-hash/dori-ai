@@ -6,7 +6,7 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Thu, 28 May 2026 08:12:26 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 28 May 2026 08:38:46 GMT</lastBuildDate>
     <item>
       <title>Aetina의 물리적 AI와 비전 AI, COMPUTEX 2026에서의 새로운 패러다임</title>
       <link>https://dori-ai.com/insight/article/trend-89</link>
@@ -14,6 +14,22 @@
       <category>트렌드</category>
       <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
       <description>Aetina가 COMPUTEX 2026에서 물리적 AI, 비전 AI, 에이전틱 AI 솔루션을 선보이며 산업 혁신을 예고했습니다.</description>
+    </item>
+    <item>
+      <title>2026년 AI 트래픽, 어떤 변화가 일어나고 있는가?</title>
+      <link>https://dori-ai.com/insight/article/trend-90</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-90</guid>
+      <category>트렌드</category>
+      <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
+      <description>AI가 인터넷 트래픽의 주도적인 역할을 하고 있으며, 그로 인해 데이터 사용량과 산업 전반에 걸친 영향이 커지고 있다.</description>
+    </item>
+    <item>
+      <title>구글, 싱가포르와 234억 달러 AI 협력 체결 — 아시아 AI 생태계의 대전환</title>
+      <link>https://dori-ai.com/insight/article/trend-91</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-91</guid>
+      <category>트렌드</category>
+      <pubDate>Thu, 28 May 2026 00:00:00 GMT</pubDate>
+      <description>구글과 오픈AI가 싱가포르와 AI 생태계 구축을 위해 234억 달러를 투자하며 아시아 시장에서의 입지를 강화하고 있다.</description>
     </item>
     <item>
       <title>NEXCOM, COMPUTEX 2026에서 물리적 AI로 스마트 제조 혁신 이끌다</title>
@@ -310,22 +326,6 @@
       <category>트렌드</category>
       <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
       <description>국내 최대 ICT 전시회인 2026 월드IT쇼(WIS 2026)가 개막했습니다. '생각을 넘어 행동으로'라는 슬로건 아래 펼쳐진 피지컬 AI와 혁신 기술들을 살펴봅니다.</description>
-    </item>
-    <item>
-      <title>2026년 AI 트렌드: '에이전틱 AI'와 자율적 에이전트의 시대</title>
-      <link>https://dori-ai.com/insight/article/trend-66</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-66</guid>
-      <category>트렌드</category>
-      <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
-      <description>단순한 비서를 넘어 스스로 판단하고 실행하는 '에이전틱 AI'가 2026년 핵심 트렌드로 부상했습니다. 멀티에이전트 시스템과 자율 업무 수행의 미래를 조망합니다.</description>
-    </item>
-    <item>
-      <title>AI 공부하고 싶은데 뭐부터 볼까? — 유튜브·책·강의·뉴스레터 최종 추천 모음</title>
-      <link>https://dori-ai.com/insight/article/curation-01</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/curation-01</guid>
-      <category>큐레이션</category>
-      <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
-      <description>AI 초보자부터 실무자까지, 검증된 학습 리소스만 엄선했습니다. 유튜브 채널, 책, 무료 강의, 뉴스레터까지 카테고리별로 바로 써먹을 수 있는 리스트입니다.</description>
     </item>
   </channel>
 </rss>

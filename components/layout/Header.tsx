@@ -53,6 +53,14 @@ export default function Header() {
       color: "from-emerald-500 to-teal-500",
       bg: "bg-emerald-50 dark:bg-emerald-900/20",
     },
+    {
+      name: "가족기록",
+      emoji: "👨‍👩‍👧‍👦",
+      desc: "가족의 모든 것을 하나의 앱으로",
+      href: "/family",
+      color: "from-purple-500 to-fuchsia-500",
+      bg: "bg-purple-50 dark:bg-purple-900/20",
+    },
   ];
 
   return (

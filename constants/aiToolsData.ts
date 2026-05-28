@@ -413,7 +413,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   // 3. Image Editing
   // ===========================================
   {
-    id: "edit-magnific", name: "Magnific AI", category: "image-editing",
+    id: "edit-magnific", name: "Magnific AI", category: "image-generation",
     summary: "흐릿한 사진을 4K로 복원. 옛날 사진 되살릴 때 마법 같음",
     description: "단순 업스케일링을 넘어 AI가 세부 질감을 새로 그려 넣는 '초해상도' 기술로 흐릿한 사진을 4K 이상 품질로 복원합니다. 이미지 복원 분야에서 업계 1위로 손꼽히며, 프로 사진가와 미드저니 사용자들이 최종 결과물 퀄리티 향상에 많이 활용합니다. 월 $39.99의 유료 서비스이지만 결과물 품질에 대한 만족도가 매우 높습니다.",
     website: "https://magnific.ai",
@@ -421,7 +421,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "edit-canva", name: "Canva", category: "image-editing",
+    id: "edit-canva", name: "Canva", category: "image-generation",
     summary: "디자인의 기본. AI 배경 제거와 마법 지우개로 편집이 너무 쉬움",
     description: "전 세계 1억 명이 사용하는 온라인 디자인 플랫폼으로, AI 배경 제거·Magic Erase·생성형 채우기 등 다양한 AI 편집 기능을 탑재하고 있습니다. 수만 개의 템플릿과 AI 기능의 결합으로 디자인 전문 지식 없이도 SNS 콘텐츠·발표 자료·마케팅 소재를 빠르게 제작합니다. 무료 플랜으로도 충분히 활용 가능하며 Pro 플랜은 월 $12.99입니다.",
     website: "https://canva.com",
@@ -429,7 +429,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "edit-photoroom", name: "Photoroom", category: "image-editing",
+    id: "edit-photoroom", name: "Photoroom", category: "image-generation",
     summary: "쇼핑몰 상품 사진 배경 1초 제거. 사진작가 없이 혼자 운영 가능",
     description: "AI로 배경을 1초 만에 제거하고 원하는 배경으로 교체해 쇼핑몰용 상품 사진을 전문가 수준으로 만들어 줍니다. 스마트폰 앱과 웹 버전을 모두 지원하며, 배치 처리 기능으로 수십 장의 사진을 한꺼번에 편집할 수 있습니다. 소셜커머스 판매자와 소규모 쇼핑몰 운영자에게 특히 인기 높은 도구입니다.",
     website: "https://photoroom.com",
@@ -437,7 +437,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "edit-clipdrop", name: "Clipdrop", category: "image-editing",
+    id: "edit-clipdrop", name: "Clipdrop", category: "image-generation",
     summary: "조명 추가, 배경 변경, 얼굴 수정까지. 사진 편집 올인원 도구",
     description: "Stability AI가 운영하는 이미지 편집 API 플랫폼으로, 배경 제거·인페인팅·아웃페인팅·AI 조명 효과 등 전문 편집 기능을 제공합니다. 광고 사진 제작, 제품 이미지 보정, 초상화 편집 등 다양한 커머셜 작업에 활용되며 API 형태로 서비스에 통합하기 쉽습니다. 무료 크레딧으로 시작 가능하며 사용량에 따라 과금됩니다.",
     website: "https://clipdrop.co",
@@ -445,7 +445,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "edit-topaz", name: "Topaz Photo AI", category: "image-editing",
+    id: "edit-topaz", name: "Topaz Photo AI", category: "image-generation",
     summary: "노이즈 제거 성능은 업계 1위. 사진작가들이 Lightroom 다음으로 씀",
     description: "AI 기반 노이즈 제거·흔들림 보정·업스케일링을 결합한 전문 사진 보정 소프트웨어로, 업계에서 노이즈 제거 성능 최고로 인정받습니다. 저조도·고ISO 촬영 사진의 화질을 극적으로 개선하며, Lightroom과 Photoshop 플러그인으로도 작동합니다. 데스크톱 설치형 소프트웨어로 $199(일회성) 또는 구독($99/년)으로 구매 가능합니다.",
     website: "https://topazlabs.com",
@@ -453,7 +453,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "edit-cleanup", name: "Cleanup.pictures", category: "image-editing",
+    id: "edit-cleanup", name: "Cleanup.pictures", category: "image-generation",
     summary: "사진에서 원하지 않는 사람이나 물건만 쏙 지움",
     description: "브러시로 지우고 싶은 영역을 칠하면 AI가 배경을 자연스럽게 채워 불필요한 요소를 말끔히 제거합니다. 설치 없이 웹에서 바로 사용 가능하며, 관광지 사진 속 행인 제거·광고 배너 속 로고 삭제 등에 특히 유용합니다. 무료로 기본 기능을 사용할 수 있고 고해상도 내보내기는 유료입니다.",
     website: "https://cleanup.pictures",
@@ -461,7 +461,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "edit-pixelcut", name: "Pixelcut", category: "image-editing",
+    id: "edit-pixelcut", name: "Pixelcut", category: "image-generation",
     summary: "모바일 친화적인 AI 배경 제거 및 디자인 편집",
     description: "스마트폰에 최적화된 AI 이미지 편집 앱으로, 배경 제거·제품 사진 생성·리사이징·텍스트 추가를 원터치로 처리합니다. 쇼핑몰 판매자를 위한 상품 사진 자동 생성 기능이 특히 강력하며, 수백 장의 이미지를 배치 처리할 수 있습니다. 앱 스토어 쇼핑몰 사진 편집 카테고리에서 꾸준히 상위권을 유지하고 있습니다.",
     website: "https://pixelcut.ai",
@@ -469,7 +469,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "edit-upscayl", name: "Upscayl", category: "image-editing",
+    id: "edit-upscayl", name: "Upscayl", category: "image-generation",
     summary: "내 컴퓨터에 설치해 쓰는 무료 AI 화질 개선기",
     description: "로컬 PC에 설치해 인터넷 없이 무료로 사용하는 오픈소스 AI 업스케일러로, GPU 가속을 지원해 빠른 처리가 가능합니다. ESRGAN·RealESRGAN 등 다양한 AI 모델을 지원하며, 사진·스크린샷·애니메이션 이미지 등 다양한 입력을 처리합니다. 클라우드 서비스처럼 파일을 업로드할 필요 없어 개인정보 걱정 없이 사용할 수 있습니다.",
     website: "https://upscayl.org",
@@ -477,7 +477,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "edit-removebg", name: "Remove.bg", category: "image-editing",
+    id: "edit-removebg", name: "Remove.bg", category: "image-generation",
     summary: "배경 제거 분야의 근본, 빠르고 정확함",
     description: "AI 배경 제거 서비스의 원조로, 단 5초 만에 고정밀 배경을 제거해 오랫동안 업계 표준으로 자리잡았습니다. 머리카락처럼 복잡한 경계선도 깔끔하게 처리하며, API 형태로 자신의 앱에 통합하기도 쉽습니다. 무료 버전은 저해상도 결과물만 제공되고, 고해상도 출력은 크레딧 구매가 필요합니다.",
     website: "https://remove.bg",
@@ -485,7 +485,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "edit-photoshop", name: "Photoshop (AI)", category: "image-editing",
+    id: "edit-photoshop", name: "Photoshop (AI)", category: "image-generation",
     summary: "생성형 채우기 기능으로 없던 배경도 만들어냄",
     description: "Adobe의 생성형 AI 기능(Firefly 탑재)이 통합된 업계 표준 이미지 편집 소프트웨어로, 선택 영역에 텍스트 설명만 입력하면 자연스러운 배경·오브젝트를 생성해 채워줍니다. 생성형 확장 기능으로 이미지 캔버스 바깥을 자동으로 채울 수도 있으며, AI가 지우개·선택·보정 등 기존 도구들을 더욱 강력하게 만들었습니다. CC 구독 외 별도 Firefly 크레딧이 사용됩니다.",
     website: "https://adobe.com",
@@ -493,61 +493,61 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "edit-magiceraser", name: "Magic Eraser", category: "image-editing",
+    id: "edit-magiceraser", name: "Magic Eraser", category: "image-generation",
     summary: "로그인도 필요 없는 초간단 지우개",
     description: "회원가입·로그인 없이 즉시 사용 가능한 초간단 AI 지우개 서비스로, 이미지를 올리고 지우고 싶은 곳을 칠하면 끝입니다. 빠른 처리 속도와 깔끔한 결과물로 간단한 편집 작업에 최적화되어 있습니다. 무료로 사용 가능하며 별도 소프트웨어 설치가 필요 없어 가장 접근성이 높은 지우개 도구 중 하나입니다.",
     website: "https://magicstudio.com/magiceraser", thumbnail: "https://logo.clearbit.com/magicstudio.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "edit-hama", name: "Hama", category: "image-editing",
+    id: "edit-hama", name: "Hama", category: "image-generation",
     summary: "드래그 한 번으로 깔끔하게 지워주는 무료 툴",
     description: "사진 속 원하지 않는 요소 위에 브러시를 칠하면 즉시 AI가 배경을 자연스럽게 복원해 주는 인페인팅 서비스입니다. Cleanup.pictures보다 더 큰 영역을 정확하게 처리하는 데 강점이 있으며, 웹에서 무료로 사용 가능합니다. 풍경 사진에서 전선·사람 제거 등 자연 배경 복원 작업에 특히 자연스러운 결과를 보여줍니다.",
     website: "https://hama.app", thumbnail: "https://logo.clearbit.com/hama.app", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "edit-watermark", name: "WatermarkRemover", category: "image-editing",
+    id: "edit-watermark", name: "WatermarkRemover", category: "image-generation",
     summary: "유료 이미지의 워터마크를 감쪽같이 삭제 (주의)",
     description: "AI를 이용해 이미지 위의 워터마크·로고·텍스트를 자동으로 감지하고 제거하는 서비스입니다. 자신이 직접 제작한 콘텐츠의 불필요한 타임스탬프나 텍스트 오버레이를 지우는 데 합법적으로 활용할 수 있습니다. 단, 타인의 저작권이 있는 워터마크 제거는 법적 문제가 될 수 있으니 주의가 필요합니다.",
     website: "https://watermarkremover.io", thumbnail: "https://logo.clearbit.com/pixelbin.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "edit-bigjpg", name: "BigJPG", category: "image-editing",
+    id: "edit-bigjpg", name: "BigJPG", category: "image-generation",
     summary: "애니메이션 그림 확대에 특화된 업스케일러",
     description: "애니메이션·만화·일러스트 이미지 업스케일링에 특화된 AI 서비스로, 실사 사진보다 선화가 많은 그림의 확대에서 특히 자연스러운 결과를 냅니다. 2배~16배까지 확대 배율을 선택할 수 있으며, 웹 버전을 무료로 사용 가능합니다. 오래된 저해상도 애니메이션 스크린샷을 고화질로 복원하는 데 즐겨 사용됩니다.",
     website: "https://bigjpg.com", thumbnail: "https://logo.clearbit.com/bigjpg.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "edit-waifu2x", name: "Waifu2x", category: "image-editing",
+    id: "edit-waifu2x", name: "Waifu2x", category: "image-generation",
     summary: "덕후들을 위한 고전 명작 2배 확대기",
     description: "딥러닝을 이용한 애니메이션 이미지 업스케일링의 고전으로, 웹에서 무료로 제공됩니다. 노이즈 감소와 함께 2배 확대를 적용해 저해상도 애니 이미지를 선명하게 복원합니다. 무거운 소프트웨어 없이 브라우저에서 바로 사용 가능하며, 오랫동안 커뮤니티에서 사랑받아 온 서비스입니다.",
     website: "https://waifu2x.udp.jp", thumbnail: "https://logo.clearbit.com/udp.jp", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "edit-vance", name: "VanceAI", category: "image-editing",
+    id: "edit-vance", name: "VanceAI", category: "image-generation",
     summary: "흐린 사진 복구, 흑백 컬러링 등 기능이 다양함",
     description: "AI 기반 이미지 보정 도구 모음으로, 흐린 사진 선명화·노이즈 제거·흑백 사진 자동 컬러화·얼굴 복원 등 여러 기능을 제공합니다. 오래된 가족 사진이나 흑백 사진을 되살리는 데 특히 유용하며, 각 기능을 낱개 도구처럼 독립적으로 사용할 수 있습니다. 월정액 구독 외 사용한 기능별 일회성 결제 방식도 지원합니다.",
     website: "https://vanceai.com", thumbnail: "https://logo.clearbit.com/vanceai.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "edit-photoai", name: "PhotoAI", category: "image-editing",
+    id: "edit-photoai", name: "PhotoAI", category: "image-generation",
     summary: "내 사진을 학습해 다양한 컨셉의 프로필 사진 생성",
     description: "내 얼굴 사진 여러 장을 AI에게 학습시키면 링크드인 프로필·패션 화보·게임 캐릭터 등 다양한 컨셉의 프로필 사진을 자동 생성합니다. 직접 스튜디오 촬영 없이 전문가급 프로필 사진을 얻을 수 있어 취업·소셜미디어 활동에 활용하는 사람이 많습니다. 월 $29부터 시작하는 구독제로 지속적으로 새 사진을 생성할 수 있습니다.",
     website: "https://photoai.com", thumbnail: "https://logo.clearbit.com/photoai.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "edit-retouch4me", name: "Retouch4me", category: "image-editing",
+    id: "edit-retouch4me", name: "Retouch4me", category: "image-generation",
     summary: "피부 보정, 잡티 제거 등 인물 사진 보정 끝판왕",
     description: "전문 사진작가를 위한 AI 인물 사진 보정 플러그인으로, 잡티 제거·피부 톤 균등화·치아 미백·눈 선명화 등 세밀한 보정을 자동으로 처리합니다. Photoshop·Lightroom 플러그인 형태로 기존 편집 워크플로우에 바로 통합할 수 있어 사진작가들 사이에서 널리 사용됩니다. 보정 결과물이 과도하게 인위적이지 않고 자연스럽다는 평가를 받습니다.",
     website: "https://retouch4me.com", thumbnail: "https://logo.clearbit.com/retouch4me.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "edit-evoto", name: "Evoto", category: "image-editing",
+    id: "edit-evoto", name: "Evoto", category: "image-generation",
     summary: "웨딩 사진 보정에 혁명을 일으킨 AI 툴",
     description: "웨딩·증명사진·인물 촬영 전문 사진작가를 위한 AI 보정 소프트웨어로, 수백 장의 사진을 일괄 보정하는 배치 처리 기능이 탁월합니다. 피부·메이크업·의상·배경 등 영역별로 세밀하게 AI 보정 강도를 조절할 수 있어 자연스러운 결과물을 얻기 쉽습니다. 웨딩 사진작가들 사이에서 후보정 시간을 70% 이상 단축시킨다는 평가를 받습니다.",
     website: "https://evoto.ai", thumbnail: "https://logo.clearbit.com/evoto.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "edit-cutout", name: "Cutout.pro", category: "image-editing",
+    id: "edit-cutout", name: "Cutout.pro", category: "image-generation",
     summary: "동영상 배경 제거부터 증명사진 만들기까지 다 됨",
     description: "이미지·동영상 배경 제거, 증명사진 생성, AI 아바타 만들기, 색상 교정 등 콘텐츠 편집 관련 기능을 원스톱으로 제공하는 플랫폼입니다. 동영상 속 사람을 실시간으로 분리하는 기능이 특히 독보적이며, 크리에이터와 마케터가 다양하게 활용합니다. 무료 플랜에서 기본 기능을 사용할 수 있으며 고급 기능은 크레딧 구매가 필요합니다.",
     website: "https://cutout.pro", thumbnail: "https://logo.clearbit.com/cutout.pro", rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -701,7 +701,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   // 5. Video Editing
   // ===========================================
   {
-    id: "vedit-capcut", name: "CapCut", category: "video-editing",
+    id: "vedit-capcut", name: "CapCut", category: "video-generation",
     summary: "AI 자막, 효과 등 숏폼 편집의 필수품",
     description: "ByteDance(틱톡 모회사)가 개발한 영상 편집 앱으로, AI 자동 자막·배경 제거·텍스트 음성 변환·효과 추천 등 숏폼 영상 편집에 필요한 모든 AI 기능을 무료로 제공합니다. TikTok·Reels·Shorts 형식에 최적화된 수천 개의 템플릿과 스티커가 내장되어 있습니다. 전 세계 가장 많이 사용하는 모바일 영상 편집 앱 중 하나이며 PC 버전도 제공됩니다.",
     website: "https://capcut.com",
@@ -709,7 +709,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "vedit-opus", name: "Opus Clip", category: "video-editing",
+    id: "vedit-opus", name: "Opus Clip", category: "video-generation",
     summary: "긴 유튜브 영상을 알아서 하이라이트 쇼츠로 잘라줌",
     description: "긴 유튜브·Zoom·Podcast 영상을 AI가 분석해 바이럴 가능성이 높은 구간을 자동으로 잘라 숏폼 클립으로 변환합니다. 자동 자막·리프레임·캡션 디자인까지 원클릭으로 처리하며, TikTok·Reels·Shorts에 바로 업로드 가능한 형식으로 내보냅니다. 무료 플랜은 월 60분 처리 제한이 있으며 Pro 플랜은 월 $19부터 시작합니다.",
     website: "https://opus.pro",
@@ -717,7 +717,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "vedit-vrew", name: "Vrew", category: "video-editing",
+    id: "vedit-vrew", name: "Vrew", category: "video-generation",
     summary: "음성을 분석해 자동으로 자막을 달아주는 국산 꿀템",
     description: "보이저엑스(한국)가 개발한 AI 영상 편집 도구로, 영상 음성을 99% 이상 정확도로 인식해 자막을 자동 생성하고 텍스트 클릭만으로 해당 영상 구간을 편집할 수 있습니다. AI 자동 자르기로 침묵·실수 구간을 일괄 제거하며, 한국어·영어·일본어 등 다국어 자막 번역도 지원합니다. 무료 플랜에서도 주요 기능을 충분히 사용할 수 있어 국내 유튜버들이 가장 많이 쓰는 편집 도구입니다.",
     website: "https://vrew.ai",
@@ -725,7 +725,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "vedit-descript", name: "Descript", category: "video-editing",
+    id: "vedit-descript", name: "Descript", category: "video-generation",
     summary: "영상을 워드 문서처럼 텍스트로 편집함",
     description: "영상·팟캐스트를 텍스트 스크립트로 변환한 뒤, 문서 편집하듯 텍스트를 지우면 해당 영상 구간이 자동으로 삭제되는 혁신적인 편집 방식을 제공합니다. AI Overdub으로 목소리를 복제해 잘못 말한 부분을 텍스트 입력만으로 재녹음 없이 수정할 수 있습니다. Creator 플랜 $24/월부터 시작하며, 팟캐스트·인터뷰·교육 영상 제작자에게 특히 유용합니다.",
     website: "https://descript.com",
@@ -733,7 +733,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "vedit-invideo", name: "InVideo", category: "video-editing",
+    id: "vedit-invideo", name: "InVideo", category: "video-generation",
     summary: "텍스트만 주면 영상+자막+음성까지 풀세트로 제작",
     description: "텍스트 프롬프트나 기사 URL을 입력하면 AI가 스크립트·스톡 영상·자막·AI 보이스오버를 자동으로 조합해 완성된 영상을 생성합니다. 5,000개 이상의 템플릿과 1,600만 개의 스톡 미디어 라이브러리를 갖추고 있으며, 소셜 미디어용 마케팅 영상 제작에 특화되어 있습니다. Business 플랜은 월 $30부터이며 팀 협업 기능도 지원합니다.",
     website: "https://invideo.io",
@@ -741,7 +741,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "vedit-premiere", name: "Premiere Pro", category: "video-editing",
+    id: "vedit-premiere", name: "Premiere Pro", category: "video-generation",
     summary: "어도비 AI 기능으로 편집 시간 단축 (전문가용)",
     description: "Adobe의 전문 영상 편집 소프트웨어로, AI 기반 'Sensei' 기술을 통해 자동 리프레임·오디오 노이즈 제거·컬러 매칭·장면 편집 감지 등을 지원합니다. After Effects·Audition·Photoshop 등 Adobe 생태계와 완벽하게 연동되며, 2024년 Firefly 기반 'Generative Extend' 기능으로 영상 클립을 AI로 자연스럽게 연장할 수 있습니다. Creative Cloud 구독 $55/월(단일 앱 $23/월)에 포함됩니다.",
     website: "https://adobe.com",
@@ -749,7 +749,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "vedit-munch", name: "Munch", category: "video-editing",
+    id: "vedit-munch", name: "Munch", category: "video-generation",
     summary: "트렌드를 분석해서 가장 뜰만한 구간을 숏폼으로 제작",
     description: "GPT-4 기반 AI가 긴 영상을 분석해 참여율·트렌드·키워드 관련성을 고려하여 바이럴 가능성이 높은 구간을 자동으로 추출합니다. 추출된 클립에 자동 자막·로고·B-Roll을 추가하고, 플랫폼별 최적 해상도와 비율로 자동 리포맷해 줍니다. Pro 플랜 월 $49부터 시작하며 LinkedIn·YouTube·Twitter 등 다채널 배포도 지원합니다.",
     website: "https://getmunch.com",
@@ -757,7 +757,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "vedit-filmora", name: "Wondershare Filmora", category: "video-editing",
+    id: "vedit-filmora", name: "Wondershare Filmora", category: "video-generation",
     summary: "초보자도 쓰기 쉬운 AI 편집 효과가 많음",
     description: "Wondershare가 개발한 초보자 친화적 영상 편집 소프트웨어로, AI 배경 제거·노이즈 제거·모션 트래킹·음성 텍스트 변환·자동 하이라이트 생성 등 30여 가지 AI 기능을 탑재했습니다. 직관적인 드래그앤드롭 인터페이스에 수천 개의 이펙트·트랜지션·타이틀 템플릿이 포함되어 있습니다. 연간 플랜 $49.99/년부터 이용 가능하며 Windows·Mac 모두 지원합니다.",
     website: "https://filmora.wondershare.com",
@@ -765,7 +765,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "vedit-kapwing", name: "Kapwing", category: "video-editing",
+    id: "vedit-kapwing", name: "Kapwing", category: "video-generation",
     summary: "웹에서 바로 쓰는 협업 가능한 영상 편집기",
     description: "설치 없이 브라우저에서 바로 사용하는 온라인 영상 편집 플랫폼으로, AI 자동 자막·배경 제거·불필요 공백 제거·리사이징 기능을 제공합니다. Google Docs처럼 팀원과 실시간 협업이 가능하며, 템플릿 기반으로 소셜 미디어용 콘텐츠를 빠르게 제작할 수 있습니다. 무료 플랜은 워터마크가 붙으며, Pro 플랜은 월 $16부터 제공합니다.",
     website: "https://kapwing.com",
@@ -773,7 +773,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "vedit-autocut", name: "AutoCut", category: "video-editing",
+    id: "vedit-autocut", name: "AutoCut", category: "video-generation",
     summary: "영상 속의 무음 구간(침묵)을 자동으로 삭제",
     description: "AI가 영상에서 침묵·망설임·잘못 말한 구간을 자동으로 감지해 제거하는 편집 자동화 도구입니다. Premiere Pro·DaVinci Resolve·Final Cut Pro 플러그인으로도 동작하며, 편집 시간을 평균 70% 이상 단축해 줍니다. 유튜버·강사·팟캐스터처럼 긴 영상을 자주 편집하는 크리에이터에게 필수 도구로 꼽히며, 월 $9부터 이용 가능합니다.",
     website: "https://autocut.com",
@@ -781,61 +781,61 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "vedit-wisecut", name: "Wisecut", category: "video-editing",
+    id: "vedit-wisecut", name: "Wisecut", category: "video-generation",
     summary: "긴 영상을 짧은 쇼츠로 만들고 음악까지 자동 삽입",
     description: "AI가 긴 영상을 분석해 자동으로 잘라 숏폼 클립을 생성하고, 분위기에 맞는 배경음악까지 자동으로 삽입해 주는 올인원 편집 도구입니다. 자동 자막·펀치인 컷·음성 기반 챕터 분할 기능도 포함되어 있으며, 침묵 구간을 자동으로 제거합니다. 무료 플랜(월 1시간 영상)부터 Pro 플랜 월 $47까지 단계별로 제공됩니다.",
     website: "https://wisecut.video", thumbnail: "https://logo.clearbit.com/wisecut.video", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "vedit-rawshorts", name: "RawShorts", category: "video-editing",
+    id: "vedit-rawshorts", name: "RawShorts", category: "video-generation",
     summary: "텍스트 스크립트를 입력하면 애니메이션 영상 제작",
     description: "텍스트 스크립트나 데이터를 입력하면 AI가 자동으로 애니메이션·인포그래픽 영상을 생성해 주는 플랫폼입니다. 드래그앤드롭 편집기로 캐릭터·아이콘·차트를 자유롭게 커스터마이징할 수 있으며, 기업 홍보·교육·마케팅용 설명 영상 제작에 특화되어 있습니다. Business 플랜 월 $149부터 제공되며 팀 협업과 브랜드 키트를 지원합니다.",
     website: "https://rawshorts.com", thumbnail: "https://logo.clearbit.com/rawshorts.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "vedit-pictory", name: "Pictory", category: "video-editing",
+    id: "vedit-pictory", name: "Pictory", category: "video-generation",
     summary: "블로그 글 주소를 넣으면 영상으로 변환해 줌",
     description: "블로그 포스트 URL이나 긴 텍스트를 붙여넣으면 AI가 핵심 내용을 추출해 스톡 영상·자막·AI 보이스오버를 자동으로 조합한 영상을 생성합니다. 긴 웨비나·팟캐스트 영상을 소셜용 짧은 클립으로 자동 변환하는 기능도 제공합니다. Starter 플랜 월 $23부터 이용 가능하며, 콘텐츠 마케터와 블로거의 영상 콘텐츠 리퍼포징에 최적화되어 있습니다.",
     website: "https://pictory.ai", thumbnail: "https://logo.clearbit.com/pictory.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "vedit-gliacloud", name: "Gliacloud", category: "video-editing",
+    id: "vedit-gliacloud", name: "Gliacloud", category: "video-generation",
     summary: "뉴스 기사를 영상 뉴스로 자동 변환 (전통 강자)",
     description: "뉴스 기사·보도자료·텍스트 콘텐츠를 AI가 자동으로 분석해 관련 영상·이미지·그래픽을 조합한 영상 뉴스로 변환하는 미디어 특화 플랫폼입니다. Reuters·AP·Bloomberg 등 글로벌 주요 언론사들이 실제 사용하는 검증된 솔루션으로, 편집자 개입 없이 분 단위로 영상을 자동 생산할 수 있습니다. 엔터프라이즈 전용 맞춤형 요금제로 운영됩니다.",
     website: "https://gliacloud.com", thumbnail: "https://logo.clearbit.com/gliacloud.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "vedit-elai", name: "Elai.io", category: "video-editing",
+    id: "vedit-elai", name: "Elai.io", category: "video-generation",
     summary: "PPT를 영상으로 만들고 아바타가 발표하게 함",
     description: "PowerPoint·Google Slides 파일을 업로드하면 AI 아바타가 슬라이드를 발표하는 영상을 자동으로 생성하는 플랫폼입니다. 65개 이상의 언어로 텍스트를 음성 변환해 자막과 함께 다국어 교육·온보딩 영상을 손쉽게 제작할 수 있습니다. Basic 플랜 월 $29부터 제공되며 커스텀 아바타 생성도 지원합니다.",
     website: "https://elai.io", thumbnail: "https://logo.clearbit.com/elai.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "vedit-deepbrain", name: "DeepBrain AI", category: "video-editing",
+    id: "vedit-deepbrain", name: "DeepBrain AI", category: "video-generation",
     summary: "방송국 수준의 가상 앵커 영상 제작 (국산)",
     description: "한국 스타트업 딥브레인AI가 개발한 초실사 AI 아바타 영상 생성 플랫폼으로, 텍스트만 입력하면 실제 사람처럼 자연스럽게 말하는 AI 앵커 영상을 수 분 내로 제작합니다. KBS·MBC 등 국내 주요 방송사와 금융·교육 기관이 실제 사용하는 기업용 솔루션으로, 80개 이상의 AI 앵커 모델과 80개 이상의 언어를 지원합니다. Starter 플랜 월 $30부터 제공됩니다.",
     website: "https://deepbrain.io", thumbnail: "https://logo.clearbit.com/deepbrain.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "vedit-hourone", name: "Hour One", category: "video-editing",
+    id: "vedit-hourone", name: "Hour One", category: "video-generation",
     summary: "텍스트만 있으면 뉴스 리포트 영상 뚝딱",
     description: "AI 아바타와 텍스트 투 비디오 기술을 결합해 대본만 입력하면 방송 품질의 프레젠테이션·교육·뉴스 형식 영상을 자동으로 제작하는 플랫폼입니다. 100개 이상의 사전 제작된 AI 아바타와 40개 이상의 언어를 지원하며, 영상 로컬라이제이션에 강점이 있습니다. Teams 플랜 월 $25부터 제공되며 API 연동도 가능합니다.",
     website: "https://hourone.ai", thumbnail: "https://logo.clearbit.com/hourone.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "vedit-synthesia-edit", name: "Synthesia (Edit)", category: "video-editing",
+    id: "vedit-synthesia-edit", name: "Synthesia (Edit)", category: "video-generation",
     summary: "영상 편집 기술 없이도 텍스트로 영상 수정",
     description: "Synthesia의 영상 편집 기능으로, AI 아바타가 등장하는 영상의 스크립트를 텍스트로 수정하면 아바타가 자동으로 새 대사를 말하도록 재생성해 영상을 업데이트합니다. 재촬영·재편집 없이 언제든지 내용 수정이 가능해 주기적으로 업데이트가 필요한 교육·제품 소개 영상에 최적입니다. Starter 플랜 월 $22부터 제공됩니다.",
     website: "https://synthesia.io", thumbnail: "https://logo.clearbit.com/synthesia.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "vedit-heygen-trans", name: "HeyGen Video Translate", category: "video-editing",
+    id: "vedit-heygen-trans", name: "HeyGen Video Translate", category: "video-generation",
     summary: "내 영상의 언어를 입모양까지 맞춰서 번역해 줌",
     description: "HeyGen의 Video Translation 기능으로, 영상 속 인물의 목소리·억양·입모양까지 타겟 언어에 맞게 AI로 변환해 자연스러운 다국어 영상을 생성합니다. 40개 이상의 언어를 지원하며, 원본 화자의 목소리 특성을 유지한 채 번역이 이루어져 기존 더빙보다 훨씬 자연스럽습니다. 분당 요금 방식으로 과금되며 기업 고객에게 맞춤 플랜을 제공합니다.",
     website: "https://heygen.com", thumbnail: "https://logo.clearbit.com/heygen.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "vedit-rask", name: "Rask.ai", category: "video-editing",
+    id: "vedit-rask", name: "Rask.ai", category: "video-generation",
     summary: "영상 더빙과 번역을 한 번에 해결하는 툴",
     description: "영상 콘텐츠를 130개 이상의 언어로 자동 번역·더빙하는 AI 로컬라이제이션 플랫폼으로, 원본 화자의 목소리 톤을 최대한 유지하면서 립싱크까지 맞춰 줍니다. 자막 생성·번역·더빙을 단일 워크플로우에서 처리하며, 유튜버·기업 교육 담당자·콘텐츠 에이전시에서 널리 활용합니다. Starter 플랜 월 $60부터 제공되며 팀 협업도 지원합니다.",
     website: "https://rask.ai", thumbnail: "https://logo.clearbit.com/rask.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []

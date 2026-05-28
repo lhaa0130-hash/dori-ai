@@ -2,7 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
-import { Heart, Sparkles, Calendar, Camera, BookHeart, ClipboardList, Bell, Users, Star } from "lucide-react";
+import Link from "next/link";
+import { Heart, Sparkles, Calendar, Camera, BookHeart, ClipboardList, Bell, Users, Star, ExternalLink, ArrowRight } from "lucide-react";
 
 const FEATURES = [
   {
@@ -98,7 +99,7 @@ export default function FamilyPageClient() {
           >
             <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-400 text-xs font-bold mb-6">
               <Heart className="w-3 h-3 fill-current" />
-              <span>2nd Project · 개발 예정</span>
+              <span>2nd Project</span>
             </div>
 
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-bold tracking-tight leading-tight mb-5 text-neutral-900 dark:text-white">
@@ -113,16 +114,27 @@ export default function FamilyPageClient() {
               가족 모두가 함께 공유하는 디지털 가족 공간이에요.
             </p>
 
-            {/* 상태 뱃지 */}
-            <div className="flex items-center gap-3 flex-wrap justify-center">
-              <div className="inline-flex items-center gap-2 bg-amber-50 dark:bg-amber-900/20 border border-amber-200 dark:border-amber-800 px-4 py-2 rounded-full">
-                <span className="w-1.5 h-1.5 rounded-full bg-amber-400 animate-pulse flex-shrink-0" />
-                <span className="text-xs font-bold text-amber-700 dark:text-amber-400">현재 기획 중 · 아이디어 수집 단계</span>
-              </div>
-              <div className="inline-flex items-center gap-1.5 bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 px-4 py-2 rounded-full">
+            {/* CTA 버튼 */}
+            <div className="flex items-center gap-4 flex-wrap justify-center mb-6">
+              <Link
+                href="https://family-94b12.web.app/"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-gradient-to-r from-purple-500 to-fuchsia-500 hover:from-purple-600 hover:to-fuchsia-600 text-white text-sm font-black shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
+              >
+                <span>앱 열기</span>
+                <ExternalLink className="w-4 h-4" />
+              </Link>
+              <div className="inline-flex items-center gap-1.5 bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 px-4 py-3.5 rounded-full">
                 <Sparkles className="w-3 h-3 text-purple-500" />
-                <span className="text-xs font-bold text-neutral-600 dark:text-neutral-400">AI 기반 스마트 추천 포함 예정</span>
+                <span className="text-xs font-bold text-neutral-600 dark:text-neutral-400">AI 기능 업데이트 예정</span>
               </div>
+            </div>
+
+            {/* 상태 뱃지 */}
+            <div className="inline-flex items-center gap-2 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 px-4 py-2 rounded-full">
+              <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse flex-shrink-0" />
+              <span className="text-xs font-bold text-emerald-700 dark:text-emerald-400">서비스 운영 중 · 지금 바로 사용 가능</span>
             </div>
           </motion.div>
         </section>
@@ -280,16 +292,21 @@ export default function FamilyPageClient() {
           >
             <div className="text-5xl mb-4">💜</div>
             <h2 className="text-2xl md:text-3xl font-bold text-neutral-900 dark:text-white mb-3">
-              함께 만들어가는 가족기록
+              지금 바로 시작해보세요
             </h2>
-            <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed max-w-lg mx-auto mb-2 break-keep">
-              어떤 기능이 있으면 좋겠는지, 가족과 어떤 것을 공유하고 싶은지<br className="hidden md:block" />
-              여러분의 아이디어를 기다리고 있어요.
+            <p className="text-neutral-600 dark:text-neutral-400 text-sm leading-relaxed max-w-lg mx-auto mb-6 break-keep">
+              가족기록 앱은 현재 서비스 중이에요.<br className="hidden md:block" />
+              지금 열어보고, 가족과 함께 첫 번째 기록을 남겨보세요.
             </p>
-            <p className="text-purple-600 dark:text-purple-400 text-xs font-bold flex items-center justify-center gap-1.5">
-              <Sparkles className="w-3 h-3" />
-              빠르게 개발하고 있습니다 — 곧 만나요!
-            </p>
+            <Link
+              href="https://family-94b12.web.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-8 py-4 rounded-full bg-gradient-to-r from-purple-500 to-fuchsia-500 hover:from-purple-600 hover:to-fuchsia-600 text-white text-sm font-black shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
+            >
+              <span>가족기록 앱 열기</span>
+              <ArrowRight className="w-4 h-4" />
+            </Link>
           </motion.div>
         </section>
 
