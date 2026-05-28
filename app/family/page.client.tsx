@@ -3,7 +3,7 @@
 import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import Link from "next/link";
-import { Heart, Sparkles, Calendar, Camera, BookHeart, ClipboardList, Bell, Users, Star, ExternalLink, ArrowRight } from "lucide-react";
+import { Heart, Sparkles, Calendar, Camera, BookHeart, ClipboardList, Bell, Users, Star, ExternalLink, ArrowRight, CheckCircle2 } from "lucide-react";
 
 const FEATURES = [
   {
@@ -139,6 +139,129 @@ export default function FamilyPageClient() {
           </motion.div>
         </section>
 
+        {/* ── 지금 사용 가능한 기능 ── */}
+        <section className="mb-20">
+          <motion.div
+            initial={{ opacity: 0, y: 16 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.5 }}
+            className="mb-10"
+          >
+            <div className="flex items-center gap-3 mb-2">
+              <div className="inline-flex items-center gap-1.5 bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-200 dark:border-emerald-800 px-3 py-1 rounded-full">
+                <span className="w-1.5 h-1.5 rounded-full bg-emerald-400 animate-pulse" />
+                <span className="text-[11px] font-bold text-emerald-700 dark:text-emerald-400">지금 바로 사용 가능</span>
+              </div>
+            </div>
+            <h2 className="text-2xl md:text-3xl font-bold text-neutral-900 dark:text-white mb-2">
+              현재 구현된 기능
+            </h2>
+            <p className="text-neutral-500 dark:text-neutral-400 text-sm font-medium">
+              가족기록 앱에서 지금 바로 사용할 수 있는 기능들이에요
+            </p>
+          </motion.div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+            {[
+              {
+                emoji: "📸",
+                title: "사진·앨범 공유",
+                desc: "가족의 소중한 순간을 사진으로 기록하고, 앨범으로 묶어 온 가족이 함께 볼 수 있어요. 여행, 생일, 일상의 사진을 한곳에서 공유해 보세요.",
+                color: "from-pink-400 to-rose-400",
+                bg: "bg-pink-50 dark:bg-pink-900/20",
+                border: "border-pink-200 dark:border-pink-800",
+                features: ["사진 업로드 및 앨범 생성", "가족 구성원 공유", "사진 모아보기"],
+              },
+              {
+                emoji: "📅",
+                title: "일정·캘린더",
+                desc: "가족 모두의 일정을 하나의 달력에서 확인하세요. 학교 행사, 병원 예약, 여행 계획까지 온 가족이 실시간으로 공유해요.",
+                color: "from-blue-400 to-sky-400",
+                bg: "bg-blue-50 dark:bg-blue-900/20",
+                border: "border-blue-200 dark:border-blue-800",
+                features: ["가족 공유 캘린더", "일정 등록 및 알림", "월별·일별 보기"],
+              },
+              {
+                emoji: "📓",
+                title: "일기·게시글",
+                desc: "각자의 하루를 글로 기록하고 가족과 나눠요. 서로의 일상을 들여다보고 댓글로 소통하는 우리 가족만의 공간이에요.",
+                color: "from-amber-400 to-orange-400",
+                bg: "bg-amber-50 dark:bg-amber-900/20",
+                border: "border-amber-200 dark:border-amber-800",
+                features: ["가족 일기 작성", "댓글로 소통", "날짜별 기록 조회"],
+              },
+              {
+                emoji: "🏥",
+                title: "건강 기록",
+                desc: "가족 구성원의 복약 일정, 병원 방문 기록, 알레르기 정보를 한눈에 관리해요. 소중한 가족의 건강을 빠짐없이 챙길 수 있어요.",
+                color: "from-emerald-400 to-teal-400",
+                bg: "bg-emerald-50 dark:bg-emerald-900/20",
+                border: "border-emerald-200 dark:border-emerald-800",
+                features: ["복약 일정 관리", "병원 기록 저장", "건강 정보 공유"],
+              },
+            ].map((feat, i) => (
+              <motion.div
+                key={i}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.4, delay: i * 0.07 }}
+                className={`bg-white dark:bg-zinc-900 border ${feat.border} rounded-2xl p-6 hover:shadow-lg hover:-translate-y-0.5 transition-all duration-300`}
+              >
+                {/* 아이콘 + 제목 */}
+                <div className="flex items-center gap-4 mb-4">
+                  <div className={`w-14 h-14 rounded-2xl bg-gradient-to-br ${feat.color} flex items-center justify-center text-2xl shadow-sm flex-shrink-0`}>
+                    {feat.emoji}
+                  </div>
+                  <div>
+                    <h3 className="text-base font-bold text-neutral-900 dark:text-white leading-snug">
+                      {feat.title}
+                    </h3>
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${feat.bg} ${feat.border} border text-neutral-600 dark:text-neutral-300 mt-1 inline-block`}>
+                      구현 완료
+                    </span>
+                  </div>
+                </div>
+
+                {/* 설명 */}
+                <p className="text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed mb-4 break-keep">
+                  {feat.desc}
+                </p>
+
+                {/* 세부 기능 */}
+                <ul className="space-y-1.5">
+                  {feat.features.map((f, j) => (
+                    <li key={j} className="flex items-center gap-2 text-xs text-neutral-600 dark:text-neutral-400">
+                      <CheckCircle2 className="w-3.5 h-3.5 text-emerald-500 flex-shrink-0" />
+                      <span>{f}</span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            ))}
+          </div>
+
+          {/* 앱 바로가기 버튼 */}
+          <motion.div
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            transition={{ duration: 0.4, delay: 0.3 }}
+            className="text-center mt-8"
+          >
+            <Link
+              href="https://family-94b12.web.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="inline-flex items-center gap-2 px-6 py-3 rounded-full bg-purple-50 dark:bg-purple-950/30 border border-purple-200 dark:border-purple-800 text-purple-700 dark:text-purple-400 text-sm font-bold hover:bg-purple-100 dark:hover:bg-purple-900/40 transition-colors"
+            >
+              <span>위 기능들 직접 써보기</span>
+              <ExternalLink className="w-3.5 h-3.5" />
+            </Link>
+          </motion.div>
+        </section>
+
         {/* ── 핵심 가치 ── */}
         <section className="mb-20">
           <motion.div
@@ -171,10 +294,10 @@ export default function FamilyPageClient() {
             className="mb-10"
           >
             <h2 className="text-2xl md:text-3xl font-bold text-neutral-900 dark:text-white mb-2">
-              ✨ 이런 기능을 담을 거예요
+              🚀 업데이트 예정 기능
             </h2>
             <p className="text-neutral-500 dark:text-neutral-400 text-sm font-medium">
-              가족의 하루부터 소중한 추억까지, 모두 한곳에
+              빠르게 추가되고 있는 기능들이에요
             </p>
           </motion.div>
 
