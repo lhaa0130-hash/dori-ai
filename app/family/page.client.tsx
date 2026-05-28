@@ -115,17 +115,17 @@ export default function FamilyPageClient() {
             </p>
 
             {/* CTA 버튼 */}
-            <div className="flex items-center gap-4 flex-wrap justify-center mb-6">
+            <div className="flex flex-col items-center gap-3 mb-6 w-full">
               <Link
                 href="https://family-94b12.web.app/"
                 target="_blank"
                 rel="noopener noreferrer"
-                className="inline-flex items-center gap-2 px-7 py-3.5 rounded-full bg-gradient-to-r from-purple-500 to-fuchsia-500 hover:from-purple-600 hover:to-fuchsia-600 text-white text-sm font-black shadow-lg shadow-purple-500/30 hover:shadow-purple-500/50 transition-all duration-300 hover:-translate-y-0.5 active:scale-95"
+                className="inline-flex items-center gap-3 px-10 py-5 rounded-2xl bg-gradient-to-r from-purple-500 to-fuchsia-500 hover:from-purple-600 hover:to-fuchsia-600 text-white text-lg font-black shadow-2xl shadow-purple-500/40 hover:shadow-purple-500/60 transition-all duration-300 hover:-translate-y-1 active:scale-95"
               >
                 <span>앱 열기</span>
-                <ExternalLink className="w-4 h-4" />
+                <ExternalLink className="w-5 h-5" />
               </Link>
-              <div className="inline-flex items-center gap-1.5 bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 px-4 py-3.5 rounded-full">
+              <div className="inline-flex items-center gap-1.5 bg-neutral-100 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 px-4 py-2 rounded-full">
                 <Sparkles className="w-3 h-3 text-purple-500" />
                 <span className="text-xs font-bold text-neutral-600 dark:text-neutral-400">AI 기능 업데이트 예정</span>
               </div>
