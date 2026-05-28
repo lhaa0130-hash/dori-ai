@@ -11,7 +11,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "agent-cursor", name: "Cursor", category: "agent",
     summary: "AI가 코드를 직접 작성하는 개발자용 에디터",
-    description: "AI가 코드를 직접 작성하는 개발자용 에디터",
+    description: "VS Code 기반 AI 코드 에디터로, 프로젝트 전체 파일 컨텍스트를 이해하고 자연어 명령만으로 코드를 작성·리팩토링합니다. 무료 플랜과 유료($20/월) 플랜이 있으며, Claude·GPT-4o 등 여러 모델 중 선택할 수 있습니다. 복잡한 기능 추가나 버그 수정을 자연어로 지시하면 알아서 처리해 코딩 속도가 최소 2~3배 빨라집니다.",
     website: "https://cursor.sh",
     thumbnail: "https://logo.clearbit.com/cursor.sh",
     strength: "자율 코딩, 컨텍스트 이해 최강",
@@ -24,7 +24,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "agent-devin", name: "Devin", category: "agent",
     summary: "세계 최초 완전 자율 AI 소프트웨어 엔지니어",
-    description: "세계 최초 완전 자율 AI 소프트웨어 엔지니어",
+    description: "Cognition이 개발한 완전 자율 AI 에이전트로, GitHub 이슈를 받아 코드 작성·테스트·PR 제출까지 혼자 완수합니다. 자체 브라우저·쉘·에디터를 갖춰 실제 개발자처럼 환경을 구성하고 문제를 해결하며, 월 $500 이상의 고가 서비스입니다. SWE-bench 코딩 벤치마크에서 인간 개발자 수준에 근접한 성능을 처음으로 달성한 것으로 주목받았습니다.",
     website: "https://devin.ai",
     thumbnail: "https://logo.clearbit.com/devin.ai",
     strength: "엔드투엔드 개발, 버그 수정, 배포까지 자율 처리",
@@ -37,7 +37,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "agent-manus", name: "Manus", category: "agent",
     summary: "웹 서핑, 파일 작업, 코딩을 혼자 다 해주는 범용 AI 에이전트",
-    description: "웹 서핑, 파일 작업, 코딩을 혼자 다 해주는 범용 AI 에이전트",
+    description: "실제 브라우저를 조작하며 리서치·파일 작성·코드 실행을 동시에 처리하는 멀티태스킹 AI 에이전트입니다. 여러 하위 에이전트를 병렬 실행해 복잡한 다단계 작업도 자율로 완수하며, 리서치 보고서부터 PPT 초안까지 원스톱으로 처리합니다. 현재 초대 기반으로 운영 중이며, 글로벌 AI 에이전트 시장에서 가장 주목받는 서비스 중 하나입니다.",
     website: "https://manus.im",
     thumbnail: "https://logo.clearbit.com/manus.im",
     strength: "브라우저 조작, 파일 처리, 코드 실행 멀티태스킹",
@@ -50,7 +50,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "agent-n8n", name: "n8n", category: "agent",
     summary: "노코드로 ChatGPT·슬랙·노션 연결. 자동화 입문자에게 추천",
-    description: "노코드로 ChatGPT·슬랙·노션 연결. 자동화 입문자에게 추천",
+    description: "오픈소스 기반 워크플로우 자동화 플랫폼으로, 400개 이상의 앱 커넥터와 AI 노드를 제공합니다. 자체 서버에 설치하면 무제한 무료 사용이 가능하고, LLM·이미지 생성 등 AI 처리를 워크플로우에 손쉽게 통합할 수 있습니다. 테크 스타트업과 개발자 사이에서 Zapier의 강력한 대안으로 빠르게 확산되고 있습니다.",
     website: "https://n8n.io",
     thumbnail: "https://logo.clearbit.com/n8n.io",
     userReview: "ChatGPT + 슬랙 + 노션 연동을 30분 만에 완성했어요.",
@@ -59,7 +59,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "agent-langchain", name: "LangChain", category: "agent",
     summary: "AI 에이전트 개발 시 필수 라이브러리. 1억 다운로드 돌파",
-    description: "AI 에이전트 개발 시 필수 라이브러리. 1억 다운로드 돌파",
+    description: "LLM 기반 AI 앱과 에이전트를 구축하는 오픈소스 프레임워크로, RAG·에이전트·체인 등 핵심 컴포넌트를 제공합니다. Python과 JavaScript를 모두 지원하며, OpenAI·Anthropic·Google 등 거의 모든 LLM 공급자와 연동됩니다. AI 스타트업과 기업의 프로덕션 AI 파이프라인 대부분이 LangChain을 기반으로 구축되어 있습니다.",
     website: "https://langchain.com",
     thumbnail: "https://logo.clearbit.com/langchain.com",
     userReview: "RAG 파이프라인 구축할 때 없으면 안 되는 존재.",
@@ -68,7 +68,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "agent-autogpt", name: "AutoGPT", category: "agent",
     summary: "목표 주면 스스로 검색·코딩·실행. 아직 발전 중이지만 잠재력 큼",
-    description: "목표 주면 스스로 검색·코딩·실행. 아직 발전 중이지만 잠재력 큼",
+    description: "GPT-4를 기반으로 목표를 설정하면 스스로 작업을 분해·실행하는 초기 자율 AI 에이전트 프로젝트입니다. 인터넷 검색, 파일 저장, 코드 실행 등 도구를 자율 사용하며, GitHub에서 오픈소스로 공개되어 있습니다. 완전 자율 AI 에이전트 개념을 처음 대중화한 프로젝트로, 현재도 활발하게 개발 중입니다.",
     website: "https://agpt.co",
     thumbnail: "https://logo.clearbit.com/agpt.co",
     userReview: "완전 자율은 아직 멀었지만, 반복 작업 자동화엔 충분해요.",
@@ -77,7 +77,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "agent-perplexity-agent", name: "Perplexity Agent", category: "agent",
     summary: "실시간 웹 정보 + 딥리서치 자동화. 조사 업무 시간 80% 절감",
-    description: "실시간 웹 정보 + 딥리서치 자동화. 조사 업무 시간 80% 절감",
+    description: "Perplexity의 딥리서치 기능으로, 복잡한 주제에 대해 수십 개의 웹 페이지를 자동 탐색하고 출처가 포함된 종합 보고서를 작성합니다. 시장 조사·경쟁사 분석·논문 리뷰 등 조사 업무를 몇 분 내로 완성할 수 있습니다. Pro 플랜($20/월) 가입 시 딥리서치 횟수가 대폭 늘어나며 더 정밀한 분석이 가능합니다.",
     website: "https://perplexity.ai",
     thumbnail: "https://logo.clearbit.com/perplexity.ai",
     userReview: "경쟁사 분석이나 시장 조사할 때 ChatGPT보다 훨씬 유용해요.",
@@ -86,7 +86,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "agent-claude-code", name: "Claude Code", category: "agent",
     summary: "터미널에서 동작하는 Anthropic의 코딩 에이전트",
-    description: "터미널에서 동작하는 Anthropic의 코딩 에이전트",
+    description: "CLI 기반으로 동작해 터미널에서 직접 파일 시스템을 읽고 코드를 수정하는 AI 에이전트입니다. 대용량 컨텍스트 윈도우를 활용해 전체 코드베이스를 파악하고 복잡한 리팩토링·버그 수정·기능 추가를 처리합니다. Claude API 사용량 기반으로 과금되며, VS Code·JetBrains 등 주요 IDE와 연동해 사용할 수 있습니다.",
     website: "https://claude.ai",
     thumbnail: "https://logo.clearbit.com/claude.ai",
     userReview: "복잡한 리팩토링도 컨텍스트를 잘 유지해서 믿고 맡길 수 있어요.",
@@ -95,7 +95,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "agent-genspark", name: "Genspark", category: "agent",
     summary: "검색·리서치·슬라이드·영상까지 한 번에 처리하는 올인원 AI 에이전트",
-    description: "검색·리서치·슬라이드·영상까지 한 번에 처리하는 올인원 AI 에이전트",
+    description: "검색 결과를 단순 나열하지 않고 AI가 직접 내용을 종합해 맞춤형 '스파크 페이지'를 생성합니다. PPT·스프레드시트·이미지·영상까지 멀티 에이전트가 병렬로 처리해 단일 프롬프트로 복잡한 보고서를 완성합니다. 하루 무료 사용량이 넉넉해 비개발자도 AI 에이전트의 위력을 바로 체험할 수 있습니다.",
     website: "https://genspark.ai",
     thumbnail: "https://logo.clearbit.com/genspark.ai",
     userReview: "리서치부터 PPT 완성까지 한 번의 프롬프트로 끝납니다. 업무 시간이 반으로 줄었어요.",
@@ -105,7 +105,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "agent-openai-operator", name: "OpenAI Operator", category: "agent",
     summary: "웹 브라우저를 직접 조작해 예약·쇼핑·양식 작성을 자동으로 처리",
-    description: "웹 브라우저를 직접 조작해 예약·쇼핑·양식 작성을 자동으로 처리",
+    description: "OpenAI가 개발한 컴퓨터 사용 AI로, 실제 웹 브라우저를 마우스·키보드로 조작해 사용자 대신 온라인 작업을 수행합니다. 항공권 예약, 폼 작성, 이메일 발송 등 단순 반복 웹 업무를 자동화하는 데 특화되어 있습니다. ChatGPT Plus·Pro 가입자에게 제공되며 미국 시장에서 먼저 출시되어 점진적으로 글로벌 확장 중입니다.",
     website: "https://openai.com",
     thumbnail: "https://logo.clearbit.com/openai.com",
     userReview: "항공권 예약을 그냥 시켜봤는데 진짜 다 해줬어요. 소름 돋음.",
@@ -114,7 +114,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "agent-zapier-ai", name: "Zapier AI", category: "agent",
     summary: "7,000개 앱 연동 + AI로 자동화 로직을 자연어로 생성",
-    description: "7,000개 앱 연동 + AI로 자동화 로직을 자연어로 생성",
+    description: "자연어로 자동화 워크플로우를 설명하면 AI가 알아서 로직을 구성해 주는 서비스로, 7,000개 이상의 앱과 연동됩니다. 무료 플랜은 월 100 Task까지 제공되며, 전문 개발자 없이도 복잡한 자동화를 구현할 수 있습니다. AI Zap Builder 기능으로 자연어 한 줄만 입력해도 워크플로우가 자동 생성되어 설정 시간이 크게 줄었습니다.",
     website: "https://zapier.com",
     thumbnail: "https://logo.clearbit.com/zapier.com",
     userReview: "코딩 몰라도 Gmail→Slack→Notion 자동화를 5분 만에 만들었어요.",
@@ -127,7 +127,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "llm-chatgpt", name: "ChatGPT", category: "llm",
     summary: "뭘 물어봐도 잘 답해줌. AI 처음 쓴다면 무조건 여기서 시작",
-    description: "뭘 물어봐도 잘 답해줌. AI 처음 쓴다면 무조건 여기서 시작",
+    description: "OpenAI가 개발한 세계 최대 사용자 AI 챗봇으로, GPT-4o 모델 기반의 텍스트·이미지·음성 통합 처리가 가능합니다. 무료 플랜(GPT-4o mini)과 Plus 플랜($20/월, GPT-4o 무제한)으로 나뉘며, GPT 스토어를 통해 특화 봇을 추가로 사용할 수 있습니다. 플러그인 생태계와 API 접근성 덕분에 전 세계 1억 명 이상이 매주 사용하는 AI 표준으로 자리잡았습니다.",
     website: "https://chatgpt.com",
     thumbnail: "https://logo.clearbit.com/chatgpt.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -135,7 +135,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "llm-claude", name: "Claude", category: "llm",
     summary: "긴 글 맥락을 귀신같이 잡아냄. 보고서 쓸 때 진짜 갑임",
-    description: "긴 글 맥락을 귀신같이 잡아냄. 보고서 쓸 때 진짜 갑임",
+    description: "Anthropic이 개발한 AI로 최대 20만 토큰의 초대형 컨텍스트를 지원해 책 한 권 분량도 한 번에 분석합니다. 글쓰기·코딩·분석 능력이 GPT-4o와 쌍벽을 이루며, 특히 긴 문서를 맥락을 잃지 않고 처리하는 능력이 뛰어납니다. 무료 플랜과 Pro 플랜($20/월)이 있으며, 안전하고 무해한 AI를 목표로 하는 헌법적 AI 설계가 적용되었습니다.",
     website: "https://claude.ai",
     thumbnail: "https://logo.clearbit.com/claude.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -143,7 +143,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "llm-gemini", name: "Gemini", category: "llm",
     summary: "구글 드라이브 문서 바로 요약. 구글 생태계 쓰는 분께 추천",
-    description: "구글 드라이브 문서 바로 요약. 구글 생태계 쓰는 분께 추천",
+    description: "Google DeepMind가 개발한 멀티모달 AI로, Docs·Sheets·Gmail·YouTube 등 Google Workspace와 깊이 통합되어 있습니다. Gemini 2.0 Flash 기준으로 속도와 비용 면에서 뛰어나며, Google One AI Premium($19.99/월)으로 가장 강력한 모델을 사용할 수 있습니다. 한국어 포함 40개 이상 언어를 지원하며 안드로이드·크롬 등 구글 기기 전반에 통합됩니다.",
     website: "https://gemini.google.com",
     thumbnail: "https://logo.clearbit.com/google.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -151,7 +151,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "llm-perplexity", name: "Perplexity", category: "llm",
     summary: "구글 대신 쓰기 딱 좋음. 출처 링크가 함께 나와서 믿음직함",
-    description: "구글 대신 쓰기 딱 좋음. 출처 링크가 함께 나와서 믿음직함",
+    description: "실시간 인터넷 검색과 AI 답변을 결합한 AI 검색 엔진으로, 모든 답변에 출처 URL이 함께 표시됩니다. GPT-4·Claude·Mistral 등 여러 모델 중 선택 가능하며, 딥리서치 기능으로 복잡한 주제도 심층 분석합니다. 무료 버전은 하루 Pro 검색 5회 제한이 있으며 Pro 플랜은 월 $20입니다.",
     website: "https://perplexity.ai",
     thumbnail: "https://logo.clearbit.com/perplexity.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -159,7 +159,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "llm-copilot", name: "Microsoft Copilot", category: "llm",
     summary: "Word·Excel에 AI가 붙어서 편집이 진짜 편해짐",
-    description: "Word·Excel에 AI가 붙어서 편집이 진짜 편해짐",
+    description: "Microsoft 365에 통합된 AI 비서로, Word 문서 초안 작성·Excel 데이터 분석·Teams 회의 요약·Outlook 이메일 작성 등을 지원합니다. GPT-4 기반으로 동작하며 Bing 검색과 연동해 최신 정보도 반영합니다. Microsoft 365 Business 구독자는 월 $30 추가 비용으로 사용 가능하며, 오피스 사용자에게 가장 자연스럽게 AI를 도입할 수 있는 선택입니다.",
     website: "https://copilot.microsoft.com",
     thumbnail: "https://logo.clearbit.com/microsoft.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -167,7 +167,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "llm-grok", name: "Grok", category: "llm",
     summary: "X(트위터) 실시간 정보 반영. 검열 없이 직설적으로 답해줌",
-    description: "X(트위터) 실시간 정보 반영. 검열 없이 직설적으로 답해줌",
+    description: "일론 머스크의 xAI가 개발한 AI로, X(트위터) 플랫폼의 실시간 게시물 데이터에 접근할 수 있는 것이 최대 차별점입니다. Grok 3 모델 기준으로 주요 벤치마크에서 GPT-4o에 근접한 성능을 보이며, 경쟁 AI보다 유머러스하고 직설적인 답변 스타일을 추구합니다. X Premium+ 구독($16/월)에 포함되어 있으며, 별도 앱과 웹사이트로도 이용 가능합니다.",
     website: "https://x.ai",
     thumbnail: "https://logo.clearbit.com/x.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -175,7 +175,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "llm-llama", name: "Llama", category: "llm",
     summary: "로컬에서 돌리는 무료 AI. 개인 정보 유출 걱정 없이 쓸 수 있음",
-    description: "로컬에서 돌리는 무료 AI. 개인 정보 유출 걱정 없이 쓸 수 있음",
+    description: "Meta가 오픈소스로 공개한 대형 언어 모델로, 자신의 컴퓨터에 설치해 인터넷 연결 없이 무제한 무료로 사용할 수 있습니다. Llama 3.3 70B 버전이 GPT-4에 준하는 성능을 보이며, Ollama 같은 툴을 이용하면 일반 소비자 PC에서도 쉽게 실행 가능합니다. 데이터가 외부로 나가지 않아 기업 내부 정보를 다루는 작업에 특히 유리합니다.",
     website: "https://llama.meta.com",
     thumbnail: "https://logo.clearbit.com/meta.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -183,7 +183,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "llm-mistral", name: "Mistral", category: "llm",
     summary: "유럽산 오픈소스 AI. 빠르고 가벼워서 서버 비용 아끼기 좋음",
-    description: "유럽산 오픈소스 AI. 빠르고 가벼워서 서버 비용 아끼기 좋음",
+    description: "프랑스 스타트업 Mistral AI가 개발한 고효율 오픈소스 모델로, Mixtral MoE(전문가 혼합) 아키텍처가 적은 계산량으로도 GPT-4급 성능을 냅니다. EU AI Act에 적합한 유럽산 모델을 원하는 기업에서 선호하며, API 비용이 GPT-4 대비 크게 저렴합니다. Mistral Large 모델은 상용 서비스에도 사용 가능한 수준의 품질을 갖추고 있습니다.",
     website: "https://mistral.ai",
     thumbnail: "https://logo.clearbit.com/mistral.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -191,7 +191,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "llm-deepseek", name: "DeepSeek", category: "llm",
     summary: "GPT-4 수준인데 거의 무료. 개발자 커뮤니티에서 핫한 이유 있음",
-    description: "GPT-4 수준인데 거의 무료. 개발자 커뮤니티에서 핫한 이유 있음",
+    description: "중국 AI 연구소 DeepSeek이 개발한 오픈소스 모델로, R1 추론 모델이 GPT-o1에 근접한 성능을 보이며 업계에 충격을 줬습니다. 학습 비용을 획기적으로 낮춘 설계 덕분에 API 사용 비용이 GPT-4의 수십 분의 1 수준입니다. 오픈소스로 공개되어 자체 서버에 설치 가능하지만, 중국 기업이라 민감한 업무 데이터 사용 시 주의가 필요합니다.",
     website: "https://deepseek.com",
     thumbnail: "https://logo.clearbit.com/deepseek.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -199,7 +199,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "llm-notebooklm", name: "NotebookLM", category: "llm",
     summary: "PDF 올리면 그 문서 기반으로만 답해줌. 내부 자료 분석에 최고",
-    description: "PDF 올리면 그 문서 기반으로만 답해줌. 내부 자료 분석에 최고",
+    description: "Google이 개발한 AI 연구 도우미로, 사용자가 업로드한 문서·PDF·링크만을 소스로 사용해 허위 정보 생성이 원천 차단됩니다. 여러 문서를 함께 업로드해 교차 분석이 가능하며, 문서 내용을 팟캐스트 형태로 변환하는 '오디오 오버뷰' 기능이 특히 인기입니다. 현재 무료로 제공되며 연구자·학생·기업 실무자에게 필수 도구로 자리잡고 있습니다.",
     website: "https://notebooklm.google.com",
     thumbnail: "https://logo.clearbit.com/google.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -207,61 +207,61 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "llm-gpt4o", name: "GPT-4o", category: "llm",
     summary: "이미지·음성·텍스트 동시 처리. 제일 빠른 GPT 모델",
-    description: "이미지·음성·텍스트 동시 처리. 제일 빠른 GPT 모델",
+    description: "OpenAI의 플래그십 멀티모달 모델로, 텍스트·이미지·오디오를 단일 모델에서 통합 처리합니다. GPT-4 Turbo 대비 2배 빠르고 비용은 절반이며, API로 사용 시 가장 효율적인 GPT 모델입니다. 실시간 음성 대화(GPT-4o Realtime) 기능으로 사람처럼 감정 있는 목소리로 즉각 응답하는 경험이 가능합니다.",
     website: "https://openai.com", thumbnail: "https://logo.clearbit.com/openai.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-claude-3-5", name: "Claude 3.5 Sonnet", category: "llm",
     summary: "코딩 실력은 GPT-4o랑 쌍벽. 긴 대화도 맥락을 절대 안 잃어버림",
-    description: "코딩 실력은 GPT-4o랑 쌍벽. 긴 대화도 맥락을 절대 안 잃어버림",
+    description: "Anthropic의 Claude 시리즈 중 가격 대비 성능이 가장 뛰어난 모델로, SWE-bench 코딩 벤치마크에서 GPT-4o를 앞서는 성과를 보였습니다. 200K 토큰 컨텍스트와 '아티팩트' 기능으로 코드·문서를 실시간 미리보기할 수 있습니다. API 요금은 입력 $3/백만 토큰, 출력 $15/백만 토큰이며 Claude.ai Pro 구독($20/월)으로도 이용 가능합니다.",
     website: "https://claude.ai", thumbnail: "https://logo.clearbit.com/anthropic.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-gemini-1-5", name: "Gemini 1.5 Pro", category: "llm",
     summary: "100만 토큰 컨텍스트. 책 한 권 통째로 분석 가능",
-    description: "100만 토큰 컨텍스트. 책 한 권 통째로 분석 가능",
+    description: "Google이 공개한 모델 중 가장 긴 컨텍스트 윈도우(100만 토큰, 약 750,000 단어)를 지원합니다. 긴 동영상·오디오 파일·대용량 코드베이스도 한 번의 요청으로 처리 가능하며, 멀티모달 능력도 동급 최강 수준입니다. Google AI Studio에서 무료로 테스트 가능하고, Vertex AI를 통해 기업용 API로도 제공됩니다.",
     website: "https://gemini.google.com", thumbnail: "https://logo.clearbit.com/google.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-cohere", name: "Cohere Command R+", category: "llm",
     summary: "기업 문서 검색 연동에 특화. B2B 서비스 만들 때 유용함",
-    description: "기업 문서 검색 연동에 특화. B2B 서비스 만들 때 유용함",
+    description: "RAG(검색 증강 생성) 및 멀티홉 추론에 특화된 기업용 LLM으로, 사내 문서와 결합해 정확한 답변을 생성하도록 설계되었습니다. 10개 이상의 비즈니스 언어를 지원하며 금융·법률 분야 기업에서 데이터 보안을 위해 선호합니다. API 비용이 GPT-4보다 저렴해 대규모 B2B 서비스 구축 시 운영비를 크게 절감할 수 있습니다.",
     website: "https://cohere.com", thumbnail: "https://logo.clearbit.com/cohere.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-solar", name: "Solar (Upstage)", category: "llm",
     summary: "한국 스타트업 Upstage 작품. 작은 사이즈에 성능이 놀라움",
-    description: "한국 스타트업 Upstage 작품. 작은 사이즈에 성능이 놀라움",
+    description: "국내 AI 스타트업 Upstage가 개발한 Solar Pro 모델은 22B 파라미터로 OpenLLM 리더보드 상위권을 기록했습니다. 한국어 이해력이 뛰어나며, 기업용 문서 처리(OCR, 레이아웃 분석) 솔루션도 함께 제공합니다. 국내 법규를 준수하는 온프레미스 배포가 가능해 데이터 보안이 중요한 국내 기업에게 특히 적합합니다.",
     website: "https://upstage.ai", thumbnail: "https://logo.clearbit.com/upstage.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-hyperclova", name: "HyperCLOVA X", category: "llm",
     summary: "한국어 맥락 이해는 최고. 국내 서비스 개발할 때 고려할 것",
-    description: "한국어 맥락 이해는 최고. 국내 서비스 개발할 때 고려할 것",
+    description: "네이버가 한국어 데이터를 중심으로 학습시킨 초거대 언어 모델로, 한국 문화·관용어·맥락 이해에서 외산 모델을 앞서는 평가를 받습니다. CLOVA Studio API를 통해 상업적 이용이 가능하며, 네이버 검색·쇼핑·클로바 노트 등 자사 서비스 전반에 이미 적용되어 있습니다. 국내 규제 대응과 온프레미스 배포를 지원해 금융·의료 분야 기업에서 선호합니다.",
     website: "https://clova.ai", thumbnail: "https://logo.clearbit.com/navercorp.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-qwen", name: "Qwen", category: "llm",
     summary: "알리바바 오픈소스 모델. GPT-4급 성능에 무료로 사용 가능",
-    description: "알리바바 오픈소스 모델. GPT-4급 성능에 무료로 사용 가능",
+    description: "알리바바 클라우드가 개발한 대형 언어 모델 시리즈로, Qwen2.5는 72B 파라미터 버전이 오픈소스로 공개되어 있습니다. 코딩·수학·추론 능력에서 동급 오픈소스 모델 중 최상위 성능을 기록하며, 중국어와 영어 모두 강력합니다. HuggingFace에서 무료 다운로드가 가능하고 Qwen-VL 멀티모달 버전도 공개되어 있습니다.",
     website: "https://github.com/QwenLM", thumbnail: "https://logo.clearbit.com/alibaba.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-yi", name: "Yi-34B", category: "llm",
     summary: "01.AI가 만든 가성비 좋은 오픈 모델",
-    description: "01.AI가 만든 가성비 좋은 오픈 모델",
+    description: "前 Google Brain 리더 이카이 리(Kai-Fu Lee)가 창업한 01.AI에서 개발한 오픈소스 모델입니다. 34B 파라미터 크기로 소비자급 GPU에서도 무난히 실행 가능하며, MMLU 등 주요 벤치마크에서 Llama 2 70B와 동등하거나 우수한 성능을 보였습니다. 한국어를 포함한 다국어 처리가 가능하고 상업적 이용이 허용되는 라이선스를 제공합니다.",
     website: "https://01.ai", thumbnail: "https://logo.clearbit.com/01.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-huggingchat", name: "HuggingChat", category: "llm",
     summary: "수십 개 오픈소스 모델을 한 곳에서. 모델 비교할 때 자주 들름",
-    description: "수십 개 오픈소스 모델을 한 곳에서. 모델 비교할 때 자주 들름",
+    description: "Hugging Face가 운영하는 무료 AI 챗봇으로, Llama 3·Mistral·Falcon 등 다양한 오픈소스 모델을 한 인터페이스에서 전환하며 사용할 수 있습니다. 완전 무료이며 별도 설치 없이 브라우저에서 바로 사용 가능해 AI 모델을 처음 접하는 사람에게 최적의 플랫폼입니다. 연구자와 개발자가 새로 출시된 모델을 빠르게 비교·테스트하는 용도로도 많이 활용됩니다.",
     website: "https://huggingface.co/chat", thumbnail: "https://logo.clearbit.com/huggingface.co", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "llm-poe-plus", name: "Poe+", category: "llm",
     summary: "GPT·Claude·Gemini를 한 화면에서 비교. 모델마다 답변 스타일 차이가 재미있음",
-    description: "GPT·Claude·Gemini를 한 화면에서 비교. 모델마다 답변 스타일 차이가 재미있음",
+    description: "Quora가 운영하는 멀티 AI 플랫폼으로, 하나의 구독으로 ChatGPT·Claude·Gemini 등 수십 개 AI 모델에 동시 접근할 수 있습니다. 개발자나 기업이 자체 AI 봇을 만들어 Poe 마켓플레이스에 배포하는 봇 빌더 기능도 제공합니다. 월 $19.99 구독료로 여러 프리미엄 AI를 비용 효율적으로 비교하며 사용할 수 있어 AI 파워유저에게 인기입니다.",
     website: "https://poe.com", thumbnail: "https://logo.clearbit.com/poe.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
@@ -271,7 +271,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "img-midjourney", name: "Midjourney", category: "image-generation",
     summary: "예술적 화질은 압도적 1위. 프로 디자이너들이 가장 많이 씀",
-    description: "예술적 화질은 압도적 1위. 프로 디자이너들이 가장 많이 씀",
+    description: "디스코드 채널에서 텍스트 프롬프트로 극도로 아름다운 예술 수준의 이미지를 생성하는 서비스입니다. V6 모델은 사실적 표현과 환상적 아트워크 모두에서 최고 수준을 자랑하며, 프로 디자이너·일러스트레이터가 가장 많이 선택합니다. 월 $10(기본)~$120(대용량) 구독제이며 생성 이미지의 상업적 사용이 허가됩니다.",
     website: "https://midjourney.com",
     thumbnail: "https://logo.clearbit.com/midjourney.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -279,7 +279,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "img-stablediffusion", name: "Stable Diffusion", category: "image-generation",
     summary: "내 PC에 설치해서 무한 생성. 모델 교체로 화풍을 마음대로 바꿈",
-    description: "내 PC에 설치해서 무한 생성. 모델 교체로 화풍을 마음대로 바꿈",
+    description: "Stability AI가 오픈소스로 공개한 이미지 생성 모델로, 자신의 PC에 설치해 인터넷·비용 없이 무제한으로 이미지를 만들 수 있습니다. Civitai에서 수천 개의 파인튜닝 모델을 무료로 받아 원하는 화풍을 적용할 수 있으며, AUTOMATIC1111·ComfyUI 같은 UI와 결합해 워크플로우를 완전히 커스터마이징할 수 있습니다. 제대로 활용하면 Midjourney보다 더 높은 자유도를 제공합니다.",
     website: "https://stability.ai",
     thumbnail: "https://logo.clearbit.com/stability.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -287,7 +287,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "img-dalle3", name: "DALL-E 3", category: "image-generation",
     summary: "ChatGPT Plus 구독하면 바로 사용. 복잡한 설정 없이 즉시 시작",
-    description: "ChatGPT Plus 구독하면 바로 사용. 복잡한 설정 없이 즉시 시작",
+    description: "OpenAI가 개발한 이미지 생성 모델로 ChatGPT Plus($20/월)와 통합되어 있어 자연스러운 대화 방식으로 이미지를 생성하고 수정할 수 있습니다. 이미지 내 텍스트 렌더링 능력이 크게 향상되었으며, 저작권 문제를 최소화하도록 안전하게 훈련된 것이 특징입니다. API를 통해 개발자가 자체 서비스에 간편하게 통합할 수 있습니다.",
     website: "https://openai.com/dall-e-3",
     thumbnail: "https://logo.clearbit.com/openai.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -295,7 +295,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "img-flux", name: "Flux", category: "image-generation",
     summary: "미드저니 대비 저렴하고 빠름. 상업 프로젝트에도 무난히 사용 가능",
-    description: "미드저니 대비 저렴하고 빠름. 상업 프로젝트에도 무난히 사용 가능",
+    description: "Stable Diffusion 원 개발팀 Black Forest Labs가 만든 차세대 이미지 생성 모델로, Flux.1 Dev 버전은 오픈소스로 공개되어 있습니다. 사실적 인물 표현과 텍스트 렌더링 능력에서 Midjourney를 위협하는 수준의 성능을 내며, 자체 GPU에서 무료로 실행하는 버전도 제공됩니다. 빠른 생성 속도와 높은 품질 일관성으로 상업 프로젝트에서도 신뢰할 수 있는 결과물을 냅니다.",
     website: "https://blackforestlabs.ai",
     thumbnail: "https://logo.clearbit.com/blackforestlabs.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -303,7 +303,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "img-ideogram", name: "Ideogram", category: "image-generation",
     summary: "이미지에 텍스트를 완벽하게 렌더링. 썸네일·로고 제작에 강추",
-    description: "이미지에 텍스트를 완벽하게 렌더링. 썸네일·로고 제작에 강추",
+    description: "이미지 안에 텍스트를 정확하게 삽입하는 능력이 다른 이미지 생성 AI보다 월등히 뛰어난 서비스입니다. 포스터·배너·유튜브 썸네일·로고 등 텍스트가 포함된 디자인 작업에 특화되어 있으며, Magic Prompt 기능으로 단순한 묘사도 풍부한 프롬프트로 자동 변환합니다. 무료 플랜에서도 하루 10~25장 생성이 가능하며, 유료 플랜은 월 $8부터 시작합니다.",
     website: "https://ideogram.ai",
     thumbnail: "https://logo.clearbit.com/ideogram.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -311,7 +311,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "img-leonardo", name: "Leonardo.ai", category: "image-generation",
     summary: "무료 크레딧이 후함. 웹에서 로그인 없이 바로 생성 가능",
-    description: "무료 크레딧이 후함. 웹에서 로그인 없이 바로 생성 가능",
+    description: "게임 에셋과 콘텐츠 제작에 특화된 AI 이미지 생성 플랫폼으로, 매일 150 토큰을 무료 제공합니다. 다양한 파인튜닝 모델을 통해 사실적 사진·애니메이션·게임 아트 등 원하는 스타일을 폭넓게 구현할 수 있습니다. 실시간 이미지 생성·Canvas 편집·AI 영상 생성까지 지원하며 디자이너와 게임 개발자에게 최적화된 올인원 플랫폼입니다.",
     website: "https://leonardo.ai",
     thumbnail: "https://logo.clearbit.com/leonardo.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -319,7 +319,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "img-firefly", name: "Adobe Firefly", category: "image-generation",
     summary: "Adobe 정품 사용자라면 추가 비용 없이 사용. 저작권 안전",
-    description: "Adobe 정품 사용자라면 추가 비용 없이 사용. 저작권 안전",
+    description: "Adobe가 상업적으로 안전한 데이터만으로 학습시킨 이미지 생성 AI로, 생성 이미지의 상업적 저작권을 보장합니다. Photoshop의 '생성형 채우기', Illustrator의 '텍스트 이펙트' 등 Adobe 앱 전반에 완벽하게 통합되어 있습니다. Creative Cloud 구독에 월 25 크레딧이 포함되며 웹 버전에서 별도 크레딧 구매도 가능합니다.",
     website: "https://firefly.adobe.com",
     thumbnail: "https://logo.clearbit.com/adobe.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -327,7 +327,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "img-krea", name: "Krea AI", category: "image-generation",
     summary: "낙서 수준 스케치를 실시간으로 고화질 변환. 아이디어 시각화 최고",
-    description: "낙서 수준 스케치를 실시간으로 고화질 변환. 아이디어 시각화 최고",
+    description: "실시간 AI 이미지 렌더링이 핵심으로, 화면에 스케치를 그리는 동시에 AI가 즉시 고품질 이미지로 변환합니다. 개념 아트·제품 디자인 아이디어를 빠르게 시각화하는 데 최적화되어 있으며, AI 업스케일러와 이미지 강화 기능도 함께 제공합니다. 무료 버전에서도 핵심 기능 대부분을 체험할 수 있어 초기 아이디어 단계에서 강력한 도구입니다.",
     website: "https://krea.ai",
     thumbnail: "https://logo.clearbit.com/krea.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -335,7 +335,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "img-civitai", name: "Civitai", category: "image-generation",
     summary: "수천 개 커스텀 모델을 무료로 다운. 원하는 화풍 뭐든 있음",
-    description: "수천 개 커스텀 모델을 무료로 다운. 원하는 화풍 뭐든 있음",
+    description: "Stable Diffusion 커뮤니티 최대 모델 허브로, 사용자가 직접 제작한 수만 개의 모델(체크포인트·LoRA·임베딩)을 무료로 공유합니다. 사실적 인물·애니메이션·건축·제품 사진 등 거의 모든 화풍의 전문 모델이 존재하며, 웹 UI에서 직접 이미지를 생성하거나 모델 파일을 로컬에 다운받아 사용하는 두 방식 모두 지원합니다. AI 이미지 생성 커뮤니티의 핵심 허브입니다.",
     website: "https://civitai.com",
     thumbnail: "https://logo.clearbit.com/civitai.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -343,7 +343,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "img-runway", name: "Runway", category: "image-generation",
     summary: "이미지+영상 모두 가능. 크리에이티브 작업의 전천후 도구",
-    description: "이미지+영상 모두 가능. 크리에이티브 작업의 전천후 도구",
+    description: "이미지 생성과 AI 영상 생성을 하나의 플랫폼에서 제공하는 크리에이티브 AI 도구입니다. 텍스트·이미지·동영상 등 다양한 입력으로 고품질 결과물을 만들 수 있어 광고·영화 제작사에서도 활용합니다. 무료 플랜에서 기본 이미지 생성이 가능하며 유료 플랜은 월 $15부터 시작합니다.",
     website: "https://runwayml.com", // Fixed shady link from user input
     thumbnail: "https://logo.clearbit.com/runwayml.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -351,61 +351,61 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "img-playground", name: "Playground AI", category: "image-generation",
     summary: "하루 1,000장 무료. 품질도 미드저니급이라 가성비 최고",
-    description: "하루 1,000장 무료. 품질도 미드저니급이라 가성비 최고",
+    description: "무료 플랜에서도 하루 최대 500장까지 이미지를 생성할 수 있는 넉넉한 무료 정책으로 인기를 끌었습니다. Playground v2 모델은 Midjourney에 근접한 예술적 품질을 제공하며, 직관적인 UI로 초보자도 쉽게 사용할 수 있습니다. 커뮤니티 피드를 통해 다른 사용자의 프롬프트와 결과물을 참고해 빠르게 실력을 키울 수 있습니다.",
     website: "https://playgroundai.com", thumbnail: "https://logo.clearbit.com/playgroundai.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-bluewillow", name: "BlueWillow", category: "image-generation",
     summary: "디스코드에서 무료로 사용. 미드저니 못지않은 퀄리티",
-    description: "디스코드에서 무료로 사용. 미드저니 못지않은 퀄리티",
+    description: "디스코드 봇 방식으로 동작하는 무료 이미지 생성 서비스로, Stable Diffusion 기반에 자체 파인튜닝을 더해 준수한 품질을 제공합니다. 미드저니처럼 커뮤니티 디스코드에서 다른 사람의 생성 결과를 보고 배울 수 있는 환경이 갖춰져 있습니다. 완전 무료 정책 덕분에 AI 이미지 생성을 처음 접하는 입문자에게 부담 없이 추천합니다.",
     website: "https://bluewillow.ai", thumbnail: "https://logo.clearbit.com/bluewillow.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-tensor", name: "Tensor.art", category: "image-generation",
     summary: "설치 없이 웹에서 SD 모델 실행. 빠른 프로토타이핑에 유용",
-    description: "설치 없이 웹에서 SD 모델 실행. 빠른 프로토타이핑에 유용",
+    description: "로컬 GPU 없이 브라우저에서 바로 Stable Diffusion 기반 다양한 모델을 실행할 수 있는 클라우드 AI 플랫폼입니다. 자체 모델 학습(파인튜닝) 기능과 커뮤니티 모델 공유 기능을 제공해 Civitai와 유사한 역할을 합니다. 무료 크레딧이 제공되며, 빠른 프로토타이핑이 필요한 개인 창작자와 개발자에게 유용합니다.",
     website: "https://tensor.art", thumbnail: "https://logo.clearbit.com/tensor.art", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-dreamstudio", name: "DreamStudio", category: "image-generation",
     summary: "Stability AI 공식 서비스. 최신 SD 모델을 API로 바로 쓸 수 있음",
-    description: "Stability AI 공식 서비스. 최신 SD 모델을 API로 바로 쓸 수 있음",
+    description: "Stability AI가 운영하는 공식 이미지 생성 서비스로, Stable Diffusion 최신 모델을 별도 설치 없이 API와 웹 인터페이스로 즉시 사용할 수 있습니다. 개발자는 API 키 발급 후 몇 줄의 코드로 자신의 앱에 이미지 생성 기능을 통합할 수 있습니다. 사용한 만큼 과금하는 크레딧 방식으로 소규모 프로젝트부터 대규모 서비스까지 유연하게 활용 가능합니다.",
     website: "https://dreamstudio.ai", thumbnail: "https://logo.clearbit.com/stability.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-imagefx", name: "ImageFX", category: "image-generation",
     summary: "Google 생태계 안에서 이미지 생성. Gemini와 연동이 매끄러움",
-    description: "Google 생태계 안에서 이미지 생성. Gemini와 연동이 매끄러움",
+    description: "Google의 Imagen 3 모델을 기반으로 한 이미지 생성 서비스로, 사실적이고 세밀한 이미지 생성에서 뛰어난 성능을 보입니다. 구글 계정만 있으면 무료로 시작 가능하며, Gemini와 긴밀하게 연동되어 자연어 대화 방식으로 이미지를 생성하고 수정할 수 있습니다. 상업적 이용 시 별도 라이선스 확인이 필요합니다.",
     website: "https://aitestkitchen.withgoogle.com/tools/image-fx", thumbnail: "https://logo.clearbit.com/google.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-bing", name: "Bing Image Creator", category: "image-generation",
     summary: "MS 계정만 있으면 무료. DALL-E 3 기반이라 품질도 좋음",
-    description: "MS 계정만 있으면 무료. DALL-E 3 기반이라 품질도 좋음",
+    description: "Microsoft 계정으로 로그인하면 누구나 무료로 사용할 수 있는 이미지 생성 서비스로, OpenAI의 DALL-E 3 모델이 탑재되어 있습니다. Bing 검색과 통합되어 있어 별도 앱 없이 bing.com/create에서 바로 접근 가능합니다. 하루 생성 횟수 제한이 있지만 완전 무료로 DALL-E 3 품질을 경험할 수 있어 입문자에게 최적입니다.",
     website: "https://bing.com/create", thumbnail: "https://logo.clearbit.com/bing.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-picfinder", name: "PicFinder", category: "image-generation",
     summary: "클릭 한 번에 이미지 무한 생성. 빠른 아이디어 스케치에 딱임",
-    description: "클릭 한 번에 이미지 무한 생성. 빠른 아이디어 스케치에 딱임",
+    description: "클릭 한 번으로 비슷한 이미지를 계속 변형·생성하는 방식으로 빠른 아이디어 탐색에 특화된 서비스입니다. 복잡한 프롬프트 없이 간단한 키워드만으로도 다양한 스타일의 이미지를 연속 생성할 수 있습니다. 무료로 사용 가능하며 기획·디자인 초기 단계에서 시각적 방향성을 잡는 데 유용합니다.",
     website: "https://picfinder.ai", thumbnail: "https://logo.clearbit.com/picfinder.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-stockimg", name: "Stockimg.ai", category: "image-generation",
     summary: "상업용 디자인 특화. 로고·포스터·책 표지를 분 단위로 완성",
-    description: "상업용 디자인 특화. 로고·포스터·책 표지를 분 단위로 완성",
+    description: "소셜미디어 배너·로고·포스터·책 표지·패키지 디자인 등 상업용 디자인에 특화된 AI 이미지 생성 플랫폼입니다. 원하는 디자인 유형을 선택하면 즉시 맞춤형 결과물이 생성되어 디자인 전문 지식 없이도 전문가급 결과물을 얻을 수 있습니다. 생성된 이미지에 대한 상업적 사용 권리가 포함되어 소상공인과 마케터에게 실용적입니다.",
     website: "https://stockimg.ai", thumbnail: "https://logo.clearbit.com/stockimg.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-getimg", name: "Getimg.ai", category: "image-generation",
     summary: "생성+편집이 한 플랫폼에. 워크플로우를 따로 분리할 필요가 없음",
-    description: "생성+편집이 한 플랫폼에. 워크플로우를 따로 분리할 필요가 없음",
+    description: "텍스트→이미지 생성, 이미지 업스케일링, 인페인팅, 아웃페인팅, ControlNet 등 이미지 생성과 편집 기능을 한 플랫폼에서 제공합니다. 200개 이상의 AI 모델을 지원하며 Stable Diffusion·FLUX·자체 모델을 선택해 사용할 수 있습니다. API 형태로도 제공되어 개발자가 자체 서비스에 통합하기 쉽습니다.",
     website: "https://getimg.ai", thumbnail: "https://logo.clearbit.com/getimg.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "img-seaart", name: "SeaArt", category: "image-generation",
     summary: "실사 사진 퀄리티가 압도적. 인물 이미지 생성에서 특히 강함",
-    description: "실사 사진 퀄리티가 압도적. 인물 이미지 생성에서 특히 강함",
+    description: "사실적인 인물 사진 품질이 업계 최고 수준으로 평가받는 AI 이미지 생성 플랫폼입니다. 다양한 화풍 모델과 LoRA를 지원하며, 일관된 캐릭터 생성(IP-Adapter)과 영상 생성 기능도 갖추고 있습니다. 매일 무료 크레딧이 지급되며 소셜미디어 콘텐츠·프로필 사진 제작에서 특히 강한 성능을 발휘합니다.",
     website: "https://seaart.ai", thumbnail: "https://logo.clearbit.com/seaart.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
@@ -415,7 +415,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edit-magnific", name: "Magnific AI", category: "image-editing",
     summary: "흐릿한 사진을 4K로 복원. 옛날 사진 되살릴 때 마법 같음",
-    description: "흐릿한 사진을 4K로 복원. 옛날 사진 되살릴 때 마법 같음",
+    description: "단순 업스케일링을 넘어 AI가 세부 질감을 새로 그려 넣는 '초해상도' 기술로 흐릿한 사진을 4K 이상 품질로 복원합니다. 이미지 복원 분야에서 업계 1위로 손꼽히며, 프로 사진가와 미드저니 사용자들이 최종 결과물 퀄리티 향상에 많이 활용합니다. 월 $39.99의 유료 서비스이지만 결과물 품질에 대한 만족도가 매우 높습니다.",
     website: "https://magnific.ai",
     thumbnail: "https://logo.clearbit.com/magnific.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -423,7 +423,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edit-canva", name: "Canva", category: "image-editing",
     summary: "디자인의 기본. AI 배경 제거와 마법 지우개로 편집이 너무 쉬움",
-    description: "디자인의 기본. AI 배경 제거와 마법 지우개로 편집이 너무 쉬움",
+    description: "전 세계 1억 명이 사용하는 온라인 디자인 플랫폼으로, AI 배경 제거·Magic Erase·생성형 채우기 등 다양한 AI 편집 기능을 탑재하고 있습니다. 수만 개의 템플릿과 AI 기능의 결합으로 디자인 전문 지식 없이도 SNS 콘텐츠·발표 자료·마케팅 소재를 빠르게 제작합니다. 무료 플랜으로도 충분히 활용 가능하며 Pro 플랜은 월 $12.99입니다.",
     website: "https://canva.com",
     thumbnail: "https://logo.clearbit.com/canva.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -431,7 +431,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edit-photoroom", name: "Photoroom", category: "image-editing",
     summary: "쇼핑몰 상품 사진 배경 1초 제거. 사진작가 없이 혼자 운영 가능",
-    description: "쇼핑몰 상품 사진 배경 1초 제거. 사진작가 없이 혼자 운영 가능",
+    description: "AI로 배경을 1초 만에 제거하고 원하는 배경으로 교체해 쇼핑몰용 상품 사진을 전문가 수준으로 만들어 줍니다. 스마트폰 앱과 웹 버전을 모두 지원하며, 배치 처리 기능으로 수십 장의 사진을 한꺼번에 편집할 수 있습니다. 소셜커머스 판매자와 소규모 쇼핑몰 운영자에게 특히 인기 높은 도구입니다.",
     website: "https://photoroom.com",
     thumbnail: "https://logo.clearbit.com/photoroom.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -439,7 +439,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edit-clipdrop", name: "Clipdrop", category: "image-editing",
     summary: "조명 추가, 배경 변경, 얼굴 수정까지. 사진 편집 올인원 도구",
-    description: "조명 추가, 배경 변경, 얼굴 수정까지. 사진 편집 올인원 도구",
+    description: "Stability AI가 운영하는 이미지 편집 API 플랫폼으로, 배경 제거·인페인팅·아웃페인팅·AI 조명 효과 등 전문 편집 기능을 제공합니다. 광고 사진 제작, 제품 이미지 보정, 초상화 편집 등 다양한 커머셜 작업에 활용되며 API 형태로 서비스에 통합하기 쉽습니다. 무료 크레딧으로 시작 가능하며 사용량에 따라 과금됩니다.",
     website: "https://clipdrop.co",
     thumbnail: "https://logo.clearbit.com/clipdrop.co",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -447,7 +447,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edit-topaz", name: "Topaz Photo AI", category: "image-editing",
     summary: "노이즈 제거 성능은 업계 1위. 사진작가들이 Lightroom 다음으로 씀",
-    description: "노이즈 제거 성능은 업계 1위. 사진작가들이 Lightroom 다음으로 씀",
+    description: "AI 기반 노이즈 제거·흔들림 보정·업스케일링을 결합한 전문 사진 보정 소프트웨어로, 업계에서 노이즈 제거 성능 최고로 인정받습니다. 저조도·고ISO 촬영 사진의 화질을 극적으로 개선하며, Lightroom과 Photoshop 플러그인으로도 작동합니다. 데스크톱 설치형 소프트웨어로 $199(일회성) 또는 구독($99/년)으로 구매 가능합니다.",
     website: "https://topazlabs.com",
     thumbnail: "https://logo.clearbit.com/topazlabs.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -455,7 +455,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edit-cleanup", name: "Cleanup.pictures", category: "image-editing",
     summary: "사진에서 원하지 않는 사람이나 물건만 쏙 지움",
-    description: "사진에서 원하지 않는 사람이나 물건만 쏙 지움",
+    description: "브러시로 지우고 싶은 영역을 칠하면 AI가 배경을 자연스럽게 채워 불필요한 요소를 말끔히 제거합니다. 설치 없이 웹에서 바로 사용 가능하며, 관광지 사진 속 행인 제거·광고 배너 속 로고 삭제 등에 특히 유용합니다. 무료로 기본 기능을 사용할 수 있고 고해상도 내보내기는 유료입니다.",
     website: "https://cleanup.pictures",
     thumbnail: "https://logo.clearbit.com/cleanup.pictures",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -463,7 +463,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edit-pixelcut", name: "Pixelcut", category: "image-editing",
     summary: "모바일 친화적인 AI 배경 제거 및 디자인 편집",
-    description: "모바일 친화적인 AI 배경 제거 및 디자인 편집",
+    description: "스마트폰에 최적화된 AI 이미지 편집 앱으로, 배경 제거·제품 사진 생성·리사이징·텍스트 추가를 원터치로 처리합니다. 쇼핑몰 판매자를 위한 상품 사진 자동 생성 기능이 특히 강력하며, 수백 장의 이미지를 배치 처리할 수 있습니다. 앱 스토어 쇼핑몰 사진 편집 카테고리에서 꾸준히 상위권을 유지하고 있습니다.",
     website: "https://pixelcut.ai",
     thumbnail: "https://logo.clearbit.com/pixelcut.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -471,7 +471,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edit-upscayl", name: "Upscayl", category: "image-editing",
     summary: "내 컴퓨터에 설치해 쓰는 무료 AI 화질 개선기",
-    description: "내 컴퓨터에 설치해 쓰는 무료 AI 화질 개선기",
+    description: "로컬 PC에 설치해 인터넷 없이 무료로 사용하는 오픈소스 AI 업스케일러로, GPU 가속을 지원해 빠른 처리가 가능합니다. ESRGAN·RealESRGAN 등 다양한 AI 모델을 지원하며, 사진·스크린샷·애니메이션 이미지 등 다양한 입력을 처리합니다. 클라우드 서비스처럼 파일을 업로드할 필요 없어 개인정보 걱정 없이 사용할 수 있습니다.",
     website: "https://upscayl.org",
     thumbnail: "https://logo.clearbit.com/upscayl.org",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -479,7 +479,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edit-removebg", name: "Remove.bg", category: "image-editing",
     summary: "배경 제거 분야의 근본, 빠르고 정확함",
-    description: "배경 제거 분야의 근본, 빠르고 정확함",
+    description: "AI 배경 제거 서비스의 원조로, 단 5초 만에 고정밀 배경을 제거해 오랫동안 업계 표준으로 자리잡았습니다. 머리카락처럼 복잡한 경계선도 깔끔하게 처리하며, API 형태로 자신의 앱에 통합하기도 쉽습니다. 무료 버전은 저해상도 결과물만 제공되고, 고해상도 출력은 크레딧 구매가 필요합니다.",
     website: "https://remove.bg",
     thumbnail: "https://logo.clearbit.com/remove.bg",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -487,7 +487,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edit-photoshop", name: "Photoshop (AI)", category: "image-editing",
     summary: "생성형 채우기 기능으로 없던 배경도 만들어냄",
-    description: "생성형 채우기 기능으로 없던 배경도 만들어냄",
+    description: "Adobe의 생성형 AI 기능(Firefly 탑재)이 통합된 업계 표준 이미지 편집 소프트웨어로, 선택 영역에 텍스트 설명만 입력하면 자연스러운 배경·오브젝트를 생성해 채워줍니다. 생성형 확장 기능으로 이미지 캔버스 바깥을 자동으로 채울 수도 있으며, AI가 지우개·선택·보정 등 기존 도구들을 더욱 강력하게 만들었습니다. CC 구독 외 별도 Firefly 크레딧이 사용됩니다.",
     website: "https://adobe.com",
     thumbnail: "https://logo.clearbit.com/adobe.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -495,61 +495,61 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edit-magiceraser", name: "Magic Eraser", category: "image-editing",
     summary: "로그인도 필요 없는 초간단 지우개",
-    description: "로그인도 필요 없는 초간단 지우개",
+    description: "회원가입·로그인 없이 즉시 사용 가능한 초간단 AI 지우개 서비스로, 이미지를 올리고 지우고 싶은 곳을 칠하면 끝입니다. 빠른 처리 속도와 깔끔한 결과물로 간단한 편집 작업에 최적화되어 있습니다. 무료로 사용 가능하며 별도 소프트웨어 설치가 필요 없어 가장 접근성이 높은 지우개 도구 중 하나입니다.",
     website: "https://magicstudio.com/magiceraser", thumbnail: "https://logo.clearbit.com/magicstudio.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "edit-hama", name: "Hama", category: "image-editing",
     summary: "드래그 한 번으로 깔끔하게 지워주는 무료 툴",
-    description: "드래그 한 번으로 깔끔하게 지워주는 무료 툴",
+    description: "사진 속 원하지 않는 요소 위에 브러시를 칠하면 즉시 AI가 배경을 자연스럽게 복원해 주는 인페인팅 서비스입니다. Cleanup.pictures보다 더 큰 영역을 정확하게 처리하는 데 강점이 있으며, 웹에서 무료로 사용 가능합니다. 풍경 사진에서 전선·사람 제거 등 자연 배경 복원 작업에 특히 자연스러운 결과를 보여줍니다.",
     website: "https://hama.app", thumbnail: "https://logo.clearbit.com/hama.app", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "edit-watermark", name: "WatermarkRemover", category: "image-editing",
     summary: "유료 이미지의 워터마크를 감쪽같이 삭제 (주의)",
-    description: "유료 이미지의 워터마크를 감쪽같이 삭제 (주의)",
+    description: "AI를 이용해 이미지 위의 워터마크·로고·텍스트를 자동으로 감지하고 제거하는 서비스입니다. 자신이 직접 제작한 콘텐츠의 불필요한 타임스탬프나 텍스트 오버레이를 지우는 데 합법적으로 활용할 수 있습니다. 단, 타인의 저작권이 있는 워터마크 제거는 법적 문제가 될 수 있으니 주의가 필요합니다.",
     website: "https://watermarkremover.io", thumbnail: "https://logo.clearbit.com/pixelbin.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "edit-bigjpg", name: "BigJPG", category: "image-editing",
     summary: "애니메이션 그림 확대에 특화된 업스케일러",
-    description: "애니메이션 그림 확대에 특화된 업스케일러",
+    description: "애니메이션·만화·일러스트 이미지 업스케일링에 특화된 AI 서비스로, 실사 사진보다 선화가 많은 그림의 확대에서 특히 자연스러운 결과를 냅니다. 2배~16배까지 확대 배율을 선택할 수 있으며, 웹 버전을 무료로 사용 가능합니다. 오래된 저해상도 애니메이션 스크린샷을 고화질로 복원하는 데 즐겨 사용됩니다.",
     website: "https://bigjpg.com", thumbnail: "https://logo.clearbit.com/bigjpg.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "edit-waifu2x", name: "Waifu2x", category: "image-editing",
     summary: "덕후들을 위한 고전 명작 2배 확대기",
-    description: "덕후들을 위한 고전 명작 2배 확대기",
+    description: "딥러닝을 이용한 애니메이션 이미지 업스케일링의 고전으로, 웹에서 무료로 제공됩니다. 노이즈 감소와 함께 2배 확대를 적용해 저해상도 애니 이미지를 선명하게 복원합니다. 무거운 소프트웨어 없이 브라우저에서 바로 사용 가능하며, 오랫동안 커뮤니티에서 사랑받아 온 서비스입니다.",
     website: "https://waifu2x.udp.jp", thumbnail: "https://logo.clearbit.com/udp.jp", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "edit-vance", name: "VanceAI", category: "image-editing",
     summary: "흐린 사진 복구, 흑백 컬러링 등 기능이 다양함",
-    description: "흐린 사진 복구, 흑백 컬러링 등 기능이 다양함",
+    description: "AI 기반 이미지 보정 도구 모음으로, 흐린 사진 선명화·노이즈 제거·흑백 사진 자동 컬러화·얼굴 복원 등 여러 기능을 제공합니다. 오래된 가족 사진이나 흑백 사진을 되살리는 데 특히 유용하며, 각 기능을 낱개 도구처럼 독립적으로 사용할 수 있습니다. 월정액 구독 외 사용한 기능별 일회성 결제 방식도 지원합니다.",
     website: "https://vanceai.com", thumbnail: "https://logo.clearbit.com/vanceai.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "edit-photoai", name: "PhotoAI", category: "image-editing",
     summary: "내 사진을 학습해 다양한 컨셉의 프로필 사진 생성",
-    description: "내 사진을 학습해 다양한 컨셉의 프로필 사진 생성",
+    description: "내 얼굴 사진 여러 장을 AI에게 학습시키면 링크드인 프로필·패션 화보·게임 캐릭터 등 다양한 컨셉의 프로필 사진을 자동 생성합니다. 직접 스튜디오 촬영 없이 전문가급 프로필 사진을 얻을 수 있어 취업·소셜미디어 활동에 활용하는 사람이 많습니다. 월 $29부터 시작하는 구독제로 지속적으로 새 사진을 생성할 수 있습니다.",
     website: "https://photoai.com", thumbnail: "https://logo.clearbit.com/photoai.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "edit-retouch4me", name: "Retouch4me", category: "image-editing",
     summary: "피부 보정, 잡티 제거 등 인물 사진 보정 끝판왕",
-    description: "피부 보정, 잡티 제거 등 인물 사진 보정 끝판왕",
+    description: "전문 사진작가를 위한 AI 인물 사진 보정 플러그인으로, 잡티 제거·피부 톤 균등화·치아 미백·눈 선명화 등 세밀한 보정을 자동으로 처리합니다. Photoshop·Lightroom 플러그인 형태로 기존 편집 워크플로우에 바로 통합할 수 있어 사진작가들 사이에서 널리 사용됩니다. 보정 결과물이 과도하게 인위적이지 않고 자연스럽다는 평가를 받습니다.",
     website: "https://retouch4me.com", thumbnail: "https://logo.clearbit.com/retouch4me.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "edit-evoto", name: "Evoto", category: "image-editing",
     summary: "웨딩 사진 보정에 혁명을 일으킨 AI 툴",
-    description: "웨딩 사진 보정에 혁명을 일으킨 AI 툴",
+    description: "웨딩·증명사진·인물 촬영 전문 사진작가를 위한 AI 보정 소프트웨어로, 수백 장의 사진을 일괄 보정하는 배치 처리 기능이 탁월합니다. 피부·메이크업·의상·배경 등 영역별로 세밀하게 AI 보정 강도를 조절할 수 있어 자연스러운 결과물을 얻기 쉽습니다. 웨딩 사진작가들 사이에서 후보정 시간을 70% 이상 단축시킨다는 평가를 받습니다.",
     website: "https://evoto.ai", thumbnail: "https://logo.clearbit.com/evoto.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "edit-cutout", name: "Cutout.pro", category: "image-editing",
     summary: "동영상 배경 제거부터 증명사진 만들기까지 다 됨",
-    description: "동영상 배경 제거부터 증명사진 만들기까지 다 됨",
+    description: "이미지·동영상 배경 제거, 증명사진 생성, AI 아바타 만들기, 색상 교정 등 콘텐츠 편집 관련 기능을 원스톱으로 제공하는 플랫폼입니다. 동영상 속 사람을 실시간으로 분리하는 기능이 특히 독보적이며, 크리에이터와 마케터가 다양하게 활용합니다. 무료 플랜에서 기본 기능을 사용할 수 있으며 고급 기능은 크레딧 구매가 필요합니다.",
     website: "https://cutout.pro", thumbnail: "https://logo.clearbit.com/cutout.pro", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
@@ -559,7 +559,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "vid-runway-gen3", name: "Runway (Gen-3)", category: "video-generation",
     summary: "사실적인 영상 생성의 선두주자, 영화 제작용",
-    description: "사실적인 영상 생성의 선두주자, 영화 제작용",
+    description: "텍스트·이미지를 최대 10초짜리 고해상도 영상으로 변환하는 AI로, Gen-3 Alpha 모델은 물리적 움직임과 조명 표현에서 업계 최상위 품질을 자랑합니다. 할리우드 영화·광고·뮤직비디오 제작에도 실제로 활용되며, 영상 편집 기능도 함께 제공합니다. 무료 플랜은 워터마크가 있으며 Standard 플랜은 월 $15부터 시작합니다.",
     website: "https://runwayml.com",
     thumbnail: "https://logo.clearbit.com/runwayml.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -567,7 +567,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "vid-luma", name: "Luma Dream Machine", category: "video-generation",
     summary: "무료로도 꽤 쓸만한 고퀄리티 영상 생성",
-    description: "무료로도 꽤 쓸만한 고퀄리티 영상 생성",
+    description: "Luma Labs가 개발한 AI 영상 생성 서비스로, 텍스트 또는 이미지를 입력하면 최대 9초 영상을 빠르게 생성합니다. 물리적 움직임과 카메라 모션 표현이 자연스러워 빠른 콘셉트 시각화에 적합합니다. 무료 플랜에서 매달 일정 횟수 생성이 가능하며, 유료 플랜은 월 $29.99부터로 크리에이터에게 접근 장벽이 낮습니다.",
     website: "https://lumalabs.ai",
     thumbnail: "https://logo.clearbit.com/lumalabs.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -575,7 +575,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "vid-kling", name: "Kling", category: "video-generation",
     summary: "최근 혜성처럼 등장한 중국발 리얼한 영상 AI",
-    description: "최근 혜성처럼 등장한 중국발 리얼한 영상 AI",
+    description: "중국 Kuaishou(콰이쇼우)가 개발한 AI 영상 생성 서비스로, 최대 30초짜리 고화질 영상을 생성할 수 있어 경쟁 서비스보다 긴 영상 생성이 가능합니다. 사실적인 인물 동작과 표정 표현에서 특히 뛰어나며, 이미지-투-비디오와 텍스트-투-비디오를 모두 지원합니다. 무료 크레딧이 넉넉하게 제공되어 Runway·Luma의 강력한 대안으로 부상했습니다.",
     website: "https://kling.kuaishou.com",
     thumbnail: "https://logo.clearbit.com/kuaishou.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -583,15 +583,15 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "vid-pika", name: "Pika", category: "video-generation",
     summary: "애니메이션 스타일이나 부드러운 움직임에 강점",
-    description: "애니메이션 스타일이나 부드러운 움직임에 강점",
+    description: "텍스트·이미지·비디오 클립을 기반으로 AI 영상을 생성하는 서비스로, Pika 2.0부터 영상 내 특정 요소만 선택적으로 수정하는 '씬 편집' 기능이 추가되었습니다. 자연스러운 캐릭터 움직임과 이야기가 있는 짧은 영상 제작에 강하며, 사용하기 쉬운 인터페이스로 비전문가도 쉽게 접근할 수 있습니다. 무료 플랜 포함 다양한 요금제를 제공합니다.",
     website: "https://pika.art",
     thumbnail: "https://logo.clearbit.com/pika.art",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "vid-sora", name: "Sora", category: "video-generation",
-    summary: "(출시 예정) 공개되자마자 업계를 뒤집어놓은 OpenAI 모델",
-    description: "(출시 예정) 공개되자마자 업계를 뒤집어놓은 OpenAI 모델",
+    summary: "텍스트로 최대 20초 고품질 영상을 만드는 OpenAI의 야심작",
+    description: "OpenAI가 개발한 텍스트-투-비디오 모델로, 물리 법칙을 이해하고 복잡한 장면 구성을 현실감 있게 표현하는 것이 특징입니다. 공개 당시 시연 영상이 전 세계에 충격을 준 모델로, ChatGPT Pro 가입자에게 우선 제공되고 있습니다. 최대 1080p, 20초 길이의 영상을 생성할 수 있으며 할리우드 스튜디오도 테스트 중입니다.",
     website: "https://openai.com/sora",
     thumbnail: "https://logo.clearbit.com/openai.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -599,7 +599,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "vid-haiper", name: "Haiper", category: "video-generation",
     summary: "짧지만 임팩트 있는 고해상도 비디오 생성",
-    description: "짧지만 임팩트 있는 고해상도 비디오 생성",
+    description: "텍스트 프롬프트나 이미지를 입력해 2~4초 분량의 고해상도 영상을 빠르게 생성하는 서비스입니다. 생성 속도가 경쟁 서비스보다 빠르고 디테일 표현이 세밀해 소셜미디어 콘텐츠·광고 소재 제작에 적합합니다. 무료 크레딧으로 시작 가능하며, 저렴한 유료 플랜으로 크리에이터도 부담 없이 사용할 수 있습니다.",
     website: "https://haiper.ai",
     thumbnail: "https://logo.clearbit.com/haiper.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -607,7 +607,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "vid-stablevideo", name: "Stable Video", category: "video-generation",
     summary: "이미지 한 장으로 영상 만들기 좋은 오픈소스 기반",
-    description: "이미지 한 장으로 영상 만들기 좋은 오픈소스 기반",
+    description: "Stability AI가 개발한 이미지-투-비디오 모델로, 정지 이미지를 자연스럽게 움직이는 영상으로 변환하는 데 특화되어 있습니다. Stable Video Diffusion 모델은 오픈소스로 공개되어 있어 직접 실행하거나 다른 서비스에 통합해 사용할 수 있습니다. 클라우드 버전과 로컬 설치 버전 모두 제공되며, 2~25프레임 설정으로 움직임 속도를 조절할 수 있습니다.",
     website: "https://stability.ai",
     thumbnail: "https://logo.clearbit.com/stability.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -615,7 +615,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "vid-vidu", name: "Vidu", category: "video-generation",
     summary: "일관성 있는 캐릭터 움직임 표현에 좋음",
-    description: "일관성 있는 캐릭터 움직임 표현에 좋음",
+    description: "캐릭터의 외형 일관성을 유지하며 자연스러운 움직임을 생성하는 것이 특기인 중국 AI 영상 생성 서비스입니다. 뚜렷한 스타일의 애니메이션 영상이나 광고 영상 제작에 활용도가 높으며, 2D·3D 모두 지원합니다. 무료 플랜과 유료 구독 옵션이 있으며 크리에이터를 위한 다양한 프리셋을 제공합니다.",
     website: "https://vidu.studio",
     thumbnail: "https://logo.clearbit.com/vidu.studio",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -623,15 +623,15 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "vid-minimax", name: "Minimax", category: "video-generation",
     summary: "화려한 이펙트와 역동적인 장면에 강함",
-    description: "화려한 이펙트와 역동적인 장면에 강함",
+    description: "Hailuo AI라고도 불리는 중국 MiniMax의 AI 영상 생성 서비스로, 역동적이고 화려한 이펙트 표현에서 두각을 나타냅니다. 최대 6초 영상을 생성할 수 있으며, 텍스트와 이미지 입력을 모두 지원합니다. 무료 버전에서도 상당한 수준의 영상을 생성할 수 있어 빠르게 사용자층이 늘고 있습니다.",
     website: "https://hailuoai.com",
     thumbnail: "https://logo.clearbit.com/hailuoai.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "vid-veo", name: "Veo", category: "video-generation",
-    summary: "구글이 작정하고 만든 영상 생성 모델 (곧 유튜브 쇼츠 탑재)",
-    description: "구글이 작정하고 만든 영상 생성 모델 (곧 유튜브 쇼츠 탑재)",
+    summary: "구글이 작정하고 만든 영상 생성 모델 (유튜브 탑재 예정)",
+    description: "Google DeepMind가 개발한 고품질 텍스트-투-비디오 모델로, 물리 법칙을 이해한 사실적인 영상 생성이 특징입니다. 영화적 감각의 카메라 워크와 연속적인 동작 표현에서 뛰어나며, Google Workspace와 유튜브에 단계적으로 통합될 예정입니다. Vertex AI API를 통해 기업 고객에게 제공되며, AI 영상 시장에서 OpenAI Sora의 가장 강력한 경쟁자로 평가받습니다.",
     website: "https://deepmind.google/technologies/veo",
     thumbnail: "https://logo.clearbit.com/google.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -639,61 +639,61 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "vid-morph", name: "Morph Studio", category: "video-generation",
     summary: "텍스트 투 비디오 모델을 스토리보드처럼 연결",
-    description: "텍스트 투 비디오 모델을 스토리보드처럼 연결",
+    description: "여러 영상 클립을 스토리보드 형식으로 연결해 하나의 완성된 단편 영상을 만들 수 있는 AI 영상 창작 플랫폼입니다. 씬별로 스타일·카메라·내레이션을 세밀하게 지정할 수 있어 일관성 있는 이야기 구조를 가진 영상 제작에 유리합니다. 디지털 스토리텔러와 소규모 영상 제작팀에서 활용하는 도구입니다.",
     website: "https://morphstudio.com", thumbnail: "https://logo.clearbit.com/morphstudio.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "vid-moonvalley", name: "Moonvalley", category: "video-generation",
     summary: "디스코드에서 고퀄리티 시네마틱 영상 생성",
-    description: "디스코드에서 고퀄리티 시네마틱 영상 생성",
+    description: "디스코드 봇 방식으로 운영되는 AI 영상 생성 서비스로, 영화적인 조명과 색감의 시네마틱 영상을 생성하는 데 특화되어 있습니다. Midjourney처럼 커뮤니티 디스코드에서 다른 사용자의 결과물을 참고하며 배울 수 있는 환경이 마련되어 있습니다. 초대 기반으로 운영되며 대기 리스트가 길지만 결과물 품질로 입소문이 났습니다.",
     website: "https://moonvalley.ai", thumbnail: "https://logo.clearbit.com/moonvalley.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "vid-genmo", name: "Genmo", category: "video-generation",
     summary: "2D 이미지를 3D 영상처럼 입체적으로 움직이게 함",
-    description: "2D 이미지를 3D 영상처럼 입체적으로 움직이게 함",
+    description: "정지 이미지에 카메라 이동과 깊이감을 추가해 마치 3D 공간을 촬영한 것처럼 움직이는 영상을 만드는 AI 서비스입니다. 오래된 사진이나 그림을 살아있는 듯한 영상으로 변환하는 '애니메이션 사진' 기능이 특히 인기입니다. 무료 플랜을 제공하며, AI 영상 생성 입문자가 접근하기 쉬운 직관적인 인터페이스를 갖추고 있습니다.",
     website: "https://genmo.ai", thumbnail: "https://logo.clearbit.com/genmo.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "vid-deforum", name: "Deforum", category: "video-generation",
     summary: "음악에 맞춰 춤추는 듯한 기하학적 영상 생성",
-    description: "음악에 맞춰 춤추는 듯한 기하학적 영상 생성",
+    description: "Stable Diffusion을 기반으로 비트에 맞춰 장면이 변형되는 사이키델릭한 AI 영상을 생성하는 오픈소스 프로젝트입니다. 뮤직비디오·아트 영상·소셜미디어 콘텐츠 제작에 독특한 스타일의 결과물을 만들어 냅니다. GitHub에서 오픈소스로 공개되어 기술 지식이 있는 크리에이터라면 자유롭게 커스터마이징할 수 있습니다.",
     website: "https://deforum.art", thumbnail: "https://logo.clearbit.com/deforum.art", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "vid-kaiber", name: "Kaiber", category: "video-generation",
     summary: "린킨파크 뮤비 제작에 쓰인 감각적인 AI",
-    description: "린킨파크 뮤비 제작에 쓰인 감각적인 AI",
+    description: "뮤직비디오와 음악 콘텐츠 제작에 특화된 AI 영상 플랫폼으로, 린킨파크를 비롯한 여러 아티스트의 실제 뮤직비디오 제작에 활용된 것으로 유명합니다. 오디오를 분석해 비트에 맞춰 영상이 변화하는 '뮤직 비디오 AI' 기능이 특징입니다. 월 $8부터 시작하는 구독제로 음악 크리에이터에게 접근성이 좋습니다.",
     website: "https://kaiber.ai", thumbnail: "https://logo.clearbit.com/kaiber.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "vid-zeroscope", name: "Zeroscope", category: "video-generation",
     summary: "워터마크 없는 무료 오픈소스 텍스트-비디오 모델",
-    description: "워터마크 없는 무료 오픈소스 텍스트-비디오 모델",
+    description: "Hugging Face에서 무료로 사용 가능한 오픈소스 텍스트-투-비디오 모델로, 워터마크 없이 576px 해상도의 영상을 생성합니다. 상업용 서비스 없이 자신의 컴퓨터나 Colab에서 직접 실행 가능하며, 커스텀 파인튜닝도 지원합니다. 유료 서비스에 비해 품질은 낮지만 완전 무료로 AI 영상 생성 실험이 가능한 점에서 연구자와 개발자에게 유용합니다.",
     website: "https://huggingface.co/cerspense/zeroscope_v2_576w", thumbnail: "https://logo.clearbit.com/huggingface.co", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "vid-modelscope", name: "ModelScope", category: "video-generation",
     summary: "짧고 기괴하지만 밈(Meme) 만들기에 최적화됨",
-    description: "짧고 기괴하지만 밈(Meme) 만들기에 최적화됨",
+    description: "Alibaba DAMO Academy에서 개발한 초기 텍스트-투-비디오 모델로, Hugging Face에서 무료로 접근 가능합니다. 결과물이 다소 초현실적이고 불안정하지만, 이 특유의 미학이 인터넷 밈과 아트 프로젝트에서 역설적으로 인기를 끌고 있습니다. 텍스트-투-비디오 기술의 발전 과정을 보여주는 역사적 의미도 있는 모델입니다.",
     website: "https://modelscope.cn", thumbnail: "https://logo.clearbit.com/modelscope.cn", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "vid-animatediff", name: "AnimateDiff", category: "video-generation",
     summary: "스테이블 디퓨전 그림을 부드럽게 움직이게 만듦",
-    description: "스테이블 디퓨전 그림을 부드럽게 움직이게 만듦",
+    description: "Stable Diffusion으로 생성한 정지 이미지에 자연스러운 움직임을 추가하는 오픈소스 모듈입니다. ComfyUI·A1111과 통합해 사용할 수 있으며, 캐릭터·배경·파티클 등 다양한 요소를 부드럽게 애니메이션화합니다. 직접 설치해 사용하는 방식이라 초기 설정 난이도가 있지만, 결과물의 자유도가 높고 완전 무료입니다.",
     website: "https://animatediff.com", thumbnail: "https://logo.clearbit.com/github.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "vid-hotshot", name: "Hotshot", category: "video-generation",
     summary: "GIF 만들기에 특화된 가볍고 빠른 생성기",
-    description: "GIF 만들기에 특화된 가볍고 빠른 생성기",
+    description: "텍스트 프롬프트로 고품질 GIF 애니메이션을 생성하는 AI 서비스로, 짧은 루프 영상 제작에 특화되어 있습니다. 소셜미디어 스티커·리액션 GIF·짧은 광고 소재 등 무한 반복 영상 콘텐츠 제작에 최적화되어 있습니다. Stable Diffusion 기반으로 빠른 생성 속도를 자랑하며, 모바일 앱과 웹 버전 모두 제공됩니다.",
     website: "https://hotshot.co", thumbnail: "https://logo.clearbit.com/hotshot.co", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "vid-neverends", name: "Neverends", category: "video-generation",
     summary: "내가 올린 사진 속 인물이 춤추고 연기하게 만듦",
-    description: "내가 올린 사진 속 인물이 춤추고 연기하게 만듦",
+    description: "정지된 인물 사진을 업로드하면 AI가 해당 인물을 춤추거나 다양한 동작을 하도록 애니메이션화하는 서비스입니다. 소셜미디어 챌린지·엔터테인먼트 콘텐츠 제작에서 독특한 결과물을 만들어 냅니다. 딥러닝 기반의 포즈 전이 기술을 활용하며, 웹에서 간편하게 사용할 수 있습니다.",
     website: "https://neverends.ai", thumbnail: "https://logo.clearbit.com/neverends.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
@@ -703,7 +703,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "vedit-capcut", name: "CapCut", category: "video-editing",
     summary: "AI 자막, 효과 등 숏폼 편집의 필수품",
-    description: "AI 자막, 효과 등 숏폼 편집의 필수품",
+    description: "ByteDance(틱톡 모회사)가 개발한 영상 편집 앱으로, AI 자동 자막·배경 제거·텍스트 음성 변환·효과 추천 등 숏폼 영상 편집에 필요한 모든 AI 기능을 무료로 제공합니다. TikTok·Reels·Shorts 형식에 최적화된 수천 개의 템플릿과 스티커가 내장되어 있습니다. 전 세계 가장 많이 사용하는 모바일 영상 편집 앱 중 하나이며 PC 버전도 제공됩니다.",
     website: "https://capcut.com",
     thumbnail: "https://logo.clearbit.com/capcut.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -711,7 +711,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "vedit-opus", name: "Opus Clip", category: "video-editing",
     summary: "긴 유튜브 영상을 알아서 하이라이트 쇼츠로 잘라줌",
-    description: "긴 유튜브 영상을 알아서 하이라이트 쇼츠로 잘라줌",
+    description: "긴 유튜브·Zoom·Podcast 영상을 AI가 분석해 바이럴 가능성이 높은 구간을 자동으로 잘라 숏폼 클립으로 변환합니다. 자동 자막·리프레임·캡션 디자인까지 원클릭으로 처리하며, TikTok·Reels·Shorts에 바로 업로드 가능한 형식으로 내보냅니다. 무료 플랜은 월 60분 처리 제한이 있으며 Pro 플랜은 월 $19부터 시작합니다.",
     website: "https://opus.pro",
     thumbnail: "https://logo.clearbit.com/opus.pro",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -719,7 +719,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "vedit-vrew", name: "Vrew", category: "video-editing",
     summary: "음성을 분석해 자동으로 자막을 달아주는 국산 꿀템",
-    description: "음성을 분석해 자동으로 자막을 달아주는 국산 꿀템",
+    description: "보이저엑스(한국)가 개발한 AI 영상 편집 도구로, 영상 음성을 99% 이상 정확도로 인식해 자막을 자동 생성하고 텍스트 클릭만으로 해당 영상 구간을 편집할 수 있습니다. AI 자동 자르기로 침묵·실수 구간을 일괄 제거하며, 한국어·영어·일본어 등 다국어 자막 번역도 지원합니다. 무료 플랜에서도 주요 기능을 충분히 사용할 수 있어 국내 유튜버들이 가장 많이 쓰는 편집 도구입니다.",
     website: "https://vrew.ai",
     thumbnail: "https://logo.clearbit.com/vrew.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -727,7 +727,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "vedit-descript", name: "Descript", category: "video-editing",
     summary: "영상을 워드 문서처럼 텍스트로 편집함",
-    description: "영상을 워드 문서처럼 텍스트로 편집함",
+    description: "영상·팟캐스트를 텍스트 스크립트로 변환한 뒤, 문서 편집하듯 텍스트를 지우면 해당 영상 구간이 자동으로 삭제되는 혁신적인 편집 방식을 제공합니다. AI Overdub으로 목소리를 복제해 잘못 말한 부분을 텍스트 입력만으로 재녹음 없이 수정할 수 있습니다. Creator 플랜 $24/월부터 시작하며, 팟캐스트·인터뷰·교육 영상 제작자에게 특히 유용합니다.",
     website: "https://descript.com",
     thumbnail: "https://logo.clearbit.com/descript.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -735,7 +735,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "vedit-invideo", name: "InVideo", category: "video-editing",
     summary: "텍스트만 주면 영상+자막+음성까지 풀세트로 제작",
-    description: "텍스트만 주면 영상+자막+음성까지 풀세트로 제작",
+    description: "텍스트 프롬프트나 기사 URL을 입력하면 AI가 스크립트·스톡 영상·자막·AI 보이스오버를 자동으로 조합해 완성된 영상을 생성합니다. 5,000개 이상의 템플릿과 1,600만 개의 스톡 미디어 라이브러리를 갖추고 있으며, 소셜 미디어용 마케팅 영상 제작에 특화되어 있습니다. Business 플랜은 월 $30부터이며 팀 협업 기능도 지원합니다.",
     website: "https://invideo.io",
     thumbnail: "https://logo.clearbit.com/invideo.io",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -743,7 +743,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "vedit-premiere", name: "Premiere Pro", category: "video-editing",
     summary: "어도비 AI 기능으로 편집 시간 단축 (전문가용)",
-    description: "어도비 AI 기능으로 편집 시간 단축 (전문가용)",
+    description: "Adobe의 전문 영상 편집 소프트웨어로, AI 기반 'Sensei' 기술을 통해 자동 리프레임·오디오 노이즈 제거·컬러 매칭·장면 편집 감지 등을 지원합니다. After Effects·Audition·Photoshop 등 Adobe 생태계와 완벽하게 연동되며, 2024년 Firefly 기반 'Generative Extend' 기능으로 영상 클립을 AI로 자연스럽게 연장할 수 있습니다. Creative Cloud 구독 $55/월(단일 앱 $23/월)에 포함됩니다.",
     website: "https://adobe.com",
     thumbnail: "https://logo.clearbit.com/adobe.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -751,7 +751,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "vedit-munch", name: "Munch", category: "video-editing",
     summary: "트렌드를 분석해서 가장 뜰만한 구간을 숏폼으로 제작",
-    description: "트렌드를 분석해서 가장 뜰만한 구간을 숏폼으로 제작",
+    description: "GPT-4 기반 AI가 긴 영상을 분석해 참여율·트렌드·키워드 관련성을 고려하여 바이럴 가능성이 높은 구간을 자동으로 추출합니다. 추출된 클립에 자동 자막·로고·B-Roll을 추가하고, 플랫폼별 최적 해상도와 비율로 자동 리포맷해 줍니다. Pro 플랜 월 $49부터 시작하며 LinkedIn·YouTube·Twitter 등 다채널 배포도 지원합니다.",
     website: "https://getmunch.com",
     thumbnail: "https://logo.clearbit.com/getmunch.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -759,7 +759,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "vedit-filmora", name: "Wondershare Filmora", category: "video-editing",
     summary: "초보자도 쓰기 쉬운 AI 편집 효과가 많음",
-    description: "초보자도 쓰기 쉬운 AI 편집 효과가 많음",
+    description: "Wondershare가 개발한 초보자 친화적 영상 편집 소프트웨어로, AI 배경 제거·노이즈 제거·모션 트래킹·음성 텍스트 변환·자동 하이라이트 생성 등 30여 가지 AI 기능을 탑재했습니다. 직관적인 드래그앤드롭 인터페이스에 수천 개의 이펙트·트랜지션·타이틀 템플릿이 포함되어 있습니다. 연간 플랜 $49.99/년부터 이용 가능하며 Windows·Mac 모두 지원합니다.",
     website: "https://filmora.wondershare.com",
     thumbnail: "https://logo.clearbit.com/wondershare.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -767,7 +767,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "vedit-kapwing", name: "Kapwing", category: "video-editing",
     summary: "웹에서 바로 쓰는 협업 가능한 영상 편집기",
-    description: "웹에서 바로 쓰는 협업 가능한 영상 편집기",
+    description: "설치 없이 브라우저에서 바로 사용하는 온라인 영상 편집 플랫폼으로, AI 자동 자막·배경 제거·불필요 공백 제거·리사이징 기능을 제공합니다. Google Docs처럼 팀원과 실시간 협업이 가능하며, 템플릿 기반으로 소셜 미디어용 콘텐츠를 빠르게 제작할 수 있습니다. 무료 플랜은 워터마크가 붙으며, Pro 플랜은 월 $16부터 제공합니다.",
     website: "https://kapwing.com",
     thumbnail: "https://logo.clearbit.com/kapwing.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -775,7 +775,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "vedit-autocut", name: "AutoCut", category: "video-editing",
     summary: "영상 속의 무음 구간(침묵)을 자동으로 삭제",
-    description: "영상 속의 무음 구간(침묵)을 자동으로 삭제",
+    description: "AI가 영상에서 침묵·망설임·잘못 말한 구간을 자동으로 감지해 제거하는 편집 자동화 도구입니다. Premiere Pro·DaVinci Resolve·Final Cut Pro 플러그인으로도 동작하며, 편집 시간을 평균 70% 이상 단축해 줍니다. 유튜버·강사·팟캐스터처럼 긴 영상을 자주 편집하는 크리에이터에게 필수 도구로 꼽히며, 월 $9부터 이용 가능합니다.",
     website: "https://autocut.com",
     thumbnail: "https://logo.clearbit.com/autocut.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -783,61 +783,61 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "vedit-wisecut", name: "Wisecut", category: "video-editing",
     summary: "긴 영상을 짧은 쇼츠로 만들고 음악까지 자동 삽입",
-    description: "긴 영상을 짧은 쇼츠로 만들고 음악까지 자동 삽입",
+    description: "AI가 긴 영상을 분석해 자동으로 잘라 숏폼 클립을 생성하고, 분위기에 맞는 배경음악까지 자동으로 삽입해 주는 올인원 편집 도구입니다. 자동 자막·펀치인 컷·음성 기반 챕터 분할 기능도 포함되어 있으며, 침묵 구간을 자동으로 제거합니다. 무료 플랜(월 1시간 영상)부터 Pro 플랜 월 $47까지 단계별로 제공됩니다.",
     website: "https://wisecut.video", thumbnail: "https://logo.clearbit.com/wisecut.video", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "vedit-rawshorts", name: "RawShorts", category: "video-editing",
     summary: "텍스트 스크립트를 입력하면 애니메이션 영상 제작",
-    description: "텍스트 스크립트를 입력하면 애니메이션 영상 제작",
+    description: "텍스트 스크립트나 데이터를 입력하면 AI가 자동으로 애니메이션·인포그래픽 영상을 생성해 주는 플랫폼입니다. 드래그앤드롭 편집기로 캐릭터·아이콘·차트를 자유롭게 커스터마이징할 수 있으며, 기업 홍보·교육·마케팅용 설명 영상 제작에 특화되어 있습니다. Business 플랜 월 $149부터 제공되며 팀 협업과 브랜드 키트를 지원합니다.",
     website: "https://rawshorts.com", thumbnail: "https://logo.clearbit.com/rawshorts.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "vedit-pictory", name: "Pictory", category: "video-editing",
     summary: "블로그 글 주소를 넣으면 영상으로 변환해 줌",
-    description: "블로그 글 주소를 넣으면 영상으로 변환해 줌",
+    description: "블로그 포스트 URL이나 긴 텍스트를 붙여넣으면 AI가 핵심 내용을 추출해 스톡 영상·자막·AI 보이스오버를 자동으로 조합한 영상을 생성합니다. 긴 웨비나·팟캐스트 영상을 소셜용 짧은 클립으로 자동 변환하는 기능도 제공합니다. Starter 플랜 월 $23부터 이용 가능하며, 콘텐츠 마케터와 블로거의 영상 콘텐츠 리퍼포징에 최적화되어 있습니다.",
     website: "https://pictory.ai", thumbnail: "https://logo.clearbit.com/pictory.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "vedit-gliacloud", name: "Gliacloud", category: "video-editing",
     summary: "뉴스 기사를 영상 뉴스로 자동 변환 (전통 강자)",
-    description: "뉴스 기사를 영상 뉴스로 자동 변환 (전통 강자)",
+    description: "뉴스 기사·보도자료·텍스트 콘텐츠를 AI가 자동으로 분석해 관련 영상·이미지·그래픽을 조합한 영상 뉴스로 변환하는 미디어 특화 플랫폼입니다. Reuters·AP·Bloomberg 등 글로벌 주요 언론사들이 실제 사용하는 검증된 솔루션으로, 편집자 개입 없이 분 단위로 영상을 자동 생산할 수 있습니다. 엔터프라이즈 전용 맞춤형 요금제로 운영됩니다.",
     website: "https://gliacloud.com", thumbnail: "https://logo.clearbit.com/gliacloud.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "vedit-elai", name: "Elai.io", category: "video-editing",
     summary: "PPT를 영상으로 만들고 아바타가 발표하게 함",
-    description: "PPT를 영상으로 만들고 아바타가 발표하게 함",
+    description: "PowerPoint·Google Slides 파일을 업로드하면 AI 아바타가 슬라이드를 발표하는 영상을 자동으로 생성하는 플랫폼입니다. 65개 이상의 언어로 텍스트를 음성 변환해 자막과 함께 다국어 교육·온보딩 영상을 손쉽게 제작할 수 있습니다. Basic 플랜 월 $29부터 제공되며 커스텀 아바타 생성도 지원합니다.",
     website: "https://elai.io", thumbnail: "https://logo.clearbit.com/elai.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "vedit-deepbrain", name: "DeepBrain AI", category: "video-editing",
     summary: "방송국 수준의 가상 앵커 영상 제작 (국산)",
-    description: "방송국 수준의 가상 앵커 영상 제작 (국산)",
+    description: "한국 스타트업 딥브레인AI가 개발한 초실사 AI 아바타 영상 생성 플랫폼으로, 텍스트만 입력하면 실제 사람처럼 자연스럽게 말하는 AI 앵커 영상을 수 분 내로 제작합니다. KBS·MBC 등 국내 주요 방송사와 금융·교육 기관이 실제 사용하는 기업용 솔루션으로, 80개 이상의 AI 앵커 모델과 80개 이상의 언어를 지원합니다. Starter 플랜 월 $30부터 제공됩니다.",
     website: "https://deepbrain.io", thumbnail: "https://logo.clearbit.com/deepbrain.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "vedit-hourone", name: "Hour One", category: "video-editing",
     summary: "텍스트만 있으면 뉴스 리포트 영상 뚝딱",
-    description: "텍스트만 있으면 뉴스 리포트 영상 뚝딱",
+    description: "AI 아바타와 텍스트 투 비디오 기술을 결합해 대본만 입력하면 방송 품질의 프레젠테이션·교육·뉴스 형식 영상을 자동으로 제작하는 플랫폼입니다. 100개 이상의 사전 제작된 AI 아바타와 40개 이상의 언어를 지원하며, 영상 로컬라이제이션에 강점이 있습니다. Teams 플랜 월 $25부터 제공되며 API 연동도 가능합니다.",
     website: "https://hourone.ai", thumbnail: "https://logo.clearbit.com/hourone.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "vedit-synthesia-edit", name: "Synthesia (Edit)", category: "video-editing",
     summary: "영상 편집 기술 없이도 텍스트로 영상 수정",
-    description: "영상 편집 기술 없이도 텍스트로 영상 수정",
+    description: "Synthesia의 영상 편집 기능으로, AI 아바타가 등장하는 영상의 스크립트를 텍스트로 수정하면 아바타가 자동으로 새 대사를 말하도록 재생성해 영상을 업데이트합니다. 재촬영·재편집 없이 언제든지 내용 수정이 가능해 주기적으로 업데이트가 필요한 교육·제품 소개 영상에 최적입니다. Starter 플랜 월 $22부터 제공됩니다.",
     website: "https://synthesia.io", thumbnail: "https://logo.clearbit.com/synthesia.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "vedit-heygen-trans", name: "HeyGen Video Translate", category: "video-editing",
     summary: "내 영상의 언어를 입모양까지 맞춰서 번역해 줌",
-    description: "내 영상의 언어를 입모양까지 맞춰서 번역해 줌",
+    description: "HeyGen의 Video Translation 기능으로, 영상 속 인물의 목소리·억양·입모양까지 타겟 언어에 맞게 AI로 변환해 자연스러운 다국어 영상을 생성합니다. 40개 이상의 언어를 지원하며, 원본 화자의 목소리 특성을 유지한 채 번역이 이루어져 기존 더빙보다 훨씬 자연스럽습니다. 분당 요금 방식으로 과금되며 기업 고객에게 맞춤 플랜을 제공합니다.",
     website: "https://heygen.com", thumbnail: "https://logo.clearbit.com/heygen.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "vedit-rask", name: "Rask.ai", category: "video-editing",
     summary: "영상 더빙과 번역을 한 번에 해결하는 툴",
-    description: "영상 더빙과 번역을 한 번에 해결하는 툴",
+    description: "영상 콘텐츠를 130개 이상의 언어로 자동 번역·더빙하는 AI 로컬라이제이션 플랫폼으로, 원본 화자의 목소리 톤을 최대한 유지하면서 립싱크까지 맞춰 줍니다. 자막 생성·번역·더빙을 단일 워크플로우에서 처리하며, 유튜버·기업 교육 담당자·콘텐츠 에이전시에서 널리 활용합니다. Starter 플랜 월 $60부터 제공되며 팀 협업도 지원합니다.",
     website: "https://rask.ai", thumbnail: "https://logo.clearbit.com/rask.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
@@ -847,7 +847,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "code-github", name: "GitHub Copilot", category: "coding",
     summary: "탭 한 번에 코드 한 블록. 안 쓰는 개발자가 없을 정도",
-    description: "탭 한 번에 코드 한 블록. 안 쓰는 개발자가 없을 정도",
+    description: "GitHub과 OpenAI가 공동 개발한 AI 코드 자동완성 도구로, 현재 작성 중인 코드 맥락을 분석해 다음 줄·함수·블록 전체를 Tab 키 하나로 완성해 줍니다. VS Code·JetBrains·Neovim 등 주요 IDE 플러그인으로 동작하며, 70개 이상의 프로그래밍 언어를 지원합니다. 개인 플랜 월 $10($100/년), 기업 플랜 월 $19/인으로 제공됩니다.",
     website: "https://github.com/features/copilot",
     thumbnail: "https://logo.clearbit.com/github.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -855,7 +855,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "code-replit", name: "Replit", category: "coding",
     summary: "브라우저에서 바로 코딩+배포. 포트폴리오 사이트 1시간에 완성",
-    description: "브라우저에서 바로 코딩+배포. 포트폴리오 사이트 1시간에 완성",
+    description: "설치 없이 웹 브라우저만으로 50개 이상의 언어를 코딩·실행·배포할 수 있는 클라우드 IDE 플랫폼입니다. AI Replit Agent가 자연어 지시만으로 앱을 코드로 구현해 주며, 즉시 공개 URL로 배포까지 처리합니다. 무료 플랜도 있으며 Core 플랜 월 $25부터 제공됩니다.",
     website: "https://replit.com",
     thumbnail: "https://logo.clearbit.com/replit.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -863,7 +863,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "code-supermaven", name: "Supermaven", category: "coding",
     summary: "GitHub Copilot보다 빠름. 코드 완성 속도 차이가 느껴짐",
-    description: "GitHub Copilot보다 빠름. 코드 완성 속도 차이가 느껴짐",
+    description: "Cursor 창업팀이 별도로 개발한 초고속 AI 코드 자동완성 도구로, 300ms 미만의 응답속도를 자랑해 Copilot 대비 눈에 띄게 빠릅니다. 300만 토큰의 컨텍스트 윈도우를 활용해 대형 코드베이스 전체를 참조하며 제안을 생성합니다. VS Code 플러그인으로 제공되며 Free 플랜에서도 빠른 자동완성을 무제한 사용할 수 있습니다.",
     website: "https://supermaven.com",
     thumbnail: "https://logo.clearbit.com/supermaven.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -871,7 +871,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "code-codeium", name: "Codeium", category: "coding",
     summary: "무료인데 Copilot 수준. 학생이나 개인 개발자에게 강추",
-    description: "무료인데 Copilot 수준. 학생이나 개인 개발자에게 강추",
+    description: "Windsurf(Codeium의 모회사)가 제공하는 무료 AI 코드 자동완성·채팅 플러그인으로, 개인 사용자에게 완전 무료로 제공됩니다. 70개 이상의 언어와 40개 이상의 IDE를 지원하며, 전체 코드베이스 검색 기반의 맥락 이해가 강점입니다. Teams/Enterprise 플랜은 유료이며 온프레미스 배포로 코드 보안도 보장합니다.",
     website: "https://codeium.com",
     thumbnail: "https://logo.clearbit.com/codeium.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -879,7 +879,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "code-tabnine", name: "Tabnine", category: "coding",
     summary: "코드가 외부에 안 나감. 회사에서 보안 이슈 없이 쓰고 싶다면",
-    description: "코드가 외부에 안 나감. 회사에서 보안 이슈 없이 쓰고 싶다면",
+    description: "코드 데이터가 외부 서버로 전송되지 않는 프라이버시 중심의 AI 코드 자동완성 도구입니다. 자체 서버나 로컬 환경에 모델을 배포하는 온프레미스 방식을 지원해 금융·의료·국방 등 보안 민감 기업에서 선호합니다. Pro 플랜 월 $12/인, Enterprise는 견적 방식이며 VS Code·JetBrains 등 주요 IDE를 지원합니다.",
     website: "https://tabnine.com",
     thumbnail: "https://logo.clearbit.com/tabnine.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -887,7 +887,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "code-amazonq", name: "Amazon Q", category: "coding",
     summary: "AWS 서비스 코드 작성에 특화. 클라우드 인프라 작업할 때 유용함",
-    description: "AWS 서비스 코드 작성에 특화. 클라우드 인프라 작업할 때 유용함",
+    description: "Amazon이 개발한 AI 코딩 어시스턴트로, AWS 서비스 연동 코드·CloudFormation·CDK·Lambda 함수 작성에 최적화되어 있습니다. 코드 자동완성·버그 수정·보안 취약점 스캔·코드 설명까지 제공하며, AWS 콘솔·VS Code·JetBrains에 통합됩니다. AWS 개인 계정에 무료로 제공되며 Pro 플랜은 월 $19/인입니다.",
     website: "https://aws.amazon.com/q",
     thumbnail: "https://logo.clearbit.com/amazon.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -895,7 +895,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "code-jetbrains", name: "JetBrains AI", category: "coding",
     summary: "IntelliJ 등을 쓴다면 가장 궁합이 좋은 내장 AI",
-    description: "IntelliJ 등을 쓴다면 가장 궁합이 좋은 내장 AI",
+    description: "JetBrains IDE(IntelliJ IDEA·PyCharm·WebStorm·GoLand 등)에 내장된 AI 코딩 어시스턴트로, 각 IDE의 컨텍스트를 가장 잘 이해하는 도구입니다. AI 코드 완성·오류 설명·리팩토링·테스트 생성·문서화 기능을 IDE에서 즉시 사용할 수 있습니다. JetBrains All Products Pack 구독에 AI 기능이 포함되며, 단독 AI 플랜은 월 $10입니다.",
     website: "https://jetbrains.com/ai",
     thumbnail: "https://logo.clearbit.com/jetbrains.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -903,7 +903,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "code-v0", name: "v0.dev", category: "coding",
     summary: "말만 하면 웹사이트 UI를 뚝딱 만들어주는 생성기",
-    description: "말만 하면 웹사이트 UI를 뚝딱 만들어주는 생성기",
+    description: "Vercel이 만든 AI 기반 UI 생성 도구로, 텍스트 설명만 입력하면 React·shadcn/ui 기반의 실제 동작하는 웹 컴포넌트 코드를 즉시 생성합니다. 생성된 코드를 인터랙티브하게 미리보기하고 수정 후 Next.js 프로젝트로 바로 export할 수 있습니다. 월 200크레딧 무료 플랜과 Pro 플랜($20/월)으로 제공됩니다.",
     website: "https://v0.dev",
     thumbnail: "https://logo.clearbit.com/v0.dev",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -911,7 +911,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "code-cody", name: "Cody", category: "coding",
     summary: "전체 코드베이스를 이해하고 답변해 주는 똑똑한 녀석",
-    description: "전체 코드베이스를 이해하고 답변해 주는 똑똑한 녀석",
+    description: "Sourcegraph가 개발한 AI 코딩 어시스턴트로, 로컬 파일뿐만 아니라 전체 코드베이스·문서·오픈소스 레포지토리를 검색·참조해 더 정확한 답변을 제공합니다. Claude·GPT-4·Gemini 등 다양한 LLM 백엔드를 선택해 사용할 수 있으며, VS Code·JetBrains 플러그인으로 제공됩니다. 개인에게 무료이며 Enterprise 플랜은 온프레미스 배포를 지원합니다.",
     website: "https://sourcegraph.com/cody",
     thumbnail: "https://logo.clearbit.com/sourcegraph.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -919,61 +919,61 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "code-blackbox", name: "Blackbox AI", category: "coding",
     summary: "코딩 질문을 위해 복사/붙여넣기 할 필요 없는 AI",
-    description: "코딩 질문을 위해 복사/붙여넣기 할 필요 없는 AI",
+    description: "코드 자동완성·AI 코드 검색·디버깅 도우미를 결합한 AI 코딩 도구로, 브라우저 확장 프로그램을 통해 ChatGPT·Stack Overflow·GitHub 등에서 코드 스니펫을 즉시 검색하고 삽입할 수 있습니다. 실시간 코드 자동완성과 오류 해설을 VS Code·JetBrains 내에서 제공합니다. 개인 무료 플랜과 팀용 Pro 플랜 월 $3.99/인으로 운영됩니다.",
     website: "https://useblackbox.io", thumbnail: "https://logo.clearbit.com/useblackbox.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "code-codium", name: "CodiumAI", category: "coding",
     summary: "버그 없는 코드를 위해 테스트 케이스를 자동 생성",
-    description: "버그 없는 코드를 위해 테스트 케이스를 자동 생성",
+    description: "Qodo(구 CodiumAI)가 개발한 AI 테스트 자동화 도구로, 코드를 분석해 엣지 케이스까지 포함한 단위 테스트·통합 테스트를 자동으로 생성합니다. Python·JavaScript·TypeScript·Java 등 다양한 언어를 지원하며, VS Code·JetBrains 플러그인으로 동작합니다. 개인 무료 플랜을 제공하며 팀 플랜은 월 $19/인부터입니다.",
     website: "https://codium.ai", thumbnail: "https://logo.clearbit.com/codium.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "code-sourcery", name: "Sourcery", category: "coding",
     summary: "지저분한 파이썬 코드를 깔끔하게 리팩토링",
-    description: "지저분한 파이썬 코드를 깔끔하게 리팩토링",
+    description: "Python 코드에 특화된 AI 리팩토링 도구로, 불필요한 중복·복잡한 로직·비pythonic 패턴을 자동으로 감지하고 더 깔끔하고 효율적인 코드로 변환 제안을 해줍니다. GitHub PR에 자동으로 리팩토링 제안 코멘트를 달아 코드 리뷰를 지원하는 CI 통합 기능도 있습니다. 개인 무료 플랜과 팀 플랜 월 $12/인으로 제공됩니다.",
     website: "https://sourcery.ai", thumbnail: "https://logo.clearbit.com/sourcery.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "code-mintlify", name: "Mintlify", category: "coding",
     summary: "코드만 짜면 문서(Docs)는 알아서 만들어 줌",
-    description: "코드만 짜면 문서(Docs)는 알아서 만들어 줌",
+    description: "개발자 문서(Docs) 작성 플랫폼으로, GitHub 코드베이스와 연동해 함수·API·클래스에 대한 주석과 문서를 AI가 자동으로 생성해 줍니다. MDX 기반으로 버전 관리가 가능하며, Stripe·Anthropic·Resend 등 수천 개 기술 기업의 공식 문서 사이트를 실제로 운영하는 데 사용됩니다. Starter 플랜 월 $150부터 제공됩니다.",
     website: "https://mintlify.com", thumbnail: "https://logo.clearbit.com/mintlify.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "code-adrenaline", name: "Adrenaline", category: "coding",
     summary: "스택오버플로우 대신 내 코드를 바로 고쳐주는 디버거",
-    description: "스택오버플로우 대신 내 코드를 바로 고쳐주는 디버거",
+    description: "에러 메시지와 코드를 붙여넣으면 AI가 원인을 분석하고 수정된 코드를 즉시 제시해 주는 AI 디버깅 어시스턴트입니다. 단순 오류 수정을 넘어 코드 전체 로직을 이해하고 개선 제안도 함께 제공합니다. 현재 서비스 상태가 변동적이며, 유사한 기능은 Cursor·Copilot Chat 등에도 통합되어 있습니다.",
     website: "https://useadrenaline.com", thumbnail: "https://logo.clearbit.com/useadrenaline.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "code-figstack", name: "Figstack", category: "coding",
     summary: "난해한 코드를 쉬운 영어(한글)로 해석해 줌",
-    description: "난해한 코드를 쉬운 영어(한글)로 해석해 줌",
+    description: "이해하기 어려운 코드 스니펫을 붙여넣으면 AI가 자연어로 상세하게 설명해 주는 코드 해석 도구입니다. 코드 설명 외에도 다른 언어로의 변환·도큐멘테이션 자동 생성·코드의 복잡도 분석 기능도 제공합니다. VS Code 확장 프로그램으로도 사용 가능하며, 코드 학습 초보자와 타인의 코드를 파악해야 하는 개발자에게 유용합니다.",
     website: "https://figstack.com", thumbnail: "https://logo.clearbit.com/figstack.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "code-kodezi", name: "Kodezi", category: "coding",
     summary: "학생들이 코딩 배울 때 쓰기 좋은 자동 수정 툴",
-    description: "학생들이 코딩 배울 때 쓰기 좋은 자동 수정 툴",
+    description: "코딩 초보자와 학생을 위한 AI 코드 어시스턴트로, 버그 자동 수정·코드 생성·최적화·문서 자동 작성을 한 곳에서 제공합니다. VS Code 플러그인으로 동작하며 Python·JavaScript·Java·C++ 등 주요 언어를 지원합니다. 무료 플랜에서도 기본 기능을 충분히 사용할 수 있어 코딩 학습 입문 단계에 추천됩니다.",
     website: "https://kodezi.com", thumbnail: "https://logo.clearbit.com/kodezi.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "code-safurai", name: "Safurai", category: "coding",
     summary: "개인 정보 유출 걱정 없는 로컬 기반 코딩 비서",
-    description: "개인 정보 유출 걱정 없는 로컬 기반 코딩 비서",
+    description: "코드를 외부 서버로 전송하지 않는 프라이버시 우선 AI 코딩 어시스턴트로, 자동완성·코드 설명·버그 수정·테스트 생성 기능을 제공합니다. VS Code·JetBrains·Sublime Text 등 다양한 IDE 플러그인을 지원합니다. 무료 플랜을 제공하며, 기업용 프라이빗 배포 옵션도 있습니다.",
     website: "https://safurai.com", thumbnail: "https://logo.clearbit.com/safurai.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "code-askcodi", name: "AskCodi", category: "coding",
     summary: "노션이나 VS Code 안에서 바로 쓰는 코딩 질문 봇",
-    description: "노션이나 VS Code 안에서 바로 쓰는 코딩 질문 봇",
+    description: "코딩 관련 질문에 특화된 AI 어시스턴트로, VS Code 플러그인과 웹 앱 형태로 제공됩니다. 코드 생성·설명·디버깅·단위 테스트 작성 기능을 갖추고 있으며, 30개 이상의 프로그래밍 언어를 지원합니다. Workspaces 기능으로 팀 지식 베이스를 구축할 수 있으며, 무료 플랜 및 Pro 플랜 월 $9.99로 제공됩니다.",
     website: "https://askcodi.com", thumbnail: "https://logo.clearbit.com/askcodi.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "code-whatthediff", name: "What The Diff", category: "coding",
     summary: "PR(풀 리퀘스트) 내용을 요약해서 코드 리뷰 시간 단축",
-    description: "PR(풀 리퀘스트) 내용을 요약해서 코드 리뷰 시간 단축",
+    description: "GitHub Pull Request를 AI가 자동으로 분석해 변경 내용 요약·잠재적 버그·보안 취약점·개선 제안을 PR 댓글로 자동 게시하는 코드 리뷰 자동화 도구입니다. 리뷰어가 전체 diff를 읽지 않고도 변경 사항의 핵심을 빠르게 파악할 수 있습니다. Starter 플랜 월 $19부터 제공되며 GitHub Actions와 연동됩니다.",
     website: "https://whatthediff.ai", thumbnail: "https://logo.clearbit.com/whatthediff.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
@@ -983,7 +983,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "voice-elevenlabs", name: "ElevenLabs", category: "voice-tts",
     summary: "현존 최고의 자연스러운 목소리 복제 및 생성",
-    description: "현존 최고의 자연스러운 목소리 복제 및 생성",
+    description: "업계 최고 수준의 AI 음성 합성·목소리 복제 플랫폼으로, 1분 미만의 샘플만으로 특정 인물의 목소리를 복제하고 32개 언어로 자연스럽게 생성할 수 있습니다. 감정 조절·억양 제어·실시간 음성 변환을 지원하며, 오디오북·팟캐스트·유튜브 내레이션 제작에 널리 사용됩니다. 무료 플랜(월 1만 자)부터 Creator 플랜 월 $22까지 제공됩니다.",
     website: "https://elevenlabs.io",
     thumbnail: "https://logo.clearbit.com/elevenlabs.io",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -991,7 +991,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "voice-murf", name: "Murf.ai", category: "voice-tts",
     summary: "스튜디오 품질의 성우 내레이션 생성",
-    description: "스튜디오 품질의 성우 내레이션 생성",
+    description: "120개 이상의 AI 성우와 20개 언어를 제공하는 전문 내레이션 생성 플랫폼으로, 강조·속도·음조 등 세밀한 발음 제어가 가능합니다. 영상에 직접 목소리를 입히는 영상 편집 기능과 팀 협업·브랜드 커스텀 목소리 생성 기능을 함께 제공합니다. Free 플랜(월 10분)부터 Creator 플랜 월 $29까지 단계별로 운영됩니다.",
     website: "https://murf.ai",
     thumbnail: "https://logo.clearbit.com/murf.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -999,7 +999,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "voice-playht", name: "Play.ht", category: "voice-tts",
     summary: "감정 표현이 풍부하고 실시간 대화도 가능한 AI 음성",
-    description: "감정 표현이 풍부하고 실시간 대화도 가능한 AI 음성",
+    description: "800개 이상의 AI 목소리와 130개 언어·방언을 지원하는 대규모 음성 합성 플랫폼으로, 감정·속도·억양을 세밀하게 제어할 수 있습니다. 실시간 음성 대화가 가능한 'PlayDialog' 기술로 챗봇·고객서비스 자동화에도 활용됩니다. 무료 플랜(월 12,500자)부터 Creator 플랜 월 $31.2까지 제공되며, API 접근도 가능합니다.",
     website: "https://play.ht",
     thumbnail: "https://logo.clearbit.com/play.ht",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1007,7 +1007,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "voice-openai", name: "OpenAI Voice", category: "voice-tts",
     summary: "챗지피티의 그 목소리, API로 활용 가능",
-    description: "챗지피티의 그 목소리, API로 활용 가능",
+    description: "OpenAI의 TTS(Text-to-Speech) API로, ChatGPT Voice에서 들을 수 있는 'Alloy·Echo·Fable·Onyx·Nova·Shimmer' 6가지 목소리를 개발자가 직접 활용할 수 있습니다. 고속 생성과 자연스러운 억양이 장점이며, Whisper STT와 결합해 음성 대화 서비스 개발에 많이 사용됩니다. 1,000자당 약 $0.015(HD 기준)로 과금됩니다.",
     website: "https://openai.com",
     thumbnail: "https://logo.clearbit.com/openai.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1015,7 +1015,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "voice-speechify", name: "Speechify", category: "voice-tts",
     summary: "난독증 환자를 위해 만든, 뭐든지 읽어주는 리더기",
-    description: "난독증 환자를 위해 만든, 뭐든지 읽어주는 리더기",
+    description: "웹페이지·PDF·이메일·Google Docs 등 어떤 텍스트든 AI가 자연스럽게 읽어주는 텍스트 음성 변환 서비스로, 원래 난독증 환자의 접근성을 위해 만들어졌습니다. 최대 4.5배속으로 재생해 정독 대비 청취 효율을 극대화할 수 있습니다. iOS·Android·Chrome 확장 프로그램으로 제공되며, Premium 플랜 월 $139로 운영됩니다.",
     website: "https://speechify.com",
     thumbnail: "https://logo.clearbit.com/speechify.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1023,7 +1023,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "voice-lovo", name: "LOVO", category: "voice-tts",
     summary: "영상 제작자를 위한 다양한 감정의 AI 성우",
-    description: "영상 제작자를 위한 다양한 감정의 AI 성우",
+    description: "500개 이상의 AI 목소리와 100개 언어를 제공하는 내레이션 특화 플랫폼으로, 기쁨·슬픔·분노 등 다양한 감정을 표현할 수 있는 세밀한 컨트롤이 가능합니다. 영상 스크립트 작성부터 내레이션·영상 편집까지 원스톱으로 처리하는 'Genny' 영상 편집 기능도 내장되어 있습니다. Starter 플랜 월 $24부터 제공됩니다.",
     website: "https://lovo.ai",
     thumbnail: "https://logo.clearbit.com/lovo.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1031,7 +1031,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "voice-rvc", name: "RVC (Model)", category: "voice-tts",
     summary: "내 목소리를 유명 가수나 캐릭터로 변조 (오픈소스)",
-    description: "내 목소리를 유명 가수나 캐릭터로 변조 (오픈소스)",
+    description: "Retrieval-based Voice Conversion의 약자로, 짧은 음성 샘플만으로 특정 인물의 목소리로 변환하는 오픈소스 AI 음성 변환 모델입니다. 커뮤니티에서 다양한 유명인·캐릭터·가수 목소리 모델을 공유하며, 음악 커버 제작과 음성 창작 활동에 널리 활용됩니다. 무료 오픈소스이며 로컬 GPU에서 실행하거나 웹 데모로 사용할 수 있습니다.",
     website: "https://github.com/RVC-Project",
     thumbnail: "https://logo.clearbit.com/github.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1039,7 +1039,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "voice-overdub", name: "Descript Overdub", category: "voice-tts",
     summary: "내 목소리를 학습시켜 오타 수정하듯 음성 수정",
-    description: "내 목소리를 학습시켜 오타 수정하듯 음성 수정",
+    description: "Descript에 내장된 AI 목소리 복제 기능으로, 자신의 목소리를 10분 정도 학습시키면 이후 텍스트를 입력하는 것만으로 본인 목소리로 말하는 오디오를 생성합니다. 팟캐스트·유튜브 영상에서 잘못 말한 부분을 재녹음 없이 텍스트 수정만으로 교체할 수 있습니다. Descript Creator 플랜($24/월) 이상에서 사용 가능합니다.",
     website: "https://descript.com",
     thumbnail: "https://logo.clearbit.com/descript.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1047,7 +1047,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "voice-gcloud", name: "Google Cloud TTS", category: "voice-tts",
     summary: "가장 안정적이고 다양한 언어를 지원하는 구글 엔진",
-    description: "가장 안정적이고 다양한 언어를 지원하는 구글 엔진",
+    description: "Google Cloud의 TTS API로, 50개 이상의 언어·220가지 이상의 목소리를 지원하며 WaveNet·Neural2 기반의 고품질 합성 음성을 제공합니다. 기업용 안정성과 99.9% SLA를 보장하며, Google Maps·Google Assistant·자동 응답 시스템 등 대규모 서비스에 광범위하게 사용됩니다. 월 100만 자까지 무료이며 이후 문자당 $0.000016로 과금됩니다.",
     website: "https://cloud.google.com/text-to-speech",
     thumbnail: "https://logo.clearbit.com/google.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1055,7 +1055,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "voice-typecast", name: "Typecast", category: "voice-tts",
     summary: "한국어 발음이 가장 자연스러운 국내 원탑 서비스",
-    description: "한국어 발음이 가장 자연스러운 국내 원탑 서비스",
+    description: "한국 스타트업 스캐터랩이 운영하는 AI 성우 플랫폼으로, 한국어 특유의 억양·높낮이·감정 표현을 가장 자연스럽게 구현하는 것으로 평가받습니다. 100명 이상의 AI 성우 캐릭터를 제공하며, 각 캐릭터마다 감정과 발화 스타일을 커스터마이징할 수 있습니다. Free 플랜(월 2,000자)부터 Pro 플랜 월 $19까지 제공됩니다.",
     website: "https://typecast.ai",
     thumbnail: "https://logo.clearbit.com/typecast.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1063,61 +1063,61 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "voice-resemble", name: "Resemble AI", category: "voice-tts",
     summary: "딥페이크 탐지 기능까지 갖춘 음성 복제 도구",
-    description: "딥페이크 탐지 기능까지 갖춘 음성 복제 도구",
+    description: "3초 분량의 샘플만으로 고품질 목소리 복제가 가능한 AI 음성 합성 플랫폼으로, 실시간 음성 변환과 감정 표현 제어를 지원합니다. 독자적인 'Watermarking' 기술로 생성된 음성에 비가청 워터마크를 삽입해 딥페이크 탐지를 돕는 책임 있는 AI 음성 솔루션을 추구합니다. 기업용 API 방식으로 제공되며, 맞춤 견적으로 운영됩니다.",
     website: "https://resemble.ai", thumbnail: "https://logo.clearbit.com/resemble.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "voice-wellsaid", name: "WellSaid Labs", category: "voice-tts",
     summary: "사람과 구별하기 힘든 기업용 내레이션 생성",
-    description: "사람과 구별하기 힘든 기업용 내레이션 생성",
+    description: "기업용 교육·마케팅·이러닝 콘텐츠에 특화된 고품질 AI 내레이션 플랫폼으로, 사람이 직접 녹음한 것과 구별하기 어려운 수준의 자연스러운 음성을 생성합니다. 50개 이상의 전문 AI 아나운서 목소리를 제공하며, 커스텀 발음 사전과 팀 협업 기능을 갖추고 있습니다. Creator 플랜 월 $49부터 제공됩니다.",
     website: "https://wellsaidlabs.com", thumbnail: "https://logo.clearbit.com/wellsaidlabs.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "voice-replica", name: "Replica Studios", category: "voice-tts",
     summary: "게임이나 영화 캐릭터 연기에 특화된 AI 성우",
-    description: "게임이나 영화 캐릭터 연기에 특화된 AI 성우",
+    description: "게임·애니메이션·영화의 캐릭터 더빙에 특화된 AI 음성 합성 플랫폼으로, 감정 강도와 연기 스타일까지 세밀하게 제어할 수 있습니다. Epic Games·EA·Warner Bros 등 대형 콘텐츠 기업들이 NPC 대화 생성에 실제로 활용하는 검증된 솔루션입니다. Starter 플랜 월 $24부터 제공되며 Unity·Unreal Engine 연동 SDK를 지원합니다.",
     website: "https://replicastudios.com", thumbnail: "https://logo.clearbit.com/replicastudios.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "voice-uberduck", name: "Uberduck", category: "voice-tts",
     summary: "래퍼 목소리로 랩을 시키는 재미있는 음성 생성",
-    description: "래퍼 목소리로 랩을 시키는 재미있는 음성 생성",
+    description: "AI 음성 합성과 음악 생성을 결합한 크리에이티브 플랫폼으로, 유명 래퍼·아티스트의 목소리 스타일로 커버곡이나 랩을 생성하는 것으로 잘 알려져 있습니다. 5,000개 이상의 목소리 모델을 커뮤니티에서 공유·사용할 수 있으며, 음악 제작자와 크리에이터들이 실험적 콘텐츠 제작에 활용합니다. 무료 플랜과 Pro 플랜 월 $9.99로 제공됩니다.",
     website: "https://uberduck.ai", thumbnail: "https://logo.clearbit.com/uberduck.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "voice-voicify", name: "Voicify.ai", category: "voice-tts",
     summary: "유명 가수 목소리로 커버곡을 만드는 도구",
-    description: "유명 가수 목소리로 커버곡을 만드는 도구",
+    description: "AI 목소리 변환 기술을 활용해 원하는 아티스트의 목소리 스타일로 노래 커버곡을 제작하는 음악 특화 플랫폼입니다. 수백 개의 AI 아티스트 모델 라이브러리를 제공하며, 노래 파일을 업로드하면 원하는 목소리로 변환된 커버를 수 분 내에 생성합니다. 월 $9.99 Pro 플랜부터 제공되며, 음악 팬들의 창작 활동에 주로 활용됩니다.",
     website: "https://voicify.ai", thumbnail: "https://logo.clearbit.com/voicify.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "voice-kits", name: "Kits.ai", category: "voice-tts",
     summary: "음악가를 위한 로열티 프리 AI 목소리 라이브러리",
-    description: "음악가를 위한 로열티 프리 AI 목소리 라이브러리",
+    description: "음악 창작자를 위한 AI 음성 변환 플랫폼으로, 로열티 프리 아티스트 음성 모델을 통해 합법적으로 AI 커버곡을 제작하고 상업적으로 활용할 수 있습니다. 자신의 목소리를 업로드해 개인 AI 음성 모델을 만들고, 수익을 나눠 받는 'Artist Partner Program'도 운영합니다. Free 플랜부터 Pro 플랜 월 $9.99까지 제공됩니다.",
     website: "https://kits.ai", thumbnail: "https://logo.clearbit.com/kits.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "voice-altered", name: "Altered", category: "voice-tts",
     summary: "내 목소리를 전문 성우처럼 바꿔주는 보이스 체인저",
-    description: "내 목소리를 전문 성우처럼 바꿔주는 보이스 체인저",
+    description: "실시간·오프라인 AI 음성 변환 소프트웨어로, 마이크 입력을 전문 성우 수준의 다양한 캐릭터 목소리로 즉시 변환해 줍니다. 팟캐스트·오디오북·더빙·게임 보이스 녹음에 활용되며, 자연스러운 음색 변환이 강점입니다. Starter 플랜 월 $29부터 제공되며 자체 목소리 학습 기능도 포함됩니다.",
     website: "https://altered.ai", thumbnail: "https://logo.clearbit.com/altered.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "voice-metavoice", name: "Metavoice", category: "voice-tts",
     summary: "실시간으로 감정까지 전달하는 고성능 음성 변환",
-    description: "실시간으로 감정까지 전달하는 고성능 음성 변환",
+    description: "감정까지 자연스럽게 전달하는 고품질 AI TTS 모델을 API로 제공하는 스타트업으로, 특히 감정적 뉘앙스가 중요한 오디오드라마·게임·대화형 AI에 강점이 있습니다. 1초 미만의 음성 샘플로도 목소리 복제가 가능하며, 오픈소스 모델도 공개되어 있습니다. API 방식으로 제공되며 사용량 기반으로 과금됩니다.",
     website: "https://metavoice.xyz", thumbnail: "https://logo.clearbit.com/metavoice.xyz", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "voice-voiceai", name: "Voice.ai", category: "voice-tts",
     summary: "디스코드나 게임에서 실시간으로 목소리 변조",
-    description: "디스코드나 게임에서 실시간으로 목소리 변조",
+    description: "Discord·Zoom·게임 등에서 실시간으로 목소리를 변조하는 AI 보이스 체인저 앱으로, 로봇·몬스터·유명인 등 수천 가지 음성 이펙트를 즉시 적용할 수 있습니다. 별도 오디오 인터페이스 없이 가상 마이크 방식으로 모든 앱과 호환되며, PC에서 무료로 사용할 수 있습니다. Premium 기능은 월 $9.99 구독이 필요합니다.",
     website: "https://voice.ai", thumbnail: "https://logo.clearbit.com/voice.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "voice-coqui", name: "Coqui (TTS)", category: "voice-tts",
     summary: "오픈소스 음성 합성의 근본, 텍스트 투 스피치",
-    description: "오픈소스 음성 합성의 근본, 텍스트 투 스피치",
+    description: "Mozilla가 개발을 시작한 오픈소스 TTS 프레임워크로, 연구자·개발자들이 커스텀 음성 합성 모델을 직접 학습시키고 활용할 수 있는 기반을 제공했습니다. 현재는 운영사가 서비스를 종료했으나 오픈소스 코드베이스는 커뮤니티에서 계속 발전되고 있으며, TTS 연구의 표준 벤치마크로 널리 인용됩니다. GitHub에서 무료로 사용 가능합니다.",
     website: "https://coqui.ai", thumbnail: "https://logo.clearbit.com/coqui.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
@@ -1127,7 +1127,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "3d-meshy", name: "Meshy", category: "3d",
     summary: "텍스트나 이미지를 넣으면 1분 만에 3D 모델 생성",
-    description: "텍스트나 이미지를 넣으면 1분 만에 3D 모델 생성",
+    description: "텍스트 설명이나 이미지를 입력하면 1분 내에 게임·디자인에 바로 사용 가능한 3D 모델을 생성하는 AI 플랫폼입니다. OBJ·FBX·GLTF·STL 등 다양한 포맷으로 내보내기가 가능하며, 자동 리깅으로 애니메이션 준비도 됩니다. 무료 플랜(월 200크레딧)과 Pro 플랜 월 $20부터 제공됩니다.",
     website: "https://meshy.ai",
     thumbnail: "https://logo.clearbit.com/meshy.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1135,7 +1135,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "3d-tripo", name: "Tripo AI", category: "3d",
     summary: "빠르고 가볍게 3D 에셋을 뽑아내는 도구",
-    description: "빠르고 가볍게 3D 에셋을 뽑아내는 도구",
+    description: "이미지·텍스트·멀티뷰 사진에서 8초 이내에 고품질 3D 모델을 생성하는 초고속 AI 3D 생성 플랫폼입니다. 게임·영화·AR/VR·전자상거래용 3D 에셋 제작에 활용되며, Blender·Maya·Unreal Engine 등과 호환되는 포맷을 지원합니다. 무료 플랜과 Basic 플랜 월 $7.99부터 제공됩니다.",
     website: "https://tripo3d.ai",
     thumbnail: "https://logo.clearbit.com/tripo3d.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1143,7 +1143,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "3d-csm", name: "CSM", category: "3d",
     summary: "단 한 장의 사진으로 360도 회전하는 3D 큐브 생성",
-    description: "단 한 장의 사진으로 360도 회전하는 3D 큐브 생성",
+    description: "Common Sense Machines(CSM)의 AI 3D 생성 플랫폼으로, 단일 이미지·여러 장의 사진·텍스트 설명에서 360도 회전 가능한 3D 모델을 자동으로 생성합니다. 게임·메타버스·전자상거래 등 다양한 분야에서 3D 에셋 제작 비용과 시간을 대폭 단축하는 솔루션입니다. API 방식으로 제공되며 웹 앱에서도 사용할 수 있습니다.",
     website: "https://csm.ai",
     thumbnail: "https://logo.clearbit.com/csm.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1151,7 +1151,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "3d-spline", name: "Spline AI", category: "3d",
     summary: "웹에서 바로 3D 디자인을 하고 AI로 수정",
-    description: "웹에서 바로 3D 디자인을 하고 AI로 수정",
+    description: "브라우저에서 바로 실행되는 3D 디자인·인터랙션 도구로, Figma처럼 직관적인 인터페이스로 웹사이트·앱에 바로 삽입 가능한 3D 인터랙티브 콘텐츠를 제작할 수 있습니다. AI 프롬프트로 3D 장면을 즉시 생성하거나 수정할 수 있으며, React·Webflow·Framer 등과 간편하게 연동됩니다. 무료 플랜과 Pro 플랜 월 $9부터 제공됩니다.",
     website: "https://spline.design",
     thumbnail: "https://logo.clearbit.com/spline.design",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1159,7 +1159,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "3d-lumagenie", name: "Luma Genie", category: "3d",
     summary: "디스코드에서 명령어로 뚝딱 만드는 3D 모델",
-    description: "디스코드에서 명령어로 뚝딱 만드는 3D 모델",
+    description: "Luma Labs의 AI 3D 모델 생성 서비스로, Discord 봇 명령어나 웹 앱을 통해 텍스트·이미지에서 게임·씬에 바로 활용 가능한 3D 에셋을 생성합니다. NeRF 기반 3D 재구성 기술을 사용해 사실적인 텍스처 표현이 뛰어납니다. 무료 플랜(월 30크레딧)과 Pro 플랜 월 $9.99부터 제공됩니다.",
     website: "https://lumalabs.ai",
     thumbnail: "https://logo.clearbit.com/lumalabs.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1167,7 +1167,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "3d-rodin", name: "Rodin", category: "3d",
     summary: "3D 피규어나 캐릭터 생성에 특화된 고퀄리티 모델",
-    description: "3D 피규어나 캐릭터 생성에 특화된 고퀄리티 모델",
+    description: "Deemos가 개발한 AI 3D 캐릭터·피규어 생성 모델로, 텍스트 또는 이미지에서 실사 수준의 고품질 3D 인체·생물 모델을 생성합니다. 메시 품질이 높고 텍스처 디테일이 뛰어나 게임 캐릭터·3D 프린팅용 피규어 제작에 적합합니다. API와 웹 플랫폼으로 제공되며, 무료 체험 후 Pro 플랜 월 $30부터 이용 가능합니다.",
     website: "https://hyperhuman.deemos.com",
     thumbnail: "https://logo.clearbit.com/deemos.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1175,7 +1175,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "3d-masterpiece", name: "Masterpiece X", category: "3d",
     summary: "VR 기기 끼고 들어가서 AI와 함께 조각하듯 만듦",
-    description: "VR 기기 끼고 들어가서 AI와 함께 조각하듯 만듦",
+    description: "Meta Quest 등 VR 헤드셋을 착용하고 가상공간에서 조각하듯 3D 모델을 제작할 수 있는 XR 3D 창작 플랫폼입니다. AI 텍스트 프롬프트로 기본 형태를 생성한 후 VR 컨트롤러로 직관적으로 수정할 수 있어 VR 아티스트들에게 인기 있습니다. Creator 플랜 월 $10부터 제공됩니다.",
     website: "https://masterpiecex.com",
     thumbnail: "https://logo.clearbit.com/masterpiecex.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1183,7 +1183,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "3d-leonardo", name: "Leonardo 3D", category: "3d",
     summary: "2D 그림을 3D 텍스처로 입혀주는 기능 보유",
-    description: "2D 그림을 3D 텍스처로 입혀주는 기능 보유",
+    description: "Leonardo.ai의 3D 텍스처 기능으로, AI가 생성한 2D 이미지를 3D 모델에 자동으로 매핑하여 리얼한 텍스처를 입혀줍니다. 게임·메타버스 에셋의 텍스처 작업 시간을 크게 단축할 수 있으며, 이미지 생성 AI와 3D 워크플로우를 통합하는 것이 특징입니다. Leonardo.ai 구독(Free~$48/월)에 포함되어 있습니다.",
     website: "https://leonardo.ai",
     thumbnail: "https://logo.clearbit.com/leonardo.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1191,7 +1191,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "3d-shape", name: "Shap-E", category: "3d",
     summary: "오픈AI가 만든 3D 생성 오픈소스 모델",
-    description: "오픈AI가 만든 3D 생성 오픈소스 모델",
+    description: "OpenAI가 2023년 공개한 오픈소스 3D 생성 모델로, 텍스트 또는 이미지에서 3D 메시와 포인트 클라우드를 직접 생성합니다. 연구·개발용으로 널리 활용되며, 상업용 AI 3D 도구들의 기반 기술로도 참조됩니다. GitHub에서 무료로 사용 가능하며 로컬 GPU 환경이 필요합니다.",
     website: "https://github.com/openai/shap-e",
     thumbnail: "https://logo.clearbit.com/openai.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1199,7 +1199,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "3d-blockade", name: "Blockade Labs", category: "3d",
     summary: "360도 파노라마 배경(스카이박스)을 순식간에 생성",
-    description: "360도 파노라마 배경(스카이박스)을 순식간에 생성",
+    description: "AI 기반 360도 파노라마 환경 이미지(스카이박스) 생성에 특화된 플랫폼으로, 텍스트 프롬프트만으로 게임·VR·메타버스에서 바로 사용 가능한 360도 배경을 수 초 만에 생성합니다. Unity·Unreal Engine·Blender 등에서 사용하는 EXR·HDRI 포맷으로 내보낼 수 있습니다. 무료 플랜과 Pro 플랜 월 $7.99부터 제공됩니다.",
     website: "https://skybox.blockadelabs.com",
     thumbnail: "https://logo.clearbit.com/blockadelabs.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1207,61 +1207,61 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "3d-kaedim", name: "Kaedim", category: "3d",
     summary: "2D 이미지를 넣으면 즉시 3D 모델로 변환",
-    description: "2D 이미지를 넣으면 즉시 3D 모델로 변환",
+    description: "2D 이미지나 콘셉트 아트를 업로드하면 게임 엔진에 바로 사용 가능한 최적화된 3D 메시로 자동 변환하는 플랫폼입니다. 게임 스튜디오를 주요 고객으로 하며, 아티스트의 컨셉트를 빠르게 3D로 제작하는 프리프로덕션 파이프라인에 활용됩니다. API 방식과 웹 대시보드로 제공되며 엔터프라이즈 요금제로 운영됩니다.",
     website: "https://kaedim3d.com", thumbnail: "https://logo.clearbit.com/kaedim3d.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "3d-polycam", name: "Polycam", category: "3d",
     summary: "아이폰 라이다 센서로 사물을 스캔해 3D화",
-    description: "아이폰 라이다 센서로 사물을 스캔해 3D화",
+    description: "iPhone·iPad의 LiDAR 센서와 AI를 결합해 실제 사물이나 공간을 스캔하고 고품질 3D 모델로 변환하는 앱입니다. GLTF·OBJ·USDZ·STL 포맷으로 내보내기가 가능해 3D 프린팅·AR·게임·건축 시각화에 널리 활용됩니다. Android 사진측량(photogrammetry) 방식도 지원하며, Pro 플랜 월 $9.99부터 제공됩니다.",
     website: "https://poly.cam", thumbnail: "https://logo.clearbit.com/poly.cam", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "3d-kiri", name: "KIRI Engine", category: "3d",
     summary: "안드로이드에서도 가능한 3D 스캔 앱",
-    description: "안드로이드에서도 가능한 3D 스캔 앱",
+    description: "사진측량(photogrammetry) 기술 기반으로 iOS·Android 모두에서 사용할 수 있는 3D 스캔 앱입니다. 여러 각도에서 촬영한 사진을 AI가 분석해 정밀한 3D 모델을 자동 생성하며, LiDAR 없는 일반 스마트폰에서도 동작합니다. 무료 플랜과 Pro 플랜 월 $9.99로 제공되며 OBJ·GLTF 등 포맷을 지원합니다.",
     website: "https://kiriengine.app", thumbnail: "https://logo.clearbit.com/kiriengine.app", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "3d-sloyd", name: "Sloyd", category: "3d",
     summary: "게임을 위한 3D 소품(오브젝트) 생성에 특화",
-    description: "게임을 위한 3D 소품(오브젝트) 생성에 특화",
+    description: "게임 제작에 최적화된 3D 오브젝트 생성 도구로, 텍스트 프롬프트에서 폴리곤 수가 최적화된 로우폴리·하이폴리 3D 소품을 즉시 생성합니다. Unity·Unreal Engine에서 바로 사용 가능한 포맷을 지원하며, 건물·가구·무기·도구 등 인게임 오브젝트 생산에 특화되어 있습니다. 무료 플랜과 Pro 플랜 월 $20부터 제공됩니다.",
     website: "https://sloyd.ai", thumbnail: "https://logo.clearbit.com/sloyd.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "3d-genie", name: "Luma Genie", category: "3d",
     summary: "텍스트로 3D 모델을 만드는 루마 랩스의 도구",
-    description: "텍스트로 3D 모델을 만드는 루마 랩스의 도구",
+    description: "Luma Labs가 개발한 텍스트-이미지-3D 변환 AI 모델로, 사진이나 텍스트 프롬프트에서 NeRF·가우시안 스플래팅 기반의 고품질 3D 장면을 생성합니다. Dream Machine 영상 생성과 함께 Luma Labs의 핵심 제품군이며, 3D 에셋과 배경 환경 생성에 활용됩니다. 무료 체험 후 Pro 플랜 월 $9.99부터 제공됩니다.",
     website: "https://lumalabs.ai", thumbnail: "https://logo.clearbit.com/lumalabs.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "3d-3dfy", name: "3DFY.ai", category: "3d",
     summary: "고품질 3D 모델을 대량으로 생성하는 솔루션",
-    description: "고품질 3D 모델을 대량으로 생성하는 솔루션",
+    description: "전자상거래·게임·메타버스를 위한 대규모 3D 에셋 자동 생성 플랫폼으로, 수백·수천 개의 제품 이미지를 3D 모델로 배치 변환하는 파이프라인을 제공합니다. 높은 메시 품질과 PBR 텍스처 지원이 강점이며, API 기반으로 기업의 기존 워크플로우에 통합하기 용이합니다. 엔터프라이즈 전용 맞춤 요금제로 운영됩니다.",
     website: "https://3dfy.ai", thumbnail: "https://logo.clearbit.com/3dfy.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "3d-alpha3d", name: "Alpha3D", category: "3d",
     summary: "증강현실(AR) 용 3D 에셋을 빠르게 제작",
-    description: "증강현실(AR) 용 3D 에셋을 빠르게 제작",
+    description: "2D 이미지에서 AR·웹·게임에 바로 사용 가능한 3D 에셋을 자동 생성하는 플랫폼으로, AR 쇼핑(제품 미리보기)과 인테리어 시각화에 특화되어 있습니다. IKEA·아마존 등 대형 이커머스에서 제품 3D 시각화 솔루션으로 도입하는 엔터프라이즈 제품입니다. API와 대시보드 방식으로 제공되며 맞춤 견적 기반입니다.",
     website: "https://alpha3d.io", thumbnail: "https://logo.clearbit.com/alpha3d.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "3d-ponzu", name: "Ponzu", category: "3d",
     summary: "3D 텍스처(재질)를 AI로 생성하는 도구",
-    description: "3D 텍스처(재질)를 AI로 생성하는 도구",
+    description: "텍스트 설명이나 참조 이미지에서 타일링 가능한 PBR 텍스처 맵(Albedo·Normal·Roughness·AO)을 AI로 자동 생성하는 도구입니다. Blender·Unity·Unreal Engine 등에서 사용하는 텍스처 포맷을 지원하며, 3D 모델 제작 시 텍스처링 작업 시간을 대폭 단축합니다. 무료 체험과 Pro 플랜 월 $19부터 제공됩니다.",
     website: "https://ponzu.ai", thumbnail: "https://logo.clearbit.com/ponzu.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "3d-latent", name: "Latent Labs", category: "3d",
     summary: "360도 스카이박스 이미지를 생성하는 또 다른 강자",
-    description: "360도 스카이박스 이미지를 생성하는 또 다른 강자",
+    description: "AI 생성 360도 파노라마·스카이박스 이미지 전문 플랫폼으로, 게임·VR·메타버스 환경 제작에 필요한 배경 씬을 텍스트 프롬프트로 빠르게 생성합니다. HDRI·EXR 포맷을 지원해 Blender·Unreal Engine에서 조명 환경으로도 활용 가능합니다. 무료 플랜과 Pro 플랜 월 $9부터 제공됩니다.",
     website: "https://latent.gg", thumbnail: "https://logo.clearbit.com/latent.gg", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "3d-csm-ai", name: "Common Sense Machines", category: "3d",
     summary: "사진을 3D 게임 에셋으로 바꿔주는 플랫폼",
-    description: "사진을 3D 게임 에셋으로 바꿔주는 플랫폼",
+    description: "Common Sense Machines의 3D 에셋 생성 플랫폼으로, 실제 물체를 스마트폰으로 촬영한 사진에서 게임·메타버스에서 사용 가능한 최적화된 3D 모델을 자동으로 생성합니다. 3D 재구성 정확도와 다양한 포맷 지원이 강점이며, e커머스·게임·AR/VR 앱 개발사들이 주로 활용합니다. API와 웹 앱으로 제공되며 사용량 기반으로 과금됩니다.",
     website: "https://csm.ai", thumbnail: "https://logo.clearbit.com/csm.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
@@ -1271,7 +1271,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "auto-n8n", name: "n8n", category: "automation",
     summary: "무료로 자체 서버에 구축 가능한 무제한 자동화 툴",
-    description: "무료로 자체 서버에 구축 가능한 무제한 자동화 툴",
+    description: "자체 서버에 무료로 설치·운영 가능한 오픈소스 워크플로우 자동화 플랫폼으로, 400개 이상의 앱과 연동되며 JavaScript·Python 코드 실행 노드까지 지원합니다. 비개발자도 시각적 캔버스에서 노드를 연결해 복잡한 자동화를 구성할 수 있으며, AI 에이전트 파이프라인 구축에도 활용됩니다. 클라우드 플랜은 월 €24부터, 셀프호스팅은 완전 무료입니다.",
     website: "https://n8n.io",
     thumbnail: "https://logo.clearbit.com/n8n.io",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1279,7 +1279,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "auto-zapier", name: "Zapier", category: "automation",
     summary: "가장 유명하고 쉬운 자동화, 연동되는 앱이 제일 많음",
-    description: "가장 유명하고 쉬운 자동화, 연동되는 앱이 제일 많음",
+    description: "7,000개 이상의 앱 연동을 지원하는 세계 최대 규모의 자동화 플랫폼으로, 코딩 없이 '트리거→액션' 방식으로 앱 간 데이터를 자동 연결합니다. AI 기반 Zap 자동 생성 기능과 멀티스텝 자동화를 지원하며, 개인부터 대기업까지 폭넓게 사용됩니다. 무료 플랜(월 100작업)부터 시작하며 Professional 플랜은 월 $69입니다.",
     website: "https://zapier.com",
     thumbnail: "https://logo.clearbit.com/zapier.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1287,7 +1287,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "auto-make", name: "Make", category: "automation",
     summary: "복잡한 시각적 워크플로우를 짜기에 가장 좋음",
-    description: "복잡한 시각적 워크플로우를 짜기에 가장 좋음",
+    description: "1,600개 이상의 앱 연동을 지원하는 시각적 자동화 플랫폼으로, 조건 분기·반복·오류 처리 등 복잡한 로직을 직관적인 플로우차트 방식으로 구성할 수 있습니다. 분기 처리·집계·필터링 등 고급 데이터 변환 기능이 풍부해 Zapier보다 세밀한 자동화가 필요한 사용자에게 적합합니다. Free 플랜(월 1,000 오퍼레이션)과 Core 플랜 월 $9부터 제공됩니다.",
     website: "https://make.com",
     thumbnail: "https://logo.clearbit.com/make.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1295,7 +1295,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "auto-bardeen", name: "Bardeen", category: "automation",
     summary: "웹 브라우저에서 버튼 한 번으로 데이터 긁어오기 최강",
-    description: "웹 브라우저에서 버튼 한 번으로 데이터 긁어오기 최강",
+    description: "Chrome 확장 프로그램 형태의 AI 자동화 도구로, 웹 스크래핑·CRM 데이터 입력·이메일 발송·리서치 등 반복적인 브라우저 작업을 노코드로 자동화합니다. GPT 기반 AI가 작업 의도를 이해해 자동화 레시피를 생성하며, HubSpot·Salesforce 등 주요 SaaS와 연동됩니다. 무료 플랜(월 14크레딧)과 Pro 플랜 월 $10부터 제공됩니다.",
     website: "https://bardeen.ai",
     thumbnail: "https://logo.clearbit.com/bardeen.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1303,7 +1303,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "auto-gumloop", name: "Gumloop", category: "automation",
     summary: "AI 기능(LLM)을 활용한 자동화 파이프라인 구축에 특화",
-    description: "AI 기능(LLM)을 활용한 자동화 파이프라인 구축에 특화",
+    description: "LLM·AI 모델을 워크플로우에 통합하는 것에 특화된 자동화 빌더로, OpenAI·Claude·Gemini 등 다양한 AI 모델을 노드로 연결해 AI 에이전트 파이프라인을 시각적으로 구성할 수 있습니다. 웹 스크래핑·이메일 처리·데이터 분류·콘텐츠 생성을 AI가 수행하는 자동화에 강점이 있습니다. Starter 플랜 월 $97부터 제공됩니다.",
     website: "https://gumloop.com",
     thumbnail: "https://logo.clearbit.com/gumloop.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1311,7 +1311,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "auto-ifttt", name: "IFTTT", category: "automation",
     summary: "이거 하면 저거 해 식의 초간단 생활 밀착형 자동화",
-    description: "이거 하면 저거 해 식의 초간단 생활 밀착형 자동화",
+    description: "스마트홈·IoT·모바일 앱 자동화에 특화된 생활 밀착형 자동화 플랫폼으로, Alexa·Google Home·SmartThings 등 700개 이상의 스마트 기기와 앱을 연결합니다. 'IF This Then That' 방식의 간단한 레시피 구조로 누구나 쉽게 설정할 수 있습니다. 무료 플랜과 Pro 플랜 월 $2.99부터 제공됩니다.",
     website: "https://ifttt.com",
     thumbnail: "https://logo.clearbit.com/ifttt.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1319,7 +1319,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "auto-powerauto", name: "Power Automate", category: "automation",
     summary: "엑셀, 아웃룩 등 MS 오피스 업무 자동화 필수품",
-    description: "엑셀, 아웃룩 등 MS 오피스 업무 자동화 필수품",
+    description: "Microsoft 365 생태계(Outlook·Excel·Teams·SharePoint·Dynamics 365)와 완벽하게 통합되는 기업용 자동화 플랫폼입니다. 데스크톱 앱의 클릭·입력 작업을 자동화하는 RPA 기능과 클라우드 워크플로우 기능을 모두 갖추고 있습니다. Microsoft 365 Business 구독에 포함되며 독립 플랜 월 $15부터 제공됩니다.",
     website: "https://microsoft.com",
     thumbnail: "https://logo.clearbit.com/microsoft.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1327,7 +1327,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "auto-relay", name: "Relay.app", category: "automation",
     summary: "사람의 개입(승인)이 필요한 업무 자동화에 좋음",
-    description: "사람의 개입(승인)이 필요한 업무 자동화에 좋음",
+    description: "완전 자동화가 아닌 '사람이 특정 단계에서 승인·검토'하는 반자동 워크플로우 구축에 특화된 자동화 도구입니다. 자동화 중간에 Slack·이메일 등으로 담당자에게 승인 요청을 보내고 응답에 따라 다음 단계를 진행하는 방식이 강점입니다. Free 플랜과 Pro 플랜 월 $9부터 제공됩니다.",
     website: "https://relay.app",
     thumbnail: "https://logo.clearbit.com/relay.app",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1335,7 +1335,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "auto-pabbly", name: "Pabbly", category: "automation",
     summary: "한 번 결제로 평생 쓰는 가성비 자동화 도구",
-    description: "한 번 결제로 평생 쓰는 가성비 자동화 도구",
+    description: "1,000개 이상의 앱 연동을 지원하는 자동화 플랫폼으로, 월정액 없이 일회성 결제(Lifetime Deal)로 무제한 사용할 수 있어 가성비가 뛰어납니다. 이메일 마케팅·결제 처리·CRM 등 다양한 비즈니스 자동화를 한 플랫폼에서 구성할 수 있습니다. 평생 플랜 $249부터 제공됩니다.",
     website: "https://pabbly.com",
     thumbnail: "https://logo.clearbit.com/pabbly.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1343,7 +1343,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "prod-gamma", name: "Gamma", category: "automation",
     summary: "PPT, 문서, 웹사이트를 1분 만에 디자인해주는 마법",
-    description: "PPT, 문서, 웹사이트를 1분 만에 디자인해주는 마법",
+    description: "텍스트나 파일을 붙여넣으면 AI가 자동으로 디자인을 입혀 세련된 프레젠테이션·문서·웹페이지를 1분 내에 생성하는 플랫폼입니다. 마우스 클릭 없이 자연어 지시만으로 레이아웃·색상·콘텐츠를 수정할 수 있으며, 공유 링크 하나로 협업이 가능합니다. 무료 플랜(월 400AI크레딧)과 Plus 플랜 월 $10부터 제공됩니다.",
     website: "https://gamma.app",
     thumbnail: "https://logo.clearbit.com/gamma.app",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1351,7 +1351,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "auto-active", name: "ActivePieces", category: "automation",
     summary: "n8n처럼 오픈소스로 쓸 수 있는 가벼운 대안",
-    description: "n8n처럼 오픈소스로 쓸 수 있는 가벼운 대안",
+    description: "n8n과 유사한 오픈소스 워크플로우 자동화 플랫폼으로, 시각적 빌더에서 200개 이상의 앱을 연결할 수 있습니다. 셀프호스팅이 무료로 가능하며, AI 기반 자동화 스텝 생성 기능을 내장해 비개발자도 쉽게 사용할 수 있습니다. 클라우드 플랜 월 $9부터 제공되며, 활발한 오픈소스 커뮤니티가 장점입니다.",
     website: "https://activepieces.com",
     thumbnail: "https://logo.clearbit.com/activepieces.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1359,61 +1359,61 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "auto-cheatlayer", name: "Cheat Layer", category: "automation",
     summary: "GPT-4를 이용해 어떤 웹사이트든 자동화 가능",
-    description: "GPT-4를 이용해 어떤 웹사이트든 자동화 가능",
+    description: "GPT-4 기반 AI가 자연어 명령을 브라우저 자동화 스크립트로 변환하는 플랫폼으로, 별도 API 연동 없이도 어떤 웹사이트든 자동화할 수 있습니다. 데이터 스크래핑·폼 자동 입력·반복 업무 처리를 AI가 직접 수행하며, 비개발자도 영어로 작업을 설명하면 자동화가 구성됩니다. 월 $199부터 제공됩니다.",
     website: "https://cheatlayer.com", thumbnail: "https://logo.clearbit.com/cheatlayer.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "auto-browse", name: "Browse AI", category: "automation",
     summary: "웹사이트 변경 사항을 감지하고 데이터를 추출",
-    description: "웹사이트 변경 사항을 감지하고 데이터를 추출",
+    description: "코딩 없이 어떤 웹사이트에서든 데이터를 정기적으로 추출하고 모니터링하는 AI 웹 스크래핑 자동화 도구입니다. 가격·재고·채용 공고 변경 등을 자동 감지해 알림을 보내고, 추출된 데이터를 Google Sheets·Zapier 등으로 자동 전송합니다. 무료 플랜(월 50작업)과 Starter 플랜 월 $19부터 제공됩니다.",
     website: "https://browse.ai", thumbnail: "https://logo.clearbit.com/browse.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "auto-levity", name: "Levity", category: "automation",
     summary: "이메일 분류 같은 반복 업무를 AI가 학습해서 처리",
-    description: "이메일 분류 같은 반복 업무를 AI가 학습해서 처리",
+    description: "이미지 분류·텍스트 분류·이메일 라우팅 등 반복적인 판단 작업을 AI가 학습해 자동으로 처리하는 노코드 AI 자동화 플랫폼입니다. 예제 데이터를 기반으로 커스텀 AI 모델을 훈련시키고, Zapier·Make 등 기존 자동화 도구와 연동할 수 있습니다. Starter 플랜 월 $59부터 제공됩니다.",
     website: "https://levity.ai", thumbnail: "https://logo.clearbit.com/levity.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "auto-axiom", name: "Axiom", category: "automation",
     summary: "브라우저 행동을 녹화해서 반복 실행하는 매크로",
-    description: "브라우저 행동을 녹화해서 반복 실행하는 매크로",
+    description: "Chrome 확장 프로그램으로 브라우저 행동(클릭·입력·스크롤)을 녹화하고 자동으로 반복 실행하는 노코드 브라우저 자동화 도구입니다. 데이터 스크래핑·폼 자동 입력·반복 업무 처리를 쉽게 자동화할 수 있으며, 조건 분기·루프 등 고급 로직도 지원합니다. 무료 플랜과 Pro 플랜 월 $15부터 제공됩니다.",
     website: "https://axiom.ai", thumbnail: "https://logo.clearbit.com/axiom.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "auto-hexomatic", name: "Hexomatic", category: "automation",
     summary: "웹 스크래핑과 업무 자동화를 동시에",
-    description: "웹 스크래핑과 업무 자동화를 동시에",
+    description: "웹 스크래핑과 비즈니스 자동화를 하나의 플랫폼에서 처리하는 올인원 도구로, 코딩 없이 웹 데이터를 수집하고 Google Sheets·Zapier·Slack 등으로 즉시 전달할 수 있습니다. AI 기반 데이터 추출·이미지 분석·SEO 모니터링 등 100가지 이상의 자동화 레시피를 제공합니다. Starter 플랜 월 $29부터 제공됩니다.",
     website: "https://hexomatic.com", thumbnail: "https://logo.clearbit.com/hexomatic.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "auto-robomotion", name: "Robomotion", category: "automation",
     summary: "RPA(로봇 프로세스 자동화)를 웹에서 쉽게 구현",
-    description: "RPA(로봇 프로세스 자동화)를 웹에서 쉽게 구현",
+    description: "클라우드·데스크톱 앱의 반복 작업을 로봇이 대신 처리하는 RPA 플랫폼으로, 그래픽 에디터에서 워크플로우를 시각적으로 구성할 수 있습니다. 웹·윈도우·SAP 등 다양한 환경의 자동화를 지원하며, 비개발자도 쉽게 접근할 수 있는 낮은 진입장벽이 특징입니다. 무료 플랜(3개 봇)과 Pro 플랜 월 $35부터 제공됩니다.",
     website: "https://robomotion.io", thumbnail: "https://logo.clearbit.com/robomotion.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "auto-automa", name: "Automa", category: "automation",
     summary: "크롬 확장 프로그램으로 브라우저 작업 자동화 (오픈소스)",
-    description: "크롬 확장 프로그램으로 브라우저 작업 자동화 (오픈소스)",
+    description: "Chrome·Firefox 확장 프로그램 형태의 오픈소스 브라우저 자동화 도구로, 블록 기반 시각적 편집기에서 워크플로우를 구성합니다. 탭 관리·데이터 스크래핑·폼 자동입력·스케줄 실행 등을 코딩 없이 자동화할 수 있으며, 무료로 모든 기능을 사용할 수 있습니다. GitHub에서 오픈소스로 공개되어 있습니다.",
     website: "https://automa.site", thumbnail: "https://logo.clearbit.com/automa.site", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "auto-uibot", name: "UIBot", category: "automation",
     summary: "윈도우, 맥 가리지 않고 화면 클릭 자동화",
-    description: "윈도우, 맥 가리지 않고 화면 클릭 자동화",
+    description: "중국산 RPA 플랫폼으로, Windows·macOS에서 화면 요소를 인식해 클릭·입력·복사 등의 반복 작업을 자동화하는 데스크톱 기반 자동화 도구입니다. OCR 기술로 텍스트를 인식하고 이미지 인식으로 UI 요소를 찾아 동작하며, 중국 기업들의 SAP·ERP 연동 자동화에 많이 활용됩니다. 무료 버전과 기업용 유료 플랜으로 제공됩니다.",
     website: "https://uibot.com.cn", thumbnail: "https://logo.clearbit.com/uibot.com.cn", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "auto-magical", name: "Magical", category: "automation",
     summary: "복잡한 데이터 입력 작업을 마법처럼 자동화",
-    description: "복잡한 데이터 입력 작업을 마법처럼 자동화",
+    description: "반복적인 데이터 입력·텍스트 확장·정보 자동완성을 Chrome 확장으로 처리하는 생산성 도구입니다. CRM·지원 티켓·이메일 등 웹 폼에서 데이터를 한 번에 채우거나, 짧은 단어를 전체 문장으로 확장하는 텍스트 스니펫 기능이 핵심입니다. 무료 플랜과 Pro 플랜 월 $6.5부터 제공됩니다.",
     website: "https://getmagical.com", thumbnail: "https://logo.clearbit.com/getmagical.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "auto-harpa", name: "Harpa AI", category: "automation",
     summary: "웹 페이지 감시 및 자동화 최강의 크롬 확장",
-    description: "웹 페이지 감시 및 자동화 최강의 크롬 확장",
+    description: "AI·GPT 기능을 웹 브라우징에 통합한 Chrome 확장 프로그램으로, 웹페이지 요약·가격 모니터링·자동화·검색 보조 등을 제공합니다. 열려 있는 웹페이지 내용을 AI가 분석·요약해 주고, 특정 조건 충족 시 알림을 보내는 웹 모니터링 기능이 특히 강력합니다. 무료 플랜과 Pro 플랜 월 $15부터 제공됩니다.",
     website: "https://harpa.ai", thumbnail: "https://logo.clearbit.com/harpa.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
@@ -1423,7 +1423,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "music-suno", name: "Suno", category: "music",
     summary: "가사만 넣으면 라디오 퀄리티 노래 뚝딱 (현재 1타)",
-    description: "가사만 넣으면 라디오 퀄리티 노래 뚝딱 (현재 1타)",
+    description: "텍스트 프롬프트로 보컬·악기·가사까지 갖춘 완성된 노래를 수 초 만에 생성하는 AI 음악 플랫폼으로, 음질·자연스러움 면에서 현재 업계 최고 수준으로 평가됩니다. 팝·힙합·재즈·클래식 등 다양한 장르를 지원하며, 생성된 음악은 상업적 사용이 가능합니다. 무료 플랜(월 10곡)과 Pro 플랜 월 $10부터 제공됩니다.",
     website: "https://suno.com",
     thumbnail: "https://logo.clearbit.com/suno.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1431,7 +1431,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "music-udio", name: "Udio", category: "music",
     summary: "음악적 완성도가 높고 편집 기능이 강력한 경쟁자",
-    description: "음악적 완성도가 높고 편집 기능이 강력한 경쟁자",
+    description: "Suno와 함께 AI 음악 생성 시장의 양대 강자로 꼽히는 플랫폼으로, 32초 클립 단위로 섹션을 이어 붙이거나 기존 음악을 연장하는 'Remix' 기능이 강점입니다. 음악 이론 기반의 세밀한 제어가 가능하고 사운드 품질이 높습니다. 무료 플랜(월 10크레딧)과 Standard 플랜 월 $10부터 제공됩니다.",
     website: "https://udio.com",
     thumbnail: "https://logo.clearbit.com/udio.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1439,7 +1439,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "music-stable", name: "Stable Audio", category: "music",
     summary: "고품질 배경음악과 효과음 생성에 최적화",
-    description: "고품질 배경음악과 효과음 생성에 최적화",
+    description: "Stability AI가 개발한 오디오 생성 모델 기반의 음악 플랫폼으로, 최대 3분 길이의 고품질 배경음악과 짧은 효과음을 텍스트 프롬프트로 생성합니다. 타임스탬프 기반 프롬프트로 시간대별로 음악 분위기를 다르게 지정할 수 있는 세밀한 제어가 특징입니다. 무료 플랜(월 20크레딧)과 Pro 플랜 월 $12부터 제공됩니다.",
     website: "https://stability.ai",
     thumbnail: "https://logo.clearbit.com/stability.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1447,7 +1447,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "music-soundraw", name: "Soundraw", category: "music",
     summary: "저작권 걱정 없는 유튜브 BGM 커스텀 생성기",
-    description: "저작권 걱정 없는 유튜브 BGM 커스텀 생성기",
+    description: "영상 크리에이터를 위한 로열티 프리 BGM 생성 플랫폼으로, 장르·분위기·템포·길이를 선택하면 AI가 맞춤 배경음악을 즉시 생성합니다. 생성된 모든 음악은 YouTube·Instagram·TikTok 등에서 저작권 클레임 없이 사용 가능합니다. 무료 플랜(월 3트랙)과 Creator 플랜 월 $19.99부터 제공됩니다.",
     website: "https://soundraw.io",
     thumbnail: "https://logo.clearbit.com/soundraw.io",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1455,7 +1455,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "music-riffusion", name: "Riffusion", category: "music",
     summary: "텍스트를 입력하면 짧은 리프(멜로디)를 생성",
-    description: "텍스트를 입력하면 짧은 리프(멜로디)를 생성",
+    description: "이미지 생성 모델(Stable Diffusion)의 음악 버전으로, 스펙트로그램(소리의 시각적 표현)을 이미지로 생성해 음악으로 변환하는 독창적인 방식을 사용합니다. 텍스트 프롬프트에서 짧은 멜로디·리프를 생성하며, 실시간 음악 생성 데모로 처음 주목받았습니다. 현재 무료 웹 앱과 오픈소스 모델로 제공됩니다.",
     website: "https://riffusion.com",
     thumbnail: "https://logo.clearbit.com/riffusion.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1463,7 +1463,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "music-aiva", name: "AIVA", category: "music",
     summary: "클래식이나 영화 음악 같은 감성적인 작곡에 강함",
-    description: "클래식이나 영화 음악 같은 감성적인 작곡에 강함",
+    description: "유럽저작권협회에 공식 등록된 최초의 AI 작곡가로, 클래식·영화·광고 음악 작곡에 특화된 플랫폼입니다. 200개 이상의 스타일을 선택해 1분~수 분 길이의 오케스트라·피아노·실내악 음악을 생성할 수 있습니다. 무료 플랜(월 3트랙)과 Standard 플랜 월 $9.99부터 제공됩니다.",
     website: "https://aiva.ai",
     thumbnail: "https://logo.clearbit.com/aiva.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1471,7 +1471,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "music-mubert", name: "Mubert", category: "music",
     summary: "스트리밍이나 게임에 쓸 실시간 생성 배경음악",
-    description: "스트리밍이나 게임에 쓸 실시간 생성 배경음악",
+    description: "실시간 적응형 AI 음악 생성 플랫폼으로, 스트리밍·게임·팟캐스트 등의 분위기에 맞춰 끊임없이 이어지는 배경음악을 즉시 생성합니다. 무한 길이의 로열티 프리 음악을 생성할 수 있어 반복되는 BGM이 필요한 콘텐츠 제작자에게 적합합니다. API 연동도 가능하며 무료 플랜과 Artist 플랜 월 $14부터 제공됩니다.",
     website: "https://mubert.com",
     thumbnail: "https://logo.clearbit.com/mubert.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1479,7 +1479,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "music-boomy", name: "Boomy", category: "music",
     summary: "초보자도 몇 초 만에 노래 만들고 스포티파이 등록 가능",
-    description: "초보자도 몇 초 만에 노래 만들고 스포티파이 등록 가능",
+    description: "AI가 자동으로 노래를 만들어 주고, 생성된 곡을 Spotify·Apple Music·Amazon Music 등 주요 스트리밍 서비스에 직접 배포할 수 있는 통합 플랫폼입니다. 음악 지식 없이도 장르를 선택하면 수 초 만에 완성된 노래가 생성됩니다. 무료 플랜과 Creator 플랜 월 $9.99부터 제공되며, 스트리밍 수익의 일부를 Boomy가 가져갑니다.",
     website: "https://boomy.com",
     thumbnail: "https://logo.clearbit.com/boomy.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1487,7 +1487,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "music-beatoven", name: "Beatoven", category: "music",
     summary: "영상 분위기에 맞춰 감정을 조절하는 BGM 생성",
-    description: "영상 분위기에 맞춰 감정을 조절하는 BGM 생성",
+    description: "영상의 분위기·감정·장르를 선택하면 AI가 그에 맞는 로열티 프리 배경음악을 생성하는 플랫폼으로, 인도 스타트업이 개발했습니다. '기쁨·슬픔·신비로움' 등 감정 파라미터를 조절해 원하는 감성의 음악을 커스터마이징할 수 있습니다. 무료 플랜(월 5트랙)과 Pro 플랜 월 $19부터 제공됩니다.",
     website: "https://beatoven.ai",
     thumbnail: "https://logo.clearbit.com/beatoven.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1495,7 +1495,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "music-loudly", name: "Loudly", category: "music",
     summary: "방대한 AI 음악 라이브러리와 생성 엔진 제공",
-    description: "방대한 AI 음악 라이브러리와 생성 엔진 제공",
+    description: "1,000개 이상의 장르·분위기별 AI 음악 트랙 라이브러리와 실시간 음악 생성 엔진을 함께 제공하는 플랫폼입니다. 템포·에너지·분위기 파라미터를 슬라이더로 조절해 커스터마이징하거나 기존 트랙을 편집할 수 있습니다. 무료 플랜과 Pro 플랜 월 $9부터 제공됩니다.",
     website: "https://loudly.com",
     thumbnail: "https://logo.clearbit.com/loudly.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1503,73 +1503,73 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "music-ecrett", name: "Ecrett Music", category: "music",
     summary: "영상 제작자를 위한 직관적인 BGM 생성",
-    description: "영상 제작자를 위한 직관적인 BGM 생성",
+    description: "영상 크리에이터에 특화된 로열티 프리 AI 음악 생성 플랫폼으로, 장면(Scene)·기분(Mood)·장르를 선택하면 영상에 딱 맞는 배경음악을 즉시 생성합니다. YouTube·Vimeo·소셜 미디어에서 저작권 클레임 없이 사용 가능하며, 간단한 인터페이스로 음악 지식이 없어도 쉽게 활용할 수 있습니다. Starter 플랜 월 $17.99부터 제공됩니다.",
     website: "https://ecrettmusic.com", thumbnail: "https://logo.clearbit.com/ecrettmusic.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "music-cassette", name: "CassetteAI", category: "music",
     summary: "머신러닝으로 만드는 나만의 비트",
-    description: "머신러닝으로 만드는 나만의 비트",
+    description: "머신러닝 기반으로 커스텀 비트와 반주를 생성하는 음악 제작 플랫폼으로, 장르·악기·분위기 파라미터를 선택해 나만의 비트를 빠르게 제작할 수 있습니다. 생성된 음악은 상업적으로 사용 가능한 라이선스로 제공됩니다. 무료 체험과 Pro 플랜 월 $7.99부터 제공됩니다.",
     website: "https://cassetteai.com", thumbnail: "https://logo.clearbit.com/cassetteai.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "music-splash", name: "Splash Pro", category: "music",
     summary: "로블록스 음악 게임으로 유명한 회사의 생성 AI",
-    description: "로블록스 음악 게임으로 유명한 회사의 생성 AI",
+    description: "Roblox 내 음악 게임으로 유명해진 Splash의 AI 음악 생성 플랫폼으로, 텍스트 설명만으로 완성된 팝·힙합·댄스 음악을 빠르게 생성합니다. 게임·숏폼 영상용 짧은 클립 생성에 강점이 있으며, 생성된 음악의 상업적 사용이 가능합니다. 무료 플랜과 Pro 플랜 월 $7.99부터 제공됩니다.",
     website: "https://splashmusic.com", thumbnail: "https://logo.clearbit.com/splashmusic.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "music-musiclm", name: "MusicLM", category: "music",
     summary: "구글이 연구용으로 공개한 고성능 음악 AI",
-    description: "구글이 연구용으로 공개한 고성능 음악 AI",
+    description: "Google Research가 개발한 AI 음악 생성 모델로, 텍스트 프롬프트에서 다양한 장르와 악기 구성의 음악을 생성하며 학술·연구 목적으로 공개되었습니다. 'AI Test Kitchen' 플랫폼에서 실험적으로 제공되었으며 현재는 접근이 제한되어 있지만, 이후 Google의 상용 음악 AI 기술 개발의 기반이 되었습니다.",
     website: "https://aitestkitchen.withgoogle.com", thumbnail: "https://logo.clearbit.com/google.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "music-songr", name: "SongR", category: "music",
     summary: "가사만 입력하면 노래를 불러주는 무료 사이트",
-    description: "가사만 입력하면 노래를 불러주는 무료 사이트",
+    description: "가사 텍스트를 입력하면 AI가 멜로디를 만들고 노래로 불러주는 무료 AI 작곡 플랫폼입니다. 장르·분위기를 선택해 원하는 스타일로 커스터마이징할 수 있으며, 음악 지식 없이 누구나 쉽게 자신만의 노래를 만들 수 있습니다. 기본 기능은 무료로 제공되며 고품질 다운로드를 위한 유료 플랜도 있습니다.",
     website: "https://songr.ai", thumbnail: "https://logo.clearbit.com/songr.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "music-voicemod", name: "Voicemod", category: "music",
     summary: "텍스트를 노래로 바꿔주는 AI 싱어 기능 탑재",
-    description: "텍스트를 노래로 바꿔주는 AI 싱어 기능 탑재",
+    description: "실시간 음성 변조로 유명한 Voicemod에 추가된 AI 싱어 기능으로, 텍스트를 입력하면 가상 캐릭터 목소리로 노래를 부르는 콘텐츠를 생성할 수 있습니다. 게임·스트리밍·음악 제작에 사용되는 실시간 보이스 이펙트와 음성 합성 기술이 결합된 독특한 플랫폼입니다. 무료 플랜과 Pro 플랜 월 $7.99부터 제공됩니다.",
     website: "https://voicemod.net", thumbnail: "https://logo.clearbit.com/voicemod.net", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "music-koe", name: "Koe Recast", category: "music",
     summary: "내 목소리를 다른 스타일의 목소리로 변환",
-    description: "내 목소리를 다른 스타일의 목소리로 변환",
+    description: "AI 목소리 변환 도구로, 자신의 목소리를 다른 성별·연령·캐릭터 스타일로 변환하거나 노래 목소리를 다른 스타일로 바꿀 수 있습니다. 실시간 변환과 오프라인 오디오 파일 처리를 모두 지원하며, 음악 창작 및 음성 콘텐츠 제작에 활용됩니다. 무료 플랜과 Pro 플랜 월 $4.99부터 제공됩니다.",
     website: "https://koe.ai", thumbnail: "https://logo.clearbit.com/koe.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "music-voiceswap", name: "VoiceSwap", category: "music",
     summary: "아티스트의 목소리로 내 데모 곡을 바꿔봄 (합법)",
-    description: "아티스트의 목소리로 내 데모 곡을 바꿔봄 (합법)",
+    description: "아티스트의 동의 하에 제공되는 합법적 AI 목소리 변환 서비스로, 등록된 아티스트 목소리로 자신의 데모 곡이나 음악을 변환할 수 있습니다. 아티스트와 사용자 모두가 수익을 나누는 공정한 수익 배분 모델을 지향합니다. Pro 플랜 월 $9.99부터 제공됩니다.",
     website: "https://voiceswap.ai", thumbnail: "https://logo.clearbit.com/voiceswap.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "music-moises", name: "Moises", category: "music",
     summary: "음악에서 보컬, 드럼 등 악기 소리를 분리 (최강)",
-    description: "음악에서 보컬, 드럼 등 악기 소리를 분리 (최강)",
+    description: "AI 기반 음원 분리 플랫폼으로, 완성된 음악에서 보컬·드럼·베이스·피아노·기타 등 각 악기 트랙을 개별적으로 분리해 추출합니다. 스마트 메트로놈·조옮김·피치 조절 기능도 제공해 음악 연습 앱으로도 인기가 높습니다. 무료 플랜(월 5곡)과 Pro 플랜 월 $3.99부터 제공됩니다.",
     website: "https://moises.ai", thumbnail: "https://logo.clearbit.com/moises.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "music-lalal", name: "Lalal.ai", category: "music",
     summary: "고품질 음원 분리 및 보컬 제거",
-    description: "고품질 음원 분리 및 보컬 제거",
+    description: "AI 음원 분리 전문 플랫폼으로, 보컬·드럼·베이스·피아노 등 최대 10개 스템을 고품질로 분리할 수 있습니다. 업계 최고 수준의 분리 품질로 정평이 나 있으며, 음악 제작자·DJ·커버 아티스트가 많이 활용합니다. 무료 플랜(미리보기 10분)과 Pay-as-you-go($15 크레딧)로 제공됩니다.",
     website: "https://lalal.ai", thumbnail: "https://logo.clearbit.com/lalal.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "music-splitter", name: "Splitter.ai", category: "music",
     summary: "2스템부터 5스템까지 세밀하게 악기 분리",
-    description: "2스템부터 5스템까지 세밀하게 악기 분리",
+    description: "AI 음원 분리 도구로 보컬·반주 2스템부터 보컬·드럼·베이스·피아노·기타 5스템까지 단계별로 세밀한 분리가 가능합니다. 웹 앱과 API 방식 모두를 지원해 개인 사용자와 기업 모두에게 적합합니다. 무료 플랜(월 3곡)과 Premium 플랜 월 $7.99부터 제공됩니다.",
     website: "https://splitter.ai", thumbnail: "https://logo.clearbit.com/splitter.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "music-audioshake", name: "AudioShake", category: "music",
     summary: "기업용 고품질 음원 분리 솔루션",
-    description: "기업용 고품질 음원 분리 솔루션",
+    description: "방송·영화·음반 업계를 위한 엔터프라이즈급 AI 음원 분리 플랫폼으로, 스튜디오 품질의 보컬·악기 스템 분리와 리믹스 준비를 대규모로 처리할 수 있습니다. YouTube·Spotify·Warner Music 등 메이저 미디어 기업들이 실제 사용하는 B2B 솔루션입니다. API 방식과 대용량 배치 처리를 지원하며 맞춤 기업 요금제로 운영됩니다.",
     website: "https://audioshake.ai", thumbnail: "https://logo.clearbit.com/audioshake.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
@@ -1579,7 +1579,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "ppt-gamma", name: "Gamma", category: "presentation",
     summary: "주제만 주면 디자인까지 끝난 PPT 자동 완성 (강추)",
-    description: "주제만 주면 디자인까지 끝난 PPT 자동 완성 (강추)",
+    description: "주제만 입력하면 AI가 내용 구성·디자인·이미지까지 갖춘 완성형 프레젠테이션을 자동으로 만들어 주는 도구입니다. 슬라이드 형식 외에도 문서·웹페이지 형식으로 변환할 수 있어 다양한 목적에 활용됩니다. 무료 플랜(월 400AI크레딧)과 Plus 플랜 월 $10부터 제공됩니다.",
     website: "https://gamma.app",
     thumbnail: "https://logo.clearbit.com/gamma.app",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1587,7 +1587,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "ppt-tome", name: "Tome", category: "presentation",
     summary: "스토리텔링이 있는 세련된 슬라이드 제작",
-    description: "스토리텔링이 있는 세련된 슬라이드 제작",
+    description: "스토리텔링 중심의 프레젠테이션 제작 도구로, AI가 주제를 받아 내러티브 구조로 구성된 슬라이드 덱을 자동 생성합니다. 기존 PPT보다 더 시각적이고 인터랙티브한 포맷을 제공하며, 임베드 영상·데이터 시각화를 자연스럽게 통합합니다. Free 플랜과 Pro 플랜 월 $16부터 제공됩니다.",
     website: "https://tome.app",
     thumbnail: "https://logo.clearbit.com/tome.app",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1595,7 +1595,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "ppt-beautiful", name: "Beautiful.ai", category: "presentation",
     summary: "디자인 감각 없어도 전문가처럼 배치해 주는 툴",
-    description: "디자인 감각 없어도 전문가처럼 배치해 주는 툴",
+    description: "AI 'DesignAI' 엔진이 슬라이드에 콘텐츠를 추가할 때마다 레이아웃·폰트·색상을 자동으로 최적화해 디자인 감각 없이도 전문가 수준의 슬라이드를 만들어 줍니다. 템플릿 기반 제작과 팀 브랜드 키트 관리를 지원합니다. 무료 플랜과 Pro 플랜 월 $12부터 제공됩니다.",
     website: "https://beautiful.ai",
     thumbnail: "https://logo.clearbit.com/beautiful.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1603,7 +1603,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "ppt-slidesai", name: "SlidesAI", category: "presentation",
     summary: "구글 슬라이드 안에서 텍스트를 장표로 변환",
-    description: "구글 슬라이드 안에서 텍스트를 장표로 변환",
+    description: "Google Slides에 직접 연동되는 AI 프레젠테이션 플러그인으로, 텍스트나 주제를 입력하면 AI가 슬라이드 내용과 디자인을 자동으로 생성합니다. 기존 Google Slides 사용자라면 설치만으로 바로 사용할 수 있어 도구 전환 없이 활용할 수 있습니다. 무료 플랜(월 3프레젠테이션)과 Basic 플랜 월 $10부터 제공됩니다.",
     website: "https://slidesai.io",
     thumbnail: "https://logo.clearbit.com/slidesai.io",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1611,7 +1611,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "ppt-pitch", name: "Pitch", category: "presentation",
     summary: "협업과 AI 생성이 결합된 현대적인 프레젠테이션",
-    description: "협업과 AI 생성이 결합된 현대적인 프레젠테이션",
+    description: "팀 협업과 AI 프레젠테이션 생성을 결합한 현대적 슬라이드 도구로, Google Docs처럼 여러 명이 동시에 편집할 수 있습니다. 60개 이상의 디자인 테마와 AI 콘텐츠 생성 기능을 제공하며, 스타트업·컨설팅 팀에서 많이 사용합니다. Free 플랜과 Pro 플랜 월 $8부터 제공됩니다.",
     website: "https://pitch.com",
     thumbnail: "https://logo.clearbit.com/pitch.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1619,7 +1619,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "ppt-napkin", name: "Napkin", category: "presentation",
     summary: "텍스트를 넣으면 귀여운 손그림 다이어그램으로 변환",
-    description: "텍스트를 넣으면 귀여운 손그림 다이어그램으로 변환",
+    description: "텍스트 설명을 입력하면 AI가 자동으로 플로우차트·다이어그램·마인드맵을 시각적으로 생성해 주는 비주얼 씽킹 도구입니다. 손그림 스타일과 깔끔한 디지털 스타일 두 가지를 지원하며, 복잡한 개념을 빠르게 시각화하는 데 특화되어 있습니다. Free 플랜과 Pro 플랜 월 $8부터 제공됩니다.",
     website: "https://napkin.ai",
     thumbnail: "https://logo.clearbit.com/napkin.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1627,7 +1627,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "ppt-decktopus", name: "Decktopus", category: "presentation",
     summary: "발표 대본과 Q&A 예상 질문까지 뽑아주는 AI",
-    description: "발표 대본과 Q&A 예상 질문까지 뽑아주는 AI",
+    description: "AI가 프레젠테이션을 자동 생성하고, 발표자 노트·Q&A 예상 질문까지 함께 준비해 주는 올인원 발표 준비 도구입니다. 500개 이상의 템플릿과 AI 이미지 생성 기능을 제공하며, 링크 공유와 삽입이 가능합니다. Starter 플랜 월 $9.99부터 제공됩니다.",
     website: "https://decktopus.com",
     thumbnail: "https://logo.clearbit.com/decktopus.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1635,7 +1635,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "ppt-msdesigner", name: "Microsoft Designer", category: "presentation",
     summary: "PPT 표지나 이미지를 AI로 즉석 생성",
-    description: "PPT 표지나 이미지를 AI로 즉석 생성",
+    description: "Microsoft가 개발한 AI 디자인 도구로, PowerPoint 표지·소셜 미디어 이미지·광고 배너 등을 텍스트 설명만으로 즉시 생성합니다. DALL-E 3 기반의 이미지 생성과 Microsoft 365 생태계(PPT·Teams·Bing)와 긴밀하게 연동됩니다. Microsoft 365 구독자에게 기본 제공되며 독립 앱으로도 무료 사용 가능합니다.",
     website: "https://designer.microsoft.com",
     thumbnail: "https://logo.clearbit.com/microsoft.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1643,7 +1643,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "ppt-prezi", name: "Prezi (AI)", category: "presentation",
     summary: "줌인/줌아웃 효과에 AI 텍스트 생성 기능 추가",
-    description: "줌인/줌아웃 효과에 AI 텍스트 생성 기능 추가",
+    description: "독특한 줌인·줌아웃 공간 탐색 방식으로 유명한 Prezi에 AI 기능이 추가되어, 텍스트 생성·이미지 추천·디자인 자동화를 지원합니다. 발표 효과가 강렬해 교육·컨퍼런스 발표에 인기가 있으며, AI가 복잡한 아이디어를 계층 구조로 시각화하는 것을 도와줍니다. Basic 무료 플랜과 Standard 플랜 월 $7부터 제공됩니다.",
     website: "https://prezi.com",
     thumbnail: "https://logo.clearbit.com/prezi.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1651,7 +1651,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "ppt-popai", name: "PopAi", category: "presentation",
     summary: "논문이나 PDF를 넣으면 발표 자료로 요약 변환",
-    description: "논문이나 PDF를 넣으면 발표 자료로 요약 변환",
+    description: "논문·PDF·Word 파일을 업로드하면 AI가 핵심 내용을 추출해 발표용 슬라이드로 자동 변환하는 도구입니다. 텍스트 질문으로 문서 내용을 파악하는 AI 채팅 기능도 갖추고 있어 논문 검토·리포트 요약에도 유용합니다. 무료 플랜(월 3회)과 Pro 플랜 월 $9.99부터 제공됩니다.",
     website: "https://popai.pro",
     thumbnail: "https://logo.clearbit.com/popai.pro",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1659,61 +1659,61 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "ppt-sendsteps", name: "Sendsteps", category: "presentation",
     summary: "청중과 실시간으로 소통하는 인터랙티브 PPT 생성",
-    description: "청중과 실시간으로 소통하는 인터랙티브 PPT 생성",
+    description: "프레젠테이션 중 청중과 실시간 투표·Q&A·퀴즈·워드클라우드로 상호작용할 수 있는 인터랙티브 발표 플랫폼입니다. AI가 주제에 맞는 퀴즈 질문과 투표 항목을 자동 생성해 준비 시간을 단축합니다. Basic 무료 플랜과 Pro 플랜 월 $14부터 제공됩니다.",
     website: "https://sendsteps.com", thumbnail: "https://logo.clearbit.com/sendsteps.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "ppt-slido", name: "Slido", category: "presentation",
     summary: "발표 도중 투표와 Q&A를 진행하는 최고의 도구",
-    description: "발표 도중 투표와 Q&A를 진행하는 최고의 도구",
+    description: "Cisco가 인수한 청중 참여 플랫폼으로, 발표 중 실시간 투표·Q&A·퀴즈·워드클라우드를 운영할 수 있습니다. Google Slides·PowerPoint·Prezi·Zoom 등 주요 발표 도구와 원클릭으로 연동되며, 기업 행사·교육·웨비나에서 가장 많이 쓰이는 청중 소통 도구입니다. 무료 플랜(최대 100명 참가)과 Pro 플랜 월 $15부터 제공됩니다.",
     website: "https://slido.com", thumbnail: "https://logo.clearbit.com/slido.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "ppt-deckrobot", name: "DeckRobot", category: "presentation",
     summary: "회사 브랜드 가이드라인에 맞춰 PPT 자동 정렬",
-    description: "회사 브랜드 가이드라인에 맞춰 PPT 자동 정렬",
+    description: "기업의 브랜드 가이드라인(색상·폰트·로고 위치)을 학습해 어떤 PPT 파일이든 자동으로 브랜드에 맞게 변환·정렬하는 기업용 PowerPoint 애드인입니다. 디자이너 없이도 모든 팀원이 일관된 브랜드 프레젠테이션을 만들 수 있어 대기업에서 많이 활용됩니다. 엔터프라이즈 전용 맞춤 요금제로 운영됩니다.",
     website: "https://deckrobot.com", thumbnail: "https://logo.clearbit.com/deckrobot.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "ppt-slidebean", name: "Slidebean", category: "presentation",
     summary: "스타트업 피치덱(투자 유치용) 제작에 특화",
-    description: "스타트업 피치덱(투자 유치용) 제작에 특화",
+    description: "스타트업 투자 유치를 위한 피치덱 제작에 특화된 플랫폼으로, AI가 회사 정보를 기반으로 투자자에게 어필하는 구성을 자동으로 생성합니다. 500개 이상의 피치덱 템플릿과 VC 피드백 기반의 콘텐츠 제안 기능을 제공합니다. 무료 플랜과 Paid 플랜 월 $29부터 제공됩니다.",
     website: "https://slidebean.com", thumbnail: "https://logo.clearbit.com/slidebean.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "ppt-powerpresenter", name: "PowerPresenter", category: "presentation",
     summary: "발표와 동시에 AI 코칭을 받아 실력 향상",
-    description: "발표와 동시에 AI 코칭을 받아 실력 향상",
+    description: "발표 연습 중 AI가 말하는 속도·명료성·자신감·어조 등을 실시간 분석하고 개선 피드백을 제공하는 발표 코칭 도구입니다. 반복 연습을 통해 발표 실력을 체계적으로 향상시킬 수 있으며, 발표 불안증 극복에도 활용됩니다. 무료 플랜과 Pro 플랜 월 $12부터 제공됩니다.",
     website: "https://powerpresenter.ai", thumbnail: "https://logo.clearbit.com/powerpresenter.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "ppt-prezent", name: "Prezent", category: "presentation",
     summary: "기업용 지능형 프레젠테이션 플랫폼",
-    description: "기업용 지능형 프레젠테이션 플랫폼",
+    description: "Fortune 500 기업들이 사용하는 엔터프라이즈 프레젠테이션 플랫폼으로, 청중 분석·선호도 파악·개인화 콘텐츠 추천 기능을 갖추고 있습니다. AI 기반 스토리라인 제안과 브랜드 컴플라이언스 자동화로 대규모 팀의 일관된 프레젠테이션 관리를 돕습니다. 엔터프라이즈 맞춤 요금제로 운영됩니다.",
     website: "https://prezent.ai", thumbnail: "https://logo.clearbit.com/prezent.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "ppt-visme", name: "Visme", category: "presentation",
     summary: "인포그래픽과 데이터 시각화가 강력한 툴",
-    description: "인포그래픽과 데이터 시각화가 강력한 툴",
+    description: "인포그래픽·데이터 시각화·프레젠테이션·보고서·소셜 그래픽을 한 플랫폼에서 만들 수 있는 멀티포맷 디자인 도구입니다. 수천 개의 템플릿과 AI 텍스트·이미지 생성 기능을 탑재하고 있으며, 차트·지도·아이콘 라이브러리가 풍부합니다. 무료 플랜과 Standard 플랜 월 $12.25부터 제공됩니다.",
     website: "https://visme.co", thumbnail: "https://logo.clearbit.com/visme.co", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "ppt-zoho", name: "Zoho Show", category: "presentation",
     summary: "팀원들과 실시간 협업이 가능한 무료 PPT 도구",
-    description: "팀원들과 실시간 협업이 가능한 무료 PPT 도구",
+    description: "Zoho 생산성 suite에 포함된 무료 온라인 프레젠테이션 도구로, PowerPoint·Keynote 파일과 호환되며 여러 명이 동시에 실시간 편집할 수 있습니다. AI 기반 발표자 노트 생성과 디자인 제안 기능을 제공하며, Zoho CRM·Mail·Writer 등 Zoho 생태계와 긴밀하게 연동됩니다. Zoho 무료 플랜으로 사용 가능합니다.",
     website: "https://zoho.com/show", thumbnail: "https://logo.clearbit.com/zoho.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "ppt-haikudeck", name: "Haiku Deck", category: "presentation",
     summary: "심플하고 감성적인 슬라이드를 빠르게 제작",
-    description: "심플하고 감성적인 슬라이드를 빠르게 제작",
+    description: "아름다운 배경 이미지와 간결한 텍스트 중심의 감성적 슬라이드 제작에 특화된 도구로, 3만 개 이상의 무료 사진 라이브러리에서 AI가 주제에 맞는 이미지를 자동으로 추천합니다. 미니멀하고 시각적으로 강렬한 프레젠테이션을 빠르게 제작하려는 교육자·스피커에게 인기 있습니다. 무료 플랜과 Pro 플랜 월 $9.99부터 제공됩니다.",
     website: "https://haikudeck.com", thumbnail: "https://logo.clearbit.com/haikudeck.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "ppt-sway", name: "Sway", category: "presentation",
     summary: "마이크로소프트의 웹 기반 스토리텔링 툴",
-    description: "마이크로소프트의 웹 기반 스토리텔링 툴",
+    description: "Microsoft가 제공하는 웹 기반 스토리텔링 도구로, 텍스트·이미지·영상·트윗 등 다양한 콘텐츠를 스크롤형 인터랙티브 페이지로 엮어 프레젠테이션·뉴스레터·보고서를 만들 수 있습니다. Microsoft 365 계정으로 무료 사용 가능하며, SharePoint와 연동해 인트라넷 콘텐츠 게시에도 활용됩니다.",
     website: "https://sway.office.com", thumbnail: "https://logo.clearbit.com/microsoft.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
@@ -1723,7 +1723,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "meet-otter", name: "Otter.ai", category: "meeting-notes",
     summary: "영어 회의 녹음 및 실시간 텍스트 변환의 원조",
-    description: "영어 회의 녹음 및 실시간 텍스트 변환의 원조",
+    description: "Zoom·Google Meet·Microsoft Teams 회의를 실시간으로 텍스트 변환하고 요약하는 AI 회의록 서비스의 원조 격 플랫폼입니다. 발화자 구분·키워드 하이라이트·실시간 자막·팀 공유 기능을 갖추고 있으며, 영어 음성 인식 정확도가 매우 높습니다. 무료 플랜(월 600분)과 Pro 플랜 월 $16.99부터 제공됩니다.",
     website: "https://otter.ai",
     thumbnail: "https://logo.clearbit.com/otter.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1731,7 +1731,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "meet-lilys", name: "Lilys", category: "meeting-notes",
     summary: "긴 유튜브 영상이나 녹음 파일을 블로그 글처럼 요약 (국산)",
-    description: "긴 유튜브 영상이나 녹음 파일을 블로그 글처럼 요약 (국산)",
+    description: "한국 스타트업이 개발한 AI 콘텐츠 요약 도구로, 유튜브 URL·음성 파일·영상을 분석해 블로그 포스트 형식의 구조화된 요약문을 생성합니다. 한국어 음성 인식과 요약 품질이 뛰어나며, 긴 강의·회의·세미나를 핵심만 빠르게 파악하는 데 최적화되어 있습니다. 무료 플랜과 Pro 플랜 월 $9.9부터 제공됩니다.",
     website: "https://lilys.ai",
     thumbnail: "https://logo.clearbit.com/lilys.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1739,7 +1739,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "meet-fireflies", name: "Fireflies.ai", category: "meeting-notes",
     summary: "줌, 구글밋 등 화상회의에 자동 참여해 회의록 작성",
-    description: "줌, 구글밋 등 화상회의에 자동 참여해 회의록 작성",
+    description: "AI 봇이 Zoom·Google Meet·Teams·Webex 회의에 자동으로 참여해 녹음·텍스트 변환·회의록 요약·액션 아이템 추출을 처리하는 회의 자동화 플랫폼입니다. Slack·Notion·HubSpot·Salesforce 등 30개 이상의 앱과 연동해 회의 내용을 자동으로 공유합니다. 무료 플랜(월 800분)과 Pro 플랜 월 $10부터 제공됩니다.",
     website: "https://fireflies.ai",
     thumbnail: "https://logo.clearbit.com/fireflies.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1747,7 +1747,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "meet-tldv", name: "tl;dv", category: "meeting-notes",
     summary: "회의 내용을 녹화하고 중요한 순간을 자동 태깅",
-    description: "회의 내용을 녹화하고 중요한 순간을 자동 태깅",
+    description: "화상회의를 녹화하고 중요한 순간에 타임스탬프를 붙여 나중에 빠르게 검색·공유할 수 있게 하는 회의 기록 도구입니다. AI가 회의 요약·다음 단계 액션 아이템을 자동 추출하고, 특정 순간을 영상 클립으로 잘라 팀에 공유하는 기능이 특징입니다. 무료 플랜(무제한 녹화)과 Pro 플랜 월 $18부터 제공됩니다.",
     website: "https://tldv.io",
     thumbnail: "https://logo.clearbit.com/tldv.io",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1755,7 +1755,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "meet-fathom", name: "Fathom", category: "meeting-notes",
     summary: "무료로 쓰는 줌/팀즈 회의 녹화 및 요약 비서",
-    description: "무료로 쓰는 줌/팀즈 회의 녹화 및 요약 비서",
+    description: "무료로 무제한 사용 가능한 AI 회의록 도구로, Zoom·Google Meet·Microsoft Teams에서 회의를 자동 녹취하고 요약·트랜스크립트·액션 아이템을 생성합니다. 회의 후 HubSpot·Salesforce·Slack으로 자동 동기화할 수 있으며, 1클릭으로 이메일 후속조치 드래프트도 작성해 줍니다. 개인 무료, 팀 플랜 월 $19/인입니다.",
     website: "https://fathom.video",
     thumbnail: "https://logo.clearbit.com/fathom.video",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1763,7 +1763,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "meet-krisp", name: "Krisp", category: "meeting-notes",
     summary: "통화 중 주변 소음(개 짖는 소리 등) 완벽 제거",
-    description: "통화 중 주변 소음(개 짖는 소리 등) 완벽 제거",
+    description: "AI 기반 실시간 소음 제거 앱으로, Zoom·Teams·Google Meet·Discord 등 어떤 통화 앱에서도 주변 소음(키보드·에어컨·개 짖는 소리 등)을 즉시 제거해 줍니다. 별도 마이크 업그레이드 없이 소프트웨어만으로 스튜디오급 음질을 제공합니다. 무료 플랜(주당 60분)과 Pro 플랜 월 $8부터 제공됩니다.",
     website: "https://krisp.ai",
     thumbnail: "https://logo.clearbit.com/krisp.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1771,7 +1771,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "meet-supernormal", name: "Supernormal", category: "meeting-notes",
     summary: "회의 끝나자마자 깔끔한 포맷의 회의록 자동 발송",
-    description: "회의 끝나자마자 깔끔한 포맷의 회의록 자동 발송",
+    description: "Google Meet·Zoom·Teams 회의를 AI가 자동으로 기록하고, 회의 종료 직후 구조화된 회의록(요약·액션 아이템·결정사항)을 참여자 이메일로 자동 발송하는 도구입니다. Notion·Slack·HubSpot·Jira 등과 연동해 회의 내용을 자동으로 업무 시스템에 반영합니다. 무료 플랜(월 20회의)과 Pro 플랜 월 $18부터 제공됩니다.",
     website: "https://supernormal.com",
     thumbnail: "https://logo.clearbit.com/supernormal.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1779,7 +1779,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "meet-daglo", name: "Daglo", category: "meeting-notes",
     summary: "한국어 음성 인식률이 매우 뛰어난 받아쓰기 툴",
-    description: "한국어 음성 인식률이 매우 뛰어난 받아쓰기 툴",
+    description: "한국어 특화 AI 음성 인식 플랫폼으로, 한국어 회의·강의·인터뷰 음성을 높은 정확도로 텍스트로 변환합니다. 화자 구분·문단 분리·자동 요약 기능을 제공하며, 국내 스타트업·기업 회의 녹취에 많이 활용됩니다. 무료 플랜과 유료 플랜 월 ₩9,900부터 제공됩니다.",
     website: "https://daglo.ai",
     thumbnail: "https://logo.clearbit.com/daglo.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1787,7 +1787,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "meet-meetgeek", name: "MeetGeek", category: "meeting-notes",
     summary: "회의 내용을 분석해 팀의 강점과 약점까지 인사이트 제공",
-    description: "회의 내용을 분석해 팀의 강점과 약점까지 인사이트 제공",
+    description: "단순 회의록 작성을 넘어 누가 가장 많이 말했는지·회의 효율성·주요 키워드 트렌드 등 팀의 회의 패턴을 분석해 인사이트를 제공하는 회의 분석 플랫폼입니다. Zoom·Google Meet·Teams 자동 참여와 HubSpot·Slack·Notion 연동을 지원합니다. 무료 플랜(월 5회의)과 Pro 플랜 월 $19부터 제공됩니다.",
     website: "https://meetgeek.ai",
     thumbnail: "https://logo.clearbit.com/meetgeek.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1795,7 +1795,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "meet-speakapp", name: "SpeakApp", category: "meeting-notes",
     summary: "아이폰 통화 녹음과 AI 텍스트 변환을 한 번에 (국산)",
-    description: "아이폰 통화 녹음과 AI 텍스트 변환을 한 번에 (국산)",
+    description: "한국에서 개발된 앱으로, 아이폰의 통화 녹음 제한을 우회해 통화 내용을 녹음하고 AI가 텍스트로 변환·요약해 주는 서비스입니다. 비즈니스 전화·고객 상담·중요 통화 내용을 자동으로 기록하고 검색 가능하게 저장합니다. 국내 앱스토어에서 구독 방식으로 제공됩니다.",
     website: "https://speakapp.co.kr",
     thumbnail: "https://logo.clearbit.com/speakapp.co.kr",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1803,61 +1803,61 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "meet-jamie", name: "Jamie", category: "meeting-notes",
     summary: "맥북 메뉴바에 상주하며 모든 회의를 요약",
-    description: "맥북 메뉴바에 상주하며 모든 회의를 요약",
+    description: "macOS 메뉴바에 상주하며 어떤 화상회의·음성 통화든 자동으로 감지해 AI 회의록을 생성하는 도구입니다. 특정 앱에 국한되지 않고 모든 오디오 소스를 자동으로 처리하며, 회의 종료 후 구조화된 요약·결정사항·액션 아이템을 제공합니다. 무료 플랜(월 10회의)과 Pro 플랜 월 €24부터 제공됩니다.",
     website: "https://meetjamie.ai", thumbnail: "https://logo.clearbit.com/meetjamie.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "meet-beulr", name: "Beulr", category: "meeting-notes",
     summary: "Zoom 회의에 봇을 대신 보내고 나는 땡땡이 침",
-    description: "Zoom 회의에 봇을 대신 보내고 나는 땡땡이 침",
+    description: "Zoom 회의에 AI 봇을 대신 참여시키고 회의 녹취·요약을 받는 도구로, 본인은 참석하지 않아도 회의 내용을 나중에 확인할 수 있습니다. 이 외에도 정기 회의 자동 참석·녹음·트랜스크립트 생성 기능을 제공합니다. Freemium 방식으로 기본 기능을 무료로 사용할 수 있습니다.",
     website: "https://beulr.com", thumbnail: "https://logo.clearbit.com/beulr.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "meet-avoma", name: "Avoma", category: "meeting-notes",
     summary: "영업 미팅과 고객 관리(CRM)에 최적화된 노트",
-    description: "영업 미팅과 고객 관리(CRM)에 최적화된 노트",
+    description: "영업팀 특화 AI 회의 어시스턴트로, 영업 미팅 녹취·CRM 자동 업데이트·고객 감성 분석·다음 단계 권장을 제공합니다. HubSpot·Salesforce·Zoom·Google Meet와 긴밀하게 연동되며, 영업 코칭·파이프라인 관리를 위한 분석 기능도 포함되어 있습니다. Starter 플랜 월 $19/인부터 제공됩니다.",
     website: "https://avoma.com", thumbnail: "https://logo.clearbit.com/avoma.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "meet-grain", name: "Grain", category: "meeting-notes",
     summary: "고객 인터뷰 영상을 공유하고 분석하기 좋음",
-    description: "고객 인터뷰 영상을 공유하고 분석하기 좋음",
+    description: "화상 회의 녹화·트랜스크립트·하이라이트 클립 생성에 특화된 도구로, UX 리서치·고객 인터뷰·영업 콜 내용을 팀과 쉽게 공유·분석할 수 있습니다. 특정 순간을 클립으로 잘라 공유하고, 여러 인터뷰에서 공통 인사이트를 도출하는 기능이 강점입니다. 무료 플랜(월 5통화)과 Starter 플랜 월 $15부터 제공됩니다.",
     website: "https://grain.com", thumbnail: "https://logo.clearbit.com/grain.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "meet-assembly", name: "AssemblyAI", category: "meeting-notes",
     summary: "개발자를 위한 강력한 음성 인식 API",
-    description: "개발자를 위한 강력한 음성 인식 API",
+    description: "개발자용 음성 AI API 플랫폼으로, 고정확도 STT(Speech-to-Text)·화자 분리·감성 분석·자동 챕터 생성·PII 마스킹 등 오디오 분석 기능 전체를 API로 제공합니다. OpenAI Whisper보다 높은 정확도와 더 많은 고급 기능으로 유명합니다. 무료 플랜(월 100분)과 사용량 기반 과금($0.37/시간)으로 제공됩니다.",
     website: "https://assemblyai.com", thumbnail: "https://logo.clearbit.com/assemblyai.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "meet-sybill", name: "Sybill", category: "meeting-notes",
     summary: "상대방의 표정과 제스처까지 읽어 감정 분석",
-    description: "상대방의 표정과 제스처까지 읽어 감정 분석",
+    description: "영업 미팅 중 AI가 고객의 표정·제스처·발화 패턴을 분석해 감정·참여도·구매 의향을 실시간으로 파악하는 영업 특화 AI 도구입니다. 회의 후 딜 요약·고객 감성 리포트·영업 팁을 자동으로 생성하고 CRM에 동기화합니다. Enterprise 플랜 맞춤 요금제로 운영됩니다.",
     website: "https://sybill.ai", thumbnail: "https://logo.clearbit.com/sybill.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "meet-nyota", name: "Nyota", category: "meeting-notes",
     summary: "노션과 완벽하게 연동되는 회의록 도우미",
-    description: "노션과 완벽하게 연동되는 회의록 도우미",
+    description: "AI 회의록 생성 도구로, 회의 녹취·요약·액션 아이템을 자동 생성하고 Notion·Jira·Linear·HubSpot·Slack 등 주요 작업 관리 도구에 직접 동기화하는 것이 강점입니다. 구글 캘린더와 연동해 예정된 회의를 자동으로 감지하고 준비합니다. Free 플랜과 Pro 플랜 월 $14부터 제공됩니다.",
     website: "https://nyota.ai", thumbnail: "https://logo.clearbit.com/nyota.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "meet-tactiq", name: "Tactiq", category: "meeting-notes",
     summary: "구글밋 자막을 실시간으로 캡처해서 저장",
-    description: "구글밋 자막을 실시간으로 캡처해서 저장",
+    description: "Google Meet·Zoom·Teams·Webex 회의의 실시간 자막을 자동으로 캡처·저장하고 AI 요약과 액션 아이템을 생성하는 Chrome 확장 프로그램입니다. 저장된 트랜스크립트를 Notion·Google Docs·Slack에 즉시 내보내거나 ChatGPT에 물어볼 수 있습니다. 무료 플랜(월 10회의)과 Pro 플랜 월 $12부터 제공됩니다.",
     website: "https://tactiq.io", thumbnail: "https://logo.clearbit.com/tactiq.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "meet-sembly", name: "Sembly", category: "meeting-notes",
     summary: "회의에서 결정된 행동 강령(Action Item) 자동 정리",
-    description: "회의에서 결정된 행동 강령(Action Item) 자동 정리",
+    description: "Zoom·Google Meet·Teams 회의를 AI가 분석해 회의록·요약·결정사항·액션 아이템·리스크 항목을 자동으로 분류·정리하는 도구입니다. 특히 '누가 무엇을 언제까지 해야 하는가'를 명확히 추출하는 액션 아이템 자동화가 강점입니다. 무료 플랜(월 15회의)과 Teams 플랜 월 $20부터 제공됩니다.",
     website: "https://sembly.ai", thumbnail: "https://logo.clearbit.com/sembly.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "meet-airgram", name: "Airgram", category: "meeting-notes",
     summary: "회의 녹화, 스크립트, 공유를 한 번에 해결",
-    description: "회의 녹화, 스크립트, 공유를 한 번에 해결",
+    description: "화상회의 녹화·자동 트랜스크립트·AI 요약을 한 플랫폼에서 처리하는 회의 관리 도구로, 회의 영상과 스크립트를 링크 하나로 팀원에게 공유할 수 있습니다. Zoom·Google Meet·Teams와 연동되며, 회의 내용을 타임스탬프와 함께 검색할 수 있습니다. Free 플랜과 Pro 플랜 월 $18부터 제공됩니다.",
     website: "https://airgram.io", thumbnail: "https://logo.clearbit.com/airgram.io", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
@@ -1867,7 +1867,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "etc-deepl", name: "DeepL", category: "etc",
     summary: "구글 번역기를 뛰어넘는 가장 자연스러운 AI 번역",
-    description: "구글 번역기를 뛰어넘는 가장 자연스러운 AI 번역",
+    description: "신경망 기계번역 기술로 구글 번역보다 더 자연스러운 번역을 제공하는 AI 번역 서비스로, 특히 유럽 언어 간 번역 품질이 업계 최고 수준입니다. Word·PowerPoint·PDF 등 문서 파일 통째로 번역하는 기능과 Chrome 확장을 지원합니다. 무료 플랜(월 50만 자)과 Pro 플랜 월 $8.74부터 제공됩니다.",
     website: "https://deepl.com",
     thumbnail: "https://logo.clearbit.com/deepl.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1875,7 +1875,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "etc-grammarly", name: "Grammarly", category: "etc",
     summary: "영어 이메일이나 문서의 문법과 톤을 교정",
-    description: "영어 이메일이나 문서의 문법과 톤을 교정",
+    description: "3,000만 명 이상이 사용하는 AI 영어 글쓰기 보조 도구로, 문법 교정·어휘 개선·문체 조정·표절 검사까지 제공합니다. Chrome·Word·Google Docs 등 어디서나 실시간으로 작동하며, 이메일·보고서·학술 논문 등 문서 유형별 맞춤 피드백을 제공합니다. 무료 플랜과 Premium 플랜 월 $12부터 제공됩니다.",
     website: "https://grammarly.com",
     thumbnail: "https://logo.clearbit.com/grammarly.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1883,7 +1883,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "etc-quillbot", name: "Quillbot", category: "etc",
     summary: "어색한 문장을 유창하게 바꿔주는 패러프레이징 툴",
-    description: "어색한 문장을 유창하게 바꿔주는 패러프레이징 툴",
+    description: "어색한 영어 문장을 더 자연스럽고 유창하게 바꿔주는 AI 패러프레이징·요약·문법 교정 도구입니다. 7가지 재작성 모드(표준·유창·공식·창의적·짧게·확장·학술)를 제공해 목적에 맞게 문장을 변형할 수 있습니다. 학생·작가·번역가가 많이 사용하며 무료 플랜과 Premium 플랜 월 $9.95부터 제공됩니다.",
     website: "https://quillbot.com",
     thumbnail: "https://logo.clearbit.com/quillbot.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1891,7 +1891,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "etc-chatpdf", name: "ChatPDF", category: "etc",
     summary: "PDF 파일을 올리면 챗봇처럼 대화하며 내용 파악",
-    description: "PDF 파일을 올리면 챗봇처럼 대화하며 내용 파악",
+    description: "PDF 문서를 업로드하면 AI가 내용을 분석해 챗봇처럼 대화하며 질문에 답해 주는 서비스입니다. 논문·계약서·보고서·교재 등 어떤 PDF든 원하는 내용을 빠르게 찾고 요약받을 수 있습니다. 무료 플랜(월 2문서, 10MB 제한)과 Plus 플랜 월 $5부터 제공됩니다.",
     website: "https://chatpdf.com",
     thumbnail: "https://logo.clearbit.com/chatpdf.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1899,7 +1899,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "etc-excelbot", name: "Excel Formula Bot", category: "etc",
     summary: "말로 설명하면 복잡한 엑셀 수식을 짜주는 비서",
-    description: "말로 설명하면 복잡한 엑셀 수식을 짜주는 비서",
+    description: "원하는 기능을 자연어로 설명하면 AI가 Excel·Google Sheets 수식을 즉시 생성해 주는 도구입니다. VLOOKUP·INDEX-MATCH·복잡한 IF 중첩 등 어려운 수식을 설명 없이 바로 얻을 수 있으며, 반대로 기존 수식의 기능도 설명해 줍니다. 무료 플랜(월 5회)과 Basic 플랜 월 $1.99부터 제공됩니다.",
     website: "https://excelformulabot.com",
     thumbnail: "https://logo.clearbit.com/excelformulabot.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1907,7 +1907,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "etc-goblin", name: "Goblin Tools", category: "etc",
     summary: "밥 차리기라고 쓰면 장보기부터 요리까지 할 일 쪼개줌",
-    description: "밥 차리기라고 쓰면 장보기부터 요리까지 할 일 쪼개줌",
+    description: "막막하게 느껴지는 큰 과제를 AI가 작은 실행 단계로 자동 분해해 주는 생산성 도구로, ADHD나 실행 기능 어려움을 가진 사람들을 위해 개발됐습니다. '저녁 식사 준비'라고 입력하면 장 보기·재료 손질·요리 순서까지 구체적인 할 일 목록을 만들어 줍니다. 무료로 사용 가능합니다.",
     website: "https://goblin.tools",
     thumbnail: "https://logo.clearbit.com/goblin.tools",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1915,7 +1915,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "etc-pdfai", name: "PDF.ai", category: "etc",
     summary: "논문이나 계약서 등 문서를 분석하고 인용구 찾아줌",
-    description: "논문이나 계약서 등 문서를 분석하고 인용구 찾아줌",
+    description: "PDF 문서를 AI와 대화하며 분석하는 서비스로, 논문·법률 계약서·재무 보고서 등에서 필요한 정보를 질문으로 찾고 정확한 인용구(원문 위치)와 함께 답변을 받을 수 있습니다. 여러 문서를 동시에 업로드해 비교 분석하는 기능도 지원합니다. 무료 플랜(하루 1문서)과 Pro 플랜 월 $14부터 제공됩니다.",
     website: "https://pdf.ai",
     thumbnail: "https://logo.clearbit.com/pdf.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1923,7 +1923,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "etc-monica", name: "Monica", category: "etc",
     summary: "웹 브라우저 어디서나 쓸 수 있는 사이드바 AI 비서",
-    description: "웹 브라우저 어디서나 쓸 수 있는 사이드바 AI 비서",
+    description: "Chrome 사이드바에서 GPT-4·Claude·Gemini 등 여러 AI 모델을 동시에 활용하며 웹 검색·번역·요약·글쓰기를 처리하는 올인원 AI 보조 도구입니다. 현재 보고 있는 웹페이지 내용을 AI에게 바로 물어볼 수 있으며, 이미지 생성·PDF 분석도 가능합니다. 무료 플랜과 Pro 플랜 월 $9부터 제공됩니다.",
     website: "https://monica.im",
     thumbnail: "https://logo.clearbit.com/monica.im",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1931,7 +1931,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "etc-arc", name: "Arc Search", category: "etc",
     summary: "검색하면 AI가 여러 사이트를 읽고 결과를 요약해 줌",
-    description: "검색하면 AI가 여러 사이트를 읽고 결과를 요약해 줌",
+    description: "The Browser Company가 개발한 Arc 브라우저에 내장된 AI 검색 기능으로, 검색 쿼리를 입력하면 AI가 여러 웹사이트의 내용을 분석하고 통합된 답변을 즉시 제공합니다. 링크 목록 대신 직접 답을 제공하는 방식으로 검색 경험을 혁신합니다. iOS 앱으로 무료 제공됩니다.",
     website: "https://arc.net",
     thumbnail: "https://logo.clearbit.com/arc.net",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1939,7 +1939,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "etc-copyai", name: "Copy.ai", category: "etc",
     summary: "마케팅 문구, 블로그 글 등 상업적 글쓰기 자동화",
-    description: "마케팅 문구, 블로그 글 등 상업적 글쓰기 자동화",
+    description: "마케팅 팀을 위한 AI 콘텐츠 마케팅 플랫폼으로, 블로그 포스트·이메일·소셜 미디어·광고 카피 등 다양한 마케팅 콘텐츠를 자동으로 생성합니다. 브랜드 보이스 학습·SEO 최적화·CRM 연동 기능을 갖추고 있으며, 팀 협업과 콘텐츠 워크플로우 관리도 지원합니다. Starter 플랜 월 $49부터 제공됩니다.",
     website: "https://copy.ai",
     thumbnail: "https://logo.clearbit.com/copy.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -1947,61 +1947,61 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "etc-notion", name: "Notion AI", category: "etc",
     summary: "노션 안에서 글쓰기, 요약, 번역을 한 번에",
-    description: "노션 안에서 글쓰기, 요약, 번역을 한 번에",
+    description: "Notion 워크스페이스에 내장된 AI 기능으로, 기존 노트·문서·데이터베이스를 기반으로 글쓰기·요약·번역·자동 완성·Q&A 분석을 처리합니다. 별도 앱 전환 없이 작업 중인 문서 안에서 AI를 바로 활용할 수 있으며, 팀 지식 베이스에 쌓인 내용을 AI가 참조해 답변합니다. 기존 Notion 구독에 $8/인 추가로 사용 가능합니다.",
     website: "https://notion.so", thumbnail: "https://logo.clearbit.com/notion.so", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "etc-mem", name: "Mem", category: "etc",
     summary: "내 생각을 알아서 정리해 주는 AI 메모 앱",
-    description: "내 생각을 알아서 정리해 주는 AI 메모 앱",
+    description: "AI가 메모를 자동으로 정리·분류·연결해 주는 메모 앱으로, 관련 메모끼리 자동으로 연결하고 나중에 필요한 메모를 자연어 검색으로 즉시 찾을 수 있습니다. 메모를 기반으로 AI와 대화하며 아이디어를 발전시키는 'Mem AI Chat' 기능도 제공합니다. Pro 플랜 월 $14.99부터 제공됩니다.",
     website: "https://mem.ai", thumbnail: "https://logo.clearbit.com/mem.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "etc-rewind", name: "Rewind", category: "etc",
     summary: "내 화면의 모든 것을 기억하고 검색해 주는 도구",
-    description: "내 화면의 모든 것을 기억하고 검색해 주는 도구",
+    description: "Mac에서 화면에 표시된 모든 내용(웹·앱·회의·문서)을 자동으로 기록하고 AI 기반 검색으로 즉시 찾아주는 '두 번째 뇌' 도구입니다. '지난 화요일 본 그 도표'나 '지난주 회의에서 나온 그 링크'를 자연어로 검색해 찾을 수 있습니다. 모든 데이터는 로컬에 저장되며, Pro 플랜 월 $19부터 제공됩니다.",
     website: "https://rewind.ai", thumbnail: "https://logo.clearbit.com/rewind.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "etc-taskade", name: "Taskade", category: "etc",
     summary: "프로젝트 관리부터 마인드맵까지 AI로 해결",
-    description: "프로젝트 관리부터 마인드맵까지 AI로 해결",
+    description: "AI 기반 프로젝트 관리·할 일 목록·마인드맵·문서 작성·팀 채팅을 하나의 플랫폼에서 제공하는 올인원 생산성 도구입니다. 자연어로 프로젝트를 설명하면 AI가 자동으로 태스크를 분해하고 일정을 배분합니다. 무료 플랜과 Pro 플랜 월 $8/인부터 제공됩니다.",
     website: "https://taskade.com", thumbnail: "https://logo.clearbit.com/taskade.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "etc-todoist", name: "Todoist (AI)", category: "etc",
     summary: "할 일 목록을 AI가 분석해 우선순위 추천",
-    description: "할 일 목록을 AI가 분석해 우선순위 추천",
+    description: "3,000만 명이 사용하는 인기 할 일 관리 앱으로, AI가 마감일·중요도·작업량을 분석해 오늘 집중해야 할 일을 자동으로 추천합니다. 자연어 입력으로 빠르게 할 일을 추가하고, Google Calendar·Gmail·Slack 등 주요 앱과 연동됩니다. 무료 플랜과 Pro 플랜 월 $4부터 제공됩니다.",
     website: "https://todoist.com", thumbnail: "https://logo.clearbit.com/todoist.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "etc-morgen", name: "Morgen", category: "etc",
     summary: "모든 캘린더를 통합하고 AI로 일정 관리",
-    description: "모든 캘린더를 통합하고 AI로 일정 관리",
+    description: "Google Calendar·Outlook·Apple Calendar 등 모든 캘린더를 하나로 통합 관리하는 AI 캘린더 앱입니다. AI 일정 비서가 여러 사람의 가능한 시간을 자동으로 분석해 미팅 최적 시간을 제안하고, 업무·개인 일정을 분리해 집중 시간 블로킹도 지원합니다. 무료 플랜과 Pro 플랜 월 $9부터 제공됩니다.",
     website: "https://morgen.so", thumbnail: "https://logo.clearbit.com/morgen.so", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "etc-reclaim", name: "Reclaim", category: "etc",
     summary: "빈 시간을 찾아 업무와 휴식 시간을 자동 배치",
-    description: "빈 시간을 찾아 업무와 휴식 시간을 자동 배치",
+    description: "Google Calendar와 연동해 할 일·습관·회의 등을 분석하고 AI가 최적의 시간에 자동으로 배치해 주는 스마트 스케줄러입니다. 업무 마감·운동·점심 시간 등을 입력하면 AI가 캘린더 빈 슬롯에 자동으로 삽입하고 충돌을 조정합니다. 무료 플랜(4개 캘린더)과 Starter 플랜 월 $10부터 제공됩니다.",
     website: "https://reclaim.ai", thumbnail: "https://logo.clearbit.com/reclaim.ai", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "etc-clockwise", name: "Clockwise", category: "etc",
     summary: "팀원들의 일정을 조율해 집중 근무 시간 확보",
-    description: "팀원들의 일정을 조율해 집중 근무 시간 확보",
+    description: "팀 전체의 Google Calendar를 AI가 분석해 불필요한 회의를 줄이고 딥워크(집중 작업) 시간을 자동으로 확보하는 팀 캘린더 최적화 도구입니다. 회의 충돌을 자동 조정하고 팀 가용 시간을 분석해 최적 미팅 시간을 제안합니다. 무료 플랜(개인용)과 Teams 플랜 월 $6.75/인부터 제공됩니다.",
     website: "https://getclockwise.com", thumbnail: "https://logo.clearbit.com/getclockwise.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "etc-motion", name: "Motion", category: "etc",
     summary: "일정을 자동으로 계획해 주는 지능형 캘린더",
-    description: "일정을 자동으로 계획해 주는 지능형 캘린더",
+    description: "할 일·회의·프로젝트 마감을 입력하면 AI가 실시간으로 캘린더를 재구성해 하루 일정을 자동으로 최적 배치해 주는 지능형 캘린더 앱입니다. 갑작스러운 회의 추가나 업무 지연이 발생하면 자동으로 나머지 일정을 재조정합니다. Individual 플랜 월 $19부터 제공됩니다.",
     website: "https://usemotion.com", thumbnail: "https://logo.clearbit.com/usemotion.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
     id: "etc-trevor", name: "Trevor AI", category: "etc",
     summary: "하루 계획을 드래그 앤 드롭으로 쉽게 짜는 툴",
-    description: "하루 계획을 드래그 앤 드롭으로 쉽게 짜는 툴",
+    description: "Todoist·Google Calendar·ClickUp·Trello 등의 할 일을 불러와 드래그앤드롭으로 하루 타임블로킹 계획을 세우는 직관적인 일정 관리 도구입니다. AI가 할 일의 중요도와 소요 시간을 분석해 하루 일정 배치를 제안합니다. 무료 플랜과 Pro 플랜 월 $3.99부터 제공됩니다.",
     website: "https://trevorai.com", thumbnail: "https://logo.clearbit.com/trevorai.com", rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
 
@@ -2011,7 +2011,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "mkt-jasper", name: "Jasper", category: "marketing",
     summary: "마케팅 문구 작성의 원조, 브랜드 톤앤매너 학습 가능",
-    description: "마케팅 문구 작성의 원조, 브랜드 톤앤매너 학습 가능",
+    description: "마케팅 AI 글쓰기 도구의 원조 격 플랫폼으로, 기업의 브랜드 가이드라인·보이스·스타일을 학습해 일관된 톤으로 블로그·광고·이메일 카피를 생성합니다. SEO 콘텐츠·소셜 포스팅·제품 설명·이메일 캠페인을 아우르는 50개 이상의 콘텐츠 템플릿을 제공합니다. Creator 플랜 월 $49부터 제공됩니다.",
     website: "https://jasper.ai",
     thumbnail: "https://logo.clearbit.com/jasper.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2019,7 +2019,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "mkt-surfer", name: "Surfer SEO", category: "marketing",
     summary: "구글 상위 노출을 위한 글쓰기 가이드를 실시간 제공",
-    description: "구글 상위 노출을 위한 글쓰기 가이드를 실시간 제공",
+    description: "구글 검색 상위 노출 콘텐츠를 AI로 작성하는 SEO 특화 플랫폼으로, 경쟁 상위 콘텐츠를 분석해 어떤 키워드를 몇 번 사용해야 할지 실시간으로 가이드를 제공합니다. AI Writer로 SEO 최적화 아티클 초안을 자동 생성하고, 키워드 리서치·사이트 감사 기능도 포함합니다. Essential 플랜 월 $89부터 제공됩니다.",
     website: "https://surferseo.com",
     thumbnail: "https://logo.clearbit.com/surferseo.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2027,7 +2027,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "mkt-adcreative", name: "AdCreative.ai", category: "marketing",
     summary: "클릭률 높은 광고 배너와 문구를 수백 개 자동 생성",
-    description: "클릭률 높은 광고 배너와 문구를 수백 개 자동 생성",
+    description: "AI가 클릭률·전환율이 높은 광고 배너 이미지와 카피를 자동으로 대량 생성하는 퍼포먼스 광고 특화 플랫폼입니다. 수백만 건의 광고 데이터를 학습해 어떤 비주얼과 문구 조합이 성과가 높을지 예측 점수를 제공합니다. Starter 플랜 월 $21부터 제공되며 Facebook·Google·LinkedIn 광고 형식을 지원합니다.",
     website: "https://adcreative.ai",
     thumbnail: "https://logo.clearbit.com/adcreative.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2035,7 +2035,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "mkt-semrush", name: "Semrush", category: "marketing",
     summary: "경쟁사 분석부터 키워드 추천까지 SEO의 모든 것",
-    description: "경쟁사 분석부터 키워드 추천까지 SEO의 모든 것",
+    description: "SEO·SEM·소셜 분석·경쟁사 인텔리전스를 아우르는 세계 최대 디지털 마케팅 분석 플랫폼으로, 100억 개 이상의 키워드 데이터베이스와 경쟁사 광고·백링크 분석 기능을 제공합니다. AI 기반 콘텐츠 최적화·소셜 미디어 예약·광고 성과 추적까지 통합한 올인원 마케팅 도구입니다. Pro 플랜 월 $129.95부터 제공됩니다.",
     website: "https://semrush.com",
     thumbnail: "https://logo.clearbit.com/semrush.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2043,7 +2043,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "mkt-predis", name: "Predis.ai", category: "marketing",
     summary: "인스타그램/틱톡용 영상과 포스팅을 한 번에 생성",
-    description: "인스타그램/틱톡용 영상과 포스팅을 한 번에 생성",
+    description: "소셜 미디어 콘텐츠 자동화 플랫폼으로, AI가 제품이나 키워드를 분석해 Instagram·TikTok·Twitter·LinkedIn에 최적화된 이미지·영상·캡션을 자동 생성합니다. 경쟁사 콘텐츠를 분석해 이기는 전략을 제안하며, 게시물 예약 발행 기능도 포함합니다. 무료 플랜(월 15크레딧)과 Starter 플랜 월 $27부터 제공됩니다.",
     website: "https://predis.ai",
     thumbnail: "https://logo.clearbit.com/predis.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2051,7 +2051,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "mkt-anyword", name: "Anyword", category: "marketing",
     summary: "어떤 문구가 클릭을 부를지 미리 예측 점수 제공",
-    description: "어떤 문구가 클릭을 부를지 미리 예측 점수 제공",
+    description: "AI가 마케팅 카피를 생성하기 전에 예상 성과 점수를 미리 제공하는 데이터 기반 카피라이팅 플랫폼입니다. 수백만 개의 광고 데이터로 학습된 모델이 어떤 문구가 클릭·전환을 유도할지 예측하며, A/B 테스트 결과를 토대로 지속적으로 개선합니다. Starter 플랜 월 $49부터 제공됩니다.",
     website: "https://anyword.com",
     thumbnail: "https://logo.clearbit.com/anyword.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2059,7 +2059,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "mkt-scalenut", name: "Scalenut", category: "marketing",
     summary: "긴 블로그 글 작성과 SEO 최적화를 동시에 해결",
-    description: "긴 블로그 글 작성과 SEO 최적화를 동시에 해결",
+    description: "AI 기반 SEO 콘텐츠 플랫폼으로, 키워드 리서치부터 콘텐츠 아이디어·롱폼 블로그 작성·최적화·퍼블리싱까지 SEO 콘텐츠 제작 전 과정을 통합합니다. 경쟁 상위 페이지를 분석해 상위 노출에 필요한 키워드와 주제를 자동으로 추천합니다. Essential 플랜 월 $39부터 제공됩니다.",
     website: "https://scalenut.com",
     thumbnail: "https://logo.clearbit.com/scalenut.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2067,7 +2067,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "mkt-marketmuse", name: "MarketMuse", category: "marketing",
     summary: "내 콘텐츠의 권위와 경쟁력을 분석해 전략 수립",
-    description: "내 콘텐츠의 권위와 경쟁력을 분석해 전략 수립",
+    description: "콘텐츠 전략 수립을 위한 AI 플랫폼으로, 자사 사이트의 콘텐츠 공백·경쟁력·토픽 권위도를 분석해 어떤 주제를 먼저 공략해야 SEO 효과를 극대화할 수 있는지 전략을 제시합니다. AI 기반 콘텐츠 브리핑과 AI 작성 도구도 포함합니다. Standard 플랜 월 $149부터 제공됩니다.",
     website: "https://marketmuse.com",
     thumbnail: "https://logo.clearbit.com/marketmuse.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2075,7 +2075,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "mkt-writer", name: "Writer", category: "marketing",
     summary: "기업용 마케팅 글쓰기, 보안과 가이드라인 준수",
-    description: "기업용 마케팅 글쓰기, 보안과 가이드라인 준수",
+    description: "Fortune 500 기업들이 채택한 엔터프라이즈 AI 글쓰기 플랫폼으로, 브랜드 가이드라인·금지 용어·법적 규정을 학습해 전 직원이 일관된 톤으로 콘텐츠를 생성할 수 있게 합니다. 자체 LLM(Palmyra)을 운영해 데이터가 외부 모델에 전송되지 않아 보안이 중시되는 금융·의료 업종에 특히 적합합니다. 팀 플랜 월 $18/유저부터 제공됩니다.",
     website: "https://writer.com",
     thumbnail: "https://logo.clearbit.com/writer.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2083,7 +2083,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "mkt-phrasee", name: "Phrasee", category: "marketing",
     summary: "이메일 오픈율을 높여주는 AI 카피라이팅",
-    description: "이메일 오픈율을 높여주는 AI 카피라이팅",
+    description: "Phrasee는 NLP 기반으로 이메일 제목·푸시 알림·SMS 문구를 자동 생성하고, 실제 A/B 테스트 결과를 학습해 오픈율과 클릭률을 지속적으로 개선하는 AI 마케팅 언어 최적화 플랫폼입니다. Walgreens·Virgin Atlantic 등 대형 리테일·항공사가 사용하며, 캠페인당 평균 오픈율 10% 이상 향상 사례를 보고하고 있습니다. 엔터프라이즈 맞춤형 요금으로 운영됩니다.",
     website: "https://phrasee.co",
     thumbnail: "https://logo.clearbit.com/phrasee.co",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2095,7 +2095,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "write-rytr", name: "Rytr", category: "writing",
     summary: "가성비 최고, 한국어 지원 잘 되는 글쓰기 도구",
-    description: "가성비 최고, 한국어 지원 잘 되는 글쓰기 도구",
+    description: "월 $9(Saver) 또는 $29(Unlimited)의 저렴한 요금으로 블로그·광고·이메일 등 40여 가지 용도의 콘텐츠를 30개 이상 언어로 생성해 주는 AI 라이팅 도구입니다. 한국어 출력 품질이 비교적 안정적이고, 크롬 확장 프로그램으로 어디서나 사용 가능합니다. 무료 플랜은 월 10,000자 생성까지 지원합니다.",
     website: "https://rytr.me",
     thumbnail: "https://logo.clearbit.com/rytr.me",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2103,7 +2103,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "write-writesonic", name: "Writesonic", category: "writing",
     summary: "최신 구글 데이터 기반으로 블로그 글 작성",
-    description: "최신 구글 데이터 기반으로 블로그 글 작성",
+    description: "실시간 구글 검색 데이터를 통합해 최신 정보를 반영한 SEO 블로그 글을 작성해 주는 AI 콘텐츠 플랫폼으로, Chatsonic(GPT-4 + 웹 검색 챗봇)과 AI Article Writer 5.0을 포함합니다. 60여 개 언어와 100개 이상의 콘텐츠 유형을 지원하며, 팀 협업 기능도 내장되어 있습니다. 개인 플랜 월 $16부터 제공됩니다.",
     website: "https://writesonic.com",
     thumbnail: "https://logo.clearbit.com/writesonic.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2111,7 +2111,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "write-sudowrite", name: "Sudowrite", category: "writing",
     summary: "소설가들을 위한 창작 도우미 (묘사, 전개 추천)",
-    description: "소설가들을 위한 창작 도우미 (묘사, 전개 추천)",
+    description: "픽션 작가를 전문으로 타깃한 AI 창작 도구로, '묘사 강화(Describe)', '스토리 엔진', '피드백' 기능을 통해 막힌 장면을 풀어주고 다음 전개를 제안해 줍니다. 장르 소설·판타지·로맨스 창작자 사이에서 특히 인기가 높으며, NaNoWriMo 참가자들이 즐겨 사용합니다. 월 $10(Hobby) ~ $100(Max) 플랜으로 제공됩니다.",
     website: "https://sudowrite.com",
     thumbnail: "https://logo.clearbit.com/sudowrite.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2119,7 +2119,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "write-novelai", name: "NovelAI", category: "writing",
     summary: "내 취향대로 소설을 이어 써주는 서브컬처 특화 AI",
-    description: "내 취향대로 소설을 이어 써주는 서브컬처 특화 AI",
+    description: "일본 애니·라이트노벨 스타일의 텍스트와 이미지를 생성하는 서브컬처 특화 AI 플랫폼으로, 검열 없는 창작 환경과 사용자 정의 가능한 글쓰기 모듈(Lorebook)이 강점입니다. 자체 호스팅 서버 덕분에 데이터 프라이버시를 중시하는 사용자층에도 어필하고 있습니다. 월 $10(Tablet) ~ $25(Opus) 플랜으로 운영됩니다.",
     website: "https://novelai.net",
     thumbnail: "https://logo.clearbit.com/novelai.net",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2127,7 +2127,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "write-wordtune", name: "Wordtune", category: "writing",
     summary: "밋밋한 문장을 다채롭고 세련되게 바꿔줌",
-    description: "밋밋한 문장을 다채롭고 세련되게 바꿔줌",
+    description: "AI21 Labs가 개발한 문장 재작성 도구로, 동일한 내용을 캐주얼·형식적·짧게·길게 등 다양한 톤과 길이로 즉시 변환해 줍니다. 크롬 확장 프로그램 형태로 Gmail·Google Docs 등에서 바로 사용할 수 있어 영어 비원어민의 이메일·보고서 작성에 특히 유용합니다. 무료 플랜과 월 $9.99 Premium 플랜이 있습니다.",
     website: "https://wordtune.com",
     thumbnail: "https://logo.clearbit.com/wordtune.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2135,7 +2135,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "write-jenni", name: "Jenni AI", category: "writing",
     summary: "논문이나 에세이 작성 시 문장 추천 및 출처 관리",
-    description: "논문이나 에세이 작성 시 문장 추천 및 출처 관리",
+    description: "학술 논문·에세이 작성을 전문으로 하는 AI 글쓰기 보조 도구로, 문장을 입력하면 자동으로 다음 내용을 제안하고 인용문(APA/MLA/Chicago 등)을 자동 삽입해 줍니다. 표절 검사와 출처 관리 기능이 내장되어 있어 대학원생·연구자에게 인기가 높습니다. 무료 플랜(200 단어/일)과 월 $12 플랜으로 제공됩니다.",
     website: "https://jenni.ai",
     thumbnail: "https://logo.clearbit.com/jenni.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2143,7 +2143,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "write-type", name: "Type.ai", category: "writing",
     summary: "타자 치는 속도에 맞춰 문장을 미리 예측해 줌",
-    description: "타자 치는 속도에 맞춰 문장을 미리 예측해 줌",
+    description: "타이핑하는 동안 실시간으로 다음 문장을 예측·제안해 주는 AI 문서 편집기로, 프롬프트 없이도 문맥에 맞는 자연스러운 흐름으로 글을 이어줍니다. 간결한 편집기 UI 덕분에 글쓰기에 집중하는 환경을 선호하는 사용자에게 맞습니다. 월 $29 Pro 플랜이 메인 옵션입니다.",
     website: "https://type.ai",
     thumbnail: "https://logo.clearbit.com/type.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2151,7 +2151,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "write-hemingway", name: "Hemingway (Plus)", category: "writing",
     summary: "복잡한 문장을 간결하고 읽기 쉽게 교정",
-    description: "복잡한 문장을 간결하고 읽기 쉽게 교정",
+    description: "가독성 점수(Readability Grade)와 색상 강조로 지나치게 복잡한 문장·부사 남용·수동태를 즉각 시각화해 간결한 문체로 교정해 주는 편집 도구입니다. 원래는 AI 없는 규칙 기반 도구였으나 Hemingway Plus에서 AI 재작성 기능을 추가했습니다. 웹 버전은 무료, 데스크탑 앱은 $19.99 일회성 구매로 사용할 수 있습니다.",
     website: "https://hemingwayapp.com",
     thumbnail: "https://logo.clearbit.com/hemingwayapp.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2159,7 +2159,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "write-hypefury", name: "Hypefury", category: "writing",
     summary: "트위터(X)에서 바이럴 되기 좋은 스레드 작성",
-    description: "트위터(X)에서 바이럴 되기 좋은 스레드 작성",
+    description: "트위터(X) 성장에 특화된 AI 소셜 미디어 도구로, 스레드 자동 생성·최적 시간 예약·인기 게시물 재활용 기능을 제공합니다. 팔로워가 리트윗할 경우 자동으로 제품 홍보 트윗을 다는 '자동 DM + 플러그' 기능이 독특한 성장 해킹 포인트입니다. 월 $19(Personal) ~ $49(Business) 플랜이 있습니다.",
     website: "https://hypefury.com",
     thumbnail: "https://logo.clearbit.com/hypefury.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2167,7 +2167,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "write-blaze", name: "TextBlaze", category: "writing",
     summary: "자주 쓰는 문구를 단축키로 자동 완성 (AI 포함)",
-    description: "자주 쓰는 문구를 단축키로 자동 완성 (AI 포함)",
+    description: "짧은 단축키(스니펫)로 자주 쓰는 이메일 답변·보고서 양식·고객 응대 문구를 즉시 삽입하는 텍스트 자동화 도구로, 팀 전체가 같은 스니펫을 공유해 커뮤니케이션을 표준화할 수 있습니다. AI 어시스트 기능이 추가되어 스니펫 내용을 상황에 맞게 자동 맞춤화해 줍니다. 무료 플랜과 팀 플랜 월 $6.99/유저부터 제공됩니다.",
     website: "https://blaze.today",
     thumbnail: "https://logo.clearbit.com/blaze.today",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2179,7 +2179,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edu-scispace", name: "Scispace", category: "education",
     summary: "논문 검색부터 분석, 요약까지 연구자를 위한 AI",
-    description: "논문 검색부터 분석, 요약까지 연구자를 위한 AI",
+    description: "2억 8000만 편 이상의 학술 논문 데이터베이스를 AI로 검색·요약·질문 답변할 수 있는 연구자용 플랫폼입니다. PDF를 업로드하면 해당 논문에 대해 채팅으로 질문하고 어려운 개념을 쉽게 설명받을 수 있습니다. 무료 플랜과 월 $12 Premium 플랜이 있습니다.",
     website: "https://typeset.io",
     thumbnail: "https://logo.clearbit.com/typeset.io",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2187,7 +2187,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edu-elicit", name: "Elicit", category: "education",
     summary: "연구 질문을 던지면 관련 논문을 찾아 답을 정리",
-    description: "연구 질문을 던지면 관련 논문을 찾아 답을 정리",
+    description: "연구 질문을 자연어로 입력하면 Semantic Scholar의 1억 8000만 편 논문에서 관련 연구를 검색하고 핵심 내용을 테이블로 비교 정리해 주는 AI 리서치 어시스턴트입니다. 논문 선정 기준·실험 방법·결과를 컬럼별로 추출해 체계적인 문헌 검토(Literature Review)를 빠르게 완성할 수 있습니다. 월 10편 무료, 이후 월 $12 Plus 플랜입니다.",
     website: "https://elicit.com",
     thumbnail: "https://logo.clearbit.com/elicit.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2195,7 +2195,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edu-consensus", name: "Consensus", category: "education",
     summary: "과학적 근거가 필요한 질문에 논문 기반으로 답변",
-    description: "과학적 근거가 필요한 질문에 논문 기반으로 답변",
+    description: "\"커피가 수면에 영향을 주나요?\" 같은 과학적 질문을 입력하면 동료 심사 논문 2억 편을 기반으로 '예/아니오/불분명'의 합의 지표와 함께 근거 논문을 제시해 주는 AI 검색 엔진입니다. 허구의 출처를 만들어내지 않아 신뢰성이 높으며, GPT-4 기반 요약을 제공합니다. 무료 플랜과 월 $8.99 Premium 플랜이 있습니다.",
     website: "https://consensus.app",
     thumbnail: "https://logo.clearbit.com/consensus.app",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2203,7 +2203,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edu-khan", name: "Khanmigo", category: "education",
     summary: "칸아카데미가 만든 소크라테스식 1:1 학습 튜터",
-    description: "칸아카데미가 만든 소크라테스식 1:1 학습 튜터",
+    description: "Khan Academy가 GPT-4와 협력해 만든 AI 튜터로, 정답을 바로 알려주지 않고 소크라테스식 질문을 통해 학생이 스스로 개념을 발견하도록 유도합니다. 수학·과학·인문학 전 과목을 커버하며 교사용 수업 계획 보조 기능도 포함합니다. 미국 내 학생·교사를 위한 무료 제공 프로그램이 운영 중입니다.",
     website: "https://khanacademy.org",
     thumbnail: "https://logo.clearbit.com/khanacademy.org",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2211,7 +2211,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edu-quivr", name: "Quivr", category: "education",
     summary: "내 컴퓨터의 파일(지식)을 학습시켜 만드는 제2의 두뇌",
-    description: "내 컴퓨터의 파일(지식)을 학습시켜 만드는 제2의 두뇌",
+    description: "PDF·Notion·텍스트 파일 등 개인 문서를 업로드해 나만의 지식 베이스 AI를 구축하는 오픈소스 도구입니다. 자체 서버에 설치해 운영할 수 있어 데이터 주권이 완전히 사용자에게 있으며, 여러 AI 모델(GPT-4, Claude 등)을 선택해 사용할 수 있습니다. 클라우드 플랜 월 $19부터 제공됩니다.",
     website: "https://quivr.app",
     thumbnail: "https://logo.clearbit.com/quivr.app",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2219,7 +2219,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edu-humata", name: "Humata", category: "education",
     summary: "수백 페이지 PDF를 순식간에 읽고 질문에 답함",
-    description: "수백 페이지 PDF를 순식간에 읽고 질문에 답함",
+    description: "대용량 PDF 파일을 업로드하면 문서 전체를 분석해 자연어 질문에 즉시 답하고 출처 페이지를 표시해 주는 AI 문서 분석 도구입니다. 법률 계약서·기술 매뉴얼·연구 보고서 등 복잡한 문서를 빠르게 파악해야 하는 전문직에게 유용합니다. 무료 플랜(60 페이지/월)과 월 $14.99 Unlimited 플랜이 있습니다.",
     website: "https://humata.ai",
     thumbnail: "https://logo.clearbit.com/humata.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2227,7 +2227,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edu-scholarcy", name: "Scholarcy", category: "education",
     summary: "복잡한 논문을 플래시카드 형태로 핵심만 요약",
-    description: "복잡한 논문을 플래시카드 형태로 핵심만 요약",
+    description: "학술 논문·보고서·기사를 업로드하면 연구 목적·방법·결론·핵심 수치를 자동으로 추출해 플래시카드 형태로 요약해 주는 AI 도구입니다. 요약 카드는 Notion·Zotero 등에 내보낼 수 있고, 브라우저 확장 프로그램으로 온라인 논문을 즉석에서 분석할 수 있습니다. 월 $9.99 Personal 플랜으로 운영됩니다.",
     website: "https://scholarcy.com",
     thumbnail: "https://logo.clearbit.com/scholarcy.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2235,7 +2235,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edu-gradescope", name: "Gradescope", category: "education",
     summary: "수학, 코딩 등 시험 채점을 AI로 자동화 (교사용)",
-    description: "수학, 코딩 등 시험 채점을 AI로 자동화 (교사용)",
+    description: "Turnitin이 운영하는 AI 채점 플랫폼으로, 손으로 쓴 시험지를 스캔하거나 디지털 제출물을 업로드하면 AI가 유사 답안을 그룹화해 일괄 채점을 지원합니다. MIT·Stanford 등 1,500개 이상 기관이 사용 중이며, 채점 일관성을 높이고 교수자의 시간을 평균 90% 단축하는 효과가 보고됩니다. 기관 계약 방식으로 제공됩니다.",
     website: "https://gradescope.com",
     thumbnail: "https://logo.clearbit.com/gradescope.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2243,7 +2243,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edu-socratic", name: "Socratic", category: "education",
     summary: "구글이 만든 숙제 도우미, 사진 찍으면 풀이 검색",
-    description: "구글이 만든 숙제 도우미, 사진 찍으면 풀이 검색",
+    description: "Google이 개발한 학습 보조 앱으로, 숙제 문제를 카메라로 찍으면 AI가 관련 개념·풀이 방법·유튜브 영상을 즉시 제공합니다. 수학·과학·영어·역사 등 다양한 과목을 지원하며, 단순 정답 제공이 아닌 개념 이해를 유도하는 방식으로 설계되었습니다. iOS·Android에서 무료로 제공됩니다.",
     website: "https://socratic.org",
     thumbnail: "https://logo.clearbit.com/socratic.org",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2251,7 +2251,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "edu-photomath", name: "Photomath", category: "education",
     summary: "수학 문제를 카메라로 비추면 풀이 과정까지 보여줌",
-    description: "수학 문제를 카메라로 비추면 풀이 과정까지 보여줌",
+    description: "스마트폰 카메라로 수학 문제를 인식해 단계별 풀이 과정을 애니메이션으로 설명해 주는 앱으로, 전 세계 2억 2000만 다운로드를 기록한 최대 규모 수학 학습 도구입니다. 산수부터 미적분·통계까지 지원하며, 각 풀이 단계에서 개념 설명도 제공합니다. 기본 무료, Photomath Plus 연 $59.99입니다.",
     website: "https://photomath.com",
     thumbnail: "https://logo.clearbit.com/photomath.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2263,7 +2263,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "chat-chatbase", name: "Chatbase", category: "chatbot",
     summary: "내 데이터를 넣으면 고객 응대용 챗봇 뚝딱 완성",
-    description: "내 데이터를 넣으면 고객 응대용 챗봇 뚝딱 완성",
+    description: "PDF·Notion·웹사이트 URL 등 자체 데이터를 학습시켜 GPT-4 기반 커스텀 챗봇을 5분 만에 만들 수 있는 노코드 플랫폼입니다. 웹사이트에 위젯으로 삽입하거나 API로 연동할 수 있으며, 응답 이력과 대화 분석 기능도 제공합니다. 무료 플랜(1개 챗봇)과 월 $19 Hobby 플랜부터 제공됩니다.",
     website: "https://chatbase.co",
     thumbnail: "https://logo.clearbit.com/chatbase.co",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2271,7 +2271,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "chat-botsonic", name: "Botsonic", category: "chatbot",
     summary: "기업용 AI 챗봇 빌더, 코딩 없이 쉽게 제작",
-    description: "기업용 AI 챗봇 빌더, 코딩 없이 쉽게 제작",
+    description: "Writesonic에서 만든 GPT-4 기반 고객 지원 챗봇 빌더로, 자사 데이터를 학습시키고 브랜드 색상·로고에 맞게 커스터마이징해 웹사이트·슬랙·WhatsApp 등에 배포할 수 있습니다. 실시간 대화 모니터링과 에스컬레이션 기능이 내장되어 있어 소규모 이커머스부터 SaaS 기업까지 폭넓게 활용됩니다. 월 $49 Basic 플랜부터 제공됩니다.",
     website: "https://writesonic.com/botsonic",
     thumbnail: "https://logo.clearbit.com/writesonic.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2279,7 +2279,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "chat-dante", name: "Dante AI", category: "chatbot",
     summary: "GPT-4 기반의 커스텀 데이터 훈련 챗봇 플랫폼",
-    description: "GPT-4 기반의 커스텀 데이터 훈련 챗봇 플랫폼",
+    description: "파일·웹사이트·YouTube·Google Drive 등 다양한 소스에서 데이터를 수집해 GPT-4 기반 챗봇을 훈련시킬 수 있는 플랫폼으로, 훈련된 챗봇을 스니펫 코드로 쉽게 웹사이트에 삽입할 수 있습니다. 음성 인식·이미지 분석 기능도 지원하며, 화이트라벨 옵션으로 자체 브랜드 제품으로 재판매할 수도 있습니다. 월 $19 Starter 플랜부터 제공됩니다.",
     website: "https://dante-ai.com",
     thumbnail: "https://logo.clearbit.com/dante-ai.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2287,7 +2287,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "chat-myshell", name: "MyShell", category: "chatbot",
     summary: "다양한 목소리와 성격을 가진 봇을 만들고 공유",
-    description: "다양한 목소리와 성격을 가진 봇을 만들고 공유",
+    description: "텍스트·음성·이미지를 통합한 멀티모달 AI 봇을 코딩 없이 만들고 커뮤니티에 공유할 수 있는 플랫폼으로, 봇 마켓플레이스에서 다른 사람들의 창작물을 탐색하고 사용할 수 있습니다. 실시간 음성 대화와 캐릭터 AI 기능이 강점이며, 크리에이터가 봇 사용량에 따라 수익을 얻는 구조를 갖추고 있습니다. 무료 사용 가능하며 유료 크레딧 방식입니다.",
     website: "https://myshell.ai",
     thumbnail: "https://logo.clearbit.com/myshell.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2295,7 +2295,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "chat-poe", name: "Poe", category: "chatbot",
     summary: "여러 LLM 모델을 한곳에서 쓰고 봇도 만드는 플랫폼",
-    description: "여러 LLM 모델을 한곳에서 쓰고 봇도 만드는 플랫폼",
+    description: "Quora가 운영하는 AI 모델 허브로, ChatGPT·Claude·Gemini·Llama·Mistral 등 다양한 LLM을 하나의 앱에서 비교하며 사용할 수 있습니다. 커스텀 봇을 만들어 커뮤니티에 공개하면 사용량에 따라 크리에이터 수익을 받을 수 있는 생태계가 구축되어 있습니다. 무료 플랜과 월 $19.99 Poe Pro 구독이 있습니다.",
     website: "https://poe.com",
     thumbnail: "https://logo.clearbit.com/poe.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2303,7 +2303,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "chat-character", name: "Character.ai", category: "chatbot",
     summary: "유명인, 애니 캐릭터와 대화하는 가장 핫한 놀이터",
-    description: "유명인, 애니 캐릭터와 대화하는 가장 핫한 놀이터",
+    description: "월간 사용자 2000만 명 이상의 AI 캐릭터 대화 플랫폼으로, 유명인·애니 캐릭터·게임 캐릭터 등 수백만 개의 봇과 자유롭게 대화하거나 자신만의 캐릭터를 만들어 공유할 수 있습니다. Z세대 사이에서 압도적인 인기를 얻고 있으며, 언어 학습·롤플레잉·감성 대화 등 다양한 용도로 활용됩니다. 기본 무료, c.ai+ 월 $9.99입니다.",
     website: "https://character.ai",
     thumbnail: "https://logo.clearbit.com/character.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2311,7 +2311,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "chat-janitor", name: "JanitorAI", category: "chatbot",
     summary: "규제 없이 자유로운 대화가 가능한 캐릭터 챗봇",
-    description: "규제 없이 자유로운 대화가 가능한 캐릭터 챗봇",
+    description: "성인 인증 후 NSFW 콘텐츠를 포함한 캐릭터 롤플레잉이 허용되는 AI 챗봇 플랫폼으로, 사용자가 직접 만든 캐릭터를 공유하는 커뮤니티 생태계를 갖추고 있습니다. OpenAI·Claude API 또는 자체 API 키를 연결해 원하는 모델로 대화할 수 있는 유연한 구조가 특징입니다. 기본 무료이며 Janitor Pro 구독 시 무제한 메시지가 제공됩니다.",
     website: "https://janitorai.com",
     thumbnail: "https://logo.clearbit.com/janitorai.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2319,7 +2319,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "chat-replika", name: "Replika", category: "chatbot",
     summary: "나와 감정적인 유대를 쌓는 가장 오래된 AI 친구",
-    description: "나와 감정적인 유대를 쌓는 가장 오래된 AI 친구",
+    description: "2017년 출시된 AI 컴패니언 앱으로, 대화가 쌓일수록 사용자의 말투·관심사를 학습해 개인화된 AI 친구로 성장합니다. 외로움·불안 감소에 효과적이라는 연구 결과가 있으며, 1000만 명 이상이 사용 중입니다. AR 기능으로 3D 아바타와 실제 공간에서 상호작용할 수 있고, Pro 구독($29.99/월)으로 로맨틱 관계 설정이 가능합니다.",
     website: "https://replika.com",
     thumbnail: "https://logo.clearbit.com/replika.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2327,7 +2327,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "chat-talkie", name: "Talkie", category: "chatbot",
     summary: "모바일에서 인기 있는 감성 대화 및 캐릭터 수집",
-    description: "모바일에서 인기 있는 감성 대화 및 캐릭터 수집",
+    description: "애니풍 비주얼과 목소리를 가진 AI 캐릭터와 음성 대화를 나누거나 롤플레잉을 즐길 수 있는 모바일 앱으로, 10~20대 사용자층을 중심으로 빠르게 성장하고 있습니다. 다양한 성격의 캐릭터를 컬렉션하고 레벨업시키는 수집 게임 요소가 지속적인 재방문을 유도합니다. 기본 무료이며 추가 기능은 인앱 구매로 제공됩니다.",
     website: "https://talkie-ai.com",
     thumbnail: "https://logo.clearbit.com/talkie-ai.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2335,7 +2335,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "chat-crushon", name: "CrushOn.AI", category: "chatbot",
     summary: "검열 없는 로맨스/롤플레잉 특화 대화 서비스",
-    description: "검열 없는 로맨스/롤플레잉 특화 대화 서비스",
+    description: "NSFW 콘텐츠를 허용하는 성인 AI 로맨스·롤플레잉 플랫폼으로, 수천 개의 사전 제작 캐릭터와 사용자 직접 제작 캐릭터를 제공합니다. 이미지 생성 기능과 음성 대화도 지원해 몰입감 높은 가상 관계 경험을 제공합니다. 무료 플랜(20메시지/일)과 월 $4.90 Standard 플랜부터 제공됩니다.",
     website: "https://crushon.ai",
     thumbnail: "https://logo.clearbit.com/crushon.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2347,7 +2347,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "avatar-heygen", name: "HeyGen", category: "avatar",
     summary: "사진 한 장으로 말하는 영상 생성, 입모양 싱크 최강",
-    description: "사진 한 장으로 말하는 영상 생성, 입모양 싱크 최강",
+    description: "사진 한 장 또는 영상 클립으로 현실감 높은 AI 아바타를 생성해 텍스트 스크립트만으로 말하는 영상을 제작할 수 있는 플랫폼으로, 입술 싱크 정밀도가 업계 최고 수준으로 평가받습니다. 40개 이상 언어 더빙과 실시간 아바타 스트리밍 기능을 지원하며, 마케팅·이커머스·교육 콘텐츠 제작에 널리 쓰입니다. 월 $29 Creator 플랜부터 제공됩니다.",
     website: "https://heygen.com",
     thumbnail: "https://logo.clearbit.com/heygen.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2355,7 +2355,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "avatar-did", name: "D-ID", category: "avatar",
     summary: "말하는 얼굴 생성 API 분야의 전통 강자",
-    description: "말하는 얼굴 생성 API 분야의 전통 강자",
+    description: "2017년 설립된 딥페이크 보안 스타트업에서 출발해 현재는 말하는 아바타 영상 생성 분야의 선두 플랫폼으로 자리잡은 서비스로, API 형태로 다른 앱에 통합하기 쉬운 것이 강점입니다. '크리에이티브 리얼리티 스튜디오'를 통해 누구나 포토 리얼리스틱한 프레젠터 영상을 만들 수 있습니다. 무료 트라이얼과 월 $5.9 Lite 플랜부터 제공됩니다.",
     website: "https://d-id.com",
     thumbnail: "https://logo.clearbit.com/d-id.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2363,7 +2363,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "avatar-synthesia", name: "Synthesia", category: "avatar",
     summary: "기업용 교육/홍보 영상에 쓰는 전문 AI 아바타",
-    description: "기업용 교육/홍보 영상에 쓰는 전문 AI 아바타",
+    description: "160개 이상의 다양한 인종·연령·성별 AI 아바타와 120개 이상 언어 지원으로, 글로벌 기업 교육(e-learning)·사내 안내 영상 제작에 최적화된 전문 플랫폼입니다. Heineken·Zoom·Nvidia 등 5만 개 이상 기업이 사용 중이며, SCORM·xAPI 형식으로 LMS에 직접 내보낼 수 있습니다. 월 $22 Starter 플랜부터 제공됩니다.",
     website: "https://synthesia.io",
     thumbnail: "https://logo.clearbit.com/synthesia.io",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2371,7 +2371,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "avatar-akool", name: "Akool", category: "avatar",
     summary: "얼굴 바꾸기(딥페이크)와 아바타 생성 고품질 툴",
-    description: "얼굴 바꾸기(딥페이크)와 아바타 생성 고품질 툴",
+    description: "실시간 페이스 스왑·아바타 생성·배경 제거·개인화 동영상 제작을 하나의 플랫폼에서 처리할 수 있는 AI 비주얼 마케팅 도구입니다. 동영상 속 인물의 얼굴을 원하는 얼굴로 교체하거나, 이메일 마케팅용 1:1 개인화 영상을 대량으로 제작하는 데 활용됩니다. 월 $30 Starter 플랜부터 제공됩니다.",
     website: "https://akool.com",
     thumbnail: "https://logo.clearbit.com/akool.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2379,7 +2379,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "avatar-hedra", name: "Hedra", category: "avatar",
     summary: "감정 표현과 고개 돌림이 자유로운 차세대 아바타",
-    description: "감정 표현과 고개 돌림이 자유로운 차세대 아바타",
+    description: "이미지와 오디오 클립을 입력하면 자연스러운 감정 표현·눈 깜빡임·고개 움직임이 포함된 말하는 영상을 생성하는 차세대 아바타 AI입니다. 기존 서비스보다 경직된 느낌이 적고 표정이 풍부해 실사 영상에 가까운 결과물을 만들 수 있습니다. 현재 무료 베타로 운영 중이며 유료 플랜 출시 예정입니다.",
     website: "https://hedra.com",
     thumbnail: "https://logo.clearbit.com/hedra.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2387,7 +2387,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "avatar-virbo", name: "Wondershare Virbo", category: "avatar",
     summary: "글로벌 상업용 영상 제작을 위한 가성비 아바타",
-    description: "글로벌 상업용 영상 제작을 위한 가성비 아바타",
+    description: "Wondershare가 개발한 AI 아바타 영상 제작 도구로, 120개 이상의 다국어 지원 아바타와 실사형 얼굴 클론 기능을 비교적 저렴한 가격에 제공합니다. 모바일 앱과 데스크탑 앱 모두 지원해 이커머스 제품 홍보·소셜 미디어 마케팅 영상 제작에 특히 유용합니다. 무료 플랜과 연 $89.99 플랜이 있습니다.",
     website: "https://virbo.wondershare.com",
     thumbnail: "https://logo.clearbit.com/wondershare.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2395,7 +2395,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "avatar-argil", name: "Argil", category: "avatar",
     summary: "인플루언서를 위한 딥페이크 복제 및 영상 생성",
-    description: "인플루언서를 위한 딥페이크 복제 및 영상 생성",
+    description: "크리에이터·인플루언서가 자신의 얼굴과 목소리를 AI 클론으로 만들어 직접 출연하지 않고도 대량의 숏폼 콘텐츠를 자동 생성할 수 있는 플랫폼입니다. 3분 분량의 학습 영상만으로 퀄리티 높은 AI 클론을 만들 수 있으며, TikTok·Instagram Reels 형식으로 바로 내보낼 수 있습니다. 월 $49 Creator 플랜부터 제공됩니다.",
     website: "https://argil.ai",
     thumbnail: "https://logo.clearbit.com/argil.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2403,7 +2403,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "avatar-pipio", name: "Pipio", category: "avatar",
     summary: "배우 섭외 없이 텍스트로 영상 만드는 플랫폼",
-    description: "배우 섭외 없이 텍스트로 영상 만드는 플랫폼",
+    description: "실제 배우를 촬영한 'Digital Actor' 라이브러리를 기반으로 텍스트 스크립트만으로 전문적인 영상을 제작하는 플랫폼입니다. 촬영 비용 없이 다양한 인물·배경·스타일의 마케팅 영상을 빠르게 만들 수 있어 광고 에이전시와 이커머스 브랜드가 주로 활용합니다. 월 $29 Basic 플랜부터 제공됩니다.",
     website: "https://pipio.ai",
     thumbnail: "https://logo.clearbit.com/pipio.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2411,7 +2411,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "avatar-colossyan", name: "Colossyan", category: "avatar",
     summary: "직장 내 교육(L&D) 영상 제작에 특화된 아바타",
-    description: "직장 내 교육(L&D) 영상 제작에 특화된 아바타",
+    description: "기업 내부 교육(L&D) 영상 제작에 특화된 AI 아바타 플랫폼으로, 70개 이상의 다양한 아바타와 70개 이상 언어 지원을 제공합니다. PowerPoint 파일을 직접 업로드해 AI 아바타 강의 영상으로 자동 변환하는 기능이 HR 팀에서 특히 인기가 높습니다. 월 $28 Starter 플랜부터 제공됩니다.",
     website: "https://colossyan.com",
     thumbnail: "https://logo.clearbit.com/colossyan.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2419,7 +2419,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "avatar-hourone", name: "Hour One", category: "avatar",
     summary: "뉴스나 방송 스타일의 고화질 가상 인간 생성",
-    description: "뉴스나 방송 스타일의 고화질 가상 인간 생성",
+    description: "뉴스 앵커·방송 진행자 수준의 고화질 AI 아바타를 제작하는 전문 영상 플랫폼으로, 100개 이상의 프리미엄 아바타와 뉴스룸·스튜디오 배경 템플릿을 제공합니다. 기업의 뉴스레터·사내 방송·외부 브리핑 영상을 정기적으로 대량 제작하는 엔터프라이즈 고객에게 적합합니다. 월 $25 Lite 플랜부터 제공됩니다.",
     website: "https://hourone.ai",
     thumbnail: "https://logo.clearbit.com/hourone.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2431,7 +2431,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "web-framer", name: "Framer", category: "web-builder",
     summary: "디자이너가 코딩 없이 고퀄 웹사이트를 만드는 툴",
-    description: "디자이너가 코딩 없이 고퀄 웹사이트를 만드는 툴",
+    description: "Figma와 유사한 비주얼 편집 인터페이스로 인터랙티브 웹사이트를 제작할 수 있는 노코드 빌더로, AI가 텍스트 설명만으로 전체 레이아웃과 콘텐츠를 자동 생성하는 'AI Site' 기능을 제공합니다. React 기반 코드로 출력되며 커스텀 도메인·분석 도구가 내장되어 있습니다. 무료 플랜과 월 $10 Mini 플랜부터 제공됩니다.",
     website: "https://framer.com",
     thumbnail: "https://logo.clearbit.com/framer.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2439,7 +2439,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "web-v0", name: "v0 (Vercel)", category: "web-builder",
     summary: "텍스트로 설명하면 리액트 코드를 즉시 짜줌",
-    description: "텍스트로 설명하면 리액트 코드를 즉시 짜줌",
+    description: "Vercel이 만든 AI UI 생성 도구로, 텍스트로 원하는 컴포넌트나 페이지를 설명하면 shadcn/ui + Tailwind CSS 기반의 프로덕션 수준 React 코드를 즉시 생성합니다. 생성된 코드를 미리보기로 확인하고 바로 Vercel에 배포하거나 Next.js 프로젝트에 붙여넣기할 수 있습니다. 무료 크레딧과 월 $20 Pro 플랜이 있습니다.",
     website: "https://v0.dev",
     thumbnail: "https://logo.clearbit.com/vercel.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2447,7 +2447,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "web-websim", name: "WebSim", category: "web-builder",
     summary: "상상하는 모든 인터넷 사이트를 시뮬레이션해 줌",
-    description: "상상하는 모든 인터넷 사이트를 시뮬레이션해 줌",
+    description: "실제로 존재하지 않는 가상의 URL을 입력하면 AI가 그 사이트가 실제로 있다면 어떤 모습일지 즉석에서 생성해 주는 독창적인 실험적 도구입니다. 생성된 사이트 내부의 링크를 클릭하면 연결된 가상 페이지가 추가로 생성되는 등 무한한 웹 시뮬레이션이 가능합니다. 현재 무료로 사용할 수 있습니다.",
     website: "https://websim.ai",
     thumbnail: "https://logo.clearbit.com/websim.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2455,7 +2455,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "web-create", name: "Create", category: "web-builder",
     summary: "앱 개발 프로세스 전체를 자동화하려는 시도",
-    description: "앱 개발 프로세스 전체를 자동화하려는 시도",
+    description: "텍스트 설명만으로 풀스택 웹 앱을 설계·개발·배포까지 자동화하는 AI 앱 빌더로, UI 생성부터 백엔드 로직·데이터베이스 구성까지 하나의 흐름으로 처리합니다. Bolt.new·Lovable과 경쟁하는 포지션으로, 비개발자가 실제 서비스 수준의 앱을 만드는 것을 목표로 합니다. 베타 무료 액세스 후 유료 전환 예정입니다.",
     website: "https://create.xyz",
     thumbnail: "https://logo.clearbit.com/create.xyz",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2463,7 +2463,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "web-relume", name: "Relume", category: "web-builder",
     summary: "피그마와 웹플로우용 사이트맵/와이어프레임 생성",
-    description: "피그마와 웹플로우용 사이트맵/와이어프레임 생성",
+    description: "웹사이트 목적과 비즈니스를 설명하면 전체 사이트맵과 와이어프레임을 자동으로 생성하고 Figma·Webflow로 즉시 내보낼 수 있는 AI 웹 디자인 도구입니다. 1000개 이상의 컴포넌트 라이브러리와 AI 카피라이팅 기능을 갖추고 있어 웹 에이전시와 프리랜서 디자이너의 기획·설계 시간을 대폭 단축해 줍니다. 월 $38 플랜으로 제공됩니다.",
     website: "https://relume.io",
     thumbnail: "https://logo.clearbit.com/relume.io",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2471,7 +2471,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "web-mixo", name: "Mixo", category: "web-builder",
     summary: "아이디어 한 줄이면 랜딩 페이지가 뚝딱 나옴",
-    description: "아이디어 한 줄이면 랜딩 페이지가 뚝딱 나옴",
+    description: "스타트업 아이디어나 제품 설명 한 문장을 입력하면 10초 만에 완성도 높은 랜딩 페이지를 생성하는 AI 사이트 빌더입니다. 이메일 대기자 명단 수집 기능이 내장되어 있어 MVP 출시 전 사전 수요를 검증하는 용도로 많이 사용됩니다. 무료 플랜과 월 $9 Starter 플랜부터 제공됩니다.",
     website: "https://mixo.io",
     thumbnail: "https://logo.clearbit.com/mixo.io",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2479,7 +2479,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "web-dora", name: "Dora", category: "web-builder",
     summary: "화려한 3D 웹사이트를 글자로 명령해서 만듦",
-    description: "화려한 3D 웹사이트를 글자로 명령해서 만듦",
+    description: "3D 애니메이션과 인터랙티브 효과가 풍부한 고품질 웹사이트를 노코드로 만들 수 있는 AI 빌더로, Three.js 기반의 3D 컴포넌트를 텍스트 명령이나 드래그앤드롭으로 자유롭게 배치할 수 있습니다. 포트폴리오·제품 쇼케이스·스타트업 랜딩 페이지처럼 시각적 임팩트가 중요한 사이트에 적합합니다. 무료 플랜과 월 $14 Starter 플랜이 있습니다.",
     website: "https://dora.run",
     thumbnail: "https://logo.clearbit.com/dora.run",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2487,7 +2487,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "web-10web", name: "10Web", category: "web-builder",
     summary: "워드프레스 사이트를 AI가 자동으로 구축 및 관리",
-    description: "워드프레스 사이트를 AI가 자동으로 구축 및 관리",
+    description: "비즈니스 유형과 설명을 입력하면 AI가 맞춤형 WordPress 사이트를 자동으로 구축하고 Google Cloud 기반 호스팅에 배포해 주는 서비스입니다. 기존 사이트 URL을 입력하면 경쟁사 사이트를 분석해 유사한 구조의 사이트를 자동 재현하는 기능도 제공합니다. 월 $10 Personal 플랜부터 호스팅 포함 제공됩니다.",
     website: "https://10web.io",
     thumbnail: "https://logo.clearbit.com/10web.io",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2495,7 +2495,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "web-pineapple", name: "Pineapple", category: "web-builder",
     summary: "블로그나 포트폴리오 사이트를 빠르게 생성",
-    description: "블로그나 포트폴리오 사이트를 빠르게 생성",
+    description: "크리에이터·프리랜서를 위한 AI 개인 사이트 빌더로, 간단한 설문 응답만으로 포트폴리오·블로그·링크트리 대체 사이트를 빠르게 생성합니다. 지속적으로 콘텐츠를 업데이트하면 AI가 자동으로 사이트를 최신 상태로 유지해 주는 기능이 독특합니다. 무료 플랜과 월 $9 Pro 플랜으로 제공됩니다.",
     website: "https://pineapplebuilder.com",
     thumbnail: "https://logo.clearbit.com/pineapplebuilder.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2503,7 +2503,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "web-galileo", name: "Galileo AI", category: "web-builder",
     summary: "텍스트에서 모바일 UI 디자인(피그마) 생성",
-    description: "텍스트에서 모바일 UI 디자인(피그마) 생성",
+    description: "텍스트 프롬프트로 모바일·웹 앱 UI 디자인을 생성하고 Figma 파일로 즉시 내보낼 수 있는 AI 디자인 도구입니다. 완성도 높은 컴포넌트 계층과 적절한 여백·타이포그래피를 자동 적용해 디자이너가 시안 작업에 소요하는 시간을 크게 줄여줍니다. 현재 웨이팅 리스트 방식으로 접근이 가능합니다.",
     website: "https://usegalileo.ai",
     thumbnail: "https://logo.clearbit.com/usegalileo.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2515,7 +2515,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "game-rosebud", name: "Rosebud AI", category: "game",
     summary: "코딩 몰라도 말로 설명해서 게임 만드는 플랫폼",
-    description: "코딩 몰라도 말로 설명해서 게임 만드는 플랫폼",
+    description: "자연어 대화로 게임 아이디어를 설명하면 AI가 실행 가능한 브라우저 게임 코드를 생성해 주는 노코드 게임 개발 플랫폼입니다. 브라우저 내에서 바로 플레이·수정·배포가 가능하며, 게임 에셋(스프라이트·배경)도 AI가 함께 생성합니다. 커뮤니티에 게임을 공유하고 다른 사람의 게임을 포크해 수정할 수도 있습니다. 무료 플랜 제공됩니다.",
     website: "https://rosebud.ai",
     thumbnail: "https://logo.clearbit.com/rosebud.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2523,7 +2523,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "game-scenario", name: "Scenario", category: "game",
     summary: "내 게임 아트 스타일을 학습시켜 무한 생성",
-    description: "내 게임 아트 스타일을 학습시켜 무한 생성",
+    description: "게임 스튜디오를 위한 AI 에셋 생성 플랫폼으로, 기존 게임의 아트 스타일을 파인튜닝으로 학습시키면 일관된 캐릭터·아이템·배경을 무한 생성할 수 있습니다. 스타일 일관성 유지가 핵심 강점으로, 상업 게임 개발에서 아트 팀의 생산성을 크게 향상시킵니다. API를 통한 파이프라인 통합도 지원하며 월 $19 Basic 플랜부터 제공됩니다.",
     website: "https://scenario.com",
     thumbnail: "https://logo.clearbit.com/scenario.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2531,7 +2531,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "game-layer", name: "Layer.ai", category: "game",
     summary: "게임 에셋 제작에 특화된 전문가용 생성 툴",
-    description: "게임 에셋 제작에 특화된 전문가용 생성 툴",
+    description: "게임 개발자·아티스트를 위해 특화된 AI 에셋 제작 워크플로우를 제공하는 플랫폼으로, 텍스처·스프라이트·아이콘 등 다양한 게임 에셋을 고해상도로 대량 생성할 수 있습니다. 팀 프로젝트 협업 기능과 버전 관리를 지원하며, 개발 파이프라인에 API로 통합해 자동화할 수 있습니다. 엔터프라이즈 맞춤형 요금제로 제공됩니다.",
     website: "https://layer.ai",
     thumbnail: "https://logo.clearbit.com/layer.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2539,7 +2539,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "game-inworld", name: "Inworld", category: "game",
     summary: "NPC에게 지능과 성격을 부여해 대화 가능하게 함",
-    description: "NPC에게 지능과 성격을 부여해 대화 가능하게 함",
+    description: "게임 NPC에 기억·감정·목표·성격을 부여해 플레이어와 자유롭게 대화하는 AI 캐릭터 엔진으로, Unity·Unreal Engine과 SDK로 쉽게 통합할 수 있습니다. Google·LG·NetEase 등이 파트너사로 있으며, AI 캐릭터가 게임 스토리 상황을 이해하고 맥락에 맞게 반응합니다. 무료 사용 가능하며 상업용은 맞춤 요금으로 제공됩니다.",
     website: "https://inworld.ai",
     thumbnail: "https://logo.clearbit.com/inworld.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2547,7 +2547,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "game-leonardo", name: "Leonardo.ai (Game)", category: "game",
     summary: "게임 아이템, 텍스처 생성에 강력한 모델 보유",
-    description: "게임 아이템, 텍스처 생성에 강력한 모델 보유",
+    description: "게임 에셋 생성에 특화된 커스텀 모델(3D Texture, Pixel Art, RPG 4.0 등)을 다수 보유한 AI 이미지 생성 플랫폼으로, 캐릭터·무기·환경 아트를 일관된 스타일로 대량 제작할 수 있습니다. 모션 이미지·3D 텍스처 생성 기능도 추가되어 2D 이미지를 넘어 게임 제작 전반에 활용되고 있습니다. 무료 플랜(150토큰/일)과 월 $10 Apprentice 플랜이 있습니다.",
     website: "https://leonardo.ai",
     thumbnail: "https://logo.clearbit.com/leonardo.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2555,7 +2555,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "game-skybox", name: "Blockade Skybox", category: "game",
     summary: "게임 배경(스카이박스) 360도 이미지 생성",
-    description: "게임 배경(스카이박스) 360도 이미지 생성",
+    description: "텍스트 프롬프트로 게임·VR·AR 환경에 바로 사용할 수 있는 360도 파노라마 스카이박스 이미지를 생성하는 특화 AI 도구입니다. HDR 품질의 이퀴렉탱글러(equirectangular) 이미지를 출력해 Unity·Unreal Engine에 바로 임포트할 수 있으며, 판타지·SF·현실·공포 등 다양한 스타일 프리셋을 제공합니다. 무료 플랜과 월 $14 Pro 플랜이 있습니다.",
     website: "https://skybox.blockadelabs.com",
     thumbnail: "https://logo.clearbit.com/blockadelabs.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2563,7 +2563,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "game-meshy", name: "Meshy (Game)", category: "game",
     summary: "3D 게임 오브젝트를 텍스트로 빠르게 생성",
-    description: "3D 게임 오브젝트를 텍스트로 빠르게 생성",
+    description: "텍스트 또는 2D 이미지에서 3D 모델을 수 분 내에 생성하는 게임 특화 3D AI 도구로, 게임 엔진에서 바로 사용 가능한 FBX·OBJ·GLB 형식으로 내보낼 수 있습니다. 텍스처 자동 생성과 애니메이션 리깅 기능도 지원해 3D 아티스트 없이도 게임 오브젝트를 빠르게 확보할 수 있습니다. 무료 플랜과 월 $20 Pro 플랜이 있습니다.",
     website: "https://meshy.ai",
     thumbnail: "https://logo.clearbit.com/meshy.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2571,7 +2571,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "game-promethean", name: "Promethean AI", category: "game",
     summary: "게임 속 환경(맵)을 알아서 배치하고 채워줌",
-    description: "게임 속 환경(맵)을 알아서 배치하고 채워줌",
+    description: "게임 씬 구성·환경 드레싱을 자동화하는 AI 툴로, 3D 엔진 내에서 AI에게 '숲 속 오두막 주변을 나무와 바위로 자연스럽게 채워줘' 같은 명령을 내리면 적절한 에셋을 자동으로 배치해 줍니다. Unreal·Maya·Max 플러그인으로 기존 워크플로우에 통합되며, 레벨 디자이너의 반복 배치 작업 시간을 70% 이상 단축한다고 주장합니다. 무료 플랜 제공됩니다.",
     website: "https://prometheanai.com",
     thumbnail: "https://logo.clearbit.com/prometheanai.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2579,7 +2579,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "game-charisma", name: "Charisma.ai", category: "game",
     summary: "인터랙티브 스토리 게임을 위한 캐릭터 대화 엔진",
-    description: "인터랙티브 스토리 게임을 위한 캐릭터 대화 엔진",
+    description: "인터랙티브 소설·게임·교육 시뮬레이션용 스토리 기반 AI 대화 엔진으로, 캐릭터마다 상세한 성격·기억·목표를 설정하고 플레이어 선택에 따라 분기하는 복잡한 스토리 트리를 비주얼 노드 에디터로 구성할 수 있습니다. Unity·Unreal·WebGL에 통합 가능하며, BBC Studios 등이 실제 콘텐츠에 활용한 사례가 있습니다. 월 $15 Creator 플랜부터 제공됩니다.",
     website: "https://charisma.ai",
     thumbnail: "https://logo.clearbit.com/charisma.ai",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -2587,7 +2587,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   {
     id: "game-replica", name: "Replica Studios", category: "game",
     summary: "게임 캐릭터 목소리 연기를 AI로 해결",
-    description: "게임 캐릭터 목소리 연기를 AI로 해결",
+    description: "게임·애니메이션·메타버스용 AI 보이스 액팅 플랫폼으로, 다양한 감정 표현과 연기 톤이 가능한 100개 이상의 AI 성우 목소리를 제공합니다. 실제 성우와 파트너십을 맺어 라이선스된 AI 목소리를 사용하는 윤리적 구조를 강점으로 내세우며, Unity·Unreal 플러그인으로 게임 개발 워크플로우에 통합할 수 있습니다. 월 $24 Creator 플랜부터 제공됩니다.",
     website: "https://replicastudios.com",
     thumbnail: "https://logo.clearbit.com/replicastudios.com",
     rating: 0, ratingCount: 0, userRatings: [], comments: []
