@@ -16,6 +16,7 @@ function getFilePath(slug: string): string | null {
   if (slug.startsWith('analysis-')) return `content/analysis/${slug}.md`;
   if (slug.startsWith('curation-')) return `content/curation/${slug}.md`;
   if (slug.startsWith('report-'))   return `content/reports/${slug}.md`;
+  if (slug.startsWith('studio-'))   return `content/studio/${slug}.md`;
   return null;
 }
 

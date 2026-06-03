@@ -4,6 +4,7 @@ import { getAllTrends } from "@/lib/trends";
 import { getAllCurations } from "@/lib/curation";
 import { getAllAnalyses } from "@/lib/analysis";
 import { getAllReports } from "@/lib/reports";
+import { getAllStudios } from "@/lib/studio";
 
 export const dynamic = "force-static";
 
@@ -43,6 +44,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       ...collect(getAllCurations(), 0.7),
       ...collect(getAllAnalyses(), 0.7),
       ...collect(getAllReports(), 0.7),
+      ...collect(getAllStudios(), 0.8),
     ];
   } catch (e) {
     console.warn("[sitemap] failed to collect articles:", e);

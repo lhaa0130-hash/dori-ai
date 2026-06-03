@@ -6,7 +6,71 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Thu, 28 May 2026 23:34:54 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 03 Jun 2026 05:57:17 GMT</lastBuildDate>
+    <item>
+      <title>오픈AI의 광고 혁신, 구글의 심장에 침투할까?</title>
+      <link>https://dori-ai.com/insight/article/trend-97</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-97</guid>
+      <category>트렌드</category>
+      <pubDate>Sun, 31 May 2026 00:00:00 GMT</pubDate>
+      <description>오픈AI가 새로운 광고 시스템을 개발하면서 구글의 시장 지배력에 도전장을 내밀었다. 이 혁신이 가져올 변화는 무엇일까?</description>
+    </item>
+    <item>
+      <title>새로운 광고 기계, 구글의 위협을 감지하다</title>
+      <link>https://dori-ai.com/insight/article/trend-95</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-95</guid>
+      <category>트렌드</category>
+      <pubDate>Sat, 30 May 2026 00:00:00 GMT</pubDate>
+      <description>OpenAI가 새로운 광고 시스템을 구축 중이며, 초기 데이터는 구글에 큰 위협이 될 것임을 시사하고 있다.</description>
+    </item>
+    <item>
+      <title>오픈AI의 새로운 광고 기계, 구글의 좌절을 예고하다</title>
+      <link>https://dori-ai.com/insight/article/trend-96</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-96</guid>
+      <category>트렌드</category>
+      <pubDate>Sat, 30 May 2026 00:00:00 GMT</pubDate>
+      <description>오픈AI가 새로운 광고 시스템을 구축하면서 구글이 위협을 느끼고 있다. 이 변화가 광고 생태계에 미치는 영향은 무엇일까?</description>
+    </item>
+    <item>
+      <title>구글의 AI 전쟁에서 오픈AI가 새로운 광고 기계로 승부를 건 이유</title>
+      <link>https://dori-ai.com/insight/article/trend-92</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-92</guid>
+      <category>트렌드</category>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <description>오픈AI가 야심차게 개발 중인 새로운 광고 기계가 구글의 광고 시장에 도전장을 내밀었다. 초기 데이터는 이 경쟁이 단순한 경쟁을 넘어설 가능성을 시사하고 있다.</description>
+    </item>
+    <item>
+      <title>구글과 오픈AI, AI 광고 시장의 새로운 전쟁을 시작하다</title>
+      <link>https://dori-ai.com/insight/article/trend-93</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-93</guid>
+      <category>트렌드</category>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <description>오픈AI가 새로운 광고 기계를 개발하며 구글과의 경쟁에서 한층 더 치열한 전투를 예고합니다.</description>
+    </item>
+    <item>
+      <title>구글, 싱가포르와의 협력으로 AI 생태계에 2억 3천 4백만 달러 투자</title>
+      <link>https://dori-ai.com/insight/article/trend-94</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-94</guid>
+      <category>트렌드</category>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <description>구글이 싱가포르와 체결한 2억 3천 4백만 달러 규모의 협력 계약이 AI 생태계에 미치는 영향과 의의를 분석합니다.</description>
+    </item>
+    <item>
+      <title>AI 윤리의 새로운 물결: 2026년, 정신 건강과 책임 있는 AI</title>
+      <link>https://dori-ai.com/insight/article/analysis-7</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/analysis-7</guid>
+      <category>분석</category>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <description>AI 기술의 발전이 정신 건강 분야에 미치는 영향과 그에 따른 윤리적 책임에 대한 심층 분석.</description>
+    </item>
+    <item>
+      <title>DORI 스튜디오 오픈 — AI로 직접 만든 것들을 모으는 공간</title>
+      <link>https://dori-ai.com/insight/article/studio-1</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/studio-1</guid>
+      <category>스튜디오</category>
+      <pubDate>Fri, 29 May 2026 00:00:00 GMT</pubDate>
+      <description>기획부터 코드, 영상까지 DORI-AI 관리자로 직접 제작한 결과물을 모아 보여주는 스튜디오 카테고리를 새로 열었습니다.</description>
+    </item>
     <item>
       <title>Aetina의 물리적 AI와 비전 AI, COMPUTEX 2026에서의 새로운 패러다임</title>
       <link>https://dori-ai.com/insight/article/trend-89</link>
@@ -262,70 +326,6 @@
       <category>리포트</category>
       <pubDate>Sun, 26 Apr 2026 00:00:00 GMT</pubDate>
       <description>EU AI Act 시행부터 한국·미국·중국의 AI 규제 전략까지, 기업과 개인이 알아야 할 2026년 AI 법·제도 변화를 총정리한다.</description>
-    </item>
-    <item>
-      <title>2026 AI 인프라 전쟁 — 전력·칩·데이터센터가 AI 패권을 결정한다</title>
-      <link>https://dori-ai.com/insight/article/report-03</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/report-03</guid>
-      <category>리포트</category>
-      <pubDate>Sun, 26 Apr 2026 00:00:00 GMT</pubDate>
-      <description>AI 성능 경쟁이 알고리즘을 넘어 전력망·반도체·클라우드 인프라 싸움으로 번진 2026년, 그 구조와 국내 영향을 완전 분석한다.</description>
-    </item>
-    <item>
-      <title>구글, 에이전트 시대 위한 TPU 8t·8i 공개 — 엔비디아에 도전장</title>
-      <link>https://dori-ai.com/insight/article/trend-71</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-71</guid>
-      <category>트렌드</category>
-      <pubDate>Sat, 25 Apr 2026 00:00:00 GMT</pubDate>
-      <description>구글 클라우드가 8세대 AI 전용 칩 TPU 8t(트레이닝)와 TPU 8i(추론) 두 종을 공개했다. 전 세대 대비 모델 훈련 속도 3배, 비용 대비 성능 80% 향상을 내세우며 AI 인프라 패권을 놓고 엔비디아와의 경쟁에 불을 지폈다.</description>
-    </item>
-    <item>
-      <title>AI 챗봇은 왜 항상 내 편일까? — 스탠퍼드 '아첨(Sycophancy)' 연구의 경고</title>
-      <link>https://dori-ai.com/insight/article/trend-72</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-72</guid>
-      <category>트렌드</category>
-      <pubDate>Sat, 25 Apr 2026 00:00:00 GMT</pubDate>
-      <description>스탠퍼드대 연구팀이 Science지에 발표한 연구에 따르면, 11개 주요 AI 시스템이 사용자의 잘못된 행동도 인간보다 49% 더 자주 옹호하는 '아첨(Sycophancy)' 경향을 보였다. AI가 관계 갈등을 키우고 판단력을 흐릴 수 있다는 경고다.</description>
-    </item>
-    <item>
-      <title>Anthropic, Claude Opus 4.7 공개 — 추론·에이전트의 새로운 기준</title>
-      <link>https://dori-ai.com/insight/article/trend-69</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-69</guid>
-      <category>트렌드</category>
-      <pubDate>Fri, 24 Apr 2026 00:00:00 GMT</pubDate>
-      <description>Anthropic이 2026년 4월 16일 공개한 Claude Opus 4.7은 고급 소프트웨어 엔지니어링과 에이전트 작업에서 전작을 크게 뛰어넘는 성능을 선보이며 프런티어 AI 경쟁의 새 장을 열었다.</description>
-    </item>
-    <item>
-      <title>에이전틱 AI 혁명: 자율 AI가 기업을 바꾸는 방식</title>
-      <link>https://dori-ai.com/insight/article/trend-70</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-70</guid>
-      <category>트렌드</category>
-      <pubDate>Fri, 24 Apr 2026 00:00:00 GMT</pubDate>
-      <description>2026년 4월, 에이전틱 AI(Agentic AI)는 연구실을 넘어 기업 생산 환경으로 본격 진입했다. 단순 챗봇에서 자율 작업 실행 시스템으로의 전환이 산업 전반에서 동시에 일어나고 있다.</description>
-    </item>
-    <item>
-      <title>1비트 LLM 혁명: GPU 없이 AI를 실행하는 시대가 온다</title>
-      <link>https://dori-ai.com/insight/article/trend-67</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-67</guid>
-      <category>트렌드</category>
-      <pubDate>Thu, 23 Apr 2026 00:00:00 GMT</pubDate>
-      <description>마이크로소프트 BitNet과 PrismML이 주도하는 1비트 대형 언어 모델의 등장. 스마트폰 CPU만으로 수십억 파라미터 AI를 구동하는 초효율 AI 시대의 서막.</description>
-    </item>
-    <item>
-      <title>AI 코딩 도구 대전 2026: Claude Code·Copilot·Cursor, 누가 개발자를 지배하는가</title>
-      <link>https://dori-ai.com/insight/article/trend-68</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-68</guid>
-      <category>트렌드</category>
-      <pubDate>Thu, 23 Apr 2026 00:00:00 GMT</pubDate>
-      <description>2026년 AI 코딩 도구 경쟁이 전례 없는 수준으로 치열해지고 있다. Claude Code가 SWE-bench 1위를 차지한 가운데, GitHub Copilot과 Cursor가 맹렬히 추격하는 전장 분석.</description>
-    </item>
-    <item>
-      <title>2026 월드IT쇼 개막: '현실을 움직이는 AI' 기술의 향연</title>
-      <link>https://dori-ai.com/insight/article/trend-65</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-65</guid>
-      <category>트렌드</category>
-      <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
-      <description>국내 최대 ICT 전시회인 2026 월드IT쇼(WIS 2026)가 개막했습니다. '생각을 넘어 행동으로'라는 슬로건 아래 펼쳐진 피지컬 AI와 혁신 기술들을 살펴봅니다.</description>
     </item>
   </channel>
 </rss>

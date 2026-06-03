@@ -24,6 +24,7 @@ function getRawMarkdown(slug: string): string {
     path.join(process.cwd(), 'content/analysis', `${slug}.md`),
     path.join(process.cwd(), 'content/curation', `${slug}.md`),
     path.join(process.cwd(), 'content/reports', `${slug}.md`),
+    path.join(process.cwd(), 'content/studio', `${slug}.md`),
   ];
   for (const p of candidates) {
     if (fs.existsSync(p)) return fs.readFileSync(p, 'utf-8');
@@ -241,6 +242,7 @@ export async function generateStaticParams() {
     const { getAllAnalyses } = await import('@/lib/analysis');
     const { getAllReports } = await import('@/lib/reports');
     const { getAllCurations } = await import('@/lib/curation');
+    const { getAllStudios } = await import('@/lib/studio');
 
     const posts = getSortedPostsData();
     const trends = getAllTrends();
@@ -248,6 +250,7 @@ export async function generateStaticParams() {
     const analyses = getAllAnalyses();
     const reports = getAllReports();
     const curations = getAllCurations();
+    const studios = getAllStudios();
 
     let params: { slug: string }[] = [];
 
@@ -257,6 +260,7 @@ export async function generateStaticParams() {
     analyses.forEach((item) => params.push({ slug: item.slug }));
     reports.forEach((item) => params.push({ slug: item.slug }));
     curations.forEach((item) => params.push({ slug: item.slug }));
+    studios.forEach((item) => params.push({ slug: item.slug }));
 
     if (params.length === 0) {
       return [{ slug: 'placeholder' }];

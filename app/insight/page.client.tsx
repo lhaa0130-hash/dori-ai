@@ -68,7 +68,7 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
   }, [mounted, likedPosts, likesData]);
 
   // 카테고리 목록 정의
-  const CATEGORIES = ['전체', '트렌드', '가이드', '분석', '리포트', '큐레이션'];
+  const CATEGORIES = ['전체', '트렌드', '가이드', '분석', '리포트', '큐레이션', '스튜디오'];
   const [selectedCategory, setSelectedCategory] = useState('전체');
 
   // 카테고리별 색상 (주황색 테마 기반 톤온톤)
@@ -85,6 +85,9 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
         return { bg: 'rgba(194, 65, 12, 0.1)', text: '#c2410c' }; // Deep Burnt Orange
       case '큐레이션':
         return { bg: 'rgba(255, 247, 237, 1)', text: '#9a3412' }; // Light beige bg, dark text
+      case '스튜디오':
+      case 'studio':
+        return { bg: 'rgba(168, 85, 247, 0.15)', text: '#a855f7' }; // Purple (제작물 구분)
       default:
         return { bg: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)', text: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)' };
     }

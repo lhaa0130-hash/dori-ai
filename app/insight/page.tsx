@@ -6,6 +6,7 @@ import { getAllTrends } from '@/lib/trends';
 import { getAllAnalyses } from '@/lib/analysis';
 import { getAllReports } from '@/lib/reports';
 import { getAllCurations } from '@/lib/curation';
+import { getAllStudios } from '@/lib/studio';
 import InsightPageClient from './page.client';
 import { getFirebaseFirestore } from '@/lib/firebase';
 import { collection, getDocs, query, orderBy, limit } from 'firebase/firestore';
@@ -54,6 +55,7 @@ export default async function InsightPage() {
       const analyses = getAllAnalyses();
       const reports = getAllReports();
       const curations = getAllCurations();
+      const studios = getAllStudios();
 
       const guideItems = guides.map((guide, index) => ({
         id: `guide-${index}`,
@@ -133,7 +135,20 @@ export default async function InsightPage() {
         slug: item.slug,
       }));
 
-      filePosts = [...guideItems, ...trendItems, ...analysisItems, ...reportItems, ...curationItems, ...insightItems];
+      const studioItems = studios.map((item, index) => ({
+        id: `studio-${index}`,
+        title: item.title,
+        summary: item.description || '',
+        category: item.category || '스튜디오',
+        tags: item.tags || [],
+        likes: 0,
+        created_at: item.date || new Date().toISOString(),
+        content: item.content || '',
+        thumbnail_url: item.thumbnail,
+        slug: item.slug,
+      }));
+
+      filePosts = [...guideItems, ...trendItems, ...analysisItems, ...reportItems, ...curationItems, ...studioItems, ...insightItems];
     } catch (fileError) {
       console.error('Error loading file posts:', fileError);
     }

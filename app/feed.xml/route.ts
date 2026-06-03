@@ -4,6 +4,7 @@ import { getAllTrends } from "@/lib/trends";
 import { getAllCurations } from "@/lib/curation";
 import { getAllAnalyses } from "@/lib/analysis";
 import { getAllReports } from "@/lib/reports";
+import { getAllStudios } from "@/lib/studio";
 
 export const dynamic = "force-static";
 
@@ -25,6 +26,7 @@ export async function GET() {
       ...(getAllCurations() as any[]).map((p) => ({ ...p, cat: "큐레이션" })),
       ...(getAllAnalyses() as any[]).map((p) => ({ ...p, cat: "분석" })),
       ...(getAllReports() as any[]).map((p) => ({ ...p, cat: "리포트" })),
+      ...(getAllStudios() as any[]).map((p) => ({ ...p, cat: "스튜디오" })),
     ];
     items = all
       .filter((p) => p && p.slug)

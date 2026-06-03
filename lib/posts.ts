@@ -192,5 +192,22 @@ export async function getPostData(id: string) {
     } as any;
   }
 
+  // 7. 스튜디오에서 찾기
+  const { getStudioBySlug } = await import('@/lib/studio');
+  const studio = getStudioBySlug(id);
+  if (studio) {
+    return {
+      id: id,
+      content: studio.content,
+      contentHtml: '',
+      title: studio.title,
+      date: studio.date,
+      category: studio.category,
+      author: studio.author,
+      thumbnail_url: studio.thumbnail,
+      tags: studio.tags,
+    } as any;
+  }
+
   throw new Error(`Post not found: ${id}`);
 }
