@@ -8,9 +8,27 @@ import { ArrowRight, Sparkles } from "lucide-react";
 
 const projects = [
   {
+    id: "illo",
+    name: "일로 (Illo)",
+    emoji: "🟧",
+    image: "/illo-logo.png",
+    tag: "정식 프로그램",
+    tagColor: "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400",
+    desc: "혼자서도, 일이 되는 곳",
+    longDesc:
+      "AI 직원을 불러와 지시하고, 내 사업·콘텐츠·사이트를 실제로 굴리는 1인용 AI 사무실이에요. 수십 개 기능 중 필요한 것만 드래그로 꺼내 쓰고, 모든 AI는 회원님의 API 키로 동작합니다.",
+    href: "/illo",
+    gradient: "from-[#FBAA60] via-[#F9954E] to-[#E8832E]",
+    iconBg: "bg-orange-50 dark:bg-orange-900/20",
+    tags: ["1인 사업", "AI 직원", "커스터마이징"],
+    status: "다운로드",
+    statusColor: "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400",
+  },
+  {
     id: "animal",
     name: "동물도감",
     emoji: "🐾",
+    image: "",
     tag: "1st Project",
     tagColor: "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400",
     desc: "포켓몬처럼, 진짜 동물을 배워요",
@@ -27,6 +45,7 @@ const projects = [
     id: "family",
     name: "가족기록",
     emoji: "👨‍👩‍👧‍👦",
+    image: "",
     tag: "2nd Project",
     tagColor: "bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-400",
     desc: "가족의 모든 것을 하나의 앱으로",
@@ -105,9 +124,17 @@ export default function ProjectsPage() {
                     <div className="absolute inset-0 opacity-20"
                       style={{ backgroundImage: 'radial-gradient(circle, white 1px, transparent 1px)', backgroundSize: '20px 20px' }}
                     />
-                    <span className="text-6xl relative z-10 group-hover:scale-110 transition-transform duration-300 drop-shadow-lg">
-                      {project.emoji}
-                    </span>
+                    {project.image ? (
+                      <img
+                        src={project.image}
+                        alt={project.name}
+                        className="w-20 h-20 rounded-3xl shadow-lg relative z-10 group-hover:scale-110 transition-transform duration-300"
+                      />
+                    ) : (
+                      <span className="text-6xl relative z-10 group-hover:scale-110 transition-transform duration-300 drop-shadow-lg">
+                        {project.emoji}
+                      </span>
+                    )}
                     {/* 1st Project 뱃지 */}
                     <div className="absolute top-3 left-3">
                       <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${project.tagColor}`}>

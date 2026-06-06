@@ -46,8 +46,18 @@ export default function Header() {
 
   const projects = [
     {
+      name: "일로 (Illo)",
+      emoji: "🟧",
+      image: "/illo-logo.png",
+      desc: "혼자서도, 일이 되는 곳",
+      href: "/illo",
+      color: "from-[#FBAA60] to-[#E8832E]",
+      bg: "bg-orange-50 dark:bg-orange-900/20",
+    },
+    {
       name: "동물도감",
       emoji: "🐾",
+      image: "",
       desc: "포켓몬처럼, 진짜 동물을 배워요",
       href: "/animal",
       color: "from-emerald-500 to-teal-500",
@@ -56,6 +66,7 @@ export default function Header() {
     {
       name: "가족기록",
       emoji: "👨‍👩‍👧‍👦",
+      image: "",
       desc: "가족의 모든 것을 하나의 앱으로",
       href: "/family",
       color: "from-purple-500 to-fuchsia-500",
@@ -111,8 +122,8 @@ export default function Header() {
                   href={p.href}
                   className="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors group/item"
                 >
-                  <div className={`w-9 h-9 rounded-xl ${p.bg} flex items-center justify-center flex-shrink-0 text-lg group-hover/item:scale-110 transition-transform`}>
-                    {p.emoji}
+                  <div className={`w-9 h-9 rounded-xl ${p.bg} flex items-center justify-center flex-shrink-0 text-lg group-hover/item:scale-110 transition-transform overflow-hidden`}>
+                    {p.image ? <img src={p.image} alt={p.name} className="w-full h-full object-cover" /> : p.emoji}
                   </div>
                   <div>
                     <div className="text-sm font-bold text-neutral-900 dark:text-white group-hover/item:text-[#E8832E] dark:group-hover/item:text-[#F9954E] transition-colors">{p.name}</div>
