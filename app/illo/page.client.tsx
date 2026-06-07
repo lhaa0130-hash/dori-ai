@@ -1,10 +1,9 @@
 "use client";
 
 import Link from "next/link";
-import { Sparkles, MousePointerClick, Users, ShieldCheck, Smartphone, Globe, ArrowRight } from "lucide-react";
+import { Sparkles, MousePointerClick, Users, ShieldCheck, Globe, ArrowRight } from "lucide-react";
 
-// 웹은 설치 없이 바로 실행(/illo/app), 안드로이드 APK(4MB)는 사이트에서 직접 다운로드.
-const ANDROID_URL = "/download/Illo-v3.75.0.apk";
+// 손님은 웹에서 바로 사용(/illo/app). 데스크톱/안드로이드 풀버전은 현재 운영자 전용(공개 다운로드 없음).
 
 const FEATURES = [
   {
@@ -60,24 +59,17 @@ export default function IlloPageClient() {
           </p>
 
           {/* Download buttons */}
-          <div className="flex flex-col sm:flex-row items-center gap-3">
+          <div className="flex justify-center">
             <Link
               href="/illo/app"
-              className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold text-[15px] shadow-lg shadow-[#F9954E]/25 transition-all hover:-translate-y-0.5"
+              className="inline-flex items-center gap-2.5 px-9 py-4 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold text-base shadow-lg shadow-[#F9954E]/25 transition-all hover:-translate-y-0.5"
             >
               <Globe className="w-5 h-5" />
               웹에서 바로 시작
             </Link>
-            <a
-              href={ANDROID_URL}
-              className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl border-2 border-[#F9954E]/40 hover:border-[#F9954E] text-[#E8832E] dark:text-[#FBAA60] font-bold text-[15px] transition-all hover:-translate-y-0.5"
-            >
-              <Smartphone className="w-5 h-5" />
-              Android 앱
-            </a>
           </div>
           <p className="text-xs text-neutral-400 dark:text-zinc-600 mt-4">
-            설치 없이 브라우저에서 바로 · Android 8.0+ · 본인 API 키로 동작
+            설치 없이 브라우저에서 바로 · 로그인하면 <b className="text-[#E8832E] dark:text-[#FBAA60]">하루 50회 무료</b>
           </p>
         </section>
 
@@ -120,15 +112,12 @@ export default function IlloPageClient() {
         <section className="mt-24 rounded-[28px] bg-gradient-to-br from-[#FFF5EB] to-[#FEEBD0] dark:from-zinc-900 dark:to-zinc-900/40 border border-[#FDD5A5] dark:border-zinc-800 p-10 text-center">
           <h2 className="text-2xl md:text-3xl font-extrabold text-neutral-900 dark:text-white mb-3">지금 바로 시작해보세요</h2>
           <p className="text-neutral-600 dark:text-neutral-400 mb-8 break-keep">
-            일로는 무료로 받아 쓸 수 있어요. (AI 사용료는 회원님의 API 키로 정산됩니다)
+            로그인만 하면 <b className="text-[#E8832E] dark:text-[#FBAA60]">하루 50회 무료</b>. 설치도 결제도 필요 없어요.
           </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 mb-6">
-            <Link href="/illo/app" className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold text-[15px] shadow-lg shadow-[#F9954E]/25 transition-all hover:-translate-y-0.5">
+          <div className="flex items-center justify-center gap-3 mb-6">
+            <Link href="/illo/app" className="inline-flex items-center gap-2.5 px-9 py-4 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold text-base shadow-lg shadow-[#F9954E]/25 transition-all hover:-translate-y-0.5">
               <Globe className="w-5 h-5" /> 웹에서 바로 시작
             </Link>
-            <a href={ANDROID_URL} className="inline-flex items-center gap-2.5 px-7 py-3.5 rounded-2xl bg-white dark:bg-zinc-800 border-2 border-[#F9954E]/40 hover:border-[#F9954E] text-[#E8832E] dark:text-[#FBAA60] font-bold text-[15px] transition-all hover:-translate-y-0.5">
-              <Smartphone className="w-5 h-5" /> Android 앱
-            </a>
           </div>
           <Link href="/signup" className="inline-flex items-center gap-1.5 text-sm font-bold text-[#E8832E] dark:text-[#FBAA60] hover:gap-3 transition-all">
             아직 계정이 없으신가요? 회원가입 <ArrowRight className="w-4 h-4" />
