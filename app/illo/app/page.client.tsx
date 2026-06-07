@@ -946,6 +946,29 @@ function Step({ n, title, children }: { n: string; title: string; children: Reac
   );
 }
 
+function GuideSection({ icon, title, children }: { icon: string; title: string; children: React.ReactNode }) {
+  return (
+    <section>
+      <div className="flex items-center gap-2 mb-3">
+        <span className="text-lg leading-none">{icon}</span>
+        <h3 className="font-extrabold text-neutral-900 dark:text-white text-[15px]">{title}</h3>
+      </div>
+      <div className="space-y-3">{children}</div>
+    </section>
+  );
+}
+function GuideRow({ icon, title, children }: { icon: string; title: string; children: React.ReactNode }) {
+  return (
+    <div className="flex gap-3">
+      <span className="w-8 h-8 rounded-xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center text-base shrink-0">{icon}</span>
+      <div className="min-w-0">
+        <div className="text-[13.5px] font-bold text-neutral-900 dark:text-white">{title}</div>
+        <div className="text-[12.5px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">{children}</div>
+      </div>
+    </div>
+  );
+}
+
 function GuideOverlay({ onClose }: { onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4" onClick={onClose}>
@@ -955,31 +978,100 @@ function GuideOverlay({ onClose }: { onClose: () => void }) {
           <button onClick={onClose} aria-label="닫기" className="w-8 h-8 grid place-items-center rounded-lg text-neutral-400 hover:text-neutral-700 dark:hover:text-white text-lg">✕</button>
         </div>
 
-        <div className="overflow-y-auto px-5 py-6 space-y-7">
+        <div className="overflow-y-auto px-5 py-6 space-y-8">
+          {/* 소개 */}
           <div className="rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/20 p-4">
             <p className="text-[13.5px] text-neutral-700 dark:text-neutral-300 leading-relaxed break-keep">
-              <b className="text-[#E8832E] dark:text-[#FBAA60]">일로</b>는 AI에게 글쓰기·SNS·카피·상품설명·답변·요약을 맡기는 도구예요. <b>로그인만 하면 하루 50회까지 무료</b>로 바로 쓸 수 있어요! 더 많이 쓰고 싶을 때만 내 키를 넣으면 됩니다.
+              <b className="text-[#E8832E] dark:text-[#FBAA60]">일로</b>는 AI에게 글쓰기·SNS·카피·상품설명·답변·요약을 맡기고, 비서에게 무엇이든 물어보는 <b>1인용 AI 사무실</b>이에요. <b>로그인만 하면 하루 50회까지 무료</b>로 바로 쓸 수 있어요!
             </p>
           </div>
 
-          <Step n="1" title="그냥 무료로 시작하기">
-            <p>로그인하고 도구를 고른 뒤 내용만 입력하면 끝! <b>하루 50회까지 무료</b>예요. 키도 결제도 필요 없어요.</p>
-          </Step>
-          <Step n="2" title="더 많이 쓰고 싶다면 — 내 키(선택)">
-            <p>하루 50회로 부족하면 <b>내 Claude 키</b>를 넣어 무제한으로 쓸 수 있어요. 아래는 키 만드는 법이에요.</p>
-          </Step>
-          <Step n="3" title="Claude 콘솔 가입 + 소액 충전">
-            <p><b>console.anthropic.com</b> 가입 → <b>Billing</b>에서 카드 등록 + <b>$5 충전</b>(크레딧 있어야 작동).</p>
-          </Step>
-          <Step n="4" title="키 만들기 → 복사 → 붙여넣기">
-            <p><b>API Keys → Create Key</b> → 생긴 <b>sk-ant-…</b> 복사 → 일로의 "키 넣기"에 붙여넣기.</p>
-            <p className="text-rose-500">⚠️ 키는 만들 때 딱 한 번만 보여요. 꼭 바로 복사!</p>
-          </Step>
+          {/* 1분 시작 */}
+          <GuideSection icon="🚀" title="1분 만에 시작 (무료)">
+            <Step n="1" title="로그인 / 회원가입">
+              <p>이메일로 가입하거나 로그인하면 끝. 결제·카드 필요 없어요.</p>
+            </Step>
+            <Step n="2" title="도구 고르거나 비서실 열기">
+              <p>홈에서 <b>비서실</b>을 누르거나, 왼쪽 메뉴에서 원하는 <b>도구</b>를 고르세요.</p>
+            </Step>
+            <Step n="3" title="입력하고 생성 → 복사">
+              <p>내용만 적고 <b>생성</b> 버튼을 누르면 AI가 결과를 만들어줘요. <b>복사</b>해서 바로 쓰면 됩니다.</p>
+            </Step>
+          </GuideSection>
 
-          <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noreferrer"
-            className="flex items-center justify-center gap-2 w-full py-3 rounded-2xl border border-[#F9954E]/40 text-[#E8832E] dark:text-[#FBAA60] font-bold text-sm">
-            🔗 Claude 콘솔 열기 (키 만들러 가기)
-          </a>
+          {/* 화면 둘러보기 */}
+          <GuideSection icon="🧭" title="화면 둘러보기">
+            <GuideRow icon="🏠" title="오늘의 사무실 (홈)">인사·바로가기·현황 위젯을 한눈에. 편집으로 위젯을 바꿀 수 있어요.</GuideRow>
+            <GuideRow icon="💬" title="비서실">AI 비서에게 자유롭게 질문하고 일을 시키는 곳.</GuideRow>
+            <GuideRow icon="🛠️" title="AI 도구">블로그·메일·요약·카피 등 목적별 전문 도구.</GuideRow>
+            <GuideRow icon="🧩" title="기능 보관함">필요한 기능만 꺼내 내 메뉴에 추가하는 곳.</GuideRow>
+            <GuideRow icon="⚙️" title="설정">키·테마(화이트/다크)·계정 관리.</GuideRow>
+          </GuideSection>
+
+          {/* 비서실 */}
+          <GuideSection icon="💬" title="비서실 — 뭐든 물어보기">
+            <p className="text-[12.5px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+              채팅처럼 자유롭게 대화해요. 예) <b>“이번 주 할 일 정리해줘”</b>, <b>“이 글 더 매끄럽게 다듬어줘”</b>, <b>“사업 아이디어 3개 제안해줘”</b>.<br />
+              <span className="text-neutral-400">입력창에서 <b>Enter</b>는 전송, <b>Shift+Enter</b>는 줄바꿈이에요.</span>
+            </p>
+          </GuideSection>
+
+          {/* 도구 사용법 */}
+          <GuideSection icon="🛠️" title="AI 도구 쓰는 법">
+            <Step n="1" title="도구 선택">
+              <p>예) 블로그 글쓰기, 상품 상세, 리뷰 답변 등.</p>
+            </Step>
+            <Step n="2" title="내용 입력 + 옵션 고르기">
+              <p>주제/내용을 적고, <b>말투·길이·플랫폼</b> 같은 옵션 칩을 눌러 원하는 스타일을 정해요.</p>
+            </Step>
+            <Step n="3" title="생성 → 복사">
+              <p>결과가 마음에 안 들면 옵션을 바꿔 다시 생성하면 돼요.</p>
+            </Step>
+          </GuideSection>
+
+          {/* 커스터마이징 */}
+          <GuideSection icon="🧩" title="내 메뉴 꾸미기 (커스터마이징)">
+            <GuideRow icon="➕" title="기능 보관함에서 추가/끄기">안 쓰는 기능은 끄고, 필요한 것만 켜서 깔끔하게.</GuideRow>
+            <GuideRow icon="⠿" title="사이드바 편집">로고 옆 <b>편집</b> → 드래그로 순서 변경, <b>✕</b>로 메뉴에서 빼기.</GuideRow>
+            <GuideRow icon="🧱" title="홈 위젯 편집">홈의 <b>편집</b> → 위젯을 드래그·추가·제거해 나만의 홈으로.</GuideRow>
+            <GuideRow icon="✍️" title="블로그·SNS는 숨김 상태">필요하면 <b>기능 보관함</b>에서 “추가”를 눌러 꺼내 쓰세요.</GuideRow>
+          </GuideSection>
+
+          {/* 무료 vs 내 키 */}
+          <GuideSection icon="🔑" title="무료 50회 vs 내 키(무제한)">
+            <div className="rounded-2xl border border-neutral-200 dark:border-zinc-800 p-3.5 text-[12.5px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep">
+              <b className="text-[#E8832E]">🆓 무료</b> — 로그인만 하면 하루 50회. 키·결제 불필요.<br />
+              <b className="text-[#E8832E]">🔑 내 키</b> — 하루 50회로 부족하면 내 Claude 키를 넣어 <b>무제한</b>. 키는 <b>내 브라우저에만</b> 저장돼요(서버에 안 보냄).
+            </div>
+            <Step n="1" title="Claude 콘솔 가입 + 소액 충전">
+              <p><b>console.anthropic.com</b> 가입 → <b>Billing</b>에서 카드 등록 + <b>$5 충전</b>(크레딧 있어야 작동).</p>
+            </Step>
+            <Step n="2" title="키 만들기 → 복사 → 붙여넣기">
+              <p><b>API Keys → Create Key</b> → 생긴 <b>sk-ant-…</b> 복사 → 설정의 <b>“키 넣기”</b>에 붙여넣기.</p>
+              <p className="text-rose-500">⚠️ 키는 만들 때 딱 한 번만 보여요. 꼭 바로 복사!</p>
+            </Step>
+            <a href="https://console.anthropic.com/settings/keys" target="_blank" rel="noreferrer"
+              className="flex items-center justify-center gap-2 w-full py-3 rounded-2xl border border-[#F9954E]/40 text-[#E8832E] dark:text-[#FBAA60] font-bold text-sm">
+              🔗 Claude 콘솔 열기 (키 만들러 가기)
+            </a>
+          </GuideSection>
+
+          {/* PC 버전 */}
+          <GuideSection icon="💻" title="더 강력한 PC 버전 (데스크톱 일로)">
+            <p className="text-[12.5px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+              <b>AI 직원 채용</b>, <b>이미지·영상 스튜디오</b>, <b>사이트 자동 배포</b>, <b>자동화 스케줄</b> 같은 풀 기능은 데스크톱(PC) 일로에서 쓸 수 있어요. 웹은 가볍게 어디서나, PC는 본격적으로!
+            </p>
+          </GuideSection>
+
+          {/* 팁 */}
+          <div className="rounded-2xl bg-neutral-50 dark:bg-zinc-800/50 border border-neutral-200 dark:border-zinc-800 p-4">
+            <div className="text-[13px] font-bold text-neutral-900 dark:text-white mb-1.5">💡 알아두면 좋은 팁</div>
+            <ul className="text-[12.5px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep list-disc pl-4 space-y-1">
+              <li>결과가 아쉬우면 비서에게 <b>“더 짧게/격식 있게/친근하게”</b> 라고 이어서 말하면 돼요.</li>
+              <li>화면이 눈부시면 <b>설정 → 테마</b>에서 다크로 바꿀 수 있어요.</li>
+              <li>한 번 넣은 키와 메뉴 구성은 <b>다음에 와도 그대로</b> 유지돼요.</li>
+            </ul>
+          </div>
         </div>
 
         <div className="px-5 py-4 border-t border-neutral-100 dark:border-zinc-800 shrink-0">
