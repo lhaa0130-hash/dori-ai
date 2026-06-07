@@ -38,35 +38,46 @@ export const PROVIDER_LABEL: Record<Provider, string> = {
   fal: 'fal.ai', elevenlabs: 'ElevenLabs', suno: 'Suno',
 };
 
+export type Tier = 'local' | 'cheap' | 'mid' | 'premium' | 'action';
+
 export interface ModelPick {
   provider: Provider;
   model: string;
   domain: Domain;
+  tier?: Tier;     // 비용 등급
+  local?: string;  // PC(데스크톱)에서 쓸 무료 로컬 모델(Ollama 등). 웹은 로컬 불가 → cloud로.
   note?: string;
 }
 
 export const MATRIX_UPDATED = '2026-06-07'; // 마지막 갱신일 (매달 검토)
 
-// ───────────────────────── 텍스트 기능별 매칭 ─────────────────────────
-// (현재 웹 실행은 텍스트=Claude. 다른 provider는 실행 연동을 단계적으로 붙임)
+// ───────────────────────── 텍스트 기능별 매칭 (비용 최적화) ─────────────────────────
+// 등급: local(PC무료) / cheap(초저가 클라우드) / mid(가성비) / premium(고급)
+// PC 데스크톱은 local 모델(무료)로, 웹/유료는 provider+model로 동작.
+// (현재 웹 실행은 텍스트=Claude 폴백. Gemini 등 실제 연동은 단계적으로 붙임)
 export const FEATURE_PICK: Record<string, ModelPick> = {
-  assistant: { provider: 'anthropic', model: 'claude-haiku-4-5',  domain: 'text', note: '비서: 빠른 응답' },
-  docs:      { provider: 'anthropic', model: 'claude-sonnet-4-6', domain: 'text', note: '문서: 구조·품질' },
-  mail:      { provider: 'anthropic', model: 'claude-haiku-4-5',  domain: 'text', note: '메일: 빠름' },
-  summary:   { provider: 'gemini',    model: 'gemini-2.5-flash',  domain: 'text', note: '요약: 초저가·빠름' },
-  copy:      { provider: 'anthropic', model: 'claude-sonnet-4-6', domain: 'text', note: '카피: 창의성' },
-  product:   { provider: 'anthropic', model: 'claude-sonnet-4-6', domain: 'text', note: '상세: 설득력' },
-  reply:     { provider: 'anthropic', model: 'claude-haiku-4-5',  domain: 'text', note: '답변: 빠름' },
-  translate: { provider: 'gemini',    model: 'gemini-2.5-flash',  domain: 'text', note: '번역: 다국어·저렴' },
-  meeting:   { provider: 'anthropic', model: 'claude-haiku-4-5',  domain: 'text', note: '회의록: 빠름' },
-  blog:      { provider: 'anthropic', model: 'claude-sonnet-4-6', domain: 'text', note: '블로그: 장문 품질' },
-  sns:       { provider: 'anthropic', model: 'claude-haiku-4-5',  domain: 'text', note: 'SNS: 짧은 글' },
+  // 🟢 단순 — 로컬(PC 무료) / 웹은 초저가
+  assistant: { provider: 'anthropic', model: 'claude-haiku-4-5',       domain: 'text', tier: 'cheap', local: 'exaone3.5:7.8b', note: '비서: 무료풀 Haiku, PC는 로컬' },
+  summary:   { provider: 'gemini',    model: 'gemini-2.5-flash-lite',  domain: 'text', tier: 'cheap', local: 'exaone3.5:7.8b', note: '요약: 초저가, PC는 로컬' },
+  translate: { provider: 'gemini',    model: 'gemini-2.5-flash-lite',  domain: 'text', tier: 'cheap', local: 'exaone3.5:7.8b', note: '번역: 초저가, PC는 로컬' },
+  mail:      { provider: 'gemini',    model: 'gemini-2.5-flash-lite',  domain: 'text', tier: 'cheap', local: 'exaone3.5:7.8b', note: '메일: 초저가, PC는 로컬' },
+  sns:       { provider: 'gemini',    model: 'gemini-2.5-flash-lite',  domain: 'text', tier: 'cheap', local: 'exaone3.5:7.8b', note: 'SNS: 초저가, PC는 로컬' },
+  reply:     { provider: 'gemini',    model: 'gemini-2.5-flash-lite',  domain: 'text', tier: 'cheap', local: 'exaone3.5:7.8b', note: 'CS답변: 초저가, PC는 로컬' },
+  meeting:   { provider: 'gemini',    model: 'gemini-2.5-flash-lite',  domain: 'text', tier: 'cheap', local: 'exaone3.5:7.8b', note: '회의록: 초저가, PC는 로컬' },
+  // 🟡 중급 — 품질 필요하지만 가성비 모델로
+  docs:      { provider: 'gemini',    model: 'gemini-2.5-flash',       domain: 'text', tier: 'mid', local: 'qwen2.5:14b', note: '문서: 가성비' },
+  blog:      { provider: 'gemini',    model: 'gemini-2.5-flash',       domain: 'text', tier: 'mid', local: 'qwen2.5:14b', note: '블로그: 가성비(품질 더 원하면 Sonnet)' },
+  copy:      { provider: 'gemini',    model: 'gemini-2.5-flash',       domain: 'text', tier: 'mid', note: '카피: 가성비(창의 더 원하면 Sonnet)' },
+  product:   { provider: 'gemini',    model: 'gemini-2.5-flash',       domain: 'text', tier: 'mid', note: '상세: 가성비' },
+  // 🔴 고급 — 진짜 어려운 작업만(전략·코드·계약·리서치). 필요 기능에서 호출.
+  strategy:  { provider: 'anthropic', model: 'claude-opus-4-8',        domain: 'text', tier: 'premium', note: '전략·고난도' },
+  code:      { provider: 'anthropic', model: 'claude-sonnet-4-6',      domain: 'text', tier: 'premium', note: '코드(가성비는 DeepSeek)' },
 };
 
 // ───────────────────────── 미디어 분야별 매칭 ─────────────────────────
 // 미디어 기능(추후 추가)에서 사용할 1순위 모델. 대안은 ALT에 정리.
 export const MEDIA_PICK: Record<string, ModelPick> = {
-  image:        { provider: 'fal', model: 'fal-ai/imagen4/preview',                domain: 'image', note: '범용 고품질' },
+  image:        { provider: 'fal', model: 'fal-ai/imagen4/preview',                domain: 'image', tier: 'mid', local: 'ComfyUI(SDXL/FLUX)', note: '범용 고품질 · PC는 ComfyUI 무료' },
   image_text:   { provider: 'fal', model: 'fal-ai/ideogram/v2',                    domain: 'image', note: '글자 렌더 강함' },
   image_design: { provider: 'fal', model: 'fal-ai/recraft-v3',                     domain: 'image', note: '디자인·로고' },
   image_edit:   { provider: 'fal', model: 'fal-ai/gemini-flash-image',             domain: 'image', note: '편집·일관성(nano-banana)' },
