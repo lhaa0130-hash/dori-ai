@@ -6,8 +6,9 @@ import { useTheme } from "next-themes";
 import { useAuth } from "@/contexts/AuthContext";
 import { getFirebaseAuth } from "@/lib/firebase";
 import { ILLO_TOOL_BY_ID } from "@/lib/illo/tools";
-import { callClaude, ILLO_MODELS, ILLO_DEFAULT_MODEL } from "@/lib/illo/claude";
-import { getLocalKey, setLocalKey, getModel, setModel, pullCloudKey } from "@/lib/illo/key";
+import { callClaude } from "@/lib/illo/claude";
+import { modelForFeature } from "@/lib/illo/modelMatrix";
+import { getLocalKey, setLocalKey, pullCloudKey } from "@/lib/illo/key";
 import {
   ILLO_FEATURES, ILLO_FEATURE_BY_ID, ILLO_GROUP_ORDER, ILLO_DEFAULT_ENABLED,
   loadIlloEnabled, saveIlloEnabled, type IlloFeature,
@@ -35,7 +36,6 @@ export default function IlloWebClient() {
 
   const [key, setKey] = useState("");
   const [keyInput, setKeyInput] = useState("");
-  const [model, setModelState] = useState(ILLO_DEFAULT_MODEL);
   const [pulling, setPulling] = useState(false);
 
   const [enabled, setEnabled] = useState<string[]>(ILLO_DEFAULT_ENABLED);
@@ -54,20 +54,21 @@ export default function IlloWebClient() {
   useEffect(() => {
     setEnabled(loadIlloEnabled());
     if (status !== "authenticated") return;
-    setModelState(getModel() || ILLO_DEFAULT_MODEL);
     const lk = getLocalKey();
     if (lk) { setKey(lk); return; }
     pullCloudKey().then((k) => { if (k) { setKey(k); setLocalKey(k); } }).catch(() => {});
   }, [status]);
 
   // ── 공용 Claude 호출 (무료/내키 자동 + 횟수 갱신) ──
-  async function runAI(prompt: string, modelOverride?: string) {
+  // 기능(featureId)별로 미리 매칭된 모델을 사용 — 소비자에겐 노출하지 않음.
+  // 무료 사용자는 서버 프록시가 Haiku로 고정(비용 관리). 내 키/유료는 매트릭스대로.
+  async function runAI(prompt: string, featureId: string) {
     let idToken: string | undefined;
     if (free) {
       const u = getFirebaseAuth().currentUser;
       idToken = u ? await u.getIdToken() : undefined;
     }
-    const r = await callClaude({ apiKey: key || undefined, idToken, prompt, model: modelOverride || model });
+    const r = await callClaude({ apiKey: key || undefined, idToken, prompt, model: modelForFeature(featureId) });
     if (typeof r.quotaRemaining === "number") setQuota(r.quotaRemaining);
     return r;
   }
@@ -188,7 +189,7 @@ export default function IlloWebClient() {
         {view === "home" && <Home userName={userName} enabled={enabled} onView={goView} free={free} quota={quota} onShowKey={() => setShowKey(true)} />}
         {view === "assistant" && <Assistant runAI={runAI} free={free} quota={quota} onShowKey={() => setShowKey(true)} userName={userName} />}
         {view === "features" && <FeatureManager enabled={enabled} onToggle={toggleFeature} onView={goView} />}
-        {view === "settings" && <Settings keyVal={key} free={free} model={model} onModel={(m) => { setModelState(m); setModel(m); }} onShowKey={() => setShowKey(true)} onRemoveKey={removeKey} onLogout={logout} userName={userName} userEmail={session?.user?.email || ""} />}
+        {view === "settings" && <Settings keyVal={key} free={free} onShowKey={() => setShowKey(true)} onRemoveKey={removeKey} onLogout={logout} userName={userName} userEmail={session?.user?.email || ""} />}
         {tool && <ToolView key={view} tool={tool} runAI={runAI} free={free} quota={quota} onShowKey={() => setShowKey(true)} onBack={() => goView("home")} />}
       </main>
 
@@ -533,7 +534,7 @@ function Home({ enabled, onView, free, quota }: {
 /* ─────────────────────────── 비서실 (채팅) ─────────────────────────── */
 type ChatMsg = { role: "user" | "assistant"; content: string };
 function Assistant({ runAI, free, quota, onShowKey, userName }: {
-  runAI: (p: string) => Promise<{ text: string }>; free: boolean; quota: number | null; onShowKey: () => void; userName: string;
+  runAI: (p: string, featureId: string) => Promise<{ text: string }>; free: boolean; quota: number | null; onShowKey: () => void; userName: string;
 }) {
   const [msgs, setMsgs] = useState<ChatMsg[]>([]);
   const [input, setInput] = useState("");
@@ -555,7 +556,7 @@ function Assistant({ runAI, free, quota, onShowKey, userName }: {
       const prompt =
         `당신은 '일로'의 유능하고 친절한 AI 비서입니다. 항상 정중한 존댓말로, 핵심을 먼저 말하고 필요하면 단계로 정리해 답하세요. ` +
         `사용자 이름은 '${userName}'입니다.\n\n[대화]\n${history}\n비서:`;
-      const r = await runAI(prompt);
+      const r = await runAI(prompt, "assistant");
       setMsgs((m) => [...m, { role: "assistant", content: r.text }]);
     } catch (e) {
       const raw = e instanceof Error ? e.message : "오류가 발생했습니다.";
@@ -677,8 +678,8 @@ function FeatureManager({ enabled, onToggle, onView }: {
 }
 
 /* ─────────────────────────── 설정 ─────────────────────────── */
-function Settings({ keyVal, free, model, onModel, onShowKey, onRemoveKey, onLogout, userName, userEmail }: {
-  keyVal: string; free: boolean; model: string; onModel: (m: string) => void;
+function Settings({ keyVal, free, onShowKey, onRemoveKey, onLogout, userName, userEmail }: {
+  keyVal: string; free: boolean;
   onShowKey: () => void; onRemoveKey: () => void; onLogout: () => void; userName: string; userEmail: string;
 }) {
   const { resolvedTheme, setTheme } = useTheme();
@@ -718,11 +719,7 @@ function Settings({ keyVal, free, model, onModel, onShowKey, onRemoveKey, onLogo
                 <button onClick={onRemoveKey} className="text-[13px] font-bold text-neutral-500 border border-neutral-200 dark:border-zinc-700 rounded-lg px-3 py-1.5">삭제</button>
               </div>
             </div>
-            <label className="block text-[12px] font-bold text-neutral-400 mb-1.5">모델</label>
-            <select value={model} onChange={(e) => onModel(e.target.value)}
-              className="w-full text-sm font-semibold bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 rounded-xl px-3 py-2.5 focus:outline-none">
-              {ILLO_MODELS.map((m) => <option key={m.id} value={m.id}>{m.label}</option>)}
-            </select>
+            <p className="text-[12px] text-neutral-400 leading-relaxed break-keep">🤖 AI 모델은 <b className="text-neutral-500 dark:text-neutral-300">작업에 맞게 자동 선택</b>돼요. 따로 고르지 않아도 각 기능에 가장 잘 맞는 AI가 일합니다.</p>
           </div>
         )}
       </Section>
@@ -761,7 +758,7 @@ function Section({ title, children }: { title: string; children: React.ReactNode
 
 /* ─────────────────────────── AI 도구 실행 ─────────────────────────── */
 function ToolView({ tool, runAI, free, quota, onShowKey, onBack }: {
-  tool: typeof ILLO_TOOL_BY_ID[string]; runAI: (p: string) => Promise<{ text: string }>;
+  tool: typeof ILLO_TOOL_BY_ID[string]; runAI: (p: string, featureId: string) => Promise<{ text: string }>;
   free: boolean; quota: number | null; onShowKey: () => void; onBack: () => void;
 }) {
   const [input, setInput] = useState("");
@@ -776,7 +773,7 @@ function ToolView({ tool, runAI, free, quota, onShowKey, onBack }: {
     if (!input.trim() || busy) return;
     setBusy(true); setErr(""); setResult("");
     try {
-      const r = await runAI(tool.buildPrompt(input, picked));
+      const r = await runAI(tool.buildPrompt(input, picked), tool.id);
       setResult(r.text);
     } catch (e) {
       const raw = e instanceof Error ? e.message : "오류가 발생했습니다.";

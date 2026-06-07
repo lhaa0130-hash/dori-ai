@@ -9,19 +9,19 @@ import { ArrowRight, Sparkles } from "lucide-react";
 const projects = [
   {
     id: "illo",
-    name: "일로 (Illo)",
+    name: "illo(일로)",
     emoji: "🟧",
     image: "/illo-logo.png",
     tag: "정식 프로그램",
     tagColor: "bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-400",
-    desc: "혼자서도, 일이 되는 곳",
+    desc: "수많은 AI로, 혼자서도 사업을",
     longDesc:
-      "AI 직원을 불러와 지시하고, 내 사업·콘텐츠·사이트를 실제로 굴리는 1인용 AI 사무실이에요. 수십 개 기능 중 필요한 것만 드래그로 꺼내 쓰고, 모든 AI는 회원님의 API 키로 동작합니다.",
+      "하고 싶은 일을 클릭만 하면, 그 작업에 가장 잘 맞는 AI가 이미 연결돼 있어요. 글쓰기·마케팅·고객응대·요약까지 — 복잡한 설정 없이 누구나 손쉽게 1인 사업을 시작할 수 있는 AI 사무실입니다. 지금은 무료로 쓸 수 있고, 2027년 6월 1일 정식 유료화될 예정이에요.",
     href: "/illo/app",
     gradient: "from-[#FBAA60] via-[#F9954E] to-[#E8832E]",
     iconBg: "bg-orange-50 dark:bg-orange-900/20",
-    tags: ["1인 사업", "AI 직원", "커스터마이징"],
-    status: "바로 시작",
+    tags: ["수많은 AI", "1인 사업", "지금 무료"],
+    status: "지금 무료",
     statusColor: "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400",
   },
   {
