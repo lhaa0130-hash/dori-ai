@@ -315,53 +315,204 @@ function QuotaLine({ free, quota, onShowKey }: { free: boolean; quota: number | 
   );
 }
 
-/* ─────────────────────────── 홈 ─────────────────────────── */
-function Home({ userName, enabled, onView, free, quota, onShowKey }: {
+/* ─────────────────────────── 홈 (위젯 대시보드 — EXE와 동일) ─────────────────────────── */
+const HOME_WIDGETS: { id: string; label: string; icon: string; desc: string }[] = [
+  { id: "assistant", label: "비서 바로가기", icon: "💬", desc: "비서에게 일 시키기" },
+  { id: "stats", label: "현황 요약", icon: "📊", desc: "결재대기 · 진행중 · 직원" },
+  { id: "finance", label: "이번 달 수지", icon: "💰", desc: "수익 · 비용 · 이익" },
+  { id: "recent", label: "최근 작업", icon: "🕑", desc: "최근 작업 목록" },
+  { id: "quicktools", label: "빠른 도구", icon: "⚡", desc: "켜둔 AI 도구 모음" },
+  { id: "shortcuts", label: "메뉴 바로가기", icon: "🔗", desc: "켜둔 기능 바로가기" },
+];
+const HOME_WIDGET_BY_ID = Object.fromEntries(HOME_WIDGETS.map((w) => [w.id, w]));
+const DEFAULT_HOME = ["assistant", "stats", "finance", "recent", "quicktools"];
+const LS_HOME = "illo.web.homeWidgets";
+function loadHome(): string[] {
+  try { const r = localStorage.getItem(LS_HOME); if (r) { const a = JSON.parse(r); if (Array.isArray(a)) return a.filter((id: string) => HOME_WIDGET_BY_ID[id]); } } catch { /* */ }
+  return DEFAULT_HOME;
+}
+function saveHome(ids: string[]) { try { localStorage.setItem(LS_HOME, JSON.stringify(ids)); } catch { /* */ } }
+function greeting(): string {
+  const h = new Date().getHours();
+  if (h < 6) return "늦은 시간까지 고생 많으십니다";
+  if (h < 12) return "좋은 아침입니다, 사장님";
+  if (h < 18) return "오후도 힘내세요, 사장님";
+  return "오늘도 수고하셨습니다, 사장님";
+}
+
+function Home({ enabled, onView, free, quota }: {
   userName: string; enabled: string[]; onView: (id: string) => void; free: boolean; quota: number | null; onShowKey: () => void;
 }) {
-  const tools = enabled.map((id) => ILLO_FEATURE_BY_ID[id]).filter((f) => f && f.kind === "tool") as IlloFeature[];
+  const [widgets, setWidgets] = useState<string[]>(DEFAULT_HOME);
+  const [editing, setEditing] = useState(false);
+  const dragIdx = useRef<number | null>(null);
+  useEffect(() => { setWidgets(loadHome()); }, []);
+
+  function update(next: string[]) { setWidgets(next); saveHome(next); }
+  function remove(id: string) { update(widgets.filter((x) => x !== id)); }
+  function add(id: string) { update([...widgets, id]); }
+  function reorder(from: number, to: number) { const n = [...widgets]; const [m] = n.splice(from, 1); n.splice(to, 0, m); update(n); }
+  const available = HOME_WIDGETS.filter((w) => !widgets.includes(w.id));
+
+  function renderWidget(id: string) {
+    switch (id) {
+      case "assistant":
+        return (
+          <button onClick={() => onView("assistant")} className="w-full bg-gradient-to-r from-[#F9954E] to-[#FB8C3E] text-white rounded-3xl px-5 py-4 flex items-center gap-3.5 shadow-lg shadow-[#F9954E]/25 hover:brightness-95 transition">
+            <span className="w-11 h-11 rounded-2xl bg-white/20 grid place-items-center text-2xl shrink-0">💬</span>
+            <span className="text-left flex-1 min-w-0">
+              <span className="block font-extrabold text-[15px]">비서에게 일 시키기</span>
+              <span className="block text-[12px] text-white/85 mt-0.5">현황 질문 · 작업 지시 · 웹 조사</span>
+            </span>
+            <span className="text-white/80 text-xl">→</span>
+          </button>
+        );
+      case "stats":
+        return (
+          <div className="grid grid-cols-3 gap-2.5">
+            {[{ e: "📋", l: "결재대기" }, { e: "⚙️", l: "진행중" }, { e: "🧑‍💼", l: "직원" }].map((c) => (
+              <button key={c.l} onClick={() => onView("features")} className="rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-3 flex flex-col items-center gap-0.5 active:scale-95 transition">
+                <span className="text-lg leading-none mb-0.5">{c.e}</span>
+                <span className="text-xl font-extrabold leading-none text-neutral-900 dark:text-white">0</span>
+                <span className="text-[10.5px] text-neutral-400">{c.l}</span>
+              </button>
+            ))}
+          </div>
+        );
+      case "finance":
+        return (
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-neutral-200 dark:border-zinc-800 p-4">
+            <div className="flex items-center justify-between mb-3">
+              <span className="text-[13px] font-bold text-neutral-900 dark:text-white">이번 달</span>
+              <button onClick={() => onView("settings")} className="text-[11px] text-[#E8832E] font-semibold">자세히 →</button>
+            </div>
+            <div className="grid grid-cols-3 gap-2 text-center">
+              {[{ l: "수익", v: "₩0", c: "text-emerald-500" }, { l: "비용", v: "₩0", c: "text-neutral-700 dark:text-neutral-200" }, { l: "이익", v: "₩0", c: "text-[#E8832E]" }].map((f) => (
+                <div key={f.l}>
+                  <div className="text-[10.5px] text-neutral-400 mb-0.5">{f.l}</div>
+                  <div className={"text-[13px] font-extrabold leading-tight " + f.c}>{f.v}</div>
+                </div>
+              ))}
+            </div>
+            <div className="mt-3 pt-3 border-t border-neutral-100 dark:border-zinc-800 flex items-center justify-between text-[12px]">
+              <span className="text-neutral-400">{free ? "오늘 남은 무료" : "내 키"}</span>
+              <span className="font-bold text-blue-500">{free ? `${quota ?? FREE_LIMIT} / ${FREE_LIMIT}회` : "무제한"}</span>
+            </div>
+          </div>
+        );
+      case "recent":
+        return (
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-neutral-200 dark:border-zinc-800 overflow-hidden">
+            <div className="px-4 py-3 flex items-center justify-between border-b border-neutral-100 dark:border-zinc-800">
+              <span className="text-[13px] font-bold text-neutral-900 dark:text-white">최근 작업</span>
+              <button onClick={() => onView("assistant")} className="text-[11px] text-[#E8832E] font-semibold">전체 →</button>
+            </div>
+            <div className="px-4 py-8 text-center text-[13px] text-neutral-400">아직 작업이 없어요.</div>
+          </div>
+        );
+      case "quicktools": {
+        const tools = enabled.map((id) => ILLO_FEATURE_BY_ID[id]).filter((f) => f && f.kind === "tool").slice(0, 8) as IlloFeature[];
+        return (
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-neutral-200 dark:border-zinc-800 p-4">
+            <div className="text-[13px] font-bold text-neutral-900 dark:text-white mb-2.5">빠른 도구</div>
+            {tools.length === 0 ? (
+              <button onClick={() => onView("features")} className="text-[12px] text-[#E8832E] font-semibold">🧩 보관함에서 도구 꺼내오기 →</button>
+            ) : (
+              <div className="grid grid-cols-4 gap-2.5">
+                {tools.map((t) => (
+                  <button key={t.id} onClick={() => onView(t.id)} className="flex flex-col items-center gap-1.5 active:scale-95 transition">
+                    <span className="w-full aspect-square rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/30 border border-neutral-100 dark:border-zinc-800 grid place-items-center text-xl">{t.icon}</span>
+                    <span className="text-[10px] text-neutral-500 dark:text-neutral-400 text-center leading-tight truncate w-full">{t.label}</span>
+                  </button>
+                ))}
+              </div>
+            )}
+          </div>
+        );
+      }
+      case "shortcuts": {
+        const items = enabled.map((id) => ILLO_FEATURE_BY_ID[id]).filter((f) => f && !["home", "features"].includes(f.id)).slice(0, 8) as IlloFeature[];
+        return (
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-neutral-200 dark:border-zinc-800 p-4">
+            <div className="text-[13px] font-bold text-neutral-900 dark:text-white mb-2.5">메뉴 바로가기</div>
+            <div className="grid grid-cols-4 gap-2.5">
+              {items.map((f) => (
+                <button key={f.id} onClick={() => onView(f.id)} className="flex flex-col items-center gap-1.5 active:scale-95 transition">
+                  <span className="w-full aspect-square rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/30 border border-neutral-100 dark:border-zinc-800 grid place-items-center text-xl">{f.icon}</span>
+                  <span className="text-[10px] text-neutral-500 dark:text-neutral-400 text-center leading-tight truncate w-full">{f.label}</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        );
+      }
+      default: return null;
+    }
+  }
+
   return (
     <ViewScroll>
-      <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white mb-1">안녕하세요, {userName}님 👋</h1>
-      <p className="text-neutral-500 dark:text-neutral-400 mb-5">혼자서도 일이 되는 곳, <b className="text-[#F9954E]">일로</b>예요.</p>
-      <div className="mb-7"><QuotaLine free={free} quota={quota} onShowKey={onShowKey} /></div>
-
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-9">
-        <button onClick={() => onView("assistant")}
-          className="text-left p-5 rounded-3xl bg-gradient-to-br from-[#F9954E] to-[#FB8C3E] text-white shadow-lg shadow-[#F9954E]/25 hover:-translate-y-0.5 transition-transform">
-          <div className="text-2xl mb-2">💬</div>
-          <div className="font-extrabold text-lg">비서실</div>
-          <div className="text-[13px] text-white/90 mt-0.5">무엇이든 물어보고 일을 시켜요</div>
-        </button>
-        <button onClick={() => onView("features")}
-          className="text-left p-5 rounded-3xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 hover:border-[#F9954E] transition-colors">
-          <div className="text-2xl mb-2">🧩</div>
-          <div className="font-extrabold text-lg text-neutral-900 dark:text-white">기능 보관함</div>
-          <div className="text-[13px] text-neutral-500 dark:text-neutral-400 mt-0.5">필요한 기능만 꺼내 내 메뉴에</div>
+      <div className="flex items-start justify-between mb-3">
+        <div>
+          <div className="text-neutral-400 text-[13px]">{greeting()}</div>
+          <h1 className="text-[22px] font-extrabold text-neutral-900 dark:text-white tracking-tight mt-0.5">오늘의 사무실</h1>
+        </div>
+        <button onClick={() => setEditing((e) => !e)}
+          className={"px-3.5 py-2 rounded-xl text-[13px] font-semibold transition-colors shrink-0 " + (editing ? "bg-[#F9954E] text-white" : "bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-neutral-500 dark:text-neutral-400")}>
+          {editing ? "✓ 완료" : "⠿ 편집"}
         </button>
       </div>
 
-      <h2 className="text-sm font-bold text-neutral-400 mb-3">내 도구</h2>
-      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {tools.map((t) => (
-          <button key={t.id} onClick={() => onView(t.id)}
-            className="flex items-center gap-3 p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-left hover:border-[#F9954E] dark:hover:border-[#F9954E] hover:-translate-y-0.5 transition-all">
-            <span className="w-11 h-11 rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center text-xl shrink-0">{t.icon}</span>
-            <span className="min-w-0">
-              <span className="block text-[15px] font-bold text-neutral-900 dark:text-white">{t.label}</span>
-              <span className="block text-xs text-neutral-500 dark:text-neutral-400 truncate">{t.desc}</span>
-            </span>
-          </button>
+      {editing && (
+        <div className="text-[12px] text-[#E8832E] mb-3 bg-[#FFF5EB] dark:bg-orange-950/20 rounded-xl px-3 py-2.5 leading-relaxed">
+          위젯을 <b>드래그</b>해 순서를 바꾸고, <b>✕</b>로 제거하세요. 아래 "위젯 추가"에서 카드를 꺼내올 수 있어요.
+        </div>
+      )}
+
+      <div className="space-y-3.5">
+        {widgets.map((id, idx) => (
+          <div
+            key={id}
+            draggable={editing}
+            onDragStart={() => { dragIdx.current = idx; }}
+            onDragOver={(e) => { if (editing) e.preventDefault(); }}
+            onDrop={() => { const f = dragIdx.current; if (f != null && f !== idx) reorder(f, idx); dragIdx.current = null; }}
+            className={"relative " + (editing ? "cursor-grab active:cursor-grabbing" : "")}
+          >
+            {editing && (
+              <button onClick={() => remove(id)} className="absolute -top-2 -right-2 z-30 w-7 h-7 rounded-full bg-rose-500 text-white text-sm font-bold shadow-md grid place-items-center active:scale-90">✕</button>
+            )}
+            <div className={editing ? "pointer-events-none select-none ring-2 ring-dashed ring-[#F9954E]/40 rounded-3xl" : ""}>
+              {renderWidget(id)}
+            </div>
+          </div>
         ))}
-        <button onClick={() => onView("features")}
-          className="flex items-center justify-center gap-2 p-4 rounded-2xl border border-dashed border-neutral-300 dark:border-zinc-700 text-neutral-500 dark:text-neutral-400 hover:text-[#E8832E] hover:border-[#F9954E] transition-colors">
-          <Plus className="w-4 h-4" /> 기능 더 추가하기
-        </button>
       </div>
 
-      <p className="text-[11px] text-neutral-400 dark:text-zinc-600 mt-9 text-center break-keep">
-        AI 직원·스튜디오·사이트 배포·자동화 등 고급 기능은 데스크톱 일로(PC)에서 쓸 수 있어요.
-      </p>
+      {editing && available.length > 0 && (
+        <div className="mt-5">
+          <div className="text-[12px] font-semibold text-neutral-400 mb-2 px-1">＋ 위젯 추가</div>
+          <div className="grid grid-cols-1 gap-2.5">
+            {available.map((w) => (
+              <button key={w.id} onClick={() => add(w.id)}
+                className="flex items-center gap-3 p-3.5 rounded-2xl border border-dashed border-neutral-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-left active:scale-[0.98] transition">
+                <span className="text-xl w-9 h-9 rounded-xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center shrink-0">{w.icon}</span>
+                <span className="min-w-0 flex-1">
+                  <span className="block text-[13.5px] font-bold text-neutral-900 dark:text-white">{w.label}</span>
+                  <span className="block text-[11.5px] text-neutral-400 truncate">{w.desc}</span>
+                </span>
+                <span className="text-[#F9954E] font-bold text-lg">＋</span>
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {widgets.length === 0 && (
+        <div className="text-center py-12 text-neutral-400 text-[13px]">
+          홈이 비어 있어요. <button onClick={() => setEditing(true)} className="text-[#E8832E] font-semibold">＋ 위젯 추가</button>
+        </div>
+      )}
     </ViewScroll>
   );
 }
