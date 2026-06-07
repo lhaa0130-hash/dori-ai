@@ -24,6 +24,7 @@ export default function IlloWebClient() {
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const [copied, setCopied] = useState(false);
+  const [showGuide, setShowGuide] = useState(false);
 
   // 키 로드: 로컬 → 없으면 클라우드(데스크톱 동기화) 시도
   useEffect(() => {
@@ -91,7 +92,9 @@ export default function IlloWebClient() {
           <h1 className="text-xl font-extrabold text-neutral-900 dark:text-white mb-2">일로 웹</h1>
           <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-6 break-keep">로그인하면 내 API 키로 AI 도구를 바로 쓸 수 있어요.</p>
           <Link href="/login" className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold transition-colors">로그인 / 회원가입</Link>
+          <button onClick={() => setShowGuide(true)} className="block mx-auto mt-4 text-sm font-bold text-[#E8832E] dark:text-[#FBAA60]">🔰 일로가 처음이신가요? 시작 가이드</button>
         </div>
+        {showGuide && <GuideOverlay onClose={() => setShowGuide(false)} />}
       </Centered>
     );
   }
@@ -104,14 +107,30 @@ export default function IlloWebClient() {
           <div className="w-14 h-14 rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center mx-auto mb-5">
             <KeyRound className="w-7 h-7 text-[#F9954E]" />
           </div>
-          <h1 className="text-xl font-extrabold text-center text-neutral-900 dark:text-white mb-2">내 Claude API 키를 넣어주세요</h1>
+          <h1 className="text-xl font-extrabold text-center text-neutral-900 dark:text-white mb-2">일로 시작하기</h1>
           <p className="text-sm text-center text-neutral-500 dark:text-neutral-400 mb-6 break-keep">
-            AI 기능은 회원님의 API 키로 동작해요. 키는 회원님 브라우저에만 저장됩니다.
+            AI 기능은 회원님의 Claude API 키로 동작해요. 키는 회원님 브라우저에만 저장됩니다.
           </p>
+
+          {/* 처음 사용자 — 가이드 (가장 크게) */}
+          <button
+            onClick={() => setShowGuide(true)}
+            className="w-full mb-2 py-3.5 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold text-[15px] flex items-center justify-center gap-2 shadow-lg shadow-[#F9954E]/25 transition-colors"
+          >
+            🔰 처음이에요 — 시작 가이드
+          </button>
+          <p className="text-center text-[11px] text-neutral-400 dark:text-zinc-600 mb-5">키 만드는 법부터 첫 사용까지, 5분이면 끝나요</p>
+
+          <div className="flex items-center gap-3 mb-4">
+            <div className="flex-1 h-px bg-neutral-200 dark:bg-zinc-800" />
+            <span className="text-[11px] font-bold text-neutral-400">이미 키가 있다면</span>
+            <div className="flex-1 h-px bg-neutral-200 dark:bg-zinc-800" />
+          </div>
+
           <button
             onClick={tryPull}
             disabled={pulling}
-            className="w-full mb-3 py-3 rounded-2xl border border-[#F9954E]/40 text-[#E8832E] dark:text-[#FBAA60] font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50"
+            className="w-full mb-2.5 py-3 rounded-2xl border border-[#F9954E]/40 text-[#E8832E] dark:text-[#FBAA60] font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50"
           >
             {pulling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />}
             데스크톱에서 저장한 키 불러오기
@@ -121,15 +140,13 @@ export default function IlloWebClient() {
             value={keyInput}
             onChange={(e) => setKeyInput(e.target.value)}
             onKeyDown={(e) => e.key === "Enter" && saveKey()}
-            placeholder="sk-ant-..."
+            placeholder="sk-ant-... (키 붙여넣기)"
             className="w-full mb-2 px-4 py-3 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-sm font-mono focus:outline-none focus:border-[#F9954E]"
           />
-          <button onClick={saveKey} className="w-full py-3 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold text-sm transition-colors">저장하고 시작</button>
+          <button onClick={saveKey} className="w-full py-3 rounded-2xl bg-neutral-900 dark:bg-white text-white dark:text-black font-bold text-sm transition-colors">저장하고 시작</button>
           {err && <p className="text-xs text-rose-500 mt-3 text-center leading-relaxed">{err}</p>}
-          <p className="text-[11px] text-neutral-400 dark:text-zinc-600 mt-4 text-center">
-            키 발급: console.anthropic.com/settings/keys
-          </p>
         </div>
+        {showGuide && <GuideOverlay onClose={() => setShowGuide(false)} />}
       </Shell>
     );
   }
@@ -254,4 +271,81 @@ function Shell({ children }: { children: React.ReactNode }) {
 }
 function Centered({ children }: { children: React.ReactNode }) {
   return <main className="w-full min-h-screen grid place-items-center bg-neutral-50 dark:bg-black px-5 font-sans">{children}</main>;
+}
+
+function Step({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
+  return (
+    <div className="flex gap-3">
+      <div className="w-7 h-7 rounded-full bg-[#F9954E] text-white text-[13px] font-extrabold grid place-items-center shrink-0">{n}</div>
+      <div className="min-w-0">
+        <div className="font-bold text-neutral-900 dark:text-white mb-1">{title}</div>
+        <div className="text-[13.5px] text-neutral-600 dark:text-neutral-400 leading-relaxed break-keep space-y-1">{children}</div>
+      </div>
+    </div>
+  );
+}
+
+// 초보자용 완전 가이드 — 키 발급부터 첫 사용까지
+function GuideOverlay({ onClose }: { onClose: () => void }) {
+  return (
+    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4" onClick={onClose}>
+      <div
+        className="bg-white dark:bg-zinc-900 w-full sm:max-w-lg max-h-[92vh] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-100 dark:border-zinc-800 shrink-0">
+          <span className="font-extrabold text-neutral-900 dark:text-white">🔰 일로 시작 가이드</span>
+          <button onClick={onClose} aria-label="닫기" className="w-8 h-8 grid place-items-center rounded-lg text-neutral-400 hover:text-neutral-700 dark:hover:text-white text-lg">✕</button>
+        </div>
+
+        <div className="overflow-y-auto px-5 py-6 space-y-7">
+          <div className="rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/20 p-4">
+            <p className="text-[13.5px] text-neutral-700 dark:text-neutral-300 leading-relaxed break-keep">
+              <b className="text-[#E8832E] dark:text-[#FBAA60]">일로</b>는 혼자서도 AI에게 일을 맡기는 도구예요. 블로그 글·SNS·광고 카피·상품 설명·답변·요약을 AI가 대신 써줍니다. 딱 하나만 준비하면 돼요 — <b>내 Claude API 키</b>.
+            </p>
+          </div>
+
+          <Step n="1" title="API 키가 왜 필요해요?">
+            <p>일로는 회원님 <b>본인 키</b>로 AI를 불러요. 그래서 ① 요금은 쓴 만큼만(글 1개 보통 몇 원), ② 키와 결과는 <b>회원님 브라우저에만</b> 남아요(우리 서버로 안 보냄).</p>
+            <p className="text-neutral-400 dark:text-zinc-500">쉽게 말해, 키는 AI를 부르는 “내 출입증”이에요.</p>
+          </Step>
+
+          <Step n="2" title="Claude 콘솔 가입">
+            <p><b>console.anthropic.com</b> 에 접속해 가입/로그인하세요. (구글 계정으로도 가능)</p>
+          </Step>
+
+          <Step n="3" title="결제수단 등록 + 소액 충전">
+            <p>왼쪽 메뉴 <b>Billing(결제)</b> 에서 카드를 등록하고 <b>$5 정도만 충전</b>하세요. 크레딧이 있어야 AI가 동작해요.</p>
+            <p className="text-neutral-400 dark:text-zinc-500">걱정되면 같은 화면에서 사용 <b>한도(limit)</b>도 걸 수 있어요.</p>
+          </Step>
+
+          <Step n="4" title="API 키 만들기 → 복사">
+            <p>왼쪽 메뉴 <b>API Keys</b> → <b>Create Key</b> → 이름 아무거나 입력 → 생성. 만들어진 <b>sk-ant-…</b> 키를 복사하세요.</p>
+            <p className="text-rose-500">⚠️ 키는 만들 때 딱 한 번만 보여요. 꼭 바로 복사하세요!</p>
+          </Step>
+
+          <Step n="5" title="일로에 붙여넣기">
+            <p>이 창을 닫고 아래 입력칸에 키를 붙여넣은 뒤 <b>저장하고 시작</b>을 누르면 끝! (데스크톱 일로를 쓰신다면 “데스크톱에서 저장한 키 불러오기”로 자동으로 가져올 수도 있어요.)</p>
+          </Step>
+
+          <Step n="6" title="첫 글 만들어보기">
+            <p>예) <b>블로그 글쓰기</b> → 주제에 “우리 동네 카페 추천” 입력 → 옵션 고르고 <b>생성</b> → 결과 <b>복사</b>. 몇 초면 초안이 나와요.</p>
+          </Step>
+
+          <a
+            href="https://console.anthropic.com/settings/keys"
+            target="_blank"
+            rel="noreferrer"
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-2xl border border-[#F9954E]/40 text-[#E8832E] dark:text-[#FBAA60] font-bold text-sm"
+          >
+            🔗 Claude 콘솔 열기 (키 만들러 가기)
+          </a>
+        </div>
+
+        <div className="px-5 py-4 border-t border-neutral-100 dark:border-zinc-800 shrink-0">
+          <button onClick={onClose} className="w-full py-3 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold text-sm">닫고 키 넣기 →</button>
+        </div>
+      </div>
+    </div>
+  );
 }

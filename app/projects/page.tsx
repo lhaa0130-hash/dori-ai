@@ -17,11 +17,11 @@ const projects = [
     desc: "혼자서도, 일이 되는 곳",
     longDesc:
       "AI 직원을 불러와 지시하고, 내 사업·콘텐츠·사이트를 실제로 굴리는 1인용 AI 사무실이에요. 수십 개 기능 중 필요한 것만 드래그로 꺼내 쓰고, 모든 AI는 회원님의 API 키로 동작합니다.",
-    href: "/illo",
+    href: "/illo/app",
     gradient: "from-[#FBAA60] via-[#F9954E] to-[#E8832E]",
     iconBg: "bg-orange-50 dark:bg-orange-900/20",
     tags: ["1인 사업", "AI 직원", "커스터마이징"],
-    status: "다운로드",
+    status: "바로 시작",
     statusColor: "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400",
   },
   {

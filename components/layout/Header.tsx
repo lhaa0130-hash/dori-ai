@@ -50,7 +50,7 @@ export default function Header() {
       emoji: "🟧",
       image: "/illo-logo.png",
       desc: "혼자서도, 일이 되는 곳",
-      href: "/illo",
+      href: "/illo/app",
       color: "from-[#FBAA60] to-[#E8832E]",
       bg: "bg-orange-50 dark:bg-orange-900/20",
     },
