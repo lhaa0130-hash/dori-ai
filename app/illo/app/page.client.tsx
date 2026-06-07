@@ -116,13 +116,7 @@ export default function IlloWebClient() {
   if (status === "unauthenticated") {
     return (
       <Centered>
-        <div className="text-center max-w-sm">
-          <img src="/illo-logo.png" alt="일로" className="w-16 h-16 rounded-2xl mx-auto mb-5 shadow-lg" />
-          <h1 className="text-xl font-extrabold text-neutral-900 dark:text-white mb-2">일로 웹</h1>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-6 break-keep">로그인하면 AI 도구를 <b className="text-[#E8832E] dark:text-[#FBAA60]">하루 50회 무료</b>로 바로 쓸 수 있어요.</p>
-          <Link href="/login" className="inline-flex items-center gap-2 px-6 py-3 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold transition-colors">로그인 / 회원가입</Link>
-          <button onClick={() => setShowGuide(true)} className="block mx-auto mt-4 text-sm font-bold text-[#E8832E] dark:text-[#FBAA60]">🔰 일로가 처음이신가요? 시작 가이드</button>
-        </div>
+        <IlloLogin onShowGuide={() => setShowGuide(true)} />
         {showGuide && <GuideOverlay onClose={() => setShowGuide(false)} />}
       </Centered>
     );
@@ -225,6 +219,97 @@ export default function IlloWebClient() {
       </p>
       {overlays}
     </Shell>
+  );
+}
+
+// 일로 전용 로그인 카드 (데스크톱 EXE와 동일 디자인) — 사이트 AuthContext 사용
+function IlloLogin({ onShowGuide }: { onShowGuide: () => void }) {
+  const { login, signup } = useAuth();
+  const [mode, setMode] = useState<"login" | "signup">("login");
+  const [email, setEmail] = useState("");
+  const [pw, setPw] = useState("");
+  const [pw2, setPw2] = useState("");
+  const [remember, setRemember] = useState(false);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+  const isSignup = mode === "signup";
+
+  useEffect(() => {
+    try { const e = localStorage.getItem("illo.web.email"); if (e) { setEmail(e); setRemember(true); } } catch { /* */ }
+  }, []);
+
+  function switchMode(m: "login" | "signup") { setMode(m); setErr(""); setPw2(""); }
+
+  async function submit() {
+    if (busy) return;
+    if (!email.trim() || !pw) { setErr("이메일과 비밀번호를 입력하세요."); return; }
+    if (isSignup) {
+      if (pw.length < 6) { setErr("비밀번호는 6자 이상으로 설정하세요."); return; }
+      if (pw !== pw2) { setErr("비밀번호가 일치하지 않습니다. 다시 확인해 주세요."); return; }
+    }
+    setBusy(true); setErr("");
+    const r = isSignup
+      ? await signup({ email: email.trim(), password: pw, name: email.trim().split("@")[0] })
+      : await login(email.trim(), pw);
+    if (!r.success) { setErr(r.error || "오류가 발생했습니다."); setBusy(false); return; }
+    try {
+      if (remember) localStorage.setItem("illo.web.email", email.trim());
+      else localStorage.removeItem("illo.web.email");
+    } catch { /* */ }
+    // 성공하면 AuthContext가 status=authenticated 로 바꿔 자동으로 도구 화면 전환 (busy 유지)
+  }
+
+  const inputCls = "w-full px-4 py-3 rounded-xl bg-neutral-50 dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-[#F9954E]";
+
+  return (
+    <div className="w-full max-w-sm bg-white dark:bg-zinc-900 rounded-3xl border border-neutral-200 dark:border-zinc-800 shadow-xl p-8">
+      <div className="flex flex-col items-center mb-6">
+        <img src="/illo-logo.png" alt="일로" className="w-14 h-14 rounded-2xl shadow-md mb-3" />
+        <div className="text-xl font-extrabold text-[#F9954E] leading-none">일로</div>
+        <div className="text-[13px] text-neutral-500 dark:text-neutral-400 mt-2">
+          {isSignup ? "계정을 만들고 바로 시작하세요" : "혼자서도 일이 되는 곳"}
+        </div>
+      </div>
+
+      <div className="flex gap-1 p-1 mb-4 rounded-xl bg-neutral-100 dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700">
+        {(["login", "signup"] as const).map((m) => (
+          <button key={m} onClick={() => switchMode(m)}
+            className={"flex-1 py-2 rounded-lg text-[13px] font-semibold transition-all " + (mode === m ? "bg-white dark:bg-zinc-900 text-[#E8832E] shadow-sm" : "text-neutral-500 dark:text-neutral-400")}>
+            {m === "login" ? "로그인" : "회원가입"}
+          </button>
+        ))}
+      </div>
+
+      <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} onKeyDown={(e) => e.key === "Enter" && submit()} placeholder="이메일" autoFocus autoCapitalize="off" autoCorrect="off" className={inputCls + " mb-2.5"} />
+      <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} onKeyDown={(e) => e.key === "Enter" && submit()} placeholder={isSignup ? "비밀번호 (6자 이상)" : "비밀번호"} className={inputCls + (isSignup ? " mb-2.5" : " mb-3")} />
+      {isSignup && (
+        <input type="password" value={pw2} onChange={(e) => setPw2(e.target.value)} onKeyDown={(e) => e.key === "Enter" && submit()} placeholder="비밀번호 확인 (한 번 더 입력)"
+          className={"w-full mb-3 px-4 py-3 rounded-xl bg-neutral-50 dark:bg-zinc-800 border text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none " + (pw2 && pw !== pw2 ? "border-rose-400 focus:border-rose-500" : "border-neutral-200 dark:border-zinc-700 focus:border-[#F9954E]")} />
+      )}
+
+      {!isSignup && (
+        <label className="flex items-center gap-2 mb-3.5 px-1 cursor-pointer select-none">
+          <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} className="w-4 h-4 rounded accent-[#F9954E] cursor-pointer" />
+          <span className="text-[12.5px] text-neutral-600 dark:text-neutral-300">아이디 저장</span>
+        </label>
+      )}
+
+      <button onClick={submit} disabled={busy} className="w-full py-3 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold disabled:opacity-50 transition-colors flex items-center justify-center gap-2">
+        {busy ? <><Loader2 className="w-4 h-4 animate-spin" /> {isSignup ? "가입 중…" : "로그인 중…"}</> : isSignup ? "회원가입하고 시작" : "로그인"}
+      </button>
+
+      {err && <div className="text-[12px] text-rose-500 text-center mt-3 leading-relaxed">{err}</div>}
+
+      <div className="text-[12px] text-neutral-500 dark:text-neutral-400 text-center mt-5">
+        {isSignup ? (
+          <>이미 계정이 있으신가요?{" "}<button onClick={() => switchMode("login")} className="text-[#E8832E] dark:text-[#FBAA60] font-semibold hover:underline">로그인</button></>
+        ) : (
+          <>계정이 없으신가요?{" "}<button onClick={() => switchMode("signup")} className="text-[#E8832E] dark:text-[#FBAA60] font-semibold hover:underline">회원가입</button>{" · "}<Link href="/" className="text-neutral-400 hover:underline">사이트</Link></>
+        )}
+      </div>
+      <button onClick={onShowGuide} className="block mx-auto mt-4 text-[12.5px] font-bold text-[#E8832E] dark:text-[#FBAA60]">🔰 일로가 처음이신가요? 시작 가이드</button>
+      <p className="text-[11px] text-neutral-400 dark:text-zinc-600 text-center mt-3 leading-relaxed">로그인하면 AI 도구를 하루 50회 무료로 쓸 수 있어요.</p>
+    </div>
   );
 }
 
