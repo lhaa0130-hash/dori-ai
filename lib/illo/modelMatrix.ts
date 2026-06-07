@@ -69,6 +69,10 @@ export const FEATURE_PICK: Record<string, ModelPick> = {
   blog:      { provider: 'gemini',    model: 'gemini-2.5-flash',       domain: 'text', tier: 'mid', local: 'qwen2.5:14b', note: '블로그: 가성비(품질 더 원하면 Sonnet)' },
   copy:      { provider: 'gemini',    model: 'gemini-2.5-flash',       domain: 'text', tier: 'mid', note: '카피: 가성비(창의 더 원하면 Sonnet)' },
   product:   { provider: 'gemini',    model: 'gemini-2.5-flash',       domain: 'text', tier: 'mid', note: '상세: 가성비' },
+  // 🔵 자동화 파이프라인용 단계 모델
+  research:  { provider: 'gemini',    model: 'gemini-2.5-flash',       domain: 'text', tier: 'mid', note: '리서치(+웹검색)' },
+  review:    { provider: 'gemini',    model: 'gemini-2.5-flash',       domain: 'text', tier: 'mid', note: '검토·교정(교차검증)' },
+  vision:    { provider: 'gemini',    model: 'gemini-2.5-flash',       domain: 'text', tier: 'cheap', note: '이미지/영상 분석(비전)' },
   // 🔴 고급 — 진짜 어려운 작업만(전략·코드·계약·리서치). 필요 기능에서 호출.
   strategy:  { provider: 'anthropic', model: 'claude-opus-4-8',        domain: 'text', tier: 'premium', note: '전략·고난도' },
   code:      { provider: 'anthropic', model: 'claude-sonnet-4-6',      domain: 'text', tier: 'premium', note: '코드(가성비는 DeepSeek)' },
