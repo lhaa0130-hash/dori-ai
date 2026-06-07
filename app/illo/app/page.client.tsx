@@ -107,7 +107,7 @@ export default function IlloWebClient() {
     const k = await pullCloudKey();
     setPulling(false);
     if (k) { setLocalKey(k); setKey(k); setShowKey(false); }
-    else setKeyErr("동기화된 키를 찾지 못했어요. 데스크톱 일로에서 키를 저장했는지 확인하거나, 아래에 직접 입력해 주세요.");
+    else setKeyErr("동기화된 키를 찾지 못했어요. 다른 기기에서 저장한 적이 없다면 아래에 직접 입력해 주세요.");
   }
 
   // ── 오버레이 (가이드 / 키 넣기) ──
@@ -122,7 +122,7 @@ export default function IlloWebClient() {
             <p className="text-[13px] text-center text-neutral-500 dark:text-neutral-400 mb-5 break-keep">키를 넣으면 무료 한도 없이 쓸 수 있어요. 키는 회원님 브라우저에만 저장됩니다.</p>
             <button onClick={() => { setShowKey(false); setShowGuide(true); }} className="w-full mb-3 py-2.5 rounded-xl text-sm font-bold text-[#E8832E] dark:text-[#FBAA60] border border-[#F9954E]/40">🔰 키 만드는 법 모르겠어요 (가이드)</button>
             <button onClick={tryPull} disabled={pulling} className="w-full mb-2.5 py-2.5 rounded-xl border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-300 font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50">
-              {pulling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />} 데스크톱에서 저장한 키 불러오기
+              {pulling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />} 다른 기기에서 저장한 키 불러오기
             </button>
             <input type="password" value={keyInput} onChange={(e) => setKeyInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && saveKey()} placeholder="sk-ant-... (키 붙여넣기)" className="w-full mb-2 px-4 py-3 rounded-xl bg-white dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 text-sm font-mono focus:outline-none focus:border-[#F9954E]" />
             <button onClick={saveKey} className="w-full py-3 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold text-sm">저장</button>
@@ -640,25 +640,23 @@ function FeatureManager({ enabled, onToggle, onView }: {
       <p className="text-neutral-500 dark:text-neutral-400 mb-7 break-keep">필요한 기능만 켜서 왼쪽 메뉴에 추가하세요. 안 쓰는 건 꺼두면 깔끔해요.</p>
 
       {ILLO_GROUP_ORDER.map((group) => {
-        const feats = ILLO_FEATURES.filter((f) => f.group === group);
+        // 공개(released)된 기능만 보여준다. 완성 전 기능은 숨김.
+        const feats = ILLO_FEATURES.filter((f) => f.group === group && f.released);
         if (!feats.length) return null;
-        const isPc = group === "PC 전용";
         return (
           <section key={group} className="mb-8">
-            <h2 className="text-sm font-bold text-neutral-400 mb-3">{group}{isPc && <span className="ml-2 text-[11px] font-medium text-neutral-300">데스크톱(PC)에서 사용</span>}</h2>
+            <h2 className="text-sm font-bold text-neutral-400 mb-3">{group}</h2>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {feats.map((f) => {
                 const on = enabled.includes(f.id);
                 return (
-                  <div key={f.id} className={"flex items-center gap-3 p-3.5 rounded-2xl border transition-colors " + (isPc ? "bg-neutral-100/60 dark:bg-zinc-900/40 border-neutral-200 dark:border-zinc-800 opacity-80" : on ? "bg-white dark:bg-zinc-900 border-[#F9954E]/50" : "bg-white dark:bg-zinc-900 border-neutral-200 dark:border-zinc-800")}>
+                  <div key={f.id} className={"flex items-center gap-3 p-3.5 rounded-2xl border transition-colors " + (on ? "bg-white dark:bg-zinc-900 border-[#F9954E]/50" : "bg-white dark:bg-zinc-900 border-neutral-200 dark:border-zinc-800")}>
                     <span className="w-10 h-10 rounded-xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center text-lg shrink-0">{f.icon}</span>
                     <div className="min-w-0 flex-1">
-                      <div className="text-sm font-bold text-neutral-900 dark:text-white flex items-center gap-1.5">{f.label}{f.id === "blog" || f.id === "sns" ? <span className="text-[10px] font-semibold text-[#E8832E] bg-[#FFF5EB] dark:bg-orange-950/30 px-1.5 py-0.5 rounded">선택</span> : null}</div>
+                      <div className="text-sm font-bold text-neutral-900 dark:text-white">{f.label}</div>
                       <div className="text-[12px] text-neutral-500 dark:text-neutral-400 truncate">{f.desc}</div>
                     </div>
-                    {isPc ? (
-                      <span className="shrink-0 text-neutral-300 dark:text-zinc-600"><Lock className="w-4 h-4" /></span>
-                    ) : f.core ? (
+                    {f.core ? (
                       <span className="shrink-0 text-[11px] text-neutral-400 font-semibold">고정</span>
                     ) : (
                       <button onClick={() => onToggle(f.id)}
@@ -673,6 +671,9 @@ function FeatureManager({ enabled, onToggle, onView }: {
           </section>
         );
       })}
+      <p className="text-[11px] text-neutral-400 dark:text-zinc-600 mt-4 text-center break-keep">
+        더 많은 기능(이미지·영상·음성·자동화)은 완성되는 대로 하나씩 열려요. 🔜
+      </p>
     </ViewScroll>
   );
 }
@@ -738,9 +739,9 @@ function Settings({ keyVal, free, onShowKey, onRemoveKey, onLogout, userName, us
         </div>
       </Section>
 
-      <Section title="데스크톱 일로">
+      <Section title="앞으로">
         <p className="text-[13px] text-neutral-600 dark:text-neutral-300 break-keep">
-          AI 직원 채용, 이미지·영상 스튜디오, 사이트 자동 배포, 자동화 스케줄 등 풀 기능은 데스크톱(PC) 일로에서 쓸 수 있어요.
+          지금은 비서실과 글쓰기 도구부터 시작해요. 이미지·영상·음성·자동화 같은 기능은 <b>완성되는 대로 하나씩</b> 열립니다. 🔜
         </p>
         <Link href="/illo" className="inline-block mt-3 text-[13px] font-bold text-[#E8832E] dark:text-[#FBAA60] hover:underline">일로 소개 보기 →</Link>
       </Section>
@@ -1053,10 +1054,10 @@ function GuideOverlay({ onClose }: { onClose: () => void }) {
             </a>
           </GuideSection>
 
-          {/* PC 버전 */}
-          <GuideSection icon="💻" title="더 강력한 PC 버전 (데스크톱 일로)">
+          {/* 앞으로 */}
+          <GuideSection icon="🔜" title="곧 추가될 기능">
             <p className="text-[12.5px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
-              <b>AI 직원 채용</b>, <b>이미지·영상 스튜디오</b>, <b>사이트 자동 배포</b>, <b>자동화 스케줄</b> 같은 풀 기능은 데스크톱(PC) 일로에서 쓸 수 있어요. 웹은 가볍게 어디서나, PC는 본격적으로!
+              지금은 <b>비서실 + 글쓰기 도구</b>부터 시작해요. <b>이미지·영상·음성·작곡·자동화 세트</b> 같은 기능은 완성되는 대로 하나씩 열립니다. 설치 없이 브라우저에서 어디서나 쓰세요.
             </p>
           </GuideSection>
 
