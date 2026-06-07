@@ -19,6 +19,66 @@ const joinPicked = (picked: string[]) => (picked.length ? `\n\n[옵션]\n- ${pic
 
 export const ILLO_TOOLS: IlloTool[] = [
   {
+    id: 'docs',
+    title: '문서 작성',
+    icon: '📝',
+    desc: '보고서·제안서·공지 초안을 AI로',
+    inputLabel: '무슨 문서가 필요하세요?',
+    placeholder: '예) 신제품 출시 사내 공지, 협업 제안서',
+    multiline: true,
+    aspects: ['보고서', '제안서', '공지문', '격식 있게', '간결하게', '표 포함'],
+    defaultAspects: ['간결하게'],
+    cta: '문서 생성',
+    buildPrompt: (input, picked) =>
+      `당신은 비즈니스 문서 작성 전문가입니다. 아래 요청에 맞는 한국어 문서 초안을 작성하세요.\n` +
+      `제목 → 목적 한 줄 → 본문(소제목 구분) → 마무리/다음 단계 순으로, 바로 사용 가능하게 써주세요.${joinPicked(picked)}\n\n[요청]\n${input}`,
+  },
+  {
+    id: 'mail',
+    title: '메일·메시지',
+    icon: '✉️',
+    desc: '상황만 입력하면 메일/답장 작성',
+    inputLabel: '어떤 메일/메시지인가요?',
+    placeholder: '예) 미팅 일정 조율 요청, 결제 지연 정중한 독촉',
+    multiline: true,
+    aspects: ['정중하게', '친근하게', '간결하게', '사과', '요청', '거절', '영문'],
+    defaultAspects: ['정중하게'],
+    cta: '메일 생성',
+    buildPrompt: (input, picked) =>
+      `당신은 비즈니스 커뮤니케이션 전문가입니다. 아래 상황에 맞는 메일/메시지를 작성하세요.\n` +
+      `제목(메일인 경우) + 본문을 자연스럽고 목적에 맞게 작성하고, 너무 길지 않게 해주세요.${joinPicked(picked)}\n\n[상황]\n${input}`,
+  },
+  {
+    id: 'translate',
+    title: '번역·교정',
+    icon: '🌐',
+    desc: '번역 + 문장 다듬기',
+    inputLabel: '번역/교정할 문장',
+    placeholder: '번역하거나 다듬고 싶은 문장을 붙여넣으세요',
+    multiline: true,
+    aspects: ['한→영', '영→한', '한→일', '일→한', '자연스럽게', '격식체', '맞춤법 교정'],
+    defaultAspects: ['자연스럽게'],
+    cta: '번역·교정',
+    buildPrompt: (input, picked) =>
+      `당신은 번역·교정 전문가입니다. 아래 문장을 요청 옵션에 맞춰 처리하세요.\n` +
+      `번역이면 자연스러운 결과를, 교정이면 다듬은 문장과 함께 바뀐 이유를 짧게 덧붙여주세요.${joinPicked(picked)}\n\n[문장]\n${input}`,
+  },
+  {
+    id: 'meeting',
+    title: '회의록 요약',
+    icon: '📋',
+    desc: '긴 회의 내용을 핵심·할 일로 요약',
+    inputLabel: '회의 내용 / 메모 붙여넣기',
+    placeholder: '회의에서 오간 내용, 녹취, 메모 등을 붙여넣으세요',
+    multiline: true,
+    aspects: ['핵심 요약', '결정사항', '할 일(담당자)', '다음 안건', '간결하게'],
+    defaultAspects: ['핵심 요약', '할 일(담당자)'],
+    cta: '회의록 정리',
+    buildPrompt: (input, picked) =>
+      `당신은 회의록 정리 전문가입니다. 아래 회의 내용을 한국어로 정리하세요.\n` +
+      `① 핵심 요약(3~5줄) ② 결정사항 ③ 할 일(가능하면 담당자/기한) ④ 다음 안건 순으로 구조화해주세요.${joinPicked(picked)}\n\n[회의 내용]\n${input}`,
+  },
+  {
     id: 'blog',
     title: '블로그 글쓰기',
     icon: '✍️',

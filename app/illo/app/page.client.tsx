@@ -1,37 +1,47 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
+import { useTheme } from "next-themes";
 import { useAuth } from "@/contexts/AuthContext";
 import { getFirebaseAuth } from "@/lib/firebase";
-import { ILLO_TOOLS, ILLO_TOOL_BY_ID } from "@/lib/illo/tools";
+import { ILLO_TOOL_BY_ID } from "@/lib/illo/tools";
 import { callClaude, ILLO_MODELS, ILLO_DEFAULT_MODEL } from "@/lib/illo/claude";
 import { getLocalKey, setLocalKey, getModel, setModel, pullCloudKey } from "@/lib/illo/key";
-import { ArrowLeft, KeyRound, Loader2, Copy, Check, Sparkles, Download } from "lucide-react";
+import {
+  ILLO_FEATURES, ILLO_FEATURE_BY_ID, ILLO_GROUP_ORDER, ILLO_DEFAULT_ENABLED,
+  loadIlloEnabled, saveIlloEnabled, type IlloFeature,
+} from "@/lib/illo/features";
+import {
+  ArrowLeft, KeyRound, Loader2, Copy, Check, Sparkles, Download,
+  Menu, X, Pencil, Plus, LogOut, Sun, Moon, Send, Lock, GripVertical,
+} from "lucide-react";
 
 const FREE_LIMIT = 50; // 무료(공용 키) 하루 호출 수
 
 export default function IlloWebClient() {
-  const { status } = useAuth();
+  const { status, session, logout } = useAuth();
 
   const [key, setKey] = useState("");
   const [keyInput, setKeyInput] = useState("");
   const [model, setModelState] = useState(ILLO_DEFAULT_MODEL);
   const [pulling, setPulling] = useState(false);
 
-  const [toolId, setToolId] = useState<string | null>(null);
-  const [input, setInput] = useState("");
-  const [picked, setPicked] = useState<string[]>([]);
-  const [result, setResult] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [err, setErr] = useState("");
-  const [copied, setCopied] = useState(false);
+  const [enabled, setEnabled] = useState<string[]>(ILLO_DEFAULT_ENABLED);
+  const [view, setView] = useState<string>("home");
+  const [editing, setEditing] = useState(false);
+  const [mobileNav, setMobileNav] = useState(false);
+
+  const [quota, setQuota] = useState<number | null>(null);
   const [showGuide, setShowGuide] = useState(false);
   const [showKey, setShowKey] = useState(false);
-  const [quota, setQuota] = useState<number | null>(null); // 무료 모드 오늘 남은 횟수
+  const [keyErr, setKeyErr] = useState("");
 
-  // 키 로드: 로컬 → 없으면 클라우드(데스크톱 동기화) 시도. 없어도 무료로 사용 가능.
+  const free = !key; // 본인 키 없으면 무료(공용 키) 모드
+
+  // 키 + 켠 기능 로드
   useEffect(() => {
+    setEnabled(loadIlloEnabled());
     if (status !== "authenticated") return;
     setModelState(getModel() || ILLO_DEFAULT_MODEL);
     const lk = getLocalKey();
@@ -39,59 +49,61 @@ export default function IlloWebClient() {
     pullCloudKey().then((k) => { if (k) { setKey(k); setLocalKey(k); } }).catch(() => {});
   }, [status]);
 
-  const tool = toolId ? ILLO_TOOL_BY_ID[toolId] : null;
-  const free = !key; // 본인 키 없으면 무료(공용 키) 모드
+  // ── 공용 Claude 호출 (무료/내키 자동 + 횟수 갱신) ──
+  async function runAI(prompt: string, modelOverride?: string) {
+    let idToken: string | undefined;
+    if (free) {
+      const u = getFirebaseAuth().currentUser;
+      idToken = u ? await u.getIdToken() : undefined;
+    }
+    const r = await callClaude({ apiKey: key || undefined, idToken, prompt, model: modelOverride || model });
+    if (typeof r.quotaRemaining === "number") setQuota(r.quotaRemaining);
+    return r;
+  }
 
-  function openTool(id: string) {
-    setToolId(id); setInput(""); setResult(""); setErr("");
-    setPicked(ILLO_TOOL_BY_ID[id]?.defaultAspects || []);
+  function goView(id: string) { setView(id); setMobileNav(false); }
+
+  function toggleFeature(id: string) {
+    const f = ILLO_FEATURE_BY_ID[id];
+    if (!f || f.core || f.kind === "pc") return;
+    setEnabled((prev) => {
+      const has = prev.includes(id);
+      const next = has ? prev.filter((x) => x !== id) : [...prev, id];
+      saveIlloEnabled(next);
+      if (has && view === id) setView("home");
+      return next;
+    });
   }
-  function togglePick(a: string) {
-    setPicked((p) => (p.includes(a) ? p.filter((x) => x !== a) : [...p, a]));
+  function reorder(from: number, to: number) {
+    setEnabled((prev) => {
+      const next = [...prev];
+      const [m] = next.splice(from, 1);
+      next.splice(to, 0, m);
+      saveIlloEnabled(next);
+      return next;
+    });
   }
+
   function saveKey() {
     const k = keyInput.trim();
     if (!k) return;
-    setLocalKey(k); setKey(k); setKeyInput(""); setShowKey(false);
+    setLocalKey(k); setKey(k); setKeyInput(""); setShowKey(false); setKeyErr("");
   }
+  function removeKey() { setLocalKey(""); setKey(""); }
   async function tryPull() {
-    setPulling(true);
+    setPulling(true); setKeyErr("");
     const k = await pullCloudKey();
     setPulling(false);
     if (k) { setLocalKey(k); setKey(k); setShowKey(false); }
-    else setErr("동기화된 키를 찾지 못했어요. 데스크톱 일로에서 키를 저장했는지 확인하거나, 아래에 직접 입력해 주세요.");
-  }
-  async function run() {
-    if (!tool || !input.trim() || busy) return;
-    setBusy(true); setErr(""); setResult("");
-    try {
-      let idToken: string | undefined;
-      if (free) {
-        const u = getFirebaseAuth().currentUser;
-        idToken = u ? await u.getIdToken() : undefined;
-      }
-      const r = await callClaude({ apiKey: key || undefined, idToken, prompt: tool.buildPrompt(input, picked), model });
-      setResult(r.text);
-      if (typeof r.quotaRemaining === "number") setQuota(r.quotaRemaining);
-    } catch (e) {
-      const raw = e instanceof Error ? e.message : "오류가 발생했습니다.";
-      if (/FREE_QUOTA_EXCEEDED/.test(raw)) {
-        setQuota(0);
-        setErr("오늘 무료 한도(하루 50회)를 다 쓰셨어요. 🌙 내일 다시 쓰거나, 내 Claude 키를 넣으면 무제한으로 쓸 수 있어요.");
-      } else if (/LOGIN_REQUIRED/.test(raw)) setErr("로그인이 필요합니다.");
-      else setErr(raw);
-    } finally { setBusy(false); }
-  }
-  async function copyResult() {
-    try { await navigator.clipboard.writeText(result); setCopied(true); setTimeout(() => setCopied(false), 1500); } catch { /* */ }
+    else setKeyErr("동기화된 키를 찾지 못했어요. 데스크톱 일로에서 키를 저장했는지 확인하거나, 아래에 직접 입력해 주세요.");
   }
 
-  // 오버레이(가이드 / 키 넣기) — 어느 화면 위에도 뜨도록 공통으로 렌더
+  // ── 오버레이 (가이드 / 키 넣기) ──
   const overlays = (
     <>
       {showGuide && <GuideOverlay onClose={() => setShowGuide(false)} />}
       {showKey && (
-        <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4" onClick={() => setShowKey(false)}>
+        <div className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4" onClick={() => setShowKey(false)}>
           <div className="bg-white dark:bg-zinc-900 w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl shadow-2xl p-6" onClick={(e) => e.stopPropagation()}>
             <div className="w-12 h-12 rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center mx-auto mb-4"><KeyRound className="w-6 h-6 text-[#F9954E]" /></div>
             <h2 className="text-lg font-extrabold text-center text-neutral-900 dark:text-white mb-1.5">내 Claude 키 넣기 (무제한)</h2>
@@ -102,7 +114,7 @@ export default function IlloWebClient() {
             </button>
             <input type="password" value={keyInput} onChange={(e) => setKeyInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && saveKey()} placeholder="sk-ant-... (키 붙여넣기)" className="w-full mb-2 px-4 py-3 rounded-xl bg-white dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 text-sm font-mono focus:outline-none focus:border-[#F9954E]" />
             <button onClick={saveKey} className="w-full py-3 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold text-sm">저장</button>
-            {err && <p className="text-xs text-rose-500 mt-3 text-center leading-relaxed">{err}</p>}
+            {keyErr && <p className="text-xs text-rose-500 mt-3 text-center leading-relaxed">{keyErr}</p>}
           </div>
         </div>
       )}
@@ -122,107 +134,549 @@ export default function IlloWebClient() {
     );
   }
 
-  // ── 도구 실행 화면 ──
-  if (tool) {
-    return (
-      <Shell>
-        <button onClick={() => setToolId(null)} className="inline-flex items-center gap-1.5 text-sm font-semibold text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] mb-5">
-          <ArrowLeft className="w-4 h-4" /> 도구 목록
-        </button>
-        <div className="flex items-center gap-3 mb-5">
-          <span className="w-11 h-11 rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center text-xl">{tool.icon}</span>
-          <div>
-            <h1 className="text-lg font-extrabold text-neutral-900 dark:text-white leading-tight">{tool.title}</h1>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400">{tool.desc}</p>
+  const tool = ILLO_FEATURE_BY_ID[view]?.kind === "tool" ? ILLO_TOOL_BY_ID[view] : null;
+  const userName = session?.user?.name || (session?.user?.email ? session.user.email.split("@")[0] : "사장님");
+
+  // ── 메인 셸 (EXE와 동일 구조: 사이드바 + 뷰) ──
+  return (
+    <div className="flex h-screen w-full bg-neutral-50 dark:bg-black font-sans overflow-hidden">
+      {/* 데스크톱 사이드바 */}
+      <div className="hidden md:flex">
+        <IlloSidebar
+          enabled={enabled} view={view} editing={editing}
+          onView={goView} onToggleEdit={() => setEditing((e) => !e)}
+          onReorder={reorder} onRemove={toggleFeature}
+          onLogout={logout} userName={userName} userEmail={session?.user?.email || ""}
+        />
+      </div>
+
+      {/* 모바일 드로어 */}
+      {mobileNav && (
+        <div className="md:hidden fixed inset-0 z-50 flex">
+          <div className="absolute inset-0 bg-black/40" onClick={() => setMobileNav(false)} />
+          <div className="relative">
+            <IlloSidebar
+              enabled={enabled} view={view} editing={editing}
+              onView={goView} onToggleEdit={() => setEditing((e) => !e)}
+              onReorder={reorder} onRemove={toggleFeature}
+              onLogout={logout} userName={userName} userEmail={session?.user?.email || ""}
+            />
           </div>
         </div>
+      )}
 
-        <label className="block text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-2">{tool.inputLabel}</label>
-        <textarea value={input} onChange={(e) => setInput(e.target.value)} placeholder={tool.placeholder} rows={5}
-          className="w-full px-4 py-3 rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-sm focus:outline-none focus:border-[#F9954E] resize-y mb-4" />
+      <main className="flex-1 min-w-0 h-full flex flex-col overflow-hidden">
+        {/* 모바일 상단바 */}
+        <header className="md:hidden flex items-center gap-2 px-4 h-14 border-b border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shrink-0">
+          <button onClick={() => setMobileNav(true)} className="p-1.5 -ml-1.5 text-neutral-600 dark:text-neutral-300"><Menu className="w-5 h-5" /></button>
+          <img src="/illo-logo.png" alt="일로" className="w-7 h-7 rounded-lg" />
+          <span className="font-extrabold text-[#F9954E]">일로</span>
+          {free && <span className="ml-auto text-[11px] font-semibold text-neutral-400">남은 <b className="text-[#E8832E]">{quota ?? FREE_LIMIT}</b>/{FREE_LIMIT}</span>}
+        </header>
 
-        {tool.aspects && (
-          <div className="flex flex-wrap gap-2 mb-5">
-            {tool.aspects.map((a) => (
-              <button key={a} onClick={() => togglePick(a)}
-                className={"px-3 py-1.5 rounded-full text-[13px] font-semibold border transition-colors " + (picked.includes(a) ? "bg-[#F9954E] border-[#F9954E] text-white" : "bg-white dark:bg-zinc-900 border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-400")}>
-                {a}
-              </button>
-            ))}
-          </div>
-        )}
+        {view === "home" && <Home userName={userName} enabled={enabled} onView={goView} free={free} quota={quota} onShowKey={() => setShowKey(true)} />}
+        {view === "assistant" && <Assistant runAI={runAI} free={free} quota={quota} onShowKey={() => setShowKey(true)} userName={userName} />}
+        {view === "features" && <FeatureManager enabled={enabled} onToggle={toggleFeature} onView={goView} />}
+        {view === "settings" && <Settings keyVal={key} free={free} model={model} onModel={(m) => { setModelState(m); setModel(m); }} onShowKey={() => setShowKey(true)} onRemoveKey={removeKey} onLogout={logout} userName={userName} userEmail={session?.user?.email || ""} />}
+        {tool && <ToolView key={view} tool={tool} runAI={runAI} free={free} quota={quota} onShowKey={() => setShowKey(true)} onBack={() => goView("home")} />}
+      </main>
 
-        {free && <p className="text-[12px] text-neutral-400 dark:text-zinc-500 mb-2 text-center">🆓 무료 · 오늘 남은 <b className={(quota ?? FREE_LIMIT) <= 5 ? "text-rose-500" : "text-[#E8832E]"}>{quota ?? FREE_LIMIT}</b> / {FREE_LIMIT}회</p>}
-        <button onClick={run} disabled={busy || !input.trim()}
-          className="w-full py-3.5 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold flex items-center justify-center gap-2 disabled:opacity-50 transition-colors">
-          {busy ? <><Loader2 className="w-5 h-5 animate-spin" /> 생성 중…</> : <><Sparkles className="w-5 h-5" /> {tool.cta}</>}
-        </button>
+      {overlays}
+    </div>
+  );
+}
 
-        {err && <p className="text-sm text-rose-500 mt-4 leading-relaxed break-keep">{err}{/FREE/.test(err) || err.includes("한도") ? <> <button onClick={() => setShowKey(true)} className="underline font-bold">키 넣기</button></> : null}</p>}
+/* ─────────────────────────── 사이드바 ─────────────────────────── */
+function IlloSidebar({
+  enabled, view, editing, onView, onToggleEdit, onReorder, onRemove, onLogout, userName, userEmail,
+}: {
+  enabled: string[]; view: string; editing: boolean;
+  onView: (id: string) => void; onToggleEdit: () => void;
+  onReorder: (from: number, to: number) => void; onRemove: (id: string) => void;
+  onLogout: () => void; userName: string; userEmail: string;
+}) {
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const dragIdx = useRef<number | null>(null);
+  const items = enabled.map((id) => ILLO_FEATURE_BY_ID[id]).filter(Boolean) as IlloFeature[];
 
-        {result && (
-          <div className="mt-6 rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden">
-            <div className="flex items-center justify-between px-4 py-2.5 border-b border-neutral-100 dark:border-zinc-800">
-              <span className="text-xs font-bold text-neutral-400">결과</span>
-              <button onClick={copyResult} className="inline-flex items-center gap-1.5 text-xs font-bold text-[#F9954E]">
-                {copied ? <><Check className="w-3.5 h-3.5" /> 복사됨</> : <><Copy className="w-3.5 h-3.5" /> 복사</>}
-              </button>
-            </div>
-            <pre className="px-4 py-4 text-sm text-neutral-800 dark:text-neutral-200 whitespace-pre-wrap break-words font-sans leading-relaxed">{result}</pre>
-          </div>
-        )}
-        {overlays}
-      </Shell>
-    );
-  }
-
-  // ── 도구 그리드 (홈) ──
   return (
-    <Shell>
-      <div className="flex items-center justify-between mb-1">
-        <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white">일로 <span className="text-[#F9954E]">웹</span></h1>
-        <div className="flex items-center gap-2">
-          {!free && (
-            <select value={model} onChange={(e) => { setModelState(e.target.value); setModel(e.target.value); }}
-              className="text-xs font-semibold bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 rounded-lg px-2 py-1.5 focus:outline-none">
-              {ILLO_MODELS.map((m) => <option key={m.id} value={m.id}>{m.label}</option>)}
-            </select>
-          )}
-          <button onClick={() => setShowKey(true)} title="내 키 넣기" className="text-xs font-semibold text-neutral-400 hover:text-[#F9954E] border border-neutral-200 dark:border-zinc-700 rounded-lg px-2 py-1.5 flex items-center gap-1">
-            <KeyRound className="w-3.5 h-3.5" /> {free ? "키 넣기" : "키 변경"}
+    <aside className="w-60 shrink-0 h-full bg-white dark:bg-zinc-950 border-r border-neutral-200 dark:border-zinc-800 flex flex-col">
+      <div className="px-5 py-5 border-b border-neutral-100 dark:border-zinc-800">
+        <div className="flex items-center gap-2.5">
+          <img src="/illo-logo.png" alt="일로" className="w-9 h-9 rounded-xl shadow-sm" />
+          <div className="flex-1 min-w-0">
+            <div className="text-base font-extrabold leading-none text-[#F9954E]">일로</div>
+            <div className="text-[10px] text-neutral-400 mt-1 tracking-wide">by DORI-AI</div>
+          </div>
+          <button onClick={onToggleEdit} title="메뉴 편집"
+            className={"shrink-0 text-[11px] px-2 py-1 rounded-lg font-semibold transition-colors flex items-center gap-1 " + (editing ? "bg-[#F9954E] text-white" : "text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-zinc-800")}>
+            <Pencil className="w-3 h-3" /> {editing ? "완료" : "편집"}
           </button>
         </div>
       </div>
-      {free ? (
-        <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-7">
-          🆓 무료로 쓰는 중 · 오늘 남은 <b className={(quota ?? FREE_LIMIT) <= 5 ? "text-rose-500" : "text-[#E8832E]"}>{quota ?? FREE_LIMIT}</b>/{FREE_LIMIT}회 — 더 쓰려면 <button onClick={() => setShowKey(true)} className="underline font-semibold text-[#E8832E] dark:text-[#FBAA60]">내 키 넣기</button>(무제한)
-        </p>
-      ) : (
-        <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-7">✓ 내 키로 무제한 사용 중. 필요한 도구를 골라 바로 쓰세요.</p>
+
+      {editing && (
+        <div className="mx-3 mt-3 text-[11px] text-[#E8832E] bg-[#FFF5EB] dark:bg-orange-950/20 rounded-lg px-2.5 py-2 leading-relaxed">
+          ⠿ 드래그로 순서 변경, ✕로 메뉴에서 빼기. 아래 ＋로 더 추가.
+        </div>
       )}
 
+      <nav className="flex-1 overflow-y-auto p-3">
+        <div className="space-y-0.5">
+          {items.map((item, idx) => {
+            const active = view === item.id;
+            const canEdit = editing && !item.core;
+            return (
+              <div
+                key={item.id}
+                draggable={canEdit}
+                onDragStart={() => { dragIdx.current = idx; }}
+                onDragOver={(e) => { if (editing) e.preventDefault(); }}
+                onDrop={() => { const f = dragIdx.current; if (f != null && f !== idx) onReorder(f, idx); dragIdx.current = null; }}
+                className="relative"
+              >
+                <button
+                  onClick={() => !editing && onView(item.id)}
+                  className={"group w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all " + (
+                    editing
+                      ? "border border-dashed border-[#F9954E]/30 bg-[#F9954E]/[0.04] " + (canEdit ? "cursor-grab active:cursor-grabbing pr-9" : "opacity-80")
+                      : active
+                        ? "bg-[#F9954E]/[0.13] text-[#E8832E] font-semibold cursor-pointer"
+                        : "text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-zinc-800 cursor-pointer"
+                  )}
+                >
+                  {canEdit && <GripVertical className="w-3.5 h-3.5 text-neutral-300 shrink-0" />}
+                  <span className="text-base">{item.icon}</span>
+                  <span className="flex-1 text-left truncate">{item.label}</span>
+                </button>
+                {canEdit && (
+                  <button onClick={() => onRemove(item.id)} title="메뉴에서 빼기"
+                    className="absolute right-1.5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-rose-500/90 text-white text-xs font-bold grid place-items-center active:scale-90">
+                    ✕
+                  </button>
+                )}
+              </div>
+            );
+          })}
+        </div>
+
+        <button onClick={() => onView("features")}
+          className="w-full mt-2 flex items-center gap-2 px-3 py-2.5 rounded-xl text-[13px] text-neutral-500 dark:text-neutral-400 hover:text-[#E8832E] hover:bg-[#FFF5EB] dark:hover:bg-orange-950/20 transition-colors border border-dashed border-neutral-300 dark:border-zinc-700">
+          <Plus className="w-4 h-4" /> 기능 추가 · 관리
+        </button>
+      </nav>
+
+      <div className="p-3 border-t border-neutral-100 dark:border-zinc-800 space-y-2">
+        <div className="flex items-center gap-1 p-1 rounded-xl bg-neutral-100 dark:bg-zinc-900">
+          {(["light", "dark"] as const).map((t) => {
+            const on = mounted && resolvedTheme === t;
+            return (
+              <button key={t} onClick={() => setTheme(t)}
+                className={"flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all " + (on ? "bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white shadow-sm" : "text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300")}>
+                {t === "light" ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
+                {t === "light" ? "화이트" : "다크"}
+              </button>
+            );
+          })}
+        </div>
+        <div className="flex items-center justify-between gap-2 px-1">
+          <div className="min-w-0">
+            <div className="text-[12px] text-neutral-700 dark:text-neutral-200 font-semibold truncate">{userName}</div>
+            <div className="text-[10px] text-neutral-400 truncate">{userEmail}</div>
+          </div>
+          <button onClick={onLogout} title="로그아웃" className="shrink-0 text-neutral-400 hover:text-rose-500 p-1.5 rounded-lg hover:bg-neutral-100 dark:hover:bg-zinc-800 transition-colors">
+            <LogOut className="w-4 h-4" />
+          </button>
+        </div>
+        <div className="px-1 text-[10px] text-neutral-300 dark:text-zinc-600">일로 웹 · by DORI-AI</div>
+      </div>
+    </aside>
+  );
+}
+
+/* ─────────────────────────── 공통 레이아웃 ─────────────────────────── */
+function ViewScroll({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="flex-1 overflow-y-auto">
+      <div className="max-w-3xl mx-auto px-5 sm:px-8 py-8 sm:py-10">{children}</div>
+    </div>
+  );
+}
+function QuotaLine({ free, quota, onShowKey }: { free: boolean; quota: number | null; onShowKey: () => void }) {
+  if (!free) return <p className="text-sm text-neutral-500 dark:text-neutral-400">✓ 내 키로 무제한 사용 중</p>;
+  const left = quota ?? FREE_LIMIT;
+  return (
+    <p className="text-sm text-neutral-500 dark:text-neutral-400">
+      🆓 무료로 쓰는 중 · 오늘 남은 <b className={left <= 5 ? "text-rose-500" : "text-[#E8832E]"}>{left}</b>/{FREE_LIMIT}회 — 더 쓰려면{" "}
+      <button onClick={onShowKey} className="underline font-semibold text-[#E8832E] dark:text-[#FBAA60]">내 키 넣기</button>(무제한)
+    </p>
+  );
+}
+
+/* ─────────────────────────── 홈 ─────────────────────────── */
+function Home({ userName, enabled, onView, free, quota, onShowKey }: {
+  userName: string; enabled: string[]; onView: (id: string) => void; free: boolean; quota: number | null; onShowKey: () => void;
+}) {
+  const tools = enabled.map((id) => ILLO_FEATURE_BY_ID[id]).filter((f) => f && f.kind === "tool") as IlloFeature[];
+  return (
+    <ViewScroll>
+      <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white mb-1">안녕하세요, {userName}님 👋</h1>
+      <p className="text-neutral-500 dark:text-neutral-400 mb-5">혼자서도 일이 되는 곳, <b className="text-[#F9954E]">일로</b>예요.</p>
+      <div className="mb-7"><QuotaLine free={free} quota={quota} onShowKey={onShowKey} /></div>
+
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-9">
+        <button onClick={() => onView("assistant")}
+          className="text-left p-5 rounded-3xl bg-gradient-to-br from-[#F9954E] to-[#FB8C3E] text-white shadow-lg shadow-[#F9954E]/25 hover:-translate-y-0.5 transition-transform">
+          <div className="text-2xl mb-2">💬</div>
+          <div className="font-extrabold text-lg">비서실</div>
+          <div className="text-[13px] text-white/90 mt-0.5">무엇이든 물어보고 일을 시켜요</div>
+        </button>
+        <button onClick={() => onView("features")}
+          className="text-left p-5 rounded-3xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 hover:border-[#F9954E] transition-colors">
+          <div className="text-2xl mb-2">🧩</div>
+          <div className="font-extrabold text-lg text-neutral-900 dark:text-white">기능 보관함</div>
+          <div className="text-[13px] text-neutral-500 dark:text-neutral-400 mt-0.5">필요한 기능만 꺼내 내 메뉴에</div>
+        </button>
+      </div>
+
+      <h2 className="text-sm font-bold text-neutral-400 mb-3">내 도구</h2>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {ILLO_TOOLS.map((t) => (
-          <button key={t.id} onClick={() => openTool(t.id)}
+        {tools.map((t) => (
+          <button key={t.id} onClick={() => onView(t.id)}
             className="flex items-center gap-3 p-4 rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-left hover:border-[#F9954E] dark:hover:border-[#F9954E] hover:-translate-y-0.5 transition-all">
             <span className="w-11 h-11 rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center text-xl shrink-0">{t.icon}</span>
             <span className="min-w-0">
-              <span className="block text-[15px] font-bold text-neutral-900 dark:text-white">{t.title}</span>
+              <span className="block text-[15px] font-bold text-neutral-900 dark:text-white">{t.label}</span>
               <span className="block text-xs text-neutral-500 dark:text-neutral-400 truncate">{t.desc}</span>
             </span>
           </button>
         ))}
+        <button onClick={() => onView("features")}
+          className="flex items-center justify-center gap-2 p-4 rounded-2xl border border-dashed border-neutral-300 dark:border-zinc-700 text-neutral-500 dark:text-neutral-400 hover:text-[#E8832E] hover:border-[#F9954E] transition-colors">
+          <Plus className="w-4 h-4" /> 기능 더 추가하기
+        </button>
       </div>
 
-      <p className="text-[11px] text-neutral-400 dark:text-zinc-600 mt-8 text-center break-keep">
-        파일·자동화·컴퓨터 제어 등 고급 기능은 데스크톱 일로(PC)에서 쓸 수 있어요.
+      <p className="text-[11px] text-neutral-400 dark:text-zinc-600 mt-9 text-center break-keep">
+        AI 직원·스튜디오·사이트 배포·자동화 등 고급 기능은 데스크톱 일로(PC)에서 쓸 수 있어요.
       </p>
-      {overlays}
-    </Shell>
+    </ViewScroll>
   );
 }
 
-// 일로 전용 로그인 카드 (데스크톱 EXE와 동일 디자인) — 사이트 AuthContext 사용
+/* ─────────────────────────── 비서실 (채팅) ─────────────────────────── */
+type ChatMsg = { role: "user" | "assistant"; content: string };
+function Assistant({ runAI, free, quota, onShowKey, userName }: {
+  runAI: (p: string) => Promise<{ text: string }>; free: boolean; quota: number | null; onShowKey: () => void; userName: string;
+}) {
+  const [msgs, setMsgs] = useState<ChatMsg[]>([]);
+  const [input, setInput] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+  const endRef = useRef<HTMLDivElement>(null);
+  useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs, busy]);
+
+  const SUGGEST = ["이번 주 할 일 정리해줘", "사업 아이디어 3개 제안해줘", "이 글 더 매끄럽게 다듬어줘", "마케팅 문구 추천해줘"];
+
+  async function send(text?: string) {
+    const q = (text ?? input).trim();
+    if (!q || busy) return;
+    setInput(""); setErr("");
+    const next: ChatMsg[] = [...msgs, { role: "user", content: q }];
+    setMsgs(next); setBusy(true);
+    try {
+      const history = next.slice(-8).map((m) => `${m.role === "user" ? "사용자" : "비서"}: ${m.content}`).join("\n");
+      const prompt =
+        `당신은 '일로'의 유능하고 친절한 AI 비서입니다. 항상 정중한 존댓말로, 핵심을 먼저 말하고 필요하면 단계로 정리해 답하세요. ` +
+        `사용자 이름은 '${userName}'입니다.\n\n[대화]\n${history}\n비서:`;
+      const r = await runAI(prompt);
+      setMsgs((m) => [...m, { role: "assistant", content: r.text }]);
+    } catch (e) {
+      const raw = e instanceof Error ? e.message : "오류가 발생했습니다.";
+      if (/FREE_QUOTA_EXCEEDED/.test(raw)) setErr("오늘 무료 한도(하루 50회)를 다 쓰셨어요. 🌙 내일 다시 쓰거나, 내 Claude 키를 넣으면 무제한이에요.");
+      else if (/LOGIN_REQUIRED/.test(raw)) setErr("로그인이 필요합니다.");
+      else setErr(raw);
+    } finally { setBusy(false); }
+  }
+
+  return (
+    <div className="flex-1 flex flex-col min-h-0">
+      <div className="border-b border-neutral-200 dark:border-zinc-800 px-5 sm:px-8 py-3.5 flex items-center gap-2 shrink-0">
+        <span className="text-xl">💬</span>
+        <h1 className="font-extrabold text-neutral-900 dark:text-white">비서실</h1>
+        {free && <span className="ml-auto text-[12px] text-neutral-400">오늘 남은 <b className={(quota ?? FREE_LIMIT) <= 5 ? "text-rose-500" : "text-[#E8832E]"}>{quota ?? FREE_LIMIT}</b>/{FREE_LIMIT}회</span>}
+      </div>
+
+      <div className="flex-1 overflow-y-auto px-5 sm:px-8 py-6">
+        <div className="max-w-2xl mx-auto">
+          {msgs.length === 0 ? (
+            <div className="text-center pt-10">
+              <div className="text-4xl mb-3">💬</div>
+              <p className="font-bold text-neutral-900 dark:text-white mb-1">무엇을 도와드릴까요?</p>
+              <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-6 break-keep">아래를 눌러보거나, 자유롭게 입력하세요.</p>
+              <div className="flex flex-wrap gap-2 justify-center">
+                {SUGGEST.map((s) => (
+                  <button key={s} onClick={() => send(s)} className="px-3.5 py-2 rounded-full text-[13px] font-semibold bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-300 hover:border-[#F9954E] hover:text-[#E8832E] transition-colors">
+                    {s}
+                  </button>
+                ))}
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-4">
+              {msgs.map((m, i) => (
+                <div key={i} className={"flex " + (m.role === "user" ? "justify-end" : "justify-start")}>
+                  <div className={"max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap break-words " + (
+                    m.role === "user"
+                      ? "bg-[#F9954E] text-white rounded-br-md"
+                      : "bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-neutral-800 dark:text-neutral-100 rounded-bl-md"
+                  )}>{m.content}</div>
+                </div>
+              ))}
+              {busy && (
+                <div className="flex justify-start">
+                  <div className="px-4 py-3 rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800"><Loader2 className="w-4 h-4 animate-spin text-[#F9954E]" /></div>
+                </div>
+              )}
+              {err && (
+                <p className="text-sm text-rose-500 text-center leading-relaxed break-keep">{err}{(/한도/.test(err)) && <> <button onClick={onShowKey} className="underline font-bold">키 넣기</button></>}</p>
+              )}
+              <div ref={endRef} />
+            </div>
+          )}
+        </div>
+      </div>
+
+      <div className="border-t border-neutral-200 dark:border-zinc-800 p-3 sm:p-4 shrink-0 bg-neutral-50 dark:bg-black">
+        <div className="max-w-2xl mx-auto flex items-end gap-2">
+          <textarea value={input} onChange={(e) => setInput(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
+            placeholder="비서에게 물어보세요… (Shift+Enter 줄바꿈)" rows={1}
+            className="flex-1 resize-none px-4 py-3 rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-sm focus:outline-none focus:border-[#F9954E] max-h-32" />
+          <button onClick={() => send()} disabled={busy || !input.trim()}
+            className="shrink-0 w-11 h-11 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white grid place-items-center disabled:opacity-40 transition-colors">
+            {busy ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
+          </button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ─────────────────────────── 기능 보관함 ─────────────────────────── */
+function FeatureManager({ enabled, onToggle, onView }: {
+  enabled: string[]; onToggle: (id: string) => void; onView: (id: string) => void;
+}) {
+  return (
+    <ViewScroll>
+      <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white mb-1">🧩 기능 보관함</h1>
+      <p className="text-neutral-500 dark:text-neutral-400 mb-7 break-keep">필요한 기능만 켜서 왼쪽 메뉴에 추가하세요. 안 쓰는 건 꺼두면 깔끔해요.</p>
+
+      {ILLO_GROUP_ORDER.map((group) => {
+        const feats = ILLO_FEATURES.filter((f) => f.group === group);
+        if (!feats.length) return null;
+        const isPc = group === "PC 전용";
+        return (
+          <section key={group} className="mb-8">
+            <h2 className="text-sm font-bold text-neutral-400 mb-3">{group}{isPc && <span className="ml-2 text-[11px] font-medium text-neutral-300">데스크톱(PC)에서 사용</span>}</h2>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {feats.map((f) => {
+                const on = enabled.includes(f.id);
+                return (
+                  <div key={f.id} className={"flex items-center gap-3 p-3.5 rounded-2xl border transition-colors " + (isPc ? "bg-neutral-100/60 dark:bg-zinc-900/40 border-neutral-200 dark:border-zinc-800 opacity-80" : on ? "bg-white dark:bg-zinc-900 border-[#F9954E]/50" : "bg-white dark:bg-zinc-900 border-neutral-200 dark:border-zinc-800")}>
+                    <span className="w-10 h-10 rounded-xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center text-lg shrink-0">{f.icon}</span>
+                    <div className="min-w-0 flex-1">
+                      <div className="text-sm font-bold text-neutral-900 dark:text-white flex items-center gap-1.5">{f.label}{f.id === "blog" || f.id === "sns" ? <span className="text-[10px] font-semibold text-[#E8832E] bg-[#FFF5EB] dark:bg-orange-950/30 px-1.5 py-0.5 rounded">선택</span> : null}</div>
+                      <div className="text-[12px] text-neutral-500 dark:text-neutral-400 truncate">{f.desc}</div>
+                    </div>
+                    {isPc ? (
+                      <span className="shrink-0 text-neutral-300 dark:text-zinc-600"><Lock className="w-4 h-4" /></span>
+                    ) : f.core ? (
+                      <span className="shrink-0 text-[11px] text-neutral-400 font-semibold">고정</span>
+                    ) : (
+                      <button onClick={() => onToggle(f.id)}
+                        className={"shrink-0 text-[12px] font-bold px-3 py-1.5 rounded-lg transition-colors " + (on ? "bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-rose-500" : "bg-[#F9954E] text-white hover:bg-[#E8832E]")}>
+                        {on ? "끄기" : "추가"}
+                      </button>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+          </section>
+        );
+      })}
+    </ViewScroll>
+  );
+}
+
+/* ─────────────────────────── 설정 ─────────────────────────── */
+function Settings({ keyVal, free, model, onModel, onShowKey, onRemoveKey, onLogout, userName, userEmail }: {
+  keyVal: string; free: boolean; model: string; onModel: (m: string) => void;
+  onShowKey: () => void; onRemoveKey: () => void; onLogout: () => void; userName: string; userEmail: string;
+}) {
+  const { resolvedTheme, setTheme } = useTheme();
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => setMounted(true), []);
+  const masked = keyVal ? keyVal.slice(0, 7) + "•••••••" + keyVal.slice(-4) : "";
+
+  return (
+    <ViewScroll>
+      <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white mb-7">⚙️ 설정</h1>
+
+      <Section title="계정">
+        <div className="flex items-center justify-between">
+          <div>
+            <div className="font-bold text-neutral-900 dark:text-white">{userName}</div>
+            <div className="text-[13px] text-neutral-500 dark:text-neutral-400">{userEmail}</div>
+          </div>
+          <button onClick={onLogout} className="text-[13px] font-bold text-rose-500 border border-rose-200 dark:border-rose-900/50 rounded-lg px-3 py-1.5 hover:bg-rose-50 dark:hover:bg-rose-950/30">로그아웃</button>
+        </div>
+      </Section>
+
+      <Section title="AI 키">
+        {free ? (
+          <div className="flex items-center justify-between gap-3">
+            <p className="text-[13px] text-neutral-600 dark:text-neutral-300 break-keep">🆓 무료로 사용 중 — 하루 50회. 더 쓰려면 내 키를 넣으면 무제한이에요.</p>
+            <button onClick={onShowKey} className="shrink-0 text-[13px] font-bold text-white bg-[#F9954E] hover:bg-[#E8832E] rounded-lg px-3 py-1.5">키 넣기</button>
+          </div>
+        ) : (
+          <div>
+            <div className="flex items-center justify-between gap-3 mb-3">
+              <div>
+                <div className="text-[13px] font-semibold text-neutral-900 dark:text-white">✓ 내 키로 무제한 사용 중</div>
+                <div className="text-[12px] font-mono text-neutral-400 mt-0.5">{masked}</div>
+              </div>
+              <div className="flex gap-2 shrink-0">
+                <button onClick={onShowKey} className="text-[13px] font-bold text-[#E8832E] border border-[#F9954E]/40 rounded-lg px-3 py-1.5">변경</button>
+                <button onClick={onRemoveKey} className="text-[13px] font-bold text-neutral-500 border border-neutral-200 dark:border-zinc-700 rounded-lg px-3 py-1.5">삭제</button>
+              </div>
+            </div>
+            <label className="block text-[12px] font-bold text-neutral-400 mb-1.5">모델</label>
+            <select value={model} onChange={(e) => onModel(e.target.value)}
+              className="w-full text-sm font-semibold bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 rounded-xl px-3 py-2.5 focus:outline-none">
+              {ILLO_MODELS.map((m) => <option key={m.id} value={m.id}>{m.label}</option>)}
+            </select>
+          </div>
+        )}
+      </Section>
+
+      <Section title="테마">
+        <div className="flex items-center gap-1 p-1 rounded-xl bg-neutral-100 dark:bg-zinc-900 max-w-xs">
+          {(["light", "dark"] as const).map((t) => {
+            const on = mounted && resolvedTheme === t;
+            return (
+              <button key={t} onClick={() => setTheme(t)}
+                className={"flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[13px] font-medium transition-all " + (on ? "bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white shadow-sm" : "text-neutral-400")}>
+                {t === "light" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}{t === "light" ? "화이트" : "다크"}
+              </button>
+            );
+          })}
+        </div>
+      </Section>
+
+      <Section title="데스크톱 일로">
+        <p className="text-[13px] text-neutral-600 dark:text-neutral-300 break-keep">
+          AI 직원 채용, 이미지·영상 스튜디오, 사이트 자동 배포, 자동화 스케줄 등 풀 기능은 데스크톱(PC) 일로에서 쓸 수 있어요.
+        </p>
+        <Link href="/illo" className="inline-block mt-3 text-[13px] font-bold text-[#E8832E] dark:text-[#FBAA60] hover:underline">일로 소개 보기 →</Link>
+      </Section>
+    </ViewScroll>
+  );
+}
+function Section({ title, children }: { title: string; children: React.ReactNode }) {
+  return (
+    <section className="mb-5">
+      <h2 className="text-sm font-bold text-neutral-400 mb-2.5">{title}</h2>
+      <div className="rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 p-4">{children}</div>
+    </section>
+  );
+}
+
+/* ─────────────────────────── AI 도구 실행 ─────────────────────────── */
+function ToolView({ tool, runAI, free, quota, onShowKey, onBack }: {
+  tool: typeof ILLO_TOOL_BY_ID[string]; runAI: (p: string) => Promise<{ text: string }>;
+  free: boolean; quota: number | null; onShowKey: () => void; onBack: () => void;
+}) {
+  const [input, setInput] = useState("");
+  const [picked, setPicked] = useState<string[]>(tool.defaultAspects || []);
+  const [result, setResult] = useState("");
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+  const [copied, setCopied] = useState(false);
+
+  function togglePick(a: string) { setPicked((p) => (p.includes(a) ? p.filter((x) => x !== a) : [...p, a])); }
+  async function run() {
+    if (!input.trim() || busy) return;
+    setBusy(true); setErr(""); setResult("");
+    try {
+      const r = await runAI(tool.buildPrompt(input, picked));
+      setResult(r.text);
+    } catch (e) {
+      const raw = e instanceof Error ? e.message : "오류가 발생했습니다.";
+      if (/FREE_QUOTA_EXCEEDED/.test(raw)) setErr("오늘 무료 한도(하루 50회)를 다 쓰셨어요. 🌙 내일 다시 쓰거나, 내 Claude 키를 넣으면 무제한이에요.");
+      else if (/LOGIN_REQUIRED/.test(raw)) setErr("로그인이 필요합니다.");
+      else setErr(raw);
+    } finally { setBusy(false); }
+  }
+  async function copyResult() {
+    try { await navigator.clipboard.writeText(result); setCopied(true); setTimeout(() => setCopied(false), 1500); } catch { /* */ }
+  }
+
+  return (
+    <ViewScroll>
+      <button onClick={onBack} className="inline-flex items-center gap-1.5 text-sm font-semibold text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] mb-5">
+        <ArrowLeft className="w-4 h-4" /> 홈
+      </button>
+      <div className="flex items-center gap-3 mb-5">
+        <span className="w-11 h-11 rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center text-xl">{tool.icon}</span>
+        <div>
+          <h1 className="text-lg font-extrabold text-neutral-900 dark:text-white leading-tight">{tool.title}</h1>
+          <p className="text-xs text-neutral-500 dark:text-neutral-400">{tool.desc}</p>
+        </div>
+      </div>
+
+      <label className="block text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-2">{tool.inputLabel}</label>
+      <textarea value={input} onChange={(e) => setInput(e.target.value)} placeholder={tool.placeholder} rows={5}
+        className="w-full px-4 py-3 rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-sm focus:outline-none focus:border-[#F9954E] resize-y mb-4" />
+
+      {tool.aspects && (
+        <div className="flex flex-wrap gap-2 mb-5">
+          {tool.aspects.map((a) => (
+            <button key={a} onClick={() => togglePick(a)}
+              className={"px-3 py-1.5 rounded-full text-[13px] font-semibold border transition-colors " + (picked.includes(a) ? "bg-[#F9954E] border-[#F9954E] text-white" : "bg-white dark:bg-zinc-900 border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-400")}>
+              {a}
+            </button>
+          ))}
+        </div>
+      )}
+
+      {free && <p className="text-[12px] text-neutral-400 dark:text-zinc-500 mb-2 text-center">🆓 무료 · 오늘 남은 <b className={(quota ?? FREE_LIMIT) <= 5 ? "text-rose-500" : "text-[#E8832E]"}>{quota ?? FREE_LIMIT}</b> / {FREE_LIMIT}회</p>}
+      <button onClick={run} disabled={busy || !input.trim()}
+        className="w-full py-3.5 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold flex items-center justify-center gap-2 disabled:opacity-50 transition-colors">
+        {busy ? <><Loader2 className="w-5 h-5 animate-spin" /> 생성 중…</> : <><Sparkles className="w-5 h-5" /> {tool.cta}</>}
+      </button>
+
+      {err && <p className="text-sm text-rose-500 mt-4 leading-relaxed break-keep">{err}{(/한도/.test(err)) && <> <button onClick={onShowKey} className="underline font-bold">키 넣기</button></>}</p>}
+
+      {result && (
+        <div className="mt-6 rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-2.5 border-b border-neutral-100 dark:border-zinc-800">
+            <span className="text-xs font-bold text-neutral-400">결과</span>
+            <button onClick={copyResult} className="inline-flex items-center gap-1.5 text-xs font-bold text-[#F9954E]">
+              {copied ? <><Check className="w-3.5 h-3.5" /> 복사됨</> : <><Copy className="w-3.5 h-3.5" /> 복사</>}
+            </button>
+          </div>
+          <pre className="px-4 py-4 text-sm text-neutral-800 dark:text-neutral-200 whitespace-pre-wrap break-words font-sans leading-relaxed">{result}</pre>
+        </div>
+      )}
+    </ViewScroll>
+  );
+}
+
+/* ─────────────────────────── 로그인 (EXE와 동일 디자인) ─────────────────────────── */
 function IlloLogin({ onShowGuide }: { onShowGuide: () => void }) {
   const { login, signup } = useAuth();
   const [mode, setMode] = useState<"login" | "signup">("login");
@@ -256,7 +710,6 @@ function IlloLogin({ onShowGuide }: { onShowGuide: () => void }) {
       if (remember) localStorage.setItem("illo.web.email", email.trim());
       else localStorage.removeItem("illo.web.email");
     } catch { /* */ }
-    // 성공하면 AuthContext가 status=authenticated 로 바꿔 자동으로 도구 화면 전환 (busy 유지)
   }
 
   const inputCls = "w-full px-4 py-3 rounded-xl bg-neutral-50 dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-[#F9954E]";
@@ -313,13 +766,6 @@ function IlloLogin({ onShowGuide }: { onShowGuide: () => void }) {
   );
 }
 
-function Shell({ children }: { children: React.ReactNode }) {
-  return (
-    <main className="w-full min-h-screen bg-neutral-50 dark:bg-black font-sans">
-      <div className="max-w-2xl mx-auto px-5 pt-28 pb-20">{children}</div>
-    </main>
-  );
-}
 function Centered({ children }: { children: React.ReactNode }) {
   return <main className="w-full min-h-screen grid place-items-center bg-neutral-50 dark:bg-black px-5 font-sans">{children}</main>;
 }
@@ -336,10 +782,9 @@ function Step({ n, title, children }: { n: string; title: string; children: Reac
   );
 }
 
-// 초보자용 완전 가이드 — 무료로 시작 + (원하면) 내 키 발급까지
 function GuideOverlay({ onClose }: { onClose: () => void }) {
   return (
-    <div className="fixed inset-0 z-50 bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4" onClick={onClose}>
+    <div className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4" onClick={onClose}>
       <div className="bg-white dark:bg-zinc-900 w-full sm:max-w-lg max-h-[92vh] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-100 dark:border-zinc-800 shrink-0">
           <span className="font-extrabold text-neutral-900 dark:text-white">🔰 일로 시작 가이드</span>
