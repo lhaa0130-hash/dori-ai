@@ -21,6 +21,17 @@ const FREE_LIMIT = 50; // 무료(공용 키) 하루 호출 수
 
 export default function IlloWebClient() {
   const { status, session, logout } = useAuth();
+  const { setTheme } = useTheme();
+
+  // EXE처럼 라이트가 기본 — 첫 방문 시 라이트로 맞춤(이후 사용자가 바꾸면 그 선택 유지)
+  useEffect(() => {
+    try {
+      if (!localStorage.getItem("illo.themeInit")) {
+        setTheme("light");
+        localStorage.setItem("illo.themeInit", "1");
+      }
+    } catch { /* */ }
+  }, [setTheme]);
 
   const [key, setKey] = useState("");
   const [keyInput, setKeyInput] = useState("");
@@ -451,7 +462,8 @@ function Home({ enabled, onView, free, quota }: {
   }
 
   return (
-    <ViewScroll>
+    <div className="flex-1 overflow-y-auto">
+    <div className="px-4 py-5 max-w-2xl mx-auto">
       <div className="flex items-start justify-between mb-3">
         <div>
           <div className="text-neutral-400 text-[13px]">{greeting()}</div>
@@ -513,7 +525,8 @@ function Home({ enabled, onView, free, quota }: {
           홈이 비어 있어요. <button onClick={() => setEditing(true)} className="text-[#E8832E] font-semibold">＋ 위젯 추가</button>
         </div>
       )}
-    </ViewScroll>
+    </div>
+    </div>
   );
 }
 
