@@ -87,10 +87,10 @@ export default function FamilyPageClient() {
       {/* 배경 */}
       <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-purple-50/60 via-fuchsia-50/20 to-transparent dark:from-purple-950/20 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
 
-      <div className="relative z-10 max-w-6xl mx-auto px-6 pt-32 pb-24">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 sm:px-6 pt-4 sm:pt-8 pb-12 sm:pb-24">
 
         {/* ── 히어로 ── */}
-        <section className="text-center mb-20">
+        <section className="text-center mb-10 sm:mb-20">
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
