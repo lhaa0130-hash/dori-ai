@@ -128,20 +128,20 @@ export default function Header() {
               <ThemeToggle />
             </div>
 
-            {/* 모바일 로그인 버튼 / 마이페이지 아이콘 */}
-            <div className="lg:hidden flex items-center">
+            {/* 모바일 로그인 버튼 / 마이페이지 */}
+            <div className="lg:hidden flex items-center ml-1">
               {session?.user ? (
                 <Link
                   href="/my"
-                  className="flex items-center justify-center w-9 h-9 rounded-xl bg-neutral-100 dark:bg-zinc-800 text-neutral-700 dark:text-neutral-200 hover:bg-[#F9954E]/10 hover:text-[#F9954E] transition-colors"
-                  aria-label="마이페이지"
+                  className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-secondary hover:bg-secondary/80 text-xs font-black text-secondary-foreground transition-all active:scale-95 whitespace-nowrap"
                 >
-                  <User className="w-4.5 h-4.5" />
+                  <User className="w-3.5 h-3.5" />
+                  <span>MY</span>
                 </Link>
               ) : (
                 <button
                   onClick={handleSignIn}
-                  className="px-3 py-1.5 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-[11px] font-black text-white transition-all active:scale-95 whitespace-nowrap"
+                  className="px-5 py-2 rounded-full bg-[#F9954E] hover:bg-[#E8832E] text-xs font-black text-white transition-all shadow-md active:scale-95 whitespace-nowrap"
                 >
                   로그인
                 </button>
