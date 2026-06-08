@@ -2,22 +2,16 @@
 
 import { useTheme } from "next-themes";
 import { useEffect, useState } from "react";
-import { Moon, Sun } from "lucide-react";
 
 export default function ThemeToggle() {
   const { theme, setTheme, systemTheme } = useTheme();
   const [mounted, setMounted] = useState(false);
 
-  useEffect(() => {
-    setMounted(true);
-  }, []);
+  useEffect(() => { setMounted(true); }, []);
 
+  // 마운트 전: 빈 자리 확보 (레이아웃 shift 방지)
   if (!mounted) {
-    return (
-      <div className="w-9 h-9 flex items-center justify-center">
-        <Sun className="w-5 h-5 text-neutral-500" />
-      </div>
-    );
+    return <div className="w-9 h-9" />;
   }
 
   const currentTheme = theme === "system" ? systemTheme : theme;
@@ -25,15 +19,13 @@ export default function ThemeToggle() {
 
   return (
     <button
-      className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-neutral-100 dark:hover:bg-zinc-800 transition-colors focus:outline-none text-neutral-700 dark:text-neutral-200"
       onClick={() => setTheme(isDark ? "light" : "dark")}
-      aria-label="Toggle Dark Mode"
+      aria-label={isDark ? "라이트 모드로 전환" : "다크 모드로 전환"}
+      className="w-9 h-9 flex items-center justify-center rounded-xl hover:bg-neutral-100 dark:hover:bg-zinc-800 transition-colors select-none"
     >
-      {isDark ? (
-        <Moon className="w-[18px] h-[18px]" />
-      ) : (
-        <Sun className="w-[18px] h-[18px]" />
-      )}
+      <span className="text-[18px] leading-none" role="img" aria-hidden="true">
+        {isDark ? "🌙" : "☀️"}
+      </span>
     </button>
   );
 }
