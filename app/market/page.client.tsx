@@ -27,7 +27,7 @@ export default function MarketClient() {
       <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
 
       {/* 히어로 섹션 (Standard) */}
-      <section className="relative pt-32 pb-12 px-6 text-center z-10">
+      <section className="relative pt-4 sm:pt-16 pb-6 sm:pb-12 px-4 sm:px-6 text-center z-10">
         <div className="max-w-3xl mx-auto animate-fade-in flex flex-col items-center">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
@@ -47,7 +47,7 @@ export default function MarketClient() {
       </section>
 
       {/* 탭 네비게이션 */}
-      <section className="container max-w-5xl mx-auto px-6 mb-12 relative z-10">
+      <section className="container max-w-5xl mx-auto px-4 sm:px-6 mb-8 sm:mb-12 relative z-10">
         <div className="flex justify-center mb-8">
           <div className="inline-flex p-1 rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
             <button

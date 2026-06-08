@@ -102,7 +102,7 @@ export default function TypingSpeedPage() {
                 <div className="w-9" />
             </header>
 
-            <div className="pt-24 pb-12 px-4 max-w-3xl mx-auto">
+            <div className="pt-2 sm:pt-4 pb-8 sm:pb-12 px-4 max-w-3xl mx-auto">
                 <div className="animate-fade-in">
                     <div className="bg-white dark:bg-zinc-900 rounded-3xl p-8 md:p-12 shadow-xl shadow-neutral-200/50 dark:shadow-none border border-neutral-100 dark:border-white/5">
 

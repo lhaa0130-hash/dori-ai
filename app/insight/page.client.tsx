@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import Header from "@/components/layout/Header";
 import { Sparkles } from "lucide-react";
 
 interface Post {
@@ -144,21 +143,15 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
   });
 
   return (
-    <main className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-500 relative overflow-x-hidden" style={{ paddingTop: '70px' }}>
-      <Header />
+    <div className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-500 relative overflow-x-hidden">
 
       {/* 배경 그라데이션 (Standard) */}
       <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
 
       {/* 인사이트 페이지 콘텐츠 */}
-      <section className="relative z-10" style={{
-        maxWidth: '1200px',
-        margin: '0 auto',
-        padding: '2rem 1.5rem',
-        minHeight: 'calc(100vh - 70px)',
-      }}>
+      <section className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 py-4 sm:py-8 min-h-[50vh]">
         {/* 헤더 (Standard) */}
-        <div className="max-w-3xl mx-auto mb-12 text-center pt-20 flex flex-col items-center">
+        <div className="max-w-3xl mx-auto mb-6 sm:mb-12 text-center pt-2 sm:pt-8 flex flex-col items-center">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
             <Sparkles className="w-3 h-3" />
@@ -356,6 +349,6 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
           }
         }
       `}</style>
-    </main>
+    </div>
   );
 }

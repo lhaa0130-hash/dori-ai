@@ -425,12 +425,12 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
         <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
 
         <div className="flex-grow z-10">
-          <section className="relative pt-32 pb-10 px-6 text-center">
+          <section className="relative pt-4 sm:pt-16 pb-6 sm:pb-10 px-4 sm:px-6 text-center">
             <div className="max-w-3xl mx-auto animate-fade-in flex flex-col items-center">
               <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
                 <Users className="w-3 h-3" /><span>Community Center</span>
               </div>
-              <h1 className="text-4xl md:text-5xl font-bold mb-4 tracking-tight">
+              <h1 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight">
                 <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
                   커뮤니티
                 </span>
@@ -441,7 +441,7 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
             </div>
           </section>
 
-          <section className="container max-w-5xl mx-auto px-6 pb-20">
+          <section className="container max-w-5xl mx-auto px-4 sm:px-6 pb-10 sm:pb-20">
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-1 p-1 bg-neutral-100 dark:bg-zinc-900 rounded-full">
                 <button onClick={() => setActiveTab('trending')} className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'trending' ? 'bg-[#F9954E] text-white shadow-md' : 'text-neutral-500 dark:text-neutral-400'}`}>

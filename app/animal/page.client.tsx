@@ -133,7 +133,7 @@ export default function AnimalPageClient() {
       {/* 배경 */}
       <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
 
-      <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 pt-32 pb-24">
+      <div className="relative z-10 max-w-7xl mx-auto px-4 md:px-6 pt-4 sm:pt-16 pb-12 sm:pb-24">
 
         {/* ── 히어로 ── */}
         <section className="text-center mb-16">

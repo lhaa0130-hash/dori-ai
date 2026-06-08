@@ -93,7 +93,7 @@ export default function AiToolsClient() {
 
 
       {/* 히어로 섹션 (Standard) */}
-      <section className="relative pt-20 pb-8 px-6 text-center z-10">
+      <section className="relative pt-4 sm:pt-12 pb-4 sm:pb-8 px-4 sm:px-6 text-center z-10">
         <div className="max-w-xl mx-auto animate-fade-in flex flex-col items-center">
           {/* Badge */}
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">

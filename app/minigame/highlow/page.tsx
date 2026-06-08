@@ -141,7 +141,7 @@ export default function HighLowPage() {
                 <div className="w-9" />
             </header>
 
-            <div className="pt-24 pb-12 px-4 max-w-lg mx-auto">
+            <div className="pt-2 sm:pt-4 pb-8 sm:pb-12 px-4 max-w-lg mx-auto">
                 <div className="animate-fade-in">
                     <div className="flex items-center justify-center gap-2 mb-6">
                         <Coins className="w-5 h-5 text-[#F9954E]" />

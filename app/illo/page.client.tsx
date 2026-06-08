@@ -35,7 +35,7 @@ export default function IlloPageClient() {
       {/* Background glow */}
       <div className="absolute top-0 left-0 w-full h-[560px] bg-gradient-to-b from-[#FEEBD0]/50 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/12 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
 
-      <div className="relative z-10 max-w-5xl mx-auto px-6 pt-32 pb-24">
+      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-4 sm:pt-16 pb-12 sm:pb-24">
         {/* Hero */}
         <section className="text-center flex flex-col items-center">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-7">

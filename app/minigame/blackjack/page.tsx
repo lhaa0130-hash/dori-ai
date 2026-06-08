@@ -234,7 +234,7 @@ export default function BlackjackPage() {
                 <div className="w-9" />
             </header>
 
-            <div className="pt-24 pb-12 px-4 max-w-lg mx-auto">
+            <div className="pt-2 sm:pt-4 pb-8 sm:pb-12 px-4 max-w-lg mx-auto">
                 <div className="animate-fade-in">
 
                     {/* 코인 잔액 */}

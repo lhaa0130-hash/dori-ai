@@ -265,7 +265,7 @@ export default function RoulettePage() {
                 <div className="w-9" />
             </header>
 
-            <div className="pt-24 pb-12 px-4 max-w-4xl mx-auto">
+            <div className="pt-2 sm:pt-4 pb-8 sm:pb-12 px-4 max-w-4xl mx-auto">
                 {gameState === "SETUP" && (
                     <div className="animate-fade-in space-y-8">
                         {/* Setup Card */}

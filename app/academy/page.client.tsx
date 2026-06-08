@@ -42,7 +42,7 @@ export default function AcademyClient() {
       </div>
 
       {/* 히어로 섹션 */}
-      <section className="relative pt-20 pb-12 px-6 text-center overflow-hidden">
+      <section className="relative pt-4 sm:pt-12 pb-8 sm:pb-12 px-4 sm:px-6 text-center overflow-hidden">
         <div className="max-w-4xl mx-auto animate-[fadeInUp_0.8s_ease-out_forwards]">
           <h1 
             className="text-4xl md:text-6xl font-extrabold mb-4 tracking-tight leading-tight"
