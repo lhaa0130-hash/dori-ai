@@ -102,9 +102,9 @@ export default function TypingSpeedPage() {
                 <div className="w-9" />
             </header>
 
-            <div className="pt-2 sm:pt-4 pb-8 sm:pb-12 px-4 max-w-3xl mx-auto">
+            <div className="pt-20 pb-8 sm:pb-12 px-4 max-w-3xl mx-auto">
                 <div className="animate-fade-in">
-                    <div className="bg-white dark:bg-zinc-900 rounded-3xl p-8 md:p-12 shadow-xl shadow-neutral-200/50 dark:shadow-none border border-neutral-100 dark:border-white/5">
+                    <div className="bg-white dark:bg-zinc-900 rounded-3xl p-5 sm:p-8 md:p-12 shadow-xl shadow-neutral-200/50 dark:shadow-none border border-neutral-100 dark:border-white/5">
 
                         {!isStarted && !isFinished && (
                             <motion.div
@@ -147,7 +147,7 @@ export default function TypingSpeedPage() {
                                 </div>
 
                                 {/* Target Text */}
-                                <div className="mb-6 p-6 bg-neutral-50 dark:bg-black rounded-xl text-2xl font-mono leading-relaxed">
+                                <div className="mb-6 p-4 sm:p-6 bg-neutral-50 dark:bg-black rounded-xl text-lg sm:text-2xl font-mono leading-relaxed">
                                     {targetText.split("").map((char, i) => (
                                         <span key={i} className={getCharacterColor(i)}>
                                             {char}
@@ -161,7 +161,7 @@ export default function TypingSpeedPage() {
                                     type="text"
                                     value={userInput}
                                     onChange={handleInput}
-                                    className="w-full p-6 bg-white dark:bg-zinc-800 border-2 border-neutral-200 dark:border-zinc-700 rounded-xl text-2xl font-mono focus:outline-none focus:border-yellow-500 transition-colors"
+                                    className="w-full p-4 sm:p-6 bg-white dark:bg-zinc-800 border-2 border-neutral-200 dark:border-zinc-700 rounded-xl text-lg sm:text-2xl font-mono focus:outline-none focus:border-yellow-500 transition-colors"
                                     placeholder="여기에 입력하세요..."
                                     autoComplete="off"
                                 />

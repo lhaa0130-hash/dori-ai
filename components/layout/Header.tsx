@@ -2,45 +2,21 @@
 
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
-import { useState, useEffect } from "react";
+
 import ThemeToggle from "@/components/ThemeToggle";
-import { Search, ChevronDown, ChevronRight, User, LogOut, Menu, X } from "lucide-react";
+import { Search, ChevronDown, User, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { useRouter, usePathname } from "next/navigation";
+import { useRouter } from "next/navigation";
 
 const ADMIN_EMAIL = "lhaa0130@gmail.com";
 
 export default function Header() {
   const { session, logout } = useAuth();
   const router = useRouter();
-  const pathname = usePathname();
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
   const isAdmin = session?.user?.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase();
 
-  useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 0);
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
-
-  // 페이지 이동 시 모바일 메뉴 닫기
-  useEffect(() => {
-    setMobileOpen(false);
-  }, [pathname]);
-
-  // 메뉴 열릴 때 body 스크롤 잠금
-  useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
-    }
-    return () => { document.body.style.overflow = ""; };
-  }, [mobileOpen]);
-
-  const handleSignIn = () => { router.push("/login"); setMobileOpen(false); };
-  const handleSignOut = () => { logout(); router.push("/"); setMobileOpen(false); };
+  const handleSignIn = () => { router.push("/login"); };
+  const handleSignOut = () => { logout(); router.push("/"); };
 
   const navItems = [
     { name: "공지사항", href: "/notice", emoji: "📢" },
@@ -222,127 +198,9 @@ export default function Header() {
               )}
             </div>
 
-            {/* 햄버거 버튼 (모바일만) */}
-            <button
-              onClick={() => setMobileOpen(prev => !prev)}
-              className="lg:hidden flex-shrink-0 w-11 h-11 flex items-center justify-center rounded-xl hover:bg-neutral-100 dark:hover:bg-zinc-800 transition-colors text-foreground"
-              aria-label={mobileOpen ? "메뉴 닫기" : "메뉴 열기"}
-            >
-              {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}
-            </button>
-          </div>
+            </div>
         </div>
       </header>
-
-      {/* ── 모바일 오버레이 ── */}
-      {mobileOpen && (
-        <div
-          className="fixed inset-0 bg-black/40 z-40 lg:hidden"
-          onClick={() => setMobileOpen(false)}
-        />
-      )}
-
-      {/* ── 모바일 드로어 ── */}
-      <div
-        className={cn(
-          "fixed top-16 left-0 right-0 z-40 lg:hidden",
-          "bg-white dark:bg-black border-b border-neutral-200 dark:border-zinc-800",
-          "overflow-y-auto transition-all duration-300 ease-in-out",
-          mobileOpen
-            ? "opacity-100 translate-y-0 pointer-events-auto max-h-[calc(100dvh-4rem)]"
-            : "opacity-0 -translate-y-2 pointer-events-none max-h-0"
-        )}
-      >
-        <div className="px-4 py-4 pb-8 flex flex-col gap-1">
-
-          {/* 로그인 / 마이페이지 */}
-          <div className="mb-3 pb-3 border-b border-neutral-100 dark:border-zinc-800">
-            {session?.user ? (
-              <div className="flex flex-col gap-1.5">
-                <Link
-                  href="/my"
-                  className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white"
-                >
-                  <User className="w-4 h-4 text-[#F9954E]" />
-                  <span>마이페이지</span>
-                </Link>
-                {isAdmin && (
-                  <Link
-                    href="/admin"
-                    className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-orange-50 dark:bg-orange-900/20 text-sm font-bold text-orange-600 dark:text-orange-400"
-                  >
-                    <span>🛡️</span>
-                    <span>관리자 패널</span>
-                  </Link>
-                )}
-                <button
-                  onClick={handleSignOut}
-                  className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-red-50 dark:bg-red-900/20 text-sm font-bold text-red-500 text-left w-full"
-                >
-                  <LogOut className="w-4 h-4" />
-                  <span>로그아웃</span>
-                </button>
-              </div>
-            ) : (
-              <button
-                onClick={handleSignIn}
-                className="w-full py-3.5 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-sm font-black text-white transition-all active:scale-95"
-              >
-                로그인 / 회원가입
-              </button>
-            )}
-          </div>
-
-          {/* 메인 메뉴 */}
-          {navItems.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="flex items-center justify-between px-4 py-3.5 rounded-2xl hover:bg-neutral-50 dark:hover:bg-zinc-900 transition-colors group"
-            >
-              <div className="flex items-center gap-3">
-                <span className="text-base w-6 text-center">{item.emoji}</span>
-                <span className="text-sm font-semibold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors">
-                  {item.name}
-                </span>
-              </div>
-              <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-zinc-600" />
-            </Link>
-          ))}
-
-          {/* 프로젝트 */}
-          <div className="mt-2 pt-2 border-t border-neutral-100 dark:border-zinc-800">
-            <p className="px-4 pt-2 pb-1 text-[10px] font-bold tracking-widest uppercase text-neutral-400">
-              Projects
-            </p>
-            {projects.map((p) => (
-              <Link
-                key={p.name}
-                href={p.href}
-                className="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-neutral-50 dark:hover:bg-zinc-900 transition-colors group"
-              >
-                <div className={`w-9 h-9 rounded-xl ${p.bg} flex items-center justify-center text-lg flex-shrink-0 overflow-hidden`}>
-                  {p.image ? <img src={p.image} alt={p.name} className="w-full h-full object-cover" /> : p.emoji}
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors">
-                    {p.name}
-                  </div>
-                  <div className="text-[11px] text-neutral-500 dark:text-neutral-400">{p.desc}</div>
-                </div>
-              </Link>
-            ))}
-            <Link
-              href="/projects"
-              className="flex items-center justify-between px-4 py-3 mt-0.5 rounded-2xl hover:bg-neutral-50 dark:hover:bg-zinc-900 transition-colors"
-            >
-              <span className="text-sm font-bold text-[#F9954E]">전체 프로젝트 보기</span>
-              <ChevronRight className="w-4 h-4 text-[#F9954E]" />
-            </Link>
-          </div>
-
-        </div>
-      </div>
     </>
   );
 }

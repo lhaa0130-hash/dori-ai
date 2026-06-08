@@ -98,9 +98,13 @@ export default function AnimalMergePage() {
       b.vy *= FRICTION;
 
       const ar = ANIMALS[b.lv].r;
+      // 좌·우 벽
       if (b.x - ar < WALL)       { b.x = WALL + ar;       b.vx =  Math.abs(b.vx) * BOUNCE; }
       if (b.x + ar > GW - WALL)  { b.x = GW - WALL - ar;  b.vx = -Math.abs(b.vx) * BOUNCE; }
+      // 바닥
       if (b.y + ar > FLOOR_Y)    { b.y = FLOOR_Y - ar;    b.vy = -Math.abs(b.vy) * BOUNCE; b.vx *= 0.82; }
+      // 천장 (공이 화면 밖으로 나가지 않도록)
+      if (b.y - ar < 0)          { b.y = ar;               b.vy =  Math.abs(b.vy) * BOUNCE; }
     }
 
     const toRemove = new Set<number>();
@@ -132,12 +136,16 @@ export default function AnimalMergePage() {
           ) {
             toRemove.add(a.id);
             toRemove.add(b.id);
+            const newR = ANIMALS[a.lv + 1].r;
+            // 합치기 위치: 두 공의 중앙, 단 바닥/천장 범위 안에 클램핑
+            const mergeX = (a.x + b.x) / 2;
+            const mergeY = Math.max(newR, Math.min(FLOOR_Y - newR, (a.y + b.y) / 2));
             const nb: Ball = {
               id: gUID++,
-              x: (a.x + b.x) / 2,
-              y: Math.min(a.y, b.y),
+              x: mergeX,
+              y: mergeY,
               vx: (a.vx + b.vx) * 0.3,
-              vy: (a.vy + b.vy) * 0.3 - 2.5,
+              vy: Math.min((a.vy + b.vy) * 0.3 - 2.5, -1), // 항상 약간 위로
               lv: a.lv + 1,
               birthFrame: f,
             };
@@ -168,9 +176,13 @@ export default function AnimalMergePage() {
       ballsRef.current = cur.filter(b => !toRemove.has(b.id)).concat(toAdd);
     }
 
-    // 게임 오버 검사
+    // 게임 오버 검사: 충분히 정착한 공이 위험선 위에 있으면 종료
+    // birthFrame 후 120프레임 (~2초) 유예 + 공이 거의 정지했을 때만 판정
     for (const b of ballsRef.current) {
-      if (f - b.birthFrame > 90 && b.y - ANIMALS[b.lv].r < DANGER_Y) {
+      const age = f - b.birthFrame;
+      const ar  = ANIMALS[b.lv].r;
+      const isSettled = Math.abs(b.vy) < 1.5 && Math.abs(b.vx) < 1.5;
+      if (age > 120 && isSettled && b.y - ar < DANGER_Y) {
         gameOverRef.current = true;
         setGameOver(true);
         const best = parseInt(localStorage.getItem("animalmerge_best") || "0", 10);

@@ -170,7 +170,7 @@ export default function Game2048() {
     }, [move]);
 
     return (
-        <div className="h-screen w-full bg-slate-900 text-white font-sans selection:bg-yellow-500/30 flex flex-col items-center justify-center p-4 overflow-hidden touch-none">
+        <div className="min-h-[100dvh] w-full bg-slate-900 text-white font-sans selection:bg-yellow-500/30 flex flex-col items-center justify-center p-4 overflow-hidden touch-none">
 
             <header className="w-full max-w-md flex items-center justify-between mb-6">
                 <Link href="/minigame" className="p-2 hover:bg-slate-800 rounded-full transition-colors">
@@ -189,7 +189,7 @@ export default function Game2048() {
                 </div>
             </header>
 
-            <div className="relative bg-slate-800 p-2 rounded-lg" style={{ touchAction: "none" }}
+            <div className="relative bg-slate-800 p-2 rounded-lg w-full max-w-[360px]" style={{ touchAction: "none" }}
                 onTouchStart={(e) => {
                     touchStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
                 }}
@@ -213,7 +213,7 @@ export default function Game2048() {
                             <motion.div
                                 key={`${i}-${j}`}
                                 layoutId={`tile-${i}-${j}`} // Simple layout animation
-                                className={`w-16 h-16 md:w-20 md:h-20 rounded font-bold text-2xl md:text-3xl flex items-center justify-center transition-colors ${val > 0 ? TILE_COLORS[val] : "bg-slate-600/50"}`}
+                                className={`aspect-square rounded font-bold text-xl sm:text-2xl md:text-3xl flex items-center justify-center transition-colors ${val > 0 ? TILE_COLORS[val] : "bg-slate-600/50"}`}
                             >
                                 {val > 0 ? val : ""}
                             </motion.div>

@@ -11,6 +11,7 @@ import LeftSideAd from "@/components/ads/LeftSideAd";
 import RightSideAd from "@/components/ads/RightSideAd";
 import { Sidebar } from "@/components/layout/Sidebar"; // Import Sidebar
 import PageTransition from "@/components/PageTransition"; // Import PageTransition
+import BottomNav from "@/components/layout/BottomNav";
 
 interface LayoutClientProps {
   children: React.ReactNode;
@@ -39,12 +40,13 @@ export default function LayoutClient({ children }: LayoutClientProps) {
     <div className="flex flex-col min-h-screen bg-background text-foreground transition-colors duration-300">
       <Header />
       <LeftSideAd />
-      <main className="flex-grow w-full pt-[100px] pb-16 sm:pb-[200px] xl:px-[260px] px-6 relative z-0">
+      <main className="flex-grow w-full pt-[100px] pb-[80px] lg:pb-[200px] xl:px-[260px] px-6 relative z-0">
         <PageTransition>
           {children}
         </PageTransition>
       </main>
       <Footer />
+      <BottomNav />
       <OpenPopup />
       <RightSideAd />
     </div>

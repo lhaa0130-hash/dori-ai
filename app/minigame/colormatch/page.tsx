@@ -117,9 +117,9 @@ export default function ColorMatchPage() {
                 <div className="w-9" />
             </header>
 
-            <div className="pt-2 sm:pt-4 pb-8 sm:pb-12 px-4 max-w-2xl mx-auto">
+            <div className="pt-20 pb-8 sm:pb-12 px-4 max-w-2xl mx-auto">
                 <div className="animate-fade-in">
-                    <div className="bg-white dark:bg-zinc-900 rounded-3xl p-8 md:p-12 shadow-xl shadow-neutral-200/50 dark:shadow-none border border-neutral-100 dark:border-white/5">
+                    <div className="bg-white dark:bg-zinc-900 rounded-3xl p-5 sm:p-8 md:p-12 shadow-xl shadow-neutral-200/50 dark:shadow-none border border-neutral-100 dark:border-white/5">
 
                         {!isPlaying && !isGameOver && (
                             <motion.div
@@ -182,7 +182,7 @@ export default function ColorMatchPage() {
                                             onClick={() => handleAnswer(color)}
                                             whileHover={{ scale: 1.05 }}
                                             whileTap={{ scale: 0.95 }}
-                                            className="p-6 rounded-2xl font-bold text-white text-lg shadow-lg transition-all"
+                                            className="p-4 sm:p-6 rounded-2xl font-bold text-white text-base sm:text-lg shadow-lg transition-all min-h-[56px]"
                                             style={{ backgroundColor: color.rgb }}
                                         >
                                             {color.kr}

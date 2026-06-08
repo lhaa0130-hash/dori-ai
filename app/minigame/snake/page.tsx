@@ -22,6 +22,7 @@ type Point = { x: number; y: number };
 export default function SnakeGame() {
     const { session } = useAuth();
     const canvasRef = useRef<HTMLCanvasElement>(null);
+    const touchStartRef = useRef<{x: number, y: number} | null>(null);
     const [gameState, setGameState] = useState<"READY" | "PLAYING" | "GAME_OVER">("READY");
     const [score, setScore] = useState(0);
     const [highScore, setHighScore] = useState(0);
@@ -191,7 +192,7 @@ export default function SnakeGame() {
     }, []);
 
     return (
-        <div className="h-screen w-full bg-slate-900 text-white font-sans selection:bg-green-500/30 flex flex-col items-center justify-center p-4 overflow-hidden touch-none">
+        <div className="min-h-[100dvh] w-full bg-slate-900 text-white font-sans selection:bg-green-500/30 flex flex-col items-center justify-center p-4 overflow-hidden touch-none">
 
             <header className="w-full max-w-md flex items-center justify-between mb-6">
                 <Link href="/minigame" className="p-2 hover:bg-slate-800 rounded-full transition-colors">
@@ -210,6 +211,19 @@ export default function SnakeGame() {
                     height={CANVAS_SIZE}
                     className="block shadow-2xl rounded-lg border-4 border-slate-700"
                     style={{ width: '100%', maxWidth: `${CANVAS_SIZE}px`, height: 'auto', aspectRatio: '1' }}
+                    onTouchStart={(e) => { touchStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }; }}
+                    onTouchEnd={(e) => {
+                        if (!touchStartRef.current) return;
+                        const dx = e.changedTouches[0].clientX - touchStartRef.current.x;
+                        const dy = e.changedTouches[0].clientY - touchStartRef.current.y;
+                        touchStartRef.current = null;
+                        if (Math.abs(dx) < 20 && Math.abs(dy) < 20) return;
+                        if (Math.abs(dx) > Math.abs(dy)) {
+                            if (direction.current.x === 0) nextDirection.current = { x: dx > 0 ? 1 : -1, y: 0 };
+                        } else {
+                            if (direction.current.y === 0) nextDirection.current = { x: 0, y: dy > 0 ? 1 : -1 };
+                        }
+                    }}
                 />
 
                 {gameState === "READY" && (
