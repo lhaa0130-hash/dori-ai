@@ -13,11 +13,12 @@ export const AI_TOOLS_DATA: AiTool[] = [
     summary: "AI가 코드를 직접 작성하는 개발자용 에디터",
     description: "VS Code 기반 AI 코드 에디터로, 프로젝트 전체 파일 컨텍스트를 이해하고 자연어 명령만으로 코드를 작성·리팩토링합니다. 무료 플랜과 유료($20/월) 플랜이 있으며, Claude·GPT-4o 등 여러 모델 중 선택할 수 있습니다. 복잡한 기능 추가나 버그 수정을 자연어로 지시하면 알아서 처리해 코딩 속도가 최소 2~3배 빨라집니다.",
     website: "https://cursor.sh",
+    apiUrl: "https://docs.cursor.com/api",
     thumbnail: "https://logo.clearbit.com/cursor.sh",
     strength: "자율 코딩, 컨텍스트 이해 최강",
     rating: 0, ratingCount: 0, userRatings: [], comments: [],
-    pros: ["파일 전체를 이해하고 코드 작성", "자연어 명령으로 리팩토링", "무료 플랜 제공"],
-    cons: ["고급 기능은 유료 ($20/월)", "대형 프로젝트에서 느릴 수 있음"],
+    pros: ["파일 전체를 이해하고 코드 자동 작성", "자연어로 리팩토링·버그 수정 가능", "무료 플랜 + 다양한 AI 모델 선택"],
+    cons: ["고급 기능은 유료 ($20/월)", "대형 프로젝트에서 응답 지연 가능"],
     userReview: "한 번 쓰면 못 돌아가요. 코딩 속도가 3배는 빨라집니다.",
     topPick: true, topRank: 3
   },
@@ -143,10 +144,11 @@ export const AI_TOOLS_DATA: AiTool[] = [
     summary: "뭘 물어봐도 잘 답해줌. AI 처음 쓴다면 무조건 여기서 시작",
     description: "OpenAI가 개발한 세계 최대 사용자 AI 챗봇으로, GPT-4o 모델 기반의 텍스트·이미지·음성 통합 처리가 가능합니다. 무료 플랜(GPT-4o mini)과 Plus 플랜($20/월, GPT-4o 무제한)으로 나뉘며, GPT 스토어를 통해 특화 봇을 추가로 사용할 수 있습니다. 플러그인 생태계와 API 접근성 덕분에 전 세계 1억 명 이상이 매주 사용하는 AI 표준으로 자리잡았습니다.",
     website: "https://chatgpt.com",
+    apiUrl: "https://platform.openai.com",
     thumbnail: "https://logo.clearbit.com/chatgpt.com",
     topPick: true, topRank: 1,
-    pros: ["전 세계 1억+ 사용자, 생태계 최강", "무료 플랜으로도 GPT-4o 사용 가능", "이미지·음성·텍스트 통합 처리"],
-    cons: ["무료 플랜은 사용량 제한 있음", "최신 정보는 유료 플랜에서만 완전 지원"],
+    pros: ["전 세계 1억+ 사용자, 생태계 최강", "무료로도 GPT-4o 기본 사용 가능", "이미지·음성·텍스트 통합 처리"],
+    cons: ["무료 플랜은 하루 사용량 제한 있음", "프라이버시 우려 (데이터 학습에 활용)"],
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
@@ -154,10 +156,11 @@ export const AI_TOOLS_DATA: AiTool[] = [
     summary: "긴 글 맥락을 귀신같이 잡아냄. 보고서 쓸 때 진짜 갑임",
     description: "Anthropic이 개발한 AI로 최대 20만 토큰의 초대형 컨텍스트를 지원해 책 한 권 분량도 한 번에 분석합니다. 글쓰기·코딩·분석 능력이 GPT-4o와 쌍벽을 이루며, 특히 긴 문서를 맥락을 잃지 않고 처리하는 능력이 뛰어납니다. 무료 플랜과 Pro 플랜($20/월)이 있으며, 안전하고 무해한 AI를 목표로 하는 헌법적 AI 설계가 적용되었습니다.",
     website: "https://claude.ai",
+    apiUrl: "https://console.anthropic.com",
     thumbnail: "https://logo.clearbit.com/claude.ai",
     topPick: true, topRank: 2,
-    pros: ["20만 토큰 초대형 컨텍스트 지원", "글쓰기·코딩 능력 GPT-4o급", "안전성 중심 헌법적 AI 설계"],
-    cons: ["무료 플랜 사용량 제한 있음", "실시간 웹 검색 기능 없음"],
+    pros: ["20만 토큰 초대형 컨텍스트 지원", "긴 문서·보고서 분석에서 최강", "안전성 중심 헌법적 AI 설계"],
+    cons: ["무료 플랜 사용량 제한 있음", "실시간 웹 검색 기능 제한적"],
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
@@ -165,10 +168,11 @@ export const AI_TOOLS_DATA: AiTool[] = [
     summary: "구글 드라이브 문서 바로 요약. 구글 생태계 쓰는 분께 추천",
     description: "Google DeepMind가 개발한 멀티모달 AI로, Docs·Sheets·Gmail·YouTube 등 Google Workspace와 깊이 통합되어 있습니다. Gemini 2.0 Flash 기준으로 속도와 비용 면에서 뛰어나며, Google One AI Premium($19.99/월)으로 가장 강력한 모델을 사용할 수 있습니다. 한국어 포함 40개 이상 언어를 지원하며 안드로이드·크롬 등 구글 기기 전반에 통합됩니다.",
     website: "https://gemini.google.com",
+    apiUrl: "https://aistudio.google.com",
     thumbnail: "https://logo.clearbit.com/google.com",
     topPick: true, topRank: 3,
-    pros: ["Google Workspace 완벽 통합", "100만 토큰 컨텍스트(1.5 Pro)", "한국어 포함 40개 이상 언어 지원"],
-    cons: ["Google 생태계 외에서는 활용도 낮음", "최고 모델은 유료 구독 필요"],
+    pros: ["Google Workspace(드라이브·Gmail) 완벽 통합", "100만 토큰 컨텍스트(1.5 Pro)", "한국어 포함 다국어 지원"],
+    cons: ["Google 생태계 밖에서는 활용도 낮음", "최고 모델은 유료 구독 필요"],
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
@@ -176,10 +180,11 @@ export const AI_TOOLS_DATA: AiTool[] = [
     summary: "구글 대신 쓰기 딱 좋음. 출처 링크가 함께 나와서 믿음직함",
     description: "실시간 인터넷 검색과 AI 답변을 결합한 AI 검색 엔진으로, 모든 답변에 출처 URL이 함께 표시됩니다. GPT-4·Claude·Mistral 등 여러 모델 중 선택 가능하며, 딥리서치 기능으로 복잡한 주제도 심층 분석합니다. 무료 버전은 하루 Pro 검색 5회 제한이 있으며 Pro 플랜은 월 $20입니다.",
     website: "https://perplexity.ai",
+    apiUrl: "https://docs.perplexity.ai",
     thumbnail: "https://logo.clearbit.com/perplexity.ai",
     topPick: true, topRank: 5,
-    pros: ["모든 답변에 출처 URL 제공", "실시간 웹 검색 기반 최신 정보", "딥리서치로 심층 분석 가능"],
-    cons: ["무료 플랜은 Pro 검색 하루 5회 제한", "깊은 창작 작업보다 검색에 특화"],
+    pros: ["모든 답변에 출처 URL 제공", "실시간 웹 검색으로 최신 정보 반영", "딥리서치로 심층 분석 가능"],
+    cons: ["무료 플랜은 Pro 검색 하루 5회 제한", "긴 창작 작업보다 검색·조사에 특화"],
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
@@ -307,9 +312,10 @@ export const AI_TOOLS_DATA: AiTool[] = [
     summary: "예술적 화질은 압도적 1위. 프로 디자이너들이 가장 많이 씀",
     description: "디스코드 채널에서 텍스트 프롬프트로 극도로 아름다운 예술 수준의 이미지를 생성하는 서비스입니다. V6 모델은 사실적 표현과 환상적 아트워크 모두에서 최고 수준을 자랑하며, 프로 디자이너·일러스트레이터가 가장 많이 선택합니다. 월 $10(기본)~$120(대용량) 구독제이며 생성 이미지의 상업적 사용이 허가됩니다.",
     website: "https://midjourney.com",
+    apiUrl: "https://docs.midjourney.com",
     thumbnail: "https://logo.clearbit.com/midjourney.com",
     topPick: true, topRank: 1,
-    pros: ["예술적 이미지 품질 업계 최고", "프로 디자이너도 쓰는 검증된 품질", "상업적 이미지 사용 허가"],
+    pros: ["예술적 이미지 품질 업계 최고", "프로 디자이너도 쓰는 검증된 품질", "상업 이미지 사용 허가"],
     cons: ["디스코드 기반으로 진입 장벽 있음", "무료 플랜 없음, 월 $10부터"],
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
@@ -318,10 +324,11 @@ export const AI_TOOLS_DATA: AiTool[] = [
     summary: "내 PC에 설치해서 무한 생성. 모델 교체로 화풍을 마음대로 바꿈",
     description: "Stability AI가 오픈소스로 공개한 이미지 생성 모델로, 자신의 PC에 설치해 인터넷·비용 없이 무제한으로 이미지를 만들 수 있습니다. Civitai에서 수천 개의 파인튜닝 모델을 무료로 받아 원하는 화풍을 적용할 수 있으며, AUTOMATIC1111·ComfyUI 같은 UI와 결합해 워크플로우를 완전히 커스터마이징할 수 있습니다. 제대로 활용하면 Midjourney보다 더 높은 자유도를 제공합니다.",
     website: "https://stability.ai",
+    apiUrl: "https://platform.stability.ai",
     thumbnail: "https://logo.clearbit.com/stability.ai",
     topPick: true, topRank: 2,
     pros: ["로컬 설치로 무제한 무료 생성", "수천 개 커스텀 모델 교체 가능", "완전 오픈소스, 최고의 자유도"],
-    cons: ["초기 설치 및 설정이 복잡함", "고성능 GPU가 없으면 느림"],
+    cons: ["초기 설치·설정이 복잡함", "고성능 GPU가 없으면 생성이 느림"],
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
@@ -329,6 +336,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     summary: "ChatGPT Plus 구독하면 바로 사용. 복잡한 설정 없이 즉시 시작",
     description: "OpenAI가 개발한 이미지 생성 모델로 ChatGPT Plus($20/월)와 통합되어 있어 자연스러운 대화 방식으로 이미지를 생성하고 수정할 수 있습니다. 이미지 내 텍스트 렌더링 능력이 크게 향상되었으며, 저작권 문제를 최소화하도록 안전하게 훈련된 것이 특징입니다. API를 통해 개발자가 자체 서비스에 간편하게 통합할 수 있습니다.",
     website: "https://openai.com/dall-e-3",
+    apiUrl: "https://platform.openai.com/docs/guides/images",
     thumbnail: "https://logo.clearbit.com/openai.com",
     topPick: true, topRank: 3,
     pros: ["ChatGPT Plus에 포함, 별도 구독 불필요", "이미지 내 텍스트 렌더링 정확도 높음", "저작권 안전하게 학습된 모델"],

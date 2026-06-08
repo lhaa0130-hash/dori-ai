@@ -74,4 +74,5 @@ export type AiTool = {
   userReview?: string;
   topPick?: boolean;
   topRank?: number;
+  apiUrl?: string;    // API 문서 / 개발자 페이지 URL
 };

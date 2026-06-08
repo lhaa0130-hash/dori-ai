@@ -53,7 +53,7 @@ export default function CommunityPreview() {
   };
 
   return (
-    <section className="max-w-[1200px] mx-auto px-4 sm:px-6 mb-12 sm:mb-24 animate-[fadeInUp_0.8s_ease-out_0.2s_forwards]">
+    <section className="max-w-[1200px] mx-auto mb-12 sm:mb-24 animate-[fadeInUp_0.8s_ease-out_0.2s_forwards]">
       <div className="flex flex-col md:flex-row justify-between items-end mb-8 gap-4">
         <div>
           <h2 className="text-2xl md:text-3xl font-extrabold mb-2" style={{ color: 'var(--text-main)' }}>{t.community.ko}</h2>

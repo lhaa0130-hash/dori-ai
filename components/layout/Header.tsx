@@ -225,7 +225,7 @@ export default function Header() {
             {/* 햄버거 버튼 (모바일만) */}
             <button
               onClick={() => setMobileOpen(prev => !prev)}
-              className="lg:hidden flex-shrink-0 w-10 h-10 flex items-center justify-center rounded-xl hover:bg-neutral-100 dark:hover:bg-zinc-800 transition-colors text-foreground"
+              className="lg:hidden flex-shrink-0 w-11 h-11 flex items-center justify-center rounded-xl hover:bg-neutral-100 dark:hover:bg-zinc-800 transition-colors text-foreground"
               aria-label={mobileOpen ? "메뉴 닫기" : "메뉴 열기"}
             >
               {mobileOpen ? <X className="w-5 h-5" /> : <Menu className="w-5 h-5" />}

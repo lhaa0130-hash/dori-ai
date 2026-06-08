@@ -149,7 +149,7 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
       <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
 
       {/* 인사이트 페이지 콘텐츠 */}
-      <section className="relative z-10 max-w-[1200px] mx-auto px-4 sm:px-6 py-4 sm:py-8 min-h-[50vh]">
+      <section className="relative z-10 max-w-[1200px] mx-auto py-4 sm:py-8 min-h-[50vh]">
         {/* 헤더 (Standard) */}
         <div className="max-w-3xl mx-auto mb-6 sm:mb-12 text-center pt-2 sm:pt-8 flex flex-col items-center">
           {/* Badge */}

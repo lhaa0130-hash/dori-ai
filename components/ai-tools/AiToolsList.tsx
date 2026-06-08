@@ -38,76 +38,95 @@ function HighlightCard({ tool }: { tool: AiTool }) {
     "업무 생산성 획기적 개선",
   ];
   const displayPros = tool.pros && tool.pros.length > 0
-    ? [...tool.pros, ...defaultPros].slice(0, 3)
-    : defaultPros;
+    ? tool.pros.slice(0, 3)
+    : defaultPros.slice(0, 3);
 
   const defaultCons = [
     "고급 기능 사용 시 유료 플랜 필요",
     "초기 학습 곡선이 존재할 수 있음",
   ];
   const displayCons = tool.cons && tool.cons.length > 0
-    ? [...tool.cons, ...defaultCons].slice(0, 2)
-    : defaultCons;
+    ? tool.cons.slice(0, 2)
+    : defaultCons.slice(0, 2);
 
   return (
     <div
-      className={`rounded-2xl border-2 ${style.border} bg-white dark:bg-zinc-900 shadow-xl ${style.glow} p-5 sm:p-6 flex flex-col gap-4 transition-transform duration-200 hover:-translate-y-0.5`}
+      className={`rounded-2xl border-2 ${style.border} bg-white dark:bg-zinc-900 shadow-xl ${style.glow} p-4 sm:p-5 flex flex-col gap-3 transition-transform duration-200 hover:-translate-y-0.5`}
     >
       {/* 헤더 */}
-      <div className="flex items-start justify-between gap-3">
-        <div className="flex items-center gap-3">
-          <span className={`text-base font-black px-3 py-1 rounded-full ${style.badge} shrink-0`}>
+      <div className="flex items-start justify-between gap-2">
+        <div className="flex items-center gap-2 min-w-0">
+          <span className={`text-sm font-black px-2.5 py-1 rounded-full ${style.badge} shrink-0`}>
             {style.emoji} #{rank}
           </span>
           <img
             src={tool.thumbnail}
             alt={tool.name}
-            className="w-9 h-9 rounded-xl object-contain bg-white border border-neutral-100 dark:border-zinc-700 shrink-0"
+            className="w-8 h-8 rounded-xl object-contain bg-white border border-neutral-100 dark:border-zinc-700 shrink-0"
             onError={(e) => {
               try {
                 (e.target as HTMLImageElement).src = `https://www.google.com/s2/favicons?domain=${new URL(tool.website).hostname}&sz=128`;
               } catch {}
             }}
           />
-          <div>
-            <h3 className="font-bold text-base sm:text-lg text-neutral-900 dark:text-white leading-tight">
+          <div className="min-w-0">
+            <h3 className="font-bold text-sm sm:text-base text-neutral-900 dark:text-white leading-tight truncate">
               {tool.name}
             </h3>
             {tool.strength && (
-              <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{tool.strength}</p>
+              <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5 truncate">{tool.strength}</p>
             )}
           </div>
         </div>
-        <a
-          href={tool.website}
-          target="_blank"
-          rel="noopener noreferrer"
-          className="shrink-0 px-4 py-2 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-white text-sm font-bold transition-colors whitespace-nowrap"
-        >
-          방문하기
-        </a>
+        {/* 버튼 그룹 */}
+        <div className="flex gap-1.5 shrink-0">
+          {tool.apiUrl && (
+            <a
+              href={tool.apiUrl}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="px-2.5 py-1.5 rounded-lg bg-neutral-100 dark:bg-zinc-800 hover:bg-purple-100 dark:hover:bg-purple-900/30 text-neutral-600 dark:text-neutral-300 hover:text-purple-700 dark:hover:text-purple-300 text-xs font-bold transition-colors border border-neutral-200 dark:border-zinc-700"
+              title="API 문서"
+            >
+              API
+            </a>
+          )}
+          <a
+            href={tool.website}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-3 py-1.5 rounded-lg bg-[#F9954E] hover:bg-[#E8832E] text-white text-xs font-bold transition-colors whitespace-nowrap"
+          >
+            방문하기
+          </a>
+        </div>
       </div>
 
+      {/* 요약 */}
+      {tool.summary && (
+        <p className="text-xs text-neutral-600 dark:text-neutral-400 leading-relaxed line-clamp-2">{tool.summary}</p>
+      )}
+
       {/* 장단점 */}
-      <div className="grid grid-cols-2 gap-3 text-sm">
-        <div>
-          <p className="font-semibold text-green-600 dark:text-green-400 mb-1.5 text-xs">✅ 장점</p>
+      <div className="grid grid-cols-2 gap-2">
+        <div className="bg-green-50 dark:bg-green-950/20 rounded-xl p-2.5">
+          <p className="font-semibold text-green-700 dark:text-green-400 mb-1.5 text-[10px] uppercase tracking-wide">✅ 장점</p>
           <ul className="space-y-1">
             {displayPros.map((p, i) => (
-              <li key={i} className="text-neutral-700 dark:text-neutral-300 flex items-start gap-1 text-xs">
+              <li key={i} className="text-neutral-700 dark:text-neutral-300 flex items-start gap-1 text-[11px]">
                 <span className="mt-0.5 text-green-500 shrink-0">•</span>
-                <span>{p}</span>
+                <span className="leading-snug">{p}</span>
               </li>
             ))}
           </ul>
         </div>
-        <div>
-          <p className="font-semibold text-red-500 dark:text-red-400 mb-1.5 text-xs">❌ 단점</p>
+        <div className="bg-red-50 dark:bg-red-950/20 rounded-xl p-2.5">
+          <p className="font-semibold text-red-600 dark:text-red-400 mb-1.5 text-[10px] uppercase tracking-wide">❌ 단점</p>
           <ul className="space-y-1">
             {displayCons.map((c, i) => (
-              <li key={i} className="text-neutral-700 dark:text-neutral-300 flex items-start gap-1 text-xs">
+              <li key={i} className="text-neutral-700 dark:text-neutral-300 flex items-start gap-1 text-[11px]">
                 <span className="mt-0.5 text-red-400 shrink-0">•</span>
-                <span>{c}</span>
+                <span className="leading-snug">{c}</span>
               </li>
             ))}
           </ul>
@@ -120,15 +139,15 @@ function HighlightCard({ tool }: { tool: AiTool }) {
 // ─── 미니 카드 (4~5위 및 나머지) ────────────────────────────────────
 function MiniCard({ tool, rank }: { tool: AiTool; rank: number }) {
   return (
-    <div className="flex items-center justify-between gap-3 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 px-4 py-3 hover:border-[#F9954E]/50 hover:shadow-sm transition-all duration-200 group">
-      <div className="flex items-center gap-3 min-w-0">
-        <span className="text-xs font-black text-neutral-400 dark:text-neutral-500 w-5 shrink-0 text-center">
+    <div className="flex items-center justify-between gap-2 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 px-3 py-2.5 hover:border-[#F9954E]/50 hover:shadow-sm transition-all duration-200 group">
+      <div className="flex items-center gap-2.5 min-w-0">
+        <span className="text-xs font-black text-neutral-400 dark:text-neutral-500 w-4 shrink-0 text-center">
           {rank}
         </span>
         <img
           src={tool.thumbnail}
           alt={tool.name}
-          className="w-8 h-8 rounded-lg object-contain bg-white border border-neutral-100 dark:border-zinc-700 shrink-0"
+          className="w-7 h-7 rounded-lg object-contain bg-white border border-neutral-100 dark:border-zinc-700 shrink-0"
           onError={(e) => {
             try {
               (e.target as HTMLImageElement).src = `https://www.google.com/s2/favicons?domain=${new URL(tool.website).hostname}&sz=128`;
@@ -136,22 +155,35 @@ function MiniCard({ tool, rank }: { tool: AiTool; rank: number }) {
           }}
         />
         <div className="min-w-0">
-          <span className="font-semibold text-sm text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors">
+          <span className="font-semibold text-xs sm:text-sm text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors">
             {tool.name}
           </span>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400 truncate mt-0.5">
+          <p className="text-[11px] text-neutral-500 dark:text-neutral-400 truncate mt-0.5 hidden sm:block">
             {tool.summary || ""}
           </p>
         </div>
       </div>
-      <a
-        href={tool.website}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="shrink-0 px-3 py-1.5 rounded-lg bg-neutral-100 dark:bg-zinc-800 hover:bg-[#F9954E] hover:text-white text-neutral-600 dark:text-neutral-300 text-xs font-semibold transition-colors whitespace-nowrap"
-      >
-        방문
-      </a>
+      <div className="flex gap-1.5 shrink-0">
+        {tool.apiUrl && (
+          <a
+            href={tool.apiUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="px-2 py-1 rounded-md bg-neutral-100 dark:bg-zinc-800 hover:bg-purple-100 dark:hover:bg-purple-900/30 text-neutral-500 dark:text-neutral-400 hover:text-purple-700 dark:hover:text-purple-300 text-[10px] font-bold transition-colors"
+            title="API 문서"
+          >
+            API
+          </a>
+        )}
+        <a
+          href={tool.website}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-2.5 py-1 rounded-md bg-neutral-100 dark:bg-zinc-800 hover:bg-[#F9954E] hover:text-white text-neutral-600 dark:text-neutral-300 text-xs font-semibold transition-colors whitespace-nowrap"
+        >
+          방문
+        </a>
+      </div>
     </div>
   );
 }
@@ -196,11 +228,11 @@ function CategorySection({
     >
       <div className="max-w-3xl mx-auto w-full">
         {/* 카테고리 헤더 */}
-        <div className="mb-10 text-center">
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black tracking-tighter mb-3 text-neutral-900 dark:text-white">
+        <div className="mb-6 sm:mb-10 border-b border-neutral-100 dark:border-zinc-800 pb-4 sm:pb-6">
+          <h2 className="text-2xl sm:text-3xl md:text-4xl font-black tracking-tight mb-2 text-neutral-900 dark:text-white">
             {CATEGORY_LABELS[cat] || cat}
           </h2>
-          <p className="text-sm sm:text-base font-medium text-neutral-500 dark:text-neutral-400">
+          <p className="text-xs sm:text-sm font-medium text-neutral-500 dark:text-neutral-400 leading-relaxed">
             {CATEGORY_DESCRIPTIONS[cat] || `${CATEGORY_LABELS[cat] || cat} 분야의 주요 AI 툴을 확인하세요.`}
           </p>
         </div>

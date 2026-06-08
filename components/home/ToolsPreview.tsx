@@ -9,7 +9,7 @@ export default function ToolsPreview() {
   ];
 
   return (
-    <section className="max-w-[1200px] mx-auto px-4 sm:px-6 mb-10 sm:mb-20">
+    <section className="max-w-[1200px] mx-auto mb-10 sm:mb-20">
       <h2 className="text-xl md:text-2xl font-bold mb-6 flex items-center gap-2" style={{ color: 'var(--text-main)' }}>
         <span className="text-[#F9954E]">🏆</span> {TEXTS.home.sectionTitles.tools.ko}
       </h2>

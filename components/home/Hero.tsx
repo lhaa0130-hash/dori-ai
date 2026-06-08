@@ -12,7 +12,7 @@ const stats = [
 
 export default function Hero() {
   return (
-    <section className="relative pt-10 pb-8 px-6 overflow-hidden">
+    <section className="relative pt-10 pb-8 overflow-hidden">
       <div className="max-w-7xl mx-auto">
         <div className="flex flex-col md:flex-row items-center justify-between gap-8 md:gap-12">
 

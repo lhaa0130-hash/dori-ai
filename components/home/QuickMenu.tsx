@@ -88,7 +88,7 @@ const itemVariants = {
 
 export default function QuickMenu() {
   return (
-    <section className="w-full px-4 sm:px-6 py-6 sm:py-8">
+    <section className="w-full py-6 sm:py-8">
       <div className="max-w-7xl mx-auto">
         {/* 헤더 */}
         <div className="mb-6">

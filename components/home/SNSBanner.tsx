@@ -5,14 +5,14 @@ import { Youtube, Instagram, ExternalLink } from "lucide-react";
 
 export default function SNSBanner() {
   return (
-    <section className="w-full px-4 sm:px-6 py-6 sm:py-8">
+    <section className="w-full py-6 sm:py-8">
       <div className="max-w-7xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 12 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, margin: "-40px" }}
           transition={{ duration: 0.5 }}
-          className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#F9954E] via-[#FF7B54] to-[#F05E93] p-8 md:p-10"
+          className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#F9954E] via-[#FF7B54] to-[#F05E93] p-5 sm:p-8 md:p-10"
         >
           {/* 배경 장식 */}
           <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-white/5 -translate-y-1/2 translate-x-1/2" />
