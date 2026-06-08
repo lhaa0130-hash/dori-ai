@@ -144,7 +144,7 @@ export default function AiToolsClient() {
 
 
       {/* Tools List */}
-      <section className="w-full max-w-7xl mx-auto px-6 pb-16">
+      <section className="w-full max-w-7xl mx-auto pb-10 sm:pb-16">
         <AiToolsList filters={filters} sectionRefs={sectionRefs} />
       </section>
 

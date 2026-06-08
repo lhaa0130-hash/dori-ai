@@ -189,11 +189,8 @@ function CategorySection({
     <section
       id={`category-${cat}`}
       ref={sectionRef}
-      className="relative flex items-center justify-center px-4 sm:px-6 lg:pl-10 py-10"
+      className="relative py-8 sm:py-12"
       style={{
-        minHeight: isFiltered ? "auto" : "100vh",
-        scrollSnapAlign: isFiltered ? "none" : "start",
-        scrollSnapStop: isFiltered ? "none" : "always",
         scrollMarginTop: "80px",
       }}
     >
