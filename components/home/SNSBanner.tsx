@@ -5,7 +5,7 @@ import { Youtube, Instagram, ArrowRight } from "lucide-react";
 export default function SNSBanner() {
   return (
     <section className="py-6 pb-4">
-      <div className="rounded-3xl bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 px-6 pt-9 pb-9">
+      <div className="scroll-reveal rounded-3xl bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 px-6 pt-9 pb-9">
         <p className="text-[12px] font-semibold text-[#F9954E] mb-3">팔로우</p>
         <h2 className="text-[28px] font-extrabold text-neutral-950 dark:text-white leading-[1.15] tracking-tight mb-2 break-keep">
           최신 AI 소식을<br />가장 먼저 받아보세요

@@ -4,6 +4,7 @@ import { Providers } from "./providers";
 import LayoutClient from "@/components/layout/LayoutClient";
 import VisitorTracker from "@/components/VisitorTracker";
 import StructuredData from "@/components/SEO/StructuredData";
+import ScrollAnimationProvider from "@/components/ScrollAnimationProvider";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata = {
@@ -111,6 +112,7 @@ export default function RootLayout({
         />
 
         <Providers>
+          <ScrollAnimationProvider />
           <VisitorTracker />
           <LayoutClient>
             {children}
