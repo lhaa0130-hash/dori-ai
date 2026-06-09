@@ -29,13 +29,14 @@ export default function Header() {
   const handleSignIn = () => { router.push("/login"); setMobileOpen(false); };
   const handleSignOut = () => { logout(); router.push("/"); setMobileOpen(false); };
 
-  // 마켓·건의사항은 메인 네비에서 숨김 (건의사항은 푸터에만 노출)
+  // 건의사항은 메인 네비에서 숨김(푸터에만 노출), 마켓은 노출
   const navItems = [
     { name: "공지사항", href: "/notice", emoji: "📢" },
     { name: "미니게임", href: "/minigame", emoji: "🎮" },
     { name: "AI 도구", href: "/ai-tools", emoji: "🔧" },
     { name: "인사이트", href: "/insight", emoji: "🧠" },
     { name: "커뮤니티", href: "/community", emoji: "💬" },
+    { name: "마켓", href: "/market", emoji: "🛒" },
     { name: "FAQ", href: "/faq", emoji: "❓" },
   ];
 

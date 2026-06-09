@@ -30,8 +30,6 @@ export default function robots(): MetadataRoute.Robots {
           "/illo",
           "/blog",
           "/insight-sample",
-          "/auto",           // 자동화 홍보 → 아직 콘텐츠 부족
-          "/market",         // 네비에서 숨김 → 색인 제외
           // 커뮤니티 글 개별 페이지 (유저 생성 콘텐츠, 내용 불안정)
           "/community/write",
           // 기타 서비스 페이지
@@ -59,8 +57,6 @@ export default function robots(): MetadataRoute.Robots {
           "/illo",
           "/blog",
           "/insight-sample",
-          "/auto",
-          "/market",
           "/community/write",
           "/shop",
           "/resources",
