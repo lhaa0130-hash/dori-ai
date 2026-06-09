@@ -9,12 +9,15 @@ export interface ProjectFeature {
   detail: string;
 }
 
+export type ProjectCategory = "main" | "kids";
+
 export interface ProjectItem {
   slug: string; // illo | animal | family
   name: string;
   emoji: string;
   image: string;
   tag: string; // 정식 프로그램 / 1st Project / 2nd Project
+  category: ProjectCategory; // main: 일반 / kids: 키즈 전용
   isMain: boolean;
   status: ProjectStatus;
   isActive: boolean;
@@ -33,6 +36,7 @@ export const PROJECTS: ProjectItem[] = [
     emoji: "🟧",
     image: "/illo-logo.png",
     tag: "정식 프로그램",
+    category: "main",
     isMain: true,
     status: "지금 무료",
     isActive: true,
@@ -54,7 +58,8 @@ export const PROJECTS: ProjectItem[] = [
     name: "동물도감",
     emoji: "🐾",
     image: "",
-    tag: "1st Project",
+    tag: "키즈 전용",
+    category: "kids",
     isMain: false,
     status: "준비 중",
     isActive: false,
@@ -76,6 +81,7 @@ export const PROJECTS: ProjectItem[] = [
     emoji: "👨‍👩‍👧‍👦",
     image: "",
     tag: "2nd Project",
+    category: "main",
     isMain: false,
     status: "기획 중",
     isActive: false,
