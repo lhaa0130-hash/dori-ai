@@ -1,6 +1,6 @@
 import Link from "next/link";
 import Image from "next/image";
-import { ArrowRight, Calendar, Tag } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import type { TrendPost } from "@/lib/trends";
 
 interface TrendPreviewProps {
@@ -11,91 +11,72 @@ export default function TrendPreview({ trends }: TrendPreviewProps) {
   if (!trends || trends.length === 0) return null;
 
   return (
-    <section className="w-full py-6 sm:py-8">
-      <div className="max-w-7xl mx-auto">
-        {/* 헤더 */}
-        <div className="flex items-center justify-between mb-6">
+    <section className="w-full py-3">
+      {/* 토스 스타일 흰 카드 */}
+      <div className="bg-white dark:bg-zinc-900 rounded-3xl shadow-sm overflow-hidden">
+        {/* 섹션 헤더 */}
+        <div className="flex items-center justify-between px-5 pt-5 pb-4">
           <div>
-            <h2 className="text-xl md:text-2xl font-extrabold text-foreground">
-              🔥 오늘의 AI 트렌드
-            </h2>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1 font-medium">
-              최신 AI 뉴스와 트렌드를 한눈에 확인하세요
-            </p>
+            <p className="text-[11px] font-bold text-neutral-400 dark:text-zinc-500 uppercase tracking-widest mb-0.5">Trends</p>
+            <h2 className="text-[17px] font-black text-neutral-900 dark:text-white">🔥 오늘의 AI 트렌드</h2>
           </div>
           <Link
             href="/insight"
-            className="flex items-center gap-1 text-sm font-bold text-[#F9954E] hover:text-[#E8832E] transition-colors"
+            className="flex items-center gap-0.5 text-[13px] font-bold text-[#F9954E]"
           >
-            더 보기
-            <ArrowRight className="w-4 h-4" />
+            전체보기 <ArrowRight className="w-3.5 h-3.5" />
           </Link>
         </div>
 
-        {/* 카드 그리드 */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-5">
-          {trends.slice(0, 3).map((trend) => (
+        {/* 리스트 (토스 스타일 row) */}
+        <div className="divide-y divide-neutral-50 dark:divide-zinc-800">
+          {trends.slice(0, 3).map((trend, i) => (
             <Link
               key={trend.slug}
               href={`/insight/article/${trend.slug}`}
-              className="group block bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-100 dark:border-neutral-800 overflow-hidden hover:border-[#F9954E] dark:hover:border-[#F9954E] hover:shadow-lg hover:shadow-[#F9954E]/5 transition-all duration-300 hover:-translate-y-0.5"
+              className="flex items-center gap-4 px-5 py-4 active:bg-neutral-50 dark:active:bg-zinc-800 transition-colors"
             >
               {/* 썸네일 */}
-              <div className="relative w-full h-[140px] bg-gradient-to-br from-[#F9954E]/10 to-[#FF7B54]/5 overflow-hidden">
+              <div className="relative w-14 h-14 rounded-2xl overflow-hidden bg-gradient-to-br from-orange-50 to-orange-100 dark:from-zinc-800 dark:to-zinc-700 flex-shrink-0">
                 {trend.thumbnail ? (
-                  <Image
-                    src={trend.thumbnail}
-                    alt={trend.title}
-                    fill
-                    style={{ objectFit: "cover" }}
-                    className="group-hover:scale-105 transition-transform duration-500"
-                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
-                  />
+                  <Image src={trend.thumbnail} alt={trend.title} fill style={{ objectFit: "cover" }} sizes="56px" />
                 ) : (
-                  <div className="absolute inset-0 flex items-center justify-center">
-                    <span className="text-4xl opacity-30">🤖</span>
-                  </div>
+                  <div className="absolute inset-0 flex items-center justify-center text-2xl">🤖</div>
                 )}
-                {/* 카테고리 뱃지 */}
+              </div>
+
+              {/* 텍스트 */}
+              <div className="flex-1 min-w-0">
                 {trend.category && (
-                  <span className="absolute top-3 left-3 px-2 py-0.5 rounded-full bg-[#F9954E] text-white text-[10px] font-bold tracking-wide">
+                  <span className="text-[10px] font-bold text-[#F9954E] mb-0.5 block">
                     {trend.category}
                   </span>
                 )}
-              </div>
-
-              {/* 콘텐츠 */}
-              <div className="p-4">
-                <h3 className="text-sm font-bold text-neutral-900 dark:text-white leading-tight mb-2 line-clamp-2 group-hover:text-[#F9954E] transition-colors">
+                <p className="text-[13px] font-bold text-neutral-900 dark:text-white leading-snug line-clamp-2 break-keep">
                   {trend.title}
-                </h3>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed line-clamp-2 mb-3">
-                  {trend.description}
                 </p>
-
-                {/* 메타 정보 */}
-                <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1 text-[10px] text-neutral-400">
-                    <Calendar className="w-3 h-3" />
-                    <time dateTime={trend.date}>
-                      {new Date(trend.date).toLocaleDateString("ko-KR", {
-                        month: "short",
-                        day: "numeric",
-                      })}
-                    </time>
-                  </div>
-                  {trend.tags && trend.tags.length > 0 && (
-                    <div className="flex items-center gap-1">
-                      <Tag className="w-3 h-3 text-neutral-400" />
-                      <span className="text-[10px] text-neutral-400 line-clamp-1 max-w-[120px]">
-                        {trend.tags.slice(0, 2).join(", ")}
-                      </span>
-                    </div>
-                  )}
-                </div>
+                <p className="text-[11px] text-neutral-400 dark:text-neutral-500 mt-1">
+                  {new Date(trend.date).toLocaleDateString("ko-KR", { month: "short", day: "numeric" })}
+                </p>
               </div>
+
+              {/* 번호 */}
+              <span className="text-[22px] font-black text-neutral-100 dark:text-zinc-800 flex-shrink-0 w-7 text-right leading-none">
+                {i + 1}
+              </span>
             </Link>
           ))}
+        </div>
+
+        {/* 더보기 버튼 */}
+        <div className="px-5 py-4 border-t border-neutral-50 dark:border-zinc-800">
+          <Link
+            href="/insight"
+            className="flex items-center justify-center gap-1.5 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-800 text-[13px] font-bold text-neutral-600 dark:text-neutral-300 active:scale-[0.98] transition-transform"
+          >
+            트렌드 더보기
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
       </div>
     </section>
