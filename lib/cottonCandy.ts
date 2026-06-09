@@ -228,6 +228,35 @@ export function addCottonCandy(email: string, amount: number, reason: string): n
   }
 }
 
+/** 플레이타임 보상: 1분 이상 플레이 시 1일 1회 솜사탕 지급 (게임 공용) */
+const PLAYTIME_REWARD_KEY = (email: string) => `dori_playtime_reward_${email}`;
+
+export function hasClaimedPlaytimeToday(email: string): boolean {
+  if (typeof window === "undefined" || !email) return false;
+  try {
+    return localStorage.getItem(PLAYTIME_REWARD_KEY(email)) === getTodayDateStr();
+  } catch {
+    return false;
+  }
+}
+
+export function grantPlaytimeReward(
+  email: string,
+  amount = 50
+): { granted: boolean; amount: number } {
+  if (typeof window === "undefined" || !email) return { granted: false, amount: 0 };
+  try {
+    if (localStorage.getItem(PLAYTIME_REWARD_KEY(email)) === getTodayDateStr()) {
+      return { granted: false, amount: 0 };
+    }
+    localStorage.setItem(PLAYTIME_REWARD_KEY(email), getTodayDateStr());
+    addCottonCandy(email, amount, "1분 이상 플레이 보상");
+    return { granted: true, amount };
+  } catch {
+    return { granted: false, amount: 0 };
+  }
+}
+
 /** 솜사탕 차감. 잔액 부족 시 false 반환 */
 export function spendCottonCandy(email: string, amount: number, reason: string): boolean {
   if (typeof window === "undefined") return false;

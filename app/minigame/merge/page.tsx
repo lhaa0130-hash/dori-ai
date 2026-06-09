@@ -5,21 +5,25 @@ import Link from "next/link";
 import { ArrowLeft, RotateCcw } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { incrementMinigamePlays } from "@/lib/cottonCandy";
+import PlaytimeRewardToast from "@/components/game/PlaytimeRewardToast";
 
 // ─── 동물 레벨 (작은 것 → 큰 것) ──────────────────────────────────
 const ANIMALS = [
-  { emoji: "🐛", name: "애벌레",  r: 20,  pts: 2   },
-  { emoji: "🐸", name: "개구리",  r: 28,  pts: 4   },
-  { emoji: "🐇", name: "토끼",    r: 36,  pts: 8   },
-  { emoji: "🐼", name: "판다",    r: 45,  pts: 16  },
-  { emoji: "🦊", name: "여우",    r: 55,  pts: 30  },
-  { emoji: "🐺", name: "늑대",    r: 66,  pts: 50  },
-  { emoji: "🦁", name: "사자",    r: 78,  pts: 80  },
-  { emoji: "🐯", name: "호랑이",  r: 91,  pts: 120 },
-  { emoji: "🦏", name: "코뿔소",  r: 106, pts: 200 },
-  { emoji: "🐘", name: "코끼리",  r: 123, pts: 300 },
-  { emoji: "🦕", name: "공룡",    r: 143, pts: 500 },
+  { emoji: "🐛", name: "애벌레",  r: 20,  pts: 2,   c: "#9ccc65" },
+  { emoji: "🐸", name: "개구리",  r: 28,  pts: 4,   c: "#66bb6a" },
+  { emoji: "🐇", name: "토끼",    r: 36,  pts: 8,   c: "#e8eaf0" },
+  { emoji: "🐼", name: "판다",    r: 45,  pts: 16,  c: "#cfd8dc" },
+  { emoji: "🦊", name: "여우",    r: 55,  pts: 30,  c: "#ff8a65" },
+  { emoji: "🐺", name: "늑대",    r: 66,  pts: 50,  c: "#90a4ae" },
+  { emoji: "🦁", name: "사자",    r: 78,  pts: 80,  c: "#ffca28" },
+  { emoji: "🐯", name: "호랑이",  r: 91,  pts: 120, c: "#ffa726" },
+  { emoji: "🦏", name: "코뿔소",  r: 106, pts: 200, c: "#b0bec5" },
+  { emoji: "🐘", name: "코끼리",  r: 123, pts: 300, c: "#9fa8da" },
+  { emoji: "🦕", name: "공룡",    r: 143, pts: 500, c: "#4db6ac" },
 ];
+
+// 합치기 팝 이펙트
+interface Pop { x: number; y: number; r: number; life: number; max: number; c: string; }
 
 // ─── 게임 상수 ─────────────────────────────────────────────────
 const GW          = 340;   // 캔버스 너비
@@ -64,6 +68,7 @@ export default function AnimalMergePage() {
   const canDropRef   = useRef(true);
   const gameOverRef  = useRef(false);
   const rafRef       = useRef(0);
+  const popsRef      = useRef<Pop[]>([]);
 
   /* ── UI 상태 (React) ── */
   const [score,     setScore]     = useState(0);
@@ -152,6 +157,8 @@ export default function AnimalMergePage() {
             toAdd.push(nb);
             scoreRef.current += ANIMALS[nb.lv].pts;
             setScore(scoreRef.current);
+            // 합치기 팝 이펙트
+            popsRef.current.push({ x: mergeX, y: mergeY, r: newR, life: 16, max: 16, c: ANIMALS[a.lv + 1].c });
             continue;
           }
 
@@ -174,6 +181,12 @@ export default function AnimalMergePage() {
     // 합치기 결과 반영
     if (toRemove.size > 0 || toAdd.length > 0) {
       ballsRef.current = cur.filter(b => !toRemove.has(b.id)).concat(toAdd);
+    }
+
+    // 팝 이펙트 수명 감소
+    if (popsRef.current.length > 0) {
+      for (const p of popsRef.current) p.life--;
+      popsRef.current = popsRef.current.filter(p => p.life > 0);
     }
 
     // 게임 오버 검사: 충분히 정착한 공이 위험선 위에 있으면 종료
@@ -242,22 +255,40 @@ export default function AnimalMergePage() {
     // 공 그리기
     for (const b of ballsRef.current) {
       const a = ANIMALS[b.lv];
-      // 반투명 원
+      // 컬러 그라데이션 원 (동물별 색)
       ctx.save();
+      const grad = ctx.createRadialGradient(b.x - a.r * 0.3, b.y - a.r * 0.35, a.r * 0.2, b.x, b.y, a.r);
+      grad.addColorStop(0, a.c + "ee");
+      grad.addColorStop(1, a.c + "66");
       ctx.beginPath();
       ctx.arc(b.x, b.y, a.r, 0, Math.PI * 2);
-      ctx.fillStyle = "rgba(255,255,255,0.07)";
+      ctx.fillStyle = grad;
       ctx.fill();
-      ctx.strokeStyle = "rgba(255,255,255,0.22)";
-      ctx.lineWidth = 1.8;
+      ctx.strokeStyle = a.c;
+      ctx.globalAlpha = 0.55;
+      ctx.lineWidth = 2;
       ctx.stroke();
       ctx.restore();
       // 이모지
       ctx.save();
-      ctx.font = `${Math.round(a.r * 1.65)}px serif`;
+      ctx.font = `${Math.round(a.r * 1.5)}px serif`;
       ctx.textAlign = "center";
       ctx.textBaseline = "middle";
       ctx.fillText(a.emoji, b.x, b.y);
+      ctx.restore();
+    }
+
+    // 합치기 팝 이펙트 (확장하며 사라지는 링)
+    for (const p of popsRef.current) {
+      const t = 1 - p.life / p.max;        // 0 → 1
+      const rr = p.r * (1 + t * 0.6);
+      ctx.save();
+      ctx.globalAlpha = (1 - t) * 0.6;
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, rr, 0, Math.PI * 2);
+      ctx.strokeStyle = p.c;
+      ctx.lineWidth = 3;
+      ctx.stroke();
       ctx.restore();
     }
   }, []);
@@ -298,7 +329,7 @@ export default function AnimalMergePage() {
       birthFrame: frameRef.current,
     });
 
-    if (session) incrementMinigamePlays(session.user.id).catch(() => {});
+    if (session?.user?.email) incrementMinigamePlays(session.user.email);
 
     setTimeout(() => {
       const n  = nextLvRef.current;
@@ -326,6 +357,7 @@ export default function AnimalMergePage() {
   const restart = useCallback(() => {
     cancelAnimationFrame(rafRef.current);
     ballsRef.current    = [];
+    popsRef.current     = [];
     frameRef.current    = 0;
     scoreRef.current    = 0;
     gameOverRef.current = false;
@@ -350,6 +382,8 @@ export default function AnimalMergePage() {
   /* ── JSX ── */
   return (
     <main className="w-full min-h-screen bg-[#0f1117] text-white flex flex-col items-center pb-10">
+      {/* 1분 플레이 보상 토스트 */}
+      <PlaytimeRewardToast />
       <div className="w-full max-w-sm px-3 pt-4">
 
         {/* 상단 바 */}

@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 import { useAuth } from "@/contexts/AuthContext";
 import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
+import PlaytimeRewardToast from "@/components/game/PlaytimeRewardToast";
 
 // ----------------------------------------------------------------------
 // Constants
@@ -142,6 +143,7 @@ export default function ClickerGame() {
 
     return (
         <div className="min-h-screen bg-neutral-900 text-white font-sans selection:bg-yellow-500/30">
+            <PlaytimeRewardToast />
             <div className="max-w-md mx-auto min-h-screen bg-black flex flex-col relative shadow-2xl border-x border-neutral-800">
 
                 {/* Header */}

@@ -6,6 +6,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
+import PlaytimeRewardToast from "@/components/game/PlaytimeRewardToast";
 
 // ----------------------------------------------------------------------
 // Constants & Types
@@ -171,6 +172,8 @@ export default function Game2048() {
 
     return (
         <div className="min-h-[100dvh] w-full bg-slate-900 text-white font-sans selection:bg-yellow-500/30 flex flex-col items-center justify-center p-4 overflow-hidden touch-none">
+
+            <PlaytimeRewardToast />
 
             <header className="w-full max-w-md flex items-center justify-between mb-6">
                 <Link href="/minigame" className="p-2 hover:bg-slate-800 rounded-full transition-colors">
