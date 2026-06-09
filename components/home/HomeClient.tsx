@@ -47,7 +47,18 @@ export default function HomeClient() {
     setChecking(false);
   };
 
-  if (status === "loading") return null;
+  /* ── 로딩 중: null 대신 동일 높이 스켈레톤 (레이아웃 시프트/깜빡임 방지) ── */
+  if (status === "loading") {
+    return (
+      <div className="mt-5 mb-5 flex items-center justify-between py-3.5 px-5 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-neutral-50/60 dark:bg-zinc-900/30 animate-pulse">
+        <div className="flex items-center gap-2.5">
+          <span className="text-[20px] opacity-40">🍭</span>
+          <span className="h-3 w-28 rounded-full bg-neutral-200 dark:bg-zinc-800" />
+        </div>
+        <span className="h-7 w-20 rounded-xl bg-neutral-200 dark:bg-zinc-800" />
+      </div>
+    );
+  }
 
   /* ── 비로그인 ── */
   if (status === "unauthenticated") {

@@ -53,19 +53,24 @@ export default async function Home() {
       {/* ③ 5개 섹션 쇼케이스 */}
       <section className="py-5 border-b border-neutral-100 dark:border-zinc-900">
 
+        {/* 섹션 안내 — 사이트 정체성 */}
+        <p className="text-[13px] font-bold text-neutral-400 dark:text-neutral-500 mb-3 px-0.5">
+          도리에서 뭐 하지? 🤔
+        </p>
+
         {/* 커뮤니티 — 풀 와이드 메인 카드 */}
         <Link
           href="/community"
-          className="scroll-reveal flex items-center justify-between p-5 rounded-2xl mb-2.5
+          className="toss-shine scroll-reveal flex items-center justify-between p-5 rounded-2xl mb-2.5
             bg-[#F9954E] active:opacity-85 transition-opacity"
         >
           <div>
             <p className="text-[10px] font-bold text-white/60 mb-2 uppercase tracking-widest">Community</p>
             <p className="text-[20px] font-extrabold text-white leading-tight break-keep">
-              AI에 대해<br />함께 이야기해요
+              오늘은 어떤 AI 얘기?<br />같이 떠들어요
             </p>
             <div className="flex items-center gap-1 text-white/80 text-[13px] font-semibold mt-3">
-              참여하기 <ArrowRight className="w-3.5 h-3.5" />
+              구경하기 <ArrowRight className="w-3.5 h-3.5" />
             </div>
           </div>
           <Users className="w-[56px] h-[56px] text-white/20 flex-shrink-0" strokeWidth={1.5} />
@@ -82,7 +87,7 @@ export default async function Home() {
             <Newspaper className="w-6 h-6 text-[#F9954E]" strokeWidth={1.5} />
             <div>
               <p className="text-[13px] font-extrabold text-neutral-900 dark:text-white mb-0.5">인사이트</p>
-              <p className="text-[11px] text-neutral-400 leading-snug">매일 새로운 AI 소식</p>
+              <p className="text-[11px] text-neutral-400 leading-snug">트렌드·분석·리포트</p>
             </div>
           </Link>
 
@@ -95,7 +100,7 @@ export default async function Home() {
             <Wrench className="w-6 h-6 text-[#F9954E]" strokeWidth={1.5} />
             <div>
               <p className="text-[13px] font-extrabold text-neutral-900 dark:text-white mb-0.5">AI 도구</p>
-              <p className="text-[11px] text-neutral-400 leading-snug">200개+ 큐레이션</p>
+              <p className="text-[11px] text-neutral-400 leading-snug">카테고리별 TOP5</p>
             </div>
           </Link>
         </div>
@@ -111,7 +116,7 @@ export default async function Home() {
             <Gamepad2 className="w-6 h-6 text-[#F9954E]" strokeWidth={1.5} />
             <div>
               <p className="text-[13px] font-extrabold text-neutral-900 dark:text-white mb-0.5">미니게임</p>
-              <p className="text-[11px] text-neutral-400 leading-snug">솜사탕 모으기</p>
+              <p className="text-[11px] text-neutral-400 leading-snug">플레이하고 솜사탕 🍭</p>
             </div>
           </Link>
 
@@ -124,7 +129,7 @@ export default async function Home() {
             <FolderKanban className="w-6 h-6 text-[#F9954E]" strokeWidth={1.5} />
             <div>
               <p className="text-[13px] font-extrabold text-neutral-900 dark:text-white mb-0.5">프로젝트</p>
-              <p className="text-[11px] text-neutral-400 leading-snug">도리가 만드는 것들</p>
+              <p className="text-[11px] text-neutral-400 leading-snug">도리가 만드는 중</p>
             </div>
           </Link>
         </div>

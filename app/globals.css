@@ -19,23 +19,9 @@ body {
   color: var(--foreground);
 }
 
-/* 모든 섹션에 스크롤 스냅 정렬 적용 */
-section[id] {
-  scroll-snap-align: center !important;
-  scroll-snap-stop: always !important;
-  scroll-margin: 0 !important;
-}
-
-/* 메인페이지 섹션 높이 보장 */
-#hero,
-#features,
-#gallery,
-#testimonials,
-#faq {
-  min-height: 100vh !important;
-  scroll-snap-align: center !important;
-  scroll-snap-stop: always !important;
-}
+/* (구) 스크롤 스냅 규칙 제거됨 — 더 이상 존재하지 않는 랜딩 id(#hero 등)를 타겟팅하던
+   레거시였고, section[id] 전역 스냅이 ai-tools 등 id 섹션에서 스크롤 끊김(jank)을
+   유발하고 scroll-margin을 덮어써 스크롤스파이 오프셋까지 깨뜨리고 있었음. */
 
 /* 모바일 최적화 */
 @media (max-width: 640px) {
@@ -58,13 +44,6 @@ section[id] {
   a.text-xs {
     min-height: 36px;
     min-width: 36px;
-  }
-}
-
-/* 모바일에서 스크롤 스냅 완화 */
-@media (max-width: 1024px) {
-  html {
-    scroll-snap-type: y proximity !important;
   }
 }
 
@@ -489,3 +468,65 @@ h6 {
 /* ── 스크롤바 숨김 ── */
 .scrollbar-hide::-webkit-scrollbar { display: none; }
 .scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
+
+/* ═══════════════════════════════════════════════════════════
+   경량 액센트 애니메이션 (GPU friendly: transform/opacity only)
+   ═══════════════════════════════════════════════════════════ */
+
+/* ①  살짝 떠오르는 부드러운 플로트 — 배지/이모지 등 작은 액센트용 */
+@keyframes toss-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-4px); }
+}
+.toss-float {
+  animation: toss-float 3.2s ease-in-out infinite;
+  will-change: transform;
+}
+
+/* ②  버튼 위로 흐르는 광택(shine) — 토스 CTA 느낌 */
+.toss-shine {
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+}
+.toss-shine::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -150%;
+  width: 60%;
+  height: 100%;
+  background: linear-gradient(
+    100deg,
+    transparent 0%,
+    rgba(255, 255, 255, 0.45) 50%,
+    transparent 100%
+  );
+  transform: skewX(-18deg);
+  animation: toss-shine-sweep 4.5s ease-in-out infinite;
+  pointer-events: none;
+}
+@keyframes toss-shine-sweep {
+  0%   { left: -150%; }
+  /* 한 번 빠르게 쓸고 지나간 뒤 길게 대기 → 과하지 않게 */
+  18%  { left: 150%; }
+  100% { left: 150%; }
+}
+
+/* ── 모션 최소화 선호 사용자 배려 + 저사양 안전장치 ── */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* 스크롤 리빌 요소는 즉시 보이도록 보장 */
+  .scroll-reveal,
+  .scroll-reveal-item {
+    opacity: 1 !important;
+    transform: none !important;
+  }
+}

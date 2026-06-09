@@ -84,8 +84,9 @@ export default function RootLayout({
         suppressHydrationWarning={true}
         style={{ fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif' }}
       >
-        <Script async src="https://www.googletagmanager.com/gtag/js?id=G-RKN3F8V01C" strategy="afterInteractive" />
-        <Script id="google-analytics" strategy="afterInteractive">
+        {/* 분석/광고 스크립트는 lazyOnload로 지연 → 초기 렌더(FCP/LCP) 우선, 메인 스레드 경합 완화 */}
+        <Script src="https://www.googletagmanager.com/gtag/js?id=G-RKN3F8V01C" strategy="lazyOnload" />
+        <Script id="google-analytics" strategy="lazyOnload">
           {`
                 window.dataLayer = window.dataLayer || [];
                 function gtag(){dataLayer.push(arguments);}
@@ -94,7 +95,7 @@ export default function RootLayout({
             `}
         </Script>
         {/* Microsoft Clarity */}
-        <Script id="microsoft-clarity" strategy="afterInteractive">
+        <Script id="microsoft-clarity" strategy="lazyOnload">
           {`
                 (function(c,l,a,r,i,t,y){
                     c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
@@ -108,7 +109,7 @@ export default function RootLayout({
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1868839951780851"
           crossOrigin="anonymous"
-          strategy="afterInteractive"
+          strategy="lazyOnload"
         />
 
         <Providers>
