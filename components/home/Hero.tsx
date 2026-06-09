@@ -5,32 +5,28 @@ import { ArrowRight } from "lucide-react";
 
 export default function Hero() {
   return (
-    <section className="pt-6 pb-14">
-      <p className="text-[11px] font-bold text-[#F9954E] tracking-[0.22em] uppercase mb-7">
-        DORI-AI
-      </p>
-
-      <h1 className="text-[52px] sm:text-[68px] font-black text-neutral-950 dark:text-white leading-[1.0] tracking-[-0.03em] mb-6 break-keep">
+    <section className="pt-8 pb-14">
+      <h1 className="text-[40px] sm:text-[54px] font-extrabold text-neutral-950 dark:text-white leading-[1.1] tracking-tight mb-5 break-keep">
         AI의 모든 것,
         <br />
         <span className="text-[#F9954E]">한 곳에서.</span>
       </h1>
 
-      <p className="text-[16px] text-neutral-400 dark:text-neutral-500 leading-[1.7] mb-10 break-keep">
-        매일 업데이트되는 AI 트렌드,<br />
-        200개 이상의 도구, 그리고 미니게임.
+      <p className="text-[15px] text-neutral-500 dark:text-neutral-400 leading-[1.75] mb-9 break-keep">
+        매일 업데이트되는 AI 트렌드, 200개 이상의 도구,<br className="hidden sm:block" />
+        그리고 즐길 수 있는 미니게임.
       </p>
 
-      <div className="flex gap-3">
+      <div className="flex gap-2.5">
         <Link
           href="/insight"
-          className="flex items-center gap-1.5 px-6 py-4 rounded-2xl bg-[#F9954E] text-white text-[15px] font-black active:opacity-80 transition-opacity"
+          className="flex items-center gap-1.5 px-6 py-3.5 rounded-full bg-[#F9954E] text-white text-[14px] font-bold shadow-md shadow-[#F9954E]/20 active:opacity-85 transition-opacity"
         >
           트렌드 보기 <ArrowRight className="w-4 h-4" />
         </Link>
         <Link
           href="/ai-tools"
-          className="flex items-center px-6 py-4 rounded-2xl border border-neutral-200 dark:border-zinc-800 text-neutral-800 dark:text-neutral-200 text-[15px] font-bold active:opacity-70 transition-opacity"
+          className="flex items-center px-6 py-3.5 rounded-full border border-neutral-200 dark:border-zinc-800 text-neutral-700 dark:text-neutral-300 text-[14px] font-semibold active:opacity-70 transition-opacity"
         >
           AI 도구
         </Link>

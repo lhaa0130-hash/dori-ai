@@ -32,41 +32,38 @@ export default function MinigamePage() {
     <main className="min-h-screen">
 
       {/* 히어로 */}
-      <section className="pt-6 pb-12 border-b border-neutral-100 dark:border-zinc-900">
-        <p className="text-[11px] font-bold text-[#F9954E] tracking-[0.22em] uppercase mb-6">
-          MINI GAME
-        </p>
-        <h1 className="text-[48px] sm:text-[60px] font-black text-neutral-950 dark:text-white leading-[1.0] tracking-[-0.03em] mb-4 break-keep">
-          미니게임
+      <section className="pt-8 pb-10 border-b border-neutral-100 dark:border-zinc-900">
+        <p className="text-[12px] font-semibold text-[#F9954E] mb-3">미니게임</p>
+        <h1 className="text-[38px] sm:text-[50px] font-extrabold text-neutral-950 dark:text-white leading-[1.1] tracking-tight mb-3 break-keep">
+          가볍게 즐기는<br />게임 모음
         </h1>
-        <p className="text-[16px] text-neutral-400 dark:text-neutral-500 leading-relaxed">
-          가볍게 즐기며 솜사탕을 모으세요.
+        <p className="text-[14px] text-neutral-500 dark:text-neutral-400 leading-relaxed">
+          솜사탕을 모으며 즐겨보세요.
         </p>
       </section>
 
       {/* 게임 리스트 */}
-      <section className="py-8 pb-20">
-        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+      <section className="py-6 pb-20">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
           {GAMES.map((game) => (
             <Link
               key={game.id}
               href={game.href}
-              className="flex items-center gap-4 p-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 active:bg-neutral-50 dark:active:bg-zinc-900/50 transition-colors"
+              className="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 shadow-sm active:opacity-70 transition-opacity"
             >
-              <div className="flex-shrink-0 w-11 h-11 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-neutral-500 dark:text-neutral-400 flex items-center justify-center">
+              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-neutral-50 dark:bg-zinc-900 text-neutral-500 dark:text-neutral-400 flex items-center justify-center">
                 {game.icon}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[15px] font-black text-neutral-950 dark:text-white">
+                <p className="text-[14px] font-bold text-neutral-950 dark:text-white">
                   {game.title}
                 </p>
                 <p className="text-[12px] text-neutral-400 mt-0.5 truncate">
                   {game.desc}
                 </p>
               </div>
-              <div className="flex-shrink-0 flex flex-col items-end gap-1">
-                <span className="text-[11px] font-bold text-[#F9954E]">{game.candy} 🍭</span>
-                <ArrowRight className="w-4 h-4 text-neutral-300 dark:text-zinc-700" />
+              <div className="flex-shrink-0 text-right">
+                <span className="text-[11px] font-semibold text-[#F9954E] block">{game.candy} 🍭</span>
               </div>
             </Link>
           ))}

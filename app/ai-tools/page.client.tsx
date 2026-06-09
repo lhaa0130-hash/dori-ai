@@ -84,15 +84,13 @@ export default function AiToolsClient() {
     <main className="w-full min-h-screen">
 
       {/* 히어로 섹션 */}
-      <section className="pt-6 pb-10 border-b border-neutral-100 dark:border-zinc-900">
+      <section className="pt-8 pb-8 border-b border-neutral-100 dark:border-zinc-900">
         <div className="flex flex-col">
-          <p className="text-[11px] font-bold text-[#F9954E] tracking-[0.22em] uppercase mb-6">
-            AI TOOLS
-          </p>
-          <h1 className="text-[48px] sm:text-[60px] font-black text-neutral-950 dark:text-white leading-[1.0] tracking-[-0.03em] mb-4 break-keep">
-            AI 도구
+          <p className="text-[12px] font-semibold text-[#F9954E] mb-3">AI 도구</p>
+          <h1 className="text-[36px] sm:text-[48px] font-extrabold text-neutral-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
+            AI 도구 모음
           </h1>
-          <p className="text-[16px] text-neutral-400 dark:text-neutral-500 leading-relaxed mb-8 break-keep">
+          <p className="text-[14px] text-neutral-500 dark:text-neutral-400 leading-relaxed mb-7 break-keep">
             {t.heroSubtitle.ko}
           </p>
 

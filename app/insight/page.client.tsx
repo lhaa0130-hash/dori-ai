@@ -148,14 +148,12 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
       {/* 인사이트 페이지 콘텐츠 */}
       <section className="py-4 sm:py-6 min-h-[50vh]">
         {/* 헤더 */}
-        <div className="mb-8 pt-2 border-b border-neutral-100 dark:border-zinc-900 pb-10">
-          <p className="text-[11px] font-bold text-[#F9954E] tracking-[0.22em] uppercase mb-6">
-            INSIGHT
-          </p>
-          <h1 className="text-[48px] sm:text-[60px] font-black text-neutral-950 dark:text-white leading-[1.0] tracking-[-0.03em] mb-4 break-keep">
-            인사이트
+        <div className="mb-7 pt-2 border-b border-neutral-100 dark:border-zinc-900 pb-8">
+          <p className="text-[12px] font-semibold text-[#F9954E] mb-3">인사이트</p>
+          <h1 className="text-[36px] sm:text-[48px] font-extrabold text-neutral-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
+            AI 인사이트
           </h1>
-          <p className="text-[16px] text-neutral-400 dark:text-neutral-500 leading-relaxed break-keep">
+          <p className="text-[14px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
             AI 업계 속보와 심층 칼럼을 만나보세요
           </p>
         </div>

@@ -1,19 +1,22 @@
 const STATS = [
-  { number: "130개+", label: "AI 기사" },
-  { number: "200개+", label: "AI 도구" },
-  { number: "20개+",  label: "미니게임" },
+  { number: "130+", label: "AI 기사" },
+  { number: "200+", label: "AI 도구" },
+  { number: "20+",  label: "미니게임" },
 ];
 
 export default function StatsStrip() {
   return (
-    <div className="border-y border-neutral-100 dark:border-zinc-900 py-8 mb-2">
-      <div className="grid grid-cols-3 divide-x divide-neutral-100 dark:divide-zinc-900">
-        {STATS.map((s) => (
-          <div key={s.label} className="flex flex-col items-center gap-1.5">
-            <span className="text-[30px] sm:text-[36px] font-black text-neutral-950 dark:text-white tracking-[-0.04em] leading-none">
+    <div className="py-8 mb-2">
+      <div className="grid grid-cols-3">
+        {STATS.map((s, i) => (
+          <div
+            key={s.label}
+            className={`flex flex-col items-center gap-1 ${i !== 0 ? "border-l border-neutral-100 dark:border-zinc-900" : ""}`}
+          >
+            <span className="text-[28px] font-extrabold text-neutral-950 dark:text-white tracking-tight leading-none">
               {s.number}
             </span>
-            <span className="text-[12px] text-neutral-400 font-medium">
+            <span className="text-[11px] text-neutral-400 font-medium mt-0.5">
               {s.label}
             </span>
           </div>
