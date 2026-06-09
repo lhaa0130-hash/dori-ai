@@ -358,14 +358,11 @@ export default function MyPage() {
   // 세션 로딩 중일 때 처리
   if (status === 'loading' || !mounted) {
     return (
-      <main className="w-full min-h-screen bg-white dark:bg-black flex flex-col items-center justify-center relative overflow-hidden">
+      <main className="w-full min-h-screen bg-white dark:bg-black flex flex-col items-center justify-center">
         <Header />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FEEBD0]/20 via-[#FFF5EB]/10 to-transparent dark:from-[#8F4B10]/5 pointer-events-none z-0" />
-        <div className="relative z-10 flex flex-col items-center">
-          <div className="w-12 h-12 border-4 border-neutral-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-6" />
-          <p className="text-neutral-500 dark:text-zinc-400 font-bold tracking-tight animate-pulse">
-            사용자 정보를 불러오는 중입니다
-          </p>
+        <div className="flex flex-col items-center">
+          <div className="w-10 h-10 border-4 border-neutral-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-5" />
+          <p className="text-[14px] text-neutral-400 font-semibold">사용자 정보를 불러오는 중입니다</p>
         </div>
       </main>
     );
@@ -374,22 +371,19 @@ export default function MyPage() {
   // 로그인이 필요한 경우 (세션이 없고 로딩이 완료된 경우)
   if (status === 'unauthenticated' || !session || !session.user || !user || !user.email) {
     return (
-      <main className="w-full min-h-screen bg-white dark:bg-black flex flex-col items-center justify-center relative overflow-hidden">
+      <main className="w-full min-h-screen bg-white dark:bg-black flex flex-col items-center justify-center px-6">
         <Header />
-        {/* Background Decorative Gradient */}
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FEEBD0]/30 via-[#FFF5EB]/10 to-transparent dark:from-[#8F4B10]/5 pointer-events-none z-0" />
-
-        <div className="relative z-10 p-12 rounded-[2.5rem] bg-white/50 dark:bg-zinc-900/30 backdrop-blur-2xl border border-neutral-200 dark:border-zinc-800 shadow-2xl flex flex-col items-center text-center max-w-sm mx-6">
-          <div className="w-16 h-16 rounded-3xl bg-orange-50 dark:bg-orange-500/10 border border-orange-100 dark:border-orange-500/20 flex items-center justify-center text-2xl mb-6 shadow-glow">
+        <div className="p-10 rounded-3xl bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 flex flex-col items-center text-center max-w-sm w-full">
+          <div className="w-14 h-14 rounded-2xl bg-[#FFF5EB] dark:bg-[#F9954E]/10 flex items-center justify-center text-2xl mb-5">
             🔒
           </div>
-          <h2 className="text-2xl font-black text-neutral-900 dark:text-white mb-3 tracking-tight">서비스 이용 제한</h2>
-          <p className="text-sm font-medium text-neutral-500 dark:text-zinc-400 mb-8 leading-relaxed">
+          <h2 className="text-[20px] font-extrabold text-neutral-900 dark:text-white mb-2">로그인이 필요해요</h2>
+          <p className="text-[14px] text-neutral-500 dark:text-neutral-400 mb-7 leading-relaxed">
             마이페이지는 로그인 후<br />이용하실 수 있습니다.
           </p>
           <Link
             href="/login"
-            className="w-full py-4 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-black text-sm transition-all shadow-lg shadow-orange-500/20 active:scale-95"
+            className="w-full py-3.5 rounded-full bg-[#F9954E] text-white font-bold text-[14px] active:opacity-85 transition-opacity text-center"
           >
             로그인하러 가기
           </Link>
@@ -401,14 +395,11 @@ export default function MyPage() {
   // 프로필 데이터 로딩 중
   if (!isAdmin && !profile) {
     return (
-      <main className="w-full min-h-screen bg-white dark:bg-black flex flex-col items-center justify-center relative overflow-hidden">
+      <main className="w-full min-h-screen bg-white dark:bg-black flex flex-col items-center justify-center">
         <Header />
-        <div className="absolute inset-0 bg-gradient-to-b from-[#FEEBD0]/20 via-[#FFF5EB]/10 to-transparent dark:from-[#8F4B10]/5 pointer-events-none z-0" />
-        <div className="relative z-10 flex flex-col items-center">
-          <div className="w-12 h-12 border-4 border-neutral-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-6" />
-          <p className="text-neutral-500 dark:text-zinc-400 font-bold tracking-tight animate-pulse">
-            프로필을 로드하는 중입니다
-          </p>
+        <div className="flex flex-col items-center">
+          <div className="w-10 h-10 border-4 border-neutral-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-5" />
+          <p className="text-[14px] text-neutral-400 font-semibold">프로필을 로드하는 중입니다</p>
         </div>
       </main>
     );
@@ -438,11 +429,8 @@ export default function MyPage() {
   }
 
   return (
-    <main className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-500 relative">
+    <main className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-500">
       <Header />
-
-      {/* Background Decorative Gradient */}
-      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
 
       {/* 업적 달성 토스트 */}
       {achievementToast && (
@@ -451,21 +439,19 @@ export default function MyPage() {
         </div>
       )}
 
-      {/* Hero Section - Simplified Header */}
-      <section className="relative pt-32 pb-8 px-6 text-center z-10">
-        <div className="max-w-3xl mx-auto flex flex-col items-center">
-          <h1 className="text-4xl font-black mb-4 tracking-tighter text-neutral-900 dark:text-white">
-            마이페이지
-          </h1>
-          <div className="w-8 h-1 bg-[#F9954E] rounded-full mb-4" />
-          <p className="text-sm font-medium text-neutral-500 dark:text-zinc-400">
-            나의 활동과 프로필 정보를 정밀하게 관리합니다.
-          </p>
-        </div>
+      {/* Hero Section */}
+      <section className="pt-28 pb-8 px-6">
+        <p className="text-[12px] font-semibold text-[#F9954E] mb-2">마이페이지</p>
+        <h1 className="text-[32px] font-extrabold tracking-tight text-neutral-950 dark:text-white mb-1">
+          내 프로필
+        </h1>
+        <p className="text-[14px] text-neutral-500 dark:text-neutral-400">
+          나의 활동과 프로필 정보를 관리합니다.
+        </p>
       </section>
 
       {/* Main Content Area */}
-      <section className="container max-w-6xl mx-auto px-6 pb-24 relative z-10">
+      <section className="max-w-6xl mx-auto px-6 pb-24">
 
         {/* Profile Details (Hero Component) */}
         {profile && user && (
@@ -483,14 +469,14 @@ export default function MyPage() {
         )}
 
         {/* ── 솜사탕 현황 카드 ── */}
-        <div className="mb-8 bg-gradient-to-br from-orange-50 to-pink-50 dark:from-orange-950/30 dark:to-pink-950/20 rounded-[2rem] border border-orange-100 dark:border-orange-900/30 p-6 md:p-8 shadow-sm">
+        <div className="mb-8 bg-[#FFF5EB] dark:bg-[#F9954E]/5 rounded-3xl border border-[#F9954E]/20 dark:border-[#F9954E]/10 p-6 md:p-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-2xl">🍭</span>
-                <h3 className="text-lg font-black text-neutral-900 dark:text-white">내 솜사탕</h3>
+                <h3 className="text-lg font-extrabold text-neutral-900 dark:text-white">내 솜사탕</h3>
               </div>
-              <p className="text-3xl font-black text-[#F9954E]">
+              <p className="text-3xl font-extrabold text-[#F9954E]">
                 {candyBalance.toLocaleString()}개
               </p>
               <div className="flex gap-4 mt-2 text-xs font-bold text-neutral-500 dark:text-zinc-400">
@@ -504,13 +490,13 @@ export default function MyPage() {
             <div className="flex gap-3">
               <button
                 onClick={() => setActiveTab("candy_history")}
-                className="px-4 py-2 rounded-xl border border-orange-200 dark:border-orange-800 text-[#F9954E] text-xs font-black hover:bg-orange-50 dark:hover:bg-orange-950/30 transition-all"
+                className="px-4 py-2 rounded-xl border border-orange-200 dark:border-orange-800 text-[#F9954E] text-xs font-extrabold hover:bg-orange-50 dark:hover:bg-orange-950/30 transition-all"
               >
                 획득 내역 보기
               </button>
               <Link
                 href="/shop"
-                className="px-4 py-2 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-white text-xs font-black transition-all shadow-sm shadow-orange-500/20"
+                className="px-4 py-2 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-white text-xs font-extrabold transition-all shadow-sm shadow-orange-500/20"
               >
                 포인트 상점 →
               </Link>
@@ -519,7 +505,7 @@ export default function MyPage() {
         </div>
 
         {/* Activity Section */}
-        <div className="bg-white/50 dark:bg-zinc-900/30 backdrop-blur-xl rounded-[2.5rem] border border-neutral-200 dark:border-zinc-800/50 p-6 md:p-10 shadow-sm">
+        <div className="bg-white dark:bg-zinc-950 rounded-3xl border border-neutral-100 dark:border-zinc-900 p-6 md:p-10">
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-xl font-extrabold text-neutral-900 dark:text-white flex items-center gap-2">
               <span className="w-1.5 h-6 bg-[#F9954E] rounded-full" />
@@ -562,7 +548,7 @@ export default function MyPage() {
             <div className="space-y-8">
               {/* 일일 미션 */}
               <div>
-                <h4 className="text-base font-black text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
+                <h4 className="text-base font-extrabold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
                   <span>📋</span> 일일 미션
                   <span className="text-xs font-medium text-neutral-400 dark:text-zinc-500 ml-1">매일 자정 초기화</span>
                 </h4>
@@ -586,11 +572,11 @@ export default function MyPage() {
                             <p className={`text-sm font-bold ${done ? "text-neutral-400 dark:text-zinc-500 line-through" : "text-neutral-800 dark:text-white"}`}>
                               {mission.label}
                             </p>
-                            <p className="text-[11px] font-black text-[#F9954E]">🍭 +{mission.reward}</p>
+                            <p className="text-[11px] font-extrabold text-[#F9954E]">🍭 +{mission.reward}</p>
                           </div>
                         </div>
                         {done ? (
-                          <span className="text-green-500 text-xs font-black flex items-center gap-1">✓ 완료</span>
+                          <span className="text-green-500 text-xs font-extrabold flex items-center gap-1">✓ 완료</span>
                         ) : (
                           <button
                             onClick={() => {
@@ -600,7 +586,7 @@ export default function MyPage() {
                                 handleMissionClaim(mission.id, mission.reward, mission.label);
                               }
                             }}
-                            className="px-3 py-1.5 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-white text-xs font-black transition-all active:scale-95"
+                            className="px-3 py-1.5 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-white text-xs font-extrabold transition-all active:scale-95"
                           >
                             받기
                           </button>
@@ -613,7 +599,7 @@ export default function MyPage() {
 
               {/* 업적 */}
               <div>
-                <h4 className="text-base font-black text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
+                <h4 className="text-base font-extrabold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
                   <span>🏆</span> 업적
                   <span className="text-xs font-medium text-neutral-400 dark:text-zinc-500 ml-1">{claimedAchievements.length}/{ACHIEVEMENTS.length} 달성</span>
                 </h4>
@@ -633,10 +619,10 @@ export default function MyPage() {
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-bold text-neutral-800 dark:text-white">{ach.name}</p>
                           <p className="text-[11px] text-neutral-500 dark:text-zinc-400 truncate">{ach.description}</p>
-                          <p className="text-[11px] font-black text-[#F9954E]">🍭 +{ach.reward}</p>
+                          <p className="text-[11px] font-extrabold text-[#F9954E]">🍭 +{ach.reward}</p>
                         </div>
                         {claimed && (
-                          <span className="text-amber-500 text-xs font-black">✓</span>
+                          <span className="text-amber-500 text-xs font-extrabold">✓</span>
                         )}
                       </div>
                     );
@@ -669,7 +655,7 @@ export default function MyPage() {
                         })}
                       </p>
                     </div>
-                    <span className={`text-sm font-black ${entry.amount > 0 ? "text-green-500" : "text-red-500"}`}>
+                    <span className={`text-sm font-extrabold ${entry.amount > 0 ? "text-green-500" : "text-red-500"}`}>
                       {entry.amount > 0 ? "+" : ""}{entry.amount} 🍭
                     </span>
                   </div>
@@ -720,7 +706,7 @@ export default function MyPage() {
                       <div className="p-5 rounded-2xl border bg-white dark:bg-zinc-900/30 border-neutral-100 dark:border-zinc-800/50 transition-all duration-300 group-hover:border-[#F9954E]/30 group-hover:shadow-sm flex items-center gap-4">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
-                            <span className="text-[#F9954E] text-[9px] font-black uppercase tracking-tighter">
+                            <span className="text-[#F9954E] text-[9px] font-extrabold uppercase tracking-tighter">
                               {post.tag || "자유"}
                             </span>
                             <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-tighter">
@@ -745,16 +731,6 @@ export default function MyPage() {
         </div>
       </section>
 
-      <style jsx global>{`
-        @keyframes gradient {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        .animate-gradient {
-          animation: gradient 3s ease infinite;
-        }
-      `}</style>
     </main>
   );
 }

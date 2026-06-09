@@ -1,8 +1,6 @@
 "use client";
 
-import { useTheme } from "next-themes";
-import { useState, useEffect } from "react";
-import { Megaphone, Pin, Clock, Tag } from "lucide-react";
+import { Pin, Clock, Tag } from "lucide-react";
 
 type NoticeType = "공지" | "업데이트" | "이벤트" | "점검";
 
@@ -47,25 +45,15 @@ const notices: NoticeItem[] = [
 ];
 
 export default function NoticeClient() {
-    const { theme } = useTheme();
-    const [mounted, setMounted] = useState(false);
-
-    useEffect(() => {
-        setMounted(true);
-    }, []);
-
-    const isDark = mounted && theme === "dark";
-
     const getTypeBadge = (t: NoticeType) => {
         switch (t) {
-            case "공지": return "bg-[#FFF5EB] text-[#E8832E] dark:bg-[#8F4B10]/20 dark:text-[#FCC07A]";
+            case "공지":    return "bg-[#FFF5EB] text-[#E8832E] dark:bg-[#8F4B10]/20 dark:text-[#FCC07A]";
             case "업데이트": return "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-300";
-            case "이벤트": return "bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-300";
-            case "점검": return "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-300";
+            case "이벤트":  return "bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-300";
+            case "점검":    return "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-300";
         }
     };
 
-    // 고정 공지 먼저, 그 다음 날짜 순
     const sortedNotices = [...notices].sort((a, b) => {
         if (a.pinned && !b.pinned) return -1;
         if (!a.pinned && b.pinned) return 1;
@@ -73,50 +61,39 @@ export default function NoticeClient() {
     });
 
     return (
-        <main className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-500 relative overflow-x-hidden">
+        <main className="w-full min-h-screen">
 
-            {/* 배경 그라데이션 */}
-            <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
-
-            {/* 히어로 섹션 */}
-            <section className="relative pt-4 sm:pt-16 pb-8 sm:pb-16 px-4 sm:px-6 text-center z-10">
-                <div className="max-w-3xl mx-auto animate-fade-in flex flex-col items-center">
-                    {/* Badge */}
-                    <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
-                        <Megaphone className="w-3 h-3" />
-                        <span>Notice</span>
-                    </div>
-
-                    <h1 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
-                        <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-                            공지사항
-                        </span>
-                    </h1>
-                    <p className="text-base md:text-lg font-medium text-neutral-600 dark:text-neutral-300 break-keep leading-relaxed max-w-xl">
-                        DORI-AI의 최신 소식과 버전 업데이트를 확인하세요.
-                    </p>
-                </div>
+            {/* 히어로 */}
+            <section className="pt-8 pb-10 border-b border-neutral-100 dark:border-zinc-900">
+                <p className="text-[12px] font-semibold text-[#F9954E] mb-3">공지사항</p>
+                <h1 className="text-[36px] sm:text-[48px] font-extrabold text-neutral-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
+                    공지사항
+                </h1>
+                <p className="text-[14px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+                    DORI-AI의 최신 소식과 버전 업데이트를 확인하세요.
+                </p>
             </section>
 
             {/* 공지사항 목록 */}
-            <section className="container max-w-3xl mx-auto px-4 sm:px-6 pb-12 sm:pb-24 relative z-10">
-                <p className="text-xs font-bold text-neutral-400 dark:text-neutral-500 mb-4">
+            <section className="py-6 pb-20">
+                <p className="text-[12px] font-medium text-neutral-400 mb-4">
                     총 {notices.length}건의 공지사항
                 </p>
 
-                <div className="space-y-4">
+                <div className="space-y-3">
                     {sortedNotices.map((item) => (
                         <details
                             key={item.id}
-                            className={`group rounded-[1.5rem] border overflow-hidden transition-all duration-300 hover:shadow-md backdrop-blur-xl shadow-sm ${item.pinned
-                                ? "border-[#FCC07A] dark:border-[#B35E15] bg-[#FFF5EB]/30 dark:bg-orange-950/10 hover:shadow-[#F9954E]/10"
-                                : "border-neutral-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/40 hover:shadow-[#F9954E]/5"
-                                }`}
+                            className={`group rounded-2xl border overflow-hidden transition-colors ${
+                                item.pinned
+                                    ? "border-[#F9954E]/30 bg-[#FFF5EB]/40 dark:bg-[#F9954E]/5 dark:border-[#F9954E]/20"
+                                    : "border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950"
+                            }`}
                         >
-                            <summary className="cursor-pointer list-none p-5 md:p-6">
+                            <summary className="cursor-pointer list-none p-5">
                                 <div className="flex items-start justify-between gap-4">
                                     <div className="flex-1 min-w-0">
-                                        <div className="flex items-center gap-2 mb-2.5">
+                                        <div className="flex items-center gap-2 mb-2">
                                             {item.pinned && (
                                                 <Pin className="w-3 h-3 text-[#F9954E] flex-shrink-0" />
                                             )}
@@ -124,13 +101,13 @@ export default function NoticeClient() {
                                                 {item.type}
                                             </span>
                                             {item.version && (
-                                                <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-neutral-100 dark:bg-neutral-800 text-neutral-500 flex items-center gap-1">
+                                                <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-500 flex items-center gap-1">
                                                     <Tag className="w-2.5 h-2.5" />
                                                     {item.version}
                                                 </span>
                                             )}
                                         </div>
-                                        <h3 className="font-bold text-[15px] text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors duration-200 leading-snug">
+                                        <h3 className="font-bold text-[15px] text-neutral-900 dark:text-white leading-snug">
                                             {item.title}
                                         </h3>
                                         <div className="flex items-center gap-1.5 mt-2 text-[12px] text-neutral-400">
@@ -138,13 +115,13 @@ export default function NoticeClient() {
                                             <span>{new Date(item.date).toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })}</span>
                                         </div>
                                     </div>
-                                    <span className="text-lg transition-all duration-300 group-open:rotate-45 flex-shrink-0 w-6 h-6 rounded-full bg-[#FFF5EB] dark:bg-[#F9954E]/10 flex items-center justify-center text-[#F9954E] text-sm font-light mt-1">
+                                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-[#F9954E] text-sm font-semibold mt-1 transition-transform duration-200 group-open:rotate-45">
                                         +
                                     </span>
                                 </div>
                             </summary>
-                            <div className="px-5 md:px-6 pb-5 md:pb-6">
-                                <div className="pt-4 border-t border-dashed border-neutral-200 dark:border-zinc-800">
+                            <div className="px-5 pb-5">
+                                <div className="pt-4 border-t border-neutral-100 dark:border-zinc-800">
                                     <p
                                         className="text-sm text-neutral-600 dark:text-neutral-400 leading-[1.85]"
                                         style={{ whiteSpace: "pre-line" }}
@@ -158,20 +135,9 @@ export default function NoticeClient() {
                 </div>
             </section>
 
-            {/* 스타일 */}
             <style jsx global>{`
-        @keyframes gradient {
-          0% { background-position: 0% 50%; }
-          50% { background-position: 100% 50%; }
-          100% { background-position: 0% 50%; }
-        }
-        .animate-gradient {
-          animation: gradient 3s ease infinite;
-        }
-        details summary::-webkit-details-marker {
-          display: none;
-        }
-      `}</style>
+                details summary::-webkit-details-marker { display: none; }
+            `}</style>
         </main>
     );
 }

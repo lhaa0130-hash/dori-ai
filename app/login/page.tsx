@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import Link from "next/link";
-import { Eye, EyeOff, Mail, Lock, User, ChevronRight, Sparkles } from "lucide-react";
+import { Eye, EyeOff, Mail, Lock, User, ChevronRight } from "lucide-react";
 
 type AuthMode = "login" | "signup";
 
@@ -146,58 +146,8 @@ export default function LoginPage() {
   const passwordStrength = getPasswordStrength(signupPassword);
 
   return (
-    <main
-      style={{
-        minHeight: "100vh",
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        background: isDark
-          ? "radial-gradient(ellipse at 50% 0%, rgba(251,146,60,0.08) 0%, #000 60%)"
-          : "radial-gradient(ellipse at 50% 0%, rgba(251,146,60,0.06) 0%, #f8f9fa 60%)",
-        padding: "20px",
-        fontFamily:
-          '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, sans-serif',
-        transition: "background 0.3s ease",
-      }}
-    >
-      {/* Background decoration */}
-      <div
-        style={{
-          position: "fixed",
-          top: "-200px",
-          right: "-200px",
-          width: "500px",
-          height: "500px",
-          borderRadius: "50%",
-          background: isDark
-            ? "radial-gradient(circle, rgba(249,115,22,0.08), transparent 70%)"
-            : "radial-gradient(circle, rgba(249,115,22,0.05), transparent 70%)",
-          pointerEvents: "none",
-        }}
-      />
-      <div
-        style={{
-          position: "fixed",
-          bottom: "-150px",
-          left: "-150px",
-          width: "400px",
-          height: "400px",
-          borderRadius: "50%",
-          background: isDark
-            ? "radial-gradient(circle, rgba(251,191,36,0.06), transparent 70%)"
-            : "radial-gradient(circle, rgba(251,191,36,0.04), transparent 70%)",
-          pointerEvents: "none",
-        }}
-      />
-
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "440px",
-          animation: "authFadeIn 0.6s ease-out",
-        }}
-      >
+    <main className="min-h-screen flex items-center justify-center bg-white dark:bg-black px-5">
+      <div style={{ width: "100%", maxWidth: "440px" }}>
         {/* Logo */}
         <div style={{ textAlign: "center", marginBottom: "32px" }}>
           <Link
@@ -206,22 +156,16 @@ export default function LoginPage() {
               textDecoration: "none",
               display: "inline-flex",
               alignItems: "center",
-              gap: "8px",
+              gap: "6px",
             }}
           >
-            <Sparkles
-              size={24}
-              style={{
-                color: "#F9954E",
-              }}
-            />
+            <span style={{ fontSize: "22px" }}>🍭</span>
             <span
               style={{
-                fontSize: "24px",
+                fontSize: "22px",
                 fontWeight: 800,
-                background: "linear-gradient(135deg, #facc15, #F9954E 50%, #ef4444)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
+                color: "#F9954E",
+                letterSpacing: "-0.02em",
               }}
             >
               DORI-AI
@@ -232,17 +176,13 @@ export default function LoginPage() {
         {/* Card */}
         <div
           style={{
-            background: isDark
-              ? "rgba(255,255,255,0.03)"
-              : "rgba(255,255,255,0.85)",
-            backdropFilter: "blur(20px)",
-            WebkitBackdropFilter: "blur(20px)",
-            border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "rgba(0,0,0,0.06)"}`,
+            background: isDark ? "#09090b" : "#ffffff",
+            border: `1px solid ${isDark ? "rgba(255,255,255,0.08)" : "#e5e7eb"}`,
             borderRadius: "24px",
-            padding: "40px",
+            padding: "36px",
             boxShadow: isDark
-              ? "0 20px 60px rgba(0,0,0,0.4), inset 0 1px 0 rgba(255,255,255,0.05)"
-              : "0 20px 60px rgba(0,0,0,0.06), inset 0 1px 0 rgba(255,255,255,0.8)",
+              ? "0 4px 24px rgba(0,0,0,0.4)"
+              : "0 4px 24px rgba(0,0,0,0.06)",
           }}
         >
           {/* Tab Switcher */}
@@ -533,12 +473,12 @@ export default function LoginPage() {
                   padding: "16px",
                   borderRadius: "12px",
                   border: "none",
-                  background: "linear-gradient(135deg, #F9954E, #ea580c)",
+                  background: "#F9954E",
                   color: "#fff",
                   fontSize: "15px",
                   fontWeight: 700,
                   cursor: isLoading ? "not-allowed" : "pointer",
-                  transition: "all 0.3s ease",
+                  transition: "opacity 0.2s ease",
                   marginTop: "8px",
                   fontFamily: "inherit",
                   opacity: isLoading ? 0.7 : 1,
@@ -546,17 +486,6 @@ export default function LoginPage() {
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "8px",
-                  boxShadow: "0 4px 15px rgba(249,115,22,0.3)",
-                }}
-                onMouseEnter={(e) => {
-                  if (!isLoading) {
-                    e.currentTarget.style.transform = "translateY(-2px)";
-                    e.currentTarget.style.boxShadow = "0 8px 25px rgba(249,115,22,0.4)";
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 4px 15px rgba(249,115,22,0.3)";
                 }}
               >
                 {isLoading ? (
@@ -1074,12 +1003,12 @@ export default function LoginPage() {
                   padding: "16px",
                   borderRadius: "12px",
                   border: "none",
-                  background: "linear-gradient(135deg, #F9954E, #ea580c)",
+                  background: "#F9954E",
                   color: "#fff",
                   fontSize: "15px",
                   fontWeight: 700,
                   cursor: isLoading ? "not-allowed" : "pointer",
-                  transition: "all 0.3s ease",
+                  transition: "opacity 0.2s ease",
                   marginTop: "8px",
                   fontFamily: "inherit",
                   opacity: isLoading ? 0.7 : 1,
@@ -1087,17 +1016,6 @@ export default function LoginPage() {
                   alignItems: "center",
                   justifyContent: "center",
                   gap: "8px",
-                  boxShadow: "0 4px 15px rgba(249,115,22,0.3)",
-                }}
-                onMouseEnter={(e) => {
-                  if (!isLoading) {
-                    e.currentTarget.style.transform = "translateY(-2px)";
-                    e.currentTarget.style.boxShadow = "0 8px 25px rgba(249,115,22,0.4)";
-                  }
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.transform = "translateY(0)";
-                  e.currentTarget.style.boxShadow = "0 4px 15px rgba(249,115,22,0.3)";
                 }}
               >
                 {isLoading ? (
@@ -1154,26 +1072,8 @@ export default function LoginPage() {
       </div>
 
       <style jsx global>{`
-        @keyframes authFadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(20px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        @keyframes authShake {
-          0%, 100% { transform: translateX(0); }
-          25% { transform: translateX(-6px); }
-          50% { transform: translateX(6px); }
-          75% { transform: translateX(-4px); }
-        }
         @keyframes authSpin {
-          to {
-            transform: rotate(360deg);
-          }
+          to { transform: rotate(360deg); }
         }
       `}</style>
     </main>

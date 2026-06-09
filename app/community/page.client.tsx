@@ -421,27 +421,20 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
         />
       )}
 
-      <main className="flex flex-col w-full min-h-screen bg-white dark:bg-black transition-colors duration-500 relative overflow-x-hidden">
-        <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
+      <main className="flex flex-col w-full min-h-screen">
 
-        <div className="flex-grow z-10">
-          <section className="relative pt-4 sm:pt-16 pb-6 sm:pb-10 px-4 sm:px-6 text-center">
-            <div className="max-w-3xl mx-auto animate-fade-in flex flex-col items-center">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
-                <Users className="w-3 h-3" /><span>Community Center</span>
-              </div>
-              <h1 className="text-3xl md:text-5xl font-bold mb-4 tracking-tight">
-                <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-                  커뮤니티
-                </span>
-              </h1>
-              <p className="text-base md:text-lg font-medium text-neutral-600 dark:text-neutral-300 break-keep leading-relaxed max-w-xl">
-                자유롭게 소통하고 정보를 공유하는 공간입니다.
-              </p>
-            </div>
+        <div className="flex-grow">
+          <section className="pt-8 pb-10 border-b border-neutral-100 dark:border-zinc-900">
+            <p className="text-[12px] font-semibold text-[#F9954E] mb-3">커뮤니티</p>
+            <h1 className="text-[36px] sm:text-[48px] font-extrabold text-neutral-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
+              커뮤니티
+            </h1>
+            <p className="text-[14px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+              자유롭게 소통하고 정보를 공유하는 공간입니다.
+            </p>
           </section>
 
-          <section className="container max-w-5xl mx-auto px-4 sm:px-6 pb-10 sm:pb-20">
+          <section className="pb-10 sm:pb-20 pt-6">
             <div className="flex items-center justify-between mb-8">
               <div className="flex items-center gap-1 p-1 bg-neutral-100 dark:bg-zinc-900 rounded-full">
                 <button onClick={() => setActiveTab('trending')} className={`flex items-center gap-1.5 px-4 py-2 rounded-full text-sm font-bold transition-all ${activeTab === 'trending' ? 'bg-[#F9954E] text-white shadow-md' : 'text-neutral-500 dark:text-neutral-400'}`}>
@@ -500,7 +493,7 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
                       <div className="flex flex-wrap gap-2 mb-4">
                         {featuredPost.tags.map(tag => <span key={tag} className={`text-xs px-3 py-1 rounded-full font-semibold ${getTagClass(tag)}`}>#{tag}</span>)}
                       </div>
-                      <h2 className="text-2xl md:text-3xl font-black text-neutral-900 dark:text-white mb-3 leading-tight group-hover:text-[#E8832E] dark:group-hover:text-[#FBAA60] transition-colors">{featuredPost.title}</h2>
+                      <h2 className="text-2xl md:text-3xl font-extrabold text-neutral-900 dark:text-white mb-3 leading-tight group-hover:text-[#E8832E] dark:group-hover:text-[#FBAA60] transition-colors">{featuredPost.title}</h2>
                       <p className="text-sm md:text-base text-neutral-600 dark:text-neutral-300 line-clamp-3 leading-relaxed mb-6">{featuredPost.content.replace(/<[^>]*>?/gm, '')}</p>
                       <div className="flex items-center justify-between">
                         <div className="flex items-center gap-3">
@@ -529,7 +522,7 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
                         <div className="flex flex-wrap gap-1.5 mb-3">
                           {post.tags.slice(0, 2).map(tag => <span key={tag} className={`text-xs px-2.5 py-0.5 rounded-full font-semibold ${getTagClass(tag)}`}>#{tag}</span>)}
                         </div>
-                        <h3 className="text-base font-black text-neutral-900 dark:text-white mb-2 group-hover:text-[#E8832E] transition-colors line-clamp-2">{post.title}</h3>
+                        <h3 className="text-base font-extrabold text-neutral-900 dark:text-white mb-2 group-hover:text-[#E8832E] transition-colors line-clamp-2">{post.title}</h3>
                         <p className="text-xs text-neutral-500 dark:text-neutral-400 line-clamp-2 leading-relaxed mb-4">{post.content.replace(/<[^>]*>?/gm, '')}</p>
                         <div className="flex items-center justify-between pt-3 border-t border-neutral-100 dark:border-white/5">
                           <div className="flex items-center gap-2">
@@ -584,3 +577,4 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
     </>
   );
 }
+

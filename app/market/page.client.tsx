@@ -1,6 +1,5 @@
 "use client";
-import React, { useState, useEffect } from "react";
-import { useTheme } from "next-themes";
+import { useState } from "react";
 import { TEXTS } from "@/constants/texts";
 import MarketList from "@/components/market/MarketList";
 import MarketRequestForm from "@/components/market/MarketRequestForm";
@@ -8,46 +7,24 @@ import { ShoppingBag, PenTool } from "lucide-react";
 
 export default function MarketClient() {
   const t = TEXTS.market;
-  const { theme } = useTheme();
-  const [mounted, setMounted] = useState(false);
-  const [activeTab, setActiveTab] = useState<'products' | 'request'>('products'); // 탭 상태 관리
-
-  useEffect(() => setMounted(true), []);
-
-  const isDark = mounted && theme === 'dark';
+  const [activeTab, setActiveTab] = useState<'products' | 'request'>('products');
 
   return (
-    <main
-      className="w-full min-h-screen relative overflow-x-hidden bg-white dark:bg-black transition-colors duration-500"
-      style={{
-        fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif',
-      }}
-    >
-      {/* 배경 그라데이션 (Standard) */}
-      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
+    <main className="w-full min-h-screen">
 
-      {/* 히어로 섹션 (Standard) */}
-      <section className="relative pt-4 sm:pt-16 pb-6 sm:pb-12 px-4 sm:px-6 text-center z-10">
-        <div className="max-w-3xl mx-auto animate-fade-in flex flex-col items-center">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
-            <ShoppingBag className="w-3 h-3" />
-            <span>Marketplace</span>
-          </div>
-
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-            <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-              {t.heroTitle.ko}
-            </span>
-          </h1>
-          <p className="text-base md:text-lg font-medium text-neutral-600 dark:text-neutral-300 break-keep leading-relaxed max-w-xl">
-            {t.heroSubtitle.ko}
-          </p>
-        </div>
+      {/* 히어로 */}
+      <section className="pt-8 pb-10 border-b border-neutral-100 dark:border-zinc-900">
+        <p className="text-[12px] font-semibold text-[#F9954E] mb-3">마켓</p>
+        <h1 className="text-[36px] sm:text-[48px] font-extrabold text-neutral-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
+          {t.heroTitle.ko}
+        </h1>
+        <p className="text-[14px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+          {t.heroSubtitle.ko}
+        </p>
       </section>
 
       {/* 탭 네비게이션 */}
-      <section className="container max-w-5xl mx-auto px-4 sm:px-6 mb-8 sm:mb-12 relative z-10">
+      <section className="mb-8 pt-6">
         <div className="flex justify-center mb-8">
           <div className="inline-flex p-1 rounded-full bg-neutral-100 dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800">
             <button
@@ -97,23 +74,6 @@ export default function MarketClient() {
         </div>
       </section>
 
-      {/* 스타일 */}
-      <style jsx global>{`
-        @keyframes gradientFlow {
-          0% { background-position: 0% 50%; }
-          100% { background-position: 200% 50%; }
-        }
-        .animate-gradient {
-          animation: gradientFlow 3s linear infinite;
-        }
-        .animate-fade-in {
-          animation: fadeIn 0.5s ease-out forwards;
-        }
-        @keyframes fadeIn {
-          from { opacity: 0; transform: translateY(10px); }
-          to { opacity: 1; transform: translateY(0); }
-        }
-      `}</style>
     </main>
   );
 }
