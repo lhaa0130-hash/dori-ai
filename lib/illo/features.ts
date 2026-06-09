@@ -2,8 +2,8 @@
 // 핵심 원칙: 기능은 "완성(released)된 것"만 보인다. 나머지는 전부 숨김 →
 // 워크플로우가 완성될 때마다 released: true 로 하나씩 공개한다.
 
-export type IlloGroup = '핵심' | 'AI 작업 도구';
-export const ILLO_GROUP_ORDER: IlloGroup[] = ['핵심', 'AI 작업 도구'];
+export type IlloGroup = '핵심' | 'AI 자동화 도구';
+export const ILLO_GROUP_ORDER: IlloGroup[] = ['핵심', 'AI 자동화 도구'];
 
 export interface IlloFeature {
   id: string;
@@ -18,28 +18,82 @@ export interface IlloFeature {
   badge?: 'new';
 }
 
-export const ILLO_FEATURES: IlloFeature[] = [
-  // ── 핵심 (released) ──
+// ── 핵심 (released) — 항상 이 순서로 최상단 고정: 홈 / 워크플로우 / 비서실 / 설정 ──
+const CORE_FEATURES: IlloFeature[] = [
   { id: 'home',      label: '홈',          icon: '🏠', group: '핵심', desc: '오늘 할 일과 내 도구', kind: 'core', core: true, released: true },
-  { id: 'assistant', label: '비서실',      icon: '💬', group: '핵심', desc: 'AI 비서에게 무엇이든', kind: 'core', core: true, released: true },
-  { id: 'features',  label: '기능 보관함', icon: '🧩', group: '핵심', desc: '완성된 기능을 메뉴에 추가', kind: 'core', core: true, released: true },
+  { id: 'builder',   label: '워크플로우',   icon: '🛠️', group: '핵심', desc: '나만의 AI 자동화를 직접 설계', kind: 'core', core: true, released: true },
+  // 비서실 임시 제거 — 복구하려면 아래 줄 주석 해제 + CORE_SIDEBAR_ORDER에 'assistant' 추가
+  // { id: 'assistant', label: '비서실',      icon: '💬', group: '핵심', desc: 'AI 비서에게 무엇이든', kind: 'core', core: true, released: true },
+  { id: 'image',     label: '이미지 생성',  icon: '🎨', group: '핵심', desc: '글로 설명하면 이미지 생성', kind: 'core', core: true, released: true },
+  { id: 'video',     label: '영상 생성',    icon: '🎬', group: '핵심', desc: '글로 설명하면 짧은 영상 생성', kind: 'core', core: true, released: true },
   { id: 'settings',  label: '설정',        icon: '⚙️', group: '핵심', desc: '키 · 테마 · 계정', kind: 'core', core: true, released: true },
-
-  // ── AI 작업 도구 ── (released: true = 공개, false = 완성 전 숨김)
-  // ✅ 1차 공개: 비서실 + 글쓰기 도구 5개
-  { id: 'blog',    label: '블로그 글쓰기', icon: '✍️', group: 'AI 작업 도구', desc: '주제→SEO 블로그 글', kind: 'tool', released: true, defaultOn: true },
-  { id: 'sns',     label: 'SNS 게시물',   icon: '📱', group: 'AI 작업 도구', desc: '인스타·페북·X 글+해시태그', kind: 'tool', released: true, defaultOn: true },
-  { id: 'copy',    label: '광고 카피',     icon: '🎯', group: 'AI 작업 도구', desc: '광고 문구·슬로건', kind: 'tool', released: true, defaultOn: true },
-  { id: 'product', label: '상품 상세',     icon: '🛍️', group: 'AI 작업 도구', desc: '쇼핑몰 상세설명', kind: 'tool', released: true, defaultOn: true },
-  { id: 'summary', label: '문서 요약',     icon: '📑', group: 'AI 작업 도구', desc: '긴 글을 핵심만', kind: 'tool', released: true, defaultOn: true },
-
-  // ⏳ 완성 전 — 숨김 (released 없음). 완성되면 released: true 로 공개.
-  { id: 'docs',      label: '문서 작성',    icon: '📝', group: 'AI 작업 도구', desc: '보고서·제안서', kind: 'tool' },
-  { id: 'mail',      label: '메일·메시지',  icon: '✉️', group: 'AI 작업 도구', desc: '메일/답장 작성', kind: 'tool' },
-  { id: 'translate', label: '번역·교정',    icon: '🌐', group: 'AI 작업 도구', desc: '번역+문장 다듬기', kind: 'tool' },
-  { id: 'meeting',   label: '회의록 요약',  icon: '📋', group: 'AI 작업 도구', desc: '회의→핵심·할일', kind: 'tool' },
-  { id: 'reply',     label: '리뷰·댓글 답변', icon: '🗨️', group: 'AI 작업 도구', desc: '고객 응대 답변', kind: 'tool' },
+  // 보관함(아래 "기능 추가·관리" 버튼으로 진입) — 사이드바 기본 메뉴엔 안 넣음
+  { id: 'features',  label: '기능 보관함', icon: '🧩', group: '핵심', desc: '완성된 기능을 메뉴에 추가', kind: 'core', released: true },
 ];
+
+// 사이드바에서 핵심 메뉴가 항상 이 순서로 보이도록 고정.
+export const CORE_SIDEBAR_ORDER = ['home', 'builder', 'image', 'video', 'settings']; // 'assistant' 임시 제거
+
+// ── AI 자동화 도구 ── ★ 여러 AI를 단계로 엮어야 의미 있는 기능만 유지(단일 AI 도구는 제거).
+// 정의 순서는 자유 — 아래에서 라벨 가나다순으로 자동 정렬되어 노출됨.
+const TOOL_FEATURES: IlloFeature[] = [
+  // 콘텐츠
+  { id: 'blog',       label: '블로그 글쓰기',     icon: '✍️', group: 'AI 자동화 도구', desc: '주제만 주면 검색 잘 되는 블로그 글 + 대표 이미지까지', kind: 'tool', released: true },
+  { id: 'sns',        label: 'SNS 게시물 쓰기',   icon: '📱', group: 'AI 자동화 도구', desc: '인스타·페북에 올릴 글을 트렌드 맞춰 작성', kind: 'tool', released: true },
+  { id: 'product',    label: '상품 상세페이지',   icon: '🛍️', group: 'AI 자동화 도구', desc: '쇼핑몰 상품 설명·광고문구 + 상품 이미지까지', kind: 'tool', released: true },
+  { id: 'newsletter', label: '이메일 소식지',     icon: '📧', group: 'AI 자동화 도구', desc: '고객에게 보낼 이메일(뉴스레터)을 제목부터 본문까지', kind: 'tool', released: true },
+  { id: 'press',      label: '보도자료(언론용)',  icon: '📰', group: 'AI 자동화 도구', desc: '기자·언론에 보내는 공식 발표문을 격식 맞춰', kind: 'tool', released: true },
+  { id: 'youtube',    label: '유튜브 올리기 준비', icon: '▶️', group: 'AI 자동화 도구', desc: '영상 대본 + 제목·설명·태그 + 썸네일 문구까지', kind: 'tool', released: true },
+  { id: 'website',        label: '홈페이지 만들기',  icon: '🌐', group: 'AI 자동화 도구', desc: '사업 소개만 주면 구성·문구 + 대표 이미지', kind: 'tool', released: true },
+  { id: 'website_manage', label: '홈페이지 관리하기', icon: '🧰', group: 'AI 자동화 도구', desc: '문제 진단 + 개선안·수정 문구', kind: 'tool', released: true },
+  // 전략·리서치
+  { id: 'marketing',  label: '마케팅 전략 짜기',  icon: '📊', group: 'AI 자동화 도구', desc: '뭘 어디에 어떻게 알릴지 + 4주 실행계획', kind: 'tool', released: true },
+  { id: 'competitor', label: '경쟁가게 분석',     icon: '🔭', group: 'AI 자동화 도구', desc: '경쟁업체와 비교해 우리만의 차별점 찾기', kind: 'tool', released: true },
+  { id: 'persona',    label: '내 고객 그려보기', icon: '👥', group: 'AI 자동화 도구', desc: '내 손님이 누구인지 한 사람처럼 구체적으로', kind: 'tool', released: true },
+  { id: 'plan',       label: '사업계획서 쓰기',   icon: '📈', group: 'AI 자동화 도구', desc: '아이템만 주면 투자·정부지원용 계획서 초안', kind: 'tool', released: true },
+  { id: 'pitch',      label: '투자 설득자료(IR)', icon: '🚀', group: 'AI 자동화 도구', desc: '투자자 앞에서 쓸 짧은 발표·설득 자료', kind: 'tool', released: true },
+  { id: 'keyword',    label: '검색 키워드 찾기',  icon: '🔑', group: 'AI 자동화 도구', desc: '사람들이 많이 검색하는 키워드·제목·태그', kind: 'tool', released: true },
+  // 고객
+  { id: 'reply',      label: '리뷰·댓글 답변',     icon: '🗨️', group: 'AI 자동화 도구', desc: '고객 후기·문의에 다는 답글을 정중하게', kind: 'tool', released: true },
+  { id: 'voc',        label: '고객 후기 분석',     icon: '🔍', group: 'AI 자동화 도구', desc: '여러 후기를 모아 칭찬·불만·개선점 정리', kind: 'tool', released: true },
+  // 돈·재무
+  { id: 'estimate',   label: '견적서 만들기',      icon: '🧾', group: 'AI 자동화 도구', desc: '항목·금액 표와 견적서 초안', kind: 'tool', released: true },
+  { id: 'finance',    label: '간편 장부 분석',     icon: '📒', group: 'AI 자동화 도구', desc: '매출·지출 정리 + 아낄 곳 찾기', kind: 'tool', released: true },
+  { id: 'dunning',    label: '결제 안내·독촉',     icon: '💳', group: 'AI 자동화 도구', desc: '미수금·결제 안내 메시지(단계별)', kind: 'tool', released: true },
+  { id: 'pricing',    label: '가격 정하기',        icon: '💰', group: 'AI 자동화 도구', desc: '경쟁가 참고 적정 가격·요금제 제안', kind: 'tool', released: true },
+];
+
+// 도구는 라벨 가나다(한글) 순으로 정렬해 노출. 핵심은 고정 순서로 최상단.
+const sortedTools = [...TOOL_FEATURES].sort((a, b) => a.label.localeCompare(b.label, 'ko'));
+export const ILLO_FEATURES: IlloFeature[] = [...CORE_FEATURES, ...sortedTools];
+
+// ── 초성(ㄱㄴㄷ) 그룹 헤더용 ──
+const CHO = ['ㄱ', 'ㄲ', 'ㄴ', 'ㄷ', 'ㄸ', 'ㄹ', 'ㅁ', 'ㅂ', 'ㅃ', 'ㅅ', 'ㅆ', 'ㅇ', 'ㅈ', 'ㅉ', 'ㅊ', 'ㅋ', 'ㅌ', 'ㅍ', 'ㅎ'];
+// 쌍자음은 기본 자음으로 묶음 (ㄲ→ㄱ 등)
+const CHO_BASE: Record<string, string> = { 'ㄲ': 'ㄱ', 'ㄸ': 'ㄷ', 'ㅃ': 'ㅂ', 'ㅆ': 'ㅅ', 'ㅉ': 'ㅈ' };
+
+/** 라벨의 첫 글자 초성(ㄱ/ㄴ/ㄷ…). 영문은 'A–Z', 숫자·기타는 '#'. */
+export function initialConsonant(label: string): string {
+  const ch = (label || '').trim().charAt(0);
+  const code = ch.charCodeAt(0);
+  if (code >= 0xac00 && code <= 0xd7a3) {
+    const lead = CHO[Math.floor((code - 0xac00) / 588)];
+    return CHO_BASE[lead] || lead;
+  }
+  if (/[A-Za-z]/.test(ch)) return 'A–Z';
+  return '#';
+}
+
+/** 문자열 전체를 초성 문자열로 변환(초성 검색용). 한글 외 문자는 그대로. 예: '블로그'→'ㅂㄹㄱ' */
+export function toInitials(text: string): string {
+  let out = '';
+  for (const ch of text || '') {
+    const code = ch.charCodeAt(0);
+    if (code >= 0xac00 && code <= 0xd7a3) out += CHO[Math.floor((code - 0xac00) / 588)];
+    else out += ch;
+  }
+  return out;
+}
 
 export const ILLO_FEATURE_BY_ID: Record<string, IlloFeature> =
   Object.fromEntries(ILLO_FEATURES.map((f) => [f.id, f]));
@@ -52,30 +106,30 @@ export function isReleased(id: string): boolean {
 // 보관함에서 켜고 끌 수 있는 = 공개된 비핵심 기능
 export const SELECTABLE_IDS = ILLO_FEATURES.filter((f) => f.released && !f.core).map((f) => f.id);
 
-// 처음 시작 시 켜짐 (핵심 + defaultOn, 모두 released)
-export const ILLO_DEFAULT_ENABLED: string[] = [
-  'home', 'assistant',
-  'blog', 'sns', 'copy', 'product', 'summary',
-  'features', 'settings',
-];
+// 처음 시작 시 사이드바 기본 메뉴 = 홈·워크플로우·비서실·설정. 나머지 도구는 보관함에서 추가.
+export const ILLO_DEFAULT_ENABLED: string[] = ['home', 'builder', 'assistant', 'settings'];
 
 const LS_KEY = 'illo.web.enabledFeatures';
 
 export function loadIlloEnabled(): string[] {
+  const coreIds = ILLO_FEATURES.filter((f) => f.core).map((f) => f.id);
+  // 핵심은 항상 고정 순서(홈/워크플로우/비서실/설정)로 맨 앞에. 누락분은 뒤에 보충.
+  const core = [...CORE_SIDEBAR_ORDER.filter((id) => coreIds.includes(id))];
+  for (const id of coreIds) if (!core.includes(id)) core.push(id);
+
+  let storedTools: string[] = [];
   try {
     const raw = localStorage.getItem(LS_KEY);
     if (raw) {
       const arr = JSON.parse(raw);
       if (Array.isArray(arr)) {
-        // 공개(released)된 것만 유지 + 핵심 보충 (숨김 기능이 저장돼 있어도 제거)
-        const valid = arr.filter((id: string) => isReleased(id));
-        const coreIds = ILLO_FEATURES.filter((f) => f.core).map((f) => f.id);
-        const missingCore = coreIds.filter((id) => !valid.includes(id));
-        return [...missingCore, ...valid];
+        // 공개(released)된 비핵심 도구만, 저장된 순서대로 유지
+        storedTools = arr.filter((id: string) => isReleased(id) && !coreIds.includes(id));
       }
     }
   } catch { /* */ }
-  return ILLO_DEFAULT_ENABLED;
+
+  return [...core, ...storedTools];
 }
 
 export function saveIlloEnabled(ids: string[]): void {

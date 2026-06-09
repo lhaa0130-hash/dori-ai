@@ -1,5 +1,6 @@
 "use client";
 
+import { usePathname } from "next/navigation";
 import { useIsApp } from "@/hooks/useIsApp";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
@@ -23,12 +24,18 @@ interface LayoutClientProps {
  */
 export default function LayoutClient({ children }: LayoutClientProps) {
   const isAppEnv = useIsApp();
+  const pathname = usePathname();
 
   // 전역 미션 자동 완료 (출석 체크, 페이지 방문 등)
   useMissionAutoComplete();
 
   // 10분간 비활성 시 자동 로그아웃
   useAutoLogout();
+
+  // 일로 앱(/illo/app)은 독립 전체화면 — 사이트 헤더·광고·여백 없이 통째로 렌더
+  if (pathname?.startsWith("/illo/app")) {
+    return <>{children}</>;
+  }
 
   // 앱 환경: Header/Footer 숨기고 AppLayoutWrapper 사용
   if (isAppEnv) {

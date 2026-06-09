@@ -1,24 +1,35 @@
 "use client";
 
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState, Fragment, type MouseEvent as ReactMouseEvent } from "react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useAuth } from "@/contexts/AuthContext";
 import { getFirebaseAuth } from "@/lib/firebase";
 import { ILLO_TOOL_BY_ID } from "@/lib/illo/tools";
-import { callClaude } from "@/lib/illo/claude";
+import { callClaude, callGateway, callMedia } from "@/lib/illo/claude";
 import { modelForFeature } from "@/lib/illo/modelMatrix";
 import { getLocalKey, setLocalKey, pullCloudKey } from "@/lib/illo/key";
 import {
   ILLO_FEATURES, ILLO_FEATURE_BY_ID, ILLO_GROUP_ORDER, ILLO_DEFAULT_ENABLED,
-  loadIlloEnabled, saveIlloEnabled, type IlloFeature,
+  loadIlloEnabled, saveIlloEnabled, initialConsonant, toInitials, type IlloFeature,
 } from "@/lib/illo/features";
 import {
+  flowDetailForTool, STEP_PALETTE, loadCustomFlow, saveCustomFlow, clearCustomFlow, hasCustomFlow,
+  type FlowStepDetail,
+} from "@/lib/illo/automations";
+import { listResults, saveResult, deleteResult, clearResults, downloadText, type IlloResult } from "@/lib/illo/history";
+import {
+  listUserFlows, saveUserFlow, deleteUserFlow, blankFlow, newId,
+  type UserFlow, type FlowNode,
+} from "@/lib/illo/flows";
+import { PLANS } from "@/lib/illo/plan";
+import { getTone, saveTone } from "@/lib/illo/tone";
+import {
   ArrowLeft, KeyRound, Loader2, Copy, Check, Sparkles, Download,
-  Menu, X, Pencil, Plus, LogOut, Sun, Moon, Send, Lock, GripVertical,
+  Menu, X, Pencil, Plus, LogOut, Sun, Moon, Send, Lock, GripVertical, ChevronUp, ChevronDown, Search,
 } from "lucide-react";
 
-const FREE_LIMIT = 50; // 무료(공용 키) 하루 호출 수
+const FREE_LIMIT = 30; // 무료 하루 호출 수
 
 export default function IlloWebClient() {
   const { status, session, logout } = useAuth();
@@ -40,13 +51,16 @@ export default function IlloWebClient() {
 
   const [enabled, setEnabled] = useState<string[]>(ILLO_DEFAULT_ENABLED);
   const [view, setView] = useState<string>("home");
-  const [editing, setEditing] = useState(false);
   const [mobileNav, setMobileNav] = useState(false);
 
   const [quota, setQuota] = useState<number | null>(null);
   const [showGuide, setShowGuide] = useState(false);
   const [showKey, setShowKey] = useState(false);
   const [keyErr, setKeyErr] = useState("");
+  const [devPreview, setDevPreview] = useState(false); // localhost 전용: 로그인 없이 화면 확인
+
+  const isLocalhost = typeof window !== "undefined" &&
+    ["localhost", "127.0.0.1", "0.0.0.0", "::1"].includes(window.location.hostname);
 
   const free = !key; // 본인 키 없으면 무료(공용 키) 모드
 
@@ -62,13 +76,18 @@ export default function IlloWebClient() {
   // ── 공용 Claude 호출 (무료/내키 자동 + 횟수 갱신) ──
   // 기능(featureId)별로 미리 매칭된 모델을 사용 — 소비자에겐 노출하지 않음.
   // 무료 사용자는 서버 프록시가 Haiku로 고정(비용 관리). 내 키/유료는 매트릭스대로.
-  async function runAI(prompt: string, featureId: string) {
-    let idToken: string | undefined;
-    if (free) {
-      const u = getFirebaseAuth().currentUser;
-      idToken = u ? await u.getIdToken() : undefined;
-    }
-    const r = await callClaude({ apiKey: key || undefined, idToken, prompt, model: modelForFeature(featureId) });
+  // 모든 실행은 게이트웨이 경유 — 패키지는 여러 AI(리서치→작성→검토→이미지/영상)를 연쇄.
+  async function runAI(prompt: string, featureId: string, rawInput?: string) {
+    const u = getFirebaseAuth().currentUser;
+    const idToken = u ? await u.getIdToken() : undefined;
+    if (!idToken) throw new Error("LOGIN_REQUIRED");
+    const isAssistant = featureId === "assistant";
+    const r = await callGateway({
+      idToken, featureId, prompt,
+      kind: isAssistant ? "text" : "package",
+      input: rawInput || "",
+      maxTokens: isAssistant ? 2000 : 4096,
+    });
     if (typeof r.quotaRemaining === "number") setQuota(r.quotaRemaining);
     return r;
   }
@@ -137,10 +156,10 @@ export default function IlloWebClient() {
   if (status === "loading") {
     return <Centered><Loader2 className="w-6 h-6 animate-spin text-[#F9954E]" /></Centered>;
   }
-  if (status === "unauthenticated") {
+  if (status === "unauthenticated" && !devPreview) {
     return (
       <Centered>
-        <IlloLogin onShowGuide={() => setShowGuide(true)} />
+        <IlloLogin onShowGuide={() => setShowGuide(true)} onDevPreview={isLocalhost ? () => setDevPreview(true) : undefined} />
         {showGuide && <GuideOverlay onClose={() => setShowGuide(false)} />}
       </Centered>
     );
@@ -155,8 +174,8 @@ export default function IlloWebClient() {
       {/* 데스크톱 사이드바 */}
       <div className="hidden md:flex">
         <IlloSidebar
-          enabled={enabled} view={view} editing={editing}
-          onView={goView} onToggleEdit={() => setEditing((e) => !e)}
+          enabled={enabled} view={view}
+          onView={goView}
           onReorder={reorder} onRemove={toggleFeature}
           onLogout={logout} userName={userName} userEmail={session?.user?.email || ""}
         />
@@ -168,8 +187,8 @@ export default function IlloWebClient() {
           <div className="absolute inset-0 bg-black/40" onClick={() => setMobileNav(false)} />
           <div className="relative">
             <IlloSidebar
-              enabled={enabled} view={view} editing={editing}
-              onView={goView} onToggleEdit={() => setEditing((e) => !e)}
+              enabled={enabled} view={view}
+              onView={goView}
               onReorder={reorder} onRemove={toggleFeature}
               onLogout={logout} userName={userName} userEmail={session?.user?.email || ""}
             />
@@ -189,6 +208,10 @@ export default function IlloWebClient() {
         {view === "home" && <Home userName={userName} enabled={enabled} onView={goView} free={free} quota={quota} onShowKey={() => setShowKey(true)} />}
         {view === "assistant" && <Assistant runAI={runAI} free={free} quota={quota} onShowKey={() => setShowKey(true)} userName={userName} />}
         {view === "features" && <FeatureManager enabled={enabled} onToggle={toggleFeature} onView={goView} />}
+        {view === "image" && <BasicGen kind="image" free={free} quota={quota} setQuota={setQuota} />}
+        {view === "video" && <BasicGen kind="video" free={free} quota={quota} setQuota={setQuota} />}
+        {view === "builder" && <FlowBuilder />}
+        {view === "history" && <HistoryView onBack={() => goView("home")} />}
         {view === "settings" && <Settings keyVal={key} free={free} onShowKey={() => setShowKey(true)} onRemoveKey={removeKey} onLogout={logout} userName={userName} userEmail={session?.user?.email || ""} />}
         {tool && <ToolView key={view} tool={tool} runAI={runAI} free={free} quota={quota} onShowKey={() => setShowKey(true)} onBack={() => goView("home")} />}
       </main>
@@ -200,10 +223,10 @@ export default function IlloWebClient() {
 
 /* ─────────────────────────── 사이드바 ─────────────────────────── */
 function IlloSidebar({
-  enabled, view, editing, onView, onToggleEdit, onReorder, onRemove, onLogout, userName, userEmail,
+  enabled, view, onView, onReorder, onRemove, onLogout, userName, userEmail,
 }: {
-  enabled: string[]; view: string; editing: boolean;
-  onView: (id: string) => void; onToggleEdit: () => void;
+  enabled: string[]; view: string;
+  onView: (id: string) => void;
   onReorder: (from: number, to: number) => void; onRemove: (id: string) => void;
   onLogout: () => void; userName: string; userEmail: string;
 }) {
@@ -211,7 +234,8 @@ function IlloSidebar({
   const [mounted, setMounted] = useState(false);
   useEffect(() => setMounted(true), []);
   const dragIdx = useRef<number | null>(null);
-  const items = enabled.map((id) => ILLO_FEATURE_BY_ID[id]).filter(Boolean) as IlloFeature[];
+  // 사이드바 메뉴 행 — 보관함(features)은 아래 "기능 추가·관리" 버튼으로 진입하므로 행에선 제외
+  const items = enabled.map((id) => ILLO_FEATURE_BY_ID[id]).filter((f) => f && f.id !== "features") as IlloFeature[];
 
   return (
     <aside className="w-60 shrink-0 h-full bg-white dark:bg-zinc-950 border-r border-neutral-200 dark:border-zinc-800 flex flex-col">
@@ -219,54 +243,41 @@ function IlloSidebar({
         <div className="flex items-center gap-2.5">
           <img src="/illo-logo.png" alt="일로" className="w-9 h-9 rounded-xl shadow-sm" />
           <div className="flex-1 min-w-0">
-            <div className="text-base font-extrabold leading-none text-[#F9954E]">일로</div>
+            <div className="text-base font-extrabold leading-none text-[#F9954E]">Illo(일로)</div>
             <div className="text-[10px] text-neutral-400 mt-1 tracking-wide">by DORI-AI</div>
           </div>
-          <button onClick={onToggleEdit} title="메뉴 편집"
-            className={"shrink-0 text-[11px] px-2 py-1 rounded-lg font-semibold transition-colors flex items-center gap-1 " + (editing ? "bg-[#F9954E] text-white" : "text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-zinc-800")}>
-            <Pencil className="w-3 h-3" /> {editing ? "완료" : "편집"}
-          </button>
         </div>
       </div>
-
-      {editing && (
-        <div className="mx-3 mt-3 text-[11px] text-[#E8832E] bg-[#FFF5EB] dark:bg-orange-950/20 rounded-lg px-2.5 py-2 leading-relaxed">
-          ⠿ 드래그로 순서 변경, ✕로 메뉴에서 빼기. 아래 ＋로 더 추가.
-        </div>
-      )}
 
       <nav className="flex-1 overflow-y-auto p-3">
         <div className="space-y-0.5">
           {items.map((item, idx) => {
             const active = view === item.id;
-            const canEdit = editing && !item.core;
+            const canEdit = !item.core; // 편집 모드 없이 항상 이동·제거 가능 (핵심 제외)
             return (
               <div
                 key={item.id}
                 draggable={canEdit}
                 onDragStart={() => { dragIdx.current = idx; }}
-                onDragOver={(e) => { if (editing) e.preventDefault(); }}
+                onDragOver={(e) => { if (canEdit) e.preventDefault(); }}
                 onDrop={() => { const f = dragIdx.current; if (f != null && f !== idx) onReorder(f, idx); dragIdx.current = null; }}
-                className="relative"
+                className="group/item relative"
               >
                 <button
-                  onClick={() => !editing && onView(item.id)}
-                  className={"group w-full flex items-center gap-3 px-3 py-2.5 rounded-xl text-sm transition-all " + (
-                    editing
-                      ? "border border-dashed border-[#F9954E]/30 bg-[#F9954E]/[0.04] " + (canEdit ? "cursor-grab active:cursor-grabbing pr-9" : "opacity-80")
-                      : active
-                        ? "bg-[#F9954E]/[0.13] text-[#E8832E] font-semibold cursor-pointer"
-                        : "text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-zinc-800 cursor-pointer"
+                  onClick={() => onView(item.id)}
+                  className={"w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm transition-all " + (canEdit ? "pr-7 cursor-pointer " : "") + (
+                    active
+                      ? "bg-[#F9954E]/[0.13] text-[#E8832E] font-semibold"
+                      : "text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-zinc-800 cursor-pointer"
                   )}
                 >
-                  {canEdit && <GripVertical className="w-3.5 h-3.5 text-neutral-300 shrink-0" />}
                   <span className="text-base">{item.icon}</span>
                   <span className="flex-1 text-left truncate">{item.label}</span>
                 </button>
                 {canEdit && (
-                  <button onClick={() => onRemove(item.id)} title="메뉴에서 빼기"
-                    className="absolute right-1.5 top-1/2 -translate-y-1/2 w-6 h-6 rounded-full bg-rose-500/90 text-white text-xs font-bold grid place-items-center active:scale-90">
-                    ✕
+                  <button onClick={(e) => { e.stopPropagation(); onRemove(item.id); }} title="메뉴에서 빼기"
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-300 opacity-0 group-hover/item:opacity-100 hover:text-rose-500 active:scale-90 transition-all">
+                    <X className="w-3.5 h-3.5" />
                   </button>
                 )}
               </div>
@@ -321,23 +332,20 @@ function QuotaLine({ free, quota, onShowKey }: { free: boolean; quota: number | 
   const left = quota ?? FREE_LIMIT;
   return (
     <p className="text-sm text-neutral-500 dark:text-neutral-400">
-      🆓 무료로 쓰는 중 · 오늘 남은 <b className={left <= 5 ? "text-rose-500" : "text-[#E8832E]"}>{left}</b>/{FREE_LIMIT}회 — 더 쓰려면{" "}
-      <button onClick={onShowKey} className="underline font-semibold text-[#E8832E] dark:text-[#FBAA60]">내 키 넣기</button>(무제한)
+      🆓 무료로 쓰는 중 · 오늘 남은 <b className={left <= 5 ? "text-rose-500" : "text-[#E8832E]"}>{left}</b>/{FREE_LIMIT}회
     </p>
   );
 }
 
 /* ─────────────────────────── 홈 (위젯 대시보드 — EXE와 동일) ─────────────────────────── */
 const HOME_WIDGETS: { id: string; label: string; icon: string; desc: string }[] = [
-  { id: "assistant", label: "비서 바로가기", icon: "💬", desc: "비서에게 일 시키기" },
-  { id: "stats", label: "현황 요약", icon: "📊", desc: "결재대기 · 진행중 · 직원" },
-  { id: "finance", label: "이번 달 수지", icon: "💰", desc: "수익 · 비용 · 이익" },
-  { id: "recent", label: "최근 작업", icon: "🕑", desc: "최근 작업 목록" },
+  // 비서 바로가기 위젯 — 비서실 임시 제거로 함께 숨김
+  { id: "results", label: "내 결과", icon: "📚", desc: "생성한 결과 모아보기" },
   { id: "quicktools", label: "빠른 도구", icon: "⚡", desc: "켜둔 AI 도구 모음" },
   { id: "shortcuts", label: "메뉴 바로가기", icon: "🔗", desc: "켜둔 기능 바로가기" },
 ];
 const HOME_WIDGET_BY_ID = Object.fromEntries(HOME_WIDGETS.map((w) => [w.id, w]));
-const DEFAULT_HOME = ["assistant", "stats", "finance", "recent", "quicktools"];
+const DEFAULT_HOME = ["quicktools", "results"];
 const LS_HOME = "illo.web.homeWidgets";
 function loadHome(): string[] {
   try { const r = localStorage.getItem(LS_HOME); if (r) { const a = JSON.parse(r); if (Array.isArray(a)) return a.filter((id: string) => HOME_WIDGET_BY_ID[id]); } } catch { /* */ }
@@ -379,6 +387,19 @@ function Home({ enabled, onView, free, quota }: {
             <span className="text-white/80 text-xl">→</span>
           </button>
         );
+      case "results": {
+        const n = listResults().length;
+        return (
+          <button onClick={() => onView("history")} className="w-full bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl px-5 py-4 flex items-center gap-3.5 hover:border-[#F9954E] transition-colors">
+            <span className="w-11 h-11 rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center text-2xl shrink-0">📚</span>
+            <span className="text-left flex-1 min-w-0">
+              <span className="block font-extrabold text-[15px] text-neutral-900 dark:text-white">내 결과 보관함</span>
+              <span className="block text-[12px] text-neutral-500 dark:text-neutral-400 mt-0.5">{n > 0 ? `저장된 결과 ${n}개 · 다시 보기/복사/내보내기` : "생성한 결과가 여기에 모여요"}</span>
+            </span>
+            <span className="text-neutral-300 text-xl">→</span>
+          </button>
+        );
+      }
       case "stats":
         return (
           <div className="grid grid-cols-3 gap-2.5">
@@ -417,24 +438,24 @@ function Home({ enabled, onView, free, quota }: {
           <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-neutral-200 dark:border-zinc-800 overflow-hidden">
             <div className="px-4 py-3 flex items-center justify-between border-b border-neutral-100 dark:border-zinc-800">
               <span className="text-[13px] font-bold text-neutral-900 dark:text-white">최근 작업</span>
-              <button onClick={() => onView("assistant")} className="text-[11px] text-[#E8832E] font-semibold">전체 →</button>
+              <button onClick={() => onView("history")} className="text-[11px] text-[#E8832E] font-semibold">전체 →</button>
             </div>
             <div className="px-4 py-8 text-center text-[13px] text-neutral-400">아직 작업이 없어요.</div>
           </div>
         );
       case "quicktools": {
-        const tools = enabled.map((id) => ILLO_FEATURE_BY_ID[id]).filter((f) => f && f.kind === "tool").slice(0, 8) as IlloFeature[];
+        const tools = enabled.map((id) => ILLO_FEATURE_BY_ID[id]).filter((f) => f && f.kind === "tool").slice(0, 18) as IlloFeature[];
         return (
           <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-neutral-200 dark:border-zinc-800 p-4">
             <div className="text-[13px] font-bold text-neutral-900 dark:text-white mb-2.5">빠른 도구</div>
             {tools.length === 0 ? (
               <button onClick={() => onView("features")} className="text-[12px] text-[#E8832E] font-semibold">🧩 보관함에서 도구 꺼내오기 →</button>
             ) : (
-              <div className="grid grid-cols-4 gap-2.5">
+              <div className="grid grid-cols-6 sm:grid-cols-8 gap-1.5">
                 {tools.map((t) => (
-                  <button key={t.id} onClick={() => onView(t.id)} className="flex flex-col items-center gap-1.5 active:scale-95 transition">
-                    <span className="w-full aspect-square rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/30 border border-neutral-100 dark:border-zinc-800 grid place-items-center text-xl">{t.icon}</span>
-                    <span className="text-[10px] text-neutral-500 dark:text-neutral-400 text-center leading-tight truncate w-full">{t.label}</span>
+                  <button key={t.id} onClick={() => onView(t.id)} title={t.label} className="flex flex-col items-center gap-1 active:scale-95 transition">
+                    <span className="w-full aspect-square rounded-xl bg-[#FFF5EB] dark:bg-orange-950/30 border border-neutral-100 dark:border-zinc-800 grid place-items-center text-base">{t.icon}</span>
+                    <span className="text-[9px] text-neutral-500 dark:text-neutral-400 text-center leading-tight truncate w-full">{t.label}</span>
                   </button>
                 ))}
               </div>
@@ -558,6 +579,7 @@ function Assistant({ runAI, free, quota, onShowKey, userName }: {
         `사용자 이름은 '${userName}'입니다.\n\n[대화]\n${history}\n비서:`;
       const r = await runAI(prompt, "assistant");
       setMsgs((m) => [...m, { role: "assistant", content: r.text }]);
+      saveResult({ toolId: "assistant", toolLabel: "비서실", input: q, output: r.text });
     } catch (e) {
       const raw = e instanceof Error ? e.message : "오류가 발생했습니다.";
       if (/FREE_QUOTA_EXCEEDED/.test(raw)) setErr("오늘 무료 한도(하루 50회)를 다 쓰셨어요. 🌙 내일 다시 쓰거나, 내 Claude 키를 넣으면 무제한이에요.");
@@ -606,7 +628,7 @@ function Assistant({ runAI, free, quota, onShowKey, userName }: {
                 </div>
               )}
               {err && (
-                <p className="text-sm text-rose-500 text-center leading-relaxed break-keep">{err}{(/한도/.test(err)) && <> <button onClick={onShowKey} className="underline font-bold">키 넣기</button></>}</p>
+                <p className="text-sm text-rose-500 text-center leading-relaxed break-keep">{err}</p>
               )}
               <div ref={endRef} />
             </div>
@@ -630,41 +652,301 @@ function Assistant({ runAI, free, quota, onShowKey, userName }: {
   );
 }
 
+/* ─────────────────── 내 워크플로우 (n8n 노드 캔버스) ─────────────────── */
+const NODE_W = 170;
+const NODE_H = 96;
+function nodeTint(kind: string): string {
+  if (kind === "input") return "border-sky-300 bg-sky-50 dark:bg-sky-950/20 dark:border-sky-800";
+  if (kind === "deliver") return "border-emerald-300 bg-emerald-50 dark:bg-emerald-950/20 dark:border-emerald-800";
+  if (kind === "media") return "border-violet-300 bg-violet-50 dark:bg-violet-950/20 dark:border-violet-800";
+  return "border-[#F9954E]/45 bg-[#FFF9F3] dark:bg-orange-950/10";
+}
+
+function FlowBuilder() {
+  const [flows, setFlows] = useState<UserFlow[]>([]);
+  const [cur, setCur] = useState<UserFlow | null>(null);
+  const [connectFrom, setConnectFrom] = useState<string | null>(null);
+  const canvasRef = useRef<HTMLDivElement>(null);
+  const drag = useRef<{ id: string; dx: number; dy: number } | null>(null);
+
+  useEffect(() => { setFlows(listUserFlows()); }, []);
+
+  const openFlow = (f: UserFlow) => { setCur(JSON.parse(JSON.stringify(f))); setConnectFrom(null); };
+  const createNew = () => openFlow(blankFlow());
+  const save = () => { if (cur) { saveUserFlow(cur); setFlows(listUserFlows()); } };
+  const removeFlow = (id: string) => { deleteUserFlow(id); setFlows(listUserFlows()); if (cur?.id === id) setCur(null); };
+
+  function addNode(opt: FlowStepDetail) {
+    if (!cur) return;
+    const i = cur.nodes.length;
+    const n: FlowNode = {
+      id: newId(), kind: opt.kind, icon: opt.icon, title: opt.title, role: opt.role, detail: opt.detail,
+      x: 60 + (i % 4) * (NODE_W + 40), y: 70 + Math.floor(i / 4) * (NODE_H + 50),
+    };
+    setCur({ ...cur, nodes: [...cur.nodes, n] });
+  }
+  function delNode(id: string) {
+    if (!cur) return;
+    setCur({ ...cur, nodes: cur.nodes.filter((n) => n.id !== id), links: cur.links.filter((l) => l.from !== id && l.to !== id) });
+    if (connectFrom === id) setConnectFrom(null);
+  }
+  function onHandle(id: string) {
+    if (!cur) return;
+    if (!connectFrom) { setConnectFrom(id); return; }
+    if (connectFrom === id) { setConnectFrom(null); return; }
+    if (!cur.links.some((l) => l.from === connectFrom && l.to === id))
+      setCur({ ...cur, links: [...cur.links, { from: connectFrom, to: id }] });
+    setConnectFrom(null);
+  }
+  function delLink(from: string, to: string) {
+    if (cur) setCur({ ...cur, links: cur.links.filter((l) => !(l.from === from && l.to === to)) });
+  }
+  function onNodeDown(e: ReactMouseEvent, n: FlowNode) {
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    drag.current = { id: n.id, dx: e.clientX - rect.left - n.x, dy: e.clientY - rect.top - n.y };
+  }
+  function onMove(e: React.MouseEvent) {
+    if (!drag.current) return;
+    const rect = canvasRef.current?.getBoundingClientRect();
+    if (!rect) return;
+    const x = Math.max(0, e.clientX - rect.left - drag.current.dx);
+    const y = Math.max(0, e.clientY - rect.top - drag.current.dy);
+    const id = drag.current.id;
+    setCur((c) => (c ? { ...c, nodes: c.nodes.map((n) => (n.id === id ? { ...n, x, y } : n)) } : c));
+  }
+  const endDrag = () => { drag.current = null; };
+
+  // ── 목록 화면 ──
+  if (!cur) {
+    return (
+      <ViewScroll>
+        <div className="flex items-start justify-between gap-3 mb-1">
+          <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white">🛠️ 내 워크플로우</h1>
+          <button onClick={createNew} className="shrink-0 flex items-center gap-1.5 text-sm font-bold px-3.5 py-2 rounded-xl bg-[#F9954E] text-white hover:bg-[#E8832E] transition-colors"><Plus className="w-4 h-4" />새로 만들기</button>
+        </div>
+        <p className="text-neutral-500 dark:text-neutral-400 mb-7 break-keep">AI 단계를 노드로 연결해 <b>나만의 자동화</b>를 직접 설계하세요. (입력 → 조사 → 작성 → 검토 → 전송처럼)</p>
+        {flows.length === 0 ? (
+          <div className="text-center py-20 text-neutral-400">
+            <div className="text-4xl mb-3">🧩</div>
+            <p className="text-sm mb-4">아직 만든 워크플로우가 없어요.</p>
+            <button onClick={createNew} className="text-sm font-bold px-4 py-2 rounded-xl bg-[#F9954E] text-white hover:bg-[#E8832E]">+ 첫 워크플로우 만들기</button>
+          </div>
+        ) : (
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {flows.map((f) => (
+              <div key={f.id} className="rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 hover:border-[#F9954E]/50 hover:shadow-sm transition-all">
+                <div className="flex items-center justify-between gap-2">
+                  <button onClick={() => openFlow(f)} className="min-w-0 flex-1 text-left">
+                    <div className="text-sm font-bold text-neutral-900 dark:text-white truncate">{f.name || "(이름 없음)"}</div>
+                    <div className="text-[12px] text-neutral-400 mt-0.5">노드 {f.nodes.length}개 · 연결 {f.links.length}개</div>
+                  </button>
+                  <button onClick={() => removeFlow(f.id)} className="shrink-0 text-neutral-300 hover:text-rose-500 transition-colors"><X className="w-4 h-4" /></button>
+                </div>
+                <div className="flex flex-wrap gap-1 mt-3">
+                  {f.nodes.slice(0, 6).map((n) => (
+                    <span key={n.id} className="text-[10px] px-1.5 py-0.5 rounded-md bg-neutral-100 dark:bg-zinc-800 text-neutral-500">{n.icon} {n.title}</span>
+                  ))}
+                  {f.nodes.length > 6 && <span className="text-[10px] text-neutral-400">+{f.nodes.length - 6}</span>}
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </ViewScroll>
+    );
+  }
+
+  // ── 편집 캔버스 화면 ──
+  return (
+    <div className="flex flex-col h-full min-h-0">
+      {/* 툴바 */}
+      <div className="flex items-center gap-2 px-4 py-2.5 border-b border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shrink-0">
+        <button onClick={() => { setCur(null); setFlows(listUserFlows()); }} className="p-1.5 -ml-1 text-neutral-500 hover:text-[#E8832E]"><ArrowLeft className="w-5 h-5" /></button>
+        <input value={cur.name} onChange={(e) => setCur({ ...cur, name: e.target.value })}
+          className="min-w-0 flex-1 max-w-xs bg-transparent text-sm font-bold text-neutral-900 dark:text-white focus:outline-none border-b border-transparent focus:border-[#F9954E] py-1" placeholder="워크플로우 이름" />
+        <span className="ml-auto text-[11px] text-neutral-400 hidden sm:inline">노드 {cur.nodes.length} · 연결 {cur.links.length}</span>
+        <button onClick={() => removeFlow(cur.id)} className="text-[12px] text-neutral-400 hover:text-rose-500 px-2 py-1.5">삭제</button>
+        <button onClick={save} className="text-[12px] font-bold px-3.5 py-1.5 rounded-lg bg-[#F9954E] text-white hover:bg-[#E8832E]">저장</button>
+      </div>
+
+      <div className="flex flex-1 min-h-0">
+        {/* 노드 팔레트 */}
+        <div className="w-[150px] shrink-0 border-r border-neutral-200 dark:border-zinc-800 bg-neutral-50 dark:bg-zinc-950 overflow-y-auto p-2.5">
+          <div className="text-[10px] font-bold text-neutral-400 mb-2 px-0.5">＋ 노드 추가</div>
+          <div className="flex flex-col gap-1.5">
+            {STEP_PALETTE.map((opt, k) => (
+              <button key={k} onClick={() => addNode(opt)}
+                className="text-left text-[11px] px-2 py-1.5 rounded-lg border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 hover:border-[#F9954E] hover:text-[#E8832E] text-neutral-600 dark:text-neutral-300 transition-colors break-keep">
+                {opt.icon} {opt.title}
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 캔버스 */}
+        <div className="relative flex-1 min-w-0 overflow-auto bg-neutral-100 dark:bg-zinc-900" onMouseMove={onMove} onMouseUp={endDrag} onMouseLeave={endDrag}>
+          {connectFrom && (
+            <div className="sticky top-2 left-2 z-30 inline-block ml-2 mt-2 text-[11px] font-semibold text-[#E8832E] bg-[#FFF5EB] dark:bg-orange-950/40 px-2.5 py-1 rounded-lg shadow-sm">
+              연결할 다음 노드의 <b>왼쪽 점</b>을 클릭하세요 · <button onClick={() => setConnectFrom(null)} className="underline">취소</button>
+            </div>
+          )}
+          <div ref={canvasRef} className="relative" style={{ width: 1600, height: 1000, backgroundImage: "radial-gradient(circle, rgba(120,120,120,0.18) 1px, transparent 1px)", backgroundSize: "22px 22px" }}>
+            {/* 연결선 */}
+            <svg className="absolute inset-0 w-full h-full pointer-events-none" style={{ overflow: "visible" }}>
+              {cur.links.map((l, i) => {
+                const a = cur.nodes.find((n) => n.id === l.from);
+                const b = cur.nodes.find((n) => n.id === l.to);
+                if (!a || !b) return null;
+                const x1 = a.x + NODE_W, y1 = a.y + NODE_H / 2;
+                const x2 = b.x, y2 = b.y + NODE_H / 2;
+                const mx = (x1 + x2) / 2;
+                return (
+                  <g key={i}>
+                    <path d={`M ${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}`} fill="none" stroke="#F9954E" strokeWidth={2} />
+                    <circle cx={x2} cy={y2} r={3.5} fill="#F9954E" />
+                    <circle cx={(x1 + x2) / 2} cy={(y1 + y2) / 2} r={8} fill="white" stroke="#F9954E" strokeWidth={1}
+                      className="pointer-events-auto cursor-pointer" onClick={() => delLink(l.from, l.to)} />
+                    <text x={(x1 + x2) / 2} y={(y1 + y2) / 2 + 3} textAnchor="middle" fontSize={10} fill="#E8832E" className="pointer-events-none select-none">✕</text>
+                  </g>
+                );
+              })}
+            </svg>
+
+            {/* 노드 */}
+            {cur.nodes.map((n) => (
+              <div key={n.id} className={"absolute rounded-xl border-2 shadow-sm select-none " + nodeTint(n.kind) + (connectFrom === n.id ? " ring-2 ring-[#F9954E]" : "")}
+                style={{ left: n.x, top: n.y, width: NODE_W, minHeight: NODE_H }}>
+                {/* 입력 핸들(왼쪽) */}
+                <button onClick={() => onHandle(n.id)} title="여기로 연결 받기"
+                  className="absolute -left-2 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white border-2 border-[#F9954E] hover:scale-125 transition-transform z-10" />
+                {/* 출력 핸들(오른쪽) */}
+                <button onClick={() => onHandle(n.id)} title="여기서 연결 시작"
+                  className={"absolute -right-2 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-[#F9954E] hover:scale-125 transition-transform z-10 " + (connectFrom === n.id ? "bg-[#F9954E]" : "bg-white")} />
+                {/* 헤더(드래그 핸들) */}
+                <div onMouseDown={(e) => onNodeDown(e, n)} className="flex items-center justify-between px-2.5 pt-2 cursor-grab active:cursor-grabbing">
+                  <span className="text-[12px] font-bold text-neutral-900 dark:text-white truncate">{n.icon} {n.title}</span>
+                  <button onMouseDown={(e) => e.stopPropagation()} onClick={() => delNode(n.id)} className="shrink-0 text-neutral-300 hover:text-rose-500"><X className="w-3.5 h-3.5" /></button>
+                </div>
+                {n.role && <div className="px-2.5 text-[9px] text-[#E8832E] font-semibold">{n.role}</div>}
+                <div className="px-2.5 pb-2 pt-0.5 text-[10px] text-neutral-400 dark:text-neutral-500 leading-snug break-keep">{n.detail}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+      <div className="shrink-0 px-4 py-2 border-t border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-[10.5px] text-neutral-400 break-keep">
+        💡 노드 제목을 <b>드래그</b>해 옮기고, 오른쪽 점 클릭 → 다음 노드 왼쪽 점 클릭으로 <b>연결</b>. 연결선 가운데 <b>✕</b>로 삭제. 다 만들면 <b>저장</b>. (실행 연동은 곧 추가 예정)
+      </div>
+    </div>
+  );
+}
+
 /* ─────────────────────────── 기능 보관함 ─────────────────────────── */
 function FeatureManager({ enabled, onToggle, onView }: {
   enabled: string[]; onToggle: (id: string) => void; onView: (id: string) => void;
 }) {
+  const [openFlows, setOpenFlows] = useState<string[]>([]);
+  const toggleFlow = (id: string) => setOpenFlows((p) => (p.includes(id) ? p.filter((x) => x !== id) : [...p, id]));
+  const [q, setQ] = useState("");
+
+  // 검색 매칭: 이름·설명 부분일치 + 초성검색(ㄱㄴㄷ…)
+  const query = q.trim();
+  const qLower = query.toLowerCase();
+  const qIsJamo = /^[ㄱ-ㅎ]+$/.test(query);
+  const matchFeat = (f: IlloFeature) => {
+    if (!query) return true;
+    if (qIsJamo) return toInitials(f.label).includes(query);
+    return (f.label + " " + f.desc).toLowerCase().includes(qLower);
+  };
+  const allTools = ILLO_FEATURES.filter((f) => f.released && f.kind === "tool");
+  const matchCount = allTools.filter(matchFeat).length;
+
   return (
     <ViewScroll>
       <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white mb-1">🧩 기능 보관함</h1>
-      <p className="text-neutral-500 dark:text-neutral-400 mb-7 break-keep">필요한 기능만 켜서 왼쪽 메뉴에 추가하세요. 안 쓰는 건 꺼두면 깔끔해요.</p>
+      <p className="text-neutral-500 dark:text-neutral-400 mb-4 break-keep">필요한 기능만 켜서 왼쪽 메뉴에 추가하세요. 안 쓰는 건 꺼두면 깔끔해요.</p>
+
+      {/* 검색 */}
+      <div className="relative mb-6">
+        <Search className="w-4 h-4 text-neutral-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+        <input value={q} onChange={(e) => setQ(e.target.value)}
+          placeholder="기능 검색… (이름·설명, 초성 ㄱㄴㄷ 가능)"
+          className="w-full pl-10 pr-9 py-2.5 rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-sm focus:outline-none focus:border-[#F9954E]" />
+        {q && (
+          <button onClick={() => setQ("")} title="지우기"
+            className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 grid place-items-center rounded-full text-neutral-400 hover:text-neutral-700 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-zinc-800">✕</button>
+        )}
+      </div>
+      {query && <p className="-mt-3 mb-5 text-[12px] text-neutral-400">검색 결과 <b className="text-[#E8832E]">{matchCount}</b>개</p>}
+      {query && matchCount === 0 && (
+        <div className="text-center py-16 text-neutral-400">
+          <div className="text-3xl mb-2">🔍</div>
+          <p className="text-sm">'{query}'에 맞는 기능이 없어요.</p>
+        </div>
+      )}
 
       {ILLO_GROUP_ORDER.map((group) => {
-        // 공개(released)된 기능만 보여준다. 완성 전 기능은 숨김.
-        const feats = ILLO_FEATURES.filter((f) => f.group === group && f.released);
+        // 공개(released)된 "도구"만 보여준다(핵심/보관함 제외). 완성 전 기능은 숨김.
+        const feats = ILLO_FEATURES.filter((f) => f.group === group && f.released && f.kind === "tool" && matchFeat(f));
         if (!feats.length) return null;
         return (
           <section key={group} className="mb-8">
             <h2 className="text-sm font-bold text-neutral-400 mb-3">{group}</h2>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              {feats.map((f) => {
+            <div className="flex flex-col gap-2">
+              {feats.map((f, idx) => {
                 const on = enabled.includes(f.id);
+                const open = openFlows.includes(f.id);
+                const steps = loadCustomFlow(f.id) || flowDetailForTool(f.id);
+                const ini = initialConsonant(f.label);
+                const showHeader = idx === 0 || initialConsonant(feats[idx - 1].label) !== ini;
                 return (
-                  <div key={f.id} className={"flex items-center gap-3 p-3.5 rounded-2xl border transition-colors " + (on ? "bg-white dark:bg-zinc-900 border-[#F9954E]/50" : "bg-white dark:bg-zinc-900 border-neutral-200 dark:border-zinc-800")}>
-                    <span className="w-10 h-10 rounded-xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center text-lg shrink-0">{f.icon}</span>
-                    <div className="min-w-0 flex-1">
-                      <div className="text-sm font-bold text-neutral-900 dark:text-white">{f.label}</div>
-                      <div className="text-[12px] text-neutral-500 dark:text-neutral-400 truncate">{f.desc}</div>
+                  <Fragment key={f.id}>
+                  {showHeader && (
+                    <div className="flex items-center gap-2 mt-3 first:mt-0 mb-0.5 px-0.5">
+                      <span className="w-6 h-6 rounded-lg bg-[#F9954E]/12 text-[#E8832E] text-[12px] font-extrabold grid place-items-center">{ini}</span>
+                      <span className="h-px flex-1 bg-neutral-100 dark:bg-zinc-800" />
                     </div>
-                    {f.core ? (
-                      <span className="shrink-0 text-[11px] text-neutral-400 font-semibold">고정</span>
-                    ) : (
+                  )}
+                  <div className={"rounded-2xl border bg-white dark:bg-zinc-900 transition-all hover:shadow-sm " + (on ? "border-[#F9954E]/60" : "border-neutral-200 dark:border-zinc-800 hover:border-[#F9954E]/40")}>
+                    <div className="flex items-center gap-3 p-3.5">
+                      <span className="w-10 h-10 rounded-xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center text-lg shrink-0">{f.icon}</span>
+                      <div className="min-w-0 flex-1">
+                        <div className="text-sm font-bold text-neutral-900 dark:text-white flex items-center gap-1.5">{f.label}{on && hasCustomFlow(f.id) && <span className="text-[9.5px] text-neutral-400 font-normal">수정됨</span>}</div>
+                        <div className="text-[12px] text-neutral-500 dark:text-neutral-400 truncate">{f.desc}</div>
+                      </div>
+                      <button onClick={() => toggleFlow(f.id)} title="어떤 AI들이 연결됐는지 보기"
+                        className={"shrink-0 text-[11px] font-semibold px-2 py-1.5 rounded-lg whitespace-nowrap transition-colors " + (open ? "text-[#E8832E] bg-[#FFF5EB] dark:bg-orange-950/30" : "text-neutral-400 hover:text-[#E8832E]")}>
+                        {open ? "접기 ▴" : "AI 보기 ▾"}
+                      </button>
                       <button onClick={() => onToggle(f.id)}
                         className={"shrink-0 text-[12px] font-bold px-3 py-1.5 rounded-lg transition-colors " + (on ? "bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-rose-500" : "bg-[#F9954E] text-white hover:bg-[#E8832E]")}>
                         {on ? "끄기" : "추가"}
                       </button>
-                    )}
+                    </div>
+                    <div className={"overflow-hidden transition-all duration-300 ease-out " + (open ? "max-h-[40rem]" : "max-h-0")}>
+                      <div className="px-3.5 pb-3.5 pt-3 border-t border-neutral-100 dark:border-zinc-800">
+                        <div className="text-[10.5px] font-semibold text-neutral-400 mb-2.5">⚙️ 워크플로우 · {steps.length}단계 — 이 AI들이 협업해요</div>
+                        <div className="relative">
+                          {steps.map((s, i) => (
+                            <div key={i} className="flex gap-3 pb-3 last:pb-0 relative">
+                              {i < steps.length - 1 && <span className="absolute left-[9px] top-[18px] bottom-0 w-px bg-neutral-200 dark:bg-zinc-700" />}
+                              <span className="shrink-0 w-[18px] h-[18px] rounded-full bg-[#F9954E]/15 text-[#E8832E] text-[10px] font-bold grid place-items-center z-10 mt-0.5">{i + 1}</span>
+                              <div className="min-w-0 flex-1">
+                                <div className="flex items-center gap-1.5">
+                                  <span className="text-[12.5px] font-semibold text-neutral-900 dark:text-white">{s.icon} {s.title}</span>
+                                  {s.role && <span className="text-[9.5px] text-neutral-400">{s.role}</span>}
+                                </div>
+                                <div className="text-[11px] text-neutral-400 dark:text-neutral-500 leading-snug break-keep mt-0.5">{s.detail}</div>
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                        <p className="mt-2.5 text-[10.5px] text-neutral-400 break-keep">＊ 편집(단계 추가·삭제)은 <b>추가</b> 후 왼쪽 메뉴에서 이 도구를 열면 가능해요.</p>
+                      </div>
+                    </div>
                   </div>
+                  </Fragment>
                 );
               })}
             </div>
@@ -672,8 +954,58 @@ function FeatureManager({ enabled, onToggle, onView }: {
         );
       })}
       <p className="text-[11px] text-neutral-400 dark:text-zinc-600 mt-4 text-center break-keep">
-        더 많은 기능(이미지·영상·음성·자동화)은 완성되는 대로 하나씩 열려요. 🔜
+        <b>AI 보기</b>로 어떤 AI들이 연계됐는지 확인하세요. 편집(단계 추가·삭제)은 추가한 뒤 도구 안에서.<br />더 많은 기능(이미지·영상·음성·자동화)은 완성되는 대로 하나씩 열려요. 🔜
       </p>
+    </ViewScroll>
+  );
+}
+
+/* ─────────────────────────── 결과 보관함 ─────────────────────────── */
+function HistoryView({ onBack }: { onBack: () => void }) {
+  const [items, setItems] = useState<IlloResult[]>([]);
+  const [openId, setOpenId] = useState<string | null>(null);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
+  useEffect(() => { setItems(listResults()); }, []);
+  const refresh = () => setItems(listResults());
+  function fmt(ts: number) { const d = new Date(ts); return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`; }
+  async function copy(t: string, id: string) { try { await navigator.clipboard.writeText(t); setCopiedId(id); setTimeout(() => setCopiedId(null), 1500); } catch { /* */ } }
+  return (
+    <ViewScroll>
+      <button onClick={onBack} className="inline-flex items-center gap-1.5 text-sm font-semibold text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] mb-4"><ArrowLeft className="w-4 h-4" /> 홈</button>
+      <div className="flex items-center justify-between mb-1">
+        <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white">📚 내 결과 보관함</h1>
+        {items.length > 0 && <button onClick={() => { clearResults(); refresh(); }} className="text-[12px] text-neutral-400 hover:text-rose-500">전체 삭제</button>}
+      </div>
+      <p className="text-neutral-500 dark:text-neutral-400 mb-6 text-sm break-keep">도구·비서실에서 만든 결과가 자동 저장돼요 (이 브라우저, 최근 100개).</p>
+      {items.length === 0 ? (
+        <div className="text-center py-16 text-neutral-400 text-sm break-keep">아직 저장된 결과가 없어요.<br />도구나 비서실에서 무언가 만들어보세요.</div>
+      ) : (
+        <div className="space-y-2.5">
+          {items.map((it) => {
+            const open = openId === it.id;
+            return (
+              <div key={it.id} className="rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden">
+                <button onClick={() => setOpenId(open ? null : it.id)} className="w-full flex items-center gap-2 p-3.5 text-left">
+                  <span className="text-[11px] font-bold text-[#E8832E] bg-[#FFF5EB] dark:bg-orange-950/30 px-2 py-0.5 rounded shrink-0">{it.toolLabel}</span>
+                  <span className="text-[11px] text-neutral-400 shrink-0">{fmt(it.ts)}</span>
+                  <span className="text-[12.5px] text-neutral-500 dark:text-neutral-400 truncate flex-1 min-w-0">{it.output.replace(/\s+/g, " ").slice(0, 70)}</span>
+                  <span className="text-[11px] text-neutral-400 shrink-0">{open ? "▴" : "▾"}</span>
+                </button>
+                {open && (
+                  <div className="px-3.5 pb-3.5">
+                    <pre className="text-[13px] text-neutral-800 dark:text-neutral-200 whitespace-pre-wrap break-words font-sans leading-relaxed bg-neutral-50 dark:bg-zinc-800/50 rounded-xl p-3">{it.output}</pre>
+                    <div className="flex items-center gap-3 mt-2.5">
+                      <button onClick={() => copy(it.output, it.id)} className="inline-flex items-center gap-1.5 text-xs font-bold text-[#F9954E]">{copiedId === it.id ? <><Check className="w-3.5 h-3.5" /> 복사됨</> : <><Copy className="w-3.5 h-3.5" /> 복사</>}</button>
+                      <button onClick={() => downloadText(`${it.toolLabel}.txt`, it.output)} className="inline-flex items-center gap-1.5 text-xs font-bold text-neutral-400 hover:text-[#F9954E]"><Download className="w-3.5 h-3.5" /> 다운로드</button>
+                      <button onClick={() => { deleteResult(it.id); refresh(); }} className="ml-auto inline-flex items-center gap-1.5 text-xs font-bold text-neutral-400 hover:text-rose-500"><X className="w-3.5 h-3.5" /> 삭제</button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            );
+          })}
+        </div>
+      )}
     </ViewScroll>
   );
 }
@@ -702,27 +1034,34 @@ function Settings({ keyVal, free, onShowKey, onRemoveKey, onLogout, userName, us
         </div>
       </Section>
 
-      <Section title="AI 키">
-        {free ? (
-          <div className="flex items-center justify-between gap-3">
-            <p className="text-[13px] text-neutral-600 dark:text-neutral-300 break-keep">🆓 무료로 사용 중 — 하루 50회. 더 쓰려면 내 키를 넣으면 무제한이에요.</p>
-            <button onClick={onShowKey} className="shrink-0 text-[13px] font-bold text-white bg-[#F9954E] hover:bg-[#E8832E] rounded-lg px-3 py-1.5">키 넣기</button>
-          </div>
-        ) : (
-          <div>
-            <div className="flex items-center justify-between gap-3 mb-3">
-              <div>
-                <div className="text-[13px] font-semibold text-neutral-900 dark:text-white">✓ 내 키로 무제한 사용 중</div>
-                <div className="text-[12px] font-mono text-neutral-400 mt-0.5">{masked}</div>
+      <Section title="요금제">
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {PLANS.map((p) => {
+            const current = (free ? "free" : "pro") === p.id;
+            return (
+              <div key={p.id} className={"rounded-2xl border p-4 " + (current ? "border-[#F9954E] bg-[#FFF9F3] dark:bg-orange-950/10" : "border-neutral-200 dark:border-zinc-800")}>
+                <div className="flex items-center justify-between mb-1">
+                  <span className="text-sm font-extrabold text-neutral-900 dark:text-white">{p.label}</span>
+                  {current ? <span className="text-[10px] font-bold text-white bg-[#F9954E] rounded-full px-2 py-0.5">사용 중</span>
+                    : p.highlight ? <span className="text-[10px] font-bold text-[#E8832E]">추천</span> : null}
+                </div>
+                <div className="text-[13px] font-bold text-neutral-700 dark:text-neutral-200">{p.price}</div>
+                <div className="text-[11px] text-neutral-400 mb-2.5">{p.limit} · {p.model}</div>
+                <ul className="space-y-1">
+                  {p.perks.map((perk, i) => (
+                    <li key={i} className="text-[11.5px] text-neutral-600 dark:text-neutral-300 flex gap-1.5 break-keep"><span className="text-[#E8832E]">✓</span>{perk}</li>
+                  ))}
+                </ul>
+                {p.id === "pro" && !current && (
+                  <button onClick={onShowKey} className="w-full mt-3 text-[12px] font-bold py-2 rounded-xl bg-[#F9954E] text-white hover:bg-[#E8832E]">프로로 업그레이드</button>
+                )}
               </div>
-              <div className="flex gap-2 shrink-0">
-                <button onClick={onShowKey} className="text-[13px] font-bold text-[#E8832E] border border-[#F9954E]/40 rounded-lg px-3 py-1.5">변경</button>
-                <button onClick={onRemoveKey} className="text-[13px] font-bold text-neutral-500 border border-neutral-200 dark:border-zinc-700 rounded-lg px-3 py-1.5">삭제</button>
-              </div>
-            </div>
-            <p className="text-[12px] text-neutral-400 leading-relaxed break-keep">🤖 AI 모델은 <b className="text-neutral-500 dark:text-neutral-300">작업에 맞게 자동 선택</b>돼요. 따로 고르지 않아도 각 기능에 가장 잘 맞는 AI가 일합니다.</p>
-          </div>
-        )}
+            );
+          })}
+        </div>
+        <p className="text-[11px] text-neutral-400 mt-3 break-keep">
+          🤖 AI는 작업에 가장 잘 맞는 모델로 <b>자동 연결</b>돼요(설정 불필요). 결제(카드)는 준비 중이라, 지금은 <b>본인 API 키</b>를 넣으면 프로처럼 무제한·고급 모델로 쓸 수 있어요.
+        </p>
       </Section>
 
       <Section title="테마">
@@ -757,28 +1096,110 @@ function Section({ title, children }: { title: string; children: React.ReactNode
   );
 }
 
+/* ─────────────────── 기본 생성 (이미지·영상) — 패키지 아님 ─────────────────── */
+function BasicGen({ kind, free, quota, setQuota }: {
+  kind: "image" | "video"; free: boolean; quota: number | null; setQuota: (n: number) => void;
+}) {
+  const isImg = kind === "image";
+  const [input, setInput] = useState("");
+  const [out, setOut] = useState<string | null>(null);
+  const [busy, setBusy] = useState(false);
+  const [err, setErr] = useState("");
+  async function run() {
+    if (!input.trim() || busy) return;
+    setBusy(true); setErr(""); setOut(null);
+    try {
+      const u = getFirebaseAuth().currentUser;
+      const idToken = u ? await u.getIdToken() : undefined;
+      if (!idToken) throw new Error("LOGIN_REQUIRED");
+      const r = await callMedia({ idToken, kind, prompt: input.trim() });
+      setOut(isImg ? r.image || null : r.video || null);
+      if (typeof r.quotaRemaining === "number") setQuota(r.quotaRemaining);
+      if (!(isImg ? r.image : r.video)) setErr("생성에 실패했어요. 잠시 후 다시 시도해 주세요.");
+    } catch (e) {
+      const raw = e instanceof Error ? e.message : "오류가 발생했습니다.";
+      if (/FREE_QUOTA_EXCEEDED/.test(raw)) setErr("오늘 무료 한도(하루 30회)를 다 쓰셨어요. 🌙 내일 다시 이용해 주세요.");
+      else if (/LOGIN_REQUIRED/.test(raw)) setErr("로그인이 필요합니다.");
+      else setErr(raw);
+    } finally { setBusy(false); }
+  }
+  return (
+    <ViewScroll>
+      <div className="flex items-center gap-3 mb-5">
+        <span className="w-11 h-11 rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center text-xl">{isImg ? "🎨" : "🎬"}</span>
+        <div>
+          <h1 className="text-lg font-extrabold text-neutral-900 dark:text-white leading-tight">{isImg ? "이미지 생성" : "영상 생성"}</h1>
+          <p className="text-xs text-neutral-500 dark:text-neutral-400">글로 설명하면 {isImg ? "이미지를" : "짧은 영상을"} 만들어드려요</p>
+        </div>
+      </div>
+      <label className="block text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-2">{isImg ? "어떤 이미지를 원하세요?" : "어떤 영상을 원하세요?"}</label>
+      <textarea value={input} onChange={(e) => setInput(e.target.value)} rows={4}
+        placeholder={isImg ? "예) 따뜻한 감성의 홈카페 디저트 사진, 부드러운 자연광" : "예) 빵이 오븐에서 부풀어 오르는 클로즈업, 따뜻한 조명"}
+        className="w-full px-4 py-3 rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-sm focus:outline-none focus:border-[#F9954E] resize-y mb-4" />
+      {free && <p className="text-[12px] text-neutral-400 mb-2 text-center">🆓 무료 · 오늘 남은 <b className={(quota ?? FREE_LIMIT) <= 5 ? "text-rose-500" : "text-[#E8832E]"}>{quota ?? FREE_LIMIT}</b> / {FREE_LIMIT}회</p>}
+      <button onClick={run} disabled={busy || !input.trim()}
+        className="w-full py-3.5 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold flex items-center justify-center gap-2 disabled:opacity-50 transition-colors">
+        {busy ? <><Loader2 className="w-5 h-5 animate-spin" /> 생성 중…{!isImg && " (영상은 1~2분)"}</> : <><Sparkles className="w-5 h-5" /> {isImg ? "이미지 생성" : "영상 생성"}</>}
+      </button>
+      {err && <p className="text-sm text-rose-500 mt-4 break-keep">{err}</p>}
+      {out && (
+        <div className="mt-6">
+          {isImg
+            ? <img src={out} alt="생성 이미지" className="w-full max-w-lg rounded-2xl border border-neutral-200 dark:border-zinc-800" />
+            : <video src={out} controls className="w-full max-w-lg rounded-2xl border border-neutral-200 dark:border-zinc-800" />}
+          <a href={out} target="_blank" rel="noreferrer" className="inline-block mt-2 text-[12px] font-bold text-[#E8832E] hover:underline">원본 다운로드/열기 ↗</a>
+        </div>
+      )}
+    </ViewScroll>
+  );
+}
+
 /* ─────────────────────────── AI 도구 실행 ─────────────────────────── */
 function ToolView({ tool, runAI, free, quota, onShowKey, onBack }: {
-  tool: typeof ILLO_TOOL_BY_ID[string]; runAI: (p: string, featureId: string) => Promise<{ text: string }>;
+  tool: typeof ILLO_TOOL_BY_ID[string];
+  runAI: (p: string, featureId: string, rawInput?: string) => Promise<{ text: string; image?: string | null; video?: string | null; steps?: string[] }>;
   free: boolean; quota: number | null; onShowKey: () => void; onBack: () => void;
 }) {
   const [input, setInput] = useState("");
   const [picked, setPicked] = useState<string[]>(tool.defaultAspects || []);
   const [result, setResult] = useState("");
+  const [image, setImage] = useState<string | null>(null);
+  const [video, setVideo] = useState<string | null>(null);
+  const [steps, setSteps] = useState<string[]>([]);
   const [busy, setBusy] = useState(false);
   const [err, setErr] = useState("");
   const [copied, setCopied] = useState(false);
+  const [tone, setToneText] = useState("");      // 내 고정 말투/스타일
+  const [toneOpen, setToneOpen] = useState(false);
+  const [length, setLength] = useState(tool.defaultLength || "");  // 길이(단일 선택)
+  const [flow, setFlow] = useState<FlowStepDetail[]>([]);          // 이 도구의 워크플로우
+  const [wfEdit, setWfEdit] = useState(false);
+  const wfDrag = useRef<number | null>(null);
+  useEffect(() => {
+    const t = getTone(tool.id); if (t) { setToneText(t); setToneOpen(true); }
+    setFlow(loadCustomFlow(tool.id) || flowDetailForTool(tool.id));
+  }, []);
+
+  function writeWf(steps: FlowStepDetail[]) { setFlow(steps); saveCustomFlow(tool.id, steps); }
+  function moveWf(i: number, dir: number) { const s = [...flow]; const j = i + dir; if (j < 0 || j >= s.length) return; [s[i], s[j]] = [s[j], s[i]]; writeWf(s); }
+  function removeWf(i: number) { writeWf(flow.filter((_, k) => k !== i)); }
+  function addWf(opt: FlowStepDetail) { writeWf([...flow, { ...opt }]); }
+  function resetWf() { clearCustomFlow(tool.id); setFlow(flowDetailForTool(tool.id)); }
 
   function togglePick(a: string) { setPicked((p) => (p.includes(a) ? p.filter((x) => x !== a) : [...p, a])); }
   async function run() {
     if (!input.trim() || busy) return;
-    setBusy(true); setErr(""); setResult("");
+    setBusy(true); setErr(""); setResult(""); setImage(null); setVideo(null); setSteps([]);
     try {
-      const r = await runAI(tool.buildPrompt(input, picked), tool.id);
+      const picked2 = length ? [...picked, length] : picked;
+      const prompt = tool.buildPrompt(input, picked2) + (tone.trim() ? `\n\n[항상 지킬 말투·스타일 — 반드시 반영]\n${tone.trim()}` : "");
+      const r = await runAI(prompt, tool.id, input);
       setResult(r.text);
+      setImage(r.image || null); setVideo(r.video || null); setSteps(r.steps || []);
+      saveResult({ toolId: tool.id, toolLabel: tool.title, input, output: r.text });
     } catch (e) {
       const raw = e instanceof Error ? e.message : "오류가 발생했습니다.";
-      if (/FREE_QUOTA_EXCEEDED/.test(raw)) setErr("오늘 무료 한도(하루 50회)를 다 쓰셨어요. 🌙 내일 다시 쓰거나, 내 Claude 키를 넣으면 무제한이에요.");
+      if (/FREE_QUOTA_EXCEEDED/.test(raw)) setErr("오늘 무료 한도(하루 30회)를 다 쓰셨어요. 🌙 내일 다시 이용해 주세요.");
       else if (/LOGIN_REQUIRED/.test(raw)) setErr("로그인이 필요합니다.");
       else setErr(raw);
     } finally { setBusy(false); }
@@ -815,31 +1236,137 @@ function ToolView({ tool, runAI, free, quota, onShowKey, onBack }: {
         </div>
       )}
 
+      {tool.lengthOptions && (
+        <div className="mb-5">
+          <div className="text-[11px] font-semibold text-neutral-400 mb-1.5">길이 <span className="font-normal">(하나만 선택)</span></div>
+          <div className="flex flex-wrap gap-2">
+            {tool.lengthOptions.map((l) => (
+              <button key={l} onClick={() => setLength(length === l ? "" : l)}
+                className={"px-3 py-1.5 rounded-full text-[13px] font-semibold border transition-colors " + (length === l ? "bg-[#F9954E] border-[#F9954E] text-white" : "bg-white dark:bg-zinc-900 border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-400")}>
+                {l}
+              </button>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 내 고정 말투/스타일 — "추가"했을 때만 입력칸 표시, 저장되면 매번 자동 적용 */}
+      {toneOpen ? (
+        <div className="mb-4">
+          <div className="flex items-center justify-between mb-1.5">
+            <label className="text-[12px] font-bold text-neutral-600 dark:text-neutral-300">✍️ 내 고정 말투·스타일 <span className="font-normal text-neutral-400">— 매번 자동 적용</span></label>
+            <button onClick={() => { setToneText(""); saveTone(tool.id, ""); setToneOpen(false); }} className="text-[11px] text-neutral-400 hover:text-rose-500">제거</button>
+          </div>
+          <textarea value={tone} onChange={(e) => { setToneText(e.target.value); saveTone(tool.id, e.target.value); }} rows={2}
+            placeholder="예) 항상 정중한 존댓말, 이모지 적게, 브랜드명 '일로' 사용, 너무 길지 않게"
+            className="w-full px-3.5 py-2.5 rounded-xl bg-[#FFF8F1] dark:bg-orange-950/10 border border-[#F9954E]/40 text-[13px] focus:outline-none focus:border-[#F9954E] resize-y" />
+        </div>
+      ) : (
+        <button onClick={() => setToneOpen(true)} className="mb-4 inline-flex items-center gap-1.5 text-[12px] font-semibold text-neutral-400 hover:text-[#E8832E] border border-dashed border-neutral-300 dark:border-zinc-700 rounded-lg px-3 py-1.5">
+          <Plus className="w-3.5 h-3.5" /> 내 고정 말투·스타일 추가
+        </button>
+      )}
+
       {free && <p className="text-[12px] text-neutral-400 dark:text-zinc-500 mb-2 text-center">🆓 무료 · 오늘 남은 <b className={(quota ?? FREE_LIMIT) <= 5 ? "text-rose-500" : "text-[#E8832E]"}>{quota ?? FREE_LIMIT}</b> / {FREE_LIMIT}회</p>}
+      {busy && <p className="text-[11px] text-neutral-400 mt-2 text-center break-keep">여러 AI가 순서대로 작업 중이에요 — 리서치 → 작성 → 검토 → 이미지/영상. 잠시만요…</p>}
       <button onClick={run} disabled={busy || !input.trim()}
         className="w-full py-3.5 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold flex items-center justify-center gap-2 disabled:opacity-50 transition-colors">
         {busy ? <><Loader2 className="w-5 h-5 animate-spin" /> 생성 중…</> : <><Sparkles className="w-5 h-5" /> {tool.cta}</>}
       </button>
 
-      {err && <p className="text-sm text-rose-500 mt-4 leading-relaxed break-keep">{err}{(/한도/.test(err)) && <> <button onClick={onShowKey} className="underline font-bold">키 넣기</button></>}</p>}
+      {err && <p className="text-sm text-rose-500 mt-4 leading-relaxed break-keep">{err}</p>}
 
       {result && (
         <div className="mt-6 rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden">
           <div className="flex items-center justify-between px-4 py-2.5 border-b border-neutral-100 dark:border-zinc-800">
-            <span className="text-xs font-bold text-neutral-400">결과</span>
-            <button onClick={copyResult} className="inline-flex items-center gap-1.5 text-xs font-bold text-[#F9954E]">
-              {copied ? <><Check className="w-3.5 h-3.5" /> 복사됨</> : <><Copy className="w-3.5 h-3.5" /> 복사</>}
-            </button>
+            <span className="text-xs font-bold text-neutral-400">결과 · 보관함에 저장됨</span>
+            <span className="flex items-center gap-3">
+              <button onClick={() => downloadText(`${tool.title}.txt`, result)} className="inline-flex items-center gap-1.5 text-xs font-bold text-neutral-400 hover:text-[#F9954E]">
+                <Download className="w-3.5 h-3.5" /> 다운로드
+              </button>
+              <button onClick={copyResult} className="inline-flex items-center gap-1.5 text-xs font-bold text-[#F9954E]">
+                {copied ? <><Check className="w-3.5 h-3.5" /> 복사됨</> : <><Copy className="w-3.5 h-3.5" /> 복사</>}
+              </button>
+            </span>
           </div>
+          {steps.length > 0 && (
+            <div className="flex flex-wrap gap-1.5 px-4 pt-3">
+              {steps.map((s, i) => (
+                <span key={i} className="text-[10.5px] font-semibold text-[#E8832E] bg-[#FFF5EB] dark:bg-orange-950/30 rounded-full px-2 py-0.5">{s}</span>
+              ))}
+            </div>
+          )}
           <pre className="px-4 py-4 text-sm text-neutral-800 dark:text-neutral-200 whitespace-pre-wrap break-words font-sans leading-relaxed">{result}</pre>
+          {image && (
+            <div className="px-4 pb-4">
+              <div className="text-[11px] font-bold text-neutral-400 mb-1.5">🎨 생성된 이미지 (fal.ai)</div>
+              <img src={image} alt="생성 이미지" className="w-full max-w-md rounded-xl border border-neutral-200 dark:border-zinc-800" />
+              <a href={image} target="_blank" rel="noreferrer" className="inline-block mt-1.5 text-[11px] text-[#E8832E] hover:underline">원본 열기 ↗</a>
+            </div>
+          )}
+          {video && (
+            <div className="px-4 pb-4">
+              <div className="text-[11px] font-bold text-neutral-400 mb-1.5">🎬 생성된 영상 (fal.ai)</div>
+              <video src={video} controls className="w-full max-w-md rounded-xl border border-neutral-200 dark:border-zinc-800" />
+              <a href={video} target="_blank" rel="noreferrer" className="inline-block mt-1.5 text-[11px] text-[#E8832E] hover:underline">원본 열기 ↗</a>
+            </div>
+          )}
         </div>
       )}
+
+      {/* 이 도구의 AI 워크플로우 — 보기 + 편집 (등록한 도구에서만) */}
+      <div className="mt-8 rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4">
+        <div className="flex items-center justify-between mb-3">
+          <span className="text-[12px] font-bold text-neutral-500 dark:text-neutral-300">⚙️ 이 작업의 AI 워크플로우 · {flow.length}단계</span>
+          <span className="flex items-center gap-3 shrink-0">
+            {hasCustomFlow(tool.id) && <button onClick={resetWf} className="text-[11px] text-neutral-400 hover:text-rose-500">기본값</button>}
+            <button onClick={() => setWfEdit((v) => !v)} className={"text-[11px] font-semibold " + (wfEdit ? "text-[#E8832E]" : "text-neutral-400 hover:text-[#E8832E]")}>{wfEdit ? "완료" : "편집"}</button>
+          </span>
+        </div>
+        <div className="relative">
+          {flow.map((s, i) => (
+            <div key={i}
+              draggable={wfEdit}
+              onDragStart={() => { wfDrag.current = i; }}
+              onDragOver={(e) => { if (wfEdit) e.preventDefault(); }}
+              onDrop={() => { const f = wfDrag.current; if (f != null && f !== i) { const s2 = [...flow]; const [m] = s2.splice(f, 1); s2.splice(i, 0, m); writeWf(s2); } wfDrag.current = null; }}
+              className={"flex gap-3 pb-3 last:pb-0 relative " + (wfEdit ? "cursor-grab active:cursor-grabbing" : "")}>
+              {!wfEdit && i < flow.length - 1 && <span className="absolute left-[9px] top-[18px] bottom-0 w-px bg-neutral-200 dark:bg-zinc-700" />}
+              <span className="shrink-0 w-[18px] h-[18px] rounded-full bg-[#F9954E]/15 text-[#E8832E] text-[10px] font-bold grid place-items-center z-10 mt-0.5">{i + 1}</span>
+              <div className="min-w-0 flex-1">
+                <div className="flex items-center gap-1.5">
+                  <span className="text-[12.5px] font-semibold text-neutral-900 dark:text-white">{s.icon} {s.title}</span>
+                  {s.role && <span className="text-[9.5px] text-neutral-400">{s.role}</span>}
+                </div>
+                <div className="text-[11px] text-neutral-400 dark:text-neutral-500 leading-snug break-keep mt-0.5">{s.detail}</div>
+              </div>
+              {wfEdit && (
+                <span className="shrink-0 flex items-start gap-1.5 text-neutral-300 dark:text-zinc-600 pt-0.5">
+                  <button onClick={() => moveWf(i, -1)} disabled={i === 0} className="hover:text-[#E8832E] disabled:opacity-25 transition-colors"><ChevronUp className="w-3.5 h-3.5" /></button>
+                  <button onClick={() => moveWf(i, 1)} disabled={i === flow.length - 1} className="hover:text-[#E8832E] disabled:opacity-25 transition-colors"><ChevronDown className="w-3.5 h-3.5" /></button>
+                  <button onClick={() => removeWf(i)} className="hover:text-rose-500 transition-colors"><X className="w-3.5 h-3.5" /></button>
+                </span>
+              )}
+            </div>
+          ))}
+        </div>
+        {wfEdit && (
+          <div className="mt-2 pt-3 border-t border-dashed border-neutral-200 dark:border-zinc-800">
+            <div className="text-[10px] text-neutral-400 mb-2">＋ 단계 추가</div>
+            <div className="flex flex-wrap gap-1.5">
+              {STEP_PALETTE.map((opt, k) => (
+                <button key={k} onClick={() => addWf(opt)} className="text-[11px] text-neutral-500 dark:text-neutral-400 px-2 py-1 rounded-md border border-neutral-200 dark:border-zinc-700 hover:border-[#F9954E] hover:text-[#E8832E] transition-colors">+ {opt.icon} {opt.title}</button>
+              ))}
+            </div>
+          </div>
+        )}
+      </div>
     </ViewScroll>
   );
 }
 
 /* ─────────────────────────── 로그인 (EXE와 동일 디자인) ─────────────────────────── */
-function IlloLogin({ onShowGuide }: { onShowGuide: () => void }) {
+function IlloLogin({ onShowGuide, onDevPreview }: { onShowGuide: () => void; onDevPreview?: () => void }) {
   const { login, signup } = useAuth();
   const [mode, setMode] = useState<"login" | "signup">("login");
   const [email, setEmail] = useState("");
@@ -924,6 +1451,11 @@ function IlloLogin({ onShowGuide }: { onShowGuide: () => void }) {
       </div>
       <button onClick={onShowGuide} className="block mx-auto mt-4 text-[12.5px] font-bold text-[#E8832E] dark:text-[#FBAA60]">🔰 일로가 처음이신가요? 시작 가이드</button>
       <p className="text-[11px] text-neutral-400 dark:text-zinc-600 text-center mt-3 leading-relaxed">로그인하면 AI 도구를 하루 50회 무료로 쓸 수 있어요.</p>
+      {onDevPreview && (
+        <button onClick={onDevPreview} className="block w-full mt-4 py-2 rounded-xl border border-dashed border-neutral-300 dark:border-zinc-700 text-[12px] font-semibold text-neutral-400 hover:text-[#E8832E] hover:border-[#F9954E] transition-colors">
+          🔧 로그인 없이 미리보기 (개발용 · localhost)
+        </button>
+      )}
     </div>
   );
 }

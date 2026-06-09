@@ -49,33 +49,47 @@ export interface ModelPick {
   note?: string;
 }
 
-export const MATRIX_UPDATED = '2026-06-07'; // 마지막 갱신일 (매달 검토)
+export const MATRIX_UPDATED = '2026-06-08'; // 마지막 갱신일 (매달 검토)
 
-// ───────────────────────── 텍스트 기능별 매칭 (비용 최적화) ─────────────────────────
-// 등급: local(PC무료) / cheap(초저가 클라우드) / mid(가성비) / premium(고급)
-// PC 데스크톱은 local 모델(무료)로, 웹/유료는 provider+model로 동작.
-// (현재 웹 실행은 텍스트=Claude 폴백. Gemini 등 실제 연동은 단계적으로 붙임)
+// ───────────────────────── 텍스트 기능별 매칭 (통일 · 한 단계 낮춤) ─────────────────────────
+// 정책: 무료·유료가 "같은 모델"을 쓴다(차이는 횟수뿐 — 무료 30회/일, 유료 무제한).
+//   비용 균형을 위해 이전보다 한 단계씩 낮은 모델로 연결:
+//   - 고난도 추론(전략·IR·사업계획): Opus 4.8 → Claude Sonnet 4.6
+//   - 창의·장문 작성(블로그·상세·보도 등): Sonnet 4.6 → Claude Haiku 4.5
+//   - 리서치/SEO/대량분석/비전: Gemini 2.5 Pro → Gemini 2.5 Flash
+//   - 교차검토: GPT-5.5 → Gemini 2.5 Flash(작성과 다른 계열로 검증)
 export const FEATURE_PICK: Record<string, ModelPick> = {
-  // 🟢 단순 — 로컬(PC 무료) / 웹은 초저가
-  assistant: { provider: 'anthropic', model: 'claude-haiku-4-5',       domain: 'text', tier: 'cheap', local: 'exaone3.5:7.8b', note: '비서: 무료풀 Haiku, PC는 로컬' },
-  summary:   { provider: 'gemini',    model: 'gemini-2.5-flash-lite',  domain: 'text', tier: 'cheap', local: 'exaone3.5:7.8b', note: '요약: 초저가, PC는 로컬' },
-  translate: { provider: 'gemini',    model: 'gemini-2.5-flash-lite',  domain: 'text', tier: 'cheap', local: 'exaone3.5:7.8b', note: '번역: 초저가, PC는 로컬' },
-  mail:      { provider: 'gemini',    model: 'gemini-2.5-flash-lite',  domain: 'text', tier: 'cheap', local: 'exaone3.5:7.8b', note: '메일: 초저가, PC는 로컬' },
-  sns:       { provider: 'gemini',    model: 'gemini-2.5-flash-lite',  domain: 'text', tier: 'cheap', local: 'exaone3.5:7.8b', note: 'SNS: 초저가, PC는 로컬' },
-  reply:     { provider: 'gemini',    model: 'gemini-2.5-flash-lite',  domain: 'text', tier: 'cheap', local: 'exaone3.5:7.8b', note: 'CS답변: 초저가, PC는 로컬' },
-  meeting:   { provider: 'gemini',    model: 'gemini-2.5-flash-lite',  domain: 'text', tier: 'cheap', local: 'exaone3.5:7.8b', note: '회의록: 초저가, PC는 로컬' },
-  // 🟡 중급 — 품질 필요하지만 가성비 모델로
-  docs:      { provider: 'gemini',    model: 'gemini-2.5-flash',       domain: 'text', tier: 'mid', local: 'qwen2.5:14b', note: '문서: 가성비' },
-  blog:      { provider: 'gemini',    model: 'gemini-2.5-flash',       domain: 'text', tier: 'mid', local: 'qwen2.5:14b', note: '블로그: 가성비(품질 더 원하면 Sonnet)' },
-  copy:      { provider: 'gemini',    model: 'gemini-2.5-flash',       domain: 'text', tier: 'mid', note: '카피: 가성비(창의 더 원하면 Sonnet)' },
-  product:   { provider: 'gemini',    model: 'gemini-2.5-flash',       domain: 'text', tier: 'mid', note: '상세: 가성비' },
-  // 🔵 자동화 파이프라인용 단계 모델
-  research:  { provider: 'gemini',    model: 'gemini-2.5-flash',       domain: 'text', tier: 'mid', note: '리서치(+웹검색)' },
-  review:    { provider: 'gemini',    model: 'gemini-2.5-flash',       domain: 'text', tier: 'mid', note: '검토·교정(교차검증)' },
-  vision:    { provider: 'gemini',    model: 'gemini-2.5-flash',       domain: 'text', tier: 'cheap', note: '이미지/영상 분석(비전)' },
-  // 🔴 고급 — 진짜 어려운 작업만(전략·코드·계약·리서치). 필요 기능에서 호출.
-  strategy:  { provider: 'anthropic', model: 'claude-opus-4-8',        domain: 'text', tier: 'premium', note: '전략·고난도' },
-  code:      { provider: 'anthropic', model: 'claude-sonnet-4-6',      domain: 'text', tier: 'premium', note: '코드(가성비는 DeepSeek)' },
+  assistant: { provider: 'anthropic', model: 'claude-haiku-4-5',  domain: 'text', tier: 'cheap', local: 'exaone3.5:7.8b', note: '비서: Haiku' },
+
+  // ── 콘텐츠 패키지 (작성 = Haiku 4.5) ──
+  blog:       { provider: 'anthropic', model: 'claude-haiku-4-5', domain: 'text', tier: 'cheap', note: '블로그: 장문·SEO' },
+  sns:        { provider: 'anthropic', model: 'claude-haiku-4-5', domain: 'text', tier: 'cheap', note: 'SNS: 카피·후킹' },
+  product:    { provider: 'anthropic', model: 'claude-haiku-4-5', domain: 'text', tier: 'cheap', note: '상품 상세' },
+  newsletter: { provider: 'anthropic', model: 'claude-haiku-4-5', domain: 'text', tier: 'cheap', note: '뉴스레터' },
+  press:      { provider: 'anthropic', model: 'claude-haiku-4-5', domain: 'text', tier: 'cheap', note: '보도자료' },
+  youtube:    { provider: 'anthropic', model: 'claude-haiku-4-5', domain: 'text', tier: 'cheap', note: '유튜브 대본·메타' },
+
+  // ── 전략·리서치 패키지 (고난도 = Sonnet 4.6 / 분석 = Gemini Flash) ──
+  marketing:  { provider: 'anthropic', model: 'claude-sonnet-4-6', domain: 'text', tier: 'mid', note: '마케팅 전략' },
+  plan:       { provider: 'anthropic', model: 'claude-sonnet-4-6', domain: 'text', tier: 'mid', note: '사업계획' },
+  pitch:      { provider: 'anthropic', model: 'claude-sonnet-4-6', domain: 'text', tier: 'mid', note: '투자 피치/IR' },
+  competitor: { provider: 'anthropic', model: 'claude-haiku-4-5',  domain: 'text', tier: 'cheap', note: '경쟁사 분석' },
+  persona:    { provider: 'anthropic', model: 'claude-haiku-4-5',  domain: 'text', tier: 'cheap', note: '고객 페르소나' },
+  keyword:    { provider: 'gemini',    model: 'gemini-2.5-flash',  domain: 'text', tier: 'cheap', note: '키워드·SEO' },
+
+  // ── 미디어 패키지 (프롬프트 설계 = Haiku) ──
+  imgprompt:  { provider: 'anthropic', model: 'claude-haiku-4-5', domain: 'text', tier: 'cheap', note: '이미지 프롬프트 설계' },
+  vidprompt:  { provider: 'anthropic', model: 'claude-haiku-4-5', domain: 'text', tier: 'cheap', note: '영상 프롬프트 설계' },
+
+  // ── 고객 패키지 ──
+  reply:      { provider: 'anthropic', model: 'claude-haiku-4-5', domain: 'text', tier: 'cheap', note: '리뷰 답변' },
+  voc:        { provider: 'gemini',    model: 'gemini-2.5-flash', domain: 'text', tier: 'cheap', note: 'VOC: 대량 분석' },
+
+  // ── 파이프라인 공용 단계(게이트웨이 단계별 호출) ──
+  research:   { provider: 'gemini',    model: 'gemini-2.5-flash', domain: 'text', tier: 'cheap', note: '리서치' },
+  review:     { provider: 'gemini',    model: 'gemini-2.5-flash', domain: 'text', tier: 'cheap', note: '교차검토(다른 계열)' },
+  vision:     { provider: 'gemini',    model: 'gemini-2.5-flash', domain: 'text', tier: 'cheap', note: '비전' },
+  strategy:   { provider: 'anthropic', model: 'claude-sonnet-4-6', domain: 'text', tier: 'mid', note: '전략·고난도' },
 };
 
 // ───────────────────────── 미디어 분야별 매칭 ─────────────────────────
@@ -123,9 +137,13 @@ export function pickForFeature(featureId: string): ModelPick {
  * 텍스트 기능이 Claude가 아닐 경우(예: gemini)에도, 실행 연동 전까지는
  * Claude로 폴백해 동작을 보장한다. (멀티 provider 실행은 단계적으로 연동)
  */
-export function modelForFeature(featureId: string): string {
+/**
+ * 실행 모델 — 무료·유료 동일(통일). 차이는 횟수뿐.
+ * 본인 키 직접 호출 경로는 Claude만 가능하므로, 비-Claude(Gemini) 기능은
+ * 동급 Claude(Haiku)로 폴백한다. (게이트웨이 경로는 Gemini를 그대로 호출)
+ */
+export function modelForFeature(featureId: string, _plan?: 'free' | 'pro'): string {
   const p = pickForFeature(featureId);
   if (p.provider === 'anthropic') return p.model;
-  // 텍스트 비-Claude는 품질 등가 Claude로 폴백
   return p.domain === 'text' ? 'claude-haiku-4-5' : FEATURE_MODEL_FALLBACK;
 }
