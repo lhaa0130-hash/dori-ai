@@ -1,65 +1,46 @@
 "use client";
 
-import { motion } from "framer-motion";
-import { Youtube, Instagram, ExternalLink } from "lucide-react";
+import { Youtube, Instagram, ArrowRight } from "lucide-react";
 
 export default function SNSBanner() {
   return (
-    <section className="w-full py-6 sm:py-8">
-      <div className="max-w-7xl mx-auto">
-        <motion.div
-          initial={{ opacity: 0, y: 12 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true, margin: "-40px" }}
-          transition={{ duration: 0.5 }}
-          className="relative rounded-3xl overflow-hidden bg-gradient-to-r from-[#F9954E] via-[#FF7B54] to-[#F05E93] p-5 sm:p-8 md:p-10"
-        >
-          {/* 배경 장식 */}
-          <div className="absolute top-0 right-0 w-64 h-64 rounded-full bg-white/5 -translate-y-1/2 translate-x-1/2" />
-          <div className="absolute bottom-0 left-0 w-48 h-48 rounded-full bg-white/5 translate-y-1/2 -translate-x-1/4" />
+    <section className="py-8 pb-4">
+      <div className="rounded-3xl bg-neutral-950 px-6 pt-10 pb-10">
+        <p className="text-[11px] font-bold text-[#F9954E] tracking-[0.22em] uppercase mb-5">
+          FOLLOW
+        </p>
 
-          <div className="relative z-10 flex flex-col md:flex-row items-center justify-between gap-6">
-            {/* 왼쪽: 텍스트 */}
-            <div className="text-center md:text-left">
-              <p className="text-white/80 text-xs font-bold tracking-widest uppercase mb-2">
-                Follow Us
-              </p>
-              <h2 className="text-2xl md:text-3xl font-extrabold text-white mb-2">
-                DORI-AI 채널 팔로우
-              </h2>
-              <p className="text-white/80 text-sm font-medium">
-                구독하고 최신 AI 소식을 가장 먼저 받아보세요 ✨
-              </p>
-            </div>
+        <h2 className="text-[36px] sm:text-[44px] font-black text-white leading-[1.0] tracking-[-0.03em] mb-3 break-keep">
+          DORI-AI<br />팔로우하기
+        </h2>
 
-            {/* 오른쪽: SNS 버튼들 */}
-            <div className="flex flex-col sm:flex-row gap-3 shrink-0">
-              {/* 유튜브 */}
-              <a
-                href="https://www.youtube.com/@lhaa0130"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-2.5 px-5 py-3 rounded-2xl bg-white text-neutral-900 font-bold text-sm hover:bg-red-50 hover:text-red-600 transition-all duration-200 hover:scale-105 shadow-lg shadow-black/10"
-              >
-                <Youtube className="w-5 h-5 text-red-600 group-hover:scale-110 transition-transform" />
-                <span>YouTube 구독</span>
-                <ExternalLink className="w-3.5 h-3.5 opacity-50" />
-              </a>
+        <p className="text-[14px] text-neutral-400 mb-10 leading-relaxed">
+          최신 AI 소식을 가장 먼저<br />받아보세요.
+        </p>
 
-              {/* 인스타그램 */}
-              <a
-                href="https://www.instagram.com/lhaa0130/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="group flex items-center gap-2.5 px-5 py-3 rounded-2xl bg-white/20 text-white font-bold text-sm hover:bg-white hover:text-neutral-900 transition-all duration-200 hover:scale-105 shadow-lg shadow-black/10 border border-white/30"
-              >
-                <Instagram className="w-5 h-5 group-hover:scale-110 transition-transform" />
-                <span>@lhaa0130</span>
-                <ExternalLink className="w-3.5 h-3.5 opacity-50" />
-              </a>
-            </div>
-          </div>
-        </motion.div>
+        <div className="flex flex-col gap-3">
+          <a
+            href="https://www.youtube.com/@lhaa0130"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 py-4 px-5 rounded-2xl bg-white active:opacity-80 transition-opacity"
+          >
+            <Youtube className="w-5 h-5 text-red-600 flex-shrink-0" />
+            <span className="text-[15px] font-bold text-neutral-900">YouTube 구독</span>
+            <ArrowRight className="w-4 h-4 text-neutral-400 ml-auto" />
+          </a>
+
+          <a
+            href="https://www.instagram.com/lhaa0130/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-3 py-4 px-5 rounded-2xl bg-neutral-800 active:opacity-80 transition-opacity"
+          >
+            <Instagram className="w-5 h-5 text-white flex-shrink-0" />
+            <span className="text-[15px] font-bold text-white">Instagram 팔로우</span>
+            <ArrowRight className="w-4 h-4 text-neutral-500 ml-auto" />
+          </a>
+        </div>
       </div>
     </section>
   );

@@ -1,69 +1,58 @@
 // app/page.tsx
+import Link from "next/link";
+import { ArrowRight } from "lucide-react";
+
 import Hero from "@/components/home/Hero";
 import HomeClient from "@/components/home/HomeClient";
+import StatsStrip from "@/components/home/StatsStrip";
 import TrendPreview from "@/components/home/TrendPreview";
-import CategorySection from "@/components/home/CategorySection";
-import QuickMenu from "@/components/home/QuickMenu";
 import MiniGameSection from "@/components/home/MiniGameSection";
 import SNSBanner from "@/components/home/SNSBanner";
 import { getAllTrends } from "@/lib/trends";
-import { getAllCurations } from "@/lib/curation";
-import { getAllAnalyses } from "@/lib/analysis";
-import { getAllReports } from "@/lib/reports";
 
 export default async function Home() {
-  // 서버 컴포넌트에서 카테고리별 최신 글 가져오기
   const latestTrends = getAllTrends().slice(0, 3);
-  const latestCurations = getAllCurations().slice(0, 3);
-  const latestAnalyses = getAllAnalyses().slice(0, 3);
-  const latestReports = getAllReports().slice(0, 3);
 
   return (
-    <main className="min-h-screen bg-background">
-      {/* 1. 히어로 섹션 */}
+    <main className="min-h-screen">
+
+      {/* 1. 히어로 */}
       <Hero />
 
-      {/* 2. 출석 체크 위젯 (클라이언트) */}
+      {/* 2. 출석 위젯 */}
       <HomeClient />
 
-      {/* 3. 최신 트렌드 기사 */}
+      {/* 3. 숫자 통계 */}
+      <StatsStrip />
+
+      {/* 4. 트렌드 (다크 카드) */}
       <TrendPreview trends={latestTrends} />
 
-      {/* 4. 큐레이션 */}
-      <CategorySection
-        emoji="📚"
-        title="이번 주 AI 큐레이션"
-        subtitle="당장 써볼 수 있는 AI 도구와 서비스를 골라드려요"
-        moreHref="/insight"
-        posts={latestCurations}
-      />
+      {/* 5. AI 도구 */}
+      <section className="py-16 border-b border-neutral-100 dark:border-zinc-900">
+        <p className="text-[11px] font-bold text-[#F9954E] tracking-[0.22em] uppercase mb-5">
+          AI TOOLS
+        </p>
+        <h2 className="text-[38px] sm:text-[46px] font-black text-neutral-950 dark:text-white leading-[1.0] tracking-[-0.03em] mb-4 break-keep">
+          200개 이상의<br />AI 도구
+        </h2>
+        <p className="text-[15px] text-neutral-400 dark:text-neutral-500 mb-10 leading-relaxed break-keep">
+          카테고리별로 정리된 AI 도구를<br />지금 바로 탐색하세요.
+        </p>
+        <Link
+          href="/ai-tools"
+          className="inline-flex items-center gap-2 px-6 py-4 rounded-2xl border border-neutral-200 dark:border-zinc-800 text-neutral-800 dark:text-neutral-200 font-bold text-[15px] active:opacity-70 transition-opacity"
+        >
+          도구 탐색하기 <ArrowRight className="w-4 h-4" />
+        </Link>
+      </section>
 
-      {/* 5. 심층 분석 */}
-      <CategorySection
-        emoji="🔍"
-        title="AI 심층 분석"
-        subtitle="표면 뒤의 구조와 흐름을 깊이 있게 풀어드려요"
-        moreHref="/insight"
-        posts={latestAnalyses}
-      />
-
-      {/* 6. 산업 리포트 */}
-      <CategorySection
-        emoji="📊"
-        title="AI 산업 리포트"
-        subtitle="투자, 시장, 기업 동향을 데이터로 정리했어요"
-        moreHref="/insight"
-        posts={latestReports}
-      />
-
-      {/* 7. 빠른 접근 메뉴 */}
-      <QuickMenu />
-
-      {/* 8. 인기 미니게임 */}
+      {/* 6. 미니게임 */}
       <MiniGameSection />
 
-      {/* 9. SNS 팔로우 배너 */}
+      {/* 7. SNS 팔로우 (다크 카드) */}
       <SNSBanner />
+
     </main>
   );
 }
