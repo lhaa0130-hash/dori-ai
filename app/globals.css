@@ -82,13 +82,10 @@ section[id] {
 
 @layer base {
   :root {
-    --background: 220 14% 96%;
-    /* Toss signature gray #F2F4F6 */
-    --foreground: 222 47% 11%;
-    /* Toss primary text #191F28 */
+    --background: 0 0% 100%;
+    --foreground: 0 0% 7%;
     --card: 0 0% 100%;
-    /* Pure white card */
-    --card-foreground: 222 47% 11%;
+    --card-foreground: 0 0% 7%;
     --popover: 0 0% 100%;
     --popover-foreground: 0 0% 9%;
     --primary: 25 94% 64%;
@@ -177,7 +174,7 @@ section[id] {
   }
 
   .intro-gradient {
-    background-image: linear-gradient(to bottom, #FFF5EB, #F2F4F6, #F2F4F6);
+    background-image: none;
   }
 
   /* Force dark gradient in dark mode */
