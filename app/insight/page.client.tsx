@@ -72,24 +72,8 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
 
   // 카테고리별 색상 (주황색 테마 기반 톤온톤)
   const getCategoryColor = (category?: string) => {
-    switch (category) {
-      case '트렌드':
-      case 'trend':
-        return { bg: 'rgba(249, 149, 78, 0.15)', text: '#F9954E' }; // Main Orange
-      case '가이드':
-        return { bg: 'rgba(232, 131, 46, 0.15)', text: '#E8832E' }; // Darker Orange
-      case '분석':
-        return { bg: 'rgba(251, 170, 96, 0.15)', text: '#FBAA60' }; // Lighter Orange
-      case '리포트':
-        return { bg: 'rgba(194, 65, 12, 0.1)', text: '#c2410c' }; // Deep Burnt Orange
-      case '큐레이션':
-        return { bg: 'rgba(255, 247, 237, 1)', text: '#9a3412' }; // Light beige bg, dark text
-      case '스튜디오':
-      case 'studio':
-        return { bg: 'rgba(168, 85, 247, 0.15)', text: '#a855f7' }; // Purple (제작물 구분)
-      default:
-        return { bg: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)', text: isDark ? 'rgba(255, 255, 255, 0.7)' : 'rgba(0, 0, 0, 0.7)' };
-    }
+    if (!category) return { bg: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)', text: isDark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.5)' };
+    return { bg: isDark ? 'rgba(249,149,78,0.15)' : 'rgba(249,149,78,0.12)', text: '#F9954E' };
   };
 
   // 본문 요약 추출 (HTML 태그 제거 및 시스템 메시지 필터링)

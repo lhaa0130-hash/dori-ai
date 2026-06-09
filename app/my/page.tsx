@@ -434,7 +434,7 @@ export default function MyPage() {
 
       {/* 업적 달성 토스트 */}
       {achievementToast && (
-        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 bg-amber-500 text-white px-6 py-3 rounded-2xl font-bold text-sm shadow-2xl flex items-center gap-2 animate-bounce">
+        <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 bg-[#F9954E] text-white px-6 py-3 rounded-2xl font-bold text-sm shadow-xl flex items-center gap-2">
           🏆 업적 달성! {achievementToast.name} +{achievementToast.reward} 🍭
         </div>
       )}
@@ -480,10 +480,10 @@ export default function MyPage() {
                 {candyBalance.toLocaleString()}개
               </p>
               <div className="flex gap-4 mt-2 text-xs font-bold text-neutral-500 dark:text-zinc-400">
-                <span>오늘 획득: <span className="text-green-500">+{todayEarned}</span>개</span>
+                <span>오늘 획득: <span className="text-[#F9954E]">+{todayEarned}</span>개</span>
                 <span>이번 달: <span className="text-[#F9954E]">+{monthEarned.toLocaleString()}</span>개</span>
                 {attendanceStreak > 0 && (
-                  <span>연속 출석: <span className="text-amber-500">🔥 {attendanceStreak}일</span></span>
+                  <span>연속 출석: <span className="text-[#F9954E]">🔥 {attendanceStreak}일</span></span>
                 )}
               </div>
             </div>
@@ -562,7 +562,7 @@ export default function MyPage() {
                         key={mission.id}
                         className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${
                           done
-                            ? "bg-green-50 dark:bg-green-950/20 border-green-200 dark:border-green-900/30"
+                            ? "bg-neutral-50 dark:bg-zinc-900 border-neutral-200 dark:border-zinc-800"
                             : "bg-white dark:bg-zinc-900/30 border-neutral-100 dark:border-zinc-800/50"
                         }`}
                       >
@@ -576,7 +576,7 @@ export default function MyPage() {
                           </div>
                         </div>
                         {done ? (
-                          <span className="text-green-500 text-xs font-extrabold flex items-center gap-1">✓ 완료</span>
+                          <span className="text-[#F9954E] text-xs font-extrabold flex items-center gap-1">✓ 완료</span>
                         ) : (
                           <button
                             onClick={() => {
@@ -611,7 +611,7 @@ export default function MyPage() {
                         key={ach.id}
                         className={`flex items-center gap-4 p-4 rounded-2xl border transition-all ${
                           claimed
-                            ? "bg-amber-50 dark:bg-amber-950/20 border-amber-200 dark:border-amber-900/30"
+                            ? "bg-[#FFF5EB] dark:bg-[#F9954E]/5 border-[#F9954E]/20 dark:border-[#F9954E]/10"
                             : "bg-white dark:bg-zinc-900/30 border-neutral-100 dark:border-zinc-800/50 opacity-60"
                         }`}
                       >
@@ -622,7 +622,7 @@ export default function MyPage() {
                           <p className="text-[11px] font-extrabold text-[#F9954E]">🍭 +{ach.reward}</p>
                         </div>
                         {claimed && (
-                          <span className="text-amber-500 text-xs font-extrabold">✓</span>
+                          <span className="text-[#F9954E] text-xs font-extrabold">✓</span>
                         )}
                       </div>
                     );
@@ -655,7 +655,7 @@ export default function MyPage() {
                         })}
                       </p>
                     </div>
-                    <span className={`text-sm font-extrabold ${entry.amount > 0 ? "text-green-500" : "text-red-500"}`}>
+                    <span className={`text-sm font-extrabold ${entry.amount > 0 ? "text-[#F9954E]" : "text-neutral-400"}`}>
                       {entry.amount > 0 ? "+" : ""}{entry.amount} 🍭
                     </span>
                   </div>

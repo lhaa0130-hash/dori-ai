@@ -47,10 +47,10 @@ const notices: NoticeItem[] = [
 export default function NoticeClient() {
     const getTypeBadge = (t: NoticeType) => {
         switch (t) {
-            case "공지":    return "bg-[#FFF5EB] text-[#E8832E] dark:bg-[#8F4B10]/20 dark:text-[#FCC07A]";
-            case "업데이트": return "bg-blue-50 text-blue-600 dark:bg-blue-900/20 dark:text-blue-300";
-            case "이벤트":  return "bg-purple-50 text-purple-600 dark:bg-purple-900/20 dark:text-purple-300";
-            case "점검":    return "bg-red-50 text-red-600 dark:bg-red-900/20 dark:text-red-300";
+            case "공지":    return "bg-[#FFF5EB] text-[#F9954E] dark:bg-[#F9954E]/10 dark:text-[#F9954E]";
+            case "업데이트": return "bg-neutral-100 text-neutral-500 dark:bg-zinc-800 dark:text-neutral-400";
+            case "이벤트":  return "bg-neutral-100 text-neutral-500 dark:bg-zinc-800 dark:text-neutral-400";
+            case "점검":    return "bg-neutral-100 text-neutral-500 dark:bg-zinc-800 dark:text-neutral-400";
         }
     };
 

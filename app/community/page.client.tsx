@@ -210,11 +210,11 @@ function PostModal({
                 onClick={handleLike}
                 className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-sm font-bold transition-all ${
                   liked
-                    ? 'bg-rose-100 dark:bg-rose-900/30 text-rose-500'
-                    : 'bg-neutral-100 dark:bg-zinc-800 text-neutral-500 hover:text-rose-400'
+                    ? 'bg-[#FFF5EB] dark:bg-[#F9954E]/10 text-[#F9954E]'
+                    : 'bg-neutral-100 dark:bg-zinc-800 text-neutral-500 hover:text-[#F9954E]'
                 }`}
               >
-                <Heart className={`w-3.5 h-3.5 ${liked ? 'fill-rose-500' : ''}`} />
+                <Heart className={`w-3.5 h-3.5 ${liked ? 'fill-[#F9954E]' : ''}`} />
                 {likeCount}
               </button>
               <span className="flex items-center gap-1.5 text-sm text-neutral-400">
@@ -268,7 +268,7 @@ function PostModal({
                       <div className="flex items-center gap-3 mt-1.5 ml-2">
                         <button
                           onClick={() => handleCommentLike(comment.id)}
-                          className="flex items-center gap-1 text-xs text-neutral-400 hover:text-rose-400 transition-colors font-medium"
+                          className="flex items-center gap-1 text-xs text-neutral-400 hover:text-[#F9954E] transition-colors font-medium"
                         >
                           <Heart className="w-3 h-3" />
                           {comment.likes > 0 && comment.likes}
@@ -399,14 +399,14 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
   };
 
   const tagColors: Record<string, string> = {
-    '커리어': 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300',
-    'AI시대': 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300',
-    'ChatGPT': 'bg-green-100 text-green-700 dark:bg-green-900/40 dark:text-green-300',
-    '꿀팁': 'bg-yellow-100 text-yellow-700 dark:bg-yellow-900/40 dark:text-yellow-300',
-    '무료': 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300',
-    '자동화': 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300',
-    '공지': 'bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300',
-    '이벤트': 'bg-pink-100 text-pink-700 dark:bg-pink-900/40 dark:text-pink-300',
+    '커리어': 'bg-neutral-100 text-neutral-500 dark:bg-zinc-800 dark:text-neutral-400',
+    'AI시대': 'bg-neutral-100 text-neutral-500 dark:bg-zinc-800 dark:text-neutral-400',
+    'ChatGPT': 'bg-neutral-100 text-neutral-500 dark:bg-zinc-800 dark:text-neutral-400',
+    '꿀팁': 'bg-neutral-100 text-neutral-500 dark:bg-zinc-800 dark:text-neutral-400',
+    '무료': 'bg-neutral-100 text-neutral-500 dark:bg-zinc-800 dark:text-neutral-400',
+    '자동화': 'bg-neutral-100 text-neutral-500 dark:bg-zinc-800 dark:text-neutral-400',
+    '공지': 'bg-[#FFF5EB] text-[#F9954E] dark:bg-[#F9954E]/10 dark:text-[#F9954E]',
+    '이벤트': 'bg-neutral-100 text-neutral-500 dark:bg-zinc-800 dark:text-neutral-400',
   };
   const getTagClass = (tag: string) =>
     tagColors[tag] || 'bg-neutral-100 text-neutral-600 dark:bg-zinc-800 dark:text-neutral-400';
@@ -505,7 +505,7 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
                         </div>
                         <div className="flex items-center gap-4 text-sm font-medium text-neutral-500">
                           <span className="flex items-center gap-1.5"><Eye className="w-4 h-4" />{(featuredPost.views || 0).toLocaleString()}</span>
-                          <span className="flex items-center gap-1.5"><Heart className="w-4 h-4 text-rose-400" />{featuredPost.likes}</span>
+                          <span className="flex items-center gap-1.5"><Heart className="w-4 h-4 text-[#F9954E]" />{featuredPost.likes}</span>
                           <span className="flex items-center gap-1.5"><MessageCircle className="w-4 h-4" />{featuredPost.commentsList?.length || featuredPost.comments}</span>
                         </div>
                       </div>
@@ -530,7 +530,7 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
                             <span className="text-xs font-semibold text-neutral-700 dark:text-neutral-300">{post.author}</span>
                           </div>
                           <div className="flex items-center gap-3 text-xs text-neutral-400">
-                            <span className="flex items-center gap-1"><Heart className="w-3 h-3 text-rose-400" />{post.likes}</span>
+                            <span className="flex items-center gap-1"><Heart className="w-3 h-3 text-[#F9954E]" />{post.likes}</span>
                             <span className="flex items-center gap-1"><MessageCircle className="w-3 h-3" />{post.commentsList?.length || post.comments}</span>
                           </div>
                         </div>
@@ -561,7 +561,7 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
                             </div>
                           </div>
                           <div className="flex-shrink-0 flex items-center gap-3 text-xs text-neutral-400">
-                            <span className="flex items-center gap-1"><Heart className="w-3 h-3 text-rose-400" />{post.likes}</span>
+                            <span className="flex items-center gap-1"><Heart className="w-3 h-3 text-[#F9954E]" />{post.likes}</span>
                             <span className="flex items-center gap-1"><MessageCircle className="w-3 h-3" />{post.commentsList?.length || post.comments}</span>
                           </div>
                         </div>

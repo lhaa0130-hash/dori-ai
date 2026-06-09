@@ -83,7 +83,7 @@ export default function HomeClient() {
       </div>
 
       {checkedToday ? (
-        <span className="text-[12px] font-bold text-green-500">✅ 출석 완료</span>
+        <span className="text-[12px] font-bold text-[#F9954E]">✅ 출석 완료</span>
       ) : (
         <button
           onClick={handleAttendance}

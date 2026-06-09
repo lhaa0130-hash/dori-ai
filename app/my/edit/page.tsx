@@ -195,8 +195,7 @@ export default function EditProfilePage() {
       {/* 다크모드 배경 효과 */}
       {isDark && (
         <div className="fixed inset-0 -z-10 pointer-events-none overflow-hidden">
-          <div className="absolute top-0 left-[20%] w-[500px] h-[500px] rounded-full blur-[100px] opacity-40 bg-blue-900 mix-blend-screen animate-pulse" />
-          <div className="absolute top-[100px] right-[20%] w-[450px] h-[450px] rounded-full blur-[100px] opacity-40 bg-purple-900 mix-blend-screen animate-pulse" style={{ animationDelay: '1s' }} />
+          <div className="absolute top-0 left-[20%] w-[500px] h-[500px] rounded-full blur-[100px] opacity-20 bg-[#F9954E]" />
         </div>
       )}
 
