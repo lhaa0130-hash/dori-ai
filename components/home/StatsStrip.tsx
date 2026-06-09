@@ -51,23 +51,26 @@ function CountUp({ target, suffix, delay }: { target: number; suffix: string; de
 
 export default function StatsStrip() {
   return (
-    <div className="py-8 mb-2">
-      <div className="grid grid-cols-3">
-        {STATS.map((s, i) => (
-          <div
-            key={s.label}
-            className={`scroll-reveal-item scroll-delay-${i + 1} flex flex-col items-center gap-1 ${
-              i !== 0 ? "border-l border-neutral-100 dark:border-zinc-900" : ""
-            }`}
-          >
-            <span className="text-[28px] font-extrabold text-neutral-950 dark:text-white tracking-tight leading-none">
-              <CountUp target={s.target} suffix={s.suffix} delay={s.delay} />
-            </span>
-            <span className="text-[11px] text-neutral-400 font-medium mt-0.5">
-              {s.label}
-            </span>
-          </div>
-        ))}
+    <div className="py-6 mb-2">
+      {/* 오렌지 틴트 카드 래퍼 — 숫자에 시각적 무게감 부여 */}
+      <div className="scroll-reveal rounded-2xl bg-[#FFF5EB] dark:bg-[#F9954E]/5 border border-[#F9954E]/15 dark:border-[#F9954E]/10 py-6">
+        <div className="grid grid-cols-3">
+          {STATS.map((s, i) => (
+            <div
+              key={s.label}
+              className={`scroll-reveal-item scroll-delay-${i + 1} flex flex-col items-center gap-1 ${
+                i !== 0 ? "border-l border-[#F9954E]/15 dark:border-[#F9954E]/10" : ""
+              }`}
+            >
+              <span className="text-[30px] font-extrabold text-neutral-950 dark:text-white tracking-tight leading-none">
+                <CountUp target={s.target} suffix={s.suffix} delay={s.delay} />
+              </span>
+              <span className="text-[11px] text-[#F9954E] font-semibold mt-0.5">
+                {s.label}
+              </span>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );

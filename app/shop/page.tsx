@@ -2,7 +2,6 @@
 
 import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import Header from "@/components/layout/Header";
 import Link from "next/link";
 import {
   getCottonCandyBalance,
@@ -169,19 +168,15 @@ export default function ShopPage() {
   if (!mounted) return null;
 
   return (
-    <main className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-500 relative">
-      <Header />
-
-      {/* 배경 그라디언트 */}
-      <div className="absolute top-0 left-0 w-full h-[500px] bg-gradient-to-b from-pink-50/60 via-orange-50/20 to-transparent dark:from-pink-950/10 dark:via-black/0 pointer-events-none z-0" />
+    <main className="w-full min-h-screen bg-white dark:bg-black">
 
       {/* 토스트 알림 */}
       {toast && (
         <div
-          className={`fixed top-24 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-2xl font-bold text-sm shadow-2xl transition-all
+          className={`fixed top-24 left-1/2 -translate-x-1/2 z-50 px-6 py-3 rounded-2xl font-bold text-[13px] shadow-xl transition-all
             ${toast.type === "success"
-              ? "bg-green-500 text-white"
-              : "bg-red-500 text-white"
+              ? "bg-[#F9954E] text-white"
+              : "bg-neutral-900 text-white"
             }`}
         >
           {toast.msg}
@@ -190,7 +185,7 @@ export default function ShopPage() {
 
       {/* 구매 확인 모달 */}
       {confirmItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm px-4">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 px-4">
           <div className="bg-white dark:bg-zinc-900 rounded-[2rem] p-8 max-w-sm w-full shadow-2xl border border-neutral-200 dark:border-zinc-700">
             <div className="text-4xl text-center mb-4">{confirmItem.emoji}</div>
             <h3 className="text-xl font-black text-center text-neutral-900 dark:text-white mb-2">
@@ -211,7 +206,7 @@ export default function ShopPage() {
                 </div>
                 <div className="flex items-center justify-between text-xs text-neutral-400 dark:text-zinc-500 mb-6">
                   <span>현재 잔액</span>
-                  <span>🍭 {balance.toLocaleString()}개 → <span className={balance < confirmItem.price ? "text-red-500" : "text-green-500"}>🍭 {(balance - confirmItem.price).toLocaleString()}개</span></span>
+                  <span>🍭 {balance.toLocaleString()}개 → <span className={balance < confirmItem.price ? "text-neutral-400" : "text-[#F9954E]"}>🍭 {(balance - confirmItem.price).toLocaleString()}개</span></span>
                 </div>
               </>
             )}
@@ -234,16 +229,16 @@ export default function ShopPage() {
         </div>
       )}
 
-      {/* 헤더 섹션 */}
-      <section className="relative pt-32 pb-8 px-6 text-center z-10">
-        <div className="max-w-3xl mx-auto">
-          <h1 className="text-4xl font-black mb-4 tracking-tighter text-neutral-900 dark:text-white">
-            🍭 솜사탕 상점
-          </h1>
-          <div className="w-8 h-1 bg-[#F9954E] rounded-full mx-auto mb-4" />
-          <p className="text-sm font-medium text-neutral-500 dark:text-zinc-400 mb-6">
-            모은 솜사탕으로 프로필을 꾸미고 특별한 아이템을 획득하세요.
-          </p>
+      {/* ── Toss 히어로 ── */}
+      <section className="pt-8 pb-10 border-b border-neutral-100 dark:border-zinc-900">
+        <p className="text-[12px] font-semibold text-[#F9954E] mb-3">솜사탕 상점</p>
+        <h1 className="text-[36px] sm:text-[48px] font-extrabold text-neutral-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
+          🍭 솜사탕 상점
+        </h1>
+        <p className="text-[14px] text-neutral-500 dark:text-neutral-400 leading-relaxed">
+          모은 솜사탕으로 프로필을 꾸미고 특별한 아이템을 획득하세요.
+        </p>
+        <div className="mt-6">
 
           {/* 잔액 표시 */}
           {user ? (
@@ -254,7 +249,7 @@ export default function ShopPage() {
                   <span className="text-sm font-bold text-yellow-400">프리미엄 회원 — 모든 아이템 무료</span>
                 </div>
               )}
-              <div className="inline-flex items-center gap-3 bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl border border-orange-100 dark:border-orange-900/30 rounded-2xl px-6 py-3 shadow-sm">
+              <div className="inline-flex items-center gap-3 bg-neutral-50 dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 rounded-2xl px-5 py-3">
                 <span className="text-2xl">🍭</span>
                 <div className="text-left">
                   <p className="text-[10px] font-bold text-neutral-400 dark:text-zinc-500 uppercase tracking-widest">내 솜사탕</p>
@@ -269,7 +264,7 @@ export default function ShopPage() {
               </div>
             </div>
           ) : (
-            <div className="inline-flex items-center gap-3 bg-white/80 dark:bg-zinc-900/50 backdrop-blur-xl border border-neutral-200 dark:border-zinc-800 rounded-2xl px-6 py-3">
+            <div className="inline-flex items-center gap-3 bg-neutral-50 dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 rounded-2xl px-5 py-3">
               <span className="text-sm font-medium text-neutral-500 dark:text-zinc-400">
                 로그인하면 솜사탕으로 아이템을 구매할 수 있어요
               </span>
@@ -282,7 +277,7 @@ export default function ShopPage() {
       </section>
 
       {/* 카테고리 탭 */}
-      <section className="relative z-10 px-6 mb-8">
+      <section className="py-6 border-b border-neutral-100 dark:border-zinc-900">
         <div className="max-w-6xl mx-auto">
           <div className="flex gap-2 overflow-x-auto scrollbar-hide pb-2">
             {CATEGORIES.map((cat) => (
@@ -304,7 +299,7 @@ export default function ShopPage() {
       </section>
 
       {/* 상품 그리드 */}
-      <section className="relative z-10 px-6 pb-24">
+      <section className="py-6 pb-24">
         <div className="max-w-6xl mx-auto">
           <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
             {filteredItems.map((item) => {
@@ -322,7 +317,7 @@ export default function ShopPage() {
                 >
                   {/* 구매 완료 배지 */}
                   {isBought && (
-                    <div className="absolute top-3 right-3 z-10 bg-green-500 text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">
+                    <div className="absolute top-3 right-3 z-10 bg-[#F9954E] text-white text-[9px] font-black px-2 py-0.5 rounded-full uppercase tracking-wider">
                       보유중
                     </div>
                   )}
@@ -350,12 +345,7 @@ export default function ShopPage() {
                   {/* 아이템 정보 */}
                   <div className="p-4">
                     <div className="mb-1">
-                      <span className={`text-[9px] font-black uppercase tracking-widest
-                        ${item.category === "profile" ? "text-pink-500" :
-                          item.category === "title" ? "text-amber-500" :
-                          item.category === "emoji" ? "text-purple-500" :
-                          "text-blue-500"}`}
-                      >
+                      <span className="text-[9px] font-black uppercase tracking-widest text-[#F9954E]">
                         {CATEGORIES.find((c) => c.id === item.category)?.label}
                       </span>
                     </div>
@@ -372,7 +362,7 @@ export default function ShopPage() {
                         🍭 {item.price.toLocaleString()}
                       </span>
                       {isBought ? (
-                        <span className="text-green-500 text-xs font-black flex items-center gap-1">
+                        <span className="text-[#F9954E] text-xs font-black flex items-center gap-1">
                           ✓ 구매완료
                         </span>
                       ) : (
@@ -395,7 +385,7 @@ export default function ShopPage() {
           </div>
 
           {/* 솜사탕 획득 안내 */}
-          <div className="mt-12 bg-gradient-to-r from-orange-50 to-pink-50 dark:from-orange-950/20 dark:to-pink-950/20 rounded-[2rem] border border-orange-100 dark:border-orange-900/30 p-8">
+          <div className="mt-12 bg-[#FFF5EB] dark:bg-[#F9954E]/5 rounded-2xl border border-[#F9954E]/20 p-6">
             <h3 className="text-lg font-black text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
               🍭 솜사탕 획득 방법
             </h3>

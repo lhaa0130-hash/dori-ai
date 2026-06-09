@@ -153,12 +153,21 @@ export default function StudioPage() {
   const getCatColor = (catKey: string) => categoryList.find(c => c.key === catKey) || { color: '#eee', text: '#666' };
 
   return (
-    <main className="studio-page">
+    <main className="bg-white dark:bg-black min-h-screen">
+
+      {/* ── Toss 히어로 ── */}
+      <section className="pt-8 pb-10 border-b border-neutral-100 dark:border-zinc-900">
+        <p className="text-[12px] font-semibold text-[#F9954E] mb-3">AI 랭킹</p>
+        <h1 className="text-[36px] sm:text-[48px] font-extrabold text-neutral-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
+          AI Tools Ranking
+        </h1>
+        <p className="text-[14px] text-neutral-500 dark:text-neutral-400 leading-relaxed">
+          엄선된 AI 툴 데이터베이스와 생생한 유저 리뷰
+        </p>
+      </section>
+
+      <div className="studio-page">
       <div className="container">
-        <header className="page-header">
-          <h1>AI Tools Ranking</h1>
-          <p>엄선된 AI 툴 데이터베이스와 생생한 유저 리뷰</p>
-        </header>
 
         <div className="toolbar">
           <div className="tabs">
@@ -218,6 +227,7 @@ export default function StudioPage() {
           <h3>알고 있는 좋은 AI 툴이 있나요?</h3>
           <button onClick={handleSuggest}>툴 추천하기</button>
         </div>
+      </div>
       </div>
 
       {/* MODAL */}
@@ -293,20 +303,15 @@ export default function StudioPage() {
 
       <style jsx global>{`
         /* Reset & Base */
-        .studio-page { background-color: #f8f9fa; min-height: 100vh; color: #333; padding-bottom: 80px; }
+        .studio-page { background-color: transparent; min-height: 50vh; color: #333; padding-bottom: 80px; padding-top: 24px; }
         .container { max-width: 1200px; margin: 0 auto; padding: 0 20px; }
-        
-        /* Header */
-        .page-header { text-align: center; padding: 60px 0 40px; }
-        .page-header h1 { font-size: 48px; font-weight: 900; margin-bottom: 10px; color: #111; letter-spacing: -1px; }
-        .page-header p { font-size: 18px; color: #666; }
 
         /* Toolbar */
         .toolbar { display: flex; justify-content: space-between; align-items: center; margin-bottom: 40px; flex-wrap: wrap; gap: 20px; }
         .tabs { display: flex; gap: 10px; overflow-x: auto; padding-bottom: 5px; }
-        .tab { padding: 10px 24px; border-radius: 30px; border: 1px solid #ddd; background: white; cursor: pointer; font-weight: 600; color: #666; transition: 0.2s; white-space: nowrap; }
-        .tab:hover { background: #f0f0f0; }
-        .tab.active { background: #111; color: white; border-color: #111; }
+        .tab { padding: 10px 24px; border-radius: 30px; border: 1px solid #e5e7eb; background: white; cursor: pointer; font-weight: 600; color: #666; transition: 0.2s; white-space: nowrap; }
+        .tab:hover { background: #f9f9f9; }
+        .tab.active { background: #F9954E; color: white; border-color: #F9954E; }
         
         .search { position: relative; width: 300px; }
         .search input { width: 100%; padding: 12px 20px; padding-right: 40px; border-radius: 25px; border: 1px solid #ddd; outline: none; transition: 0.2s; box-shadow: 0 2px 5px rgba(0,0,0,0.02); }
@@ -339,7 +344,7 @@ export default function StudioPage() {
         .btn-detail { background: none; border: none; color: #111; font-weight: 600; font-size: 13px; cursor: pointer; text-decoration: underline; }
 
         .suggestion-box { text-align: center; margin-top: 80px; background: white; padding: 40px; border-radius: 20px; border: 1px solid #eee; }
-        .suggestion-box button { margin-top: 15px; padding: 12px 30px; background: #111; color: white; border: none; border-radius: 30px; font-weight: 700; cursor: pointer; }
+        .suggestion-box button { margin-top: 15px; padding: 12px 30px; background: #F9954E; color: white; border: none; border-radius: 30px; font-weight: 700; cursor: pointer; }
 
         /* Modal */
         .modal-overlay { position: fixed; inset: 0; background: rgba(0,0,0,0.4); backdrop-filter: blur(5px); z-index: 100; display: flex; justify-content: center; align-items: center; padding: 20px; }
@@ -353,11 +358,11 @@ export default function StudioPage() {
         .modal-title h2 { font-size: 28px; font-weight: 800; margin-bottom: 8px; }
         .tags { display: flex; gap: 8px; }
         .tag { font-size: 12px; font-weight: 600; background: #eee; padding: 4px 10px; border-radius: 6px; color: #555; }
-        .visit-btn { margin-left: auto; background: #111; color: white; padding: 10px 20px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 14px; }
+        .visit-btn { margin-left: auto; background: #F9954E; color: white; padding: 10px 20px; border-radius: 12px; text-decoration: none; font-weight: 600; font-size: 14px; }
 
         .modal-nav { display: flex; padding: 0 40px; border-bottom: 1px solid #eee; background: white; }
         .modal-nav button { padding: 15px 0; margin-right: 30px; background: none; border: none; border-bottom: 3px solid transparent; font-weight: 600; color: #999; cursor: pointer; }
-        .modal-nav button.active { color: #111; border-color: #111; }
+        .modal-nav button.active { color: #F9954E; border-color: #F9954E; }
 
         .modal-body { padding: 40px; overflow-y: auto; background: white; flex: 1; }
         .info-box { margin-bottom: 30px; }
