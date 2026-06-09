@@ -25,7 +25,7 @@ export default function ScrollAnimationProvider() {
 
     const observe = () => {
       document
-        .querySelectorAll<Element>(".scroll-reveal:not(.in-view)")
+        .querySelectorAll<Element>(".scroll-reveal:not(.in-view), .scroll-reveal-item:not(.in-view)")
         .forEach((el) => observer.observe(el));
     };
 

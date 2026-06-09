@@ -386,73 +386,102 @@ h6 {
 }
 
 /* ═══════════════════════════════════════════════════════════
-   TOSS-STYLE ANIMATIONS
+   TOSS-STYLE ANIMATIONS  (toss.im 참고)
    ═══════════════════════════════════════════════════════════ */
 
-/* ── 페이지 로드 즉시 실행되는 stagger 애니메이션 ── */
-@keyframes toss-up {
-  from {
-    opacity: 0;
-    transform: translateY(16px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+/* ①  헤더 라인 진입: 토스 헤딩은 줄마다 따로 위에서 내려옴 */
+@keyframes toss-line {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
+/* ②  작은 텍스트/버튼 진입 (subtitle, CTA 버튼) */
+@keyframes toss-text {
+  from { opacity: 0; transform: translateY(18px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ③  블록/카드 진입: translate + 미세 scale → '툭' 하고 떨어지는 느낌 */
+@keyframes toss-block {
+  from { opacity: 0; transform: translateY(40px) scale(0.97); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+
+/* ── 클래스 정의 ── */
+
+/* 헤딩 줄별 */
+.toss-fade-line {
+  opacity: 0;
+  animation: toss-line 0.72s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, opacity;
+}
+
+/* 서브텍스트·버튼 */
 .toss-fade-up {
   opacity: 0;
-  animation: toss-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  animation: toss-text 0.60s cubic-bezier(0.22, 1, 0.36, 1) both;
+  will-change: transform, opacity;
 }
 
+/* 딜레이 */
 .toss-delay-0 { animation-delay: 0ms;   }
-.toss-delay-1 { animation-delay: 90ms;  }
-.toss-delay-2 { animation-delay: 170ms; }
-.toss-delay-3 { animation-delay: 250ms; }
-.toss-delay-4 { animation-delay: 330ms; }
-.toss-delay-5 { animation-delay: 410ms; }
+.toss-delay-1 { animation-delay: 100ms; }
+.toss-delay-2 { animation-delay: 200ms; }
+.toss-delay-3 { animation-delay: 290ms; }
+.toss-delay-4 { animation-delay: 370ms; }
 
-/* ── 스크롤 진입 시 트리거되는 reveal 애니메이션 ── */
-/* JS(ScrollAnimationProvider)가 .in-view 클래스를 추가하면 등장 */
+/* ── 스크롤 진입 reveal (JS → .in-view 추가) ── */
+
+/* 기본: 카드/섹션 블록 (translateY + scale) */
 .scroll-reveal {
   opacity: 0;
-  transform: translateY(22px);
+  transform: translateY(44px) scale(0.97);
   transition:
-    opacity  0.62s cubic-bezier(0.22, 1, 0.36, 1),
-    transform 0.62s cubic-bezier(0.22, 1, 0.36, 1);
+    opacity   0.80s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.80s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+.scroll-reveal.in-view {
+  opacity: 1;
+  transform: translateY(0) scale(1);
 }
 
-.scroll-reveal.in-view {
+/* 아이템 stagger: 카드 안의 개별 요소들 (scale 없음, 속도 빠름) */
+.scroll-reveal-item {
+  opacity: 0;
+  transform: translateY(28px);
+  transition:
+    opacity   0.65s cubic-bezier(0.22, 1, 0.36, 1),
+    transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform, opacity;
+}
+.scroll-reveal-item.in-view {
   opacity: 1;
   transform: translateY(0);
 }
 
-/* stagger 딜레이 변형 */
-.scroll-reveal-delay-1 { transition-delay: 55ms;  }
-.scroll-reveal-delay-2 { transition-delay: 110ms; }
-.scroll-reveal-delay-3 { transition-delay: 165ms; }
-.scroll-reveal-delay-4 { transition-delay: 220ms; }
+/* stagger 딜레이 (scroll-reveal & scroll-reveal-item 공용) */
+.scroll-delay-1 { transition-delay: 80ms;  }
+.scroll-delay-2 { transition-delay: 160ms; }
+.scroll-delay-3 { transition-delay: 240ms; }
+.scroll-delay-4 { transition-delay: 320ms; }
 
-/* ── 카드 호버 리프트 (Toss 물리감) ── */
+/* ── 카드 호버 리프트 ── */
 .toss-card {
   transition:
-    transform  0.28s cubic-bezier(0.22, 1, 0.36, 1),
-    box-shadow 0.28s cubic-bezier(0.22, 1, 0.36, 1),
+    transform  0.30s cubic-bezier(0.22, 1, 0.36, 1),
+    box-shadow 0.30s cubic-bezier(0.22, 1, 0.36, 1),
     opacity    0.15s ease;
   will-change: transform;
 }
-
 .toss-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.08);
+  transform: translateY(-5px) scale(1.015);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.09);
 }
-
 .toss-card:active {
-  transform: scale(0.975) translateY(0);
-  box-shadow: 0 1px 6px rgba(0, 0, 0, 0.05);
+  transform: scale(0.972) translateY(0);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
 }
-
 .dark .toss-card:hover {
-  box-shadow: 0 10px 28px rgba(0, 0, 0, 0.35);
+  box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
 }

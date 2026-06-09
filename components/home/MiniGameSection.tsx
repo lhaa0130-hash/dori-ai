@@ -14,7 +14,7 @@ export default function MiniGameSection() {
   return (
     <section className="py-12 border-b border-neutral-100 dark:border-zinc-900">
       {/* 헤더 */}
-      <div className="scroll-reveal flex items-center justify-between mb-7">
+      <div className="scroll-reveal-item flex items-center justify-between mb-7">
         <h2 className="text-[24px] font-extrabold text-neutral-950 dark:text-white tracking-tight">
           잠깐, 쉬어가요 🎮
         </h2>
@@ -26,8 +26,8 @@ export default function MiniGameSection() {
       {/* 2×2 카드 */}
       <div className="grid grid-cols-2 gap-3">
         {GAMES.map((game, i: number) => (
-          /* 래퍼 div: scroll-reveal(진입 페이드), Link: toss-card(호버 리프트) */
-          <div key={game.href} className={`scroll-reveal scroll-reveal-delay-${i + 1}`}>
+          /* 래퍼 div: scroll-reveal-item(진입 페이드), Link: toss-card(호버 리프트) */
+          <div key={game.href} className={`scroll-reveal-item scroll-delay-${i + 1}`}>
             <Link
               href={game.href}
               className="toss-card flex flex-col p-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 shadow-sm active:opacity-75"

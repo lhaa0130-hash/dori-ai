@@ -10,10 +10,11 @@ export default function TrendPreview({ trends }: TrendPreviewProps) {
 
   return (
     <section className="py-6">
-      <div className="rounded-3xl bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 px-6 pt-9 pb-9">
+      {/* 카드 전체가 하나의 유닛으로 진입 (Toss 패턴) */}
+      <div className="scroll-reveal rounded-3xl bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 px-6 pt-9 pb-9">
 
         {/* 헤더 */}
-        <div className="scroll-reveal mb-7">
+        <div className="mb-7">
           <p className="text-[12px] font-semibold text-[#F9954E] mb-3">AI 트렌드</p>
           <h2 className="text-[28px] sm:text-[34px] font-extrabold text-neutral-950 dark:text-white leading-[1.15] tracking-tight break-keep">
             매일 업데이트되는<br />AI 트렌드
@@ -23,8 +24,7 @@ export default function TrendPreview({ trends }: TrendPreviewProps) {
         {/* 리스트 */}
         <div className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
           {trends.slice(0, 3).map((trend, i) => (
-            /* 래퍼: scroll-reveal로 진입 페이드, Link: active 탭 피드백 유지 */
-            <div key={trend.slug} className={`scroll-reveal scroll-reveal-delay-${i + 1}`}>
+            <div key={trend.slug} className={`scroll-reveal-item scroll-delay-${i + 1}`}>
               <Link
                 href={`/insight/article/${trend.slug}`}
                 className={`flex items-center gap-4 ${i === 0 ? "pb-4" : "py-4"} active:opacity-60 transition-opacity`}

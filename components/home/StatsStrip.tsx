@@ -56,7 +56,7 @@ export default function StatsStrip() {
         {STATS.map((s, i) => (
           <div
             key={s.label}
-            className={`scroll-reveal scroll-reveal-delay-${i + 1} flex flex-col items-center gap-1 ${
+            className={`scroll-reveal-item scroll-delay-${i + 1} flex flex-col items-center gap-1 ${
               i !== 0 ? "border-l border-neutral-100 dark:border-zinc-900" : ""
             }`}
           >
