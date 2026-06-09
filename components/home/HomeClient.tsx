@@ -52,7 +52,7 @@ export default function HomeClient() {
   /* ── 비로그인 ── */
   if (status === "unauthenticated") {
     return (
-      <div className="mt-6 mb-8 flex items-center justify-between py-4 px-5 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-neutral-50 dark:bg-zinc-900/40">
+      <div className="mt-5 mb-5 flex items-center justify-between py-3.5 px-5 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-neutral-50 dark:bg-zinc-900/40">
         <div className="flex items-center gap-2.5">
           <span className="text-[20px]">🍭</span>
           <span className="text-[13px] font-semibold text-neutral-500 dark:text-neutral-400">
@@ -71,7 +71,7 @@ export default function HomeClient() {
 
   /* ── 로그인 ── */
   return (
-    <div className="mt-6 mb-8 flex items-center justify-between py-4 px-5 rounded-2xl border border-neutral-100 dark:border-zinc-900">
+    <div className="mt-5 mb-5 flex items-center justify-between py-3.5 px-5 rounded-2xl border border-neutral-100 dark:border-zinc-900">
       <div className="flex items-center gap-2.5">
         <span className="text-[20px]">🍭</span>
         <div>
