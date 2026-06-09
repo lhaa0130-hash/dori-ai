@@ -17,6 +17,7 @@ Disallow: /illo
 Disallow: /blog
 Disallow: /insight-sample
 Disallow: /auto
+Disallow: /market
 Disallow: /community/write
 Disallow: /shop
 Disallow: /resources
@@ -40,6 +41,7 @@ Disallow: /illo
 Disallow: /blog
 Disallow: /insight-sample
 Disallow: /auto
+Disallow: /market
 Disallow: /community/write
 Disallow: /shop
 Disallow: /resources
