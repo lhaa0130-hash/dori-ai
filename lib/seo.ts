@@ -88,8 +88,5 @@ export function createMetadata({
         "max-snippet": -1,
       },
     },
-    verification: {
-      google: "your-google-verification-code", // Google Search Console에서 받은 코드로 교체
-    },
   };
 }

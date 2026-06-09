@@ -1,15 +1,56 @@
 User-Agent: *
 Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /debug-auth
+Disallow: /studio
 Disallow: /my
+Disallow: /my/
+Disallow: /login
+Disallow: /signup
 Disallow: /api/
 Disallow: /_next/
-Disallow: /studio
+Disallow: /animal
+Disallow: /family
+Disallow: /education
+Disallow: /illo
+Disallow: /blog
+Disallow: /insight-sample
+Disallow: /auto
+Disallow: /community/write
+Disallow: /shop
+Disallow: /resources
 
 User-Agent: Googlebot
 Allow: /
+Disallow: /admin
+Disallow: /admin/
+Disallow: /debug-auth
+Disallow: /studio
 Disallow: /my
+Disallow: /my/
+Disallow: /login
+Disallow: /signup
 Disallow: /api/
 Disallow: /_next/
-Disallow: /studio
+Disallow: /animal
+Disallow: /family
+Disallow: /education
+Disallow: /illo
+Disallow: /blog
+Disallow: /insight-sample
+Disallow: /auto
+Disallow: /community/write
+Disallow: /shop
+Disallow: /resources
+
+User-Agent: GPTBot
+Disallow: /
+
+User-Agent: ClaudeBot
+Disallow: /
+
+User-Agent: anthropic-ai
+Disallow: /
 
 Sitemap: https://dori-ai.com/sitemap.xml

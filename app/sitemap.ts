@@ -13,38 +13,42 @@ const baseUrl = "https://dori-ai.com";
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
-  // 1) 고정 페이지
+  // 1) 핵심 정적 페이지 (크롤 가치 높은 페이지만)
   const staticPages: MetadataRoute.Sitemap = [
-    { url: `${baseUrl}/`, lastModified: now, changeFrequency: "daily", priority: 1.0 },
-    { url: `${baseUrl}/insight`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
-    { url: `${baseUrl}/ai-tools`, lastModified: now, changeFrequency: "daily", priority: 0.9 },
-    { url: `${baseUrl}/academy`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/community`, lastModified: now, changeFrequency: "daily", priority: 0.7 },
-    { url: `${baseUrl}/market`, lastModified: now, changeFrequency: "weekly", priority: 0.6 },
-    { url: `${baseUrl}/suggestions`, lastModified: now, changeFrequency: "weekly", priority: 0.5 },
-    { url: `${baseUrl}/legal/about`, lastModified: now, changeFrequency: "monthly", priority: 0.4 },
-    { url: `${baseUrl}/legal/contact`, lastModified: now, changeFrequency: "monthly", priority: 0.4 },
-    { url: `${baseUrl}/legal/privacy`, lastModified: now, changeFrequency: "monthly", priority: 0.3 },
-    { url: `${baseUrl}/legal/terms`, lastModified: now, changeFrequency: "monthly", priority: 0.3 },
+    { url: `${baseUrl}/`,          lastModified: now, changeFrequency: "daily",   priority: 1.0 },
+    { url: `${baseUrl}/insight`,   lastModified: now, changeFrequency: "daily",   priority: 0.9 },
+    { url: `${baseUrl}/ai-tools`,  lastModified: now, changeFrequency: "weekly",  priority: 0.9 },
+    { url: `${baseUrl}/community`, lastModified: now, changeFrequency: "daily",   priority: 0.8 },
+    { url: `${baseUrl}/minigame`,  lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${baseUrl}/projects`,  lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${baseUrl}/faq`,                          changeFrequency: "monthly", priority: 0.4 },
+    { url: `${baseUrl}/help`,                         changeFrequency: "monthly", priority: 0.4 },
+    { url: `${baseUrl}/legal/about`,                  changeFrequency: "monthly", priority: 0.3 },
+    { url: `${baseUrl}/legal/contact`,                changeFrequency: "monthly", priority: 0.3 },
+    { url: `${baseUrl}/legal/privacy`,                changeFrequency: "monthly", priority: 0.2 },
+    { url: `${baseUrl}/legal/terms`,                  changeFrequency: "monthly", priority: 0.2 },
   ];
 
-  // 2) 모든 콘텐츠 글 → /insight/article/{slug}
-  const collect = (posts: Array<{ slug: string; date?: string }>, priority: number) =>
+  // 2) 아티클 페이지 수집 헬퍼
+  const collect = (
+    posts: Array<{ slug: string; date?: string }>,
+    priority: number
+  ): MetadataRoute.Sitemap =>
     posts.map((p) => ({
       url: `${baseUrl}/insight/article/${p.slug}`,
       lastModified: p.date ? new Date(p.date) : now,
-      changeFrequency: "weekly" as const,
+      changeFrequency: "monthly" as const, // 발행 후 자주 바뀌지 않음
       priority,
     }));
 
   let articleUrls: MetadataRoute.Sitemap = [];
   try {
     articleUrls = [
-      ...collect(getAllTrends(), 0.8),
+      ...collect(getAllTrends(),    0.8),
       ...collect(getAllCurations(), 0.7),
-      ...collect(getAllAnalyses(), 0.7),
-      ...collect(getAllReports(), 0.7),
-      ...collect(getAllStudios(), 0.8),
+      ...collect(getAllAnalyses(),  0.7),
+      ...collect(getAllReports(),   0.7),
+      ...collect(getAllStudios(),   0.8),
     ];
   } catch (e) {
     console.warn("[sitemap] failed to collect articles:", e);
