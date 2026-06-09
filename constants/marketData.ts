@@ -22,6 +22,7 @@ export interface MarketProduct {
   priceHint?: string;    // 예: "₩₩", "10만원대"
   summary: string;       // 한 줄 설명
   hot?: boolean;
+  weekly?: boolean;      // '이주의 상품' 상단 노출
 }
 
 // ── 제품군 카테고리 ───────────────────────────────────────
@@ -68,9 +69,15 @@ export function buildMarketUrl(p: MarketProduct): string {
 // ── 상품 목록 ──────────────────────────────────────────────
 // 지금은 비어 있음. 제품을 추가하려면 아래 형식으로 한 줄씩 넣으세요. 예:
 // { id: "ap-airpurifier", name: "공기청정기", category: "appliance", source: "coupang",
-//   query: "공기청정기", emoji: "🌬️", priceHint: "10만원대", summary: "미세먼지 걱정 끝", hot: true },
+//   query: "공기청정기", emoji: "🌬️", priceHint: "10만원대", summary: "미세먼지 걱정 끝",
+//   hot: true, weekly: true },   // weekly: true → '이주의 상품'에 노출
 export const MARKET_PRODUCTS: MarketProduct[] = [];
 
 export function countByCategory(catKey: string): number {
   return MARKET_PRODUCTS.filter((p) => p.category === catKey).length;
+}
+
+// '이주의 상품' (weekly 플래그가 켜진 상품)
+export function getWeeklyPicks(): MarketProduct[] {
+  return MARKET_PRODUCTS.filter((p) => p.weekly);
 }

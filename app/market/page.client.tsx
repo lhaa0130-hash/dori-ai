@@ -7,8 +7,10 @@ import {
   MARKET_PRODUCTS,
   SOURCE_META,
   CATEGORY_EMOJI,
+  CATEGORY_LABEL,
   buildMarketUrl,
   countByCategory,
+  getWeeklyPicks,
   type MarketProduct,
   type MarketCategory,
 } from "@/constants/marketData";
@@ -38,6 +40,55 @@ function ProductCard({ p }: { p: MarketProduct }) {
         <span className="flex items-center gap-0.5 text-[12px] font-bold text-[#F9954E]">보러가기 <ArrowUpRight className="w-3.5 h-3.5" /></span>
       </div>
     </a>
+  );
+}
+
+// ── 이주의 상품 (featured) ──
+function WeeklyCard({ p }: { p: MarketProduct }) {
+  const src = SOURCE_META[p.source];
+  return (
+    <a
+      href={buildMarketUrl(p)}
+      target="_blank"
+      rel="sponsored noopener noreferrer"
+      className="group flex items-center gap-4 p-4 rounded-2xl border border-[#F9954E]/30 bg-gradient-to-br from-[#FFF5EB] to-white dark:from-[#1a0d00] dark:to-black hover:shadow-lg hover:shadow-[#F9954E]/10 transition-all"
+    >
+      <div className="w-16 h-16 rounded-2xl bg-white dark:bg-zinc-900 border border-[#F9954E]/20 flex items-center justify-center text-[34px] leading-none flex-shrink-0">
+        {p.emoji || CATEGORY_EMOJI[p.category] || "🛍️"}
+      </div>
+      <div className="flex-1 min-w-0">
+        <div className="flex items-center gap-1.5 mb-1">
+          <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${src.cls}`}>{src.label}</span>
+          <span className="text-[10px] font-bold text-neutral-400">{CATEGORY_LABEL[p.category]}</span>
+        </div>
+        <h3 className="text-[15px] font-extrabold text-neutral-900 dark:text-white truncate group-hover:text-[#E8832E] dark:group-hover:text-[#FBAA60] transition-colors">{p.name}</h3>
+        <p className="text-[12px] text-neutral-500 dark:text-neutral-400 line-clamp-1 break-keep">{p.summary}</p>
+      </div>
+      <span className="flex items-center gap-0.5 text-[12px] font-bold text-[#F9954E] flex-shrink-0">보기 <ArrowUpRight className="w-3.5 h-3.5" /></span>
+    </a>
+  );
+}
+
+function WeeklySection() {
+  const picks = getWeeklyPicks();
+  return (
+    <section className="py-6 border-b border-neutral-100 dark:border-zinc-900">
+      <div className="flex items-center gap-2 mb-4">
+        <span className="text-[14px] font-extrabold text-neutral-900 dark:text-white">🔥 이주의 상품</span>
+        <span className="text-[10px] font-bold text-[#F9954E] px-2 py-0.5 rounded-full bg-[#FFF5EB] dark:bg-[#F9954E]/10">WEEKLY</span>
+      </div>
+      {picks.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-[#F9954E]/40 bg-[#FFF5EB]/40 dark:bg-[#F9954E]/5 p-8 text-center">
+          <p className="text-3xl mb-2">🛍️</p>
+          <p className="text-[14px] font-bold text-neutral-700 dark:text-neutral-300 mb-1">이주의 상품을 준비 중이에요</p>
+          <p className="text-[12px] text-neutral-400 break-keep">매주 아마존·쿠팡·알리에서 가장 추천하는 제품을 골라 올려드릴게요.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {picks.map((p) => <WeeklyCard key={p.id} p={p} />)}
+        </div>
+      )}
+    </section>
   );
 }
 
@@ -94,7 +145,11 @@ export default function MarketClient() {
         </p>
       </section>
 
+      {/* 이주의 상품 */}
+      <WeeklySection />
+
       <section className="py-6 pb-16">
+        <p className="text-[13px] font-bold text-neutral-400 dark:text-neutral-500 mb-4">제품군</p>
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
           {MARKET_CATEGORIES.map((c) => {
             const n = countByCategory(c.key);
