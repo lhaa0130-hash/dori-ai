@@ -1,13 +1,27 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+
+const CATS = [
+  { emoji: "🔥", label: "AI 트렌드",  href: "/insight",   featured: true  },
+  { emoji: "🤖", label: "AI 도구",    href: "/ai-tools",  featured: false },
+  { emoji: "⚡", label: "자동화",     href: "/auto",      featured: false },
+  { emoji: "🎮", label: "미니게임",   href: "/minigame",  featured: false },
+  { emoji: "💬", label: "커뮤니티",   href: "/community", featured: false },
+  { emoji: "📚", label: "교육",       href: "/education", featured: false },
+];
 
 export default function Hero() {
   return (
-    <section className="pt-8 pb-14">
-      {/* 헤딩: 두 줄이 각각 따로 위에서 내려오는 Toss 패턴 */}
-      <h1 className="text-[40px] sm:text-[54px] font-extrabold leading-[1.1] tracking-tight mb-5 break-keep overflow-hidden">
+    <section className="pt-10 pb-8 border-b border-neutral-100 dark:border-zinc-900">
+
+      {/* 브랜드 태그 */}
+      <p className="text-[10px] font-black tracking-[0.16em] uppercase text-[#F9954E] mb-5 toss-fade-line">
+        Dori AI
+      </p>
+
+      {/* 헤딩 — 줄마다 따로 내려오는 Toss 패턴 */}
+      <h1 className="text-[42px] sm:text-[56px] font-extrabold leading-[1.08] tracking-tight mb-5 break-keep overflow-hidden">
         <span className="block toss-fade-line toss-delay-0 text-neutral-950 dark:text-white">
           AI의 모든 것,
         </span>
@@ -16,25 +30,31 @@ export default function Hero() {
         </span>
       </h1>
 
-      <p className="toss-fade-up toss-delay-2 text-[15px] text-neutral-500 dark:text-neutral-400 leading-[1.75] mb-9 break-keep">
-        매일 업데이트되는 AI 트렌드, 200개 이상의 도구,<br className="hidden sm:block" />
-        그리고 즐길 수 있는 미니게임.
+      {/* 서브타이틀 */}
+      <p className="toss-fade-up toss-delay-2 text-[14px] text-neutral-400 dark:text-neutral-500 mb-8 break-keep leading-relaxed">
+        매일 업데이트되는 AI 트렌드 · 200개 도구 · 미니게임
       </p>
 
-      <div className="toss-fade-up toss-delay-3 flex gap-2.5">
-        <Link
-          href="/insight"
-          className="flex items-center gap-1.5 px-6 py-3.5 rounded-full bg-[#F9954E] text-white text-[14px] font-bold shadow-md shadow-[#F9954E]/20 active:opacity-85 transition-opacity"
-        >
-          트렌드 보기 <ArrowRight className="w-4 h-4" />
-        </Link>
-        <Link
-          href="/ai-tools"
-          className="flex items-center px-6 py-3.5 rounded-full border border-neutral-200 dark:border-zinc-800 text-neutral-700 dark:text-neutral-300 text-[14px] font-semibold active:opacity-70 transition-opacity"
-        >
-          AI 도구
-        </Link>
+      {/* 카테고리 가로 스크롤 칩 */}
+      <div className="toss-fade-up toss-delay-3 -mx-4 px-4 overflow-x-auto scrollbar-hide">
+        <div className="flex gap-2 w-max pb-0.5">
+          {CATS.map((cat) => (
+            <Link
+              key={cat.href}
+              href={cat.href}
+              className={`flex items-center gap-1.5 px-4 py-2 rounded-full border whitespace-nowrap text-[13px] font-semibold transition-opacity active:opacity-60 ${
+                cat.featured
+                  ? "bg-[#F9954E] border-[#F9954E] text-white shadow-sm shadow-[#F9954E]/25"
+                  : "bg-white dark:bg-zinc-950 border-neutral-100 dark:border-zinc-800 text-neutral-700 dark:text-neutral-300"
+              }`}
+            >
+              <span className="leading-none">{cat.emoji}</span>
+              {cat.label}
+            </Link>
+          ))}
+        </div>
       </div>
+
     </section>
   );
 }

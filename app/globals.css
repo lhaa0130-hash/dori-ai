@@ -485,3 +485,7 @@ h6 {
 .dark .toss-card:hover {
   box-shadow: 0 14px 36px rgba(0, 0, 0, 0.45);
 }
+
+/* ── 스크롤바 숨김 ── */
+.scrollbar-hide::-webkit-scrollbar { display: none; }
+.scrollbar-hide { -ms-overflow-style: none; scrollbar-width: none; }
