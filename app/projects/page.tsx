@@ -2,54 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
-
-const PROJECTS = [
-  {
-    id: "illo",
-    name: "illo(일로)",
-    emoji: "🟧",
-    image: "/illo-logo.png",
-    tag: "정식 프로그램",
-    isMain: true,
-    desc: "수많은 AI로, 혼자서도 사업을",
-    longDesc:
-      "하고 싶은 일을 클릭만 하면, 그 작업에 가장 잘 맞는 AI가 이미 연결돼 있어요. 글쓰기·마케팅·고객응대·요약까지 — 복잡한 설정 없이 누구나 손쉽게 1인 사업을 시작할 수 있는 AI 사무실입니다.",
-    href: "/illo/app",
-    tags: ["수많은 AI", "1인 사업", "지금 무료"],
-    status: "지금 무료",
-    isActive: true,
-  },
-  {
-    id: "animal",
-    name: "동물도감",
-    emoji: "🐾",
-    image: "",
-    tag: "1st Project",
-    isMain: false,
-    desc: "포켓몬처럼, 진짜 동물을 배워요",
-    longDesc:
-      "요즘 아이들이 접하는 동물의 수는 점점 줄고 있어요. 동물도감은 아이들이 다양한 동물을 포켓몬처럼 친숙하게 알아가고, 엑셀처럼 셀을 클릭해서 원하는 조건의 동물을 찾을 수 있도록 만든 교육 프로젝트입니다.",
-    href: "/animal",
-    tags: ["어린이 교육", "동물 생태", "셀 검색"],
-    status: "준비 중",
-    isActive: false,
-  },
-  {
-    id: "family",
-    name: "가족기록",
-    emoji: "👨‍👩‍👧‍👦",
-    image: "",
-    tag: "2nd Project",
-    isMain: false,
-    desc: "가족의 모든 것을 하나의 앱으로",
-    longDesc:
-      "일정·사진·건강·추억·할 일까지, 가족 구성원 모두가 실시간으로 공유하는 가족 전용 플랫폼이에요. 카카오에 흩어진 사진, 각자의 캘린더, 메모장의 건강 기록을 한곳에 모아 온 가족이 함께 볼 수 있게 만들어드려요.",
-    href: "/family",
-    tags: ["가족 공유", "추억 기록", "AI 요약"],
-    status: "기획 중",
-    isActive: false,
-  },
-];
+import { PROJECTS } from "@/constants/projectsData";
 
 export default function ProjectsPage() {
   return (
@@ -71,9 +24,9 @@ export default function ProjectsPage() {
         <div className="flex flex-col gap-4">
 
           {PROJECTS.map((project, i) => (
-            <div key={project.id} className={`scroll-reveal-item scroll-delay-${i + 1}`}>
+            <div key={project.slug} className={`scroll-reveal-item scroll-delay-${i + 1}`}>
               <Link
-                href={project.href}
+                href={`/projects/${project.slug}`}
                 className="toss-card group flex flex-col rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 overflow-hidden"
               >
                 {/* 배너 */}
