@@ -143,41 +143,34 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
   });
 
   return (
-    <div className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-500 relative overflow-x-hidden">
-
-      {/* 배경 그라데이션 (Standard) */}
-      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
+    <div className="w-full min-h-screen">
 
       {/* 인사이트 페이지 콘텐츠 */}
-      <section className="relative z-10 max-w-[1200px] mx-auto py-4 sm:py-8 min-h-[50vh]">
-        {/* 헤더 (Standard) */}
-        <div className="max-w-3xl mx-auto mb-6 sm:mb-12 text-center pt-2 sm:pt-8 flex flex-col items-center">
-          {/* Badge */}
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
-            <Sparkles className="w-3 h-3" />
-            <span>Insight Center</span>
-          </div>
-
-          <h1 className="text-3xl md:text-5xl font-bold mb-6 tracking-tight">
-            <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-              인사이트
-            </span>
+      <section className="py-4 sm:py-6 min-h-[50vh]">
+        {/* 헤더 */}
+        <div className="mb-8 pt-2 border-b border-neutral-100 dark:border-zinc-900 pb-10">
+          <p className="text-[11px] font-bold text-[#F9954E] tracking-[0.22em] uppercase mb-6">
+            INSIGHT
+          </p>
+          <h1 className="text-[48px] sm:text-[60px] font-black text-neutral-950 dark:text-white leading-[1.0] tracking-[-0.03em] mb-4 break-keep">
+            인사이트
           </h1>
-          <p className="text-base md:text-lg font-medium text-neutral-600 dark:text-neutral-300 break-keep leading-relaxed max-w-xl">
+          <p className="text-[16px] text-neutral-400 dark:text-neutral-500 leading-relaxed break-keep">
             AI 업계 속보와 심층 칼럼을 만나보세요
           </p>
         </div>
 
         {/* 카테고리 필터 */}
-        <div className="flex flex-wrap justify-center gap-2 mb-12">
+        <div className="flex flex-wrap gap-2 mb-8">
           {CATEGORIES.map((cat) => (
             <button
               key={cat}
               onClick={() => setSelectedCategory(cat)}
-              className={`px-4 py-2 rounded-full text-sm font-bold transition-all duration-300 border ${selectedCategory === cat
-                ? 'bg-[#F9954E] border-[#F9954E] text-white shadow-lg shadow-[#F9954E]/30'
-                : 'bg-white dark:bg-black border-neutral-200 dark:border-zinc-800 text-neutral-600 dark:text-neutral-400 hover:border-[#F9954E]/50 hover:text-[#F9954E] dark:hover:text-[#FBAA60]'
-                }`}
+              className={`px-4 py-2 rounded-full text-[13px] font-bold transition-colors border ${
+                selectedCategory === cat
+                  ? 'bg-[#F9954E] border-[#F9954E] text-white'
+                  : 'bg-white dark:bg-black border-neutral-200 dark:border-zinc-800 text-neutral-500 dark:text-neutral-400'
+              }`}
             >
               {cat}
             </button>
@@ -205,7 +198,7 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
                   style={{ textDecoration: 'none', color: 'inherit' }}
                 >
                   <div
-                    className="flex gap-3 md:gap-4 p-3 md:p-4 rounded-[1.5rem] md:rounded-[2rem] border transition-all duration-300 hover:-translate-y-1 hover:shadow-lg bg-white/80 dark:bg-zinc-900/40 backdrop-blur-xl border-neutral-200 dark:border-zinc-800 hover:border-[#F9954E]/30 dark:hover:border-[#F9954E]/30 hover:shadow-[#F9954E]/10"
+                    className="flex gap-3 md:gap-4 p-3 md:p-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-black transition-colors active:bg-neutral-50 dark:active:bg-zinc-900/50"
                   >
                     {/* 좌측 이미지 */}
                     <div
@@ -339,16 +332,6 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
         )}
       </section>
 
-      <style jsx global>{`
-        @keyframes gradientFlow {
-          0% {
-            background-position: 0% 50%;
-          }
-          100% {
-            background-position: 200% 50%;
-          }
-        }
-      `}</style>
     </div>
   );
 }
