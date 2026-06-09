@@ -3,7 +3,9 @@
 import { useState, useEffect } from "react";
 import { AiTool } from "@/types/content";
 import { AI_TOOLS_DATA } from "@/constants/aiToolsData";
+import { AI_TOOL_API_LINKS } from "@/constants/aiToolApiLinks";
 import { DISPLAY_CATEGORIES, CATEGORY_LABELS, CATEGORY_DESCRIPTIONS } from "@/constants/aiCategories";
+import { ExternalLink, Code2, Star } from "lucide-react";
 
 // ── favicon fallback ──────────────────────────────────────────────
 function toolFavicon(tool: AiTool) {
@@ -11,144 +13,162 @@ function toolFavicon(tool: AiTool) {
   catch { return ""; }
 }
 
-// ── TOP 3 하이라이트 카드 ─────────────────────────────────────────
-function HighlightCard({ tool, rank }: { tool: AiTool; rank: number }) {
+// API 링크: 데이터 필드 우선, 없으면 별도 매핑 조회
+function apiHref(tool: AiTool): string | null {
+  return tool.apiUrl || AI_TOOL_API_LINKS[tool.id] || null;
+}
+
+// ── TOP 5 통합 카드 (1~5위 동일 크기) ─────────────────────────────
+function TopCard({ tool, rank }: { tool: AiTool; rank: number }) {
+  const api = apiHref(tool);
+  const desc = tool.strength || tool.summary || tool.description || "";
+  const features = (tool.pros && tool.pros.length > 0)
+    ? tool.pros.slice(0, 3)
+    : (tool.tags || []).slice(0, 3);
+
   return (
-    <a
-      href={tool.website}
-      target="_blank"
-      rel="noopener noreferrer"
-      className="group flex items-start gap-4 p-4 rounded-2xl bg-white dark:bg-zinc-950
+    <div
+      className="group flex flex-col p-4 rounded-2xl bg-white dark:bg-zinc-950
         border border-neutral-100 dark:border-zinc-900
         hover:border-[#F9954E]/40 hover:shadow-lg hover:shadow-[#F9954E]/5
-        transition-all duration-200"
+        transition-all duration-200 min-h-[168px]"
     >
-      {/* 랭크 번호 */}
-      <span className={`text-[13px] font-black w-5 text-center mt-0.5 flex-shrink-0 ${
-        rank === 1 ? "text-[#F9954E]" : "text-neutral-300 dark:text-zinc-600"
-      }`}>
-        {rank}
-      </span>
+      {/* 상단: 랭크 + 로고 + 이름/설명 + 평점 */}
+      <div className="flex items-start gap-3.5">
+        <span className={`text-[15px] font-black w-5 text-center mt-1 flex-shrink-0 ${
+          rank === 1 ? "text-[#F9954E]"
+          : rank === 2 ? "text-[#F9954E]/70"
+          : rank === 3 ? "text-[#F9954E]/50"
+          : "text-neutral-300 dark:text-zinc-600"
+        }`}>
+          {rank}
+        </span>
 
-      {/* 로고 */}
-      <img
-        src={tool.thumbnail || toolFavicon(tool)}
-        alt={tool.name}
-        className="w-11 h-11 rounded-xl object-contain bg-neutral-50 dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 flex-shrink-0"
-        onError={(e) => { (e.target as HTMLImageElement).src = toolFavicon(tool); }}
-      />
+        <img
+          src={tool.thumbnail || toolFavicon(tool)}
+          alt={tool.name}
+          className="w-12 h-12 rounded-xl object-contain bg-neutral-50 dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 flex-shrink-0 p-0.5"
+          loading="lazy"
+          onError={(e) => { (e.target as HTMLImageElement).src = toolFavicon(tool); }}
+        />
 
-      {/* 본문 */}
-      <div className="flex-1 min-w-0">
-        <div className="flex items-start justify-between gap-3">
-          <div className="min-w-0">
-            <h3 className="text-[15px] font-extrabold text-neutral-900 dark:text-white leading-tight">
+        <div className="flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <h3 className="text-[16px] font-extrabold text-neutral-900 dark:text-white leading-tight truncate">
               {tool.name}
             </h3>
-            <p className="text-[12px] text-neutral-400 dark:text-neutral-500 mt-0.5 line-clamp-1 break-keep">
-              {tool.strength || tool.summary || ""}
-            </p>
-          </div>
-
-          {/* 버튼 */}
-          <div className="flex gap-1.5 flex-shrink-0">
-            {tool.apiUrl && (
-              <a
-                href={tool.apiUrl}
-                target="_blank"
-                rel="noopener noreferrer"
-                onClick={(e) => e.stopPropagation()}
-                className="px-2.5 py-1.5 rounded-lg text-[11px] font-bold border border-neutral-200 dark:border-zinc-800
-                  text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E]/40 hover:text-[#F9954E] transition-colors"
-              >
-                API
-              </a>
+            {tool.company && (
+              <span className="text-[11px] text-neutral-300 dark:text-zinc-600 flex-shrink-0 truncate hidden sm:inline">
+                {tool.company}
+              </span>
             )}
-            <span
-              className="px-3 py-1.5 rounded-lg bg-[#F9954E] text-white text-[12px] font-bold
-                group-hover:bg-[#E8832E] transition-colors whitespace-nowrap"
-            >
-              방문하기
-            </span>
           </div>
+          <p className="text-[12.5px] text-neutral-500 dark:text-neutral-400 mt-1 leading-relaxed line-clamp-2 break-keep">
+            {desc}
+          </p>
         </div>
 
-        {/* 핵심 특징 태그 */}
-        {tool.pros && tool.pros.length > 0 && (
-          <div className="flex flex-wrap gap-1.5 mt-2.5">
-            {tool.pros.slice(0, 3).map((p, i) => (
-              <span
-                key={i}
-                className="text-[11px] text-neutral-500 dark:text-neutral-400 bg-neutral-50 dark:bg-zinc-900
-                  px-2 py-0.5 rounded-full border border-neutral-100 dark:border-zinc-800 leading-snug"
-              >
-                {p}
-              </span>
-            ))}
+        {tool.rating > 0 && (
+          <div className="flex items-center gap-0.5 flex-shrink-0 mt-1">
+            <Star className="w-3 h-3 fill-[#F9954E] text-[#F9954E]" />
+            <span className="text-[12px] font-bold text-neutral-700 dark:text-neutral-300">
+              {tool.rating.toFixed(1)}
+            </span>
           </div>
         )}
       </div>
-    </a>
+
+      {/* 핵심 특징 칩 */}
+      {features.length > 0 && (
+        <div className="flex flex-wrap gap-1.5 mt-3 pl-[34px]">
+          {features.map((f, i) => (
+            <span
+              key={i}
+              className="text-[11px] text-neutral-500 dark:text-neutral-400 bg-neutral-50 dark:bg-zinc-900
+                px-2 py-0.5 rounded-full border border-neutral-100 dark:border-zinc-800 leading-snug"
+            >
+              {f}
+            </span>
+          ))}
+        </div>
+      )}
+
+      {/* 하단: 버튼 2개 (API 연결 / 사이트 방문) */}
+      <div className="flex gap-2 mt-auto pt-3.5 pl-[34px]">
+        {api && (
+          <a
+            href={api}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[12.5px] font-bold
+              border border-neutral-200 dark:border-zinc-800 text-neutral-600 dark:text-neutral-300
+              hover:border-[#F9954E]/50 hover:text-[#F9954E] transition-colors"
+          >
+            <Code2 className="w-3.5 h-3.5" />
+            API 연결
+          </a>
+        )}
+        <a
+          href={tool.website}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[12.5px] font-bold
+            bg-[#F9954E] text-white hover:bg-[#E8832E] transition-colors"
+        >
+          <ExternalLink className="w-3.5 h-3.5" />
+          사이트 방문
+        </a>
+      </div>
+    </div>
   );
 }
 
-// ── 미니 카드 (4위 이하) ──────────────────────────────────────────
+// ── 미니 카드 (6위 이하, 필터 모드 전체 목록용) ───────────────────
 function MiniCard({ tool, rank }: { tool: AiTool; rank: number }) {
+  const api = apiHref(tool);
   return (
-    <a
-      href={tool.website}
-      target="_blank"
-      rel="noopener noreferrer"
+    <div
       className="group flex items-center gap-3 px-4 py-3 rounded-xl bg-white dark:bg-zinc-950
-        border border-neutral-100 dark:border-zinc-900
-        hover:border-[#F9954E]/30 transition-all duration-150"
+        border border-neutral-100 dark:border-zinc-900 hover:border-[#F9954E]/30 transition-all duration-150"
     >
-      {/* 랭크 */}
       <span className="text-[11px] font-black text-neutral-300 dark:text-zinc-600 w-4 text-center flex-shrink-0">
         {rank}
       </span>
-
-      {/* 로고 */}
       <img
         src={tool.thumbnail || toolFavicon(tool)}
         alt={tool.name}
         className="w-[30px] h-[30px] rounded-lg object-contain bg-neutral-50 dark:bg-zinc-900
           border border-neutral-100 dark:border-zinc-800 flex-shrink-0"
+        loading="lazy"
         onError={(e) => { (e.target as HTMLImageElement).src = toolFavicon(tool); }}
       />
-
-      {/* 텍스트 */}
       <div className="flex-1 min-w-0">
-        <span className="text-[13px] font-semibold text-neutral-900 dark:text-white
-          group-hover:text-[#F9954E] transition-colors">
-          {tool.name}
-        </span>
-        <p className="text-[11px] text-neutral-400 truncate hidden sm:block mt-0.5">
-          {tool.summary || ""}
-        </p>
+        <span className="text-[13px] font-semibold text-neutral-900 dark:text-white">{tool.name}</span>
+        <p className="text-[11px] text-neutral-400 truncate hidden sm:block mt-0.5">{tool.summary || ""}</p>
       </div>
-
-      {/* 방문 */}
       <div className="flex gap-1.5 flex-shrink-0">
-        {tool.apiUrl && (
+        {api && (
           <a
-            href={tool.apiUrl}
+            href={api}
             target="_blank"
             rel="noopener noreferrer"
-            onClick={(e) => e.stopPropagation()}
-            className="px-2 py-1 rounded-md text-[10px] font-bold border border-neutral-200 dark:border-zinc-800
+            className="px-2.5 py-1 rounded-md text-[11px] font-bold border border-neutral-200 dark:border-zinc-800
               text-neutral-400 hover:text-[#F9954E] hover:border-[#F9954E]/30 transition-colors"
           >
             API
           </a>
         )}
-        <span className="flex items-center gap-1 px-2.5 py-1 rounded-md text-[11px] font-semibold
-          text-neutral-400 dark:text-neutral-500 border border-neutral-200 dark:border-zinc-800
-          group-hover:bg-[#F9954E] group-hover:border-[#F9954E] group-hover:text-white transition-colors">
+        <a
+          href={tool.website}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="px-2.5 py-1 rounded-md text-[11px] font-semibold text-white bg-[#F9954E]
+            hover:bg-[#E8832E] transition-colors"
+        >
           방문
-        </span>
+        </a>
       </div>
-    </a>
+    </div>
   );
 }
 
@@ -170,9 +190,8 @@ function CategorySection({
     return b.rating - a.rating;
   });
 
-  const top3   = sortedTools.slice(0, 3).map((t, i) => ({ ...t, topRank: i + 1 }));
-  const rank45 = sortedTools.slice(3, 5).map((t, i) => ({ ...t, topRank: i + 4 }));
-  const rest   = sortedTools.slice(5);
+  const top5 = sortedTools.slice(0, 5).map((t, i) => ({ ...t, topRank: i + 1 }));
+  const rest = sortedTools.slice(5);
 
   return (
     <section
@@ -199,29 +218,20 @@ function CategorySection({
         </span>
       </div>
 
-      {/* Top 3 카드 */}
-      <div className="flex flex-col gap-2 mb-3">
-        {top3.map((tool) => (
-          <HighlightCard key={tool.id} tool={tool} rank={tool.topRank ?? 1} />
+      {/* Top 5 통합 카드 (동일 크기) */}
+      <div className="flex flex-col gap-2.5">
+        {top5.map((tool) => (
+          <TopCard key={tool.id} tool={tool} rank={tool.topRank ?? 1} />
         ))}
       </div>
 
-      {/* 4~5위 */}
-      {rank45.length > 0 && (
-        <div className="flex flex-col gap-1.5 mt-2">
-          {rank45.map((tool) => (
-            <MiniCard key={tool.id} tool={tool} rank={tool.topRank ?? 4} />
-          ))}
-        </div>
-      )}
-
-      {/* 필터 모드: 전체 목록 */}
+      {/* 필터 모드: 6위 이하 전체 목록 */}
       {isFiltered && rest.length > 0 && (
         <div className="mt-6">
           <div className="flex items-center gap-3 mb-3">
             <div className="h-px flex-1 bg-neutral-100 dark:bg-zinc-900" />
             <span className="text-[11px] font-bold text-neutral-300 dark:text-zinc-600 uppercase tracking-widest whitespace-nowrap">
-              전체 {rest.length + 5}개
+              전체 {sortedTools.length}개
             </span>
             <div className="h-px flex-1 bg-neutral-100 dark:bg-zinc-900" />
           </div>
