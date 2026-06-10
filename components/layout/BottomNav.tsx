@@ -194,7 +194,7 @@ export default function BottomNav() {
             {PROJECTS.map((p) => (
               <Link key={p.name} href={p.href} className="flex items-center gap-3 py-3 border-b border-neutral-50 dark:border-zinc-900 last:border-0">
                 <div className="w-10 h-10 rounded-2xl bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-lg flex-shrink-0 overflow-hidden">
-                  {p.image ? <img src={p.image} alt={p.name} className="w-full h-full object-cover" /> : p.emoji}
+                  {p.image ? <img src={p.image} alt={p.name} loading="lazy" className="w-full h-full object-cover" /> : p.emoji}
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-[14px] font-bold text-neutral-900 dark:text-white">{p.name}</p>

@@ -59,7 +59,7 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
         <div className="flex items-center gap-4 mb-5">
           <div className={`w-16 h-16 rounded-2xl flex items-center justify-center flex-shrink-0 overflow-hidden ${project.isMain ? "bg-[#F9954E]" : "bg-neutral-50 dark:bg-zinc-900"}`}>
             {project.image
-              ? <img src={project.image} alt={project.name} className="w-12 h-12 rounded-xl object-cover" />
+              ? <img src={project.image} alt={project.name} loading="lazy" className="w-12 h-12 rounded-xl object-cover" />
               : <span className="text-4xl">{project.emoji}</span>}
           </div>
           <div className="flex flex-wrap items-center gap-2">

@@ -16,7 +16,7 @@ function ProjectCard({ project, delay }: { project: ProjectItem; delay: number }
           project.isMain ? "bg-[#F9954E]" : "bg-neutral-50 dark:bg-zinc-900"
         }`}>
           {project.image ? (
-            <img src={project.image} alt={project.name} className="w-16 h-16 rounded-2xl shadow-md object-cover" />
+            <img src={project.image} alt={project.name} loading="lazy" className="w-16 h-16 rounded-2xl shadow-md object-cover" />
           ) : (
             <span className="text-5xl drop-shadow-sm">{project.emoji}</span>
           )}

@@ -8,6 +8,7 @@ import ScrollAnimationProvider from "@/components/ScrollAnimationProvider";
 import { createMetadata } from "@/lib/seo";
 
 export const metadata = {
+  metadataBase: new URL("https://dori-ai.com"),
   ...createMetadata({
     title: "DORI-AI - AI 활용 방법을 함께 연구하는 커뮤니티 플랫폼",
     description: "AI 도구, 인사이트, 아카데미, 커뮤니티를 한 곳에서. AI 활용 방법을 함께 연구하고 실전으로 적용해보는 최신 트렌드와 인사이트를 공유하는 커뮤니티 플랫폼입니다.",
@@ -40,7 +41,7 @@ export const metadata = {
     ],
   },
   other: {
-    'pretendard-font': 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css',
+    'pretendard-font': 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css',
     'naver-site-verification': ['fc6aff074a85b391562bd15daa80e96e0f2a946a', 'ae3b47b353b50f9a3ac06e4c0db4ac641738faee'],
   },
 };
@@ -63,14 +64,14 @@ export default function RootLayout({
   return (
     <html lang="ko" suppressHydrationWarning>
       <head>
-        <link
-          rel="preconnect"
-          href="https://cdn.jsdelivr.net"
-          crossOrigin="anonymous"
-        />
+        <link rel="preconnect" href="https://cdn.jsdelivr.net" crossOrigin="anonymous" />
+        {/* 자주 쓰는 외부 이미지 도메인 사전 연결 (도구 로고/파비콘) */}
+        <link rel="preconnect" href="https://logo.clearbit.com" crossOrigin="anonymous" />
+        <link rel="dns-prefetch" href="https://www.google.com" />
+        {/* Pretendard 한글 동적 서브셋 — 전체 웨이트(수 MB) 대신 필요한 글자만 로드 */}
         <link
           rel="stylesheet"
-          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard.min.css"
+          href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css"
         />
         <StructuredData />
       </head>

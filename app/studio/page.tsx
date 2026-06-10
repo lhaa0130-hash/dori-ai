@@ -199,7 +199,7 @@ export default function StudioPage() {
                       <div key={item.id} className="card" onClick={() => setSelectedTool(item)}>
                         {rank && rank <= 3 && <div className={`badge rank-${rank}`}>{rank === 1 ? "🥇" : rank === 2 ? "🥈" : "🥉"}</div>}
                         <div className="card-header">
-                          <img src={item.logo} alt={item.title} className="logo" onError={(e) => e.currentTarget.src = 'https://placehold.co/60x60?text=AI'} />
+                          <img src={item.logo} alt={item.title} loading="lazy" className="logo" onError={(e) => e.currentTarget.src = 'https://placehold.co/60x60?text=AI'} />
                           <span className={`price ${item.price === 'Free' ? 'free' : ''}`}>{item.price}</span>
                         </div>
                         <div className="card-body">

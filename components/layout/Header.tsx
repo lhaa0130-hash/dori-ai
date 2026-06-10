@@ -91,7 +91,7 @@ export default function Header() {
                   {projects.map((p) => (
                     <Link key={p.name} href={p.href} className="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors group/item">
                       <div className={`w-9 h-9 rounded-xl ${p.bg} flex items-center justify-center flex-shrink-0 text-lg overflow-hidden`}>
-                        {p.image ? <img src={p.image} alt={p.name} className="w-full h-full object-cover" /> : p.emoji}
+                        {p.image ? <img src={p.image} alt={p.name} loading="lazy" className="w-full h-full object-cover" /> : p.emoji}
                       </div>
                       <div>
                         <div className="text-sm font-bold text-neutral-900 dark:text-white group-hover/item:text-[#E8832E] dark:group-hover/item:text-[#F9954E] transition-colors">{p.name}</div>
@@ -260,7 +260,7 @@ export default function Header() {
             {projects.map((p) => (
               <Link key={p.name} href={p.href} className="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-neutral-50 dark:hover:bg-zinc-900 transition-colors group">
                 <div className={`w-9 h-9 rounded-xl ${p.bg} flex items-center justify-center text-lg flex-shrink-0 overflow-hidden`}>
-                  {p.image ? <img src={p.image} alt={p.name} className="w-full h-full object-cover" /> : p.emoji}
+                  {p.image ? <img src={p.image} alt={p.name} loading="lazy" className="w-full h-full object-cover" /> : p.emoji}
                 </div>
                 <div>
                   <div className="text-sm font-bold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors">{p.name}</div>
