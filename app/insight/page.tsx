@@ -1,5 +1,4 @@
 import { Suspense } from 'react';
-import { sql } from "@vercel/postgres";
 import { getSortedPostsData } from '@/lib/posts';
 import { getAllGuides } from '@/lib/guides';
 import { getAllTrends } from '@/lib/trends';
@@ -34,17 +33,8 @@ export default async function InsightPage() {
       // Firebase 에러가 나도 페이지는 떠야 함
     }
 
-    // 1. Vercel Postgres 데이터 (레거시/백업)
-    let dbPosts: any[] = [];
-    try {
-      const { rows } = await sql`
-        SELECT * FROM posts 
-        ORDER BY created_at DESC
-      `;
-      dbPosts = rows || [];
-    } catch (dbError) {
-      // console.error('Error loading DB posts:', dbError);
-    }
+    // 1. (제거됨) Vercel Postgres — 정적 export에서 무의미하여 폐기. Firestore+파일시스템만 사용
+    const dbPosts: any[] = [];
 
     // 2. 파일 시스템 데이터
     let filePosts: any[] = [];
