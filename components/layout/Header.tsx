@@ -79,10 +79,11 @@ export default function Header() {
 
             {/* 프로젝트 드롭다운 */}
             <div className="relative group flex-shrink-0">
-              <Link href="/projects" className="flex items-center gap-0.5 text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap">
+              {/* 클릭으로 /projects 이동하지 않고 호버 드롭다운만 여는 트리거 */}
+              <button type="button" aria-haspopup="true" className="flex items-center gap-0.5 text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap cursor-default">
                 프로젝트
                 <ChevronDown className="w-3.5 h-3.5 opacity-50 group-hover:rotate-180 transition-transform duration-300 ml-0.5" />
-              </Link>
+              </button>
               <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 translate-y-1 group-hover:translate-y-0 z-50 pt-2">
                 <div className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden">
                   <div className="px-4 py-2.5 border-b border-neutral-100 dark:border-zinc-800">

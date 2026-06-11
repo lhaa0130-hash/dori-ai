@@ -4,6 +4,9 @@ import { useState, useEffect, useRef } from "react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { ArrowLeft, RefreshCw, Keyboard, Send, Check, X } from "lucide-react";
+import { useAuth } from "@/contexts/AuthContext";
+import { submitScore } from "@/lib/leaderboard";
+import GameLeaderboard from "@/components/game/GameLeaderboard";
 
 // 단어 데이터
 const WORDS = [
@@ -19,6 +22,7 @@ const WORDS = [
 
 export default function TypingGamePage() {
     const { theme } = useTheme();
+    const { session } = useAuth();
     const [gameState, setGameState] = useState<"START" | "PLAY" | "RESULT">("START");
     const [currentWordIndex, setCurrentWordIndex] = useState(0);
     const [input, setInput] = useState("");
@@ -35,6 +39,11 @@ export default function TypingGamePage() {
             }, 1000);
         } else if (timeLeft === 0 && gameState === "PLAY") {
             setGameState("RESULT");
+            // 명예의 전당 점수 등록 (이 시점의 score가 최종 점수)
+            if (session?.user?.email) {
+                submitScore("typing", session.user.name || "플레이어", score, "desc");
+                if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("dori-lb-refresh", { detail: "typing" }));
+            }
         }
         return () => clearInterval(timer);
     }, [gameState, timeLeft]);
@@ -201,6 +210,11 @@ export default function TypingGamePage() {
                         </div>
                     )}
 
+                </div>
+
+                {/* 명예의 전당 TOP 5 */}
+                <div className="w-full max-w-2xl mx-auto mt-4 px-4">
+                    <GameLeaderboard game="typing" title="명예의 전당 TOP 5" unit="점" order="desc" />
                 </div>
             </div>
 

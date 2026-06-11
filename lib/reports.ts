@@ -107,7 +107,7 @@ export function getReportBySlug(slug: string): ReportPost | null {
     title: metadata.title || realSlug,
     description: metadata.description || metadata.summary || '내용이 없습니다.',
     date: metadata.date || new Date().toISOString().slice(0, 10),
-    category: metadata.category || '트렌드',
+    category: metadata.category || '리포트',
     author: metadata.author || 'DORI-AI',
     content: content,
     tags: Array.isArray(metadata.tags) ? metadata.tags : (metadata.tags ? [metadata.tags] : []),

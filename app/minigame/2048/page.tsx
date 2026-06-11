@@ -7,6 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { addCottonCandy, incrementMinigamePlays, addExp } from "@/lib/cottonCandy";
 import PlaytimeRewardToast from "@/components/game/PlaytimeRewardToast";
+import { submitScore } from "@/lib/leaderboard";
+import GameLeaderboard from "@/components/game/GameLeaderboard";
 
 // ----------------------------------------------------------------------
 // Constants & Types
@@ -139,6 +141,12 @@ export default function Game2048() {
                 if (session?.user?.email) {
                     incrementMinigamePlays(session.user.email);
                 }
+                // 명예의 전당 점수 등록 (최종 점수 = score state는 아직 갱신 전이므로 local 합산값 사용)
+                const finalScore = score + scoreGain;
+                if (session?.user?.email) {
+                    submitScore("2048", session.user.name || "플레이어", finalScore, "desc");
+                    if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("dori-lb-refresh", { detail: "2048" }));
+                }
             }
         }
     }, [grid, gameOver, won, bestScore, score, session]);
@@ -265,6 +273,10 @@ export default function Game2048() {
 
             <div className="mt-8 text-slate-500 text-sm">
                 Use arrow keys or buttons to join the numbers and get to the <span className="text-yellow-500 font-bold">2048 tile!</span>
+            </div>
+
+            <div className="w-full max-w-md mx-auto mt-4 px-4">
+                <GameLeaderboard game="2048" title="명예의 전당 TOP 5" unit="점" order="desc" tone="dark" />
             </div>
         </div>
     );

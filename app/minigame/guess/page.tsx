@@ -7,7 +7,8 @@ import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 import { useAuth } from "@/contexts/AuthContext";
-import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
+import { submitScore } from "@/lib/leaderboard";
+import GameLeaderboard from "@/components/game/GameLeaderboard";
 
 // ---- Types ----
 type GameState = "SETUP" | "PLAYING" | "WON";
@@ -94,9 +95,11 @@ export default function GuessNumberPage() {
             newMessage = `축하합니다! ${attempts.length + 1}번 만에 맞추셨습니다!`;
             setGameState("WON");
             triggerConfetti();
+            // 최종 시도 횟수 (이번 정답 시도 포함). attempts 상태는 아직 업데이트 전이므로 +1
+            const finalAttempts = attempts.length + 1;
             if (session?.user?.email) {
-                addCottonCandy(session.user.email, 20, "숫자 맞추기 성공");
-                incrementMinigamePlays(session.user.email);
+                submitScore("guess", session.user.name || "플레이어", finalAttempts, "asc");
+                if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("dori-lb-refresh", { detail: "guess" }));
             }
         } else {
             const diff = Math.abs(guess - secretNumber);
@@ -314,6 +317,11 @@ export default function GuessNumberPage() {
                                 </button>
                             </motion.div>
                         )}
+                    </div>
+
+                    {/* 명예의 전당 (글로벌 TOP 5) */}
+                    <div className="w-full max-w-md mx-auto mt-4 px-4">
+                        <GameLeaderboard game="guess" title="명예의 전당 TOP 5" unit="번" order="asc" />
                     </div>
                 </div>
             </div>

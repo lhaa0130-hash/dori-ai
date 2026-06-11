@@ -4,7 +4,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { ArrowLeft, RotateCw, ArrowDown, ArrowRight, ArrowLeft as ArrowLeftIcon, Trophy, RefreshCw, Play } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
-import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
+import { submitScore } from "@/lib/leaderboard";
+import GameLeaderboard from "@/components/game/GameLeaderboard";
 
 // ----------------------------------------------------------------------
 // Constants & Types
@@ -217,10 +218,6 @@ export default function TetrisGame() {
                 }
                 return newLines;
             });
-            // 솜사탕 지급 (줄 제거 시)
-            if (session?.user?.email) {
-                addCottonCandy(session.user.email, rowCount * 5, "테트리스 줄 제거");
-            }
         }
     };
 
@@ -244,10 +241,14 @@ export default function TetrisGame() {
         if (collide(grid.current, piece.current)) {
             setGameStateAndRef("GAME_OVER");
             if (requestRef.current) cancelAnimationFrame(requestRef.current);
-            // 게임오버 시 미니게임 플레이 카운트
-            if (session?.user?.email) {
-                incrementMinigamePlays(session.user.email);
-            }
+            // 게임오버 시 최종 점수를 명예의 전당에 제출
+            setScore((finalScore) => {
+                if (session?.user?.email) {
+                    submitScore("tetris", session.user.name || "플레이어", finalScore, "desc");
+                    if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("dori-lb-refresh", { detail: "tetris" }));
+                }
+                return finalScore;
+            });
         }
     };
 
@@ -465,6 +466,11 @@ export default function TetrisGame() {
                     </div>
                 </div>
 
+            </div>
+
+            {/* 명예의 전당 (글로벌 TOP 5) */}
+            <div className="w-full max-w-md mx-auto mt-4 px-4">
+                <GameLeaderboard game="tetris" title="명예의 전당 TOP 5" unit="점" order="desc" tone="dark" />
             </div>
         </div>
     );

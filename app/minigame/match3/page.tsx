@@ -4,8 +4,8 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { ArrowLeft, RefreshCw, Trophy, Flame } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
-import CottonCandy from "@/components/icons/CottonCandy";
-import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
+import { submitScore } from "@/lib/leaderboard";
+import GameLeaderboard from "@/components/game/GameLeaderboard";
 
 const COLS = 8;
 const ROWS = 8;
@@ -69,17 +69,18 @@ export default function Match3Game() {
   const [score, setScore] = useState(0);
   const [moves, setMoves] = useState(INIT_MOVES);
   const [isGameOver, setIsGameOver] = useState(false);
-  const [candyGiven, setCandyGiven] = useState(false);
+  const [scoreSubmitted, setScoreSubmitted] = useState(false);
   const processing = useRef(false);
 
   useEffect(() => {
-    if (isGameOver && !candyGiven && session?.user?.email) {
-      const candy = Math.max(1, Math.floor(score / 50));
-      addCottonCandy(session.user.email, candy, "매치3 게임 완료");
-      incrementMinigamePlays(session.user.email);
-      setCandyGiven(true);
+    if (isGameOver && !scoreSubmitted) {
+      setScoreSubmitted(true);
+      if (session?.user?.email) {
+        submitScore("match3", session.user.name || "플레이어", score, "desc");
+        if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("dori-lb-refresh", { detail: "match3" }));
+      }
     }
-  }, [isGameOver, candyGiven, score, session]);
+  }, [isGameOver, scoreSubmitted, score, session]);
 
   const handleClick = (idx: number) => {
     if (processing.current || isGameOver) return;
@@ -126,12 +127,10 @@ export default function Match3Game() {
     setScore(0);
     setMoves(INIT_MOVES);
     setIsGameOver(false);
-    setCandyGiven(false);
+    setScoreSubmitted(false);
     setSelected(null);
     processing.current = false;
   };
-
-  const candyPreview = Math.max(0, Math.floor(score / 50));
 
   return (
     <div className="h-screen w-full bg-neutral-900 text-white font-sans flex flex-col items-center justify-center p-4 overflow-hidden touch-none">
@@ -153,10 +152,6 @@ export default function Match3Game() {
         <div className="text-center">
           <div className="text-xs text-neutral-400 uppercase font-bold">남은 이동</div>
           <div className={`text-2xl font-bold font-mono ${moves <= 5 ? "text-red-500 animate-pulse" : "text-white"}`}>{moves}</div>
-        </div>
-        <div className="text-center">
-          <div className="text-xs text-neutral-400 uppercase font-bold flex items-center justify-center gap-1">예상 <CottonCandy className="w-3.5 h-3.5" /></div>
-          <div className="text-2xl font-bold text-orange-400">{candyPreview}</div>
         </div>
       </div>
 
@@ -184,10 +179,7 @@ export default function Match3Game() {
         <div className="w-[360px] h-[360px] flex flex-col items-center justify-center bg-neutral-800 rounded-xl border-2 border-neutral-700 p-6 text-center shadow-2xl">
           <Trophy className="w-16 h-16 text-yellow-400 mb-4" />
           <h2 className="text-3xl font-bold mb-2">게임 종료!</h2>
-          <p className="text-neutral-400 mb-2">최종 점수: <span className="text-yellow-400 font-bold">{score}</span></p>
-          {candyPreview > 0 && (
-            <p className="text-orange-400 font-bold mb-4 flex items-center justify-center gap-1"><CottonCandy className="w-4 h-4" /> 솜사탕 {candyPreview}개 획득!</p>
-          )}
+          <p className="text-neutral-400 mb-4">최종 점수: <span className="text-yellow-400 font-bold">{score}</span></p>
           <button
             onClick={reset}
             className="bg-pink-600 hover:bg-pink-500 text-white px-8 py-3 rounded-full font-bold shadow-lg transition-transform active:scale-95 flex items-center gap-2"
@@ -198,8 +190,12 @@ export default function Match3Game() {
       )}
 
       <p className="mt-4 text-neutral-500 text-xs text-center">
-        과일을 클릭해서 이웃한 과일과 교체 • 50점마다 솜사탕 1개
+        과일을 클릭해서 이웃한 과일과 교체
       </p>
+
+      <div className="w-full max-w-md mx-auto mt-4 px-4">
+        <GameLeaderboard game="match3" title="명예의 전당 TOP 5" unit="점" order="desc" tone="dark" />
+      </div>
     </div>
   );
 }

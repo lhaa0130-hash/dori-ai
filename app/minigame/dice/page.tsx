@@ -7,7 +7,6 @@ import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 import { useAuth } from "@/contexts/AuthContext";
-import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 // ---- Types ----
 type GameState = "SETUP" | "ROLLING" | "FINISHED";
@@ -68,11 +67,6 @@ export default function DiceRollPage() {
             setDiceResults(results);
             setIsRolling(false);
             setGameState("FINISHED");
-
-            if (session?.user?.email) {
-                addCottonCandy(session.user.email, 5, "주사위 굴리기");
-                incrementMinigamePlays(session.user.email);
-            }
 
             // Trigger confetti if all dice show the same number (special case)
             if (results.every(r => r === results[0])) {

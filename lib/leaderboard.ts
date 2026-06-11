@@ -1,19 +1,23 @@
 // 미니게임 명예의 전당 — Firestore 전역 랭킹 (정적 export 호환, 솜사탕과 동일 패턴)
 // ─────────────────────────────────────────────────────────────
-// 회원(로그인)만 기록 등록. 회원당 1개 문서(uid)에 "개인 최고점"만 보관 →
-// 점수가 기존보다 높을 때만 갱신. 화면에는 상위 5명만 노출.
+// 회원(로그인)만 기록 등록. 게임별·회원당 1개 문서에 "개인 최고 기록"만 보관.
+// 점수가 더 좋을 때만 갱신(desc=높을수록/asc=낮을수록 좋음). 화면엔 상위 5명만 노출.
 //
-//   lb_animalmerge/{uid}  { name, score, updatedAt }
+//   leaderboards/{game}/scores/{uid}   { name, score, updatedAt }
+//   예) leaderboards/animalmerge/scores/{uid}, leaderboards/2048/scores/{uid}
 //
-// ⚠️ Firestore 보안 규칙 필요(로그인 사용자 쓰기 허용):
-//   match /lb_animalmerge/{uid} { allow read: if true; allow write: if request.auth != null; }
+// ⚠️ Firestore 보안 규칙(한 줄로 모든 게임 커버):
+//   match /leaderboards/{game}/scores/{uid} {
+//     allow read: if true;                    // 순위표는 누구나 조회
+//     allow write: if request.auth != null;   // 로그인 회원만 등록
+//   }
 
 import {
   doc, getDoc, setDoc, getDocs, collection, query, orderBy, limit, serverTimestamp,
 } from "firebase/firestore";
 import { getFirebaseFirestore, getFirebaseAuth } from "@/lib/firebase";
 
-const COL = "lb_animalmerge";
+export type RankOrder = "desc" | "asc"; // desc=높을수록 좋음(점수), asc=낮을수록 좋음(무브/시도)
 
 export interface ScoreEntry {
   uid: string;
@@ -34,16 +38,26 @@ function currentUid(): string | null {
   }
 }
 
-/** 동물합치기 점수 등록 — 개인 최고 갱신 시에만 기록. 비로그인/0점은 무시. */
-export async function submitAnimalMergeScore(name: string, score: number): Promise<SubmitResult> {
+function scoresCol(game: string) {
+  return collection(getFirebaseFirestore(), "leaderboards", game, "scores");
+}
+
+/** 점수 등록 — 개인 기록 갱신 시에만 저장. 비로그인/0이하는 무시. */
+export async function submitScore(
+  game: string,
+  name: string,
+  score: number,
+  order: RankOrder = "desc"
+): Promise<SubmitResult> {
   const uid = currentUid();
-  if (!uid || !score || score <= 0) return { isNewBest: false, rank: 0 };
+  if (!uid || !Number.isFinite(score) || score <= 0) return { isNewBest: false, rank: 0 };
   try {
-    const db = getFirebaseFirestore();
-    const ref = doc(db, COL, uid);
+    const ref = doc(getFirebaseFirestore(), "leaderboards", game, "scores", uid);
     const snap = await getDoc(ref);
-    const prev = snap.exists() ? Number(snap.data().score || 0) : 0;
-    if (score <= prev) return { isNewBest: false, rank: 0 };
+    const has = snap.exists();
+    const prev = has ? Number(snap.data().score || 0) : 0;
+    const better = order === "asc" ? !has || score < prev : score > prev;
+    if (!better) return { isNewBest: false, rank: 0 };
 
     await setDoc(
       ref,
@@ -52,7 +66,7 @@ export async function submitAnimalMergeScore(name: string, score: number): Promi
     );
 
     // 갱신 후 순위 계산 (상위 50명 안에서)
-    const top = await getTopScores(50);
+    const top = await getTopScores(game, 50, order);
     const rank = top.findIndex((e) => e.uid === uid) + 1;
     return { isNewBest: true, rank };
   } catch {
@@ -60,11 +74,10 @@ export async function submitAnimalMergeScore(name: string, score: number): Promi
   }
 }
 
-/** 상위 N명 (점수 내림차순). 기본 5명. */
-export async function getTopScores(n = 5): Promise<ScoreEntry[]> {
+/** 상위 N명 (order 방향 정렬). 기본 5명·내림차순. */
+export async function getTopScores(game: string, n = 5, order: RankOrder = "desc"): Promise<ScoreEntry[]> {
   try {
-    const db = getFirebaseFirestore();
-    const q = query(collection(db, COL), orderBy("score", "desc"), limit(n));
+    const q = query(scoresCol(game), orderBy("score", order), limit(n));
     const snap = await getDocs(q);
     const arr: ScoreEntry[] = [];
     snap.forEach((d) => {
@@ -77,7 +90,10 @@ export async function getTopScores(n = 5): Promise<ScoreEntry[]> {
   }
 }
 
-/** 명예의 전당 TOP 5 */
+// ─── 동물합치기 하위호환 래퍼 (기존 merge 페이지가 사용) ───────────────
+export function submitAnimalMergeScore(name: string, score: number): Promise<SubmitResult> {
+  return submitScore("animalmerge", name, score, "desc");
+}
 export function getAnimalMergeTop5(): Promise<ScoreEntry[]> {
-  return getTopScores(5);
+  return getTopScores("animalmerge", 5, "desc");
 }

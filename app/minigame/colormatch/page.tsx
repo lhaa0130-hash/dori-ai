@@ -7,7 +7,8 @@ import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 import { useAuth } from "@/contexts/AuthContext";
-import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
+import { submitScore } from "@/lib/leaderboard";
+import GameLeaderboard from "@/components/game/GameLeaderboard";
 
 type GameMode = "rgb" | "name";
 
@@ -48,9 +49,8 @@ export default function ColorMatchPage() {
             setIsGameOver(true);
             setIsPlaying(false);
             if (session?.user?.email) {
-                const candy = Math.max(1, Math.floor(score / 2));
-                addCottonCandy(session.user.email, candy, "색깔 맞추기 게임 완료");
-                incrementMinigamePlays(session.user.email);
+                submitScore("colormatch", session.user.name || "플레이어", score, "desc");
+                if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("dori-lb-refresh", { detail: "colormatch" }));
             }
         }
     }, [isPlaying, timeLeft]);
@@ -231,6 +231,10 @@ export default function ColorMatchPage() {
                             </motion.div>
                         )}
                     </div>
+                </div>
+
+                <div className="w-full max-w-2xl mx-auto mt-4 px-4">
+                    <GameLeaderboard game="colormatch" title="명예의 전당 TOP 5" unit="점" order="desc" />
                 </div>
             </div>
         </main>

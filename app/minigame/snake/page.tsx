@@ -4,7 +4,8 @@ import { useState, useEffect, useRef, useCallback } from "react";
 import { ArrowLeft, RefreshCw, Trophy, Play } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
-import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
+import { submitScore } from "@/lib/leaderboard";
+import GameLeaderboard from "@/components/game/GameLeaderboard";
 
 // ----------------------------------------------------------------------
 // Constants & Types
@@ -108,13 +109,10 @@ export default function SnakeGame() {
                 setHighScore(currentScore);
                 localStorage.setItem("snake_highscore", currentScore.toString());
             }
-            // 솜사탕 지급 및 미니게임 플레이 카운트
+            // 명예의 전당(글로벌 TOP 5) 점수 제출
             if (session?.user?.email) {
-                const candy = Math.min(currentScore * 2, 50);
-                if (candy > 0) {
-                    addCottonCandy(session.user.email, candy, "스네이크 게임");
-                }
-                incrementMinigamePlays(session.user.email);
+                submitScore("snake", session.user.name || "플레이어", currentScore, "desc");
+                if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("dori-lb-refresh", { detail: "snake" }));
             }
             return currentScore;
         });
@@ -278,6 +276,10 @@ export default function SnakeGame() {
                     onTouchStart={(e) => { e.preventDefault(); if (direction.current.x === 0) nextDirection.current = { x: 1, y: 0 }; }}
                     onMouseDown={(e) => { e.preventDefault(); if (direction.current.x === 0) nextDirection.current = { x: 1, y: 0 }; }}
                 >➡️</button>
+            </div>
+
+            <div className="w-full max-w-md mx-auto mt-4 px-4">
+                <GameLeaderboard game="snake" title="명예의 전당 TOP 5" unit="점" order="desc" tone="dark" />
             </div>
         </div>
     );

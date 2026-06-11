@@ -70,6 +70,16 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
   const CATEGORIES = ['전체', '트렌드', '가이드', '분석', '리포트', '큐레이션', '스튜디오'];
   const [selectedCategory, setSelectedCategory] = useState('전체');
 
+  // 메인페이지에서 ?cat=트렌드 등으로 들어오면 해당 카테고리로 자동 필터
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+    try {
+      const cat = new URLSearchParams(window.location.search).get('cat');
+      if (cat && CATEGORIES.includes(cat)) setSelectedCategory(cat);
+    } catch { /* noop */ }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   // 카테고리별 색상 (주황색 테마 기반 톤온톤)
   const getCategoryColor = (category?: string) => {
     if (!category) return { bg: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.05)', text: isDark ? 'rgba(255,255,255,0.6)' : 'rgba(0,0,0,0.5)' };

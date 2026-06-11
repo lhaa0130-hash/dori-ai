@@ -7,6 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 import { useAuth } from "@/contexts/AuthContext";
 import { addCottonCandy, incrementMinigamePlays, addExp } from "@/lib/cottonCandy";
+import { submitScore } from "@/lib/leaderboard";
+import GameLeaderboard from "@/components/game/GameLeaderboard";
 import PlaytimeRewardToast from "@/components/game/PlaytimeRewardToast";
 
 // ----------------------------------------------------------------------
@@ -35,6 +37,7 @@ export default function ClickerGame() {
     const [stage, setStage] = useState(0);
     const [currentHp, setCurrentHp] = useState(MONSTER_LIST[0].hp);
     const [gold, setGold] = useState(0);
+    const [kills, setKills] = useState(0); // 누적 보스 처치 수 (명예의 전당 기록)
 
     // Stats
     const [clickDamage, setClickDamage] = useState(1);
@@ -87,6 +90,18 @@ export default function ClickerGame() {
             incrementMinigamePlays(session.user.email);
             addExp(session.user.email, 3, "보스 처치");
         }
+
+        // 누적 처치 수 기록 (명예의 전당) — 과도한 쓰기 방지 위해 1회차/3회마다 등록
+        setKills((prev) => {
+            const nk = prev + 1;
+            if (session?.user?.email && (nk === 1 || nk % 3 === 0)) {
+                submitScore("clicker", session.user.name || "플레이어", nk, "desc");
+                if (typeof window !== "undefined") {
+                    window.dispatchEvent(new CustomEvent("dori-lb-refresh", { detail: "clicker" }));
+                }
+            }
+            return nk;
+        });
 
         // 이펙트
         confetti({
@@ -167,7 +182,7 @@ export default function ClickerGame() {
                     {/* Stage Info */}
                     <div className="absolute top-6">
                         <span className="text-neutral-500 text-sm font-bold uppercase tracking-widest">
-                            Stage {stage + 1}
+                            Stage {stage + 1} · 처치 {kills.toLocaleString()}
                         </span>
                         <h2 className="text-2xl font-bold text-white mt-1">{monster.name}</h2>
                     </div>
@@ -278,6 +293,11 @@ export default function ClickerGame() {
                                 <div className="text-[10px] text-green-500 font-bold">+40% DPS</div>
                             </div>
                         </button>
+                    </div>
+
+                    {/* 명예의 전당 — 보스 처치 랭킹 */}
+                    <div className="mt-4">
+                        <GameLeaderboard game="clicker" title="보스 처치 랭킹 TOP 5" unit="킬" order="desc" tone="dark" />
                     </div>
                 </div>
             </div>

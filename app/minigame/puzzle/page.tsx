@@ -5,7 +5,8 @@ import { ArrowLeft, RefreshCw, Trophy, ImageIcon, HelpCircle } from "lucide-reac
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
+import { submitScore } from "@/lib/leaderboard";
+import GameLeaderboard from "@/components/game/GameLeaderboard";
 
 // ----------------------------------------------------------------------
 // Constants & Types
@@ -111,20 +112,23 @@ export default function SlidePuzzleGame() {
                 return t;
             });
 
+            // moves 상태는 비동기로 갱신되므로, 이번 이동을 반영한 최종 무브 수를 직접 계산
+            const finalMoves = moves + 1;
+
             setTiles(newTiles);
-            setMoves(prev => prev + 1);
-            checkWin(newTiles);
+            setMoves(finalMoves);
+            checkWin(newTiles, finalMoves);
         }
     };
 
-    const checkWin = (currentTiles: Tile[]) => {
+    const checkWin = (currentTiles: Tile[], finalMoves: number) => {
         const isWin = currentTiles.every(t => t.currentPos === t.correctPos);
         if (isWin) {
             setIsSolved(true);
             setIsPlaying(false);
             if (session?.user?.email) {
-                addCottonCandy(session.user.email, 30, "퍼즐 완성");
-                incrementMinigamePlays(session.user.email);
+                submitScore("puzzle", session.user.name || "플레이어", finalMoves, "asc");
+                if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("dori-lb-refresh", { detail: "puzzle" }));
             }
         }
     };
@@ -238,6 +242,11 @@ export default function SlidePuzzleGame() {
                     <RefreshCw className="w-4 h-4" /> Restart Puzzle
                 </button>
 
+            </div>
+
+            {/* 명예의 전당 (글로벌 TOP 5 리더보드) */}
+            <div className="w-full max-w-md mx-auto mt-4 px-4">
+                <GameLeaderboard game="puzzle" title="명예의 전당 TOP 5" unit="무브" order="asc" tone="dark" />
             </div>
         </div>
     );

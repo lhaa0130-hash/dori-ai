@@ -20,8 +20,9 @@ match /analyticsDaily/{dateId} {
   allow write: if true;     // 일별 카운터 increment 허용
 }
 
-// ── 미니게임 명예의 전당(랭킹) — 로그인 회원만 자기 기록 등록 ──
-match /lb_animalmerge/{uid} {
+// ── 미니게임 명예의 전당(랭킹) — 한 줄로 모든 게임 커버 ──
+// {game} 와일드카드 덕분에 게임이 늘어나도 규칙 추가 불필요. 로그인 회원만 자기 기록 등록.
+match /leaderboards/{game}/scores/{uid} {
   allow read: if true;                      // 순위표는 누구나 조회
   allow write: if request.auth != null;     // 로그인 회원만 점수 등록
 }
@@ -34,6 +35,6 @@ match /lb_animalmerge/{uid} {
 //     match /posts/{id}       { allow read: if true; allow write: if request.auth != null; }
 //     match /analytics/{d}    { allow read, write: if true; }
 //     match /analyticsDaily/{d} { allow read, write: if true; }
-//     match /lb_animalmerge/{uid} { allow read: if true; allow write: if request.auth != null; }
+//     match /leaderboards/{game}/scores/{uid} { allow read: if true; allow write: if request.auth != null; }
 //   }
 // }

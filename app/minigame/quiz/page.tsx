@@ -6,7 +6,8 @@ import Link from "next/link";
 import { ArrowLeft, CheckCircle2, XCircle, Trophy, RefreshCw, ArrowRight, Brain } from "lucide-react";
 import { QUIZ_POOL, QuizQuestion } from "./data";
 import { useAuth } from "@/contexts/AuthContext";
-import { addCottonCandy, incrementMinigamePlays, incrementQuizCorrect } from "@/lib/cottonCandy";
+import { submitScore } from "@/lib/leaderboard";
+import GameLeaderboard from "@/components/game/GameLeaderboard";
 
 export default function QuizGamePage() {
     const { theme } = useTheme();
@@ -76,11 +77,6 @@ export default function QuizGamePage() {
         if (isCorrect) {
             setScore(prev => prev + 1);
             setTotalScore(prev => prev + 1);
-            // 솜사탕 지급 및 퀴즈 정답 카운트
-            if (session?.user?.email) {
-                addCottonCandy(session.user.email, 10, "퀴즈 정답");
-                incrementQuizCorrect(session.user.email);
-            }
         }
 
         setTimeout(() => {
@@ -89,9 +85,12 @@ export default function QuizGamePage() {
                 setSelectedOption(null);
                 setIsAnswerChecked(false);
             } else {
-                // 라운드 완료 시 미니게임 플레이 카운트
+                // 라운드 종료: 누적 정답 수를 명예의 전당에 등록
+                // totalScore 상태는 이번 정답 반영 전 값이므로 로컬로 최종값 계산
+                const finalTotalScore = totalScore + (isCorrect ? 1 : 0);
                 if (session?.user?.email) {
-                    incrementMinigamePlays(session.user.email);
+                    submitScore("quiz", session.user.name || "플레이어", finalTotalScore, "desc");
+                    if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("dori-lb-refresh", { detail: "quiz" }));
                 }
                 setGameState("RESULT");
             }
@@ -283,6 +282,11 @@ export default function QuizGamePage() {
                         </div>
                     )}
 
+                </div>
+
+                {/* 명예의 전당 */}
+                <div className="w-full max-w-2xl mx-auto mt-4">
+                    <GameLeaderboard game="quiz" title="명예의 전당 TOP 5" unit="점" order="desc" />
                 </div>
             </div>
         </main>

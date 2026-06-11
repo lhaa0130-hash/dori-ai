@@ -9,11 +9,11 @@ import { getAllTrends } from "@/lib/trends";
 
 /* 퀵메뉴 — 콘텐츠 카테고리 + 섹션, 가로 스크롤 */
 const QUICK = [
-  { emoji: "🔥", label: "트렌드",   href: "/insight"   },
-  { emoji: "📖", label: "가이드",   href: "/insight"   },
-  { emoji: "📊", label: "리포트",   href: "/insight"   },
-  { emoji: "🔬", label: "분석",     href: "/insight"   },
-  { emoji: "✨", label: "큐레이션", href: "/insight"   },
+  { emoji: "🔥", label: "트렌드",   href: "/insight?cat=트렌드"   },
+  { emoji: "📖", label: "가이드",   href: "/insight?cat=가이드"   },
+  { emoji: "📊", label: "리포트",   href: "/insight?cat=리포트"   },
+  { emoji: "🔬", label: "분석",     href: "/insight?cat=분석"     },
+  { emoji: "✨", label: "큐레이션", href: "/insight?cat=큐레이션" },
   { emoji: "🤖", label: "AI 도구",  href: "/ai-tools"  },
   { emoji: "🎮", label: "미니게임", href: "/minigame"  },
   { emoji: "💬", label: "커뮤니티", href: "/community" },

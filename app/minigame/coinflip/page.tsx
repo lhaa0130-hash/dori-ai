@@ -7,7 +7,6 @@ import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 import { useAuth } from "@/contexts/AuthContext";
-import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 // ---- Types ----
 type GameState = "SETUP" | "FLIPPING" | "FINISHED";
@@ -58,11 +57,6 @@ export default function CoinFlipPage() {
         setTimeout(() => {
             const coinResult: CoinSide = Math.random() > 0.5 ? "앞면" : "뒷면";
             const won = coinResult === selectedBet;
-
-            if (won && session?.user?.email) {
-                addCottonCandy(session.user.email, 10, "동전 던지기 승리");
-                incrementMinigamePlays(session.user.email);
-            }
 
             setResult(coinResult);
             setIsWinner(won);

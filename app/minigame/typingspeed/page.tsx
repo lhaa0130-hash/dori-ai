@@ -6,7 +6,8 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
+import { submitScore } from "@/lib/leaderboard";
+import GameLeaderboard from "@/components/game/GameLeaderboard";
 
 const SAMPLE_TEXTS = [
     "빠른 갈색 여우가 게으른 개를 뛰어넘습니다",
@@ -61,9 +62,8 @@ export default function TypingSpeedPage() {
             setIsFinished(true);
             setIsStarted(false);
             if (session?.user?.email) {
-                const candy = Math.max(1, Math.floor(calculatedWpm / 10));
-                addCottonCandy(session.user.email, candy, "타이핑 속도 테스트 완료");
-                incrementMinigamePlays(session.user.email);
+                submitScore("typingspeed", session.user.name || "플레이어", calculatedWpm, "desc");
+                if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("dori-lb-refresh", { detail: "typingspeed" }));
             }
         }
 
@@ -213,6 +213,10 @@ export default function TypingSpeedPage() {
                             </motion.div>
                         )}
                     </div>
+                </div>
+
+                <div className="w-full max-w-3xl mx-auto mt-4 px-4">
+                    <GameLeaderboard game="typingspeed" title="명예의 전당 TOP 5" unit="WPM" order="desc" />
                 </div>
             </div>
         </main>

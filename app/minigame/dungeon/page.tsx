@@ -14,7 +14,6 @@ import { ArrowLeft, Package } from "lucide-react";
 import Link from "next/link";
 import { AnimatePresence, motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import { addCottonCandy, getCottonCandyBalance, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 // ═══════════════════════════════════════════════
 // CONSTANTS
@@ -230,7 +229,6 @@ export default function DoriCraft() {
 
   useEffect(() => {
     if (!session?.user?.email) return;
-    setUserPoints(getCottonCandyBalance(session.user.email));
     const raw = localStorage.getItem(`dori_craft_v3_${session.user.email}`);
     if (!raw) return;
     try {
@@ -488,16 +486,6 @@ export default function DoriCraft() {
           if (e.isBoss) {
             bossDefeatedRef.current = true;
             setBossDefeated(true);
-            if (session?.user?.email) {
-              addCottonCandy(session.user.email, gold*2, "도리 크래프트 보스 클리어");
-              setUserPoints(getCottonCandyBalance(session.user.email));
-              incrementMinigamePlays(session.user.email);
-            }
-          } else {
-            if (session?.user?.email) {
-              addCottonCandy(session.user.email, 1, "도리 크래프트 킬");
-              setUserPoints(getCottonCandyBalance(session.user.email));
-            }
           }
 
           // Stat growth on kill (Zone scaling)
@@ -558,7 +546,6 @@ export default function DoriCraft() {
           screenRef.current = "DEAD";
           setScreen("DEAD");
           trySave();
-          if (session?.user?.email) incrementMinigamePlays(session.user.email);
         }
       }
 
