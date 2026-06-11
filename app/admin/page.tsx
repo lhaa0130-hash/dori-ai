@@ -6,7 +6,7 @@ import Header from "@/components/layout/Header";
 import { useRouter } from "next/navigation";
 import { collection, getDocs } from "firebase/firestore";
 import { getFirebaseFirestore } from "@/lib/firebase";
-import { getAnalyticsSummary, getDailyAnalytics, getTodayStr, type DailyAnalytics } from "@/lib/analytics";
+import { getAnalyticsSummary, getDailyAnalytics, getTodayStr, getAdsense, saveAdsense, type DailyAnalytics, type AdsenseData } from "@/lib/analytics";
 
 // ─── 관리자 이메일 (단 1명만) ─────────────────────────────────────
 const ADMIN_EMAIL = "lhaa0130@gmail.com";
@@ -64,6 +64,11 @@ export default function AdminPage() {
   const [analyticsReady, setAnalyticsReady] = useState(false);
   const [device, setDevice] = useState({ mobile: 0, tablet: 0, desktop: 0 });
 
+  // 애드센스 수입
+  const [adsense, setAdsense] = useState<AdsenseData | null>(null);
+  const [adsenseEdit, setAdsenseEdit] = useState(false);
+  const [adsenseForm, setAdsenseForm] = useState<AdsenseData>({ today: 0, yesterday: 0, last7: 0, month: 0, balance: 0, lastPayment: "", currency: "US$" });
+
   // 사용자 데이터
   const [users, setUsers] = useState<UserData[]>([]);
   const [selectedUser, setSelectedUser] = useState<UserData | null>(null);
@@ -114,6 +119,15 @@ export default function AdminPage() {
       setAnalyticsReady(true);
     } catch (e) {
       console.warn("[admin] 방문자 통계 로드 실패:", e);
+    }
+
+    // 애드센스 수입
+    try {
+      const ad = await getAdsense();
+      setAdsense(ad);
+      setAdsenseForm(ad);
+    } catch (e) {
+      console.warn("[admin] 애드센스 로드 실패:", e);
     }
 
     // 사용자 목록: Firestore users 컬렉션
@@ -238,6 +252,18 @@ export default function AdminPage() {
     );
   }
 
+  // ── 애드센스 수입 저장 ──
+  const handleSaveAdsense = async () => {
+    const ok = await saveAdsense(adsenseForm);
+    if (ok) {
+      setAdsense({ ...adsenseForm, updatedAt: new Date().toISOString() });
+      setAdsenseEdit(false);
+      showToast("success", "애드센스 수입 저장 완료");
+    } else {
+      showToast("error", "저장 실패 (Firestore 규칙 확인)");
+    }
+  };
+
   // ── 최근 14일 방문자 차트 데이터 (Firestore daily 기반) ──
   const dailyMap: Record<string, DailyAnalytics> = {};
   daily.forEach((d) => { dailyMap[d.date] = d; });
@@ -314,6 +340,86 @@ export default function AdminPage() {
         {/* ── 대시보드 탭 ── */}
         {activeTab === "dashboard" && (
           <div className="space-y-6">
+            {/* 💰 구글 애드센스 수입 */}
+            {(() => {
+              const ad = adsense || { today: 0, yesterday: 0, last7: 0, month: 0, balance: 0, lastPayment: "", currency: "US$" };
+              const cur = ad.currency || "US$";
+              const fmt = (n: number) => `${cur}${(n || 0).toFixed(2)}`;
+              return (
+                <div className="rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-800">
+                  <div className="bg-gradient-to-br from-[#1a73e8] to-[#1557b0] p-5 text-white">
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-base font-bold flex items-center gap-2">💰 구글 애드센스 수입</h2>
+                      <div className="flex items-center gap-2">
+                        <a href="https://adsense.google.com/" target="_blank" rel="noopener noreferrer" className="text-[11px] bg-white/20 hover:bg-white/30 rounded-lg px-2.5 py-1 font-bold transition-colors">애드센스 →</a>
+                        <button onClick={() => setAdsenseEdit((v) => !v)} className="text-[11px] bg-white/20 hover:bg-white/30 rounded-lg px-2.5 py-1 font-bold transition-colors">
+                          {adsenseEdit ? "닫기" : "수정"}
+                        </button>
+                      </div>
+                    </div>
+
+                    {adsenseEdit ? (
+                      <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
+                        {([
+                          ["오늘 현재까지", "today"], ["어제", "yesterday"], ["지난 7일", "last7"],
+                          ["이번 달", "month"], ["잔고", "balance"],
+                        ] as [string, keyof AdsenseData][]).map(([label, key]) => (
+                          <label key={key} className="block">
+                            <span className="text-[11px] text-white/80">{label}</span>
+                            <input
+                              type="number" step="0.01"
+                              value={adsenseForm[key] as number}
+                              onChange={(e) => setAdsenseForm((f) => ({ ...f, [key]: parseFloat(e.target.value) || 0 }))}
+                              className="w-full mt-1 px-3 py-2 rounded-lg text-neutral-900 text-sm font-bold outline-none"
+                            />
+                          </label>
+                        ))}
+                        <label className="block">
+                          <span className="text-[11px] text-white/80">통화 표기</span>
+                          <input
+                            type="text" value={adsenseForm.currency}
+                            onChange={(e) => setAdsenseForm((f) => ({ ...f, currency: e.target.value }))}
+                            className="w-full mt-1 px-3 py-2 rounded-lg text-neutral-900 text-sm font-bold outline-none"
+                          />
+                        </label>
+                        <div className="col-span-2 sm:col-span-3 flex justify-end">
+                          <button onClick={handleSaveAdsense} className="px-5 py-2 rounded-lg bg-white text-[#1557b0] font-bold text-sm hover:opacity-90 transition-opacity">
+                            저장
+                          </button>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+                        {[
+                          { label: "오늘 현재까지", v: ad.today },
+                          { label: "어제", v: ad.yesterday },
+                          { label: "지난 7일", v: ad.last7 },
+                          { label: "이번 달", v: ad.month },
+                        ].map((m) => (
+                          <div key={m.label}>
+                            <p className="text-[12px] text-white/70 mb-1">{m.label}</p>
+                            <p className="text-2xl font-black tracking-tight">{fmt(m.v)}</p>
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="flex items-center justify-between px-5 py-3 bg-white dark:bg-neutral-900">
+                    <span className="text-sm text-neutral-500 dark:text-neutral-400">잔고</span>
+                    <div className="text-right">
+                      <span className="text-lg font-black text-foreground">{fmt(ad.balance)}</span>
+                      {ad.updatedAt && (
+                        <span className="block text-[11px] text-neutral-400 dark:text-neutral-500">
+                          갱신 {new Date(ad.updatedAt).toLocaleString("ko-KR", { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" })}
+                        </span>
+                      )}
+                    </div>
+                  </div>
+                </div>
+              );
+            })()}
+
             {/* 요약 카드 */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[

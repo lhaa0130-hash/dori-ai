@@ -138,3 +138,56 @@ export async function getDailyAnalytics(days = 30): Promise<DailyAnalytics[]> {
 }
 
 export function getTodayStr(): string { return todayStr(); }
+
+// ─── 구글 애드센스 수입 (Firestore analytics/adsense) ───────────────
+// 정적 사이트라 수입은 직접 입력하거나 n8n(AdSense API)이 이 문서에 써넣음.
+export interface AdsenseData {
+  today: number;       // 오늘 현재까지
+  yesterday: number;   // 어제
+  last7: number;       // 지난 7일
+  month: number;       // 이번 달
+  balance: number;     // 잔고
+  lastPayment: string; // 최종 지급액/일 메모 (예: "US$0.00")
+  currency: string;    // 통화 표기 (예: "US$")
+  updatedAt?: string;  // 마지막 갱신 시각(ISO)
+}
+
+const EMPTY_ADSENSE: AdsenseData = {
+  today: 0, yesterday: 0, last7: 0, month: 0, balance: 0,
+  lastPayment: "", currency: "US$",
+};
+
+export async function getAdsense(): Promise<AdsenseData> {
+  try {
+    const db = getFirebaseFirestore();
+    const s = await getDoc(doc(db, "analytics", "adsense"));
+    if (!s.exists()) return EMPTY_ADSENSE;
+    const d = s.data() as Partial<AdsenseData>;
+    return {
+      today: Number(d.today || 0),
+      yesterday: Number(d.yesterday || 0),
+      last7: Number(d.last7 || 0),
+      month: Number(d.month || 0),
+      balance: Number(d.balance || 0),
+      lastPayment: String(d.lastPayment || ""),
+      currency: String(d.currency || "US$"),
+      updatedAt: d.updatedAt ? String(d.updatedAt) : undefined,
+    };
+  } catch {
+    return EMPTY_ADSENSE;
+  }
+}
+
+export async function saveAdsense(data: Partial<AdsenseData>): Promise<boolean> {
+  try {
+    const db = getFirebaseFirestore();
+    await setDoc(
+      doc(db, "analytics", "adsense"),
+      { ...data, updatedAt: new Date().toISOString() },
+      { merge: true }
+    );
+    return true;
+  } catch {
+    return false;
+  }
+}
