@@ -6,6 +6,7 @@ import Header from "@/components/layout/Header";
 import { useRouter } from "next/navigation";
 import { collection, getDocs } from "firebase/firestore";
 import { getFirebaseFirestore } from "@/lib/firebase";
+import { getAnalyticsSummary, getDailyAnalytics, getTodayStr, type DailyAnalytics } from "@/lib/analytics";
 
 // ─── 관리자 이메일 (단 1명만) ─────────────────────────────────────
 const ADMIN_EMAIL = "lhaa0130@gmail.com";
@@ -54,11 +55,13 @@ export default function AdminPage() {
   const [mounted, setMounted] = useState(false);
   const [activeTab, setActiveTab] = useState<AdminTab>("dashboard");
 
-  // 방문자 데이터
-  const [dailyVisitors, setDailyVisitors] = useState(0);
-  const [totalVisitors, setTotalVisitors] = useState(0);
-  const [visitorHistory, setVisitorHistory] = useState<Record<string, number>>({});
-  const [visitorsList, setVisitorsList] = useState<VisitorInfo[]>([]);
+  // 방문자 데이터 (Firestore 전역 집계)
+  const [todayUV, setTodayUV] = useState(0);
+  const [todayPV, setTodayPV] = useState(0);
+  const [totalUV, setTotalUV] = useState(0);
+  const [totalPV, setTotalPV] = useState(0);
+  const [daily, setDaily] = useState<DailyAnalytics[]>([]);
+  const [analyticsReady, setAnalyticsReady] = useState(false);
 
   // 사용자 데이터
   const [users, setUsers] = useState<UserData[]>([]);
@@ -93,17 +96,23 @@ export default function AdminPage() {
   const loadData = useCallback(async () => {
     if (typeof window === "undefined") return;
 
-    // 방문자 통계 (localStorage 기반 유지)
-    setDailyVisitors(parseInt(localStorage.getItem("dori_daily_visitors") || "0", 10));
-    setTotalVisitors(parseInt(localStorage.getItem("dori_total_visitors") || "0", 10));
+    // 방문자 통계 (Firestore 전역 집계)
     try {
-      const hist = JSON.parse(localStorage.getItem("dori_visitor_history") || "{}");
-      setVisitorHistory(hist);
-    } catch {}
-    try {
-      const vList = JSON.parse(localStorage.getItem("dori_visitors_list") || "[]");
-      setVisitorsList(vList);
-    } catch {}
+      const [summary, dailyArr] = await Promise.all([
+        getAnalyticsSummary(),
+        getDailyAnalytics(30),
+      ]);
+      const today = getTodayStr();
+      const todayRow = dailyArr.find((d) => d.date === today);
+      setTotalUV(summary.totalUV);
+      setTotalPV(summary.totalPV);
+      setTodayUV(todayRow?.uv || 0);
+      setTodayPV(todayRow?.pv || 0);
+      setDaily(dailyArr);
+      setAnalyticsReady(true);
+    } catch (e) {
+      console.warn("[admin] 방문자 통계 로드 실패:", e);
+    }
 
     // 사용자 목록: Firestore users 컬렉션
     try {
@@ -205,17 +214,6 @@ export default function AdminPage() {
     showToast("success", "게시글 삭제 완료");
   };
 
-  // ── 방문자 통계 초기화 ──
-  const resetVisitors = () => {
-    if (!confirm("방문자 통계를 초기화하시겠습니까?")) return;
-    localStorage.removeItem("dori_daily_visitors");
-    localStorage.removeItem("dori_total_visitors");
-    localStorage.removeItem("dori_visitor_history");
-    localStorage.removeItem("dori_visitors_list");
-    localStorage.removeItem("dori_visitor_date");
-    loadData();
-    showToast("success", "방문자 통계 초기화 완료");
-  };
 
   // ── 로딩 / 권한 없음 ──
   if (!mounted || status === "loading") {
@@ -238,13 +236,15 @@ export default function AdminPage() {
     );
   }
 
-  // ── 최근 7일 방문자 차트 데이터 ──
-  const last7Days = Array.from({ length: 7 }, (_, i) => {
+  // ── 최근 14일 방문자 차트 데이터 (Firestore daily 기반) ──
+  const dailyMap: Record<string, DailyAnalytics> = {};
+  daily.forEach((d) => { dailyMap[d.date] = d; });
+  const last14Days = Array.from({ length: 14 }, (_, i) => {
     const d = new Date();
-    d.setDate(d.getDate() - (6 - i));
-    return d.toISOString().split("T")[0];
+    d.setDate(d.getDate() - (13 - i));
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
   });
-  const chartMax = Math.max(...last7Days.map((d) => visitorHistory[d] || 0), 1);
+  const chartMax = Math.max(...last14Days.map((d) => dailyMap[d]?.uv || 0), 1);
 
   // ── 탭 메뉴 ──
   const tabs: { id: AdminTab; label: string; emoji: string }[] = [
@@ -315,8 +315,8 @@ export default function AdminPage() {
             {/* 요약 카드 */}
             <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
               {[
-                { label: "오늘 방문자", value: dailyVisitors, emoji: "📅", color: "from-blue-500 to-cyan-500" },
-                { label: "총 방문자", value: totalVisitors, emoji: "🌍", color: "from-purple-500 to-pink-500" },
+                { label: "오늘 방문자", value: todayUV, emoji: "📅", color: "from-blue-500 to-cyan-500" },
+                { label: "총 방문자", value: totalUV, emoji: "🌍", color: "from-purple-500 to-pink-500" },
                 { label: "총 회원수", value: users.length, emoji: "👤", color: "from-green-500 to-emerald-500" },
                 { label: "게시글 수", value: communityPosts.length, emoji: "📝", color: "from-orange-500 to-red-500" },
               ].map((card) => (
@@ -331,27 +331,36 @@ export default function AdminPage() {
               ))}
             </div>
 
-            {/* 최근 7일 방문자 차트 */}
+            {/* 최근 14일 방문자(UV) 추이 */}
             <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6">
               <h2 className="text-lg font-bold mb-6 flex items-center gap-2 text-foreground">
-                📈 최근 7일 방문자 추이
+                📈 최근 14일 방문자(순방문) 추이
               </h2>
-              <div className="flex items-end gap-3 h-40">
-                {last7Days.map((date) => {
-                  const count = visitorHistory[date] || 0;
+              <div className="flex items-end gap-1.5 h-40">
+                {last14Days.map((date) => {
+                  const count = dailyMap[date]?.uv || 0;
                   const heightPct = Math.max((count / chartMax) * 100, 2);
                   return (
-                    <div key={date} className="flex-1 flex flex-col items-center gap-1">
-                      <div className="text-xs text-neutral-500 dark:text-neutral-400 font-medium">{count}</div>
+                    <div key={date} className="flex-1 flex flex-col items-center gap-1 group">
+                      <div className="text-[10px] text-neutral-500 dark:text-neutral-400 font-medium">{count || ""}</div>
                       <div
-                        className="w-full bg-gradient-to-t from-orange-500 to-red-400 rounded-t-md transition-all"
+                        className="w-full bg-gradient-to-t from-[#F9954E] to-[#FBAA60] rounded-t-md transition-all group-hover:opacity-80"
                         style={{ height: `${heightPct}%` }}
+                        title={`${date} · ${count}명`}
                       />
-                      <div className="text-xs text-neutral-400 dark:text-neutral-500">{date.slice(5)}</div>
+                      <div className="text-[9px] text-neutral-400 dark:text-neutral-500">{date.slice(5)}</div>
                     </div>
                   );
                 })}
               </div>
+              {!analyticsReady && (
+                <p className="text-xs text-neutral-400 mt-3">불러오는 중…</p>
+              )}
+              {analyticsReady && totalUV === 0 && (
+                <p className="text-xs text-amber-500 mt-3 leading-relaxed">
+                  ⚠️ 집계가 0이면 Firestore 보안 규칙에 analytics 쓰기 허용이 필요해요. (firestore.analytics.rules.txt 참고)
+                </p>
+              )}
             </div>
 
             {/* 최근 가입 회원 */}
@@ -382,69 +391,68 @@ export default function AdminPage() {
         {/* ── 방문자 탭 ── */}
         {activeTab === "visitors" && (
           <div className="space-y-6">
-            <div className="grid grid-cols-2 gap-4">
-              <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5">
-                <div className="text-neutral-500 dark:text-neutral-400 text-sm mb-1">오늘 방문자</div>
-                <div className="text-4xl font-black text-blue-500 dark:text-blue-400">{dailyVisitors.toLocaleString()}</div>
-              </div>
-              <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5">
-                <div className="text-neutral-500 dark:text-neutral-400 text-sm mb-1">전체 방문자</div>
-                <div className="text-4xl font-black text-purple-500 dark:text-purple-400">{totalVisitors.toLocaleString()}</div>
-              </div>
+            {/* 핵심 지표 4개 */}
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              {[
+                { label: "오늘 순방문(UV)", value: todayUV, sub: "오늘 다녀간 사람", color: "text-blue-500 dark:text-blue-400" },
+                { label: "오늘 조회(PV)", value: todayPV, sub: "오늘 페이지 열람", color: "text-cyan-500 dark:text-cyan-400" },
+                { label: "총 순방문(UV)", value: totalUV, sub: "전체 누적 방문자", color: "text-[#F9954E]" },
+                { label: "총 조회(PV)", value: totalPV, sub: "전체 누적 조회수", color: "text-purple-500 dark:text-purple-400" },
+              ].map((c) => (
+                <div key={c.label} className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5">
+                  <div className="text-neutral-500 dark:text-neutral-400 text-[13px] mb-1">{c.label}</div>
+                  <div className={`text-3xl font-black ${c.color}`}>{c.value.toLocaleString()}</div>
+                  <div className="text-[11px] text-neutral-400 dark:text-neutral-500 mt-1">{c.sub}</div>
+                </div>
+              ))}
             </div>
 
-            {/* 일별 기록 */}
-            <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6">
-              <div className="flex justify-between items-center mb-4">
-                <h2 className="text-lg font-bold text-foreground">📅 일별 방문 기록</h2>
-                <button
-                  onClick={resetVisitors}
-                  className="text-xs text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300 border border-red-200 dark:border-red-800 hover:border-red-300 dark:hover:border-red-600 px-3 py-1.5 rounded-lg transition"
-                >
-                  🗑️ 초기화
-                </button>
-              </div>
-              {Object.keys(visitorHistory).length === 0 ? (
-                <p className="text-neutral-400 dark:text-neutral-500 text-sm">기록 없음</p>
-              ) : (
-                <div className="space-y-2 max-h-80 overflow-y-auto">
-                  {Object.entries(visitorHistory)
-                    .sort(([a], [b]) => b.localeCompare(a))
-                    .map(([date, count]) => (
-                      <div key={date} className="flex justify-between items-center py-2 border-b border-neutral-100 dark:border-neutral-800">
-                        <span className="text-neutral-700 dark:text-neutral-300">{date}</span>
-                        <span className="font-bold text-blue-500 dark:text-blue-400">{count}명</span>
-                      </div>
-                    ))}
-                </div>
+            {/* 안내 */}
+            <div className="bg-orange-50 dark:bg-[#F9954E]/5 border border-orange-100 dark:border-[#F9954E]/20 rounded-2xl p-5 text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed">
+              <p className="font-bold text-neutral-900 dark:text-white mb-1">📊 전역 집계로 업그레이드됨</p>
+              <p>이제 <b>모든 방문자</b>가 Firestore에 누적됩니다. (UV=브라우저당 하루 1회, PV=세션당 1회)</p>
+              {analyticsReady && totalUV === 0 && (
+                <p className="text-amber-600 dark:text-amber-400 mt-2">⚠️ 0으로만 보이면 Firestore 보안 규칙에 <code>analytics</code> 쓰기 허용이 필요합니다. 저장소의 <code>firestore.analytics.rules.txt</code>를 콘솔에 추가·게시하세요.</p>
               )}
             </div>
 
-            {/* 방문자 목록 */}
+            {/* 외부 분석(정확한 실측) 바로가기 */}
+            <div className="grid grid-cols-2 gap-4">
+              <a href="https://analytics.google.com/" target="_blank" rel="noopener noreferrer"
+                className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 hover:border-[#F9954E]/40 transition-colors">
+                <div className="text-2xl mb-2">📈</div>
+                <div className="font-bold text-foreground text-sm">Google Analytics</div>
+                <div className="text-[11px] text-neutral-400 mt-0.5">실시간·기기·유입 등 정밀 지표 →</div>
+              </a>
+              <a href="https://clarity.microsoft.com/projects/view/va2qmv3mwz/dashboard" target="_blank" rel="noopener noreferrer"
+                className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 hover:border-[#F9954E]/40 transition-colors">
+                <div className="text-2xl mb-2">🔥</div>
+                <div className="font-bold text-foreground text-sm">Microsoft Clarity</div>
+                <div className="text-[11px] text-neutral-400 mt-0.5">히트맵·세션 녹화 →</div>
+              </a>
+            </div>
+
+            {/* 일별 기록 (UV/PV) */}
             <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6">
-              <h2 className="text-lg font-bold mb-4 text-foreground">🌐 방문자 상세 (최근 {visitorsList.length}명)</h2>
-              {visitorsList.length === 0 ? (
-                <p className="text-neutral-400 dark:text-neutral-500 text-sm">방문자 기록 없음</p>
+              <h2 className="text-lg font-bold mb-4 text-foreground">📅 일별 방문 기록 (최근 30일)</h2>
+              {daily.length === 0 ? (
+                <p className="text-neutral-400 dark:text-neutral-500 text-sm">{analyticsReady ? "아직 기록이 없어요." : "불러오는 중…"}</p>
               ) : (
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
                       <tr className="text-neutral-500 dark:text-neutral-400 border-b border-neutral-200 dark:border-neutral-800">
-                        <th className="text-left pb-3">IP</th>
-                        <th className="text-left pb-3">국가</th>
-                        <th className="text-left pb-3">도시</th>
-                        <th className="text-left pb-3">시간</th>
+                        <th className="text-left pb-3 font-semibold">날짜</th>
+                        <th className="text-right pb-3 font-semibold">순방문(UV)</th>
+                        <th className="text-right pb-3 font-semibold">조회(PV)</th>
                       </tr>
                     </thead>
                     <tbody>
-                      {[...visitorsList].reverse().slice(0, 50).map((v, i) => (
-                        <tr key={i} className="border-b border-neutral-100/80 dark:border-neutral-800/50 hover:bg-neutral-50 dark:hover:bg-neutral-800/30">
-                          <td className="py-2 font-mono text-xs text-foreground">{v.ip}</td>
-                          <td className="py-2 text-foreground">{v.country}</td>
-                          <td className="py-2 text-foreground">{v.city}</td>
-                          <td className="py-2 text-neutral-400 dark:text-neutral-500 text-xs">
-                            {new Date(v.timestamp).toLocaleString("ko-KR")}
-                          </td>
+                      {[...daily].reverse().map((d) => (
+                        <tr key={d.date} className="border-b border-neutral-100/80 dark:border-neutral-800/50">
+                          <td className="py-2 text-neutral-700 dark:text-neutral-300">{d.date}</td>
+                          <td className="py-2 text-right font-bold text-[#F9954E]">{d.uv.toLocaleString()}</td>
+                          <td className="py-2 text-right text-neutral-500 dark:text-neutral-400">{d.pv.toLocaleString()}</td>
                         </tr>
                       ))}
                     </tbody>
