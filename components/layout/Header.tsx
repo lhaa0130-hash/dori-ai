@@ -77,14 +77,36 @@ export default function Header() {
               공지사항
             </Link>
 
-            {/* 프로젝트 — 비활성화(준비 중): 클릭·드롭다운 없음, 회색 표시만 */}
-            <span
-              aria-disabled="true"
-              title="준비 중입니다"
-              className="flex items-center gap-0.5 text-sm font-medium text-neutral-300 dark:text-neutral-600 whitespace-nowrap cursor-not-allowed select-none flex-shrink-0"
-            >
-              프로젝트
-            </span>
+            {/* 프로젝트 — 상위는 활성(호버 드롭다운), 하위 항목만 비활성(준비 중) */}
+            <div className="relative group flex-shrink-0">
+              <button type="button" aria-haspopup="true" className="flex items-center gap-0.5 text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap cursor-default">
+                프로젝트
+                <ChevronDown className="w-3.5 h-3.5 opacity-50 group-hover:rotate-180 transition-transform duration-300 ml-0.5" />
+              </button>
+              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 translate-y-1 group-hover:translate-y-0 z-50 pt-2">
+                <div className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden">
+                  <div className="px-4 py-2.5 border-b border-neutral-100 dark:border-zinc-800 flex items-center justify-between">
+                    <span className="text-[10px] font-bold tracking-widest uppercase text-neutral-400">Projects</span>
+                    <span className="text-[10px] font-semibold text-neutral-300 dark:text-neutral-600">준비 중</span>
+                  </div>
+                  {projects.map((p) => (
+                    <div key={p.name} aria-disabled="true" title="준비 중입니다" className="flex items-center gap-3 px-4 py-3 opacity-40 cursor-not-allowed select-none">
+                      <div className={`w-9 h-9 rounded-xl ${p.bg} flex items-center justify-center flex-shrink-0 text-lg overflow-hidden`}>
+                        {p.image ? <img src={p.image} alt={p.name} loading="lazy" className="w-full h-full object-cover" /> : p.emoji}
+                      </div>
+                      <div>
+                        <div className="text-sm font-bold text-neutral-900 dark:text-white">{p.name}</div>
+                      </div>
+                    </div>
+                  ))}
+                  <div className="px-4 py-2.5 border-t border-neutral-100 dark:border-zinc-800">
+                    <span className="text-[11px] font-bold text-neutral-300 dark:text-neutral-600 cursor-not-allowed select-none">
+                      전체 프로젝트 보기 →
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
 
             {navItems.filter(i => i.name !== "공지사항").map((item) => (
               <Link key={item.name} href={item.href} className="flex-shrink-0 text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap">
