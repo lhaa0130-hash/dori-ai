@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback, useRef } from "react";
 import { ArrowLeft, RefreshCw, Trophy, Flame } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
+import CottonCandy from "@/components/icons/CottonCandy";
 import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
 
 const COLS = 8;
@@ -154,7 +155,7 @@ export default function Match3Game() {
           <div className={`text-2xl font-bold font-mono ${moves <= 5 ? "text-red-500 animate-pulse" : "text-white"}`}>{moves}</div>
         </div>
         <div className="text-center">
-          <div className="text-xs text-neutral-400 uppercase font-bold">예상 🍭</div>
+          <div className="text-xs text-neutral-400 uppercase font-bold flex items-center justify-center gap-1">예상 <CottonCandy className="w-3.5 h-3.5" /></div>
           <div className="text-2xl font-bold text-orange-400">{candyPreview}</div>
         </div>
       </div>
@@ -185,7 +186,7 @@ export default function Match3Game() {
           <h2 className="text-3xl font-bold mb-2">게임 종료!</h2>
           <p className="text-neutral-400 mb-2">최종 점수: <span className="text-yellow-400 font-bold">{score}</span></p>
           {candyPreview > 0 && (
-            <p className="text-orange-400 font-bold mb-4">🍭 솜사탕 {candyPreview}개 획득!</p>
+            <p className="text-orange-400 font-bold mb-4 flex items-center justify-center gap-1"><CottonCandy className="w-4 h-4" /> 솜사탕 {candyPreview}개 획득!</p>
           )}
           <button
             onClick={reset}
@@ -197,7 +198,7 @@ export default function Match3Game() {
       )}
 
       <p className="mt-4 text-neutral-500 text-xs text-center">
-        과일을 클릭해서 이웃한 과일과 교체 • 50점마다 🍭 1개
+        과일을 클릭해서 이웃한 과일과 교체 • 50점마다 솜사탕 1개
       </p>
     </div>
   );

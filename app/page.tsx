@@ -4,6 +4,7 @@ import { ArrowRight, Users, Newspaper, Wrench, Gamepad2, FolderKanban } from "lu
 import Hero from "@/components/home/Hero";
 import HomeClient from "@/components/home/HomeClient";
 import TrendPreview from "@/components/home/TrendPreview";
+import CottonCandy from "@/components/icons/CottonCandy";
 import { getAllTrends } from "@/lib/trends";
 
 /* 퀵메뉴 — 콘텐츠 카테고리 + 섹션, 가로 스크롤 */
@@ -116,7 +117,7 @@ export default async function Home() {
             <Gamepad2 className="w-6 h-6 text-[#F9954E]" strokeWidth={1.5} />
             <div>
               <p className="text-[13px] font-extrabold text-neutral-900 dark:text-white mb-0.5">미니게임</p>
-              <p className="text-[11px] text-neutral-400 leading-snug">플레이하고 솜사탕 🍭</p>
+              <p className="text-[11px] text-neutral-400 leading-snug flex items-center gap-1">플레이하고 솜사탕 <CottonCandy className="w-3 h-3" /></p>
             </div>
           </Link>
 

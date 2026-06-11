@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { ArrowRight, Merge, Hammer, Crown, Trophy, Flame, ImageIcon, BrainCircuit, Gamepad2, Swords, Coins, Target, Dices, Hand, Zap, Palette, Star, Sword, Sparkles, TrendingUp, MousePointer2 } from "lucide-react";
+import CottonCandy from "@/components/icons/CottonCandy";
 
 const GAMES = [
   { id: "merge",       title: "동물 합치기",   desc: "같은 동물이 만나면 합쳐져요!",           icon: <Merge className="w-5 h-5" />,         href: "/minigame/merge",       candy: "+80"  },
@@ -63,7 +64,7 @@ export default function MinigamePage() {
                 </p>
               </div>
               <div className="flex-shrink-0 text-right">
-                <span className="text-[11px] font-semibold text-[#F9954E] block">{game.candy} 🍭</span>
+                <span className="text-[11px] font-semibold text-[#F9954E] flex items-center justify-end gap-1">{game.candy} <CottonCandy className="w-3.5 h-3.5" /></span>
               </div>
             </Link>
           ))}

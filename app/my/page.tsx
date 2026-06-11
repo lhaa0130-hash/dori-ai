@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import Header from "@/components/layout/Header";
 import ProfileHero from "@/components/my/ProfileHero";
 import { UserProfile, createDefaultProfile, calculateTier, calculateLevel, ACTIVITY_SCORES } from "@/lib/userProfile";
+import CottonCandy from "@/components/icons/CottonCandy";
 import {
   getCottonCandyBalance,
   getCachedGameProfile,
@@ -440,7 +441,7 @@ export default function MyPage() {
       {/* 업적 달성 토스트 */}
       {achievementToast && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 bg-[#F9954E] text-white px-6 py-3 rounded-2xl font-bold text-sm shadow-xl flex items-center gap-2">
-          🏆 업적 달성! {achievementToast.name} +{achievementToast.reward} 🍭
+          🏆 업적 달성! {achievementToast.name} +{achievementToast.reward} <CottonCandy className="w-4 h-4 inline-block align-[-0.15em]" />
         </div>
       )}
 
@@ -478,7 +479,7 @@ export default function MyPage() {
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
-                <span className="text-2xl">🍭</span>
+                <CottonCandy className="w-7 h-7" />
                 <h3 className="text-lg font-extrabold text-neutral-900 dark:text-white">내 솜사탕</h3>
               </div>
               <p className="text-3xl font-extrabold text-[#F9954E]">
@@ -577,7 +578,7 @@ export default function MyPage() {
                             <p className={`text-sm font-bold ${done ? "text-neutral-400 dark:text-zinc-500 line-through" : "text-neutral-800 dark:text-white"}`}>
                               {mission.label}
                             </p>
-                            <p className="text-[11px] font-extrabold text-[#F9954E]">🍭 +{mission.reward}</p>
+                            <p className="text-[11px] font-extrabold text-[#F9954E] flex items-center gap-1"><CottonCandy className="w-3.5 h-3.5" /> +{mission.reward}</p>
                           </div>
                         </div>
                         {done ? (
@@ -624,7 +625,7 @@ export default function MyPage() {
                         <div className="flex-1 min-w-0">
                           <p className="text-sm font-bold text-neutral-800 dark:text-white">{ach.name}</p>
                           <p className="text-[11px] text-neutral-500 dark:text-zinc-400 truncate">{ach.description}</p>
-                          <p className="text-[11px] font-extrabold text-[#F9954E]">🍭 +{ach.reward}</p>
+                          <p className="text-[11px] font-extrabold text-[#F9954E] flex items-center gap-1"><CottonCandy className="w-3.5 h-3.5" /> +{ach.reward}</p>
                         </div>
                         {claimed && (
                           <span className="text-[#F9954E] text-xs font-extrabold">✓</span>
@@ -642,7 +643,7 @@ export default function MyPage() {
             <div className="space-y-2">
               {candyHistory.length === 0 ? (
                 <div className="text-center py-20 bg-neutral-50/50 dark:bg-zinc-950/20 rounded-3xl border border-dashed border-neutral-200 dark:border-zinc-800">
-                  <div className="text-4xl mb-4 opacity-20">🍭</div>
+                  <div className="mb-4 opacity-20 flex justify-center"><CottonCandy className="w-9 h-9" /></div>
                   <p className="text-neutral-400 dark:text-zinc-500 font-medium">아직 솜사탕 내역이 없네요!</p>
                   <p className="text-xs text-neutral-400 dark:text-zinc-600 mt-2">미션을 완료하고 솜사탕을 모아보세요.</p>
                 </div>
@@ -660,8 +661,8 @@ export default function MyPage() {
                         })}
                       </p>
                     </div>
-                    <span className={`text-sm font-extrabold ${entry.amount > 0 ? "text-[#F9954E]" : "text-neutral-400"}`}>
-                      {entry.amount > 0 ? "+" : ""}{entry.amount} 🍭
+                    <span className={`text-sm font-extrabold flex items-center gap-1 ${entry.amount > 0 ? "text-[#F9954E]" : "text-neutral-400"}`}>
+                      {entry.amount > 0 ? "+" : ""}{entry.amount} <CottonCandy className="w-3.5 h-3.5" />
                     </span>
                   </div>
                 ))

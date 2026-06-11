@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
+import CottonCandy from "@/components/icons/CottonCandy";
 import {
   getCottonCandyBalance,
   getPurchasedItems,
@@ -202,11 +203,11 @@ export default function ShopPage() {
               <>
                 <div className="flex items-center justify-between bg-orange-50 dark:bg-orange-950/30 rounded-2xl p-4 mb-4 border border-orange-100 dark:border-orange-900/30">
                   <span className="text-sm font-bold text-neutral-600 dark:text-zinc-300">구매 금액</span>
-                  <span className="font-black text-[#F9954E] text-lg">🍭 {confirmItem.price.toLocaleString()}개</span>
+                  <span className="font-black text-[#F9954E] text-lg flex items-center gap-1"><CottonCandy className="w-5 h-5" /> {confirmItem.price.toLocaleString()}개</span>
                 </div>
                 <div className="flex items-center justify-between text-xs text-neutral-400 dark:text-zinc-500 mb-6">
                   <span>현재 잔액</span>
-                  <span>🍭 {balance.toLocaleString()}개 → <span className={balance < confirmItem.price ? "text-neutral-400" : "text-[#F9954E]"}>🍭 {(balance - confirmItem.price).toLocaleString()}개</span></span>
+                  <span className="inline-flex items-center gap-1"><CottonCandy className="w-3.5 h-3.5" /> {balance.toLocaleString()}개 → <span className={`inline-flex items-center gap-1 ${balance < confirmItem.price ? "text-neutral-400" : "text-[#F9954E]"}`}><CottonCandy className="w-3.5 h-3.5" /> {(balance - confirmItem.price).toLocaleString()}개</span></span>
                 </div>
               </>
             )}
@@ -232,8 +233,8 @@ export default function ShopPage() {
       {/* ── Toss 히어로 ── */}
       <section className="pt-8 pb-10 border-b border-neutral-100 dark:border-zinc-900">
         <p className="text-[12px] font-semibold text-[#F9954E] mb-3">솜사탕 상점</p>
-        <h1 className="text-[36px] sm:text-[48px] font-extrabold text-neutral-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
-          🍭 솜사탕 상점
+        <h1 className="text-[36px] sm:text-[48px] font-extrabold text-neutral-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep flex items-center gap-2">
+          <CottonCandy className="w-9 h-9" /> 솜사탕 상점
         </h1>
         <p className="text-[14px] text-neutral-500 dark:text-neutral-400 leading-relaxed">
           모은 솜사탕으로 프로필을 꾸미고 특별한 아이템을 획득하세요.
@@ -250,7 +251,7 @@ export default function ShopPage() {
                 </div>
               )}
               <div className="inline-flex items-center gap-3 bg-neutral-50 dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 rounded-2xl px-5 py-3">
-                <span className="text-2xl">🍭</span>
+                <CottonCandy className="w-7 h-7" />
                 <div className="text-left">
                   <p className="text-[10px] font-bold text-neutral-400 dark:text-zinc-500 uppercase tracking-widest">내 솜사탕</p>
                   <p className="text-xl font-black text-[#F9954E]">{balance.toLocaleString()}개</p>
@@ -359,7 +360,7 @@ export default function ShopPage() {
                     {/* 가격 & 구매 버튼 */}
                     <div className="flex items-center justify-between">
                       <span className="font-black text-[#F9954E] text-sm flex items-center gap-1">
-                        🍭 {item.price.toLocaleString()}
+                        <CottonCandy className="w-4 h-4" /> {item.price.toLocaleString()}
                       </span>
                       {isBought ? (
                         <span className="text-[#F9954E] text-xs font-black flex items-center gap-1">
@@ -387,7 +388,7 @@ export default function ShopPage() {
           {/* 솜사탕 획득 안내 */}
           <div className="mt-12 bg-[#FFF5EB] dark:bg-[#F9954E]/5 rounded-2xl border border-[#F9954E]/20 p-6">
             <h3 className="text-lg font-black text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
-              🍭 솜사탕 획득 방법
+              <CottonCandy className="w-5 h-5" /> 솜사탕 획득 방법
             </h3>
             <div className="grid grid-cols-2 md:grid-cols-3 gap-3">
               {[

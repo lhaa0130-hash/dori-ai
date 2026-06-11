@@ -6,6 +6,7 @@ import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { Eye, EyeOff, Mail, Lock, User, ChevronRight } from "lucide-react";
+import CottonCandy from "@/components/icons/CottonCandy";
 
 type AuthMode = "login" | "signup";
 
@@ -159,7 +160,7 @@ export default function LoginPage() {
               gap: "6px",
             }}
           >
-            <span style={{ fontSize: "22px" }}>🍭</span>
+            <CottonCandy className="w-[22px] h-[22px]" />
             <span
               style={{
                 fontSize: "22px",
