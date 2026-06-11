@@ -11,6 +11,7 @@ import Link from 'next/link';
 import remarkGfm from 'remark-gfm';
 import type { Metadata } from 'next';
 import ShareButtons from '@/components/article/ShareButtons';
+import AdUnit from '@/components/ads/AdUnit';
 import ReadingProgress from '@/components/article/ReadingProgress';
 import RelatedArticles from '@/components/article/RelatedArticles';
 import AdminArticleBar from '@/components/admin/AdminArticleBar';
@@ -207,6 +208,9 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
               options={{ mdxOptions }}
             />
           </div>
+
+          {/* 본문 하단 광고 (모바일 포함 전 기기 노출) */}
+          <AdUnit />
 
           {/* 하단 공유 버튼 */}
           <div className="mt-10 pt-6 border-t border-neutral-200 dark:border-neutral-800">
