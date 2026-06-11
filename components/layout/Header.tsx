@@ -95,7 +95,6 @@ export default function Header() {
                       </div>
                       <div>
                         <div className="text-sm font-bold text-neutral-900 dark:text-white group-hover/item:text-[#E8832E] dark:group-hover/item:text-[#F9954E] transition-colors">{p.name}</div>
-                        <div className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-tight">{p.desc}</div>
                       </div>
                     </Link>
                   ))}
@@ -264,7 +263,6 @@ export default function Header() {
                 </div>
                 <div>
                   <div className="text-sm font-bold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors">{p.name}</div>
-                  <div className="text-[11px] text-neutral-500 dark:text-neutral-400">{p.desc}</div>
                 </div>
               </Link>
             ))}

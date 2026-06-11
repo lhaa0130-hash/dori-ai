@@ -198,7 +198,6 @@ export default function BottomNav() {
                 </div>
                 <div className="flex-1 min-w-0">
                   <p className="text-[14px] font-bold text-neutral-900 dark:text-white">{p.name}</p>
-                  <p className="text-[11px] text-neutral-400">{p.desc}</p>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>
               </Link>
