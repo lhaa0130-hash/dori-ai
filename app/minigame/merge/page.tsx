@@ -5,6 +5,7 @@ import Link from "next/link";
 import { ArrowLeft, RotateCcw } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { incrementMinigamePlays } from "@/lib/cottonCandy";
+import { submitAnimalMergeScore, getAnimalMergeTop5, type ScoreEntry } from "@/lib/leaderboard";
 import PlaytimeRewardToast from "@/components/game/PlaytimeRewardToast";
 
 // ─── 동물 레벨 (작은 것 → 큰 것) ──────────────────────────────────
@@ -37,7 +38,7 @@ const BOUNCE      = 0.18;
 const ITER        = 8;     // 충돌 해결 반복 횟수
 const MERGE_COOL  = 30;    // 생성 후 합치기 가능한 최소 프레임
 const DROP_DELAY  = 650;   // 다음 공 준비 대기(ms)
-const MAX_DROP_LV = 4;     // 드롭 가능한 최대 레벨 (0~4)
+const MAX_DROP_LV = 2;     // 드롭 가능한 최대 레벨 (0~2: 애벌레·개구리·토끼만)
 
 let gUID = 0;
 
@@ -51,7 +52,11 @@ interface Ball {
   birthFrame: number;
 }
 
-const rndLv = () => Math.floor(Math.random() * (MAX_DROP_LV + 1));
+// 작은 동물 위주로 드롭(애벌레 55% · 개구리 30% · 토끼 15%) — 큰 동물이 막 쏟아지지 않도록
+const rndLv = () => {
+  const r = Math.random();
+  return r < 0.55 ? 0 : r < 0.85 ? 1 : 2;
+};
 
 // ─── 컴포넌트 ──────────────────────────────────────────────────
 export default function AnimalMergePage() {
@@ -78,6 +83,11 @@ export default function AnimalMergePage() {
   const [gameOver,  setGameOver]  = useState(false);
   const [canDrop,   setCanDrop]   = useState(true);
 
+  /* ── 명예의 전당(전역 랭킹) ── */
+  const [top5,      setTop5]      = useState<ScoreEntry[]>([]);
+  const [myRank,    setMyRank]    = useState(0);     // 이번 판으로 진입한 순위(0=미진입)
+  const [serverBest, setServerBest] = useState(false); // 서버 신기록 갱신 여부
+
   /* ── 초기화 ── */
   useEffect(() => {
     const best = parseInt(localStorage.getItem("animalmerge_best") || "0", 10);
@@ -86,6 +96,25 @@ export default function AnimalMergePage() {
     dropLvRef.current = d; nextLvRef.current = n;
     setDropLv(d); setNextLv(n);
   }, []);
+
+  /* ── 명예의 전당 로드(진입 시) ── */
+  useEffect(() => {
+    getAnimalMergeTop5().then(setTop5);
+  }, []);
+
+  /* ── 게임 오버 → 회원이면 전역 랭킹에 점수 등록(개인 최고 갱신 시에만) ── */
+  useEffect(() => {
+    if (!gameOver || score <= 0) return;
+    setMyRank(0); setServerBest(false);
+    if (!session?.user?.email) return; // 비로그인은 로컬 최고점만
+    submitAnimalMergeScore(session.user.name || "플레이어", score).then((res) => {
+      if (res.isNewBest) {
+        setServerBest(true);
+        setMyRank(res.rank);
+        getAnimalMergeTop5().then(setTop5); // 순위표 즉시 갱신
+      }
+    });
+  }, [gameOver]); // eslint-disable-line react-hooks/exhaustive-deps
 
   /* ── 물리 업데이트 ── */
   const tick = useCallback(() => {
@@ -447,15 +476,59 @@ export default function AnimalMergePage() {
               <div className="text-5xl mb-3">😢</div>
               <div className="text-xl font-bold mb-1">게임 오버!</div>
               <div className="text-3xl font-black text-yellow-400 mb-1">{score.toLocaleString()}점</div>
-              {score > 0 && score >= bestScore && (
-                <div className="text-sm text-yellow-300 mb-4">🏆 신기록 달성!</div>
+              {serverBest && myRank >= 1 && myRank <= 5 ? (
+                <div className="text-sm font-bold text-yellow-300 mb-2">🏆 명예의 전당 {myRank}위 등극!</div>
+              ) : serverBest ? (
+                <div className="text-sm font-bold text-yellow-300 mb-2">🎉 개인 신기록 갱신!</div>
+              ) : score > 0 && score >= bestScore ? (
+                <div className="text-sm text-yellow-300 mb-2">🏆 신기록 달성!</div>
+              ) : null}
+              {score > 0 && !session?.user?.email && (
+                <Link href="/login" className="text-[11px] text-neutral-300 underline underline-offset-2 mb-3 hover:text-white">
+                  로그인하면 명예의 전당에 기록을 남길 수 있어요
+                </Link>
               )}
               <button
                 onClick={restart}
-                className="mt-3 px-10 py-3 bg-[#F9954E] hover:bg-[#E8832E] text-white rounded-2xl font-bold text-base transition-colors shadow-lg"
+                className="mt-2 px-10 py-3 bg-[#F9954E] hover:bg-[#E8832E] text-white rounded-2xl font-bold text-base transition-colors shadow-lg"
               >
                 다시 시작
               </button>
+            </div>
+          )}
+        </div>
+
+        {/* 🏆 명예의 전당 TOP 5 (전역 랭킹) */}
+        <div className="mt-3 bg-gradient-to-b from-yellow-500/10 to-neutral-900/80 rounded-xl p-3 border border-yellow-500/15">
+          <div className="flex items-center justify-between mb-2">
+            <span className="text-xs font-bold text-yellow-300">🏆 명예의 전당 TOP 5</span>
+            <span className="text-[10px] text-neutral-500">회원 최고점</span>
+          </div>
+          {top5.length === 0 ? (
+            <div className="py-3 text-center text-[11px] text-neutral-500">
+              아직 기록이 없어요. 첫 주인공이 되어보세요!
+            </div>
+          ) : (
+            <div className="space-y-1">
+              {top5.map((e, i) => {
+                const medal = ["🥇", "🥈", "🥉"][i] || `${i + 1}`;
+                const isMe = !!session?.user && e.name === (session.user.name || "플레이어");
+                return (
+                  <div
+                    key={e.uid}
+                    className={`flex items-center justify-between rounded-lg px-2.5 py-1.5 ${
+                      isMe ? "bg-[#F9954E]/20 ring-1 ring-[#F9954E]/40" : i < 3 ? "bg-neutral-800/70" : "bg-neutral-800/30"
+                    }`}
+                  >
+                    <div className="flex items-center gap-2 min-w-0">
+                      <span className={`w-6 text-center text-sm ${i < 3 ? "" : "text-neutral-500 font-bold"}`}>{medal}</span>
+                      <span className="text-xs text-neutral-200 truncate">{e.name}</span>
+                      {isMe && <span className="text-[9px] text-[#F9954E] font-bold shrink-0">나</span>}
+                    </div>
+                    <span className="text-xs font-bold text-yellow-400 tabular-nums shrink-0">{e.score.toLocaleString()}</span>
+                  </div>
+                );
+              })}
             </div>
           )}
         </div>
