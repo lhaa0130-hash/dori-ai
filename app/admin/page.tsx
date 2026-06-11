@@ -284,57 +284,55 @@ export default function AdminPage() {
   ];
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
+    <div className="min-h-screen bg-white dark:bg-black text-foreground">
       <Header />
 
       {/* 토스트 알림 */}
       {toast && (
         <div
-          className={`fixed top-20 right-6 z-50 px-6 py-3 rounded-xl shadow-lg font-medium text-white transition-all ${
-            toast.type === "success" ? "bg-green-500" : "bg-red-500"
+          className={`fixed top-20 left-1/2 -translate-x-1/2 z-[60] px-5 py-3 rounded-2xl shadow-xl font-bold text-[13px] text-white ${
+            toast.type === "success" ? "bg-[#F9954E]" : "bg-neutral-900"
           }`}
         >
-          {toast.type === "success" ? "✅" : "❌"} {toast.msg}
+          {toast.type === "success" ? "✅ " : "⚠️ "}{toast.msg}
         </div>
       )}
 
-      <div className="max-w-7xl mx-auto px-4 pt-24 pb-12">
+      <div className="max-w-5xl mx-auto px-4 sm:px-6 pt-24 pb-16">
         {/* 헤더 */}
-        <div className="flex items-center gap-4 mb-8">
-          <div className="w-12 h-12 bg-gradient-to-br from-red-500 to-orange-500 rounded-2xl flex items-center justify-center text-2xl shadow-lg">
+        <div className="flex items-center gap-3 mb-7">
+          <div className="w-10 h-10 rounded-2xl bg-[#FFF5EB] dark:bg-[#F9954E]/10 flex items-center justify-center text-xl flex-shrink-0">
             🛡️
           </div>
-          <div>
-            <h1 className="text-3xl font-black bg-gradient-to-r from-red-400 to-orange-400 bg-clip-text text-transparent">
-              관리자 패널
-            </h1>
-            <p className="text-neutral-500 dark:text-neutral-400 text-sm">DORI-AI Admin · {user.email}</p>
+          <div className="min-w-0">
+            <h1 className="text-[24px] font-extrabold text-neutral-950 dark:text-white leading-tight tracking-tight">관리자 패널</h1>
+            <p className="text-neutral-400 dark:text-neutral-500 text-[12px] truncate">{user.email}</p>
           </div>
-          <div className="ml-auto">
-            <button
-              onClick={loadData}
-              className="px-4 py-2 bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700 text-foreground rounded-lg text-sm font-medium transition"
-            >
-              🔄 새로고침
-            </button>
-          </div>
+          <button
+            onClick={loadData}
+            className="ml-auto flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-neutral-200 dark:border-zinc-800 text-neutral-600 dark:text-neutral-300 text-[13px] font-bold hover:border-[#F9954E]/40 hover:text-[#F9954E] transition-colors flex-shrink-0"
+          >
+            🔄 새로고침
+          </button>
         </div>
 
-        {/* 탭 네비게이션 */}
-        <div className="flex gap-2 mb-8 flex-wrap">
-          {tabs.map((tab) => (
-            <button
-              key={tab.id}
-              onClick={() => setActiveTab(tab.id)}
-              className={`px-5 py-2.5 rounded-xl font-medium transition text-sm ${
-                activeTab === tab.id
-                  ? "bg-orange-500 text-white shadow-lg shadow-orange-500/30"
-                  : "bg-neutral-100 dark:bg-neutral-800 text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-neutral-700"
-              }`}
-            >
-              {tab.emoji} {tab.label}
-            </button>
-          ))}
+        {/* 탭 네비게이션 — 가로 스크롤 pill */}
+        <div className="-mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto scrollbar-hide mb-7">
+          <div className="flex gap-2 w-max">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`px-4 py-2 rounded-full text-[13px] font-bold whitespace-nowrap border transition-colors ${
+                  activeTab === tab.id
+                    ? "bg-[#F9954E] border-[#F9954E] text-white"
+                    : "bg-white dark:bg-zinc-950 border-neutral-200 dark:border-zinc-800 text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E]/40"
+                }`}
+              >
+                {tab.emoji} {tab.label}
+              </button>
+            ))}
+          </div>
         </div>
 
         {/* ── 대시보드 탭 ── */}
@@ -346,7 +344,7 @@ export default function AdminPage() {
               const cur = ad.currency || "US$";
               const fmt = (n: number) => `${cur}${(n || 0).toFixed(2)}`;
               return (
-                <div className="rounded-2xl overflow-hidden border border-neutral-200 dark:border-neutral-800">
+                <div className="rounded-2xl overflow-hidden border border-neutral-100 dark:border-zinc-900">
                   <div className="bg-gradient-to-br from-[#1a73e8] to-[#1557b0] p-5 text-white">
                     <div className="flex items-center justify-between mb-4">
                       <h2 className="text-base font-bold flex items-center gap-2">💰 구글 애드센스 수입</h2>
@@ -405,7 +403,7 @@ export default function AdminPage() {
                     )}
                   </div>
 
-                  <div className="flex items-center justify-between px-5 py-3 bg-white dark:bg-neutral-900">
+                  <div className="flex items-center justify-between px-5 py-3 bg-white dark:bg-zinc-950">
                     <span className="text-sm text-neutral-500 dark:text-neutral-400">잔고</span>
                     <div className="text-right">
                       <span className="text-lg font-black text-foreground">{fmt(ad.balance)}</span>
@@ -421,26 +419,23 @@ export default function AdminPage() {
             })()}
 
             {/* 요약 카드 */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
               {[
-                { label: "오늘 방문자", value: todayUV, emoji: "📅", color: "from-blue-500 to-cyan-500" },
-                { label: "총 방문자", value: totalUV, emoji: "🌍", color: "from-purple-500 to-pink-500" },
-                { label: "총 회원수", value: users.length, emoji: "👤", color: "from-green-500 to-emerald-500" },
-                { label: "게시글 수", value: communityPosts.length, emoji: "📝", color: "from-orange-500 to-red-500" },
+                { label: "오늘 방문자", value: todayUV, emoji: "📅" },
+                { label: "총 방문자", value: totalUV, emoji: "🌍" },
+                { label: "총 회원수", value: users.length, emoji: "👤" },
+                { label: "게시글 수", value: communityPosts.length, emoji: "📝" },
               ].map((card) => (
-                <div key={card.label} className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 relative overflow-hidden">
-                  <div className={`absolute inset-0 bg-gradient-to-br ${card.color} opacity-5`} />
-                  <div className="text-3xl mb-2">{card.emoji}</div>
-                  <div className={`text-3xl font-black bg-gradient-to-r ${card.color} bg-clip-text text-transparent`}>
-                    {card.value.toLocaleString()}
-                  </div>
-                  <div className="text-neutral-500 dark:text-neutral-400 text-sm mt-1">{card.label}</div>
+                <div key={card.label} className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-4">
+                  <div className="text-xl mb-1.5">{card.emoji}</div>
+                  <div className="text-2xl font-black text-neutral-900 dark:text-white">{card.value.toLocaleString()}</div>
+                  <div className="text-neutral-400 dark:text-neutral-500 text-[12px] mt-0.5">{card.label}</div>
                 </div>
               ))}
             </div>
 
             {/* 최근 14일 방문자(UV) 추이 */}
-            <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6">
+            <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-6">
               <h2 className="text-lg font-bold mb-6 flex items-center gap-2 text-foreground">
                 📈 최근 14일 방문자(순방문) 추이
               </h2>
@@ -472,14 +467,14 @@ export default function AdminPage() {
             </div>
 
             {/* 최근 가입 회원 */}
-            <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6">
+            <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-6">
               <h2 className="text-lg font-bold mb-4 text-foreground">🆕 최근 회원</h2>
               {users.length === 0 ? (
                 <p className="text-neutral-400 dark:text-neutral-500 text-sm">회원 데이터 없음</p>
               ) : (
                 <div className="space-y-2">
                   {users.slice(0, 5).map((u) => (
-                    <div key={u.email} className="flex items-center justify-between py-2 border-b border-neutral-100 dark:border-neutral-800">
+                    <div key={u.email} className="flex items-center justify-between py-2 border-b border-neutral-100 dark:border-zinc-900">
                       <div>
                         <span className="font-medium text-foreground">{u.name || "이름 없음"}</span>
                         <span className="text-neutral-500 dark:text-neutral-400 text-sm ml-2">{u.email}</span>
@@ -507,7 +502,7 @@ export default function AdminPage() {
                 { label: "총 순방문(UV)", value: totalUV, sub: "전체 누적 방문자", color: "text-[#F9954E]" },
                 { label: "총 조회(PV)", value: totalPV, sub: "전체 누적 조회수", color: "text-purple-500 dark:text-purple-400" },
               ].map((c) => (
-                <div key={c.label} className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5">
+                <div key={c.label} className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
                   <div className="text-neutral-500 dark:text-neutral-400 text-[13px] mb-1">{c.label}</div>
                   <div className={`text-3xl font-black ${c.color}`}>{c.value.toLocaleString()}</div>
                   <div className="text-[11px] text-neutral-400 dark:text-neutral-500 mt-1">{c.sub}</div>
@@ -527,13 +522,13 @@ export default function AdminPage() {
             {/* 외부 분석(정확한 실측) 바로가기 */}
             <div className="grid grid-cols-2 gap-4">
               <a href="https://analytics.google.com/" target="_blank" rel="noopener noreferrer"
-                className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 hover:border-[#F9954E]/40 transition-colors">
+                className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5 hover:border-[#F9954E]/40 transition-colors">
                 <div className="text-2xl mb-2">📈</div>
                 <div className="font-bold text-foreground text-sm">Google Analytics</div>
                 <div className="text-[11px] text-neutral-400 mt-0.5">실시간·기기·유입 등 정밀 지표 →</div>
               </a>
               <a href="https://clarity.microsoft.com/projects/view/va2qmv3mwz/dashboard" target="_blank" rel="noopener noreferrer"
-                className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5 hover:border-[#F9954E]/40 transition-colors">
+                className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5 hover:border-[#F9954E]/40 transition-colors">
                 <div className="text-2xl mb-2">🔥</div>
                 <div className="font-bold text-foreground text-sm">Microsoft Clarity</div>
                 <div className="text-[11px] text-neutral-400 mt-0.5">히트맵·세션 녹화 →</div>
@@ -541,7 +536,7 @@ export default function AdminPage() {
             </div>
 
             {/* 기기별 방문 */}
-            <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6">
+            <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-6">
               <h2 className="text-lg font-bold mb-4 text-foreground">📱 기기별 방문 (순방문 기준)</h2>
               {(() => {
                 const total = device.mobile + device.tablet + device.desktop;
@@ -556,7 +551,7 @@ export default function AdminPage() {
                 ];
                 return (
                   <>
-                    <div className="flex h-3 rounded-full overflow-hidden mb-5 bg-neutral-100 dark:bg-neutral-800">
+                    <div className="flex h-3 rounded-full overflow-hidden mb-5 bg-neutral-100 dark:bg-zinc-900">
                       {items.map((it) => it.n > 0 ? (
                         <div key={it.label} style={{ width: `${pct(it.n)}%`, backgroundColor: it.color }} title={`${it.label} ${pct(it.n)}%`} />
                       ) : null)}
@@ -576,7 +571,7 @@ export default function AdminPage() {
             </div>
 
             {/* 일별 기록 (UV/PV) */}
-            <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6">
+            <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-6">
               <h2 className="text-lg font-bold mb-4 text-foreground">📅 일별 방문 기록 (최근 30일)</h2>
               {daily.length === 0 ? (
                 <p className="text-neutral-400 dark:text-neutral-500 text-sm">{analyticsReady ? "아직 기록이 없어요." : "불러오는 중…"}</p>
@@ -584,7 +579,7 @@ export default function AdminPage() {
                 <div className="overflow-x-auto">
                   <table className="w-full text-sm">
                     <thead>
-                      <tr className="text-neutral-500 dark:text-neutral-400 border-b border-neutral-200 dark:border-neutral-800">
+                      <tr className="text-neutral-500 dark:text-neutral-400 border-b border-neutral-100 dark:border-zinc-900">
                         <th className="text-left pb-3 font-semibold">날짜</th>
                         <th className="text-right pb-3 font-semibold">순방문(UV)</th>
                         <th className="text-right pb-3 font-semibold">조회(PV)</th>
@@ -592,7 +587,7 @@ export default function AdminPage() {
                     </thead>
                     <tbody>
                       {[...daily].reverse().map((d) => (
-                        <tr key={d.date} className="border-b border-neutral-100/80 dark:border-neutral-800/50">
+                        <tr key={d.date} className="border-b border-neutral-100/80 dark:border-zinc-900/50">
                           <td className="py-2 text-neutral-700 dark:text-neutral-300">{d.date}</td>
                           <td className="py-2 text-right font-bold text-[#F9954E]">{d.uv.toLocaleString()}</td>
                           <td className="py-2 text-right text-neutral-500 dark:text-neutral-400">{d.pv.toLocaleString()}</td>
@@ -610,7 +605,7 @@ export default function AdminPage() {
         {activeTab === "users" && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* 회원 목록 */}
-            <div className="md:col-span-1 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5">
+            <div className="md:col-span-1 bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
               <h2 className="font-bold mb-4 text-foreground">👤 회원 목록 ({users.length}명)</h2>
               {users.length === 0 ? (
                 <p className="text-neutral-400 dark:text-neutral-500 text-sm">회원 없음</p>
@@ -623,7 +618,7 @@ export default function AdminPage() {
                       className={`w-full text-left p-3 rounded-xl transition ${
                         selectedUser?.email === u.email
                           ? "bg-orange-500/20 border border-orange-500/50"
-                          : "bg-neutral-100 dark:bg-neutral-800 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                          : "bg-neutral-100 dark:bg-zinc-900 hover:bg-neutral-200 dark:hover:bg-neutral-700"
                       }`}
                     >
                       <div className="font-medium text-sm truncate text-foreground">{u.name || "이름 없음"}</div>
@@ -639,7 +634,7 @@ export default function AdminPage() {
             </div>
 
             {/* 회원 상세 */}
-            <div className="md:col-span-2 bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-5">
+            <div className="md:col-span-2 bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
               {!selectedUser ? (
                 <div className="h-full flex items-center justify-center text-neutral-400 dark:text-neutral-500">
                   <div className="text-center">
@@ -668,7 +663,7 @@ export default function AdminPage() {
                       { label: "레벨", value: `⭐ Lv.${selectedUser.level || 1}` },
                       { label: "경험치", value: `✨ ${selectedUser.doriExp || 0}` },
                     ].map((item) => (
-                      <div key={item.label} className="bg-neutral-100 dark:bg-neutral-800 rounded-xl p-3 text-center">
+                      <div key={item.label} className="bg-neutral-100 dark:bg-zinc-900 rounded-xl p-3 text-center">
                         <div className="font-bold text-foreground">{item.value}</div>
                         <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{item.label}</div>
                       </div>
@@ -676,7 +671,7 @@ export default function AdminPage() {
                   </div>
 
                   {/* 프리미엄 토글 */}
-                  <div className="bg-neutral-100 dark:bg-neutral-800 rounded-xl p-4 flex justify-between items-center">
+                  <div className="bg-neutral-100 dark:bg-zinc-900 rounded-xl p-4 flex justify-between items-center">
                     <div>
                       <div className="font-medium text-foreground">💎 프리미엄 (유료 → 무료 전환)</div>
                       <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
@@ -699,7 +694,7 @@ export default function AdminPage() {
                   </div>
 
                   {/* 솜사탕 지급 */}
-                  <div className="bg-neutral-100 dark:bg-neutral-800 rounded-xl p-4">
+                  <div className="bg-neutral-100 dark:bg-zinc-900 rounded-xl p-4">
                     <div className="font-medium mb-3 text-foreground">🍭 솜사탕 지급</div>
                     <div className="flex gap-2 flex-wrap">
                       {[10, 50, 100, 500, 1000].map((amount) => (
@@ -724,14 +719,14 @@ export default function AdminPage() {
 
         {/* ── 게시판 탭 ── */}
         {activeTab === "community" && (
-          <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6">
+          <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-6">
             <h2 className="text-lg font-bold mb-4 text-foreground">💬 커뮤니티 게시글 ({communityPosts.length}개)</h2>
             {communityPosts.length === 0 ? (
               <p className="text-neutral-400 dark:text-neutral-500 text-sm">게시글 없음</p>
             ) : (
               <div className="space-y-3">
                 {communityPosts.map((post) => (
-                  <div key={post.id} className="bg-neutral-50 dark:bg-neutral-800 rounded-xl p-4 flex justify-between items-start gap-4">
+                  <div key={post.id} className="bg-neutral-50 dark:bg-zinc-900 rounded-xl p-4 flex justify-between items-start gap-4">
                     <div className="flex-1 min-w-0">
                       <div className="font-medium truncate text-foreground">{post.title}</div>
                       <div className="text-sm text-neutral-500 dark:text-neutral-400 mt-1 truncate">{post.content}</div>
@@ -757,7 +752,7 @@ export default function AdminPage() {
         {/* ── 프리미엄 관리 탭 ── */}
         {activeTab === "premium" && (
           <div className="space-y-6">
-            <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6">
+            <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-6">
               <h2 className="text-lg font-bold mb-2 text-foreground">💎 프리미엄 관리</h2>
               <p className="text-neutral-500 dark:text-neutral-400 text-sm mb-6">
                 프리미엄으로 설정된 회원은 모든 유료 기능을 무료로 이용할 수 있습니다.
@@ -788,7 +783,7 @@ export default function AdminPage() {
                 <div className="font-medium mb-3 text-foreground">일반 회원에게 프리미엄 부여</div>
                 <div className="space-y-2">
                   {users.filter((u) => !u.isPremium).map((u) => (
-                    <div key={u.email} className="flex justify-between items-center bg-neutral-100 dark:bg-neutral-800 rounded-xl px-4 py-3">
+                    <div key={u.email} className="flex justify-between items-center bg-neutral-100 dark:bg-zinc-900 rounded-xl px-4 py-3">
                       <div>
                         <span className="font-medium text-sm text-foreground">{u.name || "이름 없음"}</span>
                         <span className="text-neutral-500 dark:text-neutral-400 text-xs ml-2">{u.email}</span>

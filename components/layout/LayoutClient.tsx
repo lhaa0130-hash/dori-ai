@@ -37,6 +37,11 @@ export default function LayoutClient({ children }: LayoutClientProps) {
     return <>{children}</>;
   }
 
+  // 관리자(/admin)는 자체 헤더·풀폭 레이아웃 사용 — 사이드 광고/본문 패딩 중복 제거
+  if (pathname?.startsWith("/admin")) {
+    return <>{children}</>;
+  }
+
   // 앱 환경: Header/Footer 숨기고 AppLayoutWrapper 사용
   if (isAppEnv) {
     return <AppLayoutWrapper>{children}</AppLayoutWrapper>;
