@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Thu, 11 Jun 2026 01:12:29 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 11 Jun 2026 03:46:36 GMT</lastBuildDate>
+    <item>
+      <title>중국의 데이터 센터 영향력 작전, 미국을 겨냥하다</title>
+      <link>https://dori-ai.com/insight/article/trend-98</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-98</guid>
+      <category>트렌드</category>
+      <pubDate>Thu, 11 Jun 2026 00:00:00 GMT</pubDate>
+      <description>중국이 미국의 AI 데이터 센터 운영에 대한 태도를 형성하기 위해 영향력 작전을 펼치고 있다는 OpenAI의 주장과 그 배경을 살펴봅니다.</description>
+    </item>
     <item>
       <title>오픈AI의 광고 혁신, 구글의 심장에 침투할까?</title>
       <link>https://dori-ai.com/insight/article/trend-97</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Mon, 20 Apr 2026 00:00:00 GMT</pubDate>
       <description>Anthropic이 역대 가장 강력한 AI 모델 'Claude Mythos Preview'를 공개했다. 사이버보안 분야에서 초인적 수준의 취약점 탐지 능력을 보여주지만, 동시에 강력한 사이버공격 도구로 악용될 수 있다는 우려로 제한적 배포가 결정됐다.</description>
-    </item>
-    <item>
-      <title>직장인 절반이 AI를 쓴다 — 2026년, 'AI 도구' 없이는 못 일하는 시대 도래</title>
-      <link>https://dori-ai.com/insight/article/trend-64</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-64</guid>
-      <category>트렌드</category>
-      <pubDate>Mon, 20 Apr 2026 00:00:00 GMT</pubDate>
-      <description>2026년 현재 미국 직장인의 절반 이상이 AI 도구를 업무에 활용하고 있다는 조사 결과가 잇따라 발표됐다. Gallup, Deloitte, PwC 등의 데이터가 한 방향을 가리키고 있다 — AI는 이미 선택이 아닌 생존 도구다.</description>
     </item>
   </channel>
 </rss>
