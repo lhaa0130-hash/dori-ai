@@ -62,6 +62,7 @@ export default function AdminPage() {
   const [totalPV, setTotalPV] = useState(0);
   const [daily, setDaily] = useState<DailyAnalytics[]>([]);
   const [analyticsReady, setAnalyticsReady] = useState(false);
+  const [device, setDevice] = useState({ mobile: 0, tablet: 0, desktop: 0 });
 
   // 사용자 데이터
   const [users, setUsers] = useState<UserData[]>([]);
@@ -109,6 +110,7 @@ export default function AdminPage() {
       setTodayUV(todayRow?.uv || 0);
       setTodayPV(todayRow?.pv || 0);
       setDaily(dailyArr);
+      setDevice({ mobile: summary.mobile, tablet: summary.tablet, desktop: summary.desktop });
       setAnalyticsReady(true);
     } catch (e) {
       console.warn("[admin] 방문자 통계 로드 실패:", e);
@@ -430,6 +432,41 @@ export default function AdminPage() {
                 <div className="font-bold text-foreground text-sm">Microsoft Clarity</div>
                 <div className="text-[11px] text-neutral-400 mt-0.5">히트맵·세션 녹화 →</div>
               </a>
+            </div>
+
+            {/* 기기별 방문 */}
+            <div className="bg-white dark:bg-neutral-900 border border-neutral-200 dark:border-neutral-800 rounded-2xl p-6">
+              <h2 className="text-lg font-bold mb-4 text-foreground">📱 기기별 방문 (순방문 기준)</h2>
+              {(() => {
+                const total = device.mobile + device.tablet + device.desktop;
+                if (total === 0) {
+                  return <p className="text-neutral-400 dark:text-neutral-500 text-sm">{analyticsReady ? "아직 데이터가 없어요." : "불러오는 중…"}</p>;
+                }
+                const pct = (n: number) => Math.round((n / total) * 100);
+                const items = [
+                  { label: "📱 모바일", n: device.mobile, color: "#F9954E" },
+                  { label: "💻 PC", n: device.desktop, color: "#60A5FA" },
+                  { label: "🖥️ 태블릿", n: device.tablet, color: "#A78BFA" },
+                ];
+                return (
+                  <>
+                    <div className="flex h-3 rounded-full overflow-hidden mb-5 bg-neutral-100 dark:bg-neutral-800">
+                      {items.map((it) => it.n > 0 ? (
+                        <div key={it.label} style={{ width: `${pct(it.n)}%`, backgroundColor: it.color }} title={`${it.label} ${pct(it.n)}%`} />
+                      ) : null)}
+                    </div>
+                    <div className="grid grid-cols-3 gap-3">
+                      {items.map((it) => (
+                        <div key={it.label} className="text-center">
+                          <div className="text-[13px] font-bold text-foreground">{it.label}</div>
+                          <div className="text-3xl font-black" style={{ color: it.color }}>{pct(it.n)}%</div>
+                          <div className="text-xs text-neutral-400 dark:text-neutral-500">{it.n.toLocaleString()}명</div>
+                        </div>
+                      ))}
+                    </div>
+                  </>
+                );
+              })()}
             </div>
 
             {/* 일별 기록 (UV/PV) */}

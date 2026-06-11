@@ -20,8 +20,30 @@ function todayStr(): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-export interface AnalyticsSummary { totalUV: number; totalPV: number; }
-export interface DailyAnalytics { date: string; uv: number; pv: number; }
+export type DeviceType = "mobile" | "tablet" | "desktop";
+export interface AnalyticsSummary {
+  totalUV: number;
+  totalPV: number;
+  mobile: number;
+  tablet: number;
+  desktop: number;
+}
+export interface DailyAnalytics { date: string; uv: number; pv: number }
+
+/** userAgent 기반 기기 종류 판별 (모바일/태블릿/PC) */
+export function getDeviceType(): DeviceType {
+  if (typeof navigator === "undefined") return "desktop";
+  const ua = navigator.userAgent || "";
+  const touch = (navigator.maxTouchPoints || 0) > 1;
+  // 태블릿: iPad(신형은 Mac으로 위장 → 터치로 보정), Android 태블릿(Mobile 미포함)
+  if (/iPad/i.test(ua) || (/(Macintosh)/i.test(ua) && touch) || /Tablet|PlayBook|Silk/i.test(ua) || (/Android/i.test(ua) && !/Mobile/i.test(ua))) {
+    return "tablet";
+  }
+  if (/Mobi|iPhone|iPod|Android|Windows Phone|webOS|BlackBerry|IEMobile|Opera Mini/i.test(ua)) {
+    return "mobile";
+  }
+  return "desktop";
+}
 
 /** 방문 기록 (페이지 로드시 호출). UV 하루1회/브라우저, PV 세션1회. */
 export function trackVisit(): void {
@@ -51,7 +73,12 @@ export function trackVisit(): void {
     const db = getFirebaseFirestore();
     const sPatch: Record<string, unknown> = { updatedAt: serverTimestamp() };
     const dPatch: Record<string, unknown> = { date: today, updatedAt: serverTimestamp() };
-    if (newUV) { sPatch.totalUV = increment(1); dPatch.uv = increment(1); }
+    if (newUV) {
+      sPatch.totalUV = increment(1); dPatch.uv = increment(1);
+      // 기기 종류 집계 (모바일/태블릿/PC) — 순방문 기준
+      const devKey = `dev_${getDeviceType()}`;
+      sPatch[devKey] = increment(1); dPatch[devKey] = increment(1);
+    }
     if (newPV) { sPatch.totalPV = increment(1); dPatch.pv = increment(1); }
     setDoc(doc(db, "analytics", "summary"), sPatch, { merge: true }).catch(() => {});
     setDoc(doc(db, "analyticsDaily", today), dPatch, { merge: true }).catch(() => {});
@@ -81,9 +108,15 @@ export async function getAnalyticsSummary(): Promise<AnalyticsSummary> {
     const db = getFirebaseFirestore();
     const s = await getDoc(doc(db, "analytics", "summary"));
     const d = (s.data() as Record<string, number>) || {};
-    return { totalUV: d.totalUV || 0, totalPV: d.totalPV || 0 };
+    return {
+      totalUV: d.totalUV || 0,
+      totalPV: d.totalPV || 0,
+      mobile: d.dev_mobile || 0,
+      tablet: d.dev_tablet || 0,
+      desktop: d.dev_desktop || 0,
+    };
   } catch {
-    return { totalUV: 0, totalPV: 0 };
+    return { totalUV: 0, totalPV: 0, mobile: 0, tablet: 0, desktop: 0 };
   }
 }
 
