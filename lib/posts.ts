@@ -209,5 +209,22 @@ export async function getPostData(id: string) {
     } as any;
   }
 
+  // 8. 마켓 리뷰에서 찾기
+  const { getMarketBySlug } = await import('@/lib/market-posts');
+  const market = getMarketBySlug(id);
+  if (market) {
+    return {
+      id: id,
+      content: market.content,
+      contentHtml: '',
+      title: market.title,
+      date: market.date,
+      category: market.category,
+      author: market.author,
+      thumbnail_url: market.thumbnail,
+      tags: market.tags,
+    } as any;
+  }
+
   throw new Error(`Post not found: ${id}`);
 }

@@ -1,6 +1,6 @@
 // 마켓 데이터 — 제품군(카테고리) 분류
-// 지금은 카테고리만 노출. 추후 아마존·쿠팡·알리에서 제품을 하나씩 선정해
-// MARKET_PRODUCTS 배열에 추가하면 해당 카테고리에 자동으로 채워집니다.
+// 상품 목록은 data/market-products.json 에서 로드 (n8n 마켓 워크플로우가 자동 추가)
+import productsJson from "@/data/market-products.json";
 
 export type MarketSource = "amazon" | "coupang" | "ali";
 
@@ -67,11 +67,8 @@ export function buildMarketUrl(p: MarketProduct): string {
 }
 
 // ── 상품 목록 ──────────────────────────────────────────────
-// 지금은 비어 있음. 제품을 추가하려면 아래 형식으로 한 줄씩 넣으세요. 예:
-// { id: "ap-airpurifier", name: "공기청정기", category: "appliance", source: "coupang",
-//   query: "공기청정기", emoji: "🌬️", priceHint: "10만원대", summary: "미세먼지 걱정 끝",
-//   hot: true, weekly: true },   // weekly: true → '이주의 상품'에 노출
-export const MARKET_PRODUCTS: MarketProduct[] = [];
+// data/market-products.json 에서 로드 (n8n 마켓 워크플로우가 리뷰 발행 시 자동 추가)
+export const MARKET_PRODUCTS: MarketProduct[] = productsJson as unknown as MarketProduct[];
 
 export function countByCategory(catKey: string): number {
   return MARKET_PRODUCTS.filter((p) => p.category === catKey).length;

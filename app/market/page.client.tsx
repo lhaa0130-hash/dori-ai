@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { ArrowUpRight, ArrowLeft, ShoppingBag } from "lucide-react";
+import Link from "next/link";
+import { ArrowUpRight, ArrowLeft, ShoppingBag, FileText } from "lucide-react";
 import {
   MARKET_CATEGORIES,
   MARKET_PRODUCTS,
@@ -92,7 +93,45 @@ function WeeklySection() {
   );
 }
 
-export default function MarketClient() {
+// ── 리뷰 글 (content/market 자동 발행) ──
+export interface MarketReview {
+  slug: string;
+  title: string;
+  description: string;
+  date: string;
+}
+
+function ReviewSection({ reviews }: { reviews: MarketReview[] }) {
+  if (!reviews || reviews.length === 0) return null;
+  return (
+    <section className="py-6 border-b border-neutral-100 dark:border-zinc-900">
+      <div className="flex items-center gap-2 mb-4">
+        <span className="text-[14px] font-extrabold text-neutral-900 dark:text-white">📝 최신 리뷰 & 비교</span>
+        <span className="text-[10px] font-bold text-[#F9954E] px-2 py-0.5 rounded-full bg-[#FFF5EB] dark:bg-[#F9954E]/10">REVIEW</span>
+      </div>
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+        {reviews.slice(0, 6).map((r) => (
+          <Link
+            key={r.slug}
+            href={`/insight/article/${r.slug}`}
+            className="group flex items-start gap-3 p-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 hover:border-[#F9954E]/40 hover:shadow-lg hover:shadow-[#F9954E]/5 transition-all duration-200"
+          >
+            <div className="w-10 h-10 rounded-xl bg-[#FFF5EB] dark:bg-[#F9954E]/10 flex items-center justify-center flex-shrink-0">
+              <FileText className="w-4 h-4 text-[#F9954E]" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-[14px] font-extrabold text-neutral-900 dark:text-white leading-tight line-clamp-2 group-hover:text-[#E8832E] dark:group-hover:text-[#FBAA60] transition-colors break-keep">{r.title}</h3>
+              <p className="text-[12px] text-neutral-500 dark:text-neutral-400 mt-1 line-clamp-2 break-keep">{r.description}</p>
+              <span className="text-[10px] font-bold text-neutral-300 dark:text-zinc-600 mt-1 inline-block">{r.date}</span>
+            </div>
+          </Link>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+export default function MarketClient({ reviews = [] }: { reviews?: MarketReview[] }) {
   const [active, setActive] = useState<MarketCategory | null>(null);
 
   // ── 카테고리 상세 (선택 시) ──
@@ -147,6 +186,9 @@ export default function MarketClient() {
 
       {/* 이주의 상품 */}
       <WeeklySection />
+
+      {/* 최신 리뷰 글 */}
+      <ReviewSection reviews={reviews} />
 
       <section className="py-6 pb-16">
         <p className="text-[13px] font-bold text-neutral-400 dark:text-neutral-500 mb-4">제품군</p>

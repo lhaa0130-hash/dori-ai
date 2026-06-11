@@ -1,5 +1,6 @@
 import { createMetadata } from "@/lib/seo";
-import MarketClient from "./page.client";
+import { getAllMarketPosts } from "@/lib/market-posts";
+import MarketClient, { type MarketReview } from "./page.client";
 
 export const metadata = createMetadata({
   title: "마켓",
@@ -9,5 +10,11 @@ export const metadata = createMetadata({
 });
 
 export default function Page() {
-  return <MarketClient />;
+  const reviews: MarketReview[] = getAllMarketPosts().map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    description: p.description,
+    date: p.date,
+  }));
+  return <MarketClient reviews={reviews} />;
 }
