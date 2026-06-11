@@ -22,7 +22,7 @@ export default function TrendPreview({ trends }: { trends: TrendPost[] }) {
       {/* 피처드 아티클 — 큰 이미지 카드 */}
       <Link
         href={`/insight/article/${featured.slug}`}
-        className="scroll-reveal block rounded-2xl overflow-hidden mb-3 active:opacity-80 transition-opacity"
+        className="toss-fade-up block rounded-2xl overflow-hidden mb-3 active:opacity-80 transition-opacity"
       >
         <div className="relative w-full h-[190px] bg-neutral-100 dark:bg-zinc-900">
           {featured.thumbnail ? (

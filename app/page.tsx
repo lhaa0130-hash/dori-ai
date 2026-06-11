@@ -61,7 +61,7 @@ export default async function Home() {
         {/* 커뮤니티 — 풀 와이드 메인 카드 */}
         <Link
           href="/community"
-          className="toss-shine scroll-reveal flex items-center justify-between p-5 rounded-2xl mb-2.5
+          className="toss-shine toss-fade-up flex items-center justify-between p-5 rounded-2xl mb-2.5
             bg-[#F9954E] active:opacity-85 transition-opacity"
         >
           <div>
@@ -80,7 +80,7 @@ export default async function Home() {
         <div className="grid grid-cols-2 gap-2.5 mb-2.5">
           <Link
             href="/insight"
-            className="scroll-reveal-item scroll-delay-1 flex flex-col justify-between p-4 rounded-2xl
+            className="toss-fade-up toss-delay-1 flex flex-col justify-between p-4 rounded-2xl
               border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950
               active:opacity-70 transition-opacity min-h-[120px]"
           >
@@ -93,7 +93,7 @@ export default async function Home() {
 
           <Link
             href="/ai-tools"
-            className="scroll-reveal-item scroll-delay-2 flex flex-col justify-between p-4 rounded-2xl
+            className="toss-fade-up toss-delay-2 flex flex-col justify-between p-4 rounded-2xl
               border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950
               active:opacity-70 transition-opacity min-h-[120px]"
           >
@@ -109,7 +109,7 @@ export default async function Home() {
         <div className="grid grid-cols-2 gap-2.5">
           <Link
             href="/minigame"
-            className="scroll-reveal-item scroll-delay-3 flex flex-col justify-between p-4 rounded-2xl
+            className="toss-fade-up toss-delay-3 flex flex-col justify-between p-4 rounded-2xl
               border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950
               active:opacity-70 transition-opacity min-h-[105px]"
           >
@@ -122,7 +122,7 @@ export default async function Home() {
 
           <Link
             href="/projects"
-            className="scroll-reveal-item scroll-delay-4 flex flex-col justify-between p-4 rounded-2xl
+            className="toss-fade-up toss-delay-4 flex flex-col justify-between p-4 rounded-2xl
               border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950
               active:opacity-70 transition-opacity min-h-[105px]"
           >

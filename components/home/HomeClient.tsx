@@ -10,6 +10,7 @@ import {
   getCachedGameProfile,
 } from "@/lib/cottonCandy";
 import { TIER_INFO, calculateLevelProgress, type UserTier } from "@/lib/userProfile";
+import CottonCandy from "@/components/icons/CottonCandy";
 
 function getTodayStr(): string {
   const d = new Date();
@@ -71,7 +72,7 @@ export default function HomeClient() {
     return (
       <div className="mt-5 mb-5 flex items-center justify-between py-3.5 px-5 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-neutral-50 dark:bg-zinc-900/40">
         <div className="flex items-center gap-2.5">
-          <span className="text-[20px]">🍭</span>
+          <CottonCandy className="w-5 h-5" />
           <span className="text-[13px] font-semibold text-neutral-500 dark:text-neutral-400">
             로그인하고 등급·솜사탕을 모으세요
           </span>
@@ -113,7 +114,7 @@ export default function HomeClient() {
             disabled={checking}
             className="px-3.5 py-1.5 rounded-xl bg-[#F9954E] text-white text-[12px] font-black active:opacity-80 transition-opacity disabled:opacity-50 flex-shrink-0"
           >
-            {checking ? "..." : "출석 +50 🍭"}
+            {checking ? "..." : <>출석 +50 <CottonCandy className="w-3.5 h-3.5 inline-block align-[-0.15em]" /></>}
           </button>
         )}
       </div>
@@ -129,8 +130,8 @@ export default function HomeClient() {
       {/* 하단: 솜사탕 */}
       <div className="flex items-center justify-between">
         <span className="text-[12px] text-neutral-400">다음 레벨까지 {Math.round(100 - progress)}%</span>
-        <span className="text-[13px] font-bold text-neutral-700 dark:text-neutral-300">
-          🍭 {cottonCandy.toLocaleString()}
+        <span className="flex items-center gap-1 text-[13px] font-bold text-neutral-700 dark:text-neutral-300">
+          <CottonCandy className="w-4 h-4" /> {cottonCandy.toLocaleString()}
         </span>
       </div>
     </Link>

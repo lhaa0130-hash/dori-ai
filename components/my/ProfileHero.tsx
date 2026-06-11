@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import Link from "next/link";
 import ProfileImageSelector from "./ProfileImageSelector";
 import { UserProfile, UserTier, TIER_INFO, calculateLevel, getNextLevelExp, getNextTierExp, getCurrentLevelStartExp, calculateLevelProgress } from "@/lib/userProfile";
+import CottonCandy from "@/components/icons/CottonCandy";
 
 interface ProfileHeroProps {
   profile: UserProfile;
@@ -145,9 +146,9 @@ export default function ProfileHero({
             <div className="flex flex-col relative group">
               <span className="text-[9px] font-bold text-neutral-400 dark:text-zinc-500 uppercase tracking-tighter mb-1 select-none">솜사탕</span>
               <div className="flex items-center gap-2">
-                <span className="text-xl font-black text-pink-400 dark:text-pink-300">
+                <span className="text-xl font-black text-pink-400 dark:text-pink-300 inline-flex items-center gap-1">
                   {safeProfile.cottonCandy.toLocaleString()}
-                  <span className="text-sm ml-1 opacity-70">🍬</span>
+                  <CottonCandy className="w-4 h-4" />
                 </span>
                 <button
                   onClick={() => alert('솜사탕 녹이기 팝업을 준비 중입니다!')}

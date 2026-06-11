@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { grantPlaytimeReward, hasClaimedPlaytimeToday } from "@/lib/cottonCandy";
+import CottonCandy from "@/components/icons/CottonCandy";
 
 /**
  * 1분 이상 플레이 시 솜사탕 +50 (하루 1회) 자동 지급 + 토스트 표시.
@@ -39,7 +40,7 @@ export default function PlaytimeRewardToast({ seconds = 60, amount = 50 }: { sec
   return (
     <div className="fixed left-1/2 -translate-x-1/2 bottom-20 z-[100] pointer-events-none">
       <div className="flex items-center gap-2 px-4 py-3 rounded-2xl bg-[#F9954E] text-white shadow-xl shadow-[#F9954E]/30 toss-fade-up">
-        <span className="text-[18px] toss-float">🍭</span>
+        <CottonCandy className="w-[18px] h-[18px] toss-float" />
         <span className="text-[13px] font-bold">1분 플레이 보상! 솜사탕 +{amount}</span>
       </div>
     </div>
