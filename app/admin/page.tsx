@@ -461,7 +461,7 @@ export default function AdminPage() {
               )}
               {analyticsReady && totalUV === 0 && (
                 <p className="text-xs text-amber-500 mt-3 leading-relaxed">
-                  ⚠️ 집계가 0이면 Firestore 보안 규칙에 analytics 쓰기 허용이 필요해요. (firestore.analytics.rules.txt 참고)
+                  💡 규칙 게시 직후엔 0입니다. <b>게시 이후 새 방문부터</b> 집계돼요. 본인 브라우저는 오늘 이미 셌을 수 있으니, 폰/시크릿창으로 사이트를 한 번 열어보면 숫자가 올라갑니다.
                 </p>
               )}
             </div>

@@ -59,47 +59,50 @@ export function trackVisit(): void {
     }
   } catch {}
 
+  // ⚠️ 중복방지 키 v2 — 규칙 게시 전 실패로 찍힌 기존 플래그를 무시하고 한 번씩 다시 카운트
+  const UV_KEY = "dori_uv_date_v2";
+  const PV_KEY = "dori_pv_counted_v2";
+
   let newUV = false, newPV = false;
   try {
-    newUV = localStorage.getItem("dori_uv_date") !== today;
-    newPV = !sessionStorage.getItem("dori_pv_counted");
+    newUV = localStorage.getItem(UV_KEY) !== today;
+    newPV = !sessionStorage.getItem(PV_KEY);
   } catch {
     return;
   }
   if (!newUV && !newPV) return;
 
-  // Firestore 전역 누적 (fire-and-forget)
+  // ✅ 자가복구: Firestore 쓰기가 "성공했을 때만" 카운트함 플래그를 남김
+  //    → 규칙이 막혀 있으면 플래그 미저장 → 규칙 게시 후 다음 방문에 자동 재시도/집계
+  const markCounted = () => {
+    try {
+      if (newUV) {
+        localStorage.setItem(UV_KEY, today);
+        const t = parseInt(localStorage.getItem("dori_total_visitors") || "0", 10) + 1;
+        localStorage.setItem("dori_total_visitors", String(t));
+      }
+      if (newPV) sessionStorage.setItem(PV_KEY, "1");
+    } catch {}
+  };
+
   try {
     const db = getFirebaseFirestore();
     const sPatch: Record<string, unknown> = { updatedAt: serverTimestamp() };
     const dPatch: Record<string, unknown> = { date: today, updatedAt: serverTimestamp() };
     if (newUV) {
       sPatch.totalUV = increment(1); dPatch.uv = increment(1);
-      // 기기 종류 집계 (모바일/태블릿/PC) — 순방문 기준
       const devKey = `dev_${getDeviceType()}`;
       sPatch[devKey] = increment(1); dPatch[devKey] = increment(1);
     }
     if (newPV) { sPatch.totalPV = increment(1); dPatch.pv = increment(1); }
-    setDoc(doc(db, "analytics", "summary"), sPatch, { merge: true }).catch(() => {});
-    setDoc(doc(db, "analyticsDaily", today), dPatch, { merge: true }).catch(() => {});
-  } catch { /* 규칙/네트워크 문제여도 화면엔 영향 없음 */ }
 
-  // 플래그 저장
-  try {
-    if (newUV) localStorage.setItem("dori_uv_date", today);
-    if (newPV) sessionStorage.setItem("dori_pv_counted", "1");
-  } catch {}
-
-  // 레거시 localStorage 카운터도 유지(오프라인/규칙 미배포 시 폴백 표시용)
-  try {
-    if (newUV) {
-      const t = parseInt(localStorage.getItem("dori_total_visitors") || "0", 10) + 1;
-      localStorage.setItem("dori_total_visitors", String(t));
-      const hist = JSON.parse(localStorage.getItem("dori_visitor_history") || "{}");
-      hist[today] = (hist[today] || 0) + 1;
-      localStorage.setItem("dori_visitor_history", JSON.stringify(hist));
-    }
-  } catch {}
+    Promise.all([
+      setDoc(doc(db, "analytics", "summary"), sPatch, { merge: true }),
+      setDoc(doc(db, "analyticsDaily", today), dPatch, { merge: true }),
+    ])
+      .then(markCounted)
+      .catch(() => { /* 규칙/네트워크 실패 → 플래그 미저장, 다음 방문에 재시도 */ });
+  } catch { /* 화면엔 영향 없음 */ }
 }
 
 /** 전체 누적 (관리자용) */
