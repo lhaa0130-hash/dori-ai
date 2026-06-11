@@ -9,19 +9,21 @@
     "priceHint": "가격 확인 필요",
     "summary": "국내 AS 중시형",
     "hot": true,
-    "weekly": true
+    "weekly": true,
+    "url": "https://link.coupang.com/a/euIeznh1Oe"
   },
   {
     "id": "mk1-2",
     "name": "로보락 Q10 S5+ 로봇청소기 물걸레",
     "category": "appliance",
-    "source": "amazon",
+    "source": "coupang",
     "query": "Roborock Q10 S5+ robot vacuum mop",
     "emoji": "🤖",
     "priceHint": "30만원대 해외 딜 기준",
     "summary": "예산형 자동청소",
     "hot": true,
-    "weekly": true
+    "weekly": true,
+    "url": "https://link.coupang.com/a/euIezpZ5S8"
   },
   {
     "id": "mk1-3",
@@ -33,18 +35,20 @@
     "priceHint": "가격 확인 필요",
     "summary": "올인원 입문 후보",
     "hot": true,
-    "weekly": true
+    "weekly": true,
+    "url": "https://link.coupang.com/a/euIezsZd36"
   },
   {
     "id": "mk1-4",
     "name": "드리미 X50 Ultra Complete 로봇청소기 물걸레 번들",
     "category": "appliance",
-    "source": "amazon",
+    "source": "coupang",
     "query": "Dreame X50 Ultra Complete robot vacuum mop",
     "emoji": "🚪",
     "priceHint": "100만원 안팎 해외 딜 기준",
     "summary": "문턱 많은 집용",
     "hot": true,
-    "weekly": true
+    "weekly": true,
+    "url": "https://link.coupang.com/a/euIezvhwSi"
   }
 ]
