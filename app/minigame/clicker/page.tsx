@@ -6,7 +6,7 @@ import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import confetti from "canvas-confetti";
 import { useAuth } from "@/contexts/AuthContext";
-import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
+import { addCottonCandy, incrementMinigamePlays, addExp } from "@/lib/cottonCandy";
 import PlaytimeRewardToast from "@/components/game/PlaytimeRewardToast";
 
 // ----------------------------------------------------------------------
@@ -85,6 +85,7 @@ export default function ClickerGame() {
         if (session?.user?.email) {
             addCottonCandy(session.user.email, 20, "클릭커 스테이지 클리어");
             incrementMinigamePlays(session.user.email);
+            addExp(session.user.email, 3, "보스 처치");
         }
 
         // 이펙트

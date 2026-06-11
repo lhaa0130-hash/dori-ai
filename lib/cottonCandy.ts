@@ -10,6 +10,7 @@
 
 import { doc, getDoc, setDoc, increment, serverTimestamp } from "firebase/firestore";
 import { getFirebaseFirestore, getFirebaseAuth } from "@/lib/firebase";
+import { calculateTier, calculateLevel } from "@/lib/userProfile";
 
 export interface CottonCandyHistoryEntry {
   date: string;       // ISO 날짜 문자열
@@ -125,13 +126,18 @@ export async function hydrateGameData(): Promise<void> {
     }
 
     // 마이페이지/프로필 카드용 캐시 (티어·레벨·경험치)
+    // 경험치는 로컬이 더 높으면(방금 활동으로 적립, 아직 FS 반영 전) 유지 — 절대 내리지 않음
+    const localProfile = getCachedGameProfile(email);
+    const fsExp = d.doriExp || 0;
+    const localExp = localProfile?.doriExp || 0;
+    const finalExp = Math.max(fsExp, localExp);
     localStorage.setItem(
       GAME_PROFILE_KEY(email),
       JSON.stringify({
-        cottonCandy: d.cottonCandy || 0,
-        doriExp: d.doriExp || 0,
-        tier: d.tier || 1,
-        level: d.level || 1,
+        cottonCandy: Math.max(d.cottonCandy || 0, localProfile?.cottonCandy || 0),
+        doriExp: finalExp,
+        tier: calculateTier(finalExp),
+        level: calculateLevel(finalExp),
         nickname: d.name || undefined,
         gender: d.gender || undefined,
         ageGroup: d.ageGroup || undefined,
@@ -156,6 +162,83 @@ export function getCachedGameProfile(
   } catch {
     return null;
   }
+}
+
+// ─── 경험치(doriExp) / 레벨 / 등급 ─────────────────────────────────
+// 솜사탕과 동일하게 localStorage 캐시(GAME_PROFILE) 우선 + Firestore 동기화.
+// 화면(ProfileHero·AccountMenu·HomeClient)은 getCachedGameProfile()를 읽으므로 즉시 반영됨.
+
+function writeGameProfile(
+  email: string,
+  patch: Partial<{ cottonCandy: number; doriExp: number; tier: number; level: number }>
+) {
+  const cur = getCachedGameProfile(email) || {
+    cottonCandy: getCottonCandyBalance(email),
+    doriExp: 0,
+    tier: 1,
+    level: 1,
+  };
+  const next = { ...cur, ...patch };
+  try { localStorage.setItem(GAME_PROFILE_KEY(email), JSON.stringify(next)); } catch {}
+  return next;
+}
+
+function fsSetExp(exp: number, tier: number, level: number) {
+  const uid = currentUid();
+  if (!uid) return;
+  try {
+    const db = getFirebaseFirestore();
+    setDoc(
+      doc(db, "users", uid),
+      { doriExp: exp, tier, level, lastActiveAt: serverTimestamp() },
+      { merge: true }
+    ).catch(() => {});
+  } catch { /* noop */ }
+}
+
+/** 현재 경험치(동기, 캐시 기준) */
+export function getDoriExp(email: string): number {
+  return getCachedGameProfile(email)?.doriExp || 0;
+}
+
+export interface ExpResult {
+  exp: number;
+  level: number;
+  tier: number;
+  gained: number;
+  leveledUp: boolean;
+  tierUp: boolean;
+}
+
+/**
+ * 경험치 적립(+티어/레벨 자동 재계산). 활동 시점에 호출.
+ * localStorage 즉시 반영 + Firestore fire-and-forget + 'dori-gamedata-synced' 이벤트.
+ */
+export function addExp(email: string, amount: number, reason = "활동"): ExpResult {
+  const empty: ExpResult = { exp: getDoriExp(email), level: 1, tier: 1, gained: 0, leveledUp: false, tierUp: false };
+  if (typeof window === "undefined" || !email || !amount) return empty;
+
+  const cur = getCachedGameProfile(email) || {
+    cottonCandy: getCottonCandyBalance(email), doriExp: 0, tier: 1, level: 1,
+  };
+  const oldLevel = cur.level || 1;
+  const oldTier = cur.tier || 1;
+  const newExp = Math.max(0, (cur.doriExp || 0) + amount);
+  const tier = calculateTier(newExp);
+  const level = calculateLevel(newExp);
+
+  writeGameProfile(email, { doriExp: newExp, tier, level });
+  fsSetExp(newExp, tier, level);
+  try { window.dispatchEvent(new Event("dori-gamedata-synced")); } catch {}
+
+  return { exp: newExp, level, tier, gained: amount, leveledUp: level > oldLevel, tierUp: tier > oldTier };
+}
+
+/** 절대 경험치로 끌어올림(내리지 않음) — 활동량 기반 백필용(마이페이지) */
+export function ensureExpAtLeast(email: string, exp: number): ExpResult | null {
+  const cur = getDoriExp(email);
+  if (exp > cur) return addExp(email, exp - cur, "활동 반영");
+  return null;
 }
 
 // ⚠️ 중복 제거: hydrateGameData()는 AuthContext.tsx의 onAuthStateChanged에서 이미 호출됨
@@ -251,6 +334,7 @@ export function grantPlaytimeReward(
     }
     localStorage.setItem(PLAYTIME_REWARD_KEY(email), getTodayDateStr());
     addCottonCandy(email, amount, "1분 이상 플레이 보상");
+    addExp(email, 5, "미니게임 플레이"); // 경험치 적립
     return { granted: true, amount };
   } catch {
     return { granted: false, amount: 0 };
@@ -440,6 +524,9 @@ export function checkAttendance(email: string): { success: boolean; bonus: boole
       console.warn("[출석] Firestore 저장 예외:", e);
     }
   }
+
+  // ── 경험치 적립 (출석 +5) — 등급/레벨 활성화
+  addExp(email, 5, "출석 체크");
 
   return { success: true, bonus, message: "출석 완료!", earned };
 }

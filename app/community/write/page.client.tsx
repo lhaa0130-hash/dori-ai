@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { useAuth } from '@/contexts/AuthContext';
+import { addExp, getCachedGameProfile } from '@/lib/cottonCandy';
 import { ChevronLeft, Image as ImageIcon, MoreHorizontal, HelpCircle, Sparkles } from 'lucide-react';
 import Quill from 'quill';
 import "quill/dist/quill.snow.css";
@@ -221,6 +222,9 @@ export default function WriteClient() {
                 const savedPosts = localStorage.getItem('dori_community_posts');
                 const posts = savedPosts ? JSON.parse(savedPosts) : [];
 
+                const email = session?.user?.email || '';
+                const gp = email ? getCachedGameProfile(email) : null;
+
                 const newPost = {
                     id: Date.now().toString(),
                     author: session?.user?.name || '익명',
@@ -231,10 +235,15 @@ export default function WriteClient() {
                     likes: 0,
                     comments: 0,
                     createdAt: new Date().toISOString(),
+                    authorTier: gp?.tier || 1,
+                    authorLevel: gp?.level || 1,
                 };
 
                 const updatedPosts = [newPost, ...posts];
                 localStorage.setItem('dori_community_posts', JSON.stringify(updatedPosts));
+
+                // 경험치 적립 (글 작성 +15)
+                if (email) addExp(email, 15, '커뮤니티 글 작성');
 
                 router.push('/community');
                 router.refresh();

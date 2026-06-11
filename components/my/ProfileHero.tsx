@@ -51,7 +51,7 @@ export default function ProfileHero({
   };
 
   const tierInfo = TIER_INFO[safeProfile.tier as UserTier];
-  const currentExp = safeProfile.doriExp * 10;
+  const currentExp = safeProfile.doriExp; // raw exp 기준 (등급/레벨 계산과 일치)
   const currentLevel = safeProfile.level || calculateLevel(currentExp);
   const levelProgress = calculateLevelProgress(currentExp, currentLevel);
 

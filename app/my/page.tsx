@@ -11,6 +11,7 @@ import { UserProfile, createDefaultProfile, calculateTier, calculateLevel, ACTIV
 import {
   getCottonCandyBalance,
   getCachedGameProfile,
+  ensureExpAtLeast,
   getTodayEarned,
   getMonthEarned,
   getCottonCandyHistory,
@@ -270,12 +271,16 @@ export default function MyPage() {
       const missionExp = parseInt(localStorage.getItem(missionExpKey) || '0', 10);
       const doriExp = activityExp + missionExp;
 
-      // 프로필의 doriExp가 더 크면 프로필 값을 우선 사용 (이미 미션 경험치가 반영된 경우)
-      const finalDoriExp = Math.max(profile.doriExp || 0, doriExp);
+      // 전역 게임 프로필(헤더/Firestore 동기화 캐시)의 경험치도 함께 고려
+      const gp = getCachedGameProfile(user.email);
+      const finalDoriExp = Math.max(profile.doriExp || 0, doriExp, gp?.doriExp || 0);
 
-      // 레벨 및 등급 자동 계산 (경험치 기반)
+      // 활동 기반 경험치를 전역(헤더·Firestore)에도 백필 — 마이페이지/헤더 수치 일치
+      ensureExpAtLeast(user.email, finalDoriExp);
+
+      // 레벨 및 등급 자동 계산 (경험치 기반, raw exp 일관 사용)
       const newTier = calculateTier(finalDoriExp);
-      const newLevel = calculateLevel(finalDoriExp * 10); // 경험치 = EXP * 10
+      const newLevel = calculateLevel(finalDoriExp);
 
       // 레벨업이 발생한 경우 프로필 업데이트
       if (profile.doriExp !== finalDoriExp || profile.tier !== newTier || profile.level !== newLevel) {

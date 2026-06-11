@@ -3,7 +3,25 @@
 import Link from 'next/link';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
+import { addExp, getCachedGameProfile } from '@/lib/cottonCandy';
+import { TIER_INFO, type UserTier } from '@/lib/userProfile';
 import { PlusCircle, MessageCircle, TrendingUp, Clock, X, Share2, Send, Trash2 } from 'lucide-react';
+
+// 등급 뱃지 (커뮤니티 작성자/댓글)
+function GradeBadge({ tier }: { tier?: number }) {
+  const t = (tier && tier >= 1 && tier <= 10 ? tier : 1) as UserTier;
+  const info = TIER_INFO[t];
+  if (!info) return null;
+  return (
+    <span
+      className="inline-flex items-center text-[10px] font-bold px-1.5 py-0.5 rounded-full flex-shrink-0"
+      style={{ color: info.color, backgroundColor: info.color + "1a" }}
+      title={info.description}
+    >
+      {info.name}
+    </span>
+  );
+}
 
 // ── 타입 ──────────────────────────────────────────────────
 interface Comment {
@@ -13,6 +31,7 @@ interface Comment {
   content: string;
   createdAt: string;
   likes: number;
+  authorTier?: number;
 }
 
 type ReactionKey = 'like' | 'cheer' | 'insight' | 'haha';
@@ -33,6 +52,7 @@ interface Post {
   views?: number;
   sparks?: number;
   reactions?: ReactionCounts;
+  authorTier?: number;
 }
 
 interface CommunityClientProps {
@@ -111,13 +131,14 @@ function ReactionBar({
 
 // ── 글 상세 모달 ──────────────────────────────────────────
 function PostModal({
-  post, mine, onReact, onClose, onUpdatePost,
+  post, mine, onReact, onClose, onUpdatePost, myEmail,
 }: {
   post: Post;
   mine?: ReactionKey;
   onReact: (key: ReactionKey) => void;
   onClose: () => void;
   onUpdatePost: (updated: Post) => void;
+  myEmail?: string;
 }) {
   const [comments, setComments] = useState<Comment[]>(post.commentsList || []);
   const [commentInput, setCommentInput] = useState('');
@@ -140,6 +161,7 @@ function PostModal({
     if (!text) return;
     setIsSubmitting(true);
     setTimeout(() => {
+      const gp = myEmail ? getCachedGameProfile(myEmail) : null;
       const newComment: Comment = {
         id: Date.now().toString(),
         author: name,
@@ -147,11 +169,14 @@ function PostModal({
         content: text,
         createdAt: new Date().toISOString(),
         likes: 0,
+        authorTier: gp?.tier || 1,
       };
       const updated = [...comments, newComment];
       setComments(updated);
       setCommentInput('');
       onUpdatePost({ ...post, comments: updated.length, commentsList: updated });
+      // 경험치 적립 (댓글 +5)
+      if (myEmail) addExp(myEmail, 5, '커뮤니티 댓글');
       setIsSubmitting(false);
       setTimeout(() => commentEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
     }, 250);
@@ -187,7 +212,10 @@ function PostModal({
           <div className="flex items-center gap-3">
             <div className="w-9 h-9 rounded-full bg-[#FFF5EB] dark:bg-zinc-800 flex items-center justify-center text-lg">{post.avatar}</div>
             <div>
-              <p className="text-sm font-bold text-neutral-900 dark:text-white">{post.author}</p>
+              <div className="flex items-center gap-1.5">
+                <p className="text-sm font-bold text-neutral-900 dark:text-white">{post.author}</p>
+                <GradeBadge tier={post.authorTier} />
+              </div>
               <p className="text-xs text-neutral-400">{formatRelative(post.createdAt)}</p>
             </div>
           </div>
@@ -239,7 +267,10 @@ function PostModal({
                     <div className="flex-1 min-w-0">
                       <div className="bg-neutral-50 dark:bg-zinc-900 rounded-2xl rounded-tl-sm px-4 py-3">
                         <div className="flex items-center justify-between mb-1">
-                          <span className="text-xs font-bold text-neutral-900 dark:text-white">{comment.author}</span>
+                          <span className="flex items-center gap-1.5">
+                            <span className="text-xs font-bold text-neutral-900 dark:text-white">{comment.author}</span>
+                            <GradeBadge tier={comment.authorTier} />
+                          </span>
                           <span className="text-xs text-neutral-400">{formatRelative(comment.createdAt)}</span>
                         </div>
                         <p className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed">{comment.content}</p>
@@ -303,7 +334,10 @@ function FeedCard({
       <div className="flex items-center gap-2.5 mb-3">
         <div className="w-8 h-8 rounded-full bg-[#FFF5EB] dark:bg-zinc-800 flex items-center justify-center text-base flex-shrink-0">{post.avatar}</div>
         <div className="min-w-0">
-          <p className="text-[13px] font-bold text-neutral-900 dark:text-white leading-tight truncate">{post.author}</p>
+          <div className="flex items-center gap-1.5">
+            <p className="text-[13px] font-bold text-neutral-900 dark:text-white leading-tight truncate">{post.author}</p>
+            <GradeBadge tier={post.authorTier} />
+          </div>
           <p className="text-[11px] text-neutral-400">{formatRelative(post.createdAt)}</p>
         </div>
         {post.tags[0] && (
@@ -429,6 +463,7 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
           onReact={(key) => handleReact(selectedPost, key)}
           onClose={() => setSelectedPost(null)}
           onUpdatePost={handleUpdatePost}
+          myEmail={session?.user?.email || undefined}
         />
       )}
 

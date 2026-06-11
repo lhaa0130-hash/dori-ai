@@ -5,7 +5,7 @@ import { ArrowLeft, RefreshCw, Trophy, Crown } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
-import { addCottonCandy, incrementMinigamePlays } from "@/lib/cottonCandy";
+import { addCottonCandy, incrementMinigamePlays, addExp } from "@/lib/cottonCandy";
 import PlaytimeRewardToast from "@/components/game/PlaytimeRewardToast";
 
 // ----------------------------------------------------------------------
@@ -130,6 +130,7 @@ export default function Game2048() {
                 // 2048 달성 시 솜사탕 지급
                 if (session?.user?.email) {
                     addCottonCandy(session.user.email, 100, "2048 달성!");
+                    addExp(session.user.email, 10, "2048 달성");
                 }
             }
             if (checkGameOver(newGrid)) {

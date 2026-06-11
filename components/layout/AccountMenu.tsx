@@ -6,7 +6,8 @@ import { useTheme } from "next-themes";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { CheckCircle2, Circle, Gift } from 'lucide-react';
-import { UserProfile, TIER_INFO, calculateLevel, getNextLevelExp, getNextTierExp, getCurrentLevelStartExp, TIER_THRESHOLDS, calculateLevelProgress } from "@/lib/userProfile";
+import { UserProfile, TIER_INFO, calculateTier, calculateLevel, getNextLevelExp, getNextTierExp, getCurrentLevelStartExp, TIER_THRESHOLDS, calculateLevelProgress } from "@/lib/userProfile";
+import { getCachedGameProfile } from "@/lib/cottonCandy";
 
 // 아바타 옵션 (ProfileImageSelector와 동일 - 전체 목록)
 const AVATAR_OPTIONS = [
@@ -170,6 +171,15 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => setMounted(true), []);
+
+  // 경험치/레벨/등급 실시간 반영: addExp가 쏘는 'dori-gamedata-synced' 이벤트로 재렌더
+  const [, setSyncTick] = useState(0);
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const onSync = () => setSyncTick((t) => t + 1);
+    window.addEventListener("dori-gamedata-synced", onSync);
+    return () => window.removeEventListener("dori-gamedata-synced", onSync);
+  }, []);
 
   // 포인트 업데이트
   useEffect(() => {
@@ -392,15 +402,17 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
 
   const isDark = theme === 'dark';
 
-  // 프로필 정보 계산
-  const currentTier = userProfile?.tier || 1;
-  const currentLevel = userProfile ? calculateLevel(userProfile.doriExp * 10) : level;
-  const doriExp = userProfile?.doriExp || 0;
+  // 프로필 정보 계산 (raw exp 일관 사용)
+  // 경험치/레벨/등급의 단일 소스 = 게임 프로필 캐시(addExp가 갱신). 없으면 userProfile fallback.
+  const gameProfile = mounted && user?.email ? getCachedGameProfile(user.email) : null;
+  const doriExp = Math.max(gameProfile?.doriExp || 0, userProfile?.doriExp || 0);
+  const currentTier = (gameProfile?.tier as number) || calculateTier(doriExp);
+  const currentLevel = (gameProfile?.level as number) || calculateLevel(doriExp);
   const tierInfo = TIER_INFO[currentTier as keyof typeof TIER_INFO];
-  const nextTierExp = userProfile ? getNextTierExp(currentTier, doriExp) : 0;
+  const nextTierExp = getNextTierExp(currentTier as any, doriExp);
 
   // 레벨 진행도 계산 (공통 함수 사용)
-  const currentExp = doriExp * 10;
+  const currentExp = doriExp;
   const levelProgress = calculateLevelProgress(currentExp, currentLevel);
 
   return (
