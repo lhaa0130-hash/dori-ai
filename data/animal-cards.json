@@ -1736,5 +1736,570 @@
       ]
     },
     "image_path": "/images/animal/고래.jpg"
+  },
+  {
+    "search_nickname": "긴 지느러미로 노래하며 점프하는 바다 거인",
+    "animal_name": "혹등고래",
+    "kid_friendly_desc": "혹등고래는 아주 큰 바다 친구예요. 긴 가슴지느러미를 흔들고, 물 위로 펄쩍 뛰어오르기도 한답니다. 수컷 혹등고래는 바닷속에서 멋진 노래를 길게 불러요. 작은 물고기와 크릴을 먹고, 먼 바다를 아주 오래 여행해요.",
+    "key_feature": [
+      "긴 가슴지느러미",
+      "바다 노래",
+      "큰 점프"
+    ],
+    "image_prompt": "A cute humpback whale breaching joyfully out of the ocean, with long white pectoral fins, gentle eyes, water splashes, and a friendly smiling face, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "물고기를 먹는",
+        "육식"
+      ],
+      "color": [
+        "검정색",
+        "흰색"
+      ],
+      "size": [
+        "버스만한"
+      ],
+      "habitat": [
+        "바다",
+        "극지방"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 없는"
+      ],
+      "behavior": [
+        "철새처럼 이동",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/혹등고래.jpg"
+  },
+  {
+    "search_nickname": "검정 턱시도 입고 바다를 누비는 큰 돌고래 친구",
+    "animal_name": "범고래",
+    "kid_friendly_desc": "범고래는 검은색과 흰색 무늬가 멋진 아주 큰 바다 동물이에요. 이름에는 고래가 들어가지만, 사실 돌고래 가족 중에서 가장 큰 친구란다. 가족들과 무리를 지어 다니며 서로 소리로 이야기하고, 똑똑하게 먹이를 찾아요. 물고기를 먹기도 하고, 바다에서 힘센 사냥꾼으로 살아요.",
+    "key_feature": [
+      "검정·흰색 무늬",
+      "큰 등지느러미",
+      "똑똑한 무리 생활"
+    ],
+    "image_prompt": "A cute orca with shiny black and white markings, a tall dorsal fin, and a friendly smile swimming with its family in the blue ocean, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "물고기를 먹는",
+        "육식"
+      ],
+      "color": [
+        "검정색",
+        "흰색"
+      ],
+      "size": [
+        "버스만한"
+      ],
+      "habitat": [
+        "바다",
+        "극지방"
+      ],
+      "feature": [
+        "엄청 빠른"
+      ],
+      "body": [
+        "다리가 없는"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/범고래.jpg"
+  },
+  {
+    "search_nickname": "물 위로 뿜 하고 숨 쉬는 바다의 똑똑이",
+    "animal_name": "돌고래",
+    "kid_friendly_desc": "돌고래는 바다에 사는 아주 똑똑한 포유류예요. 물고기처럼 보이지만 아가미가 아니라 허파로 숨을 쉬어서, 숨을 쉬려고 물 위로 올라온단다. 친구들과 무리 지어 헤엄치고, 작은 물고기나 새우를 냠냠 먹어요. 때로는 물 위로 폴짝 뛰어오르는 멋진 모습을 보여준답니다.",
+    "key_feature": [
+      "허파로 숨쉬기",
+      "똑똑한 바다 친구",
+      "무리 헤엄"
+    ],
+    "image_prompt": "A smiling dolphin jumping out of the sparkling ocean, with a rounded cute face, smooth gray body, playful splash, and friendly eyes, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "물고기를 먹는",
+        "육식"
+      ],
+      "color": [],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [
+        "엄청 빠른"
+      ],
+      "body": [
+        "다리가 없는"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/돌고래.jpg"
+  },
+  {
+    "search_nickname": "하얀 멜론 머리로 웃는 북극 바다 친구",
+    "animal_name": "벨루가",
+    "kid_friendly_desc": "벨루가는 북극 가까운 차가운 바다에 사는 하얀 고래예요. 머리가 동글동글해서 멜론처럼 보인답니다. 친구들과 무리 지어 헤엄치며 물고기를 냠냠 먹어요. 새끼를 낳아 젖을 먹이는 포유류라서 우리처럼 엄마가 아기를 돌봐요.",
+    "key_feature": [
+      "새하얀 몸",
+      "동그란 멜론 머리",
+      "차가운 바다 생활"
+    ],
+    "image_prompt": "A cute white beluga whale with a round melon-shaped forehead smiling gently in clear icy Arctic water, small flippers, playful bubbles around it, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "물고기를 먹는",
+        "육식"
+      ],
+      "color": [
+        "흰색"
+      ],
+      "size": [
+        "코끼리만한"
+      ],
+      "habitat": [
+        "바다",
+        "극지방"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 없는"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "철새처럼 이동",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/벨루가.jpg"
+  },
+  {
+    "search_nickname": "동해 바위에서 어흥 하고 쉬던 물개 친구",
+    "animal_name": "바다사자",
+    "kid_friendly_desc": "바다사자는 바다에서 헤엄을 아주 잘 치는 포유류예요. 옛날에는 우리나라 동해와 독도 근처 바위 해안에서 무리 지어 살았단다. 물고기를 잡아먹고, 땅에서는 지느러미 같은 앞발로 엉금엉금 움직여요. 지금은 너무 많이 잡혀서 사라진 동물이라, 우리가 자연을 더 소중히 지켜야 해요.",
+    "key_feature": [
+      "바다 포유류",
+      "물고기 사냥",
+      "무리 생활"
+    ],
+    "image_prompt": "A cute Korean sea lion resting on a rocky seaside shore, round shiny eyes, soft whiskers, flipper-like front legs, playful gentle expression, ocean waves behind it, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "물고기를 먹는",
+        "육식"
+      ],
+      "color": [],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/바다사자.jpg"
+  },
+  {
+    "search_nickname": "동글동글 점무늬 바다 강아지",
+    "animal_name": "물범",
+    "kid_friendly_desc": "물범은 차가운 바다에서 사는 포유류예요. 은회색 몸에 동글동글한 점무늬가 있어서 바다 위 얼음과 잘 어울린단다. 물속에서는 지느러미 같은 발로 슝슝 헤엄치고, 물고기를 냠냠 먹어요. 아기 물범은 엄마 젖을 먹고 자라는 귀여운 바다 친구예요.",
+    "key_feature": [
+      "점무늬 몸",
+      "헤엄 잘 침",
+      "차가운 바다 생활"
+    ],
+    "image_prompt": "A cute spotted seal with a round face, big shiny eyes, silver-gray fur with soft oval spots, resting on a small ice floe near the calm ocean, adorable flippers tucked close, playful and gentle expression, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "물고기를 먹는",
+        "육식"
+      ],
+      "color": [],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "바다",
+        "극지방"
+      ],
+      "feature": [
+        "보호색"
+      ],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/물범.jpg"
+  },
+  {
+    "search_nickname": "긴 하얀 이빨로 얼음 바다를 쉬엄쉬엄 걷는 친구",
+    "animal_name": "바다코끼리",
+    "kid_friendly_desc": "바다코끼리는 북극 근처의 아주 차가운 바다에 사는 커다란 동물이예요. 입 옆에 길고 하얀 상아가 있어서 코끼리처럼 보인답니다. 물속에서는 헤엄을 잘 치고, 땅이나 얼음 위에서는 친구들과 함께 쉬어요. 두꺼운 몸 덕분에 추운 곳에서도 따뜻하게 지낼 수 있어요.",
+    "key_feature": [
+      "긴 상아",
+      "커다란 몸",
+      "차가운 바다"
+    ],
+    "image_prompt": "A cute walrus with long white tusks, big round body, tiny whiskers, resting happily on Arctic ice near the blue sea, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "육식"
+      ],
+      "color": [],
+      "size": [
+        "코끼리만한"
+      ],
+      "habitat": [
+        "바다",
+        "극지방"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/바다코끼리.jpg"
+  },
+  {
+    "search_nickname": "바다를 쓱쓱 헤엄치는 날쌘 이빨 친구",
+    "animal_name": "상어",
+    "kid_friendly_desc": "상어는 바다에 사는 물고기 친구예요. 뼈가 딱딱하지 않고 말랑한 연골로 되어 있단다. 날카로운 이빨로 물고기를 잡아먹고, 몸을 흔들며 씽씽 헤엄쳐요. 무섭게 보일 수 있지만 바다에서 중요한 일을 하는 멋진 동물이야.",
+    "key_feature": [
+      "날카로운 이빨",
+      "연골로 된 몸",
+      "빠른 헤엄"
+    ],
+    "image_prompt": "A cute friendly shark with a rounded nose, tiny smiling mouth, shiny fins, swimming happily in the blue ocean with small fish bubbles, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "물고기를 먹는",
+        "육식"
+      ],
+      "color": [],
+      "size": [],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [
+        "엄청 빠른"
+      ],
+      "body": [
+        "다리가 없는"
+      ],
+      "behavior": [],
+      "taxonomy": [
+        "어류"
+      ]
+    },
+    "image_path": "/images/animal/상어.jpg"
+  },
+  {
+    "search_nickname": "하얀 점무늬를 달고 천천히 헤엄치는 바다 거인",
+    "animal_name": "고래상어",
+    "kid_friendly_desc": "고래상어는 바다에 사는 아주아주 큰 물고기예요. 이름에 ‘상어’가 들어가지만, 작은 먹이를 물과 함께 쏙 걸러 먹는 순한 친구란다. 몸에는 하얀 점무늬가 반짝반짝 있어서 밤하늘 별처럼 보여요. 따뜻한 바다에서 천천히 헤엄치며 여행해요.",
+    "key_feature": [
+      "세상에서 가장 큰 물고기",
+      "하얀 점무늬",
+      "순한 여과 섭식"
+    ],
+    "image_prompt": "A gentle giant whale shark swimming slowly in warm tropical ocean water, with adorable small eyes, wide friendly mouth, white polka-dot patterns on its dark blue-gray body, tiny colorful fish nearby, cute and majestic, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "물고기를 먹는"
+      ],
+      "color": [
+        "흰색"
+      ],
+      "size": [
+        "세상 가장 큰"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [
+        "엄청 느린"
+      ],
+      "body": [
+        "다리가 없는"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "어류"
+      ]
+    },
+    "image_path": "/images/animal/고래상어.jpg"
+  },
+  {
+    "search_nickname": "바다 바닥을 날개처럼 팔랑이는 납작 친구",
+    "animal_name": "가오리",
+    "kid_friendly_desc": "가오리는 몸이 접시처럼 납작한 물고기예요. 커다란 지느러미를 날개처럼 살랑살랑 움직이며 바다를 헤엄친답니다. 입은 몸 아래쪽에 있어서 바닥에 사는 조개나 작은 동물들을 찾아 먹어요. 아기 가오리는 엄마 배 속에서 자라다가 새끼로 태어나요.",
+    "key_feature": [
+      "납작한 몸",
+      "날개 같은 지느러미",
+      "긴 꼬리"
+    ],
+    "image_prompt": "A cute stingray gliding gently over the sandy ocean floor, flat round body, wing-like fins, long thin tail, sweet smiling face, tiny bubbles and seashells around it, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "물고기를 먹는",
+        "육식"
+      ],
+      "color": [],
+      "size": [],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [
+        "보호색"
+      ],
+      "body": [
+        "다리가 없는",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "어류"
+      ]
+    },
+    "image_path": "/images/animal/가오리.jpg"
+  },
+  {
+    "search_nickname": "빨판 다리 8개로 숨바꼭질하는 바다 친구",
+    "animal_name": "문어",
+    "kid_friendly_desc": "문어는 바닷속에 사는 말랑말랑한 친구예요. 다리가 8개나 있고, 다리에는 작은 빨판이 많이 붙어 있답니다. 몸 색깔을 바꾸며 바위나 모래처럼 숨어서 숨바꼭질을 아주 잘해요. 알을 낳아 아기 문어를 만나게 한답니다.",
+    "key_feature": [
+      "다리 8개",
+      "빨판",
+      "몸 색깔 바꾸기"
+    ],
+    "image_prompt": "A cute octopus with eight soft arms covered in tiny suction cups, round head, big curious eyes, gently changing colors while hiding near coral in the ocean, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "물고기를 먹는",
+        "육식"
+      ],
+      "color": [],
+      "size": [],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [
+        "보호색",
+        "변장하는"
+      ],
+      "body": [
+        "다리가 6개+"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "연체동물"
+      ]
+    },
+    "image_path": "/images/animal/문어.jpg"
+  },
+  {
+    "search_nickname": "먹물을 뿜고 색깔을 바꾸는 바다의 열 팔 친구",
+    "animal_name": "오징어",
+    "kid_friendly_desc": "오징어는 바다에 사는 말랑말랑한 연체동물이에요. 팔처럼 보이는 다리가 여러 개 있고, 위험하면 까만 먹물을 뿜고 쌩逃망가요. 몸 색깔을 바꾸며 주변과 비슷하게 변장할 수도 있단다. 작은 물고기나 새우 같은 먹이를 잡아먹어요.",
+    "key_feature": [
+      "먹물 뿜기",
+      "색깔 변장",
+      "여러 개의 팔"
+    ],
+    "image_prompt": "A cute squid with big sparkling eyes, ten tiny wiggly arms, a soft rounded body, gently squirting a playful puff of black ink in the ocean, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "물고기를 먹는",
+        "육식"
+      ],
+      "color": [],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [
+        "변장하는"
+      ],
+      "body": [
+        "다리가 6개+"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "연체동물"
+      ]
+    },
+    "image_path": "/images/animal/오징어.jpg"
+  },
+  {
+    "search_nickname": "꼬리로 해초를 꼭 잡는 아빠 주머니 물고기",
+    "animal_name": "해마",
+    "kid_friendly_desc": "해마는 말처럼 생긴 얼굴을 가진 작은 바닷속 물고기예요. 꼬리를 돌돌 말아 해초를 꼭 잡고, 물속에서 둥둥 천천히 움직인단다. 신기하게도 엄마가 알을 아빠 배 주머니에 넣어 주면, 아빠가 아기 해마들을 보살펴요. 몸 색을 바꿔 해초 사이에 숨기도 잘해요.",
+    "key_feature": [
+      "말 닮은 얼굴",
+      "돌돌 말린 꼬리",
+      "아빠 배 주머니"
+    ],
+    "image_prompt": "A tiny adorable seahorse with a horse-like face, curled tail gently holding seaweed, round belly pouch, floating in a colorful coral reef, curious sweet eyes, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "육식"
+      ],
+      "color": [
+        "알록달록한"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [
+        "보호색"
+      ],
+      "body": [
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "어류"
+      ]
+    },
+    "image_path": "/images/animal/해마.jpg"
+  },
+  {
+    "search_nickname": "말미잘 집에 사는 줄무늬 바다 친구",
+    "animal_name": "흰동가리",
+    "kid_friendly_desc": "흰동가리는 바닷속 말미잘 사이에서 쏙쏙 숨어 사는 작은 물고기예요. 몸에 예쁜 줄무늬가 있어서 바다 속에서도 눈에 잘 띈단다. 말미잘은 흰동가리를 지켜 주고, 흰동가리는 말미잘 주변을 깨끗하게 도와줘요. 둘은 서로 도와주는 멋진 친구예요!",
+    "key_feature": [
+      "말미잘과 친구",
+      "예쁜 줄무늬",
+      "작은 바닷물고기"
+    ],
+    "image_prompt": "A cute yellowtail clownfish with bright orange-yellow body, white stripes, and black edges peeking happily from a soft sea anemone in a colorful coral reef, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "잡식"
+      ],
+      "color": [
+        "흰색",
+        "알록달록한"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 없는"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "어류"
+      ]
+    },
+    "image_path": "/images/animal/흰동가리.jpg"
+  },
+  {
+    "search_nickname": "위험하면 풍선처럼 빵빵해지는 바다 친구",
+    "animal_name": "복어",
+    "kid_friendly_desc": "복어는 바닷속에 사는 물고기예요. 깜짝 놀라거나 위험하다고 느끼면 몸을 풍선처럼 빵빵하게 부풀린단다. 그런데 복어의 몸에는 아주 위험한 독이 있는 부분이 있어서 함부로 만지거나 먹으면 안 돼요. 사람들은 특별히 배운 요리사만 조심조심 다룰 수 있어요.",
+    "key_feature": [
+      "몸을 부풀림",
+      "위험한 독",
+      "동그란 몸"
+    ],
+    "image_prompt": "A cute round pufferfish puffing up like a tiny balloon in the ocean, with big gentle eyes, small fins, and a charming surprised expression, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "잡식"
+      ],
+      "color": [],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [
+        "독이 있는"
+      ],
+      "body": [
+        "다리가 없는"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "어류"
+      ]
+    },
+    "image_path": "/images/animal/복어.jpg"
   }
 ]
