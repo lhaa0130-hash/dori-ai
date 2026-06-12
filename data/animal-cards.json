@@ -2301,5 +2301,591 @@
       ]
     },
     "image_path": "/images/animal/복어.jpg"
+  },
+  {
+    "search_nickname": "딱딱한 갑옷을 입고 옆으로 걷는 집게발 친구",
+    "animal_name": "게",
+    "kid_friendly_desc": "게는 딱딱한 껍데기를 갑옷처럼 입고 사는 바다 친구예요. 집게발로 먹이를 집거나 몸을 지킬 수 있답니다. 다리가 여러 개라서 모래 위를 옆으로 사사삭 걸어 다녀요. 얕은 바닷가에서 만날 수 있는 신기한 갑각류예요.",
+    "key_feature": [
+      "딱딱한 껍데기",
+      "큰 집게발",
+      "옆으로 걷기"
+    ],
+    "image_prompt": "A cute small crab with a shiny hard shell, big friendly claws, many jointed legs, walking sideways on soft sand near shallow ocean water, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "잡식",
+        "썩은 것 먹는"
+      ],
+      "color": [],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 6개+",
+        "딱딱한 껍질"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "갑각류"
+      ]
+    },
+    "image_path": "/images/animal/게.jpg"
+  },
+  {
+    "search_nickname": "긴 수염 달고 뒤로 슝 도망가는 물속 친구",
+    "animal_name": "새우",
+    "kid_friendly_desc": "새우는 바다와 강, 호수에 사는 작은 갑각류예요. 긴 수염이 있고, 여러 개의 다리로 물속을 톡톡 움직인단다. 평소에는 앞으로 헤엄치지만, 깜짝 놀라면 꼬리를 휘둘러 뒤로 슝 물러나요. 딱딱한 껍질이 몸을 지켜 주는 멋진 갑옷 같아요.",
+    "key_feature": [
+      "긴 수염",
+      "뒤로 헤엄치기",
+      "딱딱한 껍질"
+    ],
+    "image_prompt": "A tiny adorable shrimp with long antennae, many little legs, a curved body, and a fan-shaped tail, swimming backward playfully in clear water, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "잡식",
+        "썩은 것 먹는"
+      ],
+      "color": [],
+      "size": [
+        "손보다 작은"
+      ],
+      "habitat": [
+        "바다",
+        "강·호수"
+      ],
+      "feature": [
+        "보호색"
+      ],
+      "body": [
+        "다리가 6개+",
+        "딱딱한 껍질",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "갑각류"
+      ]
+    },
+    "image_path": "/images/animal/새우.jpg"
+  },
+  {
+    "search_nickname": "큰 집게발로 바다를 청소하는 딱딱한 친구",
+    "animal_name": "바닷가재",
+    "kid_friendly_desc": "바닷가재는 바닷속 바위틈에 숨어 사는 딱딱한 껍질 친구예요. 커다란 집게발로 먹이를 잡고, 죽은 동물도 먹어서 바다를 깨끗하게 도와준단다. 몸이 자라면 낡은 껍질을 벗고 새 껍질로 갈아입어요. 아주 오래 살 수 있는 신기한 바다 동물이랍니다.",
+    "key_feature": [
+      "커다란 집게발",
+      "딱딱한 껍질",
+      "바다 청소부"
+    ],
+    "image_prompt": "A cute lobster with oversized friendly claws, shiny hard shell, tiny black eyes, standing on a sandy ocean floor near colorful sea plants, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "잡식",
+        "썩은 것 먹는"
+      ],
+      "color": [],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [
+        "야행성",
+        "보호색"
+      ],
+      "body": [
+        "다리가 6개+",
+        "딱딱한 껍질"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "갑각류"
+      ]
+    },
+    "image_path": "/images/animal/바닷가재.jpg"
+  },
+  {
+    "search_nickname": "별 모양으로 바다 바닥을 천천히 걷는 친구",
+    "animal_name": "불가사리",
+    "kid_friendly_desc": "불가사리는 바다에 사는 별 모양 동물이란다. 발처럼 보이는 작은 관족을 꼼지락꼼지락 움직여 아주 천천히 걸어가요. 조개나 작은 바다 동물을 먹고, 팔이 다치면 다시 자라기도 해요. 색깔도 주황색, 빨간색, 보라색처럼 알록달록해서 바다의 별 같답니다.",
+    "key_feature": [
+      "별 모양 몸",
+      "다시 자라는 팔",
+      "아주 느린 움직임"
+    ],
+    "image_prompt": "A cute starfish with five rounded arms, tiny tube feet, a happy smiling face, colorful orange and pink bumpy skin, resting on a sandy ocean floor with small seashells and bubbles, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "육식"
+      ],
+      "color": [
+        "알록달록한"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [
+        "엄청 느린"
+      ],
+      "body": [],
+      "behavior": [
+        "혼자 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": []
+    },
+    "image_path": "/images/animal/불가사리.jpg"
+  },
+  {
+    "search_nickname": "투명 우산을 쓰고 바다를 둥둥 떠다니는 친구",
+    "animal_name": "해파리",
+    "kid_friendly_desc": "해파리는 말랑말랑한 젤리 우산처럼 생긴 바다 동물이란다. 뼈도 다리도 없고, 물속에서 둥둥 떠다니며 살아요. 긴 촉수로 아주 작은 먹이를 잡아먹는데, 촉수에는 따끔한 독이 있을 수 있어요. 그래서 바다에서 해파리를 보면 만지지 말고 눈으로만 살펴보면 좋아요.",
+    "key_feature": [
+      "투명한 몸",
+      "말랑한 우산 모양",
+      "따끔한 촉수"
+    ],
+    "image_prompt": "A cute translucent jellyfish with a soft umbrella-shaped bell and long flowing tentacles, gently floating in the blue ocean, adorable face, sparkling tiny bubbles around it, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "물고기를 먹는",
+        "육식"
+      ],
+      "color": [
+        "투명한"
+      ],
+      "size": [],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [
+        "독이 있는"
+      ],
+      "body": [
+        "다리가 없는"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": []
+    },
+    "image_path": "/images/animal/해파리.jpg"
+  },
+  {
+    "search_nickname": "딱딱한 등딱지를 메고 바다를 헤엄치는 친구",
+    "animal_name": "거북",
+    "kid_friendly_desc": "푸른바다거북은 따뜻한 바다에서 느긋하게 헤엄치는 큰 거북이예요. 등에 딱딱한 껍질을 지고 있어서 위험할 때 몸을 보호할 수 있단다. 어른이 되면 바닷속 풀 같은 해초를 냠냠 먹어요. 모래사장에 올라와 알을 낳는 특별한 바다 친구예요.",
+    "key_feature": [
+      "딱딱한 등딱지",
+      "바다 생활",
+      "해초를 먹음"
+    ],
+    "image_prompt": "A charming green sea turtle swimming gently in a tropical ocean, with a rounded hard shell, big friendly eyes, cute flippers, and tiny bubbles around it, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인",
+        "딱딱한 껍질"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "파충류"
+      ]
+    },
+    "image_path": "/images/animal/거북.jpg"
+  },
+  {
+    "search_nickname": "뒤뚱뒤뚱 걸어도 물속에선 슝슝 나는 바다 새",
+    "animal_name": "펭귄",
+    "kid_friendly_desc": "펭귄은 날개가 있지만 하늘을 날지는 못하는 새예요. 대신 바닷속에서는 오리발 같은 날개로 슝슝 아주 잘 헤엄친단다. 검은색과 흰색 옷을 입은 것처럼 보여서 정말 멋져요. 물고기와 작은 바다 생물을 부리로 잡아 꿀꺽 먹어요.",
+    "key_feature": [
+      "뒤뚱뒤뚱 걷기",
+      "물속 수영왕",
+      "검은색·흰색 깃털"
+    ],
+    "image_prompt": "A cute penguin waddling on snowy ice with tiny flipper wings, black and white feathers, round belly, bright curious eyes, and a happy smile, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "물고기를 먹는",
+        "육식"
+      ],
+      "color": [
+        "검정색",
+        "흰색"
+      ],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "바다",
+        "극지방"
+      ],
+      "feature": [],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    },
+    "image_path": "/images/animal/펭귄.jpg"
+  },
+  {
+    "search_nickname": "남극에서 뒤뚱뒤뚱 걷는 노란 귀 턱시도 친구",
+    "animal_name": "황제펭귄",
+    "kid_friendly_desc": "황제펭귄은 남극의 아주 추운 얼음 나라에 사는 펭귄이에요. 펭귄 중에서 키가 가장 크고, 검은 등과 하얀 배, 노란 귀 무늬가 멋진 턱시도 같답니다. 날개로 하늘을 날지는 못하지만, 납작한 날개로 바닷속을 슝슝 헤엄쳐요. 친구들과 꼭 붙어 추위를 이겨 내는 모습도 정말 귀여워요.",
+    "key_feature": [
+      "가장 큰 펭귄",
+      "노란 귀 무늬",
+      "바닷속 헤엄 고수"
+    ],
+    "image_prompt": "An adorable emperor penguin standing on Antarctic ice, with a black back, white belly, bright yellow ear patches, tiny flipper wings, and a cute waddling pose, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "물고기를 먹는",
+        "육식"
+      ],
+      "color": [
+        "검정색",
+        "흰색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "바다",
+        "극지방"
+      ],
+      "feature": [
+        "보호색"
+      ],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    },
+    "image_path": "/images/animal/황제펭귄.jpg"
+  },
+  {
+    "search_nickname": "넓은 날개로 빙글빙글 나는 하늘 청소부",
+    "animal_name": "독수리",
+    "kid_friendly_desc": "독수리는 아주 넓고 긴 날개를 펴고 하늘을 빙글빙글 날아다녀요. 바람을 잘 타서 힘을 많이 쓰지 않고도 높이 올라갈 수 있단다. 죽은 동물의 몸을 먹어 자연을 깨끗하게 도와주는 고마운 새예요. 보통은 혼자 있거나 둘이 다니지만, 겨울에는 작은 무리를 만들기도 해요.",
+    "key_feature": [
+      "넓고 긴 날개",
+      "큰 검은 부리",
+      "하늘 청소부"
+    ],
+    "image_prompt": "A cute cinereous vulture with huge wide wings gliding in the sky, dark fluffy feathers, a big black beak, gentle friendly eyes, slightly bare neck, adorable and majestic pose, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "육식",
+        "썩은 것 먹는"
+      ],
+      "color": [
+        "검정색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [
+        "날 수 있는"
+      ],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "무리지어 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    },
+    "image_path": "/images/animal/독수리.jpg"
+  },
+  {
+    "search_nickname": "하늘에서 번개처럼 내려오는 빠른 사냥꾼",
+    "animal_name": "매",
+    "kid_friendly_desc": "매는 하늘을 아주 빠르게 나는 멋진 새예요. 높은 곳에서 먹이를 찾다가 번개처럼 슝 내려와 사냥한답니다. 날개가 뾰족하고 눈이 좋아서 멀리 있는 것도 잘 볼 수 있어요. 우리나라에서는 소중하게 지켜 주는 새란다.",
+    "key_feature": [
+      "번개처럼 빠름",
+      "뾰족한 날개",
+      "눈이 아주 좋음"
+    ],
+    "image_prompt": "A cute peregrine falcon with big bright eyes, sleek blue-gray feathers, a white chest with tiny spots, perched proudly on a rocky cliff with pointed wings slightly open, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "육식"
+      ],
+      "color": [
+        "검정색",
+        "흰색"
+      ],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "도시 근처"
+      ],
+      "feature": [
+        "날 수 있는",
+        "엄청 빠른"
+      ],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    },
+    "image_path": "/images/animal/매.jpg"
+  },
+  {
+    "search_nickname": "밤에 큰 눈으로 숲을 지키는 조용한 날개 친구",
+    "animal_name": "올빼미",
+    "kid_friendly_desc": "올빼미는 밤에 깨어나 조용히 숲을 날아다니는 새예요. 큰 눈으로 어두운 곳도 잘 보고, 부드러운 날개로 소리 없이 날 수 있단다. 히말라야부터 한국까지 아시아의 숲에서 살며, 특별한 울음소리로 친구들에게 신호를 보내요. 짧은 꼬리와 어두운 깃털도 올빼미의 멋진 특징이에요.",
+    "key_feature": [
+      "큰 눈",
+      "소리 없는 비행",
+      "밤에 활동"
+    ],
+    "image_prompt": "A cute owl with big round eyes, fluffy dark brown feathers, a short barred tail, perched quietly on a forest branch at night, looking curious and gentle, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "육식"
+      ],
+      "color": [],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [],
+      "feature": [
+        "날 수 있는",
+        "야행성",
+        "보호색"
+      ],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    },
+    "image_path": "/images/animal/올빼미.jpg"
+  },
+  {
+    "search_nickname": "밤에 큰 눈으로 지켜보는 뿔귀 새 친구",
+    "animal_name": "부엉이",
+    "kid_friendly_desc": "수리부엉이는 밤에 잘 보는 큰 눈을 가진 새예요. 머리 위에는 뿔처럼 보이는 깃털이 있어서 아주 멋져 보인답니다. 조용히 날아가서 작은 동물들을 찾아 먹어요. 낮에는 쉬고, 밤이 되면 부엉부엉 활동해요.",
+    "key_feature": [
+      "큰 눈",
+      "뿔 같은 귀깃",
+      "밤에 활동"
+    ],
+    "image_prompt": "A cute Eurasian eagle-owl with huge sparkling orange eyes, fluffy feather ear tufts like tiny horns, sitting calmly on a tree branch at night, looking friendly and curious. A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "육식"
+      ],
+      "color": [],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [],
+      "feature": [
+        "날 수 있는",
+        "야행성"
+      ],
+      "body": [
+        "날개 있는",
+        "뿔이 있는"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    },
+    "image_path": "/images/animal/부엉이.jpg"
+  },
+  {
+    "search_nickname": "알록달록 말 따라 하는 똑똑한 날개 친구",
+    "animal_name": "앵무새",
+    "kid_friendly_desc": "앵무새는 알록달록한 깃털이 정말 예쁜 새예요. 똑똑해서 사람의 말을 흉내 내기도 한답니다. 딱딱한 부리로 씨앗이나 열매를 냠냠 먹어요. 나무 위에서 친구들과 함께 지내는 걸 좋아해요.",
+    "key_feature": [
+      "말 흉내",
+      "알록달록 깃털",
+      "똑똑한 새"
+    ],
+    "image_prompt": "A colorful parrot with bright feathers, a cute curved beak, and sparkling curious eyes, perched on a small tree branch, looking playful and friendly, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "씨앗을 먹는"
+      ],
+      "color": [
+        "알록달록한"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "열대우림"
+      ],
+      "feature": [
+        "날 수 있는"
+      ],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "알을 낳는",
+        "나무 위에 사는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    },
+    "image_path": "/images/animal/앵무새.jpg"
+  },
+  {
+    "search_nickname": "분홍 옷 입고 한 다리로 서는 긴 목 친구",
+    "animal_name": "홍학",
+    "kid_friendly_desc": "홍학은 분홍색 깃털이 예쁜 큰 새예요. 긴 다리로 얕은 물을 사뿐사뿐 걸으며 작은 새우나 물속 식물을 찾아 먹는답니다. 부리는 아래로 휘어 있어서 물과 진흙을 걸러 먹이를 쏙쏙 골라낼 수 있어요. 친구들과 아주 많이 모여 살고, 진흙으로 둥지를 만들어 알을 낳아요.",
+    "key_feature": [
+      "분홍 깃털",
+      "긴 다리와 긴 목",
+      "휘어진 부리"
+    ],
+    "image_prompt": "A cute pink flamingo standing on one long leg in shallow water, with a graceful long neck, curved beak, soft fluffy feathers, and tiny ripples around its feet. A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "잡식"
+      ],
+      "color": [
+        "분홍색",
+        "빨간색",
+        "검정색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "바다",
+        "강·호수"
+      ],
+      "feature": [
+        "날 수 있는"
+      ],
+      "body": [
+        "날개 있는",
+        "긴 목"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    },
+    "image_path": "/images/animal/홍학.jpg"
+  },
+  {
+    "search_nickname": "무지개 부채 꼬리를 활짝 펴는 새 친구",
+    "animal_name": "공작",
+    "kid_friendly_desc": "공작은 반짝반짝 파란 목과 알록달록한 긴 꼬리깃이 멋진 새예요. 수컷 공작은 꼬리깃을 커다란 부채처럼 활짝 펴서 자랑한답니다. 씨앗이나 작은 벌레, 열매를 먹고 살아요. 날개가 있어서 짧게 날아 나무 위에서 잠을 자기도 해요.",
+    "key_feature": [
+      "무지개 꼬리깃",
+      "파란 목",
+      "부채춤"
+    ],
+    "image_prompt": "A cute peacock with a shiny blue neck spreading a big colorful fan-shaped tail with eye-like feather patterns, standing proudly and smiling, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는",
+        "잡식",
+        "씨앗을 먹는"
+      ],
+      "color": [
+        "파란색",
+        "초록색",
+        "알록달록한"
+      ],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "초원",
+        "도시 근처"
+      ],
+      "feature": [
+        "날 수 있는"
+      ],
+      "body": [
+        "날개 있는",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "알을 낳는",
+        "나무 위에 사는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    },
+    "image_path": "/images/animal/공작.jpg"
   }
 ]
