@@ -1,0 +1,597 @@
+[
+  {
+    "search_nickname": "멋진 갈기와 꼬리 털뭉치를 가진 초원의 왕",
+    "animal_name": "사자",
+    "kid_friendly_desc": "사자는 커다란 고양이과 동물이에요. 수사자는 얼굴 둘레에 멋진 갈기가 있어서 아주 씩씩해 보인단다. 사자는 가족처럼 무리를 지어 살고, 초원에서 다른 동물을 사냥해 먹어요. 꼬리 끝에는 작은 털뭉치가 달려 있어서 정말 귀여워요.",
+    "key_feature": [
+      "멋진 갈기",
+      "꼬리 털뭉치",
+      "무리 생활"
+    ],
+    "image_prompt": "A cute lion with a fluffy golden mane, round ears, big gentle eyes, and a small tuft at the end of its tail, standing proudly on a sunny savanna, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "육식"
+      ],
+      "color": [],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [
+        "야행성",
+        "엄청 빠른"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/사자.jpg"
+  },
+  {
+    "search_nickname": "검은 줄무늬 옷을 입고 살금살금 걷는 큰 고양이",
+    "animal_name": "호랑이",
+    "kid_friendly_desc": "호랑이는 아주 크고 힘센 고양이과 동물이에요. 주황빛 털에 검은 줄무늬가 있어서 숲속에서 몸을 숨기기 좋답니다. 혼자 조용히 다니며 살금살금 걸어 사냥해요. 아기 호랑이는 엄마 곁에서 장난치며 자란답니다.",
+    "key_feature": [
+      "검은 줄무늬",
+      "큰 발",
+      "살금살금 걷기"
+    ],
+    "image_prompt": "A cute tiger cub with big round eyes, fluffy orange fur, bold black stripes, tiny paws, and a playful sitting pose in a cozy forest, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "육식"
+      ],
+      "color": [
+        "검정색",
+        "흰색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "열대우림",
+        "초원"
+      ],
+      "feature": [
+        "야행성",
+        "보호색",
+        "엄청 빠른"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/호랑이.jpg"
+  },
+  {
+    "search_nickname": "긴 코로 물을 뿌리는 커다란 숲속 친구",
+    "animal_name": "코끼리",
+    "kid_friendly_desc": "코끼리는 땅 위에 사는 동물 중에서 가장 몸집이 큰 친구예요. 긴 코로 물을 마시고, 풀과 나뭇잎도 집어 먹을 수 있단다. 커다란 귀를 팔랑팔랑 움직이며 더위를 식히기도 해요. 가족과 함께 무리 지어 다니는 다정한 동물이에요.",
+    "key_feature": [
+      "아주 큰 몸",
+      "긴 코",
+      "큰 귀"
+    ],
+    "image_prompt": "A baby elephant with a long trunk spraying water playfully, big floppy ears, gentle eyes, round cute body, standing in a sunny green savanna, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "코끼리만한",
+        "세상 가장 큰"
+      ],
+      "habitat": [
+        "열대우림",
+        "초원"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/코끼리.jpg"
+  },
+  {
+    "search_nickname": "긴 목으로 나뭇잎을 냠냠 먹는 얼룩 키다리 친구",
+    "animal_name": "기린",
+    "kid_friendly_desc": "기린은 아주아주 긴 목을 가진 키 큰 동물이란다. 높은 나무에 있는 잎도 쭉 뻗어서 냠냠 먹을 수 있어요. 몸에는 예쁜 얼룩무늬가 있어서 풀밭과 나무 사이에 잘 숨을 수 있답니다. 머리 위에는 작은 뿔처럼 생긴 귀여운 뿔도 있어요.",
+    "key_feature": [
+      "아주 긴 목",
+      "얼룩무늬 몸",
+      "작은 뿔"
+    ],
+    "image_prompt": "A cute baby giraffe with a very long neck, big gentle eyes, small ossicones, and beautiful brown patch patterns, happily nibbling leaves from a tall acacia tree, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [
+        "알록달록한"
+      ],
+      "size": [
+        "코끼리만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [
+        "보호색"
+      ],
+      "body": [
+        "다리가 4개인",
+        "뿔이 있는",
+        "긴 꼬리",
+        "긴 목"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/기린.jpg"
+  },
+  {
+    "search_nickname": "검정 하양 줄무늬 옷을 입고 초원을 달리는 친구",
+    "animal_name": "얼룩말",
+    "kid_friendly_desc": "얼룩말은 말처럼 생겼지만 몸에 검정색과 흰색 줄무늬가 있어요. 신기하게도 얼룩말마다 줄무늬 모양이 조금씩 달라서 친구 얼굴처럼 알아볼 수 있단다. 넓은 초원에서 풀을 먹고, 여러 마리가 함께 지내며 서로를 지켜줘요. 위험하면 튼튼한 다리로 빠르게 달려 도망가요.",
+    "key_feature": [
+      "검정·흰 줄무늬",
+      "초원을 달림",
+      "무리 생활"
+    ],
+    "image_prompt": "A cute zebra foal with black and white stripes, standing happily in a sunny grassland, big sparkling eyes, fluffy mane, playful pose, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [
+        "검정색",
+        "흰색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [
+        "보호색",
+        "엄청 빠른"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/얼룩말.jpg"
+  },
+  {
+    "search_nickname": "물속에서 코만 빼꼼 내미는 커다란 풀 먹보",
+    "animal_name": "하마",
+    "kid_friendly_desc": "하마는 강이나 호수에서 물놀이를 아주 좋아하는 커다란 동물이란다. 낮에는 물속에 몸을 담그고 쉬다가, 밤이 되면 땅 위로 나와 풀을 냠냠 먹어요. 입이 아주 크게 벌어져서 친구들에게 깜짝 놀랄 만한 하품을 보여주기도 해요. 몸은 크지만 새끼 하마는 엄마 곁에 꼭 붙어 다니는 귀여운 아기랍니다.",
+    "key_feature": [
+      "커다란 몸",
+      "큰 입",
+      "물속 생활"
+    ],
+    "image_prompt": "A chubby hippopotamus peeking out of a calm river with only its eyes, ears, and round nose above the water, tiny water droplets on its face, a sweet friendly smile, lush green riverbank nearby, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "코끼리만한"
+      ],
+      "habitat": [
+        "강·호수"
+      ],
+      "feature": [
+        "야행성"
+      ],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/하마.jpg"
+  },
+  {
+    "search_nickname": "코 위에 멋진 뿔을 단 힘센 풀 먹보",
+    "animal_name": "코뿔소",
+    "kid_friendly_desc": "코뿔소는 코 위에 멋진 뿔이 있는 아주 큰 동물이에요. 몸은 커다랗지만 풀과 나뭇잎을 먹는 초식 친구란다. 아프리카의 넓은 초원이나 아시아의 숲에서 살아요. 코뿔소는 지금 많이 줄어들어서 우리가 꼭 아껴 주고 지켜 줘야 해요.",
+    "key_feature": [
+      "코 위의 뿔",
+      "커다란 몸",
+      "풀을 먹어요"
+    ],
+    "image_prompt": "A cute rhinoceros with a big round body, tiny ears, sturdy legs, and a charming horn on its nose, standing happily on a sunny grassland, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "코끼리만한"
+      ],
+      "habitat": [
+        "초원",
+        "열대우림"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인",
+        "뿔이 있는"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/코뿔소.jpg"
+  },
+  {
+    "search_nickname": "눈물 무늬가 있는 번개 달리기 왕",
+    "animal_name": "치타",
+    "kid_friendly_desc": "치타는 넓은 초원을 바람처럼 달리는 고양이과 동물이란다. 눈 아래에는 까만 눈물 줄무늬가 있어서 햇빛이 눈부실 때도 앞을 잘 볼 수 있어요. 아주 빠르게 달릴 수 있지만 오래 달리지는 못해서, 가까이 다가간 뒤 번개처럼 뛰어요. 긴 꼬리는 달릴 때 몸의 균형을 잡아 주는 멋진 핸들이에요.",
+    "key_feature": [
+      "번개처럼 빠른 달리기",
+      "까만 눈물 무늬",
+      "균형 잡는 긴 꼬리"
+    ],
+    "image_prompt": "A cute cheetah cub with black tear marks under its eyes, golden spotted fur, long tail, running playfully through a sunny savanna grassland, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "육식"
+      ],
+      "color": [
+        "검정색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [
+        "엄청 빠른"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/치타.jpg"
+  },
+  {
+    "search_nickname": "꽃무늬 점박이 코트를 입고 나무를 잘 타는 큰 고양이",
+    "animal_name": "표범",
+    "kid_friendly_desc": "표범은 몸에 검은 점과 꽃처럼 보이는 무늬가 있는 멋진 큰 고양이예요. 숲이나 초원 같은 여러 곳에서 아주 잘 살아간단다. 조용히 숨어 있다가 빠르게 움직이며 사냥해요. 긴 꼬리로 균형을 잡고 나무도 잘 올라간답니다.",
+    "key_feature": [
+      "꽃무늬 점박이",
+      "나무타기 선수",
+      "조용한 사냥꾼"
+    ],
+    "image_prompt": "A cute leopard cub with golden fur and black rosette spots, big curious eyes, a long tail, playfully climbing a tree branch in the savanna, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "육식"
+      ],
+      "color": [
+        "검정색",
+        "알록달록한"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "열대우림",
+        "초원"
+      ],
+      "feature": [
+        "야행성",
+        "보호색",
+        "엄청 빠른"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "새끼를 낳는",
+        "나무 위에 사는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/표범.jpg"
+  },
+  {
+    "search_nickname": "복슬복슬 꼬리를 흔드는 뾰족 귀 숲속 친구",
+    "animal_name": "여우",
+    "kid_friendly_desc": "여우는 강아지랑 친척인 작은 동물이랍니다. 뾰족한 주둥이와 쫑긋한 귀, 복슬복슬한 긴 꼬리가 아주 멋져요. 밤에 조용조용 다니며 먹이를 찾기도 해요. 영리해서 주변 소리를 잘 듣고 살금살금 움직인답니다.",
+    "key_feature": [
+      "복슬복슬 긴 꼬리",
+      "뾰족한 귀",
+      "영리한 움직임"
+    ],
+    "image_prompt": "A cute red fox with fluffy long tail, pointy ears, narrow snout, bright curious eyes, sitting gently in a cozy forest clearing, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "잡식"
+      ],
+      "color": [
+        "빨간색"
+      ],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "초원",
+        "도시 근처"
+      ],
+      "feature": [
+        "야행성"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/여우.jpg"
+  },
+  {
+    "search_nickname": "하얀 털옷을 입고 얼음 위를 걷는 큰 곰",
+    "animal_name": "북극곰",
+    "kid_friendly_desc": "북극곰은 아주 추운 북극의 얼음 위에서 살아요. 새하얀 털은 눈처럼 보여서 몸을 숨기기 좋답니다. 큰 발로 미끄러운 얼음도 척척 걷고, 차가운 바다에서도 헤엄을 잘 쳐요. 물범 같은 먹이를 찾아 혼자 조용히 돌아다니는 멋진 곰이에요.",
+    "key_feature": [
+      "새하얀 털",
+      "큰 발",
+      "얼음 위 생활"
+    ],
+    "image_prompt": "A fluffy white polar bear cub walking on sparkling Arctic ice with big round paws and a curious gentle face, tiny snowflakes around it, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "육식"
+      ],
+      "color": [
+        "흰색"
+      ],
+      "size": [
+        "세상 가장 큰"
+      ],
+      "habitat": [
+        "극지방"
+      ],
+      "feature": [
+        "보호색"
+      ],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/북극곰.jpg"
+  },
+  {
+    "search_nickname": "대나무를 아삭아삭 먹는 까만 안경 곰",
+    "animal_name": "판다",
+    "kid_friendly_desc": "판다는 까만 귀와 까만 눈동자 무늬가 있어서 안경을 쓴 것처럼 보여요. 하루에 대나무를 아주 많이 먹으며 느긋하게 앉아 우물우물 씹는 걸 좋아한단다. 중국의 산속 대나무 숲에서 혼자 조용히 지내는 시간이 많아요. 아기 판다는 아주 작게 태어나지만, 자라면 포근한 곰처럼 커져요.",
+    "key_feature": [
+      "까만 눈 무늬",
+      "대나무 먹기",
+      "포근한 곰 몸"
+    ],
+    "image_prompt": "An adorable giant panda sitting with round black ears and black eye patches, happily munching fresh green bamboo, fluffy white-and-black fur, cute gentle expression, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [
+        "검정색",
+        "흰색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [],
+      "feature": [
+        "보호색"
+      ],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/판다.jpg"
+  },
+  {
+    "search_nickname": "복슬복슬 줄무늬 꼬리로 나무를 타는 빨간 숲 친구",
+    "animal_name": "레서판다",
+    "kid_friendly_desc": "레서판다는 빨간 갈색 털과 동그란 얼굴이 아주 귀여운 동물이란다. 긴 꼬리에는 줄무늬가 있어서 나무 위에서 균형을 잡을 때 도와줘요. 대나무 잎을 좋아하지만 과일이나 작은 곤충도 먹을 수 있어요. 보통 혼자 조용히 지내고, 나무를 잘 타는 숲속 친구예요.",
+    "key_feature": [
+      "복슬복슬 줄무늬 꼬리",
+      "나무 타기 선수",
+      "동그란 하얀 얼굴"
+    ],
+    "image_prompt": "A cute red panda sitting on a tree branch, fluffy reddish-brown fur, round white face markings, big sparkling eyes, and a long striped tail curled around its paws, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "잡식"
+      ],
+      "color": [
+        "빨간색",
+        "흰색"
+      ],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [],
+      "feature": [
+        "야행성"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "새끼를 낳는",
+        "나무 위에 사는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/레서판다.jpg"
+  },
+  {
+    "search_nickname": "동그란 귀로 나무를 꼭 안고 자는 친구",
+    "animal_name": "코알라",
+    "kid_friendly_desc": "코알라는 오스트레일리아에 사는 복슬복슬한 동물이에요. 동그란 귀와 커다란 까만 코가 아주 귀엽답니다. 코알라는 유칼립투스 나뭇잎을 좋아하고, 나무 위에서 꼭 붙어 쉬는 시간이 많아요. 아기 코알라는 엄마 배의 주머니에서 자라난단다.",
+    "key_feature": [
+      "복슬복슬 둥근 귀",
+      "커다란 까만 코",
+      "나무 위 생활"
+    ],
+    "image_prompt": "A cute koala hugging a eucalyptus tree branch, with fluffy round ears, a big dark nose, soft gray fur, sleepy gentle eyes, and tiny paws holding leaves, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [],
+      "feature": [
+        "야행성"
+      ],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "새끼를 낳는",
+        "나무 위에 사는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/코알라.jpg"
+  },
+  {
+    "search_nickname": "아기 주머니가 있는 깡충깡충 점프 선수",
+    "animal_name": "캥거루",
+    "kid_friendly_desc": "캥거루는 뒷다리가 아주 튼튼해서 깡충깡충 멀리 뛸 수 있어요. 엄마 캥거루는 배에 있는 주머니에 아기를 쏙 넣고 돌본답니다. 긴 꼬리로 몸의 균형을 잡고, 주로 풀을 먹으며 초원에서 살아요. 친구들과 무리 지어 지내는 모습도 볼 수 있답니다.",
+    "key_feature": [
+      "아기 주머니",
+      "튼튼한 뒷다리",
+      "긴 꼬리"
+    ],
+    "image_prompt": "A cute kangaroo hopping with a tiny joey peeking out of its mother's pouch, strong hind legs, long balancing tail, big gentle eyes, standing on a sunny Australian grassland, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [
+        "엄청 빠른"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/캥거루.jpg"
+  }
+]
