@@ -6,7 +6,7 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Fri, 12 Jun 2026 04:33:08 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 12 Jun 2026 04:36:08 GMT</lastBuildDate>
     <item>
       <title>앤트로픽, 비영리기관을 위한 AI 활용 교육 프로그램 '클로드 코프스' 발표</title>
       <link>https://dori-ai.com/insight/article/trend-90</link>
@@ -14,6 +14,14 @@
       <category>트렌드</category>
       <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
       <description>앤트로픽이 비영리기관과 협력하여 AI 기술을 보다 효과적으로 활용할 수 있도록 돕는 '클로드 코프스' 프로그램을 공개했습니다.</description>
+    </item>
+    <item>
+      <title>클로드 코프스: 비영리기관을 위한 AI 교육 혁신</title>
+      <link>https://dori-ai.com/insight/article/trend-91</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-91</guid>
+      <category>트렌드</category>
+      <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
+      <description>앤트로픽이 발표한 '클로드 코프스'는 비영리기관이 AI를 효과적으로 활용할 수 있도록 돕는 교육 프로그램입니다.</description>
     </item>
     <item>
       <title>Google DeepMind의 ‘수백만 에이전트’ 경고: 출시 전 심사에서 상시 관제로 바뀌는 AI 보안</title>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
       <description>PwC의 2026년 AI 성과 연구에 따르면, 전 세계 1,217명의 임원 대상 조사 결과 AI 경제적 가치의 74%를 단 20%의 기업이 가져가고 있다. 승자와 패자를 가르는 결정적 차이는 'AI를 생산성 도구'가 아닌 '성장 동력'으로 바라보는 전략적 관점의 차이였다.</description>
-    </item>
-    <item>
-      <title>OpenAI, 사이버보안 전용 AI 모델 'GPT-5.4-Cyber' 제한 공개—보안의 새 지평</title>
-      <link>https://dori-ai.com/insight/article/trend-59</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-59</guid>
-      <category>트렌드</category>
-      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
-      <description>OpenAI가 2026년 4월 사이버보안 전용 AI 모델 GPT-5.4-Cyber를 발표하며 제한된 파트너사에만 단계적으로 배포를 시작했다. 악용 위험을 최소화하면서 방어적 보안 역량을 극대화하는 새로운 접근 방식이 업계의 주목을 받고 있다.</description>
     </item>
   </channel>
 </rss>
