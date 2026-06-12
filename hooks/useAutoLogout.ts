@@ -4,7 +4,7 @@ import { useEffect, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 
 /**
- * 10분간 비활성 시 자동 로그아웃 훅
+ * 장시간(2시간) 비활성 시에만 자동 로그아웃 — 로그인 유지 시간 연장
  */
 export function useAutoLogout() {
   const { session, logout } = useAuth();
@@ -22,10 +22,10 @@ export function useAutoLogout() {
 
     // 로그인 상태일 때만 타이머 설정
     if (session) {
-      // 10분(600초) 후 자동 로그아웃
+      // 2시간(120분) 비활성 후 자동 로그아웃 — 로그인 유지 시간 연장
       timeoutRef.current = setTimeout(() => {
         logout();
-      }, 10 * 60 * 1000);
+      }, 120 * 60 * 1000);
     }
   };
 

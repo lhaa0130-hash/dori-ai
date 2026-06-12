@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Merge, Hammer, Crown, Trophy, Flame, ImageIcon, BrainCircuit, Gamepad2, Swords, Coins, Target, Dices, Hand, Zap, Palette, Star, Brain, Calculator, Bird } from "lucide-react";
+import { Merge, Hammer, Crown, Trophy, Flame, ImageIcon, BrainCircuit, Gamepad2, Target, Zap, Palette, Brain, Calculator, Bird } from "lucide-react";
 import CottonCandy from "@/components/icons/CottonCandy";
 
 // candy: 솜사탕 지급 게임(동물합치기·보스클릭커·2048)만 표기 / rank: 명예의 전당(TOP5) 운영 게임
@@ -20,15 +20,8 @@ const GAMES = [
   { id: "puzzle",      title: "슬라이드 퍼즐", desc: "조각을 움직여 그림을 완성하세요!",       icon: <ImageIcon className="w-5 h-5" />,     href: "/minigame/puzzle",      candy: "",     rank: true  },
   { id: "quiz",        title: "AI 상식 퀴즈",  desc: "AI 관련 상식을 테스트하세요.",           icon: <BrainCircuit className="w-5 h-5" />,  href: "/minigame/quiz",        candy: "",     rank: true  },
   { id: "memory",      title: "카드 뒤집기",   desc: "카드 위치를 기억해 짝을 맞추세요.",      icon: <Gamepad2 className="w-5 h-5" />,      href: "/minigame/memory",      candy: "",     rank: false },
-  { id: "typingspeed", title: "타이핑 속도",   desc: "당신의 타이핑 실력을 측정하세요.",        icon: <Zap className="w-5 h-5" />,           href: "/minigame/typingspeed", candy: "",     rank: true  },
   { id: "colormatch",  title: "색깔 맞추기",   desc: "30초 안에 색깔을 맞추세요!",             icon: <Palette className="w-5 h-5" />,       href: "/minigame/colormatch",  candy: "",     rank: true  },
   { id: "guess",       title: "숫자 맞추기",   desc: "힌트로 숨겨진 숫자를 찾아보세요.",       icon: <Target className="w-5 h-5" />,        href: "/minigame/guess",       candy: "",     rank: true  },
-  { id: "ladder",      title: "사다리 타기",   desc: "스릴 넘치는 사다리 게임!",               icon: <Swords className="w-5 h-5" />,        href: "/minigame/ladder",      candy: "",     rank: false },
-  { id: "coinflip",    title: "동전 던지기",   desc: "3D 회전의 짜릿한 동전 던지기!",          icon: <Coins className="w-5 h-5" />,         href: "/minigame/coinflip",    candy: "",     rank: false },
-  { id: "dice",        title: "주사위 굴리기", desc: "주사위를 굴려 행운을 시험하세요!",        icon: <Dices className="w-5 h-5" />,         href: "/minigame/dice",        candy: "",     rank: false },
-  { id: "roulette",    title: "룰렛",          desc: "룰렛을 돌려 행운을 시험하세요!",          icon: <Trophy className="w-5 h-5" />,        href: "/minigame/roulette",    candy: "",     rank: false },
-  { id: "rps",         title: "가위바위보",    desc: "컴퓨터와 가위바위보 대결!",               icon: <Hand className="w-5 h-5" />,          href: "/minigame/rps",         candy: "",     rank: false },
-  { id: "slot",        title: "슬롯머신",      desc: "가상 코인으로 즐기는 3릴 슬롯!",         icon: <Star className="w-5 h-5" />,          href: "/minigame/slot",        candy: "",     rank: false },
 ];
 
 export default function MinigamePage() {

@@ -39,7 +39,7 @@ const GRAVITY     = 0.42;
 const FRICTION    = 0.985;
 const BOUNCE      = 0.18;
 const ITER        = 8;     // 충돌 해결 반복 횟수
-const MERGE_COOL  = 30;    // 생성 후 합치기 가능한 최소 프레임
+const MERGE_COOL  = 5;     // 생성 후 합치기 가능한 최소 프레임(거의 즉시)
 const DROP_DELAY  = 650;   // 다음 공 준비 대기(ms)
 const MAX_DROP_LV = 2;     // 드롭 가능한 최대 레벨 (0~2: 애벌레·개구리·토끼만)
 
@@ -77,6 +77,7 @@ export default function AnimalMergePage() {
   const gameOverRef  = useRef(false);
   const rafRef       = useRef(0);
   const popsRef      = useRef<Pop[]>([]);
+  const overflowRef  = useRef(0);   // 위험선 위 머문 프레임 수(게임오버 판정)
 
   /* ── UI 상태 (React) ── */
   const [score,     setScore]     = useState(0);
@@ -164,9 +165,8 @@ export default function AnimalMergePage() {
           const d  = Math.sqrt(d2);
           const nx = dx / d, ny = dy / d;
 
-          // 마지막 반복에서 합치기 검사
+          // 같은 동물끼리 닿는 즉시 합치기
           if (
-            iter === ITER - 1 &&
             a.lv === b.lv &&
             a.lv < ANIMALS.length - 1 &&
             f - a.birthFrame > MERGE_COOL &&
@@ -224,22 +224,24 @@ export default function AnimalMergePage() {
       popsRef.current = popsRef.current.filter(p => p.life > 0);
     }
 
-    // 게임 오버 검사: 충분히 정착한 공이 위험선 위에 있으면 종료
-    // birthFrame 후 120프레임 (~2초) 유예 + 공이 거의 정지했을 때만 판정
+    // 게임 오버: 위험선을 넘은 공이 잠깐만 머물러도 바로 종료
+    //  - 떨어지는 중인 공(vy 큼)·갓 생성된 공은 제외 → 드롭이 통과할 땐 안 걸림
+    //  - 선 위에 머물면 프레임이 쌓여 ~0.5초 내 아웃
+    let overflow = false;
     for (const b of ballsRef.current) {
-      const age = f - b.birthFrame;
-      const ar  = ANIMALS[b.lv].r;
-      const isSettled = Math.abs(b.vy) < 1.5 && Math.abs(b.vx) < 1.5;
-      if (age > 120 && isSettled && b.y - ar < DANGER_Y) {
-        gameOverRef.current = true;
-        setGameOver(true);
-        const best = parseInt(localStorage.getItem("animalmerge_best") || "0", 10);
-        if (scoreRef.current > best) {
-          localStorage.setItem("animalmerge_best", String(scoreRef.current));
-          setBestScore(scoreRef.current);
-        }
-        return;
+      const ar = ANIMALS[b.lv].r;
+      if ((f - b.birthFrame) > 12 && b.vy < 3 && b.y - ar < DANGER_Y) { overflow = true; break; }
+    }
+    overflowRef.current = overflow ? overflowRef.current + 1 : 0;
+    if (overflowRef.current >= 32) {
+      gameOverRef.current = true;
+      setGameOver(true);
+      const best = parseInt(localStorage.getItem("animalmerge_best") || "0", 10);
+      if (scoreRef.current > best) {
+        localStorage.setItem("animalmerge_best", String(scoreRef.current));
+        setBestScore(scoreRef.current);
       }
+      return;
     }
   }, []);
 
@@ -396,6 +398,7 @@ export default function AnimalMergePage() {
     frameRef.current    = 0;
     scoreRef.current    = 0;
     gameOverRef.current = false;
+    overflowRef.current = 0;
     canDropRef.current  = true;
     dropXRef.current    = GW / 2;
     const d = rndLv(), n = rndLv();

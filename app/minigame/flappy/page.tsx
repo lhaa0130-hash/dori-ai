@@ -24,17 +24,17 @@ const UNIT = "점";
 const W = 360;
 const H = 540;
 
-// 물리/난이도
-const GRAVITY = 0.45;
-const FLAP = -7.4;
-const MAX_FALL = 11;
+// 물리/난이도 — 느리고 쉽게 (천천히 떨어지고, 간격 넓고, 스크롤 느림)
+const GRAVITY = 0.30;
+const FLAP = -6.4;
+const MAX_FALL = 7.5;
 const BIRD_X = 96;
 const BIRD_R = 13;
 
 const PIPE_W = 60;
-const GAP = 158;          // 상하 파이프 사이 간격
-const PIPE_SPEED = 2.6;   // 스크롤 속도
-const PIPE_SPACING = 210; // 파이프 간 수평 간격
+const GAP = 195;          // 상하 파이프 사이 간격 (넓힘)
+const PIPE_SPEED = 1.8;   // 스크롤 속도 (느리게)
+const PIPE_SPACING = 260; // 파이프 간 수평 간격 (여유 있게)
 const GROUND_H = 64;
 const TOP_PAD = 8;
 

@@ -278,7 +278,6 @@ const RANKED_GAMES: { game: string; label: string; unit: string; order: "desc" |
   { game: "match3", label: "매치3", unit: "점", order: "desc" },
   { game: "colormatch", label: "색깔 맞추기", unit: "점", order: "desc" },
   { game: "quiz", label: "AI 퀴즈", unit: "점", order: "desc" },
-  { game: "typingspeed", label: "타이핑 속도", unit: "WPM", order: "desc" },
   { game: "puzzle", label: "슬라이드 퍼즐", unit: "무브", order: "asc" },
   { game: "guess", label: "숫자 맞추기", unit: "번", order: "asc" },
 ];
