@@ -23,6 +23,7 @@ import {
   type GameRecord,
 } from "@/lib/social";
 import { uploadAvatar } from "@/lib/storage";
+import { TIER_INFO, type UserTier } from "@/lib/userProfile";
 
 // ── 배경 프리셋 → 그라데이션 클래스(직접 정의) ───────────────────
 const BG_PRESETS: { id: BgStyle; label: string; grad: string }[] = [
@@ -349,6 +350,19 @@ export default function ProfilePage() {
                 <h1 className="text-[22px] font-extrabold tracking-tight text-neutral-900 dark:text-white truncate">
                   {profile.name}
                 </h1>
+                {/* 등급(티어) + 레벨 */}
+                <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+                  <span
+                    className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-bold"
+                    style={{ color: accent, backgroundColor: `${accent}1A` }}
+                  >
+                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accent }} />
+                    {TIER_INFO[profile.tier as UserTier]?.name || `등급 ${profile.tier}`}
+                  </span>
+                  <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-bold bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-neutral-200 tabular-nums">
+                    Lv.{profile.level}
+                  </span>
+                </div>
                 {profile.statusMsg ? (
                   <p className="text-[13px] mt-0.5 font-semibold" style={{ color: accent }}>
                     {profile.statusMsg}

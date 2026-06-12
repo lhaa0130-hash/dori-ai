@@ -45,10 +45,13 @@ export interface Profile {
   statusMsg: string;  // 상태메시지(한 줄)
   themeColor: string; // 대표색 hex
   bg: BgStyle;        // 배경 프리셋
+  tier: number;       // 등급(1~) — users/{uid}.tier
+  level: number;      // 레벨 — users/{uid}.level
+  exp: number;        // 경험치(doriExp)
 }
 
 const DEFAULT_PROFILE = (uid: string, name = "사용자"): Profile => ({
-  uid, name, bio: "", statusMsg: "", themeColor: "#F9954E", bg: "aurora",
+  uid, name, bio: "", statusMsg: "", themeColor: "#F9954E", bg: "aurora", tier: 1, level: 1, exp: 0,
 });
 
 export async function getProfile(uid: string): Promise<Profile> {
@@ -63,6 +66,9 @@ export async function getProfile(uid: string): Promise<Profile> {
       statusMsg: String(d.statusMsg || ""),
       themeColor: String(d.themeColor || "#F9954E"),
       bg: (String(d.bg || "aurora") as BgStyle),
+      tier: Number(d.tier || 1),
+      level: Number(d.level || 1),
+      exp: Number(d.doriExp || 0),
     };
   } catch {
     return DEFAULT_PROFILE(uid);
