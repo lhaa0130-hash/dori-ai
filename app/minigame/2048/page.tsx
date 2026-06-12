@@ -20,17 +20,17 @@ const WIN_SCORE = 2048;
 type Grid = number[][];
 
 const TILE_COLORS: Record<number, string> = {
-    2: "bg-slate-200 text-slate-700",
-    4: "bg-slate-300 text-slate-800",
-    8: "bg-orange-200 text-white",
-    16: "bg-orange-300 text-white",
-    32: "bg-orange-400 text-white",
-    64: "bg-orange-500 text-white",
-    128: "bg-yellow-200 text-white shadow-[0_0_10px_#fde047]",
-    256: "bg-yellow-300 text-white shadow-[0_0_15px_#fcd34d]",
-    512: "bg-yellow-400 text-white shadow-[0_0_20px_#fbbf24]",
-    1024: "bg-yellow-500 text-white shadow-[0_0_25px_#f59e0b]",
-    2048: "bg-yellow-600 text-white shadow-[0_0_30px_#d97706]",
+    2: "bg-white/[0.08] text-neutral-300",
+    4: "bg-white/[0.14] text-neutral-100",
+    8: "bg-[#F9954E]/30 text-white",
+    16: "bg-[#F9954E]/45 text-white",
+    32: "bg-[#F9954E]/60 text-white",
+    64: "bg-[#F9954E]/80 text-white",
+    128: "bg-[#F9954E] text-white shadow-[0_0_10px_rgba(249,149,78,0.35)]",
+    256: "bg-[#F28A3D] text-white shadow-[0_0_15px_rgba(249,149,78,0.45)]",
+    512: "bg-[#E8832E] text-white shadow-[0_0_20px_rgba(249,149,78,0.55)]",
+    1024: "bg-[#DD7522] text-white shadow-[0_0_25px_rgba(249,149,78,0.65)]",
+    2048: "bg-gradient-to-b from-[#F9954E] to-[#D96A1A] text-white shadow-[0_0_30px_rgba(249,149,78,0.75)]",
 };
 
 export default function Game2048() {
@@ -180,28 +180,30 @@ export default function Game2048() {
     }, [move]);
 
     return (
-        <div className="min-h-[100dvh] w-full bg-slate-900 text-white font-sans selection:bg-yellow-500/30 flex flex-col items-center justify-center p-4 overflow-hidden touch-none">
+        <div className="relative overflow-hidden min-h-screen w-full bg-[#09090e] text-white font-sans selection:bg-[#F9954E]/30 flex flex-col items-center justify-center p-4 touch-none">
+            <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(249,149,78,0.07),transparent)]" />
 
             <PlaytimeRewardToast />
 
-            <header className="w-full max-w-md flex items-center justify-between mb-6">
-                <Link href="/minigame" className="p-2 hover:bg-slate-800 rounded-full transition-colors">
-                    <ArrowLeft className="w-6 h-6 text-slate-400" />
+            <header className="relative w-full max-w-md flex items-center justify-between mb-6">
+                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-500 hover:text-white transition-colors">
+                    <ArrowLeft className="w-4 h-4" />
+                    미니게임
                 </Link>
-                <div className="font-bold text-3xl text-slate-200 tracking-wider">2048</div>
+                <div className="text-[15px] font-extrabold tracking-tight text-white">🧩 2048</div>
                 <div className="flex gap-2">
-                    <div className="bg-slate-700 px-3 py-1 rounded text-center min-w-[70px]">
-                        <div className="text-[10px] text-slate-400 uppercase font-bold">Score</div>
-                        <div className="font-bold">{score}</div>
+                    <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center min-w-[70px]">
+                        <div className="text-[9px] uppercase tracking-widest text-neutral-500">Score</div>
+                        <div className="text-sm font-bold text-white tabular-nums">{score}</div>
                     </div>
-                    <div className="bg-slate-700 px-3 py-1 rounded text-center min-w-[70px]">
-                        <div className="text-[10px] text-slate-400 uppercase font-bold">Best</div>
-                        <div className="font-bold">{bestScore}</div>
+                    <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center min-w-[70px]">
+                        <div className="text-[9px] uppercase tracking-widest text-neutral-500">Best</div>
+                        <div className="text-sm font-bold text-white tabular-nums">{bestScore}</div>
                     </div>
                 </div>
             </header>
 
-            <div className="relative bg-slate-800 p-2 rounded-lg w-full max-w-[360px]" style={{ touchAction: "none" }}
+            <div className="relative rounded-2xl bg-white/[0.04] border border-white/10 p-2 w-full max-w-[360px]" style={{ touchAction: "none" }}
                 onTouchStart={(e) => {
                     touchStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
                 }}
@@ -219,13 +221,13 @@ export default function Game2048() {
                 }}
             >
 
-                <div className="grid grid-cols-4 gap-2 bg-slate-700 p-2 rounded">
+                <div className="grid grid-cols-4 gap-2 bg-black/30 p-2 rounded-xl">
                     {grid.map((row, i) =>
                         row.map((val, j) => (
                             <motion.div
                                 key={`${i}-${j}`}
                                 layoutId={`tile-${i}-${j}`} // Simple layout animation
-                                className={`aspect-square rounded font-bold text-xl sm:text-2xl md:text-3xl flex items-center justify-center transition-colors ${val > 0 ? TILE_COLORS[val] : "bg-slate-600/50"}`}
+                                className={`aspect-square rounded-lg font-bold tabular-nums text-xl sm:text-2xl md:text-3xl flex items-center justify-center transition-colors ${val > 0 ? TILE_COLORS[val] : "bg-white/[0.04]"}`}
                             >
                                 {val > 0 ? val : ""}
                             </motion.div>
@@ -234,17 +236,21 @@ export default function Game2048() {
                 </div>
 
                 {(gameOver || won) && (
-                    <div className="absolute inset-0 bg-slate-900/80 flex flex-col items-center justify-center rounded-lg backdrop-blur-sm">
-                        <h2 className="text-4xl font-bold mb-4 text-white">
-                            {won ? "YOU WON! 🎉" : "GAME OVER"}
-                        </h2>
-                        <button
-                            onClick={initGame}
-                            className="bg-yellow-500 hover:bg-yellow-600 text-white px-6 py-3 rounded font-bold text-lg shadow-lg active:scale-95 transition-transform"
-                        >
-                            <RefreshCw className="w-5 h-5 inline-block mr-2" />
-                            Try Again
-                        </button>
+                    <div className="absolute inset-0 z-10 bg-black/70 backdrop-blur-sm flex items-center justify-center rounded-2xl p-4">
+                        <div className="rounded-3xl bg-[#101016] border border-white/10 p-8 flex flex-col items-center text-center">
+                            <h2 className="text-xl font-extrabold tracking-tight text-white mb-4">
+                                {won ? "2048 달성! 🎉" : "게임 오버"}
+                            </h2>
+                            <div className="text-[10px] uppercase tracking-widest text-neutral-500">Score</div>
+                            <div className="text-4xl font-black text-[#F9954E] tabular-nums mb-6">{score}</div>
+                            <button
+                                onClick={initGame}
+                                className="rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all px-8 py-3"
+                            >
+                                <RefreshCw className="w-5 h-5 inline-block mr-2" />
+                                다시 하기
+                            </button>
+                        </div>
                     </div>
                 )}
             </div>
@@ -253,26 +259,26 @@ export default function Game2048() {
             <div className="grid grid-cols-3 gap-2 mt-6 w-[200px] md:hidden">
                 <div />
                 <button
-                    className="bg-slate-800 p-4 rounded-lg active:bg-slate-700 flex justify-center text-2xl"
+                    className="rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] active:scale-[0.98] transition-all p-4 flex justify-center text-2xl"
                     onClick={() => move('UP')}
                 >⬆️</button>
                 <div />
                 <button
-                    className="bg-slate-800 p-4 rounded-lg active:bg-slate-700 flex justify-center text-2xl"
+                    className="rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] active:scale-[0.98] transition-all p-4 flex justify-center text-2xl"
                     onClick={() => move('LEFT')}
                 >⬅️</button>
                 <button
-                    className="bg-slate-800 p-4 rounded-lg active:bg-slate-700 flex justify-center text-2xl"
+                    className="rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] active:scale-[0.98] transition-all p-4 flex justify-center text-2xl"
                     onClick={() => move('DOWN')}
                 >⬇️</button>
                 <button
-                    className="bg-slate-800 p-4 rounded-lg active:bg-slate-700 flex justify-center text-2xl"
+                    className="rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] active:scale-[0.98] transition-all p-4 flex justify-center text-2xl"
                     onClick={() => move('RIGHT')}
                 >➡️</button>
             </div>
 
-            <div className="mt-8 text-slate-500 text-sm">
-                Use arrow keys or buttons to join the numbers and get to the <span className="text-yellow-500 font-bold">2048 tile!</span>
+            <div className="mt-8 text-neutral-400 text-sm text-center">
+                방향키나 버튼으로 숫자를 합쳐 <span className="text-[#F9954E] font-bold">2048 타일</span>을 만들어 보세요!
             </div>
 
             <div className="w-full max-w-md mx-auto mt-4 px-4">

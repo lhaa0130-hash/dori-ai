@@ -93,32 +93,38 @@ export default function RockPaperScissorsPage() {
     const isDark = mounted && theme === "dark";
 
     return (
-        <main className="min-h-screen bg-neutral-50 dark:bg-black text-neutral-900 dark:text-white transition-colors duration-500">
-            <header className="fixed top-0 left-0 w-full h-16 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-neutral-200 dark:border-white/10 z-50 flex items-center justify-between px-6">
-                <Link href="/minigame" className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
-                    <ArrowLeft className="w-5 h-5" />
-                </Link>
-                <h1 className="text-lg font-bold">가위바위보</h1>
-                <div className="w-9" />
-            </header>
+        <main className="relative min-h-screen overflow-hidden bg-[#09090e] text-white">
+            <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(249,149,78,0.07),transparent)]" />
 
-            <div className="pt-2 sm:pt-4 pb-8 sm:pb-12 px-4 max-w-2xl mx-auto">
+            <div className="relative pt-4 sm:pt-6 pb-8 sm:pb-12 px-4 max-w-2xl mx-auto">
+                <header className="flex items-center justify-between mb-5">
+                    <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-500 hover:text-white transition-colors">
+                        <ArrowLeft className="w-4 h-4" />
+                        미니게임
+                    </Link>
+                    <h1 className="text-[15px] font-extrabold tracking-tight text-white">✊ 가위바위보</h1>
+                    <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                        <div className="text-[9px] uppercase tracking-widest text-neutral-500">WIN</div>
+                        <div className="text-sm font-bold text-white tabular-nums">{score.win}</div>
+                    </div>
+                </header>
+
                 <div className="animate-fade-in">
-                    <div className="bg-white dark:bg-zinc-900 rounded-3xl p-8 md:p-12 shadow-xl shadow-neutral-200/50 dark:shadow-none border border-neutral-100 dark:border-white/5">
+                    <div className="rounded-3xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-6 sm:p-8 md:p-12">
 
                         {/* Score Board */}
-                        <div className="grid grid-cols-3 gap-4 mb-8">
-                            <div className="text-center p-4 bg-green-50 dark:bg-green-900/20 rounded-xl">
-                                <div className="text-3xl font-bold text-green-600">{score.win}</div>
-                                <div className="text-sm text-neutral-600 dark:text-zinc-400">승리</div>
+                        <div className="grid grid-cols-3 gap-3 mb-8">
+                            <div className="text-center p-4 rounded-2xl bg-white/[0.04] border border-white/10">
+                                <div className="text-3xl font-extrabold tabular-nums text-[#F9954E]">{score.win}</div>
+                                <div className="text-[10px] uppercase tracking-widest text-neutral-500 mt-1">승리</div>
                             </div>
-                            <div className="text-center p-4 bg-neutral-50 dark:bg-zinc-800 rounded-xl">
-                                <div className="text-3xl font-bold text-neutral-600 dark:text-zinc-300">{score.draw}</div>
-                                <div className="text-sm text-neutral-600 dark:text-zinc-400">무승부</div>
+                            <div className="text-center p-4 rounded-2xl bg-white/[0.04] border border-white/10">
+                                <div className="text-3xl font-extrabold tabular-nums text-white">{score.draw}</div>
+                                <div className="text-[10px] uppercase tracking-widest text-neutral-500 mt-1">무승부</div>
                             </div>
-                            <div className="text-center p-4 bg-red-50 dark:bg-red-900/20 rounded-xl">
-                                <div className="text-3xl font-bold text-red-600">{score.lose}</div>
-                                <div className="text-sm text-neutral-600 dark:text-zinc-400">패배</div>
+                            <div className="text-center p-4 rounded-2xl bg-white/[0.04] border border-white/10">
+                                <div className="text-3xl font-extrabold tabular-nums text-neutral-400">{score.lose}</div>
+                                <div className="text-[10px] uppercase tracking-widest text-neutral-500 mt-1">패배</div>
                             </div>
                         </div>
 
@@ -126,28 +132,32 @@ export default function RockPaperScissorsPage() {
                         <div className="flex items-center justify-center gap-8 mb-8 min-h-[200px]">
                             {/* Player */}
                             <div className="text-center">
-                                <div className="text-sm text-neutral-500 dark:text-zinc-400 mb-2">당신</div>
-                                <motion.div
-                                    className="text-8xl"
-                                    animate={playerChoice ? { scale: [1, 1.2, 1] } : {}}
-                                    transition={{ duration: 0.3 }}
-                                >
-                                    {playerChoice ? EMOJIS[playerChoice] : "❓"}
-                                </motion.div>
+                                <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-3">당신</div>
+                                <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center">
+                                    <motion.div
+                                        className="text-6xl sm:text-7xl"
+                                        animate={playerChoice ? { scale: [1, 1.2, 1] } : {}}
+                                        transition={{ duration: 0.3 }}
+                                    >
+                                        {playerChoice ? EMOJIS[playerChoice] : "❓"}
+                                    </motion.div>
+                                </div>
                             </div>
 
-                            <div className="text-4xl">VS</div>
+                            <div className="text-lg font-black tracking-widest text-neutral-600">VS</div>
 
                             {/* Computer */}
                             <div className="text-center">
-                                <div className="text-sm text-neutral-500 dark:text-zinc-400 mb-2">컴퓨터</div>
-                                <motion.div
-                                    className="text-8xl"
-                                    animate={isPlaying ? { rotate: [0, 360] } : computerChoice ? { scale: [1, 1.2, 1] } : {}}
-                                    transition={{ duration: isPlaying ? 1 : 0.3 }}
-                                >
-                                    {isPlaying ? "❓" : computerChoice ? EMOJIS[computerChoice] : "❓"}
-                                </motion.div>
+                                <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-3">컴퓨터</div>
+                                <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center">
+                                    <motion.div
+                                        className="text-6xl sm:text-7xl"
+                                        animate={isPlaying ? { rotate: [0, 360] } : computerChoice ? { scale: [1, 1.2, 1] } : {}}
+                                        transition={{ duration: isPlaying ? 1 : 0.3 }}
+                                    >
+                                        {isPlaying ? "❓" : computerChoice ? EMOJIS[computerChoice] : "❓"}
+                                    </motion.div>
+                                </div>
                             </div>
                         </div>
 
@@ -159,11 +169,11 @@ export default function RockPaperScissorsPage() {
                                     initial={{ opacity: 0, y: -20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: 20 }}
-                                    className={`mb-6 p-4 rounded-xl text-center text-xl font-bold ${result === "win"
-                                            ? "bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-400"
+                                    className={`mb-6 p-4 rounded-2xl text-center text-xl font-extrabold tracking-tight border ${result === "win"
+                                            ? "bg-[#F9954E]/10 border-[#F9954E]/25 text-[#F9954E]"
                                             : result === "lose"
-                                                ? "bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-400"
-                                                : "bg-neutral-100 dark:bg-zinc-800 text-neutral-700 dark:text-zinc-300"
+                                                ? "bg-red-500/10 border-red-500/20 text-red-400"
+                                                : "bg-white/[0.04] border-white/10 text-neutral-300"
                                         }`}
                                 >
                                     {result === "win" ? "🎉 승리!" : result === "lose" ? "😢 패배..." : "🤝 무승부!"}
@@ -172,16 +182,16 @@ export default function RockPaperScissorsPage() {
                         </AnimatePresence>
 
                         {/* Choice Buttons */}
-                        <div className="grid grid-cols-3 gap-4 mb-6">
+                        <div className="grid grid-cols-3 gap-3 mb-6">
                             {CHOICES.map((choice) => (
                                 <button
                                     key={choice}
                                     onClick={() => play(choice)}
                                     disabled={isPlaying}
-                                    className="p-6 bg-gradient-to-br from-blue-500 to-purple-500 hover:from-blue-600 hover:to-purple-600 active:scale-95 text-white rounded-2xl font-bold transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+                                    className="p-5 sm:p-6 rounded-2xl bg-white/[0.05] border border-white/10 hover:bg-white/[0.09] hover:border-[#F9954E]/30 active:scale-[0.98] font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                                 >
-                                    <div className="text-5xl mb-2">{EMOJIS[choice]}</div>
-                                    <div className="text-sm capitalize">{choice === "rock" ? "바위" : choice === "paper" ? "보" : "가위"}</div>
+                                    <div className="text-4xl sm:text-5xl mb-2">{EMOJIS[choice]}</div>
+                                    <div className="text-[13px] font-semibold text-neutral-300">{choice === "rock" ? "바위" : choice === "paper" ? "보" : "가위"}</div>
                                 </button>
                             ))}
                         </div>
@@ -191,14 +201,14 @@ export default function RockPaperScissorsPage() {
                             {result && (
                                 <button
                                     onClick={reset}
-                                    className="flex-1 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-xl font-bold transition-colors"
+                                    className="flex-1 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all"
                                 >
                                     다시 하기
                                 </button>
                             )}
                             <button
                                 onClick={resetAll}
-                                className="px-6 py-3 bg-neutral-200 dark:bg-zinc-800 hover:bg-neutral-300 dark:hover:bg-zinc-700 rounded-xl font-bold transition-colors"
+                                className="px-6 py-3 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] font-semibold transition-colors"
                             >
                                 <RotateCcw className="w-5 h-5" />
                             </button>

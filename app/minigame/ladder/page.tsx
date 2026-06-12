@@ -324,47 +324,53 @@ export default function LadderGamePage() {
     const isDark = mounted && theme === "dark";
 
     return (
-        <main className="min-h-screen bg-neutral-50 dark:bg-black text-neutral-900 dark:text-white transition-colors duration-500">
+        <main className="relative min-h-screen overflow-hidden bg-[#09090e] text-white">
+            <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(249,149,78,0.07),transparent)]" />
+
             {/* Header */}
-            <header className="fixed top-0 left-0 w-full h-16 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-neutral-200 dark:border-white/10 z-50 flex items-center justify-between px-6">
-                <Link href="/minigame" className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
-                    <ArrowLeft className="w-5 h-5" />
+            <header className="relative z-10 max-w-4xl mx-auto h-16 flex items-center justify-between px-4">
+                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-500 hover:text-white transition-colors">
+                    <ArrowLeft className="w-4 h-4" />
+                    미니게임
                 </Link>
-                <h1 className="text-lg font-bold">사다리 타기</h1>
-                <div className="w-9" />
+                <h1 className="text-[15px] font-extrabold tracking-tight text-white">🪜 사다리 타기</h1>
+                <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                    <div className="text-[9px] uppercase tracking-widest text-neutral-500">PLAYERS</div>
+                    <div className="text-sm font-bold text-white tabular-nums">{playerCount}명</div>
+                </div>
             </header>
 
-            <div className="pt-2 sm:pt-4 pb-8 sm:pb-12 px-4 max-w-4xl mx-auto">
+            <div className="relative z-10 pt-2 sm:pt-4 pb-8 sm:pb-12 px-4 max-w-4xl mx-auto">
                 {gameState === "SETUP" && (
                     <div className="animate-fade-in space-y-8">
                         {/* Setup Card */}
-                        <div className="bg-white dark:bg-zinc-900 rounded-3xl p-8 shadow-xl shadow-neutral-200/50 dark:shadow-none border border-neutral-100 dark:border-white/5">
+                        <div className="rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-6 sm:p-8">
                             <div className="text-center mb-8">
-                                <h2 className="text-2xl font-bold mb-2">게임 설정</h2>
-                                <p className="text-neutral-500 dark:text-zinc-400">참가 인원과 내기 항목을 설정하세요.</p>
+                                <h2 className="text-2xl font-extrabold tracking-tight mb-2">게임 설정</h2>
+                                <p className="text-neutral-400">참가 인원과 내기 항목을 설정하세요.</p>
                             </div>
 
                             <div className="flex items-center justify-center gap-6 mb-10">
                                 <button
                                     onClick={() => handlePlayerCountChange(-1)}
-                                    className="w-12 h-12 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center hover:bg-neutral-200 dark:hover:bg-zinc-700 transition-colors"
+                                    className="w-12 h-12 rounded-full bg-white/[0.06] border border-white/10 text-neutral-200 flex items-center justify-center hover:bg-white/[0.1] transition-colors"
                                 >
                                     <span className="text-2xl font-light">-</span>
                                 </button>
                                 <div className="text-center w-24">
-                                    <span className="text-4xl font-bold text-[#F9954E]">{playerCount}</span>
+                                    <span className="text-4xl font-extrabold tracking-tight text-[#F9954E] tabular-nums">{playerCount}</span>
                                     <span className="text-sm text-neutral-400 block mt-1">명</span>
                                 </div>
                                 <button
                                     onClick={() => handlePlayerCountChange(1)}
-                                    className="w-12 h-12 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center hover:bg-neutral-200 dark:hover:bg-zinc-700 transition-colors"
+                                    className="w-12 h-12 rounded-full bg-white/[0.06] border border-white/10 text-neutral-200 flex items-center justify-center hover:bg-white/[0.1] transition-colors"
                                 >
                                     <span className="text-2xl font-light">+</span>
                                 </button>
                             </div>
 
                             <div className="grid gap-4 mb-10">
-                                <div className="grid grid-cols-[1fr_auto_1fr] gap-4 items-center mb-2 px-2 text-sm font-bold text-neutral-400">
+                                <div className="grid grid-cols-[1fr_auto_1fr] gap-4 items-center mb-2 px-2 text-[10px] uppercase tracking-widest text-neutral-500 font-bold">
                                     <span className="text-center">이름</span>
                                     <span className="w-8"></span>
                                     <span className="text-center">결과 (벌칙/당첨)</span>
@@ -376,7 +382,7 @@ export default function LadderGamePage() {
                                             value={playerNames[i]}
                                             onChange={(e) => handleUpdateName(i, e.target.value)}
                                             placeholder={`참가자 ${i + 1}`}
-                                            className="w-full bg-neutral-50 dark:bg-black border border-neutral-200 dark:border-zinc-800 rounded-xl px-4 py-3 text-center focus:outline-none focus:border-[#F9954E] dark:focus:border-[#F9954E] transition-colors"
+                                            className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-center text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#F9954E] transition-colors"
                                         />
                                         <div className="w-8 flex justify-center text-neutral-300">
                                             <Shuffle className="w-4 h-4" />
@@ -386,7 +392,7 @@ export default function LadderGamePage() {
                                             value={results[i]}
                                             onChange={(e) => handleUpdateResult(i, e.target.value)}
                                             placeholder={i === 0 ? "당첨" : "꽝"}
-                                            className="w-full bg-neutral-50 dark:bg-black border border-neutral-200 dark:border-zinc-800 rounded-xl px-4 py-3 text-center focus:outline-none focus:border-[#F9954E] dark:focus:border-[#F9954E] transition-colors"
+                                            className="w-full bg-white/[0.04] border border-white/10 rounded-xl px-4 py-3 text-center text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#F9954E] transition-colors"
                                         />
                                     </div>
                                 ))}
@@ -408,14 +414,14 @@ export default function LadderGamePage() {
                         {/* Game Board */}
                         <motion.div
                             animate={boardControls}
-                            className="relative bg-white dark:bg-zinc-900 rounded-[2rem] p-6 md:p-10 shadow-xl border border-neutral-100 dark:border-zinc-800 min-h-[600px] overflow-hidden"
+                            className="relative bg-white/[0.04] rounded-[2rem] p-6 md:p-10 shadow-xl border border-white/10 min-h-[600px] overflow-hidden"
                         >
 
                             {/* Controls */}
                             <div className="absolute top-6 right-6 z-10 flex gap-2">
                                 <button
                                     onClick={resetGame}
-                                    className="p-2 rounded-full bg-neutral-100 dark:bg-zinc-800 hover:bg-neutral-200 dark:hover:bg-zinc-700 transition-colors text-neutral-600 dark:text-neutral-400"
+                                    className="p-2 rounded-full bg-white/[0.06] border border-white/10 hover:bg-white/[0.12] transition-colors text-neutral-200"
                                     title="다시 설정"
                                 >
                                     <RefreshCw className="w-5 h-5" />
@@ -427,7 +433,7 @@ export default function LadderGamePage() {
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none">
                                     <button
                                         onClick={() => startAnimation("ALL")}
-                                        className="pointer-events-auto px-8 py-3 bg-lack dark:bg-white text-white dark:text-black rounded-full font-bold shadow-2xl hover:scale-105 active:scale-95 transition-all text-lg flex items-center gap-2"
+                                        className="pointer-events-auto px-8 py-3 bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white rounded-full font-bold shadow-2xl hover:scale-105 active:scale-95 transition-all text-lg flex items-center gap-2"
                                     >
                                         <Play className="w-5 h-5 fill-current" />
                                         전체 결과 보기
@@ -538,8 +544,8 @@ export default function LadderGamePage() {
                                             disabled={gameState === "PLAYING" || p.finished}
                                             className={`mb-2 px-3 py-1.5 rounded-lg text-sm font-bold border-2 transition-all hover:scale-110 active:scale-95 whitespace-nowrap
                                                 ${p.finished
-                                                    ? "bg-neutral-100 border-neutral-200 text-neutral-400 grayscale"
-                                                    : "bg-white dark:bg-black"}`}
+                                                    ? "bg-white/[0.04] border-white/10 text-neutral-400 grayscale"
+                                                    : "bg-white/[0.04]"}`}
                                             style={{
                                                 borderColor: p.color,
                                                 color: p.finished ? undefined : p.color,
@@ -575,7 +581,7 @@ export default function LadderGamePage() {
                                                         key="hidden"
                                                         initial={{ scale: 1, rotateY: 0 }}
                                                         exit={{ scale: 0, rotateY: 90 }}
-                                                        className="w-full h-full bg-neutral-200 dark:bg-zinc-800 rounded-xl flex items-center justify-center cursor-pointer shadow-md hover:scale-105 transition-transform"
+                                                        className="w-full h-full bg-white/[0.08] rounded-xl flex items-center justify-center cursor-pointer shadow-md hover:scale-105 transition-transform"
                                                         onClick={() => {
                                                             if (winner) {
                                                                 setRevealedResults(prev => {
@@ -596,7 +602,7 @@ export default function LadderGamePage() {
                                                         animate={{ scale: 1, rotateY: 0 }}
                                                         className="flex flex-col items-center pointer-events-none"
                                                     >
-                                                        <div className="text-sm font-bold text-neutral-900 dark:text-white whitespace-nowrap px-3 py-1.5 rounded-lg bg-[#FEEBD0] dark:bg-[#8F4B10]/30 border border-[#FDD5A5] dark:border-[#F9954E]/30 shadow-sm">
+                                                        <div className="text-sm font-bold text-white whitespace-nowrap px-3 py-1.5 rounded-lg bg-[#8F4B10]/30 border border-[#F9954E]/30 shadow-sm">
                                                             {results[i]}
                                                         </div>
                                                         {winner && (

@@ -135,20 +135,26 @@ export default function DiceRollPage() {
     const isDark = mounted && theme === "dark";
 
     return (
-        <main className="min-h-screen bg-neutral-50 dark:bg-black text-neutral-900 dark:text-white transition-colors duration-500">
-            {/* Header */}
-            <header className="fixed top-0 left-0 w-full h-16 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-neutral-200 dark:border-white/10 z-50 flex items-center justify-between px-6">
-                <Link href="/minigame" className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
-                    <ArrowLeft className="w-5 h-5" />
-                </Link>
-                <h1 className="text-lg font-bold">주사위 굴리기</h1>
-                <div className="w-9" />
-            </header>
+        <main className="relative min-h-screen overflow-hidden bg-[#09090e] text-white">
+            <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(249,149,78,0.07),transparent)]" />
 
-            <div className="pt-2 sm:pt-4 pb-8 sm:pb-12 px-4 max-w-3xl mx-auto">
+            <div className="relative pt-5 pb-8 sm:pb-12 px-4 max-w-3xl mx-auto">
+                {/* Header */}
+                <header className="flex items-center justify-between mb-6">
+                    <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-500 hover:text-white transition-colors">
+                        <ArrowLeft className="w-4 h-4" />
+                        미니게임
+                    </Link>
+                    <h1 className="text-[15px] font-extrabold tracking-tight text-white">🎲 주사위 굴리기</h1>
+                    <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                        <div className="text-[9px] uppercase tracking-widest text-neutral-500">DICE</div>
+                        <div className="text-sm font-bold text-white tabular-nums">{diceCount}</div>
+                    </div>
+                </header>
+
                 <div className="animate-fade-in">
                     {/* Game Card */}
-                    <div className="bg-white dark:bg-zinc-900 rounded-3xl p-8 md:p-12 shadow-xl shadow-neutral-200/50 dark:shadow-none border border-neutral-100 dark:border-white/5">
+                    <div className="rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-8 md:p-12">
 
                         {/* Setup Screen */}
                         {gameState === "SETUP" && (
@@ -157,27 +163,27 @@ export default function DiceRollPage() {
                                 animate={{ opacity: 1, y: 0 }}
                             >
                                 <div className="text-center mb-8">
-                                    <Dices className="w-16 h-16 mx-auto mb-4 text-red-500" />
-                                    <h2 className="text-2xl font-bold mb-2">주사위 개수 선택</h2>
-                                    <p className="text-neutral-500 dark:text-zinc-400">
-                                        굴릴 주사위 개수를 정하세요 (1-6개)
+                                    <Dices className="w-16 h-16 mx-auto mb-4 text-[#F9954E]" />
+                                    <h2 className="text-2xl font-extrabold tracking-tight mb-2">주사위 개수 선택</h2>
+                                    <p className="text-neutral-400">
+                                        굴릴 주사위 개수를 정하세요 (1~6개)
                                     </p>
                                 </div>
 
                                 <div className="flex items-center justify-center gap-6 mb-10">
                                     <button
                                         onClick={() => handleDiceCountChange(-1)}
-                                        className="w-12 h-12 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center hover:bg-neutral-200 dark:hover:bg-zinc-700 transition-colors"
+                                        className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 flex items-center justify-center hover:bg-white/[0.1] transition-colors"
                                     >
                                         <Minus className="w-5 h-5" />
                                     </button>
                                     <div className="text-center w-24">
-                                        <span className="text-5xl font-bold text-red-500">{diceCount}</span>
-                                        <span className="text-sm text-neutral-400 block mt-1">개</span>
+                                        <span className="text-5xl font-extrabold tracking-tight text-[#F9954E] tabular-nums">{diceCount}</span>
+                                        <span className="text-sm text-neutral-500 block mt-1">개</span>
                                     </div>
                                     <button
                                         onClick={() => handleDiceCountChange(1)}
-                                        className="w-12 h-12 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center hover:bg-neutral-200 dark:hover:bg-zinc-700 transition-colors"
+                                        className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 flex items-center justify-center hover:bg-white/[0.1] transition-colors"
                                     >
                                         <Plus className="w-5 h-5" />
                                     </button>
@@ -185,7 +191,7 @@ export default function DiceRollPage() {
 
                                 <button
                                     onClick={rollDice}
-                                    className="w-full py-4 bg-red-500 hover:bg-red-600 active:scale-[0.98] text-white rounded-2xl font-bold text-lg shadow-lg shadow-red-500/20 transition-all flex items-center justify-center gap-2"
+                                    className="w-full py-4 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold text-lg shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                                 >
                                     <Play className="w-5 h-5 fill-current" />
                                     주사위 굴리기
@@ -216,16 +222,16 @@ export default function DiceRollPage() {
                                             animate={{ opacity: 1, scale: 1 }}
                                             className="text-center mb-8"
                                         >
-                                            <div className="bg-gradient-to-br from-red-50 to-[#FFF5EB] dark:from-red-900/20 dark:to-[#8F4B10]/20 rounded-2xl p-8 mb-6">
-                                                <div className="text-sm text-neutral-600 dark:text-zinc-400 mb-2">
+                                            <div className="rounded-2xl bg-white/[0.04] border border-white/10 p-8 mb-6">
+                                                <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-2">
                                                     합계
                                                 </div>
-                                                <div className="text-6xl font-bold text-red-500 mb-2">
+                                                <div className="text-6xl font-black text-[#F9954E] tabular-nums mb-2">
                                                     {totalSum}
                                                 </div>
-                                                <div className="text-sm text-neutral-500 dark:text-zinc-400">
+                                                <div className="text-sm text-neutral-400">
                                                     평균:{" "}
-                                                    <span className="font-bold">
+                                                    <span className="font-bold text-neutral-200 tabular-nums">
                                                         {(totalSum / diceCount).toFixed(1)}
                                                     </span>
                                                 </div>
@@ -236,9 +242,9 @@ export default function DiceRollPage() {
                                                 <motion.div
                                                     initial={{ opacity: 0, y: -10 }}
                                                     animate={{ opacity: 1, y: 0 }}
-                                                    className="mb-4 p-4 bg-yellow-100 dark:bg-yellow-900/30 rounded-xl"
+                                                    className="mb-4 p-4 rounded-xl bg-[#F9954E]/10 border border-[#F9954E]/20"
                                                 >
-                                                    <p className="text-lg font-bold text-yellow-700 dark:text-yellow-400">
+                                                    <p className="text-lg font-bold text-[#F9954E]">
                                                         🎉 모든 주사위가 같은 숫자!
                                                     </p>
                                                 </motion.div>
@@ -248,10 +254,10 @@ export default function DiceRollPage() {
                                                 <motion.div
                                                     initial={{ opacity: 0, y: -10 }}
                                                     animate={{ opacity: 1, y: 0 }}
-                                                    className="mb-4 p-4 bg-purple-100 dark:bg-purple-900/30 rounded-xl"
+                                                    className="mb-4 p-4 rounded-xl bg-white/[0.06] border border-white/10"
                                                 >
-                                                    <p className="text-lg font-bold text-purple-700 dark:text-purple-400">
-                                                        🔥 전부 6! 최고점!
+                                                    <p className="text-lg font-bold text-white">
+                                                        🔥 전부 6! 최고의 행운!
                                                     </p>
                                                 </motion.div>
                                             )}
@@ -260,9 +266,9 @@ export default function DiceRollPage() {
                                                 <motion.div
                                                     initial={{ opacity: 0, y: -10 }}
                                                     animate={{ opacity: 1, y: 0 }}
-                                                    className="mb-4 p-4 bg-blue-100 dark:bg-blue-900/30 rounded-xl"
+                                                    className="mb-4 p-4 bg-blue-500/15 rounded-xl"
                                                 >
-                                                    <p className="text-lg font-bold text-blue-700 dark:text-blue-400">
+                                                    <p className="text-lg font-bold text-blue-400">
                                                         😅 전부 1! 재도전!
                                                     </p>
                                                 </motion.div>
@@ -283,7 +289,7 @@ export default function DiceRollPage() {
                                         </button>
                                         <button
                                             onClick={resetGame}
-                                            className="px-6 py-4 bg-neutral-200 dark:bg-zinc-800 hover:bg-neutral-300 dark:hover:bg-zinc-700 rounded-2xl font-bold transition-colors"
+                                            className="px-6 py-4 bg-white/[0.06] border border-white/10 hover:bg-white/[0.12] text-neutral-200 rounded-2xl font-bold transition-colors"
                                         >
                                             설정
                                         </button>

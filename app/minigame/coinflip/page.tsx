@@ -79,33 +79,39 @@ export default function CoinFlipPage() {
     const isDark = mounted && theme === "dark";
 
     return (
-        <main className="min-h-screen bg-neutral-50 dark:bg-black text-neutral-900 dark:text-white transition-colors duration-500">
+        <main className="relative min-h-screen overflow-hidden bg-[#09090e] text-white">
+            <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(249,149,78,0.07),transparent)]" />
+
             {/* Header */}
-            <header className="fixed top-0 left-0 w-full h-16 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-neutral-200 dark:border-white/10 z-50 flex items-center justify-between px-6">
-                <Link href="/minigame" className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
-                    <ArrowLeft className="w-5 h-5" />
+            <header className="relative z-10 max-w-2xl mx-auto flex items-center justify-between px-4 pt-5 pb-4">
+                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-500 hover:text-white transition-colors">
+                    <ArrowLeft className="w-4 h-4" />
+                    미니게임
                 </Link>
-                <h1 className="text-lg font-bold">동전 던지기</h1>
-                <div className="w-9" />
+                <h1 className="text-[15px] font-extrabold tracking-tight text-white">🪙 동전 던지기</h1>
+                <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                    <div className="text-[9px] uppercase tracking-widest text-neutral-500">WINS</div>
+                    <div className="text-sm font-bold text-white tabular-nums">{history.filter(h => h.won).length}</div>
+                </div>
             </header>
 
-            <div className="pt-2 sm:pt-4 pb-8 sm:pb-12 px-4 max-w-2xl mx-auto">
+            <div className="relative z-10 pt-1 sm:pt-2 pb-8 sm:pb-12 px-4 max-w-2xl mx-auto">
                 <div className="animate-fade-in">
                     {/* Game Card */}
-                    <div className="bg-white dark:bg-zinc-900 rounded-3xl p-8 md:p-12 shadow-xl shadow-neutral-200/50 dark:shadow-none border border-neutral-100 dark:border-white/5">
+                    <div className="rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-8 md:p-12">
 
                         {/* Stats */}
                         <div className="flex items-center justify-center gap-8 mb-8">
                             <div className="text-center">
-                                <div className="text-3xl font-bold text-[#F9954E]">{flipCount}</div>
-                                <div className="text-sm text-neutral-500 dark:text-zinc-400">총 던진 횟수</div>
+                                <div className="text-3xl font-extrabold text-[#F9954E] tabular-nums">{flipCount}</div>
+                                <div className="mt-1 text-[10px] uppercase tracking-widest text-neutral-500">총 던진 횟수</div>
                             </div>
-                            <div className="h-12 w-px bg-neutral-200 dark:bg-zinc-700" />
+                            <div className="h-12 w-px bg-white/10" />
                             <div className="text-center">
-                                <div className="text-3xl font-bold text-green-500">
+                                <div className="text-3xl font-extrabold text-white tabular-nums">
                                     {history.filter(h => h.won).length}
                                 </div>
-                                <div className="text-sm text-neutral-500 dark:text-zinc-400">승리</div>
+                                <div className="mt-1 text-[10px] uppercase tracking-widest text-neutral-500">승리</div>
                             </div>
                         </div>
 
@@ -121,8 +127,8 @@ export default function CoinFlipPage() {
                                     <button
                                         onClick={() => setSelectedBet("앞면")}
                                         className={`p-6 rounded-2xl border-2 transition-all font-bold text-lg ${selectedBet === "앞면"
-                                                ? "border-yellow-500 bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 scale-105"
-                                                : "border-neutral-200 dark:border-zinc-700 hover:border-yellow-400"
+                                                ? "border-yellow-500 bg-yellow-500/10 text-yellow-400 scale-105"
+                                                : "border-white/10 hover:border-yellow-400"
                                             }`}
                                     >
                                         ⭐ 앞면
@@ -130,8 +136,8 @@ export default function CoinFlipPage() {
                                     <button
                                         onClick={() => setSelectedBet("뒷면")}
                                         className={`p-6 rounded-2xl border-2 transition-all font-bold text-lg ${selectedBet === "뒷면"
-                                                ? "border-yellow-500 bg-yellow-500/10 text-yellow-600 dark:text-yellow-400 scale-105"
-                                                : "border-neutral-200 dark:border-zinc-700 hover:border-yellow-400"
+                                                ? "border-yellow-500 bg-yellow-500/10 text-yellow-400 scale-105"
+                                                : "border-white/10 hover:border-yellow-400"
                                             }`}
                                     >
                                         🌙 뒷면
@@ -230,7 +236,7 @@ export default function CoinFlipPage() {
 
                         {/* History */}
                         {history.length > 0 && (
-                            <div className="mt-8 pt-8 border-t border-neutral-200 dark:border-zinc-700">
+                            <div className="mt-8 pt-8 border-t border-white/10">
                                 <h3 className="font-bold mb-4 text-center">최근 기록</h3>
                                 <div className="grid gap-2 max-h-40 overflow-y-auto">
                                     {history
@@ -240,7 +246,7 @@ export default function CoinFlipPage() {
                                         .map((h, i) => (
                                             <div
                                                 key={flipCount - i}
-                                                className="flex items-center justify-between p-3 bg-neutral-50 dark:bg-zinc-800 rounded-lg text-sm"
+                                                className="flex items-center justify-between p-3 bg-white/[0.04] border border-white/10 rounded-lg text-sm"
                                             >
                                                 <span>
                                                     베팅: <strong>{h.bet}</strong>

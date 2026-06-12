@@ -125,7 +125,7 @@ export default function SnakeGame() {
         if (!ctx) return;
 
         // Clear
-        ctx.fillStyle = "#171717"; // Neutral-900
+        ctx.fillStyle = "#0d0d13"; // Dark arcade base (#09090e 계열)
         ctx.fillRect(0, 0, CANVAS_SIZE, CANVAS_SIZE);
 
         // Draw Food
@@ -190,24 +190,33 @@ export default function SnakeGame() {
     }, []);
 
     return (
-        <div className="min-h-[100dvh] w-full bg-slate-900 text-white font-sans selection:bg-green-500/30 flex flex-col items-center justify-center p-4 overflow-hidden touch-none">
+        <div className="relative min-h-screen w-full overflow-hidden bg-[#09090e] text-white font-sans selection:bg-[#F9954E]/30 flex flex-col items-center justify-center p-4 touch-none">
+            <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(249,149,78,0.07),transparent)]" />
 
             <header className="w-full max-w-md flex items-center justify-between mb-6">
-                <Link href="/minigame" className="p-2 hover:bg-slate-800 rounded-full transition-colors">
-                    <ArrowLeft className="w-6 h-6 text-slate-400" />
+                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-500 hover:text-white transition-colors">
+                    <ArrowLeft className="w-4 h-4" />
+                    미니게임
                 </Link>
-                <div className="font-bold text-xl text-green-500 tracking-wider">SNAKE</div>
-                <div className="w-10 h-10 flex items-center justify-center bg-slate-800 rounded-full border border-slate-700">
-                    <Trophy className="w-5 h-5 text-green-500" />
+                <div className="text-[15px] font-extrabold tracking-tight text-white">🐍 스네이크</div>
+                <div className="flex items-center gap-2">
+                    <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                        <div className="text-[9px] uppercase tracking-widest text-neutral-500">SCORE</div>
+                        <div className="text-sm font-bold text-white tabular-nums">{score}</div>
+                    </div>
+                    <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                        <div className="flex items-center justify-center gap-1 text-[9px] uppercase tracking-widest text-neutral-500"><Trophy className="w-2.5 h-2.5" />BEST</div>
+                        <div className="text-sm font-bold text-[#F9954E] tabular-nums">{highScore}</div>
+                    </div>
                 </div>
             </header>
 
-            <div className="relative border-4 border-slate-700 rounded-lg shadow-2xl overflow-hidden bg-black">
+            <div className="relative rounded-2xl bg-white/[0.04] border border-white/10 p-2 shadow-2xl overflow-hidden">
                 <canvas
                     ref={canvasRef}
                     width={CANVAS_SIZE}
                     height={CANVAS_SIZE}
-                    className="block shadow-2xl rounded-lg border-4 border-slate-700"
+                    className="block rounded-xl"
                     style={{ width: '100%', maxWidth: `${CANVAS_SIZE}px`, height: 'auto', aspectRatio: '1' }}
                     onTouchStart={(e) => { touchStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY }; }}
                     onTouchEnd={(e) => {
@@ -225,29 +234,33 @@ export default function SnakeGame() {
                 />
 
                 {gameState === "READY" && (
-                    <div className="absolute inset-0 bg-black/70 flex flex-col items-center justify-center">
-                        <h1 className="text-4xl font-bold text-green-500 mb-6 font-mono animate-pulse">SNAKE</h1>
+                    <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex flex-col items-center justify-center">
+                        <h1 className="text-3xl font-extrabold tracking-tight text-white mb-2">🐍 스네이크</h1>
+                        <p className="text-sm text-neutral-400 mb-6">스와이프 또는 방향키로 조작하세요</p>
                         <button
                             onClick={initGame}
-                            className="bg-green-600 hover:bg-green-500 text-white px-8 py-3 rounded-full font-bold text-lg flex items-center gap-2 transform transition-transform active:scale-95 shadow-lg shadow-green-900/50"
+                            className="rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all px-8 py-3 flex items-center gap-2"
                         >
-                            <Play className="w-6 h-6 fill-current" />
-                            START
+                            <Play className="w-5 h-5 fill-current" />
+                            게임 시작
                         </button>
                     </div>
                 )}
 
                 {gameState === "GAME_OVER" && (
-                    <div className="absolute inset-0 bg-black/80 flex flex-col items-center justify-center z-10">
-                        <h2 className="text-3xl font-bold text-red-500 mb-2">GAME OVER</h2>
-                        <div className="text-xl text-white mb-6">Score: {score}</div>
-                        <button
-                            onClick={initGame}
-                            className="bg-white text-black px-6 py-2 rounded-full font-bold flex items-center gap-2 hover:bg-slate-200"
-                        >
-                            <RefreshCw className="w-5 h-5" />
-                            Try Again
-                        </button>
+                    <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex flex-col items-center justify-center z-10 p-4">
+                        <div className="rounded-3xl bg-[#101016] border border-white/10 p-8 flex flex-col items-center text-center">
+                            <h2 className="text-xl font-extrabold tracking-tight text-white mb-4">게임 오버</h2>
+                            <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">SCORE</div>
+                            <div className="text-4xl font-black text-[#F9954E] tabular-nums mb-6">{score}</div>
+                            <button
+                                onClick={initGame}
+                                className="rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all px-8 py-3 flex items-center gap-2"
+                            >
+                                <RefreshCw className="w-4 h-4" />
+                                다시하기
+                            </button>
+                        </div>
                     </div>
                 )}
             </div>
@@ -256,23 +269,23 @@ export default function SnakeGame() {
             <div className="grid grid-cols-3 gap-2 mt-6 w-[200px]">
                 <div />
                 <button
-                    className="bg-slate-800 p-4 rounded-lg active:bg-slate-700 flex justify-center"
+                    className="rounded-xl bg-white/[0.06] border border-white/10 p-4 active:bg-white/[0.12] transition-colors flex justify-center"
                     onTouchStart={(e) => { e.preventDefault(); if (direction.current.y === 0) nextDirection.current = { x: 0, y: -1 }; }}
                     onMouseDown={(e) => { e.preventDefault(); if (direction.current.y === 0) nextDirection.current = { x: 0, y: -1 }; }}
                 >⬆️</button>
                 <div />
                 <button
-                    className="bg-slate-800 p-4 rounded-lg active:bg-slate-700 flex justify-center"
+                    className="rounded-xl bg-white/[0.06] border border-white/10 p-4 active:bg-white/[0.12] transition-colors flex justify-center"
                     onTouchStart={(e) => { e.preventDefault(); if (direction.current.x === 0) nextDirection.current = { x: -1, y: 0 }; }}
                     onMouseDown={(e) => { e.preventDefault(); if (direction.current.x === 0) nextDirection.current = { x: -1, y: 0 }; }}
                 >⬅️</button>
                 <button
-                    className="bg-slate-800 p-4 rounded-lg active:bg-slate-700 flex justify-center"
+                    className="rounded-xl bg-white/[0.06] border border-white/10 p-4 active:bg-white/[0.12] transition-colors flex justify-center"
                     onTouchStart={(e) => { e.preventDefault(); if (direction.current.y === 0) nextDirection.current = { x: 0, y: 1 }; }}
                     onMouseDown={(e) => { e.preventDefault(); if (direction.current.y === 0) nextDirection.current = { x: 0, y: 1 }; }}
                 >⬇️</button>
                 <button
-                    className="bg-slate-800 p-4 rounded-lg active:bg-slate-700 flex justify-center"
+                    className="rounded-xl bg-white/[0.06] border border-white/10 p-4 active:bg-white/[0.12] transition-colors flex justify-center"
                     onTouchStart={(e) => { e.preventDefault(); if (direction.current.x === 0) nextDirection.current = { x: 1, y: 0 }; }}
                     onMouseDown={(e) => { e.preventDefault(); if (direction.current.x === 0) nextDirection.current = { x: 1, y: 0 }; }}
                 >➡️</button>

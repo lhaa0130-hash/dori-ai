@@ -240,7 +240,7 @@ export default function AnimalMergePage() {
   /* ── 렌더링 ── */
   const draw = useCallback((ctx: CanvasRenderingContext2D) => {
     // 배경
-    ctx.fillStyle = "#0f1117";
+    ctx.fillStyle = "#0c0c13";
     ctx.fillRect(0, 0, GW, GH);
 
     // 벽 + 바닥
@@ -410,32 +410,34 @@ export default function AnimalMergePage() {
 
   /* ── JSX ── */
   return (
-    <main className="w-full min-h-screen bg-[#0f1117] text-white flex flex-col items-center pb-10">
+    <main className="relative overflow-hidden w-full min-h-screen bg-[#09090e] text-white flex flex-col items-center pb-10">
+      {/* 상단 오렌지 글로우 */}
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(249,149,78,0.07),transparent)]" />
       {/* 1분 플레이 보상 토스트 */}
       <PlaytimeRewardToast />
-      <div className="w-full max-w-sm px-3 pt-4">
+      <div className="relative w-full max-w-sm px-3 pt-4">
 
         {/* 상단 바 */}
         <div className="flex items-center justify-between mb-3">
           <Link
             href="/minigame"
-            className="flex items-center gap-1 text-sm text-neutral-400 hover:text-white transition-colors"
+            className="inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-500 hover:text-white transition-colors"
           >
             <ArrowLeft className="w-4 h-4" />
             게임 목록
           </Link>
-          <div className="flex items-center gap-3">
-            <div className="text-center">
-              <div className="text-[10px] text-yellow-500/70">최고점</div>
-              <div className="text-sm font-bold text-yellow-400">{bestScore.toLocaleString()}</div>
+          <div className="flex items-center gap-2">
+            <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+              <div className="text-[9px] uppercase tracking-widest text-neutral-500">BEST</div>
+              <div className="text-sm font-bold text-white tabular-nums">{bestScore.toLocaleString()}</div>
             </div>
-            <div className="text-center">
-              <div className="text-[10px] text-neutral-500">점수</div>
-              <div className="text-sm font-bold text-white">{score.toLocaleString()}</div>
+            <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+              <div className="text-[9px] uppercase tracking-widest text-neutral-500">SCORE</div>
+              <div className="text-sm font-bold text-white tabular-nums">{score.toLocaleString()}</div>
             </div>
             <button
               onClick={restart}
-              className="p-2 rounded-lg bg-neutral-800 hover:bg-neutral-700 transition-colors"
+              className="p-2.5 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] transition-colors"
               aria-label="재시작"
             >
               <RotateCcw className="w-4 h-4" />
@@ -445,18 +447,18 @@ export default function AnimalMergePage() {
 
         {/* 제목 + 다음 동물 */}
         <div className="flex items-center justify-between mb-2.5">
-          <h1 className="text-sm font-bold text-white">🐾 동물 합치기</h1>
-          <div className="flex items-center gap-2 bg-neutral-800/80 rounded-xl px-3 py-1.5">
-            <span className="text-[11px] text-neutral-400">다음</span>
+          <h1 className="text-[15px] font-extrabold tracking-tight text-white">🐾 동물 합치기</h1>
+          <div className="flex items-center gap-2 rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5">
+            <span className="text-[10px] uppercase tracking-widest text-neutral-500">다음</span>
             <span className="text-xl leading-none">{ANIMALS[nextLv]?.emoji}</span>
-            <span className="text-[11px] text-neutral-300">{ANIMALS[nextLv]?.name}</span>
+            <span className="text-[11px] text-neutral-400">{ANIMALS[nextLv]?.name}</span>
           </div>
         </div>
 
         {/* 캔버스 */}
         <div
-          className="relative w-full rounded-2xl overflow-hidden"
-          style={{ aspectRatio: `${GW}/${GH}`, border: "1.5px solid rgba(255,255,255,0.08)" }}
+          className="relative w-full rounded-2xl overflow-hidden bg-white/[0.04] border border-white/10"
+          style={{ aspectRatio: `${GW}/${GH}` }}
         >
           <canvas
             ref={canvasRef}
@@ -472,28 +474,31 @@ export default function AnimalMergePage() {
 
           {/* 게임 오버 오버레이 */}
           {gameOver && (
-            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/75 backdrop-blur-[2px]">
-              <div className="text-5xl mb-3">😢</div>
-              <div className="text-xl font-bold mb-1">게임 오버!</div>
-              <div className="text-3xl font-black text-yellow-400 mb-1">{score.toLocaleString()}점</div>
-              {serverBest && myRank >= 1 && myRank <= 5 ? (
-                <div className="text-sm font-bold text-yellow-300 mb-2">🏆 명예의 전당 {myRank}위 등극!</div>
-              ) : serverBest ? (
-                <div className="text-sm font-bold text-yellow-300 mb-2">🎉 개인 신기록 갱신!</div>
-              ) : score > 0 && score >= bestScore ? (
-                <div className="text-sm text-yellow-300 mb-2">🏆 신기록 달성!</div>
-              ) : null}
-              {score > 0 && !session?.user?.email && (
-                <Link href="/login" className="text-[11px] text-neutral-300 underline underline-offset-2 mb-3 hover:text-white">
-                  로그인하면 명예의 전당에 기록을 남길 수 있어요
-                </Link>
-              )}
-              <button
-                onClick={restart}
-                className="mt-2 px-10 py-3 bg-[#F9954E] hover:bg-[#E8832E] text-white rounded-2xl font-bold text-base transition-colors shadow-lg"
-              >
-                다시 시작
-              </button>
+            <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm px-4">
+              <div className="w-full max-w-[280px] rounded-3xl bg-[#101016] border border-white/10 p-8 flex flex-col items-center text-center">
+                <div className="text-5xl mb-3">😢</div>
+                <div className="text-lg font-extrabold tracking-tight mb-3">게임 오버!</div>
+                <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">SCORE</div>
+                <div className="text-4xl font-black text-[#F9954E] tabular-nums mb-2">{score.toLocaleString()}</div>
+                {serverBest && myRank >= 1 && myRank <= 5 ? (
+                  <div className="text-sm font-bold text-[#F9954E] mb-2">🏆 명예의 전당 {myRank}위 등극!</div>
+                ) : serverBest ? (
+                  <div className="text-sm font-bold text-[#F9954E] mb-2">🎉 개인 신기록 갱신!</div>
+                ) : score > 0 && score >= bestScore ? (
+                  <div className="text-sm text-[#F9954E] mb-2">🏆 신기록 달성!</div>
+                ) : null}
+                {score > 0 && !session?.user?.email && (
+                  <Link href="/login" className="text-[11px] text-neutral-400 underline underline-offset-2 mb-3 hover:text-white transition-colors">
+                    로그인하면 명예의 전당에 기록을 남길 수 있어요
+                  </Link>
+                )}
+                <button
+                  onClick={restart}
+                  className="mt-2 px-8 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all"
+                >
+                  다시 시작
+                </button>
+              </div>
             </div>
           )}
         </div>

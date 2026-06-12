@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { ArrowLeft, RefreshCw, Trophy, ImageIcon, HelpCircle } from "lucide-react";
+import { ArrowLeft, RefreshCw, Trophy, HelpCircle } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
@@ -134,40 +134,40 @@ export default function SlidePuzzleGame() {
     };
 
     return (
-        <div className="h-screen w-full bg-neutral-900 text-white font-sans selection:bg-orange-500/30 flex flex-col items-center justify-center p-4 overflow-hidden touch-none">
+        <div className="relative min-h-screen w-full overflow-hidden bg-[#09090e] text-white font-sans selection:bg-orange-500/30 flex flex-col items-center p-4">
+            <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(249,149,78,0.07),transparent)]" />
 
             {/* Header */}
-            <header className="w-full max-w-md flex items-center justify-between mb-6">
-                <Link href="/minigame" className="p-2 hover:bg-neutral-800 rounded-full transition-colors">
-                    <ArrowLeft className="w-6 h-6 text-neutral-400" />
+            <header className="relative w-full max-w-md flex items-center justify-between gap-3 pt-2 mb-6">
+                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-500 hover:text-white transition-colors">
+                    <ArrowLeft className="w-4 h-4" />
+                    미니게임
                 </Link>
-                <div className="font-bold text-xl text-orange-500 tracking-wider">PUZZLE</div>
-                <div className="w-10 h-10 flex items-center justify-center bg-neutral-800 rounded-full border border-neutral-700">
-                    <ImageIcon className="w-5 h-5 text-orange-500" />
+                <div className="text-[15px] font-extrabold tracking-tight text-white">🧩 슬라이드 퍼즐</div>
+                <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                    <div className="text-[9px] uppercase tracking-widest text-neutral-500">MOVES</div>
+                    <div className="text-sm font-bold text-white tabular-nums">{moves}</div>
                 </div>
             </header>
 
-            <div className="flex flex-col items-center gap-6">
+            <div className="relative flex flex-col items-center gap-6">
 
                 {/* Stats */}
-                <div className="flex gap-4 mb-2">
-                    <div className="bg-neutral-800 px-4 py-2 rounded-full border border-neutral-700 font-mono text-sm">
-                        Moves: <span className="text-yellow-500 font-bold ml-1">{moves}</span>
-                    </div>
+                <div className="flex gap-4">
                     <button
                         onClick={() => setShowNumbers(!showNumbers)}
-                        className={`bg-neutral-800 px-3 py-2 rounded-full border border-neutral-700 hover:bg-neutral-700 transition-colors ${showNumbers ? "text-orange-400 border-orange-400/50" : "text-neutral-400"}`}
+                        className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-[11px] font-semibold transition-colors ${showNumbers ? "bg-[#F9954E]/10 border-[#F9954E]/40 text-[#F9954E]" : "bg-white/[0.05] border-white/10 text-neutral-400 hover:bg-white/[0.1] hover:text-neutral-200"}`}
                     >
-                        <HelpCircle className="w-4 h-4" />
+                        <HelpCircle className="w-4 h-4" /> 번호 힌트
                     </button>
                 </div>
 
                 {/* Board */}
                 <div
-                    className="relative bg-neutral-800 p-2 rounded-2xl border-4 border-neutral-700 shadow-2xl"
+                    className="relative rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-2 shadow-2xl touch-none"
                     style={{ width: "340px", height: "340px" }}
                 >
-                    <div className="relative w-full h-full bg-black rounded-xl overflow-hidden">
+                    <div className="relative w-full h-full bg-[#09090e] rounded-xl overflow-hidden">
                         {tiles.map((tile) => {
                             // Skip rendering blank tile if game is playing
                             if (tile.id === TILE_COUNT - 1 && !isSolved) return null;
@@ -193,7 +193,7 @@ export default function SlidePuzzleGame() {
                                 >
                                     <div className="w-full h-full p-0.5">
                                         <div
-                                            className="w-full h-full rounded-md shadow-sm relative overflow-hidden bg-neutral-700 border border-white/10"
+                                            className="w-full h-full rounded-md shadow-sm relative overflow-hidden bg-white/[0.06] border border-white/10"
                                             style={{
                                                 backgroundImage: `url(${DEFAULT_IMAGE})`,
                                                 backgroundSize: "400% 400%", // based on 4x4
@@ -201,7 +201,7 @@ export default function SlidePuzzleGame() {
                                             }}
                                         >
                                             {showNumbers && (
-                                                <div className="absolute top-1 left-1 bg-black/50 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold">
+                                                <div className="absolute top-1 left-1 bg-black/60 border border-white/10 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold tabular-nums">
                                                     {tile.correctPos + 1}
                                                 </div>
                                             )}
@@ -214,21 +214,22 @@ export default function SlidePuzzleGame() {
 
                     {/* Victory Overlay */}
                     {isSolved && (
-                        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/60 backdrop-blur-sm rounded-2xl">
+                        <div className="absolute inset-0 z-10 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm rounded-2xl">
                             <motion.div
                                 initial={{ scale: 0 }}
                                 animate={{ scale: 1 }}
-                                className="text-center"
+                                className="rounded-3xl bg-[#101016] border border-white/10 p-8 text-center"
                             >
-                                <Trophy className="w-16 h-16 text-yellow-500 mx-auto mb-4 drop-shadow-lg" />
-                                <h2 className="text-3xl font-bold text-white mb-2">SOLVED!</h2>
-                                <p className="text-neutral-300 mb-6 font-mono">Moves: {moves}</p>
+                                <Trophy className="w-12 h-12 text-[#F9954E] mx-auto mb-3 drop-shadow-lg" />
+                                <h2 className="text-xl font-extrabold tracking-tight text-white mb-4">퍼즐 완성!</h2>
+                                <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">MOVES</div>
+                                <div className="text-4xl font-black text-[#F9954E] tabular-nums mb-6">{moves}</div>
 
                                 <button
                                     onClick={initGame}
-                                    className="bg-orange-600 hover:bg-orange-500 text-white px-8 py-3 rounded-full font-bold shadow-lg transition-transform active:scale-95 flex items-center gap-2 mx-auto"
+                                    className="rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white px-8 py-3 font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all flex items-center gap-2 mx-auto"
                                 >
-                                    <RefreshCw className="w-5 h-5" /> Play Again
+                                    <RefreshCw className="w-5 h-5" /> 다시 하기
                                 </button>
                             </motion.div>
                         </div>
@@ -237,15 +238,15 @@ export default function SlidePuzzleGame() {
 
                 <button
                     onClick={initGame}
-                    className="text-neutral-500 text-sm hover:text-white flex items-center gap-2 mt-4"
+                    className="inline-flex items-center gap-2 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] font-semibold transition-colors px-5 py-3 text-sm"
                 >
-                    <RefreshCw className="w-4 h-4" /> Restart Puzzle
+                    <RefreshCw className="w-4 h-4" /> 다시 섞기
                 </button>
 
             </div>
 
             {/* 명예의 전당 (글로벌 TOP 5 리더보드) */}
-            <div className="w-full max-w-md mx-auto mt-4 px-4">
+            <div className="relative w-full max-w-md mx-auto mt-6 px-4 pb-8">
                 <GameLeaderboard game="puzzle" title="명예의 전당 TOP 5" unit="무브" order="asc" tone="dark" />
             </div>
         </div>

@@ -47,9 +47,9 @@ export default function MinigamePage() {
             <Link
               key={game.id}
               href={game.href}
-              className="flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 shadow-sm active:opacity-70 transition-opacity"
+              className="group flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 shadow-sm transition-all duration-200 hover:border-[#F9954E]/40 hover:shadow-md hover:-translate-y-0.5 active:opacity-70"
             >
-              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-neutral-50 dark:bg-zinc-900 text-neutral-500 dark:text-neutral-400 flex items-center justify-center">
+              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-neutral-50 dark:bg-zinc-900 text-neutral-500 dark:text-neutral-400 flex items-center justify-center transition-colors group-hover:bg-[#F9954E]/10 group-hover:text-[#F9954E]">
                 {game.icon}
               </div>
               <div className="flex-1 min-w-0">

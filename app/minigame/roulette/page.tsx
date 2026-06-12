@@ -248,41 +248,47 @@ export default function RoulettePage() {
     const isDark = mounted && theme === "dark";
 
     return (
-        <main className="min-h-screen bg-neutral-50 dark:bg-black text-neutral-900 dark:text-white transition-colors duration-500">
+        <main className="relative min-h-screen overflow-hidden bg-[#09090e] text-white">
+            <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(249,149,78,0.07),transparent)]" />
+
             {/* Header */}
-            <header className="fixed top-0 left-0 w-full h-16 bg-white/80 dark:bg-black/80 backdrop-blur-md border-b border-neutral-200 dark:border-white/10 z-50 flex items-center justify-between px-6">
-                <Link href="/minigame" className="p-2 rounded-full hover:bg-neutral-100 dark:hover:bg-white/10 transition-colors">
-                    <ArrowLeft className="w-5 h-5" />
+            <header className="relative z-10 max-w-4xl mx-auto h-16 flex items-center justify-between px-4 sm:px-6">
+                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-500 hover:text-white transition-colors">
+                    <ArrowLeft className="w-4 h-4" />
+                    미니게임
                 </Link>
-                <h1 className="text-lg font-bold">룰렛</h1>
-                <div className="w-9" />
+                <h1 className="text-[15px] font-extrabold tracking-tight text-white">🎯 룰렛</h1>
+                <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                    <div className="text-[9px] uppercase tracking-widest text-neutral-500">ITEMS</div>
+                    <div className="text-sm font-bold text-white tabular-nums">{items.length}</div>
+                </div>
             </header>
 
-            <div className="pt-2 sm:pt-4 pb-8 sm:pb-12 px-4 max-w-4xl mx-auto">
+            <div className="relative z-10 pt-2 sm:pt-4 pb-8 sm:pb-12 px-4 max-w-4xl mx-auto">
                 {gameState === "SETUP" && (
                     <div className="animate-fade-in space-y-8">
                         {/* Setup Card */}
-                        <div className="bg-white dark:bg-zinc-900 rounded-3xl p-8 shadow-xl shadow-neutral-200/50 dark:shadow-none border border-neutral-100 dark:border-white/5">
+                        <div className="rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-6 sm:p-8">
                             <div className="text-center mb-8">
-                                <h2 className="text-2xl font-bold mb-2">룰렛 설정</h2>
-                                <p className="text-neutral-500 dark:text-zinc-400">항목을 설정하고 행운을 시험해보세요.</p>
+                                <h2 className="text-2xl font-extrabold tracking-tight mb-2">룰렛 설정</h2>
+                                <p className="text-neutral-400">항목을 정하고 행운을 시험해보세요.</p>
                             </div>
 
                             {/* Item Count Control */}
                             <div className="flex items-center justify-center gap-6 mb-10">
                                 <button
                                     onClick={() => handleItemCountChange(-1)}
-                                    className="w-12 h-12 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center hover:bg-neutral-200 dark:hover:bg-zinc-700 transition-colors"
+                                    className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 flex items-center justify-center hover:bg-white/[0.1] transition-colors"
                                 >
                                     <Minus className="w-5 h-5" />
                                 </button>
                                 <div className="text-center w-24">
-                                    <span className="text-4xl font-bold text-[#F9954E]">{itemCount}</span>
-                                    <span className="text-sm text-neutral-400 block mt-1">항목</span>
+                                    <span className="text-4xl font-extrabold tracking-tight text-[#F9954E] tabular-nums">{itemCount}</span>
+                                    <span className="text-[10px] uppercase tracking-widest text-neutral-500 block mt-1">항목 수</span>
                                 </div>
                                 <button
                                     onClick={() => handleItemCountChange(1)}
-                                    className="w-12 h-12 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center hover:bg-neutral-200 dark:hover:bg-zinc-700 transition-colors"
+                                    className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 flex items-center justify-center hover:bg-white/[0.1] transition-colors"
                                 >
                                     <Plus className="w-5 h-5" />
                                 </button>
@@ -293,7 +299,7 @@ export default function RoulettePage() {
                                 {items.map((item, i) => (
                                     <div key={item.id} className="flex items-center gap-3 animate-slide-up" style={{ animationDelay: `${i * 0.05}s` }}>
                                         <div
-                                            className="w-6 h-6 rounded-full flex-shrink-0 shadow-md"
+                                            className="w-6 h-6 rounded-full flex-shrink-0 ring-1 ring-white/20"
                                             style={{ backgroundColor: item.color }}
                                         />
                                         <input
@@ -301,7 +307,7 @@ export default function RoulettePage() {
                                             value={item.name}
                                             onChange={(e) => handleUpdateItemName(i, e.target.value)}
                                             placeholder={`항목 ${i + 1}`}
-                                            className="flex-1 bg-neutral-50 dark:bg-black border border-neutral-200 dark:border-zinc-800 rounded-xl px-4 py-3 focus:outline-none focus:border-[#F9954E] dark:focus:border-[#F9954E] transition-colors"
+                                            className="flex-1 rounded-xl bg-white/[0.04] border border-white/10 px-4 py-3 text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#F9954E]/60 transition-colors"
                                         />
                                     </div>
                                 ))}
@@ -309,7 +315,7 @@ export default function RoulettePage() {
 
                             <button
                                 onClick={startGame}
-                                className="w-full py-4 bg-[#F9954E] hover:bg-[#E8832E] active:scale-[0.98] text-white rounded-2xl font-bold text-lg shadow-lg shadow-[#F9954E]/20 transition-all flex items-center justify-center gap-2"
+                                className="w-full py-4 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold text-lg shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
                             >
                                 <Play className="w-5 h-5 fill-current" />
                                 시작하기
@@ -323,13 +329,13 @@ export default function RoulettePage() {
                         {/* Game Board */}
                         <motion.div
                             animate={boardControls}
-                            className="relative bg-white dark:bg-zinc-900 rounded-[2rem] p-8 md:p-12 shadow-xl border border-neutral-100 dark:border-zinc-800"
+                            className="relative bg-white/[0.04] rounded-[2rem] p-8 md:p-12 shadow-xl border border-white/10"
                         >
                             {/* Controls */}
                             <div className="absolute top-6 right-6 z-10 flex gap-2">
                                 <button
                                     onClick={resetGame}
-                                    className="p-2 rounded-full bg-neutral-100 dark:bg-zinc-800 hover:bg-neutral-200 dark:hover:bg-zinc-700 transition-colors text-neutral-600 dark:text-neutral-400"
+                                    className="p-2 rounded-full bg-white/[0.06] border border-white/10 hover:bg-white/[0.12] transition-colors text-neutral-200"
                                     title="다시 설정"
                                 >
                                     <RefreshCw className="w-5 h-5" />
@@ -437,7 +443,7 @@ export default function RoulettePage() {
                                         initial={{ opacity: 0 }}
                                         animate={{ opacity: 1 }}
                                         transition={{ delay: 0.5 }}
-                                        className="px-8 py-3 bg-neutral-100 dark:bg-zinc-800 hover:bg-neutral-200 dark:hover:bg-zinc-700 text-neutral-900 dark:text-white rounded-full font-bold transition-all"
+                                        className="px-8 py-3 bg-white/[0.06] border border-white/10 hover:bg-white/[0.12] text-neutral-200 rounded-full font-bold transition-all"
                                     >
                                         다시 돌리기
                                     </motion.button>

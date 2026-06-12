@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback, useRef } from "react";
-import { ArrowLeft, RefreshCw, Trophy, Flame } from "lucide-react";
+import { ArrowLeft, RefreshCw, Trophy } from "lucide-react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { submitScore } from "@/lib/leaderboard";
@@ -133,39 +133,37 @@ export default function Match3Game() {
   };
 
   return (
-    <div className="h-screen w-full bg-neutral-900 text-white font-sans flex flex-col items-center justify-center p-4 overflow-hidden touch-none">
+    <div className="relative min-h-screen w-full bg-[#09090e] text-white font-sans flex flex-col items-center justify-center p-4 overflow-hidden touch-none">
+      <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(249,149,78,0.07),transparent)]" />
       <header className="w-full max-w-md flex items-center justify-between mb-4">
-        <Link href="/minigame" className="p-2 hover:bg-neutral-800 rounded-full transition-colors">
-          <ArrowLeft className="w-6 h-6 text-neutral-400" />
+        <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-500 hover:text-white transition-colors">
+          <ArrowLeft className="w-4 h-4" />
+          미니게임
         </Link>
-        <div className="font-bold text-xl text-pink-500 tracking-wider">MATCH 3</div>
-        <div className="w-10 h-10 flex items-center justify-center bg-neutral-800 rounded-full border border-neutral-700">
-          <Flame className="w-5 h-5 text-pink-500" />
+        <div className="text-[15px] font-extrabold tracking-tight text-white">🍒 매치 3</div>
+        <div className="flex items-center gap-2">
+          <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+            <div className="text-[9px] uppercase tracking-widest text-neutral-500">SCORE</div>
+            <div className="text-sm font-bold text-white tabular-nums">{score}</div>
+          </div>
+          <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+            <div className="text-[9px] uppercase tracking-widest text-neutral-500">MOVES</div>
+            <div className={`text-sm font-bold tabular-nums ${moves <= 5 ? "text-red-400 animate-pulse" : "text-white"}`}>{moves}</div>
+          </div>
         </div>
       </header>
-
-      <div className="flex w-full max-w-[360px] items-center justify-between bg-neutral-800 p-3 rounded-xl mb-4 border border-neutral-700">
-        <div className="text-center">
-          <div className="text-xs text-neutral-400 uppercase font-bold">점수</div>
-          <div className="text-2xl font-bold text-yellow-400 font-mono">{score}</div>
-        </div>
-        <div className="text-center">
-          <div className="text-xs text-neutral-400 uppercase font-bold">남은 이동</div>
-          <div className={`text-2xl font-bold font-mono ${moves <= 5 ? "text-red-500 animate-pulse" : "text-white"}`}>{moves}</div>
-        </div>
-      </div>
 
       {!isGameOver ? (
         <div
           style={{ display:"grid", gridTemplateColumns:`repeat(${COLS},1fr)`, width:360, height:360 }}
-          className="bg-neutral-800/50 rounded-xl p-1 border-2 border-neutral-700 shadow-2xl"
+          className="rounded-2xl bg-white/[0.04] border border-white/10 p-1 shadow-2xl"
         >
           {board.map((color, idx) => (
             <div
               key={idx}
               onClick={() => handleClick(idx)}
               className={`flex items-center justify-center cursor-pointer rounded-md m-0.5 transition-all select-none
-                ${selected === idx ? "ring-2 ring-white scale-110 bg-white/20" : "hover:bg-white/10"}`}
+                ${selected === idx ? "ring-2 ring-[#F9954E] scale-110 bg-[#F9954E]/15" : "hover:bg-white/10"}`}
             >
               {color && (
                 <span className="text-xl leading-none" style={{filter:"drop-shadow(0 1px 2px rgba(0,0,0,0.5))"}}>
@@ -176,21 +174,22 @@ export default function Match3Game() {
           ))}
         </div>
       ) : (
-        <div className="w-[360px] h-[360px] flex flex-col items-center justify-center bg-neutral-800 rounded-xl border-2 border-neutral-700 p-6 text-center shadow-2xl">
-          <Trophy className="w-16 h-16 text-yellow-400 mb-4" />
-          <h2 className="text-3xl font-bold mb-2">게임 종료!</h2>
-          <p className="text-neutral-400 mb-4">최종 점수: <span className="text-yellow-400 font-bold">{score}</span></p>
+        <div className="w-[360px] h-[360px] flex flex-col items-center justify-center rounded-3xl bg-[#101016] border border-white/10 p-8 text-center shadow-2xl">
+          <Trophy className="w-14 h-14 text-[#F9954E] mb-4" />
+          <h2 className="text-2xl font-extrabold tracking-tight mb-4">게임 종료!</h2>
+          <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">최종 점수</div>
+          <div className="text-4xl font-black text-[#F9954E] tabular-nums mb-6">{score}</div>
           <button
             onClick={reset}
-            className="bg-pink-600 hover:bg-pink-500 text-white px-8 py-3 rounded-full font-bold shadow-lg transition-transform active:scale-95 flex items-center gap-2"
+            className="rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all px-8 py-3 flex items-center gap-2"
           >
             <RefreshCw className="w-5 h-5" /> 다시 하기
           </button>
         </div>
       )}
 
-      <p className="mt-4 text-neutral-500 text-xs text-center">
-        과일을 클릭해서 이웃한 과일과 교체
+      <p className="mt-4 text-neutral-400 text-xs text-center">
+        과일을 눌러 옆에 있는 과일과 자리를 바꿔보세요
       </p>
 
       <div className="w-full max-w-md mx-auto mt-4 px-4">

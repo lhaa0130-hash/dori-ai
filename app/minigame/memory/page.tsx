@@ -222,31 +222,33 @@ export default function MemoryGamePage() {
     };
 
     return (
-        <main className="min-h-screen bg-neutral-50 dark:bg-black text-neutral-900 dark:text-white relative overflow-hidden flex flex-col items-center justify-center p-4">
+        <main className="min-h-screen bg-[#09090e] text-white relative overflow-hidden flex flex-col items-center justify-center p-4">
+            <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(249,149,78,0.07),transparent)]" />
 
             {/* 상단 nav */}
             <div className="w-full max-w-4xl flex items-center justify-between mb-6 z-10">
-                <Link href="/minigame" className="flex items-center gap-2 text-neutral-500 hover:text-foreground">
-                    <ArrowLeft className="w-5 h-5" />
+                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-500 hover:text-white transition-colors">
+                    <ArrowLeft className="w-4 h-4" />
                     <span>나가기</span>
                 </Link>
-                <div className={`px-4 py-1.5 rounded-full text-sm font-bold border transition-colors ${stageConfig.isHell ? "bg-red-500/10 text-red-500 border-red-500/20" :
-                        stageConfig.isHard ? "bg-zinc-500/10 text-zinc-500 border-zinc-500/20" :
-                            "bg-blue-500/10 text-blue-500 border-blue-500/20"
-                    }`}>
-                    {stageConfig.label}
+                <div className="text-[15px] font-extrabold tracking-tight text-white">🧠 메모리 마스터</div>
+                <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                    <div className="text-[9px] uppercase tracking-widest text-neutral-500">Stage</div>
+                    <div className={`text-sm font-bold tabular-nums ${stageConfig.isHell ? "text-red-400" : "text-white"}`}>
+                        {currentStage}/10{stageConfig.isHell ? " · HELL" : stageConfig.isHard ? " · HARD" : ""}
+                    </div>
                 </div>
             </div>
 
             {/* 메인 보드 */}
-            <div className={`relative z-10 w-full max-w-4xl bg-white/80 dark:bg-zinc-900/40 backdrop-blur-xl border rounded-[2rem] p-6 md:p-10 shadow-2xl overflow-hidden min-h-[600px] flex flex-col items-center justify-center
-                ${stageConfig.isHell ? "border-red-500/30 shadow-red-500/10" : "border-neutral-200 dark:border-zinc-800"}
+            <div className={`relative z-10 w-full max-w-4xl rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border p-6 md:p-10 overflow-hidden min-h-[600px] flex flex-col items-center justify-center
+                ${stageConfig.isHell ? "border-red-500/30" : "border-white/10"}
             `}>
 
                 {/* 카운트다운 오버레이 */}
                 {gameState === "COUNTDOWN" && countdown !== null && (
-                    <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm animate-fade-in">
-                        <div className="text-7xl font-black text-white animate-bounce-short">
+                    <div className="absolute inset-0 z-50 flex items-center justify-center bg-black/70 backdrop-blur-sm animate-fade-in">
+                        <div className="text-7xl font-black text-[#F9954E] tabular-nums animate-bounce-short">
                             {countdown === 0 ? "START!" : countdown}
                         </div>
                     </div>
@@ -254,16 +256,16 @@ export default function MemoryGamePage() {
 
                 {gameState === "START" && (
                     <div className="text-center animate-fade-in">
-                        <Sparkles className="w-20 h-20 mx-auto text-purple-500 mb-6" />
-                        <h1 className="text-4xl font-bold mb-4">Memory Master</h1>
-                        <p className="text-lg text-neutral-600 dark:text-neutral-400 mb-8 max-w-md mx-auto">
+                        <Sparkles className="w-20 h-20 mx-auto text-[#F9954E] mb-6" />
+                        <h1 className="text-4xl font-extrabold tracking-tight text-white mb-4">Memory Master</h1>
+                        <p className="text-lg text-neutral-400 mb-8 max-w-md mx-auto">
                             1~5단계는 색상 힌트가 있어 쉽지만,<br />
                             6단계부터는 어려워지고<br />
-                            <strong>10단계 Hell Mode</strong>는 극한의 난이도를 자랑합니다!
+                            <strong className="text-white">10단계 Hell Mode</strong>는 극한의 난이도를 자랑합니다!
                         </p>
                         <button
                             onClick={() => initializeGame(1)}
-                            className="px-8 py-4 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-lg shadow-lg"
+                            className="px-8 py-4 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold text-lg shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all"
                         >
                             게임 시작
                         </button>
@@ -275,7 +277,7 @@ export default function MemoryGamePage() {
                         {/* 상태 표시줄 */}
                         <div className="flex justify-between items-center mb-6 px-2">
                             <div className="min-w-[120px] text-sm font-medium text-neutral-500">
-                                남은 카드: <span className="text-foreground">{stageConfig.pairs - matchedCount}</span> 쌍
+                                남은 카드: <span className="font-bold text-white tabular-nums">{stageConfig.pairs - matchedCount}</span> 쌍
                             </div>
 
                             {/* 하트 표시 (Hell Mode) */}
@@ -286,7 +288,7 @@ export default function MemoryGamePage() {
                                             key={i}
                                             className={`w-6 h-6 transition-all duration-300 ${i < ((stageConfig.maxMistakes || 3) - mistakes)
                                                     ? "fill-red-500 text-red-500"
-                                                    : "fill-neutral-200 text-neutral-200 dark:fill-zinc-800 dark:text-zinc-800"
+                                                    : "fill-white/10 text-white/10"
                                                 }`}
                                         />
                                     ))}
@@ -328,16 +330,16 @@ export default function MemoryGamePage() {
                                         {/* 앞면 (뒤집혔을 때/숨겨진 상태) */}
                                         <div className={`
                                             absolute inset-0 w-full h-full backface-hidden rounded-lg md:rounded-xl flex items-center justify-center
-                                            bg-neutral-100 dark:bg-zinc-800 border-2 border-transparent
+                                            bg-white/[0.04] border-2 border-white/10
                                             hover:border-purple-500/30
                                         `}>
-                                            <div className="w-1/3 h-1/3 rounded-full bg-neutral-200 dark:bg-zinc-700 opacity-50" />
+                                            <div className="w-1/3 h-1/3 rounded-full bg-white/[0.08] opacity-50" />
                                         </div>
 
                                         {/* 뒷면 (공개된 상태) */}
                                         <div className={`
                                             absolute inset-0 w-full h-full backface-hidden rounded-lg md:rounded-xl flex items-center justify-center rotate-y-180
-                                            ${stageConfig.isHard ? "bg-neutral-800 border border-neutral-700" : "bg-white border border-neutral-200 dark:bg-neutral-800 dark:border-zinc-700"}
+                                            ${stageConfig.isHard ? "bg-neutral-800 border border-neutral-700" : "bg-white/[0.04] border border-white/10"}
                                             shadow-lg
                                         `}>
                                             <div className={`
@@ -359,13 +361,13 @@ export default function MemoryGamePage() {
 
                 {gameState === "STAGE_CLEAR" && (
                     <div className="text-center py-10 animate-fade-in">
-                        <div className="w-20 h-20 mx-auto bg-green-100 dark:bg-green-900/30 text-green-600 rounded-full flex items-center justify-center mb-6">
+                        <div className="w-20 h-20 mx-auto bg-emerald-500/15 text-emerald-400 rounded-full flex items-center justify-center mb-6">
                             <Check className="w-10 h-10" />
                         </div>
                         <h2 className="text-3xl font-bold mb-2">Stage {currentStage} Clear!</h2>
                         <button
                             onClick={handleNextStage}
-                            className="mt-8 px-8 py-3 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-black font-bold hover:scale-105 transition-transform"
+                            className="mt-8 px-8 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold hover:scale-105 transition-transform"
                         >
                             {currentStage === 9 ? "최종 단계 (Hell Mode) 도전" : "다음 스테이지"}
                         </button>
@@ -374,7 +376,7 @@ export default function MemoryGamePage() {
 
                 {gameState === "GAME_FAIL" && (
                     <div className="text-center py-10 animate-fade-in">
-                        <div className="w-20 h-20 mx-auto bg-red-100 dark:bg-red-900/30 text-red-600 rounded-full flex items-center justify-center mb-6">
+                        <div className="w-20 h-20 mx-auto bg-red-500/15 text-red-400 rounded-full flex items-center justify-center mb-6">
                             <Skull className="w-10 h-10" />
                         </div>
                         <h2 className="text-3xl font-bold mb-2">Game Over...</h2>
@@ -388,7 +390,7 @@ export default function MemoryGamePage() {
                             </button>
                             <button
                                 onClick={() => initializeGame(1)}
-                                className="px-6 py-3 rounded-xl bg-neutral-200 dark:bg-zinc-800 font-bold hover:bg-neutral-300 dark:hover:bg-zinc-700 transition-colors"
+                                className="px-6 py-3 rounded-xl bg-white/[0.06] border border-white/10 hover:bg-white/[0.12] text-neutral-200 font-bold transition-colors"
                             >
                                 처음으로
                             </button>
@@ -401,7 +403,7 @@ export default function MemoryGamePage() {
                         <h2 className="text-4xl font-bold mb-4 text-[#F9954E]">🏆 ALL CLEARED!</h2>
                         <p className="text-xl mb-8">당신은 진정한 기억력의 신입니다!</p>
                         <Link href="/minigame">
-                            <button className="px-8 py-3 rounded-xl bg-neutral-900 dark:bg-white text-white dark:text-black font-bold hover:scale-105 transition-transform">
+                            <button className="px-8 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold hover:scale-105 transition-transform">
                                 메뉴로 돌아가기
                             </button>
                         </Link>
