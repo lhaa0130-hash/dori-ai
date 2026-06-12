@@ -8,7 +8,7 @@ const SERVICE_LINKS = [
   { label: "커뮤니티", href: "/community" },
   { label: "미니게임", href: "/minigame" },
   { label: "피드", href: "/feed" },
-  { label: "미니홈피", href: "/profile" },
+  { label: "코지홈", href: "/profile" },
 ];
 
 const COMPANY_LINKS = [

@@ -178,7 +178,7 @@ export default function Header() {
                   <div className="absolute top-full right-0 mt-2 w-40 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
                     <div className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden">
                       <Link href="/profile" className="w-full flex items-center gap-2 px-4 py-3 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
-                        <Home className="w-3.5 h-3.5 text-[#F9954E]" /><span>미니홈피</span>
+                        <Home className="w-3.5 h-3.5 text-[#F9954E]" /><span>코지홈</span>
                       </Link>
                       <Link href="/messages" className="w-full flex items-center gap-2 px-4 py-3 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
                         <MessageCircle className="w-3.5 h-3.5 text-[#F9954E]" /><span>메시지</span>
@@ -233,7 +233,7 @@ export default function Header() {
                   <User className="w-4 h-4 text-[#F9954E]" /><span>마이페이지</span>
                 </Link>
                 <Link href="/profile" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white">
-                  <Home className="w-4 h-4 text-[#F9954E]" /><span>미니홈피</span>
+                  <Home className="w-4 h-4 text-[#F9954E]" /><span>코지홈</span>
                 </Link>
                 <Link href="/messages" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white">
                   <MessageCircle className="w-4 h-4 text-[#F9954E]" /><span>메시지</span>

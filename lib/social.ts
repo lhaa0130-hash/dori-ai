@@ -168,35 +168,64 @@ export function watchMessages(threadId: string, cb: (msgs: DMMessage[]) => void)
   } catch { cb([]); return () => {}; }
 }
 
-// ─── 피드(텍스트 글) ────────────────────────────────────────────
-export interface FeedPost { id: string; uid: string; name: string; text: string; at: number; likeCount: number; likedByMe: boolean; }
+// ─── 피드(글 + 이미지/영상 + 공개범위) ──────────────────────────
+export type FeedVisibility = "public" | "friends" | "groups";
+export type MediaType = "image" | "video";
+export interface FeedPost {
+  id: string; uid: string; name: string; text: string; at: number;
+  likeCount: number; likedByMe: boolean;
+  mediaUrl?: string; mediaType?: MediaType;
+  visibility: FeedVisibility;
+}
+export interface NewPostOpts {
+  mediaUrl?: string; mediaType?: MediaType;
+  visibility?: FeedVisibility;   // 기본 public
+  allowedUids?: string[];        // friends/groups 공개 시 볼 수 있는 uid (자신 자동 포함)
+}
 
+function mapPost(id: string, x: Record<string, unknown>): FeedPost {
+  const me = currentUid();
+  const likedBy = (x.likedBy as string[]) || [];
+  return {
+    id, uid: String(x.uid || ""), name: String(x.name || "익명"), text: String(x.text || ""),
+    at: tsToMillis(x.createdAt), likeCount: Number(x.likeCount || 0), likedByMe: !!me && likedBy.includes(me),
+    mediaUrl: x.mediaUrl ? String(x.mediaUrl) : undefined,
+    mediaType: (x.mediaType as MediaType) || undefined,
+    visibility: (x.visibility as FeedVisibility) || "public",
+  };
+}
+
+/** 보안규칙 안전 쿼리: 공개글 + (로그인 시) 내가 볼 수 있는 글(allowedUids 포함)을 합쳐서 최신순. */
 export async function listFeed(n = 50): Promise<FeedPost[]> {
   const me = currentUid();
   try {
-    const q = query(collection(db(), "feed"), orderBy("createdAt", "desc"), limit(n));
-    const snap = await getDocs(q);
-    const arr: FeedPost[] = [];
-    snap.forEach((d) => {
-      const x = d.data() as Record<string, unknown>;
-      const likedBy = (x.likedBy as string[]) || [];
-      arr.push({ id: d.id, uid: String(x.uid || ""), name: String(x.name || "익명"), text: String(x.text || ""), at: tsToMillis(x.createdAt), likeCount: Number(x.likeCount || 0), likedByMe: !!me && likedBy.includes(me) });
-    });
-    return arr;
+    const tasks = [getDocs(query(collection(db(), "feed"), where("visibility", "==", "public"), limit(n)))];
+    if (me) tasks.push(getDocs(query(collection(db(), "feed"), where("allowedUids", "array-contains", me), limit(n))));
+    const snaps = await Promise.all(tasks);
+    const map = new Map<string, FeedPost>();
+    snaps.forEach((s) => s.forEach((d) => { if (!map.has(d.id)) map.set(d.id, mapPost(d.id, d.data() as Record<string, unknown>)); }));
+    return Array.from(map.values()).sort((a, b) => b.at - a.at).slice(0, n);
   } catch { return []; }
 }
 
-/** 특정 유저의 피드만 (미니홈피용) */
+/** 특정 유저의 피드(내가 볼 수 있는 것만) — 코지홈용 */
 export async function listUserFeed(uid: string, n = 50): Promise<FeedPost[]> {
-  const all = await listFeed(120);
+  const all = await listFeed(150);
   return all.filter((p) => p.uid === uid).slice(0, n);
 }
 
-export async function addPost(name: string, text: string): Promise<boolean> {
+export async function addPost(name: string, text: string, opts: NewPostOpts = {}): Promise<boolean> {
   const uid = currentUid();
-  if (!uid || !text.trim()) return false;
+  if (!uid || (!text.trim() && !opts.mediaUrl)) return false;
   try {
-    await addDoc(collection(db(), "feed"), { uid, name: (name || "익명").slice(0, 20), text: text.trim().slice(0, 1000), createdAt: serverTimestamp(), likeCount: 0, likedBy: [] });
+    const visibility: FeedVisibility = opts.visibility || "public";
+    const allowedUids = visibility === "public" ? [] : Array.from(new Set([uid, ...(opts.allowedUids || [])]));
+    const data: Record<string, unknown> = {
+      uid, name: (name || "익명").slice(0, 20), text: text.trim().slice(0, 1000),
+      visibility, allowedUids, createdAt: serverTimestamp(), likeCount: 0, likedBy: [],
+    };
+    if (opts.mediaUrl) { data.mediaUrl = opts.mediaUrl; data.mediaType = opts.mediaType || "image"; }
+    await addDoc(collection(db(), "feed"), data);
     return true;
   } catch { return false; }
 }
@@ -247,4 +276,157 @@ export async function getUserRecords(uid: string): Promise<GameRecord[]> {
     }));
     return results.filter((r): r is GameRecord => r !== null);
   } catch { return []; }
+}
+
+// ─── 친구 ───────────────────────────────────────────────────────
+//   friend_requests/{toUid}/incoming/{fromUid}   친구 요청
+//   users/{uid}/friends/{friendUid}              수락된 친구(양쪽에 기록)
+export interface Friend { uid: string; name: string; }
+export interface FriendRequest { fromUid: string; fromName: string; at: number; }
+
+export async function sendFriendRequest(toUid: string, fromName: string): Promise<boolean> {
+  const me = currentUid();
+  if (!me || !toUid || toUid === me) return false;
+  try {
+    await setDoc(doc(db(), "friend_requests", toUid, "incoming", me), {
+      fromName: (fromName || "익명").slice(0, 20), createdAt: serverTimestamp(),
+    });
+    return true;
+  } catch { return false; }
+}
+
+export function watchIncomingRequests(cb: (r: FriendRequest[]) => void): () => void {
+  const me = currentUid();
+  if (!me) { cb([]); return () => {}; }
+  try {
+    return onSnapshot(collection(db(), "friend_requests", me, "incoming"), (s) => {
+      const a: FriendRequest[] = [];
+      s.forEach((d) => { const x = d.data(); a.push({ fromUid: d.id, fromName: String(x.fromName || "익명"), at: tsToMillis(x.createdAt) }); });
+      a.sort((p, q) => q.at - p.at);
+      cb(a);
+    }, () => cb([]));
+  } catch { cb([]); return () => {}; }
+}
+
+export async function acceptFriendRequest(fromUid: string, fromName: string, myName: string): Promise<boolean> {
+  const me = currentUid();
+  if (!me) return false;
+  try {
+    await Promise.all([
+      setDoc(doc(db(), "users", me, "friends", fromUid), { name: (fromName || "친구").slice(0, 20), createdAt: serverTimestamp() }, { merge: true }),
+      setDoc(doc(db(), "users", fromUid, "friends", me), { name: (myName || "친구").slice(0, 20), createdAt: serverTimestamp() }, { merge: true }),
+      deleteDoc(doc(db(), "friend_requests", me, "incoming", fromUid)),
+    ]);
+    return true;
+  } catch { return false; }
+}
+
+export async function rejectFriendRequest(fromUid: string): Promise<boolean> {
+  const me = currentUid();
+  if (!me) return false;
+  try { await deleteDoc(doc(db(), "friend_requests", me, "incoming", fromUid)); return true; } catch { return false; }
+}
+
+export function watchFriends(cb: (f: Friend[]) => void): () => void {
+  const me = currentUid();
+  if (!me) { cb([]); return () => {}; }
+  try {
+    return onSnapshot(collection(db(), "users", me, "friends"), (s) => {
+      const a: Friend[] = [];
+      s.forEach((d) => a.push({ uid: d.id, name: String((d.data() as Record<string, unknown>).name || "친구") }));
+      a.sort((p, q) => p.name.localeCompare(q.name));
+      cb(a);
+    }, () => cb([]));
+  } catch { cb([]); return () => {}; }
+}
+
+export async function listFriends(uid?: string): Promise<Friend[]> {
+  const target = uid || currentUid();
+  if (!target) return [];
+  try {
+    const s = await getDocs(collection(db(), "users", target, "friends"));
+    const a: Friend[] = [];
+    s.forEach((d) => a.push({ uid: d.id, name: String((d.data() as Record<string, unknown>).name || "친구") }));
+    return a;
+  } catch { return []; }
+}
+
+export async function isFriend(uid: string): Promise<boolean> {
+  const me = currentUid();
+  if (!me) return false;
+  try { return (await getDoc(doc(db(), "users", me, "friends", uid))).exists(); } catch { return false; }
+}
+
+export async function removeFriend(friendUid: string): Promise<boolean> {
+  const me = currentUid();
+  if (!me) return false;
+  try {
+    await deleteDoc(doc(db(), "users", me, "friends", friendUid));
+    await deleteDoc(doc(db(), "users", friendUid, "friends", me)).catch(() => {});
+    return true;
+  } catch { return false; }
+}
+
+// ─── 친구 범위(그룹) ─────────────────────────────────────────────
+//   users/{uid}/groups/{groupId}  { name, memberUids[], feedVisible }
+//   feedVisible: '친구공개' 글을 이 범위가 볼 수 있는지
+export interface FriendGroup { id: string; name: string; memberUids: string[]; feedVisible: boolean; }
+
+export function watchGroups(cb: (g: FriendGroup[]) => void): () => void {
+  const me = currentUid();
+  if (!me) { cb([]); return () => {}; }
+  try {
+    return onSnapshot(collection(db(), "users", me, "groups"), (s) => {
+      const a: FriendGroup[] = [];
+      s.forEach((d) => { const x = d.data() as Record<string, unknown>; a.push({ id: d.id, name: String(x.name || "범위"), memberUids: (x.memberUids as string[]) || [], feedVisible: x.feedVisible !== false }); });
+      a.sort((p, q) => p.name.localeCompare(q.name));
+      cb(a);
+    }, () => cb([]));
+  } catch { cb([]); return () => {}; }
+}
+
+export async function listGroups(uid?: string): Promise<FriendGroup[]> {
+  const target = uid || currentUid();
+  if (!target) return [];
+  try {
+    const s = await getDocs(collection(db(), "users", target, "groups"));
+    const a: FriendGroup[] = [];
+    s.forEach((d) => { const x = d.data() as Record<string, unknown>; a.push({ id: d.id, name: String(x.name || "범위"), memberUids: (x.memberUids as string[]) || [], feedVisible: x.feedVisible !== false }); });
+    return a;
+  } catch { return []; }
+}
+
+export async function createGroup(name: string): Promise<boolean> {
+  const me = currentUid();
+  if (!me || !name.trim()) return false;
+  try { await addDoc(collection(db(), "users", me, "groups"), { name: name.trim().slice(0, 20), memberUids: [], feedVisible: true, createdAt: serverTimestamp() }); return true; } catch { return false; }
+}
+
+export async function updateGroup(groupId: string, patch: Partial<Pick<FriendGroup, "name" | "memberUids" | "feedVisible">>): Promise<boolean> {
+  const me = currentUid();
+  if (!me) return false;
+  try { await updateDoc(doc(db(), "users", me, "groups", groupId), { ...patch }); return true; } catch { return false; }
+}
+
+export async function deleteGroup(groupId: string): Promise<boolean> {
+  const me = currentUid();
+  if (!me) return false;
+  try { await deleteDoc(doc(db(), "users", me, "groups", groupId)); return true; } catch { return false; }
+}
+
+// ─── 피드 공개범위(audience) 계산 ───────────────────────────────
+/** '친구공개' 대상 = feedVisible=true 범위의 멤버 합집합 */
+export async function feedVisibleAudience(): Promise<string[]> {
+  const groups = await listGroups();
+  const set = new Set<string>();
+  groups.filter((g) => g.feedVisible).forEach((g) => g.memberUids.forEach((u) => set.add(u)));
+  return Array.from(set);
+}
+
+/** 선택한 범위들의 멤버 합집합 */
+export async function audienceForGroups(groupIds: string[]): Promise<string[]> {
+  const groups = await listGroups();
+  const set = new Set<string>();
+  groups.filter((g) => groupIds.includes(g.id)).forEach((g) => g.memberUids.forEach((u) => set.add(u)));
+  return Array.from(set);
 }

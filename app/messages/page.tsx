@@ -10,11 +10,22 @@ import {
   sendDM,
   watchMyThreads,
   watchMessages,
+  watchFriends,
+  watchIncomingRequests,
+  sendFriendRequest,
+  acceptFriendRequest,
+  rejectFriendRequest,
+  removeFriend,
+  watchGroups,
+  createGroup,
+  updateGroup,
+  deleteGroup,
   type DMThread,
   type DMMessage,
+  type Friend,
+  type FriendRequest,
+  type FriendGroup,
 } from "@/lib/social";
-
-const POINT = "#F9954E";
 
 function formatTime(ms: number): string {
   if (!ms) return "";
@@ -30,16 +41,35 @@ interface ActivePeer {
   name: string;
 }
 
+type TabKey = "friends" | "groups" | "chat";
+
+const CARD =
+  "rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950";
+
 function MessagesInner() {
   const { session, status } = useAuth();
   const searchParams = useSearchParams();
 
   const [myUid, setMyUid] = useState<string | null>(null);
+  const [tab, setTab] = useState<TabKey>("friends");
+
+  // DM 상태
   const [threads, setThreads] = useState<DMThread[]>([]);
   const [active, setActive] = useState<ActivePeer | null>(null);
   const [msgs, setMsgs] = useState<DMMessage[]>([]);
   const [draft, setDraft] = useState("");
   const [sending, setSending] = useState(false);
+
+  // 친구 상태
+  const [friends, setFriends] = useState<Friend[]>([]);
+  const [requests, setRequests] = useState<FriendRequest[]>([]);
+
+  // 범위(그룹) 상태
+  const [groups, setGroups] = useState<FriendGroup[]>([]);
+  const [newGroupName, setNewGroupName] = useState("");
+  const [editingGroupId, setEditingGroupId] = useState<string | null>(null);
+  const [editingGroupName, setEditingGroupName] = useState("");
+  const [memberEditId, setMemberEditId] = useState<string | null>(null);
 
   const myName = session?.user?.name || "나";
   const bottomRef = useRef<HTMLDivElement | null>(null);
@@ -55,6 +85,7 @@ function MessagesInner() {
     const name = searchParams.get("name");
     if (to) {
       setActive({ uid: to, name: name || "상대" });
+      setTab("chat");
     }
   }, [searchParams]);
 
@@ -65,6 +96,36 @@ function MessagesInner() {
       return;
     }
     const unsub = watchMyThreads(setThreads);
+    return () => unsub();
+  }, [myUid]);
+
+  // 친구 목록 실시간 구독
+  useEffect(() => {
+    if (!myUid) {
+      setFriends([]);
+      return;
+    }
+    const unsub = watchFriends(setFriends);
+    return () => unsub();
+  }, [myUid]);
+
+  // 받은 친구요청 실시간 구독
+  useEffect(() => {
+    if (!myUid) {
+      setRequests([]);
+      return;
+    }
+    const unsub = watchIncomingRequests(setRequests);
+    return () => unsub();
+  }, [myUid]);
+
+  // 범위(그룹) 목록 실시간 구독
+  useEffect(() => {
+    if (!myUid) {
+      setGroups([]);
+      return;
+    }
+    const unsub = watchGroups(setGroups);
     return () => unsub();
   }, [myUid]);
 
@@ -88,8 +149,18 @@ function MessagesInner() {
     bottomRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [msgs, active?.uid]);
 
-  const openThread = useCallback((t: DMThread) => {
-    setActive({ uid: t.otherUid, name: t.otherName });
+  // ── 파생: 친구 uid 집합, 대화상대 중 비친구 ──
+  const friendUidSet = useMemo(() => new Set(friends.map((f) => f.uid)), [friends]);
+
+  const addableFromThreads = useMemo(
+    () => threads.filter((t) => t.otherUid && !friendUidSet.has(t.otherUid)),
+    [threads, friendUidSet],
+  );
+
+  // ── 액션 ──
+  const openChat = useCallback((uid: string, name: string) => {
+    setActive({ uid, name });
+    setTab("chat");
   }, []);
 
   const handleSend = useCallback(async () => {
@@ -111,11 +182,54 @@ function MessagesInner() {
     [handleSend],
   );
 
+  const handleAddFriend = useCallback(
+    async (uid: string) => {
+      await sendFriendRequest(uid, myName);
+    },
+    [myName],
+  );
+
+  const handleAccept = useCallback(
+    async (req: FriendRequest) => {
+      await acceptFriendRequest(req.fromUid, req.fromName, myName);
+    },
+    [myName],
+  );
+
+  const handleCreateGroup = useCallback(async () => {
+    const name = newGroupName.trim();
+    if (!name) return;
+    const ok = await createGroup(name);
+    if (ok) setNewGroupName("");
+  }, [newGroupName]);
+
+  const startEditGroup = useCallback((g: FriendGroup) => {
+    setEditingGroupId(g.id);
+    setEditingGroupName(g.name);
+  }, []);
+
+  const saveEditGroup = useCallback(async () => {
+    if (!editingGroupId) return;
+    const name = editingGroupName.trim();
+    if (name) await updateGroup(editingGroupId, { name });
+    setEditingGroupId(null);
+    setEditingGroupName("");
+  }, [editingGroupId, editingGroupName]);
+
+  const toggleMember = useCallback(
+    async (g: FriendGroup, uid: string) => {
+      const has = g.memberUids.includes(uid);
+      const next = has ? g.memberUids.filter((u) => u !== uid) : [...g.memberUids, uid];
+      await updateGroup(g.id, { memberUids: next });
+    },
+    [],
+  );
+
   // ── 비로그인: 로그인 유도 ──
   if (status === "unauthenticated" || (status !== "loading" && !myUid)) {
     return (
       <main className="w-full min-h-screen flex flex-col items-center justify-center px-6 py-24">
-        <div className="p-10 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 flex flex-col items-center text-center max-w-sm w-full">
+        <div className={`p-10 ${CARD} flex flex-col items-center text-center max-w-sm w-full`}>
           <div className="w-14 h-14 rounded-2xl bg-[#FFF5EB] dark:bg-[#F9954E]/10 flex items-center justify-center text-2xl mb-5">
             💬
           </div>
@@ -123,7 +237,7 @@ function MessagesInner() {
             로그인이 필요해요
           </h2>
           <p className="text-[14px] text-neutral-500 dark:text-neutral-400 mb-7 leading-relaxed">
-            1:1 메시지는 로그인 후<br />이용하실 수 있습니다.
+            친구·범위·메시지는 로그인 후<br />이용하실 수 있습니다.
           </p>
           <Link
             href="/login"
@@ -141,156 +255,464 @@ function MessagesInner() {
     return (
       <main className="w-full min-h-screen flex flex-col items-center justify-center">
         <div className="w-10 h-10 border-4 border-neutral-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-5" />
-        <p className="text-[14px] text-neutral-400 font-semibold">메시지를 불러오는 중입니다</p>
+        <p className="text-[14px] text-neutral-400 font-semibold">불러오는 중입니다</p>
       </main>
     );
   }
 
+  // ── 친구 패널 ──
+  const friendsPanel = (
+    <div className="flex flex-col gap-4">
+      {/* 받은 친구 요청 */}
+      {requests.length > 0 && (
+        <div className={`${CARD} overflow-hidden`}>
+          <div className="px-4 py-3 border-b border-neutral-100 dark:border-zinc-900">
+            <span className="text-[11px] font-semibold text-[#F9954E]">받은 친구 요청</span>
+          </div>
+          <div className="divide-y divide-neutral-50 dark:divide-zinc-900/60">
+            {requests.map((r) => (
+              <div key={r.fromUid} className="flex items-center justify-between gap-2 px-4 py-3">
+                <span className="text-[14px] font-bold text-neutral-900 dark:text-white truncate">
+                  {r.fromName}
+                </span>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => handleAccept(r)}
+                    className="px-3 py-1.5 rounded-full bg-[#F9954E] text-white font-bold text-[12px] active:opacity-85 transition-opacity"
+                  >
+                    수락
+                  </button>
+                  <button
+                    onClick={() => rejectFriendRequest(r.fromUid)}
+                    className="px-3 py-1.5 rounded-full bg-neutral-100 dark:bg-zinc-900 text-neutral-600 dark:text-neutral-300 font-bold text-[12px] active:opacity-85 transition-opacity"
+                  >
+                    거절
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )}
+
+      {/* 친구 추가 (대화 상대 중 비친구) */}
+      <div className={`${CARD} overflow-hidden`}>
+        <div className="px-4 py-3 border-b border-neutral-100 dark:border-zinc-900">
+          <span className="text-[11px] font-semibold text-[#F9954E]">친구 추가</span>
+        </div>
+        {addableFromThreads.length > 0 ? (
+          <div className="divide-y divide-neutral-50 dark:divide-zinc-900/60">
+            {addableFromThreads.map((t) => (
+              <div key={t.otherUid} className="flex items-center justify-between gap-2 px-4 py-3">
+                <span className="text-[14px] font-bold text-neutral-900 dark:text-white truncate">
+                  {t.otherName}
+                </span>
+                <button
+                  onClick={() => handleAddFriend(t.otherUid)}
+                  className="px-3 py-1.5 rounded-full bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-neutral-200 font-bold text-[12px] active:opacity-85 transition-opacity shrink-0"
+                >
+                  친구 추가
+                </button>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="px-4 py-4">
+            <p className="text-[12px] text-neutral-500 dark:text-neutral-400 leading-relaxed">
+              추가할 수 있는 대화 상대가 없어요.
+            </p>
+          </div>
+        )}
+        <div className="px-4 py-3 border-t border-neutral-100 dark:border-zinc-900">
+          <p className="text-[12px] text-neutral-400 dark:text-neutral-500 leading-relaxed">
+            다른 회원의 코지홈(프로필)에서도 친구 추가할 수 있어요.
+          </p>
+        </div>
+      </div>
+
+      {/* 내 친구 목록 */}
+      <div className={`${CARD} overflow-hidden`}>
+        <div className="px-4 py-3 border-b border-neutral-100 dark:border-zinc-900">
+          <span className="text-[11px] font-semibold text-[#F9954E]">내 친구</span>
+        </div>
+        {friends.length === 0 ? (
+          <div className="px-4 py-12 text-center">
+            <div className="text-3xl mb-3 opacity-30">🧑‍🤝‍🧑</div>
+            <p className="text-[13px] text-neutral-500 dark:text-neutral-400">아직 친구가 없어요.</p>
+          </div>
+        ) : (
+          <div className="divide-y divide-neutral-50 dark:divide-zinc-900/60">
+            {friends.map((f) => (
+              <div key={f.uid} className="flex items-center justify-between gap-2 px-4 py-3">
+                <span className="text-[14px] font-bold text-neutral-900 dark:text-white truncate">
+                  {f.name}
+                </span>
+                <div className="flex items-center gap-2 shrink-0">
+                  <button
+                    onClick={() => openChat(f.uid, f.name)}
+                    className="px-3 py-1.5 rounded-full bg-[#F9954E] text-white font-bold text-[12px] active:opacity-85 transition-opacity"
+                  >
+                    대화
+                  </button>
+                  <button
+                    onClick={() => removeFriend(f.uid)}
+                    className="px-3 py-1.5 rounded-full bg-neutral-100 dark:bg-zinc-900 text-neutral-600 dark:text-neutral-300 font-bold text-[12px] active:opacity-85 transition-opacity"
+                  >
+                    삭제
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+
+  // ── 범위(그룹) 패널 ──
+  const groupsPanel = (
+    <div className="flex flex-col gap-4">
+      {/* 범위 만들기 */}
+      <div className={`${CARD} overflow-hidden`}>
+        <div className="px-4 py-3 border-b border-neutral-100 dark:border-zinc-900">
+          <span className="text-[11px] font-semibold text-[#F9954E]">범위 만들기</span>
+        </div>
+        <div className="flex items-center gap-2 px-3 py-3">
+          <input
+            type="text"
+            value={newGroupName}
+            onChange={(e) => setNewGroupName(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter") {
+                e.preventDefault();
+                handleCreateGroup();
+              }
+            }}
+            placeholder="범위 이름 (예: 가족, 단짝)"
+            maxLength={20}
+            className="flex-1 px-4 py-2.5 rounded-full bg-neutral-100 dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white placeholder:text-neutral-400 outline-none focus:ring-2 focus:ring-[#F9954E]/40"
+          />
+          <button
+            onClick={handleCreateGroup}
+            disabled={!newGroupName.trim()}
+            className="px-5 py-2.5 rounded-full bg-[#F9954E] text-white font-bold text-[14px] active:opacity-85 transition-opacity disabled:opacity-40 shrink-0"
+          >
+            만들기
+          </button>
+        </div>
+        <div className="px-4 pb-3">
+          <p className="text-[12px] text-neutral-400 dark:text-neutral-500 leading-relaxed">
+            범위는 친구를 묶는 그룹이에요. &lsquo;피드 공개&rsquo;를 끄면 이 범위는 내 친구공개 피드를 볼 수 없어요.
+          </p>
+        </div>
+      </div>
+
+      {/* 범위 목록 */}
+      {groups.length === 0 ? (
+        <div className={`${CARD} px-4 py-12 text-center`}>
+          <div className="text-3xl mb-3 opacity-30">🗂️</div>
+          <p className="text-[13px] text-neutral-500 dark:text-neutral-400">아직 만든 범위가 없어요.</p>
+        </div>
+      ) : (
+        groups.map((g) => (
+          <div key={g.id} className={`${CARD} overflow-hidden`}>
+            <div className="flex items-center justify-between gap-2 px-4 py-3 border-b border-neutral-100 dark:border-zinc-900">
+              {editingGroupId === g.id ? (
+                <input
+                  type="text"
+                  value={editingGroupName}
+                  onChange={(e) => setEditingGroupName(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      saveEditGroup();
+                    }
+                  }}
+                  maxLength={20}
+                  autoFocus
+                  className="flex-1 px-3 py-1.5 rounded-lg bg-neutral-100 dark:bg-zinc-900 text-[14px] font-bold text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
+                />
+              ) : (
+                <span className="text-[14px] font-bold text-neutral-900 dark:text-white truncate">
+                  {g.name}
+                </span>
+              )}
+              <div className="flex items-center gap-2 shrink-0">
+                {editingGroupId === g.id ? (
+                  <button
+                    onClick={saveEditGroup}
+                    className="px-3 py-1.5 rounded-full bg-[#F9954E] text-white font-bold text-[12px] active:opacity-85 transition-opacity"
+                  >
+                    저장
+                  </button>
+                ) : (
+                  <button
+                    onClick={() => startEditGroup(g)}
+                    className="px-3 py-1.5 rounded-full bg-neutral-100 dark:bg-zinc-900 text-neutral-600 dark:text-neutral-300 font-bold text-[12px] active:opacity-85 transition-opacity"
+                  >
+                    이름수정
+                  </button>
+                )}
+                <button
+                  onClick={() => deleteGroup(g.id)}
+                  className="px-3 py-1.5 rounded-full bg-neutral-100 dark:bg-zinc-900 text-neutral-600 dark:text-neutral-300 font-bold text-[12px] active:opacity-85 transition-opacity"
+                >
+                  삭제
+                </button>
+              </div>
+            </div>
+
+            {/* 피드 공개 토글 + 멤버 수 */}
+            <div className="flex items-center justify-between gap-2 px-4 py-3">
+              <div>
+                <p className="text-[13px] font-semibold text-neutral-800 dark:text-neutral-200">피드 공개</p>
+                <p className="text-[12px] text-neutral-400 dark:text-neutral-500">
+                  멤버 {g.memberUids.length}명
+                </p>
+              </div>
+              <button
+                onClick={() => updateGroup(g.id, { feedVisible: !g.feedVisible })}
+                role="switch"
+                aria-checked={g.feedVisible}
+                className={`relative w-12 h-7 rounded-full transition-colors shrink-0 ${
+                  g.feedVisible ? "bg-[#F9954E]" : "bg-neutral-200 dark:bg-zinc-800"
+                }`}
+              >
+                <span
+                  className={`absolute top-1 left-1 w-5 h-5 rounded-full bg-white transition-transform ${
+                    g.feedVisible ? "translate-x-5" : "translate-x-0"
+                  }`}
+                />
+              </button>
+            </div>
+
+            {/* 멤버 관리 */}
+            <div className="px-4 pb-4">
+              <button
+                onClick={() => setMemberEditId(memberEditId === g.id ? null : g.id)}
+                className="w-full py-2.5 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-neutral-200 font-bold text-[13px] active:opacity-85 transition-opacity"
+              >
+                {memberEditId === g.id ? "멤버 관리 닫기" : "멤버 관리"}
+              </button>
+              {memberEditId === g.id && (
+                <div className="mt-3">
+                  {friends.length === 0 ? (
+                    <p className="text-[12px] text-neutral-400 dark:text-neutral-500 py-2">
+                      먼저 친구를 추가해 주세요.
+                    </p>
+                  ) : (
+                    <div className="flex flex-col gap-1">
+                      {friends.map((f) => {
+                        const checked = g.memberUids.includes(f.uid);
+                        return (
+                          <label
+                            key={f.uid}
+                            className="flex items-center gap-3 px-3 py-2 rounded-xl hover:bg-neutral-50 dark:hover:bg-zinc-900/50 cursor-pointer"
+                          >
+                            <input
+                              type="checkbox"
+                              checked={checked}
+                              onChange={() => toggleMember(g, f.uid)}
+                              className="w-4 h-4 accent-[#F9954E]"
+                            />
+                            <span className="text-[14px] text-neutral-800 dark:text-neutral-200 truncate">
+                              {f.name}
+                            </span>
+                          </label>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        ))
+      )}
+    </div>
+  );
+
+  // ── 대화 목록(좌측 하단/탭) ──
+  const threadsList = (
+    <div className={`${CARD} overflow-hidden flex flex-col`}>
+      <div className="px-4 py-3 border-b border-neutral-100 dark:border-zinc-900">
+        <span className="text-[11px] font-semibold text-[#F9954E]">대화</span>
+      </div>
+      <div className="flex-1 overflow-y-auto">
+        {threads.length === 0 ? (
+          <div className="px-4 py-16 text-center">
+            <div className="text-3xl mb-3 opacity-30">📭</div>
+            <p className="text-[13px] text-neutral-500 dark:text-neutral-400">아직 대화가 없어요.</p>
+          </div>
+        ) : (
+          threads.map((t) => {
+            const isActive = active?.uid === t.otherUid;
+            return (
+              <button
+                key={t.id}
+                onClick={() => openChat(t.otherUid, t.otherName)}
+                className={`w-full text-left px-4 py-3 border-b border-neutral-50 dark:border-zinc-900/60 transition-colors ${
+                  isActive
+                    ? "bg-[#FFF5EB] dark:bg-[#F9954E]/10"
+                    : "hover:bg-neutral-50 dark:hover:bg-zinc-900/50"
+                }`}
+              >
+                <div className="flex items-center justify-between gap-2 mb-0.5">
+                  <span className="text-[14px] font-bold text-neutral-900 dark:text-white truncate">
+                    {t.otherName}
+                  </span>
+                  <span className="text-[10px] text-neutral-400 shrink-0">{formatTime(t.lastAt)}</span>
+                </div>
+                <p className="text-[12px] text-neutral-500 dark:text-neutral-400 truncate">
+                  {t.lastText || "새 대화"}
+                </p>
+              </button>
+            );
+          })
+        )}
+      </div>
+    </div>
+  );
+
+  // ── 대화창 ──
+  const chatPanel = (
+    <section className={`${CARD} flex flex-col overflow-hidden min-h-[60vh] sm:min-h-0 sm:h-full`}>
+      {!active ? (
+        <div className="flex-1 flex flex-col items-center justify-center text-center px-6 py-16">
+          <div className="text-4xl mb-3 opacity-30">💬</div>
+          <p className="text-[14px] text-neutral-500 dark:text-neutral-400">
+            친구나 대화 목록에서 상대를 선택해 주세요.
+          </p>
+        </div>
+      ) : (
+        <>
+          {/* 대화창 헤더 */}
+          <div className="flex items-center gap-2 px-4 py-3 border-b border-neutral-100 dark:border-zinc-900">
+            <button
+              onClick={() => setActive(null)}
+              className="sm:hidden -ml-1 px-2 py-1 rounded-lg text-neutral-500 dark:text-neutral-400 active:opacity-60"
+              aria-label="목록으로"
+            >
+              ←
+            </button>
+            <span className="text-[15px] font-bold text-neutral-900 dark:text-white truncate">
+              {active.name}
+            </span>
+          </div>
+
+          {/* 메시지 영역 */}
+          <div className="flex-1 overflow-y-auto px-4 py-4 space-y-2">
+            {msgs.length === 0 ? (
+              <div className="h-full flex flex-col items-center justify-center text-center">
+                <p className="text-[13px] text-neutral-400 dark:text-neutral-500">
+                  첫 메시지를 보내 대화를 시작해 보세요.
+                </p>
+              </div>
+            ) : (
+              msgs.map((m) => {
+                const mine = m.fromUid === myUid;
+                return (
+                  <div key={m.id} className={`flex ${mine ? "justify-end" : "justify-start"}`}>
+                    <div
+                      className={`max-w-[78%] px-3.5 py-2 rounded-2xl text-[14px] leading-relaxed break-words whitespace-pre-wrap ${
+                        mine
+                          ? "bg-[#F9954E] text-white rounded-br-md"
+                          : "bg-neutral-100 dark:bg-zinc-900 text-neutral-900 dark:text-neutral-100 rounded-bl-md"
+                      }`}
+                    >
+                      {m.text}
+                      <span
+                        className={`block text-[10px] mt-1 ${
+                          mine ? "text-white/70" : "text-neutral-400"
+                        }`}
+                      >
+                        {formatTime(m.at)}
+                      </span>
+                    </div>
+                  </div>
+                );
+              })
+            )}
+            <div ref={bottomRef} />
+          </div>
+
+          {/* 입력 */}
+          <div className="flex items-center gap-2 px-3 py-3 border-t border-neutral-100 dark:border-zinc-900">
+            <input
+              type="text"
+              value={draft}
+              onChange={(e) => setDraft(e.target.value)}
+              onKeyDown={onKeyDown}
+              placeholder="메시지를 입력하세요"
+              className="flex-1 px-4 py-2.5 rounded-full bg-neutral-100 dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white placeholder:text-neutral-400 outline-none focus:ring-2 focus:ring-[#F9954E]/40"
+            />
+            <button
+              onClick={handleSend}
+              disabled={!draft.trim() || sending}
+              className="px-5 py-2.5 rounded-full bg-[#F9954E] text-white font-bold text-[14px] active:opacity-85 transition-opacity disabled:opacity-40"
+            >
+              전송
+            </button>
+          </div>
+        </>
+      )}
+    </section>
+  );
+
+  const tabs: { key: TabKey; label: string }[] = [
+    { key: "friends", label: "친구" },
+    { key: "groups", label: "범위" },
+    { key: "chat", label: "대화" },
+  ];
+
   return (
     <main className="w-full min-h-screen">
       <section className="max-w-5xl mx-auto px-4 sm:px-6 pt-24 pb-10">
-        <p className="text-[11px] font-semibold text-[#F9954E] mb-1">DIRECT MESSAGE</p>
+        <p className="text-[11px] font-semibold text-[#F9954E] mb-1">FRIENDS &amp; MESSAGE</p>
         <h1 className="text-[28px] sm:text-[32px] font-extrabold tracking-tight text-neutral-950 dark:text-white mb-1">
           메시지
         </h1>
         <p className="text-[14px] text-neutral-500 dark:text-neutral-400 mb-6">
-          친구와 1:1로 대화를 나눠보세요.
+          친구를 맺고 범위로 묶어, 1:1로 대화를 나눠보세요.
         </p>
 
-        <div className="grid grid-cols-1 sm:grid-cols-[300px_1fr] gap-4 sm:h-[68vh]">
-          {/* ── 대화 목록 ── (모바일: 대화 선택 시 숨김) */}
-          <aside
-            className={`${active ? "hidden sm:flex" : "flex"} flex-col rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 overflow-hidden`}
-          >
-            <div className="px-4 py-3 border-b border-neutral-100 dark:border-zinc-900">
-              <span className="text-[11px] font-semibold text-[#F9954E]">대화</span>
+        {/* 모바일 탭 */}
+        <div className="sm:hidden flex items-center gap-1 p-1 mb-4 rounded-full bg-neutral-100 dark:bg-zinc-900">
+          {tabs.map((t) => (
+            <button
+              key={t.key}
+              onClick={() => setTab(t.key)}
+              className={`flex-1 py-2 rounded-full text-[13px] font-bold transition-colors ${
+                tab === t.key
+                  ? "bg-[#F9954E] text-white"
+                  : "text-neutral-500 dark:text-neutral-400"
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+
+        {/* 모바일 레이아웃: 탭 전환 */}
+        <div className="sm:hidden">
+          {tab === "friends" && friendsPanel}
+          {tab === "groups" && groupsPanel}
+          {tab === "chat" && (
+            <div className="flex flex-col gap-4">
+              {!active && threadsList}
+              {chatPanel}
             </div>
-            <div className="flex-1 overflow-y-auto">
-              {threads.length === 0 ? (
-                <div className="px-4 py-16 text-center">
-                  <div className="text-3xl mb-3 opacity-30">📭</div>
-                  <p className="text-[13px] text-neutral-500 dark:text-neutral-400">
-                    아직 대화가 없어요.
-                  </p>
-                </div>
-              ) : (
-                threads.map((t) => {
-                  const isActive = active?.uid === t.otherUid;
-                  return (
-                    <button
-                      key={t.id}
-                      onClick={() => openThread(t)}
-                      className={`w-full text-left px-4 py-3 border-b border-neutral-50 dark:border-zinc-900/60 transition-colors ${
-                        isActive
-                          ? "bg-[#FFF5EB] dark:bg-[#F9954E]/10"
-                          : "hover:bg-neutral-50 dark:hover:bg-zinc-900/50"
-                      }`}
-                    >
-                      <div className="flex items-center justify-between gap-2 mb-0.5">
-                        <span className="text-[14px] font-bold text-neutral-900 dark:text-white truncate">
-                          {t.otherName}
-                        </span>
-                        <span className="text-[10px] text-neutral-400 shrink-0">
-                          {formatTime(t.lastAt)}
-                        </span>
-                      </div>
-                      <p className="text-[12px] text-neutral-500 dark:text-neutral-400 truncate">
-                        {t.lastText || "새 대화"}
-                      </p>
-                    </button>
-                  );
-                })
-              )}
-            </div>
+          )}
+        </div>
+
+        {/* 데스크톱 레이아웃: 좌측 사이드바 + 우측 대화창 */}
+        <div className="hidden sm:grid grid-cols-[320px_1fr] gap-4 sm:h-[70vh]">
+          <aside className="flex flex-col gap-4 overflow-y-auto pr-1">
+            {friendsPanel}
+            {threadsList}
+            {groupsPanel}
           </aside>
-
-          {/* ── 대화창 ── (모바일: 미선택 시 숨김) */}
-          <section
-            className={`${active ? "flex" : "hidden sm:flex"} flex-col rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 overflow-hidden min-h-[60vh] sm:min-h-0`}
-          >
-            {!active ? (
-              <div className="flex-1 flex flex-col items-center justify-center text-center px-6">
-                <div className="text-4xl mb-3 opacity-30">💬</div>
-                <p className="text-[14px] text-neutral-500 dark:text-neutral-400">
-                  왼쪽에서 대화를 선택해 주세요.
-                </p>
-              </div>
-            ) : (
-              <>
-                {/* 대화창 헤더 */}
-                <div className="flex items-center gap-2 px-4 py-3 border-b border-neutral-100 dark:border-zinc-900">
-                  <button
-                    onClick={() => setActive(null)}
-                    className="sm:hidden -ml-1 px-2 py-1 rounded-lg text-neutral-500 dark:text-neutral-400 active:opacity-60"
-                    aria-label="목록으로"
-                  >
-                    ←
-                  </button>
-                  <span className="text-[15px] font-bold text-neutral-900 dark:text-white truncate">
-                    {active.name}
-                  </span>
-                </div>
-
-                {/* 메시지 영역 */}
-                <div className="flex-1 overflow-y-auto px-4 py-4 space-y-2">
-                  {msgs.length === 0 ? (
-                    <div className="h-full flex flex-col items-center justify-center text-center">
-                      <p className="text-[13px] text-neutral-400 dark:text-neutral-500">
-                        첫 메시지를 보내 대화를 시작해 보세요.
-                      </p>
-                    </div>
-                  ) : (
-                    msgs.map((m) => {
-                      const mine = m.fromUid === myUid;
-                      return (
-                        <div
-                          key={m.id}
-                          className={`flex ${mine ? "justify-end" : "justify-start"}`}
-                        >
-                          <div
-                            className={`max-w-[78%] px-3.5 py-2 rounded-2xl text-[14px] leading-relaxed break-words whitespace-pre-wrap ${
-                              mine
-                                ? "bg-[#F9954E] text-white rounded-br-md"
-                                : "bg-neutral-100 dark:bg-zinc-900 text-neutral-900 dark:text-neutral-100 rounded-bl-md"
-                            }`}
-                          >
-                            {m.text}
-                            <span
-                              className={`block text-[10px] mt-1 ${
-                                mine ? "text-white/70" : "text-neutral-400"
-                              }`}
-                            >
-                              {formatTime(m.at)}
-                            </span>
-                          </div>
-                        </div>
-                      );
-                    })
-                  )}
-                  <div ref={bottomRef} />
-                </div>
-
-                {/* 입력 */}
-                <div className="flex items-center gap-2 px-3 py-3 border-t border-neutral-100 dark:border-zinc-900">
-                  <input
-                    type="text"
-                    value={draft}
-                    onChange={(e) => setDraft(e.target.value)}
-                    onKeyDown={onKeyDown}
-                    placeholder="메시지를 입력하세요"
-                    className="flex-1 px-4 py-2.5 rounded-full bg-neutral-100 dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white placeholder:text-neutral-400 outline-none focus:ring-2 focus:ring-[#F9954E]/40"
-                  />
-                  <button
-                    onClick={handleSend}
-                    disabled={!draft.trim() || sending}
-                    className="px-5 py-2.5 rounded-full bg-[#F9954E] text-white font-bold text-[14px] active:opacity-85 transition-opacity disabled:opacity-40"
-                  >
-                    전송
-                  </button>
-                </div>
-              </>
-            )}
-          </section>
+          {chatPanel}
         </div>
       </section>
     </main>

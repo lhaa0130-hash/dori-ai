@@ -1,0 +1,12 @@
+rules_version = '2';
+service firebase.storage {
+  match /b/{bucket}/o {
+    // 피드 미디어 — 누구나 보기, 본인 폴더에만 업로드(50MB 제한)
+    match /feed/{uid}/{fileName} {
+      allow read: if true;
+      allow write: if request.auth != null
+                   && request.auth.uid == uid
+                   && request.resource.size < 50 * 1024 * 1024;
+    }
+  }
+}

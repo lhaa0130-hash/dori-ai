@@ -5,6 +5,8 @@ import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   currentUid,
+  sendFriendRequest,
+  isFriend,
   getProfile,
   saveMyProfile,
   listGuestbook,
@@ -71,6 +73,9 @@ export default function ProfilePage() {
   const [gbMsg, setGbMsg] = useState("");
   const [gbSending, setGbSending] = useState(false);
 
+  // 친구 상태: "loading" | "none" | "friend" | "requested"
+  const [friendState, setFriendState] = useState<"loading" | "none" | "friend" | "requested">("none");
+
   // URL ?uid= 로 대상 결정(없으면 내 uid) — 정적 export 안전하게 window에서 직접 읽음
   useEffect(() => {
     setMounted(true);
@@ -119,6 +124,37 @@ export default function ProfilePage() {
     }
     void loadAll(targetUid);
   }, [mounted, targetUid, loadAll]);
+
+  // 다른 사람 프로필이면 친구 여부 확인
+  useEffect(() => {
+    if (!mounted) return;
+    if (!targetUid || !myUid || isOwner) {
+      setFriendState("none");
+      return;
+    }
+    let active = true;
+    setFriendState("loading");
+    isFriend(targetUid)
+      .then((yes) => {
+        if (active) setFriendState(yes ? "friend" : "none");
+      })
+      .catch(() => {
+        if (active) setFriendState("none");
+      });
+    return () => {
+      active = false;
+    };
+  }, [mounted, targetUid, myUid, isOwner]);
+
+  const handleAddFriend = async () => {
+    if (!targetUid || isOwner) return;
+    setFriendState("requested");
+    const ok = await sendFriendRequest(targetUid, myName);
+    if (!ok) {
+      setFriendState("none");
+      alert("친구 요청에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
 
   const handleSave = async () => {
     if (!isOwner || !targetUid) return;
@@ -178,10 +214,10 @@ export default function ProfilePage() {
             🏠
           </div>
           <h2 className="text-[20px] font-extrabold tracking-tight text-neutral-900 dark:text-white mb-2">
-            미니홈피를 보려면 로그인하세요
+            코지홈를 보려면 로그인하세요
           </h2>
           <p className="text-[14px] text-neutral-500 dark:text-neutral-400 mb-7 leading-relaxed">
-            로그인하면 나만의 미니홈피를
+            로그인하면 나만의 코지홈를
             <br />
             꾸미고 방명록을 받을 수 있어요.
           </p>
@@ -201,7 +237,7 @@ export default function ProfilePage() {
     return (
       <main className="w-full min-h-screen flex flex-col items-center justify-center">
         <div className="w-10 h-10 border-4 border-neutral-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-5" />
-        <p className="text-[14px] text-neutral-400 font-semibold">미니홈피를 불러오는 중입니다</p>
+        <p className="text-[14px] text-neutral-400 font-semibold">코지홈를 불러오는 중입니다</p>
       </main>
     );
   }
@@ -212,7 +248,7 @@ export default function ProfilePage() {
   return (
     <main className="w-full min-h-screen pb-24">
       <section className="max-w-2xl mx-auto px-5 pt-6">
-        {/* 1) 미니홈피 배너 */}
+        {/* 1) 코지홈 배너 */}
         <div className="relative rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 overflow-hidden">
           <div className={`absolute inset-0 bg-gradient-to-br ${bgGrad(profile.bg)}`} aria-hidden />
           <div className="relative p-6">
@@ -272,6 +308,21 @@ export default function ProfilePage() {
                   💬 메시지 보내기
                 </Link>
               )}
+              {canMessage && (
+                friendState === "friend" ? (
+                  <span className="px-4 py-2 rounded-full bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-neutral-200 text-[13px] font-bold">
+                    ✓ 친구
+                  </span>
+                ) : (
+                  <button
+                    onClick={handleAddFriend}
+                    disabled={friendState === "requested" || friendState === "loading"}
+                    className="px-4 py-2 rounded-full bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-neutral-200 text-[13px] font-bold active:opacity-85 disabled:opacity-50"
+                  >
+                    {friendState === "requested" ? "요청됨" : "친구 추가"}
+                  </button>
+                )
+              )}
             </div>
           </div>
         </div>
@@ -279,7 +330,7 @@ export default function ProfilePage() {
         {/* 2) 꾸미기 패널 */}
         {isOwner && editing && (
           <div className="mt-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
-            <p className="text-[11px] text-[#F9954E] font-bold mb-3">미니홈피 꾸미기</p>
+            <p className="text-[11px] text-[#F9954E] font-bold mb-3">코지홈 꾸미기</p>
 
             <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
               상태메시지
@@ -437,7 +488,7 @@ export default function ProfilePage() {
                 onChange={(e) => setGbMsg(e.target.value)}
                 maxLength={500}
                 rows={2}
-                placeholder={isOwner ? "내 미니홈피에 한마디" : "방명록을 남겨보세요"}
+                placeholder={isOwner ? "내 코지홈에 한마디" : "방명록을 남겨보세요"}
                 className="w-full px-3 py-2.5 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40"
               />
               <div className="mt-2 flex justify-end">
