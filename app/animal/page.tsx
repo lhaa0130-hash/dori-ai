@@ -1,5 +1,7 @@
 import { createMetadata } from "@/lib/seo";
-import AnimalPageClient from "./page.client";
+import fs from "fs";
+import path from "path";
+import AnimalPageClient, { type AnimalCard } from "./page.client";
 
 export const metadata = {
   ...createMetadata({
@@ -10,6 +12,18 @@ export const metadata = {
   robots: { index: false, follow: false },
 };
 
+function loadCards(): AnimalCard[] {
+  try {
+    const p = path.join(process.cwd(), "data", "animal-cards.json");
+    const raw = fs.readFileSync(p, "utf8");
+    const data = JSON.parse(raw);
+    return Array.isArray(data) ? data : [];
+  } catch {
+    return [];
+  }
+}
+
 export default async function AnimalPage() {
-  return <AnimalPageClient />;
+  const cards = loadCards();
+  return <AnimalPageClient cards={cards} />;
 }
