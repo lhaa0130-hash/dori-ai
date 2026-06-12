@@ -1,0 +1,15 @@
+<svg width="512" height="512" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="l1" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FFEDC0"/><stop offset="1" stop-color="#FCD088"/></linearGradient>
+    <linearGradient id="l2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#FCC87A"/><stop offset="1" stop-color="#F4A24E"/></linearGradient>
+    <linearGradient id="l3" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#F6A555"/><stop offset="1" stop-color="#EA8636"/></linearGradient>
+  </defs>
+  <rect width="100" height="100" fill="#ffffff"/>
+  <g transform="translate(50,50) scale(1.3) translate(-47,-47)">
+    <rect x="12" y="12" width="42" height="42" rx="13" fill="url(#l1)"/>
+    <rect x="26" y="26" width="42" height="42" rx="13" fill="url(#l2)"/>
+    <rect x="40" y="40" width="42" height="42" rx="13" fill="url(#l3)"/>
+    <rect x="47" y="65.5" width="8.5" height="8.5" rx="2.5" fill="#ffffff"/>
+    <text x="51.25" y="71.5" font-family="Arial, sans-serif" font-size="4" font-weight="700" fill="#E8832E" text-anchor="middle">illo</text>
+  </g>
+</svg>
