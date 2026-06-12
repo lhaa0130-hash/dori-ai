@@ -42,7 +42,7 @@ export default function Header() {
 
   const projects = [
     {
-      name: "일로 (Illo)", emoji: "🟧", image: "/illo-logo.png",
+      name: "워키 (Worki)", emoji: "🟧", image: "/illo-logo.png",
       desc: "혼자서도, 일이 되는 곳", href: "/illo/app",
       bg: "bg-orange-50 dark:bg-orange-900/20",
     },

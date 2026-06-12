@@ -32,7 +32,7 @@ export interface ProjectItem {
 export const PROJECTS: ProjectItem[] = [
   {
     slug: "illo",
-    name: "일로 (Illo)",
+    name: "워키 (Worki)",
     emoji: "🟧",
     image: "/illo-logo.png",
     tag: "정식 프로그램",

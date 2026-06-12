@@ -43,10 +43,10 @@ export default function IlloPageClient() {
             <span>DORI-AI 정식 프로그램 · 베타</span>
           </div>
 
-          <img src="/illo-logo.png" alt="일로" width={96} height={96} className="w-24 h-24 rounded-[26px] shadow-xl shadow-[#F9954E]/20 mb-6" />
+          <img src="/illo-logo.png" alt="워키" width={96} height={96} className="w-24 h-24 rounded-[26px] shadow-xl shadow-[#F9954E]/20 mb-6" />
 
           <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-neutral-900 dark:text-white mb-4">
-            일로
+            워키
           </h1>
           <p className="text-lg md:text-2xl font-bold mb-3">
             <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
