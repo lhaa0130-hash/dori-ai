@@ -1176,5 +1176,565 @@
       ]
     },
     "image_path": "/images/animal/다람쥐.jpg"
+  },
+  {
+    "search_nickname": "팔을 쫙 펴고 나무 사이를 슈웅 나는 숲속 친구",
+    "animal_name": "날다람쥐",
+    "kid_friendly_desc": "날다람쥐는 나무 위에서 사는 귀여운 다람쥐 친구예요. 팔과 다리 사이에 얇은 막이 있어서 나무에서 나무로 슈웅 미끄러지듯 날아간단다. 과일과 씨앗을 좋아하고, 긴 꼬리로 몸의 균형을 잘 잡아요. 새끼는 포근한 나무 구멍 같은 곳에서 자라요.",
+    "key_feature": [
+      "활공하는 막",
+      "긴 꼬리",
+      "씨앗을 좋아함"
+    ],
+    "image_prompt": "A cute flying squirrel gliding between forest trees with its arms and legs stretched wide, showing a soft furry gliding membrane, big sparkling eyes, fluffy long tail, tiny paws, adorable happy face, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식",
+        "씨앗을 먹는"
+      ],
+      "color": [],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [],
+      "feature": [
+        "날 수 있는",
+        "야행성"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "새끼를 낳는",
+        "나무 위에 사는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/날다람쥐.jpg"
+  },
+  {
+    "search_nickname": "깡충깡충 뛰는 긴 귀 풀밭 친구",
+    "animal_name": "토끼",
+    "kid_friendly_desc": "토끼는 긴 귀를 쫑긋 세우고 깡충깡충 뛰어다니는 귀여운 동물이예요. 풀이나 채소처럼 싱싱한 식물을 좋아해서 아삭아삭 먹는답니다. 뒷다리가 튼튼해서 놀라면 아주 빠르게 도망갈 수 있어요. 폭신한 털과 동그란 눈도 토끼의 매력이란다.",
+    "key_feature": [
+      "긴 귀",
+      "깡충뛰기",
+      "튼튼한 뒷다리"
+    ],
+    "image_prompt": "An adorable rabbit with long upright ears, fluffy soft fur, round bright eyes, and strong back legs, happily hopping in a sunny green meadow, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "초원",
+        "도시 근처"
+      ],
+      "feature": [
+        "엄청 빠른"
+      ],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/토끼.jpg"
+  },
+  {
+    "search_nickname": "멋진 뿔을 달고 폴짝 뛰는 숲속 친구",
+    "animal_name": "사슴",
+    "kid_friendly_desc": "사슴은 풀과 나뭇잎을 냠냠 먹는 순한 동물이란다. 긴 다리로 폴짝폴짝 잘 뛰고, 위험하면 아주 빠르게 달려요. 수컷 사슴은 머리에 멋진 뿔이 자라서 왕관을 쓴 것처럼 보여요. 우리나라 산과 들에서도 노루나 고라니 같은 사슴 가족을 만날 수 있답니다.",
+    "key_feature": [
+      "멋진 뿔",
+      "긴 다리",
+      "풀을 먹어요"
+    ],
+    "image_prompt": "A cute young deer with big sparkling eyes, small antlers, long slender legs, soft brown fur with tiny white spots, standing gently in a sunny meadow, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [
+        "엄청 빠른"
+      ],
+      "body": [
+        "다리가 4개인",
+        "뿔이 있는"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/사슴.jpg"
+  },
+  {
+    "search_nickname": "멋진 뿔을 달고 눈밭을 걷는 북극 친구",
+    "animal_name": "순록",
+    "kid_friendly_desc": "순록은 추운 북극 근처의 눈밭과 툰드라에서 사는 사슴 친구예요. 머리에 멋진 뿔이 있어서 눈 속에서도 아주 씩씩해 보인단다. 풀, 이끼, 작은 식물들을 먹으며 무리와 함께 먼 길을 걸어가요. 겨울에도 두꺼운 털 덕분에 따뜻하게 지낼 수 있어요.",
+    "key_feature": [
+      "멋진 뿔",
+      "두꺼운 털",
+      "눈밭 여행"
+    ],
+    "image_prompt": "A cute reindeer with big gentle eyes, fluffy thick winter fur, and beautiful antlers walking on snowy Arctic tundra, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "극지방"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인",
+        "뿔이 있는"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "철새처럼 이동",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/순록.jpg"
+  },
+  {
+    "search_nickname": "손바닥 뿔을 단 숲속 큰 친구",
+    "animal_name": "무스",
+    "kid_friendly_desc": "무스는 사슴 친구들 중에서 아주아주 큰 동물이란다. 수컷 무스는 손바닥처럼 넓적하고 멋진 뿔을 가지고 있어요. 이 뿔은 겨울에 떨어졌다가 봄이 되면 다시 자라요. 풀, 나뭇잎, 물가의 식물을 냠냠 먹고 산답니다.",
+    "key_feature": [
+      "손바닥 모양 큰 뿔",
+      "아주 큰 사슴",
+      "물가 식물 좋아함"
+    ],
+    "image_prompt": "A cute moose with huge palm-shaped antlers, a long soft nose, gentle eyes, and a fluffy brown body standing near a calm forest lake, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "강·호수"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인",
+        "뿔이 있는"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/무스.jpg"
+  },
+  {
+    "search_nickname": "등에 물주머니 같은 혹을 얹고 사막을 걷는 친구",
+    "animal_name": "낙타",
+    "kid_friendly_desc": "낙타는 뜨거운 사막을 아주 잘 걷는 동물이에요. 등에 볼록한 혹이 있어서 오래 먹지 못해도 힘을 낼 수 있단다. 긴 속눈썹은 모래바람이 눈에 들어오지 않게 도와줘요. 사람들은 낙타와 함께 사막을 여행하고 짐도 나르곤 해요.",
+    "key_feature": [
+      "등의 혹",
+      "긴 속눈썹",
+      "사막 걷기 선수"
+    ],
+    "image_prompt": "A cute camel with a soft sandy-brown coat, one big hump on its back, long eyelashes, and a gentle smile, walking happily on a sunny desert with tiny footprints in the sand, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "사막"
+      ],
+      "feature": [
+        "보호색"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 목"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/낙타.jpg"
+  },
+  {
+    "search_nickname": "폭신폭신 털옷을 입은 긴 목 친구",
+    "animal_name": "알파카",
+    "kid_friendly_desc": "알파카는 폭신폭신한 털이 아주 많은 동물이에요. 남아메리카의 높은 풀밭에서 무리 지어 살며 풀을 냠냠 먹는답니다. 알파카의 털은 부드러워서 따뜻한 옷이나 담요를 만들 때 쓰여요. 긴 목을 쭉 세우고 귀엽게 바라보는 모습이 참 사랑스러워요.",
+    "key_feature": [
+      "폭신한 털",
+      "긴 목",
+      "풀을 먹어요"
+    ],
+    "image_prompt": "A fluffy alpaca with a long neck, soft woolly fur, big gentle eyes, and tiny ears, standing cutely on a grassy mountain meadow, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인",
+        "긴 목"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/알파카.jpg"
+  },
+  {
+    "search_nickname": "긴 목으로 풀을 냠냠 먹는 폭신폭신 친구",
+    "animal_name": "라마",
+    "kid_friendly_desc": "라마는 낙타와 친척인 동물이란다. 길쭉한 목과 폭신폭신한 털을 가지고 있어요. 풀을 좋아해서 천천히 오물오물 먹고, 친구들과 함께 지내는 걸 좋아해요. 사람들은 라마의 털로 따뜻한 옷을 만들기도 해요.",
+    "key_feature": [
+      "긴 목",
+      "폭신한 털",
+      "풀을 먹어요"
+    ],
+    "image_prompt": "A fluffy llama with a long neck, big gentle eyes, soft ears, and a cute smiling face, standing in a sunny grassy field, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인",
+        "긴 목"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/라마.jpg"
+  },
+  {
+    "search_nickname": "꼬불꼬불 뿔 달고 메에 우는 풀밭 친구",
+    "animal_name": "염소",
+    "kid_friendly_desc": "염소는 풀과 나뭇잎을 오물오물 잘 먹는 동물이란다. 머리에는 멋진 뿔이 있고, 턱 밑에는 작은 수염이 난 친구도 많아요. 산길이나 울퉁불퉁한 곳도 발을 딛고 씩씩하게 잘 걸어요. 사람들과 오래전부터 함께 살아온 귀여운 가축이에요.",
+    "key_feature": [
+      "꼬불꼬불 뿔",
+      "메에 우는 소리",
+      "풀 먹기"
+    ],
+    "image_prompt": "A cute goat with small curved horns, a tiny beard, fluffy fur, and bright curious eyes, standing on a sunny grassy hill and munching leaves, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "초원",
+        "도시 근처"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인",
+        "뿔이 있는"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/염소.jpg"
+  },
+  {
+    "search_nickname": "폭신폭신 털옷을 입은 음메 친구",
+    "animal_name": "양",
+    "kid_friendly_desc": "양은 폭신폭신한 털을 가진 순한 동물이에요. 풀을 냠냠 먹고, 친구들과 함께 모여 지내는 것을 좋아한단다. 양의 털은 깎아서 따뜻한 옷이나 이불을 만드는 데 쓰이기도 해요. 아기 양은 작고 귀여워서 깡충깡충 뛰어다니기도 한답니다.",
+    "key_feature": [
+      "폭신한 털",
+      "풀을 먹어요",
+      "무리 생활"
+    ],
+    "image_prompt": "A fluffy white sheep with soft wool, gentle eyes, tiny hooves, standing happily on a green meadow with a cute baby lamb beside it, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [
+        "흰색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/양.jpg"
+  },
+  {
+    "search_nickname": "꿀꿀 소리 내는 똑똑한 코 친구",
+    "animal_name": "돼지",
+    "kid_friendly_desc": "돼지는 동글동글한 코로 킁킁 냄새를 잘 맡아요. 꿀꿀 소리를 내며 친구들과 함께 지내는 걸 좋아한단다. 생각보다 아주 똑똑해서 먹이를 찾거나 길을 기억하는 것도 잘해요. 풀, 열매, 곡식 등 여러 가지 음식을 먹는 잡식 동물이에요.",
+    "key_feature": [
+      "동그란 코",
+      "꿀꿀 소리",
+      "아주 똑똑함"
+    ],
+    "image_prompt": "A cute pink piglet with a round snout, tiny ears, curly tail, and bright curious eyes, happily standing on a cozy farm, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "잡식"
+      ],
+      "color": [
+        "분홍색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "도시 근처"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/돼지.jpg"
+  },
+  {
+    "search_nickname": "음매음매 풀을 먹는 뿔 달린 농장 친구",
+    "animal_name": "소",
+    "kid_friendly_desc": "소는 ‘음매~’ 하고 울며 풀을 맛있게 먹는 동물이어요. 아기 소는 송아지라고 부른단다. 오래전부터 사람들과 함께 지내며 우유도 주고, 농장 일을 도와주기도 했어요. 보통 친구들과 무리 지어 지내는 걸 좋아해요.",
+    "key_feature": [
+      "풀을 먹어요",
+      "뿔이 있어요",
+      "송아지를 낳아요"
+    ],
+    "image_prompt": "A gentle cow with small horns, big friendly eyes, soft black-and-white fur, a swishing tail, standing in a sunny green farm meadow and chewing grass cutely, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "초원",
+        "도시 근처"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인",
+        "뿔이 있는",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/소.jpg"
+  },
+  {
+    "search_nickname": "긴 꼬리를 흔들며 빠르게 달리는 초원 친구",
+    "animal_name": "말",
+    "kid_friendly_desc": "말은 긴 다리로 타닥타닥 아주 빠르게 달릴 수 있어요. 풀과 건초를 좋아해서 냠냠 씹어 먹는 초식 동물이란다. 사람과 오래전부터 함께 지내며 짐을 나르거나 함께 산책하기도 해요. 기분이 좋으면 히힝 하고 울며 꼬리를 살랑살랑 흔들어요.",
+    "key_feature": [
+      "빠른 달리기",
+      "긴 다리",
+      "살랑 꼬리"
+    ],
+    "image_prompt": "A sweet horse with long legs, a flowing mane, and a swishing tail, happily trotting in a sunny green meadow, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [
+        "검정색",
+        "흰색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "초원",
+        "도시 근처"
+      ],
+      "feature": [
+        "엄청 빠른"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/말.jpg"
+  },
+  {
+    "search_nickname": "긴 귀로 쫑긋쫑긋 듣는 힘센 친구",
+    "animal_name": "당나귀",
+    "kid_friendly_desc": "당나귀는 말과 비슷하지만 귀가 아주 길고 귀여운 동물이에요. 풀이나 건초를 냠냠 먹고, 무거운 짐도 씩씩하게 옮길 수 있단다. 등에는 까만 줄이 보이기도 하고, 꼬리 끝에는 털이 보송보송해요. 사람들과 오래전부터 함께 살아온 든든한 친구예요.",
+    "key_feature": [
+      "긴 귀",
+      "등의 검은 줄",
+      "힘센 다리"
+    ],
+    "image_prompt": "A cute donkey with very long ears, soft gray fur, a dark stripe along its back, short sturdy legs, and a fluffy tail tip, standing sweetly in a sunny farm meadow, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "초원",
+        "도시 근처"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/당나귀.jpg"
+  },
+  {
+    "search_nickname": "머리 위로 물기둥을 뿜는 바다의 큰 친구",
+    "animal_name": "고래",
+    "kid_friendly_desc": "고래는 바다에 사는 아주 큰 포유류예요. 물고기처럼 보이지만 아가를 낳고, 폐로 숨을 쉬어서 머리 위 구멍으로 숨을 내쉰단다. 꼬리지느러미를 위아래로 흔들며 헤엄치고, 두꺼운 지방 옷 덕분에 차가운 바다에서도 지낼 수 있어요.",
+    "key_feature": [
+      "머리 위 분수공",
+      "아주 큰 몸",
+      "수평 꼬리지느러미"
+    ],
+    "image_prompt": "A cute smiling whale surfacing in the ocean, blowing a gentle water spout from the blowhole, round friendly body, small flippers, horizontal tail fin, sparkling waves, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "물고기를 먹는",
+        "육식"
+      ],
+      "color": [],
+      "size": [
+        "버스만한"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 없는"
+      ],
+      "behavior": [
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/고래.jpg"
   }
 ]
