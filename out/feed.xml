@@ -6,7 +6,7 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Fri, 12 Jun 2026 10:03:36 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 12 Jun 2026 10:28:54 GMT</lastBuildDate>
     <item>
       <title>앤트로픽, 비영리기관을 위한 AI 활용 교육 프로그램 '클로드 코프스' 발표</title>
       <link>https://dori-ai.com/insight/article/trend-90</link>
@@ -22,6 +22,14 @@
       <category>트렌드</category>
       <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
       <description>앤트로픽이 발표한 '클로드 코프스'는 비영리기관이 AI를 효과적으로 활용할 수 있도록 돕는 교육 프로그램입니다.</description>
+    </item>
+    <item>
+      <title>애플, 시리를 위한 새로운 혁신: 엔비디아 칩으로의 전환</title>
+      <link>https://dori-ai.com/insight/article/trend-92</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-92</guid>
+      <category>트렌드</category>
+      <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
+      <description>애플이 시리의 성능 향상을 위해 엔비디아 칩으로 전환한다는 소식이 전해졌다. 이는 AI 기술 경쟁에서 중요한 전환점이 될 것으로 예상된다.</description>
     </item>
     <item>
       <title>Google DeepMind의 ‘수백만 에이전트’ 경고: 출시 전 심사에서 상시 관제로 바뀌는 AI 보안</title>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
       <description>Anthropic이 가장 강력한 범용 모델 Claude Opus 4.7을 출시했다. 1M 토큰 컨텍스트, 적응형 사고(Adaptive Thinking), xhigh 추론 레벨 등 새로운 기능이 추가됐으며, 사이버보안 특화 모델 Mythos Preview도 함께 공개됐다.</description>
-    </item>
-    <item>
-      <title>PwC 보고서: AI 경제적 가치의 74%, 상위 20% 기업이 독식</title>
-      <link>https://dori-ai.com/insight/article/trend-62</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-62</guid>
-      <category>트렌드</category>
-      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
-      <description>PwC의 2026년 AI 성과 연구에 따르면, 전 세계 1,217명의 임원 대상 조사 결과 AI 경제적 가치의 74%를 단 20%의 기업이 가져가고 있다. 승자와 패자를 가르는 결정적 차이는 'AI를 생산성 도구'가 아닌 '성장 동력'으로 바라보는 전략적 관점의 차이였다.</description>
     </item>
   </channel>
 </rss>

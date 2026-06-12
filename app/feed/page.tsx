@@ -419,7 +419,7 @@ export default function FeedPage() {
                         <video src={post.mediaUrl} controls className="rounded-xl w-full" />
                       ) : (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={post.mediaUrl} alt="" className="rounded-xl w-full" />
+                        <img src={post.mediaUrl} alt={`${post.name}님의 피드 이미지`} className="rounded-xl w-full" />
                       )}
                     </div>
                   )}

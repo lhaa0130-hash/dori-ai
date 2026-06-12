@@ -48,9 +48,9 @@ export function createMetadata({
     description,
     keywords: keywords ? keywords.join(", ") : defaultKeywords.join(", "),
     applicationName: SITE_NAME,
-    authors: [{ name: "DORI Team", url: SITE_URL }],
-    creator: "DORI Team",
-    publisher: "DORI-AI",
+    authors: [{ name: "illo", url: SITE_URL }],
+    creator: "illo",
+    publisher: "illo",
     alternates: {
       canonical: fullUrl,
     },

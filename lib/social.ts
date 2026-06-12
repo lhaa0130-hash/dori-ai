@@ -1,6 +1,6 @@
 // 소셜/나만의 공간 데이터 계층 — Firestore 클라이언트 (정적 export 호환)
 // ─────────────────────────────────────────────────────────────
-// 미니홈피(프로필 꾸미기)·방명록·1:1 DM·피드·전적을 한곳에서 다룬다.
+// 코지홈(프로필 꾸미기)·방명록·1:1 DM·피드·전적을 한곳에서 다룬다.
 //
 //   users/{uid}                         프로필 확장 필드(bio/status/themeColor/bg)
 //   guestbook/{ownerUid}/entries/{id}   방명록
@@ -34,7 +34,7 @@ function todayStr(): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-// ─── 프로필(미니홈피) ───────────────────────────────────────────
+// ─── 프로필(코지홈) ───────────────────────────────────────────
 export type BgStyle = "aurora" | "sunset" | "mono" | "mint" | "berry" | "night";
 
 export interface Profile {

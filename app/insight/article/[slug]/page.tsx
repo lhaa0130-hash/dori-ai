@@ -1,7 +1,6 @@
 import { getPostData } from '@/lib/posts';
 import { getAllTrends } from '@/lib/trends';
 import { Suspense } from 'react';
-import Header from "@/components/layout/Header";
 import Image from 'next/image';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import rehypeHighlight from 'rehype-highlight';
@@ -111,8 +110,8 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
     "author": { "@type": "Organization", "name": "DORI-AI", "url": SITE_URL },
     "publisher": {
       "@type": "Organization",
-      "name": "DORI-AI",
-      "logo": { "@type": "ImageObject", "url": `${SITE_URL}/icon.svg` },
+      "name": "illo",
+      "logo": { "@type": "ImageObject", "url": `${SITE_URL}/illo-logo.png` },
     },
     "mainEntityOfPage": { "@type": "WebPage", "@id": articleUrl },
     ...(postTags.length > 0 ? { "keywords": postTags.join(", ") } : {}),
@@ -173,8 +172,7 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
       {/* 읽기 진행 바 (상단 고정) */}
       <ReadingProgress />
 
-      <main style={{ minHeight: '100vh', paddingTop: '70px' }}>
-        <Header />
+      <div className="min-h-screen">
         <article className="max-w-4xl mx-auto p-4 md:p-8">
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-center">
             {post.title}
@@ -224,7 +222,7 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
             allTrends={allTrends}
           />
         </article>
-      </main>
+      </div>
 
       {/* 관리자 전용 편집/삭제 바 */}
       {rawMarkdown && (

@@ -264,10 +264,10 @@ export default function ProfilePage() {
             🏠
           </div>
           <h2 className="text-[20px] font-extrabold tracking-tight text-neutral-900 dark:text-white mb-2">
-            코지홈를 보려면 로그인하세요
+            코지홈을 보려면 로그인하세요
           </h2>
           <p className="text-[14px] text-neutral-500 dark:text-neutral-400 mb-7 leading-relaxed">
-            로그인하면 나만의 코지홈를
+            로그인하면 나만의 코지홈을
             <br />
             꾸미고 방명록을 받을 수 있어요.
           </p>
@@ -287,7 +287,7 @@ export default function ProfilePage() {
     return (
       <main className="w-full min-h-screen flex flex-col items-center justify-center">
         <div className="w-10 h-10 border-4 border-neutral-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-5" />
-        <p className="text-[14px] text-neutral-400 font-semibold">코지홈를 불러오는 중입니다</p>
+        <p className="text-[14px] text-neutral-400 font-semibold">코지홈을 불러오는 중입니다</p>
       </main>
     );
   }

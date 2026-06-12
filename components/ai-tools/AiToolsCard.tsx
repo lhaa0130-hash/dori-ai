@@ -233,7 +233,7 @@ const AiToolsCard = React.memo(function AiToolsCard({ tool, rank }: AiToolsCardP
                 setIsOpen(!isOpen);
               }}
               className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:bg-[#F9954E] hover:text-white ${isOpen ? "text-[#F9954E] bg-[#FFF5EB] dark:bg-[#8F4B10]/20" : "text-neutral-500 dark:text-neutral-400 bg-neutral-100 dark:bg-neutral-900"}`}
-              title="리뷰 보기"
+              title="평가·리뷰 보기"
             >
               <span>평가하기</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className={`transition-transform duration-300 ${isOpen ? "rotate-180" : ""}`}>

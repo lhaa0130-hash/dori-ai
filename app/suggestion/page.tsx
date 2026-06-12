@@ -26,13 +26,6 @@ const saveSuggestions = (items: SuggestionItem[]) => {
     localStorage.setItem("dori_suggestions_v2", JSON.stringify(items));
 };
 
-const getAuthorId = (): string => {
-    if (typeof window === "undefined") return "";
-    let id = sessionStorage.getItem("dori_author_id");
-    if (!id) { id = crypto.randomUUID(); sessionStorage.setItem("dori_author_id", id); }
-    return id;
-};
-
 export default function SuggestionPage() {
     const [mounted, setMounted] = useState(false);
     const [suggestions, setSuggestions] = useState<SuggestionItem[]>([]);

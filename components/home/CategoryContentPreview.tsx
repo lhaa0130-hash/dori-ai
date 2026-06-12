@@ -286,7 +286,7 @@ export function ProjectPreview() {
                                 <div className="flex items-center justify-between text-[10px] text-muted-foreground mt-1 pl-7">
                                     <span className="flex items-center gap-1">
                                         <Users className="w-2.5 h-2.5" />
-                                        <span>DORI Team</span>
+                                        <span>DORI-AI</span>
                                     </span>
                                     <span>{project.category}</span>
                                 </div>
