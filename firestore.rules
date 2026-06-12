@@ -1,0 +1,47 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // 회원 — 본인만 수정
+    match /users/{userId} {
+      allow read: if true;
+      allow write: if request.auth != null && request.auth.uid == userId;
+    }
+
+    // 방문자 집계 + 애드센스
+    match /analytics/{docId}       { allow read, write: if true; }
+    match /analyticsDaily/{dateId} { allow read, write: if true; }
+
+    // 일로 일일 사용량
+    match /illoQuota/{docId}       { allow read, write: if true; }
+
+    // 미니게임 명예의 전당(랭킹) — 모든 게임 커버
+    match /leaderboards/{game}/scores/{uid} {
+      allow read: if true;
+      allow write: if request.auth != null;
+    }
+
+    // 소셜 — 방명록(주인만 삭제)
+    match /guestbook/{ownerUid}/entries/{entryId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow delete: if request.auth != null && request.auth.uid == ownerUid;
+    }
+
+    // 소셜 — 1:1 DM (대화 당사자만)
+    match /dm_threads/{threadId} {
+      allow read, write: if request.auth != null && request.auth.uid in threadId.split('__');
+      match /messages/{msgId} {
+        allow read, write: if request.auth != null && request.auth.uid in threadId.split('__');
+      }
+    }
+
+    // 소셜 — 피드
+    match /feed/{postId} {
+      allow read: if true;
+      allow create: if request.auth != null;
+      allow update: if request.auth != null;
+      allow delete: if request.auth != null && request.auth.uid == resource.data.uid;
+    }
+  }
+}
