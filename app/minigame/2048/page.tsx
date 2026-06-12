@@ -9,6 +9,8 @@ import { addCottonCandy, incrementMinigamePlays, addExp } from "@/lib/cottonCand
 import PlaytimeRewardToast from "@/components/game/PlaytimeRewardToast";
 import { submitScore } from "@/lib/leaderboard";
 import GameLeaderboard from "@/components/game/GameLeaderboard";
+import CountUp from "@/components/game/CountUp";
+import { burst, bigBurst } from "@/lib/juice";
 
 // ----------------------------------------------------------------------
 // Constants & Types
@@ -117,6 +119,8 @@ export default function Game2048() {
         if (moved) {
             newGrid = addRandomTile(newGrid);
             setGrid(newGrid);
+            // 합치기 성공 시 가벼운 축하 연출(JUICE 추가 — 조건/점수계산 불변)
+            if (scoreGain > 0) burst({ count: 46 });
             setScore(prev => {
                 const newScore = prev + scoreGain;
                 if (newScore > bestScore) {
@@ -129,6 +133,7 @@ export default function Game2048() {
             // Check Win/Loss
             if (newGrid.flat().includes(2048) && !won) {
                 setWon(true);
+                bigBurst(); // 2048 달성 큰 축하(JUICE 추가)
                 // 2048 달성 시 솜사탕 지급
                 if (session?.user?.email) {
                     addCottonCandy(session.user.email, 100, "2048 달성!");
@@ -185,25 +190,27 @@ export default function Game2048() {
 
             <PlaytimeRewardToast />
 
-            <header className="relative w-full max-w-md flex items-center justify-between mb-6">
-                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-500 hover:text-white transition-colors">
+            <header className="relative w-full max-w-md flex items-center justify-between mb-6 arcade-rise">
+                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-500 hover:text-white transition-colors active:scale-[0.97]">
                     <ArrowLeft className="w-4 h-4" />
                     미니게임
                 </Link>
                 <div className="text-[15px] font-extrabold tracking-tight text-white">🧩 2048</div>
                 <div className="flex gap-2">
-                    <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center min-w-[70px]">
+                    <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center min-w-[70px]">
                         <div className="text-[9px] uppercase tracking-widest text-neutral-500">Score</div>
-                        <div className="text-sm font-bold text-white tabular-nums">{score}</div>
+                        <span key={score} className="arcade-pop inline-block text-sm font-bold text-white">
+                            <CountUp value={score} className="tabular-nums" />
+                        </span>
                     </div>
-                    <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center min-w-[70px]">
+                    <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center min-w-[70px]">
                         <div className="text-[9px] uppercase tracking-widest text-neutral-500">Best</div>
-                        <div className="text-sm font-bold text-white tabular-nums">{bestScore}</div>
+                        <CountUp value={bestScore} className="block text-sm font-bold text-white tabular-nums" />
                     </div>
                 </div>
             </header>
 
-            <div className="relative rounded-2xl bg-white/[0.04] border border-white/10 p-2 w-full max-w-[360px]" style={{ touchAction: "none" }}
+            <div className="arcade-card arcade-rise-1 relative rounded-2xl bg-white/[0.04] border border-white/10 p-2 w-full max-w-[360px]" style={{ touchAction: "none" }}
                 onTouchStart={(e) => {
                     touchStartRef.current = { x: e.touches[0].clientX, y: e.touches[0].clientY };
                 }}
@@ -237,15 +244,16 @@ export default function Game2048() {
 
                 {(gameOver || won) && (
                     <div className="absolute inset-0 z-10 bg-black/70 backdrop-blur-sm flex items-center justify-center rounded-2xl p-4">
-                        <div className="rounded-3xl bg-[#101016] border border-white/10 p-8 flex flex-col items-center text-center">
+                        <div className="arcade-pop-in arcade-card rounded-3xl bg-[#101016] border border-white/10 p-8 flex flex-col items-center text-center">
+                            <div className="arcade-float text-4xl mb-2">{won ? "🏆" : "🧩"}</div>
                             <h2 className="text-xl font-extrabold tracking-tight text-white mb-4">
                                 {won ? "2048 달성! 🎉" : "게임 오버"}
                             </h2>
                             <div className="text-[10px] uppercase tracking-widest text-neutral-500">Score</div>
-                            <div className="text-4xl font-black text-[#F9954E] tabular-nums mb-6">{score}</div>
+                            <CountUp value={score} className="arcade-grad-text block text-5xl font-black tabular-nums mb-6" />
                             <button
                                 onClick={initGame}
-                                className="rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all px-8 py-3"
+                                className="arcade-shine arcade-glow rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.97] transition-transform px-8 py-3"
                             >
                                 <RefreshCw className="w-5 h-5 inline-block mr-2" />
                                 다시 하기
@@ -256,32 +264,32 @@ export default function Game2048() {
             </div>
 
             {/* Mobile Controls */}
-            <div className="grid grid-cols-3 gap-2 mt-6 w-[200px] md:hidden">
+            <div className="arcade-rise-2 grid grid-cols-3 gap-2 mt-6 w-[200px] md:hidden">
                 <div />
                 <button
-                    className="rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] active:scale-[0.98] transition-all p-4 flex justify-center text-2xl"
+                    className="arcade-card rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] active:scale-[0.97] transition-transform p-4 flex justify-center text-2xl"
                     onClick={() => move('UP')}
                 >⬆️</button>
                 <div />
                 <button
-                    className="rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] active:scale-[0.98] transition-all p-4 flex justify-center text-2xl"
+                    className="arcade-card rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] active:scale-[0.97] transition-transform p-4 flex justify-center text-2xl"
                     onClick={() => move('LEFT')}
                 >⬅️</button>
                 <button
-                    className="rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] active:scale-[0.98] transition-all p-4 flex justify-center text-2xl"
+                    className="arcade-card rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] active:scale-[0.97] transition-transform p-4 flex justify-center text-2xl"
                     onClick={() => move('DOWN')}
                 >⬇️</button>
                 <button
-                    className="rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] active:scale-[0.98] transition-all p-4 flex justify-center text-2xl"
+                    className="arcade-card rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] active:scale-[0.97] transition-transform p-4 flex justify-center text-2xl"
                     onClick={() => move('RIGHT')}
                 >➡️</button>
             </div>
 
-            <div className="mt-8 text-neutral-400 text-sm text-center">
+            <div className="arcade-rise-2 mt-8 text-neutral-400 text-sm text-center">
                 방향키나 버튼으로 숫자를 합쳐 <span className="text-[#F9954E] font-bold">2048 타일</span>을 만들어 보세요!
             </div>
 
-            <div className="w-full max-w-md mx-auto mt-4 px-4">
+            <div className="arcade-rise-3 w-full max-w-md mx-auto mt-4 px-4">
                 <GameLeaderboard game="2048" title="명예의 전당 TOP 5" unit="점" order="desc" tone="dark" />
             </div>
         </div>

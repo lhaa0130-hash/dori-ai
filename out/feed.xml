@@ -6,7 +6,23 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Fri, 12 Jun 2026 03:40:46 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 12 Jun 2026 04:33:08 GMT</lastBuildDate>
+    <item>
+      <title>앤트로픽, 비영리기관을 위한 AI 활용 교육 프로그램 '클로드 코프스' 발표</title>
+      <link>https://dori-ai.com/insight/article/trend-90</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-90</guid>
+      <category>트렌드</category>
+      <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
+      <description>앤트로픽이 비영리기관과 협력하여 AI 기술을 보다 효과적으로 활용할 수 있도록 돕는 '클로드 코프스' 프로그램을 공개했습니다.</description>
+    </item>
+    <item>
+      <title>Google DeepMind의 ‘수백만 에이전트’ 경고: 출시 전 심사에서 상시 관제로 바뀌는 AI 보안</title>
+      <link>https://dori-ai.com/insight/article/analysis-5</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/analysis-5</guid>
+      <category>분석</category>
+      <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
+      <description>AI 위험의 중심이 챗봇 한 대의 답변에서, 서로 거래하고 설득하고 자동 실행하는 수백만 개 에이전트의 상호작용으로 이동하고 있다. 이제 기업의 AI 보안은 모델을 한 번 검사하는 방식이 아니라, 운영 중 계속 감시하고 고치는 체계로 재편되고 있다.</description>
+    </item>
     <item>
       <title>AI 전쟁에 대비한 가격 인하 — OpenAI의 전략</title>
       <link>https://dori-ai.com/insight/article/trend-88</link>
@@ -310,22 +326,6 @@
       <category>트렌드</category>
       <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
       <description>OpenAI가 2026년 4월 사이버보안 전용 AI 모델 GPT-5.4-Cyber를 발표하며 제한된 파트너사에만 단계적으로 배포를 시작했다. 악용 위험을 최소화하면서 방어적 보안 역량을 극대화하는 새로운 접근 방식이 업계의 주목을 받고 있다.</description>
-    </item>
-    <item>
-      <title>에이전틱 AI 혁명: 스스로 일하는 AI가 기업 자동화를 재정의하다</title>
-      <link>https://dori-ai.com/insight/article/trend-60</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-60</guid>
-      <category>트렌드</category>
-      <pubDate>Sat, 18 Apr 2026 00:00:00 GMT</pubDate>
-      <description>2026년 에이전틱 AI(Agentic AI)가 기업 현장의 패러다임을 바꾸고 있다. 단순 챗봇을 넘어 복잡한 멀티스텝 업무를 자율적으로 수행하는 AI 에이전트들이 금융, 제조, 의료 등 전 산업에 확산되며 '지능형 자동화'의 새 시대를 열고 있다.</description>
-    </item>
-    <item>
-      <title>앤트로픽, Claude Opus 4.7 출시 — 100만 토큰 컨텍스트와 3배 향상된 비전으로 AI 에이전트 시대 선도</title>
-      <link>https://dori-ai.com/insight/article/trend-57</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-57</guid>
-      <category>트렌드</category>
-      <pubDate>Fri, 17 Apr 2026 00:00:00 GMT</pubDate>
-      <description>앤트로픽이 최신 플래그십 모델 Claude Opus 4.7을 공개했다. 100만 토큰 컨텍스트 윈도우, 3배 향상된 이미지 해상도, 강화된 코딩 능력을 갖춘 이 모델은 복잡한 에이전트형 작업의 새로운 기준을 제시한다.</description>
     </item>
   </channel>
 </rss>

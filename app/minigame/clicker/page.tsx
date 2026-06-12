@@ -4,12 +4,13 @@ import { useState, useEffect } from "react";
 import { ArrowLeft, Zap, Coins, Hammer, Crown, Sparkles } from "lucide-react";
 import Link from "next/link";
 import { motion, AnimatePresence } from "framer-motion";
-import confetti from "canvas-confetti";
 import { useAuth } from "@/contexts/AuthContext";
 import { addCottonCandy, incrementMinigamePlays, addExp } from "@/lib/cottonCandy";
 import { submitScore } from "@/lib/leaderboard";
 import GameLeaderboard from "@/components/game/GameLeaderboard";
 import PlaytimeRewardToast from "@/components/game/PlaytimeRewardToast";
+import CountUp from "@/components/game/CountUp";
+import { burst, bigBurst } from "@/lib/juice";
 
 // ----------------------------------------------------------------------
 // Constants
@@ -103,12 +104,12 @@ export default function ClickerGame() {
             return nk;
         });
 
-        // 이펙트
-        confetti({
-            particleCount: 50,
-            spread: 60,
-            origin: { y: 0.6 }
-        });
+        // 이펙트 (보스급 처치는 큰 축하)
+        if (MONSTER_LIST[stage].hp >= 2500) {
+            bigBurst();
+        } else {
+            burst();
+        }
 
         // 다음 스테이지
         setTimeout(() => {
@@ -172,11 +173,11 @@ export default function ClickerGame() {
                     <div className="text-[15px] font-extrabold tracking-tight text-white">
                         ⚔️ 보스 클리커
                     </div>
-                    <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                    <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
                         <div className="text-[9px] uppercase tracking-widest text-neutral-500">Gold</div>
                         <div className="text-sm font-bold text-white tabular-nums flex items-center justify-center gap-1">
                             <Coins className="w-3 h-3 text-[#F9954E]" />
-                            {gold.toLocaleString()}
+                            <CountUp value={gold} className="tabular-nums" />
                         </div>
                     </div>
                 </header>
@@ -185,11 +186,11 @@ export default function ClickerGame() {
                 <div className="flex-1 flex flex-col items-center justify-center p-6 relative overflow-hidden">
 
                     {/* Stage Info */}
-                    <div className="absolute top-6 text-center">
-                        <span className="text-[10px] uppercase tracking-widest text-neutral-500 font-bold tabular-nums">
-                            Stage {stage + 1} · 처치 {kills.toLocaleString()}
+                    <div className="absolute top-6 text-center arcade-rise">
+                        <span className="text-[10px] uppercase tracking-widest text-neutral-500 font-bold tabular-nums inline-flex items-center justify-center gap-1">
+                            Stage {stage + 1} · 처치 <CountUp value={kills} className="tabular-nums" />
                         </span>
-                        <h2 className="text-2xl font-extrabold tracking-tight text-white mt-1">{monster.name}</h2>
+                        <h2 key={stage} className="arcade-pop text-2xl font-extrabold tracking-tight text-white mt-1">{monster.name}</h2>
                     </div>
 
                     {/* Monster HP Bar */}
@@ -211,7 +212,7 @@ export default function ClickerGame() {
                         onClick={handleClick}
                         className="w-64 h-64 flex items-center justify-center cursor-pointer relative z-10 select-none -mt-10"
                     >
-                        <div className="text-9xl filter drop-shadow-[0_0_30px_rgba(249,149,78,0.25)] animate-bounce-slow transform transition-transform hover:scale-105 active:scale-95 duration-100">
+                        <div className="text-9xl filter drop-shadow-[0_0_30px_rgba(249,149,78,0.25)] arcade-float animate-bounce-slow transform transition-transform hover:scale-105 active:scale-95 duration-100">
                             {monster.emoji}
                         </div>
 
@@ -235,13 +236,13 @@ export default function ClickerGame() {
                     {/* Auto Damage Indicator */}
                     <div className="absolute bottom-6 flex items-center gap-2 text-neutral-400 text-sm tabular-nums">
                         <Zap className="w-4 h-4 text-[#F9954E]" />
-                        <span>DPS: {autoDamage.toLocaleString()}</span>
+                        <span className="inline-flex items-center gap-1">DPS: <CountUp value={autoDamage} className="tabular-nums" /></span>
                     </div>
 
                 </div>
 
                 {/* Upgrade Panel */}
-                <div className="bg-gradient-to-b from-white/[0.06] to-white/[0.02] border-t border-white/10 p-6 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)] z-20">
+                <div className="arcade-card arcade-rise bg-gradient-to-b from-white/[0.06] to-white/[0.02] border-t border-white/10 p-6 rounded-t-3xl shadow-[0_-10px_40px_rgba(0,0,0,0.5)] z-20">
                     <h3 className="text-[10px] uppercase tracking-widest text-neutral-500 font-bold mb-4">Upgrades</h3>
 
                     <div className="space-y-3">
@@ -249,8 +250,8 @@ export default function ClickerGame() {
                         <button
                             onClick={upgradeClick}
                             disabled={gold < clickUpgradeCost}
-                            className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all ${gold >= clickUpgradeCost
-                                    ? "bg-white/[0.06] border-white/10 hover:bg-white/[0.1] text-neutral-200 cursor-pointer active:scale-[0.98]"
+                            className={`arcade-rise-1 arcade-shine w-full flex items-center justify-between p-4 rounded-xl border transition-all active:scale-[0.97] ${gold >= clickUpgradeCost
+                                    ? "arcade-glow bg-white/[0.06] border-white/10 hover:bg-white/[0.1] text-neutral-200 cursor-pointer"
                                     : "bg-white/[0.02] border-white/5 text-neutral-600 opacity-40 cursor-not-allowed"
                                 }`}
                         >
@@ -260,13 +261,13 @@ export default function ClickerGame() {
                                 </div>
                                 <div className="text-left">
                                     <div className="font-bold text-sm">Attack Power</div>
-                                    <div className="text-xs text-neutral-400">Current: {clickDamage}</div>
+                                    <div className="text-xs text-neutral-400 flex items-center gap-1">Current: <CountUp value={clickDamage} className="tabular-nums" /></div>
                                 </div>
                             </div>
                             <div className="text-right">
                                 <div className="text-yellow-500 font-bold text-sm flex items-center justify-end gap-1">
                                     <Coins className="w-3 h-3" />
-                                    {clickUpgradeCost.toLocaleString()}
+                                    <CountUp value={clickUpgradeCost} className="tabular-nums" />
                                 </div>
                                 <div className="text-[10px] text-green-500 font-bold">+50% DMG</div>
                             </div>
@@ -276,24 +277,24 @@ export default function ClickerGame() {
                         <button
                             onClick={upgradeAuto}
                             disabled={gold < autoUpgradeCost}
-                            className={`w-full flex items-center justify-between p-4 rounded-xl border transition-all ${gold >= autoUpgradeCost
-                                    ? "bg-neutral-800 border-neutral-700 hover:bg-neutral-700 text-white cursor-pointer active:scale-[0.98]"
-                                    : "bg-neutral-900/50 border-neutral-800 text-neutral-600 cursor-not-allowed"
+                            className={`arcade-rise-2 arcade-shine w-full flex items-center justify-between p-4 rounded-xl border transition-all active:scale-[0.97] ${gold >= autoUpgradeCost
+                                    ? "arcade-glow bg-white/[0.06] border-white/10 hover:bg-white/[0.1] text-white cursor-pointer"
+                                    : "bg-white/[0.02] border-white/5 text-neutral-600 opacity-40 cursor-not-allowed"
                                 }`}
                         >
                             <div className="flex items-center gap-4">
-                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${gold >= autoUpgradeCost ? "bg-blue-500/20 text-blue-500" : "bg-neutral-800 text-neutral-600"}`}>
+                                <div className={`w-10 h-10 rounded-lg flex items-center justify-center ${gold >= autoUpgradeCost ? "bg-blue-500/20 text-blue-400" : "bg-white/[0.04] text-neutral-600"}`}>
                                     <Crown className="w-5 h-5" />
                                 </div>
                                 <div className="text-left">
                                     <div className="font-bold text-sm">Auto Hunter</div>
-                                    <div className="text-xs text-neutral-400">Current: {autoDamage}/sec</div>
+                                    <div className="text-xs text-neutral-400 flex items-center gap-1">Current: <CountUp value={autoDamage} className="tabular-nums" />/sec</div>
                                 </div>
                             </div>
                             <div className="text-right">
                                 <div className="text-yellow-500 font-bold text-sm flex items-center justify-end gap-1">
                                     <Coins className="w-3 h-3" />
-                                    {autoUpgradeCost.toLocaleString()}
+                                    <CountUp value={autoUpgradeCost} className="tabular-nums" />
                                 </div>
                                 <div className="text-[10px] text-green-500 font-bold">+40% DPS</div>
                             </div>

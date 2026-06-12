@@ -5,8 +5,9 @@ import { ArrowLeft, Play, Plus, Minus, RotateCcw, Dices } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
-import confetti from "canvas-confetti";
 import { useAuth } from "@/contexts/AuthContext";
+import CountUp from "@/components/game/CountUp";
+import { burst, bigBurst } from "@/lib/juice";
 
 // ---- Types ----
 type GameState = "SETUP" | "ROLLING" | "FINISHED";
@@ -39,23 +40,6 @@ export default function DiceRollPage() {
         setMounted(true);
     }, []);
 
-    const triggerConfetti = () => {
-        const count = 150;
-        const defaults = { origin: { y: 0.7 } };
-
-        function fire(particleRatio: number, opts: any) {
-            confetti({
-                ...defaults,
-                ...opts,
-                particleCount: Math.floor(count * particleRatio)
-            });
-        }
-
-        fire(0.25, { spread: 26, startVelocity: 55 });
-        fire(0.2, { spread: 60 });
-        fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-    };
-
     const rollDice = () => {
         setGameState("ROLLING");
         setIsRolling(true);
@@ -68,9 +52,11 @@ export default function DiceRollPage() {
             setIsRolling(false);
             setGameState("FINISHED");
 
-            // Trigger confetti if all dice show the same number (special case)
+            // Trigger celebration if all dice show the same number (special case)
             if (results.every(r => r === results[0])) {
-                triggerConfetti();
+                bigBurst();
+            } else {
+                burst();
             }
         }, 1500);
     };
@@ -146,15 +132,17 @@ export default function DiceRollPage() {
                         미니게임
                     </Link>
                     <h1 className="text-[15px] font-extrabold tracking-tight text-white">🎲 주사위 굴리기</h1>
-                    <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                    <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
                         <div className="text-[9px] uppercase tracking-widest text-neutral-500">DICE</div>
-                        <div className="text-sm font-bold text-white tabular-nums">{diceCount}</div>
+                        <div className="text-sm font-bold text-white tabular-nums">
+                            <CountUp value={diceCount} className="tabular-nums" />
+                        </div>
                     </div>
                 </header>
 
                 <div className="animate-fade-in">
                     {/* Game Card */}
-                    <div className="rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-8 md:p-12">
+                    <div className="arcade-card arcade-rise rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-8 md:p-12">
 
                         {/* Setup Screen */}
                         {gameState === "SETUP" && (
@@ -163,7 +151,7 @@ export default function DiceRollPage() {
                                 animate={{ opacity: 1, y: 0 }}
                             >
                                 <div className="text-center mb-8">
-                                    <Dices className="w-16 h-16 mx-auto mb-4 text-[#F9954E]" />
+                                    <Dices className="arcade-float w-16 h-16 mx-auto mb-4 text-[#F9954E] drop-shadow-[0_8px_24px_rgba(249,149,78,0.4)]" />
                                     <h2 className="text-2xl font-extrabold tracking-tight mb-2">주사위 개수 선택</h2>
                                     <p className="text-neutral-400">
                                         굴릴 주사위 개수를 정하세요 (1~6개)
@@ -173,17 +161,17 @@ export default function DiceRollPage() {
                                 <div className="flex items-center justify-center gap-6 mb-10">
                                     <button
                                         onClick={() => handleDiceCountChange(-1)}
-                                        className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 flex items-center justify-center hover:bg-white/[0.1] transition-colors"
+                                        className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 flex items-center justify-center hover:bg-white/[0.1] active:scale-[0.97] transition-all"
                                     >
                                         <Minus className="w-5 h-5" />
                                     </button>
                                     <div className="text-center w-24">
-                                        <span className="text-5xl font-extrabold tracking-tight text-[#F9954E] tabular-nums">{diceCount}</span>
+                                        <span key={diceCount} className="arcade-pop inline-block text-5xl font-extrabold tracking-tight text-[#F9954E] tabular-nums">{diceCount}</span>
                                         <span className="text-sm text-neutral-500 block mt-1">개</span>
                                     </div>
                                     <button
                                         onClick={() => handleDiceCountChange(1)}
-                                        className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 flex items-center justify-center hover:bg-white/[0.1] transition-colors"
+                                        className="w-12 h-12 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 flex items-center justify-center hover:bg-white/[0.1] active:scale-[0.97] transition-all"
                                     >
                                         <Plus className="w-5 h-5" />
                                     </button>
@@ -191,7 +179,7 @@ export default function DiceRollPage() {
 
                                 <button
                                     onClick={rollDice}
-                                    className="w-full py-4 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold text-lg shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                                    className="arcade-shine arcade-glow w-full py-4 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold text-lg shadow-lg shadow-[#F9954E]/20 active:scale-[0.97] transition-all flex items-center justify-center gap-2"
                                 >
                                     <Play className="w-5 h-5 fill-current" />
                                     주사위 굴리기
@@ -220,14 +208,14 @@ export default function DiceRollPage() {
                                         <motion.div
                                             initial={{ opacity: 0, scale: 0.9 }}
                                             animate={{ opacity: 1, scale: 1 }}
-                                            className="text-center mb-8"
+                                            className="arcade-pop-in text-center mb-8"
                                         >
-                                            <div className="rounded-2xl bg-white/[0.04] border border-white/10 p-8 mb-6">
+                                            <div className="arcade-card rounded-2xl bg-white/[0.04] border border-white/10 p-8 mb-6">
                                                 <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-2">
                                                     합계
                                                 </div>
-                                                <div className="text-6xl font-black text-[#F9954E] tabular-nums mb-2">
-                                                    {totalSum}
+                                                <div key={totalSum} className="arcade-pop arcade-grad-text text-6xl font-black tabular-nums mb-2">
+                                                    <CountUp value={totalSum} className="tabular-nums" />
                                                 </div>
                                                 <div className="text-sm text-neutral-400">
                                                     평균:{" "}
@@ -282,14 +270,14 @@ export default function DiceRollPage() {
                                     <div className="flex gap-3">
                                         <button
                                             onClick={rollDice}
-                                            className="flex-1 py-4 bg-red-500 hover:bg-red-600 active:scale-[0.98] text-white rounded-2xl font-bold transition-all flex items-center justify-center gap-2"
+                                            className="arcade-shine flex-1 py-4 bg-gradient-to-b from-[#F9954E] to-[#E8832E] hover:brightness-110 active:scale-[0.97] text-white rounded-2xl font-bold shadow-lg shadow-[#F9954E]/20 transition-all flex items-center justify-center gap-2"
                                         >
                                             <RotateCcw className="w-5 h-5" />
                                             다시 굴리기
                                         </button>
                                         <button
                                             onClick={resetGame}
-                                            className="px-6 py-4 bg-white/[0.06] border border-white/10 hover:bg-white/[0.12] text-neutral-200 rounded-2xl font-bold transition-colors"
+                                            className="px-6 py-4 bg-white/[0.06] border border-white/10 hover:bg-white/[0.12] active:scale-[0.97] text-neutral-200 rounded-2xl font-bold transition-all"
                                         >
                                             설정
                                         </button>

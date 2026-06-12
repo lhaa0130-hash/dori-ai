@@ -8,6 +8,8 @@ import { QUIZ_POOL, QuizQuestion } from "./data";
 import { useAuth } from "@/contexts/AuthContext";
 import { submitScore } from "@/lib/leaderboard";
 import GameLeaderboard from "@/components/game/GameLeaderboard";
+import CountUp from "@/components/game/CountUp";
+import { burst, bigBurst } from "@/lib/juice";
 
 export default function QuizGamePage() {
     const { theme } = useTheme();
@@ -39,6 +41,7 @@ export default function QuizGamePage() {
 
         if (availableQuestions.length < QUESTIONS_PER_ROUND) {
             // 문제가 부족하면 (모든 문제 풀이 완료)
+            bigBurst();
             setGameState("CLEAR");
             return;
         }
@@ -75,6 +78,7 @@ export default function QuizGamePage() {
         setIsAnswerChecked(true);
         const isCorrect = selectedOption === currentQuestions[currentQuestionIndex].answer;
         if (isCorrect) {
+            burst();
             setScore(prev => prev + 1);
             setTotalScore(prev => prev + 1);
         }
@@ -88,6 +92,8 @@ export default function QuizGamePage() {
                 // 라운드 종료: 누적 정답 수를 명예의 전당에 등록
                 // totalScore 상태는 이번 정답 반영 전 값이므로 로컬로 최종값 계산
                 const finalTotalScore = totalScore + (isCorrect ? 1 : 0);
+                // 이번 라운드 정답 수(로컬 최종값)가 만점이면 큰 축하 연출
+                if (score + (isCorrect ? 1 : 0) === QUESTIONS_PER_ROUND) bigBurst();
                 if (session?.user?.email) {
                     submitScore("quiz", session.user.name || "플레이어", finalTotalScore, "desc");
                     if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("dori-lb-refresh", { detail: "quiz" }));
@@ -113,23 +119,31 @@ export default function QuizGamePage() {
                         <h1 className="text-[15px] font-extrabold tracking-tight text-white">🧠 AI 상식 퀴즈</h1>
                     </div>
                     <div className="flex items-center gap-2">
-                        <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                        <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
                             <div className="text-[9px] uppercase tracking-widest text-neutral-500">SCORE</div>
-                            <div className="text-sm font-bold text-white tabular-nums">{totalScore}</div>
+                            <div className="text-sm font-bold text-white tabular-nums">
+                                <span key={totalScore} className="arcade-pop inline-block">
+                                    <CountUp value={totalScore} className="tabular-nums" />
+                                </span>
+                            </div>
                         </div>
-                        <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                        <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
                             <div className="text-[9px] uppercase tracking-widest text-neutral-500">ROUND</div>
-                            <div className="text-sm font-bold text-[#F9954E] tabular-nums">{round}</div>
+                            <div className="text-sm font-bold text-[#F9954E] tabular-nums">
+                                <span key={round} className="arcade-pop inline-block">
+                                    <CountUp value={round} className="tabular-nums" />
+                                </span>
+                            </div>
                         </div>
                     </div>
                 </div>
 
                 {/* 게임 화면 */}
-                <div className="rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-8 shadow-2xl relative overflow-hidden min-h-[500px] flex flex-col justify-center">
+                <div className="arcade-card arcade-rise rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-8 shadow-2xl relative overflow-hidden min-h-[500px] flex flex-col justify-center">
 
                     {gameState === "START" && (
                         <div className="text-center py-12">
-                            <Brain className="w-20 h-20 mx-auto text-[#F9954E] mb-6" />
+                            <Brain className="arcade-float w-20 h-20 mx-auto text-[#F9954E] mb-6" />
                             <h2 className="text-3xl font-extrabold tracking-tight mb-4 text-white">AI 상식 퀴즈 서바이벌</h2>
                             <p className="text-neutral-400 mb-8 max-w-md mx-auto leading-relaxed">
                                 5문제를 모두 맞혀야 다음 라운드로 넘어갈 수 있습니다.<br />
@@ -137,7 +151,7 @@ export default function QuizGamePage() {
                             </p>
                             <button
                                 onClick={startNewGame}
-                                className="px-8 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all"
+                                className="arcade-shine arcade-glow px-8 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.97] transition-transform"
                             >
                                 도전하기
                             </button>
@@ -150,7 +164,7 @@ export default function QuizGamePage() {
                             <div className="flex items-center justify-between mb-6 text-[10px] uppercase tracking-widest text-neutral-500 font-medium">
                                 <span className="tabular-nums">Round {round} · Q{currentQuestionIndex + 1}</span>
                                 <span className={score === currentQuestionIndex ? "text-[#F9954E] tabular-nums" : "text-neutral-500 tabular-nums"}>
-                                    현재 {score} / {QUESTIONS_PER_ROUND} 정답
+                                    현재 <span key={score} className="arcade-pop inline-block"><CountUp value={score} className="tabular-nums" /></span> / {QUESTIONS_PER_ROUND} 정답
                                 </span>
                             </div>
                             <div className="w-full h-2 bg-white/[0.06] border border-white/10 rounded-full mb-8 overflow-hidden">
@@ -192,7 +206,7 @@ export default function QuizGamePage() {
                                             key={idx}
                                             onClick={() => handleOptionClick(idx)}
                                             disabled={isAnswerChecked}
-                                            className={`w-full p-4 rounded-xl text-left border transition-all duration-200 font-medium ${buttonStyle}`}
+                                            className={`w-full p-4 rounded-xl text-left border transition-all duration-200 font-medium active:scale-[0.97] ${buttonStyle}`}
                                         >
                                             <div className="flex items-center justify-between">
                                                 <span>{option}</span>
@@ -208,8 +222,8 @@ export default function QuizGamePage() {
                             <button
                                 onClick={submitAnswer}
                                 disabled={selectedOption === null || isAnswerChecked}
-                                className={`w-full mt-8 py-3 rounded-xl font-bold text-white transition-all
-                                    ${selectedOption === null ? 'bg-white/[0.06] border border-white/10 opacity-40 cursor-not-allowed' : 'bg-gradient-to-b from-[#F9954E] to-[#E8832E] shadow-lg shadow-[#F9954E]/20 active:scale-[0.98]'}
+                                className={`w-full mt-8 py-3 rounded-xl font-bold text-white transition-all active:scale-[0.97]
+                                    ${selectedOption === null ? 'bg-white/[0.06] border border-white/10 opacity-40 cursor-not-allowed' : 'arcade-shine bg-gradient-to-b from-[#F9954E] to-[#E8832E] shadow-lg shadow-[#F9954E]/20'}
                                     ${isAnswerChecked ? 'opacity-0 pointer-events-none' : ''}
                                 `}
                             >
@@ -219,17 +233,17 @@ export default function QuizGamePage() {
                     )}
 
                     {gameState === "RESULT" && (
-                        <div className="text-center py-12 animate-fade-in">
+                        <div className="text-center py-12 arcade-pop-in">
                             {score === QUESTIONS_PER_ROUND ? (
                                 <>
-                                    <Trophy className="w-24 h-24 mx-auto text-[#F9954E] mb-6 drop-shadow-lg animate-bounce" />
+                                    <Trophy className="arcade-float w-24 h-24 mx-auto text-[#F9954E] mb-6 drop-shadow-lg" />
                                     <h2 className="text-4xl font-extrabold tracking-tight text-white mb-2">Round {round} Clear!</h2>
                                     <p className="text-lg text-neutral-400 mb-8">
                                         완벽합니다! 5문제를 모두 맞히셨어요.
                                     </p>
                                     <button
                                         onClick={handleNextRound}
-                                        className="w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2 mx-auto"
+                                        className="arcade-shine arcade-glow w-full sm:w-auto px-8 py-4 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.97] transition-transform flex items-center justify-center gap-2 mx-auto"
                                     >
                                         <span>다음 라운드 도전</span>
                                         <ArrowRight className="w-5 h-5" />
@@ -237,12 +251,14 @@ export default function QuizGamePage() {
                                 </>
                             ) : (
                                 <>
-                                    <div className="w-24 h-24 mx-auto rounded-full bg-white/[0.05] border border-white/10 flex items-center justify-center mb-6 text-4xl">
+                                    <div className="arcade-float w-24 h-24 mx-auto rounded-full bg-white/[0.05] border border-white/10 flex items-center justify-center mb-6 text-4xl">
                                         😭
                                     </div>
                                     <h2 className="text-3xl font-extrabold tracking-tight text-white mb-2">Game Over</h2>
                                     <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">이번 라운드 정답</div>
-                                    <div className="text-4xl font-black text-[#F9954E] tabular-nums mb-4">{score}<span className="text-lg text-neutral-500 font-bold"> / {QUESTIONS_PER_ROUND}</span></div>
+                                    <div className="text-5xl font-black arcade-grad-text tabular-nums mb-4">
+                                        <CountUp value={score} className="tabular-nums" /><span className="text-lg text-neutral-500 font-bold"> / {QUESTIONS_PER_ROUND}</span>
+                                    </div>
                                     <p className="text-neutral-400 mb-8 max-w-sm mx-auto">
                                         아쉽네요. 다음 라운드로 가려면<br />
                                         5문제를 모두 맞혀야 합니다.
@@ -250,14 +266,14 @@ export default function QuizGamePage() {
                                     <div className="flex flex-col sm:flex-row gap-3 justify-center">
                                         <button
                                             onClick={startNewGame}
-                                            className="px-6 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                                            className="arcade-shine px-6 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.97] transition-transform flex items-center justify-center gap-2"
                                         >
                                             <RefreshCw className="w-5 h-5" />
                                             처음부터 다시하기
                                         </button>
                                         <Link
                                             href="/minigame"
-                                            className="px-6 py-3 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] font-semibold transition-colors flex items-center justify-center gap-2"
+                                            className="px-6 py-3 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] font-semibold transition-colors flex items-center justify-center gap-2 active:scale-[0.97]"
                                         >
                                             <ArrowLeft className="w-5 h-5" />
                                             나가기
@@ -269,8 +285,8 @@ export default function QuizGamePage() {
                     )}
 
                     {gameState === "CLEAR" && (
-                        <div className="text-center py-12 animate-fade-in">
-                            <Trophy className="w-32 h-32 mx-auto text-[#F9954E] mb-6 drop-shadow-xl" />
+                        <div className="text-center py-12 arcade-pop-in">
+                            <Trophy className="arcade-float w-32 h-32 mx-auto text-[#F9954E] mb-6 drop-shadow-xl" />
                             <h2 className="text-4xl font-extrabold tracking-tight text-white mb-4">All Clear!</h2>
                             <p className="text-lg text-neutral-400 mb-8 max-w-md mx-auto">
                                 축하합니다! 준비된 모든 문제를 풀었습니다.<br />
@@ -278,11 +294,13 @@ export default function QuizGamePage() {
                             </p>
                             <div className="mb-8">
                                 <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">최종 점수</div>
-                                <div className="text-4xl font-black text-[#F9954E] tabular-nums">{totalScore}<span className="text-lg text-neutral-500 font-bold"> 점</span></div>
+                                <div className="text-6xl font-black arcade-grad-text tabular-nums">
+                                    <CountUp value={totalScore} className="tabular-nums" /><span className="text-lg text-neutral-500 font-bold"> 점</span>
+                                </div>
                             </div>
                             <Link
                                 href="/minigame"
-                                className="inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all"
+                                className="arcade-shine arcade-glow inline-flex items-center justify-center gap-2 px-8 py-4 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.97] transition-transform"
                             >
                                 <ArrowLeft className="w-5 h-5" />
                                 메인으로 돌아가기

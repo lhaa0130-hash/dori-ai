@@ -4,6 +4,8 @@ import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { ArrowLeft, RefreshCw, Sparkles, Brain, Code, Database, Globe, Smartphone, Video, Film, Check, Zap, Cpu, Server, Wifi, Lock, Search, Command, Activity, Layers, Box, Key, Mail, Map, Music, Monitor, Ghost, Bomb, Skull, Heart, Eye } from "lucide-react";
+import CountUp from "@/components/game/CountUp";
+import { burst, bigBurst } from "@/lib/juice";
 
 // 카드 아이콘 데이터 풀
 const ICON_POOL = [
@@ -182,6 +184,7 @@ export default function MemoryGamePage() {
             const isMatch = cards[firstId].iconId === cards[secondId].iconId;
 
             if (isMatch) {
+                burst();
                 setTimeout(() => {
                     const matchedCards = [...cards];
                     matchedCards[firstId].isMatched = true;
@@ -192,6 +195,7 @@ export default function MemoryGamePage() {
                     setMatchedCount(prev => {
                         const newCount = prev + 1;
                         if (newCount === stageConfig.pairs) {
+                            bigBurst();
                             if (currentStage === 10) {
                                 setGameState("GAME_PASS");
                             } else {
@@ -232,16 +236,18 @@ export default function MemoryGamePage() {
                     <span>나가기</span>
                 </Link>
                 <div className="text-[15px] font-extrabold tracking-tight text-white">🧠 메모리 마스터</div>
-                <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
                     <div className="text-[9px] uppercase tracking-widest text-neutral-500">Stage</div>
                     <div className={`text-sm font-bold tabular-nums ${stageConfig.isHell ? "text-red-400" : "text-white"}`}>
-                        {currentStage}/10{stageConfig.isHell ? " · HELL" : stageConfig.isHard ? " · HARD" : ""}
+                        <span key={currentStage} className="arcade-pop inline-block">
+                            <CountUp value={currentStage} className="tabular-nums" />
+                        </span>/10{stageConfig.isHell ? " · HELL" : stageConfig.isHard ? " · HARD" : ""}
                     </div>
                 </div>
             </div>
 
             {/* 메인 보드 */}
-            <div className={`relative z-10 w-full max-w-4xl rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border p-6 md:p-10 overflow-hidden min-h-[600px] flex flex-col items-center justify-center
+            <div className={`arcade-card arcade-rise relative z-10 w-full max-w-4xl rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border p-6 md:p-10 overflow-hidden min-h-[600px] flex flex-col items-center justify-center
                 ${stageConfig.isHell ? "border-red-500/30" : "border-white/10"}
             `}>
 
@@ -256,7 +262,7 @@ export default function MemoryGamePage() {
 
                 {gameState === "START" && (
                     <div className="text-center animate-fade-in">
-                        <Sparkles className="w-20 h-20 mx-auto text-[#F9954E] mb-6" />
+                        <Sparkles className="arcade-float w-20 h-20 mx-auto text-[#F9954E] mb-6 drop-shadow-[0_0_20px_rgba(249,149,78,0.35)]" />
                         <h1 className="text-4xl font-extrabold tracking-tight text-white mb-4">Memory Master</h1>
                         <p className="text-lg text-neutral-400 mb-8 max-w-md mx-auto">
                             1~5단계는 색상 힌트가 있어 쉽지만,<br />
@@ -265,7 +271,7 @@ export default function MemoryGamePage() {
                         </p>
                         <button
                             onClick={() => initializeGame(1)}
-                            className="px-8 py-4 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold text-lg shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all"
+                            className="arcade-shine arcade-glow px-8 py-4 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold text-lg shadow-lg shadow-[#F9954E]/20 active:scale-[0.97] transition-transform"
                         >
                             게임 시작
                         </button>
@@ -277,7 +283,9 @@ export default function MemoryGamePage() {
                         {/* 상태 표시줄 */}
                         <div className="flex justify-between items-center mb-6 px-2">
                             <div className="min-w-[120px] text-sm font-medium text-neutral-500">
-                                남은 카드: <span className="font-bold text-white tabular-nums">{stageConfig.pairs - matchedCount}</span> 쌍
+                                남은 카드: <span key={stageConfig.pairs - matchedCount} className="arcade-pop inline-block font-bold text-white tabular-nums">
+                                    <CountUp value={stageConfig.pairs - matchedCount} className="tabular-nums" />
+                                </span> 쌍
                             </div>
 
                             {/* 하트 표시 (Hell Mode) */}
@@ -316,7 +324,7 @@ export default function MemoryGamePage() {
                                     onClick={() => handleCardClick(card.id)}
                                     disabled={card.isMatched || isPreviewing}
                                     className={`
-                                        relative aspect-square rounded-lg md:rounded-xl flex items-center justify-center transition-all duration-300 cursor-pointer
+                                        relative aspect-square rounded-lg md:rounded-xl flex items-center justify-center transition-all duration-300 cursor-pointer active:scale-[0.97]
                                         ${card.isMatched ? "opacity-0 pointer-events-none" : "opacity-100"}
                                     `}
                                     style={{ perspective: "1000px" }}
@@ -330,10 +338,11 @@ export default function MemoryGamePage() {
                                         {/* 앞면 (뒤집혔을 때/숨겨진 상태) */}
                                         <div className={`
                                             absolute inset-0 w-full h-full backface-hidden rounded-lg md:rounded-xl flex items-center justify-center
-                                            bg-white/[0.04] border-2 border-white/10
-                                            hover:border-purple-500/30
+                                            bg-gradient-to-br from-white/[0.07] to-white/[0.02] border-2 border-white/10
+                                            shadow-[inset_0_1px_0_rgba(255,255,255,0.08)]
+                                            hover:border-purple-500/40 hover:from-white/[0.1] transition-colors
                                         `}>
-                                            <div className="w-1/3 h-1/3 rounded-full bg-white/[0.08] opacity-50" />
+                                            <div className="w-1/3 h-1/3 rounded-full bg-white/[0.1] opacity-50 shadow-[inset_0_1px_2px_rgba(255,255,255,0.15)]" />
                                         </div>
 
                                         {/* 뒷면 (공개된 상태) */}
@@ -360,14 +369,16 @@ export default function MemoryGamePage() {
                 )}
 
                 {gameState === "STAGE_CLEAR" && (
-                    <div className="text-center py-10 animate-fade-in">
-                        <div className="w-20 h-20 mx-auto bg-emerald-500/15 text-emerald-400 rounded-full flex items-center justify-center mb-6">
+                    <div className="arcade-pop-in text-center py-10">
+                        <div className="arcade-float w-20 h-20 mx-auto bg-emerald-500/15 text-emerald-400 rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(16,185,129,0.3)]">
                             <Check className="w-10 h-10" />
                         </div>
-                        <h2 className="text-3xl font-bold mb-2">Stage {currentStage} Clear!</h2>
+                        <h2 className="text-3xl font-bold mb-2">
+                            Stage <span className="arcade-grad-text"><CountUp value={currentStage} className="tabular-nums" /></span> Clear!
+                        </h2>
                         <button
                             onClick={handleNextStage}
-                            className="mt-8 px-8 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold hover:scale-105 transition-transform"
+                            className="arcade-shine arcade-glow mt-8 px-8 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold active:scale-[0.97] transition-transform"
                         >
                             {currentStage === 9 ? "최종 단계 (Hell Mode) 도전" : "다음 스테이지"}
                         </button>
@@ -375,8 +386,8 @@ export default function MemoryGamePage() {
                 )}
 
                 {gameState === "GAME_FAIL" && (
-                    <div className="text-center py-10 animate-fade-in">
-                        <div className="w-20 h-20 mx-auto bg-red-500/15 text-red-400 rounded-full flex items-center justify-center mb-6">
+                    <div className="arcade-pop-in text-center py-10">
+                        <div className="arcade-float w-20 h-20 mx-auto bg-red-500/15 text-red-400 rounded-full flex items-center justify-center mb-6 shadow-[0_0_30px_rgba(239,68,68,0.3)]">
                             <Skull className="w-10 h-10" />
                         </div>
                         <h2 className="text-3xl font-bold mb-2">Game Over...</h2>
@@ -384,13 +395,13 @@ export default function MemoryGamePage() {
                         <div className="flex gap-4 justify-center">
                             <button
                                 onClick={() => initializeGame(10)}
-                                className="px-6 py-3 rounded-xl bg-red-600 text-white font-bold hover:bg-red-700 hover:scale-105 transition-transform"
+                                className="arcade-shine px-6 py-3 rounded-xl bg-red-600 text-white font-bold hover:bg-red-700 active:scale-[0.97] transition-all"
                             >
                                 재도전 (Hell)
                             </button>
                             <button
                                 onClick={() => initializeGame(1)}
-                                className="px-6 py-3 rounded-xl bg-white/[0.06] border border-white/10 hover:bg-white/[0.12] text-neutral-200 font-bold transition-colors"
+                                className="px-6 py-3 rounded-xl bg-white/[0.06] border border-white/10 hover:bg-white/[0.12] text-neutral-200 font-bold active:scale-[0.97] transition-all"
                             >
                                 처음으로
                             </button>
@@ -399,11 +410,12 @@ export default function MemoryGamePage() {
                 )}
 
                 {gameState === "GAME_PASS" && (
-                    <div className="text-center py-10 animate-slide-up">
-                        <h2 className="text-4xl font-bold mb-4 text-[#F9954E]">🏆 ALL CLEARED!</h2>
+                    <div className="arcade-pop-in text-center py-10">
+                        <Sparkles className="arcade-float w-16 h-16 mx-auto text-[#F9954E] mb-4 drop-shadow-[0_0_24px_rgba(249,149,78,0.45)]" />
+                        <h2 className="text-5xl font-black mb-4 arcade-grad-text">🏆 ALL CLEARED!</h2>
                         <p className="text-xl mb-8">당신은 진정한 기억력의 신입니다!</p>
                         <Link href="/minigame">
-                            <button className="px-8 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold hover:scale-105 transition-transform">
+                            <button className="arcade-shine arcade-glow px-8 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold active:scale-[0.97] transition-transform">
                                 메뉴로 돌아가기
                             </button>
                         </Link>

@@ -5,8 +5,9 @@ import { ArrowLeft, RefreshCw, Play, Users, Trophy, ChevronRight, Shuffle, Spark
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
-import confetti from "canvas-confetti";
 import { useAuth } from "@/contexts/AuthContext";
+import CountUp from "@/components/game/CountUp";
+import { burst, bigBurst } from "@/lib/juice";
 
 // ---- Types ----
 type GameState = "SETUP" | "READY" | "PLAYING" | "FINISHED";
@@ -80,24 +81,7 @@ export default function LadderGamePage() {
     }, []);
 
     const triggerConfetti = () => {
-        const count = 200;
-        const defaults = {
-            origin: { y: 0.7 }
-        };
-
-        function fire(particleRatio: number, opts: any) {
-            confetti({
-                ...defaults,
-                ...opts,
-                particleCount: Math.floor(count * particleRatio)
-            });
-        }
-
-        fire(0.25, { spread: 26, startVelocity: 55 });
-        fire(0.2, { spread: 60 });
-        fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-        fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
-        fire(0.1, { spread: 120, startVelocity: 45 });
+        bigBurst();
     };
 
     const triggerShake = async () => {
@@ -334,9 +318,11 @@ export default function LadderGamePage() {
                     미니게임
                 </Link>
                 <h1 className="text-[15px] font-extrabold tracking-tight text-white">🪜 사다리 타기</h1>
-                <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
                     <div className="text-[9px] uppercase tracking-widest text-neutral-500">PLAYERS</div>
-                    <div className="text-sm font-bold text-white tabular-nums">{playerCount}명</div>
+                    <div className="text-sm font-bold text-white tabular-nums">
+                        <CountUp value={playerCount} className="tabular-nums" />명
+                    </div>
                 </div>
             </header>
 
@@ -344,7 +330,7 @@ export default function LadderGamePage() {
                 {gameState === "SETUP" && (
                     <div className="animate-fade-in space-y-8">
                         {/* Setup Card */}
-                        <div className="rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-6 sm:p-8">
+                        <div className="arcade-card arcade-rise rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-6 sm:p-8">
                             <div className="text-center mb-8">
                                 <h2 className="text-2xl font-extrabold tracking-tight mb-2">게임 설정</h2>
                                 <p className="text-neutral-400">참가 인원과 내기 항목을 설정하세요.</p>
@@ -353,17 +339,19 @@ export default function LadderGamePage() {
                             <div className="flex items-center justify-center gap-6 mb-10">
                                 <button
                                     onClick={() => handlePlayerCountChange(-1)}
-                                    className="w-12 h-12 rounded-full bg-white/[0.06] border border-white/10 text-neutral-200 flex items-center justify-center hover:bg-white/[0.1] transition-colors"
+                                    className="w-12 h-12 rounded-full bg-white/[0.06] border border-white/10 text-neutral-200 flex items-center justify-center hover:bg-white/[0.1] active:scale-[0.97] transition-all"
                                 >
                                     <span className="text-2xl font-light">-</span>
                                 </button>
                                 <div className="text-center w-24">
-                                    <span className="text-4xl font-extrabold tracking-tight text-[#F9954E] tabular-nums">{playerCount}</span>
+                                    <span key={playerCount} className="arcade-pop inline-block text-4xl font-extrabold tracking-tight text-[#F9954E] tabular-nums">
+                                        <CountUp value={playerCount} className="tabular-nums" />
+                                    </span>
                                     <span className="text-sm text-neutral-400 block mt-1">명</span>
                                 </div>
                                 <button
                                     onClick={() => handlePlayerCountChange(1)}
-                                    className="w-12 h-12 rounded-full bg-white/[0.06] border border-white/10 text-neutral-200 flex items-center justify-center hover:bg-white/[0.1] transition-colors"
+                                    className="w-12 h-12 rounded-full bg-white/[0.06] border border-white/10 text-neutral-200 flex items-center justify-center hover:bg-white/[0.1] active:scale-[0.97] transition-all"
                                 >
                                     <span className="text-2xl font-light">+</span>
                                 </button>
@@ -400,7 +388,7 @@ export default function LadderGamePage() {
 
                             <button
                                 onClick={generateLadder}
-                                className="w-full py-4 bg-[#F9954E] hover:bg-[#E8832E] active:scale-[0.98] text-white rounded-2xl font-bold text-lg shadow-lg shadow-[#F9954E]/20 transition-all flex items-center justify-center gap-2"
+                                className="arcade-shine arcade-glow w-full py-4 bg-[#F9954E] hover:bg-[#E8832E] active:scale-[0.97] text-white rounded-2xl font-bold text-lg shadow-lg shadow-[#F9954E]/20 transition-all flex items-center justify-center gap-2"
                             >
                                 <Play className="w-5 h-5 fill-current" />
                                 게임 시작
@@ -414,14 +402,14 @@ export default function LadderGamePage() {
                         {/* Game Board */}
                         <motion.div
                             animate={boardControls}
-                            className="relative bg-white/[0.04] rounded-[2rem] p-6 md:p-10 shadow-xl border border-white/10 min-h-[600px] overflow-hidden"
+                            className="arcade-card arcade-rise relative bg-white/[0.04] rounded-[2rem] p-6 md:p-10 shadow-xl border border-white/10 min-h-[600px] overflow-hidden"
                         >
 
                             {/* Controls */}
                             <div className="absolute top-6 right-6 z-10 flex gap-2">
                                 <button
                                     onClick={resetGame}
-                                    className="p-2 rounded-full bg-white/[0.06] border border-white/10 hover:bg-white/[0.12] transition-colors text-neutral-200"
+                                    className="p-2 rounded-full bg-white/[0.06] border border-white/10 hover:bg-white/[0.12] active:scale-[0.97] transition-all text-neutral-200"
                                     title="다시 설정"
                                 >
                                     <RefreshCw className="w-5 h-5" />
@@ -433,7 +421,7 @@ export default function LadderGamePage() {
                                 <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-20 pointer-events-none">
                                     <button
                                         onClick={() => startAnimation("ALL")}
-                                        className="pointer-events-auto px-8 py-3 bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white rounded-full font-bold shadow-2xl hover:scale-105 active:scale-95 transition-all text-lg flex items-center gap-2"
+                                        className="arcade-shine arcade-glow pointer-events-auto px-8 py-3 bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white rounded-full font-bold shadow-2xl hover:scale-105 active:scale-95 transition-all text-lg flex items-center gap-2"
                                     >
                                         <Play className="w-5 h-5 fill-current" />
                                         전체 결과 보기
@@ -506,7 +494,7 @@ export default function LadderGamePage() {
                                             display: (gameState === "PLAYING" || gameState === "FINISHED" || gameState === "READY") ? 'block' : 'none'
                                         }}
                                     >
-                                        <circle r="2" fill={p.color} fillOpacity="0.4" className="animate-pulse" />
+                                        <circle r="2" fill={p.color} fillOpacity="0.4" className="animate-pulse arcade-float" />
                                         <circle r="1" fill={p.color} stroke="white" strokeWidth="0.5" filter="url(#glow)" />
 
                                         {(animatingPlayerIndex === i || animatingPlayerIndex === "ALL") && !p.finished && (
@@ -581,7 +569,7 @@ export default function LadderGamePage() {
                                                         key="hidden"
                                                         initial={{ scale: 1, rotateY: 0 }}
                                                         exit={{ scale: 0, rotateY: 90 }}
-                                                        className="w-full h-full bg-white/[0.08] rounded-xl flex items-center justify-center cursor-pointer shadow-md hover:scale-105 transition-transform"
+                                                        className="w-full h-full bg-white/[0.08] rounded-xl flex items-center justify-center cursor-pointer shadow-md hover:scale-105 active:scale-[0.97] transition-transform"
                                                         onClick={() => {
                                                             if (winner) {
                                                                 setRevealedResults(prev => {
@@ -589,7 +577,7 @@ export default function LadderGamePage() {
                                                                     next[i] = true;
                                                                     return next;
                                                                 });
-                                                                triggerConfetti();
+                                                                burst();
                                                             }
                                                         }}
                                                     >

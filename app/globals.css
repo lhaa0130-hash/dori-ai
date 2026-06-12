@@ -521,3 +521,71 @@ h6 {
     transform: none !important;
   }
 }
+
+/* ════════════════════════════════════════════════════════════
+   DORI ARCADE — 프리미엄 게임 모션 유틸 (미니게임 공용)
+   ════════════════════════════════════════════════════════════ */
+
+/* 패널 등장 (아래에서 부드럽게 떠오름) */
+@keyframes arcade-rise {
+  from { opacity: 0; transform: translateY(16px) scale(0.985); }
+  to   { opacity: 1; transform: translateY(0)    scale(1); }
+}
+.arcade-rise   { animation: arcade-rise 0.55s cubic-bezier(0.16, 1, 0.3, 1) both; }
+.arcade-rise-1 { animation: arcade-rise 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.06s both; }
+.arcade-rise-2 { animation: arcade-rise 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both; }
+.arcade-rise-3 { animation: arcade-rise 0.55s cubic-bezier(0.16, 1, 0.3, 1) 0.18s both; }
+
+/* 점수 변동 팝 (key 바뀔 때 한 번 튐) */
+@keyframes arcade-pop {
+  0%   { transform: scale(1); }
+  40%  { transform: scale(1.22); }
+  100% { transform: scale(1); }
+}
+.arcade-pop { animation: arcade-pop 0.34s ease-out; }
+
+/* 결과/게임오버 모달 등장 */
+@keyframes arcade-pop-in {
+  from { opacity: 0; transform: scale(0.85); }
+  to   { opacity: 1; transform: scale(1); }
+}
+.arcade-pop-in { animation: arcade-pop-in 0.42s cubic-bezier(0.16, 1, 0.3, 1) both; }
+
+/* 은은한 떠다님 (주인공 오브젝트) */
+@keyframes arcade-float {
+  0%, 100% { transform: translateY(0); }
+  50%      { transform: translateY(-6px); }
+}
+.arcade-float { animation: arcade-float 3.4s ease-in-out infinite; }
+
+/* 오렌지 글로우 맥동 (강조 요소·CTA) */
+@keyframes arcade-glow {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(249, 149, 78, 0.0), 0 10px 30px -12px rgba(0,0,0,0.6); }
+  50%      { box-shadow: 0 0 24px 2px rgba(249, 149, 78, 0.28), 0 10px 30px -12px rgba(0,0,0,0.6); }
+}
+.arcade-glow { animation: arcade-glow 2.6s ease-in-out infinite; }
+
+/* 프리미엄 글래스 카드 — 상단 내부 하이라이트 + 깊은 그림자로 입체감 */
+.arcade-card {
+  background: linear-gradient(180deg, rgba(255,255,255,0.055), rgba(255,255,255,0.02));
+  border: 1px solid rgba(255,255,255,0.10);
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.07), 0 18px 40px -22px rgba(0,0,0,0.75);
+  backdrop-filter: blur(6px);
+}
+
+/* 텍스트/숫자 그라데이션 (점수 강조) */
+.arcade-grad-text {
+  background: linear-gradient(180deg, #FFD9B0 0%, #F9954E 60%, #E8832E 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+
+/* 버튼 광택 스윕 (hover 시 사선 빛이 지나감) */
+.arcade-shine { position: relative; overflow: hidden; }
+.arcade-shine::after {
+  content: ""; position: absolute; top: 0; left: -120%; width: 60%; height: 100%;
+  background: linear-gradient(100deg, transparent, rgba(255,255,255,0.22), transparent);
+  transform: skewX(-18deg); transition: left 0.6s ease;
+}
+.arcade-shine:hover::after { left: 140%; }

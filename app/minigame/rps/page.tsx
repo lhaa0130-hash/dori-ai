@@ -5,8 +5,9 @@ import { ArrowLeft, Play, RotateCcw, Trophy } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
-import confetti from "canvas-confetti";
 import { useAuth } from "@/contexts/AuthContext";
+import CountUp from "@/components/game/CountUp";
+import { bigBurst } from "@/lib/juice";
 
 type Choice = "rock" | "paper" | "scissors";
 type Result = "win" | "lose" | "draw";
@@ -32,14 +33,6 @@ export default function RockPaperScissorsPage() {
     useEffect(() => {
         setMounted(true);
     }, []);
-
-    const triggerConfetti = () => {
-        confetti({
-            particleCount: 100,
-            spread: 70,
-            origin: { y: 0.6 }
-        });
-    };
 
     const determineWinner = (player: Choice, computer: Choice): Result => {
         if (player === computer) return "draw";
@@ -72,7 +65,7 @@ export default function RockPaperScissorsPage() {
             }));
 
             if (gameResult === "win") {
-                triggerConfetti();
+                bigBurst();
             }
 
             setIsPlaying(false);
@@ -103,27 +96,33 @@ export default function RockPaperScissorsPage() {
                         미니게임
                     </Link>
                     <h1 className="text-[15px] font-extrabold tracking-tight text-white">✊ 가위바위보</h1>
-                    <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                    <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
                         <div className="text-[9px] uppercase tracking-widest text-neutral-500">WIN</div>
-                        <div className="text-sm font-bold text-white tabular-nums">{score.win}</div>
+                        <CountUp value={score.win} className="block text-sm font-bold text-white tabular-nums" />
                     </div>
                 </header>
 
                 <div className="animate-fade-in">
-                    <div className="rounded-3xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-6 sm:p-8 md:p-12">
+                    <div className="arcade-card arcade-rise rounded-3xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-6 sm:p-8 md:p-12">
 
                         {/* Score Board */}
                         <div className="grid grid-cols-3 gap-3 mb-8">
-                            <div className="text-center p-4 rounded-2xl bg-white/[0.04] border border-white/10">
-                                <div className="text-3xl font-extrabold tabular-nums text-[#F9954E]">{score.win}</div>
+                            <div className="arcade-card arcade-rise-1 text-center p-4 rounded-2xl bg-white/[0.04] border border-white/10">
+                                <span key={score.win} className="arcade-pop inline-block">
+                                    <CountUp value={score.win} className="text-3xl font-extrabold tabular-nums text-[#F9954E]" />
+                                </span>
                                 <div className="text-[10px] uppercase tracking-widest text-neutral-500 mt-1">승리</div>
                             </div>
-                            <div className="text-center p-4 rounded-2xl bg-white/[0.04] border border-white/10">
-                                <div className="text-3xl font-extrabold tabular-nums text-white">{score.draw}</div>
+                            <div className="arcade-card arcade-rise-2 text-center p-4 rounded-2xl bg-white/[0.04] border border-white/10">
+                                <span key={score.draw} className="arcade-pop inline-block">
+                                    <CountUp value={score.draw} className="text-3xl font-extrabold tabular-nums text-white" />
+                                </span>
                                 <div className="text-[10px] uppercase tracking-widest text-neutral-500 mt-1">무승부</div>
                             </div>
-                            <div className="text-center p-4 rounded-2xl bg-white/[0.04] border border-white/10">
-                                <div className="text-3xl font-extrabold tabular-nums text-neutral-400">{score.lose}</div>
+                            <div className="arcade-card arcade-rise-3 text-center p-4 rounded-2xl bg-white/[0.04] border border-white/10">
+                                <span key={score.lose} className="arcade-pop inline-block">
+                                    <CountUp value={score.lose} className="text-3xl font-extrabold tabular-nums text-neutral-400" />
+                                </span>
                                 <div className="text-[10px] uppercase tracking-widest text-neutral-500 mt-1">패배</div>
                             </div>
                         </div>
@@ -133,9 +132,9 @@ export default function RockPaperScissorsPage() {
                             {/* Player */}
                             <div className="text-center">
                                 <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-3">당신</div>
-                                <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center">
+                                <div className="arcade-card w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center">
                                     <motion.div
-                                        className="text-6xl sm:text-7xl"
+                                        className="arcade-float text-6xl sm:text-7xl"
                                         animate={playerChoice ? { scale: [1, 1.2, 1] } : {}}
                                         transition={{ duration: 0.3 }}
                                     >
@@ -149,9 +148,9 @@ export default function RockPaperScissorsPage() {
                             {/* Computer */}
                             <div className="text-center">
                                 <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-3">컴퓨터</div>
-                                <div className="w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center">
+                                <div className={`arcade-card w-28 h-28 sm:w-32 sm:h-32 rounded-2xl bg-white/[0.04] border border-white/10 flex items-center justify-center ${isPlaying ? "arcade-glow" : ""}`}>
                                     <motion.div
-                                        className="text-6xl sm:text-7xl"
+                                        className="arcade-float text-6xl sm:text-7xl"
                                         animate={isPlaying ? { rotate: [0, 360] } : computerChoice ? { scale: [1, 1.2, 1] } : {}}
                                         transition={{ duration: isPlaying ? 1 : 0.3 }}
                                     >
@@ -169,7 +168,7 @@ export default function RockPaperScissorsPage() {
                                     initial={{ opacity: 0, y: -20 }}
                                     animate={{ opacity: 1, y: 0 }}
                                     exit={{ opacity: 0, y: 20 }}
-                                    className={`mb-6 p-4 rounded-2xl text-center text-xl font-extrabold tracking-tight border ${result === "win"
+                                    className={`arcade-pop-in mb-6 p-4 rounded-2xl text-center text-xl font-extrabold tracking-tight border ${result === "win"
                                             ? "bg-[#F9954E]/10 border-[#F9954E]/25 text-[#F9954E]"
                                             : result === "lose"
                                                 ? "bg-red-500/10 border-red-500/20 text-red-400"
@@ -188,7 +187,7 @@ export default function RockPaperScissorsPage() {
                                     key={choice}
                                     onClick={() => play(choice)}
                                     disabled={isPlaying}
-                                    className="p-5 sm:p-6 rounded-2xl bg-white/[0.05] border border-white/10 hover:bg-white/[0.09] hover:border-[#F9954E]/30 active:scale-[0.98] font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed"
+                                    className="arcade-shine p-5 sm:p-6 rounded-2xl bg-white/[0.05] border border-white/10 hover:bg-white/[0.09] hover:border-[#F9954E]/30 active:scale-[0.97] font-bold transition-all disabled:opacity-40 disabled:cursor-not-allowed"
                                 >
                                     <div className="text-4xl sm:text-5xl mb-2">{EMOJIS[choice]}</div>
                                     <div className="text-[13px] font-semibold text-neutral-300">{choice === "rock" ? "바위" : choice === "paper" ? "보" : "가위"}</div>
@@ -201,14 +200,14 @@ export default function RockPaperScissorsPage() {
                             {result && (
                                 <button
                                     onClick={reset}
-                                    className="flex-1 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all"
+                                    className="arcade-shine arcade-glow flex-1 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.97] transition-all"
                                 >
                                     다시 하기
                                 </button>
                             )}
                             <button
                                 onClick={resetAll}
-                                className="px-6 py-3 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] font-semibold transition-colors"
+                                className="px-6 py-3 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] font-semibold active:scale-[0.97] transition-all"
                             >
                                 <RotateCcw className="w-5 h-5" />
                             </button>

@@ -5,10 +5,11 @@ import { ArrowLeft, Play, RotateCcw, Palette } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
-import confetti from "canvas-confetti";
 import { useAuth } from "@/contexts/AuthContext";
 import { submitScore } from "@/lib/leaderboard";
 import GameLeaderboard from "@/components/game/GameLeaderboard";
+import CountUp from "@/components/game/CountUp";
+import { burst, bigBurst } from "@/lib/juice";
 
 type GameMode = "rgb" | "name";
 
@@ -48,6 +49,7 @@ export default function ColorMatchPage() {
         } else if (timeLeft === 0) {
             setIsGameOver(true);
             setIsPlaying(false);
+            if (score >= 15) bigBurst();
             if (session?.user?.email) {
                 submitScore("colormatch", session.user.name || "플레이어", score, "desc");
                 if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("dori-lb-refresh", { detail: "colormatch" }));
@@ -56,11 +58,7 @@ export default function ColorMatchPage() {
     }, [isPlaying, timeLeft]);
 
     const triggerConfetti = () => {
-        confetti({
-            particleCount: 50,
-            spread: 60,
-            origin: { y: 0.6 }
-        });
+        burst();
     };
 
     const generateQuestion = () => {
@@ -116,15 +114,17 @@ export default function ColorMatchPage() {
                     미니게임
                 </Link>
                 <h1 className="text-[15px] font-extrabold tracking-tight text-white">🎨 색깔 맞추기</h1>
-                <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
                     <div className="text-[9px] uppercase tracking-widest text-neutral-500">SCORE</div>
-                    <div className="text-sm font-bold text-white tabular-nums">{score}</div>
+                    <div className="text-sm font-bold text-white tabular-nums">
+                        <CountUp value={score} className="tabular-nums" />
+                    </div>
                 </div>
             </header>
 
             <div className="pt-20 pb-8 sm:pb-12 px-4 max-w-2xl mx-auto">
                 <div className="animate-fade-in">
-                    <div className="rounded-3xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-5 sm:p-8 md:p-12">
+                    <div className="arcade-card arcade-rise rounded-3xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-5 sm:p-8 md:p-12">
 
                         {!isPlaying && !isGameOver && (
                             <motion.div
@@ -132,7 +132,7 @@ export default function ColorMatchPage() {
                                 animate={{ opacity: 1, y: 0 }}
                                 className="text-center"
                             >
-                                <Palette className="w-16 h-16 mx-auto mb-4 text-[#F9954E]" />
+                                <Palette className="arcade-float w-16 h-16 mx-auto mb-4 text-[#F9954E]" />
                                 <h2 className="text-2xl font-extrabold tracking-tight mb-4 text-white">색깔 맞추기 게임</h2>
                                 <p className="text-neutral-400 mb-8">
                                     <strong className="text-[#F9954E]" style={{ color: textColor }}>{displayText || "색깔"}</strong>의 <strong className="text-white">실제 색상</strong>을 선택하세요!<br />
@@ -141,7 +141,7 @@ export default function ColorMatchPage() {
 
                                 <button
                                     onClick={startGame}
-                                    className="rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold text-lg shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all px-8 py-3"
+                                    className="arcade-shine arcade-glow rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold text-lg shadow-lg shadow-[#F9954E]/20 active:scale-[0.97] transition-transform px-8 py-3"
                                 >
                                     <Play className="w-5 h-5 inline mr-2" />
                                     시작하기 (30초)
@@ -156,18 +156,24 @@ export default function ColorMatchPage() {
                             >
                                 {/* Stats */}
                                 <div className="grid grid-cols-2 gap-4 mb-8">
-                                    <div className="text-center p-4 rounded-2xl bg-white/[0.04] border border-white/10">
+                                    <div className="arcade-card arcade-rise-1 text-center p-4 rounded-2xl bg-white/[0.04] border border-white/10">
                                         <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">점수</div>
-                                        <div className="text-4xl font-bold text-[#F9954E] tabular-nums">{score}</div>
+                                        <div className="text-4xl font-bold text-[#F9954E] tabular-nums">
+                                            <span key={score} className="arcade-pop inline-block">
+                                                <CountUp value={score} className="tabular-nums" />
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div className="text-center p-4 rounded-2xl bg-white/[0.04] border border-white/10">
+                                    <div className="arcade-card arcade-rise-2 text-center p-4 rounded-2xl bg-white/[0.04] border border-white/10">
                                         <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">남은 시간</div>
-                                        <div className="text-4xl font-bold text-white tabular-nums">{timeLeft}초</div>
+                                        <div className="text-4xl font-bold text-white tabular-nums">
+                                            <CountUp value={timeLeft} className="tabular-nums" />초
+                                        </div>
                                     </div>
                                 </div>
 
                                 {/* Question */}
-                                <div className="mb-8 p-8 rounded-2xl bg-white/[0.04] border border-white/10 text-center">
+                                <div className="arcade-card arcade-rise-3 mb-8 p-8 rounded-2xl bg-white/[0.04] border border-white/10 text-center">
                                     <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-3">
                                         이 글자의 실제 색상은?
                                     </div>
@@ -186,8 +192,8 @@ export default function ColorMatchPage() {
                                             key={color.kr}
                                             onClick={() => handleAnswer(color)}
                                             whileHover={{ scale: 1.05 }}
-                                            whileTap={{ scale: 0.95 }}
-                                            className="p-4 sm:p-6 rounded-2xl border border-white/10 font-bold text-white text-base sm:text-lg shadow-lg shadow-black/30 transition-all min-h-[56px]"
+                                            whileTap={{ scale: 0.96 }}
+                                            className="arcade-shine p-4 sm:p-6 rounded-2xl border border-white/10 font-bold text-white text-base sm:text-lg shadow-lg shadow-black/30 transition-all min-h-[56px]"
                                             style={{ backgroundColor: color.rgb }}
                                         >
                                             {color.kr}
@@ -201,16 +207,18 @@ export default function ColorMatchPage() {
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
-                                className="text-center"
+                                className="arcade-pop-in text-center"
                             >
-                                <div className="text-6xl mb-6">
+                                <div className="arcade-float text-6xl mb-6">
                                     {score >= 20 ? "🏆" : score >= 15 ? "🎉" : score >= 10 ? "👏" : "💪"}
                                 </div>
                                 <h2 className="text-3xl font-extrabold tracking-tight mb-4 text-white">게임 종료!</h2>
 
-                                <div className="mb-8 p-8 rounded-3xl bg-[#101016] border border-white/10">
+                                <div className="arcade-card mb-8 p-8 rounded-3xl bg-[#101016] border border-white/10">
                                     <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-2">최종 점수</div>
-                                    <div className="text-4xl font-black text-[#F9954E] tabular-nums">{score}</div>
+                                    <div className="text-6xl font-black arcade-grad-text tabular-nums">
+                                        <CountUp value={score} className="tabular-nums" />
+                                    </div>
                                 </div>
 
                                 <div className="mb-8 p-4 rounded-2xl bg-white/[0.04] border border-white/10">
@@ -222,13 +230,13 @@ export default function ColorMatchPage() {
                                 <div className="flex gap-3">
                                     <button
                                         onClick={startGame}
-                                        className="flex-1 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all"
+                                        className="arcade-shine arcade-glow flex-1 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.97] transition-transform"
                                     >
                                         다시 하기
                                     </button>
                                     <button
                                         onClick={reset}
-                                        className="px-6 py-3 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] font-semibold transition-colors"
+                                        className="px-6 py-3 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] font-semibold active:scale-[0.97] transition-transform"
                                     >
                                         <RotateCcw className="w-5 h-5" />
                                     </button>

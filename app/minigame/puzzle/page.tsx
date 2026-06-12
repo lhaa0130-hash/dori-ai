@@ -7,6 +7,8 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { submitScore } from "@/lib/leaderboard";
 import GameLeaderboard from "@/components/game/GameLeaderboard";
+import CountUp from "@/components/game/CountUp";
+import { burst, bigBurst } from "@/lib/juice";
 
 // ----------------------------------------------------------------------
 // Constants & Types
@@ -117,6 +119,7 @@ export default function SlidePuzzleGame() {
 
             setTiles(newTiles);
             setMoves(finalMoves);
+            burst();
             checkWin(newTiles, finalMoves);
         }
     };
@@ -126,6 +129,7 @@ export default function SlidePuzzleGame() {
         if (isWin) {
             setIsSolved(true);
             setIsPlaying(false);
+            bigBurst();
             if (session?.user?.email) {
                 submitScore("puzzle", session.user.name || "플레이어", finalMoves, "asc");
                 if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("dori-lb-refresh", { detail: "puzzle" }));
@@ -144,9 +148,11 @@ export default function SlidePuzzleGame() {
                     미니게임
                 </Link>
                 <div className="text-[15px] font-extrabold tracking-tight text-white">🧩 슬라이드 퍼즐</div>
-                <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
                     <div className="text-[9px] uppercase tracking-widest text-neutral-500">MOVES</div>
-                    <div className="text-sm font-bold text-white tabular-nums">{moves}</div>
+                    <div key={moves} className="arcade-pop inline-block text-sm font-bold text-white">
+                        <CountUp value={moves} className="tabular-nums" />
+                    </div>
                 </div>
             </header>
 
@@ -156,7 +162,7 @@ export default function SlidePuzzleGame() {
                 <div className="flex gap-4">
                     <button
                         onClick={() => setShowNumbers(!showNumbers)}
-                        className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-[11px] font-semibold transition-colors ${showNumbers ? "bg-[#F9954E]/10 border-[#F9954E]/40 text-[#F9954E]" : "bg-white/[0.05] border-white/10 text-neutral-400 hover:bg-white/[0.1] hover:text-neutral-200"}`}
+                        className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-[11px] font-semibold transition-all active:scale-[0.97] ${showNumbers ? "bg-[#F9954E]/10 border-[#F9954E]/40 text-[#F9954E]" : "bg-white/[0.05] border-white/10 text-neutral-400 hover:bg-white/[0.1] hover:text-neutral-200"}`}
                     >
                         <HelpCircle className="w-4 h-4" /> 번호 힌트
                     </button>
@@ -164,7 +170,7 @@ export default function SlidePuzzleGame() {
 
                 {/* Board */}
                 <div
-                    className="relative rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-2 shadow-2xl touch-none"
+                    className="arcade-card arcade-rise relative rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-2 shadow-2xl touch-none"
                     style={{ width: "340px", height: "340px" }}
                 >
                     <div className="relative w-full h-full bg-[#09090e] rounded-xl overflow-hidden">
@@ -189,17 +195,19 @@ export default function SlidePuzzleGame() {
                                     }}
                                     animate={{ x: `${x}%`, y: `${y}%` }}
                                     transition={{ type: "spring", stiffness: 300, damping: 25 }}
+                                    whileTap={{ scale: 0.92 }}
                                     onClick={() => handleTileClick(tile)}
                                 >
                                     <div className="w-full h-full p-0.5">
                                         <div
-                                            className="w-full h-full rounded-md shadow-sm relative overflow-hidden bg-white/[0.06] border border-white/10"
+                                            className="w-full h-full rounded-md shadow-md relative overflow-hidden bg-white/[0.06] border border-white/10 ring-1 ring-inset ring-white/10"
                                             style={{
                                                 backgroundImage: `url(${DEFAULT_IMAGE})`,
                                                 backgroundSize: "400% 400%", // based on 4x4
                                                 backgroundPosition: `${bgX}% ${bgY}%`
                                             }}
                                         >
+                                            <div aria-hidden className="pointer-events-none absolute inset-0 rounded-md bg-gradient-to-b from-white/15 to-transparent" />
                                             {showNumbers && (
                                                 <div className="absolute top-1 left-1 bg-black/60 border border-white/10 text-white text-[10px] w-5 h-5 flex items-center justify-center rounded-full font-bold tabular-nums">
                                                     {tile.correctPos + 1}
@@ -218,16 +226,18 @@ export default function SlidePuzzleGame() {
                             <motion.div
                                 initial={{ scale: 0 }}
                                 animate={{ scale: 1 }}
-                                className="rounded-3xl bg-[#101016] border border-white/10 p-8 text-center"
+                                className="arcade-pop-in arcade-card rounded-3xl bg-[#101016] border border-white/10 p-8 text-center"
                             >
-                                <Trophy className="w-12 h-12 text-[#F9954E] mx-auto mb-3 drop-shadow-lg" />
+                                <Trophy className="arcade-float w-12 h-12 text-[#F9954E] mx-auto mb-3 drop-shadow-lg" />
                                 <h2 className="text-xl font-extrabold tracking-tight text-white mb-4">퍼즐 완성!</h2>
                                 <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">MOVES</div>
-                                <div className="text-4xl font-black text-[#F9954E] tabular-nums mb-6">{moves}</div>
+                                <div className="arcade-grad-text text-5xl font-black tabular-nums mb-6">
+                                    <CountUp value={moves} />
+                                </div>
 
                                 <button
                                     onClick={initGame}
-                                    className="rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white px-8 py-3 font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all flex items-center gap-2 mx-auto"
+                                    className="arcade-shine arcade-glow rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white px-8 py-3 font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.97] transition-transform flex items-center gap-2 mx-auto"
                                 >
                                     <RefreshCw className="w-5 h-5" /> 다시 하기
                                 </button>
@@ -238,7 +248,7 @@ export default function SlidePuzzleGame() {
 
                 <button
                     onClick={initGame}
-                    className="inline-flex items-center gap-2 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] font-semibold transition-colors px-5 py-3 text-sm"
+                    className="arcade-shine inline-flex items-center gap-2 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] font-semibold transition-all active:scale-[0.97] px-5 py-3 text-sm"
                 >
                     <RefreshCw className="w-4 h-4" /> 다시 섞기
                 </button>

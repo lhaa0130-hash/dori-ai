@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { submitScore } from "@/lib/leaderboard";
 import GameLeaderboard from "@/components/game/GameLeaderboard";
+import CountUp from "@/components/game/CountUp";
+import { burst, bigBurst } from "@/lib/juice";
 
 const COLS = 8;
 const ROWS = 8;
@@ -75,6 +77,7 @@ export default function Match3Game() {
   useEffect(() => {
     if (isGameOver && !scoreSubmitted) {
       setScoreSubmitted(true);
+      bigBurst();
       if (session?.user?.email) {
         submitScore("match3", session.user.name || "플레이어", score, "desc");
         if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("dori-lb-refresh", { detail: "match3" }));
@@ -112,6 +115,7 @@ export default function Match3Game() {
     }
 
     const pts = cleared * 10;
+    if (cleared >= 6) bigBurst(); else burst();
     setScore(prev => prev + pts);
     setMoves(prev => {
       const next = prev - 1;
@@ -142,13 +146,19 @@ export default function Match3Game() {
         </Link>
         <div className="text-[15px] font-extrabold tracking-tight text-white">🍒 매치 3</div>
         <div className="flex items-center gap-2">
-          <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+          <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
             <div className="text-[9px] uppercase tracking-widest text-neutral-500">SCORE</div>
-            <div className="text-sm font-bold text-white tabular-nums">{score}</div>
+            <div className="text-sm font-bold text-white tabular-nums">
+              <span key={score} className="arcade-pop inline-block">
+                <CountUp value={score} className="tabular-nums" />
+              </span>
+            </div>
           </div>
-          <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+          <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
             <div className="text-[9px] uppercase tracking-widest text-neutral-500">MOVES</div>
-            <div className={`text-sm font-bold tabular-nums ${moves <= 5 ? "text-red-400 animate-pulse" : "text-white"}`}>{moves}</div>
+            <div className={`text-sm font-bold tabular-nums ${moves <= 5 ? "text-red-400 animate-pulse" : "text-white"}`}>
+              <CountUp value={moves} className="tabular-nums" />
+            </div>
           </div>
         </div>
       </header>
@@ -156,14 +166,14 @@ export default function Match3Game() {
       {!isGameOver ? (
         <div
           style={{ display:"grid", gridTemplateColumns:`repeat(${COLS},1fr)`, width:360, height:360 }}
-          className="rounded-2xl bg-white/[0.04] border border-white/10 p-1 shadow-2xl"
+          className="arcade-card arcade-rise rounded-2xl bg-white/[0.04] border border-white/10 p-1 shadow-2xl"
         >
           {board.map((color, idx) => (
             <div
               key={idx}
               onClick={() => handleClick(idx)}
-              className={`flex items-center justify-center cursor-pointer rounded-md m-0.5 transition-all select-none
-                ${selected === idx ? "ring-2 ring-[#F9954E] scale-110 bg-[#F9954E]/15" : "hover:bg-white/10"}`}
+              className={`flex items-center justify-center cursor-pointer rounded-md m-0.5 transition-all select-none active:scale-[0.92]
+                ${selected === idx ? "ring-2 ring-[#F9954E] scale-110 bg-[#F9954E]/15 arcade-glow" : "hover:bg-white/10 hover:scale-105"}`}
             >
               {color && (
                 <span className="text-xl leading-none" style={{filter:"drop-shadow(0 1px 2px rgba(0,0,0,0.5))"}}>
@@ -174,14 +184,16 @@ export default function Match3Game() {
           ))}
         </div>
       ) : (
-        <div className="w-[360px] h-[360px] flex flex-col items-center justify-center rounded-3xl bg-[#101016] border border-white/10 p-8 text-center shadow-2xl">
-          <Trophy className="w-14 h-14 text-[#F9954E] mb-4" />
+        <div className="arcade-card arcade-pop-in w-[360px] h-[360px] flex flex-col items-center justify-center rounded-3xl bg-[#101016] border border-white/10 p-8 text-center shadow-2xl">
+          <Trophy className="w-14 h-14 text-[#F9954E] mb-4 arcade-float" />
           <h2 className="text-2xl font-extrabold tracking-tight mb-4">게임 종료!</h2>
           <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">최종 점수</div>
-          <div className="text-4xl font-black text-[#F9954E] tabular-nums mb-6">{score}</div>
+          <div className="text-5xl font-black arcade-grad-text tabular-nums mb-6">
+            <CountUp value={score} className="tabular-nums" />
+          </div>
           <button
             onClick={reset}
-            className="rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all px-8 py-3 flex items-center gap-2"
+            className="arcade-shine arcade-glow rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.97] transition-transform px-8 py-3 flex items-center gap-2"
           >
             <RefreshCw className="w-5 h-5" /> 다시 하기
           </button>

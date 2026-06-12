@@ -6,6 +6,8 @@ import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { submitScore } from "@/lib/leaderboard";
 import GameLeaderboard from "@/components/game/GameLeaderboard";
+import CountUp from "@/components/game/CountUp";
+import { burst, bigBurst } from "@/lib/juice";
 
 // ----------------------------------------------------------------------
 // Constants & Types
@@ -92,6 +94,7 @@ export default function SnakeGame() {
         // Check Food
         if (head.x === food.current.x && head.y === food.current.y) {
             setScore(prev => prev + 10);
+            burst(); // 먹이 획득 축하 (JUICE)
             placeFood();
             // Don't pop tail (grow)
         } else {
@@ -108,6 +111,7 @@ export default function SnakeGame() {
             if (currentScore > highScore) {
                 setHighScore(currentScore);
                 localStorage.setItem("snake_highscore", currentScore.toString());
+                bigBurst(); // 신기록 축하 (JUICE)
             }
             // 명예의 전당(글로벌 TOP 5) 점수 제출
             if (session?.user?.email) {
@@ -200,18 +204,22 @@ export default function SnakeGame() {
                 </Link>
                 <div className="text-[15px] font-extrabold tracking-tight text-white">🐍 스네이크</div>
                 <div className="flex items-center gap-2">
-                    <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                    <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
                         <div className="text-[9px] uppercase tracking-widest text-neutral-500">SCORE</div>
-                        <div className="text-sm font-bold text-white tabular-nums">{score}</div>
+                        <div key={score} className="arcade-pop inline-block text-sm font-bold text-white">
+                            <CountUp value={score} className="tabular-nums" />
+                        </div>
                     </div>
-                    <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                    <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
                         <div className="flex items-center justify-center gap-1 text-[9px] uppercase tracking-widest text-neutral-500"><Trophy className="w-2.5 h-2.5" />BEST</div>
-                        <div className="text-sm font-bold text-[#F9954E] tabular-nums">{highScore}</div>
+                        <div key={highScore} className="arcade-pop inline-block text-sm font-bold text-[#F9954E]">
+                            <CountUp value={highScore} className="tabular-nums" />
+                        </div>
                     </div>
                 </div>
             </header>
 
-            <div className="relative rounded-2xl bg-white/[0.04] border border-white/10 p-2 shadow-2xl overflow-hidden">
+            <div className="arcade-card arcade-rise relative rounded-2xl bg-white/[0.04] border border-white/10 p-2 shadow-2xl overflow-hidden">
                 <canvas
                     ref={canvasRef}
                     width={CANVAS_SIZE}
@@ -234,12 +242,12 @@ export default function SnakeGame() {
                 />
 
                 {gameState === "READY" && (
-                    <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex flex-col items-center justify-center">
-                        <h1 className="text-3xl font-extrabold tracking-tight text-white mb-2">🐍 스네이크</h1>
+                    <div className="arcade-pop-in absolute inset-0 bg-black/70 backdrop-blur-sm flex flex-col items-center justify-center">
+                        <h1 className="arcade-float text-4xl font-extrabold tracking-tight text-white mb-2">🐍 스네이크</h1>
                         <p className="text-sm text-neutral-400 mb-6">스와이프 또는 방향키로 조작하세요</p>
                         <button
                             onClick={initGame}
-                            className="rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all px-8 py-3 flex items-center gap-2"
+                            className="arcade-shine arcade-glow rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.97] transition-transform px-8 py-3 flex items-center gap-2"
                         >
                             <Play className="w-5 h-5 fill-current" />
                             게임 시작
@@ -249,13 +257,20 @@ export default function SnakeGame() {
 
                 {gameState === "GAME_OVER" && (
                     <div className="absolute inset-0 bg-black/70 backdrop-blur-sm flex flex-col items-center justify-center z-10 p-4">
-                        <div className="rounded-3xl bg-[#101016] border border-white/10 p-8 flex flex-col items-center text-center">
+                        <div className="arcade-pop-in arcade-card rounded-3xl bg-[#101016] border border-white/10 p-8 flex flex-col items-center text-center">
                             <h2 className="text-xl font-extrabold tracking-tight text-white mb-4">게임 오버</h2>
+                            {score > 0 && score >= highScore && (
+                                <div className="mb-3 inline-flex items-center gap-1 rounded-full bg-[#F9954E]/15 border border-[#F9954E]/30 px-3 py-1 text-[11px] font-bold text-[#F9954E]">
+                                    <Trophy className="w-3 h-3" /> 신기록 달성!
+                                </div>
+                            )}
                             <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">SCORE</div>
-                            <div className="text-4xl font-black text-[#F9954E] tabular-nums mb-6">{score}</div>
+                            <div className="arcade-grad-text text-5xl font-black tabular-nums mb-6">
+                                <CountUp value={score} />
+                            </div>
                             <button
                                 onClick={initGame}
-                                className="rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all px-8 py-3 flex items-center gap-2"
+                                className="arcade-shine arcade-glow rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.97] transition-transform px-8 py-3 flex items-center gap-2"
                             >
                                 <RefreshCw className="w-4 h-4" />
                                 다시하기
@@ -269,23 +284,23 @@ export default function SnakeGame() {
             <div className="grid grid-cols-3 gap-2 mt-6 w-[200px]">
                 <div />
                 <button
-                    className="rounded-xl bg-white/[0.06] border border-white/10 p-4 active:bg-white/[0.12] transition-colors flex justify-center"
+                    className="arcade-card rounded-xl bg-white/[0.06] border border-white/10 p-4 active:bg-white/[0.12] active:scale-[0.92] transition-all flex justify-center"
                     onTouchStart={(e) => { e.preventDefault(); if (direction.current.y === 0) nextDirection.current = { x: 0, y: -1 }; }}
                     onMouseDown={(e) => { e.preventDefault(); if (direction.current.y === 0) nextDirection.current = { x: 0, y: -1 }; }}
                 >⬆️</button>
                 <div />
                 <button
-                    className="rounded-xl bg-white/[0.06] border border-white/10 p-4 active:bg-white/[0.12] transition-colors flex justify-center"
+                    className="arcade-card rounded-xl bg-white/[0.06] border border-white/10 p-4 active:bg-white/[0.12] active:scale-[0.92] transition-all flex justify-center"
                     onTouchStart={(e) => { e.preventDefault(); if (direction.current.x === 0) nextDirection.current = { x: -1, y: 0 }; }}
                     onMouseDown={(e) => { e.preventDefault(); if (direction.current.x === 0) nextDirection.current = { x: -1, y: 0 }; }}
                 >⬅️</button>
                 <button
-                    className="rounded-xl bg-white/[0.06] border border-white/10 p-4 active:bg-white/[0.12] transition-colors flex justify-center"
+                    className="arcade-card rounded-xl bg-white/[0.06] border border-white/10 p-4 active:bg-white/[0.12] active:scale-[0.92] transition-all flex justify-center"
                     onTouchStart={(e) => { e.preventDefault(); if (direction.current.y === 0) nextDirection.current = { x: 0, y: 1 }; }}
                     onMouseDown={(e) => { e.preventDefault(); if (direction.current.y === 0) nextDirection.current = { x: 0, y: 1 }; }}
                 >⬇️</button>
                 <button
-                    className="rounded-xl bg-white/[0.06] border border-white/10 p-4 active:bg-white/[0.12] transition-colors flex justify-center"
+                    className="arcade-card rounded-xl bg-white/[0.06] border border-white/10 p-4 active:bg-white/[0.12] active:scale-[0.92] transition-all flex justify-center"
                     onTouchStart={(e) => { e.preventDefault(); if (direction.current.x === 0) nextDirection.current = { x: 1, y: 0 }; }}
                     onMouseDown={(e) => { e.preventDefault(); if (direction.current.x === 0) nextDirection.current = { x: 1, y: 0 }; }}
                 >➡️</button>

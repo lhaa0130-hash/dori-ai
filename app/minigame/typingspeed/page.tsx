@@ -8,6 +8,8 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { submitScore } from "@/lib/leaderboard";
 import GameLeaderboard from "@/components/game/GameLeaderboard";
+import CountUp from "@/components/game/CountUp";
+import { bigBurst } from "@/lib/juice";
 
 const SAMPLE_TEXTS = [
     "빠른 갈색 여우가 게으른 개를 뛰어넘습니다",
@@ -61,6 +63,7 @@ export default function TypingSpeedPage() {
             setWpm(calculatedWpm);
             setIsFinished(true);
             setIsStarted(false);
+            bigBurst();
             if (session?.user?.email) {
                 submitScore("typingspeed", session.user.name || "플레이어", calculatedWpm, "desc");
                 if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("dori-lb-refresh", { detail: "typingspeed" }));
@@ -101,15 +104,15 @@ export default function TypingSpeedPage() {
                     미니게임
                 </Link>
                 <h1 className="text-[15px] font-extrabold tracking-tight text-white">⌨️ 타이핑 속도 테스트</h1>
-                <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
                     <div className="text-[9px] uppercase tracking-widest text-neutral-500">WPM</div>
-                    <div className="text-sm font-bold text-white tabular-nums">{wpm}</div>
+                    <div className="text-sm font-bold text-white tabular-nums"><CountUp value={wpm} className="tabular-nums" /></div>
                 </div>
             </header>
 
             <div className="pt-20 pb-8 sm:pb-12 px-4 max-w-3xl mx-auto">
                 <div className="animate-fade-in">
-                    <div className="rounded-3xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-5 sm:p-8 md:p-12">
+                    <div className="arcade-card arcade-rise rounded-3xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-5 sm:p-8 md:p-12">
 
                         {!isStarted && !isFinished && (
                             <motion.div
@@ -117,14 +120,14 @@ export default function TypingSpeedPage() {
                                 animate={{ opacity: 1, y: 0 }}
                                 className="text-center"
                             >
-                                <Zap className="w-16 h-16 mx-auto mb-4 text-[#F9954E]" />
+                                <Zap className="arcade-float w-16 h-16 mx-auto mb-4 text-[#F9954E]" />
                                 <h2 className="text-2xl font-extrabold tracking-tight mb-4">타이핑 속도를 측정해보세요!</h2>
                                 <p className="text-neutral-400 mb-8">
                                     제시된 문장을 정확하고 빠르게 입력하세요
                                 </p>
                                 <button
                                     onClick={startTest}
-                                    className="px-8 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold text-lg shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all"
+                                    className="arcade-shine arcade-glow px-8 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold text-lg shadow-lg shadow-[#F9954E]/20 active:scale-[0.97] transition-transform"
                                 >
                                     <Play className="w-5 h-5 inline mr-2" />
                                     시작하기
@@ -139,20 +142,24 @@ export default function TypingSpeedPage() {
                             >
                                 {/* Stats */}
                                 <div className="grid grid-cols-2 gap-4 mb-8">
-                                    <div className="text-center p-4 rounded-2xl bg-white/[0.04] border border-white/10">
+                                    <div className="arcade-card arcade-rise-1 text-center p-4 rounded-2xl bg-white/[0.04] border border-white/10">
                                         <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">정확도</div>
-                                        <div className="text-3xl font-bold text-[#F9954E] tabular-nums">{accuracy}%</div>
+                                        <div className="text-3xl font-bold text-[#F9954E] tabular-nums">
+                                            <span key={accuracy} className="arcade-pop inline-block">
+                                                <CountUp value={accuracy} className="tabular-nums" />%
+                                            </span>
+                                        </div>
                                     </div>
-                                    <div className="text-center p-4 rounded-2xl bg-white/[0.04] border border-white/10">
+                                    <div className="arcade-card arcade-rise-2 text-center p-4 rounded-2xl bg-white/[0.04] border border-white/10">
                                         <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">진행률</div>
                                         <div className="text-3xl font-bold text-white tabular-nums">
-                                            {Math.round((userInput.length / targetText.length) * 100)}%
+                                            <CountUp value={Math.round((userInput.length / targetText.length) * 100)} className="tabular-nums" />%
                                         </div>
                                     </div>
                                 </div>
 
                                 {/* Target Text */}
-                                <div className="mb-6 p-4 sm:p-6 rounded-2xl bg-white/[0.04] border border-white/10 text-lg sm:text-2xl font-mono leading-relaxed">
+                                <div className="arcade-card arcade-rise-3 mb-6 p-4 sm:p-6 rounded-2xl bg-white/[0.04] border border-white/10 text-lg sm:text-2xl font-mono leading-relaxed">
                                     {targetText.split("").map((char, i) => (
                                         <span key={i} className={getCharacterColor(i)}>
                                             {char}
@@ -177,25 +184,29 @@ export default function TypingSpeedPage() {
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
-                                className="text-center"
+                                className="arcade-pop-in text-center"
                             >
-                                <div className="text-6xl mb-6">🎉</div>
+                                <div className="arcade-float text-6xl mb-6">🎉</div>
                                 <h2 className="text-3xl font-extrabold tracking-tight mb-8">완료!</h2>
 
                                 <div className="grid grid-cols-2 gap-6 mb-8">
-                                    <div className="p-6 rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10">
+                                    <div className="arcade-card arcade-rise-1 p-6 rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10">
                                         <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-2">타이핑 속도</div>
-                                        <div className="text-5xl font-black text-[#F9954E] tabular-nums">{wpm}</div>
+                                        <div className="text-5xl font-black arcade-grad-text tabular-nums">
+                                            <CountUp value={wpm} className="tabular-nums" />
+                                        </div>
                                         <div className="text-[10px] uppercase tracking-widest text-neutral-500 mt-2">WPM</div>
                                     </div>
-                                    <div className="p-6 rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10">
+                                    <div className="arcade-card arcade-rise-2 p-6 rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10">
                                         <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-2">정확도</div>
-                                        <div className="text-5xl font-black text-white tabular-nums">{accuracy}</div>
+                                        <div className="text-5xl font-black text-white tabular-nums">
+                                            <CountUp value={accuracy} className="tabular-nums" />
+                                        </div>
                                         <div className="text-[10px] uppercase tracking-widest text-neutral-500 mt-2">%</div>
                                     </div>
                                 </div>
 
-                                <div className="mb-6 p-4 rounded-2xl bg-white/[0.04] border border-white/10">
+                                <div className="arcade-card arcade-rise-3 mb-6 p-4 rounded-2xl bg-white/[0.04] border border-white/10">
                                     <p className="text-lg font-medium text-neutral-200">
                                         {wpm >= 60 ? "🚀 매우 빠름!" : wpm >= 40 ? "⚡ 빠름!" : wpm >= 25 ? "👍 좋아요!" : "💪 연습이 필요해요!"}
                                     </p>
@@ -204,13 +215,13 @@ export default function TypingSpeedPage() {
                                 <div className="flex gap-3">
                                     <button
                                         onClick={startTest}
-                                        className="flex-1 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all"
+                                        className="arcade-shine arcade-glow flex-1 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.97] transition-transform"
                                     >
                                         다시 하기
                                     </button>
                                     <button
                                         onClick={reset}
-                                        className="px-6 py-3 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] font-semibold transition-colors"
+                                        className="px-6 py-3 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] font-semibold transition-transform active:scale-[0.97]"
                                     >
                                         <RotateCcw className="w-5 h-5" />
                                     </button>

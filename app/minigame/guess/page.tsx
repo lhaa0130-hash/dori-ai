@@ -9,6 +9,8 @@ import confetti from "canvas-confetti";
 import { useAuth } from "@/contexts/AuthContext";
 import { submitScore } from "@/lib/leaderboard";
 import GameLeaderboard from "@/components/game/GameLeaderboard";
+import CountUp from "@/components/game/CountUp";
+import { burst, bigBurst } from "@/lib/juice";
 
 // ---- Types ----
 type GameState = "SETUP" | "PLAYING" | "WON";
@@ -95,6 +97,7 @@ export default function GuessNumberPage() {
             newMessage = `축하합니다! ${attempts.length + 1}번 만에 맞추셨습니다!`;
             setGameState("WON");
             triggerConfetti();
+            bigBurst();
             // 최종 시도 횟수 (이번 정답 시도 포함). attempts 상태는 아직 업데이트 전이므로 +1
             const finalAttempts = attempts.length + 1;
             if (session?.user?.email) {
@@ -107,6 +110,7 @@ export default function GuessNumberPage() {
 
             if (percentage <= 5) {
                 hint = "🔥 아주 가까워요!";
+                burst();
             } else if (percentage <= 15) {
                 hint = "🌡️ 가까워요";
             } else if (percentage <= 30) {
@@ -152,16 +156,18 @@ export default function GuessNumberPage() {
                     미니게임
                 </Link>
                 <h1 className="text-[15px] font-extrabold tracking-tight text-white">🎯 숫자 맞추기</h1>
-                <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                <div className="arcade-card rounded-xl px-3 py-1.5 text-center">
                     <div className="text-[9px] uppercase tracking-widest text-neutral-500">TRY</div>
-                    <div className="text-sm font-bold text-white tabular-nums">{attempts.length}</div>
+                    <div className="text-sm font-bold text-white">
+                        <CountUp value={attempts.length} className="tabular-nums" />
+                    </div>
                 </div>
             </header>
 
             <div className="relative pt-2 sm:pt-4 pb-8 sm:pb-12 px-4 max-w-2xl mx-auto">
                 <div className="animate-fade-in">
                     {/* Game Card */}
-                    <div className="rounded-3xl p-8 md:p-12 bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10">
+                    <div className="arcade-card arcade-rise rounded-3xl p-8 md:p-12 bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10">
 
                         {/* Setup Screen */}
                         {gameState === "SETUP" && (
@@ -170,7 +176,7 @@ export default function GuessNumberPage() {
                                 animate={{ opacity: 1, y: 0 }}
                             >
                                 <div className="text-center mb-8">
-                                    <Target className="w-16 h-16 mx-auto mb-4 text-[#F9954E]" />
+                                    <Target className="arcade-float w-16 h-16 mx-auto mb-4 text-[#F9954E]" />
                                     <h2 className="text-2xl font-extrabold tracking-tight mb-2">난이도 선택</h2>
                                     <p className="text-neutral-400">
                                         숫자를 맞출 범위를 선택하세요
@@ -182,8 +188,8 @@ export default function GuessNumberPage() {
                                         <button
                                             key={d}
                                             onClick={() => setDifficulty(d)}
-                                            className={`p-6 rounded-2xl border transition-all ${difficulty === d
-                                                    ? "border-[#F9954E]/60 bg-[#F9954E]/10 shadow-lg shadow-[#F9954E]/10"
+                                            className={`p-6 rounded-2xl border transition-all active:scale-[0.97] ${difficulty === d
+                                                    ? "border-[#F9954E]/60 bg-[#F9954E]/10 shadow-lg shadow-[#F9954E]/10 arcade-glow"
                                                     : "border-white/10 bg-white/[0.04] hover:border-white/25"
                                                 }`}
                                         >
@@ -199,7 +205,7 @@ export default function GuessNumberPage() {
 
                                 <button
                                     onClick={startGame}
-                                    className="w-full py-4 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold text-lg shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all flex items-center justify-center gap-2"
+                                    className="arcade-shine arcade-glow w-full py-4 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold text-lg shadow-lg shadow-[#F9954E]/20 active:scale-[0.97] transition-all flex items-center justify-center gap-2"
                                 >
                                     <Play className="w-5 h-5 fill-current" />
                                     게임 시작
@@ -217,7 +223,9 @@ export default function GuessNumberPage() {
                                 <div className="flex items-center justify-center gap-8 mb-8">
                                     <div className="text-center">
                                         <div className="text-4xl font-bold text-purple-500">
-                                            {attempts.length}
+                                            <span key={attempts.length} className="arcade-pop inline-block">
+                                                <CountUp value={attempts.length} className="tabular-nums" />
+                                            </span>
                                         </div>
                                         <div className="text-sm text-neutral-500 dark:text-zinc-400">
                                             시도 횟수
@@ -226,7 +234,7 @@ export default function GuessNumberPage() {
                                     <div className="h-12 w-px bg-white/10" />
                                     <div className="text-center">
                                         <div className="text-4xl font-bold text-[#F9954E]">
-                                            {DIFFICULTY_CONFIG[difficulty].max}
+                                            <CountUp value={DIFFICULTY_CONFIG[difficulty].max} className="tabular-nums" />
                                         </div>
                                         <div className="text-sm text-neutral-500 dark:text-zinc-400">
                                             최대 숫자
@@ -253,7 +261,7 @@ export default function GuessNumberPage() {
                                     />
                                     <button
                                         onClick={submitGuess}
-                                        className="px-8 py-4 bg-purple-500 hover:bg-purple-600 active:scale-95 text-white rounded-xl font-bold transition-all"
+                                        className="arcade-shine px-8 py-4 bg-purple-500 hover:bg-purple-600 active:scale-[0.97] text-white rounded-xl font-bold transition-all"
                                     >
                                         <Zap className="w-6 h-6" />
                                     </button>
@@ -284,7 +292,7 @@ export default function GuessNumberPage() {
                                 {/* Give Up Button */}
                                 <button
                                     onClick={resetGame}
-                                    className="w-full mt-6 py-3 bg-white/[0.06] border border-white/10 hover:bg-white/[0.12] text-neutral-200 rounded-xl font-medium transition-colors text-sm"
+                                    className="w-full mt-6 py-3 bg-white/[0.06] border border-white/10 hover:bg-white/[0.12] text-neutral-200 rounded-xl font-medium transition-all text-sm active:scale-[0.97]"
                                 >
                                     포기하기
                                 </button>
@@ -296,17 +304,17 @@ export default function GuessNumberPage() {
                             <motion.div
                                 initial={{ opacity: 0, scale: 0.9 }}
                                 animate={{ opacity: 1, scale: 1 }}
-                                className="text-center"
+                                className="arcade-pop-in text-center"
                             >
-                                <Trophy className="w-20 h-20 mx-auto mb-6 text-yellow-500" />
+                                <Trophy className="arcade-float w-20 h-20 mx-auto mb-6 text-yellow-500" />
                                 <h2 className="text-3xl font-bold mb-2">축하합니다!</h2>
                                 <p className="text-xl mb-6 text-neutral-600 dark:text-zinc-400">
-                                    정답은 <span className="font-bold text-purple-500">{secretNumber}</span>
+                                    정답은 <span className="font-bold text-purple-500 tabular-nums">{secretNumber}</span>
                                 </p>
 
-                                <div className="bg-purple-500/15 rounded-2xl p-8 mb-8">
-                                    <div className="text-6xl font-bold text-purple-500 mb-2">
-                                        {attempts.length}회
+                                <div className="arcade-card bg-purple-500/15 rounded-2xl p-8 mb-8">
+                                    <div className="text-6xl font-extrabold arcade-grad-text mb-2 tabular-nums">
+                                        <CountUp value={attempts.length} />회
                                     </div>
                                     <div className={`text-2xl font-bold ${getScoreRating().color}`}>
                                         {getScoreRating().text}
@@ -315,7 +323,7 @@ export default function GuessNumberPage() {
 
                                 <button
                                     onClick={resetGame}
-                                    className="w-full py-4 bg-purple-500 hover:bg-purple-600 active:scale-[0.98] text-white rounded-2xl font-bold text-lg shadow-lg shadow-purple-500/20 transition-all flex items-center justify-center gap-2"
+                                    className="arcade-shine arcade-glow w-full py-4 bg-purple-500 hover:bg-purple-600 active:scale-[0.97] text-white rounded-2xl font-bold text-lg shadow-lg shadow-purple-500/20 transition-all flex items-center justify-center gap-2"
                                 >
                                     <RotateCcw className="w-5 h-5" />
                                     다시 하기

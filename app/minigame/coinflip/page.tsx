@@ -5,8 +5,9 @@ import { ArrowLeft, Play, Trophy, RotateCcw, Coins } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
-import confetti from "canvas-confetti";
 import { useAuth } from "@/contexts/AuthContext";
+import CountUp from "@/components/game/CountUp";
+import { burst, bigBurst } from "@/lib/juice";
 
 // ---- Types ----
 type GameState = "SETUP" | "FLIPPING" | "FINISHED";
@@ -29,25 +30,6 @@ export default function CoinFlipPage() {
         setMounted(true);
     }, []);
 
-    const triggerConfetti = () => {
-        const count = 200;
-        const defaults = { origin: { y: 0.7 } };
-
-        function fire(particleRatio: number, opts: any) {
-            confetti({
-                ...defaults,
-                ...opts,
-                particleCount: Math.floor(count * particleRatio)
-            });
-        }
-
-        fire(0.25, { spread: 26, startVelocity: 55 });
-        fire(0.2, { spread: 60 });
-        fire(0.35, { spread: 100, decay: 0.91, scalar: 0.8 });
-        fire(0.1, { spread: 120, startVelocity: 25, decay: 0.92, scalar: 1.2 });
-        fire(0.1, { spread: 120, startVelocity: 45 });
-    };
-
     const flipCoin = () => {
         setGameState("FLIPPING");
         setResult(null);
@@ -65,7 +47,7 @@ export default function CoinFlipPage() {
             setHistory(prev => [...prev, { bet: selectedBet, result: coinResult, won }]);
 
             if (won) {
-                triggerConfetti();
+                bigBurst();
             }
         }, 1500);
     };
@@ -89,27 +71,27 @@ export default function CoinFlipPage() {
                     미니게임
                 </Link>
                 <h1 className="text-[15px] font-extrabold tracking-tight text-white">🪙 동전 던지기</h1>
-                <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+                <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
                     <div className="text-[9px] uppercase tracking-widest text-neutral-500">WINS</div>
-                    <div className="text-sm font-bold text-white tabular-nums">{history.filter(h => h.won).length}</div>
+                    <div className="text-sm font-bold text-white tabular-nums"><CountUp value={history.filter(h => h.won).length} className="tabular-nums" /></div>
                 </div>
             </header>
 
             <div className="relative z-10 pt-1 sm:pt-2 pb-8 sm:pb-12 px-4 max-w-2xl mx-auto">
                 <div className="animate-fade-in">
                     {/* Game Card */}
-                    <div className="rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-8 md:p-12">
+                    <div className="arcade-card arcade-rise rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 p-8 md:p-12">
 
                         {/* Stats */}
                         <div className="flex items-center justify-center gap-8 mb-8">
                             <div className="text-center">
-                                <div className="text-3xl font-extrabold text-[#F9954E] tabular-nums">{flipCount}</div>
+                                <div key={flipCount} className="arcade-pop inline-block text-3xl font-extrabold text-[#F9954E] tabular-nums"><CountUp value={flipCount} className="tabular-nums" /></div>
                                 <div className="mt-1 text-[10px] uppercase tracking-widest text-neutral-500">총 던진 횟수</div>
                             </div>
                             <div className="h-12 w-px bg-white/10" />
                             <div className="text-center">
-                                <div className="text-3xl font-extrabold text-white tabular-nums">
-                                    {history.filter(h => h.won).length}
+                                <div key={history.filter(h => h.won).length} className="arcade-pop inline-block text-3xl font-extrabold text-white tabular-nums">
+                                    <CountUp value={history.filter(h => h.won).length} className="tabular-nums" />
                                 </div>
                                 <div className="mt-1 text-[10px] uppercase tracking-widest text-neutral-500">승리</div>
                             </div>
@@ -126,7 +108,7 @@ export default function CoinFlipPage() {
                                 <div className="grid grid-cols-2 gap-4">
                                     <button
                                         onClick={() => setSelectedBet("앞면")}
-                                        className={`p-6 rounded-2xl border-2 transition-all font-bold text-lg ${selectedBet === "앞면"
+                                        className={`arcade-shine p-6 rounded-2xl border-2 transition-all active:scale-[0.97] font-bold text-lg ${selectedBet === "앞면"
                                                 ? "border-yellow-500 bg-yellow-500/10 text-yellow-400 scale-105"
                                                 : "border-white/10 hover:border-yellow-400"
                                             }`}
@@ -135,7 +117,7 @@ export default function CoinFlipPage() {
                                     </button>
                                     <button
                                         onClick={() => setSelectedBet("뒷면")}
-                                        className={`p-6 rounded-2xl border-2 transition-all font-bold text-lg ${selectedBet === "뒷면"
+                                        className={`arcade-shine p-6 rounded-2xl border-2 transition-all active:scale-[0.97] font-bold text-lg ${selectedBet === "뒷면"
                                                 ? "border-yellow-500 bg-yellow-500/10 text-yellow-400 scale-105"
                                                 : "border-white/10 hover:border-yellow-400"
                                             }`}
@@ -148,7 +130,7 @@ export default function CoinFlipPage() {
 
                         {/* Coin Display */}
                         <div className="flex flex-col items-center gap-8 mb-8">
-                            <div className="relative w-48 h-48 perspective-1000">
+                            <div className={`relative w-48 h-48 perspective-1000 ${gameState === "SETUP" ? "arcade-float" : ""}`}>
                                 <motion.div
                                     className="w-full h-full relative preserve-3d"
                                     animate={
@@ -189,7 +171,7 @@ export default function CoinFlipPage() {
                                         initial={{ scale: 0, opacity: 0 }}
                                         animate={{ scale: 1, opacity: 1 }}
                                         exit={{ scale: 0, opacity: 0 }}
-                                        className={`p-6 rounded-2xl text-center ${isWinner
+                                        className={`arcade-pop-in p-6 rounded-2xl text-center ${isWinner
                                                 ? "bg-gradient-to-br from-green-400 to-green-600"
                                                 : "bg-gradient-to-br from-red-400 to-red-600"
                                             }`}
@@ -217,7 +199,7 @@ export default function CoinFlipPage() {
                             {gameState === "SETUP" && (
                                 <button
                                     onClick={flipCoin}
-                                    className="flex-1 py-4 bg-yellow-500 hover:bg-yellow-600 active:scale-[0.98] text-white rounded-2xl font-bold text-lg shadow-lg shadow-yellow-500/20 transition-all flex items-center justify-center gap-2"
+                                    className="arcade-shine arcade-glow flex-1 py-4 bg-yellow-500 hover:bg-yellow-600 active:scale-[0.97] text-white rounded-2xl font-bold text-lg shadow-lg shadow-yellow-500/20 transition-all flex items-center justify-center gap-2"
                                 >
                                     <Coins className="w-5 h-5" />
                                     동전 던지기
@@ -226,7 +208,7 @@ export default function CoinFlipPage() {
                             {gameState === "FINISHED" && (
                                 <button
                                     onClick={resetGame}
-                                    className="flex-1 py-4 bg-yellow-500 hover:bg-yellow-600 active:scale-[0.98] text-white rounded-2xl font-bold text-lg shadow-lg shadow-yellow-500/20 transition-all flex items-center justify-center gap-2"
+                                    className="arcade-shine flex-1 py-4 bg-yellow-500 hover:bg-yellow-600 active:scale-[0.97] text-white rounded-2xl font-bold text-lg shadow-lg shadow-yellow-500/20 transition-all flex items-center justify-center gap-2"
                                 >
                                     <RotateCcw className="w-5 h-5" />
                                     다시 던지기

@@ -7,6 +7,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { incrementMinigamePlays } from "@/lib/cottonCandy";
 import { submitAnimalMergeScore, getAnimalMergeTop5, type ScoreEntry } from "@/lib/leaderboard";
 import PlaytimeRewardToast from "@/components/game/PlaytimeRewardToast";
+import CountUp from "@/components/game/CountUp";
+import { burst, bigBurst } from "@/lib/juice";
 
 // ─── 동물 레벨 (작은 것 → 큰 것) ──────────────────────────────────
 const ANIMALS = [
@@ -112,6 +114,7 @@ export default function AnimalMergePage() {
         setServerBest(true);
         setMyRank(res.rank);
         getAnimalMergeTop5().then(setTop5); // 순위표 즉시 갱신
+        bigBurst(); // JUICE: 개인 신기록/명예의 전당 진입 축하
       }
     });
   }, [gameOver]); // eslint-disable-line react-hooks/exhaustive-deps
@@ -188,6 +191,8 @@ export default function AnimalMergePage() {
             setScore(scoreRef.current);
             // 합치기 팝 이펙트
             popsRef.current.push({ x: mergeX, y: mergeY, r: newR, life: 16, max: 16, c: ANIMALS[a.lv + 1].c });
+            // JUICE: 큰 동물(레벨 6 이상)로 합쳐지면 큰 축하, 그 외엔 가벼운 축하
+            if (nb.lv >= 6) bigBurst(); else burst();
             continue;
           }
 
@@ -427,17 +432,23 @@ export default function AnimalMergePage() {
             게임 목록
           </Link>
           <div className="flex items-center gap-2">
-            <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+            <div className="arcade-card rounded-xl px-3 py-1.5 text-center">
               <div className="text-[9px] uppercase tracking-widest text-neutral-500">BEST</div>
-              <div className="text-sm font-bold text-white tabular-nums">{bestScore.toLocaleString()}</div>
+              <div className="text-sm font-bold text-white tabular-nums">
+                <CountUp value={bestScore} className="tabular-nums" />
+              </div>
             </div>
-            <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
+            <div className="arcade-card rounded-xl px-3 py-1.5 text-center">
               <div className="text-[9px] uppercase tracking-widest text-neutral-500">SCORE</div>
-              <div className="text-sm font-bold text-white tabular-nums">{score.toLocaleString()}</div>
+              <div className="text-sm font-bold text-white tabular-nums">
+                <span key={score} className="arcade-pop inline-block">
+                  <CountUp value={score} className="tabular-nums" />
+                </span>
+              </div>
             </div>
             <button
               onClick={restart}
-              className="p-2.5 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] transition-colors"
+              className="arcade-shine p-2.5 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] active:scale-[0.97] transition-all"
               aria-label="재시작"
             >
               <RotateCcw className="w-4 h-4" />
@@ -446,18 +457,18 @@ export default function AnimalMergePage() {
         </div>
 
         {/* 제목 + 다음 동물 */}
-        <div className="flex items-center justify-between mb-2.5">
+        <div className="flex items-center justify-between mb-2.5 arcade-rise-1">
           <h1 className="text-[15px] font-extrabold tracking-tight text-white">🐾 동물 합치기</h1>
-          <div className="flex items-center gap-2 rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5">
+          <div className="flex items-center gap-2 arcade-card rounded-xl px-3 py-1.5">
             <span className="text-[10px] uppercase tracking-widest text-neutral-500">다음</span>
-            <span className="text-xl leading-none">{ANIMALS[nextLv]?.emoji}</span>
+            <span key={nextLv} className="arcade-pop text-xl leading-none">{ANIMALS[nextLv]?.emoji}</span>
             <span className="text-[11px] text-neutral-400">{ANIMALS[nextLv]?.name}</span>
           </div>
         </div>
 
         {/* 캔버스 */}
         <div
-          className="relative w-full rounded-2xl overflow-hidden bg-white/[0.04] border border-white/10"
+          className="arcade-card arcade-rise relative w-full rounded-2xl overflow-hidden"
           style={{ aspectRatio: `${GW}/${GH}` }}
         >
           <canvas
@@ -475,11 +486,13 @@ export default function AnimalMergePage() {
           {/* 게임 오버 오버레이 */}
           {gameOver && (
             <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/70 backdrop-blur-sm px-4">
-              <div className="w-full max-w-[280px] rounded-3xl bg-[#101016] border border-white/10 p-8 flex flex-col items-center text-center">
-                <div className="text-5xl mb-3">😢</div>
+              <div className="arcade-pop-in w-full max-w-[280px] rounded-3xl bg-[#101016] border border-white/10 p-8 flex flex-col items-center text-center">
+                <div className="arcade-float text-5xl mb-3">😢</div>
                 <div className="text-lg font-extrabold tracking-tight mb-3">게임 오버!</div>
                 <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">SCORE</div>
-                <div className="text-4xl font-black text-[#F9954E] tabular-nums mb-2">{score.toLocaleString()}</div>
+                <div className="text-5xl font-black arcade-grad-text tabular-nums mb-2">
+                  <CountUp value={score} className="tabular-nums" />
+                </div>
                 {serverBest && myRank >= 1 && myRank <= 5 ? (
                   <div className="text-sm font-bold text-[#F9954E] mb-2">🏆 명예의 전당 {myRank}위 등극!</div>
                 ) : serverBest ? (
@@ -494,7 +507,7 @@ export default function AnimalMergePage() {
                 )}
                 <button
                   onClick={restart}
-                  className="mt-2 px-8 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.98] transition-all"
+                  className="arcade-shine arcade-glow mt-2 px-8 py-3 rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.97] transition-all"
                 >
                   다시 시작
                 </button>
@@ -504,7 +517,7 @@ export default function AnimalMergePage() {
         </div>
 
         {/* 🏆 명예의 전당 TOP 5 (전역 랭킹) */}
-        <div className="mt-3 bg-gradient-to-b from-yellow-500/10 to-neutral-900/80 rounded-xl p-3 border border-yellow-500/15">
+        <div className="arcade-rise-2 mt-3 bg-gradient-to-b from-yellow-500/10 to-neutral-900/80 rounded-xl p-3 border border-yellow-500/15">
           <div className="flex items-center justify-between mb-2">
             <span className="text-xs font-bold text-yellow-300">🏆 명예의 전당 TOP 5</span>
             <span className="text-[10px] text-neutral-500">회원 최고점</span>
@@ -539,7 +552,7 @@ export default function AnimalMergePage() {
         </div>
 
         {/* 합치기 차트 */}
-        <div className="mt-3 bg-neutral-900/80 rounded-xl p-3">
+        <div className="arcade-rise-3 mt-3 bg-neutral-900/80 rounded-xl p-3">
           <div className="text-[10px] text-neutral-500 uppercase tracking-wider mb-2">합치기 진화표</div>
           <div className="flex items-center flex-wrap gap-1">
             {ANIMALS.map((a, i) => (

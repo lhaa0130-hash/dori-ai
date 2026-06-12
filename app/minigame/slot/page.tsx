@@ -5,8 +5,9 @@ import { ArrowLeft, RotateCcw, Trophy, Coins, Minus, Plus } from "lucide-react";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
-import confetti from "canvas-confetti";
 import { useAuth } from "@/contexts/AuthContext";
+import CountUp from "@/components/game/CountUp";
+import { burst, bigBurst } from "@/lib/juice";
 
 // 슬롯 심볼
 const SYMBOLS = ["🍒", "🍋", "🍊", "🍇", "⭐", "💎", "7️⃣"];
@@ -40,13 +41,12 @@ export default function SlotMachinePage() {
     useEffect(() => { setMounted(true); }, []);
 
     const triggerConfetti = (multiplier: number) => {
-        const intensity = Math.min(multiplier / 10, 1);
-        confetti({
-            particleCount: Math.floor(100 * intensity + 50),
-            spread: 70 + multiplier * 5,
-            origin: { y: 0.6 },
-            colors: ["#f59e0b", "#ef4444", "#8b5cf6", "#10b981"],
-        });
+        // 잭팟급(10배 이상)은 큰 축하, 그 외엔 가벼운 축하
+        if (multiplier >= 10) {
+            bigBurst();
+        } else {
+            burst();
+        }
     };
 
     const getRandomSymbol = () => SYMBOLS[Math.floor(Math.random() * SYMBOLS.length)];
@@ -134,14 +134,16 @@ export default function SlotMachinePage() {
                 <div className="animate-fade-in">
 
                     {/* 코인 잔액 */}
-                    <div className="flex items-center justify-center gap-2 mb-6">
-                        <Coins className="w-5 h-5 text-[#F9954E]" />
-                        <span className="text-2xl font-bold text-[#F9954E] tabular-nums">{coins.toLocaleString()}</span>
+                    <div className="flex items-center justify-center gap-2 mb-6 arcade-rise">
+                        <Coins className="w-5 h-5 text-[#F9954E] arcade-float" />
+                        <span key={coins} className="arcade-pop inline-block text-2xl font-bold text-[#F9954E]">
+                            <CountUp value={coins} className="tabular-nums" />
+                        </span>
                         <span className="text-sm text-neutral-500">코인</span>
                     </div>
 
                     {/* 메인 게임 카드 */}
-                    <div className="rounded-3xl p-6 md:p-8 bg-white/[0.04] border border-white/10">
+                    <div className="arcade-card arcade-rise-1 rounded-3xl p-6 md:p-8 bg-white/[0.04] border border-white/10">
 
                         {/* 슬롯 머신 */}
                         <div className="bg-gradient-to-b from-[#3a1212] to-[#1a0808] rounded-2xl p-6 mb-6 shadow-inner border border-[#F9954E]/20 relative overflow-hidden">
@@ -157,9 +159,9 @@ export default function SlotMachinePage() {
                             {/* 릴 디스플레이 */}
                             <div className="flex items-center justify-center gap-3 mt-4">
                                 {reels.map((symbol, i) => (
-                                    <div key={i} className="w-24 h-28 bg-zinc-100 rounded-xl flex items-center justify-center shadow-inner border-2 border-[#F9954E]/60 relative overflow-hidden">
+                                    <div key={i} className="w-24 h-28 bg-gradient-to-b from-white to-zinc-200 rounded-xl flex items-center justify-center shadow-[inset_0_2px_8px_rgba(0,0,0,0.25)] border-2 border-[#F9954E]/60 relative overflow-hidden">
                                         <motion.span
-                                            className="text-5xl"
+                                            className={`text-5xl drop-shadow-sm ${!spinning && result?.win ? "arcade-float" : ""}`}
                                             animate={spinReels[i] ? { y: [0, -10, 10, 0] } : {}}
                                             transition={{ duration: 0.08, repeat: spinReels[i] ? Infinity : 0 }}
                                         >
@@ -185,7 +187,7 @@ export default function SlotMachinePage() {
                                     initial={{ scale: 0.8, opacity: 0 }}
                                     animate={{ scale: 1, opacity: 1 }}
                                     exit={{ scale: 0.8, opacity: 0 }}
-                                    className={`text-center p-4 rounded-2xl mb-6 font-bold ${result.win
+                                    className={`arcade-pop-in text-center p-4 rounded-2xl mb-6 font-bold ${result.win
                                             ? "bg-gradient-to-r from-[#F9954E]/20 to-yellow-400/20 text-[#F9954E]"
                                             : result.payout > 0
                                                 ? "bg-white/[0.06] text-neutral-200"
@@ -194,7 +196,16 @@ export default function SlotMachinePage() {
                                 >
                                     <p className="text-lg">{result.message}</p>
                                     {result.payout > 0 && (
-                                        <p className="text-sm mt-1 opacity-75">+{result.payout.toLocaleString()} 코인</p>
+                                        result.win ? (
+                                            <p className="mt-1">
+                                                <span className="arcade-grad-text text-3xl font-extrabold">
+                                                    +<CountUp value={result.payout} className="tabular-nums" />
+                                                </span>
+                                                <span className="text-sm ml-1 opacity-80">코인</span>
+                                            </p>
+                                        ) : (
+                                            <p className="text-sm mt-1 opacity-75">+{result.payout.toLocaleString()} 코인</p>
+                                        )
                                     )}
                                 </motion.div>
                             )}
@@ -207,15 +218,15 @@ export default function SlotMachinePage() {
                                 <button
                                     onClick={() => adjustBet(-10)}
                                     disabled={bet <= 10 || spinning}
-                                    className="w-8 h-8 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center hover:bg-white/[0.12] disabled:opacity-30 transition-colors"
+                                    className="w-8 h-8 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center hover:bg-white/[0.12] disabled:opacity-30 transition-colors active:scale-[0.97] transition-transform"
                                 >
                                     <Minus className="w-3 h-3" />
                                 </button>
-                                <span className="text-xl font-bold text-[#F9954E] w-16 text-center tabular-nums">{bet}</span>
+                                <span key={bet} className="arcade-pop inline-block text-xl font-bold text-[#F9954E] w-16 text-center tabular-nums">{bet}</span>
                                 <button
                                     onClick={() => adjustBet(10)}
                                     disabled={bet >= coins || spinning}
-                                    className="w-8 h-8 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center hover:bg-white/[0.12] disabled:opacity-30 transition-colors"
+                                    className="w-8 h-8 rounded-full bg-white/[0.06] border border-white/10 flex items-center justify-center hover:bg-white/[0.12] disabled:opacity-30 transition-colors active:scale-[0.97] transition-transform"
                                 >
                                     <Plus className="w-3 h-3" />
                                 </button>
@@ -229,8 +240,8 @@ export default function SlotMachinePage() {
                                     key={amount}
                                     onClick={() => setBet(Math.min(amount, coins))}
                                     disabled={spinning || coins < amount}
-                                    className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all ${bet === amount
-                                            ? "bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white"
+                                    className={`flex-1 py-2 rounded-xl text-xs font-bold transition-all active:scale-[0.97] ${bet === amount
+                                            ? "bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white shadow-md shadow-[#F9954E]/20"
                                             : "bg-white/[0.06] border border-white/10 text-neutral-300 hover:bg-white/[0.12] disabled:opacity-30"
                                         }`}
                                 >
@@ -243,11 +254,11 @@ export default function SlotMachinePage() {
                         <button
                             onClick={spin}
                             disabled={spinning || coins < bet}
-                            className={`w-full py-4 rounded-2xl font-bold text-lg shadow-lg transition-all flex items-center justify-center gap-2 ${spinning
+                            className={`w-full py-4 rounded-2xl font-bold text-lg shadow-lg transition-all flex items-center justify-center gap-2 active:scale-[0.98] transition-transform ${spinning
                                     ? "bg-white/[0.06] text-neutral-500 cursor-not-allowed"
                                     : coins < bet
                                         ? "bg-white/[0.06] text-neutral-500 cursor-not-allowed"
-                                        : "bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white hover:brightness-110 active:scale-[0.98] shadow-[#F9954E]/20"
+                                        : "arcade-shine arcade-glow bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white hover:brightness-110 shadow-[#F9954E]/20"
                                 }`}
                         >
                             {spinning ? (
@@ -266,7 +277,7 @@ export default function SlotMachinePage() {
                         {coins < 10 && !spinning && (
                             <button
                                 onClick={() => { setCoins(1000); setTotalSpins(0); setTotalWins(0); setBet(10); setResult(null); }}
-                                className="w-full mt-3 py-3 rounded-2xl bg-white/[0.06] border border-white/10 text-sm font-bold text-neutral-300 hover:bg-white/[0.12] transition-colors flex items-center justify-center gap-2"
+                                className="w-full mt-3 py-3 rounded-2xl bg-white/[0.06] border border-white/10 text-sm font-bold text-neutral-300 hover:bg-white/[0.12] transition-colors active:scale-[0.97] transition-transform flex items-center justify-center gap-2"
                             >
                                 <RotateCcw className="w-4 h-4" />
                                 1,000 코인으로 다시 시작
@@ -276,17 +287,21 @@ export default function SlotMachinePage() {
 
                     {/* 통계 */}
                     <div className="mt-6 grid grid-cols-3 gap-3">
-                        <div className="bg-white/[0.04] rounded-2xl p-4 text-center border border-white/10">
-                            <div className="text-2xl font-bold text-[#F9954E] tabular-nums">{totalSpins}</div>
+                        <div className="arcade-card arcade-rise-1 rounded-2xl p-4 text-center bg-white/[0.04] border border-white/10">
+                            <div className="text-2xl font-bold text-[#F9954E]">
+                                <CountUp value={totalSpins} className="tabular-nums" />
+                            </div>
                             <div className="text-[10px] uppercase tracking-widest text-neutral-500 mt-0.5">총 스핀</div>
                         </div>
-                        <div className="bg-white/[0.04] rounded-2xl p-4 text-center border border-white/10">
-                            <div className="text-2xl font-bold text-emerald-400 tabular-nums">{totalWins}</div>
+                        <div className="arcade-card arcade-rise-2 rounded-2xl p-4 text-center bg-white/[0.04] border border-white/10">
+                            <div className="text-2xl font-bold text-emerald-400">
+                                <CountUp value={totalWins} className="tabular-nums" />
+                            </div>
                             <div className="text-[10px] uppercase tracking-widest text-neutral-500 mt-0.5">당첨</div>
                         </div>
-                        <div className="bg-white/[0.04] rounded-2xl p-4 text-center border border-white/10">
+                        <div className="arcade-card arcade-rise-3 rounded-2xl p-4 text-center bg-white/[0.04] border border-white/10">
                             <div className="text-2xl font-bold text-white tabular-nums">
-                                {totalSpins > 0 ? Math.round((totalWins / totalSpins) * 100) : 0}%
+                                <CountUp value={totalSpins > 0 ? Math.round((totalWins / totalSpins) * 100) : 0} className="tabular-nums" />%
                             </div>
                             <div className="text-[10px] uppercase tracking-widest text-neutral-500 mt-0.5">당첨률</div>
                         </div>
