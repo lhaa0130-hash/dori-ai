@@ -25,8 +25,15 @@ export default function StructuredData() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "DORI-AI",
+    alternateName: "dori-ai.com",
     url: "https://dori-ai.com",
     description: "AI 도구, 인사이트, 아카데미, 커뮤니티를 한 곳에서 제공하는 AI 플랫폼",
+    publisher: {
+      "@type": "Organization",
+      name: "illo",
+      url: "https://dori-ai.com",
+      logo: "https://dori-ai.com/illo-logo.png",
+    },
     potentialAction: {
       "@type": "SearchAction",
       target: {

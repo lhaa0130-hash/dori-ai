@@ -33,6 +33,10 @@ export const metadata = {
       "dori-ai",
     ],
   }),
+  applicationName: "DORI-AI",
+  authors: [{ name: "illo", url: "https://dori-ai.com" }],
+  creator: "illo",
+  publisher: "illo",
   icons: {
     icon: [
       { url: '/icon.svg', type: 'image/svg+xml' },
