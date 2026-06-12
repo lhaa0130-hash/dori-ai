@@ -2887,5 +2887,610 @@
       ]
     },
     "image_path": "/images/animal/공작.jpg"
+  },
+  {
+    "search_nickname": "긴 목으로 쭉쭉 달리는 날지 못하는 큰 새",
+    "animal_name": "타조",
+    "kid_friendly_desc": "타조는 아프리카 초원에 사는 아주 큰 새예요. 날개는 있지만 하늘을 날지는 못하고, 대신 긴 다리로 정말 빠르게 달린답니다. 목이 길어서 멀리 있는 것도 잘 살펴볼 수 있어요. 풀, 씨앗, 작은 벌레 같은 여러 가지 먹이를 먹어요.",
+    "key_feature": [
+      "날지 못하는 큰 새",
+      "긴 목과 긴 다리",
+      "아주 빠르게 달림"
+    ],
+    "image_prompt": "A cute ostrich with a long neck, fluffy black and white feathers, tiny wings, and long strong legs running happily on an African savanna, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "잡식",
+        "씨앗을 먹는"
+      ],
+      "color": [
+        "검정색",
+        "흰색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [
+        "엄청 빠른"
+      ],
+      "body": [
+        "날개 있는",
+        "긴 목"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    },
+    "image_path": "/images/animal/타조.jpg"
+  },
+  {
+    "search_nickname": "긴 부리로 킁킁 냄새 맡는 밤 산책 새",
+    "animal_name": "키위새",
+    "kid_friendly_desc": "키위새는 뉴질랜드에 사는 특별한 새예요. 날개는 아주 작아서 하늘을 날지는 못하지만, 튼튼한 다리로 숲속을 콩콩 걸어 다닌단다. 밤이 되면 긴 부리 끝으로 냄새를 맡으며 벌레와 지렁이를 찾아 먹어요. 동그란 몸과 복슬복슬한 깃털이 꼭 작은 털공 같아요!",
+    "key_feature": [
+      "긴 부리",
+      "날지 못하는 새",
+      "밤에 활동"
+    ],
+    "image_prompt": "A cute kiwi bird with a round fluffy brown body, tiny hidden wings, strong little legs, and a long slender beak sniffing the forest floor at night, adorable curious expression, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는",
+        "잡식"
+      ],
+      "color": [],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [],
+      "feature": [
+        "야행성"
+      ],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    },
+    "image_path": "/images/animal/키위새.jpg"
+  },
+  {
+    "search_nickname": "윙윙 날개로 꽃꿀을 쪽쪽 마시는 작은 새",
+    "animal_name": "벌새",
+    "kid_friendly_desc": "벌새는 꽃 앞에서 헬리콥터처럼 가만히 떠 있을 수 있는 아주 작은 새예요. 긴 부리로 꽃꿀을 쪽쪽 마시고, 작은 벌레도 먹는단다. 날개를 아주 빠르게 파닥여서 ‘윙윙’ 소리가 나요. 새들 중에는 손가락처럼 아주 작은 친구도 있어요!",
+    "key_feature": [
+      "아주 작은 몸",
+      "빠른 날갯짓",
+      "꽃꿀 먹기"
+    ],
+    "image_prompt": "A tiny adorable hummingbird hovering in front of a bright flower, with shimmering colorful feathers, a long slender beak sipping nectar, and super fast blurred wings. A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는",
+        "꿀을 먹는"
+      ],
+      "color": [
+        "알록달록한"
+      ],
+      "size": [
+        "손보다 작은",
+        "세상 가장 작은"
+      ],
+      "habitat": [
+        "열대우림",
+        "도시 근처"
+      ],
+      "feature": [
+        "날 수 있는",
+        "엄청 빠른"
+      ],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    },
+    "image_path": "/images/animal/벌새.jpg"
+  },
+  {
+    "search_nickname": "통통통 나무 북을 치는 빨간 모자 새",
+    "animal_name": "딱따구리",
+    "kid_friendly_desc": "딱따구리는 부리로 나무를 통통통 두드리는 새예요. 나무껍질 속에 숨어 있는 작은 벌레와 애벌레를 찾아 먹는단다. 머리에 빨간 무늬가 있는 친구들도 있어서 작은 빨간 모자를 쓴 것처럼 보여요. 튼튼한 발톱으로 나무에 꼭 붙어서 오르내릴 수 있어요.",
+    "key_feature": [
+      "나무 두드리기",
+      "튼튼한 부리",
+      "긴 혀"
+    ],
+    "image_prompt": "A cute woodpecker with a tiny red cap-like head patch, black and white feathers, clinging to a tree trunk and tapping with its strong beak, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는"
+      ],
+      "color": [
+        "빨간색",
+        "검정색",
+        "흰색"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "도시 근처"
+      ],
+      "feature": [
+        "날 수 있는"
+      ],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "알을 낳는",
+        "나무 위에 사는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    },
+    "image_path": "/images/animal/딱따구리.jpg"
+  },
+  {
+    "search_nickname": "까악까악 똑똑한 검은 날개 친구",
+    "animal_name": "까마귀",
+    "kid_friendly_desc": "까마귀는 새까만 깃털을 가진 똑똑한 새예요. “까악까악” 하고 큰 소리로 울어서 멀리서도 알아볼 수 있단다. 나무 위나 도시 근처에서 살며, 먹을 것을 아주 잘 찾아요. 친구들과 함께 모여 다니기도 해요.",
+    "key_feature": [
+      "새까만 깃털",
+      "똑똑한 머리",
+      "까악까악 울음소리"
+    ],
+    "image_prompt": "A cute black crow with shiny feathers, bright curious eyes, a small beak, perched on a tree branch and looking clever, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "잡식",
+        "곤충을 먹는",
+        "씨앗을 먹는",
+        "썩은 것 먹는"
+      ],
+      "color": [
+        "검정색"
+      ],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "도시 근처"
+      ],
+      "feature": [
+        "날 수 있는"
+      ],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "알을 낳는",
+        "나무 위에 사는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    },
+    "image_path": "/images/animal/까마귀.jpg"
+  },
+  {
+    "search_nickname": "하얀 드레스를 입고 호수 위를 미끄러지는 긴 목 친구",
+    "animal_name": "백조",
+    "kid_friendly_desc": "고니는 우리가 백조라고도 부르는 하얀 물새예요. 긴 목을 쭉 뻗고 호수 위를 사르르 미끄러지듯 헤엄친답니다. 겨울이 되면 친구들과 함께 먼 곳에서 날아와 우리나라의 강이나 연못에서 지내요. 물속 풀도 먹고, 작은 물고기나 조개도 찾아 먹어요.",
+    "key_feature": [
+      "하얀 깃털",
+      "긴 목",
+      "겨울철새"
+    ],
+    "image_prompt": "A graceful white swan with a long curved neck gently swimming on a sparkling lake, fluffy feathers, cute face, small ripples around it, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "물고기를 먹는",
+        "잡식"
+      ],
+      "color": [
+        "흰색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "바다",
+        "강·호수"
+      ],
+      "feature": [
+        "날 수 있는"
+      ],
+      "body": [
+        "날개 있는",
+        "긴 목"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "철새처럼 이동",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    },
+    "image_path": "/images/animal/백조.jpg"
+  },
+  {
+    "search_nickname": "물갈퀴 발로 첨벙첨벙 헤엄치는 뒤뚱이 친구",
+    "animal_name": "오리",
+    "kid_friendly_desc": "오리는 물에서 첨벙첨벙 헤엄치기를 좋아하는 새예요. 발가락 사이에 물갈퀴가 있어서 노처럼 물을 밀며 수영한답니다. 물 위에서는 아주 우아하지만, 땅에서는 뒤뚱뒤뚱 귀엽게 걸어요. 추운 곳에 사는 오리들은 겨울이 오면 따뜻한 곳으로 날아가기도 해요.",
+    "key_feature": [
+      "물갈퀴 발",
+      "뒤뚱뒤뚱 걷기",
+      "수영 잘함"
+    ],
+    "image_prompt": "A cute duck waddling near a calm pond, with bright webbed feet, soft fluffy feathers, a small rounded body, and a cheerful beak, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "잡식",
+        "물고기를 먹는",
+        "씨앗을 먹는"
+      ],
+      "color": [
+        "알록달록한"
+      ],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "강·호수"
+      ],
+      "feature": [
+        "날 수 있는"
+      ],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "철새처럼 이동",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    },
+    "image_path": "/images/animal/오리.jpg"
+  },
+  {
+    "search_nickname": "꼬꼬댁 알을 낳는 마당 친구",
+    "animal_name": "닭",
+    "kid_friendly_desc": "닭은 우리에게 달걀을 선물해 주는 친근한 새예요. ‘꼬꼬댁’ 하고 울며 친구들과 함께 마당을 돌아다닌답니다. 땅을 콕콕 쪼아 씨앗이나 작은 벌레를 찾아 먹어요. 날개가 있지만 멀리 날기보다는 짧게 폴짝 날아오르는 걸 더 잘해요.",
+    "key_feature": [
+      "꼬꼬댁 울음",
+      "알을 낳아요",
+      "땅을 콕콕 쪼아요"
+    ],
+    "image_prompt": "A cute fluffy chicken with a bright red comb, tiny beak, round body, and little wings, happily pecking seeds in a sunny farmyard, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는",
+        "잡식",
+        "씨앗을 먹는"
+      ],
+      "color": [
+        "알록달록한"
+      ],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "도시 근처"
+      ],
+      "feature": [
+        "날 수 있는"
+      ],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    },
+    "image_path": "/images/animal/닭.jpg"
+  },
+  {
+    "search_nickname": "물가에서 긴 꼬리로 헤엄치는 튼튼 이빨 친구",
+    "animal_name": "악어",
+    "kid_friendly_desc": "악어는 강이나 호수 근처에 사는 커다란 파충류예요. 길쭉한 몸과 긴 꼬리로 물속을 슝슝 헤엄친답니다. 입에는 뾰족한 이빨이 많아서 물고기나 다른 동물을 잡아먹어요. 아주 오래전 공룡이 살던 때부터 이어져 온 멋진 동물이에요!",
+    "key_feature": [
+      "뾰족한 이빨",
+      "긴 꼬리",
+      "물속 헤엄"
+    ],
+    "image_prompt": "A cute crocodile baby with big gentle eyes, a long tail, tiny sturdy legs, and a friendly toothy smile sitting near a calm river, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "물고기를 먹는",
+        "육식"
+      ],
+      "color": [
+        "초록색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "강·호수"
+      ],
+      "feature": [
+        "보호색"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "파충류"
+      ]
+    },
+    "image_path": "/images/animal/악어.jpg"
+  },
+  {
+    "search_nickname": "색깔 옷을 갈아입는 긴 혀 도마뱀",
+    "animal_name": "카멜레온",
+    "kid_friendly_desc": "카멜레온은 기분이나 빛, 온도에 따라 몸 색깔이 바뀌는 신기한 도마뱀이에요. 길고 끈적한 혀를 슉! 하고 뻗어서 작은 곤충을 잡아먹는답니다. 두 눈은 따로따로 움직일 수 있어서 여기저기 살피는 걸 잘해요. 나뭇가지 위에서 꼬리로 몸을 잘 붙잡고 천천히 걸어 다녀요.",
+    "key_feature": [
+      "색깔 변화",
+      "긴 끈적 혀",
+      "따로 움직이는 눈"
+    ],
+    "image_prompt": "A cute chameleon perched on a small tree branch, changing into bright green and rainbow colors, with big curious eyes looking in different directions and a curled tail, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는"
+      ],
+      "color": [
+        "초록색",
+        "알록달록한"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "열대우림"
+      ],
+      "feature": [
+        "보호색",
+        "변장하는"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "알을 낳는",
+        "나무 위에 사는"
+      ],
+      "taxonomy": [
+        "파충류"
+      ]
+    },
+    "image_path": "/images/animal/카멜레온.jpg"
+  },
+  {
+    "search_nickname": "초록 꼬리를 흔드는 나무 위 도마뱀 친구",
+    "animal_name": "이구아나",
+    "kid_friendly_desc": "이구아나는 따뜻한 중앙아메리카와 남아메리카, 카리브 섬에 사는 큰 도마뱀이에요. 초록빛 몸과 아주 긴 꼬리가 있어서 나뭇잎 사이에 숨어 있으면 잘 안 보인단다. 주로 나무 위에서 지내고, 잎이나 꽃 같은 식물을 냠냠 먹어요. 목 아래에는 축 늘어진 멋진 주름도 있어요!",
+    "key_feature": [
+      "긴 꼬리",
+      "초록빛 몸",
+      "나무 위 생활"
+    ],
+    "image_prompt": "A cute green iguana sitting on a tropical tree branch, with a long tail, gentle eyes, tiny back spines, and a soft hanging throat flap, looking friendly and curious, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [
+        "초록색"
+      ],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "열대우림"
+      ],
+      "feature": [
+        "보호색"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "알을 낳는",
+        "나무 위에 사는"
+      ],
+      "taxonomy": [
+        "파충류"
+      ]
+    },
+    "image_path": "/images/animal/이구아나.jpg"
+  },
+  {
+    "search_nickname": "밤에 벽을 척척 걷는 작은 곤충 사냥꾼",
+    "animal_name": "도마뱀붙이",
+    "kid_friendly_desc": "도마뱀붙이는 밤이 되면 벽이나 천장 위를 척척 걸어 다니는 작은 파충류예요. 발가락에 아주 작은 털 같은 힘이 있어서 미끄러운 곳에도 잘 붙을 수 있단다. 집 근처에서 곤충이나 거미를 잡아먹고, 독은 없어서 무서워하지 않아도 돼요. 꼬리가 끊어져도 다시 자랄 수 있는 신기한 친구예요.",
+    "key_feature": [
+      "벽 타기 발가락",
+      "밤에 활동",
+      "다시 자라는 꼬리"
+    ],
+    "image_prompt": "A small adorable Japanese gecko with big curious eyes, tiny sticky toes climbing on a warm house wall at night, cute spotted body and long tail, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는"
+      ],
+      "color": [
+        "검정색"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "도시 근처"
+      ],
+      "feature": [
+        "야행성"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "파충류"
+      ]
+    },
+    "image_path": "/images/animal/도마뱀붙이.jpg"
+  },
+  {
+    "search_nickname": "커다란 꼬리를 흔드는 섬의 도마뱀 왕",
+    "animal_name": "코모도왕도마뱀",
+    "kid_friendly_desc": "코모도왕도마뱀은 인도네시아의 따뜻한 섬에 사는 아주 큰 도마뱀이에요. 지금 살아 있는 도마뱀 중에서 가장 커서 ‘도마뱀 왕’처럼 보인답니다. 튼튼한 다리로 천천히 걸어 다니고, 긴 꼬리로 몸의 균형을 잡아요. 멀리서 조용히 바라보면 정말 멋진 파충류 친구예요.",
+    "key_feature": [
+      "가장 큰 도마뱀",
+      "긴 꼬리",
+      "섬에 사는 파충류"
+    ],
+    "image_prompt": "A cute Komodo dragon standing proudly on a sunny Indonesian island, with a big friendly face, sturdy legs, long tail, textured scales, and a gentle curious expression, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "육식",
+        "썩은 것 먹는"
+      ],
+      "color": [],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [
+        "독이 있는"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "파충류"
+      ]
+    },
+    "image_path": "/images/animal/코모도왕도마뱀.jpg"
+  },
+  {
+    "search_nickname": "다리 없이 스르륵 움직이는 길쭉한 친구",
+    "animal_name": "뱀",
+    "kid_friendly_desc": "뱀은 다리가 없지만 몸을 구불구불 움직여서 스르륵 잘 가요. 어떤 뱀은 손가락처럼 작고, 어떤 뱀은 아주아주 길게 자란단다. 뱀은 주로 작은 동물들을 잡아먹는 파충류예요. 조용히 숨어 있다가 냄새와 진동을 느끼며 주변을 살펴봐요.",
+    "key_feature": [
+      "다리 없음",
+      "스르륵 이동",
+      "길쭉한 몸"
+    ],
+    "image_prompt": "A friendly cute snake with a long smooth body, big sparkling eyes, tiny smiling face, gently coiled on soft green grass, adorable and non-scary, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "육식"
+      ],
+      "color": [],
+      "size": [],
+      "habitat": [
+        "사막",
+        "열대우림",
+        "초원"
+      ],
+      "feature": [
+        "보호색"
+      ],
+      "body": [
+        "다리가 없는"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "파충류"
+      ]
+    },
+    "image_path": "/images/animal/뱀.jpg"
+  },
+  {
+    "search_nickname": "폴짝폴짝 뛰고 개굴개굴 노래하는 연못 친구",
+    "animal_name": "개구리",
+    "kid_friendly_desc": "개구리는 물가에서 폴짝폴짝 뛰어다니는 작은 동물이에요. 어릴 때는 올챙이로 물속에서 살다가, 자라면 다리가 생기고 개구리가 된단다. 긴 혀로 작은 벌레를 냠냠 잡아먹기도 해요. 비 오는 날에는 개굴개굴 신나게 노래하는 것처럼 들려요.",
+    "key_feature": [
+      "폴짝 뛰기",
+      "개굴개굴 울음",
+      "올챙이에서 변신"
+    ],
+    "image_prompt": "A cute green frog sitting on a lily pad, big sparkling eyes, tiny smile, webbed feet, pond with gentle ripples and small flowers, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는"
+      ],
+      "color": [
+        "초록색"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "강·호수"
+      ],
+      "feature": [
+        "보호색"
+      ],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "양서류"
+      ]
+    },
+    "image_path": "/images/animal/개구리.jpg"
   }
 ]
