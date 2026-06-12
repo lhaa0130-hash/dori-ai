@@ -12,9 +12,13 @@ import {
   watchGroups,
   feedVisibleAudience,
   audienceForGroups,
+  listComments,
+  addComment,
+  deleteComment,
   type FeedPost,
   type FeedVisibility,
   type FriendGroup,
+  type Comment,
 } from "@/lib/social";
 import { uploadFeedMedia } from "@/lib/storage";
 
@@ -33,6 +37,27 @@ export default function FeedPage() {
   const [posts, setPosts] = useState<FeedPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [uid, setUid] = useState<string | null>(null);
+
+  // 댓글 상태 — 글별 독립(열림여부/목록/로딩/입력)
+  type CommentState = {
+    open: boolean;
+    items: Comment[];
+    loaded: boolean;
+    loading: boolean;
+    draft: string;
+    submitting: boolean;
+  };
+  const [commentMap, setCommentMap] = useState<Record<string, CommentState>>({});
+
+  const getCState = (postId: string): CommentState =>
+    commentMap[postId] || { open: false, items: [], loaded: false, loading: false, draft: "", submitting: false };
+
+  const patchCState = useCallback((postId: string, patch: Partial<CommentState>) => {
+    setCommentMap((prev) => {
+      const cur = prev[postId] || { open: false, items: [], loaded: false, loading: false, draft: "", submitting: false };
+      return { ...prev, [postId]: { ...cur, ...patch } };
+    });
+  }, []);
 
   // 글쓰기 상태
   const [text, setText] = useState("");
@@ -136,6 +161,49 @@ export default function FeedPage() {
   const handleDelete = async (postId: string) => {
     const ok = await deletePost(postId);
     if (ok) setPosts((prev) => prev.filter((p) => p.id !== postId));
+  };
+
+  // 댓글 영역 토글 — 처음 펼칠 때 목록 로드
+  const toggleComments = async (post: FeedPost) => {
+    const cur = getCState(post.id);
+    const nextOpen = !cur.open;
+    patchCState(post.id, { open: nextOpen });
+    if (nextOpen && !cur.loaded && !cur.loading) {
+      patchCState(post.id, { loading: true });
+      const items = await listComments(post.id);
+      patchCState(post.id, { items, loaded: true, loading: false });
+    }
+  };
+
+  const handleAddComment = async (post: FeedPost) => {
+    const cur = getCState(post.id);
+    const body = cur.draft.trim();
+    if (!body || cur.submitting) return;
+    patchCState(post.id, { submitting: true });
+    const ok = await addComment(post.id, post.uid, myName, body);
+    if (ok) {
+      const items = await listComments(post.id);
+      patchCState(post.id, { items, loaded: true, draft: "", submitting: false });
+      setPosts((prev) =>
+        prev.map((p) => (p.id === post.id ? { ...p, commentCount: p.commentCount + 1 } : p))
+      );
+    } else {
+      patchCState(post.id, { submitting: false });
+    }
+  };
+
+  const handleDeleteComment = async (post: FeedPost, commentId: string) => {
+    const ok = await deleteComment(post.id, commentId);
+    if (ok) {
+      setCommentMap((prev) => {
+        const cur = prev[post.id];
+        if (!cur) return prev;
+        return { ...prev, [post.id]: { ...cur, items: cur.items.filter((c) => c.id !== commentId) } };
+      });
+      setPosts((prev) =>
+        prev.map((p) => (p.id === post.id ? { ...p, commentCount: Math.max(0, p.commentCount - 1) } : p))
+      );
+    }
   };
 
   const canPost = (!!text.trim() || !!media) && !posting && !uploading;
@@ -356,7 +424,7 @@ export default function FeedPage() {
                     </div>
                   )}
 
-                  <div className="mt-3 flex items-center">
+                  <div className="mt-3 flex items-center gap-2">
                     <button
                       type="button"
                       onClick={() => handleLike(post)}
@@ -373,7 +441,102 @@ export default function FeedPage() {
                         {post.likeCount}
                       </span>
                     </button>
+
+                    <button
+                      type="button"
+                      onClick={() => toggleComments(post)}
+                      className="inline-flex items-center gap-1.5 text-sm rounded-full px-3 py-1.5 bg-neutral-100 dark:bg-zinc-900 active:opacity-85 transition text-neutral-600 dark:text-neutral-300"
+                      aria-expanded={getCState(post.id).open}
+                    >
+                      <span aria-hidden>💬</span>
+                      <span className="font-semibold">댓글 {post.commentCount}</span>
+                    </button>
                   </div>
+
+                  {/* 댓글 영역 — 글별 독립 토글 */}
+                  {getCState(post.id).open && (
+                    <div className="mt-3 border-t border-neutral-100 dark:border-zinc-900 pt-3">
+                      {getCState(post.id).loading ? (
+                        <p className="text-xs text-neutral-400">댓글 불러오는 중...</p>
+                      ) : (
+                        <>
+                          {getCState(post.id).items.length === 0 ? (
+                            <p className="text-xs text-neutral-400">아직 댓글이 없어요.</p>
+                          ) : (
+                            <ul className="space-y-3">
+                              {getCState(post.id).items.map((c) => {
+                                const myComment = !!uid && c.uid === uid;
+                                return (
+                                  <li key={c.id} className="flex items-start justify-between gap-2">
+                                    <div className="min-w-0">
+                                      <div className="flex items-center gap-2">
+                                        <Link
+                                          href={`/profile?uid=${c.uid}`}
+                                          className="font-bold text-xs text-neutral-900 dark:text-white hover:underline truncate inline-block max-w-[140px] align-bottom"
+                                        >
+                                          {c.name}
+                                        </Link>
+                                        <span className="text-[10px] text-neutral-400">
+                                          {c.at ? new Date(c.at).toLocaleString("ko-KR") : ""}
+                                        </span>
+                                      </div>
+                                      <p className="mt-0.5 text-sm text-neutral-700 dark:text-neutral-300 whitespace-pre-line break-words">
+                                        {c.text}
+                                      </p>
+                                    </div>
+                                    {myComment && (
+                                      <button
+                                        type="button"
+                                        onClick={() => handleDeleteComment(post, c.id)}
+                                        className="text-[11px] text-neutral-400 hover:text-red-500 active:opacity-85 flex-shrink-0"
+                                      >
+                                        삭제
+                                      </button>
+                                    )}
+                                  </li>
+                                );
+                              })}
+                            </ul>
+                          )}
+
+                          {/* 댓글 입력 / 로그인 유도 */}
+                          {isLoggedIn ? (
+                            <div className="mt-3 flex items-center gap-2">
+                              <input
+                                type="text"
+                                value={getCState(post.id).draft}
+                                onChange={(e) => patchCState(post.id, { draft: e.target.value })}
+                                onKeyDown={(e) => {
+                                  if (e.key === "Enter" && !e.shiftKey) {
+                                    e.preventDefault();
+                                    handleAddComment(post);
+                                  }
+                                }}
+                                placeholder="댓글을 입력하세요"
+                                maxLength={500}
+                                className="flex-1 min-w-0 rounded-full bg-neutral-100 dark:bg-zinc-900 px-4 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 outline-none"
+                              />
+                              <button
+                                type="button"
+                                onClick={() => handleAddComment(post)}
+                                disabled={!getCState(post.id).draft.trim() || getCState(post.id).submitting}
+                                className="bg-[#F9954E] text-white text-sm font-semibold rounded-full px-4 py-2 active:opacity-85 disabled:opacity-40 transition flex-shrink-0"
+                              >
+                                {getCState(post.id).submitting ? "..." : "등록"}
+                              </button>
+                            </div>
+                          ) : (
+                            <p className="mt-3 text-xs text-neutral-400">
+                              <Link href="/login" className="underline" style={{ color: POINT }}>
+                                로그인
+                              </Link>{" "}
+                              후 댓글을 남길 수 있어요.
+                            </p>
+                          )}
+                        </>
+                      )}
+                    </div>
+                  )}
                 </li>
               );
             })}

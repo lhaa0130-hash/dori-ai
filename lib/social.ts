@@ -29,6 +29,10 @@ function tsToMillis(v: unknown): number {
   if (v && typeof v === "object" && "toMillis" in (v as any)) { try { return (v as any).toMillis(); } catch { return 0; } }
   return 0;
 }
+function todayStr(): string {
+  const d = new Date();
+  return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+}
 
 // ─── 프로필(미니홈피) ───────────────────────────────────────────
 export type BgStyle = "aurora" | "sunset" | "mono" | "mint" | "berry" | "night";
@@ -66,7 +70,7 @@ export async function getProfile(uid: string): Promise<Profile> {
 }
 
 /** 내 프로필 일부 갱신(로그인 필요, users/{uid} merge) */
-export async function saveMyProfile(patch: Partial<Pick<Profile, "bio" | "statusMsg" | "themeColor" | "bg" | "name">>): Promise<boolean> {
+export async function saveMyProfile(patch: Partial<Pick<Profile, "bio" | "statusMsg" | "themeColor" | "bg" | "name" | "photoURL">>): Promise<boolean> {
   const uid = currentUid();
   if (!uid) return false;
   try {
@@ -98,6 +102,7 @@ export async function addGuestbookEntry(ownerUid: string, fromName: string, mess
     await addDoc(collection(db(), "guestbook", ownerUid, "entries"), {
       fromUid: uid, fromName: (fromName || "익명").slice(0, 20), message: message.trim().slice(0, 500), createdAt: serverTimestamp(),
     });
+    notify(ownerUid, { type: "guestbook", fromName, text: "방명록을 남겼어요.", link: "/profile?uid=" + ownerUid });
     return true;
   } catch { return false; }
 }
@@ -128,6 +133,7 @@ export async function sendDM(toUid: string, toName: string, fromName: string, te
       updatedAt: serverTimestamp(),
     }, { merge: true });
     await addDoc(collection(tref, "messages"), { fromUid: uid, text: text.trim().slice(0, 1000), createdAt: serverTimestamp() });
+    notify(toUid, { type: "dm", fromName, text: "메시지를 보냈어요.", link: "/messages" });
     return true;
   } catch { return false; }
 }
@@ -173,7 +179,7 @@ export type FeedVisibility = "public" | "friends" | "groups";
 export type MediaType = "image" | "video";
 export interface FeedPost {
   id: string; uid: string; name: string; text: string; at: number;
-  likeCount: number; likedByMe: boolean;
+  likeCount: number; likedByMe: boolean; commentCount: number;
   mediaUrl?: string; mediaType?: MediaType;
   visibility: FeedVisibility;
 }
@@ -189,6 +195,7 @@ function mapPost(id: string, x: Record<string, unknown>): FeedPost {
   return {
     id, uid: String(x.uid || ""), name: String(x.name || "익명"), text: String(x.text || ""),
     at: tsToMillis(x.createdAt), likeCount: Number(x.likeCount || 0), likedByMe: !!me && likedBy.includes(me),
+    commentCount: Number(x.commentCount || 0),
     mediaUrl: x.mediaUrl ? String(x.mediaUrl) : undefined,
     mediaType: (x.mediaType as MediaType) || undefined,
     visibility: (x.visibility as FeedVisibility) || "public",
@@ -234,7 +241,7 @@ export async function deletePost(postId: string): Promise<boolean> {
   try { await deleteDoc(doc(db(), "feed", postId)); return true; } catch { return false; }
 }
 
-export async function toggleLike(postId: string, liked: boolean): Promise<boolean> {
+export async function toggleLike(postId: string, liked: boolean, myName = "회원"): Promise<boolean> {
   const uid = currentUid();
   if (!uid) return false;
   try {
@@ -242,6 +249,13 @@ export async function toggleLike(postId: string, liked: boolean): Promise<boolea
       likeCount: increment(liked ? -1 : 1),
       likedBy: liked ? arrayRemove(uid) : arrayUnion(uid),
     });
+    if (!liked) {
+      try {
+        const s = await getDoc(doc(db(), "feed", postId));
+        const owner = String((s.data() as Record<string, unknown>)?.uid || "");
+        notify(owner, { type: "like", fromName: myName, text: "회원님 글을 좋아합니다.", link: "/feed" });
+      } catch {}
+    }
     return true;
   } catch { return false; }
 }
@@ -291,6 +305,7 @@ export async function sendFriendRequest(toUid: string, fromName: string): Promis
     await setDoc(doc(db(), "friend_requests", toUid, "incoming", me), {
       fromName: (fromName || "익명").slice(0, 20), createdAt: serverTimestamp(),
     });
+    notify(toUid, { type: "friend_request", fromName, text: "친구 요청을 보냈어요.", link: "/messages" });
     return true;
   } catch { return false; }
 }
@@ -317,6 +332,7 @@ export async function acceptFriendRequest(fromUid: string, fromName: string, myN
       setDoc(doc(db(), "users", fromUid, "friends", me), { name: (myName || "친구").slice(0, 20), createdAt: serverTimestamp() }, { merge: true }),
       deleteDoc(doc(db(), "friend_requests", me, "incoming", fromUid)),
     ]);
+    notify(fromUid, { type: "friend_accept", fromName: myName, text: "친구 요청을 수락했어요.", link: "/profile?uid=" + me });
     return true;
   } catch { return false; }
 }
@@ -429,4 +445,107 @@ export async function audienceForGroups(groupIds: string[]): Promise<string[]> {
   const set = new Set<string>();
   groups.filter((g) => groupIds.includes(g.id)).forEach((g) => g.memberUids.forEach((u) => set.add(u)));
   return Array.from(set);
+}
+
+// ─── 알림(notifications) ─────────────────────────────────────────
+//   notifications/{uid}/items/{id}  { type, fromUid, fromName, text, link, read, createdAt }
+export type NotiType = "friend_request" | "friend_accept" | "like" | "comment" | "guestbook" | "dm";
+export interface Noti { id: string; type: NotiType; fromUid: string; fromName: string; text: string; link: string; read: boolean; at: number; }
+
+/** 알림 생성(자기 자신에겐 보내지 않음, 실패해도 무시) */
+export async function notify(toUid: string, n: { type: NotiType; fromName: string; text: string; link: string }): Promise<void> {
+  const me = currentUid();
+  if (!toUid || !me || toUid === me) return;
+  try {
+    await addDoc(collection(db(), "notifications", toUid, "items"), {
+      type: n.type, fromUid: me, fromName: (n.fromName || "누군가").slice(0, 20),
+      text: n.text.slice(0, 100), link: n.link, read: false, createdAt: serverTimestamp(),
+    });
+  } catch { /* 알림 실패는 무시 */ }
+}
+
+export function watchNotifications(cb: (items: Noti[]) => void): () => void {
+  const me = currentUid();
+  if (!me) { cb([]); return () => {}; }
+  try {
+    const q = query(collection(db(), "notifications", me, "items"), orderBy("createdAt", "desc"), limit(50));
+    return onSnapshot(q, (s) => {
+      const a: Noti[] = [];
+      s.forEach((d) => { const x = d.data() as Record<string, unknown>; a.push({ id: d.id, type: x.type as NotiType, fromUid: String(x.fromUid || ""), fromName: String(x.fromName || "누군가"), text: String(x.text || ""), link: String(x.link || "#"), read: !!x.read, at: tsToMillis(x.createdAt) }); });
+      cb(a);
+    }, () => cb([]));
+  } catch { cb([]); return () => {}; }
+}
+
+export async function markNotiRead(id: string): Promise<void> {
+  const me = currentUid(); if (!me) return;
+  try { await updateDoc(doc(db(), "notifications", me, "items", id), { read: true }); } catch {}
+}
+export async function markAllNotiRead(ids: string[]): Promise<void> {
+  const me = currentUid(); if (!me) return;
+  try { await Promise.all(ids.map((id) => updateDoc(doc(db(), "notifications", me, "items", id), { read: true }).catch(() => {}))); } catch {}
+}
+
+// ─── 피드 댓글 ───────────────────────────────────────────────────
+//   feed/{postId}/comments/{id}  { uid, name, text, createdAt }
+export interface Comment { id: string; uid: string; name: string; text: string; at: number; }
+
+export async function listComments(postId: string, n = 100): Promise<Comment[]> {
+  try {
+    const q = query(collection(db(), "feed", postId, "comments"), orderBy("createdAt", "asc"), limit(n));
+    const s = await getDocs(q);
+    const a: Comment[] = [];
+    s.forEach((d) => { const x = d.data() as Record<string, unknown>; a.push({ id: d.id, uid: String(x.uid || ""), name: String(x.name || "익명"), text: String(x.text || ""), at: tsToMillis(x.createdAt) }); });
+    return a;
+  } catch { return []; }
+}
+
+/** 댓글 작성 + 글 주인에게 알림 + commentCount 증가 */
+export async function addComment(postId: string, postOwnerUid: string, name: string, text: string): Promise<boolean> {
+  const me = currentUid();
+  if (!me || !text.trim()) return false;
+  try {
+    await addDoc(collection(db(), "feed", postId, "comments"), { uid: me, name: (name || "익명").slice(0, 20), text: text.trim().slice(0, 500), createdAt: serverTimestamp() });
+    updateDoc(doc(db(), "feed", postId), { commentCount: increment(1) }).catch(() => {});
+    notify(postOwnerUid, { type: "comment", fromName: name, text: "회원님 글에 댓글을 남겼어요.", link: "/feed" });
+    return true;
+  } catch { return false; }
+}
+
+export async function deleteComment(postId: string, commentId: string): Promise<boolean> {
+  try {
+    await deleteDoc(doc(db(), "feed", postId, "comments", commentId));
+    updateDoc(doc(db(), "feed", postId), { commentCount: increment(-1) }).catch(() => {});
+    return true;
+  } catch { return false; }
+}
+
+// ─── 코지홈 방문자 카운터(투데이/투탈) ───────────────────────────
+//   visits/{uid} { total }  ·  visits/{uid}/days/{YYYY-MM-DD} { count }
+export interface VisitStats { total: number; today: number; }
+
+export async function bumpVisit(ownerUid: string): Promise<void> {
+  const me = currentUid();
+  if (!ownerUid || me === ownerUid) return; // 본인 방문은 미집계
+  try {
+    const key = `cozy_visit_${ownerUid}`;
+    if (typeof sessionStorage !== "undefined" && sessionStorage.getItem(key)) return; // 세션당 1회
+    const today = todayStr();
+    await Promise.all([
+      setDoc(doc(db(), "visits", ownerUid), { total: increment(1) }, { merge: true }),
+      setDoc(doc(db(), "visits", ownerUid, "days", today), { count: increment(1) }, { merge: true }),
+    ]);
+    try { sessionStorage.setItem(key, "1"); } catch {}
+  } catch {}
+}
+
+export async function getVisitStats(ownerUid: string): Promise<VisitStats> {
+  try {
+    const today = todayStr();
+    const [t, d] = await Promise.all([
+      getDoc(doc(db(), "visits", ownerUid)),
+      getDoc(doc(db(), "visits", ownerUid, "days", today)),
+    ]);
+    return { total: Number((t.data() as Record<string, number>)?.total || 0), today: Number((d.data() as Record<string, number>)?.count || 0) };
+  } catch { return { total: 0, today: 0 }; }
 }

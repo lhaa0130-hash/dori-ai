@@ -53,14 +53,43 @@ service cloud.firestore {
       }
     }
 
+    // 글을 읽을 수 있는 사람인지 판단(댓글 권한에 재사용)
+    function canReadPost(postId) {
+      let p = get(/databases/$(database)/documents/feed/$(postId)).data;
+      return p.visibility == 'public'
+             || (request.auth != null && (request.auth.uid == p.uid || request.auth.uid in p.allowedUids));
+    }
+
     // 소셜 — 피드 (공개범위: public=전체 / 그 외=allowedUids 에 포함된 사람만)
     match /feed/{postId} {
       allow read: if resource.data.visibility == 'public'
                   || (request.auth != null && (request.auth.uid == resource.data.uid
                        || request.auth.uid in resource.data.allowedUids));
       allow create: if request.auth != null && request.auth.uid == request.resource.data.uid;
-      allow update: if request.auth != null;   // 좋아요 등
+      allow update: if request.auth != null;   // 좋아요/댓글수 등
       allow delete: if request.auth != null && request.auth.uid == resource.data.uid;
+
+      // 댓글 — 글을 볼 수 있는 사람만 읽기/작성, 본인 또는 글주인이 삭제
+      match /comments/{commentId} {
+        allow read:   if canReadPost(postId);
+        allow create: if request.auth != null && request.auth.uid == request.resource.data.uid && canReadPost(postId);
+        allow delete: if request.auth != null && (request.auth.uid == resource.data.uid
+                       || request.auth.uid == get(/databases/$(database)/documents/feed/$(postId)).data.uid);
+      }
+    }
+
+    // 알림 — 받는 사람만 읽기/정리, 누구나 알림 생성(좋아요·댓글·요청 등)
+    match /notifications/{uid}/items/{itemId} {
+      allow read:           if request.auth != null && request.auth.uid == uid;
+      allow create:         if request.auth != null;
+      allow update, delete: if request.auth != null && request.auth.uid == uid;
+    }
+
+    // 코지홈 방문자 카운터(투데이/투탈)
+    match /visits/{uid} {
+      allow read: if true;
+      allow write: if true;
+      match /days/{date} { allow read: if true; allow write: if true; }
     }
   }
 }

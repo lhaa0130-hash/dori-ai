@@ -50,3 +50,24 @@ export async function uploadFeedMedia(
     return { ok: false, error: msg };
   }
 }
+
+/** 프로필 사진(아바타) 업로드 → 다운로드 URL */
+export async function uploadAvatar(file: File): Promise<{ ok: true; url: string } | { ok: false; error: string }> {
+  if (!file.type.startsWith("image/")) return { ok: false, error: "이미지 파일만 올릴 수 있어요." };
+  if (file.size > MAX_IMAGE) return { ok: false, error: "이미지가 너무 큽니다. (최대 10MB)" };
+  let uid: string | null = null;
+  try { uid = getFirebaseAuth().currentUser?.uid || null; } catch { uid = null; }
+  if (!uid) return { ok: false, error: "로그인이 필요합니다." };
+  try {
+    const path = `avatars/${uid}/profile_${Date.now()}`;
+    const r = ref(getFirebaseStorage(), path);
+    await uploadBytes(r, file, { contentType: file.type });
+    const url = await getDownloadURL(r);
+    return { ok: true, url };
+  } catch (e) {
+    const msg = (e as { code?: string })?.code === "storage/unauthorized"
+      ? "업로드 권한이 없어요. (콘솔에서 Storage 활성화/규칙 게시 필요)"
+      : "업로드에 실패했어요. 잠시 후 다시 시도해 주세요.";
+    return { ok: false, error: msg };
+  }
+}

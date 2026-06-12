@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState, type ChangeEvent } from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -14,12 +14,15 @@ import {
   deleteGuestbookEntry,
   listUserFeed,
   getUserRecords,
+  bumpVisit,
+  getVisitStats,
   type Profile,
   type BgStyle,
   type GuestEntry,
   type FeedPost,
   type GameRecord,
 } from "@/lib/social";
+import { uploadAvatar } from "@/lib/storage";
 
 // ── 배경 프리셋 → 그라데이션 클래스(직접 정의) ───────────────────
 const BG_PRESETS: { id: BgStyle; label: string; grad: string }[] = [
@@ -75,6 +78,13 @@ export default function ProfilePage() {
 
   // 친구 상태: "loading" | "none" | "friend" | "requested"
   const [friendState, setFriendState] = useState<"loading" | "none" | "friend" | "requested">("none");
+
+  // 방문자 카운터(투데이/투탈)
+  const [visit, setVisit] = useState<{ total: number; today: number } | null>(null);
+
+  // 프로필 사진 업로드
+  const [photoUploading, setPhotoUploading] = useState(false);
+  const [photoError, setPhotoError] = useState("");
 
   // URL ?uid= 로 대상 결정(없으면 내 uid) — 정적 export 안전하게 window에서 직접 읽음
   useEffect(() => {
@@ -145,6 +155,45 @@ export default function ProfilePage() {
       active = false;
     };
   }, [mounted, targetUid, myUid, isOwner]);
+
+  // 방문자 카운터: 대상 결정 후 1회 집계 + 통계 조회
+  useEffect(() => {
+    if (!mounted || !targetUid) return;
+    let active = true;
+    (async () => {
+      try {
+        await bumpVisit(targetUid); // 본인/세션중복은 내부에서 무시
+      } catch {
+        // 무시
+      }
+      try {
+        const stats = await getVisitStats(targetUid);
+        if (active) setVisit(stats);
+      } catch {
+        // 무시
+      }
+    })();
+    return () => {
+      active = false;
+    };
+  }, [mounted, targetUid]);
+
+  const handleChangePhoto = async (e: ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = ""; // 같은 파일 재선택 허용
+    if (!file || !isOwner || !targetUid) return;
+    setPhotoError("");
+    setPhotoUploading(true);
+    const res = await uploadAvatar(file);
+    if (res.ok) {
+      // photoURL은 Profile에 존재하지만 saveMyProfile의 patch 타입엔 빠져있어 타입 안전하게 전달
+      await saveMyProfile({ photoURL: res.url } as Parameters<typeof saveMyProfile>[0]);
+      await loadAll(targetUid);
+    } else {
+      setPhotoError(res.error || "사진 업로드에 실패했습니다.");
+    }
+    setPhotoUploading(false);
+  };
 
   const handleAddFriend = async () => {
     if (!targetUid || isOwner) return;
@@ -254,21 +303,47 @@ export default function ProfilePage() {
           <div className="relative p-6">
             <div className="flex items-start gap-4">
               {/* 아바타 */}
-              {profile.photoURL ? (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  src={profile.photoURL}
-                  alt={profile.name}
-                  className="w-16 h-16 rounded-full object-cover ring-2 ring-white dark:ring-zinc-900 shadow"
-                />
-              ) : (
-                <div
-                  className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-extrabold shadow ring-2 ring-white dark:ring-zinc-900"
-                  style={{ backgroundColor: accent }}
-                >
-                  {avatarLetter}
-                </div>
-              )}
+              <div className="relative w-16 h-16 shrink-0">
+                {profile.photoURL ? (
+                  // eslint-disable-next-line @next/next/no-img-element
+                  <img
+                    src={profile.photoURL}
+                    alt={profile.name}
+                    className="w-16 h-16 rounded-full object-cover ring-2 ring-white dark:ring-zinc-900 shadow"
+                  />
+                ) : (
+                  <div
+                    className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-extrabold shadow ring-2 ring-white dark:ring-zinc-900"
+                    style={{ backgroundColor: accent }}
+                  >
+                    {avatarLetter}
+                  </div>
+                )}
+
+                {isOwner && (
+                  <label
+                    className="absolute inset-0 rounded-full flex items-center justify-center cursor-pointer bg-black/0 hover:bg-black/40 active:bg-black/40 transition-colors group"
+                    aria-label="프로필 사진 변경"
+                  >
+                    {photoUploading ? (
+                      <span className="absolute inset-0 rounded-full flex items-center justify-center bg-black/45">
+                        <span className="w-5 h-5 border-2 border-white/40 border-t-white rounded-full animate-spin" />
+                      </span>
+                    ) : (
+                      <span className="text-[10px] font-bold text-white opacity-0 group-hover:opacity-100 transition-opacity text-center leading-tight px-1">
+                        사진<br />변경
+                      </span>
+                    )}
+                    <input
+                      type="file"
+                      accept="image/*"
+                      onChange={handleChangePhoto}
+                      disabled={photoUploading}
+                      className="hidden"
+                    />
+                  </label>
+                )}
+              </div>
 
               <div className="flex-1 min-w-0">
                 <h1 className="text-[22px] font-extrabold tracking-tight text-neutral-900 dark:text-white truncate">
@@ -282,7 +357,28 @@ export default function ProfilePage() {
                   <p className="text-[13px] mt-0.5 text-neutral-400 dark:text-neutral-500">상태메시지가 없어요</p>
                 )}
               </div>
+
+              {/* 방문자 카운터(투데이/투탈) — 싸이월드 감성 */}
+              {visit && (
+                <div className="shrink-0 self-start text-right">
+                  <div className="inline-flex items-center gap-1.5 rounded-full bg-white/70 dark:bg-zinc-900/70 backdrop-blur px-2.5 py-1 text-[10px] font-bold tracking-tight ring-1 ring-black/5 dark:ring-white/10">
+                    <span className="text-[#F9954E]">TODAY</span>
+                    <span className="text-neutral-800 dark:text-neutral-100 tabular-nums">
+                      {visit.today.toLocaleString()}
+                    </span>
+                    <span className="text-neutral-300 dark:text-zinc-700">·</span>
+                    <span className="text-neutral-400 dark:text-neutral-500">TOTAL</span>
+                    <span className="text-neutral-600 dark:text-neutral-300 tabular-nums">
+                      {visit.total.toLocaleString()}
+                    </span>
+                  </div>
+                </div>
+              )}
             </div>
+
+            {isOwner && photoError && (
+              <p className="mt-3 text-[12px] font-semibold text-red-500">{photoError}</p>
+            )}
 
             {profile.bio && (
               <p className="mt-4 text-[14px] leading-relaxed text-neutral-500 dark:text-neutral-400 whitespace-pre-wrap">
