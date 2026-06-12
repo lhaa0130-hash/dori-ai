@@ -3976,5 +3976,44 @@
       ]
     },
     "image_path": "/images/animal/달팽이.jpg"
+  },
+  {
+    "search_nickname": "친구들과 우우 노래하는 큰 개 친척",
+    "animal_name": "늑대",
+    "kid_friendly_desc": "늑대는 우리가 아는 개와 친척인 멋진 동물이에요. 친구들과 무리를 지어 살면서 ‘우우우’ 울음소리로 서로를 부른답니다. 다리가 길고 발이 커서 먼 길도 씩씩하게 걸을 수 있어요. 두꺼운 털 덕분에 추운 곳에서도 따뜻하게 지낼 수 있답니다.",
+    "key_feature": [
+      "무리 생활",
+      "우우 울음소리",
+      "두꺼운 털"
+    ],
+    "image_prompt": "A cute gray wolf pup standing with big paws and fluffy fur, looking friendly while softly howling with its wolf pack in the background, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "육식"
+      ],
+      "color": [],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [
+        "야행성",
+        "엄청 빠른"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/늑대.jpg"
   }
 ]
