@@ -3492,5 +3492,489 @@
       ]
     },
     "image_path": "/images/animal/개구리.jpg"
+  },
+  {
+    "search_nickname": "알록달록 옷 입은 작은 독 개구리",
+    "animal_name": "독화살개구리",
+    "kid_friendly_desc": "독화살개구리는 중남미의 따뜻한 열대우림에 사는 아주 작은 개구리예요. 빨강, 파랑, 노랑처럼 알록달록한 색은 “나를 만지면 위험해!” 하고 알려 주는 신호란다. 옛날에 어떤 사람들은 이 개구리의 피부 독을 화살에 묻혀 쓰기도 했어요. 예쁘지만 야생에서는 절대 만지지 말고 눈으로만 살펴봐요!",
+    "key_feature": [
+      "알록달록한 몸",
+      "피부의 독",
+      "아주 작은 개구리"
+    ],
+    "image_prompt": "A tiny colorful poison dart frog with bright blue and yellow skin, big shiny eyes, sitting on a green rainforest leaf with a cute curious pose, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는"
+      ],
+      "color": [
+        "알록달록한"
+      ],
+      "size": [
+        "손보다 작은"
+      ],
+      "habitat": [
+        "열대우림"
+      ],
+      "feature": [
+        "독이 있는"
+      ],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "양서류"
+      ]
+    },
+    "image_path": "/images/animal/독화살개구리.jpg"
+  },
+  {
+    "search_nickname": "촉촉한 피부에 긴 꼬리를 가진 물가 친구",
+    "animal_name": "도롱뇽",
+    "kid_friendly_desc": "도롱뇽은 개구리처럼 물과 땅을 오가며 사는 양서류란다. 피부가 촉촉해야 건강해서 축축한 곳을 좋아해요. 긴 꼬리와 네 개의 짧은 다리로 살금살금 걸어 다녀요. 작은 벌레나 지렁이를 냠냠 먹는 조용한 친구예요.",
+    "key_feature": [
+      "촉촉한 피부",
+      "긴 꼬리",
+      "물가 생활"
+    ],
+    "image_prompt": "A cute salamander with moist shiny skin, a long tail, tiny four legs, and big gentle eyes sitting on a mossy rock near a small clear stream, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는",
+        "육식"
+      ],
+      "color": [],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "강·호수"
+      ],
+      "feature": [
+        "야행성",
+        "보호색"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "양서류"
+      ]
+    },
+    "image_path": "/images/animal/도롱뇽.jpg"
+  },
+  {
+    "search_nickname": "머리 옆에 분홍 깃털을 단 물속 꼬마 도롱뇽",
+    "animal_name": "아홀로틀",
+    "kid_friendly_desc": "아홀로틀은 물속에서 사는 귀여운 도롱뇽 친구예요. 머리 양옆에 깃털처럼 보이는 아가미가 있어서 물속에서 숨을 쉴 수 있단다. 어른이 되어도 아기 때 모습이 많이 남아 있어서 더 사랑스러워 보여요. 다친 다리나 꼬리를 다시 자라게 하는 놀라운 힘도 가지고 있어요.",
+    "key_feature": [
+      "깃털 같은 아가미",
+      "물속 생활",
+      "몸을 다시 자라게 함"
+    ],
+    "image_prompt": "A cute pink axolotl with feathery external gills, tiny smiling face, soft round body, and small legs floating gently in clear water, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는",
+        "물고기를 먹는",
+        "육식"
+      ],
+      "color": [
+        "분홍색",
+        "흰색"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "강·호수"
+      ],
+      "feature": [
+        "야행성"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "양서류"
+      ]
+    },
+    "image_path": "/images/animal/아홀로틀.jpg"
+  },
+  {
+    "search_nickname": "알록달록 날개로 꽃밭을 팔랑이는 친구",
+    "animal_name": "나비",
+    "kid_friendly_desc": "나비는 예쁜 날개를 팔랑팔랑 움직이며 날아다니는 곤충이에요. 꽃에 앉아서 달콤한 꿀을 쪽쪽 빨아 먹는답니다. 처음에는 작은 애벌레였다가 번데기를 거쳐 멋진 나비로 변해요. 알록달록한 날개 덕분에 꽃밭에서 만나면 정말 반가워요!",
+    "key_feature": [
+      "알록달록한 날개",
+      "꽃꿀 먹기",
+      "애벌레에서 변신"
+    ],
+    "image_prompt": "A lovely colorful butterfly gently resting on a bright flower, with big delicate patterned wings and a tiny cute insect body, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "꿀을 먹는"
+      ],
+      "color": [
+        "알록달록한"
+      ],
+      "size": [
+        "손보다 작은"
+      ],
+      "habitat": [
+        "초원",
+        "도시 근처"
+      ],
+      "feature": [
+        "날 수 있는"
+      ],
+      "body": [
+        "다리가 6개+",
+        "날개 있는"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "곤충"
+      ]
+    },
+    "image_path": "/images/animal/나비.jpg"
+  },
+  {
+    "search_nickname": "윙윙 날아다니는 달콤한 꿀 모으기 대장",
+    "animal_name": "꿀벌",
+    "kid_friendly_desc": "꿀벌은 꽃 사이를 윙윙 날아다니며 달콤한 꿀을 모아요. 작은 몸에 날개와 다리 6개가 있고, 친구들과 큰 가족처럼 함께 산단다. 꿀벌이 꽃가루를 옮겨 주면 꽃과 열매가 잘 자랄 수 있어요. 그래서 꿀벌은 자연을 도와주는 아주 고마운 친구예요.",
+    "key_feature": [
+      "꿀 모으기",
+      "윙윙 날개",
+      "함께 사는 벌집"
+    ],
+    "image_prompt": "A tiny adorable honeybee with fluffy yellow and black striped body, sparkling wings, holding a little drop of golden honey while hovering near colorful flowers, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "꿀을 먹는"
+      ],
+      "color": [
+        "검정색",
+        "알록달록한"
+      ],
+      "size": [
+        "손보다 작은"
+      ],
+      "habitat": [
+        "초원",
+        "도시 근처"
+      ],
+      "feature": [
+        "날 수 있는"
+      ],
+      "body": [
+        "다리가 6개+",
+        "날개 있는"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "곤충"
+      ]
+    },
+    "image_path": "/images/animal/꿀벌.jpg"
+  },
+  {
+    "search_nickname": "동글동글 점박이 날개 친구",
+    "animal_name": "무당벌레",
+    "kid_friendly_desc": "무당벌레는 작고 동그란 몸에 예쁜 점무늬가 있는 곤충이에요. 빨갛거나 주황빛, 때로는 검은색 옷을 입은 친구도 있단다. 무당벌레는 식물에 붙어 사는 진딧물을 냠냠 먹어서 정원과 밭을 도와줘요. 작지만 날개를 펴고 폴짝 하늘로 날아갈 수 있어요.",
+    "key_feature": [
+      "점박이 등껍질",
+      "진딧물 먹기",
+      "작은 날개"
+    ],
+    "image_prompt": "A tiny round ladybug with shiny red-orange wing covers, cute black spots, tiny legs, and a happy face sitting on a fresh green leaf, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는",
+        "육식"
+      ],
+      "color": [
+        "빨간색",
+        "검정색",
+        "알록달록한"
+      ],
+      "size": [
+        "손보다 작은"
+      ],
+      "habitat": [
+        "도시 근처"
+      ],
+      "feature": [
+        "날 수 있는"
+      ],
+      "body": [
+        "다리가 6개+",
+        "날개 있는",
+        "딱딱한 껍질"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "곤충"
+      ]
+    },
+    "image_path": "/images/animal/무당벌레.jpg"
+  },
+  {
+    "search_nickname": "사슴뿔 큰턱을 가진 밤의 나무 수액 친구",
+    "animal_name": "사슴벌레",
+    "kid_friendly_desc": "사슴벌레는 머리에 사슴뿔처럼 보이는 아주 큰 턱을 가진 곤충이에요. 참나무에 나오는 달콤한 수액을 좋아해서 나무에 모여든단다. 밤에는 불빛을 보고 날아오기도 해요. 애벌레는 썩은 나무 속에서 천천히 자라 어른 벌레가 된답니다.",
+    "key_feature": [
+      "사슴뿔 같은 큰턱",
+      "참나무 수액 좋아함",
+      "밤에 불빛으로 날아옴"
+    ],
+    "image_prompt": "A charming stag beetle with a shiny black body, large antler-like mandibles, six tiny legs, sitting on an oak tree with a drop of tree sap, big friendly eyes, adorable and curious expression, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [
+        "검정색"
+      ],
+      "size": [
+        "손보다 작은"
+      ],
+      "habitat": [],
+      "feature": [
+        "날 수 있는",
+        "야행성"
+      ],
+      "body": [
+        "다리가 6개+",
+        "날개 있는",
+        "딱딱한 껍질",
+        "뿔이 있는"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "곤충"
+      ]
+    },
+    "image_path": "/images/animal/사슴벌레.jpg"
+  },
+  {
+    "search_nickname": "멋진 뿔 투구를 쓴 힘센 곤충 장군",
+    "animal_name": "장수풍뎅이",
+    "kid_friendly_desc": "장수풍뎅이는 머리에 멋진 뿔이 달린 힘센 곤충이에요. 그 뿔이 옛날 장군의 투구처럼 보여서 ‘장수’라는 이름이 붙었단다. 밤에 나무 수액을 찾아다니고, 딱딱한 몸과 날개를 가지고 있어요. 수컷끼리는 뿔로 밀기 대결을 하기도 해요!",
+    "key_feature": [
+      "멋진 큰 뿔",
+      "힘센 몸",
+      "딱딱한 껍질"
+    ],
+    "image_prompt": "A cute Japanese rhinoceros beetle with a shiny dark brown body, a big forked horn like a tiny warrior helmet, standing proudly on a tree branch with a sweet gentle expression, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [
+        "검정색"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [],
+      "feature": [
+        "날 수 있는",
+        "야행성"
+      ],
+      "body": [
+        "다리가 6개+",
+        "날개 있는",
+        "딱딱한 껍질",
+        "뿔이 있는"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "곤충"
+      ]
+    },
+    "image_path": "/images/animal/장수풍뎅이.jpg"
+  },
+  {
+    "search_nickname": "밤에 배에서 작은 불빛을 반짝이는 벌레 친구",
+    "animal_name": "반딧불이",
+    "kid_friendly_desc": "반딧불이는 깜깜한 밤에 배에서 반짝반짝 빛을 내는 작은 곤충이에요. 이 빛으로 친구에게 “나 여기 있어!” 하고 신호를 보내기도 한단다. 날개가 있어서 살랑살랑 날아다니고, 깨끗한 물가나 풀숲 근처에서 만날 수 있어요. 그래서 여름밤의 작은 별처럼 보여요!",
+    "key_feature": [
+      "배에서 빛남",
+      "밤에 활동",
+      "작은 날개"
+    ],
+    "image_prompt": "A tiny adorable firefly with a glowing green-yellow belly, delicate wings, cute round eyes, flying gently above soft grass at night with little sparkling light dots, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "꿀을 먹는"
+      ],
+      "color": [],
+      "size": [
+        "손보다 작은"
+      ],
+      "habitat": [
+        "강·호수"
+      ],
+      "feature": [
+        "날 수 있는",
+        "야행성",
+        "빛을 내는"
+      ],
+      "body": [
+        "다리가 6개+",
+        "날개 있는",
+        "딱딱한 껍질"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "곤충"
+      ]
+    },
+    "image_path": "/images/animal/반딧불이.jpg"
+  },
+  {
+    "search_nickname": "두 앞다리를 모으고 기도하는 초록 사냥꾼",
+    "animal_name": "사마귀",
+    "kid_friendly_desc": "사마귀는 길쭉한 몸과 큰 앞다리를 가진 곤충이에요. 앞다리를 모으고 가만히 있으면 마치 기도하는 모습처럼 보인단다. 초록색이나 갈색 몸으로 풀잎 사이에 숨어 있다가 작은 벌레를 재빠르게 잡아먹어요. 날개도 있어서 어른 사마귀는 날 수 있어요.",
+    "key_feature": [
+      "기도하는 앞다리",
+      "풀잎 보호색",
+      "작은 벌레 사냥꾼"
+    ],
+    "image_prompt": "A cute green praying mantis with big curious eyes, folded front legs like praying hands, sitting on a fresh leaf, adorable and friendly expression, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는",
+        "육식"
+      ],
+      "color": [
+        "초록색"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "초원",
+        "도시 근처"
+      ],
+      "feature": [
+        "보호색"
+      ],
+      "body": [
+        "다리가 6개+",
+        "날개 있는"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "곤충"
+      ]
+    },
+    "image_path": "/images/animal/사마귀.jpg"
+  },
+  {
+    "search_nickname": "반짝 날개로 물가를 씽씽 나는 친구",
+    "animal_name": "잠자리",
+    "kid_friendly_desc": "잠자리는 얇고 반짝이는 날개로 하늘을 씽씽 날아다니는 곤충이에요. 아기 잠자리는 물속에서 살다가, 자라면 밖으로 나와 멋진 날개를 펼친단다. 작은 모기나 벌레를 잡아먹어서 물가와 풀밭에서 자주 볼 수 있어요. 큰 눈이 있어서 주변을 아주 잘 살펴본답니다.",
+    "key_feature": [
+      "투명한 날개",
+      "큰 눈",
+      "물속 아기 시절"
+    ],
+    "image_prompt": "A cute dragonfly with huge sparkling eyes, transparent delicate wings, a slender colorful body, hovering happily near a pond with reeds and water lilies, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는",
+        "육식"
+      ],
+      "color": [
+        "알록달록한"
+      ],
+      "size": [
+        "손보다 작은"
+      ],
+      "habitat": [
+        "강·호수"
+      ],
+      "feature": [
+        "날 수 있는",
+        "엄청 빠른"
+      ],
+      "body": [
+        "다리가 6개+",
+        "날개 있는"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "곤충"
+      ]
+    },
+    "image_path": "/images/animal/잠자리.jpg"
+  },
+  {
+    "search_nickname": "집을 등에 메고 천천히 가는 미끌미끌 친구",
+    "animal_name": "달팽이",
+    "kid_friendly_desc": "달팽이는 동그란 껍데기 집을 등에 메고 다니는 작은 동물이란다. 아주 천천히 기어가면서 촉각으로 주변을 살펴봐요. 배처럼 생긴 발에서 미끈한 점액을 내서 슈우욱 미끄러지듯 움직여요. 나뭇잎이나 부드러운 풀을 냠냠 먹고 살아요.",
+    "key_feature": [
+      "등껍데기 집",
+      "느린 걸음",
+      "촉각 눈"
+    ],
+    "image_prompt": "A tiny adorable land snail with a round spiral shell, shiny soft body, cute eye tentacles, slowly crawling on a fresh green leaf with tiny dew drops, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "손보다 작은"
+      ],
+      "habitat": [
+        "도시 근처"
+      ],
+      "feature": [
+        "엄청 느린"
+      ],
+      "body": [
+        "다리가 없는",
+        "딱딱한 껍질"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "연체동물"
+      ]
+    },
+    "image_path": "/images/animal/달팽이.jpg"
   }
 ]
