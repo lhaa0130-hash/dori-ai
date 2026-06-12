@@ -9,6 +9,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { submitScore } from "@/lib/leaderboard";
 import GameLeaderboard from "@/components/game/GameLeaderboard";
+import GameSuggestion from "@/components/game/GameSuggestion";
 import CountUp from "@/components/game/CountUp";
 import { burst, bigBurst } from "@/lib/juice";
 
@@ -342,6 +343,9 @@ export default function WhackGame() {
 
                     {/* 명예의 전당 */}
                     <GameLeaderboard game={GAME} title="명예의 전당 TOP 5" unit={UNIT} order={ORDER} tone="dark" />
+
+                    {/* 건의/버그 제보 */}
+                    <GameSuggestion />
                 </div>
             </div>
         </main>

@@ -9,6 +9,7 @@ import { addCottonCandy, incrementMinigamePlays, addExp } from "@/lib/cottonCand
 import PlaytimeRewardToast from "@/components/game/PlaytimeRewardToast";
 import { submitScore } from "@/lib/leaderboard";
 import GameLeaderboard from "@/components/game/GameLeaderboard";
+import GameSuggestion from "@/components/game/GameSuggestion";
 import CountUp from "@/components/game/CountUp";
 import { burst, bigBurst } from "@/lib/juice";
 
@@ -292,6 +293,8 @@ export default function Game2048() {
             <div className="arcade-rise-3 w-full max-w-md mx-auto mt-4 px-4">
                 <GameLeaderboard game="2048" title="명예의 전당 TOP 5" unit="점" order="desc" tone="dark" />
             </div>
+
+            <GameSuggestion />
         </div>
     );
 }

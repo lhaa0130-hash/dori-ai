@@ -8,6 +8,7 @@ import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { submitScore } from "@/lib/leaderboard";
 import GameLeaderboard from "@/components/game/GameLeaderboard";
+import GameSuggestion from "@/components/game/GameSuggestion";
 import CountUp from "@/components/game/CountUp";
 import { burst, bigBurst } from "@/lib/juice";
 
@@ -376,6 +377,8 @@ export default function SimonPage() {
         <div className="mt-4">
           <GameLeaderboard game={GAME} title="명예의 전당 TOP 5" unit={UNIT} order={ORDER} tone="dark" />
         </div>
+
+        <GameSuggestion />
       </div>
 
       <style jsx>{`

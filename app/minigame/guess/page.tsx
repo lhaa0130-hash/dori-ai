@@ -9,6 +9,7 @@ import confetti from "canvas-confetti";
 import { useAuth } from "@/contexts/AuthContext";
 import { submitScore } from "@/lib/leaderboard";
 import GameLeaderboard from "@/components/game/GameLeaderboard";
+import GameSuggestion from "@/components/game/GameSuggestion";
 import CountUp from "@/components/game/CountUp";
 import { burst, bigBurst } from "@/lib/juice";
 
@@ -336,6 +337,8 @@ export default function GuessNumberPage() {
                     <div className="w-full max-w-md mx-auto mt-4 px-4">
                         <GameLeaderboard game="guess" title="명예의 전당 TOP 5" unit="번" order="asc" />
                     </div>
+
+                    <GameSuggestion />
                 </div>
             </div>
         </main>

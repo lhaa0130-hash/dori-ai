@@ -8,6 +8,7 @@ import { incrementMinigamePlays } from "@/lib/cottonCandy";
 import { submitAnimalMergeScore, getAnimalMergeTop5, type ScoreEntry } from "@/lib/leaderboard";
 import PlaytimeRewardToast from "@/components/game/PlaytimeRewardToast";
 import CountUp from "@/components/game/CountUp";
+import GameSuggestion from "@/components/game/GameSuggestion";
 import { burst, bigBurst } from "@/lib/juice";
 
 // ─── 동물 레벨 (작은 것 → 큰 것) ──────────────────────────────────
@@ -578,6 +579,9 @@ export default function AnimalMergePage() {
         <div className="mt-2 text-center text-[11px] text-neutral-600">
           화면을 탭/클릭해서 동물을 떨어뜨리세요 · 같은 동물 2마리가 만나면 합쳐집니다
         </div>
+
+        {/* 건의 / 버그 제보 */}
+        <GameSuggestion />
       </div>
     </main>
   );

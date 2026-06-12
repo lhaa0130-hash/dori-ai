@@ -7,6 +7,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { submitScore } from "@/lib/leaderboard";
 import GameLeaderboard from "@/components/game/GameLeaderboard";
+import GameSuggestion from "@/components/game/GameSuggestion";
 import CountUp from "@/components/game/CountUp";
 import { burst, bigBurst } from "@/lib/juice";
 
@@ -258,6 +259,7 @@ export default function SlidePuzzleGame() {
             {/* 명예의 전당 (글로벌 TOP 5 리더보드) */}
             <div className="relative w-full max-w-md mx-auto mt-6 px-4 pb-8">
                 <GameLeaderboard game="puzzle" title="명예의 전당 TOP 5" unit="무브" order="asc" tone="dark" />
+                <GameSuggestion />
             </div>
         </div>
     );

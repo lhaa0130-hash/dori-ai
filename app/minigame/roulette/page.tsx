@@ -6,6 +6,7 @@ import Link from "next/link";
 import { useTheme } from "next-themes";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import CountUp from "@/components/game/CountUp";
+import GameSuggestion from "@/components/game/GameSuggestion";
 import { bigBurst } from "@/lib/juice";
 
 // ---- Types ----
@@ -443,6 +444,8 @@ export default function RoulettePage() {
                     </div>
                 )}
             </div>
+
+            <GameSuggestion />
         </main>
     );
 }

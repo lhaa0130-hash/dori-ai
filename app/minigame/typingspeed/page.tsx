@@ -8,6 +8,7 @@ import { motion } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import { submitScore } from "@/lib/leaderboard";
 import GameLeaderboard from "@/components/game/GameLeaderboard";
+import GameSuggestion from "@/components/game/GameSuggestion";
 import CountUp from "@/components/game/CountUp";
 import { bigBurst } from "@/lib/juice";
 
@@ -234,6 +235,8 @@ export default function TypingSpeedPage() {
                 <div className="w-full max-w-3xl mx-auto mt-4 px-4">
                     <GameLeaderboard game="typingspeed" title="명예의 전당 TOP 5" unit="WPM" order="desc" tone="dark" />
                 </div>
+
+                <GameSuggestion />
             </div>
         </main>
     );

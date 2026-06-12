@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { addCottonCandy, incrementMinigamePlays, addExp } from "@/lib/cottonCandy";
 import { submitScore } from "@/lib/leaderboard";
 import GameLeaderboard from "@/components/game/GameLeaderboard";
+import GameSuggestion from "@/components/game/GameSuggestion";
 import PlaytimeRewardToast from "@/components/game/PlaytimeRewardToast";
 import CountUp from "@/components/game/CountUp";
 import { burst, bigBurst } from "@/lib/juice";
@@ -305,6 +306,8 @@ export default function ClickerGame() {
                     <div className="mt-4">
                         <GameLeaderboard game="clicker" title="보스 처치 랭킹 TOP 5" unit="킬" order="desc" tone="dark" />
                     </div>
+
+                    <GameSuggestion />
                 </div>
             </div>
         </div>

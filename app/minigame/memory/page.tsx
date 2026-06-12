@@ -5,6 +5,7 @@ import { useTheme } from "next-themes";
 import Link from "next/link";
 import { ArrowLeft, RefreshCw, Sparkles, Brain, Code, Database, Globe, Smartphone, Video, Film, Check, Zap, Cpu, Server, Wifi, Lock, Search, Command, Activity, Layers, Box, Key, Mail, Map, Music, Monitor, Ghost, Bomb, Skull, Heart, Eye } from "lucide-react";
 import CountUp from "@/components/game/CountUp";
+import GameSuggestion from "@/components/game/GameSuggestion";
 import { burst, bigBurst } from "@/lib/juice";
 
 // 카드 아이콘 데이터 풀
@@ -434,6 +435,8 @@ export default function MemoryGamePage() {
                 }
                 .animate-bounce-short { animation: bounce-short 0.5s infinite; }
             `}</style>
+
+            <GameSuggestion />
         </main>
     );
 }

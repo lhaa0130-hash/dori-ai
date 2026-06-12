@@ -7,6 +7,7 @@ import { useTheme } from "next-themes";
 import { motion, AnimatePresence } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import CountUp from "@/components/game/CountUp";
+import GameSuggestion from "@/components/game/GameSuggestion";
 import { burst, bigBurst } from "@/lib/juice";
 
 // ---- Types ----
@@ -250,6 +251,8 @@ export default function CoinFlipPage() {
                         )}
                     </div>
                 </div>
+
+                <GameSuggestion />
             </div>
 
             <style jsx global>{`

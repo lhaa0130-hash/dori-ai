@@ -7,6 +7,7 @@ import { useTheme } from "next-themes";
 import { motion, AnimatePresence, useAnimation } from "framer-motion";
 import { useAuth } from "@/contexts/AuthContext";
 import CountUp from "@/components/game/CountUp";
+import GameSuggestion from "@/components/game/GameSuggestion";
 import { burst, bigBurst } from "@/lib/juice";
 
 // ---- Types ----
@@ -612,6 +613,8 @@ export default function LadderGamePage() {
                         </motion.div>
                     </div>
                 )}
+
+                <GameSuggestion />
             </div>
         </main>
     );

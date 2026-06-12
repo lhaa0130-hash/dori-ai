@@ -25,7 +25,7 @@ interface InsightPageClientProps {
 export default function InsightPageClient({ initialPosts = [] }: InsightPageClientProps) {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [likedPosts, setLikedPosts] = useState<number[]>([]);
+  const [likedPosts, setLikedPosts] = useState<string[]>([]);
   const [likesData, setLikesData] = useState<Record<string, number>>({});
 
   useEffect(() => {
@@ -51,11 +51,10 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
 
     if (!mounted) return;
 
-    const postIdNum = parseInt(postId);
-    const newIsLiked = !likedPosts.includes(postIdNum);
+    const newIsLiked = !likedPosts.includes(postId);
     const updatedLikedPosts = newIsLiked
-      ? [...likedPosts, postIdNum]
-      : likedPosts.filter(id => id !== postIdNum);
+      ? [...likedPosts, postId]
+      : likedPosts.filter(id => id !== postId);
 
     setLikedPosts(updatedLikedPosts);
     localStorage.setItem('dori_liked_insights', JSON.stringify(updatedLikedPosts));
@@ -177,7 +176,7 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
               const summary = getSummary(post.content);
               const categoryDisplay = getCategoryDisplay(post.category);
               const postId = String(post.id || '');
-              const isPostLiked = likedPosts.includes(parseInt(postId));
+              const isPostLiked = likedPosts.includes(postId);
               const currentLikes = likesData[postId] !== undefined ? likesData[postId] : (post.likes || 0);
 
               let href = `/insight/article/${post.slug || post.id}`;

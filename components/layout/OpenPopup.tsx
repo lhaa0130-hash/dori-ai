@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
-import { X, Sparkles, PartyPopper } from "lucide-react";
+import { X, PartyPopper } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function OpenPopup() {
@@ -83,14 +83,10 @@ export default function OpenPopup() {
                 <X className="w-5 h-5" />
               </button>
 
-              {/* Icon / Date Badge */}
+              {/* Icon */}
               <div className="mb-6 mt-2 relative">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#FEEBD0] to-[#FFF5EB] dark:from-[#8F4B10]/30 dark:to-[#8F4B10]/20 flex items-center justify-center text-[#F9954E] shadow-lg mb-4 mx-auto transform rotate-3">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#FEEBD0] to-[#FFF5EB] dark:from-[#8F4B10]/30 dark:to-[#8F4B10]/20 flex items-center justify-center text-[#F9954E] shadow-lg mx-auto transform rotate-3">
                   <PartyPopper className="w-8 h-8" strokeWidth={1.5} />
-                </div>
-                <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-[#8F4B10]/50 border border-[#FEEBD0] dark:border-[#8F4B10]/50 text-[11px] font-bold text-[#E8832E] dark:text-[#FBAA60] uppercase tracking-wide">
-                  <Sparkles className="w-3 h-3" />
-                  <span>2026.02.16 Open</span>
                 </div>
               </div>
 
