@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { Merge, Hammer, Crown, Trophy, Flame, ImageIcon, BrainCircuit, Gamepad2, Swords, Coins, Target, Dices, Hand, Zap, Palette, Star } from "lucide-react";
+import { Merge, Hammer, Crown, Trophy, Flame, ImageIcon, BrainCircuit, Gamepad2, Swords, Coins, Target, Dices, Hand, Zap, Palette, Star, Brain, Calculator, Bird } from "lucide-react";
 import CottonCandy from "@/components/icons/CottonCandy";
 
 // candy: 솜사탕 지급 게임(동물합치기·보스클릭커·2048)만 표기 / rank: 명예의 전당(TOP5) 운영 게임
@@ -9,6 +9,12 @@ const GAMES = [
   { id: "merge",       title: "동물 합치기",   desc: "같은 동물이 만나면 합쳐져요!",           icon: <Merge className="w-5 h-5" />,         href: "/minigame/merge",       candy: "+80",  rank: true  },
   { id: "clicker",     title: "보스 클릭커",   desc: "클릭으로 몬스터를 처치하세요!",          icon: <Hammer className="w-5 h-5" />,        href: "/minigame/clicker",     candy: "+100", rank: true  },
   { id: "game2048",    title: "2048",          desc: "숫자를 합쳐 2048을 만드세요!",           icon: <Crown className="w-5 h-5" />,         href: "/minigame/2048",        candy: "+60",  rank: true  },
+  { id: "reaction",    title: "반응속도",      desc: "초록불에 번개처럼 탭하세요!",            icon: <Zap className="w-5 h-5" />,           href: "/minigame/reaction",    candy: "",     rank: true  },
+  { id: "whack",       title: "두더지 잡기",   desc: "튀어나오는 두더지를 빠르게!",            icon: <Hammer className="w-5 h-5" />,        href: "/minigame/whack",       candy: "",     rank: true  },
+  { id: "simon",       title: "순서 기억",     desc: "점점 길어지는 순서를 따라치세요.",       icon: <Brain className="w-5 h-5" />,         href: "/minigame/simon",       candy: "",     rank: true  },
+  { id: "mathsprint",  title: "빠른 계산",     desc: "60초 안에 최대한 많이 풀기!",           icon: <Calculator className="w-5 h-5" />,    href: "/minigame/mathsprint",  candy: "",     rank: true  },
+  { id: "aim",         title: "과녁 클릭",     desc: "과녁을 정확하고 빠르게 맞히세요.",       icon: <Target className="w-5 h-5" />,        href: "/minigame/aim",         candy: "",     rank: true  },
+  { id: "flappy",      title: "플래피 도리",   desc: "탭해서 파이프를 통과하세요!",            icon: <Bird className="w-5 h-5" />,          href: "/minigame/flappy",      candy: "",     rank: true  },
   { id: "snake",       title: "스네이크",      desc: "뱀을 길게 키우는 고전 게임!",            icon: <Trophy className="w-5 h-5" />,        href: "/minigame/snake",       candy: "",     rank: true  },
   { id: "match3",      title: "매치 3 퍼즐",   desc: "3개의 블록을 맞춰 터뜨리세요!",         icon: <Flame className="w-5 h-5" />,         href: "/minigame/match3",      candy: "",     rank: true  },
   { id: "puzzle",      title: "슬라이드 퍼즐", desc: "조각을 움직여 그림을 완성하세요!",       icon: <ImageIcon className="w-5 h-5" />,     href: "/minigame/puzzle",      candy: "",     rank: true  },

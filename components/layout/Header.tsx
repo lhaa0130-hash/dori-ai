@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
-import { Search, ChevronDown, ChevronRight, User, LogOut, Menu, X } from "lucide-react";
+import { Search, ChevronDown, ChevronRight, User, LogOut, Menu, X, Home, MessageCircle, Newspaper } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter, usePathname } from "next/navigation";
 
@@ -177,8 +177,17 @@ export default function Header() {
                   </Link>
                   <div className="absolute top-full right-0 mt-2 w-40 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
                     <div className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden">
+                      <Link href="/profile" className="w-full flex items-center gap-2 px-4 py-3 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
+                        <Home className="w-3.5 h-3.5 text-[#F9954E]" /><span>미니홈피</span>
+                      </Link>
+                      <Link href="/messages" className="w-full flex items-center gap-2 px-4 py-3 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
+                        <MessageCircle className="w-3.5 h-3.5 text-[#F9954E]" /><span>메시지</span>
+                      </Link>
+                      <Link href="/feed" className="w-full flex items-center gap-2 px-4 py-3 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
+                        <Newspaper className="w-3.5 h-3.5 text-[#F9954E]" /><span>피드</span>
+                      </Link>
                       {isAdmin && (
-                        <Link href="/admin" className="w-full flex items-center gap-2 px-4 py-3 text-xs font-bold text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-500/10 transition-colors">
+                        <Link href="/admin" className="w-full flex items-center gap-2 px-4 py-3 text-xs font-bold text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-500/10 transition-colors border-t border-neutral-100 dark:border-zinc-800">
                           <span>🛡️</span><span>관리자 패널</span>
                         </Link>
                       )}
@@ -222,6 +231,15 @@ export default function Header() {
               <div className="flex flex-col gap-1.5">
                 <Link href="/my" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white">
                   <User className="w-4 h-4 text-[#F9954E]" /><span>마이페이지</span>
+                </Link>
+                <Link href="/profile" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white">
+                  <Home className="w-4 h-4 text-[#F9954E]" /><span>미니홈피</span>
+                </Link>
+                <Link href="/messages" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white">
+                  <MessageCircle className="w-4 h-4 text-[#F9954E]" /><span>메시지</span>
+                </Link>
+                <Link href="/feed" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white">
+                  <Newspaper className="w-4 h-4 text-[#F9954E]" /><span>피드</span>
                 </Link>
                 {isAdmin && (
                   <Link href="/admin" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-orange-50 dark:bg-orange-900/20 text-sm font-bold text-orange-600 dark:text-orange-400">
