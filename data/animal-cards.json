@@ -593,5 +593,588 @@
       ]
     },
     "image_path": "/images/animal/캥거루.jpg"
+  },
+  {
+    "search_nickname": "가슴을 콩콩 두드리는 숲속 힘센 친구",
+    "animal_name": "고릴라",
+    "kid_friendly_desc": "고릴라는 아프리카 숲에 사는 아주 힘센 유인원이에요. 무섭게 보일 때도 있지만, 사실은 나뭇잎과 열매를 좋아하는 차분한 친구란다. 가족 무리와 함께 지내고, 아기 고릴라를 잘 돌봐요. 기분을 알리려고 가슴을 콩콩 두드리기도 해요.",
+    "key_feature": [
+      "힘센 팔",
+      "가슴 두드리기",
+      "가족 무리"
+    ],
+    "image_prompt": "A gentle baby gorilla sitting in a lush green rainforest, with big curious eyes, fluffy dark fur, and tiny hands holding a leaf, looking sweet and friendly, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [
+        "검정색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "열대우림"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/고릴라.jpg"
+  },
+  {
+    "search_nickname": "긴 팔로 나무를 타는 똑똑한 숲속 친구",
+    "animal_name": "침팬지",
+    "kid_friendly_desc": "침팬지는 사람과 아주 많이 닮은 똑똑한 동물이란다. 긴 팔로 나무를 잘 타고, 친구들과 무리를 지어 지내요. 과일도 먹고 곤충이나 작은 동물도 먹는 잡식 친구예요. 서로 소리와 표정으로 마음을 전하기도 해요.",
+    "key_feature": [
+      "똑똑한 머리",
+      "긴 팔",
+      "무리 생활"
+    ],
+    "image_prompt": "A cute chimpanzee with long arms sitting on a tree branch, bright curious eyes, fluffy dark fur, playful smile, holding a piece of fruit, tropical rainforest atmosphere, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "잡식"
+      ],
+      "color": [
+        "검정색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "열대우림",
+        "초원"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는",
+        "나무 위에 사는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/침팬지.jpg"
+  },
+  {
+    "search_nickname": "긴 팔로 나무를 휙휙 타는 붉은 숲 친구",
+    "animal_name": "오랑우탄",
+    "kid_friendly_desc": "오랑우탄은 이름이 ‘숲의 사람’이라는 뜻이란다. 길고 튼튼한 팔로 나무 사이를 천천히 잘 이동해요. 붉은빛 털이 폭신폭신해서 멀리서도 알아보기 쉬워요. 보르네오섬과 수마트라섬의 따뜻한 숲에서 살아요.",
+    "key_feature": [
+      "긴 팔",
+      "붉은 털",
+      "나무 위 생활"
+    ],
+    "image_prompt": "An adorable orangutan with fluffy reddish-orange fur and very long arms, gently hanging from a tropical rainforest tree branch with a curious sweet face, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "잡식"
+      ],
+      "color": [
+        "빨간색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "열대우림"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "새끼를 낳는",
+        "나무 위에 사는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/오랑우탄.jpg"
+  },
+  {
+    "search_nickname": "나무에 거꾸로 매달린 느릿느릿 친구",
+    "animal_name": "나무늘보",
+    "kid_friendly_desc": "나무늘보는 나무에 거꾸로 매달려 아주 천천히 움직이는 동물이에요. 중앙아메리카와 남아메리카의 따뜻한 열대우림에서 살아요. 털에 작은 초록 조류가 자라면 숲속 나뭇잎처럼 보여서 숨기에도 좋단다. 느릿느릿하지만 나무 위에서는 꼭 붙잡고 잘 지내는 멋진 친구예요.",
+    "key_feature": [
+      "아주 느린 움직임",
+      "나무에 매달리기",
+      "초록빛 털"
+    ],
+    "image_prompt": "An adorable sloth hanging upside down from a rainforest tree branch, with sleepy gentle eyes, fluffy gray-brown fur with a soft green tint, tiny curved claws, surrounded by lush tropical leaves, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [
+        "초록색"
+      ],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "열대우림"
+      ],
+      "feature": [
+        "엄청 느린",
+        "보호색"
+      ],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "새끼를 낳는",
+        "나무 위에 사는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/나무늘보.jpg"
+  },
+  {
+    "search_nickname": "긴 혀로 개미를 쏙쏙 먹는 털북숭이 친구",
+    "animal_name": "개미핥기",
+    "kid_friendly_desc": "개미핥기는 긴 주둥이와 아주 긴 혀를 가진 포유류예요. 개미집이나 흰개미집을 찾아서 혀를 쭉 내밀어 개미를 쏙쏙 먹는답니다. 이빨은 거의 없지만, 끈적끈적한 혀 덕분에 밥을 잘 먹을 수 있어요. 보통 혼자 조용히 다니며 먹이를 찾아요.",
+    "key_feature": [
+      "긴 혀",
+      "긴 주둥이",
+      "개미 먹기"
+    ],
+    "image_prompt": "A cute anteater with a long snout, fluffy tail, and sticky tongue gently reaching toward tiny ants, adorable curious eyes, standing in a lush green forest, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는"
+      ],
+      "color": [],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "열대우림",
+        "초원"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/개미핥기.jpg"
+  },
+  {
+    "search_nickname": "딱딱한 갑옷을 입고 공처럼 말리는 굴 파기 선수",
+    "animal_name": "아르마딜로",
+    "kid_friendly_desc": "아르마딜로는 등에 딱딱한 갑옷 같은 껍질을 입고 다니는 동물이란다. 무서운 동물을 만나면 어떤 아르마딜로는 몸을 동그랗게 말아 공처럼 변해요. 튼튼한 앞발톱으로 땅을 파서 굴집을 만들고, 냄새를 킁킁 맡아 벌레를 찾아 먹어요.",
+    "key_feature": [
+      "갑옷 같은 등딱지",
+      "공처럼 몸 말기",
+      "땅굴 파기"
+    ],
+    "image_prompt": "A cute armadillo curled into a tiny ball with a shiny banded armor shell, small nose sniffing the ground, strong little claws, adorable curious eyes, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는",
+        "잡식",
+        "썩은 것 먹는"
+      ],
+      "color": [],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "사막",
+        "초원"
+      ],
+      "feature": [
+        "야행성"
+      ],
+      "body": [
+        "다리가 4개인",
+        "딱딱한 껍질",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "새끼를 낳는",
+        "동굴에 사는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/아르마딜로.jpg"
+  },
+  {
+    "search_nickname": "두 발로 서서 망 보는 땅굴 마을 친구",
+    "animal_name": "프레리도그",
+    "kid_friendly_desc": "프레리도그는 넓은 풀밭에 땅굴 마을을 만들고 친구들과 함께 살아요. 낮이 되면 밖으로 나와 풀이나 씨앗을 냠냠 먹고, 가끔 작은 곤충도 먹는단다. 위험한 동물이 오면 두 발로 쏙 일어서서 주변을 살피고 친구들에게 알려줘요. 짧은 다리와 귀여운 꼬리가 아주 사랑스러운 동물이랍니다.",
+    "key_feature": [
+      "땅굴 마을",
+      "두 발로 망보기",
+      "무리 생활"
+    ],
+    "image_prompt": "A cute prairie dog standing upright at the entrance of a small burrow in a sunny grassland, with short legs, tiny rounded ears, bright curious eyes, light brown fluffy fur, and a small flat tail, looking like it is watching over its prairie town, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는",
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는",
+        "동굴에 사는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/프레리도그.jpg"
+  },
+  {
+    "search_nickname": "두 발로 서서 망을 보는 땅굴 마을 친구",
+    "animal_name": "미어캣",
+    "kid_friendly_desc": "미어캣은 작은 몽구스 친구로, 두 발로 쭈욱 서서 주변을 살펴보는 걸 잘해요. 가족과 친구들이 함께 땅속 굴 마을에서 살며, 누가 위험한지 망을 보기도 한단다. 앞발의 튼튼한 발톱으로 굴을 파고, 벌레 같은 작은 먹이를 찾아 먹어요. 긴 꼬리는 서 있을 때 몸의 균형을 잡는 데 도와줘요.",
+    "key_feature": [
+      "두 발로 망보기",
+      "땅굴 파기",
+      "무리 생활"
+    ],
+    "image_prompt": "A cute meerkat standing upright on its hind legs, looking around like a tiny lookout, with bright curious eyes, sandy brown fur, small paws with claws, and a long tail for balance in a warm desert burrow village, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는",
+        "잡식"
+      ],
+      "color": [],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "사막",
+        "초원"
+      ],
+      "feature": [
+        "보호색"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는",
+        "동굴에 사는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/미어캣.jpg"
+  },
+  {
+    "search_nickname": "물속에서 미끄럼 타는 수염 친구",
+    "animal_name": "수달",
+    "kid_friendly_desc": "수달은 강이나 호수에서 헤엄을 아주 잘 치는 동물이란다. 긴 꼬리와 물갈퀴 달린 발로 물속을 쏙쏙 누비며 물고기를 잡아먹어요. 코와 귀를 물 위로 살짝 내밀고 두리번두리번 살피는 모습이 정말 귀여워요. 엄마 수달은 새끼를 낳아 따뜻하게 돌봐 준답니다.",
+    "key_feature": [
+      "헤엄 잘 침",
+      "긴 꼬리",
+      "귀여운 수염"
+    ],
+    "image_prompt": "A cute Eurasian otter floating on its back in a clear river, tiny paws holding a fish, round curious eyes, wet whiskers, long tail, playful and adorable expression, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "물고기를 먹는",
+        "육식"
+      ],
+      "color": [],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "강·호수",
+        "바다"
+      ],
+      "feature": [
+        "야행성"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/수달.jpg"
+  },
+  {
+    "search_nickname": "배 위에 조개를 올려 톡톡 깨는 바다 둥둥이",
+    "animal_name": "해달",
+    "kid_friendly_desc": "해달은 차가운 바다에 사는 귀여운 포유류예요. 물 위에 둥둥 누워 배 위에 조개를 올려놓고 돌로 톡톡 깨 먹기도 한답니다. 아주 빽빽한 털 덕분에 추운 바다에서도 따뜻하게 지낼 수 있어요. 아기 해달은 엄마 배 위에 폭신하게 누워 쉬기도 해요.",
+    "key_feature": [
+      "배 위에서 조개 깨기",
+      "빽빽한 털",
+      "바다에 사는 포유류"
+    ],
+    "image_prompt": "A cute sea otter floating on its back in the ocean, holding a small shell on its belly with tiny paws, fluffy dark brown fur, round curious eyes, adorable baby-like expression, gentle waves around it, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "물고기를 먹는",
+        "육식"
+      ],
+      "color": [
+        "검정색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/해달.jpg"
+  },
+  {
+    "search_nickname": "납작 꼬리로 댐을 짓는 강가 목수",
+    "animal_name": "비버",
+    "kid_friendly_desc": "비버는 강이나 호수 근처에 사는 귀여운 포유류예요. 튼튼한 앞니로 나무를 갉아 댐과 집을 만들어요. 넓고 납작한 꼬리는 물속에서 헤엄칠 때 도와주고, 위험할 때 물을 탁! 치기도 한답니다.",
+    "key_feature": [
+      "튼튼한 앞니",
+      "납작한 꼬리",
+      "댐 만들기"
+    ],
+    "image_prompt": "A cute beaver with big front teeth and a flat paddle-shaped tail, sitting by a small river dam made of sticks, holding a tiny branch with its paws, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "강·호수"
+      ],
+      "feature": [
+        "야행성"
+      ],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/비버.jpg"
+  },
+  {
+    "search_nickname": "밤에 뾰족뾰족 가시공이 되는 작은 친구",
+    "animal_name": "고슴도치",
+    "kid_friendly_desc": "고슴도치는 등에 뾰족뾰족한 가시가 많은 작은 포유류예요. 깜짝 놀라면 몸을 동그랗게 말아서 가시공처럼 변한단다. 주로 밤에 슬금슬금 나와 벌레를 찾아 먹어요. 추운 겨울에는 따뜻한 곳에서 겨울잠을 자기도 해요.",
+    "key_feature": [
+      "뾰족한 가시",
+      "동그랗게 말기",
+      "밤에 활동"
+    ],
+    "image_prompt": "A tiny adorable hedgehog curled into a round spiky ball, with a sweet curious face, small paws, and cute button eyes, sitting on soft grass at night with gentle firefly glow, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는",
+        "잡식"
+      ],
+      "color": [],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "초원",
+        "도시 근처"
+      ],
+      "feature": [
+        "야행성"
+      ],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "겨울잠 자는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/고슴도치.jpg"
+  },
+  {
+    "search_nickname": "삽손으로 땅속 길을 파는 까만 터널 친구",
+    "animal_name": "두더지",
+    "kid_friendly_desc": "두더지는 땅속에 긴 터널을 만들며 사는 작은 포유동물이에요. 앞발이 삽처럼 튼튼해서 흙을 슥슥 잘 파낸답니다. 눈은 아주 작지만 코와 수염으로 냄새와 느낌을 잘 찾아요. 지렁이나 작은 벌레를 찾아 먹으며 땅속 마을을 바쁘게 돌아다녀요.",
+    "key_feature": [
+      "삽 같은 앞발",
+      "땅속 터널",
+      "작은 눈과 예민한 코"
+    ],
+    "image_prompt": "A cute mole with tiny eyes, velvety dark fur, and big shovel-like front paws happily digging a soft underground tunnel, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는"
+      ],
+      "color": [
+        "검정색"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [],
+      "feature": [],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/두더지.jpg"
+  },
+  {
+    "search_nickname": "밤하늘을 팔랑팔랑 나는 작은 포유류 친구",
+    "animal_name": "박쥐",
+    "kid_friendly_desc": "박쥐는 밤에 깨어나 하늘을 날아다니는 특별한 포유류예요. 새처럼 보이지만 알을 낳지 않고 새끼를 낳아 젖을 먹인단다. 어두운 곳에서도 소리를 이용해 길을 찾고 먹이를 잘 찾아요. 동굴이나 나무 근처에서 친구들과 함께 쉬기도 해요.",
+    "key_feature": [
+      "날아다니는 포유류",
+      "밤에 활동해요",
+      "소리로 길 찾기"
+    ],
+    "image_prompt": "A small adorable bat hanging upside down with wide curious eyes, soft fuzzy body, tiny ears, and open wings in a cozy cave at night, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "곤충을 먹는"
+      ],
+      "color": [
+        "검정색"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "동굴",
+        "도시 근처"
+      ],
+      "feature": [
+        "날 수 있는",
+        "야행성"
+      ],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는",
+        "동굴에 사는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/박쥐.jpg"
+  },
+  {
+    "search_nickname": "볼주머니에 간식을 쏙쏙 넣는 줄무늬 친구",
+    "animal_name": "다람쥐",
+    "kid_friendly_desc": "다람쥐는 등에 까만 줄무늬가 있는 작은 숲속 친구예요. 볼이 주머니처럼 늘어나서 도토리나 씨앗을 쏙쏙 넣어 옮길 수 있단다. 추운 겨울이 오면 땅속 굴이나 바위 구멍 근처에 먹이를 모아 두고 겨울잠을 자요. 긴 꼬리를 살랑살랑 흔들며 빠르게 뛰어다니는 모습이 아주 귀여워요.",
+    "key_feature": [
+      "볼주머니",
+      "까만 줄무늬",
+      "겨울잠"
+    ],
+    "image_prompt": "A cute Siberian chipmunk with puffy cheek pouches full of tiny seeds, five dark stripes on its back, fluffy long tail, sitting on a mossy forest log and holding an acorn, A cute, highly detailed 3D Pixar-style animation illustration, warm lighting, vibrant colors, clean soft background, child-friendly, masterpiece",
+    "filters": {
+      "diet": [
+        "잡식",
+        "씨앗을 먹는"
+      ],
+      "color": [
+        "검정색"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [],
+      "feature": [
+        "보호색"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "겨울잠 자는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    },
+    "image_path": "/images/animal/다람쥐.jpg"
   }
 ]
