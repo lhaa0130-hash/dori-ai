@@ -4,10 +4,9 @@ import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { useState, useEffect } from "react";
 import ThemeToggle from "@/components/ThemeToggle";
-import { Search, ChevronDown, ChevronRight, User, LogOut, Menu, X, Home, MessageCircle, Newspaper, Bell } from "lucide-react";
+import { Search, ChevronDown, ChevronRight, User, LogOut, Menu, X, Home, MessageCircle, Newspaper } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter, usePathname } from "next/navigation";
-import { watchNotifications } from "@/lib/social";
 
 const ADMIN_EMAIL = "lhaa0130@gmail.com";
 
@@ -16,17 +15,7 @@ export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
-  const [unreadNoti, setUnreadNoti] = useState(0);
   const isAdmin = session?.user?.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase();
-
-  // 알림 미읽음 개수 실시간 구독 (로그인 사용자만)
-  useEffect(() => {
-    if (!session?.user) { setUnreadNoti(0); return; }
-    const unsub = watchNotifications((items) => {
-      setUnreadNoti(items.filter((n) => !n.read).length);
-    });
-    return () => { unsub(); };
-  }, [session?.user]);
 
   // 페이지 이동 시 드로어 닫기
   useEffect(() => { setMobileOpen(false); }, [pathname]);
@@ -177,22 +166,6 @@ export default function Header() {
               }
             </button>
 
-            {/* 데스크탑 알림 종 (로그인 시에만) */}
-            {session?.user && (
-              <Link
-                href="/notifications"
-                aria-label="알림"
-                className="hidden lg:flex flex-shrink-0 w-10 h-10 items-center justify-center rounded-full hover:bg-neutral-100 dark:hover:bg-zinc-800 transition-colors text-foreground relative ml-1"
-              >
-                <Bell className="w-5 h-5" strokeWidth={2.5} />
-                {unreadNoti > 0 && (
-                  <span className="absolute -top-0.5 -right-0.5 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-red-500 text-white text-[10px] font-black leading-none">
-                    {unreadNoti > 9 ? "9+" : unreadNoti}
-                  </span>
-                )}
-              </Link>
-            )}
-
             {/* 데스크탑 로그인/마이페이지 */}
             <div className="hidden lg:flex items-center ml-2 relative group">
               {session?.user ? (
@@ -213,12 +186,6 @@ export default function Header() {
                       </Link>
                       <Link href="/messages" className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
                         <MessageCircle className="w-4 h-4 text-[#F9954E]" /><span>메시지</span>
-                      </Link>
-                      <Link href="/notifications" className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
-                        <Bell className="w-4 h-4 text-[#F9954E]" /><span>알림</span>
-                        {unreadNoti > 0 && (
-                          <span className="ml-auto min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-red-500 text-white text-[10px] font-black leading-none">{unreadNoti > 9 ? "9+" : unreadNoti}</span>
-                        )}
                       </Link>
 
                       <div className="my-1 border-t border-neutral-100 dark:border-zinc-800" />
@@ -286,14 +253,6 @@ export default function Header() {
                 </Link>
                 <Link href="/messages" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white">
                   <MessageCircle className="w-4 h-4 text-[#F9954E]" /><span>메시지</span>
-                </Link>
-                <Link href="/notifications" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white">
-                  <Bell className="w-4 h-4 text-[#F9954E]" /><span>알림</span>
-                  {unreadNoti > 0 && (
-                    <span className="ml-auto min-w-[20px] h-5 px-1.5 flex items-center justify-center rounded-full bg-red-500 text-white text-[11px] font-black leading-none">
-                      {unreadNoti > 9 ? "9+" : unreadNoti}
-                    </span>
-                  )}
                 </Link>
 
                 {/* 관리 / 로그아웃 */}

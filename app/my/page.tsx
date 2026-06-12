@@ -9,6 +9,8 @@ import Header from "@/components/layout/Header";
 import ProfileHero from "@/components/my/ProfileHero";
 import { UserProfile, createDefaultProfile, calculateTier, calculateLevel, ACTIVITY_SCORES } from "@/lib/userProfile";
 import CottonCandy from "@/components/icons/CottonCandy";
+import { Bell, ChevronRight } from "lucide-react";
+import { watchNotifications } from "@/lib/social";
 import {
   getCottonCandyBalance,
   getCachedGameProfile,
@@ -42,6 +44,14 @@ export default function MyPage() {
   const [bookmarkedPosts, setBookmarkedPosts] = useState<any[]>([]);
   const [recentViews, setRecentViews] = useState<any[]>([]);
   const [activeTab, setActiveTab] = useState("posts");
+  const [unreadNoti, setUnreadNoti] = useState(0);
+
+  // 알림 미읽음 개수 실시간 구독 (마이페이지 전용)
+  useEffect(() => {
+    if (!user) { setUnreadNoti(0); return; }
+    const unsub = watchNotifications((items) => setUnreadNoti(items.filter((n) => !n.read).length));
+    return () => unsub();
+  }, [user]);
   const ADMIN_EMAILS = ["admin@dori.ai", "lhaa0130@gmail.com"];
   const isAdmin = !!(user && user.email && (ADMIN_EMAILS.some(email => email.toLowerCase() === user.email.toLowerCase()) || (user as any)?.isAdmin === true));
 
@@ -473,6 +483,28 @@ export default function MyPage() {
             />
           </div>
         )}
+
+        {/* ── 알림 ── */}
+        <Link
+          href="/notifications"
+          className="mb-8 flex items-center gap-4 p-5 rounded-3xl bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 hover:border-[#F9954E]/40 transition-colors group"
+        >
+          <span className="relative flex-shrink-0 w-11 h-11 rounded-2xl bg-[#FFF5EB] dark:bg-[#F9954E]/10 flex items-center justify-center">
+            <Bell className="w-5 h-5 text-[#F9954E]" />
+            {unreadNoti > 0 && (
+              <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-red-500 text-white text-[10px] font-black leading-none">
+                {unreadNoti > 9 ? "9+" : unreadNoti}
+              </span>
+            )}
+          </span>
+          <div className="flex-1 min-w-0">
+            <p className="text-[15px] font-extrabold text-neutral-900 dark:text-white">알림</p>
+            <p className="text-[12.5px] text-neutral-500 dark:text-neutral-400">
+              {unreadNoti > 0 ? `읽지 않은 알림 ${unreadNoti}개` : "친구 요청·좋아요·댓글·방명록·메시지를 한곳에서"}
+            </p>
+          </div>
+          <ChevronRight className="w-5 h-5 text-neutral-300 dark:text-zinc-600 group-hover:text-[#F9954E] transition-colors" />
+        </Link>
 
         {/* ── 솜사탕 현황 카드 ── */}
         <div className="mb-8 bg-[#FFF5EB] dark:bg-[#F9954E]/5 rounded-3xl border border-[#F9954E]/20 dark:border-[#F9954E]/10 p-6 md:p-8">
