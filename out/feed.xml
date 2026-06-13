@@ -6,7 +6,7 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Sat, 13 Jun 2026 05:31:23 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 13 Jun 2026 05:34:34 GMT</lastBuildDate>
     <item>
       <title>스페이스X IPO와 AI의 미래, 투자자들은 어떤 변화를 기대할까?</title>
       <link>https://dori-ai.com/insight/article/trend-93</link>
@@ -16,20 +16,20 @@
       <description>스페이스X의 IPO가 AI 산업에 미치는 영향과 투자자들이 주목해야 할 요소들을 살펴봅니다.</description>
     </item>
     <item>
+      <title>앤트로픽, 미국 정부의 지시에 따라 최신 AI 모델 사용 중단</title>
+      <link>https://dori-ai.com/insight/article/trend-94</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-94</guid>
+      <category>트렌드</category>
+      <pubDate>Sat, 13 Jun 2026 00:00:00 GMT</pubDate>
+      <description>앤트로픽의 최신 AI 모델이 미국 정부의 외국인 접근 제한 명령으로 인해 사용이 중단되었습니다. 이로 인해 AI 산업의 안전성과 규제 문제에 대한 논의가 다시금 촉발되고 있습니다.</description>
+    </item>
+    <item>
       <title>앤트로픽, 비영리기관을 위한 AI 활용 교육 프로그램 '클로드 코프스' 발표</title>
       <link>https://dori-ai.com/insight/article/trend-90</link>
       <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-90</guid>
       <category>트렌드</category>
       <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
       <description>앤트로픽이 비영리기관과 협력하여 AI 기술을 보다 효과적으로 활용할 수 있도록 돕는 '클로드 코프스' 프로그램을 공개했습니다.</description>
-    </item>
-    <item>
-      <title>클로드 코프스: 비영리기관을 위한 AI 교육 혁신</title>
-      <link>https://dori-ai.com/insight/article/trend-91</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-91</guid>
-      <category>트렌드</category>
-      <pubDate>Fri, 12 Jun 2026 00:00:00 GMT</pubDate>
-      <description>앤트로픽이 발표한 '클로드 코프스'는 비영리기관이 AI를 효과적으로 활용할 수 있도록 돕는 교육 프로그램입니다.</description>
     </item>
     <item>
       <title>애플, 시리를 위한 새로운 혁신: 엔비디아 칩으로의 전환</title>
