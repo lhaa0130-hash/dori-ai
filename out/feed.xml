@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Sat, 13 Jun 2026 01:30:37 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 13 Jun 2026 02:07:14 GMT</lastBuildDate>
+    <item>
+      <title>스페이스X IPO와 AI의 미래, 투자자들은 어떤 변화를 기대할까?</title>
+      <link>https://dori-ai.com/insight/article/trend-93</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-93</guid>
+      <category>트렌드</category>
+      <pubDate>Sat, 13 Jun 2026 00:00:00 GMT</pubDate>
+      <description>스페이스X의 IPO가 AI 산업에 미치는 영향과 투자자들이 주목해야 할 요소들을 살펴봅니다.</description>
+    </item>
     <item>
       <title>앤트로픽, 비영리기관을 위한 AI 활용 교육 프로그램 '클로드 코프스' 발표</title>
       <link>https://dori-ai.com/insight/article/trend-90</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Mon, 20 Apr 2026 00:00:00 GMT</pubDate>
       <description>2026년 현재 미국 직장인의 절반 이상이 AI 도구를 업무에 활용하고 있다는 조사 결과가 잇따라 발표됐다. Gallup, Deloitte, PwC 등의 데이터가 한 방향을 가리키고 있다 — AI는 이미 선택이 아닌 생존 도구다.</description>
-    </item>
-    <item>
-      <title>Anthropic, Claude Opus 4.7 공개 — 코딩·에이전트·보안 모두 한 단계 도약</title>
-      <link>https://dori-ai.com/insight/article/trend-61</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-61</guid>
-      <category>트렌드</category>
-      <pubDate>Sun, 19 Apr 2026 00:00:00 GMT</pubDate>
-      <description>Anthropic이 가장 강력한 범용 모델 Claude Opus 4.7을 출시했다. 1M 토큰 컨텍스트, 적응형 사고(Adaptive Thinking), xhigh 추론 레벨 등 새로운 기능이 추가됐으며, 사이버보안 특화 모델 Mythos Preview도 함께 공개됐다.</description>
     </item>
   </channel>
 </rss>

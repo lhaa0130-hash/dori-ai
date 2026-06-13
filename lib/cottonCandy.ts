@@ -8,7 +8,7 @@
 // 로그인하면 hydrateGameData()가 Firestore → localStorage로 동기화하고
 // "dori-gamedata-synced" 이벤트를 쏩니다. 화면은 이 이벤트로 잔액을 다시 읽습니다.
 
-import { doc, getDoc, setDoc, increment, serverTimestamp } from "firebase/firestore";
+import { doc, getDoc, setDoc, increment, serverTimestamp, runTransaction, arrayUnion } from "firebase/firestore";
 import { getFirebaseFirestore, getFirebaseAuth } from "@/lib/firebase";
 import { calculateTier, calculateLevel } from "@/lib/userProfile";
 
@@ -26,6 +26,7 @@ const GAME_PROFILE_KEY = (email: string) => `dori_game_profile_${email}`;// Fire
 const CANDY_HISTORY_KEY = (email: string) => `dori_candy_history_${email}`;
 const TODAY_EARNED_KEY = (email: string) => `dori_candy_today_${email}`;
 const ATTENDANCE_KEY = (email: string) => `dori_attendance_${email}`;
+const OWNED_KEY = (email: string) => `dori_owned_${email}`;            // 코지홈 아이템 보유 캐시 (slot::id 배열)
 
 function getTodayDateStr(): string {
   // ⚠️ toISOString()은 UTC 기준 → 한국(UTC+9) 자정~오전9시 사이엔 어제 날짜 반환
@@ -114,6 +115,12 @@ export async function hydrateGameData(): Promise<void> {
       if (d.cottonCandyTotal >= localTotal) {
         localStorage.setItem(CC_TOTAL_KEY(email), String(d.cottonCandyTotal));
       }
+    }
+    // ── 코지홈 아이템 보유 목록: Firestore 값과 로컬 캐시를 합집합(둘 다 보존)
+    if (Array.isArray(d.ownedItems)) {
+      const local = getOwnedShopItems(email);
+      const merged = Array.from(new Set([...(d.ownedItems as string[]), ...local]));
+      localStorage.setItem(OWNED_KEY(email), JSON.stringify(merged));
     }
     // ── 출석: Firestore의 lastChecked가 로컬보다 같거나 최신일 때만 업데이트
     if (d.attendance) {
@@ -730,6 +737,107 @@ export function purchaseItem(email: string, itemId: string, price: number): { su
   purchased.push(itemId);
   localStorage.setItem(SHOP_KEY(email), JSON.stringify(purchased));
   return { success: true, message: premium ? "💎 프리미엄 혜택으로 무료 구매!" : "구매 완료!" };
+}
+
+// ─── 코지홈 아이템 보유/구매 (Firestore 영구 저장 + 트랜잭션 안전 차감) ───
+// ownedItems 에는 shopItems 의 itemKey(slot, id) = "slot::id" 형태로 저장한다.
+
+/** 보유한 코지홈 아이템 목록(slot::id) — localStorage 캐시 기준(동기) */
+export function getOwnedShopItems(email: string): string[] {
+  if (typeof window === "undefined" || !email) return [];
+  try {
+    const raw = localStorage.getItem(OWNED_KEY(email));
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function setOwnedShopCache(email: string, keys: string[]): void {
+  try {
+    localStorage.setItem(OWNED_KEY(email), JSON.stringify(Array.from(new Set(keys))));
+  } catch {
+    /* noop */
+  }
+}
+
+/**
+ * 코지홈 아이템 구매. Firestore 트랜잭션으로 잔액을 확인·차감하고
+ * ownedItems 에 추가한다(잔액 음수/이중차감 방지). 성공 시 로컬 캐시 동기화.
+ * itemKeyStr = "slot::id".
+ */
+export async function purchaseShopItem(
+  email: string,
+  itemKeyStr: string,
+  price: number
+): Promise<{ success: boolean; message: string; balance: number }> {
+  if (typeof window === "undefined") return { success: false, message: "구매할 수 없습니다.", balance: 0 };
+  if (!email) return { success: false, message: "로그인이 필요합니다.", balance: 0 };
+
+  const owned = getOwnedShopItems(email);
+  if (owned.includes(itemKeyStr)) {
+    return { success: true, message: "이미 보유한 아이템입니다.", balance: getCottonCandyBalance(email) };
+  }
+
+  // 💎 프리미엄 회원: 무료 지급
+  if (isPremiumUser(email)) {
+    const next = [...owned, itemKeyStr];
+    setOwnedShopCache(email, next);
+    const uid = currentUid();
+    if (uid) {
+      try {
+        await setDoc(doc(getFirebaseFirestore(), "users", uid), { ownedItems: arrayUnion(itemKeyStr), lastActiveAt: serverTimestamp() }, { merge: true });
+      } catch { /* 캐시는 이미 반영됨 */ }
+    }
+    window.dispatchEvent(new Event("dori-gamedata-synced"));
+    return { success: true, message: "💎 프리미엄 혜택으로 무료 획득!", balance: getCottonCandyBalance(email) };
+  }
+
+  const uid = currentUid();
+  // 로그인은 됐지만 uid 를 못 읽는 예외 상황 — 로컬 잔액으로라도 처리(차선)
+  if (!uid) {
+    const bal = getCottonCandyBalance(email);
+    if (bal < price) return { success: false, message: `솜사탕이 부족해요. (보유 ${bal.toLocaleString()} / 필요 ${price.toLocaleString()})`, balance: bal };
+    const ok = spendCottonCandy(email, price, `상점 구매: ${itemKeyStr}`);
+    if (!ok) return { success: false, message: "구매에 실패했어요.", balance: bal };
+    setOwnedShopCache(email, [...owned, itemKeyStr]);
+    window.dispatchEvent(new Event("dori-gamedata-synced"));
+    return { success: true, message: "구매 완료!", balance: getCottonCandyBalance(email) };
+  }
+
+  // 정상 경로: Firestore 트랜잭션 (서버 잔액 기준 원자적 차감 + 보유 추가)
+  try {
+    const db = getFirebaseFirestore();
+    const ref = doc(db, "users", uid);
+    let newBalance = 0;
+    await runTransaction(db, async (tx) => {
+      const snap = await tx.get(ref);
+      const cur = Number(snap.data()?.cottonCandy ?? getCottonCandyBalance(email));
+      const already: string[] = Array.isArray(snap.data()?.ownedItems) ? (snap.data()!.ownedItems as string[]) : [];
+      if (already.includes(itemKeyStr)) { newBalance = cur; return; } // 다른 기기에서 이미 구매
+      if (cur < price) throw new Error("INSUFFICIENT");
+      newBalance = cur - price;
+      tx.set(ref, { cottonCandy: newBalance, ownedItems: arrayUnion(itemKeyStr), lastActiveAt: serverTimestamp() }, { merge: true });
+    });
+    // 로컬 캐시 동기화 (잔액 + 보유 + 히스토리)
+    localStorage.setItem(CC_KEY(email), String(newBalance));
+    setOwnedShopCache(email, [...owned, itemKeyStr]);
+    try {
+      const hraw = localStorage.getItem(CANDY_HISTORY_KEY(email));
+      const history: CottonCandyHistoryEntry[] = hraw ? JSON.parse(hraw) : [];
+      history.unshift({ date: new Date().toISOString(), amount: -price, reason: `상점 구매: ${itemKeyStr}` });
+      if (history.length > 200) history.splice(200);
+      localStorage.setItem(CANDY_HISTORY_KEY(email), JSON.stringify(history));
+    } catch { /* noop */ }
+    window.dispatchEvent(new Event("dori-gamedata-synced"));
+    return { success: true, message: "구매 완료!", balance: newBalance };
+  } catch (e: unknown) {
+    const bal = getCottonCandyBalance(email);
+    if (e instanceof Error && e.message === "INSUFFICIENT") {
+      return { success: false, message: `솜사탕이 부족해요. (보유 ${bal.toLocaleString()} / 필요 ${price.toLocaleString()})`, balance: bal };
+    }
+    return { success: false, message: "네트워크 오류로 구매에 실패했어요. 잠시 후 다시 시도해주세요.", balance: bal };
+  }
 }
 
 // ─── 미니게임 / 퀴즈 통계 ─────────────────────────────────────────

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState, type ChangeEvent } from "react";
+import { useCallback, useEffect, useMemo, useState, type ChangeEvent, type ReactNode } from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -24,42 +24,22 @@ import {
 } from "@/lib/social";
 import { uploadAvatar } from "@/lib/storage";
 import { TIER_INFO, type UserTier } from "@/lib/userProfile";
+import { getOwnedShopItems } from "@/lib/cottonCandy";
+import {
+  bgGradOf,
+  frameRingOf,
+  nameClassOf,
+  itemsBySlot,
+  itemKey,
+  type ShopItem,
+} from "@/lib/shopItems";
+import BannerFx from "@/components/cozy/BannerFx";
 
-// ── 배경 프리셋 → 그라데이션 클래스(직접 정의) ───────────────────
-const BG_PRESETS: { id: BgStyle; label: string; grad: string }[] = [
-  { id: "aurora", label: "오로라", grad: "from-[#F9954E]/20 via-fuchsia-500/10 to-sky-500/20" },
-  { id: "sunset", label: "선셋",   grad: "from-orange-500/25 to-rose-500/20" },
-  { id: "peach",  label: "피치",   grad: "from-[#FFD9B0]/50 to-[#F9954E]/25" },
-  { id: "candy",  label: "캔디",   grad: "from-pink-400/25 to-purple-400/20" },
-  { id: "mint",   label: "민트",   grad: "from-emerald-400/25 to-teal-500/15" },
-  { id: "ocean",  label: "오션",   grad: "from-sky-400/25 to-blue-600/20" },
-  { id: "forest", label: "포레스트", grad: "from-green-500/25 to-emerald-700/20" },
-  { id: "berry",  label: "베리",   grad: "from-fuchsia-500/25 to-purple-600/20" },
-  { id: "galaxy", label: "갤럭시", grad: "from-indigo-600/30 via-purple-600/20 to-slate-900/40" },
-  { id: "night",  label: "나이트", grad: "from-indigo-600/20 to-slate-800/35" },
-  { id: "gold",   label: "골드",   grad: "from-amber-300/35 to-yellow-600/20" },
-  { id: "mono",   label: "모노",   grad: "from-neutral-400/15 to-neutral-600/10" },
-];
-
-function bgGrad(bg: BgStyle): string {
-  return (BG_PRESETS.find((p) => p.id === bg) || BG_PRESETS[0]).grad;
-}
+// 배경/테두리/이름효과/배너효과/스티커는 lib/shopItems.ts 카탈로그에서 가져온다.
+// (무료 기본 + 상점에서 구매한 프리미엄 아이템)
 
 // 대표색 팔레트
 const COLOR_PRESETS = ["#F9954E", "#22c55e", "#3b82f6", "#a855f7", "#ef4444", "#14b8a6", "#ec4899", "#eab308", "#6366f1", "#f97316"];
-
-// 아바타 테두리 스타일
-const FRAMES: { id: string; label: string; ring: string }[] = [
-  { id: "none",   label: "기본",   ring: "ring-2 ring-white dark:ring-zinc-900" },
-  { id: "orange", label: "오렌지", ring: "ring-[3px] ring-[#F9954E]" },
-  { id: "gold",   label: "골드",   ring: "ring-[3px] ring-amber-400" },
-  { id: "neon",   label: "네온",   ring: "ring-[3px] ring-fuchsia-400" },
-  { id: "mint",   label: "민트",   ring: "ring-[3px] ring-emerald-400" },
-  { id: "sky",    label: "스카이", ring: "ring-[3px] ring-sky-400" },
-];
-function frameRing(id: string): string {
-  return (FRAMES.find((f) => f.id === id) || FRAMES[0]).ring;
-}
 
 // 무드 이모지 / 스티커 / 관심사 후보
 const MOODS = ["😎", "🥰", "😴", "🔥", "🎮", "✨", "😌", "🤔", "💪", "🍀", "🌙", "☕"];
@@ -73,6 +53,38 @@ function fmtDate(at: number): string {
   } catch {
     return "";
   }
+}
+
+// 꾸미기 패널의 아이템 타일 — 보유 시 선택 가능, 미보유 시 자물쇠+가격으로 상점 연결
+function PickTile({
+  owned, selected, price, label, onSelect, children,
+}: {
+  owned: boolean; selected: boolean; price: number; label: string; onSelect: () => void; children: ReactNode;
+}) {
+  const cls = `relative h-16 rounded-xl border overflow-hidden flex flex-col text-left transition-all ${
+    selected ? "border-[#F9954E] ring-1 ring-[#F9954E]/50" : "border-neutral-100 dark:border-zinc-900"
+  } ${!owned ? "opacity-80 hover:opacity-100" : ""}`;
+  const inner = (
+    <>
+      <div className="relative flex-1 min-h-0">{children}</div>
+      <span className="relative z-10 block text-[10px] font-bold text-center py-0.5 bg-white/75 dark:bg-black/45 text-neutral-700 dark:text-neutral-200 truncate px-1">
+        {label}
+      </span>
+      {!owned && (
+        <span className="absolute top-1 right-1 z-20 inline-flex items-center gap-0.5 rounded-full bg-black/55 text-white text-[9px] font-bold px-1.5 py-0.5">
+          🔒 {price}
+        </span>
+      )}
+      {selected && owned && (
+        <span className="absolute top-1 right-1 z-20 w-4 h-4 rounded-full bg-[#F9954E] text-white text-[10px] font-bold flex items-center justify-center">✓</span>
+      )}
+    </>
+  );
+  return owned ? (
+    <button type="button" onClick={onSelect} className={cls}>{inner}</button>
+  ) : (
+    <Link href="/shop" className={cls} title="상점에서 구매">{inner}</Link>
+  );
 }
 
 export default function ProfilePage() {
@@ -100,6 +112,8 @@ export default function ProfilePage() {
   const [editFrame, setEditFrame] = useState("none");
   const [editInterests, setEditInterests] = useState<string[]>([]);
   const [editStickers, setEditStickers] = useState<string[]>([]);
+  const [editNameEffect, setEditNameEffect] = useState("none");
+  const [editBannerEffect, setEditBannerEffect] = useState("none");
   const [interestInput, setInterestInput] = useState("");
 
   const toggleInterest = (tag: string) => {
@@ -168,6 +182,8 @@ export default function ProfilePage() {
       setEditFrame(p.frame || "none");
       setEditInterests(p.interests || []);
       setEditStickers(p.stickers || []);
+      setEditNameEffect(p.nameEffect || "none");
+      setEditBannerEffect(p.bannerEffect || "none");
     } catch {
       // getProfile 등은 내부에서 안전 처리됨
     } finally {
@@ -267,6 +283,8 @@ export default function ProfilePage() {
       frame: editFrame,
       interests: editInterests.slice(0, 8),
       stickers: editStickers.slice(0, 6),
+      nameEffect: editNameEffect,
+      bannerEffect: editBannerEffect,
     });
     setSaving(false);
     if (ok) {
@@ -302,6 +320,14 @@ export default function ProfilePage() {
   // 뱃지(전적 기반 단순 산출)
   const gamerLevel = records.length;
   const accent = profile?.themeColor || "#F9954E";
+
+  // 보유 아이템(무료 기본 + 구매한 프리미엄) — Firestore 프로필 + 로컬 캐시 병합
+  const myEmail = session?.user?.email || "";
+  const ownedSet = useMemo(
+    () => new Set<string>([...(profile?.ownedItems || []), ...(mounted && myEmail ? getOwnedShopItems(myEmail) : [])]),
+    [profile?.ownedItems, myEmail, mounted]
+  );
+  const isItemOwned = (it: ShopItem) => it.price === 0 || ownedSet.has(itemKey(it.slot, it.id));
 
   const messageHref = useMemo(() => {
     if (!targetUid || !profile) return "/login";
@@ -353,7 +379,10 @@ export default function ProfilePage() {
       <section className="max-w-2xl mx-auto px-5 pt-6">
         {/* 1) 코지홈 배너 */}
         <div className="relative rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 overflow-hidden">
-          <div className={`absolute inset-0 bg-gradient-to-br ${bgGrad(profile.bg)}`} aria-hidden />
+          <div className={`absolute inset-0 bg-gradient-to-br ${bgGradOf(profile.bg)}`} aria-hidden />
+          {profile.bannerEffect && profile.bannerEffect !== "none" && (
+            <BannerFx id={profile.bannerEffect} />
+          )}
           <div className="relative p-6">
             <div className="flex items-start gap-4">
               {/* 아바타 */}
@@ -363,11 +392,11 @@ export default function ProfilePage() {
                   <img
                     src={profile.photoURL}
                     alt={profile.name}
-                    className={`w-16 h-16 rounded-full object-cover shadow ring-offset-2 ring-offset-white dark:ring-offset-zinc-950 ${frameRing(profile.frame)}`}
+                    className={`w-16 h-16 rounded-full object-cover shadow ring-offset-2 ring-offset-white dark:ring-offset-zinc-950 ${frameRingOf(profile.frame)}`}
                   />
                 ) : (
                   <div
-                    className={`w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-extrabold shadow ring-offset-2 ring-offset-white dark:ring-offset-zinc-950 ${frameRing(profile.frame)}`}
+                    className={`w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-extrabold shadow ring-offset-2 ring-offset-white dark:ring-offset-zinc-950 ${frameRingOf(profile.frame)}`}
                     style={{ backgroundColor: accent }}
                   >
                     {avatarLetter}
@@ -400,9 +429,11 @@ export default function ProfilePage() {
               </div>
 
               <div className="flex-1 min-w-0">
-                <h1 className="text-[22px] font-extrabold tracking-tight text-neutral-900 dark:text-white truncate">
+                <h1 className="text-[22px] font-extrabold tracking-tight truncate">
                   {profile.mood && <span className="mr-1">{profile.mood}</span>}
-                  {profile.name}
+                  <span className={nameClassOf(profile.nameEffect) || "text-neutral-900 dark:text-white"}>
+                    {profile.name}
+                  </span>
                 </h1>
                 {profile.title && (
                   <span
@@ -525,7 +556,12 @@ export default function ProfilePage() {
         {/* 2) 꾸미기 패널 */}
         {isOwner && editing && (
           <div className="mt-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
-            <p className="text-[11px] text-[#F9954E] font-bold mb-3">코지홈 꾸미기</p>
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-[11px] text-[#F9954E] font-bold">코지홈 꾸미기</p>
+              <Link href="/shop" className="text-[11px] font-bold text-[#F9954E] inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FFF5EB] dark:bg-[#F9954E]/10">
+                🍬 상점에서 아이템 받기 →
+              </Link>
+            </div>
 
             <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
               상태메시지
@@ -583,8 +619,24 @@ export default function ProfilePage() {
               onChange={(e) => setEditTitle(e.target.value)}
               maxLength={24}
               placeholder="예) 도리 덕후 · AI 탐험가"
-              className="w-full mb-4 px-3 py-2.5 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
+              className="w-full mb-2 px-3 py-2.5 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
             />
+            {itemsBySlot("title").some((t) => isItemOwned(t)) && (
+              <div className="flex flex-wrap gap-1.5 mb-4">
+                {itemsBySlot("title").filter((t) => isItemOwned(t)).map((t) => (
+                  <button
+                    key={t.id}
+                    onClick={() => setEditTitle(t.text || "")}
+                    className={`px-2.5 py-1 rounded-full text-[12px] font-bold transition-colors ${
+                      editTitle === t.text ? "bg-[#F9954E] text-white" : "bg-neutral-100 dark:bg-zinc-900 text-neutral-600 dark:text-neutral-300"
+                    }`}
+                  >
+                    {t.text}
+                  </button>
+                ))}
+              </div>
+            )}
+            {!itemsBySlot("title").some((t) => isItemOwned(t)) && <div className="mb-2" />}
 
             <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
               대표색
@@ -606,40 +658,53 @@ export default function ProfilePage() {
             <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
               아바타 테두리
             </label>
-            <div className="flex flex-wrap gap-2 mb-4">
-              {FRAMES.map((f) => (
-                <button
-                  key={f.id}
-                  onClick={() => setEditFrame(f.id)}
-                  className={`px-3 h-9 rounded-xl text-[12px] font-bold inline-flex items-center gap-2 transition-colors ${
-                    editFrame === f.id
-                      ? "bg-[#F9954E] text-white"
-                      : "bg-neutral-100 dark:bg-zinc-900 text-neutral-600 dark:text-neutral-300"
-                  }`}
-                >
-                  <span className={`w-4 h-4 rounded-full bg-white dark:bg-zinc-700 ring-offset-1 ring-offset-white dark:ring-offset-zinc-900 ${frameRing(f.id)}`} />
-                  {f.label}
-                </button>
+            <div className="grid grid-cols-3 gap-2 mb-4">
+              {itemsBySlot("frame").map((f) => (
+                <PickTile key={f.id} owned={isItemOwned(f)} selected={editFrame === f.id} price={f.price} label={f.name} onSelect={() => setEditFrame(f.id)}>
+                  <div className="w-full h-full flex items-center justify-center bg-neutral-50 dark:bg-zinc-900/50">
+                    <div className={`w-8 h-8 rounded-full bg-neutral-200 dark:bg-zinc-700 ring-offset-2 ring-offset-neutral-50 dark:ring-offset-zinc-900 ${frameRingOf(f.id)}`} />
+                  </div>
+                </PickTile>
               ))}
             </div>
 
             <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
               배경
             </label>
+            <div className="grid grid-cols-3 gap-2 mb-4">
+              {itemsBySlot("bg").map((p) => (
+                <PickTile key={p.id} owned={isItemOwned(p)} selected={editBg === p.id} price={p.price} label={p.name} onSelect={() => setEditBg(p.id)}>
+                  <span className={`absolute inset-0 bg-gradient-to-br ${p.grad || ""}`} aria-hidden />
+                </PickTile>
+              ))}
+            </div>
+
+            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+              이름 효과 <span className="font-normal text-neutral-400">이름 글씨에 적용돼요</span>
+            </label>
+            <div className="grid grid-cols-3 gap-2 mb-4">
+              {itemsBySlot("nameEffect").map((n) => (
+                <PickTile key={n.id} owned={isItemOwned(n)} selected={editNameEffect === n.id} price={n.price} label={n.name} onSelect={() => setEditNameEffect(n.id)}>
+                  <div className="w-full h-full flex items-center justify-center bg-neutral-50 dark:bg-zinc-900/50">
+                    <span className={`text-[17px] font-extrabold ${n.nameClass || "text-neutral-700 dark:text-white"}`}>도리</span>
+                  </div>
+                </PickTile>
+              ))}
+            </div>
+
+            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+              배너 효과 <span className="font-normal text-neutral-400">배너에 움직이는 효과</span>
+            </label>
             <div className="grid grid-cols-3 gap-2 mb-5">
-              {BG_PRESETS.map((p) => (
-                <button
-                  key={p.id}
-                  onClick={() => setEditBg(p.id)}
-                  className={`relative h-14 rounded-xl border overflow-hidden text-[11px] font-bold ${
-                    editBg === p.id
-                      ? "border-[#F9954E]"
-                      : "border-neutral-100 dark:border-zinc-900"
-                  }`}
-                >
-                  <span className={`absolute inset-0 bg-gradient-to-br ${p.grad}`} aria-hidden />
-                  <span className="relative text-neutral-700 dark:text-neutral-200">{p.label}</span>
-                </button>
+              {itemsBySlot("bannerEffect").map((b) => (
+                <PickTile key={b.id} owned={isItemOwned(b)} selected={editBannerEffect === b.id} price={b.price} label={b.name} onSelect={() => setEditBannerEffect(b.id)}>
+                  <span className="absolute inset-0 bg-gradient-to-br from-[#F9954E]/15 to-sky-400/10" aria-hidden />
+                  {b.fx && b.fx !== "none" ? (
+                    <BannerFx fx={b.fx} count={5} />
+                  ) : (
+                    <span className="absolute inset-0 flex items-center justify-center text-[10px] text-neutral-400">없음</span>
+                  )}
+                </PickTile>
               ))}
             </div>
 
@@ -688,8 +753,8 @@ export default function ProfilePage() {
             <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
               배너 스티커 <span className="font-normal text-neutral-400">최대 6개</span>
             </label>
-            <div className="flex flex-wrap gap-1.5 mb-5">
-              {STICKER_CHOICES.map((s) => {
+            <div className="flex flex-wrap gap-1.5 mb-2">
+              {Array.from(new Set([...STICKER_CHOICES, ...itemsBySlot("sticker").filter((s) => isItemOwned(s)).map((s) => s.emoji!)])).map((s) => {
                 const on = editStickers.includes(s);
                 return (
                   <button
@@ -703,7 +768,15 @@ export default function ProfilePage() {
                   </button>
                 );
               })}
+              <Link
+                href="/shop"
+                className="w-9 h-9 rounded-xl text-[16px] flex items-center justify-center bg-neutral-100 dark:bg-zinc-900 text-neutral-400 border border-dashed border-neutral-300 dark:border-zinc-700"
+                title="상점에서 스티커 더 받기"
+              >
+                +
+              </Link>
             </div>
+            <p className="text-[11px] text-neutral-400 mb-5">상점에서 동물·우주·디저트 스티커를 더 받을 수 있어요</p>
 
             <button
               onClick={handleSave}

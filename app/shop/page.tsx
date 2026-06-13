@@ -4,88 +4,124 @@ import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import CottonCandy from "@/components/icons/CottonCandy";
+import BannerFx from "@/components/cozy/BannerFx";
 import {
   getCottonCandyBalance,
-  getPurchasedItems,
-  purchaseItem,
+  getOwnedShopItems,
+  purchaseShopItem,
   isPremiumUser,
 } from "@/lib/cottonCandy";
+import {
+  RARITY_META,
+  itemKey,
+  itemsBySlot,
+  type ShopItem,
+  type ItemSlot,
+} from "@/lib/shopItems";
+import { getProfile, saveMyProfile, currentUid, type Profile } from "@/lib/social";
 
-// ─── 상품 데이터 ────────────────────────────────────────────────────
-
-type ShopCategory = "all" | "profile" | "title" | "emoji" | "feature";
-
-interface ShopItem {
-  id: string;
-  category: ShopCategory;
-  emoji: string;
-  name: string;
-  description: string;
-  price: number;
-  color?: string; // 칭호/테두리 색상 미리보기
-}
-
-const SHOP_ITEMS: ShopItem[] = [
-  // 🎨 프로필 꾸미기
-  { id: "border_gold",     category: "profile", emoji: "✨", name: "골드 테두리",    description: "프로필에 황금빛 테두리를 달아드립니다", price: 30,  color: "#FFD700" },
-  { id: "border_rainbow",  category: "profile", emoji: "🌈", name: "무지개 테두리",  description: "화려한 무지개 그라디언트 테두리",         price: 80,  color: "#FF6B6B" },
-  { id: "border_neon",     category: "profile", emoji: "💡", name: "네온 테두리",    description: "눈부신 네온 컬러 테두리",                 price: 60,  color: "#39FF14" },
-  { id: "border_star",     category: "profile", emoji: "⭐", name: "별빛 테두리",    description: "은은하게 빛나는 별빛 테두리",             price: 100, color: "#C0C0C0" },
-  { id: "bg_star",         category: "profile", emoji: "🌟", name: "별 배경 패턴",  description: "프로필 배경에 별 패턴 추가",              price: 50  },
-  { id: "bg_circuit",      category: "profile", emoji: "⚡", name: "회로 배경",     description: "하이테크 회로 패턴 배경",                 price: 120 },
-  { id: "bg_wave",         category: "profile", emoji: "🌊", name: "파도 배경",     description: "잔잔한 파도 패턴 배경",                   price: 80  },
-  // 🏷️ 특별 칭호
-  { id: "title_explorer",  category: "title",   emoji: "🚀", name: "AI 탐험가",     description: "닉네임 옆에 표시되는 특별 칭호",          price: 100, color: "#60A5FA" },
-  { id: "title_master",    category: "title",   emoji: "👑", name: "DORI 마스터",   description: "DORI-AI를 정복한 마스터의 칭호",          price: 300, color: "#F59E0B" },
-  { id: "title_hunter",    category: "title",   emoji: "🎯", name: "트렌드 헌터",   description: "최신 AI 트렌드를 꿰뚫는 헌터",            price: 200, color: "#34D399" },
-  { id: "title_rich",      category: "title",   emoji: "🍬", name: "솜사탕 부자",   description: "솜사탕을 넘치도록 모은 자의 칭호",        price: 500, color: "#EC4899" },
-  { id: "title_vip",       category: "title",   emoji: "💎", name: "VIP",           description: "최고의 영예를 지닌 VIP 칭호",             price: 1000, color: "#8B5CF6" },
-  // 🎭 이모지 패키지
-  { id: "emoji_pack_mini", category: "emoji",   emoji: "🎁", name: "미니 이모지 세트", description: "프로필에 뱃지처럼 표시되는 이모지 6종",  price: 80  },
-  // 💌 특별 기능
-  { id: "feature_pin",     category: "feature", emoji: "📌", name: "게시글 고정 1회권", description: "내 게시글을 상단에 1회 고정",           price: 200 },
-  { id: "feature_visitor", category: "feature", emoji: "👥", name: "방문자 확인 기능", description: "내 프로필 방문자를 확인하는 기능",        price: 300 },
-];
-
-const CATEGORIES: { id: ShopCategory; label: string }[] = [
-  { id: "all",     label: "전체" },
-  { id: "profile", label: "프로필 꾸미기" },
-  { id: "title",   label: "특별 칭호" },
-  { id: "emoji",   label: "이모지" },
-  { id: "feature", label: "특별 기능" },
+// ─── 카테고리(슬롯) ─────────────────────────────────────────────────
+const TABS: { id: ItemSlot; label: string; emoji: string }[] = [
+  { id: "bg", label: "배경", emoji: "🎨" },
+  { id: "frame", label: "테두리", emoji: "⭕" },
+  { id: "nameEffect", label: "이름 효과", emoji: "✏️" },
+  { id: "bannerEffect", label: "배너 효과", emoji: "🌸" },
+  { id: "title", label: "칭호", emoji: "🏷️" },
+  { id: "sticker", label: "스티커", emoji: "⭐" },
 ];
 
 const EARN_TIPS = [
   { emoji: "📅", text: "매일 출석", reward: "+50" },
+  { emoji: "🎮", text: "미니게임", reward: "+50" },
   { emoji: "📝", text: "글쓰기", reward: "+15" },
   { emoji: "💬", text: "댓글", reward: "+5" },
-  { emoji: "🎮", text: "미니게임", reward: "+50" },
 ];
 
-// ─── 컴포넌트 ───────────────────────────────────────────────────────
+// 슬롯별 미리보기
+function ItemPreview({ item }: { item: ShopItem }) {
+  switch (item.slot) {
+    case "bg":
+      return (
+        <div className="relative w-full h-14 rounded-xl overflow-hidden ring-1 ring-black/5 dark:ring-white/10">
+          <div className={`absolute inset-0 bg-gradient-to-br ${item.grad || ""}`} />
+        </div>
+      );
+    case "frame":
+      return (
+        <div className="w-full h-14 flex items-center justify-center">
+          <div className={`w-10 h-10 rounded-full bg-neutral-200 dark:bg-zinc-700 ring-offset-2 ring-offset-white dark:ring-offset-zinc-950 ${item.ring || ""}`} />
+        </div>
+      );
+    case "nameEffect":
+      return (
+        <div className="w-full h-14 flex items-center justify-center">
+          <span className={`text-[20px] font-extrabold ${item.nameClass || "text-neutral-800 dark:text-white"}`}>도리</span>
+        </div>
+      );
+    case "bannerEffect":
+      return (
+        <div className="relative w-full h-14 rounded-xl overflow-hidden bg-gradient-to-br from-[#F9954E]/15 to-sky-400/10 ring-1 ring-black/5 dark:ring-white/10">
+          {item.fx && item.fx !== "none" ? (
+            <BannerFx fx={item.fx} count={6} />
+          ) : (
+            <div className="absolute inset-0 flex items-center justify-center text-[11px] text-neutral-400">효과 없음</div>
+          )}
+        </div>
+      );
+    case "title":
+      return (
+        <div className="w-full h-14 flex items-center justify-center">
+          <span className="inline-flex items-center rounded-full px-2.5 py-1 text-[12px] font-bold text-white bg-[#F9954E]">{item.text}</span>
+        </div>
+      );
+    case "sticker":
+      return (
+        <div className="w-full h-14 flex items-center justify-center text-[34px] leading-none">{item.emoji}</div>
+      );
+    default:
+      return null;
+  }
+}
 
 export default function ShopPage() {
   const { session } = useAuth();
   const user = session?.user || null;
   const [mounted, setMounted] = useState(false);
 
-  const [activeCategory, setActiveCategory] = useState<ShopCategory>("all");
+  const [activeTab, setActiveTab] = useState<ItemSlot>("bg");
   const [balance, setBalance] = useState(0);
-  const [purchased, setPurchased] = useState<string[]>([]);
+  const [owned, setOwned] = useState<string[]>([]);
+  const [profile, setProfile] = useState<Profile | null>(null);
+  const [isPremium, setIsPremium] = useState(false);
   const [toast, setToast] = useState<{ type: "success" | "error"; msg: string } | null>(null);
   const [confirmItem, setConfirmItem] = useState<ShopItem | null>(null);
-  const [isPremium, setIsPremium] = useState(false);
+  const [busy, setBusy] = useState(false);
 
   useEffect(() => setMounted(true), []);
 
   const loadData = useCallback(() => {
     if (!user?.email) return;
     setBalance(getCottonCandyBalance(user.email));
-    setPurchased(getPurchasedItems(user.email));
+    setOwned(getOwnedShopItems(user.email));
     setIsPremium(isPremiumUser(user.email));
   }, [user?.email]);
 
-  useEffect(() => { if (mounted) loadData(); }, [mounted, loadData]);
+  // 장착 상태/스티커 파악을 위해 프로필(보유목록 포함) 로드
+  const loadProfile = useCallback(async () => {
+    const uid = currentUid();
+    if (!uid) return;
+    const p = await getProfile(uid);
+    setProfile(p);
+    // Firestore 보유목록과 로컬 캐시 병합
+    setOwned((prev) => Array.from(new Set([...(p.ownedItems || []), ...prev])));
+  }, []);
+
+  useEffect(() => {
+    if (mounted) {
+      loadData();
+      loadProfile();
+    }
+  }, [mounted, loadData, loadProfile]);
 
   useEffect(() => {
     if (typeof window === "undefined") return;
@@ -95,66 +131,87 @@ export default function ShopPage() {
 
   const showToast = (type: "success" | "error", msg: string) => {
     setToast({ type, msg });
-    setTimeout(() => setToast(null), 3000);
+    setTimeout(() => setToast(null), 2600);
+  };
+
+  const ownedSet = new Set(owned);
+  const isOwned = (it: ShopItem) => it.price === 0 || ownedSet.has(itemKey(it.slot, it.id));
+
+  // 현재 장착값(none 정규화)
+  const slotValue = (slot: ItemSlot): string => {
+    if (!profile) return "";
+    if (slot === "bg") return profile.bg || "aurora";
+    if (slot === "frame") return profile.frame || "none";
+    if (slot === "nameEffect") return profile.nameEffect || "none";
+    if (slot === "bannerEffect") return profile.bannerEffect || "none";
+    return "";
+  };
+  const isEquipped = (it: ShopItem): boolean => {
+    if (!profile) return false;
+    if (it.slot === "title") return !!it.text && profile.title === it.text;
+    if (it.slot === "sticker") return !!it.emoji && profile.stickers.includes(it.emoji);
+    return slotValue(it.slot) === it.id;
   };
 
   const handleBuy = (item: ShopItem) => {
-    if (!user?.email) { showToast("error", "로그인이 필요합니다."); return; }
+    if (!user?.email) { showToast("error", "로그인이 필요해요."); return; }
     setConfirmItem(item);
   };
 
-  const confirmBuy = () => {
-    if (!confirmItem || !user?.email) return;
-    const result = purchaseItem(user.email, confirmItem.id, confirmItem.price);
-    if (result.success) {
-      showToast("success", `${confirmItem.name} 구매 완료!`);
-      applyItemToProfile(user.email, confirmItem);
-      loadData();
+  const confirmBuy = async () => {
+    if (!confirmItem || !user?.email || busy) return;
+    setBusy(true);
+    const res = await purchaseShopItem(user.email, itemKey(confirmItem.slot, confirmItem.id), confirmItem.price);
+    setBusy(false);
+    if (res.success) {
+      showToast("success", `${confirmItem.name} 구매 완료! 바로 장착할 수 있어요`);
+      setBalance(res.balance);
+      setOwned((prev) => Array.from(new Set([...prev, itemKey(confirmItem.slot, confirmItem.id)])));
     } else {
-      showToast("error", result.message);
+      showToast("error", res.message);
     }
     setConfirmItem(null);
   };
 
-  // 구매한 아이템을 프로필에 즉시 반영
-  const applyItemToProfile = (email: string, item: ShopItem) => {
+  // 보유 아이템 장착/해제
+  const handleEquip = async (item: ShopItem) => {
+    if (busy) return;
+    setBusy(true);
     try {
-      const profileKey = `dori_profile_${email}`;
-      const raw = localStorage.getItem(profileKey);
-      if (!raw) return;
-      const profile = JSON.parse(raw);
-      const titleMap: Record<string, string> = {
-        "title_explorer": "AI 탐험가",
-        "title_master":   "DORI 마스터",
-        "title_hunter":   "트렌드 헌터",
-        "title_rich":     "솜사탕 부자",
-        "title_vip":      "⭐ VIP",
-      };
-      const borderMap: Record<string, string> = {
-        "border_gold":    "gold",
-        "border_rainbow": "rainbow",
-        "border_neon":    "neon",
-        "border_star":    "starlight",
-      };
-      if (titleMap[item.id]) profile.title = titleMap[item.id];
-      if (borderMap[item.id]) profile.profileBorderColor = borderMap[item.id];
-      if (item.id === "feature_visitor") profile.visitorFeature = true;
-      if (item.id === "feature_pin") profile.pinFeature = (profile.pinFeature || 0) + 1;
-      localStorage.setItem(profileKey, JSON.stringify(profile));
-      window.dispatchEvent(new CustomEvent("profileUpdated"));
-    } catch (e) {
-      console.error("프로필 반영 오류", e);
+      if (item.slot === "sticker") {
+        const cur = profile?.stickers || [];
+        const has = !!item.emoji && cur.includes(item.emoji);
+        let next: string[];
+        if (has) next = cur.filter((s) => s !== item.emoji);
+        else {
+          if (cur.length >= 6) { showToast("error", "스티커는 최대 6개까지 장착할 수 있어요."); setBusy(false); return; }
+          next = [...cur, item.emoji!];
+        }
+        const ok = await saveMyProfile({ stickers: next });
+        if (ok) { setProfile((p) => (p ? { ...p, stickers: next } : p)); showToast("success", has ? "스티커를 뗐어요" : "스티커를 붙였어요"); }
+      } else if (item.slot === "title") {
+        const equipped = isEquipped(item);
+        const nextTitle = equipped ? "" : item.text || "";
+        const ok = await saveMyProfile({ title: nextTitle });
+        if (ok) { setProfile((p) => (p ? { ...p, title: nextTitle } : p)); showToast("success", equipped ? "칭호를 내렸어요" : "칭호를 장착했어요"); }
+      } else {
+        const patch: Record<string, string> = {};
+        patch[item.slot] = item.id;
+        const ok = await saveMyProfile(patch as Parameters<typeof saveMyProfile>[0]);
+        if (ok) { setProfile((p) => (p ? { ...p, [item.slot]: item.id } as Profile : p)); showToast("success", "장착 완료!"); }
+      }
+    } finally {
+      setBusy(false);
     }
   };
 
-  const filteredItems =
-    activeCategory === "all" ? SHOP_ITEMS : SHOP_ITEMS.filter((i) => i.category === activeCategory);
+  // 각 슬롯의 전체 목록(무료 기본/none 포함 → 장착·효과끄기 가능, 유료는 구매 후 장착)
+  const visibleItems = itemsBySlot(activeTab);
 
   if (!mounted) return null;
 
   return (
     <main className="w-full min-h-screen">
-
       {/* 토스트 */}
       {toast && (
         <div className={`fixed top-20 left-1/2 -translate-x-1/2 z-[60] px-5 py-3 rounded-2xl font-bold text-[13px] shadow-xl ${toast.type === "success" ? "bg-[#F9954E] text-white" : "bg-neutral-900 text-white"}`}>
@@ -164,21 +221,17 @@ export default function ShopPage() {
 
       {/* 구매 확인 모달 */}
       {confirmItem && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4" onClick={() => setConfirmItem(null)}>
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4" onClick={() => !busy && setConfirmItem(null)}>
           <div className="bg-white dark:bg-zinc-900 rounded-[1.75rem] p-7 max-w-xs w-full shadow-2xl border border-neutral-200 dark:border-zinc-800" onClick={(e) => e.stopPropagation()}>
-            <div
-              className="w-16 h-16 rounded-2xl mx-auto mb-4 flex items-center justify-center text-[34px]"
-              style={{ backgroundColor: (confirmItem.color || "#F9954E") + "1a" }}
-            >
-              {confirmItem.emoji}
+            <div className="mb-4"><ItemPreview item={confirmItem} /></div>
+            <div className="flex items-center justify-center gap-2 mb-1">
+              <h3 className="text-[17px] font-extrabold text-center text-neutral-900 dark:text-white">{confirmItem.name}</h3>
+              <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${RARITY_META[confirmItem.rarity].badge}`}>{RARITY_META[confirmItem.rarity].label}</span>
             </div>
-            <h3 className="text-[17px] font-extrabold text-center text-neutral-900 dark:text-white mb-1">{confirmItem.name}</h3>
-            <p className="text-[13px] text-neutral-500 dark:text-zinc-400 text-center mb-5 break-keep">{confirmItem.description}</p>
+            <p className="text-[13px] text-neutral-500 dark:text-zinc-400 text-center mb-5 break-keep">{confirmItem.desc}</p>
 
             {isPremium ? (
-              <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl py-2.5 mb-5 text-center text-[13px] font-bold text-yellow-500">
-                💎 프리미엄 — 무료 구매
-              </div>
+              <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl py-2.5 mb-5 text-center text-[13px] font-bold text-yellow-500">💎 프리미엄 — 무료 획득</div>
             ) : (
               <div className="rounded-xl border border-neutral-100 dark:border-zinc-800 divide-y divide-neutral-100 dark:divide-zinc-800 mb-5">
                 <div className="flex items-center justify-between px-4 py-2.5">
@@ -195,15 +248,9 @@ export default function ShopPage() {
             )}
 
             <div className="flex gap-2.5">
-              <button onClick={() => setConfirmItem(null)} className="flex-1 py-3 rounded-xl border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-zinc-300 font-bold text-[13px] active:opacity-70 transition-opacity">
-                취소
-              </button>
-              <button
-                onClick={confirmBuy}
-                disabled={!isPremium && balance < confirmItem.price}
-                className="flex-1 py-3 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-[13px] transition-colors active:scale-95"
-              >
-                구매하기
+              <button onClick={() => setConfirmItem(null)} disabled={busy} className="flex-1 py-3 rounded-xl border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-zinc-300 font-bold text-[13px] active:opacity-70 disabled:opacity-50">취소</button>
+              <button onClick={confirmBuy} disabled={busy || (!isPremium && balance < confirmItem.price)} className="flex-1 py-3 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-[13px] transition-colors active:scale-95">
+                {busy ? "구매 중..." : "구매하기"}
               </button>
             </div>
           </div>
@@ -217,7 +264,7 @@ export default function ShopPage() {
           <CottonCandy className="w-8 h-8" /> 솜사탕 상점
         </h1>
         <p className="text-[14px] text-neutral-500 dark:text-neutral-500 leading-relaxed mb-5 break-keep">
-          모은 솜사탕으로 프로필을 꾸미고 특별한 아이템을 받아보세요.
+          모은 솜사탕으로 배경·테두리·이름효과·배너효과·칭호·스티커를 사서 코지홈을 나만의 공간으로 꾸며보세요.
         </p>
 
         {user ? (
@@ -231,41 +278,37 @@ export default function ShopPage() {
                 </p>
               </div>
             </div>
-            {isPremium ? (
-              <span className="text-[11px] font-bold px-3 py-1.5 rounded-full bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">💎 프리미엄</span>
-            ) : (
-              <Link href="/my" className="px-4 py-2.5 rounded-xl bg-[#F9954E] text-white text-[12px] font-bold active:opacity-85 transition-opacity">
-                더 모으기 →
-              </Link>
-            )}
+            <div className="flex items-center gap-2">
+              <Link href="/profile" className="px-3.5 py-2.5 rounded-xl border border-[#F9954E]/40 text-[#F9954E] text-[12px] font-bold active:opacity-85">코지홈 →</Link>
+              {isPremium ? (
+                <span className="text-[11px] font-bold px-3 py-2.5 rounded-xl bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">💎 프리미엄</span>
+              ) : (
+                <Link href="/my" className="px-3.5 py-2.5 rounded-xl bg-[#F9954E] text-white text-[12px] font-bold active:opacity-85">더 모으기</Link>
+              )}
+            </div>
           </div>
         ) : (
           <div className="flex items-center justify-between p-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-neutral-50/60 dark:bg-zinc-950">
-            <span className="text-[13px] font-medium text-neutral-500 dark:text-neutral-400 break-keep">로그인하면 아이템을 구매할 수 있어요</span>
+            <span className="text-[13px] font-medium text-neutral-500 dark:text-neutral-400 break-keep">로그인하면 아이템을 구매하고 꾸밀 수 있어요</span>
             <Link href="/login" className="px-4 py-2.5 rounded-xl bg-[#F9954E] text-white text-[12px] font-bold flex-shrink-0">로그인</Link>
           </div>
         )}
       </section>
 
-      {/* 카테고리 필터 */}
-      <div className="-mx-4 px-4 overflow-x-auto scrollbar-hide border-b border-neutral-100 dark:border-zinc-900">
-        <div className="flex gap-2 w-max pb-4">
-          {CATEGORIES.map((cat) => {
-            const active = activeCategory === cat.id;
-            const isAll = cat.id === "all";
+      {/* 카테고리 탭 */}
+      <div className="-mx-4 px-4 overflow-x-auto scrollbar-hide border-b border-neutral-100 dark:border-zinc-900 sticky top-14 bg-white/90 dark:bg-black/90 backdrop-blur z-30">
+        <div className="flex gap-2 w-max pb-4 pt-1">
+          {TABS.map((tab) => {
+            const active = activeTab === tab.id;
             return (
               <button
-                key={cat.id}
-                onClick={() => setActiveCategory(cat.id)}
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
                 className={`px-3.5 py-1.5 rounded-full text-[12px] font-bold border transition-colors whitespace-nowrap ${
-                  active
-                    ? isAll
-                      ? "bg-neutral-950 dark:bg-white border-neutral-950 dark:border-white text-white dark:text-neutral-950"
-                      : "bg-[#F9954E] border-[#F9954E] text-white"
-                    : "bg-white dark:bg-zinc-950 border-neutral-200 dark:border-zinc-700 text-neutral-500 dark:text-neutral-400"
+                  active ? "bg-[#F9954E] border-[#F9954E] text-white" : "bg-white dark:bg-zinc-950 border-neutral-200 dark:border-zinc-700 text-neutral-500 dark:text-neutral-400"
                 }`}
               >
-                {cat.label}
+                {tab.emoji} {tab.label}
               </button>
             );
           })}
@@ -275,53 +318,62 @@ export default function ShopPage() {
       {/* 상품 그리드 */}
       <section className="py-6 pb-20">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
-          {filteredItems.map((item) => {
-            const isBought = purchased.includes(item.id);
+          {visibleItems.map((item) => {
+            const ownedIt = isOwned(item);
+            const equipped = isEquipped(item);
             const affordable = isPremium || balance >= item.price;
-            const tint = item.color || "#F9954E";
+            const rm = RARITY_META[item.rarity];
             return (
               <div
-                key={item.id}
-                className={`flex flex-col p-4 rounded-2xl border bg-white dark:bg-zinc-950 transition-all ${
-                  isBought
-                    ? "border-[#F9954E]/40"
-                    : "border-neutral-100 dark:border-zinc-900 hover:border-[#F9954E]/30 hover:shadow-sm"
+                key={`${item.slot}:${item.id}`}
+                className={`flex flex-col p-3.5 rounded-2xl border bg-white dark:bg-zinc-950 transition-all ${
+                  equipped ? "border-[#F9954E] ring-1 ring-[#F9954E]/40" : ownedIt ? "border-[#F9954E]/30" : "border-neutral-100 dark:border-zinc-900 hover:border-[#F9954E]/30 hover:shadow-sm"
                 }`}
               >
-                <div className="flex items-start justify-between mb-3">
-                  <div
-                    className="w-11 h-11 rounded-xl flex items-center justify-center text-[22px] leading-none flex-shrink-0"
-                    style={{ backgroundColor: tint + "1f" }}
-                  >
-                    {item.emoji}
-                  </div>
-                  {isBought && (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#FFF5EB] dark:bg-[#F9954E]/10 text-[#F9954E]">
-                      보유중
-                    </span>
+                <div className="flex items-center justify-between mb-2">
+                  {item.rarity === "normal" ? (
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-400">기본</span>
+                  ) : (
+                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${rm.badge}`}>{rm.label}</span>
                   )}
+                  {equipped && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#FFF5EB] dark:bg-[#F9954E]/10 text-[#F9954E]">장착중</span>}
                 </div>
 
-                <h3 className="text-[14px] font-extrabold text-neutral-900 dark:text-white leading-tight">{item.name}</h3>
-                <p className="text-[12px] text-neutral-500 dark:text-neutral-400 mt-1 leading-relaxed line-clamp-2 break-keep">{item.description}</p>
+                <ItemPreview item={item} />
 
-                <div className="flex items-center justify-between mt-auto pt-3.5">
-                  <span className="flex items-center gap-1 text-[13px] font-black text-[#F9954E]">
-                    <CottonCandy className="w-4 h-4" />{item.price.toLocaleString()}
-                  </span>
-                  {isBought ? (
-                    <span className="text-[#F9954E] text-[11px] font-bold">✓ 보유</span>
+                <h3 className="text-[13px] font-extrabold text-neutral-900 dark:text-white leading-tight mt-2.5 truncate">{item.name}</h3>
+                <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5 leading-snug line-clamp-2 break-keep min-h-[28px]">{item.desc}</p>
+
+                <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-neutral-100 dark:border-zinc-900">
+                  {item.price > 0 ? (
+                    <span className="flex items-center gap-1 text-[12px] font-black text-[#F9954E]"><CottonCandy className="w-3.5 h-3.5" />{item.price.toLocaleString()}</span>
                   ) : (
+                    <span className="text-[11px] font-bold text-neutral-400">무료</span>
+                  )}
+
+                  {!ownedIt ? (
                     <button
                       onClick={() => handleBuy(item)}
                       disabled={!affordable}
-                      className={`px-3 py-1.5 rounded-lg text-[12px] font-bold transition-colors ${
-                        affordable
-                          ? "bg-[#F9954E] text-white hover:bg-[#E8832E]"
-                          : "bg-neutral-100 dark:bg-zinc-800 text-neutral-400 dark:text-zinc-500 cursor-not-allowed"
-                      }`}
+                      className={`px-3 py-1.5 rounded-lg text-[12px] font-bold transition-colors ${affordable ? "bg-[#F9954E] text-white hover:bg-[#E8832E]" : "bg-neutral-100 dark:bg-zinc-800 text-neutral-400 dark:text-zinc-500 cursor-not-allowed"}`}
                     >
                       {affordable ? "구매" : "부족"}
+                    </button>
+                  ) : !user ? (
+                    <span className="text-[#F9954E] text-[11px] font-bold">보유</span>
+                  ) : equipped && item.slot !== "sticker" ? (
+                    <span className="text-[11px] font-bold text-[#F9954E] px-2">✓ 장착</span>
+                  ) : (
+                    <button
+                      onClick={() => handleEquip(item)}
+                      disabled={busy}
+                      className={`px-3 py-1.5 rounded-lg text-[12px] font-bold transition-colors disabled:opacity-50 ${
+                        item.slot === "sticker" && equipped
+                          ? "bg-neutral-100 dark:bg-zinc-800 text-neutral-500"
+                          : "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900"
+                      }`}
+                    >
+                      {item.slot === "sticker" && equipped ? "떼기" : "장착"}
                     </button>
                   )}
                 </div>
@@ -330,12 +382,10 @@ export default function ShopPage() {
           })}
         </div>
 
-        {/* 솜사탕 획득 방법 (compact) */}
+        {/* 솜사탕 획득 방법 */}
         <div className="mt-8 p-5 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-neutral-50/50 dark:bg-zinc-950">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-[13px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-1.5">
-              <CottonCandy className="w-4 h-4" /> 솜사탕은 이렇게 모아요
-            </p>
+            <p className="text-[13px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-1.5"><CottonCandy className="w-4 h-4" /> 솜사탕은 이렇게 모아요</p>
             <Link href="/my" className="text-[12px] font-bold text-[#F9954E]">모으러 가기 →</Link>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">

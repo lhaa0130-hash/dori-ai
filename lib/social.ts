@@ -54,11 +54,15 @@ export interface Profile {
   frame: string;        // 아바타 테두리 스타일 id
   interests: string[];  // 관심사 태그
   stickers: string[];   // 배너 장식 스티커(이모지)
+  nameEffect: string;   // 이름 효과 id (상점 구매) — shopItems nameEffect
+  bannerEffect: string; // 배너 효과 id (상점 구매) — shopItems bannerEffect
+  ownedItems: string[]; // 보유한 코지홈 아이템(slot::id) — 상점에서 구매, 구매 함수가 기록
 }
 
 const DEFAULT_PROFILE = (uid: string, name = "사용자"): Profile => ({
   uid, name, bio: "", statusMsg: "", themeColor: "#F9954E", bg: "aurora", tier: 1, level: 1, exp: 0,
   mood: "", title: "", frame: "none", interests: [], stickers: [],
+  nameEffect: "", bannerEffect: "", ownedItems: [],
 });
 
 export async function getProfile(uid: string): Promise<Profile> {
@@ -81,6 +85,9 @@ export async function getProfile(uid: string): Promise<Profile> {
       frame: String(d.frame || "none"),
       interests: Array.isArray(d.interests) ? (d.interests as string[]).slice(0, 8) : [],
       stickers: Array.isArray(d.stickers) ? (d.stickers as string[]).slice(0, 6) : [],
+      nameEffect: String(d.nameEffect || ""),
+      bannerEffect: String(d.bannerEffect || ""),
+      ownedItems: Array.isArray(d.ownedItems) ? (d.ownedItems as string[]) : [],
     };
   } catch {
     return DEFAULT_PROFILE(uid);
@@ -88,7 +95,7 @@ export async function getProfile(uid: string): Promise<Profile> {
 }
 
 /** 내 프로필 일부 갱신(로그인 필요, users/{uid} merge) */
-export async function saveMyProfile(patch: Partial<Pick<Profile, "bio" | "statusMsg" | "themeColor" | "bg" | "name" | "photoURL" | "mood" | "title" | "frame" | "interests" | "stickers">>): Promise<boolean> {
+export async function saveMyProfile(patch: Partial<Pick<Profile, "bio" | "statusMsg" | "themeColor" | "bg" | "name" | "photoURL" | "mood" | "title" | "frame" | "interests" | "stickers" | "nameEffect" | "bannerEffect">>): Promise<boolean> {
   const uid = currentUid();
   if (!uid) return false;
   try {

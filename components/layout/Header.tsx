@@ -187,6 +187,9 @@ export default function Header() {
                       <Link href="/messages" className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
                         <MessageCircle className="w-4 h-4 text-[#F9954E]" /><span>메시지</span>
                       </Link>
+                      <Link href="/shop" className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
+                        <span className="w-4 text-center text-[#F9954E]">🍬</span><span>상점</span>
+                      </Link>
 
                       <div className="my-1 border-t border-neutral-100 dark:border-zinc-800" />
                       <p className="px-4 pt-1.5 pb-1 text-[9px] font-bold uppercase tracking-widest text-neutral-400">계정</p>
@@ -253,6 +256,9 @@ export default function Header() {
                 </Link>
                 <Link href="/messages" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white">
                   <MessageCircle className="w-4 h-4 text-[#F9954E]" /><span>메시지</span>
+                </Link>
+                <Link href="/shop" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white">
+                  <span className="w-4 text-center text-[#F9954E]">🍬</span><span>상점</span>
                 </Link>
 
                 {/* 관리 / 로그아웃 */}
