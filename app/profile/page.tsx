@@ -35,6 +35,7 @@ import {
   bgGradOf,
   frameRingOf,
   nameClassOf,
+  petEmojiOf,
   itemsBySlot,
   itemKey,
   FREE_STICKERS,
@@ -122,6 +123,7 @@ export default function ProfilePage() {
   const [editStickers, setEditStickers] = useState<string[]>([]);
   const [editNameEffect, setEditNameEffect] = useState("none");
   const [editBannerEffect, setEditBannerEffect] = useState("none");
+  const [editPet, setEditPet] = useState("");
   const [interestInput, setInterestInput] = useState("");
 
   const toggleInterest = (tag: string) => {
@@ -203,6 +205,7 @@ export default function ProfilePage() {
       setEditStickers(p.stickers || []);
       setEditNameEffect(p.nameEffect || "none");
       setEditBannerEffect(p.bannerEffect || "none");
+      setEditPet(p.pet || "");
     } catch {
       // getProfile 등은 내부에서 안전 처리됨
     } finally {
@@ -355,6 +358,7 @@ export default function ProfilePage() {
       stickers: editStickers.slice(0, 6),
       nameEffect: editNameEffect,
       bannerEffect: editBannerEffect,
+      pet: editPet,
     });
     setSaving(false);
     if (ok) {
@@ -486,6 +490,12 @@ export default function ProfilePage() {
           <div className={`absolute inset-0 ${bgGradOf(profile.bg)}`} aria-hidden />
           {profile.bannerEffect && profile.bannerEffect !== "none" && (
             <BannerFx id={profile.bannerEffect} />
+          )}
+          {/* 펫/캐릭터 — 배너 우하단에 둥실둥실 */}
+          {petEmojiOf(profile.pet) && (
+            <span className="absolute bottom-3 right-4 text-[44px] leading-none arcade-float drop-shadow-md select-none z-[1]" aria-hidden>
+              {petEmojiOf(profile.pet)}
+            </span>
           )}
           <div className="relative p-6">
             <div className="flex items-start gap-4">
@@ -845,6 +855,26 @@ export default function ProfilePage() {
                   ) : (
                     <span className="absolute inset-0 flex items-center justify-center text-[10px] text-neutral-400">없음</span>
                   )}
+                </PickTile>
+              ))}
+            </div>
+
+            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+              펫 · 캐릭터 <span className="font-normal text-neutral-400">코지홈에 함께 살아요</span>
+            </label>
+            <div className="grid grid-cols-4 gap-2 mb-5">
+              <button
+                type="button"
+                onClick={() => setEditPet("")}
+                className={`relative h-16 rounded-xl border overflow-hidden flex items-center justify-center text-[11px] font-bold transition-all ${
+                  editPet === "" ? "border-[#F9954E] ring-1 ring-[#F9954E]/50 text-[#F9954E]" : "border-neutral-100 dark:border-zinc-900 text-neutral-400"
+                }`}
+              >
+                없음
+              </button>
+              {itemsBySlot("pet").map((p) => (
+                <PickTile key={p.id} owned={isItemOwned(p)} selected={editPet === p.id} price={p.price} label={p.name} onSelect={() => setEditPet(p.id)}>
+                  <div className="w-full h-full flex items-center justify-center text-[28px] bg-neutral-50 dark:bg-zinc-900/50">{p.emoji}</div>
                 </PickTile>
               ))}
             </div>

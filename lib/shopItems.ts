@@ -11,7 +11,7 @@
 //    - frame.ring 은 아바타에 적용되는 ring 또는 box-shadow(.cozy-frame-*) 클래스.
 //    - 브라켓 안 콤마(shadow-[...rgba(,)...])는 JIT 미방출 → globals.css 클래스 사용.
 
-export type ItemSlot = "bg" | "frame" | "nameEffect" | "bannerEffect" | "title" | "sticker";
+export type ItemSlot = "bg" | "frame" | "nameEffect" | "bannerEffect" | "title" | "sticker" | "pet";
 export type Rarity = "normal" | "rare" | "epic" | "legend";
 
 export interface ShopItem {
@@ -360,6 +360,56 @@ export const SHOP_ITEMS: ShopItem[] = [
   { id: "st_wand", slot: "sticker", name: "마법봉", desc: "배너 스티커", price: 35, rarity: "epic", emoji: "🪄" },
   { id: "st_hibiscus", slot: "sticker", name: "히비스커스", desc: "배너 스티커", price: 25, rarity: "rare", emoji: "🌺" },
   { id: "st_dove", slot: "sticker", name: "비둘기", desc: "배너 스티커", price: 30, rarity: "epic", emoji: "🕊️" },
+
+  // ──── 미니룸 소품 스티커 (홈 꾸미기 감성) ────
+  { id: "st_plant", slot: "sticker", name: "화분", desc: "소품 스티커", price: 20, rarity: "rare", emoji: "🪴" },
+  { id: "st_sofa", slot: "sticker", name: "소파", desc: "소품 스티커", price: 30, rarity: "rare", emoji: "🛋️" },
+  { id: "st_chair", slot: "sticker", name: "의자", desc: "소품 스티커", price: 25, rarity: "rare", emoji: "🪑" },
+  { id: "st_candle", slot: "sticker", name: "양초", desc: "소품 스티커", price: 20, rarity: "rare", emoji: "🕯️" },
+  { id: "st_pic", slot: "sticker", name: "액자", desc: "소품 스티커", price: 25, rarity: "rare", emoji: "🖼️" },
+  { id: "st_lamp", slot: "sticker", name: "램프", desc: "소품 스티커", price: 20, rarity: "rare", emoji: "💡" },
+  { id: "st_window", slot: "sticker", name: "창문", desc: "소품 스티커", price: 25, rarity: "rare", emoji: "🪟" },
+  { id: "st_clock", slot: "sticker", name: "시계", desc: "소품 스티커", price: 25, rarity: "rare", emoji: "🕰️" },
+  { id: "st_books", slot: "sticker", name: "책더미", desc: "소품 스티커", price: 20, rarity: "rare", emoji: "📚" },
+  { id: "st_tv", slot: "sticker", name: "티비", desc: "소품 스티커", price: 30, rarity: "rare", emoji: "📺" },
+  { id: "st_bed", slot: "sticker", name: "침대", desc: "소품 스티커", price: 30, rarity: "rare", emoji: "🛏️" },
+  { id: "st_mirror", slot: "sticker", name: "거울", desc: "소품 스티커", price: 25, rarity: "rare", emoji: "🪞" },
+
+  // ════════ 펫 / 캐릭터 (pet) — 배너에 머무는 나만의 친구 ════════
+  // 무료
+  { id: "pet_cat", slot: "pet", name: "고양이", desc: "코지홈 단짝 펫", price: 0, rarity: "normal", emoji: "🐱" },
+  { id: "pet_dog", slot: "pet", name: "강아지", desc: "코지홈 단짝 펫", price: 0, rarity: "normal", emoji: "🐶" },
+  { id: "pet_chick", slot: "pet", name: "병아리", desc: "코지홈 단짝 펫", price: 0, rarity: "normal", emoji: "🐥" },
+  // 레어
+  { id: "pet_rabbit", slot: "pet", name: "토끼", desc: "코지홈 단짝 펫", price: 40, rarity: "rare", emoji: "🐰" },
+  { id: "pet_fox", slot: "pet", name: "여우", desc: "코지홈 단짝 펫", price: 40, rarity: "rare", emoji: "🦊" },
+  { id: "pet_panda", slot: "pet", name: "판다", desc: "코지홈 단짝 펫", price: 45, rarity: "rare", emoji: "🐼" },
+  { id: "pet_hamster", slot: "pet", name: "햄스터", desc: "코지홈 단짝 펫", price: 35, rarity: "rare", emoji: "🐹" },
+  { id: "pet_penguin", slot: "pet", name: "펭귄", desc: "코지홈 단짝 펫", price: 40, rarity: "rare", emoji: "🐧" },
+  { id: "pet_turtle", slot: "pet", name: "거북이", desc: "코지홈 단짝 펫", price: 35, rarity: "rare", emoji: "🐢" },
+  { id: "pet_frog", slot: "pet", name: "개구리", desc: "코지홈 단짝 펫", price: 35, rarity: "rare", emoji: "🐸" },
+  { id: "pet_hedgehog", slot: "pet", name: "고슴도치", desc: "코지홈 단짝 펫", price: 40, rarity: "rare", emoji: "🦔" },
+  { id: "pet_koala", slot: "pet", name: "코알라", desc: "코지홈 단짝 펫", price: 45, rarity: "rare", emoji: "🐨" },
+  { id: "pet_raccoon", slot: "pet", name: "너구리", desc: "코지홈 단짝 펫", price: 40, rarity: "rare", emoji: "🦝" },
+  { id: "pet_bear", slot: "pet", name: "곰", desc: "코지홈 단짝 펫", price: 40, rarity: "rare", emoji: "🐻" },
+  { id: "pet_pig", slot: "pet", name: "돼지", desc: "코지홈 단짝 펫", price: 35, rarity: "rare", emoji: "🐷" },
+  { id: "pet_butterfly", slot: "pet", name: "나비요정", desc: "코지홈 단짝 펫", price: 45, rarity: "rare", emoji: "🦋" },
+  // 에픽
+  { id: "pet_owl", slot: "pet", name: "부엉이", desc: "코지홈 단짝 펫", price: 100, rarity: "epic", emoji: "🦉" },
+  { id: "pet_lion", slot: "pet", name: "사자", desc: "코지홈 단짝 펫", price: 120, rarity: "epic", emoji: "🦁" },
+  { id: "pet_tiger", slot: "pet", name: "호랑이", desc: "코지홈 단짝 펫", price: 120, rarity: "epic", emoji: "🐯" },
+  { id: "pet_octopus", slot: "pet", name: "문어", desc: "코지홈 단짝 펫", price: 90, rarity: "epic", emoji: "🐙" },
+  { id: "pet_dolphin", slot: "pet", name: "돌고래", desc: "코지홈 단짝 펫", price: 100, rarity: "epic", emoji: "🐬" },
+  { id: "pet_whale", slot: "pet", name: "고래", desc: "코지홈 단짝 펫", price: 110, rarity: "epic", emoji: "🐳" },
+  { id: "pet_ghost", slot: "pet", name: "꼬마 유령", desc: "코지홈 단짝 펫", price: 90, rarity: "epic", emoji: "👻" },
+  { id: "pet_robot", slot: "pet", name: "로봇", desc: "코지홈 단짝 펫", price: 130, rarity: "epic", emoji: "🤖" },
+  { id: "pet_teddy", slot: "pet", name: "곰인형", desc: "코지홈 단짝 펫", price: 90, rarity: "epic", emoji: "🧸" },
+  { id: "pet_polar", slot: "pet", name: "북극곰", desc: "코지홈 단짝 펫", price: 100, rarity: "epic", emoji: "🐻‍❄️" },
+  // 레전드
+  { id: "pet_unicorn", slot: "pet", name: "유니콘", desc: "전설의 펫", price: 300, rarity: "legend", emoji: "🦄" },
+  { id: "pet_dragon", slot: "pet", name: "드래곤", desc: "전설의 펫", price: 450, rarity: "legend", emoji: "🐉" },
+  { id: "pet_dino", slot: "pet", name: "공룡", desc: "전설의 펫", price: 380, rarity: "legend", emoji: "🦕" },
+  { id: "pet_alien", slot: "pet", name: "외계친구", desc: "전설의 펫", price: 320, rarity: "legend", emoji: "👾" },
 ];
 
 // ─── 무료 배너 스티커(이모지) — 코지홈 기본 제공(보유 불필요) ──────────
@@ -402,6 +452,9 @@ export function nameClassOf(id: string): string {
 }
 export function bannerFxOf(id: string): string {
   return getItem("bannerEffect", id)?.fx || "none";
+}
+export function petEmojiOf(id: string): string {
+  return getItem("pet", id)?.emoji || "";
 }
 
 /** 무료(기본) 아이템 + 보유한 프리미엄 아이템만 반환 (장착 가능 목록) */

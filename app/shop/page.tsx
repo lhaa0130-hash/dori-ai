@@ -6,6 +6,7 @@ import Link from "next/link";
 import CottonCandy from "@/components/icons/CottonCandy";
 import BannerFx from "@/components/cozy/BannerFx";
 import MySpaceTabs from "@/components/cozy/MySpaceTabs";
+import CozyPreview, { type CozyLook } from "@/components/cozy/CozyPreview";
 import {
   getCottonCandyBalance,
   getOwnedShopItems,
@@ -23,12 +24,13 @@ import { getProfile, saveMyProfile, currentUid, type Profile } from "@/lib/socia
 
 // ─── 카테고리(슬롯) ─────────────────────────────────────────────────
 const TABS: { id: ItemSlot; label: string; emoji: string }[] = [
+  { id: "pet", label: "펫·캐릭터", emoji: "🐾" },
   { id: "bg", label: "배경", emoji: "🎨" },
   { id: "frame", label: "테두리", emoji: "⭕" },
   { id: "nameEffect", label: "이름 효과", emoji: "✏️" },
   { id: "bannerEffect", label: "배너 효과", emoji: "🌸" },
   { id: "title", label: "칭호", emoji: "🏷️" },
-  { id: "sticker", label: "스티커", emoji: "⭐" },
+  { id: "sticker", label: "스티커·소품", emoji: "⭐" },
 ];
 
 const EARN_TIPS = [
@@ -79,6 +81,10 @@ function ItemPreview({ item }: { item: ShopItem }) {
       return (
         <div className="w-full h-14 flex items-center justify-center text-[34px] leading-none">{item.emoji}</div>
       );
+    case "pet":
+      return (
+        <div className="w-full h-14 flex items-center justify-center text-[36px] leading-none arcade-float">{item.emoji}</div>
+      );
     default:
       return null;
   }
@@ -98,6 +104,7 @@ export default function ShopPage() {
   const [confirmItem, setConfirmItem] = useState<ShopItem | null>(null);
   const [busy, setBusy] = useState(false);
   const [priceFilter, setPriceFilter] = useState<"all" | "free" | "paid">("all");
+  const [tryOn, setTryOn] = useState<ShopItem | null>(null);
 
   useEffect(() => setMounted(true), []);
 
@@ -146,6 +153,7 @@ export default function ShopPage() {
     if (slot === "frame") return profile.frame || "none";
     if (slot === "nameEffect") return profile.nameEffect || "none";
     if (slot === "bannerEffect") return profile.bannerEffect || "none";
+    if (slot === "pet") return profile.pet || "";
     return "";
   };
   const isEquipped = (it: ShopItem): boolean => {
@@ -153,6 +161,37 @@ export default function ShopPage() {
     if (it.slot === "title") return !!it.text && profile.title === it.text;
     if (it.slot === "sticker") return !!it.emoji && profile.stickers.includes(it.emoji);
     return slotValue(it.slot) === it.id;
+  };
+
+  // 현재 코지홈 룩(미리보기용). over 가 있으면 해당 아이템을 입혀본 모습으로.
+  const buildLook = (over?: ShopItem | null): CozyLook => {
+    const base: CozyLook = {
+      name: profile?.name || user?.name || "나",
+      photoURL: profile?.photoURL,
+      bg: profile?.bg || "aurora",
+      frame: profile?.frame || "none",
+      nameEffect: profile?.nameEffect || "none",
+      title: profile?.title || "",
+      mood: profile?.mood || "",
+      stickers: (profile?.stickers || []).slice(0, 6),
+      pet: profile?.pet || "",
+      bannerEffect: profile?.bannerEffect || "none",
+      accent: profile?.themeColor || "#F9954E",
+    };
+    if (!over) return base;
+    if (over.slot === "bg") base.bg = over.id;
+    else if (over.slot === "frame") base.frame = over.id;
+    else if (over.slot === "nameEffect") base.nameEffect = over.id;
+    else if (over.slot === "bannerEffect") base.bannerEffect = over.id;
+    else if (over.slot === "pet") base.pet = over.id;
+    else if (over.slot === "title") base.title = over.text || "";
+    else if (over.slot === "sticker" && over.emoji) base.stickers = Array.from(new Set([...base.stickers, over.emoji])).slice(0, 6);
+    return base;
+  };
+
+  const startTryOn = (item: ShopItem) => {
+    setTryOn(item);
+    try { window.scrollTo({ top: 0, behavior: "smooth" }); } catch { /* noop */ }
   };
 
   const handleBuy = (item: ShopItem) => {
@@ -230,7 +269,16 @@ export default function ShopPage() {
       {confirmItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4" onClick={() => !busy && setConfirmItem(null)}>
           <div className="bg-white dark:bg-zinc-900 rounded-[1.75rem] p-7 max-w-xs w-full shadow-2xl border border-neutral-200 dark:border-zinc-800" onClick={(e) => e.stopPropagation()}>
-            <div className="mb-4"><ItemPreview item={confirmItem} /></div>
+            <div className="mb-4">
+              {profile ? (
+                <>
+                  <p className="text-[11px] font-bold text-neutral-400 mb-1.5 text-center">적용하면 이렇게 보여요</p>
+                  <CozyPreview look={buildLook(confirmItem)} />
+                </>
+              ) : (
+                <ItemPreview item={confirmItem} />
+              )}
+            </div>
             <div className="flex items-center justify-center gap-2 mb-1">
               <h3 className="text-[17px] font-extrabold text-center text-neutral-900 dark:text-white">{confirmItem.name}</h3>
               <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${RARITY_META[confirmItem.rarity].badge}`}>{RARITY_META[confirmItem.rarity].label}</span>
@@ -301,6 +349,44 @@ export default function ShopPage() {
           </div>
         )}
       </section>
+
+      {/* 입어보기 미리보기 — 내 코지홈에 적용된 모습 */}
+      {user && profile && (
+        <section className="pb-4">
+          <div className="flex items-center justify-between mb-2">
+            <p className="text-[12px] font-extrabold text-neutral-900 dark:text-white">
+              {tryOn ? <>미리보기 · <span className="text-[#F9954E]">{tryOn.name}</span></> : "내 코지홈 미리보기"}
+            </p>
+            {tryOn ? (
+              <div className="flex items-center gap-1.5">
+                {!isOwned(tryOn) && (
+                  <button
+                    onClick={() => { handleBuy(tryOn); }}
+                    className="px-3 py-1.5 rounded-full bg-[#F9954E] text-white text-[11px] font-bold active:opacity-85"
+                  >
+                    🛒 구매 {tryOn.price > 0 ? `(${tryOn.price.toLocaleString()})` : ""}
+                  </button>
+                )}
+                {isOwned(tryOn) && !isEquipped(tryOn) && (
+                  <button
+                    onClick={() => handleEquip(tryOn)}
+                    disabled={busy}
+                    className="px-3 py-1.5 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-[11px] font-bold active:opacity-85 disabled:opacity-50"
+                  >
+                    장착
+                  </button>
+                )}
+                <button onClick={() => setTryOn(null)} className="px-3 py-1.5 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-500 text-[11px] font-bold active:opacity-85">
+                  원래대로
+                </button>
+              </div>
+            ) : (
+              <span className="text-[11px] text-neutral-400">아이템을 눌러 입어보세요</span>
+            )}
+          </div>
+          <CozyPreview look={buildLook(tryOn)} />
+        </section>
+      )}
 
       {/* 카테고리 탭 */}
       <div className="-mx-4 px-4 overflow-x-auto scrollbar-hide border-b border-neutral-100 dark:border-zinc-900 sticky top-14 bg-white/90 dark:bg-black/90 backdrop-blur z-30">
@@ -384,10 +470,17 @@ export default function ShopPage() {
                   {equipped && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#FFF5EB] dark:bg-[#F9954E]/10 text-[#F9954E]">장착중</span>}
                 </div>
 
-                <ItemPreview item={item} />
-
-                <h3 className="text-[13px] font-extrabold text-neutral-900 dark:text-white leading-tight mt-2.5 truncate">{item.name}</h3>
-                <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5 leading-snug line-clamp-2 break-keep min-h-[28px]">{item.desc}</p>
+                <button
+                  type="button"
+                  onClick={() => (user && profile ? startTryOn(item) : showToast("error", "로그인하면 입어볼 수 있어요"))}
+                  className="block w-full text-left active:opacity-80"
+                  title="입어보기"
+                >
+                  <ItemPreview item={item} />
+                  <h3 className="text-[13px] font-extrabold text-neutral-900 dark:text-white leading-tight mt-2.5 truncate">{item.name}</h3>
+                  <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5 leading-snug line-clamp-2 break-keep min-h-[28px]">{item.desc}</p>
+                  <p className="text-[10px] font-bold text-[#F9954E] mt-1">👁 입어보기</p>
+                </button>
 
                 <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-neutral-100 dark:border-zinc-900">
                   {item.price > 0 ? (
