@@ -35,23 +35,30 @@ function todayStr(): string {
 }
 
 // ─── 프로필(코지홈) ───────────────────────────────────────────
-export type BgStyle = "aurora" | "sunset" | "mono" | "mint" | "berry" | "night";
+export type BgStyle = string; // 배경 프리셋 id (프로필 페이지 BG_PRESETS 참조)
 
 export interface Profile {
   uid: string;
   name: string;
   photoURL?: string;
-  bio: string;        // 자기소개
-  statusMsg: string;  // 상태메시지(한 줄)
-  themeColor: string; // 대표색 hex
-  bg: BgStyle;        // 배경 프리셋
-  tier: number;       // 등급(1~) — users/{uid}.tier
-  level: number;      // 레벨 — users/{uid}.level
-  exp: number;        // 경험치(doriExp)
+  bio: string;          // 자기소개
+  statusMsg: string;    // 상태메시지(한 줄)
+  themeColor: string;   // 대표색 hex
+  bg: BgStyle;          // 배경 프리셋
+  tier: number;         // 등급(1~) — users/{uid}.tier
+  level: number;        // 레벨 — users/{uid}.level
+  exp: number;          // 경험치(doriExp)
+  // ── 코지홈 꾸미기 ──
+  mood: string;         // 무드 이모지 (이름 옆)
+  title: string;        // 칭호/한 줄 명함
+  frame: string;        // 아바타 테두리 스타일 id
+  interests: string[];  // 관심사 태그
+  stickers: string[];   // 배너 장식 스티커(이모지)
 }
 
 const DEFAULT_PROFILE = (uid: string, name = "사용자"): Profile => ({
   uid, name, bio: "", statusMsg: "", themeColor: "#F9954E", bg: "aurora", tier: 1, level: 1, exp: 0,
+  mood: "", title: "", frame: "none", interests: [], stickers: [],
 });
 
 export async function getProfile(uid: string): Promise<Profile> {
@@ -69,6 +76,11 @@ export async function getProfile(uid: string): Promise<Profile> {
       tier: Number(d.tier || 1),
       level: Number(d.level || 1),
       exp: Number(d.doriExp || 0),
+      mood: String(d.mood || ""),
+      title: String(d.title || ""),
+      frame: String(d.frame || "none"),
+      interests: Array.isArray(d.interests) ? (d.interests as string[]).slice(0, 8) : [],
+      stickers: Array.isArray(d.stickers) ? (d.stickers as string[]).slice(0, 6) : [],
     };
   } catch {
     return DEFAULT_PROFILE(uid);
@@ -76,7 +88,7 @@ export async function getProfile(uid: string): Promise<Profile> {
 }
 
 /** 내 프로필 일부 갱신(로그인 필요, users/{uid} merge) */
-export async function saveMyProfile(patch: Partial<Pick<Profile, "bio" | "statusMsg" | "themeColor" | "bg" | "name" | "photoURL">>): Promise<boolean> {
+export async function saveMyProfile(patch: Partial<Pick<Profile, "bio" | "statusMsg" | "themeColor" | "bg" | "name" | "photoURL" | "mood" | "title" | "frame" | "interests" | "stickers">>): Promise<boolean> {
   const uid = currentUid();
   if (!uid) return false;
   try {

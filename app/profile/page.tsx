@@ -28,11 +28,17 @@ import { TIER_INFO, type UserTier } from "@/lib/userProfile";
 // ── 배경 프리셋 → 그라데이션 클래스(직접 정의) ───────────────────
 const BG_PRESETS: { id: BgStyle; label: string; grad: string }[] = [
   { id: "aurora", label: "오로라", grad: "from-[#F9954E]/20 via-fuchsia-500/10 to-sky-500/20" },
-  { id: "sunset", label: "선셋", grad: "from-orange-500/20 to-rose-500/20" },
-  { id: "mono", label: "모노", grad: "from-white/10 to-white/5" },
-  { id: "mint", label: "민트", grad: "from-emerald-400/20 to-teal-500/10" },
-  { id: "berry", label: "베리", grad: "from-fuchsia-500/20 to-purple-600/15" },
-  { id: "night", label: "나이트", grad: "from-indigo-600/20 to-slate-800/30" },
+  { id: "sunset", label: "선셋",   grad: "from-orange-500/25 to-rose-500/20" },
+  { id: "peach",  label: "피치",   grad: "from-[#FFD9B0]/50 to-[#F9954E]/25" },
+  { id: "candy",  label: "캔디",   grad: "from-pink-400/25 to-purple-400/20" },
+  { id: "mint",   label: "민트",   grad: "from-emerald-400/25 to-teal-500/15" },
+  { id: "ocean",  label: "오션",   grad: "from-sky-400/25 to-blue-600/20" },
+  { id: "forest", label: "포레스트", grad: "from-green-500/25 to-emerald-700/20" },
+  { id: "berry",  label: "베리",   grad: "from-fuchsia-500/25 to-purple-600/20" },
+  { id: "galaxy", label: "갤럭시", grad: "from-indigo-600/30 via-purple-600/20 to-slate-900/40" },
+  { id: "night",  label: "나이트", grad: "from-indigo-600/20 to-slate-800/35" },
+  { id: "gold",   label: "골드",   grad: "from-amber-300/35 to-yellow-600/20" },
+  { id: "mono",   label: "모노",   grad: "from-neutral-400/15 to-neutral-600/10" },
 ];
 
 function bgGrad(bg: BgStyle): string {
@@ -40,7 +46,25 @@ function bgGrad(bg: BgStyle): string {
 }
 
 // 대표색 팔레트
-const COLOR_PRESETS = ["#F9954E", "#22c55e", "#3b82f6", "#a855f7", "#ef4444", "#14b8a6"];
+const COLOR_PRESETS = ["#F9954E", "#22c55e", "#3b82f6", "#a855f7", "#ef4444", "#14b8a6", "#ec4899", "#eab308", "#6366f1", "#f97316"];
+
+// 아바타 테두리 스타일
+const FRAMES: { id: string; label: string; ring: string }[] = [
+  { id: "none",   label: "기본",   ring: "ring-2 ring-white dark:ring-zinc-900" },
+  { id: "orange", label: "오렌지", ring: "ring-[3px] ring-[#F9954E]" },
+  { id: "gold",   label: "골드",   ring: "ring-[3px] ring-amber-400" },
+  { id: "neon",   label: "네온",   ring: "ring-[3px] ring-fuchsia-400" },
+  { id: "mint",   label: "민트",   ring: "ring-[3px] ring-emerald-400" },
+  { id: "sky",    label: "스카이", ring: "ring-[3px] ring-sky-400" },
+];
+function frameRing(id: string): string {
+  return (FRAMES.find((f) => f.id === id) || FRAMES[0]).ring;
+}
+
+// 무드 이모지 / 스티커 / 관심사 후보
+const MOODS = ["😎", "🥰", "😴", "🔥", "🎮", "✨", "😌", "🤔", "💪", "🍀", "🌙", "☕"];
+const STICKER_CHOICES = ["⭐", "🍊", "🐾", "🌸", "🎀", "🔥", "💎", "🍭", "🦊", "🌟", "👑", "🍀", "🤖", "💛", "🌈", "🎮"];
+const INTEREST_SUGGESTIONS = ["AI", "코딩", "게임", "음악", "영화", "그림", "글쓰기", "사진", "독서", "운동", "요리", "여행", "주식", "디자인", "반려동물"];
 
 function fmtDate(at: number): string {
   if (!at) return "";
@@ -71,6 +95,25 @@ export default function ProfilePage() {
   const [editStatus, setEditStatus] = useState("");
   const [editColor, setEditColor] = useState("#F9954E");
   const [editBg, setEditBg] = useState<BgStyle>("aurora");
+  const [editMood, setEditMood] = useState("");
+  const [editTitle, setEditTitle] = useState("");
+  const [editFrame, setEditFrame] = useState("none");
+  const [editInterests, setEditInterests] = useState<string[]>([]);
+  const [editStickers, setEditStickers] = useState<string[]>([]);
+  const [interestInput, setInterestInput] = useState("");
+
+  const toggleInterest = (tag: string) => {
+    const t = tag.trim().replace(/^#/, "").slice(0, 12);
+    if (!t) return;
+    setEditInterests((prev) =>
+      prev.includes(t) ? prev.filter((x) => x !== t) : prev.length >= 8 ? prev : [...prev, t]
+    );
+  };
+  const toggleSticker = (s: string) => {
+    setEditStickers((prev) =>
+      prev.includes(s) ? prev.filter((x) => x !== s) : prev.length >= 6 ? prev : [...prev, s]
+    );
+  };
   const [saving, setSaving] = useState(false);
 
   // 방명록 입력
@@ -120,6 +163,11 @@ export default function ProfilePage() {
       setEditStatus(p.statusMsg);
       setEditColor(p.themeColor || "#F9954E");
       setEditBg(p.bg || "aurora");
+      setEditMood(p.mood || "");
+      setEditTitle(p.title || "");
+      setEditFrame(p.frame || "none");
+      setEditInterests(p.interests || []);
+      setEditStickers(p.stickers || []);
     } catch {
       // getProfile 등은 내부에서 안전 처리됨
     } finally {
@@ -214,6 +262,11 @@ export default function ProfilePage() {
       statusMsg: editStatus.slice(0, 80),
       themeColor: editColor,
       bg: editBg,
+      mood: editMood,
+      title: editTitle.slice(0, 24),
+      frame: editFrame,
+      interests: editInterests.slice(0, 8),
+      stickers: editStickers.slice(0, 6),
     });
     setSaving(false);
     if (ok) {
@@ -310,11 +363,11 @@ export default function ProfilePage() {
                   <img
                     src={profile.photoURL}
                     alt={profile.name}
-                    className="w-16 h-16 rounded-full object-cover ring-2 ring-white dark:ring-zinc-900 shadow"
+                    className={`w-16 h-16 rounded-full object-cover shadow ring-offset-2 ring-offset-white dark:ring-offset-zinc-950 ${frameRing(profile.frame)}`}
                   />
                 ) : (
                   <div
-                    className="w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-extrabold shadow ring-2 ring-white dark:ring-zinc-900"
+                    className={`w-16 h-16 rounded-full flex items-center justify-center text-white text-2xl font-extrabold shadow ring-offset-2 ring-offset-white dark:ring-offset-zinc-950 ${frameRing(profile.frame)}`}
                     style={{ backgroundColor: accent }}
                   >
                     {avatarLetter}
@@ -348,8 +401,17 @@ export default function ProfilePage() {
 
               <div className="flex-1 min-w-0">
                 <h1 className="text-[22px] font-extrabold tracking-tight text-neutral-900 dark:text-white truncate">
+                  {profile.mood && <span className="mr-1">{profile.mood}</span>}
                   {profile.name}
                 </h1>
+                {profile.title && (
+                  <span
+                    className="inline-flex items-center rounded-full px-2 py-0.5 mt-1 text-[11px] font-bold text-white"
+                    style={{ backgroundColor: accent }}
+                  >
+                    {profile.title}
+                  </span>
+                )}
                 {/* 등급(티어) + 레벨 */}
                 <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
                   <span
@@ -398,6 +460,29 @@ export default function ProfilePage() {
               <p className="mt-4 text-[14px] leading-relaxed text-neutral-500 dark:text-neutral-400 whitespace-pre-wrap">
                 {profile.bio}
               </p>
+            )}
+
+            {/* 관심사 칩 */}
+            {profile.interests.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-1.5">
+                {profile.interests.map((it) => (
+                  <span
+                    key={it}
+                    className="inline-flex items-center rounded-full px-2.5 py-1 text-[12px] font-semibold bg-white/70 dark:bg-zinc-900/70 backdrop-blur text-neutral-700 dark:text-neutral-200 ring-1 ring-black/5 dark:ring-white/10"
+                  >
+                    #{it}
+                  </span>
+                ))}
+              </div>
+            )}
+
+            {/* 배너 스티커 */}
+            {profile.stickers.length > 0 && (
+              <div className="mt-4 flex flex-wrap gap-1.5 text-[26px] leading-none select-none">
+                {profile.stickers.map((s, i) => (
+                  <span key={`${s}-${i}`} className="drop-shadow-sm">{s}</span>
+                ))}
+              </div>
             )}
 
             {/* 액션 버튼 */}
@@ -466,9 +551,45 @@ export default function ProfilePage() {
             />
 
             <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+              오늘의 기분 <span className="font-normal text-neutral-400">이름 옆에 표시돼요</span>
+            </label>
+            <div className="flex flex-wrap gap-1.5 mb-4">
+              <button
+                onClick={() => setEditMood("")}
+                className={`w-9 h-9 rounded-xl text-[12px] font-bold flex items-center justify-center transition-colors ${
+                  editMood === "" ? "bg-[#F9954E] text-white" : "bg-neutral-100 dark:bg-zinc-900 text-neutral-400"
+                }`}
+              >
+                없음
+              </button>
+              {MOODS.map((m) => (
+                <button
+                  key={m}
+                  onClick={() => setEditMood(m)}
+                  className={`w-9 h-9 rounded-xl text-[18px] flex items-center justify-center transition-transform ${
+                    editMood === m ? "bg-[#F9954E]/15 ring-2 ring-[#F9954E] scale-105" : "bg-neutral-100 dark:bg-zinc-900"
+                  }`}
+                >
+                  {m}
+                </button>
+              ))}
+            </div>
+
+            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
+              칭호 <span className="font-normal text-neutral-400">이름 아래 표시돼요</span>
+            </label>
+            <input
+              value={editTitle}
+              onChange={(e) => setEditTitle(e.target.value)}
+              maxLength={24}
+              placeholder="예) 도리 덕후 · AI 탐험가"
+              className="w-full mb-4 px-3 py-2.5 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
+            />
+
+            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
               대표색
             </label>
-            <div className="flex gap-2 mb-4">
+            <div className="flex flex-wrap gap-2 mb-4">
               {COLOR_PRESETS.map((c) => (
                 <button
                   key={c}
@@ -479,6 +600,26 @@ export default function ProfilePage() {
                   }`}
                   style={{ backgroundColor: c }}
                 />
+              ))}
+            </div>
+
+            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+              아바타 테두리
+            </label>
+            <div className="flex flex-wrap gap-2 mb-4">
+              {FRAMES.map((f) => (
+                <button
+                  key={f.id}
+                  onClick={() => setEditFrame(f.id)}
+                  className={`px-3 h-9 rounded-xl text-[12px] font-bold inline-flex items-center gap-2 transition-colors ${
+                    editFrame === f.id
+                      ? "bg-[#F9954E] text-white"
+                      : "bg-neutral-100 dark:bg-zinc-900 text-neutral-600 dark:text-neutral-300"
+                  }`}
+                >
+                  <span className={`w-4 h-4 rounded-full bg-white dark:bg-zinc-700 ring-offset-1 ring-offset-white dark:ring-offset-zinc-900 ${frameRing(f.id)}`} />
+                  {f.label}
+                </button>
               ))}
             </div>
 
@@ -500,6 +641,68 @@ export default function ProfilePage() {
                   <span className="relative text-neutral-700 dark:text-neutral-200">{p.label}</span>
                 </button>
               ))}
+            </div>
+
+            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+              관심사 <span className="font-normal text-neutral-400">최대 8개</span>
+            </label>
+            <div className="flex gap-2 mb-2">
+              <input
+                value={interestInput}
+                onChange={(e) => setInterestInput(e.target.value)}
+                onKeyDown={(e) => {
+                  if (e.key === "Enter") {
+                    e.preventDefault();
+                    toggleInterest(interestInput);
+                    setInterestInput("");
+                  }
+                }}
+                maxLength={12}
+                placeholder="직접 추가 (예: 그림)"
+                className="flex-1 px-3 py-2 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-[13px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
+              />
+              <button
+                onClick={() => { toggleInterest(interestInput); setInterestInput(""); }}
+                className="px-4 rounded-xl bg-neutral-200 dark:bg-zinc-800 text-neutral-700 dark:text-neutral-200 text-[13px] font-bold active:opacity-85"
+              >
+                추가
+              </button>
+            </div>
+            <div className="flex flex-wrap gap-1.5 mb-4">
+              {Array.from(new Set([...editInterests, ...INTEREST_SUGGESTIONS])).map((tag) => {
+                const on = editInterests.includes(tag);
+                return (
+                  <button
+                    key={tag}
+                    onClick={() => toggleInterest(tag)}
+                    className={`px-2.5 py-1 rounded-full text-[12px] font-semibold transition-colors ${
+                      on ? "bg-[#F9954E] text-white" : "bg-neutral-100 dark:bg-zinc-900 text-neutral-600 dark:text-neutral-300"
+                    }`}
+                  >
+                    #{tag}
+                  </button>
+                );
+              })}
+            </div>
+
+            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+              배너 스티커 <span className="font-normal text-neutral-400">최대 6개</span>
+            </label>
+            <div className="flex flex-wrap gap-1.5 mb-5">
+              {STICKER_CHOICES.map((s) => {
+                const on = editStickers.includes(s);
+                return (
+                  <button
+                    key={s}
+                    onClick={() => toggleSticker(s)}
+                    className={`w-9 h-9 rounded-xl text-[18px] flex items-center justify-center transition-transform ${
+                      on ? "bg-[#F9954E]/15 ring-2 ring-[#F9954E] scale-105" : "bg-neutral-100 dark:bg-zinc-900"
+                    }`}
+                  >
+                    {s}
+                  </button>
+                );
+              })}
             </div>
 
             <button
