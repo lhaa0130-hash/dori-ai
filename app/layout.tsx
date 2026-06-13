@@ -47,7 +47,6 @@ export const metadata = {
     ],
   },
   other: {
-    'pretendard-font': 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css',
     'naver-site-verification': ['fc6aff074a85b391562bd15daa80e96e0f2a946a', 'ae3b47b353b50f9a3ac06e4c0db4ac641738faee'],
   },
 };
@@ -74,11 +73,24 @@ export default function RootLayout({
         {/* 자주 쓰는 외부 이미지 도메인 사전 연결 (도구 로고/파비콘) */}
         <link rel="preconnect" href="https://logo.clearbit.com" crossOrigin="anonymous" />
         <link rel="dns-prefetch" href="https://www.google.com" />
-        {/* Pretendard 한글 동적 서브셋 — 전체 웨이트(수 MB) 대신 필요한 글자만 로드 */}
+        {/* Pretendard 한글 동적 서브셋 — 렌더 블로킹 방지(media=print 후 onload 시 all 전환).
+            폰트 로드 전에는 시스템 폰트(fallback)로 즉시 렌더 → FCP/LCP 개선. */}
         <link
+          id="pretendard-css"
           rel="stylesheet"
           href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css"
+          media="print"
         />
+        <script
+          dangerouslySetInnerHTML={{
+            __html:
+              "(function(){var p=document.getElementById('pretendard-css');if(!p)return;function on(){p.media='all';}if(p.sheet){on();}else{p.addEventListener('load',on);}})();",
+          }}
+        />
+        <noscript>
+          {/* eslint-disable-next-line @next/next/no-css-tags */}
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css" />
+        </noscript>
         <StructuredData />
       </head>
       {/* [핵심 수정] 

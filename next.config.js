@@ -12,6 +12,10 @@ const nextConfig = {
   images: {
     unoptimized: true,
   },
+  // 배럴 임포트(lucide-react, framer-motion)를 직접 임포트로 변환 → 클라 번들 축소
+  experimental: {
+    optimizePackageImports: ['lucide-react', 'framer-motion'],
+  },
 };
 
 export default nextConfig;

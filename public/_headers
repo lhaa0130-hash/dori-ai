@@ -1,0 +1,32 @@
+# Cloudflare Pages 캐시 정책
+# 콘텐츠 해시가 붙은 정적 자산 → 1년 불변 캐시 (재방문 시 재검증 0)
+/_next/static/*
+  Cache-Control: public, max-age=31536000, immutable
+
+# 이미지/썸네일/음악 → 30일 캐시
+/images/*
+  Cache-Control: public, max-age=2592000
+/thumbnails/*
+  Cache-Control: public, max-age=2592000
+/music/*
+  Cache-Control: public, max-age=2592000
+
+# 기타 정적 이미지 확장자 → 1일
+/*.png
+  Cache-Control: public, max-age=86400
+/*.jpg
+  Cache-Control: public, max-age=86400
+/*.webp
+  Cache-Control: public, max-age=86400
+/*.svg
+  Cache-Control: public, max-age=86400
+
+# 색인 파일 → 1시간
+/sitemap.xml
+  Cache-Control: public, max-age=3600
+/robots.txt
+  Cache-Control: public, max-age=3600
+
+# HTML(라우트) → 항상 재검증(배포 즉시 반영)
+/*
+  Cache-Control: public, max-age=0, must-revalidate

@@ -40,14 +40,14 @@ export default function ExplorePage() {
   const load = useCallback(async () => {
     setLoading(true);
     try {
-      const [feed, fset] = await Promise.all([listFeed(120), myFollowingSet()]);
+      const [feed, fset] = await Promise.all([listFeed(60), myFollowingSet()]);
       setPosts(feed);
       setFollowingSet(fset);
-      // 추천 팔로우는 내 관심사 기반
+      // 추천 팔로우: 이미 가져온 피드/팔로잉을 재사용(중복 읽기 방지)
       const uid = currentUid();
       let interests: string[] = [];
       if (uid) { try { interests = (await getProfile(uid)).interests || []; } catch {} }
-      setSuggested(await getSuggestedUsers(interests, 12));
+      setSuggested(await getSuggestedUsers(interests, 12, { feed, following: fset }));
     } catch { /* noop */ } finally { setLoading(false); }
   }, []);
 

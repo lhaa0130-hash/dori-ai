@@ -26,6 +26,22 @@ function db() { return getFirebaseFirestore(); }
 export function currentUid(): string | null {
   try { return getFirebaseAuth().currentUser?.uid || null; } catch { return null; }
 }
+
+// ─── 읽기 캐시(짧은 TTL) — 같은 화면/네비게이션 내 중복 Firestore 읽기 방지 ──
+// 성공한 결과만 캐시(실패는 fn이 throw → 미캐시). 쓰기 후 bustCache 로 무효화.
+type _CacheEntry = { at: number; val: unknown };
+const _rcache = new Map<string, _CacheEntry>();
+function _now(): number { try { return Date.now(); } catch { return 0; } }
+async function cachedRead<T>(key: string, ttlMs: number, fn: () => Promise<T>): Promise<T> {
+  const hit = _rcache.get(key);
+  if (hit && _now() - hit.at < ttlMs) return hit.val as T;
+  const val = await fn();
+  _rcache.set(key, { at: _now(), val });
+  return val;
+}
+function bustCache(prefix: string): void {
+  for (const k of Array.from(_rcache.keys())) if (k.startsWith(prefix)) _rcache.delete(k);
+}
 function tsToMillis(v: unknown): number {
   if (v && typeof v === "object" && "toMillis" in (v as any)) { try { return (v as any).toMillis(); } catch { return 0; } }
   return 0;
@@ -66,33 +82,35 @@ const DEFAULT_PROFILE = (uid: string, name = "사용자"): Profile => ({
   nameEffect: "", bannerEffect: "", ownedItems: [],
 });
 
+async function fetchProfile(uid: string): Promise<Profile> {
+  const s = await getDoc(doc(db(), "users", uid));
+  const d = (s.data() as Record<string, unknown>) || {};
+  return {
+    uid,
+    name: String(d.name || d.displayName || "사용자"),
+    photoURL: d.photoURL ? String(d.photoURL) : undefined,
+    bio: String(d.bio || ""),
+    statusMsg: String(d.statusMsg || ""),
+    themeColor: String(d.themeColor || "#F9954E"),
+    bg: (String(d.bg || "aurora") as BgStyle),
+    tier: Number(d.tier || 1),
+    level: Number(d.level || 1),
+    exp: Number(d.doriExp || 0),
+    mood: String(d.mood || ""),
+    title: String(d.title || ""),
+    frame: String(d.frame || "none"),
+    interests: Array.isArray(d.interests) ? (d.interests as string[]).slice(0, 8) : [],
+    stickers: Array.isArray(d.stickers) ? (d.stickers as string[]).slice(0, 6) : [],
+    nameEffect: String(d.nameEffect || ""),
+    bannerEffect: String(d.bannerEffect || ""),
+    ownedItems: Array.isArray(d.ownedItems) ? (d.ownedItems as string[]) : [],
+  };
+}
+
+/** 프로필 읽기(60초 캐시, 성공 시에만 캐시) */
 export async function getProfile(uid: string): Promise<Profile> {
-  try {
-    const s = await getDoc(doc(db(), "users", uid));
-    const d = (s.data() as Record<string, unknown>) || {};
-    return {
-      uid,
-      name: String(d.name || d.displayName || "사용자"),
-      photoURL: d.photoURL ? String(d.photoURL) : undefined,
-      bio: String(d.bio || ""),
-      statusMsg: String(d.statusMsg || ""),
-      themeColor: String(d.themeColor || "#F9954E"),
-      bg: (String(d.bg || "aurora") as BgStyle),
-      tier: Number(d.tier || 1),
-      level: Number(d.level || 1),
-      exp: Number(d.doriExp || 0),
-      mood: String(d.mood || ""),
-      title: String(d.title || ""),
-      frame: String(d.frame || "none"),
-      interests: Array.isArray(d.interests) ? (d.interests as string[]).slice(0, 8) : [],
-      stickers: Array.isArray(d.stickers) ? (d.stickers as string[]).slice(0, 6) : [],
-      nameEffect: String(d.nameEffect || ""),
-      bannerEffect: String(d.bannerEffect || ""),
-      ownedItems: Array.isArray(d.ownedItems) ? (d.ownedItems as string[]) : [],
-    };
-  } catch {
-    return DEFAULT_PROFILE(uid);
-  }
+  try { return await cachedRead(`profile:${uid}`, 60000, () => fetchProfile(uid)); }
+  catch { return DEFAULT_PROFILE(uid); }
 }
 
 /** 내 프로필 일부 갱신(로그인 필요, users/{uid} merge) */
@@ -101,6 +119,7 @@ export async function saveMyProfile(patch: Partial<Pick<Profile, "bio" | "status
   if (!uid) return false;
   try {
     await setDoc(doc(db(), "users", uid), { ...patch, updatedAt: serverTimestamp() }, { merge: true });
+    bustCache(`profile:${uid}`);
     return true;
   } catch { return false; }
 }
@@ -229,21 +248,25 @@ function mapPost(id: string, x: Record<string, unknown>): FeedPost {
 }
 
 /** 보안규칙 안전 쿼리: 공개글 + (로그인 시) 내가 볼 수 있는 글(allowedUids 포함)을 합쳐서 최신순. */
-export async function listFeed(n = 50): Promise<FeedPost[]> {
-  const me = currentUid();
-  try {
-    const tasks = [getDocs(query(collection(db(), "feed"), where("visibility", "==", "public"), limit(n)))];
-    if (me) tasks.push(getDocs(query(collection(db(), "feed"), where("allowedUids", "array-contains", me), limit(n))));
-    const snaps = await Promise.all(tasks);
-    const map = new Map<string, FeedPost>();
-    snaps.forEach((s) => s.forEach((d) => { if (!map.has(d.id)) map.set(d.id, mapPost(d.id, d.data() as Record<string, unknown>)); }));
-    return Array.from(map.values()).sort((a, b) => b.at - a.at).slice(0, n);
-  } catch { return []; }
+async function fetchFeed(n: number, me: string | null): Promise<FeedPost[]> {
+  const tasks = [getDocs(query(collection(db(), "feed"), where("visibility", "==", "public"), limit(n)))];
+  if (me) tasks.push(getDocs(query(collection(db(), "feed"), where("allowedUids", "array-contains", me), limit(n))));
+  const snaps = await Promise.all(tasks);
+  const map = new Map<string, FeedPost>();
+  snaps.forEach((s) => s.forEach((d) => { if (!map.has(d.id)) map.set(d.id, mapPost(d.id, d.data() as Record<string, unknown>)); }));
+  return Array.from(map.values()).sort((a, b) => b.at - a.at).slice(0, n);
 }
 
-/** 특정 유저의 피드(내가 볼 수 있는 것만) — 코지홈용 */
+/** 보안규칙 안전 쿼리: 공개글 + 내가 볼 수 있는 글, 최신순. 20초 캐시(네비게이션 중복 읽기 방지). */
+export async function listFeed(n = 50): Promise<FeedPost[]> {
+  const me = currentUid();
+  try { return await cachedRead(`feed:${n}:${me || "anon"}`, 20000, () => fetchFeed(n, me)); }
+  catch { return []; }
+}
+
+/** 특정 유저의 피드(내가 볼 수 있는 것만) — 코지홈용. 캐시된 피드 재사용으로 과다읽기 방지 */
 export async function listUserFeed(uid: string, n = 50): Promise<FeedPost[]> {
-  const all = await listFeed(150);
+  const all = await listFeed(80);
   return all.filter((p) => p.uid === uid).slice(0, n);
 }
 
@@ -259,12 +282,14 @@ export async function addPost(name: string, text: string, opts: NewPostOpts = {}
     };
     if (opts.mediaUrl) { data.mediaUrl = opts.mediaUrl; data.mediaType = opts.mediaType || "image"; }
     await addDoc(collection(db(), "feed"), data);
+    bustCache("feed:");
+    if (uid) bustCache(`counts:${uid}`);
     return true;
   } catch { return false; }
 }
 
 export async function deletePost(postId: string): Promise<boolean> {
-  try { await deleteDoc(doc(db(), "feed", postId)); return true; } catch { return false; }
+  try { await deleteDoc(doc(db(), "feed", postId)); bustCache("feed:"); return true; } catch { return false; }
 }
 
 export async function toggleLike(postId: string, liked: boolean, myName = "회원"): Promise<boolean> {
@@ -598,6 +623,7 @@ export async function followUser(uid: string, targetName: string, myName: string
       setDoc(doc(db(), "users", uid, "followers", me), { uid: me, name: (myName || "").slice(0, 40), at: serverTimestamp() }),
     ]);
     void notify(uid, { type: "follow", fromName: myName, text: "님이 회원님을 팔로우합니다", link: `/profile?uid=${me}` });
+    bustCache(`following:${me}`); bustCache(`counts:${me}`); bustCache(`counts:${uid}`);
     return true;
   } catch { return false; }
 }
@@ -610,6 +636,7 @@ export async function unfollowUser(uid: string): Promise<boolean> {
       deleteDoc(doc(db(), "users", me, "following", uid)),
       deleteDoc(doc(db(), "users", uid, "followers", me)),
     ]);
+    bustCache(`following:${me}`); bustCache(`counts:${me}`); bustCache(`counts:${uid}`);
     return true;
   } catch { return false; }
 }
@@ -618,15 +645,17 @@ async function countOf(c: ReturnType<typeof query> | ReturnType<typeof collectio
   try { return (await getCountFromServer(c)).data().count; } catch { return 0; }
 }
 
-/** 팔로워/팔로잉/게시물 수 (서버 집계, 역정규화 없음) */
+/** 팔로워/팔로잉/게시물 수 (서버 집계). 60초 캐시로 프로필 재방문 시 집계쿼리 절감. */
 export async function getSocialCounts(uid: string): Promise<{ followers: number; following: number; posts: number }> {
   try {
-    const [followers, following, posts] = await Promise.all([
-      countOf(collection(db(), "users", uid, "followers")),
-      countOf(collection(db(), "users", uid, "following")),
-      countOf(query(collection(db(), "feed"), where("uid", "==", uid))),
-    ]);
-    return { followers, following, posts };
+    return await cachedRead(`counts:${uid}`, 60000, async () => {
+      const [followers, following, posts] = await Promise.all([
+        countOf(collection(db(), "users", uid, "followers")),
+        countOf(collection(db(), "users", uid, "following")),
+        countOf(query(collection(db(), "feed"), where("uid", "==", uid))),
+      ]);
+      return { followers, following, posts };
+    });
   } catch { return { followers: 0, following: 0, posts: 0 }; }
 }
 
@@ -648,16 +677,19 @@ export async function listFollowing(uid: string, n = 200): Promise<FollowUser[]>
   } catch { return []; }
 }
 
-/** 내가 팔로우하는 uid 집합 (팔로잉 피드 필터용) */
+async function fetchFollowingSet(me: string): Promise<Set<string>> {
+  const s = await getDocs(collection(db(), "users", me, "following"));
+  const set = new Set<string>();
+  s.forEach((d) => set.add(d.id));
+  return set;
+}
+
+/** 내가 팔로우하는 uid 집합 (팔로잉 피드 필터용). 30초 캐시. */
 export async function myFollowingSet(): Promise<Set<string>> {
   const me = currentUid();
   if (!me) return new Set();
-  try {
-    const s = await getDocs(collection(db(), "users", me, "following"));
-    const set = new Set<string>();
-    s.forEach((d) => set.add(d.id));
-    return set;
-  } catch { return new Set(); }
+  try { return await cachedRead(`following:${me}`, 30000, () => fetchFollowingSet(me)); }
+  catch { return new Set(); }
 }
 
 // ─── 추천 팔로우 + 인기 유저 (탐색) ──────────────────────────────
@@ -668,18 +700,23 @@ export interface SuggestedUser { uid: string; name: string; photoURL?: string; b
  * 추천 유저: 최근 글쓴 사람들 중 (1) 내 관심사와 겹치는 사람 우선, (2) 본인·이미 팔로우 제외.
  * 피드 최근글에서 작성자를 수집(서버 인덱스 불필요)한 뒤 프로필을 읽어 정렬.
  */
-export async function getSuggestedUsers(myInterests: string[] = [], n = 12): Promise<SuggestedUser[]> {
+export async function getSuggestedUsers(
+  myInterests: string[] = [],
+  n = 12,
+  opts: { feed?: FeedPost[]; following?: Set<string> } = {}
+): Promise<SuggestedUser[]> {
   const me = currentUid();
   try {
-    const following = await myFollowingSet();
-    // 최근 공개글 작성자 수집 (listFeed: 인덱스 불필요한 안전 쿼리, 최신순 정렬됨)
-    const recent = await listFeed(120);
+    // 호출측이 이미 가져온 피드/팔로잉을 재사용(중복 Firestore 읽기 방지)
+    const following = opts.following ?? (await myFollowingSet());
+    const recent = opts.feed ?? (await listFeed(60));
     const seen = new Set<string>();
     const uids: string[] = [];
     for (const p of recent) {
       if (p.uid && p.uid !== me && !following.has(p.uid) && !seen.has(p.uid)) { seen.add(p.uid); uids.push(p.uid); }
     }
-    const profiles = await Promise.all(uids.slice(0, 40).map((u) => getProfile(u)));
+    // 후보 풀을 표시 개수 + 여유로 제한해 N+1 프로필 읽기 최소화 (캐시로 재방문 0)
+    const profiles = await Promise.all(uids.slice(0, Math.max(n + 6, 18)).map((u) => getProfile(u)));
     const mine = new Set(myInterests);
     const scored = profiles.map((p) => {
       const overlap = (p.interests || []).filter((t) => mine.has(t)).length;
