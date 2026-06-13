@@ -41,6 +41,7 @@ import {
   type ShopItem,
 } from "@/lib/shopItems";
 import BannerFx from "@/components/cozy/BannerFx";
+import MySpaceTabs from "@/components/cozy/MySpaceTabs";
 
 // 배경/테두리/이름효과/배너효과/스티커는 lib/shopItems.ts 카탈로그에서 가져온다.
 // (무료 기본 + 상점에서 구매한 프리미엄 아이템)
@@ -156,6 +157,9 @@ export default function ProfilePage() {
   // 프로필 사진 업로드
   const [photoUploading, setPhotoUploading] = useState(false);
   const [photoError, setPhotoError] = useState("");
+
+  // 코지홈 공유(초대) — 링크 복사
+  const [shared, setShared] = useState(false);
 
   // URL ?uid= 로 대상 결정(없으면 내 uid) — 정적 export 안전하게 window에서 직접 읽음
   useEffect(() => {
@@ -313,6 +317,22 @@ export default function ProfilePage() {
     setFollowBusy(false);
   };
 
+  const handleShare = async () => {
+    if (!targetUid) return;
+    const url = `${window.location.origin}/profile?uid=${targetUid}`;
+    const title = `${profile?.name || "코지홈"} 님의 코지홈`;
+    try {
+      if (navigator.share) { await navigator.share({ title, url }); return; }
+    } catch { /* 사용자가 공유 취소 → 무시 */ }
+    try {
+      await navigator.clipboard.writeText(url);
+      setShared(true);
+      setTimeout(() => setShared(false), 1800);
+    } catch {
+      window.prompt("이 링크를 복사해 공유하세요", url);
+    }
+  };
+
   const openFollowList = async (type: "followers" | "following") => {
     if (!targetUid) return;
     setFollowModal({ title: type === "followers" ? "팔로워" : "팔로잉", users: [] });
@@ -456,6 +476,9 @@ export default function ProfilePage() {
           </div>
         </div>
       )}
+
+      {/* 내 공간 탭(코지홈 ↔ 상점) — 본인 코지홈에서만 */}
+      {isOwner && <MySpaceTabs active="home" />}
 
       <section className="max-w-2xl mx-auto px-5 pt-6">
         {/* 1) 코지홈 배너 */}
@@ -621,6 +644,14 @@ export default function ProfilePage() {
                   className="px-4 py-2 rounded-full bg-[#F9954E] text-white text-[13px] font-bold active:opacity-85"
                 >
                   {editing ? "꾸미기 닫기" : "✏️ 꾸미기"}
+                </button>
+              )}
+              {isOwner && (
+                <button
+                  onClick={handleShare}
+                  className="px-4 py-2 rounded-full bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-neutral-200 text-[13px] font-bold active:opacity-85"
+                >
+                  {shared ? "✓ 링크 복사됨" : "🔗 공유"}
                 </button>
               )}
               {canMessage && (
@@ -1017,9 +1048,15 @@ export default function ProfilePage() {
                   className="rounded-xl bg-neutral-100 dark:bg-zinc-900 p-3.5"
                 >
                   <div className="flex items-center justify-between gap-2">
-                    <span className="text-[13px] font-bold text-neutral-800 dark:text-neutral-100 truncate">
-                      {g.fromName}
-                    </span>
+                    {g.fromUid ? (
+                      <Link href={`/profile?uid=${g.fromUid}`} className="text-[13px] font-bold text-neutral-800 dark:text-neutral-100 truncate hover:text-[#F9954E] hover:underline">
+                        {g.fromName}
+                      </Link>
+                    ) : (
+                      <span className="text-[13px] font-bold text-neutral-800 dark:text-neutral-100 truncate">
+                        {g.fromName}
+                      </span>
+                    )}
                     <div className="flex items-center gap-2 shrink-0">
                       {fmtDate(g.at) && (
                         <span className="text-[11px] text-neutral-400">{fmtDate(g.at)}</span>

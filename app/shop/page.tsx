@@ -5,6 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import CottonCandy from "@/components/icons/CottonCandy";
 import BannerFx from "@/components/cozy/BannerFx";
+import MySpaceTabs from "@/components/cozy/MySpaceTabs";
 import {
   getCottonCandyBalance,
   getOwnedShopItems,
@@ -215,6 +216,9 @@ export default function ShopPage() {
 
   return (
     <main className="w-full min-h-screen">
+      {/* 내 공간 탭(코지홈 ↔ 상점) */}
+      <MySpaceTabs active="shop" />
+
       {/* 토스트 */}
       {toast && (
         <div className={`fixed top-20 left-1/2 -translate-x-1/2 z-[60] px-5 py-3 rounded-2xl font-bold text-[13px] shadow-xl ${toast.type === "success" ? "bg-[#F9954E] text-white" : "bg-neutral-900 text-white"}`}>
@@ -282,7 +286,7 @@ export default function ShopPage() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Link href="/profile" className="px-3.5 py-2.5 rounded-xl border border-[#F9954E]/40 text-[#F9954E] text-[12px] font-bold active:opacity-85">코지홈 →</Link>
+              <Link href="/profile" className="px-3.5 py-2.5 rounded-xl border border-[#F9954E]/40 text-[#F9954E] text-[12px] font-bold active:opacity-85">🎨 꾸미러 가기</Link>
               {isPremium ? (
                 <span className="text-[11px] font-bold px-3 py-2.5 rounded-xl bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">💎 프리미엄</span>
               ) : (
