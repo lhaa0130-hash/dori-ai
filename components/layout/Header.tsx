@@ -32,11 +32,10 @@ export default function Header() {
   // 건의사항은 메인 네비에서 숨김(푸터에만 노출), 마켓은 노출
   const navItems = [
     { name: "공지사항", href: "/notice", emoji: "📢" },
-    { name: "탐색", href: "/explore", emoji: "🧭" },
-    { name: "커뮤니티", href: "/community", emoji: "💬" },
-    { name: "인사이트", href: "/insight", emoji: "🧠" },
-    { name: "AI 도구", href: "/ai-tools", emoji: "🔧" },
     { name: "미니게임", href: "/minigame", emoji: "🎮" },
+    { name: "AI 도구", href: "/ai-tools", emoji: "🔧" },
+    { name: "인사이트", href: "/insight", emoji: "🧠" },
+    { name: "커뮤니티", href: "/community", emoji: "💬" },
     { name: "마켓", href: "/market", emoji: "🛒" },
     { name: "건의사항", href: "/suggestion", emoji: "✉️" },
   ];
@@ -179,6 +178,9 @@ export default function Header() {
                   <div className="absolute top-full right-0 mt-2 w-52 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
                     <div className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden py-1">
                       <p className="px-4 pt-2 pb-1 text-[9px] font-bold uppercase tracking-widest text-neutral-400">내 공간</p>
+                      <Link href="/explore" className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
+                        <span className="w-4 text-center text-[#F9954E]">🧭</span><span>탐색</span>
+                      </Link>
                       <Link href="/profile" className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
                         <Home className="w-4 h-4 text-[#F9954E]" /><span>코지홈</span>
                       </Link>
@@ -249,6 +251,9 @@ export default function Header() {
 
                 {/* 내 공간(소셜) */}
                 <p className="px-2 pt-2 pb-0.5 text-[10px] font-bold uppercase tracking-widest text-neutral-400">내 공간</p>
+                <Link href="/explore" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white">
+                  <span className="w-4 text-center text-[#F9954E]">🧭</span><span>탐색</span>
+                </Link>
                 <Link href="/profile" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white">
                   <Home className="w-4 h-4 text-[#F9954E]" /><span>코지홈</span>
                 </Link>
