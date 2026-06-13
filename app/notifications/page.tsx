@@ -15,6 +15,9 @@ const TYPE_EMOJI: Record<NotiType, string> = {
   comment: "💬",
   guestbook: "📖",
   dm: "✉️",
+  follow: "➕",
+  mention: "@",
+  repost: "🔁",
 };
 
 function emojiFor(type: NotiType): string {

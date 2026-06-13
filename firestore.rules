@@ -16,6 +16,20 @@ service cloud.firestore {
       match /groups/{groupId} {
         allow read, write: if request.auth != null && request.auth.uid == userId;
       }
+      // 팔로워 목록 — 누구나 읽기, '나를 팔로워로 추가하는' 본인(=followerUid)만 작성/삭제
+      match /followers/{followerUid} {
+        allow read: if true;
+        allow write: if request.auth != null && request.auth.uid == followerUid;
+      }
+      // 팔로잉 목록 — 누구나 읽기, 주인만 작성/삭제
+      match /following/{followeeUid} {
+        allow read: if true;
+        allow write: if request.auth != null && request.auth.uid == userId;
+      }
+      // 북마크(저장) — 본인만 (비공개)
+      match /bookmarks/{postId} {
+        allow read, write: if request.auth != null && request.auth.uid == userId;
+      }
     }
 
     // 친구 요청 — 받는 사람이 읽기, 보내는 사람이 생성, 둘 다 삭제(수락/거절/취소)

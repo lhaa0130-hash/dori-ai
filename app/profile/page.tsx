@@ -16,6 +16,12 @@ import {
   getUserRecords,
   bumpVisit,
   getVisitStats,
+  followUser,
+  unfollowUser,
+  isFollowing,
+  getSocialCounts,
+  listFollowers,
+  listFollowing,
   type Profile,
   type BgStyle,
   type GuestEntry,
@@ -138,6 +144,12 @@ export default function ProfilePage() {
   // 친구 상태: "loading" | "none" | "friend" | "requested"
   const [friendState, setFriendState] = useState<"loading" | "none" | "friend" | "requested">("none");
 
+  // 팔로우 상태 + 소셜 카운트
+  const [followState, setFollowState] = useState<"loading" | "following" | "none">("none");
+  const [counts, setCounts] = useState<{ followers: number; following: number; posts: number }>({ followers: 0, following: 0, posts: 0 });
+  const [followBusy, setFollowBusy] = useState(false);
+  const [followModal, setFollowModal] = useState<null | { title: string; users: { uid: string; name: string }[] }>(null);
+
   // 방문자 카운터(투데이/투탈)
   const [visit, setVisit] = useState<{ total: number; today: number } | null>(null);
 
@@ -164,16 +176,18 @@ export default function ProfilePage() {
   const loadAll = useCallback(async (uid: string) => {
     setLoading(true);
     try {
-      const [p, recs, gb, uf] = await Promise.all([
+      const [p, recs, gb, uf, c] = await Promise.all([
         getProfile(uid),
         getUserRecords(uid),
         listGuestbook(uid, 50),
         listUserFeed(uid, 10),
+        getSocialCounts(uid),
       ]);
       setProfile(p);
       setRecords(recs);
       setGuestbook(gb);
       setFeed(uf);
+      setCounts(c);
       setEditBio(p.bio);
       setEditStatus(p.statusMsg);
       setEditColor(p.themeColor || "#F9954E");
@@ -220,6 +234,18 @@ export default function ProfilePage() {
     return () => {
       active = false;
     };
+  }, [mounted, targetUid, myUid, isOwner]);
+
+  // 팔로우 여부 확인
+  useEffect(() => {
+    if (!mounted) return;
+    if (!targetUid || !myUid || isOwner) { setFollowState("none"); return; }
+    let active = true;
+    setFollowState("loading");
+    isFollowing(targetUid)
+      .then((yes) => { if (active) setFollowState(yes ? "following" : "none"); })
+      .catch(() => { if (active) setFollowState("none"); });
+    return () => { active = false; };
   }, [mounted, targetUid, myUid, isOwner]);
 
   // 방문자 카운터: 대상 결정 후 1회 집계 + 통계 조회
@@ -269,6 +295,29 @@ export default function ProfilePage() {
       setFriendState("none");
       alert("친구 요청에 실패했습니다. 다시 시도해주세요.");
     }
+  };
+
+  const handleToggleFollow = async () => {
+    if (!targetUid || isOwner || followBusy) return;
+    if (!myUid) { alert("로그인이 필요해요."); return; }
+    setFollowBusy(true);
+    const wasFollowing = followState === "following";
+    // 낙관적 업데이트
+    setFollowState(wasFollowing ? "none" : "following");
+    setCounts((c) => ({ ...c, followers: Math.max(0, c.followers + (wasFollowing ? -1 : 1)) }));
+    const ok = wasFollowing ? await unfollowUser(targetUid) : await followUser(targetUid, profile?.name || "사용자", myName);
+    if (!ok) {
+      setFollowState(wasFollowing ? "following" : "none");
+      setCounts((c) => ({ ...c, followers: Math.max(0, c.followers + (wasFollowing ? 1 : -1)) }));
+    }
+    setFollowBusy(false);
+  };
+
+  const openFollowList = async (type: "followers" | "following") => {
+    if (!targetUid) return;
+    setFollowModal({ title: type === "followers" ? "팔로워" : "팔로잉", users: [] });
+    const users = type === "followers" ? await listFollowers(targetUid) : await listFollowing(targetUid);
+    setFollowModal({ title: type === "followers" ? "팔로워" : "팔로잉", users: users.map((u) => ({ uid: u.uid, name: u.name })) });
   };
 
   const handleSave = async () => {
@@ -377,6 +426,37 @@ export default function ProfilePage() {
 
   return (
     <main className="w-full min-h-screen pb-24">
+      {/* 팔로워/팔로잉 목록 모달 */}
+      {followModal && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4" onClick={() => setFollowModal(null)}>
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl w-full max-w-sm max-h-[70vh] overflow-hidden shadow-2xl border border-neutral-200 dark:border-zinc-800 flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-5 py-3.5 border-b border-neutral-100 dark:border-zinc-800">
+              <p className="text-[14px] font-extrabold text-neutral-900 dark:text-white">{followModal.title}</p>
+              <button onClick={() => setFollowModal(null)} className="text-neutral-400 text-[18px] leading-none">×</button>
+            </div>
+            <div className="overflow-y-auto p-2">
+              {followModal.users.length === 0 ? (
+                <p className="text-[13px] text-neutral-400 text-center py-8">아직 없어요</p>
+              ) : (
+                followModal.users.map((u) => (
+                  <Link
+                    key={u.uid}
+                    href={`/profile?uid=${u.uid}`}
+                    onClick={() => setFollowModal(null)}
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-neutral-50 dark:hover:bg-zinc-800"
+                  >
+                    <span className="w-9 h-9 rounded-full bg-[#F9954E]/15 text-[#F9954E] flex items-center justify-center font-extrabold">
+                      {(u.name || "?").trim().charAt(0) || "?"}
+                    </span>
+                    <span className="text-[14px] font-bold text-neutral-800 dark:text-neutral-100 truncate">{u.name}</span>
+                  </Link>
+                ))
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+
       <section className="max-w-2xl mx-auto px-5 pt-6">
         {/* 1) 코지홈 배너 */}
         <div className="relative rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 overflow-hidden">
@@ -517,6 +597,22 @@ export default function ProfilePage() {
               </div>
             )}
 
+            {/* 소셜 카운트 */}
+            <div className="mt-4 flex items-center gap-5">
+              <div className="text-center">
+                <p className="text-[16px] font-extrabold text-neutral-900 dark:text-white tabular-nums leading-none">{counts.posts.toLocaleString()}</p>
+                <p className="text-[11px] text-neutral-400 mt-0.5">게시물</p>
+              </div>
+              <button onClick={() => openFollowList("followers")} className="text-center active:opacity-70">
+                <p className="text-[16px] font-extrabold text-neutral-900 dark:text-white tabular-nums leading-none">{counts.followers.toLocaleString()}</p>
+                <p className="text-[11px] text-neutral-400 mt-0.5">팔로워</p>
+              </button>
+              <button onClick={() => openFollowList("following")} className="text-center active:opacity-70">
+                <p className="text-[16px] font-extrabold text-neutral-900 dark:text-white tabular-nums leading-none">{counts.following.toLocaleString()}</p>
+                <p className="text-[11px] text-neutral-400 mt-0.5">팔로잉</p>
+              </button>
+            </div>
+
             {/* 액션 버튼 */}
             <div className="mt-5 flex flex-wrap gap-2">
               {isOwner && (
@@ -528,11 +624,24 @@ export default function ProfilePage() {
                 </button>
               )}
               {canMessage && (
+                <button
+                  onClick={handleToggleFollow}
+                  disabled={followBusy || followState === "loading"}
+                  className={`px-5 py-2 rounded-full text-[13px] font-bold active:opacity-85 disabled:opacity-50 transition-colors ${
+                    followState === "following"
+                      ? "bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-neutral-200"
+                      : "bg-[#F9954E] text-white"
+                  }`}
+                >
+                  {followState === "following" ? "팔로잉" : "+ 팔로우"}
+                </button>
+              )}
+              {canMessage && (
                 <Link
                   href={messageHref}
-                  className="px-4 py-2 rounded-full bg-[#F9954E] text-white text-[13px] font-bold active:opacity-85"
+                  className="px-4 py-2 rounded-full bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-neutral-200 text-[13px] font-bold active:opacity-85"
                 >
-                  💬 메시지 보내기
+                  💬 메시지
                 </Link>
               )}
               {canMessage && (

@@ -18,6 +18,7 @@
 import {
   doc, getDoc, setDoc, updateDoc, addDoc, deleteDoc, collection, query, where,
   orderBy, limit, getDocs, onSnapshot, serverTimestamp, increment, arrayUnion, arrayRemove,
+  getCountFromServer,
 } from "firebase/firestore";
 import { getFirebaseFirestore, getFirebaseAuth } from "@/lib/firebase";
 
@@ -473,7 +474,7 @@ export async function audienceForGroups(groupIds: string[]): Promise<string[]> {
 
 // ─── 알림(notifications) ─────────────────────────────────────────
 //   notifications/{uid}/items/{id}  { type, fromUid, fromName, text, link, read, createdAt }
-export type NotiType = "friend_request" | "friend_accept" | "like" | "comment" | "guestbook" | "dm";
+export type NotiType = "friend_request" | "friend_accept" | "like" | "comment" | "guestbook" | "dm" | "follow" | "mention" | "repost";
 export interface Noti { id: string; type: NotiType; fromUid: string; fromName: string; text: string; link: string; read: boolean; at: number; }
 
 /** 알림 생성(자기 자신에겐 보내지 않음, 실패해도 무시) */
@@ -572,4 +573,119 @@ export async function getVisitStats(ownerUid: string): Promise<VisitStats> {
     ]);
     return { total: Number((t.data() as Record<string, number>)?.total || 0), today: Number((d.data() as Record<string, number>)?.count || 0) };
   } catch { return { total: 0, today: 0 }; }
+}
+
+// ─── 팔로우(비대칭 그래프) ───────────────────────────────────────
+//   users/{uid}/followers/{followerUid}  { uid, name, at }   (대상의 팔로워 목록)
+//   users/{me}/following/{followeeUid}   { uid, name, at }   (내 팔로잉 목록)
+//   양쪽 모두 작성: 내가 T를 팔로우하면 users/T/followers/me + users/me/following/T
+//   카운트는 getCountFromServer 로 집계(역정규화 불필요).
+export interface FollowUser { uid: string; name: string; at: number; }
+
+export async function isFollowing(uid: string): Promise<boolean> {
+  const me = currentUid();
+  if (!me || !uid || me === uid) return false;
+  try { return (await getDoc(doc(db(), "users", me, "following", uid))).exists(); } catch { return false; }
+}
+
+/** 팔로우. 대상에게 'follow' 알림. */
+export async function followUser(uid: string, targetName: string, myName: string): Promise<boolean> {
+  const me = currentUid();
+  if (!me || !uid || me === uid) return false;
+  try {
+    await Promise.all([
+      setDoc(doc(db(), "users", me, "following", uid), { uid, name: (targetName || "").slice(0, 40), at: serverTimestamp() }),
+      setDoc(doc(db(), "users", uid, "followers", me), { uid: me, name: (myName || "").slice(0, 40), at: serverTimestamp() }),
+    ]);
+    void notify(uid, { type: "follow", fromName: myName, text: "님이 회원님을 팔로우합니다", link: `/profile?uid=${me}` });
+    return true;
+  } catch { return false; }
+}
+
+export async function unfollowUser(uid: string): Promise<boolean> {
+  const me = currentUid();
+  if (!me || !uid) return false;
+  try {
+    await Promise.all([
+      deleteDoc(doc(db(), "users", me, "following", uid)),
+      deleteDoc(doc(db(), "users", uid, "followers", me)),
+    ]);
+    return true;
+  } catch { return false; }
+}
+
+async function countOf(c: ReturnType<typeof query> | ReturnType<typeof collection>): Promise<number> {
+  try { return (await getCountFromServer(c)).data().count; } catch { return 0; }
+}
+
+/** 팔로워/팔로잉/게시물 수 (서버 집계, 역정규화 없음) */
+export async function getSocialCounts(uid: string): Promise<{ followers: number; following: number; posts: number }> {
+  try {
+    const [followers, following, posts] = await Promise.all([
+      countOf(collection(db(), "users", uid, "followers")),
+      countOf(collection(db(), "users", uid, "following")),
+      countOf(query(collection(db(), "feed"), where("uid", "==", uid))),
+    ]);
+    return { followers, following, posts };
+  } catch { return { followers: 0, following: 0, posts: 0 }; }
+}
+
+export async function listFollowers(uid: string, n = 100): Promise<FollowUser[]> {
+  try {
+    const s = await getDocs(query(collection(db(), "users", uid, "followers"), orderBy("at", "desc"), limit(n)));
+    const a: FollowUser[] = [];
+    s.forEach((d) => { const x = d.data() as Record<string, unknown>; a.push({ uid: String(x.uid || d.id), name: String(x.name || "사용자"), at: tsToMillis(x.at) }); });
+    return a;
+  } catch { return []; }
+}
+
+export async function listFollowing(uid: string, n = 200): Promise<FollowUser[]> {
+  try {
+    const s = await getDocs(query(collection(db(), "users", uid, "following"), orderBy("at", "desc"), limit(n)));
+    const a: FollowUser[] = [];
+    s.forEach((d) => { const x = d.data() as Record<string, unknown>; a.push({ uid: String(x.uid || d.id), name: String(x.name || "사용자"), at: tsToMillis(x.at) }); });
+    return a;
+  } catch { return []; }
+}
+
+/** 내가 팔로우하는 uid 집합 (팔로잉 피드 필터용) */
+export async function myFollowingSet(): Promise<Set<string>> {
+  const me = currentUid();
+  if (!me) return new Set();
+  try {
+    const s = await getDocs(collection(db(), "users", me, "following"));
+    const set = new Set<string>();
+    s.forEach((d) => set.add(d.id));
+    return set;
+  } catch { return new Set(); }
+}
+
+// ─── 추천 팔로우 + 인기 유저 (탐색) ──────────────────────────────
+// 정적 export + 클라 Firestore 제약상 서버 랭킹이 없어, 최근 활동/관심사로 클라에서 추천.
+export interface SuggestedUser { uid: string; name: string; photoURL?: string; bio: string; interests: string[]; tier: number; }
+
+/**
+ * 추천 유저: 최근 글쓴 사람들 중 (1) 내 관심사와 겹치는 사람 우선, (2) 본인·이미 팔로우 제외.
+ * 피드 최근글에서 작성자를 수집(서버 인덱스 불필요)한 뒤 프로필을 읽어 정렬.
+ */
+export async function getSuggestedUsers(myInterests: string[] = [], n = 12): Promise<SuggestedUser[]> {
+  const me = currentUid();
+  try {
+    const following = await myFollowingSet();
+    // 최근 공개글 작성자 수집 (listFeed: 인덱스 불필요한 안전 쿼리, 최신순 정렬됨)
+    const recent = await listFeed(120);
+    const seen = new Set<string>();
+    const uids: string[] = [];
+    for (const p of recent) {
+      if (p.uid && p.uid !== me && !following.has(p.uid) && !seen.has(p.uid)) { seen.add(p.uid); uids.push(p.uid); }
+    }
+    const profiles = await Promise.all(uids.slice(0, 40).map((u) => getProfile(u)));
+    const mine = new Set(myInterests);
+    const scored = profiles.map((p) => {
+      const overlap = (p.interests || []).filter((t) => mine.has(t)).length;
+      return { p, score: overlap * 10 + (p.level || 0) + (p.bio ? 1 : 0) };
+    });
+    scored.sort((a, b) => b.score - a.score);
+    return scored.slice(0, n).map(({ p }) => ({ uid: p.uid, name: p.name, photoURL: p.photoURL, bio: p.bio, interests: p.interests || [], tier: p.tier }));
+  } catch { return []; }
 }
