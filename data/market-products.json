@@ -1,5 +1,44 @@
 [
   {
+    "id": "mk2-1",
+    "name": "삼성전자 갤럭시 버즈 FE",
+    "category": "digital",
+    "source": "coupang",
+    "query": "갤럭시 버즈 FE",
+    "emoji": "🎧",
+    "priceHint": "10만원 안팎",
+    "summary": "갤럭시폰에 편한 기본기",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/exsNl1oHfg"
+  },
+  {
+    "id": "mk2-2",
+    "name": "앤커 사운드코어 리버티 4 NC",
+    "category": "digital",
+    "source": "coupang",
+    "query": "사운드코어 리버티 4 NC",
+    "emoji": "🔊",
+    "priceHint": "10만원대",
+    "summary": "기능 많은 실속형 노캔",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/exsNl3VRLg"
+  },
+  {
+    "id": "mk2-3",
+    "name": "QCY HT05 멜로버즈 ANC",
+    "category": "digital",
+    "source": "coupang",
+    "query": "QCY HT05 멜로버즈 ANC",
+    "emoji": "💸",
+    "priceHint": "3만원대",
+    "summary": "입문용으로 부담 적음",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/exsNl7uJem"
+  },
+  {
     "id": "mk1-1",
     "name": "삼성전자 비스포크 AI 스팀 일반형",
     "category": "appliance",
@@ -9,7 +48,7 @@
     "priceHint": "가격 확인 필요",
     "summary": "국내 AS 중시형",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/euIeznh1Oe"
   },
   {
@@ -22,7 +61,7 @@
     "priceHint": "30만원대 해외 딜 기준",
     "summary": "예산형 자동청소",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/euIezpZ5S8"
   },
   {
@@ -35,7 +74,7 @@
     "priceHint": "가격 확인 필요",
     "summary": "올인원 입문 후보",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/euIezsZd36"
   },
   {
@@ -48,7 +87,7 @@
     "priceHint": "100만원 안팎 해외 딜 기준",
     "summary": "문턱 많은 집용",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/euIezvhwSi"
   }
 ]
