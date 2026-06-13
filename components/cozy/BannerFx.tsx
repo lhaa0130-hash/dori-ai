@@ -32,6 +32,8 @@ const FX: Record<string, { emojis: string[]; anim: "fall" | "rise" | "twinkle" }
   confetti: { emojis: ["🎉", "🎊", "💛", "💙", "💖"], anim: "fall" },
   hearts: { emojis: ["💛", "🧡", "💖", "💕"], anim: "fall" },
   stars: { emojis: ["⭐", "🌟", "💫", "✨"], anim: "fall" },
+  coins: { emojis: ["🍬", "🍭", "🍬"], anim: "fall" },
+  music: { emojis: ["🎵", "🎶", "♪", "🎵"], anim: "rise" },
   bubble: { emojis: ["🫧", "🫧", "💧"], anim: "rise" },
   sparkle: { emojis: ["✨", "⭐", "✦", "💫"], anim: "twinkle" },
 };

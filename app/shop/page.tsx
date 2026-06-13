@@ -43,7 +43,7 @@ function ItemPreview({ item }: { item: ShopItem }) {
     case "bg":
       return (
         <div className="relative w-full h-14 rounded-xl overflow-hidden ring-1 ring-black/5 dark:ring-white/10">
-          <div className={`absolute inset-0 bg-gradient-to-br ${item.grad || ""}`} />
+          <div className={`absolute inset-0 ${item.grad || ""}`} />
         </div>
       );
     case "frame":
@@ -96,6 +96,7 @@ export default function ShopPage() {
   const [toast, setToast] = useState<{ type: "success" | "error"; msg: string } | null>(null);
   const [confirmItem, setConfirmItem] = useState<ShopItem | null>(null);
   const [busy, setBusy] = useState(false);
+  const [priceFilter, setPriceFilter] = useState<"all" | "free" | "paid">("all");
 
   useEffect(() => setMounted(true), []);
 
@@ -206,7 +207,9 @@ export default function ShopPage() {
   };
 
   // 각 슬롯의 전체 목록(무료 기본/none 포함 → 장착·효과끄기 가능, 유료는 구매 후 장착)
-  const visibleItems = itemsBySlot(activeTab);
+  const visibleItems = itemsBySlot(activeTab).filter((i) =>
+    priceFilter === "all" ? true : priceFilter === "free" ? i.price === 0 : i.price > 0
+  );
 
   if (!mounted) return null;
 
@@ -315,8 +318,33 @@ export default function ShopPage() {
         </div>
       </div>
 
+      {/* 무료/유료 필터 */}
+      <div className="flex items-center gap-2 pt-4">
+        {([
+          { id: "all", label: "전체" },
+          { id: "free", label: "무료" },
+          { id: "paid", label: "유료" },
+        ] as const).map((f) => {
+          const active = priceFilter === f.id;
+          return (
+            <button
+              key={f.id}
+              onClick={() => setPriceFilter(f.id)}
+              className={`px-3 py-1 rounded-full text-[11px] font-bold border transition-colors ${
+                active
+                  ? "bg-neutral-950 dark:bg-white border-neutral-950 dark:border-white text-white dark:text-neutral-950"
+                  : "bg-white dark:bg-zinc-950 border-neutral-200 dark:border-zinc-700 text-neutral-500 dark:text-neutral-400"
+              }`}
+            >
+              {f.label}
+            </button>
+          );
+        })}
+        <span className="ml-auto text-[11px] text-neutral-400 font-medium">{visibleItems.length}개</span>
+      </div>
+
       {/* 상품 그리드 */}
-      <section className="py-6 pb-20">
+      <section className="py-5 pb-20">
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
           {visibleItems.map((item) => {
             const ownedIt = isOwned(item);

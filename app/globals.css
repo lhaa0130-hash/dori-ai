@@ -623,7 +623,72 @@ h6 {
 }
 .cozy-twinkle { animation-name: cozy-twinkle; animation-timing-function: ease-in-out; animation-iteration-count: infinite; }
 
+/* ─── 추가 이름 효과 (프리미엄) ─────────────────────────────── */
+.name-chrome  { background: linear-gradient(180deg,#f3f4f6,#9ca3af,#f9fafb,#6b7280); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.name-fire    { background: linear-gradient(0deg,#fbbf24,#ef4444,#f59e0b); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.name-ice     { background: linear-gradient(180deg,#e0f2fe,#38bdf8,#6366f1); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.name-forest  { background: linear-gradient(90deg,#86efac,#22c55e,#15803d); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.name-shimmer {
+  background: linear-gradient(90deg,#F9954E 0%,#ffffff 50%,#F9954E 100%);
+  background-size: 200% auto;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: name-legend-flow 3s linear infinite;
+}
+
+/* ─── 프리미엄 아바타 테두리 (다중 밴드 + 글로우, box-shadow 1클래스) ─── */
+/* Tailwind ring 대신 box-shadow로 그려 라이트/다크 공통. ring 필드에 그대로 사용 */
+.cozy-frame-aurora  { box-shadow: 0 0 0 3px #F9954E, 0 0 0 6px #d946ef, 0 0 16px 3px rgba(217,70,239,0.5); }
+.cozy-frame-flame   { box-shadow: 0 0 0 3px #f59e0b, 0 0 0 6px #ef4444, 0 0 16px 3px rgba(239,68,68,0.5); }
+.cozy-frame-holo    { box-shadow: 0 0 0 3px #38bdf8, 0 0 0 6px #a855f7, 0 0 16px 3px rgba(168,85,247,0.5); }
+.cozy-frame-mint    { box-shadow: 0 0 0 3px #34d399, 0 0 0 6px #22d3ee, 0 0 16px 3px rgba(45,212,191,0.5); }
+.cozy-frame-diamond { box-shadow: 0 0 0 3px #a5f3fc, 0 0 0 6px #67e8f9, 0 0 18px 4px rgba(103,232,249,0.6); }
+.cozy-frame-goldlux { box-shadow: 0 0 0 3px #fde68a, 0 0 0 6px #f59e0b, 0 0 18px 4px rgba(245,158,11,0.6); }
+.cozy-frame-rainbow { box-shadow: 0 0 0 3px #f472b6, 0 0 0 6px #60a5fa, 0 0 18px 4px rgba(244,114,182,0.55); }
+
+/* ─── 프리미엄 배경 (메시 그라데이션) — 오버레이 div 에 단독 사용 ─── */
+.cozy-bg-mesh-aurora { background:
+  radial-gradient(at 18% 22%, rgba(249,149,78,0.40), transparent 55%),
+  radial-gradient(at 82% 16%, rgba(217,70,239,0.32), transparent 50%),
+  radial-gradient(at 60% 82%, rgba(56,189,248,0.34), transparent 55%); }
+.cozy-bg-mesh-sunset { background:
+  radial-gradient(at 20% 25%, rgba(251,113,133,0.42), transparent 55%),
+  radial-gradient(at 80% 20%, rgba(249,115,22,0.38), transparent 50%),
+  radial-gradient(at 50% 85%, rgba(234,179,8,0.32), transparent 55%); }
+.cozy-bg-mesh-ocean { background:
+  radial-gradient(at 15% 20%, rgba(56,189,248,0.42), transparent 55%),
+  radial-gradient(at 85% 30%, rgba(59,130,246,0.36), transparent 50%),
+  radial-gradient(at 55% 88%, rgba(20,184,166,0.34), transparent 55%); }
+.cozy-bg-mesh-candy { background:
+  radial-gradient(at 22% 22%, rgba(244,114,182,0.42), transparent 55%),
+  radial-gradient(at 80% 18%, rgba(168,85,247,0.34), transparent 50%),
+  radial-gradient(at 50% 85%, rgba(96,165,250,0.30), transparent 55%); }
+.cozy-bg-mesh-galaxy { background:
+  radial-gradient(at 20% 20%, rgba(99,102,241,0.48), transparent 55%),
+  radial-gradient(at 82% 25%, rgba(168,85,247,0.40), transparent 50%),
+  radial-gradient(at 55% 85%, rgba(15,23,42,0.55), transparent 60%); }
+.cozy-bg-mesh-forest { background:
+  radial-gradient(at 18% 22%, rgba(34,197,94,0.42), transparent 55%),
+  radial-gradient(at 82% 20%, rgba(16,185,129,0.34), transparent 50%),
+  radial-gradient(at 55% 85%, rgba(5,150,105,0.34), transparent 55%); }
+.cozy-bg-mesh-gold { background:
+  radial-gradient(at 20% 20%, rgba(253,230,138,0.48), transparent 55%),
+  radial-gradient(at 82% 22%, rgba(245,158,11,0.40), transparent 50%),
+  radial-gradient(at 55% 85%, rgba(180,83,9,0.30), transparent 55%); }
+.cozy-bg-mesh-cottoncandy { background:
+  radial-gradient(at 20% 25%, rgba(125,211,252,0.42), transparent 55%),
+  radial-gradient(at 80% 20%, rgba(244,114,182,0.34), transparent 50%),
+  radial-gradient(at 50% 85%, rgba(196,181,253,0.34), transparent 55%); }
+.cozy-bg-mesh-rose { background:
+  radial-gradient(at 20% 22%, rgba(251,113,133,0.40), transparent 55%),
+  radial-gradient(at 82% 22%, rgba(244,114,182,0.32), transparent 50%),
+  radial-gradient(at 55% 85%, rgba(251,191,36,0.28), transparent 55%); }
+
+/* 메시 배경 라이브(은은한 색상 순환) — 오버레이에만 적용돼 글씨엔 영향 없음 */
+.cozy-bg-animate { animation: cozy-hue 14s linear infinite; }
+@keyframes cozy-hue { to { filter: hue-rotate(360deg); } }
+
 @media (prefers-reduced-motion: reduce) {
-  .name-legend { animation: none; }
+  .name-legend, .name-shimmer { animation: none; }
   .cozy-fall, .cozy-rise, .cozy-twinkle { animation: none; opacity: 0.5; }
+  .cozy-bg-animate { animation: none; }
 }

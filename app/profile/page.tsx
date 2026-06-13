@@ -31,6 +31,7 @@ import {
   nameClassOf,
   itemsBySlot,
   itemKey,
+  FREE_STICKERS,
   type ShopItem,
 } from "@/lib/shopItems";
 import BannerFx from "@/components/cozy/BannerFx";
@@ -41,9 +42,9 @@ import BannerFx from "@/components/cozy/BannerFx";
 // 대표색 팔레트
 const COLOR_PRESETS = ["#F9954E", "#22c55e", "#3b82f6", "#a855f7", "#ef4444", "#14b8a6", "#ec4899", "#eab308", "#6366f1", "#f97316"];
 
-// 무드 이모지 / 스티커 / 관심사 후보
+// 무드 이모지 / 무료 스티커 / 관심사 후보
 const MOODS = ["😎", "🥰", "😴", "🔥", "🎮", "✨", "😌", "🤔", "💪", "🍀", "🌙", "☕"];
-const STICKER_CHOICES = ["⭐", "🍊", "🐾", "🌸", "🎀", "🔥", "💎", "🍭", "🦊", "🌟", "👑", "🍀", "🤖", "💛", "🌈", "🎮"];
+const STICKER_CHOICES = FREE_STICKERS; // 무료 기본 스티커(lib/shopItems 단일 출처)
 const INTEREST_SUGGESTIONS = ["AI", "코딩", "게임", "음악", "영화", "그림", "글쓰기", "사진", "독서", "운동", "요리", "여행", "주식", "디자인", "반려동물"];
 
 function fmtDate(at: number): string {
@@ -379,7 +380,7 @@ export default function ProfilePage() {
       <section className="max-w-2xl mx-auto px-5 pt-6">
         {/* 1) 코지홈 배너 */}
         <div className="relative rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 overflow-hidden">
-          <div className={`absolute inset-0 bg-gradient-to-br ${bgGradOf(profile.bg)}`} aria-hidden />
+          <div className={`absolute inset-0 ${bgGradOf(profile.bg)}`} aria-hidden />
           {profile.bannerEffect && profile.bannerEffect !== "none" && (
             <BannerFx id={profile.bannerEffect} />
           )}
@@ -674,7 +675,7 @@ export default function ProfilePage() {
             <div className="grid grid-cols-3 gap-2 mb-4">
               {itemsBySlot("bg").map((p) => (
                 <PickTile key={p.id} owned={isItemOwned(p)} selected={editBg === p.id} price={p.price} label={p.name} onSelect={() => setEditBg(p.id)}>
-                  <span className={`absolute inset-0 bg-gradient-to-br ${p.grad || ""}`} aria-hidden />
+                  <span className={`absolute inset-0 ${p.grad || ""}`} aria-hidden />
                 </PickTile>
               ))}
             </div>
