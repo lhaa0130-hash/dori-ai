@@ -687,8 +687,93 @@ h6 {
 .cozy-bg-animate { animation: cozy-hue 14s linear infinite; }
 @keyframes cozy-hue { to { filter: hue-rotate(360deg); } }
 
+/* ─── 추가 메시 배경 (프리미엄, 2차) ─────────────────────────── */
+.cozy-bg-mesh-lavender { background:
+  radial-gradient(at 20% 22%, rgba(167,139,250,0.42), transparent 55%),
+  radial-gradient(at 82% 20%, rgba(232,121,249,0.34), transparent 50%),
+  radial-gradient(at 55% 85%, rgba(99,102,241,0.30), transparent 55%); }
+.cozy-bg-mesh-peach { background:
+  radial-gradient(at 20% 24%, rgba(251,146,60,0.40), transparent 55%),
+  radial-gradient(at 82% 20%, rgba(251,113,133,0.32), transparent 50%),
+  radial-gradient(at 55% 85%, rgba(252,211,77,0.30), transparent 55%); }
+.cozy-bg-mesh-sky { background:
+  radial-gradient(at 18% 22%, rgba(125,211,252,0.42), transparent 55%),
+  radial-gradient(at 82% 24%, rgba(96,165,250,0.34), transparent 50%),
+  radial-gradient(at 55% 85%, rgba(165,243,252,0.30), transparent 55%); }
+.cozy-bg-mesh-berry { background:
+  radial-gradient(at 20% 22%, rgba(232,121,249,0.42), transparent 55%),
+  radial-gradient(at 82% 20%, rgba(168,85,247,0.36), transparent 50%),
+  radial-gradient(at 55% 85%, rgba(236,72,153,0.32), transparent 55%); }
+.cozy-bg-mesh-fire { background:
+  radial-gradient(at 20% 24%, rgba(248,113,113,0.44), transparent 55%),
+  radial-gradient(at 82% 18%, rgba(251,146,60,0.38), transparent 50%),
+  radial-gradient(at 55% 85%, rgba(252,211,77,0.32), transparent 55%); }
+.cozy-bg-mesh-ice { background:
+  radial-gradient(at 20% 22%, rgba(186,230,253,0.46), transparent 55%),
+  radial-gradient(at 82% 24%, rgba(125,211,252,0.36), transparent 50%),
+  radial-gradient(at 55% 85%, rgba(129,140,248,0.30), transparent 55%); }
+.cozy-bg-mesh-neon { background:
+  radial-gradient(at 18% 20%, rgba(232,121,249,0.44), transparent 55%),
+  radial-gradient(at 84% 26%, rgba(34,211,238,0.38), transparent 50%),
+  radial-gradient(at 55% 85%, rgba(163,230,53,0.32), transparent 55%); }
+.cozy-bg-mesh-dawn { background:
+  radial-gradient(at 20% 24%, rgba(251,113,133,0.40), transparent 55%),
+  radial-gradient(at 82% 20%, rgba(252,211,77,0.34), transparent 50%),
+  radial-gradient(at 55% 85%, rgba(125,211,252,0.30), transparent 55%); }
+.cozy-bg-mesh-dusk { background:
+  radial-gradient(at 20% 22%, rgba(129,140,248,0.44), transparent 55%),
+  radial-gradient(at 82% 22%, rgba(192,132,252,0.36), transparent 50%),
+  radial-gradient(at 55% 85%, rgba(251,113,133,0.30), transparent 55%); }
+.cozy-bg-mesh-emerald { background:
+  radial-gradient(at 18% 22%, rgba(52,211,153,0.42), transparent 55%),
+  radial-gradient(at 82% 22%, rgba(45,212,191,0.34), transparent 50%),
+  radial-gradient(at 55% 85%, rgba(74,222,128,0.30), transparent 55%); }
+.cozy-bg-mesh-grape { background:
+  radial-gradient(at 20% 22%, rgba(192,132,252,0.44), transparent 55%),
+  radial-gradient(at 82% 20%, rgba(129,140,248,0.36), transparent 50%),
+  radial-gradient(at 55% 85%, rgba(232,121,249,0.30), transparent 55%); }
+.cozy-bg-mesh-coral { background:
+  radial-gradient(at 20% 24%, rgba(251,113,133,0.42), transparent 55%),
+  radial-gradient(at 82% 20%, rgba(251,146,60,0.34), transparent 50%),
+  radial-gradient(at 55% 85%, rgba(244,114,182,0.30), transparent 55%); }
+
+/* ─── 추가 이름 효과 (프리미엄, 2차) ───────────────────────── */
+.name-aurora    { background: linear-gradient(90deg,#F9954E,#e879f9,#38bdf8); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.name-galaxy    { background: linear-gradient(90deg,#818cf8,#a855f7,#ec4899); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.name-sunset    { background: linear-gradient(90deg,#fbbf24,#fb7185,#a855f7); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.name-toxic     { background: linear-gradient(90deg,#a3e635,#22c55e,#10b981); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.name-royal     { background: linear-gradient(90deg,#a78bfa,#6366f1,#3b82f6); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.name-cyber     { background: linear-gradient(90deg,#22d3ee,#e879f9); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.name-sakura    { background: linear-gradient(90deg,#fbcfe8,#f472b6,#fda4af); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.name-frost     { background: linear-gradient(180deg,#f0f9ff,#7dd3fc,#6366f1); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.name-bubblegum { background: linear-gradient(90deg,#f9a8d4,#c084fc,#93c5fd); -webkit-background-clip: text; background-clip: text; color: transparent; }
+.name-ember     {
+  background: linear-gradient(90deg,#fbbf24,#ef4444,#f59e0b);
+  background-size: 200% auto;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: name-legend-flow 3.5s linear infinite;
+}
+.name-galaxy-live {
+  background: linear-gradient(90deg,#818cf8,#a855f7,#ec4899,#818cf8);
+  background-size: 200% auto;
+  -webkit-background-clip: text; background-clip: text; color: transparent;
+  animation: name-legend-flow 4.5s linear infinite;
+}
+
+/* ─── 추가 프리미엄 테두리 (2차, box-shadow 다중밴드+글로우) ─── */
+.cozy-frame-ocean   { box-shadow: 0 0 0 3px #38bdf8, 0 0 0 6px #3b82f6, 0 0 16px 3px rgba(59,130,246,0.5); }
+.cozy-frame-sunset  { box-shadow: 0 0 0 3px #fb923c, 0 0 0 6px #fb7185, 0 0 16px 3px rgba(251,113,133,0.5); }
+.cozy-frame-emerald { box-shadow: 0 0 0 3px #34d399, 0 0 0 6px #14b8a6, 0 0 16px 3px rgba(16,185,129,0.5); }
+.cozy-frame-violet  { box-shadow: 0 0 0 3px #a78bfa, 0 0 0 6px #e879f9, 0 0 16px 3px rgba(168,85,247,0.5); }
+.cozy-frame-rose    { box-shadow: 0 0 0 3px #fb7185, 0 0 0 6px #f472b6, 0 0 16px 3px rgba(244,114,182,0.5); }
+.cozy-frame-royal   { box-shadow: 0 0 0 3px #818cf8, 0 0 0 6px #6366f1, 0 0 16px 3px rgba(99,102,241,0.55); }
+.cozy-frame-ember   { box-shadow: 0 0 0 3px #fbbf24, 0 0 0 6px #ef4444, 0 0 18px 4px rgba(239,68,68,0.55); }
+.cozy-frame-cyber   { box-shadow: 0 0 0 3px #22d3ee, 0 0 0 6px #e879f9, 0 0 18px 4px rgba(34,211,238,0.55); }
+.cozy-frame-forest  { box-shadow: 0 0 0 3px #4ade80, 0 0 0 6px #16a34a, 0 0 16px 3px rgba(22,163,74,0.5); }
+.cozy-frame-galaxy  { box-shadow: 0 0 0 3px #818cf8, 0 0 0 6px #a855f7, 0 0 18px 4px rgba(168,85,247,0.55); }
+
 @media (prefers-reduced-motion: reduce) {
-  .name-legend, .name-shimmer { animation: none; }
+  .name-legend, .name-shimmer, .name-ember, .name-galaxy-live { animation: none; }
   .cozy-fall, .cozy-rise, .cozy-twinkle { animation: none; opacity: 0.5; }
   .cozy-bg-animate { animation: none; }
 }

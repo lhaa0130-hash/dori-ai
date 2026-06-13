@@ -36,6 +36,18 @@ const FX: Record<string, { emojis: string[]; anim: "fall" | "rise" | "twinkle" }
   music: { emojis: ["🎵", "🎶", "♪", "🎵"], anim: "rise" },
   bubble: { emojis: ["🫧", "🫧", "💧"], anim: "rise" },
   sparkle: { emojis: ["✨", "⭐", "✦", "💫"], anim: "twinkle" },
+  rain: { emojis: ["💧", "💧", "🌧️"], anim: "fall" },
+  flower: { emojis: ["🌷", "🌼", "🌻", "🌸"], anim: "fall" },
+  candy: { emojis: ["🍭", "🍬", "🧁", "🍫"], anim: "fall" },
+  gift: { emojis: ["🎁", "🎀", "🎊"], anim: "fall" },
+  clover: { emojis: ["🍀", "☘️", "🍀"], anim: "fall" },
+  autumn: { emojis: ["🍁", "🍂", "🌰"], anim: "fall" },
+  fire: { emojis: ["🔥", "✨", "🔥"], anim: "rise" },
+  ghost: { emojis: ["👻", "🦇", "👻"], anim: "rise" },
+  balloon: { emojis: ["🎈", "🎈", "🩷"], anim: "rise" },
+  butterfly: { emojis: ["🦋", "🦋", "✨"], anim: "rise" },
+  lightning: { emojis: ["⚡", "✨", "⚡"], anim: "twinkle" },
+  diamond: { emojis: ["💎", "✨", "💠"], anim: "twinkle" },
 };
 
 export default function BannerFx({ id, fx, count = 12 }: { id?: string; fx?: string; count?: number }) {

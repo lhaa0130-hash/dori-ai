@@ -345,6 +345,19 @@ export default function ShopPage() {
 
       {/* 상품 그리드 */}
       <section className="py-5 pb-20">
+        {visibleItems.length === 0 && (
+          <div className="py-14 text-center">
+            <p className="text-[28px] mb-2">🍬</p>
+            <p className="text-[14px] font-bold text-neutral-600 dark:text-neutral-300">
+              {priceFilter === "free" ? "이 카테고리는 모두 유료예요" : "해당하는 아이템이 없어요"}
+            </p>
+            <p className="text-[12px] text-neutral-400 mt-1">
+              {activeTab === "sticker" && priceFilter === "free"
+                ? "무료 스티커는 코지홈 꾸미기에서 바로 쓸 수 있어요"
+                : "다른 카테고리를 둘러보세요"}
+            </p>
+          </div>
+        )}
         <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-2.5">
           {visibleItems.map((item) => {
             const ownedIt = isOwned(item);
