@@ -22,6 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/community`, lastModified: now, changeFrequency: "daily",   priority: 0.8 },
     { url: `${baseUrl}/market`,    lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
     { url: `${baseUrl}/minigame`,  lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${baseUrl}/flat-form`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/projects`,  lastModified: now, changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/faq`,                          changeFrequency: "monthly", priority: 0.4 },
     { url: `${baseUrl}/help`,                         changeFrequency: "monthly", priority: 0.4 },

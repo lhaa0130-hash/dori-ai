@@ -59,6 +59,7 @@ const TABS = [
 // 건의사항은 더보기에서 숨김 (푸터에만 노출), 마켓은 노출
 const MORE_ITEMS = [
   { name: "공지사항",  href: "/notice",     emoji: "📢" },
+  { name: "평면도",    href: "/flat-form",  emoji: "📐" },
   { name: "커뮤니티",  href: "/community",  emoji: "💬" },
   { name: "마켓",      href: "/market",     emoji: "🛒" },
   { name: "프로젝트",  href: "/projects",   emoji: "🚀" },

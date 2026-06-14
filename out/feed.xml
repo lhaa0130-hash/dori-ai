@@ -6,7 +6,7 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Sat, 13 Jun 2026 08:22:21 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 14 Jun 2026 02:14:58 GMT</lastBuildDate>
     <item>
       <title>스페이스X IPO와 AI의 미래, 투자자들은 어떤 변화를 기대할까?</title>
       <link>https://dori-ai.com/insight/article/trend-93</link>
@@ -22,6 +22,14 @@
       <category>트렌드</category>
       <pubDate>Sat, 13 Jun 2026 00:00:00 GMT</pubDate>
       <description>앤트로픽의 최신 AI 모델이 미국 정부의 외국인 접근 제한 명령으로 인해 사용이 중단되었습니다. 이로 인해 AI 산업의 안전성과 규제 문제에 대한 논의가 다시금 촉발되고 있습니다.</description>
+    </item>
+    <item>
+      <title>Nvidia, Abridge와 손잡고 헬스케어 AI 모델 개발 착수</title>
+      <link>https://dori-ai.com/insight/article/trend-95</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-95</guid>
+      <category>트렌드</category>
+      <pubDate>Sat, 13 Jun 2026 00:00:00 GMT</pubDate>
+      <description>Nvidia가 스타트업 Abridge와 협력하여 헬스케어 분야에 혁신을 가져올 AI 모델을 개발하고 있습니다. 이 협업은 의료 데이터의 분석과 활용에 중점을 두고 있습니다.</description>
     </item>
     <item>
       <title>앤트로픽, 비영리기관을 위한 AI 활용 교육 프로그램 '클로드 코프스' 발표</title>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Mon, 20 Apr 2026 00:00:00 GMT</pubDate>
       <description>Anthropic이 역대 가장 강력한 AI 모델 'Claude Mythos Preview'를 공개했다. 사이버보안 분야에서 초인적 수준의 취약점 탐지 능력을 보여주지만, 동시에 강력한 사이버공격 도구로 악용될 수 있다는 우려로 제한적 배포가 결정됐다.</description>
-    </item>
-    <item>
-      <title>직장인 절반이 AI를 쓴다 — 2026년, 'AI 도구' 없이는 못 일하는 시대 도래</title>
-      <link>https://dori-ai.com/insight/article/trend-64</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-64</guid>
-      <category>트렌드</category>
-      <pubDate>Mon, 20 Apr 2026 00:00:00 GMT</pubDate>
-      <description>2026년 현재 미국 직장인의 절반 이상이 AI 도구를 업무에 활용하고 있다는 조사 결과가 잇따라 발표됐다. Gallup, Deloitte, PwC 등의 데이터가 한 방향을 가리키고 있다 — AI는 이미 선택이 아닌 생존 도구다.</description>
     </item>
   </channel>
 </rss>
