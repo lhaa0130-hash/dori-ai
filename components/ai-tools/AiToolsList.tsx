@@ -7,10 +7,15 @@ import { AI_TOOL_API_LINKS } from "@/constants/aiToolApiLinks";
 import { DISPLAY_CATEGORIES, CATEGORY_LABELS, CATEGORY_DESCRIPTIONS } from "@/constants/aiCategories";
 import { ExternalLink, Code2, Star } from "lucide-react";
 
-// ── favicon fallback ──────────────────────────────────────────────
+// ── 로고: DuckDuckGo 아이콘(안정적) → 실패 시 글자 아바타 ────────────
 function toolFavicon(tool: AiTool) {
-  try { return `https://www.google.com/s2/favicons?domain=${new URL(tool.website).hostname}&sz=128`; }
-  catch { return ""; }
+  try { return `https://icons.duckduckgo.com/ip3/${new URL(tool.website).hostname}.ico`; }
+  catch { return letterAvatar(tool.name); }
+}
+function letterAvatar(name: string) {
+  const ch = (name || "?").trim().charAt(0).toUpperCase() || "?";
+  const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="64" height="64"><rect width="64" height="64" rx="14" fill="#F9954E"/><text x="32" y="44" font-size="34" font-family="sans-serif" font-weight="700" fill="#fff" text-anchor="middle">${ch}</text></svg>`;
+  return "data:image/svg+xml;charset=utf-8," + encodeURIComponent(svg);
 }
 
 // API 링크: 데이터 필드 우선, 없으면 별도 매핑 조회
@@ -45,11 +50,11 @@ function TopCard({ tool, rank }: { tool: AiTool; rank: number }) {
         </span>
 
         <img
-          src={tool.thumbnail || toolFavicon(tool)}
+          src={toolFavicon(tool)}
           alt={tool.name}
           className="w-12 h-12 rounded-xl object-contain bg-neutral-50 dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 flex-shrink-0 p-0.5"
           loading="lazy"
-          onError={(e) => { (e.target as HTMLImageElement).src = toolFavicon(tool); }}
+          onError={(e) => { const t = e.target as HTMLImageElement; if (!t.dataset.fb) { t.dataset.fb = "1"; t.src = letterAvatar(tool.name); } }}
         />
 
         <div className="flex-1 min-w-0">
@@ -135,12 +140,12 @@ function MiniCard({ tool, rank }: { tool: AiTool; rank: number }) {
         {rank}
       </span>
       <img
-        src={tool.thumbnail || toolFavicon(tool)}
+        src={toolFavicon(tool)}
         alt={tool.name}
         className="w-[30px] h-[30px] rounded-lg object-contain bg-neutral-50 dark:bg-zinc-900
           border border-neutral-100 dark:border-zinc-800 flex-shrink-0"
         loading="lazy"
-        onError={(e) => { (e.target as HTMLImageElement).src = toolFavicon(tool); }}
+        onError={(e) => { const t = e.target as HTMLImageElement; if (!t.dataset.fb) { t.dataset.fb = "1"; t.src = letterAvatar(tool.name); } }}
       />
       <div className="flex-1 min-w-0">
         <span className="text-[13px] font-semibold text-neutral-900 dark:text-white">{tool.name}</span>
@@ -185,6 +190,10 @@ function CategorySection({
   isFiltered?: boolean;
 }) {
   const sortedTools = tools.slice().sort((a, b) => {
+    // 1순위: 전 세계 인기 순위(Tranco, 낮을수록 인기) — 6시간마다 갱신
+    const pa = (a as any).__pop ?? Infinity, pb = (b as any).__pop ?? Infinity;
+    if (pa !== pb) return pa - pb;
+    // 폴백(순위 미로딩 시): 기존 큐레이션
     if ((a.topPick ? 1 : 0) !== (b.topPick ? 1 : 0)) return (b.topPick ? 1 : 0) - (a.topPick ? 1 : 0);
     if ((a.topRank ?? 99) !== (b.topRank ?? 99)) return (a.topRank ?? 99) - (b.topRank ?? 99);
     return b.rating - a.rating;
@@ -255,6 +264,7 @@ interface AiToolsListProps {
 export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) {
   const [tools, setTools] = useState<AiTool[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
+  const [popRanks, setPopRanks] = useState<Record<string, number>>({});
 
   useEffect(() => {
     const savedRatings = JSON.parse(localStorage.getItem("dori_tool_ratings") || "{}");
@@ -270,7 +280,16 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
     setIsLoaded(true);
   }, []);
 
-  const currentTools = isLoaded && tools.length > 0 ? tools : AI_TOOLS_DATA;
+  // 6시간마다 갱신되는 전 세계 인기 순위(Tranco) 로드
+  useEffect(() => {
+    fetch("/tool-ranks.json")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((d) => { if (d && d.ranks) setPopRanks(d.ranks); })
+      .catch(() => {});
+  }, []);
+
+  const base = isLoaded && tools.length > 0 ? tools : AI_TOOLS_DATA;
+  const currentTools = base.map((t) => ({ ...t, __pop: popRanks[t.id] ?? null })) as AiTool[];
   const isOverviewMode = filters.category === "All";
 
   if (isOverviewMode) {
