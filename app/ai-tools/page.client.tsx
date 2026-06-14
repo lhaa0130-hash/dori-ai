@@ -3,6 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import AiToolsList from "@/components/ai-tools/AiToolsList";
+import OpenRouterStats from "@/components/ai-tools/OpenRouterStats";
 import { completeMission, isMissionCompletedToday, markMissionCompletedToday } from "@/lib/missionHelpers";
 import { useScrollSpy } from "@/hooks/useScrollSpy";
 import { DISPLAY_CATEGORIES, CATEGORY_LABELS } from "@/constants/aiCategories";
@@ -100,6 +101,11 @@ export default function AiToolsClient() {
             })}
           </div>
         </div>
+      </section>
+
+      {/* ── OpenRouter 실시간 모델 현황 (6시간마다 갱신) ── */}
+      <section className="w-full pt-5">
+        <OpenRouterStats />
       </section>
 
       {/* ── 도구 목록 ── */}
