@@ -501,7 +501,7 @@ export async function audienceForGroups(groupIds: string[]): Promise<string[]> {
 
 // ─── 알림(notifications) ─────────────────────────────────────────
 //   notifications/{uid}/items/{id}  { type, fromUid, fromName, text, link, read, createdAt }
-export type NotiType = "friend_request" | "friend_accept" | "like" | "comment" | "guestbook" | "dm" | "follow" | "mention" | "repost";
+export type NotiType = "friend_request" | "friend_accept" | "like" | "comment" | "guestbook" | "dm" | "follow" | "mention" | "repost" | "candy_grant" | "premium_grant";
 export interface Noti { id: string; type: NotiType; fromUid: string; fromName: string; text: string; link: string; read: boolean; at: number; }
 
 /** 알림 생성(자기 자신에겐 보내지 않음, 실패해도 무시) */

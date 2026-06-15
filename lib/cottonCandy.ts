@@ -8,7 +8,7 @@
 // 로그인하면 hydrateGameData()가 Firestore → localStorage로 동기화하고
 // "dori-gamedata-synced" 이벤트를 쏩니다. 화면은 이 이벤트로 잔액을 다시 읽습니다.
 
-import { doc, getDoc, setDoc, increment, serverTimestamp, runTransaction, arrayUnion } from "firebase/firestore";
+import { doc, getDoc, setDoc, updateDoc, addDoc, collection, getDocs, query, orderBy, limit, increment, serverTimestamp, runTransaction, arrayUnion } from "firebase/firestore";
 import { getFirebaseFirestore, getFirebaseAuth } from "@/lib/firebase";
 import { calculateTier, calculateLevel } from "@/lib/userProfile";
 
@@ -85,10 +85,16 @@ function fsSetAttendance(att: AttendanceData) {
 // 대상 회원의 Firestore users/{uid} 문서에 직접 반영(진짜 저장소).
 // firestore.rules 에서 관리자 이메일만 타인 문서 쓰기를 허용해야 동작합니다.
 // 대상 유저는 다음 접속 시 hydrateGameData 가 Firestore→로컬 캐시로 동기화합니다.
-export async function adminGrantCandy(targetUid: string, amount: number): Promise<boolean> {
+// 반환 mode: 'instant'=즉시 반영(본인/규칙게시됨) · 'queued'=회원 접속 시 반영 · false=실패
+export async function adminGrantCandy(
+  targetUid: string,
+  amount: number,
+  fromName = "관리자"
+): Promise<"instant" | "queued" | false> {
   if (!targetUid || !amount) return false;
+  const db = getFirebaseFirestore();
+  // 1) 직접 반영 시도(본인 문서이거나 관리자 규칙이 게시된 경우 성공)
   try {
-    const db = getFirebaseFirestore();
     await setDoc(
       doc(db, "users", targetUid),
       {
@@ -98,19 +104,101 @@ export async function adminGrantCandy(targetUid: string, amount: number): Promis
       },
       { merge: true }
     );
-    return true;
+    return "instant";
+  } catch {
+    /* 권한 거부 → 큐로 폴백 */
+  }
+  // 2) 폴백: 대상 회원의 알림에 '지급 예약'을 남김(누구나 알림 생성 가능 규칙 활용)
+  //    대상이 접속하면 applyPendingCandyGrants()가 본인 잔액에 반영함.
+  try {
+    await addDoc(collection(db, "notifications", targetUid, "items"), {
+      type: "candy_grant",
+      amount,
+      applied: false,
+      fromName: (fromName || "관리자").slice(0, 20),
+      text: `관리자가 솜사탕 ${amount.toLocaleString()}개를 지급했어요 🍭`,
+      link: "/my",
+      read: false,
+      createdAt: serverTimestamp(),
+    });
+    return "queued";
   } catch (e) {
     console.warn("[admin] 솜사탕 지급 실패:", e);
     return false;
   }
 }
 
-export async function adminSetPremium(targetUid: string, isPremium: boolean): Promise<boolean> {
-  if (!targetUid) return false;
+/**
+ * 로그인/하이드레이트 시: 나에게 온 '솜사탕 지급 예약'을 본인 잔액에 적용.
+ * 본인 문서 쓰기는 항상 허용되므로 규칙 변경 없이 동작. applied=true 로 중복 방지.
+ */
+export async function applyPendingCandyGrants(): Promise<void> {
+  if (typeof window === "undefined") return;
+  let user;
+  try { user = getFirebaseAuth().currentUser; } catch { return; }
+  if (!user || !user.email) return;
+  const uid = user.uid;
+  const email = user.email;
   try {
     const db = getFirebaseFirestore();
+    const snap = await getDocs(query(collection(db, "notifications", uid, "items"), orderBy("createdAt", "desc"), limit(50)));
+    const candy: { id: string; amount: number }[] = [];
+    const premiumGrants: { id: string; premium: boolean }[] = [];
+    snap.forEach((d) => {
+      const x = d.data() as Record<string, unknown>;
+      if (x.applied === true) return;
+      if (x.type === "candy_grant") {
+        const amt = Number(x.amount) || 0;
+        if (amt > 0) candy.push({ id: d.id, amount: amt });
+      } else if (x.type === "premium_grant") {
+        premiumGrants.push({ id: d.id, premium: x.premium === true });
+      }
+    });
+    if (candy.length === 0 && premiumGrants.length === 0) return;
+
+    const total = candy.reduce((s, p) => s + p.amount, 0);
+    const userPatch: Record<string, unknown> = { lastActiveAt: serverTimestamp() };
+    if (total > 0) { userPatch.cottonCandy = increment(total); userPatch.cottonCandyTotal = increment(total); }
+    // 프리미엄은 가장 최근 예약값 적용(목록은 createdAt desc 정렬이라 첫 항목이 최신)
+    if (premiumGrants.length > 0) userPatch.isPremium = premiumGrants[0].premium;
+
+    // 본인 문서에 반영(소유자 쓰기 — 항상 허용)
+    await setDoc(doc(db, "users", uid), userPatch, { merge: true });
+    // 예약 항목 applied 처리(중복 적용 방지)
+    const allIds = [...candy.map((c) => c.id), ...premiumGrants.map((p) => p.id)];
+    await Promise.all(allIds.map((id) => updateDoc(doc(db, "notifications", uid, "items", id), { applied: true, read: true }).catch(() => {})));
+    // 로컬 캐시 동기화
+    if (total > 0) {
+      localStorage.setItem(CC_KEY(email), String(getCottonCandyBalance(email) + total));
+      localStorage.setItem(CC_TOTAL_KEY(email), String(getCottonCandyTotal(email) + total));
+    }
+    window.dispatchEvent(new Event("dori-gamedata-synced"));
+  } catch (e) {
+    console.warn("[candy] 지급 예약 적용 실패:", e);
+  }
+}
+
+export async function adminSetPremium(targetUid: string, isPremium: boolean): Promise<"instant" | "queued" | false> {
+  if (!targetUid) return false;
+  const db = getFirebaseFirestore();
+  try {
     await setDoc(doc(db, "users", targetUid), { isPremium, lastActiveAt: serverTimestamp() }, { merge: true });
-    return true;
+    return "instant";
+  } catch {
+    /* 권한 거부 → 큐로 폴백 */
+  }
+  try {
+    await addDoc(collection(db, "notifications", targetUid, "items"), {
+      type: "premium_grant",
+      premium: isPremium,
+      applied: false,
+      fromName: "관리자",
+      text: isPremium ? "관리자가 프리미엄을 적용했어요 💎" : "프리미엄이 해제되었어요",
+      link: "/my",
+      read: false,
+      createdAt: serverTimestamp(),
+    });
+    return "queued";
   } catch (e) {
     console.warn("[admin] 프리미엄 설정 실패:", e);
     return false;
@@ -189,6 +277,9 @@ export async function hydrateGameData(): Promise<void> {
     );
 
     window.dispatchEvent(new Event("dori-gamedata-synced"));
+
+    // 관리자가 보낸 '솜사탕 지급 예약'을 본인 잔액에 자동 반영(규칙 변경 불필요)
+    void applyPendingCandyGrants();
   } catch (e) {
     console.warn("[cottonCandy] hydrate fail:", e);
   }

@@ -185,25 +185,31 @@ export default function AdminPage() {
     const target = users.find((u) => u.email === email);
     if (!target?.uid) { showToast("error", "대상 회원의 UID를 찾을 수 없어요"); return; }
     const next = !target.isPremium;
-    const ok = await adminSetPremium(target.uid, next);
-    if (ok) {
+    const res = await adminSetPremium(target.uid, next);
+    if (res === "instant") {
       showToast("success", `${email} 프리미엄 ${next ? "활성화" : "해제"} 완료`);
+      setSelectedUser((p) => (p && p.email === email ? { ...p, isPremium: next } : p));
       await loadData();
+    } else if (res === "queued") {
+      showToast("success", `${email} 프리미엄 ${next ? "활성화" : "해제"} 예약 — 접속 시 반영돼요`);
     } else {
-      showToast("error", "변경 실패 (규칙 게시/네트워크 확인)");
+      showToast("error", "변경 실패");
     }
   };
 
-  // ── 솜사탕 지급 (대상 회원의 Firestore users/{uid}에 직접 반영) ──
+  // ── 솜사탕 지급 (대상 회원에게 반영, 규칙 없으면 '지급 예약'으로 자동 폴백) ──
   const giveCandy = async (email: string, amount: number) => {
     const target = users.find((u) => u.email === email);
     if (!target?.uid) { showToast("error", "대상 회원의 UID를 찾을 수 없어요"); return; }
-    const ok = await adminGrantCandy(target.uid, amount);
-    if (ok) {
+    const res = await adminGrantCandy(target.uid, amount, user?.name || "관리자");
+    if (res === "instant") {
       showToast("success", `${email}에게 솜사탕 ${amount.toLocaleString()}개 지급 완료`);
+      setSelectedUser((p) => (p && p.email === email ? { ...p, cottonCandy: (p.cottonCandy || 0) + amount } : p));
       await loadData();
+    } else if (res === "queued") {
+      showToast("success", `솜사탕 ${amount.toLocaleString()}개 지급 예약 — ${email} 님이 접속하면 자동 반영돼요`);
     } else {
-      showToast("error", "지급 실패 (규칙 게시/네트워크 확인)");
+      showToast("error", "지급 실패");
     }
   };
 
@@ -678,10 +684,7 @@ export default function AdminPage() {
                       </div>
                     </div>
                     <button
-                      onClick={() => {
-                        togglePremium(selectedUser.email);
-                        setSelectedUser({ ...selectedUser, isPremium: !selectedUser.isPremium });
-                      }}
+                      onClick={() => togglePremium(selectedUser.email)}
                       className={`px-4 py-2 rounded-lg font-medium text-sm transition ${
                         selectedUser.isPremium
                           ? "bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 border border-yellow-500/50 hover:bg-red-500/20 hover:text-red-500 dark:hover:text-red-400 hover:border-red-500/50"
@@ -699,10 +702,7 @@ export default function AdminPage() {
                       {[10, 50, 100, 500, 1000].map((amount) => (
                         <button
                           key={amount}
-                          onClick={() => {
-                            giveCandy(selectedUser.email, amount);
-                            setSelectedUser({ ...selectedUser, cottonCandy: (selectedUser.cottonCandy || 0) + amount });
-                          }}
+                          onClick={() => giveCandy(selectedUser.email, amount)}
                           className="px-3 py-1.5 bg-pink-500/20 text-pink-600 dark:text-pink-400 rounded-lg text-sm hover:bg-pink-500/30 transition font-medium"
                         >
                           +{amount}

@@ -18,6 +18,8 @@ const TYPE_EMOJI: Record<NotiType, string> = {
   follow: "➕",
   mention: "@",
   repost: "🔁",
+  candy_grant: "🍭",
+  premium_grant: "💎",
 };
 
 function emojiFor(type: NotiType): string {
