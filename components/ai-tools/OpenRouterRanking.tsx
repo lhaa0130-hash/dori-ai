@@ -2,19 +2,23 @@
 
 import { useEffect, useState } from "react";
 
-interface ModelRow {
-  rank: number; name: string; provider: string;
-  reqM: number; usePct: number;
+interface Row {
+  name: string; provider: string;
+  req: number; reqM: number;
   tps: number | null; pin: number | null; pout: number | null; intel: number | null;
 }
 interface Stats {
-  updatedAt: string;
-  total: number;
-  models: ModelRow[];
+  updatedAt: string; total: number;
+  usageTop: Row[]; speedTop: Row[]; priceTop: Row[];
   intelTop: { name: string; score: number }[];
 }
 
 const ORANGE = "#F9954E";
+const TABS = [
+  { key: "usage", label: "🔥 사용량", desc: "전 세계에서 가장 많이 쓰는 모델" },
+  { key: "speed", label: "⚡ 성능", desc: "가장 빠른 모델 (초당 토큰)" },
+  { key: "price", label: "💰 가격", desc: "가장 저렴한 모델 (입력가)" },
+] as const;
 
 function ago(iso: string): string {
   const m = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
@@ -27,6 +31,7 @@ function ago(iso: string): string {
 export default function OpenRouterRanking() {
   const [s, setS] = useState<Stats | null>(null);
   const [hide, setHide] = useState(false);
+  const [tab, setTab] = useState<(typeof TABS)[number]["key"]>("usage");
 
   useEffect(() => {
     fetch("/openrouter-stats.json")
@@ -35,11 +40,27 @@ export default function OpenRouterRanking() {
       .catch(() => setHide(true));
   }, []);
 
-  if (hide || !s || !s.models?.length) return null;
+  if (hide || !s || !s.usageTop?.length) return null;
+
+  const list = tab === "usage" ? s.usageTop : tab === "speed" ? s.speedTop : s.priceTop;
+  const activeDesc = TABS.find((t) => t.key === tab)!.desc;
+
+  // 탭별 1차 지표 막대
+  const primary = (m: Row): { val: string; pct: number } => {
+    if (tab === "usage") { const mx = Math.max(...list.map((x) => x.req), 1); return { val: m.reqM + "M 요청", pct: (m.req / mx) * 100 }; }
+    if (tab === "speed") { const mx = Math.max(...list.map((x) => x.tps || 0), 1); return { val: (m.tps ?? "—") + " t/s", pct: ((m.tps || 0) / mx) * 100 }; }
+    const ps = list.map((x) => x.pin || 0); const mn = Math.min(...ps), mx = Math.max(...ps);
+    return { val: "$" + (m.pin ?? "—") + " /1M", pct: mx > mn ? (1 - ((m.pin || 0) - mn) / (mx - mn)) * 100 : 100 };
+  };
+  const secondary = (m: Row): string => {
+    if (tab === "usage") return `⚡ ${m.tps ?? "—"}t/s · 💰 $${m.pin ?? "—"}/$${m.pout ?? "—"}`;
+    if (tab === "speed") return `🔥 ${m.reqM}M 요청 · 💰 $${m.pin ?? "—"}/$${m.pout ?? "—"}`;
+    return `🔥 ${m.reqM}M 요청 · ⚡ ${m.tps ?? "—"}t/s · 출력 $${m.pout ?? "—"}`;
+  };
 
   return (
     <div className="rounded-3xl border border-neutral-200 dark:border-zinc-800 overflow-hidden">
-      {/* 헤더 — illo 오렌지 */}
+      {/* 헤더 */}
       <div className="px-4 sm:px-5 pt-4 pb-3 bg-gradient-to-b from-[#F9954E]/10 to-transparent">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
@@ -49,7 +70,7 @@ export default function OpenRouterRanking() {
           </div>
           <span className="text-[11px] text-neutral-400 whitespace-nowrap">{s.total}개 · {ago(s.updatedAt)}</span>
         </div>
-        <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-1">전 세계 사용량 · 속도 · 가격을 한눈에 · 6시간마다 갱신</p>
+        <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-1">사용량 · 성능 · 가격 · 지능 — 6시간마다 갱신</p>
       </div>
 
       {/* 지능 하이라이트 */}
@@ -66,35 +87,45 @@ export default function OpenRouterRanking() {
         </div>
       )}
 
-      {/* 통합 랭킹: 사용량 순 + 속도 + 가격 */}
-      <div className="px-4 sm:px-5 py-3">
-        <p className="text-[11px] font-semibold text-neutral-500 mb-2.5">🔥 사용량 순위 <span className="text-neutral-400 font-normal">(요청수 · 속도 · 가격)</span></p>
-        <div className="space-y-2.5">
-          {s.models.map((m) => (
-            <div key={m.rank} className="flex items-start gap-2.5">
-              {/* 순위 */}
-              <span className={`text-[13px] font-extrabold w-5 text-center shrink-0 leading-6 ${m.rank <= 3 ? "text-[#F9954E]" : "text-neutral-300 dark:text-neutral-600"}`}>{m.rank}</span>
-              <div className="flex-1 min-w-0">
-                {/* 이름 + 제공사 + 지능 */}
-                <div className="flex items-center gap-1.5">
-                  <span className="text-[13px] font-bold text-neutral-900 dark:text-white truncate">{m.name}</span>
-                  {m.intel != null && <span className="text-[9px] font-bold text-[#F9954E] bg-[#F9954E]/10 rounded px-1 py-0.5 shrink-0">지능 {m.intel}</span>}
-                </div>
-                {/* 사용량 막대 */}
-                <div className="flex items-center gap-2 mt-1">
-                  <div className="flex-1 h-1.5 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden">
-                    <div className="h-full rounded-full" style={{ width: `${Math.max(4, m.usePct)}%`, background: ORANGE }} />
+      {/* 탭 */}
+      <div className="px-4 sm:px-5 pt-3">
+        <div className="flex gap-1.5">
+          {TABS.map((t) => (
+            <button
+              key={t.key}
+              onClick={() => setTab(t.key)}
+              className={`flex-1 py-2 rounded-xl text-[12.5px] font-bold transition-colors ${
+                tab === t.key ? "bg-[#F9954E] text-white" : "bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400"
+              }`}
+            >
+              {t.label}
+            </button>
+          ))}
+        </div>
+        <p className="text-[11px] text-neutral-400 mt-2 mb-1">{activeDesc}</p>
+      </div>
+
+      {/* 목록 */}
+      <div className="px-4 sm:px-5 pb-3">
+        <div className="space-y-2.5 mt-1">
+          {list.map((m, i) => {
+            const p = primary(m);
+            return (
+              <div key={m.name + i} className="flex items-start gap-2.5">
+                <span className={`text-[13px] font-extrabold w-5 text-center shrink-0 leading-6 ${i < 3 ? "text-[#F9954E]" : "text-neutral-300 dark:text-neutral-600"}`}>{i + 1}</span>
+                <div className="flex-1 min-w-0">
+                  <div className="flex items-center justify-between gap-2">
+                    <span className="text-[13px] font-bold text-neutral-900 dark:text-white truncate">{m.name}</span>
+                    <span className="text-[12px] font-extrabold text-[#F9954E] tabular-nums shrink-0">{p.val}</span>
                   </div>
-                  <span className="text-[10px] text-neutral-400 tabular-nums shrink-0">{m.reqM}M 요청</span>
-                </div>
-                {/* 속도 · 가격 */}
-                <div className="flex flex-wrap gap-x-3 gap-y-0.5 mt-1 text-[10.5px] text-neutral-500 dark:text-neutral-400">
-                  <span>⚡ {m.tps != null ? m.tps + " t/s" : "—"}</span>
-                  <span>💰 입력 ${m.pin ?? "—"} <span className="text-neutral-300 dark:text-neutral-600">·</span> 출력 ${m.pout ?? "—"} <span className="text-neutral-300 dark:text-neutral-600">/1M</span></span>
+                  <div className="h-1.5 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden my-1">
+                    <div className="h-full rounded-full" style={{ width: `${Math.max(4, p.pct)}%`, background: ORANGE }} />
+                  </div>
+                  <p className="text-[10.5px] text-neutral-500 dark:text-neutral-400 truncate">{secondary(m)}</p>
                 </div>
               </div>
-            </div>
-          ))}
+            );
+          })}
         </div>
       </div>
 

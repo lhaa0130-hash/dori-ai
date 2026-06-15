@@ -189,6 +189,7 @@ function CategorySection({
   sectionRef?: (el: HTMLElement | null) => void;
   isFiltered?: boolean;
 }) {
+  const [expanded, setExpanded] = useState(false);
   const sortedTools = tools.slice().sort((a, b) => {
     // 1순위: 전 세계 인기 순위(Tranco, 낮을수록 인기) — 6시간마다 갱신
     const pa = (a as any).__pop ?? Infinity, pb = (b as any).__pop ?? Infinity;
@@ -234,8 +235,8 @@ function CategorySection({
         ))}
       </div>
 
-      {/* 필터 모드: 6위 이하 전체 목록 */}
-      {isFiltered && rest.length > 0 && (
+      {/* 6위 이하: 필터 모드는 항상, 전체창은 펼치기 시 */}
+      {rest.length > 0 && (isFiltered || expanded) && (
         <div className="mt-6">
           <div className="flex items-center gap-3 mb-3">
             <div className="h-px flex-1 bg-neutral-100 dark:bg-zinc-900" />
@@ -250,6 +251,17 @@ function CategorySection({
             ))}
           </div>
         </div>
+      )}
+
+      {/* 전체창: 펼치기 / 접기 */}
+      {!isFiltered && rest.length > 0 && (
+        <button
+          onClick={() => setExpanded((v) => !v)}
+          className="mt-4 w-full py-2.5 rounded-xl border border-neutral-200 dark:border-zinc-800 text-[13px] font-bold
+            text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E]/40 hover:text-[#F9954E] transition-colors"
+        >
+          {expanded ? "접기 ▲" : `+ ${rest.length}개 더 보기 ▼`}
+        </button>
       )}
     </section>
   );
