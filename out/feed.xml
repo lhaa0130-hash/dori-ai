@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 15 Jun 2026 04:12:51 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 15 Jun 2026 10:32:20 GMT</lastBuildDate>
+    <item>
+      <title>중국 대학, 12,000개 과목 폐지 — AI 시대를 겨냥한 교육 개혁</title>
+      <link>https://dori-ai.com/insight/article/trend-99</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-99</guid>
+      <category>트렌드</category>
+      <pubDate>Mon, 15 Jun 2026 00:00:00 GMT</pubDate>
+      <description>중국의 대학들이 AI 시대에 맞춰 12,000개의 구식 학위를 폐지하고 새로운 교육 방향을 모색하고 있다. 이는 국가 차원의 AI 경쟁력 강화를 위한 필수적인 조치로 보인다.</description>
+    </item>
     <item>
       <title>Memoriq·OwnClip·Taste Lab·CakewordAI: 무료 AI 도구로 기억·녹화·디자인·언어 학습까지</title>
       <link>https://dori-ai.com/insight/article/curation-8</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Thu, 23 Apr 2026 00:00:00 GMT</pubDate>
       <description>2026년 AI 코딩 도구 경쟁이 전례 없는 수준으로 치열해지고 있다. Claude Code가 SWE-bench 1위를 차지한 가운데, GitHub Copilot과 Cursor가 맹렬히 추격하는 전장 분석.</description>
-    </item>
-    <item>
-      <title>2026 월드IT쇼 개막: '현실을 움직이는 AI' 기술의 향연</title>
-      <link>https://dori-ai.com/insight/article/trend-65</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-65</guid>
-      <category>트렌드</category>
-      <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
-      <description>국내 최대 ICT 전시회인 2026 월드IT쇼(WIS 2026)가 개막했습니다. '생각을 넘어 행동으로'라는 슬로건 아래 펼쳐진 피지컬 AI와 혁신 기술들을 살펴봅니다.</description>
     </item>
   </channel>
 </rss>

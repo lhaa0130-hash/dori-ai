@@ -54,6 +54,11 @@ export default function Header() {
       desc: "가족의 모든 것을 하나의 앱으로", href: "/family",
       bg: "bg-purple-50 dark:bg-purple-900/20",
     },
+    {
+      name: "Flat-Form", emoji: "📐", image: "",
+      desc: "건축설계 보조 프로그램", href: "/flat-form",
+      bg: "bg-sky-50 dark:bg-sky-900/20",
+    },
   ];
 
   return (
