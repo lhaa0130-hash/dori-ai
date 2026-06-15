@@ -71,9 +71,7 @@ export default function Header() {
 
           {/* ── 데스크탑 네비게이션 (lg+) ── */}
           <nav className="hidden lg:flex items-center gap-8">
-            <Link href="/notice" className="flex-shrink-0 text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap">
-              공지사항
-            </Link>
+            {/* 공지사항은 헤더에서 제외(푸터에만 노출) */}
 
             {/* 프로젝트 — 상위는 활성(호버 드롭다운), 하위 항목만 비활성(준비 중) */}
             <div className="relative group flex-shrink-0">
@@ -106,7 +104,7 @@ export default function Header() {
               </div>
             </div>
 
-            {navItems.filter(i => i.name !== "공지사항").map((item) => (
+            {navItems.map((item) => (
               <Link key={item.name} href={item.href} className="flex-shrink-0 text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap">
                 {item.name}
               </Link>

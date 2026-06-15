@@ -6,7 +6,39 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 15 Jun 2026 03:08:47 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 15 Jun 2026 04:12:51 GMT</lastBuildDate>
+    <item>
+      <title>Memoriq·OwnClip·Taste Lab·CakewordAI: 무료 AI 도구로 기억·녹화·디자인·언어 학습까지</title>
+      <link>https://dori-ai.com/insight/article/curation-8</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/curation-8</guid>
+      <category>큐레이션</category>
+      <pubDate>Mon, 15 Jun 2026 00:00:00 GMT</pubDate>
+      <description>이번 주는 ‘내가 쓰는 환경 안에 조용히 붙는 AI’가 두드러졌습니다. 개인 기억을 관리하는 Memoriq, 로컬 우선 화면 녹화 도구 OwnClip, 웹사이트 디자인을 분석하는 Taste Lab, 사물 이름을 바로 배우는 CakewordAI를 소개합니다.</description>
+    </item>
+    <item>
+      <title>구글, AI를 이용한 사이버 범죄 단체를 고소하다</title>
+      <link>https://dori-ai.com/insight/article/trend-96</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-96</guid>
+      <category>트렌드</category>
+      <pubDate>Sun, 14 Jun 2026 00:00:00 GMT</pubDate>
+      <description>구글이 AI를 활용해 수백만 명을 속인 중국의 사이버 범죄 단체를 고소했습니다. 이번 사건은 AI 기술의 악용 가능성을 다시 한번 조명합니다.</description>
+    </item>
+    <item>
+      <title>Mistral, 3조 원 투자 유치로 20조 원 기업가치 달성</title>
+      <link>https://dori-ai.com/insight/article/trend-97</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-97</guid>
+      <category>트렌드</category>
+      <pubDate>Sun, 14 Jun 2026 00:00:00 GMT</pubDate>
+      <description>Mistral이 3억 유로 투자 유치에 성공하며 기업 가치를 20억 유로로 평가받았다. 이는 지난 투자 라운드보다 두 배 가까이 증가한 수치다.</description>
+    </item>
+    <item>
+      <title>OpenAI에 대한 주 정부의 조사, 무엇이 문제인가?</title>
+      <link>https://dori-ai.com/insight/article/trend-98</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-98</guid>
+      <category>트렌드</category>
+      <pubDate>Sun, 14 Jun 2026 00:00:00 GMT</pubDate>
+      <description>OpenAI가 주 정부 검사에 직면했습니다. 광고 정책부터 건강 데이터 처리까지, 여러 의혹이 제기되고 있습니다.</description>
+    </item>
     <item>
       <title>스페이스X IPO와 AI의 미래, 투자자들은 어떤 변화를 기대할까?</title>
       <link>https://dori-ai.com/insight/article/trend-93</link>
@@ -294,38 +326,6 @@
       <category>트렌드</category>
       <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
       <description>국내 최대 ICT 전시회인 2026 월드IT쇼(WIS 2026)가 개막했습니다. '생각을 넘어 행동으로'라는 슬로건 아래 펼쳐진 피지컬 AI와 혁신 기술들을 살펴봅니다.</description>
-    </item>
-    <item>
-      <title>AI 공부하고 싶은데 뭐부터 볼까? — 유튜브·책·강의·뉴스레터 최종 추천 모음</title>
-      <link>https://dori-ai.com/insight/article/curation-01</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/curation-01</guid>
-      <category>큐레이션</category>
-      <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
-      <description>AI 초보자부터 실무자까지, 검증된 학습 리소스만 엄선했습니다. 유튜브 채널, 책, 무료 강의, 뉴스레터까지 카테고리별로 바로 써먹을 수 있는 리스트입니다.</description>
-    </item>
-    <item>
-      <title>2026년 한국인의 AI 사용 실태 분석 — 누가, 얼마나, 어떻게 쓰고 있나</title>
-      <link>https://dori-ai.com/insight/article/analysis-01</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/analysis-01</guid>
-      <category>분석</category>
-      <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
-      <description>연령대·직군·목적별 AI 도구 사용 현황을 데이터로 분석합니다. 한국인 3,000명 설문 기반의 AI 침투 현황과 변화 트렌드를 확인해 보세요.</description>
-    </item>
-    <item>
-      <title>AI 에이전트의 시대가 온다 — 2026년 하반기 가장 주목해야 할 기술 변화 완전 분석</title>
-      <link>https://dori-ai.com/insight/article/report-01</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/report-01</guid>
-      <category>리포트</category>
-      <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
-      <description>단순 챗봇을 넘어 스스로 계획하고 실행하는 AI 에이전트. 개념부터 국내외 사례, 직업 영향, 개인과 기업의 대응 전략까지 심층 분석합니다.</description>
-    </item>
-    <item>
-      <title>Anthropic, 사이버보안 특화 AI 모델 'Claude Mythos' 공개 — 해킹도 막고 해킹도 한다</title>
-      <link>https://dori-ai.com/insight/article/trend-63</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-63</guid>
-      <category>트렌드</category>
-      <pubDate>Mon, 20 Apr 2026 00:00:00 GMT</pubDate>
-      <description>Anthropic이 역대 가장 강력한 AI 모델 'Claude Mythos Preview'를 공개했다. 사이버보안 분야에서 초인적 수준의 취약점 탐지 능력을 보여주지만, 동시에 강력한 사이버공격 도구로 악용될 수 있다는 우려로 제한적 배포가 결정됐다.</description>
     </item>
   </channel>
 </rss>
