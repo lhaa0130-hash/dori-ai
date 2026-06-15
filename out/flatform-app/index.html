@@ -1,0 +1,1261 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>DORI-AI · Flat-Form</title>
+<link rel="stylesheet" as="style" crossorigin
+  href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@latest/dist/web/static/pretendard.min.css">
+<style>
+  :root{
+    --bg:#0f1216; --panel:#171b22; --panel2:#1d232c; --line:#2a313c;
+    --txt:#e7ecf3; --muted:#8b95a5; --accent:#F9954E; --accent2:#FBAA60;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;height:100%;font-family:'Segoe UI','Malgun Gothic',sans-serif;
+    background:var(--bg);color:var(--txt);overflow:hidden;}
+  #app{display:flex;flex-direction:column;height:100%;}
+  /* ── 툴바 ── */
+  #toolbar,#toolbar2{display:flex;align-items:center;gap:6px;padding:8px 12px;background:var(--panel);
+    border-bottom:1px solid var(--line);flex-wrap:wrap;}
+  #toolbar2{padding:6px 12px;background:var(--panel2);font-size:12.5px;}
+  #toolbar .brand{font-weight:700;letter-spacing:.5px;margin-right:8px;}
+  #toolbar .brand small{color:var(--muted);font-weight:400;}
+  .tool{background:var(--panel2);border:1px solid var(--line);color:var(--txt);
+    padding:7px 12px;border-radius:8px;cursor:pointer;font-size:13px;display:flex;
+    align-items:center;gap:6px;transition:.12s;}
+  .tool:hover{border-color:var(--accent);}
+  .tool.active{background:var(--accent);border-color:var(--accent);color:#fff;}
+  .tool .k{opacity:.55;font-size:11px;border:1px solid currentColor;border-radius:4px;
+    padding:0 4px;line-height:15px;}
+  .sep{width:1px;height:24px;background:var(--line);margin:0 4px;}
+  .ghost{background:transparent;}
+  #hint{margin-left:auto;color:var(--muted);font-size:12.5px;}
+  /* 2번째 툴바 컨트롤 */
+  .ctl{display:flex;align-items:center;gap:5px;background:var(--panel);border:1px solid var(--line);
+    border-radius:8px;padding:4px 8px;}
+  .ctl>span.lbl{color:var(--muted);}
+  .mini{background:var(--panel2);border:1px solid var(--line);color:var(--txt);border-radius:6px;
+    cursor:pointer;padding:3px 8px;font-size:13px;line-height:1;}
+  .mini:hover{border-color:var(--accent);}
+  .ctl .val{min-width:54px;text-align:center;font-variant-numeric:tabular-nums;}
+  .ctl input[type=number]{width:74px;background:var(--bg);border:1px solid var(--line);color:var(--txt);
+    border-radius:6px;padding:3px 6px;}
+  .ctl input[type=range]{width:90px;}
+  .ctl.off{opacity:.45;pointer-events:none;}
+  /* ── 본문 ── */
+  #main{flex:1;display:flex;min-height:0;}
+  #canvasWrap{flex:1;position:relative;}
+  canvas{display:block;width:100%;height:100%;cursor:crosshair;}
+  /* ── 면적표 ── */
+  #side{width:300px;background:var(--panel);border-left:1px solid var(--line);
+    display:flex;flex-direction:column;}
+  #side h2{margin:0;padding:14px 16px 10px;font-size:14px;letter-spacing:.3px;
+    border-bottom:1px solid var(--line);}
+  #side h2 span{color:var(--muted);font-weight:400;font-size:12px;}
+  #rooms{flex:1;overflow:auto;padding:6px 10px;}
+  table{width:100%;border-collapse:collapse;font-size:13px;}
+  th,td{text-align:right;padding:7px 8px;border-bottom:1px solid var(--line);}
+  th{color:var(--muted);font-weight:500;font-size:11.5px;text-transform:uppercase;}
+  td.name{text-align:left;}
+  #rooms tbody tr{cursor:pointer;}
+  tr.rsel{background:rgba(249,149,78,.13);}
+  .rname{background:transparent;border:1px solid transparent;border-radius:6px;color:var(--txt);font-size:13px;
+    font-family:inherit;padding:3px 5px;width:90px;outline:none;}
+  .rname:hover{border-color:var(--line);} .rname:focus{border-color:var(--accent);background:var(--bg);}
+  .rdel{background:transparent;border:none;color:var(--muted);cursor:pointer;font-size:15px;line-height:1;padding:2px 5px;}
+  .rdel:hover{color:#ef6f6f;}
+  .swatch{display:inline-block;width:11px;height:11px;border-radius:3px;margin-right:7px;
+    vertical-align:-1px;}
+  #empty{color:var(--muted);font-size:12.5px;text-align:center;padding:30px 12px;line-height:1.7;}
+  #total{border-top:1px solid var(--line);padding:14px 16px;background:var(--panel2);}
+  #total .row{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:6px;}
+  #total .row:last-child{margin-bottom:0;}
+  #total .big{font-size:26px;font-weight:700;color:var(--accent2);}
+  #total .lbl{color:var(--muted);font-size:12.5px;}
+  #total .py{font-size:13px;color:var(--muted);}
+  .foot{padding:8px 16px;border-top:1px solid var(--line);color:var(--muted);font-size:11px;
+    line-height:1.6;}
+  /* ── VWorld 모달 ── */
+  #vwBack{position:fixed;inset:0;background:rgba(0,0,0,.55);display:none;align-items:center;
+    justify-content:center;z-index:50;}
+  #vwBack.show{display:flex;}
+  #vw{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:18px 20px;width:400px;
+    box-shadow:0 18px 50px rgba(0,0,0,.5);}
+  #vw h3{margin:0 0 4px;font-size:15px;}
+  #vw .sub{color:var(--muted);font-size:11.5px;margin-bottom:12px;line-height:1.5;}
+  #vw .f{display:flex;flex-direction:column;gap:4px;margin-bottom:10px;}
+  #vw label{font-size:12px;color:var(--muted);}
+  #vw input{background:var(--bg);border:1px solid var(--line);color:var(--txt);border-radius:7px;
+    padding:7px 9px;font-size:13px;}
+  #vw .row2{display:flex;gap:8px;}
+  #vw .row2>.f{flex:1;}
+  #vwStatus{font-size:12px;color:var(--accent2);min-height:17px;margin:2px 0 6px;}
+  #vw .actions{display:flex;justify-content:flex-end;gap:8px;margin-top:4px;}
+  #vw .btn{background:var(--accent);border:none;color:#fff;border-radius:8px;padding:8px 16px;
+    cursor:pointer;font-size:13px;}
+  #vw .btn.sec{background:var(--panel2);border:1px solid var(--line);color:var(--txt);}
+  #vw a{color:var(--accent);}
+  /* ── 프로젝트 칩(상단) ── */
+  .chip{display:none;align-items:center;gap:6px;background:rgba(249,149,78,.14);
+    border:1px solid rgba(249,149,78,.4);color:#f3b481;border-radius:20px;padding:5px 11px;font-size:12px;}
+  /* ── 온보딩(로그인/기본정보) · dori-ai 라이트 스타일 ── */
+  #onboard{position:fixed;inset:0;z-index:100;display:flex;align-items:center;justify-content:center;padding:24px;overflow:auto;
+    background:radial-gradient(1200px 620px at 50% -12%,#FFF8F0,#fdeede 42%,#fbe3d2 100%);
+    font-family:'Pretendard','Segoe UI','Malgun Gothic',sans-serif;color:#3a2f28;}
+  #onboard.hide{display:none;}
+  .ob-card{background:#fff;border:1px solid #f1e3d6;border-radius:22px;padding:34px 32px;width:420px;max-width:100%;
+    box-shadow:0 24px 70px rgba(180,110,50,.18);}
+  .ob-card.wide{width:600px;}
+  .ob-brand{display:flex;align-items:baseline;gap:10px;}
+  .ob-brand .g{font-size:30px;font-weight:800;letter-spacing:.5px;
+    background:linear-gradient(to right,#FBAA60,#F9954E 40%,#E8832E);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .ob-brand .sub{font-size:14px;font-weight:600;color:#b08763;}
+  .ob-brand.sm .g{font-size:22px;}
+  .ob-tag{color:#8a7766;margin:8px 0 22px;font-size:14px;}
+  .ob-field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px;}
+  .ob-field label{font-size:12.5px;color:#9b8676;font-weight:600;}
+  .ob-field input{border:1px solid #ecdccd;background:#fffdfb;border-radius:11px;padding:11px 13px;font-size:14px;
+    color:#3a2f28;font-family:inherit;outline:none;transition:.15s;}
+  .ob-field input:focus{border-color:#F9954E;box-shadow:0 0 0 3px rgba(249,149,78,.15);}
+  .ob-row{display:flex;gap:12px;} .ob-row>.ob-field{flex:1;}
+  .ob-primary{width:100%;border:none;border-radius:12px;padding:13px;font-size:15px;font-weight:700;color:#fff;cursor:pointer;
+    background:linear-gradient(to right,#FBAA60,#F9954E 40%,#E8832E);font-family:inherit;transition:.15s;
+    box-shadow:0 8px 20px rgba(249,149,78,.3);}
+  .ob-primary:hover{filter:brightness(1.04);} .ob-primary.sm{width:auto;padding:11px 22px;}
+  .ob-ghost{background:none;border:none;color:#b08763;font-size:13.5px;cursor:pointer;font-family:inherit;}
+  #obGuest{width:100%;margin-top:12px;text-decoration:underline;}
+  .ob-ghost.sm{padding:11px 18px;border:1px solid #ecdccd;border-radius:12px;color:#8a7766;}
+  .ob-or{display:flex;align-items:center;gap:10px;color:#c4b3a3;font-size:12px;margin:18px 0;}
+  .ob-or::before,.ob-or::after{content:"";flex:1;height:1px;background:#f1e3d6;}
+  .ob-social{display:flex;flex-direction:column;gap:9px;}
+  .ob-social-btn{border:1px solid #ecdccd;background:#fff;border-radius:11px;padding:11px;font-size:13.5px;
+    font-weight:600;cursor:pointer;font-family:inherit;}
+  .ob-social-btn.kakao{background:#FEE500;border-color:#FEE500;color:#3c1e1e;}
+  .ob-note{font-size:11.5px;color:#b3a293;margin-top:14px;line-height:1.5;}
+  #obProg{display:flex;gap:8px;margin:18px 0 22px;}
+  #obProg .seg{flex:1;display:flex;align-items:center;gap:8px;padding:9px 12px;border-radius:12px;background:#faf1e8;
+    color:#b8a695;font-size:13px;font-weight:600;}
+  #obProg .seg i{width:22px;height:22px;border-radius:50%;background:#ece0d3;color:#fff;display:flex;align-items:center;
+    justify-content:center;font-style:normal;font-size:12px;flex:none;}
+  #obProg .seg.active{background:#FFF1E4;color:#E8832E;} #obProg .seg.active i{background:#F9954E;}
+  #obProg .seg.done i{background:#F9c79b;}
+  .ob-step{display:none;} .ob-step.show{display:block;}
+  .ob-q{font-size:15px;font-weight:700;margin:2px 0 16px;color:#5a4a3c;}
+  .ob-choices{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;margin-bottom:22px;}
+  .choice{border:1.5px solid #ecdccd;background:#fffdfb;border-radius:13px;padding:18px 10px;font-size:13.5px;
+    font-weight:600;color:#5a4a3c;cursor:pointer;font-family:inherit;transition:.12s;}
+  .choice:hover{border-color:#F9954E;}
+  .choice.on{border-color:#F9954E;background:#FFF1E4;color:#E8832E;box-shadow:0 6px 16px rgba(249,149,78,.18);}
+  .ob-actions{display:flex;justify-content:space-between;align-items:center;margin-top:6px;}
+  .ob-adv{margin:2px 0 16px;border:1px solid #f1e3d6;border-radius:12px;padding:2px 12px;background:#fffaf4;}
+  .ob-adv summary{cursor:pointer;font-size:13px;color:#b08763;font-weight:600;padding:9px 0;}
+  .ob-l{font-size:15px;color:#5a4a3c;font-weight:700;display:block;margin-bottom:4px;}
+  .ob-sub{font-size:11.5px;color:#b3a293;margin:0 0 12px;line-height:1.55;}
+  .addr-row{display:flex;align-items:center;gap:8px;margin-bottom:8px;}
+  .addr-in{flex:1;min-width:0;border:1px solid #ecdccd;background:#fffdfb;border-radius:11px;padding:11px 13px;
+    font-size:14px;color:#3a2f28;font-family:inherit;outline:none;transition:.15s;}
+  .addr-in:focus{border-color:#F9954E;box-shadow:0 0 0 3px rgba(249,149,78,.15);}
+  .addr-area{min-width:90px;text-align:right;font-size:13px;font-weight:700;color:#E8832E;
+    font-variant-numeric:tabular-nums;flex:none;}
+  .addr-del{width:30px;height:30px;border:1px solid #ecdccd;background:#fff;border-radius:9px;color:#b08763;
+    cursor:pointer;font-size:16px;line-height:1;flex:none;}
+  .addr-del:hover{border-color:#F9954E;color:#E8832E;}
+  .addr-srch{flex:none;border:1px solid #F9954E;background:#fff;color:#E8832E;border-radius:9px;padding:0 13px;height:30px;
+    font-size:12.5px;font-weight:700;cursor:pointer;font-family:inherit;}
+  .addr-srch:hover{background:#FFF1E4;}
+  .addr-res{flex:none;min-width:118px;font-size:12px;color:#b3a293;text-align:right;}
+  .addr-res.ok{color:#E8832E;} .addr-res.ok b{color:#d1620f;font-weight:800;}
+  .addr-res.err{color:#d9534f;} .addr-res.loading{color:#9b8676;}
+  .ob-add{background:none;border:1px dashed #e6cdb4;color:#b08763;border-radius:10px;padding:8px 13px;
+    font-size:12.5px;cursor:pointer;font-family:inherit;margin:2px 0 14px;}
+  .ob-add:hover:not(:disabled){border-color:#F9954E;color:#E8832E;} .ob-add:disabled{cursor:default;}
+  .ob-total{display:flex;justify-content:space-between;align-items:baseline;background:#FFF6EE;
+    border:1px solid #f3e0cf;border-radius:12px;padding:11px 14px;margin-bottom:14px;}
+  .ob-total span{font-size:12.5px;color:#9b8676;font-weight:600;} .ob-total b{font-size:15px;color:#E8832E;}
+  /* ── 로그인: dori-ai.com /login 과 동일 ── */
+  #obLogin{flex-direction:column;align-items:center;width:100%;max-width:440px;}
+  .dlog-logo{font-size:26px;font-weight:800;letter-spacing:.5px;margin-bottom:18px;
+    background:linear-gradient(to right,#FBAA60,#F9954E 40%,#E8832E);-webkit-background-clip:text;background-clip:text;color:transparent;}
+  .ob-card.login{width:100%;background:#fff;border:1px solid #e5e7eb;border-radius:24px;padding:36px;
+    box-shadow:0 4px 24px rgba(0,0,0,.06);}
+  .dlog-tabs{display:flex;background:rgba(0,0,0,.04);border-radius:14px;padding:4px;margin-bottom:28px;}
+  .dlog-tab{flex:1;padding:12px 0;border-radius:11px;border:none;font-size:14px;font-weight:700;cursor:pointer;
+    transition:all .3s ease;background:transparent;color:#9ca3af;font-family:inherit;}
+  .dlog-tab.active{background:#fff;color:#F9954E;box-shadow:0 2px 8px rgba(0,0,0,.06);}
+  .dlog-head{margin-bottom:24px;}
+  .dlog-head h1{font-size:26px;font-weight:800;color:#111;margin:0 0 8px;letter-spacing:-.02em;}
+  .dlog-head p{font-size:14px;color:#888;line-height:1.5;margin:0;}
+  .dlog-form{display:flex;flex-direction:column;gap:16px;}
+  .dlog-field{position:relative;}
+  .dlog-field .dlog-ic{position:absolute;left:14px;top:50%;transform:translateY(-50%);color:#9ca3af;display:flex;pointer-events:none;}
+  .dlog-field input{width:100%;padding:14px 14px 14px 42px;border-radius:12px;border:1px solid #e5e7eb;background:#fafafa;
+    color:#111;font-size:15px;outline:none;transition:all .2s ease;font-family:inherit;box-sizing:border-box;}
+  .dlog-field input:focus{border-color:#F9954E;background:#fff;box-shadow:0 0 0 3px rgba(249,149,78,.12);}
+  .dlog-field input[type=password]{padding-right:44px;}
+  .dlog-eye{position:absolute;right:12px;top:50%;transform:translateY(-50%);border:none;background:none;cursor:pointer;color:#9ca3af;padding:4px;display:flex;}
+  .dlog-submit{width:100%;padding:15px;border-radius:16px;border:none;background:#F9954E;color:#fff;font-size:15px;
+    font-weight:800;cursor:pointer;transition:all .15s;font-family:inherit;margin-top:2px;}
+  .dlog-submit:hover{background:#E8832E;} .dlog-submit:active{transform:scale(.99);}
+  .dlog-or{display:flex;align-items:center;gap:12px;color:#bbb;font-size:12px;margin:22px 0;}
+  .dlog-or::before,.dlog-or::after{content:"";flex:1;height:1px;background:#eee;}
+  .dlog-google{width:100%;padding:13px;border-radius:14px;border:1px solid #e5e7eb;background:#fff;color:#3c4043;
+    font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:10px;
+    font-family:inherit;transition:all .15s;}
+  .dlog-google:hover{background:#fafafa;border-color:#d1d5db;}
+  .dlog-terms{text-align:center;margin:22px 0 0;font-size:12px;color:#aaa;line-height:1.6;}
+  .dlog-terms a{color:#888;text-decoration:underline;cursor:pointer;}
+  .dlog-note{text-align:center;font-size:11px;color:#cbb9a8;margin:10px 0 0;}
+  .dlog-foot{text-align:center;font-size:11.5px;color:#bbb;margin-top:18px;}
+  /* ── 단축키 범례 ── */
+  #keyHelp{position:fixed;top:104px;right:316px;z-index:55;width:264px;background:var(--panel);border:1px solid var(--line);
+    border-radius:12px;padding:14px 16px;box-shadow:0 14px 44px rgba(0,0,0,.5);display:none;font-size:13px;}
+  #keyHelp.show{display:block;}
+  .kh-head{display:flex;justify-content:space-between;align-items:center;font-weight:700;margin-bottom:8px;}
+  .kh-head span{cursor:pointer;color:var(--muted);font-size:18px;line-height:1;}
+  .kh-sec{color:var(--accent2);font-size:11px;font-weight:700;margin:11px 0 5px;letter-spacing:.4px;}
+  .kh-row{display:flex;align-items:center;gap:10px;padding:3px 0;}
+  .kh-row .k1{flex:none;min-width:88px;}
+  kbd{background:var(--panel2);border:1px solid var(--line);border-bottom-width:2px;border-radius:5px;
+    padding:1px 6px;font-family:inherit;font-size:11.5px;color:var(--txt);}
+  .kh-d{color:var(--muted);}
+  #rotInput{position:fixed;display:none;z-index:60;width:80px;padding:7px 9px;border:2px solid var(--accent);
+    border-radius:8px;background:#fff;color:#111;font-size:14px;font-family:inherit;outline:none;
+    box-shadow:0 6px 18px rgba(0,0,0,.28);}
+  #obToast{position:fixed;bottom:26px;left:50%;transform:translateX(-50%) translateY(20px);background:#3a2f28;color:#fff;
+    padding:11px 20px;border-radius:30px;font-size:13.5px;opacity:0;pointer-events:none;transition:.25s;z-index:200;
+    font-family:'Pretendard','Segoe UI',sans-serif;}
+  #obToast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div id="app">
+  <div id="toolbar">
+    <div class="brand">DORI-AI <small>· Flat-Form</small></div>
+    <span class="chip" id="projChip"></span>
+    <button class="tool" data-tool="select">선택 <span class="k">V</span></button>
+    <div class="sep"></div>
+    <button class="tool active" data-tool="line">선 <span class="k">L</span></button>
+    <button class="tool" data-tool="rect">네모 <span class="k">R</span></button>
+    <button class="tool" data-tool="circle">동그라미 <span class="k">C</span></button>
+    <button class="tool" data-tool="arc">호 <span class="k">A</span></button>
+    <div class="sep"></div>
+    <button class="tool ghost" id="btnUndo">되돌리기 <span class="k">⌃Z</span></button>
+    <button class="tool ghost" id="btnClear">전체삭제</button>
+    <button class="tool ghost" id="btnOnboard">기본정보</button>
+    <button class="tool ghost" id="btnKeys" title="단축키 보기">⌨ 단축키</button>
+    <div id="hint"></div>
+  </div>
+  <!-- 단위/지적도 컨트롤 -->
+  <div id="toolbar2">
+    <div class="ctl">
+      <span class="lbl">지적도</span>
+      <button class="mini" id="cadVworld">VWorld 호출</button>
+      <button class="mini" id="cadLoad">이미지</button>
+      <input type="file" id="cadFile" accept="image/*" hidden>
+      <button class="mini" id="cadAxis" title="두 꼭지점을 클릭해 수평으로 정렬">기준축</button>
+      <button class="mini" id="cadRotO" title="O키와 동일 · 클릭 후 각도 입력">회전 O</button>
+      <button class="mini" id="cadClear">제거</button>
+      <span class="lbl" style="margin-left:8px">투명도</span>
+      <input type="range" id="cadOp" min="10" max="100" value="92" style="width:80px">
+    </div>
+    <div class="ctl">
+      <span class="lbl">네모</span>
+      <input type="number" id="rectW" placeholder="가로" style="width:60px">
+      <span class="lbl">×</span>
+      <input type="number" id="rectH" placeholder="세로" style="width:60px">
+      <span class="lbl">mm</span>
+      <button class="mini" id="rectPlace">배치</button>
+    </div>
+    <div id="hint2" style="margin-left:auto;color:var(--muted)"></div>
+  </div>
+  <input id="rotInput" type="number" placeholder="각도°">
+  <!-- 위 토스트/입력은 화면에 떠다님 -->
+  <div id="main">
+    <div id="canvasWrap"><canvas id="cv"></canvas></div>
+    <div id="side">
+      <h2>면적표 <span id="roomCount"></span></h2>
+      <div id="rooms"></div>
+      <div id="total">
+        <div class="row"><span class="lbl">총 면적</span></div>
+        <div class="row"><span class="big" id="totalM2">0.00 ㎡</span>
+          <span class="py" id="totalPy">0.00 평</span></div>
+      </div>
+      <div class="foot">
+        단위 <b>mm</b> · 좌표는 <b>100mm</b> 단위로 딱 정렬됩니다.<br>
+        선: <b>Shift</b>=수직/수평, <b>숫자</b>=길이(mm). 우리 필지는 <b>빨간선</b>(꼭지점 스냅).<br>
+        지적도 <b>회전=O키</b>(클릭 후 각도 입력) · <b>기준축</b>(꼭지점 2개 클릭→수평).
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- 온보딩: 로그인 → 기본정보(필지/구조/용도) -->
+<div id="onboard">
+  <!-- 로그인 -->
+  <div id="obLogin">
+    <div class="dlog-logo">DORI-AI</div>
+    <div class="ob-card login">
+      <div class="dlog-tabs">
+        <button type="button" class="dlog-tab active" id="dlogTabLogin">로그인</button>
+        <button type="button" class="dlog-tab" id="dlogTabSignup">회원가입</button>
+      </div>
+      <div class="dlog-head">
+        <h1 id="dlogTitle">Welcome Back</h1>
+        <p id="dlogSub">DORI-AI에 오신 것을 환영합니다.</p>
+      </div>
+      <form class="dlog-form" onsubmit="return false">
+        <div class="dlog-field">
+          <span class="dlog-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3 7 9 6 9-6"/></svg></span>
+          <input id="obEmail" type="email" placeholder="example@email.com">
+        </div>
+        <div class="dlog-field">
+          <span class="dlog-ic"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="11" width="16" height="10" rx="2"/><path d="M8 11V7a4 4 0 0 1 8 0v4"/></svg></span>
+          <input id="obPw" type="password" placeholder="비밀번호 입력">
+          <button type="button" class="dlog-eye" id="dlogEye" title="비밀번호 표시"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2 12s3.5-7 10-7 10 7 10 7-3.5 7-10 7-10-7-10-7Z"/><circle cx="12" cy="12" r="3"/></svg></button>
+        </div>
+        <button type="submit" class="dlog-submit" id="obLoginBtn">로그인</button>
+      </form>
+      <div class="dlog-or"><span>또는</span></div>
+      <button type="button" class="dlog-google" id="obGoogle">
+        <svg width="18" height="18" viewBox="0 0 18 18"><path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.92c1.71-1.57 2.68-3.89 2.68-6.62Z"/><path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.92-2.26c-.81.54-1.84.86-3.04.86-2.34 0-4.32-1.58-5.03-3.71H.96v2.33A9 9 0 0 0 9 18Z"/><path fill="#FBBC05" d="M3.97 10.71a5.4 5.4 0 0 1-.29-1.71c0-.6.1-1.18.29-1.71V4.96H.96A9 9 0 0 0 0 9c0 1.45.35 2.82.96 4.04l3.01-2.33Z"/><path fill="#EA4335" d="M9 3.58c1.32 0 2.51.45 3.44 1.35l2.58-2.59C13.46.89 11.43 0 9 0A9 9 0 0 0 .96 4.96l3.01 2.33C4.68 5.16 6.66 3.58 9 3.58Z"/></svg>
+        Google로 계속하기
+      </button>
+      <p class="dlog-terms">가입 시 <a id="dlogTos">이용약관</a> 및 <a id="dlogPriv">개인정보처리방침</a>에 동의합니다.</p>
+      <p class="dlog-note">프로토타입 — 실제 인증 없이 다음 단계로 진행됩니다.</p>
+    </div>
+    <div class="dlog-foot">© 2026 illo · dori-ai.com</div>
+  </div>
+  <!-- 기본정보 위저드 -->
+  <div id="obWizard" class="ob-card wide" style="display:none">
+    <div class="ob-brand sm"><span class="g">DORI-AI</span><span class="sub">Flat-Form · 기본정보</span></div>
+    <div id="obProg">
+      <div class="seg" data-step="1"><i>1</i><b>필지정보</b></div>
+      <div class="seg" data-step="2"><i>2</i><b>희망 구조</b></div>
+      <div class="seg" data-step="3"><i>3</i><b>희망 용도</b></div>
+    </div>
+    <div class="ob-step" data-step="1">
+      <label class="ob-l">대지주소</label>
+      <p class="ob-sub">최대 10개의 필지까지 입력할 수 있습니다. 지번까지 상세히 입력 부탁드립니다.</p>
+      <div id="obAddrList"></div>
+      <button type="button" class="ob-add" id="obAddAddr">＋ 주소 추가</button>
+      <div class="ob-actions"><span></span><button class="ob-primary sm" id="obNext1">다음 →</button></div>
+    </div>
+    <div class="ob-step" data-step="2">
+      <p class="ob-q">희망하는 구조를 선택하세요</p>
+      <div class="ob-choices" id="obStructs"></div>
+      <div class="ob-actions"><button class="ob-ghost sm" id="obPrev2">← 이전</button>
+        <button class="ob-primary sm" id="obNext2">다음 →</button></div>
+    </div>
+    <div class="ob-step" data-step="3">
+      <p class="ob-q">희망하는 용도를 선택하세요</p>
+      <div class="ob-choices" id="obUsages"></div>
+      <div class="ob-actions"><button class="ob-ghost sm" id="obPrev3">← 이전</button>
+        <button class="ob-primary sm" id="obFinishBtn">도면 작업 시작 →</button></div>
+    </div>
+  </div>
+</div>
+<div id="obToast"></div>
+
+<!-- 단축키 범례 -->
+<div id="keyHelp">
+  <div class="kh-head">단축키 <span id="khClose">×</span></div>
+  <div class="kh-sec">도구</div>
+  <div class="kh-row"><span class="k1"><kbd>V</kbd></span><span class="kh-d">선택</span></div>
+  <div class="kh-row"><span class="k1"><kbd>L</kbd></span><span class="kh-d">선</span></div>
+  <div class="kh-row"><span class="k1"><kbd>R</kbd></span><span class="kh-d">네모</span></div>
+  <div class="kh-row"><span class="k1"><kbd>C</kbd></span><span class="kh-d">동그라미</span></div>
+  <div class="kh-row"><span class="k1"><kbd>A</kbd></span><span class="kh-d">호</span></div>
+  <div class="kh-sec">선 그리기 중</div>
+  <div class="kh-row"><span class="k1"><kbd>Shift</kbd></span><span class="kh-d">수직·수평 고정</span></div>
+  <div class="kh-row"><span class="k1"><kbd>숫자</kbd> <kbd>↵</kbd></span><span class="kh-d">길이(mm) 지정</span></div>
+  <div class="kh-sec">지적도</div>
+  <div class="kh-row"><span class="k1"><kbd>O</kbd></span><span class="kh-d">회전 (클릭→각도 입력)</span></div>
+  <div class="kh-sec">편집 · 보기</div>
+  <div class="kh-row"><span class="k1"><kbd>Ctrl</kbd> <kbd>Z</kbd></span><span class="kh-d">되돌리기</span></div>
+  <div class="kh-row"><span class="k1"><kbd>Del</kbd></span><span class="kh-d">선택 삭제</span></div>
+  <div class="kh-row"><span class="k1"><kbd>Esc</kbd></span><span class="kh-d">취소</span></div>
+  <div class="kh-row"><span class="k1"><kbd>Space</kbd>+드래그</span><span class="kh-d">화면 이동</span></div>
+  <div class="kh-row"><span class="k1">휠</span><span class="kh-d">확대/축소</span></div>
+</div>
+
+<!-- VWorld 지적도 호출 모달 -->
+<div id="vwBack">
+  <div id="vw">
+    <h3>VWorld 지적도 호출</h3>
+    <div class="sub">국토교통부 브이월드(vworld.kr)의 <b>연속지적도</b>를 API로 불러옵니다.
+      <a href="https://www.vworld.kr" target="_blank">vworld.kr</a>에서 인증키를 발급받고,
+      <b>서비스 URL에 이 페이지 주소(예: http://localhost:5188)를 등록</b>하세요.</div>
+    <div class="f"><label>API 인증키</label><input id="vwKey" placeholder="발급받은 인증키"></div>
+    <div class="f"><label>주소 (도로명/지번)</label>
+      <input id="vwAddr" placeholder="예: 서울특별시 중구 세종대로 110"></div>
+    <div class="row2">
+      <div class="f"><label>경도 lon (주소 대신)</label><input id="vwLon" placeholder="126.977..."></div>
+      <div class="f"><label>위도 lat</label><input id="vwLat" placeholder="37.566..."></div>
+    </div>
+    <div class="f"><label>한 변 길이(m)</label><input id="vwSpan" type="number" value="150"></div>
+    <div id="vwStatus"></div>
+    <div class="actions">
+      <button class="btn sec" id="vwCancel">닫기</button>
+      <button class="btn" id="vwGo">불러오기</button>
+    </div>
+  </div>
+</div>
+
+<script src="flatform-core.js"></script>
+<script>
+'use strict';
+const FF = window.FlatForm;
+const PYEONG = FF.PYEONG;          // 1평 = 3.305785 m²
+const MM2_PER_M2 = 1e6;            // mm² → m²
+
+// ───────────────────────── 베이스 모델 (단일 진실원천) · 단위: mm ─────────────────────────
+let model = { points: [], edges: [], circles: [] };
+let _id = 1; const nid = () => _id++;
+let rooms = [];
+const history = [];
+const COLORS = ['#5b8def','#ef6f6f','#54c08a','#e0a44a','#a07cf0','#3fb8c0','#d76fae','#8aa84a'];
+
+// ───────────────────────── 화면/카메라 (scale = px/mm) ─────────────────────────
+const cv = document.getElementById('cv'); const ctx = cv.getContext('2d');
+let W=0,H=0,DPR=1;
+const view = { cx:4000, cy:2000, scale:0.06 };   // cx,cy: 화면중앙 월드좌표(mm)
+let SNAP = 100;                                   // 스냅 100mm, 10mm 단위 조절
+const SNAP_MIN = 10, SNAP_STEP = 10;
+const TOLW = 5;                                   // 좌표 일치/간선위 판정 허용오차(mm)
+function w2s(x,y){ return [ (x-view.cx)*view.scale + W/2, (y-view.cy)*view.scale + H/2 ]; }
+function s2w(x,y){ return [ (x-W/2)/view.scale + view.cx, (y-H/2)/view.scale + view.cy ]; }
+
+function resize(){
+  DPR = window.devicePixelRatio || 1;
+  const r = cv.parentElement.getBoundingClientRect();
+  W=r.width; H=r.height; cv.width=W*DPR; cv.height=H*DPR;
+  ctx.setTransform(DPR,0,0,DPR,0,0); draw();
+  if(W<2||H<2) requestAnimationFrame(resize);   // 레이아웃 늦게 잡힐 때 재시도
+}
+window.addEventListener('resize', resize);
+new ResizeObserver(resize).observe(cv.parentElement);
+
+// ───────────────────────── 지적도 레이어 ─────────────────────────
+const cad = { img:null, proc:null, _procFor:null, merc:null, cx:0, cy:0, mmPerPx:1, rot:0, opacity:0.92, visible:true };
+let mapEdit = false, cadDrag = null;
+const CAD_OTHER_COLOR='#f49cc4';   // 나머지 필지 = 얇은 분홍
+// 투명배경 지적도(TRANSPARENT=TRUE)의 선 픽셀을 지정색으로 치환
+function tintCad(img,color){
+  const c=document.createElement('canvas'); c.width=img.width; c.height=img.height;
+  const x=c.getContext('2d');
+  x.drawImage(img,0,0);
+  x.globalCompositeOperation='source-in';
+  x.fillStyle=color; x.fillRect(0,0,c.width,c.height);
+  return c;
+}
+// 지적도가 화면에 꽉 차도록 줌/위치 자동 맞춤
+function fitViewToCad(){ if(!cad.img||!W||!H) return;
+  const wmm=cad.img.width*cad.mmPerPx, hmm=cad.img.height*cad.mmPerPx;
+  view.scale=Math.max(0.004,Math.min(3, Math.min(W/wmm,H/hmm)*0.85));
+  view.cx=cad.cx; view.cy=cad.cy; }
+
+// ── 우리 필지(빨간 벡터) — geom(lon/lat) → 월드좌표 ──
+let ourGeoms=[];      // 검색으로 얻은 우리 필지 폴리곤(lon/lat)
+let ourParcels=[];    // 화면용 월드좌표 링
+function lonLatToWorld(lon,lat){
+  if(!cad.merc) return null;
+  const [vx,vy]=lonLatToMerc(lon,lat);
+  const fx=(vx-cad.merc.mx)/cad.merc.half*512;     // 중심기준 px(+x 우)
+  const fy=-(vy-cad.merc.my)/cad.merc.half*512;    // +y 아래
+  return {x:cad.cx+fx*cad.mmPerPx, y:cad.cy+fy*cad.mmPerPx};
+}
+function rotPt(p){ if(!cad.rot) return p; const a=cad.rot*Math.PI/180,dx=p.x-cad.cx,dy=p.y-cad.cy;
+  return {x:cad.cx+dx*Math.cos(a)-dy*Math.sin(a), y:cad.cy+dx*Math.sin(a)+dy*Math.cos(a)}; }
+function buildOurParcels(){
+  ourParcels=[];
+  for(const geom of ourGeoms){ if(!geom) continue;
+    const polys=geom.type==='MultiPolygon'?geom.coordinates:[geom.coordinates];
+    for(const poly of polys){
+      const rings=poly.map(ring=>ring.map(c=>lonLatToWorld(c[0],c[1])).filter(Boolean)).filter(r=>r.length>2);
+      if(rings.length) ourParcels.push({rings});
+    }
+  }
+}
+function parcelVertsScreen(){ const out=[]; for(const par of ourParcels) for(const ring of par.rings) for(const p of ring) out.push(rotPt(p)); return out; }
+function drawAxisMarks(){ if(!axisMode||!axisPts.length) return;
+  for(const p of axisPts){ const rp=rotPt(p); const [sx,sy]=w2s(rp.x,rp.y);
+    ctx.strokeStyle='#3fb8c0'; ctx.lineWidth=2.5; ctx.beginPath(); ctx.arc(sx,sy,8,0,Math.PI*2); ctx.stroke(); } }
+function drawOurParcels(){
+  if(!ourParcels.length||!cad.img) return;
+  for(const par of ourParcels){
+    par.rings.forEach((ring,ri)=>{
+      ctx.beginPath();
+      ring.forEach((p,i)=>{ const rp=rotPt(p); const [sx,sy]=w2s(rp.x,rp.y); i?ctx.lineTo(sx,sy):ctx.moveTo(sx,sy); });
+      ctx.closePath();
+      if(ri===0){ ctx.fillStyle='rgba(224,31,31,0.05)'; ctx.fill(); }
+      ctx.strokeStyle='#e01f1f'; ctx.lineWidth=ri===0?3.5:2; ctx.lineJoin='round'; ctx.stroke();
+    });
+    for(const ring of par.rings) for(const p of ring){ const rp=rotPt(p); const [sx,sy]=w2s(rp.x,rp.y);
+      ctx.fillStyle='#e01f1f'; ctx.beginPath(); ctx.arc(sx,sy,3.6,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle='#fff'; ctx.lineWidth=1.2; ctx.stroke(); }
+  }
+}
+
+// ───────────────────────── 도구/상호작용 상태 ─────────────────────────
+let tool='line';
+let mouse={sx:0,sy:0,wx:0,wy:0};
+let snap=null;
+const draft={active:false};
+let dragPoint=null;
+let selected={point:null,edge:null};
+let panning=null, spaceDown=false, shiftDown=false;
+const rectSize={w:0,h:0,place:false};   // 네모 크기입력 배치모드
+let rotArm=false, axisMode=false, axisPts=[];   // 지적도 회전(O)/기준축 모드
+
+// ───────────────────────── 모델 조작 ─────────────────────────
+function snapshot(){ history.push(JSON.stringify(model)); if(history.length>100) history.shift(); }
+function undo(){ if(!history.length) return; model=JSON.parse(history.pop()); recompute(); }
+const ptOf=(id)=>model.points.find(p=>p.id===id);
+
+function findVertex(x,y,tolPx,exclude){
+  const tol=tolPx/view.scale; let best=null,bd=tol;
+  for(const p of model.points){ if(exclude!=null&&p.id===exclude) continue;
+    const d=Math.hypot(p.x-x,p.y-y); if(d<=bd){bd=d;best=p;} }
+  return best;
+}
+function findEdgeAt(x,y,tolPx){
+  const tol=tolPx/view.scale; let best=null,bd=tol,bt=0;
+  for(const e of model.edges){ const a=ptOf(e.a),b=ptOf(e.b); if(!a||!b) continue;
+    const r=FF.pointSeg(x,y,a.x,a.y,b.x,b.y); if(r.dist<=bd){bd=r.dist;best=e;bt=r.t;} }
+  return best?{edge:best,t:bt}:null;
+}
+function nearVertex(x,y,tol){ for(const p of model.points){ if(Math.hypot(p.x-x,p.y-y)<=tol) return p; } return null; }
+
+function computeSnap(x,y,exclude){
+  if(ourParcels.length){ const tol=12/view.scale; let best=null,bd=tol;   // 우리 필지 꼭지점 우선
+    for(const pv of parcelVertsScreen()){ const d=Math.hypot(pv.x-x,pv.y-y); if(d<=bd){bd=d;best=pv;} }
+    if(best) return {x:best.x,y:best.y,vid:null,kind:'parcel'}; }
+  const v=findVertex(x,y,12,exclude);
+  if(v) return {x:v.x,y:v.y,vid:v.id,kind:'vertex'};
+  const e=findEdgeAt(x,y,9);
+  if(e){ const a=ptOf(e.edge.a),b=ptOf(e.edge.b);
+    const r=FF.pointSeg(x,y,a.x,a.y,b.x,b.y);
+    if(r.t>0.04&&r.t<0.96) return {x:r.cx,y:r.cy,vid:null,kind:'edge',onEdge:e.edge}; }
+  return {x:Math.round(x/SNAP)*SNAP, y:Math.round(y/SNAP)*SNAP, vid:null, kind:'grid'};
+}
+function getOrCreatePoint(x,y){
+  const v=findVertex(x,y,1,null)||nearVertex(x,y,TOLW);
+  if(v) return v.id;
+  for(const e of model.edges.slice()){
+    if(e.bulge) continue;
+    const a=ptOf(e.a),b=ptOf(e.b); if(!a||!b) continue;
+    const r=FF.pointSeg(x,y,a.x,a.y,b.x,b.y);
+    if(r.dist<TOLW && r.t>0.02 && r.t<0.98){
+      const np={id:nid(),x,y}; model.points.push(np);
+      model.edges=model.edges.filter(ed=>ed!==e);
+      model.edges.push({id:nid(),a:e.a,b:np.id});
+      model.edges.push({id:nid(),a:np.id,b:e.b});
+      return np.id;
+    }
+  }
+  const np={id:nid(),x,y}; model.points.push(np); return np.id;
+}
+function addEdge(aId,bId,bulge){
+  if(aId===bId) return;
+  if(!bulge){ for(const e of model.edges) if(!e.bulge&&
+     ((e.a===aId&&e.b===bId)||(e.a===bId&&e.b===aId))) return; }
+  const edge={id:nid(),a:aId,b:bId}; if(bulge) edge.bulge=bulge;
+  model.edges.push(edge);
+  if(!bulge) splitEdgeByVertices(edge);
+}
+function splitEdgeByVertices(edge){
+  const a=ptOf(edge.a),b=ptOf(edge.b); if(!a||!b) return;
+  const hits=[];
+  for(const p of model.points){ if(p.id===edge.a||p.id===edge.b) continue;
+    const r=FF.pointSeg(p.x,p.y,a.x,a.y,b.x,b.y);
+    if(r.dist<TOLW && r.t>0.02 && r.t<0.98) hits.push({p,t:r.t}); }
+  if(!hits.length) return;
+  hits.sort((u,v)=>u.t-v.t);
+  model.edges=model.edges.filter(e=>e!==edge);
+  let prev=edge.a;
+  for(const h of hits){ model.edges.push({id:nid(),a:prev,b:h.p.id}); prev=h.p.id; }
+  model.edges.push({id:nid(),a:prev,b:edge.b});
+}
+function deleteVertex(id){ model.edges=model.edges.filter(e=>e.a!==id&&e.b!==id);
+  model.points=model.points.filter(p=>p.id!==id); pruneOrphans(); }
+function deleteEdge(e){ model.edges=model.edges.filter(x=>x!==e); pruneOrphans(); }
+function pruneOrphans(){ const used=new Set(); for(const e of model.edges){used.add(e.a);used.add(e.b);}
+  model.points=model.points.filter(p=>used.has(p.id)); }
+
+// ───────────────────────── 파생: 실/면적 재계산 ─────────────────────────
+function recompute(){ rooms=FF.detectRooms(model).rooms; renderTable(); draw(); }
+const toM2=(mm2)=>mm2/MM2_PER_M2;
+
+// ───────────────────────── 렌더링 ─────────────────────────
+function draw(){
+  ctx.clearRect(0,0,W,H);
+  drawCad();
+  drawGrid();
+  drawOurParcels();
+  drawAxisMarks();
+  drawRooms();
+  drawCircles();
+  drawEdges();
+  drawVertices();
+  drawDraft();
+  drawRectGhost();
+  drawSnap();
+  drawCompass();
+}
+function drawRectGhost(){
+  if(!(tool==='rect'&&rectSize.place&&rectSize.w>0&&rectSize.h>0&&snap)) return;
+  const [sx,sy]=w2s(snap.x,snap.y);
+  ctx.save(); ctx.strokeStyle='#F9954E'; ctx.lineWidth=2; ctx.setLineDash([6,4]);
+  ctx.strokeRect(sx,sy,rectSize.w*view.scale,rectSize.h*view.scale); ctx.setLineDash([]);
+  ctx.fillStyle='#F9954E'; ctx.font='12px Segoe UI'; ctx.textAlign='left';
+  ctx.fillText(rectSize.w.toLocaleString()+'×'+rectSize.h.toLocaleString()+'mm',sx+4,sy-6);
+  ctx.restore();
+}
+function drawCad(){
+  if(!cad.img||!cad.visible) return;
+  if(cad._procFor!==cad.img){ cad.proc=tintCad(cad.img,CAD_OTHER_COLOR); cad._procFor=cad.img; } // 분홍 틴트 1회
+  const src=cad.proc||cad.img;
+  const [sx,sy]=w2s(cad.cx,cad.cy);
+  const wpx=cad.img.width*cad.mmPerPx*view.scale;
+  const hpx=cad.img.height*cad.mmPerPx*view.scale;
+  ctx.save(); ctx.globalAlpha=cad.opacity;
+  ctx.translate(sx,sy); ctx.rotate(cad.rot*Math.PI/180);
+  ctx.drawImage(src,-wpx/2,-hpx/2,wpx,hpx);
+  ctx.restore();
+  if(mapEdit){ ctx.save(); ctx.translate(sx,sy); ctx.rotate(cad.rot*Math.PI/180);
+    ctx.strokeStyle='#e0a44a'; ctx.lineWidth=1.5; ctx.setLineDash([7,5]);
+    ctx.strokeRect(-wpx/2,-hpx/2,wpx,hpx); ctx.restore(); ctx.setLineDash([]); }
+}
+function gridStep(){
+  const c=[10,20,50,100,200,500,1000,2000,5000,10000,20000,50000,100000];
+  for(const g of c){ if(g*view.scale>=9) return g; } return 100000;
+}
+function drawGrid(){
+  const minor=gridStep(), major=minor*5;
+  const [x0,y0]=s2w(0,0), [x1,y1]=s2w(W,H);
+  ctx.lineWidth=1;
+  for(let x=Math.floor(x0/minor)*minor; x<=x1; x+=minor){
+    const [sx]=w2s(x,0); ctx.strokeStyle=(Math.round(x)%major===0)?'#222a35':'#191e26';
+    ctx.beginPath(); ctx.moveTo(sx,0); ctx.lineTo(sx,H); ctx.stroke();
+  }
+  for(let y=Math.floor(y0/minor)*minor; y<=y1; y+=minor){
+    const [,sy]=w2s(0,y); ctx.strokeStyle=(Math.round(y)%major===0)?'#222a35':'#191e26';
+    ctx.beginPath(); ctx.moveTo(0,sy); ctx.lineTo(W,sy); ctx.stroke();
+  }
+  const [ox,oy]=w2s(0,0);
+  ctx.strokeStyle='#34506e'; ctx.lineWidth=1.4;
+  ctx.beginPath(); ctx.moveTo(ox-9,oy);ctx.lineTo(ox+9,oy);ctx.moveTo(ox,oy-9);ctx.lineTo(ox,oy+9);ctx.stroke();
+}
+function polyPath(poly){ ctx.beginPath();
+  for(let i=0;i<poly.length;i++){ const [sx,sy]=w2s(poly[i].x,poly[i].y); i?ctx.lineTo(sx,sy):ctx.moveTo(sx,sy); }
+  ctx.closePath(); }
+function drawRooms(){
+  rooms.forEach((rm,i)=>{
+    const col=COLORS[i%COLORS.length]; const sig=roomSig(rm); const seld=sig===selectedRoomSig;
+    if(rm.type==='circle'){ const c=rm.circle; const [sx,sy]=w2s(c.cx,c.cy);
+      ctx.fillStyle=seld?col+'44':col+'22'; ctx.beginPath(); ctx.arc(sx,sy,c.r*view.scale,0,Math.PI*2); ctx.fill();
+      if(seld){ ctx.strokeStyle='#ffd060'; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(sx,sy,c.r*view.scale,0,Math.PI*2); ctx.stroke(); }
+    }else{ ctx.fillStyle=seld?col+'44':col+'22'; polyPath(rm.poly); ctx.fill();
+      if(seld){ ctx.strokeStyle='#ffd060'; ctx.lineWidth=3; polyPath(rm.poly); ctx.stroke(); } }
+    const [lx,ly]=w2s(rm.centroid.x,rm.centroid.y);
+    const m2=toM2(rm.area), py=m2/PYEONG; const nm=(roomNames[sig]!=null?roomNames[sig]:('R'+(i+1)));
+    ctx.textAlign='center';
+    ctx.fillStyle=col; ctx.font='bold 13px Segoe UI'; ctx.fillText(nm,lx,ly-7);
+    ctx.fillStyle='#cdd6e2'; ctx.font='11px Segoe UI'; ctx.fillText(m2.toFixed(2)+'㎡',lx,ly+8);
+    ctx.fillStyle='#7f8b9c'; ctx.fillText('('+py.toFixed(2)+'평)',lx,ly+21);
+  });
+}
+function drawCircles(){
+  for(const c of model.circles){ const [sx,sy]=w2s(c.cx,c.cy);
+    ctx.strokeStyle='#cbd5e3'; ctx.lineWidth=2.4; ctx.beginPath(); ctx.arc(sx,sy,c.r*view.scale,0,Math.PI*2); ctx.stroke();
+    ctx.fillStyle='#5b6678'; ctx.beginPath(); ctx.arc(sx,sy,2.5,0,Math.PI*2); ctx.fill(); }
+}
+function drawEdges(){
+  for(const e of model.edges){
+    const a=ptOf(e.a),b=ptOf(e.b); if(!a||!b) continue;
+    const sel=selected.edge===e;
+    ctx.strokeStyle=sel?'#ffd060':'#cbd5e3'; ctx.lineWidth=sel?4:3; ctx.lineCap='round';
+    const [ax,ay]=w2s(a.x,a.y);
+    if(e.bulge){
+      ctx.beginPath(); ctx.moveTo(ax,ay);
+      for(const s of FF.sampleArc(a.x,a.y,b.x,b.y,e.bulge,24)){ const [px,py]=w2s(s.x,s.y); ctx.lineTo(px,py); }
+      const [bx,by]=w2s(b.x,b.y); ctx.lineTo(bx,by); ctx.stroke();
+    }else{
+      const [bx,by]=w2s(b.x,b.y);
+      ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.stroke();
+      const len=Math.hypot(a.x-b.x,a.y-b.y);
+      ctx.fillStyle='#6c7787'; ctx.font='10.5px Segoe UI'; ctx.textAlign='center';
+      ctx.fillText(Math.round(len).toLocaleString()+'mm',(ax+bx)/2,(ay+by)/2-5);
+    }
+  }
+}
+function drawVertices(){
+  for(const p of model.points){ const [sx,sy]=w2s(p.x,p.y);
+    const sel=selected.point===p.id||dragPoint===p.id;
+    ctx.fillStyle=sel?'#ffd060':'#9fb0c6'; ctx.beginPath(); ctx.arc(sx,sy,sel?5.5:4,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#0f1216'; ctx.lineWidth=1.5; ctx.stroke(); }
+}
+function bulgeFromCursor(a,b,m){
+  const dx=b.x-a.x,dy=b.y-a.y,c=Math.hypot(dx,dy); if(c<1e-6) return 0;
+  const px=-dy/c,py=dx/c; return (m.wx-(a.x+b.x)/2)*px+(m.wy-(a.y+b.y)/2)*py;
+}
+// 선 끝점: Shift=수직/수평 고정, 숫자입력=그 길이(mm)
+function lineTarget(){
+  const last=ptOf(draft.prev); if(!last||!snap) return {x:snap?snap.x:0,y:snap?snap.y:0,len:0};
+  let dx=snap.x-last.x, dy=snap.y-last.y;
+  if(shiftDown){ if(Math.abs(dx)>=Math.abs(dy)) dy=0; else dx=0; }
+  let len=Math.hypot(dx,dy);
+  if(draft.lenBuf){ const L=parseFloat(draft.lenBuf); if(L>0&&len>1e-6){ const k=L/len; dx*=k; dy*=k; len=L; } }
+  return {x:last.x+dx, y:last.y+dy, len};
+}
+function drawDraft(){
+  if(!draft.active) return;
+  ctx.strokeStyle='#5b8def'; ctx.lineWidth=2; ctx.setLineDash([6,4]);
+  if(draft.kind==='line'){ const last=ptOf(draft.prev);
+    if(last){ const t=lineTarget(); const [ax,ay]=w2s(last.x,last.y); const [bx,by]=w2s(t.x,t.y);
+      ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(bx,by);ctx.stroke();
+      ctx.setLineDash([]);
+      const lbl=(draft.lenBuf?draft.lenBuf+'_':Math.round(t.len).toLocaleString())+'mm'+(shiftDown?' ⟂':'');
+      ctx.font='12px Segoe UI'; ctx.textAlign='left';
+      const tw=ctx.measureText(lbl).width;
+      ctx.fillStyle='rgba(20,25,32,.92)'; ctx.fillRect(bx+12,by-24,tw+14,19);
+      ctx.fillStyle='#ffd060'; ctx.fillText(lbl,bx+19,by-10);
+      ctx.setLineDash([6,4]); }
+  }else if(draft.kind==='rect'){
+    const x=Math.min(draft.x0,snap.x),y=Math.min(draft.y0,snap.y);
+    const w=Math.abs(snap.x-draft.x0),h=Math.abs(snap.y-draft.y0);
+    const [sx,sy]=w2s(x,y); ctx.strokeRect(sx,sy,w*view.scale,h*view.scale);
+  }else if(draft.kind==='circle'){
+    const r=Math.hypot(snap.x-draft.x0,snap.y-draft.y0); const [sx,sy]=w2s(draft.x0,draft.y0);
+    ctx.beginPath();ctx.arc(sx,sy,r*view.scale,0,Math.PI*2);ctx.stroke();
+  }else if(draft.kind==='arc'){
+    const a=ptOf(draft.a);
+    if(draft.b==null){ const [ax,ay]=w2s(a.x,a.y); const [bx,by]=w2s(snap.x,snap.y);
+      ctx.beginPath();ctx.moveTo(ax,ay);ctx.lineTo(bx,by);ctx.stroke();
+    }else{ const b=ptOf(draft.b); const bulge=bulgeFromCursor(a,b,mouse); const [ax,ay]=w2s(a.x,a.y);
+      ctx.beginPath(); ctx.moveTo(ax,ay);
+      for(const s of FF.sampleArc(a.x,a.y,b.x,b.y,bulge,24)){const[px,py]=w2s(s.x,s.y);ctx.lineTo(px,py);}
+      const [bx,by]=w2s(b.x,b.y); ctx.lineTo(bx,by); ctx.stroke(); }
+  }
+  ctx.setLineDash([]);
+}
+function drawSnap(){
+  if(!snap||mapEdit) return; const [sx,sy]=w2s(snap.x,snap.y); ctx.lineWidth=1.6;
+  if(snap.kind==='vertex'){ ctx.strokeStyle='#54c08a'; ctx.strokeRect(sx-6,sy-6,12,12); }
+  else if(snap.kind==='parcel'){ ctx.strokeStyle='#e01f1f'; ctx.lineWidth=2; ctx.strokeRect(sx-7,sy-7,14,14); }
+  else if(snap.kind==='edge'){ ctx.strokeStyle='#e0a44a';
+    ctx.beginPath();ctx.moveTo(sx,sy-6);ctx.lineTo(sx+6,sy);ctx.lineTo(sx,sy+6);ctx.lineTo(sx-6,sy);ctx.closePath();ctx.stroke();}
+  else { ctx.strokeStyle='#5b8def'; ctx.beginPath();ctx.arc(sx,sy,5,0,Math.PI*2);ctx.stroke(); }
+}
+// 방위표 (좌상단, 화면 고정) — 지적도 회전과 함께 북을 가리킴
+function drawCompass(){
+  const ox=58,oy=66,R=24;
+  ctx.save();
+  ctx.fillStyle='rgba(18,22,28,.9)'; ctx.strokeStyle='#39424f'; ctx.lineWidth=1.4;
+  ctx.beginPath(); ctx.arc(ox,oy,R+10,0,Math.PI*2); ctx.fill(); ctx.stroke();
+  const rad=cad.rot*Math.PI/180;
+  const pos=(b,r)=>[ox+Math.sin(rad+b)*r, oy-Math.cos(rad+b)*r];
+  const [nx,ny]=pos(0,R-3), [s2x,s2y]=pos(Math.PI,R-3);
+  const [ex,ey]=pos(Math.PI/2,5), [wx,wy]=pos(-Math.PI/2,5);
+  ctx.fillStyle='#ef6f6f'; ctx.beginPath(); ctx.moveTo(nx,ny);ctx.lineTo(ex,ey);ctx.lineTo(wx,wy);ctx.closePath();ctx.fill();
+  ctx.fillStyle='#aeb9c8'; ctx.beginPath(); ctx.moveTo(s2x,s2y);ctx.lineTo(ex,ey);ctx.lineTo(wx,wy);ctx.closePath();ctx.fill();
+  ctx.font='bold 11px Segoe UI'; ctx.textAlign='center'; ctx.textBaseline='middle';
+  const L=[['N',0,'#ef6f6f'],['E',Math.PI/2,'#8b95a5'],['S',Math.PI,'#8b95a5'],['W',-Math.PI/2,'#8b95a5']];
+  for(const [t,b,c] of L){ const [lx,ly]=pos(b,R+0); ctx.fillStyle=c; ctx.fillText(t,lx,ly); }
+  ctx.textBaseline='alphabetic';
+  ctx.restore();
+}
+
+// ───────────────────────── 면적표 + 실 편집 ─────────────────────────
+const roomNames={};            // 실 이름(무게중심 시그니처로 유지)
+let selectedRoomSig=null;
+function roomSig(rm){ return Math.round(rm.centroid.x/100)+'_'+Math.round(rm.centroid.y/100); }
+function deleteRoom(rm){       // 실의 경계 간선(또는 원) 제거
+  snapshot();
+  if(rm.type==='circle'){ model.circles=model.circles.filter(c=>c!==rm.circle); }
+  else if(rm.face){ const f=rm.face;
+    for(let i=0;i<f.length;i++){ const a=f[i],b=f[(i+1)%f.length];
+      model.edges=model.edges.filter(e=>!((e.a===a&&e.b===b)||(e.a===b&&e.b===a))); }
+    pruneOrphans(); }
+  selectedRoomSig=null; recompute();
+}
+function renderTable(){
+  const host=document.getElementById('rooms');
+  document.getElementById('roomCount').textContent=rooms.length?`(${rooms.length}실)`:'';
+  if(!rooms.length){
+    host.innerHTML='<div id="empty">아직 인식된 실이 없습니다.<br>선/네모로 <b>닫힌 도형</b>을 그려보세요.</div>';
+  }else{
+    let rows='';
+    rooms.forEach((rm,i)=>{ const col=COLORS[i%COLORS.length]; const m2=toM2(rm.area); const sig=roomSig(rm);
+      const nm=(roomNames[sig]!=null?roomNames[sig]:('R'+(i+1)));
+      rows+=`<tr data-i="${i}" class="${selectedRoomSig===sig?'rsel':''}">`+
+        `<td class="name"><span class="swatch" style="background:${col}"></span>`+
+        `<input class="rname" data-i="${i}" value="${(''+nm).replace(/"/g,'&quot;')}"></td>`+
+        `<td>${m2.toFixed(2)}</td><td>${(m2/PYEONG).toFixed(2)}</td>`+
+        `<td><button class="rdel" data-i="${i}" title="실 삭제">×</button></td></tr>`; });
+    host.innerHTML=`<table><thead><tr><th style="text-align:left">실</th><th>㎡</th><th>평</th><th></th></tr></thead><tbody>${rows}</tbody></table>`;
+    host.querySelectorAll('.rname').forEach(inp=>{ const i=+inp.dataset.i; const sig=roomSig(rooms[i]);
+      inp.addEventListener('input',()=>{ roomNames[sig]=inp.value; });
+      inp.addEventListener('focus',()=>{ selectedRoomSig=sig; draw();
+        host.querySelectorAll('tbody tr').forEach(tr=>tr.classList.toggle('rsel',+tr.dataset.i===i)); }); });
+    host.querySelectorAll('.rdel').forEach(btn=>{ const i=+btn.dataset.i;
+      btn.addEventListener('click',e=>{ e.stopPropagation(); deleteRoom(rooms[i]); }); });
+    host.querySelectorAll('tbody tr').forEach(tr=>{ const i=+tr.dataset.i;
+      tr.addEventListener('click',e=>{ if(e.target.classList.contains('rname')||e.target.classList.contains('rdel')) return;
+        selectedRoomSig=roomSig(rooms[i]); draw();
+        host.querySelectorAll('tbody tr').forEach(t=>t.classList.toggle('rsel',+t.dataset.i===i)); }); });
+  }
+  const total=toM2(rooms.reduce((s,r)=>s+r.area,0));
+  document.getElementById('totalM2').textContent=total.toFixed(2)+' ㎡';
+  document.getElementById('totalPy').textContent=(total/PYEONG).toFixed(2)+' 평';
+}
+
+// ───────────────────────── 입력 처리 ─────────────────────────
+const HINTS={ select:'꼭지점을 끌어 이동 · 간선/꼭지점 클릭 후 Del 삭제',
+  line:'클릭으로 점을 이어 그림 · 시작점 클릭/더블클릭/Esc로 마침', rect:'드래그로 사각형',
+  circle:'중심에서 드래그로 원 (그 자체가 하나의 실)', arc:'시작→끝 클릭 후, 움직여 휜 정도 정하고 클릭' };
+function setTool(t){ tool=t; cancelDraft(); if(t!=='rect') rectSize.place=false;
+  document.querySelectorAll('.tool[data-tool]').forEach(b=>b.classList.toggle('active',b.dataset.tool===t));
+  document.getElementById('hint').textContent=HINTS[t]||'';
+  selected={point:null,edge:null}; cv.style.cursor=t==='select'?'default':'crosshair'; draw(); }
+function cancelDraft(){ if(draft.kind==='line') pruneOrphans();
+  draft.active=false; draft.kind=null; draft.prev=null; draft.a=null; draft.b=null; draft.lenBuf=''; }
+
+cv.addEventListener('contextmenu',e=>e.preventDefault());
+cv.addEventListener('mousedown',onDown);
+window.addEventListener('mousemove',onMove);
+window.addEventListener('mouseup',onUp);
+cv.addEventListener('wheel',onWheel,{passive:false});
+
+function updateMouse(e){ const r=cv.getBoundingClientRect();
+  mouse.sx=e.clientX-r.left; mouse.sy=e.clientY-r.top; [mouse.wx,mouse.wy]=s2w(mouse.sx,mouse.sy); }
+function onDown(e){
+  updateMouse(e);
+  if(e.button===1||(e.button===0&&spaceDown)){ panning={sx:e.clientX,sy:e.clientY,cx:view.cx,cy:view.cy}; e.preventDefault(); return; }
+  if(rotArm && e.button===0){ rotArm=false; showRotInput(e.clientX,e.clientY); return; }      // 회전(O): 클릭→각도입력
+  if(axisMode && e.button===0){ axisClick(mouse.wx,mouse.wy); return; }                       // 기준축: 꼭지점 클릭
+  // 지적도 배치모드: 좌드래그로 이동
+  if(mapEdit&&cad.img&&e.button===0){ cadDrag={sx:e.clientX,sy:e.clientY,cx:cad.cx,cy:cad.cy}; return; }
+  if(e.button===2){ if(draft.kind==='line'){ cancelDraft(); recompute(); } return; }
+  if(e.button!==0) return;
+  snap=computeSnap(mouse.wx,mouse.wy,dragPoint);
+
+  if(tool==='select'){
+    const v=findVertex(mouse.wx,mouse.wy,10,null);
+    if(v){ dragPoint=v.id; selected={point:v.id,edge:null}; snapshot(); draw(); return; }
+    const eh=findEdgeAt(mouse.wx,mouse.wy,8);
+    selected=eh?{point:null,edge:eh.edge}:{point:null,edge:null}; draw(); return;
+  }
+  if(tool==='line'){
+    let tx=snap.x, ty=snap.y;
+    if(draft.active){ const t=lineTarget(); tx=t.x; ty=t.y; }
+    const id=getOrCreatePoint(tx,ty);
+    if(!draft.active){ snapshot(); draft.active=true; draft.kind='line'; draft.first=id; draft.prev=id; }
+    else{ addEdge(draft.prev,id); draft.lenBuf=''; if(id===draft.first){ cancelDraft(); recompute(); return; } draft.prev=id; }
+    recompute(); return;
+  }
+  if(tool==='rect'){
+    if(rectSize.place && rectSize.w>0 && rectSize.h>0){     // 좌상단 기준 배치
+      snapshot();
+      const x0=snap.x,y0=snap.y,x1=x0+rectSize.w,y1=y0+rectSize.h;
+      const p00=getOrCreatePoint(x0,y0),p10=getOrCreatePoint(x1,y0),p11=getOrCreatePoint(x1,y1),p01=getOrCreatePoint(x0,y1);
+      addEdge(p00,p10);addEdge(p10,p11);addEdge(p11,p01);addEdge(p01,p00);
+      rectSize.place=false; document.getElementById('hint').textContent=HINTS['rect']; recompute(); return;
+    }
+    snapshot(); draft.active=true; draft.kind='rect'; draft.x0=snap.x; draft.y0=snap.y; return;
+  }
+  if(tool==='circle'){ snapshot(); draft.active=true; draft.kind='circle'; draft.x0=snap.x; draft.y0=snap.y; return; }
+  if(tool==='arc'){
+    if(!draft.active){ snapshot(); draft.active=true; draft.kind='arc'; draft.a=getOrCreatePoint(snap.x,snap.y); draft.b=null; recompute(); }
+    else if(draft.b==null){ draft.b=getOrCreatePoint(snap.x,snap.y); recompute(); }
+    else{ const a=ptOf(draft.a),b=ptOf(draft.b); const bulge=bulgeFromCursor(a,b,mouse);
+      if(Math.abs(bulge)>20) addEdge(draft.a,draft.b,bulge); else addEdge(draft.a,draft.b);
+      cancelDraft(); recompute(); }
+    return;
+  }
+}
+function onMove(e){
+  updateMouse(e); shiftDown=e.shiftKey;
+  if(panning){ view.cx=panning.cx-(e.clientX-panning.sx)/view.scale; view.cy=panning.cy-(e.clientY-panning.sy)/view.scale; draw(); return; }
+  if(cadDrag){ cad.cx=cadDrag.cx+(e.clientX-cadDrag.sx)/view.scale; cad.cy=cadDrag.cy+(e.clientY-cadDrag.sy)/view.scale; draw(); return; }
+  snap=computeSnap(mouse.wx,mouse.wy,dragPoint);
+  if(dragPoint!=null){ const p=ptOf(dragPoint); if(p){ p.x=snap.x; p.y=snap.y; recompute(); return; } }
+  draw();
+}
+function onUp(e){
+  if(panning){ panning=null; return; }
+  if(cadDrag){ cadDrag=null; return; }
+  if(dragPoint!=null){ dragPoint=null; recompute(); return; }
+  if(e.button!==0) return;
+  if(draft.kind==='rect'){
+    const x0=draft.x0,y0=draft.y0,x1=snap.x,y1=snap.y;
+    if(Math.abs(x1-x0)>50&&Math.abs(y1-y0)>50){
+      const p00=getOrCreatePoint(x0,y0),p10=getOrCreatePoint(x1,y0),p11=getOrCreatePoint(x1,y1),p01=getOrCreatePoint(x0,y1);
+      addEdge(p00,p10);addEdge(p10,p11);addEdge(p11,p01);addEdge(p01,p00);
+    }
+    cancelDraft(); recompute(); return;
+  }
+  if(draft.kind==='circle'){
+    const r=Math.hypot(snap.x-draft.x0,snap.y-draft.y0);
+    if(r>50) model.circles.push({id:nid(),cx:draft.x0,cy:draft.y0,r});
+    cancelDraft(); recompute(); return;
+  }
+}
+function onWheel(e){
+  e.preventDefault(); const [wx,wy]=s2w(mouse.sx,mouse.sy);
+  const f=Math.exp(-e.deltaY*0.0012);
+  view.scale=Math.max(0.004,Math.min(3,view.scale*f));
+  view.cx=wx-(mouse.sx-W/2)/view.scale; view.cy=wy-(mouse.sy-H/2)/view.scale; draw();
+}
+window.addEventListener('keydown',e=>{
+  const ob=document.getElementById('onboard'); if(ob && !ob.classList.contains('hide')) return;
+  if(e.target.tagName==='INPUT') { if(e.code==='Space'){} return; }
+  if(e.code==='Space'){ spaceDown=true; cv.style.cursor='grab'; }
+  if(e.key==='Shift'){ shiftDown=true; if(draft.active) draw(); }
+  // 선 그리는 중: 숫자=길이(mm) 입력, Enter=확정
+  if(tool==='line' && draft.active){
+    if(/^[0-9]$/.test(e.key)){ draft.lenBuf=(draft.lenBuf||'')+e.key; draw(); return; }
+    if(e.key==='.'&&!(draft.lenBuf||'').includes('.')){ draft.lenBuf=(draft.lenBuf||'')+'.'; draw(); return; }
+    if(e.key==='Backspace'){ draft.lenBuf=(draft.lenBuf||'').slice(0,-1); draw(); e.preventDefault(); return; }
+    if(e.key==='Enter'){ const t=lineTarget(); const id=getOrCreatePoint(t.x,t.y);
+      addEdge(draft.prev,id); draft.lenBuf=''; if(id===draft.first) cancelDraft(); else draft.prev=id; recompute(); e.preventDefault(); return; }
+  }
+  const k=e.key.toLowerCase();
+  if(k==='v') setTool('select'); else if(k==='l') setTool('line'); else if(k==='r') setTool('rect');
+  else if(k==='c') setTool('circle'); else if(k==='a') setTool('arc');
+  else if(k==='o'){ armRot(); }
+  else if(k==='z'&&(e.ctrlKey||e.metaKey)){ e.preventDefault(); undo(); }
+  else if(e.key==='Escape'){ if(draft.active){ cancelDraft(); recompute(); } selected={point:null,edge:null};
+    rotArm=false; axisMode=false; axisPts=[]; document.getElementById('rotInput').style.display='none'; draw(); }
+  else if(e.key==='Delete'||e.key==='Backspace'){
+    if(selected.point!=null){ snapshot(); deleteVertex(selected.point); selected.point=null; recompute(); }
+    else if(selected.edge){ snapshot(); deleteEdge(selected.edge); selected.edge=null; recompute(); }
+  }
+});
+window.addEventListener('keyup',e=>{ if(e.code==='Space'){ spaceDown=false; cv.style.cursor=tool==='select'?'default':'crosshair'; }
+  if(e.key==='Shift'){ shiftDown=false; if(draft.active) draw(); } });
+
+document.querySelectorAll('.tool[data-tool]').forEach(b=>b.addEventListener('click',()=>setTool(b.dataset.tool)));
+document.getElementById('btnUndo').addEventListener('click',undo);
+document.getElementById('btnKeys').addEventListener('click',()=>document.getElementById('keyHelp').classList.toggle('show'));
+document.getElementById('khClose').addEventListener('click',()=>document.getElementById('keyHelp').classList.remove('show'));
+document.getElementById('btnClear').addEventListener('click',()=>{
+  if(model.points.length||model.circles.length){ snapshot(); model={points:[],edges:[],circles:[]}; recompute(); } });
+
+// 스냅은 100mm 고정 (표시 컨트롤 제거)
+// 네모 크기 입력 → 배치모드
+document.getElementById('rectPlace').addEventListener('click',()=>{
+  const w=Math.round(parseFloat(document.getElementById('rectW').value)||0);
+  const h=Math.round(parseFloat(document.getElementById('rectH').value)||0);
+  if(w<=0||h<=0){ obToast('가로·세로(mm)를 입력하세요'); return; }
+  rectSize.w=w; rectSize.h=h; rectSize.place=true; setTool('rect');
+  document.getElementById('hint').textContent='네모 배치: 좌상단 위치를 클릭 ('+w.toLocaleString()+'×'+h.toLocaleString()+'mm)';
+});
+
+// ── 지적도 컨트롤 ──
+function cadEnabled(on){ const el=document.getElementById('cadCtl'); if(el) el.classList.toggle('off',!on); }
+function setRot(v){ cad.rot=((v%360)+360)%360; const rv=document.getElementById('rotVal'); if(rv) rv.textContent=Math.round(cad.rot)+'°'; draw(); }
+document.getElementById('cadLoad').addEventListener('click',()=>document.getElementById('cadFile').click());
+document.getElementById('cadFile').addEventListener('change',e=>{
+  const f=e.target.files&&e.target.files[0]; if(!f) return;
+  const img=new Image();
+  img.onload=()=>{ cad.img=img; cad.cx=view.cx; cad.cy=view.cy;
+    cad.mmPerPx=10000/img.width; cad.merc=null; ourGeoms=[]; ourParcels=[]; cadEnabled(true); fitViewToCad(); draw(); };
+  img.src=URL.createObjectURL(f); e.target.value='';
+});
+document.getElementById('cadOp').addEventListener('input',e=>{ cad.opacity=(+e.target.value)/100; draw(); });
+document.getElementById('cadClear').addEventListener('click',()=>{ cad.img=null; cad.merc=null; ourGeoms=[]; ourParcels=[];
+  rotArm=false; axisMode=false; axisPts=[]; document.getElementById('rotInput').style.display='none'; cadEnabled(false); draw(); });
+
+// ── 지적도 회전(단축키 O) + 기준축(두 꼭지점 수평정렬) ──
+function armRot(){ if(!cad.img){ obToast('지적도를 먼저 불러오세요'); return; }
+  rotArm=true; axisMode=false; cv.style.cursor='crosshair'; obToast('회전: 캔버스를 클릭한 뒤 각도(°)를 입력 (Enter)'); }
+function startAxis(){ if(!ourParcels.length){ obToast('우리 필지(지적도)를 먼저 불러오세요'); return; }
+  axisMode=true; rotArm=false; axisPts=[]; cv.style.cursor='crosshair'; obToast('기준축: 우리 필지 꼭지점 2개를 클릭하세요'); draw(); }
+function nearestParcelVert(wx,wy){ let best=null,bd=20/view.scale;
+  for(const par of ourParcels) for(const ring of par.rings) for(const p of ring){
+    const rp=rotPt(p); const d=Math.hypot(rp.x-wx,rp.y-wy); if(d<=bd){ bd=d; best=p; } } return best; }
+function axisClick(wx,wy){
+  const p=nearestParcelVert(wx,wy); if(!p){ obToast('필지 꼭지점(빨간 점) 근처를 클릭하세요'); return; }
+  axisPts.push(p);
+  if(axisPts.length===2){
+    const a0=Math.atan2(axisPts[1].y-axisPts[0].y, axisPts[1].x-axisPts[0].x);  // rot=0 기준 각
+    setRot(-a0*180/Math.PI);                                                     // 그 선이 수평이 되게
+    axisMode=false; axisPts=[]; cv.style.cursor=tool==='select'?'default':'crosshair'; obToast('기준축 정렬 완료 ✓');
+  } else draw();
+}
+function showRotInput(cx,cy){ const inp=document.getElementById('rotInput');
+  inp.value=''; inp.style.left=(cx+8)+'px'; inp.style.top=(cy-12)+'px'; inp.style.display='block'; inp.focus(); }
+document.getElementById('rotInput').addEventListener('keydown',e=>{ e.stopPropagation();
+  const inp=document.getElementById('rotInput');
+  if(e.key==='Enter'){ const v=parseFloat(inp.value); if(!isNaN(v)) setRot(cad.rot+v);
+    inp.style.display='none'; cv.style.cursor=tool==='select'?'default':'crosshair'; }
+  else if(e.key==='Escape'){ inp.style.display='none'; } });
+document.getElementById('rotInput').addEventListener('blur',()=>{ document.getElementById('rotInput').style.display='none'; });
+document.getElementById('cadAxis').addEventListener('click',startAxis);
+document.getElementById('cadRotO').addEventListener('click',armRot);
+
+// ── VWorld 지적도 API ──
+const $=(id)=>document.getElementById(id);
+// 내 인증키 기본값(도메인 잠금형 → 클라이언트 내장 정상). localStorage로 덮어쓸 수 있음.
+const VW_KEY_DEFAULT='09A5BB6C-E4CE-3310-B752-FD9F8CB52F23';
+function vwKey(){ return (localStorage.getItem('vw_key')||VW_KEY_DEFAULT||'').trim(); }
+const vwBack=$('vwBack');
+let jsonpN=0;
+// CORS 우회용 JSONP (VWorld Search API는 callback 지원)
+function jsonp(url){ return new Promise((res,rej)=>{
+  const cb='__vw'+(jsonpN++); const s=document.createElement('script'); let done=false;
+  const cleanup=()=>{ try{delete window[cb];}catch(e){window[cb]=undefined;} s.remove(); };
+  window[cb]=(d)=>{ done=true; res(d); cleanup(); };
+  s.onerror=()=>{ if(!done){ cleanup(); rej(new Error('load fail')); } };
+  s.src=url+(url.indexOf('?')>=0?'&':'?')+'callback='+cb; document.body.appendChild(s);
+  setTimeout(()=>{ if(!done){ cleanup(); rej(new Error('timeout')); } },12000);
+}); }
+// 경위도(EPSG:4326) → 웹메르카토르(EPSG:900913/3857), 단위 m
+function lonLatToMerc(lon,lat){ const R=6378137;
+  return [ R*lon*Math.PI/180, R*Math.log(Math.tan(Math.PI/4+(lat*Math.PI/180)/2)) ]; }
+async function geocode(key,addr){
+  for(const cat of ['road','parcel']){
+    const u='https://api.vworld.kr/req/search?service=search&request=search&version=2.0&crs=EPSG:4326'
+      +'&size=5&query='+encodeURIComponent(addr)+'&type=address&category='+cat
+      +'&format=json&key='+encodeURIComponent(key);
+    try{ const d=await jsonp(u);
+      const it=d&&d.response&&d.response.result&&d.response.result.items;
+      if(it&&it.length) return {lon:+it[0].point.x, lat:+it[0].point.y, title:it[0].title||addr};
+    }catch(e){/* 다음 카테고리 시도 */}
+  }
+  return null;
+}
+function buildWmsUrl(key,bbox,w,h){
+  // DOMAIN 파라미터는 보내지 않는다. 넣으면 등록 URL과 엄격 비교되어 localhost 등에서
+  // INCORRECT_KEY가 난다. 대신 브라우저가 자동 전송하는 Referer로 도메인 검증된다.
+  const p=new URLSearchParams({ SERVICE:'WMS', REQUEST:'GetMap', VERSION:'1.3.0',
+    LAYERS:'lp_pa_cbnd_bonbun,lp_pa_cbnd_bubun',
+    STYLES:'lp_pa_cbnd_bonbun_line,lp_pa_cbnd_bubun_line',
+    CRS:'EPSG:900913', BBOX:bbox.join(','), WIDTH:w, HEIGHT:h,
+    FORMAT:'image/png', TRANSPARENT:'TRUE', KEY:key });
+  return 'https://api.vworld.kr/req/wms?'+p.toString();
+}
+// 지적도 로드(주소 또는 경위도) — VWorld 모달과 온보딩이 공용으로 사용
+async function loadCadastral(key,opts){
+  const span=Math.max(10,opts.span||150);
+  let lon=opts.lon, lat=opts.lat, title='';
+  const status=opts.status||function(){};
+  if(!(lon&&lat)){
+    if(!opts.addr) throw new Error('주소나 좌표가 필요합니다');
+    status('주소 검색 중…');
+    let g=null; try{ g=await geocode(key,opts.addr); }catch(e){}
+    if(!g) throw new Error('주소 검색 실패');
+    lon=g.lon; lat=g.lat; title=g.title||'';
+  }
+  status('지적도 불러오는 중…');
+  const w=1024,h=1024;
+  const [mx,my]=lonLatToMerc(lon,lat);
+  const half=(span/Math.cos(lat*Math.PI/180))/2;      // 메르카토르 위도왜곡 보정
+  const bbox=[mx-half,my-half,mx+half,my+half];
+  const url=buildWmsUrl(key,bbox,w,h);
+  await new Promise((res,rej)=>{ const img=new Image();
+    img.onload=()=>{ cad.img=img; cad.cx=view.cx; cad.cy=view.cy; cad.mmPerPx=span*1000/w;
+      cad.merc={mx,my,half}; buildOurParcels();
+      cadEnabled(true); $('cadW').value=Math.round(span*1000); setRot(cad.rot); fitViewToCad(); draw(); res(); };
+    img.onerror=()=>rej(new Error('이미지 호출 실패')); img.src=url; });
+  return {lon,lat,title,span};
+}
+async function fetchVworld(){
+  const key=$('vwKey').value.trim();
+  if(!key){ $('vwStatus').textContent='인증키를 입력하세요.'; return; }
+  localStorage.setItem('vw_key',key);
+  try{
+    const r=await loadCadastral(key,{ addr:$('vwAddr').value.trim(),
+      lon:parseFloat($('vwLon').value)||0, lat:parseFloat($('vwLat').value)||0,
+      span:parseFloat($('vwSpan').value)||150, status:(m)=>{$('vwStatus').textContent=m;} });
+    $('vwLon').value=r.lon.toFixed(6); $('vwLat').value=r.lat.toFixed(6);
+    cad.opacity=(+$('cadOp').value)/100; draw();
+    $('vwStatus').textContent='완료'; closeVw();
+  }catch(e){ $('vwStatus').textContent=(e.message||'실패')+' — 키/주소 또는 http(localhost) 확인'; }
+}
+function openVw(){ $('vwKey').value=localStorage.getItem('vw_key')||VW_KEY_DEFAULT||'';
+  $('vwStatus').textContent=''; vwBack.classList.add('show'); }
+function closeVw(){ vwBack.classList.remove('show'); }
+$('cadVworld').addEventListener('click',openVw);
+$('vwCancel').addEventListener('click',closeVw);
+$('vwGo').addEventListener('click',fetchVworld);
+vwBack.addEventListener('click',e=>{ if(e.target===vwBack) closeVw(); });
+
+// ───────────────────────── 온보딩(로그인 → 기본정보) ─────────────────────────
+const onboard=$('onboard');
+const STRUCTS=['목구조','철근콘크리트구조','철골구조','조적조','기타'];
+const USAGES=['단독주택','공동주택','근린생활시설','기타'];
+const MAX_PARCELS=10;
+const project={meta:null};
+const OB={ step:1, data:{ email:'',key:'',struct:'',usage:'',
+  parcels:[{addr:'',lon:null,lat:null,area:null,jibun:'',geom:null}] } };
+
+function obToast(msg,auto){ const t=$('obToast'); t.textContent=msg; t.classList.add('show');
+  if(obToast._t) clearTimeout(obToast._t);
+  if(auto!==false) obToast._t=setTimeout(()=>t.classList.remove('show'),3500); }
+function obView(v){ $('obLogin').style.display=v==='login'?'flex':'none';
+  $('obWizard').style.display=v==='wizard'?'block':'none'; onboard.classList.remove('hide'); }
+function obStep(n){ OB.step=n;
+  document.querySelectorAll('#obWizard .ob-step').forEach(s=>s.classList.toggle('show',+s.dataset.step===n));
+  document.querySelectorAll('#obProg .seg').forEach(s=>{ const k=+s.dataset.step;
+    s.classList.toggle('active',k===n); s.classList.toggle('done',k<n); }); }
+function fillChoices(hostId,arr,onPick){ const host=$(hostId); host.innerHTML='';
+  arr.forEach(v=>{ const b=document.createElement('button'); b.type='button'; b.className='choice'; b.textContent=v;
+    b.addEventListener('click',()=>{ host.querySelectorAll('.choice').forEach(x=>x.classList.remove('on'));
+      b.classList.add('on'); onPick(v); }); host.appendChild(b); }); }
+
+// ── 필지 면적: VWorld 연속지적도(LP_PA_CBND_BUBUN) 폴리곤에서 산출 ──
+function ringAreaM2(ring,lat0){ const R=6378137,rad=Math.PI/180,k=Math.cos(lat0*rad); let a=0;
+  for(let i=0;i<ring.length;i++){ const p=ring[i],q=ring[(i+1)%ring.length];
+    a += (p[0]*rad*R*k)*(q[1]*rad*R) - (q[0]*rad*R*k)*(p[1]*rad*R); } return a/2; }
+function geomAreaM2(geom){ if(!geom) return 0;
+  let latSum=0,n=0; const scan=(c)=>{ if(typeof c[0]==='number'){ latSum+=c[1]; n++; } else c.forEach(scan); };
+  scan(geom.coordinates); const lat0=n?latSum/n:37.5;
+  const polys = geom.type==='MultiPolygon' ? geom.coordinates : [geom.coordinates];
+  let total=0;
+  for(const poly of polys) poly.forEach((ring,idx)=>{ const a=Math.abs(ringAreaM2(ring,lat0)); total += idx===0?a:-a; });
+  return Math.abs(total); }
+async function fetchParcel(key,lon,lat){
+  const u='https://api.vworld.kr/req/data?service=data&request=GetFeature&data=LP_PA_CBND_BUBUN'
+    +'&key='+encodeURIComponent(key)+'&geomFilter=POINT('+lon+'%20'+lat+')'
+    +'&format=json&crs=EPSG:4326&size=1&geometry=true&attribute=true';
+  const d=await jsonp(u);
+  const fc=d&&d.response&&d.response.result&&d.response.result.featureCollection;
+  const f=fc&&fc.features&&fc.features[0]; if(!f) return null;
+  return { area:geomAreaM2(f.geometry), geom:f.geometry,
+           jibun:(f.properties&&f.properties.jibun)||'',
+           addr:(f.properties&&f.properties.addr)||'' };
+}
+
+function renderAddrRows(){
+  const host=$('obAddrList'); host.innerHTML='';
+  OB.data.parcels.forEach((p,idx)=>{
+    const row=document.createElement('div'); row.className='addr-row';
+    const inp=document.createElement('input'); inp.className='addr-in'; inp.value=p.addr;
+    inp.placeholder='지번까지 상세히 입력';
+    const sbtn=document.createElement('button'); sbtn.type='button'; sbtn.className='addr-srch'; sbtn.textContent='검색';
+    const res=document.createElement('span'); res.className='addr-res'+(p.area?' ok':'');
+    if(p.area) res.innerHTML='<b>'+Math.round(p.area).toLocaleString()+' ㎡</b> '+(p.jibun||'')+' ✓';
+    const del=document.createElement('button'); del.type='button'; del.className='addr-del'; del.textContent='×';
+    if(OB.data.parcels.length===1) del.style.visibility='hidden';
+    inp.addEventListener('input',()=>{ p.addr=inp.value; p.lon=p.lat=p.area=p.geom=null; res.className='addr-res'; res.innerHTML=''; updateNextGate(); });
+    inp.addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); searchRow(idx); } });
+    sbtn.addEventListener('click',()=>searchRow(idx));
+    del.addEventListener('click',()=>{ if(OB.data.parcels.length>1){ OB.data.parcels.splice(idx,1); renderAddrRows(); } });
+    row.appendChild(inp); row.appendChild(sbtn); row.appendChild(res); row.appendChild(del); host.appendChild(row);
+  });
+  const add=$('obAddAddr'); add.disabled=OB.data.parcels.length>=MAX_PARCELS; add.style.opacity=add.disabled?.5:1;
+  updateNextGate();
+}
+// 행별 검색: 지오코딩 + 필지면적 → 우측에 면적·지번 표시 (맞는지 확인)
+async function searchRow(idx){
+  const p=OB.data.parcels[idx]; if(!p||!p.addr.trim()) return;
+  const key=vwKey(); const row=$('obAddrList').children[idx]; if(!row) return;
+  const res=row.querySelector('.addr-res');
+  res.className='addr-res loading'; res.textContent='검색 중…';
+  try{
+    const g=await geocode(key,p.addr); if(!g) throw new Error('no-addr');
+    p.lon=g.lon; p.lat=g.lat;
+    const par=await fetchParcel(key,g.lon,g.lat); if(!par||!par.area) throw new Error('no-parcel');
+    p.area=par.area; p.jibun=par.jibun; p.geom=par.geom;
+    res.className='addr-res ok';
+    res.innerHTML='<b>'+Math.round(par.area).toLocaleString()+' ㎡</b> '+(par.jibun||'')+' ✓';
+  }catch(e){ p.area=p.geom=null; res.className='addr-res err'; res.textContent='검색 실패 · 지번 확인'; }
+  updateNextGate();
+}
+// 입력된 모든 주소가 검색 확인(면적 有)돼야 '다음' 활성화
+function updateNextGate(){
+  const filled=OB.data.parcels.filter(p=>p.addr.trim());
+  const ok=filled.length>0 && filled.every(p=>p.area>0);
+  const btn=$('obNext1'); if(!btn) return;
+  btn.disabled=!ok; btn.style.opacity=ok?1:.45; btn.style.cursor=ok?'pointer':'not-allowed';
+}
+// 다음/완료 시 백그라운드로 좌표+면적 자동 조회 (내 인증키 사용, 화면엔 표시 안 함)
+async function lookupAllParcels(){
+  const key=vwKey(); if(!key) return;
+  for(const p of OB.data.parcels){
+    if(!p.addr.trim() || (p.lon&&p.lat&&p.area)) continue;
+    try{ const g=await geocode(key,p.addr); if(!g) continue; p.lon=g.lon; p.lat=g.lat;
+      const par=await fetchParcel(key,g.lon,g.lat); if(par&&par.area){ p.area=par.area; p.jibun=par.jibun; p.geom=par.geom; }
+    }catch(e){}
+  }
+}
+// 모든 필지를 포함하는 지적도 중심/스팬(m)
+function coverArea(parcels){
+  const pts=parcels.filter(p=>p.lon&&p.lat); if(!pts.length) return null;
+  const lons=pts.map(p=>p.lon),lats=pts.map(p=>p.lat);
+  const minLon=Math.min(...lons),maxLon=Math.max(...lons),minLat=Math.min(...lats),maxLat=Math.max(...lats);
+  const cLon=(minLon+maxLon)/2,cLat=(minLat+maxLat)/2,R=6378137,rad=Math.PI/180;
+  let span;
+  if(pts.length===1){ const a=pts[0].area; span=a?Math.sqrt(a)*4:150; }
+  else { span=Math.max((maxLon-minLon)*rad*R*Math.cos(cLat*rad),(maxLat-minLat)*rad*R)*1.6; }
+  span=Math.max(80,Math.min(2000,span||150));
+  return {lon:cLon,lat:cLat,span};
+}
+
+function renderProjectChip(){ const el=$('projChip'), m=project.meta;
+  if(!m||!m.parcels||!m.parcels.length){ el.style.display='none'; el.textContent=''; return; }
+  el.style.display='inline-flex';
+  const more=m.parcels.length>1?(' 외 '+(m.parcels.length-1)):'';
+  const ta=m.totalArea?(' · '+Math.round(m.totalArea).toLocaleString()+'㎡'):'';
+  el.textContent='📍 '+(m.parcels[0].addr||'')+more+ta+(m.struct?' · '+m.struct:'')+(m.usage?' · '+m.usage:''); }
+
+async function obFinish(){
+  if(!OB.data.parcels.some(p=>p.addr.trim())){ obToast('대지 주소를 1개 이상 입력하세요'); return; }
+  if(!OB.data.usage){ obToast('용도를 선택하세요'); return; }
+  const key=vwKey();
+  onboard.classList.add('hide'); resize();
+  obToast('지적도 불러오는 중…',false);
+  try{ await lookupAllParcels(); }catch(e){}     // 좌표·면적 자동 채움
+  const parcels=OB.data.parcels.filter(p=>p.addr.trim());
+  project.meta={ parcels:parcels.map(p=>({addr:p.addr,jibun:p.jibun,area:p.area})),
+    struct:OB.data.struct, usage:OB.data.usage, totalArea:parcels.reduce((s,p)=>s+(p.area||0),0) };
+  try{ localStorage.setItem('ff_project',JSON.stringify(project.meta)); }catch(e){}
+  renderProjectChip();
+  ourGeoms=parcels.map(p=>p.geom).filter(Boolean);   // 우리 필지 폴리곤(로드시 빨간선 생성)
+  if(key){
+    try{ const c=coverArea(parcels); if(!c) throw new Error('주소 좌표 확인 실패');
+      await loadCadastral(key,{lon:c.lon,lat:c.lat,span:c.span,status:(m)=>obToast(m,false)});
+      draw();
+      obToast('지적도 로드 완료 — 우리 필지는 빨간선 · 도면을 그려보세요',true);
+    }catch(e){ obToast('지적도 자동로드 실패: '+(e.message||'')+' (상단 VWorld 호출로 재시도)',true); }
+  } else obToast('도면을 그려보세요',true);
+}
+function gotoWizard(){ obView('wizard'); obStep(1); renderAddrRows(); }
+function dlogSetTab(mode){
+  $('dlogTabLogin').classList.toggle('active',mode==='login');
+  $('dlogTabSignup').classList.toggle('active',mode==='signup');
+  $('dlogTitle').textContent = mode==='login'?'Welcome Back':'반갑습니다';
+  $('dlogSub').textContent = mode==='login'?'DORI-AI에 오신 것을 환영합니다.':'DORI-AI에서 나만의 집을 설계해보세요.';
+  $('obLoginBtn').textContent = mode==='login'?'로그인':'회원가입';
+}
+$('obLoginBtn').addEventListener('click',()=>{ OB.data.email=$('obEmail').value; gotoWizard(); });
+$('obGoogle').addEventListener('click',gotoWizard);
+$('dlogTabLogin').addEventListener('click',()=>dlogSetTab('login'));
+$('dlogTabSignup').addEventListener('click',()=>dlogSetTab('signup'));
+$('dlogEye').addEventListener('click',()=>{ const i=$('obPw'); i.type=i.type==='password'?'text':'password'; });
+$('obAddAddr').addEventListener('click',()=>{ if(OB.data.parcels.length<MAX_PARCELS){
+  OB.data.parcels.push({addr:'',lon:null,lat:null,area:null,jibun:'',geom:null}); renderAddrRows(); } });
+$('obNext1').addEventListener('click',()=>{
+  const filled=OB.data.parcels.filter(p=>p.addr.trim());
+  if(!filled.length){ obToast('대지 주소를 입력하고 검색하세요'); return; }
+  if(!filled.every(p=>p.area>0)){ obToast('검색으로 필지를 확인해주세요 (정확한 지번 입력)'); return; }
+  obStep(2); });
+$('obPrev2').addEventListener('click',()=>obStep(1));
+$('obNext2').addEventListener('click',()=>{ if(!OB.data.struct){ obToast('구조를 선택하세요'); return; } obStep(3); });
+$('obPrev3').addEventListener('click',()=>obStep(2));
+$('obFinishBtn').addEventListener('click',obFinish);
+$('btnOnboard').addEventListener('click',()=>{ obView('wizard'); obStep(1); renderAddrRows(); });
+
+// ───────────────────────── 시작 ─────────────────────────
+setTool('line'); resize(); recompute();
+fillChoices('obStructs',STRUCTS,v=>OB.data.struct=v);
+fillChoices('obUsages',USAGES,v=>OB.data.usage=v);
+renderAddrRows();
+try{ const pm=JSON.parse(localStorage.getItem('ff_project')||'null'); if(pm){ project.meta=pm; renderProjectChip(); } }catch(e){}
+obStep(1); obView('login');
+</script>
+</body>
+</html>

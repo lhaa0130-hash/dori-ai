@@ -85,47 +85,51 @@ function fsSetAttendance(att: AttendanceData) {
 // 대상 회원의 Firestore users/{uid} 문서에 직접 반영(진짜 저장소).
 // firestore.rules 에서 관리자 이메일만 타인 문서 쓰기를 허용해야 동작합니다.
 // 대상 유저는 다음 접속 시 hydrateGameData 가 Firestore→로컬 캐시로 동기화합니다.
-// 반환 mode: 'instant'=즉시 반영(본인/규칙게시됨) · 'queued'=회원 접속 시 반영 · false=실패
+export type GrantResult = { mode: "instant" | "queued" | "fail"; error?: string };
+function errStr(e: unknown): string {
+  const any = e as { code?: string; message?: string };
+  return any?.code || any?.message || "알 수 없는 오류";
+}
+
+// 여러 통로로 시도: ①대상 user 문서 직접(본인/관리자규칙) ②대상 알림에 예약 ③방문집계(visits, 규칙 공개) 예약
 export async function adminGrantCandy(
   targetUid: string,
   amount: number,
   fromName = "관리자"
-): Promise<"instant" | "queued" | false> {
-  if (!targetUid || !amount) return false;
+): Promise<GrantResult> {
+  if (!targetUid || !amount) return { mode: "fail", error: "대상/금액 오류" };
   const db = getFirebaseFirestore();
-  // 1) 직접 반영 시도(본인 문서이거나 관리자 규칙이 게시된 경우 성공)
+  let lastErr = "";
+
+  // 1) 직접 반영(본인 문서이거나 관리자 규칙이 게시된 경우)
   try {
     await setDoc(
       doc(db, "users", targetUid),
-      {
-        cottonCandy: increment(amount),
-        ...(amount > 0 ? { cottonCandyTotal: increment(amount) } : {}),
-        lastActiveAt: serverTimestamp(),
-      },
+      { cottonCandy: increment(amount), ...(amount > 0 ? { cottonCandyTotal: increment(amount) } : {}), lastActiveAt: serverTimestamp() },
       { merge: true }
     );
-    return "instant";
-  } catch {
-    /* 권한 거부 → 큐로 폴백 */
-  }
-  // 2) 폴백: 대상 회원의 알림에 '지급 예약'을 남김(누구나 알림 생성 가능 규칙 활용)
-  //    대상이 접속하면 applyPendingCandyGrants()가 본인 잔액에 반영함.
+    return { mode: "instant" };
+  } catch (e) { lastErr = errStr(e); }
+
+  // 2) 알림으로 지급 예약(알림 생성 규칙이 게시돼 있으면 동작)
   try {
     await addDoc(collection(db, "notifications", targetUid, "items"), {
-      type: "candy_grant",
-      amount,
-      applied: false,
+      type: "candy_grant", amount, applied: false,
       fromName: (fromName || "관리자").slice(0, 20),
       text: `관리자가 솜사탕 ${amount.toLocaleString()}개를 지급했어요 🍭`,
-      link: "/my",
-      read: false,
-      createdAt: serverTimestamp(),
+      link: "/my", read: false, createdAt: serverTimestamp(),
     });
-    return "queued";
-  } catch (e) {
-    console.warn("[admin] 솜사탕 지급 실패:", e);
-    return false;
-  }
+    return { mode: "queued" };
+  } catch (e) { lastErr = errStr(e); }
+
+  // 3) 최후 폴백: visits 컬렉션(방문수 카운터가 실제 동작 → 규칙 공개 확인됨)에 예약 적립
+  try {
+    await setDoc(doc(db, "visits", targetUid), { pendingCandy: increment(amount) }, { merge: true });
+    return { mode: "queued" };
+  } catch (e) { lastErr = errStr(e); }
+
+  console.warn("[admin] 솜사탕 지급 실패:", lastErr);
+  return { mode: "fail", error: lastErr };
 }
 
 /**
@@ -154,19 +158,37 @@ export async function applyPendingCandyGrants(): Promise<void> {
         premiumGrants.push({ id: d.id, premium: x.premium === true });
       }
     });
-    if (candy.length === 0 && premiumGrants.length === 0) return;
+    // visits 폴백 통로의 예약도 함께 적용(방문집계 컬렉션 — 규칙 공개)
+    let visitsCandy = 0;
+    let visitsPremium: boolean | undefined;
+    try {
+      const vsnap = await getDoc(doc(db, "visits", uid));
+      const v = vsnap.data() as Record<string, unknown> | undefined;
+      visitsCandy = Number(v?.pendingCandy) || 0;
+      if (typeof v?.pendingPremium === "boolean") visitsPremium = v.pendingPremium as boolean;
+    } catch { /* noop */ }
 
-    const total = candy.reduce((s, p) => s + p.amount, 0);
+    if (candy.length === 0 && premiumGrants.length === 0 && visitsCandy <= 0 && visitsPremium === undefined) return;
+
+    const total = candy.reduce((s, p) => s + p.amount, 0) + (visitsCandy > 0 ? visitsCandy : 0);
     const userPatch: Record<string, unknown> = { lastActiveAt: serverTimestamp() };
     if (total > 0) { userPatch.cottonCandy = increment(total); userPatch.cottonCandyTotal = increment(total); }
     // 프리미엄은 가장 최근 예약값 적용(목록은 createdAt desc 정렬이라 첫 항목이 최신)
     if (premiumGrants.length > 0) userPatch.isPremium = premiumGrants[0].premium;
+    else if (visitsPremium !== undefined) userPatch.isPremium = visitsPremium;
 
     // 본인 문서에 반영(소유자 쓰기 — 항상 허용)
     await setDoc(doc(db, "users", uid), userPatch, { merge: true });
-    // 예약 항목 applied 처리(중복 적용 방지)
+    // 알림 예약 applied 처리(중복 적용 방지)
     const allIds = [...candy.map((c) => c.id), ...premiumGrants.map((p) => p.id)];
     await Promise.all(allIds.map((id) => updateDoc(doc(db, "notifications", uid, "items", id), { applied: true, read: true }).catch(() => {})));
+    // visits 예약 차감/해제(중복 적용 방지)
+    if (visitsCandy > 0 || visitsPremium !== undefined) {
+      const vPatch: Record<string, unknown> = {};
+      if (visitsCandy > 0) vPatch.pendingCandy = increment(-visitsCandy);
+      if (visitsPremium !== undefined) vPatch.pendingPremium = null;
+      await setDoc(doc(db, "visits", uid), vPatch, { merge: true }).catch(() => {});
+    }
     // 로컬 캐시 동기화
     if (total > 0) {
       localStorage.setItem(CC_KEY(email), String(getCottonCandyBalance(email) + total));
@@ -178,31 +200,28 @@ export async function applyPendingCandyGrants(): Promise<void> {
   }
 }
 
-export async function adminSetPremium(targetUid: string, isPremium: boolean): Promise<"instant" | "queued" | false> {
-  if (!targetUid) return false;
+export async function adminSetPremium(targetUid: string, isPremium: boolean): Promise<GrantResult> {
+  if (!targetUid) return { mode: "fail", error: "대상 오류" };
   const db = getFirebaseFirestore();
+  let lastErr = "";
   try {
     await setDoc(doc(db, "users", targetUid), { isPremium, lastActiveAt: serverTimestamp() }, { merge: true });
-    return "instant";
-  } catch {
-    /* 권한 거부 → 큐로 폴백 */
-  }
+    return { mode: "instant" };
+  } catch (e) { lastErr = errStr(e); }
   try {
     await addDoc(collection(db, "notifications", targetUid, "items"), {
-      type: "premium_grant",
-      premium: isPremium,
-      applied: false,
-      fromName: "관리자",
+      type: "premium_grant", premium: isPremium, applied: false, fromName: "관리자",
       text: isPremium ? "관리자가 프리미엄을 적용했어요 💎" : "프리미엄이 해제되었어요",
-      link: "/my",
-      read: false,
-      createdAt: serverTimestamp(),
+      link: "/my", read: false, createdAt: serverTimestamp(),
     });
-    return "queued";
-  } catch (e) {
-    console.warn("[admin] 프리미엄 설정 실패:", e);
-    return false;
-  }
+    return { mode: "queued" };
+  } catch (e) { lastErr = errStr(e); }
+  try {
+    await setDoc(doc(db, "visits", targetUid), { pendingPremium: isPremium }, { merge: true });
+    return { mode: "queued" };
+  } catch (e) { lastErr = errStr(e); }
+  console.warn("[admin] 프리미엄 설정 실패:", lastErr);
+  return { mode: "fail", error: lastErr };
 }
 
 /**

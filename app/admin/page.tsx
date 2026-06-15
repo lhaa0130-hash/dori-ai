@@ -186,14 +186,14 @@ export default function AdminPage() {
     if (!target?.uid) { showToast("error", "대상 회원의 UID를 찾을 수 없어요"); return; }
     const next = !target.isPremium;
     const res = await adminSetPremium(target.uid, next);
-    if (res === "instant") {
+    if (res.mode === "instant") {
       showToast("success", `${email} 프리미엄 ${next ? "활성화" : "해제"} 완료`);
       setSelectedUser((p) => (p && p.email === email ? { ...p, isPremium: next } : p));
       await loadData();
-    } else if (res === "queued") {
+    } else if (res.mode === "queued") {
       showToast("success", `${email} 프리미엄 ${next ? "활성화" : "해제"} 예약 — 접속 시 반영돼요`);
     } else {
-      showToast("error", "변경 실패");
+      showToast("error", `변경 실패: ${res.error || ""}`);
     }
   };
 
@@ -202,14 +202,14 @@ export default function AdminPage() {
     const target = users.find((u) => u.email === email);
     if (!target?.uid) { showToast("error", "대상 회원의 UID를 찾을 수 없어요"); return; }
     const res = await adminGrantCandy(target.uid, amount, user?.name || "관리자");
-    if (res === "instant") {
+    if (res.mode === "instant") {
       showToast("success", `${email}에게 솜사탕 ${amount.toLocaleString()}개 지급 완료`);
       setSelectedUser((p) => (p && p.email === email ? { ...p, cottonCandy: (p.cottonCandy || 0) + amount } : p));
       await loadData();
-    } else if (res === "queued") {
+    } else if (res.mode === "queued") {
       showToast("success", `솜사탕 ${amount.toLocaleString()}개 지급 예약 — ${email} 님이 접속하면 자동 반영돼요`);
     } else {
-      showToast("error", "지급 실패");
+      showToast("error", `지급 실패: ${res.error || ""}`);
     }
   };
 
