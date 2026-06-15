@@ -55,7 +55,7 @@ export default function AiToolsClient() {
   };
 
   return (
-    <main className="w-full min-h-screen">
+    <main className="w-full min-h-screen max-w-4xl mx-auto">
 
       {/* ── 히어로 ── */}
       <section className="pt-8 pb-0 border-b border-neutral-100 dark:border-zinc-900">

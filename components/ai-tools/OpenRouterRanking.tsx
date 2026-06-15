@@ -70,7 +70,7 @@ export default function OpenRouterRanking() {
           </div>
           <span className="text-[11px] text-neutral-400 whitespace-nowrap">{s.total}개 · {ago(s.updatedAt)}</span>
         </div>
-        <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-1">사용량 · 성능 · 가격 · 지능 — 6시간마다 갱신</p>
+        <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-1">전 세계 사용량 · 성능 · 가격 · 지능을 한눈에</p>
       </div>
 
       {/* 지능 하이라이트 */}
