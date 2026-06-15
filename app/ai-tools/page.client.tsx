@@ -4,7 +4,6 @@ import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import AiToolsList from "@/components/ai-tools/AiToolsList";
 import OpenRouterRanking from "@/components/ai-tools/OpenRouterRanking";
-import OpenRouterApps from "@/components/ai-tools/OpenRouterApps";
 import { completeMission, isMissionCompletedToday, markMissionCompletedToday } from "@/lib/missionHelpers";
 import { useScrollSpy } from "@/hooks/useScrollSpy";
 import { DISPLAY_CATEGORIES, CATEGORY_LABELS } from "@/constants/aiCategories";
@@ -104,10 +103,9 @@ export default function AiToolsClient() {
         </div>
       </section>
 
-      {/* ── AI 모델 랭킹 + 앱·에이전트 순위 (illo, 6시간 갱신) ── */}
-      <section className="w-full pt-5 space-y-3">
+      {/* ── AI 모델 랭킹 (사용량/지능/가격, illo, 6시간 갱신) ── */}
+      <section className="w-full pt-5">
         <OpenRouterRanking />
-        <OpenRouterApps />
       </section>
 
       {/* ── 도구 목록 ── */}
