@@ -146,7 +146,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     website: "https://chatgpt.com",
     apiUrl: "https://platform.openai.com",
     thumbnail: "https://logo.clearbit.com/chatgpt.com",
-    topPick: true, topRank: 1,
+    topPick: true, topRank: 4,
     pros: ["전 세계 1억+ 사용자, 생태계 최강", "무료로도 GPT-4o 기본 사용 가능", "이미지·음성·텍스트 통합 처리"],
     cons: ["무료 플랜은 하루 사용량 제한 있음", "프라이버시 우려 (데이터 학습에 활용)"],
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -182,7 +182,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     website: "https://perplexity.ai",
     apiUrl: "https://docs.perplexity.ai",
     thumbnail: "https://logo.clearbit.com/perplexity.ai",
-    topPick: true, topRank: 5,
+    topPick: false,
     pros: ["모든 답변에 출처 URL 제공", "실시간 웹 검색으로 최신 정보 반영", "딥리서치로 심층 분석 가능"],
     cons: ["무료 플랜은 Pro 검색 하루 5회 제한", "긴 창작 작업보다 검색·조사에 특화"],
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -202,7 +202,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     description: "일론 머스크의 xAI가 개발한 AI로, X(트위터) 플랫폼의 실시간 게시물 데이터에 접근할 수 있는 것이 최대 차별점입니다. Grok 3 모델 기준으로 주요 벤치마크에서 GPT-4o에 근접한 성능을 보이며, 경쟁 AI보다 유머러스하고 직설적인 답변 스타일을 추구합니다. X Premium+ 구독($16/월)에 포함되어 있으며, 별도 앱과 웹사이트로도 이용 가능합니다.",
     website: "https://x.ai",
     thumbnail: "https://logo.clearbit.com/x.ai",
-    topPick: true, topRank: 4,
+    topPick: true, topRank: 5,
     pros: ["X(트위터) 실시간 데이터 접근", "직설적이고 유머러스한 답변 스타일", "X Premium 구독에 포함"],
     cons: ["X Premium 유료 구독 필요", "편향된 학습 데이터 우려"],
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -231,7 +231,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     description: "중국 AI 연구소 DeepSeek이 개발한 오픈소스 모델로, R1 추론 모델이 GPT-o1에 근접한 성능을 보이며 업계에 충격을 줬습니다. 학습 비용을 획기적으로 낮춘 설계 덕분에 API 사용 비용이 GPT-4의 수십 분의 1 수준입니다. 오픈소스로 공개되어 자체 서버에 설치 가능하지만, 중국 기업이라 민감한 업무 데이터 사용 시 주의가 필요합니다.",
     website: "https://deepseek.com",
     thumbnail: "https://logo.clearbit.com/deepseek.com",
-    topPick: false,
+    topPick: true, topRank: 1,
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
