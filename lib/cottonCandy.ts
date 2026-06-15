@@ -81,6 +81,42 @@ function fsSetAttendance(att: AttendanceData) {
   }
 }
 
+// ─── 관리자 전용: 다른 회원에게 솜사탕 지급 / 프리미엄 설정 ──────────
+// 대상 회원의 Firestore users/{uid} 문서에 직접 반영(진짜 저장소).
+// firestore.rules 에서 관리자 이메일만 타인 문서 쓰기를 허용해야 동작합니다.
+// 대상 유저는 다음 접속 시 hydrateGameData 가 Firestore→로컬 캐시로 동기화합니다.
+export async function adminGrantCandy(targetUid: string, amount: number): Promise<boolean> {
+  if (!targetUid || !amount) return false;
+  try {
+    const db = getFirebaseFirestore();
+    await setDoc(
+      doc(db, "users", targetUid),
+      {
+        cottonCandy: increment(amount),
+        ...(amount > 0 ? { cottonCandyTotal: increment(amount) } : {}),
+        lastActiveAt: serverTimestamp(),
+      },
+      { merge: true }
+    );
+    return true;
+  } catch (e) {
+    console.warn("[admin] 솜사탕 지급 실패:", e);
+    return false;
+  }
+}
+
+export async function adminSetPremium(targetUid: string, isPremium: boolean): Promise<boolean> {
+  if (!targetUid) return false;
+  try {
+    const db = getFirebaseFirestore();
+    await setDoc(doc(db, "users", targetUid), { isPremium, lastActiveAt: serverTimestamp() }, { merge: true });
+    return true;
+  } catch (e) {
+    console.warn("[admin] 프리미엄 설정 실패:", e);
+    return false;
+  }
+}
+
 /**
  * 로그인 직후 Firestore → localStorage 동기화 (Firestore가 진짜 값).
  * 새 기기/브라우저에서 로그인해도 솜사탕·출석이 그대로 따라옵니다.
@@ -148,6 +184,7 @@ export async function hydrateGameData(): Promise<void> {
         nickname: d.name || undefined,
         gender: d.gender || undefined,
         ageGroup: d.ageGroup || undefined,
+        isPremium: d.isPremium === true,
       })
     );
 

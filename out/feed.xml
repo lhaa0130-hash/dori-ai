@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 15 Jun 2026 10:32:20 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 15 Jun 2026 10:48:35 GMT</lastBuildDate>
+    <item>
+      <title>바이트댄스, AI 칩 구매 협상 중 — 중국 Iluvatar CoreX와의 협력</title>
+      <link>https://dori-ai.com/insight/article/trend-100</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-100</guid>
+      <category>트렌드</category>
+      <pubDate>Mon, 15 Jun 2026 00:00:00 GMT</pubDate>
+      <description>바이트댄스가 AI 칩 제조업체 Iluvatar CoreX와의 협상을 통해 AI 반도체 시장에서의 입지를 강화하고 있다.</description>
+    </item>
     <item>
       <title>중국 대학, 12,000개 과목 폐지 — AI 시대를 겨냥한 교육 개혁</title>
       <link>https://dori-ai.com/insight/article/trend-99</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Thu, 23 Apr 2026 00:00:00 GMT</pubDate>
       <description>마이크로소프트 BitNet과 PrismML이 주도하는 1비트 대형 언어 모델의 등장. 스마트폰 CPU만으로 수십억 파라미터 AI를 구동하는 초효율 AI 시대의 서막.</description>
-    </item>
-    <item>
-      <title>AI 코딩 도구 대전 2026: Claude Code·Copilot·Cursor, 누가 개발자를 지배하는가</title>
-      <link>https://dori-ai.com/insight/article/trend-68</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-68</guid>
-      <category>트렌드</category>
-      <pubDate>Thu, 23 Apr 2026 00:00:00 GMT</pubDate>
-      <description>2026년 AI 코딩 도구 경쟁이 전례 없는 수준으로 치열해지고 있다. Claude Code가 SWE-bench 1위를 차지한 가운데, GitHub Copilot과 Cursor가 맹렬히 추격하는 전장 분석.</description>
     </item>
   </channel>
 </rss>

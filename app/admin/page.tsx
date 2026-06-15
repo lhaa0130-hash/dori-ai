@@ -6,6 +6,7 @@ import Header from "@/components/layout/Header";
 import { useRouter } from "next/navigation";
 import { collection, getDocs } from "firebase/firestore";
 import { getFirebaseFirestore } from "@/lib/firebase";
+import { adminGrantCandy, adminSetPremium } from "@/lib/cottonCandy";
 import { getAnalyticsSummary, getDailyAnalytics, getTodayStr, getAdsense, saveAdsense, type DailyAnalytics, type AdsenseData } from "@/lib/analytics";
 
 // ─── 관리자 이메일 (단 1명만) ─────────────────────────────────────
@@ -22,6 +23,7 @@ interface VisitorInfo {
 }
 
 interface UserData {
+  uid?: string;
   email: string;
   name: string;
   cottonCandy?: number;
@@ -139,7 +141,7 @@ export default function AdminPage() {
       snap.forEach((d) => {
         const data = d.data() as Record<string, unknown>;
         const email = (data.email as string) || d.id;
-        userList.push({ email, ...data } as UserData);
+        userList.push({ email, ...data, uid: d.id } as UserData);
         if (data.isPremium) premiumList.push(email);
       });
       userList.sort((a: any, b: any) => {
@@ -178,33 +180,30 @@ export default function AdminPage() {
     setTimeout(() => setToast(null), 3000);
   };
 
-  // ── 프리미엄 토글 ──
-  const togglePremium = (email: string) => {
-    const key = `dori_profile_${email}`;
-    try {
-      const raw = localStorage.getItem(key);
-      const data = raw ? JSON.parse(raw) : {};
-      data.isPremium = !data.isPremium;
-      localStorage.setItem(key, JSON.stringify(data));
-      loadData();
-      showToast("success", `${email} 프리미엄 상태가 변경되었습니다.`);
-    } catch {
-      showToast("error", "변경 실패");
+  // ── 프리미엄 토글 (대상 회원의 Firestore users/{uid}에 반영) ──
+  const togglePremium = async (email: string) => {
+    const target = users.find((u) => u.email === email);
+    if (!target?.uid) { showToast("error", "대상 회원의 UID를 찾을 수 없어요"); return; }
+    const next = !target.isPremium;
+    const ok = await adminSetPremium(target.uid, next);
+    if (ok) {
+      showToast("success", `${email} 프리미엄 ${next ? "활성화" : "해제"} 완료`);
+      await loadData();
+    } else {
+      showToast("error", "변경 실패 (규칙 게시/네트워크 확인)");
     }
   };
 
-  // ── 솜사탕 지급 ──
-  const giveCandy = (email: string, amount: number) => {
-    const key = `dori_profile_${email}`;
-    try {
-      const raw = localStorage.getItem(key);
-      const data = raw ? JSON.parse(raw) : {};
-      data.cottonCandy = (data.cottonCandy || 0) + amount;
-      localStorage.setItem(key, JSON.stringify(data));
-      loadData();
-      showToast("success", `${email}에게 솜사탕 ${amount}개 지급 완료`);
-    } catch {
-      showToast("error", "지급 실패");
+  // ── 솜사탕 지급 (대상 회원의 Firestore users/{uid}에 직접 반영) ──
+  const giveCandy = async (email: string, amount: number) => {
+    const target = users.find((u) => u.email === email);
+    if (!target?.uid) { showToast("error", "대상 회원의 UID를 찾을 수 없어요"); return; }
+    const ok = await adminGrantCandy(target.uid, amount);
+    if (ok) {
+      showToast("success", `${email}에게 솜사탕 ${amount.toLocaleString()}개 지급 완료`);
+      await loadData();
+    } else {
+      showToast("error", "지급 실패 (규칙 게시/네트워크 확인)");
     }
   };
 
