@@ -33,10 +33,10 @@ function TopCard({ tool, rank }: { tool: AiTool; rank: number }) {
 
   return (
     <div
-      className="group flex flex-col px-4 py-2.5 rounded-2xl bg-white dark:bg-zinc-950
+      className="group flex flex-col px-4 py-2 rounded-2xl bg-white dark:bg-zinc-950
         border border-neutral-100 dark:border-zinc-900
         hover:border-[#F9954E]/40 hover:shadow-lg hover:shadow-[#F9954E]/5
-        transition-all duration-200 min-h-[168px]"
+        transition-all duration-200"
     >
       {/* 상단: 랭크 + 로고 + 이름/설명 + 평점 */}
       <div className="flex items-start gap-3.5">
@@ -85,7 +85,7 @@ function TopCard({ tool, rank }: { tool: AiTool; rank: number }) {
 
       {/* 핵심 특징 칩 */}
       {features.length > 0 && (
-        <div className="flex flex-wrap gap-1.5 mt-3 pl-[34px]">
+        <div className="flex flex-wrap gap-1.5 mt-2 pl-[34px]">
           {features.map((f, i) => (
             <span
               key={i}
@@ -99,13 +99,13 @@ function TopCard({ tool, rank }: { tool: AiTool; rank: number }) {
       )}
 
       {/* 하단: 버튼 2개 (API 연결 / 사이트 방문) */}
-      <div className="flex gap-2 mt-auto pt-3.5 pl-[34px]">
+      <div className="flex gap-2 mt-auto pt-2.5 pl-[34px]">
         {api && (
           <a
             href={api}
             target="_blank"
             rel="noopener noreferrer"
-            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[12.5px] font-bold
+            className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[12.5px] font-bold
               border border-neutral-200 dark:border-zinc-800 text-neutral-600 dark:text-neutral-300
               hover:border-[#F9954E]/50 hover:text-[#F9954E] transition-colors"
           >
@@ -117,7 +117,7 @@ function TopCard({ tool, rank }: { tool: AiTool; rank: number }) {
           href={tool.website}
           target="_blank"
           rel="noopener noreferrer"
-          className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-xl text-[12.5px] font-bold
+          className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[12.5px] font-bold
             bg-[#F9954E] text-white hover:bg-[#E8832E] transition-colors"
         >
           <ExternalLink className="w-3.5 h-3.5" />
