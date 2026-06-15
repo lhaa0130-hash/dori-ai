@@ -7,6 +7,13 @@ import { AI_TOOL_API_LINKS } from "@/constants/aiToolApiLinks";
 import { DISPLAY_CATEGORIES, CATEGORY_LABELS, CATEGORY_DESCRIPTIONS } from "@/constants/aiCategories";
 import { ExternalLink, Code2, Star } from "lucide-react";
 
+// 에디터 지정 순위 (트래픽 왜곡 보정 — 대기업 통합도메인이 위로 가는 문제 해결). 여기 있으면 최우선, 없으면 트래픽순.
+const EDITORIAL_RANK: Record<string, number> = {
+  "agent-cursor": 1, "agent-claude-code": 2, "agent-openai-operator": 3, "agent-manus": 4,
+  "agent-devin": 5, "agent-perplexity-agent": 6, "agent-n8n": 7, "agent-genspark": 8,
+  "agent-zapier-ai": 9, "agent-langchain": 10, "agent-autogpt": 11,
+};
+
 // ── 로고: DuckDuckGo 아이콘(안정적) → 실패 시 글자 아바타 ────────────
 function toolFavicon(tool: AiTool) {
   try { return `https://icons.duckduckgo.com/ip3/${new URL(tool.website).hostname}.ico`; }
@@ -33,7 +40,7 @@ function TopCard({ tool, rank }: { tool: AiTool; rank: number }) {
 
   return (
     <div
-      className="group flex flex-col px-4 py-2 rounded-2xl bg-white dark:bg-zinc-950
+      className="group flex flex-col px-4 py-1.5 rounded-2xl bg-white dark:bg-zinc-950
         border border-neutral-100 dark:border-zinc-900
         hover:border-[#F9954E]/40 hover:shadow-lg hover:shadow-[#F9954E]/5
         transition-all duration-200"
@@ -52,7 +59,7 @@ function TopCard({ tool, rank }: { tool: AiTool; rank: number }) {
         <img
           src={toolFavicon(tool)}
           alt={tool.name}
-          className="w-12 h-12 rounded-xl object-contain bg-neutral-50 dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 flex-shrink-0 p-0.5"
+          className="w-10 h-10 rounded-xl object-contain bg-neutral-50 dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 flex-shrink-0 p-0.5"
           loading="lazy"
           onError={(e) => { const t = e.target as HTMLImageElement; if (!t.dataset.fb) { t.dataset.fb = "1"; t.src = letterAvatar(tool.name); } }}
         />
@@ -99,7 +106,7 @@ function TopCard({ tool, rank }: { tool: AiTool; rank: number }) {
       )}
 
       {/* 하단: 버튼 2개 (API 연결 / 사이트 방문) */}
-      <div className="flex gap-2 mt-auto pt-2.5 pl-[34px]">
+      <div className="flex gap-2 mt-auto pt-2 pl-[34px]">
         {api && (
           <a
             href={api}
@@ -190,13 +197,15 @@ function CategorySection({
   isFiltered?: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
+  // 점수: 에디터 지정 순위(1~) 최우선, 없으면 트래픽순(Tranco, 6시간 갱신)
+  const score = (t: AiTool) => {
+    const ed = EDITORIAL_RANK[t.id];
+    if (ed != null) return ed;
+    return 100000 + ((t as any).__pop ?? 999999);
+  };
   const sortedTools = tools.slice().sort((a, b) => {
-    // 1순위: 전 세계 인기 순위(Tranco, 낮을수록 인기) — 6시간마다 갱신
-    const pa = (a as any).__pop ?? Infinity, pb = (b as any).__pop ?? Infinity;
-    if (pa !== pb) return pa - pb;
-    // 폴백(순위 미로딩 시): 기존 큐레이션
-    if ((a.topPick ? 1 : 0) !== (b.topPick ? 1 : 0)) return (b.topPick ? 1 : 0) - (a.topPick ? 1 : 0);
-    if ((a.topRank ?? 99) !== (b.topRank ?? 99)) return (a.topRank ?? 99) - (b.topRank ?? 99);
+    const sa = score(a), sb = score(b);
+    if (sa !== sb) return sa - sb;
     return b.rating - a.rating;
   });
 
