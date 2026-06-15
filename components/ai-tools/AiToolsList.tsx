@@ -33,7 +33,7 @@ function TopCard({ tool, rank }: { tool: AiTool; rank: number }) {
 
   return (
     <div
-      className="group flex flex-col p-4 rounded-2xl bg-white dark:bg-zinc-950
+      className="group flex flex-col px-4 py-2.5 rounded-2xl bg-white dark:bg-zinc-950
         border border-neutral-100 dark:border-zinc-900
         hover:border-[#F9954E]/40 hover:shadow-lg hover:shadow-[#F9954E]/5
         transition-all duration-200 min-h-[168px]"
@@ -133,7 +133,7 @@ function MiniCard({ tool, rank }: { tool: AiTool; rank: number }) {
   const api = apiHref(tool);
   return (
     <div
-      className="group flex items-center gap-3 px-4 py-3 rounded-xl bg-white dark:bg-zinc-950
+      className="group flex items-center gap-3 px-4 py-2 rounded-xl bg-white dark:bg-zinc-950
         border border-neutral-100 dark:border-zinc-900 hover:border-[#F9954E]/30 transition-all duration-150"
     >
       <span className="text-[11px] font-black text-neutral-300 dark:text-zinc-600 w-4 text-center flex-shrink-0">
@@ -207,7 +207,7 @@ function CategorySection({
     <section
       id={`category-${cat}`}
       ref={sectionRef}
-      className="py-10 border-b border-neutral-100 dark:border-zinc-900 last:border-0"
+      className="py-6 border-b border-neutral-100 dark:border-zinc-900 last:border-0"
       style={{ scrollMarginTop: "80px" }}
     >
       {/* 카테고리 헤더 */}
@@ -229,7 +229,7 @@ function CategorySection({
       </div>
 
       {/* Top 5 통합 카드 (동일 크기) */}
-      <div className="flex flex-col gap-2.5">
+      <div className="flex flex-col gap-1.5">
         {top5.map((tool) => (
           <TopCard key={tool.id} tool={tool} rank={tool.topRank ?? 1} />
         ))}
