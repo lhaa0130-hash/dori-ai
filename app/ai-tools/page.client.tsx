@@ -3,8 +3,7 @@
 import { useState, useEffect, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import AiToolsList from "@/components/ai-tools/AiToolsList";
-import OpenRouterStats from "@/components/ai-tools/OpenRouterStats";
-import OpenRouterTable from "@/components/ai-tools/OpenRouterTable";
+import OpenRouterRanking from "@/components/ai-tools/OpenRouterRanking";
 import { completeMission, isMissionCompletedToday, markMissionCompletedToday } from "@/lib/missionHelpers";
 import { useScrollSpy } from "@/hooks/useScrollSpy";
 import { DISPLAY_CATEGORIES, CATEGORY_LABELS } from "@/constants/aiCategories";
@@ -104,10 +103,9 @@ export default function AiToolsClient() {
         </div>
       </section>
 
-      {/* ── OpenRouter 실시간 현황 (사용량 순위 + 성능·가격표, 6시간마다 갱신) ── */}
-      <section className="w-full pt-5 space-y-3">
-        <OpenRouterStats />
-        <OpenRouterTable />
+      {/* ── AI 모델 랭킹 (사용량+속도+가격+지능 통합, illo, 6시간 갱신) ── */}
+      <section className="w-full pt-5">
+        <OpenRouterRanking />
       </section>
 
       {/* ── 도구 목록 ── */}
