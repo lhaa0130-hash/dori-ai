@@ -37,7 +37,7 @@ import {
   type GameRecord,
 } from "@/lib/social";
 import { uploadAvatar } from "@/lib/storage";
-import { TIER_INFO, type UserTier } from "@/lib/userProfile";
+import { TIER_INFO, TIER_THRESHOLDS, type UserTier } from "@/lib/userProfile";
 import { getOwnedShopItems } from "@/lib/cottonCandy";
 import {
   bgGradOf,
@@ -180,6 +180,7 @@ export default function ProfilePage() {
   const [followBusy, setFollowBusy] = useState(false);
   const [followModal, setFollowModal] = useState<null | { title: string; users: { uid: string; name: string }[] }>(null);
   const [homeTab, setHomeTab] = useState<"home" | "account">("home");
+  const [tierOpen, setTierOpen] = useState(false);
 
   // 방문자 카운터(투데이/투탈)
   const [visit, setVisit] = useState<{ total: number; today: number } | null>(null);
@@ -1349,6 +1350,70 @@ export default function ProfilePage() {
             )}
           </div>
         )}
+
+        {/* 3.6) 내 등급 + 등급표(접이식) */}
+        <div className="mt-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
+          {(() => {
+            const ct = (Math.min(10, Math.max(1, Number(profile.tier) || 1)) as UserTier);
+            const info = TIER_INFO[ct];
+            const exp = Number(profile.exp) || 0;
+            const curThr = TIER_THRESHOLDS[ct];
+            const nextT = ct < 10 ? ((ct + 1) as UserTier) : null;
+            const nextThr = nextT ? TIER_THRESHOLDS[nextT] : null;
+            const prog = nextThr ? Math.max(0, Math.min(100, ((exp - curThr) / (nextThr - curThr)) * 100)) : 100;
+            return (
+              <>
+                <div className="flex items-center justify-between mb-2">
+                  <p className="text-[11px] text-[#F9954E] font-bold">내 등급</p>
+                  <button onClick={() => setTierOpen((v) => !v)} className="text-[11px] font-bold text-neutral-400 hover:text-[#F9954E]">
+                    {tierOpen ? "접기" : "등급표 보기"}
+                  </button>
+                </div>
+
+                {/* 현재 등급 요약 */}
+                <div className="flex flex-wrap items-center gap-1.5">
+                  <span className="inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11px] font-extrabold" style={{ color: info.color, backgroundColor: `${info.color}1A` }}>
+                    <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: info.color }} />
+                    {info.name}
+                  </span>
+                  <span className="text-[11px] text-neutral-500 dark:text-neutral-400 font-semibold">{info.description}</span>
+                  <span className="ml-auto inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-bold bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-neutral-200 tabular-nums">Lv.{profile.level}</span>
+                </div>
+
+                {/* 다음 등급까지 진행바 */}
+                <div className="mt-2.5">
+                  <div className="h-1.5 w-full rounded-full bg-neutral-100 dark:bg-zinc-900 overflow-hidden">
+                    <div className="h-full rounded-full transition-all" style={{ width: `${prog}%`, backgroundColor: info.color }} />
+                  </div>
+                  <p className="mt-1 text-[10px] text-neutral-400 tabular-nums">
+                    {nextThr
+                      ? `${TIER_INFO[nextT as UserTier].name}까지 ${Math.max(0, nextThr - exp).toLocaleString()}점 · 현재 ${exp.toLocaleString()}점`
+                      : `최고 등급! · ${exp.toLocaleString()}점`}
+                  </p>
+                </div>
+
+                {/* 등급표 */}
+                {tierOpen && (
+                  <div className="mt-3 pt-3 border-t border-neutral-100 dark:border-zinc-900 space-y-0.5">
+                    {([1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as UserTier[]).map((t) => {
+                      const ti = TIER_INFO[t];
+                      const isMe = t === ct;
+                      return (
+                        <div key={t} className={`flex items-center gap-2 px-2 py-1 rounded-lg ${isMe ? "bg-[#FFF5EB] dark:bg-[#F9954E]/10" : ""}`}>
+                          <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: ti.color }} />
+                          <span className="text-[12px] font-bold text-neutral-800 dark:text-neutral-100">{ti.name}</span>
+                          <span className="text-[11px] text-neutral-400 truncate">{ti.description}</span>
+                          <span className="ml-auto text-[11px] text-neutral-400 tabular-nums shrink-0">{TIER_THRESHOLDS[t].toLocaleString()}점</span>
+                          {isMe && <span className="text-[10px] font-extrabold text-[#F9954E] shrink-0">●</span>}
+                        </div>
+                      );
+                    })}
+                  </div>
+                )}
+              </>
+            );
+          })()}
+        </div>
 
         {/* 4) 뱃지 */}
         <div className="mt-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
