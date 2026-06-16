@@ -576,15 +576,8 @@ export default function ProfilePage() {
   const canMessage = !!myUid && !isOwner;
 
   return (
-    <main className="relative w-full min-h-screen pb-24 overflow-hidden">
-      {/* 🎨 페이지 전체 배경 스킨 — 코지홈 한 페이지 전체가 꾸며짐(배너만이 아니라) */}
-      <div className={`absolute inset-0 ${bgGradOf(profile.bg)}`} aria-hidden />
-      {profile.bannerEffect && profile.bannerEffect !== "none" && (
-        <div className="absolute inset-0 pointer-events-none overflow-hidden" aria-hidden>
-          <BannerFx id={profile.bannerEffect} count={18} />
-        </div>
-      )}
-
+    <main className="relative w-full min-h-screen pb-24 bg-white dark:bg-black">
+      {/* 페이지 전체 배경은 흰색(다크모드 검정) — 배경 스킨은 상단 배너 카드 안에만 적용 */}
       <div className="relative">
       {/* 팔로워/팔로잉 목록 모달 */}
       {followModal && (
