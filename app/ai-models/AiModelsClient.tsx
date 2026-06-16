@@ -12,7 +12,6 @@ interface Model { name: string; provider: string; reqM: number | null; tps: numb
 type SortKey = "cost" | "reqM" | "intel" | "tps" | "pin" | "pout";
 
 const norm = (s: string) => String(s || "").toLowerCase().replace(/^[^:]+:\s*/, "").replace(/[\s\-_.()]/g, "");
-function ago(iso?: string) { if (!iso) return ""; const m = Math.floor((Date.now() - new Date(iso).getTime()) / 60000); if (m < 60) return m + "분 전"; const h = Math.floor(m / 60); if (h < 24) return h + "시간 전"; return Math.floor(h / 24) + "일 전"; }
 function usd(v: number | null) { if (v == null) return "—"; if (v === 0) return "$0"; if (v < 0.01) return "$" + v.toFixed(4); if (v < 1) return "$" + v.toFixed(3); if (v < 1000) return "$" + v.toFixed(2); return "$" + v.toLocaleString(undefined, { maximumFractionDigits: 0 }); }
 function num(v: number | null, suffix = "") { return v == null ? "—" : v.toLocaleString() + suffix; }
 
@@ -162,7 +161,7 @@ export default function AiModelsClient() {
             <div className="flex items-center gap-2 mb-3">
               <span className="w-2 h-2 rounded-full bg-[#F9954E]" />
               <h2 className="text-[14px] font-extrabold text-neutral-900 dark:text-white">비용 계산기</h2>
-              {stats?.updatedAt && <span className="ml-auto text-[10.5px] text-neutral-400">갱신 {ago(stats.updatedAt)}</span>}
+              <span className="ml-auto text-[10.5px] font-bold text-[#F9954E]">● LIVE</span>
             </div>
             <div className="flex flex-wrap gap-2">
               {numInput(inTok, setInTok, "1회 입력 토큰", "토큰")}
@@ -218,7 +217,7 @@ export default function AiModelsClient() {
               </table>
             </div>
 
-            <p className="text-[10.5px] text-neutral-400 mt-3">데이터: OpenRouter 실사용 통계 · 6시간마다 자동 갱신 · 가격은 100만 토큰당 USD</p>
+            <p className="text-[10.5px] text-neutral-400 mt-3">데이터: OpenRouter 실사용 통계 · 자동 갱신 · 가격은 100만 토큰당 USD</p>
 
             <div className="mt-6 flex flex-wrap gap-2">
               <Link href="/ai-tools" className="inline-flex items-center gap-1 rounded-full bg-[#F9954E] text-white text-[12.5px] font-bold px-4 py-2">AI 도구 343개 보기 →</Link>
@@ -230,7 +229,7 @@ export default function AiModelsClient() {
               <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white">자주 묻는 질문</h2>
               {[
                 ["가격은 어떻게 계산되나요?", "각 모델의 입력·출력 100만 토큰당 단가(OpenRouter 기준)에, 입력하신 토큰 수와 월 호출 횟수를 곱해 월 예상 비용을 계산합니다."],
-                ["데이터는 얼마나 최신인가요?", "OpenRouter의 실제 사용량·가격 데이터를 6시간마다 자동으로 갱신합니다."],
+                ["데이터는 얼마나 최신인가요?", "OpenRouter의 실제 사용량·가격 데이터를 자동으로 수시 갱신합니다. 원천 데이터가 바뀌는 즉시 반영돼요."],
                 ["사용량 순위는 무슨 기준인가요?", "전 세계 개발자들이 OpenRouter를 통해 실제로 보낸 요청량(하루 백만 건 단위) 기준입니다."],
               ].map(([q, a], i) => (
                 <details key={i} className="rounded-xl border border-neutral-200 dark:border-zinc-800 p-3">

@@ -20,14 +20,6 @@ const TABS = [
   { key: "price", label: "💰 가격", desc: "가장 저렴한 모델 (입력가 기준)" },
 ] as const;
 
-function ago(iso: string): string {
-  const m = Math.floor((Date.now() - new Date(iso).getTime()) / 60000);
-  if (m < 60) return m + "분 전";
-  const h = Math.floor(m / 60);
-  if (h < 24) return h + "시간 전";
-  return Math.floor(h / 24) + "일 전";
-}
-
 export default function OpenRouterRanking() {
   const [s, setS] = useState<Stats | null>(null);
   const [hide, setHide] = useState(false);
@@ -54,7 +46,7 @@ export default function OpenRouterRanking() {
             <h2 className="text-[16px] font-extrabold text-neutral-950 dark:text-white">AI 모델 랭킹</h2>
             <span className="text-[10px] font-bold text-[#F9954E] border border-[#F9954E]/40 rounded-full px-1.5 py-0.5">LIVE</span>
           </div>
-          <span className="text-[11px] text-neutral-400 whitespace-nowrap">{s.total}개 · {ago(s.updatedAt)}</span>
+          <span className="text-[11px] text-neutral-400 whitespace-nowrap">{s.total}개 모델</span>
         </div>
         <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-1">전 세계 사용량 · 지능 · 가격을 한눈에</p>
       </div>
