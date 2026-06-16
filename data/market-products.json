@@ -1,5 +1,55 @@
 [
   {
+    "id": "mk3-1",
+    "name": "앤커 나노 GaN 충전기",
+    "category": "digital",
+    "source": "coupang",
+    "query": "앤커 나노 GaN 충전기",
+    "emoji": "🔌",
+    "priceHint": "중가형",
+    "summary": "휴대성 좋은 안정형",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/eCrwwSitie"
+  },
+  {
+    "id": "mk3-2",
+    "name": "유그린 넥소드 GaN 충전기",
+    "category": "digital",
+    "source": "coupang",
+    "query": "유그린 넥소드 GaN 충전기",
+    "emoji": "🧳",
+    "priceHint": "중가형",
+    "summary": "책상용 밸런스형",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/eCrwwVqo2e"
+  },
+  {
+    "id": "mk3-3",
+    "name": "베이스어스 GaN 멀티포트 충전기",
+    "category": "digital",
+    "source": "ali",
+    "query": "Baseus GaN 멀티포트 충전기",
+    "emoji": "💻",
+    "priceHint": "중저가형",
+    "summary": "구성 좋은 실속형",
+    "hot": true,
+    "weekly": true
+  },
+  {
+    "id": "mk3-4",
+    "name": "투키 GaN 멀티포트 충전기",
+    "category": "digital",
+    "source": "ali",
+    "query": "Toocki GaN 충전기",
+    "emoji": "⚡",
+    "priceHint": "저가 딜형",
+    "summary": "가격 우선 입문형",
+    "hot": true,
+    "weekly": true
+  },
+  {
     "id": "mk2-1",
     "name": "삼성전자 갤럭시 버즈 FE",
     "category": "digital",
@@ -9,7 +59,7 @@
     "priceHint": "10만원 안팎",
     "summary": "갤럭시폰에 편한 기본기",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/exsNl1oHfg"
   },
   {
@@ -22,7 +72,7 @@
     "priceHint": "10만원대",
     "summary": "기능 많은 실속형 노캔",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/exsNl3VRLg"
   },
   {
@@ -35,7 +85,7 @@
     "priceHint": "3만원대",
     "summary": "입문용으로 부담 적음",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/exsNl7uJem"
   },
   {
