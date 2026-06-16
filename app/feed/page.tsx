@@ -9,6 +9,7 @@ import {
   deletePost,
   toggleLike,
   currentUid,
+  myFollowingSet,
   watchGroups,
   feedVisibleAudience,
   audienceForGroups,
@@ -37,6 +38,10 @@ export default function FeedPage() {
   const [posts, setPosts] = useState<FeedPost[]>([]);
   const [loading, setLoading] = useState(true);
   const [uid, setUid] = useState<string | null>(null);
+
+  // 탭: 추천(전체 공개) / 팔로잉(내가 팔로우한 사람)
+  const [tab, setTab] = useState<"recommend" | "following">("recommend");
+  const [followingSet, setFollowingSet] = useState<Set<string>>(new Set());
 
   // 댓글 상태 — 글별 독립(열림여부/목록/로딩/입력)
   type CommentState = {
@@ -94,6 +99,20 @@ export default function FeedPage() {
     const unsub = watchGroups(setGroups);
     return () => unsub();
   }, [isLoggedIn]);
+
+  // 내가 팔로우한 사람 목록(팔로잉 탭 필터용) — 로그인 시
+  useEffect(() => {
+    if (!isLoggedIn) { setFollowingSet(new Set()); return; }
+    let alive = true;
+    myFollowingSet().then((s) => { if (alive) setFollowingSet(s); });
+    return () => { alive = false; };
+  }, [isLoggedIn, session]);
+
+  // 화면에 보일 글 — 추천=전체, 팔로잉=내가 팔로우한 사람(+내 글)
+  const shownPosts =
+    tab === "following"
+      ? posts.filter((p) => followingSet.has(p.uid) || (!!uid && p.uid === uid))
+      : posts;
 
   const onPickFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -222,6 +241,25 @@ export default function FeedPage() {
           <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
             사진·영상과 함께 소식을 남기고 공개 범위를 골라보세요.
           </p>
+        </div>
+
+        {/* 추천 / 팔로잉 탭 */}
+        <div className="mb-5 flex gap-1 p-1 rounded-2xl bg-neutral-100 dark:bg-zinc-900">
+          {([["recommend", "추천"], ["following", "팔로잉"]] as const).map(([id, label]) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setTab(id)}
+              className={
+                "flex-1 text-center py-2 rounded-xl text-[13px] font-extrabold transition-colors " +
+                (tab === id
+                  ? "bg-white dark:bg-zinc-800 text-[#F9954E] shadow-sm"
+                  : "text-neutral-500 dark:text-neutral-400 active:opacity-70")
+              }
+            >
+              {label}
+            </button>
+          ))}
         </div>
 
         {/* 글쓰기 박스 / 로그인 유도 */}
@@ -366,13 +404,28 @@ export default function FeedPage() {
               />
             ))}
           </div>
-        ) : posts.length === 0 ? (
+        ) : shownPosts.length === 0 ? (
           <div className="rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-10 text-center">
-            <p className="text-sm text-neutral-500 dark:text-neutral-400">첫 글을 남겨보세요.</p>
+            {tab === "following" ? (
+              <>
+                <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-3">
+                  {isLoggedIn ? "아직 팔로우한 사람의 글이 없어요." : "팔로우한 사람들의 글이 여기에 모여요."}
+                </p>
+                <button
+                  type="button"
+                  onClick={() => setTab("recommend")}
+                  className="inline-block bg-[#F9954E] text-white text-sm font-semibold rounded-full px-5 py-2 active:opacity-85"
+                >
+                  추천에서 둘러보기
+                </button>
+              </>
+            ) : (
+              <p className="text-sm text-neutral-500 dark:text-neutral-400">첫 글을 남겨보세요.</p>
+            )}
           </div>
         ) : (
           <ul className="space-y-3">
-            {posts.map((post) => {
+            {shownPosts.map((post) => {
               const mine = !!uid && post.uid === uid;
               return (
                 <li

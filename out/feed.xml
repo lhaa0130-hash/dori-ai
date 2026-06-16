@@ -6,7 +6,7 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 16 Jun 2026 09:41:32 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 16 Jun 2026 09:52:16 GMT</lastBuildDate>
     <item>
       <title>Nvidia, AI 붐 속 첫 부채 판매로 2조 6천억 원 유치 계획</title>
       <link>https://dori-ai.com/insight/article/trend-103</link>
@@ -46,6 +46,14 @@
       <category>트렌드</category>
       <pubDate>Tue, 16 Jun 2026 00:00:00 GMT</pubDate>
       <description>Respond.io가 AI 에이전트를 활용한 고객 문의 처리 시스템으로 큰 투자를 유치하며 사업 확장을 선언했습니다.</description>
+    </item>
+    <item>
+      <title>OpenAI의 연간 지출, 340억 달러에 달하다 — IPO 준비의 이면</title>
+      <link>https://dori-ai.com/insight/article/trend-108</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-108</guid>
+      <category>트렌드</category>
+      <pubDate>Tue, 16 Jun 2026 00:00:00 GMT</pubDate>
+      <description>OpenAI의 지난해 지출이 340억 달러에 이르렀으며, IPO를 앞두고 있는 상황이다. 이 기사는 그 배경과 의미를 분석한다.</description>
     </item>
     <item>
       <title>바이트댄스, AI 칩 구매 협상 중 — 중국 Iluvatar CoreX와의 협력</title>
@@ -318,14 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Sun, 26 Apr 2026 00:00:00 GMT</pubDate>
       <description>업무·글쓰기·분석·아이디어 발상 등 실제 쓸 수 있는 AI 프롬프트 템플릿을 상황별로 엄선해 정리했다.</description>
-    </item>
-    <item>
-      <title>AI 흐름을 놓치지 않는 법 — 국내외 AI 뉴스레터·미디어 완전 가이드 2026</title>
-      <link>https://dori-ai.com/insight/article/curation-03</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/curation-03</guid>
-      <category>큐레이션</category>
-      <pubDate>Sun, 26 Apr 2026 00:00:00 GMT</pubDate>
-      <description>매일 쏟아지는 AI 뉴스 중 신뢰할 수 있는 것만 골랐다. 한국어·영어별, 수준별로 구분한 2026년 최신 AI 미디어·뉴스레터 큐레이션.</description>
     </item>
   </channel>
 </rss>

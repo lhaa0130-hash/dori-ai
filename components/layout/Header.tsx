@@ -34,7 +34,7 @@ export default function Header() {
     { name: "미니게임", href: "/minigame", emoji: "🎮" },
     { name: "AI 도구", href: "/ai-tools", emoji: "🔧" },
     { name: "인사이트", href: "/insight", emoji: "🧠" },
-    { name: "커뮤니티", href: "/community", emoji: "💬" },
+    { name: "피드", href: "/feed", emoji: "💬" },
     { name: "마켓", href: "/market", emoji: "🛒" },
   ];
 

@@ -65,7 +65,7 @@ export default function CommunityPreview() {
             <button onClick={() => scroll('left')} className="p-2 rounded-full border hover:bg-gray-100 dark:hover:bg-white/10 transition-colors" style={{ borderColor: 'var(--card-border)', color: 'var(--text-main)' }}>←</button>
             <button onClick={() => scroll('right')} className="p-2 rounded-full border hover:bg-gray-100 dark:hover:bg-white/10 transition-colors" style={{ borderColor: 'var(--card-border)', color: 'var(--text-main)' }}>→</button>
           </div>
-          <Link href="/community" className="font-semibold text-sm hover:underline text-[#F9954E]">
+          <Link href="/feed" className="font-semibold text-sm hover:underline text-[#F9954E]">
             {t.viewAll.ko}
           </Link>
         </div>
@@ -80,7 +80,7 @@ export default function CommunityPreview() {
         onMouseMove={onMouseMove}
       >
         {blogPosts.map((post) => (
-          <Link href={`/community`} key={post.id}
+          <Link href={`/feed`} key={post.id}
             className="flex-none w-[280px] md:w-[320px] rounded-[2rem] border overflow-hidden shadow-sm hover:-translate-y-2 hover:shadow-xl transition-all duration-300 group"
             style={{
               backgroundColor: 'var(--card-bg)',

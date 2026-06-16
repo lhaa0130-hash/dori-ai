@@ -28,10 +28,10 @@ export default function Hero() {
       {/* CTA */}
       <div className="toss-fade-up toss-delay-3 flex gap-2.5">
         <Link
-          href="/community"
+          href="/feed"
           className="toss-shine flex items-center gap-1.5 px-6 py-3 rounded-full bg-[#F9954E] text-white text-[14px] font-bold shadow-md shadow-[#F9954E]/25 active:opacity-85 transition-opacity"
         >
-          커뮤니티 둘러보기 <ArrowRight className="w-3.5 h-3.5" />
+          피드 둘러보기 <ArrowRight className="w-3.5 h-3.5" />
         </Link>
         <Link
           href="/ai-tools"

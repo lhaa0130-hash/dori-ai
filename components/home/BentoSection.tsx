@@ -67,7 +67,7 @@ export default function BentoSection() {
           </div>
         </Link>
 
-        <Link href="/community" className={`md:col-span-2 ${cardClasses}`} style={cardStyle}>
+        <Link href="/feed" className={`md:col-span-2 ${cardClasses}`} style={cardStyle}>
           <div className="relative z-10">
             <div className={iconClasses}>💬</div>
             <h3 className="text-xl font-bold mb-2">{t.community.title}</h3>

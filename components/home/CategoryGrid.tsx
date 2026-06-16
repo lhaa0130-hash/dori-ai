@@ -75,9 +75,9 @@ const categories = [
         }
     },
     {
-        title: "커뮤니티",
-        description: "함께 성장하는 AI 크리에이터들의 모임",
-        href: "/community",
+        title: "피드",
+        description: "AI 크리에이터들의 소식이 모이는 곳",
+        href: "/feed",
         icon: Users,
         gradient: "from-[#F9954E] to-[#D4711A]",
         previewComponent: null, // 커뮤니티는 미리보기 없음
