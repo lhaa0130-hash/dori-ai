@@ -254,8 +254,7 @@
       <button class="mini" id="cadVworld">VWorld 호출</button>
       <button class="mini" id="cadLoad">이미지</button>
       <input type="file" id="cadFile" accept="image/*" hidden>
-      <button class="mini" id="cadAxis" title="두 꼭지점을 클릭해 수평으로 정렬">기준축</button>
-      <button class="mini" id="cadRotO" title="O키와 동일 · 클릭 후 각도 입력">회전 O</button>
+      <button class="mini" id="cadAlign" title="O키 · 지적도 위 두 점을 클릭하면 그 선이 수평이 되도록 지적도가 회전">↻ 회전(두 점)</button>
       <button class="mini" id="cadClear">제거</button>
       <span class="lbl" style="margin-left:8px">투명도</span>
       <input type="range" id="cadOp" min="10" max="100" value="55" style="width:80px">
@@ -270,8 +269,6 @@
     </div>
     <div id="hint2" style="margin-left:auto;color:var(--muted)"></div>
   </div>
-  <input id="rotInput" type="number" placeholder="각도°">
-  <!-- 위 토스트/입력은 화면에 떠다님 -->
   <div id="main">
     <div id="canvasWrap"><canvas id="cv"></canvas></div>
     <div id="side">
@@ -479,9 +476,12 @@ function buildOurParcels(){
   }
 }
 function parcelVertsScreen(){ const out=[]; for(const par of ourParcels) for(const ring of par.rings) for(const p of ring) out.push(rotPt(p)); return out; }
-function drawAxisMarks(){ if(!axisMode||!axisPts.length) return;
+function drawAxisMarks(){ if(!axisMode) return;
   for(const p of axisPts){ const rp=rotPt(p); const [sx,sy]=w2s(rp.x,rp.y);
-    ctx.strokeStyle='#3fb8c0'; ctx.lineWidth=2.5; ctx.beginPath(); ctx.arc(sx,sy,8,0,Math.PI*2); ctx.stroke(); } }
+    ctx.strokeStyle='#3fb8c0'; ctx.lineWidth=2.5; ctx.beginPath(); ctx.arc(sx,sy,8,0,Math.PI*2); ctx.stroke(); }
+  if(axisPts.length===1){ const rp=rotPt(axisPts[0]); const [ax,ay]=w2s(rp.x,rp.y); const [bx,by]=w2s(mouse.wx,mouse.wy);
+    ctx.strokeStyle='#3fb8c0'; ctx.lineWidth=1.5; ctx.setLineDash([6,4]);
+    ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.stroke(); ctx.setLineDash([]); } }
 function drawOurParcels(){
   if(!ourParcels.length||!cad.img) return;
   for(const par of ourParcels){
@@ -507,7 +507,8 @@ let dragPoint=null;
 let selected={point:null,edge:null};
 let panning=null, spaceDown=false, shiftDown=false;
 const rectSize={w:0,h:0,place:false};   // 네모 크기입력 배치모드
-let rotArm=false, axisMode=false, axisPts=[];   // 지적도 회전(O)/기준축 모드
+let axisMode=false, axisPts=[];   // 지적도 회전(두 점 수평정렬) 모드
+let cadCover=null;                // 지적도 로드 파라미터(영속화용)
 
 // ───────────────────────── 모델 조작 ─────────────────────────
 function snapshot(){ history.push(JSON.stringify(model)); if(history.length>100) history.shift(); }
@@ -585,7 +586,7 @@ function pruneOrphans(){ const used=new Set(); for(const e of model.edges){used.
   model.points=model.points.filter(p=>used.has(p.id)); }
 
 // ───────────────────────── 파생: 실/면적 재계산 ─────────────────────────
-function recompute(){ rooms=FF.detectRooms(model).rooms; renderTable(); draw(); }
+function recompute(){ rooms=FF.detectRooms(model).rooms; renderTable(); draw(); if(typeof saveModel==='function') saveModel(); }
 const toM2=(mm2)=>mm2/MM2_PER_M2;
 
 // ───────────────────────── 렌더링 ─────────────────────────
@@ -834,8 +835,7 @@ function updateMouse(e){ const r=cv.getBoundingClientRect();
 function onDown(e){
   updateMouse(e);
   if(e.button===1||(e.button===0&&spaceDown)){ panning={sx:e.clientX,sy:e.clientY,cx:view.cx,cy:view.cy}; e.preventDefault(); return; }
-  if(rotArm && e.button===0){ rotArm=false; showRotInput(e.clientX,e.clientY); return; }      // 회전(O): 클릭→각도입력
-  if(axisMode && e.button===0){ axisClick(mouse.wx,mouse.wy); return; }                       // 기준축: 꼭지점 클릭
+  if(axisMode && e.button===0){ axisClick(mouse.wx,mouse.wy); return; }                       // 회전: 두 점 클릭→수평
   // 지적도 배치모드: 좌드래그로 이동
   if(mapEdit&&cad.img&&e.button===0){ cadDrag={sx:e.clientX,sy:e.clientY,cx:cad.cx,cy:cad.cy}; return; }
   if(e.button===2){ if(draft.kind==='line'){ cancelDraft(); recompute(); } return; }
@@ -925,10 +925,10 @@ window.addEventListener('keydown',e=>{
   const k=e.key.toLowerCase();
   if(k==='v') setTool('select'); else if(k==='l') setTool('line'); else if(k==='r') setTool('rect');
   else if(k==='c') setTool('circle'); else if(k==='a') setTool('arc');
-  else if(k==='o'){ armRot(); }
+  else if(k==='o'){ startAlign(); }
   else if(k==='z'&&(e.ctrlKey||e.metaKey)){ e.preventDefault(); undo(); }
   else if(e.key==='Escape'){ if(draft.active){ cancelDraft(); recompute(); } selected={point:null,edge:null};
-    rotArm=false; axisMode=false; axisPts=[]; document.getElementById('rotInput').style.display='none'; draw(); }
+    axisMode=false; axisPts=[]; draw(); }
   else if(e.key==='Delete'||e.key==='Backspace'){
     if(selected.point!=null){ snapshot(); deleteVertex(selected.point); selected.point=null; recompute(); }
     else if(selected.edge){ snapshot(); deleteEdge(selected.edge); selected.edge=null; recompute(); }
@@ -960,7 +960,7 @@ document.getElementById('rectPlace').addEventListener('click',()=>{
 
 // ── 지적도 컨트롤 ──
 function cadEnabled(on){ const el=document.getElementById('cadCtl'); if(el) el.classList.toggle('off',!on); }
-function setRot(v){ cad.rot=((v%360)+360)%360; const rv=document.getElementById('rotVal'); if(rv) rv.textContent=Math.round(cad.rot)+'°'; draw(); }
+function setRot(v){ cad.rot=((v%360)+360)%360; draw(); if(typeof saveCad==='function') saveCad(); }
 document.getElementById('cadLoad').addEventListener('click',()=>document.getElementById('cadFile').click());
 document.getElementById('cadFile').addEventListener('change',e=>{
   const f=e.target.files&&e.target.files[0]; if(!f) return;
@@ -970,36 +970,47 @@ document.getElementById('cadFile').addEventListener('change',e=>{
   img.src=URL.createObjectURL(f); e.target.value='';
 });
 document.getElementById('cadOp').addEventListener('input',e=>{ cad.opacity=(+e.target.value)/100; draw(); });
-document.getElementById('cadClear').addEventListener('click',()=>{ cad.img=null; cad.merc=null; ourGeoms=[]; ourParcels=[];
-  rotArm=false; axisMode=false; axisPts=[]; document.getElementById('rotInput').style.display='none'; cadEnabled(false); draw(); });
+document.getElementById('cadClear').addEventListener('click',()=>{ cad.img=null; cad.merc=null; cadCover=null; ourGeoms=[]; ourParcels=[];
+  axisMode=false; axisPts=[]; cadEnabled(false); saveCad(); draw(); });
 
-// ── 지적도 회전(단축키 O) + 기준축(두 꼭지점 수평정렬) ──
-function armRot(){ if(!cad.img){ obToast('지적도를 먼저 불러오세요'); return; }
-  rotArm=true; axisMode=false; cv.style.cursor='crosshair'; obToast('회전: 캔버스를 클릭한 뒤 각도(°)를 입력 (Enter)'); }
-function startAxis(){ if(!ourParcels.length){ obToast('우리 필지(지적도)를 먼저 불러오세요'); return; }
-  axisMode=true; rotArm=false; axisPts=[]; cv.style.cursor='crosshair'; obToast('기준축: 우리 필지 꼭지점 2개를 클릭하세요'); draw(); }
-function nearestParcelVert(wx,wy){ let best=null,bd=20/view.scale;
+// ── 지적도 회전 = 두 점을 클릭 → 그 선이 수평이 되도록 지적도(+나머지) 회전 ──
+function startAlign(){ if(!ourParcels.length){ obToast('지적도를 먼저 불러오세요'); return; }
+  axisMode=true; axisPts=[]; cv.style.cursor='crosshair';
+  obToast('회전: 지적도 선의 두 점을 클릭하면 그 선이 수평이 됩니다'); draw(); }
+function nearestParcelVert(wx,wy){ let best=null,bd=Infinity;   // 가장 가까운 필지 꼭지점
   for(const par of ourParcels) for(const ring of par.rings) for(const p of ring){
-    const rp=rotPt(p); const d=Math.hypot(rp.x-wx,rp.y-wy); if(d<=bd){ bd=d; best=p; } } return best; }
+    const rp=rotPt(p); const d=Math.hypot(rp.x-wx,rp.y-wy); if(d<bd){ bd=d; best=p; } } return best; }
 function axisClick(wx,wy){
-  const p=nearestParcelVert(wx,wy); if(!p){ obToast('필지 꼭지점(빨간 점) 근처를 클릭하세요'); return; }
+  const p=nearestParcelVert(wx,wy); if(!p){ obToast('지적도를 먼저 불러오세요'); return; }
   axisPts.push(p);
   if(axisPts.length===2){
     const a0=Math.atan2(axisPts[1].y-axisPts[0].y, axisPts[1].x-axisPts[0].x);  // rot=0 기준 각
     setRot(-a0*180/Math.PI);                                                     // 그 선이 수평이 되게
-    axisMode=false; axisPts=[]; cv.style.cursor=tool==='select'?'default':'crosshair'; obToast('기준축 정렬 완료 ✓');
+    axisMode=false; axisPts=[]; cv.style.cursor=tool==='select'?'default':'crosshair';
+    obToast('정렬 완료 — 지적도가 수평 기준으로 회전됨 ✓');
   } else draw();
 }
-function showRotInput(cx,cy){ const inp=document.getElementById('rotInput');
-  inp.value=''; inp.style.left=(cx+8)+'px'; inp.style.top=(cy-12)+'px'; inp.style.display='block'; inp.focus(); }
-document.getElementById('rotInput').addEventListener('keydown',e=>{ e.stopPropagation();
-  const inp=document.getElementById('rotInput');
-  if(e.key==='Enter'){ const v=parseFloat(inp.value); if(!isNaN(v)) setRot(cad.rot+v);
-    inp.style.display='none'; cv.style.cursor=tool==='select'?'default':'crosshair'; }
-  else if(e.key==='Escape'){ inp.style.display='none'; } });
-document.getElementById('rotInput').addEventListener('blur',()=>{ document.getElementById('rotInput').style.display='none'; });
-document.getElementById('cadAxis').addEventListener('click',startAxis);
-document.getElementById('cadRotO').addEventListener('click',armRot);
+document.getElementById('cadAlign').addEventListener('click',startAlign);
+
+// ── 프로젝트 영속화(지적도 = 붙박이, 새로고침 복원) ──
+function saveModel(){ try{ localStorage.setItem('ff_model', JSON.stringify({model, roomNames, meta:project.meta})); }catch(e){} }
+function saveCad(){ try{
+  if(cad.img && cadCover) localStorage.setItem('ff_cad', JSON.stringify({cover:cadCover, geoms:ourGeoms, rot:cad.rot}));
+  else localStorage.removeItem('ff_cad');
+}catch(e){} }
+async function restoreProject(cs, ms){
+  if(!cs && !ms) return false;                 // 저장된 프로젝트 없음 → 온보딩
+  onboard.classList.add('hide');
+  if(ms){ model=ms.model||{points:[],edges:[],circles:[]}; Object.assign(roomNames, ms.roomNames||{}); project.meta=ms.meta||project.meta;
+    let mx=0; (model.points||[]).forEach(p=>mx=Math.max(mx,p.id)); (model.edges||[]).forEach(e=>mx=Math.max(mx,e.id)); (model.circles||[]).forEach(c=>mx=Math.max(mx,c.id)); _id=mx+1; }
+  renderProjectChip(); recompute();
+  if(cs && cs.cover){ cadCover=cs.cover; ourGeoms=cs.geoms||[];
+    try{ await loadCadastral(vwKey(), {lon:cadCover.lon,lat:cadCover.lat,span:cadCover.span});
+      if(cs.rot) setRot(cs.rot); buildOurParcels(); draw(); }
+    catch(e){ obToast('지적도 자동복원 실패 — 도메인/네트워크 확인 (기본정보로 다시 불러오기)'); }
+  }
+  return true;
+}
 
 // ── VWorld 지적도 API ──
 const $=(id)=>document.getElementById(id);
@@ -1063,7 +1074,7 @@ async function loadCadastral(key,opts){
   await new Promise((res,rej)=>{ const img=new Image();
     img.onload=()=>{ cad.img=img; cad.cx=view.cx; cad.cy=view.cy; cad.mmPerPx=span*1000/w;
       cad.merc={mx,my,half}; buildOurParcels();
-      cadEnabled(true); $('cadW').value=Math.round(span*1000); setRot(cad.rot); fitViewToCad(); draw(); res(); };
+      cadEnabled(true); setRot(cad.rot); fitViewToCad(); draw(); res(); };
     img.onerror=()=>rej(new Error('이미지 호출 실패')); img.src=url; });
   return {lon,lat,title,span};
 }
@@ -1217,13 +1228,13 @@ async function obFinish(){
   const parcels=OB.data.parcels.filter(p=>p.addr.trim());
   project.meta={ parcels:parcels.map(p=>({addr:p.addr,jibun:p.jibun,area:p.area})),
     struct:OB.data.struct, usage:OB.data.usage, totalArea:parcels.reduce((s,p)=>s+(p.area||0),0) };
-  try{ localStorage.setItem('ff_project',JSON.stringify(project.meta)); }catch(e){}
-  renderProjectChip();
+  renderProjectChip(); saveModel();
   ourGeoms=parcels.map(p=>p.geom).filter(Boolean);   // 우리 필지 폴리곤(로드시 빨간선 생성)
   if(key){
     try{ const c=coverArea(parcels); if(!c) throw new Error('주소 좌표 확인 실패');
+      cadCover=c;                                    // 붙박이: 로드 파라미터 저장
       await loadCadastral(key,{lon:c.lon,lat:c.lat,span:c.span,status:(m)=>obToast(m,false)});
-      draw();
+      saveCad(); draw();
       obToast('지적도 로드 완료 — 우리 필지는 빨간선 · 도면을 그려보세요',true);
     }catch(e){ obToast('지적도 자동로드 실패: '+(e.message||'')+' (상단 VWorld 호출로 재시도)',true); }
   } else obToast('도면을 그려보세요',true);
@@ -1255,12 +1266,16 @@ $('obFinishBtn').addEventListener('click',obFinish);
 $('btnOnboard').addEventListener('click',()=>{ obView('wizard'); obStep(1); renderAddrRows(); });
 
 // ───────────────────────── 시작 ─────────────────────────
+// 저장 데이터 먼저 캡처(초기 recompute의 saveModel이 덮어쓰기 전에)
+let _bootCad=null,_bootModel=null;
+try{ _bootCad=JSON.parse(localStorage.getItem('ff_cad')||'null'); }catch(e){}
+try{ _bootModel=JSON.parse(localStorage.getItem('ff_model')||'null'); }catch(e){}
 setTool('line'); resize(); recompute();
 fillChoices('obStructs',STRUCTS,v=>OB.data.struct=v);
 fillChoices('obUsages',USAGES,v=>OB.data.usage=v);
 renderAddrRows();
-try{ const pm=JSON.parse(localStorage.getItem('ff_project')||'null'); if(pm){ project.meta=pm; renderProjectChip(); } }catch(e){}
-obStep(1); obView('login');
+// 저장된 프로젝트(지적도 붙박이)가 있으면 복원·자동로드, 없으면 로그인부터
+restoreProject(_bootCad,_bootModel).then(restored=>{ if(!restored){ obStep(1); obView('login'); } });
 </script>
 </body>
 </html>

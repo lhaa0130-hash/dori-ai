@@ -46,7 +46,7 @@ import {
   type ShopItem,
 } from "@/lib/shopItems";
 import BannerFx from "@/components/cozy/BannerFx";
-import MySpaceTabs from "@/components/cozy/MySpaceTabs";
+import MyDashboard from "@/components/my/MyDashboard";
 
 // 배경/테두리/이름효과/배너효과/스티커는 lib/shopItems.ts 카탈로그에서 가져온다.
 // (무료 기본 + 상점에서 구매한 프리미엄 아이템)
@@ -167,6 +167,7 @@ export default function ProfilePage() {
   const [counts, setCounts] = useState<{ followers: number; following: number; posts: number }>({ followers: 0, following: 0, posts: 0 });
   const [followBusy, setFollowBusy] = useState(false);
   const [followModal, setFollowModal] = useState<null | { title: string; users: { uid: string; name: string }[] }>(null);
+  const [homeTab, setHomeTab] = useState<"home" | "account">("home");
 
   // 방문자 카운터(투데이/투탈)
   const [visit, setVisit] = useState<{ total: number; today: number } | null>(null);
@@ -549,9 +550,46 @@ export default function ProfilePage() {
         </div>
       )}
 
-      {/* 내 공간 탭(코지홈 ↔ 상점) — 본인 코지홈에서만 */}
-      {isOwner && <MySpaceTabs active="home" />}
+      {/* 내 공간 탭(코지홈 / 계정·활동 / 상점) — 본인 코지홈에서만 */}
+      {isOwner && (
+        <div className="max-w-2xl mx-auto px-5 pt-4">
+          <div className="flex gap-1 p-1 rounded-2xl bg-neutral-100 dark:bg-zinc-900">
+            <button
+              type="button"
+              onClick={() => setHomeTab("home")}
+              className={`flex-1 text-center py-2 rounded-xl text-[13px] font-extrabold transition-colors ${
+                homeTab === "home"
+                  ? "bg-white dark:bg-zinc-800 text-[#F9954E] shadow-sm"
+                  : "text-neutral-500 dark:text-neutral-400 active:opacity-70"
+              }`}
+            >
+              🏠 코지홈
+            </button>
+            <button
+              type="button"
+              onClick={() => setHomeTab("account")}
+              className={`flex-1 text-center py-2 rounded-xl text-[13px] font-extrabold transition-colors ${
+                homeTab === "account"
+                  ? "bg-white dark:bg-zinc-800 text-[#F9954E] shadow-sm"
+                  : "text-neutral-500 dark:text-neutral-400 active:opacity-70"
+              }`}
+            >
+              ⚙️ 계정·활동
+            </button>
+            <Link
+              href="/shop"
+              className="flex-1 text-center py-2 rounded-xl text-[13px] font-extrabold transition-colors text-neutral-500 dark:text-neutral-400 active:opacity-70"
+            >
+              🛍 상점
+            </Link>
+          </div>
+        </div>
+      )}
 
+      {/* 계정·활동 탭: 마이페이지 대시보드(출석·미션·업적·포인트·활동 흡수) */}
+      {isOwner && homeTab === "account" ? (
+        <MyDashboard />
+      ) : (
       <section className="max-w-2xl mx-auto px-5 pt-6">
         {/* 1) 코지홈 배너 */}
         <div className="relative rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 overflow-hidden">
@@ -1334,6 +1372,7 @@ export default function ProfilePage() {
           )}
         </div>
       </section>
+      )}
       </div>
     </main>
   );
