@@ -57,6 +57,7 @@ export type BgStyle = string; // 배경 프리셋 id (프로필 페이지 BG_PRE
 export interface Profile {
   uid: string;
   name: string;
+  handle: string;       // 공유 URL용 영문 핸들 (dori-ai.com/u/<handle>) — 미설정 시 ""
   photoURL?: string;
   bio: string;          // 자기소개
   statusMsg: string;    // 상태메시지(한 줄)
@@ -82,11 +83,39 @@ export interface Profile {
 
 // 다이어리 한 칸
 export interface DiaryEntry { at: number; text: string; mood: string; }
-// 내가 만든 AI 한 칸
-export interface AIShowcase { at: number; name: string; desc: string; tool: string; url: string; emoji: string; }
+// 내가 만든 AI 한 칸 — dori-ai.com/u/<handle>/<slug> 에 자동 호스팅되는 미니 소개페이지
+export interface AIShowcase {
+  at: number;
+  id: string;          // 안정 식별자(생성 시각 base36) — 공유 링크/수정/삭제 매칭용
+  slug: string;        // URL 슬러그(회원 내 유니크) — 공유 주소의 마지막 칸
+  name: string;
+  desc: string;        // 한 줄 소개(카드용)
+  body?: string;       // 긴 소개(호스팅 페이지 본문)
+  howto?: string;      // 사용법/사용 팁
+  tool?: string;       // 만든 도구/플랫폼
+  category?: string;   // 분류(챗봇/그림/글쓰기/게임/교육/음악/기타)
+  tags?: string[];     // 태그
+  url: string;         // 외부 체험 링크(있으면 '체험하러 가기' 버튼)
+  images?: string[];   // 스크린샷 URL들
+  emoji: string;
+}
+
+// 문자열 → URL 슬러그(영문/숫자/한글/하이픈 유지)
+export function slugify(s: string): string {
+  return (s || "")
+    .toString()
+    .trim()
+    .toLowerCase()
+    .replace(/['"]/g, "")
+    .replace(/[\s_]+/g, "-")
+    .replace(/[^a-z0-9가-힣-]/g, "")
+    .replace(/-+/g, "-")
+    .replace(/^-|-$/g, "")
+    .slice(0, 60) || "ai";
+}
 
 const DEFAULT_PROFILE = (uid: string, name = "사용자"): Profile => ({
-  uid, name, bio: "", statusMsg: "", themeColor: "#F9954E", bg: "aurora", tier: 1, level: 1, exp: 0,
+  uid, name, handle: "", bio: "", statusMsg: "", themeColor: "#F9954E", bg: "aurora", tier: 1, level: 1, exp: 0,
   mood: "", title: "", frame: "none", interests: [], stickers: [],
   nameEffect: "", bannerEffect: "", pet: "", ownedItems: [], greeting: "", diary: [], myAIs: [],
 });
@@ -97,6 +126,7 @@ async function fetchProfile(uid: string): Promise<Profile> {
   return {
     uid,
     name: String(d.name || d.displayName || "사용자"),
+    handle: String(d.handle || ""),
     photoURL: d.photoURL ? String(d.photoURL) : undefined,
     bio: String(d.bio || ""),
     statusMsg: String(d.statusMsg || ""),
@@ -124,7 +154,27 @@ async function fetchProfile(uid: string): Promise<Profile> {
       : [],
     myAIs: Array.isArray(d.myAIs)
       ? (d.myAIs as AIShowcase[])
-          .map((a) => ({ at: Number((a as AIShowcase)?.at) || 0, name: String((a as AIShowcase)?.name || ""), desc: String((a as AIShowcase)?.desc || ""), tool: String((a as AIShowcase)?.tool || ""), url: String((a as AIShowcase)?.url || ""), emoji: String((a as AIShowcase)?.emoji || "🤖") }))
+          .map((a) => {
+            const x = (a || {}) as Record<string, unknown>;
+            const at = Number(x.at) || 0;
+            const name = String(x.name || "");
+            const slug = String(x.slug || slugify(name));
+            return {
+              at,
+              id: String(x.id || (at ? at.toString(36) : "") || slug),
+              slug,
+              name,
+              desc: String(x.desc || ""),
+              body: x.body ? String(x.body) : "",
+              howto: x.howto ? String(x.howto) : "",
+              tool: String(x.tool || ""),
+              category: String(x.category || ""),
+              tags: Array.isArray(x.tags) ? (x.tags as string[]).map(String).slice(0, 8) : [],
+              url: String(x.url || ""),
+              images: Array.isArray(x.images) ? (x.images as string[]).map(String).slice(0, 8) : [],
+              emoji: String(x.emoji || "🤖"),
+            } as AIShowcase;
+          })
           .filter((a) => a.name)
           .sort((a, b) => b.at - a.at)
           .slice(0, 12)
@@ -181,24 +231,49 @@ export async function deleteDiaryEntry(at: number): Promise<boolean> {
 }
 
 // ─── 내가 만든 AI 자랑 — 본인 users/{uid}.myAIs 배열(규칙 변경 불필요) ───
-export async function addMyAI(
-  item: { name: string; desc: string; tool: string; url: string; emoji: string }
-): Promise<AIShowcase[] | null> {
+//   각 항목은 dori-ai.com/u/<handle>/<slug> 에 자동 호스팅되는 소개 페이지를 가진다.
+function normUrl(u: string): string {
+  let v = (u || "").trim();
+  if (v && !/^https?:\/\//i.test(v)) v = `https://${v}`;
+  return v.slice(0, 500);
+}
+function normList(raw: string[] | string | undefined, n: number, perLen: number): string[] {
+  const arr = Array.isArray(raw) ? raw : String(raw || "").split(/[\n,]/);
+  return arr.map((x) => String(x).trim()).filter(Boolean).slice(0, n).map((x) => x.slice(0, perLen));
+}
+
+export type AIInput = {
+  name: string; desc?: string; body?: string; howto?: string;
+  tool?: string; category?: string; tags?: string[] | string;
+  url?: string; images?: string[] | string; emoji?: string;
+};
+
+export async function addMyAI(item: AIInput): Promise<AIShowcase[] | null> {
   const uid = currentUid();
   const name = (item.name || "").trim();
   if (!uid || !name) return null;
-  // URL은 http(s)만 허용(빈 값 허용)
-  let url = (item.url || "").trim();
-  if (url && !/^https?:\/\//i.test(url)) url = `https://${url}`;
   try {
     const s = await getDoc(doc(db(), "users", uid));
     const cur = Array.isArray(s.data()?.myAIs) ? (s.data()!.myAIs as AIShowcase[]) : [];
+    // 회원 내 유니크 슬러그
+    const taken = new Set(cur.map((a) => String((a as AIShowcase)?.slug || "")).filter(Boolean));
+    const base = slugify(name);
+    let slug = base, n = 2;
+    while (taken.has(slug)) slug = `${base}-${n++}`;
+    const at = Date.now();
     const entry: AIShowcase = {
-      at: Date.now(),
+      at,
+      id: at.toString(36),
+      slug,
       name: name.slice(0, 40),
       desc: (item.desc || "").slice(0, 300),
+      body: (item.body || "").slice(0, 4000),
+      howto: (item.howto || "").slice(0, 1500),
       tool: (item.tool || "").slice(0, 30),
-      url: url.slice(0, 300),
+      category: (item.category || "").slice(0, 20),
+      tags: normList(item.tags, 8, 20),
+      url: normUrl(item.url || ""),
+      images: normList(item.images, 8, 500).map(normUrl),
       emoji: (item.emoji || "🤖").slice(0, 4),
     };
     const next = [entry, ...cur].slice(0, 12);
@@ -208,17 +283,166 @@ export async function addMyAI(
   } catch { return null; }
 }
 
-export async function deleteMyAI(at: number): Promise<boolean> {
+/** 기존 AI 항목 수정(id 기준) — slug/id/at 은 유지(공유 링크 안정) */
+export async function updateMyAI(id: string, patch: Partial<AIInput>): Promise<AIShowcase[] | null> {
   const uid = currentUid();
-  if (!uid) return false;
+  if (!uid || !id) return null;
   try {
     const s = await getDoc(doc(db(), "users", uid));
     const cur = Array.isArray(s.data()?.myAIs) ? (s.data()!.myAIs as AIShowcase[]) : [];
-    const next = cur.filter((a) => Number(a?.at) !== at);
+    let found = false;
+    const next = cur.map((a) => {
+      if (String((a as AIShowcase)?.id || (a as AIShowcase)?.at) !== String(id)) return a;
+      found = true;
+      const m = patch;
+      // 구버전(slug/id 없는) 항목도 안전하게 보강 — 공유 링크가 깨지지 않도록.
+      const at0 = Number((a as AIShowcase)?.at) || 0;
+      const id0 = String((a as AIShowcase)?.id || (at0 ? at0.toString(36) : "") || id);
+      const slug0 = String((a as AIShowcase)?.slug || slugify(String((a as AIShowcase)?.name || "")));
+      return {
+        ...a,
+        at: at0,
+        id: id0,
+        slug: slug0,
+        name: m.name != null ? String(m.name).slice(0, 40) : a.name,
+        desc: m.desc != null ? String(m.desc).slice(0, 300) : a.desc,
+        body: m.body != null ? String(m.body).slice(0, 4000) : (a.body || ""),
+        howto: m.howto != null ? String(m.howto).slice(0, 1500) : (a.howto || ""),
+        tool: m.tool != null ? String(m.tool).slice(0, 30) : (a.tool || ""),
+        category: m.category != null ? String(m.category).slice(0, 20) : (a.category || ""),
+        tags: m.tags != null ? normList(m.tags, 8, 20) : (a.tags || []),
+        url: m.url != null ? normUrl(m.url) : a.url,
+        images: m.images != null ? normList(m.images, 8, 500).map(normUrl) : (a.images || []),
+        emoji: m.emoji != null ? String(m.emoji).slice(0, 4) : a.emoji,
+      } as AIShowcase;
+    });
+    if (!found) return null;
+    await setDoc(doc(db(), "users", uid), { myAIs: next, updatedAt: serverTimestamp() }, { merge: true });
+    bustCache(`profile:${uid}`);
+    return next;
+  } catch { return null; }
+}
+
+/** AI 항목 삭제(id 또는 at 기준 — 구버전 호환) */
+export async function deleteMyAI(idOrAt: string | number): Promise<boolean> {
+  const uid = currentUid();
+  if (!uid) return false;
+  const key = String(idOrAt);
+  try {
+    const s = await getDoc(doc(db(), "users", uid));
+    const cur = Array.isArray(s.data()?.myAIs) ? (s.data()!.myAIs as AIShowcase[]) : [];
+    const next = cur.filter((a) => String((a as AIShowcase)?.id) !== key && String((a as AIShowcase)?.at) !== key);
     await setDoc(doc(db(), "users", uid), { myAIs: next, updatedAt: serverTimestamp() }, { merge: true });
     bustCache(`profile:${uid}`);
     return true;
   } catch { return false; }
+}
+
+// ─── 핸들(공유 URL용 영문 주소) — users/{uid}.handle (규칙 변경 불필요) ───
+const RESERVED_HANDLES = new Set([
+  "admin", "api", "u", "www", "root", "null", "undefined", "dori", "doriai", "dori-ai",
+  "me", "my", "profile", "shop", "feed", "explore", "login", "signup", "notice", "minigame",
+]);
+
+/** 핸들 형식·중복 확인 (true=사용 가능) */
+export async function checkHandle(raw: string): Promise<{ ok: boolean; reason?: string }> {
+  const handle = (raw || "").trim().toLowerCase();
+  if (!/^[a-z0-9_]{3,20}$/.test(handle)) return { ok: false, reason: "영문 소문자·숫자·밑줄(_) 3~20자" };
+  if (RESERVED_HANDLES.has(handle)) return { ok: false, reason: "사용할 수 없는 이름이에요" };
+  try {
+    const me = currentUid();
+    const qs = await getDocs(query(collection(db(), "users"), where("handle", "==", handle), limit(1)));
+    if (!qs.empty && qs.docs[0].id !== me) return { ok: false, reason: "이미 사용 중인 이름이에요" };
+    return { ok: true };
+  } catch { return { ok: false, reason: "확인 중 오류" }; }
+}
+
+/** 내 핸들 설정 */
+export async function setMyHandle(raw: string): Promise<{ ok: boolean; error?: string; handle?: string; warn?: string }> {
+  const uid = currentUid();
+  if (!uid) return { ok: false, error: "로그인이 필요해요" };
+  const handle = (raw || "").trim().toLowerCase();
+  const chk = await checkHandle(handle);
+  if (!chk.ok) return { ok: false, error: chk.reason };
+  try {
+    await setDoc(doc(db(), "users", uid), { handle, updatedAt: serverTimestamp() }, { merge: true });
+    bustCache(`profile:${uid}`);
+    // 저장 직후 경쟁조건(동시에 같은 핸들 선점) 재검증 — 정적 사이트라 원자적 보장 불가, 충돌 시 안내.
+    let warn: string | undefined;
+    try {
+      const qs = await getDocs(query(collection(db(), "users"), where("handle", "==", handle), limit(2)));
+      if (qs.size > 1) warn = "방금 다른 회원도 같은 이름을 써서 겹쳤어요. 다른 이름으로 바꾸는 걸 추천해요.";
+    } catch { /* 재검증 실패는 무시 */ }
+    return { ok: true, handle, warn };
+  } catch (e) { return { ok: false, error: (e as { code?: string })?.code || "저장 실패" }; }
+}
+
+/** handle 또는 uid → 프로필 (handle 우선, 없으면 uid 폴백) */
+export async function getProfileByHandle(handleOrUid: string): Promise<Profile | null> {
+  const key = (handleOrUid || "").trim();
+  if (!key) return null;
+  try {
+    const qs = await getDocs(query(collection(db(), "users"), where("handle", "==", key.toLowerCase()), limit(1)));
+    if (!qs.empty) return await getProfile(qs.docs[0].id);
+  } catch { /* handle 인덱스/권한 문제 시 uid 폴백 */ }
+  try {
+    const s = await getDoc(doc(db(), "users", key));
+    if (s.exists()) return await getProfile(key);
+  } catch { /* ignore */ }
+  return null;
+}
+
+/** 공유 페이지용 — handle/uid + slug → {프로필, AI} */
+export async function getAIPage(handleOrUid: string, slug: string): Promise<{ profile: Profile; ai: AIShowcase } | null> {
+  const profile = await getProfileByHandle(handleOrUid);
+  if (!profile) return null;
+  let target = slug || "";
+  try { target = decodeURIComponent(target); } catch { /* keep raw */ }
+  const ai = profile.myAIs.find((a) => a.slug === target || a.id === target || slugify(a.name) === target);
+  if (!ai) return null;
+  return { profile, ai };
+}
+
+// ─── AI 페이지 조회수·좋아요 — 공개 visits 컬렉션(write:if true, 규칙 변경 불필요) ───
+function aiStatKey(uid: string, id: string): string { return `aip_${uid}_${id}`; }
+
+export async function bumpAIView(uid: string, id: string): Promise<void> {
+  if (!uid || !id) return;
+  const key = aiStatKey(uid, id);
+  try {
+    const sk = `aiv_${key}`;
+    if (typeof sessionStorage !== "undefined" && sessionStorage.getItem(sk)) return;
+    await setDoc(doc(db(), "visits", key), { views: increment(1) }, { merge: true });
+    // 쓰기 확정 후에 세션 플래그 기록(실패 시 다음 시도에서 재집계)
+    if (typeof sessionStorage !== "undefined") sessionStorage.setItem(sk, "1");
+  } catch { /* ignore */ }
+}
+
+export async function getAIStats(uid: string, id: string): Promise<{ views: number; likes: number }> {
+  if (!uid || !id) return { views: 0, likes: 0 };
+  try {
+    const s = await getDoc(doc(db(), "visits", aiStatKey(uid, id)));
+    const d = (s.data() as Record<string, unknown>) || {};
+    return { views: Number(d.views || 0), likes: Number(d.likes || 0) };
+  } catch { return { views: 0, likes: 0 }; }
+}
+
+/** 좋아요(브라우저당 1회, localStorage 중복방지) → 새 좋아요 수 또는 null(이미함/오류) */
+export async function likeAI(uid: string, id: string): Promise<number | null> {
+  if (!uid || !id) return null;
+  const lk = `ail_${uid}_${id}`;
+  try {
+    if (typeof localStorage !== "undefined" && localStorage.getItem(lk)) return null;
+    await setDoc(doc(db(), "visits", aiStatKey(uid, id)), { likes: increment(1) }, { merge: true });
+    if (typeof localStorage !== "undefined") localStorage.setItem(lk, "1");
+    const s = await getDoc(doc(db(), "visits", aiStatKey(uid, id)));
+    return Number((s.data() as Record<string, unknown>)?.likes || 0);
+  } catch { return null; }
+}
+
+export function hasLikedAI(uid: string, id: string): boolean {
+  try { return typeof localStorage !== "undefined" && !!localStorage.getItem(`ail_${uid}_${id}`); }
+  catch { return false; }
 }
 
 // ─── 방명록 ─────────────────────────────────────────────────────

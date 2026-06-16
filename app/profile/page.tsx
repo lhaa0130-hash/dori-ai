@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState, type ChangeEvent, type ReactNode } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type ReactNode } from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import {
@@ -25,8 +25,12 @@ import {
   addDiaryEntry,
   deleteDiaryEntry,
   addMyAI,
+  updateMyAI,
   deleteMyAI,
+  setMyHandle,
+  checkHandle,
   type Profile,
+  type AIInput,
   type BgStyle,
   type GuestEntry,
   type FeedPost,
@@ -136,10 +140,18 @@ export default function ProfilePage() {
   const [diaryMood, setDiaryMood] = useState("");
   const [diaryBusy, setDiaryBusy] = useState(false);
 
-  // 내가 만든 AI 자랑
+  // 내가 만든 AI 자랑 (호스팅 페이지)
+  const EMPTY_AI = { name: "", desc: "", body: "", howto: "", tool: "", category: "", tags: "", url: "", images: "", emoji: "🤖" };
   const [aiFormOpen, setAiFormOpen] = useState(false);
-  const [aiForm, setAiForm] = useState({ name: "", desc: "", tool: "", url: "", emoji: "🤖" });
+  const [aiForm, setAiForm] = useState({ ...EMPTY_AI });
+  const [aiEditId, setAiEditId] = useState<string | null>(null); // null=신규, id=수정
   const [aiBusy, setAiBusy] = useState(false);
+  const [aiCopied, setAiCopied] = useState<string | null>(null); // 공유 복사된 ai.id
+
+  // 핸들(공유 주소)
+  const [handleInput, setHandleInput] = useState("");
+  const [handleMsg, setHandleMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [handleBusy, setHandleBusy] = useState(false);
 
   const toggleInterest = (tag: string) => {
     const t = tag.trim().replace(/^#/, "").slice(0, 12);
@@ -223,6 +235,7 @@ export default function ProfilePage() {
       setEditBannerEffect(p.bannerEffect || "none");
       setEditPet(p.pet || "");
       setEditGreeting(p.greeting || "");
+      setHandleInput(p.handle || "");
     } catch {
       // getProfile 등은 내부에서 안전 처리됨
     } finally {
@@ -430,25 +443,79 @@ export default function ProfilePage() {
     if (ok) setProfile((p) => (p ? { ...p, diary: (p.diary || []).filter((e) => e.at !== at) } : p));
   };
 
-  // ── 내가 만든 AI 자랑 ──
-  const handleAddAI = async () => {
+  // ── 내가 만든 AI 자랑 (호스팅 페이지) ──
+  const handleSubmitAI = async () => {
     if (!isOwner || !aiForm.name.trim() || aiBusy) return;
     setAiBusy(true);
-    const next = await addMyAI(aiForm);
+    const payload: AIInput = { ...aiForm };
+    const next = aiEditId ? await updateMyAI(aiEditId, payload) : await addMyAI(payload);
     setAiBusy(false);
     if (next) {
       setProfile((p) => (p ? { ...p, myAIs: next } : p));
-      setAiForm({ name: "", desc: "", tool: "", url: "", emoji: "🤖" });
+      setAiForm({ ...EMPTY_AI });
+      setAiEditId(null);
       setAiFormOpen(false);
     } else {
       alert("저장에 실패했습니다. 다시 시도해주세요.");
     }
   };
 
-  const handleDeleteAI = async (at: number) => {
+  const startEditAI = (ai: Profile["myAIs"][number]) => {
+    setAiEditId(ai.id);
+    setAiForm({
+      name: ai.name || "", desc: ai.desc || "", body: ai.body || "", howto: ai.howto || "",
+      tool: ai.tool || "", category: ai.category || "", tags: (ai.tags || []).join(", "),
+      url: ai.url || "", images: (ai.images || []).join("\n"), emoji: ai.emoji || "🤖",
+    });
+    setAiFormOpen(true);
+  };
+
+  const handleDeleteAI = async (id: string) => {
     if (!isOwner) return;
-    const ok = await deleteMyAI(at);
-    if (ok) setProfile((p) => (p ? { ...p, myAIs: (p.myAIs || []).filter((a) => a.at !== at) } : p));
+    if (!confirm("이 AI 페이지를 삭제할까요?")) return;
+    const ok = await deleteMyAI(id);
+    if (ok) setProfile((p) => (p ? { ...p, myAIs: (p.myAIs || []).filter((a) => a.id !== id) } : p));
+  };
+
+  const aiShareUrl = (ai: Profile["myAIs"][number]): string => {
+    const base = profile?.handle || profile?.uid || "";
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://www.dori-ai.com";
+    return `${origin}/u/${base}/${encodeURIComponent(ai.slug)}`;
+  };
+  const copyAiShare = async (ai: Profile["myAIs"][number]) => {
+    try {
+      await navigator.clipboard.writeText(aiShareUrl(ai));
+      setAiCopied(ai.id);
+      setTimeout(() => setAiCopied((c) => (c === ai.id ? null : c)), 1600);
+    } catch { /* ignore */ }
+  };
+
+  // ── 핸들(공유 주소) ──
+  const handleSaveHandle = async () => {
+    if (!isOwner || handleBusy) return;
+    const v = handleInput.trim().toLowerCase();
+    if (!v) return;
+    setHandleBusy(true);
+    const res = await setMyHandle(v);
+    setHandleBusy(false);
+    if (res.ok) {
+      setProfile((p) => (p ? { ...p, handle: res.handle || v } : p));
+      setHandleMsg(res.warn ? { ok: false, text: res.warn } : { ok: true, text: "저장됐어요! 이제 내 AI 주소가 깔끔해져요." });
+    } else {
+      setHandleMsg({ ok: false, text: res.error || "저장 실패" });
+    }
+  };
+  // 입력마다 비동기 중복확인 — 마지막 입력의 응답만 반영(out-of-order/스테일 방지)
+  const handleReqRef = useRef("");
+  const handleCheckHandle = async (v: string) => {
+    setHandleInput(v);
+    const t = v.trim().toLowerCase();
+    handleReqRef.current = t;
+    setHandleMsg(null); // 입력 변경 즉시 이전 결과 제거(저장 버튼이 스테일 ok로 켜지는 것 방지)
+    if (!t) return;
+    const res = await checkHandle(t);
+    if (handleReqRef.current !== t) return; // 더 최신 입력이 있으면 무시
+    setHandleMsg(res.ok ? { ok: true, text: "사용 가능한 이름이에요 ✓" } : { ok: false, text: res.reason || "사용 불가" });
   };
 
   // 뱃지(전적 기반 단순 산출)
@@ -830,6 +897,32 @@ export default function ProfilePage() {
               </Link>
             </div>
 
+            {/* 공유 주소(핸들) — 내 AI 페이지/코지홈 주소 */}
+            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
+              공유 주소 (영문 핸들) <span className="font-normal text-neutral-400">내 AI 페이지 주소가 깔끔해져요</span>
+            </label>
+            <div className="flex items-stretch gap-2 mb-1">
+              <span className="inline-flex items-center px-2.5 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-[12px] text-neutral-400 font-mono shrink-0">dori-ai.com/u/</span>
+              <input
+                value={handleInput}
+                onChange={(e) => handleCheckHandle(e.target.value)}
+                maxLength={20}
+                placeholder="user04"
+                className="flex-1 min-w-0 px-3 py-2.5 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40 font-mono lowercase"
+              />
+              <button
+                onClick={handleSaveHandle}
+                disabled={handleBusy || !handleInput.trim() || !(handleMsg && handleMsg.ok)}
+                className="px-4 rounded-xl bg-[#F9954E] text-white text-[13px] font-bold active:opacity-85 disabled:opacity-50 shrink-0"
+              >
+                {handleBusy ? "..." : "저장"}
+              </button>
+            </div>
+            {handleMsg && (
+              <p className={`text-[11px] mb-1 ${handleMsg.ok ? "text-emerald-500" : "text-red-500"}`}>{handleMsg.text}</p>
+            )}
+            <p className="text-[11px] text-neutral-400 mb-4">영문 소문자·숫자·밑줄(_) 3~20자 · 미설정 시 임시 주소가 쓰여요</p>
+
             <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
               대문 인사말 <span className="font-normal text-neutral-400">방문자에게 보이는 한마디</span>
             </label>
@@ -1093,7 +1186,7 @@ export default function ProfilePage() {
               <p className="text-[12px] font-extrabold text-neutral-900 dark:text-white">🤖 내가 만든 AI {profile.myAIs.length > 0 && <span className="text-[#F9954E]">{profile.myAIs.length}</span>}</p>
               {isOwner && (
                 <button
-                  onClick={() => setAiFormOpen((v) => !v)}
+                  onClick={() => { setAiEditId(null); setAiForm({ ...EMPTY_AI }); setAiFormOpen((v) => !v); }}
                   className="text-[11px] font-bold text-white bg-[#F9954E] rounded-full px-3 py-1 active:opacity-85"
                 >
                   {aiFormOpen ? "닫기" : "+ AI 자랑하기"}
@@ -1101,8 +1194,17 @@ export default function ProfilePage() {
               )}
             </div>
 
+            {/* 공유 주소(핸들) 안내 — 미설정 시 노출 */}
+            {isOwner && !profile.handle && (
+              <div className="mb-3 rounded-xl bg-[#FFF5EB] dark:bg-[#F9954E]/5 px-3.5 py-3 text-[12px] text-neutral-600 dark:text-neutral-300 leading-relaxed">
+                💡 아래 <button onClick={() => setEditing(true)} className="font-bold text-[#F9954E] underline underline-offset-2">코지홈 꾸미기</button>에서 <b>영문 주소(핸들)</b>를 정하면
+                <br /><span className="font-mono text-[11px]">dori-ai.com/u/<b>내이름</b>/AI</span> 처럼 깔끔한 주소로 공유돼요.
+              </div>
+            )}
+
             {isOwner && aiFormOpen && (
               <div className="mb-4 rounded-2xl bg-[#FFF5EB] dark:bg-[#F9954E]/5 p-4 space-y-2.5">
+                {aiEditId && <p className="text-[11px] font-bold text-[#F9954E]">✏️ 수정 중</p>}
                 <div className="flex flex-wrap gap-1.5">
                   {["🤖", "🧠", "💬", "🎨", "🎮", "📷", "🎵", "🔢", "🦾", "✨", "📝", "🐱"].map((em) => (
                     <button
@@ -1116,15 +1218,35 @@ export default function ProfilePage() {
                 </div>
                 <input value={aiForm.name} onChange={(e) => setAiForm((f) => ({ ...f, name: e.target.value }))} maxLength={40} placeholder="AI 이름 (예: 우리집 강아지 알려주는 AI)"
                   className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
-                <input value={aiForm.tool} onChange={(e) => setAiForm((f) => ({ ...f, tool: e.target.value }))} maxLength={30} placeholder="무엇으로 만들었나요? (예: ChatGPT, 스크래치, Teachable Machine)"
-                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
-                <textarea value={aiForm.desc} onChange={(e) => setAiForm((f) => ({ ...f, desc: e.target.value }))} maxLength={300} rows={2} placeholder="어떤 AI인지 소개해주세요!"
+                <input value={aiForm.desc} onChange={(e) => setAiForm((f) => ({ ...f, desc: e.target.value }))} maxLength={300} placeholder="한 줄 소개 (예: 사진 속 동물 이름을 맞혀줘요)"
+                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
+                <div className="flex gap-2">
+                  <select value={aiForm.category} onChange={(e) => setAiForm((f) => ({ ...f, category: e.target.value }))}
+                    className="w-1/2 px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40">
+                    <option value="">분류 선택</option>
+                    {["챗봇", "그림", "글쓰기", "게임", "교육", "음악", "기타"].map((c) => <option key={c} value={c}>{c}</option>)}
+                  </select>
+                  <input value={aiForm.tool} onChange={(e) => setAiForm((f) => ({ ...f, tool: e.target.value }))} maxLength={30} placeholder="만든 도구 (예: ChatGPT, 스크래치)"
+                    className="w-1/2 px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
+                </div>
+                <textarea value={aiForm.body} onChange={(e) => setAiForm((f) => ({ ...f, body: e.target.value }))} maxLength={4000} rows={4} placeholder="자세한 소개 — 어떤 AI인지, 왜 만들었는지, 무엇을 할 수 있는지 마음껏 적어보세요!"
                   className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40" />
-                <input value={aiForm.url} onChange={(e) => setAiForm((f) => ({ ...f, url: e.target.value }))} maxLength={300} placeholder="써볼 수 있는 링크 (선택)"
+                <textarea value={aiForm.howto} onChange={(e) => setAiForm((f) => ({ ...f, howto: e.target.value }))} maxLength={1500} rows={2} placeholder="사용법 (선택) — 이렇게 써보세요!"
+                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-neutral-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40" />
+                <input value={aiForm.tags} onChange={(e) => setAiForm((f) => ({ ...f, tags: e.target.value }))} placeholder="태그 (쉼표로 구분, 예: 동물, 사진, 초등학생)"
                   className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
-                <div className="flex justify-end">
-                  <button onClick={handleAddAI} disabled={aiBusy || !aiForm.name.trim()} className="px-5 py-2 rounded-full bg-[#F9954E] text-white text-[13px] font-bold active:opacity-85 disabled:opacity-50">
-                    {aiBusy ? "올리는 중..." : "자랑하기"}
+                <input value={aiForm.url} onChange={(e) => setAiForm((f) => ({ ...f, url: e.target.value }))} maxLength={500} placeholder="체험 링크 (선택) — 직접 써볼 수 있는 주소"
+                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
+                <textarea value={aiForm.images} onChange={(e) => setAiForm((f) => ({ ...f, images: e.target.value }))} rows={2} placeholder="스크린샷 이미지 주소 (선택, 한 줄에 하나씩)"
+                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[12px] text-neutral-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40" />
+                <div className="flex justify-end gap-2">
+                  {aiEditId && (
+                    <button onClick={() => { setAiEditId(null); setAiForm({ ...EMPTY_AI }); setAiFormOpen(false); }} className="px-4 py-2 rounded-full bg-neutral-200 dark:bg-zinc-800 text-neutral-600 dark:text-neutral-300 text-[13px] font-bold active:opacity-85">
+                      취소
+                    </button>
+                  )}
+                  <button onClick={handleSubmitAI} disabled={aiBusy || !aiForm.name.trim()} className="px-5 py-2 rounded-full bg-[#F9954E] text-white text-[13px] font-bold active:opacity-85 disabled:opacity-50">
+                    {aiBusy ? "올리는 중..." : aiEditId ? "수정 완료" : "AI 페이지 만들기"}
                   </button>
                 </div>
               </div>
@@ -1136,24 +1258,38 @@ export default function ProfilePage() {
               </p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-                {profile.myAIs.map((ai) => (
-                  <div key={ai.at} className="relative rounded-2xl bg-neutral-50 dark:bg-zinc-900 p-4 border border-neutral-100 dark:border-zinc-800">
+                {profile.myAIs.map((ai, i) => (
+                  <div key={ai.id || ai.slug || i} className="relative rounded-2xl bg-neutral-50 dark:bg-zinc-900 p-4 border border-neutral-100 dark:border-zinc-800">
                     <div className="flex items-start gap-3">
                       <span className="w-10 h-10 rounded-xl bg-[#FFF5EB] dark:bg-[#F9954E]/10 flex items-center justify-center text-[22px] shrink-0">{ai.emoji || "🤖"}</span>
                       <div className="flex-1 min-w-0">
                         <p className="text-[14px] font-extrabold text-neutral-900 dark:text-white truncate">{ai.name}</p>
-                        {ai.tool && <span className="inline-block mt-0.5 text-[10px] font-bold text-[#F9954E] bg-[#FFF5EB] dark:bg-[#F9954E]/10 rounded-full px-2 py-0.5">{ai.tool}</span>}
+                        <div className="flex flex-wrap items-center gap-1 mt-0.5">
+                          {ai.category && <span className="text-[10px] font-bold text-[#F9954E] bg-[#FFF5EB] dark:bg-[#F9954E]/10 rounded-full px-2 py-0.5">{ai.category}</span>}
+                          {ai.tool && <span className="text-[10px] font-bold text-neutral-500 bg-neutral-100 dark:bg-zinc-800 rounded-full px-2 py-0.5">{ai.tool}</span>}
+                        </div>
                       </div>
                       {isOwner && (
-                        <button onClick={() => handleDeleteAI(ai.at)} className="text-[11px] text-neutral-400 hover:text-red-500 font-bold shrink-0">삭제</button>
+                        <div className="flex gap-2 shrink-0">
+                          <button onClick={() => startEditAI(ai)} className="text-[11px] text-neutral-400 hover:text-[#F9954E] font-bold">수정</button>
+                          <button onClick={() => handleDeleteAI(ai.id)} className="text-[11px] text-neutral-400 hover:text-red-500 font-bold">삭제</button>
+                        </div>
                       )}
                     </div>
                     {ai.desc && <p className="mt-2.5 text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed whitespace-pre-wrap break-keep">{ai.desc}</p>}
-                    {ai.url && (
-                      <a href={ai.url} target="_blank" rel="noopener noreferrer nofollow" className="mt-2.5 inline-flex items-center gap-1 text-[12px] font-bold text-[#F9954E] active:opacity-70">
-                        ▶ 써보기
+                    <div className="mt-3 flex flex-wrap items-center gap-2">
+                      <a href={`/u/${profile.handle || profile.uid}/${encodeURIComponent(ai.slug)}`} className="inline-flex items-center gap-1 text-[12px] font-bold text-white bg-[#F9954E] rounded-full px-3 py-1.5 active:opacity-85">
+                        🏠 AI 페이지
                       </a>
-                    )}
+                      {ai.url && (
+                        <a href={ai.url} target="_blank" rel="noopener noreferrer nofollow" className="inline-flex items-center gap-1 text-[12px] font-bold text-[#F9954E] active:opacity-70">
+                          ▶ 써보기
+                        </a>
+                      )}
+                      <button onClick={() => copyAiShare(ai)} className="ml-auto inline-flex items-center gap-1 text-[12px] font-bold text-neutral-500 dark:text-neutral-400 active:opacity-70">
+                        {aiCopied === ai.id ? "✓ 복사됨" : "🔗 공유"}
+                      </button>
+                    </div>
                   </div>
                 ))}
               </div>
