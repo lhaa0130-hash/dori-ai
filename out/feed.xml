@@ -6,7 +6,7 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 16 Jun 2026 07:15:06 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 16 Jun 2026 09:41:32 GMT</lastBuildDate>
     <item>
       <title>Nvidia, AI 붐 속 첫 부채 판매로 2조 6천억 원 유치 계획</title>
       <link>https://dori-ai.com/insight/article/trend-103</link>
@@ -30,6 +30,22 @@
       <category>트렌드</category>
       <pubDate>Tue, 16 Jun 2026 00:00:00 GMT</pubDate>
       <description>HCLTech의 1억 5천만 달러 투자를 이끌어낸 Sarvam이 인도의 새로운 AI 유니콘으로 떠올랐다.</description>
+    </item>
+    <item>
+      <title>메타, 페이스북에 새로운 ‘AI 모드’ 도입 — 사용자 참여 강화의 시작</title>
+      <link>https://dori-ai.com/insight/article/trend-106</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-106</guid>
+      <category>트렌드</category>
+      <pubDate>Tue, 16 Jun 2026 00:00:00 GMT</pubDate>
+      <description>메타가 페이스북에 새로운 AI 기능을 출시하며 사용자 참여를 증대시키려는 노력을 시작했습니다. 이 변화는 AI 경쟁의 중요한 이정표가 될 것입니다.</description>
+    </item>
+    <item>
+      <title>말레이시아 스타트업, AI 에이전트 기반 메시징 앱으로 625억 원 유치</title>
+      <link>https://dori-ai.com/insight/article/trend-107</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-107</guid>
+      <category>트렌드</category>
+      <pubDate>Tue, 16 Jun 2026 00:00:00 GMT</pubDate>
+      <description>Respond.io가 AI 에이전트를 활용한 고객 문의 처리 시스템으로 큰 투자를 유치하며 사업 확장을 선언했습니다.</description>
     </item>
     <item>
       <title>바이트댄스, AI 칩 구매 협상 중 — 중국 Iluvatar CoreX와의 협력</title>
@@ -310,22 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Sun, 26 Apr 2026 00:00:00 GMT</pubDate>
       <description>매일 쏟아지는 AI 뉴스 중 신뢰할 수 있는 것만 골랐다. 한국어·영어별, 수준별로 구분한 2026년 최신 AI 미디어·뉴스레터 큐레이션.</description>
-    </item>
-    <item>
-      <title>AI는 정말 내 일자리를 빼앗나? — 2026년 직업 대체 실태 완전 분석</title>
-      <link>https://dori-ai.com/insight/article/analysis-02</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/analysis-02</guid>
-      <category>분석</category>
-      <pubDate>Sun, 26 Apr 2026 00:00:00 GMT</pubDate>
-      <description>AI가 실제로 어떤 직업을 얼마나 대체하고 있는지, 국내외 데이터를 바탕으로 직군별·연령별로 분석한다.</description>
-    </item>
-    <item>
-      <title>AI 쓰는 게 공짜가 아니다 — 2026년 AI 구독·운영 비용 완전 해부</title>
-      <link>https://dori-ai.com/insight/article/analysis-03</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/analysis-03</guid>
-      <category>분석</category>
-      <pubDate>Sun, 26 Apr 2026 00:00:00 GMT</pubDate>
-      <description>ChatGPT, Claude, Gemini부터 기업용 API까지, 실제로 AI를 쓰는 데 얼마나 드는지 개인·팀·기업 규모별로 분석한다.</description>
     </item>
   </channel>
 </rss>
