@@ -484,6 +484,19 @@ export default function MyPage() {
           </div>
         )}
 
+        {/* ── 내 코지홈 바로가기 (마이페이지 ↔ 코지홈 연동) ── */}
+        <Link
+          href="/profile"
+          className="mb-4 flex items-center gap-4 p-5 rounded-3xl bg-gradient-to-r from-[#FBAA60] to-[#F9954E] text-white shadow-md shadow-orange-500/20 active:scale-[0.99] transition-transform group"
+        >
+          <span className="flex-shrink-0 w-11 h-11 rounded-2xl bg-white/20 flex items-center justify-center text-[22px]">🏠</span>
+          <div className="flex-1 min-w-0">
+            <p className="text-[15px] font-extrabold">내 코지홈</p>
+            <p className="text-[12.5px] text-white/85">프로필 꾸미기 · 다이어리 · 방명록 · 내가 만든 AI 자랑까지</p>
+          </div>
+          <ChevronRight className="w-5 h-5 text-white/80 group-hover:translate-x-0.5 transition-transform" />
+        </Link>
+
         {/* ── 알림 ── */}
         <Link
           href="/notifications"
