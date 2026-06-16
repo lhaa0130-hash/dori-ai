@@ -37,6 +37,12 @@ export default function LayoutClient({ children }: LayoutClientProps) {
     return <>{children}</>;
   }
 
+  // Flat-Form(/flat-form)도 전체화면 도구 — 사이트 헤더/좌우 사이드 광고 없이 렌더
+  // (페이지 자체에서 iframe + 하단 소형 광고를 직접 배치)
+  if (pathname?.startsWith("/flat-form")) {
+    return <>{children}</>;
+  }
+
   // 관리자(/admin)는 자체 헤더·풀폭 레이아웃 사용 — 사이드 광고/본문 패딩 중복 제거
   if (pathname?.startsWith("/admin")) {
     return <>{children}</>;
