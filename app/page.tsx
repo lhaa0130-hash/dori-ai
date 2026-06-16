@@ -21,7 +21,7 @@ const QUICK = [
 ];
 
 export default async function Home() {
-  const latestTrends = getAllTrends().slice(0, 8); // 메인 AI 트렌드: 피처드 1 + 리스트 7
+  const latestTrends = getAllTrends().slice(0, 10); // 메인 AI 트렌드: 피처드 1 + 리스트 9
 
   return (
     <main className="min-h-screen">

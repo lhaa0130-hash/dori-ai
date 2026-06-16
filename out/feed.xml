@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 16 Jun 2026 11:03:16 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 16 Jun 2026 23:19:20 GMT</lastBuildDate>
+    <item>
+      <title>NewCore, AI 에이전트의 정체성을 부여하다 — 660억 원 투자 유치</title>
+      <link>https://dori-ai.com/insight/article/trend-109</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-109</guid>
+      <category>트렌드</category>
+      <pubDate>Tue, 16 Jun 2026 11:00:17 GMT</pubDate>
+      <description>AI 에이전트를 기업의 정규 직원으로 관리하는 새로운 도전 과제를 제시하며, NewCore가 660억 원의 자금을 확보했습니다.</description>
+    </item>
     <item>
       <title>Nvidia, AI 붐 속 첫 부채 판매로 2조 6천억 원 유치 계획</title>
       <link>https://dori-ai.com/insight/article/trend-103</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Sun, 26 Apr 2026 00:00:00 GMT</pubDate>
       <description>Google과 양자 스타트업 Oratomic의 최신 연구가 인터넷 암호화를 해독할 수 있는 양자컴퓨터 개발 시점을 크게 앞당길 수 있다고 경고했다. 특히 AI가 핵심 알고리즘 발견에 결정적 역할을 한 것으로 밝혀져 AI-양자 융합의 새 지평이 열렸다.</description>
-    </item>
-    <item>
-      <title>복붙만 해도 결과물이 달라지는 프롬프트 템플릿 30선</title>
-      <link>https://dori-ai.com/insight/article/curation-02</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/curation-02</guid>
-      <category>큐레이션</category>
-      <pubDate>Sun, 26 Apr 2026 00:00:00 GMT</pubDate>
-      <description>업무·글쓰기·분석·아이디어 발상 등 실제 쓸 수 있는 AI 프롬프트 템플릿을 상황별로 엄선해 정리했다.</description>
     </item>
   </channel>
 </rss>

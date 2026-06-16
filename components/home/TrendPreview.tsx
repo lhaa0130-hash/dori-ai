@@ -6,7 +6,7 @@ import type { TrendPost } from "@/lib/trends";
 export default function TrendPreview({ trends }: { trends: TrendPost[] }) {
   if (!trends || trends.length === 0) return null;
 
-  const [featured, ...rest] = trends.slice(0, 3);
+  const [featured, ...rest] = trends.slice(0, 10);
 
   return (
     <section className="py-5 border-b border-neutral-100 dark:border-zinc-900">
@@ -54,13 +54,13 @@ export default function TrendPreview({ trends }: { trends: TrendPost[] }) {
         </div>
       </Link>
 
-      {/* 나머지 2개 — 컴팩트 리스트 */}
+      {/* 나머지 — 컴팩트 리스트 */}
       <div className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
-        {rest.map((trend, i) => (
+        {rest.map((trend) => (
           <Link
             key={trend.slug}
             href={`/insight/article/${trend.slug}`}
-            className={`flex items-center gap-3 ${i === 0 ? "pb-3.5" : "pt-3.5"} active:opacity-60 transition-opacity`}
+            className="flex items-center gap-3 py-3.5 active:opacity-60 transition-opacity"
           >
             <div className="relative w-[42px] h-[42px] rounded-xl overflow-hidden bg-neutral-100 dark:bg-white/10 flex-shrink-0">
               {trend.thumbnail ? (
