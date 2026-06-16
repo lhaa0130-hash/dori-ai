@@ -1,6 +1,10 @@
 import { getPostData } from '@/lib/posts';
 import { getAllTrends } from '@/lib/trends';
+import { getAllCurations } from '@/lib/curation';
+import { getAllAnalyses } from '@/lib/analysis';
+import { getAllReports } from '@/lib/reports';
 import { Suspense } from 'react';
+import Header from "@/components/layout/Header";
 import Image from 'next/image';
 import { MDXRemote } from 'next-mdx-remote/rsc';
 import rehypeHighlight from 'rehype-highlight';
@@ -10,7 +14,6 @@ import Link from 'next/link';
 import remarkGfm from 'remark-gfm';
 import type { Metadata } from 'next';
 import ShareButtons from '@/components/article/ShareButtons';
-import AdUnit from '@/components/ads/AdUnit';
 import ReadingProgress from '@/components/article/ReadingProgress';
 import RelatedArticles from '@/components/article/RelatedArticles';
 import AdminArticleBar from '@/components/admin/AdminArticleBar';
@@ -93,8 +96,20 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
     );
   }
 
-  // 연관 기사용 전체 트렌드 가져오기
-  const allTrends = getAllTrends();
+  // 연관 기사용 — 트렌드·큐레이션·분석·리포트 전체 교차 추천(내부링크 강화·색인 촉진)
+  const safe = (fn: () => any[]) => { try { return fn() || []; } catch { return []; } };
+  const allPosts = [
+    ...safe(getAllTrends),
+    ...safe(getAllCurations),
+    ...safe(getAllAnalyses),
+    ...safe(getAllReports),
+  ].map((p: any) => ({
+    slug: p.slug,
+    title: p.title,
+    thumbnail: p.thumbnail || p.thumbnail_url,
+    date: p.date,
+    tags: p.tags,
+  }));
   const articleUrl = `${SITE_URL}/insight/article/${params.slug}`;
   const postTags: string[] = Array.isArray(post.tags) ? post.tags : (post.tags ? [post.tags] : []);
 
@@ -110,8 +125,8 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
     "author": { "@type": "Organization", "name": "DORI-AI", "url": SITE_URL },
     "publisher": {
       "@type": "Organization",
-      "name": "illo",
-      "logo": { "@type": "ImageObject", "url": `${SITE_URL}/illo-logo.png` },
+      "name": "DORI-AI",
+      "logo": { "@type": "ImageObject", "url": `${SITE_URL}/icon.svg` },
     },
     "mainEntityOfPage": { "@type": "WebPage", "@id": articleUrl },
     ...(postTags.length > 0 ? { "keywords": postTags.join(", ") } : {}),
@@ -172,7 +187,8 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
       {/* 읽기 진행 바 (상단 고정) */}
       <ReadingProgress />
 
-      <div className="min-h-screen">
+      <main style={{ minHeight: '100vh', paddingTop: '70px' }}>
+        <Header />
         <article className="max-w-4xl mx-auto p-4 md:p-8">
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-center">
             {post.title}
@@ -207,9 +223,6 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
             />
           </div>
 
-          {/* 본문 하단 광고 (모바일 포함 전 기기 노출) */}
-          <AdUnit />
-
           {/* 하단 공유 버튼 */}
           <div className="mt-10 pt-6 border-t border-neutral-200 dark:border-neutral-800">
             <ShareButtons url={articleUrl} title={post.title || 'DORI-AI 기사'} />
@@ -219,10 +232,10 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
           <RelatedArticles
             currentSlug={params.slug}
             currentTags={postTags}
-            allTrends={allTrends}
+            allPosts={allPosts}
           />
         </article>
-      </div>
+      </main>
 
       {/* 관리자 전용 편집/삭제 바 */}
       {rawMarkdown && (

@@ -1,21 +1,29 @@
 import Link from "next/link";
 import Image from "next/image";
 import { Calendar } from "lucide-react";
-import type { TrendPost } from "@/lib/trends";
+
+interface RelatedItem {
+  slug: string;
+  title: string;
+  thumbnail?: string;
+  thumbnail_url?: string;
+  date?: string;
+  tags?: string[];
+}
 
 interface RelatedArticlesProps {
   currentSlug: string;
   currentTags: string[];
-  allTrends: TrendPost[];
+  allPosts: RelatedItem[];
 }
 
 export default function RelatedArticles({
   currentSlug,
   currentTags,
-  allTrends,
+  allPosts,
 }: RelatedArticlesProps) {
   // 같은 태그를 가진 다른 기사 필터링 (최대 3개)
-  const related = allTrends
+  const related = allPosts
     .filter((t) => t.slug !== currentSlug)
     .filter((t) => {
       if (!currentTags || currentTags.length === 0) return true;
@@ -25,7 +33,7 @@ export default function RelatedArticles({
     .slice(0, 3);
 
   // 태그 매칭이 부족하면 최신 기사로 보충
-  const fallback = allTrends
+  const fallback = allPosts
     .filter((t) => t.slug !== currentSlug)
     .slice(0, 3 - related.length);
 
@@ -47,9 +55,9 @@ export default function RelatedArticles({
           >
             {/* 썸네일 */}
             <div className="relative w-full h-32 bg-gradient-to-br from-[#F9954E]/10 to-[#FF7B54]/5">
-              {article.thumbnail ? (
+              {(article.thumbnail || article.thumbnail_url) ? (
                 <Image
-                  src={article.thumbnail}
+                  src={(article.thumbnail || article.thumbnail_url) as string}
                   alt={article.title}
                   fill
                   style={{ objectFit: "cover" }}

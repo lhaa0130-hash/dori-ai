@@ -11,13 +11,15 @@ import {
   LineChart,
   MessageSquare,
   ShoppingBag,
-  Home
+  Home,
+  Calculator
 } from "lucide-react";
 
 const navItems = [
   { name: "HOME", href: "/", icon: Home },
   { name: "PROJECT", href: "/project", icon: FolderKanban },
   { name: "AI TOOLS", href: "/ai-tools", icon: Bot },
+  { name: "AI MODELS", href: "/ai-models", icon: Calculator },
   { name: "INSIGHT", href: "/insight", icon: LineChart },
   { name: "COMMUNITY", href: "/community", icon: MessageSquare },
   { name: "MARKET", href: "/market", icon: ShoppingBag },
