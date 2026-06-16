@@ -208,8 +208,9 @@
   .dlog-note{text-align:center;font-size:11px;color:#cbb9a8;margin:10px 0 0;}
   .dlog-foot{text-align:center;font-size:11.5px;color:#bbb;margin-top:18px;}
   /* ── 단축키 범례 ── */
-  #keyHelp{position:fixed;top:104px;right:316px;z-index:55;width:264px;background:var(--panel);border:1px solid var(--line);
-    border-radius:12px;padding:14px 16px;box-shadow:0 14px 44px rgba(0,0,0,.5);display:none;font-size:13px;}
+  #keyHelp{position:fixed;left:14px;bottom:14px;z-index:55;width:230px;background:rgba(23,27,34,.96);
+    border:1px solid var(--line);border-radius:11px;padding:11px 14px;box-shadow:0 12px 34px rgba(0,0,0,.55);
+    display:none;font-size:12px;}
   #keyHelp.show{display:block;}
   .kh-head{display:flex;justify-content:space-between;align-items:center;font-weight:700;margin-bottom:8px;}
   .kh-head span{cursor:pointer;color:var(--muted);font-size:18px;line-height:1;}
@@ -257,7 +258,7 @@
       <button class="mini" id="cadRotO" title="O키와 동일 · 클릭 후 각도 입력">회전 O</button>
       <button class="mini" id="cadClear">제거</button>
       <span class="lbl" style="margin-left:8px">투명도</span>
-      <input type="range" id="cadOp" min="10" max="100" value="92" style="width:80px">
+      <input type="range" id="cadOp" min="10" max="100" value="55" style="width:80px">
     </div>
     <div class="ctl">
       <span class="lbl">네모</span>
@@ -437,9 +438,9 @@ window.addEventListener('resize', resize);
 new ResizeObserver(resize).observe(cv.parentElement);
 
 // ───────────────────────── 지적도 레이어 ─────────────────────────
-const cad = { img:null, proc:null, _procFor:null, merc:null, cx:0, cy:0, mmPerPx:1, rot:0, opacity:0.92, visible:true };
+const cad = { img:null, proc:null, _procFor:null, merc:null, cx:0, cy:0, mmPerPx:1, rot:0, opacity:0.55, visible:true };
 let mapEdit = false, cadDrag = null;
-const CAD_OTHER_COLOR='#f49cc4';   // 나머지 필지 = 얇은 분홍
+const CAD_OTHER_COLOR='#f7b3d2';   // 나머지 필지 = 연한 분홍(얇게 보이도록 투명도↓)
 // 투명배경 지적도(TRANSPARENT=TRUE)의 선 픽셀을 지정색으로 치환
 function tintCad(img,color){
   const c=document.createElement('canvas'); c.width=img.width; c.height=img.height;
@@ -938,8 +939,12 @@ window.addEventListener('keyup',e=>{ if(e.code==='Space'){ spaceDown=false; cv.s
 
 document.querySelectorAll('.tool[data-tool]').forEach(b=>b.addEventListener('click',()=>setTool(b.dataset.tool)));
 document.getElementById('btnUndo').addEventListener('click',undo);
-document.getElementById('btnKeys').addEventListener('click',()=>document.getElementById('keyHelp').classList.toggle('show'));
-document.getElementById('khClose').addEventListener('click',()=>document.getElementById('keyHelp').classList.remove('show'));
+const keyHelpEl=document.getElementById('keyHelp');
+function setKeyHelp(show){ keyHelpEl.classList.toggle('show',show); try{ localStorage.setItem('ff_keyhelp',show?'shown':'hidden'); }catch(e){} }
+document.getElementById('btnKeys').addEventListener('click',()=>setKeyHelp(!keyHelpEl.classList.contains('show')));
+document.getElementById('khClose').addEventListener('click',()=>setKeyHelp(false));
+// 단축키는 기본 표시(한 번 닫으면 그 상태 기억)
+try{ if(localStorage.getItem('ff_keyhelp')!=='hidden') keyHelpEl.classList.add('show'); }catch(e){ keyHelpEl.classList.add('show'); }
 document.getElementById('btnClear').addEventListener('click',()=>{
   if(model.points.length||model.circles.length){ snapshot(); model={points:[],edges:[],circles:[]}; recompute(); } });
 

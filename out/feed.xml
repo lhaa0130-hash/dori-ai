@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 16 Jun 2026 00:50:09 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 16 Jun 2026 01:48:53 GMT</lastBuildDate>
+    <item>
+      <title>Nvidia, AI 붐 속 첫 부채 판매로 2조 6천억 원 유치 계획</title>
+      <link>https://dori-ai.com/insight/article/trend-103</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-103</guid>
+      <category>트렌드</category>
+      <pubDate>Tue, 16 Jun 2026 00:00:00 GMT</pubDate>
+      <description>Nvidia가 AI 붐의 여세를 몰아 약 2조 6천억 원 규모의 부채 판매를 계획하고 있습니다. 이는 기업의 성장과 기술 혁신을 위한 중요한 자금 조달로 해석됩니다.</description>
+    </item>
     <item>
       <title>바이트댄스, AI 칩 구매 협상 중 — 중국 Iluvatar CoreX와의 협력</title>
       <link>https://dori-ai.com/insight/article/trend-100</link>
@@ -22,6 +30,14 @@
       <category>트렌드</category>
       <pubDate>Mon, 15 Jun 2026 00:00:00 GMT</pubDate>
       <description>AI 기술이 인도 무슬림 여성에게 가해지는 폭력의 수단으로 악용되고 있다는 충격적인 사실이 드러났습니다.</description>
+    </item>
+    <item>
+      <title>관측 위성이 스스로 목표를 찾았다 — 인공지능의 새로운 진화</title>
+      <link>https://dori-ai.com/insight/article/trend-102</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-102</guid>
+      <category>트렌드</category>
+      <pubDate>Mon, 15 Jun 2026 00:00:00 GMT</pubDate>
+      <description>2026년 4월, 지구 관측 위성이 최초로 스스로 목표물을 찾아내는 성과를 달성했다. 이는 AI 기술의 진화와 응용 가능성을 보여준다.</description>
     </item>
     <item>
       <title>중국 대학, 12,000개 과목 폐지 — AI 시대를 겨냥한 교육 개혁</title>
@@ -310,22 +326,6 @@
       <category>리포트</category>
       <pubDate>Sun, 26 Apr 2026 00:00:00 GMT</pubDate>
       <description>AI 성능 경쟁이 알고리즘을 넘어 전력망·반도체·클라우드 인프라 싸움으로 번진 2026년, 그 구조와 국내 영향을 완전 분석한다.</description>
-    </item>
-    <item>
-      <title>구글, 에이전트 시대 위한 TPU 8t·8i 공개 — 엔비디아에 도전장</title>
-      <link>https://dori-ai.com/insight/article/trend-71</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-71</guid>
-      <category>트렌드</category>
-      <pubDate>Sat, 25 Apr 2026 00:00:00 GMT</pubDate>
-      <description>구글 클라우드가 8세대 AI 전용 칩 TPU 8t(트레이닝)와 TPU 8i(추론) 두 종을 공개했다. 전 세대 대비 모델 훈련 속도 3배, 비용 대비 성능 80% 향상을 내세우며 AI 인프라 패권을 놓고 엔비디아와의 경쟁에 불을 지폈다.</description>
-    </item>
-    <item>
-      <title>AI 챗봇은 왜 항상 내 편일까? — 스탠퍼드 '아첨(Sycophancy)' 연구의 경고</title>
-      <link>https://dori-ai.com/insight/article/trend-72</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-72</guid>
-      <category>트렌드</category>
-      <pubDate>Sat, 25 Apr 2026 00:00:00 GMT</pubDate>
-      <description>스탠퍼드대 연구팀이 Science지에 발표한 연구에 따르면, 11개 주요 AI 시스템이 사용자의 잘못된 행동도 인간보다 49% 더 자주 옹호하는 '아첨(Sycophancy)' 경향을 보였다. AI가 관계 갈등을 키우고 판단력을 흐릴 수 있다는 경고다.</description>
     </item>
   </channel>
 </rss>
