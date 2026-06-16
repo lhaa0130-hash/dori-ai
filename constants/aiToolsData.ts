@@ -146,7 +146,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     website: "https://chatgpt.com",
     apiUrl: "https://platform.openai.com",
     thumbnail: "https://logo.clearbit.com/chatgpt.com",
-    topPick: true, topRank: 4,
+    topPick: true, topRank: 1,
     pros: ["전 세계 1억+ 사용자, 생태계 최강", "무료로도 GPT-4o 기본 사용 가능", "이미지·음성·텍스트 통합 처리"],
     cons: ["무료 플랜은 하루 사용량 제한 있음", "프라이버시 우려 (데이터 학습에 활용)"],
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -182,7 +182,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     website: "https://perplexity.ai",
     apiUrl: "https://docs.perplexity.ai",
     thumbnail: "https://logo.clearbit.com/perplexity.ai",
-    topPick: false,
+    topPick: true, topRank: 5,
     pros: ["모든 답변에 출처 URL 제공", "실시간 웹 검색으로 최신 정보 반영", "딥리서치로 심층 분석 가능"],
     cons: ["무료 플랜은 Pro 검색 하루 5회 제한", "긴 창작 작업보다 검색·조사에 특화"],
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -202,7 +202,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     description: "일론 머스크의 xAI가 개발한 AI로, X(트위터) 플랫폼의 실시간 게시물 데이터에 접근할 수 있는 것이 최대 차별점입니다. Grok 3 모델 기준으로 주요 벤치마크에서 GPT-4o에 근접한 성능을 보이며, 경쟁 AI보다 유머러스하고 직설적인 답변 스타일을 추구합니다. X Premium+ 구독($16/월)에 포함되어 있으며, 별도 앱과 웹사이트로도 이용 가능합니다.",
     website: "https://x.ai",
     thumbnail: "https://logo.clearbit.com/x.ai",
-    topPick: true, topRank: 5,
+    topPick: true, topRank: 4,
     pros: ["X(트위터) 실시간 데이터 접근", "직설적이고 유머러스한 답변 스타일", "X Premium 구독에 포함"],
     cons: ["X Premium 유료 구독 필요", "편향된 학습 데이터 우려"],
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -231,7 +231,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     description: "중국 AI 연구소 DeepSeek이 개발한 오픈소스 모델로, R1 추론 모델이 GPT-o1에 근접한 성능을 보이며 업계에 충격을 줬습니다. 학습 비용을 획기적으로 낮춘 설계 덕분에 API 사용 비용이 GPT-4의 수십 분의 1 수준입니다. 오픈소스로 공개되어 자체 서버에 설치 가능하지만, 중국 기업이라 민감한 업무 데이터 사용 시 주의가 필요합니다.",
     website: "https://deepseek.com",
     thumbnail: "https://logo.clearbit.com/deepseek.com",
-    topPick: true, topRank: 1,
+    topPick: false,
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
@@ -244,25 +244,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "llm-gpt4o", name: "GPT-4o", category: "llm",
-    summary: "이미지·음성·텍스트 동시 처리. 제일 빠른 GPT 모델",
-    description: "OpenAI의 플래그십 멀티모달 모델로, 텍스트·이미지·오디오를 단일 모델에서 통합 처리합니다. GPT-4 Turbo 대비 2배 빠르고 비용은 절반이며, API로 사용 시 가장 효율적인 GPT 모델입니다. 실시간 음성 대화(GPT-4o Realtime) 기능으로 사람처럼 감정 있는 목소리로 즉각 응답하는 경험이 가능합니다.",
-    website: "https://openai.com", thumbnail: "https://logo.clearbit.com/openai.com", topPick: false, rating: 0, ratingCount: 0, userRatings: [], comments: []
-  },
-  {
-    id: "llm-claude-3-5", name: "Claude 3.5 Sonnet", category: "llm",
-    summary: "코딩 실력은 GPT-4o랑 쌍벽. 긴 대화도 맥락을 절대 안 잃어버림",
-    description: "Anthropic의 Claude 시리즈 중 가격 대비 성능이 가장 뛰어난 모델로, SWE-bench 코딩 벤치마크에서 GPT-4o를 앞서는 성과를 보였습니다. 200K 토큰 컨텍스트와 '아티팩트' 기능으로 코드·문서를 실시간 미리보기할 수 있습니다. API 요금은 입력 $3/백만 토큰, 출력 $15/백만 토큰이며 Claude.ai Pro 구독($20/월)으로도 이용 가능합니다.",
-    website: "https://claude.ai", thumbnail: "https://logo.clearbit.com/anthropic.com", topPick: false, rating: 0, ratingCount: 0, userRatings: [], comments: []
-  },
-  {
-    id: "llm-gemini-1-5", name: "Gemini 1.5 Pro", category: "llm",
-    summary: "100만 토큰 컨텍스트. 책 한 권 통째로 분석 가능",
-    description: "Google이 공개한 모델 중 가장 긴 컨텍스트 윈도우(100만 토큰, 약 750,000 단어)를 지원합니다. 긴 동영상·오디오 파일·대용량 코드베이스도 한 번의 요청으로 처리 가능하며, 멀티모달 능력도 동급 최강 수준입니다. Google AI Studio에서 무료로 테스트 가능하고, Vertex AI를 통해 기업용 API로도 제공됩니다.",
-    website: "https://gemini.google.com", thumbnail: "https://logo.clearbit.com/google.com", topPick: false, rating: 0, ratingCount: 0, userRatings: [], comments: []
-  },
-  {
-    id: "llm-cohere", name: "Cohere Command R+", category: "llm",
+    id: "llm-cohere", name: "Cohere", category: "llm",
     summary: "기업 문서 검색 연동에 특화. B2B 서비스 만들 때 유용함",
     description: "RAG(검색 증강 생성) 및 멀티홉 추론에 특화된 기업용 LLM으로, 사내 문서와 결합해 정확한 답변을 생성하도록 설계되었습니다. 10개 이상의 비즈니스 언어를 지원하며 금융·법률 분야 기업에서 데이터 보안을 위해 선호합니다. API 비용이 GPT-4보다 저렴해 대규모 B2B 서비스 구축 시 운영비를 크게 절감할 수 있습니다.",
     website: "https://cohere.com", thumbnail: "https://logo.clearbit.com/cohere.com", topPick: false, rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -286,7 +268,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     website: "https://github.com/QwenLM", thumbnail: "https://logo.clearbit.com/alibaba.com", topPick: false, rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
-    id: "llm-yi", name: "Yi-34B", category: "llm",
+    id: "llm-yi", name: "Yi (01.AI)", category: "llm",
     summary: "01.AI가 만든 가성비 좋은 오픈 모델",
     description: "前 Google Brain 리더 이카이 리(Kai-Fu Lee)가 창업한 01.AI에서 개발한 오픈소스 모델입니다. 34B 파라미터 크기로 소비자급 GPU에서도 무난히 실행 가능하며, MMLU 등 주요 벤치마크에서 Llama 2 70B와 동등하거나 우수한 성능을 보였습니다. 한국어를 포함한 다국어 처리가 가능하고 상업적 이용이 허용되는 라이선스를 제공합니다.",
     website: "https://01.ai", thumbnail: "https://logo.clearbit.com/01.ai", topPick: false, rating: 0, ratingCount: 0, userRatings: [], comments: []
