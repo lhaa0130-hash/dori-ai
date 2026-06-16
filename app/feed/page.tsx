@@ -330,8 +330,8 @@ export default function FeedPage() {
                 {groups.length === 0 ? (
                   <p className="text-xs text-neutral-500 dark:text-neutral-400">
                     만든 범위가 없어요.{" "}
-                    <Link href="/profile" className="underline" style={{ color: POINT }}>
-                      친구 관리
+                    <Link href="/messages" className="underline" style={{ color: POINT }}>
+                      메시지 &gt; 범위
                     </Link>
                     에서 범위를 추가해 보세요.
                   </p>

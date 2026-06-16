@@ -783,10 +783,18 @@ export async function listGroups(uid?: string): Promise<FriendGroup[]> {
   } catch { return []; }
 }
 
-export async function createGroup(name: string): Promise<boolean> {
+export const MAX_GROUPS = 5; // 범위는 최대 5개
+
+/** 범위 생성 — 최대 5개. result: ok | full | fail */
+export async function createGroup(name: string): Promise<"ok" | "full" | "fail"> {
   const me = currentUid();
-  if (!me || !name.trim()) return false;
-  try { await addDoc(collection(db(), "users", me, "groups"), { name: name.trim().slice(0, 20), memberUids: [], feedVisible: true, createdAt: serverTimestamp() }); return true; } catch { return false; }
+  if (!me || !name.trim()) return "fail";
+  try {
+    const existing = await getDocs(collection(db(), "users", me, "groups"));
+    if (existing.size >= MAX_GROUPS) return "full";
+    await addDoc(collection(db(), "users", me, "groups"), { name: name.trim().slice(0, 20), memberUids: [], feedVisible: true, createdAt: serverTimestamp() });
+    return "ok";
+  } catch { return "fail"; }
 }
 
 export async function updateGroup(groupId: string, patch: Partial<Pick<FriendGroup, "name" | "memberUids" | "feedVisible">>): Promise<boolean> {
@@ -1045,5 +1053,35 @@ export async function getSuggestedUsers(
     });
     scored.sort((a, b) => b.score - a.score);
     return scored.slice(0, n).map(({ p }) => ({ uid: p.uid, name: p.name, photoURL: p.photoURL, bio: p.bio, interests: p.interests || [], tier: p.tier }));
+  } catch { return []; }
+}
+
+// ─── 친구 찾기: 이름 접두어 검색(users read:if true → 쿼리 허용, 단일필드 인덱스) ───
+export interface UserHit { uid: string; name: string; photoURL?: string; bio?: string; handle?: string }
+export async function searchUsersByName(qText: string, n = 12): Promise<UserHit[]> {
+  const term = (qText || "").trim();
+  if (term.length < 1) return [];
+  const me = currentUid();
+  try {
+    const qs = await getDocs(query(
+      collection(db(), "users"),
+      orderBy("name"),
+      where("name", ">=", term),
+      where("name", "<=", term + ""),
+      limit(n + 1),
+    ));
+    const a: UserHit[] = [];
+    qs.forEach((d) => {
+      if (d.id === me) return;
+      const x = d.data() as Record<string, unknown>;
+      a.push({
+        uid: d.id,
+        name: String(x.name || x.displayName || "사용자"),
+        photoURL: x.photoURL ? String(x.photoURL) : undefined,
+        bio: String(x.bio || ""),
+        handle: x.handle ? String(x.handle) : undefined,
+      });
+    });
+    return a.slice(0, n);
   } catch { return []; }
 }
