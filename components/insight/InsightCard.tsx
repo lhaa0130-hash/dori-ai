@@ -111,10 +111,13 @@ const InsightCard = React.memo(({ item, onTagClick, onLikeChange, isOwner = fals
   };
 
   return (
-    <div 
-      className="relative flex flex-col p-6 rounded-3xl border transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-xl group cursor-pointer min-h-[300px]"
+    <div
+      className="relative flex flex-col p-6 rounded-3xl border transition-all duration-300 hover:-translate-y-2 hover:scale-[1.02] hover:shadow-xl group cursor-pointer min-h-[300px] overflow-hidden"
       style={cardStyle}
     >
+      {/* 상단 주황 포인트 라인 (hover 시) */}
+      <span className="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-[#FBAA60] via-[#F9954E] to-[#E8832E] opacity-0 group-hover:opacity-100 transition-opacity" aria-hidden />
+
       {/* 썸네일 이미지 */}
       {item.image && (
         <div className="w-full h-48 mb-4 rounded-2xl overflow-hidden relative">

@@ -46,13 +46,13 @@ export default function MinigamePage() {
             <Link
               key={game.id}
               href={game.href}
-              className="group flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 shadow-sm transition-all duration-200 hover:border-[#F9954E]/40 hover:shadow-md hover:-translate-y-0.5 active:opacity-70"
+              className="group flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 shadow-sm transition-all duration-200 hover:border-[#F9954E]/50 hover:shadow-md hover:-translate-y-0.5 active:opacity-70"
             >
-              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-neutral-50 dark:bg-zinc-900 text-neutral-500 dark:text-neutral-400 flex items-center justify-center transition-colors group-hover:bg-[#F9954E]/10 group-hover:text-[#F9954E]">
+              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[#FFF5EB] dark:bg-[#F9954E]/10 text-[#F9954E] flex items-center justify-center transition-colors group-hover:bg-[#F9954E] group-hover:text-white">
                 {game.icon}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[14px] font-bold text-neutral-950 dark:text-white">
+                <p className="text-[14px] font-bold text-neutral-950 dark:text-white group-hover:text-[#F9954E] transition-colors">
                   {game.title}
                 </p>
                 <p className="text-[12px] text-neutral-400 mt-0.5 truncate">
@@ -63,7 +63,7 @@ export default function MinigamePage() {
                 {game.candy ? (
                   <span className="text-[11px] font-semibold text-[#F9954E] flex items-center justify-end gap-1">{game.candy} <CottonCandy className="w-3.5 h-3.5" /></span>
                 ) : game.rank ? (
-                  <span className="text-[11px] font-semibold text-neutral-400 dark:text-neutral-500 flex items-center justify-end gap-0.5">🏆 랭킹</span>
+                  <span className="text-[11px] font-bold text-[#F9954E] bg-[#FFF5EB] dark:bg-[#F9954E]/10 rounded-full px-2 py-0.5 inline-flex items-center gap-0.5">🏆 랭킹</span>
                 ) : null}
               </div>
             </Link>
