@@ -24,6 +24,8 @@ import {
   listFollowing,
   addDiaryEntry,
   deleteDiaryEntry,
+  addMyAI,
+  deleteMyAI,
   type Profile,
   type BgStyle,
   type GuestEntry,
@@ -133,6 +135,11 @@ export default function ProfilePage() {
   const [diaryInput, setDiaryInput] = useState("");
   const [diaryMood, setDiaryMood] = useState("");
   const [diaryBusy, setDiaryBusy] = useState(false);
+
+  // 내가 만든 AI 자랑
+  const [aiFormOpen, setAiFormOpen] = useState(false);
+  const [aiForm, setAiForm] = useState({ name: "", desc: "", tool: "", url: "", emoji: "🤖" });
+  const [aiBusy, setAiBusy] = useState(false);
 
   const toggleInterest = (tag: string) => {
     const t = tag.trim().replace(/^#/, "").slice(0, 12);
@@ -420,6 +427,27 @@ export default function ProfilePage() {
     if (!isOwner) return;
     const ok = await deleteDiaryEntry(at);
     if (ok) setProfile((p) => (p ? { ...p, diary: (p.diary || []).filter((e) => e.at !== at) } : p));
+  };
+
+  // ── 내가 만든 AI 자랑 ──
+  const handleAddAI = async () => {
+    if (!isOwner || !aiForm.name.trim() || aiBusy) return;
+    setAiBusy(true);
+    const next = await addMyAI(aiForm);
+    setAiBusy(false);
+    if (next) {
+      setProfile((p) => (p ? { ...p, myAIs: next } : p));
+      setAiForm({ name: "", desc: "", tool: "", url: "", emoji: "🤖" });
+      setAiFormOpen(false);
+    } else {
+      alert("저장에 실패했습니다. 다시 시도해주세요.");
+    }
+  };
+
+  const handleDeleteAI = async (at: number) => {
+    if (!isOwner) return;
+    const ok = await deleteMyAI(at);
+    if (ok) setProfile((p) => (p ? { ...p, myAIs: (p.myAIs || []).filter((a) => a.at !== at) } : p));
   };
 
   // 뱃지(전적 기반 단순 산출)
@@ -1017,6 +1045,81 @@ export default function ProfilePage() {
             >
               {saving ? "저장 중..." : "저장하기"}
             </button>
+          </div>
+        )}
+
+        {/* 3.3) 내가 만든 AI 자랑 */}
+        {(isOwner || profile.myAIs.length > 0) && (
+          <div className="mt-4 rounded-2xl border border-[#F9954E]/30 dark:border-[#F9954E]/20 bg-white dark:bg-zinc-950 p-5">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-[12px] font-extrabold text-neutral-900 dark:text-white">🤖 내가 만든 AI {profile.myAIs.length > 0 && <span className="text-[#F9954E]">{profile.myAIs.length}</span>}</p>
+              {isOwner && (
+                <button
+                  onClick={() => setAiFormOpen((v) => !v)}
+                  className="text-[11px] font-bold text-white bg-[#F9954E] rounded-full px-3 py-1 active:opacity-85"
+                >
+                  {aiFormOpen ? "닫기" : "+ AI 자랑하기"}
+                </button>
+              )}
+            </div>
+
+            {isOwner && aiFormOpen && (
+              <div className="mb-4 rounded-2xl bg-[#FFF5EB] dark:bg-[#F9954E]/5 p-4 space-y-2.5">
+                <div className="flex flex-wrap gap-1.5">
+                  {["🤖", "🧠", "💬", "🎨", "🎮", "📷", "🎵", "🔢", "🦾", "✨", "📝", "🐱"].map((em) => (
+                    <button
+                      key={em}
+                      onClick={() => setAiForm((f) => ({ ...f, emoji: em }))}
+                      className={`w-9 h-9 rounded-xl text-[18px] flex items-center justify-center transition-transform ${aiForm.emoji === em ? "bg-[#F9954E]/20 ring-2 ring-[#F9954E] scale-105" : "bg-white dark:bg-zinc-900"}`}
+                    >
+                      {em}
+                    </button>
+                  ))}
+                </div>
+                <input value={aiForm.name} onChange={(e) => setAiForm((f) => ({ ...f, name: e.target.value }))} maxLength={40} placeholder="AI 이름 (예: 우리집 강아지 알려주는 AI)"
+                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
+                <input value={aiForm.tool} onChange={(e) => setAiForm((f) => ({ ...f, tool: e.target.value }))} maxLength={30} placeholder="무엇으로 만들었나요? (예: ChatGPT, 스크래치, Teachable Machine)"
+                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
+                <textarea value={aiForm.desc} onChange={(e) => setAiForm((f) => ({ ...f, desc: e.target.value }))} maxLength={300} rows={2} placeholder="어떤 AI인지 소개해주세요!"
+                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40" />
+                <input value={aiForm.url} onChange={(e) => setAiForm((f) => ({ ...f, url: e.target.value }))} maxLength={300} placeholder="써볼 수 있는 링크 (선택)"
+                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
+                <div className="flex justify-end">
+                  <button onClick={handleAddAI} disabled={aiBusy || !aiForm.name.trim()} className="px-5 py-2 rounded-full bg-[#F9954E] text-white text-[13px] font-bold active:opacity-85 disabled:opacity-50">
+                    {aiBusy ? "올리는 중..." : "자랑하기"}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {profile.myAIs.length === 0 ? (
+              <p className="text-[14px] text-neutral-500 dark:text-neutral-400">
+                {isOwner ? "내가 만든 AI를 자랑해보세요! 🎉" : "아직 자랑한 AI가 없어요"}
+              </p>
+            ) : (
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+                {profile.myAIs.map((ai) => (
+                  <div key={ai.at} className="relative rounded-2xl bg-neutral-50 dark:bg-zinc-900 p-4 border border-neutral-100 dark:border-zinc-800">
+                    <div className="flex items-start gap-3">
+                      <span className="w-10 h-10 rounded-xl bg-[#FFF5EB] dark:bg-[#F9954E]/10 flex items-center justify-center text-[22px] shrink-0">{ai.emoji || "🤖"}</span>
+                      <div className="flex-1 min-w-0">
+                        <p className="text-[14px] font-extrabold text-neutral-900 dark:text-white truncate">{ai.name}</p>
+                        {ai.tool && <span className="inline-block mt-0.5 text-[10px] font-bold text-[#F9954E] bg-[#FFF5EB] dark:bg-[#F9954E]/10 rounded-full px-2 py-0.5">{ai.tool}</span>}
+                      </div>
+                      {isOwner && (
+                        <button onClick={() => handleDeleteAI(ai.at)} className="text-[11px] text-neutral-400 hover:text-red-500 font-bold shrink-0">삭제</button>
+                      )}
+                    </div>
+                    {ai.desc && <p className="mt-2.5 text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed whitespace-pre-wrap break-keep">{ai.desc}</p>}
+                    {ai.url && (
+                      <a href={ai.url} target="_blank" rel="noopener noreferrer nofollow" className="mt-2.5 inline-flex items-center gap-1 text-[12px] font-bold text-[#F9954E] active:opacity-70">
+                        ▶ 써보기
+                      </a>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
         )}
 

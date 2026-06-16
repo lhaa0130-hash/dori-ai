@@ -77,15 +77,18 @@ export interface Profile {
   ownedItems: string[]; // 보유한 코지홈 아이템(slot::id) — 상점에서 구매, 구매 함수가 기록
   greeting: string;     // 대문 인사말 (코지홈 상단)
   diary: DiaryEntry[];  // 다이어리(일기장) — 주인 본인이 남기는 기록, users/{uid}.diary 배열
+  myAIs: AIShowcase[];  // 내가 만든 AI 자랑 — users/{uid}.myAIs 배열
 }
 
 // 다이어리 한 칸
 export interface DiaryEntry { at: number; text: string; mood: string; }
+// 내가 만든 AI 한 칸
+export interface AIShowcase { at: number; name: string; desc: string; tool: string; url: string; emoji: string; }
 
 const DEFAULT_PROFILE = (uid: string, name = "사용자"): Profile => ({
   uid, name, bio: "", statusMsg: "", themeColor: "#F9954E", bg: "aurora", tier: 1, level: 1, exp: 0,
   mood: "", title: "", frame: "none", interests: [], stickers: [],
-  nameEffect: "", bannerEffect: "", pet: "", ownedItems: [], greeting: "", diary: [],
+  nameEffect: "", bannerEffect: "", pet: "", ownedItems: [], greeting: "", diary: [], myAIs: [],
 });
 
 async function fetchProfile(uid: string): Promise<Profile> {
@@ -118,6 +121,13 @@ async function fetchProfile(uid: string): Promise<Profile> {
           .filter((e) => e.text)
           .sort((a, b) => b.at - a.at)
           .slice(0, 30)
+      : [],
+    myAIs: Array.isArray(d.myAIs)
+      ? (d.myAIs as AIShowcase[])
+          .map((a) => ({ at: Number((a as AIShowcase)?.at) || 0, name: String((a as AIShowcase)?.name || ""), desc: String((a as AIShowcase)?.desc || ""), tool: String((a as AIShowcase)?.tool || ""), url: String((a as AIShowcase)?.url || ""), emoji: String((a as AIShowcase)?.emoji || "🤖") }))
+          .filter((a) => a.name)
+          .sort((a, b) => b.at - a.at)
+          .slice(0, 12)
       : [],
   };
 }
@@ -165,6 +175,47 @@ export async function deleteDiaryEntry(at: number): Promise<boolean> {
     const cur = Array.isArray(s.data()?.diary) ? (s.data()!.diary as DiaryEntry[]) : [];
     const next = cur.filter((e) => Number(e?.at) !== at);
     await setDoc(doc(db(), "users", uid), { diary: next, updatedAt: serverTimestamp() }, { merge: true });
+    bustCache(`profile:${uid}`);
+    return true;
+  } catch { return false; }
+}
+
+// ─── 내가 만든 AI 자랑 — 본인 users/{uid}.myAIs 배열(규칙 변경 불필요) ───
+export async function addMyAI(
+  item: { name: string; desc: string; tool: string; url: string; emoji: string }
+): Promise<AIShowcase[] | null> {
+  const uid = currentUid();
+  const name = (item.name || "").trim();
+  if (!uid || !name) return null;
+  // URL은 http(s)만 허용(빈 값 허용)
+  let url = (item.url || "").trim();
+  if (url && !/^https?:\/\//i.test(url)) url = `https://${url}`;
+  try {
+    const s = await getDoc(doc(db(), "users", uid));
+    const cur = Array.isArray(s.data()?.myAIs) ? (s.data()!.myAIs as AIShowcase[]) : [];
+    const entry: AIShowcase = {
+      at: Date.now(),
+      name: name.slice(0, 40),
+      desc: (item.desc || "").slice(0, 300),
+      tool: (item.tool || "").slice(0, 30),
+      url: url.slice(0, 300),
+      emoji: (item.emoji || "🤖").slice(0, 4),
+    };
+    const next = [entry, ...cur].slice(0, 12);
+    await setDoc(doc(db(), "users", uid), { myAIs: next, updatedAt: serverTimestamp() }, { merge: true });
+    bustCache(`profile:${uid}`);
+    return next;
+  } catch { return null; }
+}
+
+export async function deleteMyAI(at: number): Promise<boolean> {
+  const uid = currentUid();
+  if (!uid) return false;
+  try {
+    const s = await getDoc(doc(db(), "users", uid));
+    const cur = Array.isArray(s.data()?.myAIs) ? (s.data()!.myAIs as AIShowcase[]) : [];
+    const next = cur.filter((a) => Number(a?.at) !== at);
+    await setDoc(doc(db(), "users", uid), { myAIs: next, updatedAt: serverTimestamp() }, { merge: true });
     bustCache(`profile:${uid}`);
     return true;
   } catch { return false; }
