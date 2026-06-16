@@ -22,6 +22,8 @@ import {
   getSocialCounts,
   listFollowers,
   listFollowing,
+  addDiaryEntry,
+  deleteDiaryEntry,
   type Profile,
   type BgStyle,
   type GuestEntry,
@@ -124,7 +126,13 @@ export default function ProfilePage() {
   const [editNameEffect, setEditNameEffect] = useState("none");
   const [editBannerEffect, setEditBannerEffect] = useState("none");
   const [editPet, setEditPet] = useState("");
+  const [editGreeting, setEditGreeting] = useState("");
   const [interestInput, setInterestInput] = useState("");
+
+  // 다이어리(일기장)
+  const [diaryInput, setDiaryInput] = useState("");
+  const [diaryMood, setDiaryMood] = useState("");
+  const [diaryBusy, setDiaryBusy] = useState(false);
 
   const toggleInterest = (tag: string) => {
     const t = tag.trim().replace(/^#/, "").slice(0, 12);
@@ -206,6 +214,7 @@ export default function ProfilePage() {
       setEditNameEffect(p.nameEffect || "none");
       setEditBannerEffect(p.bannerEffect || "none");
       setEditPet(p.pet || "");
+      setEditGreeting(p.greeting || "");
     } catch {
       // getProfile 등은 내부에서 안전 처리됨
     } finally {
@@ -359,6 +368,7 @@ export default function ProfilePage() {
       nameEffect: editNameEffect,
       bannerEffect: editBannerEffect,
       pet: editPet,
+      greeting: editGreeting.slice(0, 60),
     });
     setSaving(false);
     if (ok) {
@@ -389,6 +399,27 @@ export default function ProfilePage() {
     if (ok) {
       setGuestbook((prev) => prev.filter((g) => g.id !== entryId));
     }
+  };
+
+  // ── 다이어리(주인 본인만 작성) ──
+  const handleAddDiary = async () => {
+    if (!isOwner || !diaryInput.trim() || diaryBusy) return;
+    setDiaryBusy(true);
+    const next = await addDiaryEntry(diaryInput.trim(), diaryMood);
+    setDiaryBusy(false);
+    if (next) {
+      setDiaryInput("");
+      setDiaryMood("");
+      setProfile((p) => (p ? { ...p, diary: next } : p));
+    } else {
+      alert("다이어리 저장에 실패했습니다.");
+    }
+  };
+
+  const handleDeleteDiary = async (at: number) => {
+    if (!isOwner) return;
+    const ok = await deleteDiaryEntry(at);
+    if (ok) setProfile((p) => (p ? { ...p, diary: (p.diary || []).filter((e) => e.at !== at) } : p));
   };
 
   // 뱃지(전적 기반 단순 산출)
@@ -610,6 +641,16 @@ export default function ProfilePage() {
               <p className="mt-3 text-[12px] font-semibold text-red-500">{photoError}</p>
             )}
 
+            {/* 대문 인사말 */}
+            {profile.greeting && (
+              <div className="mt-4 rounded-2xl bg-white/70 dark:bg-zinc-900/70 backdrop-blur ring-1 ring-[#F9954E]/30 px-4 py-3">
+                <p className="text-[10px] font-bold text-[#F9954E] mb-1 tracking-wide">대문</p>
+                <p className="text-[14px] font-semibold text-neutral-800 dark:text-neutral-100 leading-relaxed break-keep">
+                  “{profile.greeting}”
+                </p>
+              </div>
+            )}
+
             {profile.bio && (
               <p className="mt-4 text-[14px] leading-relaxed text-neutral-500 dark:text-neutral-400 whitespace-pre-wrap">
                 {profile.bio}
@@ -722,6 +763,17 @@ export default function ProfilePage() {
                 🍬 상점에서 아이템 받기 →
               </Link>
             </div>
+
+            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
+              대문 인사말 <span className="font-normal text-neutral-400">방문자에게 보이는 한마디</span>
+            </label>
+            <input
+              value={editGreeting}
+              onChange={(e) => setEditGreeting(e.target.value)}
+              maxLength={60}
+              placeholder="예) 놀러와줘서 고마워요! 방명록 남겨주세요 :)"
+              className="w-full mb-4 px-3 py-2.5 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
+            />
 
             <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
               상태메시지
@@ -965,6 +1017,66 @@ export default function ProfilePage() {
             >
               {saving ? "저장 중..." : "저장하기"}
             </button>
+          </div>
+        )}
+
+        {/* 3.5) 다이어리(일기장) */}
+        {(isOwner || profile.diary.length > 0) && (
+          <div className="mt-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
+            <p className="text-[11px] text-[#F9954E] font-bold mb-3">📖 다이어리</p>
+
+            {isOwner && (
+              <div className="mb-4">
+                <div className="flex flex-wrap gap-1 mb-2">
+                  {MOODS.map((m) => (
+                    <button
+                      key={m}
+                      onClick={() => setDiaryMood((cur) => (cur === m ? "" : m))}
+                      className={`w-8 h-8 rounded-lg text-[16px] flex items-center justify-center transition-transform ${
+                        diaryMood === m ? "bg-[#F9954E]/15 ring-2 ring-[#F9954E] scale-105" : "bg-neutral-100 dark:bg-zinc-900"
+                      }`}
+                    >
+                      {m}
+                    </button>
+                  ))}
+                </div>
+                <textarea
+                  value={diaryInput}
+                  onChange={(e) => setDiaryInput(e.target.value)}
+                  maxLength={500}
+                  rows={2}
+                  placeholder="오늘 하루, 한 줄 일기를 남겨보세요"
+                  className="w-full px-3 py-2.5 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40"
+                />
+                <div className="mt-2 flex justify-end">
+                  <button
+                    onClick={handleAddDiary}
+                    disabled={diaryBusy || !diaryInput.trim()}
+                    className="px-4 py-2 rounded-full bg-[#F9954E] text-white text-[13px] font-bold active:opacity-85 disabled:opacity-50"
+                  >
+                    {diaryBusy ? "남기는 중..." : "일기 남기기"}
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {profile.diary.length === 0 ? (
+              <p className="text-[14px] text-neutral-500 dark:text-neutral-400">아직 일기가 없어요</p>
+            ) : (
+              <ul className="space-y-2.5">
+                {profile.diary.map((e) => (
+                  <li key={e.at} className="rounded-xl bg-neutral-50 dark:bg-zinc-900 p-3.5 border-l-2 border-[#F9954E]/40">
+                    <div className="flex items-center justify-between gap-2 mb-1">
+                      <span className="text-[12px] text-neutral-400">{e.mood && <span className="mr-1 text-[14px]">{e.mood}</span>}{fmtDate(e.at)}</span>
+                      {isOwner && (
+                        <button onClick={() => handleDeleteDiary(e.at)} className="text-[11px] text-neutral-400 hover:text-red-500 font-bold">삭제</button>
+                      )}
+                    </div>
+                    <p className="text-[14px] text-neutral-700 dark:text-neutral-300 whitespace-pre-wrap leading-relaxed break-keep">{e.text}</p>
+                  </li>
+                ))}
+              </ul>
+            )}
           </div>
         )}
 

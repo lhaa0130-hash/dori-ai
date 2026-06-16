@@ -75,12 +75,17 @@ export interface Profile {
   bannerEffect: string; // 배너 효과 id (상점 구매) — shopItems bannerEffect
   pet: string;          // 펫/캐릭터 id (상점 구매) — shopItems pet
   ownedItems: string[]; // 보유한 코지홈 아이템(slot::id) — 상점에서 구매, 구매 함수가 기록
+  greeting: string;     // 대문 인사말 (코지홈 상단)
+  diary: DiaryEntry[];  // 다이어리(일기장) — 주인 본인이 남기는 기록, users/{uid}.diary 배열
 }
+
+// 다이어리 한 칸
+export interface DiaryEntry { at: number; text: string; mood: string; }
 
 const DEFAULT_PROFILE = (uid: string, name = "사용자"): Profile => ({
   uid, name, bio: "", statusMsg: "", themeColor: "#F9954E", bg: "aurora", tier: 1, level: 1, exp: 0,
   mood: "", title: "", frame: "none", interests: [], stickers: [],
-  nameEffect: "", bannerEffect: "", pet: "", ownedItems: [],
+  nameEffect: "", bannerEffect: "", pet: "", ownedItems: [], greeting: "", diary: [],
 });
 
 async function fetchProfile(uid: string): Promise<Profile> {
@@ -106,6 +111,14 @@ async function fetchProfile(uid: string): Promise<Profile> {
     bannerEffect: String(d.bannerEffect || ""),
     pet: String(d.pet || ""),
     ownedItems: Array.isArray(d.ownedItems) ? (d.ownedItems as string[]) : [],
+    greeting: String(d.greeting || ""),
+    diary: Array.isArray(d.diary)
+      ? (d.diary as DiaryEntry[])
+          .map((e) => ({ at: Number((e as DiaryEntry)?.at) || 0, text: String((e as DiaryEntry)?.text || ""), mood: String((e as DiaryEntry)?.mood || "") }))
+          .filter((e) => e.text)
+          .sort((a, b) => b.at - a.at)
+          .slice(0, 30)
+      : [],
   };
 }
 
@@ -116,11 +129,42 @@ export async function getProfile(uid: string): Promise<Profile> {
 }
 
 /** 내 프로필 일부 갱신(로그인 필요, users/{uid} merge) */
-export async function saveMyProfile(patch: Partial<Pick<Profile, "bio" | "statusMsg" | "themeColor" | "bg" | "name" | "photoURL" | "mood" | "title" | "frame" | "interests" | "stickers" | "nameEffect" | "bannerEffect" | "pet">>): Promise<boolean> {
+export async function saveMyProfile(patch: Partial<Pick<Profile, "bio" | "statusMsg" | "themeColor" | "bg" | "name" | "photoURL" | "mood" | "title" | "frame" | "interests" | "stickers" | "nameEffect" | "bannerEffect" | "pet" | "greeting">>): Promise<boolean> {
   const uid = currentUid();
   if (!uid) return false;
   try {
     await setDoc(doc(db(), "users", uid), { ...patch, updatedAt: serverTimestamp() }, { merge: true });
+    bustCache(`profile:${uid}`);
+    return true;
+  } catch { return false; }
+}
+
+// ─── 다이어리(일기장) — 본인 users/{uid}.diary 배열(규칙 변경 불필요, 소유자 쓰기) ───
+/** 다이어리 한 줄 추가(최신 30개 유지) */
+export async function addDiaryEntry(text: string, mood = ""): Promise<DiaryEntry[] | null> {
+  const uid = currentUid();
+  const t = text.trim();
+  if (!uid || !t) return null;
+  try {
+    const s = await getDoc(doc(db(), "users", uid));
+    const cur = Array.isArray(s.data()?.diary) ? (s.data()!.diary as DiaryEntry[]) : [];
+    const entry: DiaryEntry = { at: Date.now(), text: t.slice(0, 500), mood: mood.slice(0, 4) };
+    const next = [entry, ...cur].slice(0, 30);
+    await setDoc(doc(db(), "users", uid), { diary: next, updatedAt: serverTimestamp() }, { merge: true });
+    bustCache(`profile:${uid}`);
+    return next;
+  } catch { return null; }
+}
+
+/** 다이어리 항목 삭제(at 기준) */
+export async function deleteDiaryEntry(at: number): Promise<boolean> {
+  const uid = currentUid();
+  if (!uid) return false;
+  try {
+    const s = await getDoc(doc(db(), "users", uid));
+    const cur = Array.isArray(s.data()?.diary) ? (s.data()!.diary as DiaryEntry[]) : [];
+    const next = cur.filter((e) => Number(e?.at) !== at);
+    await setDoc(doc(db(), "users", uid), { diary: next, updatedAt: serverTimestamp() }, { merge: true });
     bustCache(`profile:${uid}`);
     return true;
   } catch { return false; }
