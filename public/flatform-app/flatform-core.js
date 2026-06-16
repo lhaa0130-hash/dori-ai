@@ -195,9 +195,41 @@
     return { rooms, totalArea: total };
   }
 
+  // 두 직선(점 p + 방향 d) 교점
+  function lineInter(p1, d1, p2, d2) {
+    const den = d1.x * d2.y - d1.y * d2.x;
+    if (Math.abs(den) < 1e-9) return null;          // 평행
+    const t = ((p2.x - p1.x) * d2.y - (p2.y - p1.y) * d2.x) / den;
+    return { x: p1.x + t * d1.x, y: p1.y + t * d1.y };
+  }
+  // 단순 다각형을 안쪽으로 d 만큼 오프셋 (건축한계선/이격선). d<0이면 바깥쪽.
+  // 각 변을 안쪽 법선으로 평행이동 후 인접 변끼리 교점. 볼록/사변형 필지에 적합.
+  function offsetPolygon(poly, d) {
+    const n = poly.length; if (n < 3) return [];
+    const sgn = signedArea(poly) > 0 ? 1 : -1;       // winding 방향(안쪽 법선 부호)
+    const L = [];
+    for (let i = 0; i < n; i++) {
+      const a = poly[i], b = poly[(i + 1) % n];
+      let dx = b.x - a.x, dy = b.y - a.y; const len = Math.hypot(dx, dy);
+      if (len < 1e-9) { L.push(null); continue; }
+      dx /= len; dy /= len;
+      const nx = -dy * sgn, ny = dx * sgn;            // 안쪽 단위 법선
+      L.push({ p: { x: a.x + nx * d, y: a.y + ny * d }, d: { x: dx, y: dy } });
+    }
+    const out = [];
+    for (let i = 0; i < n; i++) {
+      const A = L[(i - 1 + n) % n], B = L[i];
+      if (!A || !B) { out.push({ x: poly[i].x, y: poly[i].y }); continue; }
+      const ip = lineInter(A.p, A.d, B.p, B.d);
+      out.push(ip || { x: poly[i].x, y: poly[i].y });
+    }
+    return out;
+  }
+
   const FlatForm = {
     PYEONG, EPS,
     dist, angleOf, signedArea, polygonCentroid, pointSeg, sampleArc, detectRooms,
+    offsetPolygon, lineInter,
   };
   if (typeof module !== 'undefined' && module.exports) module.exports = FlatForm;
   if (typeof window !== 'undefined') window.FlatForm = FlatForm;

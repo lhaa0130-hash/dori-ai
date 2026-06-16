@@ -33,14 +33,17 @@ export default function BottomAd({ height = 60 }: { height?: number }) {
     <div
       style={{
         position: "fixed",
-        left: 0,
-        right: 0,
-        bottom: 0,
+        left: "50%",
+        transform: "translateX(-50%)",
+        bottom: 8,
+        width: "min(468px, 94vw)",
         height,
         zIndex: 10000,
-        background: "rgba(255,255,255,0.92)",
+        background: "rgba(255,255,255,0.94)",
         backdropFilter: "blur(6px)",
-        borderTop: "1px solid #F9954E",
+        border: "1px solid #F9954E",
+        borderRadius: 12,
+        boxShadow: "0 4px 16px rgba(0,0,0,0.18)",
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -60,7 +63,7 @@ export default function BottomAd({ height = 60 }: { height?: number }) {
       >
         Ad
       </span>
-      <div ref={adRef} style={{ width: "100%", maxWidth: 728, height }}>
+      <div ref={adRef} style={{ width: "100%", maxWidth: 468, height }}>
         <ins
           className="adsbygoogle"
           style={{ display: "block", width: "100%", height }}

@@ -267,6 +267,12 @@
       <span class="lbl">mm</span>
       <button class="mini" id="rectPlace">배치</button>
     </div>
+    <div class="ctl">
+      <span class="lbl">건축한계선</span>
+      <label style="display:flex;align-items:center;gap:4px;cursor:pointer"><input type="checkbox" id="envOn" checked> 표시</label>
+      <span class="lbl">이격</span>
+      <input type="number" id="envSet" value="1" step="0.5" min="0" style="width:54px"> <span class="lbl">m</span>
+    </div>
     <div id="hint2" style="margin-left:auto;color:var(--muted)"></div>
   </div>
   <div id="main">
@@ -400,7 +406,7 @@
   </div>
 </div>
 
-<script src="flatform-core.js"></script>
+<script src="flatform-core.js?v=2"></script>
 <script>
 'use strict';
 const FF = window.FlatForm;
@@ -456,6 +462,8 @@ function fitViewToCad(){ if(!cad.img||!W||!H) return;
 // ── 우리 필지(빨간 벡터) — geom(lon/lat) → 월드좌표 ──
 let ourGeoms=[];      // 검색으로 얻은 우리 필지 폴리곤(lon/lat)
 let ourParcels=[];    // 화면용 월드좌표 링
+let setbackMM=1000;   // 건축한계선 이격(기본 1m)
+let showEnvelope=true;
 function lonLatToWorld(lon,lat){
   if(!cad.merc) return null;
   const [vx,vy]=lonLatToMerc(lon,lat);
@@ -476,6 +484,25 @@ function buildOurParcels(){
   }
 }
 function parcelVertsScreen(){ const out=[]; for(const par of ourParcels) for(const ring of par.rings) for(const p of ring) out.push(rotPt(p)); return out; }
+// 건축한계선(건축 가능 영역) = 필지 경계에서 안쪽으로 이격한 선 — 그 안에서만 건축
+function drawEnvelope(){
+  if(!ourParcels.length || !showEnvelope || setbackMM<=0) return;
+  let labelPt=null;
+  ctx.strokeStyle='#5b8def'; ctx.lineWidth=2; ctx.setLineDash([9,6]);
+  for(const par of ourParcels){
+    const ring=par.rings[0]; if(!ring||ring.length<3) continue;
+    const env=FF.offsetPolygon(ring,setbackMM); if(env.length<3) continue;
+    if(Math.sign(FF.signedArea(env))!==Math.sign(FF.signedArea(ring))) continue;  // 이격 과대→뒤집힘 방지
+    ctx.beginPath();
+    env.forEach((p,i)=>{ const rp=rotPt(p); const [sx,sy]=w2s(rp.x,rp.y); i?ctx.lineTo(sx,sy):ctx.moveTo(sx,sy); });
+    ctx.closePath(); ctx.fillStyle='rgba(91,141,239,0.04)'; ctx.fill(); ctx.stroke();
+    if(!labelPt){ let top=env[0]; for(const p of env) if(p.y<top.y) top=p; labelPt=rotPt(top); }
+  }
+  ctx.setLineDash([]);
+  if(labelPt){ const [lx,ly]=w2s(labelPt.x,labelPt.y);
+    ctx.fillStyle='#5b8def'; ctx.font='bold 11px Segoe UI'; ctx.textAlign='center';
+    ctx.fillText('건축한계선 (이격 '+(setbackMM/1000)+'m)',lx,ly-6); }
+}
 function drawAxisMarks(){ if(!axisMode) return;
   for(const p of axisPts){ const rp=rotPt(p); const [sx,sy]=w2s(rp.x,rp.y);
     ctx.strokeStyle='#3fb8c0'; ctx.lineWidth=2.5; ctx.beginPath(); ctx.arc(sx,sy,8,0,Math.PI*2); ctx.stroke(); }
@@ -595,6 +622,7 @@ function draw(){
   drawCad();
   drawGrid();
   drawOurParcels();
+  drawEnvelope();
   drawAxisMarks();
   drawRooms();
   drawCircles();
@@ -991,9 +1019,11 @@ function axisClick(wx,wy){
   } else draw();
 }
 document.getElementById('cadAlign').addEventListener('click',startAlign);
+document.getElementById('envOn').addEventListener('change',e=>{ showEnvelope=e.target.checked; draw(); saveModel(); });
+document.getElementById('envSet').addEventListener('input',e=>{ setbackMM=Math.max(0,(parseFloat(e.target.value)||0)*1000); draw(); saveModel(); });
 
 // ── 프로젝트 영속화(지적도 = 붙박이, 새로고침 복원) ──
-function saveModel(){ try{ localStorage.setItem('ff_model', JSON.stringify({model, roomNames, meta:project.meta})); }catch(e){} }
+function saveModel(){ try{ localStorage.setItem('ff_model', JSON.stringify({model, roomNames, meta:project.meta, setbackMM, showEnvelope})); }catch(e){} }
 function saveCad(){ try{
   if(cad.img && cadCover) localStorage.setItem('ff_cad', JSON.stringify({cover:cadCover, geoms:ourGeoms, rot:cad.rot}));
   else localStorage.removeItem('ff_cad');
@@ -1002,7 +1032,9 @@ async function restoreProject(cs, ms){
   if(!cs && !ms) return false;                 // 저장된 프로젝트 없음 → 온보딩
   onboard.classList.add('hide');
   if(ms){ model=ms.model||{points:[],edges:[],circles:[]}; Object.assign(roomNames, ms.roomNames||{}); project.meta=ms.meta||project.meta;
-    let mx=0; (model.points||[]).forEach(p=>mx=Math.max(mx,p.id)); (model.edges||[]).forEach(e=>mx=Math.max(mx,e.id)); (model.circles||[]).forEach(c=>mx=Math.max(mx,c.id)); _id=mx+1; }
+    let mx=0; (model.points||[]).forEach(p=>mx=Math.max(mx,p.id)); (model.edges||[]).forEach(e=>mx=Math.max(mx,e.id)); (model.circles||[]).forEach(c=>mx=Math.max(mx,c.id)); _id=mx+1;
+    if(ms.setbackMM!=null){ setbackMM=ms.setbackMM; const es=document.getElementById('envSet'); if(es) es.value=setbackMM/1000; }
+    if(ms.showEnvelope!=null){ showEnvelope=ms.showEnvelope; const eo=document.getElementById('envOn'); if(eo) eo.checked=showEnvelope; } }
   renderProjectChip(); recompute();
   if(cs && cs.cover){ cadCover=cs.cover; ourGeoms=cs.geoms||[];
     try{ await loadCadastral(vwKey(), {lon:cadCover.lon,lat:cadCover.lat,span:cadCover.span});

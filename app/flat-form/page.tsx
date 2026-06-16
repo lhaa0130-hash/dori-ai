@@ -8,10 +8,10 @@ export const metadata: Metadata = {
   alternates: { canonical: "/flat-form" },
 };
 
-const AD_H = 60; // 하단 광고 높이(px)
+const AD_H = 56; // 하단 소형 광고 높이(px)
 
 // 자체 완결형 캔버스 앱(public/flatform-app)을 전체 화면 iframe으로 임베드.
-// 좌우 사이드 광고는 끄고(LayoutClient에서 /flat-form 분기) 하단에 작은 광고 1개만.
+// 하단 광고는 작은 폭(가운데)으로 떠 있고, 앱은 전체 화면을 사용.
 export default function FlatFormPage() {
   return (
     <>
@@ -20,12 +20,9 @@ export default function FlatFormPage() {
         title="Flat-Form"
         style={{
           position: "fixed",
-          top: 0,
-          left: 0,
-          right: 0,
-          bottom: AD_H,        // 하단 광고 높이만큼 비워둠
+          inset: 0,
           width: "100vw",
-          height: `calc(100vh - ${AD_H}px)`,
+          height: "100vh",
           border: "none",
           zIndex: 9999,
         }}
