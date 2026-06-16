@@ -1,6 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
+import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import AiToolsList from "@/components/ai-tools/AiToolsList";
 import OpenRouterRanking from "@/components/ai-tools/OpenRouterRanking";
@@ -106,6 +107,17 @@ export default function AiToolsClient() {
       {/* ── AI 모델 랭킹 (사용량/지능/가격, illo, 6시간 갱신) ── */}
       <section className="w-full pt-5">
         <OpenRouterRanking />
+        {/* 전체 비교·계산기 진입 CTA */}
+        <Link
+          href="/ai-models"
+          className="mt-3 flex items-center justify-between rounded-2xl border border-[#F9954E]/40 bg-gradient-to-r from-[#F9954E]/10 to-transparent px-4 py-3 hover:border-[#F9954E] transition-colors"
+        >
+          <div className="min-w-0">
+            <p className="text-[13.5px] font-extrabold text-neutral-900 dark:text-white">전체 모델 비교 + 💰 비용 계산기</p>
+            <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5 truncate">토큰 수만 넣으면 모델별 월 비용을 자동 계산 · 정렬 비교표</p>
+          </div>
+          <span className="text-[#F9954E] text-[20px] font-black shrink-0 ml-3">→</span>
+        </Link>
       </section>
 
       {/* ── 도구 목록 ── */}

@@ -25,6 +25,8 @@ const COLS: { key: SortKey; label: string; defAsc: boolean; hint: string }[] = [
   { key: "pout", label: "출력가", defAsc: true, hint: "$/100만" },
 ];
 
+const SORT_LABEL: Record<SortKey, string> = { cost: "월 예상비용", reqM: "사용량", intel: "지능", tps: "속도", pin: "입력가", pout: "출력가" };
+
 export default function AiModelsClient() {
   const [stats, setStats] = useState<Stats | null>(null);
   const [err, setErr] = useState(false);
@@ -68,6 +70,42 @@ export default function AiModelsClient() {
   }, [models, sort, asc, inTok, outTok, calls]);
 
   const clickSort = (k: SortKey) => { if (k === sort) setAsc((v) => !v); else { setSort(k); setAsc(COLS.find((c) => c.key === k)!.defAsc); } };
+
+  // 현재 정렬 기준 셀 텍스트
+  const metricText = (m: Model, c: number | null): string => {
+    switch (sort) {
+      case "cost": return usd(c);
+      case "reqM": return num(m.reqM, "M");
+      case "intel": return m.intel != null ? m.intel + "점" : "—";
+      case "tps": return m.tps != null ? m.tps + " t/s" : "—";
+      case "pin": return usd(m.pin);
+      case "pout": return usd(m.pout);
+      default: return "";
+    }
+  };
+
+  // 순위를 브랜드 PNG 카드로 저장 (커뮤니티 공유용 "짤")
+  const downloadCard = () => {
+    const W = 1080, H = 1080;
+    const cv = document.createElement("canvas"); cv.width = W; cv.height = H;
+    const ctx = cv.getContext("2d"); if (!ctx) return;
+    ctx.fillStyle = "#0b0b0d"; ctx.fillRect(0, 0, W, H);
+    ctx.fillStyle = ORANGE; ctx.fillRect(0, 0, W, 14);
+    ctx.textBaseline = "alphabetic";
+    ctx.fillStyle = ORANGE; ctx.font = "800 42px sans-serif"; ctx.fillText("illo", 70, 120);
+    ctx.fillStyle = "#ffffff"; ctx.font = "800 60px sans-serif"; ctx.fillText("전 세계 AI 모델 순위", 70, 200);
+    ctx.fillStyle = "#9CA3AF"; ctx.font = "600 32px sans-serif"; ctx.fillText(SORT_LABEL[sort] + " 기준 · TOP 8", 70, 252);
+    let y = 350;
+    rows.slice(0, 8).forEach((r, i) => {
+      const name = r.m.name.replace(/^[^:]+:\s*/, "").slice(0, 26);
+      ctx.fillStyle = i < 3 ? ORANGE : "#52525b"; ctx.font = "800 46px sans-serif"; ctx.fillText(String(i + 1), 72, y);
+      ctx.fillStyle = "#ffffff"; ctx.font = "700 42px sans-serif"; ctx.fillText(name, 160, y);
+      ctx.fillStyle = ORANGE; ctx.font = "800 42px sans-serif"; ctx.textAlign = "right"; ctx.fillText(metricText(r.m, r.c), W - 70, y); ctx.textAlign = "left";
+      y += 86;
+    });
+    ctx.fillStyle = "#6b7280"; ctx.font = "600 30px sans-serif"; ctx.fillText("dori-ai.com/ai-models · 6시간마다 갱신", 70, H - 56);
+    const a = document.createElement("a"); a.href = cv.toDataURL("image/png"); a.download = "ai-model-ranking.png"; a.click();
+  };
 
   // 하이라이트 (싸다/많이쓴다/똑똑하다)
   const cheapest = useMemo(() => models.filter((m) => m.pin != null && m.pout != null).sort((a, b) => (a.pin! + a.pout!) - (b.pin! + b.pout!))[0], [models]);
@@ -136,6 +174,13 @@ export default function AiModelsClient() {
 
           {/* 비교/계산 표 */}
           <section className="mt-4 pb-16">
+            <div className="flex items-center justify-between mb-2">
+              <h2 className="text-[14px] font-extrabold text-neutral-900 dark:text-white">📊 모델 비교 <span className="text-[11px] font-medium text-neutral-400">({SORT_LABEL[sort]}순)</span></h2>
+              <button onClick={downloadCard} disabled={rows.length === 0}
+                className="inline-flex items-center gap-1 rounded-full border border-neutral-200 dark:border-zinc-700 text-neutral-700 dark:text-neutral-200 text-[12px] font-bold px-3 py-1.5 hover:border-[#F9954E] hover:text-[#F9954E] disabled:opacity-40 transition-colors">
+                📸 순위 이미지 저장
+              </button>
+            </div>
             <div className="overflow-x-auto -mx-4 px-4">
               <table className="w-full min-w-[640px] border-separate border-spacing-0">
                 <thead>
