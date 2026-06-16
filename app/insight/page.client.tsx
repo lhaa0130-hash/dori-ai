@@ -25,7 +25,7 @@ interface InsightPageClientProps {
 export default function InsightPageClient({ initialPosts = [] }: InsightPageClientProps) {
   const { theme } = useTheme();
   const [mounted, setMounted] = useState(false);
-  const [likedPosts, setLikedPosts] = useState<string[]>([]);
+  const [likedPosts, setLikedPosts] = useState<number[]>([]);
   const [likesData, setLikesData] = useState<Record<string, number>>({});
 
   useEffect(() => {
@@ -51,10 +51,11 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
 
     if (!mounted) return;
 
-    const newIsLiked = !likedPosts.includes(postId);
+    const postIdNum = parseInt(postId);
+    const newIsLiked = !likedPosts.includes(postIdNum);
     const updatedLikedPosts = newIsLiked
-      ? [...likedPosts, postId]
-      : likedPosts.filter(id => id !== postId);
+      ? [...likedPosts, postIdNum]
+      : likedPosts.filter(id => id !== postIdNum);
 
     setLikedPosts(updatedLikedPosts);
     localStorage.setItem('dori_liked_insights', JSON.stringify(updatedLikedPosts));
@@ -68,16 +69,6 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
   // 카테고리 목록 정의
   const CATEGORIES = ['전체', '트렌드', '가이드', '분석', '리포트', '큐레이션', '스튜디오'];
   const [selectedCategory, setSelectedCategory] = useState('전체');
-
-  // 메인페이지에서 ?cat=트렌드 등으로 들어오면 해당 카테고리로 자동 필터
-  useEffect(() => {
-    if (typeof window === 'undefined') return;
-    try {
-      const cat = new URLSearchParams(window.location.search).get('cat');
-      if (cat && CATEGORIES.includes(cat)) setSelectedCategory(cat);
-    } catch { /* noop */ }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
 
   // 카테고리별 색상 (주황색 테마 기반 톤온톤)
   const getCategoryColor = (category?: string) => {
@@ -176,7 +167,7 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
               const summary = getSummary(post.content);
               const categoryDisplay = getCategoryDisplay(post.category);
               const postId = String(post.id || '');
-              const isPostLiked = likedPosts.includes(postId);
+              const isPostLiked = likedPosts.includes(parseInt(postId));
               const currentLikes = likesData[postId] !== undefined ? likesData[postId] : (post.likes || 0);
 
               let href = `/insight/article/${post.slug || post.id}`;
@@ -238,6 +229,11 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
                             suppressHydrationWarning={true}
                           >
                             {new Date(post.created_at).toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit' })}
+                            {/T\d|\d{1,2}:\d{2}/.test(String(post.created_at)) && (
+                              <span className="ml-1 text-[10px] opacity-50">
+                                {new Date(post.created_at).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}
+                              </span>
+                            )}
                           </span>
                         )}
                       </div>

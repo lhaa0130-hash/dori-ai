@@ -6,7 +6,7 @@ import type { TrendPost } from "@/lib/trends";
 export default function TrendPreview({ trends }: { trends: TrendPost[] }) {
   if (!trends || trends.length === 0) return null;
 
-  const [featured, ...rest] = trends.slice(0, 8);
+  const [featured, ...rest] = trends.slice(0, 3);
 
   return (
     <section className="py-5 border-b border-neutral-100 dark:border-zinc-900">
@@ -46,12 +46,15 @@ export default function TrendPreview({ trends }: { trends: TrendPost[] }) {
             </p>
             <p className="text-white/50 text-[11px] mt-2">
               {new Date(featured.date).toLocaleDateString("ko-KR", { month: "short", day: "numeric" })}
+              {/T\d|\d{1,2}:\d{2}/.test(String(featured.date)) && (
+                <span className="ml-1 opacity-70">{new Date(featured.date).toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" })}</span>
+              )}
             </p>
           </div>
         </div>
       </Link>
 
-      {/* 나머지 트렌드 — 컴팩트 리스트 */}
+      {/* 나머지 2개 — 컴팩트 리스트 */}
       <div className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
         {rest.map((trend, i) => (
           <Link
@@ -72,6 +75,9 @@ export default function TrendPreview({ trends }: { trends: TrendPost[] }) {
               </p>
               <p className="text-neutral-400 text-[11px] mt-0.5">
                 {new Date(trend.date).toLocaleDateString("ko-KR", { month: "short", day: "numeric" })}
+                {/T\d|\d{1,2}:\d{2}/.test(String(trend.date)) && (
+                  <span className="ml-1 opacity-70">{new Date(trend.date).toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" })}</span>
+                )}
               </p>
             </div>
             <ArrowRight className="w-3.5 h-3.5 text-neutral-300 dark:text-white/20 flex-shrink-0" />

@@ -41,16 +41,14 @@ export function createMetadata({
   ];
 
   return {
-    title: {
-      default: `${title} | ${SITE_NAME}`,
-      template: `%s | ${SITE_NAME}`,
-    },
+    // title은 이미 접미사 포함 완전한 문자열로 반환(객체 default+template이면 중복 '| DORI-AI | DORI-AI' 발생)
+    title: `${title} | ${SITE_NAME}`,
     description,
     keywords: keywords ? keywords.join(", ") : defaultKeywords.join(", "),
     applicationName: SITE_NAME,
-    authors: [{ name: "illo", url: SITE_URL }],
-    creator: "illo",
-    publisher: "illo",
+    authors: [{ name: "DORI Team", url: SITE_URL }],
+    creator: "DORI Team",
+    publisher: "DORI-AI",
     alternates: {
       canonical: fullUrl,
     },

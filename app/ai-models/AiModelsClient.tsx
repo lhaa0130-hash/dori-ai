@@ -36,7 +36,12 @@ export default function AiModelsClient() {
   const [asc, setAsc] = useState(true);
 
   useEffect(() => {
-    fetch("/openrouter-stats.json").then((r) => (r.ok ? r.json() : Promise.reject())).then(setStats).catch(() => setErr(true));
+    // 실시간 엣지 함수 우선 → 실패 시 정적 JSON 폴백
+    fetch("/api/openrouter")
+      .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .catch(() => fetch("/openrouter-stats.json").then((r) => (r.ok ? r.json() : Promise.reject())))
+      .then(setStats)
+      .catch(() => setErr(true));
   }, []);
 
   const models = useMemo<Model[]>(() => {

@@ -79,10 +79,13 @@ export default function RelatedArticles({
               <div className="flex items-center gap-1 text-[10px] text-neutral-400">
                 <Calendar className="w-3 h-3" />
                 <time dateTime={article.date}>
-                  {new Date(article.date).toLocaleDateString("ko-KR", {
+                  {new Date(article.date as string).toLocaleDateString("ko-KR", {
                     month: "short",
                     day: "numeric",
                   })}
+                  {/T\d|\d{1,2}:\d{2}/.test(String(article.date)) && (
+                    <span className="ml-1 opacity-70">{new Date(article.date as string).toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" })}</span>
+                  )}
                 </time>
               </div>
             </div>

@@ -26,8 +26,10 @@ export default function OpenRouterRanking() {
   const [tab, setTab] = useState<(typeof TABS)[number]["key"]>("usage");
 
   useEffect(() => {
-    fetch("/openrouter-stats.json")
+    // 실시간 엣지 함수 우선 → 실패 시 정적 JSON 폴백
+    fetch("/api/openrouter")
       .then((r) => (r.ok ? r.json() : Promise.reject()))
+      .catch(() => fetch("/openrouter-stats.json").then((r) => (r.ok ? r.json() : Promise.reject())))
       .then(setS)
       .catch(() => setHide(true));
   }, []);

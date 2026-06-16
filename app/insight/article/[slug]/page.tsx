@@ -205,7 +205,12 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
             </div>
           )}
           <div className="text-gray-600 dark:text-gray-400 text-sm text-center mb-4">
-            <time dateTime={post.date}>{new Date(post.date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}</time>
+            <time dateTime={post.date}>
+              {new Date(post.date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
+              {/T\d|\d{1,2}:\d{2}/.test(String(post.date)) && (
+                <span className="ml-1 text-xs opacity-60">{new Date(post.date).toLocaleTimeString('ko-KR', { hour: '2-digit', minute: '2-digit' })}</span>
+              )}
+            </time>
             {post.author && <span> by {post.author}</span>}
           </div>
 
