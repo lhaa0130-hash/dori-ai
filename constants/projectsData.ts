@@ -31,6 +31,28 @@ export interface ProjectItem {
 
 export const PROJECTS: ProjectItem[] = [
   {
+    slug: "animal",
+    name: "동물도감",
+    emoji: "🐾",
+    image: "",
+    tag: "키즈 전용",
+    category: "kids",
+    isMain: false,
+    status: "이용 가능",
+    isActive: true,
+    desc: "다양한 동물을 도감처럼 만나요",
+    longDesc:
+      "요즘 아이들이 접하는 동물의 수는 점점 줄고 있어요. 동물도감은 아이들이 다양한 동물을 도감처럼 친숙하게 모으고, 색깔·먹이·크기·사는 곳 같은 특징을 골라 원하는 동물을 쉽게 찾을 수 있도록 만든 교육 프로젝트입니다. 다양한 기준으로 동물을 탐험해보세요.",
+    tags: ["어린이 교육", "동물 생태", "특징 검색"],
+    launchHref: "/animal",
+    launchLabel: "바로 가기",
+    features: [
+      { icon: "🔎", title: "특징으로 찾기", detail: "곤충을 먹는 동물, 흰색 동물, 손바닥만한 동물처럼 원하는 특징을 골라 찾아요." },
+      { icon: "🃏", title: "도감 수집의 재미", detail: "도감을 하나씩 채워가며 동물을 친숙하게 익혀요." },
+      { icon: "📚", title: "아이 눈높이 설명", detail: "먹이·서식지·크기 등 핵심 정보를 쉽고 재미있게 풀어줘요." },
+    ],
+  },
+  {
     slug: "illo",
     name: "워키 (Worki)",
     emoji: "🟧",
@@ -51,28 +73,6 @@ export const PROJECTS: ProjectItem[] = [
       { icon: "🔑", title: "내 API 키로 무제한", detail: "내 키를 연결하면 한도까지 마음껏, 가장 강력한 최신 모델로 사용할 수 있어요." },
       { icon: "🛠️", title: "나만의 워크플로우", detail: "입력 → 조사 → 작성 → 검토 단계를 노드로 연결해 나만의 자동화를 직접 설계해요." },
       { icon: "📁", title: "결과 보관함", detail: "만든 결과물을 자동으로 보관하고 언제든 다시 보거나 텍스트로 내려받을 수 있어요." },
-    ],
-  },
-  {
-    slug: "animal",
-    name: "동물도감",
-    emoji: "🐾",
-    image: "",
-    tag: "키즈 전용",
-    category: "kids",
-    isMain: false,
-    status: "이용 가능",
-    isActive: true,
-    desc: "다양한 동물을 도감처럼 만나요",
-    longDesc:
-      "요즘 아이들이 접하는 동물의 수는 점점 줄고 있어요. 동물도감은 아이들이 다양한 동물을 도감처럼 친숙하게 모으고, 색깔·먹이·크기·사는 곳 같은 특징을 골라 원하는 동물을 쉽게 찾을 수 있도록 만든 교육 프로젝트입니다. 다양한 기준으로 동물을 탐험해보세요.",
-    tags: ["어린이 교육", "동물 생태", "특징 검색"],
-    launchHref: "/animal",
-    launchLabel: "바로 가기",
-    features: [
-      { icon: "🔎", title: "특징으로 찾기", detail: "곤충을 먹는 동물, 흰색 동물, 손바닥만한 동물처럼 원하는 특징을 골라 찾아요." },
-      { icon: "🃏", title: "도감 수집의 재미", detail: "도감을 하나씩 채워가며 동물을 친숙하게 익혀요." },
-      { icon: "📚", title: "아이 눈높이 설명", detail: "먹이·서식지·크기 등 핵심 정보를 쉽고 재미있게 풀어줘요." },
     ],
   },
   {

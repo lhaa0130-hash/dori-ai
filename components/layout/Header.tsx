@@ -40,14 +40,14 @@ export default function Header() {
 
   const projects = [
     {
-      name: "워키 (Worki)", emoji: "🟧", image: "/illo-logo.png",
-      desc: "혼자서도, 일이 되는 곳", href: "/illo/app",
-      bg: "bg-orange-50 dark:bg-orange-900/20",
-    },
-    {
       name: "동물도감", emoji: "🐾", image: "",
       desc: "다양한 동물을 도감처럼 만나요", href: "/animal",
       bg: "bg-emerald-50 dark:bg-emerald-900/20", active: true,
+    },
+    {
+      name: "워키 (Worki)", emoji: "🟧", image: "/illo-logo.png",
+      desc: "혼자서도, 일이 되는 곳", href: "/illo/app",
+      bg: "bg-orange-50 dark:bg-orange-900/20",
     },
     {
       name: "가족기록", emoji: "👨‍👩‍👧‍👦", image: "",
