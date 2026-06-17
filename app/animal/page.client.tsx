@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BookOpen, Sparkles, Search, X, RotateCcw, SlidersHorizontal, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
+import { BookOpen, Sparkles, Search, X, RotateCcw, SlidersHorizontal, ChevronDown, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 
 // ─── 동물 카드 타입 ──────────────────────────────────────────────────
 export interface AnimalCard {
@@ -100,6 +100,7 @@ const ALL_CATS = [...FILTER_CATEGORIES, { id: "taxonomy", emoji: "🗂️", titl
 export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] }) {
   const [selected, setSelected] = useState<Record<string, Set<string>>>({});
   const [detail, setDetail] = useState<AnimalCard | null>(null);
+  const [zoomImg, setZoomImg] = useState<{ src: string; name: string } | null>(null);
   const [query, setQuery] = useState("");
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [sort, setSort] = useState<"no" | "name">("no");
@@ -502,10 +503,18 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
           >
             <button onClick={() => setDetail(null)} className="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-white/90 dark:bg-zinc-800/90 text-neutral-600 dark:text-neutral-300 hover:bg-red-500 hover:text-white transition shadow-md"><X className="w-5 h-5" /></button>
             <div className="grid md:grid-cols-2 gap-0">
-              <div className="relative aspect-[4/5] md:aspect-auto md:min-h-[420px] bg-neutral-100 dark:bg-zinc-800">
+              <button
+                type="button"
+                onClick={() => setZoomImg({ src: detail.image_path, name: detail.animal_name })}
+                className="group/img relative aspect-[4/5] md:aspect-auto md:min-h-[420px] bg-neutral-100 dark:bg-zinc-800 cursor-zoom-in overflow-hidden md:rounded-l-3xl"
+                aria-label="이미지 크게 보기"
+              >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={detail.image_path} alt={detail.animal_name} className="absolute inset-0 w-full h-full object-cover md:rounded-l-3xl" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
-              </div>
+                <img src={detail.image_path} alt={detail.animal_name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover/img:scale-105" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
+                <span className="absolute bottom-3 left-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/55 text-white text-[11px] font-bold backdrop-blur-sm opacity-90 group-hover/img:bg-black/70 transition">
+                  <Maximize2 className="w-3 h-3" /> 크게 보기
+                </span>
+              </button>
               <div className="p-6 md:p-7 flex flex-col">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-[11px] font-bold w-fit">
@@ -569,6 +578,33 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
                 </div>
               </div>
             </div>
+          </motion.div>
+        </div>
+      )}
+
+      {/* ── 이미지 크게 보기(라이트박스) ── */}
+      {zoomImg && (
+        <div
+          className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm"
+          onClick={() => setZoomImg(null)}
+        >
+          <button
+            onClick={() => setZoomImg(null)}
+            aria-label="닫기"
+            className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white/15 text-white hover:bg-white/30 transition"
+          >
+            <X className="w-6 h-6" />
+          </button>
+          <motion.div
+            initial={{ opacity: 0, scale: 0.9 }}
+            animate={{ opacity: 1, scale: 1 }}
+            transition={{ duration: 0.2 }}
+            onClick={(e) => e.stopPropagation()}
+            className="flex flex-col items-center gap-3"
+          >
+            {/* eslint-disable-next-line @next/next/no-img-element */}
+            <img src={zoomImg.src} alt={zoomImg.name} className="max-w-[92vw] max-h-[82vh] object-contain rounded-2xl shadow-2xl" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
+            <p className="text-white/90 text-sm font-bold">{zoomImg.name}</p>
           </motion.div>
         </div>
       )}
