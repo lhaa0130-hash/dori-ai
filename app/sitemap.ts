@@ -22,6 +22,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/ai-models`, lastModified: now, changeFrequency: "daily",   priority: 0.9 },
     { url: `${baseUrl}/community`, lastModified: now, changeFrequency: "daily",   priority: 0.8 },
     { url: `${baseUrl}/market`,    lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
+    { url: `${baseUrl}/animal`,    lastModified: now, changeFrequency: "daily",   priority: 0.8 },
     { url: `${baseUrl}/minigame`,                     changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/projects`,                      changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/faq`,                          changeFrequency: "monthly", priority: 0.4 },

@@ -17,7 +17,6 @@ export default function robots(): MetadataRoute.Robots {
     "/api/",
     "/_next/",
     // 콘텐츠 얇은 부가 페이지
-    "/animal",
     "/family",
     "/illo",
     "/shop",
