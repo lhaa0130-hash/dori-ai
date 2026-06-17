@@ -11,12 +11,22 @@ const ADMIN_EMAIL = "lhaa0130@gmail.com";
 
 // ─── 동물 카드 타입 ──────────────────────────────────────────────────
 export interface AnimalCard {
-  search_nickname: string;
+  no?: string;
+  rarity?: number;
   animal_name: string;
+  sci?: string;
+  en?: string;
+  search_nickname: string;
   kid_friendly_desc: string;
-  key_feature: string[];
+  status?: { label: string; code: string; color: string };
+  taxonomy?: string;
+  subspecies?: string;
+  info?: [string, string, string][];
+  facts?: string[];
+  key_feature?: string[];
   image_prompt?: string;
   image_path: string;
+  card_path?: string;
   filters: Record<string, string[]>;
 }
 
@@ -451,9 +461,14 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
                       loading="lazy"
                       className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
                     />
+                    {card.no && <span className="absolute top-2 left-2 text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-black/55 text-[#f0d28a] backdrop-blur-sm">No.{card.no}</span>}
+                    {card.status?.code && <span className="absolute top-2 right-2 text-[9px] font-extrabold px-1.5 py-0.5 rounded-md text-white shadow" style={{ background: card.status.color }}>{card.status.code}</span>}
                   </div>
                   <div className="p-3">
-                    <div className="font-bold text-sm text-neutral-900 dark:text-white mb-0.5 truncate">{card.animal_name}</div>
+                    <div className="flex items-center justify-between gap-1 mb-0.5">
+                      <div className="font-bold text-sm text-neutral-900 dark:text-white truncate">{card.animal_name}</div>
+                      {typeof card.rarity === "number" && <span className="text-[10px] text-[#F9954E] shrink-0 tracking-tighter">{"★".repeat(card.rarity)}{"☆".repeat(5 - card.rarity)}</span>}
+                    </div>
                     <div className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-snug line-clamp-2 break-keep">{card.search_nickname}</div>
                   </div>
                 </motion.button>
@@ -566,26 +581,50 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
 
               {/* 내용 */}
               <div className="p-6 md:p-7 flex flex-col">
-                <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-[11px] font-bold mb-3 w-fit">
-                  <Sparkles className="w-3 h-3" /> DORI 동물 카드
+                <div className="flex items-center gap-2 mb-2">
+                  <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-[11px] font-bold w-fit">
+                    <Sparkles className="w-3 h-3" /> 동물도감{detail.no ? ` No.${detail.no}` : ""}
+                  </div>
+                  {typeof detail.rarity === "number" && <span className="text-[12px] text-[#F9954E] tracking-tighter" title="희귀도">{"★".repeat(detail.rarity)}{"☆".repeat(5 - detail.rarity)}</span>}
                 </div>
-                <h3 className="text-2xl font-black text-neutral-900 dark:text-white mb-1">{detail.animal_name}</h3>
-                <p className="text-[#E8832E] dark:text-[#FBAA60] text-sm font-bold mb-4 break-keep">“{detail.search_nickname}”</p>
+                <h3 className="text-2xl font-black text-neutral-900 dark:text-white">{detail.animal_name}</h3>
+                {detail.sci && <p className="italic text-sm text-neutral-500 dark:text-neutral-400">{detail.sci}{detail.en ? ` · ${detail.en}` : ""}</p>}
+                <p className="text-[#E8832E] dark:text-[#FBAA60] text-sm font-bold mt-1.5 mb-3 break-keep">“{detail.search_nickname}”</p>
 
-                <p className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed mb-5 break-keep">
-                  {detail.kid_friendly_desc}
-                </p>
+                {detail.taxonomy && <p className="text-[11px] text-neutral-400 dark:text-neutral-500 mb-3 leading-relaxed break-keep"><b className="text-neutral-500 dark:text-neutral-400">분류 </b>{detail.taxonomy}</p>}
 
-                {/* 핵심 특징 */}
-                {detail.key_feature?.length > 0 && (
-                  <div className="flex flex-wrap gap-1.5 mb-5">
-                    {detail.key_feature.map((f) => (
-                      <span key={f} className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#F9954E]/15 text-[#E8832E] dark:text-[#FBAA60] border border-[#F9954E]/30">
-                        ⭐ {f}
-                      </span>
+                {detail.status && (
+                  <div className="flex flex-wrap gap-1.5 mb-4">
+                    <span className="text-[11px] font-extrabold px-2.5 py-1 rounded-full text-white" style={{ background: detail.status.color }}>{detail.status.label} · IUCN {detail.status.code}</span>
+                  </div>
+                )}
+
+                <p className="text-sm text-neutral-700 dark:text-neutral-300 leading-relaxed mb-4 break-keep">{detail.kid_friendly_desc}</p>
+
+                {detail.info && detail.info.length > 0 && (
+                  <div className="flex flex-col gap-2 mb-4">
+                    {detail.info.map(([ic, k, v], idx) => (
+                      <div key={idx} className="flex items-start gap-2 text-[13px]">
+                        <span className="w-5 text-center flex-shrink-0">{ic}</span>
+                        <span className="font-bold text-neutral-600 dark:text-neutral-300 w-12 flex-shrink-0">{k}</span>
+                        <span className="text-neutral-600 dark:text-neutral-400 break-keep">{v}</span>
+                      </div>
                     ))}
                   </div>
                 )}
+
+                {detail.facts && detail.facts.length > 0 && (
+                  <div className="bg-[#FFF9F0] dark:bg-orange-950/20 border border-[#FDE3C0] dark:border-orange-900/30 rounded-2xl p-3.5 mb-4">
+                    <p className="text-[11px] font-extrabold text-[#E8832E] dark:text-[#FBAA60] mb-2">🔎 알고 보면 더 흥미로운</p>
+                    <ul className="space-y-1.5">
+                      {detail.facts.map((f, idx) => (
+                        <li key={idx} className="text-[12.5px] text-neutral-600 dark:text-neutral-300 leading-snug break-keep pl-3 relative before:content-['•'] before:absolute before:left-0 before:text-[#F9954E]">{f}</li>
+                      ))}
+                    </ul>
+                  </div>
+                )}
+
+                {detail.subspecies && <p className="text-[11px] text-neutral-400 dark:text-neutral-500 mb-4 break-keep"><b className="text-neutral-500 dark:text-neutral-400">하위종 </b>{detail.subspecies}</p>}
 
                 {/* 필터 속성 */}
                 <div className="mt-auto space-y-2">
