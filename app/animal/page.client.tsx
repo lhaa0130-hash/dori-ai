@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useRef } from "react";
 import { motion, AnimatePresence } from "framer-motion";
-import { BookOpen, Sparkles, Search, X, RotateCcw, SlidersHorizontal, ChevronDown } from "lucide-react";
+import { BookOpen, Sparkles, Search, X, RotateCcw, SlidersHorizontal, ChevronDown, ChevronLeft, ChevronRight } from "lucide-react";
 
 // ─── 동물 카드 타입 ──────────────────────────────────────────────────
 export interface AnimalCard {
@@ -103,6 +103,20 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
   const [query, setQuery] = useState("");
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [sort, setSort] = useState<"no" | "name">("no");
+  const [page, setPage] = useState(1);
+  const [perPage, setPerPage] = useState(16); // 4줄 기준: 모바일2열=8, 태블릿3열=12, 데스크탑4열=16
+  const resultRef = useRef<HTMLDivElement>(null);
+
+  // 화면 너비에 따라 "4줄"이 되도록 페이지당 개수 조정
+  useEffect(() => {
+    const calc = () => {
+      const w = window.innerWidth;
+      setPerPage(w < 640 ? 8 : w < 1024 ? 12 : 16);
+    };
+    calc();
+    window.addEventListener("resize", calc);
+    return () => window.removeEventListener("resize", calc);
+  }, []);
 
   // 종류별 보유 동물 수(1회 산출)
   const typeCounts = useMemo(() => {
@@ -150,6 +164,27 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
       : (a.no || "9999").localeCompare(b.no || "9999")
   );
   const hasFilter = allSelected.length > 0 || q.length > 0;
+
+  // ── 페이지네이션 (무한스크롤 X, 4줄씩 끊어 다음 페이지로) ──
+  const filterSig = allSelected.map((s) => s.catId + s.tag).join("|") + "#" + q + "#" + sort;
+  useEffect(() => { setPage(1); }, [filterSig]);
+  const pageCount = Math.max(1, Math.ceil(sorted.length / perPage));
+  const safePage = Math.min(page, pageCount);
+  const pageItems = sorted.slice((safePage - 1) * perPage, safePage * perPage);
+  function goPage(p: number) {
+    const np = Math.min(Math.max(1, p), pageCount);
+    setPage(np);
+    setTimeout(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 30);
+  }
+  function pageList(cur: number, total: number): (number | "…")[] {
+    if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
+    const out: (number | "…")[] = [1];
+    if (cur > 4) out.push("…");
+    for (let i = Math.max(2, cur - 1); i <= Math.min(total - 1, cur + 1); i++) out.push(i);
+    if (cur < total - 3) out.push("…");
+    out.push(total);
+    return out;
+  }
 
   // 빈 결과가 "0마리인 종류만 골라서" 생긴 경우 분기
   const taxPicks = [...(selected.taxonomy || [])];
@@ -289,7 +324,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
         </section>
 
         {/* ── 결과 헤더 ── */}
-        <section className="mb-16 scroll-mt-20">
+        <section ref={resultRef} className="mb-16 scroll-mt-20">
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
             <div>
               <h2 className="text-xl md:text-2xl font-extrabold text-neutral-900 dark:text-white">
@@ -362,8 +397,9 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
               <button onClick={clearAll} className="text-sm font-bold text-[#E8832E] dark:text-[#FBAA60] hover:underline">전체 초기화</button>
             </div>
           ) : (
+            <>
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {sorted.map((card, i) => {
+              {pageItems.map((card, i) => {
                 const tax = card.filters?.taxonomy?.[0];
                 const tm = tax ? TYPE_MAP[tax] : null;
                 return (
@@ -397,6 +433,49 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
                 );
               })}
             </div>
+
+            {pageCount > 1 && (
+              <nav className="flex flex-wrap items-center justify-center gap-1.5 mt-9" aria-label="페이지">
+                <button
+                  onClick={() => goPage(safePage - 1)}
+                  disabled={safePage === 1}
+                  className="inline-flex items-center gap-0.5 h-9 pl-2 pr-3 rounded-xl text-[13px] font-bold border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-300 enabled:hover:border-[#F9954E] enabled:hover:text-[#E8832E] disabled:opacity-40 disabled:cursor-not-allowed transition"
+                >
+                  <ChevronLeft className="w-4 h-4" /> 이전
+                </button>
+                {pageList(safePage, pageCount).map((p, idx) =>
+                  p === "…" ? (
+                    <span key={"e" + idx} className="w-9 h-9 flex items-center justify-center text-neutral-400 text-sm">…</span>
+                  ) : (
+                    <button
+                      key={p}
+                      onClick={() => goPage(p)}
+                      aria-current={p === safePage ? "page" : undefined}
+                      className={`w-9 h-9 rounded-xl text-[13.5px] font-extrabold border transition ${
+                        p === safePage
+                          ? "bg-[#F9954E] text-white border-[#F9954E] shadow-sm shadow-[#F9954E]/30"
+                          : "bg-white dark:bg-zinc-900 text-neutral-600 dark:text-neutral-300 border-neutral-200 dark:border-zinc-700 hover:border-[#F9954E] hover:text-[#E8832E]"
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  )
+                )}
+                <button
+                  onClick={() => goPage(safePage + 1)}
+                  disabled={safePage === pageCount}
+                  className="inline-flex items-center gap-0.5 h-9 pl-3 pr-2 rounded-xl text-[13px] font-bold border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-300 enabled:hover:border-[#F9954E] enabled:hover:text-[#E8832E] disabled:opacity-40 disabled:cursor-not-allowed transition"
+                >
+                  다음 <ChevronRight className="w-4 h-4" />
+                </button>
+              </nav>
+            )}
+            {pageCount > 1 && (
+              <p className="text-center text-[12px] text-neutral-400 dark:text-neutral-500 mt-3">
+                {safePage} / {pageCount} 페이지 · 전체 {sorted.length}마리
+              </p>
+            )}
+            </>
           )}
         </section>
 
