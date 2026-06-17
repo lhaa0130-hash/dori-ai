@@ -4,9 +4,9 @@ import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 
 const GAMES = [
-  { emoji: "🎯", title: "보스 클릭커", desc: "클릭으로 몬스터 처치",     href: "/minigame/clicker"     },
+  { emoji: "🎯", title: "보스 클릭커", desc: "보스를 탭해 처치·업그레이드", href: "/minigame/boss"        },
   { emoji: "🐍", title: "스네이크",    desc: "뱀을 길게 키우는 아케이드", href: "/minigame/snake"       },
-  { emoji: "🔢", title: "2048",        desc: "숫자를 합쳐 2048 달성",    href: "/minigame/2048"        },
+  { emoji: "🔢", title: "Cute 2048",   desc: "숫자를 합쳐 2048 달성",    href: "/minigame/cute2048"    },
   { emoji: "⌨️", title: "타이핑",      desc: "AI 용어로 손가락 훈련",    href: "/minigame/typingspeed" },
 ];
 

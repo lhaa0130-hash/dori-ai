@@ -43,8 +43,13 @@ export default function LayoutClient({ children }: LayoutClientProps) {
     return <>{children}</>;
   }
 
-  // 임베드형 전체화면 미니게임(동물 합치기·Cute 2048) — 사이트 헤더/사이드 광고 없이 iframe 통째 렌더
-  if (pathname?.startsWith("/minigame/animal") || pathname?.startsWith("/minigame/cute2048")) {
+  // 임베드형 전체화면 미니게임 — 사이트 헤더/사이드 광고 없이 셸(EmbeddedGame) 통째 렌더
+  if (
+    pathname?.startsWith("/minigame/animal") ||
+    pathname?.startsWith("/minigame/cute2048") ||
+    pathname?.startsWith("/minigame/gem") ||
+    pathname?.startsWith("/minigame/boss")
+  ) {
     return <>{children}</>;
   }
 
