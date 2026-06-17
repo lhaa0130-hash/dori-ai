@@ -8,7 +8,8 @@ export default function StructuredData() {
     description: "AI 활용 방법을 함께 연구하고 실전으로 적용해보는 커뮤니티 플랫폼. AI 자동화, 캐릭터 제작 가이드, 프레리독 애니메이션 교육을 제공합니다.",
     email: "lhaa0130@gmail.com",
     sameAs: [
-      // 소셜 미디어 링크 추가 가능
+      "https://x.com/doriillo",
+      "https://blog.naver.com/illo26",
     ],
     areaServed: "KR",
     knowsAbout: [
@@ -25,15 +26,8 @@ export default function StructuredData() {
     "@context": "https://schema.org",
     "@type": "WebSite",
     name: "DORI-AI",
-    alternateName: "dori-ai.com",
     url: "https://dori-ai.com",
     description: "AI 도구, 인사이트, 아카데미, 커뮤니티를 한 곳에서 제공하는 AI 플랫폼",
-    publisher: {
-      "@type": "Organization",
-      name: "illo",
-      url: "https://dori-ai.com",
-      logo: "https://dori-ai.com/illo-logo.png",
-    },
     potentialAction: {
       "@type": "SearchAction",
       target: {

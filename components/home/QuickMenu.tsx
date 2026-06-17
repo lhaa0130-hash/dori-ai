@@ -4,12 +4,13 @@ import Link from "next/link";
 
 const MENUS = [
   { emoji: "📰", label: "트렌드",  href: "/insight" },
-  { emoji: "🎮", label: "게임",    href: "/minigame" },
   { emoji: "🤖", label: "AI 도구", href: "/ai-tools" },
-  { emoji: "💬", label: "피드",    href: "/feed" },
+  { emoji: "📊", label: "AI 모델", href: "/ai-models" },
+  { emoji: "🎮", label: "게임",    href: "/minigame" },
+  { emoji: "💬", label: "커뮤니티",href: "/community" },
   { emoji: "📢", label: "공지",    href: "/notice" },
   { emoji: "🛒", label: "마켓",    href: "/market" },
-  { emoji: "🏆", label: "MY",      href: "/profile" },
+  { emoji: "🏆", label: "MY",      href: "/my" },
   { emoji: "❓", label: "FAQ",     href: "/faq" },
 ];
 

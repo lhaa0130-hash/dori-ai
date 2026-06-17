@@ -113,22 +113,26 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
   const articleUrl = `${SITE_URL}/insight/article/${params.slug}`;
   const postTags: string[] = Array.isArray(post.tags) ? post.tags : (post.tags ? [post.tags] : []);
 
-  // ✅ JSON-LD 구조화 데이터 (구글 리치 결과 - 썸네일/날짜/작성자 노출)
+  // ✅ JSON-LD 구조화 데이터 (NewsArticle — 구글 뉴스·Discover·리치결과)
+  const SECTION: Record<string, string> = { trend: "AI 트렌드", curation: "AI 큐레이션", analysis: "심층 분석", report: "리포트", market: "마켓", studio: "스튜디오" };
+  const articleSection = SECTION[String(params.slug).split("-")[0]] || "인사이트";
   const jsonLd = {
     "@context": "https://schema.org",
-    "@type": "Article",
+    "@type": "NewsArticle",
     "headline": post.title,
     "description": post.summary || post.description || post.title,
-    "image": post.thumbnail_url || `${SITE_URL}/og-default.png`,
+    "image": [post.thumbnail_url || `${SITE_URL}/og-default.png`],
     "datePublished": post.date,
     "dateModified": post.date,
     "author": { "@type": "Organization", "name": "DORI-AI", "url": SITE_URL },
     "publisher": {
       "@type": "Organization",
       "name": "DORI-AI",
-      "logo": { "@type": "ImageObject", "url": `${SITE_URL}/icon.svg` },
+      "logo": { "@type": "ImageObject", "url": `${SITE_URL}/icon.svg`, "width": 512, "height": 512 },
     },
     "mainEntityOfPage": { "@type": "WebPage", "@id": articleUrl },
+    "articleSection": articleSection,
+    "isAccessibleForFree": true,
     ...(postTags.length > 0 ? { "keywords": postTags.join(", ") } : {}),
   };
 
