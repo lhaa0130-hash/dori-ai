@@ -981,7 +981,8 @@ export async function getSocialCounts(uid: string): Promise<{ followers: number;
       const [followers, following, posts] = await Promise.all([
         countOf(collection(db(), "users", uid, "followers")),
         countOf(collection(db(), "users", uid, "following")),
-        countOf(query(collection(db(), "feed"), where("uid", "==", uid))),
+        // 공개 글만 집계(피드 read 규칙이 visibility 기반이라 uid 단독 카운트는 거부됨)
+        countOf(query(collection(db(), "feed"), where("uid", "==", uid), where("visibility", "==", "public"))),
       ]);
       return { followers, following, posts };
     });

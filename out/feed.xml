@@ -6,7 +6,23 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 16 Jun 2026 23:19:20 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 17 Jun 2026 00:49:53 GMT</lastBuildDate>
+    <item>
+      <title>looquee·Edits·PrompTessor·Keyboard Copilot: 입시, 영상 편집, 프롬프트, 모바일 글쓰기를 돕는 AI 도구</title>
+      <link>https://dori-ai.com/insight/article/curation-9</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/curation-9</guid>
+      <category>큐레이션</category>
+      <pubDate>Wed, 17 Jun 2026 00:00:00 GMT</pubDate>
+      <description>이번 주에는 학생의 지원서 작성, 크리에이터의 숏폼 편집, 직장인의 프롬프트 정리, 모바일 글쓰기까지 바로 써볼 수 있는 AI 도구를 골랐습니다. AI가 앱 안으로 더 깊숙이 들어오고, 사용자는 ‘무엇을 만들지’에 더 집중하는 흐름이 뚜렷합니다.</description>
+    </item>
+    <item>
+      <title>스페이스X, 60억 달러에 AI 스타트업 커서를 인수하다</title>
+      <link>https://dori-ai.com/insight/article/trend-110</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-110</guid>
+      <category>트렌드</category>
+      <pubDate>Tue, 16 Jun 2026 13:00:19 GMT</pubDate>
+      <description>스페이스X가 AI 코딩 스타트업 커서를 약 60억 달러에 인수하며 기업 AI 시장에 본격 진입합니다.</description>
+    </item>
     <item>
       <title>NewCore, AI 에이전트의 정체성을 부여하다 — 660억 원 투자 유치</title>
       <link>https://dori-ai.com/insight/article/trend-109</link>
@@ -310,22 +326,6 @@
       <category>트렌드</category>
       <pubDate>Sat, 16 May 2026 00:00:00 GMT</pubDate>
       <description>Google I/O 2026이 5월 19일 개막한다. Gemini Intelligence, Android XR, 스마트 글래스까지 — AI 업계 최대 이벤트를 앞둔 2026년 5월 셋째 주 핵심 AI 뉴스 5가지를 정리한다.</description>
-    </item>
-    <item>
-      <title>인텔, AI 반도체 수요 폭발로 26년 만에 주가 최고치 경신</title>
-      <link>https://dori-ai.com/insight/article/trend-73</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-73</guid>
-      <category>트렌드</category>
-      <pubDate>Sun, 26 Apr 2026 00:00:00 GMT</pubDate>
-      <description>인텔이 2026년 1분기 실적에서 월가 예상을 대폭 상회하는 성과를 기록했다. AI 데이터센터와 파운드리 사업의 급성장이 견인한 이번 실적은 반도체 업계의 AI 수혜가 본격화되고 있음을 보여준다.</description>
-    </item>
-    <item>
-      <title>AI가 촉발한 양자컴퓨팅 돌파구, 인터넷 암호화 위협 현실로</title>
-      <link>https://dori-ai.com/insight/article/trend-74</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-74</guid>
-      <category>트렌드</category>
-      <pubDate>Sun, 26 Apr 2026 00:00:00 GMT</pubDate>
-      <description>Google과 양자 스타트업 Oratomic의 최신 연구가 인터넷 암호화를 해독할 수 있는 양자컴퓨터 개발 시점을 크게 앞당길 수 있다고 경고했다. 특히 AI가 핵심 알고리즘 발견에 결정적 역할을 한 것으로 밝혀져 AI-양자 융합의 새 지평이 열렸다.</description>
     </item>
   </channel>
 </rss>
