@@ -8,7 +8,7 @@ import CottonCandy from "@/components/icons/CottonCandy";
 const GAMES = [
   { id: "merge",       title: "동물 합치기",   desc: "같은 동물이 만나면 합쳐져요! (12단계 진화)", icon: <Merge className="w-5 h-5" />,       href: "/minigame/animal",      candy: "+80",  rank: true  },
   { id: "clicker",     title: "보스 클릭커",   desc: "클릭으로 몬스터를 처치하세요!",          icon: <Hammer className="w-5 h-5" />,        href: "/minigame/clicker",     candy: "+100", rank: true  },
-  { id: "game2048",    title: "2048",          desc: "숫자를 합쳐 2048을 만드세요!",           icon: <Crown className="w-5 h-5" />,         href: "/minigame/2048",        candy: "+60",  rank: true  },
+  { id: "game2048",    title: "Cute 2048",     desc: "귀여운 친구들과 숫자를 합쳐 2048!",      icon: <Crown className="w-5 h-5" />,         href: "/minigame/cute2048",    candy: "+60",  rank: true  },
   { id: "reaction",    title: "반응속도",      desc: "초록불에 번개처럼 탭하세요!",            icon: <Zap className="w-5 h-5" />,           href: "/minigame/reaction",    candy: "",     rank: true  },
   { id: "whack",       title: "두더지 잡기",   desc: "튀어나오는 두더지를 빠르게!",            icon: <Hammer className="w-5 h-5" />,        href: "/minigame/whack",       candy: "",     rank: true  },
   { id: "simon",       title: "순서 기억",     desc: "점점 길어지는 순서를 따라치세요.",       icon: <Brain className="w-5 h-5" />,         href: "/minigame/simon",       candy: "",     rank: true  },

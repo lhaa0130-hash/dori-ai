@@ -9,7 +9,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /api/
 Disallow: /_next/
-Disallow: /animal
 Disallow: /family
 Disallow: /illo
 Disallow: /shop
@@ -26,7 +25,6 @@ Disallow: /login
 Disallow: /signup
 Disallow: /api/
 Disallow: /_next/
-Disallow: /animal
 Disallow: /family
 Disallow: /illo
 Disallow: /shop

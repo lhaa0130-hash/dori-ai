@@ -6,7 +6,47 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Wed, 17 Jun 2026 08:54:44 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 17 Jun 2026 09:07:53 GMT</lastBuildDate>
+    <item>
+      <title>Probably, 더 정확한 AI를 위한 9백만 달러 확보</title>
+      <link>https://dori-ai.com/insight/article/trend-113</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-113</guid>
+      <category>트렌드</category>
+      <pubDate>Wed, 17 Jun 2026 06:00:16 GMT</pubDate>
+      <description>Probably가 9백만 달러를 확보하며 신뢰할 수 있는 AI 모델 개발에 나섰습니다. 이는 AI의 정확성을 높이기 위한 중요한 이정표로 평가됩니다.</description>
+    </item>
+    <item>
+      <title>Anthropic·California가 드러낸 미국 AI 규제 전쟁: 주법을 막으려는 백악관과 먼저 움직이는 주정부</title>
+      <link>https://dori-ai.com/insight/article/analysis-6</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/analysis-6</guid>
+      <category>분석</category>
+      <pubDate>Wed, 17 Jun 2026 05:02:12 GMT</pubDate>
+      <description>미국에서 AI 규제의 중심이 워싱턴과 주정부 사이에서 갈라지고 있다. 핵심은 기술 속도가 아니라, 누가 위험을 정의하고 누가 책임을 질 것인가의 문제다.</description>
+    </item>
+    <item>
+      <title>구글의 Android 17, 멀티태스킹 혁신으로 스마트폰의 미래를 바꾸다</title>
+      <link>https://dori-ai.com/insight/article/trend-112</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-112</guid>
+      <category>트렌드</category>
+      <pubDate>Wed, 17 Jun 2026 04:00:35 GMT</pubDate>
+      <description>구글이 Android 17을 출시하며 새로운 멀티태스킹 기능과 보안 도구를 도입했습니다. 이로 인해 스마트폰 사용 방식이 크게 변화할 것으로 예상됩니다.</description>
+    </item>
+    <item>
+      <title>스페이스X, 2.6조 달러 기업 가치 기록 — 아마존을 초월하다</title>
+      <link>https://dori-ai.com/insight/article/trend-111</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-111</guid>
+      <category>트렌드</category>
+      <pubDate>Wed, 17 Jun 2026 03:00:17 GMT</pubDate>
+      <description>스페이스X의 기업 가치가 2.6조 달러에 도달하며 아마존을 일시적으로 초과했습니다. 이는 IPO 이후 주가가 1조 달러 상승한 결과입니다.</description>
+    </item>
+    <item>
+      <title>Google 검색창 재설계·Databricks 범용 에이전트·Anthropic AI 과세론: 기업 AI의 돈길이 바뀐다</title>
+      <link>https://dori-ai.com/insight/article/report-5</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/report-5</guid>
+      <category>리포트</category>
+      <pubDate>Wed, 17 Jun 2026 02:02:13 GMT</pubDate>
+      <description>이번 주 AI 산업은 검색 인터페이스, 기업용 에이전트, AI 과세 논쟁이 동시에 전면에 올라왔다. 자금은 모델 자체보다 데이터·클라우드·전력·업무 자동화로 이동하고 있다.</description>
+    </item>
     <item>
       <title>looquee·Edits·PrompTessor·Keyboard Copilot: 입시, 영상 편집, 프롬프트, 모바일 글쓰기를 돕는 AI 도구</title>
       <link>https://dori-ai.com/insight/article/curation-9</link>
@@ -286,46 +326,6 @@
       <category>트렌드</category>
       <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
       <description>시카고의 시티 칼리지 교직원들이 AWS 펠로우십을 통해 AI 및 머신러닝 교육을 선도하게 되었다. 이는 교육 분야에서 AI 활용을 극대화할 중요한 이정표로 평가된다.</description>
-    </item>
-    <item>
-      <title>상점 수익을 늘리는 AI 도구 4가지</title>
-      <link>https://dori-ai.com/insight/article/curation-6</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/curation-6</guid>
-      <category>큐레이션</category>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>이번 주에는 상점 운영자들이 수익을 증대시킬 수 있도록 돕는 AI 도구들을 소개합니다.</description>
-    </item>
-    <item>
-      <title>AI 윤리: 글로벌 차원의 진화와 도전</title>
-      <link>https://dori-ai.com/insight/article/analysis-4</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/analysis-4</guid>
-      <category>분석</category>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>AI 윤리에 대한 논의가 전 세계적으로 확산되고 있는 가운데, 각국의 규제와 대처 방안이 어떻게 다르게 전개되고 있는지를 분석한다.</description>
-    </item>
-    <item>
-      <title>이번 주 AI 산업 리포트: 투자와 혁신의 동향</title>
-      <link>https://dori-ai.com/insight/article/report-1</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/report-1</guid>
-      <category>리포트</category>
-      <pubDate>Thu, 21 May 2026 00:00:00 GMT</pubDate>
-      <description>이번 주 AI 산업에서 중요한 투자 및 혁신 사건들을 다룹니다.</description>
-    </item>
-    <item>
-      <title>Anthropic, OpenAI 꺾고 기업 AI 시장 1위 등극 — 2026년 5월 둘째 주 AI 뉴스 총정리</title>
-      <link>https://dori-ai.com/insight/article/trend-75</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-75</guid>
-      <category>트렌드</category>
-      <pubDate>Sat, 16 May 2026 00:00:00 GMT</pubDate>
-      <description>앤트로픽이 기업 AI 도입률에서 처음으로 OpenAI를 앞질렀다. Claude의 연매출 300억 달러 돌파, 구글의 $400억 투자 유치까지 — 2026년 5월 둘째 주 가장 뜨거웠던 AI 뉴스 5가지를 정리한다.</description>
-    </item>
-    <item>
-      <title>Google I/O 2026 개막·Gemini 전면 업그레이드·AI 반도체 주가 급등 — 2026년 5월 셋째 주 AI 뉴스 총정리</title>
-      <link>https://dori-ai.com/insight/article/trend-76</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-76</guid>
-      <category>트렌드</category>
-      <pubDate>Sat, 16 May 2026 00:00:00 GMT</pubDate>
-      <description>Google I/O 2026이 5월 19일 개막한다. Gemini Intelligence, Android XR, 스마트 글래스까지 — AI 업계 최대 이벤트를 앞둔 2026년 5월 셋째 주 핵심 AI 뉴스 5가지를 정리한다.</description>
     </item>
   </channel>
 </rss>
