@@ -1,8 +1,8 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { motion } from "framer-motion";
-import { BookOpen, Sparkles, Search, X, RotateCcw } from "lucide-react";
+import { useState, useMemo } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { BookOpen, Sparkles, Search, X, RotateCcw, SlidersHorizontal, ChevronDown } from "lucide-react";
 
 // ─── 동물 카드 타입 ──────────────────────────────────────────────────
 export interface AnimalCard {
@@ -25,47 +25,56 @@ export interface AnimalCard {
   filters: Record<string, string[]>;
 }
 
-// ── 찾기 카테고리 (8가지 특징) ──────────────────────────────────────
+// ── 종류(타입) 단일 소스 — pill·카드 배지·모달 칩이 공유 ──────────────
+const TYPES: { label: string; hex: string; emoji: string }[] = [
+  { label: "포유류", hex: "#B5764A", emoji: "🦊" },
+  { label: "조류", hex: "#4E97C7", emoji: "🐦" },
+  { label: "파충류", hex: "#6BA368", emoji: "🦎" },
+  { label: "어류", hex: "#2FA6A0", emoji: "🐟" },
+  { label: "양서류", hex: "#86A642", emoji: "🐸" },
+  { label: "곤충", hex: "#C79A3C", emoji: "🐛" },
+  { label: "갑각류", hex: "#C56B4E", emoji: "🦀" },
+  { label: "연체동물", hex: "#8C6BB1", emoji: "🐙" },
+];
+const TYPE_MAP: Record<string, { hex: string; emoji: string }> = {};
+TYPES.forEach((t) => { TYPE_MAP[t.label] = { hex: t.hex, emoji: t.emoji }; });
+
+// ── 상세 찾기 카테고리 (종류 제외 7축) ─────────────────────────────
 const FILTER_CATEGORIES = [
   {
     id: "diet", emoji: "🍽️", title: "무엇을 먹나요",
-    selected: "bg-orange-500 text-white border-orange-500 shadow-sm shadow-orange-500/30",
+    selected: "bg-orange-500 text-white border-orange-500",
     tags: ["곤충을 먹는", "물고기를 먹는", "초식", "육식", "잡식", "썩은 것 먹는", "꿀을 먹는", "씨앗을 먹는"],
   },
   {
     id: "color", emoji: "🎨", title: "무슨 색깔인가요",
-    selected: "bg-pink-500 text-white border-pink-500 shadow-sm shadow-pink-500/30",
+    selected: "bg-pink-500 text-white border-pink-500",
     tags: ["분홍색", "파란색", "빨간색", "초록색", "검정색", "흰색", "투명한", "알록달록한"],
   },
   {
     id: "size", emoji: "📏", title: "얼마나 큰가요",
-    selected: "bg-sky-500 text-white border-sky-500 shadow-sm shadow-sky-500/30",
+    selected: "bg-sky-500 text-white border-sky-500",
     tags: ["손보다 작은", "손바닥만한", "고양이만한", "사람만한", "코끼리만한", "버스만한", "세상 가장 작은", "세상 가장 큰"],
   },
   {
     id: "habitat", emoji: "🌍", title: "어디에 사나요",
-    selected: "bg-emerald-500 text-white border-emerald-500 shadow-sm shadow-emerald-500/30",
+    selected: "bg-emerald-500 text-white border-emerald-500",
     tags: ["바다", "강·호수", "사막", "열대우림", "극지방", "초원", "동굴", "도시 근처"],
   },
   {
     id: "feature", emoji: "⚡", title: "특별한 능력",
-    selected: "bg-yellow-500 text-white border-yellow-500 shadow-sm shadow-yellow-500/30",
+    selected: "bg-yellow-500 text-white border-yellow-500",
     tags: ["날 수 있는", "독이 있는", "야행성", "보호색", "변장하는", "엄청 빠른", "엄청 느린", "빛을 내는"],
   },
   {
     id: "body", emoji: "🦴", title: "몸은 어떻게 생겼나요",
-    selected: "bg-violet-500 text-white border-violet-500 shadow-sm shadow-violet-500/30",
+    selected: "bg-violet-500 text-white border-violet-500",
     tags: ["다리가 없는", "다리가 4개인", "다리가 6개+", "날개 있는", "딱딱한 껍질", "뿔이 있는", "긴 꼬리", "긴 목"],
   },
   {
     id: "behavior", emoji: "🤝", title: "어떻게 사나요",
-    selected: "bg-cyan-500 text-white border-cyan-500 shadow-sm shadow-cyan-500/30",
+    selected: "bg-cyan-500 text-white border-cyan-500",
     tags: ["혼자 사는", "무리지어 사는", "겨울잠 자는", "철새처럼 이동", "알을 낳는", "새끼를 낳는", "동굴에 사는", "나무 위에 사는"],
-  },
-  {
-    id: "taxonomy", emoji: "🗂️", title: "어떤 종류인가요",
-    selected: "bg-lime-500 text-white border-lime-500 shadow-sm shadow-lime-500/30",
-    tags: ["포유류", "조류", "파충류", "어류", "양서류", "곤충", "갑각류", "연체동물"],
   },
 ];
 
@@ -86,25 +95,21 @@ const CAT_SHORT: Record<string, string> = {
   diet: "먹이", color: "색깔", size: "크기", habitat: "사는 곳",
   feature: "특징", body: "몸", behavior: "생활", taxonomy: "종류",
 };
-
-// 태그 → 카테고리 빠른 조회(예시 적용용)
-const TAG_TO_CAT: Record<string, string> = {};
-FILTER_CATEGORIES.forEach((c) => c.tags.forEach((t) => { TAG_TO_CAT[t] = c.id; }));
-
-// 빠른 예시(누르면 바로 조건 적용)
-const EXAMPLES = [
-  { label: "분홍색 + 작은", emoji: "🦩", filters: ["분홍색", "손보다 작은"] },
-  { label: "곤충 먹는 + 야행성", emoji: "🦇", filters: ["곤충을 먹는", "야행성"] },
-  { label: "독이 있는 + 파란색", emoji: "🐙", filters: ["독이 있는", "파란색"] },
-  { label: "극지방 + 흰색", emoji: "🐻‍❄️", filters: ["극지방", "흰색"] },
-  { label: "바다에 사는 포유류", emoji: "🐬", filters: ["바다", "포유류"] },
-];
+const ALL_CATS = [...FILTER_CATEGORIES, { id: "taxonomy", emoji: "🗂️", title: "어떤 종류인가요", selected: "", tags: TYPES.map((t) => t.label) }];
 
 export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] }) {
   const [selected, setSelected] = useState<Record<string, Set<string>>>({});
   const [detail, setDetail] = useState<AnimalCard | null>(null);
   const [query, setQuery] = useState("");
-  const resultRef = useRef<HTMLDivElement>(null);
+  const [showAdvanced, setShowAdvanced] = useState(false);
+  const [sort, setSort] = useState<"no" | "name">("no");
+
+  // 종류별 보유 동물 수(1회 산출)
+  const typeCounts = useMemo(() => {
+    const m: Record<string, number> = {};
+    for (const c of cards) for (const t of c.filters?.taxonomy || []) m[t] = (m[t] || 0) + 1;
+    return m;
+  }, [cards]);
 
   function toggleTag(catId: string, tag: string) {
     setSelected((prev) => {
@@ -116,31 +121,22 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
   function isSelected(catId: string, tag: string) {
     return (selected[catId] || new Set()).has(tag);
   }
-  function clearAll() { setSelected({}); setQuery(""); }
+  function clearAll() { setSelected({}); setQuery(""); } // 정렬(취향)은 보존
 
-  function applyExample(filters: string[]) {
-    const next: Record<string, Set<string>> = {};
-    filters.forEach((t) => {
-      const cid = TAG_TO_CAT[t];
-      if (cid) (next[cid] = next[cid] || new Set()).add(t);
-    });
-    setSelected(next);
-    setQuery("");
-    setTimeout(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 80);
-  }
-
-  const allSelected = FILTER_CATEGORIES.flatMap((cat) =>
+  // 선택된 모든 조건(요약칩용)
+  const allSelected = ALL_CATS.flatMap((cat) =>
     [...(selected[cat.id] || [])].map((tag) => ({ catId: cat.id, tag, cat }))
   );
+  const advancedCount = FILTER_CATEGORIES.reduce((n, c) => n + (selected[c.id]?.size || 0), 0);
 
-  // ── 매칭: 카테고리 간 AND, 카테고리 내 OR + 이름 검색 ──
+  // ── 매칭: 카테고리 간 AND, 카테고리 내 OR + 이름/별명/영문 검색 ──
   const q = query.trim().toLowerCase();
   const matched = cards.filter((card) => {
     if (q) {
-      const hay = (card.animal_name + " " + card.search_nickname).toLowerCase();
+      const hay = (card.animal_name + " " + card.search_nickname + " " + (card.en || "")).toLowerCase();
       if (!hay.includes(q)) return false;
     }
-    for (const cat of FILTER_CATEGORIES) {
+    for (const cat of ALL_CATS) {
       const picks = selected[cat.id];
       if (!picks || picks.size === 0) continue;
       const cardTags = (card.filters && card.filters[cat.id]) || [];
@@ -148,136 +144,199 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
     }
     return true;
   });
+  const sorted = [...matched].sort((a, b) =>
+    sort === "name"
+      ? a.animal_name.localeCompare(b.animal_name, "ko")
+      : (a.no || "9999").localeCompare(b.no || "9999")
+  );
   const hasFilter = allSelected.length > 0 || q.length > 0;
+
+  // 빈 결과가 "0마리인 종류만 골라서" 생긴 경우 분기
+  const taxPicks = [...(selected.taxonomy || [])];
+  const onlyEmptyTypes =
+    !q && advancedCount === 0 && taxPicks.length > 0 && taxPicks.every((t) => (typeCounts[t] || 0) === 0);
 
   return (
     <main className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-500 relative overflow-x-hidden font-sans">
-      <div className="absolute top-0 left-0 w-full h-[420px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:to-black/0 pointer-events-none z-0" />
+      <div className="absolute top-0 left-0 w-full h-[380px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:to-black/0 pointer-events-none z-0" />
 
       <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-6 pt-20 pb-16">
 
-        {/* ── 히어로 ── */}
-        <section className="text-center mb-10">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-5">
+        {/* ── 컴팩트 히어로 ── */}
+        <section className="text-center mb-6">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-4">
             <BookOpen className="w-3 h-3" /><span>DORI 동물도감</span>
           </div>
-          <h1 className="text-3xl md:text-5xl font-extrabold tracking-tight leading-tight mb-4 text-neutral-900 dark:text-white break-keep">
-            궁금한 특징을 고르면<br className="hidden md:block" />
-            <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">딱 맞는 동물</span>을 찾아줘요
+          <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight leading-tight mb-2.5 text-neutral-900 dark:text-white break-keep">
+            궁금한 <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">동물</span>을 찾아보세요
           </h1>
-          <p className="text-base md:text-lg font-medium text-neutral-600 dark:text-neutral-400 max-w-xl mx-auto leading-relaxed break-keep">
-            색깔·먹이·크기·사는 곳… 원하는 특징을 톡톡 누르기만 하면 돼요.
-            포켓몬 도감처럼, 진짜 동물을 재미있게 만나보세요. 🐾
+          <p className="text-sm md:text-base font-medium text-neutral-600 dark:text-neutral-400 max-w-xl mx-auto leading-relaxed break-keep">
+            이름으로 찾거나, 종류와 특징으로 골라보세요. 진짜 동물을 도감처럼 만나봐요 🐾
           </p>
         </section>
 
-        {/* ── 3단계 설명 ── */}
-        <section className="grid grid-cols-3 gap-3 mb-10 max-w-2xl mx-auto">
-          {[
-            { n: "1", t: "특징 고르기", d: "색깔·먹이·크기 등 누르기", e: "👆" },
-            { n: "2", t: "동물 찾기", d: "조건에 맞는 동물 등장", e: "🔎" },
-            { n: "3", t: "카드 펼치기", d: "눌러서 자세히 알아보기", e: "📖" },
-          ].map((s) => (
-            <div key={s.n} className="rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 p-3 text-center">
-              <div className="text-2xl mb-1">{s.e}</div>
-              <div className="text-[13px] font-extrabold text-neutral-900 dark:text-white">{s.t}</div>
-              <div className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5 break-keep leading-tight">{s.d}</div>
-            </div>
-          ))}
-        </section>
-
-        {/* ── 빠른 예시 ── */}
-        <section className="mb-7">
-          <p className="text-[13px] font-bold text-neutral-500 dark:text-neutral-400 mb-2.5">✨ 이렇게 찾아보세요 — 누르면 바로 적용돼요</p>
-          <div className="flex flex-wrap gap-2">
-            {EXAMPLES.map((ex) => (
-              <button
-                key={ex.label}
-                onClick={() => applyExample(ex.filters)}
-                className="inline-flex items-center gap-1.5 px-3.5 py-2 rounded-full bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-[13px] font-bold text-neutral-700 dark:text-neutral-200 hover:border-[#F9954E] hover:text-[#E8832E] dark:hover:text-[#FBAA60] hover:-translate-y-0.5 transition-all"
-              >
-                <span>{ex.emoji}</span> {ex.label}
-              </button>
-            ))}
-          </div>
-        </section>
-
-        {/* ── 특징 고르기(칩 섹션) ── */}
-        <section className="mb-10">
-          <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl md:text-2xl font-extrabold text-neutral-900 dark:text-white">🎯 특징 골라 찾기</h2>
-            {allSelected.length > 0 && (
-              <button onClick={clearAll} className="inline-flex items-center gap-1 text-[13px] font-bold text-neutral-500 dark:text-neutral-400 hover:text-red-500 transition-colors">
-                <RotateCcw className="w-3.5 h-3.5" /> 전체 초기화
-              </button>
+        {/* ── 큰 검색바 (sticky) ── */}
+        <div className="sticky top-16 z-30 -mx-4 px-4 md:-mx-6 md:px-6 py-3 bg-white/85 dark:bg-black/85 backdrop-blur-md mb-6">
+          <div className="relative max-w-2xl mx-auto">
+            <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-neutral-400" />
+            <input
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              placeholder="동물 이름이나 별명으로 찾아보세요"
+              className="w-full pl-12 pr-11 py-3.5 rounded-2xl bg-white dark:bg-zinc-900 border-2 border-neutral-200 dark:border-zinc-700 text-base text-neutral-800 dark:text-neutral-100 placeholder:text-neutral-400 focus:outline-none focus:border-[#F9954E] focus:ring-4 focus:ring-[#F9954E]/15 transition shadow-sm"
+            />
+            {query && (
+              <button onClick={() => setQuery("")} aria-label="검색어 지우기" className="absolute right-3 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center rounded-full text-neutral-400 hover:bg-neutral-100 dark:hover:bg-zinc-800 hover:text-red-500 transition"><X className="w-4 h-4" /></button>
             )}
           </div>
+        </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5">
-            {FILTER_CATEGORIES.map((cat) => {
-              const count = (selected[cat.id] || new Set()).size;
+        {/* ── 종류로 찾기 (시그니처 색 pill) ── */}
+        <section className="mb-5">
+          <div className="flex items-baseline gap-2 mb-3">
+            <h2 className="text-lg md:text-xl font-extrabold text-neutral-900 dark:text-white">🗂️ 종류로 찾기</h2>
+            <span className="text-[12px] font-medium text-neutral-400 dark:text-neutral-500">여러 개 골라도 돼요</span>
+          </div>
+          <div className="flex flex-wrap gap-2">
+            {TYPES.map((t) => {
+              const sel = isSelected("taxonomy", t.label);
+              const cnt = typeCounts[t.label] || 0;
+              const dim = cnt === 0;
               return (
-                <div key={cat.id} className="rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 p-4">
-                  <div className="flex items-center gap-2 mb-3">
-                    <span className="text-lg">{cat.emoji}</span>
-                    <h3 className="font-extrabold text-[14px] text-neutral-900 dark:text-white">{cat.title}</h3>
-                    {count > 0 && <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded-full bg-[#F9954E] text-white">{count}</span>}
-                  </div>
-                  <div className="flex flex-wrap gap-1.5">
-                    {cat.tags.map((tag) => {
-                      const sel = isSelected(cat.id, tag);
-                      return (
-                        <button
-                          key={tag}
-                          onClick={() => toggleTag(cat.id, tag)}
-                          className={`text-[12.5px] font-bold px-3 py-1.5 rounded-full border transition-all active:scale-95 ${
-                            sel ? cat.selected : "bg-neutral-50 dark:bg-zinc-800 text-neutral-600 dark:text-neutral-300 border-neutral-200 dark:border-zinc-700 hover:border-[#F9954E]"
-                          }`}
-                        >
-                          {sel && "✓ "}{tag}
-                        </button>
-                      );
-                    })}
-                  </div>
-                </div>
+                <button
+                  key={t.label}
+                  onClick={() => toggleTag("taxonomy", t.label)}
+                  className={`relative inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl border-2 font-extrabold text-[13.5px] transition-all active:scale-95 ${dim && !sel ? "opacity-45" : ""}`}
+                  style={
+                    sel
+                      ? { background: t.hex, borderColor: t.hex, color: "#fff", boxShadow: `0 5px 16px ${t.hex}55` }
+                      : { background: t.hex + "1A", borderColor: t.hex + "40", color: t.hex }
+                  }
+                >
+                  <span className="text-[15px]">{t.emoji}</span>
+                  {t.label}
+                  <span
+                    className="text-[10.5px] font-bold px-1.5 py-0.5 rounded-full leading-none"
+                    style={sel ? { background: "rgba(255,255,255,.25)", color: "#fff" } : { background: t.hex + "26", color: t.hex }}
+                  >
+                    {cnt}
+                  </span>
+                  {sel && (
+                    <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-white text-[10px] font-black flex items-center justify-center shadow" style={{ color: t.hex }}>✓</span>
+                  )}
+                </button>
               );
             })}
           </div>
         </section>
 
-        {/* ── 결과 ── */}
-        <section ref={resultRef} className="mb-16 scroll-mt-20">
-          <div className="flex flex-col sm:flex-row sm:items-end sm:justify-between gap-3 mb-5">
+        {/* ── 자세히 찾기(상세 7축) 토글 ── */}
+        <section className="mb-7">
+          <button
+            onClick={() => setShowAdvanced((v) => !v)}
+            className="inline-flex items-center gap-2 px-4 py-2.5 rounded-xl bg-neutral-50 dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-[14px] font-bold text-neutral-700 dark:text-neutral-200 hover:border-[#F9954E] transition-all"
+          >
+            <SlidersHorizontal className="w-4 h-4" />
+            자세히 찾기
+            <span className="text-[12px] text-neutral-400">(먹이·색깔·크기·특징…)</span>
+            {advancedCount > 0 && <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded-full bg-[#F9954E] text-white">{advancedCount}</span>}
+            <ChevronDown className={`w-4 h-4 transition-transform ${showAdvanced ? "rotate-180" : ""}`} />
+          </button>
+
+          <AnimatePresence initial={false}>
+            {showAdvanced && (
+              <motion.div
+                key="adv"
+                initial={{ height: 0, opacity: 0 }}
+                animate={{ height: "auto", opacity: 1 }}
+                exit={{ height: 0, opacity: 0 }}
+                transition={{ duration: 0.25 }}
+                className="overflow-hidden"
+              >
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-3.5 pt-4">
+                  {FILTER_CATEGORIES.map((cat) => {
+                    const count = selected[cat.id]?.size || 0;
+                    return (
+                      <div key={cat.id} className="rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 p-4">
+                        <div className="flex items-center gap-2 mb-3">
+                          <span className="text-lg">{cat.emoji}</span>
+                          <h3 className="font-extrabold text-[14px] text-neutral-900 dark:text-white">{cat.title}</h3>
+                          {count > 0 && <span className="text-[10px] font-extrabold px-1.5 py-0.5 rounded-full bg-[#F9954E] text-white">{count}</span>}
+                        </div>
+                        <div className="flex flex-wrap gap-1.5">
+                          {cat.tags.map((tag) => {
+                            const sel = isSelected(cat.id, tag);
+                            return (
+                              <button
+                                key={tag}
+                                onClick={() => toggleTag(cat.id, tag)}
+                                className={`text-[12.5px] font-bold px-3 py-1.5 rounded-full border transition-all active:scale-95 ${
+                                  sel ? cat.selected + " shadow-sm" : "bg-neutral-50 dark:bg-zinc-800 text-neutral-600 dark:text-neutral-300 border-neutral-200 dark:border-zinc-700 hover:border-[#F9954E]"
+                                }`}
+                              >
+                                {sel && "✓ "}{tag}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        </section>
+
+        {/* ── 결과 헤더 ── */}
+        <section className="mb-16 scroll-mt-20">
+          <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
             <div>
               <h2 className="text-xl md:text-2xl font-extrabold text-neutral-900 dark:text-white">
-                🐾 {hasFilter ? `이런 동물을 찾았어요 (${matched.length})` : `전체 동물 (${cards.length})`}
+                🐾 {hasFilter ? `${sorted.length}마리를 찾았어요` : `전체 ${cards.length}마리`}
               </h2>
               <p className="text-neutral-500 dark:text-neutral-400 text-[13px] font-medium mt-0.5">
-                {hasFilter ? "카드를 누르면 자세한 이야기를 볼 수 있어요" : "위에서 특징을 고르거나, 이름으로 바로 검색해보세요"}
+                {hasFilter ? "카드를 누르면 자세한 이야기를 볼 수 있어요" : "검색하거나, 종류·특징을 골라보세요"}
               </p>
             </div>
-            <div className="relative w-full sm:w-64 flex-shrink-0">
-              <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-neutral-400" />
-              <input
-                value={query}
-                onChange={(e) => setQuery(e.target.value)}
-                placeholder="동물 이름으로 검색"
-                className="w-full pl-9 pr-8 py-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-sm text-neutral-700 dark:text-neutral-200 placeholder:text-neutral-400 focus:outline-none focus:border-[#F9954E] focus:ring-2 focus:ring-[#F9954E]/20 transition"
-              />
-              {query && (
-                <button onClick={() => setQuery("")} className="absolute right-2.5 top-1/2 -translate-y-1/2 text-neutral-400 hover:text-red-500"><X className="w-4 h-4" /></button>
+            <div className="flex items-center gap-2 flex-shrink-0">
+              {hasFilter && (
+                <button onClick={clearAll} className="inline-flex items-center gap-1 text-[13px] font-bold text-neutral-500 dark:text-neutral-400 hover:text-red-500 transition-colors">
+                  <RotateCcw className="w-3.5 h-3.5" /> 초기화
+                </button>
               )}
+              <div className="relative">
+                <select
+                  value={sort}
+                  onChange={(e) => setSort(e.target.value as "no" | "name")}
+                  aria-label="정렬"
+                  className="appearance-none pl-3 pr-8 py-2 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-[13px] font-bold text-neutral-700 dark:text-neutral-200 focus:outline-none focus:border-[#F9954E] cursor-pointer"
+                >
+                  <option value="no">도감번호순</option>
+                  <option value="name">이름순</option>
+                </select>
+                <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-400 pointer-events-none" />
+              </div>
             </div>
           </div>
 
           {/* 선택된 조건 요약 */}
           {allSelected.length > 0 && (
             <div className="flex flex-wrap items-center gap-1.5 mb-5">
-              {allSelected.map(({ catId, tag, cat }) => (
-                <button key={catId + tag} onClick={() => toggleTag(catId, tag)} className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#F9954E]/15 text-[#E8832E] dark:text-[#FBAA60] border border-[#F9954E]/30 hover:bg-red-100 dark:hover:bg-red-900/20">
-                  {cat.emoji} {tag} <X className="w-2.5 h-2.5" />
-                </button>
-              ))}
+              {allSelected.map(({ catId, tag, cat }) => {
+                const isTax = catId === "taxonomy";
+                const tm = isTax ? TYPE_MAP[tag] : null;
+                return (
+                  <button
+                    key={catId + tag}
+                    onClick={() => toggleTag(catId, tag)}
+                    className={`inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full border transition ${isTax ? "text-white" : cat.selected}`}
+                    style={isTax && tm ? { background: tm.hex, borderColor: tm.hex } : undefined}
+                  >
+                    {isTax && tm ? tm.emoji : cat.emoji} {tag} <X className="w-2.5 h-2.5" />
+                  </button>
+                );
+              })}
             </div>
           )}
 
@@ -286,39 +345,57 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
               <div className="text-5xl mb-3">🐣</div>
               <p className="text-neutral-500 dark:text-neutral-400 font-medium">동물 데이터를 채우는 중이에요</p>
             </div>
-          ) : matched.length === 0 ? (
+          ) : sorted.length === 0 ? (
             <div className="text-center py-20 bg-neutral-50 dark:bg-zinc-900/50 rounded-2xl border border-dashed border-neutral-200 dark:border-zinc-700">
-              <div className="text-5xl mb-3">🔍</div>
-              <p className="text-neutral-600 dark:text-neutral-300 font-bold mb-1">조건에 맞는 동물이 아직 없어요</p>
-              <p className="text-neutral-400 dark:text-neutral-500 text-sm mb-4">특징을 조금 줄여보면 더 많이 찾을 수 있어요</p>
+              <div className="text-5xl mb-3">{onlyEmptyTypes ? "🥚" : "🔍"}</div>
+              {onlyEmptyTypes ? (
+                <>
+                  <p className="text-neutral-600 dark:text-neutral-300 font-bold mb-1">{taxPicks.join("·")} 친구는 곧 도감에 들어올 거예요</p>
+                  <p className="text-neutral-400 dark:text-neutral-500 text-sm mb-4">다른 종류도 구경해볼까요?</p>
+                </>
+              ) : (
+                <>
+                  <p className="text-neutral-600 dark:text-neutral-300 font-bold mb-1">아직 이 조건에 맞는 친구가 없어요</p>
+                  <p className="text-neutral-400 dark:text-neutral-500 text-sm mb-4">조건을 조금 줄이면 더 많이 찾을 수 있어요</p>
+                </>
+              )}
               <button onClick={clearAll} className="text-sm font-bold text-[#E8832E] dark:text-[#FBAA60] hover:underline">전체 초기화</button>
             </div>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-4">
-              {matched.map((card, i) => (
-                <motion.button
-                  key={card.animal_name}
-                  initial={{ opacity: 0, y: 14 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  transition={{ duration: 0.25, delay: Math.min(i * 0.03, 0.4) }}
-                  onClick={() => setDetail(card)}
-                  className="group text-left bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl overflow-hidden hover:border-[#F9954E] hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
-                >
-                  <div className="relative aspect-[4/5] overflow-hidden bg-neutral-100 dark:bg-zinc-800">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={card.image_path} alt={card.animal_name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
-                    {card.no && <span className="absolute top-2 left-2 text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-black/55 text-[#f0d28a] backdrop-blur-sm">No.{card.no}</span>}
-                    {card.status?.code && <span className="absolute top-2 right-2 text-[9px] font-extrabold px-1.5 py-0.5 rounded-md text-white shadow" style={{ background: card.status.color }}>{card.status.code}</span>}
-                  </div>
-                  <div className="p-3">
-                    <div className="flex items-center justify-between gap-1 mb-0.5">
-                      <div className="font-bold text-sm text-neutral-900 dark:text-white truncate">{card.animal_name}</div>
-                      {typeof card.rarity === "number" && <span className="text-[10px] text-[#F9954E] shrink-0 tracking-tighter">{"★".repeat(card.rarity)}{"☆".repeat(5 - card.rarity)}</span>}
+              {sorted.map((card, i) => {
+                const tax = card.filters?.taxonomy?.[0];
+                const tm = tax ? TYPE_MAP[tax] : null;
+                return (
+                  <motion.button
+                    key={card.no ?? card.animal_name}
+                    initial={{ opacity: 0, y: 14 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ duration: 0.25, delay: Math.min(i * 0.03, 0.4) }}
+                    onClick={() => setDetail(card)}
+                    className="group text-left bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl overflow-hidden hover:border-[#F9954E] hover:shadow-lg hover:-translate-y-1 transition-all duration-200"
+                  >
+                    <div className="relative aspect-[4/5] overflow-hidden bg-neutral-100 dark:bg-zinc-800">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={card.image_path} alt={card.animal_name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
+                      {card.no && <span className="absolute top-2 left-2 text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-black/55 text-[#f0d28a] backdrop-blur-sm">No.{card.no}</span>}
+                      {card.status?.code && <span className="absolute top-2 right-2 text-[9px] font-extrabold px-1.5 py-0.5 rounded-md text-white shadow" style={{ background: card.status.color }}>{card.status.code}</span>}
+                      {tax && tm && (
+                        <span className="absolute bottom-2 left-2 inline-flex items-center gap-1 text-[10px] font-extrabold px-1.5 py-0.5 rounded-md text-white shadow" style={{ background: tm.hex }}>
+                          {tm.emoji} {tax}
+                        </span>
+                      )}
                     </div>
-                    <div className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-snug line-clamp-2 break-keep">{card.search_nickname}</div>
-                  </div>
-                </motion.button>
-              ))}
+                    <div className="p-3">
+                      <div className="flex items-center justify-between gap-1 mb-0.5">
+                        <div className="font-bold text-sm text-neutral-900 dark:text-white truncate">{card.animal_name}</div>
+                        {typeof card.rarity === "number" && <span className="text-[10px] text-[#F9954E] shrink-0 tracking-tighter">{"★".repeat(card.rarity)}{"☆".repeat(5 - card.rarity)}</span>}
+                      </div>
+                      <div className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-snug line-clamp-2 break-keep">{card.search_nickname}</div>
+                    </div>
+                  </motion.button>
+                );
+              })}
             </div>
           )}
         </section>
@@ -390,14 +467,22 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
                 {detail.taxonomy && <p className="text-[11px] text-neutral-400 dark:text-neutral-500 mb-1.5 leading-relaxed break-keep"><b className="text-neutral-500 dark:text-neutral-400">분류 </b>{detail.taxonomy}</p>}
                 {detail.subspecies && <p className="text-[11px] text-neutral-400 dark:text-neutral-500 mb-4 break-keep"><b className="text-neutral-500 dark:text-neutral-400">하위종 </b>{detail.subspecies}</p>}
                 <div className="mt-auto pt-2 space-y-2">
-                  {FILTER_CATEGORIES.map((cat) => {
+                  {ALL_CATS.map((cat) => {
                     const tags = detail.filters?.[cat.id] || [];
                     if (tags.length === 0) return null;
+                    const isTax = cat.id === "taxonomy";
                     return (
                       <div key={cat.id} className="flex items-start gap-2">
                         <span className="text-[11px] font-bold text-neutral-500 dark:text-neutral-400 w-16 flex-shrink-0 pt-0.5">{cat.emoji} {CAT_SHORT[cat.id]}</span>
                         <div className="flex flex-wrap gap-1">
-                          {tags.map((t) => <span key={t} className={`text-[10px] font-medium px-2 py-0.5 rounded-md border ${CAT_CHIP[cat.id]}`}>{t}</span>)}
+                          {tags.map((t) => {
+                            const tm = isTax ? TYPE_MAP[t] : null;
+                            return tm ? (
+                              <span key={t} className="text-[10px] font-bold px-2 py-0.5 rounded-md text-white" style={{ background: tm.hex }}>{tm.emoji} {t}</span>
+                            ) : (
+                              <span key={t} className={`text-[10px] font-medium px-2 py-0.5 rounded-md border ${CAT_CHIP[cat.id]}`}>{t}</span>
+                            );
+                          })}
                         </div>
                       </div>
                     );

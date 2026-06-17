@@ -46,7 +46,7 @@ export default function Header() {
     },
     {
       name: "동물도감", emoji: "🐾", image: "",
-      desc: "포켓몬처럼, 진짜 동물을 배워요", href: "/animal",
+      desc: "다양한 동물을 도감처럼 만나요", href: "/animal",
       bg: "bg-emerald-50 dark:bg-emerald-900/20", active: true,
     },
     {
