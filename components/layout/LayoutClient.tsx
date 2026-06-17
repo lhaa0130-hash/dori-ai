@@ -43,6 +43,11 @@ export default function LayoutClient({ children }: LayoutClientProps) {
     return <>{children}</>;
   }
 
+  // 동물 합치기(/minigame/animal)도 전체화면 게임 — 사이트 헤더/사이드 광고 없이 iframe 통째 렌더
+  if (pathname?.startsWith("/minigame/animal")) {
+    return <>{children}</>;
+  }
+
   // 관리자(/admin)는 자체 헤더·풀폭 레이아웃 사용 — 사이드 광고/본문 패딩 중복 제거
   if (pathname?.startsWith("/admin")) {
     return <>{children}</>;
