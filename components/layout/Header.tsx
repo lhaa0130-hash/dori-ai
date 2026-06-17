@@ -47,7 +47,7 @@ export default function Header() {
     {
       name: "동물도감", emoji: "🐾", image: "",
       desc: "포켓몬처럼, 진짜 동물을 배워요", href: "/animal",
-      bg: "bg-emerald-50 dark:bg-emerald-900/20",
+      bg: "bg-emerald-50 dark:bg-emerald-900/20", active: true,
     },
     {
       name: "가족기록", emoji: "👨‍👩‍👧‍👦", image: "",
@@ -86,17 +86,30 @@ export default function Header() {
               </button>
               <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 translate-y-1 group-hover:translate-y-0 z-50 pt-2">
                 <div className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden">
-                  <div className="px-4 py-2.5 border-b border-neutral-100 dark:border-zinc-800 flex items-center justify-between">
+                  <div className="px-4 py-2.5 border-b border-neutral-100 dark:border-zinc-800">
                     <span className="text-[10px] font-bold tracking-widest uppercase text-neutral-400">Projects</span>
-                    <span className="text-[10px] font-semibold text-neutral-300 dark:text-neutral-600">준비 중</span>
                   </div>
-                  {projects.map((p) => (
-                    <div key={p.name} aria-disabled="true" title="준비 중입니다" className="flex items-center gap-3 px-4 py-3 opacity-40 cursor-not-allowed select-none">
+                  {projects.map((p) => p.active ? (
+                    <Link key={p.name} href={p.href} className="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
                       <div className={`w-9 h-9 rounded-xl ${p.bg} flex items-center justify-center flex-shrink-0 text-lg overflow-hidden`}>
                         {p.image ? <img src={p.image} alt={p.name} loading="lazy" className="w-full h-full object-cover" /> : p.emoji}
                       </div>
                       <div>
+                        <div className="text-sm font-bold text-neutral-900 dark:text-white flex items-center gap-1.5">
+                          {p.name}
+                          <span className="text-[9px] font-extrabold text-white bg-[#F9954E] rounded-full px-1.5 py-0.5">NEW</span>
+                        </div>
+                        <div className="text-[11px] text-neutral-400">{p.desc}</div>
+                      </div>
+                    </Link>
+                  ) : (
+                    <div key={p.name} aria-disabled="true" title="준비 중입니다" className="flex items-center gap-3 px-4 py-3 opacity-40 cursor-not-allowed select-none">
+                      <div className={`w-9 h-9 rounded-xl ${p.bg} flex items-center justify-center flex-shrink-0 text-lg overflow-hidden`}>
+                        {p.image ? <img src={p.image} alt={p.name} loading="lazy" className="w-full h-full object-cover" /> : p.emoji}
+                      </div>
+                      <div className="flex items-center gap-1.5">
                         <div className="text-sm font-bold text-neutral-900 dark:text-white">{p.name}</div>
+                        <span className="text-[9px] font-semibold text-neutral-300 dark:text-neutral-600">준비중</span>
                       </div>
                     </div>
                   ))}
@@ -284,18 +297,30 @@ export default function Header() {
             </Link>
           ))}
 
-          {/* 프로젝트 — 비활성화(준비 중): 클릭 불가, 회색 표시만 */}
+          {/* 프로젝트 — 활성 항목은 링크, 나머지는 준비 중(회색) */}
           <div className="mt-2 pt-2 border-t border-neutral-100 dark:border-zinc-800">
-            <p className="px-4 pt-2 pb-1 text-[10px] font-bold tracking-widest uppercase text-neutral-400">
-              Projects <span className="ml-1 normal-case font-medium text-neutral-300 dark:text-neutral-600">· 준비 중</span>
-            </p>
-            {projects.map((p) => (
-              <div key={p.name} aria-disabled="true" className="flex items-center gap-3 px-4 py-3 rounded-2xl opacity-40 cursor-not-allowed select-none">
+            <p className="px-4 pt-2 pb-1 text-[10px] font-bold tracking-widest uppercase text-neutral-400">Projects</p>
+            {projects.map((p) => p.active ? (
+              <Link key={p.name} href={p.href} className="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-neutral-50 dark:hover:bg-zinc-900 transition-colors">
                 <div className={`w-9 h-9 rounded-xl ${p.bg} flex items-center justify-center text-lg flex-shrink-0 overflow-hidden`}>
                   {p.image ? <img src={p.image} alt={p.name} loading="lazy" className="w-full h-full object-cover" /> : p.emoji}
                 </div>
                 <div>
+                  <div className="text-sm font-bold text-neutral-900 dark:text-white flex items-center gap-1.5">
+                    {p.name}
+                    <span className="text-[9px] font-extrabold text-white bg-[#F9954E] rounded-full px-1.5 py-0.5">NEW</span>
+                  </div>
+                  <div className="text-[11px] text-neutral-400">{p.desc}</div>
+                </div>
+              </Link>
+            ) : (
+              <div key={p.name} aria-disabled="true" className="flex items-center gap-3 px-4 py-3 rounded-2xl opacity-40 cursor-not-allowed select-none">
+                <div className={`w-9 h-9 rounded-xl ${p.bg} flex items-center justify-center text-lg flex-shrink-0 overflow-hidden`}>
+                  {p.image ? <img src={p.image} alt={p.name} loading="lazy" className="w-full h-full object-cover" /> : p.emoji}
+                </div>
+                <div className="flex items-center gap-1.5">
                   <div className="text-sm font-bold text-neutral-900 dark:text-white">{p.name}</div>
+                  <span className="text-[9px] font-semibold text-neutral-300 dark:text-neutral-600">준비중</span>
                 </div>
               </div>
             ))}
