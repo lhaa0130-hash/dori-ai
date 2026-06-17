@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Wed, 17 Jun 2026 13:04:27 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 17 Jun 2026 15:06:08 GMT</lastBuildDate>
+    <item>
+      <title>딥엘, 믹스할로 인수 — 실시간 음성 번역의 새로운 장을 열다</title>
+      <link>https://dori-ai.com/insight/article/trend-116</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-116</guid>
+      <category>트렌드</category>
+      <pubDate>Wed, 17 Jun 2026 13:00:47 GMT</pubDate>
+      <description>딥엘이 믹스할로를 인수하며 실시간 이벤트 오디오 스트리밍 및 번역 서비스에 진출한다. 샌프란시스코 사무소 개설로 미국 시장을 겨냥한다.</description>
+    </item>
     <item>
       <title>G7 정상회의의 새로운 주인공, OpenAI와 앤트로픽</title>
       <link>https://dori-ai.com/insight/article/trend-115</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Mon, 25 May 2026 00:00:00 GMT</pubDate>
       <description>버지니아 코먼웰스 대학교의 스티븐 티베난이 인공지능을 활용해 기후 예측의 새로운 지평을 열고 있습니다. 그의 연구는 기후 변화 대응에 중요한 이정표가 될 것으로 기대됩니다.</description>
-    </item>
-    <item>
-      <title>미국 정부, 20억 달러로 9개 양자 컴퓨팅 기업에 투자</title>
-      <link>https://dori-ai.com/insight/article/trend-79</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-79</guid>
-      <category>트렌드</category>
-      <pubDate>Fri, 22 May 2026 00:00:00 GMT</pubDate>
-      <description>미국 정부가 9개 양자 컴퓨팅 기업에 20억 달러의 지분을 투자하며 양자 기술 개발을 가속화하고 있습니다.</description>
     </item>
   </channel>
 </rss>
