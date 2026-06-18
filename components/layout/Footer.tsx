@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import SocialLinks from "@/components/layout/SocialLinks";
 
 const LINKS = [
   { label: "인사이트", href: "/insight" },
@@ -48,6 +49,12 @@ export default function Footer() {
             </Link>
           ))}
         </nav>
+
+        {/* 소셜 */}
+        <div className="mb-7">
+          <p className="text-[12px] font-semibold text-neutral-400 dark:text-neutral-500 mb-3">팔로우</p>
+          <SocialLinks />
+        </div>
 
         {/* 하단: 저작권 + 문의 */}
         <div className="flex items-center justify-between flex-wrap gap-2 pt-5 border-t border-neutral-100 dark:border-zinc-900 text-[11px] text-neutral-400">

@@ -1,3 +1,5 @@
+import { SOCIAL_SAMEAS } from "@/constants/socialLinks";
+
 export default function StructuredData() {
   const organizationSchema = {
     "@context": "https://schema.org",
@@ -7,10 +9,7 @@ export default function StructuredData() {
     logo: "https://dori-ai.com/logo.png",
     description: "AI 활용 방법을 함께 연구하고 실전으로 적용해보는 커뮤니티 플랫폼. AI 자동화, 캐릭터 제작 가이드, 프레리독 애니메이션 교육을 제공합니다.",
     email: "lhaa0130@gmail.com",
-    sameAs: [
-      "https://x.com/doriillo",
-      "https://blog.naver.com/illo26",
-    ],
+    sameAs: SOCIAL_SAMEAS,
     areaServed: "KR",
     knowsAbout: [
       "AI 자동화",
