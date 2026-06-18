@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Wed, 17 Jun 2026 23:43:55 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 18 Jun 2026 00:07:27 GMT</lastBuildDate>
+    <item>
+      <title>오디세이, 14억 5천만 달러 가치로 AI 모델의 새로운 지평을 열다</title>
+      <link>https://dori-ai.com/insight/article/trend-117</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-117</guid>
+      <category>트렌드</category>
+      <pubDate>Thu, 18 Jun 2026 00:00:16 GMT</pubDate>
+      <description>오디세이가 14억 5천만 달러의 기업 가치를 인정받으며 AI 모델 제작의 차세대 선두주자로 떠오르고 있다. 아마존의 지원을 받는 이 스타트업의 행보에 주목해야 한다.</description>
+    </item>
     <item>
       <title>딥엘, 믹스할로 인수 — 실시간 음성 번역의 새로운 장을 열다</title>
       <link>https://dori-ai.com/insight/article/trend-116</link>
@@ -318,14 +326,6 @@
       <category>리포트</category>
       <pubDate>Tue, 26 May 2026 00:00:00 GMT</pubDate>
       <description>이번 주 AI 산업의 주요 이슈와 기업 동향, 투자 소식을 종합적으로 정리합니다.</description>
-    </item>
-    <item>
-      <title>AI와 기후 예측: 스티븐 티베난의 혁신적 접근</title>
-      <link>https://dori-ai.com/insight/article/trend-80</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-80</guid>
-      <category>트렌드</category>
-      <pubDate>Mon, 25 May 2026 00:00:00 GMT</pubDate>
-      <description>버지니아 코먼웰스 대학교의 스티븐 티베난이 인공지능을 활용해 기후 예측의 새로운 지평을 열고 있습니다. 그의 연구는 기후 변화 대응에 중요한 이정표가 될 것으로 기대됩니다.</description>
     </item>
   </channel>
 </rss>

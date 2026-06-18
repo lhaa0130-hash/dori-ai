@@ -97,6 +97,14 @@ const CAT_SHORT: Record<string, string> = {
 };
 const ALL_CATS = [...FILTER_CATEGORIES, { id: "taxonomy", emoji: "🗂️", title: "어떤 종류인가요", selected: "", tags: TYPES.map((t) => t.label) }];
 
+// 재생성됐지만 파일명이 같아 브라우저 캐시에 막힌 이미지 — 쿼리로 캐시 무효화
+const BUSTED_SLUGS = new Set(["spider-monkey", "gibbon", "ocean-sunfish"]);
+function imgUrl(p?: string) {
+  if (!p) return p || "";
+  const slug = (p.split("/").pop() || "").replace(/\.jpg$/, "");
+  return BUSTED_SLUGS.has(slug) ? `${p}?v=2` : p;
+}
+
 export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] }) {
   const [selected, setSelected] = useState<Record<string, Set<string>>>({});
   const [detail, setDetail] = useState<AnimalCard | null>(null);
@@ -414,7 +422,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
                   >
                     <div className="relative aspect-[4/5] overflow-hidden bg-neutral-100 dark:bg-zinc-800">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={card.image_path} alt={card.animal_name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
+                      <img src={imgUrl(card.image_path)} alt={card.animal_name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
                       {card.no && <span className="absolute top-2 left-2 text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-black/55 text-[#f0d28a] backdrop-blur-sm">No.{card.no}</span>}
                       {card.status?.code && <span className="absolute top-2 right-2 text-[9px] font-extrabold px-1.5 py-0.5 rounded-md text-white shadow" style={{ background: card.status.color }}>{card.status.code}</span>}
                       {tax && tm && (
@@ -506,11 +514,11 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
               <button
                 type="button"
                 onClick={() => setZoomImg({ src: detail.image_path, name: detail.animal_name })}
-                className="group/img relative aspect-[4/5] md:aspect-auto md:min-h-[420px] bg-neutral-100 dark:bg-zinc-800 cursor-zoom-in overflow-hidden md:rounded-l-3xl"
+                className="group/img relative w-full aspect-[3/4] md:self-start bg-neutral-100 dark:bg-zinc-800 cursor-zoom-in overflow-hidden md:rounded-l-3xl"
                 aria-label="이미지 크게 보기"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={detail.image_path} alt={detail.animal_name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover/img:scale-105" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
+                <img src={imgUrl(detail.image_path)} alt={detail.animal_name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover/img:scale-105" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
                 <span className="absolute bottom-3 left-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/55 text-white text-[11px] font-bold backdrop-blur-sm opacity-90 group-hover/img:bg-black/70 transition">
                   <Maximize2 className="w-3 h-3" /> 크게 보기
                 </span>
@@ -603,7 +611,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
             className="flex flex-col items-center gap-3"
           >
             {/* eslint-disable-next-line @next/next/no-img-element */}
-            <img src={zoomImg.src} alt={zoomImg.name} className="max-w-[92vw] max-h-[82vh] object-contain rounded-2xl shadow-2xl" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
+            <img src={imgUrl(zoomImg.src)} alt={zoomImg.name} className="max-w-[92vw] max-h-[82vh] object-contain rounded-2xl shadow-2xl" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
             <p className="text-white/90 text-sm font-bold">{zoomImg.name}</p>
           </motion.div>
         </div>
