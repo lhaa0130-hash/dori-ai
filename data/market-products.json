@@ -1,5 +1,55 @@
 [
   {
+    "id": "mk4-1",
+    "name": "JBL 고 4",
+    "category": "digital",
+    "source": "coupang",
+    "query": "JBL GO 4 블루투스 스피커",
+    "emoji": "🟧",
+    "priceHint": "보급형",
+    "summary": "작고 경쾌한 휴대형",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/eFLlfRJWiy"
+  },
+  {
+    "id": "mk4-2",
+    "name": "샤오미 사운드 포켓",
+    "category": "digital",
+    "source": "ali",
+    "query": "Xiaomi Sound Pocket speaker",
+    "emoji": "⚪",
+    "priceHint": "입문형",
+    "summary": "부담 적은 세컨드용",
+    "hot": true,
+    "weekly": true
+  },
+  {
+    "id": "mk4-3",
+    "name": "앤커 사운드코어 2",
+    "category": "digital",
+    "source": "coupang",
+    "query": "Anker Soundcore 2 블루투스 스피커",
+    "emoji": "🔵",
+    "priceHint": "보급~중급형",
+    "summary": "실내에 안정적인 기본기",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/eFLlfXQpZk"
+  },
+  {
+    "id": "mk4-4",
+    "name": "트리빗 스톰박스 마이크로 2",
+    "category": "digital",
+    "source": "ali",
+    "query": "Tribit StormBox Micro 2",
+    "emoji": "🟩",
+    "priceHint": "중저가형",
+    "summary": "외출 고정에 강한 타입",
+    "hot": true,
+    "weekly": true
+  },
+  {
     "id": "mk3-1",
     "name": "앤커 나노 GaN 충전기",
     "category": "digital",
@@ -9,7 +59,7 @@
     "priceHint": "중가형",
     "summary": "휴대성 좋은 안정형",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/eCrwwSitie"
   },
   {
@@ -22,7 +72,7 @@
     "priceHint": "중가형",
     "summary": "책상용 밸런스형",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/eCrwwVqo2e"
   },
   {
@@ -35,7 +85,7 @@
     "priceHint": "중저가형",
     "summary": "구성 좋은 실속형",
     "hot": true,
-    "weekly": true
+    "weekly": false
   },
   {
     "id": "mk3-4",
@@ -47,7 +97,7 @@
     "priceHint": "저가 딜형",
     "summary": "가격 우선 입문형",
     "hot": true,
-    "weekly": true
+    "weekly": false
   },
   {
     "id": "mk2-1",
