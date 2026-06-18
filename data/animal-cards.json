@@ -17758,5 +17758,348 @@
       ],
       "taxonomy": []
     }
+  },
+  {
+    "no": "0256",
+    "rarity": 1,
+    "animal_name": "직박구리",
+    "sci": "Hypsipetes amaurotis",
+    "en": "Brown-eared Bulbul",
+    "search_nickname": "갈색 귀새",
+    "kid_friendly_desc": "직박구리는 한국에서 흔히 볼 수 있는 새예요. 귀 부분이 갈색이라서 이름이 직박구리랍니다. 나무 위에서 살고, 벌레와 과일을 먹어요. 봄에는 알을 낳고 아기 새들을 돌봐요.",
+    "status": {
+      "label": "관심대상",
+      "code": "LC",
+      "color": "#5BA86B"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 조류강 › 참새목 › 직박구리과 › 직박구리속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "도시 근처"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "잡식"
+      ],
+      [
+        "📏",
+        "크기",
+        "고양이만한"
+      ],
+      [
+        "✨",
+        "번식",
+        "알을 낳는"
+      ]
+    ],
+    "facts": [
+      "직박구리는 뺨에 갈색 반점이 있어 쉽게 구별할 수 있습니다.",
+      "주로 나무 위에서 생활하며, 도심에서도 자주 발견됩니다.",
+      "직박구리는 다양한 먹이를 먹으며, 감과 곤충을 좋아합니다."
+    ],
+    "image_path": "/images/animal/brown-eared-bulbul.jpg",
+    "card_path": "/cards/animal/0256.png",
+    "filters": {
+      "diet": [
+        "잡식"
+      ],
+      "color": [],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "도시 근처"
+      ],
+      "feature": [],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "나무 위에 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    }
+  },
+  {
+    "no": "0257",
+    "rarity": 1,
+    "animal_name": "동박새",
+    "sci": "Zosterops japonicus",
+    "en": "Japanese White-eye",
+    "search_nickname": "흰눈테 새",
+    "kid_friendly_desc": "동박새는 작은 초록색 새로, 눈 주위에 흰 테두리가 있어요. 주로 꽃의 꿀을 먹으며 나무 위에 둥지를 만들어요. 제주도와 울릉도에서 많이 볼 수 있답니다.",
+    "status": {
+      "label": "관심대상",
+      "code": "LC",
+      "color": "#5BA86B"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 조류강 › 참새목 › 동박새과 › 동박새속",
+    "subspecies": "Zosterops japonicus japonicus, Zosterops japonicus alani, Zosterops japonicus daitoensis",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "도시 근처"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "잡식"
+      ],
+      [
+        "📏",
+        "크기",
+        "손보다 작은"
+      ],
+      [
+        "✨",
+        "번식",
+        "알을 낳는"
+      ]
+    ],
+    "facts": [
+      "동박새는 동백꽃과 공생하며 꽃의 꿀을 먹고 수정을 돕습니다.",
+      "동박새는 흰 눈테를 가진 독특한 외모로 쉽게 구별됩니다.",
+      "동박새는 나뭇가지 위에 소쿠리 모양의 둥지를 짓습니다."
+    ],
+    "image_path": "/images/animal/japanese-white-eye.jpg",
+    "card_path": "/cards/animal/0257.png",
+    "filters": {
+      "diet": [
+        "잡식"
+      ],
+      "color": [
+        "초록색",
+        "흰색"
+      ],
+      "size": [
+        "손보다 작은"
+      ],
+      "habitat": [
+        "도시 근처"
+      ],
+      "feature": [],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    }
+  },
+  {
+    "no": "0258",
+    "rarity": 2,
+    "animal_name": "굴뚝새",
+    "sci": "Troglodytes troglodytes",
+    "en": "Eurasian wren",
+    "search_nickname": "작은 숲새",
+    "kid_friendly_desc": "굴뚝새는 아주 작은 새로, 손바닥만한 크기예요. 여름엔 산 속에서, 겨울엔 집 근처에서 살아요. 작은 곤충을 먹고, 덤불 사이로 다니기 때문에 찾기 어려워요.",
+    "status": {
+      "label": "관심대상",
+      "code": "LC",
+      "color": "#5BA86B"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 조류강 › 참새목 › 굴뚝새과 › 굴뚝새속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "산지, 인가 주변"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "곤충을 먹는"
+      ],
+      [
+        "📏",
+        "크기",
+        "손바닥만한"
+      ],
+      [
+        "✨",
+        "번식",
+        "알을 낳는"
+      ]
+    ],
+    "facts": [
+      "굴뚝새는 매우 작은 새로 몸길이가 약 10cm입니다.",
+      "여름에는 산지에, 겨울에는 인가 주변에서 서식합니다.",
+      "굴뚝새는 작은 소리로 울며, 덤불 사이로 다니기 때문에 눈에 잘 띄지 않습니다."
+    ],
+    "image_path": "/images/animal/eurasian-wren.jpg",
+    "card_path": "/cards/animal/0258.png",
+    "filters": {
+      "diet": [
+        "곤충을 먹는"
+      ],
+      "color": [],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "도시 근처"
+      ],
+      "feature": [],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    }
+  },
+  {
+    "no": "0259",
+    "rarity": 2,
+    "animal_name": "찌르레기",
+    "sci": "Sturnus cineraceus",
+    "en": "white-cheeked starling",
+    "search_nickname": "하얀뺨 찌르레기",
+    "kid_friendly_desc": "찌르레기는 회색과 검은색을 띠는 작은 새예요. 얼굴 주위에 하얀 깃털이 있고, 무리를 지어 살아요. 나무에서 알을 낳고, 지렁이나 열매를 먹어요.",
+    "status": {
+      "label": "관심대상",
+      "code": "LC",
+      "color": "#5BA86B"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 조류 › 참새목 › 찌르레기과 › Sturnus",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "숲 가장자리 또는 공원"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "잡식"
+      ],
+      [
+        "📏",
+        "크기",
+        "손바닥만한"
+      ],
+      [
+        "✨",
+        "번식",
+        "3~7월에 4~9개의 알을 낳는다"
+      ]
+    ],
+    "facts": [
+      "찌르레기는 무리를 지어 생활하는 경향이 있다.",
+      "번식기가 되면 맑고 높은 소리로 운다.",
+      "암컷과 수컷이 번갈아가며 알을 품는다."
+    ],
+    "image_path": "/images/animal/white-cheeked-starling.jpg",
+    "card_path": "/cards/animal/0259.png",
+    "filters": {
+      "diet": [
+        "잡식"
+      ],
+      "color": [
+        "검정색",
+        "흰색"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [],
+      "feature": [],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    }
+  },
+  {
+    "no": "0260",
+    "rarity": 2,
+    "animal_name": "구관조",
+    "sci": "Gracula religiosa",
+    "en": "common hill myna",
+    "search_nickname": "말하는 새",
+    "kid_friendly_desc": "구관조는 사람의 말을 따라 하는 재미있는 새예요. 몸은 검은색이고 날개에는 하얀 부분이 있어요. 주로 과일과 곤충을 먹고 숲 속에서 살아요.",
+    "status": {
+      "label": "관심대상",
+      "code": "LC",
+      "color": "#5BA86B"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 조강 › 참새목 › 찌르레기과 › 구관조속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "삼림"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "잡식"
+      ],
+      [
+        "📏",
+        "크기",
+        "고양이만한"
+      ],
+      [
+        "✨",
+        "수명",
+        "평균 3년, 최대 8년 이상"
+      ]
+    ],
+    "facts": [
+      "구관조는 사람의 말을 잘 흉내낼 수 있다.",
+      "몸빛은 검은색에 자주색 광택이 나며, 날개에는 흰 부분이 있다.",
+      "구관조는 인도, 동남아시아, 중국이 원산지이다."
+    ],
+    "image_path": "/images/animal/common-hill-myna.jpg",
+    "card_path": "/cards/animal/0260.png",
+    "filters": {
+      "diet": [
+        "잡식"
+      ],
+      "color": [
+        "검정색"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [],
+      "feature": [],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    }
   }
 ]
