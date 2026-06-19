@@ -23,10 +23,10 @@ const priceM = (p: any) => { const v = parseFloat(p); return v > 0 ? +(v * 1e6).
 async function build(): Promise<any> {
   const modelsResp = await jget("https://openrouter.ai/api/v1/models");
   const allModels = (modelsResp && modelsResp.data) || [];
-  const pf = ((await jget("https://openrouter.ai/api/frontend/rankings/performance")) || {}).data || [];
-  const bmResp = await jget("https://openrouter.ai/api/frontend/rankings/benchmarks");
+  const pf = ((await jget("https://openrouter.ai/api/frontend/v1/rankings/performance")) || {}).data || [];
+  const bmResp = await jget("https://openrouter.ai/api/frontend/v1/rankings/benchmarks");
   const bmIntel = (bmResp && bmResp.data && bmResp.data.aaData && bmResp.data.aaData.intelligence) || [];
-  const appsResp = await jget("https://openrouter.ai/api/frontend/rankings/apps");
+  const appsResp = await jget("https://openrouter.ai/api/frontend/v1/rankings/apps");
   const appsRaw = (appsResp && appsResp.data && (appsResp.data.day || appsResp.data.week || appsResp.data.month)) || [];
 
   const byId: any = {}, byNorm: any = {}, byName: any = {};
