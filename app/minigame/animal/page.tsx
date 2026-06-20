@@ -8,5 +8,5 @@ export const metadata: Metadata = {
 };
 
 export default function AnimalMergePage() {
-  return <EmbeddedGame gameId="animal" src="/games/animal-merge/index.html" title="동물 합치기" />;
+  return <EmbeddedGame gameId="animal" src="/games/animal-merge/index.html" title="동물 합치기" theme="neon" />;
 }

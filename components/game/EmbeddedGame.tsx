@@ -6,6 +6,7 @@
 //   · 랭킹: Firestore 명예의전당(leaderboards/{id})에 개인 최고기록 등록
 //   · 보상: 솜사탕(하루 1회 +50, 기존 grantPlaytimeReward 재사용)
 // 게임 쪽은 점수만 쏘면 되고, 자체 로그인/랭킹 UI는 제거돼 있다.
+// theme="neon": The Tower 풍 다크 네온 크롬(동물 합치기 등 재구축 게임용). 기본 light.
 
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
@@ -13,20 +14,44 @@ import { useAuth } from "@/contexts/AuthContext";
 import { submitScore, getTopScores, type ScoreEntry, type RankOrder } from "@/lib/leaderboard";
 import { grantPlaytimeReward } from "@/lib/cottonCandy";
 
+type Theme = "light" | "neon";
+
+const PALETTE = {
+  light: {
+    page: "#FFF8EE", barBg: "rgba(255,255,255,0.92)", barBorder: "1px solid #F0D6B0",
+    title: "#6B4E32", chipBg: "rgba(255,255,255,0.9)", chipColor: "#6B4E32", chipBorder: "1px solid #F0D6B0",
+    userChip: "#FFF1DC", accent: "#F9954E", accentText: "#fff",
+    toastBg: "#6B4E32", toastColor: "#fff", toastShadow: "0 10px 30px -8px rgba(0,0,0,.4)",
+    modalBg: "#fff", modalBorder: "1px solid #F0D6B0", headBorder: "1px solid #F4ECE0",
+    subtle: "#A8845C", rowHi: "#FFF1DC", rankTop: "#F9954E", rankRest: "#B0895E", name: "#5A3E2B", score: "#6B4E32",
+  },
+  neon: {
+    page: "#06060d", barBg: "rgba(9,11,20,0.85)", barBorder: "1px solid rgba(0,229,255,.25)",
+    title: "#bdefff", chipBg: "rgba(0,229,255,0.07)", chipColor: "#bdefff", chipBorder: "1px solid rgba(0,229,255,.30)",
+    userChip: "rgba(0,229,255,0.14)", accent: "#00e5ff", accentText: "#06060d",
+    toastBg: "rgba(11,14,26,0.96)", toastColor: "#eaf6ff", toastShadow: "0 0 28px rgba(0,229,255,.35)",
+    modalBg: "#0b0e1a", modalBorder: "1px solid rgba(0,229,255,.3)", headBorder: "1px solid rgba(255,255,255,.08)",
+    subtle: "#7fa9c0", rowHi: "rgba(0,229,255,.12)", rankTop: "#00e5ff", rankRest: "#6f93a8", name: "#dcefff", score: "#bdefff",
+  },
+} as const;
+
 export default function EmbeddedGame({
   gameId,
   src,
   title,
   order = "desc",
+  theme = "light",
 }: {
   gameId: string;
   src: string;
   title: string;
   order?: RankOrder;
+  theme?: Theme;
 }) {
   const { session } = useAuth();
   const user = session?.user;
   const name = user?.name || user?.email?.split("@")[0] || "나";
+  const T = PALETTE[theme];
 
   const [lbOpen, setLbOpen] = useState(false);
   const [scores, setScores] = useState<ScoreEntry[] | null>(null);
@@ -42,7 +67,6 @@ export default function EmbeddedGame({
       if (e.origin !== window.location.origin) return; // 동일 출처(우리 iframe)만 신뢰
       const d = e.data as { type?: string; event?: string; score?: number } | null;
       if (!d || d.type !== "dori-game") return;
-      // 게임 내부 버튼 → 우리 셸 기능으로 위임
       if (d.event === "open-leaderboard") { setLbOpen(true); void loadScores(); return; }
       if (d.event === "request-login") { window.location.href = "/login"; return; }
       if (d.event !== "gameover") return;
@@ -76,28 +100,33 @@ export default function EmbeddedGame({
   }, [toast]);
 
   const openLb = () => { setLbOpen(true); void loadScores(); };
+  const chip = (override?: React.CSSProperties): React.CSSProperties => ({
+    background: T.chipBg, color: T.chipColor, fontWeight: 800, fontSize: 12,
+    padding: "7px 12px", borderRadius: 999, textDecoration: "none", border: T.chipBorder,
+    cursor: "pointer", whiteSpace: "nowrap", ...override,
+  });
 
   const BAR = 46;
 
   return (
-    <div style={{ position: "fixed", inset: 0, background: "#FFF8EE" }}>
+    <div style={{ position: "fixed", inset: 0, background: T.page }}>
       {/* 상단 바 (우리 사이트 크롬) */}
       <div
         style={{
           position: "fixed", top: 0, left: 0, right: 0, height: BAR, zIndex: 10,
           display: "flex", alignItems: "center", justifyContent: "space-between",
-          padding: "0 12px", background: "rgba(255,255,255,0.92)", backdropFilter: "blur(8px)",
-          borderBottom: "1px solid #F0D6B0",
+          padding: "0 12px", background: T.barBg, backdropFilter: "blur(8px)",
+          borderBottom: T.barBorder,
         }}
       >
         <Link href="/minigame" style={chip()}>← 미니게임</Link>
-        <span style={{ fontWeight: 800, fontSize: 14, color: "#6B4E32" }}>{title}</span>
+        <span style={{ fontWeight: 800, fontSize: 14, color: T.title }}>{title}</span>
         <div style={{ display: "flex", gap: 8, alignItems: "center" }}>
           <button onClick={openLb} style={chip()}>🏆 명예의전당</button>
           {user ? (
-            <span style={{ ...chip(), background: "#FFF1DC" }}>{name}</span>
+            <span style={chip({ background: T.userChip })}>{name}</span>
           ) : (
-            <Link href="/login" style={{ ...chip(), background: "#F9954E", color: "#fff", borderColor: "#F9954E" }}>로그인</Link>
+            <Link href="/login" style={chip({ background: T.accent, color: T.accentText, borderColor: T.accent })}>로그인</Link>
           )}
         </div>
       </div>
@@ -113,8 +142,9 @@ export default function EmbeddedGame({
         <div
           style={{
             position: "fixed", left: "50%", bottom: 24, transform: "translateX(-50%)", zIndex: 20,
-            background: "#6B4E32", color: "#fff", fontWeight: 700, fontSize: 13,
-            padding: "10px 18px", borderRadius: 999, boxShadow: "0 10px 30px -8px rgba(0,0,0,.4)", maxWidth: "90vw", textAlign: "center",
+            background: T.toastBg, color: T.toastColor, fontWeight: 700, fontSize: 13,
+            padding: "10px 18px", borderRadius: 999, boxShadow: T.toastShadow, maxWidth: "90vw", textAlign: "center",
+            border: theme === "neon" ? "1px solid rgba(0,229,255,.4)" : undefined,
           }}
         >
           {toast}
@@ -125,31 +155,31 @@ export default function EmbeddedGame({
       {lbOpen && (
         <div
           onClick={() => setLbOpen(false)}
-          style={{ position: "fixed", inset: 0, zIndex: 30, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.45)", padding: 16 }}
+          style={{ position: "fixed", inset: 0, zIndex: 30, display: "flex", alignItems: "center", justifyContent: "center", background: "rgba(0,0,0,0.55)", padding: 16 }}
         >
-          <div onClick={(e) => e.stopPropagation()} style={{ width: "100%", maxWidth: 360, maxHeight: "75vh", overflow: "hidden", display: "flex", flexDirection: "column", background: "#fff", borderRadius: 20, border: "1px solid #F0D6B0" }}>
-            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 18px", borderBottom: "1px solid #F4ECE0" }}>
-              <span style={{ fontWeight: 800, color: "#6B4E32" }}>🏆 {title} 명예의전당</span>
-              <button onClick={() => setLbOpen(false)} style={{ border: "none", background: "none", fontSize: 20, color: "#A8845C", cursor: "pointer" }}>×</button>
+          <div onClick={(e) => e.stopPropagation()} style={{ width: "100%", maxWidth: 360, maxHeight: "75vh", overflow: "hidden", display: "flex", flexDirection: "column", background: T.modalBg, borderRadius: 20, border: T.modalBorder }}>
+            <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", padding: "14px 18px", borderBottom: T.headBorder }}>
+              <span style={{ fontWeight: 800, color: T.title }}>🏆 {title} 명예의전당</span>
+              <button onClick={() => setLbOpen(false)} style={{ border: "none", background: "none", fontSize: 20, color: T.subtle, cursor: "pointer" }}>×</button>
             </div>
             <div style={{ overflowY: "auto", padding: 8 }}>
               {scores === null ? (
-                <p style={{ textAlign: "center", color: "#A8845C", padding: "24px 0", fontSize: 13 }}>불러오는 중…</p>
+                <p style={{ textAlign: "center", color: T.subtle, padding: "24px 0", fontSize: 13 }}>불러오는 중…</p>
               ) : scores.length === 0 ? (
-                <p style={{ textAlign: "center", color: "#A8845C", padding: "24px 0", fontSize: 13 }}>아직 기록이 없어요. 첫 주인공이 되어보세요!</p>
+                <p style={{ textAlign: "center", color: T.subtle, padding: "24px 0", fontSize: 13 }}>아직 기록이 없어요. 첫 주인공이 되어보세요!</p>
               ) : (
                 scores.map((s, i) => (
-                  <div key={s.uid} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", borderRadius: 12, background: s.uid === (user as { id?: string } | undefined)?.id ? "#FFF1DC" : "transparent" }}>
-                    <span style={{ width: 26, textAlign: "center", fontWeight: 800, color: i < 3 ? "#F9954E" : "#B0895E" }}>{i + 1}</span>
-                    <span style={{ flex: 1, fontWeight: 700, color: "#5A3E2B", overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.name}</span>
-                    <span style={{ fontWeight: 800, color: "#6B4E32", fontVariantNumeric: "tabular-nums" }}>{s.score.toLocaleString()}</span>
+                  <div key={s.uid} style={{ display: "flex", alignItems: "center", gap: 10, padding: "8px 12px", borderRadius: 12, background: s.uid === (user as { id?: string } | undefined)?.id ? T.rowHi : "transparent" }}>
+                    <span style={{ width: 26, textAlign: "center", fontWeight: 800, color: i < 3 ? T.rankTop : T.rankRest }}>{i + 1}</span>
+                    <span style={{ flex: 1, fontWeight: 700, color: T.name, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}>{s.name}</span>
+                    <span style={{ fontWeight: 800, color: T.score, fontVariantNumeric: "tabular-nums" }}>{s.score.toLocaleString()}</span>
                   </div>
                 ))
               )}
             </div>
             {!user && (
-              <div style={{ padding: 12, borderTop: "1px solid #F4ECE0", textAlign: "center" }}>
-                <Link href="/login" style={{ ...chip(), background: "#F9954E", color: "#fff", borderColor: "#F9954E", display: "inline-block" }}>로그인하고 랭킹 등록</Link>
+              <div style={{ padding: 12, borderTop: T.headBorder, textAlign: "center" }}>
+                <Link href="/login" style={chip({ background: T.accent, color: T.accentText, borderColor: T.accent, display: "inline-block" })}>로그인하고 랭킹 등록</Link>
               </div>
             )}
           </div>
@@ -157,12 +187,4 @@ export default function EmbeddedGame({
       )}
     </div>
   );
-}
-
-function chip(): React.CSSProperties {
-  return {
-    background: "rgba(255,255,255,0.9)", color: "#6B4E32", fontWeight: 800, fontSize: 12,
-    padding: "7px 12px", borderRadius: 999, textDecoration: "none", border: "1px solid #F0D6B0",
-    cursor: "pointer", whiteSpace: "nowrap",
-  };
 }
