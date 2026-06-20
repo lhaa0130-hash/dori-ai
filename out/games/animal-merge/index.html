@@ -25,10 +25,14 @@
     font-size:15px; font-weight:800; letter-spacing:1px; border:1.5px solid; background:transparent; }
   .btn.go{ color:#06060d; background:var(--neon); border-color:var(--neon); box-shadow:0 0 22px rgba(0,229,255,.5); }
   .btn.gh{ color:#ff8ec5; border-color:rgba(255,45,149,.6); box-shadow:0 0 18px rgba(255,45,149,.2); }
+  #mute{ position:fixed; top:8px; right:8px; z-index:6; width:38px; height:38px; border-radius:50%;
+    background:rgba(0,229,255,.08); border:1.5px solid rgba(0,229,255,.4); color:#bdefff; font-size:17px;
+    cursor:pointer; display:flex; align-items:center; justify-content:center; box-shadow:0 0 14px rgba(0,229,255,.22); }
 </style>
 </head>
 <body>
 <canvas id="c"></canvas>
+<button id="mute" aria-label="음악 켜기/끄기">🔊</button>
 <div id="over">
   <div class="panel">
     <h2>GAME OVER</h2>
@@ -67,9 +71,9 @@
     W = window.innerWidth; H = window.innerHeight; dpr = Math.min(window.devicePixelRatio||1, 2.5);
     cv.width = W*dpr; cv.height = H*dpr; cv.style.width=W+'px'; cv.style.height=H+'px';
     ctx.setTransform(dpr,0,0,dpr,0,0);
-    const hud = 86;
+    const hud = 86, footer = 66;
     jarW = Math.min(W-24, 460);
-    jarH = Math.min(H-hud-22, jarW*1.42);
+    jarH = Math.min(H-hud-footer, jarW*1.42);
     jarX = (W-jarW)/2;
     jarTop = hud;
     jarBottom = jarTop + jarH;
@@ -233,14 +237,21 @@
       drawOrb(x, jarTop - r - 2, r, current.tier);
     }
 
-    // HUD: 점수(좌) + 다음(우)
+    // HUD: 점수(좌) + 다음(우, 우상단 코너는 뮤트버튼 자리라 비움)
     neonText('SCORE', 22, 30, 12, '#7fdfff');
     neonText(score.toLocaleString(), 22, 64, 34, '#00e5ff');
-    ctx.save(); ctx.textAlign='right'; neonText('NEXT', W-22, 30, 12, '#ff8ec5'); ctx.restore();
-    if(nextTier){ drawOrb(W-44, 54, 22, nextTier, .95); }
-    // 최고기록 중앙 상단
+    neonText('NEXT', W-118, 30, 12, '#ff8ec5', 'center');
+    if(nextTier){ drawOrb(W-118, 54, 20, nextTier, .95); }
     ctx.save(); ctx.textAlign='center'; ctx.font='700 11px "Segoe UI"'; ctx.fillStyle='#5f7da0';
     ctx.fillText('BEST '+best.toLocaleString(), W/2, 24); ctx.restore();
+
+    // 합치기(진화) 순서 — 하단에 12단계 미니 오브
+    const N=ANIMALS.length;
+    const gap=Math.min(Math.min(W-20, jarW+70)/N, 34), sz=gap*0.40;
+    const sx=W/2 - gap*(N-1)/2, oy=jarBottom+38;
+    ctx.save(); ctx.textAlign='center'; ctx.font='700 10px "Segoe UI"'; ctx.fillStyle='#6f93a8';
+    ctx.fillText('합치기 순서', W/2, jarBottom+20); ctx.restore();
+    for(let i=0;i<N;i++) drawOrb(sx+i*gap, oy, sz, i+1, .9);
   }
 
   // ── 루프 ──
@@ -254,16 +265,48 @@
     render(); requestAnimationFrame(loop);
   }
 
+  // ── BGM: Web Audio 신스웨이브 루프(외부 파일/저작권 없음) ──
+  let actx=null, master=null, musicOn=true, nextNote=0, mstep=0;
+  const CH=[[57,60,64,45],[53,57,60,41],[60,64,67,48],[55,59,62,43]]; // [코드3음, 베이스루트]
+  const NSTEP=0.3;
+  const hz=m=>440*Math.pow(2,(m-69)/12);
+  function mvoice(freq,t,dur,type,vol,cut){
+    const o=actx.createOscillator(), g=actx.createGain(); o.type=type; o.frequency.value=freq; let nd=o;
+    if(cut){ const lp=actx.createBiquadFilter(); lp.type='lowpass'; lp.frequency.value=cut; o.connect(lp); nd=lp; }
+    nd.connect(g); g.connect(master);
+    g.gain.setValueAtTime(0.0001,t); g.gain.linearRampToValueAtTime(vol,t+0.02); g.gain.exponentialRampToValueAtTime(0.0001,t+dur);
+    o.start(t); o.stop(t+dur+0.05);
+  }
+  function msched(){
+    if(!actx) return;
+    while(nextNote < actx.currentTime+0.25){
+      const ci=Math.floor(mstep/8)%4, ic=mstep%8, c=CH[ci];
+      if(ic===0){ mvoice(hz(c[3]),nextNote,NSTEP*8,'sawtooth',0.10,420);            // 베이스
+        c.slice(0,3).forEach(m=>mvoice(hz(m-12),nextNote,NSTEP*8,'sawtooth',0.02,700)); } // 패드
+      mvoice(hz(c[ic%3]+12),nextNote,NSTEP*0.85,'triangle',0.055,3200);             // 아르페지오
+      nextNote+=NSTEP; mstep++;
+    }
+  }
+  function startMusic(){
+    if(actx) return;
+    try{ actx=new (window.AudioContext||window.webkitAudioContext)(); }catch(e){ return; }
+    master=actx.createGain(); master.gain.value=0; master.connect(actx.destination);
+    master.gain.linearRampToValueAtTime(musicOn?0.18:0.0001, actx.currentTime+1.4);
+    nextNote=actx.currentTime+0.15; mstep=0; setInterval(msched,50);
+  }
+  function toggleMute(){ musicOn=!musicOn; if(master) master.gain.linearRampToValueAtTime(musicOn?0.18:0.0001, actx.currentTime+0.25); }
+
   // ── 입력 ──
   function px(e){ return (e.touches&&e.touches[0]?e.touches[0].clientX:e.clientX); }
   function onMove(e){ if(e.touches) e.preventDefault(); dropX=px(e); }
-  function onDown(e){ if(e.touches) e.preventDefault(); dropX=px(e); started=true; }
+  function onDown(e){ if(e.touches) e.preventDefault(); dropX=px(e); started=true; if(!actx) startMusic(); }
   function onUp(e){ if(over) return; started=true; drop(); }
   cv.addEventListener('mousemove',onMove); cv.addEventListener('mousedown',onDown); cv.addEventListener('mouseup',onUp);
   cv.addEventListener('touchstart',onDown,{passive:false}); cv.addEventListener('touchmove',onMove,{passive:false}); cv.addEventListener('touchend',onUp,{passive:false});
 
   document.getElementById('again').addEventListener('click',reset);
   document.getElementById('rank').addEventListener('click',()=>{ try{ parent.postMessage({type:'dori-game',event:'open-leaderboard'},'*'); }catch(e){} });
+  document.getElementById('mute').addEventListener('click',(e)=>{ e.stopPropagation(); if(!actx) startMusic(); toggleMute(); document.getElementById('mute').textContent=musicOn?'🔊':'🔇'; });
   window.addEventListener('resize',()=>{ layout(); buildWalls(); });
 
   // init
