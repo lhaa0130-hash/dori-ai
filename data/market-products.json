@@ -1,5 +1,44 @@
 [
   {
+    "id": "mk5-1",
+    "name": "샤오미 미 스마트 체중계 2",
+    "category": "digital",
+    "source": "coupang",
+    "query": "샤오미 미 스마트 체중계 2",
+    "emoji": "⚖️",
+    "priceHint": "저가형",
+    "summary": "가볍게 기록 시작",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/eI47jRiwo0"
+  },
+  {
+    "id": "mk5-2",
+    "name": "앳플리 T8 스마트 체성분 체중계",
+    "category": "digital",
+    "source": "coupang",
+    "query": "앳플리 T8 스마트 체성분 체중계",
+    "emoji": "📱",
+    "priceHint": "보급형",
+    "summary": "앱 기록 중심 선택",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/eI47jUMY5A"
+  },
+  {
+    "id": "mk5-3",
+    "name": "인바디 다이얼 H30N",
+    "category": "digital",
+    "source": "coupang",
+    "query": "인바디 다이얼 H30N",
+    "emoji": "💪",
+    "priceHint": "프리미엄형",
+    "summary": "브랜드 신뢰 중시",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/eI47jYii3o"
+  },
+  {
     "id": "mk4-1",
     "name": "JBL 고 4",
     "category": "digital",
@@ -9,7 +48,7 @@
     "priceHint": "보급형",
     "summary": "작고 경쾌한 휴대형",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/eFLlfRJWiy"
   },
   {
@@ -22,7 +61,7 @@
     "priceHint": "입문형",
     "summary": "부담 적은 세컨드용",
     "hot": true,
-    "weekly": true
+    "weekly": false
   },
   {
     "id": "mk4-3",
@@ -34,7 +73,7 @@
     "priceHint": "보급~중급형",
     "summary": "실내에 안정적인 기본기",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/eFLlfXQpZk"
   },
   {
@@ -47,7 +86,7 @@
     "priceHint": "중저가형",
     "summary": "외출 고정에 강한 타입",
     "hot": true,
-    "weekly": true
+    "weekly": false
   },
   {
     "id": "mk3-1",
