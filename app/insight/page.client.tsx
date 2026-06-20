@@ -4,6 +4,7 @@ import { useState, useEffect, useCallback } from "react";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { Sparkles } from "lucide-react";
+import CompanyLogoBadge from "@/components/CompanyLogoBadge";
 
 interface Post {
   id: string;
@@ -204,6 +205,9 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
                         <div className="w-full h-full flex items-center justify-center text-4xl opacity-30">
                           📝
                         </div>
+                      )}
+                      {post.thumbnail_url && (
+                        <CompanyLogoBadge text={`${post.title || ""} ${(post.tags || []).join(" ")}`} />
                       )}
                     </div>
 
