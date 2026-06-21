@@ -69,10 +69,12 @@ export default function EmbeddedGame({
     if (adInProgress.current) return;
     adInProgress.current = true;
     setAdBusy(true);
-    let viewed = false, done = false;
+    let viewed = false, done = false, adShowing = false;
+    let timer: ReturnType<typeof setTimeout> | null = null;
     const finish = (granted: boolean) => {
       if (done) return;
       done = true;
+      if (timer) clearTimeout(timer);
       adInProgress.current = false;
       setAdBusy(false);
       iframeRef.current?.contentWindow?.postMessage({ type: "dori-host", event: "ad-result", reason, granted }, "*");
@@ -84,14 +86,15 @@ export default function EmbeddedGame({
       w.adsbygoogle.push({
         type: "reward",
         name: reason,
-        beforeReward: (showAdFn: () => void) => { showAdFn(); },
+        beforeReward: (showAdFn: () => void) => { adShowing = true; if (timer) clearTimeout(timer); showAdFn(); },
         adViewed: () => { viewed = true; },
         adDismissed: () => {},
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         adBreakDone: (info: any) => { finish(viewed || (info?.breakStatus !== "dismissed")); },
       });
-    } catch { finish(true); }
-    setTimeout(() => finish(true), 16000);
+    } catch { finish(true); return; }
+    // 광고가 안 채워지면(H5 미신청/미필) beforeReward가 안 와서 3초 후 바로 보상(무의미한 대기 제거)
+    timer = setTimeout(() => { if (!adShowing) finish(true); }, 3000);
   }, []);
 
   // 게임 → 셸: gameover 점수 수신 → 랭킹/솜사탕 처리
