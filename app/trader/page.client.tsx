@@ -114,13 +114,10 @@ export default function TraderClient() {
             </div>
           )}
 
-          {/* 현재 보유중 */}
-          <h2 className="text-[15px] font-extrabold text-neutral-950 dark:text-white mb-2">🟢 현재 보유 중</h2>
-          {openPos.length === 0 ? (
-            <div className="rounded-2xl border border-neutral-200 dark:border-zinc-800 p-4 mb-5 text-[13px] text-neutral-500">
-              지금은 보유 중인 종목이 없습니다 (현금 보유). 좋은 매수 신호가 나오면 자동으로 사고 여기에 표시됩니다.
-            </div>
-          ) : (
+          {/* 현재 보유중 (있을 때만 표시) */}
+          {openPos.length > 0 && (
+            <>
+            <h2 className="text-[15px] font-extrabold text-neutral-950 dark:text-white mb-2">🟢 현재 보유 중</h2>
             <div className="space-y-2 mb-5">
               {openPos.map((p) => (
                 <div key={p.sym} className="rounded-2xl border border-emerald-300/40 dark:border-emerald-800/40 bg-emerald-50/40 dark:bg-emerald-950/10 p-4">
@@ -133,15 +130,13 @@ export default function TraderClient() {
                 </div>
               ))}
             </div>
+            </>
           )}
 
-          {/* 거래 내역 */}
-          <h2 className="text-[15px] font-extrabold text-neutral-950 dark:text-white mb-2">📒 거래 내역</h2>
-          {allTrades.length === 0 ? (
-            <div className="rounded-2xl border border-neutral-200 dark:border-zinc-800 p-4 mb-5 text-[13px] text-neutral-500">
-              아직 사고판 거래가 없습니다. 오늘부터 시작했고, 매도가 완료되면 매수일·매도일·수익률·사유가 여기에 쌓입니다.
-            </div>
-          ) : (
+          {/* 거래 내역 (있을 때만 표시) */}
+          {allTrades.length > 0 && (
+            <>
+            <h2 className="text-[15px] font-extrabold text-neutral-950 dark:text-white mb-2">📒 거래 내역</h2>
             <div className="space-y-2 mb-5">
               {allTrades.map((t, i) => (
                 <div key={i} className="rounded-2xl border border-neutral-200 dark:border-zinc-800 p-4">
@@ -156,6 +151,7 @@ export default function TraderClient() {
                 </div>
               ))}
             </div>
+            </>
           )}
 
           {/* 종목별 요약 */}
