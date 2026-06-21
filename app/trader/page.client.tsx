@@ -64,6 +64,8 @@ export default function TraderClient() {
     .flatMap((s) => (s.trade_log || []).map((t) => ({ ...t, sym: s.symbol })))
     .sort((a, b) => (a.exit < b.exit ? 1 : -1))
     .slice(0, 40);
+  // 실제로 거래했거나 보유 중인 종목만 (아직 거래 안 한 후보는 숨김)
+  const tradedSecs = secs.filter((s) => s.trades > 0 || s.open_position);
 
   return (
     <main className="w-full min-h-screen max-w-2xl mx-auto px-4 py-6">
@@ -168,35 +170,39 @@ export default function TraderClient() {
             </>
           )}
 
-          {/* 종목별 요약 (이 카테고리) */}
-          <h2 className="text-[15px] font-extrabold text-neutral-950 dark:text-white mb-2">📊 {tab} 종목</h2>
-          <div className="rounded-2xl border border-neutral-200 dark:border-zinc-800 overflow-hidden overflow-x-auto mb-3">
-            <table className="w-full text-[13px] min-w-[380px]">
-              <thead>
-                <tr className="text-neutral-400 border-b border-neutral-200 dark:border-zinc-800">
-                  <th className="text-left font-medium py-2 px-3">종목</th>
-                  <th className="text-right font-medium px-2">수익률</th>
-                  <th className="text-right font-medium px-2">거래수</th>
-                  <th className="text-right font-medium px-2">승률</th>
-                  <th className="text-right font-medium px-3">최대낙폭</th>
-                </tr>
-              </thead>
-              <tbody>
-                {secs.map((s) => (
-                  <tr key={s.symbol} className="border-b border-neutral-100 dark:border-zinc-900 last:border-0">
-                    <td className="py-2 px-3 text-neutral-700 dark:text-neutral-200">{nameOf(s.symbol)}</td>
-                    <td className={`text-right px-2 tabular-nums font-semibold ${sgn(s.return_pct)}`}>{pc(s.return_pct)}</td>
-                    <td className="text-right px-2 tabular-nums text-neutral-500">{s.trades}</td>
-                    <td className="text-right px-2 tabular-nums text-neutral-500">{s.win_rate_pct}%</td>
-                    <td className="text-right px-3 tabular-nums text-neutral-500">{s.mdd_pct}%</td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          </div>
+          {/* 종목별 요약 — 실제 거래/보유한 종목만 (0거래 후보는 숨김) */}
+          {tradedSecs.length > 0 && (
+            <>
+              <h2 className="text-[15px] font-extrabold text-neutral-950 dark:text-white mb-2">📊 {tab} 거래 종목</h2>
+              <div className="rounded-2xl border border-neutral-200 dark:border-zinc-800 overflow-hidden overflow-x-auto mb-3">
+                <table className="w-full text-[13px] min-w-[380px]">
+                  <thead>
+                    <tr className="text-neutral-400 border-b border-neutral-200 dark:border-zinc-800">
+                      <th className="text-left font-medium py-2 px-3">종목</th>
+                      <th className="text-right font-medium px-2">수익률</th>
+                      <th className="text-right font-medium px-2">거래수</th>
+                      <th className="text-right font-medium px-2">승률</th>
+                      <th className="text-right font-medium px-3">최대낙폭</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {tradedSecs.map((s) => (
+                      <tr key={s.symbol} className="border-b border-neutral-100 dark:border-zinc-900 last:border-0">
+                        <td className="py-2 px-3 text-neutral-700 dark:text-neutral-200">{nameOf(s.symbol)}</td>
+                        <td className={`text-right px-2 tabular-nums font-semibold ${sgn(s.return_pct)}`}>{pc(s.return_pct)}</td>
+                        <td className="text-right px-2 tabular-nums text-neutral-500">{s.trades}</td>
+                        <td className="text-right px-2 tabular-nums text-neutral-500">{s.win_rate_pct}%</td>
+                        <td className="text-right px-3 tabular-nums text-neutral-500">{s.mdd_pct}%</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </>
+          )}
 
           {(openPos.length === 0 && trades.length === 0) && (
-            <p className="text-[12px] text-neutral-400 mb-4 px-1">아직 이 카테고리 거래가 없어요. 좋은 매수 신호가 나오면 자동으로 사고 여기에 기록됩니다.</p>
+            <p className="text-[12px] text-neutral-400 mb-4 px-1">아직 이 카테고리에서 거래한 종목이 없어요. 좋은 매수 신호가 나오면 자동으로 사고 여기에 표시됩니다.</p>
           )}
 
           {/* 용어 설명 */}
