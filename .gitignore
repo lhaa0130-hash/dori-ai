@@ -47,3 +47,4 @@ install-companion
 # 동물도감 SNS 카드 렌더(웹사이트 미사용·대용량 PNG) — 깃 추적 제외
 public/cards/animal/
 out/cards/animal/
+build_galaxy.log
