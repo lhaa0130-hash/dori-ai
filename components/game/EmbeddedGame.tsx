@@ -56,10 +56,43 @@ export default function EmbeddedGame({
   const [lbOpen, setLbOpen] = useState(false);
   const [scores, setScores] = useState<ScoreEntry[] | null>(null);
   const [toast, setToast] = useState<string | null>(null);
+  const [adBusy, setAdBusy] = useState(false);
+  const iframeRef = useRef<HTMLIFrameElement>(null);
+  const adInProgress = useRef(false);
 
   const loadScores = useCallback(async () => {
     setScores(await getTopScores(gameId, 20, order));
   }, [gameId, order]);
+
+  // 게임 요청 → H5 리워드 광고(adBreak). 광고 미적용/미필이면 16초 후 보상(폴백) → 기능은 항상 동작.
+  const playRewardedAd = useCallback((reason: string) => {
+    if (adInProgress.current) return;
+    adInProgress.current = true;
+    setAdBusy(true);
+    let viewed = false, done = false;
+    const finish = (granted: boolean) => {
+      if (done) return;
+      done = true;
+      adInProgress.current = false;
+      setAdBusy(false);
+      iframeRef.current?.contentWindow?.postMessage({ type: "dori-host", event: "ad-result", reason, granted }, "*");
+    };
+    try {
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
+      const w = window as any;
+      w.adsbygoogle = w.adsbygoogle || [];
+      w.adsbygoogle.push({
+        type: "reward",
+        name: reason,
+        beforeReward: (showAdFn: () => void) => { showAdFn(); },
+        adViewed: () => { viewed = true; },
+        adDismissed: () => {},
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        adBreakDone: (info: any) => { finish(viewed || (info?.breakStatus !== "dismissed")); },
+      });
+    } catch { finish(true); }
+    setTimeout(() => finish(true), 16000);
+  }, []);
 
   // 게임 → 셸: gameover 점수 수신 → 랭킹/솜사탕 처리
   useEffect(() => {
@@ -68,6 +101,7 @@ export default function EmbeddedGame({
       const d = e.data as { type?: string; event?: string; score?: number } | null;
       if (!d || d.type !== "dori-game") return;
       if (d.event === "open-leaderboard") { setLbOpen(true); void loadScores(); return; }
+      if (d.event === "request-ad") { playRewardedAd((d as { reason?: string }).reason || "shuffle"); return; }
       if (d.event === "request-login") { window.location.href = "/login"; return; }
       if (d.event !== "gameover") return;
       const score = Math.max(0, Math.floor(Number(d.score) || 0));
@@ -91,7 +125,7 @@ export default function EmbeddedGame({
     };
     window.addEventListener("message", onMsg);
     return () => window.removeEventListener("message", onMsg);
-  }, [user, name, gameId, order, lbOpen, loadScores]);
+  }, [user, name, gameId, order, lbOpen, loadScores, playRewardedAd]);
 
   useEffect(() => {
     if (!toast) return;
@@ -132,6 +166,7 @@ export default function EmbeddedGame({
       </div>
 
       <iframe
+        ref={iframeRef}
         src={src}
         title={title}
         style={{ position: "fixed", top: BAR, left: 0, right: 0, bottom: 0, width: "100%", height: `calc(100% - ${BAR}px)`, border: "none" }}
@@ -148,6 +183,15 @@ export default function EmbeddedGame({
           }}
         >
           {toast}
+        </div>
+      )}
+
+      {/* 광고 대기 오버레이 (실제 광고가 뜨면 그 위에 표시됨 / 미필 시 폴백 대기) */}
+      {adBusy && (
+        <div style={{ position: "fixed", inset: 0, zIndex: 25, display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: 14, background: "rgba(2,2,8,0.9)", color: "#eaf6ff" }}>
+          <div style={{ width: 40, height: 40, borderRadius: "50%", border: "3px solid rgba(157,109,255,.3)", borderTopColor: "#9D6DFF", animation: "doriSpin .9s linear infinite" }} />
+          <span style={{ fontWeight: 800, fontSize: 14 }}>광고 시청 중…</span>
+          <style>{`@keyframes doriSpin{to{transform:rotate(360deg)}}`}</style>
         </div>
       )}
 
