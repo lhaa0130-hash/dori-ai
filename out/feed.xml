@@ -6,7 +6,55 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 21 Jun 2026 06:56:26 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 21 Jun 2026 07:10:23 GMT</lastBuildDate>
+    <item>
+      <title>시애틀, AI 붐 속 테크 스타트업의 새로운 중심지로 떠오르다</title>
+      <link>https://dori-ai.com/insight/article/trend-145</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-145</guid>
+      <category>트렌드</category>
+      <pubDate>Sun, 21 Jun 2026 06:00:21 GMT</pubDate>
+      <description>시애틀이 AI 기술의 급속한 발전에 힘입어 새로운 스타트업의 메카로 부상하고 있다. 이로 인해 지역 경제와 산업에 미치는 영향은 무엇인지 살펴본다.</description>
+    </item>
+    <item>
+      <title>AI 수사관, 조디악 킬러의 정체를 밝혔나?</title>
+      <link>https://dori-ai.com/insight/article/trend-144</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-144</guid>
+      <category>트렌드</category>
+      <pubDate>Sun, 21 Jun 2026 04:00:16 GMT</pubDate>
+      <description>AI 기술이 범죄 수사에 어떻게 활용되고 있는지, 조디악 킬러 사건과의 연관성을 살펴봅니다.</description>
+    </item>
+    <item>
+      <title>상하이 영화제가 AI와 아이폰 영화 제작의 미래를 포용하다</title>
+      <link>https://dori-ai.com/insight/article/trend-143</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-143</guid>
+      <category>트렌드</category>
+      <pubDate>Sun, 21 Jun 2026 03:00:19 GMT</pubDate>
+      <description>상하이 영화제가 AI 기술과 모바일 영화 제작을 통해 영화 산업의 새로운 가능성을 탐구하고 있습니다.</description>
+    </item>
+    <item>
+      <title>메리디스 휘타커, AI 챗봇의 진실을 직시하라</title>
+      <link>https://dori-ai.com/insight/article/trend-142</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-142</guid>
+      <category>트렌드</category>
+      <pubDate>Sun, 21 Jun 2026 01:00:19 GMT</pubDate>
+      <description>Signal의 메리디스 휘타커가 AI 챗봇의 본질을 명확히 전달하며, 이들이 우리의 친구가 아님을 강조하고 나섰다.</description>
+    </item>
+    <item>
+      <title>구글, 99달러에 새로운 스피커와 함께 Gemini를 공개하다</title>
+      <link>https://dori-ai.com/insight/article/trend-141</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-141</guid>
+      <category>트렌드</category>
+      <pubDate>Sun, 21 Jun 2026 00:00:22 GMT</pubDate>
+      <description>구글이 새로운 스피커를 출시하며 Gemini AI 모델을 통합했습니다. 가격은 99달러로, 시장 반응이 주목됩니다.</description>
+    </item>
+    <item>
+      <title>제네바에서의 인류의 약속 — 전쟁에서의 AI 사용 금지 선언</title>
+      <link>https://dori-ai.com/insight/article/trend-140</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-140</guid>
+      <category>트렌드</category>
+      <pubDate>Sat, 20 Jun 2026 22:00:16 GMT</pubDate>
+      <description>전 세계 60개국이 참여한 제네바의 공동 선언이 AI의 전쟁 사용을 금지하며 국제 사회의 새로운 방향을 제시하고 있다.</description>
+    </item>
     <item>
       <title>ASML, 중국에 첨단 반도체 장비를 판매할까?</title>
       <link>https://dori-ai.com/insight/article/trend-139</link>
@@ -278,54 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Wed, 17 Jun 2026 00:00:00 GMT</pubDate>
       <description>이번 주에는 학생의 지원서 작성, 크리에이터의 숏폼 편집, 직장인의 프롬프트 정리, 모바일 글쓰기까지 바로 써볼 수 있는 AI 도구를 골랐습니다. AI가 앱 안으로 더 깊숙이 들어오고, 사용자는 ‘무엇을 만들지’에 더 집중하는 흐름이 뚜렷합니다.</description>
-    </item>
-    <item>
-      <title>스페이스X, 60억 달러에 AI 스타트업 커서를 인수하다</title>
-      <link>https://dori-ai.com/insight/article/trend-110</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-110</guid>
-      <category>트렌드</category>
-      <pubDate>Tue, 16 Jun 2026 13:00:19 GMT</pubDate>
-      <description>스페이스X가 AI 코딩 스타트업 커서를 약 60억 달러에 인수하며 기업 AI 시장에 본격 진입합니다.</description>
-    </item>
-    <item>
-      <title>NewCore, AI 에이전트의 정체성을 부여하다 — 660억 원 투자 유치</title>
-      <link>https://dori-ai.com/insight/article/trend-109</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-109</guid>
-      <category>트렌드</category>
-      <pubDate>Tue, 16 Jun 2026 11:00:17 GMT</pubDate>
-      <description>AI 에이전트를 기업의 정규 직원으로 관리하는 새로운 도전 과제를 제시하며, NewCore가 660억 원의 자금을 확보했습니다.</description>
-    </item>
-    <item>
-      <title>Nvidia, AI 붐 속 첫 부채 판매로 2조 6천억 원 유치 계획</title>
-      <link>https://dori-ai.com/insight/article/trend-103</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-103</guid>
-      <category>트렌드</category>
-      <pubDate>Tue, 16 Jun 2026 00:00:00 GMT</pubDate>
-      <description>Nvidia가 AI 붐의 여세를 몰아 약 2조 6천억 원 규모의 부채 판매를 계획하고 있습니다. 이는 기업의 성장과 기술 혁신을 위한 중요한 자금 조달로 해석됩니다.</description>
-    </item>
-    <item>
-      <title>Salesforce, AI 고객 서비스 플랫폼 Fin 인수 — 36억 달러의 배경은?</title>
-      <link>https://dori-ai.com/insight/article/trend-104</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-104</guid>
-      <category>트렌드</category>
-      <pubDate>Tue, 16 Jun 2026 00:00:00 GMT</pubDate>
-      <description>Salesforce가 36억 달러에 AI 고객 서비스 플랫폼 Fin을 인수했다. 이 결정의 의미와 향후 계획을 살펴본다.</description>
-    </item>
-    <item>
-      <title>인도 스타트업 Sarvam, 2억 3천 4백만 달러 투자로 유니콘 반열에 올라</title>
-      <link>https://dori-ai.com/insight/article/trend-105</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-105</guid>
-      <category>트렌드</category>
-      <pubDate>Tue, 16 Jun 2026 00:00:00 GMT</pubDate>
-      <description>HCLTech의 1억 5천만 달러 투자를 이끌어낸 Sarvam이 인도의 새로운 AI 유니콘으로 떠올랐다.</description>
-    </item>
-    <item>
-      <title>메타, 페이스북에 새로운 ‘AI 모드’ 도입 — 사용자 참여 강화의 시작</title>
-      <link>https://dori-ai.com/insight/article/trend-106</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-106</guid>
-      <category>트렌드</category>
-      <pubDate>Tue, 16 Jun 2026 00:00:00 GMT</pubDate>
-      <description>메타가 페이스북에 새로운 AI 기능을 출시하며 사용자 참여를 증대시키려는 노력을 시작했습니다. 이 변화는 AI 경쟁의 중요한 이정표가 될 것입니다.</description>
     </item>
   </channel>
 </rss>
