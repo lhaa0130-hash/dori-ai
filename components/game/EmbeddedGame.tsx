@@ -13,6 +13,7 @@ import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { submitScore, getTopScores, type ScoreEntry, type RankOrder } from "@/lib/leaderboard";
 import { grantPlaytimeReward } from "@/lib/cottonCandy";
+import { saveGameState, loadGameState } from "@/lib/gameSave";
 
 type Theme = "light" | "neon";
 

@@ -39,7 +39,7 @@ interface Section {
   trades: number; win_rate_pct: number; mdd_pct: number;
   ending: number; open_position: OpenPos | null; trade_log: Trade[];
 }
-interface Category { name: string; count: number; ending: number; return_pct: number; }
+interface Category { name: string; count: number; starting: number; ending: number; return_pct: number; }
 interface Data {
   program: string; generated_at: string; mode: string;
   total_starting: number; total_ending: number; total_return_pct: number;
@@ -102,16 +102,20 @@ export default function TraderClient() {
             </div>
           </div>
 
-          {/* 카테고리 */}
+          {/* 카테고리 — 각 100만원으로 시작 */}
           {d.categories && d.categories.length > 0 && (
+            <>
+            <p className="text-[12px] text-neutral-400 mb-2">코인 · 국내주식 · 해외주식 <b className="text-neutral-500 dark:text-neutral-300">각 100만원</b>으로 시작</p>
             <div className="grid grid-cols-3 gap-2 mb-5">
               {d.categories.map((c) => (
                 <div key={c.name} className="rounded-2xl border border-neutral-200 dark:border-zinc-800 p-3 text-center">
                   <div className="text-[12px] text-neutral-500 mb-1">{c.name}</div>
                   <div className={`text-xl font-extrabold ${sgn(c.return_pct)}`}>{pc(c.return_pct)}</div>
+                  <div className="text-[10px] text-neutral-400 mt-1">{Math.round(c.starting / 10000)}만 → {Math.round(c.ending / 10000)}만</div>
                 </div>
               ))}
             </div>
+            </>
           )}
 
           {/* 현재 보유중 (있을 때만 표시) */}
