@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 21 Jun 2026 22:46:55 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 21 Jun 2026 22:52:33 GMT</lastBuildDate>
+    <item>
+      <title>테슬라의 모듈형 AI 데이터 센터, '메가포드' 출시 예고</title>
+      <link>https://dori-ai.com/insight/article/trend-149</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-149</guid>
+      <category>트렌드</category>
+      <pubDate>Sun, 21 Jun 2026 22:00:43 GMT</pubDate>
+      <description>테슬라가 새로운 모듈형 AI 데이터 센터 하드웨어인 '메가포드'를 출시할 계획이다. 이 혁신적인 제품은 AI 데이터 처리의 효율성을 크게 향상시킬 것으로 기대된다.</description>
+    </item>
     <item>
       <title>AI의 신뢰성과 의료 혁신 — 임상 시험의 새로운 네트워크</title>
       <link>https://dori-ai.com/insight/article/trend-148</link>
@@ -318,14 +326,6 @@
       <category>분석</category>
       <pubDate>Wed, 17 Jun 2026 05:02:12 GMT</pubDate>
       <description>미국에서 AI 규제의 중심이 워싱턴과 주정부 사이에서 갈라지고 있다. 핵심은 기술 속도가 아니라, 누가 위험을 정의하고 누가 책임을 질 것인가의 문제다.</description>
-    </item>
-    <item>
-      <title>구글의 Android 17, 멀티태스킹 혁신으로 스마트폰의 미래를 바꾸다</title>
-      <link>https://dori-ai.com/insight/article/trend-112</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-112</guid>
-      <category>트렌드</category>
-      <pubDate>Wed, 17 Jun 2026 04:00:35 GMT</pubDate>
-      <description>구글이 Android 17을 출시하며 새로운 멀티태스킹 기능과 보안 도구를 도입했습니다. 이로 인해 스마트폰 사용 방식이 크게 변화할 것으로 예상됩니다.</description>
     </item>
   </channel>
 </rss>

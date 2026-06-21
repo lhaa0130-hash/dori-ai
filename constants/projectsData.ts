@@ -1,7 +1,7 @@
 // 프로젝트(개발 중 프로그램) 공유 데이터 — 목록/상세 페이지 공용
 // 정적 export 환경이라 fs 없이 순수 데이터로 관리합니다.
 
-export type ProjectStatus = "지금 무료" | "준비 중" | "기획 중";
+export type ProjectStatus = "지금 무료" | "이용 가능" | "준비 중" | "기획 중";
 
 export interface ProjectFeature {
   icon: string;
@@ -73,6 +73,29 @@ export const PROJECTS: ProjectItem[] = [
       { icon: "🔑", title: "내 API 키로 무제한", detail: "내 키를 연결하면 한도까지 마음껏, 가장 강력한 최신 모델로 사용할 수 있어요." },
       { icon: "🛠️", title: "나만의 워크플로우", detail: "입력 → 조사 → 작성 → 검토 단계를 노드로 연결해 나만의 자동화를 직접 설계해요." },
       { icon: "📁", title: "결과 보관함", detail: "만든 결과물을 자동으로 보관하고 언제든 다시 보거나 텍스트로 내려받을 수 있어요." },
+    ],
+  },
+  {
+    slug: "trader",
+    name: "트레이더일로 (Trader Illo)",
+    emoji: "📈",
+    image: "",
+    tag: "정식 프로그램",
+    category: "main",
+    isMain: true,
+    status: "이용 가능",
+    isActive: true,
+    desc: "손실은 작게, 수익은 크게 — AI 자동매매",
+    longDesc:
+      "코인·국내주식·해외주식을 추세추종 전략과 엄격한 리스크 관리로 자동 매매하는 프로그램이에요. 손절·트레일링·분산·시장국면 필터로 손실을 통제하면서 상승 추세에 올라타고, 모든 거래(매수·매도 시간과 사유, 수익률)를 매일 사이트에 투명하게 공개합니다. 현재는 모의(페이퍼)로 실제 시세에 맞춰 검증 중이에요. ⚠️ 투자에 완벽은 없으며 손실 위험이 있습니다.",
+    tags: ["자동매매", "리스크 관리", "매일 공개"],
+    launchHref: "/trader",
+    launchLabel: "성과 보기",
+    features: [
+      { icon: "🛡️", title: "손실 최소 우선", detail: "모든 거래에 손절·트레일링·일일 손실한도·분산을 적용해 손실을 작게 끊어요." },
+      { icon: "📈", title: "추세 올라타기", detail: "상승 추세에서 신고가를 돌파할 때만 진입해 큰 흐름을 노려요." },
+      { icon: "🌍", title: "코인·국내·해외 분산", detail: "비트코인부터 미국·일본 지수까지 나눠 담아 위험을 분산해요." },
+      { icon: "📊", title: "매일 투명 공개", detail: "매수·매도 시간과 사유, 수익률을 매일 자동으로 공개해요." },
     ],
   },
   {
