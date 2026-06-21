@@ -57,6 +57,11 @@ service cloud.firestore {
       allow write: if request.auth != null;
     }
 
+    // 미니게임 클라우드 세이브(진행도) — 본인 것만 읽기/쓰기 (보스 클릭커 등)
+    match /gameSaves/{game}/players/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
     // 소셜 — 방명록(주인만 삭제)
     match /guestbook/{ownerUid}/entries/{entryId} {
       allow read: if true;
