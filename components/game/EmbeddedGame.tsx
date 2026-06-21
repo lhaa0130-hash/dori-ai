@@ -102,11 +102,30 @@ export default function EmbeddedGame({
   useEffect(() => {
     const onMsg = async (e: MessageEvent) => {
       if (e.origin !== window.location.origin) return; // 동일 출처(우리 iframe)만 신뢰
-      const d = e.data as { type?: string; event?: string; score?: number } | null;
+      const d = e.data as { type?: string; event?: string; score?: number; game?: string; data?: string } | null;
       if (!d || d.type !== "dori-game") return;
       if (d.event === "open-leaderboard") { setLbOpen(true); void loadScores(); return; }
       if (d.event === "request-ad") { playRewardedAd((d as { reason?: string }).reason || "shuffle"); return; }
       if (d.event === "request-login") { window.location.href = "/login"; return; }
+      // 진행형 게임(보스 클리커 등): 리더보드 점수 갱신(솜사탕 없음 — 라운드마다 호출되므로)
+      if (d.event === "submit-score") {
+        const sc = Math.max(0, Math.floor(Number(d.score) || 0));
+        if (user && sc > 0) void submitScore(gameId, name, sc, order);
+        return;
+      }
+      // 클라우드 세이브: 저장
+      if (d.event === "save") {
+        if (user && d.data) void saveGameState(d.game || gameId, d.data);
+        return;
+      }
+      // 클라우드 세이브: 불러오기 → iframe으로 전달(없으면 빈 문자열)
+      if (d.event === "load") {
+        if (user) {
+          const json = (await loadGameState(d.game || gameId)) || "";
+          iframeRef.current?.contentWindow?.postMessage({ type: "dori-host", event: "cloud-load", data: json }, "*");
+        }
+        return;
+      }
       if (d.event !== "gameover") return;
       const score = Math.max(0, Math.floor(Number(d.score) || 0));
       if (score <= 0) return;
