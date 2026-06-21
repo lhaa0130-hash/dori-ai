@@ -1,31 +1,31 @@
 {
   "program": "트레이더일로 (Trader Illo)",
-  "generated_at": "2026-06-21 20:18:44",
-  "mode": "backtest",
+  "generated_at": "2026-06-21 20:58:08",
+  "mode": "paper",
   "total_starting": 3130000,
-  "total_ending": 3358772,
-  "total_return_pct": 7.31,
+  "total_ending": 3130000,
+  "total_return_pct": 0.0,
   "categories": [
     {
       "name": "코인",
       "count": 2,
       "starting": 130000,
-      "ending": 128562,
-      "return_pct": -1.11
+      "ending": 130000,
+      "return_pct": 0.0
     },
     {
       "name": "국내주식",
       "count": 3,
       "starting": 1285714,
-      "ending": 1392040,
-      "return_pct": 8.27
+      "ending": 1285714,
+      "return_pct": 0.0
     },
     {
       "name": "해외주식",
       "count": 4,
       "starting": 1714286,
-      "ending": 1838169,
-      "return_pct": 7.23
+      "ending": 1714286,
+      "return_pct": 0.0
     }
   ],
   "sections": [
@@ -34,308 +34,117 @@
       "symbol": "KRW-BTC",
       "category": "코인",
       "starting": 65000,
-      "ending": 64262,
-      "return_pct": -1.14,
-      "trades": 2,
+      "ending": 65000,
+      "return_pct": 0.0,
+      "trades": 0,
       "win_rate_pct": 0.0,
-      "mdd_pct": 1.9,
+      "mdd_pct": 0.0,
       "open_position": null,
-      "trade_log": [
-        {
-          "entry": "2025-10-01",
-          "exit": "2025-10-17",
-          "entry_price": 166394155.5,
-          "exit_price": 165606427.4,
-          "pnl_pct": -0.47,
-          "reason": "stop_loss"
-        },
-        {
-          "entry": "2025-09-18",
-          "exit": "2025-09-26",
-          "entry_price": 163239579.0,
-          "exit_price": 158280820.0,
-          "pnl_pct": -3.04,
-          "reason": "signal"
-        }
-      ]
+      "trade_log": []
     },
     {
       "label": "🪙 코인(bithumb) · KRW-ETH",
       "symbol": "KRW-ETH",
       "category": "코인",
       "starting": 65000,
-      "ending": 64300,
-      "return_pct": -1.08,
-      "trades": 1,
+      "ending": 65000,
+      "return_pct": 0.0,
+      "trades": 0,
       "win_rate_pct": 0.0,
-      "mdd_pct": 1.08,
+      "mdd_pct": 0.0,
       "open_position": null,
-      "trade_log": [
-        {
-          "entry": "2025-10-06",
-          "exit": "2025-10-11",
-          "entry_price": 6612304.5,
-          "exit_price": 6108572.1,
-          "pnl_pct": -7.62,
-          "reason": "stop_loss"
-        }
-      ]
+      "trade_log": []
     },
     {
       "label": "📈 주식 · 005930",
       "symbol": "005930",
       "category": "국내주식",
       "starting": 428571,
-      "ending": 462747,
-      "return_pct": 7.97,
-      "trades": 1,
-      "win_rate_pct": 100.0,
-      "mdd_pct": 2.74,
+      "ending": 428571,
+      "return_pct": 0.0,
+      "trades": 0,
+      "win_rate_pct": 0.0,
+      "mdd_pct": 0.0,
       "open_position": null,
-      "trade_log": [
-        {
-          "entry": "2025-07-03",
-          "exit": "2025-11-05",
-          "entry_price": 63863.8,
-          "exit_price": 98240.82,
-          "pnl_pct": 53.83,
-          "reason": "trailing_stop"
-        }
-      ]
+      "trade_log": []
     },
     {
       "label": "📈 주식 · 069500",
       "symbol": "069500",
       "category": "국내주식",
       "starting": 428571,
-      "ending": 506243,
-      "return_pct": 18.12,
-      "trades": 2,
-      "win_rate_pct": 100.0,
-      "mdd_pct": 2.94,
+      "ending": 428571,
+      "return_pct": 0.0,
+      "trades": 0,
+      "win_rate_pct": 0.0,
+      "mdd_pct": 0.0,
       "open_position": null,
-      "trade_log": [
-        {
-          "entry": "2026-01-05",
-          "exit": "2026-03-04",
-          "entry_price": 65035.97,
-          "exit_price": 83196.72,
-          "pnl_pct": 27.92,
-          "reason": "trailing_stop"
-        },
-        {
-          "entry": "2025-05-14",
-          "exit": "2025-11-05",
-          "entry_price": 35066.03,
-          "exit_price": 55073.12,
-          "pnl_pct": 57.06,
-          "reason": "trailing_stop"
-        }
-      ]
+      "trade_log": []
     },
     {
       "label": "📈 주식 · 229200",
       "symbol": "229200",
       "category": "국내주식",
       "starting": 428571,
-      "ending": 423050,
-      "return_pct": -1.29,
-      "trades": 3,
+      "ending": 428571,
+      "return_pct": 0.0,
+      "trades": 0,
       "win_rate_pct": 0.0,
-      "mdd_pct": 2.65,
+      "mdd_pct": 0.0,
       "open_position": null,
-      "trade_log": [
-        {
-          "entry": "2025-10-24",
-          "exit": "2025-11-24",
-          "entry_price": 14859.84,
-          "exit_price": 14817.4,
-          "pnl_pct": -0.29,
-          "reason": "stop_loss"
-        },
-        {
-          "entry": "2025-09-19",
-          "exit": "2025-09-26",
-          "entry_price": 14314.3,
-          "exit_price": 13789.2,
-          "pnl_pct": -3.67,
-          "reason": "stop_loss"
-        },
-        {
-          "entry": "2025-06-11",
-          "exit": "2025-08-01",
-          "entry_price": 12847.83,
-          "exit_price": 12782.2,
-          "pnl_pct": -0.51,
-          "reason": "signal"
-        }
-      ]
+      "trade_log": []
     },
     {
       "label": "📈 주식 · 360750",
       "symbol": "360750",
       "category": "해외주식",
       "starting": 428571,
-      "ending": 460339,
-      "return_pct": 7.41,
-      "trades": 3,
-      "win_rate_pct": 66.7,
-      "mdd_pct": 2.95,
+      "ending": 428571,
+      "return_pct": 0.0,
+      "trades": 0,
+      "win_rate_pct": 0.0,
+      "mdd_pct": 0.0,
       "open_position": null,
-      "trade_log": [
-        {
-          "entry": "2026-04-20",
-          "exit": "2026-06-09",
-          "entry_price": 26020.99,
-          "exit_price": 27809.95,
-          "pnl_pct": 6.88,
-          "reason": "trailing_stop"
-        },
-        {
-          "entry": "2025-12-12",
-          "exit": "2025-12-18",
-          "entry_price": 25238.21,
-          "exit_price": 24610.37,
-          "pnl_pct": -2.49,
-          "reason": "stop_loss"
-        },
-        {
-          "entry": "2025-07-11",
-          "exit": "2025-11-18",
-          "entry_price": 21288.27,
-          "exit_price": 24126.1,
-          "pnl_pct": 13.33,
-          "reason": "trailing_stop"
-        }
-      ]
+      "trade_log": []
     },
     {
       "label": "📈 주식 · 379810",
       "symbol": "379810",
       "category": "해외주식",
       "starting": 428571,
-      "ending": 461111,
-      "return_pct": 7.59,
-      "trades": 3,
-      "win_rate_pct": 100.0,
-      "mdd_pct": 2.26,
+      "ending": 428571,
+      "return_pct": 0.0,
+      "trades": 0,
+      "win_rate_pct": 0.0,
+      "mdd_pct": 0.0,
       "open_position": null,
-      "trade_log": [
-        {
-          "entry": "2026-04-20",
-          "exit": "2026-06-08",
-          "entry_price": 26036.01,
-          "exit_price": 29491.46,
-          "pnl_pct": 13.27,
-          "reason": "trailing_stop"
-        },
-        {
-          "entry": "2025-09-19",
-          "exit": "2025-11-18",
-          "entry_price": 22622.6,
-          "exit_price": 23877.01,
-          "pnl_pct": 5.54,
-          "reason": "trailing_stop"
-        },
-        {
-          "entry": "2025-07-10",
-          "exit": "2025-08-04",
-          "entry_price": 20736.72,
-          "exit_price": 20929.03,
-          "pnl_pct": 0.93,
-          "reason": "trailing_stop"
-        }
-      ]
+      "trade_log": []
     },
     {
       "label": "📈 주식 · 381180",
       "symbol": "381180",
       "category": "해외주식",
       "starting": 428571,
-      "ending": 471502,
-      "return_pct": 10.02,
-      "trades": 4,
-      "win_rate_pct": 50.0,
-      "mdd_pct": 3.28,
+      "ending": 428571,
+      "return_pct": 0.0,
+      "trades": 0,
+      "win_rate_pct": 0.0,
+      "mdd_pct": 0.0,
       "open_position": null,
-      "trade_log": [
-        {
-          "entry": "2026-04-17",
-          "exit": "2026-06-11",
-          "entry_price": 36291.25,
-          "exit_price": 48131.82,
-          "pnl_pct": 32.63,
-          "reason": "trailing_stop"
-        },
-        {
-          "entry": "2026-01-22",
-          "exit": "2026-01-26",
-          "entry_price": 31195.16,
-          "exit_price": 29782.46,
-          "pnl_pct": -4.53,
-          "reason": "stop_loss"
-        },
-        {
-          "entry": "2025-12-05",
-          "exit": "2025-12-18",
-          "entry_price": 28076.05,
-          "exit_price": 26466.17,
-          "pnl_pct": -5.73,
-          "reason": "stop_loss"
-        },
-        {
-          "entry": "2025-06-18",
-          "exit": "2025-11-14",
-          "entry_price": 18819.8,
-          "exit_price": 25674.13,
-          "pnl_pct": 36.42,
-          "reason": "trailing_stop"
-        }
-      ]
+      "trade_log": []
     },
     {
       "label": "📈 주식 · 241180",
       "symbol": "241180",
       "category": "해외주식",
       "starting": 428571,
-      "ending": 445218,
-      "return_pct": 3.88,
-      "trades": 3,
-      "win_rate_pct": 66.7,
-      "mdd_pct": 3.34,
-      "open_position": {
-        "symbol": "241180",
-        "qty": 1.0,
-        "entry_price": 39564.524999999994,
-        "stop_price": 36431.61139096688,
-        "unrealized_pnl_pct": 3.0468582650746034
-      },
-      "trade_log": [
-        {
-          "entry": "2026-05-13",
-          "exit": "2026-05-18",
-          "entry_price": 36116.08,
-          "exit_price": 34034.64,
-          "pnl_pct": -5.76,
-          "reason": "stop_loss"
-        },
-        {
-          "entry": "2026-01-12",
-          "exit": "2026-03-04",
-          "entry_price": 29909.88,
-          "exit_price": 30174.79,
-          "pnl_pct": 0.89,
-          "reason": "signal"
-        },
-        {
-          "entry": "2025-07-23",
-          "exit": "2025-11-21",
-          "entry_price": 23138.11,
-          "exit_price": 27023.95,
-          "pnl_pct": 16.79,
-          "reason": "trailing_stop"
-        }
-      ]
+      "ending": 428571,
+      "return_pct": 0.0,
+      "trades": 0,
+      "win_rate_pct": 0.0,
+      "mdd_pct": 0.0,
+      "open_position": null,
+      "trade_log": []
     }
   ],
   "portfolio": {
@@ -344,73 +153,73 @@
         "label": "🪙 코인(bithumb) · KRW-BTC",
         "symbol": "KRW-BTC",
         "start": 65000,
-        "end": 64262,
-        "weight_end": 1.9,
-        "ret": -1.1
+        "end": 65000,
+        "weight_end": 2.1,
+        "ret": 0.0
       },
       {
         "label": "🪙 코인(bithumb) · KRW-ETH",
         "symbol": "KRW-ETH",
         "start": 65000,
-        "end": 64300,
-        "weight_end": 1.9,
-        "ret": -1.1
+        "end": 65000,
+        "weight_end": 2.1,
+        "ret": 0.0
       },
       {
         "label": "📈 주식 · 005930",
         "symbol": "005930",
         "start": 428571,
-        "end": 462747,
-        "weight_end": 13.8,
-        "ret": 8.0
+        "end": 428571,
+        "weight_end": 13.7,
+        "ret": 0.0
       },
       {
         "label": "📈 주식 · 069500",
         "symbol": "069500",
         "start": 428571,
-        "end": 506243,
-        "weight_end": 15.1,
-        "ret": 18.1
+        "end": 428571,
+        "weight_end": 13.7,
+        "ret": 0.0
       },
       {
         "label": "📈 주식 · 229200",
         "symbol": "229200",
         "start": 428571,
-        "end": 423050,
-        "weight_end": 12.6,
-        "ret": -1.3
+        "end": 428571,
+        "weight_end": 13.7,
+        "ret": 0.0
       },
       {
         "label": "📈 주식 · 360750",
         "symbol": "360750",
         "start": 428571,
-        "end": 460339,
+        "end": 428571,
         "weight_end": 13.7,
-        "ret": 7.4
+        "ret": 0.0
       },
       {
         "label": "📈 주식 · 379810",
         "symbol": "379810",
         "start": 428571,
-        "end": 461111,
+        "end": 428571,
         "weight_end": 13.7,
-        "ret": 7.6
+        "ret": 0.0
       },
       {
         "label": "📈 주식 · 381180",
         "symbol": "381180",
         "start": 428571,
-        "end": 471502,
-        "weight_end": 14.0,
-        "ret": 10.0
+        "end": 428571,
+        "weight_end": 13.7,
+        "ret": 0.0
       },
       {
         "label": "📈 주식 · 241180",
         "symbol": "241180",
         "start": 428571,
-        "end": 445218,
-        "weight_end": 13.3,
-        "ret": 3.9
+        "end": 428571,
+        "weight_end": 13.7,
+        "ret": 0.0
       }
     ],
     "correlation": {
@@ -428,106 +237,106 @@
       "matrix": [
         [
           1.0,
-          0.78,
-          0.11,
-          0.12,
+          0.88,
           0.09,
-          0.2,
-          0.23,
-          0.24,
-          0.13
+          0.07,
+          0.02,
+          0.22,
+          0.25,
+          0.22,
+          0.1
         ],
         [
-          0.78,
-          1.0,
-          0.17,
-          0.19,
-          0.18,
-          0.23,
-          0.28,
-          0.29,
-          0.17
-        ],
-        [
-          0.11,
-          0.17,
-          1.0,
-          0.88,
-          0.55,
-          0.28,
-          0.39,
-          0.52,
-          0.49
-        ],
-        [
-          0.12,
-          0.19,
           0.88,
           1.0,
-          0.7,
-          0.35,
-          0.47,
-          0.61,
-          0.59
+          0.15,
+          0.14,
+          0.06,
+          0.15,
+          0.22,
+          0.22,
+          0.14
         ],
         [
           0.09,
-          0.18,
-          0.55,
-          0.7,
+          0.15,
           1.0,
-          0.3,
-          0.39,
-          0.48,
-          0.5
-        ],
-        [
-          0.2,
+          0.9,
+          0.54,
           0.23,
-          0.28,
-          0.35,
-          0.3,
-          1.0,
-          0.95,
-          0.77,
-          0.6
-        ],
-        [
-          0.23,
-          0.28,
-          0.39,
-          0.47,
-          0.39,
-          0.95,
-          1.0,
-          0.88,
-          0.65
-        ],
-        [
-          0.24,
-          0.29,
-          0.52,
-          0.61,
-          0.48,
-          0.77,
-          0.88,
-          1.0,
-          0.68
-        ],
-        [
-          0.13,
-          0.17,
-          0.49,
-          0.59,
-          0.5,
+          0.44,
           0.6,
-          0.65,
-          0.68,
+          0.52
+        ],
+        [
+          0.07,
+          0.14,
+          0.9,
+          1.0,
+          0.67,
+          0.28,
+          0.49,
+          0.66,
+          0.61
+        ],
+        [
+          0.02,
+          0.06,
+          0.54,
+          0.67,
+          1.0,
+          0.2,
+          0.34,
+          0.43,
+          0.47
+        ],
+        [
+          0.22,
+          0.15,
+          0.23,
+          0.28,
+          0.2,
+          1.0,
+          0.91,
+          0.62,
+          0.52
+        ],
+        [
+          0.25,
+          0.22,
+          0.44,
+          0.49,
+          0.34,
+          0.91,
+          1.0,
+          0.81,
+          0.58
+        ],
+        [
+          0.22,
+          0.22,
+          0.6,
+          0.66,
+          0.43,
+          0.62,
+          0.81,
+          1.0,
+          0.61
+        ],
+        [
+          0.1,
+          0.14,
+          0.52,
+          0.61,
+          0.47,
+          0.52,
+          0.58,
+          0.61,
           1.0
         ]
       ]
     },
     "total_start": 3130000,
-    "total_end": 3358772
+    "total_end": 3130000
   }
 }
