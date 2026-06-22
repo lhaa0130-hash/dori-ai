@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 22 Jun 2026 09:33:27 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 22 Jun 2026 09:48:18 GMT</lastBuildDate>
+    <item>
+      <title>신약 개발의 새로운 지평, 인실리코 메디슨과 SK바이오팜의 협업</title>
+      <link>https://dori-ai.com/insight/article/trend-155</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-155</guid>
+      <category>트렌드</category>
+      <pubDate>Mon, 22 Jun 2026 09:00:19 GMT</pubDate>
+      <description>인실리코 메디슨과 SK바이오팜이 25억 달러 규모의 AI 기반 신약 개발 협업을 발표하며, 신경면역질환 치료의 혁신을 예고하고 있다.</description>
+    </item>
     <item>
       <title>마이크로소프트, AI 거대 기업의 경제적 영향에 대한 경고</title>
       <link>https://dori-ai.com/insight/article/trend-154</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Thu, 18 Jun 2026 06:00:21 GMT</pubDate>
       <description>프랑스와 인도 지도자들이 미국의 AI 통제 가능성에 대해 우려를 표명하며, 글로벌 AI 시장의 미래에 대한 논의가 촉발되고 있다.</description>
-    </item>
-    <item>
-      <title>구글의 새로운 AI 리더, OpenAI로 이동하다</title>
-      <link>https://dori-ai.com/insight/article/trend-120</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-120</guid>
-      <category>트렌드</category>
-      <pubDate>Thu, 18 Jun 2026 04:00:28 GMT</pubDate>
-      <description>구글의 Gemini 프로젝트 공동 리더인 노암 샤지어가 OpenAI에 합류하며 AI 업계의 큰 변화가 예고되고 있다.</description>
     </item>
   </channel>
 </rss>
