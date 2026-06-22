@@ -133,6 +133,56 @@ export default function TraderClient() {
         </ul>
       </details>
 
+      {/* 쉬운 설명 — 지금 하는 일 / 테스트 방법 / 앞으로의 계획 (초보자·학생용) */}
+      <section className="mb-5">
+        <h2 className="text-[15px] font-extrabold text-neutral-950 dark:text-white mb-2">
+          📖 이게 무슨 서비스예요? <span className="text-[12px] font-normal text-neutral-400">(쉽게 설명)</span>
+        </h2>
+        <div className="space-y-2">
+          <div className="rounded-2xl border border-neutral-200 dark:border-zinc-800 p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-5 h-5 rounded-full text-white text-[11px] font-extrabold flex items-center justify-center shrink-0" style={{ background: ORANGE }}>1</span>
+              <span className="font-bold text-neutral-800 dark:text-neutral-100 text-[13px]">지금 무슨 일을 하고 있나요?</span>
+            </div>
+            <ul className="text-[13px] text-neutral-600 dark:text-neutral-300 space-y-1.5 leading-relaxed list-disc pl-5">
+              <li>AI가 <b>4시간마다</b> 코인·국내주식·미국주식 <b>453개</b>를 쭉 살펴봐요.</li>
+              <li>그중 <b>꾸준히 오르는 흐름(추세)을 탄 종목</b>만 골라서 삽니다. 아무거나 사지 않아요.</li>
+              <li>사고 나면 <b>손절선</b>(여기까지 내려오면 자동으로 파는 선)을 정해둬서, 잘못돼도 <b>손실을 작게</b> 끊어요.</li>
+              <li>돈은 <b>코인·국내주식·미국주식에 각 100만원씩</b> 나눠서 다뤄요.</li>
+            </ul>
+          </div>
+
+          <div className="rounded-2xl border border-neutral-200 dark:border-zinc-800 p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-5 h-5 rounded-full text-white text-[11px] font-extrabold flex items-center justify-center shrink-0" style={{ background: ORANGE }}>2</span>
+              <span className="font-bold text-neutral-800 dark:text-neutral-100 text-[13px]">지금은 ‘연습’ 중이에요 (진짜 돈 아님)</span>
+            </div>
+            <ul className="text-[13px] text-neutral-600 dark:text-neutral-300 space-y-1.5 leading-relaxed list-disc pl-5">
+              <li>지금은 <b>모의(연습) 매매</b>예요 — 게임처럼 <b>가짜 돈</b>으로, 대신 <b>진짜 시세</b>를 받아 똑같이 연습해요.</li>
+              <li>진짜 돈을 넣기 전에 <b>“이 방법이 정말 괜찮은지”</b>를 안전하게 확인하려는 거예요.</li>
+              <li>과거 <b>최대 26년치 데이터</b>로도 미리 시험했어요 — “옛날에 이렇게 샀으면 어땠을까?”를 돌려보는 거예요(이걸 <b>백테스트</b>라고 해요).</li>
+            </ul>
+          </div>
+
+          <div className="rounded-2xl border border-neutral-200 dark:border-zinc-800 p-4">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="w-5 h-5 rounded-full text-white text-[11px] font-extrabold flex items-center justify-center shrink-0" style={{ background: ORANGE }}>3</span>
+              <span className="font-bold text-neutral-800 dark:text-neutral-100 text-[13px]">앞으로 어떻게 하나요?</span>
+            </div>
+            <ul className="text-[13px] text-neutral-600 dark:text-neutral-300 space-y-1.5 leading-relaxed list-disc pl-5">
+              <li><b>1주일</b> 동안 연습 결과를 지켜봐요.</li>
+              <li>결과가 괜찮고 <b>안전장치 점검</b>(진짜 주문이 제대로 나가는지 등)이 끝나면,</li>
+              <li><b>코인·국내주식부터 아주 적은 돈</b>으로 진짜 매매를 시작해요. 한 번에 몰아넣지 않아요.</li>
+              <li>미국주식은 아직 자동 ‘진짜 주문’이 안 돼서 <b>당분간 연습만</b> 합니다.</li>
+            </ul>
+          </div>
+
+          <div className="rounded-2xl border border-amber-300/40 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-800/40 p-3 text-[12px] text-amber-800 dark:text-amber-300 leading-relaxed">
+            ⚠️ 이건 “무조건 돈 버는 기계”가 아니에요. 목표는 <b>크게 잃지 않기</b>예요. 어떤 방법도 손실을 100% 막진 못하고, 과거에 잘됐다고 미래가 보장되진 않아요.
+          </div>
+        </div>
+      </section>
+
       {err && <div className="text-sm text-neutral-500 py-10 text-center">아직 데이터가 없습니다. 곧 업데이트됩니다.</div>}
       {!err && !d && <div className="text-sm text-neutral-400 py-10 text-center">불러오는 중…</div>}
 
