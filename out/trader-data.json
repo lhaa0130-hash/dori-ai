@@ -1,31 +1,31 @@
 {
   "program": "트레이더일로 (Trader Illo)",
-  "generated_at": "2026-06-22 09:39:01",
+  "generated_at": "2026-06-22 09:46:12",
   "mode": "paper",
   "total_starting": 3000000,
-  "total_ending": 2999836,
-  "total_return_pct": -0.01,
+  "total_ending": 2999956,
+  "total_return_pct": -0.0,
   "categories": [
     {
       "name": "코인",
-      "count": 20,
+      "count": 30,
       "starting": 1000000,
       "ending": 1000000,
       "return_pct": 0.0
     },
     {
       "name": "국내주식",
-      "count": 20,
+      "count": 35,
       "starting": 1000000,
       "ending": 1000000,
       "return_pct": 0.0
     },
     {
       "name": "해외주식",
-      "count": 19,
+      "count": 40,
       "starting": 1000000,
-      "ending": 999836,
-      "return_pct": -0.02
+      "ending": 999956,
+      "return_pct": -0.0
     }
   ],
   "sections": [
@@ -36,9 +36,9 @@
       "win_rate_pct": 0.0,
       "realized_pnl": 0,
       "open_position": {
-        "entry_time": "2026-06-22 09:39",
+        "entry_time": "2026-06-22 09:46",
         "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-        "unrealized_pnl_pct": -0.14
+        "unrealized_pnl_pct": -0.03
       },
       "trade_log": []
     }
