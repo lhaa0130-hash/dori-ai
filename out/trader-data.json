@@ -1,11 +1,14 @@
 {
   "program": "트레이더일로 (Trader Illo)",
-  "generated_at": "2026-06-22 15:46:51",
+  "generated_at": "2026-06-22 16:01:11",
   "mode": "paper",
-  "total_starting": 3002336,
-  "total_ending": 2995408,
+  "total_starting": 3001386,
+  "total_ending": 2994464,
   "total_return_pct": -0.23,
-  "usdkrw": 1539.64,
+  "usdkrw": 1538.18,
+  "watching": 453,
+  "holding": 3,
+  "interval_hours": 4,
   "categories": [
     {
       "name": "코인",
@@ -30,7 +33,7 @@
       "starting": 651.02,
       "ending": 646.52,
       "return_pct": -0.69,
-      "fx": 1539.64
+      "fx": 1538.18
     }
   ],
   "sections": [
@@ -93,6 +96,16 @@
         "unrealized_pnl_pct": -2.57
       },
       "trade_log": []
+    }
+  ],
+  "recent_runs": [
+    {
+      "time": "2026-06-22 16:01:11",
+      "watching": 453,
+      "holding": 3,
+      "new_trades": 0,
+      "total": 2994464,
+      "ret": -0.23
     }
   ]
 }

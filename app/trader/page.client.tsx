@@ -23,10 +23,12 @@ interface Section {
   open_position: OpenPos | null; trade_log: Trade[];
 }
 interface Category { name: string; count: number; currency?: string; fx?: number; starting: number; ending: number; return_pct: number; }
+interface RecentRun { time: string; watching?: number; holding?: number; new_trades?: number; total?: number; ret?: number; }
 interface Data {
   program: string; generated_at: string; mode: string;
   total_starting: number; total_ending: number; total_return_pct: number;
-  usdkrw?: number; categories?: Category[]; sections: Section[];
+  usdkrw?: number; watching?: number; holding?: number; interval_hours?: number;
+  categories?: Category[]; sections: Section[]; recent_runs?: RecentRun[];
 }
 
 const won = (n: number) => n.toLocaleString("ko-KR") + "원";
@@ -48,12 +50,18 @@ export default function TraderClient() {
   const [d, setD] = useState<Data | null>(null);
   const [err, setErr] = useState(false);
   const [tab, setTab] = useState<(typeof TABS)[number]>("국내주식");
+  const [now, setNow] = useState<number>(() => Date.now());
 
   useEffect(() => {
-    fetch("/trader-data.json")
-      .then((r) => (r.ok ? r.json() : Promise.reject()))
-      .then(setD)
-      .catch(() => setErr(true));
+    const load = () =>
+      fetch("/trader-data.json", { cache: "no-store" })
+        .then((r) => (r.ok ? r.json() : Promise.reject()))
+        .then((j) => { setD(j); setErr(false); })
+        .catch(() => setErr(true));
+    load();
+    const poll = setInterval(load, 60000); // 1분마다 새 결과 확인(봇이 올리면 자동 반영)
+    const tick = setInterval(() => setNow(Date.now()), 1000); // 카운트다운용 시계
+    return () => { clearInterval(poll); clearInterval(tick); };
   }, []);
 
   const secs = d ? d.sections.filter((s) => s.category === tab) : [];
@@ -77,6 +85,38 @@ export default function TraderClient() {
           AI 자동매매 — <b>손실은 작게, 수익은 크게</b>를 목표로 합니다. (완벽하진 않아요)
         </p>
       </header>
+
+      {/* 라이브 상태등 — '봇이 일하고 있는 모습' (4시간마다 점검·1분마다 자동 새로고침) */}
+      {d && (() => {
+        const gen = new Date(d.generated_at.replace(" ", "T")).getTime();
+        const ms = now - gen;
+        const minAgo = Math.max(0, Math.floor(ms / 60000));
+        const interval = (d.interval_hours ?? 4) * 3600 * 1000;
+        const left = Math.max(0, gen + interval - now);
+        const pad = (n: number) => String(n).padStart(2, "0");
+        const cd = `${pad(Math.floor(left / 3600000))}:${pad(Math.floor((left % 3600000) / 60000))}:${pad(Math.floor((left % 60000) / 1000))}`;
+        const alive = ms < (interval + 3600 * 1000); // 한 주기+1h 내 갱신이면 '작동 중'
+        const agoStr = minAgo < 1 ? "방금" : minAgo < 60 ? `${minAgo}분 전` : `${Math.floor(minAgo / 60)}시간 ${minAgo % 60}분 전`;
+        return (
+          <div className="rounded-xl border border-neutral-200 dark:border-zinc-800 bg-white/60 dark:bg-zinc-900/40 p-3 mb-3">
+            <div className="flex items-center justify-between flex-wrap gap-2">
+              <span className="flex items-center gap-2 text-[13px] font-bold">
+                <span className={`inline-block w-2.5 h-2.5 rounded-full ${alive ? "bg-emerald-500 animate-pulse" : "bg-amber-500"}`} />
+                {alive ? <span className="text-emerald-600 dark:text-emerald-400">정상 작동 중</span>
+                       : <span className="text-amber-600 dark:text-amber-400">대기 중 (PC 확인 필요)</span>}
+                <span className="text-neutral-400 font-normal">· 4시간마다 자동 점검</span>
+              </span>
+              <span className="text-[12px] text-neutral-500">
+                감시 <b>{d.watching ?? 0}</b>종목 · 보유 <b>{d.holding ?? 0}</b>종
+              </span>
+            </div>
+            <div className="flex items-center justify-between mt-2 text-[12px] text-neutral-500">
+              <span>🔍 마지막 점검 <b className="text-neutral-700 dark:text-neutral-200">{agoStr}</b> ({d.generated_at.slice(5, 16)})</span>
+              <span>⏱️ 다음 점검까지 {alive ? <b className="tabular-nums text-neutral-700 dark:text-neutral-200">{cd}</b> : <span>PC 켜지면 재개</span>}</span>
+            </div>
+          </div>
+        );
+      })()}
 
       <div className="rounded-xl border border-amber-300/40 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-800/40 p-3 mb-3 text-[12px] text-amber-800 dark:text-amber-300 leading-relaxed">
         ⚠️ <b>모의(연습) 매매</b>입니다 — 진짜 돈이 아니라 <b>실제 시세</b>로 연습하며 기록합니다. 투자엔 손실 위험이 있어요. 코인·국내주식·해외주식 <b>각 100만원</b>으로 시작했고, 매수·매도가 생길 때마다 자동 갱신됩니다.
@@ -221,6 +261,27 @@ export default function TraderClient() {
 
           {(openPos.length === 0 && trades.length === 0) && (
             <p className="text-[12px] text-neutral-400 mb-4 px-1">아직 이 카테고리에서 거래한 종목이 없어요. 좋은 매수 신호가 나오면 자동으로 사고 여기에 표시됩니다.</p>
+          )}
+
+          {/* 작업 기록 — 봇이 점검한 시각들 (일하고 있는 모습) */}
+          {d.recent_runs && d.recent_runs.length > 0 && (
+            <>
+              <h2 className="text-[15px] font-extrabold text-neutral-950 dark:text-white mb-2">🔧 작업 기록 <span className="text-[12px] font-normal text-neutral-400">(봇이 점검한 시각)</span></h2>
+              <div className="rounded-2xl border border-neutral-200 dark:border-zinc-800 divide-y divide-neutral-100 dark:divide-zinc-900 mb-5 overflow-hidden">
+                {d.recent_runs.map((r, i) => (
+                  <div key={i} className="flex items-center justify-between px-4 py-2 text-[12px]">
+                    <span className="text-neutral-600 dark:text-neutral-300">
+                      <span className="text-neutral-400 mr-2">{r.time?.slice(5, 16)}</span>
+                      {r.watching ?? 0}종목 점검 · {r.holding ?? 0}종 보유
+                      {r.new_trades ? <span className="ml-1 text-[#F9954E] font-bold">🆕 신규 {r.new_trades}건</span> : null}
+                    </span>
+                    <span className="tabular-nums text-neutral-500">
+                      {won(r.total ?? 0)} <span className={`font-semibold ${sgn(r.ret ?? 0)}`}>{pc(r.ret ?? 0)}</span>
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </>
           )}
 
           {/* 용어 설명 */}
