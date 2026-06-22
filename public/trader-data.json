@@ -1,11 +1,11 @@
 {
   "program": "트레이더일로 (Trader Illo)",
-  "generated_at": "2026-06-22 14:44:21",
+  "generated_at": "2026-06-22 15:46:51",
   "mode": "paper",
-  "total_starting": 2999693,
-  "total_ending": 2992783,
+  "total_starting": 3002336,
+  "total_ending": 2995408,
   "total_return_pct": -0.23,
-  "usdkrw": 1535.58,
+  "usdkrw": 1539.64,
   "categories": [
     {
       "name": "코인",
@@ -30,7 +30,7 @@
       "starting": 651.02,
       "ending": 646.52,
       "return_pct": -0.69,
-      "fx": 1535.58
+      "fx": 1539.64
     }
   ],
   "sections": [
