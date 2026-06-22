@@ -4,7 +4,7 @@ description: AI가 실제로 어떤 직업을 얼마나 대체하고 있는지, 
 date: 2026-04-26
 author: DORI-AI
 category: 분석
-thumbnail: /thumbnails/trend/analysis-02.png
+thumbnail: "/thumbnails/analysis/analysis-02.jpg"
 tags: [AI직업대체, 자동화, 노동시장, 화이트칼라, 미래직업]
 ---
 

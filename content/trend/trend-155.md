@@ -4,7 +4,7 @@ description: "인실리코 메디슨과 SK바이오팜이 25억 달러 규모의
 date: "2026-06-22T18:00:19+09:00"
 author: "DORI-AI"
 category: "트렌드"
-thumbnail: "/og-default.png"
+thumbnail: "/thumbnails/trend/trend-155.jpg""/thumbnails/trend/trend-155.jpg"
 tags: ["신약 개발", "AI", "SK바이오팜", "인실리코 메디슨", "의료 혁신"]
 ---
 

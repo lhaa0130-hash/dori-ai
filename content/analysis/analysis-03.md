@@ -4,7 +4,7 @@ description: ChatGPT, Claude, Gemini부터 기업용 API까지, 실제로 AI를 
 date: 2026-04-26
 author: DORI-AI
 category: 분석
-thumbnail: /thumbnails/trend/analysis-03.png
+thumbnail: "/thumbnails/analysis/analysis-03.jpg"
 tags: [AI비용, AI구독료, ChatGPT요금, Claude요금, 기업AI도입비용]
 ---
 
