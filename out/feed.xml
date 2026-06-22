@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 22 Jun 2026 07:05:12 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 22 Jun 2026 07:07:03 GMT</lastBuildDate>
+    <item>
+      <title>마이크로소프트, AI 거대 기업의 경제적 영향에 대한 경고</title>
+      <link>https://dori-ai.com/insight/article/trend-154</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-154</guid>
+      <category>트렌드</category>
+      <pubDate>Mon, 22 Jun 2026 07:00:18 GMT</pubDate>
+      <description>사티아 나델라가 AI의 발전이 경제에 미치는 영향에 대해 경고하며 새로운 규제 필요성을 강조했다.</description>
+    </item>
     <item>
       <title>California 미신고 고위험 AI가 드러낸 복지 행정 자동화의 위험</title>
       <link>https://dori-ai.com/insight/article/analysis-8</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Thu, 18 Jun 2026 04:00:28 GMT</pubDate>
       <description>구글의 Gemini 프로젝트 공동 리더인 노암 샤지어가 OpenAI에 합류하며 AI 업계의 큰 변화가 예고되고 있다.</description>
-    </item>
-    <item>
-      <title>마크 저커버그가 지시한 AI 규제의 미래</title>
-      <link>https://dori-ai.com/insight/article/trend-119</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-119</guid>
-      <category>트렌드</category>
-      <pubDate>Thu, 18 Jun 2026 03:00:20 GMT</pubDate>
-      <description>프랑스 대통령이 미국에 AI 기술 공유를 촉구하며 민주국가 간 협력을 강조했다. 이는 AI 규제의 새로운 장을 열 수 있는 기회가 될 것이다.</description>
     </item>
   </channel>
 </rss>
