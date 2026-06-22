@@ -1,0 +1,118 @@
+
+> dori-ai@0.1.0 build
+> next build
+
+  ▲ Next.js 14.2.35
+  - Environments: .env.local
+
+   Creating an optimized production build ...
+ ✓ Compiled successfully
+   Skipping validation of types
+   Skipping linting
+   Collecting page data ...
+   Generating static pages (0/254) ...
+   Generating static pages (63/254) 
+Error loading Firestore posts: [V [FirebaseError]: Missing or insufficient permissions.] {
+  code: 'permission-denied',
+  customData: undefined,
+  toString: [Function (anonymous)]
+}
+Error loading Firestore posts: [V [FirebaseError]: Missing or insufficient permissions.] {
+  code: 'permission-denied',
+  customData: undefined,
+  toString: [Function (anonymous)]
+}
+   Generating static pages (126/254) 
+   Generating static pages (190/254) 
+ ✓ Generating static pages (254/254)
+   Finalizing page optimization ...
+   Collecting build traces ...
+
+Route (app)                              Size     First Load JS
+┌ ○ /                                    3.24 kB         237 kB
+├ ○ /_not-found                          162 B          87.8 kB
+├ ○ /academy                             8.57 kB         101 kB
+├ ○ /admin                               8.47 kB         252 kB
+├ ○ /ai-models                           4.57 kB         101 kB
+├ ○ /ai-tools                            77.7 kB         307 kB
+├ ○ /animal                              12.6 kB         141 kB
+├ ƒ /api/admin/article                   0 B                0 B
+├ ƒ /api/bot/send                        0 B                0 B
+├ ○ /api/seed-community                  0 B                0 B
+├ ƒ /api/webhook/n8n/insight             0 B                0 B
+├ ○ /community                           6.78 kB         236 kB
+├ ○ /community/write                     61.7 kB         322 kB
+├ ○ /explore                             3.3 kB          239 kB
+├ ○ /family                              6.51 kB         144 kB
+├ ○ /faq                                 9.08 kB        96.7 kB
+├ ○ /feed                                4.79 kB         241 kB
+├ ○ /feed.xml                            0 B                0 B
+├ ○ /flat-form                           910 B          88.6 kB
+├ ○ /help                                4.76 kB        92.4 kB
+├ ○ /illo                                4 kB            100 kB
+├ ○ /illo/app                            38.2 kB         267 kB
+├ ○ /illo/inbox                          2.5 kB          215 kB
+├ ○ /insight                             5.57 kB         102 kB
+├ ● /insight/article/[slug]              3.39 kB         252 kB
+├   ├ /insight/article/trend-150
+├   ├ /insight/article/trend-149
+├   ├ /insight/article/trend-148
+├   └ [+177 more paths]
+├ ○ /legal/about                         1.05 kB         101 kB
+├ ○ /legal/contact                       1.05 kB         101 kB
+├ ○ /legal/privacy                       11.3 kB         108 kB
+├ ○ /legal/terms                         11.6 kB         108 kB
+├ ○ /login                               9.88 kB         239 kB
+├ ○ /market                              5.83 kB         102 kB
+├ ○ /messages                            6.56 kB         242 kB
+├ ○ /minigame                            5.14 kB         102 kB
+├ ○ /minigame/aim                        5.27 kB         240 kB
+├ ○ /minigame/boss                       154 B           233 kB
+├ ○ /minigame/colormatch                 5.06 kB         278 kB
+├ ○ /minigame/cute2048                   154 B           233 kB
+├ ○ /minigame/dungeon                    11.6 kB         278 kB
+├ ○ /minigame/flappy                     6.67 kB         242 kB
+├ ○ /minigame/galaxy                     155 B           233 kB
+├ ○ /minigame/gem                        154 B           233 kB
+├ ○ /minigame/guess                      5.69 kB         278 kB
+├ ○ /minigame/mathsprint                 8.33 kB         281 kB
+├ ○ /minigame/memory                     7.59 kB         114 kB
+├ ○ /minigame/puzzle                     4.99 kB         278 kB
+├ ○ /minigame/quiz                       10.7 kB         246 kB
+├ ○ /minigame/reaction                   7.26 kB         280 kB
+├ ○ /minigame/simon                      8.8 kB          244 kB
+├ ○ /minigame/snake                      5.18 kB         240 kB
+├ ○ /minigame/tetris                     7.03 kB         236 kB
+├ ○ /minigame/typing                     9.8 kB          239 kB
+├ ○ /minigame/whack                      7.58 kB         280 kB
+├ ○ /my                                  613 B          88.3 kB
+├ ○ /my/edit                             3.07 kB         250 kB
+├ ○ /notice                              9.39 kB          97 kB
+├ ○ /notifications                       1.93 kB         238 kB
+├ ○ /profile                             20.3 kB         269 kB
+├ ○ /projects                            3.5 kB         99.9 kB
+├ ● /projects/[slug]                     3.13 kB        99.5 kB
+├   ├ /projects/animal
+├   ├ /projects/illo
+├   ├ /projects/trader
+├   └ /projects/family
+├ ○ /robots.txt                          0 B                0 B
+├ ○ /shop                                5.97 kB         252 kB
+├ ○ /signup                              162 B          87.8 kB
+├ ○ /sitemap.xml                         0 B                0 B
+├ ○ /studio                              9.64 kB         230 kB
+├ ○ /suggestion                          3.73 kB        91.4 kB
+├ ○ /titles.json                         0 B                0 B
+├ ○ /tools-index.json                    0 B                0 B
+├ ○ /trader                              3.47 kB        91.1 kB
+└ ○ /u                                   3.73 kB         232 kB
++ First Load JS shared by all            87.7 kB
+  ├ chunks/2117-52f712c54703a8be.js      32 kB
+  ├ chunks/fd9d1056-b6621edf7a0a8796.js  53.6 kB
+  └ other shared chunks (total)          2.01 kB
+
+
+○  (Static)   prerendered as static content
+●  (SSG)      prerendered as static HTML (uses getStaticProps)
+ƒ  (Dynamic)  server-rendered on demand
+
