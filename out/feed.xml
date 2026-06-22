@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 22 Jun 2026 04:04:22 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 22 Jun 2026 04:57:03 GMT</lastBuildDate>
+    <item>
+      <title>구글 클라우드, 필리핀 정부와 AI 및 사이버 보안 협력체계 구축</title>
+      <link>https://dori-ai.com/insight/article/trend-153</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-153</guid>
+      <category>트렌드</category>
+      <pubDate>Mon, 22 Jun 2026 04:00:28 GMT</pubDate>
+      <description>구글 클라우드가 필리핀 정부와 협력해 차세대 시민 서비스를 위한 AI 및 사이버 보안 이니셔티브를 발표했다. 이는 새로운 디지털 시대를 여는 중요한 발걸음으로 평가된다.</description>
+    </item>
     <item>
       <title>삼성전자의 혁신: 직원들에게 ChatGPT와 Codex 도입</title>
       <link>https://dori-ai.com/insight/article/trend-152</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Thu, 18 Jun 2026 01:00:14 GMT</pubDate>
       <description>앤트로픽이 탄소 제거 프로젝트를 지원하는 Frontier 연합에 첫 번째 AI 스타트업으로 참여하며 환경 보호에 기여하고 있습니다.</description>
-    </item>
-    <item>
-      <title>오디세이, 14억 5천만 달러 가치로 AI 모델의 새로운 지평을 열다</title>
-      <link>https://dori-ai.com/insight/article/trend-117</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-117</guid>
-      <category>트렌드</category>
-      <pubDate>Thu, 18 Jun 2026 00:00:16 GMT</pubDate>
-      <description>오디세이가 14억 5천만 달러의 기업 가치를 인정받으며 AI 모델 제작의 차세대 선두주자로 떠오르고 있다. 아마존의 지원을 받는 이 스타트업의 행보에 주목해야 한다.</description>
     </item>
   </channel>
 </rss>

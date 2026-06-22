@@ -35,6 +35,12 @@ const man = (n: number) => Math.round(n / 10000) + "만";
 const money = (n: number, usd: boolean) =>
   usd ? "$" + n.toLocaleString("en-US", { maximumFractionDigits: 2 }) : Math.round(n).toLocaleString("ko-KR") + "원";
 const qtyStr = (q: number) => (q >= 1 ? q.toLocaleString("en-US", { maximumFractionDigits: 2 }) : q.toFixed(4));
+const codeOf = (sym: string) => (sym.startsWith("KRW-") ? sym.slice(4) : sym); // 코인은 KRW- 제거
+// "이름 (티커/코드)" — 무엇을 샀는지 명확히
+const withCode = (name: string | undefined, sym: string) => {
+  const c = codeOf(sym);
+  return name && name !== sym ? `${name} (${c})` : c;
+};
 const sgn = (n: number) => (n >= 0 ? "text-emerald-500" : "text-red-500");
 const pc = (n: number) => (n >= 0 ? "+" : "") + n + "%";
 
@@ -135,7 +141,7 @@ export default function TraderClient() {
                 {openPos.map((p) => (
                   <div key={p.sym} className="rounded-2xl border border-emerald-300/40 dark:border-emerald-800/40 bg-emerald-50/40 dark:bg-emerald-950/10 p-4">
                     <div className="flex justify-between items-center">
-                      <span className="font-bold text-neutral-800 dark:text-neutral-100">{p.nm}</span>
+                      <span className="font-bold text-neutral-800 dark:text-neutral-100">{withCode(p.nm, p.sym)}</span>
                       <span className={`font-extrabold ${sgn(p.unrealized_pnl_pct ?? 0)}`}>{pc(p.unrealized_pnl_pct ?? 0)}</span>
                     </div>
                     <div className="text-[12px] text-neutral-600 dark:text-neutral-300 mt-1">
@@ -159,7 +165,7 @@ export default function TraderClient() {
                 {trades.map((t, i) => (
                   <div key={i} className="rounded-2xl border border-neutral-200 dark:border-zinc-800 p-4">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="font-bold text-neutral-800 dark:text-neutral-100">{t.nm}</span>
+                      <span className="font-bold text-neutral-800 dark:text-neutral-100">{withCode(t.nm, t.sym)}</span>
                       <span className={`font-extrabold ${sgn(t.pnl_pct)}`}>{pc(t.pnl_pct)}</span>
                     </div>
                     <div className="text-[12px] text-neutral-600 dark:text-neutral-300">🛒 <b>매수</b> {t.entry} · {money(t.entry_price ?? 0, usd)} × {qtyStr(t.qty ?? 0)}주</div>
@@ -189,7 +195,7 @@ export default function TraderClient() {
                   <tbody>
                     {tradedSecs.map((s) => (
                       <tr key={s.symbol} className="border-b border-neutral-100 dark:border-zinc-900 last:border-0">
-                        <td className="py-2 px-3 text-neutral-700 dark:text-neutral-200">{s.name || s.symbol}</td>
+                        <td className="py-2 px-3 text-neutral-700 dark:text-neutral-200">{withCode(s.name, s.symbol)}</td>
                         <td className={`text-right px-2 tabular-nums font-semibold ${sgn(s.realized_pnl)}`}>{(s.realized_pnl >= 0 ? "+" : "") + won(s.realized_pnl)}</td>
                         <td className="text-right px-2 tabular-nums text-neutral-500">{s.trades}</td>
                         <td className="text-right px-3 tabular-nums text-neutral-500">{s.win_rate_pct}%</td>
