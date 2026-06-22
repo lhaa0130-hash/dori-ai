@@ -1,15 +1,15 @@
 {
   "program": "트레이더일로 (Trader Illo)",
-  "generated_at": "2026-06-22 14:10:14",
+  "generated_at": "2026-06-22 14:44:21",
   "mode": "paper",
-  "total_starting": 2999767,
-  "total_ending": 2993987,
-  "total_return_pct": -0.19,
-  "usdkrw": 1537.18,
+  "total_starting": 2999693,
+  "total_ending": 2992783,
+  "total_return_pct": -0.23,
+  "usdkrw": 1535.58,
   "categories": [
     {
       "name": "코인",
-      "count": 55,
+      "count": 93,
       "currency": "KRW",
       "starting": 1000000.0,
       "ending": 1000000.0,
@@ -17,7 +17,7 @@
     },
     {
       "name": "국내주식",
-      "count": 120,
+      "count": 160,
       "currency": "KRW",
       "starting": 1000000.0,
       "ending": 1000000.0,
@@ -25,35 +25,15 @@
     },
     {
       "name": "해외주식",
-      "count": 120,
+      "count": 200,
       "currency": "USD",
-      "starting": 650.39,
-      "ending": 646.63,
-      "return_pct": -0.58,
-      "fx": 1537.18
+      "starting": 651.02,
+      "ending": 646.52,
+      "return_pct": -0.69,
+      "fx": 1535.58
     }
   ],
   "sections": [
-    {
-      "symbol": "JPM",
-      "name": "JP모건",
-      "category": "해외주식",
-      "trades": 0,
-      "win_rate_pct": 0.0,
-      "realized_pnl": 0,
-      "open_position": {
-        "entry_time": "2026-06-22 14:06",
-        "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-        "entry_price": 333.7935,
-        "qty": 0.379803,
-        "invested": 126.78,
-        "cur_price": 325.22,
-        "stop_price": 316.3455,
-        "take_profit": 367.689,
-        "unrealized_pnl_pct": -2.57
-      },
-      "trade_log": []
-    },
     {
       "symbol": "GS",
       "name": "골드만삭스",
@@ -62,15 +42,55 @@
       "win_rate_pct": 0.0,
       "realized_pnl": 0,
       "open_position": {
-        "entry_time": "2026-06-22 14:06",
+        "entry_time": "2026-06-22 14:38",
         "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
         "entry_price": 1100.2392,
-        "qty": 0.079637,
-        "invested": 87.62,
+        "qty": 0.079624,
+        "invested": 87.61,
         "cur_price": 1096.5601,
         "stop_price": 1017.4705,
         "take_profit": 1262.4791,
         "unrealized_pnl_pct": -0.33
+      },
+      "trade_log": []
+    },
+    {
+      "symbol": "C",
+      "name": "씨티그룹",
+      "category": "해외주식",
+      "trades": 0,
+      "win_rate_pct": 0.0,
+      "realized_pnl": 0,
+      "open_position": {
+        "entry_time": "2026-06-22 14:38",
+        "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+        "entry_price": 143.9238,
+        "qty": 0.731136,
+        "invested": 105.23,
+        "cur_price": 143.06,
+        "stop_price": 134.8757,
+        "take_profit": 161.5886,
+        "unrealized_pnl_pct": -0.6
+      },
+      "trade_log": []
+    },
+    {
+      "symbol": "JPM",
+      "name": "JP모건",
+      "category": "해외주식",
+      "trades": 0,
+      "win_rate_pct": 0.0,
+      "realized_pnl": 0,
+      "open_position": {
+        "entry_time": "2026-06-22 14:38",
+        "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+        "entry_price": 333.7935,
+        "qty": 0.379741,
+        "invested": 126.76,
+        "cur_price": 325.22,
+        "stop_price": 316.3455,
+        "take_profit": 367.689,
+        "unrealized_pnl_pct": -2.57
       },
       "trade_log": []
     }

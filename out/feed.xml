@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 22 Jun 2026 05:13:46 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 22 Jun 2026 05:48:27 GMT</lastBuildDate>
+    <item>
+      <title>California 미신고 고위험 AI가 드러낸 복지 행정 자동화의 위험</title>
+      <link>https://dori-ai.com/insight/article/analysis-8</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/analysis-8</guid>
+      <category>분석</category>
+      <pubDate>Mon, 22 Jun 2026 05:02:38 GMT</pubDate>
+      <description>미국 주정부와 지방정부가 복지, 의료, 교육 행정에 AI를 빠르게 들여오고 있다. 문제는 기술 도입 속도보다 감시와 책임 구조가 훨씬 느리다는 점이다.</description>
+    </item>
     <item>
       <title>구글 클라우드, 필리핀 정부와 AI 및 사이버 보안 협력체계 구축</title>
       <link>https://dori-ai.com/insight/article/trend-153</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Thu, 18 Jun 2026 03:00:20 GMT</pubDate>
       <description>프랑스 대통령이 미국에 AI 기술 공유를 촉구하며 민주국가 간 협력을 강조했다. 이는 AI 규제의 새로운 장을 열 수 있는 기회가 될 것이다.</description>
-    </item>
-    <item>
-      <title>앤트로픽, 탄소 제거를 위한 혁신적 연합에 합류하다</title>
-      <link>https://dori-ai.com/insight/article/trend-118</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-118</guid>
-      <category>트렌드</category>
-      <pubDate>Thu, 18 Jun 2026 01:00:14 GMT</pubDate>
-      <description>앤트로픽이 탄소 제거 프로젝트를 지원하는 Frontier 연합에 첫 번째 AI 스타트업으로 참여하며 환경 보호에 기여하고 있습니다.</description>
     </item>
   </channel>
 </rss>

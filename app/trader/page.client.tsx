@@ -78,9 +78,20 @@ export default function TraderClient() {
         </p>
       </header>
 
-      <div className="rounded-xl border border-amber-300/40 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-800/40 p-3 mb-5 text-[12px] text-amber-800 dark:text-amber-300 leading-relaxed">
+      <div className="rounded-xl border border-amber-300/40 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-800/40 p-3 mb-3 text-[12px] text-amber-800 dark:text-amber-300 leading-relaxed">
         ⚠️ <b>모의(연습) 매매</b>입니다 — 진짜 돈이 아니라 <b>실제 시세</b>로 연습하며 기록합니다. 투자엔 손실 위험이 있어요. 코인·국내주식·해외주식 <b>각 100만원</b>으로 시작했고, 매수·매도가 생길 때마다 자동 갱신됩니다.
       </div>
+
+      <details className="rounded-xl border border-neutral-200 dark:border-zinc-800 p-3 mb-5 text-[12px] text-neutral-600 dark:text-neutral-300 leading-relaxed">
+        <summary className="cursor-pointer font-bold text-neutral-800 dark:text-neutral-100">📌 솔직하게 — 이 봇이 할 수 있는 것 / 없는 것 (꼭 읽어주세요)</summary>
+        <ul className="mt-3 space-y-2">
+          <li>🎯 이 봇의 목표는 <b>“시장을 이기는 것”이 아니라 “크게 잃지 않는 것(낙폭 관리)”</b>입니다.</li>
+          <li>📉 과거 데이터에선 <b>그냥 사서 들고 있기(존버)가 봇보다 훨씬 많이 벌었어요</b> — 대신 중간에 <b>-50%대 폭락</b>을 다 견뎌야 했고, 어떤 종목이 살아남을지는 <b>미리 알 수 없습니다</b>.</li>
+          <li>🛡️ 봇은 손절·트레일링으로 손실을 작게 끊는 대신, 큰 상승을 다 먹진 못합니다. (수익과 안전은 맞바꿈 관계예요)</li>
+          <li>🔬 전략은 미국 24·한국 10·코인 6종의 장기데이터로 검증했지만, <b>표본이 ‘살아남은 대형주’ 위주라 실제 성과는 더 낮을 수 있습니다</b>(생존편향).</li>
+          <li>🚫 <b>과거 성과는 미래를 보장하지 않습니다.</b> “안 잃기”는 불가능합니다.</li>
+        </ul>
+      </details>
 
       {err && <div className="text-sm text-neutral-500 py-10 text-center">아직 데이터가 없습니다. 곧 업데이트됩니다.</div>}
       {!err && !d && <div className="text-sm text-neutral-400 py-10 text-center">불러오는 중…</div>}
@@ -148,8 +159,9 @@ export default function TraderClient() {
                       🛒 {money(p.entry_price ?? 0, usd)} × {qtyStr(p.qty ?? 0)}주 = <b>{money(p.invested ?? 0, usd)}</b> 투자
                     </div>
                     <div className="text-[12px] text-neutral-500">
-                      🟥 손절선 {money(p.stop_price ?? 0, usd)}{p.take_profit ? `  ·  🟩 익절선 ${money(p.take_profit, usd)}` : ""}
+                      🟥 손절선 {money(p.stop_price ?? 0, usd)}{p.take_profit ? `  ·  🎯 목표가(참고) ${money(p.take_profit, usd)}` : ""}
                     </div>
+                    <div className="text-[11px] text-neutral-400">손절선은 수익이 나면 위로 따라 올라가요(트레일링). 목표가는 <b>참고선</b> — 닿아도 바로 안 팔고 추세 끝까지 따라갑니다.</div>
                     <div className="text-[11px] text-neutral-400 mt-1">매수시각 {p.entry_time} · {p.entry_reason}</div>
                   </div>
                 ))}
@@ -218,6 +230,7 @@ export default function TraderClient() {
               <li><b style={{ color: ORANGE }}>수익률</b> — 투자한 돈 대비 번 비율. +면 이익, -면 손실.</li>
               <li><b style={{ color: ORANGE }}>승률</b> — 전체 거래 중 이긴(수익 본) 거래의 비율. 예) 10번 중 6번 수익이면 60%.</li>
               <li><b style={{ color: ORANGE }}>최대낙폭 (MDD)</b> — 제일 높았을 때 대비 가장 많이 떨어진 폭. 작을수록 덜 출렁여 안전해요.</li>
+              <li><b style={{ color: ORANGE }}>손절선 / 목표가</b> — 손절선은 ‘여기까지 떨어지면 판다’(수익 나면 위로 따라 올라감). 목표가는 참고용 — 닿아도 바로 안 팔고 추세 끝까지 따라가요.</li>
               <li><b style={{ color: ORANGE }}>모의(페이퍼)</b> — 진짜 돈이 아니라 실제 시세로 연습하는 매매.</li>
             </ul>
           </details>
