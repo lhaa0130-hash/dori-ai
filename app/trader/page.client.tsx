@@ -12,22 +12,29 @@ const SELL_REASON: Record<string, string> = {
   signal: "상승 추세가 꺾여서 매도",
 };
 
-interface Trade { entry: string; exit: string; pnl_pct: number; reason: string; entry_reason: string; }
-interface OpenPos { entry_time?: string; entry_reason?: string; unrealized_pnl_pct?: number; }
+interface Trade { entry: string; exit: string; entry_price?: number; exit_price?: number; qty?: number; pnl_pct: number; reason: string; entry_reason: string; }
+interface OpenPos {
+  entry_time?: string; entry_reason?: string; entry_price?: number; qty?: number;
+  invested?: number; cur_price?: number; stop_price?: number; take_profit?: number; unrealized_pnl_pct?: number;
+}
 interface Section {
   symbol: string; name?: string; category: string;
   trades: number; win_rate_pct: number; realized_pnl: number;
   open_position: OpenPos | null; trade_log: Trade[];
 }
-interface Category { name: string; count: number; starting: number; ending: number; return_pct: number; }
+interface Category { name: string; count: number; currency?: string; fx?: number; starting: number; ending: number; return_pct: number; }
 interface Data {
   program: string; generated_at: string; mode: string;
   total_starting: number; total_ending: number; total_return_pct: number;
-  categories?: Category[]; sections: Section[];
+  usdkrw?: number; categories?: Category[]; sections: Section[];
 }
 
 const won = (n: number) => n.toLocaleString("ko-KR") + "원";
 const man = (n: number) => Math.round(n / 10000) + "만";
+// 통화별 금액/가격 표기 (해외=달러, 그 외=원화)
+const money = (n: number, usd: boolean) =>
+  usd ? "$" + n.toLocaleString("en-US", { maximumFractionDigits: 2 }) : Math.round(n).toLocaleString("ko-KR") + "원";
+const qtyStr = (q: number) => (q >= 1 ? q.toLocaleString("en-US", { maximumFractionDigits: 2 }) : q.toFixed(4));
 const sgn = (n: number) => (n >= 0 ? "text-emerald-500" : "text-red-500");
 const pc = (n: number) => (n >= 0 ? "+" : "") + n + "%";
 
@@ -45,6 +52,7 @@ export default function TraderClient() {
 
   const secs = d ? d.sections.filter((s) => s.category === tab) : [];
   const cat = d?.categories?.find((c) => c.name === tab);
+  const usd = tab === "해외주식"; // 해외는 달러 표기
   const openPos = secs.filter((s) => s.open_position).map((s) => ({ sym: s.symbol, nm: s.name || s.symbol, ...(s.open_position as OpenPos) }));
   const trades = secs
     .flatMap((s) => (s.trade_log || []).map((t) => ({ ...t, sym: s.symbol, nm: s.name || s.symbol })))
@@ -109,8 +117,11 @@ export default function TraderClient() {
           {cat && (
             <div className="rounded-2xl border border-neutral-200 dark:border-zinc-800 p-4 mb-5 flex items-center justify-between">
               <div>
-                <div className="text-[12px] text-neutral-500">{cat.name} · 시작 {man(cat.starting)}원 · 감시 {cat.count}종목</div>
-                <div className={`text-2xl font-extrabold ${sgn(cat.return_pct)}`}>{won(cat.ending)}</div>
+                <div className="text-[12px] text-neutral-500">
+                  {cat.name} · 시작 {usd ? money(cat.starting, true) : man(cat.starting) + "원"} · 감시 {cat.count}종목
+                  {usd && cat.fx ? `  (실투자금 100만원, 환율 ${cat.fx.toLocaleString()}원)` : ""}
+                </div>
+                <div className={`text-2xl font-extrabold ${sgn(cat.return_pct)}`}>{money(cat.ending, usd)}</div>
               </div>
               <div className={`text-2xl font-extrabold ${sgn(cat.return_pct)}`}>{pc(cat.return_pct)}</div>
             </div>
@@ -127,8 +138,13 @@ export default function TraderClient() {
                       <span className="font-bold text-neutral-800 dark:text-neutral-100">{p.nm}</span>
                       <span className={`font-extrabold ${sgn(p.unrealized_pnl_pct ?? 0)}`}>{pc(p.unrealized_pnl_pct ?? 0)}</span>
                     </div>
-                    <div className="text-[12px] text-neutral-500 mt-1">🛒 매수: {p.entry_time}</div>
-                    <div className="text-[12px] text-neutral-500">💬 {p.entry_reason}</div>
+                    <div className="text-[12px] text-neutral-600 dark:text-neutral-300 mt-1">
+                      🛒 {money(p.entry_price ?? 0, usd)} × {qtyStr(p.qty ?? 0)}주 = <b>{money(p.invested ?? 0, usd)}</b> 투자
+                    </div>
+                    <div className="text-[12px] text-neutral-500">
+                      🟥 손절선 {money(p.stop_price ?? 0, usd)}{p.take_profit ? `  ·  🟩 익절선 ${money(p.take_profit, usd)}` : ""}
+                    </div>
+                    <div className="text-[11px] text-neutral-400 mt-1">매수시각 {p.entry_time} · {p.entry_reason}</div>
                   </div>
                 ))}
               </div>
@@ -146,9 +162,9 @@ export default function TraderClient() {
                       <span className="font-bold text-neutral-800 dark:text-neutral-100">{t.nm}</span>
                       <span className={`font-extrabold ${sgn(t.pnl_pct)}`}>{pc(t.pnl_pct)}</span>
                     </div>
-                    <div className="text-[12px] text-neutral-600 dark:text-neutral-300">🛒 <b>매수</b> {t.entry}</div>
+                    <div className="text-[12px] text-neutral-600 dark:text-neutral-300">🛒 <b>매수</b> {t.entry} · {money(t.entry_price ?? 0, usd)} × {qtyStr(t.qty ?? 0)}주</div>
                     <div className="text-[11px] text-neutral-400 mb-1 pl-4">└ {t.entry_reason || "추세 신호 발생"}</div>
-                    <div className="text-[12px] text-neutral-600 dark:text-neutral-300">💰 <b>매도</b> {t.exit}</div>
+                    <div className="text-[12px] text-neutral-600 dark:text-neutral-300">💰 <b>매도</b> {t.exit} · {money(t.exit_price ?? 0, usd)}</div>
                     <div className="text-[11px] text-neutral-400 pl-4">└ {SELL_REASON[t.reason] || t.reason}</div>
                   </div>
                 ))}
