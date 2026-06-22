@@ -18,9 +18,9 @@ const projects = [
     },
     {
         id: "animal",
-        title: "나만의 동물 도감",
-        description: "아이들의 상상력을 자극하는 AI 기반 동물 도감 서비스. 텍스트 설명으로 나만의 동물을 만들어보세요.",
-        status: "COMING SOON",
+        title: "애니멀일로",
+        description: "다양한 동물을 먹이·색·크기·서식지 등으로 검색하고 도감처럼 모아보는 동물 백과 '애니멀일로'.",
+        status: "ACTIVE",
         category: "AI Service",
         icon: BookOpen,
         href: "#",

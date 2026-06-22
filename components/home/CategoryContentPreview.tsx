@@ -18,8 +18,8 @@ const projectPreviews = [
     },
     {
         id: "animal",
-        title: "동물 도감",
-        description: "아이들의 상상력을 자극하는 나만의 동물 도감",
+        title: "애니멀일로",
+        description: "다양한 동물을 먹이·색·크기·서식지로 검색하고 도감처럼 모아보는 애니멀일로",
         status: "ACTIVE",
         statusLabel: "진행 중",
         category: "AI Service",

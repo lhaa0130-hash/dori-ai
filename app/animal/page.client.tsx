@@ -221,13 +221,13 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
         {/* ── 컴팩트 히어로 ── */}
         <section className="text-center mb-6">
           <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-4">
-            <BookOpen className="w-3 h-3" /><span>DORI 동물도감</span>
+            <BookOpen className="w-3 h-3" /><span>애니멀일로 · animalillo</span>
           </div>
           <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight leading-tight mb-2.5 text-neutral-900 dark:text-white break-keep">
             궁금한 <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">동물</span>을 찾아보세요
           </h1>
           <p className="text-sm md:text-base font-medium text-neutral-600 dark:text-neutral-400 max-w-xl mx-auto leading-relaxed break-keep">
-            이름으로 찾거나, 종류와 특징으로 골라보세요. 진짜 동물을 도감처럼 만나봐요 🐾
+            이름으로 찾거나, 종류와 특징으로 골라보세요. 진짜 동물을 애니멀일로에서 만나봐요 🐾
           </p>
         </section>
 
@@ -368,7 +368,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
                   aria-label="정렬"
                   className="appearance-none pl-3 pr-8 py-2 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-[13px] font-bold text-neutral-700 dark:text-neutral-200 focus:outline-none focus:border-[#F9954E] cursor-pointer"
                 >
-                  <option value="no">도감번호순</option>
+                  <option value="no">번호순</option>
                   <option value="name">이름순</option>
                 </select>
                 <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-400 pointer-events-none" />
@@ -406,7 +406,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
               <div className="text-5xl mb-3">{onlyEmptyTypes ? "🥚" : "🔍"}</div>
               {onlyEmptyTypes ? (
                 <>
-                  <p className="text-neutral-600 dark:text-neutral-300 font-bold mb-1">{taxPicks.join("·")} 친구는 곧 도감에 들어올 거예요</p>
+                  <p className="text-neutral-600 dark:text-neutral-300 font-bold mb-1">{taxPicks.join("·")} 친구는 곧 애니멀일로에 들어올 거예요</p>
                   <p className="text-neutral-400 dark:text-neutral-500 text-sm mb-4">다른 종류도 구경해볼까요?</p>
                 </>
               ) : (
@@ -547,7 +547,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
               <div className="p-6 md:p-7 flex flex-col">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-[11px] font-bold w-fit">
-                    <Sparkles className="w-3 h-3" /> 도감{detail.no ? ` No.${detail.no}` : ""}
+                    <Sparkles className="w-3 h-3" /> 애니멀일로{detail.no ? ` No.${detail.no}` : ""}
                   </div>
                   {typeof detail.rarity === "number" && <span className="text-[12px] text-[#F9954E] tracking-tighter" title="희귀도">{"★".repeat(detail.rarity)}{"☆".repeat(5 - detail.rarity)}</span>}
                 </div>

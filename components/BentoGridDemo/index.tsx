@@ -76,8 +76,8 @@ const HeaderPlaceholder = ({ color, children }: { color: string, children?: Reac
 
 const items = [
   {
-    title: "동물도감",
-    description: "생생한 3D 캐릭터와 함께하는 인터랙티브 가이드.",
+    title: "애니멀일로",
+    description: "생생한 3D 캐릭터와 함께하는 인터랙티브 동물 가이드.",
     header: (
       <HeaderPlaceholder color="blue">
         <div className="w-16 h-16 rounded-full bg-blue-500/20 flex items-center justify-center glassmorphism">
