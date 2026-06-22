@@ -41,7 +41,7 @@ interface Data {
 
 const won = (n: number) => n.toLocaleString("ko-KR") + "원";
 const man = (n: number) => Math.round(n / 10000) + "만";
-const nameOf = (sym: string) => NAME_MAP[sym] || sym;
+const nameOf = (sym: string) => NAME_MAP[sym] || (sym.startsWith("KRW-") ? sym.slice(4) : sym);
 const sgn = (n: number) => (n >= 0 ? "text-emerald-500" : "text-red-500");
 const pc = (n: number) => (n >= 0 ? "+" : "") + n + "%";
 
@@ -123,7 +123,7 @@ export default function TraderClient() {
           {cat && (
             <div className="rounded-2xl border border-neutral-200 dark:border-zinc-800 p-4 mb-5 flex items-center justify-between">
               <div>
-                <div className="text-[12px] text-neutral-500">{cat.name} · 시작 {man(cat.starting)}원</div>
+                <div className="text-[12px] text-neutral-500">{cat.name} · 시작 {man(cat.starting)}원 · 감시 {cat.count}종목</div>
                 <div className={`text-2xl font-extrabold ${sgn(cat.return_pct)}`}>{won(cat.ending)}</div>
               </div>
               <div className={`text-2xl font-extrabold ${sgn(cat.return_pct)}`}>{pc(cat.return_pct)}</div>
