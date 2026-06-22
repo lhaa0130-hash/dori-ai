@@ -12,7 +12,7 @@ const SELL_REASON: Record<string, string> = {
   signal: "상승 추세가 꺾여 매도",
 };
 
-interface Trade { entry: string; exit: string; entry_price?: number; exit_price?: number; qty?: number; pnl_pct: number; reason: string; entry_reason: string; }
+interface Trade { entry: string; exit: string; entry_price?: number; exit_price?: number; qty?: number; pnl?: number; pnl_pct: number; reason: string; entry_reason: string; }
 interface OpenPos {
   entry_time?: string; entry_reason?: string; entry_price?: number; qty?: number;
   invested?: number; cur_price?: number; stop_price?: number; take_profit?: number; unrealized_pnl_pct?: number;
@@ -44,6 +44,7 @@ const withCode = (name: string | undefined, sym: string) => {
 };
 const sgn = (n: number) => (n >= 0 ? "text-emerald-500" : "text-red-500");
 const dot = (s: string) => s.replaceAll("-", ".").slice(2);
+const pm = (n: number, usd: boolean) => (n >= 0 ? "+" : "−") + money(Math.abs(n), usd); // 부호 있는 손익 금액
 
 // 손익 배지(▲▼ + 톤다운 배경) — 페이지 전반 일관 사용
 function Chg({ n, big = false }: { n: number; big?: boolean }) {
@@ -169,6 +170,11 @@ export default function TraderClient() {
               <span className="text-[28px] sm:text-[38px] font-extrabold tracking-tight tabular-nums leading-none text-neutral-950 dark:text-white whitespace-nowrap">{won(d.total_ending)}</span>
               <Chg n={d.total_return_pct} big />
             </div>
+            <div className="text-sm mt-1.5">
+              <span className="text-neutral-400">평가손익 </span>
+              <b className={`tabular-nums ${sgn(d.total_ending - d.total_starting)}`}>{pm(d.total_ending - d.total_starting, false)}</b>
+              <span className="text-neutral-400"> (시작 {won(d.total_starting)})</span>
+            </div>
 
             <div className="flex flex-wrap gap-1.5 mt-4">
               {chips.map((c) => (
@@ -183,11 +189,13 @@ export default function TraderClient() {
             {TABS.map((t) => {
               const c = d.categories?.find((x) => x.name === t);
               const active = t === tab;
+              const tu = t === "해외주식";
               return (
                 <button key={t} onClick={() => { userPicked.current = true; setTab(t); }}
-                  className={`rounded-xl py-2 text-center transition-all ${active ? "bg-white dark:bg-zinc-800 shadow-sm" : "hover:bg-white/50 dark:hover:bg-zinc-800/40"}`}>
+                  className={`rounded-xl py-2 px-0.5 text-center transition-all ${active ? "bg-white dark:bg-zinc-800 shadow-sm" : "hover:bg-white/50 dark:hover:bg-zinc-800/40"}`}>
                   <div className={`text-xs mb-0.5 ${active ? "text-neutral-900 dark:text-white font-bold" : "text-neutral-400"}`}>{t}</div>
                   <div className={`text-sm font-extrabold tabular-nums ${c ? sgn(c.return_pct) : "text-neutral-400"}`}>{c ? (c.return_pct >= 0 ? "+" : "") + c.return_pct + "%" : "-"}</div>
+                  {c && <div className={`text-[10px] tabular-nums leading-tight ${sgn(c.ending - c.starting)}`}>{pm(c.ending - c.starting, tu)}</div>}
                 </button>
               );
             })}
@@ -220,6 +228,7 @@ export default function TraderClient() {
                   {usd && cat.fx ? ` · 실투자금 300만원(환율 ${cat.fx.toLocaleString()})` : ""}
                 </div>
                 <div className="text-2xl font-extrabold tabular-nums mt-1 text-neutral-950 dark:text-white">{money(cat.ending, usd)}</div>
+                <div className="text-xs mt-0.5"><span className="text-neutral-400">평가손익 </span><b className={`tabular-nums ${sgn(cat.ending - cat.starting)}`}>{pm(cat.ending - cat.starting, usd)}</b></div>
               </div>
               <Chg n={cat.return_pct} big />
             </div>
@@ -232,12 +241,16 @@ export default function TraderClient() {
               <div className="space-y-2">
                 {openPos.map((p) => {
                   const up = (p.unrealized_pnl_pct ?? 0) >= 0;
+                  const amt = ((p.cur_price ?? p.entry_price ?? 0) - (p.entry_price ?? 0)) * (p.qty ?? 0);
                   return (
                     <div key={p.sym} className="rounded-xl border border-l-[3px] border-neutral-200/70 dark:border-zinc-800 bg-white dark:bg-zinc-900/30 p-3.5"
                       style={{ borderLeftColor: up ? "#10b981" : "#ef4444" }}>
-                      <div className="flex items-center justify-between">
+                      <div className="flex items-center justify-between gap-2">
                         <span className="text-sm font-bold text-neutral-800 dark:text-neutral-100">{withCode(p.nm, p.sym)}</span>
-                        <Chg n={p.unrealized_pnl_pct ?? 0} />
+                        <span className="flex items-center gap-2">
+                          <span className={`text-sm font-bold tabular-nums ${sgn(amt)}`}>{pm(amt, usd)}</span>
+                          <Chg n={p.unrealized_pnl_pct ?? 0} />
+                        </span>
                       </div>
                       <div className="text-xs text-neutral-400 mt-1.5">
                         매수 {money(p.entry_price ?? 0, usd)} × {qtyStr(p.qty ?? 0)} · 투자 <b className="text-neutral-600 dark:text-neutral-300">{money(p.invested ?? 0, usd)}</b>
@@ -257,16 +270,22 @@ export default function TraderClient() {
             <section className="mb-6">
               <H2>거래 내역</H2>
               <div className="space-y-2">
-                {trades.map((t, i) => (
+                {trades.map((t, i) => {
+                  const amt = t.pnl ?? ((t.exit_price ?? 0) - (t.entry_price ?? 0)) * (t.qty ?? 0);
+                  return (
                   <div key={i} className="rounded-xl border border-neutral-200/70 dark:border-zinc-800 bg-white dark:bg-zinc-900/30 p-3.5">
-                    <div className="flex items-center justify-between">
+                    <div className="flex items-center justify-between gap-2">
                       <span className="text-sm font-bold text-neutral-800 dark:text-neutral-100">{withCode(t.nm, t.sym)}</span>
-                      <Chg n={t.pnl_pct} />
+                      <span className="flex items-center gap-2">
+                        <span className={`text-sm font-bold tabular-nums ${sgn(amt)}`}>{pm(amt, usd)}</span>
+                        <Chg n={t.pnl_pct} />
+                      </span>
                     </div>
                     <div className="text-xs text-neutral-400 mt-1.5"><b className="text-neutral-500">매수</b> {t.entry} · {money(t.entry_price ?? 0, usd)} × {qtyStr(t.qty ?? 0)}</div>
                     <div className="text-xs text-neutral-400 mt-0.5"><b className="text-neutral-500">매도</b> {t.exit} · {money(t.exit_price ?? 0, usd)} — {SELL_REASON[t.reason] || t.reason}</div>
                   </div>
-                ))}
+                  );
+                })}
               </div>
             </section>
           )}
