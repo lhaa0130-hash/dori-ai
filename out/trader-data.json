@@ -1,44 +1,45 @@
 {
   "program": "트레이더일로 (Trader Illo)",
-  "generated_at": "2026-06-22 09:46:12",
+  "generated_at": "2026-06-22 12:37:14",
   "mode": "paper",
   "total_starting": 3000000,
-  "total_ending": 2999956,
-  "total_return_pct": -0.0,
+  "total_ending": 3001036,
+  "total_return_pct": 0.03,
   "categories": [
     {
       "name": "코인",
-      "count": 30,
+      "count": 40,
       "starting": 1000000,
       "ending": 1000000,
       "return_pct": 0.0
     },
     {
       "name": "국내주식",
-      "count": 35,
+      "count": 50,
       "starting": 1000000,
       "ending": 1000000,
       "return_pct": 0.0
     },
     {
       "name": "해외주식",
-      "count": 40,
+      "count": 57,
       "starting": 1000000,
-      "ending": 999956,
-      "return_pct": -0.0
+      "ending": 1001036,
+      "return_pct": 0.1
     }
   ],
   "sections": [
     {
       "symbol": "497570",
+      "name": "TIGER 미국필라델피아AI반도체나스닥",
       "category": "해외주식",
       "trades": 0,
       "win_rate_pct": 0.0,
       "realized_pnl": 0,
       "open_position": {
-        "entry_time": "2026-06-22 09:46",
+        "entry_time": "2026-06-22 10:03",
         "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-        "unrealized_pnl_pct": -0.03
+        "unrealized_pnl_pct": 0.98
       },
       "trade_log": []
     }

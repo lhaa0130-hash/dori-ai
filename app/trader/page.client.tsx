@@ -5,23 +5,6 @@ import { useEffect, useState } from "react";
 const ORANGE = "#F9954E";
 const TABS = ["국내주식", "해외주식", "코인"] as const;
 
-const NAME_MAP: Record<string, string> = {
-  "KRW-BTC": "비트코인", "KRW-ETH": "이더리움",
-  // 국내주식
-  "005930": "삼성전자", "000660": "SK하이닉스", "035420": "NAVER", "035720": "카카오",
-  "373220": "LG에너지솔루션", "006400": "삼성SDI", "207940": "삼성바이오로직스", "068270": "셀트리온",
-  "005380": "현대차", "000270": "기아", "105560": "KB금융", "055550": "신한지주",
-  "012450": "한화에어로스페이스", "051910": "LG화학", "352820": "하이브",
-  "069500": "KODEX 200", "229200": "코스닥150", "091160": "KODEX 반도체", "091170": "KODEX 은행", "364980": "TIGER 2차전지",
-  // 해외 ETF(원화)
-  "379800": "미국 S&P500", "379810": "미국 나스닥100", "497570": "미국 반도체(AI)",
-  "381170": "미국 테크TOP10", "465580": "미국 빅테크7", "402970": "미국 배당(SCHD)", "490090": "미국 AI빅테크",
-  "360750": "미국 S&P500", "381180": "미국 반도체", "241180": "일본 니케이225", "446720": "미국 배당(SCHD)", "411060": "금(Gold)",
-  // 개별 미국주식
-  "AAPL": "애플", "MSFT": "마이크로소프트", "GOOGL": "알파벳(구글)", "AMZN": "아마존",
-  "NVDA": "엔비디아", "META": "메타", "TSLA": "테슬라", "AVGO": "브로드컴",
-  "JPM": "JP모건", "V": "비자", "UNH": "유나이티드헬스", "COST": "코스트코",
-};
 const SELL_REASON: Record<string, string> = {
   stop_loss: "정해둔 손절선까지 떨어져 매도 — 손실을 작게 끊었어요",
   trailing_stop: "고점 대비 일정폭 내려와 매도 — 벌어둔 수익을 지켰어요",
@@ -32,7 +15,7 @@ const SELL_REASON: Record<string, string> = {
 interface Trade { entry: string; exit: string; pnl_pct: number; reason: string; entry_reason: string; }
 interface OpenPos { entry_time?: string; entry_reason?: string; unrealized_pnl_pct?: number; }
 interface Section {
-  symbol: string; category: string;
+  symbol: string; name?: string; category: string;
   trades: number; win_rate_pct: number; realized_pnl: number;
   open_position: OpenPos | null; trade_log: Trade[];
 }
@@ -45,7 +28,6 @@ interface Data {
 
 const won = (n: number) => n.toLocaleString("ko-KR") + "원";
 const man = (n: number) => Math.round(n / 10000) + "만";
-const nameOf = (sym: string) => NAME_MAP[sym] || (sym.startsWith("KRW-") ? sym.slice(4) : sym);
 const sgn = (n: number) => (n >= 0 ? "text-emerald-500" : "text-red-500");
 const pc = (n: number) => (n >= 0 ? "+" : "") + n + "%";
 
@@ -63,9 +45,9 @@ export default function TraderClient() {
 
   const secs = d ? d.sections.filter((s) => s.category === tab) : [];
   const cat = d?.categories?.find((c) => c.name === tab);
-  const openPos = secs.filter((s) => s.open_position).map((s) => ({ sym: s.symbol, ...(s.open_position as OpenPos) }));
+  const openPos = secs.filter((s) => s.open_position).map((s) => ({ sym: s.symbol, nm: s.name || s.symbol, ...(s.open_position as OpenPos) }));
   const trades = secs
-    .flatMap((s) => (s.trade_log || []).map((t) => ({ ...t, sym: s.symbol })))
+    .flatMap((s) => (s.trade_log || []).map((t) => ({ ...t, sym: s.symbol, nm: s.name || s.symbol })))
     .sort((a, b) => (a.exit < b.exit ? 1 : -1))
     .slice(0, 40);
   // 실제로 거래했거나 보유 중인 종목만 (아직 거래 안 한 후보는 숨김)
@@ -142,7 +124,7 @@ export default function TraderClient() {
                 {openPos.map((p) => (
                   <div key={p.sym} className="rounded-2xl border border-emerald-300/40 dark:border-emerald-800/40 bg-emerald-50/40 dark:bg-emerald-950/10 p-4">
                     <div className="flex justify-between items-center">
-                      <span className="font-bold text-neutral-800 dark:text-neutral-100">{nameOf(p.sym)}</span>
+                      <span className="font-bold text-neutral-800 dark:text-neutral-100">{p.nm}</span>
                       <span className={`font-extrabold ${sgn(p.unrealized_pnl_pct ?? 0)}`}>{pc(p.unrealized_pnl_pct ?? 0)}</span>
                     </div>
                     <div className="text-[12px] text-neutral-500 mt-1">🛒 매수: {p.entry_time}</div>
@@ -161,7 +143,7 @@ export default function TraderClient() {
                 {trades.map((t, i) => (
                   <div key={i} className="rounded-2xl border border-neutral-200 dark:border-zinc-800 p-4">
                     <div className="flex justify-between items-center mb-2">
-                      <span className="font-bold text-neutral-800 dark:text-neutral-100">{nameOf(t.sym)}</span>
+                      <span className="font-bold text-neutral-800 dark:text-neutral-100">{t.nm}</span>
                       <span className={`font-extrabold ${sgn(t.pnl_pct)}`}>{pc(t.pnl_pct)}</span>
                     </div>
                     <div className="text-[12px] text-neutral-600 dark:text-neutral-300">🛒 <b>매수</b> {t.entry}</div>
@@ -191,7 +173,7 @@ export default function TraderClient() {
                   <tbody>
                     {tradedSecs.map((s) => (
                       <tr key={s.symbol} className="border-b border-neutral-100 dark:border-zinc-900 last:border-0">
-                        <td className="py-2 px-3 text-neutral-700 dark:text-neutral-200">{nameOf(s.symbol)}</td>
+                        <td className="py-2 px-3 text-neutral-700 dark:text-neutral-200">{s.name || s.symbol}</td>
                         <td className={`text-right px-2 tabular-nums font-semibold ${sgn(s.realized_pnl)}`}>{(s.realized_pnl >= 0 ? "+" : "") + won(s.realized_pnl)}</td>
                         <td className="text-right px-2 tabular-nums text-neutral-500">{s.trades}</td>
                         <td className="text-right px-3 tabular-nums text-neutral-500">{s.win_rate_pct}%</td>

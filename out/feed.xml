@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 22 Jun 2026 00:47:28 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 22 Jun 2026 03:38:51 GMT</lastBuildDate>
+    <item>
+      <title>중국, AI 전쟁에서 새로운 국면을 맞다</title>
+      <link>https://dori-ai.com/insight/article/trend-151</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-151</guid>
+      <category>트렌드</category>
+      <pubDate>Mon, 22 Jun 2026 01:00:17 GMT</pubDate>
+      <description>중국의 AI 산업이 다시 주목받고 있다. 기술적 우위와 정부의 지원으로 AI 경쟁이 심화되고 있는 현재, 그 배경과 의미를 살펴본다.</description>
+    </item>
     <item>
       <title>하와이대, AI와 데이터 과학으로 의료 혁신에 120억 원 투자</title>
       <link>https://dori-ai.com/insight/article/trend-150</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Wed, 17 Jun 2026 11:00:18 GMT</pubDate>
       <description>G7 정상회의에서 OpenAI와 앤트로픽이 주목받으며 AI 기술과 정치의 융합이 어떻게 이루어지고 있는지를 탐구합니다.</description>
-    </item>
-    <item>
-      <title>AI의 새로운 근본, Coherent의 텍사스 시설 확장</title>
-      <link>https://dori-ai.com/insight/article/trend-114</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-114</guid>
-      <category>트렌드</category>
-      <pubDate>Wed, 17 Jun 2026 09:00:25 GMT</pubDate>
-      <description>Coherent가 AI의 광학 기반을 확장하기 위해 텍사스에서 새로운 시설을 착공했습니다. 이 프로젝트가 AI 산업에 미칠 영향은 무엇일까요?</description>
     </item>
   </channel>
 </rss>
