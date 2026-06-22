@@ -4,7 +4,7 @@ description: 초보자가 가장 먼저 익혀야 할 AI 사용 습관 7가지. 
 date: 2025-12-02
 author: DORI-AI
 category: 가이드
-thumbnail: /thumbnails/guide/guide02.png
+thumbnail: "/thumbnails/guide/guide02.png?v=2"
 tags: ["초급", "사용법", "프롬프트", "워크플로우", "검증"]
 ---
 ![썸네일 이미지](/thumbnails/guide/guide02.png)

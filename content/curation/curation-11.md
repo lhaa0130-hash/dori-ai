@@ -4,7 +4,7 @@ description: "이번 주에는 말보다 실행에 가까워진 AI 도구들이 
 date: "2026-06-22T08:02:56+09:00"
 author: "DORI-AI"
 category: "큐레이션"
-thumbnail: "/thumbnails/curation/curation-11.jpg"
+thumbnail: "/thumbnails/curation/curation-11.jpg?v=2"
 tags: ["AI도구", "업무자동화", "AI영상", "생산성", "경쟁사분석"]
 ---
 

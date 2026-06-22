@@ -4,7 +4,7 @@ description: "이번 주에는 직장인과 크리에이터를 위한 유용한 
 date: "2026-05-26"
 author: "DORI-AI"
 category: "큐레이션"
-thumbnail: "/thumbnails/curation/curation-7.jpg""/thumbnails/curation/curation-7.jpg"
+thumbnail: "/thumbnails/curation/curation-7.jpg?v=2""/thumbnails/curation/curation-7.jpg"
 tags: ["AI 도구", "생산성", "업무 효율성", "크리에이티브", "학생"]
 ---
 

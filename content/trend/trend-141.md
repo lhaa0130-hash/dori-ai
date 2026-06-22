@@ -4,7 +4,7 @@ description: "구글이 새로운 스피커를 출시하며 Gemini AI 모델을 
 date: "2026-06-21T09:00:22+09:00"
 author: "DORI-AI"
 category: "트렌드"
-thumbnail: "/thumbnails/trend/trend-141.jpg"
+thumbnail: "/thumbnails/trend/trend-141.jpg?v=2"
 tags: ["구글", "스피커", "Gemini", "AI", "기술 혁신"]
 ---
 

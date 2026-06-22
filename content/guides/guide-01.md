@@ -4,7 +4,7 @@ description: AI의 개념부터 종류, 활용 방향까지 한 번에 이해할
 date: 2025-12-01
 author: DORI-AI
 category: 가이드
-thumbnail: /thumbnails/guide/guide01.png
+thumbnail: "/thumbnails/guide/guide01.png?v=2"
 tags: [AI기초, AI입문, 인공지능개념, 생성형AI]
 ---
 ![썸네일 이미지](/thumbnails/guide/guide01.png)

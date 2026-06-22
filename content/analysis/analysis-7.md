@@ -4,7 +4,7 @@ description: "미국의 AI 칩 수출통제는 중국의 최첨단 모델 개발
 date: "2026-06-19T14:01:56+09:00"
 author: "DORI-AI"
 category: "분석"
-thumbnail: "/thumbnails/analysis/analysis-7.jpg""/thumbnails/analysis/analysis-7.jpg"
+thumbnail: "/thumbnails/analysis/analysis-7.jpg?v=2""/thumbnails/analysis/analysis-7.jpg"
 tags: ["AI반도체", "Nvidia", "Huawei", "수출통제", "미중기술경쟁"]
 ---
 

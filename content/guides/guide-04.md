@@ -4,7 +4,7 @@ description: AI를 쓰고는 있지만 일이 줄지 않는 이유는 따로 있
 date: 2025-12-04
 author: DORI-AI
 category: 가이드
-thumbnail: /thumbnails/guide/guide04.png
+thumbnail: "/thumbnails/guide/guide04.png?v=2"
 tags: ["AI실무", "구조설계", "업무활용", "실전편"]
 ---
 

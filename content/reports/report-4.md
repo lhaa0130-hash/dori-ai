@@ -4,7 +4,7 @@ description: "이번 주 AI 산업의 주요 이슈와 기업 동향, 투자 소
 date: "2026-05-26"
 author: "DORI-AI"
 category: "리포트"
-thumbnail: "/thumbnails/reports/report-4.jpg"
+thumbnail: "/thumbnails/reports/report-4.jpg?v=2"
 tags: ["AI", "투자", "기업 동향", "스타트업", "기술 혁신"]
 ---
 

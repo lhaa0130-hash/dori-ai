@@ -4,7 +4,7 @@ description: "상하이 영화제가 AI 기술과 모바일 영화 제작을 통
 date: "2026-06-21T12:00:19+09:00"
 author: "DORI-AI"
 category: "트렌드"
-thumbnail: "/thumbnails/trend/trend-143.jpg"
+thumbnail: "/thumbnails/trend/trend-143.jpg?v=2"
 tags: ["상하이 영화제", "AI", "영화 제작", "아이폰", "기술 혁신"]
 ---
 

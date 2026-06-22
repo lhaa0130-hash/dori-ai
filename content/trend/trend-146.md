@@ -4,7 +4,7 @@ description: "AI 기술이 축구의 전략과 플레이 방식을 어떻게 혁
 date: "2026-06-21T16:00:17+09:00"
 author: "DORI-AI"
 category: "트렌드"
-thumbnail: "/thumbnails/trend/trend-146.jpg"
+thumbnail: "/thumbnails/trend/trend-146.jpg?v=2"
 tags: ["축구", "AI", "스포츠", "기술 혁신", "전략 분석"]
 ---
 

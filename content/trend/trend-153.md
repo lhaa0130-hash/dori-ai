@@ -4,7 +4,7 @@ description: "구글 클라우드가 필리핀 정부와 협력해 차세대 시
 date: "2026-06-22T13:00:28+09:00"
 author: "DORI-AI"
 category: "트렌드"
-thumbnail: "/thumbnails/trend/trend-153.jpg""/thumbnails/trend/trend-153.jpg"
+thumbnail: "/thumbnails/trend/trend-153.jpg?v=2""/thumbnails/trend/trend-153.jpg"
 tags: ["구글", "클라우드", "AI", "사이버 보안", "필리핀"]
 ---
 

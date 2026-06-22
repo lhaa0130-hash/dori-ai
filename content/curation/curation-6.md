@@ -4,7 +4,7 @@ description: "이번 주에는 상점 운영자들이 수익을 증대시킬 수
 date: "2026-05-21"
 author: "DORI-AI"
 category: "큐레이션"
-thumbnail: "/thumbnails/curation/curation-6.jpg""/thumbnails/curation/curation-6.jpg"
+thumbnail: "/thumbnails/curation/curation-6.jpg?v=2""/thumbnails/curation/curation-6.jpg"
 tags: ["AI 도구", "상점 운영", "수익 증대", "상업"]
 
 ---

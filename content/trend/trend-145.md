@@ -4,7 +4,7 @@ description: "시애틀이 AI 기술의 급속한 발전에 힘입어 새로운 
 date: "2026-06-21T15:00:21+09:00"
 author: "DORI-AI"
 category: "트렌드"
-thumbnail: "/thumbnails/trend/trend-145.jpg"
+thumbnail: "/thumbnails/trend/trend-145.jpg?v=2"
 tags: ["시애틀", "AI 스타트업", "기술 혁신", "경제 변화", "산업 발전"]
 ---
 
