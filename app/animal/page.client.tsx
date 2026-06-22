@@ -195,6 +195,18 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
     return out;
   }
 
+  // ── 상세 모달 좌우 이동(이전/다음 동물) ──
+  const detailKey = (c: AnimalCard | null) => (c ? String(c.no ?? c.animal_name) : "");
+  const detailIdx = detail ? sorted.findIndex((c) => detailKey(c) === detailKey(detail)) : -1;
+  const goDetail = (dir: number) => { if (detailIdx < 0) return; const n = sorted[detailIdx + dir]; if (n) setDetail(n); };
+  const touchX = useRef<number | null>(null);
+  useEffect(() => {
+    if (!detail) return;
+    const onKey = (e: KeyboardEvent) => { if (e.key === "ArrowLeft") goDetail(-1); else if (e.key === "ArrowRight") goDetail(1); else if (e.key === "Escape") setDetail(null); };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [detail, sorted]);
+
   // 빈 결과가 "0마리인 종류만 골라서" 생긴 경우 분기
   const taxPicks = [...(selected.taxonomy || [])];
   const onlyEmptyTypes =
@@ -504,9 +516,18 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
       {/* ── 동물 상세(설명 페이지) ── */}
       {detail && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setDetail(null)}>
+          {detailIdx > 0 && (
+            <button onClick={(e) => { e.stopPropagation(); goDetail(-1); }} aria-label="이전 동물" className="fixed left-2 sm:left-4 top-1/2 -translate-y-1/2 z-[60] w-11 h-11 flex items-center justify-center rounded-full bg-white/90 dark:bg-zinc-800/90 text-neutral-700 dark:text-neutral-200 shadow-lg hover:bg-[#F9954E] hover:text-white transition active:scale-90"><ChevronLeft className="w-6 h-6" /></button>
+          )}
+          {detailIdx >= 0 && detailIdx < sorted.length - 1 && (
+            <button onClick={(e) => { e.stopPropagation(); goDetail(1); }} aria-label="다음 동물" className="fixed right-2 sm:right-4 top-1/2 -translate-y-1/2 z-[60] w-11 h-11 flex items-center justify-center rounded-full bg-white/90 dark:bg-zinc-800/90 text-neutral-700 dark:text-neutral-200 shadow-lg hover:bg-[#F9954E] hover:text-white transition active:scale-90"><ChevronRight className="w-6 h-6" /></button>
+          )}
           <motion.div
+            key={detailKey(detail)}
             initial={{ opacity: 0, scale: 0.95, y: 10 }} animate={{ opacity: 1, scale: 1, y: 0 }} transition={{ duration: 0.2 }}
             onClick={(e) => e.stopPropagation()}
+            onTouchStart={(e) => { touchX.current = e.touches[0].clientX; }}
+            onTouchEnd={(e) => { if (touchX.current == null) return; const dx = e.changedTouches[0].clientX - touchX.current; touchX.current = null; if (Math.abs(dx) > 55) goDetail(dx < 0 ? 1 : -1); }}
             className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl"
           >
             <button onClick={() => setDetail(null)} className="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-white/90 dark:bg-zinc-800/90 text-neutral-600 dark:text-neutral-300 hover:bg-red-500 hover:text-white transition shadow-md"><X className="w-5 h-5" /></button>
