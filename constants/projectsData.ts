@@ -54,7 +54,7 @@ export const PROJECTS: ProjectItem[] = [
   },
   {
     slug: "illo",
-    name: "워키 (Worki)",
+    name: "워크일로 (Workillo)",
     emoji: "🟧",
     image: "/illo-logo.png",
     tag: "정식 프로그램",

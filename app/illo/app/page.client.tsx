@@ -200,8 +200,8 @@ export default function IlloWebClient() {
         {/* 모바일 상단바 */}
         <header className="md:hidden flex items-center gap-2 px-4 h-14 border-b border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shrink-0">
           <button onClick={() => setMobileNav(true)} className="p-1.5 -ml-1.5 text-neutral-600 dark:text-neutral-300"><Menu className="w-5 h-5" /></button>
-          <img src="/illo-logo.png" alt="워키" className="w-7 h-7 rounded-lg" />
-          <span className="font-extrabold text-[#F9954E]">워키</span>
+          <img src="/illo-logo.png" alt="워크일로" className="w-7 h-7 rounded-lg" />
+          <span className="font-extrabold text-[#F9954E]">워크일로</span>
           {free && <span className="ml-auto text-[11px] font-semibold text-neutral-400">남은 <b className="text-[#E8832E]">{quota ?? FREE_LIMIT}</b>/{FREE_LIMIT}</span>}
         </header>
 
@@ -241,9 +241,9 @@ function IlloSidebar({
     <aside className="w-60 shrink-0 h-full bg-white dark:bg-zinc-950 border-r border-neutral-200 dark:border-zinc-800 flex flex-col">
       <div className="px-5 py-5 border-b border-neutral-100 dark:border-zinc-800">
         <div className="flex items-center gap-2.5">
-          <img src="/illo-logo.png" alt="워키" className="w-9 h-9 rounded-xl shadow-sm" />
+          <img src="/illo-logo.png" alt="워크일로" className="w-9 h-9 rounded-xl shadow-sm" />
           <div className="flex-1 min-w-0">
-            <div className="text-base font-extrabold leading-none text-[#F9954E]">워키(Worki)</div>
+            <div className="text-base font-extrabold leading-none text-[#F9954E]">워크일로(Workillo)</div>
             <div className="text-[10px] text-neutral-400 mt-1 tracking-wide">by DORI-AI</div>
           </div>
         </div>
@@ -313,7 +313,7 @@ function IlloSidebar({
             <LogOut className="w-4 h-4" />
           </button>
         </div>
-        <div className="px-1 text-[10px] text-neutral-300 dark:text-zinc-600">워키 웹 · by DORI-AI</div>
+        <div className="px-1 text-[10px] text-neutral-300 dark:text-zinc-600">워크일로 웹 · by DORI-AI</div>
       </div>
     </aside>
   );
@@ -575,7 +575,7 @@ function Assistant({ runAI, free, quota, onShowKey, userName }: {
     try {
       const history = next.slice(-8).map((m) => `${m.role === "user" ? "사용자" : "비서"}: ${m.content}`).join("\n");
       const prompt =
-        `당신은 '워키'의 유능하고 친절한 AI 비서입니다. 항상 정중한 존댓말로, 핵심을 먼저 말하고 필요하면 단계로 정리해 답하세요. ` +
+        `당신은 '워크일로'의 유능하고 친절한 AI 비서입니다. 항상 정중한 존댓말로, 핵심을 먼저 말하고 필요하면 단계로 정리해 답하세요. ` +
         `사용자 이름은 '${userName}'입니다.\n\n[대화]\n${history}\n비서:`;
       const r = await runAI(prompt, "assistant");
       setMsgs((m) => [...m, { role: "assistant", content: r.text }]);
@@ -1082,7 +1082,7 @@ function Settings({ keyVal, free, onShowKey, onRemoveKey, onLogout, userName, us
         <p className="text-[13px] text-neutral-600 dark:text-neutral-300 break-keep">
           지금은 비서실과 글쓰기 도구부터 시작해요. 이미지·영상·음성·자동화 같은 기능은 <b>완성되는 대로 하나씩</b> 열립니다. 🔜
         </p>
-        <Link href="/illo" className="inline-block mt-3 text-[13px] font-bold text-[#E8832E] dark:text-[#FBAA60] hover:underline">워키 소개 보기 →</Link>
+        <Link href="/illo" className="inline-block mt-3 text-[13px] font-bold text-[#E8832E] dark:text-[#FBAA60] hover:underline">워크일로 소개 보기 →</Link>
       </Section>
     </ViewScroll>
   );
@@ -1258,7 +1258,7 @@ function ToolView({ tool, runAI, free, quota, onShowKey, onBack }: {
             <button onClick={() => { setToneText(""); saveTone(tool.id, ""); setToneOpen(false); }} className="text-[11px] text-neutral-400 hover:text-rose-500">제거</button>
           </div>
           <textarea value={tone} onChange={(e) => { setToneText(e.target.value); saveTone(tool.id, e.target.value); }} rows={2}
-            placeholder="예) 항상 정중한 존댓말, 이모지 적게, 브랜드명 '워키' 사용, 너무 길지 않게"
+            placeholder="예) 항상 정중한 존댓말, 이모지 적게, 브랜드명 '워크일로' 사용, 너무 길지 않게"
             className="w-full px-3.5 py-2.5 rounded-xl bg-[#FFF8F1] dark:bg-orange-950/10 border border-[#F9954E]/40 text-[13px] focus:outline-none focus:border-[#F9954E] resize-y" />
         </div>
       ) : (
@@ -1406,8 +1406,8 @@ function IlloLogin({ onShowGuide, onDevPreview }: { onShowGuide: () => void; onD
   return (
     <div className="w-full max-w-sm bg-white dark:bg-zinc-900 rounded-3xl border border-neutral-200 dark:border-zinc-800 shadow-xl p-8">
       <div className="flex flex-col items-center mb-6">
-        <img src="/illo-logo.png" alt="워키" className="w-14 h-14 rounded-2xl shadow-md mb-3" />
-        <div className="text-xl font-extrabold text-[#F9954E] leading-none">워키</div>
+        <img src="/illo-logo.png" alt="워크일로" className="w-14 h-14 rounded-2xl shadow-md mb-3" />
+        <div className="text-xl font-extrabold text-[#F9954E] leading-none">워크일로</div>
         <div className="text-[13px] text-neutral-500 dark:text-neutral-400 mt-2">
           {isSignup ? "계정을 만들고 바로 시작하세요" : "혼자서도 일이 되는 곳"}
         </div>
@@ -1449,7 +1449,7 @@ function IlloLogin({ onShowGuide, onDevPreview }: { onShowGuide: () => void; onD
           <>계정이 없으신가요?{" "}<button onClick={() => switchMode("signup")} className="text-[#E8832E] dark:text-[#FBAA60] font-semibold hover:underline">회원가입</button>{" · "}<Link href="/" className="text-neutral-400 hover:underline">사이트</Link></>
         )}
       </div>
-      <button onClick={onShowGuide} className="block mx-auto mt-4 text-[12.5px] font-bold text-[#E8832E] dark:text-[#FBAA60]">🔰 워키가 처음이신가요? 시작 가이드</button>
+      <button onClick={onShowGuide} className="block mx-auto mt-4 text-[12.5px] font-bold text-[#E8832E] dark:text-[#FBAA60]">🔰 워크일로가 처음이신가요? 시작 가이드</button>
       <p className="text-[11px] text-neutral-400 dark:text-zinc-600 text-center mt-3 leading-relaxed">로그인하면 AI 도구를 하루 50회 무료로 쓸 수 있어요.</p>
       {onDevPreview && (
         <button onClick={onDevPreview} className="block w-full mt-4 py-2 rounded-xl border border-dashed border-neutral-300 dark:border-zinc-700 text-[12px] font-semibold text-neutral-400 hover:text-[#E8832E] hover:border-[#F9954E] transition-colors">
@@ -1504,7 +1504,7 @@ function GuideOverlay({ onClose }: { onClose: () => void }) {
     <div className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4" onClick={onClose}>
       <div className="bg-white dark:bg-zinc-900 w-full sm:max-w-lg max-h-[92vh] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden" onClick={(e) => e.stopPropagation()}>
         <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-100 dark:border-zinc-800 shrink-0">
-          <span className="font-extrabold text-neutral-900 dark:text-white">🔰 워키 시작 가이드</span>
+          <span className="font-extrabold text-neutral-900 dark:text-white">🔰 워크일로 시작 가이드</span>
           <button onClick={onClose} aria-label="닫기" className="w-8 h-8 grid place-items-center rounded-lg text-neutral-400 hover:text-neutral-700 dark:hover:text-white text-lg">✕</button>
         </div>
 
@@ -1512,7 +1512,7 @@ function GuideOverlay({ onClose }: { onClose: () => void }) {
           {/* 소개 */}
           <div className="rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/20 p-4">
             <p className="text-[13.5px] text-neutral-700 dark:text-neutral-300 leading-relaxed break-keep">
-              <b className="text-[#E8832E] dark:text-[#FBAA60]">워키</b>는 AI에게 글쓰기·SNS·카피·상품설명·답변·요약을 맡기고, 비서에게 무엇이든 물어보는 <b>1인용 AI 사무실</b>이에요. <b>로그인만 하면 하루 50회까지 무료</b>로 바로 쓸 수 있어요!
+              <b className="text-[#E8832E] dark:text-[#FBAA60]">워크일로</b>는 AI에게 글쓰기·SNS·카피·상품설명·답변·요약을 맡기고, 비서에게 무엇이든 물어보는 <b>1인용 AI 사무실</b>이에요. <b>로그인만 하면 하루 50회까지 무료</b>로 바로 쓸 수 있어요!
             </p>
           </div>
 

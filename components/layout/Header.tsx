@@ -50,8 +50,8 @@ export default function Header() {
       bg: "bg-blue-50 dark:bg-blue-900/20", active: true,
     },
     {
-      name: "워키 (Worki)", emoji: "🟧", image: "/illo-logo.png",
-      desc: "혼자서도, 일이 되는 곳", href: "/illo/app",
+      name: "워크일로 (Workillo)", emoji: "🟧", image: "/illo-logo.png",
+      desc: "AI API, 구독 말고 필요한 만큼", href: "/illo/app",
       bg: "bg-orange-50 dark:bg-orange-900/20",
     },
     {
