@@ -28,8 +28,11 @@ interface Data {
   program: string; generated_at: string; mode: string;
   total_starting: number; total_ending: number; total_return_pct: number;
   usdkrw?: number; watching?: number; holding?: number; interval_hours?: number;
+  test_period?: { start: string; end: string };
   categories?: Category[]; sections: Section[]; recent_runs?: RecentRun[];
 }
+
+const dot = (s: string) => s.replaceAll("-", ".").slice(2); // 2026-06-15 → 26.06.15
 
 const won = (n: number) => n.toLocaleString("ko-KR") + "원";
 const man = (n: number) => Math.round(n / 10000) + "만";
@@ -127,6 +130,15 @@ export default function TraderClient() {
 
       {d && (
         <>
+          {/* 테스트 기간 배너 */}
+          {d.test_period?.start && (
+            <div className="flex items-center justify-center gap-2 rounded-xl bg-[#F9954E]/10 border border-[#F9954E]/30 px-3 py-2 mb-3 text-[12px]">
+              <span className="font-bold" style={{ color: ORANGE }}>🧪 모의 테스트 기간</span>
+              <span className="font-bold text-neutral-700 dark:text-neutral-200">{dot(d.test_period.start)} ~ {dot(d.test_period.end)}</span>
+              <span className="text-neutral-400">· 진행 중</span>
+            </div>
+          )}
+
           {/* ===== 1) 핵심 히어로: 작동 상태 + 전체 평가액 + 다음 점검 ===== */}
           <div className="rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white/70 dark:bg-zinc-900/50 p-4 mb-3">
             <div className="flex items-center justify-between mb-3">
@@ -153,7 +165,7 @@ export default function TraderClient() {
 
           {/* 모의 고지 (간결) */}
           <div className="rounded-xl border border-amber-300/40 bg-amber-50 dark:bg-amber-950/20 dark:border-amber-800/40 px-3 py-2 mb-3 text-[12px] text-amber-800 dark:text-amber-300">
-            ⚠️ <b>모의(연습)</b> — 진짜 돈 아님. 실제 시세로 코인·국내·해외 <b>각 100만원</b>씩 연습 중 · 목표는 <b>크게 안 잃기</b>
+            ⚠️ <b>모의(연습)</b> — 진짜 돈 아님. 실제 시세로 코인·국내·해외 <b>각 300만원</b>씩 연습 중 · 목표는 <b>크게 안 잃기</b>
           </div>
 
           {/* ===== 2) 지금 뭐 하는지 (한 줄) ===== */}
@@ -199,7 +211,7 @@ export default function TraderClient() {
               <div>
                 <div className="text-[12px] text-neutral-500">
                   {cat.name} · 시작 {usd ? money(cat.starting, true) : man(cat.starting) + "원"} · 감시 {cat.count}종목
-                  {usd && cat.fx ? `  (실투자금 100만원, 환율 ${cat.fx.toLocaleString()}원)` : ""}
+                  {usd && cat.fx ? `  (실투자금 300만원, 환율 ${cat.fx.toLocaleString()}원)` : ""}
                 </div>
                 <div className={`text-2xl font-extrabold ${sgn(cat.return_pct)}`}>{money(cat.ending, usd)}</div>
               </div>
