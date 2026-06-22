@@ -528,14 +528,14 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
             onClick={(e) => e.stopPropagation()}
             onTouchStart={(e) => { touchX.current = e.touches[0].clientX; }}
             onTouchEnd={(e) => { if (touchX.current == null) return; const dx = e.changedTouches[0].clientX - touchX.current; touchX.current = null; if (Math.abs(dx) > 55) goDetail(dx < 0 ? 1 : -1); }}
-            className="relative w-full max-w-3xl max-h-[90vh] overflow-y-auto bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl"
+            className="relative w-full max-w-4xl max-h-[90vh] overflow-y-auto md:overflow-hidden md:max-h-none md:h-[82vh] bg-white dark:bg-zinc-900 rounded-3xl shadow-2xl"
           >
             <button onClick={() => setDetail(null)} className="absolute top-4 right-4 z-10 w-9 h-9 flex items-center justify-center rounded-full bg-white/90 dark:bg-zinc-800/90 text-neutral-600 dark:text-neutral-300 hover:bg-red-500 hover:text-white transition shadow-md"><X className="w-5 h-5" /></button>
-            <div className="grid md:grid-cols-2 gap-0">
+            <div className="grid md:grid-cols-[3fr_2fr] gap-0 md:h-full">
               <button
                 type="button"
                 onClick={() => setZoomImg({ src: detail.image_path, name: detail.animal_name })}
-                className="group/img relative w-full aspect-[3/4] md:self-start bg-neutral-100 dark:bg-zinc-800 cursor-zoom-in overflow-hidden md:rounded-l-3xl"
+                className="group/img relative w-full aspect-[3/4] md:aspect-auto md:h-full bg-neutral-100 dark:bg-zinc-800 cursor-zoom-in overflow-hidden md:rounded-l-3xl"
                 aria-label="이미지 크게 보기"
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -544,7 +544,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
                   <Maximize2 className="w-3 h-3" /> 크게 보기
                 </span>
               </button>
-              <div className="p-6 md:p-7 flex flex-col">
+              <div className="p-6 md:p-7 flex flex-col md:overflow-y-auto">
                 <div className="flex items-center gap-2 mb-2">
                   <div className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-[11px] font-bold w-fit">
                     <Sparkles className="w-3 h-3" /> 애니멀일로{detail.no ? ` No.${detail.no}` : ""}
