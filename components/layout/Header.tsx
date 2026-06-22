@@ -45,6 +45,11 @@ export default function Header() {
       bg: "bg-emerald-50 dark:bg-emerald-900/20", active: true,
     },
     {
+      name: "트레이더일로", emoji: "📈", image: "",
+      desc: "AI 자동매매 — 매일 성과 공개", href: "/trader",
+      bg: "bg-blue-50 dark:bg-blue-900/20", active: true,
+    },
+    {
       name: "워키 (Worki)", emoji: "🟧", image: "/illo-logo.png",
       desc: "혼자서도, 일이 되는 곳", href: "/illo/app",
       bg: "bg-orange-50 dark:bg-orange-900/20",

@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 22 Jun 2026 00:05:12 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 22 Jun 2026 00:09:42 GMT</lastBuildDate>
+    <item>
+      <title>하와이대, AI와 데이터 과학으로 의료 혁신에 120억 원 투자</title>
+      <link>https://dori-ai.com/insight/article/trend-150</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-150</guid>
+      <category>트렌드</category>
+      <pubDate>Mon, 22 Jun 2026 00:00:15 GMT</pubDate>
+      <description>하와이대학교가 AI와 데이터 과학을 활용하여 의료 분야의 혁신을 위한 120억 원 규모의 연구 자금을 확보했다.</description>
+    </item>
     <item>
       <title>Pixlie·WorkClaw·Mutter·Parano.ai: 영상 제작부터 경쟁사 모니터링까지 이번 주 AI 도구 추천</title>
       <link>https://dori-ai.com/insight/article/curation-11</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Wed, 17 Jun 2026 09:00:25 GMT</pubDate>
       <description>Coherent가 AI의 광학 기반을 확장하기 위해 텍사스에서 새로운 시설을 착공했습니다. 이 프로젝트가 AI 산업에 미칠 영향은 무엇일까요?</description>
-    </item>
-    <item>
-      <title>Probably, 더 정확한 AI를 위한 9백만 달러 확보</title>
-      <link>https://dori-ai.com/insight/article/trend-113</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-113</guid>
-      <category>트렌드</category>
-      <pubDate>Wed, 17 Jun 2026 06:00:16 GMT</pubDate>
-      <description>Probably가 9백만 달러를 확보하며 신뢰할 수 있는 AI 모델 개발에 나섰습니다. 이는 AI의 정확성을 높이기 위한 중요한 이정표로 평가됩니다.</description>
     </item>
   </channel>
 </rss>
