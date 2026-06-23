@@ -34,21 +34,23 @@ export default async function Home() {
       {/* ①-b 정보 스트립 (인기 AI도구·지표) */}
       <HomeInfoStrip topTools={topTools} insightCount={insightFeed.length} animalCount={animalCount} />
 
-      {/* ② 퀵 액세스 — 섹션 아이콘 그리드 */}
-      <section className="pb-6 border-b border-neutral-100 dark:border-zinc-900">
-        <div className="grid grid-cols-4 gap-1">
-          {SECTIONS.map(({ label, href, Icon }) => (
-            <Link
-              key={href}
-              href={href}
-              className="flex flex-col items-center gap-2 py-3 rounded-2xl active:bg-neutral-50 dark:active:bg-zinc-900 transition-colors"
-            >
-              <span className="w-12 h-12 rounded-2xl bg-neutral-100 dark:bg-zinc-900 flex items-center justify-center text-neutral-700 dark:text-neutral-300">
-                <Icon className="w-[22px] h-[22px]" strokeWidth={1.8} />
-              </span>
-              <span className="text-[11px] font-semibold text-neutral-600 dark:text-neutral-400">{label}</span>
-            </Link>
-          ))}
+      {/* ② 퀵 액세스 — 한 줄 가로 스크롤 */}
+      <section className="py-4 border-b border-neutral-100 dark:border-zinc-900">
+        <div className="-mx-4 px-4 overflow-x-auto scrollbar-hide">
+          <div className="flex gap-1 w-max">
+            {SECTIONS.map(({ label, href, Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                className="flex flex-col items-center gap-1.5 py-2 w-[64px] shrink-0 rounded-2xl active:bg-neutral-50 dark:active:bg-zinc-900 transition-colors"
+              >
+                <span className="w-11 h-11 rounded-2xl bg-neutral-100 dark:bg-zinc-900 flex items-center justify-center text-neutral-700 dark:text-neutral-300">
+                  <Icon className="w-5 h-5" strokeWidth={1.8} />
+                </span>
+                <span className="text-[10.5px] font-semibold text-neutral-600 dark:text-neutral-400 whitespace-nowrap">{label}</span>
+              </Link>
+            ))}
+          </div>
         </div>
       </section>
 

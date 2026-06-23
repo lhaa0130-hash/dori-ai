@@ -1,11 +1,11 @@
 "use client";
 
-// 토스 풍 우측 미리보기 — 인사이트 행 클릭 시 우측에서 슬라이드.
-// 요약(정보) + 좋아요 수 + 최근 댓글(커뮤니티) + 전체 보기. 데스크탑(lg+) 전용.
+// 인라인 미리보기 패널 — 인사이트 행에 마우스를 올리면 우측 절반에 표시(토스처럼).
+// 요약 + 좋아요 수 + 최근 댓글(커뮤니티) + 전체 보기.
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { X, Heart, MessageCircle, ArrowRight } from "lucide-react";
+import { Heart, MessageCircle, ArrowRight } from "lucide-react";
 import { getFirebaseFirestore } from "@/lib/firebase";
 import { doc, getDoc, collection, query, orderBy, limit, getDocs } from "firebase/firestore";
 
@@ -15,14 +15,10 @@ type Cmt = { id: string; name: string; text: string };
 
 const EMOJI: Record<string, string> = { 트렌드: "🔥", 가이드: "📖", 리포트: "📊", 분석: "🔬", 큐레이션: "✨", 영상: "🎬" };
 
-export default function InsightPreviewDrawer({ item, onClose }: { item: PreviewItem; onClose: () => void }) {
-  const [show, setShow] = useState(false);
+export default function InsightPreviewPane({ item }: { item: PreviewItem }) {
   const [likes, setLikes] = useState(0);
   const [comments, setComments] = useState<Cmt[]>([]);
 
-  useEffect(() => { setShow(true); }, []);
-
-  // 좋아요·최근 댓글 로드
   useEffect(() => {
     let cancelled = false;
     setLikes(0); setComments([]);
@@ -40,62 +36,37 @@ export default function InsightPreviewDrawer({ item, onClose }: { item: PreviewI
     return () => { cancelled = true; };
   }, [item.slug]);
 
-  // ESC 닫기
-  useEffect(() => {
-    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") onClose(); };
-    window.addEventListener("keydown", onKey);
-    return () => window.removeEventListener("keydown", onKey);
-  }, [onClose]);
-
   const href = `/insight/article/${item.slug}`;
   const dateStr = (() => { const t = new Date(item.date); return isNaN(t.getTime()) ? "" : t.toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" }); })();
 
   return (
-    <div className="hidden lg:block">
-      {/* 백드롭 */}
-      <div className="fixed inset-0 z-[69] bg-black/20 dark:bg-black/40" onClick={onClose} />
-      {/* 패널 */}
-      <aside
-        className={`fixed right-0 top-16 bottom-0 z-[70] w-[372px] bg-white dark:bg-zinc-950 border-l border-neutral-200 dark:border-zinc-800 shadow-2xl overflow-y-auto transition-transform duration-300 ${show ? "translate-x-0" : "translate-x-full"}`}
-    >
-      <div className="p-5">
-        {/* 닫기 */}
-        <div className="flex justify-end mb-1">
-          <button onClick={onClose} aria-label="닫기" className="w-8 h-8 rounded-lg flex items-center justify-center text-neutral-400 hover:bg-neutral-100 dark:hover:bg-zinc-900">
-            <X className="w-4 h-4" />
-          </button>
+    <div className="rounded-2xl border border-neutral-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden">
+      {/* 썸네일 */}
+      {item.thumbnail ? (
+        <div className="relative w-full h-[190px] bg-neutral-100 dark:bg-zinc-900">
+          <Image src={item.thumbnail} alt={item.title} fill style={{ objectFit: "cover" }} sizes="(max-width:1280px) 50vw, 360px" />
         </div>
+      ) : (
+        <div className="w-full h-[120px] bg-neutral-50 dark:bg-zinc-900 flex items-center justify-center text-4xl">{EMOJI[item.category] || "📝"}</div>
+      )}
 
-        {/* 썸네일 */}
-        {item.thumbnail && (
-          <div className="relative w-full h-[170px] rounded-2xl overflow-hidden bg-neutral-100 dark:bg-zinc-900 mb-4">
-            <Image src={item.thumbnail} alt={item.title} fill style={{ objectFit: "cover" }} sizes="372px" />
-          </div>
-        )}
-
-        {/* 카테고리 · 날짜 */}
+      <div className="p-5">
         <div className="flex items-center gap-2 mb-2">
-          <span className="text-[11px] font-bold text-[#F9954E] bg-[#FFF1E3] dark:bg-[#F9954E]/15 rounded px-2 py-0.5">
-            {EMOJI[item.category] || "📝"} {item.category}
-          </span>
+          <span className="text-[11px] font-bold text-[#F9954E] bg-[#FFF1E3] dark:bg-[#F9954E]/15 rounded px-2 py-0.5">{EMOJI[item.category] || "📝"} {item.category}</span>
           <span className="text-[11px] text-neutral-400">{dateStr}</span>
         </div>
 
-        {/* 제목 */}
-        <h3 className="text-[18px] font-extrabold text-neutral-950 dark:text-white leading-snug break-keep mb-2">{item.title}</h3>
+        <h3 className="text-[18px] font-extrabold text-neutral-950 dark:text-white leading-snug break-keep mb-2 line-clamp-2">{item.title}</h3>
 
-        {/* 요약 */}
         {item.summary && (
-          <p className="text-[13px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep line-clamp-5 mb-4">{item.summary}</p>
+          <p className="text-[13px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep line-clamp-4 mb-4">{item.summary}</p>
         )}
 
-        {/* 좋아요·댓글 수 */}
         <div className="flex items-center gap-4 py-3 border-y border-neutral-100 dark:border-zinc-900 mb-4 text-[13px] text-neutral-500 dark:text-neutral-400">
           <span className="inline-flex items-center gap-1.5"><Heart className="w-4 h-4 text-[#F9954E]" /> {likes}</span>
           <span className="inline-flex items-center gap-1.5"><MessageCircle className="w-4 h-4 text-[#F9954E]" /> {comments.length}{comments.length >= 3 ? "+" : ""}</span>
         </div>
 
-        {/* 최근 댓글 (커뮤니티) */}
         <p className="text-[11px] font-bold text-neutral-400 mb-2">커뮤니티</p>
         {comments.length === 0 ? (
           <p className="text-[12.5px] text-neutral-400 mb-5">아직 댓글이 없어요. 첫 댓글을 남겨보세요 ✍️</p>
@@ -113,12 +84,10 @@ export default function InsightPreviewDrawer({ item, onClose }: { item: PreviewI
           </ul>
         )}
 
-        {/* 전체 보기 */}
         <Link href={href} className="flex items-center justify-center gap-1.5 w-full py-3 rounded-xl bg-[#F9954E] text-white text-[14px] font-bold active:opacity-85 transition-opacity">
           전체 보기 <ArrowRight className="w-4 h-4" />
         </Link>
       </div>
-      </aside>
     </div>
   );
 }

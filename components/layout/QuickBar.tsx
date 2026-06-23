@@ -13,7 +13,7 @@ import {
   PawPrint, TrendingUp, Sparkles, PencilRuler,
   Gamepad2, Wrench, BarChart3, Newspaper, Rss, MessagesSquare,
   ShoppingBag, Store, User, Bell,
-  Plus, X, ChevronsRight, ChevronsLeft, Pin, GripVertical,
+  Plus, X, ChevronsRight, ChevronsLeft, GripVertical,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { loadQuickBarRemote, saveQuickBarRemote } from "@/lib/quickBar";
@@ -183,78 +183,63 @@ export default function QuickBar() {
           </button>
         </div>
 
-        {/* 아이템 목록 (스크롤·드래그 정렬) */}
+        {/* 아이템 목록(드래그 정렬) + 추가 버튼은 항목들 '바로 아래' */}
         <div className="flex-1 overflow-y-auto py-2 px-0.5 flex flex-col gap-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
-          {railItems.length === 0 ? (
-            <div className="flex flex-col items-center text-center gap-1 mt-5 px-0.5">
-              <Pin className="w-4 h-4 text-neutral-300 dark:text-zinc-700" />
-              <span className="text-[9px] leading-tight text-neutral-400 dark:text-neutral-600">
-                +로<br />추가
-              </span>
-            </div>
-          ) : (
-            railItems.map((c) => {
-              const active = isActive(c.href);
-              const isDragging = dragKey === c.key;
-              const isOver = overKey === c.key && dragKey !== c.key;
-              return (
-                <div
-                  key={c.key}
-                  draggable
-                  onDragStart={(e) => { dragKeyRef.current = c.key; setDragKey(c.key); e.dataTransfer.effectAllowed = "move"; }}
-                  onDragEnter={(e) => { e.preventDefault(); setOverKey(c.key); }}
-                  onDragOver={(e) => e.preventDefault()}
-                  onDrop={(e) => { e.preventDefault(); if (dragKeyRef.current) reorder(dragKeyRef.current, c.key); dragKeyRef.current = null; setDragKey(null); setOverKey(null); }}
-                  onDragEnd={() => { dragKeyRef.current = null; setDragKey(null); setOverKey(null); }}
-                  className={`relative group rounded-xl transition-all
-                    ${isDragging ? "opacity-40" : ""}
-                    ${isOver ? "ring-2 ring-[#F9954E] ring-offset-1 ring-offset-white dark:ring-offset-zinc-950" : ""}`}
+          {railItems.map((c) => {
+            const active = isActive(c.href);
+            const isDragging = dragKey === c.key;
+            const isOver = overKey === c.key && dragKey !== c.key;
+            return (
+              <div
+                key={c.key}
+                draggable
+                onDragStart={(e) => { dragKeyRef.current = c.key; setDragKey(c.key); e.dataTransfer.effectAllowed = "move"; }}
+                onDragEnter={(e) => { e.preventDefault(); setOverKey(c.key); }}
+                onDragOver={(e) => e.preventDefault()}
+                onDrop={(e) => { e.preventDefault(); if (dragKeyRef.current) reorder(dragKeyRef.current, c.key); dragKeyRef.current = null; setDragKey(null); setOverKey(null); }}
+                onDragEnd={() => { dragKeyRef.current = null; setDragKey(null); setOverKey(null); }}
+                className={`relative group rounded-xl transition-all
+                  ${isDragging ? "opacity-40" : ""}
+                  ${isOver ? "ring-2 ring-[#F9954E] ring-offset-1 ring-offset-white dark:ring-offset-zinc-950" : ""}`}
+              >
+                <Link
+                  href={c.href}
+                  draggable={false}
+                  className={`flex flex-col items-center justify-center gap-1 py-2 rounded-xl transition-colors
+                    ${active
+                      ? "bg-[#FFF1E3] dark:bg-[#F9954E]/15 text-[#E8832E] dark:text-[#F9954E]"
+                      : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-zinc-900 hover:text-neutral-900 dark:hover:text-white"}`}
                 >
-                  <Link
-                    href={c.href}
-                    draggable={false}
-                    className={`flex flex-col items-center justify-center gap-1 py-2 rounded-xl transition-colors
-                      ${active
-                        ? "bg-[#FFF1E3] dark:bg-[#F9954E]/15 text-[#E8832E] dark:text-[#F9954E]"
-                        : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-zinc-900 hover:text-neutral-900 dark:hover:text-white"}`}
-                  >
-                    <c.Icon className="w-4 h-4" />
-                    <span className="text-[8px] font-semibold leading-none max-w-[42px] truncate">{c.short}</span>
-                  </Link>
+                  <c.Icon className="w-4 h-4" />
+                  <span className="text-[8px] font-semibold leading-none max-w-[42px] truncate">{c.short}</span>
+                </Link>
 
-                  {/* 드래그 핸들 표시(호버) */}
-                  <span className="absolute left-0 top-1/2 -translate-y-1/2 text-neutral-300 dark:text-zinc-700
-                                   opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
-                    <GripVertical className="w-2.5 h-2.5" />
-                  </span>
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-neutral-300 dark:text-zinc-700 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                  <GripVertical className="w-2.5 h-2.5" />
+                </span>
 
-                  {/* 제거(×) — 호버 시 */}
-                  <button
-                    onClick={(e) => { e.preventDefault(); remove(c.key); }}
-                    aria-label={`${c.label} 제거`}
-                    className="absolute -top-1 -right-0.5 w-4 h-4 rounded-full bg-neutral-300 dark:bg-zinc-700
-                               text-white flex items-center justify-center opacity-0 group-hover:opacity-100
-                               hover:bg-red-500 transition-opacity"
-                  >
-                    <X className="w-2.5 h-2.5" />
-                  </button>
-                </div>
-              );
-            })
-          )}
-        </div>
+                <button
+                  onClick={(e) => { e.preventDefault(); remove(c.key); }}
+                  aria-label={`${c.label} 제거`}
+                  className="absolute -top-1 -right-0.5 w-4 h-4 rounded-full bg-neutral-300 dark:bg-zinc-700 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-500 transition-opacity"
+                >
+                  <X className="w-2.5 h-2.5" />
+                </button>
+              </div>
+            );
+          })}
 
-        {/* 하단: + 추가 (제일 아래 고정) */}
-        <div className="p-1.5 border-t border-neutral-100 dark:border-zinc-900">
+          {/* + 추가 — 추가된 항목 바로 아래 */}
           <button
             onClick={() => setPickerOpen((v) => !v)}
             aria-label="바로가기 추가"
-            className={`w-full h-9 rounded-xl flex items-center justify-center transition-colors
+            className={`flex flex-col items-center justify-center gap-1 py-2 rounded-xl border border-dashed transition-colors
               ${pickerOpen
-                ? "bg-[#F9954E] text-white"
-                : "bg-neutral-100 dark:bg-zinc-900 text-neutral-500 dark:text-neutral-400 hover:bg-[#FFF1E3] dark:hover:bg-[#F9954E]/15 hover:text-[#F9954E]"}`}
+                ? "border-[#F9954E] bg-[#FFF1E3] dark:bg-[#F9954E]/15 text-[#F9954E]"
+                : "border-neutral-200 dark:border-zinc-700 text-neutral-400 hover:border-[#F9954E] hover:text-[#F9954E]"}`}
           >
-            <Plus className="w-5 h-5" />
+            <Plus className="w-4 h-4" />
+            <span className="text-[8px] font-semibold leading-none">추가</span>
           </button>
         </div>
       </aside>

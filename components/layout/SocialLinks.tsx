@@ -31,18 +31,9 @@ function BrandIcon({ k }: { k: string }) {
   }
 }
 
-// 브랜드별 배경/텍스트 색 (정적 클래스 — Tailwind purge 안전)
-const STYLE: Record<string, string> = {
-  instagram: "bg-[#E4405F] text-white",
-  x: "bg-black text-white dark:bg-white dark:text-black",
-  naver: "bg-[#03C75A] text-white",
-  reddit: "bg-[#FF4500] text-white",
-  youtube: "bg-[#FF0000] text-white",
-};
-
 export default function SocialLinks({ className = "" }: { className?: string }) {
   return (
-    <div className={`flex flex-wrap items-center gap-2.5 ${className}`}>
+    <div className={`flex flex-wrap items-center gap-2 ${className}`}>
       {SOCIAL_LINKS.map((s) => (
         <a
           key={s.key}
@@ -51,7 +42,8 @@ export default function SocialLinks({ className = "" }: { className?: string }) 
           rel="noopener noreferrer"
           aria-label={s.name}
           title={s.name}
-          className={`w-10 h-10 flex items-center justify-center rounded-full shadow-sm transition-transform hover:-translate-y-0.5 active:scale-95 ${STYLE[s.key] || "bg-neutral-700 text-white"}`}
+          // 통일감 — 단색 미니멀 원형, 호버 시 브랜드 오렌지
+          className="w-9 h-9 flex items-center justify-center rounded-full border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] hover:border-[#F9954E] transition-colors"
         >
           <BrandIcon k={s.key} />
         </a>

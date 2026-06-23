@@ -23,18 +23,15 @@ export default function Footer() {
     <footer className="w-full bg-white dark:bg-black border-t border-neutral-100 dark:border-zinc-900 transition-colors">
       <div className="max-w-5xl mx-auto px-6 py-10">
 
-        {/* 상단: 브랜드 + 제작사 */}
-        <div className="flex items-center justify-between flex-wrap gap-4 mb-6">
+        {/* 상단: 브랜드 + 소셜 (한 줄 통일) */}
+        <div className="flex items-center justify-between flex-wrap gap-4 mb-7">
           <Link
             href="/"
             className="text-lg font-extrabold tracking-tight bg-[linear-gradient(to_right,#FBAA60,#F9954E_40%,#E8832E)] bg-clip-text text-transparent hover:opacity-80 transition-opacity"
           >
             DORI-AI
           </Link>
-          <span className="inline-flex items-center gap-1.5 text-[11px] text-neutral-400">
-            <img src="/illo-logo.png" alt="illo" width={16} height={16} className="w-4 h-4 rounded" loading="lazy" />
-            made by <span className="font-bold text-neutral-500 dark:text-neutral-300">illo</span>
-          </span>
+          <SocialLinks />
         </div>
 
         {/* 링크 — 한 줄 미니멀 */}
@@ -50,18 +47,17 @@ export default function Footer() {
           ))}
         </nav>
 
-        {/* 소셜 */}
-        <div className="mb-7">
-          <p className="text-[12px] font-semibold text-neutral-400 dark:text-neutral-500 mb-3">팔로우</p>
-          <SocialLinks />
-        </div>
-
-        {/* 하단: 저작권 + 문의 */}
-        <div className="flex items-center justify-between flex-wrap gap-2 pt-5 border-t border-neutral-100 dark:border-zinc-900 text-[11px] text-neutral-400">
-          <p>© 2026 illo · dori-ai.com</p>
-          <a href="mailto:lhaa0130@gmail.com" className="hover:text-[#F9954E] transition-colors">
-            문의: lhaa0130@gmail.com
-          </a>
+        {/* 하단: 제작사 + 저작권 + 문의 */}
+        <div className="flex items-center justify-between flex-wrap gap-3 pt-6 border-t border-neutral-100 dark:border-zinc-900">
+          <span className="inline-flex items-center gap-2 text-[12px] text-neutral-400 dark:text-neutral-500">
+            <img src="/illo-logo.png" alt="illo" width={22} height={22} className="w-[22px] h-[22px] rounded-md" loading="lazy" />
+            made by <span className="font-extrabold text-neutral-600 dark:text-neutral-200">illo</span>
+          </span>
+          <div className="flex items-center gap-3 text-[11px] text-neutral-400">
+            <span>© 2026 illo</span>
+            <span className="text-neutral-200 dark:text-zinc-700">·</span>
+            <a href="mailto:lhaa0130@gmail.com" className="hover:text-[#F9954E] transition-colors">문의</a>
+          </div>
         </div>
 
       </div>
