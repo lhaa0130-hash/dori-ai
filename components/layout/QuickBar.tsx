@@ -171,8 +171,8 @@ export default function QuickBar() {
         className="hidden lg:flex fixed right-0 top-16 bottom-0 z-[45] w-[48px] flex-col
                    bg-white/95 dark:bg-zinc-950/95 backdrop-blur border-l border-neutral-200 dark:border-zinc-800"
       >
-        {/* 상단: 접기 + 추가 */}
-        <div className="flex flex-col items-center gap-1 pt-1.5 pb-2 px-1 border-b border-neutral-100 dark:border-zinc-900">
+        {/* 상단: 접기 */}
+        <div className="flex flex-col items-center pt-1.5 pb-1 border-b border-neutral-100 dark:border-zinc-900">
           <button
             onClick={toggleCollapsed}
             aria-label="바로가기 접기"
@@ -180,16 +180,6 @@ export default function QuickBar() {
                        hover:text-[#F9954E] hover:bg-neutral-100 dark:hover:bg-zinc-900 transition-colors"
           >
             <ChevronsRight className="w-3.5 h-3.5" />
-          </button>
-          <button
-            onClick={() => setPickerOpen((v) => !v)}
-            aria-label="바로가기 추가"
-            className={`w-full h-8 rounded-xl flex items-center justify-center transition-colors
-              ${pickerOpen
-                ? "bg-[#F9954E] text-white"
-                : "bg-neutral-100 dark:bg-zinc-900 text-neutral-500 dark:text-neutral-400 hover:bg-[#FFF1E3] dark:hover:bg-[#F9954E]/15 hover:text-[#F9954E]"}`}
-          >
-            <Plus className="w-[18px] h-[18px]" />
           </button>
         </div>
 
@@ -254,6 +244,19 @@ export default function QuickBar() {
           )}
         </div>
 
+        {/* 하단: + 추가 (제일 아래 고정) */}
+        <div className="p-1.5 border-t border-neutral-100 dark:border-zinc-900">
+          <button
+            onClick={() => setPickerOpen((v) => !v)}
+            aria-label="바로가기 추가"
+            className={`w-full h-9 rounded-xl flex items-center justify-center transition-colors
+              ${pickerOpen
+                ? "bg-[#F9954E] text-white"
+                : "bg-neutral-100 dark:bg-zinc-900 text-neutral-500 dark:text-neutral-400 hover:bg-[#FFF1E3] dark:hover:bg-[#F9954E]/15 hover:text-[#F9954E]"}`}
+          >
+            <Plus className="w-5 h-5" />
+          </button>
+        </div>
       </aside>
 
       {/* 카테고리 선택 팝오버 */}

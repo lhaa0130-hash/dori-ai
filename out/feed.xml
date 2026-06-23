@@ -6,7 +6,7 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 23 Jun 2026 06:36:38 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 23 Jun 2026 06:41:50 GMT</lastBuildDate>
     <item>
       <title>오라클, AI 도입으로 21,000명 해고 — 기술과 일자리의 새로운 역학</title>
       <link>https://dori-ai.com/insight/article/trend-158</link>
@@ -16,44 +16,44 @@
       <description>오라클이 AI 도입을 이유로 21,000명의 직원을 해고하며, 기술 산업의 일자리 구조에 큰 변화를 예고하고 있다.</description>
     </item>
     <item>
-      <title>AI한테 질문하지 마세요. 앞으로 5년, 가장 빨리 사라질 직원</title>
+      <title>AI 거품 붕괴와 미래 투자 방향</title>
       <link>https://dori-ai.com/insight/article/video-1</link>
       <guid isPermaLink="true">https://dori-ai.com/insight/article/video-1</guid>
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>김대식 교수와 김혜연 안무가가 AI 시대에 인간의 능력과 직업의 미래에 대해 논의합니다. AI가 발전함에 따라 어떤 능력이 중요해질지에 대한 통찰을 제공합니다.</description>
+      <description>AI 주가 거품 붕괴 가능성과 투자 방향을 논의한다.</description>
     </item>
     <item>
-      <title>AI 작업시간 2시간 줄여주는 제미나이 신기능 10가지</title>
+      <title>제미나이 사용법 기초 강의</title>
       <link>https://dori-ai.com/insight/article/video-2</link>
       <guid isPermaLink="true">https://dori-ai.com/insight/article/video-2</guid>
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>제미나이의 신기능을 활용하여 작업 시간을 단축하는 방법을 소개합니다. 실제 화면을 통해 기능을 시연하며 유용한 활용법을 공유합니다.</description>
+      <description>제미나이를 효과적으로 사용하는 방법을 설명한다.</description>
     </item>
     <item>
-      <title>카파시의 LLM Wiki로 나만의 AI 세컨드 브레인 만들기</title>
+      <title>헤르메스 에이전트 완벽 가이드</title>
       <link>https://dori-ai.com/insight/article/video-3</link>
       <guid isPermaLink="true">https://dori-ai.com/insight/article/video-3</guid>
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>안드레 카파시의 LLM Wiki 개념을 통해 AI를 활용한 지식 관리 시스템을 구축하는 방법을 설명합니다. 클로드 코드와 옵시디언의 조합을 다룹니다.</description>
+      <description>헤르메스 에이전트의 설치와 활용법을 다룬다.</description>
     </item>
     <item>
-      <title>제미나이 사용자 필수시청! 투자의 질이 달라지는 주식투자 활용법 TOP4</title>
+      <title>구글의 AI 영상 툴 VEO 3.1 소개</title>
       <link>https://dori-ai.com/insight/article/video-4</link>
       <guid isPermaLink="true">https://dori-ai.com/insight/article/video-4</guid>
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>주식 투자에 AI를 효과적으로 활용하는 방법을 소개하며, 초보자도 쉽게 이해할 수 있도록 설명합니다.</description>
+      <description>구글의 새로운 AI 영상 툴 VEO 3.1 사용법을 설명한다.</description>
     </item>
     <item>
-      <title>오픈AI 임원이 면접에서 반드시 물어보는 '1가지' 질문</title>
+      <title>코드 자동화를 위한 Codex 완벽 가이드</title>
       <link>https://dori-ai.com/insight/article/video-5</link>
       <guid isPermaLink="true">https://dori-ai.com/insight/article/video-5</guid>
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>오픈AI의 CSO가 AI의 활용과 한국과의 협업 방향에 대해 이야기하며, 면접에서 중요한 질문을 소개합니다.</description>
+      <description>코드 자동화 도구 Codex의 활용법을 소개한다.</description>
     </item>
     <item>
       <title>Groq, 6억 5천만 달러 투자 유치 — AI 칩 시장의 새로운 강자?</title>
