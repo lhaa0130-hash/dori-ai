@@ -26,6 +26,33 @@ export function getTopTools(n = 5): TopTool[] {
   }
 }
 
+// OpenRouter 인기 자료(사람들이 많이 보는 것) — 우리 스타일 카드용
+export type OrPicks = {
+  model: { name: string; reqM: number } | null;   // 월 요청 1위 모델
+  intel: { name: string; score: number } | null;  // 지능 1위
+  speed: { name: string; tps: number } | null;     // 최고 속도
+};
+function shortModel(n: string): string {
+  const s = n.includes(": ") ? n.split(": ").slice(1).join(": ") : n;
+  return s.length > 20 ? s.slice(0, 19) + "…" : s;
+}
+export function getOrPicks(): OrPicks {
+  try {
+    const raw = fs.readFileSync(path.join(process.cwd(), "public/openrouter-stats.json"), "utf-8");
+    const j = JSON.parse(raw);
+    const u = j.usageTop?.[0];
+    const it = j.intelTop?.[0];
+    const sp = j.speedTop?.[0];
+    return {
+      model: u ? { name: shortModel(String(u.name)), reqM: Number(u.reqM) || 0 } : null,
+      intel: it ? { name: shortModel(String(it.name)), score: Number(it.score) || 0 } : null,
+      speed: sp ? { name: shortModel(String(sp.name)), tps: Number(sp.tps) || 0 } : null,
+    };
+  } catch {
+    return { model: null, intel: null, speed: null };
+  }
+}
+
 // 동물도감 종수
 export function getAnimalCount(): number {
   try {

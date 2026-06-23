@@ -229,17 +229,16 @@ export default function QuickBar() {
             );
           })}
 
-          {/* + 추가 — 추가된 항목 바로 아래 */}
+          {/* + 추가 — 추가된 항목 바로 아래 (아이콘만) */}
           <button
             onClick={() => setPickerOpen((v) => !v)}
             aria-label="바로가기 추가"
-            className={`flex flex-col items-center justify-center gap-1 py-2 rounded-xl border border-dashed transition-colors
+            className={`flex items-center justify-center py-2.5 rounded-xl transition-colors
               ${pickerOpen
-                ? "border-[#F9954E] bg-[#FFF1E3] dark:bg-[#F9954E]/15 text-[#F9954E]"
-                : "border-neutral-200 dark:border-zinc-700 text-neutral-400 hover:border-[#F9954E] hover:text-[#F9954E]"}`}
+                ? "bg-[#FFF1E3] dark:bg-[#F9954E]/15 text-[#F9954E]"
+                : "text-neutral-400 hover:bg-neutral-100 dark:hover:bg-zinc-900 hover:text-[#F9954E]"}`}
           >
-            <Plus className="w-4 h-4" />
-            <span className="text-[8px] font-semibold leading-none">추가</span>
+            <Plus className="w-5 h-5" />
           </button>
         </div>
       </aside>

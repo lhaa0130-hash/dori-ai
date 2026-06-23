@@ -1,72 +1,63 @@
-// 메인 상단 정보 — 틀(카드) 없이, 인기 AI도구 미니 바차트 + 큰 숫자 지표(우리만의 대시보드 느낌).
+// 메인 상단 정보 — 토스 지수요약 풍 콤팩트 카드(미니 스파크라인 + 큰 값).
+// OpenRouter 인기 자료(모델·지능·속도)를 우리 스타일로 + 우리 지표.
 import Link from "next/link";
-import type { TopTool } from "@/lib/homeStats";
+import type { TopTool, OrPicks } from "@/lib/homeStats";
+
+// 작은 장식용 스파크라인(브랜드색) — 카드별로 살짝 다른 모양
+function Spark({ seed }: { seed: number }) {
+  const pts = [4, 10, 7, 13, 9, 16, 12, 19];
+  const rot = pts.map((v, i) => pts[(i + seed) % pts.length]);
+  const d = rot.map((v, i) => `${(i / (rot.length - 1)) * 56},${22 - v}`).join(" ");
+  return (
+    <svg viewBox="0 0 56 24" className="w-14 h-6" fill="none" preserveAspectRatio="none">
+      <polyline points={d} stroke="#F9954E" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" opacity="0.85" />
+    </svg>
+  );
+}
+
+type Card = { href: string; tag: string; value: string; unit?: string; sub: string; seed: number };
 
 export default function HomeInfoStrip({
   topTools,
   insightCount,
   animalCount,
+  orPicks,
 }: {
   topTools: TopTool[];
   insightCount: number;
   animalCount: number;
+  orPicks: OrPicks;
 }) {
-  const stats: { emoji: string; value?: string; unit?: string; label: string; href: string }[] = [
-    { emoji: "📰", value: String(insightCount), unit: "건", label: "오늘의 인사이트", href: "/insight" },
-    ...(animalCount > 0 ? [{ emoji: "🐾", value: String(animalCount), unit: "종", label: "동물도감", href: "/animal" }] : []),
-    { emoji: "🎮", label: "미니게임", href: "/minigame" },
-    { emoji: "💬", label: "커뮤니티", href: "/community" },
-  ];
+  const cards: Card[] = [];
+  if (orPicks.model) cards.push({ href: "/ai-models", tag: "🤖 인기 AI 모델", value: `${orPicks.model.reqM}`, unit: "M", sub: orPicks.model.name, seed: 0 });
+  if (orPicks.intel) cards.push({ href: "/ai-models", tag: "🧠 지능 1위", value: `${orPicks.intel.score}`, sub: orPicks.intel.name, seed: 2 });
+  if (orPicks.speed) cards.push({ href: "/ai-models", tag: "⚡ 가장 빠름", value: `${orPicks.speed.tps}`, unit: "tps", sub: orPicks.speed.name, seed: 4 });
+  if (topTools[0]) cards.push({ href: "/ai-tools", tag: "🔧 추천 AI 도구", value: topTools[0].name, sub: topTools[1] ? `· ${topTools[1].name} 외` : "둘러보기", seed: 1 });
+  cards.push({ href: "/insight", tag: "📰 오늘의 인사이트", value: `${insightCount}`, unit: "건", sub: "트렌드·분석·리포트", seed: 3 });
+  if (animalCount > 0) cards.push({ href: "/animal", tag: "🐾 동물도감", value: `${animalCount}`, unit: "종", sub: "매일 새 동물", seed: 5 });
 
   return (
-    <section className="py-5 border-b border-neutral-100 dark:border-zinc-900">
-      <div className="flex flex-col lg:flex-row lg:items-center gap-5 lg:gap-9">
-
-        {/* 인기 AI 도구 — 순위 미니 바차트(틀 없음) */}
-        {topTools.length > 0 && (
-          <Link href="/ai-tools" className="group flex-1 min-w-0">
-            <p className="text-[11px] font-bold text-neutral-400 mb-2.5 flex items-center gap-1">
-              🔥 인기 AI 도구
-              <span className="text-[#F9954E] opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all">→</span>
-            </p>
-            <div className="space-y-[7px]">
-              {topTools.map((t, i) => (
-                <div key={t.name} className="flex items-center gap-2.5">
-                  <span className={`w-3 text-[10px] font-extrabold text-right ${i < 3 ? "text-[#F9954E]" : "text-neutral-300 dark:text-neutral-600"}`}>{i + 1}</span>
-                  <span className="text-[12px] font-semibold text-neutral-700 dark:text-neutral-200 w-[84px] truncate">{t.name}</span>
-                  <span className="flex-1 h-[6px] rounded-full bg-neutral-100 dark:bg-zinc-800/80 overflow-hidden">
-                    <span
-                      className="block h-full rounded-full bg-gradient-to-r from-[#FBAA60] to-[#F9954E] transition-all duration-700"
-                      style={{ width: `${100 - i * 15}%` }}
-                    />
-                  </span>
-                </div>
-              ))}
-            </div>
-          </Link>
-        )}
-
-        {/* 구분선(데스크탑) */}
-        <span className="hidden lg:block w-px self-stretch bg-neutral-100 dark:bg-zinc-800" />
-
-        {/* 지표 — 틀 없는 큰 숫자 */}
-        <div className="flex items-end gap-6 sm:gap-8 overflow-x-auto scrollbar-hide shrink-0 -mx-4 px-4 lg:mx-0 lg:px-0">
-          {stats.map((s) => (
-            <Link key={s.label} href={s.href} className="group flex flex-col items-center text-center shrink-0">
-              <span className="text-[15px] mb-1">{s.emoji}</span>
-              {s.value ? (
-                <span className="text-[20px] font-extrabold text-neutral-900 dark:text-white leading-none group-hover:text-[#F9954E] transition-colors tabular-nums">
-                  {s.value}
-                  <span className="text-[11px] font-bold text-neutral-400 ml-0.5">{s.unit}</span>
+    <section className="py-4 border-b border-neutral-100 dark:border-zinc-900">
+      <div className="-mx-4 px-4 overflow-x-auto scrollbar-hide">
+        <div className="flex gap-2.5 w-max">
+          {cards.map((c) => (
+            <Link
+              key={c.tag}
+              href={c.href}
+              className="group w-[150px] shrink-0 rounded-2xl bg-neutral-50 dark:bg-zinc-900/50 p-3.5 active:opacity-80 transition-opacity"
+            >
+              <p className="text-[11px] font-bold text-neutral-400 dark:text-neutral-500 mb-1.5 truncate">{c.tag}</p>
+              <div className="flex items-end justify-between gap-1">
+                <span className="text-[19px] font-extrabold text-neutral-900 dark:text-white leading-none tabular-nums truncate group-hover:text-[#F9954E] transition-colors">
+                  {c.value}
+                  {c.unit && <span className="text-[11px] font-bold text-neutral-400 ml-0.5">{c.unit}</span>}
                 </span>
-              ) : (
-                <span className="text-[14px] font-extrabold text-neutral-900 dark:text-white leading-none group-hover:text-[#F9954E] transition-colors">{s.label}</span>
-              )}
-              {s.value && <span className="text-[10.5px] text-neutral-400 mt-1.5 whitespace-nowrap">{s.label}</span>}
+                <Spark seed={c.seed} />
+              </div>
+              <p className="text-[10.5px] text-neutral-400 dark:text-neutral-500 mt-1.5 truncate">{c.sub}</p>
             </Link>
           ))}
         </div>
-
       </div>
     </section>
   );

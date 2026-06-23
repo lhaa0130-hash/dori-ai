@@ -7,6 +7,7 @@ import ThemeToggle from "@/components/ThemeToggle";
 import { Search, ChevronDown, ChevronRight, User, LogOut, Menu, X, MessageCircle, Newspaper } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { useRouter, usePathname } from "next/navigation";
+import SearchOverlay from "@/components/layout/SearchOverlay";
 
 const ADMIN_EMAIL = "lhaa0130@gmail.com";
 
@@ -15,6 +16,7 @@ export default function Header() {
   const router = useRouter();
   const pathname = usePathname();
   const [mobileOpen, setMobileOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const isAdmin = session?.user?.email?.toLowerCase() === ADMIN_EMAIL.toLowerCase();
 
   // 페이지 이동 시 드로어 닫기
@@ -40,28 +42,28 @@ export default function Header() {
 
   const projects = [
     {
-      name: "애니멀일로", emoji: "🐾", image: "",
-      desc: "다양한 동물을 애니멀일로에서 만나요", href: "/animal",
+      name: "동물도감", emoji: "🐾", image: "",
+      desc: "애니멀일로 · 다양한 동물 탐험", href: "/animal",
       bg: "bg-emerald-50 dark:bg-emerald-900/20", active: true,
     },
     {
-      name: "트레이더일로", emoji: "📈", image: "",
-      desc: "AI 자동매매 — 매일 성과 공개", href: "/trader",
+      name: "AI 투자매매", emoji: "📈", image: "",
+      desc: "트레이더일로 · 손실은 작게, 수익은 크게", href: "/trader",
       bg: "bg-blue-50 dark:bg-blue-900/20", active: true,
     },
     {
-      name: "워크일로 (Workillo)", emoji: "🟧", image: "/illo-logo.png",
-      desc: "AI API, 구독 말고 필요한 만큼", href: "/illo/app",
+      name: "AI 직원", emoji: "🟧", image: "/illo-logo.png",
+      desc: "워크일로 · 업무를 맡기는 AI 비서", href: "/illo/app",
       bg: "bg-orange-50 dark:bg-orange-900/20", active: true,
     },
     {
-      name: "아크일로", emoji: "📐", image: "",
-      desc: "건축설계 보조 프로그램", href: "/flat-form",
+      name: "건축설계 보조", emoji: "📐", image: "",
+      desc: "아크일로 · 평면설계 도우미", href: "/flat-form",
       bg: "bg-sky-50 dark:bg-sky-900/20", active: true,
     },
     {
-      name: "가족기록", emoji: "👨‍👩‍👧‍👦", image: "",
-      desc: "가족의 모든 것을 하나의 앱으로", href: "/family",
+      name: "가족 기록", emoji: "👨‍👩‍👧‍👦", image: "",
+      desc: "가족의 모든 것을 한 앱에", href: "/family",
       bg: "bg-purple-50 dark:bg-purple-900/20",
     },
   ];
@@ -85,9 +87,8 @@ export default function Header() {
 
             {/* 프로젝트 — 상위는 활성(호버 드롭다운), 하위 항목만 비활성(준비 중) */}
             <div className="relative group flex-shrink-0">
-              <button type="button" aria-haspopup="true" className="flex items-center gap-0.5 text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap cursor-default">
+              <button type="button" aria-haspopup="true" className="flex items-center text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap cursor-default">
                 프로젝트
-                <ChevronDown className="w-3.5 h-3.5 opacity-50 group-hover:rotate-180 transition-transform duration-300 ml-0.5" />
               </button>
               <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 translate-y-1 group-hover:translate-y-0 z-50 pt-2">
                 <div className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden">
@@ -137,8 +138,8 @@ export default function Header() {
           {/* ── 우측 컨트롤 ── */}
           <div className="ml-auto lg:ml-0 flex items-center gap-1">
 
-            {/* 검색 (데스크탑만) */}
-            <button aria-label="Search" className="hidden lg:flex flex-shrink-0 w-10 h-10 items-center justify-center hover:opacity-70 transition-opacity text-foreground">
+            {/* 검색 (데스크탑) */}
+            <button onClick={() => setSearchOpen(true)} aria-label="검색" className="hidden lg:flex flex-shrink-0 w-10 h-10 items-center justify-center rounded-full hover:bg-neutral-100 dark:hover:bg-zinc-800 transition-colors text-foreground">
               <Search className="w-5 h-5" strokeWidth={2.5} />
             </button>
 
@@ -234,6 +235,9 @@ export default function Header() {
           </div>
         </div>
       </header>
+
+      {/* 검색 오버레이 */}
+      <SearchOverlay open={searchOpen} onClose={() => setSearchOpen(false)} />
 
       {/* ── 모바일 오버레이 ── */}
       {mobileOpen && (

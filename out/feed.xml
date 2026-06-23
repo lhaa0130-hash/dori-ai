@@ -6,7 +6,7 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 23 Jun 2026 10:59:30 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 23 Jun 2026 11:34:02 GMT</lastBuildDate>
     <item>
       <title>유럽, 35대의 새로운 엔비디아 슈퍼컴퓨터 공개 — AI 혁신의 새로운 전환점</title>
       <link>https://dori-ai.com/insight/article/trend-160</link>
@@ -46,14 +46,6 @@
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
       <description>AI 아트를 판매하는 방법을 단계별로 안내합니다.</description>
-    </item>
-    <item>
-      <title>[우주] 우리는 영원불변한 존재가 될 수 있을까?</title>
-      <link>https://dori-ai.com/insight/article/video-11</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-11</guid>
-      <category>큐레이션</category>
-      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>우주의 미래와 인간의 존재에 대한 철학적 질문을 다룹니다.</description>
     </item>
     <item>
       <title>[영상] AI 영상 제작을 위한 필수 정보</title>
@@ -326,6 +318,14 @@
       <category>트렌드</category>
       <pubDate>Fri, 19 Jun 2026 13:00:44 GMT</pubDate>
       <description>앤트로픽이 트럼프의 압박을 받으며 AI 규제에 대한 새로운 논의를 주도하고 있다. 이는 AI 산업의 방향성을 바꿀 수 있는 중요한 사건이다.</description>
+    </item>
+    <item>
+      <title>앤트로픽의 AI 모델, 미국의 수출 금지로 동맹에 긴장감 조성</title>
+      <link>https://dori-ai.com/insight/article/trend-132</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-132</guid>
+      <category>트렌드</category>
+      <pubDate>Fri, 19 Jun 2026 11:00:21 GMT</pubDate>
+      <description>앤트로픽의 AI 모델에 대한 미국의 수출 금지가 글로벌 동맹에 미치는 영향을 분석합니다.</description>
     </item>
   </channel>
 </rss>

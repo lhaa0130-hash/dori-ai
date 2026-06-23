@@ -35,7 +35,7 @@ export function getInsightFeed(perCategory = 12): InsightFeedItem[] {
         date: String(it.date || ""),
         thumbnail: it.thumbnail || undefined,
         category: norm(it.category) || fallbackCat,
-        summary: norm(it.description || it.summary || it.subtitle) || undefined,
+        summary: (norm(it.description || it.summary || it.subtitle) || "").slice(0, 160) || undefined,
       });
     }
   };

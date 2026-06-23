@@ -4,7 +4,6 @@
 // 요약 + 좋아요 수 + 최근 댓글(커뮤니티) + 전체 보기.
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import Image from "next/image";
 import { Heart, MessageCircle, ArrowRight } from "lucide-react";
 import { getFirebaseFirestore } from "@/lib/firebase";
 import { doc, getDoc, collection, query, orderBy, limit, getDocs } from "firebase/firestore";
@@ -43,11 +42,17 @@ export default function InsightPreviewPane({ item }: { item: PreviewItem }) {
     <div className="rounded-2xl border border-neutral-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden">
       {/* 썸네일 */}
       {item.thumbnail ? (
-        <div className="relative w-full h-[190px] bg-neutral-100 dark:bg-zinc-900">
-          <Image src={item.thumbnail} alt={item.title} fill style={{ objectFit: "cover" }} sizes="(max-width:1280px) 50vw, 360px" />
+        <div className="w-full h-[200px] bg-neutral-100 dark:bg-zinc-900 overflow-hidden">
+          <img
+            src={item.thumbnail}
+            alt={item.title}
+            loading="lazy"
+            className="w-full h-full object-cover"
+            onError={(e) => { const p = e.currentTarget.parentElement; if (p) p.style.display = "none"; }}
+          />
         </div>
       ) : (
-        <div className="w-full h-[120px] bg-neutral-50 dark:bg-zinc-900 flex items-center justify-center text-4xl">{EMOJI[item.category] || "📝"}</div>
+        <div className="w-full h-[120px] bg-gradient-to-br from-[#FFF1E3] to-white dark:from-[#F9954E]/10 dark:to-zinc-900 flex items-center justify-center text-4xl">{EMOJI[item.category] || "📝"}</div>
       )}
 
       <div className="p-5">
