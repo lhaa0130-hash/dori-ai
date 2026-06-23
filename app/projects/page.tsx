@@ -6,6 +6,14 @@ import { PROJECTS } from "@/constants/projectsData";
 export default function ProjectsPage() {
   const live = PROJECTS.filter((p) => p.isActive && p.launchHref);
   const soon = PROJECTS.filter((p) => !(p.isActive && p.launchHref));
+  const now = new Date();
+  const badgeOf = (p: (typeof PROJECTS)[number]) => {
+    if (p.launchDate) {
+      const dt = new Date(p.launchDate);
+      if (now < dt) return `${dt.getMonth() + 1}월 ${dt.getDate()}일 오픈`;
+    }
+    return p.status;
+  };
 
   return (
     <main className="w-full min-h-screen bg-white dark:bg-black">
@@ -39,7 +47,7 @@ export default function ProjectsPage() {
                   <span className="block text-[12px] text-neutral-500 dark:text-neutral-400 truncate">{p.desc}</span>
                 </div>
                 <span className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#F9954E]/15 text-[#F9954E] flex-shrink-0">
-                  {p.status}
+                  {badgeOf(p)}
                 </span>
               </Link>
             ))}

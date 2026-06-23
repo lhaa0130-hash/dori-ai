@@ -137,6 +137,7 @@ export default function TraderClient() {
   const alive = d ? ms < interval + 3600 * 1000 : false;
   const minAgo = Math.max(0, Math.floor(ms / 60000));
   const agoStr = minAgo < 1 ? "방금" : minAgo < 60 ? `${minAgo}분 전` : `${Math.floor(minAgo / 60)}시간 ${minAgo % 60}분 전`;
+  const beforeLaunch = now < new Date("2026-07-01T00:00:00").getTime();
 
   return (
     <main className="w-full min-h-screen max-w-2xl mx-auto px-4 py-6">
@@ -145,6 +146,11 @@ export default function TraderClient() {
           트레이더일로 <span style={{ color: ORANGE }}>(Trader Illo)</span>
         </h1>
         <p className="text-xs text-neutral-400 dark:text-neutral-500 mt-1">AI 자동매매 — 손실은 작게, 수익은 크게.</p>
+        {beforeLaunch && (
+          <div className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 mt-2.5 text-xs font-bold" style={{ background: "rgba(249,149,78,0.12)", color: ORANGE }}>
+            🎉 7월 1일 정식 오픈 · 지금은 모의 테스트 중
+          </div>
+        )}
       </header>
 
       {err && <div className="text-sm text-neutral-400 py-16 text-center">아직 데이터가 없습니다. 곧 업데이트됩니다.</div>}
@@ -330,6 +336,17 @@ export default function TraderClient() {
           <div className="mt-8 mb-2 text-xs font-bold text-neutral-400">더 알아보기</div>
           <div className="space-y-2">
             <details className="rounded-2xl border border-neutral-200/70 dark:border-zinc-800 bg-white dark:bg-zinc-900/30 p-4 text-[13px] text-neutral-600 dark:text-neutral-300">
+              <summary className="cursor-pointer font-bold text-neutral-800 dark:text-neutral-100">이 페이지, 어떻게 보나요? (이용 방법)</summary>
+              <ul className="mt-3 space-y-2 leading-relaxed list-disc pl-5">
+                <li>여기는 트레이더일로 AI 봇의 <b>실제 매매 성과를 공개</b>하는 곳이에요. <b>4시간마다 자동 갱신</b>됩니다.</li>
+                <li>맨 위에서 <b>전체 평가액·손익(원·달러)</b>을 보고, 탭에서 <b>코인·국내·해외</b>를 나눠 봐요.</li>
+                <li>종목마다 <b>매수가·투자금·손절선·목표가·매수일</b>까지 투명하게 보여줘요.</li>
+                <li>표에서 <b>★</b>를 누르면 관심 종목으로 표시돼요(로그인하면 계정에 저장).</li>
+                <li>⚠️ <b>직접 매매하는 서비스가 아니라, 봇의 결과를 보여주는 페이지</b>예요. 여기서 주문이 나가지 않습니다 — 투자 참고·학습용이에요.</li>
+              </ul>
+            </details>
+
+            <details className="rounded-2xl border border-neutral-200/70 dark:border-zinc-800 bg-white dark:bg-zinc-900/30 p-4 text-[13px] text-neutral-600 dark:text-neutral-300">
               <summary className="cursor-pointer font-bold text-neutral-800 dark:text-neutral-100">이게 무슨 서비스예요? (쉽게 설명)</summary>
               <div className="mt-3 space-y-3">
                 <div>
@@ -358,13 +375,14 @@ export default function TraderClient() {
               </div>
             </details>
 
-            <details className="rounded-2xl border border-neutral-200/70 dark:border-zinc-800 bg-white dark:bg-zinc-900/30 p-4 text-[13px] text-neutral-600 dark:text-neutral-300">
-              <summary className="cursor-pointer font-bold text-neutral-800 dark:text-neutral-100">솔직하게 — 봇이 할 수 있는 것 / 없는 것</summary>
+            <details className="rounded-2xl border border-amber-300/40 dark:border-amber-800/40 bg-amber-50/40 dark:bg-amber-950/10 p-4 text-[13px] text-neutral-600 dark:text-neutral-300">
+              <summary className="cursor-pointer font-bold text-amber-700 dark:text-amber-400">⚠️ 투자 주의사항 (꼭 읽어주세요)</summary>
               <ul className="mt-3 space-y-2 leading-relaxed list-disc pl-5">
-                <li>목표는 “시장을 이기는 것”이 아니라 “크게 잃지 않는 것(낙폭 관리)”입니다.</li>
-                <li>과거엔 그냥 들고 있기(존버)가 봇보다 훨씬 많이 벌었어요 — 대신 중간에 -50%대 폭락도 다 견뎌야 했죠.</li>
-                <li>봇은 손실을 작게 끊는 대신 큰 상승을 다 먹진 못해요(수익과 안전은 맞바꿈).</li>
-                <li>과거 성과는 미래를 보장하지 않습니다. “안 잃기”는 불가능합니다.</li>
+                <li><b>원금 손실 위험</b>이 있어요. 어떤 전략도 손실을 100% 막지 못합니다.</li>
+                <li><b>과거 성과 ≠ 미래 수익.</b> 잘됐던 게 앞으로도 잘된다는 보장은 없어요.</li>
+                <li>지금 수치는 <b>모의(가짜 돈) 결과</b>라 실제 매매와 다를 수 있어요(수수료·체결·세금 차이).</li>
+                <li>봇의 목표는 “많이 버는 것”이 아니라 <b>“크게 잃지 않는 것(낙폭 관리)”</b>이에요. 과거엔 그냥 들고 있기(존버)가 봇보다 더 번 적도 많아요.</li>
+                <li>이 페이지는 <b>투자 권유가 아니라 정보 제공</b>입니다. 투자 결정과 책임은 <b>본인</b>에게 있어요.</li>
               </ul>
             </details>
 

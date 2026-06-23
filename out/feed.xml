@@ -6,7 +6,7 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 23 Jun 2026 10:46:49 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 23 Jun 2026 10:59:30 GMT</lastBuildDate>
     <item>
       <title>유럽, 35대의 새로운 엔비디아 슈퍼컴퓨터 공개 — AI 혁신의 새로운 전환점</title>
       <link>https://dori-ai.com/insight/article/trend-160</link>
@@ -32,28 +32,76 @@
       <description>오라클이 AI 도입을 이유로 21,000명의 직원을 해고하며, 기술 산업의 일자리 구조에 큰 변화를 예고하고 있다.</description>
     </item>
     <item>
-      <title>AI 거품 붕괴 이후의 투자 방향</title>
+      <title>[AI 투자] AI 버블 꺼져도 돈은 결국 여기로 몰린다</title>
       <link>https://dori-ai.com/insight/article/video-1</link>
       <guid isPermaLink="true">https://dori-ai.com/insight/article/video-1</guid>
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>AI 산업의 거품 붕괴와 그 이후의 투자 전략을 탐구합니다.</description>
+      <description>AI 주가 거품 붕괴 가능성과 투자 전망을 분석합니다.</description>
     </item>
     <item>
-      <title>AI 영상 제작의 시작, 구글 VEO 3.1 활용하기</title>
+      <title>[예술] 2026년 AI 아트 판매 시작하기</title>
+      <link>https://dori-ai.com/insight/article/video-10</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-10</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
+      <description>AI 아트를 판매하는 방법을 단계별로 안내합니다.</description>
+    </item>
+    <item>
+      <title>[우주] 우리는 영원불변한 존재가 될 수 있을까?</title>
+      <link>https://dori-ai.com/insight/article/video-11</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-11</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
+      <description>우주의 미래와 인간의 존재에 대한 철학적 질문을 다룹니다.</description>
+    </item>
+    <item>
+      <title>[영상] AI 영상 제작을 위한 필수 정보</title>
       <link>https://dori-ai.com/insight/article/video-4</link>
       <guid isPermaLink="true">https://dori-ai.com/insight/article/video-4</guid>
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>구글 VEO 3.1로 무료 AI 영상 제작의 모든 것을 배워보세요.</description>
+      <description>구글의 무료 AI 영상 툴 VEO 3.1로 쉽게 영상 제작하기.</description>
     </item>
     <item>
-      <title>Claude Cowork 마스터하기 | 초보자에서 전문가로</title>
+      <title>[자동화] Claude Cowork 사용법  초보에서 전문가로</title>
       <link>https://dori-ai.com/insight/article/video-5</link>
       <guid isPermaLink="true">https://dori-ai.com/insight/article/video-5</guid>
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>Claude Cowork의 기초부터 활용 방법까지 배워보세요.</description>
+      <description>Claude Cowork를 통해 업무 자동화와 프로젝트 관리를 배워보세요.</description>
+    </item>
+    <item>
+      <title>[코딩] Claude Skills와 MCP 서버 설정 및 배포 완벽 가이드</title>
+      <link>https://dori-ai.com/insight/article/video-6</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-6</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
+      <description>MCP와 Claude Skills를 설정하는 방법을 배울 수 있는 영상입니다.</description>
+    </item>
+    <item>
+      <title>[도구] 2026년 실제 사용할 AI 도구들</title>
+      <link>https://dori-ai.com/insight/article/video-7</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-7</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
+      <description>효율적인 작업을 위한 AI 도구들을 소개합니다.</description>
+    </item>
+    <item>
+      <title>[자동화] 코덱스(Codex) 초보자 완벽 가이드</title>
+      <link>https://dori-ai.com/insight/article/video-8</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-8</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
+      <description>코덱스를 활용한 다양한 자동화 방법을 배울 수 있습니다.</description>
+    </item>
+    <item>
+      <title>[AI] DeepSeek AI를 11분 만에 배우기</title>
+      <link>https://dori-ai.com/insight/article/video-9</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-9</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
+      <description>DeepSeek AI의 주요 기능을 간단히 배울 수 있는 영상입니다.</description>
     </item>
     <item>
       <title>Groq, 6억 5천만 달러 투자 유치 — AI 칩 시장의 새로운 강자?</title>
@@ -278,54 +326,6 @@
       <category>트렌드</category>
       <pubDate>Fri, 19 Jun 2026 13:00:44 GMT</pubDate>
       <description>앤트로픽이 트럼프의 압박을 받으며 AI 규제에 대한 새로운 논의를 주도하고 있다. 이는 AI 산업의 방향성을 바꿀 수 있는 중요한 사건이다.</description>
-    </item>
-    <item>
-      <title>앤트로픽의 AI 모델, 미국의 수출 금지로 동맹에 긴장감 조성</title>
-      <link>https://dori-ai.com/insight/article/trend-132</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-132</guid>
-      <category>트렌드</category>
-      <pubDate>Fri, 19 Jun 2026 11:00:21 GMT</pubDate>
-      <description>앤트로픽의 AI 모델에 대한 미국의 수출 금지가 글로벌 동맹에 미치는 영향을 분석합니다.</description>
-    </item>
-    <item>
-      <title>앤트로픽, AI 안전 규칙 논의로 백악관과 접촉</title>
-      <link>https://dori-ai.com/insight/article/trend-131</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-131</guid>
-      <category>트렌드</category>
-      <pubDate>Fri, 19 Jun 2026 09:00:17 GMT</pubDate>
-      <description>앤트로픽이 백악관과 AI 안전 규칙 설정을 위한 대화를 시작했습니다. 이는 AI 기술의 안전성과 규제 필요성을 강조하는 중요한 이정표입니다.</description>
-    </item>
-    <item>
-      <title>OpenAI, IPO 준비를 위한 인재 영입 — 노암 샤제어와 딘 볼의 합류</title>
-      <link>https://dori-ai.com/insight/article/trend-130</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-130</guid>
-      <category>트렌드</category>
-      <pubDate>Fri, 19 Jun 2026 07:00:21 GMT</pubDate>
-      <description>OpenAI가 IPO를 앞두고 구글 딥마인드의 공동 창립자인 노암 샤제어와 트럼프 행정부의 AI 정책 책임자 딘 볼을 영입하며 인재 풀을 강화하고 있다.</description>
-    </item>
-    <item>
-      <title>AI 데이터 센터, 정부의 빠른 전력 연결로 새 시대 열다</title>
-      <link>https://dori-ai.com/insight/article/trend-129</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-129</guid>
-      <category>트렌드</category>
-      <pubDate>Fri, 19 Jun 2026 06:00:27 GMT</pubDate>
-      <description>미국 연방 에너지 규제 위원회(FERC)가 AI 데이터 센터를 위해 전력망에 신속하게 연결할 수 있는 경로를 제공하며, AI의 발전을 뒷받침할 새로운 전환점을 마련했습니다.</description>
-    </item>
-    <item>
-      <title>Nvidia가 잃은 중국 AI 칩 시장: 수출통제가 만든 ‘Huawei 기회’</title>
-      <link>https://dori-ai.com/insight/article/analysis-7</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/analysis-7</guid>
-      <category>분석</category>
-      <pubDate>Fri, 19 Jun 2026 05:01:56 GMT</pubDate>
-      <description>미국의 AI 칩 수출통제는 중국의 최첨단 모델 개발 속도를 늦추려는 전략이었다. 하지만 **2026년** 현재 그 정책은 중국 시장에서 **Nvidia**를 밀어내고 **Huawei** 중심의 자립 생태계를 키우는 역설을 낳고 있다.</description>
-    </item>
-    <item>
-      <title>버니 샌더스, AI 소유권에서 연간 1,000달러 지급 제안</title>
-      <link>https://dori-ai.com/insight/article/trend-128</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-128</guid>
-      <category>트렌드</category>
-      <pubDate>Fri, 19 Jun 2026 04:00:16 GMT</pubDate>
-      <description>버니 샌더스 상원의원이 인공지능의 공공 소유를 통해 국민들에게 연간 1,000달러를 지급하자는 제안을 내놓았다. 이는 AI의 수익을 사회에 환원하려는 시도로 주목받고 있다.</description>
     </item>
   </channel>
 </rss>
