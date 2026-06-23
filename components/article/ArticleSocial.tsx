@@ -21,7 +21,7 @@ type Cmt = { id: string; uid: string; name: string; text: string; createdAt?: an
 const db = () => getFirebaseFirestore();
 const myUid = () => { try { return getFirebaseAuth().currentUser?.uid || null; } catch { return null; } };
 
-export default function ArticleSocial({ slug, title }: { slug: string; title?: string }) {
+export default function ArticleSocial({ slug, compact = false }: { slug: string; title?: string; compact?: boolean }) {
   const { status, session } = useAuth();
   const [likeCount, setLikeCount] = useState(0);
   const [liked, setLiked] = useState(false);
@@ -109,14 +109,16 @@ export default function ArticleSocial({ slug, title }: { slug: string; title?: s
   };
 
   return (
-    <section className="mt-10 pt-8 border-t border-neutral-200 dark:border-neutral-800 max-w-2xl mx-auto">
+    <section className={compact
+      ? "mt-6 pt-6 border-t border-neutral-100 dark:border-zinc-800"
+      : "mt-10 pt-8 border-t border-neutral-200 dark:border-neutral-800 max-w-2xl mx-auto"}>
       {/* 좋아요 */}
-      <div className="flex justify-center mb-8">
+      <div className={`flex justify-center ${compact ? "mb-5" : "mb-8"}`}>
         <button
           onClick={toggleLike}
           disabled={busy}
           aria-pressed={liked}
-          className={`inline-flex items-center gap-2 px-5 py-2.5 rounded-full border text-[14px] font-bold transition-colors
+          className={`inline-flex items-center gap-2 ${compact ? "px-4 py-2 text-[13px]" : "px-5 py-2.5 text-[14px]"} rounded-full border font-bold transition-colors
             ${liked
               ? "bg-[#F9954E] border-[#F9954E] text-white"
               : "bg-white dark:bg-zinc-900 border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-300 hover:border-[#F9954E]"}`}

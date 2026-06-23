@@ -27,7 +27,7 @@ const SECTIONS = [
 ];
 
 export default async function Home() {
-  const insightFeed = getInsightFeed(50); // 인사이트 종류별 탭 순위용(최대 50)
+  const insightFeed = getInsightFeed(25); // 인사이트 종류별 탭 순위용(전체 탭 최대 50, 본문발췌 포함)
   const topTools = getTopTools(5);
   const animalCount = getAnimalCount();
   const orLists = getOrLists(5);

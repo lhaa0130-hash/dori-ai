@@ -16,6 +16,8 @@ export type InsightFeedItem = {
   thumbnail?: string;
   category: string;
   summary?: string;
+  excerpt?: string;
+  channel?: string;
   videoDate?: string;
 };
 const INSIGHT_CATEGORY_ORDER = ["트렌드", "가이드", "리포트", "분석", "큐레이션", "영상"];
@@ -122,7 +124,10 @@ export default function InsightTabs({ items, perTab = 8 }: { items: InsightFeedI
                       <span className="text-[10px] font-bold text-[#F9954E] bg-[#FFF1E3] dark:bg-[#F9954E]/15 rounded px-1.5 py-0.5">{it.category}</span>
                     )}
                     {it.category === "영상" && it.videoDate ? (
-                      <span className="text-neutral-400 text-[11px]">📺 {fmtVideoDate(it.videoDate)} 업로드</span>
+                      <span className="text-neutral-400 text-[11px] truncate">
+                        {it.channel && <b className="text-neutral-600 dark:text-neutral-300">{it.channel}</b>}
+                        {it.channel ? " · " : ""}📺 {fmtVideoDate(it.videoDate)}
+                      </span>
                     ) : (
                       <span className="text-neutral-400 text-[11px]">{fmtDate(it.date)}</span>
                     )}
