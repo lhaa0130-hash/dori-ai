@@ -6,7 +6,7 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 23 Jun 2026 23:20:09 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 23 Jun 2026 23:40:19 GMT</lastBuildDate>
     <item>
       <title>사이버 보안의 미래 — AI가 시스템을 초월할 날이 얼마 남지 않았다</title>
       <link>https://dori-ai.com/insight/article/trend-162</link>
@@ -142,6 +142,30 @@
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
       <description>AI 에이전트를 만드는 방법과 활용법을 설명합니다.</description>
+    </item>
+    <item>
+      <title>[AI 아키텍처] AI 시스템의 메모리 문제 해결 방법</title>
+      <link>https://dori-ai.com/insight/article/video-21</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-21</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
+      <description>AI 시스템의 메모리 문제를 해결하는 방법을 설명합니다.</description>
+    </item>
+    <item>
+      <title>[AI 작동 원리] AI의 실제 작동 방식 설명</title>
+      <link>https://dori-ai.com/insight/article/video-22</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-22</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
+      <description>AI의 기본 작동 원리를 쉽게 설명합니다.</description>
+    </item>
+    <item>
+      <title>[영상 제작] 구글 제미나이로 영상 만드는 방법</title>
+      <link>https://dori-ai.com/insight/article/video-23</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-23</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
+      <description>구글 제미나이를 활용한 영상 제작 방법을 소개합니다.</description>
     </item>
     <item>
       <title>[영상] AI 영상 제작을 위한 필수 정보</title>
@@ -302,30 +326,6 @@
       <category>트렌드</category>
       <pubDate>Sun, 21 Jun 2026 09:00:20 GMT</pubDate>
       <description>AI가 생성한 인플루언서들이 소셜 미디어에서 제품 홍보에 활용되고 있으며, 이는 마케팅의 새로운 패러다임을 제시하고 있다.</description>
-    </item>
-    <item>
-      <title>AI가 축구 규칙을 바꾼다 — 새로운 경기를 만들어가는 기술</title>
-      <link>https://dori-ai.com/insight/article/trend-146</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-146</guid>
-      <category>트렌드</category>
-      <pubDate>Sun, 21 Jun 2026 07:00:17 GMT</pubDate>
-      <description>AI 기술이 축구의 전략과 플레이 방식을 어떻게 혁신하고 있는지 탐구합니다.</description>
-    </item>
-    <item>
-      <title>시애틀, AI 붐 속 테크 스타트업의 새로운 중심지로 떠오르다</title>
-      <link>https://dori-ai.com/insight/article/trend-145</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-145</guid>
-      <category>트렌드</category>
-      <pubDate>Sun, 21 Jun 2026 06:00:21 GMT</pubDate>
-      <description>시애틀이 AI 기술의 급속한 발전에 힘입어 새로운 스타트업의 메카로 부상하고 있다. 이로 인해 지역 경제와 산업에 미치는 영향은 무엇인지 살펴본다.</description>
-    </item>
-    <item>
-      <title>AI 수사관, 조디악 킬러의 정체를 밝혔나?</title>
-      <link>https://dori-ai.com/insight/article/trend-144</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-144</guid>
-      <category>트렌드</category>
-      <pubDate>Sun, 21 Jun 2026 04:00:16 GMT</pubDate>
-      <description>AI 기술이 범죄 수사에 어떻게 활용되고 있는지, 조디악 킬러 사건과의 연관성을 살펴봅니다.</description>
     </item>
   </channel>
 </rss>

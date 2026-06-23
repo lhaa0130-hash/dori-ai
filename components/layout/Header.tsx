@@ -73,7 +73,8 @@ export default function Header() {
     <>
       {/* ── 헤더 ── */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-black border-b border-neutral-200 dark:border-zinc-800 font-sans">
-        <div className="w-full h-16 flex items-center gap-5 px-4 lg:px-6">
+        {/* 좌측 시작점을 본문(main: xl:px-[260px])과 동일하게 맞춤 */}
+        <div className="w-full h-16 flex items-center gap-5 px-6 xl:pl-[260px]">
 
           {/* 로고 */}
           <Link href="/" aria-label="DORI-AI Home" className="flex-shrink-0 hover:opacity-70 transition-opacity">
