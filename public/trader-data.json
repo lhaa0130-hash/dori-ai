@@ -1,11 +1,11 @@
 {
   "program": "트레이더일로 (Trader Illo)",
-  "generated_at": "2026-06-23 14:00:04",
+  "generated_at": "2026-06-23 18:00:02",
   "mode": "paper",
-  "total_starting": 8995384,
-  "total_ending": 8973696,
-  "total_return_pct": -0.24,
-  "usdkrw": 1536.11,
+  "total_starting": 8999420,
+  "total_ending": 8974220,
+  "total_return_pct": -0.28,
+  "usdkrw": 1538.18,
   "watching": 453,
   "holding": 7,
   "interval_hours": 4,
@@ -19,16 +19,16 @@
       "count": 93,
       "currency": "KRW",
       "starting": 3000000.0,
-      "ending": 2983564.38,
-      "return_pct": -0.55
+      "ending": 2982513.5,
+      "return_pct": -0.58
     },
     {
       "name": "국내주식",
       "count": 160,
       "currency": "KRW",
       "starting": 3000000.0,
-      "ending": 2965961.24,
-      "return_pct": -1.13
+      "ending": 2963461.24,
+      "return_pct": -1.22
     },
     {
       "name": "해외주식",
@@ -37,7 +37,7 @@
       "starting": 1949.98,
       "ending": 1968.72,
       "return_pct": 0.96,
-      "fx": 1536.11
+      "fx": 1538.18
     }
   ],
   "sections": [
@@ -54,30 +54,10 @@
         "entry_price": 1132.566,
         "qty": 105.088799,
         "invested": 119020.0,
-        "cur_price": 979.0,
+        "cur_price": 969.0,
         "stop_price": 846.5271,
         "take_profit": 1702.9457,
-        "unrealized_pnl_pct": -13.56
-      },
-      "trade_log": []
-    },
-    {
-      "symbol": "001450",
-      "name": "현대해상",
-      "category": "국내주식",
-      "trades": 0,
-      "win_rate_pct": 0.0,
-      "realized_pnl": 0,
-      "open_position": {
-        "entry_time": "2026-06-15 00:00",
-        "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-        "entry_price": 40740.7,
-        "qty": 5.0,
-        "invested": 203703.5,
-        "cur_price": 36500.0,
-        "stop_price": 35294.7429,
-        "take_profit": 51510.5141,
-        "unrealized_pnl_pct": -10.41
+        "unrealized_pnl_pct": -14.44
       },
       "trade_log": []
     },
@@ -104,42 +84,22 @@
       ]
     },
     {
-      "symbol": "DAL",
-      "name": "델타항공",
-      "category": "해외주식",
+      "symbol": "001450",
+      "name": "현대해상",
+      "category": "국내주식",
       "trades": 0,
       "win_rate_pct": 0.0,
       "realized_pnl": 0,
       "open_position": {
         "entry_time": "2026-06-15 00:00",
         "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-        "entry_price": 84.1541,
-        "qty": 2.627083,
-        "invested": 221.08,
-        "cur_price": 85.92,
-        "stop_price": 76.6515,
-        "take_profit": 98.907,
-        "unrealized_pnl_pct": 2.1
-      },
-      "trade_log": []
-    },
-    {
-      "symbol": "INTC",
-      "name": "인텔",
-      "category": "해외주식",
-      "trades": 0,
-      "win_rate_pct": 0.0,
-      "realized_pnl": 0,
-      "open_position": {
-        "entry_time": "2026-06-15 00:00",
-        "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-        "entry_price": 127.9879,
-        "qty": 0.831637,
-        "invested": 106.44,
-        "cur_price": 140.94,
-        "stop_price": 104.4126,
-        "take_profit": 174.7549,
-        "unrealized_pnl_pct": 10.12
+        "entry_price": 40740.7,
+        "qty": 5.0,
+        "invested": 203703.5,
+        "cur_price": 36000.0,
+        "stop_price": 35294.7429,
+        "take_profit": 51510.5141,
+        "unrealized_pnl_pct": -11.64
       },
       "trade_log": []
     },
@@ -202,9 +162,57 @@
         "unrealized_pnl_pct": 0.7
       },
       "trade_log": []
+    },
+    {
+      "symbol": "INTC",
+      "name": "인텔",
+      "category": "해외주식",
+      "trades": 0,
+      "win_rate_pct": 0.0,
+      "realized_pnl": 0,
+      "open_position": {
+        "entry_time": "2026-06-15 00:00",
+        "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+        "entry_price": 127.9879,
+        "qty": 0.831637,
+        "invested": 106.44,
+        "cur_price": 140.94,
+        "stop_price": 104.4126,
+        "take_profit": 174.7549,
+        "unrealized_pnl_pct": 10.12
+      },
+      "trade_log": []
+    },
+    {
+      "symbol": "DAL",
+      "name": "델타항공",
+      "category": "해외주식",
+      "trades": 0,
+      "win_rate_pct": 0.0,
+      "realized_pnl": 0,
+      "open_position": {
+        "entry_time": "2026-06-15 00:00",
+        "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+        "entry_price": 84.1541,
+        "qty": 2.627083,
+        "invested": 221.08,
+        "cur_price": 85.92,
+        "stop_price": 76.6515,
+        "take_profit": 98.907,
+        "unrealized_pnl_pct": 2.1
+      },
+      "trade_log": []
     }
   ],
   "recent_runs": [
+    {
+      "time": "2026-06-23 18:00:02",
+      "watching": 453,
+      "holding": 7,
+      "new_trades": 1,
+      "total": 8974220,
+      "ret": -0.28
+    },
     {
       "time": "2026-06-23 14:00:04",
       "watching": 453,
