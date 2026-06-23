@@ -1,6 +1,10 @@
 import { createMetadata } from "@/lib/seo";
 import TraderClient from "./page.client";
 import RequireAuth from "@/components/auth/RequireAuth";
+import ProjectSync from "@/components/auth/ProjectSync";
+
+// 관심종목·탭 설정을 계정에 저장
+const TRADER_KEYS = ["trader_favs", "trader_tab"];
 
 export const metadata = createMetadata({
   title: "트레이더일로 (Trader Illo)",
@@ -11,6 +15,7 @@ export const metadata = createMetadata({
 export default function Page() {
   return (
     <RequireAuth>
+      <ProjectSync project="trader" keys={TRADER_KEYS} />
       <TraderClient />
     </RequireAuth>
   );

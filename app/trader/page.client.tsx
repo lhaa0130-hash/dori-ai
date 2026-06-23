@@ -79,6 +79,23 @@ export default function TraderClient() {
   const [now, setNow] = useState<number>(() => Date.now());
   const userPicked = useRef(false);
 
+  // 관심종목·설정(localStorage) — ProjectSync가 계정(Firebase)과 동기화
+  const [favs, setFavs] = useState<string[]>([]);
+  useEffect(() => {
+    const load = () => {
+      try { const f = JSON.parse(localStorage.getItem("trader_favs") || "[]"); if (Array.isArray(f)) setFavs(f); } catch { /* */ }
+      try { const t = localStorage.getItem("trader_tab"); if (t && (TABS as readonly string[]).includes(t)) { userPicked.current = true; setTab(t as (typeof TABS)[number]); } } catch { /* */ }
+    };
+    load();
+    window.addEventListener("dori-project-synced", load); // Firebase 복원 후 반영
+    return () => window.removeEventListener("dori-project-synced", load);
+  }, []);
+  const toggleFav = (sym: string) => setFavs((cur) => {
+    const next = cur.includes(sym) ? cur.filter((x) => x !== sym) : [...cur, sym];
+    try { localStorage.setItem("trader_favs", JSON.stringify(next)); } catch { /* */ }
+    return next;
+  });
+
   useEffect(() => {
     const load = () =>
       fetch("/trader-data.json", { cache: "no-store" })
@@ -168,7 +185,7 @@ export default function TraderClient() {
               const active = t === tab;
               const tu = t === "해외주식";
               return (
-                <button key={t} onClick={() => { userPicked.current = true; setTab(t); }}
+                <button key={t} onClick={() => { userPicked.current = true; setTab(t); try { localStorage.setItem("trader_tab", t); } catch { /* */ } }}
                   className={`rounded-xl py-2 px-0.5 text-center transition-all ${active ? "bg-white dark:bg-zinc-800 shadow-sm" : "hover:bg-white/50 dark:hover:bg-zinc-800/40"}`}>
                   <div className={`text-xs mb-0.5 ${active ? "text-neutral-900 dark:text-white font-bold" : "text-neutral-400"}`}>{t}</div>
                   <div className={`text-sm font-extrabold tabular-nums ${c ? sgn(c.return_pct) : "text-neutral-400"}`}>{c ? (c.return_pct >= 0 ? "+" : "") + c.return_pct + "%" : "-"}</div>
@@ -265,7 +282,12 @@ export default function TraderClient() {
                   <tbody className="divide-y divide-neutral-100 dark:divide-zinc-800">
                     {tradedSecs.map((s) => (
                       <tr key={s.symbol}>
-                        <td className="py-2.5 px-3 text-neutral-700 dark:text-neutral-200">{withCode(s.name, s.symbol)}</td>
+                        <td className="py-2.5 px-3 text-neutral-700 dark:text-neutral-200">
+                          <button onClick={() => toggleFav(s.symbol)} aria-label="관심종목" className="mr-1.5 align-middle text-[13px] leading-none" style={{ color: favs.includes(s.symbol) ? ORANGE : "#cbd5e1" }}>
+                            {favs.includes(s.symbol) ? "★" : "☆"}
+                          </button>
+                          {withCode(s.name, s.symbol)}
+                        </td>
                         <td className={`text-right px-2 tabular-nums font-semibold ${sgn(s.realized_pnl)}`}>{(s.realized_pnl >= 0 ? "+" : "") + won(s.realized_pnl)}</td>
                         <td className="text-right px-2 tabular-nums text-neutral-400">{s.trades}</td>
                         <td className="text-right px-3 tabular-nums text-neutral-400">{s.win_rate_pct}%</td>
