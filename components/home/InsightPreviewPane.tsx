@@ -29,19 +29,19 @@ export default function InsightPreviewPane({ item }: { item: PreviewItem }) {
 
   return (
     <div className="rounded-2xl border border-neutral-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden">
-      {/* 썸네일 (전체 보이게) */}
+      {/* 썸네일 — 16:9 고정 크기로 통일(어떤 이미지든 글 위치 동일). object-cover */}
       {item.thumbnail ? (
-        <div className="w-full bg-neutral-100 dark:bg-zinc-900">
+        <div className="w-full aspect-video bg-neutral-100 dark:bg-zinc-900 overflow-hidden">
           <img
             src={item.thumbnail}
             alt={item.title}
             loading="lazy"
-            className="block w-full h-auto"
+            className="block w-full h-full object-cover"
             onError={(e) => { const p = e.currentTarget.parentElement; if (p) p.style.display = "none"; }}
           />
         </div>
       ) : (
-        <div className="w-full h-[200px] bg-gradient-to-br from-[#FFF1E3] to-white dark:from-[#F9954E]/10 dark:to-zinc-900 flex items-center justify-center text-5xl">{EMOJI[item.category] || "📝"}</div>
+        <div className="w-full aspect-video bg-gradient-to-br from-[#FFF1E3] to-white dark:from-[#F9954E]/10 dark:to-zinc-900 flex items-center justify-center text-5xl">{EMOJI[item.category] || "📝"}</div>
       )}
 
       <div className="p-5">
