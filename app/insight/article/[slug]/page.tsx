@@ -157,16 +157,7 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
       }
       return <a href={href} {...props} target="_blank" rel="noopener noreferrer" />;
     },
-    img: ({ src, alt, ...props }: any) => (
-      <Image
-        src={src || ''}
-        alt={alt || ''}
-        width={700}
-        height={400}
-        style={{ width: '100%', height: 'auto' }}
-        {...props}
-      />
-    ),
+    img: ({ src, alt, ...props }: any) => ((alt || '').startsWith('@') ? (<img src={src || ''} alt={(alt || '').slice(1)} width={40} height={40} style={{ width: '40px', height: '40px', borderRadius: '50%', display: 'inline-block', verticalAlign: 'middle', marginRight: '8px' }} />) : (<Image src={src || ''} alt={alt || ''} width={700} height={400} style={{ width: '100%', height: 'auto' }} {...props} />)),
   };
 
   const mdxOptions = {
