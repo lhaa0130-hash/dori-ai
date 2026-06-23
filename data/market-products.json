@@ -1,5 +1,56 @@
 [
   {
+    "id": "mk6-1",
+    "name": "삼성전자 갤럭시 탭 A9+",
+    "category": "digital",
+    "source": "coupang",
+    "query": "갤럭시 탭 A9+",
+    "emoji": "📱",
+    "priceHint": "20만원대",
+    "summary": "가족용으로 무난한 선택",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/eN3ZnVD1ci"
+  },
+  {
+    "id": "mk6-2",
+    "name": "샤오미 레드미 패드 SE",
+    "category": "digital",
+    "source": "coupang",
+    "query": "레드미 패드 SE",
+    "emoji": "🎬",
+    "priceHint": "10만원대 후반~20만원대",
+    "summary": "영상 감상 중심 가성비",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/eN3ZnXxG32"
+  },
+  {
+    "id": "mk6-3",
+    "name": "레노버 탭 M11",
+    "category": "digital",
+    "source": "coupang",
+    "query": "레노버 탭 M11",
+    "emoji": "✏️",
+    "priceHint": "20만원대",
+    "summary": "학습용으로 보기 좋은 균형",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/eN3Zn02Tzo"
+  },
+  {
+    "id": "mk6-4",
+    "name": "올도큐브 iPlay 60 mini Pro",
+    "category": "digital",
+    "source": "ali",
+    "query": "ALLDOCUBE iPlay 60 mini Pro",
+    "emoji": "🧳",
+    "priceHint": "10만원대",
+    "summary": "휴대성 좋은 직구형 미니",
+    "hot": true,
+    "weekly": true
+  },
+  {
     "id": "mk5-1",
     "name": "샤오미 미 스마트 체중계 2",
     "category": "digital",
@@ -9,7 +60,7 @@
     "priceHint": "저가형",
     "summary": "가볍게 기록 시작",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/eI47jRiwo0"
   },
   {
@@ -22,7 +73,7 @@
     "priceHint": "보급형",
     "summary": "앱 기록 중심 선택",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/eI47jUMY5A"
   },
   {
@@ -35,7 +86,7 @@
     "priceHint": "프리미엄형",
     "summary": "브랜드 신뢰 중시",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/eI47jYii3o"
   },
   {
