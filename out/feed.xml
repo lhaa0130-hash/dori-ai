@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 23 Jun 2026 12:51:10 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 23 Jun 2026 22:10:50 GMT</lastBuildDate>
+    <item>
+      <title>사이버 보안의 미래 — AI가 시스템을 초월할 날이 얼마 남지 않았다</title>
+      <link>https://dori-ai.com/insight/article/trend-162</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-162</guid>
+      <category>트렌드</category>
+      <pubDate>Tue, 23 Jun 2026 13:00:25 GMT</pubDate>
+      <description>AI가 사이버 보안 시스템을 무너뜨릴 가능성에 대한 경고가 전 세계적으로 퍼지고 있다. 'Five Eyes' 동맹국들은 이 문제를 심각하게 보고 있다.</description>
+    </item>
     <item>
       <title>SpaceX, Reflection AI와 150억 달러의 계약 체결 — 엔비디아 칩의 새로운 시대</title>
       <link>https://dori-ai.com/insight/article/trend-161</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Sun, 21 Jun 2026 04:00:16 GMT</pubDate>
       <description>AI 기술이 범죄 수사에 어떻게 활용되고 있는지, 조디악 킬러 사건과의 연관성을 살펴봅니다.</description>
-    </item>
-    <item>
-      <title>상하이 영화제가 AI와 아이폰 영화 제작의 미래를 포용하다</title>
-      <link>https://dori-ai.com/insight/article/trend-143</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-143</guid>
-      <category>트렌드</category>
-      <pubDate>Sun, 21 Jun 2026 03:00:19 GMT</pubDate>
-      <description>상하이 영화제가 AI 기술과 모바일 영화 제작을 통해 영화 산업의 새로운 가능성을 탐구하고 있습니다.</description>
     </item>
   </channel>
 </rss>
