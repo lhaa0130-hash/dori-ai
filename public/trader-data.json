@@ -1,13 +1,13 @@
 {
   "program": "트레이더일로 (Trader Illo)",
-  "generated_at": "2026-06-23 06:00:02",
+  "generated_at": "2026-06-23 14:00:04",
   "mode": "paper",
-  "total_starting": 8999323,
-  "total_ending": 8981522,
-  "total_return_pct": -0.2,
-  "usdkrw": 1538.13,
+  "total_starting": 8995384,
+  "total_ending": 8973696,
+  "total_return_pct": -0.24,
+  "usdkrw": 1536.11,
   "watching": 453,
-  "holding": 8,
+  "holding": 7,
   "interval_hours": 4,
   "test_period": {
     "start": "2026-06-15",
@@ -19,16 +19,16 @@
       "count": 93,
       "currency": "KRW",
       "starting": 3000000.0,
-      "ending": 2985561.07,
-      "return_pct": -0.48
+      "ending": 2983564.38,
+      "return_pct": -0.55
     },
     {
       "name": "국내주식",
       "count": 160,
       "currency": "KRW",
       "starting": 3000000.0,
-      "ending": 2967814.12,
-      "return_pct": -1.07
+      "ending": 2965961.24,
+      "return_pct": -1.13
     },
     {
       "name": "해외주식",
@@ -37,7 +37,7 @@
       "starting": 1949.98,
       "ending": 1968.72,
       "return_pct": 0.96,
-      "fx": 1538.13
+      "fx": 1536.11
     }
   ],
   "sections": [
@@ -54,10 +54,10 @@
         "entry_price": 1132.566,
         "qty": 105.088799,
         "invested": 119020.0,
-        "cur_price": 998.0,
+        "cur_price": 979.0,
         "stop_price": 846.5271,
         "take_profit": 1702.9457,
-        "unrealized_pnl_pct": -11.88
+        "unrealized_pnl_pct": -13.56
       },
       "trade_log": []
     },
@@ -74,10 +74,10 @@
         "entry_price": 40740.7,
         "qty": 5.0,
         "invested": 203703.5,
-        "cur_price": 36800.0,
+        "cur_price": 36500.0,
         "stop_price": 35294.7429,
         "take_profit": 51510.5141,
-        "unrealized_pnl_pct": -9.67
+        "unrealized_pnl_pct": -10.41
       },
       "trade_log": []
     },
@@ -85,41 +85,23 @@
       "symbol": "086790",
       "name": "하나금융지주",
       "category": "국내주식",
-      "trades": 0,
+      "trades": 1,
       "win_rate_pct": 0.0,
-      "realized_pnl": 0,
-      "open_position": {
-        "entry_time": "2026-06-16 00:00",
-        "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-        "entry_price": 132132.0,
-        "qty": 1.0,
-        "invested": 132132.0,
-        "cur_price": 119700.0,
-        "stop_price": 115743.3432,
-        "take_profit": 164513.3135,
-        "unrealized_pnl_pct": -9.41
-      },
-      "trade_log": []
-    },
-    {
-      "symbol": "C",
-      "name": "씨티그룹",
-      "category": "해외주식",
-      "trades": 0,
-      "win_rate_pct": 0.0,
-      "realized_pnl": 0,
-      "open_position": {
-        "entry_time": "2026-06-15 00:00",
-        "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-        "entry_price": 141.3512,
-        "qty": 2.1375,
-        "invested": 302.14,
-        "cur_price": 145.67,
-        "stop_price": 132.0895,
-        "take_profit": 159.451,
-        "unrealized_pnl_pct": 3.06
-      },
-      "trade_log": []
+      "realized_pnl": -12804.7,
+      "open_position": null,
+      "trade_log": [
+        {
+          "entry": "2026-06-16 00:00",
+          "exit": "2026-06-23 14:00",
+          "entry_price": 132132.0,
+          "exit_price": 119580.3,
+          "qty": 1.0,
+          "pnl": -12804.7,
+          "pnl_pct": -9.5,
+          "reason": "signal",
+          "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+        }
+      ]
     },
     {
       "symbol": "DAL",
@@ -138,26 +120,6 @@
         "stop_price": 76.6515,
         "take_profit": 98.907,
         "unrealized_pnl_pct": 2.1
-      },
-      "trade_log": []
-    },
-    {
-      "symbol": "AMD",
-      "name": "AMD",
-      "category": "해외주식",
-      "trades": 0,
-      "win_rate_pct": 0.0,
-      "realized_pnl": 0,
-      "open_position": {
-        "entry_time": "2026-06-15 00:00",
-        "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-        "entry_price": 547.8073,
-        "qty": 0.233345,
-        "invested": 127.83,
-        "cur_price": 551.63,
-        "stop_price": 463.7029,
-        "take_profit": 714.3743,
-        "unrealized_pnl_pct": 0.7
       },
       "trade_log": []
     },
@@ -200,9 +162,57 @@
         "unrealized_pnl_pct": -1.71
       },
       "trade_log": []
+    },
+    {
+      "symbol": "C",
+      "name": "씨티그룹",
+      "category": "해외주식",
+      "trades": 0,
+      "win_rate_pct": 0.0,
+      "realized_pnl": 0,
+      "open_position": {
+        "entry_time": "2026-06-15 00:00",
+        "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+        "entry_price": 141.3512,
+        "qty": 2.1375,
+        "invested": 302.14,
+        "cur_price": 145.67,
+        "stop_price": 132.0895,
+        "take_profit": 159.451,
+        "unrealized_pnl_pct": 3.06
+      },
+      "trade_log": []
+    },
+    {
+      "symbol": "AMD",
+      "name": "AMD",
+      "category": "해외주식",
+      "trades": 0,
+      "win_rate_pct": 0.0,
+      "realized_pnl": 0,
+      "open_position": {
+        "entry_time": "2026-06-15 00:00",
+        "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+        "entry_price": 547.8073,
+        "qty": 0.233345,
+        "invested": 127.83,
+        "cur_price": 551.63,
+        "stop_price": 463.7029,
+        "take_profit": 714.3743,
+        "unrealized_pnl_pct": 0.7
+      },
+      "trade_log": []
     }
   ],
   "recent_runs": [
+    {
+      "time": "2026-06-23 14:00:04",
+      "watching": 453,
+      "holding": 7,
+      "new_trades": 1,
+      "total": 8973696,
+      "ret": -0.24
+    },
     {
       "time": "2026-06-23 06:00:02",
       "watching": 453,
