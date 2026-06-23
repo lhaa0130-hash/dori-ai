@@ -121,10 +121,6 @@ export default function TraderClient() {
   const minAgo = Math.max(0, Math.floor(ms / 60000));
   const agoStr = minAgo < 1 ? "방금" : minAgo < 60 ? `${minAgo}분 전` : `${Math.floor(minAgo / 60)}시간 ${minAgo % 60}분 전`;
 
-  const chips = d
-    ? ["모의투자", "각 300만원", ...(d.test_period?.start ? [`테스트 ${dot(d.test_period.start)}~${dot(d.test_period.end)}`] : [])]
-    : [];
-
   return (
     <main className="w-full min-h-screen max-w-2xl mx-auto px-4 py-6">
       <header className="mb-4">
@@ -147,7 +143,7 @@ export default function TraderClient() {
                 <span className={`font-medium ${alive ? "text-neutral-600 dark:text-neutral-300" : "text-amber-600 dark:text-amber-400"}`}>{alive ? "작동중" : "대기중"}</span>
               </span>
               <span className="text-neutral-400">
-                {alive ? <>다음 점검 <b className="tabular-nums text-neutral-600 dark:text-neutral-300">{cd}</b></> : "PC 켜지면 재개"}
+                {alive ? <>다음 점검 <b className="tabular-nums text-neutral-600 dark:text-neutral-300">{cd}</b></> : null}
               </span>
             </div>
 
@@ -162,12 +158,7 @@ export default function TraderClient() {
               <b className={`tabular-nums ${sgn(d.total_ending - d.total_starting)}`}>{pm(d.total_ending - d.total_starting, false)}</b>
             </div>
 
-            <div className="flex flex-wrap gap-1.5 mt-4">
-              {chips.map((c) => (
-                <span key={c} className="rounded-full bg-white/60 dark:bg-zinc-800/60 border border-neutral-200/60 dark:border-zinc-700/60 px-2 py-0.5 text-[11px] text-neutral-500 dark:text-neutral-400">{c}</span>
-              ))}
-            </div>
-            <div className="text-[11px] text-neutral-400 mt-2">감시 {d.watching ?? 0}종목 · 보유 {d.holding ?? 0}종 · 마지막 점검 {agoStr}</div>
+            <div className="text-[11px] text-neutral-400 mt-4">감시 {d.watching ?? 0}종목 · 보유 {d.holding ?? 0}종</div>
           </section>
 
           {/* ── 세그먼트 탭 ── */}
@@ -193,7 +184,6 @@ export default function TraderClient() {
               <div>
                 <div className="text-xs text-neutral-400">
                   {cat.name} · 시작 {usd ? money(cat.starting, true) : man(cat.starting) + "원"} · 감시 {cat.count}종목
-                  {usd && cat.fx ? ` · 실투자금 300만원(환율 ${cat.fx.toLocaleString()})` : ""}
                 </div>
                 <div className="text-2xl font-extrabold tabular-nums mt-1 text-neutral-950 dark:text-white">{money(cat.ending, usd)}</div>
                 <div className="text-xs mt-0.5"><span className="text-neutral-400">평가손익 </span><b className={`tabular-nums ${sgn(cat.ending - cat.starting)}`}>{pm(cat.ending - cat.starting, usd)}</b></div>
