@@ -27,7 +27,7 @@ export default function InsightPreviewPane({ item }: { item: PreviewItem }) {
         const ls = await getDoc(doc(db, "articleLikes", item.slug));
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if (!cancelled && ls.exists()) setLikes(Math.max(0, Number((ls.data() as any).count || 0)));
-        const qs = await getDocs(query(collection(db, "articleComments", item.slug, "items"), orderBy("createdAt", "desc"), limit(3)));
+        const qs = await getDocs(query(collection(db, "articleComments", item.slug, "items"), orderBy("createdAt", "desc"), limit(6)));
         // eslint-disable-next-line @typescript-eslint/no-explicit-any
         if (!cancelled) setComments(qs.docs.map((d) => ({ id: d.id, ...(d.data() as any) })));
       } catch { /* noop */ }
@@ -42,7 +42,7 @@ export default function InsightPreviewPane({ item }: { item: PreviewItem }) {
     <div className="rounded-2xl border border-neutral-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden">
       {/* 썸네일 */}
       {item.thumbnail ? (
-        <div className="w-full h-[200px] bg-neutral-100 dark:bg-zinc-900 overflow-hidden">
+        <div className="w-full h-[320px] bg-neutral-100 dark:bg-zinc-900 overflow-hidden">
           <img
             src={item.thumbnail}
             alt={item.title}
@@ -52,7 +52,7 @@ export default function InsightPreviewPane({ item }: { item: PreviewItem }) {
           />
         </div>
       ) : (
-        <div className="w-full h-[120px] bg-gradient-to-br from-[#FFF1E3] to-white dark:from-[#F9954E]/10 dark:to-zinc-900 flex items-center justify-center text-4xl">{EMOJI[item.category] || "📝"}</div>
+        <div className="w-full h-[220px] bg-gradient-to-br from-[#FFF1E3] to-white dark:from-[#F9954E]/10 dark:to-zinc-900 flex items-center justify-center text-5xl">{EMOJI[item.category] || "📝"}</div>
       )}
 
       <div className="p-5">
@@ -64,12 +64,12 @@ export default function InsightPreviewPane({ item }: { item: PreviewItem }) {
         <h3 className="text-[18px] font-extrabold text-neutral-950 dark:text-white leading-snug break-keep mb-2 line-clamp-2">{item.title}</h3>
 
         {item.summary && (
-          <p className="text-[13px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep line-clamp-4 mb-4">{item.summary}</p>
+          <p className="text-[13px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep line-clamp-[8] mb-4">{item.summary}</p>
         )}
 
         <div className="flex items-center gap-4 py-3 border-y border-neutral-100 dark:border-zinc-900 mb-4 text-[13px] text-neutral-500 dark:text-neutral-400">
           <span className="inline-flex items-center gap-1.5"><Heart className="w-4 h-4 text-[#F9954E]" /> {likes}</span>
-          <span className="inline-flex items-center gap-1.5"><MessageCircle className="w-4 h-4 text-[#F9954E]" /> {comments.length}{comments.length >= 3 ? "+" : ""}</span>
+          <span className="inline-flex items-center gap-1.5"><MessageCircle className="w-4 h-4 text-[#F9954E]" /> {comments.length}{comments.length >= 6 ? "+" : ""}</span>
         </div>
 
         <p className="text-[11px] font-bold text-neutral-400 mb-2">커뮤니티</p>
