@@ -52,7 +52,12 @@ export default function Header() {
     {
       name: "워크일로 (Workillo)", emoji: "🟧", image: "/illo-logo.png",
       desc: "AI API, 구독 말고 필요한 만큼", href: "/illo/app",
-      bg: "bg-orange-50 dark:bg-orange-900/20",
+      bg: "bg-orange-50 dark:bg-orange-900/20", active: true,
+    },
+    {
+      name: "아크일로", emoji: "🕹️", image: "",
+      desc: "미니게임 아케이드 · 랭킹과 솜사탕", href: "/minigame",
+      bg: "bg-pink-50 dark:bg-pink-900/20", active: true,
     },
     {
       name: "가족기록", emoji: "👨‍👩‍👧‍👦", image: "",

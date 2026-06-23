@@ -68,7 +68,9 @@ const MORE_ITEMS = [
 
 const PROJECTS = [
   { name: "애니멀일로",  emoji: "🐾", image: "",               href: "/animal",   desc: "다양한 동물을 애니멀일로에서" },
+  { name: "트레이더일로", emoji: "📈", image: "",               href: "/trader",   desc: "AI 자동매매 — 매일 성과 공개" },
   { name: "워크일로 (Workillo)", emoji: "🟧", image: "/illo-logo.png", href: "/illo/app", desc: "AI API, 구독 말고 필요한 만큼" },
+  { name: "아크일로",    emoji: "🕹️", image: "",               href: "/minigame", desc: "미니게임 아케이드 · 랭킹과 솜사탕" },
   { name: "가족기록",    emoji: "👨‍👩‍👧‍👦", image: "",              href: "/family",   desc: "가족의 모든 것" },
 ];
 
