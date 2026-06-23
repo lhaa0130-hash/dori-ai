@@ -10,7 +10,7 @@ import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import {
-  PawPrint, TrendingUp, Sparkles, PencilRuler, FolderKanban,
+  PawPrint, TrendingUp, Sparkles, PencilRuler,
   Gamepad2, Wrench, BarChart3, Newspaper, Rss, MessagesSquare,
   ShoppingBag, Store, User, Bell,
   Plus, X, ChevronsRight, ChevronsLeft, Pin, GripVertical,
@@ -30,7 +30,6 @@ const CATALOG: Group[] = [
       { key: "trader",   label: "트레이더일로", short: "트레이더", href: "/trader",    Icon: TrendingUp },
       { key: "workillo", label: "워크일로",     short: "워크",     href: "/illo/app",  Icon: Sparkles },
       { key: "arcillo",  label: "아크일로",     short: "아크",     href: "/flat-form", Icon: PencilRuler },
-      { key: "projects", label: "프로젝트 전체", short: "프로젝트", href: "/projects",  Icon: FolderKanban },
     ],
   },
   {
@@ -169,23 +168,33 @@ export default function QuickBar() {
     <>
       {/* 레일 */}
       <aside
-        className="hidden lg:flex fixed right-0 top-16 bottom-0 z-[45] w-[56px] flex-col
+        className="hidden lg:flex fixed right-0 top-16 bottom-0 z-[45] w-[48px] flex-col
                    bg-white/95 dark:bg-zinc-950/95 backdrop-blur border-l border-neutral-200 dark:border-zinc-800"
       >
-        {/* 상단: 접기 */}
-        <div className="flex flex-col items-center pt-1.5 pb-1 border-b border-neutral-100 dark:border-zinc-900">
+        {/* 상단: 접기 + 추가 */}
+        <div className="flex flex-col items-center gap-1 pt-1.5 pb-2 px-1 border-b border-neutral-100 dark:border-zinc-900">
           <button
             onClick={toggleCollapsed}
             aria-label="바로가기 접기"
-            className="w-7 h-7 rounded-lg flex items-center justify-center text-neutral-400
+            className="w-6 h-6 rounded-md flex items-center justify-center text-neutral-400
                        hover:text-[#F9954E] hover:bg-neutral-100 dark:hover:bg-zinc-900 transition-colors"
           >
-            <ChevronsRight className="w-4 h-4" />
+            <ChevronsRight className="w-3.5 h-3.5" />
+          </button>
+          <button
+            onClick={() => setPickerOpen((v) => !v)}
+            aria-label="바로가기 추가"
+            className={`w-full h-8 rounded-xl flex items-center justify-center transition-colors
+              ${pickerOpen
+                ? "bg-[#F9954E] text-white"
+                : "bg-neutral-100 dark:bg-zinc-900 text-neutral-500 dark:text-neutral-400 hover:bg-[#FFF1E3] dark:hover:bg-[#F9954E]/15 hover:text-[#F9954E]"}`}
+          >
+            <Plus className="w-[18px] h-[18px]" />
           </button>
         </div>
 
         {/* 아이템 목록 (스크롤·드래그 정렬) */}
-        <div className="flex-1 overflow-y-auto py-2 px-1 flex flex-col gap-1.5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        <div className="flex-1 overflow-y-auto py-2 px-0.5 flex flex-col gap-1 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {railItems.length === 0 ? (
             <div className="flex flex-col items-center text-center gap-1 mt-5 px-0.5">
               <Pin className="w-4 h-4 text-neutral-300 dark:text-zinc-700" />
@@ -219,8 +228,8 @@ export default function QuickBar() {
                         ? "bg-[#FFF1E3] dark:bg-[#F9954E]/15 text-[#E8832E] dark:text-[#F9954E]"
                         : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-zinc-900 hover:text-neutral-900 dark:hover:text-white"}`}
                   >
-                    <c.Icon className="w-[17px] h-[17px]" />
-                    <span className="text-[8.5px] font-semibold leading-none max-w-[48px] truncate">{c.short}</span>
+                    <c.Icon className="w-4 h-4" />
+                    <span className="text-[8px] font-semibold leading-none max-w-[42px] truncate">{c.short}</span>
                   </Link>
 
                   {/* 드래그 핸들 표시(호버) */}
@@ -245,19 +254,6 @@ export default function QuickBar() {
           )}
         </div>
 
-        {/* 하단: + 추가 */}
-        <div className="p-1.5 border-t border-neutral-100 dark:border-zinc-900">
-          <button
-            onClick={() => setPickerOpen((v) => !v)}
-            aria-label="바로가기 추가"
-            className={`w-full h-9 rounded-xl flex items-center justify-center transition-colors
-              ${pickerOpen
-                ? "bg-[#F9954E] text-white"
-                : "bg-neutral-100 dark:bg-zinc-900 text-neutral-500 dark:text-neutral-400 hover:bg-[#FFF1E3] dark:hover:bg-[#F9954E]/15 hover:text-[#F9954E]"}`}
-          >
-            <Plus className="w-5 h-5" />
-          </button>
-        </div>
       </aside>
 
       {/* 카테고리 선택 팝오버 */}
@@ -265,7 +261,7 @@ export default function QuickBar() {
         <>
           <div className="fixed inset-0 z-[60]" onClick={() => setPickerOpen(false)} />
           <div
-            className="hidden lg:flex fixed right-[68px] top-20 z-[61] w-[256px] max-h-[72vh] flex-col
+            className="hidden lg:flex fixed right-[60px] top-20 z-[61] w-[256px] max-h-[72vh] flex-col
                        bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800
                        rounded-2xl shadow-2xl overflow-hidden"
           >

@@ -6,7 +6,55 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 23 Jun 2026 06:11:35 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 23 Jun 2026 06:22:45 GMT</lastBuildDate>
+    <item>
+      <title>오라클, AI 도입으로 21,000명 해고 — 기술과 일자리의 새로운 역학</title>
+      <link>https://dori-ai.com/insight/article/trend-158</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-158</guid>
+      <category>트렌드</category>
+      <pubDate>Tue, 23 Jun 2026 06:00:28 GMT</pubDate>
+      <description>오라클이 AI 도입을 이유로 21,000명의 직원을 해고하며, 기술 산업의 일자리 구조에 큰 변화를 예고하고 있다.</description>
+    </item>
+    <item>
+      <title>AI한테 질문하지 마세요. 앞으로 5년, 가장 빨리 사라질 직원</title>
+      <link>https://dori-ai.com/insight/article/video-1</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-1</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
+      <description>김대식 교수와 김혜연 안무가가 AI 시대에 인간의 능력과 직업의 미래에 대해 논의합니다. AI가 발전함에 따라 어떤 능력이 중요해질지에 대한 통찰을 제공합니다.</description>
+    </item>
+    <item>
+      <title>AI 작업시간 2시간 줄여주는 제미나이 신기능 10가지</title>
+      <link>https://dori-ai.com/insight/article/video-2</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-2</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
+      <description>제미나이의 신기능을 활용하여 작업 시간을 단축하는 방법을 소개합니다. 실제 화면을 통해 기능을 시연하며 유용한 활용법을 공유합니다.</description>
+    </item>
+    <item>
+      <title>카파시의 LLM Wiki로 나만의 AI 세컨드 브레인 만들기</title>
+      <link>https://dori-ai.com/insight/article/video-3</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-3</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
+      <description>안드레 카파시의 LLM Wiki 개념을 통해 AI를 활용한 지식 관리 시스템을 구축하는 방법을 설명합니다. 클로드 코드와 옵시디언의 조합을 다룹니다.</description>
+    </item>
+    <item>
+      <title>제미나이 사용자 필수시청! 투자의 질이 달라지는 주식투자 활용법 TOP4</title>
+      <link>https://dori-ai.com/insight/article/video-4</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-4</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
+      <description>주식 투자에 AI를 효과적으로 활용하는 방법을 소개하며, 초보자도 쉽게 이해할 수 있도록 설명합니다.</description>
+    </item>
+    <item>
+      <title>오픈AI 임원이 면접에서 반드시 물어보는 '1가지' 질문</title>
+      <link>https://dori-ai.com/insight/article/video-5</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-5</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
+      <description>오픈AI의 CSO가 AI의 활용과 한국과의 협업 방향에 대해 이야기하며, 면접에서 중요한 질문을 소개합니다.</description>
+    </item>
     <item>
       <title>Groq, 6억 5천만 달러 투자 유치 — AI 칩 시장의 새로운 강자?</title>
       <link>https://dori-ai.com/insight/article/trend-157</link>
@@ -278,54 +326,6 @@
       <category>트렌드</category>
       <pubDate>Fri, 19 Jun 2026 04:00:16 GMT</pubDate>
       <description>버니 샌더스 상원의원이 인공지능의 공공 소유를 통해 국민들에게 연간 1,000달러를 지급하자는 제안을 내놓았다. 이는 AI의 수익을 사회에 환원하려는 시도로 주목받고 있다.</description>
-    </item>
-    <item>
-      <title>Snap, AI 동영상 팀을 분사하여 새로운 회사 Dotmo 설립</title>
-      <link>https://dori-ai.com/insight/article/trend-127</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-127</guid>
-      <category>트렌드</category>
-      <pubDate>Fri, 19 Jun 2026 03:00:15 GMT</pubDate>
-      <description>Snap이 AI 동영상 개발에 집중하기 위해 내부 팀을 분사하여 새로운 회사 Dotmo를 설립했다. 이는 비용 절감과 혁신 추진의 일환이다.</description>
-    </item>
-    <item>
-      <title>소프트웨어 버그 잡는 DeductiveAI, Elastic에 인수되다</title>
-      <link>https://dori-ai.com/insight/article/trend-126</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-126</guid>
-      <category>트렌드</category>
-      <pubDate>Fri, 19 Jun 2026 01:00:21 GMT</pubDate>
-      <description>DeductiveAI가 Elastic에 최대 8,500만 달러에 인수됩니다. 이 스타트업은 AI를 활용해 소프트웨어 버그를 자동으로 잡는 기술로 주목받고 있습니다.</description>
-    </item>
-    <item>
-      <title>Baseten, 15억 달러 투자 유치로 AI 추론 시장의 급성장 이끌다</title>
-      <link>https://dori-ai.com/insight/article/trend-125</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-125</guid>
-      <category>트렌드</category>
-      <pubDate>Fri, 19 Jun 2026 00:00:33 GMT</pubDate>
-      <description>AI 스타트업 Baseten이 15억 달러를 유치하며 AI 추론 분야의 금광을 향한 발걸음을 계속하고 있다.</description>
-    </item>
-    <item>
-      <title>Upstream·Locofy·AudienceCue·Merlin: 메일, 디자인 코딩, 유튜브 분석을 바꾸는 AI 도구 추천</title>
-      <link>https://dori-ai.com/insight/article/curation-10</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/curation-10</guid>
-      <category>큐레이션</category>
-      <pubDate>Thu, 18 Jun 2026 23:02:19 GMT</pubDate>
-      <description>이번 주에는 받은편지함, 디자인 시안, 유튜브 댓글, AI 데이터 관리처럼 매일 쌓이는 업무 재료를 바로 실행 가능한 결과물로 바꿔주는 도구를 살펴봅니다. AI 에이전트가 단순 답변을 넘어 업무 흐름 안으로 들어오는 변화도 함께 짚었습니다.</description>
-    </item>
-    <item>
-      <title>아마존, AI 칩으로 엔비디아에 도전한다</title>
-      <link>https://dori-ai.com/insight/article/trend-124</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-124</guid>
-      <category>트렌드</category>
-      <pubDate>Thu, 18 Jun 2026 22:00:15 GMT</pubDate>
-      <description>아마존이 AI 칩 판매로 5조 원 규모의 시장을 겨냥하며 엔비디아의 독주에 도전한다.</description>
-    </item>
-    <item>
-      <title>의료 분야의 자율 AI 에이전트, 새로운 가능성을 열다</title>
-      <link>https://dori-ai.com/insight/article/trend-123</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-123</guid>
-      <category>트렌드</category>
-      <pubDate>Thu, 18 Jun 2026 13:00:23 GMT</pubDate>
-      <description>의료 분야에서 자율 AI 에이전트의 개발이 진행 중이다. 이는 의료 서비스의 혁신을 가져올 수 있는 중요한 전환점이 될 것이다.</description>
     </item>
   </channel>
 </rss>
