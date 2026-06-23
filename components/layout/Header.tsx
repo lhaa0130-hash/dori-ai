@@ -55,19 +55,14 @@ export default function Header() {
       bg: "bg-orange-50 dark:bg-orange-900/20", active: true,
     },
     {
-      name: "아크일로", emoji: "🕹️", image: "",
-      desc: "미니게임 아케이드 · 랭킹과 솜사탕", href: "/minigame",
-      bg: "bg-pink-50 dark:bg-pink-900/20", active: true,
+      name: "아크일로", emoji: "📐", image: "",
+      desc: "건축설계 보조 프로그램", href: "/flat-form",
+      bg: "bg-sky-50 dark:bg-sky-900/20", active: true,
     },
     {
       name: "가족기록", emoji: "👨‍👩‍👧‍👦", image: "",
       desc: "가족의 모든 것을 하나의 앱으로", href: "/family",
       bg: "bg-purple-50 dark:bg-purple-900/20",
-    },
-    {
-      name: "Flat-Form", emoji: "📐", image: "",
-      desc: "건축설계 보조 프로그램", href: "/flat-form",
-      bg: "bg-sky-50 dark:bg-sky-900/20",
     },
   ];
 
