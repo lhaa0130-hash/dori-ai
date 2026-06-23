@@ -3,8 +3,10 @@ import Link from "next/link";
 import { MessagesSquare, Newspaper, Wrench, BarChart3, Gamepad2, PawPrint, ShoppingBag, FolderKanban } from "lucide-react";
 import Hero from "@/components/home/Hero";
 import HomeClient from "@/components/home/HomeClient";
+import HomeInfoStrip from "@/components/home/HomeInfoStrip";
 import InsightTabs from "@/components/home/InsightTabs";
 import { getInsightFeed } from "@/lib/insightFeed";
+import { getTopTools, getAnimalCount } from "@/lib/homeStats";
 
 // 퀵 액세스 — 주요 섹션 바로가기(라인 아이콘, 4열 그리드)
 const SECTIONS = [
@@ -20,12 +22,17 @@ const SECTIONS = [
 
 export default async function Home() {
   const insightFeed = getInsightFeed(); // 인사이트 종류별 탭 순위용
+  const topTools = getTopTools(5);
+  const animalCount = getAnimalCount();
 
   return (
     <main className="min-h-screen">
 
       {/* ① 미니멀 히어로 */}
       <Hero />
+
+      {/* ①-b 정보 스트립 (인기 AI도구·지표) */}
+      <HomeInfoStrip topTools={topTools} insightCount={insightFeed.length} animalCount={animalCount} />
 
       {/* ② 퀵 액세스 — 섹션 아이콘 그리드 */}
       <section className="pb-6 border-b border-neutral-100 dark:border-zinc-900">

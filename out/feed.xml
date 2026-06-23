@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 23 Jun 2026 07:17:12 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 23 Jun 2026 10:03:14 GMT</lastBuildDate>
+    <item>
+      <title>유럽, 35대의 새로운 엔비디아 슈퍼컴퓨터 공개 — AI 혁신의 새로운 전환점</title>
+      <link>https://dori-ai.com/insight/article/trend-160</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-160</guid>
+      <category>트렌드</category>
+      <pubDate>Tue, 23 Jun 2026 09:00:30 GMT</pubDate>
+      <description>유럽이 엔비디아의 최신 AI 슈퍼컴퓨터 35대를 공개하며 AI 연산 능력을 한층 강화하고 있다. 이 발표는 AI 연구 및 개발에 중요한 이정표로 자리 잡을 것으로 기대된다.</description>
+    </item>
     <item>
       <title>구글 딥마인드, 할리우드에 750억 원 투자 — AI 영화 제작의 새로운 시대 열리나</title>
       <link>https://dori-ai.com/insight/article/trend-159</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Fri, 19 Jun 2026 04:00:16 GMT</pubDate>
       <description>버니 샌더스 상원의원이 인공지능의 공공 소유를 통해 국민들에게 연간 1,000달러를 지급하자는 제안을 내놓았다. 이는 AI의 수익을 사회에 환원하려는 시도로 주목받고 있다.</description>
-    </item>
-    <item>
-      <title>Snap, AI 동영상 팀을 분사하여 새로운 회사 Dotmo 설립</title>
-      <link>https://dori-ai.com/insight/article/trend-127</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-127</guid>
-      <category>트렌드</category>
-      <pubDate>Fri, 19 Jun 2026 03:00:15 GMT</pubDate>
-      <description>Snap이 AI 동영상 개발에 집중하기 위해 내부 팀을 분사하여 새로운 회사 Dotmo를 설립했다. 이는 비용 절감과 혁신 추진의 일환이다.</description>
     </item>
   </channel>
 </rss>
