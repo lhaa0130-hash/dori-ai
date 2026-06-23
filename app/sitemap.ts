@@ -6,10 +6,22 @@ import { getAllAnalyses } from "@/lib/analysis";
 import { getAllReports } from "@/lib/reports";
 import { getAllStudios } from "@/lib/studio";
 import { getAllMarketPosts } from "@/lib/market-posts";
+import fs from "fs";
+import path from "path";
 
 export const dynamic = "force-static";
 
 const baseUrl = "https://dori-ai.com";
+
+function getAnimalNos(): string[] {
+  try {
+    const p = path.join(process.cwd(), "data", "animal-cards.json");
+    const data = JSON.parse(fs.readFileSync(p, "utf8"));
+    return (Array.isArray(data) ? data : []).map((c: any) => c?.no).filter(Boolean);
+  } catch {
+    return [];
+  }
+}
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
@@ -59,5 +71,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     console.warn("[sitemap] failed to collect articles:", e);
   }
 
-  return [...staticPages, ...articleUrls];
+  // 3) 동물 상세 페이지 (애니멀일로 — 사이트 최대 고유 콘텐츠)
+  const animalUrls: MetadataRoute.Sitemap = getAnimalNos().map((no) => ({
+    url: `${baseUrl}/animal/${no}`,
+    lastModified: now,
+    changeFrequency: "monthly" as const,
+    priority: 0.7,
+  }));
+
+  return [...staticPages, ...articleUrls, ...animalUrls];
 }
