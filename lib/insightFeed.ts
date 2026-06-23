@@ -13,6 +13,7 @@ export type InsightFeedItem = {
   date: string;
   thumbnail?: string;
   category: string;
+  summary?: string;
 };
 
 // 메인 탭 노출 순서(존재하는 카테고리만 화면에 표시)
@@ -34,6 +35,7 @@ export function getInsightFeed(perCategory = 12): InsightFeedItem[] {
         date: String(it.date || ""),
         thumbnail: it.thumbnail || undefined,
         category: norm(it.category) || fallbackCat,
+        summary: norm(it.description || it.summary || it.subtitle) || undefined,
       });
     }
   };

@@ -5,6 +5,7 @@ import { useMemo, useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { ArrowRight } from "lucide-react";
+import InsightPreviewDrawer from "./InsightPreviewDrawer";
 
 // 클라이언트 전용(서버 fs 모듈 import 금지) — 타입/순서는 여기서 정의
 export type InsightFeedItem = {
@@ -13,6 +14,7 @@ export type InsightFeedItem = {
   date: string;
   thumbnail?: string;
   category: string;
+  summary?: string;
 };
 const INSIGHT_CATEGORY_ORDER = ["트렌드", "가이드", "리포트", "분석", "큐레이션", "영상"];
 
@@ -35,6 +37,7 @@ export default function InsightTabs({ items, perTab = 8 }: { items: InsightFeedI
 
   const tabs = useMemo(() => ["전체", ...present], [present]);
   const [tab, setTab] = useState("전체");
+  const [sel, setSel] = useState<InsightFeedItem | null>(null); // 우측 미리보기(데스크탑)
 
   const rows = useMemo(() => {
     const list = tab === "전체" ? items : items.filter((i) => i.category === tab);
@@ -80,6 +83,13 @@ export default function InsightTabs({ items, perTab = 8 }: { items: InsightFeedI
           <Link
             key={it.slug + i}
             href={`/insight/article/${it.slug}`}
+            onClick={(e) => {
+              // 데스크탑(lg+)에선 우측 미리보기, 모바일은 그대로 글로 이동
+              if (typeof window !== "undefined" && window.matchMedia("(min-width:1024px)").matches) {
+                e.preventDefault();
+                setSel(it);
+              }
+            }}
             className="flex items-center gap-3 py-3 active:opacity-60 transition-opacity"
           >
             {/* 순위 */}
@@ -116,6 +126,9 @@ export default function InsightTabs({ items, perTab = 8 }: { items: InsightFeedI
           </Link>
         ))}
       </div>
+
+      {/* 우측 미리보기 (데스크탑) */}
+      {sel && <InsightPreviewDrawer item={sel} onClose={() => setSel(null)} />}
     </section>
   );
 }
