@@ -42,12 +42,11 @@ export default function InsightPreviewPane({ item }: { item: PreviewItem }) {
     <div className="rounded-2xl border border-neutral-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden">
       {/* 썸네일 */}
       {item.thumbnail ? (
-        <div className="w-full h-[320px] bg-neutral-100 dark:bg-zinc-900 overflow-hidden">
+        <div className="w-full h-[300px] bg-neutral-100 dark:bg-zinc-900 flex items-center justify-center overflow-hidden">
           <img
             src={item.thumbnail}
             alt={item.title}
-            loading="lazy"
-            className="w-full h-full object-cover"
+            className="w-full h-full object-contain"
             onError={(e) => { const p = e.currentTarget.parentElement; if (p) p.style.display = "none"; }}
           />
         </div>

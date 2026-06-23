@@ -6,7 +6,7 @@ import HomeClient from "@/components/home/HomeClient";
 import HomeInfoStrip from "@/components/home/HomeInfoStrip";
 import InsightTabs from "@/components/home/InsightTabs";
 import { getInsightFeed } from "@/lib/insightFeed";
-import { getTopTools, getAnimalCount, getOrPicks } from "@/lib/homeStats";
+import { getTopTools, getAnimalCount, getOrLists } from "@/lib/homeStats";
 
 // 퀵 액세스 — 주요 섹션 바로가기(한 줄 가로 스크롤, 다양하게)
 const SECTIONS = [
@@ -30,7 +30,7 @@ export default async function Home() {
   const insightFeed = getInsightFeed(50); // 인사이트 종류별 탭 순위용(최대 50)
   const topTools = getTopTools(5);
   const animalCount = getAnimalCount();
-  const orPicks = getOrPicks();
+  const orLists = getOrLists(5);
   // '오늘의 인사이트' = 가장 최근 발행일의 글 수(빌드 시점 TZ 무관)
   const latestDate = insightFeed[0] ? String(insightFeed[0].date).slice(0, 10) : "";
   const todayInsights = insightFeed.filter((i) => String(i.date).slice(0, 10) === latestDate).length;
@@ -42,7 +42,7 @@ export default async function Home() {
       <Hero />
 
       {/* ①-b 정보 스트립 (OpenRouter 인기 모델·지능·속도 + 우리 지표) */}
-      <HomeInfoStrip topTools={topTools} insightCount={todayInsights} animalCount={animalCount} orPicks={orPicks} />
+      <HomeInfoStrip topTools={topTools} insightCount={todayInsights} animalCount={animalCount} orLists={orLists} />
 
       {/* ② 퀵 액세스 — 한 줄 가로 스크롤 */}
       <section className="py-4 border-b border-neutral-100 dark:border-zinc-900">

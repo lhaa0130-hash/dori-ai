@@ -122,7 +122,7 @@ export default function InsightTabs({ items, perTab = 8 }: { items: InsightFeedI
         {/* 우: 미리보기 (데스크탑 전용, sticky) */}
         <div className="hidden lg:block">
           {preview && (
-            <div className="sticky top-20">
+            <div className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto scrollbar-hide">
               <InsightPreviewPane item={preview} />
             </div>
           )}

@@ -53,6 +53,28 @@ export function getOrPicks(): OrPicks {
   }
 }
 
+// OpenRouter 인기 자료 TOP n 리스트(랭킹 카드용)
+export type OrLists = {
+  usage: { name: string; reqM: number }[];
+  intel: { name: string; score: number }[];
+  speed: { name: string; tps: number }[];
+};
+export function getOrLists(n = 5): OrLists {
+  try {
+    const raw = fs.readFileSync(path.join(process.cwd(), "public/openrouter-stats.json"), "utf-8");
+    const j = JSON.parse(raw);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const take = (arr: any[], f: (x: any) => any) => (arr || []).slice(0, n).map(f);
+    return {
+      usage: take(j.usageTop, (x) => ({ name: shortModel(String(x.name)), reqM: Number(x.reqM) || 0 })),
+      intel: take(j.intelTop, (x) => ({ name: shortModel(String(x.name)), score: Number(x.score) || 0 })),
+      speed: take(j.speedTop, (x) => ({ name: shortModel(String(x.name)), tps: Number(x.tps) || 0 })),
+    };
+  } catch {
+    return { usage: [], intel: [], speed: [] };
+  }
+}
+
 // 동물도감 종수
 export function getAnimalCount(): number {
   try {
