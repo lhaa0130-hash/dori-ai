@@ -16,6 +16,7 @@ import type { Metadata } from 'next';
 import ShareButtons from '@/components/article/ShareButtons';
 import ReadingProgress from '@/components/article/ReadingProgress';
 import RelatedArticles from '@/components/article/RelatedArticles';
+import ArticleSocial from '@/components/article/ArticleSocial';
 import AdminArticleBar from '@/components/admin/AdminArticleBar';
 import fs from 'fs';
 import path from 'path';
@@ -229,6 +230,9 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
           <div className="mt-10 pt-6 border-t border-neutral-200 dark:border-neutral-800">
             <ShareButtons url={articleUrl} title={post.title || 'DORI-AI 기사'} />
           </div>
+
+          {/* 좋아요 + 댓글 (댓글은 로그인 필수) */}
+          <ArticleSocial slug={params.slug} title={post.title || params.slug} />
 
           {/* 연관 기사 추천 */}
           <RelatedArticles

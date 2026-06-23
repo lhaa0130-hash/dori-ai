@@ -67,6 +67,23 @@ service cloud.firestore {
       allow read, write: if request.auth != null && request.auth.uid == uid;
     }
 
+    // 인사이트 글 좋아요 — 카운터는 로그인 시 증감, '좋아요한 사람'은 본인만 기록
+    match /articleLikes/{slug} {
+      allow read: if true;
+      allow write: if request.auth != null;
+      match /likers/{uid} {
+        allow read: if true;
+        allow write: if request.auth != null && request.auth.uid == uid;
+      }
+    }
+
+    // 인사이트 글 댓글 — 누구나 읽기, 로그인 본인만 작성, 본인 또는 관리자 삭제
+    match /articleComments/{slug}/items/{itemId} {
+      allow read:   if true;
+      allow create: if request.auth != null && request.auth.uid == request.resource.data.uid;
+      allow delete: if request.auth != null && (request.auth.uid == resource.data.uid || isAdmin());
+    }
+
     // 소셜 — 방명록(주인만 삭제)
     match /guestbook/{ownerUid}/entries/{entryId} {
       allow read: if true;
