@@ -1,11 +1,11 @@
 {
   "program": "트레이더일로 (Trader Illo)",
-  "generated_at": "2026-06-23 18:00:02",
+  "generated_at": "2026-06-23 22:00:04",
   "mode": "paper",
-  "total_starting": 8999420,
-  "total_ending": 8974220,
-  "total_return_pct": -0.28,
-  "usdkrw": 1538.18,
+  "total_starting": 8994916,
+  "total_ending": 8966625,
+  "total_return_pct": -0.31,
+  "usdkrw": 1535.87,
   "watching": 453,
   "holding": 7,
   "interval_hours": 4,
@@ -19,8 +19,8 @@
       "count": 93,
       "currency": "KRW",
       "starting": 3000000.0,
-      "ending": 2982513.5,
-      "return_pct": -0.58
+      "ending": 2979465.92,
+      "return_pct": -0.68
     },
     {
       "name": "국내주식",
@@ -37,7 +37,7 @@
       "starting": 1949.98,
       "ending": 1968.72,
       "return_pct": 0.96,
-      "fx": 1538.18
+      "fx": 1535.87
     }
   ],
   "sections": [
@@ -54,10 +54,10 @@
         "entry_price": 1132.566,
         "qty": 105.088799,
         "invested": 119020.0,
-        "cur_price": 969.0,
+        "cur_price": 940.0,
         "stop_price": 846.5271,
         "take_profit": 1702.9457,
-        "unrealized_pnl_pct": -14.44
+        "unrealized_pnl_pct": -17.0
       },
       "trade_log": []
     },
@@ -104,6 +104,26 @@
       "trade_log": []
     },
     {
+      "symbol": "AMD",
+      "name": "AMD",
+      "category": "해외주식",
+      "trades": 0,
+      "win_rate_pct": 0.0,
+      "realized_pnl": 0,
+      "open_position": {
+        "entry_time": "2026-06-15 00:00",
+        "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+        "entry_price": 547.8073,
+        "qty": 0.233345,
+        "invested": 127.83,
+        "cur_price": 551.63,
+        "stop_price": 463.7029,
+        "take_profit": 714.3743,
+        "unrealized_pnl_pct": 0.7
+      },
+      "trade_log": []
+    },
+    {
       "symbol": "CAH",
       "name": "CAH",
       "category": "해외주식",
@@ -124,8 +144,8 @@
       "trade_log": []
     },
     {
-      "symbol": "C",
-      "name": "씨티그룹",
+      "symbol": "DAL",
+      "name": "델타항공",
       "category": "해외주식",
       "trades": 0,
       "win_rate_pct": 0.0,
@@ -133,33 +153,13 @@
       "open_position": {
         "entry_time": "2026-06-15 00:00",
         "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-        "entry_price": 141.3512,
-        "qty": 2.1375,
-        "invested": 302.14,
-        "cur_price": 145.67,
-        "stop_price": 132.0895,
-        "take_profit": 159.451,
-        "unrealized_pnl_pct": 3.06
-      },
-      "trade_log": []
-    },
-    {
-      "symbol": "AMD",
-      "name": "AMD",
-      "category": "해외주식",
-      "trades": 0,
-      "win_rate_pct": 0.0,
-      "realized_pnl": 0,
-      "open_position": {
-        "entry_time": "2026-06-15 00:00",
-        "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-        "entry_price": 547.8073,
-        "qty": 0.233345,
-        "invested": 127.83,
-        "cur_price": 551.63,
-        "stop_price": 463.7029,
-        "take_profit": 714.3743,
-        "unrealized_pnl_pct": 0.7
+        "entry_price": 84.1541,
+        "qty": 2.627083,
+        "invested": 221.08,
+        "cur_price": 85.92,
+        "stop_price": 76.6515,
+        "take_profit": 98.907,
+        "unrealized_pnl_pct": 2.1
       },
       "trade_log": []
     },
@@ -184,8 +184,8 @@
       "trade_log": []
     },
     {
-      "symbol": "DAL",
-      "name": "델타항공",
+      "symbol": "C",
+      "name": "씨티그룹",
       "category": "해외주식",
       "trades": 0,
       "win_rate_pct": 0.0,
@@ -193,18 +193,26 @@
       "open_position": {
         "entry_time": "2026-06-15 00:00",
         "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-        "entry_price": 84.1541,
-        "qty": 2.627083,
-        "invested": 221.08,
-        "cur_price": 85.92,
-        "stop_price": 76.6515,
-        "take_profit": 98.907,
-        "unrealized_pnl_pct": 2.1
+        "entry_price": 141.3512,
+        "qty": 2.1375,
+        "invested": 302.14,
+        "cur_price": 145.67,
+        "stop_price": 132.0895,
+        "take_profit": 159.451,
+        "unrealized_pnl_pct": 3.06
       },
       "trade_log": []
     }
   ],
   "recent_runs": [
+    {
+      "time": "2026-06-23 22:00:04",
+      "watching": 453,
+      "holding": 7,
+      "new_trades": 1,
+      "total": 8966625,
+      "ret": -0.31
+    },
     {
       "time": "2026-06-23 18:00:02",
       "watching": 453,
