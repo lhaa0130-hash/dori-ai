@@ -33,11 +33,12 @@ export default function Header() {
 
   // 공지사항·건의사항은 메인 네비에서 숨김(푸터에 노출됨), 마켓은 노출
   const navItems = [
-    { name: "미니게임", href: "/minigame", emoji: "🎮" },
     { name: "AI 도구", href: "/ai-tools", emoji: "🔧" },
     { name: "인사이트", href: "/insight", emoji: "🧠" },
     { name: "피드", href: "/feed", emoji: "💬" },
     { name: "마켓", href: "/market", emoji: "🛒" },
+    { name: "미니게임", href: "/minigame", emoji: "🎮" },
+    { name: "심리테스트", href: "/psychtest", emoji: "🧩" },
   ];
 
   const projects = [
@@ -72,7 +73,7 @@ export default function Header() {
     <>
       {/* ── 헤더 ── */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-black border-b border-neutral-200 dark:border-zinc-800 font-sans">
-        <div className="w-full h-16 flex items-center px-4 lg:justify-center lg:gap-8">
+        <div className="w-full h-16 flex items-center gap-5 px-4 lg:px-6">
 
           {/* 로고 */}
           <Link href="/" aria-label="DORI-AI Home" className="flex-shrink-0 hover:opacity-70 transition-opacity">
@@ -81,15 +82,15 @@ export default function Header() {
             </span>
           </Link>
 
-          {/* ── 데스크탑 네비게이션 (lg+) ── */}
-          <nav className="hidden lg:flex items-center gap-8">
+          {/* ── 데스크탑 네비게이션 (lg+, 좌측 정렬) ── */}
+          <nav className="hidden lg:flex items-center gap-6">
             {/* 공지사항은 헤더에서 제외(푸터에만 노출) */}
 
             {/* 프로젝트 — 상위는 활성(호버 드롭다운), 하위 항목만 비활성(준비 중) */}
             <div className="relative group flex-shrink-0">
-              <button type="button" aria-haspopup="true" className="flex items-center text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap cursor-default">
+              <Link href="/projects" className="flex items-center text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap">
                 프로젝트
-              </button>
+              </Link>
               <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 translate-y-1 group-hover:translate-y-0 z-50 pt-2">
                 <div className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden">
                   <div className="px-4 py-2.5 border-b border-neutral-100 dark:border-zinc-800">
@@ -135,8 +136,8 @@ export default function Header() {
             ))}
           </nav>
 
-          {/* ── 우측 컨트롤 ── */}
-          <div className="ml-auto lg:ml-0 flex items-center gap-1">
+          {/* ── 우측 컨트롤 (돋보기·테마·마이페이지) ── */}
+          <div className="ml-auto flex items-center gap-1">
 
             {/* 검색 (데스크탑) */}
             <button onClick={() => setSearchOpen(true)} aria-label="검색" className="hidden lg:flex flex-shrink-0 w-10 h-10 items-center justify-center rounded-full hover:bg-neutral-100 dark:hover:bg-zinc-800 transition-colors text-foreground">
