@@ -3,6 +3,7 @@
 // 토스증권 우측 레일 풍의 "내 바로가기" 퀵바.
 // - 우측 끝 세로 레일(lg+). 접기/펴기. 모바일은 BottomNav가 담당하므로 숨김.
 // - 기본은 비어 있고 + 버튼만. 사용자가 카테고리를 골라 채운다.
+// - 드래그로 순서 변경(HTML5 DnD, 데스크탑 전용이라 충분).
 // - 비로그인: localStorage. 로그인: users/{uid}.quickBar 자동 저장(기기 간 동기화).
 
 import { useEffect, useRef, useState, useCallback } from "react";
@@ -12,7 +13,7 @@ import {
   PawPrint, TrendingUp, Sparkles, PencilRuler, FolderKanban,
   Gamepad2, Wrench, BarChart3, Newspaper, Rss, MessagesSquare,
   ShoppingBag, Store, User, Bell,
-  Plus, X, ChevronsRight, ChevronsLeft, Pin,
+  Plus, X, ChevronsRight, ChevronsLeft, Pin, GripVertical,
 } from "lucide-react";
 import { useAuth } from "@/contexts/AuthContext";
 import { loadQuickBarRemote, saveQuickBarRemote } from "@/lib/quickBar";
@@ -69,6 +70,9 @@ export default function QuickBar() {
   const [collapsed, setCollapsed] = useState(false);
   const [pickerOpen, setPickerOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
+  const [dragKey, setDragKey] = useState<string | null>(null); // 시각효과(투명도)용
+  const [overKey, setOverKey] = useState<string | null>(null);
+  const dragKeyRef = useRef<string | null>(null);              // 로직용(동기 보장)
   const reconciledRef = useRef(false);
 
   // 1) 마운트: localStorage 복원
@@ -104,31 +108,30 @@ export default function QuickBar() {
     })();
   }, [status]);
 
-  // 변경 영속화(로컬 + 로그인 시 원격)
-  const persist = useCallback((next: string[]) => {
+  // 변경 확정 → 상태 + 로컬 + (로그인 시) 원격 저장
+  const commit = useCallback((next: string[]) => {
     setItems(next);
     try { localStorage.setItem(LS_ITEMS, JSON.stringify(next)); } catch { /* noop */ }
     if (status === "authenticated") void saveQuickBarRemote(next);
   }, [status]);
 
   const add = useCallback((key: string) => {
-    setItems((cur) => {
-      if (cur.includes(key)) return cur;
-      const next = [...cur, key];
-      try { localStorage.setItem(LS_ITEMS, JSON.stringify(next)); } catch { /* noop */ }
-      if (status === "authenticated") void saveQuickBarRemote(next);
-      return next;
-    });
-  }, [status]);
+    if (!items.includes(key)) commit([...items, key]);
+  }, [items, commit]);
 
   const remove = useCallback((key: string) => {
-    setItems((cur) => {
-      const next = cur.filter((k) => k !== key);
-      try { localStorage.setItem(LS_ITEMS, JSON.stringify(next)); } catch { /* noop */ }
-      if (status === "authenticated") void saveQuickBarRemote(next);
-      return next;
-    });
-  }, [status]);
+    commit(items.filter((k) => k !== key));
+  }, [items, commit]);
+
+  // 드래그한 from 을 to 자리(앞)로 이동
+  const reorder = useCallback((from: string, to: string) => {
+    if (from === to) return;
+    const next = items.filter((k) => k !== from);
+    const ti = next.indexOf(to);
+    if (ti < 0) return;
+    next.splice(ti, 0, from);
+    commit(next);
+  }, [items, commit]);
 
   const toggleCollapsed = useCallback(() => {
     setCollapsed((v) => {
@@ -139,7 +142,7 @@ export default function QuickBar() {
     });
   }, []);
 
-  const isActive = (href: string) => pathname === href || pathname?.startsWith(href + "/") || pathname === href;
+  const isActive = (href: string) => pathname === href || pathname?.startsWith(href + "/");
 
   // 하이드레이션 불일치 방지 — 마운트 전엔 렌더 안 함(고정 크롬이라 SEO 영향 없음)
   if (!mounted) return null;
@@ -153,11 +156,11 @@ export default function QuickBar() {
         onClick={toggleCollapsed}
         aria-label="바로가기 열기"
         className="hidden lg:flex fixed right-0 top-1/2 -translate-y-1/2 z-[45] items-center justify-center
-                   w-7 h-16 rounded-l-xl bg-white/95 dark:bg-zinc-950/95 backdrop-blur
+                   w-6 h-14 rounded-l-xl bg-white/95 dark:bg-zinc-950/95 backdrop-blur
                    border border-r-0 border-neutral-200 dark:border-zinc-800 shadow-md
                    text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition-colors"
       >
-        <ChevronsLeft className="w-4 h-4" />
+        <ChevronsLeft className="w-3.5 h-3.5" />
       </button>
     );
   }
@@ -166,46 +169,66 @@ export default function QuickBar() {
     <>
       {/* 레일 */}
       <aside
-        className="hidden lg:flex fixed right-0 top-16 bottom-0 z-[45] w-[72px] flex-col
+        className="hidden lg:flex fixed right-0 top-16 bottom-0 z-[45] w-[56px] flex-col
                    bg-white/95 dark:bg-zinc-950/95 backdrop-blur border-l border-neutral-200 dark:border-zinc-800"
       >
-        {/* 상단: 접기 + 라벨 */}
-        <div className="flex flex-col items-center pt-2 pb-1 border-b border-neutral-100 dark:border-zinc-900">
+        {/* 상단: 접기 */}
+        <div className="flex flex-col items-center pt-1.5 pb-1 border-b border-neutral-100 dark:border-zinc-900">
           <button
             onClick={toggleCollapsed}
             aria-label="바로가기 접기"
-            className="w-8 h-8 rounded-lg flex items-center justify-center text-neutral-400
+            className="w-7 h-7 rounded-lg flex items-center justify-center text-neutral-400
                        hover:text-[#F9954E] hover:bg-neutral-100 dark:hover:bg-zinc-900 transition-colors"
           >
             <ChevronsRight className="w-4 h-4" />
           </button>
-          <span className="text-[9px] font-bold tracking-wider text-neutral-400 mt-0.5">바로가기</span>
         </div>
 
-        {/* 아이템 목록 (스크롤) */}
-        <div className="flex-1 overflow-y-auto py-2 px-1.5 flex flex-col gap-1.5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
+        {/* 아이템 목록 (스크롤·드래그 정렬) */}
+        <div className="flex-1 overflow-y-auto py-2 px-1 flex flex-col gap-1.5 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden">
           {railItems.length === 0 ? (
-            <div className="flex flex-col items-center text-center gap-1 mt-6 px-1">
-              <Pin className="w-5 h-5 text-neutral-300 dark:text-zinc-700" />
-              <span className="text-[9.5px] leading-tight text-neutral-400 dark:text-neutral-600">
-                + 를 눌러<br />바로가기를<br />추가하세요
+            <div className="flex flex-col items-center text-center gap-1 mt-5 px-0.5">
+              <Pin className="w-4 h-4 text-neutral-300 dark:text-zinc-700" />
+              <span className="text-[9px] leading-tight text-neutral-400 dark:text-neutral-600">
+                +로<br />추가
               </span>
             </div>
           ) : (
             railItems.map((c) => {
               const active = isActive(c.href);
+              const isDragging = dragKey === c.key;
+              const isOver = overKey === c.key && dragKey !== c.key;
               return (
-                <div key={c.key} className="relative group">
+                <div
+                  key={c.key}
+                  draggable
+                  onDragStart={(e) => { dragKeyRef.current = c.key; setDragKey(c.key); e.dataTransfer.effectAllowed = "move"; }}
+                  onDragEnter={(e) => { e.preventDefault(); setOverKey(c.key); }}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => { e.preventDefault(); if (dragKeyRef.current) reorder(dragKeyRef.current, c.key); dragKeyRef.current = null; setDragKey(null); setOverKey(null); }}
+                  onDragEnd={() => { dragKeyRef.current = null; setDragKey(null); setOverKey(null); }}
+                  className={`relative group rounded-xl transition-all
+                    ${isDragging ? "opacity-40" : ""}
+                    ${isOver ? "ring-2 ring-[#F9954E] ring-offset-1 ring-offset-white dark:ring-offset-zinc-950" : ""}`}
+                >
                   <Link
                     href={c.href}
+                    draggable={false}
                     className={`flex flex-col items-center justify-center gap-1 py-2 rounded-xl transition-colors
                       ${active
                         ? "bg-[#FFF1E3] dark:bg-[#F9954E]/15 text-[#E8832E] dark:text-[#F9954E]"
                         : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-zinc-900 hover:text-neutral-900 dark:hover:text-white"}`}
                   >
-                    <c.Icon className="w-[18px] h-[18px]" />
-                    <span className="text-[9.5px] font-semibold leading-none max-w-[60px] truncate">{c.short}</span>
+                    <c.Icon className="w-[17px] h-[17px]" />
+                    <span className="text-[8.5px] font-semibold leading-none max-w-[48px] truncate">{c.short}</span>
                   </Link>
+
+                  {/* 드래그 핸들 표시(호버) */}
+                  <span className="absolute left-0 top-1/2 -translate-y-1/2 text-neutral-300 dark:text-zinc-700
+                                   opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                    <GripVertical className="w-2.5 h-2.5" />
+                  </span>
+
                   {/* 제거(×) — 호버 시 */}
                   <button
                     onClick={(e) => { e.preventDefault(); remove(c.key); }}
@@ -223,11 +246,11 @@ export default function QuickBar() {
         </div>
 
         {/* 하단: + 추가 */}
-        <div className="p-2 border-t border-neutral-100 dark:border-zinc-900">
+        <div className="p-1.5 border-t border-neutral-100 dark:border-zinc-900">
           <button
             onClick={() => setPickerOpen((v) => !v)}
             aria-label="바로가기 추가"
-            className={`w-full h-10 rounded-xl flex items-center justify-center transition-colors
+            className={`w-full h-9 rounded-xl flex items-center justify-center transition-colors
               ${pickerOpen
                 ? "bg-[#F9954E] text-white"
                 : "bg-neutral-100 dark:bg-zinc-900 text-neutral-500 dark:text-neutral-400 hover:bg-[#FFF1E3] dark:hover:bg-[#F9954E]/15 hover:text-[#F9954E]"}`}
@@ -242,7 +265,7 @@ export default function QuickBar() {
         <>
           <div className="fixed inset-0 z-[60]" onClick={() => setPickerOpen(false)} />
           <div
-            className="hidden lg:flex fixed right-[84px] top-20 z-[61] w-[256px] max-h-[72vh] flex-col
+            className="hidden lg:flex fixed right-[68px] top-20 z-[61] w-[256px] max-h-[72vh] flex-col
                        bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800
                        rounded-2xl shadow-2xl overflow-hidden"
           >
@@ -287,14 +310,18 @@ export default function QuickBar() {
               ))}
             </div>
 
-            {status !== "authenticated" && (
-              <div className="px-4 py-2.5 border-t border-neutral-100 dark:border-zinc-800 bg-neutral-50 dark:bg-zinc-950">
+            <div className="px-4 py-2.5 border-t border-neutral-100 dark:border-zinc-800 bg-neutral-50 dark:bg-zinc-950">
+              {status === "authenticated" ? (
+                <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-snug">
+                  드래그해서 순서를 바꿀 수 있어요. 변경은 계정에 자동 저장됩니다.
+                </p>
+              ) : (
                 <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-snug">
                   <Link href="/login" className="font-bold text-[#E8832E] dark:text-[#F9954E] hover:underline">로그인</Link>
                   하면 바로가기가 계정에 자동 저장돼 다른 기기에서도 그대로 보여요.
                 </p>
-              </div>
-            )}
+              )}
+            </div>
           </div>
         </>
       )}
