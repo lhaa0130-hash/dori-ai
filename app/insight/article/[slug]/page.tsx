@@ -83,6 +83,7 @@ export async function generateMetadata(
 export default async function InsightArticlePage({ params }: { params: { slug: string } }) {
   let post;
   const rawMarkdown = getRawMarkdown(params.slug);
+  const videoId = (rawMarkdown.match(/^videoId:\s*([\w-]+)/m) || [])[1] || '';
 
   try {
     post = await getPostData(params.slug);
@@ -188,17 +189,18 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-center">
             {post.title}
           </h1>
-          {post.thumbnail_url && (
+          {post.thumbnail_url && (videoId ? (
+            <a href={"https://www.youtube.com/watch?v=" + videoId} target="_blank" rel="noopener noreferrer" aria-label="영상 보기" className="block mb-8 rounded-lg overflow-hidden relative w-full h-[400px] group">
+              <Image src={post.thumbnail_url} alt={post.title || '썸네일 이미지'} fill style={{ objectFit: 'cover' }} priority />
+              <span className="absolute inset-0 flex items-center justify-center bg-black/20 group-hover:bg-black/30 transition-colors">
+                <span className="flex items-center justify-center w-16 h-16 rounded-full bg-red-600 text-white text-2xl shadow-lg">▶</span>
+              </span>
+            </a>
+          ) : (
             <div className="mb-8 rounded-lg overflow-hidden relative w-full h-[400px]">
-              <Image
-                src={post.thumbnail_url}
-                alt={post.title || '썸네일 이미지'}
-                fill
-                style={{ objectFit: 'cover' }}
-                priority
-              />
+              <Image src={post.thumbnail_url} alt={post.title || '썸네일 이미지'} fill style={{ objectFit: 'cover' }} priority />
             </div>
-          )}
+          ))}
           <div className="text-gray-600 dark:text-gray-400 text-sm text-center mb-4">
             <time dateTime={post.date}>
               {new Date(post.date).toLocaleDateString('ko-KR', { year: 'numeric', month: 'long', day: 'numeric' })}
