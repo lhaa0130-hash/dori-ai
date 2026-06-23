@@ -17,6 +17,7 @@ import {
   Mail,
   MessageCircle,
   Send,
+  Lightbulb,
 } from "lucide-react";
 
 // 워크일로 = 일로. 데스크톱 EXE가 아니라 웹 구독 서비스로 통일(설치 없음, BYOK).
@@ -57,10 +58,13 @@ const PIPELINE = [
   "SEO·SNS용 글까지 만들어 메일·카톡으로 보고",
 ];
 
-const STEPS = [
-  { n: "1", t: "로그인", d: "dori-ai.com 계정으로 로그인. 설치도, 다운로드도 없어요. 브라우저면 끝." },
-  { n: "2", t: "무료로 체험 / 내 키 넣기", d: "로그인만 하면 하루 50회 무료. 더 쓰려면 내 API 키를 한 번만 넣으면 돼요." },
-  { n: "3", t: "직원 불러와 일 시키기", d: "AI 직원을 채용하고 지시하면, 결과가 결재함에 도착. 확인하고 발행하세요." },
+// 처음 들어온 사람을 위한 단계별 사용 가이드.
+const GUIDE = [
+  { t: "로그인 — 30초면 끝", d: "dori-ai.com 계정으로 로그인하세요. 처음이면 앱 안에서 바로 가입할 수 있어요. 설치·다운로드 없이 브라우저면 충분합니다." },
+  { t: "먼저 무료로 둘러보기", d: "로그인만 하면 하루 50회 무료예요. 키를 넣기 전에 글쓰기·요약 같은 기본 기능부터 가볍게 써보세요." },
+  { t: "내 API 키 연결하기", d: "더 강하게 쓰려면 설정에서 내 키를 한 번만 입력해요. OpenAI·Claude·Gemini·fal.ai·ElevenLabs·Tavily 중 쓰고 싶은 것만 — 한도까지 최신 모델로, 원가에 가깝게." },
+  { t: "AI 직원 불러오기", d: "리서처·작가·화가·사이트관리자처럼 목적별 직원을 채용해요. 직원마다 어떤 모델로 일할지 직접 고를 수 있어요." },
+  { t: "지시 → 결재 → 발행", d: "사장님처럼 한 줄 지시하면 결과가 결재함에 도착해요. 확인하고 누르면 사이트·메일·카톡으로 발행. 여러 직원을 노드로 이어 ‘검색→글→이미지→발행’ 자동 흐름도 만들 수 있어요." },
 ];
 
 export default function IlloPageClient() {
@@ -129,6 +133,39 @@ export default function IlloPageClient() {
           ))}
         </section>
 
+        {/* 왜 만들었나 — 기획 의도 */}
+        <section className="mt-24 rounded-[28px] border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-8 md:p-12">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
+            <Lightbulb className="w-3 h-3" /> 왜 만들었나
+          </div>
+          <h2 className="text-2xl md:text-[28px] font-extrabold text-neutral-900 dark:text-white mb-6 break-keep leading-snug">
+            “구독은 하는데, 정작 제일 좋은 건 못 쓰고 있더라고요.”
+          </h2>
+          <div className="space-y-4 text-[15px] md:text-base text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep max-w-2xl">
+            <p>
+              ChatGPT·Claude·Gemini, 다들 매달 구독합니다. 그런데 이 회사들이 진짜 힘을 쏟는 곳은{" "}
+              <b className="text-neutral-900 dark:text-white">API</b>예요. 가장 빠르고 강한 모델, 검색·이미지·음성까지 전부 API로 열려 있죠.
+              문제는 그게 <b>개발자 전용</b>이라는 것 — 키 발급받고, 코드 짜고, 도구마다 따로 가입하고. 일반 사용자에겐 너무 멀었어요.
+              자동화 도구(n8n 같은)도 결국 개발자의 몫이었고요.
+            </p>
+            <p>
+              그래서 생각했어요.{" "}
+              <b className="text-neutral-900 dark:text-white">“개발 몰라도, 내 키로, 직원에게 일 시키듯 여러 AI를 조합해 쓰게 하면 안 될까?”</b>{" "}
+              그게 워크일로의 출발점입니다.
+            </p>
+            <p>
+              검색은 Tavily, 글은 GPT·Claude, 이미지는 fal.ai, 음성은 ElevenLabs —{" "}
+              <b className="text-neutral-900 dark:text-white">‘뭘 시킬지’만 고르면 알맞은 AI가 이미 연결</b>돼 있어요.
+              결과는 결재함에 모이고, 확인 후 누르면 사이트·메일·카톡으로 발행됩니다. 한 사람이 콘텐츠와 사업 하나를 통째로 굴릴 수 있게요.
+            </p>
+            <p>
+              저희는 실제로 <b className="text-[#E8832E] dark:text-[#FBAA60]">1인 + AI</b>로 dori-ai.com을 직접 만들고 굴립니다.
+              그 방식을 누구나 쓸 수 있게 제품으로 옮긴 게 워크일로예요. 중간 마진 없이 <b>내 키로 원가에 가깝게</b>,
+              키와 데이터는 암호화해 안전하게. 완벽하진 않지만, 매일 한 걸음씩 더 낫게 다듬고 있습니다.
+            </p>
+          </div>
+        </section>
+
         {/* API 카탈로그 — 목적별로 고른다 */}
         <section className="mt-24">
           <h2 className="text-2xl md:text-3xl font-extrabold text-center text-neutral-900 dark:text-white mb-3">
@@ -187,22 +224,39 @@ export default function IlloPageClient() {
           </div>
         </section>
 
-        {/* How to start */}
-        <section className="mt-24">
-          <h2 className="text-2xl md:text-3xl font-extrabold text-center text-neutral-900 dark:text-white mb-3">
-            3단계면 시작 준비 끝
-          </h2>
-          <p className="text-center text-neutral-500 dark:text-neutral-400 mb-12 break-keep">
-            설치도 다운로드도 없어요. 로그인하면 바로 시작합니다.
-          </p>
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-            {STEPS.map((s) => (
-              <div key={s.n} className="relative bg-neutral-50 dark:bg-zinc-900/50 border border-neutral-200 dark:border-zinc-800 rounded-3xl p-7">
-                <div className="w-10 h-10 rounded-full bg-[#F9954E] text-white font-extrabold flex items-center justify-center mb-4">{s.n}</div>
-                <h3 className="text-base font-bold text-neutral-900 dark:text-white mb-1.5">{s.t}</h3>
-                <p className="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">{s.d}</p>
-              </div>
+        {/* 처음 사용 가이드 */}
+        <section className="mt-24 rounded-[28px] bg-neutral-50 dark:bg-zinc-900/50 border border-neutral-200 dark:border-zinc-800 p-8 md:p-10">
+          <div className="text-center mb-9">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-4">
+              <Sparkles className="w-3 h-3" /> 처음이세요?
+            </div>
+            <h2 className="text-2xl md:text-3xl font-extrabold text-neutral-900 dark:text-white mb-3">
+              5분이면 첫 결과물까지
+            </h2>
+            <p className="text-neutral-500 dark:text-neutral-400 break-keep">
+              설치도 다운로드도 없어요. 순서대로 따라 하면 됩니다.
+            </p>
+          </div>
+          <ol className="max-w-2xl mx-auto space-y-5">
+            {GUIDE.map((g, i) => (
+              <li key={i} className="flex items-start gap-4">
+                <span className="flex-none w-8 h-8 rounded-full bg-[#F9954E] text-white text-sm font-extrabold flex items-center justify-center">
+                  {i + 1}
+                </span>
+                <div>
+                  <h3 className="text-base font-bold text-neutral-900 dark:text-white mb-1 break-keep">{g.t}</h3>
+                  <p className="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep">{g.d}</p>
+                </div>
+              </li>
             ))}
+          </ol>
+          <div className="text-center mt-9">
+            <Link
+              href="/illo/app"
+              className="inline-flex items-center gap-2 px-7 py-3.5 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold text-sm shadow-lg shadow-[#F9954E]/25 transition-all hover:-translate-y-0.5"
+            >
+              <Globe className="w-4 h-4" /> 지금 바로 따라 해보기
+            </Link>
           </div>
         </section>
 
