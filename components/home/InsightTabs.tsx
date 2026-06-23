@@ -90,8 +90,9 @@ export default function InsightTabs({ items, perTab = 8 }: { items: InsightFeedI
         </div>
       </div>
 
-      {/* 본문 — 데스크탑 2단(리스트 | 미리보기), 모바일 리스트만 */}
-      <div className="lg:grid lg:grid-cols-2 lg:gap-6 lg:items-start">
+      {/* 본문 — 데스크탑 2단(리스트 | 미리보기), 모바일 리스트만.
+          items-start 없이 stretch → 우측 칸이 리스트 높이만큼 늘어나 sticky 미리보기가 끝까지 따라옴 */}
+      <div className="lg:grid lg:grid-cols-2 lg:gap-6">
         {/* 좌: 순위 리스트 */}
         <div className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
           {rows.map((it, i) => {
