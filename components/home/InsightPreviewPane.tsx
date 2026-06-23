@@ -8,7 +8,17 @@ import { Heart, MessageCircle, ArrowRight } from "lucide-react";
 import { getFirebaseFirestore } from "@/lib/firebase";
 import { doc, getDoc, collection, query, orderBy, limit, getDocs } from "firebase/firestore";
 
-export type PreviewItem = { slug: string; title: string; date: string; thumbnail?: string; category: string; summary?: string };
+export type PreviewItem = { slug: string; title: string; date: string; thumbnail?: string; category: string; summary?: string; videoDate?: string };
+
+// 영상: 실제 유튜브 업로드 날짜+시간(KST)
+function fmtVideoDate(iso?: string) {
+  if (!iso) return "";
+  const t = new Date(iso);
+  if (isNaN(t.getTime())) return "";
+  const d = t.toLocaleDateString("ko-KR", { timeZone: "Asia/Seoul", year: "numeric", month: "long", day: "numeric" });
+  const tm = t.toLocaleTimeString("ko-KR", { timeZone: "Asia/Seoul", hour: "2-digit", minute: "2-digit" });
+  return `${d} ${tm}`;
+}
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type Cmt = { id: string; name: string; text: string };
 
@@ -55,9 +65,13 @@ export default function InsightPreviewPane({ item }: { item: PreviewItem }) {
       )}
 
       <div className="p-5">
-        <div className="flex items-center gap-2 mb-2">
+        <div className="flex items-center gap-2 mb-2 flex-wrap">
           <span className="text-[11px] font-bold text-[#F9954E] bg-[#FFF1E3] dark:bg-[#F9954E]/15 rounded px-2 py-0.5">{EMOJI[item.category] || "📝"} {item.category}</span>
-          <span className="text-[11px] text-neutral-400">{dateStr}</span>
+          {item.category === "영상" && item.videoDate ? (
+            <span className="text-[11px] text-neutral-500 dark:text-neutral-400">📺 {fmtVideoDate(item.videoDate)} 업로드</span>
+          ) : (
+            <span className="text-[11px] text-neutral-400">{dateStr}</span>
+          )}
         </div>
 
         <h3 className="text-[18px] font-extrabold text-neutral-950 dark:text-white leading-snug break-keep mb-2 line-clamp-2">{item.title}</h3>

@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-14.jpg"
 tags: [영상, AI추천, AI 에이전트, 입문·기초, The Neuron]
 videoId: YMxY7eEhdIY
+videoDate: 2026-05-28T20:03:17Z
 ---
 
 ![@The Neuron](https://yt3.ggpht.com/EjJKhjS6HTe4bi5zA77zGt-A7NWF6kLG1JVJf0DpYokzxIZX2Ng-JWRDmQgb8KdLtSWXSIc-LQ=s240-c-k-c0x00ffffff-no-rj) **The Neuron** · 구독자 2.1만명 · 영상 760개

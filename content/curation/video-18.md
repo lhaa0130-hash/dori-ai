@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-18.jpg"
 tags: [영상, AI추천, AI 모델 비교, 비즈니스·산업, 시사저널e - 시사저널이코노미]
 videoId: adLWFUZwD6I
+videoDate: 2026-05-29T08:07:30Z
 ---
 
 ![@시사저널e - 시사저널이코노미](https://yt3.ggpht.com/MgMG-tAPtLg0MsHDOH3oKn7NItJ8aQV7undkQWhs6zoL8ggNWXdycRHixLvMY76xF_DhB26Ssw=s240-c-k-c0x00ffffff-no-rj) **시사저널e - 시사저널이코노미** · 구독자 2.3만명 · 영상 1,327개

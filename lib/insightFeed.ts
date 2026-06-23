@@ -14,6 +14,7 @@ export type InsightFeedItem = {
   thumbnail?: string;
   category: string;
   summary?: string;
+  videoDate?: string; // 영상: 실제 유튜브 업로드 시각(ISO)
 };
 
 // 메인 탭 노출 순서(존재하는 카테고리만 화면에 표시)
@@ -36,6 +37,7 @@ export function getInsightFeed(perCategory = 12): InsightFeedItem[] {
         thumbnail: it.thumbnail || undefined,
         category: norm(it.category) || fallbackCat,
         summary: (norm(it.description || it.summary || it.subtitle) || "").slice(0, 320) || undefined,
+        videoDate: it.videoDate || undefined,
       });
     }
   };

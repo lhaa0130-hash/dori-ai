@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-5.jpg"
 tags: [영상, AI추천, 입문·기초, The iScale, 유튜브]
 videoId: ASDnDm77IRU
+videoDate: 2026-06-22T13:19:26Z
 ---
 
 ![@The iScale](https://yt3.ggpht.com/iDcdiFBiAoOQLDJLqgXdehZZBKXT3JBxngDQkAwsHJ88sH8Q3XtBzAy5eNjUUTK2x4DZr35IRA=s240-c-k-c0x00ffffff-no-rj) **The iScale** · 구독자 32.4만명 · 영상 828개

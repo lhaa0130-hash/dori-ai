@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-8.jpg"
 tags: [영상, AI추천, 입문·기초, 김용성 교수의 AI 클래스, 유튜브]
 videoId: SuQGDb9U3Rc
+videoDate: 2026-06-21T00:45:15Z
 ---
 
 ![@김용성 교수의 AI 클래스](https://yt3.ggpht.com/fX0Kq48uAgRerzyUHg4TPRgIbg8ynSh60KpkwHNva2BRuZZWGxrWlewxr0iByOai8jhCnQImkw=s240-c-k-c0x00ffffff-no-rj) **김용성 교수의 AI 클래스** · 구독자 4,400명 · 영상 33개

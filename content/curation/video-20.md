@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-20.jpg"
 tags: [영상, AI추천, AI 에이전트, 입문·기초, AI Master]
 videoId: 4TvH-OZhwxI
+videoDate: 2026-05-13T18:56:35Z
 ---
 
 ![@AI Master](https://yt3.ggpht.com/3zyScxdcSY9pGwv4juhJgpl4UNCa5V-dt9Ge3fAXhl3FlKEEIo3nar6E7hpY1yGPnkoMiHNa=s240-c-k-c0x00ffffff-no-rj) **AI Master** · 구독자 29.1만명 · 영상 444개

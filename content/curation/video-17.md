@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-17.jpg"
 tags: [영상, AI추천, 제미나이 사용법, 입문·기초, 디지털 해결사]
 videoId: syuMEGwBpws
+videoDate: 2026-06-06T15:27:28Z
 ---
 
 ![@디지털 해결사](https://yt3.ggpht.com/UTy26Y9KEJJIJDBVvcRF-8Erj26tIene8kdbLK6R6CZZpLRsPwHzjsnkaoo9vGoZsqsvCcRJqg=s240-c-k-c0x00ffffff-no-rj) **디지털 해결사** · 구독자 3.9만명 · 영상 13개

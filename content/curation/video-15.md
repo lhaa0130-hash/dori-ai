@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-15.jpg"
 tags: [영상, AI추천, AI 영화 제작, 입문·기초, Youri van Hofwegen]
 videoId: fs5S867VQzg
+videoDate: 2026-06-11T15:00:20Z
 ---
 
 ![@Youri van Hofwegen](https://yt3.ggpht.com/aJ29Msud19ay5o9d5508j-le6SnKj2oYPbXMuZP-O-uG0zsmbx6OYB8KgJ6fJLNhCg22NJDgr2Q=s240-c-k-c0x00ffffff-no-rj) **Youri van Hofwegen** · 구독자 29.8만명 · 영상 231개

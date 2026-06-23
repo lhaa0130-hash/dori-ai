@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-16.jpg"
 tags: [영상, AI추천, AI 뉴스, 최신 뉴스, 조코딩 JoCoding]
 videoId: j82T0n5-iuM
+videoDate: 2026-05-25T14:45:07Z
 ---
 
 ![@조코딩 JoCoding](https://yt3.ggpht.com/6gJoxwN9IQ3SlQIo1SibzhmwNLfxhX3t15zfQAGMxmV3Fi7aALzNayf2CzqhL5U6c2f4123G=s240-c-k-c0x00ffffff-no-rj) **조코딩 JoCoding** · 구독자 74.1만명 · 영상 2,413개

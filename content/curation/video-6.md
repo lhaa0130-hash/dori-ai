@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-6.jpg"
 tags: [영상, AI추천, 실무 활용, Code With Antonio, 유튜브]
 videoId: YKIUt9ytxIE
+videoDate: 2026-06-22T12:31:29Z
 ---
 
 ![@Code With Antonio](https://yt3.ggpht.com/hfUcRRyC488AgPpWEYXzYOGrGYyDUnjZIkLguGikZG-HkiTrDHBc5FgljDzINrXpZepZMOxgkA=s240-c-k-c0x00ffffff-no-rj) **Code With Antonio** · 구독자 41.8만명 · 영상 44개

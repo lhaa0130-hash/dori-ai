@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-11.jpg"
 tags: [영상, AI추천, AI 활용법, 입문·기초, 책과삶]
 videoId: hIrkDvQd5d8
+videoDate: 2026-06-11T09:00:27Z
 ---
 
 ![@책과삶](https://yt3.ggpht.com/If7B7NeaU9VXZbRVkRwPx-oQRRn6CId6TZR4NleQwIu-ttA2eIj_bIZkopvXoK3ND3OQze7Udg=s240-c-k-c0x00ffffff-no-rj) **책과삶** · 구독자 109만명 · 영상 666개

@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-12.jpg"
 tags: [영상, AI추천, 영상 제작, 실무 활용, 원카AI Wonka]
 videoId: wCT7kJSFLyk
+videoDate: 2026-06-13T14:15:38Z
 ---
 
 ![@원카AI Wonka](https://yt3.ggpht.com/0H-Fb0JF0ojtBn_cqj0gglvxH6ZDDmH5UK2Eeb_2MveIDQ1-GFNnWn7Mz2WBdvLSDFDwilJM=s240-c-k-c0x00ffffff-no-rj) **원카AI Wonka** · 구독자 1.6만명 · 영상 43개

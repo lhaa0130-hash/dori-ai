@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-19.jpg"
 tags: [영상, AI추천, 제미나이, 실무 활용, AI로 돈버는법 머니알고리즘]
 videoId: c4ElCUnMA8E
+videoDate: 2026-05-17T10:15:03Z
 ---
 
 ![@AI로 돈버는법, 머니알고리즘](https://yt3.ggpht.com/IHZD_B2RPWq8cNLVMAn3kcsUtvlJuK2gExFtAC8Nr1nh2PK3u7stjj2vg7sUFMr0tgsQfApR=s240-c-k-c0x00ffffff-no-rj) **AI로 돈버는법, 머니알고리즘** · 구독자 1.8만명 · 영상 23개

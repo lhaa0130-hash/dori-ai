@@ -16,6 +16,7 @@ export type InsightFeedItem = {
   thumbnail?: string;
   category: string;
   summary?: string;
+  videoDate?: string;
 };
 const INSIGHT_CATEGORY_ORDER = ["트렌드", "가이드", "리포트", "분석", "큐레이션", "영상"];
 
@@ -27,6 +28,16 @@ function fmtDate(d: string) {
   const t = new Date(d);
   if (isNaN(t.getTime())) return "";
   return t.toLocaleDateString("ko-KR", { month: "short", day: "numeric" });
+}
+
+// 영상: 실제 유튜브 업로드 날짜+시간(KST)
+export function fmtVideoDate(iso?: string) {
+  if (!iso) return "";
+  const t = new Date(iso);
+  if (isNaN(t.getTime())) return "";
+  const d = t.toLocaleDateString("ko-KR", { timeZone: "Asia/Seoul", month: "long", day: "numeric" });
+  const tm = t.toLocaleTimeString("ko-KR", { timeZone: "Asia/Seoul", hour: "2-digit", minute: "2-digit" });
+  return `${d} ${tm}`;
 }
 
 export default function InsightTabs({ items, perTab = 8 }: { items: InsightFeedItem[]; perTab?: number }) {
@@ -109,7 +120,11 @@ export default function InsightTabs({ items, perTab = 8 }: { items: InsightFeedI
                     {tab === "전체" && (
                       <span className="text-[10px] font-bold text-[#F9954E] bg-[#FFF1E3] dark:bg-[#F9954E]/15 rounded px-1.5 py-0.5">{it.category}</span>
                     )}
-                    <span className="text-neutral-400 text-[11px]">{fmtDate(it.date)}</span>
+                    {it.category === "영상" && it.videoDate ? (
+                      <span className="text-neutral-400 text-[11px]">📺 {fmtVideoDate(it.videoDate)} 업로드</span>
+                    ) : (
+                      <span className="text-neutral-400 text-[11px]">{fmtDate(it.date)}</span>
+                    )}
                   </p>
                 </div>
 

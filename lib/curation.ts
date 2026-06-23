@@ -13,6 +13,7 @@ export interface CurationPost {
   content: string;
   tags?: string[];
   thumbnail?: string;
+  videoDate?: string; // 영상 글: 실제 유튜브 업로드 시각(ISO)
 }
 
 // 📌 Frontmatter 파싱 함수 (가이드와 동일한 방식)
@@ -112,6 +113,7 @@ export function getCurationBySlug(slug: string): CurationPost | null {
     content: content,
     tags: Array.isArray(metadata.tags) ? metadata.tags : (metadata.tags ? [metadata.tags] : []),
     thumbnail: metadata.thumbnail || metadata.image,
+    videoDate: metadata.videoDate || undefined,
   };
 }
 

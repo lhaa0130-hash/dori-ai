@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-13.jpg"
 tags: [영상, AI추천, 코딩, 입문·기초, 닥또리]
 videoId: h0Yc4lF8FXw
+videoDate: 2026-06-11T00:12:19Z
 ---
 
 ![@닥또리](https://yt3.ggpht.com/QZaREWG85_f6f63ltK8k1b9i1EKFLRT2-VKfvdc8isl-lE4ULOBbJzvopoAUBSIz1tx7DnuAlKA=s240-c-k-c0x00ffffff-no-rj) **닥또리** · 구독자 3.3만명 · 영상 428개

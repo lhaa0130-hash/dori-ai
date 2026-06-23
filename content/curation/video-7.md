@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-7.jpg"
 tags: [영상, AI추천, 트렌드·전망, Andrew Ethan Zeng, 유튜브]
 videoId: FhtzROwyung
+videoDate: 2026-06-22T23:07:00Z
 ---
 
 ![@Andrew Ethan Zeng](https://yt3.ggpht.com/SrAHtFfDs0fMDcq1d-7WcrFCWqiE-ch1bPlFA1dvS60eEOhPjB3MQWMuP3NBTM7L57A276b-8dE=s240-c-k-c0x00ffffff-no-rj) **Andrew Ethan Zeng** · 구독자 42.4만명 · 영상 307개

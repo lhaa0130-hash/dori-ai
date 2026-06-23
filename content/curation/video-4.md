@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-4.jpg"
 tags: [영상, AI추천, 입문·기초, AI:ON 에이아이온💡돈버는법💡, 유튜브]
 videoId: PNxBqAlEuAI
+videoDate: 2026-06-18T11:07:23Z
 ---
 
 ![@AI:ON 에이아이온💡돈버는법💡](https://yt3.ggpht.com/vUTAPlsewiL0vdTeeddl_XMDwmNHrNpvQG3sySMus8xMG8vbaaFg3EOPY6wrQZEDtGhz9VzA=s240-c-k-c0x00ffffff-no-rj) **AI:ON 에이아이온💡돈버는법💡** · 구독자 8.9만명 · 영상 89개

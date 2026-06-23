@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-1.jpg"
 tags: [영상, AI추천, 트렌드·전망, 언더스탠딩 : 세상의 모든 지식, 유튜브]
 videoId: 0KbCNHf3P7M
+videoDate: 2026-06-19T07:55:21Z
 ---
 
 ![@언더스탠딩 : 세상의 모든 지식](https://yt3.ggpht.com/3tb87e8MoRwETS2wd4gZpsE4DMWYILkGJwKdGHyMAL0wRV9bTsYNdbiDIh7-v2gaRM3Vdizg=s240-c-k-c0x00ffffff-no-rj) **언더스탠딩 : 세상의 모든 지식** · 구독자 135만명 · 영상 4,312개

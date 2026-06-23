@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-10.jpg"
 tags: [영상, AI추천, 비즈니스·산업, Roboverse, 유튜브]
 videoId: wiq_HUhGdSo
+videoDate: 2026-06-19T14:10:56Z
 ---
 
 ![@Roboverse](https://yt3.ggpht.com/brtevLQJcEy59zLg2CWml6kU6tqOiwVdJHSb1RKgXvKflJBfwcDqMzgH2yj0Hux4xlgYFFz8dw=s240-c-k-c0x00ffffff-no-rj) **Roboverse** · 구독자 12만명 · 영상 154개

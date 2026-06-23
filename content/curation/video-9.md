@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-9.jpg"
 tags: [영상, AI추천, 입문·기초, Parker Prompts, 유튜브]
 videoId: d8XoXf0cSJI
+videoDate: 2026-06-19T13:40:26Z
 ---
 
 ![@Parker Prompts](https://yt3.ggpht.com/rmKIUlPL24nBNHrCDwupmmA5ilpfMDRlm8mP-bnbIvantod3Tzxo-ezrZjAiMoOW4iVezlEUIA=s240-c-k-c0x00ffffff-no-rj) **Parker Prompts** · 구독자 12만명 · 영상 47개
