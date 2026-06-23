@@ -75,7 +75,7 @@ export default function PsychTestClient() {
   if (done) {
     const r = RESULTS[done];
     return (
-      <main className="w-full min-h-screen max-w-xl mx-auto px-5 py-10">
+      <main className="w-full min-h-screen py-10">
         <p className="text-center text-[12px] font-bold text-[#F9954E] mb-4">나의 AI 활용 유형은…</p>
         <div className="rounded-3xl border border-neutral-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-8 text-center shadow-sm">
           <div className="text-[64px] leading-none mb-3">{r.emoji}</div>
@@ -96,7 +96,7 @@ export default function PsychTestClient() {
   const progress = Math.round((step / QUESTIONS.length) * 100);
 
   return (
-    <main className="w-full min-h-screen max-w-xl mx-auto px-5 py-10">
+    <main className="w-full min-h-screen py-10">
       {/* 헤더 */}
       <div className="mb-7">
         <p className="text-[12px] font-semibold text-[#F9954E] mb-2">🧠 AI 활용 유형 테스트</p>

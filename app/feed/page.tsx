@@ -229,7 +229,7 @@ export default function FeedPage() {
 
   return (
     <main className="w-full min-h-screen">
-      <div className="max-w-2xl mx-auto px-4 py-6 sm:py-8">
+      <div className="w-full py-6 sm:py-8">
         {/* 헤더 */}
         <div className="mb-5">
           <p className="text-[11px] font-bold tracking-wide" style={{ color: POINT }}>
