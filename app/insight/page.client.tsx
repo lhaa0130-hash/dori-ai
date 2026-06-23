@@ -68,7 +68,7 @@ export default function InsightPageClient({ initialPosts = [] }: InsightPageClie
   }, [mounted, likedPosts, likesData]);
 
   // 카테고리 목록 정의
-  const CATEGORIES = ['전체', '트렌드', '가이드', '분석', '리포트', '큐레이션', '스튜디오', '영상'];
+  const CATEGORIES = ['전체', '트렌드', '가이드', '분석', '리포트', '큐레이션', '영상'];
   const [selectedCategory, setSelectedCategory] = useState('전체');
 
   // 카테고리별 색상 (주황색 테마 기반 톤온톤)

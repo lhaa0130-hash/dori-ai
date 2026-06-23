@@ -3,9 +3,9 @@ import Link from "next/link";
 import { ArrowRight, Users, Newspaper, Wrench, Gamepad2, FolderKanban } from "lucide-react";
 import Hero from "@/components/home/Hero";
 import HomeClient from "@/components/home/HomeClient";
-import TrendPreview from "@/components/home/TrendPreview";
+import InsightTabs from "@/components/home/InsightTabs";
 import CottonCandy from "@/components/icons/CottonCandy";
-import { getAllTrends } from "@/lib/trends";
+import { getInsightFeed } from "@/lib/insightFeed";
 
 /* 퀵메뉴 — 콘텐츠 카테고리 + 섹션, 가로 스크롤 */
 const QUICK = [
@@ -21,7 +21,7 @@ const QUICK = [
 ];
 
 export default async function Home() {
-  const latestTrends = getAllTrends().slice(0, 10); // 메인 AI 트렌드: 피처드 1 + 리스트 9
+  const insightFeed = getInsightFeed(); // 메인 인사이트: 종류별 탭 순위 리스트
 
   return (
     <main className="min-h-screen">
@@ -140,8 +140,8 @@ export default async function Home() {
       {/* ④ 출석 위젯 */}
       <HomeClient />
 
-      {/* ⑤ AI 트렌드 */}
-      <TrendPreview trends={latestTrends} />
+      {/* ⑤ AI 인사이트 — 종류별 탭 순위 */}
+      <InsightTabs items={insightFeed} />
 
     </main>
   );
