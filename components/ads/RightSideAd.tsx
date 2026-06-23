@@ -67,7 +67,7 @@ export default function RightSideAd() {
   return (
     <aside
       ref={containerRef}
-      className="right-side-ad-container fixed right-6 top-1/2 -translate-y-1/2 hidden xl:flex flex-col z-40"
+      className="right-side-ad-container fixed right-[92px] top-1/2 -translate-y-1/2 hidden xl:flex flex-col z-40"
       style={{
         width: "160px",
         maxWidth: "200px",

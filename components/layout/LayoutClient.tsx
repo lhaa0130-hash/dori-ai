@@ -13,6 +13,7 @@ import RightSideAd from "@/components/ads/RightSideAd";
 import { Sidebar } from "@/components/layout/Sidebar"; // Import Sidebar
 import PageTransition from "@/components/PageTransition"; // Import PageTransition
 import BottomNav from "@/components/layout/BottomNav";
+import QuickBar from "@/components/layout/QuickBar";
 
 interface LayoutClientProps {
   children: React.ReactNode;
@@ -77,6 +78,7 @@ export default function LayoutClient({ children }: LayoutClientProps) {
       <BottomNav />
       <OpenPopup />
       <RightSideAd />
+      <QuickBar />
     </div>
   );
 }
