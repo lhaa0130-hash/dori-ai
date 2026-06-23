@@ -37,10 +37,17 @@ export default function LoginPage() {
 
   useEffect(() => setMounted(true), []);
 
+  // 로그인/가입 후 돌아갈 곳 — ?next=/trader 처럼 보호 페이지에서 넘어온 경우 그 곳으로
+  const nextDest = () => {
+    if (typeof window === "undefined") return "/";
+    const n = new URLSearchParams(window.location.search).get("next");
+    return n && n.startsWith("/") ? n : "/";
+  };
+
   // 이미 로그인한 경우 메인으로 리다이렉트
   useEffect(() => {
     if (session) {
-      router.push("/");
+      router.push(nextDest());
     }
   }, [session, router]);
 
@@ -67,7 +74,7 @@ export default function LoginPage() {
 
     const result = await login(email, password);
     if (result.success) {
-      router.push("/");
+      router.push(nextDest());
     } else {
       setError(result.error || "로그인에 실패했습니다.");
     }
@@ -104,7 +111,7 @@ export default function LoginPage() {
     });
 
     if (result.success) {
-      router.push("/");
+      router.push(nextDest());
     } else {
       setError(result.error || "회원가입에 실패했습니다.");
     }
@@ -116,7 +123,7 @@ export default function LoginPage() {
     setIsGoogleLoading(true);
     const result = await loginWithGoogle();
     if (result.success) {
-      router.push("/");
+      router.push(nextDest());
     } else {
       setError(result.error || "Google 로그인에 실패했습니다.");
     }

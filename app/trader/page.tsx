@@ -1,5 +1,6 @@
 import { createMetadata } from "@/lib/seo";
 import TraderClient from "./page.client";
+import RequireAuth from "@/components/auth/RequireAuth";
 
 export const metadata = createMetadata({
   title: "트레이더일로 (Trader Illo)",
@@ -8,5 +9,9 @@ export const metadata = createMetadata({
 });
 
 export default function Page() {
-  return <TraderClient />;
+  return (
+    <RequireAuth>
+      <TraderClient />
+    </RequireAuth>
+  );
 }

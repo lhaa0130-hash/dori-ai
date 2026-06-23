@@ -62,6 +62,11 @@ service cloud.firestore {
       allow read, write: if request.auth != null && request.auth.uid == uid;
     }
 
+    // 프로젝트 개인 저장(아크일로 설계·워크일로 작업·트레이더일로 설정 등) — 본인 것만
+    match /projectSaves/{project}/users/{uid} {
+      allow read, write: if request.auth != null && request.auth.uid == uid;
+    }
+
     // 소셜 — 방명록(주인만 삭제)
     match /guestbook/{ownerUid}/entries/{entryId} {
       allow read: if true;

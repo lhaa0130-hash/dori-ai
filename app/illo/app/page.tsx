@@ -1,5 +1,6 @@
 import { createMetadata } from "@/lib/seo";
 import IlloWebClient from "./page.client";
+import RequireAuth from "@/components/auth/RequireAuth";
 
 export const metadata = createMetadata({
   title: "워크일로 웹 — 브라우저에서 바로 쓰는 AI 도구",
@@ -8,5 +9,9 @@ export const metadata = createMetadata({
 });
 
 export default function IlloWebPage() {
-  return <IlloWebClient />;
+  return (
+    <RequireAuth>
+      <IlloWebClient />
+    </RequireAuth>
+  );
 }
