@@ -121,23 +121,9 @@ export default function TraderClient() {
   const minAgo = Math.max(0, Math.floor(ms / 60000));
   const agoStr = minAgo < 1 ? "방금" : minAgo < 60 ? `${minAgo}분 전` : `${Math.floor(minAgo / 60)}시간 ${minAgo % 60}분 전`;
 
-  const holdByCat = (name: string) => (d ? d.sections.filter((s) => s.category === name && s.open_position).length : 0);
-  const heldCats = d ? TABS.filter((t) => holdByCat(t) > 0) : [];
-  const waitCats = d ? TABS.filter((t) => holdByCat(t) === 0) : [];
-  const nowDoing =
-    heldCats.length > 0
-      ? `${heldCats.map((t) => `${t} ${holdByCat(t)}종`).join(", ")}을 보유 중` +
-        (waitCats.length ? ` · ${waitCats.join("·")}은 좋은 기회를 기다리는 중.` : ".")
-      : "전 종목을 살펴보며 좋은 매수 신호를 기다리는 중. (약한 시장에선 억지로 사지 않아요)";
-
   const chips = d
-    ? ["모의투자", "각 300만원", ...(d.test_period?.start ? [`${dot(d.test_period.start)}~${dot(d.test_period.end)}`] : []), `보유 ${d.holding ?? 0}종`]
+    ? ["모의투자", "각 300만원", ...(d.test_period?.start ? [`테스트 ${dot(d.test_period.start)}~${dot(d.test_period.end)}`] : [])]
     : [];
-  const STEPS = [
-    { label: "모의 연습", active: true },
-    { label: "소액 실전", active: false },
-    { label: "점차 확대", active: false },
-  ];
 
   return (
     <main className="w-full min-h-screen max-w-2xl mx-auto px-4 py-6">
@@ -171,9 +157,9 @@ export default function TraderClient() {
               <Chg n={d.total_return_pct} big />
             </div>
             <div className="text-sm mt-1.5">
-              <span className="text-neutral-400">평가손익 </span>
+              {d.usdkrw ? <span className="tabular-nums text-neutral-500 dark:text-neutral-300">≈ ${Math.round(d.total_ending / d.usdkrw).toLocaleString("en-US")}</span> : null}
+              <span className="text-neutral-400"> · 평가손익 </span>
               <b className={`tabular-nums ${sgn(d.total_ending - d.total_starting)}`}>{pm(d.total_ending - d.total_starting, false)}</b>
-              <span className="text-neutral-400"> (시작 {won(d.total_starting)})</span>
             </div>
 
             <div className="flex flex-wrap gap-1.5 mt-4">
@@ -181,7 +167,7 @@ export default function TraderClient() {
                 <span key={c} className="rounded-full bg-white/60 dark:bg-zinc-800/60 border border-neutral-200/60 dark:border-zinc-700/60 px-2 py-0.5 text-[11px] text-neutral-500 dark:text-neutral-400">{c}</span>
               ))}
             </div>
-            <div className="text-[11px] text-neutral-400 mt-2">감시 {d.watching ?? 0}종목 · 마지막 점검 {agoStr}</div>
+            <div className="text-[11px] text-neutral-400 mt-2">감시 {d.watching ?? 0}종목 · 보유 {d.holding ?? 0}종 · 마지막 점검 {agoStr}</div>
           </section>
 
           {/* ── 세그먼트 탭 ── */}
@@ -199,24 +185,6 @@ export default function TraderClient() {
                 </button>
               );
             })}
-          </div>
-
-          {/* ── 지금 + 진행 단계 ── */}
-          <div className="rounded-xl border border-[#F9954E]/15 bg-[#F9954E]/[0.05] px-3 py-2.5 text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed mb-3">
-            <b style={{ color: ORANGE }}>지금</b> {nowDoing}
-          </div>
-          <div className="relative mb-6 px-3">
-            <div className="absolute top-[7px] left-[20%] right-[20%] h-0.5 bg-neutral-200 dark:bg-zinc-700" />
-            <div className="relative flex justify-between">
-              {STEPS.map((s, i) => (
-                <div key={i} className="flex flex-col items-center" style={{ width: "33%" }}>
-                  <span className={`w-3.5 h-3.5 rounded-full border-2 ${s.active ? "ring-4 ring-[#F9954E]/15" : "bg-white dark:bg-zinc-950"}`}
-                    style={{ borderColor: s.active ? ORANGE : "#d4d4d8", background: s.active ? ORANGE : undefined }} />
-                  <span className={`text-[11px] mt-1.5 ${s.active ? "font-bold text-[#F9954E]" : "text-neutral-400"}`}>{i + 1} {s.label}</span>
-                  {s.active && <span className="text-[10px] text-neutral-400">지금</span>}
-                </div>
-              ))}
-            </div>
           </div>
 
           {/* ── 카테고리 요약 ── */}
