@@ -389,7 +389,7 @@ export default function ShopPage() {
       )}
 
       {/* 카테고리 탭 */}
-      <div className="-mx-4 px-4 overflow-x-auto scrollbar-hide border-b border-neutral-100 dark:border-zinc-900 sticky top-14 bg-white/90 dark:bg-black/90 backdrop-blur z-30">
+      <div className="-mx-6 px-6 overflow-x-auto scrollbar-hide border-b border-neutral-100 dark:border-zinc-900 sticky top-14 bg-white/90 dark:bg-black/90 backdrop-blur z-30">
         <div className="flex gap-2 w-max pb-4 pt-1">
           {TABS.map((tab) => {
             const active = activeTab === tab.id;

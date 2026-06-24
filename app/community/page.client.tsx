@@ -481,7 +481,7 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
         </section>
 
         {/* 정렬 탭 + 글쓰기 (sticky) */}
-        <div className="sticky top-16 z-30 -mx-4 px-4 py-2.5 bg-white/90 dark:bg-black/90 backdrop-blur-sm border-b border-neutral-100 dark:border-zinc-900">
+        <div className="sticky top-16 z-30 -mx-6 px-6 py-2.5 bg-white/90 dark:bg-black/90 backdrop-blur-sm border-b border-neutral-100 dark:border-zinc-900">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-1 p-1 bg-neutral-100 dark:bg-zinc-900 rounded-full">
               <button onClick={() => setActiveTab('trending')} className={`flex items-center gap-1.5 px-3.5 py-1.5 rounded-full text-[13px] font-bold transition-all ${activeTab === 'trending' ? 'bg-[#F9954E] text-white shadow-sm' : 'text-neutral-500 dark:text-neutral-400'}`}>
@@ -518,7 +518,7 @@ export default function CommunityClient({ initialPosts = [] }: CommunityClientPr
 
           {/* 토픽 칩 */}
           {topics.length > 1 && (
-            <div className="-mx-4 px-4 mt-2.5 overflow-x-auto scrollbar-hide">
+            <div className="-mx-6 px-6 mt-2.5 overflow-x-auto scrollbar-hide">
               <div className="flex gap-1.5 w-max pb-0.5">
                 {topics.map((t) => (
                   <button

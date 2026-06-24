@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 23 Jun 2026 23:59:51 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 24 Jun 2026 00:22:45 GMT</lastBuildDate>
+    <item>
+      <title>Fika Jobs, AI 인터뷰로 인사 혁신 이끈다</title>
+      <link>https://dori-ai.com/insight/article/trend-163</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-163</guid>
+      <category>트렌드</category>
+      <pubDate>Wed, 24 Jun 2026 00:00:25 GMT</pubDate>
+      <description>Fika Jobs가 AI 인터뷰 에이전트를 활용한 혁신적인 채용 플랫폼을 구축하기 위해 400만 달러를 투자받았다.</description>
+    </item>
     <item>
       <title>사이버 보안의 미래 — AI가 시스템을 초월할 날이 얼마 남지 않았다</title>
       <link>https://dori-ai.com/insight/article/trend-162</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Sun, 21 Jun 2026 11:00:20 GMT</pubDate>
       <description>AI 기술이 의료 분야에서 빠르게 도입되고 있지만, 신뢰성 부족으로 문제가 되고 있다. 이를 해결하기 위해 새로운 네트워크가 등장했다.</description>
-    </item>
-    <item>
-      <title>소셜 미디어에서 AI가 만든 인플루언서의 등장</title>
-      <link>https://dori-ai.com/insight/article/trend-147</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-147</guid>
-      <category>트렌드</category>
-      <pubDate>Sun, 21 Jun 2026 09:00:20 GMT</pubDate>
-      <description>AI가 생성한 인플루언서들이 소셜 미디어에서 제품 홍보에 활용되고 있으며, 이는 마케팅의 새로운 패러다임을 제시하고 있다.</description>
     </item>
   </channel>
 </rss>

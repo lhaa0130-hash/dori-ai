@@ -69,7 +69,7 @@ export default function AiToolsClient() {
         </p>
 
         {/* 카테고리 필터 — 가로 스크롤 */}
-        <div className="-mx-4 px-4 overflow-x-auto scrollbar-hide">
+        <div className="-mx-6 px-6 overflow-x-auto scrollbar-hide">
           <div className="flex gap-2 w-max pb-4">
             {/* 전체 */}
             <button

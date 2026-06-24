@@ -46,7 +46,7 @@ export default async function Home() {
 
       {/* ② 퀵 액세스 — 한 줄 가로 스크롤 */}
       <section className="py-4 border-b border-neutral-100 dark:border-zinc-900">
-        <div className="-mx-4 px-4 overflow-x-auto scrollbar-hide">
+        <div className="-mx-6 px-6 overflow-x-auto scrollbar-hide">
           <div className="flex gap-1 w-max">
             {SECTIONS.map(({ label, href, Icon }) => (
               <Link
