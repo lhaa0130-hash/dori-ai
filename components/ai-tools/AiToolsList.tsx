@@ -289,6 +289,7 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
   const [isLoaded, setIsLoaded] = useState(false);
   const [popRanks, setPopRanks] = useState<Record<string, number>>({});
   const [orPop, setOrPop] = useState<Record<string, number>>({});
+  const [orApps, setOrApps] = useState<AiTool[]>([]);
 
   useEffect(() => {
     const savedRatings = JSON.parse(localStorage.getItem("dori_tool_ratings") || "{}");
@@ -346,6 +347,20 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
         if (v > 0) map[t.id] = v;
       }
       setOrPop(map);
+
+      // OpenRouter 실사용 톱 '에이전트/코딩' 앱을 에이전트 카테고리에 합치기(목록에 없던 Hermes 등 실제 1위가 뜨도록)
+      const curatedNames = new Set(AI_TOOLS_DATA.map((t) => norm(t.name)));
+      const isAgentApp = (a: any) => /agent|code|coding|cli|dev|build|automat|claw|assistant|copilot|에이전트|코드/i.test(((a.title || "") + " " + (a.desc || "")));
+      const apps = (j.appsTop || [])
+        .filter((a: any) => a.title && isAgentApp(a) && !curatedNames.has(norm(a.title)))
+        .slice(0, 6)
+        .map((a: any) => ({
+          id: "orapp-" + norm(a.title), name: a.title, category: "agent",
+          summary: (a.desc || "").replace(/\s*\S*$/, "") + "…", strength: (a.desc || "").replace(/\s*\S*$/, "") + "…",
+          description: a.desc || "", website: a.url || a.favicon || "#",
+          pros: [], rating: 0, ratingCount: 0, userRatings: [], comments: [], __or: a.tokensB || 0,
+        }));
+      setOrApps(apps as any);
     };
     fetch("/api/openrouter").then((r) => (r.ok ? r.json() : null))
       .then((j) => (j ? compute(j) : fetch("/openrouter-stats.json").then((r) => (r.ok ? r.json() : null)).then(compute)))
@@ -353,7 +368,10 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
   }, []);
 
   const base = isLoaded && tools.length > 0 ? tools : AI_TOOLS_DATA;
-  const currentTools = base.map((t) => ({ ...t, __pop: popRanks[t.id] ?? null, __or: orPop[t.id] ?? 0 })) as AiTool[];
+  const currentTools = [
+    ...base.map((t) => ({ ...t, __pop: popRanks[t.id] ?? null, __or: orPop[t.id] ?? 0 })),
+    ...orApps, // OpenRouter 실사용 톱 에이전트 앱(Hermes 등) 합류
+  ] as AiTool[];
   const isOverviewMode = filters.category === "All";
 
   if (isOverviewMode) {
