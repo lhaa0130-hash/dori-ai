@@ -19352,5 +19352,2830 @@
         "조류"
       ]
     }
+  },
+  {
+    "no": "0266",
+    "rarity": 2,
+    "animal_name": "대벌레",
+    "sci": "Ramulus irregulariterdentatus",
+    "en": "Stick Insect",
+    "search_nickname": "나뭇가지 곤충",
+    "kid_friendly_desc": "대벌레는 나뭇가지처럼 생긴 곤충이에요. 몸이 나뭇가지처럼 보여서 적들이 쉽게 찾지 못해요. 그리고 위험할 때는 다리를 끊고 도망가기도 해요. 주로 나무 잎을 먹고 살아요.",
+    "status": {
+      "label": "자료 부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 절지동물문 › 곤충강 › 대벌레목 › 대벌레과 › 대벌레속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "열대우림"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "초식"
+      ],
+      [
+        "📏",
+        "크기",
+        "손바닥만한"
+      ],
+      [
+        "✨",
+        "특기",
+        "몸이 나뭇가지 모양"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 1~2년"
+      ]
+    ],
+    "facts": [
+      "대벌레는 자신의 몸을 나뭇가지처럼 위장해 적에게서 자신을 숨깁니다.",
+      "대벌레는 위험을 느끼면 다리를 끊고 도망가는 방법으로 자신을 방어합니다.",
+      "활엽수의 잎을 갉아먹으며 일부 지역에서는 해충으로 취급됩니다."
+    ],
+    "image_path": "/images/animal/stick-insect.jpg",
+    "card_path": "/cards/animal/0266.png",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [
+        "초록색"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "열대우림"
+      ],
+      "feature": [
+        "변장하는"
+      ],
+      "body": [
+        "다리가 6개+"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "곤충"
+      ]
+    }
+  },
+  {
+    "no": "0267",
+    "rarity": 3,
+    "animal_name": "사마귀",
+    "sci": "Mantodea",
+    "en": "Praying mantis",
+    "search_nickname": "곰손 곤충",
+    "kid_friendly_desc": "사마귀는 앞다리가 곰손처럼 생긴 곤충이에요. 주로 곤충을 잡아먹고 살며, 알을 낳아 번식해요. 사마귀는 몸을 숨길 줄도 알아서 다른 동물들에게 잡히지 않기도 해요.",
+    "status": {
+      "label": "정보부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 절지동물문 › 곤충강 › 사마귀목",
+    "subspecies": "사마귀, 왕사마귀, 좀사마귀",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "초원, 도시 근처"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "육식"
+      ],
+      [
+        "📏",
+        "크기",
+        "손바닥만한"
+      ],
+      [
+        "✨",
+        "번식",
+        "알을 낳는"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 1년"
+      ]
+    ],
+    "facts": [
+      "사마귀는 앞다리가 먹잇감을 붙잡기에 적합한 낫 모양이다.",
+      "사마귀 암컷은 교미 후 수컷을 잡아먹을 수 있다.",
+      "사마귀는 3D 화면을 인식할 수 있는 능력이 있다."
+    ],
+    "image_path": "/images/animal/praying-mantis.jpg",
+    "card_path": "/cards/animal/0267.png",
+    "filters": {
+      "diet": [
+        "육식"
+      ],
+      "color": [],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "초원",
+        "도시 근처"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 6개+"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "곤충"
+      ]
+    }
+  },
+  {
+    "no": "0268",
+    "rarity": 3,
+    "animal_name": "반딧불이",
+    "sci": "Lampyridae",
+    "en": "Firefly",
+    "search_nickname": "불빛벌레",
+    "kid_friendly_desc": "반딧불이는 밤에 빛을 내는 작은 벌레에요. 주로 초저녁에 노란 빛을 내며 풀밭 위를 날아다닌답니다. 반딧불이는 빛을 이용해 친구를 찾기도 해요. 이 특별한 빛 덕분에 반딧불이는 밤하늘의 작은 별처럼 보인답니다.",
+    "status": {
+      "label": "절멸 위기 근접",
+      "code": "NT",
+      "color": "#9CCC65"
+    },
+    "taxonomy": "동물계 › 절지동물문 › 곤충강 › 딱정벌레목 › 반딧불이과",
+    "subspecies": "Cyphonocerinae, Lampyrinae, Luciolinae, Ototetrinae, Photurinae",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "초원"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "꽃의 화분이나 꽃꿀을 먹는"
+      ],
+      [
+        "📏",
+        "크기",
+        "손보다 작은"
+      ],
+      [
+        "✨",
+        "특기",
+        "빛을 내는"
+      ],
+      [
+        "⏳",
+        "수명",
+        "성충 기간은 10~15일 정도"
+      ]
+    ],
+    "facts": [
+      "반딧불이는 주로 초저녁에 빛을 내며 날아다닙니다.",
+      "반딧불이의 유충은 다슬기와 달팽이를 주로 먹습니다.",
+      "한국에서는 반딧불이의 서식지가 파괴되어 절멸 위기에 처해 있습니다."
+    ],
+    "image_path": "/images/animal/firefly.jpg",
+    "card_path": "/cards/animal/0268.png",
+    "filters": {
+      "diet": [
+        "꿀을 먹는"
+      ],
+      "color": [],
+      "size": [
+        "손보다 작은"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [
+        "빛을 내는"
+      ],
+      "body": [
+        "다리가 6개+"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "곤충"
+      ]
+    }
+  },
+  {
+    "no": "0269",
+    "rarity": 2,
+    "animal_name": "하늘소",
+    "sci": "Cerambycidae",
+    "en": "Longhorn Beetle",
+    "search_nickname": "긴 더듬이 곤충",
+    "kid_friendly_desc": "하늘소는 긴 더듬이를 가진 곤충이에요. 몸은 황갈색 잔털로 덮여 있고, 애벌레는 나무 속에서 자라요. 수컷 하늘소는 암컷보다 더듬이가 더 길답니다.",
+    "status": {
+      "label": "정보 부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 절지동물문 › 곤충강 › 딱정벌레목 › 하늘소과",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "숲과 나무 주변"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "초식"
+      ],
+      [
+        "📏",
+        "크기",
+        "손바닥만한"
+      ],
+      [
+        "✨",
+        "특기",
+        "긴 더듬이"
+      ],
+      [
+        "⏳",
+        "수명",
+        "성충으로 몇 주에서 몇 달"
+      ]
+    ],
+    "facts": [
+      "하늘소의 수컷은 암컷보다 더듬이가 훨씬 길어요.",
+      "하늘소 애벌레는 나무 속을 파고 들어가 자라요.",
+      "하늘소는 황갈색 잔털로 덮여 있어요."
+    ],
+    "image_path": "/images/animal/longhorn-beetle.jpg",
+    "card_path": "/cards/animal/0269.png",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [
+        "알록달록한"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [],
+      "feature": [],
+      "body": [
+        "다리가 6개+"
+      ],
+      "behavior": [
+        "혼자 사는"
+      ],
+      "taxonomy": [
+        "곤충"
+      ]
+    }
+  },
+  {
+    "no": "0270",
+    "rarity": 3,
+    "animal_name": "장수말벌",
+    "sci": "Vespa mandarinia",
+    "en": "Asian giant hornet",
+    "search_nickname": "거대 말벌",
+    "kid_friendly_desc": "장수말벌은 아주 큰 말벌이에요. 숲속에 살며 다른 곤충을 잡아먹죠. 조심해야 해요, 왜냐하면 이 말벌은 무섭게 쏠 수 있거든요!",
+    "status": {
+      "label": "정보부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 절지동물문 › 곤충강 › 벌목 › 말벌과 › 말벌속",
+    "subspecies": "V. m. mandarinia, V. mandarinia magnifica, V. mandarinia nobilis",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "삼림"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "곤충을 먹는"
+      ],
+      [
+        "📏",
+        "크기",
+        "손바닥만한"
+      ],
+      [
+        "✨",
+        "번식",
+        "알을 낳는"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 1년"
+      ]
+    ],
+    "facts": [
+      "장수말벌은 세계에서 가장 큰 말벌로 알려져 있어요.",
+      "이 말벌은 땅속에 집을 지어 생활해요.",
+      "장수말벌은 독침이 길고 독액이 많아 다른 곤충을 쉽게 사냥할 수 있어요."
+    ],
+    "image_path": "/images/animal/asian-giant-hornet.jpg",
+    "card_path": "/cards/animal/0270.png",
+    "filters": {
+      "diet": [
+        "곤충을 먹는"
+      ],
+      "color": [
+        "검정색"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [],
+      "feature": [],
+      "body": [
+        "다리가 6개+"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "곤충"
+      ]
+    }
+  },
+  {
+    "no": "0271",
+    "rarity": 2,
+    "animal_name": "방아깨비",
+    "sci": "Acrida cinerea",
+    "en": "Oriental Longheaded Locust",
+    "search_nickname": "따닥개비",
+    "kid_friendly_desc": "방아깨비는 길쭉한 몸을 가진 큰 메뚜기예요. 초록색 몸에 긴 뒷다리로 방아처럼 움직여서 이름이 붙었답니다. 날아갈 때는 날개를 부딪쳐 '따다닥' 소리를 내요.",
+    "status": {
+      "label": "정보부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 절지동물문 › 곤충강 › 메뚜기목 › 메뚜기과 › 방아깨비속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "초원"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "초식"
+      ],
+      [
+        "📏",
+        "크기",
+        "손바닥만한"
+      ],
+      [
+        "✨",
+        "날개",
+        "뒷날개로 소리를 냄"
+      ],
+      [
+        "⏳",
+        "수명",
+        "자연 상태 평균 1년"
+      ]
+    ],
+    "facts": [
+      "방아깨비는 한국에서 가장 큰 메뚜기입니다.",
+      "뒷다리가 매우 길어 방아깨비라는 이름이 붙었습니다.",
+      "날아갈 때 '따다닥' 소리를 냅니다."
+    ],
+    "image_path": "/images/animal/oriental-longheaded-locust.jpg",
+    "card_path": "/cards/animal/0271.png",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [
+        "초록색"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [
+        "날 수 있는"
+      ],
+      "body": [
+        "다리가 6개+"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "곤충"
+      ]
+    }
+  },
+  {
+    "no": "0272",
+    "rarity": 2,
+    "animal_name": "집게벌레",
+    "sci": "Dermaptera",
+    "en": "Earwig",
+    "search_nickname": "작은 집게 곤충",
+    "kid_friendly_desc": "집게벌레는 작은 곤충으로 배 끝에 집게처럼 생긴 부분이 있어요. 습한 곳을 좋아해서 정원이나 풀숲에서 자주 볼 수 있답니다. 사람에게는 해를 끼치지 않으니 걱정하지 마세요!",
+    "status": {
+      "label": "정보부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 절지동물문 › 곤충강 › 집게벌레목",
+    "subspecies": "애흰수염집게벌레, 고마로브집게벌레",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "축축한 땅 밑이나 돌 밑, 풀숲, 정원"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "작은 곤충이나 썩은 낙엽, 부식질 등을 먹는 잡식성"
+      ],
+      [
+        "📏",
+        "크기",
+        "손바닥만한"
+      ],
+      [
+        "✨",
+        "모성애",
+        "자신의 알을 보호하는 본능"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 1년"
+      ]
+    ],
+    "facts": [
+      "집게벌레는 배 끝에 집게를 가지고 있어요.",
+      "집게벌레는 습한 곳을 좋아해요.",
+      "집게벌레는 사람에게 피해를 주지 않아요."
+    ],
+    "image_path": "/images/animal/earwig.jpg",
+    "card_path": "/cards/animal/0272.png",
+    "filters": {
+      "diet": [
+        "잡식"
+      ],
+      "color": [],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 6개+"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "곤충"
+      ]
+    }
+  },
+  {
+    "no": "0273",
+    "rarity": 1,
+    "animal_name": "소금쟁이",
+    "sci": "Gerridae",
+    "en": "Water Strider",
+    "search_nickname": "물 위를 걷는 곤충",
+    "kid_friendly_desc": "소금쟁이는 물 위를 걷는 작은 곤충이에요. 물고기 시체나 물에 빠진 곤충을 먹고 살아요. 물 위에서 빠르게 움직이며, 겨울에는 낙엽 밑에서 잠을 자요.",
+    "status": {
+      "label": "정보없음",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 절지동물문 › 곤충강 › 노린재목 › 소금쟁이과",
+    "subspecies": "Rhadadotarsinae, Trepobatinae, Halobatinae, Ptilomerinae, Cylindrostethinae, Charmatometrinae, Eotrechinae, Gerrinae",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "강·호수"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "육식"
+      ],
+      [
+        "📏",
+        "크기",
+        "손바닥만한"
+      ],
+      [
+        "✨",
+        "무리",
+        "혼자 사는"
+      ],
+      [
+        "⏳",
+        "수명",
+        "정보없음"
+      ]
+    ],
+    "facts": [
+      "소금쟁이는 물 위를 빠르게 이동할 수 있다.",
+      "소금쟁이는 물에 뜨기 위해 다리에 잔털과 기름기가 있다.",
+      "소금쟁이는 수면 위에서 주로 생활하며 먹이를 사냥한다."
+    ],
+    "image_path": "/images/animal/water-strider.jpg",
+    "card_path": "/cards/animal/0273.png",
+    "filters": {
+      "diet": [
+        "육식"
+      ],
+      "color": [
+        "검정색"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "강·호수"
+      ],
+      "feature": [
+        "날 수 있는"
+      ],
+      "body": [
+        "다리가 6개+"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "곤충"
+      ]
+    }
+  },
+  {
+    "no": "0274",
+    "rarity": 4,
+    "animal_name": "물방개",
+    "sci": "Cybister chinensis",
+    "en": "Diving beetle",
+    "search_nickname": "물속 친구",
+    "kid_friendly_desc": "물방개는 물속에서 사는 큰 곤충이에요. 물속에서 헤엄치고 공기 방울을 저장할 수 있어요. 위험하면 특별한 냄새를 내어 도망가기도 해요.",
+    "status": {
+      "label": "멸종위기 야생생물 Ⅱ급",
+      "code": "EN",
+      "color": "#E8743B"
+    },
+    "taxonomy": "동물계 › 절지동물문 › 곤충강 › 딱정벌레목 › 물방개과 › 속(학명)",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "강·호수"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "육식"
+      ],
+      [
+        "📏",
+        "크기",
+        "손바닥만한"
+      ],
+      [
+        "✨",
+        "특기",
+        "물속에서 헤엄치거나 자맥질할 수 있는"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 1~2년"
+      ]
+    ],
+    "facts": [
+      "물방개는 몸길이가 약 3.5~4.5cm로 물방개과의 곤충 중 가장 큽니다.",
+      "성충은 육식성으로 살아있는 것과 죽은 것을 가리지 않고 먹습니다.",
+      "위험을 느끼면 머리 뒤쪽에서 악취를 띤 물질을 분비해 도망칩니다."
+    ],
+    "image_path": "/images/animal/diving-beetle.jpg",
+    "card_path": "/cards/animal/0274.png",
+    "filters": {
+      "diet": [
+        "육식"
+      ],
+      "color": [
+        "초록색",
+        "검정색"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "강·호수"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 6개+"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "곤충"
+      ]
+    }
+  },
+  {
+    "no": "0275",
+    "rarity": 3,
+    "animal_name": "귀상어",
+    "sci": "Sphyran zygaena",
+    "en": "Smooth Hammerhead",
+    "search_nickname": "망치머리 상어",
+    "kid_friendly_desc": "귀상어는 머리가 망치처럼 생긴 특별한 상어예요. 바다에서 큰 무리를 지어 다니며 물고기들을 먹고 살아요. 귀상어는 아주 똑똑해서 전류도 잘 감지할 수 있답니다.",
+    "status": {
+      "label": "정보부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 연골어강 › 악상어목 › 귀상어과 › 귀상어속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "바다"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "물고기를 먹는"
+      ],
+      [
+        "📏",
+        "크기",
+        "버스만한"
+      ],
+      [
+        "✨",
+        "무리",
+        "수백에서 수천 마리의 무리 형성"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 20~30년"
+      ]
+    ],
+    "facts": [
+      "귀상어는 머리가 망치 모양으로 넓게 퍼져 있어 눈과 콧구멍이 머리 양쪽 끝에 있다.",
+      "전류 탐지 능력이 뛰어나 10억분의 1volt까지 감지할 수 있다.",
+      "귀상어는 고급 요리의 재료로도 많이 쓰이며, 지느러미는 킬로당 100달러 이상이다."
+    ],
+    "image_path": "/images/animal/smooth-hammerhead.jpg",
+    "card_path": "/cards/animal/0275.png",
+    "filters": {
+      "diet": [
+        "물고기를 먹는"
+      ],
+      "color": [
+        "검정색",
+        "흰색"
+      ],
+      "size": [
+        "버스만한"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [
+        "엄청 빠른"
+      ],
+      "body": [
+        "다리가 없는"
+      ],
+      "behavior": [
+        "무리지어 사는"
+      ],
+      "taxonomy": [
+        "어류"
+      ]
+    }
+  },
+  {
+    "no": "0276",
+    "rarity": 3,
+    "animal_name": "갯가재",
+    "sci": "Oratosquilla oratoria",
+    "en": "Japanese mantis shrimp",
+    "search_nickname": "해저의 사냥꾼",
+    "kid_friendly_desc": "갯가재는 바다 속에서 발견되는 작은 갑각류예요. 이들은 강력한 앞다리로 먹이를 잡아먹고, 굴을 파서 그 안에서 생활해요. 특히 밤에 활동하며 작은 물고기나 게를 사냥한답니다.",
+    "status": {
+      "label": "정보부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 절지동물문 › 갑각강 › 구각목 › 갯가재과 › Oratosquilla속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "해안, 산호초, 평판한 해저 기질"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "잡식"
+      ],
+      [
+        "📏",
+        "크기",
+        "12~18.5cm"
+      ],
+      [
+        "✨",
+        "번식",
+        "주로 5~9월에 알을 낳는다"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 6~10년"
+      ]
+    ],
+    "facts": [
+      "갯가재는 강력한 앞다리로 먹이를 사냥한다.",
+      "수심 10~30미터의 진흙 바닥에 굴을 파고 산다.",
+      "야행성으로 밤에 주로 활동한다."
+    ],
+    "image_path": "/images/animal/japanese-mantis-shrimp.jpg",
+    "card_path": "/cards/animal/0276.png",
+    "filters": {
+      "diet": [
+        "잡식"
+      ],
+      "color": [
+        "알록달록한"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [
+        "야행성"
+      ],
+      "body": [
+        "다리가 6개+"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "갑각류"
+      ]
+    }
+  },
+  {
+    "no": "0277",
+    "rarity": 2,
+    "animal_name": "넙치",
+    "sci": "Paralichthys olivaceus",
+    "en": "halibut",
+    "search_nickname": "광어",
+    "kid_friendly_desc": "넙치는 바다에서 사는 물고기로, 몸이 납작하고 눈이 왼쪽으로 몰려 있어요. 여름에는 얕은 곳에 살다가 겨울이 되면 더 깊은 곳으로 가요. 사람들은 넙치를 주로 회로 먹어요.",
+    "status": {
+      "label": "정보부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 가자미목 › 넙치과 › Paralichthys",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "바다"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "물고기를 먹는"
+      ],
+      [
+        "📏",
+        "크기",
+        "고양이만한"
+      ],
+      [
+        "✨",
+        "산란기",
+        "2-7월"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 20년"
+      ]
+    ],
+    "facts": [
+      "넙치는 눈이 왼쪽으로 몰려 있는 독특한 생김새를 가지고 있어요.",
+      "여름에는 얕은 곳에 살다가 겨울에는 더 깊은 곳으로 이동해요.",
+      "양식 넙치는 자연산과 달리 배가 얼룩덜룩해요."
+    ],
+    "image_path": "/images/animal/halibut.jpg",
+    "card_path": "/cards/animal/0277.png",
+    "filters": {
+      "diet": [
+        "물고기를 먹는"
+      ],
+      "color": [
+        "흰색"
+      ],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 없는"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "어류"
+      ]
+    }
+  },
+  {
+    "no": "0278",
+    "rarity": 3,
+    "animal_name": "산갈치",
+    "sci": "Regalecus russelii",
+    "en": "Oarfish",
+    "search_nickname": "바다의 리본",
+    "kid_friendly_desc": "산갈치는 바다 깊은 곳에 사는 아주 긴 물고기예요. 비늘이 없고 은색 몸을 가지고 있으며, 머리 위에는 빨간 지느러미가 있어요. 산갈치는 물고기를 먹으며, 드물게 해변에서 발견되기도 해요.",
+    "status": {
+      "label": "정보부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 경골어류 › 이악어목 › 산갈치과 › 산갈치속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "바다"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "물고기를 먹는"
+      ],
+      [
+        "📏",
+        "크기",
+        "세상 가장 큰"
+      ],
+      [
+        "✨",
+        "특기",
+        "긴 몸길이와 붉은색 등지느러미 볏"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 10~15년"
+      ]
+    ],
+    "facts": [
+      "산갈치는 최대 8미터까지 자랄 수 있는 매우 긴 몸을 가지고 있어요.",
+      "비늘이 없고 은색의 몸을 가지고 있으며, 붉은색의 등지느러미가 특징이에요.",
+      "심해의 수역에서 발견되며, 드물게 해변으로 떠밀려 나오기도 해요."
+    ],
+    "image_path": "/images/animal/oarfish.jpg",
+    "card_path": "/cards/animal/0278.png",
+    "filters": {
+      "diet": [
+        "물고기를 먹는"
+      ],
+      "color": [
+        "빨간색"
+      ],
+      "size": [
+        "세상 가장 큰"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 없는"
+      ],
+      "behavior": [],
+      "taxonomy": [
+        "어류"
+      ]
+    }
+  },
+  {
+    "no": "0279",
+    "rarity": 2,
+    "animal_name": "황새치",
+    "sci": "Xiphias gladius",
+    "en": "swordfish",
+    "search_nickname": "칼고기",
+    "kid_friendly_desc": "황새치는 긴 칼처럼 생긴 주둥이를 가진 큰 물고기예요. 바다에서 빠르게 헤엄치며 작은 물고기들을 잡아먹어요. 전 세계 따뜻한 바다에 살고 있어요.",
+    "status": {
+      "label": "관심 필요",
+      "code": "LC",
+      "color": "#5BA86B"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 전갱이목 › 황새치과 › 황새치속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "바다"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "물고기를 먹는"
+      ],
+      [
+        "📏",
+        "크기",
+        "세상 가장 큰"
+      ],
+      [
+        "✨",
+        "속도",
+        "시속 35km로 매우 빠르게 헤엄침"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 9년"
+      ]
+    ],
+    "facts": [
+      "황새치는 긴 칼 모양의 주둥이로 먹이를 기절시킵니다.",
+      "세계의 따뜻한 바다에 널리 분포합니다.",
+      "황새치는 매우 빠르게 헤엄칠 수 있는 능력을 가지고 있습니다."
+    ],
+    "image_path": "/images/animal/swordfish.jpg",
+    "card_path": "/cards/animal/0279.png",
+    "filters": {
+      "diet": [
+        "물고기를 먹는"
+      ],
+      "color": [],
+      "size": [
+        "세상 가장 큰"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [
+        "엄청 빠른"
+      ],
+      "body": [
+        "다리가 없는"
+      ],
+      "behavior": [],
+      "taxonomy": [
+        "어류"
+      ]
+    }
+  },
+  {
+    "no": "0280",
+    "rarity": 3,
+    "animal_name": "갑오징어",
+    "sci": "Sepia officinalis",
+    "en": "Common Cuttlefish",
+    "search_nickname": "바다의 마술사",
+    "kid_friendly_desc": "갑오징어는 바다에 사는 특별한 동물이에요. 몸 색깔을 바꿀 수 있어서 숨바꼭질을 잘해요. 다리가 여덟 개나 있어서 게나 물고기를 쉽게 잡아먹을 수 있답니다. 갑오징어는 멋진 마술사 같아요!",
+    "status": {
+      "label": "정보 부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 연체동물문 › 두족강 › 갑오징어목 › 갑오징어과 › Sepia",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "바다"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "잡식"
+      ],
+      [
+        "📏",
+        "크기",
+        "고양이만한"
+      ],
+      [
+        "✨",
+        "위장 능력",
+        "다양한 색상과 패턴으로 위장 가능"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 1년"
+      ]
+    ],
+    "facts": [
+      "갑오징어는 독보적인 위장 능력을 가지고 있어 환경에 맞춰 색과 패턴을 바꿀 수 있습니다.",
+      "다양한 해양 생물을 사냥하며, 심지어 독이 있는 파란고리문어와 새끼 복어도 사냥할 수 있습니다.",
+      "갑오징어의 뼈는 칼슘이 풍부하여 애완용 조류의 먹이로도 사용됩니다."
+    ],
+    "image_path": "/images/animal/common-cuttlefish.jpg",
+    "card_path": "/cards/animal/0280.png",
+    "filters": {
+      "diet": [
+        "잡식"
+      ],
+      "color": [],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [
+        "변장하는"
+      ],
+      "body": [
+        "다리가 6개+"
+      ],
+      "behavior": [
+        "혼자 사는"
+      ],
+      "taxonomy": [
+        "연체동물"
+      ]
+    }
+  },
+  {
+    "no": "0281",
+    "rarity": 3,
+    "animal_name": "갯민숭달팽이",
+    "sci": "Nudibranchia",
+    "en": "Sea Slug",
+    "search_nickname": "바다청소기",
+    "kid_friendly_desc": "갯민숭달팽이는 바다에 사는 작은 달팽이 친구예요. 알록달록한 색을 가지고 있어서 다른 동물들이 먹지 못하게 해요. 바다 밑바닥을 돌아다니며 조개나 해초를 먹기도 해요.",
+    "status": {
+      "label": "정보부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 연체동물문 › 복족강 › 나새목",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "바다"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "육식"
+      ],
+      [
+        "📏",
+        "크기",
+        "손보다 작은"
+      ],
+      [
+        "✨",
+        "번식",
+        "알을 낳는"
+      ],
+      [
+        "⏳",
+        "수명",
+        "몇 주에서 1년"
+      ]
+    ],
+    "facts": [
+      "갯민숭달팽이는 화려한 색상을 통해 독성을 경고합니다.",
+      "자웅동체이지만 자가수정은 하지 않습니다.",
+      "일부 갯민숭달팽이는 먹이의 독소를 체내에 저장하여 방어합니다."
+    ],
+    "image_path": "/images/animal/sea-slug.jpg",
+    "card_path": "/cards/animal/0281.png",
+    "filters": {
+      "diet": [
+        "육식"
+      ],
+      "color": [
+        "알록달록한"
+      ],
+      "size": [
+        "손보다 작은"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [
+        "독이 있는",
+        "변장하는"
+      ],
+      "body": [
+        "다리가 없는"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "연체동물"
+      ]
+    }
+  },
+  {
+    "no": "0282",
+    "rarity": 3,
+    "animal_name": "앵무조개",
+    "sci": "Nautilus pompilius",
+    "en": "Chambered Nautilus",
+    "search_nickname": "심해의 탐험가",
+    "kid_friendly_desc": "앵무조개는 아주 오래된 바다 동물이에요. 껍데기가 여러 칸으로 나뉘어 있어서 '방이 있는 조개'라고 불리기도 해요. 깊은 바다에서 살며, 특별한 모습으로 유명하답니다.",
+    "status": {
+      "label": "정보부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 연체동물문 › 두족강 › 앵무조개과 › 앵무조개속",
+    "subspecies": "Nautilus pompilius pompilius, Nautilus pompilius suluensis",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "태평양의 심해 해저"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "잡식"
+      ],
+      [
+        "📏",
+        "크기",
+        "고양이만한"
+      ],
+      [
+        "✨",
+        "특기",
+        "살아있는 화석"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 15~20년"
+      ]
+    ],
+    "facts": [
+      "앵무조개는 살아있는 화석으로 불립니다.",
+      "앵무조개는 심해에서 살아가며, 태평양 지역에 주로 서식합니다.",
+      "오징어나 문어와는 먼 친척 관계입니다."
+    ],
+    "image_path": "/images/animal/chambered-nautilus.jpg",
+    "card_path": "/cards/animal/0282.png",
+    "filters": {
+      "diet": [
+        "잡식"
+      ],
+      "color": [],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 없는"
+      ],
+      "behavior": [],
+      "taxonomy": [
+        "연체동물"
+      ]
+    }
+  },
+  {
+    "no": "0283",
+    "rarity": 3,
+    "animal_name": "파란고리문어",
+    "sci": "Hapalochlaena",
+    "en": "Blue-ringed octopus",
+    "search_nickname": "파란고리문어",
+    "kid_friendly_desc": "파란고리문어는 작고 무늬가 예쁜 문어예요. 하지만 만지면 안 돼요. 독이 있어서 위험할 수 있거든요. 바닷속에서 주로 혼자 살며 작은 물고기와 게를 먹어요.",
+    "status": {
+      "label": "정보부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 연체동물문 › 두족강 › 문어목 › 문어과 › Hapalochlaena",
+    "subspecies": "Hapalochlaena lunulata, Hapalochlaena maculosa, Hapalochlaena fasciata, Hapalochlaena nierstraszi",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "바다"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "물고기를 먹는, 갑각류를 먹는"
+      ],
+      [
+        "📏",
+        "크기",
+        "손보다 작은"
+      ],
+      [
+        "✨",
+        "특기",
+        "독이 있는"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 2~3년"
+      ]
+    ],
+    "facts": [
+      "파란고리문어는 독성이 매우 강해 사람에게 치명적일 수 있습니다.",
+      "이 문어는 위협을 느끼면 피부 색이 급격히 변해 경고 신호를 보냅니다.",
+      "파란고리문어는 작은 틈새에 숨을 수 있을 만큼 몸을 쉽게 변형할 수 있습니다."
+    ],
+    "image_path": "/images/animal/blue-ringed-octopus.jpg",
+    "card_path": "/cards/animal/0283.png",
+    "filters": {
+      "diet": [
+        "물고기를 먹는"
+      ],
+      "color": [
+        "파란색"
+      ],
+      "size": [
+        "손보다 작은"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [
+        "독이 있는"
+      ],
+      "body": [
+        "다리가 없는"
+      ],
+      "behavior": [
+        "혼자 사는"
+      ],
+      "taxonomy": [
+        "연체동물"
+      ]
+    }
+  },
+  {
+    "no": "0284",
+    "rarity": 5,
+    "animal_name": "카카포",
+    "sci": "Strigops habroptilus",
+    "en": "Kakapo",
+    "search_nickname": "올빼미앵무",
+    "kid_friendly_desc": "카카포는 뉴질랜드에 사는 특별한 앵무새예요. 이 앵무새는 날지 못하지만, 오래 살고 씨앗을 먹어요. 카카포는 밤에 활동하는 야행성 동물이에요.",
+    "status": {
+      "label": "심각한 멸종위기",
+      "code": "CR",
+      "color": "#E53935"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 조류강 › 앵무목 › 스트리곱스속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "뉴질랜드의 포식자가 없는 섬"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "씨앗을 먹는"
+      ],
+      [
+        "📏",
+        "크기",
+        "고양이만한"
+      ],
+      [
+        "✨",
+        "번식",
+        "일부다처제"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 60~90년"
+      ]
+    ],
+    "facts": [
+      "카카포는 날지 못하는 앵무새입니다.",
+      "카카포는 전 세계에서 가장 오래 사는 새 중 하나입니다.",
+      "카카포는 모든 개체에 이름이 붙어 있습니다."
+    ],
+    "image_path": "/images/animal/kakapo.jpg",
+    "card_path": "/cards/animal/0284.png",
+    "filters": {
+      "diet": [
+        "씨앗을 먹는"
+      ],
+      "color": [
+        "초록색"
+      ],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [
+        "야행성"
+      ],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    }
+  },
+  {
+    "no": "0285",
+    "rarity": 3,
+    "animal_name": "군함조",
+    "sci": "Fregata ariel",
+    "en": "Lesser Frigatebird",
+    "search_nickname": "하늘의 해적",
+    "kid_friendly_desc": "군함조는 큰 날개를 가진 새예요. 주로 따뜻한 섬 근처에서 살고, 물고기와 오징어를 먹어요. 특히 번식기에는 목에 있는 주머니가 빨갛게 부풀어 올라요.",
+    "status": {
+      "label": "정보 부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 조류강 › 가다랭이잡이목 › 군함조과 › Fregata",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "열대 섬 지방"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "물고기와 오징어를 먹는"
+      ],
+      [
+        "📏",
+        "크기",
+        "사람만한"
+      ],
+      [
+        "✨",
+        "무리",
+        "집단으로 번식"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 15~25년"
+      ]
+    ],
+    "facts": [
+      "군함조는 날개를 펼치면 길이가 2.5m나 됩니다.",
+      "수컷 군함조는 번식기에 목 주머니가 붉은색으로 부풀어 오릅니다.",
+      "군함조는 다른 새가 잡은 먹이를 가로채기도 합니다."
+    ],
+    "image_path": "/images/animal/lesser-frigatebird.jpg",
+    "card_path": "/cards/animal/0285.png",
+    "filters": {
+      "diet": [
+        "물고기를 먹는"
+      ],
+      "color": [
+        "검정색",
+        "흰색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [
+        "날 수 있는"
+      ],
+      "body": [
+        "날개 있는",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    }
+  },
+  {
+    "no": "0286",
+    "rarity": 2,
+    "animal_name": "흰머리수리",
+    "sci": "Haliaeetus leucocephalus",
+    "en": "bald eagle",
+    "search_nickname": "대머리 독수리",
+    "kid_friendly_desc": "흰머리수리는 미국을 상징하는 큰 새예요. 머리와 꼬리가 하얗고 몸은 갈색이에요. 물고기를 잘 잡아먹고, 아주 큰 둥지를 만드는 새랍니다.",
+    "status": {
+      "label": "관심 필요",
+      "code": "LC",
+      "color": "#5BA86B"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 조류강 › 수리과 › Haliaeetus속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "개빙 구역과 오래된 나무 근처"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "물고기를 먹는"
+      ],
+      [
+        "📏",
+        "크기",
+        "사람만한"
+      ],
+      [
+        "✨",
+        "번식",
+        "알을 낳는"
+      ],
+      [
+        "⏳",
+        "수명",
+        "야생에서 평균 20~30년"
+      ]
+    ],
+    "facts": [
+      "흰머리수리는 미국의 국조입니다.",
+      "흰머리수리는 북아메리카에서 가장 큰 둥지를 짓습니다.",
+      "흰머리수리는 성숙한 상태가 되면 몸이 갈색이고 머리와 꼬리가 희며 홍채가 샛노랗습니다."
+    ],
+    "image_path": "/images/animal/bald-eagle.jpg",
+    "card_path": "/cards/animal/0286.png",
+    "filters": {
+      "diet": [
+        "물고기를 먹는"
+      ],
+      "color": [
+        "검정색",
+        "흰색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "강·호수"
+      ],
+      "feature": [],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    }
+  },
+  {
+    "no": "0287",
+    "rarity": 3,
+    "animal_name": "물수리",
+    "sci": "Pandion haliaetus",
+    "en": "Osprey",
+    "search_nickname": "물고기 매",
+    "kid_friendly_desc": "물수리는 물고기를 잘 잡는 특별한 새예요. 물가 근처에서 살며, 날개를 펼치면 1.8미터나 된답니다. 머리는 하얗고, 눈 주위에는 멋진 갈색 무늬가 있어요.",
+    "status": {
+      "label": "관심 필요",
+      "code": "LC",
+      "color": "#5BA86B"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 조류강 › 매목 › 물수리과 › 물수리속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "강·호수·해안·하구"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "물고기를 먹는"
+      ],
+      [
+        "📏",
+        "크기",
+        "날개를 편 길이 1.6~1.8m"
+      ],
+      [
+        "✨",
+        "번식",
+        "알을 낳는"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 7~10년"
+      ]
+    ],
+    "facts": [
+      "물수리는 물고기를 잡기 위해 특화된 발가락 구조를 가지고 있습니다.",
+      "물수리는 전 세계의 강과 호수, 해안에서 서식합니다.",
+      "물수리는 날개를 펼칠 때 1.8m에 달할 수 있습니다."
+    ],
+    "image_path": "/images/animal/osprey.jpg",
+    "card_path": "/cards/animal/0287.png",
+    "filters": {
+      "diet": [
+        "물고기를 먹는"
+      ],
+      "color": [
+        "흰색",
+        "검정색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "강·호수"
+      ],
+      "feature": [
+        "날 수 있는"
+      ],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    }
+  },
+  {
+    "no": "0288",
+    "rarity": 2,
+    "animal_name": "솔개",
+    "sci": "Milvus migrans",
+    "en": "black kite",
+    "search_nickname": "하늘의 청소부",
+    "kid_friendly_desc": "솔개는 큰 날개를 펴고 하늘을 날아다니는 새예요. 주로 썩은 고기와 죽은 물고기를 먹으며, 무리지어 생활해요. 평균 24년을 살고, 하늘에서 먹이를 찾을 때 멋지게 날아다닌답니다.",
+    "status": {
+      "label": "관심 대상",
+      "code": "LC",
+      "color": "#5BA86B"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 조류강 › 수리과 › Milvus속",
+    "subspecies": "유럽솔개 (M. m. migrans), 솔개 (M. m. lineatus), 작은인도솔개 (M. m. govinda), M. m. affinis, 타이완솔개 (M. m. formosanus)",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "지대의 거리와 시골 해안 소택지, 선창가"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "썩은 고기와 죽은 물고기를 먹기"
+      ],
+      [
+        "📏",
+        "크기",
+        "사람만한"
+      ],
+      [
+        "✨",
+        "무리",
+        "무리지어 사는"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 24년"
+      ]
+    ],
+    "facts": [
+      "솔개는 주로 썩은 고기와 죽은 물고기를 먹습니다.",
+      "날개를 펴고 하늘에서 맴돌며 먹이를 찾습니다.",
+      "무리지어 생활하며 나그네새이기도 합니다."
+    ],
+    "image_path": "/images/animal/black-kite.jpg",
+    "card_path": "/cards/animal/0288.png",
+    "filters": {
+      "diet": [
+        "썩은 것 먹는"
+      ],
+      "color": [
+        "검정색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [
+        "날 수 있는"
+      ],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "무리지어 사는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    }
+  },
+  {
+    "no": "0289",
+    "rarity": 3,
+    "animal_name": "검독수리",
+    "sci": "Aquila chrysaetos",
+    "en": "Golden Eagle",
+    "search_nickname": "황금 맹금",
+    "kid_friendly_desc": "검독수리는 아주 빠르게 날아다니는 큰 새예요. 황금빛 머리와 목이 특징이에요. 주로 토끼나 다람쥐 같은 작은 동물을 먹고, 둥지는 높은 곳에 짓는답니다.",
+    "status": {
+      "label": "관심 필요",
+      "code": "LC",
+      "color": "#5BA86B"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 조류강 › 매목 › 수리과 › 검독수리속",
+    "subspecies": "유럽검독수리, 북아메리카검독수리, 캄차카검독수리, 히말라야검독수리, 이베리아검독수리, 일본검독수리",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "유라시아, 북아메리카, 일부 아프리카 지역"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "육식"
+      ],
+      [
+        "📏",
+        "크기",
+        "사람만한"
+      ],
+      [
+        "✨",
+        "무리",
+        "일부일처제"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 15~20년"
+      ]
+    ],
+    "facts": [
+      "검독수리는 최대 시속 240km로 비행할 수 있습니다.",
+      "검독수리는 주로 절벽이나 나무, 전신주에 둥지를 짓습니다.",
+      "검독수리는 대형 포유류와 새를 사냥하기도 합니다."
+    ],
+    "image_path": "/images/animal/golden-eagle.jpg",
+    "card_path": "/cards/animal/0289.png",
+    "filters": {
+      "diet": [
+        "육식"
+      ],
+      "color": [],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [
+        "날 수 있는"
+      ],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "무리지어 사는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    }
+  },
+  {
+    "no": "0290",
+    "rarity": 2,
+    "animal_name": "맹꽁이",
+    "sci": "Kaloula borealis",
+    "en": "boreal digging frog",
+    "search_nickname": "땅속 개구리",
+    "kid_friendly_desc": "맹꽁이는 작고 둥근 몸을 가진 개구리예요. 주로 장마철에 땅 밖으로 나와서 짝짓기를 하고 알을 낳아요. 맹꽁이는 '매앵~꽁' 소리로 유명해요.",
+    "status": {
+      "label": "관심 대상",
+      "code": "LC",
+      "color": "#5BA86B"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 양서강 › 무미목 › 맹꽁이과 › 맹꽁이속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "초원"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "곤충을 먹는"
+      ],
+      [
+        "📏",
+        "크기",
+        "손바닥만한"
+      ],
+      [
+        "✨",
+        "번식",
+        "알을 낳는"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 1~3년"
+      ]
+    ],
+    "facts": [
+      "맹꽁이는 천적에게 위협받으면 몸을 부풀려 방어합니다.",
+      "맹꽁이는 장마철에 산란하여 변태 과정을 빠르게 거칩니다.",
+      "맹꽁이의 울음소리는 '매앵~꽁' 소리로 암컷을 유인합니다."
+    ],
+    "image_path": "/images/animal/boreal-digging-frog.jpg",
+    "card_path": "/cards/animal/0290.png",
+    "filters": {
+      "diet": [
+        "곤충을 먹는"
+      ],
+      "color": [
+        "초록색",
+        "알록달록한"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "양서류"
+      ]
+    }
+  },
+  {
+    "no": "0291",
+    "rarity": 3,
+    "animal_name": "바실리스크도마뱀",
+    "sci": "Basiliscus basiliscus",
+    "en": "Common Basilisk",
+    "search_nickname": "예수도마뱀",
+    "kid_friendly_desc": "바실리스크도마뱀은 물 위를 달릴 수 있는 특별한 도마뱀이에요! 초록색 몸을 가졌고, 코스타리카의 숲 근처에서 살아요. 과일이나 작은 동물을 먹고 살아요.",
+    "status": {
+      "label": "정보 부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 파충강 › 유린목 › 이구아나과 › 바실리스크속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "습한 숲 물가"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "잡식"
+      ],
+      [
+        "📏",
+        "크기",
+        "몸길이가 최대 80센티미터"
+      ],
+      [
+        "✨",
+        "특기",
+        "물 위를 달리는 능력"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 7~10년"
+      ]
+    ],
+    "facts": [
+      "바실리스크도마뱀은 물 위를 달릴 수 있어 '예수도마뱀'이라는 별명을 가지고 있습니다.",
+      "이 도마뱀은 물 속에서 오랫동안 잠수할 수 있습니다.",
+      "빠른 속도로 물 위를 달리기 위해 초고속 카메라로만 그 모습을 확인할 수 있습니다."
+    ],
+    "image_path": "/images/animal/common-basilisk.jpg",
+    "card_path": "/cards/animal/0291.png",
+    "filters": {
+      "diet": [
+        "잡식"
+      ],
+      "color": [
+        "초록색",
+        "흰색",
+        "검정색"
+      ],
+      "size": [],
+      "habitat": [],
+      "feature": [
+        "엄청 빠른"
+      ],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "파충류"
+      ]
+    }
+  },
+  {
+    "no": "0292",
+    "rarity": 2,
+    "animal_name": "왕뱀",
+    "sci": "Boa constrictor",
+    "en": "Boa Constrictor",
+    "search_nickname": "커다란 뱀 친구",
+    "kid_friendly_desc": "왕뱀은 아주 큰 뱀이에요. 주로 혼자 살고, 밤에 활동을 많이 해요. 색깔과 무늬가 아주 다양해서 많은 사람들이 좋아한답니다.",
+    "status": {
+      "label": "관심 필요 없음",
+      "code": "LC",
+      "color": "#5BA86B"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 파충류강 › 뱀목 › 왕뱀과 › 왕뱀속",
+    "subspecies": "B. c. amarali, B. c. melanogaster",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "열대우림"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "육식"
+      ],
+      [
+        "📏",
+        "크기",
+        "사람만한"
+      ],
+      [
+        "✨",
+        "무리",
+        "혼자 사는"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 20~30년"
+      ]
+    ],
+    "facts": [
+      "왕뱀은 매우 다양한 색상과 무늬를 가집니다.",
+      "왕뱀은 주로 밤에 활동하며, 낮에는 일광욕을 즐기기도 합니다.",
+      "왕뱀은 뛰어난 수영 실력을 가지고 있어 강 주변에서 자주 발견됩니다."
+    ],
+    "image_path": "/images/animal/boa-constrictor-292.jpg",
+    "card_path": "/cards/animal/0292.png",
+    "filters": {
+      "diet": [
+        "육식"
+      ],
+      "color": [
+        "알록달록한"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "열대우림"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 없는"
+      ],
+      "behavior": [
+        "혼자 사는"
+      ],
+      "taxonomy": [
+        "파충류"
+      ]
+    }
+  },
+  {
+    "no": "0293",
+    "rarity": 3,
+    "animal_name": "악어거북",
+    "sci": "Macrochelys temminckii",
+    "en": "Alligator snapping turtle",
+    "search_nickname": "공룡 거북",
+    "kid_friendly_desc": "악어거북은 큰 거북이로, 강과 호수에 살아요. 이 거북은 물고기를 유인하기 위해 특이한 혀를 사용해요. 무거운 껍질과 큰 머리로 마치 작은 공룡처럼 보여요.",
+    "status": {
+      "label": "관심 필요",
+      "code": "LC",
+      "color": "#5BA86B"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 파충류강 › 거북목 › 늑대거북과 › 악어거북속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "강·호수"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "육식"
+      ],
+      [
+        "📏",
+        "크기",
+        "사람만한"
+      ],
+      [
+        "✨",
+        "번식",
+        "알을 낳는"
+      ],
+      [
+        "⏳",
+        "수명",
+        "야생에서 80~120년"
+      ]
+    ],
+    "facts": [
+      "악어거북은 북아메리카에서 가장 큰 민물 거북이 종입니다.",
+      "이 거북은 길고 두꺼운 껍질과 큰 비늘로 인해 도금된 공룡처럼 보입니다.",
+      "악어거북은 물고기 유인을 위한 독특한 혀 모양을 가지고 있습니다."
+    ],
+    "image_path": "/images/animal/alligator-snapping-turtle.jpg",
+    "card_path": "/cards/animal/0293.png",
+    "filters": {
+      "diet": [
+        "육식"
+      ],
+      "color": [
+        "검정색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "강·호수"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "파충류"
+      ]
+    }
+  },
+  {
+    "no": "0294",
+    "rarity": 3,
+    "animal_name": "사막거북",
+    "sci": "Gopherus agassizii",
+    "en": "Desert Tortoise",
+    "search_nickname": "사막의 생존자 거북",
+    "kid_friendly_desc": "사막거북은 뜨거운 사막에 사는 특별한 거북이에요. 땅을 파서 스스로 집을 만들고 그늘에서 쉬어요. 아주 오래 살 수 있어요!",
+    "status": {
+      "label": "준위협종",
+      "code": "NT",
+      "color": "#9CCC65"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 파충류강 › 거북목 › 땅거북과 › 고퍼거북속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "사막"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "초식"
+      ],
+      [
+        "📏",
+        "크기",
+        "고양이만한"
+      ],
+      [
+        "✨",
+        "특기",
+        "땅을 잘 파는"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 50~80년"
+      ]
+    ],
+    "facts": [
+      "사막거북은 물이 거의 없는 사막에서 살 수 있습니다.",
+      "땅을 파는 능력이 뛰어나 토굴을 만들고 햇볕을 피합니다.",
+      "사막거북은 최대 80년까지 살 수 있습니다."
+    ],
+    "image_path": "/images/animal/desert-tortoise.jpg",
+    "card_path": "/cards/animal/0294.png",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "사막"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "동굴에 사는"
+      ],
+      "taxonomy": [
+        "파충류"
+      ]
+    }
+  },
+  {
+    "no": "0295",
+    "rarity": 3,
+    "animal_name": "별코두더지",
+    "sci": "Condylura cristata",
+    "en": "Star-nosed Mole",
+    "search_nickname": "별코두더지",
+    "kid_friendly_desc": "별코두더지는 코가 별 모양인 독특한 두더지예요. 주로 캐나다와 미국의 습한 지역에서 살고 있어요. 이 작은 동물은 곤충을 먹으며, 코를 사용해 빠르게 먹이를 찾을 수 있어요.",
+    "status": {
+      "label": "정보 부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 포유강 › 식충목 › 두더지과 › 별코두더지속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "습윤 저지대"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "곤충을 먹는"
+      ],
+      [
+        "📏",
+        "크기",
+        "손보다 작은"
+      ],
+      [
+        "✨",
+        "특기",
+        "별 모양의 코"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 3~4년"
+      ]
+    ],
+    "facts": [
+      "별 모양의 코는 22개의 촉각 기관으로 이루어져 있습니다.",
+      "물속에서도 사냥을 할 수 있는 능력이 있습니다.",
+      "세계에서 가장 빠른 먹이 탐지 동물 중 하나입니다."
+    ],
+    "image_path": "/images/animal/star-nosed-mole.jpg",
+    "card_path": "/cards/animal/0295.png",
+    "filters": {
+      "diet": [
+        "곤충을 먹는"
+      ],
+      "color": [],
+      "size": [
+        "손보다 작은"
+      ],
+      "habitat": [],
+      "feature": [],
+      "body": [],
+      "behavior": [
+        "혼자 사는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    }
+  },
+  {
+    "no": "0296",
+    "rarity": 3,
+    "animal_name": "여우박쥐",
+    "sci": "Desmalopex",
+    "en": "White-winged Flying Fox",
+    "search_nickname": "날개가 하얀 여우박쥐",
+    "kid_friendly_desc": "여우박쥐는 하얀 날개를 가진 특별한 박쥐예요. 필리핀에만 살고, 과일을 먹는답니다. 여우처럼 생긴 얼굴이 아주 귀여워요!",
+    "status": {
+      "label": "정보 부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 포유강 › 큰박쥐과 › Desmalopex",
+    "subspecies": "흰날개날여우박쥐, 작은흰날개날여우박쥐",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "필리핀"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "과일을 먹는"
+      ],
+      [
+        "📏",
+        "크기",
+        "고양이만한"
+      ],
+      [
+        "✨",
+        "무리",
+        "무리지어 사는"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 15~20년"
+      ]
+    ],
+    "facts": [
+      "여우처럼 보이는 얼굴을 가지고 있어요.",
+      "날개가 하얀색이라서 이름이 붙었어요.",
+      "필리핀에서만 발견되는 특별한 박쥐예요."
+    ],
+    "image_path": "/images/animal/white-winged-flying-fox.jpg",
+    "card_path": "/cards/animal/0296.png",
+    "filters": {
+      "diet": [],
+      "color": [
+        "흰색"
+      ],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [],
+      "feature": [],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "무리지어 사는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    }
+  },
+  {
+    "no": "0297",
+    "rarity": 3,
+    "animal_name": "비쿠냐",
+    "sci": "Vicugna vicugna",
+    "en": "Vicuña",
+    "search_nickname": "작은 낙타",
+    "kid_friendly_desc": "비쿠냐는 작은 낙타처럼 생긴 동물이에요. 등에 혹이 없고, 부드러운 털을 가지고 있어요. 주로 높은 산에서 무리를 지어 살고, 풀을 먹어요. 털은 아주 부드러워 고급 옷을 만들 때 사용돼요.",
+    "status": {
+      "label": "취약",
+      "code": "VU",
+      "color": "#F4C430"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 포유강 › 우제목 › 낙타과 › 비쿠냐속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "안데스산맥"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "초식"
+      ],
+      [
+        "📏",
+        "크기",
+        "손바닥만한"
+      ],
+      [
+        "✨",
+        "무리",
+        "수컷 한 마리와 여러 암컷이 무리를 이루어 생활"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 15~20년"
+      ]
+    ],
+    "facts": [
+      "비쿠냐는 낙타과 동물 중 가장 작으며 등에 혹이 없다.",
+      "비쿠냐의 털은 잉카 제국 당시 귀족만을 위한 고급 모직물로 사용되었다.",
+      "1974년 멸종 위기 상태가 선언되었으나 현재는 약 125,000마리로 회복되었다."
+    ],
+    "image_path": "/images/animal/vicun-a.jpg",
+    "card_path": "/cards/animal/0297.png",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [
+        "빨간색",
+        "흰색"
+      ],
+      "size": [
+        "손바닥만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    }
+  },
+  {
+    "no": "0298",
+    "rarity": 3,
+    "animal_name": "짖는원숭이",
+    "sci": "Alouatta",
+    "en": "Howler Monkey",
+    "search_nickname": "고함 원숭이",
+    "kid_friendly_desc": "고함원숭이는 남아메리카와 중앙아메리카의 숲에 사는 큰 원숭이에요. 이들은 매우 큰 소리로 유명해요. 약 18마리씩 무리를 지어 살아가요.",
+    "status": {
+      "label": "정보 부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 포유강 › 영장목 › 거미원숭이과 › 고함원숭이속",
+    "subspecies": "코이바섬고함원숭이, 망토고함원숭이, 과테말라검은고함원숭이",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "남아메리카와 중앙아메리카의 숲"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "초식"
+      ],
+      [
+        "📏",
+        "크기",
+        "사람만한"
+      ],
+      [
+        "✨",
+        "무리",
+        "약 18마리씩 무리를 지어 생활"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 15~20년"
+      ]
+    ],
+    "facts": [
+      "고함원숭이는 신세계원숭이 중에서 가장 크다.",
+      "이들은 매우 큰 소리로 유명하다.",
+      "밀렵으로 인해 위기에 처해 있다."
+    ],
+    "image_path": "/images/animal/howler-monkey.jpg",
+    "card_path": "/cards/animal/0298.png",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [
+        "검정색"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "열대우림"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인",
+        "긴 꼬리"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "나무 위에 사는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    }
+  },
+  {
+    "no": "0299",
+    "rarity": 3,
+    "animal_name": "날원숭이",
+    "sci": "Dermoptera",
+    "en": "Colugo",
+    "search_nickname": "날다람쥐 원숭이",
+    "kid_friendly_desc": "날원숭이는 나무 위에서 활공하는 특별한 능력을 가진 동물이에요. 여우원숭이와 날다람쥐를 섞어놓은 것처럼 생겼답니다. 동남아시아의 숲에서 살고 있어요.",
+    "status": {
+      "label": "정보부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 포유강 › 날원숭이목",
+    "subspecies": "필리핀날원숭이 (Cynocephalus volans), 순다날원숭이 (Galeopterus variegatus)",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "열대우림"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "초식"
+      ],
+      [
+        "📏",
+        "크기",
+        "고양이만한"
+      ],
+      [
+        "✨",
+        "특기",
+        "활공 능력"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 10~15년"
+      ]
+    ],
+    "facts": [
+      "날다람쥐처럼 나무 사이를 활공할 수 있습니다.",
+      "영장류와 가까운 친척입니다.",
+      "동남아시아의 열대우림에서 주로 발견됩니다."
+    ],
+    "image_path": "/images/animal/colugo.jpg",
+    "card_path": "/cards/animal/0299.png",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "열대우림"
+      ],
+      "feature": [],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "나무 위에 사는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    }
+  },
+  {
+    "no": "0300",
+    "rarity": 4,
+    "animal_name": "큰수달",
+    "sci": "Pteronura brasiliensis",
+    "en": "Giant Otter",
+    "search_nickname": "큰 물속 친구",
+    "kid_friendly_desc": "큰수달은 남아메리카에 사는 큰 수달이에요. 가족과 함께 무리를 지어 다니며 강에서 물고기를 잡아먹어요. 이 수달들은 서로 소리를 내어 이야기를 나누고, 털이 물에 젖지 않도록 특별하게 생겼답니다.",
+    "status": {
+      "label": "위기근접",
+      "code": "NT",
+      "color": "#9CCC65"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 포유강 › 식육목 › 족제비과 › Pteronura",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "강·호수"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "물고기를 먹는"
+      ],
+      [
+        "📏",
+        "크기",
+        "고양이만한"
+      ],
+      [
+        "✨",
+        "무리",
+        "가족을 이루며 사회성이 강함"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 10~12년"
+      ]
+    ],
+    "facts": [
+      "큰수달은 족제비과 중에서 가장 긴 몸을 가지고 있다.",
+      "큰수달은 매우 복잡한 발성으로 유명하며, 서로 고유한 소리로 의사소통한다.",
+      "큰수달의 털은 물에 젖지 않도록 특별히 발달되어 있다."
+    ],
+    "image_path": "/images/animal/giant-otter.jpg",
+    "card_path": "/cards/animal/0300.png",
+    "filters": {
+      "diet": [
+        "물고기를 먹는"
+      ],
+      "color": [],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "강·호수"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    }
+  },
+  {
+    "no": "0301",
+    "rarity": 2,
+    "animal_name": "멧토끼",
+    "sci": "Lepus coreanus",
+    "en": "Korean Hare",
+    "search_nickname": "산토끼",
+    "kid_friendly_desc": "멧토끼는 한반도와 중국 북동부에서 살아요. 털 색깔은 계절에 따라 변하고, 겨울에는 흰 털로, 여름에는 갈색 털로 바뀌어요. 주로 저녁에 나와서 풀을 먹고 돌아다녀요.",
+    "status": {
+      "label": "최소관심",
+      "code": "LC",
+      "color": "#5BA86B"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 포유강 › 토끼목 › 산토끼속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "평야, 관목지 및 산악 지역"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "초식"
+      ],
+      [
+        "📏",
+        "크기",
+        "고양이만한"
+      ],
+      [
+        "✨",
+        "번식",
+        "땅에 새끼를 낳음"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 3~5년"
+      ]
+    ],
+    "facts": [
+      "멧토끼는 겨울에는 흰 털로, 여름에는 갈색 털로 털갈이를 한다.",
+      "새끼는 태어나자마자 눈을 뜨고 걸을 수 있다.",
+      "멧토끼는 주로 저녁에 활동하며 식물을 먹고 산다."
+    ],
+    "image_path": "/images/animal/korean-hare.jpg",
+    "card_path": "/cards/animal/0301.png",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [],
+      "size": [
+        "고양이만한"
+      ],
+      "habitat": [
+        "초원"
+      ],
+      "feature": [
+        "야행성"
+      ],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "혼자 사는",
+        "새끼를 낳는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    }
+  },
+  {
+    "no": "0302",
+    "rarity": 3,
+    "animal_name": "벌거숭이두더지쥐",
+    "sci": "Heterocephalus glaber",
+    "en": "Naked Mole Rat",
+    "search_nickname": "벌거숭이 두더지",
+    "kid_friendly_desc": "벌거숭이두더지쥐는 거의 털이 없이 매끈매끈한 몸을 가진 작은 동물이에요. 주로 땅 속에서 굴을 파며 살고, 여러 마리와 함께 집단생활을 해요. 이들은 동아프리카에서 찾아볼 수 있어요.",
+    "status": {
+      "label": "정보부족",
+      "code": "DD",
+      "color": "#9E9E9E"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 포유강 › 설치목 › 뻐드렁니쥐과 › 벌거숭이뻐드렁니쥐속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "동아프리카의 굴"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "초식"
+      ],
+      [
+        "📏",
+        "크기",
+        "손보다 작은"
+      ],
+      [
+        "✨",
+        "특기",
+        "굴을 잘 파는"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 10~30년"
+      ]
+    ],
+    "facts": [
+      "벌거숭이두더지쥐는 거의 털이 없고 피부가 주름져 있어요.",
+      "이들은 굴 속에서 사회적 구조를 이루며 살아가요.",
+      "벌거숭이두더지쥐는 통증을 거의 느끼지 않는 특이한 생리적 특징이 있어요."
+    ],
+    "image_path": "/images/animal/naked-mole-rat.jpg",
+    "card_path": "/cards/animal/0302.png",
+    "filters": {
+      "diet": [
+        "초식"
+      ],
+      "color": [
+        "분홍색"
+      ],
+      "size": [
+        "손보다 작은"
+      ],
+      "habitat": [
+        "동굴"
+      ],
+      "feature": [],
+      "body": [
+        "다리가 4개인"
+      ],
+      "behavior": [
+        "무리지어 사는"
+      ],
+      "taxonomy": [
+        "포유류"
+      ]
+    }
+  },
+  {
+    "no": "0303",
+    "rarity": 2,
+    "animal_name": "임금펭귄",
+    "sci": "Aptenodytes patagonicus",
+    "en": "King Penguin",
+    "search_nickname": "임금 펭귄",
+    "kid_friendly_desc": "임금펭귄은 키가 크고 멋진 펭귄이에요. 이들은 주로 남극 근처의 섬에서 살고요, 오징어와 작은 물고기를 먹어요. 날 수는 없지만, 물속에서 정말 잘 헤엄친답니다!",
+    "status": {
+      "label": "관심 필요",
+      "code": "LC",
+      "color": "#5BA86B"
+    },
+    "taxonomy": "동물계 › 척삭동물문 › 조강 › 펭귄목 › 펭귄과 › 임금펭귄속",
+    "subspecies": "",
+    "info": [
+      [
+        "🌍",
+        "서식지",
+        "남극 대륙 북쪽 끝자락의 섬들"
+      ],
+      [
+        "🍽️",
+        "먹이",
+        "물고기를 먹는"
+      ],
+      [
+        "📏",
+        "크기",
+        "사람만한"
+      ],
+      [
+        "✨",
+        "번식",
+        "일부일처제"
+      ],
+      [
+        "⏳",
+        "수명",
+        "평균 15~20년"
+      ]
+    ],
+    "facts": [
+      "임금펭귄은 황제펭귄 다음으로 큰 펭귄입니다.",
+      "이들은 주로 오징어와 크릴새우를 먹습니다.",
+      "임금펭귄은 날 수 없지만 수영에 뛰어납니다."
+    ],
+    "image_path": "/images/animal/king-penguin.jpg",
+    "card_path": "/cards/animal/0303.png",
+    "filters": {
+      "diet": [
+        "물고기를 먹는"
+      ],
+      "color": [
+        "알록달록한"
+      ],
+      "size": [
+        "사람만한"
+      ],
+      "habitat": [
+        "바다"
+      ],
+      "feature": [],
+      "body": [
+        "날개 있는"
+      ],
+      "behavior": [
+        "무리지어 사는",
+        "알을 낳는"
+      ],
+      "taxonomy": [
+        "조류"
+      ]
+    }
   }
 ]
