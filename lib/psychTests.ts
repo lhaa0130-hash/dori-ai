@@ -60,6 +60,12 @@ export type TypedTest = {
 
 // 다차원 성격 검사(Big Five 등): 축마다 합산 → 백분위 막대 + 높음/낮음 해석
 export type MultiLevel = { text: string; strengths: string; watch: string };
+// 하위척도(facet) — 축을 구성하는 세부 특성
+export type MultiFacet = {
+  name: string;
+  desc: string; // 이 하위척도가 무엇을 재는지(한 줄)
+  items: { text: string; reverse?: boolean }[];
+};
 export type MultiDimension = {
   key: string;
   name: string;
@@ -68,7 +74,7 @@ export type MultiDimension = {
   high: MultiLevel; // 높을 때
   low: MultiLevel; // 낮을 때
   mid: string; // 중간(균형) 한 줄
-  items: { text: string; reverse?: boolean }[];
+  facets: MultiFacet[]; // 하위척도(각 4문항)
 };
 export type MultiTest = {
   kind: "multi";
@@ -200,6 +206,24 @@ const AUDIT_YN: Choice[] = [
   { label: "지난 1년간 있었다", value: 4 },
 ];
 
+// ASRS(성인 ADHD) : 0~4 빈도 (지난 6개월)
+const ASRS_FREQ: Choice[] = [
+  { label: "전혀 없음", value: 0 },
+  { label: "거의 없음", value: 1 },
+  { label: "가끔", value: 2 },
+  { label: "자주", value: 3 },
+  { label: "매우 자주", value: 4 },
+];
+
+// OCI-R(강박) : 0~4 고통 정도 (지난 한 달)
+const OCIR_SCALE: Choice[] = [
+  { label: "전혀 그렇지 않다", value: 0 },
+  { label: "약간 그렇다", value: 1 },
+  { label: "보통이다", value: 2 },
+  { label: "많이 그렇다", value: 3 },
+  { label: "매우 그렇다", value: 4 },
+];
+
 /* ── 테스트 데이터 ─────────────────────────────── */
 
 export const TESTS: PsychTest[] = [
@@ -327,19 +351,102 @@ export const TESTS: PsychTest[] = [
     ],
   },
 
+  {
+    kind: "scored",
+    id: "adhd",
+    category: "mind",
+    emoji: "🌀",
+    title: "성인 ADHD 자가검진",
+    subtitle: "18문항 · 성인 ADHD 선별 (ASRS v1.1)",
+    source: "ASRS v1.1 (WHO 성인 ADHD 자기보고척도)",
+    time: "약 3분",
+    intro: "세계보건기구(WHO)가 만든 성인 ADHD 선별 도구예요. 주의력과 과잉행동·충동성 증상을 봅니다. 지난 6개월의 나를 떠올리며 답해주세요.",
+    question: "지난 6개월 동안, 다음 일이 얼마나 자주 있었나요?",
+    disclaimer: "ADHD '선별'용 검사이며 진단이 아니에요. 핵심은 앞 6문항(파트 A)으로, 여기서 자주/매우 자주가 일정 개수 이상이면 정밀 평가를 권해요.",
+    scale: ASRS_FREQ,
+    items: [
+      // Part A (1~6) — 핵심 선별 문항
+      { text: "어려운 부분을 끝낸 뒤, 일의 마무리 세부사항을 마치기 어려운 적이 있나요?" },
+      { text: "체계적으로 정리해야 하는 일을 할 때, 순서대로 정리하기 어려운 적이 있나요?" },
+      { text: "약속이나 해야 할 일을 기억하는 데 어려움을 겪는 적이 있나요?" },
+      { text: "깊이 생각해야 하는 일이 있을 때, 시작을 피하거나 미루는 적이 있나요?" },
+      { text: "오래 앉아 있어야 할 때, 손발을 꼼지락거리거나 몸을 뒤척이는 적이 있나요?" },
+      { text: "마치 모터가 달린 것처럼 지나치게 활동적이거나, 뭔가 하지 않고는 못 견디는 적이 있나요?" },
+      // Part B (7~18)
+      { text: "지루하거나 어려운 일을 할 때, 부주의한 실수를 하는 적이 있나요?" },
+      { text: "지루하거나 반복적인 일을 할 때, 주의를 유지하기 어려운 적이 있나요?" },
+      { text: "사람들이 직접 말하고 있을 때조차, 그 말에 집중하기 어려운 적이 있나요?" },
+      { text: "집이나 직장에서 물건을 엉뚱한 곳에 두거나 찾기 어려운 적이 있나요?" },
+      { text: "주변의 움직임이나 소음 때문에 주의가 흐트러지는 적이 있나요?" },
+      { text: "앉아 있어야 하는 회의·상황에서 자리를 뜨는 적이 있나요?" },
+      { text: "안절부절못하거나 가만히 있지 못하는 느낌이 드는 적이 있나요?" },
+      { text: "혼자만의 시간이 있을 때, 긴장을 풀고 편히 쉬기 어려운 적이 있나요?" },
+      { text: "사람들과 어울리는 자리에서, 내가 말을 너무 많이 한다고 느끼는 적이 있나요?" },
+      { text: "대화 중에 상대가 말을 끝내기 전에, 내가 대신 끝맺어 버리는 적이 있나요?" },
+      { text: "차례를 지켜야 하는 상황에서, 내 차례를 기다리기 어려운 적이 있나요?" },
+      { text: "다른 사람이 바쁠 때, 끼어들거나 방해하는 적이 있나요?" },
+    ],
+    bands: [
+      { max: 23, label: "특성 약함", emoji: "😌", tone: "good", desc: "주의력·과잉행동 관련 어려움이 두드러지지 않아요.", advice: "지금처럼 일정·할 일 관리를 이어가세요." },
+      { max: 41, label: "일부 특성 있음", emoji: "🙂", tone: "mild", desc: "ADHD와 비슷한 특성이 일부 보여요. 일상에 큰 지장이 없다면 자연스러운 개인차일 수 있어요.", advice: "집중이 흐트러지는 상황을 메모해 패턴을 살펴보세요. 체크리스트·타이머가 도움이 돼요." },
+      { max: 72, label: "뚜렷한 특성", emoji: "😟", tone: "warn", desc: "ADHD와 일치하는 특성이 잦은 편이에요. 특히 앞 6문항에서 자주/매우 자주가 많다면 주목할 만해요.", advice: "일상·일·관계에 지장이 있다면 정신건강의학과의 정밀 평가를 권해요. ADHD는 진단되면 효과적으로 도울 수 있어요." },
+    ],
+    note: "정식 선별 규칙(파트 A): 1~3번은 '가끔' 이상, 4~6번은 '자주' 이상에 해당하는 칸이 4개 이상이면 성인 ADHD 가능성이 높아 정밀 평가가 권장돼요.",
+  },
+  {
+    kind: "scored",
+    id: "ocd",
+    category: "mind",
+    emoji: "🔁",
+    title: "강박 성향 자가점검",
+    subtitle: "18문항 · 강박 증상 (OCI-R)",
+    source: "OCI-R (강박 증상 검사 개정판, Foa 2002)",
+    time: "약 3분",
+    intro: "강박 증상을 6개 영역(씻기·확인·정렬·강박사고·저장·중화)에서 두루 살피는 검사예요. 지난 한 달 각 경험이 당신을 얼마나 괴롭혔는지 답해주세요.",
+    question: "지난 한 달 동안, 다음 경험이 당신을 얼마나 괴롭혔나요?",
+    disclaimer: "강박 증상 '선별'용 검사이며 진단이 아니에요.",
+    scale: OCIR_SCALE,
+    items: [
+      { text: "너무 많은 물건을 쌓아 두어 생활에 방해가 될 정도다" },
+      { text: "필요 이상으로 여러 번 확인한다" },
+      { text: "물건이 제대로 정돈되어 있지 않으면 마음이 불편해진다" },
+      { text: "무언가를 할 때 숫자를 세지 않고는 못 견디는 느낌이 든다" },
+      { text: "낯선 사람이나 특정한 사람이 만진 물건은 만지기가 꺼려진다" },
+      { text: "내 생각을 스스로 통제하기가 어렵다" },
+      { text: "필요하지 않은 물건들을 모아 둔다" },
+      { text: "문, 창문, 서랍 등을 반복해서 확인한다" },
+      { text: "내가 정리해 둔 것을 다른 사람이 바꾸면 마음이 불편해진다" },
+      { text: "특정한 숫자를 반복해야 할 것 같은 기분이 든다" },
+      { text: "그저 더럽혀진 느낌이 들어서 몸을 씻거나 닦아야 할 때가 있다" },
+      { text: "내 의지와 상관없이 떠오르는 불쾌한 생각 때문에 괴롭다" },
+      { text: "나중에 필요할까 봐 물건을 버리지 못한다" },
+      { text: "가스, 수도꼭지, 전등 스위치를 끈 뒤에도 반복해서 확인한다" },
+      { text: "물건이 특정한 순서대로 정리되어 있어야 한다" },
+      { text: "좋은 숫자와 나쁜 숫자가 있다고 느낀다" },
+      { text: "필요 이상으로 자주, 그리고 오래 손을 씻는다" },
+      { text: "불쾌한 생각이 자주 떠오르고, 그것을 떨쳐내기가 어렵다" },
+    ],
+    bands: [
+      { max: 20, label: "낮음", emoji: "😌", tone: "good", desc: "강박 증상이 일상에 부담을 줄 정도로 두드러지지 않아요.", advice: "지금의 상태를 잘 유지하고 있어요." },
+      { max: 39, label: "임상 주의 수준", emoji: "😟", tone: "warn", desc: "강박장애 선별 절단점(21점) 이상이에요. 확인·정렬·강박사고 등이 생활을 꽤 방해할 수 있어요.", advice: "증상이 시간을 많이 뺏거나 괴롭다면 전문가 상담을 권해요. 강박은 치료 효과가 좋은 편이에요." },
+      { max: 72, label: "높음", emoji: "😣", tone: "high", desc: "강박 증상이 강하고 광범위해요. 일상 기능에 상당한 영향을 줄 수 있어요.", advice: "정신건강의학과·임상심리 전문가의 도움을 적극 권해요. 인지행동치료(노출·반응방지)가 특히 효과적이에요." },
+    ],
+    note: "선별 절단점은 21점이에요(더 민감하게 보려면 18점). 점수가 높아도 진단이 아니며, 전문가 평가가 필요해요.",
+  },
+
   // ═══════════════ 🪞 자기 이해 ═══════════════
   {
     kind: "multi",
     id: "bigfive",
     category: "self",
     emoji: "🧬",
-    title: "성격 5요인 검사 (Big Five)",
-    subtitle: "50문항 · 심리학 표준 성격 모델",
-    source: "IPIP Big-Five Factor Markers (Goldberg, 공개 척도)",
-    time: "약 7분",
-    intro: "심리학에서 가장 신뢰받는 성격 모델이에요. MBTI처럼 사람을 칸에 가두지 않고, 5개의 축에서 '당신이 어디쯤'인지를 보여줘요. 정답은 없으니 평소의 나를 떠올리며 솔직하게 답해주세요.",
-    question: "다음 문장이 나와 얼마나 맞나요?",
-    disclaimer: "성격에는 좋고 나쁨이 없어요. 결과는 '경향'이며, 상황과 시기에 따라 달라질 수 있어요.",
+    title: "성격 정밀 검사 (Big Five)",
+    subtitle: "120문항 · 5요인 × 30개 하위척도",
+    source: "IPIP-NEO-120 (Johnson 2014, 공개 척도)",
+    time: "약 12분",
+    intro: "심리학에서 가장 신뢰받는 성격 모델을 정밀 검사 버전으로 담았어요. 5개 큰 축을 각각 6개 하위 특성으로 나눠, 당신의 성격을 30개 측면에서 입체적으로 보여줘요. 정답은 없으니 평소의 나를 떠올리며 솔직하게 답해주세요.",
+    question: "다음 문장이 나를 얼마나 정확하게 묘사하나요?",
+    disclaimer: "성격에는 좋고 나쁨이 없어요. 결과는 '경향'이며, 상황과 시기에 따라 달라질 수 있어요. 120문항으로 약 12분 걸려요.",
     scale: BIG5_SCALE,
     dimensions: [
       {
@@ -358,17 +465,43 @@ export const TESTS: PsychTest[] = [
           watch: "새로운 방식이나 낯선 관점에 마음을 닫지 않도록 가끔 열어두면 좋아요.",
         },
         mid: "익숙함과 새로움 사이에서 균형을 잡는 편이에요. 필요할 때 호기심을, 필요할 때 현실 감각을 발휘해요.",
-        items: [
-          { text: "나는 어휘력이 풍부하다" },
-          { text: "나는 추상적인 개념을 이해하기 어려워한다", reverse: true },
-          { text: "나는 상상력이 풍부하다" },
-          { text: "나는 추상적인 생각에는 흥미가 없다", reverse: true },
-          { text: "나는 종종 기발한 아이디어를 떠올린다" },
-          { text: "나는 상상력이 그리 풍부하지 않다", reverse: true },
-          { text: "나는 무엇이든 빠르게 이해한다" },
-          { text: "나는 어려운 단어도 곧잘 사용한다" },
-          { text: "나는 이것저것 깊이 생각하는 시간을 갖는다" },
-          { text: "나는 아이디어가 넘친다" },
+        facets: [
+          { name: "상상력", desc: "풍부한 공상과 상상을 즐김", items: [
+            { text: "나는 상상력이 풍부하다" },
+            { text: "나는 자유로운 공상에 빠지는 것을 즐긴다" },
+            { text: "나는 공상에 잠기는 것을 좋아한다" },
+            { text: "나는 생각에 깊이 빠져드는 것을 좋아한다" },
+          ]},
+          { name: "예술적 관심", desc: "예술과 아름다움을 감상하고 중시함", items: [
+            { text: "나는 예술이 중요하다고 믿는다" },
+            { text: "나는 남들이 못 보는 아름다움을 발견한다" },
+            { text: "나는 시를 좋아하지 않는다", reverse: true },
+            { text: "나는 미술관에 가는 것을 즐기지 않는다", reverse: true },
+          ]},
+          { name: "정서성", desc: "감정을 강하게 느끼고 알아차림", items: [
+            { text: "나는 감정을 강렬하게 느낀다" },
+            { text: "나는 다른 사람의 감정을 함께 느낀다" },
+            { text: "나는 내 감정 반응을 잘 알아차리지 못한다", reverse: true },
+            { text: "나는 감정적으로 구는 사람들을 이해하지 못한다", reverse: true },
+          ]},
+          { name: "모험성", desc: "변화와 새로움을 선호함", items: [
+            { text: "나는 반복되는 일상보다 변화를 선호한다" },
+            { text: "나는 익숙한 것을 고수하는 편이다", reverse: true },
+            { text: "나는 변화를 싫어한다", reverse: true },
+            { text: "나는 전통적인 방식에 애착이 있다", reverse: true },
+          ]},
+          { name: "지성", desc: "추상적·이론적 사고를 즐김", items: [
+            { text: "나는 어려운 글 읽기를 좋아한다" },
+            { text: "나는 철학적인 토론을 피한다", reverse: true },
+            { text: "나는 추상적인 개념을 이해하기 어려워한다", reverse: true },
+            { text: "나는 이론적인 토론에 관심이 없다", reverse: true },
+          ]},
+          { name: "진보성", desc: "기존 권위·관습에 의문을 품음", items: [
+            { text: "나는 진보적인 후보에게 투표하는 편이다" },
+            { text: "나는 절대적인 옳고 그름은 없다고 생각한다" },
+            { text: "나는 보수적인 후보에게 투표하는 편이다", reverse: true },
+            { text: "나는 범죄에 엄격하게 대응해야 한다고 믿는다", reverse: true },
+          ]},
         ],
       },
       {
@@ -387,17 +520,43 @@ export const TESTS: PsychTest[] = [
           watch: "중요한 마감·약속은 작은 장치(알림·체크리스트)로 챙기면 도움이 돼요.",
         },
         mid: "계획성과 융통성을 함께 갖춘 편이에요. 필요하면 체계적으로, 때로는 유연하게 움직여요.",
-        items: [
-          { text: "나는 항상 준비가 되어 있다" },
-          { text: "나는 내 물건을 여기저기 늘어놓는다", reverse: true },
-          { text: "나는 세세한 부분까지 신경 쓴다" },
-          { text: "나는 일을 어수선하게 벌여 놓곤 한다", reverse: true },
-          { text: "나는 할 일을 바로바로 처리한다" },
-          { text: "나는 물건을 제자리에 돌려놓는 걸 자주 잊는다", reverse: true },
-          { text: "나는 정리정돈된 상태를 좋아한다" },
-          { text: "나는 해야 할 일을 슬쩍 미루곤 한다", reverse: true },
-          { text: "나는 계획표대로 움직이는 편이다" },
-          { text: "나는 일을 빈틈없이 꼼꼼하게 한다" },
+        facets: [
+          { name: "자기효능감", desc: "일을 잘 해낼 수 있다는 자신감", items: [
+            { text: "나는 맡은 일을 성공적으로 끝낸다" },
+            { text: "나는 내가 하는 일에서 뛰어나다" },
+            { text: "나는 일을 매끄럽게 처리한다" },
+            { text: "나는 일을 해내는 방법을 잘 안다" },
+          ]},
+          { name: "정돈성", desc: "정리정돈하고 체계적으로 유지함", items: [
+            { text: "나는 정리정돈하는 것을 좋아한다" },
+            { text: "나는 물건을 제자리에 두는 것을 자주 잊는다", reverse: true },
+            { text: "나는 방을 어질러 놓는다", reverse: true },
+            { text: "나는 내 물건을 여기저기 늘어놓는다", reverse: true },
+          ]},
+          { name: "책임감", desc: "약속·규칙을 지키고 의무를 다함", items: [
+            { text: "나는 약속을 지킨다" },
+            { text: "나는 진실을 말한다" },
+            { text: "나는 규칙을 어긴다", reverse: true },
+            { text: "나는 약속을 어긴다", reverse: true },
+          ]},
+          { name: "성취 추구", desc: "열심히 노력하고 기대 이상을 해냄", items: [
+            { text: "나는 기대받는 것 이상으로 해낸다" },
+            { text: "나는 열심히 일한다" },
+            { text: "나는 일에 시간과 노력을 거의 들이지 않는다", reverse: true },
+            { text: "나는 그저 버틸 만큼만 일한다", reverse: true },
+          ]},
+          { name: "자기통제", desc: "미루지 않고 계획을 끝까지 실행함", items: [
+            { text: "나는 늘 준비가 되어 있다" },
+            { text: "나는 세운 계획을 끝까지 실행한다" },
+            { text: "나는 시간을 허비한다", reverse: true },
+            { text: "나는 일을 시작하는 것을 어려워한다", reverse: true },
+          ]},
+          { name: "신중성", desc: "충동적으로 행동하지 않고 깊이 생각함", items: [
+            { text: "나는 생각 없이 일에 뛰어든다", reverse: true },
+            { text: "나는 성급하게 결정한다", reverse: true },
+            { text: "나는 일을 서둘러 처리한다", reverse: true },
+            { text: "나는 생각 없이 행동한다", reverse: true },
+          ]},
         ],
       },
       {
@@ -416,17 +575,43 @@ export const TESTS: PsychTest[] = [
           watch: "필요할 때 먼저 의견을 표현하면 기회를 더 잡을 수 있어요.",
         },
         mid: "어울림과 혼자 시간 사이에서 균형을 잡아요. 상황에 따라 활발해지기도, 조용해지기도 해요.",
-        items: [
-          { text: "나는 모임의 분위기를 띄운다" },
-          { text: "나는 말이 많지 않은 편이다", reverse: true },
-          { text: "나는 사람들과 함께 있을 때 편안하다" },
-          { text: "나는 나서지 않고 뒤로 빠져 있는 편이다", reverse: true },
-          { text: "나는 먼저 말을 거는 편이다" },
-          { text: "나는 딱히 할 말이 별로 없다", reverse: true },
-          { text: "나는 모임에서 여러 사람과 두루 이야기한다" },
-          { text: "나는 남의 주목을 받는 것을 좋아하지 않는다", reverse: true },
-          { text: "나는 사람들의 관심이 나에게 쏠려도 괜찮다" },
-          { text: "나는 낯선 사람들 앞에서는 조용해진다", reverse: true },
+        facets: [
+          { name: "친밀성", desc: "사람들에게 쉽게 다가가고 편하게 어울림", items: [
+            { text: "나는 친구를 쉽게 사귄다" },
+            { text: "나는 사람들 사이에서 편안함을 느낀다" },
+            { text: "나는 다른 사람과 접촉하는 것을 피한다", reverse: true },
+            { text: "나는 사람들과 거리를 둔다", reverse: true },
+          ]},
+          { name: "사교성", desc: "많은 사람과 어울리는 것을 즐김", items: [
+            { text: "나는 큰 모임을 아주 좋아한다" },
+            { text: "나는 모임에서 여러 사람과 두루 이야기한다" },
+            { text: "나는 혼자 있는 것을 더 좋아한다", reverse: true },
+            { text: "나는 사람 많은 곳을 피한다", reverse: true },
+          ]},
+          { name: "자기주장", desc: "주도권을 잡고 이끌려는 경향", items: [
+            { text: "나는 주도적으로 일을 맡아 한다" },
+            { text: "나는 다른 사람들을 이끌려고 한다" },
+            { text: "나는 상황을 직접 통제하려 한다" },
+            { text: "나는 남이 앞장서기를 기다리는 편이다", reverse: true },
+          ]},
+          { name: "활동성", desc: "늘 바쁘고 활기차게 움직임", items: [
+            { text: "나는 늘 바쁘다" },
+            { text: "나는 항상 바쁘게 움직인다" },
+            { text: "나는 여가 시간에도 많은 것을 한다" },
+            { text: "나는 느긋하게 쉬는 것을 좋아한다", reverse: true },
+          ]},
+          { name: "자극 추구", desc: "흥분·모험·스릴을 즐김", items: [
+            { text: "나는 짜릿한 흥분을 좋아한다" },
+            { text: "나는 모험을 찾아 나선다" },
+            { text: "나는 무모하게 행동하는 것을 즐긴다" },
+            { text: "나는 거침없이 자유분방하게 행동한다" },
+          ]},
+          { name: "쾌활함", desc: "즐거움과 긍정적 기분을 잘 느낌", items: [
+            { text: "나는 즐거움이 절로 묻어난다" },
+            { text: "나는 즐겁게 잘 논다" },
+            { text: "나는 삶을 사랑한다" },
+            { text: "나는 삶의 밝은 면을 본다" },
+          ]},
         ],
       },
       {
@@ -445,46 +630,98 @@ export const TESTS: PsychTest[] = [
           watch: "표현 방식에 따뜻함을 더하면 협력이 한결 수월해져요.",
         },
         mid: "배려와 솔직함의 균형을 갖췄어요. 공감하면서도 필요할 땐 자기 의견을 분명히 해요.",
-        items: [
-          { text: "나는 다른 사람에게 별로 관심이 가지 않는다", reverse: true },
-          { text: "나는 사람들에게 관심이 많다" },
-          { text: "나는 남에게 상처 주는 말을 하곤 한다", reverse: true },
-          { text: "나는 다른 사람의 감정에 공감한다" },
-          { text: "나는 남의 고민에는 별 관심이 없다", reverse: true },
-          { text: "나는 마음이 여리고 정이 많다" },
-          { text: "나는 사실 다른 사람에게 그다지 관심이 없다", reverse: true },
-          { text: "나는 기꺼이 시간을 내어 남을 돕는다" },
-          { text: "나는 다른 사람의 감정을 잘 느낀다" },
-          { text: "나는 사람들을 편하게 해 준다" },
+        facets: [
+          { name: "신뢰", desc: "타인의 선의를 믿음", items: [
+            { text: "나는 다른 사람을 믿는다" },
+            { text: "나는 사람들이 선한 의도를 가졌다고 믿는다" },
+            { text: "나는 사람들의 말을 믿는다" },
+            { text: "나는 사람들을 잘 믿지 않는다", reverse: true },
+          ]},
+          { name: "도덕성", desc: "솔직하고 술수 없이 대함", items: [
+            { text: "나는 내 이익을 위해 남을 이용한다", reverse: true },
+            { text: "나는 앞서기 위해 속임수를 쓴다", reverse: true },
+            { text: "나는 남을 이용해 먹는다", reverse: true },
+            { text: "나는 남의 계획을 방해한다", reverse: true },
+          ]},
+          { name: "이타성", desc: "타인을 돕고 배려함", items: [
+            { text: "나는 다른 사람을 염려한다" },
+            { text: "나는 남을 돕는 것을 좋아한다" },
+            { text: "나는 남의 감정에 무관심하다", reverse: true },
+            { text: "나는 남을 위해 시간을 내지 않는다", reverse: true },
+          ]},
+          { name: "협력성", desc: "다툼을 피하고 협조함", items: [
+            { text: "나는 한판 붙는 것을 즐긴다", reverse: true },
+            { text: "나는 사람들에게 소리를 지른다", reverse: true },
+            { text: "나는 사람들에게 모욕적인 말을 한다", reverse: true },
+            { text: "나는 남에게 앙갚음을 한다", reverse: true },
+          ]},
+          { name: "겸손", desc: "자신을 내세우지 않음", items: [
+            { text: "나는 내가 남보다 낫다고 생각한다", reverse: true },
+            { text: "나는 나 자신을 높게 평가한다", reverse: true },
+            { text: "나는 나 자신을 대단하게 여긴다", reverse: true },
+            { text: "나는 내 장점을 자랑한다", reverse: true },
+          ]},
+          { name: "공감", desc: "약자와 어려운 이에게 연민을 느낌", items: [
+            { text: "나는 노숙인들에게 연민을 느낀다" },
+            { text: "나는 나보다 어려운 처지의 사람들에게 동정심을 느낀다" },
+            { text: "나는 다른 사람의 문제에 관심이 없다", reverse: true },
+            { text: "나는 어려운 사람들에 대해 굳이 생각하지 않으려 한다", reverse: true },
+          ]},
         ],
       },
       {
-        key: "ES",
-        name: "정서안정성",
+        key: "N",
+        name: "신경성",
         emoji: "🌊",
-        desc: "스트레스 속에서도 감정이 안정적인 정도",
+        desc: "스트레스와 부정적 감정을 느끼는 민감성",
         high: {
-          text: "감정이 안정적이고 회복이 빨라요. 스트레스 상황에서도 비교적 침착함을 유지하고, 기복이 적어요.",
+          text: "감정을 예민하게 느끼고 스트레스에 민감해요. 기복이 있을 수 있지만, 그만큼 위험을 빨리 감지하고 섬세하게 알아차려요.",
+          strengths: "섬세함, 위험 감지, 깊은 감정 이해",
+          watch: "걱정·기복이 커질 땐 호흡·수면·대화로 다독이고, 지속되면 도움을 받는 것도 좋아요.",
+        },
+        low: {
+          text: "감정이 안정적이고 회복이 빨라요. 스트레스 상황에서도 비교적 침착함을 유지하고, 동요가 적어요.",
           strengths: "평정심, 압박 견딤, 안정감",
           watch: "너무 무덤덤해 보이지 않도록, 감정을 표현하는 것도 관계에 도움이 돼요.",
         },
-        low: {
-          text: "감정을 예민하게 느끼는 편이에요. 스트레스와 걱정에 민감하고 기복이 있을 수 있지만, 그만큼 섬세하게 알아차려요.",
-          strengths: "섬세함, 위험 감지, 깊은 감정 이해",
-          watch: "걱정이 커질 땐 호흡·수면·대화로 감정을 다독이고, 지속되면 도움을 받는 것도 좋아요.",
-        },
         mid: "대체로 안정적이되 감정도 적절히 느껴요. 상황에 따라 차분함과 예민함을 오가요.",
-        items: [
-          { text: "나는 쉽게 스트레스를 받는다", reverse: true },
-          { text: "나는 대체로 마음이 편안하다" },
-          { text: "나는 이런저런 걱정을 많이 한다", reverse: true },
-          { text: "나는 우울해지는 일이 거의 없다" },
-          { text: "나는 작은 일에도 쉽게 동요한다", reverse: true },
-          { text: "나는 쉽게 속상해한다", reverse: true },
-          { text: "나는 기분이 자주 바뀐다", reverse: true },
-          { text: "나는 감정 기복이 심한 편이다", reverse: true },
-          { text: "나는 쉽게 짜증이 난다", reverse: true },
-          { text: "나는 자주 울적해진다", reverse: true },
+        facets: [
+          { name: "불안", desc: "걱정·긴장을 잘 느낌", items: [
+            { text: "나는 이런저런 걱정을 많이 한다" },
+            { text: "나는 늘 최악의 상황을 두려워한다" },
+            { text: "나는 두려워하는 것이 많다" },
+            { text: "나는 쉽게 스트레스를 받는다" },
+          ]},
+          { name: "분노", desc: "쉽게 화나고 짜증이 남", items: [
+            { text: "나는 쉽게 화가 난다" },
+            { text: "나는 쉽게 짜증이 난다" },
+            { text: "나는 화를 참지 못하고 터뜨린다" },
+            { text: "나는 웬만해서는 짜증 내지 않는다", reverse: true },
+          ]},
+          { name: "우울", desc: "자주 가라앉고 자신을 부정적으로 봄", items: [
+            { text: "나는 자주 우울한 기분이 든다" },
+            { text: "나는 나 자신이 마음에 들지 않는다" },
+            { text: "나는 자주 기분이 가라앉는다" },
+            { text: "나는 나 자신에게 만족하며 편안하다", reverse: true },
+          ]},
+          { name: "자의식", desc: "남의 시선을 의식하고 위축됨", items: [
+            { text: "나는 다른 사람에게 다가가기가 어렵다" },
+            { text: "나는 남의 주목을 받는 것이 두렵다" },
+            { text: "나는 친한 친구들과 있을 때만 마음이 편하다" },
+            { text: "나는 어색한 사회적 상황에서도 당황하지 않는다", reverse: true },
+          ]},
+          { name: "무절제", desc: "충동·욕구를 절제하기 어려움", items: [
+            { text: "나는 한번 빠지면 과도하게 몰두(폭식·폭음 등)한다" },
+            { text: "나는 좀처럼 지나치게 탐닉하지 않는다", reverse: true },
+            { text: "나는 유혹을 쉽게 이겨낸다", reverse: true },
+            { text: "나는 욕구를 잘 다스릴 수 있다", reverse: true },
+          ]},
+          { name: "취약성", desc: "스트레스에 쉽게 압도됨", items: [
+            { text: "나는 쉽게 당황한다" },
+            { text: "나는 일이 닥치면 쉽게 압도된다" },
+            { text: "나는 상황을 감당할 수 없다고 느낀다" },
+            { text: "나는 압박 속에서도 침착함을 유지한다", reverse: true },
+          ]},
         ],
       },
     ],
@@ -812,30 +1049,49 @@ export function computeScored(test: ScoredTest, answers: number[]): ScoredResult
 /* ── 다차원(Big Five) 채점 ─────────────────────── */
 
 export type MultiLevelKey = "high" | "mid" | "low";
+export type FacetResult = { name: string; desc: string; pct: number };
 export type MultiDimResult = {
   dim: MultiDimension;
   pct: number; // 0~100
   level: MultiLevelKey;
   levelLabel: string; // "높음" / "균형" / "낮음"
+  facets: FacetResult[]; // 하위척도별 결과
 };
 
-// answers: 차원 순서대로 flatten된 응답(각 차원 items 길이만큼)
-export function computeMulti(test: MultiTest, answers: number[]): MultiDimResult[] {
+// 다차원 검사를 관리용 평면 항목 목록으로(차원·하위척도 인덱스 포함)
+export type FlowRef = { d: number; f: number; i: number; text: string; reverse?: boolean };
+export function flattenMulti(test: MultiTest): FlowRef[][] {
+  // [차원][하위척도·항목 순서] 형태. 차원별로 항목을 일렬로 펴서 라운드로빈에 사용.
+  return test.dimensions.map((dim, d) => {
+    const list: FlowRef[] = [];
+    dim.facets.forEach((fac, f) => {
+      fac.items.forEach((it, i) => list.push({ d, f, i, text: it.text, reverse: it.reverse }));
+    });
+    return list;
+  });
+}
+
+// answers: answers[d][f][i] 형태의 중첩 응답
+export function computeMulti(test: MultiTest, answers: number[][][]): MultiDimResult[] {
   const minOpt = Math.min(...test.scale.map((o) => o.value));
   const maxOpt = Math.max(...test.scale.map((o) => o.value));
-  let idx = 0;
-  return test.dimensions.map((dim) => {
-    let raw = 0;
-    dim.items.forEach((it) => {
-      const v = answers[idx++];
-      raw += it.reverse ? minOpt + maxOpt - v : v;
+  const span = maxOpt - minOpt;
+  return test.dimensions.map((dim, d) => {
+    let dimRaw = 0, dimN = 0;
+    const facets: FacetResult[] = dim.facets.map((fac, f) => {
+      let raw = 0;
+      fac.items.forEach((it, i) => {
+        const v = answers[d][f][i];
+        raw += it.reverse ? minOpt + maxOpt - v : v;
+      });
+      dimRaw += raw; dimN += fac.items.length;
+      const pct = Math.round(((raw - fac.items.length * minOpt) / (fac.items.length * span)) * 100);
+      return { name: fac.name, desc: fac.desc, pct: Math.max(0, Math.min(100, pct)) };
     });
-    const lo = dim.items.length * minOpt;
-    const hi = dim.items.length * maxOpt;
-    const pct = Math.round(((raw - lo) / (hi - lo)) * 100);
+    const pct = Math.round(((dimRaw - dimN * minOpt) / (dimN * span)) * 100);
     const level: MultiLevelKey = pct >= 60 ? "high" : pct <= 40 ? "low" : "mid";
     const levelLabel = level === "high" ? "높음" : level === "low" ? "낮음" : "균형";
-    return { dim, pct: Math.max(0, Math.min(100, pct)), level, levelLabel };
+    return { dim, pct: Math.max(0, Math.min(100, pct)), level, levelLabel, facets };
   });
 }
 
@@ -922,17 +1178,41 @@ export const ABOUT: Record<string, TestAbout> = {
     background: "Smith 등(2008) 개발·검증. 연구·실무에서 자유롭게 사용.",
   },
   bigfive: {
-    what: "성격 5요인 모델(Big Five)은 성격심리학에서 가장 과학적으로 검증된 성격 이론입니다. MBTI처럼 사람을 몇 가지 유형에 가두지 않고, 5개의 연속된 차원 위에서 '당신이 어디쯤'인지를 보여줘 성격을 입체적으로 기술합니다.",
+    what: "성격 5요인 모델(Big Five)은 성격심리학에서 가장 과학적으로 검증된 성격 이론입니다. 이 정밀 검사는 5개 큰 축을 각각 6개 하위척도로 나눠, 성격을 30개 측면에서 입체적으로 분석합니다(전문 성격검사가 쓰는 방식).",
     measures: [
-      { label: "개방성 (O)", desc: "호기심·상상력·새로운 경험에 대한 개방" },
-      { label: "성실성 (C)", desc: "계획성·자기통제·책임감" },
-      { label: "외향성 (E)", desc: "사회적 에너지·활동성·자극 추구" },
-      { label: "우호성 (A)", desc: "공감·배려·협력 성향" },
-      { label: "정서안정성 (ES)", desc: "스트레스 속 정서의 안정성(↔신경성)" },
+      { label: "개방성 (6)", desc: "상상력·예술적 관심·정서성·모험성·지성·진보성" },
+      { label: "성실성 (6)", desc: "자기효능감·정돈성·책임감·성취추구·자기통제·신중성" },
+      { label: "외향성 (6)", desc: "친밀성·사교성·자기주장·활동성·자극추구·쾌활함" },
+      { label: "우호성 (6)", desc: "신뢰·도덕성·이타성·협력성·겸손·공감" },
+      { label: "신경성 (6)", desc: "불안·분노·우울·자의식·무절제·취약성" },
     ],
-    how: "50문항(축마다 10개)을 1~5로 답하고, 역문항을 보정해 축별로 합산한 뒤 백분율로 환산합니다.",
+    how: "120문항(축마다 6개 하위척도 × 4문항)을 1~5로 답하고, 역문항을 보정해 축·하위척도별로 합산한 뒤 백분율로 환산합니다.",
     interpret: "각 축의 높고 낮음에 좋고 나쁨은 없습니다. 모든 특성은 상황에 따라 강점도 약점도 됩니다. 백분율은 문항 응답에 기반한 상대 위치이며, 대규모 규준집단 백분위는 아닙니다.",
-    background: "Goldberg(1992)의 IPIP Big-Five Factor Markers. 공개(public domain) 척도로 상업적 사용까지 자유.",
+    background: "IPIP-NEO-120 (Johnson 2014) — NEO-PI-R 30개 facet을 재현한 공개(public domain) 척도로 상업적 사용까지 자유.",
+  },
+  adhd: {
+    what: "ASRS v1.1은 세계보건기구(WHO)가 성인 ADHD를 선별하기 위해 만든 18문항 자기보고 척도입니다. DSM의 ADHD 진단기준에 대응하며, 특히 앞 6문항(파트 A)이 가장 강력한 선별 지표로 검증되어 있습니다.",
+    measures: [
+      { label: "주의력 결핍 (9문항)", desc: "마무리·정리·기억·집중·물건 분실·산만함" },
+      { label: "과잉행동·충동성 (9문항)", desc: "안절부절·과도한 활동·말 끼어들기·차례 기다리기 어려움" },
+    ],
+    how: "18문항을 0(전혀 없음)~4(매우 자주)로 답합니다. 정식 규칙은 앞 6문항(파트 A)에서 기준 이상 응답이 4개 이상인지로 판단하며, 18문항 합(0~72)은 증상 빈도의 참고 지표입니다.",
+    interpret: "파트 A에서 4개 이상이면 성인 ADHD 가능성이 높아 정밀 평가가 권장됩니다. 선별 도구이므로 진단을 대체하지 않습니다.",
+    background: "WHO·성인 ADHD 워크그룹(Adler, Kessler, Spencer 등) 개발. 임상·연구용으로 무료 사용 가능.",
+  },
+  ocd: {
+    what: "OCI-R은 강박장애의 다양한 증상을 폭넓게 측정하는 18문항 자기보고 척도입니다. 강박 증상을 6개 유형으로 나눠, 각 영역이 지난 한 달 얼마나 당신을 괴롭혔는지 평가합니다.",
+    measures: [
+      { label: "씻기", desc: "오염에 대한 두려움과 과도한 씻기" },
+      { label: "확인", desc: "문·가스·잠금 등 반복 확인" },
+      { label: "정렬", desc: "물건이 제 순서·자리에 있어야 하는 욕구" },
+      { label: "강박사고", desc: "원치 않게 떠오르는 불쾌한 생각" },
+      { label: "저장", desc: "필요 없는 물건을 버리지 못함" },
+      { label: "중화", desc: "숫자 세기 등 불안을 상쇄하는 반복 행위" },
+    ],
+    how: "18문항(6영역 × 3문항)을 0~4의 '고통 정도'로 답해 합산합니다(0~72점). 역채점 문항은 없습니다.",
+    interpret: "총점 21점 이상을 강박장애 선별의 기준선으로 봅니다(더 민감한 기준은 18점). 선별 도구이며 진단이 아닙니다 — 강박은 인지행동치료로 효과적으로 치료됩니다.",
+    background: "Foa 등(2002) 개발. 원 논문에 전문 공개, 임상·연구용 무료 사용.",
   },
   sns: {
     what: "버겐 소셜미디어 중독 척도(BSMAS)는 행위중독의 6가지 핵심 요소 이론에 따라, 인스타·유튜브·틱톡 등 소셜미디어의 문제적·중독적 사용을 측정합니다.",

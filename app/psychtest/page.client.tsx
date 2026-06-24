@@ -28,58 +28,112 @@ export default function PsychTestClient() {
   return <Runner key={test.id} test={test} onExit={() => setActiveId(null)} />;
 }
 
-/* ───────────────────────── 허브 ───────────────────────── */
+/* ───────────────────────── 허브 (프로젝트 페이지 스타일) ───────────────────────── */
+function testCount(t: PsychTest): number {
+  if (t.kind === "scored") return t.items.length;
+  if (t.kind === "multi") return t.dimensions.reduce((s, d) => s + d.facets.reduce((a, f) => a + f.items.length, 0), 0);
+  return t.questions.length;
+}
+function scaleTag(t: PsychTest): string {
+  const parts = t.subtitle.split(" · ");
+  return parts[parts.length - 1] || t.subtitle;
+}
+
 function Hub({ onPick }: { onPick: (id: string) => void }) {
   return (
-    <main className="w-full min-h-screen py-9">
-      <div className="mb-7">
-        <p className="text-[12px] font-semibold text-[#F9954E] mb-2">🧩 심리테스트</p>
-        <h1 className="text-[24px] font-extrabold text-neutral-950 dark:text-white break-keep leading-tight">
-          제대로 만든 심리테스트
+    <main className="w-full min-h-screen">
+      {/* ── 히어로 ── */}
+      <section className="pt-8 pb-8 border-b border-neutral-100 dark:border-zinc-900">
+        <p className="text-[11px] font-bold text-[#F9954E] mb-3 tracking-wide uppercase">Psychological Assessment</p>
+        <h1 className="text-[34px] sm:text-[44px] font-extrabold text-neutral-950 dark:text-white leading-[1.12] tracking-tight mb-2 break-keep">
+          검증된 척도로 보는<br />나의 마음
         </h1>
-        <p className="text-[13px] text-neutral-500 dark:text-neutral-400 mt-2 break-keep leading-relaxed">
-          실제 심리학·정신건강 분야에서 검증된 척도를 바탕으로 만들었어요. 결과는 <b>진단이 아닌 자기점검</b>이에요.
+        <p className="text-[14px] text-neutral-400 dark:text-neutral-500 leading-relaxed break-keep">
+          전 세계 임상·연구 현장에서 쓰이는 심리검사 척도를 그대로 옮겼어요.<br />
+          결과는 진단이 아닌 자기점검이며, 응답은 내 기기에서만 계산돼요.
         </p>
-      </div>
+      </section>
 
-      {/* 개인정보 안내 */}
-      <div className="flex items-start gap-2 rounded-2xl bg-neutral-50 dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 px-4 py-3 mb-7">
-        <Lock className="w-3.5 h-3.5 text-neutral-400 mt-0.5 shrink-0" />
-        <p className="text-[12px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
-          응답은 <b>내 기기에서만</b> 계산되고 어디에도 저장·전송되지 않아요.
-        </p>
-      </div>
-
+      {/* ── 카테고리별 검사 ── */}
       {CATEGORIES.map((cat) => {
         const tests = TESTS.filter((t) => t.category === cat.id);
         if (tests.length === 0) return null;
         return (
-          <section key={cat.id} className="mb-8">
-            <div className="flex items-baseline gap-2 mb-3">
-              <h2 className="text-[16px] font-extrabold text-neutral-900 dark:text-white">
-                {cat.emoji} {cat.name}
-              </h2>
-              <span className="text-[11px] text-neutral-400">{cat.desc}</span>
-            </div>
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
-              {tests.map((t) => (
-                <button
-                  key={t.id}
-                  onClick={() => onPick(t.id)}
-                  className="group flex items-center gap-3 text-left px-4 py-3.5 rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-[#F9954E] hover:bg-[#FFF8F1] dark:hover:bg-[#F9954E]/10 active:scale-[0.99] transition-all"
-                >
-                  <span className="text-[26px] leading-none shrink-0">{t.emoji}</span>
-                  <span className="flex-1 min-w-0">
-                    <span className="block text-[14px] font-bold text-neutral-900 dark:text-white break-keep">{t.title}</span>
-                    <span className="block text-[11.5px] text-neutral-400 mt-0.5 truncate">{t.subtitle} · {t.time}</span>
-                  </span>
-                  <ChevronRight className="w-4 h-4 text-neutral-300 group-hover:text-[#F9954E] transition-colors shrink-0" />
-                </button>
-              ))}
+          <section key={cat.id} className="py-8 border-b border-neutral-100 dark:border-zinc-900 last:border-0">
+            <p className="text-[11px] font-bold text-neutral-400 dark:text-zinc-600 uppercase tracking-wide mb-1">
+              {cat.emoji} {cat.name} · {tests.length}개
+            </p>
+            <p className="text-[12px] text-neutral-400 dark:text-zinc-600 mb-5 break-keep">{cat.desc}</p>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
+              {tests.map((t) => {
+                const about = getAbout(t.id);
+                return (
+                  <div key={t.id} className="flex flex-col rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden">
+                    {/* 카드 헤더 */}
+                    <div className="px-5 pt-5 pb-4 border-b border-neutral-100 dark:border-zinc-800">
+                      <div className="flex items-center justify-between gap-3 mb-3">
+                        <div className="flex items-center gap-3 min-w-0">
+                          <div className="w-10 h-10 rounded-xl bg-[#F9954E]/8 dark:bg-[#F9954E]/10 flex items-center justify-center text-[22px] flex-shrink-0">
+                            {t.emoji}
+                          </div>
+                          <div className="min-w-0">
+                            <h2 className="text-[16px] font-extrabold text-neutral-950 dark:text-white leading-tight break-keep">{t.title}</h2>
+                            <span className="text-[10px] text-neutral-400 dark:text-zinc-500">{scaleTag(t)}</span>
+                          </div>
+                        </div>
+                        <span className="text-[10px] font-bold px-2.5 py-1 rounded-full shrink-0 bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 tabular-nums">{testCount(t)}문항</span>
+                      </div>
+                      <p className="text-[13px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep line-clamp-2">{about ? about.what : t.intro}</p>
+                    </div>
+
+                    {/* 측정 영역 */}
+                    <div className="px-5 py-4 flex-1">
+                      {about ? (
+                        <ul className="space-y-2">
+                          {about.measures.slice(0, 4).map((m) => (
+                            <li key={m.label} className="flex items-start gap-2">
+                              <span className="w-1.5 h-1.5 rounded-full bg-[#F9954E] mt-1.5 flex-shrink-0" />
+                              <div className="min-w-0">
+                                <span className="text-[12.5px] font-bold text-neutral-900 dark:text-white">{m.label}</span>
+                                <span className="text-[12px] text-neutral-500 dark:text-neutral-400"> — {m.desc}</span>
+                              </div>
+                            </li>
+                          ))}
+                          {about.measures.length > 4 && (
+                            <li className="text-[11.5px] text-neutral-400 pl-3.5">+ {about.measures.length - 4}개 영역 더</li>
+                          )}
+                        </ul>
+                      ) : (
+                        <p className="text-[12.5px] text-neutral-500 dark:text-neutral-400 break-keep">{t.intro}</p>
+                      )}
+                    </div>
+
+                    {/* CTA */}
+                    <div className="px-5 pb-5">
+                      <button
+                        onClick={() => onPick(t.id)}
+                        className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#F9954E]/10 dark:bg-[#F9954E]/10 text-[#F9954E] text-[13px] font-extrabold transition-colors hover:bg-[#F9954E]/20 dark:hover:bg-[#F9954E]/20"
+                      >
+                        검사 시작 · {t.time} <ArrowRight className="w-3.5 h-3.5" />
+                      </button>
+                    </div>
+                  </div>
+                );
+              })}
             </div>
           </section>
         );
       })}
+
+      {/* ── 안내 ── */}
+      <section className="py-8">
+        <div className="flex items-start gap-2.5 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-neutral-50 dark:bg-zinc-900/50 px-5 py-4">
+          <Lock className="w-4 h-4 text-neutral-400 mt-0.5 shrink-0" />
+          <p className="text-[12px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+            모든 검사는 <b>선별·자기점검</b> 목적이며 의학적 진단이 아니에요. 응답은 <b>내 기기에서만</b> 계산되고 어디에도 저장·전송되지 않아요. 걱정되는 점이 있다면 전문가 상담을 권해요.
+          </p>
+        </div>
+      </section>
     </main>
   );
 }
@@ -310,46 +364,50 @@ function TypedRunner({ test, onExit }: { test: TypedTest; onExit: () => void }) 
 }
 
 /* ───────────────────────── 다차원(Big Five) 테스트 ───────────────────────── */
-// 차원별 문항을 라운드로빈으로 섞어 같은 축이 연달아 나오지 않게 함
-function buildFlow(test: MultiTest): { d: number; i: number }[] {
-  const flow: { d: number; i: number }[] = [];
-  const maxLen = Math.max(...test.dimensions.map((d) => d.items.length));
+// 차원별 문항(하위척도 순서)을 라운드로빈으로 섞어 같은 축이 연달아 나오지 않게 함
+type Cell = { d: number; f: number; i: number };
+function buildFlow(test: MultiTest): Cell[] {
+  const perDim: Cell[][] = test.dimensions.map((dim, d) => {
+    const seq: Cell[] = [];
+    dim.facets.forEach((fac, f) => fac.items.forEach((_, i) => seq.push({ d, f, i })));
+    return seq;
+  });
+  const maxLen = Math.max(...perDim.map((s) => s.length));
+  const flow: Cell[] = [];
   for (let r = 0; r < maxLen; r++) {
-    test.dimensions.forEach((dim, d) => {
-      if (r < dim.items.length) flow.push({ d, i: r });
-    });
+    perDim.forEach((seq) => { if (r < seq.length) flow.push(seq[r]); });
   }
   return flow;
 }
+const initAnswers = (test: MultiTest): number[][][] =>
+  test.dimensions.map((dim) => dim.facets.map((fac) => fac.items.map(() => -1)));
 
 function MultiRunner({ test, onExit }: { test: MultiTest; onExit: () => void }) {
   const [started, setStarted] = useState(false);
   const flow = buildFlow(test);
   const [step, setStep] = useState(0);
-  const [answers, setAnswers] = useState<number[][]>(() => test.dimensions.map((d) => d.items.map(() => -1)));
+  const [answers, setAnswers] = useState<number[][][]>(() => initAnswers(test));
 
   if (!started) return <Intro test={test} onBack={onExit} onStart={() => setStarted(true)} />;
 
-  const filled = answers.every((dim) => dim.every((v) => v >= 0));
+  const filled = answers.every((dim) => dim.every((fac) => fac.every((v) => v >= 0)));
   if (filled) {
-    const flat = answers.flat();
-    return <MultiResult test={test} answers={flat} onBack={onExit} onRetry={() => { setAnswers(test.dimensions.map((d) => d.items.map(() => -1))); setStep(0); setStarted(false); }} />;
+    return <MultiResult test={test} answers={answers} onBack={onExit} onRetry={() => { setAnswers(initAnswers(test)); setStep(0); setStarted(false); }} />;
   }
 
   const cur = flow[step];
-  const item = test.dimensions[cur.d].items[cur.i];
+  const item = test.dimensions[cur.d].facets[cur.f].items[cur.i];
   const progress = Math.round((step / flow.length) * 100);
 
   const choose = (value: number) => {
-    const next = answers.map((a) => [...a]);
-    next[cur.d][cur.i] = value;
+    const next = answers.map((dim) => dim.map((fac) => [...fac]));
+    next[cur.d][cur.f][cur.i] = value;
     setAnswers(next);
     if (step + 1 < flow.length) setStep(step + 1);
     else {
       // 마지막: 혹시 빈 문항이 있으면 그쪽으로
-      let s = 0;
-      for (const f of flow) { if (next[f.d][f.i] < 0) break; s++; }
-      if (s < flow.length) setStep(s);
+      const s = flow.findIndex((c) => next[c.d][c.f][c.i] < 0);
+      if (s !== -1) setStep(s);
     }
   };
 
@@ -360,7 +418,7 @@ function MultiRunner({ test, onExit }: { test: MultiTest; onExit: () => void }) 
       <h2 className="text-[18.5px] font-extrabold text-neutral-900 dark:text-white leading-snug break-keep mb-6 min-h-[2.4em]">{item.text}</h2>
       <div className="flex flex-col gap-2.5">
         {test.scale.map((o, i) => {
-          const selected = answers[cur.d][cur.i] === o.value;
+          const selected = answers[cur.d][cur.f][cur.i] === o.value;
           return (
             <button
               key={i}
@@ -380,9 +438,9 @@ function MultiRunner({ test, onExit }: { test: MultiTest; onExit: () => void }) 
   );
 }
 
-function MultiResult({ test, answers, onBack, onRetry }: { test: MultiTest; answers: number[]; onBack: () => void; onRetry: () => void }) {
+function MultiResult({ test, answers, onBack, onRetry }: { test: MultiTest; answers: number[][][]; onBack: () => void; onRetry: () => void }) {
   const results = computeMulti(test, answers);
-  // 가장 두드러진 축(높음/낮음 중 50%에서 가장 먼 것)으로 한 줄 요약
+  // 가장 두드러진 축(50%에서 가장 먼 것)으로 한 줄 요약
   const standout = [...results].sort((a, b) => Math.abs(b.pct - 50) - Math.abs(a.pct - 50))[0];
   const summary = standout.level === "mid"
     ? "전반적으로 균형 잡힌 성향을 가지고 있어요."
@@ -396,8 +454,9 @@ function MultiResult({ test, answers, onBack, onRetry }: { test: MultiTest; answ
 
       <div className="text-center mb-6">
         <div className="text-[52px] leading-none mb-2">{test.emoji}</div>
-        <h1 className="text-[22px] font-extrabold text-neutral-950 dark:text-white">나의 성격 5요인</h1>
+        <h1 className="text-[22px] font-extrabold text-neutral-950 dark:text-white">나의 성격 프로파일</h1>
         <p className="text-[13px] text-neutral-500 dark:text-neutral-400 mt-2 break-keep">{summary}</p>
+        <p className="text-[11px] text-neutral-400 mt-1">5개 요인 · 30개 하위척도 분석</p>
       </div>
 
       <div className="flex flex-col gap-3">
@@ -418,9 +477,25 @@ function MultiResult({ test, answers, onBack, onRetry }: { test: MultiTest; answ
               </div>
               <p className="text-[13px] text-neutral-700 dark:text-neutral-200 leading-relaxed break-keep mb-3">{text}</p>
               {lv && (
-                <div className="grid grid-cols-1 gap-1.5">
+                <div className="grid grid-cols-1 gap-1.5 mb-3">
                   <p className="text-[12px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep"><b className="text-emerald-600 dark:text-emerald-400">강점</b> {lv.strengths}</p>
                   <p className="text-[12px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep"><b className="text-amber-600 dark:text-amber-400">살필 점</b> {lv.watch}</p>
+                </div>
+              )}
+              {/* 하위척도 분해 */}
+              {r.facets.length > 0 && (
+                <div className="border-t border-neutral-100 dark:border-zinc-800 pt-3 mt-1 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
+                  {r.facets.map((f) => (
+                    <div key={f.name}>
+                      <div className="flex items-center justify-between mb-0.5">
+                        <span className="text-[11.5px] font-bold text-neutral-700 dark:text-neutral-300" title={f.desc}>{f.name}</span>
+                        <span className="text-[10.5px] font-bold text-neutral-400 tabular-nums">{f.pct}%</span>
+                      </div>
+                      <div className="h-1.5 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden">
+                        <div className={`h-full rounded-full ${TONE[tone].bar}`} style={{ width: `${Math.max(3, f.pct)}%` }} />
+                      </div>
+                    </div>
+                  ))}
                 </div>
               )}
             </div>
@@ -546,7 +621,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 function Intro({ test, onBack, onStart }: { test: PsychTest; onBack: () => void; onStart: () => void }) {
   const count =
     test.kind === "scored" ? test.items.length
-    : test.kind === "multi" ? test.dimensions.reduce((s, d) => s + d.items.length, 0)
+    : test.kind === "multi" ? test.dimensions.reduce((s, d) => s + d.facets.reduce((a, f) => a + f.items.length, 0), 0)
     : test.questions.length;
   const disclaimer = (test.kind === "scored" || test.kind === "multi") ? test.disclaimer : undefined;
   const about = getAbout(test.id);
