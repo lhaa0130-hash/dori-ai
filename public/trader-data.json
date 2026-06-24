@@ -1,11 +1,11 @@
 {
   "program": "트레이더일로 (Trader Illo)",
-  "generated_at": "2026-06-24 22:00:04",
+  "generated_at": "2026-06-25 02:00:04",
   "mode": "paper",
-  "total_starting": 9015800,
-  "total_ending": 8985457,
-  "total_return_pct": -0.34,
-  "usdkrw": 1546.58,
+  "total_starting": 9006772,
+  "total_ending": 8990590,
+  "total_return_pct": -0.18,
+  "usdkrw": 1541.95,
   "watching": 453,
   "holding": 7,
   "interval_hours": 4,
@@ -19,8 +19,8 @@
       "count": 93,
       "currency": "KRW",
       "starting": 3000000.0,
-      "ending": 2989134.09,
-      "return_pct": -0.36
+      "ending": 2981988.05,
+      "return_pct": -0.6
     },
     {
       "name": "국내주식",
@@ -35,9 +35,9 @@
       "count": 200,
       "currency": "USD",
       "starting": 1949.98,
-      "ending": 1963.76,
-      "return_pct": 0.71,
-      "fx": 1546.58
+      "ending": 1977.62,
+      "return_pct": 1.42,
+      "fx": 1541.95
     }
   ],
   "sections": [
@@ -54,10 +54,10 @@
         "entry_price": 1132.566,
         "qty": 105.088799,
         "invested": 119020.0,
-        "cur_price": 1032.0,
+        "cur_price": 964.0,
         "stop_price": 846.5271,
         "take_profit": 1702.9457,
-        "unrealized_pnl_pct": -8.88
+        "unrealized_pnl_pct": -14.88
       },
       "trade_log": []
     },
@@ -104,26 +104,6 @@
       ]
     },
     {
-      "symbol": "CAH",
-      "name": "CAH",
-      "category": "해외주식",
-      "trades": 0,
-      "win_rate_pct": 0.0,
-      "realized_pnl": 0,
-      "open_position": {
-        "entry_time": "2026-06-15 00:00",
-        "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-        "entry_price": 226.6264,
-        "qty": 1.466965,
-        "invested": 332.45,
-        "cur_price": 228.91,
-        "stop_price": 213.1177,
-        "take_profit": 252.9645,
-        "unrealized_pnl_pct": 1.01
-      },
-      "trade_log": []
-    },
-    {
       "symbol": "INTC",
       "name": "인텔",
       "category": "해외주식",
@@ -136,16 +116,16 @@
         "entry_price": 127.9879,
         "qty": 0.831637,
         "invested": 106.44,
-        "cur_price": 132.28,
+        "cur_price": 132.1001,
         "stop_price": 104.4126,
         "take_profit": 174.7549,
-        "unrealized_pnl_pct": 3.35
+        "unrealized_pnl_pct": 3.21
       },
       "trade_log": []
     },
     {
-      "symbol": "DAL",
-      "name": "델타항공",
+      "symbol": "CAH",
+      "name": "CAH",
       "category": "해외주식",
       "trades": 0,
       "win_rate_pct": 0.0,
@@ -153,13 +133,13 @@
       "open_position": {
         "entry_time": "2026-06-15 00:00",
         "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-        "entry_price": 84.1541,
-        "qty": 2.627083,
-        "invested": 221.08,
-        "cur_price": 86.72,
-        "stop_price": 76.6515,
-        "take_profit": 98.907,
-        "unrealized_pnl_pct": 3.05
+        "entry_price": 226.6264,
+        "qty": 1.466965,
+        "invested": 332.45,
+        "cur_price": 235.08,
+        "stop_price": 213.1177,
+        "take_profit": 252.9645,
+        "unrealized_pnl_pct": 3.73
       },
       "trade_log": []
     },
@@ -176,10 +156,30 @@
         "entry_price": 547.8073,
         "qty": 0.233345,
         "invested": 127.83,
-        "cur_price": 519.85,
+        "cur_price": 516.24,
         "stop_price": 463.7029,
         "take_profit": 714.3743,
-        "unrealized_pnl_pct": -5.1
+        "unrealized_pnl_pct": -5.76
+      },
+      "trade_log": []
+    },
+    {
+      "symbol": "DAL",
+      "name": "델타항공",
+      "category": "해외주식",
+      "trades": 0,
+      "win_rate_pct": 0.0,
+      "realized_pnl": 0,
+      "open_position": {
+        "entry_time": "2026-06-15 00:00",
+        "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+        "entry_price": 84.1541,
+        "qty": 2.627083,
+        "invested": 221.08,
+        "cur_price": 89.945,
+        "stop_price": 76.6515,
+        "take_profit": 98.907,
+        "unrealized_pnl_pct": 6.88
       },
       "trade_log": []
     },
@@ -196,15 +196,23 @@
         "entry_price": 141.3512,
         "qty": 2.1375,
         "invested": 302.14,
-        "cur_price": 144.97,
+        "cur_price": 143.72,
         "stop_price": 132.0895,
         "take_profit": 159.451,
-        "unrealized_pnl_pct": 2.56
+        "unrealized_pnl_pct": 1.68
       },
       "trade_log": []
     }
   ],
   "recent_runs": [
+    {
+      "time": "2026-06-25 02:00:04",
+      "watching": 453,
+      "holding": 7,
+      "new_trades": 0,
+      "total": 8990590,
+      "ret": -0.18
+    },
     {
       "time": "2026-06-24 22:00:04",
       "watching": 453,
