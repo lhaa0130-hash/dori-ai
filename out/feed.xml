@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Wed, 24 Jun 2026 00:22:45 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 24 Jun 2026 01:06:53 GMT</lastBuildDate>
+    <item>
+      <title>메타, AI 보안 점검에 협력할까? 미국 정부의 압박</title>
+      <link>https://dori-ai.com/insight/article/trend-164</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-164</guid>
+      <category>트렌드</category>
+      <pubDate>Wed, 24 Jun 2026 01:00:33 GMT</pubDate>
+      <description>미국 정부가 메타에 AI 검토를 요구하며 보안 우려가 커지고 있다. 이로 인해 메타의 기술 개발 방향이 크게 변화할 가능성이 있다.</description>
+    </item>
     <item>
       <title>Fika Jobs, AI 인터뷰로 인사 혁신 이끈다</title>
       <link>https://dori-ai.com/insight/article/trend-163</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Sun, 21 Jun 2026 22:00:43 GMT</pubDate>
       <description>테슬라가 새로운 모듈형 AI 데이터 센터 하드웨어인 '메가포드'를 출시할 계획이다. 이 혁신적인 제품은 AI 데이터 처리의 효율성을 크게 향상시킬 것으로 기대된다.</description>
-    </item>
-    <item>
-      <title>AI의 신뢰성과 의료 혁신 — 임상 시험의 새로운 네트워크</title>
-      <link>https://dori-ai.com/insight/article/trend-148</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-148</guid>
-      <category>트렌드</category>
-      <pubDate>Sun, 21 Jun 2026 11:00:20 GMT</pubDate>
-      <description>AI 기술이 의료 분야에서 빠르게 도입되고 있지만, 신뢰성 부족으로 문제가 되고 있다. 이를 해결하기 위해 새로운 네트워크가 등장했다.</description>
     </item>
   </channel>
 </rss>

@@ -43,28 +43,28 @@ export default function Header() {
 
   const projects = [
     {
-      name: "동물도감", emoji: "🐾", image: "",
-      desc: "애니멀일로 · 다양한 동물 탐험", href: "/animal",
-      bg: "bg-emerald-50 dark:bg-emerald-900/20", active: true,
-    },
-    {
-      name: "AI 투자매매", emoji: "📈", image: "",
-      desc: "트레이더일로 · 손실은 작게, 수익은 크게", href: "/trader",
-      bg: "bg-blue-50 dark:bg-blue-900/20", active: true,
-    },
-    {
-      name: "AI 직원", emoji: "🟧", image: "/illo-logo.png",
-      desc: "워크일로 · 업무를 맡기는 AI 비서", href: "/illo/app",
+      name: "AI 업무비서", emoji: "🟧", image: "/illo-logo.png",
+      desc: "수많은 AI를 한 공간에서 — 1인 사업용", href: "/illo/app",
       bg: "bg-orange-50 dark:bg-orange-900/20", active: true,
     },
     {
-      name: "건축설계 보조", emoji: "📐", image: "",
-      desc: "아크일로 · 평면설계 도우미", href: "/flat-form",
+      name: "AI 자동매매", emoji: "📈", image: "",
+      desc: "코인·주식 AI 자동 투자 — 손실은 작게", href: "/trader",
+      bg: "bg-blue-50 dark:bg-blue-900/20", active: true,
+    },
+    {
+      name: "AI 건축설계", emoji: "📐", image: "",
+      desc: "지번 입력하면 지적도·한계선 자동 계산", href: "/flat-form",
       bg: "bg-sky-50 dark:bg-sky-900/20", active: true,
     },
     {
-      name: "가족 기록", emoji: "👨‍👩‍👧‍👦", image: "",
-      desc: "가족의 모든 것을 한 앱에", href: "/family",
+      name: "AI 동물도감", emoji: "🐾", image: "",
+      desc: "300종 동물 탐험 — 매일 5종 업데이트", href: "/animal",
+      bg: "bg-emerald-50 dark:bg-emerald-900/20", active: true,
+    },
+    {
+      name: "AI 가족앱", emoji: "👨‍👩‍👧‍👦", image: "",
+      desc: "온 가족 일정·사진·건강 한 앱에", href: "/family",
       bg: "bg-purple-50 dark:bg-purple-900/20",
     },
   ];

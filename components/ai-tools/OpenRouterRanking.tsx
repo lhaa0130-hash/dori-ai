@@ -14,19 +14,18 @@ interface Stats {
 }
 
 const ORANGE = "#F9954E";
-const TABS = [
-  { key: "usage", label: "🔥 사용량", desc: "전 세계에서 가장 많이 쓰는 모델" },
-  { key: "intel", label: "🧠 지능", desc: "벤치마크 지능 점수가 높은 모델" },
-  { key: "price", label: "💰 가격", desc: "가장 저렴한 모델 (입력가 기준)" },
-] as const;
+
+function shortName(name: string) {
+  // "제공사: 모델명" 형태에서 모델명만 추출, 너무 길면 자름
+  const n = name.includes(":") ? name.split(":").slice(1).join(":").trim() : name;
+  return n.length > 22 ? n.slice(0, 21) + "…" : n;
+}
 
 export default function OpenRouterRanking() {
   const [s, setS] = useState<Stats | null>(null);
   const [hide, setHide] = useState(false);
-  const [tab, setTab] = useState<(typeof TABS)[number]["key"]>("usage");
 
   useEffect(() => {
-    // 실시간 엣지 함수 우선 → 실패 시 정적 JSON 폴백
     fetch("/api/openrouter")
       .then((r) => (r.ok ? r.json() : Promise.reject()))
       .catch(() => fetch("/openrouter-stats.json").then((r) => (r.ok ? r.json() : Promise.reject())))
@@ -36,12 +35,14 @@ export default function OpenRouterRanking() {
 
   if (hide || !s || !s.usageTop?.length) return null;
 
-  const activeDesc = TABS.find((t) => t.key === tab)!.desc;
+  const usage = s.usageTop.slice(0, 5);
+  const intel = s.intelTop.slice(0, 5);
+  const price = s.priceTop.slice(0, 5);
 
   return (
     <div className="rounded-3xl border border-neutral-200 dark:border-zinc-800 overflow-hidden">
       {/* 헤더 */}
-      <div className="px-4 sm:px-5 pt-4 pb-3 bg-gradient-to-b from-[#F9954E]/10 to-transparent">
+      <div className="px-4 sm:px-5 pt-4 pb-3 bg-gradient-to-b from-[#F9954E]/10 to-transparent border-b border-neutral-100 dark:border-zinc-800">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
@@ -53,87 +54,68 @@ export default function OpenRouterRanking() {
         <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-1">전 세계 사용량 · 지능 · 가격을 한눈에</p>
       </div>
 
-      {/* 탭 */}
-      <div className="px-4 sm:px-5 pt-3">
-        <div className="flex gap-1.5">
-          {TABS.map((t) => (
-            <button
-              key={t.key}
-              onClick={() => setTab(t.key)}
-              className={`flex-1 py-2 rounded-xl text-[12.5px] font-bold transition-colors ${
-                tab === t.key ? "bg-[#F9954E] text-white" : "bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400"
-              }`}
-            >
-              {t.label}
-            </button>
-          ))}
+      {/* 3열 동시 표시 */}
+      <div className="grid grid-cols-3 divide-x divide-neutral-100 dark:divide-zinc-800">
+
+        {/* 🔥 사용량 */}
+        <div className="px-3 sm:px-4 py-3">
+          <p className="text-[11px] font-extrabold text-neutral-700 dark:text-neutral-200 mb-2.5">🔥 사용량</p>
+          <ol className="space-y-2">
+            {usage.map((m, i) => (
+              <li key={m.name} className="flex items-center gap-1.5">
+                <span className={`text-[11px] font-extrabold w-4 text-center shrink-0 ${i < 3 ? "text-[#F9954E]" : "text-neutral-300 dark:text-neutral-600"}`}>{i + 1}</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[11px] font-bold text-neutral-900 dark:text-white truncate leading-snug">{shortName(m.name)}</p>
+                  <p className="text-[10px] text-neutral-400 tabular-nums">{m.reqM}M</p>
+                </div>
+              </li>
+            ))}
+          </ol>
         </div>
-        <p className="text-[11px] text-neutral-400 mt-2">{activeDesc}</p>
+
+        {/* 🧠 지능 */}
+        <div className="px-3 sm:px-4 py-3">
+          <p className="text-[11px] font-extrabold text-neutral-700 dark:text-neutral-200 mb-2.5">🧠 지능</p>
+          <ol className="space-y-2">
+            {intel.map((m, i) => {
+              const max = Math.max(...intel.map((x) => x.score), 1);
+              return (
+                <li key={m.name} className="flex items-center gap-1.5">
+                  <span className={`text-[11px] font-extrabold w-4 text-center shrink-0 ${i < 3 ? "text-[#F9954E]" : "text-neutral-300 dark:text-neutral-600"}`}>{i + 1}</span>
+                  <div className="flex-1 min-w-0">
+                    <p className="text-[11px] font-bold text-neutral-900 dark:text-white truncate leading-snug">{shortName(m.name)}</p>
+                    <div className="flex items-center gap-1 mt-0.5">
+                      <div className="flex-1 h-1 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden">
+                        <div className="h-full rounded-full" style={{ width: `${(m.score / max) * 100}%`, background: ORANGE }} />
+                      </div>
+                      <span className="text-[10px] text-[#F9954E] font-bold tabular-nums">{m.score}</span>
+                    </div>
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+        </div>
+
+        {/* 💰 가격 */}
+        <div className="px-3 sm:px-4 py-3">
+          <p className="text-[11px] font-extrabold text-neutral-700 dark:text-neutral-200 mb-2.5">💰 가격</p>
+          <ol className="space-y-2">
+            {price.map((m, i) => (
+              <li key={m.name} className="flex items-center gap-1.5">
+                <span className={`text-[11px] font-extrabold w-4 text-center shrink-0 ${i < 3 ? "text-[#F9954E]" : "text-neutral-300 dark:text-neutral-600"}`}>{i + 1}</span>
+                <div className="flex-1 min-w-0">
+                  <p className="text-[11px] font-bold text-neutral-900 dark:text-white truncate leading-snug">{shortName(m.name)}</p>
+                  <p className="text-[10px] text-neutral-400 tabular-nums">${m.pin ?? "—"}<span className="text-[9px]">/1M</span></p>
+                </div>
+              </li>
+            ))}
+          </ol>
+        </div>
+
       </div>
 
-      {/* 본문 */}
-      <div className="px-4 sm:px-5 py-3">
-        {tab === "intel" ? (
-          <IntelList items={s.intelTop} />
-        ) : (
-          <MetricList rows={tab === "usage" ? s.usageTop : s.priceTop} mode={tab} />
-        )}
-      </div>
-
-      <p className="px-4 sm:px-5 pb-3 text-[10px] text-neutral-400">데이터: OpenRouter · 속도=초당 토큰(중앙값) · 가격=100만 토큰당 USD · 지능=Artificial Analysis</p>
-    </div>
-  );
-}
-
-function IntelList({ items }: { items: { name: string; score: number }[] }) {
-  const max = Math.max(...items.map((i) => i.score), 1);
-  return (
-    <div className="space-y-2.5">
-      {items.slice(0, 10).map((m, i) => (
-        <div key={m.name + i} className="flex items-center gap-2.5">
-          <span className={`text-[13px] font-extrabold w-5 text-center shrink-0 ${i < 3 ? "text-[#F9954E]" : "text-neutral-300 dark:text-neutral-600"}`}>{i + 1}</span>
-          <span className="text-[13px] font-bold text-neutral-900 dark:text-white truncate flex-1">{i === 0 && "👑 "}{m.name}</span>
-          <div className="w-24 h-1.5 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden shrink-0">
-            <div className="h-full rounded-full" style={{ width: `${(m.score / max) * 100}%`, background: ORANGE }} />
-          </div>
-          <span className="text-[12px] font-extrabold text-[#F9954E] tabular-nums w-9 text-right shrink-0">{m.score}</span>
-        </div>
-      ))}
-    </div>
-  );
-}
-
-function MetricList({ rows, mode }: { rows: Row[]; mode: "usage" | "price" }) {
-  const list = rows.slice(0, 10);
-  const primary = (m: Row): { val: string; pct: number } => {
-    if (mode === "usage") { const mx = Math.max(...list.map((x) => x.req), 1); return { val: m.reqM + "M 요청", pct: (m.req / mx) * 100 }; }
-    const ps = list.map((x) => x.pin || 0); const mn = Math.min(...ps), mx = Math.max(...ps);
-    return { val: "$" + (m.pin ?? "—") + " /1M", pct: mx > mn ? (1 - ((m.pin || 0) - mn) / (mx - mn)) * 100 : 100 };
-  };
-  const secondary = (m: Row): string =>
-    mode === "usage"
-      ? `⚡ ${m.tps ?? "—"}t/s · 💰 $${m.pin ?? "—"}/$${m.pout ?? "—"}`
-      : `🔥 ${m.reqM}M 요청 · ⚡ ${m.tps ?? "—"}t/s · 출력 $${m.pout ?? "—"}`;
-  return (
-    <div className="space-y-2.5">
-      {list.map((m, i) => {
-        const p = primary(m);
-        return (
-          <div key={m.name + i} className="flex items-start gap-2.5">
-            <span className={`text-[13px] font-extrabold w-5 text-center shrink-0 leading-6 ${i < 3 ? "text-[#F9954E]" : "text-neutral-300 dark:text-neutral-600"}`}>{i + 1}</span>
-            <div className="flex-1 min-w-0">
-              <div className="flex items-center justify-between gap-2">
-                <span className="text-[13px] font-bold text-neutral-900 dark:text-white truncate">{m.name}</span>
-                <span className="text-[12px] font-extrabold text-[#F9954E] tabular-nums shrink-0">{p.val}</span>
-              </div>
-              <div className="h-1.5 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden my-1">
-                <div className="h-full rounded-full" style={{ width: `${Math.max(4, p.pct)}%`, background: ORANGE }} />
-              </div>
-              <p className="text-[10.5px] text-neutral-500 dark:text-neutral-400 truncate">{secondary(m)}</p>
-            </div>
-          </div>
-        );
-      })}
+      <p className="px-4 sm:px-5 pb-2.5 text-[10px] text-neutral-400 border-t border-neutral-100 dark:border-zinc-800 pt-2">데이터: OpenRouter · 지능=Artificial Analysis · 가격=입력 토큰 100만 개당 USD</p>
     </div>
   );
 }
