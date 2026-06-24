@@ -2,11 +2,11 @@
 
 // 심리테스트 허브 — 검증된 임상/연구 척도 기반 점수형 테스트 + 가벼운 유형 테스트.
 // 단일 라우트에서 허브 → 인트로 → 문항 → 결과를 상태로 전환(정적 export 호환).
-import { useState } from "react";
+import { useState, type ReactNode } from "react";
 import Link from "next/link";
 import { RotateCcw, ArrowRight, ArrowLeft, ChevronRight, Info, ShieldAlert, Lock, Share2, BookmarkPlus, Check } from "lucide-react";
 import {
-  TESTS, CATEGORIES, getTest, computeScored, computeMulti,
+  TESTS, CATEGORIES, getTest, computeScored, computeMulti, getAbout,
   type PsychTest, type ScoredTest, type TypedTest, type MultiTest, type Tone,
 } from "@/lib/psychTests";
 import { shareResultCard, type CardData } from "@/lib/shareCard";
@@ -522,25 +522,83 @@ function ResultActions({ card, badge, allowBadge }: { card: CardData; badge: Omi
 }
 
 /* ───────────────────────── 공통 조각 ───────────────────────── */
+function MetaPill({ k, v }: { k: string; v: string }) {
+  return (
+    <div className="flex-1 rounded-2xl bg-neutral-50 dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 px-3 py-2.5 text-center">
+      <p className="text-[10px] text-neutral-400 mb-0.5">{k}</p>
+      <p className="text-[13px] font-extrabold text-neutral-800 dark:text-neutral-100 break-keep">{v}</p>
+    </div>
+  );
+}
+
+function Section({ title, children }: { title: string; children: ReactNode }) {
+  return (
+    <section className="mb-5">
+      <div className="flex items-center gap-2 mb-2">
+        <span className="w-1 h-3.5 rounded-full bg-[#F9954E]" />
+        <h2 className="text-[13px] font-extrabold text-neutral-900 dark:text-white">{title}</h2>
+      </div>
+      {children}
+    </section>
+  );
+}
+
 function Intro({ test, onBack, onStart }: { test: PsychTest; onBack: () => void; onStart: () => void }) {
   const count =
     test.kind === "scored" ? test.items.length
     : test.kind === "multi" ? test.dimensions.reduce((s, d) => s + d.items.length, 0)
     : test.questions.length;
   const disclaimer = (test.kind === "scored" || test.kind === "multi") ? test.disclaimer : undefined;
+  const about = getAbout(test.id);
+
   return (
     <main className="w-full min-h-screen py-9">
       <button onClick={onBack} className="flex items-center gap-1 text-[12.5px] font-semibold text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 mb-6">
-        <ArrowLeft className="w-3.5 h-3.5" /> 목록으로
+        <ArrowLeft className="w-3.5 h-3.5" /> 검사 목록
       </button>
 
-      <div className="text-center mb-6">
-        <div className="text-[60px] leading-none mb-3">{test.emoji}</div>
+      {/* 표제부 */}
+      <div className="text-center mb-5">
+        <div className="text-[58px] leading-none mb-3">{test.emoji}</div>
+        <p className="text-[11px] font-bold text-[#F9954E] mb-1.5 tracking-wide">검사 안내</p>
         <h1 className="text-[23px] font-extrabold text-neutral-950 dark:text-white break-keep leading-tight">{test.title}</h1>
-        <p className="text-[12.5px] text-neutral-400 mt-2">{count}문항 · {test.time}</p>
       </div>
 
-      <p className="text-[14px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep text-center mb-6">{test.intro}</p>
+      {/* 메타 3종 */}
+      <div className="flex gap-2 mb-6">
+        <MetaPill k="문항" v={`${count}문항`} />
+        <MetaPill k="예상 소요" v={test.time} />
+        <MetaPill k="근거 척도" v={test.subtitle.split(" · ").pop() || "—"} />
+      </div>
+
+      {about ? (
+        <>
+          <Section title="이 검사는">
+            <p className="text-[13.5px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep">{about.what}</p>
+          </Section>
+
+          <Section title="측정 영역">
+            <div className="flex flex-col gap-1.5">
+              {about.measures.map((m, i) => (
+                <div key={i} className="flex gap-2.5 rounded-xl bg-neutral-50 dark:bg-zinc-900 px-3.5 py-2.5">
+                  <span className="text-[12.5px] font-extrabold text-neutral-800 dark:text-neutral-100 shrink-0 min-w-[88px] break-keep">{m.label}</span>
+                  <span className="text-[12px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">{m.desc}</span>
+                </div>
+              ))}
+            </div>
+          </Section>
+
+          <Section title="측정·채점 방식">
+            <p className="text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep">{about.how}</p>
+          </Section>
+
+          <Section title="결과 해석">
+            <p className="text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep">{about.interpret}</p>
+          </Section>
+        </>
+      ) : (
+        <p className="text-[14px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep mb-6">{test.intro}</p>
+      )}
 
       {disclaimer && (
         <div className="flex items-start gap-2 rounded-2xl bg-amber-50 dark:bg-amber-950/30 border border-amber-100 dark:border-amber-900/40 px-4 py-3 mb-4">
@@ -549,13 +607,17 @@ function Intro({ test, onBack, onStart }: { test: PsychTest; onBack: () => void;
         </div>
       )}
 
-      <div className="flex items-center justify-center gap-1.5 text-[11.5px] text-neutral-400 mb-6">
-        <Info className="w-3 h-3" /> 근거: {test.source}
+      <div className="flex items-start gap-2 rounded-2xl bg-neutral-50 dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 px-4 py-3 mb-2">
+        <Info className="w-3.5 h-3.5 text-neutral-400 mt-0.5 shrink-0" />
+        <p className="text-[11.5px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+          근거: {about ? about.background : test.source} · 응답은 내 기기에서만 계산되며 저장·전송되지 않습니다.
+        </p>
       </div>
 
-      <button onClick={onStart} className="flex items-center justify-center gap-1.5 w-full py-4 rounded-2xl bg-[#F9954E] text-white text-[15px] font-bold active:opacity-85 transition-opacity">
-        시작하기 <ArrowRight className="w-4 h-4" />
+      <button onClick={onStart} className="flex items-center justify-center gap-1.5 w-full py-4 mt-4 rounded-2xl bg-[#F9954E] text-white text-[15px] font-bold active:opacity-85 transition-opacity">
+        검사 시작 <ArrowRight className="w-4 h-4" />
       </button>
+      <p className="text-center text-[11px] text-neutral-400 mt-3 break-keep">정확한 결과를 위해 평소의 자신을 떠올리며 솔직하게 답해주세요.</p>
     </main>
   );
 }
