@@ -353,7 +353,7 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
       const isAgentApp = (a: any) => /agent|code|coding|cli|dev|build|automat|claw|assistant|copilot|에이전트|코드/i.test(((a.title || "") + " " + (a.desc || "")));
       const apps = (j.appsTop || [])
         .filter((a: any) => a.title && isAgentApp(a) && !curatedNames.has(norm(a.title)))
-        .slice(0, 6)
+        .slice(0, 20)
         .map((a: any) => ({
           id: "orapp-" + norm(a.title), name: a.title, category: "agent",
           summary: (a.desc || "").replace(/\s*\S*$/, "") + "…", strength: (a.desc || "").replace(/\s*\S*$/, "") + "…",
