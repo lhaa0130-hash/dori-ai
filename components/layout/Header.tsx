@@ -73,8 +73,8 @@ export default function Header() {
     <>
       {/* ── 헤더 ── */}
       <header className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-black border-b border-neutral-200 dark:border-zinc-800 font-sans">
-        {/* 좌측 시작점을 본문(main: xl:px-[260px])과 동일하게 맞춤 */}
-        <div className="w-full h-16 flex items-center gap-5 px-6 xl:pl-[260px]">
+        {/* 본문(main: xl:px-[260px])과 좌·우 동일 정렬 — 우측 컨트롤이 본문/미리보기 끝선에 맞음 */}
+        <div className="w-full h-16 flex items-center gap-4 px-6 xl:px-[260px]">
 
           {/* 로고 */}
           <Link href="/" aria-label="DORI-AI Home" className="flex-shrink-0 hover:opacity-70 transition-opacity">
@@ -84,7 +84,7 @@ export default function Header() {
           </Link>
 
           {/* ── 데스크탑 네비게이션 (lg+, 좌측 정렬) ── */}
-          <nav className="hidden lg:flex items-center gap-6">
+          <nav className="hidden lg:flex items-center gap-5">
             {/* 공지사항은 헤더에서 제외(푸터에만 노출) */}
 
             {/* 프로젝트 — 상위는 활성(호버 드롭다운), 하위 항목만 비활성(준비 중) */}

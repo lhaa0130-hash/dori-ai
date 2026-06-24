@@ -21,10 +21,22 @@ const LINKS = [
 export default function Footer() {
   return (
     <footer className="w-full bg-white dark:bg-black border-t border-neutral-100 dark:border-zinc-900 transition-colors">
-      <div className="max-w-5xl mx-auto px-6 py-9">
+      {/* 폭을 헤더/본문과 동일하게(xl:px-[260px] px-6) */}
+      <div className="px-6 xl:px-[260px] py-9">
 
-        {/* 링크 + SNS 5종 — 한 줄(이용약관 옆에 이어서) */}
-        <nav className="flex flex-wrap items-center gap-x-5 gap-y-3 mb-7">
+        {/* 상단: DORI-AI(좌) + SNS 5종(우측 끝) */}
+        <div className="flex items-center justify-between gap-4 mb-7">
+          <Link
+            href="/"
+            className="text-lg font-extrabold tracking-tight bg-[linear-gradient(to_right,#FBAA60,#F9954E_40%,#E8832E)] bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+          >
+            DORI-AI
+          </Link>
+          <SocialLinks />
+        </div>
+
+        {/* 링크 */}
+        <nav className="flex flex-wrap gap-x-5 gap-y-3 mb-7">
           {LINKS.map((l) => (
             <Link
               key={l.href}
@@ -34,18 +46,10 @@ export default function Footer() {
               {l.label}
             </Link>
           ))}
-          <span className="hidden sm:block w-px h-3.5 bg-neutral-200 dark:bg-zinc-700 mx-1" />
-          <SocialLinks />
         </nav>
 
-        {/* 하단: 브랜드 + 제작사 + 저작권 */}
+        {/* 하단: 제작사 + 저작권 */}
         <div className="flex items-center justify-between flex-wrap gap-3 pt-6 border-t border-neutral-100 dark:border-zinc-900">
-          <Link
-            href="/"
-            className="text-lg font-extrabold tracking-tight bg-[linear-gradient(to_right,#FBAA60,#F9954E_40%,#E8832E)] bg-clip-text text-transparent hover:opacity-80 transition-opacity"
-          >
-            DORI-AI
-          </Link>
           <span className="inline-flex items-center gap-2 text-[12px] text-neutral-400 dark:text-neutral-500">
             <img src="/illo-logo.png" alt="illo" width={22} height={22} className="w-[22px] h-[22px] rounded-md" loading="lazy" />
             made by <span className="font-extrabold text-neutral-600 dark:text-neutral-200">illo</span>
