@@ -49,7 +49,7 @@ async function build(): Promise<any> {
   const priceTop = [...popular].filter((c: any) => c.pin != null && c.pin > 0).sort((a, b) => a.pin - b.pin).slice(0, 10);
   const intelTop = bmIntel.filter((b: any) => b.score != null && (b.aa_name || b.permaslug)).sort((a: any, b: any) => b.score - a.score).slice(0, 10)
     .map((b: any) => ({ name: (b.aa_name || norm(b.permaslug)).split("(")[0].trim().substring(0, 40), score: +Number(b.score).toFixed(1) }));
-  const appsTop = appsRaw.slice(0, 10).map((a: any) => ({
+  const appsTop = appsRaw.slice(0, 20).map((a: any) => ({
     rank: a.rank, title: (a.app && a.app.title) || "App",
     desc: ((a.app && a.app.description) || "").replace(/\s+/g, " ").trim().substring(0, 70),
     tokensB: +(Number(a.total_tokens) / 1e9).toFixed(1),
