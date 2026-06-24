@@ -5,8 +5,10 @@ import { ArrowRight, CheckCircle2 } from "lucide-react";
 import { PROJECTS } from "@/constants/projectsData";
 
 const STATUS_STYLE: Record<string, string> = {
+  "오픈":       "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400",
   "지금 무료":  "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400",
   "이용 가능":  "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400",
+  "테스트 중":  "bg-amber-100 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400",
   "준비 중":    "bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400",
   "기획 중":    "bg-neutral-100 dark:bg-zinc-800 text-neutral-400 dark:text-neutral-500",
 };
