@@ -354,17 +354,21 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
       const apps = (j.appsTop || [])
         .filter((a: any) => a.title && isAgentApp(a) && !curatedNames.has(norm(a.title)))
         .slice(0, 20)
-        .map((a: any) => ({
-          id: "orapp-" + norm(a.title), name: a.title, category: "agent",
-          summary: (a.desc || "").replace(/\s*\S*$/, "") + "…", strength: (a.desc || "").replace(/\s*\S*$/, "") + "…",
-          description: a.desc || "", website: a.url || a.favicon || "#",
-          pros: [], rating: 0, ratingCount: 0, userRatings: [], comments: [], __or: a.tokensB || 0,
-        }));
+        .map((a: any) => {
+          const d = a.descKo || ((a.desc || "").replace(/\s*\S*$/, "") + "…"); // 한글 번역(descKo) 우선, 없으면 영어 폴백
+          return {
+            id: "orapp-" + norm(a.title), name: a.title, category: "agent",
+            summary: d, strength: d,
+            description: a.descKo || a.desc || "", website: a.url || a.favicon || "#",
+            pros: [], rating: 0, ratingCount: 0, userRatings: [], comments: [], __or: a.tokensB || 0,
+          };
+        });
       setOrApps(apps as any);
     };
-    fetch("/api/openrouter").then((r) => (r.ok ? r.json() : null))
-      .then((j) => (j ? compute(j) : fetch("/openrouter-stats.json").then((r) => (r.ok ? r.json() : null)).then(compute)))
-      .catch(() => fetch("/openrouter-stats.json").then((r) => (r.ok ? r.json() : null)).then(compute).catch(() => {}));
+    // 에이전트 앱 설명 한글(descKo)은 수집기가 stats.json에만 넣으므로 정적 JSON 우선, 엣지(/api/openrouter)는 폴백
+    fetch("/openrouter-stats.json").then((r) => (r.ok ? r.json() : null))
+      .then((j) => (j ? compute(j) : fetch("/api/openrouter").then((r) => (r.ok ? r.json() : null)).then(compute)))
+      .catch(() => fetch("/api/openrouter").then((r) => (r.ok ? r.json() : null)).then(compute).catch(() => {}));
   }, []);
 
   const base = isLoaded && tools.length > 0 ? tools : AI_TOOLS_DATA;
