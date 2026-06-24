@@ -12,6 +12,7 @@ import {
 import { shareResultCard, type CardData } from "@/lib/shareCard";
 import { savePsychResult, appendPsychLog, type PsychResult, type PsychLog } from "@/lib/social";
 import { getFirebaseAuth } from "@/lib/firebase";
+import { onAuthStateChanged } from "firebase/auth";
 
 const TONE: Record<Tone, { ring: string; text: string; bar: string; soft: string }> = {
   good: { ring: "border-emerald-200 dark:border-emerald-900/50", text: "text-emerald-600 dark:text-emerald-400", bar: "bg-emerald-500", soft: "bg-emerald-50 dark:bg-emerald-950/30" },
@@ -30,9 +31,26 @@ const COMFORT: Record<Tone, string> = {
 
 export default function PsychTestClient() {
   const [activeId, setActiveId] = useState<string | null>(null);
+  const [uid, setUid] = useState<string | null | undefined>(undefined); // undefined=확인 중
+
+  useEffect(() => {
+    let unsub = () => {};
+    try { unsub = onAuthStateChanged(getFirebaseAuth(), (u) => setUid(u?.uid ?? null)); }
+    catch { setUid(null); }
+    return () => unsub();
+  }, []);
+
   const test = activeId ? getTest(activeId) : null;
 
-  if (!test) return <Hub onPick={setActiveId} />;
+  // 검사 시작 = 로그인 필요. 로그아웃이면 로그인 화면으로 전환(복귀 후 /psychtest).
+  const pick = (id: string) => {
+    let u: string | null = uid ?? null;
+    try { u = getFirebaseAuth().currentUser?.uid ?? u; } catch {}
+    if (!u) { window.location.href = "/login?next=" + encodeURIComponent("/psychtest"); return; }
+    setActiveId(id);
+  };
+
+  if (!test) return <Hub onPick={pick} />;
   return <Runner key={test.id} test={test} onExit={() => setActiveId(null)} />;
 }
 
