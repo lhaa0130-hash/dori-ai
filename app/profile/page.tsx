@@ -1442,6 +1442,28 @@ export default function ProfilePage() {
           </div>
         </div>
 
+        {/* 4-1) 심리 리포트(심리테스트 결과 뱃지) */}
+        {profile?.psychResults && profile.psychResults.length > 0 && (
+          <div className="mt-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
+            <div className="flex items-center justify-between mb-3">
+              <p className="text-[11px] text-[#F9954E] font-bold">🧩 심리 리포트</p>
+              <a href="/psychtest" className="text-[11px] font-bold text-neutral-400 hover:text-[#F9954E]">테스트 하러 가기 →</a>
+            </div>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+              {profile.psychResults.map((r) => (
+                <div key={r.testId} className="flex items-center gap-3 rounded-xl bg-neutral-50 dark:bg-zinc-900 p-3">
+                  <span className="text-[26px] leading-none shrink-0">{r.emoji}</span>
+                  <span className="flex-1 min-w-0">
+                    <span className="block text-[11px] text-neutral-400 truncate">{r.title}</span>
+                    <span className="block text-[13.5px] font-extrabold text-neutral-900 dark:text-white truncate">{r.label}</span>
+                  </span>
+                  {r.sub && <span className="text-[11px] font-bold text-neutral-400 tabular-nums shrink-0">{r.sub}</span>}
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* 3) 전적 */}
         <div className="mt-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
           <p className="text-[11px] text-[#F9954E] font-bold mb-3">전적</p>

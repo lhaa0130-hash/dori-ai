@@ -79,10 +79,13 @@ export interface Profile {
   greeting: string;     // 대문 인사말 (코지홈 상단)
   diary: DiaryEntry[];  // 다이어리(일기장) — 주인 본인이 남기는 기록, users/{uid}.diary 배열
   myAIs: AIShowcase[];  // 내가 만든 AI 자랑 — users/{uid}.myAIs 배열
+  psychResults: PsychResult[]; // 심리테스트 결과 뱃지 — users/{uid}.psychResults 배열
 }
 
 // 다이어리 한 칸
 export interface DiaryEntry { at: number; text: string; mood: string; }
+// 심리테스트 결과 한 칸(코지홈 뱃지) — 검사별 최신 1개 유지
+export interface PsychResult { at: number; testId: string; title: string; label: string; sub: string; emoji: string; }
 // 내가 만든 AI 한 칸 — dori-ai.com/u/<handle>/<slug> 에 자동 호스팅되는 미니 소개페이지
 export interface AIShowcase {
   at: number;
@@ -117,7 +120,7 @@ export function slugify(s: string): string {
 const DEFAULT_PROFILE = (uid: string, name = "사용자"): Profile => ({
   uid, name, handle: "", bio: "", statusMsg: "", themeColor: "#F9954E", bg: "aurora", tier: 1, level: 1, exp: 0,
   mood: "", title: "", frame: "none", interests: [], stickers: [],
-  nameEffect: "", bannerEffect: "", pet: "", ownedItems: [], greeting: "", diary: [], myAIs: [],
+  nameEffect: "", bannerEffect: "", pet: "", ownedItems: [], greeting: "", diary: [], myAIs: [], psychResults: [],
 });
 
 async function fetchProfile(uid: string): Promise<Profile> {
@@ -179,6 +182,23 @@ async function fetchProfile(uid: string): Promise<Profile> {
           .sort((a, b) => b.at - a.at)
           .slice(0, 12)
       : [],
+    psychResults: Array.isArray(d.psychResults)
+      ? (d.psychResults as PsychResult[])
+          .map((r) => {
+            const x = (r || {}) as Record<string, unknown>;
+            return {
+              at: Number(x.at) || 0,
+              testId: String(x.testId || ""),
+              title: String(x.title || ""),
+              label: String(x.label || ""),
+              sub: String(x.sub || ""),
+              emoji: String(x.emoji || "🧩"),
+            } as PsychResult;
+          })
+          .filter((r) => r.testId && r.label)
+          .sort((a, b) => b.at - a.at)
+          .slice(0, 12)
+      : [],
   };
 }
 
@@ -194,6 +214,29 @@ export async function saveMyProfile(patch: Partial<Pick<Profile, "bio" | "status
   if (!uid) return false;
   try {
     await setDoc(doc(db(), "users", uid), { ...patch, updatedAt: serverTimestamp() }, { merge: true });
+    bustCache(`profile:${uid}`);
+    return true;
+  } catch { return false; }
+}
+
+// ─── 심리테스트 결과 — 본인 users/{uid}.psychResults 배열(규칙 변경 불필요, 소유자 쓰기) ───
+/** 심리 결과를 코지홈에 저장(검사별 최신 1개만 유지, 최대 12종). 비로그인 false. */
+export async function savePsychResult(r: Omit<PsychResult, "at">): Promise<boolean> {
+  const uid = currentUid();
+  if (!uid || !r.testId) return false;
+  try {
+    const s = await getDoc(doc(db(), "users", uid));
+    const cur = Array.isArray(s.data()?.psychResults) ? (s.data()!.psychResults as PsychResult[]) : [];
+    const entry: PsychResult = {
+      at: Date.now(),
+      testId: String(r.testId).slice(0, 40),
+      title: String(r.title).slice(0, 60),
+      label: String(r.label).slice(0, 60),
+      sub: String(r.sub || "").slice(0, 80),
+      emoji: String(r.emoji || "🧩").slice(0, 4),
+    };
+    const next = [entry, ...cur.filter((x) => x.testId !== entry.testId)].slice(0, 12);
+    await setDoc(doc(db(), "users", uid), { psychResults: next, updatedAt: serverTimestamp() }, { merge: true });
     bustCache(`profile:${uid}`);
     return true;
   } catch { return false; }
