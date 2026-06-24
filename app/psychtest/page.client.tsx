@@ -20,6 +20,14 @@ const TONE: Record<Tone, { ring: string; text: string; bar: string; soft: string
   high: { ring: "border-rose-200 dark:border-rose-900/50",       text: "text-rose-600 dark:text-rose-400",       bar: "bg-rose-500",    soft: "bg-rose-50 dark:bg-rose-950/30" },
 };
 
+// 심각도(tone)별 위로 한마디 — 수위를 달리해, 힘든 사람에게 빈말만 하지 않도록 보정
+const COMFORT: Record<Tone, string> = {
+  good: "지금은 비교적 안정적인 상태예요. 여기까지 잘 지켜온 데에는 당신의 노력도 분명히 있었을 거예요. 스스로를 조금 칭찬해 주세요.",
+  mild: "가벼운 신호가 보이지만 크게 걱정할 정도는 아니에요. 이런 흐름은 누구에게나 찾아와요. 너무 자책하지 말고, 챙길 수 있는 작은 것부터 돌봐주세요.",
+  warn: "지금 꽤 버겁거나 신경 쓰이는 상태일 수 있어요. 이건 의지가 약해서가 아니라 돌봄이 필요하다는 신호예요. 혼자 다 감당하지 않아도 괜찮아요.",
+  high: "지금 많이 힘들거나 부담이 큰 시기를 지나고 있는 것 같아요. 이렇게 스스로를 점검해 본 것 자체가 자신을 돌보려는 용기예요. 지금의 어려움은 충분히 나아질 수 있고, 당신은 도움을 받을 자격이 있어요.",
+};
+
 export default function PsychTestClient() {
   const [activeId, setActiveId] = useState<string | null>(null);
   const test = activeId ? getTest(activeId) : null;
@@ -229,6 +237,8 @@ function ScoredResult({ test, answers, onBack, onRetry }: { test: ScoredTest; an
   const { band, displayScore, unitLabel, pct } = computeScored(test, answers);
   const tone = TONE[band.tone];
   const higherWorse = test.higherWorse !== false;
+  const stageTotal = test.bands.length;
+  const stageIdx = Math.max(1, test.bands.indexOf(band) + 1);
 
   return (
     <main className="w-full min-h-screen py-9">
@@ -245,6 +255,7 @@ function ScoredResult({ test, answers, onBack, onRetry }: { test: ScoredTest; an
           <p className="text-[13px] text-neutral-400 tabular-nums">
             점수 <b className="text-neutral-700 dark:text-neutral-200">{displayScore}</b> / {unitLabel}
           </p>
+          <p className="text-[11.5px] text-neutral-400 mt-1">전체 {stageTotal}단계 중 <b className={tone.text}>{stageIdx}단계</b></p>
         </div>
 
         {/* 게이지 */}
@@ -258,12 +269,19 @@ function ScoredResult({ test, answers, onBack, onRetry }: { test: ScoredTest; an
         </div>
 
         <div className={`rounded-2xl ${tone.soft} px-4 py-4 mb-4`}>
+          <p className="text-[11.5px] font-bold text-neutral-400 mb-1.5">이 결과의 의미</p>
           <p className="text-[13.5px] text-neutral-700 dark:text-neutral-200 leading-relaxed break-keep">{band.desc}</p>
         </div>
 
-        <div className="px-1">
+        <div className="px-1 mb-4">
           <p className="text-[11.5px] font-bold text-neutral-400 mb-1.5">이렇게 해보세요</p>
           <p className="text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep">{band.advice}</p>
+        </div>
+
+        {/* 톤에 맞춘 위로 한마디 */}
+        <div className={`rounded-2xl border ${tone.ring} px-4 py-3.5`}>
+          <p className={`text-[11.5px] font-bold mb-1.5 ${tone.text}`}>💛 마음 한마디</p>
+          <p className="text-[13px] text-neutral-700 dark:text-neutral-200 leading-relaxed break-keep">{COMFORT[band.tone]}</p>
         </div>
       </div>
 
