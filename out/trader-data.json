@@ -1,11 +1,11 @@
 {
   "program": "트레이더일로 (Trader Illo)",
-  "generated_at": "2026-06-24 06:00:02",
+  "generated_at": "2026-06-24 10:00:04",
   "mode": "paper",
-  "total_starting": 8988286,
-  "total_ending": 8958321,
-  "total_return_pct": -0.33,
-  "usdkrw": 1532.47,
+  "total_starting": 8995520,
+  "total_ending": 8965154,
+  "total_return_pct": -0.34,
+  "usdkrw": 1536.18,
   "watching": 453,
   "holding": 7,
   "interval_hours": 4,
@@ -19,16 +19,16 @@
       "count": 93,
       "currency": "KRW",
       "starting": 3000000.0,
-      "ending": 2985455.98,
-      "return_pct": -0.48
+      "ending": 2988503.56,
+      "return_pct": -0.38
     },
     {
       "name": "국내주식",
       "count": 160,
       "currency": "KRW",
       "starting": 3000000.0,
-      "ending": 2963461.24,
-      "return_pct": -1.22
+      "ending": 2959961.24,
+      "return_pct": -1.33
     },
     {
       "name": "해외주식",
@@ -37,7 +37,7 @@
       "starting": 1949.98,
       "ending": 1963.76,
       "return_pct": 0.71,
-      "fx": 1532.47
+      "fx": 1536.18
     }
   ],
   "sections": [
@@ -54,10 +54,10 @@
         "entry_price": 1132.566,
         "qty": 105.088799,
         "invested": 119020.0,
-        "cur_price": 997.0,
+        "cur_price": 1026.0,
         "stop_price": 846.5271,
         "take_profit": 1702.9457,
-        "unrealized_pnl_pct": -11.97
+        "unrealized_pnl_pct": -9.41
       },
       "trade_log": []
     },
@@ -96,10 +96,30 @@
         "entry_price": 40740.7,
         "qty": 5.0,
         "invested": 203703.5,
-        "cur_price": 36000.0,
+        "cur_price": 35300.0,
         "stop_price": 35294.7429,
         "take_profit": 51510.5141,
-        "unrealized_pnl_pct": -11.64
+        "unrealized_pnl_pct": -13.35
+      },
+      "trade_log": []
+    },
+    {
+      "symbol": "C",
+      "name": "씨티그룹",
+      "category": "해외주식",
+      "trades": 0,
+      "win_rate_pct": 0.0,
+      "realized_pnl": 0,
+      "open_position": {
+        "entry_time": "2026-06-15 00:00",
+        "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+        "entry_price": 141.3512,
+        "qty": 2.1375,
+        "invested": 302.14,
+        "cur_price": 144.97,
+        "stop_price": 132.0895,
+        "take_profit": 159.451,
+        "unrealized_pnl_pct": 2.56
       },
       "trade_log": []
     },
@@ -140,26 +160,6 @@
         "stop_price": 213.1177,
         "take_profit": 252.9645,
         "unrealized_pnl_pct": 1.01
-      },
-      "trade_log": []
-    },
-    {
-      "symbol": "C",
-      "name": "씨티그룹",
-      "category": "해외주식",
-      "trades": 0,
-      "win_rate_pct": 0.0,
-      "realized_pnl": 0,
-      "open_position": {
-        "entry_time": "2026-06-15 00:00",
-        "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-        "entry_price": 141.3512,
-        "qty": 2.1375,
-        "invested": 302.14,
-        "cur_price": 144.97,
-        "stop_price": 132.0895,
-        "take_profit": 159.451,
-        "unrealized_pnl_pct": 2.56
       },
       "trade_log": []
     },
@@ -205,6 +205,14 @@
     }
   ],
   "recent_runs": [
+    {
+      "time": "2026-06-24 10:00:04",
+      "watching": 453,
+      "holding": 7,
+      "new_trades": 0,
+      "total": 8965154,
+      "ret": -0.34
+    },
     {
       "time": "2026-06-24 06:00:02",
       "watching": 453,
