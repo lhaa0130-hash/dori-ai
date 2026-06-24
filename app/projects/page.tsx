@@ -32,44 +32,10 @@ export default function ProjectsPage() {
         </p>
       </section>
 
-      {/* ── 의뢰하기 배너 ── */}
-      <section className="py-6 border-b border-neutral-100 dark:border-zinc-900">
-        <div className="rounded-2xl border border-neutral-200 dark:border-zinc-800 p-5">
-          <div className="flex items-start justify-between gap-4">
-            <div className="flex-1 min-w-0">
-              <p className="text-[13px] font-extrabold text-neutral-900 dark:text-white mb-1">맞춤 프로젝트 의뢰하기</p>
-              <p className="text-[12px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
-                아이디어가 있으시면 저희가 AI 서비스로 만들어 드려요.
-              </p>
-              {/* 의뢰 시 필요한 정보 */}
-              <ul className="mt-3 space-y-1">
-                {[
-                  "해결하고 싶은 문제 또는 만들고 싶은 서비스",
-                  "주요 기능 목록 (간단히 적어도 됩니다)",
-                  "대상 사용자와 사용 환경",
-                  "원하는 일정과 예산 범위",
-                ].map((item) => (
-                  <li key={item} className="flex items-start gap-2 text-[11.5px] text-neutral-500 dark:text-neutral-400">
-                    <span className="text-neutral-300 dark:text-zinc-600 mt-0.5 shrink-0">—</span>
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-          </div>
-          <a
-            href="mailto:lhaa0130@gmail.com?subject=프로젝트 의뢰&body=안녕하세요, 프로젝트를 의뢰하고 싶습니다.%0A%0A[해결하고 싶은 문제]%0A%0A[주요 기능]%0A%0A[대상 사용자]%0A%0A[일정/예산]"
-            className="mt-4 flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 text-[13px] font-extrabold transition-opacity active:opacity-80"
-          >
-            이메일로 의뢰하기 <ArrowRight className="w-3.5 h-3.5" />
-          </a>
-        </div>
-      </section>
-
       {/* ── 진행 중인 프로젝트 ── */}
       <section className="py-8">
         <p className="text-[11px] font-bold text-neutral-400 dark:text-zinc-600 uppercase tracking-wide mb-5">운영 중 · {active.length}개</p>
-        <div className="flex flex-col gap-4">
+        <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {active.map((p) => {
             const now = new Date();
             const isOpen = !p.launchDate || now >= new Date(p.launchDate);
@@ -86,7 +52,7 @@ export default function ProjectsPage() {
                 <div className="px-5 pt-5 pb-4 border-b border-neutral-100 dark:border-zinc-800">
                   <div className="flex items-center justify-between gap-3 mb-3">
                     <div className="flex items-center gap-3">
-                      <div className="w-10 h-10 rounded-xl bg-neutral-100 dark:bg-zinc-900 flex items-center justify-center text-[22px] flex-shrink-0 overflow-hidden">
+                      <div className="w-10 h-10 rounded-xl bg-[#F9954E]/8 dark:bg-[#F9954E]/10 flex items-center justify-center text-[22px] flex-shrink-0 overflow-hidden">
                         {p.image
                           ? <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
                           : p.emoji}
@@ -121,7 +87,7 @@ export default function ProjectsPage() {
                   {p.launchHref && isOpen ? (
                     <Link
                       href={p.launchHref}
-                      className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-neutral-900 dark:text-white text-[13px] font-bold transition-colors hover:border-neutral-400 dark:hover:border-zinc-500"
+                      className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#F9954E]/10 dark:bg-[#F9954E]/10 text-[#F9954E] text-[13px] font-extrabold transition-colors hover:bg-[#F9954E]/20 dark:hover:bg-[#F9954E]/20"
                     >
                       {openLabel} <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
@@ -139,7 +105,7 @@ export default function ProjectsPage() {
 
       {/* ── 준비 중 ── */}
       {soon.length > 0 && (
-        <section className="pb-12">
+        <section className="pb-10">
           <p className="text-[11px] font-bold text-neutral-400 dark:text-zinc-600 uppercase tracking-wide mb-4">준비 중</p>
           <div className="flex flex-col gap-2.5">
             {soon.map((p) => (
@@ -162,6 +128,38 @@ export default function ProjectsPage() {
           </div>
         </section>
       )}
+
+      {/* ── 의뢰하기 ── */}
+      <section className="pb-12 border-t border-neutral-100 dark:border-zinc-900 pt-8">
+        <p className="text-[11px] font-bold text-neutral-400 dark:text-zinc-600 uppercase tracking-wide mb-4">맞춤 제작 의뢰</p>
+        <div className="rounded-2xl border border-[#F9954E]/30 dark:border-[#F9954E]/20 bg-[#F9954E]/5 dark:bg-[#F9954E]/5 p-5">
+          <p className="text-[15px] font-extrabold text-neutral-900 dark:text-white mb-1">사용자 요청 프로젝트도 제작합니다</p>
+          <p className="text-[13px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep mb-4">
+            아이디어가 있으시면 저희가 AI 서비스로 만들어 드려요.<br />
+            의뢰 시 아래 내용을 함께 보내주시면 빠르게 검토해 드립니다.
+          </p>
+          <ul className="space-y-1.5 mb-5">
+            {[
+              "해결하고 싶은 문제 또는 만들고 싶은 서비스",
+              "주요 기능 목록 (간단히 적어도 됩니다)",
+              "대상 사용자와 사용 환경 (웹·앱 등)",
+              "원하는 일정과 예산 범위",
+            ].map((item) => (
+              <li key={item} className="flex items-start gap-2 text-[12px] text-neutral-500 dark:text-neutral-400">
+                <span className="text-[#F9954E] mt-0.5 shrink-0 font-bold">·</span>
+                {item}
+              </li>
+            ))}
+          </ul>
+          <a
+            href="mailto:lhaa0130@gmail.com?subject=프로젝트 의뢰&body=안녕하세요, 프로젝트를 의뢰하고 싶습니다.%0A%0A[해결하고 싶은 문제]%0A%0A[주요 기능]%0A%0A[대상 사용자]%0A%0A[일정/예산]"
+            className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#F9954E] text-white text-[13px] font-extrabold transition-opacity active:opacity-85"
+          >
+            이메일로 의뢰하기 <ArrowRight className="w-3.5 h-3.5" />
+          </a>
+        </div>
+      </section>
+
     </main>
   );
 }
