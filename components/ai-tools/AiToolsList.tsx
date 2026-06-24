@@ -197,11 +197,13 @@ function CategorySection({
   isFiltered?: boolean;
 }) {
   const [expanded, setExpanded] = useState(false);
-  // 점수: 에디터 지정 순위(1~) 최우선, 없으면 트래픽순(Tranco, 6시간 갱신)
+  // 점수(낮을수록 상위): ① OpenRouter 실시간 사용량 매칭분 최우선(높을수록 위) → ② 에디터 지정 순위 → ③ Tranco 트래픽순
   const score = (t: AiTool) => {
+    const orv = (t as any).__or || 0;
+    if (orv > 0) return -orv;                 // OpenRouter 실사용량(매칭 도구): 사용량 클수록 상위
     const ed = EDITORIAL_RANK[t.id];
-    if (ed != null) return ed;
-    return 100000 + ((t as any).__pop ?? 999999);
+    if (ed != null) return ed;                // 에디터 지정(에이전트 등 미매칭 도구)
+    return 100000 + ((t as any).__pop ?? 999999);  // Tranco 웹트래픽
   };
   const sortedTools = tools.slice().sort((a, b) => {
     const sa = score(a), sb = score(b);
@@ -286,6 +288,7 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
   const [tools, setTools] = useState<AiTool[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [popRanks, setPopRanks] = useState<Record<string, number>>({});
+  const [orPop, setOrPop] = useState<Record<string, number>>({});
 
   useEffect(() => {
     const savedRatings = JSON.parse(localStorage.getItem("dori_tool_ratings") || "{}");
@@ -309,8 +312,48 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
       .catch(() => {});
   }, []);
 
+  // OpenRouter 실시간 사용량 로드 → 매칭되는 도구는 실사용량 순으로 라이브 정렬
+  // (LLM=provider 요청량, 그 외=OpenRouter 앱 토큰량으로 매칭. 매칭 안 되면 기존 순서 유지)
+  useEffect(() => {
+    const norm = (x: string) => (x || "").toLowerCase().replace(/[^a-z0-9가-힣]/g, "");
+    const providerOf = (name: string) => {
+      const s = (name || "").toLowerCase();
+      if (/chatgpt|gpt|openai/.test(s)) return "openai";
+      if (/gemini|google/.test(s)) return "google";
+      if (/deepseek|딥시크/.test(s)) return "deepseek";
+      if (/grok|x\.?ai/.test(s)) return "x-ai";
+      if (/llama|meta|메타/.test(s)) return "meta";
+      if (/mistral/.test(s)) return "mistralai";
+      if (/qwen|alibaba|tongyi/.test(s)) return "qwen";
+      if (/claude|anthropic/.test(s)) return "anthropic";
+      return null;
+    };
+    const compute = (j: any) => {
+      if (!j) return;
+      const providerReq: Record<string, number> = {};
+      for (const m of (j.usageTop || [])) providerReq[m.provider] = (providerReq[m.provider] || 0) + (m.req || 0);
+      const appTokens: Record<string, number> = {};
+      for (const a of (j.appsTop || [])) { const k = norm(a.title); if (k) appTokens[k] = a.tokensB || 0; }
+      const map: Record<string, number> = {};
+      for (const t of AI_TOOLS_DATA) {
+        let v = 0;
+        if (String(t.category) === "llm") {
+          const p = providerOf(t.name); if (p && providerReq[p]) v = providerReq[p];
+        } else {
+          const k = norm(t.name);
+          if (k) for (const title in appTokens) { if (title.includes(k) || k.includes(title)) v = Math.max(v, appTokens[title]); }
+        }
+        if (v > 0) map[t.id] = v;
+      }
+      setOrPop(map);
+    };
+    fetch("/api/openrouter").then((r) => (r.ok ? r.json() : null))
+      .then((j) => (j ? compute(j) : fetch("/openrouter-stats.json").then((r) => (r.ok ? r.json() : null)).then(compute)))
+      .catch(() => fetch("/openrouter-stats.json").then((r) => (r.ok ? r.json() : null)).then(compute).catch(() => {}));
+  }, []);
+
   const base = isLoaded && tools.length > 0 ? tools : AI_TOOLS_DATA;
-  const currentTools = base.map((t) => ({ ...t, __pop: popRanks[t.id] ?? null })) as AiTool[];
+  const currentTools = base.map((t) => ({ ...t, __pop: popRanks[t.id] ?? null, __or: orPop[t.id] ?? 0 })) as AiTool[];
   const isOverviewMode = filters.category === "All";
 
   if (isOverviewMode) {
