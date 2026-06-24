@@ -41,34 +41,6 @@ export default function Header() {
     { name: "심리테스트", href: "/psychtest", emoji: "🧩" },
   ];
 
-  const projects = [
-    {
-      name: "AI 업무비서", emoji: "🟧", image: "/illo-logo.png",
-      desc: "수많은 AI를 한 공간에서 — 1인 사업용", href: "/illo/app",
-      bg: "bg-orange-50 dark:bg-orange-900/20", active: true,
-    },
-    {
-      name: "AI 자동매매", emoji: "📈", image: "",
-      desc: "코인·주식 AI 자동 투자 — 손실은 작게", href: "/trader",
-      bg: "bg-blue-50 dark:bg-blue-900/20", active: true,
-    },
-    {
-      name: "AI 건축설계", emoji: "📐", image: "",
-      desc: "지번 입력하면 지적도·한계선 자동 계산", href: "/flat-form",
-      bg: "bg-sky-50 dark:bg-sky-900/20", active: true,
-    },
-    {
-      name: "AI 동물도감", emoji: "🐾", image: "",
-      desc: "300종 동물 탐험 — 매일 5종 업데이트", href: "/animal",
-      bg: "bg-emerald-50 dark:bg-emerald-900/20", active: true,
-    },
-    {
-      name: "AI 가족앱", emoji: "👨‍👩‍👧‍👦", image: "",
-      desc: "온 가족 일정·사진·건강 한 앱에", href: "/family",
-      bg: "bg-purple-50 dark:bg-purple-900/20",
-    },
-  ];
-
   return (
     <>
       {/* ── 헤더 ── */}
@@ -87,48 +59,9 @@ export default function Header() {
           <nav className="hidden lg:flex items-center gap-5">
             {/* 공지사항은 헤더에서 제외(푸터에만 노출) */}
 
-            {/* 프로젝트 — 상위는 활성(호버 드롭다운), 하위 항목만 비활성(준비 중) */}
-            <div className="relative group flex-shrink-0">
-              <Link href="/projects" className="flex items-center text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap">
-                프로젝트
-              </Link>
-              <div className="absolute top-full left-1/2 -translate-x-1/2 mt-3 w-52 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 translate-y-1 group-hover:translate-y-0 z-50 pt-2">
-                <div className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden">
-                  <div className="px-4 py-2.5 border-b border-neutral-100 dark:border-zinc-800">
-                    <span className="text-[10px] font-bold tracking-widest uppercase text-neutral-400">Projects</span>
-                  </div>
-                  {projects.map((p) => p.active ? (
-                    <Link key={p.name} href={p.href} className="flex items-center gap-3 px-4 py-3 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
-                      <div className={`w-9 h-9 rounded-xl ${p.bg} flex items-center justify-center flex-shrink-0 text-lg overflow-hidden`}>
-                        {p.image ? <img src={p.image} alt={p.name} loading="lazy" className="w-full h-full object-cover" /> : p.emoji}
-                      </div>
-                      <div>
-                        <div className="text-sm font-bold text-neutral-900 dark:text-white flex items-center gap-1.5">
-                          {p.name}
-                          <span className="text-[9px] font-extrabold text-white bg-[#F9954E] rounded-full px-1.5 py-0.5">NEW</span>
-                        </div>
-                        <div className="text-[11px] text-neutral-400">{p.desc}</div>
-                      </div>
-                    </Link>
-                  ) : (
-                    <div key={p.name} aria-disabled="true" title="준비 중입니다" className="flex items-center gap-3 px-4 py-3 opacity-40 cursor-not-allowed select-none">
-                      <div className={`w-9 h-9 rounded-xl ${p.bg} flex items-center justify-center flex-shrink-0 text-lg overflow-hidden`}>
-                        {p.image ? <img src={p.image} alt={p.name} loading="lazy" className="w-full h-full object-cover" /> : p.emoji}
-                      </div>
-                      <div className="flex items-center gap-1.5">
-                        <div className="text-sm font-bold text-neutral-900 dark:text-white">{p.name}</div>
-                        <span className="text-[9px] font-semibold text-neutral-300 dark:text-neutral-600">준비중</span>
-                      </div>
-                    </div>
-                  ))}
-                  <div className="px-4 py-2.5 border-t border-neutral-100 dark:border-zinc-800">
-                    <span className="text-[11px] font-bold text-neutral-300 dark:text-neutral-600 cursor-not-allowed select-none">
-                      전체 프로젝트 보기 →
-                    </span>
-                  </div>
-                </div>
-              </div>
-            </div>
+            <Link href="/projects" className="flex-shrink-0 text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap">
+              프로젝트
+            </Link>
 
             {navItems.map((item) => (
               <Link key={item.name} href={item.href} className="flex-shrink-0 text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap">
@@ -308,34 +241,16 @@ export default function Header() {
             </Link>
           ))}
 
-          {/* 프로젝트 — 활성 항목은 링크, 나머지는 준비 중(회색) */}
-          <div className="mt-2 pt-2 border-t border-neutral-100 dark:border-zinc-800">
-            <p className="px-4 pt-2 pb-1 text-[10px] font-bold tracking-widest uppercase text-neutral-400">Projects</p>
-            {projects.map((p) => p.active ? (
-              <Link key={p.name} href={p.href} className="flex items-center gap-3 px-4 py-3 rounded-2xl hover:bg-neutral-50 dark:hover:bg-zinc-900 transition-colors">
-                <div className={`w-9 h-9 rounded-xl ${p.bg} flex items-center justify-center text-lg flex-shrink-0 overflow-hidden`}>
-                  {p.image ? <img src={p.image} alt={p.name} loading="lazy" className="w-full h-full object-cover" /> : p.emoji}
-                </div>
-                <div>
-                  <div className="text-sm font-bold text-neutral-900 dark:text-white flex items-center gap-1.5">
-                    {p.name}
-                    <span className="text-[9px] font-extrabold text-white bg-[#F9954E] rounded-full px-1.5 py-0.5">NEW</span>
-                  </div>
-                  <div className="text-[11px] text-neutral-400">{p.desc}</div>
-                </div>
-              </Link>
-            ) : (
-              <div key={p.name} aria-disabled="true" className="flex items-center gap-3 px-4 py-3 rounded-2xl opacity-40 cursor-not-allowed select-none">
-                <div className={`w-9 h-9 rounded-xl ${p.bg} flex items-center justify-center text-lg flex-shrink-0 overflow-hidden`}>
-                  {p.image ? <img src={p.image} alt={p.name} loading="lazy" className="w-full h-full object-cover" /> : p.emoji}
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <div className="text-sm font-bold text-neutral-900 dark:text-white">{p.name}</div>
-                  <span className="text-[9px] font-semibold text-neutral-300 dark:text-neutral-600">준비중</span>
-                </div>
-              </div>
-            ))}
-          </div>
+          <Link
+            href="/projects"
+            className="flex items-center justify-between px-4 py-3.5 rounded-2xl hover:bg-neutral-50 dark:hover:bg-zinc-900 transition-colors group"
+          >
+            <div className="flex items-center gap-3">
+              <span className="text-base w-6 text-center">🚀</span>
+              <span className="text-sm font-semibold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors">프로젝트</span>
+            </div>
+            <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-zinc-600" />
+          </Link>
 
         </div>
       </div>
