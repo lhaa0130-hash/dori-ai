@@ -244,7 +244,7 @@ function IlloSidebar({
           <img src="/illo-logo.png" alt="워크일로" className="w-9 h-9 rounded-xl shadow-sm" />
           <div className="flex-1 min-w-0">
             <div className="text-base font-extrabold leading-none text-[#F9954E]">워크일로(Workillo)</div>
-            <div className="text-[10px] text-neutral-400 mt-1 tracking-wide">by DORI-AI</div>
+            <Link href="/" className="text-[10px] text-neutral-400 mt-1 tracking-wide hover:text-[#F9954E] transition-colors inline-block">← DORI-AI 홈</Link>
           </div>
         </div>
       </div>

@@ -140,15 +140,22 @@ export default function TraderClient() {
   const beforeLaunch = now < new Date("2026-07-01T00:00:00").getTime();
 
   return (
-    <main className="w-full min-h-screen max-w-2xl mx-auto">
-      <section className="pt-8 pb-6 border-b border-neutral-100 dark:border-zinc-900 mb-6">
-        <p className="text-[11px] font-bold text-[#F9954E] mb-3 tracking-wide uppercase">AI 자동매매</p>
-        <h1 className="text-[30px] sm:text-[40px] font-extrabold text-neutral-950 dark:text-white leading-[1.12] tracking-tight mb-2 break-keep">
-          손실은 작게,<br />수익은 크게
-        </h1>
-        <p className="text-[14px] text-neutral-400 dark:text-neutral-500 leading-relaxed break-keep">
-          코인·국내·해외주식을 AI가 추세추종 전략으로 자동 매매해요
-        </p>
+    <main className="w-full min-h-screen">
+      {/* ── 페이지 헤더 ── */}
+      <section className="pt-8 pb-5 border-b border-neutral-100 dark:border-zinc-900 mb-6">
+        <p className="text-[11px] font-bold text-[#F9954E] mb-2 tracking-wide uppercase">AI 자동매매</p>
+        <div className="flex items-end justify-between gap-4 flex-wrap">
+          <h1 className="text-[30px] sm:text-[38px] font-extrabold text-neutral-950 dark:text-white leading-[1.1] tracking-tight break-keep">
+            손실은 작게, 수익은 크게
+          </h1>
+          {d && (
+            <span className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs mb-1">
+              <span className={`inline-block w-2 h-2 rounded-full ${alive ? "bg-emerald-500 animate-pulse" : "bg-amber-500"}`} />
+              <span className={`font-semibold ${alive ? "text-neutral-700 dark:text-neutral-200" : "text-amber-600 dark:text-amber-400"}`}>{alive ? "작동중" : "대기중"}</span>
+              {alive && <span className="text-neutral-400 tabular-nums">다음 점검 {cd}</span>}
+            </span>
+          )}
+        </div>
       </section>
 
       {err && <div className="text-sm text-neutral-400 py-16 text-center">아직 데이터가 없습니다. 곧 업데이트됩니다.</div>}
@@ -156,86 +163,87 @@ export default function TraderClient() {
 
       {d && (
         <>
-          {/* ── 히어로 카드 ── */}
-          <section className="rounded-2xl border border-[#F9954E]/20 dark:border-zinc-800 bg-gradient-to-b from-[#F9954E]/[0.07] to-transparent dark:from-[#F9954E]/[0.05] shadow-sm p-5 mb-4">
-            <div className="flex items-center justify-between text-xs mb-4">
-              <span className="inline-flex items-center gap-1.5 rounded-full bg-white/70 dark:bg-zinc-900/60 border border-neutral-200/70 dark:border-zinc-700 px-2 py-0.5">
-                <span className={`inline-block w-2 h-2 rounded-full ${alive ? "bg-emerald-500 animate-pulse" : "bg-amber-500"}`} />
-                <span className={`font-medium ${alive ? "text-neutral-600 dark:text-neutral-300" : "text-amber-600 dark:text-amber-400"}`}>{alive ? "작동중" : "대기중"}</span>
-              </span>
-              <span className="text-neutral-400">
-                {alive ? <>다음 점검 <b className="tabular-nums text-neutral-600 dark:text-neutral-300">{cd}</b></> : null}
-              </span>
-            </div>
+          {/* ── 전체 요약 카드 + 탭 ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4 mb-6">
+            {/* 왼쪽: 전체 평가액 */}
+            <section className="rounded-2xl border border-[#F9954E]/20 dark:border-zinc-800 bg-gradient-to-br from-[#FFF5EB] to-white dark:from-zinc-900 dark:to-zinc-950 p-5">
+              <div className="text-xs text-neutral-400 mb-1">전체 평가액</div>
+              <div className="flex items-end gap-3 mb-2">
+                <span className="text-[32px] sm:text-[40px] font-extrabold tracking-tight tabular-nums leading-none text-neutral-950 dark:text-white">{won(d.total_ending)}</span>
+                <Chg n={d.total_return_pct} big />
+              </div>
+              <div className="text-sm text-neutral-500 dark:text-neutral-400">
+                {d.usdkrw ? <span className="tabular-nums mr-2">≈ ${Math.round(d.total_ending / d.usdkrw).toLocaleString("en-US")}</span> : null}
+                평가손익 <b className={`tabular-nums ${sgn(d.total_ending - d.total_starting)}`}>{pm(d.total_ending - d.total_starting, false)}</b>
+              </div>
+              <div className="text-[11px] text-neutral-400 mt-3 pt-3 border-t border-neutral-100 dark:border-zinc-800">
+                감시 {d.watching ?? 0}종목 · 보유 {d.holding ?? 0}종 · {agoStr} 업데이트
+              </div>
+            </section>
 
-            <div className="text-xs text-neutral-400">전체 평가액</div>
-            <div className="flex items-end justify-between gap-2 mt-1">
-              <span className="text-[28px] sm:text-[38px] font-extrabold tracking-tight tabular-nums leading-none text-neutral-950 dark:text-white whitespace-nowrap">{won(d.total_ending)}</span>
-              <Chg n={d.total_return_pct} big />
+            {/* 오른쪽: 시장별 수익 카드 */}
+            <div className="grid grid-cols-3 lg:grid-cols-1 gap-2">
+              {TABS.map((t) => {
+                const c = d.categories?.find((x) => x.name === t);
+                const isActive = t === tab;
+                const tu = t === "해외주식";
+                return (
+                  <button key={t} onClick={() => { userPicked.current = true; setTab(t); try { localStorage.setItem("trader_tab", t); } catch { /* */ } }}
+                    className={`rounded-xl p-3 text-left transition-all border ${isActive ? "border-[#F9954E]/40 bg-[#FFF5EB] dark:bg-[#F9954E]/10" : "border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-[#F9954E]/30"}`}>
+                    <div className="flex items-center justify-between gap-2">
+                      <span className={`text-[12px] font-bold ${isActive ? "text-[#E8832E]" : "text-neutral-500 dark:text-neutral-400"}`}>{t}</span>
+                      {c && <Chg n={c.return_pct} />}
+                    </div>
+                    {c && (
+                      <div className={`text-[13px] font-extrabold tabular-nums mt-0.5 ${sgn(c.ending - c.starting)}`}>{pm(c.ending - c.starting, tu)}</div>
+                    )}
+                  </button>
+                );
+              })}
             </div>
-            <div className="text-sm mt-1.5">
-              {d.usdkrw ? <span className="tabular-nums text-neutral-500 dark:text-neutral-300">≈ ${Math.round(d.total_ending / d.usdkrw).toLocaleString("en-US")}</span> : null}
-              <span className="text-neutral-400"> · 평가손익 </span>
-              <b className={`tabular-nums ${sgn(d.total_ending - d.total_starting)}`}>{pm(d.total_ending - d.total_starting, false)}</b>
-            </div>
-
-            <div className="text-[11px] text-neutral-400 mt-4">감시 {d.watching ?? 0}종목 · 보유 {d.holding ?? 0}종</div>
-          </section>
-
-          {/* ── 세그먼트 탭 ── */}
-          <div className="grid grid-cols-3 gap-1 p-1 rounded-2xl bg-neutral-100 dark:bg-zinc-900 mb-5">
-            {TABS.map((t) => {
-              const c = d.categories?.find((x) => x.name === t);
-              const active = t === tab;
-              const tu = t === "해외주식";
-              return (
-                <button key={t} onClick={() => { userPicked.current = true; setTab(t); try { localStorage.setItem("trader_tab", t); } catch { /* */ } }}
-                  className={`rounded-xl py-2 px-0.5 text-center transition-all ${active ? "bg-white dark:bg-zinc-800 shadow-sm" : "hover:bg-white/50 dark:hover:bg-zinc-800/40"}`}>
-                  <div className={`text-xs mb-0.5 ${active ? "text-neutral-900 dark:text-white font-bold" : "text-neutral-400"}`}>{t}</div>
-                  <div className={`text-sm font-extrabold tabular-nums ${c ? sgn(c.return_pct) : "text-neutral-400"}`}>{c ? (c.return_pct >= 0 ? "+" : "") + c.return_pct + "%" : "-"}</div>
-                  {c && <div className={`text-[10px] tabular-nums leading-tight ${sgn(c.ending - c.starting)}`}>{pm(c.ending - c.starting, tu)}</div>}
-                </button>
-              );
-            })}
           </div>
 
-          {/* ── 카테고리 요약 ── */}
+          {/* ── 선택 시장 요약 ── */}
           {cat && (
-            <div className="rounded-2xl border border-neutral-200/70 dark:border-zinc-800 bg-white dark:bg-zinc-900/40 p-4 mb-5 flex items-end justify-between">
+            <div className="rounded-2xl border border-neutral-100 dark:border-zinc-800 bg-white dark:bg-zinc-900/40 px-5 py-4 mb-5 flex items-center justify-between gap-4">
               <div>
-                <div className="text-xs text-neutral-400">
-                  {cat.name} · 시작 {usd ? money(cat.starting, true) : man(cat.starting) + "원"} · 감시 {cat.count}종목
-                </div>
-                <div className="text-2xl font-extrabold tabular-nums mt-1 text-neutral-950 dark:text-white">{money(cat.ending, usd)}</div>
-                <div className="text-xs mt-0.5"><span className="text-neutral-400">평가손익 </span><b className={`tabular-nums ${sgn(cat.ending - cat.starting)}`}>{pm(cat.ending - cat.starting, usd)}</b></div>
+                <div className="text-[11px] text-neutral-400 mb-0.5">{cat.name} · 시작 {usd ? money(cat.starting, true) : man(cat.starting) + "원"} · {cat.count}종목 감시</div>
+                <div className="text-[22px] font-extrabold tabular-nums text-neutral-950 dark:text-white leading-tight">{money(cat.ending, usd)}</div>
+                <div className="text-xs mt-0.5 text-neutral-400">평가손익 <b className={`tabular-nums ${sgn(cat.ending - cat.starting)}`}>{pm(cat.ending - cat.starting, usd)}</b></div>
               </div>
               <Chg n={cat.return_pct} big />
             </div>
           )}
 
-          {/* ── 현재 보유 ── */}
+          {/* ── 2컬럼: 보유/거래 내역 | 종목 요약 ── */}
+          <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4 items-start">
+          {/* 왼쪽: 현재 보유 + 거래 내역 */}
+          <div>
+          {/* 현재 보유 */}
           {openPos.length > 0 && (
-            <section className="mb-6">
+            <section className="mb-5">
               <H2>현재 보유</H2>
               <div className="space-y-2">
                 {openPos.map((p) => {
                   const up = (p.unrealized_pnl_pct ?? 0) >= 0;
                   const amt = ((p.cur_price ?? p.entry_price ?? 0) - (p.entry_price ?? 0)) * (p.qty ?? 0);
                   return (
-                    <div key={p.sym} className="rounded-xl border border-l-[3px] border-neutral-200/70 dark:border-zinc-800 bg-white dark:bg-zinc-900/30 p-3.5"
+                    <div key={p.sym} className="rounded-xl border-l-[3px] border border-neutral-100 dark:border-zinc-800 bg-white dark:bg-zinc-900/30 p-4"
                       style={{ borderLeftColor: up ? "#10b981" : "#ef4444" }}>
-                      <div className="flex items-center justify-between gap-2">
-                        <span className="text-sm font-bold text-neutral-800 dark:text-neutral-100">{withCode(p.nm, p.sym)}</span>
+                      <div className="flex items-center justify-between gap-2 mb-2">
+                        <span className="text-[14px] font-extrabold text-neutral-900 dark:text-neutral-100">{withCode(p.nm, p.sym)}</span>
                         <span className="flex items-center gap-2">
-                          <span className={`text-sm font-bold tabular-nums ${sgn(amt)}`}>{pm(amt, usd)}</span>
+                          <span className={`text-[14px] font-extrabold tabular-nums ${sgn(amt)}`}>{pm(amt, usd)}</span>
                           <Chg n={p.unrealized_pnl_pct ?? 0} />
                         </span>
                       </div>
-                      <div className="text-xs text-neutral-400 mt-1.5">
-                        매수 {money(p.entry_price ?? 0, usd)} × {qtyStr(p.qty ?? 0)} · 투자 <b className="text-neutral-600 dark:text-neutral-300">{money(p.invested ?? 0, usd)}</b>
-                      </div>
-                      <div className="text-xs text-neutral-400 mt-0.5">
-                        손절 <span className="text-neutral-600 dark:text-neutral-300">{money(p.stop_price ?? 0, usd)}</span>{p.take_profit ? <> · 목표 <span className="text-neutral-600 dark:text-neutral-300">{money(p.take_profit, usd)}</span></> : null} · {p.entry_time?.slice(0, 10)} 매수
+                      <div className="grid grid-cols-2 gap-x-4 text-xs text-neutral-400">
+                        <div>매수가 <span className="text-neutral-600 dark:text-neutral-300 font-semibold">{money(p.entry_price ?? 0, usd)}</span></div>
+                        <div>수량 <span className="text-neutral-600 dark:text-neutral-300 font-semibold">{qtyStr(p.qty ?? 0)}</span></div>
+                        <div>투자금 <span className="text-neutral-600 dark:text-neutral-300 font-semibold">{money(p.invested ?? 0, usd)}</span></div>
+                        <div>손절선 <span className="text-red-500 font-semibold">{money(p.stop_price ?? 0, usd)}</span></div>
+                        {p.take_profit && <div>목표가 <span className="text-emerald-500 font-semibold">{money(p.take_profit, usd)}</span></div>}
+                        <div>매수일 <span className="text-neutral-600 dark:text-neutral-300 font-semibold">{p.entry_time?.slice(0, 10)}</span></div>
                       </div>
                     </div>
                   );
@@ -246,59 +254,30 @@ export default function TraderClient() {
 
           {/* ── 거래 내역 ── */}
           {trades.length > 0 && (
-            <section className="mb-6">
-              <H2>거래 내역</H2>
-              <div className="space-y-2">
+            <section className="mb-5">
+              <H2>거래 내역 <span className="text-[11px] font-normal text-neutral-400">최근 {trades.length}건</span></H2>
+              <div className="rounded-2xl border border-neutral-100 dark:border-zinc-800 overflow-hidden divide-y divide-neutral-50 dark:divide-zinc-800/60">
                 {trades.map((t, i) => {
                   const amt = t.pnl ?? ((t.exit_price ?? 0) - (t.entry_price ?? 0)) * (t.qty ?? 0);
+                  const up = amt >= 0;
                   return (
-                  <div key={i} className="rounded-xl border border-neutral-200/70 dark:border-zinc-800 bg-white dark:bg-zinc-900/30 p-3.5">
-                    <div className="flex items-center justify-between gap-2">
-                      <span className="text-sm font-bold text-neutral-800 dark:text-neutral-100">{withCode(t.nm, t.sym)}</span>
-                      <span className="flex items-center gap-2">
-                        <span className={`text-sm font-bold tabular-nums ${sgn(amt)}`}>{pm(amt, usd)}</span>
-                        <Chg n={t.pnl_pct} />
-                      </span>
+                  <div key={i} className="flex items-center justify-between gap-3 px-4 py-3 bg-white dark:bg-zinc-950 hover:bg-neutral-50 dark:hover:bg-zinc-900/50 transition-colors">
+                    <div className="min-w-0 flex-1">
+                      <div className="flex items-center gap-2">
+                        <span className={`inline-block w-1.5 h-1.5 rounded-full flex-shrink-0 ${up ? "bg-emerald-500" : "bg-red-500"}`} />
+                        <span className="text-[13px] font-bold text-neutral-900 dark:text-neutral-100 truncate">{withCode(t.nm, t.sym)}</span>
+                      </div>
+                      <div className="text-[11px] text-neutral-400 mt-0.5 truncate">
+                        {t.exit?.slice(5, 10)} · {SELL_REASON[t.reason] || t.reason}
+                      </div>
                     </div>
-                    <div className="text-xs text-neutral-400 mt-1.5"><b className="text-neutral-500">매수</b> {t.entry} · {money(t.entry_price ?? 0, usd)} × {qtyStr(t.qty ?? 0)}</div>
-                    <div className="text-xs text-neutral-400 mt-0.5"><b className="text-neutral-500">매도</b> {t.exit} · {money(t.exit_price ?? 0, usd)} — {SELL_REASON[t.reason] || t.reason}</div>
+                    <div className="text-right flex-shrink-0">
+                      <div className={`text-[13px] font-extrabold tabular-nums ${sgn(amt)}`}>{pm(amt, usd)}</div>
+                      <Chg n={t.pnl_pct} />
+                    </div>
                   </div>
                   );
                 })}
-              </div>
-            </section>
-          )}
-
-          {/* ── 종목별 요약 ── */}
-          {tradedSecs.length > 0 && (
-            <section className="mb-6">
-              <H2>{tab} 거래 종목</H2>
-              <div className="rounded-2xl border border-neutral-200/70 dark:border-zinc-800 overflow-hidden overflow-x-auto">
-                <table className="w-full text-xs min-w-[340px]">
-                  <thead>
-                    <tr className="text-neutral-400 bg-neutral-50 dark:bg-zinc-900/60">
-                      <th className="text-left font-medium py-2.5 px-3">종목</th>
-                      <th className="text-right font-medium px-2">실현손익</th>
-                      <th className="text-right font-medium px-2">거래</th>
-                      <th className="text-right font-medium px-3">승률</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-neutral-100 dark:divide-zinc-800">
-                    {tradedSecs.map((s) => (
-                      <tr key={s.symbol}>
-                        <td className="py-2.5 px-3 text-neutral-700 dark:text-neutral-200">
-                          <button onClick={() => toggleFav(s.symbol)} aria-label="관심종목" className="mr-1.5 align-middle text-[13px] leading-none" style={{ color: favs.includes(s.symbol) ? ORANGE : "#cbd5e1" }}>
-                            {favs.includes(s.symbol) ? "★" : "☆"}
-                          </button>
-                          {withCode(s.name, s.symbol)}
-                        </td>
-                        <td className={`text-right px-2 tabular-nums font-semibold ${sgn(s.realized_pnl)}`}>{(s.realized_pnl >= 0 ? "+" : "") + won(s.realized_pnl)}</td>
-                        <td className="text-right px-2 tabular-nums text-neutral-400">{s.trades}</td>
-                        <td className="text-right px-3 tabular-nums text-neutral-400">{s.win_rate_pct}%</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
               </div>
             </section>
           )}
@@ -308,27 +287,62 @@ export default function TraderClient() {
               아직 <b>{tab}</b>에서 거래한 종목이 없어요.<br />좋은 매수 신호(상승 흐름 + 신고가 돌파)가 나오면 자동으로 사고 여기 표시됩니다.
             </div>
           )}
+          </div>{/* /왼쪽 */}
 
-          {/* ── 작업 기록 ── */}
+          {/* 오른쪽: 종목 요약 + 작업 기록 */}
+          <div>
+          {/* 종목별 요약 */}
+          {tradedSecs.length > 0 && (
+            <section className="mb-4">
+              <H2>{tab} 종목</H2>
+              <div className="rounded-2xl border border-neutral-100 dark:border-zinc-800 overflow-hidden">
+                <table className="w-full text-xs">
+                  <thead>
+                    <tr className="text-neutral-400 bg-neutral-50 dark:bg-zinc-900">
+                      <th className="text-left font-medium py-2.5 px-3">종목</th>
+                      <th className="text-right font-medium px-2">손익</th>
+                      <th className="text-right font-medium px-3">승률</th>
+                    </tr>
+                  </thead>
+                  <tbody className="divide-y divide-neutral-50 dark:divide-zinc-800/60">
+                    {tradedSecs.map((s) => (
+                      <tr key={s.symbol} className="bg-white dark:bg-zinc-950 hover:bg-neutral-50 dark:hover:bg-zinc-900/50 transition-colors">
+                        <td className="py-2.5 px-3 text-neutral-700 dark:text-neutral-200 truncate max-w-[100px]">
+                          <button onClick={() => toggleFav(s.symbol)} aria-label="관심종목" className="mr-1.5 align-middle text-[12px] leading-none" style={{ color: favs.includes(s.symbol) ? ORANGE : "#cbd5e1" }}>
+                            {favs.includes(s.symbol) ? "★" : "☆"}
+                          </button>
+                          {withCode(s.name, s.symbol)}
+                        </td>
+                        <td className={`text-right px-2 tabular-nums font-semibold text-[11px] ${sgn(s.realized_pnl)}`}>{(s.realized_pnl >= 0 ? "+" : "") + won(s.realized_pnl)}</td>
+                        <td className="text-right px-3 tabular-nums text-neutral-400">{s.win_rate_pct}%</td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </table>
+              </div>
+            </section>
+          )}
+
+          {/* 작업 기록 */}
           {d.recent_runs && d.recent_runs.length > 0 && (
-            <section className="mb-6">
-              <H2 sub="봇이 점검한 시각">작업 기록</H2>
-              <div className="rounded-2xl border border-neutral-200/70 dark:border-zinc-800 divide-y divide-neutral-100 dark:divide-zinc-800 overflow-hidden">
-                {d.recent_runs.map((r, i) => (
-                  <div key={i} className="flex items-center justify-between px-3.5 py-2.5 text-xs">
+            <section className="mb-4">
+              <H2 sub="최근 점검">작업 기록</H2>
+              <div className="rounded-2xl border border-neutral-100 dark:border-zinc-800 divide-y divide-neutral-50 dark:divide-zinc-800/60 overflow-hidden">
+                {d.recent_runs.slice(0, 10).map((r, i) => (
+                  <div key={i} className="flex items-center justify-between px-3 py-2.5 text-xs bg-white dark:bg-zinc-950">
                     <span className="text-neutral-500 dark:text-neutral-400">
-                      <span className="text-neutral-400 mr-2 tabular-nums">{r.time?.slice(5, 16)}</span>
-                      {r.watching ?? 0}종목 점검 · {r.holding ?? 0}종 보유
-                      {r.new_trades ? <span className="ml-1.5 rounded-full px-1.5 py-0.5 text-[10px] font-bold text-white" style={{ background: ORANGE }}>신규 {r.new_trades}</span> : null}
+                      <span className="tabular-nums mr-1.5">{r.time?.slice(5, 16)}</span>
+                      {r.watching ?? 0}개 감시
+                      {r.new_trades ? <span className="ml-1.5 rounded-full px-1.5 py-0.5 text-[9px] font-bold text-white" style={{ background: ORANGE }}>+{r.new_trades}</span> : null}
                     </span>
-                    <span className="tabular-nums text-neutral-500 dark:text-neutral-300">
-                      {won(r.total ?? 0)} <span className={`font-semibold ${sgn(r.ret ?? 0)}`}>{(r.ret ?? 0) >= 0 ? "+" : ""}{r.ret ?? 0}%</span>
-                    </span>
+                    <span className={`tabular-nums font-semibold text-[11px] ${sgn(r.ret ?? 0)}`}>{(r.ret ?? 0) >= 0 ? "+" : ""}{r.ret ?? 0}%</span>
                   </div>
                 ))}
               </div>
             </section>
           )}
+          </div>{/* /오른쪽 */}
+          </div>{/* /2컬럼 grid */}
 
           {/* ── 더 알아보기 ── */}
           <div className="mt-8 mb-2 text-xs font-bold text-neutral-400">더 알아보기</div>

@@ -168,10 +168,11 @@ export default function MarketClient({ reviews = [] }: { reviews?: MarketReview[
     );
   }
 
-  // ── 카테고리 디렉토리 (기본) ──
+  // ── 메인 (기본) ──
   return (
     <main className="w-full min-h-screen">
-      <section className="pt-8 pb-6 border-b border-neutral-100 dark:border-zinc-900">
+      {/* 히어로 */}
+      <section className="pt-8 pb-5 border-b border-neutral-100 dark:border-zinc-900">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-[#F9954E]/10 mb-4">
           <ShoppingBag className="w-3.5 h-3.5 text-[#F9954E]" />
           <span className="text-[11px] font-bold text-[#F9954E]">DORI 마켓</span>
@@ -179,9 +180,25 @@ export default function MarketClient({ reviews = [] }: { reviews?: MarketReview[
         <h1 className="text-[34px] sm:text-[44px] font-extrabold text-neutral-950 dark:text-white leading-[1.12] tracking-tight mb-2 break-keep">
           무엇을 찾고 있나요?
         </h1>
-        <p className="text-[14px] text-neutral-500 dark:text-neutral-500 leading-relaxed break-keep">
-          제품군을 골라보세요. 아마존·쿠팡·알리에서 하나씩 엄선한 추천 아이템을 올려드려요.
+        <p className="text-[14px] text-neutral-500 dark:text-neutral-500 leading-relaxed break-keep mb-5">
+          아마존·쿠팡·알리에서 하나씩 엄선한 추천 아이템을 올려드려요.
         </p>
+
+        {/* 카테고리 칩 (가로 스크롤, 1~2줄) */}
+        <div className="-mx-6 px-6 overflow-x-auto scrollbar-hide pb-1">
+          <div className="flex flex-wrap gap-2 w-max max-w-full sm:flex-wrap sm:w-auto">
+            {MARKET_CATEGORIES.map((c) => (
+              <button
+                key={c.key}
+                onClick={() => setActive(c)}
+                className="inline-flex items-center gap-1.5 px-3.5 py-1.5 rounded-full border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-[12.5px] font-semibold text-neutral-700 dark:text-neutral-300 hover:border-[#F9954E] hover:text-[#F9954E] active:scale-95 transition-all whitespace-nowrap"
+              >
+                <span className="text-[13px]">{c.emoji}</span>
+                {c.label}
+              </button>
+            ))}
+          </div>
+        </div>
       </section>
 
       {/* 이주의 상품 */}
@@ -190,32 +207,9 @@ export default function MarketClient({ reviews = [] }: { reviews?: MarketReview[
       {/* 최신 리뷰 글 */}
       <ReviewSection reviews={reviews} />
 
-      <section className="py-6 pb-16">
-        <p className="text-[13px] font-bold text-neutral-400 dark:text-neutral-500 mb-4">제품군</p>
-        <div className="grid grid-cols-2 sm:grid-cols-3 gap-3">
-          {MARKET_CATEGORIES.map((c) => {
-            const n = countByCategory(c.key);
-            return (
-              <button
-                key={c.key}
-                onClick={() => setActive(c)}
-                className="group text-left flex flex-col p-5 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 hover:border-[#F9954E]/40 hover:shadow-lg hover:shadow-[#F9954E]/5 transition-all duration-200 min-h-[128px]"
-              >
-                <span className="text-[30px] leading-none mb-3">{c.emoji}</span>
-                <span className="text-[15px] font-extrabold text-neutral-900 dark:text-white group-hover:text-[#E8832E] dark:group-hover:text-[#FBAA60] transition-colors">{c.label}</span>
-                <span className="text-[12px] text-neutral-400 dark:text-neutral-500 mt-0.5 leading-snug break-keep line-clamp-2">{c.desc}</span>
-                <span className="mt-auto pt-3 text-[11px] font-bold text-neutral-300 dark:text-zinc-600">
-                  {n > 0 ? `${n}개 추천` : "준비 중"}
-                </span>
-              </button>
-            );
-          })}
-        </div>
-
-        <p className="mt-8 text-[11px] text-neutral-400 dark:text-zinc-600 leading-relaxed break-keep">
-          ⚠️ 마켓의 제품 링크는 어필리에이트(제휴) 링크로, 구매 시 일정 수수료를 받을 수 있습니다.
-        </p>
-      </section>
+      <p className="pb-10 text-[11px] text-neutral-400 dark:text-zinc-600 leading-relaxed break-keep">
+        ⚠️ 마켓의 제품 링크는 어필리에이트(제휴) 링크로, 구매 시 일정 수수료를 받을 수 있습니다.
+      </p>
     </main>
   );
 }

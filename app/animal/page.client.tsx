@@ -210,7 +210,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
 
   return (
     <main className="w-full min-h-screen">
-      <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-6 pt-8 pb-16">
+      <div className="relative z-10 pt-8 pb-16">
 
         {/* ── 히어로 ── */}
         <section className="pb-6 border-b border-neutral-100 dark:border-zinc-900 mb-6">
