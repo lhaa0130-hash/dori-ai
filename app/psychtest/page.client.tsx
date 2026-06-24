@@ -4,12 +4,12 @@
 // 단일 라우트에서 허브 → 인트로 → 문항 → 결과를 상태로 전환(정적 export 호환).
 import { useState, useEffect, useRef, type ReactNode } from "react";
 import Link from "next/link";
-import { RotateCcw, ArrowRight, ArrowLeft, ChevronRight, Info, ShieldAlert, Lock, Share2, BookmarkPlus, Check } from "lucide-react";
+import { RotateCcw, ArrowRight, ArrowLeft, ChevronRight, Info, ShieldAlert, Lock, Share2, BookmarkPlus, Check, Copy, Download, X as XClose, Smartphone } from "lucide-react";
 import {
   TESTS, CATEGORIES, getTest, computeScored, computeMulti, getAbout,
   type PsychTest, type ScoredTest, type TypedTest, type MultiTest, type Tone,
 } from "@/lib/psychTests";
-import { shareResultCard, type CardData } from "@/lib/shareCard";
+import { shareResultCard, getCardDataUrl, downloadCard, type CardData } from "@/lib/shareCard";
 import { savePsychResult, appendPsychLog, type PsychResult, type PsychLog } from "@/lib/social";
 import { getFirebaseAuth } from "@/lib/firebase";
 import { onAuthStateChanged } from "firebase/auth";
@@ -675,20 +675,183 @@ function ScoreTracker({ testId, scoreNum, max, pct, label, higherWorse }: {
 }
 
 /* ───────────────────────── 결과 액션(공유 카드 + 코지홈 저장) ───────────────────────── */
-function ResultActions({ card, badge, allowBadge }: { card: CardData; badge: Omit<PsychResult, "at">; allowBadge: boolean }) {
-  const [shareMsg, setShareMsg] = useState("");
-  const [busy, setBusy] = useState(false);
-  const [saveState, setSaveState] = useState<"idle" | "saving" | "saved" | "login" | "fail">("idle");
+// 공유 플랫폼 버튼 목록
+const SHARE_PLATFORMS = [
+  {
+    id: "kakao", label: "카카오톡", bg: "#FEE500", fg: "#3C1E1E",
+    icon: <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M12 3C6.477 3 2 6.477 2 10.8c0 2.7 1.518 5.077 3.816 6.535L4.8 21l4.41-2.397A11.4 11.4 0 0 0 12 18.6c5.523 0 10-3.477 10-7.8S17.523 3 12 3z"/></svg>,
+    open: (url: string, title: string) => window.open(`https://story.kakao.com/share?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`, "_blank", "noopener,width=600,height=500"),
+  },
+  {
+    id: "whatsapp", label: "WhatsApp", bg: "#25D366", fg: "#fff",
+    icon: <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 0 1-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 0 1-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 0 1 2.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0 0 12.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 0 0 5.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 0 0-3.48-8.413z"/></svg>,
+    open: (url: string, title: string) => window.open(`https://api.whatsapp.com/send?text=${encodeURIComponent(title + "\n" + url)}`, "_blank", "noopener,width=600,height=500"),
+  },
+  {
+    id: "telegram", label: "텔레그램", bg: "#26A5E4", fg: "#fff",
+    icon: <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M11.944 0A12 12 0 0 0 0 12a12 12 0 0 0 12 12 12 12 0 0 0 12-12A12 12 0 0 0 12 0a12 12 0 0 0-.056 0zm4.962 7.224c.1-.002.321.023.465.14a.506.506 0 0 1 .171.325c.016.093.036.306.02.472-.18 1.898-.962 6.502-1.36 8.627-.168.9-.499 1.201-.820 1.23-.696.065-1.225-.46-1.9-.902-1.056-.693-1.653-1.124-2.678-1.8-1.185-.78-.417-1.21.258-1.91.177-.184 3.247-2.977 3.307-3.23.007-.032.014-.15-.056-.212s-.174-.041-.249-.024c-.106.024-1.793 1.14-5.061 3.345-.48.33-.913.49-1.302.48-.428-.008-1.252-.241-1.865-.44-.752-.245-1.349-.374-1.297-.789.027-.216.325-.437.893-.663 3.498-1.524 5.83-2.529 6.998-3.014 3.332-1.386 4.025-1.627 4.476-1.635z"/></svg>,
+    open: (url: string, title: string) => window.open(`https://t.me/share/url?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`, "_blank", "noopener,width=600,height=500"),
+  },
+  {
+    id: "line", label: "라인", bg: "#06C755", fg: "#fff",
+    icon: <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M19.365 9.863c.349 0 .63.285.63.631 0 .345-.281.63-.63.63H17.61v1.125h1.755c.349 0 .63.283.63.63 0 .344-.281.629-.63.629h-2.386c-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63h2.386c.346 0 .627.285.627.63 0 .349-.281.63-.63.63H17.61v1.125h1.755zm-3.855 3.016c0 .27-.174.51-.432.596-.064.021-.133.031-.199.031-.211 0-.391-.09-.51-.25l-2.443-3.317v2.94c0 .344-.279.629-.631.629-.346 0-.626-.285-.626-.629V8.108c0-.27.173-.51.43-.595.06-.023.136-.033.194-.033.195 0 .375.104.495.254l2.462 3.33V8.108c0-.345.282-.63.63-.63.345 0 .63.285.63.63v4.771zm-5.741 0c0 .344-.282.629-.631.629-.345 0-.627-.285-.627-.629V8.108c0-.345.282-.63.63-.63.346 0 .628.285.628.63v4.771zm-2.466.629H4.917c-.345 0-.63-.285-.63-.629V8.108c0-.345.285-.63.63-.63.348 0 .63.285.63.63v4.141h1.756c.348 0 .629.283.629.63 0 .344-.282.629-.629.629M24 10.314C24 4.943 18.615.572 12 .572S0 4.943 0 10.314c0 4.811 4.27 8.842 10.035 9.608.391.082.923.258 1.058.59.12.301.079.766.038 1.08l-.164 1.02c-.045.301-.24 1.186 1.049.645 1.291-.539 6.916-4.070 9.436-6.975C23.176 14.393 24 12.458 24 10.314"/></svg>,
+    open: (url: string, title: string) => window.open(`https://social-plugins.line.me/lineit/share?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`, "_blank", "noopener,width=600,height=500"),
+  },
+  {
+    id: "facebook", label: "페이스북", bg: "#1877F2", fg: "#fff",
+    icon: <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>,
+    open: (url: string) => window.open(`https://www.facebook.com/sharer/sharer.php?u=${encodeURIComponent(url)}`, "_blank", "noopener,width=600,height=500"),
+  },
+  {
+    id: "twitter", label: "X(트위터)", bg: "#000", fg: "#fff",
+    icon: <svg viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.742l7.732-8.835L2.195 2.25H8.94l4.272 5.65zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg>,
+    open: (url: string, title: string) => window.open(`https://twitter.com/intent/tweet?url=${encodeURIComponent(url)}&text=${encodeURIComponent(title)}`, "_blank", "noopener,width=600,height=500"),
+  },
+  {
+    id: "email", label: "이메일", bg: "#6B7280", fg: "#fff",
+    icon: <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" className="w-4 h-4"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m2 7 10 7 10-7"/></svg>,
+    open: (url: string, title: string) => { window.location.href = `mailto:?subject=${encodeURIComponent(title)}&body=${encodeURIComponent(title + "\n\n" + url)}`; },
+  },
+];
 
-  const onShare = async () => {
-    setBusy(true); setShareMsg("");
-    try {
-      const r = await shareResultCard(card, `dori-${badge.testId}`);
-      setShareMsg(r === "downloaded" ? "결과 카드를 이미지로 저장했어요 📥" : "공유했어요 🎉");
-    } catch {
-      setShareMsg("카드를 만들지 못했어요. 다시 시도해 주세요.");
-    } finally { setBusy(false); }
+// 심리테스트 결과 공유 모달
+function ShareModal({
+  card, testId, onClose,
+}: { card: CardData; testId: string; onClose: () => void }) {
+  const [preview, setPreview] = useState<string | null>(null);
+  const [copied, setCopied] = useState(false);
+  const [tooltip, setTooltip] = useState<string | null>(null);
+  const [downloading, setDownloading] = useState(false);
+  const [nativeSharing, setNativeSharing] = useState(false);
+  const pageUrl = typeof window !== "undefined" ? `${window.location.origin}/psychtest` : "https://dori-ai.com/psychtest";
+  const shareTitle = `나의 심리테스트 결과: ${card.headline}`;
+
+  useEffect(() => {
+    getCardDataUrl(card).then(setPreview).catch(() => {});
+  }, [card]);
+
+  const handleDownload = async () => {
+    setDownloading(true);
+    try { await downloadCard(card, `dori-${testId}`); } finally { setDownloading(false); }
   };
+
+  const handleNativeShare = async () => {
+    setNativeSharing(true);
+    try { await shareResultCard(card, `dori-${testId}`); } finally { setNativeSharing(false); }
+  };
+
+  const handleCopy = async () => {
+    try { await navigator.clipboard.writeText(pageUrl); } catch {
+      const el = document.createElement("textarea");
+      el.value = pageUrl; document.body.appendChild(el); el.select();
+      document.execCommand("copy"); el.remove();
+    }
+    setCopied(true); setTimeout(() => setCopied(false), 2000);
+  };
+
+  const canNativeShare = typeof navigator !== "undefined" && !!navigator.share;
+
+  return (
+    <div
+      className="fixed inset-0 z-50 flex items-end sm:items-center justify-center bg-black/60 backdrop-blur-sm p-4"
+      onClick={onClose}
+    >
+      <div
+        className="bg-white dark:bg-zinc-900 rounded-3xl w-full max-w-sm shadow-2xl overflow-hidden"
+        onClick={(e) => e.stopPropagation()}
+      >
+        {/* 헤더 */}
+        <div className="flex items-center justify-between px-5 pt-5 pb-3">
+          <span className="text-[15px] font-extrabold text-neutral-900 dark:text-white">결과 공유하기</span>
+          <button onClick={onClose} className="w-7 h-7 flex items-center justify-center rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-500 hover:bg-neutral-200 dark:hover:bg-zinc-700 transition-colors">
+            <XClose className="w-4 h-4" />
+          </button>
+        </div>
+
+        {/* 카드 미리보기 */}
+        <div className="px-5 pb-4">
+          {preview ? (
+            /* eslint-disable-next-line @next/next/no-img-element */
+            <img src={preview} alt="결과 카드" className="w-full rounded-2xl border border-neutral-100 dark:border-zinc-800 shadow-sm" style={{ aspectRatio: "1080/1350" }} />
+          ) : (
+            <div className="w-full rounded-2xl bg-neutral-100 dark:bg-zinc-800 animate-pulse" style={{ aspectRatio: "1080/1350" }} />
+          )}
+        </div>
+
+        {/* 이미지 액션 */}
+        <div className="px-5 pb-4 flex gap-2">
+          <button
+            onClick={handleDownload}
+            disabled={downloading}
+            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-2xl bg-neutral-100 dark:bg-zinc-800 text-neutral-700 dark:text-neutral-200 text-[13px] font-bold hover:bg-neutral-200 dark:hover:bg-zinc-700 transition-colors disabled:opacity-60"
+          >
+            <Download className="w-3.5 h-3.5" />
+            {downloading ? "저장 중..." : "이미지 저장"}
+          </button>
+          {canNativeShare && (
+            <button
+              onClick={handleNativeShare}
+              disabled={nativeSharing}
+              className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-2xl bg-[#F9954E] text-white text-[13px] font-bold hover:bg-[#E8832E] transition-colors disabled:opacity-60"
+            >
+              <Smartphone className="w-3.5 h-3.5" />
+              {nativeSharing ? "공유 중..." : "앱으로 공유"}
+            </button>
+          )}
+        </div>
+
+        {/* 구분선 */}
+        <div className="mx-5 mb-4 border-t border-neutral-100 dark:border-zinc-800" />
+
+        {/* 링크 공유 */}
+        <div className="px-5 pb-5">
+          <p className="text-[11px] font-bold text-neutral-400 dark:text-neutral-500 mb-3 uppercase tracking-wide">링크로 공유</p>
+          <div className="flex items-center gap-2 flex-wrap">
+            {SHARE_PLATFORMS.map((p) => (
+              <div key={p.id} className="relative">
+                <button
+                  onClick={() => p.open(pageUrl, shareTitle)}
+                  onMouseEnter={() => setTooltip(p.id)}
+                  onMouseLeave={() => setTooltip(null)}
+                  title={p.label}
+                  style={{ backgroundColor: p.bg, color: p.fg }}
+                  className="w-9 h-9 flex items-center justify-center rounded-full hover:scale-110 active:scale-95 transition-all shadow-sm"
+                >
+                  {p.icon}
+                </button>
+                {tooltip === p.id && (
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-0.5 rounded bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-[10px] font-medium whitespace-nowrap pointer-events-none z-10">
+                    {p.label}
+                  </div>
+                )}
+              </div>
+            ))}
+            {/* 링크 복사 */}
+            <div className="relative">
+              <button
+                onClick={handleCopy}
+                onMouseEnter={() => setTooltip("copy")}
+                onMouseLeave={() => setTooltip(null)}
+                className={`w-9 h-9 flex items-center justify-center rounded-full hover:scale-110 active:scale-95 transition-all shadow-sm ${copied ? "bg-emerald-500 text-white" : "bg-[#F9954E] text-white"}`}
+              >
+                {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
+              </button>
+              {tooltip === "copy" && (
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-0.5 rounded bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-[10px] font-medium whitespace-nowrap pointer-events-none z-10">
+                  {copied ? "복사됨!" : "링크 복사"}
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function ResultActions({ card, badge, allowBadge }: { card: CardData; badge: Omit<PsychResult, "at">; allowBadge: boolean }) {
+  const [showShare, setShowShare] = useState(false);
+  const [saveState, setSaveState] = useState<"idle" | "saving" | "saved" | "login" | "fail">("idle");
 
   const onSave = async () => {
     let uid: string | null = null;
@@ -700,38 +863,41 @@ function ResultActions({ card, badge, allowBadge }: { card: CardData; badge: Omi
   };
 
   return (
-    <div className="mt-3">
-      <div className={`grid ${allowBadge ? "grid-cols-2" : "grid-cols-1"} gap-2.5`}>
-        <button
-          onClick={onShare}
-          disabled={busy}
-          className="flex items-center justify-center gap-1.5 py-3 rounded-2xl bg-[#F9954E] text-white text-[13.5px] font-bold active:opacity-85 transition-opacity disabled:opacity-60"
-        >
-          <Share2 className="w-4 h-4" /> 결과 카드 공유
-        </button>
-        {allowBadge && (
+    <>
+      {showShare && (
+        <ShareModal card={card} testId={badge.testId} onClose={() => setShowShare(false)} />
+      )}
+      <div className="mt-3">
+        <div className={`grid ${allowBadge ? "grid-cols-2" : "grid-cols-1"} gap-2.5`}>
           <button
-            onClick={onSave}
-            disabled={saveState === "saving" || saveState === "saved"}
-            className="flex items-center justify-center gap-1.5 py-3 rounded-2xl bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-neutral-200 text-[13.5px] font-bold active:opacity-70 transition-opacity"
+            onClick={() => setShowShare(true)}
+            className="flex items-center justify-center gap-1.5 py-3 rounded-2xl bg-[#F9954E] text-white text-[13.5px] font-bold active:opacity-85 transition-opacity"
           >
-            {saveState === "saved" ? <><Check className="w-4 h-4 text-emerald-500" /> 저장됨</> : <><BookmarkPlus className="w-4 h-4" /> 코지홈에 저장</>}
+            <Share2 className="w-4 h-4" /> 결과 카드 공유
           </button>
+          {allowBadge && (
+            <button
+              onClick={onSave}
+              disabled={saveState === "saving" || saveState === "saved"}
+              className="flex items-center justify-center gap-1.5 py-3 rounded-2xl bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-neutral-200 text-[13.5px] font-bold active:opacity-70 transition-opacity"
+            >
+              {saveState === "saved" ? <><Check className="w-4 h-4 text-emerald-500" /> 저장됨</> : <><BookmarkPlus className="w-4 h-4" /> 코지홈에 저장</>}
+            </button>
+          )}
+        </div>
+        {saveState === "saved" && (
+          <p className="text-center text-[12px] text-neutral-500 dark:text-neutral-400 mt-2">
+            내 <Link href="/profile" className="font-bold text-[#F9954E]">코지홈 프로필</Link>에 결과 뱃지가 추가됐어요.
+          </p>
         )}
+        {saveState === "login" && (
+          <p className="text-center text-[12px] text-neutral-500 dark:text-neutral-400 mt-2">
+            <Link href="/login?next=/psychtest" className="font-bold text-[#F9954E]">로그인</Link>하면 결과를 코지홈에 저장할 수 있어요.
+          </p>
+        )}
+        {saveState === "fail" && <p className="text-center text-[12px] text-rose-500 mt-2">저장에 실패했어요. 잠시 후 다시 시도해 주세요.</p>}
       </div>
-      {shareMsg && <p className="text-center text-[12px] text-neutral-500 dark:text-neutral-400 mt-2">{shareMsg}</p>}
-      {saveState === "saved" && (
-        <p className="text-center text-[12px] text-neutral-500 dark:text-neutral-400 mt-2">
-          내 <Link href="/profile" className="font-bold text-[#F9954E]">코지홈 프로필</Link>에 결과 뱃지가 추가됐어요.
-        </p>
-      )}
-      {saveState === "login" && (
-        <p className="text-center text-[12px] text-neutral-500 dark:text-neutral-400 mt-2">
-          <Link href="/login?next=/psychtest" className="font-bold text-[#F9954E]">로그인</Link>하면 결과를 코지홈에 저장할 수 있어요.
-        </p>
-      )}
-      {saveState === "fail" && <p className="text-center text-[12px] text-rose-500 mt-2">저장에 실패했어요. 잠시 후 다시 시도해 주세요.</p>}
-    </div>
+    </>
   );
 }
 

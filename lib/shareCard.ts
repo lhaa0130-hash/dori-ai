@@ -133,6 +133,26 @@ function canvasToBlob(canvas: HTMLCanvasElement): Promise<Blob> {
   });
 }
 
+/** 카드를 canvas로 그려 data URL 반환 (미리보기용) */
+export async function getCardDataUrl(data: CardData): Promise<string> {
+  const canvas = drawCard(data);
+  return canvas.toDataURL("image/png");
+}
+
+/** 카드 PNG를 다운로드 */
+export async function downloadCard(data: CardData, filename = "dori-psychtest"): Promise<void> {
+  const canvas = drawCard(data);
+  const blob = await canvasToBlob(canvas);
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `${filename}.png`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  setTimeout(() => URL.revokeObjectURL(url), 1000);
+}
+
 /** 결과 카드를 만들어 공유(가능 시) 또는 다운로드. 반환: "shared" | "downloaded" */
 export async function shareResultCard(data: CardData, filename = "dori-psychtest"): Promise<"shared" | "downloaded"> {
   const canvas = drawCard(data);
