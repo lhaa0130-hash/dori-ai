@@ -140,18 +140,16 @@ export default function TraderClient() {
   const beforeLaunch = now < new Date("2026-07-01T00:00:00").getTime();
 
   return (
-    <main className="w-full min-h-screen max-w-2xl mx-auto px-4 py-6">
-      <header className="mb-4">
-        <h1 className="text-2xl font-extrabold text-neutral-950 dark:text-white">
-          트레이더일로 <span style={{ color: ORANGE }}>(Trader Illo)</span>
+    <main className="w-full min-h-screen max-w-2xl mx-auto">
+      <section className="pt-8 pb-6 border-b border-neutral-100 dark:border-zinc-900 mb-6">
+        <p className="text-[11px] font-bold text-[#F9954E] mb-3 tracking-wide uppercase">AI 자동매매</p>
+        <h1 className="text-[30px] sm:text-[40px] font-extrabold text-neutral-950 dark:text-white leading-[1.12] tracking-tight mb-2 break-keep">
+          손실은 작게,<br />수익은 크게
         </h1>
-        <p className="text-xs text-neutral-400 dark:text-neutral-500 mt-1">AI 자동매매 — 손실은 작게, 수익은 크게.</p>
-        {beforeLaunch && (
-          <div className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 mt-2.5 text-xs font-bold" style={{ background: "rgba(249,149,78,0.12)", color: ORANGE }}>
-            🎉 7월 1일 정식 오픈 · 지금은 모의 테스트 중
-          </div>
-        )}
-      </header>
+        <p className="text-[14px] text-neutral-400 dark:text-neutral-500 leading-relaxed break-keep">
+          코인·국내·해외주식을 AI가 추세추종 전략으로 자동 매매해요
+        </p>
+      </section>
 
       {err && <div className="text-sm text-neutral-400 py-16 text-center">아직 데이터가 없습니다. 곧 업데이트됩니다.</div>}
       {!err && !d && <div className="text-sm text-neutral-400 py-16 text-center">불러오는 중…</div>}

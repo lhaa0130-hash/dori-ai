@@ -69,52 +69,27 @@ const GUIDE = [
 
 export default function IlloPageClient() {
   return (
-    <main className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-500 relative overflow-x-hidden font-sans">
-      {/* Background glow */}
-      <div className="absolute top-0 left-0 w-full h-[560px] bg-gradient-to-b from-[#FEEBD0]/50 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/12 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
-
-      <div className="relative z-10 max-w-5xl mx-auto px-4 sm:px-6 pt-4 sm:pt-16 pb-12 sm:pb-24">
-        {/* Hero */}
-        <section className="text-center flex flex-col items-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-7">
-            <Sparkles className="w-3 h-3" />
-            <span>워크일로 = 일로 · AI API 활용 웹 구독</span>
+    <main className="w-full min-h-screen">
+      <div className="max-w-5xl mx-auto pt-8 pb-12 sm:pb-24">
+        {/* ── 히어로 ── */}
+        <section className="pb-8 border-b border-neutral-100 dark:border-zinc-900 mb-8">
+          <p className="text-[11px] font-bold text-[#F9954E] mb-3 tracking-wide uppercase">AI 업무비서</p>
+          <div className="flex items-center gap-3 mb-3">
+            <img src="/illo-logo.png" alt="워크일로" width={48} height={48} className="w-12 h-12 rounded-2xl shrink-0" />
+            <h1 className="text-[30px] sm:text-[40px] font-extrabold text-neutral-950 dark:text-white leading-[1.12] tracking-tight break-keep">
+              워크일로
+            </h1>
           </div>
-
-          <img src="/illo-logo.png" alt="워크일로" width={96} height={96} className="w-24 h-24 rounded-[26px] shadow-xl shadow-[#F9954E]/20 mb-6" />
-
-          <h1 className="text-4xl md:text-6xl font-extrabold tracking-tight text-neutral-900 dark:text-white mb-4">
-            워크일로
-          </h1>
-          <p className="text-lg md:text-2xl font-bold mb-3">
-            <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-              AI API, 구독 말고 필요한 만큼
-            </span>
+          <p className="text-[14px] text-neutral-400 dark:text-neutral-500 leading-relaxed break-keep mb-5">
+            ChatGPT·Claude·Gemini를 내 API 키로, 구독 없이 원하는 만큼 써요.<br />
+            글·이미지·음성을 조합하고 사이트·메일·카톡으로 자동 발행합니다.
           </p>
-          <p className="text-base md:text-lg font-medium text-neutral-600 dark:text-neutral-400 max-w-xl leading-relaxed break-keep mb-9">
-            ChatGPT·Claude·Gemini는 구독하면서도 API는 어려워서 못 쓰던 분들을 위한 서비스예요.
-            내 키로 검색·글·이미지·음성을 조합하고, 결과를 사이트·메일·카톡으로 자동 발행합니다.
-          </p>
-
-          {/* CTA buttons */}
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <Link
-              href="/illo/app"
-              className="inline-flex items-center gap-2.5 px-9 py-4 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold text-base shadow-lg shadow-[#F9954E]/25 transition-all hover:-translate-y-0.5"
-            >
-              <Globe className="w-5 h-5" />
-              웹에서 바로 시작
-            </Link>
-            <Link
-              href="#pricing"
-              className="inline-flex items-center gap-2 px-7 py-4 rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-neutral-700 dark:text-neutral-200 font-bold text-base hover:border-[#F9954E] transition-colors"
-            >
-              요금 보기
-            </Link>
-          </div>
-          <p className="text-xs text-neutral-400 dark:text-zinc-600 mt-4">
-            설치 없이 브라우저에서 바로 · 로그인하면 <b className="text-[#E8832E] dark:text-[#FBAA60]">하루 50회 무료</b> · 월 <b className="text-[#E8832E] dark:text-[#FBAA60]">₩990</b>
-          </p>
+          <Link
+            href="/illo/app"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-[#F9954E]/10 text-[#F9954E] text-[13px] font-extrabold transition-colors hover:bg-[#F9954E]/20"
+          >
+            테스트 참여하기 <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </section>
 
         {/* Features */}

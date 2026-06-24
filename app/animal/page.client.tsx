@@ -209,20 +209,16 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
   }, [detail, sorted]); // eslint-disable-line react-hooks/exhaustive-deps
 
   return (
-    <main className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-500 relative overflow-x-hidden font-sans">
-      <div className="absolute top-0 left-0 w-full h-[320px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:to-black/0 pointer-events-none z-0" />
-
-      <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-6 pt-20 pb-16">
+    <main className="w-full min-h-screen">
+      <div className="relative z-10 max-w-6xl mx-auto px-4 md:px-6 pt-8 pb-16">
 
         {/* ── 히어로 ── */}
-        <section className="text-center mb-6">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-4">
-            <BookOpen className="w-3 h-3" /><span>애니멀일로 · animalillo</span>
-          </div>
-          <h1 className="text-2xl md:text-4xl font-extrabold tracking-tight leading-tight mb-2.5 text-neutral-900 dark:text-white break-keep">
-            궁금한 <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">동물</span>을 찾아보세요
+        <section className="pb-6 border-b border-neutral-100 dark:border-zinc-900 mb-6">
+          <p className="text-[11px] font-bold text-[#F9954E] mb-3 tracking-wide uppercase">AI 동물도감</p>
+          <h1 className="text-[30px] sm:text-[40px] font-extrabold text-neutral-950 dark:text-white leading-[1.12] tracking-tight mb-2 break-keep">
+            300종 동물을<br />아이 눈높이로 탐험해요
           </h1>
-          <p className="text-sm text-neutral-500 dark:text-neutral-400 max-w-md mx-auto break-keep">
+          <p className="text-[14px] text-neutral-400 dark:text-neutral-500 leading-relaxed break-keep">
             이름으로 찾거나 종류 · 먹이 · 색깔 · 수명으로 골라보세요
           </p>
         </section>
