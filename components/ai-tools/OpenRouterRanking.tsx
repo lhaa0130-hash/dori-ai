@@ -42,7 +42,7 @@ export default function OpenRouterRanking() {
   return (
     <div className="rounded-3xl border border-neutral-200 dark:border-zinc-800 overflow-hidden">
       {/* 헤더 */}
-      <div className="px-4 sm:px-5 pt-4 pb-3 bg-gradient-to-b from-[#F9954E]/10 to-transparent border-b border-neutral-100 dark:border-zinc-800">
+      <div className="px-4 sm:px-5 pt-3 pb-2 bg-gradient-to-b from-[#F9954E]/10 to-transparent border-b border-neutral-100 dark:border-zinc-800">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
@@ -51,16 +51,16 @@ export default function OpenRouterRanking() {
           </div>
           <span className="text-[11px] text-neutral-400 whitespace-nowrap">{s.total}개 모델</span>
         </div>
-        <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-1">전 세계 사용량 · 지능 · 가격을 한눈에</p>
+        <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5">전 세계 사용량 · 지능 · 가격을 한눈에</p>
       </div>
 
       {/* 3열 동시 표시 */}
       <div className="grid grid-cols-3 divide-x divide-neutral-100 dark:divide-zinc-800">
 
         {/* 🔥 사용량 */}
-        <div className="px-3 sm:px-4 py-3">
-          <p className="text-[11px] font-extrabold text-neutral-700 dark:text-neutral-200 mb-2.5">🔥 사용량</p>
-          <ol className="space-y-2">
+        <div className="px-3 sm:px-4 py-2">
+          <p className="text-[11px] font-extrabold text-neutral-700 dark:text-neutral-200 mb-2">🔥 사용량</p>
+          <ol className="space-y-1.5">
             {usage.map((m, i) => (
               <li key={m.name} className="flex items-center gap-1.5">
                 <span className={`text-[11px] font-extrabold w-4 text-center shrink-0 ${i < 3 ? "text-[#F9954E]" : "text-neutral-300 dark:text-neutral-600"}`}>{i + 1}</span>
@@ -74,9 +74,9 @@ export default function OpenRouterRanking() {
         </div>
 
         {/* 🧠 지능 */}
-        <div className="px-3 sm:px-4 py-3">
-          <p className="text-[11px] font-extrabold text-neutral-700 dark:text-neutral-200 mb-2.5">🧠 지능</p>
-          <ol className="space-y-2">
+        <div className="px-3 sm:px-4 py-2">
+          <p className="text-[11px] font-extrabold text-neutral-700 dark:text-neutral-200 mb-2">🧠 지능</p>
+          <ol className="space-y-1.5">
             {intel.map((m, i) => {
               const max = Math.max(...intel.map((x) => x.score), 1);
               return (
@@ -98,9 +98,9 @@ export default function OpenRouterRanking() {
         </div>
 
         {/* 💰 가격 */}
-        <div className="px-3 sm:px-4 py-3">
-          <p className="text-[11px] font-extrabold text-neutral-700 dark:text-neutral-200 mb-2.5">💰 가격</p>
-          <ol className="space-y-2">
+        <div className="px-3 sm:px-4 py-2">
+          <p className="text-[11px] font-extrabold text-neutral-700 dark:text-neutral-200 mb-2">💰 가격</p>
+          <ol className="space-y-1.5">
             {price.map((m, i) => (
               <li key={m.name} className="flex items-center gap-1.5">
                 <span className={`text-[11px] font-extrabold w-4 text-center shrink-0 ${i < 3 ? "text-[#F9954E]" : "text-neutral-300 dark:text-neutral-600"}`}>{i + 1}</span>
@@ -115,7 +115,7 @@ export default function OpenRouterRanking() {
 
       </div>
 
-      <p className="px-4 sm:px-5 pb-2.5 text-[10px] text-neutral-400 border-t border-neutral-100 dark:border-zinc-800 pt-2">데이터: OpenRouter · 지능=Artificial Analysis · 가격=입력 토큰 100만 개당 USD</p>
+      <p className="px-4 sm:px-5 pb-2 text-[10px] text-neutral-400 border-t border-neutral-100 dark:border-zinc-800 pt-1.5">데이터: OpenRouter · 지능=Artificial Analysis · 가격=입력 토큰 100만 개당 USD</p>
     </div>
   );
 }

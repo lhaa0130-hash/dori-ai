@@ -33,8 +33,8 @@ export default function Header() {
 
   // 공지사항·건의사항은 메인 네비에서 숨김(푸터에 노출됨), 마켓은 노출
   const navItems = [
-    { name: "AI 도구", href: "/ai-tools", emoji: "🔧" },
     { name: "인사이트", href: "/insight", emoji: "🧠" },
+    { name: "AI 도구", href: "/ai-tools", emoji: "🔧" },
     { name: "피드", href: "/feed", emoji: "💬" },
     { name: "마켓", href: "/market", emoji: "🛒" },
     { name: "미니게임", href: "/minigame", emoji: "🎮" },
