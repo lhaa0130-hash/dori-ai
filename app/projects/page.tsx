@@ -1,24 +1,16 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, CheckCircle2 } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { PROJECTS } from "@/constants/projectsData";
 
 const STATUS_STYLE: Record<string, string> = {
-  "오픈":       "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400",
-  "지금 무료":  "bg-emerald-100 dark:bg-emerald-900/30 text-emerald-700 dark:text-emerald-400",
-  "이용 가능":  "bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-400",
-  "테스트 중":  "bg-amber-100 dark:bg-amber-900/20 text-amber-700 dark:text-amber-400",
-  "준비 중":    "bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400",
-  "기획 중":    "bg-neutral-100 dark:bg-zinc-800 text-neutral-400 dark:text-neutral-500",
-};
-
-const CARD_BG: Record<string, string> = {
-  "illo":      "from-orange-50 to-white dark:from-orange-900/10 dark:to-zinc-950",
-  "trader":    "from-blue-50 to-white dark:from-blue-900/10 dark:to-zinc-950",
-  "flat-form": "from-sky-50 to-white dark:from-sky-900/10 dark:to-zinc-950",
-  "animal":    "from-emerald-50 to-white dark:from-emerald-900/10 dark:to-zinc-950",
-  "family":    "from-purple-50 to-white dark:from-purple-900/10 dark:to-zinc-950",
+  "오픈":       "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20",
+  "지금 무료":  "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20",
+  "이용 가능":  "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20",
+  "테스트 중":  "text-neutral-500 dark:text-neutral-400 bg-neutral-100 dark:bg-zinc-800",
+  "준비 중":    "text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-zinc-800",
+  "기획 중":    "text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-zinc-800",
 };
 
 export default function ProjectsPage() {
@@ -29,20 +21,55 @@ export default function ProjectsPage() {
     <main className="w-full min-h-screen">
 
       {/* ── 히어로 ── */}
-      <section className="pt-8 pb-10 border-b border-neutral-100 dark:border-zinc-900">
-        <p className="text-[12px] font-semibold text-[#F9954E] mb-3">프로젝트</p>
-        <h1 className="text-[36px] sm:text-[48px] font-extrabold text-neutral-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
-          DORI-AI가<br />만드는 것들
+      <section className="pt-8 pb-8 border-b border-neutral-100 dark:border-zinc-900">
+        <p className="text-[11px] font-bold text-[#F9954E] mb-3 tracking-wide uppercase">Projects by illo</p>
+        <h1 className="text-[34px] sm:text-[44px] font-extrabold text-neutral-950 dark:text-white leading-[1.12] tracking-tight mb-2 break-keep">
+          AI로 만드는<br />실용 서비스들
         </h1>
-        <p className="text-[14px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
-          AI를 실생활에 녹인 5가지 서비스예요. 이용 가능한 건 지금 바로 써보세요.
+        <p className="text-[14px] text-neutral-400 dark:text-neutral-500 leading-relaxed break-keep">
+          illo가 직접 기획·개발·운영하는 AI 서비스예요.<br />
+          원하는 서비스가 있다면 의뢰도 받습니다.
         </p>
       </section>
 
-      {/* ── 이용 가능 프로젝트 ── */}
+      {/* ── 의뢰하기 배너 ── */}
+      <section className="py-6 border-b border-neutral-100 dark:border-zinc-900">
+        <div className="rounded-2xl border border-neutral-200 dark:border-zinc-800 p-5">
+          <div className="flex items-start justify-between gap-4">
+            <div className="flex-1 min-w-0">
+              <p className="text-[13px] font-extrabold text-neutral-900 dark:text-white mb-1">맞춤 프로젝트 의뢰하기</p>
+              <p className="text-[12px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+                아이디어가 있으시면 저희가 AI 서비스로 만들어 드려요.
+              </p>
+              {/* 의뢰 시 필요한 정보 */}
+              <ul className="mt-3 space-y-1">
+                {[
+                  "해결하고 싶은 문제 또는 만들고 싶은 서비스",
+                  "주요 기능 목록 (간단히 적어도 됩니다)",
+                  "대상 사용자와 사용 환경",
+                  "원하는 일정과 예산 범위",
+                ].map((item) => (
+                  <li key={item} className="flex items-start gap-2 text-[11.5px] text-neutral-500 dark:text-neutral-400">
+                    <span className="text-neutral-300 dark:text-zinc-600 mt-0.5 shrink-0">—</span>
+                    {item}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </div>
+          <a
+            href="mailto:lhaa0130@gmail.com?subject=프로젝트 의뢰&body=안녕하세요, 프로젝트를 의뢰하고 싶습니다.%0A%0A[해결하고 싶은 문제]%0A%0A[주요 기능]%0A%0A[대상 사용자]%0A%0A[일정/예산]"
+            className="mt-4 flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-neutral-950 dark:bg-white text-white dark:text-neutral-950 text-[13px] font-extrabold transition-opacity active:opacity-80"
+          >
+            이메일로 의뢰하기 <ArrowRight className="w-3.5 h-3.5" />
+          </a>
+        </div>
+      </section>
+
+      {/* ── 진행 중인 프로젝트 ── */}
       <section className="py-8">
-        <p className="text-[12px] font-bold text-neutral-400 mb-5">지금 이용 가능 · {active.length}개</p>
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
+        <p className="text-[11px] font-bold text-neutral-400 dark:text-zinc-600 uppercase tracking-wide mb-5">운영 중 · {active.length}개</p>
+        <div className="flex flex-col gap-4">
           {active.map((p) => {
             const now = new Date();
             const isOpen = !p.launchDate || now >= new Date(p.launchDate);
@@ -53,60 +80,53 @@ export default function ProjectsPage() {
             return (
               <div
                 key={p.slug}
-                className={`flex flex-col rounded-3xl border border-neutral-100 dark:border-zinc-800 bg-gradient-to-br ${CARD_BG[p.slug] ?? "from-neutral-50 to-white dark:from-zinc-900 dark:to-zinc-950"} overflow-hidden`}
+                className="flex flex-col rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden"
               >
                 {/* 카드 헤더 */}
-                <div className="px-6 pt-6 pb-4 border-b border-neutral-100 dark:border-zinc-800">
-                  <div className="flex items-start justify-between gap-3 mb-3">
-                    <div className="w-14 h-14 rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 flex items-center justify-center text-[32px] shadow-sm flex-shrink-0 overflow-hidden">
-                      {p.image
-                        ? <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
-                        : p.emoji}
+                <div className="px-5 pt-5 pb-4 border-b border-neutral-100 dark:border-zinc-800">
+                  <div className="flex items-center justify-between gap-3 mb-3">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-neutral-100 dark:bg-zinc-900 flex items-center justify-center text-[22px] flex-shrink-0 overflow-hidden">
+                        {p.image
+                          ? <img src={p.image} alt={p.name} className="w-full h-full object-cover" />
+                          : p.emoji}
+                      </div>
+                      <div>
+                        <h2 className="text-[16px] font-extrabold text-neutral-950 dark:text-white leading-tight">{p.name}</h2>
+                        <span className="text-[10px] text-neutral-400 dark:text-zinc-500">{p.tag}</span>
+                      </div>
                     </div>
-                    <div className="flex flex-col items-end gap-1.5 flex-shrink-0">
-                      <span className={`text-[10px] font-extrabold px-2.5 py-1 rounded-full ${STATUS_STYLE[p.status]}`}>{p.status}</span>
-                      <span className="text-[10px] font-semibold text-neutral-400 dark:text-zinc-500">{p.tag}</span>
-                    </div>
+                    <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full shrink-0 ${STATUS_STYLE[p.status] ?? ""}`}>{p.status}</span>
                   </div>
-                  <h2 className="text-[20px] font-extrabold text-neutral-950 dark:text-white leading-snug mb-1.5">{p.name}</h2>
                   <p className="text-[13px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">{p.desc}</p>
                 </div>
 
                 {/* 기능 목록 */}
-                <div className="px-6 py-4 flex-1">
-                  <ul className="space-y-2.5">
+                <div className="px-5 py-4 flex-1">
+                  <ul className="space-y-2">
                     {p.features.map((f) => (
-                      <li key={f.title} className="flex items-start gap-2.5">
-                        <span className="text-[16px] leading-none mt-0.5 flex-shrink-0">{f.icon}</span>
+                      <li key={f.title} className="flex items-start gap-2">
+                        <span className="text-[14px] leading-none mt-0.5 flex-shrink-0">{f.icon}</span>
                         <div className="min-w-0">
-                          <span className="text-[13px] font-bold text-neutral-900 dark:text-white">{f.title}</span>
+                          <span className="text-[12.5px] font-bold text-neutral-900 dark:text-white">{f.title}</span>
                           <span className="text-[12px] text-neutral-500 dark:text-neutral-400"> — {f.detail}</span>
                         </div>
                       </li>
                     ))}
                   </ul>
-
-                  {/* 태그 */}
-                  <div className="flex flex-wrap gap-1.5 mt-4">
-                    {p.tags.map((t) => (
-                      <span key={t} className="text-[11px] font-semibold px-2.5 py-1 rounded-full bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-neutral-500 dark:text-neutral-400">
-                        {t}
-                      </span>
-                    ))}
-                  </div>
                 </div>
 
                 {/* CTA */}
-                <div className="px-6 pb-6">
+                <div className="px-5 pb-5">
                   {p.launchHref && isOpen ? (
                     <Link
                       href={p.launchHref}
-                      className="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl bg-[#F9954E] text-white text-[14px] font-extrabold active:opacity-85 transition-opacity"
+                      className="flex items-center justify-center gap-2 w-full py-3 rounded-xl border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-neutral-900 dark:text-white text-[13px] font-bold transition-colors hover:border-neutral-400 dark:hover:border-zinc-500"
                     >
-                      {openLabel} <ArrowRight className="w-4 h-4" />
+                      {openLabel} <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   ) : (
-                    <div className="flex items-center justify-center gap-2 w-full py-3.5 rounded-2xl bg-neutral-100 dark:bg-zinc-800 text-neutral-400 dark:text-neutral-500 text-[14px] font-extrabold cursor-not-allowed">
+                    <div className="flex items-center justify-center w-full py-3 rounded-xl bg-neutral-50 dark:bg-zinc-900 text-neutral-300 dark:text-zinc-600 text-[13px] font-bold cursor-not-allowed">
                       {openLabel}
                     </div>
                   )}
@@ -120,32 +140,26 @@ export default function ProjectsPage() {
       {/* ── 준비 중 ── */}
       {soon.length > 0 && (
         <section className="pb-12">
-          <p className="text-[12px] font-bold text-neutral-400 mb-4">준비 중</p>
-          <div className="flex flex-col gap-3">
+          <p className="text-[11px] font-bold text-neutral-400 dark:text-zinc-600 uppercase tracking-wide mb-4">준비 중</p>
+          <div className="flex flex-col gap-2.5">
             {soon.map((p) => (
               <div
                 key={p.slug}
-                className="flex items-start gap-4 p-5 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-neutral-50/60 dark:bg-zinc-950"
+                className="flex items-start gap-4 px-5 py-4 rounded-2xl border border-neutral-100 dark:border-zinc-900"
               >
-                <div className="w-12 h-12 rounded-xl bg-neutral-100 dark:bg-zinc-900 flex items-center justify-center text-[24px] flex-shrink-0 grayscale opacity-70">
+                <div className="w-9 h-9 rounded-lg bg-neutral-100 dark:bg-zinc-900 flex items-center justify-center text-[18px] flex-shrink-0 grayscale opacity-50">
                   {p.emoji}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <div className="flex items-center gap-2 mb-1">
-                    <span className="text-[15px] font-extrabold text-neutral-700 dark:text-neutral-300">{p.name}</span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-400">준비 중</span>
+                  <div className="flex items-center gap-2 mb-0.5">
+                    <span className="text-[14px] font-extrabold text-neutral-600 dark:text-neutral-400">{p.name}</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-400 dark:text-zinc-600">{p.status}</span>
                   </div>
-                  <p className="text-[12px] text-neutral-400 dark:text-zinc-500 break-keep leading-relaxed">{p.desc}</p>
-                  <div className="flex flex-wrap gap-1 mt-2">
-                    {p.tags.map((t) => (
-                      <span key={t} className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-400">{t}</span>
-                    ))}
-                  </div>
+                  <p className="text-[12px] text-neutral-400 dark:text-zinc-600 break-keep leading-relaxed">{p.desc}</p>
                 </div>
               </div>
             ))}
           </div>
-          <p className="mt-5 text-center text-[12px] text-neutral-300 dark:text-zinc-600">공개 일정은 공지사항에서 안내해 드릴게요.</p>
         </section>
       )}
     </main>
