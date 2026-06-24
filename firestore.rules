@@ -137,5 +137,12 @@ service cloud.firestore {
       allow write: if true;
       match /days/{date} { allow read: if true; allow write: if true; }
     }
+
+    // 건의사항 — 누구나 작성, 운영자 일일 디제스트용 읽기 허용(피드백이라 저민감), 수정/삭제는 관리자만
+    match /suggestions/{id} {
+      allow create: if true;
+      allow read:   if true;
+      allow update, delete: if isAdmin();
+    }
   }
 }

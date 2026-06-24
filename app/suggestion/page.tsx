@@ -2,6 +2,8 @@
 
 import { useState, useEffect } from "react";
 import { MessageSquarePlus, Send, Trash2, ChevronDown } from "lucide-react";
+import { getFirebaseFirestore } from "@/lib/firebase";
+import { collection, addDoc } from "firebase/firestore";
 
 type SuggestionType = "건의사항" | "버그 제보" | "기능 요청" | "기타";
 type SuggestionPriority = "낮음" | "보통" | "높음";
@@ -41,7 +43,7 @@ export default function SuggestionPage() {
         setSuggestions(getSuggestions());
     }, []);
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!name.trim() || !message.trim()) { alert("이름과 내용을 입력해주세요."); return; }
         if (message.trim().length < 10) { alert("내용은 10자 이상 입력해주세요."); return; }
@@ -52,6 +54,13 @@ export default function SuggestionPage() {
             message: message.trim(),
             createdAt: new Date().toISOString(),
         };
+        // 서버(Firestore)에도 저장 — 운영자에게 매일 요약 전달용(실패해도 UX는 진행)
+        try {
+            await addDoc(collection(getFirebaseFirestore(), "suggestions"), {
+                name: newItem.name, type, priority, message: newItem.message, createdAt: newItem.createdAt,
+            });
+        } catch (err) { console.error("suggestion firestore write failed", err); }
+
         const updated = [newItem, ...suggestions];
         setSuggestions(updated);
         saveSuggestions(updated);
