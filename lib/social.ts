@@ -242,6 +242,62 @@ export async function savePsychResult(r: Omit<PsychResult, "at">): Promise<boole
   } catch { return false; }
 }
 
+// ─── 심리테스트 결과 이력(완료 날짜·점수) — psychLogs/{uid} 본인만 읽기/쓰기(비공개) ───
+// 재검사 시 지난 결과와 비교하기 위한 시계열 기록. (민감정보라 공개 프로필과 분리)
+export interface PsychLog {
+  at: number;       // 완료 시각(ms)
+  testId: string;
+  score: number;    // 표시 점수(합산 또는 평균)
+  max: number;      // 만점(척도 최대)
+  pct: number;      // 0~100 환산(검사 간 비교용)
+  label: string;    // 결과 구간 라벨
+}
+
+function sameDay(a: number, b: number): boolean {
+  const d1 = new Date(a), d2 = new Date(b);
+  return d1.getFullYear() === d2.getFullYear() && d1.getMonth() === d2.getMonth() && d1.getDate() === d2.getDate();
+}
+
+/**
+ * 결과를 이력에 기록하고, 비교용 '직전 결과'를 돌려줌.
+ * - 같은 날 같은 검사를 또 하면 그날 기록을 갱신(중복 누적 방지)하고, 그 전 회차를 비교 대상으로 반환.
+ * - 비로그인 → null.
+ */
+export async function appendPsychLog(entry: Omit<PsychLog, "at">): Promise<{ prev: PsychLog | null; saved: PsychLog } | null> {
+  const uid = currentUid();
+  if (!uid || !entry.testId) return null;
+  try {
+    const ref = doc(db(), "psychLogs", uid);
+    const snap = await getDoc(ref);
+    const all: PsychLog[] = Array.isArray(snap.data()?.logs) ? (snap.data()!.logs as PsychLog[]) : [];
+    const saved: PsychLog = {
+      at: Date.now(),
+      testId: String(entry.testId).slice(0, 40),
+      score: Number(entry.score) || 0,
+      max: Number(entry.max) || 0,
+      pct: Math.max(0, Math.min(100, Math.round(Number(entry.pct) || 0))),
+      label: String(entry.label || "").slice(0, 40),
+    };
+    const sameTest = all.filter((l) => l.testId === saved.testId).sort((a, b) => a.at - b.at);
+    const last = sameTest[sameTest.length - 1] || null;
+    let prev: PsychLog | null;
+    if (last && sameDay(last.at, saved.at)) {
+      prev = sameTest[sameTest.length - 2] || null; // 같은 날 재검사 → 그 전 회차와 비교
+      const idx = all.indexOf(last);
+      if (idx >= 0) all[idx] = saved;
+      else all.push(saved);
+    } else {
+      prev = last;
+      all.push(saved);
+    }
+    const trimmed = all.sort((a, b) => a.at - b.at).slice(-80); // 최근 80건 유지
+    await setDoc(ref, { logs: trimmed, updatedAt: serverTimestamp() }, { merge: true });
+    return { prev, saved };
+  } catch {
+    return null;
+  }
+}
+
 // ─── 다이어리(일기장) — 본인 users/{uid}.diary 배열(규칙 변경 불필요, 소유자 쓰기) ───
 /** 다이어리 한 줄 추가(최신 30개 유지) */
 export async function addDiaryEntry(text: string, mood = ""): Promise<DiaryEntry[] | null> {

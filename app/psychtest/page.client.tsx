@@ -2,7 +2,7 @@
 
 // 심리테스트 허브 — 검증된 임상/연구 척도 기반 점수형 테스트 + 가벼운 유형 테스트.
 // 단일 라우트에서 허브 → 인트로 → 문항 → 결과를 상태로 전환(정적 export 호환).
-import { useState, type ReactNode } from "react";
+import { useState, useEffect, useRef, type ReactNode } from "react";
 import Link from "next/link";
 import { RotateCcw, ArrowRight, ArrowLeft, ChevronRight, Info, ShieldAlert, Lock, Share2, BookmarkPlus, Check } from "lucide-react";
 import {
@@ -10,7 +10,7 @@ import {
   type PsychTest, type ScoredTest, type TypedTest, type MultiTest, type Tone,
 } from "@/lib/psychTests";
 import { shareResultCard, type CardData } from "@/lib/shareCard";
-import { savePsychResult, type PsychResult } from "@/lib/social";
+import { savePsychResult, appendPsychLog, type PsychResult, type PsychLog } from "@/lib/social";
 import { getFirebaseAuth } from "@/lib/firebase";
 
 const TONE: Record<Tone, { ring: string; text: string; bar: string; soft: string }> = {
@@ -52,6 +52,11 @@ function Hub({ onPick }: { onPick: (id: string) => void }) {
           전 세계 임상·연구 현장에서 쓰이는 심리검사 척도를 그대로 옮겼어요.<br />
           결과는 진단이 아닌 자기점검이며, 응답은 내 기기에서만 계산돼요.
         </p>
+        <div className="flex flex-wrap gap-2 mt-4">
+          <span className="inline-flex items-center gap-1 text-[12px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 px-2.5 py-1 rounded-full">💸 완전 무료</span>
+          <span className="inline-flex items-center gap-1 text-[12px] font-bold text-[#F9954E] bg-[#F9954E]/10 px-2.5 py-1 rounded-full">⏱️ 회원가입 1분</span>
+          <span className="inline-flex items-center gap-1 text-[12px] font-bold text-neutral-500 dark:text-neutral-400 bg-neutral-100 dark:bg-zinc-900 px-2.5 py-1 rounded-full">📈 결과 저장·변화 추적</span>
+        </div>
       </section>
 
       {/* ── 카테고리별 검사 ── */}
@@ -130,7 +135,7 @@ function Hub({ onPick }: { onPick: (id: string) => void }) {
         <div className="flex items-start gap-2.5 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-neutral-50 dark:bg-zinc-900/50 px-5 py-4">
           <Lock className="w-4 h-4 text-neutral-400 mt-0.5 shrink-0" />
           <p className="text-[12px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
-            모든 검사는 <b>선별·자기점검</b> 목적이며 의학적 진단이 아니에요. 응답은 <b>내 기기에서만</b> 계산되고 어디에도 저장·전송되지 않아요. 걱정되는 점이 있다면 전문가 상담을 권해요.
+            모든 검사는 <b>완전 무료</b>이며 <b>선별·자기점검</b> 목적이에요(의학적 진단 아님). 응답은 기기에서만 계산되고, <b>회원가입(1분)</b> 시에만 내 결과 이력이 <b>본인만 볼 수 있게</b> 저장돼 다음 검사 때 변화를 비교해드려요. 걱정되는 점이 있다면 전문가 상담을 권해요.
           </p>
         </div>
       </section>
@@ -261,6 +266,16 @@ function ScoredResult({ test, answers, onBack, onRetry }: { test: ScoredTest; an
           <p className="text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep">{band.advice}</p>
         </div>
       </div>
+
+      {/* 결과 저장 + 지난 결과 비교 */}
+      <ScoreTracker
+        testId={test.id}
+        scoreNum={parseFloat(displayScore)}
+        max={parseFloat(unitLabel)}
+        pct={pct}
+        label={band.label}
+        higherWorse={higherWorse}
+      />
 
       {/* 위기 자원 */}
       {test.crisis && (
@@ -532,6 +547,94 @@ function MultiResult({ test, answers, onBack, onRetry }: { test: MultiTest; answ
         <RotateCcw className="w-3.5 h-3.5" /> 다시 하기
       </button>
     </main>
+  );
+}
+
+/* ───────────────────────── 결과 저장 + 지난 결과 비교 ───────────────────────── */
+function fmtDate(ms: number): string {
+  try { return new Date(ms).toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" }); }
+  catch { return ""; }
+}
+
+function ScoreTracker({ testId, scoreNum, max, pct, label, higherWorse }: {
+  testId: string; scoreNum: number; max: number; pct: number; label: string; higherWorse: boolean;
+}) {
+  const [state, setState] = useState<"loading" | "loggedout" | "done">("loading");
+  const [prev, setPrev] = useState<PsychLog | null>(null);
+  const [savedAt, setSavedAt] = useState<number>(0);
+  const ran = useRef(false);
+
+  useEffect(() => {
+    if (ran.current) return;
+    ran.current = true;
+    let uid: string | null = null;
+    try { uid = getFirebaseAuth().currentUser?.uid || null; } catch { uid = null; }
+    if (!uid) { setState("loggedout"); return; }
+    appendPsychLog({ testId, score: scoreNum, max, pct, label }).then((res) => {
+      if (res) { setPrev(res.prev); setSavedAt(res.saved.at); setState("done"); }
+      else setState("loggedout");
+    });
+  }, [testId, scoreNum, max, pct, label]);
+
+  if (state === "loading") return null;
+
+  if (state === "loggedout") {
+    return (
+      <div className="rounded-2xl border border-[#F9954E]/30 bg-[#F9954E]/5 px-5 py-4 mt-3">
+        <p className="text-[13px] font-extrabold text-neutral-900 dark:text-white mb-1">결과를 저장하고 변화를 추적하세요</p>
+        <p className="text-[12.5px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep mb-3">
+          <b className="text-[#F9954E]">회원가입은 1분, 완전 무료</b>예요. 가입하면 오늘 결과가 날짜와 함께 저장되고, 다음에 다시 검사하면 <b>지난 결과와 얼마나 달라졌는지</b> 비교해드려요.
+        </p>
+        <Link href="/login?next=/psychtest" className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl bg-[#F9954E] text-white text-[13px] font-bold active:opacity-85">
+          1분 만에 무료 가입하고 저장하기 <ArrowRight className="w-3.5 h-3.5" />
+        </Link>
+      </div>
+    );
+  }
+
+  // done
+  if (!prev) {
+    return (
+      <div className="flex items-start gap-2 rounded-2xl bg-emerald-50 dark:bg-emerald-950/30 border border-emerald-100 dark:border-emerald-900/40 px-4 py-3 mt-3">
+        <Check className="w-4 h-4 text-emerald-500 mt-0.5 shrink-0" />
+        <p className="text-[12.5px] text-emerald-700 dark:text-emerald-300 leading-relaxed break-keep">
+          오늘 결과를 저장했어요 ({fmtDate(savedAt)}). 다음에 다시 검사하면 <b>이번 결과와 비교</b>해드릴게요.
+        </p>
+      </div>
+    );
+  }
+
+  // 비교
+  const delta = pct - prev.pct; // 0~100 기준 변화
+  const betterWhenLower = higherWorse;
+  const improved = betterWhenLower ? delta < 0 : delta > 0;
+  const same = Math.abs(delta) < 5;
+  const tone = same ? "mild" : improved ? "good" : "high";
+  const headline = same ? "지난번과 비슷해요" : improved ? "지난번보다 좋아졌어요" : "지난번보다 더 높아졌어요";
+  const arrow = delta === 0 ? "→" : delta > 0 ? "▲" : "▼";
+
+  return (
+    <div className={`rounded-2xl border ${TONE[tone].ring} bg-white dark:bg-zinc-950 px-5 py-4 mt-3`}>
+      <p className="text-[11px] font-bold text-neutral-400 mb-2">📈 지난 결과와 비교</p>
+      <div className="flex items-center justify-between gap-2 mb-2">
+        <div className="text-center flex-1">
+          <p className="text-[11px] text-neutral-400 mb-0.5">{fmtDate(prev.at)}</p>
+          <p className="text-[15px] font-extrabold text-neutral-500 dark:text-neutral-400 tabular-nums">{prev.score}</p>
+          <p className="text-[11px] text-neutral-400 truncate">{prev.label}</p>
+        </div>
+        <div className="text-center px-2">
+          <p className={`text-[18px] font-extrabold ${TONE[tone].text}`}>{arrow}</p>
+          <p className={`text-[11px] font-bold ${TONE[tone].text} tabular-nums`}>{delta > 0 ? "+" : ""}{Math.round(delta)}%p</p>
+        </div>
+        <div className="text-center flex-1">
+          <p className="text-[11px] text-[#F9954E] font-bold mb-0.5">오늘</p>
+          <p className={`text-[15px] font-extrabold tabular-nums ${TONE[tone].text}`}>{scoreNum}</p>
+          <p className="text-[11px] text-neutral-500 dark:text-neutral-300 truncate">{label}</p>
+        </div>
+      </div>
+      <p className={`text-center text-[13px] font-extrabold ${TONE[tone].text} mt-1`}>{headline}</p>
+      <p className="text-center text-[11px] text-neutral-400 mt-1">결과가 저장됐어요 · {fmtDate(savedAt)}</p>
+    </div>
   );
 }
 
