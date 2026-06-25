@@ -11663,7 +11663,7 @@
     "sci": "Anser anser",
     "en": "Domestic Goose",
     "search_nickname": "긴목 거위",
-    "kid_friendly_desc": "거위는 목이 길고 몸이 흰 색인 새예요. 보통 사람과 함께 살며, 낯선 사람이 오면 울기도 해요. 거위는 40년 이상 살 수 있고, 무엇이든 잘 먹어요!",
+    "kid_friendly_desc": "거위는 목이 길고 몸이 흰 색인 새예요. 보통 사람과 함께 살며, 낯선 사람이 오면 울기도 해요. 거위는 20년 가까이 살 수 있고, 무엇이든 잘 먹어요!",
     "status": {
       "label": "정보부족",
       "code": "DD",
@@ -11690,7 +11690,7 @@
       [
         "✨",
         "수명",
-        "40-50년"
+        "10~20년"
       ]
     ],
     "facts": [
@@ -12119,7 +12119,7 @@
       "code": "LC",
       "color": "#5BA86B"
     },
-    "taxonomy": "동물계 › 척삭동물문 › 조류강 › 펭귄목 › 펭귄과 › 젠투펭귄속",
+    "taxonomy": "동물계 › 척삭동물문 › 조류강 › 펭귄목 › 펭귄과 › Pygoscelis속",
     "subspecies": "",
     "info": [
       [
@@ -19292,7 +19292,7 @@
       "code": "DD",
       "color": "#9E9E9E"
     },
-    "taxonomy": "동물계 › 척삭동물문 › 조류강 › 펭귄목 › 펭귄과 › 젠투펭귄속",
+    "taxonomy": "동물계 › 척삭동물문 › 조류강 › 펭귄목 › 펭귄과 › Pygoscelis속",
     "subspecies": "",
     "info": [
       [
@@ -22118,7 +22118,7 @@
       "code": "LC",
       "color": "#5BA86B"
     },
-    "taxonomy": "동물계 › 척삭동물문 › 조강 › 펭귄목 › 펭귄과 › 임금펭귄속",
+    "taxonomy": "동물계 › 척삭동물문 › 조강 › 펭귄목 › 펭귄과 › Aptenodytes속",
     "subspecies": "",
     "info": [
       [
