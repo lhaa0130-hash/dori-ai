@@ -44,13 +44,8 @@ export default function LayoutClient({ children }: LayoutClientProps) {
     return <>{children}</>;
   }
 
-  // 임베드형 전체화면 미니게임 — 사이트 헤더/사이드 광고 없이 셸(EmbeddedGame) 통째 렌더
-  if (
-    pathname?.startsWith("/minigame/galaxy") ||
-    pathname?.startsWith("/minigame/cute2048") ||
-    pathname?.startsWith("/minigame/gem") ||
-    pathname?.startsWith("/minigame/boss")
-  ) {
+  // 미니게임 인게임 — 헤더/사이드 광고/패딩 없이 풀스크린 렌더 (인덱스 /minigame 는 제외)
+  if (pathname?.startsWith("/minigame/")) {
     return <>{children}</>;
   }
 

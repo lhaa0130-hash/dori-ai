@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Thu, 25 Jun 2026 11:11:21 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 25 Jun 2026 13:51:32 GMT</lastBuildDate>
+    <item>
+      <title>아마존, 인도에 130억 달러 AI 인프라 투자 — 글로벌 기술 기업의 경쟁</title>
+      <link>https://dori-ai.com/insight/article/trend-168</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-168</guid>
+      <category>트렌드</category>
+      <pubDate>Thu, 25 Jun 2026 13:00:23 GMT</pubDate>
+      <description>아마존이 인도에 130억 달러를 투자하며 AI 인프라 구축에 박차를 가하고 있다. 이는 글로벌 기술 기업 간의 AI 경쟁이 심화되고 있음을 시사한다.</description>
+    </item>
     <item>
       <title>OpenAI의 맞춤형 칩, 인공지능의 새로운 전환점</title>
       <link>https://dori-ai.com/insight/article/trend-167</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Mon, 22 Jun 2026 07:00:18 GMT</pubDate>
       <description>사티아 나델라가 AI의 발전이 경제에 미치는 영향에 대해 경고하며 새로운 규제 필요성을 강조했다.</description>
-    </item>
-    <item>
-      <title>California 미신고 고위험 AI가 드러낸 복지 행정 자동화의 위험</title>
-      <link>https://dori-ai.com/insight/article/analysis-8</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/analysis-8</guid>
-      <category>분석</category>
-      <pubDate>Mon, 22 Jun 2026 05:02:38 GMT</pubDate>
-      <description>미국 주정부와 지방정부가 복지, 의료, 교육 행정에 AI를 빠르게 들여오고 있다. 문제는 기술 도입 속도보다 감시와 책임 구조가 훨씬 느리다는 점이다.</description>
     </item>
   </channel>
 </rss>

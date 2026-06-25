@@ -22,8 +22,36 @@ import {
   type Comment,
 } from "@/lib/social";
 import { uploadFeedMedia } from "@/lib/storage";
+import { MARKET_PRODUCTS, SOURCE_META, CATEGORY_EMOJI, buildMarketUrl } from "@/constants/marketData";
 
 const POINT = "#F9954E";
+
+// 피드 광고용 상품 풀 (hot 우선, 최대 6개 순환)
+const AD_PRODUCTS = [...MARKET_PRODUCTS.filter(p => p.hot), ...MARKET_PRODUCTS.filter(p => !p.hot)].slice(0, 6);
+
+function FeedAdCard({ index }: { index: number }) {
+  const p = AD_PRODUCTS[index % AD_PRODUCTS.length];
+  if (!p) return null;
+  const src = SOURCE_META[p.source];
+  return (
+    <li className="rounded-2xl border border-[#F9954E]/20 bg-[#FFF8EE] dark:bg-[#1a0d00] p-4">
+      <div className="flex items-center justify-between mb-2">
+        <span className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wide">스폰서</span>
+        <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${src.cls}`}>{src.label}</span>
+      </div>
+      <a href={buildMarketUrl(p)} target="_blank" rel="sponsored noopener noreferrer" className="flex items-center gap-3 group">
+        <div className="w-12 h-12 rounded-xl bg-white dark:bg-zinc-900 border border-[#F9954E]/20 flex items-center justify-center text-[26px] flex-shrink-0">
+          {p.emoji || CATEGORY_EMOJI[p.category] || "🛍️"}
+        </div>
+        <div className="flex-1 min-w-0">
+          <p className="text-[13px] font-extrabold text-neutral-900 dark:text-white truncate group-hover:text-[#F9954E] transition-colors">{p.name}</p>
+          <p className="text-[11px] text-neutral-500 dark:text-neutral-400 line-clamp-1 mt-0.5">{p.summary}</p>
+        </div>
+        <span className="text-[12px] font-bold text-[#F9954E] flex-shrink-0">보기 →</span>
+      </a>
+    </li>
+  );
+}
 
 const VIS_LABEL: Record<FeedVisibility, string> = {
   public: "전체",
@@ -425,9 +453,13 @@ export default function FeedPage() {
           </div>
         ) : (
           <ul className="space-y-3">
-            {shownPosts.map((post) => {
+            {shownPosts.map((post, idx) => {
               const mine = !!uid && post.uid === uid;
               return (
+                <>
+                  {idx > 0 && idx % 5 === 0 && AD_PRODUCTS.length > 0 && (
+                    <FeedAdCard key={`ad-${idx}`} index={Math.floor(idx / 5) - 1} />
+                  )}
                 <li
                   key={post.id}
                   className="rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-4"
@@ -591,6 +623,7 @@ export default function FeedPage() {
                     </div>
                   )}
                 </li>
+                </>
               );
             })}
           </ul>
