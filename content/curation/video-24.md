@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-24.jpg"
 tags: [영상, AI추천, 개발, 입문·기초, Awesome]
 videoId: UTKVB_tlyFw
+videoDate: 2026-06-22T10:00:12Z
 ---
 
 ![@Awesome](https://yt3.ggpht.com/fkqTwkC52t-y6qbkUBw4cn-ZLXSuxHd1nwa_HDoL3LConFxObxoPxx0p5htk8k1gh0HyY8Di5_I=s240-c-k-c0x00ffffff-no-rj) **Awesome** · 구독자 13.1만명 · 영상 339개

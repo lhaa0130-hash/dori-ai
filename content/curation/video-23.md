@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-23.jpg"
 tags: [영상, AI추천, 영상 제작, 실무 활용, IB 96]
 videoId: xUVsjZ-wZWE
+videoDate: 2026-06-17T06:00:07Z
 ---
 
 ![@IB 96](https://yt3.ggpht.com/ytc/AIdro_m4gD2W6juYhMrtMjHW-HkW7cEW3Y7BZnBqwv3Rh3L7J4g=s240-c-k-c0x00ffffff-no-rj) **IB 96** · 구독자 83.1만명 · 영상 3,707개

@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-25.jpg"
 tags: [영상, AI추천, 반도체, 최신 뉴스, 언더스탠딩 : 세상의 모든 지식]
 videoId: XKAhMLlV00U
+videoDate: 2026-06-24T12:25:12Z
 ---
 
 ![@언더스탠딩 : 세상의 모든 지식](https://yt3.ggpht.com/3tb87e8MoRwETS2wd4gZpsE4DMWYILkGJwKdGHyMAL0wRV9bTsYNdbiDIh7-v2gaRM3Vdizg=s240-c-k-c0x00ffffff-no-rj) **언더스탠딩 : 세상의 모든 지식** · 구독자 135만명 · 영상 4,319개

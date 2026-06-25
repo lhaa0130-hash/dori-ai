@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-27.jpg"
 tags: [영상, AI추천, 역사, 논문·연구, Neso Academy]
 videoId: _jaV6DKFEg8
+videoDate: 2026-06-23T13:30:12Z
 ---
 
 ![@Neso Academy](https://yt3.ggpht.com/1iRrlRhV7RMLlyeLSeYaHjtvql01jATABgZtWeX3GyFcJJNNYp3ICYPgdyUOE6U4Y4PLXee594Q=s240-c-k-c0x00ffffff-no-rj) **Neso Academy** · 구독자 320만명 · 영상 3,021개

@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-26.jpg"
 tags: [영상, AI추천, GPT, 입문·기초, Caleb Writes Code]
 videoId: 7gkaWaDEpHg
+videoDate: 2026-06-23T16:49:54Z
 ---
 
 ![@Caleb Writes Code](https://yt3.ggpht.com/eIYT_o7lSWYrG74iSlDOWBbmrsgKdyMCL5WQ1PexM9DuuE5FuWxFj6Zqt1UamO2TAlUKwh78JQ=s240-c-k-c0x00ffffff-no-rj) **Caleb Writes Code** · 구독자 8.8만명 · 영상 97개

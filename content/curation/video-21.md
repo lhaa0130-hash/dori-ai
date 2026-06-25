@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-21.jpg"
 tags: [영상, AI추천, AI 아키텍처, 최신 뉴스, Nana Janashia]
 videoId: PmpFmclctuM
+videoDate: 2026-06-23T16:31:04Z
 ---
 
 ![@Nana Janashia](https://yt3.ggpht.com/eoiE4Ij15fiJ5CNTVJK8Ji4M0BquBFElzaob_FrTi9odrSAUbCOr-VxaQJzODf0JXeCY33RijFY=s240-c-k-c0x00ffffff-no-rj) **Nana Janashia** · 구독자 1.5만명 · 영상 90개

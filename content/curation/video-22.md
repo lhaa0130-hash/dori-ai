@@ -7,6 +7,7 @@ category: 영상
 thumbnail: "/thumbnails/video/video-22.jpg"
 tags: [영상, AI추천, AI 작동 원리, 입문·기초, Swaroop Talks]
 videoId: BTZ0BgUzKhU
+videoDate: 2026-06-20T12:20:36Z
 ---
 
 ![@Swaroop Talks](https://yt3.ggpht.com/vHwkfKXT76Yp_aqJ21wBMqX2094mWUbXgUK48vT4qvKkxnEy_OWkYuROwrBqKBmEd8RN2GkK=s240-c-k-c0x00ffffff-no-rj) **Swaroop Talks** · 구독자 46.7만명 · 영상 473개
