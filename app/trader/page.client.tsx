@@ -140,8 +140,24 @@ export default function TraderClient() {
   const cat = strat?.categories.find((c) => c.name === tab);
   const usd = tab === "해외주식";
   const openPos = secs.filter((s) => s.open_position).map((s) => ({ sym: s.symbol, nm: s.name || s.symbol, ...(s.open_position as OpenPos) }));
-  const trades = secs.flatMap((s) => (s.trade_log || []).map((t) => ({ ...t, sym: s.symbol, nm: s.name || s.symbol })))
-    .sort((a, b) => (a.exit < b.exit ? 1 : -1)).slice(0, 30);
+  // 거래 내역 = 매수·매도 타임라인. 아직 안 판(보유중) 매수도 함께 보여준다(완료된 청산만 보이면 "매매 안 한 것처럼" 보여서).
+  type Txn = { sym: string; nm: string; open: boolean; entry: string; entry_price?: number; qty?: number; exit?: string; exit_price?: number; reason?: string; pnl: number; pnl_pct: number; when: string; };
+  const txns: Txn[] = secs.flatMap((s) => {
+    const rows: Txn[] = (s.trade_log || []).map((t) => ({
+      sym: s.symbol, nm: s.name || s.symbol, open: false,
+      entry: t.entry, entry_price: t.entry_price, qty: t.qty,
+      exit: t.exit, exit_price: t.exit_price, reason: t.reason,
+      pnl: t.pnl ?? 0, pnl_pct: t.pnl_pct, when: t.exit,
+    }));
+    const p = s.open_position;
+    if (p) rows.push({
+      sym: s.symbol, nm: s.name || s.symbol, open: true,
+      entry: p.entry_time || "", entry_price: p.entry_price, qty: p.qty,
+      pnl: ((p.cur_price ?? p.entry_price ?? 0) - (p.entry_price ?? 0)) * (p.qty ?? 0),
+      pnl_pct: p.unrealized_pnl_pct ?? 0, when: p.entry_time || "",
+    });
+    return rows;
+  }).sort((a, b) => (a.when < b.when ? 1 : -1)).slice(0, 40);
   const tradedSecs = secs.filter((s) => s.trades > 0 || s.open_position);
 
   return (
@@ -258,24 +274,26 @@ export default function TraderClient() {
                 </section>
               )}
 
-              {/* 거래 내역 */}
-              {trades.length > 0 && (
+              {/* 거래 내역 (매수·매도 타임라인 — 아직 안 판 매수도 '보유중'으로 표시) */}
+              {txns.length > 0 && (
                 <section className="mb-6">
-                  <H2>거래 내역</H2>
+                  <H2 sub="매수·매도 기록">거래 내역</H2>
                   <div className="space-y-2">
-                    {trades.map((t, i) => {
-                      const amt = t.pnl ?? ((t.exit_price ?? 0) - (t.entry_price ?? 0)) * (t.qty ?? 0);
-                      return (
-                        <div key={i} className="rounded-xl border border-neutral-200/70 dark:border-zinc-800 bg-white dark:bg-zinc-900/30 p-3.5">
-                          <div className="flex items-center justify-between gap-2">
-                            <span className="text-sm font-bold text-neutral-800 dark:text-neutral-100">{withCode(t.nm, t.sym)}</span>
-                            <span className="flex items-center gap-2"><span className={`text-sm font-bold tabular-nums ${sgn(amt)}`}>{pm(amt, usd)}</span><Chg n={t.pnl_pct} /></span>
-                          </div>
-                          <div className="text-xs text-neutral-400 mt-1.5"><b className="text-neutral-500">매수</b> {t.entry} · {money(t.entry_price ?? 0, usd)} × {qtyStr(t.qty ?? 0)}</div>
-                          <div className="text-xs text-neutral-400 mt-0.5"><b className="text-neutral-500">매도</b> {t.exit} · {money(t.exit_price ?? 0, usd)} — {SELL_REASON[t.reason] || t.reason}</div>
+                    {txns.map((t, i) => (
+                      <div key={i} className="rounded-xl border border-neutral-200/70 dark:border-zinc-800 bg-white dark:bg-zinc-900/30 p-3.5">
+                        <div className="flex items-center justify-between gap-2">
+                          <span className="flex items-center gap-1.5 min-w-0">
+                            <span className="text-sm font-bold text-neutral-800 dark:text-neutral-100 truncate">{withCode(t.nm, t.sym)}</span>
+                            {t.open && <span className="flex-shrink-0 text-[10px] px-1.5 py-0.5 rounded-full bg-emerald-500/10 text-emerald-600 dark:text-emerald-400 font-bold">보유중</span>}
+                          </span>
+                          <span className="flex items-center gap-2 flex-shrink-0"><span className={`text-sm font-bold tabular-nums ${sgn(t.pnl)}`}>{pm(t.pnl, usd)}</span><Chg n={t.pnl_pct} /></span>
                         </div>
-                      );
-                    })}
+                        <div className="text-xs text-neutral-400 mt-1.5"><b className="text-emerald-600 dark:text-emerald-500">매수</b> {t.entry} · {money(t.entry_price ?? 0, usd)} × {qtyStr(t.qty ?? 0)}</div>
+                        {t.open
+                          ? <div className="text-xs text-neutral-400 mt-0.5"><b className="text-emerald-600 dark:text-emerald-400">보유중</b> · 아직 팔지 않음 (위 손익은 평가손익)</div>
+                          : <div className="text-xs text-neutral-400 mt-0.5"><b className="text-red-500">매도</b> {t.exit} · {money(t.exit_price ?? 0, usd)} — {SELL_REASON[t.reason || ""] || t.reason}</div>}
+                      </div>
+                    ))}
                   </div>
                 </section>
               )}
@@ -312,7 +330,7 @@ export default function TraderClient() {
                 </section>
               )}
 
-              {openPos.length === 0 && trades.length === 0 && (
+              {txns.length === 0 && (
                 <div className="rounded-2xl border border-dashed border-neutral-200 dark:border-zinc-800 p-5 text-center text-[13px] text-neutral-500 dark:text-neutral-400 mb-6 leading-relaxed">
                   <b>{strat.name}</b>이 아직 <b>{tab}</b>에서 산 게 없어요.<br />이 전략의 매수 조건에 맞는 종목이 나오면 자동으로 사고 표시됩니다.
                 </div>
