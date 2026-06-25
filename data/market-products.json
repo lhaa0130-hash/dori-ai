@@ -1,5 +1,57 @@
 [
   {
+    "id": "mk7-1",
+    "name": "이케아 스코디스 페그보드",
+    "category": "furniture",
+    "source": "coupang",
+    "query": "이케아 스코디스 페그보드",
+    "emoji": "🧩",
+    "priceHint": "1~3만원대",
+    "summary": "벽면 정리용 모듈 보드",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/eRnDjOuFPw"
+  },
+  {
+    "id": "mk7-2",
+    "name": "마켓비 RUSTA 장스탠드",
+    "category": "furniture",
+    "source": "coupang",
+    "query": "마켓비 RUSTA 장스탠드",
+    "emoji": "💡",
+    "priceHint": "2~5만원대",
+    "summary": "방 분위기 바꾸는 조명",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/eRnDjRqvp6"
+  },
+  {
+    "id": "mk7-3",
+    "name": "플라워트리 몬스테라 조화 화분",
+    "category": "furniture",
+    "source": "coupang",
+    "query": "플라워트리 몬스테라 조화 화분",
+    "emoji": "🌿",
+    "priceHint": "1~3만원대",
+    "summary": "관리 쉬운 초록 포인트",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/eRnDjUCOSy"
+  },
+  {
+    "id": "mk7-4",
+    "name": "오리엔트 무소음 인테리어 벽시계",
+    "category": "furniture",
+    "source": "coupang",
+    "query": "오리엔트 무소음 인테리어 벽시계",
+    "emoji": "🕒",
+    "priceHint": "1만원대",
+    "summary": "실용적인 벽 포인트",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/eRnDjXzPZA"
+  },
+  {
     "id": "mk6-1",
     "name": "삼성전자 갤럭시 탭 A9+",
     "category": "digital",
@@ -9,7 +61,7 @@
     "priceHint": "20만원대",
     "summary": "가족용으로 무난한 선택",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/eN3ZnVD1ci"
   },
   {
@@ -22,7 +74,7 @@
     "priceHint": "10만원대 후반~20만원대",
     "summary": "영상 감상 중심 가성비",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/eN3ZnXxG32"
   },
   {
@@ -35,7 +87,7 @@
     "priceHint": "20만원대",
     "summary": "학습용으로 보기 좋은 균형",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/eN3Zn02Tzo"
   },
   {
@@ -48,7 +100,7 @@
     "priceHint": "10만원대",
     "summary": "휴대성 좋은 직구형 미니",
     "hot": true,
-    "weekly": true
+    "weekly": false
   },
   {
     "id": "mk5-1",
