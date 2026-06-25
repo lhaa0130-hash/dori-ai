@@ -9,7 +9,7 @@ const SELL_REASON: Record<string, string> = {
   stop_loss: "손절선까지 떨어져 매도 — 손실을 작게 끊음",
   trailing_stop: "고점 대비 내려와 매도 — 벌어둔 수익 지킴",
   take_profit: "목표 수익 도달 매도",
-  signal: "상승 추세가 꺾여 매도",
+  signal: "신호 종료(추세 꺾임/회복)로 매도",
 };
 
 interface Trade { entry: string; exit: string; entry_price?: number; exit_price?: number; qty?: number; pnl?: number; pnl_pct: number; reason: string; entry_reason: string; }
@@ -23,16 +23,22 @@ interface Section {
   open_position: OpenPos | null; trade_log: Trade[];
 }
 interface Category { name: string; count: number; currency?: string; fx?: number; starting: number; ending: number; return_pct: number; }
-interface RecentRun { time: string; watching?: number; holding?: number; new_trades?: number; total?: number; ret?: number; }
+interface Strategy {
+  key: string; name: string; desc: string; verified: boolean;
+  starting: number; ending: number; return_pct: number; holding: number; trades: number;
+  categories: Category[]; sections: Section[];
+}
+interface Lb { key: string; name: string; return_pct: number; ending: number; holding: number; verified: boolean; }
+interface RecentRun { time: string; watching?: number; best?: string; best_ret?: number; total?: number; }
 interface Data {
-  program: string; generated_at: string; mode: string;
-  total_starting: number; total_ending: number; total_return_pct: number;
-  usdkrw?: number; watching?: number; holding?: number; interval_hours?: number;
+  program: string; generated_at: string; mode: string; multi?: boolean;
+  usdkrw?: number; watching?: number; interval_hours?: number; capital_each?: number;
   test_period?: { start: string; end: string };
-  categories?: Category[]; sections: Section[]; recent_runs?: RecentRun[];
+  total_starting?: number; total_ending?: number; total_return_pct?: number;
+  leaderboard?: Lb[]; strategies?: Strategy[]; recent_runs?: RecentRun[];
 }
 
-const won = (n: number) => n.toLocaleString("ko-KR") + "원";
+const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
 const man = (n: number) => Math.round(n / 10000) + "만";
 const money = (n: number, usd: boolean) =>
   usd ? "$" + n.toLocaleString("en-US", { maximumFractionDigits: 2 }) : Math.round(n).toLocaleString("ko-KR") + "원";
@@ -44,24 +50,17 @@ const withCode = (name: string | undefined, sym: string) => {
 };
 const sgn = (n: number) => (n >= 0 ? "text-emerald-500" : "text-red-500");
 const dot = (s: string) => s.replaceAll("-", ".").slice(2);
-const pm = (n: number, usd: boolean) => (n >= 0 ? "+" : "−") + money(Math.abs(n), usd); // 부호 있는 손익 금액
+const pm = (n: number, usd: boolean) => (n >= 0 ? "+" : "−") + money(Math.abs(n), usd);
 
-// 손익 배지(▲▼ + 톤다운 배경) — 페이지 전반 일관 사용
 function Chg({ n, big = false }: { n: number; big?: boolean }) {
   const up = n >= 0;
   return (
-    <span
-      className={`inline-flex items-center gap-0.5 rounded-full font-bold tabular-nums ${big ? "px-2.5 py-1 text-sm" : "px-2 py-0.5 text-xs"} ${
-        up ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" : "bg-red-500/10 text-red-600 dark:text-red-400"
-      }`}
-    >
-      <span className="text-[0.8em] leading-none">{up ? "▲" : "▼"}</span>
-      {Math.abs(n)}%
+    <span className={`inline-flex items-center gap-0.5 rounded-full font-bold tabular-nums ${big ? "px-2.5 py-1 text-sm" : "px-2 py-0.5 text-xs"} ${
+      up ? "bg-emerald-500/10 text-emerald-600 dark:text-emerald-400" : "bg-red-500/10 text-red-600 dark:text-red-400"}`}>
+      <span className="text-[0.8em] leading-none">{up ? "▲" : "▼"}</span>{Math.abs(n)}%
     </span>
   );
 }
-
-// 섹션 제목 (주황 액센트 바 + 부제)
 function H2({ children, sub }: { children: React.ReactNode; sub?: string }) {
   return (
     <h2 className="flex items-center gap-2 mb-2.5">
@@ -75,20 +74,19 @@ function H2({ children, sub }: { children: React.ReactNode; sub?: string }) {
 export default function TraderClient() {
   const [d, setD] = useState<Data | null>(null);
   const [err, setErr] = useState(false);
+  const [selStrat, setSelStrat] = useState<string>("");
   const [tab, setTab] = useState<(typeof TABS)[number]>("해외주식");
   const [now, setNow] = useState<number>(() => Date.now());
   const userPicked = useRef(false);
 
-  // 관심종목·설정(localStorage) — ProjectSync가 계정(Firebase)과 동기화
   const [favs, setFavs] = useState<string[]>([]);
   useEffect(() => {
-    const load = () => {
+    const loadLs = () => {
       try { const f = JSON.parse(localStorage.getItem("trader_favs") || "[]"); if (Array.isArray(f)) setFavs(f); } catch { /* */ }
-      try { const t = localStorage.getItem("trader_tab"); if (t && (TABS as readonly string[]).includes(t)) { userPicked.current = true; setTab(t as (typeof TABS)[number]); } } catch { /* */ }
     };
-    load();
-    window.addEventListener("dori-project-synced", load); // Firebase 복원 후 반영
-    return () => window.removeEventListener("dori-project-synced", load);
+    loadLs();
+    window.addEventListener("dori-project-synced", loadLs);
+    return () => window.removeEventListener("dori-project-synced", loadLs);
   }, []);
   const toggleFav = (sym: string) => setFavs((cur) => {
     const next = cur.includes(sym) ? cur.filter((x) => x !== sym) : [...cur, sym];
@@ -102,13 +100,15 @@ export default function TraderClient() {
         .then((r) => (r.ok ? r.json() : Promise.reject()))
         .then((j: Data) => {
           setD(j); setErr(false);
-          if (!userPicked.current) {
-            let best: (typeof TABS)[number] | null = null, bestN = 0;
-            for (const t of TABS) {
-              const n = j.sections.filter((s) => s.category === t && s.open_position).length;
-              if (n > bestN) { bestN = n; best = t; }
+          if (!userPicked.current && j.strategies?.length) {
+            const key = j.leaderboard?.[0]?.key || j.strategies[0].key;
+            setSelStrat(key);
+            const sg = j.strategies.find((s) => s.key === key);
+            if (sg) {
+              let best: (typeof TABS)[number] | null = null, n = 0;
+              for (const t of TABS) { const c = sg.sections.filter((s) => s.category === t && s.open_position).length; if (c > n) { n = c; best = t; } }
+              if (best) setTab(best);
             }
-            if (best) setTab(best);
           }
         })
         .catch(() => setErr(true));
@@ -118,15 +118,11 @@ export default function TraderClient() {
     return () => { clearInterval(poll); clearInterval(tick); };
   }, []);
 
-  const secs = d ? d.sections.filter((s) => s.category === tab) : [];
-  const cat = d?.categories?.find((c) => c.name === tab);
-  const usd = tab === "해외주식";
-  const openPos = secs.filter((s) => s.open_position).map((s) => ({ sym: s.symbol, nm: s.name || s.symbol, ...(s.open_position as OpenPos) }));
-  const trades = secs
-    .flatMap((s) => (s.trade_log || []).map((t) => ({ ...t, sym: s.symbol, nm: s.name || s.symbol })))
-    .sort((a, b) => (a.exit < b.exit ? 1 : -1))
-    .slice(0, 40);
-  const tradedSecs = secs.filter((s) => s.trades > 0 || s.open_position);
+  const pickStrat = (key: string) => {
+    userPicked.current = true; setSelStrat(key);
+    const sg = d?.strategies?.find((s) => s.key === key);
+    if (sg) { let best: (typeof TABS)[number] | null = null, n = 0; for (const t of TABS) { const c = sg.sections.filter((s) => s.category === t && s.open_position).length; if (c > n) { n = c; best = t; } } setTab(best || "해외주식"); }
+  };
 
   const gen = d ? new Date(d.generated_at.replace(" ", "T")).getTime() : 0;
   const ms = now - gen;
@@ -139,261 +135,238 @@ export default function TraderClient() {
   const agoStr = minAgo < 1 ? "방금" : minAgo < 60 ? `${minAgo}분 전` : `${Math.floor(minAgo / 60)}시간 ${minAgo % 60}분 전`;
   const beforeLaunch = now < new Date("2026-07-01T00:00:00").getTime();
 
+  const strat = d?.strategies?.find((s) => s.key === selStrat) || d?.strategies?.[0];
+  const secs = strat ? strat.sections.filter((s) => s.category === tab) : [];
+  const cat = strat?.categories.find((c) => c.name === tab);
+  const usd = tab === "해외주식";
+  const openPos = secs.filter((s) => s.open_position).map((s) => ({ sym: s.symbol, nm: s.name || s.symbol, ...(s.open_position as OpenPos) }));
+  const trades = secs.flatMap((s) => (s.trade_log || []).map((t) => ({ ...t, sym: s.symbol, nm: s.name || s.symbol })))
+    .sort((a, b) => (a.exit < b.exit ? 1 : -1)).slice(0, 30);
+  const tradedSecs = secs.filter((s) => s.trades > 0 || s.open_position);
+
   return (
-    <main className="w-full min-h-screen">
-      {/* ── 페이지 헤더 ── */}
-      <section className="pt-8 pb-5 border-b border-neutral-100 dark:border-zinc-900 mb-6">
-        <p className="text-[11px] font-bold text-[#F9954E] mb-2 tracking-wide uppercase">AI 자동매매</p>
-        <div className="flex items-end justify-between gap-4 flex-wrap">
-          <h1 className="text-[30px] sm:text-[38px] font-extrabold text-neutral-950 dark:text-white leading-[1.1] tracking-tight break-keep">
-            손실은 작게, 수익은 크게
-          </h1>
-          {d && (
-            <span className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-1.5 text-xs mb-1">
-              <span className={`inline-block w-2 h-2 rounded-full ${alive ? "bg-emerald-500 animate-pulse" : "bg-amber-500"}`} />
-              <span className={`font-semibold ${alive ? "text-neutral-700 dark:text-neutral-200" : "text-amber-600 dark:text-amber-400"}`}>{alive ? "작동중" : "대기중"}</span>
-              {alive && <span className="text-neutral-400 tabular-nums">다음 점검 {cd}</span>}
-            </span>
-          )}
-        </div>
-      </section>
+    <main className="w-full min-h-screen max-w-2xl mx-auto px-4 py-6">
+      <header className="mb-4">
+        <h1 className="text-2xl font-extrabold text-neutral-950 dark:text-white">
+          트레이더일로 <span style={{ color: ORANGE }}>(Trader Illo)</span>
+        </h1>
+        <p className="text-xs text-neutral-400 dark:text-neutral-500 mt-1">5개 AI 전략이 각 300만원으로 겨루는 자동매매 대결.</p>
+        {beforeLaunch && (
+          <div className="inline-flex items-center gap-1 rounded-full px-2.5 py-1 mt-2.5 text-xs font-bold" style={{ background: "rgba(249,149,78,0.12)", color: ORANGE }}>
+            🎉 7월 1일 정식 오픈 · 지금은 모의 테스트 중
+          </div>
+        )}
+      </header>
 
       {err && <div className="text-sm text-neutral-400 py-16 text-center">아직 데이터가 없습니다. 곧 업데이트됩니다.</div>}
       {!err && !d && <div className="text-sm text-neutral-400 py-16 text-center">불러오는 중…</div>}
 
-      {d && (
+      {d && d.strategies?.length && d.leaderboard?.length && (
         <>
-          {/* ── 전체 요약 카드 + 탭 ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_320px] gap-4 mb-6">
-            {/* 왼쪽: 전체 평가액 */}
-            <section className="rounded-2xl border border-[#F9954E]/20 dark:border-zinc-800 bg-gradient-to-br from-[#FFF5EB] to-white dark:from-zinc-900 dark:to-zinc-950 p-5">
-              <div className="text-xs text-neutral-400 mb-1">전체 평가액</div>
-              <div className="flex items-end gap-3 mb-2">
-                <span className="text-[32px] sm:text-[40px] font-extrabold tracking-tight tabular-nums leading-none text-neutral-950 dark:text-white">{won(d.total_ending)}</span>
-                <Chg n={d.total_return_pct} big />
-              </div>
-              <div className="text-sm text-neutral-500 dark:text-neutral-400">
-                {d.usdkrw ? <span className="tabular-nums mr-2">≈ ${Math.round(d.total_ending / d.usdkrw).toLocaleString("en-US")}</span> : null}
-                평가손익 <b className={`tabular-nums ${sgn(d.total_ending - d.total_starting)}`}>{pm(d.total_ending - d.total_starting, false)}</b>
-              </div>
-              <div className="text-[11px] text-neutral-400 mt-3 pt-3 border-t border-neutral-100 dark:border-zinc-800">
-                감시 {d.watching ?? 0}종목 · 보유 {d.holding ?? 0}종 · {agoStr} 업데이트
-              </div>
-            </section>
-
-            {/* 오른쪽: 시장별 수익 카드 */}
-            <div className="grid grid-cols-3 lg:grid-cols-1 gap-2">
-              {TABS.map((t) => {
-                const c = d.categories?.find((x) => x.name === t);
-                const isActive = t === tab;
-                const tu = t === "해외주식";
-                return (
-                  <button key={t} onClick={() => { userPicked.current = true; setTab(t); try { localStorage.setItem("trader_tab", t); } catch { /* */ } }}
-                    className={`rounded-xl p-3 text-left transition-all border ${isActive ? "border-[#F9954E]/40 bg-[#FFF5EB] dark:bg-[#F9954E]/10" : "border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 hover:border-[#F9954E]/30"}`}>
-                    <div className="flex items-center justify-between gap-2">
-                      <span className={`text-[12px] font-bold ${isActive ? "text-[#E8832E]" : "text-neutral-500 dark:text-neutral-400"}`}>{t}</span>
-                      {c && <Chg n={c.return_pct} />}
-                    </div>
-                    {c && (
-                      <div className={`text-[13px] font-extrabold tabular-nums mt-0.5 ${sgn(c.ending - c.starting)}`}>{pm(c.ending - c.starting, tu)}</div>
-                    )}
-                  </button>
-                );
-              })}
-            </div>
+          {/* 상태 */}
+          <div className="flex items-center justify-between text-xs mb-3">
+            <span className="inline-flex items-center gap-1.5">
+              <span className={`inline-block w-2 h-2 rounded-full ${alive ? "bg-emerald-500 animate-pulse" : "bg-amber-500"}`} />
+              <span className={alive ? "text-neutral-500" : "text-amber-600 dark:text-amber-400 font-medium"}>{alive ? "작동중" : "대기중"}</span>
+              <span className="text-neutral-400">· 모의투자 · 각 300만원 · 4시간마다</span>
+            </span>
+            <span className="text-neutral-400">{alive ? <>다음 점검 <b className="tabular-nums text-neutral-600 dark:text-neutral-300">{cd}</b></> : null}</span>
           </div>
 
-          {/* ── 선택 시장 요약 ── */}
-          {cat && (
-            <div className="rounded-2xl border border-neutral-100 dark:border-zinc-800 bg-white dark:bg-zinc-900/40 px-5 py-4 mb-5 flex items-center justify-between gap-4">
-              <div>
-                <div className="text-[11px] text-neutral-400 mb-0.5">{cat.name} · 시작 {usd ? money(cat.starting, true) : man(cat.starting) + "원"} · {cat.count}종목 감시</div>
-                <div className="text-[22px] font-extrabold tabular-nums text-neutral-950 dark:text-white leading-tight">{money(cat.ending, usd)}</div>
-                <div className="text-xs mt-0.5 text-neutral-400">평가손익 <b className={`tabular-nums ${sgn(cat.ending - cat.starting)}`}>{pm(cat.ending - cat.starting, usd)}</b></div>
-              </div>
-              <Chg n={cat.return_pct} big />
-            </div>
-          )}
+          {/* ── 리더보드 (전략 대결) ── */}
+          <H2 sub={`${dot(d.test_period?.start || "")}~${dot(d.test_period?.end || "")}`}>전략 순위 🏆</H2>
+          <div className="rounded-2xl border border-neutral-200/70 dark:border-zinc-800 divide-y divide-neutral-100 dark:divide-zinc-800 overflow-hidden mb-2">
+            {d.leaderboard.map((s, i) => {
+              const sel = (strat?.key ?? "") === s.key;
+              const pnl = (d.strategies!.find((x) => x.key === s.key)?.ending ?? 0) - (d.strategies!.find((x) => x.key === s.key)?.starting ?? 0);
+              return (
+                <button key={s.key} onClick={() => pickStrat(s.key)}
+                  className={`w-full flex items-center gap-2.5 px-3 py-3 text-left transition-colors ${sel ? "bg-[#F9954E]/[0.07]" : "hover:bg-neutral-50 dark:hover:bg-zinc-900/40"}`}>
+                  <span className={`w-6 h-6 rounded-full flex items-center justify-center text-xs font-extrabold flex-shrink-0 ${i === 0 ? "text-white" : "text-neutral-500 bg-neutral-100 dark:bg-zinc-800"}`} style={i === 0 ? { background: ORANGE } : undefined}>{i + 1}</span>
+                  <span className="flex-1 min-w-0">
+                    <span className="flex items-center gap-1.5">
+                      <span className={`text-sm font-bold ${sel ? "text-[#F9954E]" : "text-neutral-800 dark:text-neutral-100"}`}>{s.name}</span>
+                      {!s.verified && <span className="text-[10px] px-1.5 py-0.5 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-400">실험</span>}
+                    </span>
+                    <span className="block text-[11px] text-neutral-400 tabular-nums">보유 {s.holding}종 · {pm(pnl, false)}</span>
+                  </span>
+                  <Chg n={s.return_pct} />
+                </button>
+              );
+            })}
+          </div>
+          <p className="text-[11px] text-neutral-400 mb-5 px-1">전략을 눌러 상세 보기 · ‘실험’ = 장기검증 전인 전략</p>
 
-          {/* ── 2컬럼: 보유/거래 내역 | 종목 요약 ── */}
-          <div className="grid grid-cols-1 lg:grid-cols-[1fr_280px] gap-4 items-start">
-          {/* 왼쪽: 현재 보유 + 거래 내역 */}
-          <div>
-          {/* 현재 보유 */}
-          {openPos.length > 0 && (
-            <section className="mb-5">
-              <H2>현재 보유</H2>
-              <div className="space-y-2">
-                {openPos.map((p) => {
-                  const up = (p.unrealized_pnl_pct ?? 0) >= 0;
-                  const amt = ((p.cur_price ?? p.entry_price ?? 0) - (p.entry_price ?? 0)) * (p.qty ?? 0);
+          {/* ── 선택 전략 상세 ── */}
+          {strat && (
+            <>
+              <div className="rounded-2xl border border-[#F9954E]/20 bg-gradient-to-b from-[#F9954E]/[0.06] to-transparent p-4 mb-4">
+                <div className="flex items-center justify-between gap-2">
+                  <span className="text-base font-extrabold text-neutral-950 dark:text-white">{strat.name}</span>
+                  <Chg n={strat.return_pct} big />
+                </div>
+                <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1 leading-relaxed">{strat.desc}</p>
+                <div className="text-xs mt-2"><span className="text-neutral-400">평가손익 </span><b className={`tabular-nums ${sgn(strat.ending - strat.starting)}`}>{pm(strat.ending - strat.starting, false)}</b><span className="text-neutral-400"> · 보유 {strat.holding}종 · 청산 {strat.trades}건</span></div>
+              </div>
+
+              {/* 카테고리 탭 */}
+              <div className="grid grid-cols-3 gap-1 p-1 rounded-2xl bg-neutral-100 dark:bg-zinc-900 mb-4">
+                {TABS.map((t) => {
+                  const c = strat.categories.find((x) => x.name === t);
+                  const active = t === tab;
                   return (
-                    <div key={p.sym} className="rounded-xl border-l-[3px] border border-neutral-100 dark:border-zinc-800 bg-white dark:bg-zinc-900/30 p-4"
-                      style={{ borderLeftColor: up ? "#10b981" : "#ef4444" }}>
-                      <div className="flex items-center justify-between gap-2 mb-2">
-                        <span className="text-[14px] font-extrabold text-neutral-900 dark:text-neutral-100">{withCode(p.nm, p.sym)}</span>
-                        <span className="flex items-center gap-2">
-                          <span className={`text-[14px] font-extrabold tabular-nums ${sgn(amt)}`}>{pm(amt, usd)}</span>
-                          <Chg n={p.unrealized_pnl_pct ?? 0} />
-                        </span>
-                      </div>
-                      <div className="grid grid-cols-2 gap-x-4 text-xs text-neutral-400">
-                        <div>매수가 <span className="text-neutral-600 dark:text-neutral-300 font-semibold">{money(p.entry_price ?? 0, usd)}</span></div>
-                        <div>수량 <span className="text-neutral-600 dark:text-neutral-300 font-semibold">{qtyStr(p.qty ?? 0)}</span></div>
-                        <div>투자금 <span className="text-neutral-600 dark:text-neutral-300 font-semibold">{money(p.invested ?? 0, usd)}</span></div>
-                        <div>손절선 <span className="text-red-500 font-semibold">{money(p.stop_price ?? 0, usd)}</span></div>
-                        {p.take_profit && <div>목표가 <span className="text-emerald-500 font-semibold">{money(p.take_profit, usd)}</span></div>}
-                        <div>매수일 <span className="text-neutral-600 dark:text-neutral-300 font-semibold">{p.entry_time?.slice(0, 10)}</span></div>
-                      </div>
-                    </div>
+                    <button key={t} onClick={() => setTab(t)}
+                      className={`rounded-xl py-2 text-center transition-all ${active ? "bg-white dark:bg-zinc-800 shadow-sm" : "hover:bg-white/50 dark:hover:bg-zinc-800/40"}`}>
+                      <div className={`text-xs mb-0.5 ${active ? "text-neutral-900 dark:text-white font-bold" : "text-neutral-400"}`}>{t}</div>
+                      <div className={`text-sm font-extrabold tabular-nums ${c ? sgn(c.return_pct) : "text-neutral-400"}`}>{c ? (c.return_pct >= 0 ? "+" : "") + c.return_pct + "%" : "-"}</div>
+                    </button>
                   );
                 })}
               </div>
-            </section>
-          )}
 
-          {/* ── 거래 내역 ── */}
-          {trades.length > 0 && (
-            <section className="mb-5">
-              <H2>거래 내역 <span className="text-[11px] font-normal text-neutral-400">최근 {trades.length}건</span></H2>
-              <div className="rounded-2xl border border-neutral-100 dark:border-zinc-800 overflow-hidden divide-y divide-neutral-50 dark:divide-zinc-800/60">
-                {trades.map((t, i) => {
-                  const amt = t.pnl ?? ((t.exit_price ?? 0) - (t.entry_price ?? 0)) * (t.qty ?? 0);
-                  const up = amt >= 0;
-                  return (
-                  <div key={i} className="flex items-center justify-between gap-3 px-4 py-3 bg-white dark:bg-zinc-950 hover:bg-neutral-50 dark:hover:bg-zinc-900/50 transition-colors">
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center gap-2">
-                        <span className={`inline-block w-1.5 h-1.5 rounded-full flex-shrink-0 ${up ? "bg-emerald-500" : "bg-red-500"}`} />
-                        <span className="text-[13px] font-bold text-neutral-900 dark:text-neutral-100 truncate">{withCode(t.nm, t.sym)}</span>
-                      </div>
-                      <div className="text-[11px] text-neutral-400 mt-0.5 truncate">
-                        {t.exit?.slice(5, 10)} · {SELL_REASON[t.reason] || t.reason}
-                      </div>
-                    </div>
-                    <div className="text-right flex-shrink-0">
-                      <div className={`text-[13px] font-extrabold tabular-nums ${sgn(amt)}`}>{pm(amt, usd)}</div>
-                      <Chg n={t.pnl_pct} />
-                    </div>
+              {cat && (
+                <div className="rounded-2xl border border-neutral-200/70 dark:border-zinc-800 bg-white dark:bg-zinc-900/40 p-4 mb-5 flex items-end justify-between">
+                  <div>
+                    <div className="text-xs text-neutral-400">{cat.name} · 시작 {usd ? money(cat.starting, true) : man(cat.starting) + "원"} · 감시 {cat.count}종목{usd && cat.fx ? ` · 환율 ${cat.fx.toLocaleString()}` : ""}</div>
+                    <div className="text-2xl font-extrabold tabular-nums mt-1 text-neutral-950 dark:text-white">{money(cat.ending, usd)}</div>
+                    <div className="text-xs mt-0.5"><span className="text-neutral-400">평가손익 </span><b className={`tabular-nums ${sgn(cat.ending - cat.starting)}`}>{pm(cat.ending - cat.starting, usd)}</b></div>
                   </div>
-                  );
-                })}
-              </div>
-            </section>
-          )}
+                  <Chg n={cat.return_pct} big />
+                </div>
+              )}
 
-          {openPos.length === 0 && trades.length === 0 && (
-            <div className="rounded-2xl border border-dashed border-neutral-200 dark:border-zinc-800 p-5 text-center text-[13px] text-neutral-500 dark:text-neutral-400 mb-6 leading-relaxed">
-              아직 <b>{tab}</b>에서 거래한 종목이 없어요.<br />좋은 매수 신호(상승 흐름 + 신고가 돌파)가 나오면 자동으로 사고 여기 표시됩니다.
-            </div>
-          )}
-          </div>{/* /왼쪽 */}
+              {/* 현재 보유 */}
+              {openPos.length > 0 && (
+                <section className="mb-6">
+                  <H2>현재 보유</H2>
+                  <div className="space-y-2">
+                    {openPos.map((p) => {
+                      const up = (p.unrealized_pnl_pct ?? 0) >= 0;
+                      const amt = ((p.cur_price ?? p.entry_price ?? 0) - (p.entry_price ?? 0)) * (p.qty ?? 0);
+                      return (
+                        <div key={p.sym} className="rounded-xl border border-l-[3px] border-neutral-200/70 dark:border-zinc-800 bg-white dark:bg-zinc-900/30 p-3.5" style={{ borderLeftColor: up ? "#10b981" : "#ef4444" }}>
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="text-sm font-bold text-neutral-800 dark:text-neutral-100">{withCode(p.nm, p.sym)}</span>
+                            <span className="flex items-center gap-2"><span className={`text-sm font-bold tabular-nums ${sgn(amt)}`}>{pm(amt, usd)}</span><Chg n={p.unrealized_pnl_pct ?? 0} /></span>
+                          </div>
+                          <div className="text-xs text-neutral-400 mt-1.5">매수 {money(p.entry_price ?? 0, usd)} × {qtyStr(p.qty ?? 0)} · 투자 <b className="text-neutral-600 dark:text-neutral-300">{money(p.invested ?? 0, usd)}</b></div>
+                          <div className="text-xs text-neutral-400 mt-0.5">손절 <span className="text-neutral-600 dark:text-neutral-300">{money(p.stop_price ?? 0, usd)}</span>{p.take_profit ? <> · 목표 <span className="text-neutral-600 dark:text-neutral-300">{money(p.take_profit, usd)}</span></> : null} · {p.entry_time?.slice(0, 10)} 매수</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </section>
+              )}
 
-          {/* 오른쪽: 종목 요약 + 작업 기록 */}
-          <div>
-          {/* 종목별 요약 */}
-          {tradedSecs.length > 0 && (
-            <section className="mb-4">
-              <H2>{tab} 종목</H2>
-              <div className="rounded-2xl border border-neutral-100 dark:border-zinc-800 overflow-hidden">
-                <table className="w-full text-xs">
-                  <thead>
-                    <tr className="text-neutral-400 bg-neutral-50 dark:bg-zinc-900">
-                      <th className="text-left font-medium py-2.5 px-3">종목</th>
-                      <th className="text-right font-medium px-2">손익</th>
-                      <th className="text-right font-medium px-3">승률</th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-neutral-50 dark:divide-zinc-800/60">
-                    {tradedSecs.map((s) => (
-                      <tr key={s.symbol} className="bg-white dark:bg-zinc-950 hover:bg-neutral-50 dark:hover:bg-zinc-900/50 transition-colors">
-                        <td className="py-2.5 px-3 text-neutral-700 dark:text-neutral-200 truncate max-w-[100px]">
-                          <button onClick={() => toggleFav(s.symbol)} aria-label="관심종목" className="mr-1.5 align-middle text-[12px] leading-none" style={{ color: favs.includes(s.symbol) ? ORANGE : "#cbd5e1" }}>
-                            {favs.includes(s.symbol) ? "★" : "☆"}
-                          </button>
-                          {withCode(s.name, s.symbol)}
-                        </td>
-                        <td className={`text-right px-2 tabular-nums font-semibold text-[11px] ${sgn(s.realized_pnl)}`}>{(s.realized_pnl >= 0 ? "+" : "") + won(s.realized_pnl)}</td>
-                        <td className="text-right px-3 tabular-nums text-neutral-400">{s.win_rate_pct}%</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </section>
+              {/* 거래 내역 */}
+              {trades.length > 0 && (
+                <section className="mb-6">
+                  <H2>거래 내역</H2>
+                  <div className="space-y-2">
+                    {trades.map((t, i) => {
+                      const amt = t.pnl ?? ((t.exit_price ?? 0) - (t.entry_price ?? 0)) * (t.qty ?? 0);
+                      return (
+                        <div key={i} className="rounded-xl border border-neutral-200/70 dark:border-zinc-800 bg-white dark:bg-zinc-900/30 p-3.5">
+                          <div className="flex items-center justify-between gap-2">
+                            <span className="text-sm font-bold text-neutral-800 dark:text-neutral-100">{withCode(t.nm, t.sym)}</span>
+                            <span className="flex items-center gap-2"><span className={`text-sm font-bold tabular-nums ${sgn(amt)}`}>{pm(amt, usd)}</span><Chg n={t.pnl_pct} /></span>
+                          </div>
+                          <div className="text-xs text-neutral-400 mt-1.5"><b className="text-neutral-500">매수</b> {t.entry} · {money(t.entry_price ?? 0, usd)} × {qtyStr(t.qty ?? 0)}</div>
+                          <div className="text-xs text-neutral-400 mt-0.5"><b className="text-neutral-500">매도</b> {t.exit} · {money(t.exit_price ?? 0, usd)} — {SELL_REASON[t.reason] || t.reason}</div>
+                        </div>
+                      );
+                    })}
+                  </div>
+                </section>
+              )}
+
+              {/* 종목별 요약 */}
+              {tradedSecs.length > 0 && (
+                <section className="mb-6">
+                  <H2>{tab} 거래 종목</H2>
+                  <div className="rounded-2xl border border-neutral-200/70 dark:border-zinc-800 overflow-hidden overflow-x-auto">
+                    <table className="w-full text-xs min-w-[340px]">
+                      <thead>
+                        <tr className="text-neutral-400 bg-neutral-50 dark:bg-zinc-900/60">
+                          <th className="text-left font-medium py-2.5 px-3">종목</th>
+                          <th className="text-right font-medium px-2">실현손익</th>
+                          <th className="text-right font-medium px-2">거래</th>
+                          <th className="text-right font-medium px-3">승률</th>
+                        </tr>
+                      </thead>
+                      <tbody className="divide-y divide-neutral-100 dark:divide-zinc-800">
+                        {tradedSecs.map((s) => (
+                          <tr key={s.symbol}>
+                            <td className="py-2.5 px-3 text-neutral-700 dark:text-neutral-200">
+                              <button onClick={() => toggleFav(s.symbol)} aria-label="관심종목" className="mr-1.5 align-middle text-[13px] leading-none" style={{ color: favs.includes(s.symbol) ? ORANGE : "#cbd5e1" }}>{favs.includes(s.symbol) ? "★" : "☆"}</button>
+                              {withCode(s.name, s.symbol)}
+                            </td>
+                            <td className={`text-right px-2 tabular-nums font-semibold ${sgn(s.realized_pnl)}`}>{(s.realized_pnl >= 0 ? "+" : "") + won(s.realized_pnl)}</td>
+                            <td className="text-right px-2 tabular-nums text-neutral-400">{s.trades}</td>
+                            <td className="text-right px-3 tabular-nums text-neutral-400">{s.win_rate_pct}%</td>
+                          </tr>
+                        ))}
+                      </tbody>
+                    </table>
+                  </div>
+                </section>
+              )}
+
+              {openPos.length === 0 && trades.length === 0 && (
+                <div className="rounded-2xl border border-dashed border-neutral-200 dark:border-zinc-800 p-5 text-center text-[13px] text-neutral-500 dark:text-neutral-400 mb-6 leading-relaxed">
+                  <b>{strat.name}</b>이 아직 <b>{tab}</b>에서 산 게 없어요.<br />이 전략의 매수 조건에 맞는 종목이 나오면 자동으로 사고 표시됩니다.
+                </div>
+              )}
+            </>
           )}
 
           {/* 작업 기록 */}
           {d.recent_runs && d.recent_runs.length > 0 && (
-            <section className="mb-4">
-              <H2 sub="최근 점검">작업 기록</H2>
-              <div className="rounded-2xl border border-neutral-100 dark:border-zinc-800 divide-y divide-neutral-50 dark:divide-zinc-800/60 overflow-hidden">
-                {d.recent_runs.slice(0, 10).map((r, i) => (
-                  <div key={i} className="flex items-center justify-between px-3 py-2.5 text-xs bg-white dark:bg-zinc-950">
-                    <span className="text-neutral-500 dark:text-neutral-400">
-                      <span className="tabular-nums mr-1.5">{r.time?.slice(5, 16)}</span>
-                      {r.watching ?? 0}개 감시
-                      {r.new_trades ? <span className="ml-1.5 rounded-full px-1.5 py-0.5 text-[9px] font-bold text-white" style={{ background: ORANGE }}>+{r.new_trades}</span> : null}
-                    </span>
-                    <span className={`tabular-nums font-semibold text-[11px] ${sgn(r.ret ?? 0)}`}>{(r.ret ?? 0) >= 0 ? "+" : ""}{r.ret ?? 0}%</span>
+            <section className="mb-6">
+              <H2 sub="봇이 점검한 시각">작업 기록</H2>
+              <div className="rounded-2xl border border-neutral-200/70 dark:border-zinc-800 divide-y divide-neutral-100 dark:divide-zinc-800 overflow-hidden">
+                {d.recent_runs.map((r, i) => (
+                  <div key={i} className="flex items-center justify-between px-3.5 py-2.5 text-xs">
+                    <span className="text-neutral-500 dark:text-neutral-400"><span className="text-neutral-400 mr-2 tabular-nums">{r.time?.slice(5, 16)}</span>{r.watching ?? 0}종목 점검</span>
+                    <span className="tabular-nums text-neutral-500 dark:text-neutral-300">1위 <b style={{ color: ORANGE }}>{r.best}</b> <span className={`font-semibold ${sgn(r.best_ret ?? 0)}`}>{(r.best_ret ?? 0) >= 0 ? "+" : ""}{r.best_ret ?? 0}%</span></span>
                   </div>
                 ))}
               </div>
             </section>
           )}
-          </div>{/* /오른쪽 */}
-          </div>{/* /2컬럼 grid */}
 
-          {/* ── 더 알아보기 ── */}
-          <div className="mt-8 mb-2 text-xs font-bold text-neutral-400">더 알아보기</div>
+          {/* 더 알아보기 */}
+          <div className="mt-8 mb-1 text-xs font-bold text-neutral-400">더 알아보기</div>
           <div className="space-y-2">
             <details className="rounded-2xl border border-neutral-200/70 dark:border-zinc-800 bg-white dark:bg-zinc-900/30 p-4 text-[13px] text-neutral-600 dark:text-neutral-300">
-              <summary className="cursor-pointer font-bold text-neutral-800 dark:text-neutral-100">이 페이지, 어떻게 보나요? (이용 방법)</summary>
-              <ul className="mt-3 space-y-2 leading-relaxed list-disc pl-5">
-                <li>여기는 트레이더일로 AI 봇의 <b>실제 매매 성과를 공개</b>하는 곳이에요. <b>4시간마다 자동 갱신</b>됩니다.</li>
-                <li>맨 위에서 <b>전체 평가액·손익(원·달러)</b>을 보고, 탭에서 <b>코인·국내·해외</b>를 나눠 봐요.</li>
-                <li>종목마다 <b>매수가·투자금·손절선·목표가·매수일</b>까지 투명하게 보여줘요.</li>
-                <li>표에서 <b>★</b>를 누르면 관심 종목으로 표시돼요(로그인하면 계정에 저장).</li>
-                <li>⚠️ <b>직접 매매하는 서비스가 아니라, 봇의 결과를 보여주는 페이지</b>예요. 여기서 주문이 나가지 않습니다 — 투자 참고·학습용이에요.</li>
+              <summary className="cursor-pointer font-bold text-neutral-800 dark:text-neutral-100">5개 전략은 뭐가 다른가요?</summary>
+              <ul className="mt-3 space-y-2 leading-relaxed">
+                <li><b style={{ color: ORANGE }}>추세추종</b> — 상승추세에서 20일 신고가를 돌파할 때 매수(큰 흐름 타기). <b>유일하게 장기검증된</b> 전략.</li>
+                <li><b style={{ color: ORANGE }}>돌파</b> — 20일 신고가를 강하게 뚫을 때 매수, 10일 신저가 이탈 시 매도.</li>
+                <li><b style={{ color: ORANGE }}>평균회귀</b> — 상승추세의 눌림목(과매도)에서 싸게 매수, 회복하면 매도.</li>
+                <li><b style={{ color: ORANGE }}>모멘텀</b> — 최근 60일 가장 강하게 오른 종목을 추격(상대강도).</li>
+                <li><b style={{ color: ORANGE }}>안정형</b> — 상승추세 중 ‘덜 출렁이는’ 저변동성 종목 위주, 타이트한 손절.</li>
+                <li className="text-neutral-400">돌파·평균회귀·모멘텀·안정형은 <b>실험적</b>(장기검증 전)이라, 5개를 나란히 돌려 어느 게 잘 맞는지 비교하는 거예요.</li>
               </ul>
             </details>
 
             <details className="rounded-2xl border border-neutral-200/70 dark:border-zinc-800 bg-white dark:bg-zinc-900/30 p-4 text-[13px] text-neutral-600 dark:text-neutral-300">
-              <summary className="cursor-pointer font-bold text-neutral-800 dark:text-neutral-100">이게 무슨 서비스예요? (쉽게 설명)</summary>
-              <div className="mt-3 space-y-3">
-                <div>
-                  <div className="font-bold text-neutral-800 dark:text-neutral-100 mb-1">① 지금 무슨 일을 하나요?</div>
-                  <ul className="space-y-1 leading-relaxed list-disc pl-5">
-                    <li>AI가 4시간마다 코인·국내·미국 주식 453개를 살펴봐요.</li>
-                    <li>그중 꾸준히 오르는 흐름을 탄 종목만 골라 삽니다. 아무거나 안 사요.</li>
-                    <li>사면 손절선(여기까지 내려오면 자동 매도)을 정해 손실을 작게 끊어요.</li>
-                  </ul>
-                </div>
-                <div>
-                  <div className="font-bold text-neutral-800 dark:text-neutral-100 mb-1">② 지금은 ‘연습’ 중 (진짜 돈 아님)</div>
-                  <ul className="space-y-1 leading-relaxed list-disc pl-5">
-                    <li>게임처럼 가짜 돈으로, 대신 진짜 시세를 받아 똑같이 연습해요.</li>
-                    <li>과거 최대 26년치 데이터로도 미리 시험했어요(=백테스트).</li>
-                  </ul>
-                </div>
-                <div>
-                  <div className="font-bold text-neutral-800 dark:text-neutral-100 mb-1">③ 앞으로 계획</div>
-                  <ul className="space-y-1 leading-relaxed list-disc pl-5">
-                    <li>1주일 연습 결과를 보고, 안전장치 점검이 끝나면</li>
-                    <li>코인·국내부터 아주 적은 돈으로 진짜 매매 시작 (한 번에 안 몰아넣어요).</li>
-                    <li>미국주식은 아직 자동 ‘진짜 주문’이 안 돼서 당분간 연습만 합니다.</li>
-                  </ul>
-                </div>
-              </div>
+              <summary className="cursor-pointer font-bold text-neutral-800 dark:text-neutral-100">이 페이지, 어떻게 보나요? (이용 방법)</summary>
+              <ul className="mt-3 space-y-2 leading-relaxed list-disc pl-5">
+                <li>맨 위 <b>전략 순위</b>에서 어느 전략이 잘하는지 한눈에 봐요. 전략을 누르면 상세가 열려요.</li>
+                <li>전략 안에서 <b>코인·국내·해외</b> 탭으로 나눠 보고, 종목별 매수가·손절선·손익까지 확인해요.</li>
+                <li>표에서 <b>★</b>를 누르면 관심 종목으로 표시돼요(로그인하면 계정에 저장).</li>
+                <li>⚠️ <b>직접 매매하는 서비스가 아니라, 봇의 결과를 보여주는 페이지</b>예요 — 투자 참고·학습용입니다.</li>
+              </ul>
             </details>
 
             <details className="rounded-2xl border border-amber-300/40 dark:border-amber-800/40 bg-amber-50/40 dark:bg-amber-950/10 p-4 text-[13px] text-neutral-600 dark:text-neutral-300">
               <summary className="cursor-pointer font-bold text-amber-700 dark:text-amber-400">⚠️ 투자 주의사항 (꼭 읽어주세요)</summary>
               <ul className="mt-3 space-y-2 leading-relaxed list-disc pl-5">
                 <li><b>원금 손실 위험</b>이 있어요. 어떤 전략도 손실을 100% 막지 못합니다.</li>
-                <li><b>과거 성과 ≠ 미래 수익.</b> 잘됐던 게 앞으로도 잘된다는 보장은 없어요.</li>
+                <li><b>과거 성과 ≠ 미래 수익.</b> 지금 1위가 앞으로도 1위라는 보장은 없어요.</li>
                 <li>지금 수치는 <b>모의(가짜 돈) 결과</b>라 실제 매매와 다를 수 있어요(수수료·체결·세금 차이).</li>
-                <li>봇의 목표는 “많이 버는 것”이 아니라 <b>“크게 잃지 않는 것(낙폭 관리)”</b>이에요. 과거엔 그냥 들고 있기(존버)가 봇보다 더 번 적도 많아요.</li>
+                <li>실험 전략(돌파·평균회귀·모멘텀·안정형)은 <b>장기검증 전</b>이라 더 불안정할 수 있어요.</li>
                 <li>이 페이지는 <b>투자 권유가 아니라 정보 제공</b>입니다. 투자 결정과 책임은 <b>본인</b>에게 있어요.</li>
               </ul>
             </details>
@@ -403,7 +376,7 @@ export default function TraderClient() {
               <ul className="mt-3 space-y-2 leading-relaxed">
                 <li><b style={{ color: ORANGE }}>수익률</b> — 투자한 돈 대비 번 비율. +면 이익, -면 손실.</li>
                 <li><b style={{ color: ORANGE }}>승률</b> — 전체 거래 중 이긴 거래의 비율. 10번 중 6번 수익이면 60%.</li>
-                <li><b style={{ color: ORANGE }}>손절선 / 목표가</b> — 손절선은 ‘여기까지 떨어지면 판다’(수익 나면 위로 따라 올라감). 목표가는 참고용 — 닿아도 바로 안 팔고 추세 끝까지 따라가요.</li>
+                <li><b style={{ color: ORANGE }}>손절선 / 목표가</b> — 손절선은 ‘여기까지 떨어지면 판다’. 목표가는 참고용(닿아도 바로 안 팖).</li>
                 <li><b style={{ color: ORANGE }}>모의(페이퍼)</b> — 진짜 돈이 아니라 실제 시세로 하는 연습 매매.</li>
               </ul>
             </details>

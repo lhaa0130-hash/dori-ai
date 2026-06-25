@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Thu, 25 Jun 2026 03:16:40 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 25 Jun 2026 04:05:04 GMT</lastBuildDate>
+    <item>
+      <title>OpenAI의 맞춤형 칩, 인공지능의 새로운 전환점</title>
+      <link>https://dori-ai.com/insight/article/trend-167</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-167</guid>
+      <category>트렌드</category>
+      <pubDate>Thu, 25 Jun 2026 03:00:20 GMT</pubDate>
+      <description>OpenAI가 Broadcom과 협력하여 개발한 새로운 맞춤형 칩 '할라페뇨'가 인공지능 시스템의 효율성을 혁신적으로 끌어올리고 있습니다.</description>
+    </item>
     <item>
       <title>OpenAI, 새로운 맞춤형 칩으로 ChatGPT 성능 향상</title>
       <link>https://dori-ai.com/insight/article/trend-166</link>
@@ -318,14 +326,6 @@
       <category>분석</category>
       <pubDate>Mon, 22 Jun 2026 05:02:38 GMT</pubDate>
       <description>미국 주정부와 지방정부가 복지, 의료, 교육 행정에 AI를 빠르게 들여오고 있다. 문제는 기술 도입 속도보다 감시와 책임 구조가 훨씬 느리다는 점이다.</description>
-    </item>
-    <item>
-      <title>구글 클라우드, 필리핀 정부와 AI 및 사이버 보안 협력체계 구축</title>
-      <link>https://dori-ai.com/insight/article/trend-153</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-153</guid>
-      <category>트렌드</category>
-      <pubDate>Mon, 22 Jun 2026 04:00:28 GMT</pubDate>
-      <description>구글 클라우드가 필리핀 정부와 협력해 차세대 시민 서비스를 위한 AI 및 사이버 보안 이니셔티브를 발표했다. 이는 새로운 디지털 시대를 여는 중요한 발걸음으로 평가된다.</description>
     </item>
   </channel>
 </rss>
