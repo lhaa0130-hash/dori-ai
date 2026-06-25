@@ -59,33 +59,25 @@ export default function AiToolsClient() {
     <main className="w-full min-h-screen">
 
       {/* ── 히어로 ── */}
-      <section className="pt-8 pb-8 border-b border-neutral-100 dark:border-zinc-900">
-        <p className="text-[11px] font-bold text-[#F9954E] mb-3 tracking-wide uppercase">AI 도구</p>
-        <h1 className="text-[34px] sm:text-[44px] font-extrabold text-neutral-950 dark:text-white leading-[1.12] tracking-tight mb-2 break-keep">
-          지금 가장 많이 쓰는<br />AI 도구 모음
+      <section className="pt-6 pb-5 border-b border-neutral-100 dark:border-zinc-900">
+        <h1 className="text-[28px] sm:text-[36px] font-extrabold text-neutral-950 dark:text-white leading-[1.12] tracking-tight mb-1.5 break-keep">
+          AI 도구 모음
         </h1>
-        <p className="text-[14px] text-neutral-400 dark:text-neutral-500 leading-relaxed break-keep">
+        <p className="text-[13px] text-neutral-400 dark:text-neutral-500 break-keep">
           카테고리별로 엄선된 200개+ AI 도구
         </p>
       </section>
 
       {/* ── AI 모델 랭킹 (사용량/지능/가격 3열 동시) ── */}
-      <section className="w-full pt-6 pb-2">
+      <section className="w-full pt-4 pb-1">
         <OpenRouterRanking />
-        <Link
-          href="/ai-models"
-          className="mt-3 flex items-center justify-between rounded-2xl border border-[#F9954E]/40 bg-gradient-to-r from-[#F9954E]/10 to-transparent px-4 py-3 hover:border-[#F9954E] transition-colors"
-        >
-          <div className="min-w-0">
-            <p className="text-[13.5px] font-extrabold text-neutral-900 dark:text-white">전체 모델 비교 + 💰 비용 계산기</p>
-            <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5 truncate">토큰 수만 넣으면 모델별 월 비용을 자동 계산 · 정렬 비교표</p>
-          </div>
-          <span className="text-[#F9954E] text-[20px] font-black shrink-0 ml-3">→</span>
+        <Link href="/ai-models" className="mt-2 flex items-center gap-1.5 text-[12px] text-neutral-400 hover:text-[#F9954E] transition-colors">
+          전체 모델 비교 · 비용 계산기 →
         </Link>
       </section>
 
       {/* ── 카테고리 필터 (랭킹 하위) ── */}
-      <section className="pt-6 pb-0 border-b border-neutral-100 dark:border-zinc-900">
+      <section className="pt-4 pb-0 border-b border-neutral-100 dark:border-zinc-900">
         <div className="-mx-6 px-6 overflow-x-auto scrollbar-hide">
           <div className="flex gap-2 w-max pb-4">
             <button
