@@ -355,7 +355,7 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
         .filter((a: any) => a.title && isAgentApp(a) && !curatedNames.has(norm(a.title)))
         .slice(0, 20)
         .map((a: any) => {
-          const d = a.descKo || ((a.desc || "").replace(/\s*\S*$/, "") + "…"); // 한글 번역(descKo) 우선, 없으면 영어 폴백
+          const d = a.descKo || ((a.desc || "").replace(/\s*\S*$/, "") + "…");
           return {
             id: "orapp-" + norm(a.title), name: a.title, category: "agent",
             summary: d, strength: d,
