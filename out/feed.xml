@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Fri, 26 Jun 2026 09:00:16 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 26 Jun 2026 10:00:13 GMT</lastBuildDate>
+    <item>
+      <title>ON 반도체, Synaptics 인수로 물리적 AI 혁신 가속화</title>
+      <link>https://dori-ai.com/insight/article/trend-172</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-172</guid>
+      <category>트렌드</category>
+      <pubDate>Fri, 26 Jun 2026 09:00:17 GMT</pubDate>
+      <description>ON Semiconductor가 Synaptics를 70억 달러에 인수하며 물리적 AI 기술에 더욱 집중할 계획을 밝혔습니다.</description>
+    </item>
     <item>
       <title>게임이 AI의 직관을 키운다 — General Intuition의 23억 달러 도전</title>
       <link>https://dori-ai.com/insight/article/trend-171</link>
@@ -318,14 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
       <description>Claude Cowork를 활용한 자동화 및 프로젝트 관리 방법을 배워보세요.</description>
-    </item>
-    <item>
-      <title>[MCP 서버] Build and Deploy Claude Skills and MCP Servers | The Complete 2026 Guide</title>
-      <link>https://dori-ai.com/insight/article/video-6</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-6</guid>
-      <category>큐레이션</category>
-      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>MCP와 스킬을 활용한 AI 도구 배포 방법을 배워보세요.</description>
     </item>
   </channel>
 </rss>
