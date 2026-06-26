@@ -17,8 +17,6 @@ export const metadata = createMetadata({
   path: '/insight',
 });
 
-// Revalidate 설정 (새 글이 올라오면 60초마다 갱신 or 온디맨드 리밸리데이트)
-export const revalidate = 60;
 
 export default async function InsightPage() {
   try {
