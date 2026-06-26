@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Fri, 26 Jun 2026 05:00:15 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 26 Jun 2026 06:00:13 GMT</lastBuildDate>
+    <item>
+      <title>New York 민주당 경선에 쏟아진 **2천만 달러**: OpenAI 시대의 정치자금 전쟁</title>
+      <link>https://dori-ai.com/insight/article/analysis-9</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/analysis-9</guid>
+      <category>분석</category>
+      <pubDate>Fri, 26 Jun 2026 05:01:21 GMT</pubDate>
+      <description>AI 업계의 규제 싸움이 의회 청문회와 로비 사무실을 넘어 선거판으로 이동하고 있다. **New York** 민주당 경선에 투입된 **2천만 달러**는 기술 기업이 법을 기다리는 대신 법을 만들 사람을 고르기 시작했다는 신호다.</description>
+    </item>
     <item>
       <title>Patronus AI, 5천만 달러 투자 유치로 디지털 세계 구축 나선다</title>
       <link>https://dori-ai.com/insight/article/trend-170</link>
@@ -318,14 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
       <description>2026년에 유용한 AI 도구들을 소개합니다.</description>
-    </item>
-    <item>
-      <title>[코딩] 챗GPT만 쓰면 손해입니다 | '무료'로 쓰는 코덱스(Codex) 2026 초보자 완벽 가이드</title>
-      <link>https://dori-ai.com/insight/article/video-8</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-8</guid>
-      <category>큐레이션</category>
-      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>코덱스를 활용한 다양한 자동화 기법을 소개합니다.</description>
     </item>
   </channel>
 </rss>
