@@ -15,6 +15,7 @@ export type InsightFeedItem = {
   category: string;
   summary?: string;
   excerpt?: string;   // 본문 일부(미리보기용)
+  author?: string;    // 글 작성자(출처)
   channel?: string;   // 영상: 유튜브 채널명
   videoDate?: string; // 영상: 실제 유튜브 업로드 시각(ISO)
 };
@@ -56,6 +57,7 @@ export function getInsightFeed(perCategory = 12): InsightFeedItem[] {
         category: cat,
         summary: (norm(it.description || it.summary || it.subtitle) || "").slice(0, 180) || undefined,
         excerpt: excerptOf(body) || undefined,
+        author: norm(it.author) || "DORI-AI",
         channel: cat === "영상" ? ((body.match(/\*\*(.+?)\*\*/) || [])[1] || undefined) : undefined,
         videoDate: it.videoDate || undefined,
       });

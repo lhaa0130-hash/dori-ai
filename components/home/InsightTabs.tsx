@@ -17,6 +17,7 @@ export type InsightFeedItem = {
   category: string;
   summary?: string;
   excerpt?: string;
+  author?: string;
   channel?: string;
   videoDate?: string;
 };
@@ -129,7 +130,10 @@ export default function InsightTabs({ items, perTab = 8 }: { items: InsightFeedI
                         {it.channel ? " · " : ""}📺 {fmtVideoDate(it.videoDate)}
                       </span>
                     ) : (
-                      <span className="text-neutral-400 text-[11px]">{fmtDate(it.date)}</span>
+                      <span className="text-neutral-400 text-[11px] truncate">
+                        {it.author && <b className="text-neutral-600 dark:text-neutral-300">{it.author}</b>}
+                        {it.author ? " · " : ""}{fmtDate(it.date)}
+                      </span>
                     )}
                   </p>
                 </div>

@@ -108,31 +108,37 @@ export default function InsightPageClient({ initialPosts = [] }: { initialPosts:
 
             return (
               <li key={pid} className="border-b border-neutral-100 dark:border-zinc-900 last:border-0">
-                <Link href={`/insight/article/${post.slug || post.id}`} className="group flex items-start gap-4 py-4">
+                <Link href={`/insight/article/${post.slug || post.id}`} className="group flex items-start gap-3 py-4">
 
                   {/* 텍스트 */}
                   <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1.5">
-                      {cat && (
-                        <span className="text-[11px] font-bold text-[#F9954E]">{cat}</span>
-                      )}
+                    <div className="flex items-center gap-2 mb-1">
+                      {cat && <span className="text-[10px] font-bold text-[#F9954E]">{cat}</span>}
                       <span className="text-[11px] text-neutral-400 dark:text-neutral-500" suppressHydrationWarning>
                         {fmtDate(post.created_at)}
                       </span>
                     </div>
-                    <h3 className="text-[14px] sm:text-[15px] font-bold text-neutral-900 dark:text-white leading-snug break-keep line-clamp-2 group-hover:text-[#F9954E] transition-colors mb-1">
+                    <h3 className="text-[13.5px] sm:text-[14.5px] font-bold text-neutral-900 dark:text-white leading-snug break-keep line-clamp-2 group-hover:text-[#F9954E] transition-colors">
                       {post.title || '제목 없음'}
                     </h3>
                     {desc && (
-                      <p className="text-[12px] text-neutral-500 dark:text-neutral-400 line-clamp-1 leading-relaxed">
+                      <p className="text-[11.5px] text-neutral-500 dark:text-neutral-400 line-clamp-1 mt-0.5">
                         {desc}
                       </p>
                     )}
+                    <button
+                      type="button"
+                      onClick={(e) => handleLike(e, pid, likes)}
+                      className="mt-1.5 flex items-center gap-1 text-[11px] text-neutral-400 dark:text-neutral-500 hover:text-[#F9954E] transition-colors"
+                    >
+                      <span>{isLiked ? '❤️' : '♡'}</span>
+                      <span className={isLiked ? 'text-[#F9954E]' : ''}>{likes}</span>
+                    </button>
                   </div>
 
                   {/* 썸네일 */}
                   {post.thumbnail_url && (
-                    <div className="w-[72px] sm:w-[88px] h-[54px] sm:h-[64px] rounded-xl overflow-hidden flex-shrink-0 bg-neutral-100 dark:bg-zinc-800">
+                    <div className="w-[68px] sm:w-[80px] h-[52px] sm:h-[60px] rounded-lg overflow-hidden flex-shrink-0 bg-neutral-100 dark:bg-zinc-800">
                       <img
                         src={post.thumbnail_url}
                         alt=""
@@ -144,18 +150,6 @@ export default function InsightPageClient({ initialPosts = [] }: { initialPosts:
                     </div>
                   )}
                 </Link>
-
-                {/* 좋아요 */}
-                <div className="pb-3 flex justify-end">
-                  <button
-                    type="button"
-                    onClick={(e) => handleLike(e, pid, likes)}
-                    className="flex items-center gap-1 text-[11px] text-neutral-400 dark:text-neutral-500 hover:text-[#F9954E] transition-colors"
-                  >
-                    <span>{isLiked ? '❤️' : '♡'}</span>
-                    <span className={isLiked ? 'text-[#F9954E]' : ''}>{likes}</span>
-                  </button>
-                </div>
               </li>
             );
           })}
