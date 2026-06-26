@@ -39,7 +39,7 @@ function fmtDate(s?: string) {
 }
 
 export default function InsightPageClient({ initialPosts = [] }: { initialPosts: Post[] }) {
-  const [likedPosts, setLikedPosts] = useState<number[]>([]);
+  const [likedPosts, setLikedPosts] = useState<string[]>([]);
   const [likesData, setLikesData] = useState<Record<string, number>>({});
   const [selected, setSelected] = useState('전체');
 
@@ -53,9 +53,8 @@ export default function InsightPageClient({ initialPosts = [] }: { initialPosts:
   const handleLike = useCallback((e: React.MouseEvent, postId: string, cur: number) => {
     e.preventDefault();
     e.stopPropagation();
-    const num = parseInt(postId);
-    const liked = likedPosts.includes(num);
-    const next = liked ? likedPosts.filter(id => id !== num) : [...likedPosts, num];
+    const liked = likedPosts.includes(postId);
+    const next = liked ? likedPosts.filter(id => id !== postId) : [...likedPosts, postId];
     setLikedPosts(next);
     localStorage.setItem('dori_liked_insights', JSON.stringify(next));
     const nextLikes = { ...likesData, [postId]: liked ? Math.max(0, cur - 1) : cur + 1 };
