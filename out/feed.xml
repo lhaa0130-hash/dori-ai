@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Fri, 26 Jun 2026 06:00:13 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 26 Jun 2026 07:00:14 GMT</lastBuildDate>
+    <item>
+      <title>게임이 AI의 직관을 키운다 — General Intuition의 23억 달러 도전</title>
+      <link>https://dori-ai.com/insight/article/trend-171</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-171</guid>
+      <category>트렌드</category>
+      <pubDate>Fri, 26 Jun 2026 06:00:18 GMT</pubDate>
+      <description>General Intuition이 비디오 게임 데이터를 활용해 AI의 인간 직관을 개발하기 위한 3억 2천만 달러를 유치했습니다. 이 혁신의 의미와 AI의 미래가 주목받고 있습니다.</description>
+    </item>
     <item>
       <title>New York 민주당 경선에 쏟아진 **2천만 달러**: OpenAI 시대의 정치자금 전쟁</title>
       <link>https://dori-ai.com/insight/article/analysis-9</link>
@@ -318,14 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
       <description>MCP와 스킬을 활용한 AI 도구 배포 방법을 배워보세요.</description>
-    </item>
-    <item>
-      <title>[AI 도구] 2026년에 실제로 사용할 AI 도구들!</title>
-      <link>https://dori-ai.com/insight/article/video-7</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-7</guid>
-      <category>큐레이션</category>
-      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>2026년에 유용한 AI 도구들을 소개합니다.</description>
     </item>
   </channel>
 </rss>
