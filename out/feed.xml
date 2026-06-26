@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Fri, 26 Jun 2026 22:00:13 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 26 Jun 2026 23:00:14 GMT</lastBuildDate>
+    <item>
+      <title>OpenAI, 인도 시장 공략을 위한 새로운 리더 영입</title>
+      <link>https://dori-ai.com/insight/article/trend-175</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-175</guid>
+      <category>트렌드</category>
+      <pubDate>Fri, 26 Jun 2026 22:00:17 GMT</pubDate>
+      <description>OpenAI가 인도 시장을 겨냥해 우버 인디아의 수장을 영입하며 본격적으로 진출을 선언했다.</description>
+    </item>
     <item>
       <title>어도비, 이미지 및 동영상 편집 도구 Topaz Labs 인수</title>
       <link>https://dori-ai.com/insight/article/trend-174</link>
@@ -318,14 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
       <description>AI의 기본 작동 원리를 쉽게 설명합니다.</description>
-    </item>
-    <item>
-      <title>[영상 제작] 구글 제미나이로 영상 만드는 방법</title>
-      <link>https://dori-ai.com/insight/article/video-23</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-23</guid>
-      <category>큐레이션</category>
-      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>구글 제미나이를 활용한 영상 제작 방법을 소개합니다.</description>
     </item>
   </channel>
 </rss>
