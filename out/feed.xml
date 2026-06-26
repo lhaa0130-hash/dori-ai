@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Fri, 26 Jun 2026 11:00:13 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 26 Jun 2026 12:00:14 GMT</lastBuildDate>
+    <item>
+      <title>Netris, AI 네오클라우드 혁신을 위해 150억 원 투자 유치</title>
+      <link>https://dori-ai.com/insight/article/trend-173</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-173</guid>
+      <category>트렌드</category>
+      <pubDate>Fri, 26 Jun 2026 11:00:19 GMT</pubDate>
+      <description>Netris가 a16z로부터 150억 원을 유치하여 AI 네오클라우드 운영을 가속화하려는 비전을 밝혔다.</description>
+    </item>
     <item>
       <title>ON 반도체, Synaptics 인수로 물리적 AI 혁신 가속화</title>
       <link>https://dori-ai.com/insight/article/trend-172</link>
@@ -318,14 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
       <description>구글의 무료 AI 영상 툴 VEO 3.1을 활용하는 방법을 소개합니다.</description>
-    </item>
-    <item>
-      <title>[워크플로우] Master Claude Cowork 20분 만에 배우기</title>
-      <link>https://dori-ai.com/insight/article/video-5</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-5</guid>
-      <category>큐레이션</category>
-      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>Claude Cowork를 활용한 자동화 및 프로젝트 관리 방법을 배워보세요.</description>
     </item>
   </channel>
 </rss>
