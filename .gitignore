@@ -48,3 +48,6 @@ install-companion
 public/cards/animal/
 out/cards/animal/
 build_galaxy.log
+
+# 빌드·배포 동시실행 방지 락(deploy.js) — 커밋 금지
+.deploy.lock
