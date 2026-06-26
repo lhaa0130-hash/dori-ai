@@ -6,13 +6,11 @@ import { getAllReports } from '@/lib/reports';
 import { Suspense } from 'react';
 import Header from "@/components/layout/Header";
 import Image from 'next/image';
-import { MDXRemote } from 'next-mdx-remote/rsc';
-import rehypeHighlight from 'rehype-highlight';
-import rehypeSlug from 'rehype-slug';
-import rehypeAutolinkHeadings from 'rehype-autolink-headings';
 import Link from 'next/link';
-import remarkGfm from 'remark-gfm';
 import type { Metadata } from 'next';
+import { remark } from 'remark';
+import remarkGfm from 'remark-gfm';
+import remarkHtml from 'remark-html';
 import ShareButtons from '@/components/article/ShareButtons';
 import ReadingProgress from '@/components/article/ReadingProgress';
 import RelatedArticles from '@/components/article/RelatedArticles';
@@ -149,26 +147,12 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
     ],
   };
 
-  // Next.js Link 컴포넌트에는 href 속성이 필수입니다.
-  const components = {
-    a: ({ href, ...props }: any) => {
-      if (href && href.startsWith('/')) {
-        return (
-          <Link href={href} {...props} />
-        );
-      }
-      return <a href={href} {...props} target="_blank" rel="noopener noreferrer" />;
-    },
-    img: ({ src, alt, ...props }: any) => ((alt || '').startsWith('@') ? (<img src={src || ''} alt={(alt || '').slice(1)} width={40} height={40} style={{ width: '40px', height: '40px', borderRadius: '50%', display: 'inline-block', verticalAlign: 'middle', marginRight: '8px' }} />) : (<Image src={src || ''} alt={alt || ''} width={700} height={400} style={{ width: '100%', height: 'auto' }} {...props} />)),
-  };
-
-  const mdxOptions = {
-    remarkPlugins: [remarkGfm],
-    rehypePlugins: [
-      rehypeHighlight,
-      rehypeSlug,
-    ],
-  };
+  // 마크다운 → HTML 변환 (next-mdx-remote/rsc 대신 remark 사용 — 정적 export 호환)
+  const contentHtml = await remark()
+    .use(remarkGfm)
+    .use(remarkHtml, { sanitize: false })
+    .process(post.content || '')
+    .then((f) => String(f));
 
   return (
     <Suspense fallback={<div>Loading...</div>}>
@@ -218,13 +202,10 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
           </div>
 
           {/* 기사 본문 */}
-          <div className="prose-premium max-w-none">
-            <MDXRemote
-              source={post.content || ''}
-              components={components}
-              options={{ mdxOptions }}
-            />
-          </div>
+          <div
+            className="prose-premium max-w-none"
+            dangerouslySetInnerHTML={{ __html: contentHtml }}
+          />
 
           {/* 하단 공유 버튼 */}
           <div className="mt-10 pt-6 border-t border-neutral-200 dark:border-neutral-800">

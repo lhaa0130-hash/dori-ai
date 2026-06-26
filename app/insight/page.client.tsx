@@ -100,7 +100,7 @@ export default function InsightPageClient({ initialPosts = [] }: { initialPosts:
         <ul>
           {posts.map((post) => {
             const pid = String(post.id || '');
-            const isLiked = likedPosts.includes(parseInt(pid));
+            const isLiked = likedPosts.includes(pid);
             const likes = likesData[pid] ?? (post.likes || 0);
             const cat = getCat(post.category);
             const desc = getDesc(post.content, post.summary);
