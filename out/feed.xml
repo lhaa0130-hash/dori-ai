@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Fri, 26 Jun 2026 00:21:47 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 26 Jun 2026 00:42:05 GMT</lastBuildDate>
+    <item>
+      <title>캘리포니아, AI의 노동 시장 영향 모니터링 도구 최초 출시</title>
+      <link>https://dori-ai.com/insight/article/trend-169</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-169</guid>
+      <category>트렌드</category>
+      <pubDate>Fri, 26 Jun 2026 00:00:30 GMT</pubDate>
+      <description>캘리포니아주가 AI의 노동 시장에 미치는 영향을 추적할 수 있는 도구를 세계 최초로 출시했습니다. 이는 AI 기술의 영향력을 보다 명확히 이해하는 데 큰 의미를 가집니다.</description>
+    </item>
     <item>
       <title>노트북LM(NotebookLM) 사용법: 자료 업로드부터 요약·질문·오디오까지 단계별 가이드</title>
       <link>https://dori-ai.com/insight/article/curation-12</link>
@@ -318,14 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
       <description>DeepSeek AI의 핵심 기능과 활용법을 간단히 소개합니다.</description>
-    </item>
-    <item>
-      <title>Groq, 6억 5천만 달러 투자 유치 — AI 칩 시장의 새로운 강자?</title>
-      <link>https://dori-ai.com/insight/article/trend-157</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-157</guid>
-      <category>트렌드</category>
-      <pubDate>Mon, 22 Jun 2026 22:00:18 GMT</pubDate>
-      <description>AI 칩 제조업체 Groq가 6억 5천만 달러의 자금을 확보하며 새로운 인재를 영입하고 있습니다. 이는 NVIDIA의 대규모 인수 이후 AI 생태계에서의 경쟁을 더욱 치열하게 만듭니다.</description>
     </item>
   </channel>
 </rss>

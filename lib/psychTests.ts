@@ -116,9 +116,9 @@ export const CATEGORIES = [
 
 // PHQ-9 / GAD-7 : 0~3 (지난 2주 빈도)
 const FREQ_2W: Choice[] = [
-  { label: "전혀 아니다", value: 0 },
+  { label: "전혀 없었다", value: 0 },
   { label: "며칠 동안", value: 1 },
-  { label: "일주일 이상", value: 2 },
+  { label: "절반 이상의 날", value: 2 },
   { label: "거의 매일", value: 3 },
 ];
 
@@ -142,10 +142,10 @@ const CBI_FREQ: Choice[] = [
 
 // Rosenberg : 0~3 동의 (역채점은 엔진이 자동 반전)
 const AGREE_4: Choice[] = [
-  { label: "매우 그렇다", value: 3 },
-  { label: "그렇다", value: 2 },
-  { label: "아니다", value: 1 },
   { label: "전혀 아니다", value: 0 },
+  { label: "아니다", value: 1 },
+  { label: "그렇다", value: 2 },
+  { label: "매우 그렇다", value: 3 },
 ];
 
 // BRS : 1~5 동의 (평균 채점)
@@ -219,11 +219,11 @@ const ASRS_FREQ: Choice[] = [
 
 // OCI-R(강박) : 0~4 고통 정도 (지난 한 달)
 const OCIR_SCALE: Choice[] = [
-  { label: "전혀 그렇지 않다", value: 0 },
-  { label: "약간 그렇다", value: 1 },
-  { label: "보통이다", value: 2 },
-  { label: "많이 그렇다", value: 3 },
-  { label: "매우 그렇다", value: 4 },
+  { label: "전혀 아니다", value: 0 },
+  { label: "조금", value: 1 },
+  { label: "보통", value: 2 },
+  { label: "많이", value: 3 },
+  { label: "매우 심하다", value: 4 },
 ];
 
 /* ── 테스트 데이터 ─────────────────────────────── */
