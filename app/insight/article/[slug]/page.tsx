@@ -225,13 +225,10 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
       </main>
 
       {/* 관리자 전용 편집/삭제 바 */}
-      {rawMarkdown && (
-        <AdminArticleBar
-          slug={params.slug}
-          title={post.title || params.slug}
-          rawMarkdown={rawMarkdown}
-        />
-      )}
+      <AdminArticleBar
+        slug={params.slug}
+        title={post.title || params.slug}
+      />
     </Suspense>
   );
 }
