@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Fri, 26 Jun 2026 03:00:13 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 26 Jun 2026 04:00:17 GMT</lastBuildDate>
+    <item>
+      <title>Patronus AI, 5천만 달러 투자 유치로 디지털 세계 구축 나선다</title>
+      <link>https://dori-ai.com/insight/article/trend-170</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-170</guid>
+      <category>트렌드</category>
+      <pubDate>Fri, 26 Jun 2026 03:00:19 GMT</pubDate>
+      <description>Patronus AI가 5천만 달러의 투자금을 확보하며 AI 에이전트의 스트레스 테스트를 위한 디지털 세계 구축에 나섭니다.</description>
+    </item>
     <item>
       <title>캘리포니아, AI의 노동 시장 영향 모니터링 도구 최초 출시</title>
       <link>https://dori-ai.com/insight/article/trend-169</link>
@@ -318,14 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
       <description>코덱스를 활용한 다양한 자동화 기법을 소개합니다.</description>
-    </item>
-    <item>
-      <title>[AI 도구] DeepSeek AI의 주요 기능을 11분 만에 알아보세요</title>
-      <link>https://dori-ai.com/insight/article/video-9</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-9</guid>
-      <category>큐레이션</category>
-      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>DeepSeek AI의 핵심 기능과 활용법을 간단히 소개합니다.</description>
     </item>
   </channel>
 </rss>
