@@ -59,7 +59,7 @@ export default async function InsightPage() {
         tags: guide.tags || [],
         likes: 0,
         created_at: guide.date || new Date().toISOString(),
-        content: guide.content || '',
+        content: '',
         thumbnail_url: guide.thumbnail,
         slug: guide.slug,
       }));
@@ -72,7 +72,7 @@ export default async function InsightPage() {
         tags: trend.tags || [],
         likes: 0,
         created_at: trend.date || new Date().toISOString(),
-        content: trend.content || '',
+        content: '',
         thumbnail_url: trend.thumbnail,
         slug: trend.slug,
       }));
@@ -98,7 +98,7 @@ export default async function InsightPage() {
         tags: item.tags || [],
         likes: 0,
         created_at: item.date || new Date().toISOString(),
-        content: item.content || '',
+        content: '',
         thumbnail_url: item.thumbnail,
         slug: item.slug,
       }));
@@ -111,7 +111,7 @@ export default async function InsightPage() {
         tags: item.tags || [],
         likes: 0,
         created_at: item.date || new Date().toISOString(),
-        content: item.content || '',
+        content: '',
         thumbnail_url: item.thumbnail,
         slug: item.slug,
       }));
@@ -124,7 +124,7 @@ export default async function InsightPage() {
         tags: item.tags || [],
         likes: 0,
         created_at: item.date || new Date().toISOString(),
-        content: item.content || '',
+        content: '',
         thumbnail_url: item.thumbnail,
         slug: item.slug,
       }));
@@ -165,7 +165,7 @@ export default async function InsightPage() {
       tags: post.tags,
       likes: post.likes || 0,
       created_at: post.created_at,
-      content: post.content,
+      content: '',
       thumbnail_url: post.thumbnail_url,
       slug: post.slug || post.id,
       isNew: true // UI에서 구분 가능하게 표시 가능
