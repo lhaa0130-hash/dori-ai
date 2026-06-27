@@ -1,5 +1,44 @@
 [
   {
+    "id": "mk8-1",
+    "name": "모나미 153 볼펜 세트",
+    "category": "living",
+    "source": "coupang",
+    "query": "모나미 153 볼펜 세트",
+    "emoji": "✍️",
+    "priceHint": "1만원 이하~1만원대",
+    "summary": "가장 무난한 데일리 필기템",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/eUHqEHPhwi"
+  },
+  {
+    "id": "mk8-2",
+    "name": "문교 소프트 오일파스텔 세트",
+    "category": "living",
+    "source": "coupang",
+    "query": "문교 소프트 오일파스텔 세트",
+    "emoji": "🎨",
+    "priceHint": "1~3만원대",
+    "summary": "퇴근 후 가볍게 시작하는 취미",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/eUHqEKjwTk"
+  },
+  {
+    "id": "mk8-3",
+    "name": "코멧 아웃도어 폴딩 캠핑 박스",
+    "category": "living",
+    "source": "coupang",
+    "query": "코멧 아웃도어 폴딩 캠핑 박스",
+    "emoji": "📦",
+    "priceHint": "2~5만원대",
+    "summary": "캠핑 짐과 집 수납을 겸용",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/eUHqEMCWXI"
+  },
+  {
     "id": "mk7-1",
     "name": "이케아 스코디스 페그보드",
     "category": "furniture",
@@ -9,7 +48,7 @@
     "priceHint": "1~3만원대",
     "summary": "벽면 정리용 모듈 보드",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/eRnDjOuFPw"
   },
   {
@@ -22,7 +61,7 @@
     "priceHint": "2~5만원대",
     "summary": "방 분위기 바꾸는 조명",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/eRnDjRqvp6"
   },
   {
@@ -35,7 +74,7 @@
     "priceHint": "1~3만원대",
     "summary": "관리 쉬운 초록 포인트",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/eRnDjUCOSy"
   },
   {
@@ -48,7 +87,7 @@
     "priceHint": "1만원대",
     "summary": "실용적인 벽 포인트",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/eRnDjXzPZA"
   },
   {
