@@ -90,11 +90,11 @@ function lifespanOf(card: AnimalCard): string | null {
   return "50년 이상";
 }
 
-const BUSTED_SLUGS = new Set(["spider-monkey", "gibbon", "ocean-sunfish"]);
+const BUSTED_SLUGS = new Set(["spider-monkey", "gibbon", "sloth", "japanese-giant-flying-squirrel", "cassowary", "andean-condor", "ocean-sunfish", "eel", "electric-eel", "piranha", "devil-fish", "flying-fish", "blackmouth-angler", "sea-anemone", "sea-urchin", "abalone", "scallop", "dragonfly", "cicada", "stag-beetle", "newt", "stick-insect", "earwig", "water-strider", "desert-tortoise", "star-nosed-mole", "naked-mole-rat"]);
 function imgUrl(p?: string) {
   if (!p) return "";
   const slug = (p.split("/").pop() || "").replace(/\.jpg$/, "");
-  return BUSTED_SLUGS.has(slug) ? `${p}?v=2` : p;
+  return BUSTED_SLUGS.has(slug) ? `${p}?v=3` : p;
 }
 
 export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] }) {
