@@ -59,6 +59,12 @@ const SIMPLE_FILTERS = [
     chipCls: "bg-violet-50 dark:bg-violet-900/20 text-violet-700 dark:text-violet-300 border-violet-200 dark:border-violet-800",
     tags: ["1년 이하", "1~5년", "5~20년", "20~50년", "50년 이상"],
   },
+  {
+    id: "weight", emoji: "⚖️", label: "몸무게",
+    cls: "bg-cyan-500 text-white border-cyan-500",
+    chipCls: "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800",
+    tags: ["100g 이하", "100g~1kg", "1~10kg", "10~50kg", "50~200kg", "200kg~1톤", "1톤 이상"],
+  },
 ] as const;
 
 // 모달 하단에 항상 표시할 3개 칩 (모든 동물 동일)
@@ -73,6 +79,7 @@ const STD_INFO = [
   { key: "서식지", emoji: "🌍" },
   { key: "먹이",   emoji: "🍽️" },
   { key: "크기",   emoji: "📏" },
+  { key: "몸무게", emoji: "⚖️" },
   { key: "수명",   emoji: "⏳" },
 ];
 
@@ -150,8 +157,8 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
       const ct = card.filters?.taxonomy || [];
       if (![...taxPicks].some((t) => ct.includes(t))) return false;
     }
-    // diet, color (filters 객체에서)
-    for (const fid of ["diet", "color"] as const) {
+    // diet, color, weight (filters 객체에서)
+    for (const fid of ["diet", "color", "weight"] as const) {
       const picks = selected[fid];
       if (!picks?.size) continue;
       const ct = card.filters?.[fid] || [];
@@ -219,7 +226,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
             300종 동물을<br />아이 눈높이로 탐험해요
           </h1>
           <p className="text-[14px] text-neutral-400 dark:text-neutral-500 leading-relaxed break-keep">
-            이름으로 찾거나 종류 · 먹이 · 색깔 · 수명으로 골라보세요
+            이름으로 찾거나 종류 · 먹이 · 색깔 · 수명 · 몸무게로 골라보세요
           </p>
         </section>
 
