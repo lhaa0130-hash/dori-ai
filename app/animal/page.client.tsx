@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { BookOpen, Search, X, RotateCcw, ChevronDown, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
+import { BookOpen, Search, X, RotateCcw, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 
 // ─── 동물 카드 타입 ──────────────────────────────────────────────────
 export interface AnimalCard {
@@ -102,7 +102,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
   const [detail, setDetail] = useState<AnimalCard | null>(null);
   const [zoomImg, setZoomImg] = useState<{ src: string; name: string } | null>(null);
   const [query, setQuery] = useState("");
-  const [sort, setSort] = useState<"no" | "name">("no");
+  const [sort] = useState<"no" | "name">("name"); // 항상 가나다(이름)순
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(16);
   const resultRef = useRef<HTMLDivElement>(null);
@@ -320,18 +320,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
                   <RotateCcw className="w-3.5 h-3.5" /> 초기화
                 </button>
               )}
-              <div className="relative">
-                <select
-                  value={sort}
-                  onChange={(e) => setSort(e.target.value as "no" | "name")}
-                  aria-label="정렬"
-                  className="appearance-none pl-3 pr-8 py-2 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-[13px] font-bold text-neutral-700 dark:text-neutral-200 focus:outline-none focus:border-[#F9954E] cursor-pointer"
-                >
-                  <option value="no">번호순</option>
-                  <option value="name">이름순</option>
-                </select>
-                <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-400 pointer-events-none" />
-              </div>
+              <span className="text-[12px] font-bold text-neutral-400 dark:text-neutral-500">가나다순</span>
             </div>
           </div>
 
