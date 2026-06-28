@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 28 Jun 2026 06:00:13 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 28 Jun 2026 07:00:14 GMT</lastBuildDate>
+    <item>
+      <title>중국의 사이버 보안 혁신, 앤트로픽과의 경쟁에서 우위 점하다</title>
+      <link>https://dori-ai.com/insight/article/trend-178</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-178</guid>
+      <category>트렌드</category>
+      <pubDate>Sun, 28 Jun 2026 06:00:16 GMT</pubDate>
+      <description>중국이 사이버 보안 분야에서 앤트로픽과 유사한 기술력을 확보하면서 AI 경쟁의 판도가 바뀌고 있다.</description>
+    </item>
     <item>
       <title>엘론 머스크의 우주 데이터 센터, 과연 실현될까?</title>
       <link>https://dori-ai.com/insight/article/trend-177</link>
@@ -318,14 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
       <description>Google IO와 AI 관련 최신 소식을 종합적으로 정리합니다.</description>
-    </item>
-    <item>
-      <title>[제미나이 사용법] 제미나이 완전정복1편</title>
-      <link>https://dori-ai.com/insight/article/video-17</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-17</guid>
-      <category>큐레이션</category>
-      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>제미나이 설치 및 기본 사용법을 안내합니다.</description>
     </item>
   </channel>
 </rss>
