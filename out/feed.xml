@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 28 Jun 2026 09:00:15 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 28 Jun 2026 09:09:55 GMT</lastBuildDate>
+    <item>
+      <title>구글의 제약, 메타의 AI 모델 사용 제한</title>
+      <link>https://dori-ai.com/insight/article/trend-180</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-180</guid>
+      <category>트렌드</category>
+      <pubDate>Sun, 28 Jun 2026 09:00:15 GMT</pubDate>
+      <description>구글이 메타의 Gemini AI 모델 사용을 제한하면서 AI 산업의 경쟁 구도가 변화하고 있다. 이 결정이 무엇을 의미하는지 살펴본다.</description>
+    </item>
     <item>
       <title>암 투병 중 AI를 활용한 기적, 코너 크리스투의 이야기</title>
       <link>https://dori-ai.com/insight/article/trend-179</link>
@@ -318,14 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
       <description>AI 에이전트와 자동화의 기본 개념을 쉽게 설명합니다.</description>
-    </item>
-    <item>
-      <title>[AI 영화 제작] AI 영화 제작을 위한 완벽 가이드</title>
-      <link>https://dori-ai.com/insight/article/video-15</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-15</guid>
-      <category>큐레이션</category>
-      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>AI를 활용한 영화 제작의 전 과정을 안내합니다.</description>
     </item>
   </channel>
 </rss>
