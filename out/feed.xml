@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 28 Jun 2026 22:00:15 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 28 Jun 2026 23:00:15 GMT</lastBuildDate>
+    <item>
+      <title>포드, AI 한계를 인식하고 경력 있는 엔지니어를 재고용하다</title>
+      <link>https://dori-ai.com/insight/article/trend-182</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-182</guid>
+      <category>트렌드</category>
+      <pubDate>Sun, 28 Jun 2026 22:00:15 GMT</pubDate>
+      <description>포드가 AI 도입의 한계를 깨닫고 경력 있는 엔지니어를 다시 고용하기 시작했습니다. 이는 기술 의존의 위험성을 드러내며, 자동차 산업의 변화를 시사합니다.</description>
+    </item>
     <item>
       <title>아시아 스타트업, 새로운 신화 같은 모델 출시 — 미국의 수출 금지에 맞서다</title>
       <link>https://dori-ai.com/insight/article/trend-181</link>
@@ -318,14 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
       <description>구글 Flow의 신기능을 활용한 AI 영상 제작 방법을 소개합니다.</description>
-    </item>
-    <item>
-      <title>[코딩] 무료로 AI가 파일 수정하는 CODEX 가이드</title>
-      <link>https://dori-ai.com/insight/article/video-13</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-13</guid>
-      <category>큐레이션</category>
-      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>코딩 없이도 AI를 활용해 파일을 수정하는 방법을 안내합니다.</description>
     </item>
   </channel>
 </rss>
