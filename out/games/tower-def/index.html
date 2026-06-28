@@ -116,15 +116,6 @@
         createUnityInstance(canvas, config, (progress) => {
           document.querySelector("#unity-progress-bar-full").style.width = 100 * progress + "%";
               }).then((unityInstance) => {
-              window.addEventListener("message", function (e) {
-                var d = e.data;
-                if (!d || d.type !== "dori-host") return;
-                if (d.event === "ad-result") {
-                  try { unityInstance.SendMessage("DoriAdReceiver", "OnAdResult", d.granted ? "1" : "0"); } catch (x) {}
-                } else if (d.event === "cloud-load") {
-                  try { unityInstance.SendMessage("DoriSaveReceiver", "OnCloudLoad", d.data || ""); } catch (x) {}
-                }
-              });
                 document.querySelector("#unity-loading-bar").style.display = "none";
                 document.querySelector("#unity-fullscreen-button").onclick = () => {
                   unityInstance.SetFullscreen(1);
