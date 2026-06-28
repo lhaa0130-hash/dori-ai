@@ -2,7 +2,7 @@
 
 import { useState, useMemo, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
-import { BookOpen, Search, X, RotateCcw, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
+import { BookOpen, Search, X, RotateCcw, ChevronDown, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
 
 // ─── 동물 카드 타입 ──────────────────────────────────────────────────
 export interface AnimalCard {
@@ -90,11 +90,11 @@ function lifespanOf(card: AnimalCard): string | null {
   return "50년 이상";
 }
 
-const BUSTED_SLUGS = new Set(["spider-monkey", "gibbon", "sloth", "japanese-giant-flying-squirrel", "cassowary", "andean-condor", "ocean-sunfish", "eel", "electric-eel", "piranha", "devil-fish", "flying-fish", "blackmouth-angler", "sea-anemone", "sea-urchin", "abalone", "scallop", "dragonfly", "cicada", "stag-beetle", "newt", "stick-insect", "earwig", "water-strider", "desert-tortoise", "star-nosed-mole", "naked-mole-rat"]);
+const BUSTED_SLUGS = new Set(["spider-monkey", "gibbon", "sloth", "japanese-giant-flying-squirrel", "cassowary", "andean-condor", "ocean-sunfish", "eel", "electric-eel", "piranha", "devil-fish", "flying-fish", "blackmouth-angler", "sea-anemone", "sea-urchin", "abalone", "scallop", "dragonfly", "cicada", "stag-beetle", "newt", "stick-insect", "earwig", "water-strider", "desert-tortoise", "star-nosed-mole", "naked-mole-rat", "smooth-hammerhead", "colugo", "firefly", "longhorn-beetle", "lionfish"]);
 function imgUrl(p?: string) {
   if (!p) return "";
   const slug = (p.split("/").pop() || "").replace(/\.jpg$/, "");
-  return BUSTED_SLUGS.has(slug) ? `${p}?v=4` : p;
+  return BUSTED_SLUGS.has(slug) ? `${p}?v=5` : p;
 }
 
 export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] }) {
@@ -102,7 +102,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
   const [detail, setDetail] = useState<AnimalCard | null>(null);
   const [zoomImg, setZoomImg] = useState<{ src: string; name: string } | null>(null);
   const [query, setQuery] = useState("");
-  const [sort] = useState<"no" | "name">("name"); // 항상 가나다(이름)순
+  const [sort, setSort] = useState<"no" | "name">("name"); // 가나다 기본, 번호순 토글 가능
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(16);
   const resultRef = useRef<HTMLDivElement>(null);
@@ -241,10 +241,14 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
           </div>
         </div>
 
-        {/* ── 종류로 찾기 ── */}
-        <section className="mb-5">
-          <p className="text-[11px] font-bold text-neutral-400 dark:text-neutral-500 uppercase tracking-widest mb-2.5">종류</p>
-          <div className="flex flex-wrap gap-2">
+        {/* ── 종류로 찾기 (라벨 왼쪽 + 한 줄 가로 스크롤로 통일) ── */}
+        <section className="mb-3">
+          <div className="flex items-center gap-3">
+            <div className="flex items-center gap-1 w-[60px] flex-shrink-0">
+              <span className="text-sm">🐾</span>
+              <span className="text-[11px] font-bold text-neutral-400 dark:text-neutral-500">종류</span>
+            </div>
+            <div className="flex flex-nowrap gap-2 overflow-x-auto pb-1">
             {TYPES.map((t) => {
               const sel = isSelected("taxonomy", t.label);
               const cnt = typeCounts[t.label] || 0;
@@ -273,18 +277,19 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
                 </button>
               );
             })}
+            </div>
           </div>
         </section>
 
-        {/* ── 3개 간소화 필터 (먹이·색깔·수명) ── */}
+        {/* ── 3개 간소화 필터 (먹이·색깔·수명) — 한 줄 가로 스크롤 ── */}
         <section className="mb-8 space-y-2.5">
           {SIMPLE_FILTERS.map((f) => (
-            <div key={f.id} className="flex items-start gap-3">
-              <div className="flex items-center gap-1 w-[60px] flex-shrink-0 pt-2">
+            <div key={f.id} className="flex items-center gap-3">
+              <div className="flex items-center gap-1 w-[60px] flex-shrink-0">
                 <span className="text-sm">{f.emoji}</span>
                 <span className="text-[11px] font-bold text-neutral-400 dark:text-neutral-500">{f.label}</span>
               </div>
-              <div className="flex flex-wrap gap-1.5">
+              <div className="flex flex-nowrap gap-1.5 overflow-x-auto pb-1">
                 {f.tags.map((tag) => {
                   const sel = isSelected(f.id, tag);
                   return (
@@ -320,7 +325,18 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
                   <RotateCcw className="w-3.5 h-3.5" /> 초기화
                 </button>
               )}
-              <span className="text-[12px] font-bold text-neutral-400 dark:text-neutral-500">가나다순</span>
+              <div className="relative">
+                <select
+                  value={sort}
+                  onChange={(e) => setSort(e.target.value as "no" | "name")}
+                  aria-label="정렬"
+                  className="appearance-none pl-3 pr-8 py-2 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-[13px] font-bold text-neutral-700 dark:text-neutral-200 focus:outline-none focus:border-[#F9954E] cursor-pointer"
+                >
+                  <option value="name">가나다순</option>
+                  <option value="no">번호순</option>
+                </select>
+                <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-neutral-400 pointer-events-none" />
+              </div>
             </div>
           </div>
 

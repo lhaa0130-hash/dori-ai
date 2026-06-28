@@ -27,16 +27,22 @@ export default async function AnimalPage() {
   return (
     <>
       <AnimalPageClient cards={cards} />
-      {/* 크롤러용 정적 내부링크 — 262종 개별 페이지로 가는 앵커(자바스크립트 카드는 색인 불가하므로 필수) */}
+      {/* 크롤러용 정적 내부링크 — 개별 페이지로 가는 앵커(JS 카드는 색인 불가하므로 필수).
+          시각적으로는 접어둠(details, 기본 닫힘) → UI는 깔끔하게, 크롤러는 정적 HTML 앵커를 그대로 수집. */}
       <nav aria-label="전체 동물 목록" className="max-w-5xl mx-auto px-4 pb-16 pt-8">
-        <h2 className="text-base font-bold mb-3 text-neutral-600 dark:text-neutral-400">전체 동물 목록 ({cards.length}종)</h2>
-        <ul className="flex flex-wrap gap-x-3 gap-y-1.5 text-sm text-neutral-500 dark:text-neutral-400">
-          {cards.map((c) => (
-            <li key={c.no}>
-              <a href={`/animal/${c.no}`} className="hover:text-orange-500 hover:underline">{c.animal_name}</a>
-            </li>
-          ))}
-        </ul>
+        <details className="group">
+          <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 text-sm font-bold text-neutral-500 dark:text-neutral-400 hover:text-orange-500 transition select-none">
+            <span className="text-neutral-400 transition-transform group-open:rotate-90">▸</span>
+            전체 동물 목록 ({cards.length}종) 펼쳐보기
+          </summary>
+          <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-1.5 text-sm text-neutral-500 dark:text-neutral-400">
+            {cards.map((c) => (
+              <li key={c.no}>
+                <a href={`/animal/${c.no}`} className="hover:text-orange-500 hover:underline">{c.animal_name}</a>
+              </li>
+            ))}
+          </ul>
+        </details>
       </nav>
     </>
   );
