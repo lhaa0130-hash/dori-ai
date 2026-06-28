@@ -102,15 +102,18 @@ export interface MarketReview {
 }
 
 function ReviewSection({ reviews }: { reviews: MarketReview[] }) {
+  const [showAll, setShowAll] = useState(false);
   if (!reviews || reviews.length === 0) return null;
+  const visible = showAll ? reviews : reviews.slice(0, 6);
   return (
     <section className="py-6 border-b border-neutral-100 dark:border-zinc-900">
       <div className="flex items-center gap-2 mb-4">
         <span className="text-[14px] font-extrabold text-neutral-900 dark:text-white">📝 최신 리뷰 & 비교</span>
         <span className="text-[10px] font-bold text-[#F9954E] px-2 py-0.5 rounded-full bg-[#FFF5EB] dark:bg-[#F9954E]/10">REVIEW</span>
+        <span className="text-[11px] font-bold text-neutral-400">{reviews.length}</span>
       </div>
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-        {reviews.slice(0, 6).map((r) => (
+        {visible.map((r) => (
           <Link
             key={r.slug}
             href={`/insight/article/${r.slug}`}
@@ -127,6 +130,16 @@ function ReviewSection({ reviews }: { reviews: MarketReview[] }) {
           </Link>
         ))}
       </div>
+      {reviews.length > 6 && (
+        <div className="mt-4 text-center">
+          <button
+            onClick={() => setShowAll((v) => !v)}
+            className="inline-flex items-center gap-1 px-5 py-2 rounded-full border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-[13px] font-semibold text-neutral-600 dark:text-neutral-300 hover:border-[#F9954E] hover:text-[#F9954E] active:scale-95 transition-all"
+          >
+            {showAll ? "접기" : `전체 ${reviews.length}개 보기`}
+          </button>
+        </div>
+      )}
     </section>
   );
 }
