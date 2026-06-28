@@ -1,6 +1,6 @@
 {
   "program": "트레이더일로 (Trader Illo)",
-  "generated_at": "2026-06-28 10:00:05",
+  "generated_at": "2026-06-28 14:00:02",
   "mode": "paper",
   "multi": true,
   "usdkrw": 1535.0,
@@ -12,22 +12,22 @@
   },
   "capital_each": 3000000,
   "total_starting": 44960265,
-  "total_ending": 44952380,
-  "total_return_pct": -0.02,
+  "total_ending": 44940126,
+  "total_return_pct": -0.04,
   "leaderboard": [
     {
       "key": "momentum",
       "name": "모멘텀",
-      "return_pct": 2.74,
-      "ending": 9238814,
+      "return_pct": 2.66,
+      "ending": 9231060,
       "holding": 11,
       "verified": false
     },
     {
       "key": "trend",
       "name": "추세추종",
-      "return_pct": 2.12,
-      "ending": 9182591,
+      "return_pct": 2.08,
+      "ending": 9178920,
       "holding": 7,
       "verified": true
     },
@@ -42,16 +42,16 @@
     {
       "key": "lowvol",
       "name": "안정형",
-      "return_pct": -2.39,
-      "ending": 8777151,
+      "return_pct": -2.36,
+      "ending": 8779893,
       "holding": 5,
       "verified": false
     },
     {
       "key": "breakout",
       "name": "돌파",
-      "return_pct": -2.65,
-      "ending": 8753592,
+      "return_pct": -2.69,
+      "ending": 8750021,
       "holding": 9,
       "verified": false
     }
@@ -63,8 +63,8 @@
       "desc": "상승추세에서 20일 신고가를 돌파할 때 매수 — 큰 흐름에 올라타기",
       "verified": true,
       "starting": 8992053,
-      "ending": 9182591,
-      "return_pct": 2.12,
+      "ending": 9178920,
+      "return_pct": 2.08,
       "holding": 7,
       "trades": 22,
       "categories": [
@@ -73,8 +73,8 @@
           "count": 93,
           "currency": "KRW",
           "starting": 3000000.0,
-          "ending": 3067604.07,
-          "return_pct": 2.25
+          "ending": 3063932.82,
+          "return_pct": 2.13
         },
         {
           "name": "국내주식",
@@ -96,6 +96,28 @@
       ],
       "sections": [
         {
+          "symbol": "KRW-INJ",
+          "name": "인젝티브",
+          "category": "코인",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -31746.81,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-30 00:00",
+              "exit": "2026-06-05 00:00",
+              "entry_price": 10135.065,
+              "exit_price": 8073.0931,
+              "qty": 15.063786,
+              "pnl": -31746.81,
+              "pnl_pct": -20.34,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
           "symbol": "KRW-ALGO",
           "name": "알고랜드",
           "category": "코인",
@@ -113,6 +135,48 @@
               "pnl": -23625.37,
               "pnl_pct": -10.84,
               "reason": "signal",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "KRW-JTO",
+          "name": "지토",
+          "category": "코인",
+          "trades": 0,
+          "win_rate_pct": 0.0,
+          "realized_pnl": 0,
+          "open_position": {
+            "entry_time": "2026-06-02 00:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 879.4395,
+            "qty": 131.116081,
+            "invested": 115308.66,
+            "cur_price": 1192.0,
+            "stop_price": 707.3436,
+            "take_profit": 1354.7103,
+            "unrealized_pnl_pct": 35.54
+          },
+          "trade_log": []
+        },
+        {
+          "symbol": "KRW-NEAR",
+          "name": "니어프로토콜",
+          "category": "코인",
+          "trades": 1,
+          "win_rate_pct": 100.0,
+          "realized_pnl": 58031.47,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-20 00:00",
+              "exit": "2026-06-05 00:00",
+              "entry_price": 2513.256,
+              "exit_price": 3161.897,
+              "qty": 91.466908,
+              "pnl": 58031.47,
+              "pnl_pct": 25.81,
+              "reason": "trailing_stop",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
           ]
@@ -140,205 +204,44 @@
           ]
         },
         {
-          "symbol": "KRW-NEAR",
-          "name": "니어프로토콜",
-          "category": "코인",
+          "symbol": "016360",
+          "name": "삼성증권",
+          "category": "국내주식",
           "trades": 1,
-          "win_rate_pct": 100.0,
-          "realized_pnl": 58031.47,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -15521.17,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-04 00:00",
+              "exit": "2026-05-15 00:00",
+              "entry_price": 138037.9,
+              "exit_price": 122776.8488,
+              "qty": 1.0,
+              "pnl": -15521.17,
+              "pnl_pct": -11.06,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "440110",
+          "name": "파두",
+          "category": "국내주식",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -19808.59,
           "open_position": null,
           "trade_log": [
             {
               "entry": "2026-05-20 00:00",
-              "exit": "2026-06-05 00:00",
-              "entry_price": 2513.256,
-              "exit_price": 3161.897,
-              "qty": 91.466908,
-              "pnl": 58031.47,
-              "pnl_pct": 25.81,
-              "reason": "trailing_stop",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "KRW-JTO",
-          "name": "지토",
-          "category": "코인",
-          "trades": 0,
-          "win_rate_pct": 0.0,
-          "realized_pnl": 0,
-          "open_position": {
-            "entry_time": "2026-06-02 00:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 879.4395,
-            "qty": 131.116081,
-            "invested": 115308.66,
-            "cur_price": 1220.0,
-            "stop_price": 707.3436,
-            "take_profit": 1354.7103,
-            "unrealized_pnl_pct": 38.72
-          },
-          "trade_log": []
-        },
-        {
-          "symbol": "KRW-INJ",
-          "name": "인젝티브",
-          "category": "코인",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -31746.81,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-30 00:00",
-              "exit": "2026-06-05 00:00",
-              "entry_price": 10135.065,
-              "exit_price": 8073.0931,
-              "qty": 15.063786,
-              "pnl": -31746.81,
-              "pnl_pct": -20.34,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "319660",
-          "name": "피에스케이",
-          "category": "국내주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -14686.04,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-04 00:00",
-              "exit": "2026-06-02 00:00",
-              "entry_price": 100200.1,
-              "exit_price": 85696.2021,
+              "exit": "2026-06-11 00:00",
+              "entry_price": 112312.2,
+              "exit_price": 92701.2231,
               "qty": 1.0,
-              "pnl": -14686.04,
-              "pnl_pct": -14.47,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "069960",
-          "name": "현대백화점",
-          "category": "국내주식",
-          "trades": 0,
-          "win_rate_pct": 0.0,
-          "realized_pnl": 0,
-          "open_position": {
-            "entry_time": "2026-06-04 00:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 139939.8,
-            "qty": 1.0,
-            "invested": 139939.8,
-            "cur_price": 200500.0,
-            "stop_price": 148351.1051,
-            "take_profit": 187979.1804,
-            "unrealized_pnl_pct": 43.28
-          },
-          "trade_log": []
-        },
-        {
-          "symbol": "178320",
-          "name": "서진시스템",
-          "category": "국내주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -8861.73,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-04 00:00",
-              "exit": "2026-06-23 00:00",
-              "entry_price": 61361.3,
-              "exit_price": 57050.8898,
-              "qty": 2.0,
-              "pnl": -8861.73,
-              "pnl_pct": -7.02,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "064400",
-          "name": "LG씨엔에스",
-          "category": "국내주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -15222.74,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-29 00:00",
-              "exit": "2026-06-08 00:00",
-              "entry_price": 113913.8,
-              "exit_price": 98901.0,
-              "qty": 1.0,
-              "pnl": -15222.74,
-              "pnl_pct": -13.18,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "086790",
-          "name": "하나금융지주",
-          "category": "국내주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -12804.7,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-06-16 00:00",
-              "exit": "2026-06-22 00:00",
-              "entry_price": 132132.0,
-              "exit_price": 119580.3,
-              "qty": 1.0,
-              "pnl": -12804.7,
-              "pnl_pct": -9.5,
-              "reason": "signal",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "001450",
-          "name": "현대해상",
-          "category": "국내주식",
-          "trades": 2,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -56875.6,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-06-15 00:00",
-              "exit": "2026-06-24 00:00",
-              "entry_price": 40740.7,
-              "exit_price": 35259.4482,
-              "qty": 5.0,
-              "pnl": -27780.59,
-              "pnl_pct": -13.45,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            },
-            {
-              "entry": "2026-05-18 00:00",
-              "exit": "2026-05-28 00:00",
-              "entry_price": 38388.35,
-              "exit_price": 34304.5722,
-              "qty": 7.0,
-              "pnl": -29095.01,
-              "pnl_pct": -10.64,
+              "pnl": -19808.59,
+              "pnl_pct": -17.46,
               "reason": "stop_loss",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
@@ -389,50 +292,6 @@
           ]
         },
         {
-          "symbol": "440110",
-          "name": "파두",
-          "category": "국내주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -19808.59,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-20 00:00",
-              "exit": "2026-06-11 00:00",
-              "entry_price": 112312.2,
-              "exit_price": 92701.2231,
-              "qty": 1.0,
-              "pnl": -19808.59,
-              "pnl_pct": -17.46,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "016360",
-          "name": "삼성증권",
-          "category": "국내주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -15521.17,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-04 00:00",
-              "exit": "2026-05-15 00:00",
-              "entry_price": 138037.9,
-              "exit_price": 122776.8488,
-              "qty": 1.0,
-              "pnl": -15521.17,
-              "pnl_pct": -11.06,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
           "symbol": "000880",
           "name": "한화",
           "category": "국내주식",
@@ -455,64 +314,145 @@
           ]
         },
         {
-          "symbol": "AMAT",
-          "name": "어플라이드머티어리얼즈",
-          "category": "해외주식",
+          "symbol": "001450",
+          "name": "현대해상",
+          "category": "국내주식",
+          "trades": 2,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -56875.6,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-06-15 00:00",
+              "exit": "2026-06-24 00:00",
+              "entry_price": 40740.7,
+              "exit_price": 35259.4482,
+              "qty": 5.0,
+              "pnl": -27780.59,
+              "pnl_pct": -13.45,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            },
+            {
+              "entry": "2026-05-18 00:00",
+              "exit": "2026-05-28 00:00",
+              "entry_price": 38388.35,
+              "exit_price": 34304.5722,
+              "qty": 7.0,
+              "pnl": -29095.01,
+              "pnl_pct": -10.64,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "069960",
+          "name": "현대백화점",
+          "category": "국내주식",
           "trades": 0,
           "win_rate_pct": 0.0,
           "realized_pnl": 0,
           "open_position": {
-            "entry_time": "2026-06-22 00:00",
+            "entry_time": "2026-06-04 00:00",
             "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 640.8202,
-            "qty": 0.26383,
-            "invested": 169.07,
-            "cur_price": 626.84,
-            "stop_price": 559.4646,
-            "take_profit": 801.6108,
-            "unrealized_pnl_pct": -2.18
+            "entry_price": 139939.8,
+            "qty": 1.0,
+            "invested": 139939.8,
+            "cur_price": 200500.0,
+            "stop_price": 148351.1051,
+            "take_profit": 187979.1804,
+            "unrealized_pnl_pct": 43.28
           },
           "trade_log": []
         },
         {
-          "symbol": "MU",
-          "name": "마이크론",
-          "category": "해외주식",
-          "trades": 0,
+          "symbol": "178320",
+          "name": "서진시스템",
+          "category": "국내주식",
+          "trades": 1,
           "win_rate_pct": 0.0,
-          "realized_pnl": 0,
-          "open_position": {
-            "entry_time": "2026-05-01 00:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 542.7522,
-            "qty": 0.275995,
-            "invested": 149.8,
-            "cur_price": 1132.33,
-            "stop_price": 892.171,
-            "take_profit": 683.3595,
-            "unrealized_pnl_pct": 108.63
-          },
-          "trade_log": []
+          "realized_pnl": -8861.73,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-04 00:00",
+              "exit": "2026-06-23 00:00",
+              "entry_price": 61361.3,
+              "exit_price": 57050.8898,
+              "qty": 2.0,
+              "pnl": -8861.73,
+              "pnl_pct": -7.02,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
         },
         {
-          "symbol": "CVS",
-          "name": "CVS헬스",
-          "category": "해외주식",
-          "trades": 0,
+          "symbol": "086790",
+          "name": "하나금융지주",
+          "category": "국내주식",
+          "trades": 1,
           "win_rate_pct": 0.0,
-          "realized_pnl": 0,
-          "open_position": {
-            "entry_time": "2026-06-11 00:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 100.5805,
-            "qty": 3.453877,
-            "invested": 347.39,
-            "cur_price": 104.34,
-            "stop_price": 94.5905,
-            "take_profit": 112.6365,
-            "unrealized_pnl_pct": 3.74
-          },
-          "trade_log": []
+          "realized_pnl": -12804.7,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-06-16 00:00",
+              "exit": "2026-06-22 00:00",
+              "entry_price": 132132.0,
+              "exit_price": 119580.3,
+              "qty": 1.0,
+              "pnl": -12804.7,
+              "pnl_pct": -9.5,
+              "reason": "signal",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "319660",
+          "name": "피에스케이",
+          "category": "국내주식",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -14686.04,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-04 00:00",
+              "exit": "2026-06-02 00:00",
+              "entry_price": 100200.1,
+              "exit_price": 85696.2021,
+              "qty": 1.0,
+              "pnl": -14686.04,
+              "pnl_pct": -14.47,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "064400",
+          "name": "LG씨엔에스",
+          "category": "국내주식",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -15222.74,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-29 00:00",
+              "exit": "2026-06-08 00:00",
+              "entry_price": 113913.8,
+              "exit_price": 98901.0,
+              "qty": 1.0,
+              "pnl": -15222.74,
+              "pnl_pct": -13.18,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
         },
         {
           "symbol": "INTC",
@@ -533,136 +473,6 @@
             "unrealized_pnl_pct": -4.33
           },
           "trade_log": []
-        },
-        {
-          "symbol": "FIX",
-          "name": "FIX",
-          "category": "해외주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -15.77,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-01 00:00",
-              "exit": "2026-06-10 00:00",
-              "entry_price": 1868.887,
-              "exit_price": 1710.7722,
-              "qty": 0.097503,
-              "pnl": -15.77,
-              "pnl_pct": -8.46,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "KO",
-          "name": "코카콜라",
-          "category": "해외주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -22.53,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-06-10 00:00",
-              "exit": "2026-06-17 00:00",
-              "entry_price": 83.6736,
-              "exit_price": 79.459,
-              "qty": 5.146244,
-              "pnl": -22.53,
-              "pnl_pct": -5.04,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "CIEN",
-          "name": "CIEN",
-          "category": "해외주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -11.72,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-01 00:00",
-              "exit": "2026-06-05 00:00",
-              "entry_price": 535.8253,
-              "exit_price": 487.7218,
-              "qty": 0.238661,
-              "pnl": -11.72,
-              "pnl_pct": -8.98,
-              "reason": "signal",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "DELL",
-          "name": "델",
-          "category": "해외주식",
-          "trades": 1,
-          "win_rate_pct": 100.0,
-          "realized_pnl": 39.74,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-22 00:00",
-              "exit": "2026-06-09 00:00",
-              "entry_price": 295.4852,
-              "exit_price": 368.9366,
-              "qty": 0.546044,
-              "pnl": 39.74,
-              "pnl_pct": 24.86,
-              "reason": "trailing_stop",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "CNC",
-          "name": "센틴",
-          "category": "해외주식",
-          "trades": 0,
-          "win_rate_pct": 0.0,
-          "realized_pnl": 0,
-          "open_position": {
-            "entry_time": "2026-06-08 00:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 65.095,
-            "qty": 3.997817,
-            "invested": 260.24,
-            "cur_price": 65.73,
-            "stop_price": 59.6347,
-            "take_profit": 75.8206,
-            "unrealized_pnl_pct": 0.98
-          },
-          "trade_log": []
-        },
-        {
-          "symbol": "AMD",
-          "name": "AMD",
-          "category": "해외주식",
-          "trades": 1,
-          "win_rate_pct": 100.0,
-          "realized_pnl": 37.85,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-01 00:00",
-              "exit": "2026-06-09 00:00",
-              "entry_price": 360.9005,
-              "exit_price": 438.3845,
-              "qty": 0.493595,
-              "pnl": 37.85,
-              "pnl_pct": 21.47,
-              "reason": "trailing_stop",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
         },
         {
           "symbol": "CASY",
@@ -696,6 +506,196 @@
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
           ]
+        },
+        {
+          "symbol": "AMAT",
+          "name": "어플라이드머티어리얼즈",
+          "category": "해외주식",
+          "trades": 0,
+          "win_rate_pct": 0.0,
+          "realized_pnl": 0,
+          "open_position": {
+            "entry_time": "2026-06-22 00:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 640.8202,
+            "qty": 0.26383,
+            "invested": 169.07,
+            "cur_price": 626.84,
+            "stop_price": 559.4646,
+            "take_profit": 801.6108,
+            "unrealized_pnl_pct": -2.18
+          },
+          "trade_log": []
+        },
+        {
+          "symbol": "KO",
+          "name": "코카콜라",
+          "category": "해외주식",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -22.53,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-06-10 00:00",
+              "exit": "2026-06-17 00:00",
+              "entry_price": 83.6736,
+              "exit_price": 79.459,
+              "qty": 5.146244,
+              "pnl": -22.53,
+              "pnl_pct": -5.04,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "MU",
+          "name": "마이크론",
+          "category": "해외주식",
+          "trades": 0,
+          "win_rate_pct": 0.0,
+          "realized_pnl": 0,
+          "open_position": {
+            "entry_time": "2026-05-01 00:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 542.7522,
+            "qty": 0.275995,
+            "invested": 149.8,
+            "cur_price": 1132.33,
+            "stop_price": 892.171,
+            "take_profit": 683.3595,
+            "unrealized_pnl_pct": 108.63
+          },
+          "trade_log": []
+        },
+        {
+          "symbol": "CNC",
+          "name": "센틴",
+          "category": "해외주식",
+          "trades": 0,
+          "win_rate_pct": 0.0,
+          "realized_pnl": 0,
+          "open_position": {
+            "entry_time": "2026-06-08 00:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 65.095,
+            "qty": 3.997817,
+            "invested": 260.24,
+            "cur_price": 65.73,
+            "stop_price": 59.6347,
+            "take_profit": 75.8206,
+            "unrealized_pnl_pct": 0.98
+          },
+          "trade_log": []
+        },
+        {
+          "symbol": "CVS",
+          "name": "CVS헬스",
+          "category": "해외주식",
+          "trades": 0,
+          "win_rate_pct": 0.0,
+          "realized_pnl": 0,
+          "open_position": {
+            "entry_time": "2026-06-11 00:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 100.5805,
+            "qty": 3.453877,
+            "invested": 347.39,
+            "cur_price": 104.34,
+            "stop_price": 94.5905,
+            "take_profit": 112.6365,
+            "unrealized_pnl_pct": 3.74
+          },
+          "trade_log": []
+        },
+        {
+          "symbol": "AMD",
+          "name": "AMD",
+          "category": "해외주식",
+          "trades": 1,
+          "win_rate_pct": 100.0,
+          "realized_pnl": 37.85,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-01 00:00",
+              "exit": "2026-06-09 00:00",
+              "entry_price": 360.9005,
+              "exit_price": 438.3845,
+              "qty": 0.493595,
+              "pnl": 37.85,
+              "pnl_pct": 21.47,
+              "reason": "trailing_stop",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "DELL",
+          "name": "델",
+          "category": "해외주식",
+          "trades": 1,
+          "win_rate_pct": 100.0,
+          "realized_pnl": 39.74,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-22 00:00",
+              "exit": "2026-06-09 00:00",
+              "entry_price": 295.4852,
+              "exit_price": 368.9366,
+              "qty": 0.546044,
+              "pnl": 39.74,
+              "pnl_pct": 24.86,
+              "reason": "trailing_stop",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "CIEN",
+          "name": "CIEN",
+          "category": "해외주식",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -11.72,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-01 00:00",
+              "exit": "2026-06-05 00:00",
+              "entry_price": 535.8253,
+              "exit_price": 487.7218,
+              "qty": 0.238661,
+              "pnl": -11.72,
+              "pnl_pct": -8.98,
+              "reason": "signal",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "FIX",
+          "name": "FIX",
+          "category": "해외주식",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -15.77,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-01 00:00",
+              "exit": "2026-06-10 00:00",
+              "entry_price": 1868.887,
+              "exit_price": 1710.7722,
+              "qty": 0.097503,
+              "pnl": -15.77,
+              "pnl_pct": -8.46,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
         }
       ]
     },
@@ -705,8 +705,8 @@
       "desc": "20일 신고가를 강하게 뚫을 때 매수, 10일 신저가 이탈 시 매도",
       "verified": false,
       "starting": 8992053,
-      "ending": 8753592,
-      "return_pct": -2.65,
+      "ending": 8750021,
+      "return_pct": -2.69,
       "holding": 9,
       "trades": 30,
       "categories": [
@@ -715,8 +715,8 @@
           "count": 93,
           "currency": "KRW",
           "starting": 3000000.0,
-          "ending": 2843396.98,
-          "return_pct": -5.22
+          "ending": 2839825.25,
+          "return_pct": -5.34
         },
         {
           "name": "국내주식",
@@ -738,6 +738,39 @@
       ],
       "sections": [
         {
+          "symbol": "KRW-INJ",
+          "name": "인젝티브",
+          "category": "코인",
+          "trades": 2,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -61848.82,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-30 00:00",
+              "exit": "2026-06-05 00:00",
+              "entry_price": 10135.065,
+              "exit_price": 8073.0931,
+              "qty": 14.777653,
+              "pnl": -31143.79,
+              "pnl_pct": -20.34,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            },
+            {
+              "entry": "2026-05-13 00:00",
+              "exit": "2026-05-16 00:00",
+              "entry_price": 8344.17,
+              "exit_price": 7001.2211,
+              "qty": 22.228886,
+              "pnl": -30705.03,
+              "pnl_pct": -16.09,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
           "symbol": "KRW-TRX",
           "name": "트론",
           "category": "코인",
@@ -755,6 +788,60 @@
               "pnl": 20580.1,
               "pnl_pct": 3.78,
               "reason": "trailing_stop",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "KRW-JST",
+          "name": "저스트",
+          "category": "코인",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -30686.82,
+          "open_position": {
+            "entry_time": "2026-06-28 02:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 129.0645,
+            "qty": 2010.239997,
+            "invested": 259450.62,
+            "cur_price": 129.0,
+            "stop_price": 114.8084,
+            "take_profit": 0.0,
+            "unrealized_pnl_pct": -0.05
+          },
+          "trade_log": [
+            {
+              "entry": "2026-05-20 00:00",
+              "exit": "2026-06-03 00:00",
+              "entry_price": 140.07,
+              "exit_price": 124.4673,
+              "qty": 1886.791391,
+              "pnl": -30686.82,
+              "pnl_pct": -11.14,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "KRW-ONDO",
+          "name": "온도파이낸스",
+          "category": "코인",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -31421.28,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-08 00:00",
+              "exit": "2026-05-16 00:00",
+              "entry_price": 614.307,
+              "exit_price": 529.1527,
+              "qty": 357.007514,
+              "pnl": -31421.28,
+              "pnl_pct": -13.86,
+              "reason": "stop_loss",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
           ]
@@ -782,6 +869,70 @@
           ]
         },
         {
+          "symbol": "KRW-JTO",
+          "name": "지토",
+          "category": "코인",
+          "trades": 0,
+          "win_rate_pct": 0.0,
+          "realized_pnl": 0,
+          "open_position": {
+            "entry_time": "2026-06-15 00:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 1132.566,
+            "qty": 100.765467,
+            "invested": 114123.54,
+            "cur_price": 1192.0,
+            "stop_price": 846.5271,
+            "take_profit": 0.0,
+            "unrealized_pnl_pct": 5.25
+          },
+          "trade_log": []
+        },
+        {
+          "symbol": "KRW-NEAR",
+          "name": "니어프로토콜",
+          "category": "코인",
+          "trades": 1,
+          "win_rate_pct": 100.0,
+          "realized_pnl": 56226.13,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-20 00:00",
+              "exit": "2026-06-05 00:00",
+              "entry_price": 2513.256,
+              "exit_price": 3161.897,
+              "qty": 88.621414,
+              "pnl": 56226.13,
+              "pnl_pct": 25.81,
+              "reason": "trailing_stop",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "KRW-RENDER",
+          "name": "렌더토큰",
+          "category": "코인",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -31717.75,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-25 00:00",
+              "exit": "2026-06-05 00:00",
+              "entry_price": 3214.6065,
+              "exit_price": 2673.0224,
+              "qty": 57.015229,
+              "pnl": -31717.75,
+              "pnl_pct": -16.85,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
           "symbol": "KRW-JUP",
           "name": "주피터",
           "category": "코인",
@@ -794,10 +945,10 @@
             "entry_price": 331.1655,
             "qty": 460.089652,
             "invested": 152365.82,
-            "cur_price": 333.0,
+            "cur_price": 327.0,
             "stop_price": 268.6207,
             "take_profit": 0.0,
-            "unrealized_pnl_pct": 0.55
+            "unrealized_pnl_pct": -1.26
           },
           "trade_log": [
             {
@@ -836,325 +987,22 @@
           ]
         },
         {
-          "symbol": "KRW-NEAR",
-          "name": "니어프로토콜",
-          "category": "코인",
+          "symbol": "440110",
+          "name": "파두",
+          "category": "국내주식",
           "trades": 1,
-          "win_rate_pct": 100.0,
-          "realized_pnl": 56226.13,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -19808.59,
           "open_position": null,
           "trade_log": [
             {
               "entry": "2026-05-20 00:00",
-              "exit": "2026-06-05 00:00",
-              "entry_price": 2513.256,
-              "exit_price": 3161.897,
-              "qty": 88.621414,
-              "pnl": 56226.13,
-              "pnl_pct": 25.81,
-              "reason": "trailing_stop",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "KRW-JST",
-          "name": "저스트",
-          "category": "코인",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -30686.82,
-          "open_position": {
-            "entry_time": "2026-06-28 02:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 129.0645,
-            "qty": 2010.239997,
-            "invested": 259450.62,
-            "cur_price": 128.0,
-            "stop_price": 114.8084,
-            "take_profit": 0.0,
-            "unrealized_pnl_pct": -0.82
-          },
-          "trade_log": [
-            {
-              "entry": "2026-05-20 00:00",
-              "exit": "2026-06-03 00:00",
-              "entry_price": 140.07,
-              "exit_price": 124.4673,
-              "qty": 1886.791391,
-              "pnl": -30686.82,
-              "pnl_pct": -11.14,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "KRW-RENDER",
-          "name": "렌더토큰",
-          "category": "코인",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -31717.75,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-25 00:00",
-              "exit": "2026-06-05 00:00",
-              "entry_price": 3214.6065,
-              "exit_price": 2673.0224,
-              "qty": 57.015229,
-              "pnl": -31717.75,
-              "pnl_pct": -16.85,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "KRW-JTO",
-          "name": "지토",
-          "category": "코인",
-          "trades": 0,
-          "win_rate_pct": 0.0,
-          "realized_pnl": 0,
-          "open_position": {
-            "entry_time": "2026-06-15 00:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 1132.566,
-            "qty": 100.765467,
-            "invested": 114123.54,
-            "cur_price": 1220.0,
-            "stop_price": 846.5271,
-            "take_profit": 0.0,
-            "unrealized_pnl_pct": 7.72
-          },
-          "trade_log": []
-        },
-        {
-          "symbol": "KRW-ONDO",
-          "name": "온도파이낸스",
-          "category": "코인",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -31421.28,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-08 00:00",
-              "exit": "2026-05-16 00:00",
-              "entry_price": 614.307,
-              "exit_price": 529.1527,
-              "qty": 357.007514,
-              "pnl": -31421.28,
-              "pnl_pct": -13.86,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "KRW-INJ",
-          "name": "인젝티브",
-          "category": "코인",
-          "trades": 2,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -61848.82,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-30 00:00",
-              "exit": "2026-06-05 00:00",
-              "entry_price": 10135.065,
-              "exit_price": 8073.0931,
-              "qty": 14.777653,
-              "pnl": -31143.79,
-              "pnl_pct": -20.34,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            },
-            {
-              "entry": "2026-05-13 00:00",
-              "exit": "2026-05-16 00:00",
-              "entry_price": 8344.17,
-              "exit_price": 7001.2211,
-              "qty": 22.228886,
-              "pnl": -30705.03,
-              "pnl_pct": -16.09,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "319660",
-          "name": "피에스케이",
-          "category": "국내주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -14686.04,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-04 00:00",
-              "exit": "2026-06-02 00:00",
-              "entry_price": 100200.1,
-              "exit_price": 85696.2021,
+              "exit": "2026-06-11 00:00",
+              "entry_price": 112312.2,
+              "exit_price": 92701.2231,
               "qty": 1.0,
-              "pnl": -14686.04,
-              "pnl_pct": -14.47,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "069960",
-          "name": "현대백화점",
-          "category": "국내주식",
-          "trades": 0,
-          "win_rate_pct": 0.0,
-          "realized_pnl": 0,
-          "open_position": {
-            "entry_time": "2026-06-04 00:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 139939.8,
-            "qty": 1.0,
-            "invested": 139939.8,
-            "cur_price": 200500.0,
-            "stop_price": 148351.1051,
-            "take_profit": 0.0,
-            "unrealized_pnl_pct": 43.28
-          },
-          "trade_log": []
-        },
-        {
-          "symbol": "103590",
-          "name": "일진전기",
-          "category": "국내주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -20890.69,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-04 00:00",
-              "exit": "2026-05-15 00:00",
-              "entry_price": 144244.1,
-              "exit_price": 123616.0961,
-              "qty": 1.0,
-              "pnl": -20890.69,
-              "pnl_pct": -14.3,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "161390",
-          "name": "한국타이어앤테크놀로지",
-          "category": "국내주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -21969.41,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-06-09 00:00",
-              "exit": "2026-06-23 00:00",
-              "entry_price": 73073.0,
-              "exit_price": 62220.5852,
-              "qty": 2.0,
-              "pnl": -21969.41,
-              "pnl_pct": -14.85,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "178320",
-          "name": "서진시스템",
-          "category": "국내주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -8861.73,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-04 00:00",
-              "exit": "2026-06-23 00:00",
-              "entry_price": 61361.3,
-              "exit_price": 57050.8898,
-              "qty": 2.0,
-              "pnl": -8861.73,
-              "pnl_pct": -7.02,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "064400",
-          "name": "LG씨엔에스",
-          "category": "국내주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -15222.74,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-29 00:00",
-              "exit": "2026-06-08 00:00",
-              "entry_price": 113913.8,
-              "exit_price": 98901.0,
-              "qty": 1.0,
-              "pnl": -15222.74,
-              "pnl_pct": -13.18,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "001450",
-          "name": "현대해상",
-          "category": "국내주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -29095.01,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-18 00:00",
-              "exit": "2026-05-28 00:00",
-              "entry_price": 38388.35,
-              "exit_price": 34304.5722,
-              "qty": 7.0,
-              "pnl": -29095.01,
-              "pnl_pct": -10.64,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "024110",
-          "name": "기업은행",
-          "category": "국내주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -28370.67,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-06-12 00:00",
-              "exit": "2026-06-24 00:00",
-              "entry_price": 21821.8,
-              "exit_price": 19972.6418,
-              "qty": 15.0,
-              "pnl": -28370.67,
-              "pnl_pct": -8.47,
+              "pnl": -19808.59,
+              "pnl_pct": -17.46,
               "reason": "stop_loss",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
@@ -1205,26 +1053,68 @@
           ]
         },
         {
-          "symbol": "440110",
-          "name": "파두",
+          "symbol": "161390",
+          "name": "한국타이어앤테크놀로지",
           "category": "국내주식",
           "trades": 1,
           "win_rate_pct": 0.0,
-          "realized_pnl": -19808.59,
+          "realized_pnl": -21969.41,
           "open_position": null,
           "trade_log": [
             {
-              "entry": "2026-05-20 00:00",
-              "exit": "2026-06-11 00:00",
-              "entry_price": 112312.2,
-              "exit_price": 92701.2231,
-              "qty": 1.0,
-              "pnl": -19808.59,
-              "pnl_pct": -17.46,
+              "entry": "2026-06-09 00:00",
+              "exit": "2026-06-23 00:00",
+              "entry_price": 73073.0,
+              "exit_price": 62220.5852,
+              "qty": 2.0,
+              "pnl": -21969.41,
+              "pnl_pct": -14.85,
               "reason": "stop_loss",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
           ]
+        },
+        {
+          "symbol": "001450",
+          "name": "현대해상",
+          "category": "국내주식",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -29095.01,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-18 00:00",
+              "exit": "2026-05-28 00:00",
+              "entry_price": 38388.35,
+              "exit_price": 34304.5722,
+              "qty": 7.0,
+              "pnl": -29095.01,
+              "pnl_pct": -10.64,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "069960",
+          "name": "현대백화점",
+          "category": "국내주식",
+          "trades": 0,
+          "win_rate_pct": 0.0,
+          "realized_pnl": 0,
+          "open_position": {
+            "entry_time": "2026-06-04 00:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 139939.8,
+            "qty": 1.0,
+            "invested": 139939.8,
+            "cur_price": 200500.0,
+            "stop_price": 148351.1051,
+            "take_profit": 0.0,
+            "unrealized_pnl_pct": 43.28
+          },
+          "trade_log": []
         },
         {
           "symbol": "001440",
@@ -1249,24 +1139,114 @@
           ]
         },
         {
-          "symbol": "AMAT",
-          "name": "어플라이드머티어리얼즈",
-          "category": "해외주식",
-          "trades": 0,
+          "symbol": "178320",
+          "name": "서진시스템",
+          "category": "국내주식",
+          "trades": 1,
           "win_rate_pct": 0.0,
-          "realized_pnl": 0,
-          "open_position": {
-            "entry_time": "2026-06-22 00:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 640.8202,
-            "qty": 0.245873,
-            "invested": 157.56,
-            "cur_price": 626.84,
-            "stop_price": 559.4646,
-            "take_profit": 0.0,
-            "unrealized_pnl_pct": -2.18
-          },
-          "trade_log": []
+          "realized_pnl": -8861.73,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-04 00:00",
+              "exit": "2026-06-23 00:00",
+              "entry_price": 61361.3,
+              "exit_price": 57050.8898,
+              "qty": 2.0,
+              "pnl": -8861.73,
+              "pnl_pct": -7.02,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "319660",
+          "name": "피에스케이",
+          "category": "국내주식",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -14686.04,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-04 00:00",
+              "exit": "2026-06-02 00:00",
+              "entry_price": 100200.1,
+              "exit_price": 85696.2021,
+              "qty": 1.0,
+              "pnl": -14686.04,
+              "pnl_pct": -14.47,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "103590",
+          "name": "일진전기",
+          "category": "국내주식",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -20890.69,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-04 00:00",
+              "exit": "2026-05-15 00:00",
+              "entry_price": 144244.1,
+              "exit_price": 123616.0961,
+              "qty": 1.0,
+              "pnl": -20890.69,
+              "pnl_pct": -14.3,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "024110",
+          "name": "기업은행",
+          "category": "국내주식",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -28370.67,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-06-12 00:00",
+              "exit": "2026-06-24 00:00",
+              "entry_price": 21821.8,
+              "exit_price": 19972.6418,
+              "qty": 15.0,
+              "pnl": -28370.67,
+              "pnl_pct": -8.47,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "064400",
+          "name": "LG씨엔에스",
+          "category": "국내주식",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -15222.74,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-29 00:00",
+              "exit": "2026-06-08 00:00",
+              "entry_price": 113913.8,
+              "exit_price": 98901.0,
+              "qty": 1.0,
+              "pnl": -15222.74,
+              "pnl_pct": -13.18,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
         },
         {
           "symbol": "CAH",
@@ -1321,178 +1301,6 @@
           ]
         },
         {
-          "symbol": "FIX",
-          "name": "FIX",
-          "category": "해외주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -1.95,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-01 00:00",
-              "exit": "2026-05-18 00:00",
-              "entry_price": 1868.887,
-              "exit_price": 1852.5756,
-              "qty": 0.097456,
-              "pnl": -1.95,
-              "pnl_pct": -0.87,
-              "reason": "signal",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "KO",
-          "name": "코카콜라",
-          "category": "해외주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -21.75,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-06-10 00:00",
-              "exit": "2026-06-17 00:00",
-              "entry_price": 83.6736,
-              "exit_price": 79.459,
-              "qty": 4.967524,
-              "pnl": -21.75,
-              "pnl_pct": -5.04,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "DDOG",
-          "name": "데이터독",
-          "category": "해외주식",
-          "trades": 1,
-          "win_rate_pct": 100.0,
-          "realized_pnl": 10.16,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-19 00:00",
-              "exit": "2026-06-09 00:00",
-              "entry_price": 215.3651,
-              "exit_price": 228.5094,
-              "qty": 0.800362,
-              "pnl": 10.16,
-              "pnl_pct": 6.1,
-              "reason": "trailing_stop",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "DELL",
-          "name": "델",
-          "category": "해외주식",
-          "trades": 1,
-          "win_rate_pct": 100.0,
-          "realized_pnl": 34.36,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-26 00:00",
-              "exit": "2026-06-09 00:00",
-              "entry_price": 305.3851,
-              "exit_price": 368.9366,
-              "qty": 0.546479,
-              "pnl": 34.36,
-              "pnl_pct": 20.81,
-              "reason": "trailing_stop",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "CNC",
-          "name": "센틴",
-          "category": "해외주식",
-          "trades": 0,
-          "win_rate_pct": 0.0,
-          "realized_pnl": 0,
-          "open_position": {
-            "entry_time": "2026-06-08 00:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 65.095,
-            "qty": 3.837472,
-            "invested": 249.8,
-            "cur_price": 65.73,
-            "stop_price": 59.6347,
-            "take_profit": 0.0,
-            "unrealized_pnl_pct": 0.98
-          },
-          "trade_log": []
-        },
-        {
-          "symbol": "AMD",
-          "name": "AMD",
-          "category": "해외주식",
-          "trades": 1,
-          "win_rate_pct": 100.0,
-          "realized_pnl": 37.85,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-01 00:00",
-              "exit": "2026-06-09 00:00",
-              "entry_price": 360.9005,
-              "exit_price": 438.3845,
-              "qty": 0.493515,
-              "pnl": 37.85,
-              "pnl_pct": 21.47,
-              "reason": "trailing_stop",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "GOOG",
-          "name": "알파벳(구글)",
-          "category": "해외주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -4.3,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-01 00:00",
-              "exit": "2026-05-22 00:00",
-              "entry_price": 383.6032,
-              "exit_price": 379.0006,
-              "qty": 0.801354,
-              "pnl": -4.3,
-              "pnl_pct": -1.2,
-              "reason": "signal",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "CSCO",
-          "name": "시스코",
-          "category": "해외주식",
-          "trades": 0,
-          "win_rate_pct": 0.0,
-          "realized_pnl": 0,
-          "open_position": {
-            "entry_time": "2026-05-22 00:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 120.5304,
-            "qty": 2.227992,
-            "invested": 268.54,
-            "cur_price": 113.77,
-            "stop_price": 113.6998,
-            "take_profit": 0.0,
-            "unrealized_pnl_pct": -5.61
-          },
-          "trade_log": []
-        },
-        {
           "symbol": "CASY",
           "name": "CASY",
           "category": "해외주식",
@@ -1521,6 +1329,198 @@
               "pnl": -11.8,
               "pnl_pct": -3.33,
               "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "GOOG",
+          "name": "알파벳(구글)",
+          "category": "해외주식",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -4.3,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-01 00:00",
+              "exit": "2026-05-22 00:00",
+              "entry_price": 383.6032,
+              "exit_price": 379.0006,
+              "qty": 0.801354,
+              "pnl": -4.3,
+              "pnl_pct": -1.2,
+              "reason": "signal",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "KO",
+          "name": "코카콜라",
+          "category": "해외주식",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -21.75,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-06-10 00:00",
+              "exit": "2026-06-17 00:00",
+              "entry_price": 83.6736,
+              "exit_price": 79.459,
+              "qty": 4.967524,
+              "pnl": -21.75,
+              "pnl_pct": -5.04,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "AMAT",
+          "name": "어플라이드머티어리얼즈",
+          "category": "해외주식",
+          "trades": 0,
+          "win_rate_pct": 0.0,
+          "realized_pnl": 0,
+          "open_position": {
+            "entry_time": "2026-06-22 00:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 640.8202,
+            "qty": 0.245873,
+            "invested": 157.56,
+            "cur_price": 626.84,
+            "stop_price": 559.4646,
+            "take_profit": 0.0,
+            "unrealized_pnl_pct": -2.18
+          },
+          "trade_log": []
+        },
+        {
+          "symbol": "CNC",
+          "name": "센틴",
+          "category": "해외주식",
+          "trades": 0,
+          "win_rate_pct": 0.0,
+          "realized_pnl": 0,
+          "open_position": {
+            "entry_time": "2026-06-08 00:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 65.095,
+            "qty": 3.837472,
+            "invested": 249.8,
+            "cur_price": 65.73,
+            "stop_price": 59.6347,
+            "take_profit": 0.0,
+            "unrealized_pnl_pct": 0.98
+          },
+          "trade_log": []
+        },
+        {
+          "symbol": "DDOG",
+          "name": "데이터독",
+          "category": "해외주식",
+          "trades": 1,
+          "win_rate_pct": 100.0,
+          "realized_pnl": 10.16,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-19 00:00",
+              "exit": "2026-06-09 00:00",
+              "entry_price": 215.3651,
+              "exit_price": 228.5094,
+              "qty": 0.800362,
+              "pnl": 10.16,
+              "pnl_pct": 6.1,
+              "reason": "trailing_stop",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "CSCO",
+          "name": "시스코",
+          "category": "해외주식",
+          "trades": 0,
+          "win_rate_pct": 0.0,
+          "realized_pnl": 0,
+          "open_position": {
+            "entry_time": "2026-05-22 00:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 120.5304,
+            "qty": 2.227992,
+            "invested": 268.54,
+            "cur_price": 113.77,
+            "stop_price": 113.6998,
+            "take_profit": 0.0,
+            "unrealized_pnl_pct": -5.61
+          },
+          "trade_log": []
+        },
+        {
+          "symbol": "AMD",
+          "name": "AMD",
+          "category": "해외주식",
+          "trades": 1,
+          "win_rate_pct": 100.0,
+          "realized_pnl": 37.85,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-01 00:00",
+              "exit": "2026-06-09 00:00",
+              "entry_price": 360.9005,
+              "exit_price": 438.3845,
+              "qty": 0.493515,
+              "pnl": 37.85,
+              "pnl_pct": 21.47,
+              "reason": "trailing_stop",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "DELL",
+          "name": "델",
+          "category": "해외주식",
+          "trades": 1,
+          "win_rate_pct": 100.0,
+          "realized_pnl": 34.36,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-26 00:00",
+              "exit": "2026-06-09 00:00",
+              "entry_price": 305.3851,
+              "exit_price": 368.9366,
+              "qty": 0.546479,
+              "pnl": 34.36,
+              "pnl_pct": 20.81,
+              "reason": "trailing_stop",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "FIX",
+          "name": "FIX",
+          "category": "해외주식",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -1.95,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-01 00:00",
+              "exit": "2026-05-18 00:00",
+              "entry_price": 1868.887,
+              "exit_price": 1852.5756,
+              "qty": 0.097456,
+              "pnl": -1.95,
+              "pnl_pct": -0.87,
+              "reason": "signal",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
           ]
@@ -1566,28 +1566,6 @@
       ],
       "sections": [
         {
-          "symbol": "138930",
-          "name": "BNK금융지주",
-          "category": "국내주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -8055.82,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-20 00:00",
-              "exit": "2026-06-08 00:00",
-              "entry_price": 16716.7,
-              "exit_price": 16213.77,
-              "qty": 15.0,
-              "pnl": -8055.82,
-              "pnl_pct": -3.01,
-              "reason": "signal",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
           "symbol": "052690",
           "name": "한전기술",
           "category": "국내주식",
@@ -1604,6 +1582,28 @@
               "qty": 1.0,
               "pnl": -8432.02,
               "pnl_pct": -6.02,
+              "reason": "signal",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "138930",
+          "name": "BNK금융지주",
+          "category": "국내주식",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -8055.82,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-20 00:00",
+              "exit": "2026-06-08 00:00",
+              "entry_price": 16716.7,
+              "exit_price": 16213.77,
+              "qty": 15.0,
+              "pnl": -8055.82,
+              "pnl_pct": -3.01,
               "reason": "signal",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
@@ -1639,8 +1639,8 @@
       "desc": "최근 60일 가장 강하게 오른 종목을 추격 매수 (상대강도)",
       "verified": false,
       "starting": 8992053,
-      "ending": 9238814,
-      "return_pct": 2.74,
+      "ending": 9231060,
+      "return_pct": 2.66,
       "holding": 11,
       "trades": 32,
       "categories": [
@@ -1649,8 +1649,8 @@
           "count": 93,
           "currency": "KRW",
           "starting": 3000000.0,
-          "ending": 2879555.83,
-          "return_pct": -4.01
+          "ending": 2871801.99,
+          "return_pct": -4.27
         },
         {
           "name": "국내주식",
@@ -1672,163 +1672,97 @@
       ],
       "sections": [
         {
-          "symbol": "KRW-APE",
-          "name": "에이프코인",
+          "symbol": "KRW-INJ",
+          "name": "인젝티브",
           "category": "코인",
           "trades": 2,
           "win_rate_pct": 0.0,
-          "realized_pnl": -22548.55,
-          "open_position": null,
+          "realized_pnl": -24908.04,
+          "open_position": {
+            "entry_time": "2026-06-28 02:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 7433.715,
+            "qty": 14.369153,
+            "invested": 106816.19,
+            "cur_price": 7075.0,
+            "stop_price": 5418.8222,
+            "take_profit": 0.0,
+            "unrealized_pnl_pct": -4.83
+          },
           "trade_log": [
             {
               "entry": "2026-06-21 00:00",
-              "exit": "2026-06-24 00:00",
-              "entry_price": 205.1025,
-              "exit_price": 197.901,
-              "qty": 625.478732,
-              "pnl": -5134.56,
-              "pnl_pct": -3.51,
+              "exit": "2026-06-22 00:00",
+              "entry_price": 7458.7275,
+              "exit_price": 7306.345,
+              "qty": 13.163079,
+              "pnl": -2491.71,
+              "pnl_pct": -2.04,
               "reason": "signal",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             },
             {
-              "entry": "2026-05-01 00:00",
-              "exit": "2026-05-23 00:00",
-              "entry_price": 261.1305,
-              "exit_price": 200.8995,
-              "qty": 283.679755,
-              "pnl": -17413.99,
-              "pnl_pct": -23.07,
+              "entry": "2026-05-31 00:00",
+              "exit": "2026-06-20 00:00",
+              "entry_price": 9379.6875,
+              "exit_price": 7526.235,
+              "qty": 11.824721,
+              "pnl": -22416.33,
+              "pnl_pct": -19.76,
               "reason": "signal",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
           ]
         },
         {
-          "symbol": "KRW-JUP",
-          "name": "주피터",
+          "symbol": "KRW-JTO",
+          "name": "지토",
           "category": "코인",
           "trades": 0,
           "win_rate_pct": 0.0,
           "realized_pnl": 0,
           "open_position": {
-            "entry_time": "2026-06-23 00:00",
+            "entry_time": "2026-05-07 00:00",
             "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 305.1525,
-            "qty": 373.58084,
-            "invested": 113999.13,
-            "cur_price": 333.0,
-            "stop_price": 229.0993,
+            "entry_price": 742.371,
+            "qty": 172.18158,
+            "invested": 127822.61,
+            "cur_price": 1192.0,
+            "stop_price": 579.1795,
             "take_profit": 0.0,
-            "unrealized_pnl_pct": 9.13
+            "unrealized_pnl_pct": 60.57
           },
           "trade_log": []
         },
         {
-          "symbol": "KRW-DYDX",
-          "name": "디와이디엑스",
+          "symbol": "KRW-ONT",
+          "name": "온톨로지",
           "category": "코인",
           "trades": 2,
           "win_rate_pct": 0.0,
-          "realized_pnl": -15318.47,
+          "realized_pnl": -18983.02,
           "open_position": null,
           "trade_log": [
             {
-              "entry": "2026-05-19 00:00",
-              "exit": "2026-06-06 00:00",
-              "entry_price": 209.1045,
-              "exit_price": 205.897,
-              "qty": 486.299868,
-              "pnl": -2064.34,
-              "pnl_pct": -1.53,
+              "entry": "2026-05-04 00:00",
+              "exit": "2026-05-06 00:00",
+              "entry_price": 107.0535,
+              "exit_price": 92.5137,
+              "qty": 1089.893178,
+              "pnl": -16390.57,
+              "pnl_pct": -13.58,
               "reason": "signal",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             },
             {
               "entry": "2026-05-01 00:00",
-              "exit": "2026-05-18 00:00",
-              "entry_price": 220.11,
-              "exit_price": 193.903,
-              "qty": 486.53207,
-              "pnl": -13254.12,
-              "pnl_pct": -11.91,
+              "exit": "2026-05-03 00:00",
+              "entry_price": 105.0525,
+              "exit_price": 102.9485,
+              "qty": 987.974421,
+              "pnl": -2592.45,
+              "pnl_pct": -2.0,
               "reason": "signal",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "KRW-XLM",
-          "name": "스텔라루멘",
-          "category": "코인",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -7827.71,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-06-07 00:00",
-              "exit": "2026-06-24 00:00",
-              "entry_price": 310.155,
-              "exit_price": 284.8575,
-              "qty": 292.242036,
-              "pnl": -7827.71,
-              "pnl_pct": -8.16,
-              "reason": "signal",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "KRW-NEAR",
-          "name": "니어프로토콜",
-          "category": "코인",
-          "trades": 3,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -34448.74,
-          "open_position": {
-            "entry_time": "2026-06-28 02:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 2848.4235,
-            "qty": 33.398664,
-            "invested": 95133.54,
-            "cur_price": 2891.0,
-            "stop_price": 1982.3228,
-            "take_profit": 0.0,
-            "unrealized_pnl_pct": 1.49
-          },
-          "trade_log": [
-            {
-              "entry": "2026-06-24 00:00",
-              "exit": "2026-06-26 02:00",
-              "entry_price": 2941.47,
-              "exit_price": 2830.584,
-              "qty": 30.500771,
-              "pnl": -3822.24,
-              "pnl_pct": -3.77,
-              "reason": "signal",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            },
-            {
-              "entry": "2026-06-07 00:00",
-              "exit": "2026-06-23 00:00",
-              "entry_price": 3010.5045,
-              "exit_price": 3003.4975,
-              "qty": 22.011964,
-              "pnl": -485.19,
-              "pnl_pct": -0.23,
-              "reason": "signal",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            },
-            {
-              "entry": "2026-05-27 00:00",
-              "exit": "2026-06-06 00:00",
-              "entry_price": 3756.8775,
-              "exit_price": 2909.4851,
-              "qty": 34.883425,
-              "pnl": -30141.31,
-              "pnl_pct": -22.56,
-              "reason": "stop_loss",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
           ]
@@ -1876,59 +1810,6 @@
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
           ]
-        },
-        {
-          "symbol": "KRW-ONT",
-          "name": "온톨로지",
-          "category": "코인",
-          "trades": 2,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -18983.02,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-04 00:00",
-              "exit": "2026-05-06 00:00",
-              "entry_price": 107.0535,
-              "exit_price": 92.5137,
-              "qty": 1089.893178,
-              "pnl": -16390.57,
-              "pnl_pct": -13.58,
-              "reason": "signal",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            },
-            {
-              "entry": "2026-05-01 00:00",
-              "exit": "2026-05-03 00:00",
-              "entry_price": 105.0525,
-              "exit_price": 102.9485,
-              "qty": 987.974421,
-              "pnl": -2592.45,
-              "pnl_pct": -2.0,
-              "reason": "signal",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "KRW-JTO",
-          "name": "지토",
-          "category": "코인",
-          "trades": 0,
-          "win_rate_pct": 0.0,
-          "realized_pnl": 0,
-          "open_position": {
-            "entry_time": "2026-05-07 00:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 742.371,
-            "qty": 172.18158,
-            "invested": 127822.61,
-            "cur_price": 1220.0,
-            "stop_price": 579.1795,
-            "take_profit": 0.0,
-            "unrealized_pnl_pct": 64.34
-          },
-          "trade_log": []
         },
         {
           "symbol": "KRW-ONDO",
@@ -1986,153 +1867,243 @@
           ]
         },
         {
-          "symbol": "KRW-INJ",
-          "name": "인젝티브",
+          "symbol": "KRW-DYDX",
+          "name": "디와이디엑스",
           "category": "코인",
           "trades": 2,
           "win_rate_pct": 0.0,
-          "realized_pnl": -24908.04,
-          "open_position": {
-            "entry_time": "2026-06-28 02:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 7433.715,
-            "qty": 14.369153,
-            "invested": 106816.19,
-            "cur_price": 7065.0,
-            "stop_price": 5418.8222,
-            "take_profit": 0.0,
-            "unrealized_pnl_pct": -4.96
-          },
+          "realized_pnl": -15318.47,
+          "open_position": null,
           "trade_log": [
             {
-              "entry": "2026-06-21 00:00",
-              "exit": "2026-06-22 00:00",
-              "entry_price": 7458.7275,
-              "exit_price": 7306.345,
-              "qty": 13.163079,
-              "pnl": -2491.71,
-              "pnl_pct": -2.04,
+              "entry": "2026-05-19 00:00",
+              "exit": "2026-06-06 00:00",
+              "entry_price": 209.1045,
+              "exit_price": 205.897,
+              "qty": 486.299868,
+              "pnl": -2064.34,
+              "pnl_pct": -1.53,
               "reason": "signal",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             },
             {
-              "entry": "2026-05-31 00:00",
-              "exit": "2026-06-20 00:00",
-              "entry_price": 9379.6875,
-              "exit_price": 7526.235,
-              "qty": 11.824721,
-              "pnl": -22416.33,
-              "pnl_pct": -19.76,
+              "entry": "2026-05-01 00:00",
+              "exit": "2026-05-18 00:00",
+              "entry_price": 220.11,
+              "exit_price": 193.903,
+              "qty": 486.53207,
+              "pnl": -13254.12,
+              "pnl_pct": -11.91,
               "reason": "signal",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
           ]
         },
         {
-          "symbol": "319660",
-          "name": "피에스케이",
-          "category": "국내주식",
-          "trades": 1,
+          "symbol": "KRW-APE",
+          "name": "에이프코인",
+          "category": "코인",
+          "trades": 2,
           "win_rate_pct": 0.0,
-          "realized_pnl": -9882.22,
+          "realized_pnl": -22548.55,
           "open_position": null,
           "trade_log": [
             {
-              "entry": "2026-05-04 00:00",
-              "exit": "2026-06-02 00:00",
-              "entry_price": 100200.1,
-              "exit_price": 90509.4,
-              "qty": 1.0,
-              "pnl": -9882.22,
-              "pnl_pct": -9.67,
+              "entry": "2026-06-21 00:00",
+              "exit": "2026-06-24 00:00",
+              "entry_price": 205.1025,
+              "exit_price": 197.901,
+              "qty": 625.478732,
+              "pnl": -5134.56,
+              "pnl_pct": -3.51,
+              "reason": "signal",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            },
+            {
+              "entry": "2026-05-01 00:00",
+              "exit": "2026-05-23 00:00",
+              "entry_price": 261.1305,
+              "exit_price": 200.8995,
+              "qty": 283.679755,
+              "pnl": -17413.99,
+              "pnl_pct": -23.07,
               "reason": "signal",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
           ]
         },
         {
-          "symbol": "222800",
-          "name": "심텍",
-          "category": "국내주식",
-          "trades": 1,
+          "symbol": "KRW-NEAR",
+          "name": "니어프로토콜",
+          "category": "코인",
+          "trades": 3,
           "win_rate_pct": 0.0,
-          "realized_pnl": -25379.89,
-          "open_position": null,
+          "realized_pnl": -34448.74,
+          "open_position": {
+            "entry_time": "2026-06-28 02:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 2848.4235,
+            "qty": 33.398664,
+            "invested": 95133.54,
+            "cur_price": 2866.0,
+            "stop_price": 1982.3228,
+            "take_profit": 0.0,
+            "unrealized_pnl_pct": 0.62
+          },
           "trade_log": [
             {
-              "entry": "2026-05-13 00:00",
-              "exit": "2026-06-08 00:00",
-              "entry_price": 114314.2,
-              "exit_price": 89125.2499,
-              "qty": 1.0,
-              "pnl": -25379.89,
-              "pnl_pct": -22.03,
+              "entry": "2026-06-24 00:00",
+              "exit": "2026-06-26 02:00",
+              "entry_price": 2941.47,
+              "exit_price": 2830.584,
+              "qty": 30.500771,
+              "pnl": -3822.24,
+              "pnl_pct": -3.77,
+              "reason": "signal",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            },
+            {
+              "entry": "2026-06-07 00:00",
+              "exit": "2026-06-23 00:00",
+              "entry_price": 3010.5045,
+              "exit_price": 3003.4975,
+              "qty": 22.011964,
+              "pnl": -485.19,
+              "pnl_pct": -0.23,
+              "reason": "signal",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            },
+            {
+              "entry": "2026-05-27 00:00",
+              "exit": "2026-06-06 00:00",
+              "entry_price": 3756.8775,
+              "exit_price": 2909.4851,
+              "qty": 34.883425,
+              "pnl": -30141.31,
+              "pnl_pct": -22.56,
               "reason": "stop_loss",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
           ]
         },
         {
-          "symbol": "069960",
-          "name": "현대백화점",
-          "category": "국내주식",
+          "symbol": "KRW-JUP",
+          "name": "주피터",
+          "category": "코인",
           "trades": 0,
           "win_rate_pct": 0.0,
           "realized_pnl": 0,
           "open_position": {
-            "entry_time": "2026-06-04 00:00",
+            "entry_time": "2026-06-23 00:00",
             "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 139939.8,
-            "qty": 1.0,
-            "invested": 139939.8,
-            "cur_price": 200500.0,
-            "stop_price": 133688.8813,
+            "entry_price": 305.1525,
+            "qty": 373.58084,
+            "invested": 113999.13,
+            "cur_price": 327.0,
+            "stop_price": 229.0993,
             "take_profit": 0.0,
-            "unrealized_pnl_pct": 43.28
+            "unrealized_pnl_pct": 7.16
           },
           "trade_log": []
         },
         {
-          "symbol": "021240",
-          "name": "코웨이",
-          "category": "국내주식",
+          "symbol": "KRW-XLM",
+          "name": "스텔라루멘",
+          "category": "코인",
           "trades": 1,
-          "win_rate_pct": 100.0,
-          "realized_pnl": 688.52,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -7827.71,
           "open_position": null,
           "trade_log": [
             {
-              "entry": "2026-06-24 00:00",
-              "exit": "2026-06-26 10:00",
-              "entry_price": 86386.3,
-              "exit_price": 86913.0,
-              "qty": 2.0,
-              "pnl": 688.52,
-              "pnl_pct": 0.61,
+              "entry": "2026-06-07 00:00",
+              "exit": "2026-06-24 00:00",
+              "entry_price": 310.155,
+              "exit_price": 284.8575,
+              "qty": 292.242036,
+              "pnl": -7827.71,
+              "pnl_pct": -8.16,
               "reason": "signal",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
           ]
         },
         {
-          "symbol": "001450",
-          "name": "현대해상",
+          "symbol": "440110",
+          "name": "파두",
           "category": "국내주식",
-          "trades": 0,
-          "win_rate_pct": 0.0,
-          "realized_pnl": 0,
-          "open_position": {
-            "entry_time": "2026-06-19 00:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 38488.45,
-            "qty": 4.0,
-            "invested": 153953.8,
-            "cur_price": 34400.0,
-            "stop_price": 31643.3112,
-            "take_profit": 0.0,
-            "unrealized_pnl_pct": -10.62
-          },
-          "trade_log": []
+          "trades": 1,
+          "win_rate_pct": 100.0,
+          "realized_pnl": 8241.87,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-04 00:00",
+              "exit": "2026-06-23 00:00",
+              "entry_price": 81281.2,
+              "exit_price": 89710.2,
+              "qty": 1.0,
+              "pnl": 8241.87,
+              "pnl_pct": 10.37,
+              "reason": "signal",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "336260",
+          "name": "두산퓨얼셀",
+          "category": "국내주식",
+          "trades": 1,
+          "win_rate_pct": 100.0,
+          "realized_pnl": 4309.51,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-04 00:00",
+              "exit": "2026-06-18 00:00",
+              "entry_price": 60660.6,
+              "exit_price": 62947.1989,
+              "qty": 2.0,
+              "pnl": 4309.51,
+              "pnl_pct": 3.77,
+              "reason": "trailing_stop",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "017670",
+          "name": "SK텔레콤",
+          "category": "국내주식",
+          "trades": 2,
+          "win_rate_pct": 50.0,
+          "realized_pnl": -4647.49,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-06-24 00:00",
+              "exit": "2026-06-26 10:00",
+              "entry_price": 91091.0,
+              "exit_price": 91308.6,
+              "qty": 1.0,
+              "pnl": 25.88,
+              "pnl_pct": 0.24,
+              "reason": "signal",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            },
+            {
+              "entry": "2026-06-22 00:00",
+              "exit": "2026-06-23 00:00",
+              "entry_price": 94294.2,
+              "exit_price": 89810.1,
+              "qty": 1.0,
+              "pnl": -4673.37,
+              "pnl_pct": -4.76,
+              "reason": "signal",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
         },
         {
           "symbol": "028050",
@@ -2179,23 +2150,85 @@
           ]
         },
         {
-          "symbol": "336260",
-          "name": "두산퓨얼셀",
+          "symbol": "001450",
+          "name": "현대해상",
+          "category": "국내주식",
+          "trades": 0,
+          "win_rate_pct": 0.0,
+          "realized_pnl": 0,
+          "open_position": {
+            "entry_time": "2026-06-19 00:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 38488.45,
+            "qty": 4.0,
+            "invested": 153953.8,
+            "cur_price": 34400.0,
+            "stop_price": 31643.3112,
+            "take_profit": 0.0,
+            "unrealized_pnl_pct": -10.62
+          },
+          "trade_log": []
+        },
+        {
+          "symbol": "069960",
+          "name": "현대백화점",
+          "category": "국내주식",
+          "trades": 0,
+          "win_rate_pct": 0.0,
+          "realized_pnl": 0,
+          "open_position": {
+            "entry_time": "2026-06-04 00:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 139939.8,
+            "qty": 1.0,
+            "invested": 139939.8,
+            "cur_price": 200500.0,
+            "stop_price": 133688.8813,
+            "take_profit": 0.0,
+            "unrealized_pnl_pct": 43.28
+          },
+          "trade_log": []
+        },
+        {
+          "symbol": "353200",
+          "name": "대덕전자",
           "category": "국내주식",
           "trades": 1,
           "win_rate_pct": 100.0,
-          "realized_pnl": 4309.51,
+          "realized_pnl": 18873.97,
           "open_position": null,
           "trade_log": [
             {
               "entry": "2026-05-04 00:00",
-              "exit": "2026-06-18 00:00",
-              "entry_price": 60660.6,
-              "exit_price": 62947.1989,
-              "qty": 2.0,
-              "pnl": 4309.51,
-              "pnl_pct": 3.77,
-              "reason": "trailing_stop",
+              "exit": "2026-06-26 10:00",
+              "entry_price": 114514.4,
+              "exit_price": 133666.2,
+              "qty": 1.0,
+              "pnl": 18873.97,
+              "pnl_pct": 16.72,
+              "reason": "signal",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "319660",
+          "name": "피에스케이",
+          "category": "국내주식",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -9882.22,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-04 00:00",
+              "exit": "2026-06-02 00:00",
+              "entry_price": 100200.1,
+              "exit_price": 90509.4,
+              "qty": 1.0,
+              "pnl": -9882.22,
+              "pnl_pct": -9.67,
+              "reason": "signal",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
           ]
@@ -2223,78 +2256,45 @@
           ]
         },
         {
-          "symbol": "353200",
-          "name": "대덕전자",
+          "symbol": "021240",
+          "name": "코웨이",
           "category": "국내주식",
           "trades": 1,
           "win_rate_pct": 100.0,
-          "realized_pnl": 18873.97,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-04 00:00",
-              "exit": "2026-06-26 10:00",
-              "entry_price": 114514.4,
-              "exit_price": 133666.2,
-              "qty": 1.0,
-              "pnl": 18873.97,
-              "pnl_pct": 16.72,
-              "reason": "signal",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "017670",
-          "name": "SK텔레콤",
-          "category": "국내주식",
-          "trades": 2,
-          "win_rate_pct": 50.0,
-          "realized_pnl": -4647.49,
+          "realized_pnl": 688.52,
           "open_position": null,
           "trade_log": [
             {
               "entry": "2026-06-24 00:00",
               "exit": "2026-06-26 10:00",
-              "entry_price": 91091.0,
-              "exit_price": 91308.6,
-              "qty": 1.0,
-              "pnl": 25.88,
-              "pnl_pct": 0.24,
-              "reason": "signal",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            },
-            {
-              "entry": "2026-06-22 00:00",
-              "exit": "2026-06-23 00:00",
-              "entry_price": 94294.2,
-              "exit_price": 89810.1,
-              "qty": 1.0,
-              "pnl": -4673.37,
-              "pnl_pct": -4.76,
+              "entry_price": 86386.3,
+              "exit_price": 86913.0,
+              "qty": 2.0,
+              "pnl": 688.52,
+              "pnl_pct": 0.61,
               "reason": "signal",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
           ]
         },
         {
-          "symbol": "440110",
-          "name": "파두",
+          "symbol": "222800",
+          "name": "심텍",
           "category": "국내주식",
           "trades": 1,
-          "win_rate_pct": 100.0,
-          "realized_pnl": 8241.87,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -25379.89,
           "open_position": null,
           "trade_log": [
             {
-              "entry": "2026-05-04 00:00",
-              "exit": "2026-06-23 00:00",
-              "entry_price": 81281.2,
-              "exit_price": 89710.2,
+              "entry": "2026-05-13 00:00",
+              "exit": "2026-06-08 00:00",
+              "entry_price": 114314.2,
+              "exit_price": 89125.2499,
               "qty": 1.0,
-              "pnl": 8241.87,
-              "pnl_pct": 10.37,
-              "reason": "signal",
+              "pnl": -25379.89,
+              "pnl_pct": -22.03,
+              "reason": "stop_loss",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
           ]
@@ -2316,6 +2316,66 @@
             "stop_price": 282.1449,
             "take_profit": 0.0,
             "unrealized_pnl_pct": 15.38
+          },
+          "trade_log": []
+        },
+        {
+          "symbol": "AMD",
+          "name": "AMD",
+          "category": "해외주식",
+          "trades": 0,
+          "win_rate_pct": 0.0,
+          "realized_pnl": 0,
+          "open_position": {
+            "entry_time": "2026-05-01 00:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 360.9005,
+            "qty": 0.411284,
+            "invested": 148.43,
+            "cur_price": 521.58,
+            "stop_price": 412.8991,
+            "take_profit": 0.0,
+            "unrealized_pnl_pct": 44.52
+          },
+          "trade_log": []
+        },
+        {
+          "symbol": "INTC",
+          "name": "인텔",
+          "category": "해외주식",
+          "trades": 0,
+          "win_rate_pct": 0.0,
+          "realized_pnl": 0,
+          "open_position": {
+            "entry_time": "2026-06-08 00:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 110.3803,
+            "qty": 0.815105,
+            "invested": 89.97,
+            "cur_price": 128.32,
+            "stop_price": 92.5008,
+            "take_profit": 0.0,
+            "unrealized_pnl_pct": 16.25
+          },
+          "trade_log": []
+        },
+        {
+          "symbol": "DELL",
+          "name": "델",
+          "category": "해외주식",
+          "trades": 0,
+          "win_rate_pct": 0.0,
+          "realized_pnl": 0,
+          "open_position": {
+            "entry_time": "2026-05-01 00:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 210.3802,
+            "qty": 0.742189,
+            "invested": 156.14,
+            "cur_price": 399.49,
+            "stop_price": 345.1424,
+            "take_profit": 0.0,
+            "unrealized_pnl_pct": 89.89
           },
           "trade_log": []
         },
@@ -2342,26 +2402,6 @@
           ]
         },
         {
-          "symbol": "DELL",
-          "name": "델",
-          "category": "해외주식",
-          "trades": 0,
-          "win_rate_pct": 0.0,
-          "realized_pnl": 0,
-          "open_position": {
-            "entry_time": "2026-05-01 00:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 210.3802,
-            "qty": 0.742189,
-            "invested": 156.14,
-            "cur_price": 399.49,
-            "stop_price": 345.1424,
-            "take_profit": 0.0,
-            "unrealized_pnl_pct": 89.89
-          },
-          "trade_log": []
-        },
-        {
           "symbol": "MU",
           "name": "마이크론",
           "category": "해외주식",
@@ -2378,26 +2418,6 @@
             "stop_price": 812.3687,
             "take_profit": 0.0,
             "unrealized_pnl_pct": 13.59
-          },
-          "trade_log": []
-        },
-        {
-          "symbol": "INTC",
-          "name": "인텔",
-          "category": "해외주식",
-          "trades": 0,
-          "win_rate_pct": 0.0,
-          "realized_pnl": 0,
-          "open_position": {
-            "entry_time": "2026-06-08 00:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 110.3803,
-            "qty": 0.815105,
-            "invested": 89.97,
-            "cur_price": 128.32,
-            "stop_price": 92.5008,
-            "take_profit": 0.0,
-            "unrealized_pnl_pct": 16.25
           },
           "trade_log": []
         },
@@ -2422,26 +2442,6 @@
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
           ]
-        },
-        {
-          "symbol": "AMD",
-          "name": "AMD",
-          "category": "해외주식",
-          "trades": 0,
-          "win_rate_pct": 0.0,
-          "realized_pnl": 0,
-          "open_position": {
-            "entry_time": "2026-05-01 00:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 360.9005,
-            "qty": 0.411284,
-            "invested": 148.43,
-            "cur_price": 521.58,
-            "stop_price": 412.8991,
-            "take_profit": 0.0,
-            "unrealized_pnl_pct": 44.52
-          },
-          "trade_log": []
         }
       ]
     },
@@ -2451,8 +2451,8 @@
       "desc": "상승추세 중 '덜 출렁이는' 저변동성 종목 위주 — 타이트한 손절",
       "verified": false,
       "starting": 8992053,
-      "ending": 8777151,
-      "return_pct": -2.39,
+      "ending": 8779893,
+      "return_pct": -2.36,
       "holding": 5,
       "trades": 31,
       "categories": [
@@ -2461,8 +2461,8 @@
           "count": 93,
           "currency": "KRW",
           "starting": 3000000.0,
-          "ending": 3070462.9,
-          "return_pct": 2.35
+          "ending": 3073205.36,
+          "return_pct": 2.44
         },
         {
           "name": "국내주식",
@@ -2501,6 +2501,38 @@
               "pnl": 30312.96,
               "pnl_pct": 10.04,
               "reason": "trailing_stop",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "KRW-JST",
+          "name": "저스트",
+          "category": "코인",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -23417.88,
+          "open_position": {
+            "entry_time": "2026-06-27 02:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 123.0615,
+            "qty": 2742.462692,
+            "invested": 337491.57,
+            "cur_price": 129.0,
+            "stop_price": 111.9701,
+            "take_profit": 0.0,
+            "unrealized_pnl_pct": 4.83
+          },
+          "trade_log": [
+            {
+              "entry": "2026-05-16 00:00",
+              "exit": "2026-06-03 00:00",
+              "entry_price": 135.0675,
+              "exit_price": 125.6209,
+              "qty": 2318.982065,
+              "pnl": -23417.88,
+              "pnl_pct": -6.99,
+              "reason": "stop_loss",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
           ]
@@ -2594,114 +2626,6 @@
           ]
         },
         {
-          "symbol": "KRW-JST",
-          "name": "저스트",
-          "category": "코인",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -23417.88,
-          "open_position": {
-            "entry_time": "2026-06-27 02:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 123.0615,
-            "qty": 2742.462692,
-            "invested": 337491.57,
-            "cur_price": 128.0,
-            "stop_price": 111.9701,
-            "take_profit": 0.0,
-            "unrealized_pnl_pct": 4.01
-          },
-          "trade_log": [
-            {
-              "entry": "2026-05-16 00:00",
-              "exit": "2026-06-03 00:00",
-              "entry_price": 135.0675,
-              "exit_price": 125.6209,
-              "qty": 2318.982065,
-              "pnl": -23417.88,
-              "pnl_pct": -6.99,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "033780",
-          "name": "KT&G",
-          "category": "국내주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -16266.54,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-04 00:00",
-              "exit": "2026-06-22 00:00",
-              "entry_price": 179779.6,
-              "exit_price": 174725.1,
-              "qty": 3.0,
-              "pnl": -16266.54,
-              "pnl_pct": -2.81,
-              "reason": "signal",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "055550",
-          "name": "신한지주",
-          "category": "국내주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -15966.85,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-04 00:00",
-              "exit": "2026-05-13 00:00",
-              "entry_price": 98098.0,
-              "exit_price": 95104.8,
-              "qty": 5.0,
-              "pnl": -15966.85,
-              "pnl_pct": -3.05,
-              "reason": "signal",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "012510",
-          "name": "더존비즈온",
-          "category": "국내주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -13868.97,
-          "open_position": {
-            "entry_time": "2026-05-14 00:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 120120.0,
-            "qty": 7.0,
-            "invested": 840840.0,
-            "cur_price": 120000.0,
-            "stop_price": 117977.7304,
-            "take_profit": 0.0,
-            "unrealized_pnl_pct": -0.1
-          },
-          "trade_log": [
-            {
-              "entry": "2026-05-04 00:00",
-              "exit": "2026-05-13 00:00",
-              "entry_price": 120120.0,
-              "exit_price": 118387.5922,
-              "qty": 7.0,
-              "pnl": -13868.97,
-              "pnl_pct": -1.44,
-              "reason": "stop_loss",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
           "symbol": "030200",
           "name": "KT",
           "category": "국내주식",
@@ -2757,6 +2681,82 @@
           ]
         },
         {
+          "symbol": "033780",
+          "name": "KT&G",
+          "category": "국내주식",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -16266.54,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-04 00:00",
+              "exit": "2026-06-22 00:00",
+              "entry_price": 179779.6,
+              "exit_price": 174725.1,
+              "qty": 3.0,
+              "pnl": -16266.54,
+              "pnl_pct": -2.81,
+              "reason": "signal",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "012510",
+          "name": "더존비즈온",
+          "category": "국내주식",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -13868.97,
+          "open_position": {
+            "entry_time": "2026-05-14 00:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 120120.0,
+            "qty": 7.0,
+            "invested": 840840.0,
+            "cur_price": 120000.0,
+            "stop_price": 117977.7304,
+            "take_profit": 0.0,
+            "unrealized_pnl_pct": -0.1
+          },
+          "trade_log": [
+            {
+              "entry": "2026-05-04 00:00",
+              "exit": "2026-05-13 00:00",
+              "entry_price": 120120.0,
+              "exit_price": 118387.5922,
+              "qty": 7.0,
+              "pnl": -13868.97,
+              "pnl_pct": -1.44,
+              "reason": "stop_loss",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
+          "symbol": "055550",
+          "name": "신한지주",
+          "category": "국내주식",
+          "trades": 1,
+          "win_rate_pct": 0.0,
+          "realized_pnl": -15966.85,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-04 00:00",
+              "exit": "2026-05-13 00:00",
+              "entry_price": 98098.0,
+              "exit_price": 95104.8,
+              "qty": 5.0,
+              "pnl": -15966.85,
+              "pnl_pct": -3.05,
+              "reason": "signal",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
+        },
+        {
           "symbol": "011200",
           "name": "HMM",
           "category": "국내주식",
@@ -2790,37 +2790,46 @@
           ]
         },
         {
-          "symbol": "LNT",
-          "name": "얼라이언트에너지",
+          "symbol": "CINF",
+          "name": "CINF",
           "category": "해외주식",
-          "trades": 2,
+          "trades": 1,
           "win_rate_pct": 0.0,
-          "realized_pnl": -14.2,
+          "realized_pnl": -17.02,
           "open_position": null,
           "trade_log": [
             {
               "entry": "2026-05-18 00:00",
-              "exit": "2026-05-29 00:00",
-              "entry_price": 72.1621,
-              "exit_price": 71.5384,
-              "qty": 7.583241,
-              "pnl": -5.82,
-              "pnl_pct": -0.86,
-              "reason": "signal",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            },
-            {
-              "entry": "2026-05-08 00:00",
-              "exit": "2026-05-15 00:00",
-              "entry_price": 71.8318,
-              "exit_price": 70.8291,
-              "qty": 7.319272,
-              "pnl": -8.38,
-              "pnl_pct": -1.4,
+              "exit": "2026-05-27 00:00",
+              "entry_price": 167.8176,
+              "exit_price": 162.7771,
+              "qty": 3.169348,
+              "pnl": -17.02,
+              "pnl_pct": -3.0,
               "reason": "signal",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
           ]
+        },
+        {
+          "symbol": "AES",
+          "name": "AES",
+          "category": "해외주식",
+          "trades": 0,
+          "win_rate_pct": 0.0,
+          "realized_pnl": 0,
+          "open_position": {
+            "entry_time": "2026-05-28 00:00",
+            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
+            "entry_price": 14.7047,
+            "qty": 38.06099,
+            "invested": 559.68,
+            "cur_price": 14.67,
+            "stop_price": 14.5188,
+            "take_profit": 0.0,
+            "unrealized_pnl_pct": -0.24
+          },
+          "trade_log": []
         },
         {
           "symbol": "KO",
@@ -2878,57 +2887,70 @@
           ]
         },
         {
-          "symbol": "DUK",
-          "name": "듀크에너지",
+          "symbol": "AVB",
+          "name": "아발론베이",
           "category": "해외주식",
           "trades": 2,
           "win_rate_pct": 0.0,
-          "realized_pnl": -18.72,
+          "realized_pnl": -31.77,
           "open_position": null,
           "trade_log": [
             {
-              "entry": "2026-05-05 00:00",
-              "exit": "2026-05-06 00:00",
-              "entry_price": 127.7076,
-              "exit_price": 125.4145,
-              "qty": 4.452949,
-              "pnl": -11.34,
-              "pnl_pct": -1.8,
-              "reason": "signal",
+              "entry": "2026-06-01 00:00",
+              "exit": "2026-06-17 00:00",
+              "entry_price": 183.0529,
+              "exit_price": 179.5832,
+              "qty": 2.787853,
+              "pnl": -10.68,
+              "pnl_pct": -1.9,
+              "reason": "stop_loss",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             },
             {
-              "entry": "2026-05-01 00:00",
-              "exit": "2026-05-04 00:00",
-              "entry_price": 128.7286,
-              "exit_price": 127.3225,
-              "qty": 4.44304,
-              "pnl": -7.38,
-              "pnl_pct": -1.09,
-              "reason": "signal",
+              "entry": "2026-05-11 00:00",
+              "exit": "2026-05-15 00:00",
+              "entry_price": 187.4573,
+              "exit_price": 180.3052,
+              "qty": 2.803952,
+              "pnl": -21.09,
+              "pnl_pct": -3.82,
+              "reason": "stop_loss",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
           ]
         },
         {
-          "symbol": "BRK-B",
-          "name": "버크셔해서웨이",
+          "symbol": "LNT",
+          "name": "얼라이언트에너지",
           "category": "해외주식",
-          "trades": 0,
+          "trades": 2,
           "win_rate_pct": 0.0,
-          "realized_pnl": 0,
-          "open_position": {
-            "entry_time": "2026-06-18 00:00",
-            "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 489.9495,
-            "qty": 1.108918,
-            "invested": 543.31,
-            "cur_price": 498.66,
-            "stop_price": 475.343,
-            "take_profit": 0.0,
-            "unrealized_pnl_pct": 1.78
-          },
-          "trade_log": []
+          "realized_pnl": -14.2,
+          "open_position": null,
+          "trade_log": [
+            {
+              "entry": "2026-05-18 00:00",
+              "exit": "2026-05-29 00:00",
+              "entry_price": 72.1621,
+              "exit_price": 71.5384,
+              "qty": 7.583241,
+              "pnl": -5.82,
+              "pnl_pct": -0.86,
+              "reason": "signal",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            },
+            {
+              "entry": "2026-05-08 00:00",
+              "exit": "2026-05-15 00:00",
+              "entry_price": 71.8318,
+              "exit_price": 70.8291,
+              "qty": 7.319272,
+              "pnl": -8.38,
+              "pnl_pct": -1.4,
+              "reason": "signal",
+              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
+            }
+          ]
         },
         {
           "symbol": "EA",
@@ -2985,76 +3007,54 @@
           ]
         },
         {
-          "symbol": "CINF",
-          "name": "CINF",
-          "category": "해외주식",
-          "trades": 1,
-          "win_rate_pct": 0.0,
-          "realized_pnl": -17.02,
-          "open_position": null,
-          "trade_log": [
-            {
-              "entry": "2026-05-18 00:00",
-              "exit": "2026-05-27 00:00",
-              "entry_price": 167.8176,
-              "exit_price": 162.7771,
-              "qty": 3.169348,
-              "pnl": -17.02,
-              "pnl_pct": -3.0,
-              "reason": "signal",
-              "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
-            }
-          ]
-        },
-        {
-          "symbol": "AES",
-          "name": "AES",
+          "symbol": "BRK-B",
+          "name": "버크셔해서웨이",
           "category": "해외주식",
           "trades": 0,
           "win_rate_pct": 0.0,
           "realized_pnl": 0,
           "open_position": {
-            "entry_time": "2026-05-28 00:00",
+            "entry_time": "2026-06-18 00:00",
             "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수",
-            "entry_price": 14.7047,
-            "qty": 38.06099,
-            "invested": 559.68,
-            "cur_price": 14.67,
-            "stop_price": 14.5188,
+            "entry_price": 489.9495,
+            "qty": 1.108918,
+            "invested": 543.31,
+            "cur_price": 498.66,
+            "stop_price": 475.343,
             "take_profit": 0.0,
-            "unrealized_pnl_pct": -0.24
+            "unrealized_pnl_pct": 1.78
           },
           "trade_log": []
         },
         {
-          "symbol": "AVB",
-          "name": "아발론베이",
+          "symbol": "DUK",
+          "name": "듀크에너지",
           "category": "해외주식",
           "trades": 2,
           "win_rate_pct": 0.0,
-          "realized_pnl": -31.77,
+          "realized_pnl": -18.72,
           "open_position": null,
           "trade_log": [
             {
-              "entry": "2026-06-01 00:00",
-              "exit": "2026-06-17 00:00",
-              "entry_price": 183.0529,
-              "exit_price": 179.5832,
-              "qty": 2.787853,
-              "pnl": -10.68,
-              "pnl_pct": -1.9,
-              "reason": "stop_loss",
+              "entry": "2026-05-05 00:00",
+              "exit": "2026-05-06 00:00",
+              "entry_price": 127.7076,
+              "exit_price": 125.4145,
+              "qty": 4.452949,
+              "pnl": -11.34,
+              "pnl_pct": -1.8,
+              "reason": "signal",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             },
             {
-              "entry": "2026-05-11 00:00",
-              "exit": "2026-05-15 00:00",
-              "entry_price": 187.4573,
-              "exit_price": 180.3052,
-              "qty": 2.803952,
-              "pnl": -21.09,
-              "pnl_pct": -3.82,
-              "reason": "stop_loss",
+              "entry": "2026-05-01 00:00",
+              "exit": "2026-05-04 00:00",
+              "entry_price": 128.7286,
+              "exit_price": 127.3225,
+              "qty": 4.44304,
+              "pnl": -7.38,
+              "pnl_pct": -1.09,
+              "reason": "signal",
               "entry_reason": "상승추세에서 20일 신고가를 돌파(시장도 상승국면) → 추세 올라타기 매수"
             }
           ]
@@ -3063,6 +3063,13 @@
     }
   ],
   "recent_runs": [
+    {
+      "time": "2026-06-28 14:00:02",
+      "watching": 453,
+      "best": "모멘텀",
+      "best_ret": 2.66,
+      "total": 44940126
+    },
     {
       "time": "2026-06-28 10:00:05",
       "watching": 453,
@@ -3160,13 +3167,6 @@
       "best": "모멘텀",
       "best_ret": 2.77,
       "total": 44980039
-    },
-    {
-      "time": "2026-06-25 23:35:09",
-      "watching": 453,
-      "best": "모멘텀",
-      "best_ret": 2.63,
-      "total": 44929318
     }
   ]
 }
