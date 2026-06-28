@@ -94,7 +94,7 @@ const BUSTED_SLUGS = new Set(["spider-monkey", "gibbon", "sloth", "japanese-gian
 function imgUrl(p?: string) {
   if (!p) return "";
   const slug = (p.split("/").pop() || "").replace(/\.jpg$/, "");
-  return BUSTED_SLUGS.has(slug) ? `${p}?v=3` : p;
+  return BUSTED_SLUGS.has(slug) ? `${p}?v=4` : p;
 }
 
 export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] }) {
