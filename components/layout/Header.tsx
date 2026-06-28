@@ -35,6 +35,7 @@ export default function Header() {
   const navItems = [
     { name: "인사이트", href: "/insight", emoji: "🧠" },
     { name: "AI 도구", href: "/ai-tools", emoji: "🔧" },
+    { name: "AI 소식", href: "/ai-news", emoji: "📰" },
     { name: "피드", href: "/feed", emoji: "💬" },
     { name: "마켓", href: "/market", emoji: "🛒" },
     { name: "미니게임", href: "/minigame", emoji: "🎮" },
