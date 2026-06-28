@@ -45,7 +45,7 @@ const SIMPLE_FILTERS = [
     id: "diet", emoji: "🍽️", label: "먹이",
     cls: "bg-orange-500 text-white border-orange-500",
     chipCls: "bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800",
-    tags: ["초식", "육식", "잡식", "곤충을 먹는", "물고기를 먹는", "꿀을 먹는", "씨앗을 먹는"],
+    tags: ["초식", "육식", "잡식", "곤충을 먹는", "물고기를 먹는", "플랑크톤을 먹는", "꿀을 먹는", "씨앗을 먹는"],
   },
   {
     id: "color", emoji: "🎨", label: "색깔",
