@@ -15,6 +15,7 @@ export default function Page() {
     title: p.title,
     description: p.description,
     date: p.date,
+    thumbnail: p.thumbnail,
   }));
   return <MarketClient reviews={reviews} />;
 }
