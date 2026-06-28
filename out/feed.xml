@@ -6,7 +6,31 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Sat, 27 Jun 2026 23:00:14 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 28 Jun 2026 00:00:13 GMT</lastBuildDate>
+    <item>
+      <title>[개념] 2026년 가장 중요한 AI 개념</title>
+      <link>https://dori-ai.com/insight/article/video-30</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-30</guid>
+      <category>큐레이션</category>
+      <pubDate>Sat, 27 Jun 2026 00:00:00 GMT</pubDate>
+      <description>AI의 핵심 개념을 간단히 설명합니다.</description>
+    </item>
+    <item>
+      <title>[자동화] 구글 Flow AI Agent 월드컵 뉴스 자동화 워크플로우</title>
+      <link>https://dori-ai.com/insight/article/video-31</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-31</guid>
+      <category>큐레이션</category>
+      <pubDate>Sat, 27 Jun 2026 00:00:00 GMT</pubDate>
+      <description>AI를 활용한 뉴스 영상 제작 자동화 방법을 소개합니다.</description>
+    </item>
+    <item>
+      <title>[교육] AI Tech Transforming Language Learning</title>
+      <link>https://dori-ai.com/insight/article/video-32</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-32</guid>
+      <category>큐레이션</category>
+      <pubDate>Sat, 27 Jun 2026 00:00:00 GMT</pubDate>
+      <description>AI가 언어 학습에 미치는 영향을 다룹니다.</description>
+    </item>
     <item>
       <title>OpenAI, 인도 시장 공략을 위한 새로운 리더 영입</title>
       <link>https://dori-ai.com/insight/article/trend-175</link>
@@ -302,30 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
       <description>제미나이의 신기능을 활용해 작업 시간을 단축하는 방법을 소개합니다.</description>
-    </item>
-    <item>
-      <title>[AI 에이전트] AI Agents Explained  How to Create and Use AI Agents in 2026</title>
-      <link>https://dori-ai.com/insight/article/video-20</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-20</guid>
-      <category>큐레이션</category>
-      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>AI 에이전트를 만드는 방법과 활용법을 설명합니다.</description>
-    </item>
-    <item>
-      <title>[AI 아키텍처] AI 시스템의 메모리 문제 해결 방법</title>
-      <link>https://dori-ai.com/insight/article/video-21</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-21</guid>
-      <category>큐레이션</category>
-      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>AI 시스템의 메모리 문제를 해결하는 방법을 설명합니다.</description>
-    </item>
-    <item>
-      <title>[AI 작동 원리] AI의 실제 작동 방식 설명</title>
-      <link>https://dori-ai.com/insight/article/video-22</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-22</guid>
-      <category>큐레이션</category>
-      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>AI의 기본 작동 원리를 쉽게 설명합니다.</description>
     </item>
   </channel>
 </rss>
