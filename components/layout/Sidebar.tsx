@@ -12,7 +12,8 @@ import {
   MessageSquare,
   ShoppingBag,
   Home,
-  Calculator
+  Calculator,
+  Newspaper
 } from "lucide-react";
 
 const navItems = [
@@ -20,6 +21,7 @@ const navItems = [
   { name: "PROJECT", href: "/project", icon: FolderKanban },
   { name: "AI TOOLS", href: "/ai-tools", icon: Bot },
   { name: "AI MODELS", href: "/ai-models", icon: Calculator },
+  { name: "AI NEWS", href: "/ai-news", icon: Newspaper },
   { name: "INSIGHT", href: "/insight", icon: LineChart },
   { name: "COMMUNITY", href: "/community", icon: MessageSquare },
   { name: "MARKET", href: "/market", icon: ShoppingBag },

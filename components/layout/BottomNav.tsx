@@ -59,6 +59,7 @@ const TABS = [
 // 건의사항은 더보기에서 숨김 (푸터에만 노출), 마켓은 노출
 const MORE_ITEMS = [
   { name: "AI 모델 비교", href: "/ai-models", emoji: "📊" },
+  { name: "AI 소식",   href: "/ai-news",    emoji: "📰" },
   { name: "공지사항",  href: "/notice",     emoji: "📢" },
   { name: "커뮤니티",  href: "/community",  emoji: "💬" },
   { name: "마켓",      href: "/market",     emoji: "🛒" },
