@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 28 Jun 2026 03:00:14 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 28 Jun 2026 04:00:13 GMT</lastBuildDate>
+    <item>
+      <title>엘론 머스크의 우주 데이터 센터, 과연 실현될까?</title>
+      <link>https://dori-ai.com/insight/article/trend-177</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-177</guid>
+      <category>트렌드</category>
+      <pubDate>Sun, 28 Jun 2026 03:00:14 GMT</pubDate>
+      <description>엘론 머스크의 우주 데이터 센터 비전에 대한 의문과 그에 따른 업계 반응을 살펴봅니다.</description>
+    </item>
     <item>
       <title>애플 비전 프로의 핵심 인력이 OpenAI로 이동하다</title>
       <link>https://dori-ai.com/insight/article/trend-176</link>
@@ -318,14 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
       <description>제미나이 설치 및 기본 사용법을 안내합니다.</description>
-    </item>
-    <item>
-      <title>[AI 모델 비교] 챗GPT vs 제미나이 vs 클로드 vs 퍼플렉시티 실무 대결</title>
-      <link>https://dori-ai.com/insight/article/video-18</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-18</guid>
-      <category>큐레이션</category>
-      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>여러 AI 모델의 실무 활용을 비교합니다.</description>
     </item>
   </channel>
 </rss>
