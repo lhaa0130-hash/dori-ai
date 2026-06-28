@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 28 Jun 2026 01:00:16 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 28 Jun 2026 02:00:14 GMT</lastBuildDate>
+    <item>
+      <title>애플 비전 프로의 핵심 인력이 OpenAI로 이동하다</title>
+      <link>https://dori-ai.com/insight/article/trend-176</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-176</guid>
+      <category>트렌드</category>
+      <pubDate>Sun, 28 Jun 2026 01:00:13 GMT</pubDate>
+      <description>애플의 비전 프로 팀 부사장이 OpenAI의 하드웨어 팀으로 이직하며 업계의 관심을 받고 있다.</description>
+    </item>
     <item>
       <title>[개념] 2026년 가장 중요한 AI 개념</title>
       <link>https://dori-ai.com/insight/article/video-30</link>
@@ -318,14 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
       <description>여러 AI 모델의 실무 활용을 비교합니다.</description>
-    </item>
-    <item>
-      <title>[제미나이] AI 작업시간 2시간 줄여주는 제미나이 신기능 10가지</title>
-      <link>https://dori-ai.com/insight/article/video-19</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-19</guid>
-      <category>큐레이션</category>
-      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>제미나이의 신기능을 활용해 작업 시간을 단축하는 방법을 소개합니다.</description>
     </item>
   </channel>
 </rss>
