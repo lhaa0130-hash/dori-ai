@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 29 Jun 2026 02:00:14 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 29 Jun 2026 03:00:14 GMT</lastBuildDate>
+    <item>
+      <title>SpaceX·Baseten·Salesforce가 보여준 AI 돈길: 데이터센터, 고밸류 스타트업, 업무 에이전트의 재배치</title>
+      <link>https://dori-ai.com/insight/article/report-7</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/report-7</guid>
+      <category>리포트</category>
+      <pubDate>Mon, 29 Jun 2026 02:02:04 GMT</pubDate>
+      <description>이번 주 AI 산업의 핵심은 모델 성능 경쟁보다 자본과 물리 인프라의 재배치였다. 데이터센터 공간, 고평가 스타트업, 업무용 에이전트가 한 축으로 묶이며 AI 수익성 검증 압력이 커지고 있다.</description>
+    </item>
     <item>
       <title>Nvidia, 호주 기업과 AI 접근 협약 체결 — 새로운 기술 시대 열리나?</title>
       <link>https://dori-ai.com/insight/article/trend-183</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Tue, 23 Jun 2026 07:00:25 GMT</pubDate>
       <description>구글 딥마인드가 할리우드 제작사 A24와 손잡고 AI 영화 제작 도구 개발에 750억 원을 투자한다. 이번 협력은 영화산업에 AI 기술의 본격적 활용을 의미한다.</description>
-    </item>
-    <item>
-      <title>오라클, AI 도입으로 21,000명 해고 — 기술과 일자리의 새로운 역학</title>
-      <link>https://dori-ai.com/insight/article/trend-158</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-158</guid>
-      <category>트렌드</category>
-      <pubDate>Tue, 23 Jun 2026 06:00:28 GMT</pubDate>
-      <description>오라클이 AI 도입을 이유로 21,000명의 직원을 해고하며, 기술 산업의 일자리 구조에 큰 변화를 예고하고 있다.</description>
     </item>
   </channel>
 </rss>
