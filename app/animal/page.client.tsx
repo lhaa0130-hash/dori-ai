@@ -248,14 +248,14 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
           </div>
         </div>
 
-        {/* ── 종류로 찾기 (라벨 왼쪽 + 한 줄 가로 스크롤로 통일) ── */}
-        <section className="mb-3">
+        {/* ── 종류로 찾기 (다른 필터와 동일한 컴팩트 pill로 통일) ── */}
+        <section className="mb-2.5">
           <div className="flex items-center gap-3">
             <div className="flex items-center gap-1 w-[60px] flex-shrink-0">
               <span className="text-sm">🐾</span>
               <span className="text-[11px] font-bold text-neutral-400 dark:text-neutral-500">종류</span>
             </div>
-            <div className="flex flex-nowrap gap-2 overflow-x-auto pb-1">
+            <div className="flex flex-nowrap gap-1.5 overflow-x-auto pb-1">
             {TYPES.map((t) => {
               const sel = isSelected("taxonomy", t.label);
               const cnt = typeCounts[t.label] || 0;
@@ -263,24 +263,22 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
                 <button
                   key={t.label}
                   onClick={() => toggleTag("taxonomy", t.label)}
-                  className={`relative inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-2xl border-2 font-extrabold text-[13.5px] transition-all active:scale-95 ${cnt === 0 && !sel ? "opacity-45" : ""}`}
+                  className={`inline-flex items-center gap-1 whitespace-nowrap flex-shrink-0 text-[12px] font-semibold px-3 py-1.5 rounded-full border transition-all active:scale-95 ${cnt === 0 && !sel ? "opacity-45" : ""}`}
                   style={
                     sel
-                      ? { background: t.hex, borderColor: t.hex, color: "#fff", boxShadow: `0 5px 16px ${t.hex}55` }
+                      ? { background: t.hex, borderColor: t.hex, color: "#fff" }
                       : { background: t.hex + "1A", borderColor: t.hex + "40", color: t.hex }
                   }
                 >
-                  <span className="text-[15px]">{t.emoji}</span>
+                  {sel && "✓ "}
+                  <span className="text-[12px] leading-none">{t.emoji}</span>
                   {t.label}
                   <span
-                    className="text-[10.5px] font-bold px-1.5 py-0.5 rounded-full leading-none"
+                    className="text-[10px] font-bold px-1 rounded-full leading-none"
                     style={sel ? { background: "rgba(255,255,255,.25)", color: "#fff" } : { background: t.hex + "26", color: t.hex }}
                   >
                     {cnt}
                   </span>
-                  {sel && (
-                    <span className="absolute -top-1.5 -right-1.5 w-4 h-4 rounded-full bg-white text-[10px] font-black flex items-center justify-center shadow" style={{ color: t.hex }}>✓</span>
-                  )}
                 </button>
               );
             })}
@@ -303,7 +301,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
                     <button
                       key={tag}
                       onClick={() => toggleTag(f.id, tag)}
-                      className={`text-[12px] font-semibold px-3 py-1.5 rounded-full border transition-all active:scale-95 ${
+                      className={`whitespace-nowrap flex-shrink-0 text-[12px] font-semibold px-3 py-1.5 rounded-full border transition-all active:scale-95 ${
                         sel
                           ? f.cls + " shadow-sm"
                           : "bg-neutral-50 dark:bg-zinc-900 text-neutral-600 dark:text-neutral-300 border-neutral-200 dark:border-zinc-700 hover:border-[#F9954E]"
