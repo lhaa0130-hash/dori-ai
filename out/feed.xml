@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 29 Jun 2026 01:00:16 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 29 Jun 2026 02:00:14 GMT</lastBuildDate>
+    <item>
+      <title>Nvidia, 호주 기업과 AI 접근 협약 체결 — 새로운 기술 시대 열리나?</title>
+      <link>https://dori-ai.com/insight/article/trend-183</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-183</guid>
+      <category>트렌드</category>
+      <pubDate>Mon, 29 Jun 2026 01:00:18 GMT</pubDate>
+      <description>호주 Firmus Technologies가 Nvidia와 AI 접근 협약을 체결하며 기술 혁신에 박차를 가한다.</description>
+    </item>
     <item>
       <title>AI 프로필 사진 만들기: 무료 도구로 자연스럽게 만드는 단계별 가이드</title>
       <link>https://dori-ai.com/insight/article/curation-13</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Tue, 23 Jun 2026 06:00:28 GMT</pubDate>
       <description>오라클이 AI 도입을 이유로 21,000명의 직원을 해고하며, 기술 산업의 일자리 구조에 큰 변화를 예고하고 있다.</description>
-    </item>
-    <item>
-      <title>[AI 거품] AI 거품 꺼져도 돈은 결국 여기로 몰린다</title>
-      <link>https://dori-ai.com/insight/article/video-1</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-1</guid>
-      <category>큐레이션</category>
-      <pubDate>Tue, 23 Jun 2026 00:00:00 GMT</pubDate>
-      <description>AI 거품 붕괴 가능성과 그 이후의 투자 방향을 탐구합니다.</description>
     </item>
   </channel>
 </rss>
