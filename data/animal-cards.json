@@ -24837,5 +24837,414 @@
     "10~50kg"
    ]
   }
+ },
+ {
+  "no": "0304",
+  "rarity": 2,
+  "animal_name": "대머리독수리",
+  "sci": "Haliaeetus leucocephalus",
+  "en": "Bald Eagle",
+  "search_nickname": "미국의 상징 독수리",
+  "kid_friendly_desc": "대머리독수리는 사실 대머리가 아니에요! 머리가 하얀 깃털로 덮여 있어서 그렇게 불려요. 이 독수리는 미국의 상징이에요. 강이나 호수 근처에서 살며 고기를 먹고 살아요. 무리지어 사는 것을 좋아한답니다.",
+  "status": {
+   "label": "관심 필요",
+   "code": "LC",
+   "color": "#5BA86B"
+  },
+  "taxonomy": "동물계 › 척삭동물문 › 조류강 › 매목 › 수리과 › 흰머리수리속",
+  "subspecies": "H. l. leucocephalus, H. l. washingtoniensis",
+  "info": [
+   [
+    "🌍",
+    "서식지",
+    "강·호수"
+   ],
+   [
+    "🍽️",
+    "먹이",
+    "육식"
+   ],
+   [
+    "📏",
+    "크기",
+    "사람만한"
+   ],
+   [
+    "⚖️",
+    "몸무게",
+    "3~6kg"
+   ],
+   [
+    "✨",
+    "무리",
+    "무리지어 사는"
+   ],
+   [
+    "⏳",
+    "수명",
+    "평균 20~30년"
+   ]
+  ],
+  "facts": [
+   "대머리수리는 실제로 머리가 하얀 깃털로 덮여 있어요.",
+   "미국의 국조로 지정되어 있습니다.",
+   "매우 뛰어난 시력을 가지고 있어 멀리서도 먹이를 잘 찾습니다."
+  ],
+  "image_path": "/images/animal/bald-eagle-304.jpg",
+  "card_path": "/cards/animal/0304.png",
+  "filters": {
+   "diet": [
+    "육식"
+   ],
+   "color": [
+    "흰색",
+    "검정색"
+   ],
+   "size": [
+    "사람만한"
+   ],
+   "habitat": [
+    "강·호수"
+   ],
+   "feature": [],
+   "body": [
+    "날개 있는"
+   ],
+   "behavior": [
+    "무리지어 사는"
+   ],
+   "taxonomy": [
+    "조류"
+   ],
+   "weight": [
+    "1~10kg"
+   ]
+  }
+ },
+ {
+  "no": "0305",
+  "rarity": 2,
+  "animal_name": "여치",
+  "sci": "Gampsocleis sedakovii",
+  "en": "Bush-cricket",
+  "search_nickname": "풀숲의 노래꾼",
+  "kid_friendly_desc": "여치는 풀밭이나 덤불에서 사는 작은 곤충이에요. 수컷은 날개를 비벼 '찌르르' 소리를 내며 노래해요. 여치는 작은 벌레를 잡아먹고 살아요.",
+  "status": {
+   "label": "정보 없음",
+   "code": "DD",
+   "color": "#9E9E9E"
+  },
+  "taxonomy": "동물계 › 절지동물문 › 곤충강 › 메뚜기목 › 여치과 › 여치속",
+  "subspecies": "",
+  "info": [
+   [
+    "🌍",
+    "서식지",
+    "산지 가장자리의 풀밭이나 덤불"
+   ],
+   [
+    "🍽️",
+    "먹이",
+    "곤충을 먹는"
+   ],
+   [
+    "📏",
+    "크기",
+    "손바닥만한"
+   ],
+   [
+    "⚖️",
+    "몸무게",
+    "100g 이하"
+   ],
+   [
+    "✨",
+    "발음기",
+    "수컷 등면의 날개가 겹치는 곳에 발음기가 있음"
+   ],
+   [
+    "⏳",
+    "수명",
+    "정보 없음"
+   ]
+  ],
+  "facts": [
+   "여치는 녹색형과 갈색형 두 가지 형태가 있어요.",
+   "여치의 수컷은 날개를 비벼 '찌르르' 소리를 내요.",
+   "여치는 앞다리에 날카로운 가시가 있어 작은 곤충을 잡아먹어요."
+  ],
+  "image_path": "/images/animal/bush-cricket.jpg",
+  "card_path": "/cards/animal/0305.png",
+  "filters": {
+   "diet": [
+    "곤충을 먹는"
+   ],
+   "color": [
+    "초록색"
+   ],
+   "size": [
+    "손바닥만한"
+   ],
+   "habitat": [
+    "초원"
+   ],
+   "feature": [],
+   "body": [
+    "다리가 6개+"
+   ],
+   "behavior": [
+    "알을 낳는"
+   ],
+   "taxonomy": [
+    "곤충"
+   ],
+   "weight": [
+    "100g 이하"
+   ]
+  }
+ },
+ {
+  "no": "0306",
+  "rarity": 3,
+  "animal_name": "투구게",
+  "sci": "Limulidae",
+  "en": "Horseshoe Crab",
+  "search_nickname": "말발굽 게",
+  "kid_friendly_desc": "투구게는 바다에 사는 특별한 동물이에요. 머리와 몸통이 말발굽처럼 생겼고, 아주 오랫동안 변하지 않아 살아있는 화석으로 불려요. 투구게의 피는 병균을 검사하는 데 쓰여요.",
+  "status": {
+   "label": "정보부족",
+   "code": "DD",
+   "color": "#9E9E9E"
+  },
+  "taxonomy": "동물계 › 절지동물문 › 협각아문 › 검미목 › 투구게과",
+  "subspecies": "Limulus polyphemus, Carcinoscorpius rotundicauda, Tachypleus tridentatus, Tachypleus gigas",
+  "info": [
+   [
+    "🌍",
+    "서식지",
+    "바다"
+   ],
+   [
+    "🍽️",
+    "먹이",
+    "잡식"
+   ],
+   [
+    "📏",
+    "크기",
+    "고양이만한"
+   ],
+   [
+    "⚖️",
+    "몸무게",
+    "약 1.5kg"
+   ],
+   [
+    "✨",
+    "특기",
+    "살아있는 화석으로 불림"
+   ],
+   [
+    "⏳",
+    "수명",
+    "평균 20년 이상"
+   ]
+  ],
+  "facts": [
+   "투구게는 약 2억 5천만 년 전부터 거의 변하지 않았어요.",
+   "투구게의 혈액은 의료 도구의 내독소 검사에 사용됩니다.",
+   "투구게는 물고기 미끼로도 사용됩니다."
+  ],
+  "image_path": "/images/animal/horseshoe-crab.jpg",
+  "card_path": "/cards/animal/0306.png",
+  "filters": {
+   "diet": [
+    "잡식"
+   ],
+   "color": [],
+   "size": [
+    "고양이만한"
+   ],
+   "habitat": [
+    "바다"
+   ],
+   "feature": [],
+   "body": [
+    "다리가 없는"
+   ],
+   "behavior": [
+    "혼자 사는"
+   ],
+   "taxonomy": [
+    "갑각류"
+   ],
+   "weight": [
+    "1~10kg"
+   ]
+  }
+ },
+ {
+  "no": "0307",
+  "rarity": 4,
+  "animal_name": "흰수염고래",
+  "sci": "Balaenoptera musculus",
+  "en": "Blue Whale",
+  "search_nickname": "바다의 거인",
+  "kid_friendly_desc": "흰수염고래는 세상에서 가장 큰 동물이에요! 크릴새우라는 작은 생물을 먹고 살아요. 바다에서 아주 멀리까지 헤엄칠 수 있답니다. 흰수염고래는 친구들과 함께 무리지어 다니기도 해요.",
+  "status": {
+   "label": "위기 근접",
+   "code": "NT",
+   "color": "#9CCC65"
+  },
+  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 수염고래과 › 대왕고래속",
+  "subspecies": "",
+  "info": [
+   [
+    "🌍",
+    "서식지",
+    "바다"
+   ],
+   [
+    "🍽️",
+    "먹이",
+    "플랑크톤을 먹는"
+   ],
+   [
+    "📏",
+    "크기",
+    "세상 가장 큰"
+   ],
+   [
+    "⚖️",
+    "몸무게",
+    "약 72~135톤"
+   ],
+   [
+    "✨",
+    "속도",
+    "최대 시속 32~48km"
+   ],
+   [
+    "⏳",
+    "수명",
+    "최대 110년"
+   ]
+  ],
+  "facts": [
+   "대왕고래는 지구상에서 가장 큰 동물입니다.",
+   "대왕고래는 하루에 최대 90kg씩 체중이 증가할 수 있습니다.",
+   "대왕고래의 심장은 자동차 크기만큼 큽니다."
+  ],
+  "image_path": "/images/animal/blue-whale-307.jpg",
+  "card_path": "/cards/animal/0307.png",
+  "filters": {
+   "diet": [
+    "플랑크톤을 먹는"
+   ],
+   "color": [
+    "파란색"
+   ],
+   "size": [
+    "세상 가장 큰"
+   ],
+   "habitat": [
+    "바다"
+   ],
+   "feature": [],
+   "body": [
+    "다리가 없는"
+   ],
+   "behavior": [
+    "혼자 사는"
+   ],
+   "taxonomy": [
+    "포유류"
+   ],
+   "weight": [
+    "1톤 이상"
+   ]
+  }
+ },
+ {
+  "no": "0308",
+  "rarity": 1,
+  "animal_name": "모기",
+  "sci": "Culicidae",
+  "en": "Mosquito",
+  "search_nickname": "작은 흡혈귀",
+  "kid_friendly_desc": "모기는 작은 곤충이에요. 암컷 모기는 사람이나 동물의 피를 빨아먹어요. 그래서 가끔 간지럽거나 아플 수 있어요. 모기는 주로 여름에 많이 나타나요.",
+  "status": {
+   "label": "정보 부족",
+   "code": "DD",
+   "color": "#9E9E9E"
+  },
+  "taxonomy": "동물계 › 절지동물문 › 곤충강 › 파리목 › 모기과",
+  "subspecies": "학질모기아과, 보통모기아과",
+  "info": [
+   [
+    "🌍",
+    "서식지",
+    "도시 근처"
+   ],
+   [
+    "🍽️",
+    "먹이",
+    "꿀을 먹는"
+   ],
+   [
+    "📏",
+    "크기",
+    "손보다 작은"
+   ],
+   [
+    "⚖️",
+    "몸무게",
+    "약 2~3mg"
+   ],
+   [
+    "✨",
+    "번식",
+    "알을 낳는"
+   ],
+   [
+    "⏳",
+    "수명",
+    "평균 1~2주"
+   ]
+  ],
+  "facts": [
+   "모기는 1억 7천만 년 전부터 존재해왔어요.",
+   "암컷 모기만 피를 빨아요.",
+   "모기는 여러 질병의 매개체가 될 수 있어요."
+  ],
+  "image_path": "/images/animal/mosquito.jpg",
+  "card_path": "/cards/animal/0308.png",
+  "filters": {
+   "diet": [
+    "꿀을 먹는"
+   ],
+   "color": [
+    "투명한"
+   ],
+   "size": [
+    "손보다 작은"
+   ],
+   "habitat": [
+    "도시 근처"
+   ],
+   "feature": [],
+   "body": [
+    "다리가 6개+"
+   ],
+   "behavior": [
+    "알을 낳는"
+   ],
+   "taxonomy": [
+    "곤충"
+   ],
+   "weight": [
+    "100g 이하"
+   ]
+  }
  }
 ]
