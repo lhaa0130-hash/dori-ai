@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 29 Jun 2026 05:00:25 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 29 Jun 2026 06:00:16 GMT</lastBuildDate>
+    <item>
+      <title>Microsoft·Google 데이터센터가 만난 36.1℃ 폭염: 전력망이 AI 경쟁의 새 병목이다</title>
+      <link>https://dori-ai.com/insight/article/analysis-10</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/analysis-10</guid>
+      <category>분석</category>
+      <pubDate>Mon, 29 Jun 2026 05:01:48 GMT</pubDate>
+      <description>유럽 폭염으로 전력망과 발전소가 흔들리는 사이, AI 데이터센터 전력 수요는 폭발적으로 늘고 있다. 이제 AI 경쟁의 핵심은 모델 성능이 아니라 전기·물·입지·송전망을 누가 먼저 확보하느냐로 이동하고 있다.</description>
+    </item>
     <item>
       <title>SpaceX·Baseten·Salesforce가 보여준 AI 돈길: 데이터센터, 고밸류 스타트업, 업무 에이전트의 재배치</title>
       <link>https://dori-ai.com/insight/article/report-7</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Tue, 23 Jun 2026 09:00:30 GMT</pubDate>
       <description>유럽이 엔비디아의 최신 AI 슈퍼컴퓨터 35대를 공개하며 AI 연산 능력을 한층 강화하고 있다. 이 발표는 AI 연구 및 개발에 중요한 이정표로 자리 잡을 것으로 기대된다.</description>
-    </item>
-    <item>
-      <title>구글 딥마인드, 할리우드에 750억 원 투자 — AI 영화 제작의 새로운 시대 열리나</title>
-      <link>https://dori-ai.com/insight/article/trend-159</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-159</guid>
-      <category>트렌드</category>
-      <pubDate>Tue, 23 Jun 2026 07:00:25 GMT</pubDate>
-      <description>구글 딥마인드가 할리우드 제작사 A24와 손잡고 AI 영화 제작 도구 개발에 750억 원을 투자한다. 이번 협력은 영화산업에 AI 기술의 본격적 활용을 의미한다.</description>
     </item>
   </channel>
 </rss>
