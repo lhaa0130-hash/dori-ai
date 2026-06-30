@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 30 Jun 2026 04:00:16 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 30 Jun 2026 05:00:15 GMT</lastBuildDate>
+    <item>
+      <title>한국, 550억 달러 투자로 AI 메모리 혁신에 나선다</title>
+      <link>https://dori-ai.com/insight/article/trend-185</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-185</guid>
+      <category>트렌드</category>
+      <pubDate>Tue, 30 Jun 2026 04:00:15 GMT</pubDate>
+      <description>한국의 주요 기술 기업들이 550억 달러를 투자하여 AI 메모리 기술을 혁신하고 있다. 이는 'RAMageddon' 문제를 해결하기 위한 노력의 일환이다.</description>
+    </item>
     <item>
       <title>한국, 1조 달러 규모 AI 및 반도체 투자 발표</title>
       <link>https://dori-ai.com/insight/article/trend-184</link>
@@ -318,14 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Wed, 24 Jun 2026 00:00:00 GMT</pubDate>
       <description>머신러닝의 발전 과정을 간략히 정리한다.</description>
-    </item>
-    <item>
-      <title>사이버 보안의 미래 — AI가 시스템을 초월할 날이 얼마 남지 않았다</title>
-      <link>https://dori-ai.com/insight/article/trend-162</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-162</guid>
-      <category>트렌드</category>
-      <pubDate>Tue, 23 Jun 2026 13:00:25 GMT</pubDate>
-      <description>AI가 사이버 보안 시스템을 무너뜨릴 가능성에 대한 경고가 전 세계적으로 퍼지고 있다. 'Five Eyes' 동맹국들은 이 문제를 심각하게 보고 있다.</description>
     </item>
   </channel>
 </rss>
