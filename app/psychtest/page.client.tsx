@@ -4,9 +4,9 @@
 // 단일 라우트에서 허브 → 인트로 → 문항 → 결과를 상태로 전환(정적 export 호환).
 import { useState, useEffect, useRef, type ReactNode } from "react";
 import Link from "next/link";
-import { RotateCcw, ArrowRight, ArrowLeft, ChevronRight, Info, ShieldAlert, Lock, Share2, BookmarkPlus, Check, Copy, Download, X as XClose, Smartphone } from "lucide-react";
+import { RotateCcw, ArrowRight, ArrowLeft, ChevronRight, Info, ShieldAlert, Lock, Share2, BookmarkPlus, Check, Copy, Download, X as XClose, Smartphone, Phone } from "lucide-react";
 import {
-  TESTS, CATEGORIES, getTest, computeScored, computeMulti, getAbout,
+  TESTS, CATEGORIES, getTest, computeScored, computeMulti, getAbout, getResources,
   type PsychTest, type ScoredTest, type TypedTest, type MultiTest, type Tone,
 } from "@/lib/psychTests";
 import { shareResultCard, getCardDataUrl, downloadCard, type CardData } from "@/lib/shareCard";
@@ -313,15 +313,8 @@ function ScoredResult({ test, answers, onBack, onRetry }: { test: ScoredTest; an
         higherWorse={higherWorse}
       />
 
-      {/* 위기 자원 */}
-      {test.crisis && (
-        <div className="flex items-start gap-2 rounded-2xl bg-rose-50 dark:bg-rose-950/30 border border-rose-100 dark:border-rose-900/40 px-4 py-3.5 mt-3">
-          <ShieldAlert className="w-4 h-4 text-rose-500 mt-0.5 shrink-0" />
-          <p className="text-[12px] text-rose-700 dark:text-rose-300 leading-relaxed break-keep">
-            힘든 마음이 든다면 혼자 견디지 마세요. <b>자살예방상담전화 109</b>, <b>정신건강상담전화 1577-0199</b>에서 24시간 무료로 이야기할 수 있어요.
-          </p>
-        </div>
-      )}
+      {/* 도움받을 수 있는 곳 */}
+      <ResourcesBox testId={test.id} emphasize={!!test.crisis || band.tone === "high"} />
 
       {/* 출처 + 고지 */}
       <div className="mt-3 space-y-2">
@@ -379,6 +372,7 @@ function TypedRunner({ test, onExit }: { test: TypedTest; onExit: () => void }) 
             <RotateCcw className="w-3.5 h-3.5" /> 다시 하기
           </button>
         </div>
+        <ResourcesBox testId={test.id} emphasize={false} />
         <ResultActions
           card={{ kicker: test.title, emoji: r.emoji, headline: r.title, lines: [r.desc] }}
           badge={{ testId: test.id, title: test.title, label: r.title, sub: "", emoji: r.emoji }}
@@ -561,6 +555,8 @@ function MultiResult({ test, answers, onBack, onRetry }: { test: MultiTest; answ
         </p>
       </div>
 
+      <ResourcesBox testId={test.id} emphasize={false} />
+
       <ResultActions
         card={{
           kicker: "성격 5요인 검사",
@@ -583,6 +579,40 @@ function MultiResult({ test, answers, onBack, onRetry }: { test: MultiTest; answ
         <RotateCcw className="w-3.5 h-3.5" /> 다시 하기
       </button>
     </main>
+  );
+}
+
+/* ───────────────────────── 도움받을 수 있는 곳 ───────────────────────── */
+function ResourcesBox({ testId, emphasize }: { testId: string; emphasize?: boolean }) {
+  const list = getResources(testId);
+  if (!list.length) return null;
+  return (
+    <div className={`rounded-2xl border px-4 py-3.5 mt-3 ${emphasize ? "bg-rose-50 dark:bg-rose-950/30 border-rose-200 dark:border-rose-900/50" : "bg-neutral-50 dark:bg-zinc-900 border-neutral-100 dark:border-zinc-800"}`}>
+      <div className="flex items-center gap-1.5 mb-2">
+        <ShieldAlert className={`w-4 h-4 ${emphasize ? "text-rose-500" : "text-[#F9954E]"}`} />
+        <p className={`text-[12.5px] font-extrabold ${emphasize ? "text-rose-600 dark:text-rose-300" : "text-neutral-700 dark:text-neutral-200"}`}>도움받을 수 있는 곳</p>
+      </div>
+      {emphasize && (
+        <p className="text-[12px] text-rose-700 dark:text-rose-300 leading-relaxed break-keep mb-2.5">
+          힘들 땐 혼자 견디지 마세요. 아래로 연락하면 무료로 이야기하고 도움받을 수 있어요.
+        </p>
+      )}
+      <div className="flex flex-col gap-2.5">
+        {list.map((r) => (
+          <div key={r.name} className="flex items-start gap-2">
+            <Phone className="w-3.5 h-3.5 text-neutral-400 mt-0.5 shrink-0" />
+            <div className="min-w-0">
+              <p className="text-[12.5px] leading-snug break-keep">
+                <b className="text-neutral-800 dark:text-neutral-100">{r.name}</b>{" "}
+                <span className="font-extrabold text-[#F9954E] tabular-nums">{r.phone}</span>
+                <span className="text-[11px] text-neutral-400"> · {r.hours}</span>
+              </p>
+              <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep mt-0.5">{r.desc}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
   );
 }
 
