@@ -1,5 +1,56 @@
 [
   {
+    "id": "mk9-1",
+    "name": "로지텍 M331 무소음 무선 마우스",
+    "category": "digital",
+    "source": "coupang",
+    "query": "로지텍 M331 무소음 무선 마우스",
+    "emoji": "🖱️",
+    "priceHint": "1~3만원대",
+    "summary": "조용한 책상용 마우스",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/eZF8E7B2RM"
+  },
+  {
+    "id": "mk9-2",
+    "name": "아이리버 EQwear-V10 무선 키보드 마우스 세트",
+    "category": "digital",
+    "source": "coupang",
+    "query": "아이리버 EQwear V10 무선 키보드 마우스 세트",
+    "emoji": "⌨️",
+    "priceHint": "2~4만원대",
+    "summary": "책상 기본 세트 교체용",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/eZF8FanTmS"
+  },
+  {
+    "id": "mk9-3",
+    "name": "넥시 USB-C 멀티 허브",
+    "category": "digital",
+    "source": "coupang",
+    "query": "넥시 USB C 멀티 허브",
+    "emoji": "🔌",
+    "priceHint": "1~3만원대",
+    "summary": "노트북 포트 확장용",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/eZF8FdqrAG"
+  },
+  {
+    "id": "mk9-4",
+    "name": "베이스어스 접이식 스마트폰 태블릿 거치대",
+    "category": "digital",
+    "source": "ali",
+    "query": "Baseus 접이식 스마트폰 태블릿 거치대",
+    "emoji": "📱",
+    "priceHint": "1만원대",
+    "summary": "영상·화상회의 거치용",
+    "hot": true,
+    "weekly": true
+  },
+  {
     "id": "mk8-1",
     "name": "모나미 153 볼펜 세트",
     "category": "living",
@@ -9,7 +60,7 @@
     "priceHint": "1만원 이하~1만원대",
     "summary": "가장 무난한 데일리 필기템",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/eUHqEHPhwi"
   },
   {
@@ -22,7 +73,7 @@
     "priceHint": "1~3만원대",
     "summary": "퇴근 후 가볍게 시작하는 취미",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/eUHqEKjwTk"
   },
   {
@@ -35,7 +86,7 @@
     "priceHint": "2~5만원대",
     "summary": "캠핑 짐과 집 수납을 겸용",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/eUHqEMCWXI"
   },
   {
