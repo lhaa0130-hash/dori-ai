@@ -37,13 +37,12 @@ export default function Header() {
   type NavItem = { name: string; emoji: string; href?: string; children?: NavChild[] };
   const navItems: NavItem[] = [
     {
-      name: "프로젝트", emoji: "🚀", children: [
+      name: "프로젝트", href: "/projects", emoji: "🚀", children: [
         { name: "애니멀일로", href: "/animal", emoji: "🐾" },
         { name: "트레이더일로", href: "/trader", emoji: "📈" },
         { name: "워크일로", href: "/illo/app", emoji: "🟧" },
         { name: "아크일로", href: "/flat-form", emoji: "📐" },
         { name: "가족기록", href: "/family", emoji: "👨‍👩‍👧‍👦" },
-        { name: "전체 프로젝트", href: "/projects", emoji: "🗂️" },
       ],
     },
     { name: "인사이트", href: "/insight", emoji: "🧠" },
@@ -84,10 +83,17 @@ export default function Header() {
             {navItems.map((item) =>
               item.children ? (
                 <div key={item.name} className="relative group/nav">
-                  <button className="flex items-center gap-1 text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap">
-                    {item.name}
-                    <ChevronDown className="w-3 h-3 opacity-50 group-hover/nav:rotate-180 transition-transform duration-300" />
-                  </button>
+                  {item.href ? (
+                    <Link href={item.href} className="flex items-center gap-1 text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap">
+                      {item.name}
+                      <ChevronDown className="w-3 h-3 opacity-50 group-hover/nav:rotate-180 transition-transform duration-300" />
+                    </Link>
+                  ) : (
+                    <button className="flex items-center gap-1 text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap">
+                      {item.name}
+                      <ChevronDown className="w-3 h-3 opacity-50 group-hover/nav:rotate-180 transition-transform duration-300" />
+                    </button>
+                  )}
                   <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-300 translate-y-1 group-hover/nav:translate-y-0 z-50">
                     <div className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden py-1 min-w-[160px]">
                       {item.children.map((c) => (
@@ -266,10 +272,20 @@ export default function Header() {
           {navItems.map((item) =>
             item.children ? (
               <div key={item.name} className="py-1">
-                <div className="flex items-center gap-3 px-4 pt-2 pb-1">
-                  <span className="text-base w-6 text-center">{item.emoji}</span>
-                  <span className="text-xs font-bold text-neutral-400 dark:text-zinc-500 tracking-wide">{item.name}</span>
-                </div>
+                {item.href ? (
+                  <Link href={item.href} className="flex items-center justify-between px-4 pt-2 pb-1 group">
+                    <div className="flex items-center gap-3">
+                      <span className="text-base w-6 text-center">{item.emoji}</span>
+                      <span className="text-sm font-semibold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors">{item.name}</span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-zinc-600" />
+                  </Link>
+                ) : (
+                  <div className="flex items-center gap-3 px-4 pt-2 pb-1">
+                    <span className="text-base w-6 text-center">{item.emoji}</span>
+                    <span className="text-xs font-bold text-neutral-400 dark:text-zinc-500 tracking-wide">{item.name}</span>
+                  </div>
+                )}
                 {item.children.map((c) => (
                   <Link
                     key={c.name}
