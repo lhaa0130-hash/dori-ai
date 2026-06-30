@@ -37,6 +37,13 @@ export default function Header() {
   type NavItem = { name: string; emoji: string; href?: string; children?: NavChild[] };
   const navItems: NavItem[] = [
     {
+      name: "AI 정보", emoji: "🤖", children: [
+        { name: "AI 도구", href: "/ai-tools", emoji: "🔧" },
+        { name: "AI 소식", href: "/ai-news", emoji: "📰" },
+        { name: "AI영상", href: "/video", emoji: "🎬" },
+      ],
+    },
+    {
       name: "프로젝트", href: "/projects", emoji: "🚀", children: [
         { name: "트레이더일로", href: "/trader", emoji: "📈" },
         { name: "워크일로", href: "/illo/app", emoji: "🟧" },
@@ -44,21 +51,14 @@ export default function Header() {
         { name: "가족기록", href: "/family", emoji: "👨‍👩‍👧‍👦" },
       ],
     },
+    { name: "인사이트", href: "/insight", emoji: "🧠" },
+    { name: "피드", href: "/feed", emoji: "💬" },
+    { name: "마켓", href: "/market", emoji: "🛒" },
     {
       name: "키즈", emoji: "🧸", children: [
         { name: "동물도감", href: "/animal", emoji: "🐾" },
       ],
     },
-    { name: "인사이트", href: "/insight", emoji: "🧠" },
-    {
-      name: "AI 정보", emoji: "🤖", children: [
-        { name: "AI 도구", href: "/ai-tools", emoji: "🔧" },
-        { name: "AI 소식", href: "/ai-news", emoji: "📰" },
-        { name: "AI영상", href: "/video", emoji: "🎬" },
-      ],
-    },
-    { name: "피드", href: "/feed", emoji: "💬" },
-    { name: "마켓", href: "/market", emoji: "🛒" },
     {
       name: "놀이터", emoji: "🎡", children: [
         { name: "미니게임", href: "/minigame", emoji: "🎮" },
