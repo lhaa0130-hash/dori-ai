@@ -50,6 +50,7 @@ export default function Header() {
       name: "AI 정보", emoji: "🤖", children: [
         { name: "AI 도구", href: "/ai-tools", emoji: "🔧" },
         { name: "AI 소식", href: "/ai-news", emoji: "📰" },
+        { name: "영상", href: "/video", emoji: "🎬" },
       ],
     },
     { name: "피드", href: "/feed", emoji: "💬" },
