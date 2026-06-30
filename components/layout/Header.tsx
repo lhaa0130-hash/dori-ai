@@ -32,14 +32,26 @@ export default function Header() {
   const handleSignOut = () => { logout(); router.push("/"); setMobileOpen(false); };
 
   // 공지사항·건의사항은 메인 네비에서 숨김(푸터에 노출됨), 마켓은 노출
-  const navItems = [
+  // 일부 항목은 children 드롭다운(AI 정보 / 놀이터)
+  type NavChild = { name: string; href: string; emoji: string };
+  type NavItem = { name: string; emoji: string; href?: string; children?: NavChild[] };
+  const navItems: NavItem[] = [
+    { name: "프로젝트", href: "/projects", emoji: "🚀" },
     { name: "인사이트", href: "/insight", emoji: "🧠" },
-    { name: "AI 도구", href: "/ai-tools", emoji: "🔧" },
-    { name: "AI 소식", href: "/ai-news", emoji: "📰" },
+    {
+      name: "AI 정보", emoji: "🤖", children: [
+        { name: "AI 도구", href: "/ai-tools", emoji: "🔧" },
+        { name: "AI 소식", href: "/ai-news", emoji: "📰" },
+      ],
+    },
     { name: "피드", href: "/feed", emoji: "💬" },
     { name: "마켓", href: "/market", emoji: "🛒" },
-    { name: "미니게임", href: "/minigame", emoji: "🎮" },
-    { name: "심리테스트", href: "/psychtest", emoji: "🧩" },
+    {
+      name: "놀이터", emoji: "🎡", children: [
+        { name: "미니게임", href: "/minigame", emoji: "🎮" },
+        { name: "심리테스트", href: "/psychtest", emoji: "🧩" },
+      ],
+    },
   ];
 
   return (
@@ -60,15 +72,29 @@ export default function Header() {
           <nav className="hidden lg:flex items-center gap-5">
             {/* 공지사항은 헤더에서 제외(푸터에만 노출) */}
 
-            <Link href="/projects" className="flex-shrink-0 text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap">
-              프로젝트
-            </Link>
-
-            {navItems.map((item) => (
-              <Link key={item.name} href={item.href} className="flex-shrink-0 text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap">
-                {item.name}
-              </Link>
-            ))}
+            {navItems.map((item) =>
+              item.children ? (
+                <div key={item.name} className="relative group/nav">
+                  <button className="flex items-center gap-1 text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap">
+                    {item.name}
+                    <ChevronDown className="w-3 h-3 opacity-50 group-hover/nav:rotate-180 transition-transform duration-300" />
+                  </button>
+                  <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-300 translate-y-1 group-hover/nav:translate-y-0 z-50">
+                    <div className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden py-1 min-w-[160px]">
+                      {item.children.map((c) => (
+                        <Link key={c.name} href={c.href} className="flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 hover:text-[#F9954E] transition-colors whitespace-nowrap">
+                          <span className="w-4 text-center">{c.emoji}</span><span>{c.name}</span>
+                        </Link>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <Link key={item.name} href={item.href || "#"} className="flex-shrink-0 text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap">
+                  {item.name}
+                </Link>
+              )
+            )}
           </nav>
 
           {/* ── 우측 컨트롤 (돋보기·테마·마이페이지) ── */}
@@ -228,30 +254,41 @@ export default function Header() {
           </div>
 
           {/* 메인 메뉴 */}
-          {navItems.map((item) => (
-            <Link
-              key={item.name}
-              href={item.href}
-              className="flex items-center justify-between px-4 py-3.5 rounded-2xl hover:bg-neutral-50 dark:hover:bg-zinc-900 transition-colors group"
-            >
-              <div className="flex items-center gap-3">
-                <span className="text-base w-6 text-center">{item.emoji}</span>
-                <span className="text-sm font-semibold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors">{item.name}</span>
+          {navItems.map((item) =>
+            item.children ? (
+              <div key={item.name} className="py-1">
+                <div className="flex items-center gap-3 px-4 pt-2 pb-1">
+                  <span className="text-base w-6 text-center">{item.emoji}</span>
+                  <span className="text-xs font-bold text-neutral-400 dark:text-zinc-500 tracking-wide">{item.name}</span>
+                </div>
+                {item.children.map((c) => (
+                  <Link
+                    key={c.name}
+                    href={c.href}
+                    className="flex items-center justify-between pl-12 pr-4 py-3 rounded-2xl hover:bg-neutral-50 dark:hover:bg-zinc-900 transition-colors group"
+                  >
+                    <div className="flex items-center gap-3">
+                      <span className="text-base w-6 text-center">{c.emoji}</span>
+                      <span className="text-sm font-semibold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors">{c.name}</span>
+                    </div>
+                    <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-zinc-600" />
+                  </Link>
+                ))}
               </div>
-              <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-zinc-600" />
-            </Link>
-          ))}
-
-          <Link
-            href="/projects"
-            className="flex items-center justify-between px-4 py-3.5 rounded-2xl hover:bg-neutral-50 dark:hover:bg-zinc-900 transition-colors group"
-          >
-            <div className="flex items-center gap-3">
-              <span className="text-base w-6 text-center">🚀</span>
-              <span className="text-sm font-semibold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors">프로젝트</span>
-            </div>
-            <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-zinc-600" />
-          </Link>
+            ) : (
+              <Link
+                key={item.name}
+                href={item.href || "#"}
+                className="flex items-center justify-between px-4 py-3.5 rounded-2xl hover:bg-neutral-50 dark:hover:bg-zinc-900 transition-colors group"
+              >
+                <div className="flex items-center gap-3">
+                  <span className="text-base w-6 text-center">{item.emoji}</span>
+                  <span className="text-sm font-semibold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors">{item.name}</span>
+                </div>
+                <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-zinc-600" />
+              </Link>
+            )
+          )}
 
         </div>
       </div>
