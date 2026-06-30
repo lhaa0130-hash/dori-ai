@@ -54,7 +54,7 @@ export const PROJECTS: ProjectItem[] = [
   },
   {
     slug: "trader",
-    name: "AI 자동매매",
+    name: "AI트레이더",
     emoji: "📈",
     image: "",
     tag: "테스트 중",
@@ -77,7 +77,7 @@ export const PROJECTS: ProjectItem[] = [
   },
   {
     slug: "illo",
-    name: "AI 업무비서",
+    name: "AI비서",
     emoji: "🟧",
     image: "/illo-logo.png",
     tag: "테스트 중",
@@ -100,7 +100,7 @@ export const PROJECTS: ProjectItem[] = [
   },
   {
     slug: "flat-form",
-    name: "AI 건축설계",
+    name: "건축일로",
     emoji: "📐",
     image: "",
     tag: "테스트 중",
@@ -123,7 +123,7 @@ export const PROJECTS: ProjectItem[] = [
   },
   {
     slug: "family",
-    name: "AI 가족앱",
+    name: "집안일로",
     emoji: "👨‍👩‍👧‍👦",
     image: "",
     tag: "가족 서비스",
@@ -136,7 +136,7 @@ export const PROJECTS: ProjectItem[] = [
       "일정·사진·건강·추억·할 일까지 가족 구성원 모두가 실시간으로 공유하는 가족 전용 플랫폼이에요.",
     tags: ["가족 공유", "추억 기록", "AI 요약"],
     launchHref: "/family",
-    launchLabel: "가족기록 열기",
+    launchLabel: "집안일로 열기",
     features: [
       { icon: "🗓️", title: "가족 캘린더", detail: "각자 흩어진 일정을 하나로 모아 온 가족이 함께 봐요." },
       { icon: "🖼️", title: "추억 아카이브", detail: "카카오·갤러리에 흩어진 사진을 한곳에 모아 정리해요." },

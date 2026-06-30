@@ -3,7 +3,7 @@ import RequireAuth from "@/components/auth/RequireAuth";
 import FlatFormClient from "./page.client";
 
 export const metadata: Metadata = {
-  title: "아크일로 · 건축설계 보조 프로그램 | DORI-AI",
+  title: "건축일로 · 건축설계 보조 프로그램 | DORI-AI",
   description:
     "선으로 도면을 그리면 실(室)과 면적을 자동으로 인식·계산하는 건축설계 보조 프로그램. 지적도(VWorld) 자동 로드부터 평면 설계까지. 로그인하면 설계가 계정에 저장됩니다.",
   alternates: { canonical: "/flat-form" },

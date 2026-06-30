@@ -45,10 +45,10 @@ export default function Header() {
     },
     {
       name: "프로젝트", href: "/projects", emoji: "🚀", children: [
-        { name: "트레이더일로", href: "/trader", emoji: "📈" },
-        { name: "워크일로", href: "/illo/app", emoji: "🟧" },
-        { name: "아크일로", href: "/flat-form", emoji: "📐" },
-        { name: "가족기록", href: "/family", emoji: "👨‍👩‍👧‍👦" },
+        { name: "AI트레이더", href: "/trader", emoji: "📈" },
+        { name: "AI비서", href: "/illo/app", emoji: "🟧" },
+        { name: "건축일로", href: "/flat-form", emoji: "📐" },
+        { name: "집안일로", href: "/family", emoji: "👨‍👩‍👧‍👦" },
       ],
     },
     { name: "인사이트", href: "/insight", emoji: "🧠" },

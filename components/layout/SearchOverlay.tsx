@@ -11,7 +11,7 @@ const SHORTCUTS: { t: string; href: string }[] = [
   { t: "커뮤니티", href: "/community" }, { t: "피드", href: "/feed" }, { t: "인사이트", href: "/insight" },
   { t: "AI 도구", href: "/ai-tools" }, { t: "AI 모델", href: "/ai-models" }, { t: "미니게임", href: "/minigame" },
   { t: "동물도감", href: "/animal" }, { t: "마켓", href: "/market" }, { t: "상점", href: "/shop" },
-  { t: "트레이더일로 (투자매매)", href: "/trader" }, { t: "워크일로 (AI 직원)", href: "/illo/app" }, { t: "아크일로 (건축설계)", href: "/flat-form" },
+  { t: "AI트레이더 (투자매매)", href: "/trader" }, { t: "AI비서 (워크일로)", href: "/illo/app" }, { t: "건축일로 (건축설계)", href: "/flat-form" }, { t: "집안일로 (가족기록)", href: "/family" },
   { t: "공지사항", href: "/notice" }, { t: "FAQ", href: "/faq" }, { t: "마이페이지", href: "/profile" },
 ];
 

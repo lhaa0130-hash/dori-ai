@@ -8,6 +8,7 @@
 import { useEffect, useRef, useState } from "react";
 import BottomAd from "@/components/ads/BottomAd";
 import { saveProject, loadProject } from "@/lib/projectSave";
+import ProjectTopBar from "@/components/layout/ProjectTopBar";
 
 const AD_H = 56; // 하단 소형 광고 높이(px)
 const KEYS = ["ff_model", "ff_cad", "vw_key"]; // 설계/지적도/개인 VWorld 키
@@ -67,19 +68,23 @@ export default function FlatFormClient() {
 
   if (!ready) {
     return (
-      <div className="fixed inset-0 z-[9999] flex flex-col items-center justify-center gap-3 bg-white dark:bg-black">
-        <div className="w-7 h-7 rounded-full border-2 border-neutral-200 dark:border-zinc-700 border-t-[#F9954E] animate-spin" />
-        <p className="text-[13px] text-neutral-400">내 설계 불러오는 중…</p>
-      </div>
+      <>
+        <ProjectTopBar name="건축일로" emoji="📐" />
+        <div className="fixed left-0 right-0 bottom-0 top-12 z-[9999] flex flex-col items-center justify-center gap-3 bg-white dark:bg-black">
+          <div className="w-7 h-7 rounded-full border-2 border-neutral-200 dark:border-zinc-700 border-t-[#F9954E] animate-spin" />
+          <p className="text-[13px] text-neutral-400">내 설계 불러오는 중…</p>
+        </div>
+      </>
     );
   }
 
   return (
     <>
+      <ProjectTopBar name="건축일로" emoji="📐" />
       <iframe
         src="/flatform-app/index.html"
-        title="아크일로 (Flat-Form)"
-        style={{ position: "fixed", inset: 0, width: "100vw", height: "100vh", border: "none", zIndex: 9999 }}
+        title="건축일로 (Flat-Form)"
+        style={{ position: "fixed", top: 48, left: 0, right: 0, bottom: 0, width: "100vw", height: "calc(100vh - 48px)", border: "none", zIndex: 9999 }}
       />
       <BottomAd height={AD_H} />
     </>

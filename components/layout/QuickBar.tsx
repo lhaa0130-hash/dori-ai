@@ -27,9 +27,9 @@ const CATALOG: Group[] = [
     label: "프로젝트",
     items: [
       { key: "animal",   label: "애니멀일로",   short: "애니멀",   href: "/animal",    Icon: PawPrint },
-      { key: "trader",   label: "트레이더일로", short: "트레이더", href: "/trader",    Icon: TrendingUp },
-      { key: "workillo", label: "워크일로",     short: "워크",     href: "/illo/app",  Icon: Sparkles },
-      { key: "arcillo",  label: "아크일로",     short: "아크",     href: "/flat-form", Icon: PencilRuler },
+      { key: "trader",   label: "AI트레이더", short: "트레이더", href: "/trader",    Icon: TrendingUp },
+      { key: "workillo", label: "AI비서",     short: "비서",     href: "/illo/app",  Icon: Sparkles },
+      { key: "arcillo",  label: "건축일로",     short: "건축",     href: "/flat-form", Icon: PencilRuler },
     ],
   },
   {

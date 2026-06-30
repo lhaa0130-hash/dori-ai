@@ -69,10 +69,10 @@ const MORE_ITEMS = [
 
 const PROJECTS = [
   { name: "애니멀일로",  emoji: "🐾", image: "",               href: "/animal",   desc: "다양한 동물을 애니멀일로에서" },
-  { name: "트레이더일로", emoji: "📈", image: "",               href: "/trader",   desc: "AI 자동매매 — 매일 성과 공개" },
-  { name: "워크일로 (Workillo)", emoji: "🟧", image: "/illo-logo.png", href: "/illo/app", desc: "AI API, 구독 말고 필요한 만큼" },
-  { name: "아크일로",    emoji: "📐", image: "",               href: "/flat-form", desc: "건축설계 보조 프로그램" },
-  { name: "가족기록",    emoji: "👨‍👩‍👧‍👦", image: "",              href: "/family",   desc: "가족의 모든 것" },
+  { name: "AI트레이더", emoji: "📈", image: "",               href: "/trader",   desc: "AI 자동매매 — 매일 성과 공개" },
+  { name: "AI비서", emoji: "🟧", image: "/illo-logo.png", href: "/illo/app", desc: "AI API, 구독 말고 필요한 만큼" },
+  { name: "건축일로",    emoji: "📐", image: "",               href: "/flat-form", desc: "건축설계 보조 프로그램" },
+  { name: "집안일로",    emoji: "👨‍👩‍👧‍👦", image: "",              href: "/family",   desc: "가족의 모든 것" },
 ];
 
 export default function BottomNav() {

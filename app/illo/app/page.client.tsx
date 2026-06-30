@@ -24,6 +24,7 @@ import {
 } from "@/lib/illo/flows";
 import { PLANS } from "@/lib/illo/plan";
 import { getTone, saveTone } from "@/lib/illo/tone";
+import ProjectTopBar from "@/components/layout/ProjectTopBar";
 import {
   ArrowLeft, KeyRound, Loader2, Copy, Check, Sparkles, Download,
   Menu, X, Pencil, Plus, LogOut, Sun, Moon, Send, Lock, GripVertical, ChevronUp, ChevronDown, Search,
@@ -170,7 +171,9 @@ export default function IlloWebClient() {
 
   // ── 메인 셸 (EXE와 동일 구조: 사이드바 + 뷰) ──
   return (
-    <div className="flex h-screen w-full bg-neutral-50 dark:bg-black font-sans overflow-hidden">
+    <>
+    <ProjectTopBar name="AI비서" emoji="🟧" />
+    <div className="flex h-[calc(100vh-3rem)] mt-12 w-full bg-neutral-50 dark:bg-black font-sans overflow-hidden">
       {/* 데스크톱 사이드바 */}
       <div className="hidden md:flex">
         <IlloSidebar
@@ -200,8 +203,8 @@ export default function IlloWebClient() {
         {/* 모바일 상단바 */}
         <header className="md:hidden flex items-center gap-2 px-4 h-14 border-b border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shrink-0">
           <button onClick={() => setMobileNav(true)} className="p-1.5 -ml-1.5 text-neutral-600 dark:text-neutral-300"><Menu className="w-5 h-5" /></button>
-          <img src="/illo-logo.png" alt="워크일로" className="w-7 h-7 rounded-lg" />
-          <span className="font-extrabold text-[#F9954E]">워크일로</span>
+          <img src="/illo-logo.png" alt="AI비서" className="w-7 h-7 rounded-lg" />
+          <span className="font-extrabold text-[#F9954E]">AI비서</span>
           {free && <span className="ml-auto text-[11px] font-semibold text-neutral-400">남은 <b className="text-[#E8832E]">{quota ?? FREE_LIMIT}</b>/{FREE_LIMIT}</span>}
         </header>
 
@@ -218,6 +221,7 @@ export default function IlloWebClient() {
 
       {overlays}
     </div>
+    </>
   );
 }
 
@@ -243,7 +247,7 @@ function IlloSidebar({
         <div className="flex items-center gap-2.5">
           <img src="/illo-logo.png" alt="워크일로" className="w-9 h-9 rounded-xl shadow-sm" />
           <div className="flex-1 min-w-0">
-            <div className="text-base font-extrabold leading-none text-[#F9954E]">워크일로(Workillo)</div>
+            <div className="text-base font-extrabold leading-none text-[#F9954E]">AI비서</div>
             <Link href="/" className="text-[10px] text-neutral-400 mt-1 tracking-wide hover:text-[#F9954E] transition-colors inline-block">← DORI-AI 홈</Link>
           </div>
         </div>
@@ -1406,8 +1410,8 @@ function IlloLogin({ onShowGuide, onDevPreview }: { onShowGuide: () => void; onD
   return (
     <div className="w-full max-w-sm bg-white dark:bg-zinc-900 rounded-3xl border border-neutral-200 dark:border-zinc-800 shadow-xl p-8">
       <div className="flex flex-col items-center mb-6">
-        <img src="/illo-logo.png" alt="워크일로" className="w-14 h-14 rounded-2xl shadow-md mb-3" />
-        <div className="text-xl font-extrabold text-[#F9954E] leading-none">워크일로</div>
+        <img src="/illo-logo.png" alt="AI비서" className="w-14 h-14 rounded-2xl shadow-md mb-3" />
+        <div className="text-xl font-extrabold text-[#F9954E] leading-none">AI비서</div>
         <div className="text-[13px] text-neutral-500 dark:text-neutral-400 mt-2">
           {isSignup ? "계정을 만들고 바로 시작하세요" : "혼자서도 일이 되는 곳"}
         </div>

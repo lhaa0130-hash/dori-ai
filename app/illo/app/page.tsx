@@ -7,8 +7,8 @@ import ProjectSync from "@/components/auth/ProjectSync";
 const WORKILLO_KEYS = ["illo_results_v1", "illo.web.homeWidgets"];
 
 export const metadata = createMetadata({
-  title: "워크일로 웹 — 브라우저에서 바로 쓰는 AI 도구",
-  description: "설치 없이 브라우저에서 바로 쓰는 워크일로 라이트. 내 API 키로 블로그·SNS·카피·상품설명·답변·요약을 즉시 생성하세요.",
+  title: "AI비서 (비서일로) — 브라우저에서 바로 쓰는 AI 도구",
+  description: "설치 없이 브라우저에서 바로 쓰는 AI비서. 내 API 키로 블로그·SNS·카피·상품설명·답변·요약을 즉시 생성하세요.",
   path: "/illo/app",
 });
 
