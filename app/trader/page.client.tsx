@@ -36,6 +36,7 @@ interface Data {
   test_period?: { start: string; end: string };
   total_starting?: number; total_ending?: number; total_return_pct?: number;
   leaderboard?: Lb[]; strategies?: Strategy[]; recent_runs?: RecentRun[];
+  alert_bot?: string;   // 공용 알림봇 @username (텔레그램 매수/매도 알림 구독용)
 }
 
 const won = (n: number) => Math.round(n).toLocaleString("ko-KR") + "원";
@@ -188,6 +189,32 @@ export default function TraderClient() {
             </span>
             <span className="text-neutral-400">{alive ? <>다음 점검 <b className="tabular-nums text-neutral-600 dark:text-neutral-300">{cd}</b></> : null}</span>
           </div>
+
+          {/* ── 텔레그램 매수/매도 알림 받기 (회원) ── */}
+          {d.alert_bot && (
+            <section className="mb-5 rounded-2xl border border-[#F9954E]/25 bg-gradient-to-b from-[#F9954E]/[0.06] to-transparent p-4">
+              <div className="flex items-start gap-3">
+                <span className="text-xl leading-none mt-0.5">📲</span>
+                <div className="min-w-0 flex-1">
+                  <div className="text-sm font-bold text-neutral-900 dark:text-neutral-100">텔레그램으로 매수·매도 알림 받기</div>
+                  <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5 leading-relaxed">봇이 사고팔 때마다 내 텔레그램으로 바로 알려드려요. 버튼 누르고 <b>‘시작’</b> 한 번이면 끝! <span className="text-neutral-400">(지금은 모의투자)</span></p>
+                  <a href={`https://t.me/${d.alert_bot}?start=trader`} target="_blank" rel="noopener noreferrer"
+                    className="inline-flex items-center gap-1.5 mt-2.5 rounded-xl px-3.5 py-2 text-sm font-bold text-white transition-opacity hover:opacity-90" style={{ background: ORANGE }}>
+                    알림봇 열고 ‘시작’ 누르기 <span className="text-[0.85em]">→</span>
+                  </a>
+                  <details className="mt-2.5 text-xs text-neutral-500 dark:text-neutral-400">
+                    <summary className="cursor-pointer font-medium text-neutral-600 dark:text-neutral-300">어떻게 받나요? · 끄는 법 (3단계)</summary>
+                    <ol className="mt-2 space-y-1.5 list-decimal pl-5 leading-relaxed">
+                      <li>위 <b>‘알림봇 열기’</b> 버튼을 누르면 텔레그램이 열려요. (앱 없으면 무료 설치)</li>
+                      <li>봇 화면 아래쪽 <b>[시작] / [Start]</b> 버튼을 한 번 누르면 등록 완료 — 봇이 “✅ 등록 완료”라고 답해요.</li>
+                      <li>이제 매수/매도 때마다 알림이 와요. <b>끄려면</b> 봇 채팅에 <b>/stop</b>, 다시 켜려면 <b>/start</b>.</li>
+                    </ol>
+                    <p className="mt-2 text-neutral-400">알림은 내 텔레그램에서만 보여요. 무료이고, 언제든 /stop 으로 끌 수 있어요.</p>
+                  </details>
+                </div>
+              </div>
+            </section>
+          )}
 
           {/* ── 리더보드 (전략 대결) ── */}
           <H2 sub={`${dot(d.test_period?.start || "")}~${dot(d.test_period?.end || "")}`}>전략 순위 🏆</H2>

@@ -1,0 +1,313 @@
+3:I[4707,[],""]
+5:I[36423,[],""]
+6:I[26886,["3755","static/chunks/app/insight/article/error-0fec1554ed7c63a0.js"],"default"]
+7:I[5194,["7903","static/chunks/app/insight/error-cc5a5a9b8d61ff9d.js"],"default"]
+8:I[88003,["429","static/chunks/d94474cc-99386325d2739c99.js","5117","static/chunks/ebf8faf4-11417e5fa3a0848a.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-7e95c19d0facdcb8.js","2837","static/chunks/2837-1b4fc2817f4d24e9.js","8136","static/chunks/8136-809a903f7d99e7b1.js","3165","static/chunks/3165-1e67094d3b31ad40.js","6281","static/chunks/6281-98e9135bc4ad1a83.js","198","static/chunks/198-94dd06790450c3ec.js","3185","static/chunks/app/layout-866df269133444db.js"],""]
+9:I[49294,["429","static/chunks/d94474cc-99386325d2739c99.js","5117","static/chunks/ebf8faf4-11417e5fa3a0848a.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-7e95c19d0facdcb8.js","2837","static/chunks/2837-1b4fc2817f4d24e9.js","8136","static/chunks/8136-809a903f7d99e7b1.js","3165","static/chunks/3165-1e67094d3b31ad40.js","6281","static/chunks/6281-98e9135bc4ad1a83.js","198","static/chunks/198-94dd06790450c3ec.js","3185","static/chunks/app/layout-866df269133444db.js"],"Providers"]
+a:I[11403,["429","static/chunks/d94474cc-99386325d2739c99.js","5117","static/chunks/ebf8faf4-11417e5fa3a0848a.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-7e95c19d0facdcb8.js","2837","static/chunks/2837-1b4fc2817f4d24e9.js","8136","static/chunks/8136-809a903f7d99e7b1.js","3165","static/chunks/3165-1e67094d3b31ad40.js","6281","static/chunks/6281-98e9135bc4ad1a83.js","198","static/chunks/198-94dd06790450c3ec.js","3185","static/chunks/app/layout-866df269133444db.js"],"default"]
+b:I[66170,["429","static/chunks/d94474cc-99386325d2739c99.js","5117","static/chunks/ebf8faf4-11417e5fa3a0848a.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-7e95c19d0facdcb8.js","2837","static/chunks/2837-1b4fc2817f4d24e9.js","8136","static/chunks/8136-809a903f7d99e7b1.js","3165","static/chunks/3165-1e67094d3b31ad40.js","6281","static/chunks/6281-98e9135bc4ad1a83.js","198","static/chunks/198-94dd06790450c3ec.js","3185","static/chunks/app/layout-866df269133444db.js"],"default"]
+c:I[28342,["429","static/chunks/d94474cc-99386325d2739c99.js","5117","static/chunks/ebf8faf4-11417e5fa3a0848a.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-7e95c19d0facdcb8.js","2837","static/chunks/2837-1b4fc2817f4d24e9.js","8136","static/chunks/8136-809a903f7d99e7b1.js","3165","static/chunks/3165-1e67094d3b31ad40.js","6281","static/chunks/6281-98e9135bc4ad1a83.js","198","static/chunks/198-94dd06790450c3ec.js","3185","static/chunks/app/layout-866df269133444db.js"],"default"]
+d:I[70904,["429","static/chunks/d94474cc-99386325d2739c99.js","5117","static/chunks/ebf8faf4-11417e5fa3a0848a.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-7e95c19d0facdcb8.js","2837","static/chunks/2837-1b4fc2817f4d24e9.js","8136","static/chunks/8136-809a903f7d99e7b1.js","3165","static/chunks/3165-1e67094d3b31ad40.js","6281","static/chunks/6281-98e9135bc4ad1a83.js","198","static/chunks/198-94dd06790450c3ec.js","3185","static/chunks/app/layout-866df269133444db.js"],"default"]
+e:I[72972,["429","static/chunks/d94474cc-99386325d2739c99.js","5117","static/chunks/ebf8faf4-11417e5fa3a0848a.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-7e95c19d0facdcb8.js","8136","static/chunks/8136-809a903f7d99e7b1.js","5878","static/chunks/5878-8143e85c9419eba3.js","6281","static/chunks/6281-98e9135bc4ad1a83.js","198","static/chunks/198-94dd06790450c3ec.js","2511","static/chunks/app/insight/article/%5Bslug%5D/page-76e3aed3bc5c91f1.js"],""]
+4:["slug","curation-14","d"]
+0:["YkbKgndBLz_XTRxBDgB-2",[[["",{"children":["insight",{"children":["article",{"children":[["slug","curation-14","d"],{"children":["__PAGE__?{\"slug\":\"curation-14\"}",{}]}]}]}]},"$undefined","$undefined",true],["",{"children":["insight",{"children":["article",{"children":[["slug","curation-14","d"],{"children":["__PAGE__",{},[["$L1","$L2",null],null],null]},[null,["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","insight","children","article","children","$4","children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined"}]],null]},[null,["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","insight","children","article","children"],"error":"$6","errorStyles":[],"errorScripts":[],"template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined"}]],null]},[null,["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","insight","children"],"error":"$7","errorStyles":[],"errorScripts":[],"template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined"}]],null]},[[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/d82068451df3b999.css","precedence":"next","crossOrigin":"$undefined"}]],["$","html",null,{"lang":"ko","suppressHydrationWarning":true,"children":[["$","head",null,{"children":[["$","link",null,{"rel":"preconnect","href":"https://cdn.jsdelivr.net","crossOrigin":"anonymous"}],["$","link",null,{"rel":"preconnect","href":"https://logo.clearbit.com","crossOrigin":"anonymous"}],["$","link",null,{"rel":"dns-prefetch","href":"https://www.google.com"}],["$","link",null,{"rel":"stylesheet","href":"https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css"}],["$","link",null,{"rel":"alternate","type":"application/rss+xml","title":"DORI-AI 최신 인사이트","href":"https://dori-ai.com/feed.xml"}],[["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"DORI-AI\",\"url\":\"https://dori-ai.com\",\"logo\":\"https://dori-ai.com/logo.png\",\"description\":\"AI 활용 방법을 함께 연구하고 실전으로 적용해보는 커뮤니티 플랫폼. AI 자동화, 캐릭터 제작 가이드, 프레리독 애니메이션 교육을 제공합니다.\",\"email\":\"lhaa0130@gmail.com\",\"sameAs\":[\"https://www.instagram.com/lhaa0130/\",\"https://x.com/doriillo\",\"https://blog.naver.com/illo26\",\"https://www.reddit.com/user/illo0601/\",\"https://www.youtube.com/@lhaa0130\"],\"areaServed\":\"KR\",\"knowsAbout\":[\"AI 자동화\",\"캐릭터 제작\",\"프레리독 애니메이션\",\"AI 교육\",\"AI 도구\",\"AI 커뮤니티\"]}"}}],["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"DORI-AI\",\"url\":\"https://dori-ai.com\",\"description\":\"AI 도구, 인사이트, 아카데미, 커뮤니티를 한 곳에서 제공하는 AI 플랫폼\",\"potentialAction\":{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://dori-ai.com/api/search?q={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}}"}}]]]}],["$","body",null,{"className":"transition-colors duration-300 bg-white text-black dark:!bg-black dark:text-white","suppressHydrationWarning":true,"style":{"fontFamily":"\"Pretendard\", -apple-system, BlinkMacSystemFont, system-ui, \"Apple SD Gothic Neo\", \"Noto Sans KR\", \"Malgun Gothic\", \"맑은 고딕\", sans-serif"},"children":[["$","$L8",null,{"src":"https://www.googletagmanager.com/gtag/js?id=G-RKN3F8V01C","strategy":"lazyOnload"}],["$","$L8",null,{"id":"google-analytics","strategy":"lazyOnload","children":"\n                window.dataLayer = window.dataLayer || [];\n                function gtag(){dataLayer.push(arguments);}\n                gtag('js', new Date());\n                gtag('config', 'G-RKN3F8V01C');\n            "}],["$","$L8",null,{"id":"microsoft-clarity","strategy":"lazyOnload","children":"\n                (function(c,l,a,r,i,t,y){\n                    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};\n                    t=l.createElement(r);t.async=1;t.src=\"https://www.clarity.ms/tag/\"+i;\n                    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);\n                })(window, document, \"clarity\", \"script\", \"va2qmv3mwz\");\n            "}],["$","$L8",null,{"async":true,"src":"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1868839951780851","crossOrigin":"anonymous","strategy":"lazyOnload"}],["$","$L9",null,{"children":[["$","$La",null,{}],["$","$Lb",null,{}],["$","$Lc",null,{}],["$","$Ld",null,{"children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","main",null,{"className":"min-h-[80vh] flex flex-col items-center justify-center px-6 text-center","children":[["$","p",null,{"className":"text-7xl font-black text-[#F9954E]","children":"404"}],["$","h1",null,{"className":"mt-4 text-2xl font-bold text-foreground","children":"앗, 페이지를 찾을 수 없어요"}],["$","p",null,{"className":"mt-2 text-neutral-500 dark:text-neutral-400","children":"주소가 바뀌었거나 삭제된 페이지일 수 있어요. 아래에서 원하는 곳으로 이동해 보세요."}],["$","div",null,{"className":"mt-8 flex flex-wrap items-center justify-center gap-3","children":[["$","$Le",null,{"href":"/","className":"px-5 py-2.5 rounded-full bg-[#F9954E] text-white text-sm font-bold hover:bg-[#E8832E] transition-colors","children":"홈으로"}],["$","$Le",null,{"href":"/insight","className":"px-5 py-2.5 rounded-full border border-neutral-300 dark:border-neutral-700 text-sm font-bold hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors","children":"AI 인사이트"}],["$","$Le",null,{"href":"/ai-tools","className":"px-5 py-2.5 rounded-full border border-neutral-300 dark:border-neutral-700 text-sm font-bold hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors","children":"AI 도구 모음"}]]}]]}],"notFoundStyles":[]}]}]]}]]}]]}]],null],null],["$Lf",null]]]]
+10:"$Sreact.suspense"
+11:I[60990,["429","static/chunks/d94474cc-99386325d2739c99.js","5117","static/chunks/ebf8faf4-11417e5fa3a0848a.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-7e95c19d0facdcb8.js","8136","static/chunks/8136-809a903f7d99e7b1.js","5878","static/chunks/5878-8143e85c9419eba3.js","6281","static/chunks/6281-98e9135bc4ad1a83.js","198","static/chunks/198-94dd06790450c3ec.js","2511","static/chunks/app/insight/article/%5Bslug%5D/page-76e3aed3bc5c91f1.js"],"default"]
+12:I[10198,["429","static/chunks/d94474cc-99386325d2739c99.js","5117","static/chunks/ebf8faf4-11417e5fa3a0848a.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-7e95c19d0facdcb8.js","8136","static/chunks/8136-809a903f7d99e7b1.js","5878","static/chunks/5878-8143e85c9419eba3.js","6281","static/chunks/6281-98e9135bc4ad1a83.js","198","static/chunks/198-94dd06790450c3ec.js","2511","static/chunks/app/insight/article/%5Bslug%5D/page-76e3aed3bc5c91f1.js"],"default"]
+13:I[65878,["429","static/chunks/d94474cc-99386325d2739c99.js","5117","static/chunks/ebf8faf4-11417e5fa3a0848a.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-7e95c19d0facdcb8.js","8136","static/chunks/8136-809a903f7d99e7b1.js","5878","static/chunks/5878-8143e85c9419eba3.js","6281","static/chunks/6281-98e9135bc4ad1a83.js","198","static/chunks/198-94dd06790450c3ec.js","2511","static/chunks/app/insight/article/%5Bslug%5D/page-76e3aed3bc5c91f1.js"],"Image"]
+14:I[23004,["429","static/chunks/d94474cc-99386325d2739c99.js","5117","static/chunks/ebf8faf4-11417e5fa3a0848a.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-7e95c19d0facdcb8.js","8136","static/chunks/8136-809a903f7d99e7b1.js","5878","static/chunks/5878-8143e85c9419eba3.js","6281","static/chunks/6281-98e9135bc4ad1a83.js","198","static/chunks/198-94dd06790450c3ec.js","2511","static/chunks/app/insight/article/%5Bslug%5D/page-76e3aed3bc5c91f1.js"],"default"]
+16:I[83486,["429","static/chunks/d94474cc-99386325d2739c99.js","5117","static/chunks/ebf8faf4-11417e5fa3a0848a.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-7e95c19d0facdcb8.js","8136","static/chunks/8136-809a903f7d99e7b1.js","5878","static/chunks/5878-8143e85c9419eba3.js","6281","static/chunks/6281-98e9135bc4ad1a83.js","198","static/chunks/198-94dd06790450c3ec.js","2511","static/chunks/app/insight/article/%5Bslug%5D/page-76e3aed3bc5c91f1.js"],"default"]
+17:I[49577,["429","static/chunks/d94474cc-99386325d2739c99.js","5117","static/chunks/ebf8faf4-11417e5fa3a0848a.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-7e95c19d0facdcb8.js","8136","static/chunks/8136-809a903f7d99e7b1.js","5878","static/chunks/5878-8143e85c9419eba3.js","6281","static/chunks/6281-98e9135bc4ad1a83.js","198","static/chunks/198-94dd06790450c3ec.js","2511","static/chunks/app/insight/article/%5Bslug%5D/page-76e3aed3bc5c91f1.js"],"default"]
+15:T4fc5,<p>AI 그림 프롬프트 작성법을 검색했다면 대부분 “무엇을 어떻게 써야 원하는 그림이 나오는지”가 가장 막막할 것입니다. 같은 도구를 써도 어떤 사람은 포스터처럼 선명한 이미지를 만들고, 어떤 사람은 어색한 손·흐린 배경·엉뚱한 구도가 나옵니다. 차이는 재능보다 <strong>프롬프트를 구조화하는 방식</strong>에 있습니다.</p>
+<p>아래 가이드는 초보자가 바로 따라 할 수 있도록 <strong>도구 선택  설정  입력 문장 작성  수정  저장</strong> 순서로 정리했습니다. Midjourney, DALL·E 계열, Gemini, Microsoft Designer, Stable Diffusion 계열 도구에 공통으로 적용할 수 있습니다.</p>
+<h2>1단계: AI 그림 도구를 먼저 고르기</h2>
+<p>AI 그림 프롬프트 작성법은 도구마다 조금씩 달라집니다. 어떤 도구는 자연어 설명에 강하고, 어떤 도구는 세부 옵션과 부정 프롬프트를 잘 활용해야 합니다.</p>
+<table>
+<thead>
+<tr>
+<th>도구</th>
+<th>무료 사용 여부</th>
+<th>장점</th>
+<th>아쉬운 점</th>
+<th>추천 대상</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Microsoft Designer / Copilot 이미지 생성</strong></td>
+<td>Microsoft Copilot은 무료로 사용할 수 있으나, 일부 기능은 로그인해야 접근할 수 있고 사용량 제한이 있을 수 있음</td>
+<td>접근이 쉽고 한국어 입력도 비교적 편함</td>
+<td>세밀한 스타일 고정은 한계가 있을 수 있음</td>
+<td>입문자, 블로그 썸네일 제작</td>
+</tr>
+<tr>
+<td><strong>Gemini 이미지 생성</strong></td>
+<td>계정·지역·연령·요금제와 기능 종류에 따라 제공 범위가 다를 수 있음</td>
+<td>대화형으로 수정 요청하기 쉬움</td>
+<td>일부 생성 기능은 별도 요금제나 적합한 라이선스가 필요할 수 있음</td>
+<td>설명하면서 이미지를 다듬고 싶은 사람</td>
+</tr>
+<tr>
+<td><strong>ChatGPT 이미지 생성 계열</strong></td>
+<td>제공 범위와 사용 조건은 서비스 정책에 따라 확인 필요</td>
+<td>문장형 요청과 수정 대화에 강함</td>
+<td>생성 제한이 있을 수 있음</td>
+<td>기획안, 광고 이미지, 콘셉트 시안</td>
+</tr>
+<tr>
+<td><strong>Midjourney</strong></td>
+<td>이용 조건과 요금제는 공식 안내 확인 필요</td>
+<td>예술적 완성도와 스타일 표현이 강함</td>
+<td>초보자는 명령어와 옵션이 낯설 수 있음</td>
+<td>포스터, 캐릭터, 고퀄리티 콘셉트 아트</td>
+</tr>
+<tr>
+<td><strong>Stable Diffusion 계열</strong></td>
+<td>로컬 설치, 웹 서비스, 배포 모델에 따라 조건 확인 필요</td>
+<td>모델·로라·부정 프롬프트 등 세밀한 제어</td>
+<td>설치형은 난도가 높음</td>
+<td>세밀한 커스터마이징이 필요한 사용자</td>
+</tr>
+</tbody>
+</table>
+<p>처음이라면 <strong>Microsoft Designer, Gemini, ChatGPT 이미지 생성 계열</strong>처럼 대화형으로 수정하기 쉬운 도구를 추천합니다. “한 번에 완벽한 프롬프트”보다 “생성 후 수정”이 훨씬 빠릅니다.</p>
+<h2>2단계: 생성 전에 용도와 비율을 정하기</h2>
+<p>프롬프트를 쓰기 전에 이미지를 어디에 쓸지부터 정해야 합니다. 용도가 없으면 AI도 구도와 여백을 제대로 잡기 어렵습니다.</p>
+<p>예를 들어 같은 “커피 컵 사진”이라도 용도에 따라 프롬프트가 달라집니다.</p>
+<ul>
+<li>블로그 썸네일: <strong>상단에 제목을 넣을 여백</strong>, 밝은 배경</li>
+<li>인스타그램 게시물: <strong>정사각형</strong>, 감성적인 색감</li>
+<li>유튜브 썸네일: <strong>강한 대비</strong>, 큰 피사체, 시선이 가는 구도</li>
+<li>쇼핑몰 상세페이지: <strong>제품 중심</strong>, 흰 배경, 왜곡 최소화</li>
+<li>포스터: <strong>세로 비율</strong>, 타이포그래피 공간, 극적인 조명</li>
+</ul>
+<p>도구에 비율 설정이 있다면 먼저 선택하세요. 보통은 <strong>1:1 정사각형</strong>, <strong>16:9 가로형</strong>, <strong>9:16 세로형</strong>, <strong>4:5 SNS형</strong> 중 하나를 고르면 됩니다. 비율 옵션이 없다면 프롬프트에 직접 넣습니다.</p>
+<p>예시:</p>
+<blockquote>
+<p>세로형 포스터 비율, 9:16, 중앙에 인물이 있고 상단에는 제목을 넣을 수 있는 빈 공간</p>
+</blockquote>
+<h2>3단계: AI 그림 프롬프트 작성법의 기본 공식 익히기</h2>
+<p>가장 안정적인 프롬프트 구조는 다음 순서입니다.</p>
+<blockquote>
+<p><strong>주제 + 행동/상황 + 배경 + 스타일 + 구도 + 조명 + 색감 + 품질 조건 + 제외할 요소</strong></p>
+</blockquote>
+<p>초보자는 이 공식을 그대로 채우면 됩니다.</p>
+<h3>기본 템플릿</h3>
+<blockquote>
+<p>[주제]가 [행동/상황]을 하고 있는 장면, [배경], [스타일], [구도], [조명], [색감], [품질 조건], [제외할 요소]</p>
+</blockquote>
+<p>예시:</p>
+<blockquote>
+<p>고양이 모양의 작은 로봇이 책상 위에서 노트북을 보고 있는 장면, 따뜻한 홈오피스 배경, 귀여운 3D 일러스트 스타일, 정면에서 약간 내려다본 구도, 부드러운 아침 햇살, 파스텔톤 색감, 선명하고 깔끔한 이미지, 글자와 로고는 제외</p>
+</blockquote>
+<p>나쁜 프롬프트는 보통 너무 짧습니다.</p>
+<ul>
+<li>나쁜 예: “예쁜 카페 그림”</li>
+<li>좋은 예: “비 오는 저녁의 작은 골목 카페, 창가에 따뜻한 조명이 켜져 있고 테이블 위에 라떼 한 잔이 놓인 장면, 감성적인 디지털 일러스트, 세로형 포스터 구도, 부드러운 빛 번짐, 차분한 브라운과 오렌지 색감, 사람 얼굴은 나오지 않게”</li>
+</ul>
+<p>핵심은 <strong>AI가 추측하지 않게 하는 것</strong>입니다. “예쁘게”보다 “따뜻한 조명, 파스텔톤, 미니멀한 배경”처럼 눈에 보이는 단어로 바꾸세요.</p>
+<h2>4단계: 주제는 구체적으로, 형용사는 시각적으로 쓰기</h2>
+<p>AI 그림은 추상적인 감정보다 시각적 단서에 강합니다. “고급스러운”이라고만 쓰면 결과가 흔들립니다. 대신 고급스러움을 만드는 요소를 적어야 합니다.</p>
+<table>
+<thead>
+<tr>
+<th>추상 표현</th>
+<th>더 좋은 시각 표현</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>고급스러운</td>
+<td>대리석 배경, 금색 포인트, 절제된 조명, 미니멀한 구도</td>
+</tr>
+<tr>
+<td>귀여운</td>
+<td>둥근 형태, 큰 눈, 파스텔 색감, 작은 몸 비율</td>
+</tr>
+<tr>
+<td>미래적인</td>
+<td>유리 건물, 네온 라이트, 홀로그램 UI, 금속 질감</td>
+</tr>
+<tr>
+<td>따뜻한</td>
+<td>노란 조명, 나무 테이블, 석양빛, 부드러운 그림자</td>
+</tr>
+<tr>
+<td>전문적인</td>
+<td>흰 배경, 정돈된 레이아웃, 선명한 제품 사진, 과한 장식 없음</td>
+</tr>
+</tbody>
+</table>
+<p>예시 프롬프트:</p>
+<blockquote>
+<p>프리미엄 스킨케어 제품 광고 이미지, 흰색 세럼 병 1개가 대리석 받침대 위에 놓여 있음, 배경은 밝은 베이지톤, 부드러운 스튜디오 조명, 미니멀한 구도, 제품 라벨은 비워두기, 깨끗하고 고급스러운 상업 사진 스타일</p>
+</blockquote>
+<p>이렇게 쓰면 “고급스럽게”보다 훨씬 안정적인 결과가 나옵니다.</p>
+<h2>5단계: 구도·카메라·조명을 넣어 완성도 높이기</h2>
+<p>프롬프트 초보자가 가장 많이 빼먹는 부분이 <strong>구도와 조명</strong>입니다. 하지만 실제 이미지의 완성도는 여기서 크게 갈립니다.</p>
+<p>자주 쓰는 구도 표현은 다음과 같습니다.</p>
+<ul>
+<li><strong>정면 구도</strong>: 제품, 프로필, 캐릭터 시트에 적합</li>
+<li><strong>상단에서 내려다본 구도</strong>: 음식, 책상, 문구류, 플랫레이 이미지에 적합</li>
+<li><strong>클로즈업</strong>: 감정, 질감, 제품 디테일 강조</li>
+<li><strong>와이드샷</strong>: 풍경, 공간, 배경이 중요한 장면에 적합</li>
+<li><strong>중앙 배치</strong>: 썸네일, 광고, 상세페이지에 안정적</li>
+<li><strong>좌측 여백 / 우측 여백</strong>: 텍스트를 얹을 디자인에 유용</li>
+</ul>
+<p>조명 표현도 함께 넣습니다.</p>
+<ul>
+<li><strong>부드러운 자연광</strong></li>
+<li><strong>스튜디오 조명</strong></li>
+<li><strong>역광</strong></li>
+<li><strong>네온 조명</strong></li>
+<li><strong>따뜻한 석양빛</strong></li>
+<li><strong>강한 명암 대비</strong></li>
+<li><strong>그림자가 거의 없는 밝은 조명</strong></li>
+</ul>
+<p>예시:</p>
+<blockquote>
+<p>건강한 샐러드 볼 사진, 상단에서 내려다본 플랫레이 구도, 흰색 테이블 위에 신선한 채소와 닭가슴살, 자연광, 밝고 깨끗한 색감, 블로그 썸네일용, 오른쪽에 텍스트를 넣을 빈 공간</p>
+</blockquote>
+<h2>6단계: 스타일은 1~2개만 명확히 지정하기</h2>
+<p>스타일을 너무 많이 넣으면 결과가 섞여 어색해질 수 있습니다. “수채화, 픽사풍, 실사, 애니메이션, 사이버펑크, 미니멀”처럼 한 번에 여러 스타일을 넣기보다 목적에 맞게 1~2개만 고르세요.</p>
+<p>자주 쓰는 스타일 예시는 다음과 같습니다.</p>
+<ul>
+<li><strong>실사 사진 스타일</strong></li>
+<li><strong>3D 일러스트 스타일</strong></li>
+<li><strong>수채화 일러스트</strong></li>
+<li><strong>미니멀 벡터 일러스트</strong></li>
+<li><strong>애니메이션 배경화 스타일</strong></li>
+<li><strong>레트로 포스터 스타일</strong></li>
+<li><strong>제품 광고 사진 스타일</strong></li>
+<li><strong>패션 화보 스타일</strong></li>
+<li><strong>아이소메트릭 일러스트</strong></li>
+</ul>
+<p>예시:</p>
+<blockquote>
+<p>온라인 강의 플랫폼 홍보용 이미지, 노트북 화면을 보며 공부하는 20대 인물, 밝은 방 안, 미니멀 3D 일러스트 스타일, 파란색과 흰색 중심의 색감, 정사각형 구도, 친근하고 깔끔한 분위기</p>
+</blockquote>
+<p>주의할 점은 특정 생존 작가나 저작권이 있는 캐릭터의 스타일을 그대로 요구하는 방식은 피하는 것이 좋습니다. 대신 “따뜻한 수채화풍”, “고전 만화 느낌”, “미래적인 네온 도시”처럼 일반적인 미술·디자인 용어로 바꾸는 편이 안전합니다.</p>
+<h2>7단계: 부정 프롬프트로 실패 요소 줄이기</h2>
+<p>일부 도구는 <strong>Negative Prompt</strong> 입력칸을 제공합니다. 없다면 본문 프롬프트 끝에 “다음 요소는 제외”라고 적어도 됩니다.</p>
+<p>자주 제외하는 요소는 다음과 같습니다.</p>
+<ul>
+<li>글자 깨짐</li>
+<li>로고</li>
+<li>워터마크</li>
+<li>흐릿함</li>
+<li>왜곡된 손</li>
+<li>여분의 손가락</li>
+<li>비대칭 얼굴</li>
+<li>과도한 노이즈</li>
+<li>저해상도 느낌</li>
+<li>잘린 피사체</li>
+<li>복잡한 배경</li>
+</ul>
+<p>예시:</p>
+<blockquote>
+<p>제외할 요소: 흐릿한 이미지, 깨진 글자, 로고, 워터마크, 손가락 왜곡, 과하게 복잡한 배경, 잘린 얼굴</p>
+</blockquote>
+<p>단, 부정 프롬프트가 만능은 아닙니다. 특히 손, 글자, 복잡한 포즈는 여전히 오류가 날 수 있으므로 처음부터 “손이 화면 밖에 있음”, “텍스트 없음”, “단순한 포즈”처럼 설계하는 것이 더 안정적입니다.</p>
+<h2>8단계: 한 번에 끝내지 말고 수정 요청하기</h2>
+<p>AI 그림 프롬프트 작성법에서 가장 중요한 습관은 <strong>첫 결과를 평가하고 다시 지시하는 것</strong>입니다. 처음 프롬프트로 70%를 만들고, 수정 프롬프트로 90%까지 끌어올린다고 생각하면 됩니다.</p>
+<p>수정 요청은 구체적으로 해야 합니다.</p>
+<ul>
+<li>“더 예쁘게”  모호함</li>
+<li>“배경을 더 밝은 베이지톤으로 바꾸고, 제품은 중앙에 더 크게 배치해줘”  좋음</li>
+<li>“인물 표정을 자연스럽게 하고, 손은 보이지 않게 해줘”  좋음</li>
+<li>“왼쪽 30%는 제목을 넣을 수 있게 비워줘”  좋음</li>
+</ul>
+<p>수정용 템플릿:</p>
+<blockquote>
+<p>이전 이미지의 [유지할 요소]는 그대로 두고, [바꿀 요소]를 [원하는 방향]으로 수정해줘. [제외할 요소]는 넣지 마.</p>
+</blockquote>
+<p>예시:</p>
+<blockquote>
+<p>이전 이미지의 따뜻한 카페 분위기는 유지하고, 창밖 배경을 비 오는 밤거리로 바꿔줘. 컵은 더 크게 보이게 중앙 하단에 배치하고, 상단에는 제목을 넣을 수 있는 빈 공간을 남겨줘. 글자와 로고는 넣지 마.</p>
+</blockquote>
+<h2>무료로 AI 그림 프롬프트 연습하는 법</h2>
+<p>처음부터 유료 도구를 결제할 필요는 없습니다. 무료로 이용할 수 있거나 접근 조건을 확인할 수 있는 도구에서 프롬프트 구조를 익힌 뒤, 필요한 경우 고급 도구로 넘어가는 방식이 좋습니다.</p>
+<p>가장 쉬운 연습 순서는 다음과 같습니다.</p>
+<ol>
+<li><strong>Microsoft Copilot 또는 Microsoft Designer의 이미지 생성 기능</strong>에 접속해 필요한 경우 Microsoft 계정으로 로그인합니다.</li>
+<li>입력창에 “정사각형 블로그 썸네일용”처럼 용도를 먼저 씁니다.</li>
+<li>주제, 배경, 스타일, 구도, 조명, 제외 요소를 한 문장으로 입력합니다.</li>
+<li>결과 이미지를 비교해 마음에 드는 이미지를 고릅니다.</li>
+<li>“배경을 단순하게”, “제품을 더 크게”, “텍스트 공간을 확보”처럼 수정 요청을 합니다.</li>
+<li>최종 이미지를 다운로드하고, 필요한 경우 Canva 같은 디자인 도구에서 실제 텍스트를 얹습니다.</li>
+</ol>
+<p>무료 또는 기본 제공 도구는 생성 속도, 해상도, 하루 사용량, 상업적 사용 조건이 바뀔 수 있습니다. Microsoft Copilot도 일부 기능은 로그인해야 접근할 수 있고 사용량 제한이 있을 수 있습니다. 특히 업무나 판매용으로 쓸 이미지는 각 서비스의 이용 약관을 확인하는 것이 안전합니다.</p>
+<h2>자주 막히는 포인트와 해결법</h2>
+<h3>결과가 너무 평범할 때</h3>
+<p>프롬프트에 <strong>구도, 조명, 색감, 질감</strong>이 빠졌을 가능성이 큽니다.</p>
+<p>수정 전:</p>
+<blockquote>
+<p>강아지 그림</p>
+</blockquote>
+<p>수정 후:</p>
+<blockquote>
+<p>작은 갈색 강아지가 창가 쿠션 위에서 잠들어 있는 장면, 따뜻한 오후 햇살, 부드러운 털 질감, 아늑한 거실 배경, 수채화 일러스트 스타일, 파스텔톤, 정사각형 구도</p>
+</blockquote>
+<h3>글자가 깨질 때</h3>
+<p>AI 이미지 생성 도구는 이미지 안의 정확한 한글 텍스트에 약한 경우가 많습니다. 포스터나 썸네일을 만들 때는 이미지 안에 글자를 직접 생성하게 하지 말고, <strong>빈 공간만 확보한 뒤 편집 도구에서 텍스트를 넣는 방식</strong>이 안정적입니다.</p>
+<p>프롬프트 예시:</p>
+<blockquote>
+<p>상단에 제목을 넣을 수 있는 넓은 빈 공간, 이미지 안에는 글자 없음, 로고 없음</p>
+</blockquote>
+<h3>손이나 얼굴이 어색할 때</h3>
+<p>복잡한 손동작, 여러 명의 인물, 작은 얼굴이 많을수록 오류가 늘어납니다. 초보자는 다음처럼 단순화하세요.</p>
+<ul>
+<li>손을 화면 밖으로 설정</li>
+<li>인물은 1명만 배치</li>
+<li>얼굴 클로즈업 또는 뒷모습 활용</li>
+<li>복잡한 포즈 대신 자연스러운 정면 자세 사용</li>
+</ul>
+<p>예시:</p>
+<blockquote>
+<p>인물의 손은 화면 밖에 있고, 자연스럽게 미소 짓는 정면 상반신 구도, 단순한 배경</p>
+</blockquote>
+<h2>AI 그림 프롬프트 작성 시 고르는 기준과 주의점</h2>
+<p>좋은 프롬프트는 길다고 좋은 것이 아닙니다. <strong>필요한 정보가 빠짐없이 들어간 짧고 명확한 문장</strong>이 좋습니다.</p>
+<p>체크리스트는 다음과 같습니다.</p>
+<ul>
+<li>이미지 용도를 썼는가?</li>
+<li>비율 또는 구도를 지정했는가?</li>
+<li>주 피사체가 명확한가?</li>
+<li>배경이 구체적인가?</li>
+<li>스타일을 1~2개로 제한했는가?</li>
+<li>조명과 색감을 넣었는가?</li>
+<li>제외할 요소를 적었는가?</li>
+<li>텍스트가 필요하면 직접 생성하지 않고 여백만 요청했는가?</li>
+<li>상업적 사용 전 이용 약관을 확인했는가?</li>
+</ul>
+<p>또한 유명 캐릭터, 브랜드 로고, 실제 인물의 초상, 특정 작가의 화풍을 그대로 복제하는 요청은 저작권·초상권 문제가 생길 수 있습니다. 안전하게 쓰려면 “특정 캐릭터처럼”보다 “귀여운 동물 마스코트”, “복고풍 만화 느낌”처럼 일반화해 작성하세요.</p>
+<h2>바로 복사해서 쓰는 프롬프트 예시</h2>
+<h3>블로그 썸네일용</h3>
+<blockquote>
+<p>AI 기술을 설명하는 블로그 썸네일 이미지, 노트북과 빛나는 회로 패턴이 있는 책상, 파란색과 보라색 그라데이션 배경, 미니멀한 3D 일러스트 스타일, 중앙에 주요 오브젝트, 상단에는 제목을 넣을 수 있는 빈 공간, 선명하고 깔끔한 이미지, 글자와 로고 없음</p>
+</blockquote>
+<h3>제품 광고용</h3>
+<blockquote>
+<p>프리미엄 텀블러 제품 광고 이미지, 무광 스테인리스 텀블러 1개가 밝은 회색 배경 앞에 놓여 있음, 스튜디오 조명, 부드러운 그림자, 중앙 배치, 고급스럽고 미니멀한 상업 사진 스타일, 제품 라벨은 비워두기, 로고와 글자 없음</p>
+</blockquote>
+<h3>캐릭터 콘셉트용</h3>
+<blockquote>
+<p>작은 우주 탐험가 고양이 캐릭터, 둥근 헬멧과 작은 배낭을 착용, 달 표면 위에 서 있는 장면, 귀여운 3D 캐릭터 스타일, 큰 눈, 파스텔 색감, 정면 전신 구도, 단순한 배경, 선명한 렌더링, 글자 없음</p>
+</blockquote>
+<h2>FAQ</h2>
+<h3>Q1. AI 그림 프롬프트는 한국어로 써도 되나요?</h3>
+<p>네, 대부분의 최신 이미지 생성 도구는 한국어 입력을 어느 정도 이해합니다. 다만 특정 스타일, 카메라 용어, 구도 표현은 영어가 더 안정적으로 반영되는 경우도 있습니다. 초보자는 한국어로 시작하고, 필요한 경우 “close-up, studio lighting, minimal background” 같은 핵심 영어 표현만 섞어도 충분합니다.</p>
+<h3>Q2. 프롬프트는 길수록 좋은가요?</h3>
+<p>무조건 길다고 좋은 것은 아닙니다. 주제, 배경, 스타일, 구도, 조명, 색감, 제외 요소가 들어가면 충분합니다. 너무 많은 스타일과 조건을 넣으면 이미지가 산만해질 수 있습니다. 처음에는 2~4문장 정도로 작성하고, 결과를 보며 수정하는 방식이 좋습니다.</p>
+<h3>Q3. 상업용 이미지로 사용해도 되나요?</h3>
+<p>도구마다 다릅니다. 무료 플랜과 유료 플랜의 상업적 사용 조건, 저작권 정책, 생성물 사용 범위가 다를 수 있으므로 반드시 해당 서비스의 이용 약관을 확인해야 합니다. 특히 브랜드 로고, 유명 캐릭터, 실제 인물과 닮은 이미지는 별도 권리 문제가 생길 수 있어 주의가 필요합니다.</p>
+<h2>결론: 좋은 AI 그림은 좋은 입력 순서에서 나온다</h2>
+<p>AI 그림 프롬프트 작성법의 핵심은 “멋지게 그려줘”가 아니라 <strong>무엇을, 어디에, 어떤 스타일과 구도로, 어떤 빛과 색감으로 만들지</strong>를 구체적으로 알려주는 것입니다.</p>
+<p>처음에는 아래 공식만 기억해도 충분합니다.</p>
+<blockquote>
+<p><strong>주제 + 상황 + 배경 + 스타일 + 구도 + 조명 + 색감 + 제외 요소</strong></p>
+</blockquote>
+<p>그리고 한 번에 완성하려 하지 말고, 생성 결과를 보며 “유지할 것”과 “바꿀 것”을 나눠 수정하세요. 이 방식만 익혀도 블로그 썸네일, 광고 시안, 캐릭터 콘셉트, SNS 이미지까지 훨씬 안정적으로 만들 수 있습니다.</p>
+2:["$","$10",null,{"fallback":["$","div",null,{"children":"Loading..."}],"children":[["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\"@context\":\"https://schema.org\",\"@type\":\"NewsArticle\",\"headline\":\"AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식\",\"description\":\"AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식\",\"image\":[\"/thumbnails/curation/curation-14.jpg\"],\"datePublished\":\"2026-07-01T08:02:46+09:00\",\"dateModified\":\"2026-07-01T08:02:46+09:00\",\"author\":{\"@type\":\"Organization\",\"name\":\"DORI-AI\",\"url\":\"https://dori-ai.com\"},\"publisher\":{\"@type\":\"Organization\",\"name\":\"DORI-AI\",\"logo\":{\"@type\":\"ImageObject\",\"url\":\"https://dori-ai.com/icon.svg\",\"width\":512,\"height\":512}},\"mainEntityOfPage\":{\"@type\":\"WebPage\",\"@id\":\"https://dori-ai.com/insight/article/curation-14\"},\"articleSection\":\"AI 큐레이션\",\"isAccessibleForFree\":true,\"keywords\":\"AI 그림 프롬프트 작성법, AI 이미지 생성, 프롬프트 예시, 무료 AI 그림, 이미지 생성 AI\"}"}}],["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"홈\",\"item\":\"https://dori-ai.com\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"AI 인사이트\",\"item\":\"https://dori-ai.com/insight\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식\",\"item\":\"https://dori-ai.com/insight/article/curation-14\"}]}"}}],["$","$L11",null,{}],["$","main",null,{"style":{"minHeight":"100vh","paddingTop":"70px"},"children":[["$","$L12",null,{}],["$","article",null,{"className":"max-w-4xl mx-auto p-4 md:p-8","children":[["$","h1",null,{"className":"text-4xl md:text-5xl font-extrabold mb-4 text-center","children":"AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식"}],["$","div",null,{"className":"mb-8 rounded-lg overflow-hidden relative w-full h-[400px]","children":["$","$L13",null,{"src":"/thumbnails/curation/curation-14.jpg","alt":"AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식","fill":true,"style":{"objectFit":"cover"},"priority":true}]}],["$","div",null,{"className":"text-gray-600 dark:text-gray-400 text-sm text-center mb-4","children":[["$","time",null,{"dateTime":"2026-07-01T08:02:46+09:00","children":["2026년 7월 1일",["$","span",null,{"className":"ml-1 text-xs opacity-60","children":"AM 08:02"}]]}],["$","span",null,{"children":[" by ","DORI-AI"]}]]}],["$","div",null,{"className":"flex justify-center mb-8","children":["$","$L14",null,{"url":"https://dori-ai.com/insight/article/curation-14","title":"AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식"}]}],["$","div",null,{"className":"prose-premium max-w-none","dangerouslySetInnerHTML":{"__html":"$15"}}],["$","div",null,{"className":"mt-10 pt-6 border-t border-neutral-200 dark:border-neutral-800","children":["$","$L14",null,{"url":"https://dori-ai.com/insight/article/curation-14","title":"AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식"}]}],["$","$L16",null,{"slug":"curation-14","title":"AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식"}],["$","section",null,{"className":"mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800","children":[["$","h2",null,{"className":"text-lg font-extrabold text-foreground mb-5","children":"이런 기사는 어떠세요? 🤔"}],["$","div",null,{"className":"grid grid-cols-1 sm:grid-cols-3 gap-4","children":[["$","$Le","trend-188",{"href":"/insight/article/trend-188","className":"group block bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 overflow-hidden hover:border-[#F9954E] dark:hover:border-[#F9954E] hover:shadow-md transition-all duration-300 hover:-translate-y-0.5","children":[["$","div",null,{"className":"relative w-full h-32 bg-gradient-to-br from-[#F9954E]/10 to-[#FF7B54]/5","children":["$","$L13",null,{"src":"/thumbnails/trend/trend-188.jpg","alt":"AI 하드웨어 밀수, 대만의 경각심을 일깨우다","fill":true,"style":{"objectFit":"cover"},"className":"group-hover:scale-105 transition-transform duration-500","sizes":"(max-width: 640px) 100vw, 33vw"}]}],["$","div",null,{"className":"p-3","children":[["$","h3",null,{"className":"text-xs font-bold text-neutral-900 dark:text-white line-clamp-2 mb-1.5 group-hover:text-[#F9954E] transition-colors","children":"AI 하드웨어 밀수, 대만의 경각심을 일깨우다"}],["$","div",null,{"className":"flex items-center gap-1 text-[10px] text-neutral-400","children":[["$","svg",null,{"xmlns":"http://www.w3.org/2000/svg","width":24,"height":24,"viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","strokeWidth":2,"strokeLinecap":"round","strokeLinejoin":"round","className":"lucide lucide-calendar w-3 h-3","aria-hidden":"true","children":[["$","path","1cmpym",{"d":"M8 2v4"}],["$","path","4m81vk",{"d":"M16 2v4"}],["$","rect","1hopcy",{"width":"18","height":"18","x":"3","y":"4","rx":"2"}],["$","path","8toen8",{"d":"M3 10h18"}],"$undefined"]}],["$","time",null,{"dateTime":"2026-06-30T20:00:20+09:00","children":["6월 30일",["$","span",null,{"className":"ml-1 opacity-70","children":"PM 08:00"}]]}]]}]]}]]}],["$","$Le","trend-187",{"href":"/insight/article/trend-187","className":"group block bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 overflow-hidden hover:border-[#F9954E] dark:hover:border-[#F9954E] hover:shadow-md transition-all duration-300 hover:-translate-y-0.5","children":[["$","div",null,{"className":"relative w-full h-32 bg-gradient-to-br from-[#F9954E]/10 to-[#FF7B54]/5","children":["$","$L13",null,{"src":"/thumbnails/trend/trend-187.jpg","alt":"Arena, AI 리더보드가 1억 달러 기업으로 성장하다","fill":true,"style":{"objectFit":"cover"},"className":"group-hover:scale-105 transition-transform duration-500","sizes":"(max-width: 640px) 100vw, 33vw"}]}],["$","div",null,{"className":"p-3","children":[["$","h3",null,{"className":"text-xs font-bold text-neutral-900 dark:text-white line-clamp-2 mb-1.5 group-hover:text-[#F9954E] transition-colors","children":"Arena, AI 리더보드가 1억 달러 기업으로 성장하다"}],["$","div",null,{"className":"flex items-center gap-1 text-[10px] text-neutral-400","children":[["$","svg",null,{"xmlns":"http://www.w3.org/2000/svg","width":24,"height":24,"viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","strokeWidth":2,"strokeLinecap":"round","strokeLinejoin":"round","className":"lucide lucide-calendar w-3 h-3","aria-hidden":"true","children":[["$","path","1cmpym",{"d":"M8 2v4"}],["$","path","4m81vk",{"d":"M16 2v4"}],["$","rect","1hopcy",{"width":"18","height":"18","x":"3","y":"4","rx":"2"}],["$","path","8toen8",{"d":"M3 10h18"}],"$undefined"]}],["$","time",null,{"dateTime":"2026-06-30T18:00:18+09:00","children":["6월 30일",["$","span",null,{"className":"ml-1 opacity-70","children":"PM 06:00"}]]}]]}]]}]]}],["$","$Le","trend-186",{"href":"/insight/article/trend-186","className":"group block bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 overflow-hidden hover:border-[#F9954E] dark:hover:border-[#F9954E] hover:shadow-md transition-all duration-300 hover:-translate-y-0.5","children":[["$","div",null,{"className":"relative w-full h-32 bg-gradient-to-br from-[#F9954E]/10 to-[#FF7B54]/5","children":["$","$L13",null,{"src":"/thumbnails/trend/trend-186.jpg","alt":"캘리포니아, 앤트로픽과의 파트너십으로 새로운 시대를 열다","fill":true,"style":{"objectFit":"cover"},"className":"group-hover:scale-105 transition-transform duration-500","sizes":"(max-width: 640px) 100vw, 33vw"}]}],["$","div",null,{"className":"p-3","children":[["$","h3",null,{"className":"text-xs font-bold text-neutral-900 dark:text-white line-clamp-2 mb-1.5 group-hover:text-[#F9954E] transition-colors","children":"캘리포니아, 앤트로픽과의 파트너십으로 새로운 시대를 열다"}],["$","div",null,{"className":"flex items-center gap-1 text-[10px] text-neutral-400","children":[["$","svg",null,{"xmlns":"http://www.w3.org/2000/svg","width":24,"height":24,"viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","strokeWidth":2,"strokeLinecap":"round","strokeLinejoin":"round","className":"lucide lucide-calendar w-3 h-3","aria-hidden":"true","children":[["$","path","1cmpym",{"d":"M8 2v4"}],["$","path","4m81vk",{"d":"M16 2v4"}],["$","rect","1hopcy",{"width":"18","height":"18","x":"3","y":"4","rx":"2"}],["$","path","8toen8",{"d":"M3 10h18"}],"$undefined"]}],["$","time",null,{"dateTime":"2026-06-30T16:00:18+09:00","children":["6월 30일",["$","span",null,{"className":"ml-1 opacity-70","children":"PM 04:00"}]]}]]}]]}]]}]]}]]}]]}]]}],["$","$L17",null,{"slug":"curation-14","title":"AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식"}]]}]
+f:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1, maximum-scale=1"}],["$","meta","1",{"name":"theme-color","media":"(prefers-color-scheme: light)","content":"#ffffff"}],["$","meta","2",{"name":"theme-color","media":"(prefers-color-scheme: dark)","content":"#000000"}],["$","meta","3",{"charSet":"utf-8"}],["$","title","4",{"children":"AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식 | DORI-AI"}],["$","meta","5",{"name":"description","content":"AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식 - DORI-AI에서 최신 AI 트렌드와 인사이트를 확인하세요."}],["$","meta","6",{"name":"application-name","content":"DORI-AI"}],["$","link","7",{"rel":"author","href":"https://dori-ai.com"}],["$","meta","8",{"name":"author","content":"DORI Team"}],["$","meta","9",{"name":"keywords","content":"AI 트렌드, 인공지능, DORI-AI, AI 인사이트, AI 그림 프롬프트 작성법, AI 이미지 생성, 프롬프트 예시, 무료 AI 그림, 이미지 생성 AI"}],["$","meta","10",{"name":"creator","content":"DORI Team"}],["$","meta","11",{"name":"publisher","content":"DORI-AI"}],["$","meta","12",{"name":"robots","content":"index, follow"}],["$","meta","13",{"name":"googlebot","content":"index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"}],["$","meta","14",{"name":"pretendard-font","content":"https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css"}],["$","meta","15",{"name":"naver-site-verification","content":"fc6aff074a85b391562bd15daa80e96e0f2a946a"}],["$","meta","16",{"name":"naver-site-verification","content":"ae3b47b353b50f9a3ac06e4c0db4ac641738faee"}],["$","link","17",{"rel":"canonical","href":"https://dori-ai.com/insight/article/curation-14"}],["$","meta","18",{"property":"og:title","content":"AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식 | DORI-AI"}],["$","meta","19",{"property":"og:description","content":"AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식 - DORI-AI에서 최신 AI 트렌드와 인사이트를 확인하세요."}],["$","meta","20",{"property":"og:url","content":"https://dori-ai.com/insight/article/curation-14"}],["$","meta","21",{"property":"og:site_name","content":"DORI-AI"}],["$","meta","22",{"property":"og:locale","content":"ko_KR"}],["$","meta","23",{"property":"og:image","content":"https://dori-ai.com/thumbnails/curation/curation-14.jpg"}],["$","meta","24",{"property":"og:image:width","content":"1200"}],["$","meta","25",{"property":"og:image:height","content":"630"}],["$","meta","26",{"property":"og:image:alt","content":"AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식"}],["$","meta","27",{"property":"og:type","content":"article"}],["$","meta","28",{"property":"article:published_time","content":"2026-07-01T08:02:46+09:00"}],["$","meta","29",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","30",{"name":"twitter:title","content":"AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식 | DORI-AI"}],["$","meta","31",{"name":"twitter:description","content":"AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식 - DORI-AI에서 최신 AI 트렌드와 인사이트를 확인하세요."}],["$","meta","32",{"name":"twitter:image","content":"https://dori-ai.com/thumbnails/curation/curation-14.jpg"}],["$","link","33",{"rel":"icon","href":"/favicon.ico","type":"image/x-icon","sizes":"64x64"}],["$","link","34",{"rel":"icon","href":"/icon.svg","type":"image/svg+xml"}],["$","link","35",{"rel":"icon","href":"/icon.png","type":"image/png","sizes":"512x512"}],["$","link","36",{"rel":"apple-touch-icon","href":"/apple-icon.png","type":"image/png","sizes":"180x180"}]]
+1:null
