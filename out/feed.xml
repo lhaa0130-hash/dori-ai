@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 30 Jun 2026 11:00:14 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 30 Jun 2026 12:00:15 GMT</lastBuildDate>
+    <item>
+      <title>AI 하드웨어 밀수, 대만의 경각심을 일깨우다</title>
+      <link>https://dori-ai.com/insight/article/trend-188</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-188</guid>
+      <category>트렌드</category>
+      <pubDate>Tue, 30 Jun 2026 11:00:20 GMT</pubDate>
+      <description>대만이 AI 하드웨어 밀수 사건을 본격적으로 수사하며 글로벌 기술 시장의 불법 거래 위험을 경고하고 있다.</description>
+    </item>
     <item>
       <title>Arena, AI 리더보드가 1억 달러 기업으로 성장하다</title>
       <link>https://dori-ai.com/insight/article/trend-187</link>
@@ -318,14 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Wed, 24 Jun 2026 00:00:00 GMT</pubDate>
       <description>AI 시대에 개발자가 어떻게 경쟁력을 유지할 수 있는지 설명한다.</description>
-    </item>
-    <item>
-      <title>[반도체] 애플 출신 엔지니어가 설명하는 초저전력 AI 반도체</title>
-      <link>https://dori-ai.com/insight/article/video-25</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-25</guid>
-      <category>큐레이션</category>
-      <pubDate>Wed, 24 Jun 2026 00:00:00 GMT</pubDate>
-      <description>딥엑스의 AI 반도체 개발과 그 중요성을 설명한다.</description>
     </item>
   </channel>
 </rss>
