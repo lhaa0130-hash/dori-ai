@@ -6,6 +6,7 @@ import { getAllAnalyses } from "@/lib/analysis";
 import { getAllReports } from "@/lib/reports";
 import { getAllStudios } from "@/lib/studio";
 import { getAllMarketPosts } from "@/lib/market-posts";
+import { getAllGuides } from "@/lib/guides";
 import fs from "fs";
 import path from "path";
 
@@ -32,6 +33,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/insight`,   lastModified: now, changeFrequency: "daily",   priority: 0.9 },
     { url: `${baseUrl}/ai-tools`,  lastModified: now, changeFrequency: "weekly",  priority: 0.9 },
     { url: `${baseUrl}/ai-models`, lastModified: now, changeFrequency: "daily",   priority: 0.9 },
+    { url: `${baseUrl}/ai-news`,   lastModified: now, changeFrequency: "weekly",  priority: 0.8 },
+    { url: `${baseUrl}/video`,     lastModified: now, changeFrequency: "daily",   priority: 0.8 },
+    { url: `${baseUrl}/psychtest`, lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
     { url: `${baseUrl}/community`, lastModified: now, changeFrequency: "daily",   priority: 0.8 },
     { url: `${baseUrl}/market`,    lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
     { url: `${baseUrl}/animal`,    lastModified: now, changeFrequency: "daily",   priority: 0.8 },
@@ -66,6 +70,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
       ...collect(getAllReports(),   0.7),
       ...collect(getAllStudios(),   0.8),
       ...collect(getAllMarketPosts(), 0.8),
+      ...collect(getAllGuides(),    0.8),
     ];
   } catch (e) {
     console.warn("[sitemap] failed to collect articles:", e);

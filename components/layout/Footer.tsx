@@ -6,6 +6,12 @@ import SocialLinks from "@/components/layout/SocialLinks";
 const LINKS = [
   { label: "인사이트", href: "/insight" },
   { label: "AI 도구", href: "/ai-tools" },
+  { label: "AI 모델", href: "/ai-models" },
+  { label: "AI 소식", href: "/ai-news" },
+  { label: "AI영상", href: "/video" },
+  { label: "동물도감", href: "/animal" },
+  { label: "마켓", href: "/market" },
+  { label: "심리테스트", href: "/psychtest" },
   { label: "커뮤니티", href: "/community" },
   { label: "미니게임", href: "/minigame" },
   { label: "피드", href: "/feed" },
