@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 30 Jun 2026 09:00:15 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 30 Jun 2026 10:00:16 GMT</lastBuildDate>
+    <item>
+      <title>Arena, AI 리더보드가 1억 달러 기업으로 성장하다</title>
+      <link>https://dori-ai.com/insight/article/trend-187</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-187</guid>
+      <category>트렌드</category>
+      <pubDate>Tue, 30 Jun 2026 09:00:18 GMT</pubDate>
+      <description>AI 리더보드 플랫폼 Arena가 상업 서비스 출시 9개월 만에 1억 달러 기업으로 성장하며 업계의 주목을 받고 있다.</description>
+    </item>
     <item>
       <title>캘리포니아, 앤트로픽과의 파트너십으로 새로운 시대를 열다</title>
       <link>https://dori-ai.com/insight/article/trend-186</link>
@@ -318,14 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Wed, 24 Jun 2026 00:00:00 GMT</pubDate>
       <description>딥엑스의 AI 반도체 개발과 그 중요성을 설명한다.</description>
-    </item>
-    <item>
-      <title>[GPT] GPT를 시각적으로 설명하는 영상</title>
-      <link>https://dori-ai.com/insight/article/video-26</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-26</guid>
-      <category>큐레이션</category>
-      <pubDate>Wed, 24 Jun 2026 00:00:00 GMT</pubDate>
-      <description>GPT의 작동 원리를 시각적으로 쉽게 설명한다.</description>
     </item>
   </channel>
 </rss>
