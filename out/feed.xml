@@ -6,7 +6,7 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 29 Jun 2026 23:00:20 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 30 Jun 2026 00:00:15 GMT</lastBuildDate>
     <item>
       <title>한국, 1조 달러 규모 AI 및 반도체 투자 발표</title>
       <link>https://dori-ai.com/insight/article/trend-184</link>
@@ -38,6 +38,14 @@
       <category>트렌드</category>
       <pubDate>Mon, 29 Jun 2026 01:00:18 GMT</pubDate>
       <description>호주 Firmus Technologies가 Nvidia와 AI 접근 협약을 체결하며 기술 혁신에 박차를 가한다.</description>
+    </item>
+    <item>
+      <title>[AI 문제] AI의 근본 문제에 대한 AI 천재들의 고백</title>
+      <link>https://dori-ai.com/insight/article/video-35</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-35</guid>
+      <category>큐레이션</category>
+      <pubDate>Mon, 29 Jun 2026 00:00:00 GMT</pubDate>
+      <description>AI의 내부 작동 원리를 이해하지 못하는 현실을 다룬다.</description>
     </item>
     <item>
       <title>AI 프로필 사진 만들기: 무료 도구로 자연스럽게 만드는 단계별 가이드</title>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Tue, 23 Jun 2026 13:00:25 GMT</pubDate>
       <description>AI가 사이버 보안 시스템을 무너뜨릴 가능성에 대한 경고가 전 세계적으로 퍼지고 있다. 'Five Eyes' 동맹국들은 이 문제를 심각하게 보고 있다.</description>
-    </item>
-    <item>
-      <title>SpaceX, Reflection AI와 150억 달러의 계약 체결 — 엔비디아 칩의 새로운 시대</title>
-      <link>https://dori-ai.com/insight/article/trend-161</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-161</guid>
-      <category>트렌드</category>
-      <pubDate>Tue, 23 Jun 2026 11:00:55 GMT</pubDate>
-      <description>SpaceX가 Reflection AI와 체결한 계약으로 엔비디아의 최신 AI 칩을 활용한 혁신적인 데이터 센터 운영을 예고하고 있습니다.</description>
     </item>
   </channel>
 </rss>
