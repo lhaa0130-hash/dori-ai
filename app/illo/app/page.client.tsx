@@ -20,7 +20,8 @@ import {
 import { listResults, saveResult, deleteResult, clearResults, downloadText, type IlloResult } from "@/lib/illo/history";
 import {
   listUserFlows, saveUserFlow, deleteUserFlow, blankFlow, newId,
-  type UserFlow, type FlowNode, type Side,
+  listUserTemplates, saveUserTemplate, deleteUserTemplate, instantiateTemplate,
+  type UserFlow, type FlowNode, type Side, type SavedTemplate,
 } from "@/lib/illo/flows";
 import { FLOW_TEMPLATES, templateToFlow } from "@/lib/illo/flowTemplates";
 import { API_CATALOG, COST_TIPS, ROUTER_TIP, ROLE_LABEL, type ApiEntry } from "@/lib/illo/apiCatalog";
@@ -664,8 +665,8 @@ function Assistant({ runAI, free, quota, onShowKey, userName }: {
 }
 
 /* ─────────────────── 내 워크플로우 (n8n 노드 캔버스) ─────────────────── */
-const NODE_W = 170;
-const NODE_H = 96;
+const NODE_W = 192;
+const NODE_H = 148;
 function nodeTint(kind: string): string {
   if (kind === "input") return "border-sky-300 bg-sky-50 dark:bg-sky-950/20 dark:border-sky-800";
   if (kind === "deliver") return "border-emerald-300 bg-emerald-50 dark:bg-emerald-950/20 dark:border-emerald-800";
@@ -696,16 +697,30 @@ function FlowBuilder() {
   const [flows, setFlows] = useState<UserFlow[]>([]);
   const [cur, setCur] = useState<UserFlow | null>(null);
   const [connectFrom, setConnectFrom] = useState<{ id: string; side: Side } | null>(null);
+  const [templates, setTemplates] = useState<SavedTemplate[]>([]);
   const canvasRef = useRef<HTMLDivElement>(null);
   const drag = useRef<{ id: string; dx: number; dy: number } | null>(null);
 
-  useEffect(() => { setFlows(listUserFlows()); }, []);
+  useEffect(() => { setFlows(listUserFlows()); setTemplates(listUserTemplates()); }, []);
 
   const openFlow = (f: UserFlow) => { setCur(JSON.parse(JSON.stringify(f))); setConnectFrom(null); };
   const createNew = () => openFlow(blankFlow());
   const startFromTemplate = (t: (typeof FLOW_TEMPLATES)[number]) => openFlow(templateToFlow(t));
+  const startFromSaved = (t: SavedTemplate) => openFlow(instantiateTemplate(t));
   const save = () => { if (cur) { saveUserFlow(cur); setFlows(listUserFlows()); } };
   const removeFlow = (id: string) => { deleteUserFlow(id); setFlows(listUserFlows()); if (cur?.id === id) setCur(null); };
+  const removeTemplate = (id: string) => { deleteUserTemplate(id); setTemplates(listUserTemplates()); };
+  const saveAsTemplate = () => {
+    if (!cur) return;
+    if (!cur.name.trim()) { alert("먼저 위에서 워크플로우 이름을 입력하세요 — 보관 틀 이름이 됩니다."); return; }
+    if (cur.nodes.length === 0) { alert("노드를 먼저 추가하세요."); return; }
+    saveUserTemplate(cur);
+    setTemplates(listUserTemplates());
+    alert(`'${cur.name.trim()}' 을(를) 재사용 틀로 결합 보관했어요. (목록의 '내가 만든 워크플로우'에서 다시 꺼내 쓸 수 있어요)`);
+  };
+  function updateNode(id: string, patch: Partial<FlowNode>) {
+    setCur((c) => (c ? { ...c, nodes: c.nodes.map((n) => (n.id === id ? { ...n, ...patch } : n)) } : c));
+  }
 
   function addNode(opt: FlowStepDetail) {
     if (!cur) return;
@@ -789,6 +804,28 @@ function FlowBuilder() {
           </div>
         </div>
 
+        {/* 내가 만든 워크플로우 (결합 보관한 재사용 틀) */}
+        {templates.length > 0 && (
+          <div className="mb-9">
+            <h2 className="text-sm font-bold text-neutral-900 dark:text-white mb-1">📦 내가 만든 워크플로우</h2>
+            <p className="text-[12.5px] text-neutral-400 mb-3.5 break-keep">결합 보관해둔 틀이에요. 누르면 새 사본으로 열려 그대로 다시 씁니다.</p>
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {templates.map((t) => (
+                <div key={t.id} className="rounded-2xl border border-[#FDD5A5] dark:border-[#B35E15] bg-[#FFF9F3] dark:bg-orange-950/10 p-4 hover:shadow-sm transition-all">
+                  <div className="flex items-center justify-between gap-2">
+                    <button onClick={() => startFromSaved(t)} className="min-w-0 flex-1 text-left">
+                      <div className="text-sm font-bold text-neutral-900 dark:text-white truncate">📦 {t.name}</div>
+                      <div className="text-[12px] text-neutral-400 mt-0.5">노드 {t.nodes.length}개 · 연결 {t.links.length}개</div>
+                    </button>
+                    <button onClick={() => removeTemplate(t.id)} className="shrink-0 text-neutral-300 hover:text-rose-500 transition-colors"><X className="w-4 h-4" /></button>
+                  </div>
+                  <div className="mt-2.5 text-[12px] font-bold text-[#E8832E] dark:text-[#FBAA60]">이 틀로 시작 →</div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* 내 워크플로우 */}
         <h2 className="text-sm font-bold text-neutral-900 dark:text-white mb-3">🛠️ 내 워크플로우</h2>
         {flows.length === 0 ? (
@@ -830,6 +867,7 @@ function FlowBuilder() {
           className="min-w-0 flex-1 max-w-xs bg-transparent text-sm font-bold text-neutral-900 dark:text-white focus:outline-none border-b border-transparent focus:border-[#F9954E] py-1" placeholder="워크플로우 이름" />
         <span className="ml-auto text-[11px] text-neutral-400 hidden sm:inline">노드 {cur.nodes.length} · 연결 {cur.links.length}</span>
         <button onClick={() => removeFlow(cur.id)} className="text-[12px] text-neutral-400 hover:text-rose-500 px-2 py-1.5">삭제</button>
+        <button onClick={saveAsTemplate} title="완성한 노드들을 재사용 틀로 결합 보관" className="text-[12px] font-bold px-2.5 py-1.5 rounded-lg border border-[#F9954E] text-[#E8832E] hover:bg-[#FFF5EB] dark:hover:bg-orange-950/30">📦 결합 보관</button>
         <button onClick={save} className="text-[12px] font-bold px-3.5 py-1.5 rounded-lg bg-[#F9954E] text-white hover:bg-[#E8832E]">저장</button>
       </div>
 
@@ -879,8 +917,9 @@ function FlowBuilder() {
 
             {/* 노드 */}
             {cur.nodes.map((n) => (
-              <div key={n.id} className={"absolute rounded-xl border-2 shadow-sm select-none " + nodeTint(n.kind) + (connectFrom === n.id ? " ring-2 ring-[#F9954E]" : "")}
-                style={{ left: n.x, top: n.y, width: NODE_W, minHeight: NODE_H }}>
+              <div key={n.id} onMouseDown={(e) => onNodeDown(e, n)}
+                className={"absolute rounded-xl border-2 shadow-sm select-none cursor-grab active:cursor-grabbing flex flex-col overflow-hidden " + nodeTint(n.kind) + (connectFrom?.id === n.id ? " ring-2 ring-[#F9954E]" : "")}
+                style={{ left: n.x, top: n.y, width: NODE_W, height: NODE_H }}>
                 {/* 4면 연결 핸들 — 받기·내보내기 공용. 한 면에서 여러 갈래로 연결 가능 */}
                 {SIDES.map((sd) => {
                   const pos = sd === "top" ? "left-1/2 -top-2 -translate-x-1/2"
@@ -894,20 +933,27 @@ function FlowBuilder() {
                       className={"absolute " + pos + " w-4 h-4 rounded-full border-2 border-[#F9954E] hover:scale-125 transition-transform z-20 " + (lit ? "bg-[#F9954E]" : "bg-white")} />
                   );
                 })}
-                {/* 헤더(드래그 핸들) */}
-                <div onMouseDown={(e) => onNodeDown(e, n)} className="flex items-center justify-between px-2.5 pt-2 cursor-grab active:cursor-grabbing">
+                {/* 헤더 (노드 전체가 드래그 가능 — 아무 데나 잡고 이동) */}
+                <div className="flex items-center justify-between px-2.5 pt-2 shrink-0">
                   <span className="text-[12px] font-bold text-neutral-900 dark:text-white truncate">{n.icon} {n.title}</span>
                   <button onMouseDown={(e) => e.stopPropagation()} onClick={() => delNode(n.id)} className="shrink-0 text-neutral-300 hover:text-rose-500"><X className="w-3.5 h-3.5" /></button>
                 </div>
-                {n.role && <div className="px-2.5 text-[9px] text-[#E8832E] font-semibold">{n.role}</div>}
-                <div className="px-2.5 pb-2 pt-0.5 text-[10px] text-neutral-400 dark:text-neutral-500 leading-snug break-keep">{n.detail}</div>
+                {n.role && <div className="px-2.5 text-[9px] text-[#E8832E] font-semibold shrink-0">{n.role}</div>}
+                {/* 노드별 명령 — 받은 내용 + 이 명령대로 처리해 다음 노드로 */}
+                <div className="px-2 pb-2 pt-1 flex-1 min-h-0">
+                  <textarea value={n.instruction ?? ""}
+                    onChange={(e) => updateNode(n.id, { instruction: e.target.value })}
+                    onMouseDown={(e) => e.stopPropagation()}
+                    placeholder={n.detail || "이 노드가 할 일(명령)을 적어요"}
+                    className="w-full h-full resize-none bg-white/70 dark:bg-zinc-950/40 border border-neutral-200/70 dark:border-zinc-700 rounded-md px-1.5 py-1 text-[9.5px] leading-snug text-neutral-700 dark:text-neutral-200 placeholder:text-neutral-400 focus:outline-none focus:border-[#F9954E] cursor-text" />
+                </div>
               </div>
             ))}
           </div>
         </div>
       </div>
       <div className="shrink-0 px-4 py-2 border-t border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-[10.5px] text-neutral-400 break-keep">
-        💡 노드 제목을 <b>드래그</b>해 옮기고, <b>4면 어디든 점</b>을 클릭 → 다음 노드의 점을 클릭하면 <b>연결</b>(한 면에서 여러 갈래로 보낼 수 있어요). 연결선 가운데 <b>✕</b>로 삭제. 연결만 해두면 내용은 <b>자동으로 다음 노드에 전달</b>돼요. (실행 연동 준비 중)
+        💡 노드를 <b>아무 데나 잡고 드래그</b>해 옮기고, 가장자리 <b>4면 점</b> 클릭 → 다음 노드의 점 클릭으로 <b>연결</b>(한 면에서 여러 갈래 OK). 노드 안 칸에 <b>명령</b>을 적으면 그 AI가 받은 내용 + 명령대로 처리해 넘겨요. 다 만들면 <b>저장</b>, 재사용하려면 <b>📦 결합 보관</b>. (실행 연동 준비 중)
       </div>
     </div>
   );
