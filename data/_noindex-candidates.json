@@ -1,0 +1,494 @@
+{
+  "generatedAt": "2026-06-30",
+  "criteria": "트렌드 카테고리 + 발행 30일 경과(시의성 소멸). 조회신호(GSC) 미반영 — 적용 전 Search Console \"발견됨-색인 안 됨\"·트래픽과 교차확인 권장.",
+  "note": "n8n은 후보 선별만. 실제 noindex는 홈페이지 repo 세션이 각 file frontmatter에 noindex:true 추가 + 템플릿이 이를 읽어 robots noindex 출력하도록 처리.",
+  "count": 81,
+  "items": [
+    {
+      "file": "content/trend/trend-40.md",
+      "title": "Gemma Scope: AI 모델의 내부를 들여다보는 새로운 도구",
+      "date": "2024-07-31",
+      "ageDays": 699
+    },
+    {
+      "file": "content/trend/trend-41.md",
+      "title": "AI 오디오 생성 기술, 한계를 넘어서다",
+      "date": "2024-10-30",
+      "ageDays": 608
+    },
+    {
+      "file": "content/trend/trend-42.md",
+      "title": "수학 연구의 새로운 지평을 여는 AI for Math Initiative",
+      "date": "2025-10-29",
+      "ageDays": 244
+    },
+    {
+      "file": "content/trend/trend-01.md",
+      "title": "한국의 국가대표 AI 모델 'K-AI GPT' 공개와 K-AI 생태계의 미래 전략",
+      "date": "2025-12-31",
+      "ageDays": 181
+    },
+    {
+      "file": "content/trend/trend-02.md",
+      "title": "2026년 AI 트렌드 전망: 실험의 시대를 넘어 '융전틱 AI'와 인프라 중심 성장의 가속화",
+      "date": "2025-12-31",
+      "ageDays": 181
+    },
+    {
+      "file": "content/trend/trend-03.md",
+      "title": "",
+      "date": "2025-12-31",
+      "ageDays": 181
+    },
+    {
+      "file": "content/trend/trend-04.md",
+      "title": "",
+      "date": "2025-12-31",
+      "ageDays": 181
+    },
+    {
+      "file": "content/trend/trend-05.md",
+      "title": "",
+      "date": "2025-12-31",
+      "ageDays": 181
+    },
+    {
+      "file": "content/trend/trend-06.md",
+      "title": "",
+      "date": "2025-12-31",
+      "ageDays": 181
+    },
+    {
+      "file": "content/trend/trend-07.md",
+      "title": "",
+      "date": "2025-12-31",
+      "ageDays": 181
+    },
+    {
+      "file": "content/trend/trend-08.md",
+      "title": "",
+      "date": "2026-01-02",
+      "ageDays": 179
+    },
+    {
+      "file": "content/trend/trend-09.md",
+      "title": "",
+      "date": "2026-01-02",
+      "ageDays": 179
+    },
+    {
+      "file": "content/trend/trend-10.md",
+      "title": "",
+      "date": "2026-01-02",
+      "ageDays": 179
+    },
+    {
+      "file": "content/trend/trend-11.md",
+      "title": "",
+      "date": "2026-01-02",
+      "ageDays": 179
+    },
+    {
+      "file": "content/trend/trend-12.md",
+      "title": "",
+      "date": "2026-01-02",
+      "ageDays": 179
+    },
+    {
+      "file": "content/trend/trend-13.md",
+      "title": "",
+      "date": "2026-01-02",
+      "ageDays": 179
+    },
+    {
+      "file": "content/trend/trend-14.md",
+      "title": "",
+      "date": "2026-01-03",
+      "ageDays": 178
+    },
+    {
+      "file": "content/trend/trend-15.md",
+      "title": "",
+      "date": "2026-01-03",
+      "ageDays": 178
+    },
+    {
+      "file": "content/trend/trend-16.md",
+      "title": "",
+      "date": "2026-01-03",
+      "ageDays": 178
+    },
+    {
+      "file": "content/trend/trend-17.md",
+      "title": "",
+      "date": "2026-01-04",
+      "ageDays": 177
+    },
+    {
+      "file": "content/trend/trend-18.md",
+      "title": "",
+      "date": "2026-01-04",
+      "ageDays": 177
+    },
+    {
+      "file": "content/trend/trend-19.md",
+      "title": "",
+      "date": "2026-01-05",
+      "ageDays": 176
+    },
+    {
+      "file": "content/trend/trend-20.md",
+      "title": "",
+      "date": "2026-01-05",
+      "ageDays": 176
+    },
+    {
+      "file": "content/trend/trend-21.md",
+      "title": "",
+      "date": "2026-01-05",
+      "ageDays": 176
+    },
+    {
+      "file": "content/trend/trend-22.md",
+      "title": "",
+      "date": "2026-01-06",
+      "ageDays": 175
+    },
+    {
+      "file": "content/trend/trend-23.md",
+      "title": "",
+      "date": "2026-01-06",
+      "ageDays": 175
+    },
+    {
+      "file": "content/trend/trend-24.md",
+      "title": "",
+      "date": "2026-01-06",
+      "ageDays": 175
+    },
+    {
+      "file": "content/trend/trend-25.md",
+      "title": "",
+      "date": "2026-01-07",
+      "ageDays": 174
+    },
+    {
+      "file": "content/trend/trend-26.md",
+      "title": "",
+      "date": "2026-01-07",
+      "ageDays": 174
+    },
+    {
+      "file": "content/trend/trend-27.md",
+      "title": "",
+      "date": "2026-01-07",
+      "ageDays": 174
+    },
+    {
+      "file": "content/trend/trend-28.md",
+      "title": "",
+      "date": "2026-01-07",
+      "ageDays": 174
+    },
+    {
+      "file": "content/trend/trend-29.md",
+      "title": "",
+      "date": "2026-01-07",
+      "ageDays": 174
+    },
+    {
+      "file": "content/trend/trend-30.md",
+      "title": "",
+      "date": "2026-01-07",
+      "ageDays": 174
+    },
+    {
+      "file": "content/trend/trend-31.md",
+      "title": "",
+      "date": "2026-01-08",
+      "ageDays": 173
+    },
+    {
+      "file": "content/trend/trend-32.md",
+      "title": "",
+      "date": "2026-01-08",
+      "ageDays": 173
+    },
+    {
+      "file": "content/trend/trend-33.md",
+      "title": "",
+      "date": "2026-01-08",
+      "ageDays": 173
+    },
+    {
+      "file": "content/trend/trend-34.md",
+      "title": "",
+      "date": "2026-01-09",
+      "ageDays": 172
+    },
+    {
+      "file": "content/trend/trend-35.md",
+      "title": "",
+      "date": "2026-01-09",
+      "ageDays": 172
+    },
+    {
+      "file": "content/trend/trend-36.md",
+      "title": "",
+      "date": "2026-01-09",
+      "ageDays": 172
+    },
+    {
+      "file": "content/trend/trend-37.md",
+      "title": "",
+      "date": "2026-01-10",
+      "ageDays": 171
+    },
+    {
+      "file": "content/trend/trend-38.md",
+      "title": "",
+      "date": "2026-01-10",
+      "ageDays": 171
+    },
+    {
+      "file": "content/trend/trend-39.md",
+      "title": "",
+      "date": "2026-01-10",
+      "ageDays": 171
+    },
+    {
+      "file": "content/trend/trend-45.md",
+      "title": "GPT-5.4 출시: 전문 업무의 새 기준, 컴퓨터를 직접 다루는 AI",
+      "date": "2026-03-10",
+      "ageDays": 112
+    },
+    {
+      "file": "content/trend/trend-43.md",
+      "title": "NVIDIA GTC 2026: 엔터프라이즈 AI 에이전트 시대의 서막",
+      "date": "2026-03-20",
+      "ageDays": 102
+    },
+    {
+      "file": "content/trend/trend-46.md",
+      "title": "AI가 93%의 직업을 바꾼다: Cognizant '새로운 일, 새로운 세계 2026' 보고서",
+      "date": "2026-03-22",
+      "ageDays": 100
+    },
+    {
+      "file": "content/trend/trend-44.md",
+      "title": "OpenAI, Sora 서비스 전격 종료: 디즈니 10억 달러 파트너십도 무산",
+      "date": "2026-03-25",
+      "ageDays": 97
+    },
+    {
+      "file": "content/trend/trend-47.md",
+      "title": "구글 Stitch, AI 네이티브 디자인 캔버스로 진화: 'Vibe Design' 시대의 개막",
+      "date": "2026-03-26",
+      "ageDays": 96
+    },
+    {
+      "file": "content/trend/trend-48.md",
+      "title": "브로드컴 경고: TSMC 생산 한계, 2026년 AI 칩 공급망 병목 현실화",
+      "date": "2026-03-26",
+      "ageDays": 96
+    },
+    {
+      "file": "content/trend/trend-49.md",
+      "title": "GPT-5.4 출시: OpenAI, 컴퓨터를 직접 조작하는 AI 시대 열다",
+      "date": "2026-03-27",
+      "ageDays": 95
+    },
+    {
+      "file": "content/trend/trend-50.md",
+      "title": "모건스탠리 경고: 2026년 상반기 '거대 AI 돌파구' 온다, 세계는 준비됐나",
+      "date": "2026-03-27",
+      "ageDays": 95
+    },
+    {
+      "file": "content/trend/trend-51.md",
+      "title": "NVIDIA, GTC 2026에서 기업용 AI 에이전트 플랫폼 'Agent Toolkit' 공개 — Adobe·Salesforce·SAP 등 1",
+      "date": "2026-03-28",
+      "ageDays": 94
+    },
+    {
+      "file": "content/trend/trend-52.md",
+      "title": "가트너 예측: 2028년까지 전 세계 정부 80% AI 에이전트 도입 — 공공행정의 대전환이 시작됐다",
+      "date": "2026-03-28",
+      "ageDays": 94
+    },
+    {
+      "file": "content/trend/trend-53.md",
+      "title": "Anthropic, 차세대 AI '클로드 미토스' 유출 사태 — 보안 실수가 드러낸 'AI 능력의 도약'",
+      "date": "2026-03-29",
+      "ageDays": 93
+    },
+    {
+      "file": "content/trend/trend-54.md",
+      "title": "빅파마, AI 신약 개발에 130조 베팅 — '10년·1조 원' 공식이 무너진다",
+      "date": "2026-03-29",
+      "ageDays": 93
+    },
+    {
+      "file": "content/trend/trend-55.md",
+      "title": "모건스탠리가 경고한다: 2026년 상반기, AI 대돌파가 온다",
+      "date": "2026-03-30",
+      "ageDays": 92
+    },
+    {
+      "file": "content/trend/trend-56.md",
+      "title": "NVIDIA GTC 2026: 피지컬 AI 시대의 개막—로봇이 현실 세계로 나온다",
+      "date": "2026-03-30",
+      "ageDays": 92
+    },
+    {
+      "file": "content/trend/trend-57.md",
+      "title": "앤트로픽, Claude Opus 4.7 출시 — 100만 토큰 컨텍스트와 3배 향상된 비전으로 AI 에이전트 시대 선도",
+      "date": "2026-04-17",
+      "ageDays": 74
+    },
+    {
+      "file": "content/trend/trend-58.md",
+      "title": "ElevenLabs, 5억 달러 시리즈 D 유치 — 음성 AI 시장, 에이전트 시대의 핵심 인프라로 도약",
+      "date": "2026-04-17",
+      "ageDays": 74
+    },
+    {
+      "file": "content/trend/trend-59.md",
+      "title": "OpenAI, 사이버보안 전용 AI 모델 'GPT-5.4-Cyber' 제한 공개—보안의 새 지평",
+      "date": "2026-04-18",
+      "ageDays": 73
+    },
+    {
+      "file": "content/trend/trend-60.md",
+      "title": "에이전틱 AI 혁명: 스스로 일하는 AI가 기업 자동화를 재정의하다",
+      "date": "2026-04-18",
+      "ageDays": 73
+    },
+    {
+      "file": "content/trend/trend-61.md",
+      "title": "Anthropic, Claude Opus 4.7 공개 — 코딩·에이전트·보안 모두 한 단계 도약",
+      "date": "2026-04-19",
+      "ageDays": 72
+    },
+    {
+      "file": "content/trend/trend-62.md",
+      "title": "PwC 보고서: AI 경제적 가치의 74%, 상위 20% 기업이 독식",
+      "date": "2026-04-19",
+      "ageDays": 72
+    },
+    {
+      "file": "content/trend/trend-63.md",
+      "title": "Anthropic, 사이버보안 특화 AI 모델 'Claude Mythos' 공개 — 해킹도 막고 해킹도 한다",
+      "date": "2026-04-20",
+      "ageDays": 71
+    },
+    {
+      "file": "content/trend/trend-64.md",
+      "title": "직장인 절반이 AI를 쓴다 — 2026년, 'AI 도구' 없이는 못 일하는 시대 도래",
+      "date": "2026-04-20",
+      "ageDays": 71
+    },
+    {
+      "file": "content/trend/trend-65.md",
+      "title": "2026 월드IT쇼 개막: '현실을 움직이는 AI' 기술의 향연",
+      "date": "2026-04-22",
+      "ageDays": 69
+    },
+    {
+      "file": "content/trend/trend-67.md",
+      "title": "1비트 LLM 혁명: GPU 없이 AI를 실행하는 시대가 온다",
+      "date": "2026-04-23",
+      "ageDays": 68
+    },
+    {
+      "file": "content/trend/trend-68.md",
+      "title": "AI 코딩 도구 대전 2026: Claude Code·Copilot·Cursor, 누가 개발자를 지배하는가",
+      "date": "2026-04-23",
+      "ageDays": 68
+    },
+    {
+      "file": "content/trend/trend-71.md",
+      "title": "구글, 에이전트 시대 위한 TPU 8t·8i 공개 — 엔비디아에 도전장",
+      "date": "2026-04-25",
+      "ageDays": 66
+    },
+    {
+      "file": "content/trend/trend-72.md",
+      "title": "AI 챗봇은 왜 항상 내 편일까? — 스탠퍼드 '아첨(Sycophancy)' 연구의 경고",
+      "date": "2026-04-25",
+      "ageDays": 66
+    },
+    {
+      "file": "content/trend/trend-73.md",
+      "title": "인텔, AI 반도체 수요 폭발로 26년 만에 주가 최고치 경신",
+      "date": "2026-04-26",
+      "ageDays": 65
+    },
+    {
+      "file": "content/trend/trend-74.md",
+      "title": "AI가 촉발한 양자컴퓨팅 돌파구, 인터넷 암호화 위협 현실로",
+      "date": "2026-04-26",
+      "ageDays": 65
+    },
+    {
+      "file": "content/trend/trend-75.md",
+      "title": "Anthropic, OpenAI 꺾고 기업 AI 시장 1위 등극 — 2026년 5월 둘째 주 AI 뉴스 총정리",
+      "date": "2026-05-16",
+      "ageDays": 45
+    },
+    {
+      "file": "content/trend/trend-76.md",
+      "title": "Google I/O 2026 개막·Gemini 전면 업그레이드·AI 반도체 주가 급등 — 2026년 5월 셋째 주 AI 뉴스 총정리",
+      "date": "2026-05-16",
+      "ageDays": 45
+    },
+    {
+      "file": "content/trend/trend-77.md",
+      "title": "구글, 크로미움 사용자 위협하는 악성 코드 공개",
+      "date": "2026-05-21",
+      "ageDays": 40
+    },
+    {
+      "file": "content/trend/trend-78.md",
+      "title": "AI 혁신의 새로운 장을 여는 AWS 펠로우십",
+      "date": "2026-05-21",
+      "ageDays": 40
+    },
+    {
+      "file": "content/trend/trend-79.md",
+      "title": "미국 정부, 20억 달러로 9개 양자 컴퓨팅 기업에 투자",
+      "date": "2026-05-22",
+      "ageDays": 39
+    },
+    {
+      "file": "content/trend/trend-80.md",
+      "title": "AI와 기후 예측: 스티븐 티베난의 혁신적 접근",
+      "date": "2026-05-25",
+      "ageDays": 36
+    },
+    {
+      "file": "content/trend/trend-83.md",
+      "title": "넥사르, 머신러닝 혁신으로 2026년 AI 기술상 수상",
+      "date": "2026-05-26",
+      "ageDays": 35
+    },
+    {
+      "file": "content/trend/trend-84.md",
+      "title": "텍사스주, 메타를 상대로 한 소송 — 메시지 암호화의 진실은?",
+      "date": "2026-05-26",
+      "ageDays": 35
+    },
+    {
+      "file": "content/trend/trend-85.md",
+      "title": "무차별적인 오픈 소스 코드 공격, 누구에게 책임을 물을 것인가?",
+      "date": "2026-05-26",
+      "ageDays": 35
+    },
+    {
+      "file": "content/trend/trend-87.md",
+      "title": "오픈 소스 패키지의 숨겨진 위협 — 수백만 AI 에이전트가 위험에 처하다",
+      "date": "2026-05-27",
+      "ageDays": 34
+    }
+  ]
+}
