@@ -36,7 +36,16 @@ export default function Header() {
   type NavChild = { name: string; href: string; emoji: string };
   type NavItem = { name: string; emoji: string; href?: string; children?: NavChild[] };
   const navItems: NavItem[] = [
-    { name: "프로젝트", href: "/projects", emoji: "🚀" },
+    {
+      name: "프로젝트", emoji: "🚀", children: [
+        { name: "애니멀일로", href: "/animal", emoji: "🐾" },
+        { name: "트레이더일로", href: "/trader", emoji: "📈" },
+        { name: "워크일로", href: "/illo/app", emoji: "🟧" },
+        { name: "아크일로", href: "/flat-form", emoji: "📐" },
+        { name: "가족기록", href: "/family", emoji: "👨‍👩‍👧‍👦" },
+        { name: "전체 프로젝트", href: "/projects", emoji: "🗂️" },
+      ],
+    },
     { name: "인사이트", href: "/insight", emoji: "🧠" },
     {
       name: "AI 정보", emoji: "🤖", children: [
