@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 30 Jun 2026 07:00:16 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 30 Jun 2026 08:00:30 GMT</lastBuildDate>
+    <item>
+      <title>캘리포니아, 앤트로픽과의 파트너십으로 새로운 시대를 열다</title>
+      <link>https://dori-ai.com/insight/article/trend-186</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-186</guid>
+      <category>트렌드</category>
+      <pubDate>Tue, 30 Jun 2026 07:00:18 GMT</pubDate>
+      <description>캘리포니아 주가 앤트로픽의 AI 도구를 도입하여 공공 서비스 개선에 나섰습니다. 이는 정부와 AI의 협업 모델을 제시하는 중요한 사례가 될 것입니다.</description>
+    </item>
     <item>
       <title>한국, 550억 달러 투자로 AI 메모리 혁신에 나선다</title>
       <link>https://dori-ai.com/insight/article/trend-185</link>
@@ -318,14 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Wed, 24 Jun 2026 00:00:00 GMT</pubDate>
       <description>GPT의 작동 원리를 시각적으로 쉽게 설명한다.</description>
-    </item>
-    <item>
-      <title>[역사] 머신러닝의 역사</title>
-      <link>https://dori-ai.com/insight/article/video-27</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-27</guid>
-      <category>큐레이션</category>
-      <pubDate>Wed, 24 Jun 2026 00:00:00 GMT</pubDate>
-      <description>머신러닝의 발전 과정을 간략히 정리한다.</description>
     </item>
   </channel>
 </rss>
