@@ -50,7 +50,7 @@ export default function Header() {
       name: "AI 정보", emoji: "🤖", children: [
         { name: "AI 도구", href: "/ai-tools", emoji: "🔧" },
         { name: "AI 소식", href: "/ai-news", emoji: "📰" },
-        { name: "영상", href: "/video", emoji: "🎬" },
+        { name: "AI영상", href: "/video", emoji: "🎬" },
       ],
     },
     { name: "피드", href: "/feed", emoji: "💬" },
@@ -85,14 +85,12 @@ export default function Header() {
               item.children ? (
                 <div key={item.name} className="relative group/nav">
                   {item.href ? (
-                    <Link href={item.href} className="flex items-center gap-1 text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap">
+                    <Link href={item.href} className="flex items-center text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap">
                       {item.name}
-                      <ChevronDown className="w-3 h-3 opacity-50 group-hover/nav:rotate-180 transition-transform duration-300" />
                     </Link>
                   ) : (
-                    <button className="flex items-center gap-1 text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap">
+                    <button className="flex items-center text-sm font-medium text-foreground hover:text-[#E8832E] dark:hover:text-[#F9954E] transition-colors whitespace-nowrap">
                       {item.name}
-                      <ChevronDown className="w-3 h-3 opacity-50 group-hover/nav:rotate-180 transition-transform duration-300" />
                     </button>
                   )}
                   <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-300 translate-y-1 group-hover/nav:translate-y-0 z-50">
