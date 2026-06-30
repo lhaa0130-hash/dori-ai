@@ -22,8 +22,8 @@ export interface IlloFeature {
 const CORE_FEATURES: IlloFeature[] = [
   { id: 'home',      label: '홈',          icon: '🏠', group: '핵심', desc: '오늘 할 일과 내 도구', kind: 'core', core: true, released: true },
   { id: 'builder',   label: '워크플로우',   icon: '🛠️', group: '핵심', desc: '나만의 AI 자동화를 직접 설계', kind: 'core', core: true, released: true },
-  // 비서실 임시 제거 — 복구하려면 아래 줄 주석 해제 + CORE_SIDEBAR_ORDER에 'assistant' 추가
-  // { id: 'assistant', label: '비서실',      icon: '💬', group: '핵심', desc: 'AI 비서에게 무엇이든', kind: 'core', core: true, released: true },
+  { id: 'catalog',   label: 'API 카탈로그', icon: '📚', group: '핵심', desc: '어떤 API가 있고, 키는 어디서 받는지', kind: 'core', core: true, released: true },
+  { id: 'assistant', label: '일리',        icon: '🐿️', group: '핵심', desc: 'AI 비서 일리 — 무엇이든 묻고, API 조합도 안내받기', kind: 'core', core: true, released: true },
   { id: 'image',     label: '이미지 생성',  icon: '🎨', group: '핵심', desc: '글로 설명하면 이미지 생성', kind: 'core', core: true, released: true },
   { id: 'video',     label: '영상 생성',    icon: '🎬', group: '핵심', desc: '글로 설명하면 짧은 영상 생성', kind: 'core', core: true, released: true },
   { id: 'settings',  label: '설정',        icon: '⚙️', group: '핵심', desc: '키 · 테마 · 계정', kind: 'core', core: true, released: true },
@@ -32,7 +32,7 @@ const CORE_FEATURES: IlloFeature[] = [
 ];
 
 // 사이드바에서 핵심 메뉴가 항상 이 순서로 보이도록 고정.
-export const CORE_SIDEBAR_ORDER = ['home', 'builder', 'image', 'video', 'settings']; // 'assistant' 임시 제거
+export const CORE_SIDEBAR_ORDER = ['home', 'assistant', 'builder', 'catalog', 'image', 'video', 'settings'];
 
 // ── AI 자동화 도구 ── ★ 여러 AI를 단계로 엮어야 의미 있는 기능만 유지(단일 AI 도구는 제거).
 // 정의 순서는 자유 — 아래에서 라벨 가나다순으로 자동 정렬되어 노출됨.

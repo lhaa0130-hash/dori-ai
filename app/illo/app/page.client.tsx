@@ -20,14 +20,16 @@ import {
 import { listResults, saveResult, deleteResult, clearResults, downloadText, type IlloResult } from "@/lib/illo/history";
 import {
   listUserFlows, saveUserFlow, deleteUserFlow, blankFlow, newId,
-  type UserFlow, type FlowNode,
+  type UserFlow, type FlowNode, type Side,
 } from "@/lib/illo/flows";
+import { FLOW_TEMPLATES, templateToFlow } from "@/lib/illo/flowTemplates";
+import { API_CATALOG, COST_TIPS, ROUTER_TIP, ROLE_LABEL, type ApiEntry } from "@/lib/illo/apiCatalog";
 import { PLANS } from "@/lib/illo/plan";
 import { getTone, saveTone } from "@/lib/illo/tone";
 import ProjectTopBar from "@/components/layout/ProjectTopBar";
 import {
   ArrowLeft, KeyRound, Loader2, Copy, Check, Sparkles, Download,
-  Menu, X, Pencil, Plus, LogOut, Sun, Moon, Send, Lock, GripVertical, ChevronUp, ChevronDown, Search,
+  Menu, X, Pencil, Plus, LogOut, Sun, Moon, Send, Lock, GripVertical, ChevronUp, ChevronDown, Search, ExternalLink,
 } from "lucide-react";
 
 const FREE_LIMIT = 30; // 무료 하루 호출 수
@@ -214,6 +216,7 @@ export default function IlloWebClient() {
         {view === "image" && <BasicGen kind="image" free={free} quota={quota} setQuota={setQuota} />}
         {view === "video" && <BasicGen kind="video" free={free} quota={quota} setQuota={setQuota} />}
         {view === "builder" && <FlowBuilder />}
+        {view === "catalog" && <ApiCatalog />}
         {view === "history" && <HistoryView onBack={() => goView("home")} />}
         {view === "settings" && <Settings keyVal={key} free={free} onShowKey={() => setShowKey(true)} onRemoveKey={removeKey} onLogout={logout} userName={userName} userEmail={session?.user?.email || ""} />}
         {tool && <ToolView key={view} tool={tool} runAI={runAI} free={free} quota={quota} onShowKey={() => setShowKey(true)} onBack={() => goView("home")} />}
@@ -343,7 +346,7 @@ function QuotaLine({ free, quota, onShowKey }: { free: boolean; quota: number | 
 
 /* ─────────────────────────── 홈 (위젯 대시보드 — EXE와 동일) ─────────────────────────── */
 const HOME_WIDGETS: { id: string; label: string; icon: string; desc: string }[] = [
-  // 비서 바로가기 위젯 — 비서실 임시 제거로 함께 숨김
+  // 일리(AI 비서)는 사이드바 + '메뉴 바로가기' 위젯으로 진입.
   { id: "results", label: "내 결과", icon: "📚", desc: "생성한 결과 모아보기" },
   { id: "quicktools", label: "빠른 도구", icon: "⚡", desc: "켜둔 AI 도구 모음" },
   { id: "shortcuts", label: "메뉴 바로가기", icon: "🔗", desc: "켜둔 기능 바로가기" },
@@ -568,7 +571,7 @@ function Assistant({ runAI, free, quota, onShowKey, userName }: {
   const endRef = useRef<HTMLDivElement>(null);
   useEffect(() => { endRef.current?.scrollIntoView({ behavior: "smooth" }); }, [msgs, busy]);
 
-  const SUGGEST = ["이번 주 할 일 정리해줘", "사업 아이디어 3개 제안해줘", "이 글 더 매끄럽게 다듬어줘", "마케팅 문구 추천해줘"];
+  const SUGGEST = ["블로그 글 쓰려면 어떤 AI 조합이 좋아?", "API 키는 어디서 받아?", "내 작업에 맞는 워크플로우 추천해줘", "이 글 더 매끄럽게 다듬어줘"];
 
   async function send(text?: string) {
     const q = (text ?? input).trim();
@@ -577,13 +580,17 @@ function Assistant({ runAI, free, quota, onShowKey, userName }: {
     const next: ChatMsg[] = [...msgs, { role: "user", content: q }];
     setMsgs(next); setBusy(true);
     try {
-      const history = next.slice(-8).map((m) => `${m.role === "user" ? "사용자" : "비서"}: ${m.content}`).join("\n");
+      const history = next.slice(-8).map((m) => `${m.role === "user" ? "사용자" : "일리"}: ${m.content}`).join("\n");
       const prompt =
-        `당신은 '워크일로'의 유능하고 친절한 AI 비서입니다. 항상 정중한 존댓말로, 핵심을 먼저 말하고 필요하면 단계로 정리해 답하세요. ` +
-        `사용자 이름은 '${userName}'입니다.\n\n[대화]\n${history}\n비서:`;
+        `당신은 워크일로의 AI 비서 '일리(Illi)'예요. 굴 밖으로 고개를 내밀어 길을 알려주는 친근한 프레리독 캐릭터입니다. ` +
+        `항상 정중한 존댓말로, 핵심을 먼저 말하고 필요하면 단계로 정리해 답하세요. 너무 길지 않게, 따뜻하고 다정하게. ` +
+        `당신은 두 가지를 합니다 — (1) 글쓰기·요약·아이디어 등 무엇이든 돕는 챗봇, (2) "이 작업엔 이 API/조합이 좋아요"라고 짚어주는 가이드. ` +
+        `가이드가 필요할 땐 이렇게 추천하세요 — 검색=Tavily, 글=GPT·Claude·Gemini, 이미지=DALL·E·Flux, 영상=Kling·힉스필드, 음성=ElevenLabs, 전송=이메일·카카오톡·텔레그램. ` +
+        `키 발급 방법은 왼쪽 'API 카탈로그' 메뉴에, 자동 실행은 '워크플로우' 메뉴의 완성 템플릿(블로그·SNS·상품 등)에 있다고 안내하세요. 모르면 모른다고 솔직하게. ` +
+        `사용자 이름은 '${userName}'입니다.\n\n[대화]\n${history}\n일리:`;
       const r = await runAI(prompt, "assistant");
       setMsgs((m) => [...m, { role: "assistant", content: r.text }]);
-      saveResult({ toolId: "assistant", toolLabel: "비서실", input: q, output: r.text });
+      saveResult({ toolId: "assistant", toolLabel: "일리", input: q, output: r.text });
     } catch (e) {
       const raw = e instanceof Error ? e.message : "오류가 발생했습니다.";
       if (/FREE_QUOTA_EXCEEDED/.test(raw)) setErr("오늘 무료 한도(하루 50회)를 다 쓰셨어요. 🌙 내일 다시 쓰거나, 내 Claude 키를 넣으면 무제한이에요.");
@@ -595,8 +602,8 @@ function Assistant({ runAI, free, quota, onShowKey, userName }: {
   return (
     <div className="flex-1 flex flex-col min-h-0">
       <div className="border-b border-neutral-200 dark:border-zinc-800 px-5 sm:px-8 py-3.5 flex items-center gap-2 shrink-0">
-        <span className="text-xl">💬</span>
-        <h1 className="font-extrabold text-neutral-900 dark:text-white">비서실</h1>
+        <span className="text-xl">🐿️</span>
+        <h1 className="font-extrabold text-neutral-900 dark:text-white">일리 <span className="text-[12px] font-normal text-neutral-400">· AI 비서 &amp; 가이드</span></h1>
         {free && <span className="ml-auto text-[12px] text-neutral-400">오늘 남은 <b className={(quota ?? FREE_LIMIT) <= 5 ? "text-rose-500" : "text-[#E8832E]"}>{quota ?? FREE_LIMIT}</b>/{FREE_LIMIT}회</span>}
       </div>
 
@@ -604,9 +611,9 @@ function Assistant({ runAI, free, quota, onShowKey, userName }: {
         <div className="max-w-2xl mx-auto">
           {msgs.length === 0 ? (
             <div className="text-center pt-10">
-              <div className="text-4xl mb-3">💬</div>
-              <p className="font-bold text-neutral-900 dark:text-white mb-1">무엇을 도와드릴까요?</p>
-              <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-6 break-keep">아래를 눌러보거나, 자유롭게 입력하세요.</p>
+              <div className="text-5xl mb-3">🐿️</div>
+              <p className="font-bold text-neutral-900 dark:text-white mb-1">안녕하세요, 저는 일리예요!</p>
+              <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-6 break-keep">무엇이든 물어보세요. “어떤 AI를 어떻게 조합할지”도 제가 안내해드려요.</p>
               <div className="flex flex-wrap gap-2 justify-center">
                 {SUGGEST.map((s) => (
                   <button key={s} onClick={() => send(s)} className="px-3.5 py-2 rounded-full text-[13px] font-semibold bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-300 hover:border-[#F9954E] hover:text-[#E8832E] transition-colors">
@@ -644,7 +651,7 @@ function Assistant({ runAI, free, quota, onShowKey, userName }: {
         <div className="max-w-2xl mx-auto flex items-end gap-2">
           <textarea value={input} onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
-            placeholder="비서에게 물어보세요… (Shift+Enter 줄바꿈)" rows={1}
+            placeholder="일리에게 물어보세요… (Shift+Enter 줄바꿈)" rows={1}
             className="flex-1 resize-none px-4 py-3 rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-sm focus:outline-none focus:border-[#F9954E] max-h-32" />
           <button onClick={() => send()} disabled={busy || !input.trim()}
             className="shrink-0 w-11 h-11 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white grid place-items-center disabled:opacity-40 transition-colors">
@@ -665,11 +672,30 @@ function nodeTint(kind: string): string {
   if (kind === "media") return "border-violet-300 bg-violet-50 dark:bg-violet-950/20 dark:border-violet-800";
   return "border-[#F9954E]/45 bg-[#FFF9F3] dark:bg-orange-950/10";
 }
+// 노드의 한 면(side)의 연결점 좌표.
+function sideAnchor(n: { x: number; y: number }, side: Side) {
+  switch (side) {
+    case "top": return { x: n.x + NODE_W / 2, y: n.y };
+    case "bottom": return { x: n.x + NODE_W / 2, y: n.y + NODE_H };
+    case "left": return { x: n.x, y: n.y + NODE_H / 2 };
+    default: return { x: n.x + NODE_W, y: n.y + NODE_H / 2 }; // right
+  }
+}
+// 면 방향으로 뻗는 베지어 제어점.
+function ctrlPoint(p: { x: number; y: number }, side: Side, k = 64) {
+  switch (side) {
+    case "top": return { x: p.x, y: p.y - k };
+    case "bottom": return { x: p.x, y: p.y + k };
+    case "left": return { x: p.x - k, y: p.y };
+    default: return { x: p.x + k, y: p.y }; // right
+  }
+}
+const SIDES: Side[] = ["top", "right", "bottom", "left"];
 
 function FlowBuilder() {
   const [flows, setFlows] = useState<UserFlow[]>([]);
   const [cur, setCur] = useState<UserFlow | null>(null);
-  const [connectFrom, setConnectFrom] = useState<string | null>(null);
+  const [connectFrom, setConnectFrom] = useState<{ id: string; side: Side } | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const drag = useRef<{ id: string; dx: number; dy: number } | null>(null);
 
@@ -677,6 +703,7 @@ function FlowBuilder() {
 
   const openFlow = (f: UserFlow) => { setCur(JSON.parse(JSON.stringify(f))); setConnectFrom(null); };
   const createNew = () => openFlow(blankFlow());
+  const startFromTemplate = (t: (typeof FLOW_TEMPLATES)[number]) => openFlow(templateToFlow(t));
   const save = () => { if (cur) { saveUserFlow(cur); setFlows(listUserFlows()); } };
   const removeFlow = (id: string) => { deleteUserFlow(id); setFlows(listUserFlows()); if (cur?.id === id) setCur(null); };
 
@@ -692,14 +719,15 @@ function FlowBuilder() {
   function delNode(id: string) {
     if (!cur) return;
     setCur({ ...cur, nodes: cur.nodes.filter((n) => n.id !== id), links: cur.links.filter((l) => l.from !== id && l.to !== id) });
-    if (connectFrom === id) setConnectFrom(null);
+    if (connectFrom?.id === id) setConnectFrom(null);
   }
-  function onHandle(id: string) {
+  function onHandle(id: string, side: Side) {
     if (!cur) return;
-    if (!connectFrom) { setConnectFrom(id); return; }
-    if (connectFrom === id) { setConnectFrom(null); return; }
-    if (!cur.links.some((l) => l.from === connectFrom && l.to === id))
-      setCur({ ...cur, links: [...cur.links, { from: connectFrom, to: id }] });
+    if (!connectFrom) { setConnectFrom({ id, side }); return; }
+    if (connectFrom.id === id) { setConnectFrom(null); return; }   // 같은 노드 → 취소
+    const from = connectFrom;
+    if (!cur.links.some((l) => l.from === from.id && l.to === id))   // 같은 두 노드 사이 중복 방지
+      setCur({ ...cur, links: [...cur.links, { from: from.id, to: id, fromSide: from.side, toSide: side }] });
     setConnectFrom(null);
   }
   function delLink(from: string, to: string) {
@@ -729,12 +757,43 @@ function FlowBuilder() {
           <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white">🛠️ 내 워크플로우</h1>
           <button onClick={createNew} className="shrink-0 flex items-center gap-1.5 text-sm font-bold px-3.5 py-2 rounded-xl bg-[#F9954E] text-white hover:bg-[#E8832E] transition-colors"><Plus className="w-4 h-4" />새로 만들기</button>
         </div>
-        <p className="text-neutral-500 dark:text-neutral-400 mb-7 break-keep">AI 단계를 노드로 연결해 <b>나만의 자동화</b>를 직접 설계하세요. (입력 → 조사 → 작성 → 검토 → 전송처럼)</p>
+        <p className="text-neutral-500 dark:text-neutral-400 mb-2.5 break-keep">AI 단계를 노드로 연결해 <b>나만의 자동화</b>를 직접 설계하세요. (입력 → 조사 → 작성 → 검토 → 전송처럼)</p>
+        <div className="mb-7 rounded-2xl border border-[#FDD5A5] dark:border-[#B35E15] bg-[#FFF9F3] dark:bg-orange-950/10 px-4 py-3 text-[12.5px] text-neutral-600 dark:text-neutral-300 break-keep leading-relaxed">
+          <b className="text-[#E8832E]">n8n 자동화의 쉬운 고급 버전이에요.</b> 복잡한 설정 없이 — <b>AI의 API 키만 넣으면 연결</b>되고, <b>노드끼리 선만 이으면</b> 내용이 자동으로 흘러갑니다. 각 노드는 <b>받은 내용 + 자기 역할</b>대로 처리해 다음 노드로 넘기기만 하면 돼요. 노드는 <b>4면 어디로든</b> 받고, <b>한 면에서 여러 갈래</b>로 보낼 수 있어요.</div>
+
+        {/* 완성된 워크플로우 템플릿 — 빈 캔버스 대신 바로 시작 */}
+        <div className="mb-9">
+          <h2 className="text-sm font-bold text-neutral-900 dark:text-white mb-1">✨ 완성된 워크플로우로 바로 시작</h2>
+          <p className="text-[12.5px] text-neutral-400 mb-3.5 break-keep">템플릿을 고르면 노드가 연결된 채로 열려요. 그대로 쓰거나 자유롭게 고치세요.</p>
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            {FLOW_TEMPLATES.map((t) => (
+              <button key={t.id} onClick={() => startFromTemplate(t)}
+                className="text-left rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 hover:border-[#F9954E] hover:shadow-sm transition-all group">
+                <div className="flex items-center gap-2">
+                  <span className="text-xl">{t.icon}</span>
+                  <span className="text-sm font-bold text-neutral-900 dark:text-white">{t.name}</span>
+                  <span className="ml-auto text-[11px] text-neutral-400 shrink-0">{t.steps.length}단계</span>
+                </div>
+                <p className="text-[12px] text-neutral-500 dark:text-neutral-400 mt-1.5 break-keep leading-relaxed">{t.desc}</p>
+                <div className="flex flex-wrap items-center gap-y-1 mt-3">
+                  {t.steps.map((st, i) => (
+                    <span key={i} className="inline-flex items-center">
+                      <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-neutral-100 dark:bg-zinc-800 text-neutral-500 whitespace-nowrap">{st.icon} {st.title}</span>
+                      {i < t.steps.length - 1 && <span className="mx-0.5 text-neutral-300 dark:text-zinc-600 text-[10px]">→</span>}
+                    </span>
+                  ))}
+                </div>
+                <div className="mt-3 text-[12px] font-bold text-[#E8832E] dark:text-[#FBAA60] opacity-0 group-hover:opacity-100 transition-opacity">이 템플릿으로 시작 →</div>
+              </button>
+            ))}
+          </div>
+        </div>
+
+        {/* 내 워크플로우 */}
+        <h2 className="text-sm font-bold text-neutral-900 dark:text-white mb-3">🛠️ 내 워크플로우</h2>
         {flows.length === 0 ? (
-          <div className="text-center py-20 text-neutral-400">
-            <div className="text-4xl mb-3">🧩</div>
-            <p className="text-sm mb-4">아직 만든 워크플로우가 없어요.</p>
-            <button onClick={createNew} className="text-sm font-bold px-4 py-2 rounded-xl bg-[#F9954E] text-white hover:bg-[#E8832E]">+ 첫 워크플로우 만들기</button>
+          <div className="rounded-2xl border border-dashed border-neutral-300 dark:border-zinc-700 text-center py-10 text-neutral-400">
+            <p className="text-[13px] break-keep">아직 저장한 워크플로우가 없어요. 위 템플릿으로 시작하거나 <button onClick={createNew} className="font-bold text-[#E8832E] hover:underline">빈 캔버스로 만들기</button>.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -792,7 +851,7 @@ function FlowBuilder() {
         <div className="relative flex-1 min-w-0 overflow-auto bg-neutral-100 dark:bg-zinc-900" onMouseMove={onMove} onMouseUp={endDrag} onMouseLeave={endDrag}>
           {connectFrom && (
             <div className="sticky top-2 left-2 z-30 inline-block ml-2 mt-2 text-[11px] font-semibold text-[#E8832E] bg-[#FFF5EB] dark:bg-orange-950/40 px-2.5 py-1 rounded-lg shadow-sm">
-              연결할 다음 노드의 <b>왼쪽 점</b>을 클릭하세요 · <button onClick={() => setConnectFrom(null)} className="underline">취소</button>
+연결할 <b>다음 노드의 점(아무 면이나)</b>을 클릭하세요 · <button onClick={() => setConnectFrom(null)} className="underline">취소</button>
             </div>
           )}
           <div ref={canvasRef} className="relative" style={{ width: 1600, height: 1000, backgroundImage: "radial-gradient(circle, rgba(120,120,120,0.18) 1px, transparent 1px)", backgroundSize: "22px 22px" }}>
@@ -802,16 +861,17 @@ function FlowBuilder() {
                 const a = cur.nodes.find((n) => n.id === l.from);
                 const b = cur.nodes.find((n) => n.id === l.to);
                 if (!a || !b) return null;
-                const x1 = a.x + NODE_W, y1 = a.y + NODE_H / 2;
-                const x2 = b.x, y2 = b.y + NODE_H / 2;
-                const mx = (x1 + x2) / 2;
+                const fs = l.fromSide || "right", ts = l.toSide || "left";
+                const p1 = sideAnchor(a, fs), p2 = sideAnchor(b, ts);
+                const c1 = ctrlPoint(p1, fs), c2 = ctrlPoint(p2, ts);
+                const mx = (p1.x + p2.x) / 2, my = (p1.y + p2.y) / 2;
                 return (
                   <g key={i}>
-                    <path d={`M ${x1} ${y1} C ${mx} ${y1}, ${mx} ${y2}, ${x2} ${y2}`} fill="none" stroke="#F9954E" strokeWidth={2} />
-                    <circle cx={x2} cy={y2} r={3.5} fill="#F9954E" />
-                    <circle cx={(x1 + x2) / 2} cy={(y1 + y2) / 2} r={8} fill="white" stroke="#F9954E" strokeWidth={1}
+                    <path d={`M ${p1.x} ${p1.y} C ${c1.x} ${c1.y}, ${c2.x} ${c2.y}, ${p2.x} ${p2.y}`} fill="none" stroke="#F9954E" strokeWidth={2} />
+                    <circle cx={p2.x} cy={p2.y} r={3.5} fill="#F9954E" />
+                    <circle cx={mx} cy={my} r={8} fill="white" stroke="#F9954E" strokeWidth={1}
                       className="pointer-events-auto cursor-pointer" onClick={() => delLink(l.from, l.to)} />
-                    <text x={(x1 + x2) / 2} y={(y1 + y2) / 2 + 3} textAnchor="middle" fontSize={10} fill="#E8832E" className="pointer-events-none select-none">✕</text>
+                    <text x={mx} y={my + 3} textAnchor="middle" fontSize={10} fill="#E8832E" className="pointer-events-none select-none">✕</text>
                   </g>
                 );
               })}
@@ -821,12 +881,19 @@ function FlowBuilder() {
             {cur.nodes.map((n) => (
               <div key={n.id} className={"absolute rounded-xl border-2 shadow-sm select-none " + nodeTint(n.kind) + (connectFrom === n.id ? " ring-2 ring-[#F9954E]" : "")}
                 style={{ left: n.x, top: n.y, width: NODE_W, minHeight: NODE_H }}>
-                {/* 입력 핸들(왼쪽) */}
-                <button onClick={() => onHandle(n.id)} title="여기로 연결 받기"
-                  className="absolute -left-2 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full bg-white border-2 border-[#F9954E] hover:scale-125 transition-transform z-10" />
-                {/* 출력 핸들(오른쪽) */}
-                <button onClick={() => onHandle(n.id)} title="여기서 연결 시작"
-                  className={"absolute -right-2 top-1/2 -translate-y-1/2 w-4 h-4 rounded-full border-2 border-[#F9954E] hover:scale-125 transition-transform z-10 " + (connectFrom === n.id ? "bg-[#F9954E]" : "bg-white")} />
+                {/* 4면 연결 핸들 — 받기·내보내기 공용. 한 면에서 여러 갈래로 연결 가능 */}
+                {SIDES.map((sd) => {
+                  const pos = sd === "top" ? "left-1/2 -top-2 -translate-x-1/2"
+                    : sd === "bottom" ? "left-1/2 -bottom-2 -translate-x-1/2"
+                    : sd === "left" ? "-left-2 top-1/2 -translate-y-1/2"
+                    : "-right-2 top-1/2 -translate-y-1/2";
+                  const lit = connectFrom?.id === n.id && connectFrom?.side === sd;
+                  return (
+                    <button key={sd} onMouseDown={(e) => e.stopPropagation()} onClick={() => onHandle(n.id, sd)}
+                      title="점을 클릭해 연결 시작 → 다음 노드의 점 클릭"
+                      className={"absolute " + pos + " w-4 h-4 rounded-full border-2 border-[#F9954E] hover:scale-125 transition-transform z-20 " + (lit ? "bg-[#F9954E]" : "bg-white")} />
+                  );
+                })}
                 {/* 헤더(드래그 핸들) */}
                 <div onMouseDown={(e) => onNodeDown(e, n)} className="flex items-center justify-between px-2.5 pt-2 cursor-grab active:cursor-grabbing">
                   <span className="text-[12px] font-bold text-neutral-900 dark:text-white truncate">{n.icon} {n.title}</span>
@@ -840,9 +907,117 @@ function FlowBuilder() {
         </div>
       </div>
       <div className="shrink-0 px-4 py-2 border-t border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-[10.5px] text-neutral-400 break-keep">
-        💡 노드 제목을 <b>드래그</b>해 옮기고, 오른쪽 점 클릭 → 다음 노드 왼쪽 점 클릭으로 <b>연결</b>. 연결선 가운데 <b>✕</b>로 삭제. 다 만들면 <b>저장</b>. (실행 연동은 곧 추가 예정)
+        💡 노드 제목을 <b>드래그</b>해 옮기고, <b>4면 어디든 점</b>을 클릭 → 다음 노드의 점을 클릭하면 <b>연결</b>(한 면에서 여러 갈래로 보낼 수 있어요). 연결선 가운데 <b>✕</b>로 삭제. 연결만 해두면 내용은 <b>자동으로 다음 노드에 전달</b>돼요. (실행 연동 준비 중)
       </div>
     </div>
+  );
+}
+
+/* ─────────────────── API 카탈로그 (키 발급 가이드) ─────────────────── */
+function roleBadgeClass(role: ApiEntry["role"]): string {
+  if (role === "pick") return "bg-[#FFF5EB] text-[#E8832E] border-[#FDD5A5] dark:bg-orange-950/30 dark:border-[#B35E15]";
+  if (role === "warn") return "bg-rose-50 text-rose-500 border-rose-200 dark:bg-rose-950/20 dark:border-rose-900";
+  return "bg-neutral-100 text-neutral-500 border-neutral-200 dark:bg-zinc-800 dark:border-zinc-700";
+}
+function ApiCatalog() {
+  const [open, setOpen] = useState<string | null>(null);
+  const toggle = (k: string) => setOpen((p) => (p === k ? null : k));
+  const hasDetail = (e: ApiEntry) => !!(e.keySteps || e.keyUrl || e.free || e.topup || e.note);
+  return (
+    <ViewScroll>
+      <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white mb-1">📚 API 카탈로그</h1>
+      <p className="text-neutral-500 dark:text-neutral-400 mb-2 break-keep">
+        “어떤 API가 있고, 뭐가 다르고, 키는 어디서 받는지” — 목적별로 정리했어요. 카드를 누르면 <b>키 발급 단계</b>와 무료 크레딧·최소 충전을 볼 수 있어요.
+      </p>
+      <p className="text-[12px] text-neutral-400 mb-6 break-keep">※ 가격·정책은 제공사 사정으로 자주 바뀌어요. 정확한 최신 정보는 각 발급 페이지에서 확인하세요.</p>
+
+      <div className="flex flex-wrap gap-2 mb-6 text-[11.5px]">
+        <span className="px-2 py-0.5 rounded-full border bg-[#FFF5EB] text-[#E8832E] border-[#FDD5A5] dark:bg-orange-950/30 dark:border-[#B35E15]">★ 지정 — 직접 고른 핵심</span>
+        <span className="px-2 py-0.5 rounded-full border bg-neutral-100 text-neutral-500 border-neutral-200 dark:bg-zinc-800 dark:border-zinc-700">추천 — 함께 제안</span>
+        <span className="px-2 py-0.5 rounded-full border bg-rose-50 text-rose-500 border-rose-200 dark:bg-rose-950/20 dark:border-rose-900">⚠ 주의</span>
+      </div>
+
+      {/* 초기 비용 줄이는 법 */}
+      <div className="rounded-2xl border border-[#FDD5A5] dark:border-[#B35E15] bg-[#FFF9F3] dark:bg-orange-950/10 p-5 mb-8">
+        <div className="text-sm font-bold text-neutral-900 dark:text-white mb-1">💡 초기 비용, 이렇게 줄여요</div>
+        <p className="text-[12.5px] text-neutral-500 dark:text-neutral-400 mb-3 break-keep">API마다 최소 충전($5~10)이 있어요. 한 번에 다 넣을 필요 없습니다.</p>
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
+          {COST_TIPS.map((t) => (
+            <div key={t.tag} className="rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 p-3">
+              <div className="text-[10px] font-bold text-[#E8832E] font-mono mb-1">{t.tag}</div>
+              <div className="text-[13px] font-bold text-neutral-900 dark:text-white mb-0.5">{t.title}</div>
+              <div className="text-[12px] text-neutral-500 dark:text-neutral-400 break-keep leading-relaxed">{t.body}</div>
+            </div>
+          ))}
+        </div>
+        <div className="mt-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 p-3">
+          <div className="flex items-center gap-2 mb-1 flex-wrap">
+            <span className="text-[13px] font-bold text-neutral-900 dark:text-white">🔗 {ROUTER_TIP.name}로 글 모델 묶기</span>
+            <a href={ROUTER_TIP.keyUrl} target="_blank" rel="noopener noreferrer" className="sm:ml-auto inline-flex items-center gap-1 text-[11px] font-bold text-[#E8832E] hover:underline">키 발급 <ExternalLink className="w-3 h-3" /></a>
+          </div>
+          <div className="text-[12px] text-neutral-500 dark:text-neutral-400 break-keep">{ROUTER_TIP.desc}</div>
+        </div>
+      </div>
+
+      <div className="space-y-7">
+        {API_CATALOG.map((cat) => (
+          <div key={cat.id}>
+            <div className="flex items-baseline gap-2 mb-1">
+              <span className="text-lg">{cat.icon}</span>
+              <h2 className="text-base font-bold text-neutral-900 dark:text-white">{cat.name}</h2>
+              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">{cat.en}</span>
+            </div>
+            <p className="text-[12.5px] text-neutral-500 dark:text-neutral-400 mb-3 break-keep">{cat.desc}</p>
+            <div className="space-y-2">
+              {cat.entries.map((e) => {
+                const k = cat.id + ":" + e.name;
+                const detail = hasDetail(e);
+                const isOpen = open === k;
+                return (
+                  <div key={k} className="rounded-xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden">
+                    <button disabled={!detail} onClick={() => detail && toggle(k)}
+                      className={"w-full flex items-center gap-2.5 px-4 py-3 text-left " + (detail ? "hover:bg-neutral-50 dark:hover:bg-zinc-800/50 transition-colors" : "cursor-default")}>
+                      <span className={"shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md border " + roleBadgeClass(e.role)}>{ROLE_LABEL[e.role]}</span>
+                      <span className="shrink-0 text-[13.5px] font-bold text-neutral-900 dark:text-white">{e.name}</span>
+                      <span className="min-w-0 flex-1 text-[12px] text-neutral-500 dark:text-neutral-400 break-keep">{e.use}</span>
+                      {detail && <ChevronDown className={"ml-1 shrink-0 w-4 h-4 text-neutral-400 transition-transform " + (isOpen ? "rotate-180" : "")} />}
+                    </button>
+                    {detail && isOpen && (
+                      <div className="px-4 pb-4 pt-1 border-t border-neutral-100 dark:border-zinc-800 text-[12.5px] space-y-2">
+                        {e.free && <div className="flex gap-2"><span className="shrink-0 font-bold text-[#149074] dark:text-emerald-400">무료</span><span className="text-neutral-600 dark:text-neutral-300 break-keep">{e.free}</span></div>}
+                        {e.topup && <div className="flex gap-2"><span className="shrink-0 font-bold text-[#E8832E]">충전</span><span className="text-neutral-600 dark:text-neutral-300 break-keep">{e.topup}</span></div>}
+                        {e.note && <div className="flex gap-2"><span className="shrink-0 font-bold text-neutral-400">참고</span><span className="text-neutral-500 dark:text-neutral-400 break-keep">{e.note}</span></div>}
+                        {e.keySteps && (
+                          <div className="pt-1">
+                            <div className="flex items-center gap-1.5 font-bold text-neutral-900 dark:text-white mb-1.5"><KeyRound className="w-3.5 h-3.5 text-[#F9954E]" /> 키 발급 방법</div>
+                            <ol className="space-y-1">
+                              {e.keySteps.map((s, i) => (
+                                <li key={i} className="flex gap-2 text-neutral-600 dark:text-neutral-300 break-keep">
+                                  <span className="shrink-0 w-4 h-4 rounded-full bg-[#F9954E] text-white text-[9px] font-bold flex items-center justify-center mt-0.5">{i + 1}</span>
+                                  <span>{s}</span>
+                                </li>
+                              ))}
+                            </ol>
+                          </div>
+                        )}
+                        {e.keyUrl && (
+                          <a href={e.keyUrl} target="_blank" rel="noopener noreferrer" className="inline-flex items-center gap-1.5 mt-1.5 text-[12px] font-bold text-white bg-[#F9954E] hover:bg-[#E8832E] rounded-lg px-3 py-1.5 transition-colors">
+                            키 발급 페이지 열기 <ExternalLink className="w-3.5 h-3.5" />
+                          </a>
+                        )}
+                      </div>
+                    )}
+                  </div>
+                );
+              })}
+            </div>
+            {cat.catNote && <p className="text-[12px] text-neutral-600 dark:text-neutral-300 mt-2.5 break-keep bg-neutral-50 dark:bg-zinc-900/50 rounded-lg px-3 py-2">{cat.catNote}</p>}
+          </div>
+        ))}
+      </div>
+
+      <p className="text-[12px] text-neutral-400 mt-8 break-keep text-center">발급한 키는 <b className="text-[#E8832E]">설정 → AI 키</b>에 넣으면 워크플로우·도구가 바로 그 키로 동작해요.</p>
+    </ViewScroll>
   );
 }
 
@@ -980,9 +1155,9 @@ function HistoryView({ onBack }: { onBack: () => void }) {
         <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white">📚 내 결과 보관함</h1>
         {items.length > 0 && <button onClick={() => { clearResults(); refresh(); }} className="text-[12px] text-neutral-400 hover:text-rose-500">전체 삭제</button>}
       </div>
-      <p className="text-neutral-500 dark:text-neutral-400 mb-6 text-sm break-keep">도구·비서실에서 만든 결과가 자동 저장돼요 (이 브라우저, 최근 100개).</p>
+      <p className="text-neutral-500 dark:text-neutral-400 mb-6 text-sm break-keep">도구·일리에서 만든 결과가 자동 저장돼요 (이 브라우저, 최근 100개).</p>
       {items.length === 0 ? (
-        <div className="text-center py-16 text-neutral-400 text-sm break-keep">아직 저장된 결과가 없어요.<br />도구나 비서실에서 무언가 만들어보세요.</div>
+        <div className="text-center py-16 text-neutral-400 text-sm break-keep">아직 저장된 결과가 없어요.<br />도구나 일리에게 무언가 만들어보세요.</div>
       ) : (
         <div className="space-y-2.5">
           {items.map((it) => {
@@ -1084,7 +1259,7 @@ function Settings({ keyVal, free, onShowKey, onRemoveKey, onLogout, userName, us
 
       <Section title="앞으로">
         <p className="text-[13px] text-neutral-600 dark:text-neutral-300 break-keep">
-          지금은 비서실과 글쓰기 도구부터 시작해요. 이미지·영상·음성·자동화 같은 기능은 <b>완성되는 대로 하나씩</b> 열립니다. 🔜
+          지금은 일리(AI 비서)·워크플로우·API 카탈로그·글쓰기 도구부터 시작해요. 이미지·영상·음성·자동화 같은 기능은 <b>완성되는 대로 하나씩</b> 열립니다. 🔜
         </p>
         <Link href="/illo" className="inline-block mt-3 text-[13px] font-bold text-[#E8832E] dark:text-[#FBAA60] hover:underline">워크일로 소개 보기 →</Link>
       </Section>
@@ -1525,8 +1700,8 @@ function GuideOverlay({ onClose }: { onClose: () => void }) {
             <Step n="1" title="로그인 / 회원가입">
               <p>이메일로 가입하거나 로그인하면 끝. 결제·카드 필요 없어요.</p>
             </Step>
-            <Step n="2" title="도구 고르거나 비서실 열기">
-              <p>홈에서 <b>비서실</b>을 누르거나, 왼쪽 메뉴에서 원하는 <b>도구</b>를 고르세요.</p>
+            <Step n="2" title="일리에게 묻거나 도구 고르기">
+              <p>왼쪽 메뉴에서 <b>일리</b>(🐿️ AI 비서)에게 물어보거나, 원하는 <b>도구</b>·<b>워크플로우 템플릿</b>을 고르세요.</p>
             </Step>
             <Step n="3" title="입력하고 생성 → 복사">
               <p>내용만 적고 <b>생성</b> 버튼을 누르면 AI가 결과를 만들어줘요. <b>복사</b>해서 바로 쓰면 됩니다.</p>
@@ -1536,17 +1711,19 @@ function GuideOverlay({ onClose }: { onClose: () => void }) {
           {/* 화면 둘러보기 */}
           <GuideSection icon="🧭" title="화면 둘러보기">
             <GuideRow icon="🏠" title="오늘의 사무실 (홈)">인사·바로가기·현황 위젯을 한눈에. 편집으로 위젯을 바꿀 수 있어요.</GuideRow>
-            <GuideRow icon="💬" title="비서실">AI 비서에게 자유롭게 질문하고 일을 시키는 곳.</GuideRow>
+            <GuideRow icon="🐿️" title="일리 (AI 비서)">무엇이든 묻고, “이 작업엔 이 AI 조합”까지 안내받는 곳.</GuideRow>
+            <GuideRow icon="🛠️" title="워크플로우">완성된 템플릿을 고르거나, AI 단계를 노드로 이어 자동화를 설계.</GuideRow>
+            <GuideRow icon="📚" title="API 카탈로그">어떤 API가 있고 키는 어디서 받는지, 목적별로 안내.</GuideRow>
             <GuideRow icon="🛠️" title="AI 도구">블로그·메일·요약·카피 등 목적별 전문 도구.</GuideRow>
             <GuideRow icon="🧩" title="기능 보관함">필요한 기능만 꺼내 내 메뉴에 추가하는 곳.</GuideRow>
             <GuideRow icon="⚙️" title="설정">키·테마(화이트/다크)·계정 관리.</GuideRow>
           </GuideSection>
 
-          {/* 비서실 */}
-          <GuideSection icon="💬" title="비서실 — 뭐든 물어보기">
+          {/* 일리 */}
+          <GuideSection icon="🐿️" title="일리 — 뭐든 물어보기">
             <p className="text-[12.5px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
-              채팅처럼 자유롭게 대화해요. 예) <b>“이번 주 할 일 정리해줘”</b>, <b>“이 글 더 매끄럽게 다듬어줘”</b>, <b>“사업 아이디어 3개 제안해줘”</b>.<br />
-              <span className="text-neutral-400">입력창에서 <b>Enter</b>는 전송, <b>Shift+Enter</b>는 줄바꿈이에요.</span>
+              채팅처럼 자유롭게 대화해요. 예) <b>“블로그 글엔 어떤 AI 조합이 좋아?”</b>, <b>“API 키는 어디서 받아?”</b>, <b>“이 글 더 매끄럽게 다듬어줘”</b>.<br />
+              <span className="text-neutral-400">일리(🐿️)는 답도 해주고, 필요하면 알맞은 API·워크플로우 템플릿도 짚어줘요. <b>Enter</b> 전송, <b>Shift+Enter</b> 줄바꿈.</span>
             </p>
           </GuideSection>
 
@@ -1593,7 +1770,7 @@ function GuideOverlay({ onClose }: { onClose: () => void }) {
           {/* 앞으로 */}
           <GuideSection icon="🔜" title="곧 추가될 기능">
             <p className="text-[12.5px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
-              지금은 <b>비서실 + 글쓰기 도구</b>부터 시작해요. <b>이미지·영상·음성·작곡·자동화 세트</b> 같은 기능은 완성되는 대로 하나씩 열립니다. 설치 없이 브라우저에서 어디서나 쓰세요.
+              지금은 <b>일리 + 글쓰기 도구 + 워크플로우 템플릿 + API 카탈로그</b>부터 시작해요. <b>이미지·영상·음성·작곡·자동화 실행</b> 같은 기능은 완성되는 대로 하나씩 열립니다. 설치 없이 브라우저에서 어디서나 쓰세요.
             </p>
           </GuideSection>
 

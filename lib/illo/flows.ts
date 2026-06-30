@@ -15,9 +15,14 @@ export type FlowNode = {
   y: number;
 };
 
+// 노드 4면 — 어느 면에서든 받고/내보낼 수 있고, 한 면에서 여러 갈래로 연결 가능.
+export type Side = "top" | "right" | "bottom" | "left";
+
 export type FlowLink = {
   from: string;
   to: string;
+  fromSide?: Side;   // 출발 면 (없으면 기본 오른쪽)
+  toSide?: Side;     // 도착 면 (없으면 기본 왼쪽)
 };
 
 export type UserFlow = {
