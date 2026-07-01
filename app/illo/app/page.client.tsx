@@ -934,8 +934,12 @@ function FlowBuilder() {
                   );
                 })}
                 {/* 헤더 (노드 전체가 드래그 가능 — 아무 데나 잡고 이동) */}
-                <div className="flex items-center justify-between px-2.5 pt-2 shrink-0">
-                  <span className="text-[12px] font-bold text-neutral-900 dark:text-white truncate">{n.icon} {n.title}</span>
+                <div className="flex items-center justify-between gap-1 px-2.5 pt-2 shrink-0">
+                  <span className="flex items-center gap-1 min-w-0 flex-1">
+                    <span className="text-[12px] shrink-0">{n.icon}</span>
+                    <input value={n.title} onChange={(e) => updateNode(n.id, { title: e.target.value })} onMouseDown={(e) => e.stopPropagation()} placeholder="이름" title="노드 이름 (클릭해서 수정)"
+                      className="min-w-0 flex-1 bg-transparent text-[12px] font-bold text-neutral-900 dark:text-white focus:outline-none border-b border-transparent focus:border-[#F9954E] cursor-text" />
+                  </span>
                   <button onMouseDown={(e) => e.stopPropagation()} onClick={() => delNode(n.id)} className="shrink-0 text-neutral-300 hover:text-rose-500"><X className="w-3.5 h-3.5" /></button>
                 </div>
                 {n.role && <div className="px-2.5 text-[9px] text-[#E8832E] font-semibold shrink-0">{n.role}</div>}

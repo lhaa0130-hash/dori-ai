@@ -20,7 +20,7 @@ export type StepKind =
   | 'media'      // 이미지/영상/음성 생성
   | 'deliver';   // 전송(액션, 모델 불필요)
 
-export type DeliverChannel = 'email' | 'kakao' | 'download' | 'approval';
+export type DeliverChannel = 'email' | 'kakao' | 'download' | 'approval' | 'telegram';
 
 export interface AutoStep {
   kind: StepKind;
@@ -174,6 +174,7 @@ const FLOW_DESC: Record<string, string[]> = {
 
 // ── 사용자가 추가할 수 있는 "단계 팔레트" ──
 export const STEP_PALETTE: FlowStepDetail[] = [
+  { kind: 'input',    icon: '🚀', title: '시작하기',     role: '시작', detail: '이름을 붙이고 시작 지시(프롬프트)를 적으면, 그 내용이 연결된 다음 노드들로 흘러가 업무가 진행돼요.' },
   { kind: 'research', icon: '📚', title: '자료 조사',   role: '조사 AI', detail: '관련 정보·트렌드·근거를 웹에서 조사해 정리해요.' },
   { kind: 'vision',   icon: '🔍', title: '자료 분석',   role: '분석 AI', detail: '올린 이미지/영상/자료를 분석해 핵심을 뽑아요.' },
   { kind: 'generate', icon: '✍️', title: 'AI 작성',     role: '작성 AI', detail: '내용을 글로 작성해요.' },
@@ -182,7 +183,7 @@ export const STEP_PALETTE: FlowStepDetail[] = [
   { kind: 'media',    icon: '🎬', title: '영상 생성',   role: '제작 AI', detail: '짧은 홍보 영상을 자동 생성해요. (곧 오픈)' },
   { kind: 'media',    icon: '🎙️', title: '음성 더빙',   role: '제작 AI', detail: '텍스트를 자연스러운 음성으로 변환해요. (곧 오픈)' },
   { kind: 'finalize', icon: '📑', title: '최종본 정리', role: '편집 AI', detail: '바로 쓸 수 있게 최종본으로 정리해요.' },
-  { kind: 'deliver',  icon: '📤', title: '전송(이메일/카카오)', role: '전송', detail: '완성본을 이메일·카카오로 보내요. (곧 오픈)' },
+  { kind: 'deliver',  icon: '📤', title: '전송(이메일/카카오/텔레그램)', role: '전송', detail: '완성본을 이메일·카카오·텔레그램으로 보내요.' },
 ];
 
 // ── 도구별 사용자 커스텀 워크플로우 저장 (localStorage) ──

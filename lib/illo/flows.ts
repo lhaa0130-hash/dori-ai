@@ -61,7 +61,18 @@ function write(items: UserFlow[]): void {
 }
 
 export function blankFlow(): UserFlow {
-  return { id: newId(), name: "", nodes: [], links: [] };
+  // 기본으로 "시작하기(START)" 노드를 최상단에 하나 놓아준다 — 이름을 붙이고 시작 프롬프트를 적으면
+  // 그 내용이 연결된 다음 노드들로 흘러가 업무가 진행된다.
+  return {
+    id: newId(),
+    name: "",
+    nodes: [{
+      id: newId(), kind: "input", icon: "🚀", title: "시작하기", role: "시작",
+      detail: "이름을 붙이고 시작 지시(프롬프트)를 적으면, 그 내용이 연결된 다음 노드들로 흘러가 업무가 진행돼요.",
+      instruction: "", x: 60, y: 24,
+    }],
+    links: [],
+  };
 }
 
 export function listUserFlows(): UserFlow[] {
