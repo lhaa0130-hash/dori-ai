@@ -698,13 +698,16 @@ function FlowBuilder() {
   const [connectFrom, setConnectFrom] = useState<{ id: string; side: Side } | null>(null);
   const [templates, setTemplates] = useState<SavedTemplate[]>([]);
   const [pickModelFor, setPickModelFor] = useState<FlowNode | null>(null);
+  const [naming, setNaming] = useState<UserFlow | null>(null);   // 이름 입력 단계
+  const [showGuide, setShowGuide] = useState(true);              // 우측 하단 가이드
   const canvasRef = useRef<HTMLDivElement>(null);
   const drag = useRef<{ id: string; dx: number; dy: number } | null>(null);
 
   useEffect(() => { setFlows(listUserFlows()); setTemplates(listUserTemplates()); }, []);
 
   const openFlow = (f: UserFlow) => { setCur(JSON.parse(JSON.stringify(f))); setConnectFrom(null); };
-  const createNew = () => openFlow(blankFlow());
+  const createNew = () => setNaming(blankFlow());   // 먼저 이름 입력 화면으로
+  const startNamed = () => { if (!naming) return; openFlow({ ...naming, name: naming.name.trim() }); setNaming(null); };
   const startFromTemplate = (t: (typeof FLOW_TEMPLATES)[number]) => openFlow(templateToFlow(t));
   const startFromSaved = (t: SavedTemplate) => openFlow(instantiateTemplate(t));
   const save = () => { if (cur) { saveUserFlow(cur); setFlows(listUserFlows()); } };
@@ -763,6 +766,29 @@ function FlowBuilder() {
     setCur((c) => (c ? { ...c, nodes: c.nodes.map((n) => (n.id === id ? { ...n, x, y } : n)) } : c));
   }
   const endDrag = () => { drag.current = null; };
+
+  // ── 이름 입력 화면 (새로 만들기 → 여기서 이름 먼저 정하고 캔버스로) ──
+  if (naming) {
+    return (
+      <ViewScroll>
+        <button onClick={() => setNaming(null)} className="inline-flex items-center gap-1 text-[13px] text-neutral-400 hover:text-[#E8832E] mb-6"><ArrowLeft className="w-4 h-4" /> 목록으로</button>
+        <div className="max-w-md">
+          <h1 className="text-xl font-extrabold text-neutral-900 dark:text-white mb-1">새 워크플로우</h1>
+          <p className="text-[13px] text-neutral-400 dark:text-neutral-500 mb-6 break-keep">이름을 먼저 정해주세요. 나중에 바꿀 수 있어요.</p>
+          <label className="block text-[12px] font-bold text-neutral-500 dark:text-neutral-400 mb-1.5">워크플로우 이름</label>
+          <input autoFocus value={naming.name}
+            onChange={(e) => setNaming({ ...naming, name: e.target.value })}
+            onKeyDown={(e) => { if (e.key === "Enter" && naming.name.trim()) startNamed(); }}
+            placeholder="예: 블로그 글 자동 발행"
+            className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm text-neutral-900 dark:text-white focus:outline-none focus:border-[#F9954E] mb-4" />
+          <button onClick={startNamed} disabled={!naming.name.trim()}
+            className="w-full py-3 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold text-sm transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
+            만들기 → 노드 연결하기
+          </button>
+        </div>
+      </ViewScroll>
+    );
+  }
 
   // ── 목록 화면 ──
   if (!cur) {
@@ -918,7 +944,7 @@ function FlowBuilder() {
         <button onClick={save} className="text-[12px] font-bold px-3.5 py-1.5 rounded-lg bg-[#F9954E] text-white hover:bg-[#E8832E]">저장</button>
       </div>
 
-      <div className="flex flex-1 min-h-0">
+      <div className="relative flex flex-1 min-h-0">
         {/* 노드 팔레트 */}
         <div className="w-[150px] shrink-0 border-r border-neutral-200 dark:border-zinc-800 bg-neutral-50 dark:bg-zinc-950 overflow-y-auto p-2.5">
           <div className="text-[10px] font-bold text-neutral-400 mb-2 px-0.5">＋ 노드 추가</div>
@@ -1011,9 +1037,21 @@ function FlowBuilder() {
             ))}
           </div>
         </div>
-      </div>
-      <div className="shrink-0 px-4 py-2 border-t border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-[10.5px] text-neutral-400 break-keep">
-        💡 노드를 <b>아무 데나 잡고 드래그</b>해 옮기고, 가장자리 <b>4면 점</b> 클릭 → 다음 노드의 점 클릭으로 <b>연결</b>(한 면에서 여러 갈래 OK). 노드 안 칸에 <b>명령</b>을 적으면 그 AI가 받은 내용 + 명령대로 처리해 넘겨요. 다 만들면 <b>저장</b>, 재사용하려면 <b>📦 결합 보관</b>. (실행 연동 준비 중)
+        {/* 플로팅 가이드 — 우측 하단 */}
+        <div className="absolute bottom-4 right-4 z-30 max-w-[290px]">
+          {showGuide ? (
+            <div className="rounded-xl border border-neutral-200 dark:border-zinc-700 bg-white/95 dark:bg-zinc-900/95 backdrop-blur shadow-lg p-3 text-[11px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="font-bold text-neutral-700 dark:text-neutral-200">💡 사용법</span>
+                <button onClick={() => setShowGuide(false)} className="text-neutral-400 hover:text-rose-500"><X className="w-3.5 h-3.5" /></button>
+              </div>
+              노드를 <b>아무 데나 잡고 드래그</b>해 옮기고, 가장자리 <b>4면 점</b>을 클릭 → 다음 노드의 점을 클릭하면 <b>연결</b>(한 면에서 여러 갈래 OK). 노드의 <b>🤖 AI</b>로 모델을 고르고, <b>명령</b> 칸에 할 일을 적어요. 다 만들면 <b>저장</b>, 재사용은 <b>📦 결합 보관</b>.
+            </div>
+          ) : (
+            <button onClick={() => setShowGuide(true)} title="사용법 보기"
+              className="w-9 h-9 rounded-full border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-lg flex items-center justify-center text-[15px] hover:border-[#F9954E] transition-colors">💡</button>
+          )}
+        </div>
       </div>
     </div>
   );
