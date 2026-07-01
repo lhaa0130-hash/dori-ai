@@ -6,7 +6,7 @@ import { useState, useEffect, useRef, type ReactNode } from "react";
 import Link from "next/link";
 import { RotateCcw, ArrowRight, ArrowLeft, ChevronRight, Info, ShieldAlert, Lock, Share2, BookmarkPlus, Check, Copy, Download, X as XClose, Smartphone, Phone } from "lucide-react";
 import {
-  TESTS, CATEGORIES, getTest, computeScored, computeMulti, getAbout, getResources,
+  TESTS, CATEGORIES, getTest, computeScored, computeMulti, getAbout, getResources, deriveQuadrant,
   type PsychTest, type ScoredTest, type TypedTest, type MultiTest, type Tone,
 } from "@/lib/psychTests";
 import { shareResultCard, getCardDataUrl, downloadCard, type CardData } from "@/lib/shareCard";
@@ -485,11 +485,13 @@ function MultiRunner({ test, onExit }: { test: MultiTest; onExit: () => void }) 
 
 function MultiResult({ test, answers, onBack, onRetry }: { test: MultiTest; answers: number[][][]; onBack: () => void; onRetry: () => void }) {
   const results = computeMulti(test, answers);
+  const quad = deriveQuadrant(test, results);
   // 가장 두드러진 축(50%에서 가장 먼 것)으로 한 줄 요약
   const standout = [...results].sort((a, b) => Math.abs(b.pct - 50) - Math.abs(a.pct - 50))[0];
   const summary = standout.level === "mid"
     ? "전반적으로 균형 잡힌 성향을 가지고 있어요."
     : `가장 두드러지는 특성은 '${standout.dim.name}'(${standout.levelLabel})이에요.`;
+  const facetCount = test.dimensions.reduce((s, d) => s + d.facets.length, 0);
 
   return (
     <main className="w-full min-h-screen py-9">
@@ -498,12 +500,31 @@ function MultiResult({ test, answers, onBack, onRetry }: { test: MultiTest; answ
       </button>
 
       <div className="text-center mb-6">
-        <div className="text-[52px] leading-none mb-2">{test.emoji}</div>
-        <h1 className="text-[22px] font-extrabold text-neutral-950 dark:text-white">나의 성격 프로파일</h1>
+        <div className="text-[52px] leading-none mb-2">{quad ? quad.emoji : test.emoji}</div>
+        <p className="text-[12px] font-bold text-[#F9954E] mb-1">{test.resultTitle || "나의 성격 프로파일"}</p>
+        {quad
+          ? <h1 className="text-[24px] font-extrabold text-neutral-950 dark:text-white">{quad.label}</h1>
+          : <h1 className="text-[22px] font-extrabold text-neutral-950 dark:text-white">유형 분석</h1>}
         <p className="text-[13px] text-neutral-500 dark:text-neutral-400 mt-2 break-keep">{summary}</p>
-        <p className="text-[11px] text-neutral-400 mt-1">5개 요인 · 30개 하위척도 분석</p>
+        {!quad && <p className="text-[11px] text-neutral-400 mt-1">{results.length}개 요인 · {facetCount}개 하위척도 분석</p>}
       </div>
 
+      {/* 4유형 결과 카드(애착유형 등) */}
+      {quad && (
+        <div className="rounded-3xl border border-[#F9954E]/30 bg-[#F9954E]/5 p-6 mb-4">
+          <p className="text-[14px] text-neutral-700 dark:text-neutral-200 leading-relaxed break-keep mb-4">{quad.desc}</p>
+          <div className="grid grid-cols-1 gap-1.5 mb-3">
+            <p className="text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep"><b className="text-emerald-600 dark:text-emerald-400">강점</b> {quad.strengths}</p>
+            <p className="text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep"><b className="text-amber-600 dark:text-amber-400">살필 점</b> {quad.watch}</p>
+          </div>
+          <div className="rounded-2xl bg-white/70 dark:bg-zinc-950/50 px-4 py-3">
+            <p className="text-[11.5px] font-bold text-[#F9954E] mb-1">💡 관계에서 이렇게</p>
+            <p className="text-[13px] text-neutral-700 dark:text-neutral-200 leading-relaxed break-keep">{quad.tip}</p>
+          </div>
+        </div>
+      )}
+
+      {quad && <p className="text-[11px] font-bold text-neutral-400 mb-2 px-1">두 축 자세히 보기</p>}
       <div className="flex flex-col gap-3">
         {results.map((r) => {
           const lv = r.level === "high" ? r.dim.high : r.level === "low" ? r.dim.low : null;
@@ -559,18 +580,18 @@ function MultiResult({ test, answers, onBack, onRetry }: { test: MultiTest; answ
 
       <ResultActions
         card={{
-          kicker: "성격 5요인 검사",
-          emoji: test.emoji,
-          headline: "나의 성격 5요인",
-          sub: standout.level === "mid" ? "균형형" : `${standout.dim.name} ${standout.levelLabel}`,
+          kicker: test.resultTitle || "성격 5요인 검사",
+          emoji: quad ? quad.emoji : test.emoji,
+          headline: quad ? quad.label : "나의 성격 5요인",
+          sub: quad ? "" : (standout.level === "mid" ? "균형형" : `${standout.dim.name} ${standout.levelLabel}`),
           lines: results.map((r) => `${r.dim.emoji} ${r.dim.name} — ${r.levelLabel} ${r.pct}%`),
         }}
         badge={{
           testId: test.id,
-          title: "성격 5요인",
-          label: standout.level === "mid" ? "균형형" : `${standout.dim.name} ${standout.levelLabel}`,
+          title: test.resultTitle || "성격 5요인",
+          label: quad ? quad.label : (standout.level === "mid" ? "균형형" : `${standout.dim.name} ${standout.levelLabel}`),
           sub: results.map((r) => `${r.dim.name[0]}${r.pct}`).join("·"),
-          emoji: test.emoji,
+          emoji: quad ? quad.emoji : test.emoji,
         }}
         allowBadge={true}
       />
