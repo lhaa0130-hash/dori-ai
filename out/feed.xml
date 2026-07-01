@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Wed, 01 Jul 2026 02:00:25 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 01 Jul 2026 03:00:29 GMT</lastBuildDate>
+    <item>
+      <title>OpenAI 토큰 비용 압박·SK하이닉스 HBM4·피지컬 AI: 비용 효율이 돈길을 바꾼 한 주</title>
+      <link>https://dori-ai.com/insight/article/report-8</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/report-8</guid>
+      <category>리포트</category>
+      <pubDate>Wed, 01 Jul 2026 02:03:42 GMT</pubDate>
+      <description>이번 주 AI 산업의 핵심은 더 큰 모델이 아니라 더 싼 사용료, 더 빠른 메모리, 더 현실적인 로봇이었다. 자금은 과시적 모델 경쟁에서 인프라 병목과 실제 업무 자동화로 이동하고 있다.</description>
+    </item>
     <item>
       <title>AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식</title>
       <link>https://dori-ai.com/insight/article/curation-14</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Thu, 25 Jun 2026 03:00:20 GMT</pubDate>
       <description>OpenAI가 Broadcom과 협력하여 개발한 새로운 맞춤형 칩 '할라페뇨'가 인공지능 시스템의 효율성을 혁신적으로 끌어올리고 있습니다.</description>
-    </item>
-    <item>
-      <title>OpenAI, 새로운 맞춤형 칩으로 ChatGPT 성능 향상</title>
-      <link>https://dori-ai.com/insight/article/trend-166</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-166</guid>
-      <category>트렌드</category>
-      <pubDate>Thu, 25 Jun 2026 01:00:28 GMT</pubDate>
-      <description>OpenAI가 Broadcom과 협력하여 LLM에 최적화된 맞춤형 칩을 출시하며 ChatGPT의 성능을 한층 높였다. 이번 발표는 AI 기술의 진화에 중요한 이정표가 될 전망이다.</description>
     </item>
   </channel>
 </rss>
