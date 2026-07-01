@@ -25,6 +25,7 @@ import {
 } from "@/lib/illo/flows";
 import { FLOW_TEMPLATES, templateToFlow } from "@/lib/illo/flowTemplates";
 import { API_CATALOG, COST_TIPS, ROUTER_TIP, ROLE_LABEL, type ApiEntry } from "@/lib/illo/apiCatalog";
+import { SLOT_LABEL, slotForNode, optionsForNode, defaultModelFor, modelLabel } from "@/lib/illo/nodeModels";
 import { PLANS } from "@/lib/illo/plan";
 import { getTone, saveTone } from "@/lib/illo/tone";
 import ProjectTopBar from "@/components/layout/ProjectTopBar";
@@ -587,7 +588,7 @@ function Assistant({ runAI, free, quota, onShowKey, userName }: {
         `항상 정중한 존댓말로, 핵심을 먼저 말하고 필요하면 단계로 정리해 답하세요. 너무 길지 않게, 따뜻하고 다정하게. ` +
         `당신은 두 가지를 합니다 — (1) 글쓰기·요약·아이디어 등 무엇이든 돕는 챗봇, (2) "이 작업엔 이 API/조합이 좋아요"라고 짚어주는 가이드. ` +
         `가이드가 필요할 땐 이렇게 추천하세요 — 검색=Tavily, 글=GPT·Claude·Gemini, 이미지=DALL·E·Flux, 영상=Kling·힉스필드, 음성=ElevenLabs, 전송=이메일·카카오톡·텔레그램. ` +
-        `키 발급 방법은 왼쪽 'API 카탈로그' 메뉴에, 자동 실행은 '워크플로우' 메뉴의 완성 템플릿(블로그·SNS·상품 등)에 있다고 안내하세요. 모르면 모른다고 솔직하게. ` +
+        `키 발급 방법은 왼쪽 '가이드' 메뉴에, 자동 실행은 '워크플로우' 메뉴의 완성 템플릿(블로그·SNS·상품 등)에 있다고 안내하세요. 모르면 모른다고 솔직하게. ` +
         `사용자 이름은 '${userName}'입니다.\n\n[대화]\n${history}\n일리:`;
       const r = await runAI(prompt, "assistant");
       setMsgs((m) => [...m, { role: "assistant", content: r.text }]);
@@ -665,13 +666,11 @@ function Assistant({ runAI, free, quota, onShowKey, userName }: {
 }
 
 /* ─────────────────── 내 워크플로우 (n8n 노드 캔버스) ─────────────────── */
-const NODE_W = 192;
-const NODE_H = 148;
-function nodeTint(kind: string): string {
-  if (kind === "input") return "border-sky-300 bg-sky-50 dark:bg-sky-950/20 dark:border-sky-800";
-  if (kind === "deliver") return "border-emerald-300 bg-emerald-50 dark:bg-emerald-950/20 dark:border-emerald-800";
-  if (kind === "media") return "border-violet-300 bg-violet-50 dark:bg-violet-950/20 dark:border-violet-800";
-  return "border-[#F9954E]/45 bg-[#FFF9F3] dark:bg-orange-950/10";
+const NODE_W = 196;
+const NODE_H = 176;
+function nodeTint(_kind: string): string {
+  // 미니멀 — 모든 노드 동일한 중립 카드. 종류는 아이콘·역할로 구분, 강조는 주황 하나로.
+  return "border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900";
 }
 // 노드의 한 면(side)의 연결점 좌표.
 function sideAnchor(n: { x: number; y: number }, side: Side) {
@@ -698,6 +697,7 @@ function FlowBuilder() {
   const [cur, setCur] = useState<UserFlow | null>(null);
   const [connectFrom, setConnectFrom] = useState<{ id: string; side: Side } | null>(null);
   const [templates, setTemplates] = useState<SavedTemplate[]>([]);
+  const [pickModelFor, setPickModelFor] = useState<FlowNode | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const drag = useRef<{ id: string; dx: number; dy: number } | null>(null);
 
@@ -860,6 +860,53 @@ function FlowBuilder() {
   // ── 편집 캔버스 화면 ──
   return (
     <div className="flex flex-col h-full min-h-0">
+      {/* 노드 AI·모델 선택 모달 — 종류에 맞는 AI + 실제 모델 버전, 설명과 함께 */}
+      {pickModelFor && (() => {
+        const slot = slotForNode(pickModelFor);
+        const curModel = pickModelFor.model || defaultModelFor(pickModelFor);
+        return (
+          <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setPickModelFor(null)}>
+            <div className="w-full max-w-sm bg-white dark:bg-zinc-900 rounded-2xl border border-neutral-200 dark:border-zinc-800 shadow-xl p-4 max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+              <div className="flex items-center justify-between mb-1">
+                <h3 className="text-sm font-bold text-neutral-900 dark:text-white truncate">{pickModelFor.icon} {pickModelFor.title}</h3>
+                <button onClick={() => setPickModelFor(null)} className="text-neutral-400 hover:text-rose-500"><X className="w-4 h-4" /></button>
+              </div>
+              <p className="text-[11.5px] text-neutral-400 mb-3 break-keep">이 노드를 어떤 AI·모델로 처리할지 골라요 — <b className="text-[#E8832E]">{slot ? SLOT_LABEL[slot] : ""}</b></p>
+              <div className="space-y-2">
+                {optionsForNode(pickModelFor).map((opt) => {
+                  const selProvider = curModel === opt.id;
+                  const curVariant = pickModelFor.variant || opt.models[0] || "";
+                  return (
+                    <div key={opt.id}
+                      className={"rounded-xl border p-3 transition-colors " + (selProvider ? "border-[#F9954E] bg-[#FFF5EB] dark:bg-orange-950/20" : "border-neutral-200 dark:border-zinc-700")}>
+                      <button onClick={() => { updateNode(pickModelFor.id, { model: opt.id, variant: opt.models[0] || "" }); setPickModelFor(null); }} className="w-full text-left">
+                        <div className="flex items-center gap-2">
+                          <span className="text-[13px] font-bold text-neutral-900 dark:text-white">{opt.name}</span>
+                          {selProvider && <Check className="w-3.5 h-3.5 text-[#F9954E] ml-auto shrink-0" />}
+                        </div>
+                        <div className="text-[12px] text-neutral-500 dark:text-neutral-400 mt-0.5 break-keep leading-relaxed">{opt.desc}</div>
+                      </button>
+                      {opt.models.length > 0 && (
+                        <div className="flex flex-wrap gap-1.5 mt-2.5">
+                          {opt.models.map((m) => {
+                            const selV = selProvider && curVariant === m;
+                            return (
+                              <button key={m} onClick={() => { updateNode(pickModelFor.id, { model: opt.id, variant: m }); setPickModelFor(null); }}
+                                className={"text-[11px] font-medium px-2 py-0.5 rounded-md border transition-colors " + (selV ? "border-[#F9954E] bg-[#F9954E] text-white" : "border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-300 hover:border-[#F9954E]")}>
+                                {m}
+                              </button>
+                            );
+                          })}
+                        </div>
+                      )}
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
+          </div>
+        );
+      })()}
       {/* 툴바 */}
       <div className="flex items-center gap-2 px-4 py-2.5 border-b border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shrink-0">
         <button onClick={() => { setCur(null); setFlows(listUserFlows()); }} className="p-1.5 -ml-1 text-neutral-500 hover:text-[#E8832E]"><ArrowLeft className="w-5 h-5" /></button>
@@ -943,6 +990,15 @@ function FlowBuilder() {
                   <button onMouseDown={(e) => e.stopPropagation()} onClick={() => delNode(n.id)} className="shrink-0 text-neutral-300 hover:text-rose-500"><X className="w-3.5 h-3.5" /></button>
                 </div>
                 {n.role && <div className="px-2.5 text-[9px] text-[#E8832E] font-semibold shrink-0">{n.role}</div>}
+                {/* 이 노드를 처리할 AI·모델 — 클릭해 바꾸기 */}
+                {slotForNode(n) && (
+                  <button onMouseDown={(e) => e.stopPropagation()} onClick={() => setPickModelFor(n)}
+                    title="이 노드를 처리할 AI·모델 바꾸기"
+                    className="mx-2 mt-1 shrink-0 flex items-center gap-1 w-fit max-w-[calc(100%-16px)] text-[9px] font-bold text-neutral-600 dark:text-neutral-300 bg-neutral-100 dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 rounded-md px-1.5 py-0.5 hover:border-[#F9954E] hover:text-[#E8832E] cursor-pointer">
+                    <span className="truncate">🤖 {modelLabel(n, n.model, n.variant)}</span>
+                    <ChevronDown className="w-2.5 h-2.5 shrink-0" />
+                  </button>
+                )}
                 {/* 노드별 명령 — 받은 내용 + 이 명령대로 처리해 다음 노드로 */}
                 <div className="px-2 pb-2 pt-1 flex-1 min-h-0">
                   <textarea value={n.instruction ?? ""}
@@ -975,7 +1031,7 @@ function ApiCatalog() {
   const hasDetail = (e: ApiEntry) => !!(e.keySteps || e.keyUrl || e.free || e.topup || e.note);
   return (
     <ViewScroll>
-      <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white mb-1">📚 API 카탈로그</h1>
+      <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white mb-1">📖 가이드</h1>
       <p className="text-neutral-500 dark:text-neutral-400 mb-2 break-keep">
         “어떤 API가 있고, 뭐가 다르고, 키는 어디서 받는지” — 목적별로 정리했어요. 카드를 누르면 <b>키 발급 단계</b>와 무료 크레딧·최소 충전을 볼 수 있어요.
       </p>
@@ -1309,7 +1365,7 @@ function Settings({ keyVal, free, onShowKey, onRemoveKey, onLogout, userName, us
 
       <Section title="앞으로">
         <p className="text-[13px] text-neutral-600 dark:text-neutral-300 break-keep">
-          지금은 일리(AI 비서)·워크플로우·API 카탈로그·글쓰기 도구부터 시작해요. 이미지·영상·음성·자동화 같은 기능은 <b>완성되는 대로 하나씩</b> 열립니다. 🔜
+          지금은 일리(AI 비서)·워크플로우·가이드·글쓰기 도구부터 시작해요. 이미지·영상·음성·자동화 같은 기능은 <b>완성되는 대로 하나씩</b> 열립니다. 🔜
         </p>
         <Link href="/illo" className="inline-block mt-3 text-[13px] font-bold text-[#E8832E] dark:text-[#FBAA60] hover:underline">워크일로 소개 보기 →</Link>
       </Section>
@@ -1763,7 +1819,7 @@ function GuideOverlay({ onClose }: { onClose: () => void }) {
             <GuideRow icon="🏠" title="오늘의 사무실 (홈)">인사·바로가기·현황 위젯을 한눈에. 편집으로 위젯을 바꿀 수 있어요.</GuideRow>
             <GuideRow icon="🐿️" title="일리 (AI 비서)">무엇이든 묻고, “이 작업엔 이 AI 조합”까지 안내받는 곳.</GuideRow>
             <GuideRow icon="🛠️" title="워크플로우">완성된 템플릿을 고르거나, AI 단계를 노드로 이어 자동화를 설계.</GuideRow>
-            <GuideRow icon="📚" title="API 카탈로그">어떤 API가 있고 키는 어디서 받는지, 목적별로 안내.</GuideRow>
+            <GuideRow icon="📖" title="가이드">어떤 API가 있고 키는 어디서 받는지, 목적별로 안내.</GuideRow>
             <GuideRow icon="🛠️" title="AI 도구">블로그·메일·요약·카피 등 목적별 전문 도구.</GuideRow>
             <GuideRow icon="🧩" title="기능 보관함">필요한 기능만 꺼내 내 메뉴에 추가하는 곳.</GuideRow>
             <GuideRow icon="⚙️" title="설정">키·테마(화이트/다크)·계정 관리.</GuideRow>
@@ -1820,7 +1876,7 @@ function GuideOverlay({ onClose }: { onClose: () => void }) {
           {/* 앞으로 */}
           <GuideSection icon="🔜" title="곧 추가될 기능">
             <p className="text-[12.5px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
-              지금은 <b>일리 + 글쓰기 도구 + 워크플로우 템플릿 + API 카탈로그</b>부터 시작해요. <b>이미지·영상·음성·작곡·자동화 실행</b> 같은 기능은 완성되는 대로 하나씩 열립니다. 설치 없이 브라우저에서 어디서나 쓰세요.
+              지금은 <b>일리 + 가이드 + 워크플로우 템플릿 + 글쓰기 도구</b>부터 시작해요. <b>이미지·영상·음성·작곡·자동화 실행</b> 같은 기능은 완성되는 대로 하나씩 열립니다. 설치 없이 브라우저에서 어디서나 쓰세요.
             </p>
           </GuideSection>
 

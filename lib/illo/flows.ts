@@ -12,6 +12,8 @@ export type FlowNode = {
   role: string;
   detail: string;
   instruction?: string;   // 이 노드(AI)가 받은 내용 + 이 명령대로 처리 → 다음 노드로
+  model?: string;         // 이 노드를 처리할 AI 선택(nodeModels 옵션 id). 없으면 자동(추천)
+  variant?: string;       // 그 AI의 실제 구동 모델 버전(예: 'GPT-5.1')
   x: number;
   y: number;
 };

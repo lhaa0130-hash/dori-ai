@@ -25,8 +25,8 @@ export type FlowTemplate = {
 };
 
 // 캔버스 노드 크기(명령 입력칸 포함) — page.client.tsx와 동일하게 유지.
-const NODE_W = 192;
-const NODE_H = 148;
+const NODE_W = 196;
+const NODE_H = 176;
 
 const ICON: Record<StepKind, string> = {
   input: "📥", vision: "🔍", research: "📚", generate: "✍️",
