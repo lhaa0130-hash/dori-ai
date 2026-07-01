@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Wed, 01 Jul 2026 05:00:24 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 01 Jul 2026 06:00:16 GMT</lastBuildDate>
+    <item>
+      <title>FigureAI Rose 200시간 시연: 챗봇을 넘어 창고로 들어가는 피지컬 AI</title>
+      <link>https://dori-ai.com/insight/article/analysis-11</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/analysis-11</guid>
+      <category>분석</category>
+      <pubDate>Wed, 01 Jul 2026 05:03:40 GMT</pubDate>
+      <description>휴머노이드 로봇이 실험실을 벗어나 물류·제조·서비스 현장으로 이동하고 있다. 핵심은 더 똑똑한 챗봇이 아니라, 오래 버티고 안전하게 움직이며 기존 업무 흐름에 붙는 AI다.</description>
+    </item>
     <item>
       <title>OpenAI 토큰 비용 압박·SK하이닉스 HBM4·피지컬 AI: 비용 효율이 돈길을 바꾼 한 주</title>
       <link>https://dori-ai.com/insight/article/report-8</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Thu, 25 Jun 2026 13:00:23 GMT</pubDate>
       <description>아마존이 인도에 130억 달러를 투자하며 AI 인프라 구축에 박차를 가하고 있다. 이는 글로벌 기술 기업 간의 AI 경쟁이 심화되고 있음을 시사한다.</description>
-    </item>
-    <item>
-      <title>OpenAI의 맞춤형 칩, 인공지능의 새로운 전환점</title>
-      <link>https://dori-ai.com/insight/article/trend-167</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-167</guid>
-      <category>트렌드</category>
-      <pubDate>Thu, 25 Jun 2026 03:00:20 GMT</pubDate>
-      <description>OpenAI가 Broadcom과 협력하여 개발한 새로운 맞춤형 칩 '할라페뇨'가 인공지능 시스템의 효율성을 혁신적으로 끌어올리고 있습니다.</description>
     </item>
   </channel>
 </rss>
