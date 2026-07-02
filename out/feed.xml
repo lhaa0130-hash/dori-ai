@@ -6,7 +6,7 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Wed, 01 Jul 2026 23:00:17 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 02 Jul 2026 00:00:19 GMT</lastBuildDate>
     <item>
       <title>FigureAI Rose 200시간 시연: 챗봇을 넘어 창고로 들어가는 피지컬 AI</title>
       <link>https://dori-ai.com/insight/article/analysis-11</link>
@@ -22,6 +22,30 @@
       <category>리포트</category>
       <pubDate>Wed, 01 Jul 2026 02:03:42 GMT</pubDate>
       <description>이번 주 AI 산업의 핵심은 더 큰 모델이 아니라 더 싼 사용료, 더 빠른 메모리, 더 현실적인 로봇이었다. 자금은 과시적 모델 경쟁에서 인프라 병목과 실제 업무 자동화로 이동하고 있다.</description>
+    </item>
+    <item>
+      <title>[모델] AI는 정말 생각할 수 있을까? 추론 모델 설명</title>
+      <link>https://dori-ai.com/insight/article/video-41</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-41</guid>
+      <category>큐레이션</category>
+      <pubDate>Wed, 01 Jul 2026 00:00:00 GMT</pubDate>
+      <description>AI의 사고 능력과 추론 모델의 발전을 설명합니다.</description>
+    </item>
+    <item>
+      <title>[프로토콜] MCP와 API  모든 개발자가 알아야 할 프로토콜</title>
+      <link>https://dori-ai.com/insight/article/video-42</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-42</guid>
+      <category>큐레이션</category>
+      <pubDate>Wed, 01 Jul 2026 00:00:00 GMT</pubDate>
+      <description>AI 개발자를 위한 MCP와 API의 차이를 설명합니다.</description>
+    </item>
+    <item>
+      <title>[모델] 외부 세계 모델의 종말  LLM에 통합된</title>
+      <link>https://dori-ai.com/insight/article/video-43</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-43</guid>
+      <category>큐레이션</category>
+      <pubDate>Wed, 01 Jul 2026 00:00:00 GMT</pubDate>
+      <description>LLM에 통합된 외부 세계 모델의 변화를 다룹니다.</description>
     </item>
     <item>
       <title>AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식</title>
@@ -302,30 +326,6 @@
       <category>트렌드</category>
       <pubDate>Fri, 26 Jun 2026 03:00:19 GMT</pubDate>
       <description>Patronus AI가 5천만 달러의 투자금을 확보하며 AI 에이전트의 스트레스 테스트를 위한 디지털 세계 구축에 나섭니다.</description>
-    </item>
-    <item>
-      <title>캘리포니아, AI의 노동 시장 영향 모니터링 도구 최초 출시</title>
-      <link>https://dori-ai.com/insight/article/trend-169</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-169</guid>
-      <category>트렌드</category>
-      <pubDate>Fri, 26 Jun 2026 00:00:30 GMT</pubDate>
-      <description>캘리포니아주가 AI의 노동 시장에 미치는 영향을 추적할 수 있는 도구를 세계 최초로 출시했습니다. 이는 AI 기술의 영향력을 보다 명확히 이해하는 데 큰 의미를 가집니다.</description>
-    </item>
-    <item>
-      <title>노트북LM(NotebookLM) 사용법: 자료 업로드부터 요약·질문·오디오까지 단계별 가이드</title>
-      <link>https://dori-ai.com/insight/article/curation-12</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/curation-12</guid>
-      <category>큐레이션</category>
-      <pubDate>Thu, 25 Jun 2026 23:01:03 GMT</pubDate>
-      <description>노트북LM(NotebookLM)을 처음 쓰는 사람도 바로 따라 할 수 있도록 가입, 자료 추가, 요약, 질문, 오디오 개요, 공유 방법과 무료 사용 팁을 정리했습니다.</description>
-    </item>
-    <item>
-      <title>아마존, 인도에 130억 달러 AI 인프라 투자 — 글로벌 기술 기업의 경쟁</title>
-      <link>https://dori-ai.com/insight/article/trend-168</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-168</guid>
-      <category>트렌드</category>
-      <pubDate>Thu, 25 Jun 2026 13:00:23 GMT</pubDate>
-      <description>아마존이 인도에 130억 달러를 투자하며 AI 인프라 구축에 박차를 가하고 있다. 이는 글로벌 기술 기업 간의 AI 경쟁이 심화되고 있음을 시사한다.</description>
     </item>
   </channel>
 </rss>
