@@ -218,7 +218,7 @@ export default function IlloWebClient() {
         {view === "features" && <FeatureManager enabled={enabled} onToggle={toggleFeature} onView={goView} />}
         {view === "image" && <BasicGen kind="image" free={free} quota={quota} setQuota={setQuota} />}
         {view === "video" && <BasicGen kind="video" free={free} quota={quota} setQuota={setQuota} />}
-        {view === "builder" && <FlowBuilder />}
+        {view === "builder" && <FlowBuilder runAI={runAI} userKey={session?.user?.email || "local"} />}
         {view === "catalog" && <ApiCatalog />}
         {view === "docs" && <Workspace userKey={session?.user?.email || "local"} />}
         {view === "history" && <HistoryView onBack={() => goView("home")} />}
@@ -694,7 +694,10 @@ function ctrlPoint(p: { x: number; y: number }, side: Side, k = 64) {
 }
 const SIDES: Side[] = ["top", "right", "bottom", "left"];
 
-function FlowBuilder() {
+function FlowBuilder({ runAI, userKey }: {
+  runAI: (p: string, featureId: string, rawInput?: string) => Promise<{ text: string }>;
+  userKey: string;
+}) {
   const [flows, setFlows] = useState<UserFlow[]>([]);
   const [cur, setCur] = useState<UserFlow | null>(null);
   const [connectFrom, setConnectFrom] = useState<{ id: string; side: Side } | null>(null);
@@ -702,6 +705,11 @@ function FlowBuilder() {
   const [pickModelFor, setPickModelFor] = useState<FlowNode | null>(null);
   const [naming, setNaming] = useState<UserFlow | null>(null);   // 이름 입력 단계
   const [showGuide, setShowGuide] = useState(true);              // 우측 하단 가이드
+  const [command, setCommand] = useState("");                    // 최상단 명령
+  const [running, setRunning] = useState(false);
+  const [runNodeId, setRunNodeId] = useState<string | null>(null);
+  const [runErr, setRunErr] = useState("");
+  const [runResult, setRunResult] = useState<{ final: string; steps: { title: string; icon: string; out: string }[]; deliver?: { channel: string; content: string } } | null>(null);
   const canvasRef = useRef<HTMLDivElement>(null);
   const drag = useRef<{ id: string; dx: number; dy: number } | null>(null);
 
@@ -725,6 +733,76 @@ function FlowBuilder() {
   };
   function updateNode(id: string, patch: Partial<FlowNode>) {
     setCur((c) => (c ? { ...c, nodes: c.nodes.map((n) => (n.id === id ? { ...n, ...patch } : n)) } : c));
+  }
+
+  // ── 워크플로우 실행 — 최상단 명령 → 노드 순서대로 AI 처리 → 결과 ──
+  async function runFlow() {
+    if (!cur || running) return;
+    const nodes = cur.nodes, links = cur.links;
+    if (nodes.length === 0) { setRunErr("노드를 먼저 추가하세요."); return; }
+    if (!command.trim()) { setRunErr("맨 위에 요청(명령)을 입력하세요."); return; }
+    setRunErr(""); setRunning(true); setRunResult(null);
+    try {
+      // 위상정렬(Kahn) — 연결 순서대로. 링크 없으면 배열 순서.
+      const indeg = new Map(nodes.map((n) => [n.id, 0] as [string, number]));
+      links.forEach((l) => indeg.set(l.to, (indeg.get(l.to) || 0) + 1));
+      const outAdj = new Map(nodes.map((n) => [n.id, [] as string[]]));
+      const inAdj = new Map(nodes.map((n) => [n.id, [] as string[]]));
+      links.forEach((l) => { outAdj.get(l.from)?.push(l.to); inAdj.get(l.to)?.push(l.from); });
+      const q = nodes.filter((n) => (indeg.get(n.id) || 0) === 0).map((n) => n.id);
+      const order: string[] = [];
+      while (q.length) {
+        const id = q.shift() as string;
+        order.push(id);
+        (outAdj.get(id) || []).forEach((t) => { indeg.set(t, (indeg.get(t) || 0) - 1); if ((indeg.get(t) || 0) === 0) q.push(t); });
+      }
+      nodes.forEach((n) => { if (!order.includes(n.id)) order.push(n.id); }); // 사이클 누락분 보충
+
+      const byId = new Map(nodes.map((n) => [n.id, n]));
+      const outputs = new Map<string, string>();
+      const steps: { title: string; icon: string; out: string }[] = [];
+      let deliver: { channel: string; content: string } | undefined;
+
+      for (const id of order) {
+        const node = byId.get(id);
+        if (!node) continue;
+        setRunNodeId(id);
+        const incoming = (inAdj.get(id) || []).map((f) => outputs.get(f)).filter(Boolean) as string[];
+        const inputText = incoming.length ? incoming.join("\n\n---\n\n") : command.trim();
+        if (node.kind === "input") { outputs.set(id, inputText); continue; }
+        if (node.kind === "deliver") {
+          const channel = node.variant || "이메일";
+          outputs.set(id, inputText);
+          deliver = { channel, content: inputText };
+          steps.push({ title: node.title, icon: node.icon, out: `📤 전송 준비 완료 → ${channel}` });
+          continue;
+        }
+        const task = (node.instruction || node.detail || node.title).trim();
+        const hint = node.variant ? ` (선호 모델: ${node.variant})` : "";
+        const prompt =
+          `당신은 워크플로우의 '${node.title}' 단계입니다(역할: ${node.role})${hint}.\n` +
+          `[이 단계에서 할 일]\n${task}\n\n[이전 단계에서 받은 내용]\n${inputText}\n\n` +
+          `받은 내용을 바탕으로 이 단계의 결과만 깔끔하게 작성하세요.`;
+        const r = await runAI(prompt, "assistant");
+        const out = (r?.text || "").trim();
+        outputs.set(id, out);
+        steps.push({ title: node.title, icon: node.icon, out });
+      }
+      setRunNodeId(null);
+      const lastId = order[order.length - 1];
+      const final = deliver?.content || outputs.get(lastId) || steps[steps.length - 1]?.out || "";
+      setRunResult({ final, steps, deliver });
+      // 좌측 📁 자료함에 자동 저장
+      const isHtml = /<html|<!doctype|<body|<div|<p[ >]|<section/i.test(final);
+      const html = isHtml ? final
+        : `<pre style="white-space:pre-wrap;font-family:system-ui,sans-serif;padding:20px;line-height:1.7;color:#222">${final.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")}</pre>`;
+      saveDoc(userKey, { id: "", name: `${cur.name || "워크플로우"} 결과 · ${new Date().toLocaleString("ko-KR")}`, dept: "", html });
+    } catch (e) {
+      const raw = e instanceof Error ? e.message : String(e);
+      if (/FREE_QUOTA_EXCEEDED/.test(raw)) setRunErr("오늘 무료 한도(하루 50회)를 다 썼어요. 설정에서 내 키를 넣으면 무제한이에요.");
+      else if (/LOGIN_REQUIRED/.test(raw)) setRunErr("로그인이 필요합니다.");
+      else setRunErr(raw.slice(0, 180));
+    } finally { setRunning(false); setRunNodeId(null); }
   }
 
   function addNode(opt: FlowStepDetail) {
@@ -888,6 +966,43 @@ function FlowBuilder() {
   // ── 편집 캔버스 화면 ──
   return (
     <div className="flex flex-col h-full min-h-0">
+      {/* 실행 결과 모달 */}
+      {runResult && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setRunResult(null)}>
+          <div className="w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-2xl border border-neutral-200 dark:border-zinc-800 shadow-xl p-5 max-h-[88vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-bold text-neutral-900 dark:text-white">✅ 실행 결과</h3>
+              <button onClick={() => setRunResult(null)} className="text-neutral-400 hover:text-rose-500"><X className="w-4 h-4" /></button>
+            </div>
+            <div className="overflow-y-auto flex-1 space-y-2">
+              {runResult.steps.map((s, i) => (
+                <details key={i} className="rounded-lg border border-neutral-200 dark:border-zinc-800">
+                  <summary className="cursor-pointer px-3 py-2 text-[12.5px] font-bold text-neutral-700 dark:text-neutral-200">{i + 1}. {s.icon} {s.title}</summary>
+                  <div className="px-3 pb-2.5 text-[12px] text-neutral-600 dark:text-neutral-300 whitespace-pre-wrap break-words leading-relaxed">{s.out}</div>
+                </details>
+              ))}
+              <div className="rounded-xl border border-[#F9954E] bg-[#FFF9F3] dark:bg-orange-950/10 p-3 mt-1">
+                <div className="text-[11px] font-bold text-[#E8832E] mb-1">최종 결과</div>
+                <div className="text-[13px] text-neutral-800 dark:text-neutral-100 whitespace-pre-wrap break-words leading-relaxed max-h-[40vh] overflow-y-auto">{runResult.final}</div>
+              </div>
+            </div>
+            <div className="flex items-center gap-2 mt-3 flex-wrap">
+              <span className="text-[11px] text-neutral-400 mr-auto">📁 자료함에 자동 저장됨</span>
+              <button onClick={() => { try { navigator.clipboard?.writeText(runResult.final); } catch {} }} className="text-[12px] font-bold px-3 py-2 rounded-lg border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-300 hover:border-[#F9954E]">복사</button>
+              {runResult.deliver && (
+                <button onClick={() => {
+                  const d = runResult.deliver;
+                  if (!d) return;
+                  if (/이메일|email/i.test(d.channel)) { window.location.href = `mailto:?subject=${encodeURIComponent((cur?.name || "워크일로") + " 결과")}&body=${encodeURIComponent(d.content)}`; }
+                  else { alert(`${d.channel} 전송은 채널 연결 후 자동 발송됩니다. 지금은 복사/자료함으로 보내주세요.`); }
+                }} className="text-[12px] font-bold px-3 py-2 rounded-lg bg-[#F9954E] text-white hover:bg-[#E8832E] flex items-center gap-1"><Send className="w-3.5 h-3.5" /> {runResult.deliver.channel}(으)로 전송</button>
+              )}
+              <button onClick={() => setRunResult(null)} className="text-[12px] px-3 py-2 text-neutral-500">닫기</button>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* 노드 AI·모델 선택 모달 — 종류에 맞는 AI + 실제 모델 버전, 설명과 함께 */}
       {pickModelFor && (() => {
         const slot = slotForNode(pickModelFor);
@@ -946,6 +1061,21 @@ function FlowBuilder() {
         <button onClick={save} className="text-[12px] font-bold px-3.5 py-1.5 rounded-lg bg-[#F9954E] text-white hover:bg-[#E8832E]">저장</button>
       </div>
 
+      {/* 최상단 명령 바 — 요청 입력하고 실행 */}
+      <div className="shrink-0 px-4 py-2.5 border-b border-neutral-200 dark:border-zinc-800 bg-neutral-50 dark:bg-zinc-950">
+        <div className="flex items-center gap-2">
+          <input value={command} onChange={(e) => setCommand(e.target.value)}
+            onKeyDown={(e) => { if (e.key === "Enter" && !running) runFlow(); }}
+            placeholder="이 워크플로우에 요청을 입력하세요… (예: 6월 신제품으로 블로그 글 써줘)"
+            className="flex-1 min-w-0 px-3.5 py-2 rounded-xl border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm text-neutral-900 dark:text-white focus:outline-none focus:border-[#F9954E]" />
+          <button onClick={runFlow} disabled={running}
+            className="shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-white text-[13px] font-extrabold transition-colors disabled:opacity-50">
+            {running ? <><Loader2 className="w-4 h-4 animate-spin" /> 실행 중…</> : <>▶ 실행</>}
+          </button>
+        </div>
+        {runErr && <p className="text-[12px] text-rose-500 mt-1.5">{runErr}</p>}
+      </div>
+
       <div className="relative flex flex-1 min-h-0">
         {/* 노드 팔레트 */}
         <div className="w-[150px] shrink-0 border-r border-neutral-200 dark:border-zinc-800 bg-neutral-50 dark:bg-zinc-950 overflow-y-auto p-2.5">
@@ -993,7 +1123,7 @@ function FlowBuilder() {
             {/* 노드 */}
             {cur.nodes.map((n) => (
               <div key={n.id} onMouseDown={(e) => onNodeDown(e, n)}
-                className={"absolute rounded-xl border-2 shadow-sm select-none cursor-grab active:cursor-grabbing flex flex-col overflow-hidden " + nodeTint(n.kind) + (connectFrom?.id === n.id ? " ring-2 ring-[#F9954E]" : "")}
+                className={"absolute rounded-xl border-2 shadow-sm select-none cursor-grab active:cursor-grabbing flex flex-col overflow-hidden " + nodeTint(n.kind) + (connectFrom?.id === n.id ? " ring-2 ring-[#F9954E]" : "") + (runNodeId === n.id ? " ring-2 ring-[#F9954E] animate-pulse" : "")}
                 style={{ left: n.x, top: n.y, width: NODE_W, height: NODE_H }}>
                 {/* 4면 연결 핸들 — 받기·내보내기 공용. 한 면에서 여러 갈래로 연결 가능 */}
                 {SIDES.map((sd) => {
