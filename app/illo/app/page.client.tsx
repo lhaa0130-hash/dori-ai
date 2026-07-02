@@ -771,7 +771,9 @@ function FlowBuilder({ runAI, userKey }: {
         const inputText = incoming.length ? incoming.join("\n\n---\n\n") : command.trim();
         if (node.kind === "input") { outputs.set(id, inputText); continue; }
         if (node.kind === "deliver") {
-          const channel = node.variant || "이메일";
+          // 전송 채널 = 선택한 전송 옵션(이메일/카카오톡/텔레그램). 자동/미선택은 이메일로.
+          const ch = modelLabel(node, node.model, node.variant);
+          const channel = !ch || ch === "—" || /자동/.test(ch) ? "이메일" : ch;
           outputs.set(id, inputText);
           deliver = { channel, content: inputText };
           steps.push({ title: node.title, icon: node.icon, out: `📤 전송 준비 완료 → ${channel}` });
