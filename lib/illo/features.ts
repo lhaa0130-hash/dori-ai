@@ -23,6 +23,7 @@ const CORE_FEATURES: IlloFeature[] = [
   { id: 'home',      label: '홈',          icon: '🏠', group: '핵심', desc: '오늘 할 일과 내 도구', kind: 'core', core: true, released: true },
   { id: 'builder',   label: '워크플로우',   icon: '🛠️', group: '핵심', desc: '나만의 AI 자동화를 직접 설계', kind: 'core', core: true, released: true },
   { id: 'catalog',   label: '가이드',      icon: '📖', group: '핵심', desc: '어떤 AI/API가 있고, 키는 어디서 받는지 안내', kind: 'core', core: true, released: true },
+  { id: 'docs',      label: '자료함',      icon: '📁', group: '핵심', desc: 'HTML 문서 저장·보기 + 내 부서(폴더)', kind: 'core', core: true, released: true },
   { id: 'assistant', label: '일리',        icon: '🐿️', group: '핵심', desc: 'AI 비서 일리 — 무엇이든 묻고, API 조합도 안내받기', kind: 'core', core: true, released: true },
   // 이미지/영상 생성은 사이드바에서 제외(숨김) — 워크플로우 노드로 대체
   { id: 'image',     label: '이미지 생성',  icon: '🎨', group: '핵심', desc: '글로 설명하면 이미지 생성', kind: 'core', released: false },
@@ -33,7 +34,7 @@ const CORE_FEATURES: IlloFeature[] = [
 ];
 
 // 사이드바에서 핵심 메뉴가 항상 이 순서로 보이도록 고정.
-export const CORE_SIDEBAR_ORDER = ['home', 'catalog', 'assistant', 'builder', 'settings'];
+export const CORE_SIDEBAR_ORDER = ['home', 'catalog', 'assistant', 'builder', 'docs', 'settings'];
 
 // ── AI 자동화 도구 ── ★ 여러 AI를 단계로 엮어야 의미 있는 기능만 유지(단일 AI 도구는 제거).
 // 정의 순서는 자유 — 아래에서 라벨 가나다순으로 자동 정렬되어 노출됨.

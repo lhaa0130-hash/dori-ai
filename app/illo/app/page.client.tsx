@@ -26,6 +26,7 @@ import {
 import { FLOW_TEMPLATES, templateToFlow } from "@/lib/illo/flowTemplates";
 import { API_CATALOG, COST_TIPS, ROUTER_TIP, ROLE_LABEL, type ApiEntry } from "@/lib/illo/apiCatalog";
 import { SLOT_LABEL, slotForNode, optionsForNode, defaultModelFor, modelLabel } from "@/lib/illo/nodeModels";
+import { listDocs, saveDoc, deleteDoc, listDepts, saveDept, deleteDept, DEPT_EMOJIS, type SavedDoc, type Dept } from "@/lib/illo/workspace";
 import { PLANS } from "@/lib/illo/plan";
 import { getTone, saveTone } from "@/lib/illo/tone";
 import ProjectTopBar from "@/components/layout/ProjectTopBar";
@@ -219,6 +220,7 @@ export default function IlloWebClient() {
         {view === "video" && <BasicGen kind="video" free={free} quota={quota} setQuota={setQuota} />}
         {view === "builder" && <FlowBuilder />}
         {view === "catalog" && <ApiCatalog />}
+        {view === "docs" && <Workspace userKey={session?.user?.email || "local"} />}
         {view === "history" && <HistoryView onBack={() => goView("home")} />}
         {view === "settings" && <Settings keyVal={key} free={free} onShowKey={() => setShowKey(true)} onRemoveKey={removeKey} onLogout={logout} userName={userName} userEmail={session?.user?.email || ""} />}
         {tool && <ToolView key={view} tool={tool} runAI={runAI} free={free} quota={quota} onShowKey={() => setShowKey(true)} onBack={() => goView("home")} />}
@@ -1054,6 +1056,150 @@ function FlowBuilder() {
         </div>
       </div>
     </div>
+  );
+}
+
+/* ─────────────────── 자료함 (HTML 문서 + 커스텀 부서, 회원별) ─────────────────── */
+function Workspace({ userKey }: { userKey: string }) {
+  const [docs, setDocs] = useState<SavedDoc[]>([]);
+  const [depts, setDepts] = useState<Dept[]>([]);
+  const [sel, setSel] = useState<string>("all");
+  const [editing, setEditing] = useState<SavedDoc | null>(null);
+  const [viewing, setViewing] = useState<SavedDoc | null>(null);
+  const [addDept, setAddDept] = useState(false);
+  const [newDeptName, setNewDeptName] = useState("");
+  const [newDeptEmoji, setNewDeptEmoji] = useState(DEPT_EMOJIS[0]);
+
+  useEffect(() => { setDocs(listDocs(userKey)); setDepts(listDepts(userKey)); }, [userKey]);
+  const refresh = () => { setDocs(listDocs(userKey)); setDepts(listDepts(userKey)); };
+
+  const deptName = (id: string) => (id === "" ? "미분류" : depts.find((d) => d.id === id)?.name || "미분류");
+  const deptEmoji = (id: string) => (id === "" ? "🗂️" : depts.find((d) => d.id === id)?.emoji || "🏢");
+  const shown = sel === "all" ? docs : docs.filter((d) => d.dept === sel);
+
+  const newDoc = () => setEditing({ id: "", name: "", dept: sel === "all" ? "" : sel, html: "", updatedAt: "" });
+  const saveEditing = () => {
+    if (!editing) return;
+    if (!editing.name.trim()) { alert("문서 이름을 입력하세요."); return; }
+    saveDoc(userKey, { id: editing.id, name: editing.name.trim(), dept: editing.dept, html: editing.html });
+    setEditing(null); refresh();
+  };
+  const removeDoc = (id: string) => { deleteDoc(userKey, id); setViewing(null); setEditing(null); refresh(); };
+  const addDeptDo = () => {
+    if (!newDeptName.trim()) return;
+    saveDept(userKey, { emoji: newDeptEmoji, name: newDeptName.trim() });
+    setNewDeptName(""); setNewDeptEmoji(DEPT_EMOJIS[0]); setAddDept(false); refresh();
+  };
+  const removeDept = (id: string) => {
+    if (!confirm("이 부서를 삭제할까요? 안의 문서는 '미분류'로 옮겨져요.")) return;
+    deleteDept(userKey, id); if (sel === id) setSel("all"); refresh();
+  };
+
+  const chip = (active: boolean) =>
+    "px-3 py-1.5 rounded-lg text-[13px] font-bold border transition-colors " +
+    (active ? "border-[#F9954E] bg-[#FFF5EB] text-[#E8832E] dark:bg-orange-950/20" : "border-neutral-200 dark:border-zinc-700 text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E]");
+
+  return (
+    <ViewScroll>
+      <div className="flex items-start justify-between gap-3 mb-1">
+        <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white">📁 자료함</h1>
+        <button onClick={newDoc} className="shrink-0 flex items-center gap-1.5 text-sm font-bold px-3.5 py-2 rounded-xl bg-[#F9954E] text-white hover:bg-[#E8832E] transition-colors"><Plus className="w-4 h-4" />새 문서</button>
+      </div>
+      <p className="text-[13px] text-neutral-400 dark:text-neutral-500 mb-6 break-keep">HTML을 저장해두고 언제든 열어봐요. <b>부서</b>를 만들어 사업체처럼 정리할 수 있어요. <span className="text-neutral-400">(이 계정 전용)</span></p>
+
+      {/* 부서 폴더 */}
+      <div className="flex flex-wrap items-center gap-2 mb-6">
+        <button onClick={() => setSel("all")} className={chip(sel === "all")}>전체 {docs.length}</button>
+        <button onClick={() => setSel("")} className={chip(sel === "")}>🗂️ 미분류</button>
+        {depts.map((d) => (
+          <span key={d.id} className={"group inline-flex items-center gap-1 " + chip(sel === d.id)}>
+            <button onClick={() => setSel(d.id)}>{d.emoji} {d.name}</button>
+            <button onClick={() => removeDept(d.id)} title="부서 삭제" className="text-neutral-300 hover:text-rose-500"><X className="w-3 h-3" /></button>
+          </span>
+        ))}
+        {addDept ? (
+          <span className="inline-flex items-center gap-1.5 px-2 py-1 rounded-lg border border-[#F9954E] bg-white dark:bg-zinc-900">
+            <select value={newDeptEmoji} onChange={(e) => setNewDeptEmoji(e.target.value)} className="bg-transparent text-[13px] focus:outline-none">
+              {DEPT_EMOJIS.map((e) => <option key={e} value={e}>{e}</option>)}
+            </select>
+            <input autoFocus value={newDeptName} onChange={(e) => setNewDeptName(e.target.value)}
+              onKeyDown={(e) => { if (e.key === "Enter") addDeptDo(); if (e.key === "Escape") setAddDept(false); }}
+              placeholder="부서 이름" className="w-24 bg-transparent text-[13px] focus:outline-none text-neutral-900 dark:text-white" />
+            <button onClick={addDeptDo} className="text-[12px] font-bold text-[#E8832E]">추가</button>
+          </span>
+        ) : (
+          <button onClick={() => setAddDept(true)} className="px-3 py-1.5 rounded-lg text-[13px] font-bold border border-dashed border-neutral-300 dark:border-zinc-600 text-neutral-400 hover:border-[#F9954E] hover:text-[#E8832E]">+ 부서 만들기</button>
+        )}
+      </div>
+
+      {/* 문서 목록 */}
+      {shown.length === 0 ? (
+        <div className="rounded-2xl border border-dashed border-neutral-300 dark:border-zinc-700 text-center py-14 text-neutral-400">
+          <div className="text-3xl mb-2">📄</div>
+          <p className="text-[13px] break-keep">저장된 문서가 없어요. <button onClick={newDoc} className="font-bold text-[#E8832E] hover:underline">새 문서</button>로 HTML을 저장해보세요.</p>
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          {shown.map((d) => (
+            <div key={d.id} className="rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 hover:border-[#F9954E]/50 transition-colors">
+              <div className="flex items-center justify-between gap-2">
+                <button onClick={() => setViewing(d)} className="min-w-0 flex-1 text-left">
+                  <div className="text-sm font-bold text-neutral-900 dark:text-white truncate">{d.name}</div>
+                  <div className="text-[11px] text-neutral-400 mt-0.5">{deptEmoji(d.dept)} {deptName(d.dept)} · {(d.html.length / 1024).toFixed(1)}KB</div>
+                </button>
+                <button onClick={() => { deleteDoc(userKey, d.id); refresh(); }} className="shrink-0 text-neutral-300 hover:text-rose-500"><X className="w-4 h-4" /></button>
+              </div>
+              <div className="flex gap-3 mt-3">
+                <button onClick={() => setViewing(d)} className="text-[12px] font-bold text-[#E8832E] hover:underline">열어보기 →</button>
+                <button onClick={() => setEditing(d)} className="text-[12px] text-neutral-400 hover:text-[#E8832E]">편집</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* 편집/작성 모달 */}
+      {editing && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setEditing(null)}>
+          <div className="w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-2xl border border-neutral-200 dark:border-zinc-800 shadow-xl p-5 max-h-[88vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between mb-3">
+              <h3 className="text-sm font-bold text-neutral-900 dark:text-white">{editing.id ? "문서 편집" : "새 HTML 문서"}</h3>
+              <button onClick={() => setEditing(null)} className="text-neutral-400 hover:text-rose-500"><X className="w-4 h-4" /></button>
+            </div>
+            <div className="flex gap-2 mb-3">
+              <input value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} placeholder="문서 이름 (예: 이벤트 랜딩)" className="flex-1 px-3 py-2 rounded-lg border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm text-neutral-900 dark:text-white focus:outline-none focus:border-[#F9954E]" />
+              <select value={editing.dept} onChange={(e) => setEditing({ ...editing, dept: e.target.value })} className="px-3 py-2 rounded-lg border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm focus:outline-none">
+                <option value="">미분류</option>
+                {depts.map((d) => <option key={d.id} value={d.id}>{d.emoji} {d.name}</option>)}
+              </select>
+            </div>
+            <textarea value={editing.html} onChange={(e) => setEditing({ ...editing, html: e.target.value })} placeholder="<!DOCTYPE html> … HTML을 붙여넣으세요" spellCheck={false}
+              className="flex-1 min-h-[240px] w-full px-3 py-2 rounded-lg border border-neutral-200 dark:border-zinc-700 bg-neutral-50 dark:bg-zinc-950 text-[12px] font-mono text-neutral-800 dark:text-neutral-200 focus:outline-none focus:border-[#F9954E] resize-none" />
+            <div className="flex items-center justify-end gap-2 mt-3">
+              {editing.id && <button onClick={() => removeDoc(editing.id)} className="mr-auto text-[13px] text-neutral-400 hover:text-rose-500">삭제</button>}
+              <button onClick={() => setEditing(null)} className="text-[13px] px-3 py-2 text-neutral-500">취소</button>
+              <button onClick={saveEditing} className="text-[13px] font-bold px-4 py-2 rounded-lg bg-[#F9954E] text-white hover:bg-[#E8832E]">저장</button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* 미리보기 모달 */}
+      {viewing && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setViewing(null)}>
+          <div className="w-full max-w-4xl h-[86vh] bg-white dark:bg-zinc-900 rounded-2xl border border-neutral-200 dark:border-zinc-800 shadow-xl flex flex-col overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center gap-2 px-4 py-2.5 border-b border-neutral-200 dark:border-zinc-800 shrink-0">
+              <span className="text-sm font-bold text-neutral-900 dark:text-white truncate">{viewing.name}</span>
+              <span className="text-[11px] text-neutral-400 shrink-0">{deptEmoji(viewing.dept)} {deptName(viewing.dept)}</span>
+              <button onClick={() => downloadText(viewing.name + ".html", viewing.html)} className="ml-auto shrink-0 text-[12px] font-bold text-[#E8832E] flex items-center gap-1"><Download className="w-3.5 h-3.5" />다운로드</button>
+              <button onClick={() => { const d = viewing; setViewing(null); setEditing(d); }} className="shrink-0 text-[12px] text-neutral-400 hover:text-[#E8832E]">편집</button>
+              <button onClick={() => setViewing(null)} className="shrink-0 text-neutral-400 hover:text-rose-500"><X className="w-4 h-4" /></button>
+            </div>
+            <iframe srcDoc={viewing.html} sandbox="allow-scripts allow-popups allow-forms" title={viewing.name} className="flex-1 w-full bg-white" />
+          </div>
+        </div>
+      )}
+    </ViewScroll>
   );
 }
 
