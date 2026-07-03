@@ -6,7 +6,15 @@
     <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Fri, 03 Jul 2026 02:00:14 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 03 Jul 2026 03:00:14 GMT</lastBuildDate>
+    <item>
+      <title>OpenAI 저가요금제·SK하이닉스 EUV·Figure AI: AI 돈길이 모델에서 물리 인프라로 넓어진다</title>
+      <link>https://dori-ai.com/insight/article/report-9</link>
+      <guid isPermaLink="true">https://dori-ai.com/insight/article/report-9</guid>
+      <category>리포트</category>
+      <pubDate>Fri, 03 Jul 2026 02:03:18 GMT</pubDate>
+      <description>이번 주 AI 산업의 핵심은 모델 성능 경쟁보다 비용, 인프라, 표준, 로봇 상용화로 돈이 이동하고 있다는 점입니다. 저가형 AI 서비스, HBM 생산설비, 피지컬 AI 투자가 함께 움직이며 다음 성장 구간의 주도권을 가르고 있습니다.</description>
+    </item>
     <item>
       <title>생성형 AI 종류 총정리: 텍스트·이미지·영상·음성·코딩 AI 한눈에 보기</title>
       <link>https://dori-ai.com/insight/article/curation-15</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Fri, 26 Jun 2026 11:00:19 GMT</pubDate>
       <description>Netris가 a16z로부터 150억 원을 유치하여 AI 네오클라우드 운영을 가속화하려는 비전을 밝혔다.</description>
-    </item>
-    <item>
-      <title>ON 반도체, Synaptics 인수로 물리적 AI 혁신 가속화</title>
-      <link>https://dori-ai.com/insight/article/trend-172</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-172</guid>
-      <category>트렌드</category>
-      <pubDate>Fri, 26 Jun 2026 09:00:17 GMT</pubDate>
-      <description>ON Semiconductor가 Synaptics를 70억 달러에 인수하며 물리적 AI 기술에 더욱 집중할 계획을 밝혔습니다.</description>
     </item>
   </channel>
 </rss>
