@@ -35,7 +35,7 @@ function getRawMarkdown(slug: string): string {
   return '';
 }
 
-const SITE_URL = "https://dori-ai.com";
+const SITE_URL = "https://illo.im";
 
 // ✅ 아티클별 개별 메타데이터 생성 (SEO 핵심)
 export async function generateMetadata(

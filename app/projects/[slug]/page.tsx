@@ -4,7 +4,7 @@ import { ArrowLeft, ArrowRight } from "lucide-react";
 import { PROJECTS, getProjectBySlug } from "@/constants/projectsData";
 import ProjectSuggestion from "@/components/projects/ProjectSuggestion";
 
-const SITE_URL = "https://dori-ai.com";
+const SITE_URL = "https://illo.im";
 
 export function generateStaticParams() {
   return PROJECTS.map((p) => ({ slug: p.slug }));

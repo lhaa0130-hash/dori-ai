@@ -12,7 +12,7 @@ import path from "path";
 
 export const dynamic = "force-static";
 
-const baseUrl = "https://dori-ai.com";
+const baseUrl = "https://illo.im";
 
 function getAnimalNos(): string[] {
   try {

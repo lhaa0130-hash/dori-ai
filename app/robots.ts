@@ -1,7 +1,7 @@
 import { MetadataRoute } from "next";
 
 export default function robots(): MetadataRoute.Robots {
-  const baseUrl = "https://dori-ai.com";
+  const baseUrl = "https://illo.im";
 
   // 색인 제외 경로 (한 곳에서 관리)
   const disallow = [

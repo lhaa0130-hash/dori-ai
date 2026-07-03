@@ -188,7 +188,7 @@ export const ILLO_TOOLS: IlloTool[] = [
     icon: '🧰',
     desc: '홈페이지 주소(URL)만 넣으면 직접 분석해 점수·문제·수정안·실행계획까지',
     inputLabel: '홈페이지 주소(URL) 또는 현재 내용 붙여넣기',
-    placeholder: '예) https://dori-ai.com  (또는 현재 홈페이지 문구를 붙여넣어 주세요)',
+    placeholder: '예) https://illo.im  (또는 현재 홈페이지 문구를 붙여넣어 주세요)',
     multiline: true,
     aspects: ['문의·구매 늘리기', '검색 노출(SEO)', '첫인상 개선', '문구 개선', '구조 개선', '모바일 최적화', '신뢰요소 추가', '속도/사용성'],
     defaultAspects: ['문의·구매 늘리기', '검색 노출(SEO)'],

@@ -1,7 +1,7 @@
 import { createMetadata } from "@/lib/seo";
 import AiModelsClient from "./AiModelsClient";
 
-const SITE = "https://dori-ai.com";
+const SITE = "https://illo.im";
 
 export const metadata = createMetadata({
   title: "AI 모델 가격 비교 · 실시간 비용 계산기",

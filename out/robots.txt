@@ -39,4 +39,4 @@ Disallow: /
 User-Agent: anthropic-ai
 Disallow: /
 
-Sitemap: https://dori-ai.com/sitemap.xml
+Sitemap: https://illo.im/sitemap.xml

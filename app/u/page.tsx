@@ -1,6 +1,6 @@
 "use client";
 
-// 회원 AI 호스팅 페이지 — dori-ai.com/u/<handle>/<slug>
+// 회원 AI 호스팅 페이지 — illo.im/u/<handle>/<slug>
 // 정적 export + Cloudflare _redirects(/u/* → /u.html 200)로 어떤 경로든 이 페이지가 받아
 // window.location 경로를 파싱해 Firestore에서 해당 회원의 AI 소개페이지를 그린다.
 // (개발/폴백용으로 쿼리 ?h=<handle>&a=<slug> 도 지원)

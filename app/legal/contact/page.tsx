@@ -4,7 +4,7 @@ import LegalPageLayout from "../components/LegalPageLayout";
 export const metadata: Metadata = {
   title: "문의하기 | DORI-AI",
   description: "DORI-AI에 제휴, 광고, 콘텐츠 제보, 오류 신고 등 문의를 남겨주세요.",
-  alternates: { canonical: "https://dori-ai.com/legal/contact" },
+  alternates: { canonical: "https://illo.im/legal/contact" },
 };
 
 export default function ContactPage() {

@@ -57,7 +57,7 @@ export type BgStyle = string; // 배경 프리셋 id (프로필 페이지 BG_PRE
 export interface Profile {
   uid: string;
   name: string;
-  handle: string;       // 공유 URL용 영문 핸들 (dori-ai.com/u/<handle>) — 미설정 시 ""
+  handle: string;       // 공유 URL용 영문 핸들 (illo.im/u/<handle>) — 미설정 시 ""
   photoURL?: string;
   bio: string;          // 자기소개
   statusMsg: string;    // 상태메시지(한 줄)
@@ -86,7 +86,7 @@ export interface Profile {
 export interface DiaryEntry { at: number; text: string; mood: string; }
 // 심리테스트 결과 한 칸(코지홈 뱃지) — 검사별 최신 1개 유지
 export interface PsychResult { at: number; testId: string; title: string; label: string; sub: string; emoji: string; }
-// 내가 만든 AI 한 칸 — dori-ai.com/u/<handle>/<slug> 에 자동 호스팅되는 미니 소개페이지
+// 내가 만든 AI 한 칸 — illo.im/u/<handle>/<slug> 에 자동 호스팅되는 미니 소개페이지
 export interface AIShowcase {
   at: number;
   id: string;          // 안정 식별자(생성 시각 base36) — 공유 링크/수정/삭제 매칭용
@@ -330,7 +330,7 @@ export async function deleteDiaryEntry(at: number): Promise<boolean> {
 }
 
 // ─── 내가 만든 AI 자랑 — 본인 users/{uid}.myAIs 배열(규칙 변경 불필요) ───
-//   각 항목은 dori-ai.com/u/<handle>/<slug> 에 자동 호스팅되는 소개 페이지를 가진다.
+//   각 항목은 illo.im/u/<handle>/<slug> 에 자동 호스팅되는 소개 페이지를 가진다.
 function normUrl(u: string): string {
   let v = (u || "").trim();
   if (v && !/^https?:\/\//i.test(v)) v = `https://${v}`;

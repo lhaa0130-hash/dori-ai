@@ -2,7 +2,7 @@ import { createMetadata } from "@/lib/seo";
 import { AI_NEWS_CATEGORIES } from "@/constants/aiNewsData";
 import AiNewsClient from "./AiNewsClient";
 
-const SITE = "https://dori-ai.com";
+const SITE = "https://illo.im";
 
 export const metadata = createMetadata({
   title: "AI 정보 사이트 총정리 — 뉴스·커뮤니티·뉴스레터·리더보드",

@@ -3,7 +3,7 @@ import { getAllCurations } from "@/lib/curation";
 import { mapVideoCategory } from "@/constants/videoCategories";
 import VideoClient, { type VideoItem } from "./VideoClient";
 
-const SITE = "https://dori-ai.com";
+const SITE = "https://illo.im";
 
 export const metadata = createMetadata({
   title: "AI 영상 모음 — 카테고리별 추천 영상",

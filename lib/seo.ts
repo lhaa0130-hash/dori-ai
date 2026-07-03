@@ -1,8 +1,8 @@
 import { Metadata } from "next";
 
 const SITE_NAME = "DORI-AI";
-const SITE_URL = "https://dori-ai.com";
-const DEFAULT_OG_IMAGE = "https://dori-ai.com/og-default.png";
+const SITE_URL = "https://illo.im";
+const DEFAULT_OG_IMAGE = "https://illo.im/og-default.png";
 
 interface CreateMetadataProps {
   title: string;

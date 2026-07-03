@@ -2,327 +2,327 @@
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
     <title>DORI-AI — AI 트렌드·큐레이션·분석·리포트</title>
-    <link>https://dori-ai.com</link>
-    <atom:link href="https://dori-ai.com/feed.xml" rel="self" type="application/rss+xml" />
+    <link>https://illo.im</link>
+    <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Fri, 03 Jul 2026 08:00:16 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 03 Jul 2026 08:44:56 GMT</lastBuildDate>
     <item>
       <title>OpenAI 저가요금제·SK하이닉스 EUV·Figure AI: AI 돈길이 모델에서 물리 인프라로 넓어진다</title>
-      <link>https://dori-ai.com/insight/article/report-9</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/report-9</guid>
+      <link>https://illo.im/insight/article/report-9</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/report-9</guid>
       <category>리포트</category>
       <pubDate>Fri, 03 Jul 2026 02:03:18 GMT</pubDate>
       <description>이번 주 AI 산업의 핵심은 모델 성능 경쟁보다 비용, 인프라, 표준, 로봇 상용화로 돈이 이동하고 있다는 점입니다. 저가형 AI 서비스, HBM 생산설비, 피지컬 AI 투자가 함께 움직이며 다음 성장 구간의 주도권을 가르고 있습니다.</description>
     </item>
     <item>
       <title>생성형 AI 종류 총정리: 텍스트·이미지·영상·음성·코딩 AI 한눈에 보기</title>
-      <link>https://dori-ai.com/insight/article/curation-15</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/curation-15</guid>
+      <link>https://illo.im/insight/article/curation-15</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/curation-15</guid>
       <category>큐레이션</category>
       <pubDate>Thu, 02 Jul 2026 23:01:57 GMT</pubDate>
       <description>생성형 AI의 정의부터 텍스트, 이미지, 영상, 음성, 코딩, 에이전트형 AI까지 종류별 차이와 대표 도구, 활용처, 선택 기준을 한 번에 정리했습니다.</description>
     </item>
     <item>
       <title>[AI 에이전트] AI 에이전트의 오류 분석과 해결 방법</title>
-      <link>https://dori-ai.com/insight/article/video-44</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-44</guid>
+      <link>https://illo.im/insight/article/video-44</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-44</guid>
       <category>큐레이션</category>
       <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
       <description>AI 에이전트의 오류 원인과 해결 방법을 분석합니다.</description>
     </item>
     <item>
       <title>[영상 제작] 구글 제미나이로 광고 및 영화 영상 제작하기</title>
-      <link>https://dori-ai.com/insight/article/video-45</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-45</guid>
+      <link>https://illo.im/insight/article/video-45</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-45</guid>
       <category>큐레이션</category>
       <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
       <description>구글 제미나이를 활용한 영상 제작 방법을 소개합니다.</description>
     </item>
     <item>
       <title>FigureAI Rose 200시간 시연: 챗봇을 넘어 창고로 들어가는 피지컬 AI</title>
-      <link>https://dori-ai.com/insight/article/analysis-11</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/analysis-11</guid>
+      <link>https://illo.im/insight/article/analysis-11</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/analysis-11</guid>
       <category>분석</category>
       <pubDate>Wed, 01 Jul 2026 05:03:40 GMT</pubDate>
       <description>휴머노이드 로봇이 실험실을 벗어나 물류·제조·서비스 현장으로 이동하고 있다. 핵심은 더 똑똑한 챗봇이 아니라, 오래 버티고 안전하게 움직이며 기존 업무 흐름에 붙는 AI다.</description>
     </item>
     <item>
       <title>OpenAI 토큰 비용 압박·SK하이닉스 HBM4·피지컬 AI: 비용 효율이 돈길을 바꾼 한 주</title>
-      <link>https://dori-ai.com/insight/article/report-8</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/report-8</guid>
+      <link>https://illo.im/insight/article/report-8</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/report-8</guid>
       <category>리포트</category>
       <pubDate>Wed, 01 Jul 2026 02:03:42 GMT</pubDate>
       <description>이번 주 AI 산업의 핵심은 더 큰 모델이 아니라 더 싼 사용료, 더 빠른 메모리, 더 현실적인 로봇이었다. 자금은 과시적 모델 경쟁에서 인프라 병목과 실제 업무 자동화로 이동하고 있다.</description>
     </item>
     <item>
       <title>[모델] AI는 정말 생각할 수 있을까? 추론 모델 설명</title>
-      <link>https://dori-ai.com/insight/article/video-41</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-41</guid>
+      <link>https://illo.im/insight/article/video-41</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-41</guid>
       <category>큐레이션</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 GMT</pubDate>
       <description>AI의 사고 능력과 추론 모델의 발전을 설명합니다.</description>
     </item>
     <item>
       <title>[프로토콜] MCP와 API  모든 개발자가 알아야 할 프로토콜</title>
-      <link>https://dori-ai.com/insight/article/video-42</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-42</guid>
+      <link>https://illo.im/insight/article/video-42</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-42</guid>
       <category>큐레이션</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 GMT</pubDate>
       <description>AI 개발자를 위한 MCP와 API의 차이를 설명합니다.</description>
     </item>
     <item>
       <title>[모델] 외부 세계 모델의 종말  LLM에 통합된</title>
-      <link>https://dori-ai.com/insight/article/video-43</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-43</guid>
+      <link>https://illo.im/insight/article/video-43</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-43</guid>
       <category>큐레이션</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 GMT</pubDate>
       <description>LLM에 통합된 외부 세계 모델의 변화를 다룹니다.</description>
     </item>
     <item>
       <title>AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식</title>
-      <link>https://dori-ai.com/insight/article/curation-14</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/curation-14</guid>
+      <link>https://illo.im/insight/article/curation-14</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/curation-14</guid>
       <category>큐레이션</category>
       <pubDate>Tue, 30 Jun 2026 23:02:46 GMT</pubDate>
       <description>AI 그림 프롬프트 작성법을 처음 배우는 사람도 바로 따라 할 수 있게 도구 선택, 무료 사용법, 프롬프트 구조, 수정 요청, 실패 해결법까지 단계별로 정리했습니다.</description>
     </item>
     <item>
       <title>AI 하드웨어 밀수, 대만의 경각심을 일깨우다</title>
-      <link>https://dori-ai.com/insight/article/trend-188</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-188</guid>
+      <link>https://illo.im/insight/article/trend-188</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/trend-188</guid>
       <category>트렌드</category>
       <pubDate>Tue, 30 Jun 2026 11:00:20 GMT</pubDate>
       <description>대만이 AI 하드웨어 밀수 사건을 본격적으로 수사하며 글로벌 기술 시장의 불법 거래 위험을 경고하고 있다.</description>
     </item>
     <item>
       <title>Arena, AI 리더보드가 1억 달러 기업으로 성장하다</title>
-      <link>https://dori-ai.com/insight/article/trend-187</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-187</guid>
+      <link>https://illo.im/insight/article/trend-187</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/trend-187</guid>
       <category>트렌드</category>
       <pubDate>Tue, 30 Jun 2026 09:00:18 GMT</pubDate>
       <description>AI 리더보드 플랫폼 Arena가 상업 서비스 출시 9개월 만에 1억 달러 기업으로 성장하며 업계의 주목을 받고 있다.</description>
     </item>
     <item>
       <title>캘리포니아, 앤트로픽과의 파트너십으로 새로운 시대를 열다</title>
-      <link>https://dori-ai.com/insight/article/trend-186</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-186</guid>
+      <link>https://illo.im/insight/article/trend-186</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/trend-186</guid>
       <category>트렌드</category>
       <pubDate>Tue, 30 Jun 2026 07:00:18 GMT</pubDate>
       <description>캘리포니아 주가 앤트로픽의 AI 도구를 도입하여 공공 서비스 개선에 나섰습니다. 이는 정부와 AI의 협업 모델을 제시하는 중요한 사례가 될 것입니다.</description>
     </item>
     <item>
       <title>한국, 550억 달러 투자로 AI 메모리 혁신에 나선다</title>
-      <link>https://dori-ai.com/insight/article/trend-185</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-185</guid>
+      <link>https://illo.im/insight/article/trend-185</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/trend-185</guid>
       <category>트렌드</category>
       <pubDate>Tue, 30 Jun 2026 04:00:15 GMT</pubDate>
       <description>한국의 주요 기술 기업들이 550억 달러를 투자하여 AI 메모리 기술을 혁신하고 있다. 이는 'RAMageddon' 문제를 해결하기 위한 노력의 일환이다.</description>
     </item>
     <item>
       <title>[챗봇] AI를 활용한 인생 기둥의 비밀</title>
-      <link>https://dori-ai.com/insight/article/video-36</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-36</guid>
+      <link>https://illo.im/insight/article/video-36</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-36</guid>
       <category>큐레이션</category>
       <pubDate>Tue, 30 Jun 2026 00:00:00 GMT</pubDate>
       <description>AI를 활용해 인생을 변화시키는 방법을 소개합니다.</description>
     </item>
     <item>
       <title>[제미나이] 제미나이 사용법과 대화법</title>
-      <link>https://dori-ai.com/insight/article/video-37</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-37</guid>
+      <link>https://illo.im/insight/article/video-37</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-37</guid>
       <category>큐레이션</category>
       <pubDate>Tue, 30 Jun 2026 00:00:00 GMT</pubDate>
       <description>제미나이에서 효과적인 답변을 얻는 대화법을 배웁니다.</description>
     </item>
     <item>
       <title>[수학] 머신러닝의 수학적 원리</title>
-      <link>https://dori-ai.com/insight/article/video-38</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-38</guid>
+      <link>https://illo.im/insight/article/video-38</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-38</guid>
       <category>큐레이션</category>
       <pubDate>Tue, 30 Jun 2026 00:00:00 GMT</pubDate>
       <description>머신러닝의 기초 수학 원리를 쉽게 설명합니다.</description>
     </item>
     <item>
       <title>[AI 산업] AI 딥러닝과 중국 작업장의 실체</title>
-      <link>https://dori-ai.com/insight/article/video-39</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-39</guid>
+      <link>https://illo.im/insight/article/video-39</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-39</guid>
       <category>큐레이션</category>
       <pubDate>Tue, 30 Jun 2026 00:00:00 GMT</pubDate>
       <description>AI 딥러닝과 관련된 중국 작업장의 실체를 탐구합니다.</description>
     </item>
     <item>
       <title>[AI 강의] 하정우의 AI 특별 강의</title>
-      <link>https://dori-ai.com/insight/article/video-40</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-40</guid>
+      <link>https://illo.im/insight/article/video-40</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-40</guid>
       <category>큐레이션</category>
       <pubDate>Tue, 30 Jun 2026 00:00:00 GMT</pubDate>
       <description>하정우의 AI에 대한 특별 강의를 들어보세요.</description>
     </item>
     <item>
       <title>한국, 1조 달러 규모 AI 및 반도체 투자 발표</title>
-      <link>https://dori-ai.com/insight/article/trend-184</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-184</guid>
+      <link>https://illo.im/insight/article/trend-184</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/trend-184</guid>
       <category>트렌드</category>
       <pubDate>Mon, 29 Jun 2026 13:00:17 GMT</pubDate>
       <description>한국 정부가 AI 및 반도체 분야에 1조 달러를 투자하겠다고 발표하며 글로벌 기술 경쟁에서의 입지를 강화하고 있다.</description>
     </item>
     <item>
       <title>Microsoft·Google 데이터센터가 만난 36.1℃ 폭염: 전력망이 AI 경쟁의 새 병목이다</title>
-      <link>https://dori-ai.com/insight/article/analysis-10</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/analysis-10</guid>
+      <link>https://illo.im/insight/article/analysis-10</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/analysis-10</guid>
       <category>분석</category>
       <pubDate>Mon, 29 Jun 2026 05:01:48 GMT</pubDate>
       <description>유럽 폭염으로 전력망과 발전소가 흔들리는 사이, AI 데이터센터 전력 수요는 폭발적으로 늘고 있다. 이제 AI 경쟁의 핵심은 모델 성능이 아니라 전기·물·입지·송전망을 누가 먼저 확보하느냐로 이동하고 있다.</description>
     </item>
     <item>
       <title>SpaceX·Baseten·Salesforce가 보여준 AI 돈길: 데이터센터, 고밸류 스타트업, 업무 에이전트의 재배치</title>
-      <link>https://dori-ai.com/insight/article/report-7</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/report-7</guid>
+      <link>https://illo.im/insight/article/report-7</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/report-7</guid>
       <category>리포트</category>
       <pubDate>Mon, 29 Jun 2026 02:02:04 GMT</pubDate>
       <description>이번 주 AI 산업의 핵심은 모델 성능 경쟁보다 자본과 물리 인프라의 재배치였다. 데이터센터 공간, 고평가 스타트업, 업무용 에이전트가 한 축으로 묶이며 AI 수익성 검증 압력이 커지고 있다.</description>
     </item>
     <item>
       <title>Nvidia, 호주 기업과 AI 접근 협약 체결 — 새로운 기술 시대 열리나?</title>
-      <link>https://dori-ai.com/insight/article/trend-183</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-183</guid>
+      <link>https://illo.im/insight/article/trend-183</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/trend-183</guid>
       <category>트렌드</category>
       <pubDate>Mon, 29 Jun 2026 01:00:18 GMT</pubDate>
       <description>호주 Firmus Technologies가 Nvidia와 AI 접근 협약을 체결하며 기술 혁신에 박차를 가한다.</description>
     </item>
     <item>
       <title>[AI 문제] AI의 근본 문제에 대한 AI 천재들의 고백</title>
-      <link>https://dori-ai.com/insight/article/video-35</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-35</guid>
+      <link>https://illo.im/insight/article/video-35</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-35</guid>
       <category>큐레이션</category>
       <pubDate>Mon, 29 Jun 2026 00:00:00 GMT</pubDate>
       <description>AI의 내부 작동 원리를 이해하지 못하는 현실을 다룬다.</description>
     </item>
     <item>
       <title>AI 프로필 사진 만들기: 무료 도구로 자연스럽게 만드는 단계별 가이드</title>
-      <link>https://dori-ai.com/insight/article/curation-13</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/curation-13</guid>
+      <link>https://illo.im/insight/article/curation-13</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/curation-13</guid>
       <category>큐레이션</category>
       <pubDate>Sun, 28 Jun 2026 23:01:28 GMT</pubDate>
       <description>AI 프로필 사진 만들기를 처음 하는 사람도 따라 할 수 있도록 사진 준비, 도구 선택, 프롬프트 입력, 보정, 저장까지 단계별로 정리했습니다. 무료로 쓰는 방법과 자주 실패하는 포인트도 함께 안내합니다.</description>
     </item>
     <item>
       <title>포드, AI 한계를 인식하고 경력 있는 엔지니어를 재고용하다</title>
-      <link>https://dori-ai.com/insight/article/trend-182</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-182</guid>
+      <link>https://illo.im/insight/article/trend-182</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/trend-182</guid>
       <category>트렌드</category>
       <pubDate>Sun, 28 Jun 2026 22:00:15 GMT</pubDate>
       <description>포드가 AI 도입의 한계를 깨닫고 경력 있는 엔지니어를 다시 고용하기 시작했습니다. 이는 기술 의존의 위험성을 드러내며, 자동차 산업의 변화를 시사합니다.</description>
     </item>
     <item>
       <title>아시아 스타트업, 새로운 신화 같은 모델 출시 — 미국의 수출 금지에 맞서다</title>
-      <link>https://dori-ai.com/insight/article/trend-181</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-181</guid>
+      <link>https://illo.im/insight/article/trend-181</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/trend-181</guid>
       <category>트렌드</category>
       <pubDate>Sun, 28 Jun 2026 13:00:17 GMT</pubDate>
       <description>아시아의 여러 AI 스타트업들이 Anthropic의 수출 금지 조치에 대응하여 Mythos와 유사한 혁신적인 모델을 출시하고 있다.</description>
     </item>
     <item>
       <title>구글의 제약, 메타의 AI 모델 사용 제한</title>
-      <link>https://dori-ai.com/insight/article/trend-180</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-180</guid>
+      <link>https://illo.im/insight/article/trend-180</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/trend-180</guid>
       <category>트렌드</category>
       <pubDate>Sun, 28 Jun 2026 09:00:15 GMT</pubDate>
       <description>구글이 메타의 Gemini AI 모델 사용을 제한하면서 AI 산업의 경쟁 구도가 변화하고 있다. 이 결정이 무엇을 의미하는지 살펴본다.</description>
     </item>
     <item>
       <title>암 투병 중 AI를 활용한 기적, 코너 크리스투의 이야기</title>
-      <link>https://dori-ai.com/insight/article/trend-179</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-179</guid>
+      <link>https://illo.im/insight/article/trend-179</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/trend-179</guid>
       <category>트렌드</category>
       <pubDate>Sun, 28 Jun 2026 07:00:20 GMT</pubDate>
       <description>코너 크리스투는 AI를 통해 암과의 싸움에서 새로운 희망을 찾았습니다. 그가 어떻게 데이터를 활용했는지 살펴봅니다.</description>
     </item>
     <item>
       <title>중국의 사이버 보안 혁신, 앤트로픽과의 경쟁에서 우위 점하다</title>
-      <link>https://dori-ai.com/insight/article/trend-178</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-178</guid>
+      <link>https://illo.im/insight/article/trend-178</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/trend-178</guid>
       <category>트렌드</category>
       <pubDate>Sun, 28 Jun 2026 06:00:16 GMT</pubDate>
       <description>중국이 사이버 보안 분야에서 앤트로픽과 유사한 기술력을 확보하면서 AI 경쟁의 판도가 바뀌고 있다.</description>
     </item>
     <item>
       <title>엘론 머스크의 우주 데이터 센터, 과연 실현될까?</title>
-      <link>https://dori-ai.com/insight/article/trend-177</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-177</guid>
+      <link>https://illo.im/insight/article/trend-177</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/trend-177</guid>
       <category>트렌드</category>
       <pubDate>Sun, 28 Jun 2026 03:00:14 GMT</pubDate>
       <description>엘론 머스크의 우주 데이터 센터 비전에 대한 의문과 그에 따른 업계 반응을 살펴봅니다.</description>
     </item>
     <item>
       <title>애플 비전 프로의 핵심 인력이 OpenAI로 이동하다</title>
-      <link>https://dori-ai.com/insight/article/trend-176</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-176</guid>
+      <link>https://illo.im/insight/article/trend-176</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/trend-176</guid>
       <category>트렌드</category>
       <pubDate>Sun, 28 Jun 2026 01:00:13 GMT</pubDate>
       <description>애플의 비전 프로 팀 부사장이 OpenAI의 하드웨어 팀으로 이직하며 업계의 관심을 받고 있다.</description>
     </item>
     <item>
       <title>[AI 문명] AI 문명에 대한 김미경 강사의 직설적 강연</title>
-      <link>https://dori-ai.com/insight/article/video-33</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-33</guid>
+      <link>https://illo.im/insight/article/video-33</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-33</guid>
       <category>큐레이션</category>
       <pubDate>Sun, 28 Jun 2026 00:00:00 GMT</pubDate>
       <description>AI 시대에 적응하기 위한 통찰을 제공합니다.</description>
     </item>
     <item>
       <title>[모델 설명] GPT 5.6에 대한 간단한 설명</title>
-      <link>https://dori-ai.com/insight/article/video-34</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-34</guid>
+      <link>https://illo.im/insight/article/video-34</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-34</guid>
       <category>큐레이션</category>
       <pubDate>Sun, 28 Jun 2026 00:00:00 GMT</pubDate>
       <description>GPT 5.6의 주요 특징과 정부의 규제에 대해 설명합니다.</description>
     </item>
     <item>
       <title>[개념] 2026년 가장 중요한 AI 개념</title>
-      <link>https://dori-ai.com/insight/article/video-30</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-30</guid>
+      <link>https://illo.im/insight/article/video-30</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-30</guid>
       <category>큐레이션</category>
       <pubDate>Sat, 27 Jun 2026 00:00:00 GMT</pubDate>
       <description>AI의 핵심 개념을 간단히 설명합니다.</description>
     </item>
     <item>
       <title>[자동화] 구글 Flow AI Agent 월드컵 뉴스 자동화 워크플로우</title>
-      <link>https://dori-ai.com/insight/article/video-31</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-31</guid>
+      <link>https://illo.im/insight/article/video-31</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-31</guid>
       <category>큐레이션</category>
       <pubDate>Sat, 27 Jun 2026 00:00:00 GMT</pubDate>
       <description>AI를 활용한 뉴스 영상 제작 자동화 방법을 소개합니다.</description>
     </item>
     <item>
       <title>[교육] AI Tech Transforming Language Learning</title>
-      <link>https://dori-ai.com/insight/article/video-32</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/video-32</guid>
+      <link>https://illo.im/insight/article/video-32</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-32</guid>
       <category>큐레이션</category>
       <pubDate>Sat, 27 Jun 2026 00:00:00 GMT</pubDate>
       <description>AI가 언어 학습에 미치는 영향을 다룹니다.</description>
     </item>
     <item>
       <title>OpenAI, 인도 시장 공략을 위한 새로운 리더 영입</title>
-      <link>https://dori-ai.com/insight/article/trend-175</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-175</guid>
+      <link>https://illo.im/insight/article/trend-175</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/trend-175</guid>
       <category>트렌드</category>
       <pubDate>Fri, 26 Jun 2026 22:00:17 GMT</pubDate>
       <description>OpenAI가 인도 시장을 겨냥해 우버 인디아의 수장을 영입하며 본격적으로 진출을 선언했다.</description>
     </item>
     <item>
       <title>어도비, 이미지 및 동영상 편집 도구 Topaz Labs 인수</title>
-      <link>https://dori-ai.com/insight/article/trend-174</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-174</guid>
+      <link>https://illo.im/insight/article/trend-174</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/trend-174</guid>
       <category>트렌드</category>
       <pubDate>Fri, 26 Jun 2026 13:00:23 GMT</pubDate>
       <description>어도비가 Topaz Labs를 인수하며 자사의 앱에 고급 이미지 및 동영상 편집 기능을 통합할 계획이다.</description>
     </item>
     <item>
       <title>Netris, AI 네오클라우드 혁신을 위해 150억 원 투자 유치</title>
-      <link>https://dori-ai.com/insight/article/trend-173</link>
-      <guid isPermaLink="true">https://dori-ai.com/insight/article/trend-173</guid>
+      <link>https://illo.im/insight/article/trend-173</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/trend-173</guid>
       <category>트렌드</category>
       <pubDate>Fri, 26 Jun 2026 11:00:19 GMT</pubDate>
       <description>Netris가 a16z로부터 150억 원을 유치하여 AI 네오클라우드 운영을 가속화하려는 비전을 밝혔다.</description>

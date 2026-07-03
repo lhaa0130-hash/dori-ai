@@ -107,7 +107,7 @@ export default function AiModelsClient() {
       ctx.fillStyle = ORANGE; ctx.font = "800 42px sans-serif"; ctx.textAlign = "right"; ctx.fillText(metricText(r.m, r.c), W - 70, y); ctx.textAlign = "left";
       y += 86;
     });
-    ctx.fillStyle = "#6b7280"; ctx.font = "600 30px sans-serif"; ctx.fillText("dori-ai.com/ai-models · 6시간마다 갱신", 70, H - 56);
+    ctx.fillStyle = "#6b7280"; ctx.font = "600 30px sans-serif"; ctx.fillText("illo.im/ai-models · 6시간마다 갱신", 70, H - 56);
     const a = document.createElement("a"); a.href = cv.toDataURL("image/png"); a.download = "ai-model-ranking.png"; a.click();
   };
 

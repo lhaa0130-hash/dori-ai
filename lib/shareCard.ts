@@ -122,7 +122,7 @@ export function drawCard(data: CardData): HTMLCanvasElement {
   ctx.textAlign = "center";
   ctx.fillStyle = "#6b6b73";
   ctx.font = `600 30px ${SANS}`;
-  ctx.fillText("dori-ai.com · 심리테스트", cx, H - 110);
+  ctx.fillText("illo.im · 심리테스트", cx, H - 110);
 
   return canvas;
 }

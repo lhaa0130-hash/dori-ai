@@ -13,7 +13,7 @@ import { createMetadata } from '@/lib/seo';
 // 자기참조 canonical + 고유 제목/설명 (이전엔 메타데이터가 없어 canonical이 홈으로 박혀 색인에서 누락됨)
 export const metadata = createMetadata({
   title: 'AI 인사이트 — 최신 AI 트렌드·분석·리포트·추천영상',
-  description: 'AI 트렌드, 심층 분석, 리포트, 큐레이션, 추천 유튜브 영상까지 — dori-ai.com이 매일 정리하는 AI 인사이트 모음입니다.',
+  description: 'AI 트렌드, 심층 분석, 리포트, 큐레이션, 추천 유튜브 영상까지 — illo.im이 매일 정리하는 AI 인사이트 모음입니다.',
   path: '/insight',
 });
 

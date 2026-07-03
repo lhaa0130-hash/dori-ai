@@ -480,7 +480,7 @@ export default function ProfilePage() {
 
   const aiShareUrl = (ai: Profile["myAIs"][number]): string => {
     const base = profile?.handle || profile?.uid || "";
-    const origin = typeof window !== "undefined" ? window.location.origin : "https://www.dori-ai.com";
+    const origin = typeof window !== "undefined" ? window.location.origin : "https://www.illo.im";
     return `${origin}/u/${base}/${encodeURIComponent(ai.slug)}`;
   };
   const copyAiShare = async (ai: Profile["myAIs"][number]) => {
@@ -896,7 +896,7 @@ export default function ProfilePage() {
               공유 주소 (영문 핸들) <span className="font-normal text-neutral-400">내 AI 페이지 주소가 깔끔해져요</span>
             </label>
             <div className="flex items-stretch gap-2 mb-1">
-              <span className="inline-flex items-center px-2.5 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-[12px] text-neutral-400 font-mono shrink-0">dori-ai.com/u/</span>
+              <span className="inline-flex items-center px-2.5 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-[12px] text-neutral-400 font-mono shrink-0">illo.im/u/</span>
               <input
                 value={handleInput}
                 onChange={(e) => handleCheckHandle(e.target.value)}
@@ -1192,7 +1192,7 @@ export default function ProfilePage() {
             {isOwner && !profile.handle && (
               <div className="mb-3 rounded-xl bg-[#FFF5EB] dark:bg-[#F9954E]/5 px-3.5 py-3 text-[12px] text-neutral-600 dark:text-neutral-300 leading-relaxed">
                 💡 아래 <button onClick={() => setEditing(true)} className="font-bold text-[#F9954E] underline underline-offset-2">코지홈 꾸미기</button>에서 <b>영문 주소(핸들)</b>를 정하면
-                <br /><span className="font-mono text-[11px]">dori-ai.com/u/<b>내이름</b>/AI</span> 처럼 깔끔한 주소로 공유돼요.
+                <br /><span className="font-mono text-[11px]">illo.im/u/<b>내이름</b>/AI</span> 처럼 깔끔한 주소로 공유돼요.
               </div>
             )}
 

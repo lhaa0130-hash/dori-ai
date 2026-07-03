@@ -8,7 +8,7 @@ import { getAllStudios } from "@/lib/studio";
 
 export const dynamic = "force-static";
 
-const SITE = "https://dori-ai.com";
+const SITE = "https://illo.im";
 
 function esc(s: string): string {
   return (s || "")

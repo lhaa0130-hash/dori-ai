@@ -774,7 +774,7 @@ function ShareModal({
   const [tooltip, setTooltip] = useState<string | null>(null);
   const [downloading, setDownloading] = useState(false);
   const [nativeSharing, setNativeSharing] = useState(false);
-  const pageUrl = typeof window !== "undefined" ? `${window.location.origin}/psychtest` : "https://dori-ai.com/psychtest";
+  const pageUrl = typeof window !== "undefined" ? `${window.location.origin}/psychtest` : "https://illo.im/psychtest";
   const shareTitle = `나의 심리테스트 결과: ${card.headline}`;
 
   useEffect(() => {

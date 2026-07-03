@@ -7,7 +7,7 @@ import Header from "@/components/layout/Header";
 import { notFound } from "next/navigation";
 import type { AnimalCard } from "../page.client";
 
-const SITE_URL = "https://dori-ai.com";
+const SITE_URL = "https://illo.im";
 
 function loadCards(): AnimalCard[] {
   try {
