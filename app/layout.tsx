@@ -11,7 +11,7 @@ import { createMetadata } from "@/lib/seo";
 export const metadata = {
   metadataBase: new URL("https://illo.im"),
   ...createMetadata({
-    title: "illo - AI 활용 방법을 함께 연구하는 커뮤니티 플랫폼",
+    title: "AI 활용 방법을 함께 연구하는 커뮤니티 플랫폼",
     description: "AI 도구, 인사이트, 아카데미, 커뮤니티를 한 곳에서. AI 활용 방법을 함께 연구하고 실전으로 적용해보는 최신 트렌드와 인사이트를 공유하는 커뮤니티 플랫폼입니다.",
     path: "/",
     keywords: [
