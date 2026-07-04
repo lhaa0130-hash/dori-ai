@@ -1,17 +1,16 @@
 <svg width="512" height="512" viewBox="0 0 512 512" fill="none" xmlns="http://www.w3.org/2000/svg">
   <defs>
-    <linearGradient id="bg" x1="0" y1="0" x2="512" y2="512" gradientUnits="userSpaceOnUse">
-      <stop stop-color="#FFC48A"/><stop offset="0.5" stop-color="#F9954E"/><stop offset="1" stop-color="#E8832E"/>
+    <linearGradient id="front" x1="214" y1="214" x2="440" y2="440" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#F9A257"/><stop offset="1" stop-color="#E8832E"/>
     </linearGradient>
   </defs>
-  <rect width="512" height="512" rx="115" fill="url(#bg)"/>
-  <g transform="translate(116,116) scale(4.375)" fill="none">
-    <path d="M12 16 C30 16, 34 32, 48 32" stroke="#ffffff" stroke-opacity="0.55" stroke-width="3.4" stroke-linecap="round"/>
-    <path d="M12 32 H44" stroke="#ffffff" stroke-opacity="0.55" stroke-width="3.4" stroke-linecap="round"/>
-    <path d="M12 48 C30 48, 34 32, 48 32" stroke="#ffffff" stroke-opacity="0.55" stroke-width="3.4" stroke-linecap="round"/>
-    <circle cx="12" cy="16" r="3.2" fill="#ffffff" fill-opacity="0.7"/>
-    <circle cx="12" cy="32" r="3.2" fill="#ffffff" fill-opacity="0.7"/>
-    <circle cx="12" cy="48" r="3.2" fill="#ffffff" fill-opacity="0.7"/>
-    <circle cx="50" cy="32" r="9.5" fill="#ffffff"/>
-  </g>
+  <!-- 뒤 (가장 밝은) -->
+  <rect x="76" y="72" width="216" height="216" rx="54" fill="#FBDFB9"/>
+  <!-- 중간 -->
+  <rect x="148" y="145" width="216" height="216" rx="54" fill="#F9C079"/>
+  <!-- 앞 (진한 그라데이션) -->
+  <rect x="220" y="218" width="216" height="216" rx="54" fill="url(#front)"/>
+  <!-- illo 배지 -->
+  <rect x="262" y="358" width="80" height="36" rx="18" fill="#ffffff"/>
+  <text x="302" y="384" text-anchor="middle" font-family="'Malgun Gothic','Segoe UI',sans-serif" font-size="25" font-weight="800" letter-spacing="-0.5" fill="#F9954E">illo</text>
 </svg>
