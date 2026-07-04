@@ -152,7 +152,7 @@ export default function ProjectsPage() {
             ))}
           </ul>
           <a
-            href="mailto:lhaa0130@gmail.com?subject=프로젝트 의뢰&body=안녕하세요, 프로젝트를 의뢰하고 싶습니다.%0A%0A[해결하고 싶은 문제]%0A%0A[주요 기능]%0A%0A[대상 사용자]%0A%0A[일정/예산]"
+            href="mailto:illo@illo.im?subject=프로젝트 의뢰&body=안녕하세요, 프로젝트를 의뢰하고 싶습니다.%0A%0A[해결하고 싶은 문제]%0A%0A[주요 기능]%0A%0A[대상 사용자]%0A%0A[일정/예산]"
             className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#F9954E] text-white text-[13px] font-extrabold transition-opacity active:opacity-85"
           >
             이메일로 의뢰하기 <ArrowRight className="w-3.5 h-3.5" />

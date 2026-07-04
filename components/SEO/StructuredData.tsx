@@ -8,7 +8,7 @@ export default function StructuredData() {
     url: "https://illo.im",
     logo: "https://illo.im/logo.png",
     description: "AI 활용 방법을 함께 연구하고 실전으로 적용해보는 커뮤니티 플랫폼. AI 자동화, 캐릭터 제작 가이드, 프레리독 애니메이션 교육을 제공합니다.",
-    email: "lhaa0130@gmail.com",
+    email: "illo@illo.im",
     sameAs: SOCIAL_SAMEAS,
     areaServed: "KR",
     knowsAbout: [
