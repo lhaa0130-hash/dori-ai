@@ -63,7 +63,7 @@ export default function Footer() {
           <div className="flex items-center gap-3 text-[11px] text-neutral-400">
             <span>© 2026 illo</span>
             <span className="text-neutral-200 dark:text-zinc-700">·</span>
-            <a href="mailto:lhaa0130@gmail.com" className="hover:text-[#F9954E] transition-colors">문의</a>
+            <a href="mailto:illo@illo.im" className="hover:text-[#F9954E] transition-colors">문의</a>
           </div>
         </div>
 

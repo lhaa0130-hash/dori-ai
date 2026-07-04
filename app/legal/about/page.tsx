@@ -37,7 +37,7 @@ export default function AboutPage() {
 
       <h2>문의</h2>
       <p>
-        제휴·광고·기타 문의는 이메일 <strong>lhaa0130@gmail.com</strong> 으로 보내 주세요.
+        제휴·광고·기타 문의는 이메일 <strong>illo@illo.im</strong> 으로 보내 주세요.
       </p>
     </LegalPageLayout>
   );

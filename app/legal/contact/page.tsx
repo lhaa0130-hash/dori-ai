@@ -14,8 +14,8 @@ export default function ContactPage() {
 
       <h2>이메일</h2>
       <ul>
-        <li><strong>일반·제휴·광고 문의:</strong> lhaa0130@gmail.com</li>
-        <li><strong>콘텐츠 오류 신고:</strong> lhaa0130@gmail.com</li>
+        <li><strong>일반·제휴·광고 문의:</strong> illo@illo.im</li>
+        <li><strong>콘텐츠 오류 신고:</strong> illo@illo.im</li>
       </ul>
 
       <h2>커뮤니티</h2>
