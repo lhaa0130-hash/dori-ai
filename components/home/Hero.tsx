@@ -12,6 +12,10 @@ export default function Hero() {
       <h1 className="text-[23px] sm:text-[30px] font-extrabold tracking-tight leading-[1.2] text-neutral-950 dark:text-white break-keep toss-fade-line toss-delay-0">
         AI로 만들고, 배우고, <span className="text-[#F9954E]">익히고.</span>
       </h1>
+      <p className="mt-2.5 text-[13px] sm:text-[15px] font-medium text-neutral-500 dark:text-neutral-400 break-keep toss-fade-line toss-delay-0">
+        흩어진 AI를 한 곳에서. 모든 일을, <span className="font-bold text-[#F9954E]">일로.</span>
+        <span className="text-neutral-400 dark:text-neutral-500"> (일로 = 모든 일을 하나로, 이리로)</span>
+      </p>
     </section>
   );
 }

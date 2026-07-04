@@ -34,13 +34,19 @@ export default function Footer() {
       <div className="px-6 xl:px-[260px] py-9">
 
         {/* 상단: illo(좌) + SNS 5종(우측 끝) */}
-        <div className="flex items-center justify-between gap-4 mb-7">
-          <Link
-            href="/"
-            className="text-lg font-extrabold tracking-tight bg-[linear-gradient(to_right,#FBAA60,#F9954E_40%,#E8832E)] bg-clip-text text-transparent hover:opacity-80 transition-opacity"
-          >
-            illo
-          </Link>
+        <div className="flex items-start justify-between gap-4 mb-7">
+          <div>
+            <Link
+              href="/"
+              className="text-lg font-extrabold tracking-tight bg-[linear-gradient(to_right,#FBAA60,#F9954E_40%,#E8832E)] bg-clip-text text-transparent hover:opacity-80 transition-opacity"
+            >
+              illo
+            </Link>
+            <p className="text-[11.5px] leading-relaxed text-neutral-400 dark:text-neutral-500 mt-1.5 break-keep max-w-[280px]">
+              <span className="font-bold text-neutral-500 dark:text-neutral-400">모든 일을, 하나의 일로.</span><br />
+              흩어진 AI를 한 곳에서 — <b>일로</b>는 ‘모든 일(work)을 하나로, 이리로’라는 뜻이에요.
+            </p>
+          </div>
           <SocialLinks />
         </div>
 

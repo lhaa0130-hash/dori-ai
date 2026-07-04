@@ -35,7 +35,7 @@ export function IntroSection() {
                     transition={{ delay: 0.4, duration: 0.8 }}
                     className="text-xl md:text-2xl font-medium text-foreground/80 mb-2"
                 >
-                    Design Of Real Intelligence
+                    모든 일을, 하나의 일로.
                 </motion.p>
 
                 {/* 3. Description Line 1 */}
