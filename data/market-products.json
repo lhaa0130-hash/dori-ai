@@ -1,5 +1,57 @@
 [
   {
+    "id": "mk11-1",
+    "name": "3M 스카치브라이트 베이직 테이프클리너",
+    "category": "living",
+    "source": "coupang",
+    "query": "3M 스카치브라이트 테이프클리너",
+    "emoji": "🧹",
+    "priceHint": "1만원대",
+    "summary": "머리카락·먼지 빠른 정리",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/e6jJ7YOwdU"
+  },
+  {
+    "id": "mk11-2",
+    "name": "코멧 홈 의류용 압축팩",
+    "category": "living",
+    "source": "coupang",
+    "query": "코멧 홈 의류용 압축팩",
+    "emoji": "🧺",
+    "priceHint": "1만원대",
+    "summary": "계절옷 부피 줄이기",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/e6jJ71XCqi"
+  },
+  {
+    "id": "mk11-3",
+    "name": "리벤스 이동식 틈새수납장",
+    "category": "living",
+    "source": "coupang",
+    "query": "리벤스 이동식 틈새수납장",
+    "emoji": "🧴",
+    "priceHint": "1~3만원대",
+    "summary": "죽은 틈새를 수납칸으로",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/e6jJ74PqFM"
+  },
+  {
+    "id": "mk11-4",
+    "name": "LG생활건강 홈스타 욕실용 세정제",
+    "category": "living",
+    "source": "coupang",
+    "query": "홈스타 욕실용 세정제",
+    "emoji": "🚿",
+    "priceHint": "1만원 이하~1만원대",
+    "summary": "욕실 물때 청소용",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/e6jJ77l7lY"
+  },
+  {
     "id": "mk10-1",
     "name": "락앤락 바로한끼 도자기 밥용기",
     "category": "kitchen",
@@ -9,7 +61,7 @@
     "priceHint": "1~3만원대",
     "summary": "밥 소분·데우기용",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/e2ZVYgBoUC"
   },
   {
@@ -22,7 +74,7 @@
     "priceHint": "1~2만원대",
     "summary": "간단 계란찜용",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/e2ZVYkjHm8"
   },
   {
@@ -35,7 +87,7 @@
     "priceHint": "1~3만원대",
     "summary": "팬 흠집 줄이는 도구",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/e2ZVYnRi3w"
   },
   {
