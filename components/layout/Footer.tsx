@@ -22,6 +22,8 @@ const LINKS = [
   { label: "건의사항", href: "/suggestion" },
   { label: "개인정보처리방침", href: "/legal/privacy" },
   { label: "이용약관", href: "/legal/terms" },
+  { label: "저작권·라이선스", href: "/legal/copyright" },
+  { label: "사업자정보", href: "/legal/business" },
 ];
 
 export default function Footer() {

@@ -90,6 +90,40 @@ export default function LegalPageLayout({ title, children }: LegalPageLayoutProp
           font-weight: 700;
         }
 
+        /* 사업자 정보 테이블 */
+        .legal-content :global(.biz-table) {
+          width: 100%;
+          border-collapse: collapse;
+          margin: 8px 0 20px;
+          font-size: 0.95rem;
+        }
+        .legal-content :global(.biz-table th),
+        .legal-content :global(.biz-table td) {
+          text-align: left;
+          padding: 12px 14px;
+          border-bottom: 1px solid #f0f0f0;
+          vertical-align: top;
+        }
+        .legal-content :global(.biz-table th) {
+          width: 38%;
+          color: #6b7280;
+          font-weight: 700;
+          white-space: nowrap;
+        }
+        .legal-content :global(.biz-table td) {
+          color: #374151;
+          font-weight: 600;
+        }
+        .legal-content :global(.biz-table td.pending) {
+          color: #b98a3e;
+          font-weight: 500;
+        }
+        .legal-content :global(.biz-table a) {
+          color: #E8832E;
+          font-weight: 700;
+          text-decoration: none;
+        }
+
         /* 다크 모드 (next-themes가 html.dark 토글) */
         :global(.dark) .legal-page {
           background: #09090b;
@@ -113,6 +147,19 @@ export default function LegalPageLayout({ title, children }: LegalPageLayoutProp
         }
         :global(.dark) .legal-footer {
           border-top-color: #27272a;
+        }
+        :global(.dark) .legal-content :global(.biz-table th),
+        :global(.dark) .legal-content :global(.biz-table td) {
+          border-bottom-color: #27272a;
+        }
+        :global(.dark) .legal-content :global(.biz-table th) {
+          color: #a1a1aa;
+        }
+        :global(.dark) .legal-content :global(.biz-table td) {
+          color: #e4e4e7;
+        }
+        :global(.dark) .legal-content :global(.biz-table td.pending) {
+          color: #d6a860;
         }
       `}</style>
     </div>

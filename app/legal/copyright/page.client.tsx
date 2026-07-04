@@ -1,0 +1,91 @@
+"use client";
+
+import { useState, useEffect } from "react";
+import { Copyright } from "lucide-react";
+import Link from "next/link";
+
+export default function CopyrightClient() {
+  const [mounted, setMounted] = useState(false);
+  useEffect(() => { setMounted(true); }, []);
+
+  const sections = [
+    {
+      "q": "illo 콘텐츠의 저작권",
+      "a": "illo(일로, illo.im, 이하 '회사')가 서비스에 게시한 글·기획·편집·디자인·레이아웃·데이터베이스 및 이를 구성하는 화면 요소 등 회사가 직접 제작하거나 제작을 의뢰하여 확보한 콘텐츠에 대한 저작권 및 기타 지식재산권은 원칙적으로 회사에 귀속됩니다.\n\n이용자는 회사가 제공한 콘텐츠를 서비스 이용 목적 범위 내에서 열람·이용할 수 있으나, 회사 또는 정당한 권리자의 사전 서면 동의 없이 이를 복제·전송·출판·배포·방송·2차적저작물 작성 등의 방법으로 영리·비영리를 불문하고 이용하거나 제3자에게 이용하게 하여서는 안 됩니다.\n\n인용·소개 등 저작권법이 허용하는 범위에서 콘텐츠를 이용하는 경우에도 출처를 'illo(illo.im)'로 명확히 표시하여 주시기 바랍니다. 콘텐츠의 상업적 이용 또는 대량 이용을 원하시는 경우 illo@illo.im 으로 사전에 문의하여 주십시오."
+    },
+    {
+      "q": "AI 생성 콘텐츠 투명 고지",
+      "a": "illo는 서비스에 게시되는 글·이미지 등 콘텐츠의 일부를 생성형 AI(Generative AI) 기술을 활용하여 제작합니다. 이미지 생성 등에는 fal.ai 등 외부 AI 서비스가 사용될 수 있으며, 텍스트 콘텐츠 역시 AI의 보조 또는 생성을 거쳐 편집·검수 후 게시되는 경우가 있습니다.\n\n회사는 이러한 사실을 이용자에게 투명하게 알리기 위해 본 안내를 제공하며, 콘텐츠의 성격에 따라 개별 게시물 단위로 AI 활용 여부를 표시할 수 있습니다. 다만 AI 생성 콘텐츠는 그 특성상 사실과 다르거나 부정확한 내용을 포함할 수 있으므로, 이용자께서는 중요한 의사결정에 앞서 원 출처를 별도로 확인하시기를 권장합니다.\n\n회사는 AI 생성 콘텐츠가 제3자의 권리를 침해하지 않도록 검수 절차를 운영하고 있으나, 그럼에도 권리 침해의 소지가 발견되는 경우 아래 '저작권 침해 신고' 절차에 따라 신속히 조치합니다."
+    },
+    {
+      "q": "오픈소스·서드파티 라이선스",
+      "a": "illo 서비스는 다음의 오픈소스 소프트웨어 및 서드파티 저작물을 각 라이선스 조건에 따라 이용하고 있으며, 각 저작물의 권리는 원 저작권자에게 있습니다.\n\n· 서체 Pretendard — SIL Open Font License 1.1 (OFL)\n· 아이콘 lucide — ISC License\n· 프레임워크 Next.js 및 React 등 관련 라이브러리 — MIT License 등 각 프로젝트가 정한 오픈소스 라이선스\n· 그 밖의 오픈소스 구성요소 — 각 배포 패키지에 포함된 라이선스 조건\n\n각 라이선스의 전문(全文) 및 저작권 고지는 해당 프로젝트가 배포하는 원문을 따르며, 회사는 관련 라이선스가 요구하는 저작권 표시 및 라이선스 사본 유지 의무를 준수합니다. 개별 구성요소의 라이선스 원문을 확인하고자 하시는 경우 illo@illo.im 으로 요청하시면 안내해 드립니다."
+    },
+    {
+      "q": "제3자 상표·로고",
+      "a": "illo 서비스에 표시되는 AI 도구·서비스명, 회사명, 제품명, 로고 및 상표(이하 '제3자 표장')는 각 해당 권리자의 상표 또는 등록상표이며, 그 권리는 전적으로 각 권리자에게 귀속됩니다.\n\n회사는 이러한 제3자 표장을 이용자에게 관련 도구·서비스를 정확히 식별·안내하고 정보를 제공하기 위한 목적(정보제공 및 식별 목적)으로만 사용하며, 이는 해당 권리자와의 제휴, 후원, 보증 또는 특별한 관계를 의미하지 않습니다.\n\n제3자 표장의 사용과 관련하여 정당한 권리자께서 표시 방식의 수정 또는 삭제를 원하시는 경우 illo@illo.im 으로 연락 주시면 확인 후 신속히 조치하겠습니다."
+    },
+    {
+      "q": "이용자 게시물의 저작권",
+      "a": "이용자가 서비스 내 댓글·게시글·프로필·기타 방식으로 직접 작성하여 게시한 콘텐츠(이하 '이용자 게시물')에 대한 저작권은 이를 작성한 이용자 본인에게 귀속됩니다.\n\n다만 이용자는 서비스의 운영·개선·홍보 및 콘텐츠의 원활한 노출을 위하여, 회사가 이용자 게시물을 서비스 및 이와 연동된 회사 채널 내에서 무상으로 저장·복제·수정(게시물의 본질적 내용을 변경하지 않는 형식 변경 등)·전송·전시·배포할 수 있는 이용 권한을 회사에 부여하는 데 동의합니다. 이러한 이용은 서비스 제공 목적 범위 내로 한정되며, 이용자의 저작인격권은 존중됩니다.\n\n이용자는 자신이 게시하는 게시물이 제3자의 저작권·상표권·초상권·명예 등 권리를 침해하지 않음을 보증하며, 이를 위반하여 발생하는 책임은 해당 이용자가 부담합니다. 회사는 타인의 권리를 침해하거나 관련 법령 및 이용약관에 위반되는 게시물에 대하여 사전 통지 없이 게시를 제한하거나 삭제할 수 있습니다."
+    },
+    {
+      "q": "저작권 침해 신고 방법",
+      "a": "illo 서비스에 게시된 콘텐츠가 귀하의 저작권 또는 기타 권리를 침해한다고 판단되는 경우, 아래 연락처로 신고하여 주시기 바랍니다. 회사는 신고 접수 시 관련 법령(저작권법 제103조, 정보통신망 이용촉진 및 정보보호 등에 관한 법률 등)에 따라 신속히 검토하고 필요한 조치를 취합니다.\n\n· 신고 접수 이메일: illo@illo.im\n\n원활한 처리를 위하여 신고 시 다음 사항을 함께 기재해 주시면 도움이 됩니다.\n① 신고인의 성명 및 연락처\n② 침해되었다고 주장하는 권리의 내용 및 권리자임을 소명할 수 있는 자료\n③ 침해가 발생한 콘텐츠의 위치(URL) 및 구체적인 침해 내용\n④ 신고 내용이 사실임을 확인하는 진술\n\n회사는 정당한 권리자의 요청이 확인되는 경우 해당 콘텐츠의 게시 중단(삭제·차단) 등 필요한 조치를 이행하며, 처리 결과를 신고인에게 회신합니다. 저작권법 제103조에 따른 복제·전송 중단의 경우, 회사는 해당 콘텐츠를 게시한 이용자에게 그 사실을 통보할 수 있으며, 게시 이용자는 정당한 권리가 있음을 소명하여 재개를 요청할 수 있습니다."
+    }
+  ];
+
+  return (
+    <main className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-500 relative overflow-x-hidden">
+      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
+
+      <section className="relative pt-4 sm:pt-16 pb-8 sm:pb-16 px-4 sm:px-6 text-center z-10">
+        <div className="max-w-3xl mx-auto animate-fade-in flex flex-col items-center">
+          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
+            <Copyright className="w-3 h-3" />
+            <span>Copyright &amp; License</span>
+          </div>
+          <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
+            <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
+              저작권 · 라이선스 안내
+            </span>
+          </h1>
+          <p className="text-base md:text-lg font-medium text-neutral-600 dark:text-neutral-300 break-keep leading-relaxed max-w-xl">
+            illo 콘텐츠의 저작권, AI 생성물 고지, 오픈소스 라이선스를 안내합니다.
+          </p>
+          <p className="text-xs text-neutral-400 dark:text-neutral-500 mt-3">최종 수정일: 2026년 7월 4일</p>
+        </div>
+      </section>
+
+      <section className="container max-w-3xl mx-auto px-4 sm:px-6 mb-6 sm:mb-8 relative z-10">
+        <div className="p-5 rounded-2xl bg-[#FFF5EB]/50 dark:bg-orange-950/10 border border-[#FDD5A5]/50 dark:border-[#B35E15]/30 text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
+          illo(일로)는 콘텐츠의 저작권과 오픈소스 라이선스를 존중하며, AI를 활용한 콘텐츠 제작 사실을 투명하게 공개합니다. 권리 침해가 우려되는 경우 아래 절차에 따라 신속히 조치합니다.
+        </div>
+      </section>
+
+      <section className="container max-w-3xl mx-auto px-4 sm:px-6 pb-10 sm:pb-20 relative z-10">
+        <div className="space-y-4">
+          {sections.map((item, idx) => (
+            <details key={idx} className="group rounded-[1.5rem] border border-neutral-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/40 backdrop-blur-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md hover:shadow-[#F9954E]/5">
+              <summary className="cursor-pointer list-none flex items-center justify-between gap-4 p-6">
+                <span className="font-bold text-[15px] text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors duration-200">{item.q}</span>
+                <span className="text-lg transition-all duration-300 group-open:rotate-45 flex-shrink-0 w-6 h-6 rounded-full bg-[#FFF5EB] dark:bg-[#F9954E]/10 flex items-center justify-center text-[#F9954E] text-sm font-light">+</span>
+              </summary>
+              <div className="px-6 pb-6 text-sm text-neutral-600 dark:text-neutral-400 leading-[1.85]" style={{ whiteSpace: 'pre-line' }}>{item.a}</div>
+            </details>
+          ))}
+        </div>
+        <div className="mt-12 text-center flex flex-wrap gap-3 justify-center">
+          <Link href="/legal/terms" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-neutral-300 text-sm font-medium hover:bg-[#FFF5EB] dark:hover:bg-orange-950/20 hover:text-[#E8832E] dark:hover:text-[#FBAA60] transition-all duration-200">이용약관 보기 →</Link>
+          <Link href="/legal/business" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-neutral-300 text-sm font-medium hover:bg-[#FFF5EB] dark:hover:bg-orange-950/20 hover:text-[#E8832E] dark:hover:text-[#FBAA60] transition-all duration-200">사업자 정보 →</Link>
+        </div>
+      </section>
+
+      <style jsx global>{`
+        @keyframes gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
+        .animate-gradient { animation: gradient 3s ease infinite; }
+        details summary::-webkit-details-marker { display: none; }
+      `}</style>
+    </main>
+  );
+}
