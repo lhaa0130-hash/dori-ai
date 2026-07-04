@@ -23,6 +23,7 @@ const LINKS = [
   { label: "개인정보처리방침", href: "/legal/privacy" },
   { label: "이용약관", href: "/legal/terms" },
   { label: "저작권·라이선스", href: "/legal/copyright" },
+  { label: "청소년보호정책", href: "/legal/youth" },
   { label: "사업자정보", href: "/legal/business" },
 ];
 
