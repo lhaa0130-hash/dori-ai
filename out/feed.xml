@@ -6,7 +6,7 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Fri, 03 Jul 2026 23:00:15 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 04 Jul 2026 00:00:19 GMT</lastBuildDate>
     <item>
       <title>OpenAI 저가요금제·SK하이닉스 EUV·Figure AI: AI 돈길이 모델에서 물리 인프라로 넓어진다</title>
       <link>https://illo.im/insight/article/report-9</link>
@@ -14,6 +14,22 @@
       <category>리포트</category>
       <pubDate>Fri, 03 Jul 2026 02:03:18 GMT</pubDate>
       <description>이번 주 AI 산업의 핵심은 모델 성능 경쟁보다 비용, 인프라, 표준, 로봇 상용화로 돈이 이동하고 있다는 점입니다. 저가형 AI 서비스, HBM 생산설비, 피지컬 AI 투자가 함께 움직이며 다음 성장 구간의 주도권을 가르고 있습니다.</description>
+    </item>
+    <item>
+      <title>[영상] AI 영상 제작 활용법 5가지</title>
+      <link>https://illo.im/insight/article/video-46</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-46</guid>
+      <category>큐레이션</category>
+      <pubDate>Fri, 03 Jul 2026 00:00:00 GMT</pubDate>
+      <description>구글 Flow를 활용한 AI 영상 제작 방법을 소개합니다.</description>
+    </item>
+    <item>
+      <title>[반도체] 빅테크의 AI 반도체 공유와 전망</title>
+      <link>https://illo.im/insight/article/video-47</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-47</guid>
+      <category>큐레이션</category>
+      <pubDate>Fri, 03 Jul 2026 00:00:00 GMT</pubDate>
+      <description>AI 인프라 과잉 공급과 반도체 시장의 변화를 분석합니다.</description>
     </item>
     <item>
       <title>생성형 AI 종류 총정리: 텍스트·이미지·영상·음성·코딩 AI 한눈에 보기</title>
@@ -310,22 +326,6 @@
       <category>트렌드</category>
       <pubDate>Fri, 26 Jun 2026 22:00:17 GMT</pubDate>
       <description>OpenAI가 인도 시장을 겨냥해 우버 인디아의 수장을 영입하며 본격적으로 진출을 선언했다.</description>
-    </item>
-    <item>
-      <title>어도비, 이미지 및 동영상 편집 도구 Topaz Labs 인수</title>
-      <link>https://illo.im/insight/article/trend-174</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/trend-174</guid>
-      <category>트렌드</category>
-      <pubDate>Fri, 26 Jun 2026 13:00:23 GMT</pubDate>
-      <description>어도비가 Topaz Labs를 인수하며 자사의 앱에 고급 이미지 및 동영상 편집 기능을 통합할 계획이다.</description>
-    </item>
-    <item>
-      <title>Netris, AI 네오클라우드 혁신을 위해 150억 원 투자 유치</title>
-      <link>https://illo.im/insight/article/trend-173</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/trend-173</guid>
-      <category>트렌드</category>
-      <pubDate>Fri, 26 Jun 2026 11:00:19 GMT</pubDate>
-      <description>Netris가 a16z로부터 150억 원을 유치하여 AI 네오클라우드 운영을 가속화하려는 비전을 밝혔다.</description>
     </item>
   </channel>
 </rss>
