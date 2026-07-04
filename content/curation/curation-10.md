@@ -2,7 +2,7 @@
 title: "Upstream·Locofy·AudienceCue·Merlin: 메일, 디자인 코딩, 유튜브 분석을 바꾸는 AI 도구 추천"
 description: "이번 주에는 받은편지함, 디자인 시안, 유튜브 댓글, AI 데이터 관리처럼 매일 쌓이는 업무 재료를 바로 실행 가능한 결과물로 바꿔주는 도구를 살펴봅니다. AI 에이전트가 단순 답변을 넘어 업무 흐름 안으로 들어오는 변화도 함께 짚었습니다."
 date: "2026-06-19T08:02:19+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "큐레이션"
 thumbnail: "/thumbnails/curation/curation-10.jpg?v=2"
 tags: ["AI 도구", "AI 업무 자동화", "AI 메일", "AI 코딩", "AI 리서치"]

@@ -2,7 +2,7 @@
 title: "NewCore, AI 에이전트의 정체성을 부여하다 — 660억 원 투자 유치"
 description: "AI 에이전트를 기업의 정규 직원으로 관리하는 새로운 도전 과제를 제시하며, NewCore가 660억 원의 자금을 확보했습니다."
 date: "2026-06-16T20:00:17+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-109.jpg"
 tags: ["NewCore", "AI 에이전트", "투자", "기업 보안", "테크 트렌드"]

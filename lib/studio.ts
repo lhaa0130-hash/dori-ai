@@ -98,7 +98,7 @@ export function getStudioBySlug(slug: string): StudioPost | null {
     description: metadata.description || metadata.summary || '내용이 없습니다.',
     date: metadata.date || new Date().toISOString().slice(0, 10),
     category: metadata.category || '스튜디오',
-    author: metadata.author || 'DORI-AI',
+    author: metadata.author || 'illo',
     content: content,
     tags: Array.isArray(metadata.tags) ? metadata.tags : metadata.tags ? [metadata.tags] : [],
     thumbnail: metadata.thumbnail || metadata.image,

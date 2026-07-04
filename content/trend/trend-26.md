@@ -2,7 +2,7 @@
 title : 2026년, AI 헥토콘의 시대: 미니맥스 상장 돌풍과 스페이스X의 1.5조 달러 IPO 로드맵
 description: 글로벌 AI 스타트업 시장이 '비상장의 시대'를 끝내고 대규모 상장 레이스에 돌입했습니다. 홍콩 증시를 뒤흔든 미니맥스의 데뷔와 일론 머스크가 예고한 스페이스X의 역사적 IPO, 그리고 2026년 자본 시장을 관통할 'VC 엑시트 슈퍼사이클'을 심층 분석합니다.
 date: 2026-01-07
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend026.png 
 tags: [AI스타트업, 미니맥스상장, 스페이스X_IPO, 스타링크, 앤트로픽, 나스닥, AI자본시장, 헥토콘] 

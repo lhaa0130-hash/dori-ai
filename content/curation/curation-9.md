@@ -2,7 +2,7 @@
 title: "looquee·Edits·PrompTessor·Keyboard Copilot: 입시, 영상 편집, 프롬프트, 모바일 글쓰기를 돕는 AI 도구"
 description: "이번 주에는 학생의 지원서 작성, 크리에이터의 숏폼 편집, 직장인의 프롬프트 정리, 모바일 글쓰기까지 바로 써볼 수 있는 AI 도구를 골랐습니다. AI가 앱 안으로 더 깊숙이 들어오고, 사용자는 ‘무엇을 만들지’에 더 집중하는 흐름이 뚜렷합니다."
 date: "2026-06-17"
-author: "DORI-AI"
+author: "illo"
 category: "큐레이션"
 thumbnail: "/thumbnails/curation/curation-9.jpg?v=2"
 tags: ["AI도구", "AI글쓰기", "AI영상편집", "AI프롬프트", "입시AI"]

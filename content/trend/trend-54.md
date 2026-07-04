@@ -2,7 +2,7 @@
 title: "빅파마, AI 신약 개발에 130조 베팅 — '10년·1조 원' 공식이 무너진다"
 description: "일라이 릴리·로슈·AstraZeneca 등 글로벌 제약 공룡들이 AI 신약 개발 플랫폼에 수십억 달러씩 쏟아붓고 있다. 로슈는 엔비디아와 'AI 팩토리'를 구축하고, 릴리는 인실리코 메디신과 손잡는 등 2026년 제약 업계의 패러다임 자체가 바뀌고 있다."
 date: "2026-03-29"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-54.png"
 tags:

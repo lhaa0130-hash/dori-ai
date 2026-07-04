@@ -2,7 +2,7 @@
 title: "Nvidia, Abridge와 손잡고 헬스케어 AI 모델 개발 착수"
 description: "Nvidia가 스타트업 Abridge와 협력하여 헬스케어 분야에 혁신을 가져올 AI 모델을 개발하고 있습니다. 이 협업은 의료 데이터의 분석과 활용에 중점을 두고 있습니다."
 date: "2026-06-13"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-95.jpg"
 tags: ["Nvidia", "Abridge", "헬스케어", "AI 모델", "의료 데이터"]

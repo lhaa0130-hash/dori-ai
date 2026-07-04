@@ -2,7 +2,7 @@
 title: "AI의 신뢰성과 의료 혁신 — 임상 시험의 새로운 네트워크"
 description: "AI 기술이 의료 분야에서 빠르게 도입되고 있지만, 신뢰성 부족으로 문제가 되고 있다. 이를 해결하기 위해 새로운 네트워크가 등장했다."
 date: "2026-06-21T20:00:20+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-148.jpg?v=2"
 tags: ["의료", "AI", "임상시험", "신뢰성", "혁신"]

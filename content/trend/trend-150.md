@@ -2,7 +2,7 @@
 title: "하와이대, AI와 데이터 과학으로 의료 혁신에 120억 원 투자"
 description: "하와이대학교가 AI와 데이터 과학을 활용하여 의료 분야의 혁신을 위한 120억 원 규모의 연구 자금을 확보했다."
 date: "2026-06-22T09:00:15+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-150.jpg?v=2"
 tags: ["하와이대학교", "AI", "의료", "데이터 과학", "연구"]

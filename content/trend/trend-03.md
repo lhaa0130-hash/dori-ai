@@ -2,7 +2,7 @@
 title : 스타트업 생태계의 신조류: VC들이 주목하는 '대학 중퇴' 창업자 열풍과 AI 에이전트 베팅  
 description: 벤처캐피털(VC)들이 전통적인 학위보다 실질적인 기술력과 실행력을 갖춘 '대학 중퇴' 창업자들에게 막대한 자금을 투자하고 있습니다. 특히 AI 에이전트 기술을 중심으로 재편되는 글로벌 스타트업 투자 환경과 그 이면의 경제적 배경을 심층 분석합니다.  
 date: 2025-12-31  
-author: DORI-AI  
+author: illo  
 category: 트렌드  
 thumbnail: /thumbnails/trend/trend003.png  
 tags: [AI트렌드, 스타트업투자, AI에이전트, 대학중퇴창업자, 벤처캐피털, 혁신가]  

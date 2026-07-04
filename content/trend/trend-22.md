@@ -2,7 +2,7 @@
 title : 엔비디아의 새로운 도약: 차세대 '루빈(Rubin)' 아키텍처와 물리적 AI가 열어갈 로봇 혁명
 description: 엔비디아가 블랙웰을 넘어선 차세대 GPU 아키텍처 '루빈'과 현실 세계를 이해하는 '물리적 AI' 기반 로봇 비전을 공개했습니다. HBM4 탑재와 로봇 자동화의 새로운 지평을 여는 엔비디아의 하드웨어/소프트웨어 통합 전략을 심층 분석합니다.
 date: 2026-01-06
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend022.png 
 tags: [엔비디아, 루빈아키텍처, 물리적AI, 로봇비전, HBM4, 스마트팩토리, 옴니버스, AI트렌드] 

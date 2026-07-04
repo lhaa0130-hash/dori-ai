@@ -2,7 +2,7 @@
 title: "[코딩] 챗GPT만 쓰면 손해입니다 | '무료'로 쓰는 코덱스(Codex) 2026 초보자 완벽 가이드"
 description: 코덱스를 활용한 다양한 자동화 기법을 소개합니다.
 date: 2026-06-23
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-8.jpg"
 tags: [영상, AI추천, 입문·기초, 김용성 교수의 AI 클래스, 유튜브]

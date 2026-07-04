@@ -2,7 +2,7 @@
 title : 엔비디아-지멘스, '산업용 AI 운영체제'로 피지컬 AI 시대 개막: CES 2026 파트너십 전격 확대
 description: 지멘스와 엔비디아가 CES 2026에서 '산업용 AI 운영체제' 구축을 위한 전략적 파트너십 확대를 발표했습니다. 디지털 트윈을 넘어 스스로 판단하고 적응하는 'AI 팩토리'의 청사진과 펩시코, HD현대의 실제 도입 사례를 분석합니다.
 date: 2026-01-07
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend028.png 
 tags: [엔비디아, 지멘스, 산업용AI, 피지컬AI, 디지털트윈, 옴니버스, CES2026, 스마트팩토리] 

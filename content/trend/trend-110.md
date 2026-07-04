@@ -2,7 +2,7 @@
 title: "스페이스X, 60억 달러에 AI 스타트업 커서를 인수하다"
 description: "스페이스X가 AI 코딩 스타트업 커서를 약 60억 달러에 인수하며 기업 AI 시장에 본격 진입합니다."
 date: "2026-06-16T22:00:19+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-110.jpg"
 tags: ["스페이스X", "AI 스타트업", "인수", "커서", "기업 AI"]

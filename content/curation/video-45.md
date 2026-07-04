@@ -2,7 +2,7 @@
 title: "[영상 제작] 구글 제미나이로 광고 및 영화 영상 제작하기"
 description: 구글 제미나이를 활용한 영상 제작 방법을 소개합니다.
 date: 2026-07-02
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-45.jpg"
 tags: [영상, AI추천, 영상 제작, 실무 활용, IB 96]

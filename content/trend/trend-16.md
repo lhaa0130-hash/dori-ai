@@ -2,7 +2,7 @@
 title : 구글 제미나이 3(Gemini 3), IQ 130 달성: 인공지능 인지 지능의 임계점을 넘다
 description: 구글 딥마인드가 개발한 Gemini 3가 표준 지능 검사에서 IQ 130을 기록하며 인류 상위 2.5% 수준의 인지 능력을 입증했습니다. '추론하는 AI'의 시대가 열리면서 산업 생산성과 화이트칼라 노동 구조에 미칠 거대한 변화를 심층 분석합니다.
 date: 2026-01-03
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend016.png 
 tags: [제미나이3, 구글딥마인드, AI_IQ, 인공지능인지능력, AGI, 추론형AI, 생산성혁신] 

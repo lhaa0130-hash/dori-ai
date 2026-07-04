@@ -2,7 +2,7 @@
 title: "[코딩] 무료로 AI가 파일 수정하는 CODEX 가이드"
 description: 코딩 없이도 AI를 활용해 파일을 수정하는 방법을 안내합니다.
 date: 2026-06-23
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-13.jpg"
 tags: [영상, AI추천, 코딩, 입문·기초, 닥또리]

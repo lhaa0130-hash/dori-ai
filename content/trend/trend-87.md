@@ -2,7 +2,7 @@
 title: "오픈 소스 패키지의 숨겨진 위협 — 수백만 AI 에이전트가 위험에 처하다"
 description: "오픈 소스 소프트웨어의 취약점이 수백만 개의 AI 에이전트를 위협하고 있으며, 그로 인해 발생하는 문제의 심각성을 탐구합니다."
 date: "2026-05-27"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-87.jpg"
 tags: ["오픈 소스", "AI", "보안", "취약점", "위험"]

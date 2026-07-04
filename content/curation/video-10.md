@@ -2,7 +2,7 @@
 title: "[AI 아트] 2026년 AI 아트 판매 시작하는 법 - 완벽 가이드"
 description: 2026년 AI 아트를 판매하는 방법을 단계별로 안내합니다.
 date: 2026-06-23
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-10.jpg"
 tags: [영상, AI추천, 비즈니스·산업, Roboverse, 유튜브]

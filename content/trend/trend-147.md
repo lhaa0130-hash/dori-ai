@@ -2,7 +2,7 @@
 title: "소셜 미디어에서 AI가 만든 인플루언서의 등장"
 description: "AI가 생성한 인플루언서들이 소셜 미디어에서 제품 홍보에 활용되고 있으며, 이는 마케팅의 새로운 패러다임을 제시하고 있다."
 date: "2026-06-21T18:00:20+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-147.jpg?v=2"
 tags: ["AI", "인플루언서", "소셜미디어", "마케팅", "트렌드"]

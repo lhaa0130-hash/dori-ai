@@ -2,7 +2,7 @@
 title: "AI와 기후 예측: 스티븐 티베난의 혁신적 접근"
 description: "버지니아 코먼웰스 대학교의 스티븐 티베난이 인공지능을 활용해 기후 예측의 새로운 지평을 열고 있습니다. 그의 연구는 기후 변화 대응에 중요한 이정표가 될 것으로 기대됩니다."
 date: "2026-05-25"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-80.jpg"
 tags: ["AI", "기후변화", "예측", "VCU"]

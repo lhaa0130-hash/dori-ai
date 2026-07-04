@@ -2,7 +2,7 @@
 title: "Accenture의 AI 미래, 불투명한 전망에 직면하다"
 description: "Accenture가 AI 시장의 불확실성으로 인해 어려움을 겪고 있다는 소식이 전해졌다. 이로 인해 기업 전략에 대한 새로운 고민이 필요해졌다."
 date: "2026-06-20T20:00:20+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-138.jpg"
 tags: ["Accenture", "AI", "미래", "기업 전략", "IT"]

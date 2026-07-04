@@ -2,7 +2,7 @@
 title: "Anthropic, 차세대 AI '클로드 미토스' 유출 사태 — 보안 실수가 드러낸 'AI 능력의 도약'"
 description: "Anthropic의 내부 CMS 설정 오류로 3,000개 이상의 문서가 공개되며 역대 가장 강력한 AI 모델 'Claude Mythos(코드명: Capybara)'의 존재가 세상에 드러났다. 이 모델은 추론·코딩·사이버보안에서 전례 없는 성능을 보이며 업계에 충격을 줬다."
 date: "2026-03-29"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-53.png"
 tags:

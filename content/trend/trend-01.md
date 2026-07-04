@@ -2,7 +2,7 @@
 title: 한국의 국가대표 AI 모델 'K-AI GPT' 공개와 K-AI 생태계의 미래 전략
 description: 대한민국 자체 기술력으로 완성된 'K-AI GPT' 공개의 의미와 산업 전반에 미치는 영향력을 심층 분석합니다. 디지털 주권 확보, 생산성 혁신, 그리고 글로벌 AI 패권 경쟁 속에서의 한국의 생태계 구축 전략을 다룹니다.
 date: 2025-12-31
-author: DORI-AI
+author: illo
 category: 트렌드
 thumbnail: /thumbnails/trend/trend001.png
 tags: [AI트렌드, K-AI, 생성형AI, 디지털주권, 생산성혁신, 조직문화]

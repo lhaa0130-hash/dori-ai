@@ -2,7 +2,7 @@
 title: "구글, 크로미움 사용자 위협하는 악성 코드 공개"
 description: "구글이 크로미움 사용자를 겨냥한 악성 코드의 세부 정보를 공개하며 보안 경각심을 높이고 있다."
 date: "2026-05-21"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-77.jpg"
 tags: ["구글", "크로미움", "보안", "악성 코드"]

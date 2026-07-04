@@ -2,7 +2,7 @@
 title: "[모델] 외부 세계 모델의 종말  LLM에 통합된"
 description: LLM에 통합된 외부 세계 모델의 변화를 다룹니다.
 date: 2026-07-01
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-43.jpg"
 tags: [영상, AI추천, 모델, 논문·연구, Discover AI]

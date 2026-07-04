@@ -2,7 +2,7 @@
 title: "OpenAI, 사이버보안 전용 AI 모델 'GPT-5.4-Cyber' 제한 공개—보안의 새 지평"
 description: "OpenAI가 2026년 4월 사이버보안 전용 AI 모델 GPT-5.4-Cyber를 발표하며 제한된 파트너사에만 단계적으로 배포를 시작했다. 악용 위험을 최소화하면서 방어적 보안 역량을 극대화하는 새로운 접근 방식이 업계의 주목을 받고 있다."
 date: 2026-04-18
-author: DORI-AI
+author: illo
 category: 트렌드
 thumbnail: /thumbnails/trend/trend-59.png
 tags:

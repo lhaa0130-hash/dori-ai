@@ -14,17 +14,17 @@ export async function generateMetadata(
   { params }: { params: { slug: string } }
 ): Promise<Metadata> {
   const project = getProjectBySlug(params.slug);
-  if (!project) return { title: "프로젝트 | DORI-AI" };
+  if (!project) return { title: "프로젝트 | illo" };
   const url = `${SITE_URL}/projects/${project.slug}`;
   return {
-    title: `${project.name} | DORI-AI 프로젝트`,
+    title: `${project.name} | illo 프로젝트`,
     description: project.longDesc,
     alternates: { canonical: url },
     openGraph: {
-      title: `${project.name} | DORI-AI`,
+      title: `${project.name} | illo`,
       description: project.desc,
       url,
-      siteName: "DORI-AI",
+      siteName: "illo",
       locale: "ko_KR",
       type: "website",
     },

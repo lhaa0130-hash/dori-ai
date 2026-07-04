@@ -26,7 +26,7 @@ https://dori-ai.com/insight/article/trend-112
 
 **Title:** Google's Android 17 Introduces Revolutionary Multitasking Features and Enhanced Security
 
-Google has officially launched Android 17, introducing significant improvements in multitasking capabilities. Users can now run two apps side by side, enhancing efficiency in both work and personal tasks. The update also includes strengthened parental controls and security tools for better privacy protection. This innovation showcases how AI technology is being integrated into everyday life. How do you think these advancements will impact your smartphone usage? Source: DORI-AI
+Google has officially launched Android 17, introducing significant improvements in multitasking capabilities. Users can now run two apps side by side, enhancing efficiency in both work and personal tasks. The update also includes strengthened parental controls and security tools for better privacy protection. This innovation showcases how AI technology is being integrated into everyday life. How do you think these advancements will impact your smartphone usage? Source: illo
 
 https://dori-ai.com/insight/article/trend-112
 

@@ -2,7 +2,7 @@
 title: "구글, 에이전트 시대 위한 TPU 8t·8i 공개 — 엔비디아에 도전장"
 description: "구글 클라우드가 8세대 AI 전용 칩 TPU 8t(트레이닝)와 TPU 8i(추론) 두 종을 공개했다. 전 세대 대비 모델 훈련 속도 3배, 비용 대비 성능 80% 향상을 내세우며 AI 인프라 패권을 놓고 엔비디아와의 경쟁에 불을 지폈다."
 date: "2026-04-25"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-71.png"
 tags:

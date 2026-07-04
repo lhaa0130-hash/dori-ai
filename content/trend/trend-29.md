@@ -2,7 +2,7 @@
 title : 삼성전자, 2026년 ‘AI 기기 4억 대’ 출하 목표 수립: 갤럭시 AI 대중화와 8억 대 생태계 선언
 description: 삼성전자가 CES 2026에서 'AI 일상 동반자' 비전을 선포하며 올해 4억 대의 신규 AI 기기 출하 계획을 공개했습니다. 누적 8억 대의 연결된 지능형 생태계가 가져올 변화와 반도체 수급난 속 가격 전략을 심층 분석합니다.
 date: 2026-01-07
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend029.png 
 tags: [삼성전자, AI대중화, CES2026, 갤럭시AI, 노태문사장, 온디바이스AI, S26전망, 스마트싱스] 

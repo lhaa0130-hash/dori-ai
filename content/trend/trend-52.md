@@ -2,7 +2,7 @@
 title: "가트너 예측: 2028년까지 전 세계 정부 80% AI 에이전트 도입 — 공공행정의 대전환이 시작됐다"
 description: "가트너(Gartner)가 2026년 3월, 2028년까지 전 세계 정부의 80% 이상이 루틴 의사결정 자동화를 위해 AI 에이전트를 도입할 것이라고 예측했다. 정부 AI 도입의 가속화 배경과 의사결정 인텔리전스(DI) 거버넌스 패러다임의 변화를 심층 분석한다."
 date: 2026-03-28
-author: DORI-AI
+author: illo
 category: 트렌드
 thumbnail: /thumbnails/trend/trend-52.png
 tags:

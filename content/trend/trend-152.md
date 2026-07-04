@@ -2,7 +2,7 @@
 title: "삼성전자의 혁신: 직원들에게 ChatGPT와 Codex 도입"
 description: "삼성전자가 ChatGPT와 Codex를 직원들에게 도입하며 업무 효율성을 높이고 있다. 이 변화는 AI 기술의 실용성을 다시 한번 입증하고 있다."
 date: "2026-06-22T12:00:18+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-152.jpg?v=2""/thumbnails/trend/trend-152.jpg"
 tags: ["삼성전자", "ChatGPT", "Codex", "AI 도입", "업무 혁신"]

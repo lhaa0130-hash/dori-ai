@@ -2,7 +2,7 @@
 title: "Salesforce, AI 고객 서비스 플랫폼 Fin 인수 — 36억 달러의 배경은?"
 description: "Salesforce가 36억 달러에 AI 고객 서비스 플랫폼 Fin을 인수했다. 이 결정의 의미와 향후 계획을 살펴본다."
 date: "2026-06-16"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-104.jpg"
 tags: ["Salesforce", "Fin", "AI 고객 서비스", "기업 인수", "테크 트렌드"]

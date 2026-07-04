@@ -2,7 +2,7 @@
 title: "2026 월드IT쇼 개막: '현실을 움직이는 AI' 기술의 향연"
 description: "국내 최대 ICT 전시회인 2026 월드IT쇼(WIS 2026)가 개막했습니다. '생각을 넘어 행동으로'라는 슬로건 아래 펼쳐진 피지컬 AI와 혁신 기술들을 살펴봅니다."
 date: "2026-04-22"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-65.png"
 tags: ["월드IT쇼", "WIS2026", "피지컬AI", "ICT트렌드", "인공지능", "K-엔터테크", "전시회", "IT뉴스"]

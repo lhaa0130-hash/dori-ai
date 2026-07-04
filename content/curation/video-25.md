@@ -2,7 +2,7 @@
 title: "[반도체] 애플 출신 엔지니어가 설명하는 초저전력 AI 반도체"
 description: 딥엑스의 AI 반도체 개발과 그 중요성을 설명한다.
 date: 2026-06-24
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-25.jpg"
 tags: [영상, AI추천, 반도체, 최신 뉴스, 언더스탠딩 : 세상의 모든 지식]

@@ -2,7 +2,7 @@
 title: 2026년 AI 트렌드 전망: 실험의 시대를 넘어 '융전틱 AI'와 인프라 중심 성장의 가속화  
 description: 2026년 AI 산업의 핵심인 융합형 전용 AI(융전틱 AI) 도입과 대규모 인프라 확장 현황을 분석합니다. 실험 단계를 넘어 실제 산업 현장에 적용되는 AI 기술이 생산성과 노동 구조에 미치는 영향을 심층적으로 다룹니다.  
 date: 2025-12-31  
-author: DORI-AI  
+author: illo  
 category: 트렌드  
 thumbnail: /thumbnails/trend/trend002.png  
 tags: [AI트렌드, 융전틱AI, 엣지컴퓨팅, 인프라투자, 업무자동화, 리스킬링]  

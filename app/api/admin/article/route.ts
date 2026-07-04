@@ -105,7 +105,7 @@ export async function POST(req: NextRequest) {
           body: JSON.stringify({
             message: `[admin] delete: ${slug}`,
             sha: fileInfo.sha,
-            committer: { name: 'DORI-AI Admin', email: ADMIN_EMAIL },
+            committer: { name: 'illo Admin', email: ADMIN_EMAIL },
           }),
         }
       );
@@ -133,7 +133,7 @@ export async function POST(req: NextRequest) {
             message: `[admin] update: ${slug}`,
             content: contentBase64,
             sha: fileInfo.sha,
-            committer: { name: 'DORI-AI Admin', email: ADMIN_EMAIL },
+            committer: { name: 'illo Admin', email: ADMIN_EMAIL },
           }),
         }
       );

@@ -2,7 +2,7 @@
 title: "구글 딥마인드, 할리우드에 750억 원 투자 — AI 영화 제작의 새로운 시대 열리나"
 description: "구글 딥마인드가 할리우드 제작사 A24와 손잡고 AI 영화 제작 도구 개발에 750억 원을 투자한다. 이번 협력은 영화산업에 AI 기술의 본격적 활용을 의미한다."
 date: "2026-06-23T16:00:25+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-159.jpg"
 tags: ["구글", "딥마인드", "영화", "AI", "A24"]

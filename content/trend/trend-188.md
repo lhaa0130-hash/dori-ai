@@ -2,7 +2,7 @@
 title: "AI 하드웨어 밀수, 대만의 경각심을 일깨우다"
 description: "대만이 AI 하드웨어 밀수 사건을 본격적으로 수사하며 글로벌 기술 시장의 불법 거래 위험을 경고하고 있다."
 date: "2026-06-30T20:00:20+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-188.jpg"
 tags: ["대만", "AI", "하드웨어", "밀수", "기술"]

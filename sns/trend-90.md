@@ -26,7 +26,7 @@ https://dori-ai.com/insight/article/trend-90
 
 **Title:** Anthropic Launches AI Training Program for Nonprofits to Enhance Social Impact
 
-Anthropic has announced the launch of 'Claude Corps', an AI training program aimed at enhancing the capabilities of nonprofit organizations. This initiative is expected to help nonprofits leverage AI for data analysis, resource management, and communication improvement. With AI's potential to address social issues, how can we ensure that these technologies are accessible to all nonprofits? Source: DORI-AI
+Anthropic has announced the launch of 'Claude Corps', an AI training program aimed at enhancing the capabilities of nonprofit organizations. This initiative is expected to help nonprofits leverage AI for data analysis, resource management, and communication improvement. With AI's potential to address social issues, how can we ensure that these technologies are accessible to all nonprofits? Source: illo
 
 https://dori-ai.com/insight/article/trend-90
 

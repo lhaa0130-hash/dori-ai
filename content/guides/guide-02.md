@@ -2,7 +2,7 @@
 title: "입문서 02: 프롬프트 엔지니어링 — 비싼 강의에서만 알려주는 실전 기법 8가지"
 description: "역할 부여, Few-Shot, Chain of Thought, 메타 프롬프트까지 — 결과를 극적으로 바꾸는 프롬프트 기법을 예시와 함께 정리한다."
 date: 2026-06-24
-author: DORI-AI
+author: illo
 category: 가이드
 thumbnail: "/thumbnails/guide/guide02.png?v=3"
 tags: ["프롬프트엔지니어링", "ChatGPT", "Claude", "AI활용"]

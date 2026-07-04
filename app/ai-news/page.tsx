@@ -7,7 +7,7 @@ const SITE = "https://illo.im";
 export const metadata = createMetadata({
   title: "AI 정보 사이트 총정리 — 뉴스·커뮤니티·뉴스레터·리더보드",
   description:
-    "GeekNews, Hacker News, TLDR AI, LMArena, Hugging Face 등 AI 정보를 얻기 좋은 사이트를 뉴스·커뮤니티·뉴스레터·리더보드·연구 카테고리로 모았습니다. DORI-AI 큐레이션.",
+    "GeekNews, Hacker News, TLDR AI, LMArena, Hugging Face 등 AI 정보를 얻기 좋은 사이트를 뉴스·커뮤니티·뉴스레터·리더보드·연구 카테고리로 모았습니다. illo 큐레이션.",
   path: "/ai-news",
   keywords: [
     "AI 뉴스 사이트", "AI 정보 사이트", "AI 커뮤니티", "AI 뉴스레터", "GeekNews",

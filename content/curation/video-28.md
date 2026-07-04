@@ -2,7 +2,7 @@
 title: "[홈페이지] 클로드로 고퀄 홈페이지 만드는 법"
 description: 클로드를 활용해 30분 만에 홈페이지를 만드는 방법을 소개합니다.
 date: 2026-06-25
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-28.jpg"
 tags: [영상, AI추천, 홈페이지, 실무 활용, 홍아린 AI]

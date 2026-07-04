@@ -2,7 +2,7 @@
 title: "스페이스X IPO와 AI의 미래, 투자자들은 어떤 변화를 기대할까?"
 description: "스페이스X의 IPO가 AI 산업에 미치는 영향과 투자자들이 주목해야 할 요소들을 살펴봅니다."
 date: "2026-06-13"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-93.jpg"
 tags: ["스페이스X", "IPO", "AI", "투자", "산업 변화"]

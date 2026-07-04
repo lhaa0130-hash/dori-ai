@@ -2,7 +2,7 @@
 title: "[개발] AI 시대의 개발자로서의 생존 전략"
 description: AI 시대에 개발자가 어떻게 경쟁력을 유지할 수 있는지 설명한다.
 date: 2026-06-24
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-24.jpg"
 tags: [영상, AI추천, 개발, 입문·기초, Awesome]

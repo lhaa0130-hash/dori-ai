@@ -2,7 +2,7 @@
 title: "[교육] AI Tech Transforming Language Learning"
 description: AI가 언어 학습에 미치는 영향을 다룹니다.
 date: 2026-06-27
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-32.jpg"
 tags: [영상, AI추천, 교육, 최신 뉴스, Russell Stannard (TT]

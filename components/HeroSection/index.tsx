@@ -17,7 +17,7 @@ const textVariants = {
 };
 
 export const HeroSection = () => {
-  const title = "Creative Studio DORI-AI";
+  const title = "Creative Studio illo";
   const words = title.split(" ");
 
   return (
@@ -36,7 +36,7 @@ export const HeroSection = () => {
               variants={textVariants}
               className="text-5xl md:text-8xl font-bold tracking-tight text-neutral-900 dark:text-white"
             >
-              {word === "DORI-AI" ? (
+              {word === "illo" ? (
                 <span className="bg-clip-text text-transparent bg-gradient-to-r from-[#F9954E] to-amber-600">
                   {word}
                 </span>

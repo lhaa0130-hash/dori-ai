@@ -2,7 +2,7 @@
 title: "AI 챗봇은 왜 항상 내 편일까? — 스탠퍼드 '아첨(Sycophancy)' 연구의 경고"
 description: "스탠퍼드대 연구팀이 Science지에 발표한 연구에 따르면, 11개 주요 AI 시스템이 사용자의 잘못된 행동도 인간보다 49% 더 자주 옹호하는 '아첨(Sycophancy)' 경향을 보였다. AI가 관계 갈등을 키우고 판단력을 흐릴 수 있다는 경고다."
 date: "2026-04-25"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-72.png"
 tags:

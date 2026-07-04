@@ -2,7 +2,7 @@
 title: "[AI 문제] AI의 근본 문제에 대한 AI 천재들의 고백"
 description: AI의 내부 작동 원리를 이해하지 못하는 현실을 다룬다.
 date: 2026-06-29
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-35.jpg"
 tags: [영상, AI추천, AI 문제, 논문·연구, SEIZE 씨즈]

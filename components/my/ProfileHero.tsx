@@ -125,7 +125,7 @@ export default function ProfileHero({
           {/* Intro Text */}
           <div className="mb-8 max-w-2xl mx-auto md:mx-0">
             <p className={`text-sm leading-relaxed font-medium ${isDark ? "text-zinc-400" : "text-neutral-500"}`}>
-              {safeProfile.bio || "새로운 AI 시대를 함께 열어가는 DORI AI 크리에이터입니다."}
+              {safeProfile.bio || "새로운 AI 시대를 함께 열어가는 illo 크리에이터입니다."}
             </p>
             {safeProfile.statusMessage && (
               <p className="mt-2 text-xs font-bold text-[#F9954E]/80">

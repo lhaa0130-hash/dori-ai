@@ -2,7 +2,7 @@
 title: "FigureAI Rose 200시간 시연: 챗봇을 넘어 창고로 들어가는 피지컬 AI"
 description: "휴머노이드 로봇이 실험실을 벗어나 물류·제조·서비스 현장으로 이동하고 있다. 핵심은 더 똑똑한 챗봇이 아니라, 오래 버티고 안전하게 움직이며 기존 업무 흐름에 붙는 AI다."
 date: "2026-07-01T14:03:40+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "분석"
 thumbnail: "/thumbnails/analysis/analysis-11.jpg"
 tags: ["피지컬 AI", "휴머노이드", "FigureAI", "로봇 자동화", "일자리"]

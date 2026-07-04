@@ -8,7 +8,7 @@ import { ArrowUpRight, BookOpen, Smartphone, Video, Film, ShoppingBag, Box } fro
 const projects = [
     {
         id: "dori-ai",
-        title: "Dori-AI",
+        title: "illo",
         description: "창의적인 상상력을 현실로 구현하는 차세대 AI 에듀테크 통합 플랫폼. 다채로운 인공지능 기반 서비스와 교육 콘텐츠 경험을 제공합니다.",
         status: "ACTIVE",
         category: "Web Platform",
@@ -38,8 +38,8 @@ const projects = [
     },
     {
         id: "app",
-        title: "DORI-AI App",
-        description: "언제 어디서나 접근 가능한 DORI-AI 전용 모바일 애플리케이션.",
+        title: "illo App",
+        description: "언제 어디서나 접근 가능한 illo 전용 모바일 애플리케이션.",
         status: "COMING SOON",
         category: "Mobile App",
         icon: Smartphone,

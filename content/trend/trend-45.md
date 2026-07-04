@@ -2,7 +2,7 @@
 title: "GPT-5.4 출시: 전문 업무의 새 기준, 컴퓨터를 직접 다루는 AI"
 description: "OpenAI가 2026년 3월 5일 GPT-5.4를 공개했습니다. 전문직 업무 벤치마크 83% 달성, 100만 토큰 컨텍스트, 컴퓨터 직접 조작 기능을 갖춘 이 모델은 AI와 업무의 경계를 다시 정의합니다."
 date: 2026-03-10
-author: DORI-AI
+author: illo
 category: 트렌드
 thumbnail: /thumbnails/trend/trend-45.png
 tags:

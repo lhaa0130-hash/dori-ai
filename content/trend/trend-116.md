@@ -2,7 +2,7 @@
 title: "딥엘, 믹스할로 인수 — 실시간 음성 번역의 새로운 장을 열다"
 description: "딥엘이 믹스할로를 인수하며 실시간 이벤트 오디오 스트리밍 및 번역 서비스에 진출한다. 샌프란시스코 사무소 개설로 미국 시장을 겨냥한다."
 date: "2026-06-17T22:00:47+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-116.jpg"
 tags: ["딥엘", "믹스할로", "실시간 번역", "음성 스트리밍", "기술 혁신"]

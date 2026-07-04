@@ -2,7 +2,7 @@
 title: "OpenAI 저가요금제·SK하이닉스 EUV·Figure AI: AI 돈길이 모델에서 물리 인프라로 넓어진다"
 description: "이번 주 AI 산업의 핵심은 모델 성능 경쟁보다 비용, 인프라, 표준, 로봇 상용화로 돈이 이동하고 있다는 점입니다. 저가형 AI 서비스, HBM 생산설비, 피지컬 AI 투자가 함께 움직이며 다음 성장 구간의 주도권을 가르고 있습니다."
 date: "2026-07-03T11:03:18+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "리포트"
 thumbnail: "/thumbnails/reports/report-9.jpg"
 tags: ["AI인프라", "HBM", "피지컬AI", "AI투자", "AI서비스"]

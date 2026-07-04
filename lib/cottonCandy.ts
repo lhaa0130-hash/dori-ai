@@ -746,7 +746,7 @@ export interface AchievementStats {
 }
 
 export const ACHIEVEMENTS: Achievement[] = [
-  { id: "first_visit",   emoji: "🎉", name: "첫 방문",          description: "DORI-AI에 처음 방문",           reward: 10,   condition: () => true },
+  { id: "first_visit",   emoji: "🎉", name: "첫 방문",          description: "illo에 처음 방문",           reward: 10,   condition: () => true },
   { id: "first_post",    emoji: "📝", name: "첫 글쓰기",        description: "커뮤니티 글 1개 작성",           reward: 50,   condition: (s) => s.totalPosts >= 1 },
   { id: "comment_king",  emoji: "💬", name: "댓글왕",           description: "댓글 10개 달기",                 reward: 100,  condition: (s) => s.totalComments >= 10 },
   { id: "streak_3",      emoji: "🔥", name: "3일 연속 출석",    description: "3일 연속으로 출석",              reward: 100,  condition: (s) => s.streak >= 3 },

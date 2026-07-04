@@ -111,7 +111,7 @@ export const INSIGHT_DATA: InsightItem[] = [
 
       <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-xl my-4">
         <span class="text-blue-600 dark:text-blue-300 font-bold">🧪 실전 예시</span>
-        <p class="mt-1 text-sm">"안녕하세요. DORI-AI 가이드 1단계입니다. 오늘은 AI 기본 기능을 함께 배워보겠습니다."</p>
+        <p class="mt-1 text-sm">"안녕하세요. illo 가이드 1단계입니다. 오늘은 AI 기본 기능을 함께 배워보겠습니다."</p>
       </div>
 
       <br/>

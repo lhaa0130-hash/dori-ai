@@ -2,7 +2,7 @@
 title: "Probably, 더 정확한 AI를 위한 9백만 달러 확보"
 description: "Probably가 9백만 달러를 확보하며 신뢰할 수 있는 AI 모델 개발에 나섰습니다. 이는 AI의 정확성을 높이기 위한 중요한 이정표로 평가됩니다."
 date: "2026-06-17T15:00:16+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-113.jpg"
 tags: ["Probably", "AI", "정확도", "투자", "모델"]

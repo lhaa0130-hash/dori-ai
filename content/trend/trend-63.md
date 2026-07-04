@@ -2,7 +2,7 @@
 title: "Anthropic, 사이버보안 특화 AI 모델 'Claude Mythos' 공개 — 해킹도 막고 해킹도 한다"
 description: "Anthropic이 역대 가장 강력한 AI 모델 'Claude Mythos Preview'를 공개했다. 사이버보안 분야에서 초인적 수준의 취약점 탐지 능력을 보여주지만, 동시에 강력한 사이버공격 도구로 악용될 수 있다는 우려로 제한적 배포가 결정됐다."
 date: "2026-04-20"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-63.png"
 tags:

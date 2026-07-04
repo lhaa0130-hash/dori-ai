@@ -92,7 +92,7 @@ export default function OpenPopup() {
 
               {/* Text Content */}
               <h2 className="text-xl font-bold text-foreground mb-3 tracking-tight">
-                DORI-AI에 오신 것을 환영합니다!
+                illo에 오신 것을 환영합니다!
               </h2>
 
               <div className="text-sm text-muted-foreground leading-relaxed space-y-1 mb-8">

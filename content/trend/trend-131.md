@@ -2,7 +2,7 @@
 title: "앤트로픽, AI 안전 규칙 논의로 백악관과 접촉"
 description: "앤트로픽이 백악관과 AI 안전 규칙 설정을 위한 대화를 시작했습니다. 이는 AI 기술의 안전성과 규제 필요성을 강조하는 중요한 이정표입니다."
 date: "2026-06-19T18:00:17+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-131.jpg"
 tags: ["앤트로픽", "AI 규제", "백악관", "AI 안전", "정책"]

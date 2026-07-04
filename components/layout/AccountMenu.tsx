@@ -849,8 +849,8 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                                       const { handleShareMission } = require('@/lib/missionProgress');
                                       if (navigator.share) {
                                         await navigator.share({
-                                          title: 'Dori AI',
-                                          text: 'Dori AI를 확인해보세요!',
+                                          title: 'illo',
+                                          text: 'illo를 확인해보세요!',
                                           url: window.location.origin,
                                         });
                                         await handleShareMission();

@@ -2,7 +2,7 @@
 title: "앤트로픽, 트럼프의 압박 속에서 AI 규제의 새로운 장을 열다"
 description: "앤트로픽이 트럼프의 압박을 받으며 AI 규제에 대한 새로운 논의를 주도하고 있다. 이는 AI 산업의 방향성을 바꿀 수 있는 중요한 사건이다."
 date: "2026-06-19T22:00:44+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-133.jpg"
 tags: ["앤트로픽", "트럼프", "AI 규제", "산업 변화", "정치적 영향"]

@@ -2,7 +2,7 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "페이지를 찾을 수 없습니다 | DORI-AI",
+  title: "페이지를 찾을 수 없습니다 | illo",
   robots: { index: false, follow: true },
 };
 

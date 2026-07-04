@@ -30,13 +30,13 @@ export default function Footer() {
       {/* 폭을 헤더/본문과 동일하게(xl:px-[260px] px-6) */}
       <div className="px-6 xl:px-[260px] py-9">
 
-        {/* 상단: DORI-AI(좌) + SNS 5종(우측 끝) */}
+        {/* 상단: illo(좌) + SNS 5종(우측 끝) */}
         <div className="flex items-center justify-between gap-4 mb-7">
           <Link
             href="/"
             className="text-lg font-extrabold tracking-tight bg-[linear-gradient(to_right,#FBAA60,#F9954E_40%,#E8832E)] bg-clip-text text-transparent hover:opacity-80 transition-opacity"
           >
-            DORI-AI
+            illo
           </Link>
           <SocialLinks />
         </div>

@@ -74,9 +74,9 @@ export default function Header() {
         <div className="w-full h-16 flex items-center gap-4 px-6 xl:px-[260px]">
 
           {/* 로고 */}
-          <Link href="/" aria-label="DORI-AI Home" className="flex-shrink-0 hover:opacity-70 transition-opacity">
+          <Link href="/" aria-label="illo Home" className="flex-shrink-0 hover:opacity-70 transition-opacity">
             <span className="font-bold text-lg whitespace-nowrap bg-[linear-gradient(to_right,#FBAA60,#F9954E_30%,#F9954E_70%,#E8832E)] bg-clip-text text-transparent animate-gradient-x">
-              DORI-AI
+              illo
             </span>
           </Link>
 

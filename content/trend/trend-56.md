@@ -2,7 +2,7 @@
 title: "NVIDIA GTC 2026: 피지컬 AI 시대의 개막—로봇이 현실 세계로 나온다"
 description: "NVIDIA GTC 2026에서 젠슨 황 CEO가 선언한 '피지컬 AI 빅뱅'. 자율주행차부터 휴머노이드 로봇까지, 디지털 AI가 물리적 현실과 결합하는 새로운 산업혁명의 서막을 분석한다."
 date: "2026-03-30"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-56.png"
 tags:

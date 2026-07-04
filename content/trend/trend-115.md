@@ -2,7 +2,7 @@
 title: "G7 정상회의의 새로운 주인공, OpenAI와 앤트로픽"
 description: "G7 정상회의에서 OpenAI와 앤트로픽이 주목받으며 AI 기술과 정치의 융합이 어떻게 이루어지고 있는지를 탐구합니다."
 date: "2026-06-17T20:00:18+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-115.jpg"
 tags: ["G7", "OpenAI", "앤트로픽", "AI", "정치"]

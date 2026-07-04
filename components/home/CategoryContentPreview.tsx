@@ -9,7 +9,7 @@ import { ArrowRight, Users, Clock, Gamepad2, Lightbulb, Cog, Sparkles, TrendingU
 const projectPreviews = [
     {
         id: "site",
-        title: "사이트: DORI-AI",
+        title: "사이트: illo",
         description: "AI 정보를 공유하고 소통하는 커뮤니티 플랫폼",
         status: "ACTIVE",
         statusLabel: "진행 중",
@@ -28,7 +28,7 @@ const projectPreviews = [
     {
         id: "app",
         title: "애플리케이션",
-        description: "언제 어디서나 접근 가능한 DORI-AI 전용 앱",
+        description: "언제 어디서나 접근 가능한 illo 전용 앱",
         status: "COMING SOON",
         statusLabel: "준비 중",
         category: "Mobile App",
@@ -286,7 +286,7 @@ export function ProjectPreview() {
                                 <div className="flex items-center justify-between text-[10px] text-muted-foreground mt-1 pl-7">
                                     <span className="flex items-center gap-1">
                                         <Users className="w-2.5 h-2.5" />
-                                        <span>DORI-AI</span>
+                                        <span>illo</span>
                                     </span>
                                     <span>{project.category}</span>
                                 </div>

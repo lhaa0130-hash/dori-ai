@@ -2,7 +2,7 @@
 title: "고급편 01: 여러 AI를 동시에 쓰는 멀티 AI 시스템 설계법"
 description: Claude에게 기획, GPT에게 실행, Perplexity에게 팩트체크 — AI 역할 분업 시스템으로 혼자 팀처럼 일하는 법
 date: 2026-06-24
-author: DORI-AI
+author: illo
 category: 가이드
 thumbnail: "/thumbnails/guide/guide07.png?v=3"
 tags: [멀티AI, Claude, ChatGPT, Perplexity, AI시스템]

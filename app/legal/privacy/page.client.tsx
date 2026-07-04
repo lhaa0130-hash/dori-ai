@@ -87,7 +87,7 @@ export default function PrivacyClient() {
             </span>
           </h1>
           <p className="text-base md:text-lg font-medium text-neutral-600 dark:text-neutral-300 break-keep leading-relaxed max-w-xl">
-            DORI-AI는 이용자의 개인정보를 소중히 보호합니다.
+            illo는 이용자의 개인정보를 소중히 보호합니다.
           </p>
           <p className="text-xs text-neutral-400 dark:text-neutral-500 mt-3">
             최종 수정일: 2026년 2월 16일 · 시행일: 2026년 2월 16일
@@ -98,7 +98,7 @@ export default function PrivacyClient() {
       {/* 안내 배너 */}
       <section className="container max-w-3xl mx-auto px-4 sm:px-6 mb-6 sm:mb-8 relative z-10">
         <div className="p-5 rounded-2xl bg-[#FFF5EB]/50 dark:bg-orange-950/10 border border-[#FDD5A5]/50 dark:border-[#B35E15]/30 text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-          DORI-AI(이하 &quot;회사&quot;)는 「개인정보 보호법」 제30조에 따라 이용자의 개인정보를 보호하고, 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 다음과 같이 개인정보 처리방침을 수립·공개합니다.
+          illo(이하 &quot;회사&quot;)는 「개인정보 보호법」 제30조에 따라 이용자의 개인정보를 보호하고, 이와 관련한 고충을 신속하고 원활하게 처리할 수 있도록 다음과 같이 개인정보 처리방침을 수립·공개합니다.
         </div>
       </section>
 

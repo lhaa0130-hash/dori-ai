@@ -2,7 +2,7 @@
 title: "ON 반도체, Synaptics 인수로 물리적 AI 혁신 가속화"
 description: "ON Semiconductor가 Synaptics를 70억 달러에 인수하며 물리적 AI 기술에 더욱 집중할 계획을 밝혔습니다."
 date: "2026-06-26T18:00:17+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-172.jpg"
 tags: ["ON Semiconductor", "Synaptics", "물리적 AI", "AI 혁신", "기술 기업 인수"]

@@ -3,7 +3,7 @@ import { createMetadata } from '@/lib/seo';
 
 export const metadata = createMetadata({
   title: '커뮤니티',
-  description: 'DORI-AI 커뮤니티에서 자유롭게 의견을 나누고 정보를 공유하세요.',
+  description: 'illo 커뮤니티에서 자유롭게 의견을 나누고 정보를 공유하세요.',
   path: '/community',
 });
 

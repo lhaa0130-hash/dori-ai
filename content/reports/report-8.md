@@ -2,7 +2,7 @@
 title: "OpenAI 토큰 비용 압박·SK하이닉스 HBM4·피지컬 AI: 비용 효율이 돈길을 바꾼 한 주"
 description: "이번 주 AI 산업의 핵심은 더 큰 모델이 아니라 더 싼 사용료, 더 빠른 메모리, 더 현실적인 로봇이었다. 자금은 과시적 모델 경쟁에서 인프라 병목과 실제 업무 자동화로 이동하고 있다."
 date: "2026-07-01T11:03:42+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "리포트"
 thumbnail: "/thumbnails/reports/report-8.jpg"
 tags: ["OpenAI", "HBM", "피지컬AI", "AI투자", "토큰비용"]

@@ -2,7 +2,7 @@
 title: "OpenAI에 대한 주 정부의 조사, 무엇이 문제인가?"
 description: "OpenAI가 주 정부 검사에 직면했습니다. 광고 정책부터 건강 데이터 처리까지, 여러 의혹이 제기되고 있습니다."
 date: "2026-06-14"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-98.jpg"
 tags: ["OpenAI", "조사", "건강 데이터", "광고 정책", "AI 윤리"]

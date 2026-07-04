@@ -2,7 +2,7 @@
 title: "엘론 머스크의 우주 데이터 센터, 과연 실현될까?"
 description: "엘론 머스크의 우주 데이터 센터 비전에 대한 의문과 그에 따른 업계 반응을 살펴봅니다."
 date: "2026-06-28T12:00:14+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-177.jpg"
 tags: ["엘론 머스크", "우주 데이터 센터", "소프트뱅크", "AI 기술", "기술 혁신"]

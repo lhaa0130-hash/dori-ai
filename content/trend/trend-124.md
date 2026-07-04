@@ -2,7 +2,7 @@
 title: "아마존, AI 칩으로 엔비디아에 도전한다"
 description: "아마존이 AI 칩 판매로 5조 원 규모의 시장을 겨냥하며 엔비디아의 독주에 도전한다."
 date: "2026-06-19T07:00:15+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-124.jpg"
 tags: ["아마존", "AI 칩", "엔비디아", "AWS", "AI 시장"]

@@ -2,7 +2,7 @@
 title: "SpaceX·Baseten·Salesforce가 보여준 AI 돈길: 데이터센터, 고밸류 스타트업, 업무 에이전트의 재배치"
 description: "이번 주 AI 산업의 핵심은 모델 성능 경쟁보다 자본과 물리 인프라의 재배치였다. 데이터센터 공간, 고평가 스타트업, 업무용 에이전트가 한 축으로 묶이며 AI 수익성 검증 압력이 커지고 있다."
 date: "2026-06-29T11:02:04+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "리포트"
 thumbnail: "/thumbnails/reports/report-7.jpg"
 tags: ["AI투자", "데이터센터", "AI에이전트", "피지컬AI", "스타트업밸류에이션"]

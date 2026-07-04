@@ -2,7 +2,7 @@
 title : 애플의 2026년 사활을 건 승부수: ‘AI 탑재 시리(Siri)’와 12억 대의 아이폰 교체 주기 폭발할까
 description: 2026년 공개될 ‘Siri 2.0’과 애플 인텔리전스의 완성형 모델이 아이폰 역사상 최대 규모의 교체 주기를 촉발할 것으로 보입니다. 기술적 사양, 시장 전망, 그리고 경쟁사와의 비교 분석을 통해 애플의 AI 승부수를 심층 분석합니다.
 date: 2025-12-31  
-author: DORI-AI  
+author: illo  
 category: 트렌드  
 thumbnail: /thumbnails/trend/trend004.png  
 tags: [애플인텔리전스, 아이폰18, 시리2.0, AI트렌드, 온디바이스AI, 스마트폰시장]  

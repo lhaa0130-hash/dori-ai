@@ -2,7 +2,7 @@
 title : 유튜브를 점령한 'AI 슬롭(Slop)' 콘텐츠의 위협: 무분별한 생성 영상이 플랫폼 생태계에 미치는 영향
 description: 2026년 유튜브의 최대 과제는 저품질 AI 생성 콘텐츠인 '슬롭(Slop)'과의 전쟁입니다. 유튜브의 새로운 수익 창출 규제 정책(YPP 2025)과 AI 라벨링 의무화, 그리고 이것이 창작자 생태계에 미치는 파급 효과를 심층 분석합니다.
 date: 2026-01-02
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend012.png 
 tags: [AI슬롭, 유튜브트렌드, 생성형AI규제, YPP정책, 콘텐츠품질, 디지털스팸, AI라벨링] 

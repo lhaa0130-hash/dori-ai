@@ -2,7 +2,7 @@
 title : 은행권, AI 도입으로 20만 명 규모 감원 전망: 금융권 일자리 생태계의 급격한 지각변동
 description: 인공지능(AI)이 금융권의 화이트칼라 일자리를 빠르게 대체하고 있습니다. 유럽 주요 은행의 20만 명 감원 전망과 골드만삭스, 시티그룹 등 글로벌 투자은행들의 인력 구조 재편 현황을 통해 금융권 고용 시장의 미래를 진단합니다.
 date: 2026-01-02
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend009.png 
 tags: [AI트렌드, 금융권구조조정, 디지털전환, 리스킬링, 리스크관리, 핀테크] 

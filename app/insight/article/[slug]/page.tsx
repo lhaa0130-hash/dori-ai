@@ -43,22 +43,22 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   try {
     const post = await getPostData(params.slug);
-    const title = post.title || "DORI-AI 인사이트";
-    const description = post.summary || post.description || `${title} - DORI-AI에서 최신 AI 트렌드와 인사이트를 확인하세요.`;
+    const title = post.title || "illo 인사이트";
+    const description = post.summary || post.description || `${title} - illo에서 최신 AI 트렌드와 인사이트를 확인하세요.`;
     const image = post.thumbnail_url || `${SITE_URL}/og-default.png`;
     const url = `${SITE_URL}/insight/article/${params.slug}`;
     const tags = post.tags || [];
 
     return {
-      title: `${title} | DORI-AI`,
+      title: `${title} | illo`,
       description,
-      keywords: ["AI 트렌드", "인공지능", "DORI-AI", "AI 인사이트", ...tags].join(", "),
+      keywords: ["AI 트렌드", "인공지능", "illo", "AI 인사이트", ...tags].join(", "),
       alternates: { canonical: url },
       openGraph: {
-        title: `${title} | DORI-AI`,
+        title: `${title} | illo`,
         description,
         url,
-        siteName: "DORI-AI",
+        siteName: "illo",
         images: [{ url: image, width: 1200, height: 630, alt: title }],
         locale: "ko_KR",
         type: "article",
@@ -66,14 +66,14 @@ export async function generateMetadata(
       },
       twitter: {
         card: "summary_large_image",
-        title: `${title} | DORI-AI`,
+        title: `${title} | illo`,
         description,
         images: [image],
       },
     };
   } catch {
     return {
-      title: "DORI-AI 인사이트",
+      title: "illo 인사이트",
       description: "AI 트렌드와 인사이트를 확인하세요.",
     };
   }
@@ -124,10 +124,10 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
     "image": [post.thumbnail_url || `${SITE_URL}/og-default.png`],
     "datePublished": post.date,
     "dateModified": post.date,
-    "author": { "@type": "Organization", "name": "DORI-AI", "url": SITE_URL },
+    "author": { "@type": "Organization", "name": "illo", "url": SITE_URL },
     "publisher": {
       "@type": "Organization",
-      "name": "DORI-AI",
+      "name": "illo",
       "logo": { "@type": "ImageObject", "url": `${SITE_URL}/icon.svg`, "width": 512, "height": 512 },
     },
     "mainEntityOfPage": { "@type": "WebPage", "@id": articleUrl },
@@ -198,7 +198,7 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
 
           {/* 소셜 공유 버튼 */}
           <div className="flex justify-center mb-8">
-            <ShareButtons url={articleUrl} title={post.title || 'DORI-AI 기사'} />
+            <ShareButtons url={articleUrl} title={post.title || 'illo 기사'} />
           </div>
 
           {/* 기사 본문 */}
@@ -209,7 +209,7 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
 
           {/* 하단 공유 버튼 */}
           <div className="mt-10 pt-6 border-t border-neutral-200 dark:border-neutral-800">
-            <ShareButtons url={articleUrl} title={post.title || 'DORI-AI 기사'} />
+            <ShareButtons url={articleUrl} title={post.title || 'illo 기사'} />
           </div>
 
           {/* 좋아요 + 댓글 (댓글은 로그인 필수) */}

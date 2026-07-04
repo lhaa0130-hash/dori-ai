@@ -2,7 +2,7 @@
 title: "Nvidia, AI의 물 문제를 해결하다"
 description: "Nvidia가 인공지능(AI)을 통해 물 문제 해결에 대한 새로운 진전을 발표했습니다. 이 기술이 가져올 변화는 무엇일까요?"
 date: "2026-06-22T20:00:17+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-156.jpg?v=2""/thumbnails/trend/trend-156.jpg"
 tags: ["Nvidia", "AI", "기술 혁신", "물 문제", "환경"]

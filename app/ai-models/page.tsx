@@ -26,13 +26,13 @@ const faqLd = {
 const appLd = {
   "@context": "https://schema.org",
   "@type": "WebApplication",
-  name: "AI 모델 가격 비교 · 비용 계산기 | DORI-AI",
+  name: "AI 모델 가격 비교 · 비용 계산기 | illo",
   url: `${SITE}/ai-models`,
   applicationCategory: "BusinessApplication",
   operatingSystem: "Web",
   offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
   description: "전 세계 인기 AI 모델의 가격·사용량·지능·속도를 비교하고 월 비용을 계산하는 무료 도구.",
-  publisher: { "@type": "Organization", name: "DORI-AI", url: SITE },
+  publisher: { "@type": "Organization", name: "illo", url: SITE },
 };
 
 export default function Page() {

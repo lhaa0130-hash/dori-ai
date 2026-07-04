@@ -2,7 +2,7 @@
 title: "신약 개발의 새로운 지평, 인실리코 메디슨과 SK바이오팜의 협업"
 description: "인실리코 메디슨과 SK바이오팜이 25억 달러 규모의 AI 기반 신약 개발 협업을 발표하며, 신경면역질환 치료의 혁신을 예고하고 있다."
 date: "2026-06-22T18:00:19+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-155.jpg?v=2""/thumbnails/trend/trend-155.jpg"
 tags: ["신약 개발", "AI", "SK바이오팜", "인실리코 메디슨", "의료 혁신"]

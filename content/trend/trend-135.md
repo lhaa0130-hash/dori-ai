@@ -2,7 +2,7 @@
 title: "암바니가 제안하는 통신의 미래, AI가 모든 통화를 바꾼다"
 description: "리라이언스가 5억 명이 넘는 사용자에게 AI를 적용한 통신 서비스를 제공하려고 한다."
 date: "2026-06-20T09:00:22+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-135.jpg"
 tags: ["AI", "통신", "암바니", "리라이언스", "기술혁신"]

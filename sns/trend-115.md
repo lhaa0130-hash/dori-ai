@@ -26,7 +26,7 @@ https://dori-ai.com/insight/article/trend-115
 
 **Title:** OpenAI and Anthropic at G7 Summit Discuss AI's Role in Future Politics and Economy
 
-At the recent G7 Summit, OpenAI's CEO Sam Altman and Anthropic's CEO Damián Breyer discussed the implications of AI development. This meeting highlighted the growing recognition of AI as a strategic asset for nations. With global leaders engaging in deep discussions about ethical usage and economic impacts, the influence of AI on political decisions is becoming increasingly significant. How do you think these developments will shape future policies? Source: DORI-AI
+At the recent G7 Summit, OpenAI's CEO Sam Altman and Anthropic's CEO Damián Breyer discussed the implications of AI development. This meeting highlighted the growing recognition of AI as a strategic asset for nations. With global leaders engaging in deep discussions about ethical usage and economic impacts, the influence of AI on political decisions is becoming increasingly significant. How do you think these developments will shape future policies? Source: illo
 
 https://dori-ai.com/insight/article/trend-115
 

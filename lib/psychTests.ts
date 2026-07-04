@@ -1303,7 +1303,7 @@ export const TESTS: PsychTest[] = [
     emoji: "🤖",
     title: "나는 어떤 AI 사용자일까?",
     subtitle: "6문항 · AI 활용 성향",
-    source: "DORI-AI 자체 제작 (재미용)",
+    source: "illo 자체 제작 (재미용)",
     time: "약 1분",
     intro: "6개의 질문으로 알아보는 나의 AI 활용 성향. 가볍게 즐겨보세요!",
     questions: [
@@ -1839,13 +1839,13 @@ export const ABOUT: Record<string, TestAbout> = {
     background: "Babor 등(WHO, 2001) 개발. 공개(public domain) 도구.",
   },
   "ai-type": {
-    what: "DORI-AI가 재미로 만든 가벼운 유형 테스트입니다. 검증된 심리척도가 아니며, 결과는 과학적 해석의 대상이 아닙니다.",
+    what: "illo가 재미로 만든 가벼운 유형 테스트입니다. 검증된 심리척도가 아니며, 결과는 과학적 해석의 대상이 아닙니다.",
     measures: [
       { label: "AI 활용 성향", desc: "만들기·창작·학습·자동화·탐색 중 어디에 끌리는지" },
     ],
     how: "6개 질문에서 고른 답을 유형별로 집계해, 가장 많이 나온 유형을 보여줍니다.",
     interpret: "순수 재미용입니다. 자신을 칸에 가두기보다 가볍게 즐겨주세요.",
-    background: "DORI-AI 자체 제작.",
+    background: "illo 자체 제작.",
   },
 };
 

@@ -2,7 +2,7 @@
 title: "AI 전쟁에 대비한 가격 인하 — OpenAI의 전략"
 description: "OpenAI가 사용자 확보를 위해 가격을 대폭 인하할 가능성을 고려하고 있습니다. 이러한 결정이 AI 업계에 미치는 영향은 무엇일까요?"
 date: "2026-06-11"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-88.jpg"
 tags: ["OpenAI", "가격 인하", "AI 전쟁", "사용자 확보", "경쟁"]

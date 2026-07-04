@@ -2,7 +2,7 @@
 title: "GPT-5.4 출시: OpenAI, 컴퓨터를 직접 조작하는 AI 시대 열다"
 description: "OpenAI가 2026년 3월 출시한 GPT-5.4는 100만 토큰 컨텍스트 윈도우와 네이티브 컴퓨터 사용 능력을 갖춘 최강 프런티어 모델이다. 엔터프라이즈 업무 자동화의 새 시대를 예고한다."
 date: "2026-03-27"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-49.png"
 tags:

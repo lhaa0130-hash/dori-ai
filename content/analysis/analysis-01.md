@@ -2,7 +2,7 @@
 title: 2026년 한국인의 AI 사용 실태 분석 — 누가, 얼마나, 어떻게 쓰고 있나
 description: 연령대·직군·목적별 AI 도구 사용 현황을 데이터로 분석합니다. 한국인 3,000명 설문 기반의 AI 침투 현황과 변화 트렌드를 확인해 보세요.
 date: 2026-04-22
-author: DORI-AI
+author: illo
 category: 분석
 thumbnail: "/thumbnails/analysis/analysis-01.jpg?v=2"
 tags: [AI분석, 한국AI, 사용통계, 트렌드분석, 2026]

@@ -2,7 +2,7 @@
 title: "[챗봇] AI를 활용한 인생 기둥의 비밀"
 description: AI를 활용해 인생을 변화시키는 방법을 소개합니다.
 date: 2026-06-30
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-36.jpg"
 tags: [영상, AI추천, 챗봇, 입문·기초, 세바시 강연 Sebasi Talk]

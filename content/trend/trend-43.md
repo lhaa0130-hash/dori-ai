@@ -2,7 +2,7 @@
 title: "NVIDIA GTC 2026: 엔터프라이즈 AI 에이전트 시대의 서막"
 description: "NVIDIA가 GTC 2026에서 오픈소스 AI 에이전트 개발 플랫폼 'Agent Toolkit'과 보안 런타임 'OpenShell'을 발표했습니다. 젠슨 황은 '에이전트 변곡점'의 도래를 선언하며 지식 노동의 산업혁명을 예고했습니다."
 date: 2026-03-20
-author: DORI-AI
+author: illo
 category: 트렌드
 thumbnail: /thumbnails/trend/trend-43.png
 tags:

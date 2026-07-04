@@ -3,7 +3,7 @@ import { NextResponse } from "next/server";
 const seedPosts = [
   {
     id: "viral-1",
-    author: "도리AI",
+    author: "illo",
     avatar: "🤖",
     title: "2026년 생존 가이드: AI에게 대체되지 않는 직업 5가지 🔥",
     content:
@@ -19,7 +19,7 @@ const seedPosts = [
   },
   {
     id: "viral-2",
-    author: "도리AI",
+    author: "illo",
     avatar: "🤖",
     title: "ChatGPT한테 이렇게 물어보면 퀄리티가 10배 달라집니다 💡",
     content:
@@ -35,7 +35,7 @@ const seedPosts = [
   },
   {
     id: "viral-3",
-    author: "도리AI",
+    author: "illo",
     avatar: "🤖",
     title: "지금 당장 무료로 쓸 수 있는 AI 도구 10개 🛠️",
     content:
@@ -51,7 +51,7 @@ const seedPosts = [
   },
   {
     id: "viral-4",
-    author: "도리AI",
+    author: "illo",
     avatar: "🤖",
     title: "하루 2시간을 돌려준 나만의 AI 자동화 루틴 ⏰",
     content:
@@ -67,7 +67,7 @@ const seedPosts = [
   },
   {
     id: "viral-5",
-    author: "도리AI",
+    author: "illo",
     avatar: "🤖",
     title: "AI가 만든 이미지인지 구별하는 5가지 방법 👁️",
     content:
@@ -84,7 +84,7 @@ const seedPosts = [
 
   {
     id: "beginner-1",
-    author: "도리AI",
+    author: "illo",
     avatar: "🌱",
     title: "AI 완전 초보자를 위한 첫 걸음 가이드 🐣",
     content:
@@ -100,7 +100,7 @@ const seedPosts = [
   },
   {
     id: "beginner-2",
-    author: "도리AI",
+    author: "illo",
     avatar: "💬",
     title: "ChatGPT한테 '좋은 질문'을 하는 법 — 초보자 필독 📖",
     content:
@@ -116,7 +116,7 @@ const seedPosts = [
   },
   {
     id: "beginner-3",
-    author: "도리AI",
+    author: "illo",
     avatar: "🎨",
     title: "AI 이미지 생성, 진짜 쉽게 시작하는 법 🖼️",
     content:
@@ -132,7 +132,7 @@ const seedPosts = [
   },
   {
     id: "beginner-4",
-    author: "도리AI",
+    author: "illo",
     avatar: "⚠️",
     title: "AI 믿다가 낭패 본 사람들의 실수 모음 — 이것만은 주의하세요 🚨",
     content:
@@ -148,7 +148,7 @@ const seedPosts = [
   },
   {
     id: "beginner-5",
-    author: "도리AI",
+    author: "illo",
     avatar: "🗺️",
     title: "AI 도구 지도: 목적별로 무엇을 써야 할지 모르겠다면 👀",
     content:
@@ -164,7 +164,7 @@ const seedPosts = [
   },
   {
     id: "beginner-6",
-    author: "도리AI",
+    author: "illo",
     avatar: "🧠",
     title: "GPT, 클로드, 제미나이... 뭐가 다른 거야? 솔직 비교 🥊",
     content:
@@ -180,7 +180,7 @@ const seedPosts = [
   },
   {
     id: "beginner-7",
-    author: "도리AI",
+    author: "illo",
     avatar: "⚡",
     title: "직장인이 당장 쓸 수 있는 AI 업무 활용법 5가지 💼",
     content:

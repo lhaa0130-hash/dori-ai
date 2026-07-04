@@ -2,7 +2,7 @@
 title : 오픈AI 'ChatGPT Health' 공개: 의료 상담의 패러다임을 바꾸는 AI 코파일럿의 등장
 description: 오픈AI가 2026년 1월, 의료 전용 샌드박스인 'ChatGPT Health'를 정식 출시했습니다. 환자의 의료 기록과 웨어러블 데이터를 실시간 분석하는 개인 맞춤형 AI 상담의 시대와 의료 현장의 변화를 심층 분석합니다.
 date: 2026-01-08
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend033.png 
 tags: [오픈AI, ChatGPTHealth, 의료AI, 헬스케어트렌드, 디지털헬스, HIPAA, 의료데이터연동, AI보건] 

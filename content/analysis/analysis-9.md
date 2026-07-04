@@ -2,7 +2,7 @@
 title: "New York 민주당 경선에 쏟아진 **2천만 달러**: OpenAI 시대의 정치자금 전쟁"
 description: "AI 업계의 규제 싸움이 의회 청문회와 로비 사무실을 넘어 선거판으로 이동하고 있다. **New York** 민주당 경선에 투입된 **2천만 달러**는 기술 기업이 법을 기다리는 대신 법을 만들 사람을 고르기 시작했다는 신호다."
 date: "2026-06-26T14:01:21+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "분석"
 thumbnail: "/thumbnails/analysis/analysis-9.jpg"
 tags: ["AI정치자금", "AI규제", "OpenAI", "선거", "기술권력"]

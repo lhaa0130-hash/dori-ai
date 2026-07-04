@@ -2,7 +2,7 @@
 title: "[GPT] GPT를 시각적으로 설명하는 영상"
 description: GPT의 작동 원리를 시각적으로 쉽게 설명한다.
 date: 2026-06-24
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-26.jpg"
 tags: [영상, AI추천, GPT, 입문·기초, Caleb Writes Code]

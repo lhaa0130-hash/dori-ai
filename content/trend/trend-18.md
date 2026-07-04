@@ -2,7 +2,7 @@
 title : 의료 AI의 진화: 암 조기 진단 및 정밀 의료 시장 324억 달러 규모로 급성장
 description: 인공지능(AI)이 암 조기 진단과 환자 맞춤형 정밀 의료의 패러다임을 바꾸고 있습니다. 2025년 324억 달러 규모로 성장한 의료 AI 시장의 현주소와 기술적 혁신 사례, 그리고 미래 전망을 심층 분석합니다.
 date: 2026-01-04
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend018.png 
 tags: [의료AI, 암조기진단, 정밀의료, 헬스케어트렌드, 삼성메디슨, 디지털병리, FDA승인] 

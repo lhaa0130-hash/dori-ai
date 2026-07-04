@@ -2,7 +2,7 @@
 title : 애플의 2026년 로드맵: 폴더블 아이폰 출시와 'AI 슈퍼사이클'을 통한 하드웨어 혁신 예고  
 description: 애플이 2026년 가을, 마침내 첫 번째 폴더블 아이폰(가칭 iPhone Fold)을 공개하며 시장의 판도를 바꿉니다. 세계 최초 2nm 공정의 A20 칩 탑재와 Apple Intelligence의 완성형 모델이 결합하여 역대 최대 규모의 'AI 슈퍼사이클'을 일으킬 전망입니다.
 date: 2026-01-02
-author: DORI-AI  
+author: illo  
 category: 트렌드  
 thumbnail: /thumbnails/trend/trend010.png 
 tags: [폴더블아이폰, AI슈퍼사이클, A20칩, 2nm공정, 애플인텔리전스, 스마트제조]  

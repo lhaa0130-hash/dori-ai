@@ -2,7 +2,7 @@
 title: "[AI 에이전트] AI 에이전트와 자동화에 대한 초보자 가이드"
 description: AI 에이전트와 자동화의 기본 개념을 쉽게 설명합니다.
 date: 2026-06-23
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-14.jpg"
 tags: [영상, AI추천, AI 에이전트, 입문·기초, The Neuron]

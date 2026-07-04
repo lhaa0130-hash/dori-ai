@@ -2,7 +2,7 @@
 title: "[AI 아키텍처] AI 시스템의 메모리 문제 해결 방법"
 description: AI 시스템의 메모리 문제를 해결하는 방법을 설명합니다.
 date: 2026-06-23
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-21.jpg"
 tags: [영상, AI추천, AI 아키텍처, 최신 뉴스, Nana Janashia]

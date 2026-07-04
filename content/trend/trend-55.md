@@ -2,7 +2,7 @@
 title: "모건스탠리가 경고한다: 2026년 상반기, AI 대돌파가 온다"
 description: "월가의 투자은행 모건스탠리가 2026년 상반기 안에 대규모 AI 혁신이 도래할 것이라 경고했다. 컴퓨팅 집중, 스케일링 법칙의 연장, 그리고 세계가 아직 준비되지 않은 이유까지 핵심을 분석한다."
 date: "2026-03-30"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-55.png"
 tags:

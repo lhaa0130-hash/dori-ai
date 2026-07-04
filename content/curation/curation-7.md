@@ -2,7 +2,7 @@
 title: "2026년 주목할 AI 도구 4종: 업무 효율성을 높이는 스마트한 선택"
 description: "이번 주에는 직장인과 크리에이터를 위한 유용한 AI 도구 4종을 소개합니다. 업무 효율성을 높이고 창의성을 극대화할 수 있는 도구들을 살펴보세요."
 date: "2026-05-26"
-author: "DORI-AI"
+author: "illo"
 category: "큐레이션"
 thumbnail: "/thumbnails/curation/curation-7.jpg?v=2""/thumbnails/curation/curation-7.jpg"
 tags: ["AI 도구", "생산성", "업무 효율성", "크리에이티브", "학생"]

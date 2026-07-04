@@ -57,7 +57,7 @@ export function getInsightFeed(perCategory = 12): InsightFeedItem[] {
         category: cat,
         summary: (norm(it.description || it.summary || it.subtitle) || "").slice(0, 180) || undefined,
         excerpt: excerptOf(body) || undefined,
-        author: norm(it.author) || "DORI-AI",
+        author: norm(it.author) || "illo",
         channel: cat === "영상" ? ((body.match(/\*\*(.+?)\*\*/) || [])[1] || undefined) : undefined,
         videoDate: it.videoDate || undefined,
       });

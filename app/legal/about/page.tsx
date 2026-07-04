@@ -2,16 +2,16 @@ import type { Metadata } from "next";
 import LegalPageLayout from "../components/LegalPageLayout";
 
 export const metadata: Metadata = {
-  title: "회사 소개 | DORI-AI",
-  description: "DORI-AI는 매일 AI 트렌드를, 매주 큐레이션·분석·리포트를 제공하며, 누구나 쉽게 AI를 활용하도록 돕는 커뮤니티 플랫폼입니다. 제작·운영은 illo가 맡고 있습니다.",
+  title: "회사 소개 | illo",
+  description: "illo는 매일 AI 트렌드를, 매주 큐레이션·분석·리포트를 제공하며, 누구나 쉽게 AI를 활용하도록 돕는 커뮤니티 플랫폼입니다. 제작·운영은 illo가 맡고 있습니다.",
   alternates: { canonical: "https://illo.im/legal/about" },
 };
 
 export default function AboutPage() {
   return (
-    <LegalPageLayout title="DORI-AI 소개">
+    <LegalPageLayout title="illo 소개">
       <p>
-        DORI-AI는 빠르게 변하는 인공지능(AI) 소식을 누구나 쉽게 이해하도록 정리해 전달하는
+        illo는 빠르게 변하는 인공지능(AI) 소식을 누구나 쉽게 이해하도록 정리해 전달하는
         AI 콘텐츠·커뮤니티 플랫폼입니다. 전문가가 아니어도 읽고 바로 활용할 수 있는 글을 목표로 합니다.
       </p>
 
@@ -26,7 +26,7 @@ export default function AboutPage() {
       <h2>지향점</h2>
       <p>
         어려운 전문용어는 풀어 쓰고, 과장 없이 사실 위주로 전달합니다.
-        AI를 배우고 활용하려는 모든 분께 신뢰할 수 있는 길잡이가 되는 것이 DORI-AI의 목표입니다.
+        AI를 배우고 활용하려는 모든 분께 신뢰할 수 있는 길잡이가 되는 것이 illo의 목표입니다.
       </p>
 
       <h2>함께하기</h2>

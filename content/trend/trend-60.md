@@ -2,7 +2,7 @@
 title: "에이전틱 AI 혁명: 스스로 일하는 AI가 기업 자동화를 재정의하다"
 description: "2026년 에이전틱 AI(Agentic AI)가 기업 현장의 패러다임을 바꾸고 있다. 단순 챗봇을 넘어 복잡한 멀티스텝 업무를 자율적으로 수행하는 AI 에이전트들이 금융, 제조, 의료 등 전 산업에 확산되며 '지능형 자동화'의 새 시대를 열고 있다."
 date: 2026-04-18
-author: DORI-AI
+author: illo
 category: 트렌드
 thumbnail: /thumbnails/trend/trend-60.png
 tags:

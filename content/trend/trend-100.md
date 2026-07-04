@@ -2,7 +2,7 @@
 title: "바이트댄스, AI 칩 구매 협상 중 — 중국 Iluvatar CoreX와의 협력"
 description: "바이트댄스가 AI 칩 제조업체 Iluvatar CoreX와의 협상을 통해 AI 반도체 시장에서의 입지를 강화하고 있다."
 date: "2026-06-15"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-100.jpg"
 tags: ["바이트댄스", "AI 칩", "Iluvatar CoreX", "중국", "반도체"]

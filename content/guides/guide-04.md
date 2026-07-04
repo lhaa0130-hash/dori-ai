@@ -2,7 +2,7 @@
 title: "실전편 01: AI를 '업무 파트너'로 만드는 시스템 프롬프트 설계법"
 description: 매번 설명을 반복하지 않아도 되는 AI 세팅법 — 시스템 프롬프트 5요소와 실전 템플릿 3종 완전 공개
 date: 2026-06-24
-author: DORI-AI
+author: illo
 category: 가이드
 thumbnail: "/thumbnails/guide/guide04.png?v=3"
 tags: [시스템프롬프트, AI활용, 프롬프트엔지니어링, 업무자동화]

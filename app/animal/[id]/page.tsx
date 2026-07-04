@@ -60,8 +60,8 @@ export default function AnimalDetail({ params }: { params: { id: string } }) {
     headline: `${card.animal_name} — 특징·서식지·먹이·수명`,
     description: card.kid_friendly_desc,
     image: card.image_path ? [`${SITE_URL}${card.image_path}`] : undefined,
-    author: { "@type": "Organization", name: "DORI-AI", url: SITE_URL },
-    publisher: { "@type": "Organization", name: "DORI-AI", logo: { "@type": "ImageObject", url: `${SITE_URL}/icon.svg` } },
+    author: { "@type": "Organization", name: "illo", url: SITE_URL },
+    publisher: { "@type": "Organization", name: "illo", logo: { "@type": "ImageObject", url: `${SITE_URL}/icon.svg` } },
     mainEntityOfPage: { "@type": "WebPage", "@id": `${SITE_URL}/animal/${card.no}` },
     about: { "@type": "Thing", name: card.animal_name, ...(card.sci ? { alternateName: card.sci } : {}) },
   };

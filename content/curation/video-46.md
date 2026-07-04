@@ -2,7 +2,7 @@
 title: "[영상] AI 영상 제작 활용법 5가지"
 description: 구글 Flow를 활용한 AI 영상 제작 방법을 소개합니다.
 date: 2026-07-03
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-46.jpg"
 tags: [영상, AI추천, 영상, 실무 활용, 슈퍼휴먼X]

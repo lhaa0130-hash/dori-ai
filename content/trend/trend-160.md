@@ -2,7 +2,7 @@
 title: "유럽, 35대의 새로운 엔비디아 슈퍼컴퓨터 공개 — AI 혁신의 새로운 전환점"
 description: "유럽이 엔비디아의 최신 AI 슈퍼컴퓨터 35대를 공개하며 AI 연산 능력을 한층 강화하고 있다. 이 발표는 AI 연구 및 개발에 중요한 이정표로 자리 잡을 것으로 기대된다."
 date: "2026-06-23T18:00:30+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-160.jpg"
 tags: ["엔비디아", "슈퍼컴퓨터", "AI", "유럽", "기술 혁신"]

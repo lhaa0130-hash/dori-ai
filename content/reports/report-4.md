@@ -2,7 +2,7 @@
 title: "2026년 5월 AI 산업 주간 리포트: 혁신과 투자 동향"
 description: "이번 주 AI 산업의 주요 이슈와 기업 동향, 투자 소식을 종합적으로 정리합니다."
 date: "2026-05-26"
-author: "DORI-AI"
+author: "illo"
 category: "리포트"
 thumbnail: "/thumbnails/reports/report-4.jpg?v=2"
 tags: ["AI", "투자", "기업 동향", "스타트업", "기술 혁신"]

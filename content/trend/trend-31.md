@@ -2,7 +2,7 @@
 title : 구글과 캐릭터.ai의 비극적 소송 합의: AI 안전성과 '책임 있는 기술'의 새로운 이정표
 description: 14세 소년의 비극적 죽음으로 시작된 캐릭터.ai와 구글의 소송이 2026년 1월 전격 합의로 종결되었습니다. 이번 사건이 AI 챗봇 산업에 남긴 안전성 가이드라인과 '18세 미만 채팅 금지' 등 고강도 보호 조치의 실체를 심층 분석합니다.
 date: 2026-01-08
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend031.png 
 tags: [AI안전성, 캐릭터ai, 구글소송, AI윤리, 청소년보호, 챗봇부작용, AI가이드라인] 

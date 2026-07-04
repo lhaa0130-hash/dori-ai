@@ -2,7 +2,7 @@
 title : CES 2026 트렌드 분석: '피지컬 AI'와 휴머노이드가 주도하는 지능형 하드웨어 시대
 description: CES 2026은 AI가 화면을 벗어나 물리적 몸을 입는 '피지컬 AI'의 원년이었습니다. 삼성의 네온 X부터 보스턴 다이내믹스의 전동식 아틀라스까지, 산업과 가정을 혁신할 지능형 로봇 기술을 심층 분석합니다.
 date: 2026-01-09
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend036.png 
 tags: [CES2026, 피지컬AI, 휴머노이드, 보스턴다이내믹스, 삼성네온X, VLA모델, 로보틱스, 지능형하드웨어] 

@@ -2,7 +2,7 @@
 title: "[AI 에이전트] AI Agents Explained  How to Create and Use AI Agents in 2026"
 description: AI 에이전트를 만드는 방법과 활용법을 설명합니다.
 date: 2026-06-23
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-20.jpg"
 tags: [영상, AI추천, AI 에이전트, 입문·기초, AI Master]

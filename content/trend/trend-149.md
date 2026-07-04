@@ -2,7 +2,7 @@
 title: "테슬라의 모듈형 AI 데이터 센터, '메가포드' 출시 예고"
 description: "테슬라가 새로운 모듈형 AI 데이터 센터 하드웨어인 '메가포드'를 출시할 계획이다. 이 혁신적인 제품은 AI 데이터 처리의 효율성을 크게 향상시킬 것으로 기대된다."
 date: "2026-06-22T07:00:43+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-149.jpg?v=2"
 tags: ["테슬라", "AI 데이터 센터", "메가포드", "모듈형 하드웨어", "AI 기술"]

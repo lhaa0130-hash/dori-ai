@@ -2,7 +2,7 @@
 title: "인도 스타트업 Sarvam, 2억 3천 4백만 달러 투자로 유니콘 반열에 올라"
 description: "HCLTech의 1억 5천만 달러 투자를 이끌어낸 Sarvam이 인도의 새로운 AI 유니콘으로 떠올랐다."
 date: "2026-06-16"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-105.jpg"
 tags: ["인도 스타트업", "AI 유니콘", "HCLTech", "투자", "Sarvam"]

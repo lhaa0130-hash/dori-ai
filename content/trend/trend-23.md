@@ -2,7 +2,7 @@
 title : 마이크로소프트 나델라 회장의 선언: 'AI 슬롭(Slop)'을 넘어 신뢰할 수 있는 생산성 혁명으로
 description: 사티아 나델라 마이크로소프트 회장이 생성형 AI의 고질적 문제인 '슬롭(Slop)' 현상에 대한 인식 개선과 품질 관리 전략을 발표했습니다. AI 스팸을 차단하고 업무 생산성을 극대화하기 위한 MS의 기술적 대응과 미래 비전을 분석합니다.
 date: 2026-01-06
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend023.png 
 tags: [사티아나델라, AI슬롭, 마이크로소프트, 코파일럿, AI신뢰성, 생산성혁신, CES2026, AI윤리] 

@@ -2,7 +2,7 @@
 title: "생성형 AI 종류 총정리: 텍스트·이미지·영상·음성·코딩 AI 한눈에 보기"
 description: "생성형 AI의 정의부터 텍스트, 이미지, 영상, 음성, 코딩, 에이전트형 AI까지 종류별 차이와 대표 도구, 활용처, 선택 기준을 한 번에 정리했습니다."
 date: "2026-07-03T08:01:57+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "큐레이션"
 thumbnail: "/thumbnails/curation/curation-15.jpg"
 tags: ["생성형 AI 종류 총정리", "생성형 AI", "AI 도구 추천", "멀티모달 AI", "AI 에이전트"]

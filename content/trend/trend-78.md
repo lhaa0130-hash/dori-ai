@@ -2,7 +2,7 @@
 title: "AI 혁신의 새로운 장을 여는 AWS 펠로우십"
 description: "시카고의 시티 칼리지 교직원들이 AWS 펠로우십을 통해 AI 및 머신러닝 교육을 선도하게 되었다. 이는 교육 분야에서 AI 활용을 극대화할 중요한 이정표로 평가된다."
 date: "2026-05-21"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-78.jpg"
 tags: ["AI", "AWS", "교육", "머신러닝"]

@@ -2,7 +2,7 @@
 title: "한국, 1조 달러 규모 AI 및 반도체 투자 발표"
 description: "한국 정부가 AI 및 반도체 분야에 1조 달러를 투자하겠다고 발표하며 글로벌 기술 경쟁에서의 입지를 강화하고 있다."
 date: "2026-06-29T22:00:17+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-184.jpg"
 tags: ["AI 투자", "반도체", "한국 정부", "기술 경쟁", "글로벌 경제"]

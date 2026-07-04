@@ -51,7 +51,7 @@ export const TEXTS = {
       community: {
         title: "Community",
         desc: { ko: "잡담 / 질문 / 정보 공유", en: "Chat / Q&A / Information Sharing" },
-        detail: { ko: "혼자 고민하지 마세요. AI에 관련된 이야기를 함께 공유해주세요.", en: "Don't struggle alone. Share your work, ask questions, and grow together with DORI-AI members." }
+        detail: { ko: "혼자 고민하지 마세요. AI에 관련된 이야기를 함께 공유해주세요.", en: "Don't struggle alone. Share your work, ask questions, and grow together with illo members." }
       },
       market: {
         title: "Market(준비중)",
@@ -115,7 +115,7 @@ export const TEXTS = {
 
   // 8. Footer (하단 영역)
   footer: {
-    copyright: { ko: "© 2026 DORI-AI. All rights reserved.", en: "© 2024 DORI-AI. All rights reserved." },
+    copyright: { ko: "© 2026 illo. All rights reserved.", en: "© 2024 illo. All rights reserved." },
     privacy: { ko: "개인정보처리방침", en: "Privacy Policy" },
     terms: { ko: "이용약관", en: "Terms of Service" },
     suggestion: { ko: "건의사항", en: "Suggestions" }

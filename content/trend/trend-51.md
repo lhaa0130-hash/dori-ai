@@ -2,7 +2,7 @@
 title: "NVIDIA, GTC 2026에서 기업용 AI 에이전트 플랫폼 'Agent Toolkit' 공개 — Adobe·Salesforce·SAP 등 17개사 동참"
 description: "NVIDIA가 GTC 2026에서 오픈소스 AI 에이전트 개발 플랫폼 Agent Toolkit을 발표하고, 글로벌 엔터프라이즈 소프트웨어 기업 17곳과 전략적 파트너십을 체결했다. GPU 독점에서 에이전트 인프라 독점으로의 전환을 노리는 NVIDIA의 전략을 분석한다."
 date: 2026-03-28
-author: DORI-AI
+author: illo
 category: 트렌드
 thumbnail: /thumbnails/trend/trend-51.png
 tags:

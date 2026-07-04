@@ -2,7 +2,7 @@
 title: "Google 검색창 재설계·Databricks 범용 에이전트·Anthropic AI 과세론: 기업 AI의 돈길이 바뀐다"
 description: "이번 주 AI 산업은 검색 인터페이스, 기업용 에이전트, AI 과세 논쟁이 동시에 전면에 올라왔다. 자금은 모델 자체보다 데이터·클라우드·전력·업무 자동화로 이동하고 있다."
 date: "2026-06-17T11:02:13+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "리포트"
 thumbnail: "/thumbnails/reports/report-5.jpg?v=2"
 tags: ["AI에이전트", "AI인프라", "기업AI", "AI투자", "피지컬AI"]

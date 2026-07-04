@@ -49,7 +49,7 @@ async function getFileSha(filePath: string, token: string): Promise<{ sha: strin
         Authorization: `Bearer ${token}`,
         Accept: 'application/vnd.github+json',
         'X-GitHub-Api-Version': '2022-11-28',
-        'User-Agent': 'DORI-AI-Admin/1.0',
+        'User-Agent': 'illo-Admin/1.0',
       },
     }
   );
@@ -127,12 +127,12 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
             Accept: 'application/vnd.github+json',
             'Content-Type': 'application/json',
             'X-GitHub-Api-Version': '2022-11-28',
-            'User-Agent': 'DORI-AI-Admin/1.0',
+            'User-Agent': 'illo-Admin/1.0',
           },
           body: JSON.stringify({
             message: `[admin] delete: ${slug}`,
             sha: fileInfo.sha,
-            committer: { name: 'DORI-AI Admin', email: ADMIN_EMAIL },
+            committer: { name: 'illo Admin', email: ADMIN_EMAIL },
           }),
         }
       );
@@ -155,13 +155,13 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
             Accept: 'application/vnd.github+json',
             'Content-Type': 'application/json',
             'X-GitHub-Api-Version': '2022-11-28',
-            'User-Agent': 'DORI-AI-Admin/1.0',
+            'User-Agent': 'illo-Admin/1.0',
           },
           body: JSON.stringify({
             message: `[admin] update: ${slug}`,
             content: contentBase64,
             sha: fileInfo.sha,
-            committer: { name: 'DORI-AI Admin', email: ADMIN_EMAIL },
+            committer: { name: 'illo Admin', email: ADMIN_EMAIL },
           }),
         }
       );

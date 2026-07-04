@@ -2,7 +2,7 @@
 title: "[역사] 머신러닝의 역사"
 description: 머신러닝의 발전 과정을 간략히 정리한다.
 date: 2026-06-24
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-27.jpg"
 tags: [영상, AI추천, 역사, 논문·연구, Neso Academy]

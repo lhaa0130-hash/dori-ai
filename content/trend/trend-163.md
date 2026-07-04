@@ -2,7 +2,7 @@
 title: "Fika Jobs, AI 인터뷰로 인사 혁신 이끈다"
 description: "Fika Jobs가 AI 인터뷰 에이전트를 활용한 혁신적인 채용 플랫폼을 구축하기 위해 400만 달러를 투자받았다."
 date: "2026-06-24T09:00:25+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-163.jpg"
 tags: ["Fika Jobs", "AI", "채용", "스타트업", "인터뷰"]

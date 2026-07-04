@@ -2,7 +2,7 @@
 title: "[수학] 머신러닝의 수학적 원리"
 description: 머신러닝의 기초 수학 원리를 쉽게 설명합니다.
 date: 2026-06-30
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-38.jpg"
 tags: [영상, AI추천, 수학, 논문·연구, Ellie Sleightholm]

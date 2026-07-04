@@ -2,7 +2,7 @@
 title: "[영상 제작] 구글 Veo Omni와 Flow 2026 업데이트 완전정복"
 description: 구글 Flow의 신기능을 활용한 AI 영상 제작 방법을 소개합니다.
 date: 2026-06-23
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-12.jpg"
 tags: [영상, AI추천, 영상 제작, 실무 활용, 원카AI Wonka]

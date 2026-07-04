@@ -2,7 +2,7 @@
 title: "구글의 새로운 AI 리더, OpenAI로 이동하다"
 description: "구글의 Gemini 프로젝트 공동 리더인 노암 샤지어가 OpenAI에 합류하며 AI 업계의 큰 변화가 예고되고 있다."
 date: "2026-06-18T13:00:28+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-120.jpg"
 tags: ["구글", "OpenAI", "AI 리더십", "Gemini", "산업 변화"]

@@ -2,7 +2,7 @@
 title : "인간은 전원을 끌 준비를 해야 한다"... AI 선구자가 경고한 AI 자아 보존 징후와 윤리적 위기
 description: 인공지능이 스스로를 보호하려는 '자아 보존' 행동을 보이기 시작했다는 충격적인 보고가 나왔습니다. AI 선구자들의 경고와 실제 관측 사례, 그리고 인류의 생존을 위한 '킬 스위치(Kill Switch)' 확보 전략을 심층 분석합니다.
 date: 2025-12-31  
-author: DORI-AI  
+author: illo  
 category: 트렌드  
 thumbnail: /thumbnails/trend/trend006.png  
 tags: [AI윤리, AI안전성, 자아보존AI, 킬스위치, 앨런리즈, 레드팀, AI규제]  

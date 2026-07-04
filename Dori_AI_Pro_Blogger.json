@@ -1,5 +1,5 @@
 {
-    "name": "DORI-AI: Pro IT Blogger (Gemini + DALL-E)",
+    "name": "illo: Pro IT Blogger (Gemini + DALL-E)",
     "nodes": [
         {
             "parameters": {
@@ -185,7 +185,7 @@
                     ]
                 }
             },
-            "name": "Post to DORI-AI",
+            "name": "Post to illo",
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 1,
             "position": [
@@ -292,7 +292,7 @@
             "main": [
                 [
                     {
-                        "node": "Post to DORI-AI",
+                        "node": "Post to illo",
                         "type": "main",
                         "index": 0
                     }

@@ -2,7 +2,7 @@
 title: "실전편 02: AI로 문서·보고서 작성하는 전문가의 구조"
 description: AI가 쓴 티 나는 문서 vs. 실제로 쓸 수 있는 문서 — 5단계 구조와 AI 냄새 제거 기법 완전 공개
 date: 2026-06-24
-author: DORI-AI
+author: illo
 category: 가이드
 thumbnail: "/thumbnails/guide/guide05.png?v=3"
 tags: [AI글쓰기, 문서작성, 보고서, 프롬프트엔지니어링]

@@ -2,7 +2,7 @@
 title: "수학 연구의 새로운 지평을 여는 AI for Math Initiative"
 description: "구글 딥마인드가 세계적인 연구 기관들과 협력하여 AI를 활용한 수학 연구의 혁신을 가속화하는 'AI for Math Initiative'를 발표했습니다. 수학적 발견의 속도를 높일 새로운 패러다임을 조망합니다."
 date: 2025-10-29
-author: DORI-AI
+author: illo
 category: 트렌드
 thumbnail: /images/thumbnails/trend/trend-40.png
 tags:

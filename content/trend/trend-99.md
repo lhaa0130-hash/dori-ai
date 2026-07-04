@@ -2,7 +2,7 @@
 title: "중국 대학, 12,000개 과목 폐지 — AI 시대를 겨냥한 교육 개혁"
 description: "중국의 대학들이 AI 시대에 맞춰 12,000개의 구식 학위를 폐지하고 새로운 교육 방향을 모색하고 있다. 이는 국가 차원의 AI 경쟁력 강화를 위한 필수적인 조치로 보인다."
 date: "2026-06-15"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-99.jpg"
 tags: ["중국", "교육 개혁", "AI", "대학", "미래 산업"]

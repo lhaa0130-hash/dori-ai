@@ -2,7 +2,7 @@
 title: "구글 클라우드, 필리핀 정부와 AI 및 사이버 보안 협력체계 구축"
 description: "구글 클라우드가 필리핀 정부와 협력해 차세대 시민 서비스를 위한 AI 및 사이버 보안 이니셔티브를 발표했다. 이는 새로운 디지털 시대를 여는 중요한 발걸음으로 평가된다."
 date: "2026-06-22T13:00:28+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-153.jpg?v=2""/thumbnails/trend/trend-153.jpg"
 tags: ["구글", "클라우드", "AI", "사이버 보안", "필리핀"]

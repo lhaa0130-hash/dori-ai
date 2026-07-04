@@ -2,7 +2,7 @@
 title: "인텔, AI 반도체 수요 폭발로 26년 만에 주가 최고치 경신"
 description: "인텔이 2026년 1분기 실적에서 월가 예상을 대폭 상회하는 성과를 기록했다. AI 데이터센터와 파운드리 사업의 급성장이 견인한 이번 실적은 반도체 업계의 AI 수혜가 본격화되고 있음을 보여준다."
 date: "2026-04-26"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-73.png"
 tags:

@@ -2,7 +2,7 @@
 title: "AI 코딩 도구 대전 2026: Claude Code·Copilot·Cursor, 누가 개발자를 지배하는가"
 description: "2026년 AI 코딩 도구 경쟁이 전례 없는 수준으로 치열해지고 있다. Claude Code가 SWE-bench 1위를 차지한 가운데, GitHub Copilot과 Cursor가 맹렬히 추격하는 전장 분석."
 date: "2026-04-23"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-68.png"
 tags:

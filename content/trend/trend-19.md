@@ -2,7 +2,7 @@
 title : 방대한 학습 데이터의 필요성을 뒤집는 AI 훈련 효율성 혁신: '데이터 갈증' 시대의 종말
 description: AI 훈련에 필요한 데이터 의존도를 획기적으로 낮추는 기술들이 공개되며 AI 개발의 비용과 시간을 단축하고 있습니다. 구글 딥마인드, 마이크로소프트, NVIDIA의 최신 효율화 기술과 실증 사례를 분석합니다.
 date: 2026-01-05
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend019.png 
 tags: [AI트렌드, 데이터효율성, 소수샘플학습, NVIDIA루빈, 자가지도학습, AI훈련비용] 

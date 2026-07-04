@@ -2,7 +2,7 @@
 title: "California 미신고 고위험 AI가 드러낸 복지 행정 자동화의 위험"
 description: "미국 주정부와 지방정부가 복지, 의료, 교육 행정에 AI를 빠르게 들여오고 있다. 문제는 기술 도입 속도보다 감시와 책임 구조가 훨씬 느리다는 점이다."
 date: "2026-06-22T14:02:38+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "분석"
 thumbnail: "/thumbnails/analysis/analysis-8.jpg?v=2""/thumbnails/analysis/analysis-8.jpg"
 tags: ["공공AI", "복지자동화", "AI거버넌스", "고위험AI", "행정자동화"]

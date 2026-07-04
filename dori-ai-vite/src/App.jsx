@@ -46,7 +46,7 @@ const App = () => {
             transition={{ duration: 0.8, delay: 0.6 }}
             className="text-5xl md:text-7xl font-bold text-gray-700 dark:text-gray-300"
           >
-            DORI-AI
+            illo
           </motion.h2>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

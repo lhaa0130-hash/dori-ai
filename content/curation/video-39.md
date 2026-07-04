@@ -2,7 +2,7 @@
 title: "[AI 산업] AI 딥러닝과 중국 작업장의 실체"
 description: AI 딥러닝과 관련된 중국 작업장의 실체를 탐구합니다.
 date: 2026-06-30
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-39.jpg"
 tags: [영상, AI추천, AI 산업, 최신 뉴스, 린]

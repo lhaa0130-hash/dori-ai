@@ -2,7 +2,7 @@
 title: "[AI 활용법] 99%는 모르는 똑똑한 AI 활용법"
 description: 중년을 위한 AI 활용법과 학습 필요성을 다룬 영상.
 date: 2026-06-23
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-11.jpg"
 tags: [영상, AI추천, AI 활용법, 입문·기초, 책과삶]

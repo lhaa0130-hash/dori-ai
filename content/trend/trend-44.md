@@ -2,7 +2,7 @@
 title: "OpenAI, Sora 서비스 전격 종료: 디즈니 10억 달러 파트너십도 무산"
 description: "OpenAI가 2026년 3월 24일 AI 영상 생성 서비스 Sora를 전격 종료한다고 발표했습니다. 출시 15개월 만의 결정으로, 1조 원 이상의 디즈니 파트너십도 함께 종료됩니다. AI 영상 시장의 경쟁 심화와 수익 구조의 한계가 원인으로 지목됩니다."
 date: 2026-03-25
-author: DORI-AI
+author: illo
 category: 트렌드
 thumbnail: /thumbnails/trend/trend-44.png
 tags:

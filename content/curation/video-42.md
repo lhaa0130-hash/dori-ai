@@ -2,7 +2,7 @@
 title: "[프로토콜] MCP와 API  모든 개발자가 알아야 할 프로토콜"
 description: AI 개발자를 위한 MCP와 API의 차이를 설명합니다.
 date: 2026-07-01
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-42.jpg"
 tags: [영상, AI추천, 프로토콜, 개발·코딩, Google Cloud Tech]

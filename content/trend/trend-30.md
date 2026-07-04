@@ -2,7 +2,7 @@
 title : 생성형 AI가 가속화하는 AD 신원 공격: '기계 내부자'의 등장과 보안 패러다임의 전환
 description: 생성형 AI가 액티브 디렉토리(AD) 기반 신원 공격의 전 과정을 자동화하며 기업 보안을 위협하고 있습니다. 딥페이크 사칭부터 자율 에이전트 침투까지, 2026년 최신 보안 트렌드와 대응 전략을 심층 분석합니다.
 date: 2026-01-07
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend030.png 
 tags: [생성형AI보안, 액티브디렉토리, 신원공격, 제로트러스트2.0, 기계내무자, 딥페이크, 사이버보안2026] 

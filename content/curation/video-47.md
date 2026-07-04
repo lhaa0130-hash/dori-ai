@@ -2,7 +2,7 @@
 title: "[반도체] 빅테크의 AI 반도체 공유와 전망"
 description: AI 인프라 과잉 공급과 반도체 시장의 변화를 분석합니다.
 date: 2026-07-03
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-47.jpg"
 tags: [영상, AI추천, 반도체, 비즈니스·산업, 피셔인베스트]

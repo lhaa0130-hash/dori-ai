@@ -2,7 +2,7 @@
 title: "실전편 03: AI 결과물을 믿기 전에 반드시 해야 할 검증 루틴"
 description: AI 환각(Hallucination)은 언제 일어나는가 — A/B/C 등급 분류와 5단계 검증 프로토콜 완전 공개
 date: 2026-06-24
-author: DORI-AI
+author: illo
 category: 가이드
 thumbnail: "/thumbnails/guide/guide06.png?v=3"
 tags: [AI검증, 팩트체크, 환각, 프롬프트엔지니어링]

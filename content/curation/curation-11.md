@@ -2,7 +2,7 @@
 title: "Pixlie·WorkClaw·Mutter·Parano.ai: 영상 제작부터 경쟁사 모니터링까지 이번 주 AI 도구 추천"
 description: "이번 주에는 말보다 실행에 가까워진 AI 도구들이 눈에 띕니다. 영상 제작, 협업, 받아쓰기, 경쟁사 분석처럼 매일 반복되는 일을 줄여주는 서비스들을 골라 소개합니다."
 date: "2026-06-22T08:02:56+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "큐레이션"
 thumbnail: "/thumbnails/curation/curation-11.jpg?v=2"
 tags: ["AI도구", "업무자동화", "AI영상", "생산성", "경쟁사분석"]

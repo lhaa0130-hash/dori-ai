@@ -2,7 +2,7 @@
 title: "OpenAI의 맞춤형 칩, 인공지능의 새로운 전환점"
 description: "OpenAI가 Broadcom과 협력하여 개발한 새로운 맞춤형 칩 '할라페뇨'가 인공지능 시스템의 효율성을 혁신적으로 끌어올리고 있습니다."
 date: "2026-06-25T12:00:20+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-167.jpg"
 tags: ["OpenAI", "Broadcom", "인공지능", "맞춤형 칩", "할라페뇨"]

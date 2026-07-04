@@ -2,7 +2,7 @@
 title: "구글 Stitch, AI 네이티브 디자인 캔버스로 진화: 'Vibe Design' 시대의 개막"
 description: "구글이 2026년 3월 Stitch를 AI 네이티브 디자인 캔버스로 전면 개편했다. 자연어 한 줄로 고품질 UI를 생성하고, 음성으로 디자인을 수정하며, DESIGN.md로 디자인 시스템을 코드처럼 관리하는 새로운 패러다임이 열렸다."
 date: "2026-03-26"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-47.png"
 tags:

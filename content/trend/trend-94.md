@@ -2,7 +2,7 @@
 title: "앤트로픽, 미국 정부의 지시에 따라 최신 AI 모델 사용 중단"
 description: "앤트로픽의 최신 AI 모델이 미국 정부의 외국인 접근 제한 명령으로 인해 사용이 중단되었습니다. 이로 인해 AI 산업의 안전성과 규제 문제에 대한 논의가 다시금 촉발되고 있습니다."
 date: "2026-06-13"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-94.jpg"
 tags: ["앤트로픽", "AI 모델", "정부 규제", "안전성", "기술 산업"]

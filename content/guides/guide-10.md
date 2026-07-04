@@ -2,7 +2,7 @@
 title: "고급편 04: AI 시스템을 지속 가능하게 운영하는 법 — 3단계 수명 관리"
 description: 처음엔 잘 쓰다가 결국 방치하는 AI — 그 이유와 해결법. 월간 체크리스트부터 팀 확장 전략까지 AI 운영 루틴 완전 가이드
 date: 2026-06-24
-author: DORI-AI
+author: illo
 category: 가이드
 thumbnail: "/thumbnails/guide/guide10.png?v=3"
 tags: [AI운영, 생산성루틴, AI관리, 지속가능, 팀AI]

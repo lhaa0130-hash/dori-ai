@@ -176,7 +176,7 @@ export default function LoginPage() {
                 letterSpacing: "-0.02em",
               }}
             >
-              DORI-AI
+              illo
             </span>
           </Link>
         </div>
@@ -293,7 +293,7 @@ export default function LoginPage() {
               }}
             >
               {mode === "login"
-                ? "DORI-AI에 오신 것을 환영합니다."
+                ? "illo에 오신 것을 환영합니다."
                 : "이메일로 간편하게 가입하고 시작하세요."}
             </p>
           </div>

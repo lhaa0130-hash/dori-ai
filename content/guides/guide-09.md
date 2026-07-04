@@ -2,7 +2,7 @@
 title: "고급편 03: AI로 월 수십 시간 절약하는 TOP 7 업무와 ROI 계산법"
 description: 회의록, 이메일, 리서치, 코드 리뷰, 번역, 데이터 분석, 고객 응대 — 업무별 AI 적용 전략과 실제 시간 절약 수치
 date: 2026-06-24
-author: DORI-AI
+author: illo
 category: 가이드
 thumbnail: "/thumbnails/guide/guide09.png?v=3"
 tags: [생산성, 시간절약, AI활용, ROI, 업무자동화]

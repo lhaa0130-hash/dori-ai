@@ -24,7 +24,7 @@ export function IntroSection() {
                     className="text-5xl md:text-7xl font-bold tracking-tight"
                 >
                     <span className="bg-gradient-to-r from-[#FBAA60] via-[#F9954E] to-[#E8832E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-                        DORI-AI
+                        illo
                     </span>
                 </motion.h1>
 

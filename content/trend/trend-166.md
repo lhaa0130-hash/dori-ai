@@ -2,7 +2,7 @@
 title: "OpenAI, 새로운 맞춤형 칩으로 ChatGPT 성능 향상"
 description: "OpenAI가 Broadcom과 협력하여 LLM에 최적화된 맞춤형 칩을 출시하며 ChatGPT의 성능을 한층 높였다. 이번 발표는 AI 기술의 진화에 중요한 이정표가 될 전망이다."
 date: "2026-06-25T10:00:28+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-166.jpg"
 tags: ["OpenAI", "ChatGPT", "AI 칩", "Broadcom", "기술 혁신"]

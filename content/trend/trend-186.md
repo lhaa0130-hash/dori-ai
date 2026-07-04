@@ -2,7 +2,7 @@
 title: "캘리포니아, 앤트로픽과의 파트너십으로 새로운 시대를 열다"
 description: "캘리포니아 주가 앤트로픽의 AI 도구를 도입하여 공공 서비스 개선에 나섰습니다. 이는 정부와 AI의 협업 모델을 제시하는 중요한 사례가 될 것입니다."
 date: "2026-06-30T16:00:18+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-186.jpg"
 tags: ["앤트로픽", "캘리포니아", "AI", "공공 서비스", "파트너십"]

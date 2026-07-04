@@ -2,7 +2,7 @@
 title: "제네바에서의 인류의 약속 — 전쟁에서의 AI 사용 금지 선언"
 description: "전 세계 60개국이 참여한 제네바의 공동 선언이 AI의 전쟁 사용을 금지하며 국제 사회의 새로운 방향을 제시하고 있다."
 date: "2026-06-21T07:00:16+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-140.jpg?v=2"
 tags: ["AI", "전쟁", "윤리", "국제협약"]

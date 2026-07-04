@@ -2,7 +2,7 @@
 title : 2026년 글로벌 경제 전망: AI 거품론과 인플레이션 리스크의 위태로운 동행
 description: 2026년 세계 경제는 AI 산업의 '수익성 증명'에 대한 의구심과 예상보다 고착화된 인플레이션이라는 양면적 과제에 직면해 있습니다. IMF와 세계은행의 최신 경고와 연준(Fed)의 통화 정책 흐름을 통해 올해의 경제 지형도를 진단합니다.
 date: 2026-01-07
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend025.png 
 tags: [글로벌경제전망, AI거품론, 인플레이션리스크, 연준금리정책, IMF보고서, 자산버블, 경제불확실성] 

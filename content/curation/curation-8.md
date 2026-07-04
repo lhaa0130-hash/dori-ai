@@ -2,7 +2,7 @@
 title: "Memoriq·OwnClip·Taste Lab·CakewordAI: 무료 AI 도구로 기억·녹화·디자인·언어 학습까지"
 description: "이번 주는 ‘내가 쓰는 환경 안에 조용히 붙는 AI’가 두드러졌습니다. 개인 기억을 관리하는 Memoriq, 로컬 우선 화면 녹화 도구 OwnClip, 웹사이트 디자인을 분석하는 Taste Lab, 사물 이름을 바로 배우는 CakewordAI를 소개합니다."
 date: "2026-06-15"
-author: "DORI-AI"
+author: "illo"
 category: "큐레이션"
 thumbnail: "/thumbnails/curation/curation-8.jpg?v=2"
 tags: ["AI도구", "무료AI도구", "AI생산성", "AI디자인", "AI학습"]

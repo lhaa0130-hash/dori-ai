@@ -2,7 +2,7 @@
 title: "입문서 01: AI가 실제로 '어떻게' 작동하는지 아는 사람은 드물다"
 description: 토큰, 온도, 할루시네이션, 컨텍스트 윈도우 — AI의 내부 원리를 이해하면 사용법이 완전히 달라진다.
 date: 2026-06-24
-author: DORI-AI
+author: illo
 category: 가이드
 thumbnail: "/thumbnails/guide/guide01.png?v=3"
 tags: ["AI원리", "LLM", "토큰", "할루시네이션"]

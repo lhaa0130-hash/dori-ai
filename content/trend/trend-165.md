@@ -2,7 +2,7 @@
 title: "미국 의회, AI 데이터 센터 에너지 비용을 기술 기업에 부담시키는 법안 논의"
 description: "미국 의회에서 AI 데이터 센터의 에너지 비용을 기술 기업이 부담하도록 하는 법안이 논의되고 있다. 이는 AI 생태계와 환경 문제에 중요한 영향을 미칠 것으로 예상된다."
 date: "2026-06-24T22:00:22+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-165.jpg"
 tags: ["AI", "데이터 센터", "법안", "환경", "기술 기업"]

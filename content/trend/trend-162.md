@@ -2,7 +2,7 @@
 title: "사이버 보안의 미래 — AI가 시스템을 초월할 날이 얼마 남지 않았다"
 description: "AI가 사이버 보안 시스템을 무너뜨릴 가능성에 대한 경고가 전 세계적으로 퍼지고 있다. 'Five Eyes' 동맹국들은 이 문제를 심각하게 보고 있다."
 date: "2026-06-23T22:00:25+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-162.jpg"
 tags: ["사이버 보안", "AI", "Five Eyes", "기술 트렌드", "해킹"]

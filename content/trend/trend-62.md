@@ -2,7 +2,7 @@
 title: "PwC 보고서: AI 경제적 가치의 74%, 상위 20% 기업이 독식"
 description: "PwC의 2026년 AI 성과 연구에 따르면, 전 세계 1,217명의 임원 대상 조사 결과 AI 경제적 가치의 74%를 단 20%의 기업이 가져가고 있다. 승자와 패자를 가르는 결정적 차이는 'AI를 생산성 도구'가 아닌 '성장 동력'으로 바라보는 전략적 관점의 차이였다."
 date: "2026-04-19"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-62.png"
 tags:

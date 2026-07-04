@@ -2,7 +2,7 @@
 title: "앤트로픽, Claude Opus 4.7 출시 — 100만 토큰 컨텍스트와 3배 향상된 비전으로 AI 에이전트 시대 선도"
 description: "앤트로픽이 최신 플래그십 모델 Claude Opus 4.7을 공개했다. 100만 토큰 컨텍스트 윈도우, 3배 향상된 이미지 해상도, 강화된 코딩 능력을 갖춘 이 모델은 복잡한 에이전트형 작업의 새로운 기준을 제시한다."
 date: 2026-04-17
-author: DORI-AI
+author: illo
 category: 트렌드
 thumbnail: /thumbnails/trend/trend-57.png
 tags:

@@ -2,7 +2,7 @@
 title: "메타, AI 보안 점검에 협력할까? 미국 정부의 압박"
 description: "미국 정부가 메타에 AI 검토를 요구하며 보안 우려가 커지고 있다. 이로 인해 메타의 기술 개발 방향이 크게 변화할 가능성이 있다."
 date: "2026-06-24T10:00:33+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-164.jpg"
 tags: ["메타", "AI 보안", "정책", "기술", "정부 압박"]

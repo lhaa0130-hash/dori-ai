@@ -137,7 +137,7 @@ export default function AiNewsClient() {
       ))}
 
       <p className="py-8 text-[11px] text-neutral-400 dark:text-zinc-600 leading-relaxed break-keep">
-        ⚠️ 외부 사이트로 이동합니다. 추천 목록은 DORI-AI가 직접 큐레이션하며 제휴와 무관합니다.
+        ⚠️ 외부 사이트로 이동합니다. 추천 목록은 illo가 직접 큐레이션하며 제휴와 무관합니다.
       </p>
     </main>
   );

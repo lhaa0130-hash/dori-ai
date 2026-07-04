@@ -2,7 +2,7 @@
 title : CES 2026의 핵심 트렌드: '피지컬 AI'의 시대, 모니터를 찢고 나온 인공지능  
 description: CES 2026은 AI가 단순한 소프트웨어를 넘어 로봇, 모빌리티, 가전 등 물리적 장치와 결합하는 '피지컬 AI'의 원년이었습니다. 전 세계를 놀라게 한 혁신 제품들과 산업 구조의 변화를 심층 분석합니다.  
 date: 2026-01-08
-author: DORI-AI  
+author: illo  
 category: 트렌드  
 thumbnail: /thumbnails/trend/trend032.png  
 tags: [CES2026, 피지컬AI, 로보틱스, 엔비디아루빈, 지능형홈, 엣지AI, 삼성볼리, LG클로이D] 

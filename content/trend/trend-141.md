@@ -2,7 +2,7 @@
 title: "구글, 99달러에 새로운 스피커와 함께 Gemini를 공개하다"
 description: "구글이 새로운 스피커를 출시하며 Gemini AI 모델을 통합했습니다. 가격은 99달러로, 시장 반응이 주목됩니다."
 date: "2026-06-21T09:00:22+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-141.jpg?v=2"
 tags: ["구글", "스피커", "Gemini", "AI", "기술 혁신"]

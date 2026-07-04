@@ -2,7 +2,7 @@
 title: "1비트 LLM 혁명: GPU 없이 AI를 실행하는 시대가 온다"
 description: "마이크로소프트 BitNet과 PrismML이 주도하는 1비트 대형 언어 모델의 등장. 스마트폰 CPU만으로 수십억 파라미터 AI를 구동하는 초효율 AI 시대의 서막."
 date: "2026-04-23"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-67.png"
 tags:

@@ -2,7 +2,7 @@
 title : 메타의 20억 달러 ‘마누스(Manus)’ 인수와 중국의 역공: AI 에이전트 시장의 지각변동
 description: 메타가 역대 가장 빠른 성장을 기록한 AI 에이전트 스타트업 '마누스'를 인수했습니다. 하지만 중국 상무부(MOFCOM)가 기술 수출 규제 위반 여부로 정식 조사에 착수하며, 지정학적 리스크가 인수의 핵심 변수로 부상했습니다.
 date: 2026-01-10
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend039.png 
 tags: [메타, 마누스, AI에이전트, M&A, 중국규제, 상무부조사, 생성형AI, 기술수출통제] 

@@ -2,7 +2,7 @@
 title: "중국의 사이버 보안 혁신, 앤트로픽과의 경쟁에서 우위 점하다"
 description: "중국이 사이버 보안 분야에서 앤트로픽과 유사한 기술력을 확보하면서 AI 경쟁의 판도가 바뀌고 있다."
 date: "2026-06-28T15:00:16+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-178.jpg"
 tags: ["중국", "사이버 보안", "AI", "앤트로픽", "기술 경쟁"]

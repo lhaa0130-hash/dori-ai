@@ -2,7 +2,7 @@
 title: "Anthropic·California가 드러낸 미국 AI 규제 전쟁: 주법을 막으려는 백악관과 먼저 움직이는 주정부"
 description: "미국에서 AI 규제의 중심이 워싱턴과 주정부 사이에서 갈라지고 있다. 핵심은 기술 속도가 아니라, 누가 위험을 정의하고 누가 책임을 질 것인가의 문제다."
 date: "2026-06-17T14:02:12+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "분석"
 thumbnail: "/thumbnails/analysis/analysis-6.jpg?v=2"
 tags: ["AI규제", "Anthropic", "California", "백악관", "AI거버넌스"]

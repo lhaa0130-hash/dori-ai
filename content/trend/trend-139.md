@@ -2,7 +2,7 @@
 title: "ASML, 중국에 첨단 반도체 장비를 판매할까?"
 description: "미국 정부가 ASML의 주요 반도체 장비가 중국에 있을 가능성을 제기했습니다. 이 상황이 반도체 산업에 미치는 영향은 무엇인지 살펴봅니다."
 date: "2026-06-20T22:00:22+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-139.jpg"
 tags: ["ASML", "반도체", "중국", "미국", "수출 규제"]

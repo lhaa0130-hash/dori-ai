@@ -2,7 +2,7 @@
 title : 2026년 AI 시장의 본질은 '수익 창출(Show Me the Money)': 실험을 넘어선 실질적 비즈니스 가치 증명기  
 description: 2026년 AI 시장은 단순한 기술적 호기심을 넘어 '수익 창출(ROI)'을 증명해야 하는 '심판의 해'를 맞이했습니다. 에이전틱 AI의 부상과 산업별 실증 데이터를 통해 AI가 어떻게 실질적인 경제적 가치로 전환되고 있는지 심층 분석합니다.  
 date: 2026-01-02
-author: DORI-AI  
+author: illo  
 category: 트렌드  
 thumbnail: /thumbnails/trend/trend008.png 
 tags: [AI트렌드, 수익모델, ROI, 에이전틱AI, 생산성혁신, 비즈니스전략]  

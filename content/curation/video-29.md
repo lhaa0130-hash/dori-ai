@@ -2,7 +2,7 @@
 title: "[LLM] 대형 언어 모델의 작동 원리"
 description: 대형 언어 모델의 기본 작동 원리를 쉽게 설명합니다.
 date: 2026-06-25
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-29.jpg"
 tags: [영상, AI추천, LLM, 입문·기초, Upskill Fleet Academ]

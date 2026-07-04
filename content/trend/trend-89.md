@@ -2,7 +2,7 @@
 title: "비자와 OpenAI의 파트너십 — AI 쇼핑의 미래를 열다"
 description: "비자가 OpenAI와 손잡고 AI 에이전트가 사용자 대신 쇼핑을 할 수 있는 새로운 서비스를 출시합니다. 이로 인해 AI 기술이 소비자 쇼핑 경험을 어떻게 변화시킬지 주목됩니다."
 date: "2026-06-11"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-89.jpg"
 tags: ["OpenAI", "비자", "AI", "쇼핑", "혁신"]

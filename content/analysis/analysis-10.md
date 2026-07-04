@@ -2,7 +2,7 @@
 title: "Microsoft·Google 데이터센터가 만난 36.1℃ 폭염: 전력망이 AI 경쟁의 새 병목이다"
 description: "유럽 폭염으로 전력망과 발전소가 흔들리는 사이, AI 데이터센터 전력 수요는 폭발적으로 늘고 있다. 이제 AI 경쟁의 핵심은 모델 성능이 아니라 전기·물·입지·송전망을 누가 먼저 확보하느냐로 이동하고 있다."
 date: "2026-06-29T14:01:48+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "분석"
 thumbnail: "/thumbnails/analysis/analysis-10.jpg"
 tags: ["AI데이터센터", "전력망", "폭염", "Microsoft", "Google"]

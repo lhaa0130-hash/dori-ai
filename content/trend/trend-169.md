@@ -2,7 +2,7 @@
 title: "캘리포니아, AI의 노동 시장 영향 모니터링 도구 최초 출시"
 description: "캘리포니아주가 AI의 노동 시장에 미치는 영향을 추적할 수 있는 도구를 세계 최초로 출시했습니다. 이는 AI 기술의 영향력을 보다 명확히 이해하는 데 큰 의미를 가집니다."
 date: "2026-06-26T09:00:30+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-169.jpg"
 tags: ["캘리포니아", "AI", "노동 시장", "모니터링", "기술"]

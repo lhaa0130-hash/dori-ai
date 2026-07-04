@@ -102,7 +102,7 @@ export async function getPostData(id: string) {
       contentHtml: '', // Legacy support
       ...matterResult.data,
       thumbnail_url: matterResult.data.image, // Map image to thumbnail_url
-      author: matterResult.data.author || 'DORI-AI', // Default author
+      author: matterResult.data.author || 'illo', // Default author
       date: matterResult.data.date || new Date().toISOString(),
     } as any;
   }

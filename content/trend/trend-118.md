@@ -2,7 +2,7 @@
 title: "앤트로픽, 탄소 제거를 위한 혁신적 연합에 합류하다"
 description: "앤트로픽이 탄소 제거 프로젝트를 지원하는 Frontier 연합에 첫 번째 AI 스타트업으로 참여하며 환경 보호에 기여하고 있습니다."
 date: "2026-06-18T10:00:14+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-118.jpg"
 tags: ["앤트로픽", "탄소 제거", "환경", "AI 스타트업", "Frontier 연합"]

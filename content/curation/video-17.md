@@ -2,7 +2,7 @@
 title: "[제미나이 사용법] 제미나이 완전정복1편"
 description: 제미나이 설치 및 기본 사용법을 안내합니다.
 date: 2026-06-23
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-17.jpg"
 tags: [영상, AI추천, 제미나이 사용법, 입문·기초, 디지털 해결사]

@@ -56,7 +56,7 @@ const RocketPopup = () => {
         </button>
         <div className="mb-4 text-6xl animate-bounce">🚀</div>
         <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-2">
-          DORI-AI에 오신 것을 환영합니다!
+          illo에 오신 것을 환영합니다!
         </h2>
         <p className="text-gray-600 dark:text-gray-300 mb-6">
           최신 트렌드와 인사이트를 공유하며 함께 성장하는 커뮤니티 플랫폼입니다.

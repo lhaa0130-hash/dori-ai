@@ -2,7 +2,7 @@
 title: "Mistral, 3조 원 투자 유치로 20조 원 기업가치 달성"
 description: "Mistral이 3억 유로 투자 유치에 성공하며 기업 가치를 20억 유로로 평가받았다. 이는 지난 투자 라운드보다 두 배 가까이 증가한 수치다."
 date: "2026-06-14"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-97.jpg"
 tags: ["Mistral", "투자", "AI 업계", "기업가치", "스타트업"]

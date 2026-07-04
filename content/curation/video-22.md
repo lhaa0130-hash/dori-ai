@@ -2,7 +2,7 @@
 title: "[AI 작동 원리] AI의 실제 작동 방식 설명"
 description: AI의 기본 작동 원리를 쉽게 설명합니다.
 date: 2026-06-23
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-22.jpg"
 tags: [영상, AI추천, AI 작동 원리, 입문·기초, Swaroop Talks]

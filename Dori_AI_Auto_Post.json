@@ -1,5 +1,5 @@
 {
-    "name": "DORI-AI Auto Post",
+    "name": "illo Auto Post",
     "nodes": [
         {
             "parameters": {},
@@ -78,7 +78,7 @@
                     ]
                 }
             },
-            "name": "Post to DORI-AI",
+            "name": "Post to illo",
             "type": "n8n-nodes-base.httpRequest",
             "typeVersion": 1,
             "position": [
@@ -143,7 +143,7 @@
             "main": [
                 [
                     {
-                        "node": "Post to DORI-AI",
+                        "node": "Post to illo",
                         "type": "main",
                         "index": 0
                     }

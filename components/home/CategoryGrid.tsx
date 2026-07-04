@@ -23,7 +23,7 @@ import {
 const categories = [
     {
         title: "프로젝트",
-        description: "DORI-AI가 진행하는 다양한 AI 프로젝트",
+        description: "illo가 진행하는 다양한 AI 프로젝트",
         href: "/project",
         icon: Rocket,
         gradient: "from-[#FBAA60] to-[#F9954E]",

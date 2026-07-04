@@ -2,7 +2,7 @@
 title: "구글, AI를 이용한 사이버 범죄 단체를 고소하다"
 description: "구글이 AI를 활용해 수백만 명을 속인 중국의 사이버 범죄 단체를 고소했습니다. 이번 사건은 AI 기술의 악용 가능성을 다시 한번 조명합니다."
 date: "2026-06-14"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-96.jpg"
 tags: ["구글", "사이버 범죄", "AI", "스팸", "사기"]

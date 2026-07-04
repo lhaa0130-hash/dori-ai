@@ -1,6 +1,6 @@
 "use client";
 
-// 가족기록 — DORI-AI 2nd 프로젝트
+// 가족기록 — illo 2nd 프로젝트
 // 디자인: /illo, /flat-form 등 DORI 전역 톤과 통일 (orange #F9954E + cream #FFF5EB)
 
 import Link from "next/link";
@@ -380,7 +380,7 @@ export default function FamilyPageClient() {
               AI가 도와주는 가족 기록
             </h2>
             <p className="text-sm text-neutral-400 mb-8 break-keep">
-              DORI-AI 본진 기술을 가족 단위로 가져와요. 빠르게 추가되고 있어요.
+              illo 본진 기술을 가족 단위로 가져와요. 빠르게 추가되고 있어요.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
               {[
@@ -418,7 +418,7 @@ export default function FamilyPageClient() {
               { icon: ClipboardList, title: "건강 기록 공유", desc: "복약 일정·병원 기록·알레르기 정보를 가족 멤버별로" },
               { icon: Heart, title: "추억 타임라인", desc: "가족 멤버별로 사진·일기·이벤트를 시간순 타임라인으로" },
               { icon: Lock, title: "카카오·구글 로그인", desc: "익명 → 영구 계정 전환, 기기 바뀌어도 가족 그대로" },
-              { icon: Sparkles, title: "DORI-AI 도구 연동", desc: "워크일로·인사이트와 연결해 가족 콘텐츠 자동 생성" },
+              { icon: Sparkles, title: "illo 도구 연동", desc: "워크일로·인사이트와 연결해 가족 콘텐츠 자동 생성" },
             ].map((f) => (
               <div
                 key={f.title}
@@ -462,7 +462,7 @@ export default function FamilyPageClient() {
                 href="/illo"
                 className="inline-flex items-center gap-1.5 text-sm font-bold text-[#E8832E] dark:text-[#FBAA60] hover:gap-3 transition-all"
               >
-                다른 DORI-AI 프로젝트 보기 <ArrowRight className="w-4 h-4" />
+                다른 illo 프로젝트 보기 <ArrowRight className="w-4 h-4" />
               </Link>
             </div>
           </div>

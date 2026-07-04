@@ -2,7 +2,7 @@
 title: "Google I/O 2026 개막·Gemini 전면 업그레이드·AI 반도체 주가 급등 — 2026년 5월 셋째 주 AI 뉴스 총정리"
 description: "Google I/O 2026이 5월 19일 개막한다. Gemini Intelligence, Android XR, 스마트 글래스까지 — AI 업계 최대 이벤트를 앞둔 2026년 5월 셋째 주 핵심 AI 뉴스 5가지를 정리한다."
 date: "2026-05-16"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-76.png"
 tags:

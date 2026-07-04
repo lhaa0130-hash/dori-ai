@@ -2,7 +2,7 @@
 title: "관측 위성이 스스로 목표를 찾았다 — 인공지능의 새로운 진화"
 description: "2026년 4월, 지구 관측 위성이 최초로 스스로 목표물을 찾아내는 성과를 달성했다. 이는 AI 기술의 진화와 응용 가능성을 보여준다."
 date: "2026-06-15"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-102.jpg"
 tags: ["인공지능", "위성", "기술혁신", "자율성", "AI응용"]

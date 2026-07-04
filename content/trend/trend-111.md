@@ -2,7 +2,7 @@
 title: "스페이스X, 2.6조 달러 기업 가치 기록 — 아마존을 초월하다"
 description: "스페이스X의 기업 가치가 2.6조 달러에 도달하며 아마존을 일시적으로 초과했습니다. 이는 IPO 이후 주가가 1조 달러 상승한 결과입니다."
 date: "2026-06-17T12:00:17+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-111.jpg"
 tags: ["스페이스X", "IPO", "투자", "기업 가치", "우주 산업"]

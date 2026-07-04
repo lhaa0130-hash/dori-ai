@@ -1,4 +1,4 @@
-# DORI-AI Android App
+# illo Android App
 
 ## 빠른 시작 (Android Studio)
 1. Android Studio → **Open** 클릭
@@ -28,7 +28,7 @@
 - Package: `com.doriai.app`
 - Min SDK: 26 (Android 8.0+)
 - Target SDK: 34 (Android 14)
-- 색상: 보라색 (#7C3AED) - DORI-AI 브랜드 컬러
+- 색상: 보라색 (#7C3AED) - illo 브랜드 컬러
 
 ## APK 빌드 (명령줄)
 ```bash

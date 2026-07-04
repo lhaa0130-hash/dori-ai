@@ -2,7 +2,7 @@
 title: "AI의 새로운 근본, Coherent의 텍사스 시설 확장"
 description: "Coherent가 AI의 광학 기반을 확장하기 위해 텍사스에서 새로운 시설을 착공했습니다. 이 프로젝트가 AI 산업에 미칠 영향은 무엇일까요?"
 date: "2026-06-17T18:00:25+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-114.jpg"
 tags: ["Coherent", "AI", "텍사스", "광학", "산업 확장"]

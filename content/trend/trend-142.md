@@ -2,7 +2,7 @@
 title: "메리디스 휘타커, AI 챗봇의 진실을 직시하라"
 description: "Signal의 메리디스 휘타커가 AI 챗봇의 본질을 명확히 전달하며, 이들이 우리의 친구가 아님을 강조하고 나섰다."
 date: "2026-06-21T10:00:19+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-142.jpg?v=2"
 tags: ["AI 챗봇", "메리디스 휘타커", "Signal", "인간관계", "기술 윤리"]

@@ -2,7 +2,7 @@
 title: "텍사스주, 메타를 상대로 한 소송 — 메시지 암호화의 진실은?"
 description: "텍사스주 검찰이 메타를 상대로 WhatsApp의 종단 간 암호화 미비를 주장하며 소송을 제기했다. 이 사건은 개인정보 보호와 기업의 신뢰성에 대한 논란을 불러일으킨다."
 date: "2026-05-26"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-84.jpg"
 tags: ["메타", "WhatsApp", "암호화", "법적 소송", "개인정보 보호"]

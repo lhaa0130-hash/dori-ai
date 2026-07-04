@@ -2,7 +2,7 @@
 title : 엔비디아(NVIDIA)의 중국 시장 실리 전략: H200 공급 재개와 '전액 선불' 결제의 이면
 description: 엔비디아가 중국 시장을 겨냥해 H200 AI 칩 수출 재개를 추진하며 '전액 선불 결제' 및 '환불 불가'라는 초강수 조건을 내걸었습니다. 미·중 갈등 속에서 실리를 챙기려는 엔비디아의 공급망 통제 전략과 재무 리스크 관리 방안을 심층 분석합니다.
 date: 2026-01-10
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend037.png 
 tags: [엔비디아, H200, 중국반도체규제, 선불결제, CES2026, 트럼프행정부, 공급망관리, AI반도체] 

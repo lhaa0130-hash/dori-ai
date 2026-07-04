@@ -2,7 +2,7 @@
 title: "무차별적인 오픈 소스 코드 공격, 누구에게 책임을 물을 것인가?"
 description: "해커 집단이 오픈 소스 코드에 대한 공격을 감행하며 소프트웨어 생태계의 안전성을 위협하고 있다. 이 사건은 소프트웨어 개발자와 기업 모두에게 심각한 경고를 던진다."
 date: "2026-05-26"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-85.jpg"
 tags: ["해킹", "오픈 소스", "소프트웨어 보안", "사이버 공격", "개발자"]

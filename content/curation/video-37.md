@@ -2,7 +2,7 @@
 title: "[제미나이] 제미나이 사용법과 대화법"
 description: 제미나이에서 효과적인 답변을 얻는 대화법을 배웁니다.
 date: 2026-06-30
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-37.jpg"
 tags: [영상, AI추천, 제미나이, 실무 활용, 디지털 해결사]

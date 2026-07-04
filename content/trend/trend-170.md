@@ -2,7 +2,7 @@
 title: "Patronus AI, 5천만 달러 투자 유치로 디지털 세계 구축 나선다"
 description: "Patronus AI가 5천만 달러의 투자금을 확보하며 AI 에이전트의 스트레스 테스트를 위한 디지털 세계 구축에 나섭니다."
 date: "2026-06-26T12:00:19+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-170.jpg"
 tags: ["Patronus AI", "AI 에이전트", "투자", "디지털 세계", "스트레스 테스트"]

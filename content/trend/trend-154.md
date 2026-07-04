@@ -2,7 +2,7 @@
 title: "마이크로소프트, AI 거대 기업의 경제적 영향에 대한 경고"
 description: "사티아 나델라가 AI의 발전이 경제에 미치는 영향에 대해 경고하며 새로운 규제 필요성을 강조했다."
 date: "2026-06-22T16:00:18+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-154.jpg?v=2""/thumbnails/trend/trend-154.jpg"
 tags: ["마이크로소프트", "사티아 나델라", "AI", "경제", "규제"]

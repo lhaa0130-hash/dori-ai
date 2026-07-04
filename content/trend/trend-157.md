@@ -2,7 +2,7 @@
 title: "Groq, 6억 5천만 달러 투자 유치 — AI 칩 시장의 새로운 강자?"
 description: "AI 칩 제조업체 Groq가 6억 5천만 달러의 자금을 확보하며 새로운 인재를 영입하고 있습니다. 이는 NVIDIA의 대규모 인수 이후 AI 생태계에서의 경쟁을 더욱 치열하게 만듭니다."
 date: "2026-06-23T07:00:18+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-157.jpg?v=2"
 tags: ["AI 칩", "Groq", "NVIDIA", "투자", "AI 기술"]

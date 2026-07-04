@@ -2,7 +2,7 @@
 title: "암 투병 중 AI를 활용한 기적, 코너 크리스투의 이야기"
 description: "코너 크리스투는 AI를 통해 암과의 싸움에서 새로운 희망을 찾았습니다. 그가 어떻게 데이터를 활용했는지 살펴봅니다."
 date: "2026-06-28T16:00:20+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-179.jpg"
 tags: ["AI", "암", "헬스케어", "데이터", "기술"]

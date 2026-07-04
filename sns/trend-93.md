@@ -26,7 +26,7 @@ https://dori-ai.com/insight/article/trend-93
 
 **Title:** SpaceX IPO Triggers Anticipated Changes in the AI Industry
 
-With SpaceX's IPO priced at $135 per share, raising $2.7 billion, interest in the AI industry is surging. Investors are hopeful that this success will enhance the credibility of AI companies like OpenAI and Anthropic. This IPO could lead to increased funding for AI startups and stimulate discussions on how AI can contribute to space exploration. What do you think about the potential collaborations between AI and space technology? Source: DORI-AI
+With SpaceX's IPO priced at $135 per share, raising $2.7 billion, interest in the AI industry is surging. Investors are hopeful that this success will enhance the credibility of AI companies like OpenAI and Anthropic. This IPO could lead to increased funding for AI startups and stimulate discussions on how AI can contribute to space exploration. What do you think about the potential collaborations between AI and space technology? Source: illo
 
 https://dori-ai.com/insight/article/trend-93
 

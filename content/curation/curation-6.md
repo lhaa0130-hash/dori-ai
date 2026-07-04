@@ -2,7 +2,7 @@
 title: "상점 수익을 늘리는 AI 도구 4가지"
 description: "이번 주에는 상점 운영자들이 수익을 증대시킬 수 있도록 돕는 AI 도구들을 소개합니다."
 date: "2026-05-21"
-author: "DORI-AI"
+author: "illo"
 category: "큐레이션"
 thumbnail: "/thumbnails/curation/curation-6.jpg?v=2""/thumbnails/curation/curation-6.jpg"
 tags: ["AI 도구", "상점 운영", "수익 증대", "상업"]

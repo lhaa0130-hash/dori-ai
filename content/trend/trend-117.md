@@ -2,7 +2,7 @@
 title: "오디세이, 14억 5천만 달러 가치로 AI 모델의 새로운 지평을 열다"
 description: "오디세이가 14억 5천만 달러의 기업 가치를 인정받으며 AI 모델 제작의 차세대 선두주자로 떠오르고 있다. 아마존의 지원을 받는 이 스타트업의 행보에 주목해야 한다."
 date: "2026-06-18T09:00:16+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-117.jpg"
 tags: ["AI 모델", "오디세이", "스타트업", "기업가치", "투자"]

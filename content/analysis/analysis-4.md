@@ -2,7 +2,7 @@
 title: "AI 윤리: 글로벌 차원의 진화와 도전"
 description: "AI 윤리에 대한 논의가 전 세계적으로 확산되고 있는 가운데, 각국의 규제와 대처 방안이 어떻게 다르게 전개되고 있는지를 분석한다."
 date: "2026-05-21"
-author: "DORI-AI"
+author: "illo"
 category: "분석"
 thumbnail: "/thumbnails/analysis/analysis-4.jpg?v=2""/thumbnails/analysis/analysis-4.jpg"
 tags: ["AI 윤리", "규제", "국제 협력", "기술 발전"]

@@ -2,7 +2,7 @@
 title: "한국, 550억 달러 투자로 AI 메모리 혁신에 나선다"
 description: "한국의 주요 기술 기업들이 550억 달러를 투자하여 AI 메모리 기술을 혁신하고 있다. 이는 'RAMageddon' 문제를 해결하기 위한 노력의 일환이다."
 date: "2026-06-30T13:00:15+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-185.jpg"
 tags: ["AI", "반도체", "투자", "한국", "메모리"]

@@ -2,7 +2,7 @@
 title: "고급편 02: AI 자동화 파이프라인 구축 — 반복 업무를 영구히 없애는 법"
 description: n8n, Zapier, Make로 AI를 연결해 '한 번 설정하면 영원히 작동하는' 업무 자동화 시스템을 만드는 레벨별 로드맵
 date: 2026-06-24
-author: DORI-AI
+author: illo
 category: 가이드
 thumbnail: "/thumbnails/guide/guide08.png?v=3"
 tags: [AI자동화, n8n, Zapier, 업무자동화, 파이프라인]

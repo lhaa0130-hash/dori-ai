@@ -2,7 +2,7 @@
 title: "메타, 페이스북에 새로운 ‘AI 모드’ 도입 — 사용자 참여 강화의 시작"
 description: "메타가 페이스북에 새로운 AI 기능을 출시하며 사용자 참여를 증대시키려는 노력을 시작했습니다. 이 변화는 AI 경쟁의 중요한 이정표가 될 것입니다."
 date: "2026-06-16"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-106.jpg"
 tags: ["메타", "AI모드", "페이스북", "사용자 참여", "기술 변화"]

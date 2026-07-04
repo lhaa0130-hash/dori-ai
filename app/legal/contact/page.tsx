@@ -2,15 +2,15 @@ import type { Metadata } from "next";
 import LegalPageLayout from "../components/LegalPageLayout";
 
 export const metadata: Metadata = {
-  title: "문의하기 | DORI-AI",
-  description: "DORI-AI에 제휴, 광고, 콘텐츠 제보, 오류 신고 등 문의를 남겨주세요.",
+  title: "문의하기 | illo",
+  description: "illo에 제휴, 광고, 콘텐츠 제보, 오류 신고 등 문의를 남겨주세요.",
   alternates: { canonical: "https://illo.im/legal/contact" },
 };
 
 export default function ContactPage() {
   return (
     <LegalPageLayout title="문의하기">
-      <p>DORI-AI에 궁금한 점이나 제안이 있으시면 언제든 연락 주세요.</p>
+      <p>illo에 궁금한 점이나 제안이 있으시면 언제든 연락 주세요.</p>
 
       <h2>이메일</h2>
       <ul>

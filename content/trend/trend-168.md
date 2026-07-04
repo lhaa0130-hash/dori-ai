@@ -2,7 +2,7 @@
 title: "아마존, 인도에 130억 달러 AI 인프라 투자 — 글로벌 기술 기업의 경쟁"
 description: "아마존이 인도에 130억 달러를 투자하며 AI 인프라 구축에 박차를 가하고 있다. 이는 글로벌 기술 기업 간의 AI 경쟁이 심화되고 있음을 시사한다."
 date: "2026-06-25T22:00:23+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-168.jpg"
 tags: ["아마존", "AI 인프라", "인도", "투자", "기술 경쟁"]

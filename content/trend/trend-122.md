@@ -2,7 +2,7 @@
 title: "마이크로소프트, 중국에서 OpenAI 모델 판매로 AI 시장 확대"
 description: "마이크로소프트가 중국에서 OpenAI 모델을 판매하며 AI 기술의 글로벌 시장 점유율을 높이고 있습니다. 이는 기술의 전파와 경쟁력을 한층 강화하는 계기가 될 것입니다."
 date: "2026-06-18T16:00:19+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-122.jpg"
 tags: ["Microsoft", "OpenAI", "중국", "AI 시장", "기술 경쟁"]

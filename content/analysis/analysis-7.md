@@ -2,7 +2,7 @@
 title: "Nvidia가 잃은 중국 AI 칩 시장: 수출통제가 만든 ‘Huawei 기회’"
 description: "미국의 AI 칩 수출통제는 중국의 최첨단 모델 개발 속도를 늦추려는 전략이었다. 하지만 **2026년** 현재 그 정책은 중국 시장에서 **Nvidia**를 밀어내고 **Huawei** 중심의 자립 생태계를 키우는 역설을 낳고 있다."
 date: "2026-06-19T14:01:56+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "분석"
 thumbnail: "/thumbnails/analysis/analysis-7.jpg?v=2""/thumbnails/analysis/analysis-7.jpg"
 tags: ["AI반도체", "Nvidia", "Huawei", "수출통제", "미중기술경쟁"]

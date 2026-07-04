@@ -2,7 +2,7 @@
 title: "[MCP 서버] Build and Deploy Claude Skills and MCP Servers | The Complete 2026 Guide"
 description: MCP와 스킬을 활용한 AI 도구 배포 방법을 배워보세요.
 date: 2026-06-23
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-6.jpg"
 tags: [영상, AI추천, 실무 활용, Code With Antonio, 유튜브]

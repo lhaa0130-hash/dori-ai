@@ -2,7 +2,7 @@
 title: "NVIDIA·Micron·Railway: AI 인프라 돈줄과 기업 에이전트 수익성 시험대"
 description: "이번 주 AI 산업의 초점은 모델 성능보다 자본 지출의 지속 가능성, 메모리 공급망, 기업용 에이전트의 실제 비용으로 이동했다. 데이터센터와 전력, 클라우드, 업무 자동화가 하나의 투자 지형으로 묶이고 있다."
 date: "2026-06-22T11:03:10+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "리포트"
 thumbnail: "/thumbnails/reports/report-6.jpg?v=2""/thumbnails/reports/report-6.jpg"
 tags: ["AI인프라", "NVIDIA", "Micron", "기업용AI", "데이터센터"]

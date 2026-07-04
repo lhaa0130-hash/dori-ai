@@ -2,7 +2,7 @@
 title: "SpaceX, Reflection AI와 150억 달러의 계약 체결 — 엔비디아 칩의 새로운 시대"
 description: "SpaceX가 Reflection AI와 체결한 계약으로 엔비디아의 최신 AI 칩을 활용한 혁신적인 데이터 센터 운영을 예고하고 있습니다."
 date: "2026-06-23T20:00:55+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-161.jpg"
 tags: ["SpaceX", "Reflection AI", "엔비디아", "AI 칩", "데이터 센터"]

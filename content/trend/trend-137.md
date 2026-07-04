@@ -2,7 +2,7 @@
 title: "구글, 엔비디아의 전략을 벤치마킹한 차세대 AI 칩 사업"
 description: "구글이 엔비디아의 성공적인 칩 사업 모델을 참조해 AI 칩 사업 진출에 나섰습니다. 이는 향후 AI 기술 시장에 큰 변화를 예고합니다."
 date: "2026-06-20T18:00:19+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-137.jpg"
 tags: ["구글", "AI 칩", "엔비디아", "최신 기술", "AI 혁신"]

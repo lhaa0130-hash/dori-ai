@@ -2,7 +2,7 @@
 title: "OpenAI, IPO 준비를 위한 인재 영입 — 노암 샤제어와 딘 볼의 합류"
 description: "OpenAI가 IPO를 앞두고 구글 딥마인드의 공동 창립자인 노암 샤제어와 트럼프 행정부의 AI 정책 책임자 딘 볼을 영입하며 인재 풀을 강화하고 있다."
 date: "2026-06-19T16:00:21+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-130.jpg"
 tags: ["OpenAI", "IPO", "인재 영입", "AI 정책", "노암 샤제어"]

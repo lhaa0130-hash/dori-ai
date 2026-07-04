@@ -2,7 +2,7 @@
 title: "AI가 축구 규칙을 바꾼다 — 새로운 경기를 만들어가는 기술"
 description: "AI 기술이 축구의 전략과 플레이 방식을 어떻게 혁신하고 있는지 탐구합니다."
 date: "2026-06-21T16:00:17+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-146.jpg?v=2"
 tags: ["축구", "AI", "스포츠", "기술 혁신", "전략 분석"]

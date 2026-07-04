@@ -2,7 +2,7 @@
 title: "구글의 제약, 메타의 AI 모델 사용 제한"
 description: "구글이 메타의 Gemini AI 모델 사용을 제한하면서 AI 산업의 경쟁 구도가 변화하고 있다. 이 결정이 무엇을 의미하는지 살펴본다."
 date: "2026-06-28T18:00:15+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-180.jpg"
 tags: ["구글", "메타", "AI", "Gemini", "산업 동향"]

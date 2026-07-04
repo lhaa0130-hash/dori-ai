@@ -2,7 +2,7 @@
 title: "[AI 영화 제작] AI 영화 제작을 위한 완벽 가이드"
 description: AI를 활용한 영화 제작의 전 과정을 안내합니다.
 date: 2026-06-23
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-15.jpg"
 tags: [영상, AI추천, AI 영화 제작, 입문·기초, Youri van Hofwegen]

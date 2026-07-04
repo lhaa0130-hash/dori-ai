@@ -2,7 +2,7 @@
 title: "AI가 93%의 직업을 바꾼다: Cognizant '새로운 일, 새로운 세계 2026' 보고서"
 description: "Cognizant의 최신 연구에 따르면 AI는 미국 일자리의 93%에 영향을 미치며 4.5조 달러의 생산성을 창출할 수 있습니다. 예상보다 6년 빠른 AI 노동 전환, 그 실체와 우리에게 남겨진 질문을 살펴봅니다."
 date: 2026-03-22
-author: DORI-AI
+author: illo
 category: 트렌드
 thumbnail: /thumbnails/trend/trend-46.png
 tags:

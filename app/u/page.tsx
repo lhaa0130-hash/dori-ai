@@ -53,14 +53,14 @@ export default function AIHostPage() {
         if (!res) { setView({ kind: "notfound" }); return; }
         setView({ kind: "ai", profile: res.profile, ai: res.ai });
         setLiked(hasLikedAI(res.profile.uid, res.ai.id));
-        try { document.title = `${res.ai.name} · ${res.profile.name}의 AI | DORI-AI`; } catch { /* */ }
+        try { document.title = `${res.ai.name} · ${res.profile.name}의 AI | illo`; } catch { /* */ }
         void bumpAIView(res.profile.uid, res.ai.id);
         setStats(await getAIStats(res.profile.uid, res.ai.id));
       } else {
         const p = await getProfileByHandle(handle);
         if (!p) { setView({ kind: "notfound" }); return; }
         setView({ kind: "dir", profile: p });
-        try { document.title = `${p.name}의 AI 모음 | DORI-AI`; } catch { /* */ }
+        try { document.title = `${p.name}의 AI 모음 | illo`; } catch { /* */ }
       }
     })();
   }, []);
@@ -265,7 +265,7 @@ export default function AIHostPage() {
         {/* 푸터 CTA */}
         <div className="mt-8 p-6 rounded-2xl bg-gradient-to-br from-[#FBAA60]/15 to-[#F9954E]/5 border border-[#F9954E]/20 text-center">
           <p className="text-[14px] font-extrabold text-neutral-900 dark:text-white mb-1">나도 내가 만든 AI 자랑하기 🤖</p>
-          <p className="text-[12px] text-neutral-500 dark:text-neutral-400 mb-4">DORI-AI에서 무료로 나만의 AI 소개 페이지를 만들어요</p>
+          <p className="text-[12px] text-neutral-500 dark:text-neutral-400 mb-4">illo에서 무료로 나만의 AI 소개 페이지를 만들어요</p>
           <Link href="/profile" className="inline-block px-5 py-2.5 rounded-full bg-[#F9954E] text-white font-bold text-[13px] active:opacity-85">
             내 AI 페이지 만들기 →
           </Link>

@@ -2,7 +2,7 @@
 title: "[AI 강의] 하정우의 AI 특별 강의"
 description: 하정우의 AI에 대한 특별 강의를 들어보세요.
 date: 2026-06-30
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-40.jpg"
 tags: [영상, AI추천, AI 강의, 최신 뉴스, JTV뉴스]

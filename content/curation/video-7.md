@@ -2,7 +2,7 @@
 title: "[AI 도구] 2026년에 실제로 사용할 AI 도구들!"
 description: 2026년에 유용한 AI 도구들을 소개합니다.
 date: 2026-06-23
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-7.jpg"
 tags: [영상, AI추천, 트렌드·전망, Andrew Ethan Zeng, 유튜브]

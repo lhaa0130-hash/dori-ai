@@ -2,7 +2,7 @@
 title: "AI 수사관, 조디악 킬러의 정체를 밝혔나?"
 description: "AI 기술이 범죄 수사에 어떻게 활용되고 있는지, 조디악 킬러 사건과의 연관성을 살펴봅니다."
 date: "2026-06-21T13:00:16+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-144.jpg?v=2"
 tags: ["AI", "범죄 수사", "조디악 킬러", "기술 혁신", "사건 해결"]

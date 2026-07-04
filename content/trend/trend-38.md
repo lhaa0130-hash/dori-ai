@@ -2,7 +2,7 @@
 title : 앤트로픽(Anthropic), 100억 달러 투자 유치와 3,500억 달러 기업 가치 목표: '안전'을 넘어 '성장'으로
 description: 앤트로픽이 AI 업계 사상 최대 규모인 100억 달러 자금 조달을 추진하며 기업 가치 3,500억 달러 달성을 목표로 삼았습니다. 오픈AI와의 가치 전쟁 속에서 앤트로픽이 내세운 '헌법적 AI'와 기업용 시장 점유 전략을 심층 분석합니다.
 date: 2026-01-10
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend038.png 
 tags: [앤트로픽, AI투자, 기업가치, 클로드, 아마존, 구글, AI안전성, 테크IPO, 2026테크트렌드] 

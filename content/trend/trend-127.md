@@ -2,7 +2,7 @@
 title: "Snap, AI 동영상 팀을 분사하여 새로운 회사 Dotmo 설립"
 description: "Snap이 AI 동영상 개발에 집중하기 위해 내부 팀을 분사하여 새로운 회사 Dotmo를 설립했다. 이는 비용 절감과 혁신 추진의 일환이다."
 date: "2026-06-19T12:00:15+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-127.jpg"
 tags: ["Snap", "Dotmo", "AI 동영상", "분사", "스타트업"]

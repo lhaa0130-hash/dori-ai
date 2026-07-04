@@ -2,7 +2,7 @@
 title: "AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식"
 description: "AI 그림 프롬프트 작성법을 처음 배우는 사람도 바로 따라 할 수 있게 도구 선택, 무료 사용법, 프롬프트 구조, 수정 요청, 실패 해결법까지 단계별로 정리했습니다."
 date: "2026-07-01T08:02:46+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "큐레이션"
 thumbnail: "/thumbnails/curation/curation-14.jpg"
 tags: ["AI 그림 프롬프트 작성법", "AI 이미지 생성", "프롬프트 예시", "무료 AI 그림", "이미지 생성 AI"]

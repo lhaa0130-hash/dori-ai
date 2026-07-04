@@ -2,7 +2,7 @@
 title : 메타, $20억 규모의 AI 에이전트 스타트업 ‘마누스(Manus)’ 인수... ‘자율형 AI 에이전트’ 시장의 게임 체인저 될까
 description: 메타가 자율형 AI 에이전트 분야의 신성 '마누스(Manus)'를 20억 달러에 전격 인수했습니다. 단순 챗봇을 넘어 스스로 생각하고 행동하는 '에이전틱 AI' 시대를 선점하려는 메타의 전략과 산업적 파급 효과를 심층 분석합니다.
 date: 2025-12-31  
-author: DORI-AI  
+author: illo  
 category: 트렌드  
 thumbnail: /thumbnails/trend/trend005.png  
 tags: [메타, 마누스, AI에이전트, 자율형AI, M&A, AI트렌드, 라마3, 생산성혁신]  

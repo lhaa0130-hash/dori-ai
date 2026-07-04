@@ -2,7 +2,7 @@
 title: "아시아 스타트업, 새로운 신화 같은 모델 출시 — 미국의 수출 금지에 맞서다"
 description: "아시아의 여러 AI 스타트업들이 Anthropic의 수출 금지 조치에 대응하여 Mythos와 유사한 혁신적인 모델을 출시하고 있다."
 date: "2026-06-28T22:00:17+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-181.jpg"
 tags: ["AI 스타트업", "모델 출시", "Anthropic", "수출 금지", "아시아"]

@@ -22,7 +22,7 @@ export const TEXTS = {
       tools: { title: "AI Tools", desc: "평점·리뷰 포함", detail: "수천 개의 AI 툴 중 진짜만 엄선했습니다.\n실시간 순위와 유저들의 솔직한 평가를 확인하세요.", linkText: "랭킹 보러가기 →" },
       insight: { title: "Insight", desc: "AI 인사이트 / 개념 / 트렌드" },
       academy: { title: "Academy", desc: "실전 튜토리얼 / 팁 / 유튜브 참고자료" },
-      community: { title: "Community", desc: "잡담 / 질문 / 정보 공유", detail: "혼자 고민하지 마세요. 작품 자랑부터 에러 해결 질문까지, DORI-AI 멤버들과 함께 성장하는 자유로운 소통 공간입니다." },
+      community: { title: "Community", desc: "잡담 / 질문 / 정보 공유", detail: "혼자 고민하지 마세요. 작품 자랑부터 에러 해결 질문까지, illo 멤버들과 함께 성장하는 자유로운 소통 공간입니다." },
       market: { title: "Market", desc: "AI 자료 판매 + 작업 의뢰" }
     }
   }

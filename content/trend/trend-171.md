@@ -2,7 +2,7 @@
 title: "게임이 AI의 직관을 키운다 — General Intuition의 23억 달러 도전"
 description: "General Intuition이 비디오 게임 데이터를 활용해 AI의 인간 직관을 개발하기 위한 3억 2천만 달러를 유치했습니다. 이 혁신의 의미와 AI의 미래가 주목받고 있습니다."
 date: "2026-06-26T15:00:18+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-171.jpg"
 tags: ["General Intuition", "AI", "비디오 게임", "투자", "직관"]

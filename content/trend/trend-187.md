@@ -2,7 +2,7 @@
 title: "Arena, AI 리더보드가 1억 달러 기업으로 성장하다"
 description: "AI 리더보드 플랫폼 Arena가 상업 서비스 출시 9개월 만에 1억 달러 기업으로 성장하며 업계의 주목을 받고 있다."
 date: "2026-06-30T18:00:18+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-187.jpg"
 tags: ["AI 리더보드", "Arena", "스타트업", "비즈니스 성장"]

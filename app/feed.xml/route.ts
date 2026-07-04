@@ -54,7 +54,7 @@ export async function GET() {
   const xml = `<?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>DORI-AI — AI 트렌드·큐레이션·분석·리포트</title>
+    <title>illo — AI 트렌드·큐레이션·분석·리포트</title>
     <link>${SITE}</link>
     <atom:link href="${SITE}/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>

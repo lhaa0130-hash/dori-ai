@@ -2,7 +2,7 @@
 title: "Nvidia, 호주 기업과 AI 접근 협약 체결 — 새로운 기술 시대 열리나?"
 description: "호주 Firmus Technologies가 Nvidia와 AI 접근 협약을 체결하며 기술 혁신에 박차를 가한다."
 date: "2026-06-29T10:00:18+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-183.jpg"
 tags: ["Nvidia", "Firmus Technologies", "AI", "호주", "기술 혁신"]

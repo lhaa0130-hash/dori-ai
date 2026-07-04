@@ -2,7 +2,7 @@
 title: "AI 데이터 센터, 정부의 빠른 전력 연결로 새 시대 열다"
 description: "미국 연방 에너지 규제 위원회(FERC)가 AI 데이터 센터를 위해 전력망에 신속하게 연결할 수 있는 경로를 제공하며, AI의 발전을 뒷받침할 새로운 전환점을 마련했습니다."
 date: "2026-06-19T15:00:27+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/og-default.png"
 tags: ["AI 데이터 센터", "전력망", "정부 정책", "FERC", "전력 공급"]

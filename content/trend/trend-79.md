@@ -2,7 +2,7 @@
 title: "미국 정부, 20억 달러로 9개 양자 컴퓨팅 기업에 투자"
 description: "미국 정부가 9개 양자 컴퓨팅 기업에 20억 달러의 지분을 투자하며 양자 기술 개발을 가속화하고 있습니다."
 date: "2026-05-22"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-79.jpg"
 tags: ["양자 컴퓨팅", "미국 정부", "투자", "기술 개발"]

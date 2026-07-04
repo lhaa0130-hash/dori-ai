@@ -2,7 +2,7 @@
 title: "[AI 에이전트] AI 에이전트의 오류 분석과 해결 방법"
 description: AI 에이전트의 오류 원인과 해결 방법을 분석합니다.
 date: 2026-07-02
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-44.jpg"
 tags: [영상, AI추천, AI 에이전트, 실무 활용, 김효율의 AI 개발단]

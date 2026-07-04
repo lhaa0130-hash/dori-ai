@@ -2,7 +2,7 @@
 title : AI의 파격적인 보상 체계와 실리콘밸리 AI 인재 쟁탈전 가속화: '평균 21억' 주식 보상의 명암
 description: 오픈AI가 직원 1인당 평균 150만 달러(약 21억 원)의 주식 보상을 지급하며 실리콘밸리 인재 쟁탈전이 정점에 달했습니다. 메타의 공격적 스카우트와 삼성전자의 PSU 도입 등 국내외 AI 인재 확보 경쟁의 현주소를 진단합니다.
 date: 2026-01-02
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend013.png 
 tags: [AI인재쟁탈전, 오픈AI보상, 스톡옵션, 삼성전자PSU, 실리콘밸리트렌드, 테크이코노미, 리텐션전략] 

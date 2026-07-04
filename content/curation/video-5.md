@@ -2,7 +2,7 @@
 title: "[워크플로우] Master Claude Cowork 20분 만에 배우기"
 description: Claude Cowork를 활용한 자동화 및 프로젝트 관리 방법을 배워보세요.
 date: 2026-06-23
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-5.jpg"
 tags: [영상, AI추천, 입문·기초, The iScale, 유튜브]

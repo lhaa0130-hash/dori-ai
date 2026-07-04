@@ -2,7 +2,7 @@
 title : 삼성전자, CES 2026에서 'AI 대중화'와 반도체 특화 AI 비전 선포: 8억 대 기기를 잇는 지능형 생태계
 description: 삼성전자가 CES 2026에서 'AI 경험의 대중화'를 선포하며 전 세계 8억 대 기기에 AI를 이식하는 파격적인 로드맵을 공개했습니다. HBM4와 2나노 GAA 반도체 혁신부터 130형 마이크로 RGB TV까지, 삼성의 전방위적 AI 전략을 심층 분석합니다.
 date: 2026-01-06
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend024.png 
 tags: [삼성전자, CES2026, AI대중화, AI일상동반자, HBM4, 온디바이스AI, 비스포크AI, 스마트싱스] 

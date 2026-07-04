@@ -2,7 +2,7 @@
 title : 머스크의 xAI, 200억 달러 펀딩 성공: 기업가치 2,300억 달러로 'AI 초격차' 선언
 description: 일론 머스크의 xAI가 당초 목표액을 초과한 200억 달러(약 29조 원) 투자 유치에 성공하며 기업가치 2,300억 달러를 달성했습니다. 엔비디아와 시스코의 참여, 그리고 2GW 규모의 슈퍼컴퓨터 '콜로서스' 확장 로드맵을 심층 분석합니다.
 date: 2026-01-07
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend027.png 
 tags: [xAI, 일론머스크, 그록5, 콜로서스, 엔비디아, AI투자, 슈퍼컴퓨터, 매크로하드르] 

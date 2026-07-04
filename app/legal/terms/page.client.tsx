@@ -18,7 +18,7 @@ export default function TermsClient() {
   const sections = [
     {
       q: "제1조 (목적)",
-      a: "본 약관은 DORI-AI(이하 \"회사\")가 운영하는 웹사이트(이하 \"사이트\")에서 제공하는 인터넷 관련 서비스(이하 \"서비스\")를 이용함에 있어 사이트와 이용자의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다."
+      a: "본 약관은 illo(이하 \"회사\")가 운영하는 웹사이트(이하 \"사이트\")에서 제공하는 인터넷 관련 서비스(이하 \"서비스\")를 이용함에 있어 사이트와 이용자의 권리, 의무 및 책임사항을 규정함을 목적으로 합니다."
     },
     {
       q: "제2조 (정의)",
@@ -118,7 +118,7 @@ export default function TermsClient() {
       {/* 안내 배너 */}
       <section className="container max-w-3xl mx-auto px-4 sm:px-6 mb-6 sm:mb-8 relative z-10">
         <div className="p-5 rounded-2xl bg-[#FFF5EB]/50 dark:bg-orange-950/10 border border-[#FDD5A5]/50 dark:border-[#B35E15]/30 text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-          본 약관은 DORI-AI(이하 &quot;회사&quot;)가 운영하는 웹사이트(illo.im)에서 제공하는 서비스의 이용과 관련하여, 회사와 이용자 간의 권리·의무 및 책임사항, 기타 필요한 사항을 규정합니다. 서비스를 이용하시기 전에 본 약관을 주의 깊게 읽어주시기 바랍니다.
+          본 약관은 illo(이하 &quot;회사&quot;)가 운영하는 웹사이트(illo.im)에서 제공하는 서비스의 이용과 관련하여, 회사와 이용자 간의 권리·의무 및 책임사항, 기타 필요한 사항을 규정합니다. 서비스를 이용하시기 전에 본 약관을 주의 깊게 읽어주시기 바랍니다.
         </div>
       </section>
 

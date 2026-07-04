@@ -2,7 +2,7 @@
 title: "어도비, 이미지 및 동영상 편집 도구 Topaz Labs 인수"
 description: "어도비가 Topaz Labs를 인수하며 자사의 앱에 고급 이미지 및 동영상 편집 기능을 통합할 계획이다."
 date: "2026-06-26T22:00:23+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-174.jpg"
 tags: ["어도비", "Topaz Labs", "이미지 편집", "동영상 편집", "기술 인수"]

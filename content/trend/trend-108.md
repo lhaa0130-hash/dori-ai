@@ -2,7 +2,7 @@
 title: "OpenAI의 연간 지출, 340억 달러에 달하다 — IPO 준비의 이면"
 description: "OpenAI의 지난해 지출이 340억 달러에 이르렀으며, IPO를 앞두고 있는 상황이다. 이 기사는 그 배경과 의미를 분석한다."
 date: "2026-06-16"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-108.jpg"
 tags: ["OpenAI", "IPO", "AI 투자", "비즈니스"]

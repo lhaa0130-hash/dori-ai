@@ -2,7 +2,7 @@
 title: "말레이시아 스타트업, AI 에이전트 기반 메시징 앱으로 625억 원 유치"
 description: "Respond.io가 AI 에이전트를 활용한 고객 문의 처리 시스템으로 큰 투자를 유치하며 사업 확장을 선언했습니다."
 date: "2026-06-16"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-107.jpg"
 tags: ["Respond.io", "AI 에이전트", "투자", "메시징 앱"]

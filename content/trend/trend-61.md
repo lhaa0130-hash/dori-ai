@@ -2,7 +2,7 @@
 title: "Anthropic, Claude Opus 4.7 공개 — 코딩·에이전트·보안 모두 한 단계 도약"
 description: "Anthropic이 가장 강력한 범용 모델 Claude Opus 4.7을 출시했다. 1M 토큰 컨텍스트, 적응형 사고(Adaptive Thinking), xhigh 추론 레벨 등 새로운 기능이 추가됐으며, 사이버보안 특화 모델 Mythos Preview도 함께 공개됐다."
 date: "2026-04-19"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-61.png"
 tags:

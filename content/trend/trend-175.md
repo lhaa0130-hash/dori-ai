@@ -2,7 +2,7 @@
 title: "OpenAI, 인도 시장 공략을 위한 새로운 리더 영입"
 description: "OpenAI가 인도 시장을 겨냥해 우버 인디아의 수장을 영입하며 본격적으로 진출을 선언했다."
 date: "2026-06-27T07:00:17+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-175.jpg"
 tags: ["OpenAI", "인도", "우버", "AI", "시장확장"]

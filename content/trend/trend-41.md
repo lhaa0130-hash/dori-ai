@@ -2,7 +2,7 @@
 title: AI 오디오 생성 기술, 한계를 넘어서다
 description: 구글 딥마인드의 선구적인 음성 생성 기술은 전 세계 사람들이 더 자연스럽고 직관적인 대화형 디지털 비서 및 AI 도구와 상호작용하도록 돕습니다.
 date: 2024-10-30
-author: DORI-AI
+author: illo
 category: 트렌드
 thumbnail: /images/thumbnails/trend/trend-40.png
 tags:

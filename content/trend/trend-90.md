@@ -2,7 +2,7 @@
 title: "앤트로픽, 비영리기관을 위한 AI 활용 교육 프로그램 '클로드 코프스' 발표"
 description: "앤트로픽이 비영리기관과 협력하여 AI 기술을 보다 효과적으로 활용할 수 있도록 돕는 '클로드 코프스' 프로그램을 공개했습니다."
 date: "2026-06-12"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-90.jpg"
 tags: ["앤트로픽", "AI 교육", "비영리기관", "클로드 코프스", "기술 활용"]

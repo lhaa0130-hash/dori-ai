@@ -2,7 +2,7 @@
 title: "[모델 설명] GPT 5.6에 대한 간단한 설명"
 description: GPT 5.6의 주요 특징과 정부의 규제에 대해 설명합니다.
 date: 2026-06-28
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-34.jpg"
 tags: [영상, AI추천, 모델 설명, 최신 뉴스, Caleb Writes Code]

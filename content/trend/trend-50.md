@@ -2,7 +2,7 @@
 title: "모건스탠리 경고: 2026년 상반기 '거대 AI 돌파구' 온다, 세계는 준비됐나"
 description: "모건스탠리가 2026년 상반기 사상 최대 규모의 AI 능력 도약이 임박했다고 경고했다. 미국 AI 연구소의 전례 없는 컴퓨팅 집적과 3조 달러 인프라 투자가 배경이다. 세계는 이 혁명을 맞이할 준비가 됐는가?"
 date: "2026-03-27"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-50.png"
 tags:

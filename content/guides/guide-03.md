@@ -2,7 +2,7 @@
 title: "입문서 03: 2026년 AI 모델 완전 비교 — 어떤 일에 무슨 모델을 써야 하는가"
 description: Claude, GPT-4o, Gemini, Perplexity — 주요 AI 모델을 용도별로 비교하고 최적의 선택 기준을 제시한다.
 date: 2026-06-24
-author: DORI-AI
+author: illo
 category: 가이드
 thumbnail: "/thumbnails/guide/guide03.png?v=3"
 tags: ["AI모델비교", "Claude", "GPT4o", "Gemini"]

@@ -2,7 +2,7 @@
 title: "직장인 절반이 AI를 쓴다 — 2026년, 'AI 도구' 없이는 못 일하는 시대 도래"
 description: "2026년 현재 미국 직장인의 절반 이상이 AI 도구를 업무에 활용하고 있다는 조사 결과가 잇따라 발표됐다. Gallup, Deloitte, PwC 등의 데이터가 한 방향을 가리키고 있다 — AI는 이미 선택이 아닌 생존 도구다."
 date: "2026-04-20"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-64.png"
 tags:

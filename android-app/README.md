@@ -1,4 +1,4 @@
-# DORI-AI Android WebView 앱
+# illo Android WebView 앱
 
 ## 파일 구조
 

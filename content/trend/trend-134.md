@@ -2,7 +2,7 @@
 title: "유니트헬스, 30억 달러 투자로 AI 혁신 이끈다"
 description: "유니트헬스가 30억 달러를 투자하여 AI 기반의 의료 시스템을 강화하고, 의사와의 소통을 자동화하는 새로운 기술을 도입했다."
 date: "2026-06-20T07:00:30+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-134.jpg"
 tags: ["유니트헬스", "AI", "의료", "자동화", "혁신"]

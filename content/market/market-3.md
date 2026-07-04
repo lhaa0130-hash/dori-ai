@@ -2,7 +2,7 @@
 title: "2026년 가성비 GaN 충전기 비교: 노트북·태블릿·폰을 하나로 충전하려면 어떤 USB-C 멀티충전기를 골라야 할까"
 description: "가성비 인기 디지털 제품 중 활용도가 높은 GaN USB-C 충전기 4종을 비교했습니다. 노트북 겸용, 여행용, 책상 정리용처럼 실제 사용 상황별로 장단점과 선택 기준을 짚었습니다."
 date: "2026-06-16"
-author: "DORI-AI"
+author: "illo"
 category: "마켓"
 thumbnail: "/thumbnails/market/market-3.jpg"
 tags: ["GaN충전기", "USB-C충전기", "멀티충전기", "노트북충전기", "가성비디지털"]

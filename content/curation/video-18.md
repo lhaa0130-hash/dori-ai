@@ -2,7 +2,7 @@
 title: "[AI 모델 비교] 챗GPT vs 제미나이 vs 클로드 vs 퍼플렉시티 실무 대결"
 description: 여러 AI 모델의 실무 활용을 비교합니다.
 date: 2026-06-23
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-18.jpg"
 tags: [영상, AI추천, AI 모델 비교, 비즈니스·산업, 시사저널e - 시사저널이코노미]

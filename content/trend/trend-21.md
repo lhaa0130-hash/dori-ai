@@ -2,7 +2,7 @@
 title : 역대급 IPO 시대의 개막: 오픈AI·스페이스X·앤트로픽이 그리는 자본 시장의 미래
 description: 인공지능(AI)과 우주 기술의 거두들이 마침내 기업 공개(IPO) 시장에 나옵니다. 오픈AI의 500억 달러 상장 예고부터 스페이스X의 스타링크 분할 상장설까지, 자본 시장의 지각변동을 일으킬 AI 거물들의 상장 전략을 심층 분석합니다.
 date: 2026-01-05
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend021.png 
 tags: [AI트렌드, 오픈AI상장, 스페이스X_IPO, 앤트로픽, 스타링크, 나스닥, AI자본시장] 

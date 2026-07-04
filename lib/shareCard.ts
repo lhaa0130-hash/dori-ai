@@ -69,7 +69,7 @@ export function drawCard(data: CardData): HTMLCanvasElement {
   // 워드마크
   ctx.fillStyle = accent;
   ctx.font = `800 40px ${SANS}`;
-  ctx.fillText("DORI-AI", cx, 168);
+  ctx.fillText("illo", cx, 168);
   // kicker
   ctx.fillStyle = "#8a8a93";
   ctx.font = `600 30px ${SANS}`;

@@ -2,7 +2,7 @@
 title: "책상 정리부터 피크닉 짐까지: 1~5만원대 문구·취미·캠핑 실용템 3가지 비교"
 description: "문구·취미·캠핑 용품 중 오늘 바로 사도 부담이 적은 실용 제품을 골라 비교했습니다. 볼펜 세트, 오일파스텔, 캠핑 폴딩박스를 실제 사용 상황 기준으로 장단점까지 짚었습니다."
 date: "2026-06-27"
-author: "DORI-AI"
+author: "illo"
 category: "마켓"
 thumbnail: "/thumbnails/market/market-8.jpg"
 tags: ["가성비문구", "취미용품", "캠핑수납", "생활용품비교", "실용템"]

@@ -2,7 +2,7 @@
 title: "AI 프로필 사진 만들기: 무료 도구로 자연스럽게 만드는 단계별 가이드"
 description: "AI 프로필 사진 만들기를 처음 하는 사람도 따라 할 수 있도록 사진 준비, 도구 선택, 프롬프트 입력, 보정, 저장까지 단계별로 정리했습니다. 무료로 쓰는 방법과 자주 실패하는 포인트도 함께 안내합니다."
 date: "2026-06-29T08:01:28+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "큐레이션"
 thumbnail: "/thumbnails/curation/curation-13.jpg"
 tags: ["AI 프로필 사진 만들기", "AI 증명사진", "AI 프로필", "무료 AI 이미지", "프로필 사진 보정"]

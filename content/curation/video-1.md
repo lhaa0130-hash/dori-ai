@@ -2,7 +2,7 @@
 title: "[AI 거품] AI 거품 꺼져도 돈은 결국 여기로 몰린다"
 description: AI 거품 붕괴 가능성과 그 이후의 투자 방향을 탐구합니다.
 date: 2026-06-23
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-1.jpg"
 tags: [영상, AI추천, 트렌드·전망, 언더스탠딩 : 세상의 모든 지식, 유튜브]

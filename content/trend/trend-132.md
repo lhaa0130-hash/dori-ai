@@ -2,7 +2,7 @@
 title: "앤트로픽의 AI 모델, 미국의 수출 금지로 동맹에 긴장감 조성"
 description: "앤트로픽의 AI 모델에 대한 미국의 수출 금지가 글로벌 동맹에 미치는 영향을 분석합니다."
 date: "2026-06-19T20:00:21+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-132.jpg"
 tags: ["앤트로픽", "AI 모델", "수출 금지", "미국", "글로벌 동맹"]

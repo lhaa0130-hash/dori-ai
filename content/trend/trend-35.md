@@ -2,7 +2,7 @@
 title : 구글-캐릭터.AI, 역사적 '챗봇 안전' 소송 합의: AI 윤리의 중대 분기점
 description: 14세 소년의 비극적 죽음으로 촉발된 캐릭터.AI와 구글의 집단소송이 2026년 1월 초 대규모 합의에 도달했습니다. AI 챗봇의 '의인화' 위험성과 미성년자 보호를 위한 초강력 안전 가이드라인의 실체를 분석합니다.
 date: 2026-01-09
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend035.png 
 tags: [캐릭터AI, 구글소송, AI안전성, 챗봇윤리, 청소년보호, 섹션230, 가드레일, AI심리학] 

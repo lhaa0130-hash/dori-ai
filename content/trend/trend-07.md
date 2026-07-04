@@ -2,7 +2,7 @@
 title : 혁신의 게임 체인저: 수술실 효율성 극대화와 응급실 대기 시간 단축을 주도하는 실전 AI  
 description: AI 기술이 수술실 운영 최적화와 응급실 환자 분류(Triage)에 적용되어 의료 서비스의 질을 획기적으로 높이고 있습니다. 정부 시범사업 성과와 주요 병원의 실증 데이터를 통해 의료 생산성 혁신의 현주소를 진단합니다.  
 date: 2025-12-31  
-author: DORI-AI  
+author: illo  
 category: 트렌드  
 thumbnail: /thumbnails/trend/trend007.png  
 tags: [의료AI, 스마트병원, 수술실최적화, 응급실트리아제, 디지털헬스케어, 의료생산성]  

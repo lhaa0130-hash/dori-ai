@@ -2,7 +2,7 @@
 title : 오픈AI(OpenAI), 'Whisper Pro'로 여는 화면 없는 AI 시대: 조니 아이브와의 협업과 음성 혁명 
 description: 오픈AI가 차세대 음성 모델 'Whisper Pro'와 조니 아이브의 디자인 철학을 결합해 '화면 없는 AI 기기' 시장 선점에 나섰습니다. 스마트폰을 넘어 일상에 스며드는 '앰비언트 AI'의 미래와 하드웨어 전략을 심층 분석합니다.
 date: 2026-01-04
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend017.png 
 tags: [오픈AI, 조니아이브, WhisperPro, 화면없는AI, 앰비언트컴퓨팅, VUI, 제로UI] 

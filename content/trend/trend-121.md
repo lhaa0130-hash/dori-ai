@@ -2,7 +2,7 @@
 title: "미국 AI 시장, 글로벌 정치의 새로운 전장으로 떠오르다"
 description: "프랑스와 인도 지도자들이 미국의 AI 통제 가능성에 대해 우려를 표명하며, 글로벌 AI 시장의 미래에 대한 논의가 촉발되고 있다."
 date: "2026-06-18T15:00:21+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-121.jpg"
 tags: ["AI", "정치", "글로벌 경제", "프랑스", "인도"]

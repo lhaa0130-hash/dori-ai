@@ -2,7 +2,7 @@
 title: "노트북LM(NotebookLM) 사용법: 자료 업로드부터 요약·질문·오디오까지 단계별 가이드"
 description: "노트북LM(NotebookLM)을 처음 쓰는 사람도 바로 따라 할 수 있도록 가입, 자료 추가, 요약, 질문, 오디오 개요, 공유 방법과 무료 사용 팁을 정리했습니다."
 date: "2026-06-26T08:01:03+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "큐레이션"
 thumbnail: "/thumbnails/curation/curation-12.jpg"
 tags: ["노트북LM(NotebookLM) 사용법", "NotebookLM", "구글 AI 노트", "AI 요약 도구", "AI 공부법"]

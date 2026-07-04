@@ -2,7 +2,7 @@
 title : 인도 정부, 머스크의 AI '그록(Grok)' 음란물 생성 규제 강력 지시: 디지털 주권과 AI 윤리의 충돌
 description: 인도 정부가 일론 머스크의 xAI가 개발한 '그록'의 음란물 및 딥페이크 생성 기능을 정조준했습니다. 2026년 초 발생한 '디지털 탈의' 논란과 인도 IT 법안 개정안을 중심으로 한 AI 규제 강화의 흐름을 심층 분석합니다.
 date: 2026-01-03
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend014.png 
 tags: [AI규제, 그록, 일론머스크, 딥페이크, 인도IT법, AI윤리, 디지털주권, 세이프가드] 

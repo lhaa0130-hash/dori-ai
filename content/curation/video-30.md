@@ -2,7 +2,7 @@
 title: "[개념] 2026년 가장 중요한 AI 개념"
 description: AI의 핵심 개념을 간단히 설명합니다.
 date: 2026-06-27
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-30.jpg"
 tags: [영상, AI추천, 개념, 입문·기초, 천대표 Julius Chun]

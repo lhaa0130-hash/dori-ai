@@ -2,7 +2,7 @@
 title: "Google DeepMind의 ‘수백만 에이전트’ 경고: 출시 전 심사에서 상시 관제로 바뀌는 AI 보안"
 description: "AI 위험의 중심이 챗봇 한 대의 답변에서, 서로 거래하고 설득하고 자동 실행하는 수백만 개 에이전트의 상호작용으로 이동하고 있다. 이제 기업의 AI 보안은 모델을 한 번 검사하는 방식이 아니라, 운영 중 계속 감시하고 고치는 체계로 재편되고 있다."
 date: "2026-06-12"
-author: "DORI-AI"
+author: "illo"
 category: "분석"
 thumbnail: "/thumbnails/analysis/analysis-5.jpg?v=2"
 tags: ["AI에이전트", "AI보안", "GoogleDeepMind", "NIST", "기업AI"]

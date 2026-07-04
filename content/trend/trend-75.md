@@ -2,7 +2,7 @@
 title: "Anthropic, OpenAI 꺾고 기업 AI 시장 1위 등극 — 2026년 5월 둘째 주 AI 뉴스 총정리"
 description: "앤트로픽이 기업 AI 도입률에서 처음으로 OpenAI를 앞질렀다. Claude의 연매출 300억 달러 돌파, 구글의 $400억 투자 유치까지 — 2026년 5월 둘째 주 가장 뜨거웠던 AI 뉴스 5가지를 정리한다."
 date: "2026-05-16"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-75.png"
 tags:

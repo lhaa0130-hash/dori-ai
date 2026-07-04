@@ -2,7 +2,7 @@
 title: "중국, AI 전쟁에서 새로운 국면을 맞다"
 description: "중국의 AI 산업이 다시 주목받고 있다. 기술적 우위와 정부의 지원으로 AI 경쟁이 심화되고 있는 현재, 그 배경과 의미를 살펴본다."
 date: "2026-06-22T10:00:17+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-151.jpg?v=2"
 tags: ["AI", "중국", "경쟁", "기술", "정책"]

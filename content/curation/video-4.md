@@ -2,7 +2,7 @@
 title: "[영상] AI 영상 제작을 위한 필수 정보"
 description: 구글의 무료 AI 영상 툴 VEO 3.1을 활용하는 방법을 소개합니다.
 date: 2026-06-23
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-4.jpg"
 tags: [영상, AI추천, 입문·기초, AI:ON 에이아이온💡돈버는법💡, 유튜브]

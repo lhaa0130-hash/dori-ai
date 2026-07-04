@@ -2,7 +2,7 @@
 title: "마크 저커버그가 지시한 AI 규제의 미래"
 description: "프랑스 대통령이 미국에 AI 기술 공유를 촉구하며 민주국가 간 협력을 강조했다. 이는 AI 규제의 새로운 장을 열 수 있는 기회가 될 것이다."
 date: "2026-06-18T12:00:20+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-119.jpg"
 tags: ["AI 규제", "프랑스", "미국", "마크 저커버그", "국제 협력"]

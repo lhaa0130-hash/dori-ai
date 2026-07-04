@@ -6,7 +6,7 @@ export default function HelpPage() {
       <div className="help-container">
         <div className="help-header">
           <h1>무엇을 도와드릴까요?</h1>
-          <p>DORI-AI 이용 중 궁금한 점이나 제안하고 싶은 점을 남겨주세요.</p>
+          <p>illo 이용 중 궁금한 점이나 제안하고 싶은 점을 남겨주세요.</p>
         </div>
 
         <form className="contact-form" onSubmit={(e) => {e.preventDefault(); alert('문의가 접수되었습니다.');}}>

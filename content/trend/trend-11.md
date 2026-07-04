@@ -2,7 +2,7 @@
 title : 삼성전자, CES 2026서 차세대 AI 스크린 '더 프리스타일+' 공개: 온디바이스 AI가 바꾸는 스마트 라이프의 미래
 description: 삼성전자가 CES 2026에서 공개한 '더 프리스타일+'는 단순한 프로젝터를 넘어 온디바이스 AI 기술이 집약된 이동형 스크린의 정점을 보여줍니다. AI 옵티스크린 기술과 비전 AI 컴패니언이 선사하는 새로운 시청 경험과 개인정보 보호 강화 전략을 심층 분석합니다.
 date: 2026-01-02
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend011.png 
 tags: [삼성전자, CES2026, 더프리스타일+, 온디바이스AI, AI스크린, AI옵티스크린, 비전AI컴패니언] 

@@ -2,7 +2,7 @@
 title: "넥사르, 머신러닝 혁신으로 2026년 AI 기술상 수상"
 description: "넥사르가 머신러닝 혁신으로 2026년 AI 기술상을 수상하며 주목받고 있다. 이들의 기술은 실시간 데이터 분석과 교통 안전성을 높이는 데 기여하고 있다."
 date: "2026-05-26"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-83.jpg"
 tags: ["넥사르", "머신러닝", "AI 기술상", "교통 안전", "혁신"]

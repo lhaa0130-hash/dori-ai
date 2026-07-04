@@ -2,7 +2,7 @@
 title: "오라클, AI 도입으로 21,000명 해고 — 기술과 일자리의 새로운 역학"
 description: "오라클이 AI 도입을 이유로 21,000명의 직원을 해고하며, 기술 산업의 일자리 구조에 큰 변화를 예고하고 있다."
 date: "2026-06-23T15:00:28+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-158.jpg"
 tags: ["오라클", "AI", "해고", "기술산업", "일자리"]

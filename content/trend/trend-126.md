@@ -2,7 +2,7 @@
 title: "소프트웨어 버그 잡는 DeductiveAI, Elastic에 인수되다"
 description: "DeductiveAI가 Elastic에 최대 8,500만 달러에 인수됩니다. 이 스타트업은 AI를 활용해 소프트웨어 버그를 자동으로 잡는 기술로 주목받고 있습니다."
 date: "2026-06-19T10:00:21+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-126.jpg"
 tags: ["DeductiveAI", "Elastic", "소프트웨어", "버그", "AI 스타트업"]

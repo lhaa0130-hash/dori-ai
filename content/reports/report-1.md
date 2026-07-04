@@ -2,7 +2,7 @@
 title: "이번 주 AI 산업 리포트: 투자와 혁신의 동향"
 description: "이번 주 AI 산업에서 중요한 투자 및 혁신 사건들을 다룹니다."
 date: "2026-05-21"
-author: "DORI-AI"
+author: "illo"
 category: "리포트"
 thumbnail: "/thumbnails/reports/report-1.jpg?v=2""/thumbnails/reports/report-1.jpg"
 tags: ["AI", "투자", "스타트업", "기술 혁신"]

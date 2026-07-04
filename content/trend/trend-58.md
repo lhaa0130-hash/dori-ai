@@ -2,7 +2,7 @@
 title: "ElevenLabs, 5억 달러 시리즈 D 유치 — 음성 AI 시장, 에이전트 시대의 핵심 인프라로 도약"
 description: "음성 AI 스타트업 ElevenLabs가 세쿼이아 캐피털 주도로 5억 달러 투자를 유치해 기업 가치 110억 달러를 달성했다. 단순 TTS를 넘어 대화형 AI 에이전트 플랫폼으로 진화하는 음성 AI의 미래를 살펴본다."
 date: 2026-04-17
-author: DORI-AI
+author: illo
 category: 트렌드
 thumbnail: /thumbnails/trend/trend-58.png
 tags:

@@ -1,6 +1,6 @@
 import { Metadata } from "next";
 
-const SITE_NAME = "DORI-AI";
+const SITE_NAME = "illo";
 const SITE_URL = "https://illo.im";
 const DEFAULT_OG_IMAGE = "https://illo.im/og-default.png";
 
@@ -30,7 +30,7 @@ export function createMetadata({
     "AI 튜토리얼",
     "생성형 AI",
     "ChatGPT",
-    "DORI-AI",
+    "illo",
     "AI 자동화",
     "AI 교육",
     "AI 도구 모음",
@@ -41,14 +41,14 @@ export function createMetadata({
   ];
 
   return {
-    // title은 이미 접미사 포함 완전한 문자열로 반환(객체 default+template이면 중복 '| DORI-AI | DORI-AI' 발생)
+    // title은 이미 접미사 포함 완전한 문자열로 반환(객체 default+template이면 중복 '| illo | illo' 발생)
     title: `${title} | ${SITE_NAME}`,
     description,
     keywords: keywords ? keywords.join(", ") : defaultKeywords.join(", "),
     applicationName: SITE_NAME,
     authors: [{ name: "DORI Team", url: SITE_URL }],
     creator: "DORI Team",
-    publisher: "DORI-AI",
+    publisher: "illo",
     alternates: {
       canonical: fullUrl,
     },
@@ -73,7 +73,7 @@ export function createMetadata({
       title: `${title} | ${SITE_NAME}`,
       description,
       images: [image],
-      creator: "@DORI-AI",
+      creator: "@illo",
     },
     robots: {
       index: true,

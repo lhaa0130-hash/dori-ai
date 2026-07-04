@@ -2,7 +2,7 @@
 title: "브로드컴 경고: TSMC 생산 한계, 2026년 AI 칩 공급망 병목 현실화"
 description: "AI 칩 수요가 폭발적으로 증가하는 가운데, 브로드컴이 TSMC의 생산 용량 한계를 공개 경고했다. 반도체뿐 아니라 레이저, PCB 등 인접 공급망 전반으로 병목이 확산되고 있으며, 리드 타임이 6주에서 6개월로 늘어났다."
 date: "2026-03-26"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-48.png"
 tags:

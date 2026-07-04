@@ -2,7 +2,7 @@
 title: "애플, 시리를 위한 새로운 혁신: 엔비디아 칩으로의 전환"
 description: "애플이 시리의 성능 향상을 위해 엔비디아 칩으로 전환한다는 소식이 전해졌다. 이는 AI 기술 경쟁에서 중요한 전환점이 될 것으로 예상된다."
 date: "2026-06-12"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-92.jpg"
 tags: ["애플", "엔비디아", "시리", "AI 기술", "AI 경쟁"]

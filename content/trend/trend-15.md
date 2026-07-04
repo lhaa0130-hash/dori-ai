@@ -2,7 +2,7 @@
 title : AI 데이터센터 전력 수요 급증에 따른 미국 전력망의 공급 위기 경고: '에너지 주권'이 AI 리더십을 결정한다
 description: AI 데이터센터의 폭발적인 전력 소모가 미국 전력망의 임계점을 위협하고 있습니다. 2026년 현재 가시화된 전력 부족 실태와 빅테크 기업들의 원자력(SMR) 회귀 전략, 그리고 에너지 인프라가 초래할 글로벌 AI 패권의 변화를 심층 분석합니다.
 date: 2026-01-03
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend015.png 
 tags: [AI에너지위기, 데이터센터전력, SMR, 원자력발전, 그리드락, 에너지주권, 용인반도체클러스터] 

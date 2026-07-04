@@ -29,7 +29,7 @@ https://dori-ai.com/insight/article/trend-113
 **Title:** Probably Secures $9 Million to Develop More Reliable AI Models
 
 AI startup Probably has recently raised $9 million to enhance the accuracy of its AI models. This funding aims to address the hallucination issue in AI, striving for a level of accuracy that matches deterministic systems. The investment highlights the increasing demand for reliable AI technologies, especially as businesses adopt AI solutions. How do you see the future of trustworthy AI? 
-Source: DORI-AI
+Source: illo
 
 https://dori-ai.com/insight/article/trend-113
 

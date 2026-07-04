@@ -2,7 +2,7 @@
 title: "Netris, AI 네오클라우드 혁신을 위해 150억 원 투자 유치"
 description: "Netris가 a16z로부터 150억 원을 유치하여 AI 네오클라우드 운영을 가속화하려는 비전을 밝혔다."
 date: "2026-06-26T20:00:19+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-173.jpg"
 tags: ["Netris", "AI", "클라우드", "투자", "네트워킹"]

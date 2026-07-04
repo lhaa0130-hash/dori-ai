@@ -2,7 +2,7 @@
 title: AI 에이전트의 시대가 온다 — 2026년 하반기 가장 주목해야 할 기술 변화 완전 분석
 description: 단순 챗봇을 넘어 스스로 계획하고 실행하는 AI 에이전트. 개념부터 국내외 사례, 직업 영향, 개인과 기업의 대응 전략까지 심층 분석합니다.
 date: 2026-04-22
-author: DORI-AI
+author: illo
 category: 리포트
 thumbnail: "/thumbnails/reports/report-01.jpg?v=2"
 tags: [AI에이전트, 딥리포트, 미래기술, 2026하반기, 업무혁신]

@@ -2,7 +2,7 @@
 title: "[제미나이] AI 작업시간 2시간 줄여주는 제미나이 신기능 10가지"
 description: 제미나이의 신기능을 활용해 작업 시간을 단축하는 방법을 소개합니다.
 date: 2026-06-23
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-19.jpg"
 tags: [영상, AI추천, 제미나이, 실무 활용, AI로 돈버는법 머니알고리즘]

@@ -2,7 +2,7 @@
 title: "포드, AI 한계를 인식하고 경력 있는 엔지니어를 재고용하다"
 description: "포드가 AI 도입의 한계를 깨닫고 경력 있는 엔지니어를 다시 고용하기 시작했습니다. 이는 기술 의존의 위험성을 드러내며, 자동차 산업의 변화를 시사합니다."
 date: "2026-06-29T07:00:15+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-182.jpg"
 tags: ["포드", "자동차", "AI", "기술", "엔지니어"]

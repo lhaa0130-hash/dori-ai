@@ -2,7 +2,7 @@
 title: "[AI 뉴스] Google IO 총정리 및 AI 관련 최신 뉴스"
 description: Google IO와 AI 관련 최신 소식을 종합적으로 정리합니다.
 date: 2026-06-23
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-16.jpg"
 tags: [영상, AI추천, AI 뉴스, 최신 뉴스, 조코딩 JoCoding]

@@ -2,7 +2,7 @@
 title: "AI가 촉발한 양자컴퓨팅 돌파구, 인터넷 암호화 위협 현실로"
 description: "Google과 양자 스타트업 Oratomic의 최신 연구가 인터넷 암호화를 해독할 수 있는 양자컴퓨터 개발 시점을 크게 앞당길 수 있다고 경고했다. 특히 AI가 핵심 알고리즘 발견에 결정적 역할을 한 것으로 밝혀져 AI-양자 융합의 새 지평이 열렸다."
 date: "2026-04-26"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-74.png"
 tags:

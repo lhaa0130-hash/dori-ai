@@ -2,7 +2,7 @@
 title : 메타(Meta), AI 패권 선점 위한 6.6GW 원자력 벨트 구축: ‘에너지 자립’ 선언
 description: 메타가 AI 데이터센터의 전력 수급을 위해 비스트라(Vistra), 테라파워(TerraPower), 오클로(Oklo)와 역대급 원자력 파트너십을 체결했습니다. 2035년까지 총 6.6GW의 전력을 확보하여 '프로메테우스' 슈퍼클러스터를 가동하려는 메타의 에너지 전략을 분석합니다.
 date: 2026-01-09
-author: DORI-AI 
+author: illo 
 category: 트렌드 
 thumbnail: /thumbnails/trend/trend034.png 
 tags: [메타, 원자력발전, SMR, 비스트라, 테라파워, 오클로, AI데이터센터, 전력인프라, 2026테크트렌드] 

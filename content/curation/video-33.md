@@ -2,7 +2,7 @@
 title: "[AI 문명] AI 문명에 대한 김미경 강사의 직설적 강연"
 description: AI 시대에 적응하기 위한 통찰을 제공합니다.
 date: 2026-06-28
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-33.jpg"
 tags: [영상, AI추천, AI 문명, 입문·기초, 세바시 강연 Sebasi Talk]

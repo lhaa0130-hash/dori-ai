@@ -2,7 +2,7 @@
 title: "[AI 도구] DeepSeek AI의 주요 기능을 11분 만에 알아보세요"
 description: DeepSeek AI의 핵심 기능과 활용법을 간단히 소개합니다.
 date: 2026-06-23
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-9.jpg"
 tags: [영상, AI추천, 입문·기초, Parker Prompts, 유튜브]

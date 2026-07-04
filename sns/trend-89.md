@@ -27,7 +27,7 @@ https://dori-ai.com/insight/article/trend-89
 **Title:** Visa and OpenAI Partnership Launches AI Shopping Agents for Enhanced Consumer Experience
 
 Visa has partnered with OpenAI to introduce a revolutionary AI shopping service that allows users to shop on their behalf. This AI agent not only learns user preferences but also automates payment processes, enhancing shopping efficiency. As more consumers embrace mobile shopping, this integration promises to streamline the purchasing experience significantly. How do you think this will impact small retailers? 
-Source: DORI-AI
+Source: illo
 
 https://dori-ai.com/insight/article/trend-89
 

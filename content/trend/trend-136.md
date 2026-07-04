@@ -2,7 +2,7 @@
 title: "앤트로픽, 구글 딥마인드에서 존 점퍼 영입 — AI 안전성의 새로운 전환점"
 description: "존 점퍼가 구글 딥마인드에서 앤트로픽으로 이직하며 AI 안전성 강화에 기여할 예정이다."
 date: "2026-06-20T10:00:17+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-136.jpg"
 tags: ["앤트로픽", "구글 딥마인드", "AI 안전성", "존 점퍼"]

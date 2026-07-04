@@ -2,7 +2,7 @@
 title: "Baseten, 15억 달러 투자 유치로 AI 추론 시장의 급성장 이끌다"
 description: "AI 스타트업 Baseten이 15억 달러를 유치하며 AI 추론 분야의 금광을 향한 발걸음을 계속하고 있다."
 date: "2026-06-19T09:00:33+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-125.jpg"
 tags: ["AI 스타트업", "투자", "Baseten", "추론", "AI 기술"]

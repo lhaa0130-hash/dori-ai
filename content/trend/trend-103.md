@@ -2,7 +2,7 @@
 title: "Nvidia, AI 붐 속 첫 부채 판매로 2조 6천억 원 유치 계획"
 description: "Nvidia가 AI 붐의 여세를 몰아 약 2조 6천억 원 규모의 부채 판매를 계획하고 있습니다. 이는 기업의 성장과 기술 혁신을 위한 중요한 자금 조달로 해석됩니다."
 date: "2026-06-16"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-103.jpg"
 tags: ["Nvidia", "AI", "부채 판매", "자금 조달", "기술 혁신"]

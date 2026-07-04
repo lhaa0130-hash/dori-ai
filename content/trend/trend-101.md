@@ -2,7 +2,7 @@
 title: "AI가 무기화된 현실: 인도 무슬림 여성의 위협"
 description: "AI 기술이 인도 무슬림 여성에게 가해지는 폭력의 수단으로 악용되고 있다는 충격적인 사실이 드러났습니다."
 date: "2026-06-15"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-101.jpg"
 tags: ["AI", "인권", "여성", "기술", "사회적 이슈"]

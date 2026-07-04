@@ -2,7 +2,7 @@
 title: "Gemma Scope: AI 모델의 내부를 들여다보는 새로운 도구"
 description: "구글 딥마인드가 언어 모델의 해석 가능성을 높이기 위해 오픈 소스 희소 오토인코더 스위트 'Gemma Scope'를 공개했습니다. AI의 블랙박스를 열어 안전성을 강화하는 중요한 발걸음입니다."
 date: 2024-07-31
-author: DORI-AI
+author: illo
 category: 트렌드
 thumbnail: /images/thumbnails/trend/trend-40.png
 tags:

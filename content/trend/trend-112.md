@@ -2,7 +2,7 @@
 title: "구글의 Android 17, 멀티태스킹 혁신으로 스마트폰의 미래를 바꾸다"
 description: "구글이 Android 17을 출시하며 새로운 멀티태스킹 기능과 보안 도구를 도입했습니다. 이로 인해 스마트폰 사용 방식이 크게 변화할 것으로 예상됩니다."
 date: "2026-06-17T13:00:35+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-112.jpg"
 tags: ["구글", "Android 17", "스마트폰", "멀티태스킹", "AI"]

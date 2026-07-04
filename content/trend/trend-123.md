@@ -2,7 +2,7 @@
 title: "의료 분야의 자율 AI 에이전트, 새로운 가능성을 열다"
 description: "의료 분야에서 자율 AI 에이전트의 개발이 진행 중이다. 이는 의료 서비스의 혁신을 가져올 수 있는 중요한 전환점이 될 것이다."
 date: "2026-06-18T22:00:23+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-123.jpg"
 tags: ["의료", "AI", "자율 에이전트", "혁신", "기술"]

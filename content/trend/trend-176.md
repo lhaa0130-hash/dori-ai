@@ -2,7 +2,7 @@
 title: "애플 비전 프로의 핵심 인력이 OpenAI로 이동하다"
 description: "애플의 비전 프로 팀 부사장이 OpenAI의 하드웨어 팀으로 이직하며 업계의 관심을 받고 있다."
 date: "2026-06-28T10:00:13+09:00"
-author: "DORI-AI"
+author: "illo"
 category: "트렌드"
 thumbnail: "/thumbnails/trend/trend-176.jpg"
 tags: ["OpenAI", "Apple", "하드웨어", "비전 프로", "인재 이동"]

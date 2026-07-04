@@ -2,7 +2,7 @@
 title: "[자동화] 구글 Flow AI Agent 월드컵 뉴스 자동화 워크플로우"
 description: AI를 활용한 뉴스 영상 제작 자동화 방법을 소개합니다.
 date: 2026-06-27
-author: DORI-AI
+author: illo
 category: 영상
 thumbnail: "/thumbnails/video/video-31.jpg"
 tags: [영상, AI추천, 자동화, 실무 활용, cocojuan코코쥬안]
