@@ -37,7 +37,7 @@ export default function LoginPage() {
 
   useEffect(() => setMounted(true), []);
 
-  // 로그인/가입 후 돌아갈 곳 — ?next=/trader 처럼 보호 페이지에서 넘어온 경우 그 곳으로
+  // 로그인/가입 후 돌아갈 곳 — ?next=/flat-form 처럼 보호 페이지에서 넘어온 경우 그 곳으로
   const nextDest = () => {
     if (typeof window === "undefined") return "/";
     const n = new URLSearchParams(window.location.search).get("next");

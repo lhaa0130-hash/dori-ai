@@ -45,7 +45,6 @@ export default function Header() {
     },
     {
       name: "프로젝트", href: "/projects", emoji: "🚀", children: [
-        { name: "AI트레이더", href: "/trader", emoji: "📈" },
         { name: "AI비서", href: "/illo/app", emoji: "🟧" },
         { name: "건축일로", href: "/flat-form", emoji: "📐" },
         { name: "집안일로", href: "/family", emoji: "👨‍👩‍👧‍👦" },

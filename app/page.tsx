@@ -1,6 +1,6 @@
 // app/page.tsx — 토스 풍 미니멀 메인
 import Link from "next/link";
-import { MessagesSquare, Newspaper, Wrench, BarChart3, Gamepad2, PawPrint, ShoppingBag, FolderKanban, Rss, Store, Bell, HelpCircle, TrendingUp, PencilRuler } from "lucide-react";
+import { MessagesSquare, Newspaper, Wrench, BarChart3, Gamepad2, PawPrint, ShoppingBag, FolderKanban, Rss, Store, Bell, HelpCircle, PencilRuler } from "lucide-react";
 import Hero from "@/components/home/Hero";
 import HomeClient from "@/components/home/HomeClient";
 import HomeInfoStrip from "@/components/home/HomeInfoStrip";
@@ -17,7 +17,6 @@ const SECTIONS = [
   { label: "AI 모델", href: "/ai-models", Icon: BarChart3 },
   { label: "미니게임", href: "/minigame", Icon: Gamepad2 },
   { label: "동물도감", href: "/animal", Icon: PawPrint },
-  { label: "트레이더일로", href: "/trader", Icon: TrendingUp },
   { label: "아크일로", href: "/flat-form", Icon: PencilRuler },
   { label: "마켓", href: "/market", Icon: ShoppingBag },
   { label: "상점", href: "/shop", Icon: Store },
