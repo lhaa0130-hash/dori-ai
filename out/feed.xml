@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
   <channel>
-    <title>DORI-AI — AI 트렌드·큐레이션·분석·리포트</title>
+    <title>illo — AI 트렌드·큐레이션·분석·리포트</title>
     <link>https://illo.im</link>
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Sat, 04 Jul 2026 08:00:25 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 04 Jul 2026 08:50:01 GMT</lastBuildDate>
     <item>
       <title>OpenAI 저가요금제·SK하이닉스 EUV·Figure AI: AI 돈길이 모델에서 물리 인프라로 넓어진다</title>
       <link>https://illo.im/insight/article/report-9</link>
