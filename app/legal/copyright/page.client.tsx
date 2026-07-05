@@ -1,13 +1,8 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { Copyright } from "lucide-react";
-import Link from "next/link";
+import LegalAccordion from "../components/LegalAccordion";
 
 export default function CopyrightClient() {
-  const [mounted, setMounted] = useState(false);
-  useEffect(() => { setMounted(true); }, []);
-
   const sections = [
     {
       "q": "illo 콘텐츠의 저작권",
@@ -36,56 +31,12 @@ export default function CopyrightClient() {
   ];
 
   return (
-    <main className="w-full min-h-screen bg-white dark:bg-black transition-colors duration-500 relative overflow-x-hidden">
-      <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-[#FEEBD0]/40 via-[#FFF5EB]/20 to-transparent dark:from-[#8F4B10]/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
-
-      <section className="relative pt-4 sm:pt-16 pb-8 sm:pb-16 px-4 sm:px-6 text-center z-10">
-        <div className="max-w-3xl mx-auto animate-fade-in flex flex-col items-center">
-          <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 border border-[#FDD5A5] dark:border-[#B35E15] text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
-            <Copyright className="w-3 h-3" />
-            <span>Copyright &amp; License</span>
-          </div>
-          <h1 className="text-4xl md:text-5xl font-bold mb-6 tracking-tight">
-            <span className="bg-gradient-to-r from-[#F9954E] via-[#FBAA60] to-[#F9954E] bg-clip-text text-transparent bg-[length:200%_auto] animate-gradient">
-              저작권 · 라이선스 안내
-            </span>
-          </h1>
-          <p className="text-base md:text-lg font-medium text-neutral-600 dark:text-neutral-300 break-keep leading-relaxed max-w-xl">
-            illo 콘텐츠의 저작권, AI 생성물 고지, 오픈소스 라이선스를 안내합니다.
-          </p>
-          <p className="text-xs text-neutral-400 dark:text-neutral-500 mt-3">최종 수정일: 2026년 7월 4일</p>
-        </div>
-      </section>
-
-      <section className="container max-w-3xl mx-auto px-4 sm:px-6 mb-6 sm:mb-8 relative z-10">
-        <div className="p-5 rounded-2xl bg-[#FFF5EB]/50 dark:bg-orange-950/10 border border-[#FDD5A5]/50 dark:border-[#B35E15]/30 text-sm text-neutral-600 dark:text-neutral-400 leading-relaxed">
-          illo(일로)는 콘텐츠의 저작권과 오픈소스 라이선스를 존중하며, AI를 활용한 콘텐츠 제작 사실을 투명하게 공개합니다. 권리 침해가 우려되는 경우 아래 절차에 따라 신속히 조치합니다.
-        </div>
-      </section>
-
-      <section className="container max-w-3xl mx-auto px-4 sm:px-6 pb-10 sm:pb-20 relative z-10">
-        <div className="space-y-4">
-          {sections.map((item, idx) => (
-            <details key={idx} className="group rounded-[1.5rem] border border-neutral-200 dark:border-zinc-800 bg-white/80 dark:bg-zinc-900/40 backdrop-blur-xl shadow-sm overflow-hidden transition-all duration-300 hover:shadow-md hover:shadow-[#F9954E]/5">
-              <summary className="cursor-pointer list-none flex items-center justify-between gap-4 p-6">
-                <span className="font-bold text-[15px] text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors duration-200">{item.q}</span>
-                <span className="text-lg transition-all duration-300 group-open:rotate-45 flex-shrink-0 w-6 h-6 rounded-full bg-[#FFF5EB] dark:bg-[#F9954E]/10 flex items-center justify-center text-[#F9954E] text-sm font-light">+</span>
-              </summary>
-              <div className="px-6 pb-6 text-sm text-neutral-600 dark:text-neutral-400 leading-[1.85]" style={{ whiteSpace: 'pre-line' }}>{item.a}</div>
-            </details>
-          ))}
-        </div>
-        <div className="mt-12 text-center flex flex-wrap gap-3 justify-center">
-          <Link href="/legal/terms" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-neutral-300 text-sm font-medium hover:bg-[#FFF5EB] dark:hover:bg-orange-950/20 hover:text-[#E8832E] dark:hover:text-[#FBAA60] transition-all duration-200">이용약관 보기 →</Link>
-          <Link href="/legal/business" className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-neutral-300 text-sm font-medium hover:bg-[#FFF5EB] dark:hover:bg-orange-950/20 hover:text-[#E8832E] dark:hover:text-[#FBAA60] transition-all duration-200">사업자 정보 →</Link>
-        </div>
-      </section>
-
-      <style jsx global>{`
-        @keyframes gradient { 0% { background-position: 0% 50%; } 50% { background-position: 100% 50%; } 100% { background-position: 0% 50%; } }
-        .animate-gradient { animation: gradient 3s ease infinite; }
-        details summary::-webkit-details-marker { display: none; }
-      `}</style>
-    </main>
+    <LegalAccordion
+      label="저작권"
+      title="저작권·라이선스 안내"
+      subtitle="illo 콘텐츠의 저작권, AI 생성물 고지, 오픈소스 라이선스를 안내합니다."
+      date="최종 수정일: 2026년 7월 4일"
+      sections={sections}
+    />
   );
 }
