@@ -117,7 +117,11 @@ service cloud.firestore {
                   || (request.auth != null && (request.auth.uid == resource.data.uid
                        || request.auth.uid in resource.data.allowedUids));
       allow create: if request.auth != null && request.auth.uid == request.resource.data.uid;
-      allow update: if request.auth != null;   // 좋아요/댓글수 등
+      // 소유자는 전체 수정, 타인은 좋아요/댓글수 필드만(본문·공개범위 등 무단 수정 차단)
+      allow update: if request.auth != null && (
+        request.auth.uid == resource.data.uid ||
+        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likeCount', 'likedBy', 'commentCount'])
+      );
       allow delete: if request.auth != null && request.auth.uid == resource.data.uid;
 
       // 댓글 — 글을 볼 수 있는 사람만 읽기/작성, 본인 또는 글주인이 삭제
@@ -129,17 +133,21 @@ service cloud.firestore {
       }
     }
 
-    // 알림 — 받는 사람만 읽기/정리, 누구나 알림 생성(좋아요·댓글·요청 등)
+    // 알림 — 받는 사람만 읽기/정리. 관리자는 그대로(솜사탕·프리미엄 지급 알림 등), 일반 사용자는 '자기 이름으로'만 생성(익명 스팸·발신자 위조 차단)
     match /notifications/{uid}/items/{itemId} {
       allow read:           if request.auth != null && request.auth.uid == uid;
-      allow create:         if request.auth != null;
+      allow create:         if request.auth != null && (
+                               isAdmin() ||
+                               (request.resource.data.fromUid == request.auth.uid && request.resource.data.fromUid != uid)
+                             );
       allow update, delete: if request.auth != null && request.auth.uid == uid;
     }
 
-    // 코지홈 방문자 카운터(투데이/투탈)
+    // 코지홈 방문자 카운터(투데이/투탈) — pendingCandy/pendingPremium(관리자 재화·프리미엄 지급 폴백 경로)은 관리자만 값 변경 가능
     match /visits/{uid} {
       allow read: if true;
-      allow write: if true;
+      allow create: if isAdmin() || (!('pendingCandy' in request.resource.data) && !('pendingPremium' in request.resource.data));
+      allow update: if isAdmin() || !request.resource.data.diff(resource.data).affectedKeys().hasAny(['pendingCandy', 'pendingPremium']);
       match /days/{date} { allow read: if true; allow write: if true; }
     }
 

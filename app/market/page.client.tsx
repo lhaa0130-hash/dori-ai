@@ -187,6 +187,9 @@ export default function MarketClient({ reviews = [] }: { reviews?: MarketReview[
               {items.map((p) => <ProductCard key={p.id} p={p} />)}
             </div>
           )}
+          <p className="pt-8 text-[11px] text-neutral-400 dark:text-zinc-600 leading-relaxed break-keep">
+            이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다. 아마존·알리 등 다른 제휴 링크도 구매 시 일정 수수료가 발생할 수 있습니다.
+          </p>
         </section>
       </main>
     );
@@ -232,7 +235,7 @@ export default function MarketClient({ reviews = [] }: { reviews?: MarketReview[
       <ReviewSection reviews={reviews} />
 
       <p className="pb-10 text-[11px] text-neutral-400 dark:text-zinc-600 leading-relaxed break-keep">
-        ⚠️ 마켓의 제품 링크는 어필리에이트(제휴) 링크로, 구매 시 일정 수수료를 받을 수 있습니다.
+        이 포스팅은 쿠팡 파트너스 활동의 일환으로, 이에 따른 일정액의 수수료를 제공받습니다. 아마존·알리 등 다른 제휴 링크도 구매 시 일정 수수료가 발생할 수 있습니다.
       </p>
     </main>
   );
