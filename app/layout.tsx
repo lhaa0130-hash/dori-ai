@@ -44,6 +44,7 @@ export const metadata = {
   other: {
     'pretendard-font': 'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css',
     'naver-site-verification': ['fc6aff074a85b391562bd15daa80e96e0f2a946a', 'ae3b47b353b50f9a3ac06e4c0db4ac641738faee', '6089a4a423224f2bfbf2ba87754c73d2b5e20f82'],
+    'msvalidate.01': 'DEFC5BCB96FACF7035E1444299D359B2',
   },
 };
 
