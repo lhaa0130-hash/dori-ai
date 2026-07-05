@@ -30,46 +30,50 @@
   .app {
     height: 100%;
     display: grid;
-    grid-template-rows: 8vh 37vh 12vh 1fr;
-    padding: 2.2vh 3vw;
-    gap: 1vh;
+    grid-template-rows: 3vh 10vh 4.5vh 1fr 6vh;
+    padding: 0.9vh 1.5vw;
+    gap: 0.4vh;
   }
   .app > * { min-height: 0; }
 
   header {
     display: flex; align-items: center; justify-content: space-between;
   }
-  .wordmark { display: flex; align-items: baseline; gap: .6vw; }
-  .wordmark .coin { font-size: 3vh; }
-  .wordmark b { font-size: 3vh; font-weight: 800; letter-spacing: -.5px; }
-  .wordmark span { font-size: 3vh; font-weight: 300; color: var(--orange); }
+  .wordmark { display: flex; align-items: baseline; gap: 0.3vw; }
+  .wordmark .coin { font-size: 1.5vh; }
+  .wordmark b { font-size: 1.5vh; font-weight: 800; letter-spacing: -.5px; }
+  .wordmark span { font-size: 1.5vh; font-weight: 300; color: var(--orange); }
   .clock {
     text-align: right;
     font-variant-numeric: tabular-nums;
-    font-size: 3vh; font-weight: 600; color: var(--ink);
+    font-size: 1.3vh; font-weight: 600; color: var(--ink);
     letter-spacing: 1px;
   }
-  .clock small { display:block; font-size: 1.4vh; font-weight: 600; color: var(--muted); letter-spacing: 3px; }
+  .clock small { display:block; font-size: 0.65vh; font-weight: 600; color: var(--muted); letter-spacing: 3px; }
 
-  .hero { display: flex; align-items: center; justify-content: center; }
-  .ring { position: relative; height: 36vh; aspect-ratio: 1; }
-  .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
-  .ring .track { fill: none; stroke: var(--line); stroke-width: 6; }
-  .ring .prog  {
-    fill: none; stroke: url(#grad); stroke-width: 6; stroke-linecap: round;
-    transition: stroke-dashoffset .3s linear;
+  .hero { display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 0.6vh; }
+
+  .progressBar {
+    width: 90%; max-width: 600px;
+    height: 0.8vh; border-radius: 4px;
+    background: var(--line); overflow: hidden;
+    position: relative;
   }
-  .ringCenter {
-    position: absolute; inset: 0;
-    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  .progressFill {
+    height: 100%; background: linear-gradient(90deg, #FFB067, #F26A1B);
+    width: 0%; transition: width .3s linear;
   }
-  .eyebrow { font-size: 1.7vh; font-weight: 700; color: var(--muted); letter-spacing: 4px; }
+
+  .timerDisplay {
+    display: flex; flex-direction: column; align-items: center; gap: 0.3vh;
+  }
+  .eyebrow { font-size: 0.8vh; font-weight: 700; color: var(--muted); letter-spacing: 3px; }
   .timer {
-    font-size: 15vh; font-weight: 800; line-height: .95; letter-spacing: -3px;
+    font-size: 5vh; font-weight: 800; line-height: .95; letter-spacing: -2px;
     font-variant-numeric: tabular-nums; color: var(--ink);
   }
   .next {
-    margin-top: .4vh; font-size: 1.9vh; font-weight: 700; color: var(--orange);
+    font-size: 0.9vh; font-weight: 700; color: var(--orange);
     letter-spacing: .5px;
   }
   .warn .timer { color: var(--deep); }
@@ -78,10 +82,10 @@
   body.alarm { animation: flash .6s steps(1) infinite; }
   @keyframes flash { 0% { background: #FFEEDD; } 50% { background: var(--paper); } }
   .alarmMsg {
-    display: none; position: absolute; top: -3.4vh; left: 50%; transform: translateX(-50%);
+    display: none; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
     white-space: nowrap;
-    font-size: 2vh; font-weight: 800; color: #fff; background: var(--orange);
-    padding: .8vh 2vw; border-radius: 999px; box-shadow: 0 6px 18px rgba(242,106,27,.35);
+    font-size: 1.2vh; font-weight: 800; color: #fff; background: var(--orange);
+    padding: .6vh 1.5vw; border-radius: 999px; box-shadow: 0 6px 18px rgba(242,106,27,.35);
   }
   body.alarm .alarmMsg { display: block; }
 
@@ -89,70 +93,70 @@
     display: grid; grid-template-columns: 1fr 1fr 1fr;
     background: var(--card);
     border: 1px solid var(--line);
-    border-radius: 20px;
+    border-radius: 16px;
     box-shadow: 0 2px 14px rgba(33,29,24,.04);
     overflow: hidden;
   }
   .rule {
-    display: flex; align-items: center; justify-content: center; gap: 1.1vw;
-    padding: 0 1.6vw; text-align: left;
+    display: flex; align-items: center; justify-content: center; gap: 0.5vw;
+    padding: 0 0.8vw; text-align: left;
   }
   .rule + .rule { border-left: 1px solid var(--line); }
   .rule .idx {
     flex: none;
-    width: 5vh; height: 5vh; border-radius: 50%;
+    width: 2.2vh; height: 2.2vh; border-radius: 50%;
     display: grid; place-items: center;
     background: var(--pill); color: var(--orange);
-    font-size: 2vh; font-weight: 800;
+    font-size: 0.95vh; font-weight: 800;
   }
-  .rule .txt { font-size: 2.1vh; font-weight: 600; line-height: 1.3; }
+  .rule .txt { font-size: 1.1vh; font-weight: 600; line-height: 1.3; }
 
-  .tables { display: grid; grid-template-columns: 1fr 1fr; gap: 2vw; min-height: 0; }
+  .tables { display: grid; grid-template-columns: 1fr 1fr; gap: 1vw; min-height: 0; }
   .card {
     background: var(--card);
     border: 1px solid var(--line);
-    border-radius: 20px;
+    border-radius: 16px;
     box-shadow: 0 2px 14px rgba(33,29,24,.04);
     display: flex; flex-direction: column; overflow: hidden;
   }
   .cardHead {
-    display: flex; align-items: center; gap: .8vw;
-    padding: 1.6vh 1.6vw 1.2vh;
+    display: flex; align-items: center; gap: 0.4vw;
+    padding: 0.7vh 0.8vw 0.5vh;
     border-bottom: 1px solid var(--line);
   }
-  .cardHead .dot { width: 1.1vh; height: 1.1vh; border-radius: 50%; background: var(--orange); }
-  .cardHead h2 { font-size: 2.3vh; font-weight: 800; letter-spacing: -.3px; }
-  .cardHead .tag { margin-left: auto; font-size: 1.4vh; font-weight: 700; color: var(--muted); letter-spacing: 2px; }
+  .cardHead .dot { width: 0.5vh; height: 0.5vh; border-radius: 50%; background: var(--orange); }
+  .cardHead h2 { font-size: 1.2vh; font-weight: 800; letter-spacing: -.3px; }
+  .cardHead .tag { margin-left: auto; font-size: 0.65vh; font-weight: 700; color: var(--muted); letter-spacing: 2px; }
 
   table { width: 100%; border-collapse: collapse; flex: 1; }
   td {
-    padding: 0.82vh 1.4vw; font-size: 1.7vh; line-height: 1.32;
+    padding: 0.28vh 0.7vw; font-size: 0.9vh; line-height: 1.25;
     border-bottom: 1px solid var(--line);
     vertical-align: middle;
     word-break: keep-all; overflow-wrap: break-word;
   }
   tr:last-child td { border-bottom: none; }
-  .cost { width: 1%; white-space: nowrap; text-align: center; padding-left: 1.4vw; padding-right: 0; }
+  .cost { width: 1%; white-space: nowrap; text-align: center; padding-left: 0.7vw; padding-right: 0; }
   .cost b {
     display: inline-block;
     background: var(--pill); color: var(--orange);
-    font-size: 1.7vh; font-weight: 800;
-    padding: .5vh 1.1vw; border-radius: 999px;
+    font-size: 0.88vh; font-weight: 800;
+    padding: 0.3vh 0.6vw; border-radius: 999px;
   }
 
   #startOverlay {
     position: fixed; inset: 0; z-index: 100;
     background: var(--paper);
-    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3.5vh;
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2vh;
     cursor: pointer;
   }
-  #startOverlay .coin { font-size: 9vh; }
-  #startOverlay h1 { font-size: 5vh; font-weight: 800; letter-spacing: -1px; }
+  #startOverlay .coin { font-size: 4.5vh; }
+  #startOverlay h1 { font-size: 2.6vh; font-weight: 800; letter-spacing: -1px; }
   #startOverlay h1 span { color: var(--orange); font-weight: 300; }
-  #startOverlay p { font-size: 2.2vh; color: var(--muted); text-align: center; line-height: 1.8; }
+  #startOverlay p { font-size: 1.15vh; color: var(--muted); text-align: center; line-height: 1.8; }
   #startBtn {
-    font-size: 2.6vh; font-weight: 800; color: #fff;
-    padding: 2vh 6vw; border: none; border-radius: 999px;
+    font-size: 1.4vh; font-weight: 800; color: #fff;
+    padding: 1.1vh 3.5vw; border: none; border-radius: 999px;
     background: linear-gradient(180deg, var(--amber), var(--orange));
     box-shadow: 0 12px 30px rgba(242,106,27,.35);
     cursor: pointer;
@@ -172,24 +176,15 @@
     <div class="clock"><small>현재 시각</small><span id="clock">--:--:--</span></div>
   </header>
 
-  <div class="hero">
-    <div class="ring" id="ring">
-      <div class="alarmMsg">⏰ 시간 종료 — 1달란트 지급 &amp; 미션 가능!</div>
-      <svg viewBox="0 0 200 200">
-        <defs>
-          <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
-            <stop offset="0%" stop-color="#FFB067"/>
-            <stop offset="100%" stop-color="#F26A1B"/>
-          </linearGradient>
-        </defs>
-        <circle class="track" cx="100" cy="100" r="92"/>
-        <circle class="prog"  cx="100" cy="100" r="92" id="prog"/>
-      </svg>
-      <div class="ringCenter">
-        <div class="eyebrow">다음 지급까지</div>
-        <div class="timer" id="timer">30:00</div>
-        <div class="next" id="nextInfo">&nbsp;</div>
-      </div>
+  <div class="hero" id="ring">
+    <div class="alarmMsg">⏰ 시간 종료 — 1달란트 지급 &amp; 미션 가능!</div>
+    <div class="timerDisplay">
+      <div class="eyebrow">다음 지급까지</div>
+      <div class="timer" id="timer">30:00</div>
+      <div class="next" id="nextInfo">&nbsp;</div>
+    </div>
+    <div class="progressBar">
+      <div class="progressFill" id="progFill"></div>
     </div>
   </div>
 
@@ -200,6 +195,24 @@
   </div>
 
   <div class="tables">
+    <div class="card">
+      <div class="cardHead"><span class="dot"></span><h2>미션표</h2><span class="tag">MISSION</span></div>
+      <table>
+        <tr><td class="cost"><b>1달란트</b></td><td>이불 정리</td></tr>
+        <tr><td class="cost"><b>1달란트</b></td><td>인형 정리</td></tr>
+        <tr><td class="cost"><b>1달란트</b></td><td>블럭 정리</td></tr>
+        <tr><td class="cost"><b>1달란트</b></td><td>양치하기</td></tr>
+        <tr><td class="cost"><b>1달란트</b></td><td>방 정리하기</td></tr>
+        <tr><td class="cost"><b>1달란트</b></td><td>엄마 마사지 3분</td></tr>
+        <tr><td class="cost"><b>1달란트</b></td><td>아빠 마사지 3분</td></tr>
+        <tr><td class="cost"><b>1달란트</b></td><td>아빠 등긁기</td></tr>
+        <tr><td class="cost"><b>1달란트</b></td><td>엄마 심부름하기</td></tr>
+        <tr><td class="cost"><b>2달란트</b></td><td>한글 쓰기</td></tr>
+        <tr><td class="cost"><b>2달란트</b></td><td>재능 공부</td></tr>
+        <tr><td class="cost"><b>2달란트</b></td><td>책 1권 읽기</td></tr>
+      </table>
+    </div>
+
     <div class="card">
       <div class="cardHead"><span class="dot"></span><h2>상품표</h2><span class="tag">PRIZE</span></div>
       <table>
@@ -218,25 +231,9 @@
         <tr><td class="cost"><b>15달란트</b></td><td>엄마·아빠랑 40분간 신나게 놀기 (핸드폰·TV 없이)</td></tr>
       </table>
     </div>
-
-    <div class="card">
-      <div class="cardHead"><span class="dot"></span><h2>미션표</h2><span class="tag">MISSION</span></div>
-      <table>
-        <tr><td class="cost"><b>1달란트</b></td><td>이불 정리</td></tr>
-        <tr><td class="cost"><b>1달란트</b></td><td>인형 정리</td></tr>
-        <tr><td class="cost"><b>1달란트</b></td><td>블럭 정리</td></tr>
-        <tr><td class="cost"><b>1달란트</b></td><td>양치하기</td></tr>
-        <tr><td class="cost"><b>1달란트</b></td><td>방 정리하기</td></tr>
-        <tr><td class="cost"><b>2달란트</b></td><td>한글 쓰기</td></tr>
-        <tr><td class="cost"><b>2달란트</b></td><td>재능 공부</td></tr>
-        <tr><td class="cost"><b>1달란트</b></td><td>엄마 마사지 3분</td></tr>
-        <tr><td class="cost"><b>1달란트</b></td><td>아빠 마사지 3분</td></tr>
-        <tr><td class="cost"><b>1달란트</b></td><td>아빠 등긁기</td></tr>
-        <tr><td class="cost"><b>1달란트</b></td><td>엄마 심부름하기</td></tr>
-        <tr><td class="cost"><b>2달란트</b></td><td>책 1권 읽기</td></tr>
-      </table>
-    </div>
   </div>
+
+  <div></div>
 </div>
 
 <script>
@@ -244,10 +241,7 @@
   var ALARM_SECONDS = 10;
   var audioCtx = null, alarming = false, alarmTimer = null, lastPeriodIndex = null;
 
-  var progEl = document.getElementById("prog");
-  var C = 2 * Math.PI * 92;
-
-  progEl.style.strokeDasharray = C;
+  var progFill = document.getElementById("progFill");
 
   function beep() {
     if (!audioCtx) return;
@@ -285,7 +279,7 @@
       two(now.getHours()) + ":" + two(now.getMinutes()) + ":" + two(now.getSeconds());
 
     var secOfHour = now.getMinutes() * 60 + now.getSeconds();
-    var periodIndex = Math.floor(secOfHour / PERIOD);   // 0·1 (00·30분 구간)
+    var periodIndex = Math.floor(secOfHour / PERIOD);
     var elapsed = secOfHour - periodIndex * PERIOD;
     var remain = PERIOD - elapsed;
 
@@ -295,7 +289,7 @@
     var m = Math.floor(remain / 60), s = remain % 60;
     document.getElementById("timer").textContent = two(m) + ":" + two(s);
 
-    progEl.style.strokeDashoffset = C * (elapsed / PERIOD);
+    progFill.style.width = (100 * elapsed / PERIOD) + "%";
 
     var ring = document.getElementById("ring");
     if (remain <= 60) ring.classList.add("warn"); else ring.classList.remove("warn");
