@@ -3,23 +3,14 @@
 import Link from "next/link";
 import SocialLinks from "@/components/layout/SocialLinks";
 
+// 헤더 네비와 중복되는 콘텐츠 링크(인사이트·AI도구·AI모델·AI소식·AI영상·동물도감·마켓·심리테스트·미니게임·피드)는 제외.
+// 푸터는 회사·고객지원·법적 링크 중심으로 정리.
 const LINKS = [
-  { label: "인사이트", href: "/insight" },
-  { label: "AI 도구", href: "/ai-tools" },
-  { label: "AI 모델", href: "/ai-models" },
-  { label: "AI 소식", href: "/ai-news" },
-  { label: "AI영상", href: "/video" },
-  { label: "동물도감", href: "/animal" },
-  { label: "마켓", href: "/market" },
-  { label: "심리테스트", href: "/psychtest" },
-  { label: "커뮤니티", href: "/community" },
-  { label: "미니게임", href: "/minigame" },
-  { label: "피드", href: "/feed" },
-  { label: "코지홈", href: "/profile" },
   { label: "회사 소개", href: "/legal/about" },
   { label: "공지사항", href: "/notice" },
   { label: "FAQ", href: "/faq" },
   { label: "건의사항", href: "/suggestion" },
+  { label: "코지홈", href: "/profile" },
   { label: "개인정보처리방침", href: "/legal/privacy" },
   { label: "이용약관", href: "/legal/terms" },
   { label: "저작권·라이선스", href: "/legal/copyright" },
