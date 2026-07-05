@@ -9,7 +9,12 @@ export const metadata: Metadata = {
 
 export default function AboutPage() {
   return (
-    <LegalPageLayout title="illo 소개">
+    <LegalPageLayout
+      title="illo 소개"
+      badge="About"
+      subtitle="AI를 누구나 쉽게 — illo를 소개합니다."
+      date="최종 개정일: 2026년 7월 5일"
+    >
       <p>
         illo는 빠르게 변하는 인공지능(AI) 소식을 누구나 쉽게 이해하도록 정리해 전달하는
         AI 콘텐츠·커뮤니티 플랫폼입니다. 전문가가 아니어도 읽고 바로 활용할 수 있는 글을 목표로 합니다.

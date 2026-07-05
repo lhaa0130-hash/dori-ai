@@ -20,11 +20,13 @@ const rows: { k: string; v: ReactNode; pending?: boolean }[] = [
 
 export default function BusinessPage() {
   return (
-    <LegalPageLayout title="사업자 정보">
-      <p>
-        「전자상거래 등에서의 소비자보호에 관한 법률」의 취지에 따라 illo의 사업자 신원정보를 아래와 같이 안내합니다.
-      </p>
-
+    <LegalPageLayout
+      title="사업자 정보"
+      badge="Business"
+      subtitle="illo의 사업자 신원정보를 안내합니다."
+      date="최종 개정일: 2026년 7월 5일"
+      intro="「전자상거래 등에서의 소비자보호에 관한 법률」의 취지에 따라 illo의 사업자 신원정보를 아래와 같이 안내합니다."
+    >
       <table className="biz-table">
         <tbody>
           {rows.map((r) => (

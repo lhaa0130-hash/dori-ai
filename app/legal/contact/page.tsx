@@ -9,7 +9,12 @@ export const metadata: Metadata = {
 
 export default function ContactPage() {
   return (
-    <LegalPageLayout title="문의하기">
+    <LegalPageLayout
+      title="문의하기"
+      badge="Contact"
+      subtitle="궁금한 점이나 제안이 있으시면 언제든 연락 주세요."
+      date="최종 개정일: 2026년 7월 5일"
+    >
       <p>illo에 궁금한 점이나 제안이 있으시면 언제든 연락 주세요.</p>
 
       <h2>이메일</h2>
