@@ -136,6 +136,11 @@
     word-break: keep-all; overflow-wrap: break-word;
   }
   tr:last-child td { border-bottom: none; }
+  tr { cursor: pointer; transition: all .2s; position: relative; }
+  tr:hover { background: #f9f6f0; }
+  tr.completed { background: #d0d0d0; opacity: 0.5; }
+  tr.completed td { text-decoration: line-through; color: #666; }
+  tr.completed td::before { content: '✕ '; color: #ff4444; font-weight: 900; font-size: 1.1vh; margin-right: 0.3vw; }
   .cost { width: 1%; white-space: nowrap; text-align: center; padding-left: 0.7vw; padding-right: 0; }
   .cost b {
     display: inline-block;
@@ -308,5 +313,17 @@
     document.getElementById("startOverlay").style.display = "none";
     tick();
     setInterval(tick, 250);
+  });
+
+  // 테이블 행 클릭 기능
+  var tables = document.querySelectorAll("table");
+  tables.forEach(function(table) {
+    var rows = table.querySelectorAll("tbody tr, tr");
+    rows.forEach(function(row) {
+      row.addEventListener("click", function(e) {
+        if (e.target.closest(".cost")) return; // 달란트 칸은 제외
+        row.classList.toggle("completed");
+      });
+    });
   });
 </script>
