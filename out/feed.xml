@@ -6,7 +6,55 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 05 Jul 2026 23:00:16 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 05 Jul 2026 23:18:16 GMT</lastBuildDate>
+    <item>
+      <title>무료 AI 번역 사이트 추천 BEST 7: 한국어 지원·장단점·상황별 선택 가이드</title>
+      <link>https://illo.im/insight/article/curation-16</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/curation-16</guid>
+      <category>큐레이션</category>
+      <pubDate>Sun, 05 Jul 2026 23:02:02 GMT</pubDate>
+      <description>무료로 쓸 수 있는 AI 번역 사이트 7가지를 한국어 지원, 무료 사용 가능 여부, 장단점, 추천 대상 기준으로 비교했습니다. 문서 번역, 자연스러운 의역, 업무용 번역까지 상황별 최종 픽도 정리했습니다.</description>
+    </item>
+    <item>
+      <title>[업무 자동화] AI 업무 치트키 '3가지'</title>
+      <link>https://illo.im/insight/article/video-51</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-51</guid>
+      <category>큐레이션</category>
+      <pubDate>Sun, 05 Jul 2026 00:00:00 GMT</pubDate>
+      <description>AI를 활용해 업무 시간을 90% 이상 줄이는 방법을 소개합니다.</description>
+    </item>
+    <item>
+      <title>[영상 제작] AI 영상 만드는 법</title>
+      <link>https://illo.im/insight/article/video-52</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-52</guid>
+      <category>큐레이션</category>
+      <pubDate>Sun, 05 Jul 2026 00:00:00 GMT</pubDate>
+      <description>AI를 활용해 간편하게 영상을 만드는 방법을 소개합니다.</description>
+    </item>
+    <item>
+      <title>[딥러닝] 딥러닝 기초 배우기</title>
+      <link>https://illo.im/insight/article/video-53</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-53</guid>
+      <category>큐레이션</category>
+      <pubDate>Sun, 05 Jul 2026 00:00:00 GMT</pubDate>
+      <description>딥러닝의 기초 개념을 쉽게 설명합니다.</description>
+    </item>
+    <item>
+      <title>[업무 자동화] 구글 Flow 사용법</title>
+      <link>https://illo.im/insight/article/video-54</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-54</guid>
+      <category>큐레이션</category>
+      <pubDate>Sun, 05 Jul 2026 00:00:00 GMT</pubDate>
+      <description>구글 Flow를 쉽게 활용하는 방법을 소개합니다.</description>
+    </item>
+    <item>
+      <title>[업무 자동화] Manus AI로 업무 자동화</title>
+      <link>https://illo.im/insight/article/video-55</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-55</guid>
+      <category>큐레이션</category>
+      <pubDate>Sun, 05 Jul 2026 00:00:00 GMT</pubDate>
+      <description>Manus AI를 활용해 다양한 업무를 자동화하는 방법을 소개합니다.</description>
+    </item>
     <item>
       <title>[LLM] KV 캐시가 LLM 속도를 높이는 방법</title>
       <link>https://illo.im/insight/article/video-48</link>
@@ -278,54 +326,6 @@
       <category>트렌드</category>
       <pubDate>Sun, 28 Jun 2026 07:00:20 GMT</pubDate>
       <description>코너 크리스투는 AI를 통해 암과의 싸움에서 새로운 희망을 찾았습니다. 그가 어떻게 데이터를 활용했는지 살펴봅니다.</description>
-    </item>
-    <item>
-      <title>중국의 사이버 보안 혁신, 앤트로픽과의 경쟁에서 우위 점하다</title>
-      <link>https://illo.im/insight/article/trend-178</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/trend-178</guid>
-      <category>트렌드</category>
-      <pubDate>Sun, 28 Jun 2026 06:00:16 GMT</pubDate>
-      <description>중국이 사이버 보안 분야에서 앤트로픽과 유사한 기술력을 확보하면서 AI 경쟁의 판도가 바뀌고 있다.</description>
-    </item>
-    <item>
-      <title>엘론 머스크의 우주 데이터 센터, 과연 실현될까?</title>
-      <link>https://illo.im/insight/article/trend-177</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/trend-177</guid>
-      <category>트렌드</category>
-      <pubDate>Sun, 28 Jun 2026 03:00:14 GMT</pubDate>
-      <description>엘론 머스크의 우주 데이터 센터 비전에 대한 의문과 그에 따른 업계 반응을 살펴봅니다.</description>
-    </item>
-    <item>
-      <title>애플 비전 프로의 핵심 인력이 OpenAI로 이동하다</title>
-      <link>https://illo.im/insight/article/trend-176</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/trend-176</guid>
-      <category>트렌드</category>
-      <pubDate>Sun, 28 Jun 2026 01:00:13 GMT</pubDate>
-      <description>애플의 비전 프로 팀 부사장이 OpenAI의 하드웨어 팀으로 이직하며 업계의 관심을 받고 있다.</description>
-    </item>
-    <item>
-      <title>[AI 문명] AI 문명에 대한 김미경 강사의 직설적 강연</title>
-      <link>https://illo.im/insight/article/video-33</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-33</guid>
-      <category>큐레이션</category>
-      <pubDate>Sun, 28 Jun 2026 00:00:00 GMT</pubDate>
-      <description>AI 시대에 적응하기 위한 통찰을 제공합니다.</description>
-    </item>
-    <item>
-      <title>[모델 설명] GPT 5.6에 대한 간단한 설명</title>
-      <link>https://illo.im/insight/article/video-34</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-34</guid>
-      <category>큐레이션</category>
-      <pubDate>Sun, 28 Jun 2026 00:00:00 GMT</pubDate>
-      <description>GPT 5.6의 주요 특징과 정부의 규제에 대해 설명합니다.</description>
-    </item>
-    <item>
-      <title>[개념] 2026년 가장 중요한 AI 개념</title>
-      <link>https://illo.im/insight/article/video-30</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-30</guid>
-      <category>큐레이션</category>
-      <pubDate>Sat, 27 Jun 2026 00:00:00 GMT</pubDate>
-      <description>AI의 핵심 개념을 간단히 설명합니다.</description>
     </item>
   </channel>
 </rss>

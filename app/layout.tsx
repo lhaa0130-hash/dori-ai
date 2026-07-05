@@ -12,7 +12,7 @@ export const metadata = {
   metadataBase: new URL("https://illo.im"),
   ...createMetadata({
     title: "AI 활용 방법을 함께 연구하는 커뮤니티 플랫폼",
-    description: "AI 도구, 인사이트, 아카데미, 커뮤니티를 한 곳에서. AI 활용 방법을 함께 연구하고 실전으로 적용해보는 최신 트렌드와 인사이트를 공유하는 커뮤니티 플랫폼입니다.",
+    description: "AI 도구·트렌드·큐레이션·분석을 매일 만나는 AI 피드 플랫폼, illo.",
     path: "/",
     keywords: [
       "AI 도구",
@@ -30,7 +30,6 @@ export const metadata = {
       "AI 뉴스",
       "AI 도구 모음",
       "AI 교육",
-      "dori-ai",
     ],
   }),
   icons: {
