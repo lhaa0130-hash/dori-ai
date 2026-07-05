@@ -6,7 +6,31 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Sat, 04 Jul 2026 23:00:14 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 05 Jul 2026 00:00:17 GMT</lastBuildDate>
+    <item>
+      <title>[LLM] KV 캐시가 LLM 속도를 높이는 방법</title>
+      <link>https://illo.im/insight/article/video-48</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-48</guid>
+      <category>큐레이션</category>
+      <pubDate>Sat, 04 Jul 2026 00:00:00 GMT</pubDate>
+      <description>KV 캐시를 통해 LLM의 속도를 개선하는 방법을 설명합니다.</description>
+    </item>
+    <item>
+      <title>[AI 교육] AI 배우기 위한 필수 지식</title>
+      <link>https://illo.im/insight/article/video-49</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-49</guid>
+      <category>큐레이션</category>
+      <pubDate>Sat, 04 Jul 2026 00:00:00 GMT</pubDate>
+      <description>AI를 배우기 위한 기초 지식과 방향성을 제시합니다.</description>
+    </item>
+    <item>
+      <title>[AI 원리] 생성형 AI 원리와 활용법</title>
+      <link>https://illo.im/insight/article/video-50</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-50</guid>
+      <category>큐레이션</category>
+      <pubDate>Sat, 04 Jul 2026 00:00:00 GMT</pubDate>
+      <description>생성형 AI의 원리와 활용 방법을 심층적으로 다룹니다.</description>
+    </item>
     <item>
       <title>OpenAI 저가요금제·SK하이닉스 EUV·Figure AI: AI 돈길이 모델에서 물리 인프라로 넓어진다</title>
       <link>https://illo.im/insight/article/report-9</link>
@@ -302,30 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Sat, 27 Jun 2026 00:00:00 GMT</pubDate>
       <description>AI의 핵심 개념을 간단히 설명합니다.</description>
-    </item>
-    <item>
-      <title>[자동화] 구글 Flow AI Agent 월드컵 뉴스 자동화 워크플로우</title>
-      <link>https://illo.im/insight/article/video-31</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-31</guid>
-      <category>큐레이션</category>
-      <pubDate>Sat, 27 Jun 2026 00:00:00 GMT</pubDate>
-      <description>AI를 활용한 뉴스 영상 제작 자동화 방법을 소개합니다.</description>
-    </item>
-    <item>
-      <title>[교육] AI Tech Transforming Language Learning</title>
-      <link>https://illo.im/insight/article/video-32</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-32</guid>
-      <category>큐레이션</category>
-      <pubDate>Sat, 27 Jun 2026 00:00:00 GMT</pubDate>
-      <description>AI가 언어 학습에 미치는 영향을 다룹니다.</description>
-    </item>
-    <item>
-      <title>OpenAI, 인도 시장 공략을 위한 새로운 리더 영입</title>
-      <link>https://illo.im/insight/article/trend-175</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/trend-175</guid>
-      <category>트렌드</category>
-      <pubDate>Fri, 26 Jun 2026 22:00:17 GMT</pubDate>
-      <description>OpenAI가 인도 시장을 겨냥해 우버 인디아의 수장을 영입하며 본격적으로 진출을 선언했다.</description>
     </item>
   </channel>
 </rss>
