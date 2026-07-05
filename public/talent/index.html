@@ -1,0 +1,318 @@
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex, nofollow, noarchive, nosnippet">
+<title>달란트 타이머</title>
+<style>
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html, body { height: 100%; }
+  :root {
+    --paper:   #FAF7F2;
+    --card:    #FFFFFF;
+    --ink:     #211D18;
+    --muted:   #A2978A;
+    --line:    #ECE4D9;
+    --orange:  #F26A1B;
+    --amber:   #FFB067;
+    --deep:    #D9531A;
+    --pill:    #FCECDD;
+  }
+  body {
+    font-family: "Malgun Gothic", "Apple SD Gothic Neo", "Noto Sans KR", "Samsung One", sans-serif;
+    color: var(--ink);
+    height: 100%;
+    background:
+      radial-gradient(120vw 80vh at 50% -10%, #FFF6ED 0%, rgba(255,246,237,0) 60%),
+      var(--paper);
+    -webkit-user-select: none; user-select: none;
+    overflow: hidden;
+  }
+
+  .app {
+    height: 100%;
+    display: grid;
+    grid-template-rows: 8vh 37vh 12vh 1fr;
+    padding: 2.2vh 3vw;
+    gap: 1vh;
+  }
+  .app > * { min-height: 0; }
+
+  header {
+    display: flex; align-items: center; justify-content: space-between;
+  }
+  .wordmark { display: flex; align-items: baseline; gap: .6vw; }
+  .wordmark .coin { font-size: 3vh; }
+  .wordmark b { font-size: 3vh; font-weight: 800; letter-spacing: -.5px; }
+  .wordmark span { font-size: 3vh; font-weight: 300; color: var(--orange); }
+  .clock {
+    text-align: right;
+    font-variant-numeric: tabular-nums;
+    font-size: 3vh; font-weight: 600; color: var(--ink);
+    letter-spacing: 1px;
+  }
+  .clock small { display:block; font-size: 1.4vh; font-weight: 600; color: var(--muted); letter-spacing: 3px; }
+
+  .hero { display: flex; align-items: center; justify-content: center; }
+  .ring { position: relative; height: 36vh; aspect-ratio: 1; }
+  .ring svg { width: 100%; height: 100%; transform: rotate(-90deg); }
+  .ring .track { fill: none; stroke: var(--line); stroke-width: 6; }
+  .ring .prog  {
+    fill: none; stroke: url(#grad); stroke-width: 6; stroke-linecap: round;
+    transition: stroke-dashoffset .3s linear;
+  }
+  .ringCenter {
+    position: absolute; inset: 0;
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+  }
+  .eyebrow { font-size: 1.7vh; font-weight: 700; color: var(--muted); letter-spacing: 4px; }
+  .timer {
+    font-size: 15vh; font-weight: 800; line-height: .95; letter-spacing: -3px;
+    font-variant-numeric: tabular-nums; color: var(--ink);
+  }
+  .next {
+    margin-top: .4vh; font-size: 1.9vh; font-weight: 700; color: var(--orange);
+    letter-spacing: .5px;
+  }
+  .warn .timer { color: var(--deep); }
+  .warn .next  { color: var(--deep); }
+
+  body.alarm { animation: flash .6s steps(1) infinite; }
+  @keyframes flash { 0% { background: #FFEEDD; } 50% { background: var(--paper); } }
+  .alarmMsg {
+    display: none; position: absolute; top: -3.4vh; left: 50%; transform: translateX(-50%);
+    white-space: nowrap;
+    font-size: 2vh; font-weight: 800; color: #fff; background: var(--orange);
+    padding: .8vh 2vw; border-radius: 999px; box-shadow: 0 6px 18px rgba(242,106,27,.35);
+  }
+  body.alarm .alarmMsg { display: block; }
+
+  .rules {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: 0 2px 14px rgba(33,29,24,.04);
+    overflow: hidden;
+  }
+  .rule {
+    display: flex; align-items: center; justify-content: center; gap: 1.1vw;
+    padding: 0 1.6vw; text-align: left;
+  }
+  .rule + .rule { border-left: 1px solid var(--line); }
+  .rule .idx {
+    flex: none;
+    width: 5vh; height: 5vh; border-radius: 50%;
+    display: grid; place-items: center;
+    background: var(--pill); color: var(--orange);
+    font-size: 2vh; font-weight: 800;
+  }
+  .rule .txt { font-size: 2.1vh; font-weight: 600; line-height: 1.3; }
+
+  .tables { display: grid; grid-template-columns: 1fr 1fr; gap: 2vw; min-height: 0; }
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 20px;
+    box-shadow: 0 2px 14px rgba(33,29,24,.04);
+    display: flex; flex-direction: column; overflow: hidden;
+  }
+  .cardHead {
+    display: flex; align-items: center; gap: .8vw;
+    padding: 1.6vh 1.6vw 1.2vh;
+    border-bottom: 1px solid var(--line);
+  }
+  .cardHead .dot { width: 1.1vh; height: 1.1vh; border-radius: 50%; background: var(--orange); }
+  .cardHead h2 { font-size: 2.3vh; font-weight: 800; letter-spacing: -.3px; }
+  .cardHead .tag { margin-left: auto; font-size: 1.4vh; font-weight: 700; color: var(--muted); letter-spacing: 2px; }
+
+  table { width: 100%; border-collapse: collapse; flex: 1; }
+  td {
+    padding: 0.82vh 1.4vw; font-size: 1.7vh; line-height: 1.32;
+    border-bottom: 1px solid var(--line);
+    vertical-align: middle;
+    word-break: keep-all; overflow-wrap: break-word;
+  }
+  tr:last-child td { border-bottom: none; }
+  .cost { width: 1%; white-space: nowrap; text-align: center; padding-left: 1.4vw; padding-right: 0; }
+  .cost b {
+    display: inline-block;
+    background: var(--pill); color: var(--orange);
+    font-size: 1.7vh; font-weight: 800;
+    padding: .5vh 1.1vw; border-radius: 999px;
+  }
+
+  #startOverlay {
+    position: fixed; inset: 0; z-index: 100;
+    background: var(--paper);
+    display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3.5vh;
+    cursor: pointer;
+  }
+  #startOverlay .coin { font-size: 9vh; }
+  #startOverlay h1 { font-size: 5vh; font-weight: 800; letter-spacing: -1px; }
+  #startOverlay h1 span { color: var(--orange); font-weight: 300; }
+  #startOverlay p { font-size: 2.2vh; color: var(--muted); text-align: center; line-height: 1.8; }
+  #startBtn {
+    font-size: 2.6vh; font-weight: 800; color: #fff;
+    padding: 2vh 6vw; border: none; border-radius: 999px;
+    background: linear-gradient(180deg, var(--amber), var(--orange));
+    box-shadow: 0 12px 30px rgba(242,106,27,.35);
+    cursor: pointer;
+  }
+</style>
+
+<div id="startOverlay">
+  <div class="coin">🪙</div>
+  <h1>달란트 <span>타이머</span></h1>
+  <p>TV에서 소리가 나오려면 시작 버튼을 한 번 눌러주세요.<br>정각 · 30분 기준에 맞춰 타이머가 진행됩니다.</p>
+  <button id="startBtn">시작하기</button>
+</div>
+
+<div class="app" id="app">
+  <header>
+    <div class="wordmark"><span class="coin">🪙</span><b>달란트</b><span>타이머</span></div>
+    <div class="clock"><small>현재 시각</small><span id="clock">--:--:--</span></div>
+  </header>
+
+  <div class="hero">
+    <div class="ring" id="ring">
+      <div class="alarmMsg">⏰ 시간 종료 — 1달란트 지급 &amp; 미션 가능!</div>
+      <svg viewBox="0 0 200 200">
+        <defs>
+          <linearGradient id="grad" x1="0" y1="0" x2="1" y2="1">
+            <stop offset="0%" stop-color="#FFB067"/>
+            <stop offset="100%" stop-color="#F26A1B"/>
+          </linearGradient>
+        </defs>
+        <circle class="track" cx="100" cy="100" r="92"/>
+        <circle class="prog"  cx="100" cy="100" r="92" id="prog"/>
+      </svg>
+      <div class="ringCenter">
+        <div class="eyebrow">다음 지급까지</div>
+        <div class="timer" id="timer">30:00</div>
+        <div class="next" id="nextInfo">&nbsp;</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="rules">
+    <div class="rule"><div class="idx">1</div><div class="txt">달란트 잃어버리지 않기</div></div>
+    <div class="rule"><div class="idx">2</div><div class="txt">30분마다 1달란트 지급</div></div>
+    <div class="rule"><div class="idx">3</div><div class="txt">30분마다 미션 1회 진행 가능</div></div>
+  </div>
+
+  <div class="tables">
+    <div class="card">
+      <div class="cardHead"><span class="dot"></span><h2>상품표</h2><span class="tag">PRIZE</span></div>
+      <table>
+        <tr><td class="cost"><b>3달란트</b></td><td>레고통</td></tr>
+        <tr><td class="cost"><b>3달란트</b></td><td>피규어 레고블럭</td></tr>
+        <tr><td class="cost"><b>3달란트</b></td><td>안경 레고</td></tr>
+        <tr><td class="cost"><b>3달란트</b></td><td>아이도우</td></tr>
+        <tr><td class="cost"><b>3달란트</b></td><td>코끼리 피리</td></tr>
+        <tr><td class="cost"><b>3달란트</b></td><td>워터게임</td></tr>
+        <tr><td class="cost"><b>3달란트</b></td><td>치즈맛콘 과자</td></tr>
+        <tr><td class="cost"><b>3달란트</b></td><td>캬라멜 땅콩과자</td></tr>
+        <tr><td class="cost"><b>5달란트</b></td><td>엄마랑 20분간 신나게 놀기 (핸드폰·TV 없이)</td></tr>
+        <tr><td class="cost"><b>5달란트</b></td><td>아빠랑 20분간 신나게 놀기 (핸드폰·TV 없이)</td></tr>
+        <tr><td class="cost"><b>10달란트</b></td><td>연날리기 슈팅건</td></tr>
+        <tr><td class="cost"><b>10달란트</b></td><td>그냥 슈팅건</td></tr>
+        <tr><td class="cost"><b>15달란트</b></td><td>엄마·아빠랑 40분간 신나게 놀기 (핸드폰·TV 없이)</td></tr>
+      </table>
+    </div>
+
+    <div class="card">
+      <div class="cardHead"><span class="dot"></span><h2>미션표</h2><span class="tag">MISSION</span></div>
+      <table>
+        <tr><td class="cost"><b>1달란트</b></td><td>이불 정리</td></tr>
+        <tr><td class="cost"><b>1달란트</b></td><td>인형 정리</td></tr>
+        <tr><td class="cost"><b>1달란트</b></td><td>블럭 정리</td></tr>
+        <tr><td class="cost"><b>1달란트</b></td><td>양치하기</td></tr>
+        <tr><td class="cost"><b>1달란트</b></td><td>방 정리하기</td></tr>
+        <tr><td class="cost"><b>2달란트</b></td><td>한글 쓰기</td></tr>
+        <tr><td class="cost"><b>2달란트</b></td><td>재능 공부</td></tr>
+        <tr><td class="cost"><b>1달란트</b></td><td>엄마 마사지 3분</td></tr>
+        <tr><td class="cost"><b>1달란트</b></td><td>아빠 마사지 3분</td></tr>
+        <tr><td class="cost"><b>1달란트</b></td><td>아빠 등긁기</td></tr>
+        <tr><td class="cost"><b>1달란트</b></td><td>엄마 심부름하기</td></tr>
+        <tr><td class="cost"><b>2달란트</b></td><td>책 1권 읽기</td></tr>
+      </table>
+    </div>
+  </div>
+</div>
+
+<script>
+  var PERIOD = 30 * 60; // 30분(초)
+  var ALARM_SECONDS = 10;
+  var audioCtx = null, alarming = false, alarmTimer = null, lastPeriodIndex = null;
+
+  var progEl = document.getElementById("prog");
+  var C = 2 * Math.PI * 92;
+
+  progEl.style.strokeDasharray = C;
+
+  function beep() {
+    if (!audioCtx) return;
+    var t = audioCtx.currentTime;
+    var osc = audioCtx.createOscillator(), gain = audioCtx.createGain();
+    osc.type = "sine";
+    osc.frequency.setValueAtTime(880, t);
+    osc.frequency.setValueAtTime(1175, t + 0.18);
+    gain.gain.setValueAtTime(0.0001, t);
+    gain.gain.exponentialRampToValueAtTime(0.45, t + 0.02);
+    gain.gain.exponentialRampToValueAtTime(0.0001, t + 0.42);
+    osc.connect(gain); gain.connect(audioCtx.destination);
+    osc.start(t); osc.stop(t + 0.44);
+  }
+  function startAlarm() {
+    if (alarming) return;
+    alarming = true;
+    document.body.classList.add("alarm");
+    var count = 0; beep();
+    alarmTimer = setInterval(function () {
+      count += 0.5; beep();
+      if (count >= ALARM_SECONDS) stopAlarm();
+    }, 500);
+  }
+  function stopAlarm() {
+    alarming = false; clearInterval(alarmTimer);
+    document.body.classList.remove("alarm");
+  }
+
+  function two(n) { return (n < 10 ? "0" : "") + n; }
+
+  function tick() {
+    var now = new Date();
+    document.getElementById("clock").textContent =
+      two(now.getHours()) + ":" + two(now.getMinutes()) + ":" + two(now.getSeconds());
+
+    var secOfHour = now.getMinutes() * 60 + now.getSeconds();
+    var periodIndex = Math.floor(secOfHour / PERIOD);   // 0·1 (00·30분 구간)
+    var elapsed = secOfHour - periodIndex * PERIOD;
+    var remain = PERIOD - elapsed;
+
+    if (lastPeriodIndex === null) lastPeriodIndex = periodIndex;
+    else if (periodIndex !== lastPeriodIndex) { lastPeriodIndex = periodIndex; startAlarm(); }
+
+    var m = Math.floor(remain / 60), s = remain % 60;
+    document.getElementById("timer").textContent = two(m) + ":" + two(s);
+
+    progEl.style.strokeDashoffset = C * (elapsed / PERIOD);
+
+    var ring = document.getElementById("ring");
+    if (remain <= 60) ring.classList.add("warn"); else ring.classList.remove("warn");
+
+    var base = [0, 30];
+    document.getElementById("nextInfo").textContent =
+      "매시 " + two(base[(periodIndex + 1) % 2]) + "분 지급";
+  }
+
+  document.getElementById("startBtn").addEventListener("click", function () {
+    try {
+      audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+      if (audioCtx.state === "suspended") audioCtx.resume();
+      beep();
+    } catch (e) {}
+    document.getElementById("startOverlay").style.display = "none";
+    tick();
+    setInterval(tick, 250);
+  });
+</script>
