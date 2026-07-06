@@ -319,6 +319,10 @@ export default function AdminPage() {
 
   const REGION_ORDER = ["아시아", "아프리카", "유럽", "북아메리카", "남아메리카", "오세아니아", "태평양", "대서양", "인도양", "북극해", "남극해"];
 
+  // 영문 위키백과 검색 링크 — 정확한 학명/영문명이 있으면 해당 문서로 바로 이동, 없으면 검색결과로
+  const wikiSearchUrl = (c: AnimalCard) =>
+    `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(c.en || c.sci || c.animal_name)}`;
+
   // ── 동물도감 검수: 필터별 목록·현재 카드 ──
   const reviewList = allAnimals.filter((c) => {
     const no = c.no || "";
@@ -382,6 +386,7 @@ export default function AdminPage() {
         weight: get("몸무게") || "—",
         length: get("몸길이") || "—",
         region: (c.filters?.region || []) as string[],
+        wikiUrl: wikiSearchUrl(c),
         status: approved.has(no) ? "approved" as const : rejected.has(no) ? "rejected" as const : "pending" as const,
       };
     });
@@ -973,7 +978,16 @@ export default function AdminPage() {
 
                   {/* 정보 + 액션 */}
                   <div className="p-5">
-                    <h3 className="text-xl font-black text-neutral-900 dark:text-white">{currentAnimal.animal_name}</h3>
+                    <div className="flex items-start justify-between gap-2">
+                      <h3 className="text-xl font-black text-neutral-900 dark:text-white">{currentAnimal.animal_name}</h3>
+                      <a
+                        href={wikiSearchUrl(currentAnimal)}
+                        target="_blank" rel="noopener noreferrer"
+                        className="flex-shrink-0 text-[11px] font-bold px-2.5 py-1 rounded-full border border-neutral-200 dark:border-zinc-800 text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E]/40 hover:text-[#F9954E] transition whitespace-nowrap"
+                      >
+                        🌐 영문 위키 확인
+                      </a>
+                    </div>
                     {currentAnimal.sci && (
                       <p className="italic text-sm text-neutral-500 dark:text-neutral-400">{currentAnimal.sci}{currentAnimal.en ? ` · ${currentAnimal.en}` : ""}</p>
                     )}
@@ -1083,6 +1097,7 @@ export default function AdminPage() {
                     <th className="px-3 py-2.5 font-bold">몸무게</th>
                     <th className="px-3 py-2.5 font-bold">몸길이</th>
                     <th className="px-3 py-2.5 font-bold">서식지</th>
+                    <th className="px-3 py-2.5 font-bold">출처</th>
                     <th className="px-3 py-2.5 font-bold">반려</th>
                   </tr>
                 </thead>
@@ -1121,6 +1136,9 @@ export default function AdminPage() {
                             ))
                           )}
                         </div>
+                      </td>
+                      <td className="px-3 py-2 text-center">
+                        <a href={r.wikiUrl} target="_blank" rel="noopener noreferrer" className="text-[11px] font-bold text-sky-500 hover:text-sky-700 transition">🌐 위키</a>
                       </td>
                       <td className="px-3 py-2 text-center">
                         {r.status === "rejected" ? (
