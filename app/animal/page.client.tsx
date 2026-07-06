@@ -66,6 +66,12 @@ const SIMPLE_FILTERS = [
     chipCls: "bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800",
     tags: ["10cm 이하", "10~30cm", "30~100cm", "100~200cm", "2~5m", "5~10m", "10m 이상"],
   },
+  {
+    id: "region", emoji: "🗺️", label: "서식지",
+    cls: "bg-sky-500 text-white border-sky-500",
+    chipCls: "bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-300 border-sky-200 dark:border-sky-800",
+    tags: ["아시아", "아프리카", "유럽", "북아메리카", "남아메리카", "오세아니아", "태평양", "대서양", "인도양", "북극해", "남극해"],
+  },
 ] as const;
 
 // 모달 하단에 항상 표시할 2개 칩 (모든 동물 동일)
@@ -138,11 +144,11 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
     return m;
   }, [cards]);
 
-  // 먹이·수명·몸무게·몸길이 태그별 개수 (종류 개수 배지와 동일한 방식으로 통일)
+  // 먹이·수명·몸무게·몸길이·서식지 태그별 개수 (종류 개수 배지와 동일한 방식으로 통일)
   const simpleCounts = useMemo(() => {
-    const m: Record<string, Record<string, number>> = { diet: {}, lifespan: {}, weight: {}, length: {} };
+    const m: Record<string, Record<string, number>> = { diet: {}, lifespan: {}, weight: {}, length: {}, region: {} };
     for (const c of cards) {
-      for (const fid of ["diet", "weight", "length"] as const) {
+      for (const fid of ["diet", "weight", "length", "region"] as const) {
         for (const t of c.filters?.[fid] || []) m[fid][t] = (m[fid][t] || 0) + 1;
       }
       const life = lifespanOf(c);
@@ -181,8 +187,8 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
       const ct = card.filters?.taxonomy || [];
       if (![...taxPicks].some((t) => ct.includes(t))) return false;
     }
-    // diet, weight, length (filters 객체에서)
-    for (const fid of ["diet", "weight", "length"] as const) {
+    // diet, weight, length, region (filters 객체에서)
+    for (const fid of ["diet", "weight", "length", "region"] as const) {
       const picks = selected[fid];
       if (!picks?.size) continue;
       const ct = card.filters?.[fid] || [];
@@ -250,7 +256,7 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
             300종 동물을<br />아이 눈높이로 탐험해요
           </h1>
           <p className="text-[14px] text-neutral-400 dark:text-neutral-500 leading-relaxed break-keep">
-            이름으로 찾거나 종류 · 먹이 · 수명 · 몸무게 · 몸길이로 골라보세요
+            이름으로 찾거나 종류 · 먹이 · 수명 · 몸무게 · 몸길이 · 서식지로 골라보세요
           </p>
         </section>
 
@@ -272,7 +278,7 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
           </div>
         </div>
 
-        {/* ── 필터 5줄 (종류·먹이·수명·몸무게·몸길이) — 라벨 우측정렬로 알약 시작선 통일 ── */}
+        {/* ── 필터 6줄 (종류·먹이·수명·몸무게·몸길이·서식지) — 라벨 우측정렬로 알약 시작선 통일 ── */}
         <section className="mb-8 space-y-3">
           <div className="flex items-center gap-3.5">
             <div className="flex items-center justify-end gap-1 w-[64px] flex-shrink-0 text-right">
