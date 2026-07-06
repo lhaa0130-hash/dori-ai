@@ -601,8 +601,13 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
 
                 {/* 분류 */}
                 {detail.taxonomy && (
-                  <p className="text-[11px] text-neutral-400 dark:text-neutral-500 mb-4 leading-relaxed break-keep">
+                  <p className="text-[11px] text-neutral-400 dark:text-neutral-500 mb-1 leading-relaxed break-keep">
                     <b className="text-neutral-500 dark:text-neutral-400">분류 </b>{detail.taxonomy}
+                  </p>
+                )}
+                {detail.subspecies && (
+                  <p className="text-[11px] text-neutral-400 dark:text-neutral-500 mb-4 leading-relaxed break-keep">
+                    <b className="text-neutral-500 dark:text-neutral-400">하위종 </b>{detail.subspecies}
                   </p>
                 )}
 
