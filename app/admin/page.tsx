@@ -49,7 +49,7 @@ interface CommunityPost {
 }
 
 // ─── 탭 타입 ─────────────────────────────────────────────────────
-type AdminTab = "dashboard" | "visitors" | "users" | "community" | "content" | "premium" | "animalReview";
+type AdminTab = "dashboard" | "visitors" | "users" | "community" | "content" | "premium" | "animalReview" | "animalTable";
 type ReviewFilter = "pending" | "approved" | "rejected" | "all";
 
 // ─── 메인 컴포넌트 ────────────────────────────────────────────────
@@ -96,6 +96,8 @@ export default function AdminPage() {
   const [reviewFilter, setReviewFilter] = useState<ReviewFilter>("pending");
   const [reviewIdx, setReviewIdx] = useState(0);
   const [reviewBusy, setReviewBusy] = useState(false);
+  const [tableSearch, setTableSearch] = useState("");
+  const [tableFilter, setTableFilter] = useState<ReviewFilter>("all");
 
   useEffect(() => setMounted(true), []);
 
@@ -312,7 +314,10 @@ export default function AdminPage() {
     { id: "community", label: "게시판",   emoji: "💬" },
     { id: "premium",   label: "프리미엄", emoji: "💎" },
     { id: "animalReview", label: "동물검수", emoji: "🐾" },
+    { id: "animalTable", label: "동물표", emoji: "📋" },
   ];
+
+  const REGION_ORDER = ["아시아", "아프리카", "유럽", "북아메리카", "남아메리카", "오세아니아", "태평양", "대서양", "인도양", "북극해", "남극해"];
 
   // ── 동물도감 검수: 필터별 목록·현재 카드 ──
   const reviewList = allAnimals.filter((c) => {
@@ -331,10 +336,7 @@ export default function AdminPage() {
   const reviewGoto = (dir: number) => {
     setReviewIdx((i) => Math.min(Math.max(0, i + dir), Math.max(0, reviewList.length - 1)));
   };
-  const reviewDecide = async (action: "approve" | "reject" | "reset") => {
-    if (!currentAnimal?.no || reviewBusy) return;
-    const no = currentAnimal.no;
-    setReviewBusy(true);
+  const decideAnimal = async (no: string, action: "approve" | "reject" | "reset") => {
     // 낙관적 갱신 — 목록이 줄어드는 필터(미검수)에서는 idx 그대로 두면 다음 항목이 자연히 그 자리로 옴
     if (action === "approve") {
       setApproved((s) => new Set(s).add(no));
@@ -349,8 +351,40 @@ export default function AdminPage() {
       setRejected((s) => { const n = new Set(s); n.delete(no); return n; });
       await resetAnimal(no);
     }
+  };
+  const reviewDecide = async (action: "approve" | "reject" | "reset") => {
+    if (!currentAnimal?.no || reviewBusy) return;
+    setReviewBusy(true);
+    await decideAnimal(currentAnimal.no, action);
     setReviewBusy(false);
   };
+
+  // ── 동물표(엑셀뷰): 검색+필터 목록, 각 행 정보 추출 ──
+  const tableQ = tableSearch.trim().toLowerCase();
+  const tableRows = allAnimals
+    .filter((c) => {
+      const no = c.no || "";
+      if (tableFilter === "approved" && !approved.has(no)) return false;
+      if (tableFilter === "rejected" && !rejected.has(no)) return false;
+      if (tableFilter === "pending" && (approved.has(no) || rejected.has(no))) return false;
+      if (tableQ && !c.animal_name.toLowerCase().includes(tableQ) && !(c.en || "").toLowerCase().includes(tableQ)) return false;
+      return true;
+    })
+    .map((c) => {
+      const info = c.info || [];
+      const get = (k: string) => info.find((r) => r[1] === k)?.[2] || "";
+      const no = c.no || "";
+      return {
+        no, name: c.animal_name,
+        type: c.filters?.taxonomy?.[0] || "—",
+        diet: (c.filters?.diet || []).join(", ") || "—",
+        lifespan: get("수명") || "—",
+        weight: get("몸무게") || "—",
+        length: get("몸길이") || "—",
+        region: (c.filters?.region || []) as string[],
+        status: approved.has(no) ? "approved" as const : rejected.has(no) ? "rejected" as const : "pending" as const,
+      };
+    });
 
   return (
     <div className="min-h-screen bg-white dark:bg-black text-foreground">
@@ -1002,6 +1036,107 @@ export default function AdminPage() {
                 </div>
               </div>
             ) : null}
+          </div>
+        )}
+
+        {/* ── 동물표(엑셀뷰) 탭 ── */}
+        {activeTab === "animalTable" && (
+          <div className="space-y-4">
+            <div className="flex flex-wrap items-center gap-2">
+              <input
+                value={tableSearch}
+                onChange={(e) => setTableSearch(e.target.value)}
+                placeholder="이름/영문명 검색"
+                className="px-3.5 py-2 rounded-xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-[13px] text-foreground placeholder:text-neutral-400 focus:outline-none focus:border-[#F9954E] w-56"
+              />
+              {([
+                { id: "all", label: "전체" },
+                { id: "pending", label: "미검수" },
+                { id: "approved", label: "승인" },
+                { id: "rejected", label: "반려" },
+              ] as { id: ReviewFilter; label: string }[]).map((f) => (
+                <button
+                  key={f.id}
+                  onClick={() => setTableFilter(f.id)}
+                  className={`px-3.5 py-1.5 rounded-full text-[13px] font-bold border transition-colors ${
+                    tableFilter === f.id
+                      ? "bg-[#F9954E] border-[#F9954E] text-white"
+                      : "bg-white dark:bg-zinc-950 border-neutral-200 dark:border-zinc-800 text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E]/40"
+                  }`}
+                >
+                  {f.label}
+                </button>
+              ))}
+              <span className="text-[12px] text-neutral-400 dark:text-neutral-500 ml-auto">{tableRows.length}행 표시 중 (전체 {allAnimals.length})</span>
+            </div>
+
+            <div className="overflow-x-auto border border-neutral-100 dark:border-zinc-900 rounded-2xl">
+              <table className="w-full text-[13px] whitespace-nowrap">
+                <thead className="sticky top-0 bg-neutral-50 dark:bg-zinc-900 z-10">
+                  <tr className="text-left text-neutral-500 dark:text-neutral-400">
+                    <th className="px-3 py-2.5 font-bold w-12">승인</th>
+                    <th className="px-3 py-2.5 font-bold">No.</th>
+                    <th className="px-3 py-2.5 font-bold">동물이름</th>
+                    <th className="px-3 py-2.5 font-bold">종류</th>
+                    <th className="px-3 py-2.5 font-bold">먹이</th>
+                    <th className="px-3 py-2.5 font-bold">수명</th>
+                    <th className="px-3 py-2.5 font-bold">몸무게</th>
+                    <th className="px-3 py-2.5 font-bold">몸길이</th>
+                    <th className="px-3 py-2.5 font-bold">서식지</th>
+                    <th className="px-3 py-2.5 font-bold">반려</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {tableRows.map((r) => (
+                    <tr
+                      key={r.no}
+                      className={`border-t border-neutral-100 dark:border-zinc-900 ${
+                        r.status === "approved" ? "bg-green-50/60 dark:bg-green-900/10" : r.status === "rejected" ? "bg-red-50/60 dark:bg-red-900/10 opacity-60" : ""
+                      }`}
+                    >
+                      <td className="px-3 py-2 text-center">
+                        <input
+                          type="checkbox"
+                          checked={r.status === "approved"}
+                          onChange={(e) => decideAnimal(r.no, e.target.checked ? "approve" : "reset")}
+                          className="w-4 h-4 accent-green-500 cursor-pointer"
+                        />
+                      </td>
+                      <td className="px-3 py-2 text-neutral-400 dark:text-neutral-500">{r.no}</td>
+                      <td className="px-3 py-2 font-bold text-neutral-900 dark:text-white">{r.name}</td>
+                      <td className="px-3 py-2 text-neutral-600 dark:text-neutral-300">{r.type}</td>
+                      <td className="px-3 py-2 text-neutral-600 dark:text-neutral-300">{r.diet}</td>
+                      <td className="px-3 py-2 text-neutral-600 dark:text-neutral-300">{r.lifespan}</td>
+                      <td className="px-3 py-2 text-neutral-600 dark:text-neutral-300">{r.weight}</td>
+                      <td className="px-3 py-2 text-neutral-600 dark:text-neutral-300">{r.length}</td>
+                      <td className="px-3 py-2">
+                        <div className="flex flex-wrap gap-1">
+                          {r.region.length === 0 ? (
+                            <span className="text-neutral-300 dark:text-neutral-600">—</span>
+                          ) : (
+                            [...r.region].sort((a, b) => REGION_ORDER.indexOf(a) - REGION_ORDER.indexOf(b)).map((tag) => (
+                              <span key={tag} className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800">
+                                {tag}
+                              </span>
+                            ))
+                          )}
+                        </div>
+                      </td>
+                      <td className="px-3 py-2 text-center">
+                        {r.status === "rejected" ? (
+                          <button onClick={() => decideAnimal(r.no, "reset")} className="text-[11px] text-neutral-400 hover:text-[#F9954E] transition">↩️ 되돌리기</button>
+                        ) : (
+                          <button onClick={() => decideAnimal(r.no, "reject")} className="text-[11px] text-red-400 hover:text-red-600 transition">❌ 반려</button>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              {tableRows.length === 0 && (
+                <p className="text-center py-10 text-neutral-400 dark:text-neutral-500 text-sm">조건에 맞는 동물이 없어요</p>
+              )}
+            </div>
           </div>
         )}
       </div>
