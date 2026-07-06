@@ -319,6 +319,19 @@ export default function AdminPage() {
 
   const REGION_ORDER = ["아시아", "아프리카", "유럽", "북아메리카", "남아메리카", "오세아니아", "태평양", "대서양", "인도양", "북극해", "남극해"];
 
+  // 수명 태그 — 공개 필터(page.client.tsx의 lifespanOf)와 동일 로직. info "수명" 텍스트의 최댓값으로 버킷 결정
+  const lifespanTag = (c: AnimalCard): string[] => {
+    const item = (c.info || []).find((i) => i[1] === "수명");
+    const nums = item?.[2].match(/\d+/g)?.map(Number) || [];
+    if (!nums.length) return [];
+    const max = Math.max(...nums);
+    if (max <= 1) return ["1년 이하"];
+    if (max <= 5) return ["1~5년"];
+    if (max <= 20) return ["5~20년"];
+    if (max <= 50) return ["20~50년"];
+    return ["50년 이상"];
+  };
+
   // 영문 위키백과 검색 링크 — 정확한 학명/영문명이 있으면 해당 문서로 바로 이동, 없으면 검색결과로
   const wikiSearchUrl = (c: AnimalCard) =>
     `https://en.wikipedia.org/wiki/Special:Search?search=${encodeURIComponent(c.en || c.sci || c.animal_name)}`;
@@ -1016,15 +1029,18 @@ export default function AdminPage() {
 
                     {/* 검색 분류 태그 — 관리자 전용(공개 화면엔 안 보임). 이게 검색 필터를 결정하므로 여기서 오류 확인 */}
                     <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800/40 rounded-xl p-2.5 mb-4">
-                      <p className="text-[10px] font-bold text-amber-700 dark:text-amber-400 mb-1.5">🏷️ 검색 분류 태그 (관리자 전용)</p>
+                      <p className="text-[10px] font-bold text-amber-700 dark:text-amber-400 mb-1.5">🏷️ 검색 분류 태그 (관리자 전용 · 몽글로 검색 필터와 동일)</p>
                       <div className="space-y-1">
                         {[
                           { label: "종류", tags: currentAnimal.filters?.taxonomy || [] },
                           { label: "먹이", tags: currentAnimal.filters?.diet || [] },
-                          { label: "서식", tags: currentAnimal.filters?.region || [] },
+                          { label: "수명", tags: lifespanTag(currentAnimal) },
+                          { label: "몸무게", tags: currentAnimal.filters?.weight || [] },
+                          { label: "몸길이", tags: currentAnimal.filters?.length || [] },
+                          { label: "서식지", tags: currentAnimal.filters?.region || [] },
                         ].map(({ label, tags }) => (
                           <div key={label} className="flex items-start gap-1.5 text-[11px]">
-                            <span className="font-bold text-neutral-500 dark:text-neutral-400 w-8 flex-shrink-0">{label}</span>
+                            <span className="font-bold text-neutral-500 dark:text-neutral-400 w-11 flex-shrink-0">{label}</span>
                             <div className="flex flex-wrap gap-1">
                               {tags.length === 0 ? (
                                 <span className="text-neutral-300 dark:text-neutral-600">—</span>
