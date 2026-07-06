@@ -1009,10 +1009,33 @@ export default function AdminPage() {
                       </p>
                     )}
                     {currentAnimal.subspecies && (
-                      <p className="text-[11px] text-neutral-400 dark:text-neutral-500 mb-4 break-keep">
+                      <p className="text-[11px] text-neutral-400 dark:text-neutral-500 mb-2 break-keep">
                         <b className="text-neutral-500 dark:text-neutral-400">하위종 </b>{currentAnimal.subspecies}
                       </p>
                     )}
+
+                    {/* 검색 분류 태그 — 관리자 전용(공개 화면엔 안 보임). 이게 검색 필터를 결정하므로 여기서 오류 확인 */}
+                    <div className="bg-amber-50 dark:bg-amber-900/10 border border-amber-200 dark:border-amber-800/40 rounded-xl p-2.5 mb-4">
+                      <p className="text-[10px] font-bold text-amber-700 dark:text-amber-400 mb-1.5">🏷️ 검색 분류 태그 (관리자 전용)</p>
+                      <div className="space-y-1">
+                        {[
+                          { label: "종류", tags: currentAnimal.filters?.taxonomy || [] },
+                          { label: "먹이", tags: currentAnimal.filters?.diet || [] },
+                          { label: "서식", tags: currentAnimal.filters?.region || [] },
+                        ].map(({ label, tags }) => (
+                          <div key={label} className="flex items-start gap-1.5 text-[11px]">
+                            <span className="font-bold text-neutral-500 dark:text-neutral-400 w-8 flex-shrink-0">{label}</span>
+                            <div className="flex flex-wrap gap-1">
+                              {tags.length === 0 ? (
+                                <span className="text-neutral-300 dark:text-neutral-600">—</span>
+                              ) : tags.map((t) => (
+                                <span key={t} className="font-bold px-1.5 py-0.5 rounded-full bg-white dark:bg-zinc-800 text-neutral-600 dark:text-neutral-300 border border-neutral-200 dark:border-zinc-700">{t}</span>
+                              ))}
+                            </div>
+                          </div>
+                        ))}
+                      </div>
+                    </div>
 
                     {/* 승인/반려 액션 */}
                     <div className="flex flex-wrap gap-2 mb-4">

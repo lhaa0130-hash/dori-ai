@@ -244,8 +244,7 @@
   "card_path": "/cards/animal/0003.png",
   "filters": {
    "diet": [
-    "초식",
-    "잡식"
+    "초식"
    ],
    "color": [
     "빨간색"
@@ -339,7 +338,7 @@
   "card_path": "/cards/animal/0004.png",
   "filters": {
    "diet": [
-    "잡식"
+    "육식"
    ],
    "color": [],
    "size": [
@@ -708,7 +707,7 @@
   "card_path": "/cards/animal/0008.png",
   "filters": {
    "diet": [
-    "잡식"
+    "육식"
    ],
    "color": [
     "흰색",
@@ -808,7 +807,6 @@
   "card_path": "/cards/animal/0009.png",
   "filters": {
    "diet": [
-    "곤충을 먹는",
     "씨앗을 먹는"
    ],
    "color": [
@@ -1100,8 +1098,7 @@
   "card_path": "/cards/animal/0012.png",
   "filters": {
    "diet": [
-    "초식",
-    "육식"
+    "초식"
    ],
    "color": [],
    "size": [
@@ -1854,9 +1851,7 @@
   "card_path": "/cards/animal/0020.png",
   "filters": {
    "diet": [
-    "육식",
-    "잡식",
-    "썩은 것 먹는"
+    "육식"
    ],
    "color": [
     "알록달록한",
@@ -2052,7 +2047,6 @@
   "card_path": "/cards/animal/0022.png",
   "filters": {
    "diet": [
-    "물고기를 먹는",
     "육식"
    ],
    "color": [
@@ -2431,8 +2425,7 @@
   "card_path": "/cards/animal/0026.png",
   "filters": {
    "diet": [
-    "초식",
-    "곤충을 먹는"
+    "초식"
    ],
    "color": [
     "검정색"
@@ -2615,8 +2608,7 @@
   "card_path": "/cards/animal/0028.png",
   "filters": {
    "diet": [
-    "초식",
-    "육식"
+    "초식"
    ],
    "color": [
     "빨간색"
@@ -2710,7 +2702,7 @@
   "card_path": "/cards/animal/0029.png",
   "filters": {
    "diet": [
-    "잡식"
+    "초식"
    ],
    "color": [
     "초록색"
@@ -2904,8 +2896,7 @@
   "card_path": "/cards/animal/0031.png",
   "filters": {
    "diet": [
-    "곤충을 먹는",
-    "썩은 것 먹는"
+    "곤충을 먹는"
    ],
    "color": [],
    "size": [
@@ -3002,7 +2993,7 @@
   "card_path": "/cards/animal/0032.png",
   "filters": {
    "diet": [
-    "잡식"
+    "육식"
    ],
    "color": [
     "검정색",
@@ -3198,8 +3189,7 @@
   "card_path": "/cards/animal/0034.png",
   "filters": {
    "diet": [
-    "곤충을 먹는",
-    "잡식"
+    "곤충을 먹는"
    ],
    "color": [],
    "size": [
@@ -3388,8 +3378,7 @@
   "card_path": "/cards/animal/0036.png",
   "filters": {
    "diet": [
-    "곤충을 먹는",
-    "잡식"
+    "곤충을 먹는"
    ],
    "color": [],
    "size": [
@@ -4884,8 +4873,7 @@
   "card_path": "/cards/animal/0052.png",
   "filters": {
    "diet": [
-    "플랑크톤을 먹는",
-    "물고기를 먹는"
+    "플랑크톤을 먹는"
    ],
    "color": [
     "검정색",
@@ -4987,7 +4975,6 @@
   "card_path": "/cards/animal/0053.png",
   "filters": {
    "diet": [
-    "물고기를 먹는",
     "육식"
    ],
    "color": [
@@ -5458,7 +5445,7 @@
   "card_path": "/cards/animal/0058.png",
   "filters": {
    "diet": [
-    "잡식"
+    "육식"
    ],
    "color": [
     "검정색"
@@ -5931,8 +5918,7 @@
   "card_path": "/cards/animal/0063.png",
   "filters": {
    "diet": [
-    "물고기를 먹는",
-    "잡식"
+    "육식"
    ],
    "color": [
     "알록달록한"
@@ -6030,7 +6016,7 @@
   "card_path": "/cards/animal/0064.png",
   "filters": {
    "diet": [
-    "잡식"
+    "육식"
    ],
    "color": [
     "알록달록한"
@@ -6215,7 +6201,7 @@
   "card_path": "/cards/animal/0066.png",
   "filters": {
    "diet": [
-    "물고기를 먹는"
+    "육식"
    ],
    "color": [],
    "size": [
@@ -6584,7 +6570,7 @@
   "card_path": "/cards/animal/0070.png",
   "filters": {
    "diet": [
-    "물고기를 먹는"
+    "육식"
    ],
    "color": [
     "알록달록한"
@@ -6679,7 +6665,7 @@
   "card_path": "/cards/animal/0071.png",
   "filters": {
    "diet": [
-    "잡식"
+    "육식"
    ],
    "color": [
     "알록달록한"
@@ -7065,7 +7051,6 @@
   "card_path": "/cards/animal/0075.png",
   "filters": {
    "diet": [
-    "곤충을 먹는",
     "육식"
    ],
    "color": [
@@ -7442,8 +7427,7 @@
   "card_path": "/cards/animal/0079.png",
   "filters": {
    "diet": [
-    "곤충을 먹는",
-    "씨앗을 먹는"
+    "잡식"
    ],
    "color": [
     "알록달록한"
@@ -7540,8 +7524,7 @@
   "card_path": "/cards/animal/0080.png",
   "filters": {
    "diet": [
-    "초식",
-    "곤충을 먹는"
+    "초식"
    ],
    "color": [
     "흰색",
@@ -7639,7 +7622,7 @@
   "card_path": "/cards/animal/0081.png",
   "filters": {
    "diet": [
-    "곤충을 먹는"
+    "잡식"
    ],
    "color": [
     "알록달록한"
@@ -7734,7 +7717,6 @@
   "card_path": "/cards/animal/0082.png",
   "filters": {
    "diet": [
-    "곤충을 먹는",
     "꿀을 먹는"
    ],
    "color": [
@@ -9165,7 +9147,7 @@
   "card_path": "/cards/animal/0097.png",
   "filters": {
    "diet": [
-    "잡식"
+    "육식"
    ],
    "color": [
     "분홍색",
@@ -9937,7 +9919,7 @@
   "card_path": "/cards/animal/0105.png",
   "filters": {
    "diet": [
-    "잡식"
+    "육식"
    ],
    "color": [
     "알록달록한"
@@ -10123,7 +10105,7 @@
   "card_path": "/cards/animal/0107.png",
   "filters": {
    "diet": [
-    "잡식"
+    "육식"
    ],
    "color": [
     "검정색",
@@ -10685,7 +10667,7 @@
   "card_path": "/cards/animal/0113.png",
   "filters": {
    "diet": [
-    "잡식"
+    "육식"
    ],
    "color": [
     "검정색"
@@ -10782,7 +10764,7 @@
   "card_path": "/cards/animal/0114.png",
   "filters": {
    "diet": [
-    "잡식"
+    "육식"
    ],
    "color": [],
    "size": [
@@ -10875,7 +10857,7 @@
   "card_path": "/cards/animal/0115.png",
   "filters": {
    "diet": [
-    "잡식"
+    "육식"
    ],
    "color": [],
    "size": [
@@ -11053,7 +11035,6 @@
   "card_path": "/cards/animal/0117.png",
   "filters": {
    "diet": [
-    "초식",
     "잡식"
    ],
    "color": [
@@ -11425,7 +11406,7 @@
   "card_path": "/cards/animal/0121.png",
   "filters": {
    "diet": [
-    "잡식"
+    "초식"
    ],
    "color": [],
    "size": [
@@ -11518,7 +11499,7 @@
   "card_path": "/cards/animal/0122.png",
   "filters": {
    "diet": [
-    "잡식"
+    "초식"
    ],
    "color": [
     "검정색"
@@ -11706,7 +11687,7 @@
   "card_path": "/cards/animal/0124.png",
   "filters": {
    "diet": [
-    "잡식"
+    "초식"
    ],
    "color": [],
    "size": [
@@ -15752,7 +15733,7 @@
   "card_path": "/cards/animal/0167.png",
   "filters": {
    "diet": [
-    "육식"
+    "플랑크톤을 먹는"
    ],
    "color": [
     "검정색",
@@ -16039,8 +16020,7 @@
   "card_path": "/cards/animal/0170.png",
   "filters": {
    "diet": [
-    "곤충을 먹는",
-    "씨앗을 먹는"
+    "잡식"
    ],
    "color": [
     "흰색"
@@ -16692,7 +16672,7 @@
   "card_path": "/cards/animal/0177.png",
   "filters": {
    "diet": [
-    "잡식"
+    "육식"
    ],
    "color": [
     "검정색"
@@ -17153,7 +17133,7 @@
   "card_path": "/cards/animal/0182.png",
   "filters": {
    "diet": [
-    "잡식"
+    "플랑크톤을 먹는"
    ],
    "color": [],
    "size": [
@@ -17343,7 +17323,7 @@
   "card_path": "/cards/animal/0184.png",
   "filters": {
    "diet": [
-    "잡식"
+    "육식"
    ],
    "color": [
     "흰색",
@@ -17440,7 +17420,7 @@
   "card_path": "/cards/animal/0185.png",
   "filters": {
    "diet": [
-    "잡식"
+    "초식"
    ],
    "color": [],
    "size": [
@@ -17804,7 +17784,7 @@
   "card_path": "/cards/animal/0189.png",
   "filters": {
    "diet": [
-    "잡식"
+    "플랑크톤을 먹는"
    ],
    "color": [],
    "size": [
@@ -17992,7 +17972,7 @@
   "card_path": "/cards/animal/0191.png",
   "filters": {
    "diet": [
-    "잡식"
+    "육식"
    ],
    "color": [],
    "size": [
@@ -18738,7 +18718,9 @@
   "image_path": "/images/animal/cicada.jpg",
   "card_path": "/cards/animal/0199.png",
   "filters": {
-   "diet": [],
+   "diet": [
+    "초식"
+   ],
    "color": [],
    "size": [
     "손바닥만한"
@@ -18826,7 +18808,7 @@
   "card_path": "/cards/animal/0200.png",
   "filters": {
    "diet": [
-    "꿀을 먹는"
+    "초식"
    ],
    "color": [
     "검정색"
@@ -20509,7 +20491,7 @@
   "card_path": "/cards/animal/0218.png",
   "filters": {
    "diet": [
-    "육식"
+    "물고기를 먹는"
    ],
    "color": [
     "흰색",
@@ -23557,7 +23539,9 @@
   "image_path": "/images/animal/japanese-rhinoceros-beetle.jpg",
   "card_path": "/cards/animal/0251.png",
   "filters": {
-   "diet": [],
+   "diet": [
+    "초식"
+   ],
    "color": [],
    "size": [
     "손바닥만한"
@@ -25150,7 +25134,7 @@
   "card_path": "/cards/animal/0268.png",
   "filters": {
    "diet": [
-    "꿀을 먹는"
+    "육식"
    ],
    "color": [],
    "size": [
@@ -26284,7 +26268,7 @@
   "card_path": "/cards/animal/0280.png",
   "filters": {
    "diet": [
-    "잡식"
+    "육식"
    ],
    "color": [],
    "size": [
@@ -26477,7 +26461,7 @@
   "card_path": "/cards/animal/0282.png",
   "filters": {
    "diet": [
-    "잡식"
+    "육식"
    ],
    "color": [],
    "size": [
@@ -26566,7 +26550,7 @@
   "card_path": "/cards/animal/0283.png",
   "filters": {
    "diet": [
-    "물고기를 먹는"
+    "육식"
    ],
    "color": [
     "파란색"
@@ -26663,7 +26647,7 @@
   "card_path": "/cards/animal/0284.png",
   "filters": {
    "diet": [
-    "씨앗을 먹는"
+    "초식"
    ],
    "color": [
     "초록색"
@@ -27796,7 +27780,9 @@
   "image_path": "/images/animal/white-winged-flying-fox.jpg",
   "card_path": "/cards/animal/0296.png",
   "filters": {
-   "diet": [],
+   "diet": [
+    "초식"
+   ],
    "color": [
     "흰색"
    ],
@@ -28733,7 +28719,7 @@
   "card_path": "/cards/animal/0306.png",
   "filters": {
    "diet": [
-    "육식"
+    "물고기를 먹는"
    ],
    "color": [
     "검정색"

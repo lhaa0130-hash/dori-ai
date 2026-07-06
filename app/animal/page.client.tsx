@@ -74,11 +74,6 @@ const SIMPLE_FILTERS = [
   },
 ] as const;
 
-// 모달 하단에 항상 표시할 2개 칩 (모든 동물 동일)
-const MODAL_CHIPS = [
-  { id: "taxonomy", label: "종류", emoji: "🗂️" },
-  { id: "diet",     label: "먹이", emoji: "🍽️" },
-];
 
 // 모달 기본 정보 — 항상 4개 행을 동일하게 표시
 // "크기"는 몸길이·몸무게로 이미 대체돼 정보가 중복이라 표시에서 제외(295/308종이 완전 중복, 나머지는 미세한 부가정보뿐)
@@ -616,31 +611,7 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
                     <b className="text-neutral-500 dark:text-neutral-400">하위종 </b>{detail.subspecies}
                   </p>
                 )}
-
-                {/* 하단 칩 — 모든 동물 동일하게 종류·먹이 2개 */}
-                <div className="mt-auto pt-3 space-y-2 border-t border-neutral-100 dark:border-zinc-800">
-                  {MODAL_CHIPS.map(({ id, label, emoji }) => {
-                    const tags = detail.filters?.[id] || [];
-                    const f = SIMPLE_FILTERS.find((x) => x.id === id);
-                    return (
-                      <div key={id} className="flex items-center gap-2">
-                        <span className="text-[11px] font-bold text-neutral-400 dark:text-neutral-500 w-16 flex-shrink-0">{emoji} {label}</span>
-                        <div className="flex flex-wrap gap-1">
-                          {tags.length === 0 ? (
-                            <span className="text-[10px] text-neutral-300 dark:text-neutral-600">—</span>
-                          ) : tags.map((t) => {
-                            const tm = id === "taxonomy" ? TYPE_MAP[t] : null;
-                            return tm ? (
-                              <span key={t} className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style={{ background: tm.hex }}>{tm.emoji} {t}</span>
-                            ) : (
-                              <span key={t} className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${f?.chipCls || ""}`}>{t}</span>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    );
-                  })}
-                </div>
+                {/* 종류·먹이 분류칩은 위 정보(먹이 설명·분류)와 중복이라 공개 화면에서 숨김 — 검색 필터·관리자 검수에서만 사용 */}
               </div>
             </div>
           </motion.div>
