@@ -59,6 +59,12 @@ const SIMPLE_FILTERS = [
     chipCls: "bg-cyan-50 dark:bg-cyan-900/20 text-cyan-700 dark:text-cyan-300 border-cyan-200 dark:border-cyan-800",
     tags: ["100g 이하", "100g~1kg", "1~10kg", "10~50kg", "50~200kg", "200kg~1톤", "1톤 이상"],
   },
+  {
+    id: "length", emoji: "📏", label: "몸길이",
+    cls: "bg-rose-500 text-white border-rose-500",
+    chipCls: "bg-rose-50 dark:bg-rose-900/20 text-rose-700 dark:text-rose-300 border-rose-200 dark:border-rose-800",
+    tags: ["10cm 이하", "10~30cm", "30~100cm", "100~200cm", "2~5m", "5~10m", "10m 이상"],
+  },
 ] as const;
 
 // 모달 하단에 항상 표시할 2개 칩 (모든 동물 동일)
@@ -72,6 +78,7 @@ const STD_INFO = [
   { key: "서식지", emoji: "🌍" },
   { key: "먹이",   emoji: "🍽️" },
   { key: "크기",   emoji: "📏" },
+  { key: "몸길이", emoji: "📐" },
   { key: "몸무게", emoji: "⚖️" },
   { key: "수명",   emoji: "⏳" },
 ];
@@ -120,11 +127,11 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
     return m;
   }, [cards]);
 
-  // 먹이·수명·몸무게 태그별 개수 (종류 개수 배지와 동일한 방식으로 통일)
+  // 먹이·수명·몸무게·몸길이 태그별 개수 (종류 개수 배지와 동일한 방식으로 통일)
   const simpleCounts = useMemo(() => {
-    const m: Record<string, Record<string, number>> = { diet: {}, lifespan: {}, weight: {} };
+    const m: Record<string, Record<string, number>> = { diet: {}, lifespan: {}, weight: {}, length: {} };
     for (const c of cards) {
-      for (const fid of ["diet", "weight"] as const) {
+      for (const fid of ["diet", "weight", "length"] as const) {
         for (const t of c.filters?.[fid] || []) m[fid][t] = (m[fid][t] || 0) + 1;
       }
       const life = lifespanOf(c);
@@ -163,8 +170,8 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
       const ct = card.filters?.taxonomy || [];
       if (![...taxPicks].some((t) => ct.includes(t))) return false;
     }
-    // diet, weight (filters 객체에서)
-    for (const fid of ["diet", "weight"] as const) {
+    // diet, weight, length (filters 객체에서)
+    for (const fid of ["diet", "weight", "length"] as const) {
       const picks = selected[fid];
       if (!picks?.size) continue;
       const ct = card.filters?.[fid] || [];
@@ -232,7 +239,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
             300종 동물을<br />아이 눈높이로 탐험해요
           </h1>
           <p className="text-[14px] text-neutral-400 dark:text-neutral-500 leading-relaxed break-keep">
-            이름으로 찾거나 종류 · 먹이 · 수명 · 몸무게로 골라보세요
+            이름으로 찾거나 종류 · 먹이 · 수명 · 몸무게 · 몸길이로 골라보세요
           </p>
         </section>
 
@@ -254,7 +261,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
           </div>
         </div>
 
-        {/* ── 필터 4줄 (종류·먹이·수명·몸무게) — 라벨 우측정렬로 알약 시작선 통일 ── */}
+        {/* ── 필터 5줄 (종류·먹이·수명·몸무게·몸길이) — 라벨 우측정렬로 알약 시작선 통일 ── */}
         <section className="mb-8 space-y-3">
           <div className="flex items-center gap-3.5">
             <div className="flex items-center justify-end gap-1 w-[64px] flex-shrink-0 text-right">
