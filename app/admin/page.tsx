@@ -946,7 +946,7 @@ export default function AdminPage() {
                     <p className="text-[#E8832E] dark:text-[#FBAA60] text-sm font-bold mt-1 mb-3">&ldquo;{currentAnimal.search_nickname}&rdquo;</p>
 
                     <div className="bg-neutral-50 dark:bg-zinc-900/50 rounded-xl p-3 mb-4 space-y-1.5">
-                      {(currentAnimal.info || []).map(([ic, k, v], i) => (
+                      {(currentAnimal.info || []).filter(([, k]) => k !== "크기").map(([ic, k, v], i) => (
                         <div key={i} className="flex items-start gap-2 text-[12.5px]">
                           <span className="w-5 text-center flex-shrink-0">{ic}</span>
                           <span className="font-bold text-neutral-500 dark:text-neutral-400 w-12 flex-shrink-0">{k}</span>
