@@ -5,8 +5,8 @@ import AnimalPageClient, { type AnimalCard } from "./page.client";
 
 export const metadata = {
   ...createMetadata({
-    title: "애니멀일로 (animalillo) — illo",
-    description: "애니멀일로(animalillo) — 먹이·색깔·크기·서식지 등 다양한 속성으로 동물을 검색하고 분류하는 동물 백과사전.",
+    title: "몽글로 동물도감 — illo",
+    description: "몽글로 동물도감 — 먹이·색깔·크기·서식지 등 다양한 속성으로 동물을 검색하고 분류하는 동물 백과사전.",
     path: "/animal",
   }),
 };

@@ -1,5 +1,5 @@
 // 프로젝트 개인 저장 — 로그인 회원별로 프로젝트 작업/설정을 Firestore에 보관.
-// (애니멀일로 제외. 아크일로=설계도면, 워크일로=작업·결과물)
+// (몽글로 동물도감 제외. 아크일로=설계도면, 워크일로=작업·결과물)
 //
 //   projectSaves/{project}/users/{uid}   { data: <json string>, updatedAt }
 //

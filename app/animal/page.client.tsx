@@ -221,7 +221,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
 
         {/* ── 히어로 ── */}
         <section className="pb-6 border-b border-neutral-100 dark:border-zinc-900 mb-6">
-          <p className="text-[11px] font-bold text-[#F9954E] mb-3 tracking-wide uppercase">AI 동물도감</p>
+          <p className="text-[11px] font-bold text-[#F9954E] mb-3 tracking-wide uppercase">몽글로 · AI 동물도감</p>
           <h1 className="text-[30px] sm:text-[40px] font-extrabold text-neutral-950 dark:text-white leading-[1.12] tracking-tight mb-2 break-keep">
             300종 동물을<br />아이 눈높이로 탐험해요
           </h1>

@@ -6,7 +6,15 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 06 Jul 2026 02:00:17 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 06 Jul 2026 02:53:05 GMT</lastBuildDate>
+    <item>
+      <title>xAI·Anthropic·미 국방부·롯데이노베이트: 컴퓨트, 안보, 피지컬 AI로 이동한 돈길</title>
+      <link>https://illo.im/insight/article/report-10</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/report-10</guid>
+      <category>리포트</category>
+      <pubDate>Mon, 06 Jul 2026 02:03:16 GMT</pubDate>
+      <description>이번 주 AI 산업의 핵심은 모델 성능 경쟁보다 컴퓨트 접근권, 정부 조달, 현장형 로봇 인프라에 있었다. xAI의 데이터센터 컴퓨트 임대, 미 국방부의 기밀 AI 계약, 국내 피지컬 AI 확산을 통해 자본이 어디로 이동하는지 짚었다.</description>
+    </item>
     <item>
       <title>무료 AI 번역 사이트 추천 BEST 7: 한국어 지원·장단점·상황별 선택 가이드</title>
       <link>https://illo.im/insight/article/curation-16</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Sun, 28 Jun 2026 09:00:15 GMT</pubDate>
       <description>구글이 메타의 Gemini AI 모델 사용을 제한하면서 AI 산업의 경쟁 구도가 변화하고 있다. 이 결정이 무엇을 의미하는지 살펴본다.</description>
-    </item>
-    <item>
-      <title>암 투병 중 AI를 활용한 기적, 코너 크리스투의 이야기</title>
-      <link>https://illo.im/insight/article/trend-179</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/trend-179</guid>
-      <category>트렌드</category>
-      <pubDate>Sun, 28 Jun 2026 07:00:20 GMT</pubDate>
-      <description>코너 크리스투는 AI를 통해 암과의 싸움에서 새로운 희망을 찾았습니다. 그가 어떻게 데이터를 활용했는지 살펴봅니다.</description>
     </item>
   </channel>
 </rss>

@@ -29,7 +29,7 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: { params: { id: string } }) {
   const card = findCard(params.id, loadCards());
-  if (!card) return createMetadata({ title: "동물 백과 — 애니멀일로", description: "동물 백과사전 애니멀일로", path: `/animal/${params.id}` });
+  if (!card) return createMetadata({ title: "동물 백과 — 몽글로 동물도감", description: "동물 백과사전 몽글로 동물도감", path: `/animal/${params.id}` });
   const name = card.animal_name;
   const en = card.en ? ` (${card.en})` : "";
   const desc = (card.kid_friendly_desc || `${name}의 특징, 서식지, 먹이, 수명 등 정보를 알아보세요.`).replace(/\s+/g, " ").slice(0, 155);
@@ -38,7 +38,7 @@ export function generateMetadata({ params }: { params: { id: string } }) {
     description: desc,
     path: `/animal/${card.no}`,
     image: card.image_path ? `${SITE_URL}${card.image_path}` : undefined,
-    keywords: [name, `${name} 특징`, `${name} 수명`, `${name} 서식지`, `${name} 먹이`, card.en, card.sci, "동물 백과", "애니멀일로"].filter(Boolean) as string[],
+    keywords: [name, `${name} 특징`, `${name} 수명`, `${name} 서식지`, `${name} 먹이`, card.en, card.sci, "동물 백과", "몽글로", "몽글로 동물도감"].filter(Boolean) as string[],
   });
 }
 
@@ -70,7 +70,7 @@ export default function AnimalDetail({ params }: { params: { id: string } }) {
     "@type": "BreadcrumbList",
     itemListElement: [
       { "@type": "ListItem", position: 1, name: "홈", item: SITE_URL },
-      { "@type": "ListItem", position: 2, name: "애니멀일로", item: `${SITE_URL}/animal` },
+      { "@type": "ListItem", position: 2, name: "몽글로 동물도감", item: `${SITE_URL}/animal` },
       { "@type": "ListItem", position: 3, name: card.animal_name, item: `${SITE_URL}/animal/${card.no}` },
     ],
   };
@@ -84,7 +84,7 @@ export default function AnimalDetail({ params }: { params: { id: string } }) {
         <article className="max-w-3xl mx-auto p-4 md:p-8">
           <nav className="text-sm text-gray-500 dark:text-gray-400 mb-4">
             <Link href="/" className="hover:underline">홈</Link> ›{" "}
-            <Link href="/animal" className="hover:underline">애니멀일로</Link> › <span>{card.animal_name}</span>
+            <Link href="/animal" className="hover:underline">몽글로 동물도감</Link> › <span>{card.animal_name}</span>
           </nav>
 
           <h1 className="text-3xl md:text-4xl font-extrabold mb-1">{card.animal_name}</h1>
@@ -143,7 +143,7 @@ export default function AnimalDetail({ params }: { params: { id: string } }) {
 
           <nav className="flex items-center justify-between mt-10 pt-6 border-t border-neutral-200 dark:border-neutral-800 text-sm">
             {prev ? <Link href={`/animal/${prev.no}`} className="hover:underline">← {prev.animal_name}</Link> : <span />}
-            <Link href="/animal" className="font-semibold text-orange-500 hover:underline">애니멀일로 전체 보기</Link>
+            <Link href="/animal" className="font-semibold text-orange-500 hover:underline">몽글로 동물도감 전체 보기</Link>
             {next ? <Link href={`/animal/${next.no}`} className="hover:underline">{next.animal_name} →</Link> : <span />}
           </nav>
         </article>

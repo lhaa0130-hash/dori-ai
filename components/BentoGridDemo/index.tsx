@@ -76,7 +76,7 @@ const HeaderPlaceholder = ({ color, children }: { color: string, children?: Reac
 
 const items = [
   {
-    title: "애니멀일로",
+    title: "몽글로 동물도감",
     description: "생생한 3D 캐릭터와 함께하는 인터랙티브 동물 가이드.",
     header: (
       <HeaderPlaceholder color="blue">
