@@ -127,6 +127,19 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
     return m;
   }, [cards]);
 
+  // 먹이·색깔·수명·몸무게 태그별 개수 (종류 개수 배지와 동일한 방식으로 통일)
+  const simpleCounts = useMemo(() => {
+    const m: Record<string, Record<string, number>> = { diet: {}, color: {}, lifespan: {}, weight: {} };
+    for (const c of cards) {
+      for (const fid of ["diet", "color", "weight"] as const) {
+        for (const t of c.filters?.[fid] || []) m[fid][t] = (m[fid][t] || 0) + 1;
+      }
+      const life = lifespanOf(c);
+      if (life) m.lifespan[life] = (m.lifespan[life] || 0) + 1;
+    }
+    return m;
+  }, [cards]);
+
   function toggleTag(catId: string, tag: string) {
     setSelected((prev) => {
       const cur = new Set(prev[catId] || []);
@@ -293,17 +306,21 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
               <div className="flex flex-nowrap gap-1.5 overflow-x-auto pb-1">
                 {f.tags.map((tag) => {
                   const sel = isSelected(f.id, tag);
+                  const cnt = simpleCounts[f.id]?.[tag] || 0;
                   return (
                     <button
                       key={tag}
                       onClick={() => toggleTag(f.id, tag)}
-                      className={`whitespace-nowrap flex-shrink-0 text-[12px] font-semibold px-3 py-1.5 rounded-full border transition-all active:scale-95 ${
+                      className={`inline-flex items-center gap-1 whitespace-nowrap flex-shrink-0 text-[12px] font-semibold px-3 py-1.5 rounded-full border transition-all active:scale-95 ${
                         sel
                           ? f.cls + " shadow-sm"
                           : f.chipCls + " hover:shadow-sm"
-                      }`}
+                      } ${cnt === 0 && !sel ? "opacity-45" : ""}`}
                     >
                       {sel && "✓ "}{tag}
+                      <span className={`text-[10px] font-bold px-1 rounded-full leading-none ${sel ? "bg-white/25 text-white" : "bg-black/10 dark:bg-white/10"}`}>
+                        {cnt}
+                      </span>
                     </button>
                   );
                 })}
