@@ -157,5 +157,11 @@ service cloud.firestore {
       allow read:   if true;
       allow update, delete: if isAdmin();
     }
+
+    // 몽글로 동물도감 검수 상태 — 공개페이지가 승인목록을 읽어야 해서 읽기는 전체 공개, 쓰기는 관리자만
+    match /animalReview/{docId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
   }
 }

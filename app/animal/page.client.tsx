@@ -3,6 +3,7 @@
 import { useState, useMemo, useEffect, useRef } from "react";
 import { motion } from "framer-motion";
 import { BookOpen, Search, X, RotateCcw, ChevronDown, ChevronLeft, ChevronRight, Maximize2 } from "lucide-react";
+import { getAnimalReviewStatus } from "@/lib/animalReview";
 
 // ─── 동물 카드 타입 ──────────────────────────────────────────────────
 export interface AnimalCard {
@@ -104,7 +105,7 @@ function imgUrl(p?: string) {
   return BUSTED_SLUGS.has(slug) ? `${p}?v=5` : p;
 }
 
-export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] }) {
+export default function AnimalPageClient({ cards: allCards = [] }: { cards?: AnimalCard[] }) {
   const [selected, setSelected] = useState<Record<string, Set<string>>>({});
   const [detail, setDetail] = useState<AnimalCard | null>(null);
   const [zoomImg, setZoomImg] = useState<{ src: string; name: string } | null>(null);
@@ -112,7 +113,17 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
   const [sort, setSort] = useState<"no" | "name">("name"); // 가나다 기본, 번호순 토글 가능
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(16);
+  const [approvedNos, setApprovedNos] = useState<Set<string> | null>(null); // null=검수상태 로딩중
   const resultRef = useRef<HTMLDivElement>(null);
+
+  // 검수 통과(승인)된 동물만 공개 노출 — Firestore animalReview/status 읽어 필터링
+  useEffect(() => {
+    getAnimalReviewStatus().then((r) => setApprovedNos(new Set(r.approved)));
+  }, []);
+  const cards = useMemo(
+    () => (approvedNos ? allCards.filter((c) => c.no && approvedNos.has(c.no)) : []),
+    [allCards, approvedNos]
+  );
 
   useEffect(() => {
     const calc = () => { const w = window.innerWidth; setPerPage(w < 640 ? 8 : w < 1024 ? 12 : 16); };

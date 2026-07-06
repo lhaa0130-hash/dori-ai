@@ -8,6 +8,9 @@ import { collection, getDocs } from "firebase/firestore";
 import { getFirebaseFirestore } from "@/lib/firebase";
 import { adminGrantCandy, adminSetPremium } from "@/lib/cottonCandy";
 import { getAnalyticsSummary, getDailyAnalytics, getTodayStr, getAdsense, saveAdsense, type DailyAnalytics, type AdsenseData } from "@/lib/analytics";
+import { getAnimalReviewStatus, approveAnimal, rejectAnimal, resetAnimal } from "@/lib/animalReview";
+import animalCardsData from "@/data/animal-cards.json";
+import type { AnimalCard } from "@/app/animal/page.client";
 
 // ─── 관리자 이메일 (단 1명만) ─────────────────────────────────────
 const ADMIN_EMAIL = "lhaa0130@gmail.com";
@@ -46,7 +49,8 @@ interface CommunityPost {
 }
 
 // ─── 탭 타입 ─────────────────────────────────────────────────────
-type AdminTab = "dashboard" | "visitors" | "users" | "community" | "content" | "premium";
+type AdminTab = "dashboard" | "visitors" | "users" | "community" | "content" | "premium" | "animalReview";
+type ReviewFilter = "pending" | "approved" | "rejected" | "all";
 
 // ─── 메인 컴포넌트 ────────────────────────────────────────────────
 export default function AdminPage() {
@@ -83,6 +87,15 @@ export default function AdminPage() {
 
   // 프리미엄 설정
   const [premiumUsers, setPremiumUsers] = useState<string[]>([]);
+
+  // 동물도감 검수
+  const allAnimals = animalCardsData as unknown as AnimalCard[];
+  const [approved, setApproved] = useState<Set<string>>(new Set());
+  const [rejected, setRejected] = useState<Set<string>>(new Set());
+  const [reviewLoaded, setReviewLoaded] = useState(false);
+  const [reviewFilter, setReviewFilter] = useState<ReviewFilter>("pending");
+  const [reviewIdx, setReviewIdx] = useState(0);
+  const [reviewBusy, setReviewBusy] = useState(false);
 
   useEffect(() => setMounted(true), []);
 
@@ -132,6 +145,16 @@ export default function AdminPage() {
       console.warn("[admin] 애드센스 로드 실패:", e);
     }
 
+    // 동물도감 검수 상태
+    try {
+      const r = await getAnimalReviewStatus();
+      setApproved(new Set(r.approved));
+      setRejected(new Set(r.rejected));
+      setReviewLoaded(true);
+    } catch (e) {
+      console.warn("[admin] 동물검수 상태 로드 실패:", e);
+    }
+
     // 사용자 목록: Firestore users 컬렉션
     try {
       const db = getFirebaseFirestore();
@@ -173,6 +196,8 @@ export default function AdminPage() {
   useEffect(() => {
     if (mounted) loadData();
   }, [mounted, loadData]);
+
+  useEffect(() => { setReviewIdx(0); }, [reviewFilter]);
 
   // ── 알림 표시 ──
   const showToast = (type: "success" | "error", msg: string) => {
@@ -286,7 +311,46 @@ export default function AdminPage() {
     { id: "users",     label: "회원관리", emoji: "👤" },
     { id: "community", label: "게시판",   emoji: "💬" },
     { id: "premium",   label: "프리미엄", emoji: "💎" },
+    { id: "animalReview", label: "동물검수", emoji: "🐾" },
   ];
+
+  // ── 동물도감 검수: 필터별 목록·현재 카드 ──
+  const reviewList = allAnimals.filter((c) => {
+    const no = c.no || "";
+    if (reviewFilter === "approved") return approved.has(no);
+    if (reviewFilter === "rejected") return rejected.has(no);
+    if (reviewFilter === "pending") return !approved.has(no) && !rejected.has(no);
+    return true;
+  });
+  const reviewSafeIdx = Math.min(reviewIdx, Math.max(0, reviewList.length - 1));
+  const currentAnimal = reviewList[reviewSafeIdx] as AnimalCard | undefined;
+  const currentStatus = currentAnimal
+    ? approved.has(currentAnimal.no || "") ? "approved" : rejected.has(currentAnimal.no || "") ? "rejected" : "pending"
+    : null;
+
+  const reviewGoto = (dir: number) => {
+    setReviewIdx((i) => Math.min(Math.max(0, i + dir), Math.max(0, reviewList.length - 1)));
+  };
+  const reviewDecide = async (action: "approve" | "reject" | "reset") => {
+    if (!currentAnimal?.no || reviewBusy) return;
+    const no = currentAnimal.no;
+    setReviewBusy(true);
+    // 낙관적 갱신 — 목록이 줄어드는 필터(미검수)에서는 idx 그대로 두면 다음 항목이 자연히 그 자리로 옴
+    if (action === "approve") {
+      setApproved((s) => new Set(s).add(no));
+      setRejected((s) => { const n = new Set(s); n.delete(no); return n; });
+      await approveAnimal(no);
+    } else if (action === "reject") {
+      setRejected((s) => new Set(s).add(no));
+      setApproved((s) => { const n = new Set(s); n.delete(no); return n; });
+      await rejectAnimal(no);
+    } else {
+      setApproved((s) => { const n = new Set(s); n.delete(no); return n; });
+      setRejected((s) => { const n = new Set(s); n.delete(no); return n; });
+      await resetAnimal(no);
+    }
+    setReviewBusy(false);
+  };
 
   return (
     <div className="min-h-screen bg-white dark:bg-black text-foreground">
@@ -801,6 +865,143 @@ export default function AdminPage() {
                 </div>
               </div>
             </div>
+          </div>
+        )}
+
+        {/* ── 동물검수 탭 ── */}
+        {activeTab === "animalReview" && (
+          <div className="space-y-5">
+            {/* 진행률 요약 */}
+            <div className="grid grid-cols-4 gap-3">
+              {[
+                { label: "전체", n: allAnimals.length, color: "text-neutral-500 dark:text-neutral-400" },
+                { label: "미검수", n: allAnimals.length - approved.size - rejected.size, color: "text-neutral-700 dark:text-neutral-200" },
+                { label: "승인", n: approved.size, color: "text-green-600 dark:text-green-400" },
+                { label: "반려", n: rejected.size, color: "text-red-500 dark:text-red-400" },
+              ].map((c) => (
+                <div key={c.label} className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-4 text-center">
+                  <div className={`text-2xl font-black ${c.color}`}>{c.n}</div>
+                  <div className="text-[12px] text-neutral-400 dark:text-neutral-500 mt-0.5">{c.label}</div>
+                </div>
+              ))}
+            </div>
+            <p className="text-[12px] text-neutral-400 dark:text-neutral-500">
+              🐾 승인된 동물만 <a href="/animal" target="_blank" className="underline hover:text-[#F9954E]">공개 동물도감</a>에 노출됩니다.
+            </p>
+
+            {/* 필터 탭 */}
+            <div className="flex gap-2">
+              {([
+                { id: "pending", label: "미검수" },
+                { id: "approved", label: "승인" },
+                { id: "rejected", label: "반려" },
+                { id: "all", label: "전체" },
+              ] as { id: ReviewFilter; label: string }[]).map((f) => (
+                <button
+                  key={f.id}
+                  onClick={() => setReviewFilter(f.id)}
+                  className={`px-3.5 py-1.5 rounded-full text-[13px] font-bold border transition-colors ${
+                    reviewFilter === f.id
+                      ? "bg-[#F9954E] border-[#F9954E] text-white"
+                      : "bg-white dark:bg-zinc-950 border-neutral-200 dark:border-zinc-800 text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E]/40"
+                  }`}
+                >
+                  {f.label}
+                </button>
+              ))}
+            </div>
+
+            {!reviewLoaded ? (
+              <p className="text-neutral-400 dark:text-neutral-500 text-sm">검수 상태 불러오는 중…</p>
+            ) : reviewList.length === 0 ? (
+              <div className="text-center py-16 bg-neutral-50 dark:bg-zinc-900/50 rounded-2xl border border-dashed border-neutral-200 dark:border-zinc-700">
+                <div className="text-4xl mb-2">🎉</div>
+                <p className="text-neutral-500 dark:text-neutral-400 font-medium">
+                  {reviewFilter === "pending" ? "미검수 항목이 없어요 — 전부 검수 완료!" : "해당 목록이 비어있어요"}
+                </p>
+              </div>
+            ) : currentAnimal ? (
+              <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl overflow-hidden">
+                <div className="grid md:grid-cols-[280px_1fr]">
+                  {/* 이미지 */}
+                  <div className="relative aspect-[4/5] md:aspect-auto bg-neutral-100 dark:bg-zinc-900">
+                    {/* eslint-disable-next-line @next/next/no-img-element */}
+                    <img src={currentAnimal.image_path} alt={currentAnimal.animal_name} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
+                    <span className="absolute top-2 left-2 text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-black/55 text-[#f0d28a] backdrop-blur-sm">No.{currentAnimal.no}</span>
+                    <span
+                      className={`absolute top-2 right-2 text-[10px] font-extrabold px-2 py-0.5 rounded-full text-white ${
+                        currentStatus === "approved" ? "bg-green-500" : currentStatus === "rejected" ? "bg-red-500" : "bg-neutral-500"
+                      }`}
+                    >
+                      {currentStatus === "approved" ? "승인됨" : currentStatus === "rejected" ? "반려됨" : "미검수"}
+                    </span>
+                  </div>
+
+                  {/* 정보 + 액션 */}
+                  <div className="p-5">
+                    <h3 className="text-xl font-black text-neutral-900 dark:text-white">{currentAnimal.animal_name}</h3>
+                    {currentAnimal.sci && (
+                      <p className="italic text-sm text-neutral-500 dark:text-neutral-400">{currentAnimal.sci}{currentAnimal.en ? ` · ${currentAnimal.en}` : ""}</p>
+                    )}
+                    <p className="text-[#E8832E] dark:text-[#FBAA60] text-sm font-bold mt-1 mb-3">&ldquo;{currentAnimal.search_nickname}&rdquo;</p>
+
+                    <div className="bg-neutral-50 dark:bg-zinc-900/50 rounded-xl p-3 mb-4 space-y-1.5">
+                      {(currentAnimal.info || []).map(([ic, k, v], i) => (
+                        <div key={i} className="flex items-start gap-2 text-[12.5px]">
+                          <span className="w-5 text-center flex-shrink-0">{ic}</span>
+                          <span className="font-bold text-neutral-500 dark:text-neutral-400 w-12 flex-shrink-0">{k}</span>
+                          <span className="text-neutral-700 dark:text-neutral-300 break-keep">{v}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    {currentAnimal.taxonomy && (
+                      <p className="text-[11px] text-neutral-400 dark:text-neutral-500 mb-4 break-keep">
+                        <b className="text-neutral-500 dark:text-neutral-400">분류 </b>{currentAnimal.taxonomy}
+                      </p>
+                    )}
+
+                    {/* 승인/반려 액션 */}
+                    <div className="flex flex-wrap gap-2 mb-4">
+                      <button
+                        disabled={reviewBusy}
+                        onClick={() => reviewDecide("approve")}
+                        className="flex-1 min-w-[100px] px-4 py-2.5 rounded-xl bg-green-500 hover:bg-green-600 text-white font-bold text-sm transition disabled:opacity-50"
+                      >
+                        ✅ 승인
+                      </button>
+                      <button
+                        disabled={reviewBusy}
+                        onClick={() => reviewDecide("reject")}
+                        className="flex-1 min-w-[100px] px-4 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white font-bold text-sm transition disabled:opacity-50"
+                      >
+                        ❌ 반려
+                      </button>
+                      {currentStatus !== "pending" && (
+                        <button
+                          disabled={reviewBusy}
+                          onClick={() => reviewDecide("reset")}
+                          className="px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-zinc-800 text-neutral-500 dark:text-neutral-400 font-bold text-sm hover:border-[#F9954E]/40 transition disabled:opacity-50"
+                        >
+                          ↩️ 보류로
+                        </button>
+                      )}
+                    </div>
+
+                    {/* 이전/다음 네비게이션 */}
+                    <div className="flex items-center justify-between border-t border-neutral-100 dark:border-zinc-900 pt-3">
+                      <button onClick={() => reviewGoto(-1)} disabled={reviewSafeIdx === 0} className="px-3 py-1.5 rounded-lg text-[13px] font-bold text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] disabled:opacity-30 transition">
+                        ◀ 이전
+                      </button>
+                      <span className="text-[12px] text-neutral-400 dark:text-neutral-500">{reviewSafeIdx + 1} / {reviewList.length}</span>
+                      <button onClick={() => reviewGoto(1)} disabled={reviewSafeIdx >= reviewList.length - 1} className="px-3 py-1.5 rounded-lg text-[13px] font-bold text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] disabled:opacity-30 transition">
+                        다음 ▶
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            ) : null}
           </div>
         )}
       </div>
