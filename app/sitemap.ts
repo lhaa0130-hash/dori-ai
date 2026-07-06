@@ -76,7 +76,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     console.warn("[sitemap] failed to collect articles:", e);
   }
 
-  // 3) 동물 상세 페이지 (몽글로 동물도감 — 사이트 최대 고유 콘텐츠)
+  // 3) 동물 상세 페이지 (몽글로 : 동물도감 — 사이트 최대 고유 콘텐츠)
   const animalUrls: MetadataRoute.Sitemap = getAnimalNos().map((no) => ({
     url: `${baseUrl}/animal/${no}`,
     lastModified: now,

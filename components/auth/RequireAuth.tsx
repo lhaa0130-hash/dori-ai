@@ -1,7 +1,7 @@
 "use client";
 
 // 프로젝트 보호 게이트 — 비로그인 시 로그인 화면(/login?next=...)으로 전환.
-// 로그인된 경우에만 children 렌더. (몽글로 동물도감은 공개라 미적용)
+// 로그인된 경우에만 children 렌더. (몽글로 : 동물도감은 공개라 미적용)
 import { useEffect } from "react";
 import { useRouter } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";

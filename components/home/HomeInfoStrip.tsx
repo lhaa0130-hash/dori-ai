@@ -61,7 +61,7 @@ export default function HomeInfoStrip({
             <p className="text-[11px] font-bold text-neutral-400 dark:text-neutral-500 mb-2">✨ 오늘의 도리</p>
             <ul className="space-y-[7px]">
               <li><Link href="/insight" className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-neutral-700 dark:text-neutral-200">📰 오늘 인사이트</span><b className="text-neutral-900 dark:text-white tabular-nums">{insightCount}건</b></Link></li>
-              {animalCount > 0 && <li><Link href="/animal" className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-neutral-700 dark:text-neutral-200">🐾 동물도감</span><b className="text-neutral-900 dark:text-white tabular-nums">{animalCount}종</b></Link></li>}
+              {animalCount > 0 && <li><Link href="/animal" className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-neutral-700 dark:text-neutral-200">🐾 몽글로</span><b className="text-neutral-900 dark:text-white tabular-nums">{animalCount}종</b></Link></li>}
               <li><Link href="/minigame" className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-neutral-700 dark:text-neutral-200">🎮 미니게임</span><span className="text-[10.5px] text-neutral-400">바로가기</span></Link></li>
               <li><Link href="/community" className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-neutral-700 dark:text-neutral-200">💬 커뮤니티</span><span className="text-[10.5px] text-neutral-400">이야기</span></Link></li>
             </ul>

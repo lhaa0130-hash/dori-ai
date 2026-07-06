@@ -18,8 +18,8 @@ const projects = [
     },
     {
         id: "animal",
-        title: "몽글로 동물도감",
-        description: "다양한 동물을 먹이·색·크기·서식지 등으로 검색하고 도감처럼 모아보는 동물 백과 '몽글로 동물도감'.",
+        title: "몽글로 : 동물도감",
+        description: "다양한 동물을 먹이·색·크기·서식지 등으로 검색하고 도감처럼 모아보는 동물 백과 '몽글로 : 동물도감'.",
         status: "ACTIVE",
         category: "AI Service",
         icon: BookOpen,

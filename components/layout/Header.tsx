@@ -55,7 +55,7 @@ export default function Header() {
     { name: "마켓", href: "/market", emoji: "🛒" },
     {
       name: "키즈", emoji: "🧸", children: [
-        { name: "동물도감", href: "/animal", emoji: "🐾" },
+        { name: "몽글로 : 동물도감", href: "/animal", emoji: "🐾" },
       ],
     },
     {
