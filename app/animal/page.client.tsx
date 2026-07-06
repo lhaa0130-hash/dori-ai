@@ -248,10 +248,10 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
           </div>
         </div>
 
-        {/* ── 종류로 찾기 (다른 필터와 동일한 컴팩트 pill로 통일) ── */}
-        <section className="mb-2.5">
-          <div className="flex items-center gap-3">
-            <div className="flex items-center gap-1 w-[60px] flex-shrink-0">
+        {/* ── 필터 5줄 (종류·먹이·색깔·수명·몸무게) — 라벨 우측정렬로 알약 시작선 통일 ── */}
+        <section className="mb-8 space-y-3">
+          <div className="flex items-center gap-3.5">
+            <div className="flex items-center justify-end gap-1 w-[64px] flex-shrink-0 text-right">
               <span className="text-sm">🐾</span>
               <span className="text-[11px] font-bold text-neutral-400 dark:text-neutral-500">종류</span>
             </div>
@@ -284,13 +284,9 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
             })}
             </div>
           </div>
-        </section>
-
-        {/* ── 3개 간소화 필터 (먹이·색깔·수명) — 한 줄 가로 스크롤 ── */}
-        <section className="mb-8 space-y-2.5">
           {SIMPLE_FILTERS.map((f) => (
-            <div key={f.id} className="flex items-center gap-3">
-              <div className="flex items-center gap-1 w-[60px] flex-shrink-0">
+            <div key={f.id} className="flex items-center gap-3.5">
+              <div className="flex items-center justify-end gap-1 w-[64px] flex-shrink-0 text-right">
                 <span className="text-sm">{f.emoji}</span>
                 <span className="text-[11px] font-bold text-neutral-400 dark:text-neutral-500">{f.label}</span>
               </div>
