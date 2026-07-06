@@ -6,7 +6,15 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 06 Jul 2026 05:00:23 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 06 Jul 2026 05:06:31 GMT</lastBuildDate>
+    <item>
+      <title>OpenAI ChatGPT Go와 Anthropic 기업 공략: ‘공짜 AI’ 시대가 끝나는 이유</title>
+      <link>https://illo.im/insight/article/analysis-12</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/analysis-12</guid>
+      <category>분석</category>
+      <pubDate>Mon, 06 Jul 2026 05:03:20 GMT</pubDate>
+      <description>AI 모델 가격 경쟁은 심해지고 있지만, AI 기업의 돈 버는 방식은 더 복잡해지고 있다. OpenAI의 저가 요금제와 광고 테스트 계획, Anthropic의 기업 시장 공략은 생성형 AI 경쟁의 중심이 성능에서 유통·신뢰·수익화로 이동하고 있음을 보여준다.</description>
+    </item>
     <item>
       <title>xAI·Anthropic·미 국방부·롯데이노베이트: 컴퓨트, 안보, 피지컬 AI로 이동한 돈길</title>
       <link>https://illo.im/insight/article/report-10</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Sun, 28 Jun 2026 13:00:17 GMT</pubDate>
       <description>아시아의 여러 AI 스타트업들이 Anthropic의 수출 금지 조치에 대응하여 Mythos와 유사한 혁신적인 모델을 출시하고 있다.</description>
-    </item>
-    <item>
-      <title>구글의 제약, 메타의 AI 모델 사용 제한</title>
-      <link>https://illo.im/insight/article/trend-180</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/trend-180</guid>
-      <category>트렌드</category>
-      <pubDate>Sun, 28 Jun 2026 09:00:15 GMT</pubDate>
-      <description>구글이 메타의 Gemini AI 모델 사용을 제한하면서 AI 산업의 경쟁 구도가 변화하고 있다. 이 결정이 무엇을 의미하는지 살펴본다.</description>
     </item>
   </channel>
 </rss>

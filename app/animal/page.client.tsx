@@ -39,19 +39,13 @@ const TYPES: { label: string; hex: string; emoji: string }[] = [
 const TYPE_MAP: Record<string, { hex: string; emoji: string }> = {};
 TYPES.forEach((t) => { TYPE_MAP[t.label] = { hex: t.hex, emoji: t.emoji }; });
 
-// ── 간소화된 3개 필터 (먹이·색깔·수명) ──────────────────────────────
+// ── 간소화된 2개 필터 (먹이·수명) ──────────────────────────────
 const SIMPLE_FILTERS = [
   {
     id: "diet", emoji: "🍽️", label: "먹이",
     cls: "bg-orange-500 text-white border-orange-500",
     chipCls: "bg-orange-50 dark:bg-orange-900/20 text-orange-700 dark:text-orange-300 border-orange-200 dark:border-orange-800",
     tags: ["초식", "육식", "잡식", "곤충을 먹는", "물고기를 먹는", "플랑크톤을 먹는", "꿀을 먹는", "씨앗을 먹는"],
-  },
-  {
-    id: "color", emoji: "🎨", label: "색깔",
-    cls: "bg-pink-500 text-white border-pink-500",
-    chipCls: "bg-pink-50 dark:bg-pink-900/20 text-pink-700 dark:text-pink-300 border-pink-200 dark:border-pink-800",
-    tags: ["흰색", "검정색", "빨간색", "파란색", "초록색", "분홍색", "투명한", "알록달록한"],
   },
   {
     id: "lifespan", emoji: "⏳", label: "수명",
@@ -67,11 +61,10 @@ const SIMPLE_FILTERS = [
   },
 ] as const;
 
-// 모달 하단에 항상 표시할 3개 칩 (모든 동물 동일)
+// 모달 하단에 항상 표시할 2개 칩 (모든 동물 동일)
 const MODAL_CHIPS = [
   { id: "taxonomy", label: "종류", emoji: "🗂️" },
   { id: "diet",     label: "먹이", emoji: "🍽️" },
-  { id: "color",    label: "색깔", emoji: "🎨" },
 ];
 
 // 모달 기본 정보 — 항상 4개 행을 동일하게 표시
@@ -127,11 +120,11 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
     return m;
   }, [cards]);
 
-  // 먹이·색깔·수명·몸무게 태그별 개수 (종류 개수 배지와 동일한 방식으로 통일)
+  // 먹이·수명·몸무게 태그별 개수 (종류 개수 배지와 동일한 방식으로 통일)
   const simpleCounts = useMemo(() => {
-    const m: Record<string, Record<string, number>> = { diet: {}, color: {}, lifespan: {}, weight: {} };
+    const m: Record<string, Record<string, number>> = { diet: {}, lifespan: {}, weight: {} };
     for (const c of cards) {
-      for (const fid of ["diet", "color", "weight"] as const) {
+      for (const fid of ["diet", "weight"] as const) {
         for (const t of c.filters?.[fid] || []) m[fid][t] = (m[fid][t] || 0) + 1;
       }
       const life = lifespanOf(c);
@@ -157,7 +150,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
   ];
   const hasFilter = allSelected.length > 0 || query.trim().length > 0;
 
-  // ── 매칭: 종류·먹이·색깔 AND, 내부 OR + 수명 계산 매칭 ──
+  // ── 매칭: 종류·먹이 AND, 내부 OR + 수명 계산 매칭 ──
   const q = query.trim().toLowerCase();
   const matched = cards.filter((card) => {
     if (q) {
@@ -170,8 +163,8 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
       const ct = card.filters?.taxonomy || [];
       if (![...taxPicks].some((t) => ct.includes(t))) return false;
     }
-    // diet, color, weight (filters 객체에서)
-    for (const fid of ["diet", "color", "weight"] as const) {
+    // diet, weight (filters 객체에서)
+    for (const fid of ["diet", "weight"] as const) {
       const picks = selected[fid];
       if (!picks?.size) continue;
       const ct = card.filters?.[fid] || [];
@@ -239,7 +232,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
             300종 동물을<br />아이 눈높이로 탐험해요
           </h1>
           <p className="text-[14px] text-neutral-400 dark:text-neutral-500 leading-relaxed break-keep">
-            이름으로 찾거나 종류 · 먹이 · 색깔 · 수명 · 몸무게로 골라보세요
+            이름으로 찾거나 종류 · 먹이 · 수명 · 몸무게로 골라보세요
           </p>
         </section>
 
@@ -261,7 +254,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
           </div>
         </div>
 
-        {/* ── 필터 5줄 (종류·먹이·색깔·수명·몸무게) — 라벨 우측정렬로 알약 시작선 통일 ── */}
+        {/* ── 필터 4줄 (종류·먹이·수명·몸무게) — 라벨 우측정렬로 알약 시작선 통일 ── */}
         <section className="mb-8 space-y-3">
           <div className="flex items-center gap-3.5">
             <div className="flex items-center justify-end gap-1 w-[64px] flex-shrink-0 text-right">
@@ -595,7 +588,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
                   </p>
                 )}
 
-                {/* 하단 칩 — 모든 동물 동일하게 종류·먹이·색깔 3개 */}
+                {/* 하단 칩 — 모든 동물 동일하게 종류·먹이 2개 */}
                 <div className="mt-auto pt-3 space-y-2 border-t border-neutral-100 dark:border-zinc-800">
                   {MODAL_CHIPS.map(({ id, label, emoji }) => {
                     const tags = detail.filters?.[id] || [];
