@@ -998,16 +998,7 @@ export default function AdminPage() {
                         <div key={i} className="flex items-start gap-2 text-[12.5px]">
                           <span className="w-5 text-center flex-shrink-0">{ic}</span>
                           <span className="font-bold text-neutral-500 dark:text-neutral-400 w-12 flex-shrink-0">{k}</span>
-                          <span className="text-neutral-700 dark:text-neutral-300 break-keep">
-                            {v}
-                            {k === "서식지" && (currentAnimal.filters?.region || []).length > 0 && (
-                              <span className="ml-1.5 inline-flex flex-wrap gap-1 align-middle">
-                                {[...(currentAnimal.filters?.region || [])].sort((a, b) => REGION_ORDER.indexOf(a) - REGION_ORDER.indexOf(b)).map((tag) => (
-                                  <span key={tag} className="text-[10px] font-bold px-1.5 py-0.5 rounded-full bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800">{tag}</span>
-                                ))}
-                              </span>
-                            )}
-                          </span>
+                          <span className="text-neutral-700 dark:text-neutral-300 break-keep">{v}</span>
                         </div>
                       ))}
                     </div>
