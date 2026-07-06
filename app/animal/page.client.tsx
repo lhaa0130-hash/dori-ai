@@ -402,10 +402,10 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
                       <div className="relative aspect-[4/5] overflow-hidden bg-neutral-100 dark:bg-zinc-800">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img src={imgUrl(card.image_path)} alt={card.animal_name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
-                        {card.no && <span className="absolute top-2 left-2 text-[10px] font-extrabold px-1.5 py-0.5 rounded-md bg-black/55 text-[#f0d28a] backdrop-blur-sm">No.{card.no}</span>}
-                        {card.status?.code && <span className="absolute top-2 right-2 text-[9px] font-extrabold px-1.5 py-0.5 rounded-md text-white shadow" style={{ background: card.status.color }}>{card.status.code}</span>}
+                        {card.no && <span className="absolute top-2 left-2 text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-black/55 text-[#f0d28a] backdrop-blur-sm">No.{card.no}</span>}
+                        {card.status?.code && <span className="absolute top-2 right-2 text-[10px] font-extrabold px-2 py-0.5 rounded-full text-white shadow" style={{ background: card.status.color }}>{card.status.code}</span>}
                         {tax && tm && (
-                          <span className="absolute bottom-2 left-2 inline-flex items-center gap-1 text-[10px] font-extrabold px-1.5 py-0.5 rounded-md text-white shadow" style={{ background: tm.hex }}>
+                          <span className="absolute bottom-2 left-2 inline-flex items-center gap-1 text-[10px] font-extrabold px-2 py-0.5 rounded-full text-white shadow" style={{ background: tm.hex }}>
                             {tm.emoji} {tax}
                           </span>
                         )}
@@ -592,9 +592,9 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
                           ) : tags.map((t) => {
                             const tm = id === "taxonomy" ? TYPE_MAP[t] : null;
                             return tm ? (
-                              <span key={t} className="text-[10px] font-bold px-2 py-0.5 rounded-md text-white" style={{ background: tm.hex }}>{tm.emoji} {t}</span>
+                              <span key={t} className="text-[10px] font-bold px-2 py-0.5 rounded-full text-white" style={{ background: tm.hex }}>{tm.emoji} {t}</span>
                             ) : (
-                              <span key={t} className={`text-[10px] font-medium px-2 py-0.5 rounded-md border ${f?.chipCls || ""}`}>{t}</span>
+                              <span key={t} className={`text-[10px] font-medium px-2 py-0.5 rounded-full border ${f?.chipCls || ""}`}>{t}</span>
                             );
                           })}
                         </div>
