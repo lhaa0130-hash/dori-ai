@@ -300,7 +300,7 @@ export default function AnimalPageClient({ cards = [] }: { cards?: AnimalCard[] 
                       className={`whitespace-nowrap flex-shrink-0 text-[12px] font-semibold px-3 py-1.5 rounded-full border transition-all active:scale-95 ${
                         sel
                           ? f.cls + " shadow-sm"
-                          : "bg-neutral-50 dark:bg-zinc-900 text-neutral-600 dark:text-neutral-300 border-neutral-200 dark:border-zinc-700 hover:border-[#F9954E]"
+                          : f.chipCls + " hover:shadow-sm"
                       }`}
                     >
                       {sel && "✓ "}{tag}
