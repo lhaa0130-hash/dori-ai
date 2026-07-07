@@ -196,7 +196,7 @@
    "code": "EN",
    "color": "#E8743B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 식육목 › 레서판다과 › Ailurus",
+  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 식육목 › 레서판다과 › 레서판다속",
   "subspecies": "히말라야레서판다, 중국레서판다",
   "info": [
    [
@@ -290,7 +290,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 식육목 › 몽구스과 › Suricata",
+  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 식육목 › 몽구스과 › 미어캣속",
   "subspecies": "",
   "info": [
    [
@@ -566,7 +566,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조강 › 펭귄목 › 펭귄과 › Aptenodytes속",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 펭귄목 › 펭귄과 › 황제펭귄속",
   "subspecies": "",
   "info": [
    [
@@ -3141,7 +3141,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 진무맹장목 › 고슴도치과 › 속(Erinaceus)",
+  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 진무맹장목 › 고슴도치과 › 고슴도치속",
   "subspecies": "",
   "info": [
    [
@@ -5777,7 +5777,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 연체동물문 › 두족강 › 문어목 › 문어과 › Enteroctopus",
+  "taxonomy": "동물계 › 연체동물문 › 두족강 › 문어목 › 문어과 › 문어속",
   "subspecies": "",
   "info": [
    [
@@ -6805,7 +6805,7 @@
    "code": "NT",
    "color": "#9CCC65"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조강 › 매목 › 수리과 › Aegypius속",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 매목 › 수리과 › 독수리속",
   "subspecies": "",
   "info": [
    [
@@ -8056,7 +8056,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 파충류강 › 유린목 › 도마뱀붙이과 › Gekko속",
+  "taxonomy": "동물계 › 척삭동물문 › 파충류강 › 유린목 › 도마뱀붙이과 › 도마뱀붙이속",
   "subspecies": "",
   "info": [
    [
@@ -8348,7 +8348,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조강 › 닭목 › 꿩과 › Gallus",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 닭목 › 꿩과 › 닭속",
   "subspecies": "적색야계",
   "info": [
    [
@@ -9394,7 +9394,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 절지동물문 › 곤충강 › 딱정벌레목 › 무당벌레과 › Harmonia",
+  "taxonomy": "동물계 › 절지동물문 › 곤충강 › 딱정벌레목 › 무당벌레과 › 무당벌레속",
   "subspecies": "",
   "info": [
    [
@@ -11263,7 +11263,7 @@
    "code": "VU",
    "color": "#F4C430"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 영장목 › 긴꼬리원숭이과 › Mandrillus",
+  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 영장목 › 긴꼬리원숭이과 › 맨드릴속",
   "subspecies": "",
   "info": [
    [
@@ -11451,7 +11451,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 영장목 › 거미원숭이과 › 거미원숭이속(Ateles)",
+  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 영장목 › 거미원숭이과 › 거미원숭이속",
   "subspecies": "붉은얼굴거미원숭이, 흰이마거미원숭이, 페루거미원숭이, 갈색거미원숭이, 흰뺨거미원숭이, 검은머리거미원숭이, 조프루아거미원숭이",
   "info": [
    [
@@ -13781,7 +13781,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조강 › 사다새목 › 사다새과 › Pelecanus",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 사다새목 › 사다새과 › 사다새속",
   "subspecies": "",
   "info": [
    [
@@ -13876,7 +13876,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조류강 › 도요목 › 갈매기과 › Larus",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 도요목 › 갈매기과 › 갈매기속",
   "subspecies": "",
   "info": [
    [
@@ -14151,7 +14151,7 @@
    "code": "NT",
    "color": "#9CCC65"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조류 › 황새목 › 황새과 › Ciconia",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 황새목 › 황새과 › 황새속",
   "subspecies": "",
   "info": [
    [
@@ -14435,7 +14435,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조류 › 파랑새목 › 물총새과 › Alcedo",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 파랑새목 › 물총새과 › 물총새속",
   "subspecies": "",
   "info": [
    [
@@ -14636,7 +14636,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조류강 › 참새목 › 참새과 › Passer속",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 참새목 › 참새과 › 참새속",
   "subspecies": "P. m. dybowskii, P. m. saturatus",
   "info": [
    [
@@ -15117,7 +15117,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조류 › 기러기과 › Anser",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 기러기과 › 기러기속",
   "subspecies": "Anser cygnoides, Anser anser",
   "info": [
    [
@@ -15685,7 +15685,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조류강 › 펭귄목 › 펭귄과 › Pygoscelis속",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 펭귄목 › 펭귄과 › 아델리펭귄속",
   "subspecies": "",
   "info": [
    [
@@ -16068,7 +16068,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 연어목 › 연어과 › Oncorhynchus",
+  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 연어목 › 연어과 › 연어속",
   "subspecies": "",
   "info": [
    [
@@ -16349,7 +16349,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 메기목 › 메기과 › Silurus",
+  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 메기목 › 메기과 › 메기속",
   "subspecies": "",
   "info": [
    [
@@ -16444,7 +16444,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 뱀장어목 › 뱀장어과 › 속(Anguilla)",
+  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 뱀장어목 › 뱀장어과 › 뱀장어속",
   "subspecies": "",
   "info": [
    [
@@ -16533,7 +16533,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 돛새치목 › 돛새치과 › Kajikia",
+  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 돛새치목 › 돛새치과 › 청새치속",
   "subspecies": "",
   "info": [
    [
@@ -16719,7 +16719,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 경골어강 › 김노투스목 › 김노투스과 › Electrophorus속",
+  "taxonomy": "동물계 › 척삭동물문 › 경골어강 › 김노투스목 › 김노투스과 › 전기뱀장어속",
   "subspecies": "E. electricus, E. voltai, E. varii",
   "info": [
    [
@@ -16905,7 +16905,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 철갑상어목 › 철갑상어과 › Acipenser",
+  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 철갑상어목 › 철갑상어과 › 철갑상어속",
   "subspecies": "",
   "info": [
    [
@@ -17085,7 +17085,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 날치과 › Cheilopogon",
+  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 날치과 › 날치속",
   "subspecies": "",
   "info": [
    [
@@ -17736,7 +17736,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 연체동물문 › 이매패강 › 가리비과 › Pectinidae",
+  "taxonomy": "동물계 › 연체동물문 › 이매패강 › 가리비과 › 가리비속",
   "subspecies": "",
   "info": [
    [
@@ -18385,7 +18385,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 양서강 › 무미목 › 두꺼비과 › Bufo",
+  "taxonomy": "동물계 › 척삭동물문 › 양서강 › 무미목 › 두꺼비과 › 두꺼비속",
   "subspecies": "",
   "info": [
    [
@@ -20270,7 +20270,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 식육목 › 족제비과 › Mustela",
+  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 식육목 › 족제비과 › 족제비속",
   "subspecies": "",
   "info": [
    [
@@ -20903,7 +20903,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 설치목 › 가시쥐과 › Myocastor",
+  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 설치목 › 가시쥐과 › 뉴트리아속",
   "subspecies": "",
   "info": [
    [
@@ -21461,7 +21461,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 우제목 › 소과 › Antidorcas",
+  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 우제목 › 소과 › 스프링복속",
   "subspecies": "",
   "info": [
    [
@@ -21648,7 +21648,7 @@
    "code": "VU",
    "color": "#F4C430"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 우제목 › 소과 › 소속 › Bos",
+  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 우제목 › 소과 › 소속",
   "subspecies": "",
   "info": [
    [
@@ -22116,7 +22116,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 유대목 › 캥거루과 › Notamacropus속",
+  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 유대목 › 캥거루과 › 왈라비속",
   "subspecies": "Notamacropus agilis, Notamacropus rufogriseus",
   "info": [
    [
@@ -22205,7 +22205,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 쌍구류목 › 캥거루과 › Setonix속",
+  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 쌍구류목 › 캥거루과 › 쿼카속",
   "subspecies": "",
   "info": [
    [
@@ -22570,7 +22570,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조류강 › 코뿔새과 › Buceros속",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 코뿔새과 › 코뿔새속",
   "subspecies": "",
   "info": [
    [
@@ -22841,7 +22841,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조강 › 파랑새목 › 파랑새과 › Eurystomus",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 파랑새목 › 파랑새과 › 파랑새속",
   "subspecies": "E. o. cyanocollis, E. o. orientalis, E. o. laetior, E. o. gigas, E. o. irisi, E. o. oberholseri, E. o. pacificus, E. o. waigiouensis, E. o. crassirostris, E. o. solomonensis",
   "info": [
    [
@@ -23037,7 +23037,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 청어목 › 청어과 › Sardinops",
+  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 청어목 › 청어과 › 정어리속",
   "subspecies": "",
   "info": [
    [
@@ -23126,7 +23126,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 청어목 › 청어과 › Clupea",
+  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 청어목 › 청어과 › 청어속",
   "subspecies": "",
   "info": [
    [
@@ -23220,7 +23220,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 잉어목 › 잉어과 › Carassius",
+  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 잉어목 › 잉어과 › 붕어속",
   "subspecies": "",
   "info": [
    [
@@ -23781,7 +23781,7 @@
    "code": "EN",
    "color": "#E8743B"
   },
-  "taxonomy": "동물계 › 절지동물문 › 곤충강 › 딱정벌레목 › 소똥구리아과 › Scarabaeus",
+  "taxonomy": "동물계 › 절지동물문 › 곤충강 › 딱정벌레목 › 소똥구리아과 › 쇠똥구리속",
   "subspecies": "",
   "info": [
    [
@@ -24246,7 +24246,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조류 › 참새목 › 찌르레기과 › Sturnus",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 참새목 › 찌르레기과 › 찌르레기속",
   "subspecies": "",
   "info": [
    [
@@ -24518,7 +24518,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조류강 › 앵무목 › 앵무과 › Psittacus",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 앵무목 › 앵무과 › 회색앵무속",
   "subspecies": "팀네 회색앵무, 콩고 회색앵무",
   "info": [
    [
@@ -24799,7 +24799,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조류강 › 펭귄목 › 펭귄과 › Pygoscelis속",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 펭귄목 › 펭귄과 › 젠투펭귄속",
   "subspecies": "",
   "info": [
    [
@@ -25844,7 +25844,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 절지동물문 › 갑각강 › 구각목 › 갯가재과 › Oratosquilla속",
+  "taxonomy": "동물계 › 절지동물문 › 갑각강 › 구각목 › 갯가재과 › 갯가재속",
   "subspecies": "",
   "info": [
    [
@@ -25940,7 +25940,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 가자미목 › 넙치과 › Paralichthys",
+  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 가자미목 › 넙치과 › 넙치속",
   "subspecies": "",
   "info": [
    [
@@ -26220,7 +26220,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 연체동물문 › 두족강 › 갑오징어목 › 갑오징어과 › Sepia",
+  "taxonomy": "동물계 › 연체동물문 › 두족강 › 갑오징어목 › 갑오징어과 › 갑오징어속",
   "subspecies": "",
   "info": [
    [
@@ -26502,7 +26502,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 연체동물문 › 두족강 › 문어목 › 문어과 › Hapalochlaena",
+  "taxonomy": "동물계 › 연체동물문 › 두족강 › 문어목 › 문어과 › 파란고리문어속",
   "subspecies": "Hapalochlaena lunulata, Hapalochlaena maculosa, Hapalochlaena fasciata, Hapalochlaena nierstraszi",
   "info": [
    [
@@ -26695,7 +26695,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조류강 › 가다랭이잡이목 › 군함조과 › Fregata",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 가다랭이잡이목 › 군함조과 › 군함조속",
   "subspecies": "",
   "info": [
    [
@@ -26794,7 +26794,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조류강 › 수리과 › Haliaeetus속",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 수리과 › 흰꼬리수리속",
   "subspecies": "",
   "info": [
    [
@@ -26988,7 +26988,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조류강 › 수리과 › Milvus속",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 수리과 › 솔개속",
   "subspecies": "유럽솔개 (M. m. migrans), 솔개 (M. m. lineatus), 작은인도솔개 (M. m. govinda), M. m. affinis, 타이완솔개 (M. m. formosanus)",
   "info": [
    [
@@ -27733,7 +27733,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 큰박쥐과 › Desmalopex",
+  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 큰박쥐과 › 여우박쥐속",
   "subspecies": "흰날개날여우박쥐, 작은흰날개날여우박쥐",
   "info": [
    [
@@ -28106,7 +28106,7 @@
    "code": "NT",
    "color": "#9CCC65"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 식육목 › 족제비과 › Pteronura",
+  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 식육목 › 족제비과 › 큰수달속",
   "subspecies": "",
   "info": [
    [
@@ -28385,7 +28385,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조강 › 펭귄목 › 펭귄과 › Aptenodytes속",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 펭귄목 › 펭귄과 › 임금펭귄속",
   "subspecies": "",
   "info": [
    [
@@ -28482,7 +28482,7 @@
    "code": "NT",
    "color": "#9CCC65"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 영장목 › 긴꼬리원숭이과 › 콜로부스아과 › Trachypithecus",
+  "taxonomy": "동물계 › 척삭동물문 › 포유강 › 영장목 › 긴꼬리원숭이과 › 콜로부스아과 › 잎원숭이속",
   "subspecies": "동부자바원숭이, 서부자바원숭이",
   "info": [
    [
@@ -28768,7 +28768,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 연체동물문 › 이매패강 › 진주조개목 › 키조개과 › Atrina",
+  "taxonomy": "동물계 › 연체동물문 › 이매패강 › 진주조개목 › 키조개과 › 키조개속",
   "subspecies": "",
   "info": [
    [
