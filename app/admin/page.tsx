@@ -8,7 +8,7 @@ import { collection, getDocs } from "firebase/firestore";
 import { getFirebaseFirestore } from "@/lib/firebase";
 import { adminGrantCandy, adminSetPremium } from "@/lib/cottonCandy";
 import { getAnalyticsSummary, getDailyAnalytics, getTodayStr, getAdsense, saveAdsense, type DailyAnalytics, type AdsenseData } from "@/lib/analytics";
-import { getAnimalReviewStatus, approveAnimal, rejectAnimal, resetAnimal } from "@/lib/animalReview";
+import { getAnimalReviewStatus, approveAnimal, rejectAnimal, resetAnimal, setRejectReason } from "@/lib/animalReview";
 import animalCardsData from "@/data/animal-cards.json";
 import type { AnimalCard } from "@/app/animal/page.client";
 
@@ -92,6 +92,8 @@ export default function AdminPage() {
   const allAnimals = animalCardsData as unknown as AnimalCard[];
   const [approved, setApproved] = useState<Set<string>>(new Set());
   const [rejected, setRejected] = useState<Set<string>>(new Set());
+  const [rejectReasons, setRejectReasons] = useState<Record<string, string>>({});
+  const [reasonDraft, setReasonDraft] = useState("");
   const [reviewLoaded, setReviewLoaded] = useState(false);
   const [reviewFilter, setReviewFilter] = useState<ReviewFilter>("pending");
   const [reviewIdx, setReviewIdx] = useState(0);
@@ -152,6 +154,7 @@ export default function AdminPage() {
       const r = await getAnimalReviewStatus();
       setApproved(new Set(r.approved));
       setRejected(new Set(r.rejected));
+      setRejectReasons(r.rejectReasons || {});
       setReviewLoaded(true);
     } catch (e) {
       console.warn("[admin] 동물검수 상태 로드 실패:", e);
@@ -350,30 +353,50 @@ export default function AdminPage() {
     ? approved.has(currentAnimal.no || "") ? "approved" : rejected.has(currentAnimal.no || "") ? "rejected" : "pending"
     : null;
 
+  // 카드 이동/사유 로드 시 반려 사유 입력칸을 저장된 값으로 초기화(타이핑 중엔 rejectReasons가 안 바뀌므로 방해 없음)
+  const currentNo = currentAnimal?.no || "";
+  useEffect(() => {
+    setReasonDraft(currentNo ? (rejectReasons[currentNo] || "") : "");
+  }, [currentNo, rejectReasons]);
+
   const reviewGoto = (dir: number) => {
     setReviewIdx((i) => Math.min(Math.max(0, i + dir), Math.max(0, reviewList.length - 1)));
   };
-  const decideAnimal = async (no: string, action: "approve" | "reject" | "reset") => {
+  const decideAnimal = async (no: string, action: "approve" | "reject" | "reset", reason = "") => {
     // 낙관적 갱신 — 목록이 줄어드는 필터(미검수)에서는 idx 그대로 두면 다음 항목이 자연히 그 자리로 옴
     if (action === "approve") {
       setApproved((s) => new Set(s).add(no));
       setRejected((s) => { const n = new Set(s); n.delete(no); return n; });
+      setRejectReasons((m) => { const n = { ...m }; delete n[no]; return n; });
       await approveAnimal(no);
     } else if (action === "reject") {
       setRejected((s) => new Set(s).add(no));
       setApproved((s) => { const n = new Set(s); n.delete(no); return n; });
-      await rejectAnimal(no);
+      setRejectReasons((m) => ({ ...m, [no]: reason }));
+      await rejectAnimal(no, reason);
     } else {
       setApproved((s) => { const n = new Set(s); n.delete(no); return n; });
       setRejected((s) => { const n = new Set(s); n.delete(no); return n; });
+      setRejectReasons((m) => { const n = { ...m }; delete n[no]; return n; });
       await resetAnimal(no);
     }
   };
   const reviewDecide = async (action: "approve" | "reject" | "reset") => {
     if (!currentAnimal?.no || reviewBusy) return;
     setReviewBusy(true);
-    await decideAnimal(currentAnimal.no, action);
+    await decideAnimal(currentAnimal.no, action, reasonDraft.trim());
     setReviewBusy(false);
+  };
+  // 반려 상태 유지한 채 사유만 저장(자동화 처리용 메모 갱신)
+  const reviewSaveReason = async () => {
+    if (!currentAnimal?.no || reviewBusy) return;
+    const no = currentAnimal.no;
+    const reason = reasonDraft.trim();
+    setReviewBusy(true);
+    setRejectReasons((m) => ({ ...m, [no]: reason }));
+    await setRejectReason(no, reason);
+    setReviewBusy(false);
+    setToast({ type: "success", msg: "반려 사유 저장됨" });
   };
 
   // ── 동물표(엑셀뷰): 검색+필터 목록, 각 행 정보 추출 ──
@@ -1077,6 +1100,34 @@ export default function AdminPage() {
                         >
                           ↩️ 보류로
                         </button>
+                      )}
+                    </div>
+
+                    {/* 반려 사유 — 여기 적고 ❌반려 누르면 저장. 자동화(n8n)가 이 사유를 읽어 데이터 검토·수정 */}
+                    <div className="mb-4">
+                      <div className="flex items-center justify-between mb-1.5">
+                        <label className="text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
+                          📝 반려 사유 <span className="font-normal text-neutral-400 dark:text-neutral-500">· 자동화가 읽고 수정 — 어디가 왜 틀렸는지</span>
+                        </label>
+                        {currentStatus === "rejected" && (
+                          <button
+                            disabled={reviewBusy}
+                            onClick={reviewSaveReason}
+                            className="px-2.5 py-1 rounded-lg bg-[#F9954E] hover:bg-[#e8843d] text-white font-bold text-[11px] transition disabled:opacity-50"
+                          >
+                            💾 사유만 저장
+                          </button>
+                        )}
+                      </div>
+                      <textarea
+                        value={reasonDraft}
+                        onChange={(e) => setReasonDraft(e.target.value)}
+                        rows={3}
+                        placeholder="예: 몸무게 15kg은 오류(실제 약 3.5kg) · 서식지에 남극해 빠짐 · 먹이 태그가 초식으로 잘못됨"
+                        className="w-full px-3 py-2 rounded-xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-[12.5px] text-foreground placeholder:text-neutral-400 focus:outline-none focus:border-[#F9954E] resize-y break-keep leading-relaxed"
+                      />
+                      {currentStatus === "rejected" && (rejectReasons[currentNo] || "").trim() && (
+                        <p className="mt-1 text-[10.5px] text-red-500 dark:text-red-400 font-bold">● 반려 사유 저장됨 · 자동화 처리 대기</p>
                       )}
                     </div>
 
