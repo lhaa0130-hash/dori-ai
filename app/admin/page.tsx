@@ -94,6 +94,7 @@ export default function AdminPage() {
   const [rejected, setRejected] = useState<Set<string>>(new Set());
   const [rejectReasons, setRejectReasons] = useState<Record<string, string>>({});
   const [reasonDraft, setReasonDraft] = useState("");
+  const [reasonSyncKey, setReasonSyncKey] = useState("");
   const [reviewLoaded, setReviewLoaded] = useState(false);
   const [reviewFilter, setReviewFilter] = useState<ReviewFilter>("pending");
   const [reviewIdx, setReviewIdx] = useState(0);
@@ -353,11 +354,16 @@ export default function AdminPage() {
     ? approved.has(currentAnimal.no || "") ? "approved" : rejected.has(currentAnimal.no || "") ? "rejected" : "pending"
     : null;
 
-  // 카드 이동/사유 로드 시 반려 사유 입력칸을 저장된 값으로 초기화(타이핑 중엔 rejectReasons가 안 바뀌므로 방해 없음)
+  // 카드 이동/사유 로드 시 반려 사유 입력칸을 저장된 값으로 동기화.
+  // useEffect가 아닌 "렌더 중 setState" 패턴 — 조기 return 뒤라 훅을 쓰면 Rules of Hooks 위반이라서.
+  // syncKey = 현재 no + 저장된 사유. 타이핑은 reasonDraft만 바꾸므로 syncKey 불변 → 타이핑 방해 없음. 사유 로드/저장 시엔 syncKey가 바뀌어 반영됨.
   const currentNo = currentAnimal?.no || "";
-  useEffect(() => {
-    setReasonDraft(currentNo ? (rejectReasons[currentNo] || "") : "");
-  }, [currentNo, rejectReasons]);
+  const reasonSrc = currentNo ? (rejectReasons[currentNo] || "") : "";
+  const wantSyncKey = currentNo + "|" + reasonSrc;
+  if (wantSyncKey !== reasonSyncKey) {
+    setReasonSyncKey(wantSyncKey);
+    setReasonDraft(reasonSrc);
+  }
 
   const reviewGoto = (dir: number) => {
     setReviewIdx((i) => Math.min(Math.max(0, i + dir), Math.max(0, reviewList.length - 1)));
