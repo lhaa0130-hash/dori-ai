@@ -6,7 +6,23 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 07 Jul 2026 23:00:16 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 07 Jul 2026 23:31:41 GMT</lastBuildDate>
+    <item>
+      <title>AI 글쓰기 사이트 무료 추천 BEST 8: 한국어 글쓰기까지 쓸 만한 도구 정리</title>
+      <link>https://illo.im/insight/article/curation-17</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/curation-17</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 07 Jul 2026 23:08:11 GMT</pubDate>
+      <description>무료로 시작할 수 있는 AI 글쓰기 사이트 8개를 한국어 지원, 무료 한도, 장단점, 추천 대상별로 비교했습니다. 블로그·보고서·SNS·광고문 작성에 맞는 최종 픽까지 확인하세요.</description>
+    </item>
+    <item>
+      <title>[기초] 기계 학습의 경량화 기법인 경량 하강법</title>
+      <link>https://illo.im/insight/article/video-58</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-58</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 07 Jul 2026 00:00:00 GMT</pubDate>
+      <description>경량 하강법을 통해 기계 학습 모델 최적화를 설명합니다.</description>
+    </item>
     <item>
       <title>OpenAI ChatGPT Go와 Anthropic 기업 공략: ‘공짜 AI’ 시대가 끝나는 이유</title>
       <link>https://illo.im/insight/article/analysis-12</link>
@@ -310,22 +326,6 @@
       <category>트렌드</category>
       <pubDate>Mon, 29 Jun 2026 01:00:18 GMT</pubDate>
       <description>호주 Firmus Technologies가 Nvidia와 AI 접근 협약을 체결하며 기술 혁신에 박차를 가한다.</description>
-    </item>
-    <item>
-      <title>[AI 문제] AI의 근본 문제에 대한 AI 천재들의 고백</title>
-      <link>https://illo.im/insight/article/video-35</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-35</guid>
-      <category>큐레이션</category>
-      <pubDate>Mon, 29 Jun 2026 00:00:00 GMT</pubDate>
-      <description>AI의 내부 작동 원리를 이해하지 못하는 현실을 다룬다.</description>
-    </item>
-    <item>
-      <title>AI 프로필 사진 만들기: 무료 도구로 자연스럽게 만드는 단계별 가이드</title>
-      <link>https://illo.im/insight/article/curation-13</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/curation-13</guid>
-      <category>큐레이션</category>
-      <pubDate>Sun, 28 Jun 2026 23:01:28 GMT</pubDate>
-      <description>AI 프로필 사진 만들기를 처음 하는 사람도 따라 할 수 있도록 사진 준비, 도구 선택, 프롬프트 입력, 보정, 저장까지 단계별로 정리했습니다. 무료로 쓰는 방법과 자주 실패하는 포인트도 함께 안내합니다.</description>
     </item>
   </channel>
 </rss>
