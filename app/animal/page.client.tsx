@@ -215,18 +215,11 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
     setPage(np);
     setTimeout(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 30);
   }
-  function pageList(cur: number, total: number): (number | "…")[] {
-    const WINDOW = 10; // 한 번에 직접 누를 수 있는 페이지 버튼 수
-    if (total <= WINDOW + 2) return Array.from({ length: total }, (_, i) => i + 1);
-    let start = Math.max(1, cur - Math.floor(WINDOW / 2) + 1);
-    let end = start + WINDOW - 1;
-    if (end >= total) { end = total; start = Math.max(1, end - WINDOW + 1); }
-    const out: (number | "…")[] = [];
-    if (start > 1) { out.push(1); if (start > 2) out.push("…"); }
-    for (let i = start; i <= end; i++) out.push(i);
-    if (end < total) { if (end < total - 1) out.push("…"); out.push(total); }
-    return out;
-  }
+  const PAGE_BLOCK = 10; // 한 블록에 보이는 페이지 수 (1~10, 11~20 …)
+  const blockStart = Math.floor((safePage - 1) / PAGE_BLOCK) * PAGE_BLOCK + 1;
+  const blockEnd = Math.min(blockStart + PAGE_BLOCK - 1, pageCount);
+  // 현재 블록의 페이지 번호만 (네이버식 — 이전/다음으로 블록 이동)
+  const pageNumbers = Array.from({ length: blockEnd - blockStart + 1 }, (_, i) => blockStart + i);
 
   const detailKey = (c: AnimalCard | null) => (c ? String(c.no ?? c.animal_name) : "");
   const detailIdx = detail ? sorted.findIndex((c) => detailKey(c) === detailKey(detail)) : -1;
@@ -465,33 +458,31 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
               {pageCount > 1 && (
                 <nav className="flex flex-wrap items-center justify-center gap-1.5 mt-9" aria-label="페이지">
                   <button
-                    onClick={() => goPage(safePage - 1)}
-                    disabled={safePage === 1}
+                    onClick={() => goPage(blockStart - 1)}
+                    disabled={blockStart === 1}
+                    aria-label="이전 10페이지"
                     className="inline-flex items-center gap-0.5 h-9 pl-2 pr-3 rounded-xl text-[13px] font-bold border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-300 enabled:hover:border-[#F9954E] enabled:hover:text-[#E8832E] disabled:opacity-40 disabled:cursor-not-allowed transition"
                   >
                     <ChevronLeft className="w-4 h-4" /> 이전
                   </button>
-                  {pageList(safePage, pageCount).map((p, idx) =>
-                    p === "…" ? (
-                      <span key={"e" + idx} className="w-9 h-9 flex items-center justify-center text-neutral-400 text-sm">…</span>
-                    ) : (
-                      <button
-                        key={p}
-                        onClick={() => goPage(p)}
-                        aria-current={p === safePage ? "page" : undefined}
-                        className={`w-9 h-9 rounded-xl text-[13.5px] font-extrabold border transition ${
-                          p === safePage
-                            ? "bg-[#F9954E] text-white border-[#F9954E] shadow-sm shadow-[#F9954E]/30"
-                            : "bg-white dark:bg-zinc-900 text-neutral-600 dark:text-neutral-300 border-neutral-200 dark:border-zinc-700 hover:border-[#F9954E] hover:text-[#E8832E]"
-                        }`}
-                      >
-                        {p}
-                      </button>
-                    )
-                  )}
+                  {pageNumbers.map((p) => (
+                    <button
+                      key={p}
+                      onClick={() => goPage(p)}
+                      aria-current={p === safePage ? "page" : undefined}
+                      className={`w-9 h-9 rounded-xl text-[13.5px] font-extrabold border transition ${
+                        p === safePage
+                          ? "bg-[#F9954E] text-white border-[#F9954E] shadow-sm shadow-[#F9954E]/30"
+                          : "bg-white dark:bg-zinc-900 text-neutral-600 dark:text-neutral-300 border-neutral-200 dark:border-zinc-700 hover:border-[#F9954E] hover:text-[#E8832E]"
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  ))}
                   <button
-                    onClick={() => goPage(safePage + 1)}
-                    disabled={safePage === pageCount}
+                    onClick={() => goPage(blockEnd + 1)}
+                    disabled={blockEnd === pageCount}
+                    aria-label="다음 10페이지"
                     className="inline-flex items-center gap-0.5 h-9 pl-3 pr-2 rounded-xl text-[13px] font-bold border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-300 enabled:hover:border-[#F9954E] enabled:hover:text-[#E8832E] disabled:opacity-40 disabled:cursor-not-allowed transition"
                   >
                     다음 <ChevronRight className="w-4 h-4" />
