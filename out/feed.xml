@@ -6,7 +6,15 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Wed, 08 Jul 2026 04:42:02 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 08 Jul 2026 05:08:41 GMT</lastBuildDate>
+    <item>
+      <title>Meta AI 클라우드 진출: AWS·Azure의 성벽을 흔드는 ‘남는 컴퓨팅’의 경제학</title>
+      <link>https://illo.im/insight/article/analysis-13</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/analysis-13</guid>
+      <category>분석</category>
+      <pubDate>Wed, 08 Jul 2026 05:03:02 GMT</pubDate>
+      <description>Meta가 초과 AI 컴퓨팅 자원과 모델 접근권을 판매하는 클라우드 인프라 사업을 추진하고 있다. 이는 단순한 사업 확장이 아니라, AI 시대 클라우드 권력이 재편되는 신호다.</description>
+    </item>
     <item>
       <title>AI 글쓰기 사이트 무료 추천 BEST 8: 한국어 글쓰기까지 쓸 만한 도구 정리</title>
       <link>https://illo.im/insight/article/curation-17</link>
@@ -318,14 +326,6 @@
       <category>리포트</category>
       <pubDate>Mon, 29 Jun 2026 02:02:04 GMT</pubDate>
       <description>이번 주 AI 산업의 핵심은 모델 성능 경쟁보다 자본과 물리 인프라의 재배치였다. 데이터센터 공간, 고평가 스타트업, 업무용 에이전트가 한 축으로 묶이며 AI 수익성 검증 압력이 커지고 있다.</description>
-    </item>
-    <item>
-      <title>Nvidia, 호주 기업과 AI 접근 협약 체결 — 새로운 기술 시대 열리나?</title>
-      <link>https://illo.im/insight/article/trend-183</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/trend-183</guid>
-      <category>트렌드</category>
-      <pubDate>Mon, 29 Jun 2026 01:00:18 GMT</pubDate>
-      <description>호주 Firmus Technologies가 Nvidia와 AI 접근 협약을 체결하며 기술 혁신에 박차를 가한다.</description>
     </item>
   </channel>
 </rss>
