@@ -3,6 +3,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type ReactNode } from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
+import MyAnimalsSection from "@/components/animal/MyAnimalsSection";
 import {
   currentUid,
   sendFriendRequest,
@@ -1172,6 +1173,9 @@ export default function ProfilePage() {
             </button>
           </div>
         )}
+
+        {/* 3.25) 내가 만든 동물(창작) */}
+        {targetUid && <MyAnimalsSection uid={targetUid} isOwner={isOwner} />}
 
         {/* 3.3) 내가 만든 AI 자랑 */}
         {(isOwner || profile.myAIs.length > 0) && (

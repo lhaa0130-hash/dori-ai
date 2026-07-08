@@ -253,6 +253,14 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
           <p className="text-[14px] text-neutral-400 dark:text-neutral-500 leading-relaxed break-keep">
             이름으로 찾거나 종류 · 먹이 · 수명 · 몸무게 · 몸길이 · 서식지로 골라보세요
           </p>
+          <div className="mt-4 flex flex-wrap gap-2">
+            <a href="/animal/create" className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#F9954E] to-[#f97e6d] px-4 py-2 text-[13px] font-bold text-white shadow-sm hover:shadow-md hover:brightness-105 transition">
+              🐣 나만의 동물 만들기
+            </a>
+            <a href="/animal/creations" className="inline-flex items-center gap-1.5 rounded-full border border-neutral-200 dark:border-zinc-800 px-4 py-2 text-[13px] font-bold text-neutral-600 dark:text-neutral-300 hover:border-[#F9954E]/50 transition">
+              🖼️ 친구들이 만든 동물
+            </a>
+          </div>
         </section>
 
         {/* ── 검색바 (sticky) ── */}
