@@ -6,6 +6,7 @@
 
 const PROJECT = "dori-ai-0130";
 const LIMIT = 3;
+// keys: Cloudflare Pages env(OPENAI_KEY, FAL_KEY) — 2026-07-08 연결
 const FS = `https://firestore.googleapis.com/v1/projects/${PROJECT}/databases/(default)/documents`;
 
 const VOCAB: Record<string, string[]> = {
