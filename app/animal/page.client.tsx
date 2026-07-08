@@ -216,12 +216,15 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
     setTimeout(() => resultRef.current?.scrollIntoView({ behavior: "smooth", block: "start" }), 30);
   }
   function pageList(cur: number, total: number): (number | "…")[] {
-    if (total <= 7) return Array.from({ length: total }, (_, i) => i + 1);
-    const out: (number | "…")[] = [1];
-    if (cur > 4) out.push("…");
-    for (let i = Math.max(2, cur - 1); i <= Math.min(total - 1, cur + 1); i++) out.push(i);
-    if (cur < total - 3) out.push("…");
-    out.push(total);
+    const WINDOW = 10; // 한 번에 직접 누를 수 있는 페이지 버튼 수
+    if (total <= WINDOW + 2) return Array.from({ length: total }, (_, i) => i + 1);
+    let start = Math.max(1, cur - Math.floor(WINDOW / 2) + 1);
+    let end = start + WINDOW - 1;
+    if (end >= total) { end = total; start = Math.max(1, end - WINDOW + 1); }
+    const out: (number | "…")[] = [];
+    if (start > 1) { out.push(1); if (start > 2) out.push("…"); }
+    for (let i = start; i <= end; i++) out.push(i);
+    if (end < total) { if (end < total - 1) out.push("…"); out.push(total); }
     return out;
   }
 
