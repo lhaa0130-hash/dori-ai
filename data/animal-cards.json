@@ -20511,7 +20511,7 @@
  {
   "no": "0220",
   "rarity": 3,
-  "animal_name": "바다오리",
+  "animal_name": "코뿔바다오리",
   "sci": "Fratercula arctica",
   "en": "Atlantic Puffin",
   "search_nickname": "바다의 광대 새",
@@ -20521,7 +20521,7 @@
    "code": "VU",
    "color": "#F4C430"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조류강 › 도요목 › 바다오리과 › 바다오리속",
+  "taxonomy": "동물계 › 척삭동물문 › 조류강 › 도요목 › 바다쇠오리과 › 코뿔바다오리속",
   "subspecies": "",
   "info": [
    [
@@ -20605,7 +20605,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조류강 › 가다랭이잡이목 › 가다랭이잡이과 › 부비새속",
+  "taxonomy": "동물계 › 척삭동물문 › 조류강 › 가다랭이잡이목 › 가다랭이잡이과 › 가넷속",
   "subspecies": "",
   "info": [
    [
@@ -20898,7 +20898,7 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림"
+    "도시 근처"
    ],
    "feature": [
     "날 수 있는",
@@ -21330,8 +21330,7 @@
    ],
    "body": [
     "날개 있는",
-    "긴 목",
-    "긴 꼬리"
+    "긴 목"
    ],
    "behavior": [
     "알을 낳는",
@@ -22245,8 +22244,7 @@
    "color": [],
    "size": [],
    "habitat": [
-    "도시 근처",
-    "초원"
+    "도시 근처"
    ],
    "feature": [
     "날 수 있는"
@@ -22611,7 +22609,7 @@
  {
   "no": "0245",
   "rarity": 3,
-  "animal_name": "인도공작비둘기",
+  "animal_name": "빅토리아관비둘기",
   "sci": "Goura victoria",
   "en": "Victoria Crowned Pigeon",
   "search_nickname": "레이스 왕관 비둘기",
@@ -22786,7 +22784,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조강 › 도요목 › 바다오리과 › 바다오리속",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 도요목 › 바다오리과 › 코뿔바다오리속",
   "subspecies": "",
   "info": [
    [
@@ -22868,7 +22866,7 @@
    "code": "VU",
    "color": "#F4C430"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조강 › 펭귄목 › 펭귄과 › 아프리카펭귄속",
+  "taxonomy": "동물계 › 척삭동물문 › 조강 › 펭귄목 › 펭귄과 › 자카스펭귄속",
   "subspecies": "",
   "info": [
    [
@@ -23983,7 +23981,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "극지방"
    ],
    "feature": [
@@ -24398,7 +24395,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "도시 근처"
    ],
    "feature": [
@@ -24731,7 +24727,7 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림"
+    "도시 근처"
    ],
    "feature": [
     "날 수 있는"
@@ -24814,7 +24810,7 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림"
+    "도시 근처"
    ],
    "feature": [
     "날 수 있는",
@@ -25019,7 +25015,7 @@
   "no": "0274",
   "rarity": 1,
   "animal_name": "쏙독새",
-  "sci": "Caprimulgus indicus",
+  "sci": "Caprimulgus jotaka",
   "en": "Grey Nightjar",
   "search_nickname": "낙엽 속 숨바꼭질 선수",
   "kid_friendly_desc": "낮에는 나뭇가지나 땅에 붙어 낙엽처럼 감쪽같이 숨어 있는 밤의 새예요. 해가 지면 큰 입을 벌리고 날아다니며 나방을 잡아먹어요. 이름처럼 '쏙독쏙독' 소리를 내요.",
@@ -25071,7 +25067,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "초원"
    ],
    "feature": [
@@ -26225,7 +26220,7 @@
  {
   "no": "0288",
   "rarity": 2,
-  "animal_name": "논병아리",
+  "animal_name": "뿔논병아리",
   "sci": "Podiceps cristatus",
   "en": "Great Crested Grebe",
   "search_nickname": "물속 잠수 명수",
@@ -26308,7 +26303,7 @@
  {
   "no": "0289",
   "rarity": 2,
-  "animal_name": "아비",
+  "animal_name": "검은부리아비",
   "sci": "Gavia immer",
   "en": "Common Loon",
   "search_nickname": "북쪽 호수의 잠수부",
@@ -26650,7 +26645,7 @@
  {
   "no": "0293",
   "rarity": 2,
-  "animal_name": "쇠오리",
+  "animal_name": "넓적부리오리",
   "sci": "Spatula clypeata",
   "en": "Northern Shoveler",
   "search_nickname": "주걱 부리 오리",
@@ -27220,7 +27215,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "도시 근처"
    ],
    "feature": [
@@ -27251,7 +27245,7 @@
  {
   "no": "0300",
   "rarity": 2,
-  "animal_name": "붉은댕기울새",
+  "animal_name": "상모솔새",
   "sci": "Regulus regulus",
   "en": "Goldcrest",
   "search_nickname": "유럽의 아기 새",
@@ -27304,7 +27298,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "도시 근처"
    ],
    "feature": [
@@ -33463,16 +33456,16 @@
  },
  {
   "no": "0372",
-  "rarity": 2,
+  "rarity": 3,
   "animal_name": "다이아몬드백테라핀",
   "sci": "Malaclemys terrapin",
   "en": "Diamondback Terrapin",
   "search_nickname": "다이아몬드 무늬 거북",
   "kid_friendly_desc": "등딱지에 다이아몬드 모양 무늬가 있는 거북이에요. 바닷물과 민물이 섞이는 갯벌과 습지에 살아요. 짠물에서도 살 수 있는 특별한 민물거북이에요.",
   "status": {
-   "label": "관심대상",
-   "code": "LC",
-   "color": "#5BA86B"
+   "label": "취약",
+   "code": "VU",
+   "color": "#F4C430"
   },
   "taxonomy": "동물계 › 척삭동물문 › 파충강 › 거북목 › 늪거북과 › 다이아몬드거북속",
   "subspecies": "",
@@ -34519,7 +34512,7 @@
  {
   "no": "0385",
   "rarity": 3,
-  "animal_name": "무티스악어",
+  "animal_name": "말레이가비알",
   "sci": "Tomistoma schlegelii",
   "en": "False Gharial",
   "search_nickname": "가짜 가비알",
@@ -34775,7 +34768,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 파충강 › 뱀목 › 도마뱀붙이과 › 라코닥틸루스속",
+  "taxonomy": "동물계 › 척삭동물문 › 파충강 › 뱀목 › 발가락도마뱀붙이과 › 라코닥틸루스속",
   "subspecies": "",
   "info": [
    [
@@ -34857,7 +34850,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 파충강 › 뱀목 › 도마뱀붙이과 › 라코닥틸루스속",
+  "taxonomy": "동물계 › 척삭동물문 › 파충강 › 뱀목 › 발가락도마뱀붙이과 › 라코닥틸루스속",
   "subspecies": "",
   "info": [
    [
@@ -37683,7 +37676,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 파충강 › 뱀목 › 도마뱀붙이과 › 푸른혀도마뱀속",
+  "taxonomy": "동물계 › 척삭동물문 › 파충강 › 뱀목 › 도마뱀과 › 푸른혀도마뱀속",
   "subspecies": "",
   "info": [
    [
@@ -37764,7 +37757,7 @@
    "code": "NT",
    "color": "#9CCC65"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 파충강 › 뱀목 › 도마뱀붙이과 › 솔로몬제도스킨크속",
+  "taxonomy": "동물계 › 척삭동물문 › 파충강 › 뱀목 › 도마뱀과 › 솔로몬제도스킨크속",
   "subspecies": "",
   "info": [
    [
@@ -37848,7 +37841,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 파충강 › 뱀목 › 도마뱀붙이과 › 모래헤엄스킨크속",
+  "taxonomy": "동물계 › 척삭동물문 › 파충강 › 뱀목 › 도마뱀과 › 모래헤엄스킨크속",
   "subspecies": "",
   "info": [
    [
@@ -37931,7 +37924,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 파충강 › 뱀목 › 도마뱀붙이과 › 유트로피스속",
+  "taxonomy": "동물계 › 척삭동물문 › 파충강 › 뱀목 › 도마뱀과 › 유트로피스속",
   "subspecies": "",
   "info": [
    [
@@ -39322,7 +39315,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "초원"
    ],
    "feature": [
@@ -39986,7 +39978,7 @@
    [
     "⚖️",
     "몸무게",
-    "약 100~200g"
+    "약 250~800g"
    ],
    [
     "⏳",
@@ -46223,7 +46215,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 시프리누스목 › 카라신과 › 파라케이로돈속",
+  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 카라신목 › 카라신과 › 파라케이로돈속",
   "subspecies": "",
   "info": [
    [
@@ -46304,7 +46296,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 시클리드목 › 시클리드과 › 디스커스속",
+  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 농어목 › 시클리드과 › 디스커스속",
   "subspecies": "",
   "info": [
    [
@@ -46382,7 +46374,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 시클리드목 › 시클리드과 › 프테로필룸속",
+  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 농어목 › 시클리드과 › 프테로필룸속",
   "subspecies": "",
   "info": [
    [
@@ -46460,7 +46452,7 @@
    "code": "VU",
    "color": "#F4C430"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 검정우럭목 › 버들붕어과 › 베타속",
+  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 등목어목 › 버들붕어과 › 베타속",
   "subspecies": "",
   "info": [
    [
@@ -46540,7 +46532,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 메기목 › 짐노투스메기과 › 프락토케팔루스속",
+  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 메기목 › 핌로두스과 › 프락토케팔루스속",
   "subspecies": "",
   "info": [
    [
@@ -46777,7 +46769,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 검정우럭목 › 검정우럭과 › 개복치속",
+  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 검정우럭목 › 검정우럭과 › 블루길속",
   "subspecies": "",
   "info": [
    [
@@ -47488,7 +47480,7 @@
    "code": "EN",
    "color": "#E8743B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 연골어강 › 흉상어목 › 악상어과 › 청상아리속",
+  "taxonomy": "동물계 › 척삭동물문 › 연골어강 › 악상어목 › 악상어과 › 청상아리속",
   "subspecies": "",
   "info": [
    [
@@ -48418,7 +48410,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 연골어강 › 돔발상어목 › 검은상어과 › 검은가시상어속",
+  "taxonomy": "동물계 › 척삭동물문 › 연골어강 › 돔발상어목 › 검은가시상어과 › 검은가시상어속",
   "subspecies": "",
   "info": [
    [
@@ -49398,7 +49390,7 @@
  {
   "no": "0562",
   "rarity": 2,
-  "animal_name": "청줄돔",
+  "animal_name": "나비고기",
   "sci": "Chaetodon auripes",
   "en": "Oriental Butterflyfish",
   "search_nickname": "노란 나비 옷을 입은 물고기",
@@ -49478,7 +49470,7 @@
  {
   "no": "0563",
   "rarity": 2,
-  "animal_name": "가시나비고기",
+  "animal_name": "두동가리돔",
   "sci": "Heniochus acuminatus",
   "en": "Pennant Coralfish",
   "search_nickname": "긴 깃발을 단 흑백 물고기",
@@ -50197,7 +50189,7 @@
  {
   "no": "0572",
   "rarity": 2,
-  "animal_name": "세동가리돔",
+  "animal_name": "샛별돔",
   "sci": "Dascyllus trimaculatus",
   "en": "Threespot Dascyllus",
   "search_nickname": "점 세 개를 가진 까만 아기",
@@ -51347,7 +51339,7 @@
    "code": "EN",
    "color": "#E8743B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 농어목 › 바리과 › 능성어속",
+  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 농어목 › 바리과 › 우럭속",
   "subspecies": "",
   "info": [
    [
@@ -51425,7 +51417,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 농어목 › 바리과 › 능성어속",
+  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 농어목 › 바리과 › 우럭속",
   "subspecies": "",
   "info": [
    [
@@ -51505,7 +51497,7 @@
    "code": "NT",
    "color": "#9CCC65"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 농어목 › 바리과 › 능성어속",
+  "taxonomy": "동물계 › 척삭동물문 › 조기어강 › 농어목 › 바리과 › 우럭속",
   "subspecies": "",
   "info": [
    [
@@ -57610,8 +57602,7 @@
     "보호색"
    ],
    "body": [
-    "다리가 4개인",
-    "날개 있는"
+    "다리가 4개인"
    ],
    "behavior": [
     "나무 위에 사는",
@@ -57970,7 +57961,7 @@
   "animal_name": "알프스영원",
   "sci": "Ichthyosaura alpestris",
   "en": "Alpine newt",
-  "search_nickname": "배가 새파란 알록달록 영원",
+  "search_nickname": "배가 주황색인 알록달록 영원",
   "kid_friendly_desc": "배가 밝은 주황색이라 눈에 확 띄는 도롱뇽이에요. 산속 차가운 연못을 좋아하고, 유럽의 높은 곳에서도 살 수 있어요.",
   "status": {
    "label": "관심대상",
@@ -58185,7 +58176,7 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림"
+    "강·호수"
    ],
    "feature": [
     "독이 있는",
@@ -58216,7 +58207,7 @@
   "no": "0668",
   "rarity": 2,
   "animal_name": "안경도롱뇽붙이",
-  "sci": "Salamandrina terdigitata",
+  "sci": "Salamandrina perspicillata",
   "en": "Northern spectacled salamander",
   "search_nickname": "눈 위에 안경 무늬를 쓴 도롱뇽",
   "kid_friendly_desc": "눈 사이에 안경처럼 보이는 무늬가 있고, 배는 새빨개요. 이탈리아 숲에만 사는 작고 특별한 도롱뇽이에요.",
@@ -58225,7 +58216,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 양서강 › 도롱뇽목 › 도롱뇽과 › 안경도롱뇽붙이속",
+  "taxonomy": "동물계 › 척삭동물문 › 양서강 › 도롱뇽목 › 영원과 › 안경도롱뇽붙이속",
   "subspecies": "",
   "info": [
    [
@@ -58268,7 +58259,7 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림"
+    "강·호수"
    ],
    "feature": [
     "야행성",
@@ -58308,7 +58299,7 @@
    "code": "VU",
    "color": "#F4C430"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 양서강 › 도롱뇽목 › 영원과 › 올름속",
+  "taxonomy": "동물계 › 척삭동물문 › 양서강 › 도롱뇽목 › 뱀도롱뇽과 › 올름속",
   "subspecies": "",
   "info": [
    [
@@ -58435,7 +58426,7 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림"
+    "강·호수"
    ],
    "feature": [
     "야행성"
@@ -58517,7 +58508,7 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림"
+    "강·호수"
    ],
    "feature": [
     "야행성"
@@ -58600,7 +58591,7 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림"
+    "강·호수"
    ],
    "feature": [
     "야행성"
@@ -58928,8 +58919,7 @@
    "color": [],
    "size": [],
    "habitat": [
-    "강·호수",
-    "열대우림"
+    "강·호수"
    ],
    "feature": [
     "보호색",
@@ -59180,7 +59170,7 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림"
+    "강·호수"
    ],
    "feature": [
     "보호색",
@@ -59264,8 +59254,7 @@
    "color": [],
    "size": [],
    "habitat": [
-    "강·호수",
-    "열대우림"
+    "강·호수"
    ],
    "feature": [
     "보호색",
@@ -59597,7 +59586,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "강·호수"
    ],
    "feature": [
@@ -60014,7 +60002,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "강·호수"
    ],
    "feature": [
@@ -60094,7 +60081,7 @@
   "card_path": "/cards/animal/0690.png",
   "filters": {
    "diet": [
-    "잡식"
+    "육식"
    ],
    "color": [],
    "size": [],
@@ -60587,7 +60574,7 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림"
+    "강·호수"
    ],
    "feature": [
     "보호색",
@@ -60835,7 +60822,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "강·호수"
    ],
    "feature": [
@@ -61028,7 +61014,7 @@
  {
   "no": "0702",
   "rarity": 2,
-  "animal_name": "일본참개구리",
+  "animal_name": "참개구리",
   "sci": "Pelophylax nigromaculatus",
   "en": "Dark-spotted frog",
   "search_nickname": "논밭의 검은 점 개구리",
@@ -61245,8 +61231,7 @@
    "color": [],
    "size": [],
    "habitat": [
-    "강·호수",
-    "열대우림"
+    "강·호수"
    ],
    "feature": [
     "보호색"
@@ -61327,7 +61312,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "강·호수"
    ],
    "feature": [
@@ -61357,7 +61341,7 @@
  {
   "no": "0706",
   "rarity": 2,
-  "animal_name": "옴두꺼비",
+  "animal_name": "나터잭두꺼비",
   "sci": "Epidalea calamita",
   "en": "Natterjack toad",
   "search_nickname": "등에 노란 줄 달리기 선수",
@@ -61410,8 +61394,8 @@
    "color": [],
    "size": [],
    "habitat": [
-    "사막",
-    "초원"
+    "초원",
+    "도시 근처"
    ],
    "feature": [
     "보호색",
@@ -63090,7 +63074,7 @@
  {
   "no": "0727",
   "rarity": 2,
-  "animal_name": "가시두꺼비",
+  "animal_name": "남부두꺼비",
   "sci": "Anaxyrus terrestris",
   "en": "Southern toad",
   "search_nickname": "머리에 왕관 두꺼비",
@@ -63512,7 +63496,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 양서강 › 무미목 › 잔개구리과 › 털개구리속",
+  "taxonomy": "동물계 › 척삭동물문 › 양서강 › 무미목 › 아프리카개구리과 › 털개구리속",
   "subspecies": "",
   "info": [
    [
@@ -63674,7 +63658,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 척삭동물문 › 양서강 › 무미목 › 잔개구리과 › 뿔개구리붙이속",
+  "taxonomy": "동물계 › 척삭동물문 › 양서강 › 무미목 › 뿔개구리붙이과 › 뿔개구리붙이속",
   "subspecies": "",
   "info": [
    [
@@ -64244,7 +64228,7 @@
  {
   "no": "0741",
   "rarity": 2,
-  "animal_name": "황무지도롱뇽",
+  "animal_name": "나무도롱뇽",
   "sci": "Aneides lugubris",
   "en": "Arboreal salamander",
   "search_nickname": "나무 타는 도롱뇽",
@@ -64497,9 +64481,9 @@
   "search_nickname": "다리 없는 땅속 지렁이",
   "kid_friendly_desc": "스리랑카에 사는 다리가 없는 양서류예요. 지렁이나 뱀처럼 생겼지만 개구리·도롱뇽과 친척이에요. 땅속을 파고들며 살고, 어미가 알을 지키는 특별한 습성이 있어요.",
   "status": {
-   "label": "관심대상",
-   "code": "LC",
-   "color": "#5BA86B"
+   "label": "취약",
+   "code": "VU",
+   "color": "#F4C430"
   },
   "taxonomy": "동물계 › 척삭동물문 › 양서강 › 무족영원목 › 물뱀영원과 › 물뱀영원속",
   "subspecies": "",
@@ -64655,7 +64639,7 @@
   "rarity": 4,
   "animal_name": "산호개구리",
   "sci": "Micrixalus herrei",
-  "en": "Kottigehar dancing frog",
+  "en": "Kallar dancing frog",
   "search_nickname": "발을 흔드는 춤꾼",
   "kid_friendly_desc": "인도 서고츠산맥의 시냇가에 사는 아주 작은 개구리예요. 수컷이 뒷다리를 들어 발을 빙빙 흔드는 '춤'으로 짝을 부르거나 다른 수컷에게 경고해요. 그래서 '춤추는 개구리'라고 불려요.",
   "status": {
@@ -69475,9 +69459,9 @@
   "search_nickname": "수천 킬로 나는 여행자",
   "kid_friendly_desc": "주황색과 검정색 날개를 가진 아름다운 나비예요. 북아메리카에서 멕시코까지 수천 킬로미터를 이동하는 대장정으로 유명해요. 애벌레는 독이 있는 밀크위드를 먹어 몸에 독을 지녀요.",
   "status": {
-   "label": "관심대상",
-   "code": "LC",
-   "color": "#5BA86B"
+   "label": "취약",
+   "code": "VU",
+   "color": "#F4C430"
   },
   "taxonomy": "동물계 › 절지동물문 › 곤충강 › 나비목 › 네발나비과 › 왕나비속",
   "subspecies": "",
@@ -69737,7 +69721,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 절지동물문 › 곤충강 › 나비목 › 네발나비과 › 뿔나비속",
+  "taxonomy": "동물계 › 절지동물문 › 곤충강 › 나비목 › 네발나비과 › 공작나비속",
   "subspecies": "",
   "info": [
    [
@@ -70068,7 +70052,7 @@
  {
   "no": "0808",
   "rarity": 1,
-  "animal_name": "긴꼬리제비나비",
+  "animal_name": "멤논제비나비",
   "sci": "Papilio memnon",
   "en": "Great Mormon",
   "search_nickname": "여러 옷을 입는 큰 나비",
@@ -71247,7 +71231,7 @@
  {
   "no": "0822",
   "rarity": 1,
-  "animal_name": "물결나비",
+  "animal_name": "애물결나비",
   "sci": "Ypthima baldus",
   "en": "Common five-ring",
   "search_nickname": "다섯 개 눈 무늬 나비",
@@ -71331,7 +71315,7 @@
  {
   "no": "0823",
   "rarity": 1,
-  "animal_name": "지리산팔랑나비",
+  "animal_name": "제주꼬마팔랑나비",
   "sci": "Pelopidas mathias",
   "en": "Small branded swift",
   "search_nickname": "재빠른 갈색 팔랑이",
@@ -71341,7 +71325,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 절지동물문 › 곤충강 › 나비목 › 팔랑나비과 › 흰줄점팔랑나비속",
+  "taxonomy": "동물계 › 절지동물문 › 곤충강 › 나비목 › 팔랑나비과 › 산줄점팔랑나비속",
   "subspecies": "",
   "info": [
    [
@@ -71415,7 +71399,7 @@
  {
   "no": "0824",
   "rarity": 1,
-  "animal_name": "은점팔랑나비",
+  "animal_name": "수풀떠들썩팔랑나비",
   "sci": "Ochlodes venatus",
   "en": "Large skipper",
   "search_nickname": "주황 날개 팔랑이",
@@ -72830,7 +72814,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "초원"
    ],
    "feature": [
@@ -73090,7 +73073,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "초원"
    ],
    "feature": [
@@ -73262,7 +73244,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "초원"
    ],
    "feature": [
@@ -73432,7 +73413,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "초원"
    ],
    "feature": [
@@ -73519,7 +73499,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "초원"
    ],
    "feature": [
@@ -73781,7 +73760,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "초원",
     "도시 근처"
    ],
@@ -74853,7 +74831,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 절지동물문 › 곤충강 › 딱정벌레목 › 잎벌레과 › 아겔라스티카속",
+  "taxonomy": "동물계 › 절지동물문 › 곤충강 › 딱정벌레목 › 잎벌레과 › 오리나무잎벌레속",
   "subspecies": "",
   "info": [
    [
@@ -74896,7 +74874,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "초원"
    ],
    "feature": [
@@ -75237,7 +75214,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "초원"
    ],
    "feature": [
@@ -75493,7 +75469,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "초원"
    ],
    "feature": [
@@ -75608,7 +75583,7 @@
  {
   "no": "0873",
   "rarity": 1,
-  "animal_name": "바구미",
+  "animal_name": "밤바구미",
   "sci": "Curculio sikkimensis",
   "en": "Chestnut weevil",
   "search_nickname": "긴 코 밤 도둑",
@@ -75661,7 +75636,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "초원"
    ],
    "feature": [
@@ -75693,7 +75667,7 @@
  {
   "no": "0874",
   "rarity": 1,
-  "animal_name": "밤바구미",
+  "animal_name": "버들바구미",
   "sci": "Cryptorhynchus lapathi",
   "en": "Poplar-and-willow borer",
   "search_nickname": "버드나무 속 파는 벌레",
@@ -75703,7 +75677,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 절지동물문 › 곤충강 › 딱정벌레목 › 바구미과 › 크립토린쿠스속",
+  "taxonomy": "동물계 › 절지동물문 › 곤충강 › 딱정벌레목 › 바구미과 › 버들바구미속",
   "subspecies": "",
   "info": [
    [
@@ -75834,7 +75808,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "초원"
    ],
    "feature": [],
@@ -76002,7 +75975,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "도시 근처"
    ],
    "feature": [
@@ -76089,7 +76061,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "도시 근처"
    ],
    "feature": [
@@ -76205,11 +76176,11 @@
  {
   "no": "0880",
   "rarity": 1,
-  "animal_name": "가위벌",
+  "animal_name": "왕가위벌",
   "sci": "Megachile sculpturalis",
   "en": "Giant resin bee",
-  "search_nickname": "잎을 오리는 목수벌",
-  "kid_friendly_desc": "큰턱으로 나뭇잎을 가위처럼 동그랗게 오려 둥지를 만드는 벌이에요. 오린 잎 조각으로 작은 방을 만들어 그 안에 알과 꿀을 넣어요. 혼자서 둥지를 짓는 외톨이 벌이에요.",
+  "search_nickname": "송진으로 집 짓는 큰 벌",
+  "kid_friendly_desc": "호박벌만큼 큰 대형 가위벌 무리의 벌이에요. 잎을 오리는 대신 나무 송진(수지)을 모아 대나무 구멍이나 마른 나무의 빈 구멍에 방을 만들어 알과 꿀을 넣어요. 혼자서 둥지를 짓는 외톨이 벌이에요.",
   "status": {
    "label": "관심대상",
    "code": "LC",
@@ -76245,9 +76216,9 @@
    ]
   ],
   "facts": [
-   "큰턱으로 잎을 동그랗게 오려 둥지 방을 만들어요.",
+   "송진(수지)을 모아 둥지 방을 막고 지어요.",
    "무리 짓지 않고 혼자 둥지를 짓는 벌이에요.",
-   "원래 아시아 벌인데 유럽·북미로도 퍼졌어요."
+   "원래 동아시아 벌인데 유럽·북미로도 퍼졌어요."
   ],
   "image_path": "/images/animal/giant-resin-bee.jpg",
   "card_path": "/cards/animal/0880.png",
@@ -76258,7 +76229,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "도시 근처"
    ],
    "feature": [
@@ -76515,8 +76485,7 @@
    "color": [],
    "size": [],
    "habitat": [
-    "초원",
-    "열대우림"
+    "초원"
    ],
    "feature": [
     "날 수 있는",
@@ -76601,7 +76570,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "초원"
    ],
    "feature": [],
@@ -76639,7 +76607,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 절지동물문 › 곤충강 › 벌목 › 개미과 › 뿔개미속",
+  "taxonomy": "동물계 › 절지동물문 › 곤충강 › 벌목 › 개미과 › 불개미속",
   "subspecies": "",
   "info": [
    [
@@ -76682,7 +76650,6 @@
    "color": [],
    "size": [],
    "habitat": [
-    "열대우림",
     "초원"
    ],
    "feature": [],
@@ -76805,7 +76772,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 절지동물문 › 곤충강 › 잠자리목 › 실잠자리과 › 세리아그리온속",
+  "taxonomy": "동물계 › 절지동물문 › 곤충강 › 잠자리목 › 실잠자리과 › 노란실잠자리속",
   "subspecies": "",
   "info": [
    [
@@ -76888,7 +76855,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 절지동물문 › 곤충강 › 잠자리목 › 잠자리과 › 고추좀잠자리속",
+  "taxonomy": "동물계 › 절지동물문 › 곤충강 › 잠자리목 › 잠자리과 › 고추잠자리속",
   "subspecies": "",
   "info": [
    [
@@ -77132,7 +77099,7 @@
  {
   "no": "0891",
   "rarity": 1,
-  "animal_name": "황등색실잠자리",
+  "animal_name": "아시아실잠자리",
   "sci": "Ischnura asiatica",
   "en": "Asiatic bluetail",
   "search_nickname": "가늘고 여린 물가 요정",
@@ -77215,7 +77182,7 @@
  {
   "no": "0892",
   "rarity": 1,
-  "animal_name": "말총잠자리",
+  "animal_name": "왕잠자리",
   "sci": "Anax parthenope",
   "en": "Lesser emperor",
   "search_nickname": "물가의 커다란 왕잠자리",
@@ -82638,7 +82605,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 물맞이게상과 › 던지네스게속",
+  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 은행게과 › 던지네스게속",
   "subspecies": "",
   "info": [
    [
@@ -82875,7 +82842,7 @@
  {
   "no": "0959",
   "rarity": 1,
-  "animal_name": "코코넛따개비",
+  "animal_name": "조무래기따개비",
   "sci": "Chthamalus stellatus",
   "en": "Poli's stellate barnacle",
   "search_nickname": "바위에 딱 붙은 작은 화산",
@@ -85240,7 +85207,7 @@
  {
   "no": "0988",
   "rarity": 2,
-  "animal_name": "맹그로브새우",
+  "animal_name": "큰징거미새우",
   "sci": "Macrobrachium rosenbergii",
   "en": "Giant river prawn",
   "search_nickname": "민물의 큰 팔 새우",
@@ -85250,7 +85217,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 손새우과 › 큰징거미새우속",
+  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 손새우과 › 징거미새우속",
   "subspecies": "",
   "info": [
    [
@@ -85319,7 +85286,7 @@
  {
   "no": "0989",
   "rarity": 1,
-  "animal_name": "박스새우",
+  "animal_name": "낙타새우",
   "sci": "Rhynchocinetes durbanensis",
   "en": "Camel shrimp",
   "search_nickname": "등이 굽은 낙타 새우",
@@ -85493,7 +85460,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 딱총새우붙이과 › 사론새우속",
+  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 꼬마새우과 › 사론새우속",
   "subspecies": "",
   "info": [
    [
@@ -85657,7 +85624,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 딱총새우붙이과 › 리스마타새우속",
+  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 꼬마새우과 › 리스마타새우속",
   "subspecies": "",
   "info": [
    [
@@ -85738,7 +85705,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 물맞이게과 › 대게붙이속",
+  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 칸케르과 › 칸케르속",
   "subspecies": "",
   "info": [
    [
@@ -85898,7 +85865,7 @@
    "code": "VU",
    "color": "#F4C430"
   },
-  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 물맞이게과 › 왕게속",
+  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 돌게과 › 슈도카르키누스속",
   "subspecies": "",
   "info": [
    [
@@ -86542,7 +86509,7 @@
  {
   "no": "1004",
   "rarity": 2,
-  "animal_name": "털다리게",
+  "animal_name": "중국참게",
   "sci": "Eriocheir sinensis",
   "en": "Chinese mitten crab",
   "search_nickname": "털장갑 낀 게",
@@ -86702,7 +86669,7 @@
  {
   "no": "1006",
   "rarity": 1,
-  "animal_name": "슬리퍼게",
+  "animal_name": "날쌘게",
   "sci": "Percnon gibbesi",
   "en": "Sally Lightfoot spray crab",
   "search_nickname": "바위 위 날쌘 게",
@@ -86866,7 +86833,7 @@
  {
   "no": "1008",
   "rarity": 1,
-  "animal_name": "물사이클롭스",
+  "animal_name": "검물벼룩",
   "sci": "Cyclops strenuus",
   "en": "Cyclops copepod",
   "search_nickname": "외눈박이 물벼룩 친척",
@@ -87023,7 +86990,7 @@
  {
   "no": "1010",
   "rarity": 1,
-  "animal_name": "따개비상어",
+  "animal_name": "조무래기따개비",
   "sci": "Semibalanus balanoides",
   "en": "Acorn barnacle",
   "search_nickname": "바위에 붙어 사는 따개비",
@@ -87701,7 +87668,7 @@
  {
   "no": "1018",
   "rarity": 1,
-  "animal_name": "옆새우모래",
+  "animal_name": "모래옆새우",
   "sci": "Talitrus saltator",
   "en": "Sand hopper",
   "search_nickname": "모래밭의 콩콩 점프왕",
@@ -89319,7 +89286,7 @@
  {
   "no": "1037",
   "rarity": 2,
-  "animal_name": "다랑어게",
+  "animal_name": "청색꽃게",
   "sci": "Portunus pelagicus",
   "en": "Blue swimmer crab",
   "search_nickname": "헤엄치는 파란 꽃게",
@@ -89416,7 +89383,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 사각게과 › 톱게속",
+  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 꽃게과 › 톱날꽃게속",
   "subspecies": "",
   "info": [
    [
@@ -89499,7 +89466,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 칼리코게과 › 칼리코게속",
+  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 상자게과 › 상자게속",
   "subspecies": "",
   "info": [
    [
@@ -89581,7 +89548,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 뿔게과 › 화살게속",
+  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 물맞이게과 › 화살게속",
   "subspecies": "",
   "info": [
    [
@@ -89654,7 +89621,7 @@
  {
   "no": "1041",
   "rarity": 2,
-  "animal_name": "판다게",
+  "animal_name": "우산게",
   "sci": "Cryptolithodes typicus",
   "en": "Umbrella crab",
   "search_nickname": "우산 등딱지 게",
@@ -89746,7 +89713,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 뿔게과 › 장식게속",
+  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 장식게과 › 장식게속",
   "subspecies": "",
   "info": [
    [
@@ -89830,7 +89797,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 갯가재붙이과 › 자기게속",
+  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 게붙이과 › 자기게속",
   "subspecies": "",
   "info": [
    [
@@ -89991,7 +89958,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 갯가재붙이과 › 말미잘자기게속",
+  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 게붙이과 › 말미잘자기게속",
   "subspecies": "",
   "info": [
    [
@@ -90235,7 +90202,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 가시발새우과 › 산호랍스터속",
+  "taxonomy": "동물계 › 절지동물문 › 연갑강 › 십각목 › 산호랍스터과 › 산호랍스터속",
   "subspecies": "",
   "info": [
    [
@@ -94799,7 +94766,7 @@
    "code": "DD",
    "color": "#9E9E9E"
   },
-  "taxonomy": "동물계 › 연체동물문 › 두족강 › 살오징어목 › 짧은지느러미오징어과 › 하트지느러미오징어속",
+  "taxonomy": "동물계 › 연체동물문 › 두족강 › 살오징어목 › 하트오징어과 › 하트지느러미오징어속",
   "subspecies": "",
   "info": [
    [
@@ -94880,7 +94847,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 연체동물문 › 두족강 › 살오징어목 › 짧은지느러미오징어과 › 훔볼트오징어속",
+  "taxonomy": "동물계 › 연체동물문 › 두족강 › 살오징어목 › 살오징어과 › 훔볼트오징어속",
   "subspecies": "",
   "info": [
    [
@@ -95049,7 +95016,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 연체동물문 › 두족강 › 살오징어목 › 짧은지느러미오징어과 › 짧은지느러미오징어속",
+  "taxonomy": "동물계 › 연체동물문 › 두족강 › 살오징어목 › 살오징어과 › 짧은지느러미오징어속",
   "subspecies": "",
   "info": [
    [
@@ -96135,7 +96102,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 연체동물문 › 두족강 › 문어목 › 문어과 › 마귀문어속",
+  "taxonomy": "동물계 › 연체동물문 › 두족강 › 문어목 › 문어과 › 마다코속",
   "subspecies": "",
   "info": [
    [
@@ -97096,8 +97063,8 @@
   "rarity": 2,
   "animal_name": "말조개",
   "sci": "Unio douglasiae",
-  "en": "Freshwater pearl mussel",
-  "search_nickname": "강바닥의 진주 조개",
+  "en": "Douglas's freshwater mussel",
+  "search_nickname": "강바닥의 민물조개",
   "kid_friendly_desc": "강이나 연못 바닥 진흙 속에 사는 민물조개예요. 새끼가 잠시 물고기 몸에 붙어 자라는 신기한 성장 방법을 가졌어요.",
   "status": {
    "label": "관심대상",
@@ -97971,7 +97938,7 @@
  {
   "no": "1141",
   "rarity": 1,
-  "animal_name": "가리비큰가리비",
+  "animal_name": "큰가리비",
   "sci": "Pecten maximus",
   "en": "Great scallop",
   "search_nickname": "헤엄치는 부채조개",
@@ -98301,7 +98268,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 연체동물문 › 이매패강 › 가리비목 › 리마조개과 › 불꽃조개속",
+  "taxonomy": "동물계 › 연체동물문 › 이매패강 › 리마조개목 › 리마조개과 › 불꽃조개속",
   "subspecies": "",
   "info": [
    [
@@ -98384,7 +98351,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 연체동물문 › 이매패강 › 가리비목 › 리마조개과 › 리마조개속",
+  "taxonomy": "동물계 › 연체동물문 › 이매패강 › 리마조개목 › 리마조개과 › 리마조개속",
   "subspecies": "",
   "info": [
    [
@@ -98867,7 +98834,7 @@
  {
   "no": "1152",
   "rarity": 1,
-  "animal_name": "홍당무조개",
+  "animal_name": "피조개",
   "sci": "Anadara broughtonii",
   "en": "Broughton's ribbed ark",
   "search_nickname": "붉은 살 큰 피조개",
@@ -99029,7 +98996,7 @@
  {
   "no": "1154",
   "rarity": 5,
-  "animal_name": "지중해따개비조개",
+  "animal_name": "지중해키조개",
   "sci": "Pinna nobilis",
   "en": "Noble pen shell",
   "search_nickname": "바다의 거대한 부채",
@@ -99039,7 +99006,7 @@
    "code": "CR",
    "color": "#E53935"
   },
-  "taxonomy": "동물계 › 연체동물문 › 이매패강 › 홍합목 › 키조개과 › 키조개속",
+  "taxonomy": "동물계 › 연체동물문 › 이매패강 › 진주조개목 › 키조개과 › 키조개속",
   "subspecies": "",
   "info": [
    [
@@ -99102,8 +99069,7 @@
     "30~100cm"
    ],
    "region": [
-    "유럽",
-    "대서양"
+    "유럽"
    ]
   }
  },
@@ -99120,7 +99086,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 연체동물문 › 이매패강 › 홍합목 › 귀조개과 › 귀조개속",
+  "taxonomy": "동물계 › 연체동물문 › 이매패강 › 진주조개목 › 귀조개과 › 귀조개속",
   "subspecies": "",
   "info": [
    [
@@ -99687,7 +99653,7 @@
    "code": "VU",
    "color": "#F4C430"
   },
-  "taxonomy": "동물계 › 연체동물문 › 복족강 › 흡강목 › 소라고둥과 › 여왕고둥속",
+  "taxonomy": "동물계 › 연체동물문 › 복족강 › 중복족목 › 소라고둥과 › 여왕고둥속",
   "subspecies": "",
   "info": [
    [
@@ -101845,7 +101811,7 @@
  {
   "no": "1189",
   "rarity": 2,
-  "animal_name": "바다나비",
+  "animal_name": "클리오네",
   "sci": "Clione limacina",
   "en": "Sea angel",
   "search_nickname": "바다의 천사",
@@ -101855,7 +101821,7 @@
    "code": "LC",
    "color": "#5BA86B"
   },
-  "taxonomy": "동물계 › 연체동물문 › 복족강 › 나새목 › 바다나비과 › 바다나비속",
+  "taxonomy": "동물계 › 연체동물문 › 복족강 › 익족목 › 무각거북고둥과 › 클리오네속",
   "subspecies": "",
   "info": [
    [
