@@ -102,8 +102,10 @@ export default function AdminPage() {
   const [tableSearch, setTableSearch] = useState("");
   const [tableFilter, setTableFilter] = useState<ReviewFilter>("all");
   const [refImages, setRefImages] = useState<Record<string, string>>({}); // 검수용 실제(영문위키) 참조 이미지 {no: url}
+  const [imgVer, setImgVer] = useState(0); // 검수 이미지 캐시버스팅(재생성분이 브라우저 캐시에 안 막히게)
 
   useEffect(() => setMounted(true), []);
+  useEffect(() => setImgVer(Date.now()), []); // 페이지 진입 시마다 최신 이미지 강제 로드
 
   // 검수 페이지용 실제 참조 이미지 로드(정적 JSON, 관리자만) — 생성이미지 옆에 실제 사진을 나란히 비교
   useEffect(() => {
@@ -1018,7 +1020,7 @@ export default function AdminPage() {
                     {/* 우리 생성 이미지 */}
                     <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-white dark:bg-zinc-950">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
-                      <img src={currentAnimal.image_path} alt={currentAnimal.animal_name} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
+                      <img src={`${currentAnimal.image_path}?v=${imgVer}`} alt={currentAnimal.animal_name} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
                       <span className="absolute top-2 left-2 text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-black/55 text-[#f0d28a] backdrop-blur-sm">No.{currentAnimal.no}</span>
                       <span
                         className={`absolute top-2 right-2 text-[10px] font-extrabold px-2 py-0.5 rounded-full text-white ${
