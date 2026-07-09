@@ -1034,7 +1034,7 @@ export default function AdminPage() {
                       {refImages[currentAnimal.no || ""] ? (
                         <>
                           {/* eslint-disable-next-line @next/next/no-img-element */}
-                          <img src={refImages[currentAnimal.no || ""]} alt={`${currentAnimal.animal_name} 실제`} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+                          <img src={refImages[currentAnimal.no || ""]} alt={`${currentAnimal.animal_name} 실제`} className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = "none"; }} />
                           <span className="absolute bottom-1.5 left-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-neutral-800/80 text-white">📷 실제 (위키)</span>
                         </>
                       ) : (
