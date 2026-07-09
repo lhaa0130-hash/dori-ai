@@ -101,8 +101,17 @@ export default function AdminPage() {
   const [reviewBusy, setReviewBusy] = useState(false);
   const [tableSearch, setTableSearch] = useState("");
   const [tableFilter, setTableFilter] = useState<ReviewFilter>("all");
+  const [refImages, setRefImages] = useState<Record<string, string>>({}); // 검수용 실제(영문위키) 참조 이미지 {no: url}
 
   useEffect(() => setMounted(true), []);
+
+  // 검수 페이지용 실제 참조 이미지 로드(정적 JSON, 관리자만) — 생성이미지 옆에 실제 사진을 나란히 비교
+  useEffect(() => {
+    fetch("/animal-ref-images.json")
+      .then((r) => (r.ok ? r.json() : null))
+      .then((j) => { if (j) setRefImages(j.images || j); })
+      .catch(() => {});
+  }, []);
 
   // ── 관리자 체크 ──
   useEffect(() => {
@@ -1004,18 +1013,34 @@ export default function AdminPage() {
             ) : currentAnimal ? (
               <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl overflow-hidden">
                 <div className="grid md:grid-cols-[280px_1fr]">
-                  {/* 이미지 */}
-                  <div className="relative aspect-[4/5] md:aspect-auto bg-neutral-100 dark:bg-zinc-900">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img src={currentAnimal.image_path} alt={currentAnimal.animal_name} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
-                    <span className="absolute top-2 left-2 text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-black/55 text-[#f0d28a] backdrop-blur-sm">No.{currentAnimal.no}</span>
-                    <span
-                      className={`absolute top-2 right-2 text-[10px] font-extrabold px-2 py-0.5 rounded-full text-white ${
-                        currentStatus === "approved" ? "bg-green-500" : currentStatus === "rejected" ? "bg-red-500" : "bg-neutral-500"
-                      }`}
-                    >
-                      {currentStatus === "approved" ? "승인됨" : currentStatus === "rejected" ? "반려됨" : "미검수"}
-                    </span>
+                  {/* 이미지 — 우리 생성 vs 실제(영문 위키) 나란히 비교 */}
+                  <div className="bg-neutral-100 dark:bg-zinc-900 p-2 space-y-2">
+                    {/* 우리 생성 이미지 */}
+                    <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-white dark:bg-zinc-950">
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={currentAnimal.image_path} alt={currentAnimal.animal_name} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
+                      <span className="absolute top-2 left-2 text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-black/55 text-[#f0d28a] backdrop-blur-sm">No.{currentAnimal.no}</span>
+                      <span
+                        className={`absolute top-2 right-2 text-[10px] font-extrabold px-2 py-0.5 rounded-full text-white ${
+                          currentStatus === "approved" ? "bg-green-500" : currentStatus === "rejected" ? "bg-red-500" : "bg-neutral-500"
+                        }`}
+                      >
+                        {currentStatus === "approved" ? "승인됨" : currentStatus === "rejected" ? "반려됨" : "미검수"}
+                      </span>
+                      <span className="absolute bottom-1.5 left-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-[#F9954E] text-white">🎨 우리 생성</span>
+                    </div>
+                    {/* 실제 사진(영문 위키) — 종이 다르면 반려 사유에 '이미지' 적기 */}
+                    <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-white dark:bg-zinc-950 flex items-center justify-center">
+                      {refImages[currentAnimal.no || ""] ? (
+                        <>
+                          {/* eslint-disable-next-line @next/next/no-img-element */}
+                          <img src={refImages[currentAnimal.no || ""]} alt={`${currentAnimal.animal_name} 실제`} className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = "none"; }} />
+                          <span className="absolute bottom-1.5 left-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-neutral-800/80 text-white">📷 실제 (위키)</span>
+                        </>
+                      ) : (
+                        <span className="text-[11px] text-neutral-400 dark:text-neutral-500 px-3 text-center leading-relaxed">실제 참조 사진 없음<br />(영문 위키 대표사진 미확보)</span>
+                      )}
+                    </div>
                   </div>
 
                   {/* 정보 + 액션 */}
