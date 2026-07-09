@@ -10536,7 +10536,7 @@
    "color": "#9E9E9E"
   },
   "taxonomy": "동물계 › 척삭동물문 › 포유강 › 식육목 › 아메리카너구리과 › 코아티속",
-  "subspecies": "남아메리카코아티, 흰코코아티, 서부마운틴코아티, 동부마운틴코아티",
+  "subspecies": "Nasua narica, Nasua nasua, Nasuella meridensis, Nasuella olivacea",
   "info": [
    [
     "🌍",
@@ -11635,7 +11635,7 @@
   "sci": "Macroscelidea",
   "en": "Elephant Shrew",
   "search_nickname": "작은 코끼리 친구",
-  "kid_friendly_desc": "코끼리땃쥐는 아프리카에 사는 작은 동물이에요. 이름은 코끼리땃쥐지만 코끼리와는 전혀 관련이 없답니다. 주로 곤충을 먹고 아주 빠르게 움직일 수 있어요.",
+  "kid_friendly_desc": "코끼리땃쥐는 아프리카에 사는 작은 동물이에요. 이름은 코끼리땃쥐지만 코끼리와는 전혀 관련이 없답니다. 하지만 코가 코끼리의 코와 비슷하게 생겼어요. 주로 곤충을 먹고 아주 빠르게 움직일 수 있어요.",
   "status": {
    "label": "정보부족",
    "code": "DD",
@@ -17131,7 +17131,7 @@
    [
     "⚖️",
     "몸무게",
-    "약 100g"
+    "100g~120g"
    ],
    [
     "✨",
@@ -17178,7 +17178,7 @@
     "조류"
    ],
    "weight": [
-    "100g 이하"
+    "100g~1kg"
    ],
    "length": [
     "10~30cm"
