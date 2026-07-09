@@ -9,7 +9,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
   // 0. AI AGENTS (최상단)
   // ===========================================
   {
-    id: "agent-cursor", name: "Cursor", category: "agent",
+    id: "agent-cursor", name: "Cursor", category: "coding",
     summary: "AI가 코드를 직접 작성하는 개발자용 에디터",
     description: "VS Code 기반 AI 코드 에디터로, 프로젝트 전체 파일 컨텍스트를 이해하고 자연어 명령만으로 코드를 작성·리팩토링합니다. 무료 플랜과 유료($20/월) 플랜이 있으며, Claude·GPT-4o 등 여러 모델 중 선택할 수 있습니다. 복잡한 기능 추가나 버그 수정을 자연어로 지시하면 알아서 처리해 코딩 속도가 최소 2~3배 빨라집니다.",
     website: "https://cursor.sh",
@@ -20,7 +20,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     pros: ["파일 전체를 이해하고 코드 자동 작성", "자연어로 리팩토링·버그 수정 가능", "무료 플랜 + 다양한 AI 모델 선택"],
     cons: ["고급 기능은 유료 ($20/월)", "대형 프로젝트에서 응답 지연 가능"],
     userReview: "한 번 쓰면 못 돌아가요. 코딩 속도가 3배는 빨라집니다.",
-    topPick: true, topRank: 3
+    topPick: true, topRank: 1
   },
 
   {
@@ -660,7 +660,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     description: "OpenAI가 개발한 텍스트-투-비디오 모델로, 물리 법칙을 이해하고 복잡한 장면 구성을 현실감 있게 표현하는 것이 특징입니다. 공개 당시 시연 영상이 전 세계에 충격을 준 모델로, ChatGPT Pro 가입자에게 우선 제공되고 있습니다. 최대 1080p, 20초 길이의 영상을 생성할 수 있으며 할리우드 스튜디오도 테스트 중입니다.",
     website: "https://openai.com/sora",
     thumbnail: "https://logo.clearbit.com/openai.com",
-    topPick: true, topRank: 1,
+    topPick: true, topRank: 2,
     pros: ["물리 법칙 이해한 최고 품질 영상", "최대 1080p 20초 생성 가능", "OpenAI 브랜드·신뢰성"],
     cons: ["ChatGPT Pro 구독 필요(월 $200)", "API 미제공, 접근 제한적"],
     rating: 0, ratingCount: 0, userRatings: [], comments: []
@@ -707,7 +707,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     description: "Google DeepMind가 개발한 고품질 텍스트-투-비디오 모델로, 물리 법칙을 이해한 사실적인 영상 생성이 특징입니다. 영화적 감각의 카메라 워크와 연속적인 동작 표현에서 뛰어나며, Google Workspace와 유튜브에 단계적으로 통합될 예정입니다. Vertex AI API를 통해 기업 고객에게 제공되며, AI 영상 시장에서 OpenAI Sora의 가장 강력한 경쟁자로 평가받습니다.",
     website: "https://deepmind.google/technologies/veo",
     thumbnail: "https://logo.clearbit.com/google.com",
-    topPick: false,
+    topPick: true, topRank: 1,
     rating: 0, ratingCount: 0, userRatings: [], comments: []
   },
   {
@@ -934,7 +934,7 @@ export const AI_TOOLS_DATA: AiTool[] = [
     description: "GitHub과 OpenAI가 공동 개발한 AI 코드 자동완성 도구로, 현재 작성 중인 코드 맥락을 분석해 다음 줄·함수·블록 전체를 Tab 키 하나로 완성해 줍니다. VS Code·JetBrains·Neovim 등 주요 IDE 플러그인으로 동작하며, 70개 이상의 프로그래밍 언어를 지원합니다. 개인 플랜 월 $10($100/년), 기업 플랜 월 $19/인으로 제공됩니다.",
     website: "https://github.com/features/copilot",
     thumbnail: "https://logo.clearbit.com/github.com",
-    topPick: true, topRank: 1,
+    topPick: true, topRank: 2,
     pros: ["가장 많은 IDE·언어 지원", "코드 맥락 이해 자동완성 탁월", "GitHub 생태계 완벽 통합"],
     cons: ["월 $10 유료 구독 필수", "코드 전송에 보안 민감 기업은 주의"],
     rating: 0, ratingCount: 0, userRatings: [], comments: []
