@@ -1012,7 +1012,7 @@ export default function AdminPage() {
               </div>
             ) : currentAnimal ? (
               <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl overflow-hidden">
-                <div className="grid md:grid-cols-[280px_1fr]">
+                <div className="grid md:grid-cols-[340px_1fr] xl:grid-cols-[460px_1fr]">
                   {/* 이미지 — 우리 생성 vs 실제(영문 위키) 나란히 비교 */}
                   <div className="bg-neutral-100 dark:bg-zinc-900 p-2 space-y-2">
                     {/* 우리 생성 이미지 */}
