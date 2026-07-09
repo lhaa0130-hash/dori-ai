@@ -123,8 +123,9 @@ function assemble(g: any) {
 }
 
 export const onRequestPost: any = async (context: any) => {
+ try {
   const { request, env } = context;
-  const OPENAI = env.OPENAI_KEY, FAL = env.FAL_KEY;
+  const OPENAI = String(env.OPENAI_KEY || "").trim(), FAL = String(env.FAL_KEY || "").trim();
   if (!OPENAI || !FAL) return J({ error: "server_not_configured", message: "서버에 API 키가 설정되지 않았어요(관리자: Cloudflare 환경변수 OPENAI_KEY, FAL_KEY 등록 필요)." }, 503);
 
   let body: any;
@@ -154,6 +155,9 @@ export const onRequestPost: any = async (context: any) => {
   try { await writeQuota(uid, idToken, today, newCount); } catch {}
 
   return J({ ok: true, animal: assemble(g), imageUrl, remaining: LIMIT - newCount, limit: LIMIT });
+ } catch (e: any) {
+  return J({ error: "exception", message: "서버 오류: " + String((e && e.message) || e).slice(0, 220) }, 500);
+ }
 };
 
 export const onRequestOptions: any = () => new Response(null, { status: 204, headers: { "Access-Control-Allow-Origin": "*", "Access-Control-Allow-Methods": "POST, OPTIONS", "Access-Control-Allow-Headers": "Content-Type" } });
