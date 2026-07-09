@@ -6,7 +6,15 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Thu, 09 Jul 2026 13:00:23 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 09 Jul 2026 23:39:43 GMT</lastBuildDate>
+    <item>
+      <title>[영상] 사진 한 장으로 움직이는 영상을 무료로 만드는 방법</title>
+      <link>https://illo.im/insight/article/video-60</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-60</guid>
+      <category>큐레이션</category>
+      <pubDate>Thu, 09 Jul 2026 00:00:00 GMT</pubDate>
+      <description>구글 플로우로 사진을 AI 영상으로 변환하는 방법을 소개합니다.</description>
+    </item>
     <item>
       <title>Meta AI 클라우드 진출: AWS·Azure의 성벽을 흔드는 ‘남는 컴퓨팅’의 경제학</title>
       <link>https://illo.im/insight/article/analysis-13</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Mon, 29 Jun 2026 13:00:17 GMT</pubDate>
       <description>한국 정부가 AI 및 반도체 분야에 1조 달러를 투자하겠다고 발표하며 글로벌 기술 경쟁에서의 입지를 강화하고 있다.</description>
-    </item>
-    <item>
-      <title>Microsoft·Google 데이터센터가 만난 36.1℃ 폭염: 전력망이 AI 경쟁의 새 병목이다</title>
-      <link>https://illo.im/insight/article/analysis-10</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/analysis-10</guid>
-      <category>분석</category>
-      <pubDate>Mon, 29 Jun 2026 05:01:48 GMT</pubDate>
-      <description>유럽 폭염으로 전력망과 발전소가 흔들리는 사이, AI 데이터센터 전력 수요는 폭발적으로 늘고 있다. 이제 AI 경쟁의 핵심은 모델 성능이 아니라 전기·물·입지·송전망을 누가 먼저 확보하느냐로 이동하고 있다.</description>
     </item>
   </channel>
 </rss>
