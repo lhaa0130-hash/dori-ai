@@ -1,5 +1,57 @@
 [
   {
+    "id": "mk13-1",
+    "name": "지오다노 코튼 크루넥 반팔 티셔츠",
+    "category": "fashion",
+    "source": "coupang",
+    "query": "지오다노 코튼 크루넥 반팔 티셔츠",
+    "emoji": "👕",
+    "priceHint": "1~2만원대",
+    "summary": "매일 입기 쉬운 기본 티",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/feCjDrfAmO"
+  },
+  {
+    "id": "mk13-2",
+    "name": "캐럿 여성용 쿨링 밴딩 와이드 팬츠",
+    "category": "fashion",
+    "source": "coupang",
+    "query": "캐럿 여성용 쿨링 밴딩 와이드 팬츠",
+    "emoji": "👖",
+    "priceHint": "1~3만원대",
+    "summary": "편한 허리의 데일리 팬츠",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/feCjDtiBTE"
+  },
+  {
+    "id": "mk13-3",
+    "name": "베이스알파에센셜 남녀공용 골지 중목 양말",
+    "category": "fashion",
+    "source": "coupang",
+    "query": "베이스알파에센셜 남녀공용 골지 중목 양말",
+    "emoji": "🧦",
+    "priceHint": "1만원대",
+    "summary": "매일 갈아 신는 기본 양말",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/feCjDwdCk8"
+  },
+  {
+    "id": "mk13-4",
+    "name": "말랑젤리 캠퍼스 크로스백",
+    "category": "fashion",
+    "source": "coupang",
+    "query": "말랑젤리 캠퍼스 크로스백",
+    "emoji": "👜",
+    "priceHint": "1~2만원대",
+    "summary": "가볍게 메는 생활 크로스백",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/feCjDzLygK"
+  },
+  {
     "id": "mk12-1",
     "name": "라운드랩 1025 독도 토너",
     "category": "beauty",
@@ -9,7 +61,7 @@
     "priceHint": "1~2만원대",
     "summary": "가볍게 닦고 바르는 토너",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/fbivXqxcBh"
   },
   {
@@ -22,7 +74,7 @@
     "priceHint": "1~2만원대",
     "summary": "수분감 중심의 데일리 세럼",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/fbivXtUYML"
   },
   {
@@ -35,7 +87,7 @@
     "priceHint": "1~2만원대",
     "summary": "건조할 때 덧바르는 보습크림",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/fbivXwYXrV"
   },
   {
@@ -48,7 +100,7 @@
     "priceHint": "1~2만원대",
     "summary": "데일리용 무난한 선크림",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/fbivXzSr7I"
   },
   {
