@@ -81,8 +81,8 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
           ))}
         </div>
 
-        {/* 실행/체험 버튼 */}
-        {project.launchHref ? (
+        {/* 실행/체험 버튼 — 비활성(준비 중) 프로젝트는 링크 없이 '준비 중' 표시 */}
+        {project.isActive && project.launchHref ? (
           <Link
             href={project.launchHref}
             className="toss-shine inline-flex items-center gap-1.5 mt-6 px-6 py-3 rounded-full bg-[#F9954E] text-white text-[14px] font-bold shadow-md shadow-[#F9954E]/25 active:opacity-85 transition-opacity"
