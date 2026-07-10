@@ -17,35 +17,22 @@
     <style id="illo-loader-style">
       #illo-loader{position:fixed;inset:0;z-index:99999;background:#ffffff;
         display:flex;flex-direction:column;align-items:center;justify-content:center;
-        font-family:'Pretendard','Apple SD Gothic Neo',system-ui,-apple-system,'Malgun Gothic',sans-serif;
-        transition:opacity .55s ease;-webkit-font-smoothing:antialiased;}
-      #illo-loader .dot{width:92px;height:92px;border-radius:50%;background:#F9954E;margin-bottom:30px;
-        animation:illoPulse 1.8s ease-out infinite;}
-      @keyframes illoPulse{0%{box-shadow:0 0 0 0 rgba(249,149,78,.45);transform:scale(1);}
-        70%{box-shadow:0 0 0 30px rgba(249,149,78,0);transform:scale(1.04);}
-        100%{box-shadow:0 0 0 0 rgba(249,149,78,0);transform:scale(1);}}
-      #illo-loader .ttl{font-size:60px;font-weight:900;color:#17161A;letter-spacing:-2px;line-height:1;}
-      #illo-loader .ttl b{color:#F9954E;}
-      #illo-loader .sub{margin-top:14px;font-size:14px;color:#B7ADA4;letter-spacing:4px;}
-      #illo-loader .bar{margin-top:66px;width:270px;height:10px;border-radius:100px;background:#F1EAE1;overflow:hidden;}
-      #illo-loader .fill{height:100%;width:0%;background:linear-gradient(90deg,#FCB877,#F9954E);border-radius:100px;transition:width .25s ease;}
-      #illo-loader .ld{margin-top:15px;font-size:13px;font-weight:700;color:#BCB2A9;letter-spacing:1px;}
+        font-family:system-ui,-apple-system,'Malgun Gothic',sans-serif;}
+      #illo-loader .bar{width:220px;height:8px;border-radius:100px;background:#F1EAE1;overflow:hidden;}
+      #illo-loader .fill{height:100%;width:0%;background:linear-gradient(90deg,#FCB877,#F9954E);border-radius:100px;transition:width .2s ease;}
+      #illo-loader .ld{margin-top:12px;font-size:12px;font-weight:600;color:#C7BDB4;letter-spacing:1px;}
       #unity-loading-bar{display:none!important;}
     </style>
   </head>
   <body>
     <div id="illo-loader">
-      <div class="dot"></div>
-      <div class="ttl"><b>illo</b> tower</div>
-      <div class="sub">모든 일을 하나의 일로</div>
       <div class="bar"><div class="fill" id="illo-fill"></div></div>
       <div class="ld" id="illo-ld">Loading… 0%</div>
     </div>
     <script>
       window.__illoProgress=function(p){var f=document.getElementById('illo-fill'),t=document.getElementById('illo-ld');
         var v=Math.max(0,Math.min(100,Math.round(p*100)));if(f)f.style.width=v+'%';if(t)t.textContent='Loading… '+v+'%';};
-      window.__illoLoaded=function(){var el=document.getElementById('illo-loader');if(!el)return;
-        el.style.opacity='0';setTimeout(function(){if(el&&el.parentNode)el.parentNode.removeChild(el);},600);};
+      window.__illoLoaded=function(){var el=document.getElementById('illo-loader');if(el&&el.parentNode)el.parentNode.removeChild(el);};
     </script>
     <div id="unity-container" class="unity-desktop">
       <canvas id="unity-canvas" width=960 height=600 tabindex="-1"></canvas>
