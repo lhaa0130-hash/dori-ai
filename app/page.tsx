@@ -17,7 +17,6 @@ const SECTIONS = [
   { label: "AI 모델", href: "/ai-models", Icon: BarChart3 },
   { label: "미니게임", href: "/minigame", Icon: Gamepad2 },
   { label: "몽글로 : 동물도감", href: "/animal", Icon: PawPrint },
-  { label: "아크일로", href: "/flat-form", Icon: PencilRuler },
   { label: "마켓", href: "/market", Icon: ShoppingBag },
   { label: "상점", href: "/shop", Icon: Store },
   { label: "프로젝트", href: "/projects", Icon: FolderKanban },

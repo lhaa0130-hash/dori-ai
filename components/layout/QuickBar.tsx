@@ -27,8 +27,6 @@ const CATALOG: Group[] = [
     label: "프로젝트",
     items: [
       { key: "animal",   label: "몽글로 : 동물도감",   short: "몽글로",   href: "/animal",    Icon: PawPrint },
-      { key: "workillo", label: "AI비서",     short: "비서",     href: "/illo/app",  Icon: Sparkles },
-      { key: "arcillo",  label: "건축일로",     short: "건축",     href: "/flat-form", Icon: PencilRuler },
     ],
   },
   {

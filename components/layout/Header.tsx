@@ -43,13 +43,7 @@ export default function Header() {
         { name: "AI영상", href: "/video", emoji: "🎬" },
       ],
     },
-    {
-      name: "프로젝트", href: "/projects", emoji: "🚀", children: [
-        { name: "AI비서", href: "/illo/app", emoji: "🟧" },
-        { name: "건축일로", href: "/flat-form", emoji: "📐" },
-        { name: "집안일로", href: "/family", emoji: "👨‍👩‍👧‍👦" },
-      ],
-    },
+    { name: "프로젝트", href: "/projects", emoji: "🚀" },
     { name: "인사이트", href: "/insight", emoji: "🧠" },
     { name: "피드", href: "/feed", emoji: "💬" },
     { name: "마켓", href: "/market", emoji: "🛒" },
