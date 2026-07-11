@@ -1,5 +1,57 @@
 [
   {
+    "id": "mk14-1",
+    "name": "코멧 펫 반려동물 베이직 배변패드",
+    "category": "pet",
+    "source": "coupang",
+    "query": "코멧 펫 베이직 배변패드",
+    "emoji": "🐶",
+    "priceHint": "1~3만원대",
+    "summary": "매일 쓰는 기본 배변템",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/fhV60iiSw8"
+  },
+  {
+    "id": "mk14-2",
+    "name": "탐사 반려동물 물티슈",
+    "category": "pet",
+    "source": "coupang",
+    "query": "탐사 반려동물 물티슈",
+    "emoji": "🧻",
+    "priceHint": "1만원대",
+    "summary": "산책 후 발 닦기용",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/fhV60miL7I"
+  },
+  {
+    "id": "mk14-3",
+    "name": "딩동펫 반려동물 미끄럼방지 매트",
+    "category": "pet",
+    "source": "coupang",
+    "query": "딩동펫 반려동물 미끄럼방지 매트",
+    "emoji": "🐾",
+    "priceHint": "2~5만원대",
+    "summary": "슬개골 걱정 줄이는 바닥템",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/fhV60pdrfU"
+  },
+  {
+    "id": "mk14-4",
+    "name": "버박 C.E.T. 반려동물 치약",
+    "category": "pet",
+    "source": "coupang",
+    "query": "버박 C.E.T 반려동물 치약",
+    "emoji": "🪥",
+    "priceHint": "1~2만원대",
+    "summary": "양치 습관 시작용 치약",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/fhV60tfTB6"
+  },
+  {
     "id": "mk13-1",
     "name": "지오다노 코튼 크루넥 반팔 티셔츠",
     "category": "fashion",
@@ -9,7 +61,7 @@
     "priceHint": "1~2만원대",
     "summary": "매일 입기 쉬운 기본 티",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/feCjDrfAmO"
   },
   {
@@ -22,7 +74,7 @@
     "priceHint": "1~3만원대",
     "summary": "편한 허리의 데일리 팬츠",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/feCjDtiBTE"
   },
   {
@@ -35,7 +87,7 @@
     "priceHint": "1만원대",
     "summary": "매일 갈아 신는 기본 양말",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/feCjDwdCk8"
   },
   {
@@ -48,7 +100,7 @@
     "priceHint": "1~2만원대",
     "summary": "가볍게 메는 생활 크로스백",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/feCjDzLygK"
   },
   {
