@@ -6,7 +6,23 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Fri, 10 Jul 2026 23:00:17 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 11 Jul 2026 04:02:23 GMT</lastBuildDate>
+    <item>
+      <title>[모델] Grok 4.5 모델의 설명과 특징</title>
+      <link>https://illo.im/insight/article/video-61</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-61</guid>
+      <category>큐레이션</category>
+      <pubDate>Fri, 10 Jul 2026 00:00:00 GMT</pubDate>
+      <description>Grok 4.5 모델의 주요 특징과 경쟁력을 간단히 소개합니다.</description>
+    </item>
+    <item>
+      <title>[교육법] AI 활용법과 자녀 교육법 총정리</title>
+      <link>https://illo.im/insight/article/video-62</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-62</guid>
+      <category>큐레이션</category>
+      <pubDate>Fri, 10 Jul 2026 00:00:00 GMT</pubDate>
+      <description>AI 시대에 필요한 활용법과 자녀 교육법을 소개합니다.</description>
+    </item>
     <item>
       <title>[영상] 사진 한 장으로 움직이는 영상을 무료로 만드는 방법</title>
       <link>https://illo.im/insight/article/video-60</link>
@@ -310,22 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Tue, 30 Jun 2026 00:00:00 GMT</pubDate>
       <description>AI 딥러닝과 관련된 중국 작업장의 실체를 탐구합니다.</description>
-    </item>
-    <item>
-      <title>[AI 강의] 하정우의 AI 특별 강의</title>
-      <link>https://illo.im/insight/article/video-40</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-40</guid>
-      <category>큐레이션</category>
-      <pubDate>Tue, 30 Jun 2026 00:00:00 GMT</pubDate>
-      <description>하정우의 AI에 대한 특별 강의를 들어보세요.</description>
-    </item>
-    <item>
-      <title>한국, 1조 달러 규모 AI 및 반도체 투자 발표</title>
-      <link>https://illo.im/insight/article/trend-184</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/trend-184</guid>
-      <category>트렌드</category>
-      <pubDate>Mon, 29 Jun 2026 13:00:17 GMT</pubDate>
-      <description>한국 정부가 AI 및 반도체 분야에 1조 달러를 투자하겠다고 발표하며 글로벌 기술 경쟁에서의 입지를 강화하고 있다.</description>
     </item>
   </channel>
 </rss>
