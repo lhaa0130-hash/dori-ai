@@ -6,7 +6,23 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Sat, 11 Jul 2026 23:00:19 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 12 Jul 2026 00:00:20 GMT</lastBuildDate>
+    <item>
+      <title>[미래예측] AI 시대의 충격적 전망과 생존 전략</title>
+      <link>https://illo.im/insight/article/video-63</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-63</guid>
+      <category>큐레이션</category>
+      <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
+      <description>AI 시대에 살아남기 위한 사람의 특징을 설명합니다.</description>
+    </item>
+    <item>
+      <title>[AI 결제] AI 프로토콜과 금융 결제 시스템의 혁신</title>
+      <link>https://illo.im/insight/article/video-64</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-64</guid>
+      <category>큐레이션</category>
+      <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
+      <description>AI 결제 시스템의 혁신과 Quant Network의 역할을 설명합니다.</description>
+    </item>
     <item>
       <title>[모델] Grok 4.5 모델의 설명과 특징</title>
       <link>https://illo.im/insight/article/video-61</link>
@@ -310,22 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Tue, 30 Jun 2026 00:00:00 GMT</pubDate>
       <description>제미나이에서 효과적인 답변을 얻는 대화법을 배웁니다.</description>
-    </item>
-    <item>
-      <title>[수학] 머신러닝의 수학적 원리</title>
-      <link>https://illo.im/insight/article/video-38</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-38</guid>
-      <category>큐레이션</category>
-      <pubDate>Tue, 30 Jun 2026 00:00:00 GMT</pubDate>
-      <description>머신러닝의 기초 수학 원리를 쉽게 설명합니다.</description>
-    </item>
-    <item>
-      <title>[AI 산업] AI 딥러닝과 중국 작업장의 실체</title>
-      <link>https://illo.im/insight/article/video-39</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-39</guid>
-      <category>큐레이션</category>
-      <pubDate>Tue, 30 Jun 2026 00:00:00 GMT</pubDate>
-      <description>AI 딥러닝과 관련된 중국 작업장의 실체를 탐구합니다.</description>
     </item>
   </channel>
 </rss>
