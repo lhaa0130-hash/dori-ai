@@ -6,7 +6,15 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 13 Jul 2026 04:14:25 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 13 Jul 2026 05:27:15 GMT</lastBuildDate>
+    <item>
+      <title>Claude·Gemini·Runway·Suno AI 편집 스튜디오: 지방정부가 AI 접근권을 공공 인프라로 만드는 이유</title>
+      <link>https://illo.im/insight/article/analysis-14</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/analysis-14</guid>
+      <category>분석</category>
+      <pubDate>Mon, 13 Jul 2026 05:03:34 GMT</pubDate>
+      <description>청주시가 주관하고 청주시문화산업진흥재단이 운영하는 충북콘텐츠코리아랩의 AI 편집 스튜디오는 단순한 체험 공간이 아니다. 생성형 AI가 개인 구독 상품을 넘어 지역 창작·교육·소상공인 생산성의 공공 인프라로 재정의되는 신호다.</description>
+    </item>
     <item>
       <title>삼성전자 충격과 무료 컴퓨트 전쟁: AI 자금이 모델보다 인프라로 더 깊게 흐른 한 주</title>
       <link>https://illo.im/insight/article/report-11</link>
@@ -318,14 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Tue, 30 Jun 2026 23:02:46 GMT</pubDate>
       <description>AI 그림 프롬프트 작성법을 처음 배우는 사람도 바로 따라 할 수 있게 도구 선택, 무료 사용법, 프롬프트 구조, 수정 요청, 실패 해결법까지 단계별로 정리했습니다.</description>
-    </item>
-    <item>
-      <title>AI 하드웨어 밀수, 대만의 경각심을 일깨우다</title>
-      <link>https://illo.im/insight/article/trend-188</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/trend-188</guid>
-      <category>트렌드</category>
-      <pubDate>Tue, 30 Jun 2026 11:00:20 GMT</pubDate>
-      <description>대만이 AI 하드웨어 밀수 사건을 본격적으로 수사하며 글로벌 기술 시장의 불법 거래 위험을 경고하고 있다.</description>
     </item>
   </channel>
 </rss>
