@@ -802,121 +802,126 @@ export default function AdminPage() {
         })()}
 
         {/* ── 방문자 탭 ── */}
-        {activeTab === "visitors" && (
-          <div className="space-y-6">
-            {/* 핵심 지표 4개 */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
-              {[
-                { label: "오늘 순방문(UV)", value: todayUV, sub: "오늘 다녀간 사람", color: "text-blue-500 dark:text-blue-400" },
-                { label: "오늘 조회(PV)", value: todayPV, sub: "오늘 페이지 열람", color: "text-cyan-500 dark:text-cyan-400" },
-                { label: "총 순방문(UV)", value: totalUV, sub: "전체 누적 방문자", color: "text-[#F9954E]" },
-                { label: "총 조회(PV)", value: totalPV, sub: "전체 누적 조회수", color: "text-purple-500 dark:text-purple-400" },
-              ].map((c) => (
-                <div key={c.label} className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
-                  <div className="text-neutral-500 dark:text-neutral-400 text-[13px] mb-1">{c.label}</div>
-                  <div className={`text-3xl font-black ${c.color}`}>{c.value.toLocaleString()}</div>
-                  <div className="text-[11px] text-neutral-400 dark:text-neutral-500 mt-1">{c.sub}</div>
-                </div>
-              ))}
-            </div>
+        {activeTab === "visitors" && (() => {
+          const g = ga4;
+          const dev = g ? g.devices : device;
+          const devTotal = dev.mobile + dev.desktop + dev.tablet;
+          const days: { date: string; users: number }[] = g ? g.daily14 : [...daily].slice(-14).map((d) => ({ date: d.date, users: d.uv }));
+          const chanKo: Record<string, string> = { "Direct": "직접 방문", "Organic Search": "검색 유입", "Referral": "외부 링크", "Organic Social": "소셜", "Unassigned": "미분류", "Organic Video": "동영상", "Email": "이메일" };
+          const flag: Record<string, string> = { "United States": "🇺🇸", "South Korea": "🇰🇷", "Singapore": "🇸🇬", "Nigeria": "🇳🇬", "Poland": "🇵🇱", "Ireland": "🇮🇪", "Japan": "🇯🇵", "China": "🇨🇳", "India": "🇮🇳", "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "Canada": "🇨🇦", "France": "🇫🇷", "Vietnam": "🇻🇳", "Indonesia": "🇮🇩", "Brazil": "🇧🇷" };
+          const dayMax = Math.max(1, ...days.map((d) => d.users));
+          return (
+            <div className="space-y-5">
+              {/* 1) 방문 요약 KPI */}
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                {[
+                  { label: "오늘 방문", sub: "순 사용자", v: g ? g.today.users : todayUV, c: "text-sky-600 dark:text-sky-400" },
+                  { label: "오늘 조회", sub: "페이지뷰", v: g ? g.today.pageViews : todayPV, c: "text-cyan-600 dark:text-cyan-400" },
+                  { label: "7일 방문", sub: "순 사용자", v: g ? g.last7.users : totalUV, c: "text-[#F9954E]" },
+                  { label: "7일 조회", sub: "페이지뷰", v: g ? g.last7.pageViews : totalPV, c: "text-violet-600 dark:text-violet-400" },
+                ].map((c) => (
+                  <div key={c.label} className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-4">
+                    <div className="text-neutral-500 dark:text-neutral-400 text-[12px]">{c.label}</div>
+                    <div className={`text-[26px] font-black mt-1 leading-none ${c.c}`}>{c.v.toLocaleString()}</div>
+                    <div className="text-[10.5px] text-neutral-400 dark:text-neutral-500 mt-1.5">{c.sub}</div>
+                  </div>
+                ))}
+              </div>
 
-            {/* 안내 */}
-            <div className="bg-orange-50 dark:bg-[#F9954E]/5 border border-orange-100 dark:border-[#F9954E]/20 rounded-2xl p-5 text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed">
-              <p className="font-bold text-neutral-900 dark:text-white mb-1">📊 전역 집계로 업그레이드됨</p>
-              <p>이제 <b>모든 방문자</b>가 Firestore에 누적됩니다. (UV=브라우저당 하루 1회, PV=세션당 1회)</p>
-              {analyticsReady && totalUV === 0 && (
-                <p className="text-amber-600 dark:text-amber-400 mt-2">⚠️ 0으로만 보이면 Firestore 보안 규칙에 <code>analytics</code> 쓰기 허용이 필요합니다. 저장소의 <code>firestore.analytics.rules.txt</code>를 콘솔에 추가·게시하세요.</p>
-              )}
-            </div>
+              {/* 2) 일별 방문 표 (정확 수치) */}
+              <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
+                <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">📅 일별 방문 기록 <span className="text-[11px] font-normal text-neutral-400">최근 14일 {g && <span className="text-emerald-600 font-bold">· GA4</span>}</span></h2>
+                {days.length === 0 ? (
+                  <p className="text-neutral-400 dark:text-neutral-500 text-[13px] py-2">{analyticsReady || g ? "아직 기록이 없어요." : "불러오는 중…"}</p>
+                ) : (
+                  <div className="space-y-1.5">
+                    {[...days].reverse().map((d) => (
+                      <div key={d.date} className="flex items-center gap-3">
+                        <span className="text-[12px] text-neutral-500 dark:text-neutral-400 w-20 flex-shrink-0 tabular-nums">{d.date.slice(5)}</span>
+                        <div className="flex-1 h-4 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden"><div className="h-full rounded-full bg-gradient-to-r from-[#F9954E] to-[#FBAA60]" style={{ width: `${Math.max((d.users / dayMax) * 100, 2)}%` }} /></div>
+                        <span className="text-[13px] font-bold text-neutral-800 dark:text-neutral-100 w-12 text-right flex-shrink-0 tabular-nums">{d.users.toLocaleString()}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
 
-            {/* 외부 분석(정확한 실측) 바로가기 */}
-            <div className="grid grid-cols-2 gap-4">
-              <a href="https://analytics.google.com/" target="_blank" rel="noopener noreferrer"
-                className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5 hover:border-[#F9954E]/40 transition-colors">
-                <div className="text-2xl mb-2">📈</div>
-                <div className="font-bold text-foreground text-sm">Google Analytics</div>
-                <div className="text-[11px] text-neutral-400 mt-0.5">실시간·기기·유입 등 정밀 지표 →</div>
-              </a>
-              <a href="https://clarity.microsoft.com/projects/view/va2qmv3mwz/dashboard" target="_blank" rel="noopener noreferrer"
-                className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5 hover:border-[#F9954E]/40 transition-colors">
-                <div className="text-2xl mb-2">🔥</div>
-                <div className="font-bold text-foreground text-sm">Microsoft Clarity</div>
-                <div className="text-[11px] text-neutral-400 mt-0.5">히트맵·세션 녹화 →</div>
-              </a>
-            </div>
-
-            {/* 기기별 방문 */}
-            <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-6">
-              <h2 className="text-lg font-bold mb-4 text-foreground">📱 기기별 방문 (순방문 기준)</h2>
-              {(() => {
-                const total = device.mobile + device.tablet + device.desktop;
-                if (total === 0) {
-                  return <p className="text-neutral-400 dark:text-neutral-500 text-sm">{analyticsReady ? "아직 데이터가 없어요." : "불러오는 중…"}</p>;
-                }
-                const pct = (n: number) => Math.round((n / total) * 100);
-                const items = [
-                  { label: "📱 모바일", n: device.mobile, color: "#F9954E" },
-                  { label: "💻 PC", n: device.desktop, color: "#60A5FA" },
-                  { label: "🖥️ 태블릿", n: device.tablet, color: "#A78BFA" },
-                ];
-                return (
-                  <>
-                    <div className="flex h-3 rounded-full overflow-hidden mb-5 bg-neutral-100 dark:bg-zinc-900">
-                      {items.map((it) => it.n > 0 ? (
-                        <div key={it.label} style={{ width: `${pct(it.n)}%`, backgroundColor: it.color }} title={`${it.label} ${pct(it.n)}%`} />
-                      ) : null)}
+              {/* 3) 기기 · 국가 · 유입 상세 */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                {/* 기기 */}
+                <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
+                  <h2 className="text-[14px] font-extrabold text-neutral-900 dark:text-white mb-4">📱 기기별</h2>
+                  {devTotal === 0 ? <p className="text-[13px] text-neutral-400 py-2">데이터 없음</p> : (
+                    <div className="space-y-3">
+                      {[
+                        { label: "모바일", n: dev.mobile, c: "bg-[#F9954E]" },
+                        { label: "데스크탑", n: dev.desktop, c: "bg-sky-400" },
+                        { label: "태블릿", n: dev.tablet, c: "bg-violet-400" },
+                      ].map((d) => { const p = devTotal ? Math.round((d.n / devTotal) * 100) : 0; return (
+                        <div key={d.label}>
+                          <div className="flex items-center justify-between text-[12.5px] mb-1"><span className="font-bold text-neutral-600 dark:text-neutral-300">{d.label}</span><span className="text-neutral-400">{d.n.toLocaleString()} · {p}%</span></div>
+                          <div className="h-2 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden"><div className={`h-full rounded-full ${d.c}`} style={{ width: `${p}%` }} /></div>
+                        </div>
+                      ); })}
                     </div>
-                    <div className="grid grid-cols-3 gap-3">
-                      {items.map((it) => (
-                        <div key={it.label} className="text-center">
-                          <div className="text-[13px] font-bold text-foreground">{it.label}</div>
-                          <div className="text-3xl font-black" style={{ color: it.color }}>{pct(it.n)}%</div>
-                          <div className="text-xs text-neutral-400 dark:text-neutral-500">{it.n.toLocaleString()}명</div>
+                  )}
+                </div>
+                {/* 국가 */}
+                <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
+                  <h2 className="text-[14px] font-extrabold text-neutral-900 dark:text-white mb-4">🌍 국가 <span className="text-[11px] font-normal text-neutral-400">7일</span></h2>
+                  {g && g.topCountries.length ? (
+                    <div className="space-y-2">
+                      {g.topCountries.slice(0, 6).map((c, i) => (
+                        <div key={i} className="flex items-center justify-between gap-2 text-[12.5px]">
+                          <span className="truncate text-neutral-600 dark:text-neutral-300">{flag[c.country] || "🌐"} {c.country}</span>
+                          <span className="font-bold text-neutral-800 dark:text-neutral-100 flex-shrink-0">{c.users.toLocaleString()}</span>
                         </div>
                       ))}
                     </div>
-                  </>
-                );
-              })()}
-            </div>
-
-            {/* 일별 기록 (UV/PV) */}
-            <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-6">
-              <h2 className="text-lg font-bold mb-4 text-foreground">📅 일별 방문 기록 (최근 30일)</h2>
-              {daily.length === 0 ? (
-                <p className="text-neutral-400 dark:text-neutral-500 text-sm">{analyticsReady ? "아직 기록이 없어요." : "불러오는 중…"}</p>
-              ) : (
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm">
-                    <thead>
-                      <tr className="text-neutral-500 dark:text-neutral-400 border-b border-neutral-100 dark:border-zinc-900">
-                        <th className="text-left pb-3 font-semibold">날짜</th>
-                        <th className="text-right pb-3 font-semibold">순방문(UV)</th>
-                        <th className="text-right pb-3 font-semibold">조회(PV)</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {[...daily].reverse().map((d) => (
-                        <tr key={d.date} className="border-b border-neutral-100/80 dark:border-zinc-900/50">
-                          <td className="py-2 text-neutral-700 dark:text-neutral-300">{d.date}</td>
-                          <td className="py-2 text-right font-bold text-[#F9954E]">{d.uv.toLocaleString()}</td>
-                          <td className="py-2 text-right text-neutral-500 dark:text-neutral-400">{d.pv.toLocaleString()}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
+                  ) : <p className="text-[13px] text-neutral-400 py-2">GA4 연동 대기</p>}
                 </div>
-              )}
+                {/* 유입 */}
+                <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
+                  <h2 className="text-[14px] font-extrabold text-neutral-900 dark:text-white mb-4">🧭 유입 경로 <span className="text-[11px] font-normal text-neutral-400">7일</span></h2>
+                  {g && g.channels.length ? (
+                    (() => { const tot = g.channels.reduce((s, c) => s + c.sessions, 0) || 1; return (
+                      <div className="space-y-2.5">
+                        {g.channels.slice(0, 6).map((c, i) => { const pct = Math.round((c.sessions / tot) * 100); return (
+                          <div key={i}>
+                            <div className="flex items-center justify-between text-[12px] mb-1"><span className="font-semibold text-neutral-600 dark:text-neutral-300">{chanKo[c.name] || c.name}</span><span className="text-neutral-400">{c.sessions} · {pct}%</span></div>
+                            <div className="h-1.5 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden"><div className="h-full rounded-full bg-sky-400" style={{ width: `${pct}%` }} /></div>
+                          </div>
+                        ); })}
+                      </div>
+                    ); })()
+                  ) : <p className="text-[13px] text-neutral-400 py-2">GA4 연동 대기</p>}
+                </div>
+              </div>
+
+              {/* 4) 외부 정밀 분석 도구 */}
+              <div className="grid grid-cols-2 gap-3">
+                <a href="https://analytics.google.com/" target="_blank" rel="noopener noreferrer" className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5 hover:border-[#F9954E]/40 transition-colors">
+                  <div className="text-2xl mb-2">📈</div>
+                  <div className="font-bold text-foreground text-[13.5px]">Google Analytics</div>
+                  <div className="text-[11px] text-neutral-400 mt-0.5">실시간·유입·이벤트 정밀 분석 →</div>
+                </a>
+                <a href="https://clarity.microsoft.com/projects/view/va2qmv3mwz/dashboard" target="_blank" rel="noopener noreferrer" className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5 hover:border-[#F9954E]/40 transition-colors">
+                  <div className="text-2xl mb-2">🔥</div>
+                  <div className="font-bold text-foreground text-[13.5px]">Microsoft Clarity</div>
+                  <div className="text-[11px] text-neutral-400 mt-0.5">히트맵·세션 녹화 →</div>
+                </a>
+              </div>
+              <p className="text-[11.5px] text-neutral-400 dark:text-neutral-500 text-center">방문 지표는 Google Analytics(GA4) 기준 · 관리자 본인 방문은 집계에서 제외됩니다 · 요약은 대시보드 탭에서 확인</p>
             </div>
-          </div>
-        )}
+          );
+        })()}
 
         {/* ── 회원관리 탭 ── */}
         {activeTab === "users" && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* 회원 목록 */}
             <div className="md:col-span-1 bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
-              <h2 className="font-bold mb-4 text-foreground">👤 회원 목록 ({users.length}명)</h2>
+              <h2 className="text-[15px] font-extrabold mb-4 text-neutral-900 dark:text-white">👤 회원 목록 <span className="text-[12px] font-normal text-neutral-400">{users.length}명</span></h2>
               {users.length === 0 ? (
                 <p className="text-neutral-400 dark:text-neutral-500 text-sm">회원 없음</p>
               ) : (
@@ -1024,7 +1029,7 @@ export default function AdminPage() {
         {/* ── 게시판 탭 ── */}
         {activeTab === "community" && (
           <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-6">
-            <h2 className="text-lg font-bold mb-4 text-foreground">💬 커뮤니티 게시글 ({communityPosts.length}개)</h2>
+            <h2 className="text-[15px] font-extrabold mb-4 text-neutral-900 dark:text-white">💬 커뮤니티 게시글 <span className="text-[12px] font-normal text-neutral-400">{communityPosts.length}개</span></h2>
             {communityPosts.length === 0 ? (
               <p className="text-neutral-400 dark:text-neutral-500 text-sm">게시글 없음</p>
             ) : (
@@ -1057,7 +1062,7 @@ export default function AdminPage() {
         {activeTab === "premium" && (
           <div className="space-y-6">
             <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-6">
-              <h2 className="text-lg font-bold mb-2 text-foreground">💎 프리미엄 관리</h2>
+              <h2 className="text-[15px] font-extrabold mb-2 text-neutral-900 dark:text-white">💎 프리미엄 관리</h2>
               <p className="text-neutral-500 dark:text-neutral-400 text-sm mb-6">
                 프리미엄으로 설정된 회원은 모든 유료 기능을 무료로 이용할 수 있습니다.
               </p>
