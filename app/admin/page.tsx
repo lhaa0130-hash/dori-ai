@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Header from "@/components/layout/Header";
 import { useRouter } from "next/navigation";
-import { collection, getDocs } from "firebase/firestore";
+import { collection, getDocs, doc, getDoc } from "firebase/firestore";
 import { getFirebaseFirestore } from "@/lib/firebase";
 import { adminGrantCandy, adminSetPremium } from "@/lib/cottonCandy";
 import { getAnalyticsSummary, getDailyAnalytics, getTodayStr, getAdsense, saveAdsense, type DailyAnalytics, type AdsenseData } from "@/lib/analytics";
@@ -48,6 +48,24 @@ interface CommunityPost {
   category: string;
 }
 
+// GA4 실시간·집계 (dashboardStats/live 문서) — n8n 수집 스크립트가 채움
+interface Ga4Stats {
+  realtimeUsers: number;
+  today: { users: number; pageViews: number };
+  last7: { users: number; pageViews: number; sessions: number };
+  daily14: { date: string; users: number }[];
+  devices: { mobile: number; desktop: number; tablet: number };
+  topPages: { title: string; views: number }[];
+  topCountries: { country: string; users: number }[];
+  channels: { name: string; sessions: number }[];
+}
+interface AdsenseLive {
+  currency: string;
+  today: { earnings: number; pageViews: number; clicks: number; impressions: number } | null;
+  month: { earnings: number; pageViews: number; clicks: number; impressions: number } | null;
+  last7: { earnings: number; pageViews: number; clicks: number; impressions: number } | null;
+}
+
 // ─── 탭 타입 ─────────────────────────────────────────────────────
 type AdminTab = "dashboard" | "visitors" | "users" | "community" | "content" | "premium" | "animalReview" | "animalTable";
 type ReviewFilter = "pending" | "approved" | "rejected" | "all";
@@ -74,6 +92,11 @@ export default function AdminPage() {
   const [adsense, setAdsense] = useState<AdsenseData | null>(null);
   const [adsenseEdit, setAdsenseEdit] = useState(false);
   const [adsenseForm, setAdsenseForm] = useState<AdsenseData>({ today: 0, yesterday: 0, last7: 0, month: 0, balance: 0, lastPayment: "", currency: "US$" });
+
+  // GA4·애드센스 실시간 통계 (dashboardStats/live)
+  const [ga4, setGa4] = useState<Ga4Stats | null>(null);
+  const [adsenseLive, setAdsenseLive] = useState<AdsenseLive | null>(null);
+  const [statsUpdatedAt, setStatsUpdatedAt] = useState<string>("");
 
   // 사용자 데이터
   const [users, setUsers] = useState<UserData[]>([]);
@@ -152,13 +175,27 @@ export default function AdminPage() {
       console.warn("[admin] 방문자 통계 로드 실패:", e);
     }
 
-    // 애드센스 수입
+    // 애드센스 수입 (수동 입력 백업값)
     try {
       const ad = await getAdsense();
       setAdsense(ad);
       setAdsenseForm(ad);
     } catch (e) {
       console.warn("[admin] 애드센스 로드 실패:", e);
+    }
+
+    // GA4·애드센스 자동 통계 (dashboardStats/live — n8n이 ~5분마다 채움)
+    try {
+      const db = getFirebaseFirestore();
+      const s = await getDoc(doc(db, "dashboardStats", "live"));
+      if (s.exists()) {
+        const d = s.data() as { ga4?: Ga4Stats; adsense?: AdsenseLive; updatedAt?: string };
+        if (d.ga4) setGa4(d.ga4);
+        if (d.adsense) setAdsenseLive(d.adsense);
+        if (d.updatedAt) setStatsUpdatedAt(d.updatedAt);
+      }
+    } catch (e) {
+      console.warn("[admin] GA4 통계 로드 실패:", e);
     }
 
     // 동물도감 검수 상태
@@ -501,10 +538,25 @@ export default function AdminPage() {
           const totalAnimals = allAnimals.length;
           const apprN = approved.size, rejN = rejected.size, pendN = Math.max(0, totalAnimals - apprN - rejN);
           const pctOf = (n: number) => (totalAnimals ? (n / totalAnimals) * 100 : 0);
-          const devTotal = device.mobile + device.tablet + device.desktop;
+          const gaOn = !!ga4;
+          // GA4 우선, 없으면 자체집계 폴백
+          const todayUsers = ga4 ? ga4.today.users : todayUV;
+          const todayViews = ga4 ? ga4.today.pageViews : todayPV;
+          const dev = ga4 ? ga4.devices : device;
+          const devTotal = dev.mobile + dev.tablet + dev.desktop;
+          const chart: { date: string; users: number }[] = ga4
+            ? ga4.daily14
+            : last14Days.map((date) => ({ date, users: dailyMap[date]?.uv || 0 }));
+          const chartMax = Math.max(1, ...chart.map((c) => c.users));
+          const minsAgo = statsUpdatedAt ? Math.max(0, Math.round((Date.now() - new Date(statsUpdatedAt).getTime()) / 60000)) : null;
+          const agoLabel = minsAgo == null ? "" : minsAgo < 1 ? "방금" : minsAgo < 60 ? `${minsAgo}분 전` : `${Math.round(minsAgo / 60)}시간 전`;
+          // 애드센스: 자동(adsenseLive) 우선, 없으면 수동입력
           const ad = adsense || { today: 0, yesterday: 0, last7: 0, month: 0, balance: 0, lastPayment: "", currency: "US$" };
-          const cur = ad.currency || "US$";
-          const money = (n: number) => `${cur}${(n || 0).toFixed(2)}`;
+          const curSym = (c?: string) => (c === "USD" || c === "US$" ? "$" : c === "KRW" ? "₩" : (c || "$") + " ");
+          const adCur = curSym(adsenseLive?.currency || ad.currency);
+          const money = (n: number) => `${adCur}${(n || 0).toFixed(2)}`;
+          const chanKo: Record<string, string> = { "Direct": "직접 방문", "Organic Search": "검색 유입", "Referral": "외부 링크", "Organic Social": "소셜", "Unassigned": "미분류", "Organic Video": "동영상", "Email": "이메일" };
+          const flag: Record<string, string> = { "United States": "🇺🇸", "South Korea": "🇰🇷", "Singapore": "🇸🇬", "Nigeria": "🇳🇬", "Poland": "🇵🇱", "Ireland": "🇮🇪", "Japan": "🇯🇵", "China": "🇨🇳", "India": "🇮🇳", "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "Canada": "🇨🇦", "France": "🇫🇷", "Vietnam": "🇻🇳", "Indonesia": "🇮🇩", "Brazil": "🇧🇷" };
           return (
             <div className="space-y-5">
 
@@ -536,13 +588,34 @@ export default function AdminPage() {
                 </p>
               </div>
 
-              {/* 2) 핵심 지표 */}
+              {/* 2) 실시간 라인 (GA4) */}
+              {gaOn && (
+                <div className="rounded-2xl border border-emerald-200/70 dark:border-emerald-900/40 bg-gradient-to-br from-emerald-50 to-white dark:from-emerald-950/30 dark:to-zinc-950 p-5">
+                  <div className="flex items-center justify-between gap-3 flex-wrap">
+                    <div className="flex items-center gap-4">
+                      <div className="flex items-center gap-2">
+                        <span className="relative flex h-2.5 w-2.5"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" /><span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" /></span>
+                        <span className="text-[12px] font-bold text-emerald-700 dark:text-emerald-400">지금 접속자</span>
+                      </div>
+                      <div className="text-[34px] font-black text-neutral-900 dark:text-white leading-none">{ga4!.realtimeUsers.toLocaleString()}<span className="text-[14px] font-bold text-neutral-400 ml-1">명</span></div>
+                    </div>
+                    <div className="flex items-center gap-5 text-[13px]">
+                      <div><span className="text-neutral-400">오늘 방문</span> <b className="text-neutral-800 dark:text-neutral-100 ml-1">{todayUsers.toLocaleString()}</b></div>
+                      <div><span className="text-neutral-400">오늘 조회</span> <b className="text-neutral-800 dark:text-neutral-100 ml-1">{todayViews.toLocaleString()}</b></div>
+                      <div className="hidden sm:block"><span className="text-neutral-400">7일 세션</span> <b className="text-neutral-800 dark:text-neutral-100 ml-1">{ga4!.last7.sessions.toLocaleString()}</b></div>
+                    </div>
+                  </div>
+                  <p className="mt-2.5 text-[11px] text-emerald-700/70 dark:text-emerald-500/70">Google Analytics 실시간 · 최근 30분 활성 사용자{agoLabel && ` · ${agoLabel} 갱신`}</p>
+                </div>
+              )}
+
+              {/* 3) 핵심 지표 */}
               <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
                 {[
                   { emoji: "👤", label: "총 회원", value: users.length },
                   { emoji: "💎", label: "프리미엄", value: premiumUsers.length },
-                  { emoji: "📅", label: "오늘 방문", value: todayUV },
-                  { emoji: "🌍", label: "총 방문", value: totalUV },
+                  { emoji: "📅", label: "오늘 방문", value: todayUsers },
+                  { emoji: "📊", label: "7일 방문", value: ga4 ? ga4.last7.users : totalUV },
                   { emoji: "💬", label: "게시글", value: communityPosts.length },
                   { emoji: "🐾", label: "총 동물", value: totalAnimals },
                 ].map((c) => (
@@ -554,43 +627,81 @@ export default function AdminPage() {
                 ))}
               </div>
 
-              {/* 3) 방문자 추이 */}
+              {/* 4) 방문자 추이 */}
               <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
                 <div className="flex items-center justify-between gap-2 flex-wrap mb-5">
-                  <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-2">📈 최근 14일 방문자</h2>
+                  <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-2">📈 최근 14일 방문자 {gaOn && <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded">GA4</span>}</h2>
                   <div className="flex items-center gap-4 text-[12px]">
-                    <span className="text-neutral-500 dark:text-neutral-400">오늘 <b className="text-[#F9954E]">{todayUV.toLocaleString()}</b>명</span>
-                    <span className="text-neutral-500 dark:text-neutral-400">누적 조회 <b className="text-neutral-700 dark:text-neutral-200">{totalPV.toLocaleString()}</b></span>
+                    <span className="text-neutral-500 dark:text-neutral-400">오늘 <b className="text-[#F9954E]">{todayUsers.toLocaleString()}</b>명</span>
+                    <span className="text-neutral-500 dark:text-neutral-400">7일 조회 <b className="text-neutral-700 dark:text-neutral-200">{(ga4 ? ga4.last7.pageViews : totalPV).toLocaleString()}</b></span>
                   </div>
                 </div>
                 <div className="flex items-end gap-1.5 h-40">
-                  {last14Days.map((date) => {
-                    const count = dailyMap[date]?.uv || 0;
-                    const heightPct = Math.max((count / chartMax) * 100, 3);
+                  {chart.map((row) => {
+                    const heightPct = Math.max((row.users / chartMax) * 100, 3);
                     return (
-                      <div key={date} className="flex-1 flex flex-col items-center gap-1.5 group">
-                        <div className="text-[10px] font-bold text-neutral-500 dark:text-neutral-400 opacity-0 group-hover:opacity-100 transition">{count}</div>
-                        <div className="w-full bg-gradient-to-t from-[#F9954E] to-[#FBAA60] rounded-t-md group-hover:brightness-110 transition-all" style={{ height: `${heightPct}%` }} title={`${date} · ${count}명`} />
-                        <div className="text-[9px] text-neutral-400 dark:text-neutral-500">{date.slice(5)}</div>
+                      <div key={row.date} className="flex-1 flex flex-col items-center gap-1.5 group">
+                        <div className="text-[10px] font-bold text-neutral-500 dark:text-neutral-400 opacity-0 group-hover:opacity-100 transition">{row.users}</div>
+                        <div className="w-full bg-gradient-to-t from-[#F9954E] to-[#FBAA60] rounded-t-md group-hover:brightness-110 transition-all" style={{ height: `${heightPct}%` }} title={`${row.date} · ${row.users}명`} />
+                        <div className="text-[9px] text-neutral-400 dark:text-neutral-500">{row.date.slice(5)}</div>
                       </div>
                     );
                   })}
                 </div>
-                {!analyticsReady && <p className="text-xs text-neutral-400 mt-3">불러오는 중…</p>}
+                {!gaOn && !analyticsReady && <p className="text-xs text-neutral-400 mt-3">불러오는 중…</p>}
               </div>
 
-              {/* 4) 방문 기기 + 애드센스 */}
+              {/* 5) 인기 페이지 · 유입 경로 · 국가 (GA4) */}
+              {gaOn && (
+                <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                  <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
+                    <h2 className="text-[14px] font-extrabold text-neutral-900 dark:text-white mb-3">🔥 인기 페이지 <span className="text-[11px] font-normal text-neutral-400">7일</span></h2>
+                    <div className="space-y-2">
+                      {ga4!.topPages.slice(0, 6).map((p, i) => (
+                        <div key={i} className="flex items-center justify-between gap-2 text-[12.5px]">
+                          <span className="truncate text-neutral-600 dark:text-neutral-300"><span className="text-neutral-300 dark:text-neutral-600 mr-1.5">{i + 1}</span>{p.title || "(제목없음)"}</span>
+                          <span className="font-bold text-neutral-800 dark:text-neutral-100 flex-shrink-0">{p.views.toLocaleString()}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                  <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
+                    <h2 className="text-[14px] font-extrabold text-neutral-900 dark:text-white mb-3">🧭 유입 경로 <span className="text-[11px] font-normal text-neutral-400">7일</span></h2>
+                    <div className="space-y-2.5">
+                      {(() => { const tot = ga4!.channels.reduce((s, c) => s + c.sessions, 0) || 1; return ga4!.channels.slice(0, 6).map((c, i) => { const pct = Math.round((c.sessions / tot) * 100); return (
+                        <div key={i}>
+                          <div className="flex items-center justify-between text-[12px] mb-1"><span className="font-semibold text-neutral-600 dark:text-neutral-300">{chanKo[c.name] || c.name}</span><span className="text-neutral-400">{c.sessions} · {pct}%</span></div>
+                          <div className="h-1.5 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden"><div className="h-full rounded-full bg-sky-400" style={{ width: `${pct}%` }} /></div>
+                        </div>
+                      ); }); })()}
+                    </div>
+                  </div>
+                  <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
+                    <h2 className="text-[14px] font-extrabold text-neutral-900 dark:text-white mb-3">🌍 국가 <span className="text-[11px] font-normal text-neutral-400">7일</span></h2>
+                    <div className="space-y-2">
+                      {ga4!.topCountries.slice(0, 6).map((c, i) => (
+                        <div key={i} className="flex items-center justify-between gap-2 text-[12.5px]">
+                          <span className="truncate text-neutral-600 dark:text-neutral-300">{flag[c.country] || "🌐"} {c.country}</span>
+                          <span className="font-bold text-neutral-800 dark:text-neutral-100 flex-shrink-0">{c.users.toLocaleString()}</span>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              )}
+
+              {/* 6) 방문 기기 + 애드센스 */}
               <div className="grid grid-cols-1 lg:grid-cols-2 gap-5">
                 <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
-                  <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white mb-4">📱 방문 기기</h2>
+                  <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white mb-4">📱 방문 기기 {gaOn && <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded align-middle">GA4</span>}</h2>
                   {devTotal === 0 ? (
                     <p className="text-[13px] text-neutral-400 py-3">아직 데이터가 없어요.</p>
                   ) : (
                     <div className="space-y-3.5">
                       {[
-                        { label: "모바일", n: device.mobile, c: "bg-[#F9954E]" },
-                        { label: "데스크탑", n: device.desktop, c: "bg-sky-400" },
-                        { label: "태블릿", n: device.tablet, c: "bg-violet-400" },
+                        { label: "모바일", n: dev.mobile, c: "bg-[#F9954E]" },
+                        { label: "데스크탑", n: dev.desktop, c: "bg-sky-400" },
+                        { label: "태블릿", n: dev.tablet, c: "bg-violet-400" },
                       ].map((d) => {
                         const p = devTotal ? Math.round((d.n / devTotal) * 100) : 0;
                         return (
@@ -606,13 +717,29 @@ export default function AdminPage() {
 
                 <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
                   <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white">💰 애드센스 수입</h2>
+                    <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-1.5">💰 애드센스 수입 {adsenseLive?.today ? <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded">자동</span> : <span className="text-[10px] font-bold text-neutral-400 bg-neutral-500/10 px-1.5 py-0.5 rounded">수동</span>}</h2>
                     <div className="flex gap-1.5">
                       <a href="https://adsense.google.com/" target="_blank" rel="noopener noreferrer" className="text-[11px] rounded-lg px-2 py-1 font-bold bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition">애드센스 →</a>
-                      <button onClick={() => setAdsenseEdit((v) => !v)} className="text-[11px] rounded-lg px-2 py-1 font-bold bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition">{adsenseEdit ? "닫기" : "수정"}</button>
+                      {!adsenseLive?.today && <button onClick={() => setAdsenseEdit((v) => !v)} className="text-[11px] rounded-lg px-2 py-1 font-bold bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition">{adsenseEdit ? "닫기" : "수정"}</button>}
                     </div>
                   </div>
-                  {adsenseEdit ? (
+                  {adsenseLive?.today ? (
+                    <>
+                      <div className="grid grid-cols-3 gap-3">
+                        {[{ label: "오늘 예상", v: adsenseLive.today.earnings }, { label: "이번 달", v: adsenseLive.month?.earnings || 0 }, { label: "지난 7일", v: adsenseLive.last7?.earnings || 0 }].map((m) => (
+                          <div key={m.label} className="rounded-xl bg-neutral-50 dark:bg-zinc-900/60 p-3">
+                            <p className="text-[11px] text-neutral-400 mb-0.5">{m.label}</p>
+                            <p className="text-lg font-black text-neutral-900 dark:text-white">{money(m.v)}</p>
+                          </div>
+                        ))}
+                      </div>
+                      <div className="mt-3 flex items-center gap-4 text-[11.5px] text-neutral-400">
+                        <span>오늘 클릭 <b className="text-neutral-600 dark:text-neutral-300">{adsenseLive.today.clicks.toLocaleString()}</b></span>
+                        <span>노출 <b className="text-neutral-600 dark:text-neutral-300">{adsenseLive.today.impressions.toLocaleString()}</b></span>
+                        <span>페이지뷰 <b className="text-neutral-600 dark:text-neutral-300">{adsenseLive.today.pageViews.toLocaleString()}</b></span>
+                      </div>
+                    </>
+                  ) : adsenseEdit ? (
                     <div className="grid grid-cols-2 gap-2.5">
                       {([["오늘", "today"], ["어제", "yesterday"], ["지난 7일", "last7"], ["이번 달", "month"], ["잔고", "balance"]] as [string, keyof AdsenseData][]).map(([label, key]) => (
                         <label key={key} className="block">
@@ -635,7 +762,7 @@ export default function AdminPage() {
                 </div>
               </div>
 
-              {/* 5) 최근 회원 */}
+              {/* 7) 최근 회원 */}
               <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
                 <div className="flex items-center justify-between mb-3">
                   <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white">🆕 최근 회원</h2>

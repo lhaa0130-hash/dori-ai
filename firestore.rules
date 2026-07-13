@@ -48,6 +48,9 @@ service cloud.firestore {
     match /analytics/{docId}       { allow read, write: if true; }
     match /analyticsDaily/{dateId} { allow read, write: if true; }
 
+    // 대시보드 통계(GA4·애드센스 수입) — 관리자만 읽기, 쓰기는 서버 SA만(규칙 우회)
+    match /dashboardStats/{docId}  { allow read: if isAdmin(); allow write: if false; }
+
     // 일로 일일 사용량
     match /illoQuota/{docId}       { allow read, write: if true; }
 
