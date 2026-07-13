@@ -30,6 +30,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // 1) 핵심 정적 페이지 (크롤 가치 높은 페이지만)
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${baseUrl}/`,          lastModified: now, changeFrequency: "daily",   priority: 1.0 },
+    { url: `${baseUrl}/en`,        lastModified: now, changeFrequency: "daily",   priority: 0.9 },
     { url: `${baseUrl}/insight`,   lastModified: now, changeFrequency: "daily",   priority: 0.9 },
     { url: `${baseUrl}/ai-tools`,  lastModified: now, changeFrequency: "weekly",  priority: 0.9 },
     { url: `${baseUrl}/en/ai-tools`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },

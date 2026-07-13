@@ -24,6 +24,18 @@ const SECTIONS = [
   { label: "FAQ", href: "/faq", Icon: HelpCircle },
 ];
 
+// 영어 홈(/en)과 hreflang 상호링크 (제목·OG는 레이아웃 기본 유지, alternates만 추가)
+export const metadata = {
+  alternates: {
+    canonical: "https://illo.im/",
+    languages: {
+      "ko-KR": "https://illo.im/",
+      en: "https://illo.im/en",
+      "x-default": "https://illo.im/",
+    },
+  },
+};
+
 export default async function Home() {
   const insightFeed = getInsightFeed(25); // 인사이트 종류별 탭 순위용(전체 탭 최대 50, 본문발췌 포함)
   const topTools = getTopTools(5);

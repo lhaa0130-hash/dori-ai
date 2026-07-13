@@ -46,9 +46,7 @@ export default function Header() {
             { name: "AI News", href: "/ai-news", emoji: "📰" },
           ],
         },
-        { name: "Projects", href: "/projects", emoji: "🚀" },
-        { name: "Insight", href: "/en/insight", emoji: "🧠" },
-        { name: "Feed", href: "/feed", emoji: "💬" },
+        { name: "Insight", href: "/insight", emoji: "🧠" },
         { name: "Market", href: "/market", emoji: "🛒" },
         {
           name: "Kids", emoji: "🧸", children: [
@@ -88,7 +86,7 @@ export default function Header() {
       ];
 
   // 언어 토글: en→ko는 항상 가능(/en 제거), ko→en은 영어판 있는 페이지만
-  const EN_AVAILABLE = ["/ai-tools", "/ai-models", "/insight"];
+  const EN_AVAILABLE = ["/", "/ai-tools", "/ai-models"];
   const langToggleHref = isEn
     ? ((pathname || "/en").replace(/^\/en/, "") || "/")
     : (EN_AVAILABLE.includes(pathname || "") ? "/en" + pathname : null);
@@ -101,7 +99,7 @@ export default function Header() {
         <div className="w-full h-16 flex items-center gap-4 px-6 xl:px-[260px]">
 
           {/* 로고 */}
-          <Link href="/" aria-label="illo Home" className="flex-shrink-0 hover:opacity-70 transition-opacity">
+          <Link href={isEn ? "/en" : "/"} aria-label="illo Home" className="flex-shrink-0 hover:opacity-70 transition-opacity">
             <span className="font-bold text-lg whitespace-nowrap bg-[linear-gradient(to_right,#FBAA60,#F9954E_30%,#F9954E_70%,#E8832E)] bg-clip-text text-transparent animate-gradient-x">
               illo
             </span>
