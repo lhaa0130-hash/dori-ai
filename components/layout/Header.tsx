@@ -35,30 +35,63 @@ export default function Header() {
   // 일부 항목은 children 드롭다운(AI 정보 / 놀이터)
   type NavChild = { name: string; href: string; emoji: string };
   type NavItem = { name: string; emoji: string; href?: string; children?: NavChild[] };
-  const navItems: NavItem[] = [
-    {
-      name: "AI 정보", emoji: "🤖", children: [
-        { name: "AI 도구", href: "/ai-tools", emoji: "🔧" },
-        { name: "AI 소식", href: "/ai-news", emoji: "📰" },
-        { name: "AI영상", href: "/video", emoji: "🎬" },
-      ],
-    },
-    { name: "프로젝트", href: "/projects", emoji: "🚀" },
-    { name: "인사이트", href: "/insight", emoji: "🧠" },
-    { name: "피드", href: "/feed", emoji: "💬" },
-    { name: "마켓", href: "/market", emoji: "🛒" },
-    {
-      name: "키즈", emoji: "🧸", children: [
-        { name: "몽글로 : 동물도감", href: "/animal", emoji: "🐾" },
-      ],
-    },
-    {
-      name: "놀이터", emoji: "🎡", children: [
-        { name: "미니게임", href: "/minigame", emoji: "🎮" },
-        { name: "심리테스트", href: "/psychtest", emoji: "🧩" },
-      ],
-    },
-  ];
+  // 영어 라우트(/en/*)면 네비·라벨을 영어로. 영어판 있는 페이지는 /en 경로로 연결.
+  const isEn = (pathname || "").startsWith("/en");
+  const navItems: NavItem[] = isEn
+    ? [
+        {
+          name: "AI Hub", emoji: "🤖", children: [
+            { name: "AI Tools", href: "/en/ai-tools", emoji: "🔧" },
+            { name: "AI Models", href: "/en/ai-models", emoji: "📊" },
+            { name: "AI News", href: "/ai-news", emoji: "📰" },
+          ],
+        },
+        { name: "Projects", href: "/projects", emoji: "🚀" },
+        { name: "Insight", href: "/en/insight", emoji: "🧠" },
+        { name: "Feed", href: "/feed", emoji: "💬" },
+        { name: "Market", href: "/market", emoji: "🛒" },
+        {
+          name: "Kids", emoji: "🧸", children: [
+            { name: "Animal Encyclopedia", href: "/animal", emoji: "🐾" },
+          ],
+        },
+        {
+          name: "Play", emoji: "🎡", children: [
+            { name: "Mini Games", href: "/minigame", emoji: "🎮" },
+            { name: "Psych Tests", href: "/psychtest", emoji: "🧩" },
+          ],
+        },
+      ]
+    : [
+        {
+          name: "AI 정보", emoji: "🤖", children: [
+            { name: "AI 도구", href: "/ai-tools", emoji: "🔧" },
+            { name: "AI 소식", href: "/ai-news", emoji: "📰" },
+            { name: "AI영상", href: "/video", emoji: "🎬" },
+          ],
+        },
+        { name: "프로젝트", href: "/projects", emoji: "🚀" },
+        { name: "인사이트", href: "/insight", emoji: "🧠" },
+        { name: "피드", href: "/feed", emoji: "💬" },
+        { name: "마켓", href: "/market", emoji: "🛒" },
+        {
+          name: "키즈", emoji: "🧸", children: [
+            { name: "몽글로 : 동물도감", href: "/animal", emoji: "🐾" },
+          ],
+        },
+        {
+          name: "놀이터", emoji: "🎡", children: [
+            { name: "미니게임", href: "/minigame", emoji: "🎮" },
+            { name: "심리테스트", href: "/psychtest", emoji: "🧩" },
+          ],
+        },
+      ];
+
+  // 언어 토글: en→ko는 항상 가능(/en 제거), ko→en은 영어판 있는 페이지만
+  const EN_AVAILABLE = ["/ai-tools", "/ai-models", "/insight"];
+  const langToggleHref = isEn
+    ? ((pathname || "/en").replace(/^\/en/, "") || "/")
+    : (EN_AVAILABLE.includes(pathname || "") ? "/en" + pathname : null);
 
   return (
     <>
@@ -111,6 +144,17 @@ export default function Header() {
           {/* ── 우측 컨트롤 (돋보기·테마·마이페이지) ── */}
           <div className="ml-auto flex items-center gap-1">
 
+            {/* 언어 토글 (영어판 있는 페이지에서만) */}
+            {langToggleHref && (
+              <Link
+                href={langToggleHref}
+                className="flex-shrink-0 flex items-center gap-1 px-2.5 h-8 rounded-full border border-neutral-200 dark:border-zinc-700 text-[12px] font-bold text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E] hover:text-[#F9954E] transition-colors"
+                aria-label={isEn ? "한국어로 보기" : "View in English"}
+              >
+                🌐 {isEn ? "한국어" : "EN"}
+              </Link>
+            )}
+
             {/* 검색 (데스크탑) */}
             <button onClick={() => setSearchOpen(true)} aria-label="검색" className="hidden lg:flex flex-shrink-0 w-10 h-10 items-center justify-center rounded-full hover:bg-neutral-100 dark:hover:bg-zinc-800 transition-colors text-foreground">
               <Search className="w-5 h-5" strokeWidth={2.5} />
@@ -136,7 +180,7 @@ export default function Header() {
                   onClick={handleSignIn}
                   className="px-5 py-2 rounded-full bg-[#F9954E] hover:bg-[#E8832E] text-xs font-black text-white transition-all shadow-md active:scale-95 whitespace-nowrap"
                 >
-                  로그인
+                  {isEn ? "Sign in" : "로그인"}
                 </button>
               )}
             </div>
