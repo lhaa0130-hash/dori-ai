@@ -3,6 +3,7 @@ import "./globals.css";
 import { Providers } from "./providers";
 import LayoutClient from "@/components/layout/LayoutClient";
 import VisitorTracker from "@/components/VisitorTracker";
+import AnalyticsScripts from "@/components/AnalyticsScripts";
 import LevelUpToast from "@/components/LevelUpToast";
 import StructuredData from "@/components/SEO/StructuredData";
 import ScrollAnimationProvider from "@/components/ScrollAnimationProvider";
@@ -89,27 +90,8 @@ export default function RootLayout({
         suppressHydrationWarning={true}
         style={{ fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif' }}
       >
-        {/* 분석/광고 스크립트는 lazyOnload로 지연 → 초기 렌더(FCP/LCP) 우선, 메인 스레드 경합 완화 */}
-        <Script src="https://www.googletagmanager.com/gtag/js?id=G-RKN3F8V01C" strategy="lazyOnload" />
-        <Script id="google-analytics" strategy="lazyOnload">
-          {`
-                window.dataLayer = window.dataLayer || [];
-                function gtag(){dataLayer.push(arguments);}
-                gtag('js', new Date());
-                gtag('config', 'G-RKN3F8V01C');
-            `}
-        </Script>
-        {/* Microsoft Clarity */}
-        <Script id="microsoft-clarity" strategy="lazyOnload">
-          {`
-                (function(c,l,a,r,i,t,y){
-                    c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-                    t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-                    y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-                })(window, document, "clarity", "script", "va2qmv3mwz");
-            `}
-        </Script>
-
+        {/* 분석 스크립트(GA4·Clarity)는 AnalyticsScripts 컴포넌트에서 로드 — 관리자 본인은 제외.
+            광고(AdSense)는 모든 방문자에게 노출되어야 하므로 여기서 그대로 로드. lazyOnload로 지연. */}
         <Script
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1868839951780851"
@@ -118,6 +100,7 @@ export default function RootLayout({
         />
 
         <Providers>
+          <AnalyticsScripts />
           <ScrollAnimationProvider />
           <VisitorTracker />
           <LevelUpToast />
