@@ -51,6 +51,7 @@ interface CommunityPost {
 // GA4 실시간·집계 (dashboardStats/live 문서) — n8n 수집 스크립트가 채움
 interface Ga4Stats {
   realtimeUsers: number;
+  active?: { dau: number; wau: number; mau: number };
   today: { users: number; pageViews: number };
   last7: { users: number; pageViews: number; sessions: number };
   daily14: { date: string; users: number }[];
@@ -539,9 +540,8 @@ export default function AdminPage() {
           const apprN = approved.size, rejN = rejected.size, pendN = Math.max(0, totalAnimals - apprN - rejN);
           const pctOf = (n: number) => (totalAnimals ? (n / totalAnimals) * 100 : 0);
           const gaOn = !!ga4;
-          // GA4 우선, 없으면 자체집계 폴백
           const todayUsers = ga4 ? ga4.today.users : todayUV;
-          const todayViews = ga4 ? ga4.today.pageViews : todayPV;
+          const act = ga4?.active || (ga4 ? { dau: ga4.today.users, wau: ga4.last7.users, mau: ga4.last7.users } : null);
           const dev = ga4 ? ga4.devices : device;
           const devTotal = dev.mobile + dev.tablet + dev.desktop;
           const chart: { date: string; users: number }[] = ga4
@@ -550,7 +550,6 @@ export default function AdminPage() {
           const chartMax = Math.max(1, ...chart.map((c) => c.users));
           const minsAgo = statsUpdatedAt ? Math.max(0, Math.round((Date.now() - new Date(statsUpdatedAt).getTime()) / 60000)) : null;
           const agoLabel = minsAgo == null ? "" : minsAgo < 1 ? "방금" : minsAgo < 60 ? `${minsAgo}분 전` : `${Math.round(minsAgo / 60)}시간 전`;
-          // 애드센스: 자동(adsenseLive) 우선, 없으면 수동입력
           const ad = adsense || { today: 0, yesterday: 0, last7: 0, month: 0, balance: 0, lastPayment: "", currency: "US$" };
           const curSym = (c?: string) => (c === "USD" || c === "US$" ? "$" : c === "KRW" ? "₩" : (c || "$") + " ");
           const adCur = curSym(adsenseLive?.currency || ad.currency);
@@ -588,34 +587,47 @@ export default function AdminPage() {
                 </p>
               </div>
 
-              {/* 2) 실시간 라인 (GA4) */}
-              {gaOn && (
-                <div className="rounded-2xl border border-emerald-200/70 dark:border-emerald-900/40 bg-gradient-to-br from-emerald-50 to-white dark:from-emerald-950/30 dark:to-zinc-950 p-5">
-                  <div className="flex items-center justify-between gap-3 flex-wrap">
-                    <div className="flex items-center gap-4">
-                      <div className="flex items-center gap-2">
-                        <span className="relative flex h-2.5 w-2.5"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" /><span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" /></span>
-                        <span className="text-[12px] font-bold text-emerald-700 dark:text-emerald-400">지금 접속자</span>
-                      </div>
-                      <div className="text-[34px] font-black text-neutral-900 dark:text-white leading-none">{ga4!.realtimeUsers.toLocaleString()}<span className="text-[14px] font-bold text-neutral-400 ml-1">명</span></div>
+              {/* 2) 사용자 현황 — 실시간 + DAU/WAU/MAU */}
+              <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
+                <div className="flex items-center justify-between gap-2 flex-wrap mb-4">
+                  <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-2">👥 사용자 현황</h2>
+                  {gaOn ? (
+                    <div className="flex items-center gap-2 text-[12px]">
+                      <span className="relative flex h-2.5 w-2.5"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" /><span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" /></span>
+                      <span className="font-bold text-emerald-700 dark:text-emerald-400">지금 {ga4!.realtimeUsers.toLocaleString()}명 접속중</span>
+                      {agoLabel && <span className="text-neutral-400 dark:text-neutral-600">· {agoLabel} 갱신</span>}
                     </div>
-                    <div className="flex items-center gap-5 text-[13px]">
-                      <div><span className="text-neutral-400">오늘 방문</span> <b className="text-neutral-800 dark:text-neutral-100 ml-1">{todayUsers.toLocaleString()}</b></div>
-                      <div><span className="text-neutral-400">오늘 조회</span> <b className="text-neutral-800 dark:text-neutral-100 ml-1">{todayViews.toLocaleString()}</b></div>
-                      <div className="hidden sm:block"><span className="text-neutral-400">7일 세션</span> <b className="text-neutral-800 dark:text-neutral-100 ml-1">{ga4!.last7.sessions.toLocaleString()}</b></div>
-                    </div>
-                  </div>
-                  <p className="mt-2.5 text-[11px] text-emerald-700/70 dark:text-emerald-500/70">Google Analytics 실시간 · 최근 30분 활성 사용자{agoLabel && ` · ${agoLabel} 갱신`}</p>
+                  ) : (
+                    <span className="text-[11px] text-neutral-400">불러오는 중…</span>
+                  )}
                 </div>
-              )}
+                {act ? (
+                  <>
+                    <div className="grid grid-cols-3 gap-3">
+                      {[
+                        { label: "오늘", sub: "DAU · 일간 활성", n: act.dau, accent: "text-sky-600 dark:text-sky-400", bar: "bg-sky-500", bg: "from-sky-50 dark:from-sky-950/30" },
+                        { label: "이번 주", sub: "WAU · 최근 7일", n: act.wau, accent: "text-violet-600 dark:text-violet-400", bar: "bg-violet-500", bg: "from-violet-50 dark:from-violet-950/30" },
+                        { label: "이번 달", sub: "MAU · 최근 30일", n: act.mau, accent: "text-emerald-600 dark:text-emerald-400", bar: "bg-emerald-500", bg: "from-emerald-50 dark:from-emerald-950/30" },
+                      ].map((m) => (
+                        <div key={m.label} className={`rounded-xl bg-gradient-to-br ${m.bg} to-white dark:to-zinc-950 border border-neutral-100 dark:border-zinc-900 p-4`}>
+                          <div className="flex items-center gap-1.5"><span className={`w-1.5 h-1.5 rounded-full ${m.bar}`} /><span className="text-[12px] font-bold text-neutral-600 dark:text-neutral-300">{m.label}</span></div>
+                          <div className={`text-[30px] font-black mt-1.5 leading-none ${m.accent}`}>{m.n.toLocaleString()}</div>
+                          <div className="text-[10.5px] text-neutral-400 dark:text-neutral-500 mt-1.5">{m.sub}</div>
+                        </div>
+                      ))}
+                    </div>
+                    <p className="mt-3 text-[11.5px] text-neutral-400 dark:text-neutral-500 break-keep">DAU·WAU·MAU = 중복 제외 <b>순수 방문자 수</b> · Google Analytics 실시간 자동집계</p>
+                  </>
+                ) : (
+                  <p className="text-[13px] text-neutral-400 py-3">활성 사용자 데이터를 불러오는 중이에요.</p>
+                )}
+              </div>
 
-              {/* 3) 핵심 지표 */}
-              <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
+              {/* 3) 사이트 총계 지표 */}
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
                 {[
                   { emoji: "👤", label: "총 회원", value: users.length },
                   { emoji: "💎", label: "프리미엄", value: premiumUsers.length },
-                  { emoji: "📅", label: "오늘 방문", value: todayUsers },
-                  { emoji: "📊", label: "7일 방문", value: ga4 ? ga4.last7.users : totalUV },
                   { emoji: "💬", label: "게시글", value: communityPosts.length },
                   { emoji: "🐾", label: "총 동물", value: totalAnimals },
                 ].map((c) => (
