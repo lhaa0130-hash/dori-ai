@@ -50,6 +50,23 @@ export default function AnimalDetail({ params }: { params: { id: string } }) {
 
   const prev = idx > 0 ? cards[idx - 1] : null;
   const next = idx < cards.length - 1 ? cards[idx + 1] : null;
+
+  // 관련 동물 — 같은 분류군·먹이 기준 점수화(내부링크 강화: 크롤러 발견성·PageRank·회유 개선)
+  const myTax = card.filters?.taxonomy?.[0];
+  const myDiet = card.filters?.diet || [];
+  const related = cards
+    .filter((c) => c.no && c.no !== card.no && c.image_path)
+    .map((c) => {
+      let score = 0;
+      if (myTax && (c.filters?.taxonomy || []).includes(myTax)) score += 2;
+      score += (c.filters?.diet || []).filter((d) => myDiet.includes(d)).length;
+      return { c, score };
+    })
+    .filter((x) => x.score > 0)
+    .sort((a, b) => b.score - a.score)
+    .slice(0, 8)
+    .map((x) => x.c);
+
   const info = Array.isArray(card.info) ? card.info : [];
   const facts = Array.isArray(card.facts) ? card.facts : [];
   const features = Array.isArray(card.key_feature) ? card.key_feature : [];
@@ -138,6 +155,22 @@ export default function AnimalDetail({ params }: { params: { id: string } }) {
             <section className="mb-6">
               <h2 className="text-xl font-bold mb-2">🧬 아종</h2>
               <p>{card.subspecies}</p>
+            </section>
+          )}
+
+          {related.length > 0 && (
+            <section className="mb-6 mt-10 pt-6 border-t border-neutral-200 dark:border-neutral-800">
+              <h2 className="text-xl font-bold mb-4">🐾 관련 동물</h2>
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                {related.map((r) => (
+                  <Link key={r.no} href={`/animal/${r.no}`} className="group block" title={`${r.animal_name} 알아보기`}>
+                    <div className="rounded-xl overflow-hidden relative w-full bg-neutral-100 dark:bg-zinc-900" style={{ aspectRatio: "1 / 1" }}>
+                      {r.image_path && <Image src={r.image_path} alt={`${r.animal_name} 이미지`} fill sizes="140px" style={{ objectFit: "cover" }} className="group-hover:scale-105 transition-transform" />}
+                    </div>
+                    <div className="text-[13px] font-semibold mt-1.5 text-center truncate group-hover:text-orange-500">{r.animal_name}</div>
+                  </Link>
+                ))}
+              </div>
             </section>
           )}
 
