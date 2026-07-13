@@ -459,7 +459,7 @@ export default function AdminPage() {
         </div>
       )}
 
-      <div className="w-full max-w-[1600px] mx-auto px-4 sm:px-6 lg:px-8 pt-24 pb-16">
+      <div className="w-full px-6 xl:px-[260px] pt-24 pb-16">
         {/* 헤더 */}
         <div className="flex items-center gap-3 mb-7">
           <div className="w-10 h-10 rounded-2xl bg-[#FFF5EB] dark:bg-[#F9954E]/10 flex items-center justify-center text-xl flex-shrink-0">

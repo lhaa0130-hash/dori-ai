@@ -6,7 +6,15 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 13 Jul 2026 01:00:31 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 13 Jul 2026 04:14:25 GMT</lastBuildDate>
+    <item>
+      <title>삼성전자 충격과 무료 컴퓨트 전쟁: AI 자금이 모델보다 인프라로 더 깊게 흐른 한 주</title>
+      <link>https://illo.im/insight/article/report-11</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/report-11</guid>
+      <category>리포트</category>
+      <pubDate>Mon, 13 Jul 2026 02:04:45 GMT</pubDate>
+      <description>이번 주 인공지능 업계는 무료 컴퓨트 제공, 반도체 기대치 재조정, 데이터센터 장기 임대 계약이 동시에 부각됐다. 돈은 여전히 인공지능으로 흐르지만, 시장은 이제 ‘누가 더 크게 쓰는가’보다 ‘누가 그 비용을 회수하는가’를 묻기 시작했다.</description>
+    </item>
     <item>
       <title>[대시보드] 클로드코드로 나만의 주식 AI 대시보드 만들기</title>
       <link>https://illo.im/insight/article/video-65</link>
@@ -318,14 +326,6 @@
       <category>트렌드</category>
       <pubDate>Tue, 30 Jun 2026 11:00:20 GMT</pubDate>
       <description>대만이 AI 하드웨어 밀수 사건을 본격적으로 수사하며 글로벌 기술 시장의 불법 거래 위험을 경고하고 있다.</description>
-    </item>
-    <item>
-      <title>Arena, AI 리더보드가 1억 달러 기업으로 성장하다</title>
-      <link>https://illo.im/insight/article/trend-187</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/trend-187</guid>
-      <category>트렌드</category>
-      <pubDate>Tue, 30 Jun 2026 09:00:18 GMT</pubDate>
-      <description>AI 리더보드 플랫폼 Arena가 상업 서비스 출시 9개월 만에 1억 달러 기업으로 성장하며 업계의 주목을 받고 있다.</description>
     </item>
   </channel>
 </rss>
