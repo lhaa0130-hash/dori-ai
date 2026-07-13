@@ -4,8 +4,30 @@ import { useState, useEffect } from "react";
 import { AiTool } from "@/types/content";
 import { AI_TOOLS_DATA } from "@/constants/aiToolsData";
 import { AI_TOOL_API_LINKS } from "@/constants/aiToolApiLinks";
-import { DISPLAY_CATEGORIES, CATEGORY_LABELS, CATEGORY_DESCRIPTIONS } from "@/constants/aiCategories";
+import { DISPLAY_CATEGORIES, CATEGORY_LABELS, CATEGORY_DESCRIPTIONS, CATEGORY_LABELS_EN, CATEGORY_DESCRIPTIONS_EN } from "@/constants/aiCategories";
 import { ExternalLink, Code2, Star } from "lucide-react";
+
+type Locale = "ko" | "en";
+
+// ── UI 문자열(다국어) ──────────────────────────────────────────────
+const UI = {
+  ko: {
+    apiConnect: "API 연결", visitSite: "사이트 방문", visit: "방문",
+    top5: "Top 5", neu: "🆕 신규",
+    count: (n: number) => `${n}개`, allN: (n: number) => `전체 ${n}개`,
+    collapse: "접기 ▲", more: (n: number) => `+ ${n}개 더 보기 ▼`,
+    empty: "조건에 맞는 도구가 없어요",
+  },
+  en: {
+    apiConnect: "API", visitSite: "Visit site", visit: "Visit",
+    top5: "Top 5", neu: "🆕 New",
+    count: (n: number) => `${n}`, allN: (n: number) => `All ${n}`,
+    collapse: "Collapse ▲", more: (n: number) => `+ ${n} more ▼`,
+    empty: "No tools match your filter",
+  },
+};
+const labelsFor = (l: Locale) => (l === "en" ? CATEGORY_LABELS_EN : CATEGORY_LABELS);
+const descsFor = (l: Locale) => (l === "en" ? CATEGORY_DESCRIPTIONS_EN : CATEGORY_DESCRIPTIONS);
 
 // 에디터 지정 순위 (트래픽 왜곡 보정 — 대기업 통합도메인이 위로 가는 문제 해결). 여기 있으면 최우선, 없으면 트래픽순.
 const EDITORIAL_RANK: Record<string, number> = {
@@ -31,7 +53,7 @@ function apiHref(tool: AiTool): string | null {
 }
 
 // ── TOP 5 통합 카드 (1~5위 동일 크기) ─────────────────────────────
-function TopCard({ tool, rank }: { tool: AiTool; rank: number }) {
+function TopCard({ tool, rank, t }: { tool: AiTool; rank: number; t: typeof UI["ko"] }) {
   const api = apiHref(tool);
   const desc = tool.strength || tool.summary || tool.description || "";
   const features = (tool.pros && tool.pros.length > 0)
@@ -61,7 +83,7 @@ function TopCard({ tool, rank }: { tool: AiTool; rank: number }) {
           alt={tool.name}
           className="w-10 h-10 rounded-xl object-contain bg-neutral-50 dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 flex-shrink-0 p-0.5"
           loading="lazy"
-          onError={(e) => { const t = e.target as HTMLImageElement; if (!t.dataset.fb) { t.dataset.fb = "1"; t.src = letterAvatar(tool.name); } }}
+          onError={(e) => { const t2 = e.target as HTMLImageElement; if (!t2.dataset.fb) { t2.dataset.fb = "1"; t2.src = letterAvatar(tool.name); } }}
         />
 
         <div className="flex-1 min-w-0">
@@ -117,7 +139,7 @@ function TopCard({ tool, rank }: { tool: AiTool; rank: number }) {
               hover:border-[#F9954E]/50 hover:text-[#F9954E] transition-colors"
           >
             <Code2 className="w-3.5 h-3.5" />
-            API 연결
+            {t.apiConnect}
           </a>
         )}
         <a
@@ -128,7 +150,7 @@ function TopCard({ tool, rank }: { tool: AiTool; rank: number }) {
             bg-[#F9954E] text-white hover:bg-[#E8832E] transition-colors"
         >
           <ExternalLink className="w-3.5 h-3.5" />
-          사이트 방문
+          {t.visitSite}
         </a>
       </div>
     </div>
@@ -136,7 +158,7 @@ function TopCard({ tool, rank }: { tool: AiTool; rank: number }) {
 }
 
 // ── 미니 카드 (6위 이하, 필터 모드 전체 목록용) ───────────────────
-function MiniCard({ tool, rank }: { tool: AiTool; rank: number }) {
+function MiniCard({ tool, rank, t }: { tool: AiTool; rank: number; t: typeof UI["ko"] }) {
   const api = apiHref(tool);
   return (
     <div
@@ -152,7 +174,7 @@ function MiniCard({ tool, rank }: { tool: AiTool; rank: number }) {
         className="w-[30px] h-[30px] rounded-lg object-contain bg-neutral-50 dark:bg-zinc-900
           border border-neutral-100 dark:border-zinc-800 flex-shrink-0"
         loading="lazy"
-        onError={(e) => { const t = e.target as HTMLImageElement; if (!t.dataset.fb) { t.dataset.fb = "1"; t.src = letterAvatar(tool.name); } }}
+        onError={(e) => { const t2 = e.target as HTMLImageElement; if (!t2.dataset.fb) { t2.dataset.fb = "1"; t2.src = letterAvatar(tool.name); } }}
       />
       <div className="flex-1 min-w-0">
         <span className="text-[13px] font-semibold text-neutral-900 dark:text-white">{tool.name}</span>
@@ -177,7 +199,7 @@ function MiniCard({ tool, rank }: { tool: AiTool; rank: number }) {
           className="px-2.5 py-1 rounded-md text-[11px] font-semibold text-white bg-[#F9954E]
             hover:bg-[#E8832E] transition-colors"
         >
-          방문
+          {t.visit}
         </a>
       </div>
     </div>
@@ -190,20 +212,25 @@ function CategorySection({
   tools,
   sectionRef,
   isFiltered = false,
+  locale = "ko",
 }: {
   cat: string;
   tools: AiTool[];
   sectionRef?: (el: HTMLElement | null) => void;
   isFiltered?: boolean;
+  locale?: Locale;
 }) {
   const [expanded, setExpanded] = useState(false);
+  const t = UI[locale];
+  const LABELS = labelsFor(locale);
+  const DESCS = descsFor(locale);
   // 점수(낮을수록 상위): ① OpenRouter 실시간 사용량 매칭분 최우선(높을수록 위) → ② 에디터 지정 순위 → ③ Tranco 트래픽순
-  const score = (t: AiTool) => {
-    const orv = (t as any).__or || 0;
+  const score = (tl: AiTool) => {
+    const orv = (tl as any).__or || 0;
     if (orv > 0) return -orv;                 // OpenRouter 실사용량(매칭 도구): 사용량 클수록 상위
-    const ed = EDITORIAL_RANK[t.id];
+    const ed = EDITORIAL_RANK[tl.id];
     if (ed != null) return ed;                // 에디터 지정(에이전트 등 미매칭 도구)
-    return 100000 + ((t as any).__pop ?? 999999);  // Tranco 웹트래픽
+    return 100000 + ((tl as any).__pop ?? 999999);  // Tranco 웹트래픽
   };
   const sortedTools = tools.slice().sort((a, b) => {
     const sa = score(a), sb = score(b);
@@ -211,7 +238,7 @@ function CategorySection({
     return b.rating - a.rating;
   });
 
-  const top5 = sortedTools.slice(0, 5).map((t, i) => ({ ...t, topRank: i + 1 }));
+  const top5 = sortedTools.slice(0, 5).map((tl, i) => ({ ...tl, topRank: i + 1 }));
   const rest = sortedTools.slice(5);
 
   return (
@@ -225,24 +252,24 @@ function CategorySection({
       <div className="flex items-end justify-between mb-6">
         <div>
           <p className="text-[11px] font-bold text-[#F9954E] mb-1.5 uppercase tracking-wide">
-            {cat === "agent" ? "🆕 신규" : "Top 5"}
+            {cat === "agent" ? t.neu : t.top5}
           </p>
           <h2 className="text-[22px] font-extrabold text-neutral-950 dark:text-white tracking-tight leading-tight">
-            {CATEGORY_LABELS[cat] || cat}
+            {LABELS[cat] || cat}
           </h2>
           <p className="text-[13px] text-neutral-400 dark:text-neutral-500 mt-1 leading-relaxed break-keep max-w-xs">
-            {CATEGORY_DESCRIPTIONS[cat]}
+            {DESCS[cat]}
           </p>
         </div>
         <span className="text-[12px] font-semibold text-neutral-400 flex-shrink-0">
-          {sortedTools.length}개
+          {t.count(sortedTools.length)}
         </span>
       </div>
 
       {/* Top 5 통합 카드 (동일 크기) */}
       <div className="flex flex-col gap-1.5">
         {top5.map((tool) => (
-          <TopCard key={tool.id} tool={tool} rank={tool.topRank ?? 1} />
+          <TopCard key={tool.id} tool={tool} rank={tool.topRank ?? 1} t={t} />
         ))}
       </div>
 
@@ -252,13 +279,13 @@ function CategorySection({
           <div className="flex items-center gap-3 mb-3">
             <div className="h-px flex-1 bg-neutral-100 dark:bg-zinc-900" />
             <span className="text-[11px] font-bold text-neutral-300 dark:text-zinc-600 uppercase tracking-widest whitespace-nowrap">
-              전체 {sortedTools.length}개
+              {t.allN(sortedTools.length)}
             </span>
             <div className="h-px flex-1 bg-neutral-100 dark:bg-zinc-900" />
           </div>
           <div className="flex flex-col gap-1.5">
             {rest.map((tool, i) => (
-              <MiniCard key={tool.id} tool={tool} rank={i + 6} />
+              <MiniCard key={tool.id} tool={tool} rank={i + 6} t={t} />
             ))}
           </div>
         </div>
@@ -271,7 +298,7 @@ function CategorySection({
           className="mt-4 w-full py-2.5 rounded-xl border border-neutral-200 dark:border-zinc-800 text-[13px] font-bold
             text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E]/40 hover:text-[#F9954E] transition-colors"
         >
-          {expanded ? "접기 ▲" : `+ ${rest.length}개 더 보기 ▼`}
+          {expanded ? t.collapse : t.more(rest.length)}
         </button>
       )}
     </section>
@@ -282,9 +309,13 @@ function CategorySection({
 interface AiToolsListProps {
   filters: { category: string };
   sectionRefs?: React.MutableRefObject<{ [key: string]: HTMLElement | null }>;
+  locale?: Locale;
+  toolsData?: AiTool[];
 }
 
-export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) {
+export default function AiToolsList({ filters, sectionRefs, locale = "ko", toolsData }: AiToolsListProps) {
+  const DATA = toolsData ?? AI_TOOLS_DATA;
+  const t = UI[locale];
   const [tools, setTools] = useState<AiTool[]>([]);
   const [isLoaded, setIsLoaded] = useState(false);
   const [popRanks, setPopRanks] = useState<Record<string, number>>({});
@@ -293,7 +324,7 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
 
   useEffect(() => {
     const savedRatings = JSON.parse(localStorage.getItem("dori_tool_ratings") || "{}");
-    const updated = AI_TOOLS_DATA.map((tool) => {
+    const updated = DATA.map((tool) => {
       const saved = savedRatings[tool.id];
       if (saved) {
         const avg = saved.count > 0 ? Number((saved.totalScore / saved.count).toFixed(1)) : 0;
@@ -303,6 +334,7 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
     });
     setTools(updated);
     setIsLoaded(true);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // 6시간마다 갱신되는 전 세계 인기 순위(Tranco) 로드
@@ -314,7 +346,6 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
   }, []);
 
   // OpenRouter 실시간 사용량 로드 → 매칭되는 도구는 실사용량 순으로 라이브 정렬
-  // (LLM=provider 요청량, 그 외=OpenRouter 앱 토큰량으로 매칭. 매칭 안 되면 기존 순서 유지)
   useEffect(() => {
     const norm = (x: string) => (x || "").toLowerCase().replace(/[^a-z0-9가-힣]/g, "");
     const providerOf = (name: string) => {
@@ -336,45 +367,46 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
       const appTokens: Record<string, number> = {};
       for (const a of (j.appsTop || [])) { const k = norm(a.title); if (k) appTokens[k] = a.tokensB || 0; }
       const map: Record<string, number> = {};
-      for (const t of AI_TOOLS_DATA) {
+      for (const tl of DATA) {
         let v = 0;
-        if (String(t.category) === "llm") {
-          const p = providerOf(t.name); if (p && providerReq[p]) v = providerReq[p];
+        if (String(tl.category) === "llm") {
+          const p = providerOf(tl.name); if (p && providerReq[p]) v = providerReq[p];
         } else {
-          const k = norm(t.name);
+          const k = norm(tl.name);
           if (k) for (const title in appTokens) { if (title.includes(k) || k.includes(title)) v = Math.max(v, appTokens[title]); }
         }
-        if (v > 0) map[t.id] = v;
+        if (v > 0) map[tl.id] = v;
       }
       setOrPop(map);
 
-      // OpenRouter 실사용 톱 '에이전트/코딩' 앱을 에이전트 카테고리에 합치기(목록에 없던 Hermes 등 실제 1위가 뜨도록)
-      const curatedNames = new Set(AI_TOOLS_DATA.map((t) => norm(t.name)));
+      // OpenRouter 실사용 톱 '에이전트/코딩' 앱을 에이전트 카테고리에 합치기
+      const curatedNames = new Set(DATA.map((tl) => norm(tl.name)));
       const isAgentApp = (a: any) => /agent|code|coding|cli|dev|build|automat|claw|assistant|copilot|에이전트|코드/i.test(((a.title || "") + " " + (a.desc || "")));
       const apps = (j.appsTop || [])
         .filter((a: any) => a.title && isAgentApp(a) && !curatedNames.has(norm(a.title)))
         .slice(0, 20)
         .map((a: any) => {
-          const d = a.descKo || ((a.desc || "").replace(/\s*\S*$/, "") + "…");
+          const dKo = a.descKo || ((a.desc || "").replace(/\s*\S*$/, "") + "…");
+          const d = locale === "en" ? (a.desc || dKo) : dKo;
           return {
             id: "orapp-" + norm(a.title), name: a.title, category: "agent",
             summary: d, strength: d,
-            description: a.descKo || a.desc || "", website: a.url || a.favicon || "#",
+            description: a.desc || dKo || "", website: a.url || a.favicon || "#",
             pros: [], rating: 0, ratingCount: 0, userRatings: [], comments: [], __or: a.tokensB || 0,
           };
         });
       setOrApps(apps as any);
     };
-    // 에이전트 앱 설명 한글(descKo)은 수집기가 stats.json에만 넣으므로 정적 JSON 우선, 엣지(/api/openrouter)는 폴백
     fetch("/openrouter-stats.json").then((r) => (r.ok ? r.json() : null))
       .then((j) => (j ? compute(j) : fetch("/api/openrouter").then((r) => (r.ok ? r.json() : null)).then(compute)))
       .catch(() => fetch("/api/openrouter").then((r) => (r.ok ? r.json() : null)).then(compute).catch(() => {}));
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  const base = isLoaded && tools.length > 0 ? tools : AI_TOOLS_DATA;
+  const base = isLoaded && tools.length > 0 ? tools : DATA;
   const currentTools = [
-    ...base.map((t) => ({ ...t, __pop: popRanks[t.id] ?? null, __or: orPop[t.id] ?? 0 })),
-    ...orApps, // OpenRouter 실사용 톱 에이전트 앱(Hermes 등) 합류
+    ...base.map((tl) => ({ ...tl, __pop: popRanks[tl.id] ?? null, __or: orPop[tl.id] ?? 0 })),
+    ...orApps,
   ] as AiTool[];
   const isOverviewMode = filters.category === "All";
 
@@ -382,7 +414,7 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
     return (
       <div className="w-full flex flex-col">
         {DISPLAY_CATEGORIES.map((cat) => {
-          const catTools = currentTools.filter((t) => String(t.category) === String(cat));
+          const catTools = currentTools.filter((tl) => String(tl.category) === String(cat));
           if (catTools.length === 0) return null;
           return (
             <CategorySection
@@ -390,6 +422,7 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
               cat={cat}
               tools={catTools}
               isFiltered={false}
+              locale={locale}
               sectionRef={(el) => { if (sectionRefs) sectionRefs.current[`category-${cat}`] = el; }}
             />
           );
@@ -399,21 +432,21 @@ export default function AiToolsList({ filters, sectionRefs }: AiToolsListProps) 
   }
 
   const filteredTools = currentTools.filter(
-    (t) => t.category.toLowerCase() === filters.category.toLowerCase()
+    (tl) => tl.category.toLowerCase() === filters.category.toLowerCase()
   );
 
   if (filteredTools.length === 0) {
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center">
         <p className="text-[32px] mb-3">🔍</p>
-        <p className="text-[15px] font-semibold text-neutral-500">조건에 맞는 도구가 없어요</p>
+        <p className="text-[15px] font-semibold text-neutral-500">{t.empty}</p>
       </div>
     );
   }
 
   return (
     <div className="w-full">
-      <CategorySection cat={filters.category} tools={filteredTools} isFiltered={true} />
+      <CategorySection cat={filters.category} tools={filteredTools} isFiltered={true} locale={locale} />
     </div>
   );
 }

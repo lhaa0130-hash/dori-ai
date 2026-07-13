@@ -7,10 +7,20 @@ import AiToolsList from "@/components/ai-tools/AiToolsList";
 import OpenRouterRanking from "@/components/ai-tools/OpenRouterRanking";
 import { completeMission, isMissionCompletedToday, markMissionCompletedToday } from "@/lib/missionHelpers";
 import { useScrollSpy } from "@/hooks/useScrollSpy";
-import { DISPLAY_CATEGORIES, CATEGORY_LABELS } from "@/constants/aiCategories";
+import { DISPLAY_CATEGORIES, CATEGORY_LABELS, CATEGORY_LABELS_EN } from "@/constants/aiCategories";
+import type { AiTool } from "@/types/content";
 
-export default function AiToolsClient() {
+type Locale = "ko" | "en";
+const CLIENT_T = {
+  ko: { h1: "AI 도구 모음", sub: "카테고리별로 엄선된 340개+ AI 도구", compare: "전체 모델 비교 · 비용 계산기 →", all: "전체" },
+  en: { h1: "AI Tools Directory", sub: "340+ hand-picked AI tools by category", compare: "Compare all models · cost calculator →", all: "All" },
+};
+
+export default function AiToolsClient({ locale = "ko", toolsData }: { locale?: Locale; toolsData?: AiTool[] }) {
   const { session } = useAuth();
+  const tt = CLIENT_T[locale];
+  const LABELS = locale === "en" ? CATEGORY_LABELS_EN : CATEGORY_LABELS;
+  const modelsHref = locale === "en" ? "/en/ai-models" : "/ai-models";
   const [mounted, setMounted] = useState(false);
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
   const [filters, setFilters] = useState({ category: "All" });
@@ -61,18 +71,18 @@ export default function AiToolsClient() {
       {/* ── 히어로 ── */}
       <section className="pt-6 pb-5 border-b border-neutral-100 dark:border-zinc-900">
         <h1 className="text-[28px] sm:text-[36px] font-extrabold text-neutral-950 dark:text-white leading-[1.12] tracking-tight mb-1.5 break-keep">
-          AI 도구 모음
+          {tt.h1}
         </h1>
         <p className="text-[13px] text-neutral-400 dark:text-neutral-500 break-keep">
-          카테고리별로 엄선된 200개+ AI 도구
+          {tt.sub}
         </p>
       </section>
 
       {/* ── AI 모델 랭킹 (사용량/지능/가격 3열 동시) ── */}
       <section className="w-full pt-4 pb-1">
         <OpenRouterRanking />
-        <Link href="/ai-models" className="mt-2 flex items-center gap-1.5 text-[12px] text-neutral-400 hover:text-[#F9954E] transition-colors">
-          전체 모델 비교 · 비용 계산기 →
+        <Link href={modelsHref} className="mt-2 flex items-center gap-1.5 text-[12px] text-neutral-400 hover:text-[#F9954E] transition-colors">
+          {tt.compare}
         </Link>
       </section>
 
@@ -88,7 +98,7 @@ export default function AiToolsClient() {
                   : "bg-white dark:bg-zinc-950 border-neutral-200 dark:border-zinc-700 text-neutral-500 dark:text-neutral-400"
               }`}
             >
-              전체
+              {tt.all}
             </button>
             {DISPLAY_CATEGORIES.map((cat) => {
               const isActive = activeCategory === cat && filters.category !== "All";
@@ -103,7 +113,7 @@ export default function AiToolsClient() {
                   }`}
                 >
                   {cat === "agent" && <span className="mr-1 text-[10px] bg-[#F9954E] text-white px-1.5 py-0.5 rounded-full font-black">NEW</span>}
-                  {CATEGORY_LABELS[cat]}
+                  {LABELS[cat]}
                 </button>
               );
             })}
@@ -113,7 +123,7 @@ export default function AiToolsClient() {
 
       {/* ── 도구 목록 ── */}
       <section className="w-full pb-16">
-        <AiToolsList filters={filters} sectionRefs={sectionRefs} />
+        <AiToolsList filters={filters} sectionRefs={sectionRefs} locale={locale} toolsData={toolsData} />
       </section>
 
     </main>

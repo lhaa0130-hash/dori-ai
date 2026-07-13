@@ -42,6 +42,50 @@ export const CATEGORY_LABELS: Record<string, string> = {
     "etc": "기타"
 };
 
+export const CATEGORY_LABELS_EN: Record<string, string> = {
+    "agent": "AI Agents",
+    "llm": "LLMs",
+    "image-generation": "Image",
+    "video-generation": "Video",
+    "coding": "Coding",
+    "voice-tts": "Voice / TTS",
+    "3d": "3D",
+    "automation": "Automation",
+    "music": "Music",
+    "presentation": "Presentation",
+    "meeting-notes": "Meeting Notes",
+    "marketing": "Marketing",
+    "writing": "Writing",
+    "education": "Education / Research",
+    "chatbot": "Chatbot",
+    "avatar": "Avatar",
+    "web-builder": "Web Builder",
+    "game": "Game",
+    "etc": "Others"
+};
+
+export const CATEGORY_DESCRIPTIONS_EN: Record<string, string> = {
+    "agent": "Next-gen AI agents that plan and execute tasks autonomously",
+    "llm": "The AI standard — the most capable, all-round conversational models",
+    "image-generation": "Everything AI image — generation, editing, background removal",
+    "video-generation": "AI video generation, subtitles and editing automation in one",
+    "coding": "Coding assistants that dramatically boost developer productivity",
+    "voice-tts": "Turn text into the most natural human-like voices",
+    "3d": "Instantly generate 3D models and assets from text or images",
+    "automation": "Workflows that handle complex, repetitive tasks automatically",
+    "music": "AI music that composes and sings from just your lyrics",
+    "presentation": "Give a topic, get a designed slide deck and talking points",
+    "meeting-notes": "A smart assistant that records and summarizes your meetings",
+    "marketing": "Everything marketing — from copywriting to SEO",
+    "writing": "Tools that help with blogs, fiction, emails and all writing",
+    "education": "AI tutors for paper summaries, language learning and more",
+    "chatbot": "Build your own chatbot — from customer support to a personal assistant",
+    "avatar": "Create talking virtual-human avatar videos from text",
+    "web-builder": "Draw like a designer and get it turned into website code",
+    "game": "Game dev innovation — from asset generation to NPC dialogue",
+    "etc": "Handy productivity tools — translation, spreadsheets, PDF analysis and more"
+};
+
 export const CATEGORY_DESCRIPTIONS: Record<string, string> = {
     "agent": "자율적으로 작업을 계획하고 실행하는 차세대 AI 에이전트",
     "llm": "AI의 표준, 가장 무난하고 강력한 대화형 모델",
