@@ -7,6 +7,7 @@ export const metadata = createMetadata({
   title: "AI 모델 가격 비교 · 실시간 비용 계산기",
   description: "ChatGPT, Claude, Gemini, DeepSeek 등 전 세계 인기 AI 모델의 사용량·지능·속도·가격을 한눈에 비교하고, 토큰 수만 넣으면 모델별 월 비용을 자동 계산합니다. 자동 갱신.",
   path: "/ai-models",
+  hreflang: { ko: "/ai-models", en: "/en/ai-models" },
   keywords: [
     "AI 모델 가격", "AI 모델 비교", "LLM 가격 비교", "AI API 비용 계산기", "GPT 가격",
     "Claude 가격", "Gemini 가격", "DeepSeek 가격", "토큰 비용", "AI 모델 순위", "LLM 비교",

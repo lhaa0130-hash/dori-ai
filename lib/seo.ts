@@ -9,6 +9,9 @@ interface CreateMetadataProps {
   description: string;
   path: string;
   image?: string;
+  locale?: "ko" | "en";
+  // 다국어 대응 페이지면 ko/en 경로를 주면 hreflang 상호 링크를 생성
+  hreflang?: { ko: string; en: string };
 }
 
 export function createMetadata({
@@ -17,8 +20,17 @@ export function createMetadata({
   path,
   image = DEFAULT_OG_IMAGE,
   keywords,
+  locale = "ko",
+  hreflang,
 }: CreateMetadataProps & { keywords?: string[] }): Metadata {
   const fullUrl = `${SITE_URL}${path}`;
+  const languages = hreflang
+    ? {
+        "ko-KR": `${SITE_URL}${hreflang.ko}`,
+        en: `${SITE_URL}${hreflang.en}`,
+        "x-default": `${SITE_URL}${hreflang.ko}`,
+      }
+    : undefined;
   const defaultKeywords = [
     "AI",
     "인공지능",
@@ -51,6 +63,7 @@ export function createMetadata({
     publisher: "illo",
     alternates: {
       canonical: fullUrl,
+      ...(languages ? { languages } : {}),
     },
     openGraph: {
       title: `${title} | ${SITE_NAME}`,
@@ -65,7 +78,7 @@ export function createMetadata({
           alt: title,
         },
       ],
-      locale: "ko_KR",
+      locale: locale === "en" ? "en_US" : "ko_KR",
       type: "website",
     },
     twitter: {
