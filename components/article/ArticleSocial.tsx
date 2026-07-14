@@ -21,7 +21,8 @@ type Cmt = { id: string; uid: string; name: string; text: string; createdAt?: an
 const db = () => getFirebaseFirestore();
 const myUid = () => { try { return getFirebaseAuth().currentUser?.uid || null; } catch { return null; } };
 
-export default function ArticleSocial({ slug, compact = false }: { slug: string; title?: string; compact?: boolean }) {
+export default function ArticleSocial({ slug, compact = false, locale = "ko" }: { slug: string; title?: string; compact?: boolean; locale?: "ko" | "en" }) {
+  const en = locale === "en";
   const { status, session } = useAuth();
   const [likeCount, setLikeCount] = useState(0);
   const [liked, setLiked] = useState(false);
@@ -124,14 +125,14 @@ export default function ArticleSocial({ slug, compact = false }: { slug: string;
               : "bg-white dark:bg-zinc-900 border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-300 hover:border-[#F9954E]"}`}
         >
           <Heart className={`w-4 h-4 ${liked ? "fill-white" : ""}`} />
-          좋아요 {likeCount > 0 && <span className="tabular-nums">{likeCount}</span>}
+          {en ? "Like" : "좋아요"} {likeCount > 0 && <span className="tabular-nums">{likeCount}</span>}
         </button>
       </div>
 
       {/* 댓글 */}
       <div className="flex items-center gap-2 mb-4">
         <MessageCircle className="w-4 h-4 text-[#F9954E]" />
-        <h3 className="text-[15px] font-extrabold text-neutral-900 dark:text-white">댓글 {comments.length > 0 && <span className="text-[#F9954E]">{comments.length}</span>}</h3>
+        <h3 className="text-[15px] font-extrabold text-neutral-900 dark:text-white">{en ? "Comments" : "댓글"} {comments.length > 0 && <span className="text-[#F9954E]">{comments.length}</span>}</h3>
       </div>
 
       {/* 작성 폼 */}
@@ -141,37 +142,37 @@ export default function ArticleSocial({ slug, compact = false }: { slug: string;
             value={text}
             onChange={(e) => setText(e.target.value)}
             maxLength={1000}
-            placeholder="따뜻한 댓글을 남겨주세요"
+            placeholder={en ? "Leave a kind comment" : "따뜻한 댓글을 남겨주세요"}
             className="flex-1 px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-zinc-700 bg-neutral-50 dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none focus:border-[#F9954E]"
           />
           <button type="submit" disabled={posting || !text.trim()} className="px-4 rounded-xl bg-[#F9954E] text-white font-bold text-[13px] disabled:opacity-50 flex items-center gap-1">
-            <Send className="w-3.5 h-3.5" /> 등록
+            <Send className="w-3.5 h-3.5" /> {en ? "Post" : "등록"}
           </button>
         </form>
       ) : (
         <div className="mb-6 p-4 rounded-xl border border-neutral-200 dark:border-zinc-800 bg-neutral-50 dark:bg-zinc-900/40 text-center">
           <p className="text-[13px] text-neutral-500 dark:text-neutral-400">
-            <Link href={`/login`} className="font-bold text-[#E8832E] dark:text-[#F9954E] hover:underline">로그인</Link>하면 댓글을 남길 수 있어요.
+            <Link href={`/login`} className="font-bold text-[#E8832E] dark:text-[#F9954E] hover:underline">{en ? "Sign in" : "로그인"}</Link>{en ? " to leave a comment." : "하면 댓글을 남길 수 있어요."}
           </p>
         </div>
       )}
 
       {/* 목록 */}
       {comments.length === 0 ? (
-        <p className="text-center text-[13px] text-neutral-400 py-8">첫 댓글을 남겨보세요 ✍️</p>
+        <p className="text-center text-[13px] text-neutral-400 py-8">{en ? "Be the first to comment ✍️" : "첫 댓글을 남겨보세요 ✍️"}</p>
       ) : (
         <ul className="space-y-3">
           {comments.map((c) => (
             <li key={c.id} className="flex gap-3 p-3.5 rounded-xl border border-neutral-100 dark:border-zinc-800 bg-white dark:bg-zinc-950">
               <div className="w-8 h-8 rounded-full bg-[#FFF1E3] dark:bg-[#F9954E]/15 flex items-center justify-center text-[13px] font-bold text-[#E8832E] dark:text-[#F9954E] flex-shrink-0">
-                {(c.name || "익")[0]}
+                {(c.name || (en ? "A" : "익"))[0]}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-[12.5px] font-bold text-neutral-800 dark:text-neutral-100">{c.name || "익명"}</span>
+                  <span className="text-[12.5px] font-bold text-neutral-800 dark:text-neutral-100">{c.name || (en ? "Anonymous" : "익명")}</span>
                   <span className="text-[11px] text-neutral-400">{fmt(c.createdAt)}</span>
                   {myUid() === c.uid && (
-                    <button onClick={() => remove(c)} aria-label="삭제" className="ml-auto text-neutral-300 hover:text-red-500 transition-colors">
+                    <button onClick={() => remove(c)} aria-label={en ? "Delete" : "삭제"} className="ml-auto text-neutral-300 hover:text-red-500 transition-colors">
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   )}

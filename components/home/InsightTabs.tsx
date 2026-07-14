@@ -26,24 +26,31 @@ const INSIGHT_CATEGORY_ORDER = ["트렌드", "가이드", "리포트", "분석",
 const EMOJI: Record<string, string> = {
   트렌드: "🔥", 가이드: "📖", 리포트: "📊", 분석: "🔬", 큐레이션: "✨", 영상: "🎬",
 };
+// 카테고리 영어 라벨(칩·탭 표시용). 기사 카테고리 값 자체는 한글 유지.
+const CAT_EN: Record<string, string> = {
+  트렌드: "Trends", 가이드: "Guides", 리포트: "Reports", 분석: "Analysis", 큐레이션: "Curation", 영상: "Videos",
+};
 
-function fmtDate(d: string) {
+function fmtDate(d: string, locale: "ko" | "en" = "ko") {
   const t = new Date(d);
   if (isNaN(t.getTime())) return "";
-  return t.toLocaleDateString("ko-KR", { month: "short", day: "numeric" });
+  return t.toLocaleDateString(locale === "en" ? "en-US" : "ko-KR", { month: "short", day: "numeric" });
 }
 
 // 영상: 실제 유튜브 업로드 날짜+시간(KST)
-export function fmtVideoDate(iso?: string) {
+export function fmtVideoDate(iso?: string, locale: "ko" | "en" = "ko") {
   if (!iso) return "";
   const t = new Date(iso);
   if (isNaN(t.getTime())) return "";
-  const d = t.toLocaleDateString("ko-KR", { timeZone: "Asia/Seoul", month: "long", day: "numeric" });
-  const tm = t.toLocaleTimeString("ko-KR", { timeZone: "Asia/Seoul", hour: "2-digit", minute: "2-digit" });
+  const lc = locale === "en" ? "en-US" : "ko-KR";
+  const d = t.toLocaleDateString(lc, { timeZone: "Asia/Seoul", month: "long", day: "numeric" });
+  const tm = t.toLocaleTimeString(lc, { timeZone: "Asia/Seoul", hour: "2-digit", minute: "2-digit" });
   return `${d} ${tm}`;
 }
 
-export default function InsightTabs({ items, perTab = 8 }: { items: InsightFeedItem[]; perTab?: number }) {
+export default function InsightTabs({ items, perTab = 8, locale = "ko" }: { items: InsightFeedItem[]; perTab?: number; locale?: "ko" | "en" }) {
+  const en = locale === "en";
+  const catLabel = (c: string) => (en ? CAT_EN[c] || c : c);
   const present = useMemo(() => {
     const set = new Set(items.map((i) => i.category));
     return INSIGHT_CATEGORY_ORDER.filter((c) => set.has(c));
@@ -66,9 +73,9 @@ export default function InsightTabs({ items, perTab = 8 }: { items: InsightFeedI
     <section className="py-5 border-b border-neutral-100 dark:border-zinc-900">
       {/* 헤더 */}
       <div className="flex items-center justify-between mb-3">
-        <p className="text-[14px] font-extrabold text-neutral-950 dark:text-white">AI 인사이트</p>
+        <p className="text-[14px] font-extrabold text-neutral-950 dark:text-white">{en ? "AI Insights" : "AI 인사이트"}</p>
         <Link href="/insight" className="flex items-center gap-1 text-[13px] font-semibold text-[#F9954E]">
-          전체 <ArrowRight className="w-3.5 h-3.5" />
+          {en ? "All" : "전체"} <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>
 
@@ -86,7 +93,7 @@ export default function InsightTabs({ items, perTab = 8 }: { items: InsightFeedI
                     ? "bg-[#F9954E] border-[#F9954E] text-white"
                     : "bg-white dark:bg-zinc-950 border-neutral-200 dark:border-zinc-800 text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E]/40"}`}
               >
-                {t !== "전체" && <span className="mr-1">{EMOJI[t]}</span>}{t}
+                {t !== "전체" && <span className="mr-1">{EMOJI[t]}</span>}{t === "전체" ? (en ? "All" : "전체") : catLabel(t)}
               </button>
             );
           })}
@@ -122,17 +129,17 @@ export default function InsightTabs({ items, perTab = 8 }: { items: InsightFeedI
                   <p className="text-neutral-900 dark:text-white font-semibold text-[13px] line-clamp-1 break-keep">{it.title}</p>
                   <p className="flex items-center gap-1.5 mt-0.5">
                     {tab === "전체" && (
-                      <span className="text-[10px] font-bold text-[#F9954E] bg-[#FFF1E3] dark:bg-[#F9954E]/15 rounded px-1.5 py-0.5">{it.category}</span>
+                      <span className="text-[10px] font-bold text-[#F9954E] bg-[#FFF1E3] dark:bg-[#F9954E]/15 rounded px-1.5 py-0.5">{catLabel(it.category)}</span>
                     )}
                     {it.category === "영상" && it.videoDate ? (
                       <span className="text-neutral-400 text-[11px] truncate">
                         {it.channel && <b className="text-neutral-600 dark:text-neutral-300">{it.channel}</b>}
-                        {it.channel ? " · " : ""}📺 {fmtVideoDate(it.videoDate)}
+                        {it.channel ? " · " : ""}📺 {fmtVideoDate(it.videoDate, locale)}
                       </span>
                     ) : (
                       <span className="text-neutral-400 text-[11px] truncate">
                         {it.author && <b className="text-neutral-600 dark:text-neutral-300">{it.author}</b>}
-                        {it.author ? " · " : ""}{fmtDate(it.date)}
+                        {it.author ? " · " : ""}{fmtDate(it.date, locale)}
                       </span>
                     )}
                   </p>
@@ -148,7 +155,7 @@ export default function InsightTabs({ items, perTab = 8 }: { items: InsightFeedI
         <div className="hidden lg:block">
           {preview && (
             <div className="sticky top-20 max-h-[calc(100vh-6rem)] overflow-y-auto scrollbar-hide">
-              <InsightPreviewPane item={preview} />
+              <InsightPreviewPane item={preview} locale={locale} />
             </div>
           )}
         </div>

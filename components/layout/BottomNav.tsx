@@ -68,7 +68,7 @@ const MORE_ITEMS = [
 ];
 
 const PROJECTS = [
-  { name: "몽글로 : 동물도감",  emoji: "🐾", image: "",               href: "/animal",   desc: "다양한 동물을 몽글로에서" },
+  { name: "몽글로 : 동물도감",  nameEn: "Animal Encyclopedia",  emoji: "🐾", image: "",               href: "/animal",   desc: "다양한 동물을 몽글로에서" },
 ];
 
 export default function BottomNav() {
@@ -201,7 +201,7 @@ export default function BottomNav() {
                   {p.image ? <img src={p.image} alt={p.name} loading="lazy" className="w-full h-full object-cover" /> : p.emoji}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[14px] font-bold text-neutral-900 dark:text-white">{p.name}</p>
+                  <p className="text-[14px] font-bold text-neutral-900 dark:text-white">{isEn ? ((p as any).nameEn ?? p.name) : p.name}</p>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>
               </Link>

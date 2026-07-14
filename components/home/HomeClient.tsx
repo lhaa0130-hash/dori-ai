@@ -17,7 +17,8 @@ function getTodayStr(): string {
   return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
 }
 
-export default function HomeClient() {
+export default function HomeClient({ locale = "ko" }: { locale?: "ko" | "en" }) {
+  const en = locale === "en";
   const { session, status } = useAuth();
   const [cottonCandy, setCottonCandy] = useState(0);
   const [checkedToday, setCheckedToday] = useState(false);
@@ -74,11 +75,11 @@ export default function HomeClient() {
         <div className="flex items-center gap-2.5">
           <CottonCandy className="w-5 h-5" />
           <span className="text-[13px] font-semibold text-neutral-500 dark:text-neutral-400">
-            로그인하고 등급·솜사탕을 모으세요
+            {en ? "Sign in to earn levels & cotton candy" : "로그인하고 등급·솜사탕을 모으세요"}
           </span>
         </div>
         <Link href="/login" className="px-4 py-2 rounded-xl bg-[#F9954E] text-white text-[12px] font-black">
-          로그인
+          {en ? "Sign in" : "로그인"}
         </Link>
       </div>
     );
@@ -107,14 +108,14 @@ export default function HomeClient() {
         </div>
 
         {checkedToday ? (
-          <span className="text-[12px] font-bold text-[#F9954E] flex-shrink-0">✅ 출석완료</span>
+          <span className="text-[12px] font-bold text-[#F9954E] flex-shrink-0">{en ? "✅ Checked in" : "✅ 출석완료"}</span>
         ) : (
           <button
             onClick={(e) => { e.preventDefault(); handleAttendance(); }}
             disabled={checking}
             className="px-3.5 py-1.5 rounded-xl bg-[#F9954E] text-white text-[12px] font-black active:opacity-80 transition-opacity disabled:opacity-50 flex-shrink-0"
           >
-            {checking ? "..." : <>출석 +50 <CottonCandy className="w-3.5 h-3.5 inline-block align-[-0.15em]" /></>}
+            {checking ? "..." : <>{en ? "Check in" : "출석"} +50 <CottonCandy className="w-3.5 h-3.5 inline-block align-[-0.15em]" /></>}
           </button>
         )}
       </div>
@@ -129,7 +130,7 @@ export default function HomeClient() {
 
       {/* 하단: 솜사탕 */}
       <div className="flex items-center justify-between">
-        <span className="text-[12px] text-neutral-400">다음 레벨까지 {Math.round(100 - progress)}%</span>
+        <span className="text-[12px] text-neutral-400">{en ? `${Math.round(100 - progress)}% to next level` : `다음 레벨까지 ${Math.round(100 - progress)}%`}</span>
         <span className="flex items-center gap-1 text-[13px] font-bold text-neutral-700 dark:text-neutral-300">
           <CottonCandy className="w-4 h-4" /> {cottonCandy.toLocaleString()}
         </span>

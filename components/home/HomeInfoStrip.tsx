@@ -1,9 +1,10 @@
-// 메인 상단 정보 — OpenRouter 인기 자료 TOP5 랭킹 카드 + 도리 현황.
+// 메인 상단 정보 — OpenRouter 인기 자료 TOP5 랭킹 카드 + 도리 현황. (locale-aware)
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { TopTool, OrLists } from "@/lib/homeStats";
 
 type Row = { name: string; val?: string };
+type Locale = "ko" | "en";
 
 function RankCard({ title, href, rows }: { title: string; href: string; rows: Row[] }) {
   if (!rows.length) return null;
@@ -29,41 +30,53 @@ function RankCard({ title, href, rows }: { title: string; href: string; rows: Ro
   );
 }
 
+const T = {
+  ko: { usage: "🤖 많이 쓰는 AI 모델", intel: "🧠 똑똑한 AI 모델", speed: "⚡ 빠른 AI 모델", tools: "🔧 추천 AI 도구", today: "✨ 오늘의 도리", insight: "📰 오늘 인사이트", animal: "🐾 몽글로", game: "🎮 미니게임", community: "💬 커뮤니티", play: "바로가기", talk: "이야기", cnt: "건", spec: "종", pts: "점" },
+  en: { usage: "🤖 Most-used AI Models", intel: "🧠 Smartest AI Models", speed: "⚡ Fastest AI Models", tools: "🔧 Recommended AI Tools", today: "✨ Today on illo", insight: "📰 Today's insights", animal: "🐾 Animal Encyclopedia", game: "🎮 Mini Games", community: "💬 Community", play: "Play", talk: "Talk", cnt: "", spec: "", pts: " pts" },
+};
+
 export default function HomeInfoStrip({
   topTools,
   insightCount,
   animalCount,
   orLists,
+  locale = "ko",
 }: {
   topTools: TopTool[];
   insightCount: number;
   animalCount: number;
   orLists: OrLists;
+  locale?: Locale;
 }) {
-  const won = (reqM: number) => `${Math.round(reqM * 100).toLocaleString()}만`;
+  const t = T[locale];
+  const en = locale === "en";
+  const usageVal = (reqM: number) => (en ? `${reqM}M` : `${Math.round(reqM * 100).toLocaleString()}만`);
+  const L = (p: string) => (en ? `/en${p}` : p); // 영어판 있는 페이지만 /en
+  const hModels = en ? "/en/ai-models" : "/ai-models";
+  const hTools = en ? "/en/ai-tools" : "/ai-tools";
 
   return (
     <section className="py-4 border-b border-neutral-100 dark:border-zinc-900">
       <div className="-mx-4 px-4 overflow-x-auto scrollbar-hide">
         <div className="flex gap-2.5 w-max items-stretch">
 
-          <RankCard title="🤖 많이 쓰는 AI 모델" href="/ai-models"
-            rows={orLists.usage.map((m) => ({ name: m.name, val: won(m.reqM) }))} />
-          <RankCard title="🧠 똑똑한 AI 모델" href="/ai-models"
-            rows={orLists.intel.map((m) => ({ name: m.name, val: `${m.score}점` }))} />
-          <RankCard title="⚡ 빠른 AI 모델" href="/ai-models"
+          <RankCard title={t.usage} href={hModels}
+            rows={orLists.usage.map((m) => ({ name: m.name, val: usageVal(m.reqM) }))} />
+          <RankCard title={t.intel} href={hModels}
+            rows={orLists.intel.map((m) => ({ name: m.name, val: `${m.score}${t.pts}` }))} />
+          <RankCard title={t.speed} href={hModels}
             rows={orLists.speed.map((m) => ({ name: m.name, val: `${m.tps}tps` }))} />
-          <RankCard title="🔧 추천 AI 도구" href="/ai-tools"
-            rows={topTools.map((t) => ({ name: t.name }))} />
+          <RankCard title={t.tools} href={hTools}
+            rows={topTools.map((tl) => ({ name: tl.name }))} />
 
           {/* 도리 현황 — 행마다 개별 링크 */}
           <div className="w-[212px] shrink-0 rounded-2xl bg-neutral-50 dark:bg-zinc-900/50 p-3.5">
-            <p className="text-[11px] font-bold text-neutral-400 dark:text-neutral-500 mb-2">✨ 오늘의 도리</p>
+            <p className="text-[11px] font-bold text-neutral-400 dark:text-neutral-500 mb-2">{t.today}</p>
             <ul className="space-y-[7px]">
-              <li><Link href="/insight" className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-neutral-700 dark:text-neutral-200">📰 오늘 인사이트</span><b className="text-neutral-900 dark:text-white tabular-nums">{insightCount}건</b></Link></li>
-              {animalCount > 0 && <li><Link href="/animal" className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-neutral-700 dark:text-neutral-200">🐾 몽글로</span><b className="text-neutral-900 dark:text-white tabular-nums">{animalCount}종</b></Link></li>}
-              <li><Link href="/minigame" className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-neutral-700 dark:text-neutral-200">🎮 미니게임</span><span className="text-[10.5px] text-neutral-400">바로가기</span></Link></li>
-              <li><Link href="/community" className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-neutral-700 dark:text-neutral-200">💬 커뮤니티</span><span className="text-[10.5px] text-neutral-400">이야기</span></Link></li>
+              <li><Link href={en ? "/insight" : "/insight"} className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-neutral-700 dark:text-neutral-200">{t.insight}</span><b className="text-neutral-900 dark:text-white tabular-nums">{insightCount}{t.cnt}</b></Link></li>
+              {animalCount > 0 && <li><Link href="/animal" className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-neutral-700 dark:text-neutral-200">{t.animal}</span><b className="text-neutral-900 dark:text-white tabular-nums">{animalCount}{t.spec}</b></Link></li>}
+              <li><Link href="/minigame" className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-neutral-700 dark:text-neutral-200">{t.game}</span><span className="text-[10.5px] text-neutral-400">{t.play}</span></Link></li>
+              <li><Link href="/community" className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-neutral-700 dark:text-neutral-200">{t.community}</span><span className="text-[10.5px] text-neutral-400">{t.talk}</span></Link></li>
             </ul>
           </div>
 

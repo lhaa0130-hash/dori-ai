@@ -243,7 +243,7 @@ export default function Header() {
                 </div>
               ) : (
                 <button onClick={handleSignIn} className="px-6 py-2.5 rounded-full bg-[#F9954E] hover:bg-[#E8832E] text-xs font-black text-white transition-all shadow-md hover:shadow-lg active:scale-95 whitespace-nowrap">
-                  로그인
+                  {isEn ? "Sign in" : "로그인"}
                 </button>
               )}
             </div>
@@ -301,7 +301,7 @@ export default function Header() {
               </div>
             ) : (
               <button onClick={handleSignIn} className="w-full py-3.5 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-sm font-black text-white transition-all active:scale-95">
-                로그인 / 회원가입
+                {isEn ? "Sign in / Sign up" : "로그인 / 회원가입"}
               </button>
             )}
           </div>
