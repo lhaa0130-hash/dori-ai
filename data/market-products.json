@@ -1,5 +1,57 @@
 [
   {
+    "id": "mk15-1",
+    "name": "베베숲 시그니처 블루 아기물티슈",
+    "category": "kids",
+    "source": "coupang",
+    "query": "베베숲 시그니처 블루 아기물티슈",
+    "emoji": "🧻",
+    "priceHint": "1~3만원대",
+    "summary": "매일 쓰는 기본 소모품",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/fmUOElhJWC"
+  },
+  {
+    "id": "mk15-2",
+    "name": "유비맘 시그니처 PPSU 빨대컵",
+    "category": "kids",
+    "source": "coupang",
+    "query": "유비맘 시그니처 PPSU 빨대컵",
+    "emoji": "🥤",
+    "priceHint": "1~3만원대",
+    "summary": "외출 물컵 입문용",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/fmUOEpbrVY"
+  },
+  {
+    "id": "mk15-3",
+    "name": "마더케이 일회용 젖병비닐",
+    "category": "kids",
+    "source": "coupang",
+    "query": "마더케이 일회용 젖병비닐",
+    "emoji": "🍼",
+    "priceHint": "1만원대",
+    "summary": "외출 수유 설거지 줄이기",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/fmUOEsJnRA"
+  },
+  {
+    "id": "mk15-4",
+    "name": "아가드 W형 모서리 보호대",
+    "category": "kids",
+    "source": "coupang",
+    "query": "아가드 W형 모서리 보호대",
+    "emoji": "🛡️",
+    "priceHint": "1만원대",
+    "summary": "걸음마 시기 안전 보강",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/fmUOEuEveK"
+  },
+  {
     "id": "mk14-1",
     "name": "코멧 펫 반려동물 베이직 배변패드",
     "category": "pet",
@@ -9,7 +61,7 @@
     "priceHint": "1~3만원대",
     "summary": "매일 쓰는 기본 배변템",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/fhV60iiSw8"
   },
   {
@@ -22,7 +74,7 @@
     "priceHint": "1만원대",
     "summary": "산책 후 발 닦기용",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/fhV60miL7I"
   },
   {
@@ -35,7 +87,7 @@
     "priceHint": "2~5만원대",
     "summary": "슬개골 걱정 줄이는 바닥템",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/fhV60pdrfU"
   },
   {
@@ -48,7 +100,7 @@
     "priceHint": "1~2만원대",
     "summary": "양치 습관 시작용 치약",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/fhV60tfTB6"
   },
   {
