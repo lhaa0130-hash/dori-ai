@@ -1,5 +1,7 @@
 ---
 title: "[AI 원리] 생성형 AI 원리와 활용법"
+titleEn: "[How AI Works] How Generative AI Works and How to Use It"
+summaryEn: "Takes an in-depth look at how generative AI works and how to use it."
 description: 생성형 AI의 원리와 활용 방법을 심층적으로 다룹니다.
 date: 2026-07-04
 author: DORI-AI

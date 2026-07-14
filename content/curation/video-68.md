@@ -1,5 +1,7 @@
 ---
 title: "[AI 모델] 주요 AI 모델 설명"
+titleEn: "[AI Models] The Major AI Models, Explained"
+summaryEn: "Explains the differences between major AI models like ChatGPT and Gemini."
 description: ChatGPT, Gemini 등 주요 AI 모델의 차이점을 설명합니다.
 date: 2026-07-12
 author: DORI-AI

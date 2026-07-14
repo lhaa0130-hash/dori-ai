@@ -1,5 +1,7 @@
 ---
 title: "[AI 문명] AI 문명에 대한 김미경 강사의 직설적 강연"
+titleEn: "[AI Civilization] Kim Mi-kyung's Straight-Talking Lecture on the AI Civilization"
+summaryEn: "Offers insights for adapting to the age of AI."
 description: AI 시대에 적응하기 위한 통찰을 제공합니다.
 date: 2026-06-28
 author: illo

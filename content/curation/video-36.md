@@ -1,5 +1,7 @@
 ---
 title: "[챗봇] AI를 활용한 인생 기둥의 비밀"
+titleEn: "[Chatbots] The Secret to Building Life's Pillars with AI"
+summaryEn: "Introduces how to transform your life using AI."
 description: AI를 활용해 인생을 변화시키는 방법을 소개합니다.
 date: 2026-06-30
 author: illo

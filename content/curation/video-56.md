@@ -1,5 +1,7 @@
 ---
 title: "[토큰] AI 토큰의 높은 가격 이유"
+titleEn: "[Tokens] Why AI Tokens Cost So Much"
+summaryEn: "Explains the complexities behind AI token usage."
 description: AI 토큰 사용의 복잡성을 설명하는 영상입니다.
 date: 2026-07-06
 author: DORI-AI

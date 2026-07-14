@@ -1,5 +1,7 @@
 ---
 title: "[AI 도구] 2026년에 실제로 사용할 AI 도구들!"
+titleEn: "[AI Tools] The AI Tools You'll Actually Use in 2026!"
+summaryEn: "Introduces the most useful AI tools of 2026."
 description: 2026년에 유용한 AI 도구들을 소개합니다.
 date: 2026-06-23
 author: illo

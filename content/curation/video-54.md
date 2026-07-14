@@ -1,5 +1,7 @@
 ---
 title: "[업무 자동화] 구글 Flow 사용법"
+titleEn: "[Automation] How to Use Google Flow"
+summaryEn: "Introduces how to use Google Flow with ease."
 description: 구글 Flow를 쉽게 활용하는 방법을 소개합니다.
 date: 2026-07-05
 author: DORI-AI

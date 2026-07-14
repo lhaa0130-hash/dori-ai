@@ -1,5 +1,7 @@
 ---
 title: "[업무 자동화] AI 업무 치트키 '3가지'"
+titleEn: "[Automation] 3 AI Cheat Codes for Getting Work Done"
+summaryEn: "Introduces how to cut your work time by over 90% using AI."
 description: AI를 활용해 업무 시간을 90% 이상 줄이는 방법을 소개합니다.
 date: 2026-07-05
 author: DORI-AI

@@ -1,5 +1,7 @@
 ---
 title: "[교육] AI Tech Transforming Language Learning"
+titleEn: "[Education] AI Tech Transforming Language Learning"
+summaryEn: "Explores how AI is reshaping the way we learn languages."
 description: AI가 언어 학습에 미치는 영향을 다룹니다.
 date: 2026-06-27
 author: illo

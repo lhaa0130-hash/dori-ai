@@ -1,5 +1,7 @@
 ---
 title: "[제미나이] 제미나이 사용법과 대화법"
+titleEn: "[Gemini] How to Use Gemini and Prompt It Effectively"
+summaryEn: "Learn how to phrase prompts so Gemini gives you better answers."
 description: 제미나이에서 효과적인 답변을 얻는 대화법을 배웁니다.
 date: 2026-06-30
 author: illo

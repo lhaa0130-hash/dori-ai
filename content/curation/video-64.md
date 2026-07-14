@@ -1,5 +1,7 @@
 ---
 title: "[AI 결제] AI 프로토콜과 금융 결제 시스템의 혁신"
+titleEn: "[AI Payments] AI Protocols and the Revolution in Financial Payment Systems"
+summaryEn: "Explains the AI payments revolution and the role of Quant Network."
 description: AI 결제 시스템의 혁신과 Quant Network의 역할을 설명합니다.
 date: 2026-07-11
 author: DORI-AI

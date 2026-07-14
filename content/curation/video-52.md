@@ -1,5 +1,7 @@
 ---
 title: "[영상 제작] AI 영상 만드는 법"
+titleEn: "[Video Creation] How to Make AI Videos"
+summaryEn: "Introduces how to easily create videos using AI."
 description: AI를 활용해 간편하게 영상을 만드는 방법을 소개합니다.
 date: 2026-07-05
 author: DORI-AI

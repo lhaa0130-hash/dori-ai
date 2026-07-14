@@ -1,5 +1,7 @@
 ---
 title: "[대시보드] 클로드코드로 나만의 주식 AI 대시보드 만들기"
+titleEn: "[Dashboards] Build Your Own AI Stock Dashboard with Claude Code"
+summaryEn: "Introduces how to build an AI dashboard with Claude Code, no coding required."
 description: 코딩 없이 클로드코드를 활용해 AI 대시보드를 만드는 방법을 소개합니다.
 date: 2026-07-12
 author: DORI-AI

@@ -1,5 +1,7 @@
 ---
 title: "[영상] AI 영상 제작을 위한 필수 정보"
+titleEn: "[Video] Essential Info for Creating AI Videos"
+summaryEn: "Introduces how to use Google's free AI video tool, Veo 3.1."
 description: 구글의 무료 AI 영상 툴 VEO 3.1을 활용하는 방법을 소개합니다.
 date: 2026-06-23
 author: illo

@@ -1,5 +1,7 @@
 ---
 title: "[딥러닝] 딥러닝 기초 배우기"
+titleEn: "[Deep Learning] Learning the Basics of Deep Learning"
+summaryEn: "Explains the fundamental concepts of deep learning in simple terms."
 description: 딥러닝의 기초 개념을 쉽게 설명합니다.
 date: 2026-07-05
 author: DORI-AI

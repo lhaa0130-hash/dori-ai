@@ -1,5 +1,7 @@
 ---
 title: "[AI 영화 제작] AI 영화 제작을 위한 완벽 가이드"
+titleEn: "[AI Filmmaking] The Complete Guide to Making Films with AI"
+summaryEn: "Walks through the entire process of making a film using AI."
 description: AI를 활용한 영화 제작의 전 과정을 안내합니다.
 date: 2026-06-23
 author: illo

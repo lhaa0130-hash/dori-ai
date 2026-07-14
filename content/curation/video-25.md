@@ -1,5 +1,7 @@
 ---
 title: "[반도체] 애플 출신 엔지니어가 설명하는 초저전력 AI 반도체"
+titleEn: "[Chips] Ultra-Low-Power AI Chips, Explained by a Former Apple Engineer"
+summaryEn: "Explains DeepX's AI chip development and why it matters."
 description: 딥엑스의 AI 반도체 개발과 그 중요성을 설명한다.
 date: 2026-06-24
 author: illo

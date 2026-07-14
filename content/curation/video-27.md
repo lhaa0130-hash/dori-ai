@@ -1,5 +1,7 @@
 ---
 title: "[역사] 머신러닝의 역사"
+titleEn: "[History] The History of Machine Learning"
+summaryEn: "A brief overview of how machine learning has evolved."
 description: 머신러닝의 발전 과정을 간략히 정리한다.
 date: 2026-06-24
 author: illo

@@ -1,5 +1,7 @@
 ---
 title: "[업무 자동화] Manus AI로 업무 자동화"
+titleEn: "[Automation] Automating Your Work with Manus AI"
+summaryEn: "Introduces how to automate a variety of tasks using Manus AI."
 description: Manus AI를 활용해 다양한 업무를 자동화하는 방법을 소개합니다.
 date: 2026-07-05
 author: DORI-AI

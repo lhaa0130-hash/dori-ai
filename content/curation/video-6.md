@@ -1,5 +1,7 @@
 ---
 title: "[MCP 서버] Build and Deploy Claude Skills and MCP Servers | The Complete 2026 Guide"
+titleEn: "[MCP Servers] Build and Deploy Claude Skills and MCP Servers | The Complete 2026 Guide"
+summaryEn: "Learn how to deploy AI tools using MCP and Skills."
 description: MCP와 스킬을 활용한 AI 도구 배포 방법을 배워보세요.
 date: 2026-06-23
 author: illo

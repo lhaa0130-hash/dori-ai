@@ -1,5 +1,7 @@
 ---
 title: "[교육] AI 시대 자녀에게 필요한 능력은 무엇인가?"
+titleEn: "[Education] What Skills Do Children Need in the AI Era?"
+summaryEn: "Offers educational insights on the skills children need in the age of AI."
 description: AI 시대에 자녀에게 필요한 능력에 대한 교육적 통찰을 제공합니다.
 date: 2026-07-13
 author: DORI-AI

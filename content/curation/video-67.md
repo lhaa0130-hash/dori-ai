@@ -1,5 +1,7 @@
 ---
 title: "[AI 도입] 대기업 AI 도입 실패의 이유"
+titleEn: "[AI Adoption] Why Big Companies Fail at Adopting AI"
+summaryEn: "Analyzes the problems and causes behind failed AI adoption at large enterprises."
 description: 대기업에서 AI 도입 시 발생하는 문제와 실패 원인을 분석합니다.
 date: 2026-07-12
 author: DORI-AI

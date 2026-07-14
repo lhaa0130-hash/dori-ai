@@ -1,5 +1,7 @@
 ---
 title: "[AI 강의] 하정우의 AI 특별 강의"
+titleEn: "[AI Lecture] Ha Jung-woo's Special Lecture on AI"
+summaryEn: "Tune in to Ha Jung-woo's special lecture on AI."
 description: 하정우의 AI에 대한 특별 강의를 들어보세요.
 date: 2026-06-30
 author: illo

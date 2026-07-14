@@ -1,5 +1,7 @@
 ---
 title: "[제미나이] AI 작업시간 2시간 줄여주는 제미나이 신기능 10가지"
+titleEn: "[Gemini] 10 New Gemini Features That Cut 2 Hours off Your Workday"
+summaryEn: "Introduces new Gemini features that help you save time on your work."
 description: 제미나이의 신기능을 활용해 작업 시간을 단축하는 방법을 소개합니다.
 date: 2026-06-23
 author: illo

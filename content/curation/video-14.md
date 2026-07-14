@@ -1,5 +1,7 @@
 ---
 title: "[AI 에이전트] AI 에이전트와 자동화에 대한 초보자 가이드"
+titleEn: "[AI Agents] A Beginner's Guide to AI Agents and Automation"
+summaryEn: "Explains the basic concepts of AI agents and automation in simple terms."
 description: AI 에이전트와 자동화의 기본 개념을 쉽게 설명합니다.
 date: 2026-06-23
 author: illo

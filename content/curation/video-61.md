@@ -1,5 +1,7 @@
 ---
 title: "[모델] Grok 4.5 모델의 설명과 특징"
+titleEn: "[Models] Grok 4.5 Explained: Features and What Sets It Apart"
+summaryEn: "A quick overview of Grok 4.5's key features and competitive edge."
 description: Grok 4.5 모델의 주요 특징과 경쟁력을 간단히 소개합니다.
 date: 2026-07-10
 author: DORI-AI

@@ -1,5 +1,7 @@
 ---
 title: "[워크플로우] Master Claude Cowork 20분 만에 배우기"
+titleEn: "[Workflow] Master Claude Cowork in 20 Minutes"
+summaryEn: "Learn how to automate work and manage projects with Claude Cowork."
 description: Claude Cowork를 활용한 자동화 및 프로젝트 관리 방법을 배워보세요.
 date: 2026-06-23
 author: illo

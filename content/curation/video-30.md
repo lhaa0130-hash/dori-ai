@@ -1,5 +1,7 @@
 ---
 title: "[개념] 2026년 가장 중요한 AI 개념"
+titleEn: "[Concepts] The Most Important AI Concept of 2026"
+summaryEn: "A concise explanation of AI's core concepts."
 description: AI의 핵심 개념을 간단히 설명합니다.
 date: 2026-06-27
 author: illo

@@ -1,5 +1,7 @@
 ---
 title: "[AI 활용법] 99%는 모르는 똑똑한 AI 활용법"
+titleEn: "[AI Tips] Smart Ways to Use AI That 99% of People Don't Know"
+summaryEn: "Covers practical ways for middle-aged users to use AI and why learning it matters."
 description: 중년을 위한 AI 활용법과 학습 필요성을 다룬 영상.
 date: 2026-06-23
 author: illo

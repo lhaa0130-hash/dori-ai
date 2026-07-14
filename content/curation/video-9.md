@@ -1,5 +1,7 @@
 ---
 title: "[AI 도구] DeepSeek AI의 주요 기능을 11분 만에 알아보세요"
+titleEn: "[AI Tools] Get to Know DeepSeek AI's Key Features in 11 Minutes"
+summaryEn: "A quick overview of DeepSeek AI's core features and how to use them."
 description: DeepSeek AI의 핵심 기능과 활용법을 간단히 소개합니다.
 date: 2026-06-23
 author: illo

@@ -1,5 +1,7 @@
 ---
 title: "[LLM] 대형 언어 모델의 작동 원리"
+titleEn: "[LLM] How Large Language Models Work"
+summaryEn: "Explains the basics of how large language models work in simple terms."
 description: 대형 언어 모델의 기본 작동 원리를 쉽게 설명합니다.
 date: 2026-06-25
 author: illo

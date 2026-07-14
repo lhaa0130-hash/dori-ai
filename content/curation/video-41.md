@@ -1,5 +1,7 @@
 ---
 title: "[모델] AI는 정말 생각할 수 있을까? 추론 모델 설명"
+titleEn: "[Models] Can AI Really Think? Reasoning Models Explained"
+summaryEn: "Explains AI's capacity for thought and the rise of reasoning models."
 description: AI의 사고 능력과 추론 모델의 발전을 설명합니다.
 date: 2026-07-01
 author: illo

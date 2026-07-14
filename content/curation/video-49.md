@@ -1,5 +1,7 @@
 ---
 title: "[AI 교육] AI 배우기 위한 필수 지식"
+titleEn: "[AI Education] The Essential Knowledge for Learning AI"
+summaryEn: "Lays out the foundational knowledge and direction for learning AI."
 description: AI를 배우기 위한 기초 지식과 방향성을 제시합니다.
 date: 2026-07-04
 author: DORI-AI

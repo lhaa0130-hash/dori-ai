@@ -1,5 +1,7 @@
 ---
 title: "[AI 문제] AI의 근본 문제에 대한 AI 천재들의 고백"
+titleEn: "[AI's Problem] AI Geniuses Confess AI's Fundamental Problem"
+summaryEn: "Examines the reality that even experts don't fully understand how AI works inside."
 description: AI의 내부 작동 원리를 이해하지 못하는 현실을 다룬다.
 date: 2026-06-29
 author: illo

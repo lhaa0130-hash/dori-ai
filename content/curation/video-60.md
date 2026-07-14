@@ -1,5 +1,7 @@
 ---
 title: "[영상] 사진 한 장으로 움직이는 영상을 무료로 만드는 방법"
+titleEn: "[Video] How to Turn a Single Photo into a Moving Video for Free"
+summaryEn: "Introduces how to turn photos into AI videos with Google Flow."
 description: 구글 플로우로 사진을 AI 영상으로 변환하는 방법을 소개합니다.
 date: 2026-07-09
 author: DORI-AI

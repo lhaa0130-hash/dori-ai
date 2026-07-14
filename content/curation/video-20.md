@@ -1,5 +1,7 @@
 ---
 title: "[AI 에이전트] AI Agents Explained  How to Create and Use AI Agents in 2026"
+titleEn: "[AI Agents] AI Agents Explained: How to Create and Use AI Agents in 2026"
+summaryEn: "Explains how to build and use AI agents."
 description: AI 에이전트를 만드는 방법과 활용법을 설명합니다.
 date: 2026-06-23
 author: illo

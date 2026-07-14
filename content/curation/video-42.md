@@ -1,5 +1,7 @@
 ---
 title: "[프로토콜] MCP와 API  모든 개발자가 알아야 할 프로토콜"
+titleEn: "[Protocols] MCP and API: The Protocols Every Developer Should Know"
+summaryEn: "Explains the difference between MCP and APIs for AI developers."
 description: AI 개발자를 위한 MCP와 API의 차이를 설명합니다.
 date: 2026-07-01
 author: illo

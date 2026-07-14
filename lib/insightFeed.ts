@@ -86,6 +86,8 @@ export function getInsightFeed(perCategory = 12, lang?: "ko" | "en"): InsightFee
     for (const it of src) {
       if (it.titleEn) it.title = it.titleEn;
       if (it.summaryEn) it.summary = it.summaryEn;
+      // 영상은 본문(발췌)이 한글이라 영어 페이지에선 숨김 — 영어 제목·요약만 노출
+      if (it.category === "영상") it.excerpt = undefined;
     }
   }
 

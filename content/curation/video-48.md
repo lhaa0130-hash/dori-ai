@@ -1,5 +1,7 @@
 ---
 title: "[LLM] KV 캐시가 LLM 속도를 높이는 방법"
+titleEn: "[LLM] How the KV Cache Speeds Up LLMs"
+summaryEn: "Explains how the KV cache improves LLM speed."
 description: KV 캐시를 통해 LLM의 속도를 개선하는 방법을 설명합니다.
 date: 2026-07-04
 author: DORI-AI

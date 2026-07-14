@@ -1,5 +1,7 @@
 ---
 title: "[AI 에이전트] AI 에이전트의 오류 분석과 해결 방법"
+titleEn: "[AI Agents] Analyzing AI Agent Errors and How to Fix Them"
+summaryEn: "Analyzes the causes of AI agent errors and how to resolve them."
 description: AI 에이전트의 오류 원인과 해결 방법을 분석합니다.
 date: 2026-07-02
 author: illo

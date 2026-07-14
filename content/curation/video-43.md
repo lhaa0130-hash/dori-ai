@@ -1,5 +1,7 @@
 ---
 title: "[모델] 외부 세계 모델의 종말  LLM에 통합된"
+titleEn: "[Models] The End of External World Models, Now Merged into LLMs"
+summaryEn: "Covers the shift toward world models being integrated directly into LLMs."
 description: LLM에 통합된 외부 세계 모델의 변화를 다룹니다.
 date: 2026-07-01
 author: illo

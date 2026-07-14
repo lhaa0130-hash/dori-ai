@@ -1,5 +1,7 @@
 ---
 title: "[미래] AI 시대에 기존 상식으로는 도태되는 이유"
+titleEn: "[The Future] Why Old Conventional Wisdom Leaves You Behind in the AI Era"
+summaryEn: "Covers what humans must prove in the AI era and what the future holds."
 description: AI 시대에 인간이 증명해야 할 것과 미래 전망을 다룹니다.
 date: 2026-07-08
 author: DORI-AI

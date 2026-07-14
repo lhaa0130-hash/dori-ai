@@ -1,5 +1,7 @@
 ---
 title: "[제미나이 사용법] 제미나이 완전정복1편"
+titleEn: "[Gemini Guide] Gemini Mastery, Part 1"
+summaryEn: "Walks through installing Gemini and its basic usage."
 description: 제미나이 설치 및 기본 사용법을 안내합니다.
 date: 2026-06-23
 author: illo

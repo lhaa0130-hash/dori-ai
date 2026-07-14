@@ -1,5 +1,7 @@
 ---
 title: "[코딩] 챗GPT만 쓰면 손해입니다 | '무료'로 쓰는 코덱스(Codex) 2026 초보자 완벽 가이드"
+titleEn: "[Coding] You're Losing Out If You Only Use ChatGPT | The Complete 2026 Beginner's Guide to Free Codex"
+summaryEn: "Introduces a variety of automation techniques using Codex."
 description: 코덱스를 활용한 다양한 자동화 기법을 소개합니다.
 date: 2026-06-23
 author: illo

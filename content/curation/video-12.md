@@ -1,5 +1,7 @@
 ---
 title: "[영상 제작] 구글 Veo Omni와 Flow 2026 업데이트 완전정복"
+titleEn: "[Video Creation] Mastering Google Veo Omni and the Flow 2026 Update"
+summaryEn: "Introduces how to create AI videos using the new features in Google Flow."
 description: 구글 Flow의 신기능을 활용한 AI 영상 제작 방법을 소개합니다.
 date: 2026-06-23
 author: illo

@@ -1,5 +1,7 @@
 ---
 title: "[AI 모델 비교] 챗GPT vs 제미나이 vs 클로드 vs 퍼플렉시티 실무 대결"
+titleEn: "[AI Model Comparison] ChatGPT vs Gemini vs Claude vs Perplexity: A Real-World Showdown"
+summaryEn: "Compares how several AI models perform on real-world tasks."
 description: 여러 AI 모델의 실무 활용을 비교합니다.
 date: 2026-06-23
 author: illo

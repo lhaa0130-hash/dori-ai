@@ -1,5 +1,7 @@
 ---
 title: "[코딩] 무료로 AI가 파일 수정하는 CODEX 가이드"
+titleEn: "[Coding] A Guide to CODEX, Where AI Edits Your Files for Free"
+summaryEn: "Shows how to use AI to edit files without any coding."
 description: 코딩 없이도 AI를 활용해 파일을 수정하는 방법을 안내합니다.
 date: 2026-06-23
 author: illo

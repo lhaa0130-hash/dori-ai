@@ -1,5 +1,7 @@
 ---
 title: "[반도체] 빅테크의 AI 반도체 공유와 전망"
+titleEn: "[Chips] Big Tech's AI Chip Sharing and What Lies Ahead"
+summaryEn: "Analyzes AI infrastructure oversupply and shifts in the chip market."
 description: AI 인프라 과잉 공급과 반도체 시장의 변화를 분석합니다.
 date: 2026-07-03
 author: illo

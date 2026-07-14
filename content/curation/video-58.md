@@ -1,5 +1,7 @@
 ---
 title: "[기초] 기계 학습의 경량화 기법인 경량 하강법"
+titleEn: "[Basics] Gradient Descent, a Model-Optimization Technique in Machine Learning"
+summaryEn: "Explains how gradient descent optimizes machine learning models."
 description: 경량 하강법을 통해 기계 학습 모델 최적화를 설명합니다.
 date: 2026-07-07
 author: DORI-AI

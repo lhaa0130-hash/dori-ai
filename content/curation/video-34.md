@@ -1,5 +1,7 @@
 ---
 title: "[모델 설명] GPT 5.6에 대한 간단한 설명"
+titleEn: "[Model Breakdown] A Quick Explainer on GPT-5.6"
+summaryEn: "Explains GPT-5.6's key features and the government regulation around it."
 description: GPT 5.6의 주요 특징과 정부의 규제에 대해 설명합니다.
 date: 2026-06-28
 author: illo

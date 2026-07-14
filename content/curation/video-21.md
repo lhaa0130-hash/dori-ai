@@ -1,5 +1,7 @@
 ---
 title: "[AI 아키텍처] AI 시스템의 메모리 문제 해결 방법"
+titleEn: "[AI Architecture] How to Solve the Memory Problem in AI Systems"
+summaryEn: "Explains how to solve memory problems in AI systems."
 description: AI 시스템의 메모리 문제를 해결하는 방법을 설명합니다.
 date: 2026-06-23
 author: illo

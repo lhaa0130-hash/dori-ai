@@ -1,5 +1,7 @@
 ---
 title: "[LLM] Fine-Tuned LLMs의 그래디언트 손실 문제 분석"
+titleEn: "[LLM] Analyzing the Gradient Loss Problem in Fine-Tuned LLMs"
+summaryEn: "An in-depth analysis of the gradient loss phenomenon in fine-tuned LLMs."
 description: Fine-tuned LLMs의 그래디언트 손실 현상을 심층적으로 분석합니다.
 date: 2026-07-13
 author: DORI-AI

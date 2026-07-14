@@ -1,5 +1,7 @@
 ---
 title: "[영상] AI 영상 제작 활용법 5가지"
+titleEn: "[Video] 5 Ways to Use AI for Video Creation"
+summaryEn: "Introduces how to create AI videos using Google Flow."
 description: 구글 Flow를 활용한 AI 영상 제작 방법을 소개합니다.
 date: 2026-07-03
 author: illo

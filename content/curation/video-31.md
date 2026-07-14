@@ -1,5 +1,7 @@
 ---
 title: "[자동화] 구글 Flow AI Agent 월드컵 뉴스 자동화 워크플로우"
+titleEn: "[Automation] A Google Flow AI Agent Workflow for Automating World Cup News"
+summaryEn: "Introduces how to automate news video production with AI."
 description: AI를 활용한 뉴스 영상 제작 자동화 방법을 소개합니다.
 date: 2026-06-27
 author: illo

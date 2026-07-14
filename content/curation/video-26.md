@@ -1,5 +1,7 @@
 ---
 title: "[GPT] GPT를 시각적으로 설명하는 영상"
+titleEn: "[GPT] A Visual Explanation of GPT"
+summaryEn: "Explains how GPT works in a simple, visual way."
 description: GPT의 작동 원리를 시각적으로 쉽게 설명한다.
 date: 2026-06-24
 author: illo

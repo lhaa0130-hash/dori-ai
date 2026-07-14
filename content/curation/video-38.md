@@ -1,5 +1,7 @@
 ---
 title: "[수학] 머신러닝의 수학적 원리"
+titleEn: "[Math] The Mathematics Behind Machine Learning"
+summaryEn: "Explains the foundational math behind machine learning in simple terms."
 description: 머신러닝의 기초 수학 원리를 쉽게 설명합니다.
 date: 2026-06-30
 author: illo

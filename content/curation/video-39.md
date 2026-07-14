@@ -1,5 +1,7 @@
 ---
 title: "[AI 산업] AI 딥러닝과 중국 작업장의 실체"
+titleEn: "[AI Industry] AI Deep Learning and the Reality of China's Labor Workshops"
+summaryEn: "Explores the reality of the Chinese workshops behind AI deep learning."
 description: AI 딥러닝과 관련된 중국 작업장의 실체를 탐구합니다.
 date: 2026-06-30
 author: illo

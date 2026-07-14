@@ -1,5 +1,7 @@
 ---
 title: "[미래예측] AI 시대의 충격적 전망과 생존 전략"
+titleEn: "[Predictions] Shocking Forecasts and Survival Strategies for the AI Era"
+summaryEn: "Explains the traits people need to survive in the age of AI."
 description: AI 시대에 살아남기 위한 사람의 특징을 설명합니다.
 date: 2026-07-11
 author: DORI-AI

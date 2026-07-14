@@ -1,5 +1,7 @@
 ---
 title: "[AI 작동 원리] AI의 실제 작동 방식 설명"
+titleEn: "[How AI Works] How AI Actually Works, Explained"
+summaryEn: "Explains the fundamentals of how AI works in simple terms."
 description: AI의 기본 작동 원리를 쉽게 설명합니다.
 date: 2026-06-23
 author: illo

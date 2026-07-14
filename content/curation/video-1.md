@@ -1,5 +1,7 @@
 ---
 title: "[AI 거품] AI 거품 꺼져도 돈은 결국 여기로 몰린다"
+titleEn: "[AI Bubble] Even If the AI Bubble Bursts, the Money Ends Up Here"
+summaryEn: "Explores the possibility of an AI bubble collapse and where investment will flow afterward."
 description: AI 거품 붕괴 가능성과 그 이후의 투자 방향을 탐구합니다.
 date: 2026-06-23
 author: illo

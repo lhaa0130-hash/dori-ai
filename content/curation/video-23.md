@@ -1,5 +1,7 @@
 ---
 title: "[영상 제작] 구글 제미나이로 영상 만드는 방법"
+titleEn: "[Video Creation] How to Make Videos with Google Gemini"
+summaryEn: "Introduces how to create videos using Google Gemini."
 description: 구글 제미나이를 활용한 영상 제작 방법을 소개합니다.
 date: 2026-06-23
 author: illo

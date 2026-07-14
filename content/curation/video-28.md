@@ -1,5 +1,7 @@
 ---
 title: "[홈페이지] 클로드로 고퀄 홈페이지 만드는 법"
+titleEn: "[Websites] How to Build a High-Quality Website with Claude"
+summaryEn: "Introduces how to build a website in 30 minutes using Claude."
 description: 클로드를 활용해 30분 만에 홈페이지를 만드는 방법을 소개합니다.
 date: 2026-06-25
 author: illo

@@ -1,5 +1,7 @@
 ---
 title: "[개발] AI 시대의 개발자로서의 생존 전략"
+titleEn: "[Development] Survival Strategies for Developers in the AI Era"
+summaryEn: "Explains how developers can stay competitive in the age of AI."
 description: AI 시대에 개발자가 어떻게 경쟁력을 유지할 수 있는지 설명한다.
 date: 2026-06-24
 author: illo

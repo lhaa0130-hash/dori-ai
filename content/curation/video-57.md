@@ -1,5 +1,7 @@
 ---
 title: "[구글] 제미나이 3.5 인공지능 기능 사용법"
+titleEn: "[Google] How to Use Gemini 3.5's AI Features"
+summaryEn: "Introduces how to make the most of Google Gemini 3.5."
 description: 구글 제미나이 3.5의 활용 방법을 소개합니다.
 date: 2026-07-06
 author: DORI-AI

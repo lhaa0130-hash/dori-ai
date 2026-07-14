@@ -1,5 +1,7 @@
 ---
 title: "[교육법] AI 활용법과 자녀 교육법 총정리"
+titleEn: "[Parenting] A Complete Guide to Using AI and Raising Kids"
+summaryEn: "Introduces how to use AI and educate your children in the AI era."
 description: AI 시대에 필요한 활용법과 자녀 교육법을 소개합니다.
 date: 2026-07-10
 author: DORI-AI

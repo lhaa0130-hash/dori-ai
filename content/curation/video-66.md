@@ -1,5 +1,7 @@
 ---
 title: "[모델 선택] AI가 이해의 병목이 될 때"
+titleEn: "[Model Selection] When AI Becomes the Bottleneck to Understanding"
+summaryEn: "Covers the importance of choosing the right AI model and dividing roles among subagents."
 description: AI 모델 선택과 서브에이전트 역할 분배의 중요성을 다룹니다.
 date: 2026-07-12
 author: DORI-AI
