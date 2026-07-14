@@ -665,6 +665,7 @@ export default function AdminPage() {
 
               {/* 5) 인기 페이지 · 유입 경로 · 국가 (GA4) */}
               {gaOn && (
+                <div className="space-y-2.5">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                   <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
                     <h2 className="text-[14px] font-extrabold text-neutral-900 dark:text-white mb-3">🔥 인기 페이지 <span className="text-[11px] font-normal text-neutral-400">7일</span></h2>
@@ -699,6 +700,8 @@ export default function AdminPage() {
                       ))}
                     </div>
                   </div>
+                </div>
+                <p className="text-[11px] text-neutral-400 dark:text-neutral-500 leading-relaxed break-keep">GA4는 방문자를 <b className="font-semibold">중복 없이</b> 세어, 국가·유입경로별 합이 전체(DAU/WAU/MAU)와 정확히 일치하지 않을 수 있어요 — 한 방문자가 여러 국가·경로에 잡히면 각각 카운트되기 때문입니다(GA4 정상 동작).</p>
                 </div>
               )}
 
