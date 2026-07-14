@@ -558,10 +558,10 @@ export default function AdminPage() {
           const chanKo: Record<string, string> = { "Direct": "직접 방문", "Organic Search": "검색 유입", "Referral": "외부 링크", "Organic Social": "소셜", "Unassigned": "미분류", "Organic Video": "동영상", "Email": "이메일" };
           const flag: Record<string, string> = { "United States": "🇺🇸", "South Korea": "🇰🇷", "Singapore": "🇸🇬", "Nigeria": "🇳🇬", "Poland": "🇵🇱", "Ireland": "🇮🇪", "Japan": "🇯🇵", "China": "🇨🇳", "India": "🇮🇳", "Germany": "🇩🇪", "United Kingdom": "🇬🇧", "Canada": "🇨🇦", "France": "🇫🇷", "Vietnam": "🇻🇳", "Indonesia": "🇮🇩", "Brazil": "🇧🇷" };
           return (
-            <div className="space-y-5">
+            <div className="space-y-4">
 
               {/* 1) 동물도감 검수 현황 — 핵심 작업 */}
-              <div className="rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-5">
+              <div className="rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
                 <div className="flex items-center justify-between gap-2 flex-wrap mb-4">
                   <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-2">🐾 동물도감 검수 현황</h2>
                   <button onClick={() => setActiveTab("animalReview")} className="rounded-full bg-[#F9954E] text-white text-[12px] font-bold px-3.5 py-1.5 hover:brightness-105 transition">검수하러 가기 →</button>
@@ -606,18 +606,18 @@ export default function AdminPage() {
                   <>
                     <div className="grid grid-cols-3 gap-3">
                       {[
-                        { label: "오늘", sub: "DAU · 일간 활성", n: act.dau, accent: "text-sky-600 dark:text-sky-400", bar: "bg-sky-500", bg: "from-sky-50 dark:from-sky-950/30" },
-                        { label: "이번 주", sub: "WAU · 최근 7일", n: act.wau, accent: "text-violet-600 dark:text-violet-400", bar: "bg-violet-500", bg: "from-violet-50 dark:from-violet-950/30" },
-                        { label: "이번 달", sub: "MAU · 최근 30일", n: act.mau, accent: "text-emerald-600 dark:text-emerald-400", bar: "bg-emerald-500", bg: "from-emerald-50 dark:from-emerald-950/30" },
+                        { label: "오늘", sub: "DAU · 일간", n: act.dau },
+                        { label: "이번 주", sub: "WAU · 7일", n: act.wau },
+                        { label: "이번 달", sub: "MAU · 30일", n: act.mau },
                       ].map((m) => (
-                        <div key={m.label} className={`rounded-xl bg-gradient-to-br ${m.bg} to-white dark:to-zinc-950 border border-neutral-100 dark:border-zinc-900 p-4`}>
-                          <div className="flex items-center gap-1.5"><span className={`w-1.5 h-1.5 rounded-full ${m.bar}`} /><span className="text-[12px] font-bold text-neutral-600 dark:text-neutral-300">{m.label}</span></div>
-                          <div className={`text-[30px] font-black mt-1.5 leading-none ${m.accent}`}>{m.n.toLocaleString()}</div>
+                        <div key={m.label} className="rounded-xl bg-neutral-50 dark:bg-zinc-900/40 p-4">
+                          <div className="text-[12px] font-bold text-neutral-500 dark:text-neutral-400">{m.label}</div>
+                          <div className="text-[30px] font-black mt-1.5 leading-none text-neutral-900 dark:text-white tabular-nums">{m.n.toLocaleString()}</div>
                           <div className="text-[10.5px] text-neutral-400 dark:text-neutral-500 mt-1.5">{m.sub}</div>
                         </div>
                       ))}
                     </div>
-                    <p className="mt-3 text-[11.5px] text-neutral-400 dark:text-neutral-500 break-keep">DAU·WAU·MAU = 중복 제외 <b>순수 방문자 수</b> · Google Analytics 실시간 자동집계</p>
+                    <p className="mt-3 text-[11px] text-neutral-400 dark:text-neutral-500 break-keep">중복 제외 순수 방문자 · GA4 자동집계</p>
                   </>
                 ) : (
                   <p className="text-[13px] text-neutral-400 py-3">활성 사용자 데이터를 불러오는 중이에요.</p>
