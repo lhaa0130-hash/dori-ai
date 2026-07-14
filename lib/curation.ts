@@ -12,6 +12,8 @@ export interface CurationPost {
   author: string;
   content: string;
   lang?: "ko" | "en";
+  titleEn?: string;   // 영상 등 공유 글의 영어 제목(영어 페이지 표시용)
+  summaryEn?: string; // 영어 요약
   tags?: string[];
   thumbnail?: string;
   videoDate?: string; // 영상 글: 실제 유튜브 업로드 시각(ISO)
@@ -113,6 +115,8 @@ export function getCurationBySlug(slug: string): CurationPost | null {
     author: metadata.author || 'illo',
     content: content,
     lang: metadata.lang === "en" ? "en" : "ko",
+    titleEn: metadata.titleEn || undefined,
+    summaryEn: metadata.summaryEn || metadata.descriptionEn || undefined,
     tags: Array.isArray(metadata.tags) ? metadata.tags : (metadata.tags ? [metadata.tags] : []),
     thumbnail: metadata.thumbnail || metadata.image,
     videoDate: metadata.videoDate || undefined,

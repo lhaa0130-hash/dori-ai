@@ -216,36 +216,36 @@ export default function Header() {
                 <div className="relative">
                   <Link href="/profile" className="flex items-center gap-2 px-5 py-2 rounded-full bg-secondary hover:bg-secondary/80 text-xs font-black text-secondary-foreground transition-all active:scale-95 whitespace-nowrap">
                     <User className="w-3.5 h-3.5" />
-                    <span>마이페이지</span>
+                    <span>{isEn ? "My page" : "마이페이지"}</span>
                     <ChevronDown className="w-3 h-3 opacity-50 group-hover:rotate-180 transition-transform duration-300" />
                   </Link>
                   <div className="absolute top-full right-0 mt-2 w-52 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
                     <div className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden py-1">
                       <Link href="/profile" className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
-                        <User className="w-4 h-4 text-[#F9954E]" /><span>마이페이지</span>
+                        <User className="w-4 h-4 text-[#F9954E]" /><span>{isEn ? "My page" : "마이페이지"}</span>
                       </Link>
                       <Link href="/feed" className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
-                        <Newspaper className="w-4 h-4 text-[#F9954E]" /><span>피드</span>
+                        <Newspaper className="w-4 h-4 text-[#F9954E]" /><span>{isEn ? "Feed" : "피드"}</span>
                       </Link>
                       <Link href="/messages" className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
-                        <MessageCircle className="w-4 h-4 text-[#F9954E]" /><span>메시지</span>
+                        <MessageCircle className="w-4 h-4 text-[#F9954E]" /><span>{isEn ? "Messages" : "메시지"}</span>
                       </Link>
                       <Link href="/shop" className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
-                        <span className="w-4 text-center text-[#F9954E]">🍬</span><span>상점</span>
+                        <span className="w-4 text-center text-[#F9954E]">🍬</span><span>{isEn ? "Shop" : "상점"}</span>
                       </Link>
 
                       {isAdmin && (
                         <>
                           <div className="my-1 border-t border-neutral-100 dark:border-zinc-800" />
                           <Link href="/admin" className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-500/10 transition-colors">
-                            <span className="w-4 text-center">🛡️</span><span>관리자 패널</span>
+                            <span className="w-4 text-center">🛡️</span><span>{isEn ? "Admin" : "관리자 패널"}</span>
                           </Link>
                         </>
                       )}
 
                       <div className="my-1 border-t border-neutral-100 dark:border-zinc-800" />
                       <button onClick={handleSignOut} className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors">
-                        <LogOut className="w-4 h-4" /><span>로그아웃</span>
+                        <LogOut className="w-4 h-4" /><span>{isEn ? "Sign out" : "로그아웃"}</span>
                       </button>
                     </div>
                   </div>
@@ -286,26 +286,26 @@ export default function Header() {
             {session?.user ? (
               <div className="flex flex-col gap-1.5">
                 <Link href="/profile" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white">
-                  <User className="w-4 h-4 text-[#F9954E]" /><span>마이페이지</span>
+                  <User className="w-4 h-4 text-[#F9954E]" /><span>{isEn ? "My page" : "마이페이지"}</span>
                 </Link>
                 <Link href="/feed" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white">
-                  <Newspaper className="w-4 h-4 text-[#F9954E]" /><span>피드</span>
+                  <Newspaper className="w-4 h-4 text-[#F9954E]" /><span>{isEn ? "Feed" : "피드"}</span>
                 </Link>
                 <Link href="/messages" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white">
-                  <MessageCircle className="w-4 h-4 text-[#F9954E]" /><span>메시지</span>
+                  <MessageCircle className="w-4 h-4 text-[#F9954E]" /><span>{isEn ? "Messages" : "메시지"}</span>
                 </Link>
                 <Link href="/shop" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white">
-                  <span className="w-4 text-center text-[#F9954E]">🍬</span><span>상점</span>
+                  <span className="w-4 text-center text-[#F9954E]">🍬</span><span>{isEn ? "Shop" : "상점"}</span>
                 </Link>
 
                 {/* 관리 / 로그아웃 */}
                 {isAdmin && (
                   <Link href="/admin" className="mt-1 flex items-center gap-3 px-4 py-3 rounded-2xl bg-orange-50 dark:bg-orange-900/20 text-sm font-bold text-orange-600 dark:text-orange-400">
-                    <span className="w-4 text-center">🛡️</span><span>관리자 패널</span>
+                    <span className="w-4 text-center">🛡️</span><span>{isEn ? "Admin" : "관리자 패널"}</span>
                   </Link>
                 )}
                 <button onClick={handleSignOut} className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-red-50 dark:bg-red-900/20 text-sm font-bold text-red-500 text-left w-full">
-                  <LogOut className="w-4 h-4" /><span>로그아웃</span>
+                  <LogOut className="w-4 h-4" /><span>{isEn ? "Sign out" : "로그아웃"}</span>
                 </button>
               </div>
             ) : (

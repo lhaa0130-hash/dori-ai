@@ -817,3 +817,432 @@
   .mart-product { transform: scale(0.88); transform-origin: bottom center; }
   .mart-booster-row button { min-height: 43px; }
 }
+
+/* Approved image-led game direction. */
+.mart-store-scene {
+  width: min(1120px, 100%);
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-areas:
+    "rule"
+    "order"
+    "aisle"
+    "guide"
+    "shelves"
+    "checkout";
+  grid-template-rows: auto auto auto auto auto auto;
+  gap: 8px;
+  padding: 10px;
+  border-radius: 26px;
+  background: linear-gradient(180deg, #fbf6ec, #ead8be);
+}
+
+.mart-rule-banner {
+  grid-area: rule;
+  min-height: clamp(110px, 16vh, 150px);
+  display: grid;
+  grid-template-columns: minmax(190px, 0.8fr) minmax(300px, 1.3fr) minmax(210px, 0.9fr);
+  align-items: center;
+  gap: 14px;
+  padding: 14px 18px;
+  border: 1px solid rgba(23,33,43,0.09);
+  border-radius: 22px;
+  background: #fffaf1;
+  box-shadow: inset 0 -5px rgba(23,33,43,0.035), 0 10px 22px -19px rgba(23,33,43,0.65);
+}
+
+.mart-rule-copy { text-align: center; }
+.mart-rule-copy > span {
+  display: inline-flex;
+  padding: 4px 9px;
+  border-radius: 99px;
+  color: #fff;
+  background: var(--illo-orange);
+  font-size: 8px;
+  font-weight: 950;
+  letter-spacing: 0.1em;
+}
+.mart-rule-copy h1 {
+  margin: 8px 0 0;
+  color: var(--illo-ink);
+  font-size: clamp(22px, 2.2vw, 34px);
+  line-height: 1.16;
+  letter-spacing: -0.055em;
+}
+
+.mart-rule-step {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+}
+.mart-rule-step strong {
+  color: rgba(23,33,43,0.72);
+  font-size: 11px;
+  white-space: nowrap;
+}
+.mart-rule-step strong b {
+  width: 20px;
+  height: 20px;
+  display: inline-grid;
+  place-items: center;
+  margin-right: 5px;
+  border-radius: 7px;
+  color: #fff;
+  background: var(--illo-orange);
+  font-size: 9px;
+}
+.mart-rule-place strong b { background: var(--illo-mint); }
+
+.mart-rule-products {
+  position: relative;
+  width: 122px;
+  height: 68px;
+}
+.mart-rule-products i {
+  position: absolute;
+  bottom: 0;
+  width: 54px;
+  height: 61px;
+  background-image: url('/game-assets/mart/products-atlas-v1.png');
+  background-size: 400% 200%;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 5px 4px rgba(23,33,43,0.14));
+}
+.mart-rule-products i:nth-child(1) { left: 0; transform: scale(0.82); transform-origin: bottom; opacity: 0.65; }
+.mart-rule-products i:nth-child(2) { left: 34px; transform: scale(0.9); transform-origin: bottom; opacity: 0.82; }
+.mart-rule-products i:nth-child(3) { right: 0; filter: drop-shadow(0 0 0.4px #fff) drop-shadow(0 0 5px rgba(242,122,63,0.9)); }
+
+.mart-rule-target {
+  position: relative;
+  width: 112px;
+  height: 66px;
+  border: 4px solid #76c9bc;
+  border-radius: 18px 18px 10px 10px;
+  background: rgba(78,168,156,0.12);
+  box-shadow: 0 0 0 7px rgba(78,168,156,0.08), inset 0 -8px rgba(78,168,156,0.12);
+}
+.mart-rule-target::before {
+  content: "→";
+  position: absolute;
+  left: -43px;
+  top: 15px;
+  color: var(--illo-mint);
+  font-size: 29px;
+  font-weight: 950;
+}
+.mart-rule-target i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  border-right: 5px solid var(--illo-mint);
+  border-bottom: 5px solid var(--illo-mint);
+  transform: translate(-50%,-65%) rotate(45deg);
+}
+
+.mart-store-scene .mart-order-card {
+  grid-area: order;
+  width: 100%;
+  min-height: 64px;
+  height: auto;
+  display: grid;
+  grid-template-columns: 175px minmax(0,1fr) auto;
+  grid-template-rows: auto 4px;
+  align-items: center;
+  gap: 7px 14px;
+  padding: 10px 14px 9px;
+  border: 1px solid rgba(23,33,43,0.1);
+  border-radius: 16px;
+  background: rgba(255,253,247,0.92);
+  box-shadow: 0 7px 0 -4px #b99064, 0 14px 18px -17px rgba(23,33,43,0.62);
+}
+.mart-store-scene .mart-order-card::before { display: none; }
+.mart-order-heading { display: flex; align-items: center; }
+.mart-order-heading span { font-size: 8px; }
+.mart-order-heading h2 { margin: 3px 0 0; font-size: 14px; letter-spacing: -0.035em; }
+.mart-order-heading > strong { min-width: 40px; margin: 0; padding: 6px 8px; }
+.mart-order-card .mart-orders { display: grid; grid-template-columns: repeat(auto-fit,minmax(92px,1fr)); gap: 5px; margin: 0; }
+.mart-order-card .mart-order { min-height: 36px; padding: 5px 8px; }
+.mart-order-card .mart-flow { margin: 0; white-space: nowrap; }
+.mart-order-card .mart-order-progress { grid-column: 1 / -1; width: 100%; margin: 0; }
+
+.mart-aisle-heading { grid-area: aisle; }
+.mart-store-scene .mart-action-guide { grid-area: guide; }
+
+.mart-store-scene .mart-shelves {
+  grid-area: shelves;
+  width: 100%;
+  height: clamp(220px, 30vh, 285px);
+  padding: 13px 13px 20px;
+  gap: 9px;
+  border-width: 9px;
+  border-bottom-width: 15px;
+  border-radius: 16px 16px 10px 10px;
+  background: linear-gradient(180deg,#fffaf1 0 74%,#ead4b5 74%);
+}
+.mart-store-scene .mart-shelf { height: 100%; min-height: 180px; }
+.mart-product-stack { inset: 34px 8px 19px; }
+.mart-slot { width: 52%; height: calc(100% - 4px); align-items: flex-end; }
+.mart-slot-1 { left: 0; transform: scale(0.84) translateY(-8px); }
+.mart-slot-2 { left: 24%; transform: scale(0.92) translateY(-3px); }
+.mart-slot-3 { right: 0; }
+
+.mart-product,
+.mart-product-bottle,
+.mart-product-can,
+.mart-product-bag,
+.mart-product-box,
+.mart-product-cup,
+.mart-product-pump {
+  width: clamp(66px, 7vw, 92px);
+  height: clamp(74px, 7.9vw, 104px);
+  border: 0;
+  border-radius: 0;
+  clip-path: none;
+  overflow: visible;
+  background-color: transparent;
+  background-image: url('/game-assets/mart/products-atlas-v1.png');
+  background-size: 400% 200%;
+  background-repeat: no-repeat;
+  box-shadow: none;
+  filter: drop-shadow(0 7px 5px rgba(23,33,43,0.18));
+}
+.mart-product[data-product="milk"] { background-position: 0 0; }
+.mart-product[data-product="juice"] { background-position: 33.333% 0; }
+.mart-product[data-product="soda"] { background-position: 66.666% 0; }
+.mart-product[data-product="chips"] { background-position: 100% 0; }
+.mart-product[data-product="cookies"] { background-position: 0 100%; }
+.mart-product[data-product="yogurt"] { background-position: 33.333% 100%; }
+.mart-product[data-product="soap"] { background-position: 66.666% 100%; }
+.mart-product::before,
+.mart-product::after,
+.mart-product-cap,
+.mart-product-brand,
+.mart-product-art,
+.mart-product-label { display: none !important; }
+.mart-product.is-front {
+  transform: translateY(-4px) scale(1.02);
+  filter: drop-shadow(0 8px 5px rgba(23,33,43,0.2));
+}
+.mart-shelf.is-selected .mart-product.is-front {
+  filter: drop-shadow(0 0 2px #fff) drop-shadow(0 0 7px var(--illo-orange)) drop-shadow(0 8px 5px rgba(23,33,43,0.2));
+}
+.mart-product.is-back:not(.is-peeking) { filter: saturate(0.72) brightness(0.84) drop-shadow(0 6px 4px rgba(23,33,43,0.14)); }
+
+.mart-checkout-line { grid-area: checkout; }
+
+.mart-tutorial-steps > div { min-height: 58px; }
+
+@media (max-height: 700px) and (min-width: 761px) {
+  .mart-rule-banner { min-height: 92px; padding: 8px 14px; }
+  .mart-rule-copy h1 { margin-top: 4px; font-size: 22px; }
+  .mart-rule-products { transform: scale(0.8); }
+  .mart-rule-target { transform: scale(0.82); }
+  .mart-store-scene .mart-order-card { min-height: 53px; padding-top: 6px; padding-bottom: 6px; }
+  .mart-store-scene .mart-shelves { height: 182px; }
+  .mart-store-scene .mart-shelf { min-height: 140px; }
+  .mart-product,
+  .mart-product-bottle,
+  .mart-product-can,
+  .mart-product-bag,
+  .mart-product-box,
+  .mart-product-cup,
+  .mart-product-pump { width: 61px; height: 69px; }
+}
+
+@media (max-width: 760px) {
+  .mart-rule-banner {
+    min-height: 178px;
+    grid-template-columns: 1fr 1fr;
+    grid-template-areas: "copy copy" "pick place";
+    gap: 8px;
+    padding: 10px;
+  }
+  .mart-rule-copy { grid-area: copy; }
+  .mart-rule-copy h1 { margin-top: 5px; font-size: 21px; }
+  .mart-rule-pick { grid-area: pick; }
+  .mart-rule-place { grid-area: place; }
+  .mart-rule-products { width: 92px; height: 48px; transform: scale(0.72); }
+  .mart-rule-target { width: 82px; height: 49px; transform: scale(0.82); }
+  .mart-rule-step { gap: 1px; }
+  .mart-rule-step strong { font-size: 9px; }
+  .mart-store-scene .mart-order-card { display: block; padding: 10px; }
+  .mart-order-card .mart-orders { margin-top: 8px; grid-template-columns: repeat(3,minmax(0,1fr)); }
+  .mart-order-card .mart-flow { margin-top: 7px; }
+  .mart-order-card .mart-order-progress { margin-top: 7px; }
+  .mart-store-scene .mart-shelves { height: auto; }
+  .mart-store-scene .mart-shelf { min-height: 160px; }
+  .mart-product,
+  .mart-product-bottle,
+  .mart-product-can,
+  .mart-product-bag,
+  .mart-product-box,
+  .mart-product-cup,
+  .mart-product-pump { width: 70px; height: 79px; }
+}
+
+/* Strong completion reward and unified tactile surfaces. */
+.mart-rule-banner,
+.mart-store-scene .mart-order-card,
+.mart-store-scene .mart-shelves,
+.illo-game-controls {
+  border-color: rgba(118, 82, 48, 0.2);
+}
+
+.mart-store-scene .mart-order-card {
+  box-shadow: 0 6px 0 -2px #c9a274, 0 15px 24px -20px rgba(71,45,24,0.68), inset 0 1px #fff;
+}
+
+.mart-order { position: relative; }
+.mart-order.is-done { padding-right: 28px; text-decoration: none; animation: mart-order-done 520ms cubic-bezier(.2,.9,.2,1) both; }
+.mart-order.is-done::after {
+  content: "✓";
+  position: absolute;
+  right: 7px;
+  top: 50%;
+  width: 18px;
+  height: 18px;
+  display: grid;
+  place-items: center;
+  transform: translateY(-50%) rotate(-8deg);
+  border: 2px solid var(--illo-mint);
+  border-radius: 50%;
+  color: var(--illo-mint);
+  font-size: 10px;
+  font-weight: 950;
+}
+
+.illo-game-controls {
+  background: #fffaf1;
+  box-shadow: 0 6px 0 -2px #c9a274, 0 18px 32px -24px rgba(71,45,24,0.72), inset 0 1px #fff;
+}
+.mart-booster-row button {
+  border: 2px solid rgba(242,122,63,0.25);
+  background: linear-gradient(180deg,#fffdf8,#f5eadb);
+  box-shadow: 0 4px 0 #ddc19e, 0 8px 12px -10px rgba(71,45,24,0.58);
+  transition: transform 150ms ease, box-shadow 150ms ease, border-color 150ms ease;
+}
+.mart-booster-row button:nth-child(2) { border-color: rgba(78,168,156,0.3); }
+.mart-booster-row button:nth-child(3) { border-color: rgba(94,120,214,0.28); }
+.mart-booster-row button:active:not(:disabled) { transform: translateY(3px); box-shadow: 0 1px 0 #ddc19e; }
+.mart-booster-row button:disabled { opacity: 0.58; filter: saturate(0.72); box-shadow: 0 3px 0 #ddc19e; }
+
+.mart-celebration {
+  position: fixed;
+  inset: 0;
+  z-index: 45;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  background: radial-gradient(circle, rgba(255,248,224,0.38), transparent 48%);
+  animation: mart-celebration-fade 1450ms ease both;
+}
+
+.mart-complete-card {
+  position: relative;
+  width: min(310px, calc(100vw - 44px));
+  min-height: 255px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 22px 18px 20px;
+  border: 4px solid #f4c99d;
+  border-radius: 30px;
+  color: var(--illo-ink);
+  background: linear-gradient(160deg,#fffdf7,#f8ead7);
+  box-shadow: 0 12px 0 #c99764, 0 34px 65px -25px rgba(23,33,43,0.72), inset 0 2px #fff;
+  animation: mart-complete-pop 1450ms cubic-bezier(.16,1,.3,1) both;
+}
+
+.mart-complete-kicker {
+  padding: 5px 9px;
+  border-radius: 99px;
+  color: #fff;
+  background: var(--illo-orange);
+  font-size: 8px;
+  font-weight: 950;
+  letter-spacing: 0.16em;
+}
+.mart-complete-card > strong { margin-top: 8px; font-size: 24px; letter-spacing: -0.045em; }
+.mart-complete-stamp {
+  margin-top: 9px;
+  padding: 5px 9px;
+  border: 2px solid var(--illo-mint);
+  border-radius: 8px;
+  color: var(--illo-mint);
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: 0.08em;
+  transform: rotate(-5deg);
+  animation: mart-stamp-in 1450ms cubic-bezier(.16,1,.3,1) both;
+}
+
+.mart-complete-products { position: relative; width: 180px; height: 92px; margin-top: 8px; }
+.mart-complete-products i {
+  position: absolute;
+  bottom: 0;
+  width: 76px;
+  height: 86px;
+  background-image: url('/game-assets/mart/products-atlas-v1.png');
+  background-size: 400% 200%;
+  background-repeat: no-repeat;
+  filter: drop-shadow(0 8px 5px rgba(23,33,43,0.2));
+}
+.mart-complete-products i:nth-child(1) { left: 8px; transform: rotate(-11deg) translateY(5px); }
+.mart-complete-products i:nth-child(2) { left: 52px; z-index: 2; transform: translateY(-7px) scale(1.08); }
+.mart-complete-products i:nth-child(3) { right: 7px; transform: rotate(11deg) translateY(5px); }
+.mart-complete-products[data-product="milk"] i { background-position: 0 0; }
+.mart-complete-products[data-product="juice"] i { background-position: 33.333% 0; }
+.mart-complete-products[data-product="soda"] i { background-position: 66.666% 0; }
+.mart-complete-products[data-product="chips"] i { background-position: 100% 0; }
+.mart-complete-products[data-product="cookies"] i { background-position: 0 100%; }
+.mart-complete-products[data-product="yogurt"] i { background-position: 33.333% 100%; }
+.mart-complete-products[data-product="soap"] i { background-position: 66.666% 100%; }
+
+.mart-confetti { position: fixed; left: 50%; top: 48%; width: 1px; height: 1px; }
+.mart-confetti i {
+  --tx: 0px;
+  --ty: -160px;
+  --rot: 180deg;
+  position: absolute;
+  width: 9px;
+  height: 16px;
+  border-radius: 3px;
+  background: var(--illo-orange);
+  animation: mart-confetti-fly 1050ms cubic-bezier(.1,.7,.25,1) both;
+}
+.mart-confetti i:nth-child(3n) { background: var(--illo-mint); }
+.mart-confetti i:nth-child(3n + 2) { background: var(--illo-blue); }
+.mart-confetti i:nth-child(1) { --tx:-190px;--ty:-170px;--rot:240deg; }
+.mart-confetti i:nth-child(2) { --tx:-150px;--ty:-235px;--rot:410deg; }
+.mart-confetti i:nth-child(3) { --tx:-105px;--ty:-185px;--rot:170deg; }
+.mart-confetti i:nth-child(4) { --tx:-62px;--ty:-250px;--rot:330deg; }
+.mart-confetti i:nth-child(5) { --tx:-22px;--ty:-205px;--rot:480deg; }
+.mart-confetti i:nth-child(6) { --tx:28px;--ty:-245px;--rot:220deg; }
+.mart-confetti i:nth-child(7) { --tx:72px;--ty:-188px;--rot:390deg; }
+.mart-confetti i:nth-child(8) { --tx:118px;--ty:-238px;--rot:270deg; }
+.mart-confetti i:nth-child(9) { --tx:165px;--ty:-178px;--rot:440deg; }
+.mart-confetti i:nth-child(10) { --tx:195px;--ty:-120px;--rot:210deg; }
+.mart-confetti i:nth-child(11) { --tx:-205px;--ty:-95px;--rot:360deg; }
+.mart-confetti i:nth-child(12) { --tx:-145px;--ty:-115px;--rot:190deg; }
+.mart-confetti i:nth-child(13) { --tx:145px;--ty:-105px;--rot:420deg; }
+.mart-confetti i:nth-child(14) { --tx:68px;--ty:-145px;--rot:280deg; }
+
+@keyframes mart-complete-pop {
+  0% { opacity: 0; transform: translateY(40px) scale(.55) rotate(-4deg); }
+  18% { opacity: 1; transform: translateY(0) scale(1.07) rotate(1deg); }
+  30%, 78% { opacity: 1; transform: scale(1) rotate(0); }
+  100% { opacity: 0; transform: translateY(-28px) scale(.92); }
+}
+@keyframes mart-celebration-fade { 0%,85% { opacity: 1; } 100% { opacity: 0; } }
+@keyframes mart-stamp-in { 0%,24% { opacity: 0; transform: rotate(-18deg) scale(1.8); } 40%,84% { opacity: 1; transform: rotate(-5deg) scale(1); } 100% { opacity: 0; } }
+@keyframes mart-confetti-fly { 0% { opacity: 0; transform: translate(0,0) rotate(0); } 12% { opacity: 1; } 75% { opacity: 1; transform: translate(var(--tx),var(--ty)) rotate(var(--rot)); } 100% { opacity: 0; transform: translate(var(--tx),calc(var(--ty) + 120px)) rotate(var(--rot)); } }
+@keyframes mart-order-done { 0% { transform: scale(.94); } 55% { transform: scale(1.045); } 100% { transform: scale(1); } }
+
+.illo-reduced-motion .mart-celebration { display: none; }

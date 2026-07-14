@@ -19,6 +19,8 @@ export type InsightFeedItem = {
   channel?: string;   // 영상: 유튜브 채널명
   videoDate?: string; // 영상: 실제 유튜브 업로드 시각(ISO)
   lang: "ko" | "en";  // 콘텐츠 언어(frontmatter lang, 기본 ko) — 홈 언어별 분리용
+  titleEn?: string;   // 영상 등 공유 글의 영어 제목(en 피드에서 title로 스왑)
+  summaryEn?: string; // 영어 요약
 };
 
 // 메인 탭 노출 순서(존재하는 카테고리만 화면에 표시)
@@ -62,6 +64,8 @@ export function getInsightFeed(perCategory = 12, lang?: "ko" | "en"): InsightFee
         channel: cat === "영상" ? ((body.match(/\*\*(.+?)\*\*/) || [])[1] || undefined) : undefined,
         videoDate: it.videoDate || undefined,
         lang: it.lang === "en" ? "en" : "ko",
+        titleEn: norm(it.titleEn) || undefined,
+        summaryEn: (norm(it.summaryEn) || "").slice(0, 180) || undefined,
       });
     }
   };
@@ -76,7 +80,14 @@ export function getInsightFeed(perCategory = 12, lang?: "ko" | "en"): InsightFee
   items.sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime());
 
   // 언어 필터(한글=ko페이지, 영어=en페이지). 상한 적용 전에 걸러야 카테고리별 개수가 올바름.
-  const src = lang ? items.filter((it) => it.lang === lang) : items;
+  // 영상(영상 카테고리)은 언어중립(유튜브)이라 양쪽에 노출 — en에선 영어 제목(titleEn)으로 스왑.
+  const src = lang ? items.filter((it) => it.lang === lang || it.category === "영상") : items;
+  if (lang === "en") {
+    for (const it of src) {
+      if (it.titleEn) it.title = it.titleEn;
+      if (it.summaryEn) it.summary = it.summaryEn;
+    }
+  }
 
   // 카테고리별 상한 적용(페이로드 절약)
   const byCat: Record<string, InsightFeedItem[]> = {};

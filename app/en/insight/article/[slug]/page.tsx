@@ -23,7 +23,7 @@ export async function generateMetadata(
 ): Promise<Metadata> {
   try {
     const post = await getPostData(params.slug);
-    const title = post.title || "illo Insights";
+    const title = (post as any).titleEn || post.title || "illo Insights";
     const description = post.summary || post.description || `${title} - the latest AI trends and insights on illo.`;
     const image = post.thumbnail_url || `${SITE_URL}/og-default.png`;
     const url = `${SITE_URL}/en/insight/article/${params.slug}`;
@@ -70,6 +70,8 @@ export default async function EnInsightArticlePage({ params }: { params: { slug:
   let post;
   try {
     post = await getPostData(params.slug);
+    if ((post as any).titleEn) post.title = (post as any).titleEn; // 영상 등: 영어 제목으로 표시
+    if ((post as any).summaryEn) post.summary = (post as any).summaryEn;
   } catch (error) {
     console.error('Error loading insight article:', error);
     return (
@@ -188,12 +190,13 @@ export async function generateStaticParams() {
     const { getAllCurations } = await import('@/lib/curation');
 
     const isEn = (p: any) => p?.lang === 'en';
+    const isEnOrVideo = (p: any) => p?.lang === 'en' || p?.category === '영상'; // 영상은 언어중립이라 en에도 노출
     const params: { slug: string }[] = [];
     [
       ...getAllGuides().filter(isEn),
       ...getAllAnalyses().filter(isEn),
       ...getAllReports().filter(isEn),
-      ...getAllCurations().filter(isEn),
+      ...getAllCurations().filter(isEnOrVideo),
     ].forEach((item) => params.push({ slug: item.slug }));
 
     if (params.length === 0) return [{ slug: 'placeholder' }];

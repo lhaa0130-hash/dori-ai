@@ -54,6 +54,14 @@ function categoryLabel(category: ProductCategory) {
   return product?.categoryLabel || category;
 }
 
+function difficultyLabel(levelId: number) {
+  if (levelId <= 3) return "처음 진열";
+  if (levelId <= 10) return "주문 시작";
+  if (levelId <= 18) return "잠금 선반";
+  if (levelId <= 24) return "우선 주문";
+  return "마감 러시";
+}
+
 function ProductToken({ productId, isFront, peek }: { productId: ProductId; isFront: boolean; peek: boolean }) {
   const product = PRODUCT_CATALOG[productId];
   return (
@@ -164,20 +172,25 @@ export default function MartGame() {
   }, [hydrated, state.status]);
 
   const feedback = useCallback((kind: "move" | "complete" | "invalid") => {
-    if (progress.settings.vibration && navigator.vibrate) navigator.vibrate(kind === "complete" ? [25, 35, 45] : kind === "invalid" ? 35 : 12);
+    if (progress.settings.vibration && navigator.vibrate) navigator.vibrate(kind === "complete" ? [22, 28, 22, 30, 65] : kind === "invalid" ? 35 : 12);
     if (!progress.settings.sound) return;
     try {
       const AudioContextClass = window.AudioContext || (window as typeof window & { webkitAudioContext?: typeof AudioContext }).webkitAudioContext;
       if (!AudioContextClass) return;
       const audio = new AudioContextClass();
-      const oscillator = audio.createOscillator();
-      const gain = audio.createGain();
-      oscillator.frequency.value = kind === "complete" ? 660 : kind === "invalid" ? 180 : 360;
-      gain.gain.setValueAtTime(0.05, audio.currentTime);
-      gain.gain.exponentialRampToValueAtTime(0.001, audio.currentTime + 0.09);
-      oscillator.connect(gain).connect(audio.destination);
-      oscillator.start();
-      oscillator.stop(audio.currentTime + 0.1);
+      const notes = kind === "complete" ? [523.25, 659.25, 783.99] : [kind === "invalid" ? 180 : 360];
+      notes.forEach((frequency, index) => {
+        const oscillator = audio.createOscillator();
+        const gain = audio.createGain();
+        const start = audio.currentTime + index * 0.08;
+        oscillator.type = kind === "complete" ? "sine" : "triangle";
+        oscillator.frequency.value = frequency;
+        gain.gain.setValueAtTime(kind === "complete" ? 0.055 : 0.04, start);
+        gain.gain.exponentialRampToValueAtTime(0.001, start + 0.16);
+        oscillator.connect(gain).connect(audio.destination);
+        oscillator.start(start);
+        oscillator.stop(start + 0.17);
+      });
     } catch {
       // Audio feedback is optional.
     }
@@ -223,7 +236,7 @@ export default function MartGame() {
       setCelebration(result.setCompleted);
       setAnnouncement(`${PRODUCT_CATALOG[result.setCompleted].label} 세트 완성`);
       trackGameEvent("set_complete", { level: level.id, product: result.setCompleted });
-      window.setTimeout(() => setCelebration(null), 850);
+      window.setTimeout(() => setCelebration(null), 1450);
     }
     if (result.orderCompleted) {
       trackGameEvent("order_complete", { level: level.id, category: result.orderCompleted });
@@ -326,18 +339,24 @@ export default function MartGame() {
       )}
     >
       <div className="mart-store-scene">
-      <section className="mart-store-marquee" aria-label="illo MART 매장 안내">
-        <div className="mart-store-emblem" aria-hidden="true">M</div>
-        <div className="mart-store-copy">
-          <span>ILLO TOWN · CORNER STORE</span>
-          <strong>오늘의 진열을 시작해볼까요?</strong>
+      <section className="mart-rule-banner" aria-labelledby="mart-rule-title">
+        <div className="mart-rule-step mart-rule-pick" aria-hidden="true">
+          <span className="mart-rule-products"><i /><i /><i /></span>
+          <strong><b>1</b> 앞 상품 선택</strong>
         </div>
-        <div className="mart-open-sign"><i /> OPEN</div>
+        <div className="mart-rule-copy">
+          <span>{difficultyLabel(level.id)} · LEVEL {level.id}</span>
+          <h1 id="mart-rule-title">같은 상품 3개를 모아<br />주문을 완성하세요</h1>
+        </div>
+        <div className="mart-rule-step mart-rule-place" aria-hidden="true">
+          <span className="mart-rule-target"><i /></span>
+          <strong><b>2</b> 같은 상품 위 또는 빈 칸</strong>
+        </div>
       </section>
 
       <section className="mart-order-card" aria-labelledby="mart-orders-title">
         <div className="mart-order-heading">
-          <div><span>오늘의 주문</span><h1 id="mart-orders-title">순서대로 채워주세요</h1></div>
+          <div><span>오늘의 주문</span><h2 id="mart-orders-title">완성할 상품 세트</h2></div>
           <strong>{ordersComplete}/{level.orders.length}</strong>
         </div>
         <div className="mart-orders">
@@ -368,8 +387,8 @@ export default function MartGame() {
       )}
 
       <div className="mart-aisle-heading" aria-hidden="true">
-        <span>AISLE 01</span>
-        <strong>오늘의 진열대</strong>
+        <span>GAME BOARD</span>
+        <strong>상품 진열대</strong>
         <i />
       </div>
 
@@ -377,7 +396,7 @@ export default function MartGame() {
         <span className="mart-guide-dot" aria-hidden="true" />
         {selectedProduct
           ? <><strong>{PRODUCT_CATALOG[selectedProduct].label}</strong> 선택됨 · 빛나는 선반을 눌러주세요</>
-          : <>가장 앞쪽 상품을 골라주세요</>}
+          : <>가장 앞쪽 상품을 눌러 시작하세요</>}
       </div>
 
       <section className="mart-shelves" aria-label="상품 선반">
@@ -412,13 +431,25 @@ export default function MartGame() {
       <div className="mart-checkout-line" aria-hidden="true"><span>ILLO MART</span><i /><i /><i /></div>
       </div>
 
-      {celebration && <div className="mart-set-toast"><span>SET</span>{PRODUCT_CATALOG[celebration].label} 정리 완료</div>}
+      {celebration && (
+        <div className="mart-celebration" role="status" aria-live="assertive">
+          <div className="mart-confetti" aria-hidden="true">
+            {Array.from({ length: 14 }, (_, index) => <i key={index} />)}
+          </div>
+          <div className="mart-complete-card">
+            <span className="mart-complete-kicker">ORDER COMPLETE</span>
+            <span className="mart-complete-products" data-product={celebration} aria-hidden="true"><i /><i /><i /></span>
+            <strong>{PRODUCT_CATALOG[celebration].label} 3개 완성!</strong>
+            <span className="mart-complete-stamp">PACKED ✓</span>
+          </div>
+        </div>
+      )}
 
       {hydrated && !progress.tutorialComplete && (
         <IlloGameDialog
-          title="앞쪽 상품부터, 세 개씩"
-          description="상품을 누르고 목적 선반을 눌러 오늘의 주문을 완성해요."
-          primaryLabel="진열 시작"
+          title="같은 상품 3개를 모아주세요"
+          description="앞에 있는 상품을 골라 같은 상품 위나 빈 선반으로 옮기면 돼요."
+          primaryLabel="바로 시작하기"
           onPrimary={() => {
             persistProgress({ ...progress, tutorialComplete: true });
             trackGameEvent("game_start", { level: level.id, tutorial: true });

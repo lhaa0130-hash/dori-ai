@@ -22,13 +22,14 @@ export default async function EnInsightPage() {
     const guides = en(getAllGuides());
     const analyses = en(getAllAnalyses());
     const reports = en(getAllReports());
-    const curations = en(getAllCurations());
+    // 영상(영상 카테고리)은 언어중립이라 영어 목록에도 노출
+    const curations = getAllCurations().filter((x: any) => x.lang === 'en' || x.category === '영상');
 
     const map = (arr: any[], prefix: string, fallbackCat: string) =>
       arr.map((item, index) => ({
         id: `${prefix}-${index}`,
-        title: item.title,
-        summary: item.description || '',
+        title: item.titleEn || item.title,
+        summary: item.summaryEn || item.description || '',
         category: item.category || fallbackCat,
         tags: item.tags || [],
         likes: 0,
