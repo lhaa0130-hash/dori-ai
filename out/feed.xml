@@ -6,7 +6,15 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 13 Jul 2026 22:50:19 GMT</lastBuildDate>
+    <lastBuildDate>Tue, 14 Jul 2026 01:57:25 GMT</lastBuildDate>
+    <item>
+      <title>백악관, AI 전력 비용 절감 위해 대규모 협력 추진</title>
+      <link>https://illo.im/insight/article/trend-189</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/trend-189</guid>
+      <category>트렌드</category>
+      <pubDate>Mon, 13 Jul 2026 23:00:40 GMT</pubDate>
+      <description>백악관이 AI 전력 비용 절감을 위해 주요 유틸리티 업체와 데이터 센터 운영사들을 동원하는 계획을 발표했습니다. 이 움직임은 AI 기술의 확산과 함께 급증하는 에너지 수요를 조절하기 위한 것으로, 향후 기술 및 산업 판도에 큰 영향을 미칠 전망입니다.</description>
+    </item>
     <item>
       <title>Claude·Gemini·Runway·Suno AI 편집 스튜디오: 지방정부가 AI 접근권을 공공 인프라로 만드는 이유</title>
       <link>https://illo.im/insight/article/analysis-14</link>
@@ -22,6 +30,22 @@
       <category>리포트</category>
       <pubDate>Mon, 13 Jul 2026 02:04:45 GMT</pubDate>
       <description>이번 주 인공지능 업계는 무료 컴퓨트 제공, 반도체 기대치 재조정, 데이터센터 장기 임대 계약이 동시에 부각됐다. 돈은 여전히 인공지능으로 흐르지만, 시장은 이제 ‘누가 더 크게 쓰는가’보다 ‘누가 그 비용을 회수하는가’를 묻기 시작했다.</description>
+    </item>
+    <item>
+      <title>[교육] AI 시대 자녀에게 필요한 능력은 무엇인가?</title>
+      <link>https://illo.im/insight/article/video-69</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-69</guid>
+      <category>큐레이션</category>
+      <pubDate>Mon, 13 Jul 2026 00:00:00 GMT</pubDate>
+      <description>AI 시대에 자녀에게 필요한 능력에 대한 교육적 통찰을 제공합니다.</description>
+    </item>
+    <item>
+      <title>[LLM] Fine-Tuned LLMs의 그래디언트 손실 문제 분석</title>
+      <link>https://illo.im/insight/article/video-70</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-70</guid>
+      <category>큐레이션</category>
+      <pubDate>Mon, 13 Jul 2026 00:00:00 GMT</pubDate>
+      <description>Fine-tuned LLMs의 그래디언트 손실 현상을 심층적으로 분석합니다.</description>
     </item>
     <item>
       <title>[대시보드] 클로드코드로 나만의 주식 AI 대시보드 만들기</title>
@@ -302,30 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Wed, 01 Jul 2026 00:00:00 GMT</pubDate>
       <description>AI의 사고 능력과 추론 모델의 발전을 설명합니다.</description>
-    </item>
-    <item>
-      <title>[프로토콜] MCP와 API  모든 개발자가 알아야 할 프로토콜</title>
-      <link>https://illo.im/insight/article/video-42</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-42</guid>
-      <category>큐레이션</category>
-      <pubDate>Wed, 01 Jul 2026 00:00:00 GMT</pubDate>
-      <description>AI 개발자를 위한 MCP와 API의 차이를 설명합니다.</description>
-    </item>
-    <item>
-      <title>[모델] 외부 세계 모델의 종말  LLM에 통합된</title>
-      <link>https://illo.im/insight/article/video-43</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-43</guid>
-      <category>큐레이션</category>
-      <pubDate>Wed, 01 Jul 2026 00:00:00 GMT</pubDate>
-      <description>LLM에 통합된 외부 세계 모델의 변화를 다룹니다.</description>
-    </item>
-    <item>
-      <title>AI 그림 프롬프트 작성법: 원하는 이미지를 뽑는 단계별 입력 공식</title>
-      <link>https://illo.im/insight/article/curation-14</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/curation-14</guid>
-      <category>큐레이션</category>
-      <pubDate>Tue, 30 Jun 2026 23:02:46 GMT</pubDate>
-      <description>AI 그림 프롬프트 작성법을 처음 배우는 사람도 바로 따라 할 수 있게 도구 선택, 무료 사용법, 프롬프트 구조, 수정 요청, 실패 해결법까지 단계별로 정리했습니다.</description>
     </item>
   </channel>
 </rss>
