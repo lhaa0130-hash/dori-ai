@@ -691,13 +691,13 @@ export default function AdminPage() {
                   </div>
                   <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
                     <h2 className="text-[14px] font-extrabold text-neutral-900 dark:text-white mb-3">🌍 국가 <span className="text-[11px] font-normal text-neutral-400">7일</span></h2>
-                    <div className="space-y-2">
-                      {ga4!.topCountries.slice(0, 6).map((c, i) => (
-                        <div key={i} className="flex items-center justify-between gap-2 text-[12.5px]">
-                          <span className="truncate text-neutral-600 dark:text-neutral-300">{flag[c.country] || "🌐"} {c.country}</span>
-                          <span className="font-bold text-neutral-800 dark:text-neutral-100 flex-shrink-0">{c.users.toLocaleString()}</span>
+                    <div className="space-y-2.5">
+                      {(() => { const tot = ga4!.topCountries.reduce((s, c) => s + c.users, 0) || 1; return ga4!.topCountries.slice(0, 6).map((c, i) => { const pct = Math.round((c.users / tot) * 100); return (
+                        <div key={i}>
+                          <div className="flex items-center justify-between text-[12px] mb-1"><span className="truncate text-neutral-600 dark:text-neutral-300">{flag[c.country] || "🌐"} {c.country}</span><span className="text-neutral-400 flex-shrink-0">{c.users} · {pct}%</span></div>
+                          <div className="h-1.5 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden"><div className="h-full rounded-full bg-emerald-400" style={{ width: `${pct}%` }} /></div>
                         </div>
-                      ))}
+                      ); }); })()}
                     </div>
                   </div>
                 </div>
