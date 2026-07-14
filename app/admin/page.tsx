@@ -92,7 +92,8 @@ export default function AdminPage() {
   // 애드센스 수입
   const [adsense, setAdsense] = useState<AdsenseData | null>(null);
   const [adsenseEdit, setAdsenseEdit] = useState(false);
-  const [adsenseForm, setAdsenseForm] = useState<AdsenseData>({ today: 0, yesterday: 0, last7: 0, month: 0, balance: 0, lastPayment: "", currency: "US$" });
+  const [adsenseForm, setAdsenseForm] = useState<AdsenseData>({ today: 0, yesterday: 0, last7: 0, month: 0, balance: 0, lastPayment: "", currency: "US$", admobToday: 0, admobMonth: 0 });
+  const [admobEdit, setAdmobEdit] = useState(false);
 
   // GA4·애드센스 실시간 통계 (dashboardStats/live)
   const [ga4, setGa4] = useState<Ga4Stats | null>(null);
@@ -550,7 +551,12 @@ export default function AdminPage() {
           const chartMax = Math.max(1, ...chart.map((c) => c.users));
           const minsAgo = statsUpdatedAt ? Math.max(0, Math.round((Date.now() - new Date(statsUpdatedAt).getTime()) / 60000)) : null;
           const agoLabel = minsAgo == null ? "" : minsAgo < 1 ? "방금" : minsAgo < 60 ? `${minsAgo}분 전` : `${Math.round(minsAgo / 60)}시간 전`;
-          const ad = adsense || { today: 0, yesterday: 0, last7: 0, month: 0, balance: 0, lastPayment: "", currency: "US$" };
+          const ad = adsense || { today: 0, yesterday: 0, last7: 0, month: 0, balance: 0, lastPayment: "", currency: "US$", admobToday: 0, admobMonth: 0 };
+          // 광고 수입 합계(애드센스 자동/수동 + 애드몹 수동)
+          const adsenseToday = adsenseLive?.today ? adsenseLive.today.earnings : ad.today;
+          const adsenseMonth = adsenseLive?.month ? adsenseLive.month.earnings : ad.month;
+          const totalToday = adsenseToday + (ad.admobToday || 0);
+          const totalMonth = adsenseMonth + (ad.admobMonth || 0);
           const curSym = (c?: string) => (c === "USD" || c === "US$" ? "$" : c === "KRW" ? "₩" : (c || "$") + " ");
           const adCur = curSym(adsenseLive?.currency || ad.currency);
           const money = (n: number) => `${adCur}${(n || 0).toFixed(2)}`;
@@ -650,15 +656,19 @@ export default function AdminPage() {
                 </div>
                 <div className="flex items-end gap-1.5 h-40">
                   {chart.map((row) => {
-                    const heightPct = Math.max((row.users / chartMax) * 100, 3);
+                    const heightPct = Math.max((row.users / chartMax) * 100, 2);
                     return (
-                      <div key={row.date} className="flex-1 flex flex-col items-center gap-1.5 group">
-                        <div className="text-[10px] font-bold text-neutral-500 dark:text-neutral-400 opacity-0 group-hover:opacity-100 transition">{row.users}</div>
-                        <div className="w-full bg-gradient-to-t from-[#F9954E] to-[#FBAA60] rounded-t-md group-hover:brightness-110 transition-all" style={{ height: `${heightPct}%` }} title={`${row.date} · ${row.users}명`} />
-                        <div className="text-[9px] text-neutral-400 dark:text-neutral-500">{row.date.slice(5)}</div>
+                      <div key={row.date} className="group relative flex-1 h-full flex items-end" title={`${row.date} · ${row.users}명`}>
+                        <div className="w-full bg-gradient-to-t from-[#F9954E] to-[#FBAA60] rounded-t-md group-hover:brightness-110 transition-all" style={{ height: `${heightPct}%` }} />
+                        <span className="absolute left-1/2 -translate-x-1/2 -top-4 text-[10px] font-bold text-neutral-600 dark:text-neutral-300 opacity-0 group-hover:opacity-100 transition tabular-nums">{row.users}</span>
                       </div>
                     );
                   })}
+                </div>
+                <div className="flex gap-1.5 mt-1.5">
+                  {chart.map((row) => (
+                    <div key={row.date} className="flex-1 text-center text-[9px] text-neutral-400 dark:text-neutral-500 tabular-nums">{row.date.slice(5)}</div>
+                  ))}
                 </div>
                 {!gaOn && !analyticsReady && <p className="text-xs text-neutral-400 mt-3">불러오는 중…</p>}
               </div>
@@ -731,49 +741,56 @@ export default function AdminPage() {
                 </div>
 
                 <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-1.5">💰 애드센스 수입 {adsenseLive?.today ? <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded">자동</span> : <span className="text-[10px] font-bold text-neutral-400 bg-neutral-500/10 px-1.5 py-0.5 rounded">수동</span>}</h2>
+                  <div className="flex items-center justify-between mb-3.5">
+                    <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white">💰 광고 수입</h2>
                     <div className="flex gap-1.5">
                       <a href="https://adsense.google.com/" target="_blank" rel="noopener noreferrer" className="text-[11px] rounded-lg px-2 py-1 font-bold bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition">애드센스 →</a>
-                      {!adsenseLive?.today && <button onClick={() => setAdsenseEdit((v) => !v)} className="text-[11px] rounded-lg px-2 py-1 font-bold bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition">{adsenseEdit ? "닫기" : "수정"}</button>}
+                      <a href="https://apps.admob.com/" target="_blank" rel="noopener noreferrer" className="text-[11px] rounded-lg px-2 py-1 font-bold bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition">애드몹 →</a>
                     </div>
                   </div>
-                  {adsenseLive?.today ? (
-                    <>
-                      <div className="grid grid-cols-3 gap-3">
-                        {[{ label: "오늘 예상", v: adsenseLive.today.earnings }, { label: "이번 달", v: adsenseLive.month?.earnings || 0 }, { label: "지난 7일", v: adsenseLive.last7?.earnings || 0 }].map((m) => (
-                          <div key={m.label} className="rounded-xl bg-neutral-50 dark:bg-zinc-900/60 p-3">
-                            <p className="text-[11px] text-neutral-400 mb-0.5">{m.label}</p>
-                            <p className="text-lg font-black text-neutral-900 dark:text-white">{money(m.v)}</p>
-                          </div>
-                        ))}
+
+                  {/* 합계 */}
+                  <div className="grid grid-cols-2 gap-3 mb-3">
+                    {[{ label: "오늘 합계", v: totalToday }, { label: "이번 달 합계", v: totalMonth }].map((m) => (
+                      <div key={m.label} className="rounded-xl bg-gradient-to-br from-[#F9954E]/10 to-transparent border border-[#F9954E]/20 p-3">
+                        <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mb-0.5">{m.label}</p>
+                        <p className="text-xl font-black text-[#F9954E]">{money(m.v)}</p>
                       </div>
-                      <div className="mt-3 flex items-center gap-4 text-[11.5px] text-neutral-400">
-                        <span>오늘 클릭 <b className="text-neutral-600 dark:text-neutral-300">{adsenseLive.today.clicks.toLocaleString()}</b></span>
-                        <span>노출 <b className="text-neutral-600 dark:text-neutral-300">{adsenseLive.today.impressions.toLocaleString()}</b></span>
-                        <span>페이지뷰 <b className="text-neutral-600 dark:text-neutral-300">{adsenseLive.today.pageViews.toLocaleString()}</b></span>
-                      </div>
-                    </>
-                  ) : adsenseEdit ? (
-                    <div className="grid grid-cols-2 gap-2.5">
-                      {([["오늘", "today"], ["어제", "yesterday"], ["지난 7일", "last7"], ["이번 달", "month"], ["잔고", "balance"]] as [string, keyof AdsenseData][]).map(([label, key]) => (
-                        <label key={key} className="block">
-                          <span className="text-[10.5px] text-neutral-400">{label}</span>
-                          <input type="number" step="0.01" value={adsenseForm[key] as number} onChange={(e) => setAdsenseForm((f) => ({ ...f, [key]: parseFloat(e.target.value) || 0 }))} className="w-full mt-0.5 px-2.5 py-1.5 rounded-lg border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-foreground text-[13px] font-bold outline-none focus:border-[#F9954E]" />
-                        </label>
+                    ))}
+                  </div>
+
+                  {/* 애드센스(웹) */}
+                  <div className="flex items-center justify-between py-2 border-t border-neutral-100 dark:border-zinc-900">
+                    <span className="text-[12.5px] font-bold text-neutral-600 dark:text-neutral-300 flex items-center gap-1.5">🌐 애드센스 <span className="text-[10px] text-neutral-400 font-normal">웹</span>
+                      {adsenseLive?.today ? <span className="text-[9px] font-bold text-emerald-600 bg-emerald-500/10 px-1 py-0.5 rounded">자동</span> : <button onClick={() => setAdsenseEdit((v) => !v)} className="text-[10px] text-neutral-400 hover:text-[#F9954E] transition">{adsenseEdit ? "닫기" : "수정"}</button>}
+                    </span>
+                    <span className="text-[12.5px] tabular-nums text-neutral-400">오늘 <b className="text-neutral-800 dark:text-neutral-100">{money(adsenseToday)}</b> · 달 <b className="text-neutral-800 dark:text-neutral-100">{money(adsenseMonth)}</b></span>
+                  </div>
+                  {adsenseEdit && !adsenseLive?.today && (
+                    <div className="flex items-end gap-2 pb-1">
+                      {([["오늘", "today"], ["이번 달", "month"]] as [string, keyof AdsenseData][]).map(([label, key]) => (
+                        <label key={key} className="flex-1"><span className="text-[10px] text-neutral-400">{label}</span><input type="number" step="0.01" value={adsenseForm[key] as number} onChange={(e) => setAdsenseForm((f) => ({ ...f, [key]: parseFloat(e.target.value) || 0 }))} className="w-full mt-0.5 px-2 py-1.5 rounded-lg border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-foreground text-[13px] font-bold outline-none focus:border-[#F9954E]" /></label>
                       ))}
-                      <div className="col-span-2 flex justify-end"><button onClick={handleSaveAdsense} className="px-4 py-1.5 rounded-lg bg-[#F9954E] text-white font-bold text-[13px] hover:brightness-105 transition">저장</button></div>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-2 gap-3">
-                      {[{ label: "오늘", v: ad.today }, { label: "이번 달", v: ad.month }, { label: "지난 7일", v: ad.last7 }, { label: "잔고", v: ad.balance }].map((m) => (
-                        <div key={m.label} className="rounded-xl bg-neutral-50 dark:bg-zinc-900/60 p-3">
-                          <p className="text-[11px] text-neutral-400 mb-0.5">{m.label}</p>
-                          <p className="text-lg font-black text-neutral-900 dark:text-white">{money(m.v)}</p>
-                        </div>
-                      ))}
+                      <button onClick={handleSaveAdsense} className="px-3 py-1.5 rounded-lg bg-[#F9954E] text-white font-bold text-[12px] hover:brightness-105 transition">저장</button>
                     </div>
                   )}
+
+                  {/* 애드몹(앱) — 수동 */}
+                  <div className="flex items-center justify-between py-2 border-t border-neutral-100 dark:border-zinc-900">
+                    <span className="text-[12.5px] font-bold text-neutral-600 dark:text-neutral-300 flex items-center gap-1.5">📱 애드몹 <span className="text-[10px] text-neutral-400 font-normal">앱</span>
+                      <button onClick={() => setAdmobEdit((v) => !v)} className="text-[10px] text-neutral-400 hover:text-[#F9954E] transition">{admobEdit ? "닫기" : "수정"}</button>
+                    </span>
+                    <span className="text-[12.5px] tabular-nums text-neutral-400">오늘 <b className="text-neutral-800 dark:text-neutral-100">{money(ad.admobToday || 0)}</b> · 달 <b className="text-neutral-800 dark:text-neutral-100">{money(ad.admobMonth || 0)}</b></span>
+                  </div>
+                  {admobEdit && (
+                    <div className="flex items-end gap-2 pb-1">
+                      {([["오늘 (앱)", "admobToday"], ["이번 달 (앱)", "admobMonth"]] as [string, keyof AdsenseData][]).map(([label, key]) => (
+                        <label key={key} className="flex-1"><span className="text-[10px] text-neutral-400">{label}</span><input type="number" step="0.01" value={adsenseForm[key] as number} onChange={(e) => setAdsenseForm((f) => ({ ...f, [key]: parseFloat(e.target.value) || 0 }))} className="w-full mt-0.5 px-2 py-1.5 rounded-lg border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-foreground text-[13px] font-bold outline-none focus:border-[#F9954E]" /></label>
+                      ))}
+                      <button onClick={handleSaveAdsense} className="px-3 py-1.5 rounded-lg bg-[#F9954E] text-white font-bold text-[12px] hover:brightness-105 transition">저장</button>
+                    </div>
+                  )}
+                  <p className="mt-2 text-[10.5px] text-neutral-400 dark:text-neutral-500">애드센스=웹 광고(자동) · 애드몹=앱 광고(수동 입력). 앱 수입은 AdMob 콘솔에서 확인 후 입력하세요.</p>
                 </div>
               </div>
 

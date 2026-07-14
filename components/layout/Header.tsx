@@ -85,11 +85,11 @@ export default function Header() {
         },
       ];
 
-  // 언어 토글: en→ko는 항상 가능(/en 제거), ko→en은 영어판 있는 페이지만
+  // 언어 토글(세그먼트): 현재 페이지의 ko/en URL을 각각 계산. 영어판 있는 페이지에서만 표시.
   const EN_AVAILABLE = ["/", "/ai-tools", "/ai-models"];
-  const langToggleHref = isEn
-    ? ((pathname || "/en").replace(/^\/en/, "") || "/")
-    : (EN_AVAILABLE.includes(pathname || "") ? "/en" + pathname : null);
+  const koUrl = isEn ? ((pathname || "/en").replace(/^\/en/, "") || "/") : (pathname || "/");
+  const enUrl = isEn ? (pathname || "/en") : (EN_AVAILABLE.includes(pathname || "") ? "/en" + pathname : null);
+  const showLang = isEn || !!enUrl;
 
   return (
     <>
@@ -142,15 +142,24 @@ export default function Header() {
           {/* ── 우측 컨트롤 (돋보기·테마·마이페이지) ── */}
           <div className="ml-auto flex items-center gap-1">
 
-            {/* 언어 토글 (영어판 있는 페이지에서만) */}
-            {langToggleHref && (
-              <Link
-                href={langToggleHref}
-                className="flex-shrink-0 flex items-center gap-1 px-2.5 h-8 rounded-full border border-neutral-200 dark:border-zinc-700 text-[12px] font-bold text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E] hover:text-[#F9954E] transition-colors"
-                aria-label={isEn ? "한국어로 보기" : "View in English"}
-              >
-                🌐 {isEn ? "한국어" : "EN"}
-              </Link>
+            {/* 언어 토글 (세그먼트 KO/EN, 영어판 있는 페이지에서만) */}
+            {showLang && (
+              <div className="flex-shrink-0 flex items-center h-8 rounded-full bg-neutral-100 dark:bg-zinc-800/80 p-0.5 text-[11px] font-extrabold">
+                <Link
+                  href={koUrl}
+                  aria-label="한국어로 보기"
+                  className={`px-2.5 h-7 flex items-center rounded-full transition-colors ${!isEn ? "bg-white dark:bg-zinc-950 text-[#F9954E] shadow-sm" : "text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300"}`}
+                >
+                  KO
+                </Link>
+                <Link
+                  href={enUrl || koUrl}
+                  aria-label="View in English"
+                  className={`px-2.5 h-7 flex items-center rounded-full transition-colors ${isEn ? "bg-white dark:bg-zinc-950 text-[#F9954E] shadow-sm" : "text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300"}`}
+                >
+                  EN
+                </Link>
+              </div>
             )}
 
             {/* 검색 (데스크탑) */}
