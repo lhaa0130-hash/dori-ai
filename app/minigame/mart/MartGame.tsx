@@ -60,10 +60,12 @@ function ProductToken({ productId, isFront, peek }: { productId: ProductId; isFr
     <div
       className={`mart-product mart-product-${product.shape} ${isFront ? "is-front" : "is-back"} ${peek ? "is-peeking" : ""}`}
       style={{ "--product-color": product.color } as React.CSSProperties}
+      data-product={productId}
       aria-label={`${product.label}${isFront ? ", 이동 가능" : ", 뒤쪽 상품"}`}
     >
       <span className="mart-product-cap" />
-      <span className="mart-product-mark">{product.short.slice(0, 1)}</span>
+      <span className="mart-product-brand" aria-hidden="true">illo</span>
+      <span className="mart-product-art" aria-hidden="true"><i /><i /><i /></span>
       <span className="mart-product-label">{product.label}</span>
     </div>
   );
@@ -289,6 +291,9 @@ export default function MartGame() {
   );
   const stars = calculateStars(state, level);
   const bestMoves = progress.bestMoves[String(level.id)];
+  const selectedShelfState = selectedShelf === null ? undefined : state.shelves[selectedShelf];
+  const selectedProduct = selectedShelfState?.items[selectedShelfState.items.length - 1] || null;
+  const completionPercent = Math.round((state.completedProducts.length / level.products.length) * 100);
   const recommendation = getMiniGame("mart")?.relatedGame === "illo-tower"
     ? { name: "illo tower", path: "/minigame/illo-tower" }
     : undefined;
@@ -320,6 +325,16 @@ export default function MartGame() {
         </div>
       )}
     >
+      <div className="mart-store-scene">
+      <section className="mart-store-marquee" aria-label="illo MART 매장 안내">
+        <div className="mart-store-emblem" aria-hidden="true">M</div>
+        <div className="mart-store-copy">
+          <span>ILLO TOWN · CORNER STORE</span>
+          <strong>오늘의 진열을 시작해볼까요?</strong>
+        </div>
+        <div className="mart-open-sign"><i /> OPEN</div>
+      </section>
+
       <section className="mart-order-card" aria-labelledby="mart-orders-title">
         <div className="mart-order-heading">
           <div><span>오늘의 주문</span><h1 id="mart-orders-title">순서대로 채워주세요</h1></div>
@@ -341,6 +356,9 @@ export default function MartGame() {
         <div className={`mart-flow ${state.flowIntact ? "is-active" : ""}`}>
           <span>FLOW</span>{state.flowIntact ? "주문 순서 보너스 유지 중" : "모든 주문은 계속 완성할 수 있어요"}
         </div>
+        <div className="mart-order-progress" aria-label={`전체 진열 ${completionPercent}% 완료`}>
+          <span style={{ width: `${completionPercent}%` }} />
+        </div>
       </section>
 
       {progress.consecutiveFails >= 3 && state.status === "playing" && (
@@ -349,15 +367,29 @@ export default function MartGame() {
         </button>
       )}
 
+      <div className="mart-aisle-heading" aria-hidden="true">
+        <span>AISLE 01</span>
+        <strong>오늘의 진열대</strong>
+        <i />
+      </div>
+
+      <div className={`mart-action-guide ${selectedProduct ? "has-selection" : ""}`}>
+        <span className="mart-guide-dot" aria-hidden="true" />
+        {selectedProduct
+          ? <><strong>{PRODUCT_CATALOG[selectedProduct].label}</strong> 선택됨 · 빛나는 선반을 눌러주세요</>
+          : <>가장 앞쪽 상품을 골라주세요</>}
+      </div>
+
       <section className="mart-shelves" aria-label="상품 선반">
         {state.shelves.map((shelf, index) => (
           <button
             type="button"
             key={shelf.id}
-            className={`mart-shelf ${selectedShelf === index ? "is-selected" : ""} ${invalidShelf === index ? "is-invalid" : ""} ${hint?.from === index ? "is-hint-from" : ""} ${hint?.to === index ? "is-hint-to" : ""} ${shelf.basket ? "is-basket" : ""}`}
+            className={`mart-shelf ${selectedShelf === index ? "is-selected" : ""} ${selectedShelf !== null && selectedShelf !== index && canMove(state, selectedShelf, index) ? "is-valid-target" : ""} ${invalidShelf === index ? "is-invalid" : ""} ${hint?.from === index ? "is-hint-from" : ""} ${hint?.to === index ? "is-hint-to" : ""} ${shelf.basket ? "is-basket" : ""}`}
             onClick={() => handleShelf(index)}
             aria-label={`${index + 1}번 ${shelf.basket ? "바구니" : "선반"}, ${shelf.locked ? "잠김" : `${shelf.items.length}개 상품`}`}
           >
+            <span className="mart-shelf-topline" aria-hidden="true"><i /><i /><i /></span>
             <span className="mart-shelf-number">{shelf.basket ? "B" : String(index + 1).padStart(2, "0")}</span>
             {shelf.locked ? (
               <span className="mart-lock"><LockKeyhole aria-hidden="true" /><small>{level.unlockAfterSets}세트 후 열림</small></span>
@@ -377,6 +409,8 @@ export default function MartGame() {
           </button>
         ))}
       </section>
+      <div className="mart-checkout-line" aria-hidden="true"><span>ILLO MART</span><i /><i /><i /></div>
+      </div>
 
       {celebration && <div className="mart-set-toast"><span>SET</span>{PRODUCT_CATALOG[celebration].label} 정리 완료</div>}
 
