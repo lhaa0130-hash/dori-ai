@@ -98,7 +98,7 @@ export default function AdminPage() {
   // 애드센스 수입
   const [adsense, setAdsense] = useState<AdsenseData | null>(null);
   const [adsenseEdit, setAdsenseEdit] = useState(false);
-  const [adsenseForm, setAdsenseForm] = useState<AdsenseData>({ today: 0, yesterday: 0, last7: 0, month: 0, balance: 0, lastPayment: "", currency: "US$", admobToday: 0, admobMonth: 0 });
+  const [adsenseForm, setAdsenseForm] = useState<AdsenseData>({ today: 0, yesterday: 0, last7: 0, month: 0, balance: 0, lastPayment: "", currency: "US$", admobToday: 0, admobMonth: 0, admobBalance: 0 });
   const [admobEdit, setAdmobEdit] = useState(false);
 
   // GA4·애드센스 실시간 통계 (dashboardStats/live)
@@ -506,7 +506,7 @@ export default function AdminPage() {
         </div>
       )}
 
-      <div className="w-full px-6 xl:px-[260px] pt-24 pb-16">
+      <div className="w-full max-w-[1200px] mx-auto px-5 sm:px-6 pt-24 pb-16">
         {/* 헤더 */}
         <div className="flex items-center gap-3 mb-7">
           <div className="w-10 h-10 rounded-2xl bg-[#FFF5EB] dark:bg-[#F9954E]/10 flex items-center justify-center text-xl flex-shrink-0">
@@ -524,24 +524,28 @@ export default function AdminPage() {
           </button>
         </div>
 
-        {/* 탭 네비게이션 — 가로 스크롤 pill */}
-        <div className="-mx-4 px-4 sm:mx-0 sm:px-0 overflow-x-auto scrollbar-hide mb-7">
-          <div className="flex gap-2 w-max">
-            {tabs.map((tab) => (
-              <button
-                key={tab.id}
-                onClick={() => setActiveTab(tab.id)}
-                className={`px-4 py-2 rounded-full text-[13px] font-bold whitespace-nowrap border transition-colors ${
-                  activeTab === tab.id
-                    ? "bg-[#F9954E] border-[#F9954E] text-white"
-                    : "bg-white dark:bg-zinc-950 border-neutral-200 dark:border-zinc-800 text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E]/40"
-                }`}
-              >
-                {tab.emoji} {tab.label}
-              </button>
-            ))}
-          </div>
-        </div>
+        {/* 본문(좌) + 카테고리 네비(우) */}
+        <div className="flex gap-6 lg:gap-8 items-start">
+          <div className="flex-1 min-w-0">
+
+            {/* 모바일: 상단 가로 탭 (데스크탑은 우측 세로 네비) */}
+            <div className="lg:hidden -mx-4 px-4 overflow-x-auto scrollbar-hide mb-6">
+              <div className="flex gap-2 w-max">
+                {tabs.map((tab) => (
+                  <button
+                    key={tab.id}
+                    onClick={() => setActiveTab(tab.id)}
+                    className={`px-4 py-2 rounded-full text-[13px] font-bold whitespace-nowrap border transition-colors ${
+                      activeTab === tab.id
+                        ? "bg-[#F9954E] border-[#F9954E] text-white"
+                        : "bg-white dark:bg-zinc-950 border-neutral-200 dark:border-zinc-800 text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E]/40"
+                    }`}
+                  >
+                    {tab.emoji} {tab.label}
+                  </button>
+                ))}
+              </div>
+            </div>
 
         {/* ── 대시보드 탭 ── */}
         {activeTab === "dashboard" && (() => {
@@ -559,7 +563,7 @@ export default function AdminPage() {
           const chartMax = Math.max(1, ...chart.map((c) => c.users));
           const minsAgo = statsUpdatedAt ? Math.max(0, Math.round((Date.now() - new Date(statsUpdatedAt).getTime()) / 60000)) : null;
           const agoLabel = minsAgo == null ? "" : minsAgo < 1 ? "방금" : minsAgo < 60 ? `${minsAgo}분 전` : `${Math.round(minsAgo / 60)}시간 전`;
-          const ad = adsense || { today: 0, yesterday: 0, last7: 0, month: 0, balance: 0, lastPayment: "", currency: "US$", admobToday: 0, admobMonth: 0 };
+          const ad = adsense || { today: 0, yesterday: 0, last7: 0, month: 0, balance: 0, lastPayment: "", currency: "US$", admobToday: 0, admobMonth: 0, admobBalance: 0 };
           // 광고 수입 통합값(자동 우선, 없으면 수동) + 총합(최종 금액)
           const adsenseToday = adsenseLive?.today ? adsenseLive.today.earnings : ad.today;
           const adsenseMonth = adsenseLive?.month ? adsenseLive.month.earnings : ad.month;
@@ -576,115 +580,89 @@ export default function AdminPage() {
           return (
             <div className="space-y-4">
 
-              {/* 1) 동물도감 검수 현황 — 핵심 작업 */}
-              <div className="rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
-                <div className="flex items-center justify-between gap-2 flex-wrap mb-4">
-                  <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-2">🐾 동물도감 검수 현황</h2>
-                  <button onClick={() => setActiveTab("animalReview")} className="rounded-full bg-[#F9954E] text-white text-[12px] font-bold px-3.5 py-1.5 hover:brightness-105 transition">검수하러 가기 →</button>
-                </div>
-                <div className="h-3 w-full rounded-full overflow-hidden bg-neutral-100 dark:bg-zinc-800 flex">
-                  <div className="bg-emerald-500 h-full transition-all" style={{ width: `${pctOf(apprN)}%` }} title={`승인 ${apprN}`} />
-                  <div className="bg-[#F9954E] h-full transition-all" style={{ width: `${pctOf(pendN)}%` }} title={`미검수 ${pendN}`} />
-                  <div className="bg-red-400 h-full transition-all" style={{ width: `${pctOf(rejN)}%` }} title={`반려 ${rejN}`} />
-                </div>
-                <div className="mt-4 grid grid-cols-3 gap-3">
-                  {[
-                    { label: "승인 · 공개중", n: apprN, c: "text-emerald-600 dark:text-emerald-400", dot: "bg-emerald-500" },
-                    { label: "미검수", n: pendN, c: "text-[#E8832E]", dot: "bg-[#F9954E]" },
-                    { label: "반려", n: rejN, c: "text-red-500", dot: "bg-red-400" },
-                  ].map((s) => (
-                    <div key={s.label} className="rounded-xl bg-neutral-50 dark:bg-zinc-900/40 p-3">
-                      <div className="text-[11px] font-bold text-neutral-500 dark:text-neutral-400">{s.label}</div>
-                      <div className={`text-2xl font-black mt-1 leading-none ${s.c}`}>{s.n.toLocaleString()}</div>
-                    </div>
-                  ))}
-                </div>
-                <p className="mt-3 text-[12px] text-neutral-400 dark:text-neutral-500 break-keep">
-                  전체 {totalAnimals.toLocaleString()}종 중 <b className="text-emerald-600 dark:text-emerald-400">{Math.round(pctOf(apprN))}%</b> 공개 완료 — 승인된 동물만 공개 도감에 노출됩니다.
-                </p>
-              </div>
 
-              {/* 2) 사용자 현황 — 실시간 + DAU/WAU/MAU */}
+              {/* 1) 사용자 현황 — 오늘 / 이번 주 / 이번 달 / 총 회원 */}
               <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
                 <div className="flex items-center justify-between gap-2 flex-wrap mb-4">
                   <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-2">👥 사용자 현황</h2>
-                  {gaOn ? (
+                  {gaOn && (
                     <div className="flex items-center gap-2 text-[12px]">
                       <span className="relative flex h-2.5 w-2.5"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" /><span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" /></span>
-                      <span className="font-bold text-emerald-700 dark:text-emerald-400">지금 {ga4!.realtimeUsers.toLocaleString()}명 접속중</span>
-                      {agoLabel && <span className="text-neutral-400 dark:text-neutral-600">· {agoLabel} 갱신</span>}
+                      <span className="font-bold text-emerald-700 dark:text-emerald-400">지금 {ga4!.realtimeUsers.toLocaleString()}명</span>
+                      {agoLabel && <span className="text-neutral-400 dark:text-neutral-600">· {agoLabel}</span>}
                     </div>
-                  ) : (
-                    <span className="text-[11px] text-neutral-400">불러오는 중…</span>
                   )}
                 </div>
-                {act ? (
-                  <>
-                    <div className="grid grid-cols-3 gap-3">
-                      {[
-                        { label: "오늘", sub: "DAU · 일간", n: act.dau },
-                        { label: "이번 주", sub: "WAU · 7일", n: act.wau },
-                        { label: "이번 달", sub: "MAU · 30일", n: act.mau },
-                      ].map((m) => (
-                        <div key={m.label} className="rounded-xl bg-neutral-50 dark:bg-zinc-900/40 p-4">
-                          <div className="text-[12px] font-bold text-neutral-500 dark:text-neutral-400">{m.label}</div>
-                          <div className="text-[30px] font-black mt-1.5 leading-none text-neutral-900 dark:text-white tabular-nums">{m.n.toLocaleString()}</div>
-                          <div className="text-[10.5px] text-neutral-400 dark:text-neutral-500 mt-1.5">{m.sub}</div>
-                        </div>
-                      ))}
+                <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
+                  {[
+                    { label: "오늘", sub: "DAU · 일간", n: act ? act.dau : todayUsers },
+                    { label: "이번 주", sub: "WAU · 7일", n: act ? act.wau : 0 },
+                    { label: "이번 달", sub: "MAU · 30일", n: act ? act.mau : 0 },
+                    { label: "총 회원", sub: "누적 가입", n: users.length },
+                  ].map((m) => (
+                    <div key={m.label} className="rounded-xl bg-neutral-50 dark:bg-zinc-900/40 p-4">
+                      <div className="text-[12px] font-bold text-neutral-500 dark:text-neutral-400">{m.label}</div>
+                      <div className="text-[26px] font-black mt-1.5 leading-none text-neutral-900 dark:text-white tabular-nums">{m.n.toLocaleString()}</div>
+                      <div className="text-[10.5px] text-neutral-400 dark:text-neutral-500 mt-1.5">{m.sub}</div>
                     </div>
-                    <p className="mt-3 text-[11px] text-neutral-400 dark:text-neutral-500 break-keep">중복 제외 순수 방문자 · GA4 자동집계</p>
-                  </>
-                ) : (
-                  <p className="text-[13px] text-neutral-400 py-3">활성 사용자 데이터를 불러오는 중이에요.</p>
-                )}
-              </div>
-
-              {/* 3) 사이트 총계 지표 */}
-              <div className="grid grid-cols-2 sm:grid-cols-4 gap-3">
-                {[
-                  { emoji: "👤", label: "총 회원", value: users.length },
-                  { emoji: "💎", label: "프리미엄", value: premiumUsers.length },
-                  { emoji: "💬", label: "게시글", value: communityPosts.length },
-                  { emoji: "🐾", label: "총 동물", value: totalAnimals },
-                ].map((c) => (
-                  <div key={c.label} className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-4">
-                    <div className="text-lg mb-1.5">{c.emoji}</div>
-                    <div className="text-[22px] font-black text-neutral-900 dark:text-white leading-none">{c.value.toLocaleString()}</div>
-                    <div className="text-neutral-400 dark:text-neutral-500 text-[11.5px] mt-1.5">{c.label}</div>
-                  </div>
-                ))}
-              </div>
-
-              {/* 4) 방문자 추이 */}
-              <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
-                <div className="flex items-center justify-between gap-2 flex-wrap mb-5">
-                  <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-2">📈 최근 14일 방문자 {gaOn && <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded">GA4</span>}</h2>
-                  <div className="flex items-center gap-4 text-[12px]">
-                    <span className="text-neutral-500 dark:text-neutral-400">오늘 <b className="text-[#F9954E]">{todayUsers.toLocaleString()}</b>명</span>
-                    <span className="text-neutral-500 dark:text-neutral-400">7일 조회 <b className="text-neutral-700 dark:text-neutral-200">{(ga4 ? ga4.last7.pageViews : totalPV).toLocaleString()}</b></span>
-                  </div>
-                </div>
-                <div className="flex items-end gap-1.5 h-40">
-                  {chart.map((row) => {
-                    const heightPct = Math.max((row.users / chartMax) * 100, 2);
-                    return (
-                      <div key={row.date} className="group relative flex-1 h-full flex items-end" title={`${row.date} · ${row.users}명`}>
-                        <div className="w-full bg-gradient-to-t from-[#F9954E] to-[#FBAA60] rounded-t-md group-hover:brightness-110 transition-all" style={{ height: `${heightPct}%` }} />
-                        <span className="absolute left-1/2 -translate-x-1/2 -top-4 text-[10px] font-bold text-neutral-600 dark:text-neutral-300 opacity-0 group-hover:opacity-100 transition tabular-nums">{row.users}</span>
-                      </div>
-                    );
-                  })}
-                </div>
-                <div className="flex gap-1.5 mt-1.5">
-                  {chart.map((row) => (
-                    <div key={row.date} className="flex-1 text-center text-[9px] text-neutral-400 dark:text-neutral-500 tabular-nums">{row.date.slice(5)}</div>
                   ))}
                 </div>
-                {!gaOn && !analyticsReady && <p className="text-xs text-neutral-400 mt-3">불러오는 중…</p>}
               </div>
 
-              {/* 5) 인기 페이지 · 유입 경로 · 국가 (GA4) */}
+              {/* 2) 최근 14일 방문자 + 방문 기기 */}
+              <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
+                <div className="lg:col-span-2 bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
+                  <div className="flex items-center justify-between gap-2 flex-wrap mb-5">
+                    <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-2">📈 최근 14일 방문자 {gaOn && <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded">GA4</span>}</h2>
+                    <div className="flex items-center gap-4 text-[12px]">
+                      <span className="text-neutral-500 dark:text-neutral-400">오늘 <b className="text-[#F9954E]">{todayUsers.toLocaleString()}</b>명</span>
+                      <span className="text-neutral-500 dark:text-neutral-400">7일 조회 <b className="text-neutral-700 dark:text-neutral-200">{(ga4 ? ga4.last7.pageViews : totalPV).toLocaleString()}</b></span>
+                    </div>
+                  </div>
+                  <div className="flex items-end gap-1.5 h-40">
+                    {chart.map((row) => {
+                      const heightPct = Math.max((row.users / chartMax) * 100, 2);
+                      return (
+                        <div key={row.date} className="group relative flex-1 h-full flex items-end" title={`${row.date} · ${row.users}명`}>
+                          <div className="w-full bg-gradient-to-t from-[#F9954E] to-[#FBAA60] rounded-t-md group-hover:brightness-110 transition-all" style={{ height: `${heightPct}%` }} />
+                          <span className="absolute left-1/2 -translate-x-1/2 -top-4 text-[10px] font-bold text-neutral-600 dark:text-neutral-300 opacity-0 group-hover:opacity-100 transition tabular-nums">{row.users}</span>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  <div className="flex gap-1.5 mt-1.5">
+                    {chart.map((row) => (
+                      <div key={row.date} className="flex-1 text-center text-[9px] text-neutral-400 dark:text-neutral-500 tabular-nums">{row.date.slice(5)}</div>
+                    ))}
+                  </div>
+                  {!gaOn && !analyticsReady && <p className="text-xs text-neutral-400 mt-3">불러오는 중…</p>}
+                </div>
+
+                <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
+                  <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white mb-4">📱 방문 기기 {gaOn && <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded align-middle">GA4</span>}</h2>
+                  {devTotal === 0 ? (
+                    <p className="text-[13px] text-neutral-400 py-3">아직 데이터가 없어요.</p>
+                  ) : (
+                    <div className="space-y-3.5">
+                      {[
+                        { label: "모바일", n: dev.mobile, c: "bg-[#F9954E]" },
+                        { label: "데스크탑", n: dev.desktop, c: "bg-sky-400" },
+                        { label: "태블릿", n: dev.tablet, c: "bg-violet-400" },
+                      ].map((d) => {
+                        const p = devTotal ? Math.round((d.n / devTotal) * 100) : 0;
+                        return (
+                          <div key={d.label}>
+                            <div className="flex items-center justify-between text-[12.5px] mb-1"><span className="font-bold text-neutral-600 dark:text-neutral-300">{d.label}</span><span className="text-neutral-400">{d.n.toLocaleString()} · {p}%</span></div>
+                            <div className="h-2 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden"><div className={`h-full rounded-full ${d.c}`} style={{ width: `${p}%` }} /></div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  )}
+                </div>
+              </div>
+
+              {/* 3) 인기 페이지 · 유입 경로 · 국가 (GA4) */}
               {gaOn && (
                 <div className="space-y-2.5">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
@@ -726,125 +704,74 @@ export default function AdminPage() {
                 </div>
               )}
 
-              {/* 총 광고 수입(최종 금액) — 애드센스 + 애드몹 합산, 큰 숫자로 강조 */}
-              <div className="rounded-2xl border border-[#F9954E]/30 bg-gradient-to-br from-[#FFF1E3] to-white dark:from-[#F9954E]/10 dark:to-zinc-950 p-5">
-                <div className="flex items-center gap-1.5 mb-3">
-                  <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white">💰 총 광고 수입</h2>
-                  <span className="text-[11px] font-normal text-neutral-400">애드센스 + 애드몹</span>
-                </div>
-                <div className="grid grid-cols-2 gap-3">
-                  <div className="rounded-xl bg-white/70 dark:bg-zinc-900/50 px-4 py-3">
-                    <div className="text-[11px] font-bold text-neutral-400 mb-1">오늘</div>
-                    <div className="text-[26px] leading-none font-extrabold text-neutral-900 dark:text-white tabular-nums">{money(totalToday)}</div>
-                  </div>
-                  <div className="rounded-xl bg-white/70 dark:bg-zinc-900/50 px-4 py-3">
-                    <div className="text-[11px] font-bold text-neutral-400 mb-1">이번 달</div>
-                    <div className="text-[26px] leading-none font-extrabold text-[#F9954E] tabular-nums">{money(totalMonth)}</div>
-                  </div>
-                </div>
-              </div>
 
-              {/* 6) 방문 기기 + 애드센스 + 애드몹 (각각 별도) */}
-              <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
-                  <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white mb-4">📱 방문 기기 {gaOn && <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded align-middle">GA4</span>}</h2>
-                  {devTotal === 0 ? (
-                    <p className="text-[13px] text-neutral-400 py-3">아직 데이터가 없어요.</p>
-                  ) : (
-                    <div className="space-y-3.5">
-                      {[
-                        { label: "모바일", n: dev.mobile, c: "bg-[#F9954E]" },
-                        { label: "데스크탑", n: dev.desktop, c: "bg-sky-400" },
-                        { label: "태블릿", n: dev.tablet, c: "bg-violet-400" },
-                      ].map((d) => {
-                        const p = devTotal ? Math.round((d.n / devTotal) * 100) : 0;
-                        return (
-                          <div key={d.label}>
-                            <div className="flex items-center justify-between text-[12.5px] mb-1"><span className="font-bold text-neutral-600 dark:text-neutral-300">{d.label}</span><span className="text-neutral-400">{d.n.toLocaleString()} · {p}%</span></div>
-                            <div className="h-2 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden"><div className={`h-full rounded-full ${d.c}`} style={{ width: `${p}%` }} /></div>
-                          </div>
-                        );
-                      })}
-                    </div>
-                  )}
+              {/* 4) 광고 수입 — 애드센스 · 애드몹 (각 이번 달 + 잔고) */}
+              <div className="space-y-4">
+                <div className="flex items-center justify-between gap-3 flex-wrap rounded-2xl border border-[#F9954E]/30 bg-gradient-to-br from-[#FFF1E3] to-white dark:from-[#F9954E]/10 dark:to-zinc-950 px-5 py-4">
+                  <span className="text-[14px] font-extrabold text-neutral-900 dark:text-white">💰 광고 수입 <span className="text-[11px] font-normal text-neutral-400">이번 달 합계 · 애드센스+애드몹</span></span>
+                  <span className="text-[24px] leading-none font-extrabold text-[#F9954E] tabular-nums">{money(totalMonth)}</span>
                 </div>
-
-                {/* 애드센스 (웹) */}
-                <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-1.5">🌐 애드센스 <span className="text-[10.5px] text-neutral-400 font-normal">웹</span> {adsenseLive?.today ? <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded">자동</span> : <span className="text-[10px] font-bold text-neutral-400 bg-neutral-500/10 px-1.5 py-0.5 rounded">수동</span>}</h2>
-                    <div className="flex gap-1.5">
-                      <a href="https://adsense.google.com/" target="_blank" rel="noopener noreferrer" className="text-[11px] rounded-lg px-2 py-1 font-bold bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition">→</a>
-                      {!adsenseLive?.today && <button onClick={() => setAdsenseEdit((v) => !v)} className="text-[11px] rounded-lg px-2 py-1 font-bold bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition">{adsenseEdit ? "닫기" : "수정"}</button>}
+                <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
+                  {/* 애드센스 (웹) — 이번 달 + 잔고 */}
+                  <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-1.5">🌐 애드센스 <span className="text-[10.5px] text-neutral-400 font-normal">웹</span> {adsenseLive?.month ? <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded">자동</span> : <span className="text-[10px] font-bold text-neutral-400 bg-neutral-500/10 px-1.5 py-0.5 rounded">수동</span>}</h2>
+                      <div className="flex gap-1.5">
+                        <a href="https://adsense.google.com/" target="_blank" rel="noopener noreferrer" className="text-[11px] rounded-lg px-2 py-1 font-bold bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition">→</a>
+                        <button onClick={() => setAdsenseEdit((v) => !v)} className="text-[11px] rounded-lg px-2 py-1 font-bold bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition">{adsenseEdit ? "닫기" : "수정"}</button>
+                      </div>
                     </div>
-                  </div>
-                  {adsenseLive?.today ? (
-                    <>
+                    {adsenseEdit ? (
+                      <div className="flex items-end gap-2">
+                        {([["이번 달", "month"], ["잔고", "balance"]] as [string, keyof AdsenseData][]).map(([label, key]) => (
+                          <label key={key} className="flex-1"><span className="text-[10.5px] text-neutral-400">{label}</span><input type="number" step="0.01" value={adsenseForm[key] as number} onChange={(e) => setAdsenseForm((f) => ({ ...f, [key]: parseFloat(e.target.value) || 0 }))} className="w-full mt-0.5 px-2 py-1.5 rounded-lg border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-foreground text-[13px] font-bold outline-none focus:border-[#F9954E]" /></label>
+                        ))}
+                        <button onClick={handleSaveAdsense} className="px-3 py-2 rounded-lg bg-[#F9954E] text-white font-bold text-[12px] hover:brightness-105 transition">저장</button>
+                      </div>
+                    ) : (
                       <div className="grid grid-cols-2 gap-3">
-                        {[{ label: "오늘 예상", v: adsenseLive.today.earnings }, { label: "이번 달", v: adsenseLive.month?.earnings || 0 }].map((m) => (
+                        {[{ label: "이번 달", v: adsenseMonth }, { label: "잔고", v: ad.balance }].map((m) => (
                           <div key={m.label} className="rounded-xl bg-neutral-50 dark:bg-zinc-900/60 p-3">
                             <p className="text-[11px] text-neutral-400 mb-0.5">{m.label}</p>
                             <p className="text-lg font-black text-neutral-900 dark:text-white">{money(m.v)}</p>
                           </div>
                         ))}
                       </div>
-                      <div className="mt-3 flex items-center gap-4 text-[11.5px] text-neutral-400">
-                        <span>오늘 클릭 <b className="text-neutral-600 dark:text-neutral-300">{adsenseLive.today.clicks.toLocaleString()}</b></span>
-                        <span>노출 <b className="text-neutral-600 dark:text-neutral-300">{adsenseLive.today.impressions.toLocaleString()}</b></span>
-                      </div>
-                    </>
-                  ) : adsenseEdit ? (
-                    <div className="flex items-end gap-2">
-                      {([["오늘", "today"], ["이번 달", "month"]] as [string, keyof AdsenseData][]).map(([label, key]) => (
-                        <label key={key} className="flex-1"><span className="text-[10.5px] text-neutral-400">{label}</span><input type="number" step="0.01" value={adsenseForm[key] as number} onChange={(e) => setAdsenseForm((f) => ({ ...f, [key]: parseFloat(e.target.value) || 0 }))} className="w-full mt-0.5 px-2 py-1.5 rounded-lg border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-foreground text-[13px] font-bold outline-none focus:border-[#F9954E]" /></label>
-                      ))}
-                      <button onClick={handleSaveAdsense} className="px-3 py-2 rounded-lg bg-[#F9954E] text-white font-bold text-[12px] hover:brightness-105 transition">저장</button>
-                    </div>
-                  ) : (
-                    <div className="grid grid-cols-2 gap-3">
-                      {[{ label: "오늘", v: ad.today }, { label: "이번 달", v: ad.month }].map((m) => (
-                        <div key={m.label} className="rounded-xl bg-neutral-50 dark:bg-zinc-900/60 p-3">
-                          <p className="text-[11px] text-neutral-400 mb-0.5">{m.label}</p>
-                          <p className="text-lg font-black text-neutral-900 dark:text-white">{money(m.v)}</p>
-                        </div>
-                      ))}
-                    </div>
-                  )}
-                </div>
-
-                {/* 애드몹 (앱) — 자동(admob API) 우선, 없으면 수동 */}
-                <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
-                  <div className="flex items-center justify-between mb-4">
-                    <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-1.5">📱 애드몹 <span className="text-[10.5px] text-neutral-400 font-normal">앱</span> {admobAuto ? <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded">자동</span> : <span className="text-[10px] font-bold text-neutral-400 bg-neutral-500/10 px-1.5 py-0.5 rounded">수동</span>}</h2>
-                    <div className="flex gap-1.5">
-                      <a href="https://apps.admob.com/" target="_blank" rel="noopener noreferrer" className="text-[11px] rounded-lg px-2 py-1 font-bold bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition">→</a>
-                      {!admobAuto && <button onClick={() => setAdmobEdit((v) => !v)} className="text-[11px] rounded-lg px-2 py-1 font-bold bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition">{admobEdit ? "닫기" : "수정"}</button>}
-                    </div>
+                    )}
                   </div>
-                  {!admobAuto && admobEdit ? (
-                    <div className="flex items-end gap-2">
-                      {([["오늘", "admobToday"], ["이번 달", "admobMonth"]] as [string, keyof AdsenseData][]).map(([label, key]) => (
-                        <label key={key} className="flex-1"><span className="text-[10.5px] text-neutral-400">{label}</span><input type="number" step="0.01" value={adsenseForm[key] as number} onChange={(e) => setAdsenseForm((f) => ({ ...f, [key]: parseFloat(e.target.value) || 0 }))} className="w-full mt-0.5 px-2 py-1.5 rounded-lg border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-foreground text-[13px] font-bold outline-none focus:border-[#F9954E]" /></label>
-                      ))}
-                      <button onClick={handleSaveAdsense} className="px-3 py-2 rounded-lg bg-[#F9954E] text-white font-bold text-[12px] hover:brightness-105 transition">저장</button>
+
+                  {/* 애드몹 (앱) — 이번 달 + 잔고 */}
+                  <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
+                    <div className="flex items-center justify-between mb-4">
+                      <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-1.5">📱 애드몹 <span className="text-[10.5px] text-neutral-400 font-normal">앱</span> {admobAuto ? <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded">자동</span> : <span className="text-[10px] font-bold text-neutral-400 bg-neutral-500/10 px-1.5 py-0.5 rounded">수동</span>}</h2>
+                      <div className="flex gap-1.5">
+                        <a href="https://apps.admob.com/" target="_blank" rel="noopener noreferrer" className="text-[11px] rounded-lg px-2 py-1 font-bold bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition">→</a>
+                        <button onClick={() => setAdmobEdit((v) => !v)} className="text-[11px] rounded-lg px-2 py-1 font-bold bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition">{admobEdit ? "닫기" : "수정"}</button>
+                      </div>
                     </div>
-                  ) : (
-                    <>
+                    {admobEdit ? (
+                      <div className="flex items-end gap-2">
+                        {([["이번 달", "admobMonth"], ["잔고", "admobBalance"]] as [string, keyof AdsenseData][]).map(([label, key]) => (
+                          <label key={key} className="flex-1"><span className="text-[10.5px] text-neutral-400">{label}</span><input type="number" step="0.01" value={adsenseForm[key] as number} onChange={(e) => setAdsenseForm((f) => ({ ...f, [key]: parseFloat(e.target.value) || 0 }))} className="w-full mt-0.5 px-2 py-1.5 rounded-lg border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-foreground text-[13px] font-bold outline-none focus:border-[#F9954E]" /></label>
+                        ))}
+                        <button onClick={handleSaveAdsense} className="px-3 py-2 rounded-lg bg-[#F9954E] text-white font-bold text-[12px] hover:brightness-105 transition">저장</button>
+                      </div>
+                    ) : (
                       <div className="grid grid-cols-2 gap-3">
-                        {[{ label: "오늘", v: admobToday }, { label: "이번 달", v: admobMonth }].map((m) => (
+                        {[{ label: "이번 달", v: admobMonth }, { label: "잔고", v: ad.admobBalance }].map((m) => (
                           <div key={m.label} className="rounded-xl bg-neutral-50 dark:bg-zinc-900/60 p-3">
                             <p className="text-[11px] text-neutral-400 mb-0.5">{m.label}</p>
                             <p className="text-lg font-black text-neutral-900 dark:text-white">{money(m.v)}</p>
                           </div>
                         ))}
                       </div>
-                      {!admobAuto && <p className="mt-2.5 text-[10.5px] text-neutral-400 dark:text-neutral-500">앱 광고 수입 — 수동 입력 중. 자동 연동 준비됨(OAuth 재동의 시 전환).</p>}
-                    </>
-                  )}
+                    )}
+                    {!admobAuto && <p className="mt-2.5 text-[10.5px] text-neutral-400 dark:text-neutral-500">앱 광고 수입 — 수동 입력 중. 자동 연동 준비됨(OAuth 재동의 시 전환).</p>}
+                  </div>
                 </div>
               </div>
 
-              {/* 7) 최근 회원 */}
+              {/* 5) 최근 회원 */}
               <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
                 <div className="flex items-center justify-between mb-3">
                   <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white">🆕 최근 회원</h2>
@@ -1509,6 +1436,25 @@ export default function AdminPage() {
             </div>
           </div>
         )}
+          </div>
+
+          {/* 데스크탑: 우측 세로 카테고리 네비 */}
+          <nav className="hidden lg:flex flex-col gap-1 w-44 shrink-0 sticky top-24">
+            {tabs.map((tab) => (
+              <button
+                key={tab.id}
+                onClick={() => setActiveTab(tab.id)}
+                className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-[13.5px] font-bold text-left transition-colors ${
+                  activeTab === tab.id
+                    ? "bg-[#F9954E] text-white"
+                    : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-zinc-900"
+                }`}
+              >
+                <span className="text-[15px]">{tab.emoji}</span> {tab.label}
+              </button>
+            ))}
+          </nav>
+        </div>
       </div>
     </div>
   );

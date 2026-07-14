@@ -154,12 +154,13 @@ export interface AdsenseData {
   currency: string;    // 통화 표기 (예: "US$")
   admobToday: number;  // 애드몹(모바일 앱 광고) 오늘 수입 — 수동 입력
   admobMonth: number;  // 애드몹 이번 달 수입 — 수동 입력
+  admobBalance: number; // 애드몹 잔고 — 수동 입력
   updatedAt?: string;  // 마지막 갱신 시각(ISO)
 }
 
 const EMPTY_ADSENSE: AdsenseData = {
   today: 0, yesterday: 0, last7: 0, month: 0, balance: 0,
-  lastPayment: "", currency: "US$", admobToday: 0, admobMonth: 0,
+  lastPayment: "", currency: "US$", admobToday: 0, admobMonth: 0, admobBalance: 0,
 };
 
 export async function getAdsense(): Promise<AdsenseData> {
@@ -178,6 +179,7 @@ export async function getAdsense(): Promise<AdsenseData> {
       currency: String(d.currency || "US$"),
       admobToday: Number(d.admobToday || 0),
       admobMonth: Number(d.admobMonth || 0),
+      admobBalance: Number(d.admobBalance || 0),
       updatedAt: d.updatedAt ? String(d.updatedAt) : undefined,
     };
   } catch {
