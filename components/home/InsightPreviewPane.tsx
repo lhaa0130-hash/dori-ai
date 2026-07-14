@@ -27,7 +27,7 @@ function fmtVideoDate(iso: string | undefined, en: boolean) {
 export default function InsightPreviewPane({ item, locale = "ko" }: { item: PreviewItem; locale?: "ko" | "en" }) {
   const en = locale === "en";
   const catLabel = (c: string) => (en ? CAT_EN[c] || c : c);
-  const href = `/insight/article/${item.slug}`;
+  const href = en ? `/en/insight/article/${item.slug}` : `/insight/article/${item.slug}`;
   const dateStr = (() => { const t = new Date(item.date); return isNaN(t.getTime()) ? "" : t.toLocaleDateString(en ? "en-US" : "ko-KR", { year: "numeric", month: "long", day: "numeric" }); })();
   const isVideo = item.category === "영상";
 

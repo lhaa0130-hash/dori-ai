@@ -11,6 +11,7 @@ export interface GuidePost {
   category: string;
   author: string;
   content: string;
+  lang?: "ko" | "en";
   tags?: string[];
   subtitle?: string;
   thumbnail?: string;
@@ -114,6 +115,7 @@ export function getGuideBySlug(slug: string): GuidePost | null {
     category: '가이드',
     author: metadata.author || 'AI Canvas Editor',
     content: content,
+    lang: metadata.lang === "en" ? "en" : "ko",
     tags: metadata.tags || [],
     subtitle: metadata.subtitle,
     thumbnail: metadata.thumbnail,

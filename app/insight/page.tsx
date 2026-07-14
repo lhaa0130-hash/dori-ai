@@ -44,12 +44,14 @@ export default async function InsightPage() {
     // 2. 파일 시스템 데이터
     let filePosts: any[] = [];
     try {
+      // 한글 페이지 — 한글 콘텐츠만(영어=en은 /en/insight로 분리)
+      const ko = <T extends { lang?: string }>(arr: T[]) => arr.filter((x) => (x.lang || 'ko') === 'ko');
       const allPosts = getSortedPostsData();
-      const guides = getAllGuides();
-      const trends = getAllTrends();
-      const analyses = getAllAnalyses();
-      const reports = getAllReports();
-      const curations = getAllCurations();
+      const guides = ko(getAllGuides());
+      const trends = ko(getAllTrends());
+      const analyses = ko(getAllAnalyses());
+      const reports = ko(getAllReports());
+      const curations = ko(getAllCurations());
 
       const guideItems = guides.map((guide, index) => ({
         id: `guide-${index}`,

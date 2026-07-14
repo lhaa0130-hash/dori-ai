@@ -20,6 +20,7 @@ export type InsightFeedItem = {
   author?: string;
   channel?: string;
   videoDate?: string;
+  lang?: "ko" | "en";
 };
 const INSIGHT_CATEGORY_ORDER = ["트렌드", "가이드", "리포트", "분석", "큐레이션", "영상"];
 
@@ -51,6 +52,8 @@ export function fmtVideoDate(iso?: string, locale: "ko" | "en" = "ko") {
 export default function InsightTabs({ items, perTab = 8, locale = "ko" }: { items: InsightFeedItem[]; perTab?: number; locale?: "ko" | "en" }) {
   const en = locale === "en";
   const catLabel = (c: string) => (en ? CAT_EN[c] || c : c);
+  const insightHref = en ? "/en/insight" : "/insight";
+  const articleHref = (slug: string) => (en ? `/en/insight/article/${slug}` : `/insight/article/${slug}`);
   const present = useMemo(() => {
     const set = new Set(items.map((i) => i.category));
     return INSIGHT_CATEGORY_ORDER.filter((c) => set.has(c));
@@ -74,7 +77,7 @@ export default function InsightTabs({ items, perTab = 8, locale = "ko" }: { item
       {/* 헤더 */}
       <div className="flex items-center justify-between mb-3">
         <p className="text-[14px] font-extrabold text-neutral-950 dark:text-white">{en ? "AI Insights" : "AI 인사이트"}</p>
-        <Link href="/insight" className="flex items-center gap-1 text-[13px] font-semibold text-[#F9954E]">
+        <Link href={insightHref} className="flex items-center gap-1 text-[13px] font-semibold text-[#F9954E]">
           {en ? "All" : "전체"} <ArrowRight className="w-3.5 h-3.5" />
         </Link>
       </div>
@@ -110,7 +113,7 @@ export default function InsightTabs({ items, perTab = 8, locale = "ko" }: { item
             return (
               <Link
                 key={it.slug + i}
-                href={`/insight/article/${it.slug}`}
+                href={articleHref(it.slug)}
                 onMouseEnter={() => setSel(it)}
                 className={`flex items-center gap-3 py-3 transition-colors active:opacity-60 lg:px-2.5 lg:rounded-xl lg:border-0
                   ${isPrev ? "lg:bg-[#FFF8F1] dark:lg:bg-[#F9954E]/[0.08]" : "lg:hover:bg-neutral-50 dark:lg:hover:bg-zinc-900/50"}`}

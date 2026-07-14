@@ -11,6 +11,7 @@ export interface TrendPost {
   category: string;
   author: string;
   content: string;
+  lang?: "ko" | "en";
   tags?: string[];
   thumbnail?: string;
 }
@@ -110,6 +111,7 @@ export function getTrendBySlug(slug: string): TrendPost | null {
     category: metadata.category || '트렌드',
     author: metadata.author || 'illo',
     content: content,
+    lang: metadata.lang === "en" ? "en" : "ko",
     tags: Array.isArray(metadata.tags) ? metadata.tags : (metadata.tags ? [metadata.tags] : []),
     thumbnail: metadata.thumbnail || metadata.image,
   };

@@ -18,6 +18,7 @@ export type InsightFeedItem = {
   author?: string;    // 글 작성자(출처)
   channel?: string;   // 영상: 유튜브 채널명
   videoDate?: string; // 영상: 실제 유튜브 업로드 시각(ISO)
+  lang: "ko" | "en";  // 콘텐츠 언어(frontmatter lang, 기본 ko) — 홈 언어별 분리용
 };
 
 // 메인 탭 노출 순서(존재하는 카테고리만 화면에 표시)
@@ -40,7 +41,7 @@ function excerptOf(md: string, n = 280): string {
 }
 
 /** 카테고리별 최신 perCategory개씩, 전체 날짜 최신순 평면 배열 */
-export function getInsightFeed(perCategory = 12): InsightFeedItem[] {
+export function getInsightFeed(perCategory = 12, lang?: "ko" | "en"): InsightFeedItem[] {
   const items: InsightFeedItem[] = [];
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -60,6 +61,7 @@ export function getInsightFeed(perCategory = 12): InsightFeedItem[] {
         author: norm(it.author) || "illo",
         channel: cat === "영상" ? ((body.match(/\*\*(.+?)\*\*/) || [])[1] || undefined) : undefined,
         videoDate: it.videoDate || undefined,
+        lang: it.lang === "en" ? "en" : "ko",
       });
     }
   };
@@ -73,9 +75,12 @@ export function getInsightFeed(perCategory = 12): InsightFeedItem[] {
   // 날짜 최신순
   items.sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime());
 
+  // 언어 필터(한글=ko페이지, 영어=en페이지). 상한 적용 전에 걸러야 카테고리별 개수가 올바름.
+  const src = lang ? items.filter((it) => it.lang === lang) : items;
+
   // 카테고리별 상한 적용(페이로드 절약)
   const byCat: Record<string, InsightFeedItem[]> = {};
-  for (const it of items) (byCat[it.category] ||= []).push(it);
+  for (const it of src) (byCat[it.category] ||= []).push(it);
   const capped: InsightFeedItem[] = [];
   for (const cat of Object.keys(byCat)) capped.push(...byCat[cat].slice(0, perCategory));
   capped.sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime());

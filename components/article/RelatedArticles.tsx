@@ -15,13 +15,17 @@ interface RelatedArticlesProps {
   currentSlug: string;
   currentTags: string[];
   allPosts: RelatedItem[];
+  locale?: "ko" | "en";
 }
 
 export default function RelatedArticles({
   currentSlug,
   currentTags,
   allPosts,
+  locale = "ko",
 }: RelatedArticlesProps) {
+  const en = locale === "en";
+  const articleBase = en ? "/en/insight/article/" : "/insight/article/";
   // 같은 태그를 가진 다른 기사 필터링 (최대 3개)
   const related = allPosts
     .filter((t) => t.slug !== currentSlug)
@@ -44,13 +48,13 @@ export default function RelatedArticles({
   return (
     <section className="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800">
       <h2 className="text-lg font-extrabold text-foreground mb-5">
-        이런 기사는 어떠세요? 🤔
+        {en ? "You might also like 🤔" : "이런 기사는 어떠세요? 🤔"}
       </h2>
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
         {articles.map((article) => (
           <Link
             key={article.slug}
-            href={`/insight/article/${article.slug}`}
+            href={`${articleBase}${article.slug}`}
             className="group block bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 overflow-hidden hover:border-[#F9954E] dark:hover:border-[#F9954E] hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
           >
             {/* 썸네일 */}

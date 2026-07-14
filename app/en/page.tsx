@@ -34,7 +34,7 @@ export const metadata = createMetadata({
 });
 
 export default async function EnHome() {
-  const insightFeed = getInsightFeed(25);
+  const insightFeed = getInsightFeed(25, "en"); // 영어 인사이트만(영어 페이지)
   const topTools = getTopTools(5);
   const animalCount = getAnimalCount();
   const orLists = getOrLists(5);

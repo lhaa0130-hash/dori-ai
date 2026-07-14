@@ -17,6 +17,7 @@ interface Post {
 }
 
 const CATEGORIES = ['전체', '트렌드', '가이드', '분석', '리포트', '큐레이션', '영상'];
+const CAT_LABEL_EN: Record<string, string> = { 전체: 'All', 트렌드: 'Trends', 가이드: 'Guides', 분석: 'Analysis', 리포트: 'Reports', 큐레이션: 'Curation', 영상: 'Videos' };
 
 function getCat(cat?: string) {
   if (!cat) return '';
@@ -32,13 +33,16 @@ function getDesc(content?: string, summary?: string) {
   return text.length > 100 ? text.slice(0, 100) + '…' : text;
 }
 
-function fmtDate(s?: string) {
+function fmtDate(s?: string, en = false) {
   if (!s) return '';
   const d = new Date(s);
+  if (en) return d.toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
   return `${d.getMonth() + 1}월 ${d.getDate()}일`;
 }
 
-export default function InsightPageClient({ initialPosts = [] }: { initialPosts: Post[] }) {
+export default function InsightPageClient({ initialPosts = [], locale = 'ko' }: { initialPosts: Post[]; locale?: 'ko' | 'en' }) {
+  const en = locale === 'en';
+  const articleBase = en ? '/en/insight/article/' : '/insight/article/';
   const [likedPosts, setLikedPosts] = useState<string[]>([]);
   const [likesData, setLikesData] = useState<Record<string, number>>({});
   const [selected, setSelected] = useState('전체');
@@ -72,7 +76,7 @@ export default function InsightPageClient({ initialPosts = [] }: { initialPosts:
       {/* 헤더 */}
       <section className="pt-6 pb-5 border-b border-neutral-100 dark:border-zinc-900">
         <h1 className="text-[28px] sm:text-[36px] font-extrabold text-neutral-950 dark:text-white tracking-tight break-keep">
-          AI 인사이트
+          {en ? 'AI Insights' : 'AI 인사이트'}
         </h1>
       </section>
 
@@ -89,7 +93,7 @@ export default function InsightPageClient({ initialPosts = [] }: { initialPosts:
                   : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
               }`}
             >
-              {cat}
+              {en ? (CAT_LABEL_EN[cat] || cat) : cat}
             </button>
           ))}
         </div>
@@ -107,7 +111,7 @@ export default function InsightPageClient({ initialPosts = [] }: { initialPosts:
 
             return (
               <li key={pid} className="border-b border-neutral-100 dark:border-zinc-900 last:border-0">
-                <Link href={`/insight/article/${post.slug || post.id}`} className="group flex items-start gap-3 py-3">
+                <Link href={`${articleBase}${post.slug || post.id}`} className="group flex items-start gap-3 py-3">
 
                   {/* 썸네일 */}
                   {post.thumbnail_url && (
@@ -128,11 +132,11 @@ export default function InsightPageClient({ initialPosts = [] }: { initialPosts:
                     <div className="flex items-center gap-2 mb-0.5">
                       {cat && <span className="text-[10px] font-bold text-[#F9954E]">{cat}</span>}
                       <span className="text-[11px] text-neutral-400 dark:text-neutral-500" suppressHydrationWarning>
-                        {fmtDate(post.created_at)}
+                        {fmtDate(post.created_at, en)}
                       </span>
                     </div>
                     <h3 className="text-[13.5px] sm:text-[14.5px] font-bold text-neutral-900 dark:text-white leading-snug break-keep line-clamp-2 group-hover:text-[#F9954E] transition-colors">
-                      {post.title || '제목 없음'}
+                      {post.title || (en ? 'Untitled' : '제목 없음')}
                     </h3>
                     <button
                       type="button"
@@ -149,7 +153,7 @@ export default function InsightPageClient({ initialPosts = [] }: { initialPosts:
           })}
         </ul>
       ) : (
-        <p className="py-20 text-center text-[13px] text-neutral-400 dark:text-neutral-500">아직 게시글이 없습니다.</p>
+        <p className="py-20 text-center text-[13px] text-neutral-400 dark:text-neutral-500">{en ? 'No articles yet.' : '아직 게시글이 없습니다.'}</p>
       )}
     </div>
   );

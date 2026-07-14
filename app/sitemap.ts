@@ -32,6 +32,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/`,          lastModified: now, changeFrequency: "daily",   priority: 1.0 },
     { url: `${baseUrl}/en`,        lastModified: now, changeFrequency: "daily",   priority: 0.9 },
     { url: `${baseUrl}/insight`,   lastModified: now, changeFrequency: "daily",   priority: 0.9 },
+    { url: `${baseUrl}/en/insight`, lastModified: now, changeFrequency: "daily",  priority: 0.8 },
     { url: `${baseUrl}/ai-tools`,  lastModified: now, changeFrequency: "weekly",  priority: 0.9 },
     { url: `${baseUrl}/en/ai-tools`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${baseUrl}/ai-models`, lastModified: now, changeFrequency: "daily",   priority: 0.9 },
@@ -52,13 +53,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/legal/terms`,                  changeFrequency: "monthly", priority: 0.2 },
   ];
 
-  // 2) 아티클 페이지 수집 헬퍼
+  // 2) 아티클 페이지 수집 헬퍼 — 언어별 경로 분리(한글=/insight/article, 영어=/en/insight/article)
+  type Post = { slug: string; date?: string; lang?: string };
   const collect = (
-    posts: Array<{ slug: string; date?: string }>,
+    posts: Post[],
     priority: number
   ): MetadataRoute.Sitemap =>
     posts.map((p) => ({
-      url: `${baseUrl}/insight/article/${p.slug}`,
+      url: `${baseUrl}${p.lang === "en" ? "/en/insight/article/" : "/insight/article/"}${p.slug}`,
       lastModified: p.date ? new Date(p.date) : now,
       changeFrequency: "monthly" as const, // 발행 후 자주 바뀌지 않음
       priority,
