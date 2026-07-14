@@ -726,10 +726,22 @@ export default function AdminPage() {
                 </div>
               )}
 
-              {/* 총 광고 수입(최종 금액) — 애드센스 + 애드몹 */}
-              <div className="flex items-center justify-between gap-3 flex-wrap rounded-2xl bg-neutral-50 dark:bg-zinc-900/40 px-5 py-3">
-                <span className="text-[13px] font-extrabold text-neutral-700 dark:text-neutral-200">💰 총 광고 수입 <span className="text-[11px] font-normal text-neutral-400">애드센스+애드몹</span></span>
-                <span className="text-[13px] tabular-nums text-neutral-400">오늘 <b className="text-[#F9954E]">{money(totalToday)}</b> · 이번 달 <b className="text-[#F9954E]">{money(totalMonth)}</b></span>
+              {/* 총 광고 수입(최종 금액) — 애드센스 + 애드몹 합산, 큰 숫자로 강조 */}
+              <div className="rounded-2xl border border-[#F9954E]/30 bg-gradient-to-br from-[#FFF1E3] to-white dark:from-[#F9954E]/10 dark:to-zinc-950 p-5">
+                <div className="flex items-center gap-1.5 mb-3">
+                  <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white">💰 총 광고 수입</h2>
+                  <span className="text-[11px] font-normal text-neutral-400">애드센스 + 애드몹</span>
+                </div>
+                <div className="grid grid-cols-2 gap-3">
+                  <div className="rounded-xl bg-white/70 dark:bg-zinc-900/50 px-4 py-3">
+                    <div className="text-[11px] font-bold text-neutral-400 mb-1">오늘</div>
+                    <div className="text-[26px] leading-none font-extrabold text-neutral-900 dark:text-white tabular-nums">{money(totalToday)}</div>
+                  </div>
+                  <div className="rounded-xl bg-white/70 dark:bg-zinc-900/50 px-4 py-3">
+                    <div className="text-[11px] font-bold text-neutral-400 mb-1">이번 달</div>
+                    <div className="text-[26px] leading-none font-extrabold text-[#F9954E] tabular-nums">{money(totalMonth)}</div>
+                  </div>
+                </div>
               </div>
 
               {/* 6) 방문 기기 + 애드센스 + 애드몹 (각각 별도) */}
