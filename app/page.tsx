@@ -1,10 +1,30 @@
-// app/page.tsx — illo 메인 (SNS 피드 × AI 인사이트 하이브리드 랜딩, 라이트/다크 대응)
+// app/page.tsx — 토스 풍 미니멀 메인
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { MessagesSquare, Newspaper, Wrench, BarChart3, Gamepad2, PawPrint, ShoppingBag, FolderKanban, Rss, Store, Bell, HelpCircle, PencilRuler } from "lucide-react";
+import Hero from "@/components/home/Hero";
+import HomeClient from "@/components/home/HomeClient";
+import HomeInfoStrip from "@/components/home/HomeInfoStrip";
+import InsightTabs from "@/components/home/InsightTabs";
 import { getInsightFeed } from "@/lib/insightFeed";
-import { getOrLists, getAnimalCount } from "@/lib/homeStats";
+import { getTopTools, getAnimalCount, getOrLists } from "@/lib/homeStats";
 
-// 영어 홈(/en)과 hreflang 상호링크
+// 퀵 액세스 — 주요 섹션 바로가기(한 줄 가로 스크롤, 다양하게)
+const SECTIONS = [
+  { label: "커뮤니티", href: "/community", Icon: MessagesSquare },
+  { label: "피드", href: "/feed", Icon: Rss },
+  { label: "인사이트", href: "/insight", Icon: Newspaper },
+  { label: "AI 도구", href: "/ai-tools", Icon: Wrench },
+  { label: "AI 모델", href: "/ai-models", Icon: BarChart3 },
+  { label: "미니게임", href: "/minigame", Icon: Gamepad2 },
+  { label: "몽글로 : 동물도감", href: "/animal", Icon: PawPrint },
+  { label: "마켓", href: "/market", Icon: ShoppingBag },
+  { label: "상점", href: "/shop", Icon: Store },
+  { label: "프로젝트", href: "/projects", Icon: FolderKanban },
+  { label: "공지사항", href: "/notice", Icon: Bell },
+  { label: "FAQ", href: "/faq", Icon: HelpCircle },
+];
+
+// 영어 홈(/en)과 hreflang 상호링크 (제목·OG는 레이아웃 기본 유지, alternates만 추가)
 export const metadata = {
   alternates: {
     canonical: "https://illo.im/",
@@ -16,277 +36,50 @@ export const metadata = {
   },
 };
 
-const CAT_META: Record<string, { emoji: string; color: string }> = {
-  트렌드: { emoji: "🔥", color: "#F9954E" },
-  가이드: { emoji: "📖", color: "#3FA97A" },
-  리포트: { emoji: "📊", color: "#5B7FE0" },
-  분석: { emoji: "🔬", color: "#9C6BD0" },
-  큐레이션: { emoji: "✨", color: "#E0679E" },
-  영상: { emoji: "🎬", color: "#F9954E" },
-};
-const CATS = ["트렌드", "가이드", "리포트", "분석", "큐레이션", "영상"];
-
-function fmtDate(s?: string) {
-  if (!s) return "";
-  const d = new Date(s);
-  if (isNaN(d.getTime())) return "";
-  return `${d.getMonth() + 1}월 ${d.getDate()}일`;
-}
-
-// SNS 피드 미리보기 — 랜딩 티저(실제 피드는 /feed). 예시 활동.
-const FEED_TEASER = [
-  { name: "라이", handle: "@lhaa0130", time: "2시간", text: "클로드코드로 주식 대시보드를 하루 만에 완성했어요. 프롬프트 3개면 충분하더라고요.", likes: 128, comments: 24, color: "#F9954E" },
-  { name: "도리", handle: "@doriillo", time: "5시간", text: "이번 주 AI 리포트 올렸습니다. 자금이 모델보다 인프라로 더 깊게 흐른 한 주였어요.", likes: 96, comments: 12, color: "#5B7FE0" },
-  { name: "몽글러", handle: "@mongglo", time: "어제", text: "몽글로 1,205번째 동물이 추가됐어요. 오늘의 친구는 수달 🦦", likes: 342, comments: 57, color: "#3FA97A" },
-  { name: "준", handle: "@jun_ai", time: "어제", text: "Cursor랑 Genspark 실사용 비교 정리했어요. 결론은 상황별로 갈립니다.", likes: 74, comments: 9, color: "#9C6BD0" },
-];
-
-const KIDS_ANIMALS = [
-  { emoji: "🦉", name: "올빼미" },
-  { emoji: "🐢", name: "거북이" },
-  { emoji: "🦔", name: "고슴도치" },
-  { emoji: "🦦", name: "수달" },
-];
-
 export default async function Home() {
-  const feed = getInsightFeed(12, "ko");
-  const orLists = getOrLists(5);
+  const insightFeed = getInsightFeed(25, "ko"); // 한글 인사이트만(한글 페이지)
+  const topTools = getTopTools(5);
   const animalCount = getAnimalCount();
-
-  const featured = feed[0];
-  const rest = feed.slice(1, 7);
-  const fmtM = (n: number) => (n >= 100 ? `${(n / 100).toFixed(n >= 1000 ? 0 : 1)}억` : `${n.toLocaleString()}만`);
+  const orLists = getOrLists(5);
+  // '오늘의 인사이트' = 가장 최근 발행일의 글 수(빌드 시점 TZ 무관)
+  const latestDate = insightFeed[0] ? String(insightFeed[0].date).slice(0, 10) : "";
+  const todayInsights = insightFeed.filter((i) => String(i.date).slice(0, 10) === latestDate).length;
 
   return (
-    <main className="bg-[#FAFAF8] text-neutral-900 dark:bg-[#08080A] dark:text-[#F4F3F1]">
+    <main className="min-h-screen">
 
-      {/* ① 히어로 */}
-      <section className="max-w-[1240px] mx-auto px-6 sm:px-10 pt-14 sm:pt-20 pb-12 text-center">
-        <span className="inline-block text-[13px] font-bold text-[#E8832E] dark:text-[#FF9D72] bg-[#F9954E]/10 border border-[#F9954E]/20 rounded-full px-3.5 py-1.5 mb-6">
-          매일 만나는 AI 피드
-        </span>
-        <h1 className="text-[40px] sm:text-[56px] font-extrabold leading-[1.1] tracking-tight break-keep">
-          흩어진 AI를,<br /> 한 곳에서<span className="text-[#F9954E]">.</span>
-        </h1>
-        <p className="mt-5 text-[15px] sm:text-[18px] text-neutral-500 dark:text-[#9C9B97] break-keep">
-          AI 인사이트와 SNS 피드를 매일 한 곳에서.
-        </p>
-        <div className="mt-8 flex items-center justify-center gap-3 flex-wrap">
-          <Link href="/insight" className="inline-flex items-center gap-1.5 px-6 py-3.5 rounded-2xl bg-[#F9954E] text-white text-[15px] font-bold hover:brightness-105 active:scale-[0.98] transition">
-            인사이트 보러가기 <ArrowRight className="w-4 h-4" />
-          </Link>
-          <Link href="/feed" className="inline-flex items-center gap-1.5 px-6 py-3.5 rounded-2xl border border-neutral-300 dark:border-white/15 text-neutral-700 dark:text-neutral-200 text-[15px] font-bold hover:border-[#F9954E]/50 hover:text-[#F9954E] transition">
-            피드 둘러보기
-          </Link>
-        </div>
-      </section>
+      {/* ① 미니멀 히어로 */}
+      <Hero />
 
-      {/* ② 오늘 꼭 봐야 할 인사이트 */}
-      <section className="max-w-[1240px] mx-auto px-6 sm:px-10 py-12">
-        <div className="mb-1">
-          <span className="text-[12px] font-extrabold tracking-widest text-[#F9954E]">TODAY</span>
-        </div>
-        <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
-          <h2 className="text-[24px] sm:text-[30px] font-extrabold tracking-tight break-keep">오늘 꼭 봐야 할 인사이트</h2>
-          <Link href="/insight" className="text-[14px] font-bold text-neutral-500 dark:text-[#9C9B97] hover:text-[#F9954E] transition whitespace-nowrap">인사이트 전체 →</Link>
-        </div>
-        {/* 카테고리 칩 */}
-        <div className="-mx-6 px-6 sm:mx-0 sm:px-0 overflow-x-auto scrollbar-hide mb-6">
-          <div className="flex gap-2 w-max">
-            <Link href="/insight" className="text-[13.5px] font-bold text-white bg-[#F9954E] border border-[#F9954E] rounded-full px-4 py-2 transition whitespace-nowrap">전체</Link>
-            {CATS.map((c) => (
-              <Link key={c} href="/insight" className="text-[13.5px] font-semibold text-neutral-500 dark:text-[#9C9B97] border border-neutral-200 dark:border-white/10 rounded-full px-3.5 py-2 hover:border-[#F9954E]/50 hover:text-[#F9954E] transition whitespace-nowrap">
-                {CAT_META[c]?.emoji} {c}
+      {/* ①-b 정보 스트립 (OpenRouter 인기 모델·지능·속도 + 우리 지표) */}
+      <HomeInfoStrip topTools={topTools} insightCount={todayInsights} animalCount={animalCount} orLists={orLists} />
+
+      {/* ② 퀵 액세스 — 한 줄 가로 스크롤 */}
+      <section className="py-4 border-b border-neutral-100 dark:border-zinc-900">
+        <div className="-mx-6 px-6 overflow-x-auto scrollbar-hide">
+          <div className="flex gap-1 w-max">
+            {SECTIONS.map(({ label, href, Icon }) => (
+              <Link
+                key={href}
+                href={href}
+                className="flex flex-col items-center gap-1.5 py-2 w-[64px] shrink-0 rounded-2xl active:bg-neutral-50 dark:active:bg-zinc-900 transition-colors"
+              >
+                <span className="w-11 h-11 rounded-2xl bg-neutral-100 dark:bg-zinc-900 flex items-center justify-center text-neutral-700 dark:text-neutral-300">
+                  <Icon className="w-5 h-5" strokeWidth={1.8} />
+                </span>
+                <span className="text-[10.5px] font-semibold text-neutral-600 dark:text-neutral-400 whitespace-nowrap">{label}</span>
               </Link>
             ))}
           </div>
         </div>
-
-        {feed.length > 0 && (
-          <div className="grid grid-cols-1 lg:grid-cols-2 gap-5 items-start">
-            {featured && <InsightCard item={featured} featured />}
-            <div className="flex flex-col gap-3">
-              {rest.slice(0, 5).map((it) => <InsightListCard key={it.slug} item={it} />)}
-            </div>
-          </div>
-        )}
       </section>
 
-      {/* ③ SNS 피드 */}
-      <section className="max-w-[1240px] mx-auto px-6 sm:px-10 py-12">
-        <div className="flex items-center justify-between gap-3 mb-6">
-          <h2 className="text-[24px] sm:text-[30px] font-extrabold tracking-tight">SNS 피드</h2>
-          <Link href="/feed" className="text-[14px] font-bold text-neutral-500 dark:text-[#9C9B97] hover:text-[#F9954E] transition whitespace-nowrap">피드 전체 →</Link>
-        </div>
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 items-stretch">
-          {/* 피드 리스트 */}
-          <div className="lg:col-span-2 rounded-3xl border border-neutral-200/70 dark:border-white/[0.07] bg-white dark:bg-[#111114] divide-y divide-neutral-100 dark:divide-white/[0.06] px-5 sm:px-6">
-            {FEED_TEASER.map((p) => (
-              <div key={p.handle} className="flex gap-3 py-5">
-                <div className="w-10 h-10 rounded-full flex items-center justify-center font-extrabold text-white text-[15px] flex-shrink-0" style={{ backgroundColor: p.color }}>{p.name.slice(0, 1)}</div>
-                <div className="min-w-0 flex-1">
-                  <div className="flex items-center gap-1.5 text-[13px]">
-                    <b className="text-neutral-900 dark:text-white">{p.name}</b>
-                    <span className="text-neutral-400 dark:text-[#6f6e6b]">{p.handle} · {p.time}</span>
-                  </div>
-                  <p className="mt-1.5 text-[14px] text-neutral-700 dark:text-neutral-200 leading-relaxed break-keep">{p.text}</p>
-                  <div className="mt-2.5 flex items-center gap-4 text-[12.5px] text-neutral-400 dark:text-[#6f6e6b]">
-                    <span>♡ {p.likes}</span><span>댓글 {p.comments}</span><span>공유</span>
-                  </div>
-                </div>
-              </div>
-            ))}
-          </div>
-          {/* 커뮤니티 + 지표(한 카드) */}
-          <div className="lg:col-span-1 rounded-3xl border border-neutral-200/70 dark:border-white/[0.07] bg-white dark:bg-[#111114] p-6 flex flex-col">
-            <div>
-              <span className="text-[12px] font-extrabold tracking-widest text-[#F9954E]">● 커뮤니티</span>
-              <h3 className="mt-3 text-[20px] font-extrabold break-keep">같이 연구하는 사람들</h3>
-              <p className="mt-2 text-[13.5px] text-neutral-500 dark:text-[#9C9B97] break-keep leading-relaxed">질문하고, 공유하고, 같이 실험해요.</p>
-              <Link href="/community" className="mt-4 inline-flex items-center gap-1 text-[13px] font-bold text-[#F9954E] hover:gap-1.5 transition-all">커뮤니티 가기 <ArrowRight className="w-3.5 h-3.5" /></Link>
-            </div>
-            <div className="mt-auto pt-8 grid grid-cols-2 gap-x-4 gap-y-6">
-              {[
-                { v: `${feed.length}건`, l: "오늘 인사이트" },
-                { v: `${animalCount.toLocaleString()}종`, l: "몽글로 도감" },
-                { v: "매일", l: "새 피드 업데이트" },
-                { v: "6+", l: "카테고리" },
-              ].map((s) => (
-                <div key={s.l}>
-                  <div className="text-[22px] font-extrabold tracking-tight leading-none">{s.v}</div>
-                  <div className="mt-1.5 text-[12px] text-neutral-400 dark:text-[#6f6e6b]">{s.l}</div>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* ③ 출석·등급 위젯 */}
+      <HomeClient />
 
-      {/* ④ AI 모델 랭킹 */}
-      <section className="max-w-[1240px] mx-auto px-6 sm:px-10 py-12">
-        <div className="mb-1">
-          <span className="text-[12px] font-extrabold tracking-widest text-[#F9954E]">AI 모델 랭킹</span>
-        </div>
-        <div className="flex items-center justify-between gap-3 mb-6 flex-wrap">
-          <h2 className="text-[24px] sm:text-[30px] font-extrabold tracking-tight break-keep">지금 뜨는 모델, 한눈에</h2>
-          <Link href="/ai-models" className="text-[14px] font-bold text-neutral-500 dark:text-[#9C9B97] hover:text-[#F9954E] transition whitespace-nowrap">전체 비교 →</Link>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
-          <ModelCol title="많이 쓰는" rows={orLists.usage.map((m) => ({ name: m.name, v: fmtM(m.reqM) }))} accent="#F9954E" />
-          <ModelCol title="똑똑한" rows={orLists.intel.map((m) => ({ name: m.name, v: `${m.score}점` }))} accent="#5B7FE0" />
-          <ModelCol title="빠른" rows={orLists.speed.map((m) => ({ name: m.name, v: `${m.tps}tps` }))} accent="#3FA97A" />
-        </div>
-      </section>
+      {/* ④ AI 인사이트 — 종류별 탭 순위 (최대 50) */}
+      <InsightTabs items={insightFeed} perTab={50} />
 
-      {/* ⑤ 키즈 · 몽글로 */}
-      <section className="max-w-[1240px] mx-auto px-6 sm:px-10 py-12">
-        <div className="rounded-3xl border border-neutral-200/70 dark:border-white/[0.07] bg-gradient-to-br from-[#FFF3EA] to-white dark:from-[#F9954E]/[0.07] dark:to-[#111114] p-7 sm:p-10 flex flex-col lg:flex-row items-center gap-8">
-          <div className="flex-1 min-w-0 text-center lg:text-left">
-            <span className="text-[12px] font-extrabold tracking-widest text-[#F9954E]">🐾 키즈 · 몽글로</span>
-            <h2 className="mt-3 text-[24px] sm:text-[32px] font-extrabold leading-tight break-keep">아이와 함께 보는<br />AI 동물도감</h2>
-            <p className="mt-3 text-[14px] sm:text-[15px] text-neutral-500 dark:text-[#9C9B97] break-keep">
-              {animalCount.toLocaleString()}종의 동물을 AI가 이야기로 들려줘요. 궁금한 동물을 찾아 나만의 도감을 채워보세요.
-            </p>
-            <Link href="/animal" className="mt-5 inline-flex items-center gap-1.5 px-5 py-3 rounded-2xl bg-[#F9954E] text-white text-[14px] font-bold hover:brightness-105 transition">몽글로 열기 <ArrowRight className="w-4 h-4" /></Link>
-          </div>
-          <div className="flex gap-3 flex-wrap justify-center">
-            {KIDS_ANIMALS.map((a) => (
-              <div key={a.name} className="w-[84px] h-[84px] rounded-2xl bg-white dark:bg-[#08080A]/60 border border-neutral-200/70 dark:border-white/10 flex flex-col items-center justify-center gap-1">
-                <span className="text-[28px] leading-none">{a.emoji}</span>
-                <span className="text-[11.5px] font-bold text-neutral-500 dark:text-neutral-300">{a.name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ⑥ 최종 CTA */}
-      <section className="max-w-[1240px] mx-auto px-6 sm:px-10 pt-8 pb-24 text-center">
-        <h2 className="text-[30px] sm:text-[40px] font-extrabold tracking-tight">
-          모든 일을, <span className="text-[#F9954E]">일로.</span>
-        </h2>
-        <p className="mt-3 text-[15px] sm:text-[17px] text-neutral-500 dark:text-[#9C9B97] break-keep">흩어진 AI를 한 곳에 모아, 매일 읽어보세요.</p>
-        <Link href="/login" className="mt-7 inline-flex items-center gap-1.5 px-8 py-4 rounded-2xl bg-[#F9954E] text-[#3A1E10] font-extrabold text-[15px] hover:brightness-105 active:scale-[0.98] transition">
-          무료로 시작하기
-        </Link>
-      </section>
     </main>
-  );
-}
-
-// ── 서브 컴포넌트 ──
-function InsightCard({ item, featured = false }: { item: any; featured?: boolean }) {
-  const meta = CAT_META[item.category] || { emoji: "📝", color: "#F9954E" };
-  const isVideo = item.category === "영상";
-  const source = isVideo ? item.channel : item.author || item.channel || "DORI-AI";
-  const date = isVideo ? item.videoDate : item.date;
-  return (
-    <Link
-      href={`/insight/article/${item.slug}`}
-      className="group block rounded-[22px] overflow-hidden border border-neutral-200/70 dark:border-white/[0.07] bg-white dark:bg-[#111114] hover:border-[#F9954E]/40 transition"
-    >
-      <div className={`relative w-full ${featured ? "aspect-[16/10]" : "aspect-[16/9]"} bg-neutral-100 dark:bg-[#08080A] overflow-hidden`}>
-        {item.thumbnail ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.thumbnail} alt={item.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-[1.03] transition-transform duration-500" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-4xl">{meta.emoji}</div>
-        )}
-        <span className="absolute top-3 left-3 text-[11px] font-bold text-white px-2 py-1 rounded-lg" style={{ backgroundColor: meta.color }}>
-          {meta.emoji} {item.category}
-        </span>
-      </div>
-      <div className={featured ? "p-5" : "p-4"}>
-        <h3 className={`font-extrabold leading-snug break-keep line-clamp-2 group-hover:text-[#F9954E] transition ${featured ? "text-[19px]" : "text-[15px]"}`}>{item.title}</h3>
-        {featured && item.summary && <p className="mt-2 text-[13.5px] text-neutral-500 dark:text-[#9C9B97] line-clamp-2 break-keep">{item.summary}</p>}
-        <p className="mt-2.5 text-[12px] text-neutral-400 dark:text-[#6f6e6b]">{isVideo ? "📺 " : ""}{source} · {fmtDate(date)}</p>
-      </div>
-    </Link>
-  );
-}
-
-function InsightListCard({ item }: { item: any }) {
-  const meta = CAT_META[item.category] || { emoji: "📝", color: "#F9954E" };
-  const isVideo = item.category === "영상";
-  const source = isVideo ? item.channel : item.author || item.channel || "DORI-AI";
-  const date = isVideo ? item.videoDate : item.date;
-  return (
-    <Link href={`/insight/article/${item.slug}`} className="group flex gap-3.5 p-3 rounded-2xl border border-neutral-200/70 dark:border-white/[0.07] bg-white dark:bg-[#111114] hover:border-[#F9954E]/40 transition">
-      <div className="relative w-[76px] h-[76px] rounded-xl overflow-hidden bg-neutral-100 dark:bg-[#08080A] flex-shrink-0">
-        {item.thumbnail ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img src={item.thumbnail} alt={item.title} loading="lazy" className="w-full h-full object-cover group-hover:scale-[1.04] transition-transform duration-500" />
-        ) : (
-          <div className="w-full h-full flex items-center justify-center text-2xl">{meta.emoji}</div>
-        )}
-      </div>
-      <div className="min-w-0 flex-1 py-0.5">
-        <span className="text-[11px] font-bold" style={{ color: meta.color }}>{item.category}</span>
-        <h3 className="mt-1 text-[14px] font-bold leading-snug break-keep line-clamp-2 group-hover:text-[#F9954E] transition">{item.title}</h3>
-        <p className="mt-1.5 text-[11.5px] text-neutral-400 dark:text-[#6f6e6b]">{isVideo ? "📺 " : ""}{source} · {fmtDate(date)}</p>
-      </div>
-    </Link>
-  );
-}
-
-function ModelCol({ title, rows, accent }: { title: string; rows: { name: string; v: string }[]; accent: string }) {
-  return (
-    <div className="rounded-3xl border border-neutral-200/70 dark:border-white/[0.07] bg-white dark:bg-[#111114] p-5">
-      <div className="flex items-center gap-2 mb-3">
-        <span className="w-2 h-2 rounded-full" style={{ backgroundColor: accent }} />
-        <span className="text-[13.5px] font-extrabold">{title}</span>
-      </div>
-      <div>
-        {rows.length === 0 ? (
-          <p className="text-[13px] text-neutral-400 py-2">불러오는 중…</p>
-        ) : rows.map((r, i) => (
-          <div key={r.name + i} className="flex items-center gap-3 py-2.5 border-t border-neutral-100 dark:border-white/[0.05] first:border-0">
-            <span className="w-4 text-center text-[13px] font-extrabold" style={{ color: i < 3 ? accent : undefined }}>{i + 1}</span>
-            <span className="flex-1 min-w-0 truncate text-[13.5px] font-semibold text-neutral-800 dark:text-neutral-100">{r.name}</span>
-            <span className="text-[12.5px] font-bold text-neutral-400 dark:text-[#9C9B97] tabular-nums flex-shrink-0">{r.v}</span>
-          </div>
-        ))}
-      </div>
-    </div>
   );
 }
