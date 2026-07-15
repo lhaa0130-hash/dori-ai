@@ -302,7 +302,20 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
   return (
     <div className={(embedded ? "h-full flex flex-col" : "min-h-screen") + " bg-background text-foreground"}>
       {!embedded && <ProjectTopBar name="AI 직원 관제탑" emoji="🗂️" />}
-      <div className={embedded ? "flex flex-1 min-h-0" : "pt-12 flex h-screen"}>
+      <div className={embedded ? "flex flex-col flex-1 min-h-0" : "pt-12 flex flex-col h-screen"}>
+        {/* 상태 범례 — 작업중/검수중/완료/대기/확인 필요 (색+글자 이중 표시) */}
+        <div className="shrink-0 flex items-center justify-end gap-1.5 px-4 py-2 border-b border-border flex-wrap bg-card/40">
+          {(["work", "review", "done", "wait", "alert"] as OrgStatus[]).map((s) => {
+            const dot = s === "work" ? "bg-blue-500" : s === "review" ? "bg-amber-500" : s === "done" ? "bg-emerald-500" : s === "alert" ? "bg-red-500" : "bg-muted-foreground";
+            return (
+              <span key={s} className="inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-1 text-[12px] text-muted-foreground">
+                <span className={"w-2 h-2 rounded-full " + dot} /> {STATUS_META[s].label}
+              </span>
+            );
+          })}
+        </div>
+        {/* 본문: 좌측 레일 + 캔버스 */}
+        <div className="flex flex-1 min-h-0">
         {/* 좌측 컨트롤 레일 */}
         <aside className="w-[250px] shrink-0 border-r border-border bg-card overflow-y-auto flex flex-col gap-6 p-4">
           <div>
@@ -359,6 +372,7 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
               <div>마스터는 기본이에요. <b className="text-foreground font-medium">‘부서 만들기’</b>부터 눌러 시작하세요.</div>
             </div>
           )}
+        </div>
         </div>
       </div>
     </div>
