@@ -1,5 +1,5 @@
 import { createMetadata } from "@/lib/seo";
-import RequireAuth from "@/components/auth/RequireAuth";
+import RequireAdmin from "@/components/auth/RequireAdmin";
 import ProjectSync from "@/components/auth/ProjectSync";
 import IlloWebClient from "@/app/illo/app/page.client";
 
@@ -14,9 +14,9 @@ export const metadata = createMetadata({
 
 export default function AiAssistantPage() {
   return (
-    <RequireAuth>
+    <RequireAdmin>
       <ProjectSync project="workillo" keys={AI_ASSISTANT_KEYS} />
       <IlloWebClient />
-    </RequireAuth>
+    </RequireAdmin>
   );
 }

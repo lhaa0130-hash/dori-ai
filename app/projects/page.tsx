@@ -1,8 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowRight, Lock } from "lucide-react";
 import { PROJECTS } from "@/constants/projectsData";
+import { useAuth } from "@/contexts/AuthContext";
+import { isAdminEmail } from "@/lib/admin";
+
+// 관리자만 들어갈 수 있는 프로젝트(슬러그) — 카드는 보이되 CTA를 잠근다.
+const ADMIN_ONLY_SLUGS = new Set(["illo"]);
 
 const STATUS_STYLE: Record<string, string> = {
   "오픈":       "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20",
@@ -14,6 +19,8 @@ const STATUS_STYLE: Record<string, string> = {
 };
 
 export default function ProjectsPage() {
+  const { session } = useAuth();
+  const isAdmin = isAdminEmail(session?.user?.email);
   const active = PROJECTS.filter((p) => p.isActive);
   const soon   = PROJECTS.filter((p) => !p.isActive);
 
@@ -84,7 +91,11 @@ export default function ProjectsPage() {
 
                 {/* CTA */}
                 <div className="px-5 pb-5">
-                  {p.launchHref && isOpen ? (
+                  {ADMIN_ONLY_SLUGS.has(p.slug) && !isAdmin ? (
+                    <div className="flex items-center justify-center gap-1.5 w-full py-3 rounded-xl bg-neutral-50 dark:bg-zinc-900 text-neutral-400 dark:text-zinc-500 text-[13px] font-bold cursor-not-allowed">
+                      <Lock className="w-3.5 h-3.5" /> 관리자 전용
+                    </div>
+                  ) : p.launchHref && isOpen ? (
                     <Link
                       href={p.launchHref}
                       className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#F9954E]/10 dark:bg-[#F9954E]/10 text-[#F9954E] text-[13px] font-extrabold transition-colors hover:bg-[#F9954E]/20 dark:hover:bg-[#F9954E]/20"

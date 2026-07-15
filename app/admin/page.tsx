@@ -11,9 +11,7 @@ import { getAnalyticsSummary, getDailyAnalytics, getTodayStr, getAdsense, saveAd
 import { getAnimalReviewStatus, approveAnimal, rejectAnimal, resetAnimal, setRejectReason } from "@/lib/animalReview";
 import animalCardsData from "@/data/animal-cards.json";
 import type { AnimalCard } from "@/app/animal/page.client";
-
-// ─── 관리자 이메일 (단 1명만) ─────────────────────────────────────
-const ADMIN_EMAIL = "lhaa0130@gmail.com";
+import { ADMIN_EMAIL } from "@/lib/admin";
 
 // ─── 타입 정의 ────────────────────────────────────────────────────
 interface VisitorInfo {
