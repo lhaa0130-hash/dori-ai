@@ -21,7 +21,7 @@ export interface IlloFeature {
 // ── 핵심 (released) — 항상 이 순서로 최상단 고정: 홈 / 워크플로우 / 비서실 / 설정 ──
 const CORE_FEATURES: IlloFeature[] = [
   { id: 'home',      label: '홈',          icon: '🏠', group: '핵심', desc: '오늘 할 일과 내 도구', kind: 'core', core: true, released: true },
-  { id: 'builder',   label: '워크플로우',   icon: '🛠️', group: '핵심', desc: '나만의 AI 자동화를 직접 설계', kind: 'core', core: true, released: true },
+  { id: 'builder',   label: 'AI 직원',      icon: '🗂️', group: '핵심', desc: '부서·팀·직원을 만들고 AI 모델을 배정하는 관제탑', kind: 'core', core: true, released: true },
   { id: 'catalog',   label: '가이드',      icon: '📖', group: '핵심', desc: '어떤 AI/API가 있고, 키는 어디서 받는지 안내', kind: 'core', core: true, released: true },
   { id: 'docs',      label: '자료함',      icon: '📁', group: '핵심', desc: 'HTML 문서 저장·보기 + 내 부서(폴더)', kind: 'core', core: true, released: true },
   { id: 'assistant', label: '일리',        icon: '🐿️', group: '핵심', desc: 'AI 비서 일리 — 무엇이든 묻고, API 조합도 안내받기', kind: 'core', core: true, released: true },

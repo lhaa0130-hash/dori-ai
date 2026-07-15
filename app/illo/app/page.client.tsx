@@ -30,6 +30,7 @@ import { listDocs, saveDoc, deleteDoc, listDepts, saveDept, deleteDept, DEPT_EMO
 import { PLANS } from "@/lib/illo/plan";
 import { getTone, saveTone } from "@/lib/illo/tone";
 import ProjectTopBar from "@/components/layout/ProjectTopBar";
+import OrgControlTower from "@/components/illo/OrgControlTower";
 import {
   ArrowLeft, KeyRound, Loader2, Copy, Check, Sparkles, Download,
   Menu, X, Pencil, Plus, LogOut, Sun, Moon, Send, Lock, GripVertical, ChevronUp, ChevronDown, Search, ExternalLink,
@@ -218,7 +219,7 @@ export default function IlloWebClient() {
         {view === "features" && <FeatureManager enabled={enabled} onToggle={toggleFeature} onView={goView} />}
         {view === "image" && <BasicGen kind="image" free={free} quota={quota} setQuota={setQuota} />}
         {view === "video" && <BasicGen kind="video" free={free} quota={quota} setQuota={setQuota} />}
-        {view === "builder" && <FlowBuilder runAI={runAI} userKey={session?.user?.email || "local"} />}
+        {view === "builder" && <OrgControlTower embedded />}
         {view === "catalog" && <ApiCatalog />}
         {view === "docs" && <Workspace userKey={session?.user?.email || "local"} />}
         {view === "history" && <HistoryView onBack={() => goView("home")} />}

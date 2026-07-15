@@ -62,7 +62,8 @@ function StatusPill({ status }: { status: OrgStatus }) {
   );
 }
 
-export default function OrgControlTower() {
+// embedded=true: AI 비서 앱의 '워크플로우' 자리에 끼워 넣을 때(자체 상단바 생략, 부모 높이에 맞춤)
+export default function OrgControlTower({ embedded = false }: { embedded?: boolean }) {
   const { session } = useAuth();
   const userKey = session?.user?.email || "local";
 
@@ -299,9 +300,9 @@ export default function OrgControlTower() {
   }
 
   return (
-    <div className="min-h-screen bg-background text-foreground">
-      <ProjectTopBar name="AI 직원 관제탑" emoji="🗂️" />
-      <div className="pt-12 flex h-screen">
+    <div className={(embedded ? "h-full flex flex-col" : "min-h-screen") + " bg-background text-foreground"}>
+      {!embedded && <ProjectTopBar name="AI 직원 관제탑" emoji="🗂️" />}
+      <div className={embedded ? "flex flex-1 min-h-0" : "pt-12 flex h-screen"}>
         {/* 좌측 컨트롤 레일 */}
         <aside className="w-[250px] shrink-0 border-r border-border bg-card overflow-y-auto flex flex-col gap-6 p-4">
           <div>
