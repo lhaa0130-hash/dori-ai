@@ -270,16 +270,16 @@ export default function WriteClient() {
                 initial={{ y: -20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ duration: 0.4 }}
-                className="h-16 border-b border-neutral-100 dark:border-zinc-800 flex items-center justify-between px-6 bg-white/70 dark:bg-black/70 backdrop-blur-xl z-50 sticky top-0 supports-[backdrop-filter]:bg-opacity-60"
+                className="h-16 border-b border-stone-100 dark:border-zinc-800 flex items-center justify-between px-6 bg-white/70 dark:bg-black/70 backdrop-blur-xl z-50 sticky top-0 supports-[backdrop-filter]:bg-opacity-60"
             >
                 <div className="flex items-center gap-4">
                     <motion.button
                         whileHover={{ scale: 1.1, x: -2 }}
                         whileTap={{ scale: 0.95 }}
                         onClick={() => router.back()}
-                        className="p-2 hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-full transition-colors"
+                        className="p-2 hover:bg-stone-100 dark:hover:bg-zinc-800 rounded-full transition-colors"
                     >
-                        <ChevronLeft className="w-6 h-6 text-neutral-600 dark:text-neutral-400" />
+                        <ChevronLeft className="w-6 h-6 text-stone-600 dark:text-stone-400" />
                     </motion.button>
                     <AnimatePresence>
                         {title.length > 0 && (
@@ -287,7 +287,7 @@ export default function WriteClient() {
                                 initial={{ opacity: 0, x: -10 }}
                                 animate={{ opacity: 1, x: 0 }}
                                 exit={{ opacity: 0 }}
-                                className="text-sm font-medium text-neutral-500 w-32 truncate hidden md:block"
+                                className="text-sm font-medium text-stone-500 w-32 truncate hidden md:block"
                             >
                                 {title}
                             </motion.span>
@@ -296,7 +296,7 @@ export default function WriteClient() {
                 </div>
 
                 <div className="flex items-center gap-3">
-                    <div className="hidden md:flex items-center text-xs text-neutral-400 mr-2">
+                    <div className="hidden md:flex items-center text-xs text-stone-400 mr-2">
                         <Sparkles size={14} className="mr-1 text-[#FBAA60]" />
                         <span>자동 저장 켜짐</span>
                     </div>
@@ -323,13 +323,13 @@ export default function WriteClient() {
                             exit={{ opacity: 0, x: 20 }}
                             className="absolute top-8 -right-48 w-40 bg-white dark:bg-zinc-900 p-3 rounded-xl shadow-xl border border-[#FEEBD0] dark:border-[#8F4B10]/30 hidden xl:block"
                         >
-                            <p className="text-xs text-neutral-600 dark:text-neutral-300 leading-relaxed">
+                            <p className="text-xs text-stone-600 dark:text-stone-300 leading-relaxed">
                                 <span className="font-bold text-[#F9954E]">Tip.</span><br />
                                 Tab키를 눌러서 도구창으로 이동할 수 있어요!
                             </p>
                             <button
                                 onClick={() => setShowTip(false)}
-                                className="absolute top-1 right-1 text-neutral-400 hover:text-neutral-600"
+                                className="absolute top-1 right-1 text-stone-400 hover:text-stone-600"
                             >
                                 ×
                             </button>
@@ -348,7 +348,7 @@ export default function WriteClient() {
                         placeholder="제목을 입력해 주세요"
                         value={title}
                         onChange={(e) => setTitle(e.target.value)}
-                        className="w-full text-4xl md:text-5xl font-extrabold placeholder:text-neutral-200 dark:placeholder:text-zinc-800 bg-transparent border-none outline-none mb-6 text-neutral-900 dark:text-white tracking-tight leading-tight"
+                        className="w-full text-4xl md:text-5xl font-extrabold placeholder:text-stone-200 dark:placeholder:text-zinc-800 bg-transparent border-none outline-none mb-6 text-stone-900 dark:text-white tracking-tight leading-tight"
                     />
                 </motion.div>
 
@@ -394,8 +394,8 @@ export default function WriteClient() {
                                     <div className="w-16 h-16 bg-[#FEEBD0] dark:bg-[#8F4B10]/20 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl">
                                         📝
                                     </div>
-                                    <h3 className="text-2xl font-bold text-neutral-900 dark:text-white mb-2">발행하시겠습니까?</h3>
-                                    <p className="text-neutral-500 dark:text-neutral-400 text-sm">
+                                    <h3 className="text-2xl font-bold text-stone-900 dark:text-white mb-2">발행하시겠습니까?</h3>
+                                    <p className="text-stone-500 dark:text-stone-400 text-sm">
                                         어떤 주제의 글인지 알려주세요!
                                     </p>
                                 </div>
@@ -410,7 +410,7 @@ export default function WriteClient() {
                                                 onClick={() => setSelectedTag(tag)}
                                                 className={`py-2 px-4 rounded-full text-sm font-bold transition-all ${selectedTag === tag
                                                     ? 'bg-[#F9954E] text-white shadow-lg shadow-[#F9954E]/30 ring-2 ring-[#F9954E] ring-offset-2 ring-offset-white dark:ring-offset-black'
-                                                    : 'bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-neutral-400 hover:bg-neutral-200 dark:hover:bg-zinc-700'
+                                                    : 'bg-stone-100 dark:bg-zinc-800 text-stone-600 dark:text-stone-400 hover:bg-stone-200 dark:hover:bg-zinc-700'
                                                     }`}
                                             >
                                                 {tag}
@@ -419,14 +419,14 @@ export default function WriteClient() {
                                     </div>
 
                                     {/* Preview Card */}
-                                    <div className="bg-neutral-50 dark:bg-zinc-800/50 p-4 rounded-2xl flex gap-4 items-center border border-neutral-100 dark:border-zinc-800 mt-4">
+                                    <div className="bg-stone-50 dark:bg-zinc-800/50 p-4 rounded-2xl flex gap-4 items-center border border-stone-100 dark:border-zinc-800 mt-4">
                                         <div className="w-16 h-16 bg-white dark:bg-zinc-700 rounded-xl flex items-center justify-center shadow-sm text-2xl flex-shrink-0">
                                             {/* Could be dynamic based on content */}
                                             ✨
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <h4 className="font-bold text-neutral-900 dark:text-white truncate mb-1">{title || '제목 없는 글'}</h4>
-                                            <div className="text-xs text-neutral-400 dark:text-neutral-500 flex items-center gap-1">
+                                            <h4 className="font-bold text-stone-900 dark:text-white truncate mb-1">{title || '제목 없는 글'}</h4>
+                                            <div className="text-xs text-stone-400 dark:text-stone-500 flex items-center gap-1">
                                                 <span className="text-[#F9954E] font-medium">#{selectedTag}</span>
                                                 <span>•</span>
                                                 <span>방금 전</span>
@@ -439,7 +439,7 @@ export default function WriteClient() {
                             <div className="p-6 flex justify-between items-center gap-3 mt-4">
                                 <button
                                     onClick={() => setIsPublishModalOpen(false)}
-                                    className="px-6 py-3 text-neutral-500 font-bold hover:bg-neutral-100 dark:hover:bg-zinc-800 rounded-xl transition-colors"
+                                    className="px-6 py-3 text-stone-500 font-bold hover:bg-stone-100 dark:hover:bg-zinc-800 rounded-xl transition-colors"
                                 >
                                     취소
                                 </button>

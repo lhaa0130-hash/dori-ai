@@ -46,7 +46,7 @@ export default function RelatedArticles({
   if (articles.length === 0) return null;
 
   return (
-    <section className="mt-12 pt-8 border-t border-neutral-200 dark:border-neutral-800">
+    <section className="mt-12 pt-8 border-t border-stone-200 dark:border-stone-800">
       <h2 className="text-lg font-extrabold text-foreground mb-5">
         {en ? "You might also like 🤔" : "이런 기사는 어떠세요? 🤔"}
       </h2>
@@ -55,7 +55,7 @@ export default function RelatedArticles({
           <Link
             key={article.slug}
             href={`${articleBase}${article.slug}`}
-            className="group block bg-white dark:bg-neutral-900 rounded-xl border border-neutral-100 dark:border-neutral-800 overflow-hidden hover:border-[#F9954E] dark:hover:border-[#F9954E] hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
+            className="group block bg-white dark:bg-stone-900 rounded-xl border border-stone-100 dark:border-stone-800 overflow-hidden hover:border-[#F9954E] dark:hover:border-[#F9954E] hover:shadow-md transition-all duration-300 hover:-translate-y-0.5"
           >
             {/* 썸네일 */}
             <div className="relative w-full h-32 bg-gradient-to-br from-[#F9954E]/10 to-[#FF7B54]/5">
@@ -77,10 +77,10 @@ export default function RelatedArticles({
 
             {/* 콘텐츠 */}
             <div className="p-3">
-              <h3 className="text-xs font-bold text-neutral-900 dark:text-white line-clamp-2 mb-1.5 group-hover:text-[#F9954E] transition-colors">
+              <h3 className="text-xs font-bold text-stone-900 dark:text-white line-clamp-2 mb-1.5 group-hover:text-[#F9954E] transition-colors">
                 {article.title}
               </h3>
-              <div className="flex items-center gap-1 text-[10px] text-neutral-400">
+              <div className="flex items-center gap-1 text-[10px] text-stone-400">
                 <Calendar className="w-3 h-3" />
                 <time dateTime={article.date}>
                   {new Date(article.date as string).toLocaleDateString("ko-KR", {

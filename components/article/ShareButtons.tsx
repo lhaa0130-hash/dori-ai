@@ -20,17 +20,17 @@ function WeChatModal({ url, onClose }: { url: string; onClose: () => void }) {
         className="bg-white dark:bg-zinc-900 rounded-2xl p-6 shadow-2xl flex flex-col items-center gap-3 max-w-xs w-full mx-4"
         onClick={(e) => e.stopPropagation()}
       >
-        <p className="text-sm font-bold text-neutral-700 dark:text-neutral-200">
+        <p className="text-sm font-bold text-stone-700 dark:text-stone-200">
           위챗(WeChat)으로 공유
         </p>
-        <p className="text-xs text-neutral-500 text-center">
+        <p className="text-xs text-stone-500 text-center">
           QR코드를 위챗 앱으로 스캔하세요
         </p>
         {/* eslint-disable-next-line @next/next/no-img-element */}
-        <img src={qrUrl} alt="WeChat QR Code" width={200} height={200} className="rounded-xl border border-neutral-100 dark:border-zinc-700" />
+        <img src={qrUrl} alt="WeChat QR Code" width={200} height={200} className="rounded-xl border border-stone-100 dark:border-zinc-700" />
         <button
           onClick={onClose}
-          className="mt-1 px-4 py-1.5 rounded-full bg-neutral-100 dark:bg-zinc-800 text-xs text-neutral-600 dark:text-neutral-300 hover:bg-neutral-200 dark:hover:bg-zinc-700 transition-colors"
+          className="mt-1 px-4 py-1.5 rounded-full bg-stone-100 dark:bg-zinc-800 text-xs text-stone-600 dark:text-stone-300 hover:bg-stone-200 dark:hover:bg-zinc-700 transition-colors"
         >
           닫기
         </button>
@@ -204,7 +204,7 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
       )}
 
       <div className="flex flex-col gap-2">
-        <span className="text-xs font-bold text-neutral-500 dark:text-neutral-400">공유하기</span>
+        <span className="text-xs font-bold text-stone-500 dark:text-stone-400">공유하기</span>
 
         <div className="flex items-center gap-2 flex-wrap">
           {SHARE_ITEMS.map((item) => (
@@ -226,7 +226,7 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
                 {item.icon}
               </button>
               {tooltip === item.id && (
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-0.5 rounded bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-[10px] font-medium whitespace-nowrap pointer-events-none z-10">
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-0.5 rounded bg-stone-900 dark:bg-white text-white dark:text-stone-900 text-[10px] font-medium whitespace-nowrap pointer-events-none z-10">
                   {item.label}
                 </div>
               )}
@@ -249,7 +249,7 @@ export default function ShareButtons({ url, title }: ShareButtonsProps) {
               {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
             </button>
             {tooltip === "copy" && (
-              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-0.5 rounded bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-[10px] font-medium whitespace-nowrap pointer-events-none z-10">
+              <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-0.5 rounded bg-stone-900 dark:bg-white text-white dark:text-stone-900 text-[10px] font-medium whitespace-nowrap pointer-events-none z-10">
                 {copied ? "복사됨!" : "링크 복사"}
               </div>
             )}

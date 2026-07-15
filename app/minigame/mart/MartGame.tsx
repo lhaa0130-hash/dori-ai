@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, Eye, Lightbulb, LockKeyhole, PackagePlus, Pause, RotateCcw, Settings, Volume2, VolumeX, Vibrate } from "lucide-react";
+import { ArrowLeft, Lightbulb, LockKeyhole, PackagePlus, Pause, RotateCcw, Settings, Volume2, VolumeX, Vibrate } from "lucide-react";
 import IlloGameShell from "@/components/game/illo-play/IlloGameShell";
 import IlloGameDialog from "@/components/game/illo-play/IlloGameDialog";
 import IlloGameResult from "@/components/game/illo-play/IlloGameResult";
@@ -12,10 +12,12 @@ import { trackGameEvent } from "@/lib/minigames/analytics";
 import { getMiniGame } from "@/lib/minigames/registry";
 import {
   PRODUCT_CATALOG,
+  MART_LEVEL_COUNT,
   addBasketShelf,
   calculateStars,
   canMove,
   createInitialState,
+  expandMartLevels,
   moveItem,
   undoMove,
   type MartLevel,
@@ -23,6 +25,7 @@ import {
   type ProductCategory,
   type ProductId,
 } from "@/lib/minigames/mart-engine";
+import { showRewardedAd, type RewardedPlacement } from "@/lib/minigames/rewarded-ads";
 import {
   DEFAULT_ILLO_PLAY_PROGRESS,
   clearLocalRun,
@@ -34,7 +37,11 @@ import {
 } from "@/lib/minigames/storage";
 import type { IlloPlayProgress } from "@/lib/minigames/types";
 
-const LEVELS = levelsJson as MartLevel[];
+const LEVELS = expandMartLevels(levelsJson as MartLevel[]);
+type BoosterType = "basket";
+const BOOSTER_COPY: Record<BoosterType, { title: string; description: string; placement: RewardedPlacement }> = {
+  basket: { title: "보관칸 추가", description: "15초 보상형 광고를 끝까지 보면 이번 레벨에 빈 보관칸 1개가 추가돼요.", placement: "mart-basket" },
+};
 const ERROR_MESSAGES = {
   "same-shelf": "같은 선반이에요.",
   "source-empty": "옮길 상품이 없어요.",
@@ -59,14 +66,18 @@ function difficultyLabel(levelId: number) {
   if (levelId <= 10) return "주문 시작";
   if (levelId <= 18) return "잠금 선반";
   if (levelId <= 24) return "우선 주문";
-  return "마감 러시";
+  if (levelId <= 30) return "마감 러시";
+  if (levelId <= 60) return "숨은 재고";
+  if (levelId <= 100) return "잠긴 보관함";
+  if (levelId <= 150) return "복합 주문";
+  return "마스터 진열";
 }
 
-function ProductToken({ productId, isFront, peek }: { productId: ProductId; isFront: boolean; peek: boolean }) {
+function ProductToken({ productId, isFront }: { productId: ProductId; isFront: boolean }) {
   const product = PRODUCT_CATALOG[productId];
   return (
     <div
-      className={`mart-product mart-product-${product.shape} ${isFront ? "is-front" : "is-back"} ${peek ? "is-peeking" : ""}`}
+      className={`mart-product mart-product-${product.shape} ${isFront ? "is-front" : "is-back"}`}
       style={{ "--product-color": product.color } as React.CSSProperties}
       data-product={productId}
       aria-label={`${product.label}${isFront ? ", 이동 가능" : ", 뒤쪽 상품"}`}
@@ -90,16 +101,19 @@ export default function MartGame() {
   const [selectedShelf, setSelectedShelf] = useState<number | null>(null);
   const [paused, setPaused] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
-  const [peek, setPeek] = useState(false);
-  const [peekUsed, setPeekUsed] = useState(false);
+  const [undoRemaining, setUndoRemaining] = useState(2);
+  const [pendingBooster, setPendingBooster] = useState<BoosterType | null>(null);
+  const [rewardLoading, setRewardLoading] = useState(false);
   const [invalidShelf, setInvalidShelf] = useState<number | null>(null);
   const [announcement, setAnnouncement] = useState("");
   const [celebration, setCelebration] = useState<ProductId | null>(null);
   const [hint, setHint] = useState<{ from: number; to: number } | null>(null);
   const handledResult = useRef(false);
+  const progressRef = useRef(DEFAULT_ILLO_PLAY_PROGRESS);
 
   const persistProgress = useCallback((next: IlloPlayProgress) => {
     const saved = writeLocalProgress(next);
+    progressRef.current = saved;
     setProgress(saved);
     void saveGameState("illo-mart", JSON.stringify(saved));
     return saved;
@@ -114,17 +128,19 @@ export default function MartGame() {
       if (
         run?.level
         && run.level >= 1
-        && run.level <= 30
+        && run.level <= MART_LEVEL_COUNT
         && run.state?.status === "playing"
         && run.state.shelves?.length === LEVELS[run.level - 1].shelfCount
+        && run.state.shelves.every((shelf) => shelf.items.every((item) => LEVELS[run.level - 1].products.includes(item)))
       ) {
         setLevelNumber(run.level);
         setState(run.state);
       } else {
-        const nextLevel = Math.min(30, Math.max(1, loaded.recentLevels[0] || loaded.unlockedLevel));
+        const nextLevel = Math.min(MART_LEVEL_COUNT, Math.max(1, loaded.recentLevels[0] || loaded.unlockedLevel));
         setLevelNumber(nextLevel);
         setState(createInitialState(LEVELS[nextLevel - 1]));
       }
+      progressRef.current = loaded;
       setProgress(loaded);
       setHydrated(true);
     };
@@ -148,7 +164,7 @@ export default function MartGame() {
     const timer = window.setTimeout(() => {
       const currentRun = { level: levelNumber, state } satisfies SavedRun;
       writeLocalRun(currentRun);
-      persistProgress({ ...progress, currentRun });
+      persistProgress({ ...progressRef.current, currentRun });
     }, 180);
     return () => window.clearTimeout(timer);
   }, [hydrated, levelNumber, state]); // progress intentionally omitted to avoid save loops
@@ -162,7 +178,7 @@ export default function MartGame() {
     const previousBest = progress.bestMoves[key];
     const next: IlloPlayProgress = {
       ...progress,
-      unlockedLevel: won ? Math.max(progress.unlockedLevel, Math.min(30, level.id + 1)) : progress.unlockedLevel,
+      unlockedLevel: won ? Math.max(progress.unlockedLevel, Math.min(MART_LEVEL_COUNT, level.id + 1)) : progress.unlockedLevel,
       bestStars: won ? { ...progress.bestStars, [key]: Math.max(progress.bestStars[key] || 0, stars) } : progress.bestStars,
       bestMoves: won ? { ...progress.bestMoves, [key]: previousBest ? Math.min(previousBest, state.moves) : state.moves } : progress.bestMoves,
       recentLevels: [level.id, ...progress.recentLevels.filter((id) => id !== level.id)].slice(0, 5),
@@ -250,42 +266,59 @@ export default function MartGame() {
   };
 
   const startLevel = useCallback((number: number, retry = false) => {
-    const safe = Math.min(30, Math.max(1, number));
+    const safe = Math.min(MART_LEVEL_COUNT, Math.max(1, number));
     setLevelNumber(safe);
     setState(createInitialState(LEVELS[safe - 1]));
     setHistory([]);
     setSelectedShelf(null);
     setHint(null);
-    setPeek(false);
-    setPeekUsed(false);
+    setUndoRemaining(2);
+    setPendingBooster(null);
+    setRewardLoading(false);
     setPaused(false);
     handledResult.current = false;
     trackGameEvent(retry ? "game_retry" : "game_start", { level: safe });
   }, []);
 
-  const useUndo = () => {
+  const grantUndo = () => {
+    if (undoRemaining <= 0) return;
     const previous = history[history.length - 1];
     const restored = undoMove(state, previous);
     if (!restored) return;
     setState(restored);
     setHistory((items) => items.slice(0, -1));
     setSelectedShelf(null);
+    setUndoRemaining((count) => Math.max(0, count - 1));
     trackGameEvent("booster_use", { level: level.id, booster: "undo" });
   };
 
-  const useBasket = () => {
+  const grantBasket = () => {
     if (level.id <= 3 || state.basketAdded) return;
     setHistory((items) => [...items.slice(-19), state]);
     setState(addBasketShelf(state));
     trackGameEvent("booster_use", { level: level.id, booster: "basket" });
   };
 
-  const usePeek = () => {
-    if (level.id <= 3 || peekUsed) return;
-    setPeek(true);
-    setPeekUsed(true);
-    trackGameEvent("booster_use", { level: level.id, booster: "peek" });
-    window.setTimeout(() => setPeek(false), 3000);
+  const requestBooster = (booster: BoosterType) => {
+    setPendingBooster(booster);
+    trackGameEvent("reward_ad_offer", { level: level.id, booster });
+  };
+
+  const confirmRewardedBooster = async () => {
+    if (!pendingBooster || rewardLoading) return;
+    const booster = pendingBooster;
+    setRewardLoading(true);
+    const result = await showRewardedAd({ placement: BOOSTER_COPY[booster].placement, game: "illo-mart", level: level.id });
+    setRewardLoading(false);
+    setPendingBooster(null);
+    if (result.status !== "granted") {
+      setAnnouncement(result.status === "unavailable" ? "광고 연결 준비 중이에요. 잠시 후 다시 시도해주세요." : "광고를 끝까지 보면 기능을 사용할 수 있어요.");
+      trackGameEvent("reward_ad_failed", { level: level.id, booster, status: result.status });
+      return;
+    }
+    if (booster === "basket") grantBasket();
+    setAnnouncement(`${BOOSTER_COPY[booster].title} 보상이 적용됐어요.`);
+    trackGameEvent("reward_ad_granted", { level: level.id, booster, provider: result.provider });
   };
 
   const showHint = () => {
@@ -318,6 +351,9 @@ export default function MartGame() {
     : undefined;
   const moveCount = level.moveLimit === null ? state.moves : Math.max(0, level.moveLimit - state.moves);
   const moveCaption = level.moveLimit === null ? "MOVES" : "LEFT";
+  const remainingItems = state.shelves.reduce((sum, shelf) => sum + shelf.items.length, 0);
+  const remainingSets = Math.max(0, level.products.length - state.completedProducts.length);
+  const threeStarTarget = Math.min(level.par, level.scrambleMoves + 1);
 
   if (!level) {
     return <div className="mart-fatal">레벨을 불러오지 못했어요. 잠시 후 다시 시도해주세요.</div>;
@@ -334,25 +370,30 @@ export default function MartGame() {
       reducedMotion={progress.settings.reducedMotion}
       controls={(
         <div className="mart-booster-row">
-          <button type="button" onClick={useUndo} disabled={history.length === 0} aria-label="직전 이동 취소">
-            <RotateCcw aria-hidden="true" /><span>Undo</span><small>{history.length ? "1회" : "없음"}</small>
+          <button type="button" onClick={grantUndo} disabled={history.length === 0 || undoRemaining === 0} aria-label={`무료 되돌리기, ${undoRemaining}회 남음`}>
+            <RotateCcw aria-hidden="true" /><span>되돌리기</span><small>무료 {undoRemaining}회</small>
           </button>
-          <button type="button" onClick={useBasket} disabled={level.id <= 3 || state.basketAdded} aria-label="임시 보관 선반 추가">
-            <PackagePlus aria-hidden="true" /><span>Basket</span><small>{level.id <= 3 ? "Lv.4" : state.basketAdded ? "사용함" : "1회"}</small>
-          </button>
-          <button type="button" onClick={usePeek} disabled={level.id <= 3 || peekUsed} aria-label="뒤쪽 상품 3초 보기">
-            <Eye aria-hidden="true" /><span>Peek</span><small>{level.id <= 3 ? "Lv.4" : peekUsed ? "사용함" : "3초"}</small>
+          <button type="button" onClick={() => requestBooster("basket")} disabled={level.id <= 3 || state.basketAdded} aria-label="광고를 보고 임시 보관 선반 추가">
+            <PackagePlus aria-hidden="true" /><span>보관칸</span><small>{level.id <= 3 ? "Lv.4" : state.basketAdded ? "사용함" : "광고 15초"}</small>
           </button>
         </div>
       )}
     >
       <div className="mart-store-scene">
+      <svg className="mart-alpha-filter" aria-hidden="true" width="0" height="0">
+        <filter id="mart-alpha-clean" colorInterpolationFilters="sRGB">
+          <feComponentTransfer>
+            <feFuncA type="linear" slope="1.35" intercept="-0.16" />
+          </feComponentTransfer>
+        </filter>
+      </svg>
       <header className="mart-cabinet-header">
         <button type="button" className="mart-cabinet-back" onClick={() => router.push("/minigame")} aria-label="미니게임 목록으로 돌아가기">
           <ArrowLeft aria-hidden="true" />
         </button>
         <div className="mart-level-plaque"><span>LEVEL</span><strong>{level.id}</strong></div>
         <div className="mart-cabinet-logo" aria-label="illo MART"><b>illo</b><i>:</i><strong>MART</strong></div>
+        <div className="mart-stock-plaque"><span>남은 상품</span><strong>{remainingItems}</strong><em>개 · {remainingSets}세트</em></div>
         <div className="mart-moves-plaque"><strong>{moveCount}</strong><span>{moveCaption}</span></div>
         <div className="mart-cabinet-actions">
           <button type="button" onClick={() => setSettingsOpen(true)} aria-label="설정 열기"><Settings aria-hidden="true" /></button>
@@ -421,10 +462,20 @@ export default function MartGame() {
 
       <section
         className="mart-shelves"
-        aria-label="상품 선반"
-        style={{ "--shelf-count": Math.min(state.shelves.length, 8) } as React.CSSProperties}
+        aria-label="15칸 상품 진열대"
       >
-        {state.shelves.map((shelf, index) => (
+        {Array.from({ length: 15 }, (_, index) => {
+          const shelf = state.shelves[index];
+          if (!shelf) {
+            return (
+              <button type="button" key={`locked-${index}`} className="mart-shelf is-display-locked" disabled aria-label={`${index + 1}번 진열칸, 잠김`}>
+                <span className="mart-shelf-number">{String(index + 1).padStart(2, "0")}</span>
+                <span className="mart-lock"><LockKeyhole aria-hidden="true" /><small>아직 잠긴 칸</small></span>
+                <span className="mart-shelf-base" />
+              </button>
+            );
+          }
+          return (
           <button
             type="button"
             key={shelf.id}
@@ -434,15 +485,20 @@ export default function MartGame() {
           >
             <span className="mart-shelf-topline" aria-hidden="true"><i /><i /><i /></span>
             <span className="mart-shelf-number">{shelf.basket ? "B" : String(index + 1).padStart(2, "0")}</span>
+            {!shelf.locked && shelf.items.length > 0 && (
+              <span className="mart-stock-count" aria-label={`현재 재고 ${shelf.items.length}개`}>
+                <i aria-hidden="true" /><span>재고</span><strong>{shelf.items.length}</strong>
+              </span>
+            )}
             {shelf.locked ? (
-              <span className="mart-lock"><LockKeyhole aria-hidden="true" /><small>{level.unlockAfterSets}세트 후 열림</small></span>
+              <span className="mart-lock"><LockKeyhole aria-hidden="true" /><small>{level.unlockAfterMoves ? `${level.unlockAfterMoves}회 이동 후 열림` : `${level.unlockAfterSets}세트 후 열림`}</small></span>
             ) : (
               <span className="mart-product-stack">
                 {[0, 1, 2].map((slot) => {
                   const productId = shelf.items[slot];
                   return (
                     <span key={slot} className={`mart-slot mart-slot-${slot + 1}`}>
-                      {productId && <ProductToken productId={productId} isFront={slot === shelf.items.length - 1} peek={peek} />}
+                      {productId && <ProductToken productId={productId} isFront={slot === shelf.items.length - 1} />}
                     </span>
                   );
                 })}
@@ -450,7 +506,8 @@ export default function MartGame() {
             )}
             <span className="mart-shelf-base" />
           </button>
-        ))}
+          );
+        })}
       </section>
       <div className="mart-checkout-line" aria-hidden="true"><span>ILLO MART</span><i /><i /><i /></div>
       </div>
@@ -514,6 +571,20 @@ export default function MartGame() {
         </IlloGameDialog>
       )}
 
+      {pendingBooster && (
+        <IlloGameDialog
+          eyebrow="선택형 보상 광고"
+          title={BOOSTER_COPY[pendingBooster].title}
+          description={BOOSTER_COPY[pendingBooster].description}
+          primaryLabel={rewardLoading ? "광고 불러오는 중…" : "15초 광고 보고 사용"}
+          onPrimary={() => { void confirmRewardedBooster(); }}
+          secondaryLabel="취소"
+          onSecondary={() => { if (!rewardLoading) setPendingBooster(null); }}
+        >
+          <p className="mart-reward-note">광고를 보지 않아도 모든 레벨을 풀 수 있어요. 이 기능은 선택사항입니다.</p>
+        </IlloGameDialog>
+      )}
+
       {state.status !== "playing" && (
         <IlloGameResult
           won={state.status === "won"}
@@ -523,11 +594,12 @@ export default function MartGame() {
           onRetry={() => startLevel(level.id, true)}
           onNext={state.status === "won" ? () => {
             trackGameEvent("next_game_click", { level: level.id, nextLevel: level.id + 1 });
-            if (level.id < 30) startLevel(level.id + 1);
+            if (level.id < MART_LEVEL_COUNT) startLevel(level.id + 1);
             else router.push("/minigame");
           } : undefined}
-          nextLabel={level.id < 30 ? "다음 레벨" : "게임 목록"}
+          nextLabel={level.id < MART_LEVEL_COUNT ? "다음 레벨" : "게임 목록"}
           recommendation={recommendation}
+          starCriteria={`3★ ${threeStarTarget}회 이하 · 2★ ${level.par}회 이하 · 클리어 1★`}
         />
       )}
     </IlloGameShell>

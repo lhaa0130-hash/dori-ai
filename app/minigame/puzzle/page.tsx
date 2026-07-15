@@ -144,13 +144,13 @@ export default function SlidePuzzleGame() {
 
             {/* Header */}
             <header className="relative w-full max-w-md flex items-center justify-between gap-3 pt-2 mb-6">
-                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-500 hover:text-white transition-colors">
+                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-stone-500 hover:text-white transition-colors">
                     <ArrowLeft className="w-4 h-4" />
                     미니게임
                 </Link>
                 <div className="text-[15px] font-extrabold tracking-tight text-white">🧩 슬라이드 퍼즐</div>
                 <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
-                    <div className="text-[9px] uppercase tracking-widest text-neutral-500">MOVES</div>
+                    <div className="text-[9px] uppercase tracking-widest text-stone-500">MOVES</div>
                     <div key={moves} className="arcade-pop inline-block text-sm font-bold text-white">
                         <CountUp value={moves} className="tabular-nums" />
                     </div>
@@ -163,7 +163,7 @@ export default function SlidePuzzleGame() {
                 <div className="flex gap-4">
                     <button
                         onClick={() => setShowNumbers(!showNumbers)}
-                        className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-[11px] font-semibold transition-all active:scale-[0.97] ${showNumbers ? "bg-[#F9954E]/10 border-[#F9954E]/40 text-[#F9954E]" : "bg-white/[0.05] border-white/10 text-neutral-400 hover:bg-white/[0.1] hover:text-neutral-200"}`}
+                        className={`inline-flex items-center gap-1.5 rounded-xl border px-3 py-2 text-[11px] font-semibold transition-all active:scale-[0.97] ${showNumbers ? "bg-[#F9954E]/10 border-[#F9954E]/40 text-[#F9954E]" : "bg-white/[0.05] border-white/10 text-stone-400 hover:bg-white/[0.1] hover:text-stone-200"}`}
                     >
                         <HelpCircle className="w-4 h-4" /> 번호 힌트
                     </button>
@@ -231,7 +231,7 @@ export default function SlidePuzzleGame() {
                             >
                                 <Trophy className="arcade-float w-12 h-12 text-[#F9954E] mx-auto mb-3 drop-shadow-lg" />
                                 <h2 className="text-xl font-extrabold tracking-tight text-white mb-4">퍼즐 완성!</h2>
-                                <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">MOVES</div>
+                                <div className="text-[10px] uppercase tracking-widest text-stone-500 mb-1">MOVES</div>
                                 <div className="arcade-grad-text text-5xl font-black tabular-nums mb-6">
                                     <CountUp value={moves} />
                                 </div>
@@ -249,7 +249,7 @@ export default function SlidePuzzleGame() {
 
                 <button
                     onClick={initGame}
-                    className="arcade-shine inline-flex items-center gap-2 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] font-semibold transition-all active:scale-[0.97] px-5 py-3 text-sm"
+                    className="arcade-shine inline-flex items-center gap-2 rounded-xl bg-white/[0.06] border border-white/10 text-stone-200 hover:bg-white/[0.1] font-semibold transition-all active:scale-[0.97] px-5 py-3 text-sm"
                 >
                     <RefreshCw className="w-4 h-4" /> 다시 섞기
                 </button>

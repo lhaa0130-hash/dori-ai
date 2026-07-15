@@ -13,9 +13,9 @@ const STATUS_STYLE: Record<string, string> = {
   "오픈":       "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20",
   "지금 무료":  "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20",
   "이용 가능":  "text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-900/20",
-  "테스트 중":  "text-neutral-500 dark:text-neutral-400 bg-neutral-100 dark:bg-zinc-800",
-  "준비 중":    "text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-zinc-800",
-  "기획 중":    "text-neutral-400 dark:text-neutral-500 bg-neutral-100 dark:bg-zinc-800",
+  "테스트 중":  "text-stone-500 dark:text-stone-400 bg-stone-100 dark:bg-zinc-800",
+  "준비 중":    "text-stone-400 dark:text-stone-500 bg-stone-100 dark:bg-zinc-800",
+  "기획 중":    "text-stone-400 dark:text-stone-500 bg-stone-100 dark:bg-zinc-800",
 };
 
 export default function ProjectsPage() {
@@ -31,12 +31,12 @@ export default function ProjectsPage() {
     <main className="w-full min-h-screen">
 
       {/* ── 히어로 ── */}
-      <section className="pt-8 pb-8 border-b border-neutral-100 dark:border-zinc-900">
+      <section className="pt-8 pb-8 border-b border-stone-100 dark:border-zinc-900">
         <p className="text-[11px] font-bold text-[#F9954E] mb-3 tracking-wide uppercase">Projects by illo</p>
-        <h1 className="text-[34px] sm:text-[44px] font-extrabold text-neutral-950 dark:text-white leading-[1.12] tracking-tight mb-2 break-keep">
+        <h1 className="text-[34px] sm:text-[44px] font-extrabold text-stone-950 dark:text-white leading-[1.12] tracking-tight mb-2 break-keep">
           AI로 만드는<br />실용 서비스들
         </h1>
-        <p className="text-[14px] text-neutral-400 dark:text-neutral-500 leading-relaxed break-keep">
+        <p className="text-[14px] text-stone-400 dark:text-stone-500 leading-relaxed break-keep">
           illo가 직접 기획·개발·운영하는 AI 서비스예요.<br />
           원하는 서비스가 있다면 의뢰도 받습니다.
         </p>
@@ -44,7 +44,7 @@ export default function ProjectsPage() {
 
       {/* ── 진행 중인 프로젝트 ── */}
       <section className="py-8">
-        <p className="text-[11px] font-bold text-neutral-400 dark:text-zinc-600 uppercase tracking-wide mb-5">운영 중 · {active.length}개</p>
+        <p className="text-[11px] font-bold text-stone-400 dark:text-zinc-600 uppercase tracking-wide mb-5">운영 중 · {active.length}개</p>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
           {active.map((p) => {
             const now = new Date();
@@ -56,10 +56,10 @@ export default function ProjectsPage() {
             return (
               <div
                 key={p.slug}
-                className="flex flex-col rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden"
+                className="flex flex-col rounded-2xl border border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden"
               >
                 {/* 카드 헤더 */}
-                <div className="px-5 pt-5 pb-4 border-b border-neutral-100 dark:border-zinc-800">
+                <div className="px-5 pt-5 pb-4 border-b border-stone-100 dark:border-zinc-800">
                   <div className="flex items-center justify-between gap-3 mb-3">
                     <div className="flex items-center gap-3">
                       <div className="w-10 h-10 rounded-xl bg-[#F9954E]/8 dark:bg-[#F9954E]/10 flex items-center justify-center text-[22px] flex-shrink-0 overflow-hidden">
@@ -68,15 +68,15 @@ export default function ProjectsPage() {
                           : p.emoji}
                       </div>
                       <div>
-                        <h2 className="text-[16px] font-extrabold text-neutral-950 dark:text-white leading-tight">{p.name}</h2>
-                        <span className="text-[10px] text-neutral-400 dark:text-zinc-500">{p.tag}</span>
+                        <h2 className="text-[16px] font-extrabold text-stone-950 dark:text-white leading-tight">{p.name}</h2>
+                        <span className="text-[10px] text-stone-400 dark:text-zinc-500">{p.tag}</span>
                       </div>
                     </div>
                     {ADMIN_ONLY_SLUGS.has(p.slug)
                       ? <span className="text-[10px] font-bold px-2.5 py-1 rounded-full shrink-0 text-[#F9954E] bg-[#F9954E]/10">🔒 관리자 전용</span>
                       : <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full shrink-0 ${STATUS_STYLE[p.status] ?? ""}`}>{p.status}</span>}
                   </div>
-                  <p className="text-[13px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">{p.desc}</p>
+                  <p className="text-[13px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep">{p.desc}</p>
                 </div>
 
                 {/* 기능 목록 */}
@@ -86,8 +86,8 @@ export default function ProjectsPage() {
                       <li key={f.title} className="flex items-start gap-2">
                         <span className="text-[14px] leading-none mt-0.5 flex-shrink-0">{f.icon}</span>
                         <div className="min-w-0">
-                          <span className="text-[12.5px] font-bold text-neutral-900 dark:text-white">{f.title}</span>
-                          <span className="text-[12px] text-neutral-500 dark:text-neutral-400"> — {f.detail}</span>
+                          <span className="text-[12.5px] font-bold text-stone-900 dark:text-white">{f.title}</span>
+                          <span className="text-[12px] text-stone-500 dark:text-stone-400"> — {f.detail}</span>
                         </div>
                       </li>
                     ))}
@@ -104,7 +104,7 @@ export default function ProjectsPage() {
                       {openLabel} <ArrowRight className="w-3.5 h-3.5" />
                     </Link>
                   ) : (
-                    <div className="flex items-center justify-center w-full py-3 rounded-xl bg-neutral-50 dark:bg-zinc-900 text-neutral-300 dark:text-zinc-600 text-[13px] font-bold cursor-not-allowed">
+                    <div className="flex items-center justify-center w-full py-3 rounded-xl bg-stone-50 dark:bg-zinc-900 text-stone-300 dark:text-zinc-600 text-[13px] font-bold cursor-not-allowed">
                       {openLabel}
                     </div>
                   )}
@@ -118,22 +118,22 @@ export default function ProjectsPage() {
       {/* ── 준비 중 ── */}
       {soon.length > 0 && (
         <section className="pb-10">
-          <p className="text-[11px] font-bold text-neutral-400 dark:text-zinc-600 uppercase tracking-wide mb-4">준비 중</p>
+          <p className="text-[11px] font-bold text-stone-400 dark:text-zinc-600 uppercase tracking-wide mb-4">준비 중</p>
           <div className="flex flex-col gap-2.5">
             {soon.map((p) => (
               <div
                 key={p.slug}
-                className="flex items-start gap-4 px-5 py-4 rounded-2xl border border-neutral-100 dark:border-zinc-900"
+                className="flex items-start gap-4 px-5 py-4 rounded-2xl border border-stone-100 dark:border-zinc-900"
               >
-                <div className="w-9 h-9 rounded-lg bg-neutral-100 dark:bg-zinc-900 flex items-center justify-center text-[18px] flex-shrink-0 grayscale opacity-50">
+                <div className="w-9 h-9 rounded-lg bg-stone-100 dark:bg-zinc-900 flex items-center justify-center text-[18px] flex-shrink-0 grayscale opacity-50">
                   {p.emoji}
                 </div>
                 <div className="flex-1 min-w-0">
                   <div className="flex items-center gap-2 mb-0.5">
-                    <span className="text-[14px] font-extrabold text-neutral-600 dark:text-neutral-400">{p.name}</span>
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-400 dark:text-zinc-600">{p.status}</span>
+                    <span className="text-[14px] font-extrabold text-stone-600 dark:text-stone-400">{p.name}</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-100 dark:bg-zinc-800 text-stone-400 dark:text-zinc-600">{p.status}</span>
                   </div>
-                  <p className="text-[12px] text-neutral-400 dark:text-zinc-600 break-keep leading-relaxed">{p.desc}</p>
+                  <p className="text-[12px] text-stone-400 dark:text-zinc-600 break-keep leading-relaxed">{p.desc}</p>
                 </div>
               </div>
             ))}
@@ -142,11 +142,11 @@ export default function ProjectsPage() {
       )}
 
       {/* ── 의뢰하기 ── */}
-      <section className="pb-12 border-t border-neutral-100 dark:border-zinc-900 pt-8">
-        <p className="text-[11px] font-bold text-neutral-400 dark:text-zinc-600 uppercase tracking-wide mb-4">맞춤 제작 의뢰</p>
+      <section className="pb-12 border-t border-stone-100 dark:border-zinc-900 pt-8">
+        <p className="text-[11px] font-bold text-stone-400 dark:text-zinc-600 uppercase tracking-wide mb-4">맞춤 제작 의뢰</p>
         <div className="rounded-2xl border border-[#F9954E]/30 dark:border-[#F9954E]/20 bg-[#F9954E]/5 dark:bg-[#F9954E]/5 p-5">
-          <p className="text-[15px] font-extrabold text-neutral-900 dark:text-white mb-1">사용자 요청 프로젝트도 제작합니다</p>
-          <p className="text-[13px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep mb-4">
+          <p className="text-[15px] font-extrabold text-stone-900 dark:text-white mb-1">사용자 요청 프로젝트도 제작합니다</p>
+          <p className="text-[13px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep mb-4">
             아이디어가 있으시면 저희가 AI 서비스로 만들어 드려요.<br />
             의뢰 시 아래 내용을 함께 보내주시면 빠르게 검토해 드립니다.
           </p>
@@ -157,7 +157,7 @@ export default function ProjectsPage() {
               "대상 사용자와 사용 환경 (웹·앱 등)",
               "원하는 일정과 예산 범위",
             ].map((item) => (
-              <li key={item} className="flex items-start gap-2 text-[12px] text-neutral-500 dark:text-neutral-400">
+              <li key={item} className="flex items-start gap-2 text-[12px] text-stone-500 dark:text-stone-400">
                 <span className="text-[#F9954E] mt-0.5 shrink-0 font-bold">·</span>
                 {item}
               </li>

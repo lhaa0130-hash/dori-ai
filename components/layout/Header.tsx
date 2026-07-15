@@ -94,7 +94,7 @@ export default function Header() {
   return (
     <>
       {/* ── 헤더 ── */}
-      <header className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-black border-b border-neutral-200 dark:border-zinc-800 font-sans">
+      <header className="fixed top-0 left-0 right-0 z-50 bg-white dark:bg-black border-b border-stone-200 dark:border-zinc-800 font-sans">
         {/* 본문(main: xl:px-[260px])과 좌·우 동일 정렬 — 우측 컨트롤이 본문/미리보기 끝선에 맞음 */}
         <div className="w-full h-16 flex items-center gap-4 px-6 xl:px-[260px]">
 
@@ -122,9 +122,9 @@ export default function Header() {
                     </button>
                   )}
                   <div className="absolute top-full left-0 pt-2 opacity-0 invisible group-hover/nav:opacity-100 group-hover/nav:visible transition-all duration-300 translate-y-1 group-hover/nav:translate-y-0 z-50">
-                    <div className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden py-1 min-w-[160px]">
+                    <div className="bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden py-1 min-w-[160px]">
                       {item.children.map((c) => (
-                        <Link key={c.name} href={c.href} className="flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 hover:text-[#F9954E] transition-colors whitespace-nowrap">
+                        <Link key={c.name} href={c.href} className="flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-stone-700 dark:text-stone-200 hover:bg-stone-50 dark:hover:bg-zinc-800 hover:text-[#F9954E] transition-colors whitespace-nowrap">
                           <span className="w-4 text-center">{c.emoji}</span><span>{c.name}</span>
                         </Link>
                       ))}
@@ -144,18 +144,18 @@ export default function Header() {
 
             {/* 언어 토글 (세그먼트 KO/EN, 영어판 있는 페이지에서만) */}
             {showLang && (
-              <div className="flex-shrink-0 flex items-center h-8 rounded-full bg-neutral-100 dark:bg-zinc-800/80 p-0.5 text-[11px] font-extrabold">
+              <div className="flex-shrink-0 flex items-center h-8 rounded-full bg-stone-100 dark:bg-zinc-800/80 p-0.5 text-[11px] font-extrabold">
                 <Link
                   href={koUrl}
                   aria-label="한국어로 보기"
-                  className={`px-2.5 h-7 flex items-center rounded-full transition-colors ${!isEn ? "bg-white dark:bg-zinc-950 text-[#F9954E] shadow-sm" : "text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300"}`}
+                  className={`px-2.5 h-7 flex items-center rounded-full transition-colors ${!isEn ? "bg-white dark:bg-zinc-950 text-[#F9954E] shadow-sm" : "text-stone-400 dark:text-stone-500 hover:text-stone-600 dark:hover:text-stone-300"}`}
                 >
                   KO
                 </Link>
                 <Link
                   href={enUrl || koUrl}
                   aria-label="View in English"
-                  className={`px-2.5 h-7 flex items-center rounded-full transition-colors ${isEn ? "bg-white dark:bg-zinc-950 text-[#F9954E] shadow-sm" : "text-neutral-400 dark:text-neutral-500 hover:text-neutral-600 dark:hover:text-neutral-300"}`}
+                  className={`px-2.5 h-7 flex items-center rounded-full transition-colors ${isEn ? "bg-white dark:bg-zinc-950 text-[#F9954E] shadow-sm" : "text-stone-400 dark:text-stone-500 hover:text-stone-600 dark:hover:text-stone-300"}`}
                 >
                   EN
                 </Link>
@@ -163,7 +163,7 @@ export default function Header() {
             )}
 
             {/* 검색 (데스크탑) */}
-            <button onClick={() => setSearchOpen(true)} aria-label="검색" className="hidden lg:flex flex-shrink-0 w-10 h-10 items-center justify-center rounded-full hover:bg-neutral-100 dark:hover:bg-zinc-800 transition-colors text-foreground">
+            <button onClick={() => setSearchOpen(true)} aria-label="검색" className="hidden lg:flex flex-shrink-0 w-10 h-10 items-center justify-center rounded-full hover:bg-stone-100 dark:hover:bg-zinc-800 transition-colors text-foreground">
               <Search className="w-5 h-5" strokeWidth={2.5} />
             </button>
 
@@ -195,7 +195,7 @@ export default function Header() {
             {/* 햄버거 (모바일만) */}
             <button
               onClick={() => setMobileOpen(prev => !prev)}
-              className="lg:hidden flex-shrink-0 w-11 h-11 flex items-center justify-center rounded-xl hover:bg-neutral-100 dark:hover:bg-zinc-800 transition-colors text-foreground"
+              className="lg:hidden flex-shrink-0 w-11 h-11 flex items-center justify-center rounded-xl hover:bg-stone-100 dark:hover:bg-zinc-800 transition-colors text-foreground"
               aria-label={mobileOpen ? "메뉴 닫기" : "메뉴 열기"}
             >
               {mobileOpen
@@ -220,30 +220,30 @@ export default function Header() {
                     <ChevronDown className="w-3 h-3 opacity-50 group-hover:rotate-180 transition-transform duration-300" />
                   </Link>
                   <div className="absolute top-full right-0 mt-2 w-52 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
-                    <div className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden py-1">
-                      <Link href="/profile" className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
+                    <div className="bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden py-1">
+                      <Link href="/profile" className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-stone-700 dark:text-stone-200 hover:bg-stone-50 dark:hover:bg-zinc-800 transition-colors">
                         <User className="w-4 h-4 text-[#F9954E]" /><span>{isEn ? "My page" : "마이페이지"}</span>
                       </Link>
-                      <Link href="/feed" className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
+                      <Link href="/feed" className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-stone-700 dark:text-stone-200 hover:bg-stone-50 dark:hover:bg-zinc-800 transition-colors">
                         <Newspaper className="w-4 h-4 text-[#F9954E]" /><span>{isEn ? "Feed" : "피드"}</span>
                       </Link>
-                      <Link href="/messages" className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
+                      <Link href="/messages" className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-stone-700 dark:text-stone-200 hover:bg-stone-50 dark:hover:bg-zinc-800 transition-colors">
                         <MessageCircle className="w-4 h-4 text-[#F9954E]" /><span>{isEn ? "Messages" : "메시지"}</span>
                       </Link>
-                      <Link href="/shop" className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-neutral-700 dark:text-neutral-200 hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors">
+                      <Link href="/shop" className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-stone-700 dark:text-stone-200 hover:bg-stone-50 dark:hover:bg-zinc-800 transition-colors">
                         <span className="w-4 text-center text-[#F9954E]">🍬</span><span>{isEn ? "Shop" : "상점"}</span>
                       </Link>
 
                       {isAdmin && (
                         <>
-                          <div className="my-1 border-t border-neutral-100 dark:border-zinc-800" />
+                          <div className="my-1 border-t border-stone-100 dark:border-zinc-800" />
                           <Link href="/admin" className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-orange-500 hover:bg-orange-50 dark:hover:bg-orange-500/10 transition-colors">
                             <span className="w-4 text-center">🛡️</span><span>{isEn ? "Admin" : "관리자 패널"}</span>
                           </Link>
                         </>
                       )}
 
-                      <div className="my-1 border-t border-neutral-100 dark:border-zinc-800" />
+                      <div className="my-1 border-t border-stone-100 dark:border-zinc-800" />
                       <button onClick={handleSignOut} className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 transition-colors">
                         <LogOut className="w-4 h-4" /><span>{isEn ? "Sign out" : "로그아웃"}</span>
                       </button>
@@ -272,7 +272,7 @@ export default function Header() {
       <div
         className={cn(
           "fixed top-16 left-0 right-0 z-40 lg:hidden",
-          "bg-white dark:bg-black border-b border-neutral-200 dark:border-zinc-800",
+          "bg-white dark:bg-black border-b border-stone-200 dark:border-zinc-800",
           "overflow-y-auto transition-all duration-300 ease-in-out",
           mobileOpen
             ? "opacity-100 translate-y-0 pointer-events-auto max-h-[calc(100dvh-4rem)]"
@@ -282,19 +282,19 @@ export default function Header() {
         <div className="px-4 py-4 pb-8 flex flex-col gap-1">
 
           {/* 로그인 / 마이페이지 */}
-          <div className="mb-3 pb-3 border-b border-neutral-100 dark:border-zinc-800">
+          <div className="mb-3 pb-3 border-b border-stone-100 dark:border-zinc-800">
             {session?.user ? (
               <div className="flex flex-col gap-1.5">
-                <Link href="/profile" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white">
+                <Link href="/profile" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-stone-50 dark:bg-zinc-900 text-sm font-bold text-stone-900 dark:text-white">
                   <User className="w-4 h-4 text-[#F9954E]" /><span>{isEn ? "My page" : "마이페이지"}</span>
                 </Link>
-                <Link href="/feed" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white">
+                <Link href="/feed" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-stone-50 dark:bg-zinc-900 text-sm font-bold text-stone-900 dark:text-white">
                   <Newspaper className="w-4 h-4 text-[#F9954E]" /><span>{isEn ? "Feed" : "피드"}</span>
                 </Link>
-                <Link href="/messages" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white">
+                <Link href="/messages" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-stone-50 dark:bg-zinc-900 text-sm font-bold text-stone-900 dark:text-white">
                   <MessageCircle className="w-4 h-4 text-[#F9954E]" /><span>{isEn ? "Messages" : "메시지"}</span>
                 </Link>
-                <Link href="/shop" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900 text-sm font-bold text-neutral-900 dark:text-white">
+                <Link href="/shop" className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-stone-50 dark:bg-zinc-900 text-sm font-bold text-stone-900 dark:text-white">
                   <span className="w-4 text-center text-[#F9954E]">🍬</span><span>{isEn ? "Shop" : "상점"}</span>
                 </Link>
 
@@ -323,27 +323,27 @@ export default function Header() {
                   <Link href={item.href} className="flex items-center justify-between px-4 pt-2 pb-1 group">
                     <div className="flex items-center gap-3">
                       <span className="text-base w-6 text-center">{item.emoji}</span>
-                      <span className="text-sm font-semibold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors">{item.name}</span>
+                      <span className="text-sm font-semibold text-stone-900 dark:text-white group-hover:text-[#F9954E] transition-colors">{item.name}</span>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-zinc-600" />
+                    <ChevronRight className="w-4 h-4 text-stone-300 dark:text-zinc-600" />
                   </Link>
                 ) : (
                   <div className="flex items-center gap-3 px-4 pt-2 pb-1">
                     <span className="text-base w-6 text-center">{item.emoji}</span>
-                    <span className="text-xs font-bold text-neutral-400 dark:text-zinc-500 tracking-wide">{item.name}</span>
+                    <span className="text-xs font-bold text-stone-400 dark:text-zinc-500 tracking-wide">{item.name}</span>
                   </div>
                 )}
                 {item.children.map((c) => (
                   <Link
                     key={c.name}
                     href={c.href}
-                    className="flex items-center justify-between pl-12 pr-4 py-3 rounded-2xl hover:bg-neutral-50 dark:hover:bg-zinc-900 transition-colors group"
+                    className="flex items-center justify-between pl-12 pr-4 py-3 rounded-2xl hover:bg-stone-50 dark:hover:bg-zinc-900 transition-colors group"
                   >
                     <div className="flex items-center gap-3">
                       <span className="text-base w-6 text-center">{c.emoji}</span>
-                      <span className="text-sm font-semibold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors">{c.name}</span>
+                      <span className="text-sm font-semibold text-stone-900 dark:text-white group-hover:text-[#F9954E] transition-colors">{c.name}</span>
                     </div>
-                    <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-zinc-600" />
+                    <ChevronRight className="w-4 h-4 text-stone-300 dark:text-zinc-600" />
                   </Link>
                 ))}
               </div>
@@ -351,13 +351,13 @@ export default function Header() {
               <Link
                 key={item.name}
                 href={item.href || "#"}
-                className="flex items-center justify-between px-4 py-3.5 rounded-2xl hover:bg-neutral-50 dark:hover:bg-zinc-900 transition-colors group"
+                className="flex items-center justify-between px-4 py-3.5 rounded-2xl hover:bg-stone-50 dark:hover:bg-zinc-900 transition-colors group"
               >
                 <div className="flex items-center gap-3">
                   <span className="text-base w-6 text-center">{item.emoji}</span>
-                  <span className="text-sm font-semibold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors">{item.name}</span>
+                  <span className="text-sm font-semibold text-stone-900 dark:text-white group-hover:text-[#F9954E] transition-colors">{item.name}</span>
                 </div>
-                <ChevronRight className="w-4 h-4 text-neutral-300 dark:text-zinc-600" />
+                <ChevronRight className="w-4 h-4 text-stone-300 dark:text-zinc-600" />
               </Link>
             )
           )}

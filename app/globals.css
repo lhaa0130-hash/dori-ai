@@ -61,27 +61,33 @@ body {
 
 @layer base {
   :root {
-    --background: 0 0% 100%;
-    --foreground: 0 0% 7%;
+    /* 따뜻한 크림/에디토리얼 톤 (illo-ai-assistant 참고) */
+    --background: 35 40% 97%;
+    /* Warm paper #FBF7F1 */
+    --foreground: 22 13% 11%;
+    /* Warm near-black #1C1917 */
     --card: 0 0% 100%;
-    --card-foreground: 0 0% 7%;
+    --card-foreground: 22 13% 11%;
     --popover: 0 0% 100%;
-    --popover-foreground: 0 0% 9%;
+    --popover-foreground: 22 13% 11%;
     --primary: 25 94% 64%;
-    /* Main Color #F9954E */
+    /* Main Color #F9954E (brand 유지) */
     --primary-foreground: 0 0% 100%;
-    --secondary: 210 14% 95%;
-    /* Sub Color #EFF1F3 */
-    --secondary-foreground: 222.2 47.4% 11.2%;
-    --muted: 210 14% 95%;
-    --muted-foreground: 215.4 16.3% 46.9%;
-    --accent: 210 14% 95%;
-    --accent-foreground: 222.2 47.4% 11.2%;
+    --secondary: 36 32% 93%;
+    /* Warm sand #F2EADF */
+    --secondary-foreground: 24 12% 20%;
+    --muted: 37 34% 94%;
+    /* Warm cream #F7F2EA */
+    --muted-foreground: 28 9% 47%;
+    /* Warm gray #8A7F76 */
+    --accent: 36 32% 93%;
+    --accent-foreground: 24 12% 20%;
     --destructive: 0 84.2% 60.2%;
     --destructive-foreground: 210 40% 98%;
-    --border: 214.3 31.8% 91.4%;
-    --input: 214.3 31.8% 91.4%;
-    --ring: 222.2 84% 4.9%;
+    --border: 34 24% 89%;
+    /* Warm border #EBE3D8 */
+    --input: 34 24% 89%;
+    --ring: 22 13% 11%;
     --radius: 0.5rem;
   }
 

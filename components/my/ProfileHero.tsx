@@ -69,7 +69,7 @@ export default function ProfileHero({
     <div
       className={`relative overflow-hidden rounded-[2rem] border p-8 md:p-10 transition-all duration-500 ${isDark
           ? "bg-zinc-900 border-zinc-800 shadow-xl"
-          : "bg-white border-neutral-100 shadow-sm"
+          : "bg-white border-stone-100 shadow-sm"
         }`}
     >
       {/* Background Subtle Gradient */}
@@ -88,7 +88,7 @@ export default function ProfileHero({
         {/* Info Section */}
         <div className="flex-1 w-full text-center md:text-left">
           <div className="flex flex-wrap items-center justify-center md:justify-start gap-3 mb-4">
-            <h1 className="text-3xl font-black tracking-tight text-neutral-900 dark:text-white">
+            <h1 className="text-3xl font-black tracking-tight text-stone-900 dark:text-white">
               {safeProfile.nickname}
             </h1>
 
@@ -97,7 +97,7 @@ export default function ProfileHero({
                 href="/my/edit"
                 className={`px-3 py-1 rounded-full text-[10px] font-bold border transition-all duration-200 ${isDark
                     ? "bg-zinc-800 border-zinc-700 text-zinc-400 hover:text-white"
-                    : "bg-neutral-50 border-neutral-200 text-neutral-500 hover:bg-neutral-100 hover:text-neutral-900"
+                    : "bg-stone-50 border-stone-200 text-stone-500 hover:bg-stone-100 hover:text-stone-900"
                   }`}
               >
                 편집
@@ -117,14 +117,14 @@ export default function ProfileHero({
               <span className="opacity-20 mx-1">|</span>
               <span>Lv.{currentLevel}</span>
             </div>
-            <div className="text-[11px] font-medium text-neutral-400 dark:text-zinc-500">
+            <div className="text-[11px] font-medium text-stone-400 dark:text-zinc-500">
               ID: {safeProfile.email.split('@')[0]}
             </div>
           </div>
 
           {/* Intro Text */}
           <div className="mb-8 max-w-2xl mx-auto md:mx-0">
-            <p className={`text-sm leading-relaxed font-medium ${isDark ? "text-zinc-400" : "text-neutral-500"}`}>
+            <p className={`text-sm leading-relaxed font-medium ${isDark ? "text-zinc-400" : "text-stone-500"}`}>
               {safeProfile.bio || "새로운 AI 시대를 함께 열어가는 illo 크리에이터입니다."}
             </p>
             {safeProfile.statusMessage && (
@@ -135,16 +135,16 @@ export default function ProfileHero({
           </div>
 
           {/* Stats Bar */}
-          <div className="flex flex-wrap items-center justify-center md:justify-start gap-8 border-t border-neutral-100 dark:border-zinc-800 pt-8">
+          <div className="flex flex-wrap items-center justify-center md:justify-start gap-8 border-t border-stone-100 dark:border-zinc-800 pt-8">
             <div className="flex flex-col">
-              <span className="text-[9px] font-bold text-neutral-400 dark:text-zinc-500 uppercase tracking-tighter mb-1">DORI EXP</span>
+              <span className="text-[9px] font-bold text-stone-400 dark:text-zinc-500 uppercase tracking-tighter mb-1">DORI EXP</span>
               <span className="text-xl font-black text-[#F9954E]">
                 {safeProfile.doriExp.toLocaleString()}
               </span>
             </div>
 
             <div className="flex flex-col relative group">
-              <span className="text-[9px] font-bold text-neutral-400 dark:text-zinc-500 uppercase tracking-tighter mb-1 select-none">솜사탕</span>
+              <span className="text-[9px] font-bold text-stone-400 dark:text-zinc-500 uppercase tracking-tighter mb-1 select-none">솜사탕</span>
               <div className="flex items-center gap-2">
                 <span className="text-xl font-black text-pink-400 dark:text-pink-300 inline-flex items-center gap-1">
                   {safeProfile.cottonCandy.toLocaleString()}
@@ -162,12 +162,12 @@ export default function ProfileHero({
             {activityStats && (
               <>
                 <div className="flex flex-col">
-                  <span className="text-[9px] font-bold text-neutral-400 dark:text-zinc-500 uppercase tracking-tighter mb-1">POSTS</span>
-                  <span className={`text-xl font-black ${isDark ? "text-white" : "text-neutral-900"}`}>{activityStats.posts}</span>
+                  <span className="text-[9px] font-bold text-stone-400 dark:text-zinc-500 uppercase tracking-tighter mb-1">POSTS</span>
+                  <span className={`text-xl font-black ${isDark ? "text-white" : "text-stone-900"}`}>{activityStats.posts}</span>
                 </div>
                 <div className="flex flex-col">
-                  <span className="text-[9px] font-bold text-neutral-400 dark:text-zinc-500 uppercase tracking-tighter mb-1">COMMENTS</span>
-                  <span className={`text-xl font-black ${isDark ? "text-white" : "text-neutral-900"}`}>{activityStats.comments}</span>
+                  <span className="text-[9px] font-bold text-stone-400 dark:text-zinc-500 uppercase tracking-tighter mb-1">COMMENTS</span>
+                  <span className={`text-xl font-black ${isDark ? "text-white" : "text-stone-900"}`}>{activityStats.comments}</span>
                 </div>
               </>
             )}
@@ -176,14 +176,14 @@ export default function ProfileHero({
       </div>
 
       {/* Refined Progress Bar Section */}
-      <div className="mt-10 pt-8 border-t border-neutral-50 dark:border-zinc-800/50">
+      <div className="mt-10 pt-8 border-t border-stone-50 dark:border-zinc-800/50">
         <div className="flex justify-between items-center mb-3">
-          <span className="text-[10px] font-bold text-neutral-400 dark:text-zinc-500 uppercase tracking-tighter">Level Progress</span>
+          <span className="text-[10px] font-bold text-stone-400 dark:text-zinc-500 uppercase tracking-tighter">Level Progress</span>
           <span className="text-[10px] font-bold text-[#F9954E]">
             {Math.floor(currentLevelExp).toLocaleString()} / {Math.floor(nextLevelExpRequired).toLocaleString()} XP ({Math.round(levelProgress)}%)
           </span>
         </div>
-        <div className={`relative h-1 rounded-full overflow-hidden ${isDark ? "bg-zinc-800" : "bg-neutral-100"}`}>
+        <div className={`relative h-1 rounded-full overflow-hidden ${isDark ? "bg-zinc-800" : "bg-stone-100"}`}>
           <div
             className="absolute top-0 left-0 h-full rounded-full transition-all duration-1000 ease-out"
             style={{

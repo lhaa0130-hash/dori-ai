@@ -37,17 +37,17 @@ export default function OpenRouterApps() {
   if (hide || !s || !s.appsTop?.length) return null;
 
   return (
-    <div className="rounded-3xl border border-neutral-200 dark:border-zinc-800 overflow-hidden">
+    <div className="rounded-3xl border border-stone-200 dark:border-zinc-800 overflow-hidden">
       <div className="px-4 sm:px-5 pt-4 pb-3 bg-gradient-to-b from-[#F9954E]/10 to-transparent">
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
             <span className="w-2 h-2 rounded-full bg-red-500 animate-pulse" />
-            <h2 className="text-[16px] font-extrabold text-neutral-950 dark:text-white">AI 앱·에이전트 순위</h2>
+            <h2 className="text-[16px] font-extrabold text-stone-950 dark:text-white">AI 앱·에이전트 순위</h2>
             <span className="text-[10px] font-bold text-[#F9954E] border border-[#F9954E]/40 rounded-full px-1.5 py-0.5">LIVE</span>
           </div>
-          <span className="text-[11px] text-neutral-400 whitespace-nowrap">{ago(s.updatedAt)}</span>
+          <span className="text-[11px] text-stone-400 whitespace-nowrap">{ago(s.updatedAt)}</span>
         </div>
-        <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-1">전 세계에서 가장 많이 쓰는 AI 앱·에이전트 (토큰 사용량)</p>
+        <p className="text-[11px] text-stone-500 dark:text-stone-400 mt-1">전 세계에서 가장 많이 쓰는 AI 앱·에이전트 (토큰 사용량)</p>
       </div>
 
       <div className="px-4 sm:px-5 py-3 space-y-1">
@@ -57,26 +57,26 @@ export default function OpenRouterApps() {
             href={a.url || undefined}
             target="_blank"
             rel="noreferrer"
-            className="flex items-center gap-2.5 py-1.5 rounded-lg hover:bg-neutral-50 dark:hover:bg-zinc-900 transition-colors -mx-1 px-1"
+            className="flex items-center gap-2.5 py-1.5 rounded-lg hover:bg-stone-50 dark:hover:bg-zinc-900 transition-colors -mx-1 px-1"
           >
-            <span className={`text-[13px] font-extrabold w-5 text-center shrink-0 ${i < 3 ? "text-[#F9954E]" : "text-neutral-300 dark:text-neutral-600"}`}>{i + 1}</span>
+            <span className={`text-[13px] font-extrabold w-5 text-center shrink-0 ${i < 3 ? "text-[#F9954E]" : "text-stone-300 dark:text-stone-600"}`}>{i + 1}</span>
             <img
               src={a.favicon || letterAvatar(a.title)}
               alt={a.title}
               loading="lazy"
-              className="w-7 h-7 rounded-lg object-contain bg-neutral-50 dark:bg-zinc-800 border border-neutral-100 dark:border-zinc-800 shrink-0"
+              className="w-7 h-7 rounded-lg object-contain bg-stone-50 dark:bg-zinc-800 border border-stone-100 dark:border-zinc-800 shrink-0"
               onError={(e) => { const t = e.target as HTMLImageElement; if (!t.dataset.fb) { t.dataset.fb = "1"; t.src = letterAvatar(a.title); } }}
             />
             <div className="flex-1 min-w-0">
-              <p className="text-[13px] font-bold text-neutral-900 dark:text-white truncate">{a.title}</p>
-              {a.desc && <p className="text-[10.5px] text-neutral-400 truncate">{a.desc}</p>}
+              <p className="text-[13px] font-bold text-stone-900 dark:text-white truncate">{a.title}</p>
+              {a.desc && <p className="text-[10.5px] text-stone-400 truncate">{a.desc}</p>}
             </div>
             <span className="text-[12px] font-extrabold text-[#F9954E] tabular-nums shrink-0">{tokens(a.tokensB)}</span>
           </a>
         ))}
       </div>
 
-      <p className="px-4 sm:px-5 pb-3 text-[10px] text-neutral-400">데이터: OpenRouter · 토큰 사용량 기준</p>
+      <p className="px-4 sm:px-5 pb-3 text-[10px] text-stone-400">데이터: OpenRouter · 토큰 사용량 기준</p>
     </div>
   );
 }

@@ -208,7 +208,7 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
           />
 
           {/* 하단 공유 버튼 */}
-          <div className="mt-10 pt-6 border-t border-neutral-200 dark:border-neutral-800">
+          <div className="mt-10 pt-6 border-t border-stone-200 dark:border-stone-800">
             <ShareButtons url={articleUrl} title={post.title || 'illo 기사'} />
           </div>
 

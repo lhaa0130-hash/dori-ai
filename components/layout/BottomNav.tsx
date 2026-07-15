@@ -97,7 +97,7 @@ export default function BottomNav() {
   return (
     <>
       {/* ── 탭바 ── */}
-      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-black border-t border-neutral-100 dark:border-zinc-900">
+      <nav className="lg:hidden fixed bottom-0 left-0 right-0 z-50 bg-white dark:bg-black border-t border-stone-100 dark:border-zinc-900">
         <div className="flex h-[58px]">
           {TABS.map((tab) => {
             const active = isActive(tab);
@@ -109,7 +109,7 @@ export default function BottomNav() {
               >
                 {active && <span className="absolute top-0 left-1/2 -translate-x-1/2 w-5 h-[2.5px] rounded-full bg-[#F9954E]" />}
                 {tab.icon(active)}
-                <span className={cn("text-[10px] font-semibold", active ? "text-[#F9954E]" : "text-neutral-400 dark:text-neutral-600")}>
+                <span className={cn("text-[10px] font-semibold", active ? "text-[#F9954E]" : "text-stone-400 dark:text-stone-600")}>
                   {effLabel(tab)}
                 </span>
               </button>
@@ -121,7 +121,7 @@ export default function BottomNav() {
               >
                 {active && <span className="absolute top-0 left-1/2 -translate-x-1/2 w-5 h-[2.5px] rounded-full bg-[#F9954E]" />}
                 {tab.icon(active)}
-                <span className={cn("text-[10px] font-semibold", active ? "text-[#F9954E]" : "text-neutral-400 dark:text-neutral-600")}>
+                <span className={cn("text-[10px] font-semibold", active ? "text-[#F9954E]" : "text-stone-400 dark:text-stone-600")}>
                   {effLabel(tab)}
                 </span>
               </Link>
@@ -135,24 +135,24 @@ export default function BottomNav() {
 
       {/* ── 드로어 ── */}
       <div className={cn(
-        "lg:hidden fixed left-0 right-0 bottom-[58px] z-40 bg-white dark:bg-black rounded-t-3xl border-t border-neutral-100 dark:border-zinc-900 overflow-y-auto transition-all duration-300",
+        "lg:hidden fixed left-0 right-0 bottom-[58px] z-40 bg-white dark:bg-black rounded-t-3xl border-t border-stone-100 dark:border-zinc-900 overflow-y-auto transition-all duration-300",
         open ? "max-h-[75dvh] opacity-100 translate-y-0 pointer-events-auto" : "max-h-0 opacity-0 translate-y-3 pointer-events-none"
       )}>
         {/* 핸들 */}
         <div className="flex justify-center pt-3 pb-2">
-          <div className="w-8 h-1 rounded-full bg-neutral-200 dark:bg-zinc-800" />
+          <div className="w-8 h-1 rounded-full bg-stone-200 dark:bg-zinc-800" />
         </div>
 
         <div className="px-5 pb-10 flex flex-col">
 
           {/* 로그인 */}
-          <div className="py-4 border-b border-neutral-100 dark:border-zinc-900">
+          <div className="py-4 border-b border-stone-100 dark:border-zinc-900">
             {session?.user ? (
               <div className="flex flex-col gap-2">
                 <Link href="/my" className="flex items-center justify-between py-3">
                   <div>
-                    <p className="text-[15px] font-black text-neutral-900 dark:text-white">{isEn ? "My Page" : "마이페이지"}</p>
-                    <p className="text-[12px] text-neutral-400 mt-0.5">{session.user.email}</p>
+                    <p className="text-[15px] font-black text-stone-900 dark:text-white">{isEn ? "My Page" : "마이페이지"}</p>
+                    <p className="text-[12px] text-stone-400 mt-0.5">{session.user.email}</p>
                   </div>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>
                 </Link>
@@ -176,10 +176,10 @@ export default function BottomNav() {
           {/* 메뉴 */}
           <div className="py-2">
             {MORE_ITEMS.map((item) => (
-              <Link key={item.name} href={isEn ? ((item as any).hrefEn ?? item.href) : item.href} className="flex items-center justify-between py-4 border-b border-neutral-50 dark:border-zinc-900 last:border-0">
+              <Link key={item.name} href={isEn ? ((item as any).hrefEn ?? item.href) : item.href} className="flex items-center justify-between py-4 border-b border-stone-50 dark:border-zinc-900 last:border-0">
                 <div className="flex items-center gap-3">
                   <span className="text-lg">{item.emoji}</span>
-                  <span className="text-[14px] font-semibold text-neutral-800 dark:text-white">{isEn ? ((item as any).nameEn ?? item.name) : item.name}</span>
+                  <span className="text-[14px] font-semibold text-stone-800 dark:text-white">{isEn ? ((item as any).nameEn ?? item.name) : item.name}</span>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>
               </Link>
@@ -187,21 +187,21 @@ export default function BottomNav() {
           </div>
 
           {/* 화면 모드 */}
-          <div className="flex items-center justify-between py-4 border-t border-neutral-100 dark:border-zinc-900">
-            <span className="text-[14px] font-semibold text-neutral-800 dark:text-white">{isEn ? "Theme" : "화면 모드"}</span>
+          <div className="flex items-center justify-between py-4 border-t border-stone-100 dark:border-zinc-900">
+            <span className="text-[14px] font-semibold text-stone-800 dark:text-white">{isEn ? "Theme" : "화면 모드"}</span>
             <ThemeToggle />
           </div>
 
           {/* 프로젝트 */}
-          <div className="border-t border-neutral-100 dark:border-zinc-900 pt-4">
-            <p className="text-[11px] font-bold text-neutral-400 uppercase tracking-widest mb-3">Projects</p>
+          <div className="border-t border-stone-100 dark:border-zinc-900 pt-4">
+            <p className="text-[11px] font-bold text-stone-400 uppercase tracking-widest mb-3">Projects</p>
             {PROJECTS.map((p) => (
-              <Link key={p.name} href={p.href} className="flex items-center gap-3 py-3 border-b border-neutral-50 dark:border-zinc-900 last:border-0">
-                <div className="w-10 h-10 rounded-2xl bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-lg flex-shrink-0 overflow-hidden">
+              <Link key={p.name} href={p.href} className="flex items-center gap-3 py-3 border-b border-stone-50 dark:border-zinc-900 last:border-0">
+                <div className="w-10 h-10 rounded-2xl bg-stone-100 dark:bg-zinc-800 flex items-center justify-center text-lg flex-shrink-0 overflow-hidden">
                   {p.image ? <img src={p.image} alt={p.name} loading="lazy" className="w-full h-full object-cover" /> : p.emoji}
                 </div>
                 <div className="flex-1 min-w-0">
-                  <p className="text-[14px] font-bold text-neutral-900 dark:text-white">{isEn ? ((p as any).nameEn ?? p.name) : p.name}</p>
+                  <p className="text-[14px] font-bold text-stone-900 dark:text-white">{isEn ? ((p as any).nameEn ?? p.name) : p.name}</p>
                 </div>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#D1D5DB" strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>
               </Link>

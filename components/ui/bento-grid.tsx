@@ -74,10 +74,10 @@ export const BentoGridItem = ({
         whileHover={{ rotate: 5 }} // Icon rotation effect
       >
         {icon}
-        <div className="font-sans font-bold text-neutral-600 dark:text-neutral-200 mb-2 mt-2">
+        <div className="font-sans font-bold text-stone-600 dark:text-stone-200 mb-2 mt-2">
           {title}
         </div>
-        <div className="font-sans font-normal text-neutral-600 text-xs dark:text-neutral-300">
+        <div className="font-sans font-normal text-stone-600 text-xs dark:text-stone-300">
           {description}
         </div>
       </motion.div>

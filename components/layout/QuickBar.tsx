@@ -153,8 +153,8 @@ export default function QuickBar() {
         aria-label="바로가기 열기"
         className="hidden lg:flex fixed right-0 top-1/2 -translate-y-1/2 z-[45] items-center justify-center
                    w-6 h-14 rounded-l-xl bg-white/95 dark:bg-zinc-950/95 backdrop-blur
-                   border border-r-0 border-neutral-200 dark:border-zinc-800 shadow-md
-                   text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition-colors"
+                   border border-r-0 border-stone-200 dark:border-zinc-800 shadow-md
+                   text-stone-500 dark:text-stone-400 hover:text-[#F9954E] transition-colors"
       >
         <ChevronsLeft className="w-3.5 h-3.5" />
       </button>
@@ -166,15 +166,15 @@ export default function QuickBar() {
       {/* 레일 */}
       <aside
         className="hidden lg:flex fixed right-0 top-16 bottom-0 z-[45] w-[48px] flex-col
-                   bg-white/95 dark:bg-zinc-950/95 backdrop-blur border-l border-neutral-200 dark:border-zinc-800"
+                   bg-white/95 dark:bg-zinc-950/95 backdrop-blur border-l border-stone-200 dark:border-zinc-800"
       >
         {/* 상단: 접기 */}
-        <div className="flex flex-col items-center pt-1.5 pb-1 border-b border-neutral-100 dark:border-zinc-900">
+        <div className="flex flex-col items-center pt-1.5 pb-1 border-b border-stone-100 dark:border-zinc-900">
           <button
             onClick={toggleCollapsed}
             aria-label="바로가기 접기"
-            className="w-6 h-6 rounded-md flex items-center justify-center text-neutral-400
-                       hover:text-[#F9954E] hover:bg-neutral-100 dark:hover:bg-zinc-900 transition-colors"
+            className="w-6 h-6 rounded-md flex items-center justify-center text-stone-400
+                       hover:text-[#F9954E] hover:bg-stone-100 dark:hover:bg-zinc-900 transition-colors"
           >
             <ChevronsRight className="w-3.5 h-3.5" />
           </button>
@@ -205,20 +205,20 @@ export default function QuickBar() {
                   className={`flex flex-col items-center justify-center gap-1 py-2 rounded-xl transition-colors
                     ${active
                       ? "bg-[#FFF1E3] dark:bg-[#F9954E]/15 text-[#E8832E] dark:text-[#F9954E]"
-                      : "text-neutral-600 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-zinc-900 hover:text-neutral-900 dark:hover:text-white"}`}
+                      : "text-stone-600 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-zinc-900 hover:text-stone-900 dark:hover:text-white"}`}
                 >
                   <c.Icon className="w-4 h-4" />
                   <span className="text-[8px] font-semibold leading-none max-w-[42px] truncate">{c.short}</span>
                 </Link>
 
-                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-neutral-300 dark:text-zinc-700 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
+                <span className="absolute left-0 top-1/2 -translate-y-1/2 text-stone-300 dark:text-zinc-700 opacity-0 group-hover:opacity-100 transition-opacity pointer-events-none">
                   <GripVertical className="w-2.5 h-2.5" />
                 </span>
 
                 <button
                   onClick={(e) => { e.preventDefault(); remove(c.key); }}
                   aria-label={`${c.label} 제거`}
-                  className="absolute -top-1 -right-0.5 w-4 h-4 rounded-full bg-neutral-300 dark:bg-zinc-700 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-500 transition-opacity"
+                  className="absolute -top-1 -right-0.5 w-4 h-4 rounded-full bg-stone-300 dark:bg-zinc-700 text-white flex items-center justify-center opacity-0 group-hover:opacity-100 hover:bg-red-500 transition-opacity"
                 >
                   <X className="w-2.5 h-2.5" />
                 </button>
@@ -233,7 +233,7 @@ export default function QuickBar() {
             className={`flex items-center justify-center py-2.5 rounded-xl transition-colors
               ${pickerOpen
                 ? "bg-[#FFF1E3] dark:bg-[#F9954E]/15 text-[#F9954E]"
-                : "text-neutral-400 hover:bg-neutral-100 dark:hover:bg-zinc-900 hover:text-[#F9954E]"}`}
+                : "text-stone-400 hover:bg-stone-100 dark:hover:bg-zinc-900 hover:text-[#F9954E]"}`}
           >
             <Plus className="w-5 h-5" />
           </button>
@@ -246,12 +246,12 @@ export default function QuickBar() {
           <div className="fixed inset-0 z-[60]" onClick={() => setPickerOpen(false)} />
           <div
             className="hidden lg:flex fixed right-[60px] top-20 z-[61] w-[256px] max-h-[72vh] flex-col
-                       bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800
+                       bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800
                        rounded-2xl shadow-2xl overflow-hidden"
           >
-            <div className="flex items-center justify-between px-4 py-3 border-b border-neutral-100 dark:border-zinc-800">
-              <span className="text-[13px] font-extrabold text-neutral-900 dark:text-white">바로가기 추가</span>
-              <button onClick={() => setPickerOpen(false)} aria-label="닫기" className="text-neutral-400 hover:text-neutral-700 dark:hover:text-white">
+            <div className="flex items-center justify-between px-4 py-3 border-b border-stone-100 dark:border-zinc-800">
+              <span className="text-[13px] font-extrabold text-stone-900 dark:text-white">바로가기 추가</span>
+              <button onClick={() => setPickerOpen(false)} aria-label="닫기" className="text-stone-400 hover:text-stone-700 dark:hover:text-white">
                 <X className="w-4 h-4" />
               </button>
             </div>
@@ -259,7 +259,7 @@ export default function QuickBar() {
             <div className="flex-1 overflow-y-auto p-2">
               {CATALOG.map((group) => (
                 <div key={group.label} className="mb-2 last:mb-0">
-                  <p className="px-2 py-1.5 text-[10px] font-bold tracking-widest uppercase text-neutral-400">{group.label}</p>
+                  <p className="px-2 py-1.5 text-[10px] font-bold tracking-widest uppercase text-stone-400">{group.label}</p>
                   <div className="flex flex-col gap-0.5">
                     {group.items.map((c) => {
                       const added = items.includes(c.key);
@@ -270,15 +270,15 @@ export default function QuickBar() {
                           aria-label={`${added ? "제거" : "추가"} ${c.label}`}
                           onClick={() => (added ? remove(c.key) : add(c.key))}
                           className="flex items-center gap-3 px-2.5 py-2 rounded-xl text-left
-                                     hover:bg-neutral-50 dark:hover:bg-zinc-800 transition-colors"
+                                     hover:bg-stone-50 dark:hover:bg-zinc-800 transition-colors"
                         >
-                          <span className="w-8 h-8 rounded-lg bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-neutral-600 dark:text-neutral-300 flex-shrink-0">
+                          <span className="w-8 h-8 rounded-lg bg-stone-100 dark:bg-zinc-800 flex items-center justify-center text-stone-600 dark:text-stone-300 flex-shrink-0">
                             <c.Icon className="w-4 h-4" />
                           </span>
-                          <span className="flex-1 text-[13.5px] font-semibold text-neutral-800 dark:text-neutral-100">{c.label}</span>
+                          <span className="flex-1 text-[13.5px] font-semibold text-stone-800 dark:text-stone-100">{c.label}</span>
                           <span
                             className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 transition-colors
-                              ${added ? "bg-[#F9954E] text-white" : "bg-neutral-100 dark:bg-zinc-800 text-neutral-400"}`}
+                              ${added ? "bg-[#F9954E] text-white" : "bg-stone-100 dark:bg-zinc-800 text-stone-400"}`}
                           >
                             {added ? <X className="w-3.5 h-3.5" /> : <Plus className="w-3.5 h-3.5" />}
                           </span>
@@ -290,13 +290,13 @@ export default function QuickBar() {
               ))}
             </div>
 
-            <div className="px-4 py-2.5 border-t border-neutral-100 dark:border-zinc-800 bg-neutral-50 dark:bg-zinc-950">
+            <div className="px-4 py-2.5 border-t border-stone-100 dark:border-zinc-800 bg-stone-50 dark:bg-zinc-950">
               {status === "authenticated" ? (
-                <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-snug">
+                <p className="text-[11px] text-stone-500 dark:text-stone-400 leading-snug">
                   드래그해서 순서를 바꿀 수 있어요. 변경은 계정에 자동 저장됩니다.
                 </p>
               ) : (
-                <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-snug">
+                <p className="text-[11px] text-stone-500 dark:text-stone-400 leading-snug">
                   <Link href="/login" className="font-bold text-[#E8832E] dark:text-[#F9954E] hover:underline">로그인</Link>
                   하면 바로가기가 계정에 자동 저장돼 다른 기기에서도 그대로 보여요.
                 </p>

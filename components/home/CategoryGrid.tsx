@@ -27,7 +27,7 @@ const categories = [
         href: "/project",
         icon: Rocket,
         gradient: "from-[#FBAA60] to-[#F9954E]",
-        iconBorder: "border-[#F9954E] dark:border-[#F9954E] bg-[#FFF5EB] dark:bg-black", // Fixed orange border & bg for Rocket
+        iconBorder: "border-[#F9954E] dark:border-[#F9954E] bg-[#FBEEE7] dark:bg-black", // Fixed orange border & bg for Rocket
         previewComponent: ProjectPreview,
         stats: {
             count: "2개",
@@ -169,7 +169,7 @@ export function CategoryGrid() {
 
                                         {/* Icon Container - Outline Style */}
                                         <div className="relative mb-4">
-                                            <div className="w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:shadow-md border border-[#F9954E] dark:border-[#F9954E] bg-[#FFF5EB] dark:bg-black">
+                                            <div className="w-14 h-14 rounded-xl flex items-center justify-center transition-all duration-300 group-hover:scale-105 group-hover:shadow-md border border-[#F9954E] dark:border-[#F9954E] bg-[#FBEEE7] dark:bg-black">
                                                 <category.icon className="w-7 h-7 text-[#F9954E] dark:text-[#F9954E] transition-colors" />
                                             </div>
 
@@ -194,17 +194,17 @@ export function CategoryGrid() {
                                             </p>
 
                                             {/* Divider */}
-                                            <div className="h-px bg-gradient-to-r from-transparent via-neutral-300 dark:via-zinc-700 to-transparent mb-4" />
+                                            <div className="h-px bg-gradient-to-r from-transparent via-stone-300 dark:via-zinc-700 to-transparent mb-4" />
 
                                             {/* Stats Section */}
                                             <div className="space-y-2">
                                                 <div className="flex items-center justify-between">
                                                     <div className="flex items-center gap-2">
                                                         <Star className="w-4 h-4 text-[#F9954E]" />
-                                                        <span className="text-xs font-semibold text-neutral-900 dark:text-white">
+                                                        <span className="text-xs font-semibold text-stone-900 dark:text-white">
                                                             {category.stats.count}
                                                         </span>
-                                                        <span className="text-xs text-neutral-500 dark:text-neutral-400">
+                                                        <span className="text-xs text-stone-500 dark:text-stone-400">
                                                             {category.stats.label}
                                                         </span>
                                                     </div>

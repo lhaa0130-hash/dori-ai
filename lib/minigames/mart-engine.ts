@@ -1,11 +1,18 @@
 export const PRODUCT_CATALOG = {
   milk: { label: "우유", short: "MILK", category: "chilled", categoryLabel: "냉장", color: "#5E78D6", shape: "carton" },
-  juice: { label: "주스", short: "JUICE", category: "beverage", categoryLabel: "음료", color: "#F27A3F", shape: "bottle" },
+  juice: { label: "주스", short: "JUICE", category: "beverage", categoryLabel: "음료", color: "#FF9D72", shape: "bottle" },
   soda: { label: "소다", short: "SODA", category: "beverage", categoryLabel: "음료", color: "#4EA89C", shape: "can" },
   chips: { label: "칩", short: "CHIPS", category: "snack", categoryLabel: "과자", color: "#E9A63A", shape: "bag" },
   cookies: { label: "쿠키", short: "COOKIE", category: "snack", categoryLabel: "과자", color: "#C77B56", shape: "box" },
   yogurt: { label: "요거트", short: "YOGURT", category: "chilled", categoryLabel: "냉장", color: "#B86B8B", shape: "cup" },
   soap: { label: "솝", short: "SOAP", category: "home", categoryLabel: "생활", color: "#6E9D7D", shape: "pump" },
+  water: { label: "생수", short: "WATER", category: "beverage", categoryLabel: "음료", color: "#62A9D8", shape: "bottle" },
+  coffee: { label: "커피", short: "COFFEE", category: "beverage", categoryLabel: "음료", color: "#8B5A3C", shape: "can" },
+  cereal: { label: "시리얼", short: "CEREAL", category: "snack", categoryLabel: "과자", color: "#D99A3E", shape: "box" },
+  noodles: { label: "라면", short: "NOODLES", category: "snack", categoryLabel: "과자", color: "#D95D47", shape: "bag" },
+  bread: { label: "식빵", short: "BREAD", category: "snack", categoryLabel: "과자", color: "#C98A55", shape: "bag" },
+  icecream: { label: "아이스크림", short: "ICE", category: "chilled", categoryLabel: "냉장", color: "#D884A7", shape: "cup" },
+  detergent: { label: "세탁세제", short: "WASH", category: "home", categoryLabel: "생활", color: "#816CB6", shape: "pump" },
 } as const;
 
 export type ProductId = keyof typeof PRODUCT_CATALOG;
@@ -28,7 +35,10 @@ export interface MartLevel {
   orders: MartOrder[];
   lockedShelf?: number;
   unlockAfterSets?: number;
+  unlockAfterMoves?: number;
 }
+
+export const MART_LEVEL_COUNT = 200;
 
 export interface MartShelf {
   id: number;
@@ -68,6 +78,72 @@ export interface MoveResult {
 export interface GeneratedLevel {
   shelves: ProductId[][];
   solution: MartMove[];
+}
+
+const EXTENDED_LEVEL_TITLES = [
+  "숨은 재고", "잠긴 보관함", "교대 진열", "빠른 발주", "복잡한 통로",
+  "마감 준비", "재고 점검", "혼합 주문", "집중 진열", "마스터 선반",
+] as const;
+
+function productsForLevel(levelId: number, count: number): ProductId[] {
+  const catalog = Object.keys(PRODUCT_CATALOG) as ProductId[];
+  const offset = (levelId * 3 + Math.floor(levelId / 7)) % catalog.length;
+  return Array.from({ length: count }, (_, index) => catalog[(offset + index) % catalog.length]);
+}
+
+function ordersForProducts(products: ProductId[], levelId: number): MartOrder[] {
+  const counts = new Map<ProductCategory, number>();
+  products.forEach((product) => {
+    const category = PRODUCT_CATALOG[product].category;
+    counts.set(category, (counts.get(category) || 0) + 1);
+  });
+  const orders = Array.from(counts, ([category, count]) => ({ category, count }));
+  const rotation = orders.length ? levelId % orders.length : 0;
+  return [...orders.slice(rotation), ...orders.slice(0, rotation)];
+}
+
+/**
+ * Extends the authored opening levels with deterministic boards up to 200.
+ * Locked shelves are always spare shelves outside the recorded solution path,
+ * so every board remains solvable without a booster or rewarded ad.
+ */
+export function expandMartLevels(authored: MartLevel[], total = MART_LEVEL_COUNT): MartLevel[] {
+  const levels = authored.map((level) => {
+    const products = level.id <= 3 ? [...level.products] : productsForLevel(level.id, level.products.length);
+    return {
+      ...level,
+      products,
+      orders: level.id <= 3 ? level.orders.map((order) => ({ ...order })) : ordersForProducts(products, level.id),
+      moveLimit: level.moveLimit ?? Math.max(level.scrambleMoves + 2, Math.ceil(level.par * 0.9)),
+    };
+  });
+  for (let id = levels.length + 1; id <= total; id += 1) {
+    const distance = id - 31;
+    const lockFrequency = id < 61 ? 5 : id < 101 ? 4 : 3;
+    const hasLock = id % lockFrequency !== 1;
+    const productCount = hasLock ? 6 : 7;
+    const products = productsForLevel(id, productCount);
+    const scrambleMoves = 59 + Math.floor((Math.max(0, distance) * 29) / 169);
+    const allowance = Math.max(10, 20 - Math.floor(Math.max(0, distance) / 17));
+    const moveLock = hasLock && id % 2 === 0;
+    const setLock = hasLock && !moveLock;
+
+    levels.push({
+      id,
+      title: EXTENDED_LEVEL_TITLES[(id - 31) % EXTENDED_LEVEL_TITLES.length],
+      products,
+      shelfCount: 8,
+      seed: 3109 + id * 97,
+      scrambleMoves,
+      moveLimit: scrambleMoves + allowance,
+      par: scrambleMoves + Math.floor(allowance / 2),
+      orders: ordersForProducts(products, id),
+      lockedShelf: hasLock ? 7 : undefined,
+      unlockAfterSets: setLock ? Math.min(4, 1 + Math.floor(distance / 55)) : undefined,
+      unlockAfterMoves: moveLock ? Math.min(12, 4 + Math.floor(distance / 35)) : undefined,
+    });
+  }
+  return levels.slice(0, total);
 }
 
 function cloneState(state: MartState): MartState {
@@ -230,10 +306,12 @@ export function moveItem(state: MartState, level: MartLevel, from: number, to: n
       orderCompleted = category;
     }
 
-    const unlockAt = level.unlockAfterSets || 0;
-    if (unlockAt > 0 && next.completedProducts.length >= unlockAt) {
-      next.shelves = next.shelves.map((shelf) => ({ ...shelf, locked: false }));
-    }
+  }
+
+  const unlockAt = level.unlockAfterSets || 0;
+  const unlockAfterMoves = level.unlockAfterMoves || 0;
+  if ((unlockAt > 0 && next.completedProducts.length >= unlockAt) || (unlockAfterMoves > 0 && next.moves >= unlockAfterMoves)) {
+    next.shelves = next.shelves.map((shelf) => ({ ...shelf, locked: false }));
   }
 
   if (next.completedProducts.length === level.products.length && areOrdersComplete(next, level)) {
@@ -259,12 +337,15 @@ export function undoMove(_current: MartState, previous: MartState | undefined): 
 
 export function calculateStars(state: MartState, level: MartLevel) {
   if (state.status !== "won") return 0;
-  return 1 + (state.moves <= level.par ? 1 : 0) + (state.flowIntact ? 1 : 0);
+  const threeStarTarget = Math.min(level.par, level.scrambleMoves + 1);
+  if (state.moves <= threeStarTarget) return 3;
+  if (state.moves <= level.par) return 2;
+  return 1;
 }
 
 export function validateLevel(level: MartLevel): string[] {
   const errors: string[] = [];
-  if (level.id < 1 || level.id > 30) errors.push("id");
+  if (level.id < 1 || level.id > MART_LEVEL_COUNT) errors.push("id");
   if (level.shelfCount < 4 || level.shelfCount > 8) errors.push("shelfCount");
   if (level.products.length < 3 || level.products.length > 7) errors.push("products");
   if (new Set(level.products).size !== level.products.length) errors.push("duplicateProducts");

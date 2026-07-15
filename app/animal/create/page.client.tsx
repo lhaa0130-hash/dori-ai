@@ -13,31 +13,31 @@ const EXAMPLES = [
 
 function Card({ a, img }: { a: GenAnimal; img: string }) {
   return (
-    <div className="rounded-3xl overflow-hidden border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-sm">
-      <div className="relative aspect-[4/5] bg-neutral-100 dark:bg-zinc-900">
+    <div className="rounded-3xl overflow-hidden border border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-sm">
+      <div className="relative aspect-[4/5] bg-stone-100 dark:bg-zinc-900">
         {img ? <img src={img} alt={a.animal_name} className="w-full h-full object-cover" /> : <div className="w-full h-full animate-pulse" />}
         <span className="absolute top-3 left-3 rounded-full bg-black/45 text-white text-[11px] font-bold px-2.5 py-1 backdrop-blur">🐣 나만의 동물</span>
         {a.status?.label && <span className="absolute top-3 right-3 rounded-full text-white text-[11px] font-bold px-2.5 py-1" style={{ background: a.status.color }}>{a.status.label}</span>}
       </div>
       <div className="p-4">
         <div className="flex items-center justify-between gap-2">
-          <h3 className="text-lg font-extrabold text-neutral-900 dark:text-white break-keep">{a.animal_name}</h3>
+          <h3 className="text-lg font-extrabold text-stone-900 dark:text-white break-keep">{a.animal_name}</h3>
           <span className="text-[11px] font-bold text-amber-500">{"★".repeat(Math.max(0, Math.min(5, a.rarity)))}{"☆".repeat(5 - Math.max(0, Math.min(5, a.rarity)))}</span>
         </div>
         {a.search_nickname && <p className="text-[13px] text-[#E8832E] dark:text-[#FBAA60] font-bold mt-0.5">&ldquo;{a.search_nickname}&rdquo;</p>}
-        {a.kid_friendly_desc && <p className="text-[13px] text-neutral-600 dark:text-neutral-300 mt-2 leading-relaxed break-keep">{a.kid_friendly_desc}</p>}
-        <div className="mt-3 rounded-2xl bg-neutral-50 dark:bg-zinc-900/60 p-3 space-y-1.5">
+        {a.kid_friendly_desc && <p className="text-[13px] text-stone-600 dark:text-stone-300 mt-2 leading-relaxed break-keep">{a.kid_friendly_desc}</p>}
+        <div className="mt-3 rounded-2xl bg-stone-50 dark:bg-zinc-900/60 p-3 space-y-1.5">
           {a.info?.map(([ic, k, v], i) => (
             <div key={i} className="flex items-start gap-2 text-[12.5px]">
               <span className="w-5 text-center flex-shrink-0">{ic}</span>
-              <span className="font-bold text-neutral-500 dark:text-neutral-400 w-12 flex-shrink-0">{k}</span>
-              <span className="text-neutral-700 dark:text-neutral-300 break-keep">{v}</span>
+              <span className="font-bold text-stone-500 dark:text-stone-400 w-12 flex-shrink-0">{k}</span>
+              <span className="text-stone-700 dark:text-stone-300 break-keep">{v}</span>
             </div>
           ))}
         </div>
         {a.facts?.length > 0 && (
           <ul className="mt-3 space-y-1">
-            {a.facts.map((f, i) => <li key={i} className="text-[12px] text-neutral-500 dark:text-neutral-400 pl-3 relative break-keep before:content-['•'] before:absolute before:left-0 before:text-[#F9954E]">{f}</li>)}
+            {a.facts.map((f, i) => <li key={i} className="text-[12px] text-stone-500 dark:text-stone-400 pl-3 relative break-keep before:content-['•'] before:absolute before:left-0 before:text-[#F9954E]">{f}</li>)}
           </ul>
         )}
       </div>
@@ -97,9 +97,9 @@ function Inner() {
 
   return (
     <main className="w-full min-h-screen max-w-2xl mx-auto px-4 pt-8 pb-20">
-      <a href="/animal" className="text-[13px] font-bold text-neutral-400 hover:text-[#F9954E]">← 동물도감</a>
-      <h1 className="text-[26px] sm:text-[32px] font-extrabold text-neutral-950 dark:text-white mt-3 mb-1 break-keep">🐣 나만의 동물 만들기</h1>
-      <p className="text-[14px] text-neutral-400 dark:text-neutral-500 break-keep">상상한 동물을 적으면 AI가 서식지·먹이·크기·수명까지 어울리게 지어줘요.</p>
+      <a href="/animal" className="text-[13px] font-bold text-stone-400 hover:text-[#F9954E]">← 동물도감</a>
+      <h1 className="text-[26px] sm:text-[32px] font-extrabold text-stone-950 dark:text-white mt-3 mb-1 break-keep">🐣 나만의 동물 만들기</h1>
+      <p className="text-[14px] text-stone-400 dark:text-stone-500 break-keep">상상한 동물을 적으면 AI가 서식지·먹이·크기·수명까지 어울리게 지어줘요.</p>
       <p className="mt-1 text-[12px] font-bold text-[#F9954E]">오늘 남은 횟수: {remaining === null ? "…" : `${remaining} / 3`}</p>
 
       <div className="mt-5">
@@ -109,11 +109,11 @@ function Inner() {
           rows={3}
           maxLength={400}
           placeholder="예: 구름 위에 사는 솜사탕 여우"
-          className="w-full px-4 py-3 rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-[14px] text-foreground placeholder:text-neutral-400 focus:outline-none focus:border-[#F9954E] resize-y break-keep"
+          className="w-full px-4 py-3 rounded-2xl border border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-[14px] text-foreground placeholder:text-stone-400 focus:outline-none focus:border-[#F9954E] resize-y break-keep"
         />
         <div className="mt-2 flex flex-wrap gap-1.5">
           {EXAMPLES.map((ex) => (
-            <button key={ex} onClick={() => setPrompt(ex)} className="rounded-full border border-neutral-200 dark:border-zinc-800 px-2.5 py-1 text-[11px] text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E]/50 transition">{ex}</button>
+            <button key={ex} onClick={() => setPrompt(ex)} className="rounded-full border border-stone-200 dark:border-zinc-800 px-2.5 py-1 text-[11px] text-stone-500 dark:text-stone-400 hover:border-[#F9954E]/50 transition">{ex}</button>
           ))}
         </div>
         <button
@@ -126,7 +126,7 @@ function Inner() {
         {error && <p className="mt-2 text-[13px] font-bold text-red-500 break-keep">{error}</p>}
       </div>
 
-      {gen && <div className="mt-6 rounded-3xl aspect-[4/5] max-w-xs mx-auto bg-neutral-100 dark:bg-zinc-900 animate-pulse" />}
+      {gen && <div className="mt-6 rounded-3xl aspect-[4/5] max-w-xs mx-auto bg-stone-100 dark:bg-zinc-900 animate-pulse" />}
 
       {result && (
         <div className="mt-7">
@@ -134,7 +134,7 @@ function Inner() {
             <Card a={result.animal} img={permUrl || result.falUrl} />
           </div>
           <div className="mt-4 max-w-xs mx-auto grid grid-cols-2 gap-2">
-            <button onClick={onRegister} disabled={!!busy || done.profile} className="rounded-2xl bg-neutral-900 dark:bg-white text-white dark:text-black py-2.5 text-[13px] font-bold hover:opacity-90 transition disabled:opacity-50">
+            <button onClick={onRegister} disabled={!!busy || done.profile} className="rounded-2xl bg-stone-900 dark:bg-white text-white dark:text-black py-2.5 text-[13px] font-bold hover:opacity-90 transition disabled:opacity-50">
               {busy === "profile" ? "저장 중…" : done.profile ? "✓ 프로필에 등록됨" : "⭐ 프로필에 등록"}
             </button>
             <button onClick={onShare} disabled={!!busy || done.feed} className="rounded-2xl bg-[#F9954E] text-white py-2.5 text-[13px] font-bold hover:brightness-105 transition disabled:opacity-50">
@@ -142,13 +142,13 @@ function Inner() {
             </button>
           </div>
           {(done.profile || done.feed) && (
-            <p className="mt-3 text-center text-[12px] text-neutral-500">
+            <p className="mt-3 text-center text-[12px] text-stone-500">
               {done.profile && <a href="/profile" className="font-bold text-[#F9954E] hover:underline">내 프로필 보기</a>}
               {done.profile && done.feed && " · "}
               {done.feed && <a href="/feed" className="font-bold text-[#F9954E] hover:underline">피드 보기</a>}
             </p>
           )}
-          <p className="mt-4 text-center text-[12px] text-neutral-400">다른 동물을 만들고 싶으면 위에 새로 적어주세요.</p>
+          <p className="mt-4 text-center text-[12px] text-stone-400">다른 동물을 만들고 싶으면 위에 새로 적어주세요.</p>
         </div>
       )}
     </main>

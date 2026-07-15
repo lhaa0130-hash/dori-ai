@@ -32,7 +32,7 @@ const projectPreviews = [
         status: "COMING SOON",
         statusLabel: "준비 중",
         category: "Mobile App",
-        icon: <Smartphone className="w-5 h-5 text-neutral-400" />
+        icon: <Smartphone className="w-5 h-5 text-stone-400" />
     },
     {
         id: "shorts",
@@ -41,7 +41,7 @@ const projectPreviews = [
         status: "COMING SOON",
         statusLabel: "준비 중",
         category: "Content",
-        icon: <Video className="w-5 h-5 text-neutral-400" />
+        icon: <Video className="w-5 h-5 text-stone-400" />
     },
     {
         id: "animation",
@@ -50,7 +50,7 @@ const projectPreviews = [
         status: "COMING SOON",
         statusLabel: "준비 중",
         category: "Kids Tech",
-        icon: <Film className="w-5 h-5 text-neutral-400" />
+        icon: <Film className="w-5 h-5 text-stone-400" />
     },
     {
         id: "gumroad",
@@ -59,7 +59,7 @@ const projectPreviews = [
         status: "COMING SOON",
         statusLabel: "준비 중",
         category: "Marketplace",
-        icon: <ShoppingBag className="w-5 h-5 text-neutral-400" />
+        icon: <ShoppingBag className="w-5 h-5 text-stone-400" />
     }
 ];
 
@@ -271,8 +271,8 @@ export function ProjectPreview() {
                                                 {project.title}
                                             </h4>
                                             <span className={`text-[9px] px-1.5 py-0 rounded-full flex-shrink-0 ml-2 border ${project.status === "ACTIVE"
-                                                ? "bg-[#FFF5EB] dark:bg-[#8F4B10]/20 text-[#E8832E] dark:text-[#FBAA60] border-[#FEEBD0] dark:border-[#8F4B10]/30"
-                                                : "bg-neutral-50 dark:bg-neutral-800 text-neutral-500 dark:text-neutral-400 border-neutral-100 dark:border-neutral-700"
+                                                ? "bg-[#FBEEE7] dark:bg-[#8F4B10]/20 text-[#E8832E] dark:text-[#FBAA60] border-[#FEEBD0] dark:border-[#8F4B10]/30"
+                                                : "bg-stone-50 dark:bg-stone-800 text-stone-500 dark:text-stone-400 border-stone-100 dark:border-stone-700"
                                                 }`}>
                                                 {project.statusLabel}
                                             </span>
@@ -303,10 +303,10 @@ export function ProjectPreview() {
 export function MinigamePreview() {
     const getDifficultyColor = (difficulty: string) => {
         switch (difficulty) {
-            case "쉬움": return "text-neutral-400 dark:text-neutral-500";
-            case "보통": return "text-neutral-600 dark:text-neutral-400";
+            case "쉬움": return "text-stone-400 dark:text-stone-500";
+            case "보통": return "text-stone-600 dark:text-stone-400";
             case "어려움": return "text-[#F9954E] dark:text-[#FBAA60]";
-            default: return "text-neutral-400";
+            default: return "text-stone-400";
         }
     };
 
@@ -374,9 +374,9 @@ export function AIToolsPreview() {
     const getRankColor = (rank: number) => {
         switch (rank) {
             case 1: return "text-yellow-500"; // 금메달
-            case 2: return "text-neutral-400"; // 은메달
+            case 2: return "text-stone-400"; // 은메달
             case 3: return "text-[#E8832E]"; // 동메달
-            default: return "text-neutral-400";
+            default: return "text-stone-400";
         }
     };
 
@@ -410,7 +410,7 @@ export function AIToolsPreview() {
                         transition={{ delay: categoryIndex * 0.05 }}
                         viewport={{ once: true }}
                     >
-                        <div className="bg-card/30 border border-neutral-200/50 dark:border-zinc-800/50 rounded-lg p-1.5">
+                        <div className="bg-card/30 border border-stone-200/50 dark:border-zinc-800/50 rounded-lg p-1.5">
                             <h4 className="text-[9px] font-bold text-[#F9954E] mb-1 flex items-center gap-1 tracking-tight px-1">
                                 <span className="w-0.5 h-0.5 bg-[#F9954E] rounded-full" />
                                 {categoryData.category}
@@ -420,7 +420,7 @@ export function AIToolsPreview() {
                                     <Link
                                         key={tool.rank}
                                         href="/ai-tools"
-                                        className="group flex items-center gap-1 p-1.5 hover:bg-[#FFF5EB] dark:hover:bg-orange-950/20 rounded transition-all"
+                                        className="group flex items-center gap-1 p-1.5 hover:bg-[#FBEEE7] dark:hover:bg-orange-950/20 rounded transition-all"
                                     >
                                         <span className={`text-xs flex-shrink-0 ${getRankColor(tool.rank)}`}>
                                             {getRankEmoji(tool.rank)}
@@ -470,7 +470,7 @@ export function InsightPreview() {
                         transition={{ delay: categoryIndex * 0.05 }}
                         viewport={{ once: true }}
                     >
-                        <div className="bg-card/30 border border-neutral-200/50 dark:border-zinc-800/50 rounded-lg p-1.5">
+                        <div className="bg-card/30 border border-stone-200/50 dark:border-zinc-800/50 rounded-lg p-1.5">
                             <h4 className="text-[9px] font-bold text-[#F9954E] mb-1 flex items-center gap-1 tracking-tight px-1">
                                 <span className="w-0.5 h-0.5 bg-[#F9954E] rounded-full" />
                                 {categoryData.category}
@@ -480,7 +480,7 @@ export function InsightPreview() {
                                     <Link
                                         key={articleIndex}
                                         href="/insight"
-                                        className="group block p-1.5 hover:bg-[#FFF5EB] dark:hover:bg-orange-950/20 rounded transition-all"
+                                        className="group block p-1.5 hover:bg-[#FBEEE7] dark:hover:bg-orange-950/20 rounded transition-all"
                                     >
                                         <h5 className="text-[10px] font-bold text-foreground group-hover:text-[#F9954E] transition-colors line-clamp-1 leading-tight mb-0.5">
                                             {article.title}

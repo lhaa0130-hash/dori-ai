@@ -31,12 +31,12 @@ export default function MinigamePage() {
     <main className="min-h-screen">
 
       {/* 히어로 */}
-      <section className="pt-8 pb-10 border-b border-neutral-100 dark:border-zinc-900">
+      <section className="pt-8 pb-10 border-b border-stone-100 dark:border-zinc-900">
         <p className="text-[12px] font-semibold text-[#F9954E] mb-3">미니게임</p>
-        <h1 className="text-[38px] sm:text-[50px] font-extrabold text-neutral-950 dark:text-white leading-[1.1] tracking-tight mb-3 break-keep">
+        <h1 className="text-[38px] sm:text-[50px] font-extrabold text-stone-950 dark:text-white leading-[1.1] tracking-tight mb-3 break-keep">
           가볍게 즐기는<br />게임 모음
         </h1>
-        <p className="text-[14px] text-neutral-500 dark:text-neutral-400 leading-relaxed">
+        <p className="text-[14px] text-stone-500 dark:text-stone-400 leading-relaxed">
           🏆 게임은 명예의 전당(TOP 5)에 기록이 남아요. 솜사탕은 갤럭시 머지·보스 클릭커·2048에서 받을 수 있어요.
         </p>
       </section>
@@ -48,16 +48,16 @@ export default function MinigamePage() {
             <Link
               key={game.id}
               href={game.href}
-              className="group flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 shadow-sm transition-all duration-200 hover:border-[#F9954E]/50 hover:shadow-md hover:-translate-y-0.5 active:opacity-70"
+              className="group flex items-center gap-4 p-4 rounded-2xl bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 shadow-sm transition-all duration-200 hover:border-[#F9954E]/50 hover:shadow-md hover:-translate-y-0.5 active:opacity-70"
             >
-              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[#FFF5EB] dark:bg-[#F9954E]/10 text-[#F9954E] flex items-center justify-center transition-colors group-hover:bg-[#F9954E] group-hover:text-white">
+              <div className="flex-shrink-0 w-10 h-10 rounded-xl bg-[#FBEEE7] dark:bg-[#F9954E]/10 text-[#F9954E] flex items-center justify-center transition-colors group-hover:bg-[#F9954E] group-hover:text-white">
                 {game.icon}
               </div>
               <div className="flex-1 min-w-0">
-                <p className="text-[14px] font-bold text-neutral-950 dark:text-white group-hover:text-[#F9954E] transition-colors">
+                <p className="text-[14px] font-bold text-stone-950 dark:text-white group-hover:text-[#F9954E] transition-colors">
                   {game.title}
                 </p>
-                <p className="text-[12px] text-neutral-400 mt-0.5 truncate">
+                <p className="text-[12px] text-stone-400 mt-0.5 truncate">
                   {game.desc}
                 </p>
               </div>
@@ -65,7 +65,7 @@ export default function MinigamePage() {
                 {game.candy ? (
                   <span className="text-[11px] font-semibold text-[#F9954E] flex items-center justify-end gap-1">{game.candy} <CottonCandy className="w-3.5 h-3.5" /></span>
                 ) : game.rank ? (
-                  <span className="text-[11px] font-bold text-[#F9954E] bg-[#FFF5EB] dark:bg-[#F9954E]/10 rounded-full px-2 py-0.5 inline-flex items-center gap-0.5">🏆 랭킹</span>
+                  <span className="text-[11px] font-bold text-[#F9954E] bg-[#FBEEE7] dark:bg-[#F9954E]/10 rounded-full px-2 py-0.5 inline-flex items-center gap-0.5">🏆 랭킹</span>
                 ) : null}
               </div>
             </Link>

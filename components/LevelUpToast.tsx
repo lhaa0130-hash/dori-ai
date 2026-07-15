@@ -48,7 +48,7 @@ export default function LevelUpToast() {
       <div className="flex items-center gap-2.5 px-5 py-3.5 rounded-2xl bg-white dark:bg-zinc-900 border border-[#F9954E]/40 shadow-xl shadow-[#F9954E]/10 toss-fade-up">
         <span className="text-[22px] toss-float">🎉</span>
         <div>
-          <p className="text-[13px] font-extrabold text-neutral-900 dark:text-white">레벨 업! Lv.{toast.level} 달성</p>
+          <p className="text-[13px] font-extrabold text-stone-900 dark:text-white">레벨 업! Lv.{toast.level} 달성</p>
           {toast.tierUp && (
             <p className="text-[11px] font-bold" style={{ color: info.color }}>
               등급 상승 → {info.name}

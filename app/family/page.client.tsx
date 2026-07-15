@@ -1,7 +1,7 @@
 "use client";
 
 // 가족기록 — illo 2nd 프로젝트
-// 디자인: /illo, /flat-form 등 DORI 전역 톤과 통일 (orange #F9954E + cream #FFF5EB)
+// 디자인: /illo, /flat-form 등 DORI 전역 톤과 통일 (orange #F9954E + cream #FBEEE7)
 
 import Link from "next/link";
 import {
@@ -114,17 +114,17 @@ export default function FamilyPageClient() {
       <div className="max-w-5xl mx-auto pt-8 pb-12 sm:pb-24">
 
         {/* ── 히어로 ── */}
-        <section className="pb-8 border-b border-neutral-100 dark:border-zinc-900 mb-8 px-4 sm:px-0">
+        <section className="pb-8 border-b border-stone-100 dark:border-zinc-900 mb-8 px-4 sm:px-0">
           <p className="text-[11px] font-bold text-[#F9954E] mb-3 tracking-wide uppercase">2nd Project · 가족 플랫폼</p>
           <div className="flex items-center gap-3 mb-3">
             <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-[#F9954E] to-[#FE6E00] flex items-center justify-center text-2xl shrink-0 shadow-lg shadow-[#F9954E]/20">
               💝
             </div>
-            <h1 className="text-[30px] sm:text-[40px] font-extrabold text-neutral-950 dark:text-white leading-[1.12] tracking-tight break-keep">
+            <h1 className="text-[30px] sm:text-[40px] font-extrabold text-stone-950 dark:text-white leading-[1.12] tracking-tight break-keep">
               가족기록
             </h1>
           </div>
-          <p className="text-[14px] text-neutral-400 dark:text-neutral-500 leading-relaxed break-keep mb-5">
+          <p className="text-[14px] text-stone-400 dark:text-stone-500 leading-relaxed break-keep mb-5">
             일정·사진·건강·살림·채팅까지 — 가족 모두가 함께 쓰는 디지털 가족 공간이에요.<br />
             안드로이드 홈화면처럼 원하는 위젯만 직접 배치하고, 가족별 권한도 세팅할 수 있어요.
           </p>
@@ -147,13 +147,13 @@ export default function FamilyPageClient() {
         {/* ── 지금 사용 가능한 기능 ── */}
         <section className="mt-16 sm:mt-24 px-4 sm:px-0">
           <div className="mb-9">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FBEEE7] dark:bg-orange-950/30 text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-4">
               <Sparkles className="w-3 h-3" /> 지금 바로 사용 가능
             </div>
-            <h2 className="text-2xl md:text-[28px] font-extrabold text-neutral-900 dark:text-white mb-2 break-keep leading-snug">
+            <h2 className="text-2xl md:text-[28px] font-extrabold text-stone-900 dark:text-white mb-2 break-keep leading-snug">
               현재 구현된 기능
             </h2>
-            <p className="text-[14px] text-neutral-500 dark:text-neutral-400 break-keep">
+            <p className="text-[14px] text-stone-500 dark:text-stone-400 break-keep">
               가족기록 앱에서 지금 바로 써볼 수 있는 기능들이에요.
             </p>
           </div>
@@ -162,22 +162,22 @@ export default function FamilyPageClient() {
             {NOW.map((f) => (
               <div
                 key={f.title}
-                className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-3xl p-7 hover:border-[#F9954E] dark:hover:border-[#F9954E] transition-colors"
+                className="bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 rounded-3xl p-7 hover:border-[#F9954E] dark:hover:border-[#F9954E] transition-colors"
               >
                 <div className="flex items-center gap-4 mb-4">
-                  <div className="w-12 h-12 rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/30 flex items-center justify-center shrink-0">
+                  <div className="w-12 h-12 rounded-2xl bg-[#FBEEE7] dark:bg-orange-950/30 flex items-center justify-center shrink-0">
                     <f.icon className="w-6 h-6 text-[#F9954E]" />
                   </div>
-                  <h3 className="text-lg font-bold text-neutral-900 dark:text-white leading-snug break-keep">
+                  <h3 className="text-lg font-bold text-stone-900 dark:text-white leading-snug break-keep">
                     {f.title}
                   </h3>
                 </div>
-                <p className="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep mb-4">
+                <p className="text-sm text-stone-500 dark:text-stone-400 leading-relaxed break-keep mb-4">
                   {f.desc}
                 </p>
                 <ul className="space-y-2">
                   {f.bullets.map((b) => (
-                    <li key={b} className="flex items-center gap-2 text-xs text-neutral-600 dark:text-neutral-400">
+                    <li key={b} className="flex items-center gap-2 text-xs text-stone-600 dark:text-stone-400">
                       <Check className="w-3.5 h-3.5 text-[#F9954E] flex-shrink-0" />
                       <span>{b}</span>
                     </li>
@@ -190,20 +190,20 @@ export default function FamilyPageClient() {
 
         {/* ── 왜 만들었나 ── */}
         <section className="mt-16 sm:mt-24 px-4 sm:px-0">
-          <div className="rounded-[28px] border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-8 md:p-12">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
+          <div className="rounded-[28px] border border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-8 md:p-12">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FBEEE7] dark:bg-orange-950/30 text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-6">
               <Lightbulb className="w-3 h-3" /> 왜 만들었나
             </div>
-            <h2 className="text-2xl md:text-[28px] font-extrabold text-neutral-900 dark:text-white mb-6 break-keep leading-snug">
+            <h2 className="text-2xl md:text-[28px] font-extrabold text-stone-900 dark:text-white mb-6 break-keep leading-snug">
               “가족 정보가 카카오·네이버·메모장에 다 흩어져 있어요.”
             </h2>
-            <div className="space-y-4 text-[15px] md:text-base text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep max-w-2xl">
+            <div className="space-y-4 text-[15px] md:text-base text-stone-600 dark:text-stone-300 leading-relaxed break-keep max-w-2xl">
               <p>
-                가족 사진은 카톡에, 일정은 <b className="text-neutral-900 dark:text-white">네이버 캘린더</b>에, 약 챙김은 메모장에, 살림 비밀번호는 누가 어디 적었는지 모르고…
+                가족 사진은 카톡에, 일정은 <b className="text-stone-900 dark:text-white">네이버 캘린더</b>에, 약 챙김은 메모장에, 살림 비밀번호는 누가 어디 적었는지 모르고…
                 정작 가족이 함께 보고 싶은 건 한 곳에 모이지 않아요.
               </p>
               <p>
-                <b className="text-neutral-900 dark:text-white">가족기록</b>은 이 모든 것을 가족 단위로 묶어요. 일정·사진·메시지·살림·기록까지 한 앱 안에서 공유하고,
+                <b className="text-stone-900 dark:text-white">가족기록</b>은 이 모든 것을 가족 단위로 묶어요. 일정·사진·메시지·살림·기록까지 한 앱 안에서 공유하고,
                 필요하면 토스·카카오톡·구글 캘린더와도 자연스럽게 연결됩니다.
               </p>
               <p>
@@ -217,14 +217,14 @@ export default function FamilyPageClient() {
         {/* ── 위젯 카탈로그 ── */}
         <section className="mt-16 sm:mt-24 px-4 sm:px-0">
           <div className="text-center mb-10">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FBEEE7] dark:bg-orange-950/30 text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-4">
               <Sparkles className="w-3 h-3" /> 26종 위젯
             </div>
-            <h2 className="text-2xl md:text-[28px] font-extrabold text-neutral-900 dark:text-white mb-3 break-keep leading-snug">
+            <h2 className="text-2xl md:text-[28px] font-extrabold text-stone-900 dark:text-white mb-3 break-keep leading-snug">
               안드로이드 홈화면처럼,<br className="hidden md:block" />
               내가 원하는 것만 골라서
             </h2>
-            <p className="text-[14px] text-neutral-500 dark:text-neutral-400 break-keep">
+            <p className="text-[14px] text-stone-500 dark:text-stone-400 break-keep">
               10×10 그리드에 위젯을 끌어다 놓으면 끝. 좌→우 스와이프로 페이지 추가.
             </p>
           </div>
@@ -232,10 +232,10 @@ export default function FamilyPageClient() {
             {WIDGETS.map((w) => (
               <div
                 key={w.title}
-                className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl p-3 text-center hover:border-[#F9954E] hover:-translate-y-0.5 transition-all"
+                className="bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 rounded-2xl p-3 text-center hover:border-[#F9954E] hover:-translate-y-0.5 transition-all"
               >
                 <div className="text-2xl mb-1.5">{w.emoji}</div>
-                <p className="text-[11px] font-bold text-neutral-700 dark:text-neutral-300 leading-tight break-keep">
+                <p className="text-[11px] font-bold text-stone-700 dark:text-stone-300 leading-tight break-keep">
                   {w.title}
                 </p>
               </div>
@@ -245,15 +245,15 @@ export default function FamilyPageClient() {
 
         {/* ── 외부 앱 호환 ── */}
         <section className="mt-16 sm:mt-24 px-4 sm:px-0">
-          <div className="rounded-[28px] bg-neutral-50 dark:bg-zinc-900/50 border border-neutral-200 dark:border-zinc-800 p-8 md:p-10">
+          <div className="rounded-[28px] bg-stone-50 dark:bg-zinc-900/50 border border-stone-200 dark:border-zinc-800 p-8 md:p-10">
             <div className="text-center mb-9">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FBEEE7] dark:bg-orange-950/30 text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-4">
                 <ExternalLink className="w-3 h-3" /> 외부 앱 호환
               </div>
-              <h2 className="text-2xl md:text-[28px] font-extrabold text-neutral-900 dark:text-white mb-3 break-keep leading-snug">
+              <h2 className="text-2xl md:text-[28px] font-extrabold text-stone-900 dark:text-white mb-3 break-keep leading-snug">
                 다른 앱이랑 자연스럽게 연결돼요
               </h2>
-              <p className="text-[14px] text-neutral-500 dark:text-neutral-400 break-keep">
+              <p className="text-[14px] text-stone-500 dark:text-stone-400 break-keep">
                 토스로 가족 정산, 카톡으로 일정 공유, 구글·Apple 캘린더로 동기화까지.
               </p>
             </div>
@@ -261,14 +261,14 @@ export default function FamilyPageClient() {
               {INTEGRATIONS.map((i) => (
                 <div
                   key={i.label}
-                  className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl p-5 flex items-start gap-3 hover:border-[#F9954E] transition-colors"
+                  className="bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 rounded-2xl p-5 flex items-start gap-3 hover:border-[#F9954E] transition-colors"
                 >
                   <div className="text-2xl shrink-0">{i.emoji}</div>
                   <div className="min-w-0">
-                    <h3 className="text-sm font-bold text-neutral-900 dark:text-white mb-0.5 break-keep">
+                    <h3 className="text-sm font-bold text-stone-900 dark:text-white mb-0.5 break-keep">
                       {i.label}
                     </h3>
-                    <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-snug break-keep">
+                    <p className="text-[11px] text-stone-500 dark:text-stone-400 leading-snug break-keep">
                       {i.desc}
                     </p>
                   </div>
@@ -281,13 +281,13 @@ export default function FamilyPageClient() {
         {/* ── 누가 사용하나요 ── */}
         <section className="mt-16 sm:mt-24 px-4 sm:px-0">
           <div className="mb-9 text-center">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FBEEE7] dark:bg-orange-950/30 text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-4">
               <Users className="w-3 h-3" /> 3세대 가족 모두
             </div>
-            <h2 className="text-2xl md:text-[28px] font-extrabold text-neutral-900 dark:text-white mb-3 break-keep leading-snug">
+            <h2 className="text-2xl md:text-[28px] font-extrabold text-stone-900 dark:text-white mb-3 break-keep leading-snug">
               누가 사용하나요?
             </h2>
-            <p className="text-[14px] text-neutral-500 dark:text-neutral-400 break-keep">
+            <p className="text-[14px] text-stone-500 dark:text-stone-400 break-keep">
               할아버지·할머니부터 영유아 부모까지, 한 가족 안의 모두를 위해 설계해요.
             </p>
           </div>
@@ -295,13 +295,13 @@ export default function FamilyPageClient() {
             {ROLES.map((r) => (
               <div
                 key={r.role}
-                className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl p-5 text-center hover:border-[#F9954E] transition-colors"
+                className="bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 rounded-2xl p-5 text-center hover:border-[#F9954E] transition-colors"
               >
                 <div className="text-4xl mb-3">{r.emoji}</div>
-                <div className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 text-[#E8832E] dark:text-[#FBAA60] mb-2 inline-block">
+                <div className="text-[11px] font-bold px-2.5 py-1 rounded-full bg-[#FBEEE7] dark:bg-orange-950/30 text-[#E8832E] dark:text-[#FBAA60] mb-2 inline-block">
                   {r.role}
                 </div>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-snug break-keep">
+                <p className="text-xs text-stone-500 dark:text-stone-400 leading-snug break-keep">
                   {r.desc}
                 </p>
               </div>
@@ -311,15 +311,15 @@ export default function FamilyPageClient() {
 
         {/* ── 시작 가이드 ── */}
         <section className="mt-16 sm:mt-24 px-4 sm:px-0">
-          <div className="rounded-[28px] bg-neutral-50 dark:bg-zinc-900/50 border border-neutral-200 dark:border-zinc-800 p-8 md:p-10">
+          <div className="rounded-[28px] bg-stone-50 dark:bg-zinc-900/50 border border-stone-200 dark:border-zinc-800 p-8 md:p-10">
             <div className="text-center mb-9">
-              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-4">
+              <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FBEEE7] dark:bg-orange-950/30 text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-4">
                 <Sparkles className="w-3 h-3" /> 처음이세요?
               </div>
-              <h2 className="text-2xl md:text-[28px] font-extrabold text-neutral-900 dark:text-white mb-3 break-keep leading-snug">
+              <h2 className="text-2xl md:text-[28px] font-extrabold text-stone-900 dark:text-white mb-3 break-keep leading-snug">
                 30초면 가족 만들기 끝
               </h2>
-              <p className="text-[14px] text-neutral-500 dark:text-neutral-400 break-keep">
+              <p className="text-[14px] text-stone-500 dark:text-stone-400 break-keep">
                 설치도 회원가입도 없어요. 순서대로 따라 하면 됩니다.
               </p>
             </div>
@@ -330,10 +330,10 @@ export default function FamilyPageClient() {
                     {i + 1}
                   </span>
                   <div>
-                    <h3 className="text-base font-bold text-neutral-900 dark:text-white mb-1 break-keep">
+                    <h3 className="text-base font-bold text-stone-900 dark:text-white mb-1 break-keep">
                       {g.t}
                     </h3>
-                    <p className="text-sm text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep">
+                    <p className="text-sm text-stone-600 dark:text-stone-300 leading-relaxed break-keep">
                       {g.d}
                     </p>
                   </div>
@@ -355,13 +355,13 @@ export default function FamilyPageClient() {
 
         {/* ── 보안 ── */}
         <section className="mt-16 sm:mt-24 px-4 sm:px-0">
-          <div className="flex flex-col md:flex-row items-center gap-8 rounded-[28px] bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 p-8 md:p-10">
-            <div className="flex-none w-16 h-16 rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/30 flex items-center justify-center">
+          <div className="flex flex-col md:flex-row items-center gap-8 rounded-[28px] bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 p-8 md:p-10">
+            <div className="flex-none w-16 h-16 rounded-2xl bg-[#FBEEE7] dark:bg-orange-950/30 flex items-center justify-center">
               <ShieldCheck className="w-8 h-8 text-[#F9954E]" />
             </div>
             <div className="text-center md:text-left">
-              <h3 className="text-xl font-bold text-neutral-900 dark:text-white mb-2">가족 데이터는 그 가족만</h3>
-              <p className="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+              <h3 className="text-xl font-bold text-stone-900 dark:text-white mb-2">가족 데이터는 그 가족만</h3>
+              <p className="text-sm text-stone-500 dark:text-stone-400 leading-relaxed break-keep">
                 Firestore 보안 규칙으로 인증된 가족 멤버만 read/write 가능합니다. 위젯별로 누가 볼 수 있을지도 따로 설정할 수 있고,
                 가입 코드는 brute-force 시도 시 자동으로 잠겨요. 사진·채팅·비밀번호 모두 가족 안에서만 흐릅니다.
               </p>
@@ -371,7 +371,7 @@ export default function FamilyPageClient() {
 
         {/* ── AI 기능 (다크 카드) ── */}
         <section className="mt-16 sm:mt-24 px-4 sm:px-0">
-          <div className="rounded-[28px] bg-gradient-to-br from-neutral-900 to-neutral-800 dark:from-zinc-800 dark:to-zinc-900 p-8 md:p-12">
+          <div className="rounded-[28px] bg-gradient-to-br from-stone-900 to-stone-800 dark:from-zinc-800 dark:to-zinc-900 p-8 md:p-12">
             <div className="flex items-center gap-2 mb-6">
               <Star className="w-5 h-5 text-[#F9954E] fill-[#F9954E]" />
               <span className="text-xs font-bold text-[#FBAA60] uppercase tracking-wider">AI Features · 업데이트 예정</span>
@@ -379,7 +379,7 @@ export default function FamilyPageClient() {
             <h2 className="text-2xl md:text-[28px] font-extrabold text-white mb-3 break-keep leading-snug">
               AI가 도와주는 가족 기록
             </h2>
-            <p className="text-sm text-neutral-400 mb-8 break-keep">
+            <p className="text-sm text-stone-400 mb-8 break-keep">
               illo 본진 기술을 가족 단위로 가져와요. 빠르게 추가되고 있어요.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
@@ -391,7 +391,7 @@ export default function FamilyPageClient() {
                 <div key={a.title} className="bg-white/10 rounded-2xl p-5">
                   <div className="text-3xl mb-3">{a.emoji}</div>
                   <h3 className="text-sm font-bold text-white mb-2 break-keep">{a.title}</h3>
-                  <p className="text-xs text-neutral-400 leading-relaxed break-keep">{a.desc}</p>
+                  <p className="text-xs text-stone-400 leading-relaxed break-keep">{a.desc}</p>
                 </div>
               ))}
             </div>
@@ -401,13 +401,13 @@ export default function FamilyPageClient() {
         {/* ── 곧 추가될 기능 ── */}
         <section className="mt-16 sm:mt-24 px-4 sm:px-0">
           <div className="mb-9">
-            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FFF5EB] dark:bg-orange-950/30 text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-4">
+            <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-[#FBEEE7] dark:bg-orange-950/30 text-[#E8832E] dark:text-[#FBAA60] text-xs font-bold mb-4">
               <CalendarCheck className="w-3 h-3" /> 다음 업데이트
             </div>
-            <h2 className="text-2xl md:text-[28px] font-extrabold text-neutral-900 dark:text-white mb-2 break-keep leading-snug">
+            <h2 className="text-2xl md:text-[28px] font-extrabold text-stone-900 dark:text-white mb-2 break-keep leading-snug">
               곧 추가될 기능
             </h2>
-            <p className="text-[14px] text-neutral-500 dark:text-neutral-400 break-keep">
+            <p className="text-[14px] text-stone-500 dark:text-stone-400 break-keep">
               빠르게 만들어가는 중이에요. 매주 새로운 기능이 추가됩니다.
             </p>
           </div>
@@ -422,15 +422,15 @@ export default function FamilyPageClient() {
             ].map((f) => (
               <div
                 key={f.title}
-                className="bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl p-5 hover:border-[#F9954E] transition-colors"
+                className="bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 rounded-2xl p-5 hover:border-[#F9954E] transition-colors"
               >
-                <div className="w-10 h-10 rounded-xl bg-[#FFF5EB] dark:bg-orange-950/30 flex items-center justify-center mb-3">
+                <div className="w-10 h-10 rounded-xl bg-[#FBEEE7] dark:bg-orange-950/30 flex items-center justify-center mb-3">
                   <f.icon className="w-5 h-5 text-[#F9954E]" />
                 </div>
-                <h3 className="text-sm font-bold text-neutral-900 dark:text-white mb-1.5 leading-snug break-keep">
+                <h3 className="text-sm font-bold text-stone-900 dark:text-white mb-1.5 leading-snug break-keep">
                   {f.title}
                 </h3>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+                <p className="text-xs text-stone-500 dark:text-stone-400 leading-relaxed break-keep">
                   {f.desc}
                 </p>
               </div>
@@ -440,12 +440,12 @@ export default function FamilyPageClient() {
 
         {/* ── 최종 CTA ── */}
         <section className="mt-16 sm:mt-24 px-4 sm:px-0">
-          <div className="rounded-[28px] bg-gradient-to-br from-[#FFF5EB] to-[#FEEBD0] dark:from-zinc-900 dark:to-zinc-900/40 border border-[#FDD5A5] dark:border-zinc-800 p-10 text-center">
+          <div className="rounded-[28px] bg-gradient-to-br from-[#FBEEE7] to-[#FEEBD0] dark:from-zinc-900 dark:to-zinc-900/40 border border-[#FDD5A5] dark:border-zinc-800 p-10 text-center">
             <div className="text-5xl mb-4">💝</div>
-            <h2 className="text-2xl md:text-[28px] font-extrabold text-neutral-900 dark:text-white mb-3 break-keep leading-snug">
+            <h2 className="text-2xl md:text-[28px] font-extrabold text-stone-900 dark:text-white mb-3 break-keep leading-snug">
               지금 바로 시작해보세요
             </h2>
-            <p className="text-neutral-600 dark:text-neutral-400 mb-8 break-keep text-[15px]">
+            <p className="text-stone-600 dark:text-stone-400 mb-8 break-keep text-[15px]">
               설치도, 결제도, 회원가입도 필요 없어요.<br className="hidden md:block" />
               브라우저만 있으면 30초 뒤에 우리 가족 첫 기록을 남길 수 있습니다.
             </p>

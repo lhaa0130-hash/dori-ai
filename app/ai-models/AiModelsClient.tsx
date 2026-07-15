@@ -184,11 +184,11 @@ export default function AiModelsClient({ locale = "ko" }: { locale?: Locale }) {
 
   const numInput = (v: number, set: (n: number) => void, label: string, unit: string) => (
     <label className="flex-1 min-w-[100px]">
-      <span className="block text-[11px] font-bold text-neutral-500 dark:text-neutral-400 mb-1">{label}</span>
-      <div className="flex items-center gap-1 rounded-xl border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 focus-within:border-[#F9954E]">
+      <span className="block text-[11px] font-bold text-stone-500 dark:text-stone-400 mb-1">{label}</span>
+      <div className="flex items-center gap-1 rounded-xl border border-stone-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 px-3 py-2 focus-within:border-[#F9954E]">
         <input type="number" min={0} value={v} onChange={(e) => set(Math.max(0, Number(e.target.value) || 0))}
-          className="w-full bg-transparent text-[14px] font-bold text-neutral-900 dark:text-white outline-none tabular-nums" />
-        <span className="text-[11px] text-neutral-400 whitespace-nowrap">{unit}</span>
+          className="w-full bg-transparent text-[14px] font-bold text-stone-900 dark:text-white outline-none tabular-nums" />
+        <span className="text-[11px] text-stone-400 whitespace-nowrap">{unit}</span>
       </div>
     </label>
   );
@@ -196,24 +196,24 @@ export default function AiModelsClient({ locale = "ko" }: { locale?: Locale }) {
   return (
     <main className="w-full min-h-screen max-w-3xl mx-auto px-4">
       {/* 히어로 */}
-      <section className="pt-8 pb-5 border-b border-neutral-100 dark:border-zinc-900">
+      <section className="pt-8 pb-5 border-b border-stone-100 dark:border-zinc-900">
         <div className="flex items-center justify-between mb-3">
           <p className="text-[11px] font-bold text-[#F9954E] tracking-wide uppercase">{t.eyebrow}</p>
           <Link href={t.switchHref} hrefLang={locale === "en" ? "ko" : "en"}
-            className="text-[11px] font-bold rounded-full border border-neutral-200 dark:border-zinc-700 px-2.5 py-1 text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E] hover:text-[#F9954E] transition-colors">
+            className="text-[11px] font-bold rounded-full border border-stone-200 dark:border-zinc-700 px-2.5 py-1 text-stone-500 dark:text-stone-400 hover:border-[#F9954E] hover:text-[#F9954E] transition-colors">
             🌐 {t.switchTo}
           </Link>
         </div>
-        <h1 className="text-[30px] sm:text-[40px] font-extrabold text-neutral-950 dark:text-white leading-[1.14] tracking-tight mb-2 break-keep">
+        <h1 className="text-[30px] sm:text-[40px] font-extrabold text-stone-950 dark:text-white leading-[1.14] tracking-tight mb-2 break-keep">
           {t.h1a}<br />{t.h1b}
         </h1>
-        <p className="text-[14px] text-neutral-400 dark:text-neutral-500 leading-relaxed break-keep">
-          {t.heroPre}<b className="text-neutral-600 dark:text-neutral-300">{t.heroBold}</b>{t.heroPost}
+        <p className="text-[14px] text-stone-400 dark:text-stone-500 leading-relaxed break-keep">
+          {t.heroPre}<b className="text-stone-600 dark:text-stone-300">{t.heroBold}</b>{t.heroPost}
         </p>
       </section>
 
       {err && (
-        <p className="text-[13px] text-neutral-400 py-10 text-center">{t.errText}</p>
+        <p className="text-[13px] text-stone-400 py-10 text-center">{t.errText}</p>
       )}
 
       {!err && (
@@ -225,19 +225,19 @@ export default function AiModelsClient({ locale = "ko" }: { locale?: Locale }) {
               { t: t.hiUsed, m: mostUsed, sub: mostUsed && mostUsed.reqM != null ? mostUsed.reqM + t.reqDay : "" },
               { t: t.hiSmart, m: smartest, sub: smartest && smartest.intel != null ? smartest.intel + t.ptsSub : "" },
             ].map((h, i) => (
-              <div key={i} className="rounded-2xl border border-neutral-200 dark:border-zinc-800 p-3 bg-gradient-to-b from-[#F9954E]/5 to-transparent">
-                <p className="text-[10.5px] font-bold text-neutral-500 dark:text-neutral-400 mb-1">{h.t}</p>
-                <p className="text-[12.5px] font-extrabold text-neutral-900 dark:text-white leading-tight line-clamp-2 min-h-[30px]">{h.m ? h.m.name.replace(/^[^:]+:\s*/, "") : "—"}</p>
+              <div key={i} className="rounded-2xl border border-stone-200 dark:border-zinc-800 p-3 bg-gradient-to-b from-[#F9954E]/5 to-transparent">
+                <p className="text-[10.5px] font-bold text-stone-500 dark:text-stone-400 mb-1">{h.t}</p>
+                <p className="text-[12.5px] font-extrabold text-stone-900 dark:text-white leading-tight line-clamp-2 min-h-[30px]">{h.m ? h.m.name.replace(/^[^:]+:\s*/, "") : "—"}</p>
                 <p className="text-[10.5px] font-bold text-[#F9954E] mt-1">{h.sub}</p>
               </div>
             ))}
           </section>
 
           {/* 계산기 입력 */}
-          <section className="mt-5 rounded-2xl border border-neutral-200 dark:border-zinc-800 p-4">
+          <section className="mt-5 rounded-2xl border border-stone-200 dark:border-zinc-800 p-4">
             <div className="flex items-center gap-2 mb-3">
               <span className="w-2 h-2 rounded-full bg-[#F9954E]" />
-              <h2 className="text-[14px] font-extrabold text-neutral-900 dark:text-white">{t.calc}</h2>
+              <h2 className="text-[14px] font-extrabold text-stone-900 dark:text-white">{t.calc}</h2>
               <span className="ml-auto text-[10.5px] font-bold text-[#F9954E]">● LIVE</span>
             </div>
             <div className="flex flex-wrap gap-2">
@@ -245,15 +245,15 @@ export default function AiModelsClient({ locale = "ko" }: { locale?: Locale }) {
               {numInput(outTok, setOutTok, t.outTok, t.unitTok)}
               {numInput(calls, setCalls, t.calls, t.unitCall)}
             </div>
-            <p className="text-[11px] text-neutral-400 mt-2">{t.calcHint}</p>
+            <p className="text-[11px] text-stone-400 mt-2">{t.calcHint}</p>
           </section>
 
           {/* 비교/계산 표 */}
           <section className="mt-4 pb-16">
             <div className="flex items-center justify-between mb-2">
-              <h2 className="text-[14px] font-extrabold text-neutral-900 dark:text-white">{t.compare} <span className="text-[11px] font-medium text-neutral-400">({t.cols[sort].label}{t.bySuffix})</span></h2>
+              <h2 className="text-[14px] font-extrabold text-stone-900 dark:text-white">{t.compare} <span className="text-[11px] font-medium text-stone-400">({t.cols[sort].label}{t.bySuffix})</span></h2>
               <button onClick={downloadCard} disabled={rows.length === 0}
-                className="inline-flex items-center gap-1 rounded-full border border-neutral-200 dark:border-zinc-700 text-neutral-700 dark:text-neutral-200 text-[12px] font-bold px-3 py-1.5 hover:border-[#F9954E] hover:text-[#F9954E] disabled:opacity-40 transition-colors">
+                className="inline-flex items-center gap-1 rounded-full border border-stone-200 dark:border-zinc-700 text-stone-700 dark:text-stone-200 text-[12px] font-bold px-3 py-1.5 hover:border-[#F9954E] hover:text-[#F9954E] disabled:opacity-40 transition-colors">
                 {t.saveImg}
               </button>
             </div>
@@ -261,53 +261,53 @@ export default function AiModelsClient({ locale = "ko" }: { locale?: Locale }) {
               <table className="w-full min-w-[640px] border-separate border-spacing-0">
                 <thead>
                   <tr>
-                    <th className="sticky left-0 z-10 bg-white dark:bg-black text-left text-[11px] font-bold text-neutral-400 pb-2 pr-2">{t.colModel}</th>
+                    <th className="sticky left-0 z-10 bg-white dark:bg-black text-left text-[11px] font-bold text-stone-400 pb-2 pr-2">{t.colModel}</th>
                     {COL_KEYS.map((c) => (
                       <th key={c.key} onClick={() => clickSort(c.key)}
                         className="text-right text-[11px] font-bold pb-2 px-2 cursor-pointer select-none whitespace-nowrap hover:text-[#F9954E]"
                         style={{ color: sort === c.key ? ORANGE : undefined }}>
                         {t.cols[c.key].label}{sort === c.key ? (asc ? " ▲" : " ▼") : ""}
-                        <span className="block text-[9px] font-medium text-neutral-300 dark:text-neutral-600">{t.cols[c.key].hint}</span>
+                        <span className="block text-[9px] font-medium text-stone-300 dark:text-stone-600">{t.cols[c.key].hint}</span>
                       </th>
                     ))}
                   </tr>
                 </thead>
                 <tbody>
                   {rows.length === 0 && (
-                    <tr><td colSpan={7} className="text-center text-[13px] text-neutral-400 py-10">{t.loading}</td></tr>
+                    <tr><td colSpan={7} className="text-center text-[13px] text-stone-400 py-10">{t.loading}</td></tr>
                   )}
                   {rows.map(({ m, c }, i) => (
-                    <tr key={m.name + i} className="border-t border-neutral-100 dark:border-zinc-900">
+                    <tr key={m.name + i} className="border-t border-stone-100 dark:border-zinc-900">
                       <td className="sticky left-0 z-10 bg-white dark:bg-black py-2.5 pr-2">
-                        <p className="text-[12.5px] font-bold text-neutral-900 dark:text-white leading-tight line-clamp-1">{m.name.replace(/^[^:]+:\s*/, "")}</p>
-                        {m.provider && <p className="text-[10px] text-neutral-400 capitalize">{m.provider}</p>}
+                        <p className="text-[12.5px] font-bold text-stone-900 dark:text-white leading-tight line-clamp-1">{m.name.replace(/^[^:]+:\s*/, "")}</p>
+                        {m.provider && <p className="text-[10px] text-stone-400 capitalize">{m.provider}</p>}
                       </td>
                       <td className="text-right px-2 text-[12.5px] font-extrabold tabular-nums" style={{ color: c != null ? ORANGE : undefined }}>{usd(c)}</td>
-                      <td className="text-right px-2 text-[12px] tabular-nums text-neutral-600 dark:text-neutral-300">{num(m.reqM, "M")}</td>
-                      <td className="text-right px-2 text-[12px] tabular-nums text-neutral-600 dark:text-neutral-300">{m.intel != null ? m.intel : "—"}</td>
-                      <td className="text-right px-2 text-[12px] tabular-nums text-neutral-600 dark:text-neutral-300">{num(m.tps)}</td>
-                      <td className="text-right px-2 text-[12px] tabular-nums text-neutral-500">{usd(m.pin)}</td>
-                      <td className="text-right px-2 text-[12px] tabular-nums text-neutral-500">{usd(m.pout)}</td>
+                      <td className="text-right px-2 text-[12px] tabular-nums text-stone-600 dark:text-stone-300">{num(m.reqM, "M")}</td>
+                      <td className="text-right px-2 text-[12px] tabular-nums text-stone-600 dark:text-stone-300">{m.intel != null ? m.intel : "—"}</td>
+                      <td className="text-right px-2 text-[12px] tabular-nums text-stone-600 dark:text-stone-300">{num(m.tps)}</td>
+                      <td className="text-right px-2 text-[12px] tabular-nums text-stone-500">{usd(m.pin)}</td>
+                      <td className="text-right px-2 text-[12px] tabular-nums text-stone-500">{usd(m.pout)}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
 
-            <p className="text-[10.5px] text-neutral-400 mt-3">{t.dataNote}</p>
+            <p className="text-[10.5px] text-stone-400 mt-3">{t.dataNote}</p>
 
             <div className="mt-6 flex flex-wrap gap-2">
               <Link href="/ai-tools" className="inline-flex items-center gap-1 rounded-full bg-[#F9954E] text-white text-[12.5px] font-bold px-4 py-2">{t.ctaTools(343)}</Link>
-              <Link href="/insight" className="inline-flex items-center gap-1 rounded-full border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-300 text-[12.5px] font-bold px-4 py-2">{t.ctaInsight}</Link>
+              <Link href="/insight" className="inline-flex items-center gap-1 rounded-full border border-stone-200 dark:border-zinc-700 text-stone-600 dark:text-stone-300 text-[12.5px] font-bold px-4 py-2">{t.ctaInsight}</Link>
             </div>
 
             {/* FAQ (사람용 — JSON-LD는 서버에서 별도 주입) */}
             <div className="mt-8 space-y-3">
-              <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white">{t.faqTitle}</h2>
+              <h2 className="text-[15px] font-extrabold text-stone-900 dark:text-white">{t.faqTitle}</h2>
               {t.faq.map(([q, a], i) => (
-                <details key={i} className="rounded-xl border border-neutral-200 dark:border-zinc-800 p-3">
-                  <summary className="text-[13px] font-bold text-neutral-900 dark:text-white cursor-pointer">{q}</summary>
-                  <p className="text-[12.5px] text-neutral-500 dark:text-neutral-400 mt-2 leading-relaxed">{a}</p>
+                <details key={i} className="rounded-xl border border-stone-200 dark:border-zinc-800 p-3">
+                  <summary className="text-[13px] font-bold text-stone-900 dark:text-white cursor-pointer">{q}</summary>
+                  <p className="text-[12.5px] text-stone-500 dark:text-stone-400 mt-2 leading-relaxed">{a}</p>
                 </details>
               ))}
             </div>

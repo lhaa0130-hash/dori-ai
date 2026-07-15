@@ -52,13 +52,13 @@ function ItemPreview({ item }: { item: ShopItem }) {
     case "frame":
       return (
         <div className="w-full h-14 flex items-center justify-center">
-          <div className={`w-10 h-10 rounded-full bg-neutral-200 dark:bg-zinc-700 ring-offset-2 ring-offset-white dark:ring-offset-zinc-950 ${item.ring || ""}`} />
+          <div className={`w-10 h-10 rounded-full bg-stone-200 dark:bg-zinc-700 ring-offset-2 ring-offset-white dark:ring-offset-zinc-950 ${item.ring || ""}`} />
         </div>
       );
     case "nameEffect":
       return (
         <div className="w-full h-14 flex items-center justify-center">
-          <span className={`text-[20px] font-extrabold ${item.nameClass || "text-neutral-800 dark:text-white"}`}>도리</span>
+          <span className={`text-[20px] font-extrabold ${item.nameClass || "text-stone-800 dark:text-white"}`}>도리</span>
         </div>
       );
     case "bannerEffect":
@@ -67,7 +67,7 @@ function ItemPreview({ item }: { item: ShopItem }) {
           {item.fx && item.fx !== "none" ? (
             <BannerFx fx={item.fx} count={6} />
           ) : (
-            <div className="absolute inset-0 flex items-center justify-center text-[11px] text-neutral-400">효과 없음</div>
+            <div className="absolute inset-0 flex items-center justify-center text-[11px] text-stone-400">효과 없음</div>
           )}
         </div>
       );
@@ -260,7 +260,7 @@ export default function ShopPage() {
 
       {/* 토스트 */}
       {toast && (
-        <div className={`fixed top-20 left-1/2 -translate-x-1/2 z-[60] px-5 py-3 rounded-2xl font-bold text-[13px] shadow-xl ${toast.type === "success" ? "bg-[#F9954E] text-white" : "bg-neutral-900 text-white"}`}>
+        <div className={`fixed top-20 left-1/2 -translate-x-1/2 z-[60] px-5 py-3 rounded-2xl font-bold text-[13px] shadow-xl ${toast.type === "success" ? "bg-[#F9954E] text-white" : "bg-stone-900 text-white"}`}>
           {toast.msg}
         </div>
       )}
@@ -268,11 +268,11 @@ export default function ShopPage() {
       {/* 구매 확인 모달 */}
       {confirmItem && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4" onClick={() => !busy && setConfirmItem(null)}>
-          <div className="bg-white dark:bg-zinc-900 rounded-[1.75rem] p-7 max-w-xs w-full shadow-2xl border border-neutral-200 dark:border-zinc-800" onClick={(e) => e.stopPropagation()}>
+          <div className="bg-white dark:bg-zinc-900 rounded-[1.75rem] p-7 max-w-xs w-full shadow-2xl border border-stone-200 dark:border-zinc-800" onClick={(e) => e.stopPropagation()}>
             <div className="mb-4">
               {profile ? (
                 <>
-                  <p className="text-[11px] font-bold text-neutral-400 mb-1.5 text-center">적용하면 이렇게 보여요</p>
+                  <p className="text-[11px] font-bold text-stone-400 mb-1.5 text-center">적용하면 이렇게 보여요</p>
                   <CozyPreview look={buildLook(confirmItem)} />
                 </>
               ) : (
@@ -280,22 +280,22 @@ export default function ShopPage() {
               )}
             </div>
             <div className="flex items-center justify-center gap-2 mb-1">
-              <h3 className="text-[17px] font-extrabold text-center text-neutral-900 dark:text-white">{confirmItem.name}</h3>
+              <h3 className="text-[17px] font-extrabold text-center text-stone-900 dark:text-white">{confirmItem.name}</h3>
               <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${RARITY_META[confirmItem.rarity].badge}`}>{RARITY_META[confirmItem.rarity].label}</span>
             </div>
-            <p className="text-[13px] text-neutral-500 dark:text-zinc-400 text-center mb-5 break-keep">{confirmItem.desc}</p>
+            <p className="text-[13px] text-stone-500 dark:text-zinc-400 text-center mb-5 break-keep">{confirmItem.desc}</p>
 
             {isPremium ? (
               <div className="bg-yellow-500/10 border border-yellow-500/20 rounded-xl py-2.5 mb-5 text-center text-[13px] font-bold text-yellow-500">💎 프리미엄 — 무료 획득</div>
             ) : (
-              <div className="rounded-xl border border-neutral-100 dark:border-zinc-800 divide-y divide-neutral-100 dark:divide-zinc-800 mb-5">
+              <div className="rounded-xl border border-stone-100 dark:border-zinc-800 divide-y divide-stone-100 dark:divide-zinc-800 mb-5">
                 <div className="flex items-center justify-between px-4 py-2.5">
-                  <span className="text-[12px] text-neutral-500">구매 금액</span>
+                  <span className="text-[12px] text-stone-500">구매 금액</span>
                   <span className="flex items-center gap-1 text-[14px] font-extrabold text-[#F9954E]"><CottonCandy className="w-4 h-4" />{confirmItem.price.toLocaleString()}</span>
                 </div>
                 <div className="flex items-center justify-between px-4 py-2.5">
-                  <span className="text-[12px] text-neutral-500">구매 후 잔액</span>
-                  <span className={`flex items-center gap-1 text-[13px] font-bold ${balance < confirmItem.price ? "text-neutral-400" : "text-neutral-700 dark:text-neutral-300"}`}>
+                  <span className="text-[12px] text-stone-500">구매 후 잔액</span>
+                  <span className={`flex items-center gap-1 text-[13px] font-bold ${balance < confirmItem.price ? "text-stone-400" : "text-stone-700 dark:text-stone-300"}`}>
                     <CottonCandy className="w-3.5 h-3.5" />{(balance - confirmItem.price).toLocaleString()}
                   </span>
                 </div>
@@ -303,7 +303,7 @@ export default function ShopPage() {
             )}
 
             <div className="flex gap-2.5">
-              <button onClick={() => setConfirmItem(null)} disabled={busy} className="flex-1 py-3 rounded-xl border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-zinc-300 font-bold text-[13px] active:opacity-70 disabled:opacity-50">취소</button>
+              <button onClick={() => setConfirmItem(null)} disabled={busy} className="flex-1 py-3 rounded-xl border border-stone-200 dark:border-zinc-700 text-stone-600 dark:text-zinc-300 font-bold text-[13px] active:opacity-70 disabled:opacity-50">취소</button>
               <button onClick={confirmBuy} disabled={busy || (!isPremium && balance < confirmItem.price)} className="flex-1 py-3 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] disabled:opacity-40 disabled:cursor-not-allowed text-white font-bold text-[13px] transition-colors active:scale-95">
                 {busy ? "구매 중..." : "구매하기"}
               </button>
@@ -315,21 +315,21 @@ export default function ShopPage() {
       {/* 히어로 + 잔액 */}
       <section className="pt-8 pb-5">
         <p className="text-[12px] font-semibold text-[#F9954E] mb-2">상점</p>
-        <h1 className="text-[30px] sm:text-[40px] font-extrabold text-neutral-950 dark:text-white leading-[1.12] tracking-tight mb-2 flex items-center gap-2">
+        <h1 className="text-[30px] sm:text-[40px] font-extrabold text-stone-950 dark:text-white leading-[1.12] tracking-tight mb-2 flex items-center gap-2">
           <CottonCandy className="w-8 h-8" /> 솜사탕 상점
         </h1>
-        <p className="text-[14px] text-neutral-500 dark:text-neutral-500 leading-relaxed mb-5 break-keep">
+        <p className="text-[14px] text-stone-500 dark:text-stone-500 leading-relaxed mb-5 break-keep">
           모은 솜사탕으로 배경·테두리·이름효과·배너효과·칭호·스티커를 사서 코지홈을 나만의 공간으로 꾸며보세요.
         </p>
 
         {user ? (
-          <div className="flex items-center justify-between p-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-neutral-50/60 dark:bg-zinc-950">
+          <div className="flex items-center justify-between p-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-stone-50/60 dark:bg-zinc-950">
             <div className="flex items-center gap-3">
               <CottonCandy className="w-9 h-9" />
               <div>
-                <p className="text-[10px] font-bold text-neutral-400 dark:text-zinc-500 uppercase tracking-widest">내 솜사탕</p>
+                <p className="text-[10px] font-bold text-stone-400 dark:text-zinc-500 uppercase tracking-widest">내 솜사탕</p>
                 <p className="text-[22px] font-black text-[#F9954E] leading-tight">
-                  {balance.toLocaleString()}<span className="text-[12px] text-neutral-400 ml-0.5 font-bold">개</span>
+                  {balance.toLocaleString()}<span className="text-[12px] text-stone-400 ml-0.5 font-bold">개</span>
                 </p>
               </div>
             </div>
@@ -343,8 +343,8 @@ export default function ShopPage() {
             </div>
           </div>
         ) : (
-          <div className="flex items-center justify-between p-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-neutral-50/60 dark:bg-zinc-950">
-            <span className="text-[13px] font-medium text-neutral-500 dark:text-neutral-400 break-keep">로그인하면 아이템을 구매하고 꾸밀 수 있어요</span>
+          <div className="flex items-center justify-between p-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-stone-50/60 dark:bg-zinc-950">
+            <span className="text-[13px] font-medium text-stone-500 dark:text-stone-400 break-keep">로그인하면 아이템을 구매하고 꾸밀 수 있어요</span>
             <Link href="/login" className="px-4 py-2.5 rounded-xl bg-[#F9954E] text-white text-[12px] font-bold flex-shrink-0">로그인</Link>
           </div>
         )}
@@ -354,7 +354,7 @@ export default function ShopPage() {
       {user && profile && (
         <section className="pb-4">
           <div className="flex items-center justify-between mb-2">
-            <p className="text-[12px] font-extrabold text-neutral-900 dark:text-white">
+            <p className="text-[12px] font-extrabold text-stone-900 dark:text-white">
               {tryOn ? <>미리보기 · <span className="text-[#F9954E]">{tryOn.name}</span></> : "내 코지홈 미리보기"}
             </p>
             {tryOn ? (
@@ -371,17 +371,17 @@ export default function ShopPage() {
                   <button
                     onClick={() => handleEquip(tryOn)}
                     disabled={busy}
-                    className="px-3 py-1.5 rounded-full bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-[11px] font-bold active:opacity-85 disabled:opacity-50"
+                    className="px-3 py-1.5 rounded-full bg-stone-900 dark:bg-white text-white dark:text-stone-900 text-[11px] font-bold active:opacity-85 disabled:opacity-50"
                   >
                     장착
                   </button>
                 )}
-                <button onClick={() => setTryOn(null)} className="px-3 py-1.5 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-500 text-[11px] font-bold active:opacity-85">
+                <button onClick={() => setTryOn(null)} className="px-3 py-1.5 rounded-full bg-stone-100 dark:bg-zinc-800 text-stone-500 text-[11px] font-bold active:opacity-85">
                   원래대로
                 </button>
               </div>
             ) : (
-              <span className="text-[11px] text-neutral-400">아이템을 눌러 입어보세요</span>
+              <span className="text-[11px] text-stone-400">아이템을 눌러 입어보세요</span>
             )}
           </div>
           <CozyPreview look={buildLook(tryOn)} />
@@ -389,7 +389,7 @@ export default function ShopPage() {
       )}
 
       {/* 카테고리 탭 */}
-      <div className="-mx-6 px-6 overflow-x-auto scrollbar-hide border-b border-neutral-100 dark:border-zinc-900 sticky top-14 bg-white/90 dark:bg-black/90 backdrop-blur z-30">
+      <div className="-mx-6 px-6 overflow-x-auto scrollbar-hide border-b border-stone-100 dark:border-zinc-900 sticky top-14 bg-white/90 dark:bg-black/90 backdrop-blur z-30">
         <div className="flex gap-2 w-max pb-4 pt-1">
           {TABS.map((tab) => {
             const active = activeTab === tab.id;
@@ -398,7 +398,7 @@ export default function ShopPage() {
                 key={tab.id}
                 onClick={() => setActiveTab(tab.id)}
                 className={`px-3.5 py-1.5 rounded-full text-[12px] font-bold border transition-colors whitespace-nowrap ${
-                  active ? "bg-[#F9954E] border-[#F9954E] text-white" : "bg-white dark:bg-zinc-950 border-neutral-200 dark:border-zinc-700 text-neutral-500 dark:text-neutral-400"
+                  active ? "bg-[#F9954E] border-[#F9954E] text-white" : "bg-white dark:bg-zinc-950 border-stone-200 dark:border-zinc-700 text-stone-500 dark:text-stone-400"
                 }`}
               >
                 {tab.emoji} {tab.label}
@@ -422,15 +422,15 @@ export default function ShopPage() {
               onClick={() => setPriceFilter(f.id)}
               className={`px-3 py-1 rounded-full text-[11px] font-bold border transition-colors ${
                 active
-                  ? "bg-neutral-950 dark:bg-white border-neutral-950 dark:border-white text-white dark:text-neutral-950"
-                  : "bg-white dark:bg-zinc-950 border-neutral-200 dark:border-zinc-700 text-neutral-500 dark:text-neutral-400"
+                  ? "bg-stone-950 dark:bg-white border-stone-950 dark:border-white text-white dark:text-stone-950"
+                  : "bg-white dark:bg-zinc-950 border-stone-200 dark:border-zinc-700 text-stone-500 dark:text-stone-400"
               }`}
             >
               {f.label}
             </button>
           );
         })}
-        <span className="ml-auto text-[11px] text-neutral-400 font-medium">{visibleItems.length}개</span>
+        <span className="ml-auto text-[11px] text-stone-400 font-medium">{visibleItems.length}개</span>
       </div>
 
       {/* 상품 그리드 */}
@@ -438,10 +438,10 @@ export default function ShopPage() {
         {visibleItems.length === 0 && (
           <div className="py-14 text-center">
             <p className="text-[28px] mb-2">🍬</p>
-            <p className="text-[14px] font-bold text-neutral-600 dark:text-neutral-300">
+            <p className="text-[14px] font-bold text-stone-600 dark:text-stone-300">
               {priceFilter === "free" ? "이 카테고리는 모두 유료예요" : "해당하는 아이템이 없어요"}
             </p>
-            <p className="text-[12px] text-neutral-400 mt-1">
+            <p className="text-[12px] text-stone-400 mt-1">
               {activeTab === "sticker" && priceFilter === "free"
                 ? "무료 스티커는 코지홈 꾸미기에서 바로 쓸 수 있어요"
                 : "다른 카테고리를 둘러보세요"}
@@ -458,16 +458,16 @@ export default function ShopPage() {
               <div
                 key={`${item.slot}:${item.id}`}
                 className={`flex flex-col p-3.5 rounded-2xl border bg-white dark:bg-zinc-950 transition-all ${
-                  equipped ? "border-[#F9954E] ring-1 ring-[#F9954E]/40" : ownedIt ? "border-[#F9954E]/30" : "border-neutral-100 dark:border-zinc-900 hover:border-[#F9954E]/30 hover:shadow-sm"
+                  equipped ? "border-[#F9954E] ring-1 ring-[#F9954E]/40" : ownedIt ? "border-[#F9954E]/30" : "border-stone-100 dark:border-zinc-900 hover:border-[#F9954E]/30 hover:shadow-sm"
                 }`}
               >
                 <div className="flex items-center justify-between mb-2">
                   {item.rarity === "normal" ? (
-                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-400">기본</span>
+                    <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-stone-100 dark:bg-zinc-800 text-stone-400">기본</span>
                   ) : (
                     <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${rm.badge}`}>{rm.label}</span>
                   )}
-                  {equipped && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#FFF5EB] dark:bg-[#F9954E]/10 text-[#F9954E]">장착중</span>}
+                  {equipped && <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-[#FBEEE7] dark:bg-[#F9954E]/10 text-[#F9954E]">장착중</span>}
                 </div>
 
                 <button
@@ -477,23 +477,23 @@ export default function ShopPage() {
                   title="입어보기"
                 >
                   <ItemPreview item={item} />
-                  <h3 className="text-[13px] font-extrabold text-neutral-900 dark:text-white leading-tight mt-2.5 truncate">{item.name}</h3>
-                  <p className="text-[11px] text-neutral-500 dark:text-neutral-400 mt-0.5 leading-snug line-clamp-2 break-keep min-h-[28px]">{item.desc}</p>
+                  <h3 className="text-[13px] font-extrabold text-stone-900 dark:text-white leading-tight mt-2.5 truncate">{item.name}</h3>
+                  <p className="text-[11px] text-stone-500 dark:text-stone-400 mt-0.5 leading-snug line-clamp-2 break-keep min-h-[28px]">{item.desc}</p>
                   <p className="text-[10px] font-bold text-[#F9954E] mt-1">👁 입어보기</p>
                 </button>
 
-                <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-neutral-100 dark:border-zinc-900">
+                <div className="flex items-center justify-between mt-2.5 pt-2.5 border-t border-stone-100 dark:border-zinc-900">
                   {item.price > 0 ? (
                     <span className="flex items-center gap-1 text-[12px] font-black text-[#F9954E]"><CottonCandy className="w-3.5 h-3.5" />{item.price.toLocaleString()}</span>
                   ) : (
-                    <span className="text-[11px] font-bold text-neutral-400">무료</span>
+                    <span className="text-[11px] font-bold text-stone-400">무료</span>
                   )}
 
                   {!ownedIt ? (
                     <button
                       onClick={() => handleBuy(item)}
                       disabled={!affordable}
-                      className={`px-3 py-1.5 rounded-lg text-[12px] font-bold transition-colors ${affordable ? "bg-[#F9954E] text-white hover:bg-[#E8832E]" : "bg-neutral-100 dark:bg-zinc-800 text-neutral-400 dark:text-zinc-500 cursor-not-allowed"}`}
+                      className={`px-3 py-1.5 rounded-lg text-[12px] font-bold transition-colors ${affordable ? "bg-[#F9954E] text-white hover:bg-[#E8832E]" : "bg-stone-100 dark:bg-zinc-800 text-stone-400 dark:text-zinc-500 cursor-not-allowed"}`}
                     >
                       {affordable ? "구매" : "부족"}
                     </button>
@@ -507,8 +507,8 @@ export default function ShopPage() {
                       disabled={busy}
                       className={`px-3 py-1.5 rounded-lg text-[12px] font-bold transition-colors disabled:opacity-50 ${
                         item.slot === "sticker" && equipped
-                          ? "bg-neutral-100 dark:bg-zinc-800 text-neutral-500"
-                          : "bg-neutral-900 dark:bg-white text-white dark:text-neutral-900"
+                          ? "bg-stone-100 dark:bg-zinc-800 text-stone-500"
+                          : "bg-stone-900 dark:bg-white text-white dark:text-stone-900"
                       }`}
                     >
                       {item.slot === "sticker" && equipped ? "떼기" : "장착"}
@@ -521,17 +521,17 @@ export default function ShopPage() {
         </div>
 
         {/* 솜사탕 획득 방법 */}
-        <div className="mt-8 p-5 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-neutral-50/50 dark:bg-zinc-950">
+        <div className="mt-8 p-5 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-stone-50/50 dark:bg-zinc-950">
           <div className="flex items-center justify-between mb-3">
-            <p className="text-[13px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-1.5"><CottonCandy className="w-4 h-4" /> 솜사탕은 이렇게 모아요</p>
+            <p className="text-[13px] font-extrabold text-stone-900 dark:text-white flex items-center gap-1.5"><CottonCandy className="w-4 h-4" /> 솜사탕은 이렇게 모아요</p>
             <Link href="/my" className="text-[12px] font-bold text-[#F9954E]">모으러 가기 →</Link>
           </div>
           <div className="grid grid-cols-2 sm:grid-cols-4 gap-2">
             {EARN_TIPS.map((tip) => (
-              <div key={tip.text} className="flex items-center gap-2 bg-white dark:bg-zinc-900 rounded-xl p-2.5 border border-neutral-100 dark:border-zinc-800">
+              <div key={tip.text} className="flex items-center gap-2 bg-white dark:bg-zinc-900 rounded-xl p-2.5 border border-stone-100 dark:border-zinc-800">
                 <span className="text-base">{tip.emoji}</span>
                 <div className="min-w-0">
-                  <p className="text-[11px] font-bold text-neutral-600 dark:text-zinc-300 truncate">{tip.text}</p>
+                  <p className="text-[11px] font-bold text-stone-600 dark:text-zinc-300 truncate">{tip.text}</p>
                   <p className="text-[11px] font-black text-[#F9954E] flex items-center gap-0.5"><CottonCandy className="w-3 h-3" />{tip.reward}</p>
                 </div>
               </div>

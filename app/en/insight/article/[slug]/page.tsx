@@ -166,7 +166,7 @@ export default async function EnInsightArticlePage({ params }: { params: { slug:
 
           <div className="prose-premium max-w-none" dangerouslySetInnerHTML={{ __html: contentHtml }} />
 
-          <div className="mt-10 pt-6 border-t border-neutral-200 dark:border-neutral-800">
+          <div className="mt-10 pt-6 border-t border-stone-200 dark:border-stone-800">
             <ShareButtons url={articleUrl} title={post.title || 'illo article'} />
           </div>
 

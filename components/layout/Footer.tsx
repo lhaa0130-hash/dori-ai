@@ -23,7 +23,7 @@ export default function Footer() {
   const isEn = (pathname || "").startsWith("/en");
 
   return (
-    <footer className="w-full bg-white dark:bg-black border-t border-neutral-100 dark:border-zinc-900 transition-colors">
+    <footer className="w-full bg-white dark:bg-black border-t border-stone-100 dark:border-zinc-900 transition-colors">
       {/* 폭을 헤더/본문과 동일하게(xl:px-[260px] px-6) */}
       <div className="px-6 xl:px-[260px] py-9">
 
@@ -36,15 +36,15 @@ export default function Footer() {
             >
               illo
             </Link>
-            <p className="text-[11.5px] leading-relaxed text-neutral-400 dark:text-neutral-500 mt-1.5 break-keep max-w-[300px]">
+            <p className="text-[11.5px] leading-relaxed text-stone-400 dark:text-stone-500 mt-1.5 break-keep max-w-[300px]">
               {isEn ? (
                 <>
-                  <span className="font-bold text-neutral-500 dark:text-neutral-400">All your work, in one place.</span><br />
+                  <span className="font-bold text-stone-500 dark:text-stone-400">All your work, in one place.</span><br />
                   Scattered AI, brought together — <b>illo</b> means bringing all your work into one place.
                 </>
               ) : (
                 <>
-                  <span className="font-bold text-neutral-500 dark:text-neutral-400">모든 일을, 하나의 일로.</span><br />
+                  <span className="font-bold text-stone-500 dark:text-stone-400">모든 일을, 하나의 일로.</span><br />
                   흩어진 AI를 한 곳에서 — <b>일로</b>는 ‘모든 일(work)을 하나로, 이리로’라는 뜻이에요.
                 </>
               )}
@@ -59,7 +59,7 @@ export default function Footer() {
             <Link
               key={l.href}
               href={l.href}
-              className="text-[12.5px] text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition-colors"
+              className="text-[12.5px] text-stone-500 dark:text-stone-400 hover:text-[#F9954E] transition-colors"
             >
               {isEn ? l.labelEn : l.label}
             </Link>
@@ -67,14 +67,14 @@ export default function Footer() {
         </nav>
 
         {/* 하단: 제작사 + 저작권 */}
-        <div className="flex items-center justify-between flex-wrap gap-3 pt-6 border-t border-neutral-100 dark:border-zinc-900">
-          <span className="inline-flex items-center gap-2 text-[12px] text-neutral-400 dark:text-neutral-500">
+        <div className="flex items-center justify-between flex-wrap gap-3 pt-6 border-t border-stone-100 dark:border-zinc-900">
+          <span className="inline-flex items-center gap-2 text-[12px] text-stone-400 dark:text-stone-500">
             <img src="/illo-logo.png" alt="illo" width={22} height={22} className="w-[22px] h-[22px] rounded-md" loading="lazy" />
-            made by <span className="font-extrabold text-neutral-600 dark:text-neutral-200">illo</span>
+            made by <span className="font-extrabold text-stone-600 dark:text-stone-200">illo</span>
           </span>
-          <div className="flex items-center gap-3 text-[11px] text-neutral-400">
+          <div className="flex items-center gap-3 text-[11px] text-stone-400">
             <span>© 2026 illo</span>
-            <span className="text-neutral-200 dark:text-zinc-700">·</span>
+            <span className="text-stone-200 dark:text-zinc-700">·</span>
             <a href="mailto:illo@illo.im" className="hover:text-[#F9954E] transition-colors">{isEn ? "Contact" : "문의"}</a>
           </div>
         </div>

@@ -69,19 +69,19 @@ function Hub({ onPick }: { onPick: (id: string) => void }) {
   return (
     <main className="w-full min-h-screen">
       {/* ── 히어로 ── */}
-      <section className="pt-8 pb-8 border-b border-neutral-100 dark:border-zinc-900">
+      <section className="pt-8 pb-8 border-b border-stone-100 dark:border-zinc-900">
         <p className="text-[11px] font-bold text-[#F9954E] mb-3 tracking-wide uppercase">Psychological Assessment</p>
-        <h1 className="text-[34px] sm:text-[44px] font-extrabold text-neutral-950 dark:text-white leading-[1.12] tracking-tight mb-2 break-keep">
+        <h1 className="text-[34px] sm:text-[44px] font-extrabold text-stone-950 dark:text-white leading-[1.12] tracking-tight mb-2 break-keep">
           검증된 척도로 보는<br />나의 마음
         </h1>
-        <p className="text-[14px] text-neutral-400 dark:text-neutral-500 leading-relaxed break-keep">
+        <p className="text-[14px] text-stone-400 dark:text-stone-500 leading-relaxed break-keep">
           전 세계 임상·연구 현장에서 쓰이는 심리검사 척도를 그대로 옮겼어요.<br />
           결과는 진단이 아닌 자기점검이며, 응답은 내 기기에서만 계산돼요.
         </p>
         <div className="flex flex-wrap gap-2 mt-4">
           <span className="inline-flex items-center gap-1 text-[12px] font-bold text-emerald-600 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/30 px-2.5 py-1 rounded-full">💸 완전 무료</span>
           <span className="inline-flex items-center gap-1 text-[12px] font-bold text-[#F9954E] bg-[#F9954E]/10 px-2.5 py-1 rounded-full">⏱️ 회원가입 1분</span>
-          <span className="inline-flex items-center gap-1 text-[12px] font-bold text-neutral-500 dark:text-neutral-400 bg-neutral-100 dark:bg-zinc-900 px-2.5 py-1 rounded-full">📈 결과 저장·변화 추적</span>
+          <span className="inline-flex items-center gap-1 text-[12px] font-bold text-stone-500 dark:text-stone-400 bg-stone-100 dark:bg-zinc-900 px-2.5 py-1 rounded-full">📈 결과 저장·변화 추적</span>
         </div>
       </section>
 
@@ -90,31 +90,31 @@ function Hub({ onPick }: { onPick: (id: string) => void }) {
         const tests = TESTS.filter((t) => t.category === cat.id);
         if (tests.length === 0) return null;
         return (
-          <section key={cat.id} className="py-8 border-b border-neutral-100 dark:border-zinc-900 last:border-0">
-            <p className="text-[11px] font-bold text-neutral-400 dark:text-zinc-600 uppercase tracking-wide mb-1">
+          <section key={cat.id} className="py-8 border-b border-stone-100 dark:border-zinc-900 last:border-0">
+            <p className="text-[11px] font-bold text-stone-400 dark:text-zinc-600 uppercase tracking-wide mb-1">
               {cat.emoji} {cat.name} · {tests.length}개
             </p>
-            <p className="text-[12px] text-neutral-400 dark:text-zinc-600 mb-5 break-keep">{cat.desc}</p>
+            <p className="text-[12px] text-stone-400 dark:text-zinc-600 mb-5 break-keep">{cat.desc}</p>
             <div className="grid grid-cols-1 lg:grid-cols-2 gap-4">
               {tests.map((t) => {
                 const about = getAbout(t.id);
                 return (
-                  <div key={t.id} className="flex flex-col rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden">
+                  <div key={t.id} className="flex flex-col rounded-2xl border border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden">
                     {/* 카드 헤더 */}
-                    <div className="px-5 pt-5 pb-4 border-b border-neutral-100 dark:border-zinc-800">
+                    <div className="px-5 pt-5 pb-4 border-b border-stone-100 dark:border-zinc-800">
                       <div className="flex items-center justify-between gap-3 mb-3">
                         <div className="flex items-center gap-3 min-w-0">
                           <div className="w-10 h-10 rounded-xl bg-[#F9954E]/8 dark:bg-[#F9954E]/10 flex items-center justify-center text-[22px] flex-shrink-0">
                             {t.emoji}
                           </div>
                           <div className="min-w-0">
-                            <h2 className="text-[16px] font-extrabold text-neutral-950 dark:text-white leading-tight break-keep">{t.title}</h2>
-                            <span className="text-[10px] text-neutral-400 dark:text-zinc-500">{scaleTag(t)}</span>
+                            <h2 className="text-[16px] font-extrabold text-stone-950 dark:text-white leading-tight break-keep">{t.title}</h2>
+                            <span className="text-[10px] text-stone-400 dark:text-zinc-500">{scaleTag(t)}</span>
                           </div>
                         </div>
-                        <span className="text-[10px] font-bold px-2.5 py-1 rounded-full shrink-0 bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 tabular-nums">{testCount(t)}문항</span>
+                        <span className="text-[10px] font-bold px-2.5 py-1 rounded-full shrink-0 bg-stone-100 dark:bg-zinc-800 text-stone-500 dark:text-stone-400 tabular-nums">{testCount(t)}문항</span>
                       </div>
-                      <p className="text-[13px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep line-clamp-2">{about ? about.what : t.intro}</p>
+                      <p className="text-[13px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep line-clamp-2">{about ? about.what : t.intro}</p>
                     </div>
 
                     {/* 측정 영역 */}
@@ -125,17 +125,17 @@ function Hub({ onPick }: { onPick: (id: string) => void }) {
                             <li key={m.label} className="flex items-start gap-2">
                               <span className="w-1.5 h-1.5 rounded-full bg-[#F9954E] mt-1.5 flex-shrink-0" />
                               <div className="min-w-0">
-                                <span className="text-[12.5px] font-bold text-neutral-900 dark:text-white">{m.label}</span>
-                                <span className="text-[12px] text-neutral-500 dark:text-neutral-400"> — {m.desc}</span>
+                                <span className="text-[12.5px] font-bold text-stone-900 dark:text-white">{m.label}</span>
+                                <span className="text-[12px] text-stone-500 dark:text-stone-400"> — {m.desc}</span>
                               </div>
                             </li>
                           ))}
                           {about.measures.length > 4 && (
-                            <li className="text-[11.5px] text-neutral-400 pl-3.5">+ {about.measures.length - 4}개 영역 더</li>
+                            <li className="text-[11.5px] text-stone-400 pl-3.5">+ {about.measures.length - 4}개 영역 더</li>
                           )}
                         </ul>
                       ) : (
-                        <p className="text-[12.5px] text-neutral-500 dark:text-neutral-400 break-keep">{t.intro}</p>
+                        <p className="text-[12.5px] text-stone-500 dark:text-stone-400 break-keep">{t.intro}</p>
                       )}
                     </div>
 
@@ -158,9 +158,9 @@ function Hub({ onPick }: { onPick: (id: string) => void }) {
 
       {/* ── 안내 ── */}
       <section className="py-8">
-        <div className="flex items-start gap-2.5 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-neutral-50 dark:bg-zinc-900/50 px-5 py-4">
-          <Lock className="w-4 h-4 text-neutral-400 mt-0.5 shrink-0" />
-          <p className="text-[12px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+        <div className="flex items-start gap-2.5 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-stone-50 dark:bg-zinc-900/50 px-5 py-4">
+          <Lock className="w-4 h-4 text-stone-400 mt-0.5 shrink-0" />
+          <p className="text-[12px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep">
             모든 검사는 <b>완전 무료</b>이며 <b>선별·자기점검</b> 목적이에요(의학적 진단 아님). 응답은 기기에서만 계산되고, <b>회원가입(1분)</b> 시에만 내 결과 이력이 <b>본인만 볼 수 있게</b> 저장돼 다음 검사 때 변화를 비교해드려요. 걱정되는 점이 있다면 전문가 상담을 권해요.
           </p>
         </div>
@@ -221,11 +221,11 @@ function ScoredRunner({ test, onExit }: { test: ScoredTest; onExit: () => void }
       />
 
       {test.question ? (
-        <p className="text-[12.5px] font-semibold text-neutral-400 mb-2 break-keep">{test.question}</p>
+        <p className="text-[12.5px] font-semibold text-stone-400 mb-2 break-keep">{test.question}</p>
       ) : (
-        <p className="text-[12.5px] text-neutral-400 mb-2 break-keep">{test.subtitle}</p>
+        <p className="text-[12.5px] text-stone-400 mb-2 break-keep">{test.subtitle}</p>
       )}
-      <h2 className="text-[18.5px] font-extrabold text-neutral-900 dark:text-white leading-snug break-keep mb-6 min-h-[2.4em]">
+      <h2 className="text-[18.5px] font-extrabold text-stone-900 dark:text-white leading-snug break-keep mb-6 min-h-[2.4em]">
         {item.text}
       </h2>
 
@@ -238,8 +238,8 @@ function ScoredRunner({ test, onExit }: { test: ScoredTest; onExit: () => void }
               onClick={() => choose(o.value)}
               className={`text-left px-4 py-3.5 rounded-2xl border text-[14px] font-semibold transition-all active:scale-[0.99] break-keep ${
                 selected
-                  ? "border-[#F9954E] bg-[#FFF8F1] dark:bg-[#F9954E]/15 text-[#d97a2e] dark:text-[#F9954E]"
-                  : "border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-neutral-800 dark:text-neutral-100 hover:border-[#F9954E]/60"
+                  ? "border-[#F9954E] bg-[#FBEEE7] dark:bg-[#F9954E]/15 text-[#d97a2e] dark:text-[#F9954E]"
+                  : "border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-stone-800 dark:text-stone-100 hover:border-[#F9954E]/60"
               }`}
             >
               {o.label}
@@ -260,7 +260,7 @@ function ScoredResult({ test, answers, onBack, onRetry }: { test: ScoredTest; an
 
   return (
     <main className="w-full min-h-screen py-9">
-      <button onClick={onBack} className="flex items-center gap-1 text-[12.5px] font-semibold text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 mb-5">
+      <button onClick={onBack} className="flex items-center gap-1 text-[12.5px] font-semibold text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 mb-5">
         <ArrowLeft className="w-3.5 h-3.5" /> 목록으로
       </button>
 
@@ -270,36 +270,36 @@ function ScoredResult({ test, answers, onBack, onRetry }: { test: ScoredTest; an
         <div className="text-center">
           <div className="text-[56px] leading-none mb-2">{band.emoji}</div>
           <h1 className={`text-[24px] font-extrabold mb-1 ${tone.text}`}>{band.label}</h1>
-          <p className="text-[13px] text-neutral-400 tabular-nums">
-            점수 <b className="text-neutral-700 dark:text-neutral-200">{displayScore}</b> / {unitLabel}
+          <p className="text-[13px] text-stone-400 tabular-nums">
+            점수 <b className="text-stone-700 dark:text-stone-200">{displayScore}</b> / {unitLabel}
           </p>
-          <p className="text-[11.5px] text-neutral-400 mt-1">전체 {stageTotal}단계 중 <b className={tone.text}>{stageIdx}단계</b></p>
+          <p className="text-[11.5px] text-stone-400 mt-1">전체 {stageTotal}단계 중 <b className={tone.text}>{stageIdx}단계</b></p>
         </div>
 
         {/* 게이지 */}
         <div className="mt-5 mb-6">
-          <div className="h-2.5 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden">
+          <div className="h-2.5 rounded-full bg-stone-100 dark:bg-zinc-800 overflow-hidden">
             <div className={`h-full rounded-full ${tone.bar} transition-all duration-500`} style={{ width: `${Math.max(4, pct)}%` }} />
           </div>
-          <div className="flex justify-between text-[10.5px] text-neutral-400 mt-1.5">
+          <div className="flex justify-between text-[10.5px] text-stone-400 mt-1.5">
             <span>{higherWorse ? "양호" : "낮음"}</span><span>{higherWorse ? "심함" : "높음"}</span>
           </div>
         </div>
 
         <div className={`rounded-2xl ${tone.soft} px-4 py-4 mb-4`}>
-          <p className="text-[11.5px] font-bold text-neutral-400 mb-1.5">이 결과의 의미</p>
-          <p className="text-[13.5px] text-neutral-700 dark:text-neutral-200 leading-relaxed break-keep">{band.desc}</p>
+          <p className="text-[11.5px] font-bold text-stone-400 mb-1.5">이 결과의 의미</p>
+          <p className="text-[13.5px] text-stone-700 dark:text-stone-200 leading-relaxed break-keep">{band.desc}</p>
         </div>
 
         <div className="px-1 mb-4">
-          <p className="text-[11.5px] font-bold text-neutral-400 mb-1.5">이렇게 해보세요</p>
-          <p className="text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep">{band.advice}</p>
+          <p className="text-[11.5px] font-bold text-stone-400 mb-1.5">이렇게 해보세요</p>
+          <p className="text-[13px] text-stone-600 dark:text-stone-300 leading-relaxed break-keep">{band.advice}</p>
         </div>
 
         {/* 톤에 맞춘 위로 한마디 */}
         <div className={`rounded-2xl border ${tone.ring} px-4 py-3.5`}>
           <p className={`text-[11.5px] font-bold mb-1.5 ${tone.text}`}>💛 마음 한마디</p>
-          <p className="text-[13px] text-neutral-700 dark:text-neutral-200 leading-relaxed break-keep">{COMFORT[band.tone]}</p>
+          <p className="text-[13px] text-stone-700 dark:text-stone-200 leading-relaxed break-keep">{COMFORT[band.tone]}</p>
         </div>
       </div>
 
@@ -319,11 +319,11 @@ function ScoredResult({ test, answers, onBack, onRetry }: { test: ScoredTest; an
       {/* 출처 + 고지 */}
       <div className="mt-3 space-y-2">
         {test.note && (
-          <p className="text-[11.5px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep px-1">{test.note}</p>
+          <p className="text-[11.5px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep px-1">{test.note}</p>
         )}
-        <div className="flex items-start gap-2 rounded-2xl bg-neutral-50 dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 px-4 py-3">
-          <Info className="w-3.5 h-3.5 text-neutral-400 mt-0.5 shrink-0" />
-          <p className="text-[11.5px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+        <div className="flex items-start gap-2 rounded-2xl bg-stone-50 dark:bg-zinc-900 border border-stone-100 dark:border-zinc-800 px-4 py-3">
+          <Info className="w-3.5 h-3.5 text-stone-400 mt-0.5 shrink-0" />
+          <p className="text-[11.5px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep">
             근거: {test.source}. 이 결과는 <b>선별 목적의 자기점검</b>이며 의학적 진단이 아니에요. 걱정되는 점이 있다면 전문가 상담을 권해요.
           </p>
         </div>
@@ -335,7 +335,7 @@ function ScoredResult({ test, answers, onBack, onRetry }: { test: ScoredTest; an
         allowBadge={test.category === "self"}
       />
 
-      <button onClick={onRetry} className="flex items-center justify-center gap-1.5 w-full py-3 mt-3 rounded-2xl bg-neutral-100 dark:bg-zinc-900 text-neutral-600 dark:text-neutral-300 text-[13px] font-bold active:opacity-70 transition-opacity">
+      <button onClick={onRetry} className="flex items-center justify-center gap-1.5 w-full py-3 mt-3 rounded-2xl bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300 text-[13px] font-bold active:opacity-70 transition-opacity">
         <RotateCcw className="w-3.5 h-3.5" /> 다시 하기
       </button>
     </main>
@@ -355,20 +355,20 @@ function TypedRunner({ test, onExit }: { test: TypedTest; onExit: () => void }) 
     const r = test.results[done];
     return (
       <main className="w-full min-h-screen py-9">
-        <button onClick={onExit} className="flex items-center gap-1 text-[12.5px] font-semibold text-neutral-400 hover:text-neutral-600 mb-5">
+        <button onClick={onExit} className="flex items-center gap-1 text-[12.5px] font-semibold text-stone-400 hover:text-stone-600 mb-5">
           <ArrowLeft className="w-3.5 h-3.5" /> 목록으로
         </button>
         <p className="text-center text-[12px] font-bold text-[#F9954E] mb-4">{test.title}</p>
-        <div className="rounded-3xl border border-neutral-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-8 text-center shadow-sm">
+        <div className="rounded-3xl border border-stone-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-8 text-center shadow-sm">
           <div className="text-[64px] leading-none mb-3">{r.emoji}</div>
-          <h1 className="text-[26px] font-extrabold text-neutral-950 dark:text-white mb-3">{r.title}</h1>
-          <p className="text-[14px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep mb-7">{r.desc}</p>
+          <h1 className="text-[26px] font-extrabold text-stone-950 dark:text-white mb-3">{r.title}</h1>
+          <p className="text-[14px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep mb-7">{r.desc}</p>
           {r.rec && (
             <Link href={r.rec.href} className="flex items-center justify-center gap-1.5 w-full py-3.5 rounded-2xl bg-[#F9954E] text-white text-[14px] font-bold active:opacity-85 transition-opacity mb-2.5">
               {r.rec.label} <ArrowRight className="w-4 h-4" />
             </Link>
           )}
-          <button onClick={() => { setStep(0); setTally({}); setDone(null); setStarted(false); }} className="flex items-center justify-center gap-1.5 w-full py-3 rounded-2xl bg-neutral-100 dark:bg-zinc-900 text-neutral-600 dark:text-neutral-300 text-[13px] font-bold active:opacity-70 transition-opacity">
+          <button onClick={() => { setStep(0); setTally({}); setDone(null); setStarted(false); }} className="flex items-center justify-center gap-1.5 w-full py-3 rounded-2xl bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300 text-[13px] font-bold active:opacity-70 transition-opacity">
             <RotateCcw className="w-3.5 h-3.5" /> 다시 하기
           </button>
         </div>
@@ -396,10 +396,10 @@ function TypedRunner({ test, onExit }: { test: TypedTest; onExit: () => void }) 
   return (
     <main className="w-full min-h-screen py-9">
       <TopBar label={test.title} step={step} total={test.questions.length} progress={progress} onBack={() => (step === 0 ? setStarted(false) : setStep(step - 1))} />
-      <h2 className="text-[19px] font-extrabold text-neutral-900 dark:text-white leading-snug break-keep mb-5 min-h-[2.4em]">{cur.q}</h2>
+      <h2 className="text-[19px] font-extrabold text-stone-900 dark:text-white leading-snug break-keep mb-5 min-h-[2.4em]">{cur.q}</h2>
       <div className="flex flex-col gap-2.5">
         {cur.options.map((o, i) => (
-          <button key={i} onClick={() => pick(o.type)} className="text-left px-4 py-4 rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-[14px] font-semibold text-neutral-800 dark:text-neutral-100 hover:border-[#F9954E] hover:bg-[#FFF8F1] dark:hover:bg-[#F9954E]/10 active:scale-[0.99] transition-all break-keep">
+          <button key={i} onClick={() => pick(o.type)} className="text-left px-4 py-4 rounded-2xl border border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-[14px] font-semibold text-stone-800 dark:text-stone-100 hover:border-[#F9954E] hover:bg-[#FBEEE7] dark:hover:bg-[#F9954E]/10 active:scale-[0.99] transition-all break-keep">
             {o.t}
           </button>
         ))}
@@ -459,8 +459,8 @@ function MultiRunner({ test, onExit }: { test: MultiTest; onExit: () => void }) 
   return (
     <main className="w-full min-h-screen py-9">
       <TopBar label={test.title} step={step} total={flow.length} progress={progress} onBack={() => (step === 0 ? setStarted(false) : setStep(step - 1))} />
-      <p className="text-[12.5px] font-semibold text-neutral-400 mb-2 break-keep">{test.question}</p>
-      <h2 className="text-[18.5px] font-extrabold text-neutral-900 dark:text-white leading-snug break-keep mb-6 min-h-[2.4em]">{item.text}</h2>
+      <p className="text-[12.5px] font-semibold text-stone-400 mb-2 break-keep">{test.question}</p>
+      <h2 className="text-[18.5px] font-extrabold text-stone-900 dark:text-white leading-snug break-keep mb-6 min-h-[2.4em]">{item.text}</h2>
       <div className="flex flex-col gap-2.5">
         {test.scale.map((o, i) => {
           const selected = answers[cur.d][cur.f][cur.i] === o.value;
@@ -470,8 +470,8 @@ function MultiRunner({ test, onExit }: { test: MultiTest; onExit: () => void }) 
               onClick={() => choose(o.value)}
               className={`text-left px-4 py-3.5 rounded-2xl border text-[14px] font-semibold transition-all active:scale-[0.99] break-keep ${
                 selected
-                  ? "border-[#F9954E] bg-[#FFF8F1] dark:bg-[#F9954E]/15 text-[#d97a2e] dark:text-[#F9954E]"
-                  : "border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-neutral-800 dark:text-neutral-100 hover:border-[#F9954E]/60"
+                  ? "border-[#F9954E] bg-[#FBEEE7] dark:bg-[#F9954E]/15 text-[#d97a2e] dark:text-[#F9954E]"
+                  : "border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-stone-800 dark:text-stone-100 hover:border-[#F9954E]/60"
               }`}
             >
               {o.label}
@@ -495,7 +495,7 @@ function MultiResult({ test, answers, onBack, onRetry }: { test: MultiTest; answ
 
   return (
     <main className="w-full min-h-screen py-9">
-      <button onClick={onBack} className="flex items-center gap-1 text-[12.5px] font-semibold text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 mb-5">
+      <button onClick={onBack} className="flex items-center gap-1 text-[12.5px] font-semibold text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 mb-5">
         <ArrowLeft className="w-3.5 h-3.5" /> 목록으로
       </button>
 
@@ -503,61 +503,61 @@ function MultiResult({ test, answers, onBack, onRetry }: { test: MultiTest; answ
         <div className="text-[52px] leading-none mb-2">{quad ? quad.emoji : test.emoji}</div>
         <p className="text-[12px] font-bold text-[#F9954E] mb-1">{test.resultTitle || "나의 성격 프로파일"}</p>
         {quad
-          ? <h1 className="text-[24px] font-extrabold text-neutral-950 dark:text-white">{quad.label}</h1>
-          : <h1 className="text-[22px] font-extrabold text-neutral-950 dark:text-white">유형 분석</h1>}
-        <p className="text-[13px] text-neutral-500 dark:text-neutral-400 mt-2 break-keep">{summary}</p>
-        {!quad && <p className="text-[11px] text-neutral-400 mt-1">{results.length}개 요인 · {facetCount}개 하위척도 분석</p>}
+          ? <h1 className="text-[24px] font-extrabold text-stone-950 dark:text-white">{quad.label}</h1>
+          : <h1 className="text-[22px] font-extrabold text-stone-950 dark:text-white">유형 분석</h1>}
+        <p className="text-[13px] text-stone-500 dark:text-stone-400 mt-2 break-keep">{summary}</p>
+        {!quad && <p className="text-[11px] text-stone-400 mt-1">{results.length}개 요인 · {facetCount}개 하위척도 분석</p>}
       </div>
 
       {/* 4유형 결과 카드(애착유형 등) */}
       {quad && (
         <div className="rounded-3xl border border-[#F9954E]/30 bg-[#F9954E]/5 p-6 mb-4">
-          <p className="text-[14px] text-neutral-700 dark:text-neutral-200 leading-relaxed break-keep mb-4">{quad.desc}</p>
+          <p className="text-[14px] text-stone-700 dark:text-stone-200 leading-relaxed break-keep mb-4">{quad.desc}</p>
           <div className="grid grid-cols-1 gap-1.5 mb-3">
-            <p className="text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep"><b className="text-emerald-600 dark:text-emerald-400">강점</b> {quad.strengths}</p>
-            <p className="text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep"><b className="text-amber-600 dark:text-amber-400">살필 점</b> {quad.watch}</p>
+            <p className="text-[13px] text-stone-600 dark:text-stone-300 leading-relaxed break-keep"><b className="text-emerald-600 dark:text-emerald-400">강점</b> {quad.strengths}</p>
+            <p className="text-[13px] text-stone-600 dark:text-stone-300 leading-relaxed break-keep"><b className="text-amber-600 dark:text-amber-400">살필 점</b> {quad.watch}</p>
           </div>
           <div className="rounded-2xl bg-white/70 dark:bg-zinc-950/50 px-4 py-3">
             <p className="text-[11.5px] font-bold text-[#F9954E] mb-1">💡 관계에서 이렇게</p>
-            <p className="text-[13px] text-neutral-700 dark:text-neutral-200 leading-relaxed break-keep">{quad.tip}</p>
+            <p className="text-[13px] text-stone-700 dark:text-stone-200 leading-relaxed break-keep">{quad.tip}</p>
           </div>
         </div>
       )}
 
-      {quad && <p className="text-[11px] font-bold text-neutral-400 mb-2 px-1">두 축 자세히 보기</p>}
+      {quad && <p className="text-[11px] font-bold text-stone-400 mb-2 px-1">두 축 자세히 보기</p>}
       <div className="flex flex-col gap-3">
         {results.map((r) => {
           const lv = r.level === "high" ? r.dim.high : r.level === "low" ? r.dim.low : null;
           const text = lv ? lv.text : r.dim.mid;
           const tone: Tone = r.level === "mid" ? "mild" : "good";
           return (
-            <div key={r.dim.key} className="rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-5">
+            <div key={r.dim.key} className="rounded-2xl border border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 p-5">
               <div className="flex items-center gap-2 mb-1">
                 <span className="text-[20px]">{r.dim.emoji}</span>
-                <h3 className="text-[15px] font-extrabold text-neutral-900 dark:text-white">{r.dim.name}</h3>
+                <h3 className="text-[15px] font-extrabold text-stone-900 dark:text-white">{r.dim.name}</h3>
                 <span className={`ml-auto text-[12px] font-bold tabular-nums ${TONE[tone].text}`}>{r.levelLabel} · {r.pct}%</span>
               </div>
-              <p className="text-[11.5px] text-neutral-400 mb-3 break-keep">{r.dim.desc}</p>
-              <div className="h-2.5 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden mb-3">
+              <p className="text-[11.5px] text-stone-400 mb-3 break-keep">{r.dim.desc}</p>
+              <div className="h-2.5 rounded-full bg-stone-100 dark:bg-zinc-800 overflow-hidden mb-3">
                 <div className={`h-full rounded-full ${TONE[tone].bar} transition-all duration-500`} style={{ width: `${Math.max(4, r.pct)}%` }} />
               </div>
-              <p className="text-[13px] text-neutral-700 dark:text-neutral-200 leading-relaxed break-keep mb-3">{text}</p>
+              <p className="text-[13px] text-stone-700 dark:text-stone-200 leading-relaxed break-keep mb-3">{text}</p>
               {lv && (
                 <div className="grid grid-cols-1 gap-1.5 mb-3">
-                  <p className="text-[12px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep"><b className="text-emerald-600 dark:text-emerald-400">강점</b> {lv.strengths}</p>
-                  <p className="text-[12px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep"><b className="text-amber-600 dark:text-amber-400">살필 점</b> {lv.watch}</p>
+                  <p className="text-[12px] text-stone-600 dark:text-stone-300 leading-relaxed break-keep"><b className="text-emerald-600 dark:text-emerald-400">강점</b> {lv.strengths}</p>
+                  <p className="text-[12px] text-stone-600 dark:text-stone-300 leading-relaxed break-keep"><b className="text-amber-600 dark:text-amber-400">살필 점</b> {lv.watch}</p>
                 </div>
               )}
               {/* 하위척도 분해 */}
               {r.facets.length > 0 && (
-                <div className="border-t border-neutral-100 dark:border-zinc-800 pt-3 mt-1 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
+                <div className="border-t border-stone-100 dark:border-zinc-800 pt-3 mt-1 grid grid-cols-1 sm:grid-cols-2 gap-x-4 gap-y-2">
                   {r.facets.map((f) => (
                     <div key={f.name}>
                       <div className="flex items-center justify-between mb-0.5">
-                        <span className="text-[11.5px] font-bold text-neutral-700 dark:text-neutral-300" title={f.desc}>{f.name}</span>
-                        <span className="text-[10.5px] font-bold text-neutral-400 tabular-nums">{f.pct}%</span>
+                        <span className="text-[11.5px] font-bold text-stone-700 dark:text-stone-300" title={f.desc}>{f.name}</span>
+                        <span className="text-[10.5px] font-bold text-stone-400 tabular-nums">{f.pct}%</span>
                       </div>
-                      <div className="h-1.5 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden">
+                      <div className="h-1.5 rounded-full bg-stone-100 dark:bg-zinc-800 overflow-hidden">
                         <div className={`h-full rounded-full ${TONE[tone].bar}`} style={{ width: `${Math.max(3, f.pct)}%` }} />
                       </div>
                     </div>
@@ -569,9 +569,9 @@ function MultiResult({ test, answers, onBack, onRetry }: { test: MultiTest; answ
         })}
       </div>
 
-      <div className="flex items-start gap-2 rounded-2xl bg-neutral-50 dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 px-4 py-3 mt-3">
-        <Info className="w-3.5 h-3.5 text-neutral-400 mt-0.5 shrink-0" />
-        <p className="text-[11.5px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+      <div className="flex items-start gap-2 rounded-2xl bg-stone-50 dark:bg-zinc-900 border border-stone-100 dark:border-zinc-800 px-4 py-3 mt-3">
+        <Info className="w-3.5 h-3.5 text-stone-400 mt-0.5 shrink-0" />
+        <p className="text-[11.5px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep">
           근거: {test.source}. 성격에 좋고 나쁨은 없어요. 각 특성은 상황에 따라 강점도, 약점도 될 수 있어요.
         </p>
       </div>
@@ -596,7 +596,7 @@ function MultiResult({ test, answers, onBack, onRetry }: { test: MultiTest; answ
         allowBadge={true}
       />
 
-      <button onClick={onRetry} className="flex items-center justify-center gap-1.5 w-full py-3 mt-3 rounded-2xl bg-neutral-100 dark:bg-zinc-900 text-neutral-600 dark:text-neutral-300 text-[13px] font-bold active:opacity-70 transition-opacity">
+      <button onClick={onRetry} className="flex items-center justify-center gap-1.5 w-full py-3 mt-3 rounded-2xl bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300 text-[13px] font-bold active:opacity-70 transition-opacity">
         <RotateCcw className="w-3.5 h-3.5" /> 다시 하기
       </button>
     </main>
@@ -608,10 +608,10 @@ function ResourcesBox({ testId, emphasize }: { testId: string; emphasize?: boole
   const list = getResources(testId);
   if (!list.length) return null;
   return (
-    <div className={`rounded-2xl border px-4 py-3.5 mt-3 ${emphasize ? "bg-rose-50 dark:bg-rose-950/30 border-rose-200 dark:border-rose-900/50" : "bg-neutral-50 dark:bg-zinc-900 border-neutral-100 dark:border-zinc-800"}`}>
+    <div className={`rounded-2xl border px-4 py-3.5 mt-3 ${emphasize ? "bg-rose-50 dark:bg-rose-950/30 border-rose-200 dark:border-rose-900/50" : "bg-stone-50 dark:bg-zinc-900 border-stone-100 dark:border-zinc-800"}`}>
       <div className="flex items-center gap-1.5 mb-2">
         <ShieldAlert className={`w-4 h-4 ${emphasize ? "text-rose-500" : "text-[#F9954E]"}`} />
-        <p className={`text-[12.5px] font-extrabold ${emphasize ? "text-rose-600 dark:text-rose-300" : "text-neutral-700 dark:text-neutral-200"}`}>도움받을 수 있는 곳</p>
+        <p className={`text-[12.5px] font-extrabold ${emphasize ? "text-rose-600 dark:text-rose-300" : "text-stone-700 dark:text-stone-200"}`}>도움받을 수 있는 곳</p>
       </div>
       {emphasize && (
         <p className="text-[12px] text-rose-700 dark:text-rose-300 leading-relaxed break-keep mb-2.5">
@@ -621,14 +621,14 @@ function ResourcesBox({ testId, emphasize }: { testId: string; emphasize?: boole
       <div className="flex flex-col gap-2.5">
         {list.map((r) => (
           <div key={r.name} className="flex items-start gap-2">
-            <Phone className="w-3.5 h-3.5 text-neutral-400 mt-0.5 shrink-0" />
+            <Phone className="w-3.5 h-3.5 text-stone-400 mt-0.5 shrink-0" />
             <div className="min-w-0">
               <p className="text-[12.5px] leading-snug break-keep">
-                <b className="text-neutral-800 dark:text-neutral-100">{r.name}</b>{" "}
+                <b className="text-stone-800 dark:text-stone-100">{r.name}</b>{" "}
                 <span className="font-extrabold text-[#F9954E] tabular-nums">{r.phone}</span>
-                <span className="text-[11px] text-neutral-400"> · {r.hours}</span>
+                <span className="text-[11px] text-stone-400"> · {r.hours}</span>
               </p>
-              <p className="text-[11px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep mt-0.5">{r.desc}</p>
+              <p className="text-[11px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep mt-0.5">{r.desc}</p>
             </div>
           </div>
         ))}
@@ -668,8 +668,8 @@ function ScoreTracker({ testId, scoreNum, max, pct, label, higherWorse }: {
   if (state === "loggedout") {
     return (
       <div className="rounded-2xl border border-[#F9954E]/30 bg-[#F9954E]/5 px-5 py-4 mt-3">
-        <p className="text-[13px] font-extrabold text-neutral-900 dark:text-white mb-1">결과를 저장하고 변화를 추적하세요</p>
-        <p className="text-[12.5px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep mb-3">
+        <p className="text-[13px] font-extrabold text-stone-900 dark:text-white mb-1">결과를 저장하고 변화를 추적하세요</p>
+        <p className="text-[12.5px] text-stone-600 dark:text-stone-300 leading-relaxed break-keep mb-3">
           <b className="text-[#F9954E]">회원가입은 1분, 완전 무료</b>예요. 가입하면 오늘 결과가 날짜와 함께 저장되고, 다음에 다시 검사하면 <b>지난 결과와 얼마나 달라졌는지</b> 비교해드려요.
         </p>
         <Link href="/login?next=/psychtest" className="flex items-center justify-center gap-1.5 w-full py-2.5 rounded-xl bg-[#F9954E] text-white text-[13px] font-bold active:opacity-85">
@@ -702,12 +702,12 @@ function ScoreTracker({ testId, scoreNum, max, pct, label, higherWorse }: {
 
   return (
     <div className={`rounded-2xl border ${TONE[tone].ring} bg-white dark:bg-zinc-950 px-5 py-4 mt-3`}>
-      <p className="text-[11px] font-bold text-neutral-400 mb-2">📈 지난 결과와 비교</p>
+      <p className="text-[11px] font-bold text-stone-400 mb-2">📈 지난 결과와 비교</p>
       <div className="flex items-center justify-between gap-2 mb-2">
         <div className="text-center flex-1">
-          <p className="text-[11px] text-neutral-400 mb-0.5">{fmtDate(prev.at)}</p>
-          <p className="text-[15px] font-extrabold text-neutral-500 dark:text-neutral-400 tabular-nums">{prev.score}</p>
-          <p className="text-[11px] text-neutral-400 truncate">{prev.label}</p>
+          <p className="text-[11px] text-stone-400 mb-0.5">{fmtDate(prev.at)}</p>
+          <p className="text-[15px] font-extrabold text-stone-500 dark:text-stone-400 tabular-nums">{prev.score}</p>
+          <p className="text-[11px] text-stone-400 truncate">{prev.label}</p>
         </div>
         <div className="text-center px-2">
           <p className={`text-[18px] font-extrabold ${TONE[tone].text}`}>{arrow}</p>
@@ -716,11 +716,11 @@ function ScoreTracker({ testId, scoreNum, max, pct, label, higherWorse }: {
         <div className="text-center flex-1">
           <p className="text-[11px] text-[#F9954E] font-bold mb-0.5">오늘</p>
           <p className={`text-[15px] font-extrabold tabular-nums ${TONE[tone].text}`}>{scoreNum}</p>
-          <p className="text-[11px] text-neutral-500 dark:text-neutral-300 truncate">{label}</p>
+          <p className="text-[11px] text-stone-500 dark:text-stone-300 truncate">{label}</p>
         </div>
       </div>
       <p className={`text-center text-[13px] font-extrabold ${TONE[tone].text} mt-1`}>{headline}</p>
-      <p className="text-center text-[11px] text-neutral-400 mt-1">결과가 저장됐어요 · {fmtDate(savedAt)}</p>
+      <p className="text-center text-[11px] text-stone-400 mt-1">결과가 저장됐어요 · {fmtDate(savedAt)}</p>
     </div>
   );
 }
@@ -813,8 +813,8 @@ function ShareModal({
       >
         {/* 헤더 */}
         <div className="flex items-center justify-between px-5 pt-5 pb-3">
-          <span className="text-[15px] font-extrabold text-neutral-900 dark:text-white">결과 공유하기</span>
-          <button onClick={onClose} className="w-7 h-7 flex items-center justify-center rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-500 hover:bg-neutral-200 dark:hover:bg-zinc-700 transition-colors">
+          <span className="text-[15px] font-extrabold text-stone-900 dark:text-white">결과 공유하기</span>
+          <button onClick={onClose} className="w-7 h-7 flex items-center justify-center rounded-full bg-stone-100 dark:bg-zinc-800 text-stone-500 hover:bg-stone-200 dark:hover:bg-zinc-700 transition-colors">
             <XClose className="w-4 h-4" />
           </button>
         </div>
@@ -823,9 +823,9 @@ function ShareModal({
         <div className="px-5 pb-4">
           {preview ? (
             /* eslint-disable-next-line @next/next/no-img-element */
-            <img src={preview} alt="결과 카드" className="w-full rounded-2xl border border-neutral-100 dark:border-zinc-800 shadow-sm" style={{ aspectRatio: "1080/1350" }} />
+            <img src={preview} alt="결과 카드" className="w-full rounded-2xl border border-stone-100 dark:border-zinc-800 shadow-sm" style={{ aspectRatio: "1080/1350" }} />
           ) : (
-            <div className="w-full rounded-2xl bg-neutral-100 dark:bg-zinc-800 animate-pulse" style={{ aspectRatio: "1080/1350" }} />
+            <div className="w-full rounded-2xl bg-stone-100 dark:bg-zinc-800 animate-pulse" style={{ aspectRatio: "1080/1350" }} />
           )}
         </div>
 
@@ -834,7 +834,7 @@ function ShareModal({
           <button
             onClick={handleDownload}
             disabled={downloading}
-            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-2xl bg-neutral-100 dark:bg-zinc-800 text-neutral-700 dark:text-neutral-200 text-[13px] font-bold hover:bg-neutral-200 dark:hover:bg-zinc-700 transition-colors disabled:opacity-60"
+            className="flex-1 flex items-center justify-center gap-1.5 py-2.5 rounded-2xl bg-stone-100 dark:bg-zinc-800 text-stone-700 dark:text-stone-200 text-[13px] font-bold hover:bg-stone-200 dark:hover:bg-zinc-700 transition-colors disabled:opacity-60"
           >
             <Download className="w-3.5 h-3.5" />
             {downloading ? "저장 중..." : "이미지 저장"}
@@ -852,11 +852,11 @@ function ShareModal({
         </div>
 
         {/* 구분선 */}
-        <div className="mx-5 mb-4 border-t border-neutral-100 dark:border-zinc-800" />
+        <div className="mx-5 mb-4 border-t border-stone-100 dark:border-zinc-800" />
 
         {/* 링크 공유 */}
         <div className="px-5 pb-5">
-          <p className="text-[11px] font-bold text-neutral-400 dark:text-neutral-500 mb-3 uppercase tracking-wide">링크로 공유</p>
+          <p className="text-[11px] font-bold text-stone-400 dark:text-stone-500 mb-3 uppercase tracking-wide">링크로 공유</p>
           <div className="flex items-center gap-2 flex-wrap">
             {SHARE_PLATFORMS.map((p) => (
               <div key={p.id} className="relative">
@@ -871,7 +871,7 @@ function ShareModal({
                   {p.icon}
                 </button>
                 {tooltip === p.id && (
-                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-0.5 rounded bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-[10px] font-medium whitespace-nowrap pointer-events-none z-10">
+                  <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-0.5 rounded bg-stone-900 dark:bg-white text-white dark:text-stone-900 text-[10px] font-medium whitespace-nowrap pointer-events-none z-10">
                     {p.label}
                   </div>
                 )}
@@ -888,7 +888,7 @@ function ShareModal({
                 {copied ? <Check className="w-4 h-4" /> : <Copy className="w-4 h-4" />}
               </button>
               {tooltip === "copy" && (
-                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-0.5 rounded bg-neutral-900 dark:bg-white text-white dark:text-neutral-900 text-[10px] font-medium whitespace-nowrap pointer-events-none z-10">
+                <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-1.5 px-2 py-0.5 rounded bg-stone-900 dark:bg-white text-white dark:text-stone-900 text-[10px] font-medium whitespace-nowrap pointer-events-none z-10">
                   {copied ? "복사됨!" : "링크 복사"}
                 </div>
               )}
@@ -930,19 +930,19 @@ function ResultActions({ card, badge, allowBadge }: { card: CardData; badge: Omi
             <button
               onClick={onSave}
               disabled={saveState === "saving" || saveState === "saved"}
-              className="flex items-center justify-center gap-1.5 py-3 rounded-2xl bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-neutral-200 text-[13.5px] font-bold active:opacity-70 transition-opacity"
+              className="flex items-center justify-center gap-1.5 py-3 rounded-2xl bg-stone-100 dark:bg-zinc-900 text-stone-700 dark:text-stone-200 text-[13.5px] font-bold active:opacity-70 transition-opacity"
             >
               {saveState === "saved" ? <><Check className="w-4 h-4 text-emerald-500" /> 저장됨</> : <><BookmarkPlus className="w-4 h-4" /> 코지홈에 저장</>}
             </button>
           )}
         </div>
         {saveState === "saved" && (
-          <p className="text-center text-[12px] text-neutral-500 dark:text-neutral-400 mt-2">
+          <p className="text-center text-[12px] text-stone-500 dark:text-stone-400 mt-2">
             내 <Link href="/profile" className="font-bold text-[#F9954E]">코지홈 프로필</Link>에 결과 뱃지가 추가됐어요.
           </p>
         )}
         {saveState === "login" && (
-          <p className="text-center text-[12px] text-neutral-500 dark:text-neutral-400 mt-2">
+          <p className="text-center text-[12px] text-stone-500 dark:text-stone-400 mt-2">
             <Link href="/login?next=/psychtest" className="font-bold text-[#F9954E]">로그인</Link>하면 결과를 코지홈에 저장할 수 있어요.
           </p>
         )}
@@ -955,9 +955,9 @@ function ResultActions({ card, badge, allowBadge }: { card: CardData; badge: Omi
 /* ───────────────────────── 공통 조각 ───────────────────────── */
 function MetaPill({ k, v }: { k: string; v: string }) {
   return (
-    <div className="flex-1 rounded-2xl bg-neutral-50 dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 px-3 py-2.5 text-center">
-      <p className="text-[10px] text-neutral-400 mb-0.5">{k}</p>
-      <p className="text-[13px] font-extrabold text-neutral-800 dark:text-neutral-100 break-keep">{v}</p>
+    <div className="flex-1 rounded-2xl bg-stone-50 dark:bg-zinc-900 border border-stone-100 dark:border-zinc-800 px-3 py-2.5 text-center">
+      <p className="text-[10px] text-stone-400 mb-0.5">{k}</p>
+      <p className="text-[13px] font-extrabold text-stone-800 dark:text-stone-100 break-keep">{v}</p>
     </div>
   );
 }
@@ -967,7 +967,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
     <section className="mb-5">
       <div className="flex items-center gap-2 mb-2">
         <span className="w-1 h-3.5 rounded-full bg-[#F9954E]" />
-        <h2 className="text-[13px] font-extrabold text-neutral-900 dark:text-white">{title}</h2>
+        <h2 className="text-[13px] font-extrabold text-stone-900 dark:text-white">{title}</h2>
       </div>
       {children}
     </section>
@@ -984,7 +984,7 @@ function Intro({ test, onBack, onStart }: { test: PsychTest; onBack: () => void;
 
   return (
     <main className="w-full min-h-screen py-9">
-      <button onClick={onBack} className="flex items-center gap-1 text-[12.5px] font-semibold text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300 mb-6">
+      <button onClick={onBack} className="flex items-center gap-1 text-[12.5px] font-semibold text-stone-400 hover:text-stone-600 dark:hover:text-stone-300 mb-6">
         <ArrowLeft className="w-3.5 h-3.5" /> 검사 목록
       </button>
 
@@ -992,7 +992,7 @@ function Intro({ test, onBack, onStart }: { test: PsychTest; onBack: () => void;
       <div className="text-center mb-5">
         <div className="text-[58px] leading-none mb-3">{test.emoji}</div>
         <p className="text-[11px] font-bold text-[#F9954E] mb-1.5 tracking-wide">검사 안내</p>
-        <h1 className="text-[23px] font-extrabold text-neutral-950 dark:text-white break-keep leading-tight">{test.title}</h1>
+        <h1 className="text-[23px] font-extrabold text-stone-950 dark:text-white break-keep leading-tight">{test.title}</h1>
       </div>
 
       {/* 메타 3종 */}
@@ -1005,30 +1005,30 @@ function Intro({ test, onBack, onStart }: { test: PsychTest; onBack: () => void;
       {about ? (
         <>
           <Section title="이 검사는">
-            <p className="text-[13.5px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep">{about.what}</p>
+            <p className="text-[13.5px] text-stone-600 dark:text-stone-300 leading-relaxed break-keep">{about.what}</p>
           </Section>
 
           <Section title="측정 영역">
             <div className="flex flex-col gap-1.5">
               {about.measures.map((m, i) => (
-                <div key={i} className="flex gap-2.5 rounded-xl bg-neutral-50 dark:bg-zinc-900 px-3.5 py-2.5">
-                  <span className="text-[12.5px] font-extrabold text-neutral-800 dark:text-neutral-100 shrink-0 min-w-[88px] break-keep">{m.label}</span>
-                  <span className="text-[12px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">{m.desc}</span>
+                <div key={i} className="flex gap-2.5 rounded-xl bg-stone-50 dark:bg-zinc-900 px-3.5 py-2.5">
+                  <span className="text-[12.5px] font-extrabold text-stone-800 dark:text-stone-100 shrink-0 min-w-[88px] break-keep">{m.label}</span>
+                  <span className="text-[12px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep">{m.desc}</span>
                 </div>
               ))}
             </div>
           </Section>
 
           <Section title="측정·채점 방식">
-            <p className="text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep">{about.how}</p>
+            <p className="text-[13px] text-stone-600 dark:text-stone-300 leading-relaxed break-keep">{about.how}</p>
           </Section>
 
           <Section title="결과 해석">
-            <p className="text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep">{about.interpret}</p>
+            <p className="text-[13px] text-stone-600 dark:text-stone-300 leading-relaxed break-keep">{about.interpret}</p>
           </Section>
         </>
       ) : (
-        <p className="text-[14px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep mb-6">{test.intro}</p>
+        <p className="text-[14px] text-stone-600 dark:text-stone-300 leading-relaxed break-keep mb-6">{test.intro}</p>
       )}
 
       {disclaimer && (
@@ -1038,9 +1038,9 @@ function Intro({ test, onBack, onStart }: { test: PsychTest; onBack: () => void;
         </div>
       )}
 
-      <div className="flex items-start gap-2 rounded-2xl bg-neutral-50 dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 px-4 py-3 mb-2">
-        <Info className="w-3.5 h-3.5 text-neutral-400 mt-0.5 shrink-0" />
-        <p className="text-[11.5px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+      <div className="flex items-start gap-2 rounded-2xl bg-stone-50 dark:bg-zinc-900 border border-stone-100 dark:border-zinc-800 px-4 py-3 mb-2">
+        <Info className="w-3.5 h-3.5 text-stone-400 mt-0.5 shrink-0" />
+        <p className="text-[11.5px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep">
           근거: {about ? about.background : test.source} · 응답은 내 기기에서만 계산되며 저장·전송되지 않습니다.
         </p>
       </div>
@@ -1048,7 +1048,7 @@ function Intro({ test, onBack, onStart }: { test: PsychTest; onBack: () => void;
       <button onClick={onStart} className="flex items-center justify-center gap-1.5 w-full py-4 mt-4 rounded-2xl bg-[#F9954E] text-white text-[15px] font-bold active:opacity-85 transition-opacity">
         검사 시작 <ArrowRight className="w-4 h-4" />
       </button>
-      <p className="text-center text-[11px] text-neutral-400 mt-3 break-keep">정확한 결과를 위해 평소의 자신을 떠올리며 솔직하게 답해주세요.</p>
+      <p className="text-center text-[11px] text-stone-400 mt-3 break-keep">정확한 결과를 위해 평소의 자신을 떠올리며 솔직하게 답해주세요.</p>
     </main>
   );
 }
@@ -1057,16 +1057,16 @@ function TopBar({ label, step, total, progress, onBack }: { label: string; step:
   return (
     <>
       <div className="flex items-center gap-2 mb-5">
-        <button onClick={onBack} className="p-1.5 -ml-1.5 rounded-lg text-neutral-400 hover:text-neutral-700 dark:hover:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-zinc-800 transition-colors">
+        <button onClick={onBack} className="p-1.5 -ml-1.5 rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-zinc-800 transition-colors">
           <ArrowLeft className="w-4 h-4" />
         </button>
-        <p className="text-[12.5px] font-bold text-neutral-500 dark:text-neutral-400 truncate">{label}</p>
+        <p className="text-[12.5px] font-bold text-stone-500 dark:text-stone-400 truncate">{label}</p>
       </div>
       <div className="flex items-center gap-3 mb-6">
-        <div className="flex-1 h-1.5 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden">
+        <div className="flex-1 h-1.5 rounded-full bg-stone-100 dark:bg-zinc-800 overflow-hidden">
           <div className="h-full rounded-full bg-[#F9954E] transition-all duration-300" style={{ width: `${progress}%` }} />
         </div>
-        <span className="text-[12px] font-bold text-neutral-400 tabular-nums">{step + 1}/{total}</span>
+        <span className="text-[12px] font-bold text-stone-400 tabular-nums">{step + 1}/{total}</span>
       </div>
     </>
   );

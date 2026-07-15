@@ -12,8 +12,8 @@ export default function MyPage() {
   }, [router]);
   return (
     <main className="w-full min-h-screen flex flex-col items-center justify-center">
-      <div className="w-10 h-10 border-4 border-neutral-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-4" />
-      <p className="text-[13px] text-neutral-400 font-semibold">코지홈으로 이동 중…</p>
+      <div className="w-10 h-10 border-4 border-stone-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-4" />
+      <p className="text-[13px] text-stone-400 font-semibold">코지홈으로 이동 중…</p>
     </main>
   );
 }

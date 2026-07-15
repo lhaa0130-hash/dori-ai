@@ -174,7 +174,7 @@ export default function WhackGame() {
                 <header className="sticky top-0 z-50 flex items-center justify-between gap-2 border-b border-white/10 bg-[#09090e]/80 px-4 py-3 backdrop-blur-md">
                     <Link
                         href="/minigame"
-                        className="inline-flex items-center gap-1.5 text-[13px] text-neutral-500 transition-colors hover:text-white"
+                        className="inline-flex items-center gap-1.5 text-[13px] text-stone-500 transition-colors hover:text-white"
                     >
                         <ArrowLeft className="h-4 w-4" />
                         뒤로
@@ -184,7 +184,7 @@ export default function WhackGame() {
                         두더지 잡기
                     </div>
                     <div className="arcade-card rounded-xl border border-white/10 bg-white/[0.05] px-3 py-1.5 text-center">
-                        <div className="text-[9px] uppercase tracking-widest text-neutral-500">Score</div>
+                        <div className="text-[9px] uppercase tracking-widest text-stone-500">Score</div>
                         <div className="text-sm font-bold tabular-nums text-white">
                             <CountUp value={score} className="tabular-nums" />
                         </div>
@@ -196,7 +196,7 @@ export default function WhackGame() {
                     <div className="grid grid-cols-2 gap-3">
                         <div className="arcade-card arcade-rise-1 rounded-2xl border border-white/10 bg-white/[0.04] p-3">
                             <div className="mb-1.5 flex items-center justify-between">
-                                <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-widest text-neutral-500">
+                                <span className="inline-flex items-center gap-1 text-[10px] uppercase tracking-widest text-stone-500">
                                     <Timer className="h-3 w-3" /> 남은 시간
                                 </span>
                                 <span className={`text-sm font-extrabold tabular-nums ${lowTime ? "text-red-400" : "text-white"}`}>
@@ -213,12 +213,12 @@ export default function WhackGame() {
                             </div>
                         </div>
                         <div className="arcade-card arcade-rise-2 rounded-2xl border border-white/10 bg-white/[0.04] p-3">
-                            <div className="mb-1.5 inline-flex items-center gap-1 text-[10px] uppercase tracking-widest text-neutral-500">
+                            <div className="mb-1.5 inline-flex items-center gap-1 text-[10px] uppercase tracking-widest text-stone-500">
                                 <Trophy className="h-3 w-3 text-[#F9954E]" /> 내 최고
                             </div>
                             <div className="text-lg font-extrabold tabular-nums text-white">
                                 <CountUp value={best} className="tabular-nums" />
-                                <span className="ml-0.5 text-xs font-bold text-neutral-500">{UNIT}</span>
+                                <span className="ml-0.5 text-xs font-bold text-stone-500">{UNIT}</span>
                             </div>
                         </div>
                     </div>
@@ -293,7 +293,7 @@ export default function WhackGame() {
                                             <div className="arcade-float text-5xl">🐹</div>
                                             <div>
                                                 <h2 className="text-xl font-extrabold tracking-tight">두더지를 잡아라!</h2>
-                                                <p className="mt-1.5 text-[13px] leading-relaxed text-neutral-400">
+                                                <p className="mt-1.5 text-[13px] leading-relaxed text-stone-400">
                                                     30초 안에 튀어나오는 두더지를<br />빠르게 탭하세요. 한 마리당 1점!
                                                 </p>
                                             </div>
@@ -315,12 +315,12 @@ export default function WhackGame() {
                                                 </h2>
                                                 <div className="mt-2 text-5xl font-black arcade-grad-text tabular-nums">
                                                     <CountUp value={score} className="tabular-nums" />
-                                                    <span className="ml-1 text-2xl font-extrabold text-neutral-400">{UNIT}</span>
+                                                    <span className="ml-1 text-2xl font-extrabold text-stone-400">{UNIT}</span>
                                                 </div>
-                                                <p className="mt-2 text-[13px] text-neutral-400">
+                                                <p className="mt-2 text-[13px] text-stone-400">
                                                     내 최고 기록 {best.toLocaleString()}{UNIT}
                                                     {!session?.user?.email && (
-                                                        <span className="mt-1 block text-[11px] text-neutral-500">
+                                                        <span className="mt-1 block text-[11px] text-stone-500">
                                                             로그인하면 명예의 전당에 기록돼요
                                                         </span>
                                                     )}

@@ -1,7 +1,7 @@
 :root {
   --illo-cream: #f6f2ea;
   --illo-ink: #17212b;
-  --illo-orange: #f27a3f;
+  --illo-orange: #ff9d72;
   --illo-mint: #4ea89c;
   --illo-blue: #5e78d6;
 }
@@ -1247,6 +1247,33 @@
 
 .illo-reduced-motion .mart-celebration { display: none; }
 
+.mart-auth-screen {
+  min-height: 100dvh;
+  display: grid;
+  place-items: center;
+  padding: 24px;
+  color: #17212b;
+  background:
+    radial-gradient(circle at 20% 0%, rgba(255, 157, 114, 0.28), transparent 36rem),
+    #f6f2ea;
+  font-family: Pretendard, "Noto Sans KR", system-ui, sans-serif;
+}
+
+.mart-auth-screen > p { font-size: 14px; font-weight: 800; }
+.mart-auth-loader { width: 34px; height: 34px; border: 4px solid rgba(23,33,43,.12); border-top-color: #ff9d72; border-radius: 50%; animation: mart-auth-spin .8s linear infinite; }
+.mart-auth-card { width: min(420px, 100%); padding: 34px 28px; border: 1px solid rgba(23,33,43,.1); border-radius: 28px; background: rgba(255,255,255,.86); box-shadow: 0 28px 70px -38px rgba(23,33,43,.5); text-align: center; }
+.mart-auth-icon { width: 58px; height: 58px; margin: 0 auto 18px; display: grid; place-items: center; border-radius: 19px; color: #fff; background: #ff9d72; box-shadow: 0 12px 22px -12px rgba(255,157,114,.85); }
+.mart-auth-icon svg { width: 27px; height: 27px; }
+.mart-auth-eyebrow { display: block; color: #d96843; font-size: 10px; font-weight: 950; letter-spacing: .16em; }
+.mart-auth-card h1 { margin: 9px 0 10px; font-size: clamp(23px, 6vw, 29px); letter-spacing: -.05em; }
+.mart-auth-card p { margin: 0 auto 24px; max-width: 310px; color: rgba(23,33,43,.62); font-size: 14px; line-height: 1.65; }
+.mart-auth-card button { width: 100%; min-height: 54px; border: 0; border-radius: 16px; color: #17212b; background: #ff9d72; box-shadow: 0 5px 0 #d97851; font-weight: 950; cursor: pointer; }
+.mart-auth-card button:active { transform: translateY(3px); box-shadow: 0 2px 0 #d97851; }
+.mart-auth-card .mart-guest-button { margin-top: 12px; border: 1px solid rgba(23,33,43,.16); color: #17212b; background: #fffaf2; box-shadow: 0 4px 0 #d9c9b3; }
+.mart-auth-card .mart-guest-button:active { box-shadow: 0 1px 0 #d9c9b3; }
+.mart-auth-card small { display: block; margin-top: 16px; color: rgba(23,33,43,.45); font-size: 11px; }
+@keyframes mart-auth-spin { to { transform: rotate(360deg); } }
+
 /* Reference-aligned MART cabinet: warm 2.5D store, playable HTML controls. */
 body:has(.illo-game-shell) {
   margin: 0;
@@ -1651,6 +1678,9 @@ body:has(.illo-game-shell) {
   .mart-booster-row button > span { font-size: clamp(12px,3.8vw,18px); }
   .mart-booster-row button small { right: -3px; top: -9px; min-width: 27px; height: 27px; padding: 0 3px; border-width: 2px; font-size: 8px; }
 }
+
+.mart-booster-row button > span { white-space: nowrap; word-break: keep-all; font-size: clamp(14px, 1.7vw, 20px) !important; }
+.mart-reward-note { margin: 16px 0 0; padding: 12px 14px; border-radius: 14px; background: rgba(255,157,114,.12); color: rgba(23,33,43,.72); font-size: 12px; font-weight: 750; line-height: 1.55; }
 
 /* Stock depth matches the reference crop: front item low-left, stock recedes up-right. */
 .mart-product-stack {
@@ -2173,4 +2203,488 @@ body:has(.illo-game-shell) {
   line-height: 1;
   transform: rotate(-8deg);
   filter: drop-shadow(0 4px 0 rgba(49,116,93,.14));
+}
+
+/* FINAL 15-bay retail fixture. Keep after every legacy MART rule. */
+.mart-cabinet-header {
+  grid-template-columns: 150px minmax(280px,1fr) 165px 150px;
+  gap: 14px;
+}
+.mart-stock-plaque {
+  min-height: 58px;
+  display: grid;
+  grid-template-columns: auto auto;
+  grid-template-rows: auto auto;
+  align-content: center;
+  justify-content: center;
+  column-gap: 7px;
+  padding: 7px 12px;
+  border: 2px solid #9bd1c0;
+  border-radius: 19px;
+  color: #286b5b;
+  background: linear-gradient(180deg,#f6fffa,#e1f4e9);
+  box-shadow: 0 4px 0 #72aa98,inset 0 2px #fff;
+}
+.mart-stock-plaque span { grid-column: 1 / -1; font-size: 10px; font-weight: 950; letter-spacing: .04em; }
+.mart-stock-plaque strong { font-size: 25px; line-height: 1; }
+.mart-stock-plaque em { align-self: end; font-size: 10px; font-style: normal; font-weight: 900; }
+
+.mart-store-scene .mart-shelves {
+  width: 100%;
+  height: auto;
+  min-height: 640px;
+  display: grid;
+  grid-template-columns: repeat(5,minmax(0,1fr));
+  grid-template-rows: repeat(3,minmax(190px,1fr));
+  grid-auto-flow: row;
+  grid-auto-columns: auto;
+  gap: 0;
+  padding: 18px 18px 26px;
+  overflow: hidden;
+  border: 15px solid #9a521b;
+  border-top-color: #bd7130;
+  border-bottom-width: 24px;
+  border-radius: 18px 18px 8px 8px;
+  background: linear-gradient(180deg,#502507,#71360f 32%,#8f4819 66%,#a95c23);
+  box-shadow: 0 9px 0 #5c2e0e,0 22px 32px rgba(57,31,12,.3),inset 0 15px 27px rgba(20,8,2,.52);
+}
+.mart-store-scene .mart-shelves::after { display: none !important; }
+.mart-store-scene .mart-shelf,
+.mart-store-scene .mart-shelf:hover,
+.mart-store-scene .mart-shelf:focus,
+.mart-store-scene .mart-shelf:active,
+.mart-store-scene .mart-shelf.is-selected,
+.mart-store-scene .mart-shelf.is-valid-target,
+.mart-store-scene .mart-shelf.is-hint-from,
+.mart-store-scene .mart-shelf.is-hint-to,
+.mart-store-scene .mart-shelf.is-basket {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  min-height: 190px;
+  padding: 0;
+  overflow: hidden;
+  border: 0 !important;
+  border-right: 7px solid #8b4515 !important;
+  border-bottom: 13px solid #9f571e !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  background: linear-gradient(180deg,rgba(25,10,2,.32),rgba(109,50,13,.08)) !important;
+  box-shadow: inset 0 12px 17px rgba(18,7,1,.35),inset -3px 0 5px rgba(37,15,3,.28) !important;
+  transform: none !important;
+  transition: none !important;
+  animation: none !important;
+}
+.mart-store-scene .mart-shelf:nth-child(5n) { border-right: 0 !important; }
+.mart-store-scene .mart-shelf:nth-child(n+11) { border-bottom: 0 !important; }
+.mart-store-scene .mart-shelf::after { display: none !important; }
+.mart-store-scene .mart-shelf::before {
+  content: "";
+  position: absolute;
+  z-index: 4;
+  left: 20%;
+  right: 20%;
+  bottom: 13px;
+  height: 9px;
+  border-radius: 50%;
+  opacity: 0;
+  background: #78ebc8;
+  filter: blur(6px);
+  transition: opacity 120ms linear;
+  pointer-events: none;
+}
+.mart-store-scene .mart-shelf.is-valid-target::before,
+.mart-store-scene .mart-shelf.is-hint-to::before { opacity: .9; }
+.mart-store-scene .mart-shelf.is-selected::before { opacity: .85; background: #ff8b47; }
+.mart-shelf-topline { display: none !important; }
+.mart-shelf-number {
+  display: block !important;
+  position: absolute;
+  z-index: 18;
+  top: 9px;
+  left: 11px;
+  color: #f7d8a8;
+  font-size: 10px;
+  font-weight: 950;
+  letter-spacing: .06em;
+}
+.mart-shelf-base {
+  display: block !important;
+  position: absolute;
+  z-index: 15;
+  left: 8px;
+  right: 8px;
+  bottom: 5px;
+  height: 10px;
+  border-radius: 2px;
+  background: linear-gradient(180deg,#e2a65e,#9b501a 70%,#5b2909);
+  box-shadow: 0 4px 0 #4b2107,0 -2px 5px rgba(255,187,88,.23);
+}
+.mart-stock-count {
+  position: absolute;
+  z-index: 19;
+  top: 8px;
+  right: 9px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  min-height: 23px;
+  padding: 3px 7px;
+  border: 1px solid rgba(255,225,177,.28);
+  border-radius: 999px;
+  color: #ffe4b7;
+  background: rgba(53,22,5,.52);
+  font-size: 9px;
+  font-weight: 900;
+}
+.mart-stock-count i { width: 6px; height: 9px; border-radius: 2px; background: #f4a96b; box-shadow: 3px -2px 0 rgba(255,207,151,.58); }
+.mart-stock-count strong { font-size: 12px; }
+.mart-depth-indicator { display: none !important; }
+
+.mart-product-stack { inset: 30px 0 21px !important; }
+.mart-product,.mart-product-bottle,.mart-product-can,.mart-product-bag,.mart-product-box,.mart-product-cup,.mart-product-pump {
+  width: clamp(68px,6.2vw,96px);
+  height: clamp(77px,7vw,109px);
+}
+.mart-slot-1 { left: 38% !important; bottom: 24px; transform: translateX(-50%) scale(.78) !important; }
+.mart-slot-2 { left: 47% !important; bottom: 12px; transform: translateX(-50%) scale(.88) !important; }
+.mart-slot-3,.mart-slot:has(.mart-product.is-front) { left: 57% !important; bottom: 0; transform: translateX(-50%) scale(1) !important; }
+
+.mart-store-scene .mart-shelf.is-display-locked,
+.mart-store-scene .mart-shelf.is-display-locked:hover {
+  opacity: 1;
+  cursor: default;
+  background: linear-gradient(145deg,rgba(47,20,5,.68),rgba(82,39,12,.5)) !important;
+  filter: saturate(.72);
+}
+.mart-store-scene .mart-shelf.is-display-locked .mart-lock {
+  display: flex;
+  color: rgba(255,223,175,.48);
+}
+.mart-store-scene .mart-shelf.is-display-locked .mart-lock svg { width: 25px; height: 25px; }
+.mart-store-scene .mart-shelf.is-display-locked .mart-lock small { font-size: 9px; }
+
+.mart-booster-row { grid-template-columns: repeat(2,minmax(0,1fr)); max-width: 720px; }
+.mart-booster-row button:nth-child(2) { border-color: #55ad91; }
+.illo-result-star-criteria {
+  margin: -4px 0 13px;
+  color: #68717a;
+  font-size: 11px;
+  font-weight: 750;
+  line-height: 1.45;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .mart-cabinet-header { grid-template-columns: 74px minmax(100px,1fr) 86px 72px; gap: 5px; padding-inline: 33px; }
+  .mart-stock-plaque { min-height: 46px; padding: 4px; border-radius: 13px; }
+  .mart-stock-plaque span { font-size: 7px; }
+  .mart-stock-plaque strong { font-size: 18px; }
+  .mart-stock-plaque em { font-size: 7px; }
+  .mart-store-scene .mart-shelves {
+    min-height: 735px;
+    height: auto;
+    grid-template-columns: repeat(3,minmax(0,1fr));
+    grid-template-rows: repeat(5,minmax(135px,1fr));
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    padding: 10px 8px 17px;
+    overflow: hidden;
+  }
+  .mart-store-scene .mart-shelf { min-height: 135px; border-right: 5px solid #8b4515 !important; border-bottom: 10px solid #9f571e !important; }
+  .mart-store-scene .mart-shelf:nth-child(5n) { border-right: 5px solid #8b4515 !important; }
+  .mart-store-scene .mart-shelf:nth-child(3n) { border-right: 0 !important; }
+  .mart-store-scene .mart-shelf:nth-child(n+11) { border-bottom: 10px solid #9f571e !important; }
+  .mart-store-scene .mart-shelf:nth-child(n+13) { border-bottom: 0 !important; }
+  .mart-product-stack { inset: 29px 0 18px !important; }
+  .mart-product,.mart-product-bottle,.mart-product-can,.mart-product-bag,.mart-product-box,.mart-product-cup,.mart-product-pump { width: 67px; height: 76px; }
+  .mart-booster-row { grid-template-columns: repeat(2,minmax(0,1fr)); }
+}
+
+/* Clean aisle pass: no glass cards, only real shelf dividers. */
+.mart-store-scene .mart-shelves {
+  min-height: 286px;
+  gap: 0;
+  padding: 10px 12px 24px;
+}
+
+.mart-store-scene .mart-shelf,
+.mart-store-scene .mart-shelf:hover,
+.mart-store-scene .mart-shelf:active,
+.mart-store-scene .mart-shelf:focus {
+  min-height: 246px;
+  border: 0 !important;
+  border-radius: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: none;
+}
+
+.mart-store-scene .mart-shelf::after,
+.mart-store-scene .mart-shelf:not(:has(.mart-product))::after {
+  content: "" !important;
+  display: block !important;
+  position: absolute;
+  z-index: 16;
+  top: 6px;
+  right: -4px;
+  bottom: 16px;
+  left: auto;
+  width: 8px !important;
+  height: auto !important;
+  border: 0;
+  border-radius: 3px;
+  color: transparent;
+  background: linear-gradient(90deg, #5a290c, #bc6b27 42%, #71350f);
+  box-shadow: 2px 0 5px rgba(28, 11, 2, .48), inset 1px 0 rgba(255, 196, 112, .24);
+  pointer-events: none;
+}
+
+.mart-store-scene .mart-shelf:last-child::after { display: none !important; }
+
+.mart-store-scene .mart-shelf.is-selected,
+.mart-store-scene .mart-shelf.is-hint-from {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: none;
+}
+
+.mart-store-scene .mart-shelf.is-valid-target,
+.mart-store-scene .mart-shelf.is-hint-to {
+  border: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+}
+
+.mart-store-scene .mart-shelf.is-selected .mart-shelf-number,
+.mart-store-scene .mart-shelf.is-hint-from .mart-shelf-number { color: #ff9d72; }
+.mart-store-scene .mart-shelf.is-valid-target .mart-shelf-number,
+.mart-store-scene .mart-shelf.is-hint-to .mart-shelf-number { color: #79dfc1; }
+.mart-store-scene .mart-shelf.is-selected .mart-product.is-front { transform: translateY(-8px) scale(1.07); }
+
+.mart-store-scene .mart-shelf-number {
+  display: block !important;
+  top: 5px;
+  left: 10px;
+  min-width: 0;
+  height: auto;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: rgba(255, 231, 194, .74);
+  background: transparent;
+  box-shadow: none;
+  font-size: 10px;
+}
+
+.mart-product-stack { inset: 12px 0 24px !important; }
+.mart-slot-1 { bottom: 25px; filter: brightness(.48) saturate(.55) contrast(.88); }
+.mart-slot-2 { bottom: 12px; filter: brightness(.68) saturate(.72) contrast(.94); }
+.mart-slot-3,
+.mart-slot:has(.mart-product.is-front) { bottom: 0; filter: none; }
+
+@media (max-width: 900px) {
+  .mart-store-scene .mart-shelves { min-height: 286px; height: 286px; gap: 0; padding: 10px 8px 24px; }
+  .mart-store-scene .mart-shelf,
+  .mart-store-scene .mart-shelf:hover,
+  .mart-store-scene .mart-shelf:active,
+  .mart-store-scene .mart-shelf:focus { min-height: 246px; }
+  .mart-product-stack { inset: 12px 0 23px !important; }
+}
+
+/* Crop transparent atlas-cell seams that looked like a glass box. */
+.mart-product,
+.mart-product-bottle,
+.mart-product-can,
+.mart-product-bag,
+.mart-product-box,
+.mart-product-cup,
+.mart-product-pump { clip-path: inset(4px 4px 1px 4px); }
+
+.mart-product,
+.mart-product.is-front,
+.mart-product.is-back:not(.is-peeking),
+.mart-shelf.is-selected .mart-product.is-front { filter: none !important; }
+
+.mart-alpha-filter { position: absolute; width: 0; height: 0; overflow: hidden; pointer-events: none; }
+.mart-product,
+.mart-product.is-front,
+.mart-product.is-back:not(.is-peeking),
+.mart-shelf.is-selected .mart-product.is-front { filter: url(#mart-alpha-clean) !important; }
+
+.mart-depth-indicator { position: absolute; z-index: 22; top: 5px; right: 10px; display: flex; align-items: center; gap: 3px; color: rgba(255,231,194,.58); font-size: 9px; font-weight: 900; line-height: 1; pointer-events: none; }
+.mart-depth-indicator i { width: 6px; height: 6px; border-radius: 50%; background: currentColor; box-shadow: 0 1px 2px rgba(25,10,2,.42); }
+.mart-depth-indicator strong { margin-left: 1px; font-size: 10px; }
+.mart-depth-indicator.is-full { color: #ffb28e; text-shadow: 0 1px 3px rgba(46,17,4,.65); }
+
+.mart-store-scene .mart-shelf.is-selected {
+  outline: 3px solid #ff9d72 !important;
+  outline-offset: -4px;
+  box-shadow: none !important;
+}
+
+/* Five shelves per desktop row; shelf 06 starts the next row. */
+.mart-store-scene .mart-shelves {
+  grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+  grid-auto-flow: row;
+  grid-auto-columns: auto;
+  min-height: 0;
+  height: auto;
+  gap: 20px 0;
+  overflow: visible;
+}
+.mart-store-scene .mart-shelf { min-height: 226px; }
+.mart-store-scene .mart-shelf:nth-child(5n)::after { display: none !important; }
+.mart-store-scene .mart-shelves::after { display: none !important; }
+.mart-store-scene .mart-shelf-base {
+  display: block !important;
+  left: 4px;
+  right: 4px;
+  bottom: 0;
+  height: 13px;
+  border-radius: 2px;
+  background: linear-gradient(180deg,#e0a35b 0 26%,#a85d23 27% 72%,#713612 73%);
+  box-shadow: 0 5px 0 #4f250d,0 -2px 6px rgba(255,186,91,.22);
+}
+@media (max-width: 900px) {
+  .mart-store-scene .mart-shelves {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    grid-auto-flow: row;
+    grid-auto-columns: auto;
+    min-height: 0;
+    height: auto;
+    gap: 18px 0;
+    overflow: visible;
+  }
+  .mart-store-scene .mart-shelf { min-height: 210px; }
+  .mart-store-scene .mart-shelf:nth-child(5n)::after { display: block !important; }
+  .mart-store-scene .mart-shelf:nth-child(2n)::after { display: none !important; }
+}
+
+/* FINAL UX STABILIZATION — no pointer-driven movement or glass outlines. */
+.mart-store-scene .mart-shelf,
+.mart-store-scene .mart-shelf:hover,
+.mart-store-scene .mart-shelf:focus,
+.mart-store-scene .mart-shelf:active,
+.mart-store-scene .mart-shelf.is-selected,
+.mart-store-scene .mart-shelf.is-valid-target,
+.mart-store-scene .mart-shelf.is-hint-from,
+.mart-store-scene .mart-shelf.is-hint-to {
+  transform: none !important;
+  translate: none !important;
+  scale: 1 !important;
+  outline: 0 !important;
+  transition: none !important;
+  animation: none !important;
+}
+.mart-store-scene .mart-shelf *,
+.mart-store-scene .mart-shelf *::before,
+.mart-store-scene .mart-shelf *::after {
+  transition: none !important;
+  animation: none !important;
+}
+.mart-store-scene .mart-shelf.is-selected .mart-product.is-front,
+.mart-store-scene .mart-shelf:hover .mart-product.is-front {
+  transform: translateY(-2px) scale(1.02) !important;
+}
+
+/* Furniture-like 15-bay grocery fixture. */
+.mart-store-scene .mart-shelves {
+  grid-template-columns: repeat(5,minmax(0,1fr)) !important;
+  grid-template-rows: repeat(3,minmax(210px,1fr)) !important;
+  gap: 0 !important;
+  padding: 20px 20px 30px !important;
+  overflow: hidden !important;
+  border: 18px solid #9e571d !important;
+  border-top-color: #cf8136 !important;
+  border-bottom-width: 28px !important;
+  border-radius: 24px 24px 10px 10px !important;
+  background:
+    linear-gradient(90deg,rgba(255,208,128,.08),transparent 9% 91%,rgba(38,14,1,.18)),
+    linear-gradient(180deg,#6e3512,#854418 33%,#7b3c13 66%,#8e491a) !important;
+  box-shadow: 0 10px 0 #62300e,0 24px 34px rgba(53,27,8,.3),inset 0 18px 30px rgba(28,10,1,.48),inset 0 0 0 2px rgba(255,187,90,.12) !important;
+}
+.mart-store-scene .mart-shelf,
+.mart-store-scene .mart-shelf:hover,
+.mart-store-scene .mart-shelf:focus {
+  min-height: 210px !important;
+  overflow: hidden !important;
+  border: 0 !important;
+  border-right: 10px solid #9a501a !important;
+  border-bottom: 17px solid #ad6326 !important;
+  background:
+    radial-gradient(ellipse at 50% 88%,rgba(221,139,63,.17),transparent 54%),
+    linear-gradient(180deg,rgba(37,13,1,.35),rgba(104,45,10,.05)) !important;
+  box-shadow: inset 0 15px 22px rgba(25,8,1,.38),inset -4px 0 6px rgba(35,12,1,.3),inset 3px 0 5px rgba(255,178,77,.08) !important;
+}
+.mart-store-scene .mart-shelf:nth-child(5n) { border-right: 0 !important; }
+.mart-store-scene .mart-shelf:nth-child(n+11) { border-bottom: 0 !important; }
+.mart-store-scene .mart-shelf::after { display: none !important; }
+.mart-store-scene .mart-shelf-base {
+  display: block !important;
+  left: 7px !important;
+  right: 7px !important;
+  bottom: 4px !important;
+  height: 13px !important;
+  background: linear-gradient(180deg,#e4aa62 0 24%,#a85b20 25% 72%,#602b09 73%) !important;
+  box-shadow: 0 5px 0 #4a2006,0 -3px 7px rgba(255,191,95,.25) !important;
+}
+.mart-store-scene .mart-shelf.is-display-locked,
+.mart-store-scene .mart-shelf.is-display-locked:hover {
+  background:
+    repeating-linear-gradient(135deg,rgba(255,218,165,.025) 0 8px,transparent 8px 16px),
+    linear-gradient(180deg,#3f1c07,#55270a) !important;
+  box-shadow: inset 0 14px 22px rgba(13,4,0,.5) !important;
+}
+.mart-store-scene .mart-shelf.is-selected::before,
+.mart-store-scene .mart-shelf.is-valid-target::before { bottom: 15px; }
+
+/* New product families reuse the illustrated atlas with distinct colorways. */
+.mart-product { --mart-variant-filter: saturate(1); }
+.mart-product[data-product="water"] { background-position: 33.333% 0; --mart-variant-filter: hue-rotate(155deg) saturate(1.15) brightness(1.08); }
+.mart-product[data-product="coffee"] { background-position: 66.666% 0; --mart-variant-filter: sepia(.62) hue-rotate(335deg) saturate(1.3) brightness(.78); }
+.mart-product[data-product="cereal"] { background-position: 0 100%; --mart-variant-filter: hue-rotate(315deg) saturate(1.2) brightness(1.08); }
+.mart-product[data-product="noodles"] { background-position: 100% 0; --mart-variant-filter: hue-rotate(305deg) saturate(1.45); }
+.mart-product[data-product="bread"] { background-position: 100% 0; --mart-variant-filter: sepia(.5) hue-rotate(340deg) saturate(.85) brightness(1.08); }
+.mart-product[data-product="icecream"] { background-position: 33.333% 100%; --mart-variant-filter: hue-rotate(300deg) saturate(1.25) brightness(1.06); }
+.mart-product[data-product="detergent"] { background-position: 66.666% 100%; --mart-variant-filter: hue-rotate(210deg) saturate(1.2); }
+.mart-product,
+.mart-product.is-front,
+.mart-product.is-back:not(.is-peeking),
+.mart-shelf.is-selected .mart-product.is-front {
+  filter: var(--mart-variant-filter) drop-shadow(0 7px 5px rgba(20,9,3,.34)) !important;
+}
+.mart-product.is-front .mart-product-label {
+  position: absolute;
+  left: 50%;
+  bottom: -2px;
+  z-index: 5;
+  display: block !important;
+  min-width: 48px;
+  padding: 2px 5px;
+  transform: translateX(-50%);
+  border: 1px solid rgba(91,46,16,.2);
+  border-radius: 6px;
+  color: #4b2a15;
+  background: rgba(255,247,225,.94);
+  font-size: 8px;
+  font-weight: 950;
+  line-height: 1.2;
+  text-align: center;
+}
+
+@media (max-width: 900px) {
+  .mart-store-scene .mart-shelves {
+    grid-template-columns: repeat(3,minmax(0,1fr)) !important;
+    grid-template-rows: repeat(5,minmax(142px,1fr)) !important;
+    padding: 10px 9px 18px !important;
+  }
+  .mart-store-scene .mart-shelf,
+  .mart-store-scene .mart-shelf:hover { min-height: 142px !important; border-right: 6px solid #9a501a !important; border-bottom: 11px solid #ad6326 !important; }
+  .mart-store-scene .mart-shelf:nth-child(5n) { border-right: 6px solid #9a501a !important; }
+  .mart-store-scene .mart-shelf:nth-child(3n) { border-right: 0 !important; }
+  .mart-store-scene .mart-shelf:nth-child(n+11) { border-bottom: 11px solid #ad6326 !important; }
+  .mart-store-scene .mart-shelf:nth-child(n+13) { border-bottom: 0 !important; }
+  .mart-product.is-front .mart-product-label { min-width: 40px; font-size: 7px; }
 }

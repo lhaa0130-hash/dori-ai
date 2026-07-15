@@ -111,8 +111,8 @@ export default function ArticleSocial({ slug, compact = false, locale = "ko" }: 
 
   return (
     <section className={compact
-      ? "mt-6 pt-6 border-t border-neutral-100 dark:border-zinc-800"
-      : "mt-10 pt-8 border-t border-neutral-200 dark:border-neutral-800 max-w-2xl mx-auto"}>
+      ? "mt-6 pt-6 border-t border-stone-100 dark:border-zinc-800"
+      : "mt-10 pt-8 border-t border-stone-200 dark:border-stone-800 max-w-2xl mx-auto"}>
       {/* 좋아요 */}
       <div className={`flex justify-center ${compact ? "mb-5" : "mb-8"}`}>
         <button
@@ -122,7 +122,7 @@ export default function ArticleSocial({ slug, compact = false, locale = "ko" }: 
           className={`inline-flex items-center gap-2 ${compact ? "px-4 py-2 text-[13px]" : "px-5 py-2.5 text-[14px]"} rounded-full border font-bold transition-colors
             ${liked
               ? "bg-[#F9954E] border-[#F9954E] text-white"
-              : "bg-white dark:bg-zinc-900 border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-300 hover:border-[#F9954E]"}`}
+              : "bg-white dark:bg-zinc-900 border-stone-200 dark:border-zinc-700 text-stone-600 dark:text-stone-300 hover:border-[#F9954E]"}`}
         >
           <Heart className={`w-4 h-4 ${liked ? "fill-white" : ""}`} />
           {en ? "Like" : "좋아요"} {likeCount > 0 && <span className="tabular-nums">{likeCount}</span>}
@@ -132,7 +132,7 @@ export default function ArticleSocial({ slug, compact = false, locale = "ko" }: 
       {/* 댓글 */}
       <div className="flex items-center gap-2 mb-4">
         <MessageCircle className="w-4 h-4 text-[#F9954E]" />
-        <h3 className="text-[15px] font-extrabold text-neutral-900 dark:text-white">{en ? "Comments" : "댓글"} {comments.length > 0 && <span className="text-[#F9954E]">{comments.length}</span>}</h3>
+        <h3 className="text-[15px] font-extrabold text-stone-900 dark:text-white">{en ? "Comments" : "댓글"} {comments.length > 0 && <span className="text-[#F9954E]">{comments.length}</span>}</h3>
       </div>
 
       {/* 작성 폼 */}
@@ -143,15 +143,15 @@ export default function ArticleSocial({ slug, compact = false, locale = "ko" }: 
             onChange={(e) => setText(e.target.value)}
             maxLength={1000}
             placeholder={en ? "Leave a kind comment" : "따뜻한 댓글을 남겨주세요"}
-            className="flex-1 px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-zinc-700 bg-neutral-50 dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none focus:border-[#F9954E]"
+            className="flex-1 px-4 py-2.5 rounded-xl border border-stone-200 dark:border-zinc-700 bg-stone-50 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none focus:border-[#F9954E]"
           />
           <button type="submit" disabled={posting || !text.trim()} className="px-4 rounded-xl bg-[#F9954E] text-white font-bold text-[13px] disabled:opacity-50 flex items-center gap-1">
             <Send className="w-3.5 h-3.5" /> {en ? "Post" : "등록"}
           </button>
         </form>
       ) : (
-        <div className="mb-6 p-4 rounded-xl border border-neutral-200 dark:border-zinc-800 bg-neutral-50 dark:bg-zinc-900/40 text-center">
-          <p className="text-[13px] text-neutral-500 dark:text-neutral-400">
+        <div className="mb-6 p-4 rounded-xl border border-stone-200 dark:border-zinc-800 bg-stone-50 dark:bg-zinc-900/40 text-center">
+          <p className="text-[13px] text-stone-500 dark:text-stone-400">
             <Link href={`/login`} className="font-bold text-[#E8832E] dark:text-[#F9954E] hover:underline">{en ? "Sign in" : "로그인"}</Link>{en ? " to leave a comment." : "하면 댓글을 남길 수 있어요."}
           </p>
         </div>
@@ -159,25 +159,25 @@ export default function ArticleSocial({ slug, compact = false, locale = "ko" }: 
 
       {/* 목록 */}
       {comments.length === 0 ? (
-        <p className="text-center text-[13px] text-neutral-400 py-8">{en ? "Be the first to comment ✍️" : "첫 댓글을 남겨보세요 ✍️"}</p>
+        <p className="text-center text-[13px] text-stone-400 py-8">{en ? "Be the first to comment ✍️" : "첫 댓글을 남겨보세요 ✍️"}</p>
       ) : (
         <ul className="space-y-3">
           {comments.map((c) => (
-            <li key={c.id} className="flex gap-3 p-3.5 rounded-xl border border-neutral-100 dark:border-zinc-800 bg-white dark:bg-zinc-950">
+            <li key={c.id} className="flex gap-3 p-3.5 rounded-xl border border-stone-100 dark:border-zinc-800 bg-white dark:bg-zinc-950">
               <div className="w-8 h-8 rounded-full bg-[#FFF1E3] dark:bg-[#F9954E]/15 flex items-center justify-center text-[13px] font-bold text-[#E8832E] dark:text-[#F9954E] flex-shrink-0">
                 {(c.name || (en ? "A" : "익"))[0]}
               </div>
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
-                  <span className="text-[12.5px] font-bold text-neutral-800 dark:text-neutral-100">{c.name || (en ? "Anonymous" : "익명")}</span>
-                  <span className="text-[11px] text-neutral-400">{fmt(c.createdAt)}</span>
+                  <span className="text-[12.5px] font-bold text-stone-800 dark:text-stone-100">{c.name || (en ? "Anonymous" : "익명")}</span>
+                  <span className="text-[11px] text-stone-400">{fmt(c.createdAt)}</span>
                   {myUid() === c.uid && (
-                    <button onClick={() => remove(c)} aria-label={en ? "Delete" : "삭제"} className="ml-auto text-neutral-300 hover:text-red-500 transition-colors">
+                    <button onClick={() => remove(c)} aria-label={en ? "Delete" : "삭제"} className="ml-auto text-stone-300 hover:text-red-500 transition-colors">
                       <Trash2 className="w-3.5 h-3.5" />
                     </button>
                   )}
                 </div>
-                <p className="text-[13.5px] text-neutral-700 dark:text-neutral-300 mt-0.5 break-words whitespace-pre-wrap">{c.text}</p>
+                <p className="text-[13.5px] text-stone-700 dark:text-stone-300 mt-0.5 break-words whitespace-pre-wrap">{c.text}</p>
               </div>
             </li>
           ))}

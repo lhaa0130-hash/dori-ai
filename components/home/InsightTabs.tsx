@@ -73,10 +73,10 @@ export default function InsightTabs({ items, perTab = 8, locale = "ko" }: { item
   const preview = sel ?? rows[0];
 
   return (
-    <section className="py-5 border-b border-neutral-100 dark:border-zinc-900">
+    <section className="py-5 border-b border-stone-100 dark:border-zinc-900">
       {/* 헤더 */}
       <div className="flex items-center justify-between mb-3">
-        <p className="text-[14px] font-extrabold text-neutral-950 dark:text-white">{en ? "AI Insights" : "AI 인사이트"}</p>
+        <p className="text-[14px] font-extrabold text-stone-950 dark:text-white">{en ? "AI Insights" : "AI 인사이트"}</p>
         <Link href={insightHref} className="flex items-center gap-1 text-[13px] font-semibold text-[#F9954E]">
           {en ? "All" : "전체"} <ArrowRight className="w-3.5 h-3.5" />
         </Link>
@@ -94,7 +94,7 @@ export default function InsightTabs({ items, perTab = 8, locale = "ko" }: { item
                 className={`px-3.5 py-1.5 rounded-full text-[12.5px] font-bold whitespace-nowrap transition-colors border
                   ${active
                     ? "bg-[#F9954E] border-[#F9954E] text-white"
-                    : "bg-white dark:bg-zinc-950 border-neutral-200 dark:border-zinc-800 text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E]/40"}`}
+                    : "bg-white dark:bg-zinc-950 border-stone-200 dark:border-zinc-800 text-stone-500 dark:text-stone-400 hover:border-[#F9954E]/40"}`}
               >
                 {t !== "전체" && <span className="mr-1">{EMOJI[t]}</span>}{t === "전체" ? (en ? "All" : "전체") : catLabel(t)}
               </button>
@@ -107,7 +107,7 @@ export default function InsightTabs({ items, perTab = 8, locale = "ko" }: { item
           items-start 없이 stretch → 우측 칸이 리스트 높이만큼 늘어나 sticky 미리보기가 끝까지 따라옴 */}
       <div className="lg:grid lg:grid-cols-2 lg:gap-6">
         {/* 좌: 순위 리스트 */}
-        <div className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
+        <div className="divide-y divide-stone-100 dark:divide-white/[0.06]">
           {rows.map((it, i) => {
             const isPrev = preview?.slug === it.slug;
             return (
@@ -116,11 +116,11 @@ export default function InsightTabs({ items, perTab = 8, locale = "ko" }: { item
                 href={articleHref(it.slug)}
                 onMouseEnter={() => setSel(it)}
                 className={`flex items-center gap-3 py-3 transition-colors active:opacity-60 lg:px-2.5 lg:rounded-xl lg:border-0
-                  ${isPrev ? "lg:bg-[#FFF8F1] dark:lg:bg-[#F9954E]/[0.08]" : "lg:hover:bg-neutral-50 dark:lg:hover:bg-zinc-900/50"}`}
+                  ${isPrev ? "lg:bg-[#FBEEE7] dark:lg:bg-[#F9954E]/[0.08]" : "lg:hover:bg-stone-50 dark:lg:hover:bg-zinc-900/50"}`}
               >
-                <span className={`w-5 text-center text-[14px] font-extrabold flex-shrink-0 ${i < 3 ? "text-[#F9954E]" : "text-neutral-300 dark:text-neutral-600"}`}>{i + 1}</span>
+                <span className={`w-5 text-center text-[14px] font-extrabold flex-shrink-0 ${i < 3 ? "text-[#F9954E]" : "text-stone-300 dark:text-stone-600"}`}>{i + 1}</span>
 
-                <div className="relative w-[40px] h-[40px] rounded-xl overflow-hidden bg-neutral-100 dark:bg-white/10 flex-shrink-0">
+                <div className="relative w-[40px] h-[40px] rounded-xl overflow-hidden bg-stone-100 dark:bg-white/10 flex-shrink-0">
                   {it.thumbnail ? (
                     <Image src={it.thumbnail} alt={it.title} fill style={{ objectFit: "cover" }} sizes="40px" />
                   ) : (
@@ -129,26 +129,26 @@ export default function InsightTabs({ items, perTab = 8, locale = "ko" }: { item
                 </div>
 
                 <div className="flex-1 min-w-0">
-                  <p className="text-neutral-900 dark:text-white font-semibold text-[13px] line-clamp-1 break-keep">{it.title}</p>
+                  <p className="text-stone-900 dark:text-white font-semibold text-[13px] line-clamp-1 break-keep">{it.title}</p>
                   <p className="flex items-center gap-1.5 mt-0.5">
                     {tab === "전체" && (
                       <span className="text-[10px] font-bold text-[#F9954E] bg-[#FFF1E3] dark:bg-[#F9954E]/15 rounded px-1.5 py-0.5">{catLabel(it.category)}</span>
                     )}
                     {it.category === "영상" && it.videoDate ? (
-                      <span className="text-neutral-400 text-[11px] truncate">
-                        {it.channel && <b className="text-neutral-600 dark:text-neutral-300">{it.channel}</b>}
+                      <span className="text-stone-400 text-[11px] truncate">
+                        {it.channel && <b className="text-stone-600 dark:text-stone-300">{it.channel}</b>}
                         {it.channel ? " · " : ""}📺 {fmtVideoDate(it.videoDate, locale)}
                       </span>
                     ) : (
-                      <span className="text-neutral-400 text-[11px] truncate">
-                        {it.author && <b className="text-neutral-600 dark:text-neutral-300">{it.author}</b>}
+                      <span className="text-stone-400 text-[11px] truncate">
+                        {it.author && <b className="text-stone-600 dark:text-stone-300">{it.author}</b>}
                         {it.author ? " · " : ""}{fmtDate(it.date, locale)}
                       </span>
                     )}
                   </p>
                 </div>
 
-                <ArrowRight className="w-3.5 h-3.5 text-neutral-300 dark:text-white/20 flex-shrink-0" />
+                <ArrowRight className="w-3.5 h-3.5 text-stone-300 dark:text-white/20 flex-shrink-0" />
               </Link>
             );
           })}

@@ -69,11 +69,11 @@ export default function AiToolsClient({ locale = "ko", toolsData }: { locale?: L
     <main className="w-full min-h-screen">
 
       {/* ── 히어로 ── */}
-      <section className="pt-6 pb-5 border-b border-neutral-100 dark:border-zinc-900">
-        <h1 className="text-[28px] sm:text-[36px] font-extrabold text-neutral-950 dark:text-white leading-[1.12] tracking-tight mb-1.5 break-keep">
+      <section className="pt-6 pb-5 border-b border-stone-100 dark:border-zinc-900">
+        <h1 className="text-[28px] sm:text-[36px] font-extrabold text-stone-950 dark:text-white leading-[1.12] tracking-tight mb-1.5 break-keep">
           {tt.h1}
         </h1>
-        <p className="text-[13px] text-neutral-400 dark:text-neutral-500 break-keep">
+        <p className="text-[13px] text-stone-400 dark:text-stone-500 break-keep">
           {tt.sub}
         </p>
       </section>
@@ -81,21 +81,21 @@ export default function AiToolsClient({ locale = "ko", toolsData }: { locale?: L
       {/* ── AI 모델 랭킹 (사용량/지능/가격 3열 동시) ── */}
       <section className="w-full pt-4 pb-1">
         <OpenRouterRanking />
-        <Link href={modelsHref} className="mt-2 flex items-center gap-1.5 text-[12px] text-neutral-400 hover:text-[#F9954E] transition-colors">
+        <Link href={modelsHref} className="mt-2 flex items-center gap-1.5 text-[12px] text-stone-400 hover:text-[#F9954E] transition-colors">
           {tt.compare}
         </Link>
       </section>
 
       {/* ── 카테고리 필터 (랭킹 하위) ── */}
-      <section className="pt-4 pb-0 border-b border-neutral-100 dark:border-zinc-900">
+      <section className="pt-4 pb-0 border-b border-stone-100 dark:border-zinc-900">
         <div className="-mx-6 px-6 overflow-x-auto scrollbar-hide">
           <div className="flex gap-2 w-max pb-4">
             <button
               onClick={() => { setActiveCategory(null); setFilters({ category: "All" }); }}
               className={`px-3.5 py-1.5 rounded-full text-[12px] font-bold border transition-colors whitespace-nowrap ${
                 filters.category === "All"
-                  ? "bg-neutral-950 dark:bg-white border-neutral-950 dark:border-white text-white dark:text-neutral-950"
-                  : "bg-white dark:bg-zinc-950 border-neutral-200 dark:border-zinc-700 text-neutral-500 dark:text-neutral-400"
+                  ? "bg-stone-950 dark:bg-white border-stone-950 dark:border-white text-white dark:text-stone-950"
+                  : "bg-white dark:bg-zinc-950 border-stone-200 dark:border-zinc-700 text-stone-500 dark:text-stone-400"
               }`}
             >
               {tt.all}
@@ -109,7 +109,7 @@ export default function AiToolsClient({ locale = "ko", toolsData }: { locale?: L
                   className={`px-3.5 py-1.5 rounded-full text-[12px] font-bold border transition-colors whitespace-nowrap ${
                     isActive
                       ? "bg-[#F9954E] border-[#F9954E] text-white"
-                      : "bg-white dark:bg-zinc-950 border-neutral-200 dark:border-zinc-700 text-neutral-500 dark:text-neutral-400"
+                      : "bg-white dark:bg-zinc-950 border-stone-200 dark:border-zinc-700 text-stone-500 dark:text-stone-400"
                   }`}
                 >
                   {cat === "agent" && <span className="mr-1 text-[10px] bg-[#F9954E] text-white px-1.5 py-0.5 rounded-full font-black">NEW</span>}

@@ -35,7 +35,7 @@ const ICON_POOL = [
     { id: "monitor", icon: <Monitor className="w-8 h-8" />, color: "text-slate-600" },
     { id: "ghost", icon: <Ghost className="w-8 h-8" />, color: "text-purple-400" },
     { id: "bomb", icon: <Bomb className="w-8 h-8" />, color: "text-red-600" },
-    { id: "skull", icon: <Skull className="w-8 h-8" />, color: "text-neutral-500" },
+    { id: "skull", icon: <Skull className="w-8 h-8" />, color: "text-stone-500" },
 ];
 
 interface Card {
@@ -232,13 +232,13 @@ export default function MemoryGamePage() {
 
             {/* 상단 nav */}
             <div className="w-full max-w-4xl flex items-center justify-between mb-6 z-10">
-                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-500 hover:text-white transition-colors">
+                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-stone-500 hover:text-white transition-colors">
                     <ArrowLeft className="w-4 h-4" />
                     <span>나가기</span>
                 </Link>
                 <div className="text-[15px] font-extrabold tracking-tight text-white">🧠 메모리 마스터</div>
                 <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
-                    <div className="text-[9px] uppercase tracking-widest text-neutral-500">Stage</div>
+                    <div className="text-[9px] uppercase tracking-widest text-stone-500">Stage</div>
                     <div className={`text-sm font-bold tabular-nums ${stageConfig.isHell ? "text-red-400" : "text-white"}`}>
                         <span key={currentStage} className="arcade-pop inline-block">
                             <CountUp value={currentStage} className="tabular-nums" />
@@ -265,7 +265,7 @@ export default function MemoryGamePage() {
                     <div className="text-center animate-fade-in">
                         <Sparkles className="arcade-float w-20 h-20 mx-auto text-[#F9954E] mb-6 drop-shadow-[0_0_20px_rgba(249,149,78,0.35)]" />
                         <h1 className="text-4xl font-extrabold tracking-tight text-white mb-4">Memory Master</h1>
-                        <p className="text-lg text-neutral-400 mb-8 max-w-md mx-auto">
+                        <p className="text-lg text-stone-400 mb-8 max-w-md mx-auto">
                             1~5단계는 색상 힌트가 있어 쉽지만,<br />
                             6단계부터는 어려워지고<br />
                             <strong className="text-white">10단계 Hell Mode</strong>는 극한의 난이도를 자랑합니다!
@@ -283,7 +283,7 @@ export default function MemoryGamePage() {
                     <div className="w-full flex flex-col h-full animate-fade-in select-none">
                         {/* 상태 표시줄 */}
                         <div className="flex justify-between items-center mb-6 px-2">
-                            <div className="min-w-[120px] text-sm font-medium text-neutral-500">
+                            <div className="min-w-[120px] text-sm font-medium text-stone-500">
                                 남은 카드: <span key={stageConfig.pairs - matchedCount} className="arcade-pop inline-block font-bold text-white tabular-nums">
                                     <CountUp value={stageConfig.pairs - matchedCount} className="tabular-nums" />
                                 </span> 쌍
@@ -349,7 +349,7 @@ export default function MemoryGamePage() {
                                         {/* 뒷면 (공개된 상태) */}
                                         <div className={`
                                             absolute inset-0 w-full h-full backface-hidden rounded-lg md:rounded-xl flex items-center justify-center rotate-y-180
-                                            ${stageConfig.isHard ? "bg-neutral-800 border border-neutral-700" : "bg-white/[0.04] border border-white/10"}
+                                            ${stageConfig.isHard ? "bg-stone-800 border border-stone-700" : "bg-white/[0.04] border border-white/10"}
                                             shadow-lg
                                         `}>
                                             <div className={`
@@ -392,7 +392,7 @@ export default function MemoryGamePage() {
                             <Skull className="w-10 h-10" />
                         </div>
                         <h2 className="text-3xl font-bold mb-2">Game Over...</h2>
-                        <p className="text-neutral-500 mb-8">기회를 모두 소진했습니다.</p>
+                        <p className="text-stone-500 mb-8">기회를 모두 소진했습니다.</p>
                         <div className="flex gap-4 justify-center">
                             <button
                                 onClick={() => initializeGame(10)}
@@ -402,7 +402,7 @@ export default function MemoryGamePage() {
                             </button>
                             <button
                                 onClick={() => initializeGame(1)}
-                                className="px-6 py-3 rounded-xl bg-white/[0.06] border border-white/10 hover:bg-white/[0.12] text-neutral-200 font-bold active:scale-[0.97] transition-all"
+                                className="px-6 py-3 rounded-xl bg-white/[0.06] border border-white/10 hover:bg-white/[0.12] text-stone-200 font-bold active:scale-[0.97] transition-all"
                             >
                                 처음으로
                             </button>

@@ -10,7 +10,7 @@ export default function MySpaceTabs({ active }: { active: "home" | "shop" }) {
   ] as const;
   return (
     <div className="max-w-2xl mx-auto px-5 pt-4">
-      <div className="flex gap-1 p-1 rounded-2xl bg-neutral-100 dark:bg-zinc-900">
+      <div className="flex gap-1 p-1 rounded-2xl bg-stone-100 dark:bg-zinc-900">
         {tabs.map((t) => (
           <Link
             key={t.id}
@@ -18,7 +18,7 @@ export default function MySpaceTabs({ active }: { active: "home" | "shop" }) {
             className={`flex-1 text-center py-2 rounded-xl text-[13px] font-extrabold transition-colors ${
               active === t.id
                 ? "bg-white dark:bg-zinc-800 text-[#F9954E] shadow-sm"
-                : "text-neutral-500 dark:text-neutral-400 active:opacity-70"
+                : "text-stone-500 dark:text-stone-400 active:opacity-70"
             }`}
           >
             {t.emoji} {t.label}

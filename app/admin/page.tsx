@@ -338,7 +338,7 @@ export default function AdminPage() {
         <div className="text-center">
           <div className="text-6xl mb-4">🚫</div>
           <h1 className="text-foreground text-2xl font-bold mb-2">접근 권한 없음</h1>
-          <p className="text-neutral-500 dark:text-neutral-400">관리자만 접근할 수 있습니다.</p>
+          <p className="text-stone-500 dark:text-stone-400">관리자만 접근할 수 있습니다.</p>
         </div>
       </div>
     );
@@ -497,7 +497,7 @@ export default function AdminPage() {
       {toast && (
         <div
           className={`fixed top-20 left-1/2 -translate-x-1/2 z-[60] px-5 py-3 rounded-2xl shadow-xl font-bold text-[13px] text-white ${
-            toast.type === "success" ? "bg-[#F9954E]" : "bg-neutral-900"
+            toast.type === "success" ? "bg-[#F9954E]" : "bg-stone-900"
           }`}
         >
           {toast.type === "success" ? "✅ " : "⚠️ "}{toast.msg}
@@ -507,16 +507,16 @@ export default function AdminPage() {
       <div className="w-full max-w-[1200px] mx-auto px-5 sm:px-6 pt-24 pb-16">
         {/* 헤더 */}
         <div className="flex items-center gap-3 mb-7">
-          <div className="w-10 h-10 rounded-2xl bg-[#FFF5EB] dark:bg-[#F9954E]/10 flex items-center justify-center text-xl flex-shrink-0">
+          <div className="w-10 h-10 rounded-2xl bg-[#FBEEE7] dark:bg-[#F9954E]/10 flex items-center justify-center text-xl flex-shrink-0">
             🛡️
           </div>
           <div className="min-w-0">
-            <h1 className="text-[24px] font-extrabold text-neutral-950 dark:text-white leading-tight tracking-tight">관리자 패널</h1>
-            <p className="text-neutral-400 dark:text-neutral-500 text-[12px] truncate">{user.email}</p>
+            <h1 className="text-[24px] font-extrabold text-stone-950 dark:text-white leading-tight tracking-tight">관리자 패널</h1>
+            <p className="text-stone-400 dark:text-stone-500 text-[12px] truncate">{user.email}</p>
           </div>
           <button
             onClick={loadData}
-            className="ml-auto flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-neutral-200 dark:border-zinc-800 text-neutral-600 dark:text-neutral-300 text-[13px] font-bold hover:border-[#F9954E]/40 hover:text-[#F9954E] transition-colors flex-shrink-0"
+            className="ml-auto flex items-center gap-1.5 px-3.5 py-2 rounded-xl border border-stone-200 dark:border-zinc-800 text-stone-600 dark:text-stone-300 text-[13px] font-bold hover:border-[#F9954E]/40 hover:text-[#F9954E] transition-colors flex-shrink-0"
           >
             🔄 새로고침
           </button>
@@ -536,7 +536,7 @@ export default function AdminPage() {
                     className={`px-4 py-2 rounded-full text-[13px] font-bold whitespace-nowrap border transition-colors ${
                       activeTab === tab.id
                         ? "bg-[#F9954E] border-[#F9954E] text-white"
-                        : "bg-white dark:bg-zinc-950 border-neutral-200 dark:border-zinc-800 text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E]/40"
+                        : "bg-white dark:bg-zinc-950 border-stone-200 dark:border-zinc-800 text-stone-500 dark:text-stone-400 hover:border-[#F9954E]/40"
                     }`}
                   >
                     {tab.emoji} {tab.label}
@@ -580,14 +580,14 @@ export default function AdminPage() {
 
 
               {/* 1) 사용자 현황 — 오늘 / 이번 주 / 이번 달 / 총 회원 */}
-              <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
+              <div className="bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-5">
                 <div className="flex items-center justify-between gap-2 flex-wrap mb-4">
-                  <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-2">👥 사용자 현황</h2>
+                  <h2 className="text-[15px] font-extrabold text-stone-900 dark:text-white flex items-center gap-2">👥 사용자 현황</h2>
                   {gaOn && (
                     <div className="flex items-center gap-2 text-[12px]">
                       <span className="relative flex h-2.5 w-2.5"><span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75" /><span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500" /></span>
                       <span className="font-bold text-emerald-700 dark:text-emerald-400">지금 {ga4!.realtimeUsers.toLocaleString()}명</span>
-                      {agoLabel && <span className="text-neutral-400 dark:text-neutral-600">· {agoLabel}</span>}
+                      {agoLabel && <span className="text-stone-400 dark:text-stone-600">· {agoLabel}</span>}
                     </div>
                   )}
                 </div>
@@ -598,10 +598,10 @@ export default function AdminPage() {
                     { label: "이번 달", sub: "MAU · 30일", n: act ? act.mau : 0 },
                     { label: "총 회원", sub: "누적 가입", n: users.length },
                   ].map((m) => (
-                    <div key={m.label} className="rounded-xl bg-neutral-50 dark:bg-zinc-900/40 p-4">
-                      <div className="text-[12px] font-bold text-neutral-500 dark:text-neutral-400">{m.label}</div>
-                      <div className="text-[26px] font-black mt-1.5 leading-none text-neutral-900 dark:text-white tabular-nums">{m.n.toLocaleString()}</div>
-                      <div className="text-[10.5px] text-neutral-400 dark:text-neutral-500 mt-1.5">{m.sub}</div>
+                    <div key={m.label} className="rounded-xl bg-stone-50 dark:bg-zinc-900/40 p-4">
+                      <div className="text-[12px] font-bold text-stone-500 dark:text-stone-400">{m.label}</div>
+                      <div className="text-[26px] font-black mt-1.5 leading-none text-stone-900 dark:text-white tabular-nums">{m.n.toLocaleString()}</div>
+                      <div className="text-[10.5px] text-stone-400 dark:text-stone-500 mt-1.5">{m.sub}</div>
                     </div>
                   ))}
                 </div>
@@ -609,12 +609,12 @@ export default function AdminPage() {
 
               {/* 2) 최근 14일 방문자 + 방문 기기 */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                <div className="lg:col-span-2 bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
+                <div className="lg:col-span-2 bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-5">
                   <div className="flex items-center justify-between gap-2 flex-wrap mb-5">
-                    <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-2">📈 최근 14일 방문자 {gaOn && <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded">GA4</span>}</h2>
+                    <h2 className="text-[15px] font-extrabold text-stone-900 dark:text-white flex items-center gap-2">📈 최근 14일 방문자 {gaOn && <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded">GA4</span>}</h2>
                     <div className="flex items-center gap-4 text-[12px]">
-                      <span className="text-neutral-500 dark:text-neutral-400">오늘 <b className="text-[#F9954E]">{todayUsers.toLocaleString()}</b>명</span>
-                      <span className="text-neutral-500 dark:text-neutral-400">7일 조회 <b className="text-neutral-700 dark:text-neutral-200">{(ga4 ? ga4.last7.pageViews : totalPV).toLocaleString()}</b></span>
+                      <span className="text-stone-500 dark:text-stone-400">오늘 <b className="text-[#F9954E]">{todayUsers.toLocaleString()}</b>명</span>
+                      <span className="text-stone-500 dark:text-stone-400">7일 조회 <b className="text-stone-700 dark:text-stone-200">{(ga4 ? ga4.last7.pageViews : totalPV).toLocaleString()}</b></span>
                     </div>
                   </div>
                   <div className="flex items-end gap-1.5 h-40">
@@ -623,23 +623,23 @@ export default function AdminPage() {
                       return (
                         <div key={row.date} className="group relative flex-1 h-full flex items-end" title={`${row.date} · ${row.users}명`}>
                           <div className="w-full bg-gradient-to-t from-[#F9954E] to-[#FBAA60] rounded-t-md group-hover:brightness-110 transition-all" style={{ height: `${heightPct}%` }} />
-                          <span className="absolute left-1/2 -translate-x-1/2 -top-4 text-[10px] font-bold text-neutral-600 dark:text-neutral-300 opacity-0 group-hover:opacity-100 transition tabular-nums">{row.users}</span>
+                          <span className="absolute left-1/2 -translate-x-1/2 -top-4 text-[10px] font-bold text-stone-600 dark:text-stone-300 opacity-0 group-hover:opacity-100 transition tabular-nums">{row.users}</span>
                         </div>
                       );
                     })}
                   </div>
                   <div className="flex gap-1.5 mt-1.5">
                     {chart.map((row) => (
-                      <div key={row.date} className="flex-1 text-center text-[9px] text-neutral-400 dark:text-neutral-500 tabular-nums">{row.date.slice(5)}</div>
+                      <div key={row.date} className="flex-1 text-center text-[9px] text-stone-400 dark:text-stone-500 tabular-nums">{row.date.slice(5)}</div>
                     ))}
                   </div>
-                  {!gaOn && !analyticsReady && <p className="text-xs text-neutral-400 mt-3">불러오는 중…</p>}
+                  {!gaOn && !analyticsReady && <p className="text-xs text-stone-400 mt-3">불러오는 중…</p>}
                 </div>
 
-                <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
-                  <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white mb-4">📱 방문 기기 {gaOn && <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded align-middle">GA4</span>}</h2>
+                <div className="bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-5">
+                  <h2 className="text-[15px] font-extrabold text-stone-900 dark:text-white mb-4">📱 방문 기기 {gaOn && <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded align-middle">GA4</span>}</h2>
                   {devTotal === 0 ? (
-                    <p className="text-[13px] text-neutral-400 py-3">아직 데이터가 없어요.</p>
+                    <p className="text-[13px] text-stone-400 py-3">아직 데이터가 없어요.</p>
                   ) : (
                     <div className="space-y-3.5">
                       {[
@@ -650,8 +650,8 @@ export default function AdminPage() {
                         const p = devTotal ? Math.round((d.n / devTotal) * 100) : 0;
                         return (
                           <div key={d.label}>
-                            <div className="flex items-center justify-between text-[12.5px] mb-1"><span className="font-bold text-neutral-600 dark:text-neutral-300">{d.label}</span><span className="text-neutral-400">{d.n.toLocaleString()} · {p}%</span></div>
-                            <div className="h-2 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden"><div className={`h-full rounded-full ${d.c}`} style={{ width: `${p}%` }} /></div>
+                            <div className="flex items-center justify-between text-[12.5px] mb-1"><span className="font-bold text-stone-600 dark:text-stone-300">{d.label}</span><span className="text-stone-400">{d.n.toLocaleString()} · {p}%</span></div>
+                            <div className="h-2 rounded-full bg-stone-100 dark:bg-zinc-800 overflow-hidden"><div className={`h-full rounded-full ${d.c}`} style={{ width: `${p}%` }} /></div>
                           </div>
                         );
                       })}
@@ -664,41 +664,41 @@ export default function AdminPage() {
               {gaOn && (
                 <div className="space-y-2.5">
                 <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
-                  <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
-                    <h2 className="text-[14px] font-extrabold text-neutral-900 dark:text-white mb-3">🔥 인기 페이지 <span className="text-[11px] font-normal text-neutral-400">7일</span></h2>
+                  <div className="bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-5">
+                    <h2 className="text-[14px] font-extrabold text-stone-900 dark:text-white mb-3">🔥 인기 페이지 <span className="text-[11px] font-normal text-stone-400">7일</span></h2>
                     <div className="space-y-2">
                       {ga4!.topPages.slice(0, 6).map((p, i) => (
                         <div key={i} className="flex items-center justify-between gap-2 text-[12.5px]">
-                          <span className="truncate text-neutral-600 dark:text-neutral-300"><span className="text-neutral-300 dark:text-neutral-600 mr-1.5">{i + 1}</span>{p.title || "(제목없음)"}</span>
-                          <span className="font-bold text-neutral-800 dark:text-neutral-100 flex-shrink-0">{p.views.toLocaleString()}</span>
+                          <span className="truncate text-stone-600 dark:text-stone-300"><span className="text-stone-300 dark:text-stone-600 mr-1.5">{i + 1}</span>{p.title || "(제목없음)"}</span>
+                          <span className="font-bold text-stone-800 dark:text-stone-100 flex-shrink-0">{p.views.toLocaleString()}</span>
                         </div>
                       ))}
                     </div>
                   </div>
-                  <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
-                    <h2 className="text-[14px] font-extrabold text-neutral-900 dark:text-white mb-3">🧭 유입 경로 <span className="text-[11px] font-normal text-neutral-400">7일</span></h2>
+                  <div className="bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-5">
+                    <h2 className="text-[14px] font-extrabold text-stone-900 dark:text-white mb-3">🧭 유입 경로 <span className="text-[11px] font-normal text-stone-400">7일</span></h2>
                     <div className="space-y-2.5">
                       {(() => { const tot = ga4!.channels.reduce((s, c) => s + c.sessions, 0) || 1; return ga4!.channels.slice(0, 6).map((c, i) => { const pct = Math.round((c.sessions / tot) * 100); return (
                         <div key={i}>
-                          <div className="flex items-center justify-between text-[12px] mb-1"><span className="font-semibold text-neutral-600 dark:text-neutral-300">{chanKo[c.name] || c.name}</span><span className="text-neutral-400">{c.sessions} · {pct}%</span></div>
-                          <div className="h-1.5 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden"><div className="h-full rounded-full bg-sky-400" style={{ width: `${pct}%` }} /></div>
+                          <div className="flex items-center justify-between text-[12px] mb-1"><span className="font-semibold text-stone-600 dark:text-stone-300">{chanKo[c.name] || c.name}</span><span className="text-stone-400">{c.sessions} · {pct}%</span></div>
+                          <div className="h-1.5 rounded-full bg-stone-100 dark:bg-zinc-800 overflow-hidden"><div className="h-full rounded-full bg-sky-400" style={{ width: `${pct}%` }} /></div>
                         </div>
                       ); }); })()}
                     </div>
                   </div>
-                  <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
-                    <h2 className="text-[14px] font-extrabold text-neutral-900 dark:text-white mb-3">🌍 국가 <span className="text-[11px] font-normal text-neutral-400">7일</span></h2>
+                  <div className="bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-5">
+                    <h2 className="text-[14px] font-extrabold text-stone-900 dark:text-white mb-3">🌍 국가 <span className="text-[11px] font-normal text-stone-400">7일</span></h2>
                     <div className="space-y-2.5">
                       {(() => { const tot = ga4!.topCountries.reduce((s, c) => s + c.users, 0) || 1; return ga4!.topCountries.slice(0, 6).map((c, i) => { const pct = Math.round((c.users / tot) * 100); return (
                         <div key={i}>
-                          <div className="flex items-center justify-between text-[12px] mb-1"><span className="truncate text-neutral-600 dark:text-neutral-300">{flag[c.country] || "🌐"} {c.country}</span><span className="text-neutral-400 flex-shrink-0">{c.users} · {pct}%</span></div>
-                          <div className="h-1.5 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden"><div className="h-full rounded-full bg-emerald-400" style={{ width: `${pct}%` }} /></div>
+                          <div className="flex items-center justify-between text-[12px] mb-1"><span className="truncate text-stone-600 dark:text-stone-300">{flag[c.country] || "🌐"} {c.country}</span><span className="text-stone-400 flex-shrink-0">{c.users} · {pct}%</span></div>
+                          <div className="h-1.5 rounded-full bg-stone-100 dark:bg-zinc-800 overflow-hidden"><div className="h-full rounded-full bg-emerald-400" style={{ width: `${pct}%` }} /></div>
                         </div>
                       ); }); })()}
                     </div>
                   </div>
                 </div>
-                <p className="text-[11px] text-neutral-400 dark:text-neutral-500 leading-relaxed break-keep">GA4는 방문자를 <b className="font-semibold">중복 없이</b> 세어, 국가·유입경로별 합이 전체(DAU/WAU/MAU)와 정확히 일치하지 않을 수 있어요 — 한 방문자가 여러 국가·경로에 잡히면 각각 카운트되기 때문입니다(GA4 정상 동작).</p>
+                <p className="text-[11px] text-stone-400 dark:text-stone-500 leading-relaxed break-keep">GA4는 방문자를 <b className="font-semibold">중복 없이</b> 세어, 국가·유입경로별 합이 전체(DAU/WAU/MAU)와 정확히 일치하지 않을 수 있어요 — 한 방문자가 여러 국가·경로에 잡히면 각각 카운트되기 때문입니다(GA4 정상 동작).</p>
                 </div>
               )}
 
@@ -706,32 +706,32 @@ export default function AdminPage() {
               {/* 4) 광고 수입 — 애드센스 · 애드몹 (각 이번 달 + 잔고) */}
               <div className="space-y-4">
                 <div className="flex items-center justify-between gap-3 flex-wrap rounded-2xl border border-[#F9954E]/30 bg-gradient-to-br from-[#FFF1E3] to-white dark:from-[#F9954E]/10 dark:to-zinc-950 px-5 py-4">
-                  <span className="text-[14px] font-extrabold text-neutral-900 dark:text-white">💰 광고 수입 <span className="text-[11px] font-normal text-neutral-400">이번 달 합계 · 애드센스+애드몹</span></span>
+                  <span className="text-[14px] font-extrabold text-stone-900 dark:text-white">💰 광고 수입 <span className="text-[11px] font-normal text-stone-400">이번 달 합계 · 애드센스+애드몹</span></span>
                   <span className="text-[24px] leading-none font-extrabold text-[#F9954E] tabular-nums">{money(totalMonth)}</span>
                 </div>
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
                   {/* 애드센스 (웹) — 이번 달 + 잔고 */}
-                  <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
+                  <div className="bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-5">
                     <div className="flex items-center justify-between mb-4">
-                      <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-1.5">🌐 애드센스 <span className="text-[10.5px] text-neutral-400 font-normal">웹</span> {adsenseLive?.month ? <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded">자동</span> : <span className="text-[10px] font-bold text-neutral-400 bg-neutral-500/10 px-1.5 py-0.5 rounded">수동</span>}</h2>
+                      <h2 className="text-[15px] font-extrabold text-stone-900 dark:text-white flex items-center gap-1.5">🌐 애드센스 <span className="text-[10.5px] text-stone-400 font-normal">웹</span> {adsenseLive?.month ? <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded">자동</span> : <span className="text-[10px] font-bold text-stone-400 bg-stone-500/10 px-1.5 py-0.5 rounded">수동</span>}</h2>
                       <div className="flex gap-1.5">
-                        <a href="https://adsense.google.com/" target="_blank" rel="noopener noreferrer" className="text-[11px] rounded-lg px-2 py-1 font-bold bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition">→</a>
-                        <button onClick={() => setAdsenseEdit((v) => !v)} className="text-[11px] rounded-lg px-2 py-1 font-bold bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition">{adsenseEdit ? "닫기" : "수정"}</button>
+                        <a href="https://adsense.google.com/" target="_blank" rel="noopener noreferrer" className="text-[11px] rounded-lg px-2 py-1 font-bold bg-stone-100 dark:bg-zinc-800 text-stone-500 dark:text-stone-400 hover:text-[#F9954E] transition">→</a>
+                        <button onClick={() => setAdsenseEdit((v) => !v)} className="text-[11px] rounded-lg px-2 py-1 font-bold bg-stone-100 dark:bg-zinc-800 text-stone-500 dark:text-stone-400 hover:text-[#F9954E] transition">{adsenseEdit ? "닫기" : "수정"}</button>
                       </div>
                     </div>
                     {adsenseEdit ? (
                       <div className="flex items-end gap-2">
                         {([["이번 달", "month"], ["잔고", "balance"]] as [string, keyof AdsenseData][]).map(([label, key]) => (
-                          <label key={key} className="flex-1"><span className="text-[10.5px] text-neutral-400">{label}</span><input type="number" step="0.01" value={adsenseForm[key] as number} onChange={(e) => setAdsenseForm((f) => ({ ...f, [key]: parseFloat(e.target.value) || 0 }))} className="w-full mt-0.5 px-2 py-1.5 rounded-lg border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-foreground text-[13px] font-bold outline-none focus:border-[#F9954E]" /></label>
+                          <label key={key} className="flex-1"><span className="text-[10.5px] text-stone-400">{label}</span><input type="number" step="0.01" value={adsenseForm[key] as number} onChange={(e) => setAdsenseForm((f) => ({ ...f, [key]: parseFloat(e.target.value) || 0 }))} className="w-full mt-0.5 px-2 py-1.5 rounded-lg border border-stone-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-foreground text-[13px] font-bold outline-none focus:border-[#F9954E]" /></label>
                         ))}
                         <button onClick={handleSaveAdsense} className="px-3 py-2 rounded-lg bg-[#F9954E] text-white font-bold text-[12px] hover:brightness-105 transition">저장</button>
                       </div>
                     ) : (
                       <div className="grid grid-cols-2 gap-3">
                         {[{ label: "이번 달", v: adsenseMonth }, { label: "잔고", v: ad.balance }].map((m) => (
-                          <div key={m.label} className="rounded-xl bg-neutral-50 dark:bg-zinc-900/60 p-3">
-                            <p className="text-[11px] text-neutral-400 mb-0.5">{m.label}</p>
-                            <p className="text-lg font-black text-neutral-900 dark:text-white">{money(m.v)}</p>
+                          <div key={m.label} className="rounded-xl bg-stone-50 dark:bg-zinc-900/60 p-3">
+                            <p className="text-[11px] text-stone-400 mb-0.5">{m.label}</p>
+                            <p className="text-lg font-black text-stone-900 dark:text-white">{money(m.v)}</p>
                           </div>
                         ))}
                       </div>
@@ -739,52 +739,52 @@ export default function AdminPage() {
                   </div>
 
                   {/* 애드몹 (앱) — 이번 달 + 잔고 */}
-                  <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
+                  <div className="bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-5">
                     <div className="flex items-center justify-between mb-4">
-                      <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white flex items-center gap-1.5">📱 애드몹 <span className="text-[10.5px] text-neutral-400 font-normal">앱</span> {admobAuto ? <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded">자동</span> : <span className="text-[10px] font-bold text-neutral-400 bg-neutral-500/10 px-1.5 py-0.5 rounded">수동</span>}</h2>
+                      <h2 className="text-[15px] font-extrabold text-stone-900 dark:text-white flex items-center gap-1.5">📱 애드몹 <span className="text-[10.5px] text-stone-400 font-normal">앱</span> {admobAuto ? <span className="text-[10px] font-bold text-emerald-600 bg-emerald-500/10 px-1.5 py-0.5 rounded">자동</span> : <span className="text-[10px] font-bold text-stone-400 bg-stone-500/10 px-1.5 py-0.5 rounded">수동</span>}</h2>
                       <div className="flex gap-1.5">
-                        <a href="https://apps.admob.com/" target="_blank" rel="noopener noreferrer" className="text-[11px] rounded-lg px-2 py-1 font-bold bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition">→</a>
-                        <button onClick={() => setAdmobEdit((v) => !v)} className="text-[11px] rounded-lg px-2 py-1 font-bold bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] transition">{admobEdit ? "닫기" : "수정"}</button>
+                        <a href="https://apps.admob.com/" target="_blank" rel="noopener noreferrer" className="text-[11px] rounded-lg px-2 py-1 font-bold bg-stone-100 dark:bg-zinc-800 text-stone-500 dark:text-stone-400 hover:text-[#F9954E] transition">→</a>
+                        <button onClick={() => setAdmobEdit((v) => !v)} className="text-[11px] rounded-lg px-2 py-1 font-bold bg-stone-100 dark:bg-zinc-800 text-stone-500 dark:text-stone-400 hover:text-[#F9954E] transition">{admobEdit ? "닫기" : "수정"}</button>
                       </div>
                     </div>
                     {admobEdit ? (
                       <div className="flex items-end gap-2">
                         {([["이번 달", "admobMonth"], ["잔고", "admobBalance"]] as [string, keyof AdsenseData][]).map(([label, key]) => (
-                          <label key={key} className="flex-1"><span className="text-[10.5px] text-neutral-400">{label}</span><input type="number" step="0.01" value={adsenseForm[key] as number} onChange={(e) => setAdsenseForm((f) => ({ ...f, [key]: parseFloat(e.target.value) || 0 }))} className="w-full mt-0.5 px-2 py-1.5 rounded-lg border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-foreground text-[13px] font-bold outline-none focus:border-[#F9954E]" /></label>
+                          <label key={key} className="flex-1"><span className="text-[10.5px] text-stone-400">{label}</span><input type="number" step="0.01" value={adsenseForm[key] as number} onChange={(e) => setAdsenseForm((f) => ({ ...f, [key]: parseFloat(e.target.value) || 0 }))} className="w-full mt-0.5 px-2 py-1.5 rounded-lg border border-stone-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-foreground text-[13px] font-bold outline-none focus:border-[#F9954E]" /></label>
                         ))}
                         <button onClick={handleSaveAdsense} className="px-3 py-2 rounded-lg bg-[#F9954E] text-white font-bold text-[12px] hover:brightness-105 transition">저장</button>
                       </div>
                     ) : (
                       <div className="grid grid-cols-2 gap-3">
                         {[{ label: "이번 달", v: admobMonth }, { label: "잔고", v: ad.admobBalance }].map((m) => (
-                          <div key={m.label} className="rounded-xl bg-neutral-50 dark:bg-zinc-900/60 p-3">
-                            <p className="text-[11px] text-neutral-400 mb-0.5">{m.label}</p>
-                            <p className="text-lg font-black text-neutral-900 dark:text-white">{money(m.v)}</p>
+                          <div key={m.label} className="rounded-xl bg-stone-50 dark:bg-zinc-900/60 p-3">
+                            <p className="text-[11px] text-stone-400 mb-0.5">{m.label}</p>
+                            <p className="text-lg font-black text-stone-900 dark:text-white">{money(m.v)}</p>
                           </div>
                         ))}
                       </div>
                     )}
-                    {!admobAuto && <p className="mt-2.5 text-[10.5px] text-neutral-400 dark:text-neutral-500">앱 광고 수입 — 수동 입력 중. 자동 연동 준비됨(OAuth 재동의 시 전환).</p>}
+                    {!admobAuto && <p className="mt-2.5 text-[10.5px] text-stone-400 dark:text-stone-500">앱 광고 수입 — 수동 입력 중. 자동 연동 준비됨(OAuth 재동의 시 전환).</p>}
                   </div>
                 </div>
               </div>
 
               {/* 5) 최근 회원 */}
-              <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
+              <div className="bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-5">
                 <div className="flex items-center justify-between mb-3">
-                  <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white">🆕 최근 회원</h2>
-                  <button onClick={() => setActiveTab("users")} className="text-[12px] font-bold text-neutral-400 hover:text-[#F9954E] transition">회원관리 →</button>
+                  <h2 className="text-[15px] font-extrabold text-stone-900 dark:text-white">🆕 최근 회원</h2>
+                  <button onClick={() => setActiveTab("users")} className="text-[12px] font-bold text-stone-400 hover:text-[#F9954E] transition">회원관리 →</button>
                 </div>
                 {users.length === 0 ? (
-                  <p className="text-neutral-400 dark:text-neutral-500 text-sm py-2">회원 데이터 없음</p>
+                  <p className="text-stone-400 dark:text-stone-500 text-sm py-2">회원 데이터 없음</p>
                 ) : (
-                  <div className="divide-y divide-neutral-100 dark:divide-zinc-900">
+                  <div className="divide-y divide-stone-100 dark:divide-zinc-900">
                     {users.slice(0, 6).map((u) => (
                       <div key={u.email} className="flex items-center justify-between py-2.5 gap-2">
-                        <div className="min-w-0 truncate"><span className="font-bold text-[13.5px] text-foreground">{u.name || "이름 없음"}</span><span className="text-neutral-400 text-[12px] ml-2">{u.email}</span></div>
+                        <div className="min-w-0 truncate"><span className="font-bold text-[13.5px] text-foreground">{u.name || "이름 없음"}</span><span className="text-stone-400 text-[12px] ml-2">{u.email}</span></div>
                         <div className="flex items-center gap-2 flex-shrink-0">
                           {u.isPremium && <span className="text-[10.5px] bg-yellow-500/15 text-yellow-600 dark:text-yellow-400 px-2 py-0.5 rounded-full font-bold">💎</span>}
-                          <span className="text-[11.5px] text-neutral-400">🍭 {(u.cottonCandy || 0).toLocaleString()}</span>
+                          <span className="text-[11.5px] text-stone-400">🍭 {(u.cottonCandy || 0).toLocaleString()}</span>
                         </div>
                       </div>
                     ))}
@@ -815,26 +815,26 @@ export default function AdminPage() {
                   { label: "7일 방문", sub: "순 사용자", v: g ? g.last7.users : totalUV, c: "text-[#F9954E]" },
                   { label: "7일 조회", sub: "페이지뷰", v: g ? g.last7.pageViews : totalPV, c: "text-violet-600 dark:text-violet-400" },
                 ].map((c) => (
-                  <div key={c.label} className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-4">
-                    <div className="text-neutral-500 dark:text-neutral-400 text-[12px]">{c.label}</div>
+                  <div key={c.label} className="bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-4">
+                    <div className="text-stone-500 dark:text-stone-400 text-[12px]">{c.label}</div>
                     <div className={`text-[26px] font-black mt-1 leading-none ${c.c}`}>{c.v.toLocaleString()}</div>
-                    <div className="text-[10.5px] text-neutral-400 dark:text-neutral-500 mt-1.5">{c.sub}</div>
+                    <div className="text-[10.5px] text-stone-400 dark:text-stone-500 mt-1.5">{c.sub}</div>
                   </div>
                 ))}
               </div>
 
               {/* 2) 일별 방문 표 (정확 수치) */}
-              <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
-                <h2 className="text-[15px] font-extrabold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">📅 일별 방문 기록 <span className="text-[11px] font-normal text-neutral-400">최근 14일 {g && <span className="text-emerald-600 font-bold">· GA4</span>}</span></h2>
+              <div className="bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-5">
+                <h2 className="text-[15px] font-extrabold text-stone-900 dark:text-white mb-4 flex items-center gap-2">📅 일별 방문 기록 <span className="text-[11px] font-normal text-stone-400">최근 14일 {g && <span className="text-emerald-600 font-bold">· GA4</span>}</span></h2>
                 {days.length === 0 ? (
-                  <p className="text-neutral-400 dark:text-neutral-500 text-[13px] py-2">{analyticsReady || g ? "아직 기록이 없어요." : "불러오는 중…"}</p>
+                  <p className="text-stone-400 dark:text-stone-500 text-[13px] py-2">{analyticsReady || g ? "아직 기록이 없어요." : "불러오는 중…"}</p>
                 ) : (
                   <div className="space-y-1.5">
                     {[...days].reverse().map((d) => (
                       <div key={d.date} className="flex items-center gap-3">
-                        <span className="text-[12px] text-neutral-500 dark:text-neutral-400 w-20 flex-shrink-0 tabular-nums">{d.date.slice(5)}</span>
-                        <div className="flex-1 h-4 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden"><div className="h-full rounded-full bg-gradient-to-r from-[#F9954E] to-[#FBAA60]" style={{ width: `${Math.max((d.users / dayMax) * 100, 2)}%` }} /></div>
-                        <span className="text-[13px] font-bold text-neutral-800 dark:text-neutral-100 w-12 text-right flex-shrink-0 tabular-nums">{d.users.toLocaleString()}</span>
+                        <span className="text-[12px] text-stone-500 dark:text-stone-400 w-20 flex-shrink-0 tabular-nums">{d.date.slice(5)}</span>
+                        <div className="flex-1 h-4 rounded-full bg-stone-100 dark:bg-zinc-800 overflow-hidden"><div className="h-full rounded-full bg-gradient-to-r from-[#F9954E] to-[#FBAA60]" style={{ width: `${Math.max((d.users / dayMax) * 100, 2)}%` }} /></div>
+                        <span className="text-[13px] font-bold text-stone-800 dark:text-stone-100 w-12 text-right flex-shrink-0 tabular-nums">{d.users.toLocaleString()}</span>
                       </div>
                     ))}
                   </div>
@@ -844,9 +844,9 @@ export default function AdminPage() {
               {/* 3) 기기 · 국가 · 유입 상세 */}
               <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
                 {/* 기기 */}
-                <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
-                  <h2 className="text-[14px] font-extrabold text-neutral-900 dark:text-white mb-4">📱 기기별</h2>
-                  {devTotal === 0 ? <p className="text-[13px] text-neutral-400 py-2">데이터 없음</p> : (
+                <div className="bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-5">
+                  <h2 className="text-[14px] font-extrabold text-stone-900 dark:text-white mb-4">📱 기기별</h2>
+                  {devTotal === 0 ? <p className="text-[13px] text-stone-400 py-2">데이터 없음</p> : (
                     <div className="space-y-3">
                       {[
                         { label: "모바일", n: dev.mobile, c: "bg-[#F9954E]" },
@@ -854,59 +854,59 @@ export default function AdminPage() {
                         { label: "태블릿", n: dev.tablet, c: "bg-violet-400" },
                       ].map((d) => { const p = devTotal ? Math.round((d.n / devTotal) * 100) : 0; return (
                         <div key={d.label}>
-                          <div className="flex items-center justify-between text-[12.5px] mb-1"><span className="font-bold text-neutral-600 dark:text-neutral-300">{d.label}</span><span className="text-neutral-400">{d.n.toLocaleString()} · {p}%</span></div>
-                          <div className="h-2 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden"><div className={`h-full rounded-full ${d.c}`} style={{ width: `${p}%` }} /></div>
+                          <div className="flex items-center justify-between text-[12.5px] mb-1"><span className="font-bold text-stone-600 dark:text-stone-300">{d.label}</span><span className="text-stone-400">{d.n.toLocaleString()} · {p}%</span></div>
+                          <div className="h-2 rounded-full bg-stone-100 dark:bg-zinc-800 overflow-hidden"><div className={`h-full rounded-full ${d.c}`} style={{ width: `${p}%` }} /></div>
                         </div>
                       ); })}
                     </div>
                   )}
                 </div>
                 {/* 국가 */}
-                <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
-                  <h2 className="text-[14px] font-extrabold text-neutral-900 dark:text-white mb-4">🌍 국가 <span className="text-[11px] font-normal text-neutral-400">7일</span></h2>
+                <div className="bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-5">
+                  <h2 className="text-[14px] font-extrabold text-stone-900 dark:text-white mb-4">🌍 국가 <span className="text-[11px] font-normal text-stone-400">7일</span></h2>
                   {g && g.topCountries.length ? (
                     <div className="space-y-2">
                       {g.topCountries.slice(0, 6).map((c, i) => (
                         <div key={i} className="flex items-center justify-between gap-2 text-[12.5px]">
-                          <span className="truncate text-neutral-600 dark:text-neutral-300">{flag[c.country] || "🌐"} {c.country}</span>
-                          <span className="font-bold text-neutral-800 dark:text-neutral-100 flex-shrink-0">{c.users.toLocaleString()}</span>
+                          <span className="truncate text-stone-600 dark:text-stone-300">{flag[c.country] || "🌐"} {c.country}</span>
+                          <span className="font-bold text-stone-800 dark:text-stone-100 flex-shrink-0">{c.users.toLocaleString()}</span>
                         </div>
                       ))}
                     </div>
-                  ) : <p className="text-[13px] text-neutral-400 py-2">GA4 연동 대기</p>}
+                  ) : <p className="text-[13px] text-stone-400 py-2">GA4 연동 대기</p>}
                 </div>
                 {/* 유입 */}
-                <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
-                  <h2 className="text-[14px] font-extrabold text-neutral-900 dark:text-white mb-4">🧭 유입 경로 <span className="text-[11px] font-normal text-neutral-400">7일</span></h2>
+                <div className="bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-5">
+                  <h2 className="text-[14px] font-extrabold text-stone-900 dark:text-white mb-4">🧭 유입 경로 <span className="text-[11px] font-normal text-stone-400">7일</span></h2>
                   {g && g.channels.length ? (
                     (() => { const tot = g.channels.reduce((s, c) => s + c.sessions, 0) || 1; return (
                       <div className="space-y-2.5">
                         {g.channels.slice(0, 6).map((c, i) => { const pct = Math.round((c.sessions / tot) * 100); return (
                           <div key={i}>
-                            <div className="flex items-center justify-between text-[12px] mb-1"><span className="font-semibold text-neutral-600 dark:text-neutral-300">{chanKo[c.name] || c.name}</span><span className="text-neutral-400">{c.sessions} · {pct}%</span></div>
-                            <div className="h-1.5 rounded-full bg-neutral-100 dark:bg-zinc-800 overflow-hidden"><div className="h-full rounded-full bg-sky-400" style={{ width: `${pct}%` }} /></div>
+                            <div className="flex items-center justify-between text-[12px] mb-1"><span className="font-semibold text-stone-600 dark:text-stone-300">{chanKo[c.name] || c.name}</span><span className="text-stone-400">{c.sessions} · {pct}%</span></div>
+                            <div className="h-1.5 rounded-full bg-stone-100 dark:bg-zinc-800 overflow-hidden"><div className="h-full rounded-full bg-sky-400" style={{ width: `${pct}%` }} /></div>
                           </div>
                         ); })}
                       </div>
                     ); })()
-                  ) : <p className="text-[13px] text-neutral-400 py-2">GA4 연동 대기</p>}
+                  ) : <p className="text-[13px] text-stone-400 py-2">GA4 연동 대기</p>}
                 </div>
               </div>
 
               {/* 4) 외부 정밀 분석 도구 */}
               <div className="grid grid-cols-2 gap-3">
-                <a href="https://analytics.google.com/" target="_blank" rel="noopener noreferrer" className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5 hover:border-[#F9954E]/40 transition-colors">
+                <a href="https://analytics.google.com/" target="_blank" rel="noopener noreferrer" className="bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-5 hover:border-[#F9954E]/40 transition-colors">
                   <div className="text-2xl mb-2">📈</div>
                   <div className="font-bold text-foreground text-[13.5px]">Google Analytics</div>
-                  <div className="text-[11px] text-neutral-400 mt-0.5">실시간·유입·이벤트 정밀 분석 →</div>
+                  <div className="text-[11px] text-stone-400 mt-0.5">실시간·유입·이벤트 정밀 분석 →</div>
                 </a>
-                <a href="https://clarity.microsoft.com/projects/view/va2qmv3mwz/dashboard" target="_blank" rel="noopener noreferrer" className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5 hover:border-[#F9954E]/40 transition-colors">
+                <a href="https://clarity.microsoft.com/projects/view/va2qmv3mwz/dashboard" target="_blank" rel="noopener noreferrer" className="bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-5 hover:border-[#F9954E]/40 transition-colors">
                   <div className="text-2xl mb-2">🔥</div>
                   <div className="font-bold text-foreground text-[13.5px]">Microsoft Clarity</div>
-                  <div className="text-[11px] text-neutral-400 mt-0.5">히트맵·세션 녹화 →</div>
+                  <div className="text-[11px] text-stone-400 mt-0.5">히트맵·세션 녹화 →</div>
                 </a>
               </div>
-              <p className="text-[11.5px] text-neutral-400 dark:text-neutral-500 text-center">방문 지표는 Google Analytics(GA4) 기준 · 관리자 본인 방문은 집계에서 제외됩니다 · 요약은 대시보드 탭에서 확인</p>
+              <p className="text-[11.5px] text-stone-400 dark:text-stone-500 text-center">방문 지표는 Google Analytics(GA4) 기준 · 관리자 본인 방문은 집계에서 제외됩니다 · 요약은 대시보드 탭에서 확인</p>
             </div>
           );
         })()}
@@ -915,10 +915,10 @@ export default function AdminPage() {
         {activeTab === "users" && (
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
             {/* 회원 목록 */}
-            <div className="md:col-span-1 bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
-              <h2 className="text-[15px] font-extrabold mb-4 text-neutral-900 dark:text-white">👤 회원 목록 <span className="text-[12px] font-normal text-neutral-400">{users.length}명</span></h2>
+            <div className="md:col-span-1 bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-5">
+              <h2 className="text-[15px] font-extrabold mb-4 text-stone-900 dark:text-white">👤 회원 목록 <span className="text-[12px] font-normal text-stone-400">{users.length}명</span></h2>
               {users.length === 0 ? (
-                <p className="text-neutral-400 dark:text-neutral-500 text-sm">회원 없음</p>
+                <p className="text-stone-400 dark:text-stone-500 text-sm">회원 없음</p>
               ) : (
                 <div className="space-y-2 max-h-[500px] overflow-y-auto">
                   {users.map((u) => (
@@ -928,14 +928,14 @@ export default function AdminPage() {
                       className={`w-full text-left p-3 rounded-xl transition ${
                         selectedUser?.email === u.email
                           ? "bg-orange-500/20 border border-orange-500/50"
-                          : "bg-neutral-100 dark:bg-zinc-900 hover:bg-neutral-200 dark:hover:bg-neutral-700"
+                          : "bg-stone-100 dark:bg-zinc-900 hover:bg-stone-200 dark:hover:bg-stone-700"
                       }`}
                     >
                       <div className="font-medium text-sm truncate text-foreground">{u.name || "이름 없음"}</div>
-                      <div className="text-xs text-neutral-500 dark:text-neutral-400 truncate">{u.email}</div>
+                      <div className="text-xs text-stone-500 dark:text-stone-400 truncate">{u.email}</div>
                       <div className="flex gap-1 mt-1">
                         {u.isPremium && <span className="text-xs text-yellow-600 dark:text-yellow-400">💎</span>}
-                        <span className="text-xs text-neutral-400 dark:text-neutral-500">Lv.{u.level || 1}</span>
+                        <span className="text-xs text-stone-400 dark:text-stone-500">Lv.{u.level || 1}</span>
                       </div>
                     </button>
                   ))}
@@ -944,9 +944,9 @@ export default function AdminPage() {
             </div>
 
             {/* 회원 상세 */}
-            <div className="md:col-span-2 bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-5">
+            <div className="md:col-span-2 bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-5">
               {!selectedUser ? (
-                <div className="h-full flex items-center justify-center text-neutral-400 dark:text-neutral-500">
+                <div className="h-full flex items-center justify-center text-stone-400 dark:text-stone-500">
                   <div className="text-center">
                     <div className="text-5xl mb-3">👆</div>
                     <p>왼쪽에서 회원을 선택하세요</p>
@@ -957,7 +957,7 @@ export default function AdminPage() {
                   <div className="flex justify-between items-start">
                     <div>
                       <h2 className="text-xl font-bold text-foreground">{selectedUser.name || "이름 없음"}</h2>
-                      <p className="text-neutral-500 dark:text-neutral-400 text-sm">{selectedUser.email}</p>
+                      <p className="text-stone-500 dark:text-stone-400 text-sm">{selectedUser.email}</p>
                     </div>
                     <button
                       onClick={() => deleteUser(selectedUser.email)}
@@ -973,18 +973,18 @@ export default function AdminPage() {
                       { label: "레벨", value: `⭐ Lv.${selectedUser.level || 1}` },
                       { label: "경험치", value: `✨ ${selectedUser.doriExp || 0}` },
                     ].map((item) => (
-                      <div key={item.label} className="bg-neutral-100 dark:bg-zinc-900 rounded-xl p-3 text-center">
+                      <div key={item.label} className="bg-stone-100 dark:bg-zinc-900 rounded-xl p-3 text-center">
                         <div className="font-bold text-foreground">{item.value}</div>
-                        <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">{item.label}</div>
+                        <div className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">{item.label}</div>
                       </div>
                     ))}
                   </div>
 
                   {/* 프리미엄 토글 */}
-                  <div className="bg-neutral-100 dark:bg-zinc-900 rounded-xl p-4 flex justify-between items-center">
+                  <div className="bg-stone-100 dark:bg-zinc-900 rounded-xl p-4 flex justify-between items-center">
                     <div>
                       <div className="font-medium text-foreground">💎 프리미엄 (유료 → 무료 전환)</div>
-                      <div className="text-xs text-neutral-500 dark:text-neutral-400 mt-0.5">
+                      <div className="text-xs text-stone-500 dark:text-stone-400 mt-0.5">
                         {selectedUser.isPremium ? "현재 프리미엄 적용 중" : "현재 일반 회원"}
                       </div>
                     </div>
@@ -993,7 +993,7 @@ export default function AdminPage() {
                       className={`px-4 py-2 rounded-lg font-medium text-sm transition ${
                         selectedUser.isPremium
                           ? "bg-yellow-500/20 text-yellow-600 dark:text-yellow-400 border border-yellow-500/50 hover:bg-red-500/20 hover:text-red-500 dark:hover:text-red-400 hover:border-red-500/50"
-                          : "bg-neutral-200 dark:bg-neutral-700 text-neutral-600 dark:text-neutral-300 hover:bg-yellow-500/20 hover:text-yellow-600 dark:hover:text-yellow-400"
+                          : "bg-stone-200 dark:bg-stone-700 text-stone-600 dark:text-stone-300 hover:bg-yellow-500/20 hover:text-yellow-600 dark:hover:text-yellow-400"
                       }`}
                     >
                       {selectedUser.isPremium ? "해제" : "활성화"}
@@ -1001,7 +1001,7 @@ export default function AdminPage() {
                   </div>
 
                   {/* 솜사탕 지급 */}
-                  <div className="bg-neutral-100 dark:bg-zinc-900 rounded-xl p-4">
+                  <div className="bg-stone-100 dark:bg-zinc-900 rounded-xl p-4">
                     <div className="font-medium mb-3 text-foreground">🍭 솜사탕 지급</div>
                     <div className="flex gap-2 flex-wrap">
                       {[10, 50, 100, 500, 1000].map((amount) => (
@@ -1023,18 +1023,18 @@ export default function AdminPage() {
 
         {/* ── 게시판 탭 ── */}
         {activeTab === "community" && (
-          <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-6">
-            <h2 className="text-[15px] font-extrabold mb-4 text-neutral-900 dark:text-white">💬 커뮤니티 게시글 <span className="text-[12px] font-normal text-neutral-400">{communityPosts.length}개</span></h2>
+          <div className="bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-6">
+            <h2 className="text-[15px] font-extrabold mb-4 text-stone-900 dark:text-white">💬 커뮤니티 게시글 <span className="text-[12px] font-normal text-stone-400">{communityPosts.length}개</span></h2>
             {communityPosts.length === 0 ? (
-              <p className="text-neutral-400 dark:text-neutral-500 text-sm">게시글 없음</p>
+              <p className="text-stone-400 dark:text-stone-500 text-sm">게시글 없음</p>
             ) : (
               <div className="space-y-3">
                 {communityPosts.map((post) => (
-                  <div key={post.id} className="bg-neutral-50 dark:bg-zinc-900 rounded-xl p-4 flex justify-between items-start gap-4">
+                  <div key={post.id} className="bg-stone-50 dark:bg-zinc-900 rounded-xl p-4 flex justify-between items-start gap-4">
                     <div className="flex-1 min-w-0">
                       <div className="font-medium truncate text-foreground">{post.title}</div>
-                      <div className="text-sm text-neutral-500 dark:text-neutral-400 mt-1 truncate">{post.content}</div>
-                      <div className="flex gap-3 mt-2 text-xs text-neutral-400 dark:text-neutral-500">
+                      <div className="text-sm text-stone-500 dark:text-stone-400 mt-1 truncate">{post.content}</div>
+                      <div className="flex gap-3 mt-2 text-xs text-stone-400 dark:text-stone-500">
                         <span>✍️ {post.author || post.authorEmail}</span>
                         <span>❤️ {post.likes || 0}</span>
                         <span>{new Date(post.createdAt).toLocaleDateString("ko-KR")}</span>
@@ -1056,21 +1056,21 @@ export default function AdminPage() {
         {/* ── 프리미엄 관리 탭 ── */}
         {activeTab === "premium" && (
           <div className="space-y-6">
-            <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-6">
-              <h2 className="text-[15px] font-extrabold mb-2 text-neutral-900 dark:text-white">💎 프리미엄 관리</h2>
-              <p className="text-neutral-500 dark:text-neutral-400 text-sm mb-6">
+            <div className="bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-6">
+              <h2 className="text-[15px] font-extrabold mb-2 text-stone-900 dark:text-white">💎 프리미엄 관리</h2>
+              <p className="text-stone-500 dark:text-stone-400 text-sm mb-6">
                 프리미엄으로 설정된 회원은 모든 유료 기능을 무료로 이용할 수 있습니다.
               </p>
 
               <div className="mb-6 bg-green-500/10 border border-green-500/30 rounded-xl p-4">
                 <div className="font-medium text-green-600 dark:text-green-400">✅ 현재 무료 이용 회원</div>
                 {premiumUsers.length === 0 ? (
-                  <p className="text-neutral-400 dark:text-neutral-500 text-sm mt-2">없음</p>
+                  <p className="text-stone-400 dark:text-stone-500 text-sm mt-2">없음</p>
                 ) : (
                   <ul className="mt-2 space-y-1">
                     {premiumUsers.map((email) => (
                       <li key={email} className="flex justify-between items-center">
-                        <span className="text-sm text-neutral-700 dark:text-neutral-300">{email}</span>
+                        <span className="text-sm text-stone-700 dark:text-stone-300">{email}</span>
                         <button
                           onClick={() => togglePremium(email)}
                           className="text-xs text-red-500 dark:text-red-400 hover:text-red-600 dark:hover:text-red-300"
@@ -1087,10 +1087,10 @@ export default function AdminPage() {
                 <div className="font-medium mb-3 text-foreground">일반 회원에게 프리미엄 부여</div>
                 <div className="space-y-2">
                   {users.filter((u) => !u.isPremium).map((u) => (
-                    <div key={u.email} className="flex justify-between items-center bg-neutral-100 dark:bg-zinc-900 rounded-xl px-4 py-3">
+                    <div key={u.email} className="flex justify-between items-center bg-stone-100 dark:bg-zinc-900 rounded-xl px-4 py-3">
                       <div>
                         <span className="font-medium text-sm text-foreground">{u.name || "이름 없음"}</span>
-                        <span className="text-neutral-500 dark:text-neutral-400 text-xs ml-2">{u.email}</span>
+                        <span className="text-stone-500 dark:text-stone-400 text-xs ml-2">{u.email}</span>
                       </div>
                       <button
                         onClick={() => togglePremium(u.email)}
@@ -1101,7 +1101,7 @@ export default function AdminPage() {
                     </div>
                   ))}
                   {users.filter((u) => !u.isPremium).length === 0 && (
-                    <p className="text-neutral-400 dark:text-neutral-500 text-sm">모든 회원이 프리미엄입니다</p>
+                    <p className="text-stone-400 dark:text-stone-500 text-sm">모든 회원이 프리미엄입니다</p>
                   )}
                 </div>
               </div>
@@ -1115,18 +1115,18 @@ export default function AdminPage() {
             {/* 진행률 요약 */}
             <div className="grid grid-cols-4 gap-3">
               {[
-                { label: "전체", n: allAnimals.length, color: "text-neutral-500 dark:text-neutral-400" },
-                { label: "미검수", n: allAnimals.length - approved.size - rejected.size, color: "text-neutral-700 dark:text-neutral-200" },
+                { label: "전체", n: allAnimals.length, color: "text-stone-500 dark:text-stone-400" },
+                { label: "미검수", n: allAnimals.length - approved.size - rejected.size, color: "text-stone-700 dark:text-stone-200" },
                 { label: "승인", n: approved.size, color: "text-green-600 dark:text-green-400" },
                 { label: "반려", n: rejected.size, color: "text-red-500 dark:text-red-400" },
               ].map((c) => (
-                <div key={c.label} className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl p-4 text-center">
+                <div key={c.label} className="bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl p-4 text-center">
                   <div className={`text-2xl font-black ${c.color}`}>{c.n}</div>
-                  <div className="text-[12px] text-neutral-400 dark:text-neutral-500 mt-0.5">{c.label}</div>
+                  <div className="text-[12px] text-stone-400 dark:text-stone-500 mt-0.5">{c.label}</div>
                 </div>
               ))}
             </div>
-            <p className="text-[12px] text-neutral-400 dark:text-neutral-500">
+            <p className="text-[12px] text-stone-400 dark:text-stone-500">
               🐾 승인된 동물만 <a href="/animal" target="_blank" className="underline hover:text-[#F9954E]">공개 동물도감</a>에 노출됩니다.
             </p>
 
@@ -1144,7 +1144,7 @@ export default function AdminPage() {
                   className={`px-3.5 py-1.5 rounded-full text-[13px] font-bold border transition-colors ${
                     reviewFilter === f.id
                       ? "bg-[#F9954E] border-[#F9954E] text-white"
-                      : "bg-white dark:bg-zinc-950 border-neutral-200 dark:border-zinc-800 text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E]/40"
+                      : "bg-white dark:bg-zinc-950 border-stone-200 dark:border-zinc-800 text-stone-500 dark:text-stone-400 hover:border-[#F9954E]/40"
                   }`}
                 >
                   {f.label}
@@ -1153,19 +1153,19 @@ export default function AdminPage() {
             </div>
 
             {!reviewLoaded ? (
-              <p className="text-neutral-400 dark:text-neutral-500 text-sm">검수 상태 불러오는 중…</p>
+              <p className="text-stone-400 dark:text-stone-500 text-sm">검수 상태 불러오는 중…</p>
             ) : reviewList.length === 0 ? (
-              <div className="text-center py-16 bg-neutral-50 dark:bg-zinc-900/50 rounded-2xl border border-dashed border-neutral-200 dark:border-zinc-700">
+              <div className="text-center py-16 bg-stone-50 dark:bg-zinc-900/50 rounded-2xl border border-dashed border-stone-200 dark:border-zinc-700">
                 <div className="text-4xl mb-2">🎉</div>
-                <p className="text-neutral-500 dark:text-neutral-400 font-medium">
+                <p className="text-stone-500 dark:text-stone-400 font-medium">
                   {reviewFilter === "pending" ? "미검수 항목이 없어요 — 전부 검수 완료!" : "해당 목록이 비어있어요"}
                 </p>
               </div>
             ) : currentAnimal ? (
-              <div className="bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 rounded-2xl overflow-hidden">
+              <div className="bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 rounded-2xl overflow-hidden">
                 <div className="grid md:grid-cols-[340px_1fr] xl:grid-cols-[460px_1fr]">
                   {/* 이미지 — 우리 생성 vs 실제(영문 위키) 나란히 비교 */}
-                  <div className="bg-neutral-100 dark:bg-zinc-900 p-2 space-y-2">
+                  <div className="bg-stone-100 dark:bg-zinc-900 p-2 space-y-2">
                     {/* 우리 생성 이미지 */}
                     <div className="relative aspect-[4/5] rounded-xl overflow-hidden bg-white dark:bg-zinc-950">
                       {/* eslint-disable-next-line @next/next/no-img-element */}
@@ -1173,7 +1173,7 @@ export default function AdminPage() {
                       <span className="absolute top-2 left-2 text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-black/55 text-[#f0d28a] backdrop-blur-sm">No.{currentAnimal.no}</span>
                       <span
                         className={`absolute top-2 right-2 text-[10px] font-extrabold px-2 py-0.5 rounded-full text-white ${
-                          currentStatus === "approved" ? "bg-green-500" : currentStatus === "rejected" ? "bg-red-500" : "bg-neutral-500"
+                          currentStatus === "approved" ? "bg-green-500" : currentStatus === "rejected" ? "bg-red-500" : "bg-stone-500"
                         }`}
                       >
                         {currentStatus === "approved" ? "승인됨" : currentStatus === "rejected" ? "반려됨" : "미검수"}
@@ -1186,10 +1186,10 @@ export default function AdminPage() {
                         <>
                           {/* eslint-disable-next-line @next/next/no-img-element */}
                           <img src={refImages[currentAnimal.no || ""]} alt={`${currentAnimal.animal_name} 실제`} className="w-full h-full object-contain" onError={(e) => { e.currentTarget.style.display = "none"; }} />
-                          <span className="absolute bottom-1.5 left-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-neutral-800/80 text-white">📷 실제 (위키)</span>
+                          <span className="absolute bottom-1.5 left-1.5 text-[10px] font-bold px-1.5 py-0.5 rounded-md bg-stone-800/80 text-white">📷 실제 (위키)</span>
                         </>
                       ) : (
-                        <span className="text-[11px] text-neutral-400 dark:text-neutral-500 px-3 text-center leading-relaxed">실제 참조 사진 없음<br />(영문 위키 대표사진 미확보)</span>
+                        <span className="text-[11px] text-stone-400 dark:text-stone-500 px-3 text-center leading-relaxed">실제 참조 사진 없음<br />(영문 위키 대표사진 미확보)</span>
                       )}
                     </div>
                   </div>
@@ -1197,38 +1197,38 @@ export default function AdminPage() {
                   {/* 정보 + 액션 */}
                   <div className="p-5">
                     <div className="flex items-start justify-between gap-2">
-                      <h3 className="text-xl font-black text-neutral-900 dark:text-white">{currentAnimal.animal_name}</h3>
+                      <h3 className="text-xl font-black text-stone-900 dark:text-white">{currentAnimal.animal_name}</h3>
                       <a
                         href={wikiSearchUrl(currentAnimal)}
                         target="_blank" rel="noopener noreferrer"
-                        className="flex-shrink-0 text-[11px] font-bold px-2.5 py-1 rounded-full border border-neutral-200 dark:border-zinc-800 text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E]/40 hover:text-[#F9954E] transition whitespace-nowrap"
+                        className="flex-shrink-0 text-[11px] font-bold px-2.5 py-1 rounded-full border border-stone-200 dark:border-zinc-800 text-stone-500 dark:text-stone-400 hover:border-[#F9954E]/40 hover:text-[#F9954E] transition whitespace-nowrap"
                       >
                         🌐 영문 위키 확인
                       </a>
                     </div>
                     {currentAnimal.sci && (
-                      <p className="italic text-sm text-neutral-500 dark:text-neutral-400">{currentAnimal.sci}{currentAnimal.en ? ` · ${currentAnimal.en}` : ""}</p>
+                      <p className="italic text-sm text-stone-500 dark:text-stone-400">{currentAnimal.sci}{currentAnimal.en ? ` · ${currentAnimal.en}` : ""}</p>
                     )}
                     <p className="text-[#E8832E] dark:text-[#FBAA60] text-sm font-bold mt-1 mb-3">&ldquo;{currentAnimal.search_nickname}&rdquo;</p>
 
-                    <div className="bg-neutral-50 dark:bg-zinc-900/50 rounded-xl p-3 mb-4 space-y-1.5">
+                    <div className="bg-stone-50 dark:bg-zinc-900/50 rounded-xl p-3 mb-4 space-y-1.5">
                       {(currentAnimal.info || []).filter(([, k]) => k !== "크기").map(([ic, k, v], i) => (
                         <div key={i} className="flex items-start gap-2 text-[12.5px]">
                           <span className="w-5 text-center flex-shrink-0">{ic}</span>
-                          <span className="font-bold text-neutral-500 dark:text-neutral-400 w-12 flex-shrink-0">{k}</span>
-                          <span className="text-neutral-700 dark:text-neutral-300 break-keep">{v}</span>
+                          <span className="font-bold text-stone-500 dark:text-stone-400 w-12 flex-shrink-0">{k}</span>
+                          <span className="text-stone-700 dark:text-stone-300 break-keep">{v}</span>
                         </div>
                       ))}
                     </div>
 
                     {currentAnimal.taxonomy && (
-                      <p className="text-[11px] text-neutral-400 dark:text-neutral-500 mb-2 break-keep">
-                        <b className="text-neutral-500 dark:text-neutral-400">분류 </b>{currentAnimal.taxonomy}
+                      <p className="text-[11px] text-stone-400 dark:text-stone-500 mb-2 break-keep">
+                        <b className="text-stone-500 dark:text-stone-400">분류 </b>{currentAnimal.taxonomy}
                       </p>
                     )}
                     {currentAnimal.subspecies && (
-                      <p className="text-[11px] text-neutral-400 dark:text-neutral-500 mb-2 break-keep">
-                        <b className="text-neutral-500 dark:text-neutral-400">하위종 </b>{currentAnimal.subspecies}
+                      <p className="text-[11px] text-stone-400 dark:text-stone-500 mb-2 break-keep">
+                        <b className="text-stone-500 dark:text-stone-400">하위종 </b>{currentAnimal.subspecies}
                       </p>
                     )}
 
@@ -1245,12 +1245,12 @@ export default function AdminPage() {
                           { label: "서식지", tags: currentAnimal.filters?.region || [] },
                         ].map(({ label, tags }) => (
                           <div key={label} className="flex items-start gap-1.5 text-[11px]">
-                            <span className="font-bold text-neutral-500 dark:text-neutral-400 w-11 flex-shrink-0">{label}</span>
+                            <span className="font-bold text-stone-500 dark:text-stone-400 w-11 flex-shrink-0">{label}</span>
                             <div className="flex flex-wrap gap-1">
                               {tags.length === 0 ? (
-                                <span className="text-neutral-300 dark:text-neutral-600">—</span>
+                                <span className="text-stone-300 dark:text-stone-600">—</span>
                               ) : tags.map((t) => (
-                                <span key={t} className="font-bold px-1.5 py-0.5 rounded-full bg-white dark:bg-zinc-800 text-neutral-600 dark:text-neutral-300 border border-neutral-200 dark:border-zinc-700">{t}</span>
+                                <span key={t} className="font-bold px-1.5 py-0.5 rounded-full bg-white dark:bg-zinc-800 text-stone-600 dark:text-stone-300 border border-stone-200 dark:border-zinc-700">{t}</span>
                               ))}
                             </div>
                           </div>
@@ -1278,7 +1278,7 @@ export default function AdminPage() {
                         <button
                           disabled={reviewBusy}
                           onClick={() => reviewDecide("reset")}
-                          className="px-4 py-2.5 rounded-xl border border-neutral-200 dark:border-zinc-800 text-neutral-500 dark:text-neutral-400 font-bold text-sm hover:border-[#F9954E]/40 transition disabled:opacity-50"
+                          className="px-4 py-2.5 rounded-xl border border-stone-200 dark:border-zinc-800 text-stone-500 dark:text-stone-400 font-bold text-sm hover:border-[#F9954E]/40 transition disabled:opacity-50"
                         >
                           ↩️ 보류로
                         </button>
@@ -1288,8 +1288,8 @@ export default function AdminPage() {
                     {/* 반려 사유 — 여기 적고 ❌반려 누르면 저장. 자동화(n8n)가 이 사유를 읽어 데이터 검토·수정 */}
                     <div className="mb-4">
                       <div className="flex items-center justify-between mb-1.5">
-                        <label className="text-[11px] font-bold text-neutral-500 dark:text-neutral-400">
-                          📝 반려 사유 <span className="font-normal text-neutral-400 dark:text-neutral-500">· 자동화가 읽고 수정 — 어디가 왜 틀렸는지</span>
+                        <label className="text-[11px] font-bold text-stone-500 dark:text-stone-400">
+                          📝 반려 사유 <span className="font-normal text-stone-400 dark:text-stone-500">· 자동화가 읽고 수정 — 어디가 왜 틀렸는지</span>
                         </label>
                         {currentStatus === "rejected" && (
                           <button
@@ -1306,7 +1306,7 @@ export default function AdminPage() {
                         onChange={(e) => setReasonDraft(e.target.value)}
                         rows={3}
                         placeholder="예: 몸무게 15kg은 오류(실제 약 3.5kg) · 서식지에 남극해 빠짐 · 먹이 태그가 초식으로 잘못됨"
-                        className="w-full px-3 py-2 rounded-xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-[12.5px] text-foreground placeholder:text-neutral-400 focus:outline-none focus:border-[#F9954E] resize-y break-keep leading-relaxed"
+                        className="w-full px-3 py-2 rounded-xl border border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-[12.5px] text-foreground placeholder:text-stone-400 focus:outline-none focus:border-[#F9954E] resize-y break-keep leading-relaxed"
                       />
                       {currentStatus === "rejected" && (rejectReasons[currentNo] || "").trim() && (
                         <p className="mt-1 text-[10.5px] text-red-500 dark:text-red-400 font-bold">● 반려 사유 저장됨 · 자동화 처리 대기</p>
@@ -1314,12 +1314,12 @@ export default function AdminPage() {
                     </div>
 
                     {/* 이전/다음 네비게이션 */}
-                    <div className="flex items-center justify-between border-t border-neutral-100 dark:border-zinc-900 pt-3">
-                      <button onClick={() => reviewGoto(-1)} disabled={reviewSafeIdx === 0} className="px-3 py-1.5 rounded-lg text-[13px] font-bold text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] disabled:opacity-30 transition">
+                    <div className="flex items-center justify-between border-t border-stone-100 dark:border-zinc-900 pt-3">
+                      <button onClick={() => reviewGoto(-1)} disabled={reviewSafeIdx === 0} className="px-3 py-1.5 rounded-lg text-[13px] font-bold text-stone-500 dark:text-stone-400 hover:text-[#F9954E] disabled:opacity-30 transition">
                         ◀ 이전
                       </button>
-                      <span className="text-[12px] text-neutral-400 dark:text-neutral-500">{reviewSafeIdx + 1} / {reviewList.length}</span>
-                      <button onClick={() => reviewGoto(1)} disabled={reviewSafeIdx >= reviewList.length - 1} className="px-3 py-1.5 rounded-lg text-[13px] font-bold text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] disabled:opacity-30 transition">
+                      <span className="text-[12px] text-stone-400 dark:text-stone-500">{reviewSafeIdx + 1} / {reviewList.length}</span>
+                      <button onClick={() => reviewGoto(1)} disabled={reviewSafeIdx >= reviewList.length - 1} className="px-3 py-1.5 rounded-lg text-[13px] font-bold text-stone-500 dark:text-stone-400 hover:text-[#F9954E] disabled:opacity-30 transition">
                         다음 ▶
                       </button>
                     </div>
@@ -1338,7 +1338,7 @@ export default function AdminPage() {
                 value={tableSearch}
                 onChange={(e) => setTableSearch(e.target.value)}
                 placeholder="이름/영문명 검색"
-                className="px-3.5 py-2 rounded-xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-[13px] text-foreground placeholder:text-neutral-400 focus:outline-none focus:border-[#F9954E] w-56"
+                className="px-3.5 py-2 rounded-xl border border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-[13px] text-foreground placeholder:text-stone-400 focus:outline-none focus:border-[#F9954E] w-56"
               />
               {([
                 { id: "all", label: "전체" },
@@ -1352,19 +1352,19 @@ export default function AdminPage() {
                   className={`px-3.5 py-1.5 rounded-full text-[13px] font-bold border transition-colors ${
                     tableFilter === f.id
                       ? "bg-[#F9954E] border-[#F9954E] text-white"
-                      : "bg-white dark:bg-zinc-950 border-neutral-200 dark:border-zinc-800 text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E]/40"
+                      : "bg-white dark:bg-zinc-950 border-stone-200 dark:border-zinc-800 text-stone-500 dark:text-stone-400 hover:border-[#F9954E]/40"
                   }`}
                 >
                   {f.label}
                 </button>
               ))}
-              <span className="text-[12px] text-neutral-400 dark:text-neutral-500 ml-auto">{tableRows.length}행 표시 중 (전체 {allAnimals.length})</span>
+              <span className="text-[12px] text-stone-400 dark:text-stone-500 ml-auto">{tableRows.length}행 표시 중 (전체 {allAnimals.length})</span>
             </div>
 
-            <div className="overflow-x-auto border border-neutral-100 dark:border-zinc-900 rounded-2xl">
+            <div className="overflow-x-auto border border-stone-100 dark:border-zinc-900 rounded-2xl">
               <table className="w-full text-[13px] whitespace-nowrap">
-                <thead className="sticky top-0 bg-neutral-50 dark:bg-zinc-900 z-10">
-                  <tr className="text-left text-neutral-500 dark:text-neutral-400">
+                <thead className="sticky top-0 bg-stone-50 dark:bg-zinc-900 z-10">
+                  <tr className="text-left text-stone-500 dark:text-stone-400">
                     <th className="px-3 py-2.5 font-bold w-12">승인</th>
                     <th className="px-3 py-2.5 font-bold">No.</th>
                     <th className="px-3 py-2.5 font-bold">동물이름</th>
@@ -1382,7 +1382,7 @@ export default function AdminPage() {
                   {tableRows.map((r) => (
                     <tr
                       key={r.no}
-                      className={`border-t border-neutral-100 dark:border-zinc-900 ${
+                      className={`border-t border-stone-100 dark:border-zinc-900 ${
                         r.status === "approved" ? "bg-green-50/60 dark:bg-green-900/10" : r.status === "rejected" ? "bg-red-50/60 dark:bg-red-900/10 opacity-60" : ""
                       }`}
                     >
@@ -1394,17 +1394,17 @@ export default function AdminPage() {
                           className="w-4 h-4 accent-green-500 cursor-pointer"
                         />
                       </td>
-                      <td className="px-3 py-2 text-neutral-400 dark:text-neutral-500">{r.no}</td>
-                      <td className="px-3 py-2 font-bold text-neutral-900 dark:text-white">{r.name}</td>
-                      <td className="px-3 py-2 text-neutral-600 dark:text-neutral-300">{r.type}</td>
-                      <td className="px-3 py-2 text-neutral-600 dark:text-neutral-300">{r.diet}</td>
-                      <td className="px-3 py-2 text-neutral-600 dark:text-neutral-300">{r.lifespan}</td>
-                      <td className="px-3 py-2 text-neutral-600 dark:text-neutral-300">{r.weight}</td>
-                      <td className="px-3 py-2 text-neutral-600 dark:text-neutral-300">{r.length}</td>
+                      <td className="px-3 py-2 text-stone-400 dark:text-stone-500">{r.no}</td>
+                      <td className="px-3 py-2 font-bold text-stone-900 dark:text-white">{r.name}</td>
+                      <td className="px-3 py-2 text-stone-600 dark:text-stone-300">{r.type}</td>
+                      <td className="px-3 py-2 text-stone-600 dark:text-stone-300">{r.diet}</td>
+                      <td className="px-3 py-2 text-stone-600 dark:text-stone-300">{r.lifespan}</td>
+                      <td className="px-3 py-2 text-stone-600 dark:text-stone-300">{r.weight}</td>
+                      <td className="px-3 py-2 text-stone-600 dark:text-stone-300">{r.length}</td>
                       <td className="px-3 py-2">
                         <div className="flex flex-wrap gap-1">
                           {r.region.length === 0 ? (
-                            <span className="text-neutral-300 dark:text-neutral-600">—</span>
+                            <span className="text-stone-300 dark:text-stone-600">—</span>
                           ) : (
                             [...r.region].sort((a, b) => REGION_ORDER.indexOf(a) - REGION_ORDER.indexOf(b)).map((tag) => (
                               <span key={tag} className="text-[10.5px] font-bold px-2 py-0.5 rounded-full bg-sky-50 dark:bg-sky-900/20 text-sky-700 dark:text-sky-300 border border-sky-200 dark:border-sky-800">
@@ -1419,7 +1419,7 @@ export default function AdminPage() {
                       </td>
                       <td className="px-3 py-2 text-center">
                         {r.status === "rejected" ? (
-                          <button onClick={() => decideAnimal(r.no, "reset")} className="text-[11px] text-neutral-400 hover:text-[#F9954E] transition">↩️ 되돌리기</button>
+                          <button onClick={() => decideAnimal(r.no, "reset")} className="text-[11px] text-stone-400 hover:text-[#F9954E] transition">↩️ 되돌리기</button>
                         ) : (
                           <button onClick={() => decideAnimal(r.no, "reject")} className="text-[11px] text-red-400 hover:text-red-600 transition">❌ 반려</button>
                         )}
@@ -1429,7 +1429,7 @@ export default function AdminPage() {
                 </tbody>
               </table>
               {tableRows.length === 0 && (
-                <p className="text-center py-10 text-neutral-400 dark:text-neutral-500 text-sm">조건에 맞는 동물이 없어요</p>
+                <p className="text-center py-10 text-stone-400 dark:text-stone-500 text-sm">조건에 맞는 동물이 없어요</p>
               )}
             </div>
           </div>
@@ -1445,7 +1445,7 @@ export default function AdminPage() {
                 className={`flex items-center gap-2.5 px-3.5 py-2.5 rounded-xl text-[13.5px] font-bold text-left transition-colors ${
                   activeTab === tab.id
                     ? "bg-[#F9954E] text-white"
-                    : "text-neutral-500 dark:text-neutral-400 hover:bg-neutral-100 dark:hover:bg-zinc-900"
+                    : "text-stone-500 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-zinc-900"
                 }`}
               >
                 <span className="text-[15px]">{tab.emoji}</span> {tab.label}

@@ -61,9 +61,9 @@ export default function HomeClient({ locale = "ko" }: { locale?: "ko" | "en" }) 
   /* ── 로딩 중: 스켈레톤 ── */
   if (status === "loading") {
     return (
-      <div className="mt-5 mb-5 py-4 px-5 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-neutral-50/60 dark:bg-zinc-900/30 animate-pulse">
-        <div className="h-3 w-40 rounded-full bg-neutral-200 dark:bg-zinc-800 mb-3" />
-        <div className="h-7 w-full rounded-xl bg-neutral-200 dark:bg-zinc-800" />
+      <div className="mt-5 mb-5 py-4 px-5 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-stone-50/60 dark:bg-zinc-900/30 animate-pulse">
+        <div className="h-3 w-40 rounded-full bg-stone-200 dark:bg-zinc-800 mb-3" />
+        <div className="h-7 w-full rounded-xl bg-stone-200 dark:bg-zinc-800" />
       </div>
     );
   }
@@ -71,10 +71,10 @@ export default function HomeClient({ locale = "ko" }: { locale?: "ko" | "en" }) 
   /* ── 비로그인 ── */
   if (status === "unauthenticated") {
     return (
-      <div className="mt-5 mb-5 flex items-center justify-between py-3.5 px-5 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-neutral-50 dark:bg-zinc-900/40">
+      <div className="mt-5 mb-5 flex items-center justify-between py-3.5 px-5 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-stone-50 dark:bg-zinc-900/40">
         <div className="flex items-center gap-2.5">
           <CottonCandy className="w-5 h-5" />
-          <span className="text-[13px] font-semibold text-neutral-500 dark:text-neutral-400">
+          <span className="text-[13px] font-semibold text-stone-500 dark:text-stone-400">
             {en ? "Sign in to earn levels & cotton candy" : "로그인하고 등급·솜사탕을 모으세요"}
           </span>
         </div>
@@ -92,7 +92,7 @@ export default function HomeClient({ locale = "ko" }: { locale?: "ko" | "en" }) 
   return (
     <Link
       href="/my"
-      className="mt-5 mb-5 block py-4 px-5 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 active:opacity-80 transition-opacity"
+      className="mt-5 mb-5 block py-4 px-5 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 active:opacity-80 transition-opacity"
     >
       {/* 상단: 등급/레벨 + 출석 */}
       <div className="flex items-center justify-between mb-3">
@@ -103,8 +103,8 @@ export default function HomeClient({ locale = "ko" }: { locale?: "ko" | "en" }) 
           >
             {tierInfo.name}
           </span>
-          <span className="text-[14px] font-extrabold text-neutral-900 dark:text-white">Lv.{level}</span>
-          <span className="text-[11px] text-neutral-400">· {exp.toLocaleString()} EXP</span>
+          <span className="text-[14px] font-extrabold text-stone-900 dark:text-white">Lv.{level}</span>
+          <span className="text-[11px] text-stone-400">· {exp.toLocaleString()} EXP</span>
         </div>
 
         {checkedToday ? (
@@ -121,7 +121,7 @@ export default function HomeClient({ locale = "ko" }: { locale?: "ko" | "en" }) 
       </div>
 
       {/* 레벨 진행 바 */}
-      <div className="relative h-1.5 rounded-full overflow-hidden bg-neutral-100 dark:bg-zinc-800 mb-2.5">
+      <div className="relative h-1.5 rounded-full overflow-hidden bg-stone-100 dark:bg-zinc-800 mb-2.5">
         <div
           className="absolute top-0 left-0 h-full rounded-full transition-all duration-700"
           style={{ width: `${Math.min(Math.max(progress, 0), 100)}%`, backgroundColor: tierInfo.color }}
@@ -130,8 +130,8 @@ export default function HomeClient({ locale = "ko" }: { locale?: "ko" | "en" }) 
 
       {/* 하단: 솜사탕 */}
       <div className="flex items-center justify-between">
-        <span className="text-[12px] text-neutral-400">{en ? `${Math.round(100 - progress)}% to next level` : `다음 레벨까지 ${Math.round(100 - progress)}%`}</span>
-        <span className="flex items-center gap-1 text-[13px] font-bold text-neutral-700 dark:text-neutral-300">
+        <span className="text-[12px] text-stone-400">{en ? `${Math.round(100 - progress)}% to next level` : `다음 레벨까지 ${Math.round(100 - progress)}%`}</span>
+        <span className="flex items-center gap-1 text-[13px] font-bold text-stone-700 dark:text-stone-300">
           <CottonCandy className="w-4 h-4" /> {cottonCandy.toLocaleString()}
         </span>
       </div>

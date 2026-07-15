@@ -80,12 +80,12 @@ function PickTile({
   owned: boolean; selected: boolean; price: number; label: string; onSelect: () => void; children: ReactNode;
 }) {
   const cls = `relative h-16 rounded-xl border overflow-hidden flex flex-col text-left transition-all ${
-    selected ? "border-[#F9954E] ring-1 ring-[#F9954E]/50" : "border-neutral-100 dark:border-zinc-900"
+    selected ? "border-[#F9954E] ring-1 ring-[#F9954E]/50" : "border-stone-100 dark:border-zinc-900"
   } ${!owned ? "opacity-80 hover:opacity-100" : ""}`;
   const inner = (
     <>
       <div className="relative flex-1 min-h-0">{children}</div>
-      <span className="relative z-10 block text-[10px] font-bold text-center py-0.5 bg-white/75 dark:bg-black/45 text-neutral-700 dark:text-neutral-200 truncate px-1">
+      <span className="relative z-10 block text-[10px] font-bold text-center py-0.5 bg-white/75 dark:bg-black/45 text-stone-700 dark:text-stone-200 truncate px-1">
         {label}
       </span>
       {!owned && (
@@ -541,14 +541,14 @@ export default function ProfilePage() {
   if (mounted && !targetUid) {
     return (
       <main className="w-full min-h-screen flex flex-col items-center justify-center px-6 py-24">
-        <div className="rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-10 flex flex-col items-center text-center max-w-sm w-full">
-          <div className="w-14 h-14 rounded-2xl bg-[#FFF5EB] dark:bg-[#F9954E]/10 flex items-center justify-center text-2xl mb-5">
+        <div className="rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-10 flex flex-col items-center text-center max-w-sm w-full">
+          <div className="w-14 h-14 rounded-2xl bg-[#FBEEE7] dark:bg-[#F9954E]/10 flex items-center justify-center text-2xl mb-5">
             🏠
           </div>
-          <h2 className="text-[20px] font-extrabold tracking-tight text-neutral-900 dark:text-white mb-2">
+          <h2 className="text-[20px] font-extrabold tracking-tight text-stone-900 dark:text-white mb-2">
             코지홈을 보려면 로그인하세요
           </h2>
-          <p className="text-[14px] text-neutral-500 dark:text-neutral-400 mb-7 leading-relaxed">
+          <p className="text-[14px] text-stone-500 dark:text-stone-400 mb-7 leading-relaxed">
             로그인하면 나만의 코지홈을
             <br />
             꾸미고 방명록을 받을 수 있어요.
@@ -568,8 +568,8 @@ export default function ProfilePage() {
   if (!mounted || loading || !profile) {
     return (
       <main className="w-full min-h-screen flex flex-col items-center justify-center">
-        <div className="w-10 h-10 border-4 border-neutral-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-5" />
-        <p className="text-[14px] text-neutral-400 font-semibold">코지홈을 불러오는 중입니다</p>
+        <div className="w-10 h-10 border-4 border-stone-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-5" />
+        <p className="text-[14px] text-stone-400 font-semibold">코지홈을 불러오는 중입니다</p>
       </main>
     );
   }
@@ -584,26 +584,26 @@ export default function ProfilePage() {
       {/* 팔로워/팔로잉 목록 모달 */}
       {followModal && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-sm px-4" onClick={() => setFollowModal(null)}>
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl w-full max-w-sm max-h-[70vh] overflow-hidden shadow-2xl border border-neutral-200 dark:border-zinc-800 flex flex-col" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center justify-between px-5 py-3.5 border-b border-neutral-100 dark:border-zinc-800">
-              <p className="text-[14px] font-extrabold text-neutral-900 dark:text-white">{followModal.title}</p>
-              <button onClick={() => setFollowModal(null)} className="text-neutral-400 text-[18px] leading-none">×</button>
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl w-full max-w-sm max-h-[70vh] overflow-hidden shadow-2xl border border-stone-200 dark:border-zinc-800 flex flex-col" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center justify-between px-5 py-3.5 border-b border-stone-100 dark:border-zinc-800">
+              <p className="text-[14px] font-extrabold text-stone-900 dark:text-white">{followModal.title}</p>
+              <button onClick={() => setFollowModal(null)} className="text-stone-400 text-[18px] leading-none">×</button>
             </div>
             <div className="overflow-y-auto p-2">
               {followModal.users.length === 0 ? (
-                <p className="text-[13px] text-neutral-400 text-center py-8">아직 없어요</p>
+                <p className="text-[13px] text-stone-400 text-center py-8">아직 없어요</p>
               ) : (
                 followModal.users.map((u) => (
                   <Link
                     key={u.uid}
                     href={`/profile?uid=${u.uid}`}
                     onClick={() => setFollowModal(null)}
-                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-neutral-50 dark:hover:bg-zinc-800"
+                    className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-stone-50 dark:hover:bg-zinc-800"
                   >
                     <span className="w-9 h-9 rounded-full bg-[#F9954E]/15 text-[#F9954E] flex items-center justify-center font-extrabold">
                       {(u.name || "?").trim().charAt(0) || "?"}
                     </span>
-                    <span className="text-[14px] font-bold text-neutral-800 dark:text-neutral-100 truncate">{u.name}</span>
+                    <span className="text-[14px] font-bold text-stone-800 dark:text-stone-100 truncate">{u.name}</span>
                   </Link>
                 ))
               )}
@@ -615,14 +615,14 @@ export default function ProfilePage() {
       {/* 내 공간 탭(코지홈 / 계정·활동 / 상점) — 본인 코지홈에서만 */}
       {isOwner && (
         <div className="max-w-2xl mx-auto px-5 pt-4">
-          <div className="flex gap-1 p-1 rounded-2xl bg-neutral-100 dark:bg-zinc-900">
+          <div className="flex gap-1 p-1 rounded-2xl bg-stone-100 dark:bg-zinc-900">
             <button
               type="button"
               onClick={() => setHomeTab("home")}
               className={`flex-1 text-center py-2 rounded-xl text-[13px] font-extrabold transition-colors ${
                 homeTab === "home"
                   ? "bg-white dark:bg-zinc-800 text-[#F9954E] shadow-sm"
-                  : "text-neutral-500 dark:text-neutral-400 active:opacity-70"
+                  : "text-stone-500 dark:text-stone-400 active:opacity-70"
               }`}
             >
               🏠 코지홈
@@ -633,14 +633,14 @@ export default function ProfilePage() {
               className={`flex-1 text-center py-2 rounded-xl text-[13px] font-extrabold transition-colors ${
                 homeTab === "account"
                   ? "bg-white dark:bg-zinc-800 text-[#F9954E] shadow-sm"
-                  : "text-neutral-500 dark:text-neutral-400 active:opacity-70"
+                  : "text-stone-500 dark:text-stone-400 active:opacity-70"
               }`}
             >
               ⚙️ 계정·활동
             </button>
             <Link
               href="/shop"
-              className="flex-1 text-center py-2 rounded-xl text-[13px] font-extrabold transition-colors text-neutral-500 dark:text-neutral-400 active:opacity-70"
+              className="flex-1 text-center py-2 rounded-xl text-[13px] font-extrabold transition-colors text-stone-500 dark:text-stone-400 active:opacity-70"
             >
               🛍 상점
             </Link>
@@ -654,7 +654,7 @@ export default function ProfilePage() {
       ) : (
       <section className="max-w-2xl mx-auto px-5 pt-6">
         {/* 1) 코지홈 배너 */}
-        <div className="relative rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 overflow-hidden">
+        <div className="relative rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 overflow-hidden">
           <div className={`absolute inset-0 ${bgGradOf(profile.bg)}`} aria-hidden />
           {profile.bannerEffect && profile.bannerEffect !== "none" && (
             <BannerFx id={profile.bannerEffect} />
@@ -713,7 +713,7 @@ export default function ProfilePage() {
               <div className="flex-1 min-w-0">
                 <h1 className="text-[22px] font-extrabold tracking-tight truncate">
                   {profile.mood && <span className="mr-1">{profile.mood}</span>}
-                  <span className={nameClassOf(profile.nameEffect) || "text-neutral-900 dark:text-white"}>
+                  <span className={nameClassOf(profile.nameEffect) || "text-stone-900 dark:text-white"}>
                     {profile.name}
                   </span>
                 </h1>
@@ -734,7 +734,7 @@ export default function ProfilePage() {
                     <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accent }} />
                     {TIER_INFO[profile.tier as UserTier]?.name || `등급 ${profile.tier}`}
                   </span>
-                  <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-bold bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-neutral-200 tabular-nums">
+                  <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-bold bg-stone-100 dark:bg-zinc-900 text-stone-700 dark:text-stone-200 tabular-nums">
                     Lv.{profile.level}
                   </span>
                 </div>
@@ -743,7 +743,7 @@ export default function ProfilePage() {
                     {profile.statusMsg}
                   </p>
                 ) : (
-                  <p className="text-[13px] mt-0.5 text-neutral-400 dark:text-neutral-500">상태메시지가 없어요</p>
+                  <p className="text-[13px] mt-0.5 text-stone-400 dark:text-stone-500">상태메시지가 없어요</p>
                 )}
               </div>
 
@@ -752,12 +752,12 @@ export default function ProfilePage() {
                 <div className="shrink-0 self-start text-right">
                   <div className="inline-flex items-center gap-1.5 rounded-full bg-white/70 dark:bg-zinc-900/70 backdrop-blur px-2.5 py-1 text-[10px] font-bold tracking-tight ring-1 ring-black/5 dark:ring-white/10">
                     <span className="text-[#F9954E]">TODAY</span>
-                    <span className="text-neutral-800 dark:text-neutral-100 tabular-nums">
+                    <span className="text-stone-800 dark:text-stone-100 tabular-nums">
                       {visit.today.toLocaleString()}
                     </span>
-                    <span className="text-neutral-300 dark:text-zinc-700">·</span>
-                    <span className="text-neutral-400 dark:text-neutral-500">TOTAL</span>
-                    <span className="text-neutral-600 dark:text-neutral-300 tabular-nums">
+                    <span className="text-stone-300 dark:text-zinc-700">·</span>
+                    <span className="text-stone-400 dark:text-stone-500">TOTAL</span>
+                    <span className="text-stone-600 dark:text-stone-300 tabular-nums">
                       {visit.total.toLocaleString()}
                     </span>
                   </div>
@@ -773,14 +773,14 @@ export default function ProfilePage() {
             {profile.greeting && (
               <div className="mt-4 rounded-2xl bg-white/70 dark:bg-zinc-900/70 backdrop-blur ring-1 ring-[#F9954E]/30 px-4 py-3">
                 <p className="text-[10px] font-bold text-[#F9954E] mb-1 tracking-wide">대문</p>
-                <p className="text-[14px] font-semibold text-neutral-800 dark:text-neutral-100 leading-relaxed break-keep">
+                <p className="text-[14px] font-semibold text-stone-800 dark:text-stone-100 leading-relaxed break-keep">
                   “{profile.greeting}”
                 </p>
               </div>
             )}
 
             {profile.bio && (
-              <p className="mt-4 text-[14px] leading-relaxed text-neutral-500 dark:text-neutral-400 whitespace-pre-wrap">
+              <p className="mt-4 text-[14px] leading-relaxed text-stone-500 dark:text-stone-400 whitespace-pre-wrap">
                 {profile.bio}
               </p>
             )}
@@ -791,7 +791,7 @@ export default function ProfilePage() {
                 {profile.interests.map((it) => (
                   <span
                     key={it}
-                    className="inline-flex items-center rounded-full px-2.5 py-1 text-[12px] font-semibold bg-white/70 dark:bg-zinc-900/70 backdrop-blur text-neutral-700 dark:text-neutral-200 ring-1 ring-black/5 dark:ring-white/10"
+                    className="inline-flex items-center rounded-full px-2.5 py-1 text-[12px] font-semibold bg-white/70 dark:bg-zinc-900/70 backdrop-blur text-stone-700 dark:text-stone-200 ring-1 ring-black/5 dark:ring-white/10"
                   >
                     #{it}
                   </span>
@@ -811,16 +811,16 @@ export default function ProfilePage() {
             {/* 소셜 카운트 */}
             <div className="mt-4 flex items-center gap-5">
               <div className="text-center">
-                <p className="text-[16px] font-extrabold text-neutral-900 dark:text-white tabular-nums leading-none">{counts.posts.toLocaleString()}</p>
-                <p className="text-[11px] text-neutral-400 mt-0.5">게시물</p>
+                <p className="text-[16px] font-extrabold text-stone-900 dark:text-white tabular-nums leading-none">{counts.posts.toLocaleString()}</p>
+                <p className="text-[11px] text-stone-400 mt-0.5">게시물</p>
               </div>
               <button onClick={() => openFollowList("followers")} className="text-center active:opacity-70">
-                <p className="text-[16px] font-extrabold text-neutral-900 dark:text-white tabular-nums leading-none">{counts.followers.toLocaleString()}</p>
-                <p className="text-[11px] text-neutral-400 mt-0.5">팔로워</p>
+                <p className="text-[16px] font-extrabold text-stone-900 dark:text-white tabular-nums leading-none">{counts.followers.toLocaleString()}</p>
+                <p className="text-[11px] text-stone-400 mt-0.5">팔로워</p>
               </button>
               <button onClick={() => openFollowList("following")} className="text-center active:opacity-70">
-                <p className="text-[16px] font-extrabold text-neutral-900 dark:text-white tabular-nums leading-none">{counts.following.toLocaleString()}</p>
-                <p className="text-[11px] text-neutral-400 mt-0.5">팔로잉</p>
+                <p className="text-[16px] font-extrabold text-stone-900 dark:text-white tabular-nums leading-none">{counts.following.toLocaleString()}</p>
+                <p className="text-[11px] text-stone-400 mt-0.5">팔로잉</p>
               </button>
             </div>
 
@@ -837,7 +837,7 @@ export default function ProfilePage() {
               {isOwner && (
                 <button
                   onClick={handleShare}
-                  className="px-4 py-2 rounded-full bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-neutral-200 text-[13px] font-bold active:opacity-85"
+                  className="px-4 py-2 rounded-full bg-stone-100 dark:bg-zinc-900 text-stone-700 dark:text-stone-200 text-[13px] font-bold active:opacity-85"
                 >
                   {shared ? "✓ 링크 복사됨" : "🔗 공유"}
                 </button>
@@ -848,7 +848,7 @@ export default function ProfilePage() {
                   disabled={followBusy || followState === "loading"}
                   className={`px-5 py-2 rounded-full text-[13px] font-bold active:opacity-85 disabled:opacity-50 transition-colors ${
                     followState === "following"
-                      ? "bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-neutral-200"
+                      ? "bg-stone-100 dark:bg-zinc-900 text-stone-700 dark:text-stone-200"
                       : "bg-[#F9954E] text-white"
                   }`}
                 >
@@ -858,21 +858,21 @@ export default function ProfilePage() {
               {canMessage && (
                 <Link
                   href={messageHref}
-                  className="px-4 py-2 rounded-full bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-neutral-200 text-[13px] font-bold active:opacity-85"
+                  className="px-4 py-2 rounded-full bg-stone-100 dark:bg-zinc-900 text-stone-700 dark:text-stone-200 text-[13px] font-bold active:opacity-85"
                 >
                   💬 메시지
                 </Link>
               )}
               {canMessage && (
                 friendState === "friend" ? (
-                  <span className="px-4 py-2 rounded-full bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-neutral-200 text-[13px] font-bold">
+                  <span className="px-4 py-2 rounded-full bg-stone-100 dark:bg-zinc-900 text-stone-700 dark:text-stone-200 text-[13px] font-bold">
                     ✓ 친구
                   </span>
                 ) : (
                   <button
                     onClick={handleAddFriend}
                     disabled={friendState === "requested" || friendState === "loading"}
-                    className="px-4 py-2 rounded-full bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-neutral-200 text-[13px] font-bold active:opacity-85 disabled:opacity-50"
+                    className="px-4 py-2 rounded-full bg-stone-100 dark:bg-zinc-900 text-stone-700 dark:text-stone-200 text-[13px] font-bold active:opacity-85 disabled:opacity-50"
                   >
                     {friendState === "requested" ? "요청됨" : "친구 추가"}
                   </button>
@@ -884,26 +884,26 @@ export default function ProfilePage() {
 
         {/* 2) 꾸미기 패널 */}
         {isOwner && editing && (
-          <div className="mt-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
+          <div className="mt-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
             <div className="flex items-center justify-between mb-3">
               <p className="text-[11px] text-[#F9954E] font-bold">코지홈 꾸미기</p>
-              <Link href="/shop" className="text-[11px] font-bold text-[#F9954E] inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FFF5EB] dark:bg-[#F9954E]/10">
+              <Link href="/shop" className="text-[11px] font-bold text-[#F9954E] inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FBEEE7] dark:bg-[#F9954E]/10">
                 🍬 상점에서 아이템 받기 →
               </Link>
             </div>
 
             {/* 공유 주소(핸들) — 내 AI 페이지/코지홈 주소 */}
-            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
-              공유 주소 (영문 핸들) <span className="font-normal text-neutral-400">내 AI 페이지 주소가 깔끔해져요</span>
+            <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-1">
+              공유 주소 (영문 핸들) <span className="font-normal text-stone-400">내 AI 페이지 주소가 깔끔해져요</span>
             </label>
             <div className="flex items-stretch gap-2 mb-1">
-              <span className="inline-flex items-center px-2.5 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-[12px] text-neutral-400 font-mono shrink-0">illo.im/u/</span>
+              <span className="inline-flex items-center px-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[12px] text-stone-400 font-mono shrink-0">illo.im/u/</span>
               <input
                 value={handleInput}
                 onChange={(e) => handleCheckHandle(e.target.value)}
                 maxLength={20}
                 placeholder="user04"
-                className="flex-1 min-w-0 px-3 py-2.5 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40 font-mono lowercase"
+                className="flex-1 min-w-0 px-3 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40 font-mono lowercase"
               />
               <button
                 onClick={handleSaveHandle}
@@ -916,20 +916,20 @@ export default function ProfilePage() {
             {handleMsg && (
               <p className={`text-[11px] mb-1 ${handleMsg.ok ? "text-emerald-500" : "text-red-500"}`}>{handleMsg.text}</p>
             )}
-            <p className="text-[11px] text-neutral-400 mb-4">영문 소문자·숫자·밑줄(_) 3~20자 · 미설정 시 임시 주소가 쓰여요</p>
+            <p className="text-[11px] text-stone-400 mb-4">영문 소문자·숫자·밑줄(_) 3~20자 · 미설정 시 임시 주소가 쓰여요</p>
 
-            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
-              대문 인사말 <span className="font-normal text-neutral-400">방문자에게 보이는 한마디</span>
+            <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-1">
+              대문 인사말 <span className="font-normal text-stone-400">방문자에게 보이는 한마디</span>
             </label>
             <input
               value={editGreeting}
               onChange={(e) => setEditGreeting(e.target.value)}
               maxLength={60}
               placeholder="예) 놀러와줘서 고마워요! 방명록 남겨주세요 :)"
-              className="w-full mb-4 px-3 py-2.5 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
+              className="w-full mb-4 px-3 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
             />
 
-            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
+            <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-1">
               상태메시지
             </label>
             <input
@@ -937,10 +937,10 @@ export default function ProfilePage() {
               onChange={(e) => setEditStatus(e.target.value)}
               maxLength={80}
               placeholder="한 줄 상태메시지"
-              className="w-full mb-4 px-3 py-2.5 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
+              className="w-full mb-4 px-3 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
             />
 
-            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
+            <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-1">
               소개
             </label>
             <textarea
@@ -949,17 +949,17 @@ export default function ProfilePage() {
               maxLength={300}
               rows={3}
               placeholder="자기소개를 적어보세요"
-              className="w-full mb-4 px-3 py-2.5 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40"
+              className="w-full mb-4 px-3 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40"
             />
 
-            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
-              오늘의 기분 <span className="font-normal text-neutral-400">이름 옆에 표시돼요</span>
+            <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-2">
+              오늘의 기분 <span className="font-normal text-stone-400">이름 옆에 표시돼요</span>
             </label>
             <div className="flex flex-wrap gap-1.5 mb-4">
               <button
                 onClick={() => setEditMood("")}
                 className={`w-9 h-9 rounded-xl text-[12px] font-bold flex items-center justify-center transition-colors ${
-                  editMood === "" ? "bg-[#F9954E] text-white" : "bg-neutral-100 dark:bg-zinc-900 text-neutral-400"
+                  editMood === "" ? "bg-[#F9954E] text-white" : "bg-stone-100 dark:bg-zinc-900 text-stone-400"
                 }`}
               >
                 없음
@@ -969,7 +969,7 @@ export default function ProfilePage() {
                   key={m}
                   onClick={() => setEditMood(m)}
                   className={`w-9 h-9 rounded-xl text-[18px] flex items-center justify-center transition-transform ${
-                    editMood === m ? "bg-[#F9954E]/15 ring-2 ring-[#F9954E] scale-105" : "bg-neutral-100 dark:bg-zinc-900"
+                    editMood === m ? "bg-[#F9954E]/15 ring-2 ring-[#F9954E] scale-105" : "bg-stone-100 dark:bg-zinc-900"
                   }`}
                 >
                   {m}
@@ -977,15 +977,15 @@ export default function ProfilePage() {
               ))}
             </div>
 
-            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-1">
-              칭호 <span className="font-normal text-neutral-400">이름 아래 표시돼요</span>
+            <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-1">
+              칭호 <span className="font-normal text-stone-400">이름 아래 표시돼요</span>
             </label>
             <input
               value={editTitle}
               onChange={(e) => setEditTitle(e.target.value)}
               maxLength={24}
               placeholder="예) 도리 덕후 · AI 탐험가"
-              className="w-full mb-2 px-3 py-2.5 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
+              className="w-full mb-2 px-3 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
             />
             {itemsBySlot("title").some((t) => isItemOwned(t)) && (
               <div className="flex flex-wrap gap-1.5 mb-4">
@@ -994,7 +994,7 @@ export default function ProfilePage() {
                     key={t.id}
                     onClick={() => setEditTitle(t.text || "")}
                     className={`px-2.5 py-1 rounded-full text-[12px] font-bold transition-colors ${
-                      editTitle === t.text ? "bg-[#F9954E] text-white" : "bg-neutral-100 dark:bg-zinc-900 text-neutral-600 dark:text-neutral-300"
+                      editTitle === t.text ? "bg-[#F9954E] text-white" : "bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300"
                     }`}
                   >
                     {t.text}
@@ -1004,7 +1004,7 @@ export default function ProfilePage() {
             )}
             {!itemsBySlot("title").some((t) => isItemOwned(t)) && <div className="mb-2" />}
 
-            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+            <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-2">
               대표색
             </label>
             <div className="flex flex-wrap gap-2 mb-4">
@@ -1014,27 +1014,27 @@ export default function ProfilePage() {
                   onClick={() => setEditColor(c)}
                   aria-label={`색상 ${c}`}
                   className={`w-8 h-8 rounded-full transition-transform ${
-                    editColor === c ? "ring-2 ring-offset-2 ring-neutral-400 dark:ring-offset-zinc-950 scale-110" : ""
+                    editColor === c ? "ring-2 ring-offset-2 ring-stone-400 dark:ring-offset-zinc-950 scale-110" : ""
                   }`}
                   style={{ backgroundColor: c }}
                 />
               ))}
             </div>
 
-            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+            <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-2">
               아바타 테두리
             </label>
             <div className="grid grid-cols-3 gap-2 mb-4">
               {itemsBySlot("frame").map((f) => (
                 <PickTile key={f.id} owned={isItemOwned(f)} selected={editFrame === f.id} price={f.price} label={f.name} onSelect={() => setEditFrame(f.id)}>
-                  <div className="w-full h-full flex items-center justify-center bg-neutral-50 dark:bg-zinc-900/50">
-                    <div className={`w-8 h-8 rounded-full bg-neutral-200 dark:bg-zinc-700 ring-offset-2 ring-offset-neutral-50 dark:ring-offset-zinc-900 ${frameRingOf(f.id)}`} />
+                  <div className="w-full h-full flex items-center justify-center bg-stone-50 dark:bg-zinc-900/50">
+                    <div className={`w-8 h-8 rounded-full bg-stone-200 dark:bg-zinc-700 ring-offset-2 ring-offset-stone-50 dark:ring-offset-zinc-900 ${frameRingOf(f.id)}`} />
                   </div>
                 </PickTile>
               ))}
             </div>
 
-            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
+            <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-2">
               배경
             </label>
             <div className="grid grid-cols-3 gap-2 mb-4">
@@ -1045,21 +1045,21 @@ export default function ProfilePage() {
               ))}
             </div>
 
-            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
-              이름 효과 <span className="font-normal text-neutral-400">이름 글씨에 적용돼요</span>
+            <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-2">
+              이름 효과 <span className="font-normal text-stone-400">이름 글씨에 적용돼요</span>
             </label>
             <div className="grid grid-cols-3 gap-2 mb-4">
               {itemsBySlot("nameEffect").map((n) => (
                 <PickTile key={n.id} owned={isItemOwned(n)} selected={editNameEffect === n.id} price={n.price} label={n.name} onSelect={() => setEditNameEffect(n.id)}>
-                  <div className="w-full h-full flex items-center justify-center bg-neutral-50 dark:bg-zinc-900/50">
-                    <span className={`text-[17px] font-extrabold ${n.nameClass || "text-neutral-700 dark:text-white"}`}>도리</span>
+                  <div className="w-full h-full flex items-center justify-center bg-stone-50 dark:bg-zinc-900/50">
+                    <span className={`text-[17px] font-extrabold ${n.nameClass || "text-stone-700 dark:text-white"}`}>도리</span>
                   </div>
                 </PickTile>
               ))}
             </div>
 
-            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
-              배너 효과 <span className="font-normal text-neutral-400">배너에 움직이는 효과</span>
+            <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-2">
+              배너 효과 <span className="font-normal text-stone-400">배너에 움직이는 효과</span>
             </label>
             <div className="grid grid-cols-3 gap-2 mb-5">
               {itemsBySlot("bannerEffect").map((b) => (
@@ -1068,34 +1068,34 @@ export default function ProfilePage() {
                   {b.fx && b.fx !== "none" ? (
                     <BannerFx fx={b.fx} count={5} />
                   ) : (
-                    <span className="absolute inset-0 flex items-center justify-center text-[10px] text-neutral-400">없음</span>
+                    <span className="absolute inset-0 flex items-center justify-center text-[10px] text-stone-400">없음</span>
                   )}
                 </PickTile>
               ))}
             </div>
 
-            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
-              펫 · 캐릭터 <span className="font-normal text-neutral-400">코지홈에 함께 살아요</span>
+            <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-2">
+              펫 · 캐릭터 <span className="font-normal text-stone-400">코지홈에 함께 살아요</span>
             </label>
             <div className="grid grid-cols-4 gap-2 mb-5">
               <button
                 type="button"
                 onClick={() => setEditPet("")}
                 className={`relative h-16 rounded-xl border overflow-hidden flex items-center justify-center text-[11px] font-bold transition-all ${
-                  editPet === "" ? "border-[#F9954E] ring-1 ring-[#F9954E]/50 text-[#F9954E]" : "border-neutral-100 dark:border-zinc-900 text-neutral-400"
+                  editPet === "" ? "border-[#F9954E] ring-1 ring-[#F9954E]/50 text-[#F9954E]" : "border-stone-100 dark:border-zinc-900 text-stone-400"
                 }`}
               >
                 없음
               </button>
               {itemsBySlot("pet").map((p) => (
                 <PickTile key={p.id} owned={isItemOwned(p)} selected={editPet === p.id} price={p.price} label={p.name} onSelect={() => setEditPet(p.id)}>
-                  <div className="w-full h-full flex items-center justify-center text-[28px] bg-neutral-50 dark:bg-zinc-900/50">{p.emoji}</div>
+                  <div className="w-full h-full flex items-center justify-center text-[28px] bg-stone-50 dark:bg-zinc-900/50">{p.emoji}</div>
                 </PickTile>
               ))}
             </div>
 
-            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
-              관심사 <span className="font-normal text-neutral-400">최대 8개</span>
+            <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-2">
+              관심사 <span className="font-normal text-stone-400">최대 8개</span>
             </label>
             <div className="flex gap-2 mb-2">
               <input
@@ -1110,11 +1110,11 @@ export default function ProfilePage() {
                 }}
                 maxLength={12}
                 placeholder="직접 추가 (예: 그림)"
-                className="flex-1 px-3 py-2 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-[13px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
+                className="flex-1 px-3 py-2 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[13px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
               />
               <button
                 onClick={() => { toggleInterest(interestInput); setInterestInput(""); }}
-                className="px-4 rounded-xl bg-neutral-200 dark:bg-zinc-800 text-neutral-700 dark:text-neutral-200 text-[13px] font-bold active:opacity-85"
+                className="px-4 rounded-xl bg-stone-200 dark:bg-zinc-800 text-stone-700 dark:text-stone-200 text-[13px] font-bold active:opacity-85"
               >
                 추가
               </button>
@@ -1127,7 +1127,7 @@ export default function ProfilePage() {
                     key={tag}
                     onClick={() => toggleInterest(tag)}
                     className={`px-2.5 py-1 rounded-full text-[12px] font-semibold transition-colors ${
-                      on ? "bg-[#F9954E] text-white" : "bg-neutral-100 dark:bg-zinc-900 text-neutral-600 dark:text-neutral-300"
+                      on ? "bg-[#F9954E] text-white" : "bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300"
                     }`}
                   >
                     #{tag}
@@ -1136,8 +1136,8 @@ export default function ProfilePage() {
               })}
             </div>
 
-            <label className="block text-[12px] font-semibold text-neutral-700 dark:text-neutral-300 mb-2">
-              배너 스티커 <span className="font-normal text-neutral-400">최대 6개</span>
+            <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-2">
+              배너 스티커 <span className="font-normal text-stone-400">최대 6개</span>
             </label>
             <div className="flex flex-wrap gap-1.5 mb-2">
               {Array.from(new Set([...STICKER_CHOICES, ...itemsBySlot("sticker").filter((s) => isItemOwned(s)).map((s) => s.emoji!)])).map((s) => {
@@ -1147,7 +1147,7 @@ export default function ProfilePage() {
                     key={s}
                     onClick={() => toggleSticker(s)}
                     className={`w-9 h-9 rounded-xl text-[18px] flex items-center justify-center transition-transform ${
-                      on ? "bg-[#F9954E]/15 ring-2 ring-[#F9954E] scale-105" : "bg-neutral-100 dark:bg-zinc-900"
+                      on ? "bg-[#F9954E]/15 ring-2 ring-[#F9954E] scale-105" : "bg-stone-100 dark:bg-zinc-900"
                     }`}
                   >
                     {s}
@@ -1156,13 +1156,13 @@ export default function ProfilePage() {
               })}
               <Link
                 href="/shop"
-                className="w-9 h-9 rounded-xl text-[16px] flex items-center justify-center bg-neutral-100 dark:bg-zinc-900 text-neutral-400 border border-dashed border-neutral-300 dark:border-zinc-700"
+                className="w-9 h-9 rounded-xl text-[16px] flex items-center justify-center bg-stone-100 dark:bg-zinc-900 text-stone-400 border border-dashed border-stone-300 dark:border-zinc-700"
                 title="상점에서 스티커 더 받기"
               >
                 +
               </Link>
             </div>
-            <p className="text-[11px] text-neutral-400 mb-5">상점에서 동물·우주·디저트 스티커를 더 받을 수 있어요</p>
+            <p className="text-[11px] text-stone-400 mb-5">상점에서 동물·우주·디저트 스티커를 더 받을 수 있어요</p>
 
             <button
               onClick={handleSave}
@@ -1181,7 +1181,7 @@ export default function ProfilePage() {
         {(isOwner || profile.myAIs.length > 0) && (
           <div className="mt-4 rounded-2xl border border-[#F9954E]/30 dark:border-[#F9954E]/20 bg-white dark:bg-zinc-950 p-5">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-[12px] font-extrabold text-neutral-900 dark:text-white">🤖 내가 만든 AI {profile.myAIs.length > 0 && <span className="text-[#F9954E]">{profile.myAIs.length}</span>}</p>
+              <p className="text-[12px] font-extrabold text-stone-900 dark:text-white">🤖 내가 만든 AI {profile.myAIs.length > 0 && <span className="text-[#F9954E]">{profile.myAIs.length}</span>}</p>
               {isOwner && (
                 <button
                   onClick={() => { setAiEditId(null); setAiForm({ ...EMPTY_AI }); setAiFormOpen((v) => !v); }}
@@ -1194,14 +1194,14 @@ export default function ProfilePage() {
 
             {/* 공유 주소(핸들) 안내 — 미설정 시 노출 */}
             {isOwner && !profile.handle && (
-              <div className="mb-3 rounded-xl bg-[#FFF5EB] dark:bg-[#F9954E]/5 px-3.5 py-3 text-[12px] text-neutral-600 dark:text-neutral-300 leading-relaxed">
+              <div className="mb-3 rounded-xl bg-[#FBEEE7] dark:bg-[#F9954E]/5 px-3.5 py-3 text-[12px] text-stone-600 dark:text-stone-300 leading-relaxed">
                 💡 아래 <button onClick={() => setEditing(true)} className="font-bold text-[#F9954E] underline underline-offset-2">코지홈 꾸미기</button>에서 <b>영문 주소(핸들)</b>를 정하면
                 <br /><span className="font-mono text-[11px]">illo.im/u/<b>내이름</b>/AI</span> 처럼 깔끔한 주소로 공유돼요.
               </div>
             )}
 
             {isOwner && aiFormOpen && (
-              <div className="mb-4 rounded-2xl bg-[#FFF5EB] dark:bg-[#F9954E]/5 p-4 space-y-2.5">
+              <div className="mb-4 rounded-2xl bg-[#FBEEE7] dark:bg-[#F9954E]/5 p-4 space-y-2.5">
                 {aiEditId && <p className="text-[11px] font-bold text-[#F9954E]">✏️ 수정 중</p>}
                 <div className="flex flex-wrap gap-1.5">
                   {["🤖", "🧠", "💬", "🎨", "🎮", "📷", "🎵", "🔢", "🦾", "✨", "📝", "🐱"].map((em) => (
@@ -1215,31 +1215,31 @@ export default function ProfilePage() {
                   ))}
                 </div>
                 <input value={aiForm.name} onChange={(e) => setAiForm((f) => ({ ...f, name: e.target.value }))} maxLength={40} placeholder="AI 이름 (예: 우리집 강아지 알려주는 AI)"
-                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
+                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
                 <input value={aiForm.desc} onChange={(e) => setAiForm((f) => ({ ...f, desc: e.target.value }))} maxLength={300} placeholder="한 줄 소개 (예: 사진 속 동물 이름을 맞혀줘요)"
-                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
+                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
                 <div className="flex gap-2">
                   <select value={aiForm.category} onChange={(e) => setAiForm((f) => ({ ...f, category: e.target.value }))}
-                    className="w-1/2 px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40">
+                    className="w-1/2 px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40">
                     <option value="">분류 선택</option>
                     {["챗봇", "그림", "글쓰기", "게임", "교육", "음악", "기타"].map((c) => <option key={c} value={c}>{c}</option>)}
                   </select>
                   <input value={aiForm.tool} onChange={(e) => setAiForm((f) => ({ ...f, tool: e.target.value }))} maxLength={30} placeholder="만든 도구 (예: ChatGPT, 스크래치)"
-                    className="w-1/2 px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
+                    className="w-1/2 px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
                 </div>
                 <textarea value={aiForm.body} onChange={(e) => setAiForm((f) => ({ ...f, body: e.target.value }))} maxLength={4000} rows={4} placeholder="자세한 소개 — 어떤 AI인지, 왜 만들었는지, 무엇을 할 수 있는지 마음껏 적어보세요!"
-                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40" />
+                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40" />
                 <textarea value={aiForm.howto} onChange={(e) => setAiForm((f) => ({ ...f, howto: e.target.value }))} maxLength={1500} rows={2} placeholder="사용법 (선택) — 이렇게 써보세요!"
-                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-neutral-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40" />
+                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-stone-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40" />
                 <input value={aiForm.tags} onChange={(e) => setAiForm((f) => ({ ...f, tags: e.target.value }))} placeholder="태그 (쉼표로 구분, 예: 동물, 사진, 초등학생)"
-                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
+                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
                 <input value={aiForm.url} onChange={(e) => setAiForm((f) => ({ ...f, url: e.target.value }))} maxLength={500} placeholder="체험 링크 (선택) — 직접 써볼 수 있는 주소"
-                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-neutral-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
+                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
                 <textarea value={aiForm.images} onChange={(e) => setAiForm((f) => ({ ...f, images: e.target.value }))} rows={2} placeholder="스크린샷 이미지 주소 (선택, 한 줄에 하나씩)"
-                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[12px] text-neutral-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40" />
+                  className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[12px] text-stone-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40" />
                 <div className="flex justify-end gap-2">
                   {aiEditId && (
-                    <button onClick={() => { setAiEditId(null); setAiForm({ ...EMPTY_AI }); setAiFormOpen(false); }} className="px-4 py-2 rounded-full bg-neutral-200 dark:bg-zinc-800 text-neutral-600 dark:text-neutral-300 text-[13px] font-bold active:opacity-85">
+                    <button onClick={() => { setAiEditId(null); setAiForm({ ...EMPTY_AI }); setAiFormOpen(false); }} className="px-4 py-2 rounded-full bg-stone-200 dark:bg-zinc-800 text-stone-600 dark:text-stone-300 text-[13px] font-bold active:opacity-85">
                       취소
                     </button>
                   )}
@@ -1251,30 +1251,30 @@ export default function ProfilePage() {
             )}
 
             {profile.myAIs.length === 0 ? (
-              <p className="text-[14px] text-neutral-500 dark:text-neutral-400">
+              <p className="text-[14px] text-stone-500 dark:text-stone-400">
                 {isOwner ? "내가 만든 AI를 자랑해보세요! 🎉" : "아직 자랑한 AI가 없어요"}
               </p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
                 {profile.myAIs.map((ai, i) => (
-                  <div key={ai.id || ai.slug || i} className="relative rounded-2xl bg-neutral-50 dark:bg-zinc-900 p-4 border border-neutral-100 dark:border-zinc-800">
+                  <div key={ai.id || ai.slug || i} className="relative rounded-2xl bg-stone-50 dark:bg-zinc-900 p-4 border border-stone-100 dark:border-zinc-800">
                     <div className="flex items-start gap-3">
-                      <span className="w-10 h-10 rounded-xl bg-[#FFF5EB] dark:bg-[#F9954E]/10 flex items-center justify-center text-[22px] shrink-0">{ai.emoji || "🤖"}</span>
+                      <span className="w-10 h-10 rounded-xl bg-[#FBEEE7] dark:bg-[#F9954E]/10 flex items-center justify-center text-[22px] shrink-0">{ai.emoji || "🤖"}</span>
                       <div className="flex-1 min-w-0">
-                        <p className="text-[14px] font-extrabold text-neutral-900 dark:text-white truncate">{ai.name}</p>
+                        <p className="text-[14px] font-extrabold text-stone-900 dark:text-white truncate">{ai.name}</p>
                         <div className="flex flex-wrap items-center gap-1 mt-0.5">
-                          {ai.category && <span className="text-[10px] font-bold text-[#F9954E] bg-[#FFF5EB] dark:bg-[#F9954E]/10 rounded-full px-2 py-0.5">{ai.category}</span>}
-                          {ai.tool && <span className="text-[10px] font-bold text-neutral-500 bg-neutral-100 dark:bg-zinc-800 rounded-full px-2 py-0.5">{ai.tool}</span>}
+                          {ai.category && <span className="text-[10px] font-bold text-[#F9954E] bg-[#FBEEE7] dark:bg-[#F9954E]/10 rounded-full px-2 py-0.5">{ai.category}</span>}
+                          {ai.tool && <span className="text-[10px] font-bold text-stone-500 bg-stone-100 dark:bg-zinc-800 rounded-full px-2 py-0.5">{ai.tool}</span>}
                         </div>
                       </div>
                       {isOwner && (
                         <div className="flex gap-2 shrink-0">
-                          <button onClick={() => startEditAI(ai)} className="text-[11px] text-neutral-400 hover:text-[#F9954E] font-bold">수정</button>
-                          <button onClick={() => handleDeleteAI(ai.id)} className="text-[11px] text-neutral-400 hover:text-red-500 font-bold">삭제</button>
+                          <button onClick={() => startEditAI(ai)} className="text-[11px] text-stone-400 hover:text-[#F9954E] font-bold">수정</button>
+                          <button onClick={() => handleDeleteAI(ai.id)} className="text-[11px] text-stone-400 hover:text-red-500 font-bold">삭제</button>
                         </div>
                       )}
                     </div>
-                    {ai.desc && <p className="mt-2.5 text-[13px] text-neutral-600 dark:text-neutral-300 leading-relaxed whitespace-pre-wrap break-keep">{ai.desc}</p>}
+                    {ai.desc && <p className="mt-2.5 text-[13px] text-stone-600 dark:text-stone-300 leading-relaxed whitespace-pre-wrap break-keep">{ai.desc}</p>}
                     <div className="mt-3 flex flex-wrap items-center gap-2">
                       <a href={`/u/${profile.handle || profile.uid}/${encodeURIComponent(ai.slug)}`} className="inline-flex items-center gap-1 text-[12px] font-bold text-white bg-[#F9954E] rounded-full px-3 py-1.5 active:opacity-85">
                         🏠 AI 페이지
@@ -1284,7 +1284,7 @@ export default function ProfilePage() {
                           ▶ 써보기
                         </a>
                       )}
-                      <button onClick={() => copyAiShare(ai)} className="ml-auto inline-flex items-center gap-1 text-[12px] font-bold text-neutral-500 dark:text-neutral-400 active:opacity-70">
+                      <button onClick={() => copyAiShare(ai)} className="ml-auto inline-flex items-center gap-1 text-[12px] font-bold text-stone-500 dark:text-stone-400 active:opacity-70">
                         {aiCopied === ai.id ? "✓ 복사됨" : "🔗 공유"}
                       </button>
                     </div>
@@ -1297,7 +1297,7 @@ export default function ProfilePage() {
 
         {/* 3.5) 다이어리(일기장) */}
         {(isOwner || profile.diary.length > 0) && (
-          <div className="mt-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
+          <div className="mt-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
             <p className="text-[11px] text-[#F9954E] font-bold mb-3">📖 다이어리</p>
 
             {isOwner && (
@@ -1308,7 +1308,7 @@ export default function ProfilePage() {
                       key={m}
                       onClick={() => setDiaryMood((cur) => (cur === m ? "" : m))}
                       className={`w-8 h-8 rounded-lg text-[16px] flex items-center justify-center transition-transform ${
-                        diaryMood === m ? "bg-[#F9954E]/15 ring-2 ring-[#F9954E] scale-105" : "bg-neutral-100 dark:bg-zinc-900"
+                        diaryMood === m ? "bg-[#F9954E]/15 ring-2 ring-[#F9954E] scale-105" : "bg-stone-100 dark:bg-zinc-900"
                       }`}
                     >
                       {m}
@@ -1321,7 +1321,7 @@ export default function ProfilePage() {
                   maxLength={500}
                   rows={2}
                   placeholder="오늘 하루, 한 줄 일기를 남겨보세요"
-                  className="w-full px-3 py-2.5 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40"
+                  className="w-full px-3 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40"
                 />
                 <div className="mt-2 flex justify-end">
                   <button
@@ -1336,18 +1336,18 @@ export default function ProfilePage() {
             )}
 
             {profile.diary.length === 0 ? (
-              <p className="text-[14px] text-neutral-500 dark:text-neutral-400">아직 일기가 없어요</p>
+              <p className="text-[14px] text-stone-500 dark:text-stone-400">아직 일기가 없어요</p>
             ) : (
               <ul className="space-y-2.5">
                 {profile.diary.map((e) => (
-                  <li key={e.at} className="rounded-xl bg-neutral-50 dark:bg-zinc-900 p-3.5 border-l-2 border-[#F9954E]/40">
+                  <li key={e.at} className="rounded-xl bg-stone-50 dark:bg-zinc-900 p-3.5 border-l-2 border-[#F9954E]/40">
                     <div className="flex items-center justify-between gap-2 mb-1">
-                      <span className="text-[12px] text-neutral-400">{e.mood && <span className="mr-1 text-[14px]">{e.mood}</span>}{fmtDate(e.at)}</span>
+                      <span className="text-[12px] text-stone-400">{e.mood && <span className="mr-1 text-[14px]">{e.mood}</span>}{fmtDate(e.at)}</span>
                       {isOwner && (
-                        <button onClick={() => handleDeleteDiary(e.at)} className="text-[11px] text-neutral-400 hover:text-red-500 font-bold">삭제</button>
+                        <button onClick={() => handleDeleteDiary(e.at)} className="text-[11px] text-stone-400 hover:text-red-500 font-bold">삭제</button>
                       )}
                     </div>
-                    <p className="text-[14px] text-neutral-700 dark:text-neutral-300 whitespace-pre-wrap leading-relaxed break-keep">{e.text}</p>
+                    <p className="text-[14px] text-stone-700 dark:text-stone-300 whitespace-pre-wrap leading-relaxed break-keep">{e.text}</p>
                   </li>
                 ))}
               </ul>
@@ -1356,7 +1356,7 @@ export default function ProfilePage() {
         )}
 
         {/* 3.6) 내 등급 + 등급표(접이식) */}
-        <div className="mt-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
+        <div className="mt-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
           {(() => {
             const ct = (Math.min(10, Math.max(1, Number(profile.tier) || 1)) as UserTier);
             const info = TIER_INFO[ct];
@@ -1369,7 +1369,7 @@ export default function ProfilePage() {
               <>
                 <div className="flex items-center justify-between mb-2">
                   <p className="text-[11px] text-[#F9954E] font-bold">내 등급</p>
-                  <button onClick={() => setTierOpen((v) => !v)} className="text-[11px] font-bold text-neutral-400 hover:text-[#F9954E]">
+                  <button onClick={() => setTierOpen((v) => !v)} className="text-[11px] font-bold text-stone-400 hover:text-[#F9954E]">
                     {tierOpen ? "접기" : "등급표 보기"}
                   </button>
                 </div>
@@ -1380,16 +1380,16 @@ export default function ProfilePage() {
                     <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: info.color }} />
                     {info.name}
                   </span>
-                  <span className="text-[11px] text-neutral-500 dark:text-neutral-400 font-semibold">{info.description}</span>
-                  <span className="ml-auto inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-bold bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-neutral-200 tabular-nums">Lv.{profile.level}</span>
+                  <span className="text-[11px] text-stone-500 dark:text-stone-400 font-semibold">{info.description}</span>
+                  <span className="ml-auto inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-bold bg-stone-100 dark:bg-zinc-900 text-stone-700 dark:text-stone-200 tabular-nums">Lv.{profile.level}</span>
                 </div>
 
                 {/* 다음 등급까지 진행바 */}
                 <div className="mt-2.5">
-                  <div className="h-1.5 w-full rounded-full bg-neutral-100 dark:bg-zinc-900 overflow-hidden">
+                  <div className="h-1.5 w-full rounded-full bg-stone-100 dark:bg-zinc-900 overflow-hidden">
                     <div className="h-full rounded-full transition-all" style={{ width: `${prog}%`, backgroundColor: info.color }} />
                   </div>
-                  <p className="mt-1 text-[10px] text-neutral-400 tabular-nums">
+                  <p className="mt-1 text-[10px] text-stone-400 tabular-nums">
                     {nextThr
                       ? `${TIER_INFO[nextT as UserTier].name}까지 ${Math.max(0, nextThr - exp).toLocaleString()}점 · 현재 ${exp.toLocaleString()}점`
                       : `최고 등급! · ${exp.toLocaleString()}점`}
@@ -1398,16 +1398,16 @@ export default function ProfilePage() {
 
                 {/* 등급표 */}
                 {tierOpen && (
-                  <div className="mt-3 pt-3 border-t border-neutral-100 dark:border-zinc-900 space-y-0.5">
+                  <div className="mt-3 pt-3 border-t border-stone-100 dark:border-zinc-900 space-y-0.5">
                     {([1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as UserTier[]).map((t) => {
                       const ti = TIER_INFO[t];
                       const isMe = t === ct;
                       return (
-                        <div key={t} className={`flex items-center gap-2 px-2 py-1 rounded-lg ${isMe ? "bg-[#FFF5EB] dark:bg-[#F9954E]/10" : ""}`}>
+                        <div key={t} className={`flex items-center gap-2 px-2 py-1 rounded-lg ${isMe ? "bg-[#FBEEE7] dark:bg-[#F9954E]/10" : ""}`}>
                           <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: ti.color }} />
-                          <span className="text-[12px] font-bold text-neutral-800 dark:text-neutral-100">{ti.name}</span>
-                          <span className="text-[11px] text-neutral-400 truncate">{ti.description}</span>
-                          <span className="ml-auto text-[11px] text-neutral-400 tabular-nums shrink-0">{TIER_THRESHOLDS[t].toLocaleString()}점</span>
+                          <span className="text-[12px] font-bold text-stone-800 dark:text-stone-100">{ti.name}</span>
+                          <span className="text-[11px] text-stone-400 truncate">{ti.description}</span>
+                          <span className="ml-auto text-[11px] text-stone-400 tabular-nums shrink-0">{TIER_THRESHOLDS[t].toLocaleString()}점</span>
                           {isMe && <span className="text-[10px] font-extrabold text-[#F9954E] shrink-0">●</span>}
                         </div>
                       );
@@ -1420,7 +1420,7 @@ export default function ProfilePage() {
         </div>
 
         {/* 4) 뱃지 */}
-        <div className="mt-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
+        <div className="mt-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
           <p className="text-[11px] text-[#F9954E] font-bold mb-3">뱃지</p>
           <div className="flex flex-wrap items-center gap-2">
             <span
@@ -1430,14 +1430,14 @@ export default function ProfilePage() {
               🎮 게이머 Lv.{gamerLevel}
             </span>
             {records.length === 0 ? (
-              <span className="text-[13px] text-neutral-400 dark:text-neutral-500">
+              <span className="text-[13px] text-stone-400 dark:text-stone-500">
                 기록을 쌓으면 뱃지가 생겨요
               </span>
             ) : (
               records.map((r) => (
                 <span
                   key={r.game}
-                  className="px-3 py-1.5 rounded-full text-[12px] font-bold bg-neutral-100 dark:bg-zinc-900 text-neutral-700 dark:text-neutral-200"
+                  className="px-3 py-1.5 rounded-full text-[12px] font-bold bg-stone-100 dark:bg-zinc-900 text-stone-700 dark:text-stone-200"
                 >
                   🏅 {r.label}
                 </span>
@@ -1448,20 +1448,20 @@ export default function ProfilePage() {
 
         {/* 4-1) 심리 리포트(심리테스트 결과 뱃지) */}
         {profile?.psychResults && profile.psychResults.length > 0 && (
-          <div className="mt-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
+          <div className="mt-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
             <div className="flex items-center justify-between mb-3">
               <p className="text-[11px] text-[#F9954E] font-bold">🧩 심리 리포트</p>
-              <a href="/psychtest" className="text-[11px] font-bold text-neutral-400 hover:text-[#F9954E]">테스트 하러 가기 →</a>
+              <a href="/psychtest" className="text-[11px] font-bold text-stone-400 hover:text-[#F9954E]">테스트 하러 가기 →</a>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {profile.psychResults.map((r) => (
-                <div key={r.testId} className="flex items-center gap-3 rounded-xl bg-neutral-50 dark:bg-zinc-900 p-3">
+                <div key={r.testId} className="flex items-center gap-3 rounded-xl bg-stone-50 dark:bg-zinc-900 p-3">
                   <span className="text-[26px] leading-none shrink-0">{r.emoji}</span>
                   <span className="flex-1 min-w-0">
-                    <span className="block text-[11px] text-neutral-400 truncate">{r.title}</span>
-                    <span className="block text-[13.5px] font-extrabold text-neutral-900 dark:text-white truncate">{r.label}</span>
+                    <span className="block text-[11px] text-stone-400 truncate">{r.title}</span>
+                    <span className="block text-[13.5px] font-extrabold text-stone-900 dark:text-white truncate">{r.label}</span>
                   </span>
-                  {r.sub && <span className="text-[11px] font-bold text-neutral-400 tabular-nums shrink-0">{r.sub}</span>}
+                  {r.sub && <span className="text-[11px] font-bold text-stone-400 tabular-nums shrink-0">{r.sub}</span>}
                 </div>
               ))}
             </div>
@@ -1469,21 +1469,21 @@ export default function ProfilePage() {
         )}
 
         {/* 3) 전적 */}
-        <div className="mt-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
+        <div className="mt-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
           <p className="text-[11px] text-[#F9954E] font-bold mb-3">전적</p>
           {records.length === 0 ? (
-            <p className="text-[14px] text-neutral-500 dark:text-neutral-400">아직 기록 없음</p>
+            <p className="text-[14px] text-stone-500 dark:text-stone-400">아직 기록 없음</p>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
               {records.map((r) => (
                 <div
                   key={r.game}
-                  className="rounded-xl bg-neutral-100 dark:bg-zinc-900 p-3.5"
+                  className="rounded-xl bg-stone-100 dark:bg-zinc-900 p-3.5"
                 >
-                  <p className="text-[12px] text-neutral-500 dark:text-neutral-400 mb-1 truncate">{r.label}</p>
-                  <p className="text-[18px] font-extrabold text-neutral-900 dark:text-white">
+                  <p className="text-[12px] text-stone-500 dark:text-stone-400 mb-1 truncate">{r.label}</p>
+                  <p className="text-[18px] font-extrabold text-stone-900 dark:text-white">
                     {r.score.toLocaleString()}
-                    <span className="text-[12px] font-bold text-neutral-400 ml-1">{r.unit}</span>
+                    <span className="text-[12px] font-bold text-stone-400 ml-1">{r.unit}</span>
                   </p>
                 </div>
               ))}
@@ -1492,21 +1492,21 @@ export default function ProfilePage() {
         </div>
 
         {/* 6) 본인 피드 */}
-        <div className="mt-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
+        <div className="mt-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
           <p className="text-[11px] text-[#F9954E] font-bold mb-3">최근 글</p>
           {feed.length === 0 ? (
-            <p className="text-[14px] text-neutral-500 dark:text-neutral-400">아직 작성한 글이 없어요</p>
+            <p className="text-[14px] text-stone-500 dark:text-stone-400">아직 작성한 글이 없어요</p>
           ) : (
             <ul className="space-y-3">
               {feed.map((p) => (
                 <li
                   key={p.id}
-                  className="rounded-xl bg-neutral-100 dark:bg-zinc-900 p-3.5"
+                  className="rounded-xl bg-stone-100 dark:bg-zinc-900 p-3.5"
                 >
-                  <p className="text-[14px] text-neutral-800 dark:text-neutral-100 whitespace-pre-wrap leading-relaxed">
+                  <p className="text-[14px] text-stone-800 dark:text-stone-100 whitespace-pre-wrap leading-relaxed">
                     {p.text}
                   </p>
-                  <div className="mt-2 flex items-center gap-3 text-[12px] text-neutral-400">
+                  <div className="mt-2 flex items-center gap-3 text-[12px] text-stone-400">
                     {fmtDate(p.at) && <span>{fmtDate(p.at)}</span>}
                     <span>❤️ {p.likeCount.toLocaleString()}</span>
                   </div>
@@ -1517,7 +1517,7 @@ export default function ProfilePage() {
         </div>
 
         {/* 5) 방명록 */}
-        <div className="mt-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
+        <div className="mt-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
           <p className="text-[11px] text-[#F9954E] font-bold mb-3">방명록</p>
 
           {myUid ? (
@@ -1528,7 +1528,7 @@ export default function ProfilePage() {
                 maxLength={500}
                 rows={2}
                 placeholder={isOwner ? "내 코지홈에 한마디" : "방명록을 남겨보세요"}
-                className="w-full px-3 py-2.5 rounded-xl bg-neutral-100 dark:bg-zinc-900 text-[14px] text-neutral-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40"
+                className="w-full px-3 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40"
               />
               <div className="mt-2 flex justify-end">
                 <button
@@ -1541,7 +1541,7 @@ export default function ProfilePage() {
               </div>
             </div>
           ) : (
-            <div className="mb-4 rounded-xl bg-neutral-100 dark:bg-zinc-900 p-3.5 text-[13px] text-neutral-500 dark:text-neutral-400">
+            <div className="mb-4 rounded-xl bg-stone-100 dark:bg-zinc-900 p-3.5 text-[13px] text-stone-500 dark:text-stone-400">
               방명록을 남기려면{" "}
               <Link href="/login" className="font-bold text-[#F9954E]">
                 로그인
@@ -1551,39 +1551,39 @@ export default function ProfilePage() {
           )}
 
           {guestbook.length === 0 ? (
-            <p className="text-[14px] text-neutral-500 dark:text-neutral-400">아직 방명록이 없어요</p>
+            <p className="text-[14px] text-stone-500 dark:text-stone-400">아직 방명록이 없어요</p>
           ) : (
             <ul className="space-y-3">
               {guestbook.map((g) => (
                 <li
                   key={g.id}
-                  className="rounded-xl bg-neutral-100 dark:bg-zinc-900 p-3.5"
+                  className="rounded-xl bg-stone-100 dark:bg-zinc-900 p-3.5"
                 >
                   <div className="flex items-center justify-between gap-2">
                     {g.fromUid ? (
-                      <Link href={`/profile?uid=${g.fromUid}`} className="text-[13px] font-bold text-neutral-800 dark:text-neutral-100 truncate hover:text-[#F9954E] hover:underline">
+                      <Link href={`/profile?uid=${g.fromUid}`} className="text-[13px] font-bold text-stone-800 dark:text-stone-100 truncate hover:text-[#F9954E] hover:underline">
                         {g.fromName}
                       </Link>
                     ) : (
-                      <span className="text-[13px] font-bold text-neutral-800 dark:text-neutral-100 truncate">
+                      <span className="text-[13px] font-bold text-stone-800 dark:text-stone-100 truncate">
                         {g.fromName}
                       </span>
                     )}
                     <div className="flex items-center gap-2 shrink-0">
                       {fmtDate(g.at) && (
-                        <span className="text-[11px] text-neutral-400">{fmtDate(g.at)}</span>
+                        <span className="text-[11px] text-stone-400">{fmtDate(g.at)}</span>
                       )}
                       {isOwner && (
                         <button
                           onClick={() => handleDeleteGuestbook(g.id)}
-                          className="text-[11px] text-neutral-400 hover:text-red-500 font-bold"
+                          className="text-[11px] text-stone-400 hover:text-red-500 font-bold"
                         >
                           삭제
                         </button>
                       )}
                     </div>
                   </div>
-                  <p className="mt-1.5 text-[14px] text-neutral-700 dark:text-neutral-300 whitespace-pre-wrap leading-relaxed">
+                  <p className="mt-1.5 text-[14px] text-stone-700 dark:text-stone-300 whitespace-pre-wrap leading-relaxed">
                     {g.message}
                   </p>
                 </li>

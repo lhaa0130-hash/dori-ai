@@ -50,19 +50,19 @@ export default async function EnHome() {
       <HomeInfoStrip topTools={topTools} insightCount={todayInsights} animalCount={animalCount} orLists={orLists} locale="en" />
 
       {/* ② 퀵 액세스 */}
-      <section className="py-4 border-b border-neutral-100 dark:border-zinc-900">
+      <section className="py-4 border-b border-stone-100 dark:border-zinc-900">
         <div className="-mx-6 px-6 overflow-x-auto scrollbar-hide">
           <div className="flex gap-1 w-max">
             {SECTIONS.map(({ label, href, Icon }) => (
               <Link
                 key={href}
                 href={href}
-                className="flex flex-col items-center gap-1.5 py-2 w-[72px] shrink-0 rounded-2xl active:bg-neutral-50 dark:active:bg-zinc-900 transition-colors"
+                className="flex flex-col items-center gap-1.5 py-2 w-[72px] shrink-0 rounded-2xl active:bg-stone-50 dark:active:bg-zinc-900 transition-colors"
               >
-                <span className="w-11 h-11 rounded-2xl bg-neutral-100 dark:bg-zinc-900 flex items-center justify-center text-neutral-700 dark:text-neutral-300">
+                <span className="w-11 h-11 rounded-2xl bg-stone-100 dark:bg-zinc-900 flex items-center justify-center text-stone-700 dark:text-stone-300">
                   <Icon className="w-5 h-5" strokeWidth={1.8} />
                 </span>
-                <span className="text-[10.5px] font-semibold text-neutral-600 dark:text-neutral-400 whitespace-nowrap">{label}</span>
+                <span className="text-[10.5px] font-semibold text-stone-600 dark:text-stone-400 whitespace-nowrap">{label}</span>
               </Link>
             ))}
           </div>

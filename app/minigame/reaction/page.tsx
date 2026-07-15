@@ -164,8 +164,8 @@ export default function ReactionPage() {
         if (ms < 180) return { label: "🚀 인간을 초월했어요!", color: "text-emerald-400" };
         if (ms < 230) return { label: "⚡ 번개 같은 반사신경!", color: "text-emerald-400" };
         if (ms < 300) return { label: "👍 아주 빨라요!", color: "text-[#F9954E]" };
-        if (ms < 400) return { label: "🙂 평균 수준이에요", color: "text-neutral-200" };
-        return { label: "💪 조금 더 집중!", color: "text-neutral-300" };
+        if (ms < 400) return { label: "🙂 평균 수준이에요", color: "text-stone-200" };
+        return { label: "💪 조금 더 집중!", color: "text-stone-300" };
     };
 
     // 패드 색/문구
@@ -226,7 +226,7 @@ export default function ReactionPage() {
             <header className="fixed top-0 left-0 w-full h-16 bg-[#09090e]/80 backdrop-blur-md border-b border-white/10 z-50 flex items-center justify-between px-4 sm:px-6">
                 <Link
                     href="/minigame"
-                    className="inline-flex items-center gap-1.5 text-[13px] text-neutral-500 hover:text-white transition-colors"
+                    className="inline-flex items-center gap-1.5 text-[13px] text-stone-500 hover:text-white transition-colors"
                 >
                     <ArrowLeft className="w-4 h-4" />
                     뒤로
@@ -236,7 +236,7 @@ export default function ReactionPage() {
                     반응속도 테스트
                 </h1>
                 <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
-                    <div className="text-[9px] uppercase tracking-widest text-neutral-500">Best {UNIT}</div>
+                    <div className="text-[9px] uppercase tracking-widest text-stone-500">Best {UNIT}</div>
                     <div className="text-sm font-bold text-white tabular-nums">
                         {showScore > 0 ? <CountUp value={showScore} className="tabular-nums" /> : "—"}
                     </div>
@@ -310,7 +310,7 @@ export default function ReactionPage() {
                                     className={`arcade-pop rounded-lg border px-2.5 py-1 text-xs font-bold tabular-nums ${
                                         isMin
                                             ? "border-[#F9954E]/50 bg-[#F9954E]/15 text-[#F9954E]"
-                                            : "border-white/10 bg-white/[0.04] text-neutral-300"
+                                            : "border-white/10 bg-white/[0.04] text-stone-300"
                                     }`}
                                 >
                                     {t}
@@ -330,18 +330,18 @@ export default function ReactionPage() {
                     >
                         <div className="grid grid-cols-2 gap-3">
                             <div className="arcade-card arcade-rise-1 p-5 rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 text-center">
-                                <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-2">최고 기록</div>
+                                <div className="text-[10px] uppercase tracking-widest text-stone-500 mb-2">최고 기록</div>
                                 <div className="text-4xl font-black arcade-grad-text tabular-nums">
                                     <CountUp value={finalBest} className="tabular-nums" />
                                 </div>
-                                <div className="text-[10px] uppercase tracking-widest text-neutral-500 mt-2">{UNIT}</div>
+                                <div className="text-[10px] uppercase tracking-widest text-stone-500 mt-2">{UNIT}</div>
                             </div>
                             <div className="arcade-card arcade-rise-2 p-5 rounded-2xl bg-gradient-to-b from-white/[0.06] to-white/[0.02] border border-white/10 text-center">
-                                <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-2">평균</div>
+                                <div className="text-[10px] uppercase tracking-widest text-stone-500 mb-2">평균</div>
                                 <div className="text-4xl font-black text-white tabular-nums">
                                     <CountUp value={finalAvg} className="tabular-nums" />
                                 </div>
-                                <div className="text-[10px] uppercase tracking-widest text-neutral-500 mt-2">{UNIT}</div>
+                                <div className="text-[10px] uppercase tracking-widest text-stone-500 mt-2">{UNIT}</div>
                             </div>
                         </div>
 

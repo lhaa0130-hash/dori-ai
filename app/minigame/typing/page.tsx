@@ -91,14 +91,14 @@ export default function TypingGamePage() {
     };
 
     return (
-        <main className="min-h-screen bg-white dark:bg-black text-neutral-900 dark:text-white relative overflow-hidden flex flex-col items-center justify-center p-6">
+        <main className="min-h-screen bg-white dark:bg-black text-stone-900 dark:text-white relative overflow-hidden flex flex-col items-center justify-center p-6">
             {/* 배경 그라데이션 */}
             <div className="absolute top-0 left-0 w-full h-[600px] bg-gradient-to-b from-blue-100/40 via-blue-50/20 to-transparent dark:from-blue-900/10 dark:via-black/0 dark:to-black/0 pointer-events-none z-0" />
 
             <div className="relative z-10 w-full max-w-2xl">
                 {/* 헤더 */}
                 <div className="flex items-center justify-between mb-8">
-                    <Link href="/minigame" className="flex items-center gap-2 text-neutral-500 hover:text-blue-500 transition-colors">
+                    <Link href="/minigame" className="flex items-center gap-2 text-stone-500 hover:text-blue-500 transition-colors">
                         <ArrowLeft className="w-5 h-5" />
                         <span>나가기</span>
                     </Link>
@@ -108,13 +108,13 @@ export default function TypingGamePage() {
                 </div>
 
                 {/* 게임 화면 */}
-                <div className="bg-white/80 dark:bg-zinc-900/40 backdrop-blur-xl border border-neutral-200 dark:border-zinc-800 rounded-[2rem] p-8 shadow-2xl relative overflow-hidden min-h-[400px] flex flex-col justify-center">
+                <div className="bg-white/80 dark:bg-zinc-900/40 backdrop-blur-xl border border-stone-200 dark:border-zinc-800 rounded-[2rem] p-8 shadow-2xl relative overflow-hidden min-h-[400px] flex flex-col justify-center">
 
                     {gameState === "START" && (
                         <div className="text-center py-12">
                             <Keyboard className="w-20 h-20 mx-auto text-blue-500 mb-6" />
                             <h1 className="text-3xl font-bold mb-4">단어 맞추기 챌린지</h1>
-                            <p className="text-neutral-600 dark:text-neutral-400 mb-8 max-w-md mx-auto">
+                            <p className="text-stone-600 dark:text-stone-400 mb-8 max-w-md mx-auto">
                                 제시되는 설명을 보고 알맞은 단어를 입력하세요.<br />
                                 제한시간 60초 동안 최대한 많은 점수를 획득하세요!
                             </p>
@@ -132,13 +132,13 @@ export default function TypingGamePage() {
                             {/* 정보 패널 */}
                             <div className="flex items-center justify-between mb-12">
                                 <div className="text-center">
-                                    <div className="text-xs text-neutral-500 mb-1">TIME</div>
-                                    <div className={`text-2xl font-bold font-mono ${timeLeft < 10 ? 'text-red-500 animate-pulse' : 'text-neutral-900 dark:text-white'}`}>
+                                    <div className="text-xs text-stone-500 mb-1">TIME</div>
+                                    <div className={`text-2xl font-bold font-mono ${timeLeft < 10 ? 'text-red-500 animate-pulse' : 'text-stone-900 dark:text-white'}`}>
                                         {timeLeft}s
                                     </div>
                                 </div>
                                 <div className="text-center">
-                                    <div className="text-xs text-neutral-500 mb-1">SCORE</div>
+                                    <div className="text-xs text-stone-500 mb-1">SCORE</div>
                                     <div className="text-2xl font-bold text-blue-500">{score}</div>
                                 </div>
                             </div>
@@ -160,7 +160,7 @@ export default function TypingGamePage() {
                                     onChange={(e) => setInput(e.target.value)}
                                     onKeyDown={handleKeyDown}
                                     placeholder="정답을 입력하세요"
-                                    className={`w-full px-6 py-4 rounded-2xl bg-neutral-100 dark:bg-zinc-800 border-2 text-center text-xl font-bold focus:outline-none transition-all
+                                    className={`w-full px-6 py-4 rounded-2xl bg-stone-100 dark:bg-zinc-800 border-2 text-center text-xl font-bold focus:outline-none transition-all
                                         ${feedback === "CORRECT" ? "border-green-500 text-green-600 bg-green-50 dark:bg-green-900/20" : ""}
                                         ${feedback === "WRONG" ? "border-red-500 text-red-600 bg-red-50 dark:bg-red-900/20 animate-shake" : "border-transparent focus:border-blue-500 focus:bg-white dark:focus:bg-black"}
                                     `}
@@ -187,7 +187,7 @@ export default function TypingGamePage() {
                                 <span className="text-4xl">🎉</span>
                             </div>
                             <h2 className="text-4xl font-bold mb-2">Time Over!</h2>
-                            <p className="text-xl text-neutral-600 dark:text-neutral-400 mb-8">
+                            <p className="text-xl text-stone-600 dark:text-stone-400 mb-8">
                                 최종 점수: <span className="text-blue-500 font-bold text-3xl">{score}</span> 점
                             </p>
 
@@ -201,7 +201,7 @@ export default function TypingGamePage() {
                                 </button>
                                 <Link
                                     href="/minigame"
-                                    className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-neutral-100 dark:bg-zinc-800 hover:bg-neutral-200 dark:hover:bg-zinc-700 text-neutral-700 dark:text-neutral-300 font-bold transition-all"
+                                    className="flex items-center justify-center gap-2 px-6 py-3 rounded-xl bg-stone-100 dark:bg-zinc-800 hover:bg-stone-200 dark:hover:bg-zinc-700 text-stone-700 dark:text-stone-300 font-bold transition-all"
                                 >
                                     <ArrowLeft className="w-5 h-5" />
                                     메뉴로 돌아가기

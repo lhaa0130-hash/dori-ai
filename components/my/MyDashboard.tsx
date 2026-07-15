@@ -375,8 +375,8 @@ export default function MyDashboard() {
     return (
       <main className="w-full min-h-screen bg-white dark:bg-black flex flex-col items-center justify-center">
         <div className="flex flex-col items-center">
-          <div className="w-10 h-10 border-4 border-neutral-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-5" />
-          <p className="text-[14px] text-neutral-400 font-semibold">사용자 정보를 불러오는 중입니다</p>
+          <div className="w-10 h-10 border-4 border-stone-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-5" />
+          <p className="text-[14px] text-stone-400 font-semibold">사용자 정보를 불러오는 중입니다</p>
         </div>
       </main>
     );
@@ -386,12 +386,12 @@ export default function MyDashboard() {
   if (status === 'unauthenticated' || !session || !session.user || !user || !user.email) {
     return (
       <main className="w-full min-h-screen bg-white dark:bg-black flex flex-col items-center justify-center px-6">
-        <div className="p-10 rounded-3xl bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 flex flex-col items-center text-center max-w-sm w-full">
-          <div className="w-14 h-14 rounded-2xl bg-[#FFF5EB] dark:bg-[#F9954E]/10 flex items-center justify-center text-2xl mb-5">
+        <div className="p-10 rounded-3xl bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 flex flex-col items-center text-center max-w-sm w-full">
+          <div className="w-14 h-14 rounded-2xl bg-[#FBEEE7] dark:bg-[#F9954E]/10 flex items-center justify-center text-2xl mb-5">
             🔒
           </div>
-          <h2 className="text-[20px] font-extrabold text-neutral-900 dark:text-white mb-2">로그인이 필요해요</h2>
-          <p className="text-[14px] text-neutral-500 dark:text-neutral-400 mb-7 leading-relaxed">
+          <h2 className="text-[20px] font-extrabold text-stone-900 dark:text-white mb-2">로그인이 필요해요</h2>
+          <p className="text-[14px] text-stone-500 dark:text-stone-400 mb-7 leading-relaxed">
             마이페이지는 로그인 후<br />이용하실 수 있습니다.
           </p>
           <Link
@@ -410,8 +410,8 @@ export default function MyDashboard() {
     return (
       <main className="w-full min-h-screen bg-white dark:bg-black flex flex-col items-center justify-center">
         <div className="flex flex-col items-center">
-          <div className="w-10 h-10 border-4 border-neutral-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-5" />
-          <p className="text-[14px] text-neutral-400 font-semibold">프로필을 로드하는 중입니다</p>
+          <div className="w-10 h-10 border-4 border-stone-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-5" />
+          <p className="text-[14px] text-stone-400 font-semibold">프로필을 로드하는 중입니다</p>
         </div>
       </main>
     );
@@ -429,8 +429,8 @@ export default function MyDashboard() {
   if (!user || !user.email) {
     return (
       <main className="w-full min-h-screen pt-20 flex flex-col items-center justify-center bg-white dark:bg-black">
-        <div className="text-center p-8 bg-neutral-50 dark:bg-zinc-900 rounded-3xl border border-neutral-200 dark:border-zinc-800 shadow-sm">
-          <p className="text-neutral-500 dark:text-zinc-400 font-medium mb-6">사용자 정보를 찾을 수 없습니다.</p>
+        <div className="text-center p-8 bg-stone-50 dark:bg-zinc-900 rounded-3xl border border-stone-200 dark:border-zinc-800 shadow-sm">
+          <p className="text-stone-500 dark:text-zinc-400 font-medium mb-6">사용자 정보를 찾을 수 없습니다.</p>
           <Link href="/login" className="px-6 py-3 rounded-full bg-[#F9954E] text-white font-bold hover:bg-[#E8832E] transition-all">
             다시 로그인하기
           </Link>
@@ -451,10 +451,10 @@ export default function MyDashboard() {
       {/* Hero Section */}
       <section className="pt-2 pb-6 px-6">
         <p className="text-[12px] font-semibold text-[#F9954E] mb-2">계정 · 활동</p>
-        <h1 className="text-[32px] font-extrabold tracking-tight text-neutral-950 dark:text-white mb-1">
+        <h1 className="text-[32px] font-extrabold tracking-tight text-stone-950 dark:text-white mb-1">
           내 프로필
         </h1>
-        <p className="text-[14px] text-neutral-500 dark:text-neutral-400">
+        <p className="text-[14px] text-stone-500 dark:text-stone-400">
           나의 활동과 프로필 정보를 관리합니다.
         </p>
       </section>
@@ -481,9 +481,9 @@ export default function MyDashboard() {
         {/* ── 알림 ── */}
         <Link
           href="/notifications"
-          className="mb-8 flex items-center gap-4 p-5 rounded-3xl bg-white dark:bg-zinc-950 border border-neutral-100 dark:border-zinc-900 hover:border-[#F9954E]/40 transition-colors group"
+          className="mb-8 flex items-center gap-4 p-5 rounded-3xl bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 hover:border-[#F9954E]/40 transition-colors group"
         >
-          <span className="relative flex-shrink-0 w-11 h-11 rounded-2xl bg-[#FFF5EB] dark:bg-[#F9954E]/10 flex items-center justify-center">
+          <span className="relative flex-shrink-0 w-11 h-11 rounded-2xl bg-[#FBEEE7] dark:bg-[#F9954E]/10 flex items-center justify-center">
             <Bell className="w-5 h-5 text-[#F9954E]" />
             {unreadNoti > 0 && (
               <span className="absolute -top-1 -right-1 min-w-[18px] h-[18px] px-1 flex items-center justify-center rounded-full bg-red-500 text-white text-[10px] font-black leading-none">
@@ -492,26 +492,26 @@ export default function MyDashboard() {
             )}
           </span>
           <div className="flex-1 min-w-0">
-            <p className="text-[15px] font-extrabold text-neutral-900 dark:text-white">알림</p>
-            <p className="text-[12.5px] text-neutral-500 dark:text-neutral-400">
+            <p className="text-[15px] font-extrabold text-stone-900 dark:text-white">알림</p>
+            <p className="text-[12.5px] text-stone-500 dark:text-stone-400">
               {unreadNoti > 0 ? `읽지 않은 알림 ${unreadNoti}개` : "친구 요청·좋아요·댓글·방명록·메시지를 한곳에서"}
             </p>
           </div>
-          <ChevronRight className="w-5 h-5 text-neutral-300 dark:text-zinc-600 group-hover:text-[#F9954E] transition-colors" />
+          <ChevronRight className="w-5 h-5 text-stone-300 dark:text-zinc-600 group-hover:text-[#F9954E] transition-colors" />
         </Link>
 
         {/* ── 솜사탕 현황 카드 ── */}
-        <div className="mb-8 bg-[#FFF5EB] dark:bg-[#F9954E]/5 rounded-3xl border border-[#F9954E]/20 dark:border-[#F9954E]/10 p-6 md:p-8">
+        <div className="mb-8 bg-[#FBEEE7] dark:bg-[#F9954E]/5 rounded-3xl border border-[#F9954E]/20 dark:border-[#F9954E]/10 p-6 md:p-8">
           <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <CottonCandy className="w-7 h-7" />
-                <h3 className="text-lg font-extrabold text-neutral-900 dark:text-white">내 솜사탕</h3>
+                <h3 className="text-lg font-extrabold text-stone-900 dark:text-white">내 솜사탕</h3>
               </div>
               <p className="text-3xl font-extrabold text-[#F9954E]">
                 {candyBalance.toLocaleString()}개
               </p>
-              <div className="flex gap-4 mt-2 text-xs font-bold text-neutral-500 dark:text-zinc-400">
+              <div className="flex gap-4 mt-2 text-xs font-bold text-stone-500 dark:text-zinc-400">
                 <span>오늘 획득: <span className="text-[#F9954E]">+{todayEarned}</span>개</span>
                 <span>이번 달: <span className="text-[#F9954E]">+{monthEarned.toLocaleString()}</span>개</span>
                 {attendanceStreak > 0 && (
@@ -537,16 +537,16 @@ export default function MyDashboard() {
         </div>
 
         {/* Activity Section */}
-        <div className="bg-white dark:bg-zinc-950 rounded-3xl border border-neutral-100 dark:border-zinc-900 p-6 md:p-10">
+        <div className="bg-white dark:bg-zinc-950 rounded-3xl border border-stone-100 dark:border-zinc-900 p-6 md:p-10">
           <div className="flex items-center justify-between mb-8">
-            <h3 className="text-xl font-extrabold text-neutral-900 dark:text-white flex items-center gap-2">
+            <h3 className="text-xl font-extrabold text-stone-900 dark:text-white flex items-center gap-2">
               <span className="w-1.5 h-6 bg-[#F9954E] rounded-full" />
               활동 히스토리
             </h3>
           </div>
 
           {/* Refined Tab UI */}
-          <div className="flex gap-4 border-b border-neutral-100 dark:border-zinc-800 mb-10 overflow-x-auto whitespace-nowrap scrollbar-hide pb-1">
+          <div className="flex gap-4 border-b border-stone-100 dark:border-zinc-800 mb-10 overflow-x-auto whitespace-nowrap scrollbar-hide pb-1">
             {[
               { id: "posts", label: "작성한 글", count: myPosts.length },
               { id: "comments", label: "댓글 내역", count: myComments.length },
@@ -561,7 +561,7 @@ export default function MyDashboard() {
                 onClick={() => setActiveTab(tab.id)}
                 className={`relative pb-3 text-sm font-bold transition-all ${activeTab === tab.id
                   ? "text-[#F9954E]"
-                  : "text-neutral-400 hover:text-neutral-600 dark:text-zinc-500 dark:hover:text-zinc-300"
+                  : "text-stone-400 hover:text-stone-600 dark:text-zinc-500 dark:hover:text-zinc-300"
                   }`}
               >
                 {tab.label}
@@ -580,9 +580,9 @@ export default function MyDashboard() {
             <div className="space-y-8">
               {/* 일일 미션 */}
               <div>
-                <h4 className="text-base font-extrabold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
+                <h4 className="text-base font-extrabold text-stone-900 dark:text-white mb-4 flex items-center gap-2">
                   <span>📋</span> 일일 미션
-                  <span className="text-xs font-medium text-neutral-400 dark:text-zinc-500 ml-1">매일 자정 초기화</span>
+                  <span className="text-xs font-medium text-stone-400 dark:text-zinc-500 ml-1">매일 자정 초기화</span>
                 </h4>
                 <div className="grid gap-3">
                   {DAILY_MISSIONS.map((mission) => {
@@ -594,14 +594,14 @@ export default function MyDashboard() {
                         key={mission.id}
                         className={`flex items-center justify-between p-4 rounded-2xl border transition-all ${
                           done
-                            ? "bg-neutral-50 dark:bg-zinc-900 border-neutral-200 dark:border-zinc-800"
-                            : "bg-white dark:bg-zinc-900/30 border-neutral-100 dark:border-zinc-800/50"
+                            ? "bg-stone-50 dark:bg-zinc-900 border-stone-200 dark:border-zinc-800"
+                            : "bg-white dark:bg-zinc-900/30 border-stone-100 dark:border-zinc-800/50"
                         }`}
                       >
                         <div className="flex items-center gap-3">
                           <span className="text-xl">{mission.emoji}</span>
                           <div>
-                            <p className={`text-sm font-bold ${done ? "text-neutral-400 dark:text-zinc-500 line-through" : "text-neutral-800 dark:text-white"}`}>
+                            <p className={`text-sm font-bold ${done ? "text-stone-400 dark:text-zinc-500 line-through" : "text-stone-800 dark:text-white"}`}>
                               {mission.label}
                             </p>
                             <p className="text-[11px] font-extrabold text-[#F9954E] flex items-center gap-1"><CottonCandy className="w-3.5 h-3.5" /> +{mission.reward}</p>
@@ -631,9 +631,9 @@ export default function MyDashboard() {
 
               {/* 업적 */}
               <div>
-                <h4 className="text-base font-extrabold text-neutral-900 dark:text-white mb-4 flex items-center gap-2">
+                <h4 className="text-base font-extrabold text-stone-900 dark:text-white mb-4 flex items-center gap-2">
                   <span>🏆</span> 업적
-                  <span className="text-xs font-medium text-neutral-400 dark:text-zinc-500 ml-1">{claimedAchievements.length}/{ACHIEVEMENTS.length} 달성</span>
+                  <span className="text-xs font-medium text-stone-400 dark:text-zinc-500 ml-1">{claimedAchievements.length}/{ACHIEVEMENTS.length} 달성</span>
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {ACHIEVEMENTS.map((ach) => {
@@ -643,14 +643,14 @@ export default function MyDashboard() {
                         key={ach.id}
                         className={`flex items-center gap-4 p-4 rounded-2xl border transition-all ${
                           claimed
-                            ? "bg-[#FFF5EB] dark:bg-[#F9954E]/5 border-[#F9954E]/20 dark:border-[#F9954E]/10"
-                            : "bg-white dark:bg-zinc-900/30 border-neutral-100 dark:border-zinc-800/50 opacity-60"
+                            ? "bg-[#FBEEE7] dark:bg-[#F9954E]/5 border-[#F9954E]/20 dark:border-[#F9954E]/10"
+                            : "bg-white dark:bg-zinc-900/30 border-stone-100 dark:border-zinc-800/50 opacity-60"
                         }`}
                       >
                         <span className="text-2xl">{ach.emoji}</span>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-bold text-neutral-800 dark:text-white">{ach.name}</p>
-                          <p className="text-[11px] text-neutral-500 dark:text-zinc-400 truncate">{ach.description}</p>
+                          <p className="text-sm font-bold text-stone-800 dark:text-white">{ach.name}</p>
+                          <p className="text-[11px] text-stone-500 dark:text-zinc-400 truncate">{ach.description}</p>
                           <p className="text-[11px] font-extrabold text-[#F9954E] flex items-center gap-1"><CottonCandy className="w-3.5 h-3.5" /> +{ach.reward}</p>
                         </div>
                         {claimed && (
@@ -668,26 +668,26 @@ export default function MyDashboard() {
           {activeTab === "candy_history" && (
             <div className="space-y-2">
               {candyHistory.length === 0 ? (
-                <div className="text-center py-20 bg-neutral-50/50 dark:bg-zinc-950/20 rounded-3xl border border-dashed border-neutral-200 dark:border-zinc-800">
+                <div className="text-center py-20 bg-stone-50/50 dark:bg-zinc-950/20 rounded-3xl border border-dashed border-stone-200 dark:border-zinc-800">
                   <div className="mb-4 opacity-20 flex justify-center"><CottonCandy className="w-9 h-9" /></div>
-                  <p className="text-neutral-400 dark:text-zinc-500 font-medium">아직 솜사탕 내역이 없네요!</p>
-                  <p className="text-xs text-neutral-400 dark:text-zinc-600 mt-2">미션을 완료하고 솜사탕을 모아보세요.</p>
+                  <p className="text-stone-400 dark:text-zinc-500 font-medium">아직 솜사탕 내역이 없네요!</p>
+                  <p className="text-xs text-stone-400 dark:text-zinc-600 mt-2">미션을 완료하고 솜사탕을 모아보세요.</p>
                 </div>
               ) : (
                 candyHistory.map((entry, idx) => (
                   <div
                     key={idx}
-                    className="flex items-center justify-between p-4 rounded-2xl border bg-white dark:bg-zinc-900/30 border-neutral-100 dark:border-zinc-800/50"
+                    className="flex items-center justify-between p-4 rounded-2xl border bg-white dark:bg-zinc-900/30 border-stone-100 dark:border-zinc-800/50"
                   >
                     <div>
-                      <p className="text-sm font-bold text-neutral-800 dark:text-white">{entry.reason}</p>
-                      <p className="text-[11px] text-neutral-400 dark:text-zinc-500">
+                      <p className="text-sm font-bold text-stone-800 dark:text-white">{entry.reason}</p>
+                      <p className="text-[11px] text-stone-400 dark:text-zinc-500">
                         {new Date(entry.date).toLocaleString("ko-KR", {
                           month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
                         })}
                       </p>
                     </div>
-                    <span className={`text-sm font-extrabold flex items-center gap-1 ${entry.amount > 0 ? "text-[#F9954E]" : "text-neutral-400"}`}>
+                    <span className={`text-sm font-extrabold flex items-center gap-1 ${entry.amount > 0 ? "text-[#F9954E]" : "text-stone-400"}`}>
                       {entry.amount > 0 ? "+" : ""}{entry.amount} <CottonCandy className="w-3.5 h-3.5" />
                     </span>
                   </div>
@@ -700,9 +700,9 @@ export default function MyDashboard() {
           {activeTab !== "missions" && activeTab !== "candy_history" && (
             <div className="space-y-4">
               {displayList.length === 0 ? (
-                <div className="text-center py-20 bg-neutral-50/50 dark:bg-zinc-950/20 rounded-3xl border border-dashed border-neutral-200 dark:border-zinc-800">
+                <div className="text-center py-20 bg-stone-50/50 dark:bg-zinc-950/20 rounded-3xl border border-dashed border-stone-200 dark:border-zinc-800">
                   <div className="text-4xl mb-4 opacity-20">📭</div>
-                  <p className="text-neutral-400 dark:text-zinc-500 font-medium mb-6">아직 활동 정보가 없네요!</p>
+                  <p className="text-stone-400 dark:text-zinc-500 font-medium mb-6">아직 활동 정보가 없네요!</p>
                   <Link href="/community" className="text-[#F9954E] font-bold text-sm hover:underline">
                     첫 게시글 작성하러 가기 →
                   </Link>
@@ -715,12 +715,12 @@ export default function MyDashboard() {
                       key={comment.id}
                       className="block group"
                     >
-                      <div className="p-5 rounded-2xl border bg-white dark:bg-zinc-900/30 border-neutral-100 dark:border-zinc-800/50 transition-all duration-300 group-hover:border-[#F9954E]/30 group-hover:shadow-sm">
+                      <div className="p-5 rounded-2xl border bg-white dark:bg-zinc-900/30 border-stone-100 dark:border-zinc-800/50 transition-all duration-300 group-hover:border-[#F9954E]/30 group-hover:shadow-sm">
                         <div className="flex items-center gap-2 mb-2">
-                          <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-tighter">{comment.date || 'RECENT'}</span>
+                          <span className="text-[9px] font-bold text-stone-400 uppercase tracking-tighter">{comment.date || 'RECENT'}</span>
                           <span className="text-[10px] font-bold text-[#F9954E] truncate max-w-[200px]">{comment.postTitle}</span>
                         </div>
-                        <p className="text-sm text-neutral-600 dark:text-zinc-400 leading-relaxed font-medium line-clamp-1">
+                        <p className="text-sm text-stone-600 dark:text-zinc-400 leading-relaxed font-medium line-clamp-1">
                           {comment.text || comment.content}
                         </p>
                       </div>
@@ -735,21 +735,21 @@ export default function MyDashboard() {
                       key={post.id}
                       className="block group"
                     >
-                      <div className="p-5 rounded-2xl border bg-white dark:bg-zinc-900/30 border-neutral-100 dark:border-zinc-800/50 transition-all duration-300 group-hover:border-[#F9954E]/30 group-hover:shadow-sm flex items-center gap-4">
+                      <div className="p-5 rounded-2xl border bg-white dark:bg-zinc-900/30 border-stone-100 dark:border-zinc-800/50 transition-all duration-300 group-hover:border-[#F9954E]/30 group-hover:shadow-sm flex items-center gap-4">
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <span className="text-[#F9954E] text-[9px] font-extrabold uppercase tracking-tighter">
                               {post.tag || "자유"}
                             </span>
-                            <span className="text-[9px] font-bold text-neutral-400 uppercase tracking-tighter">
+                            <span className="text-[9px] font-bold text-stone-400 uppercase tracking-tighter">
                               {post.date || 'RECENT'}
                             </span>
                           </div>
-                          <h4 className="text-sm font-bold text-neutral-900 dark:text-white group-hover:text-[#F9954E] transition-colors line-clamp-1">
+                          <h4 className="text-sm font-bold text-stone-900 dark:text-white group-hover:text-[#F9954E] transition-colors line-clamp-1">
                             {post.title}
                           </h4>
                         </div>
-                        <div className="flex items-center gap-3 text-[10px] font-bold text-neutral-400">
+                        <div className="flex items-center gap-3 text-[10px] font-bold text-stone-400">
                           <span className="flex items-center gap-1">👀 {post.views || 0}</span>
                           <span className="flex items-center gap-1">⚡ {post.sparks || 0}</span>
                         </div>

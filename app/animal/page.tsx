@@ -31,11 +31,11 @@ export default async function AnimalPage() {
           시각적으로는 접어둠(details, 기본 닫힘) → UI는 깔끔하게, 크롤러는 정적 HTML 앵커를 그대로 수집. */}
       <nav aria-label="전체 동물 목록" className="max-w-5xl mx-auto px-4 pb-16 pt-8">
         <details className="group">
-          <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 text-sm font-bold text-neutral-500 dark:text-neutral-400 hover:text-orange-500 transition select-none">
-            <span className="text-neutral-400 transition-transform group-open:rotate-90">▸</span>
+          <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 text-sm font-bold text-stone-500 dark:text-stone-400 hover:text-orange-500 transition select-none">
+            <span className="text-stone-400 transition-transform group-open:rotate-90">▸</span>
             전체 동물 목록 ({cards.length}종) 펼쳐보기
           </summary>
-          <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-1.5 text-sm text-neutral-500 dark:text-neutral-400">
+          <ul className="mt-3 flex flex-wrap gap-x-3 gap-y-1.5 text-sm text-stone-500 dark:text-stone-400">
             {cards.map((c) => (
               <li key={c.no}>
                 <a href={`/animal/${c.no}`} className="hover:text-orange-500 hover:underline">{c.animal_name}</a>

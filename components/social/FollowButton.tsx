@@ -28,7 +28,7 @@ export default function FollowButton({
       onClick={toggle}
       disabled={busy}
       className={`rounded-full font-bold active:opacity-85 disabled:opacity-50 transition-colors ${pad} ${
-        following ? "bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-neutral-300" : "bg-[#F9954E] text-white"
+        following ? "bg-stone-100 dark:bg-zinc-800 text-stone-600 dark:text-stone-300" : "bg-[#F9954E] text-white"
       }`}
     >
       {following ? "팔로잉" : "팔로우"}

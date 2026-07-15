@@ -63,7 +63,7 @@ function TopCard({ tool, rank, t }: { tool: AiTool; rank: number; t: typeof UI["
   return (
     <div
       className="group flex flex-col px-4 py-1.5 rounded-2xl bg-white dark:bg-zinc-950
-        border border-neutral-100 dark:border-zinc-900
+        border border-stone-100 dark:border-zinc-900
         hover:border-[#F9954E]/40 hover:shadow-lg hover:shadow-[#F9954E]/5
         transition-all duration-200"
     >
@@ -73,7 +73,7 @@ function TopCard({ tool, rank, t }: { tool: AiTool; rank: number; t: typeof UI["
           rank === 1 ? "text-[#F9954E]"
           : rank === 2 ? "text-[#F9954E]/70"
           : rank === 3 ? "text-[#F9954E]/50"
-          : "text-neutral-300 dark:text-zinc-600"
+          : "text-stone-300 dark:text-zinc-600"
         }`}>
           {rank}
         </span>
@@ -81,23 +81,23 @@ function TopCard({ tool, rank, t }: { tool: AiTool; rank: number; t: typeof UI["
         <img
           src={toolFavicon(tool)}
           alt={tool.name}
-          className="w-10 h-10 rounded-xl object-contain bg-neutral-50 dark:bg-zinc-900 border border-neutral-100 dark:border-zinc-800 flex-shrink-0 p-0.5"
+          className="w-10 h-10 rounded-xl object-contain bg-stone-50 dark:bg-zinc-900 border border-stone-100 dark:border-zinc-800 flex-shrink-0 p-0.5"
           loading="lazy"
           onError={(e) => { const t2 = e.target as HTMLImageElement; if (!t2.dataset.fb) { t2.dataset.fb = "1"; t2.src = letterAvatar(tool.name); } }}
         />
 
         <div className="flex-1 min-w-0">
           <div className="flex items-center gap-2">
-            <h3 className="text-[16px] font-extrabold text-neutral-900 dark:text-white leading-tight truncate">
+            <h3 className="text-[16px] font-extrabold text-stone-900 dark:text-white leading-tight truncate">
               {tool.name}
             </h3>
             {tool.company && (
-              <span className="text-[11px] text-neutral-300 dark:text-zinc-600 flex-shrink-0 truncate hidden sm:inline">
+              <span className="text-[11px] text-stone-300 dark:text-zinc-600 flex-shrink-0 truncate hidden sm:inline">
                 {tool.company}
               </span>
             )}
           </div>
-          <p className="text-[12.5px] text-neutral-500 dark:text-neutral-400 mt-1 leading-relaxed line-clamp-2 break-keep">
+          <p className="text-[12.5px] text-stone-500 dark:text-stone-400 mt-1 leading-relaxed line-clamp-2 break-keep">
             {desc}
           </p>
         </div>
@@ -105,7 +105,7 @@ function TopCard({ tool, rank, t }: { tool: AiTool; rank: number; t: typeof UI["
         {tool.rating > 0 && (
           <div className="flex items-center gap-0.5 flex-shrink-0 mt-1">
             <Star className="w-3 h-3 fill-[#F9954E] text-[#F9954E]" />
-            <span className="text-[12px] font-bold text-neutral-700 dark:text-neutral-300">
+            <span className="text-[12px] font-bold text-stone-700 dark:text-stone-300">
               {tool.rating.toFixed(1)}
             </span>
           </div>
@@ -118,8 +118,8 @@ function TopCard({ tool, rank, t }: { tool: AiTool; rank: number; t: typeof UI["
           {features.map((f, i) => (
             <span
               key={i}
-              className="text-[11px] text-neutral-500 dark:text-neutral-400 bg-neutral-50 dark:bg-zinc-900
-                px-2 py-0.5 rounded-full border border-neutral-100 dark:border-zinc-800 leading-snug"
+              className="text-[11px] text-stone-500 dark:text-stone-400 bg-stone-50 dark:bg-zinc-900
+                px-2 py-0.5 rounded-full border border-stone-100 dark:border-zinc-800 leading-snug"
             >
               {f}
             </span>
@@ -135,7 +135,7 @@ function TopCard({ tool, rank, t }: { tool: AiTool; rank: number; t: typeof UI["
             target="_blank"
             rel="noopener noreferrer"
             className="flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl text-[12.5px] font-bold
-              border border-neutral-200 dark:border-zinc-800 text-neutral-600 dark:text-neutral-300
+              border border-stone-200 dark:border-zinc-800 text-stone-600 dark:text-stone-300
               hover:border-[#F9954E]/50 hover:text-[#F9954E] transition-colors"
           >
             <Code2 className="w-3.5 h-3.5" />
@@ -163,22 +163,22 @@ function MiniCard({ tool, rank, t }: { tool: AiTool; rank: number; t: typeof UI[
   return (
     <div
       className="group flex items-center gap-3 px-4 py-2 rounded-xl bg-white dark:bg-zinc-950
-        border border-neutral-100 dark:border-zinc-900 hover:border-[#F9954E]/30 transition-all duration-150"
+        border border-stone-100 dark:border-zinc-900 hover:border-[#F9954E]/30 transition-all duration-150"
     >
-      <span className="text-[11px] font-black text-neutral-300 dark:text-zinc-600 w-4 text-center flex-shrink-0">
+      <span className="text-[11px] font-black text-stone-300 dark:text-zinc-600 w-4 text-center flex-shrink-0">
         {rank}
       </span>
       <img
         src={toolFavicon(tool)}
         alt={tool.name}
-        className="w-[30px] h-[30px] rounded-lg object-contain bg-neutral-50 dark:bg-zinc-900
-          border border-neutral-100 dark:border-zinc-800 flex-shrink-0"
+        className="w-[30px] h-[30px] rounded-lg object-contain bg-stone-50 dark:bg-zinc-900
+          border border-stone-100 dark:border-zinc-800 flex-shrink-0"
         loading="lazy"
         onError={(e) => { const t2 = e.target as HTMLImageElement; if (!t2.dataset.fb) { t2.dataset.fb = "1"; t2.src = letterAvatar(tool.name); } }}
       />
       <div className="flex-1 min-w-0">
-        <span className="text-[13px] font-semibold text-neutral-900 dark:text-white">{tool.name}</span>
-        <p className="text-[11px] text-neutral-400 truncate hidden sm:block mt-0.5">{tool.summary || ""}</p>
+        <span className="text-[13px] font-semibold text-stone-900 dark:text-white">{tool.name}</span>
+        <p className="text-[11px] text-stone-400 truncate hidden sm:block mt-0.5">{tool.summary || ""}</p>
       </div>
       <div className="flex gap-1.5 flex-shrink-0">
         {api && (
@@ -186,8 +186,8 @@ function MiniCard({ tool, rank, t }: { tool: AiTool; rank: number; t: typeof UI[
             href={api}
             target="_blank"
             rel="noopener noreferrer"
-            className="px-2.5 py-1 rounded-md text-[11px] font-bold border border-neutral-200 dark:border-zinc-800
-              text-neutral-400 hover:text-[#F9954E] hover:border-[#F9954E]/30 transition-colors"
+            className="px-2.5 py-1 rounded-md text-[11px] font-bold border border-stone-200 dark:border-zinc-800
+              text-stone-400 hover:text-[#F9954E] hover:border-[#F9954E]/30 transition-colors"
           >
             API
           </a>
@@ -245,7 +245,7 @@ function CategorySection({
     <section
       id={`category-${cat}`}
       ref={sectionRef}
-      className="py-6 border-b border-neutral-100 dark:border-zinc-900 last:border-0"
+      className="py-6 border-b border-stone-100 dark:border-zinc-900 last:border-0"
       style={{ scrollMarginTop: "80px" }}
     >
       {/* 카테고리 헤더 */}
@@ -254,14 +254,14 @@ function CategorySection({
           <p className="text-[11px] font-bold text-[#F9954E] mb-1.5 uppercase tracking-wide">
             {cat === "agent" ? t.neu : t.top5}
           </p>
-          <h2 className="text-[22px] font-extrabold text-neutral-950 dark:text-white tracking-tight leading-tight">
+          <h2 className="text-[22px] font-extrabold text-stone-950 dark:text-white tracking-tight leading-tight">
             {LABELS[cat] || cat}
           </h2>
-          <p className="text-[13px] text-neutral-400 dark:text-neutral-500 mt-1 leading-relaxed break-keep max-w-xs">
+          <p className="text-[13px] text-stone-400 dark:text-stone-500 mt-1 leading-relaxed break-keep max-w-xs">
             {DESCS[cat]}
           </p>
         </div>
-        <span className="text-[12px] font-semibold text-neutral-400 flex-shrink-0">
+        <span className="text-[12px] font-semibold text-stone-400 flex-shrink-0">
           {t.count(sortedTools.length)}
         </span>
       </div>
@@ -277,11 +277,11 @@ function CategorySection({
       {rest.length > 0 && (isFiltered || expanded) && (
         <div className="mt-6">
           <div className="flex items-center gap-3 mb-3">
-            <div className="h-px flex-1 bg-neutral-100 dark:bg-zinc-900" />
-            <span className="text-[11px] font-bold text-neutral-300 dark:text-zinc-600 uppercase tracking-widest whitespace-nowrap">
+            <div className="h-px flex-1 bg-stone-100 dark:bg-zinc-900" />
+            <span className="text-[11px] font-bold text-stone-300 dark:text-zinc-600 uppercase tracking-widest whitespace-nowrap">
               {t.allN(sortedTools.length)}
             </span>
-            <div className="h-px flex-1 bg-neutral-100 dark:bg-zinc-900" />
+            <div className="h-px flex-1 bg-stone-100 dark:bg-zinc-900" />
           </div>
           <div className="flex flex-col gap-1.5">
             {rest.map((tool, i) => (
@@ -295,8 +295,8 @@ function CategorySection({
       {!isFiltered && rest.length > 0 && (
         <button
           onClick={() => setExpanded((v) => !v)}
-          className="mt-4 w-full py-2.5 rounded-xl border border-neutral-200 dark:border-zinc-800 text-[13px] font-bold
-            text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E]/40 hover:text-[#F9954E] transition-colors"
+          className="mt-4 w-full py-2.5 rounded-xl border border-stone-200 dark:border-zinc-800 text-[13px] font-bold
+            text-stone-500 dark:text-stone-400 hover:border-[#F9954E]/40 hover:text-[#F9954E] transition-colors"
         >
           {expanded ? t.collapse : t.more(rest.length)}
         </button>
@@ -439,7 +439,7 @@ export default function AiToolsList({ filters, sectionRefs, locale = "ko", tools
     return (
       <div className="flex flex-col items-center justify-center py-24 text-center">
         <p className="text-[32px] mb-3">🔍</p>
-        <p className="text-[15px] font-semibold text-neutral-500">{t.empty}</p>
+        <p className="text-[15px] font-semibold text-stone-500">{t.empty}</p>
       </div>
     );
   }

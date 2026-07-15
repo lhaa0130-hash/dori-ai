@@ -51,21 +51,21 @@ export default function PostCard({ post, myName }: { post: FeedPost; myName: str
   const letter = (post.name || "?").trim().charAt(0) || "?";
 
   return (
-    <article className="rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-4">
+    <article className="rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-4">
       <div className="flex items-center gap-2.5 mb-2.5">
         <Link href={`/profile?uid=${post.uid}`} className="w-9 h-9 rounded-full bg-[#F9954E]/15 text-[#F9954E] flex items-center justify-center font-extrabold text-[15px] shrink-0">
           {letter}
         </Link>
         <div className="min-w-0">
-          <Link href={`/profile?uid=${post.uid}`} className="text-[13px] font-bold text-neutral-900 dark:text-white hover:underline truncate block">
+          <Link href={`/profile?uid=${post.uid}`} className="text-[13px] font-bold text-stone-900 dark:text-white hover:underline truncate block">
             {post.name}
           </Link>
-          <p className="text-[11px] text-neutral-400 leading-none">{timeAgo(post.at)}</p>
+          <p className="text-[11px] text-stone-400 leading-none">{timeAgo(post.at)}</p>
         </div>
       </div>
 
       {post.text && (
-        <p className="text-[14px] leading-relaxed text-neutral-700 dark:text-neutral-200 whitespace-pre-wrap break-words">
+        <p className="text-[14px] leading-relaxed text-stone-700 dark:text-stone-200 whitespace-pre-wrap break-words">
           {renderText(post.text)}
         </p>
       )}
@@ -78,12 +78,12 @@ export default function PostCard({ post, myName }: { post: FeedPost; myName: str
         <video src={post.mediaUrl} controls className="mt-3 rounded-xl w-full max-h-[420px]" />
       )}
 
-      <div className="flex items-center gap-4 mt-3 pt-2.5 border-t border-neutral-50 dark:border-zinc-900/60">
+      <div className="flex items-center gap-4 mt-3 pt-2.5 border-t border-stone-50 dark:border-zinc-900/60">
         <button onClick={onLike} disabled={busy} className="flex items-center gap-1.5 text-[13px] font-bold active:opacity-70 disabled:opacity-50">
           <span className={liked ? "" : "grayscale opacity-60"}>{liked ? "❤️" : "🤍"}</span>
-          <span className={liked ? "text-[#F9954E]" : "text-neutral-500 dark:text-neutral-400"}>{likeCount.toLocaleString()}</span>
+          <span className={liked ? "text-[#F9954E]" : "text-stone-500 dark:text-stone-400"}>{likeCount.toLocaleString()}</span>
         </button>
-        <Link href={`/feed?post=${post.id}`} className="flex items-center gap-1.5 text-[13px] font-bold text-neutral-500 dark:text-neutral-400 active:opacity-70">
+        <Link href={`/feed?post=${post.id}`} className="flex items-center gap-1.5 text-[13px] font-bold text-stone-500 dark:text-stone-400 active:opacity-70">
           💬 <span>{post.commentCount.toLocaleString()}</span>
         </Link>
       </div>

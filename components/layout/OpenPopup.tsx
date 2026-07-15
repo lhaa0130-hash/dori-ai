@@ -71,7 +71,7 @@ export default function OpenPopup() {
             onClick={(e) => e.stopPropagation()}
           >
             {/* Background Decoration */}
-            <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#FFF5EB]/50 to-transparent dark:from-[#8F4B10]/20 pointer-events-none" />
+            <div className="absolute top-0 left-0 w-full h-32 bg-gradient-to-b from-[#FBEEE7]/50 to-transparent dark:from-[#8F4B10]/20 pointer-events-none" />
 
             <div className="relative p-6 px-8 flex flex-col items-center text-center">
 
@@ -85,7 +85,7 @@ export default function OpenPopup() {
 
               {/* Icon */}
               <div className="mb-6 mt-2 relative">
-                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#FEEBD0] to-[#FFF5EB] dark:from-[#8F4B10]/30 dark:to-[#8F4B10]/20 flex items-center justify-center text-[#F9954E] shadow-lg mx-auto transform rotate-3">
+                <div className="w-16 h-16 rounded-2xl bg-gradient-to-br from-[#FEEBD0] to-[#FBEEE7] dark:from-[#8F4B10]/30 dark:to-[#8F4B10]/20 flex items-center justify-center text-[#F9954E] shadow-lg mx-auto transform rotate-3">
                   <PartyPopper className="w-8 h-8" strokeWidth={1.5} />
                 </div>
               </div>

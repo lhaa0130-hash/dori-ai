@@ -43,7 +43,7 @@ export default function SocialLinks({ className = "" }: { className?: string }) 
           aria-label={s.name}
           title={s.name}
           // 통일감 — 단색 미니멀 원형, 호버 시 브랜드 오렌지
-          className="w-9 h-9 flex items-center justify-center rounded-full border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] hover:border-[#F9954E] transition-colors"
+          className="w-9 h-9 flex items-center justify-center rounded-full border border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 text-stone-500 dark:text-stone-400 hover:text-[#F9954E] hover:border-[#F9954E] transition-colors"
         >
           <BrandIcon k={s.key} />
         </a>

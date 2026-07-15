@@ -22,8 +22,8 @@ export default function RequireAuth({ children }: { children: React.ReactNode })
   // 확인/리다이렉트 중 — 전체화면 플레이스홀더
   return (
     <div className="min-h-screen flex flex-col items-center justify-center gap-3 text-center px-6 bg-white dark:bg-black">
-      <div className="w-7 h-7 rounded-full border-2 border-neutral-200 dark:border-zinc-700 border-t-[#F9954E] animate-spin" />
-      <p className="text-[13px] text-neutral-400">
+      <div className="w-7 h-7 rounded-full border-2 border-stone-200 dark:border-zinc-700 border-t-[#F9954E] animate-spin" />
+      <p className="text-[13px] text-stone-400">
         {status === "loading" ? "확인 중…" : "로그인이 필요한 프로젝트예요. 로그인 화면으로 이동합니다…"}
       </p>
     </div>

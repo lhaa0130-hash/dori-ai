@@ -73,10 +73,10 @@ export default function ExplorePage() {
       <section className="max-w-2xl mx-auto px-5 pt-7">
         {/* 히어로 */}
         <p className="text-[12px] font-semibold text-[#F9954E] mb-2">탐색</p>
-        <h1 className="text-[30px] sm:text-[38px] font-extrabold text-neutral-950 dark:text-white leading-[1.12] tracking-tight mb-2">
+        <h1 className="text-[30px] sm:text-[38px] font-extrabold text-stone-950 dark:text-white leading-[1.12] tracking-tight mb-2">
           {tag ? <>#{tag}</> : <>지금 뜨는 <span className="text-[#F9954E]">AI 이야기</span></>}
         </h1>
-        <p className="text-[14px] text-neutral-500 dark:text-neutral-400 mb-5 break-keep">
+        <p className="text-[14px] text-stone-500 dark:text-stone-400 mb-5 break-keep">
           {tag ? "이 태그가 달린 글" : "인기 글과 사람들을 발견하고 팔로우해보세요."}
         </p>
 
@@ -84,19 +84,19 @@ export default function ExplorePage() {
         {!tag && suggested.length > 0 && (
           <div className="mb-6">
             <div className="flex items-center justify-between mb-2.5">
-              <p className="text-[13px] font-extrabold text-neutral-900 dark:text-white">추천 팔로우</p>
-              <span className="text-[11px] text-neutral-400">관심사 기반</span>
+              <p className="text-[13px] font-extrabold text-stone-900 dark:text-white">추천 팔로우</p>
+              <span className="text-[11px] text-stone-400">관심사 기반</span>
             </div>
             <div className="-mx-5 px-5 overflow-x-auto scrollbar-hide">
               <div className="flex gap-2.5 w-max pb-1">
                 {suggested.map((u) => (
-                  <div key={u.uid} className="w-40 shrink-0 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-3.5 text-center">
+                  <div key={u.uid} className="w-40 shrink-0 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-3.5 text-center">
                     <Link href={`/profile?uid=${u.uid}`} className="block">
                       <span className="w-12 h-12 mx-auto rounded-full bg-[#F9954E]/15 text-[#F9954E] flex items-center justify-center font-extrabold text-[18px] mb-2">
                         {(u.name || "?").trim().charAt(0) || "?"}
                       </span>
-                      <p className="text-[13px] font-bold text-neutral-900 dark:text-white truncate">{u.name}</p>
-                      <p className="text-[11px] text-neutral-400 truncate min-h-[15px]">{u.bio || (u.interests[0] ? `#${u.interests[0]}` : "AI 메이트")}</p>
+                      <p className="text-[13px] font-bold text-stone-900 dark:text-white truncate">{u.name}</p>
+                      <p className="text-[11px] text-stone-400 truncate min-h-[15px]">{u.bio || (u.interests[0] ? `#${u.interests[0]}` : "AI 메이트")}</p>
                     </Link>
                     <div className="mt-2.5 flex justify-center">
                       <FollowButton uid={u.uid} name={u.name} myName={myName} size="sm" />
@@ -109,13 +109,13 @@ export default function ExplorePage() {
         )}
 
         {/* 탭 */}
-        <div className="flex gap-2 mb-4 border-b border-neutral-100 dark:border-zinc-900 pb-3">
+        <div className="flex gap-2 mb-4 border-b border-stone-100 dark:border-zinc-900 pb-3">
           {TABS.map((t) => (
             <button
               key={t.id}
               onClick={() => setTab(t.id)}
               className={`px-3.5 py-1.5 rounded-full text-[12px] font-bold transition-colors ${
-                tab === t.id ? "bg-[#F9954E] text-white" : "bg-neutral-100 dark:bg-zinc-900 text-neutral-500 dark:text-neutral-400"
+                tab === t.id ? "bg-[#F9954E] text-white" : "bg-stone-100 dark:bg-zinc-900 text-stone-500 dark:text-stone-400"
               }`}
             >
               {t.emoji} {t.label}
@@ -126,15 +126,15 @@ export default function ExplorePage() {
         {/* 피드 */}
         {loading ? (
           <div className="py-16 flex justify-center">
-            <div className="w-8 h-8 border-4 border-neutral-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin" />
+            <div className="w-8 h-8 border-4 border-stone-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin" />
           </div>
         ) : list.length === 0 ? (
           <div className="py-16 text-center">
             <p className="text-[28px] mb-2">🌱</p>
-            <p className="text-[14px] font-bold text-neutral-600 dark:text-neutral-300">
+            <p className="text-[14px] font-bold text-stone-600 dark:text-stone-300">
               {tab === "following" ? "팔로우한 사람의 글이 아직 없어요" : tag ? "이 태그의 글이 아직 없어요" : "아직 글이 없어요"}
             </p>
-            <p className="text-[12px] text-neutral-400 mt-1">
+            <p className="text-[12px] text-stone-400 mt-1">
               {tab === "following" ? "추천 팔로우에서 마음에 드는 사람을 팔로우해보세요" : "첫 글을 남겨보세요!"}
             </p>
             <Link href="/feed" className="inline-block mt-4 px-5 py-2.5 rounded-full bg-[#F9954E] text-white text-[13px] font-bold">피드로 가기</Link>
@@ -146,8 +146,8 @@ export default function ExplorePage() {
         )}
 
         {!loggedIn && (
-          <div className="mt-6 p-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-neutral-50/60 dark:bg-zinc-950 flex items-center justify-between">
-            <span className="text-[13px] font-medium text-neutral-500 dark:text-neutral-400 break-keep">로그인하면 팔로우하고 글을 남길 수 있어요</span>
+          <div className="mt-6 p-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-stone-50/60 dark:bg-zinc-950 flex items-center justify-between">
+            <span className="text-[13px] font-medium text-stone-500 dark:text-stone-400 break-keep">로그인하면 팔로우하고 글을 남길 수 있어요</span>
             <Link href="/login" className="px-4 py-2.5 rounded-xl bg-[#F9954E] text-white text-[12px] font-bold flex-shrink-0">로그인</Link>
           </div>
         )}

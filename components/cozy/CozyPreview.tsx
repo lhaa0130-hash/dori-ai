@@ -24,7 +24,7 @@ export default function CozyPreview({ look }: { look: CozyLook }) {
   const nameCls = nameClassOf(look.nameEffect);
   const petEmoji = petEmojiOf(look.pet);
   return (
-    <div className="relative rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 overflow-hidden min-h-[128px]">
+    <div className="relative rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 overflow-hidden min-h-[128px]">
       <div className={`absolute inset-0 ${bgGradOf(look.bg)}`} aria-hidden />
       {look.bannerEffect && look.bannerEffect !== "none" && <BannerFx id={look.bannerEffect} count={8} />}
       <div className="relative p-4">
@@ -42,7 +42,7 @@ export default function CozyPreview({ look }: { look: CozyLook }) {
           <div className="min-w-0 flex-1">
             <p className="text-[17px] font-extrabold tracking-tight truncate">
               {look.mood && <span className="mr-1">{look.mood}</span>}
-              <span className={nameCls || "text-neutral-900 dark:text-white"}>{look.name}</span>
+              <span className={nameCls || "text-stone-900 dark:text-white"}>{look.name}</span>
             </p>
             {look.title && (
               <span className="inline-flex items-center rounded-full px-2 py-0.5 mt-1 text-[10px] font-bold text-white" style={{ backgroundColor: accent }}>

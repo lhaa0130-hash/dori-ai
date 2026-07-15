@@ -12,6 +12,7 @@ interface Props {
   onNext?: () => void;
   nextLabel?: string;
   recommendation?: { name: string; path: string };
+  starCriteria?: string;
 }
 
 export default function IlloGameResult({
@@ -23,6 +24,7 @@ export default function IlloGameResult({
   onNext,
   nextLabel = "다음 레벨",
   recommendation,
+  starCriteria,
 }: Props) {
   return (
     <div className="illo-dialog-backdrop">
@@ -34,6 +36,7 @@ export default function IlloGameResult({
             <Star key={index} aria-hidden="true" className={index < stars ? "is-earned" : ""} fill="currentColor" />
           ))}
         </div>
+        {starCriteria && <p className="illo-result-star-criteria">별 기준 · {starCriteria}</p>}
         <dl className="illo-result-stats">
           <div><dt>사용 이동</dt><dd>{moves}</dd></div>
           <div><dt>개인 최고</dt><dd>{bestMoves ? `${bestMoves}회` : "첫 기록"}</dd></div>
@@ -63,4 +66,3 @@ export default function IlloGameResult({
     </div>
   );
 }
-

@@ -31,7 +31,7 @@ export const Sidebar = () => {
   const pathname = usePathname();
 
   return (
-    <aside className="fixed left-0 top-0 h-full w-64 bg-white dark:!bg-[#000000] border-r border-neutral-200 dark:border-[#27272a] pt-[80px] px-4 z-40 transition-colors duration-300">
+    <aside className="fixed left-0 top-0 h-full w-64 bg-white dark:!bg-[#000000] border-r border-stone-200 dark:border-[#27272a] pt-[80px] px-4 z-40 transition-colors duration-300">
       <nav className="flex flex-col space-y-2">
         {navItems.map((item) => {
           const isActive = pathname === item.href || (item.href !== "/" && pathname.startsWith(item.href));
@@ -44,13 +44,13 @@ export const Sidebar = () => {
                 "relative flex items-center gap-3 px-4 py-3 rounded-2xl transition-colors duration-200 group text-[14px] font-medium tracking-tight",
                 isActive
                   ? "text-[#E8832E] dark:text-[#F9954E]"
-                  : "text-neutral-600 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-neutral-200"
+                  : "text-stone-600 dark:text-stone-400 hover:text-stone-900 dark:hover:text-stone-200"
               )}
             >
               {isActive && (
                 <motion.div
                   layoutId="sidebar-active"
-                  className="absolute inset-0 bg-[#FFF5EB] dark:bg-[#F9954E]/10 rounded-2xl"
+                  className="absolute inset-0 bg-[#FBEEE7] dark:bg-[#F9954E]/10 rounded-2xl"
                   initial={false}
                   transition={{
                     type: "spring",
@@ -62,7 +62,7 @@ export const Sidebar = () => {
 
               <item.icon className={cn(
                 "w-5 h-5 relative z-10 transition-transform duration-200 group-hover:scale-110",
-                isActive ? "text-[#E8832E] dark:text-[#F9954E]" : "text-neutral-500 dark:text-neutral-500 group-hover:text-neutral-800 dark:group-hover:text-neutral-200"
+                isActive ? "text-[#E8832E] dark:text-[#F9954E]" : "text-stone-500 dark:text-stone-500 group-hover:text-stone-800 dark:group-hover:text-stone-200"
               )} />
 
               <span className="relative z-10">{item.name}</span>

@@ -25,7 +25,7 @@ export default function AdUnit({
 
   return (
     <div className={`my-8 text-center overflow-hidden ${className}`}>
-      <p className="text-[10px] text-neutral-300 dark:text-zinc-600 uppercase tracking-widest mb-1">Advertisement</p>
+      <p className="text-[10px] text-stone-300 dark:text-zinc-600 uppercase tracking-widest mb-1">Advertisement</p>
       <ins
         className="adsbygoogle"
         style={{ display: "block" }}

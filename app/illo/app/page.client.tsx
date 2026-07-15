@@ -149,14 +149,14 @@ export default function IlloWebClient() {
       {showKey && (
         <div className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4" onClick={() => setShowKey(false)}>
           <div className="bg-white dark:bg-zinc-900 w-full sm:max-w-md rounded-t-3xl sm:rounded-3xl shadow-2xl p-6" onClick={(e) => e.stopPropagation()}>
-            <div className="w-12 h-12 rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center mx-auto mb-4"><KeyRound className="w-6 h-6 text-[#F9954E]" /></div>
-            <h2 className="text-lg font-extrabold text-center text-neutral-900 dark:text-white mb-1.5">내 Claude 키 넣기 (무제한)</h2>
-            <p className="text-[13px] text-center text-neutral-500 dark:text-neutral-400 mb-5 break-keep">키를 넣으면 무료 한도 없이 쓸 수 있어요. 키는 회원님 브라우저에만 저장됩니다.</p>
+            <div className="w-12 h-12 rounded-2xl bg-[#FBEEE7] dark:bg-orange-950/30 grid place-items-center mx-auto mb-4"><KeyRound className="w-6 h-6 text-[#F9954E]" /></div>
+            <h2 className="text-lg font-extrabold text-center text-stone-900 dark:text-white mb-1.5">내 Claude 키 넣기 (무제한)</h2>
+            <p className="text-[13px] text-center text-stone-500 dark:text-stone-400 mb-5 break-keep">키를 넣으면 무료 한도 없이 쓸 수 있어요. 키는 회원님 브라우저에만 저장됩니다.</p>
             <button onClick={() => { setShowKey(false); setShowGuide(true); }} className="w-full mb-3 py-2.5 rounded-xl text-sm font-bold text-[#E8832E] dark:text-[#FBAA60] border border-[#F9954E]/40">🔰 키 만드는 법 모르겠어요 (가이드)</button>
-            <button onClick={tryPull} disabled={pulling} className="w-full mb-2.5 py-2.5 rounded-xl border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-300 font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50">
+            <button onClick={tryPull} disabled={pulling} className="w-full mb-2.5 py-2.5 rounded-xl border border-stone-200 dark:border-zinc-700 text-stone-600 dark:text-stone-300 font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50">
               {pulling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />} 다른 기기에서 저장한 키 불러오기
             </button>
-            <input type="password" value={keyInput} onChange={(e) => setKeyInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && saveKey()} placeholder="sk-ant-... (키 붙여넣기)" className="w-full mb-2 px-4 py-3 rounded-xl bg-white dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 text-sm font-mono focus:outline-none focus:border-[#F9954E]" />
+            <input type="password" value={keyInput} onChange={(e) => setKeyInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && saveKey()} placeholder="sk-ant-... (키 붙여넣기)" className="w-full mb-2 px-4 py-3 rounded-xl bg-white dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 text-sm font-mono focus:outline-none focus:border-[#F9954E]" />
             <button onClick={saveKey} className="w-full py-3 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold text-sm">저장</button>
             {keyErr && <p className="text-xs text-rose-500 mt-3 text-center leading-relaxed">{keyErr}</p>}
           </div>
@@ -185,7 +185,7 @@ export default function IlloWebClient() {
   return (
     <>
     <ProjectTopBar name="AI비서" emoji="🟧" />
-    <div className="flex h-[calc(100vh-3rem)] mt-12 w-full bg-neutral-50 dark:bg-black font-sans overflow-hidden">
+    <div className="flex h-[calc(100vh-3rem)] mt-12 w-full bg-stone-50 dark:bg-black font-sans overflow-hidden">
       {/* 데스크톱 사이드바 */}
       <div className="hidden md:flex">
         <IlloSidebar
@@ -213,11 +213,11 @@ export default function IlloWebClient() {
 
       <main className="flex-1 min-w-0 h-full flex flex-col overflow-hidden">
         {/* 모바일 상단바 */}
-        <header className="md:hidden flex items-center gap-2 px-4 h-14 border-b border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shrink-0">
-          <button onClick={() => setMobileNav(true)} className="p-1.5 -ml-1.5 text-neutral-600 dark:text-neutral-300"><Menu className="w-5 h-5" /></button>
+        <header className="md:hidden flex items-center gap-2 px-4 h-14 border-b border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shrink-0">
+          <button onClick={() => setMobileNav(true)} className="p-1.5 -ml-1.5 text-stone-600 dark:text-stone-300"><Menu className="w-5 h-5" /></button>
           <img src="/illo-logo.png" alt="AI비서" className="w-7 h-7 rounded-lg" />
           <span className="font-extrabold text-[#F9954E]">AI비서</span>
-          {free && <span className="ml-auto text-[11px] font-semibold text-neutral-400">남은 <b className="text-[#E8832E]">{quota ?? FREE_LIMIT}</b>/{FREE_LIMIT}</span>}
+          {free && <span className="ml-auto text-[11px] font-semibold text-stone-400">남은 <b className="text-[#E8832E]">{quota ?? FREE_LIMIT}</b>/{FREE_LIMIT}</span>}
         </header>
 
         {view === "home" && <Home userName={userName} enabled={enabled} onView={goView} free={free} quota={quota} onShowKey={() => setShowKey(true)} />}
@@ -256,13 +256,13 @@ function IlloSidebar({
   const items = enabled.map((id) => ILLO_FEATURE_BY_ID[id]).filter((f) => f && f.id !== "features") as IlloFeature[];
 
   return (
-    <aside className="w-60 shrink-0 h-full bg-white dark:bg-zinc-950 border-r border-neutral-200 dark:border-zinc-800 flex flex-col">
-      <div className="px-5 py-5 border-b border-neutral-100 dark:border-zinc-800">
+    <aside className="w-60 shrink-0 h-full bg-white dark:bg-zinc-950 border-r border-stone-200 dark:border-zinc-800 flex flex-col">
+      <div className="px-5 py-5 border-b border-stone-100 dark:border-zinc-800">
         <div className="flex items-center gap-2.5">
           <img src="/illo-logo.png" alt="워크일로" className="w-9 h-9 rounded-xl shadow-sm" />
           <div className="flex-1 min-w-0">
             <div className="text-base font-extrabold leading-none text-[#F9954E]">AI비서</div>
-            <Link href="/" className="text-[10px] text-neutral-400 mt-1 tracking-wide hover:text-[#F9954E] transition-colors inline-block">← illo 홈</Link>
+            <Link href="/" className="text-[10px] text-stone-400 mt-1 tracking-wide hover:text-[#F9954E] transition-colors inline-block">← illo 홈</Link>
           </div>
         </div>
       </div>
@@ -286,7 +286,7 @@ function IlloSidebar({
                   className={"w-full flex items-center gap-2.5 px-3 py-2.5 rounded-xl text-sm transition-all " + (canEdit ? "pr-7 cursor-pointer " : "") + (
                     active
                       ? "bg-[#F9954E]/[0.13] text-[#E8832E] font-semibold"
-                      : "text-neutral-600 dark:text-neutral-300 hover:bg-neutral-100 dark:hover:bg-zinc-800 cursor-pointer"
+                      : "text-stone-600 dark:text-stone-300 hover:bg-stone-100 dark:hover:bg-zinc-800 cursor-pointer"
                   )}
                 >
                   <span className="text-base">{item.icon}</span>
@@ -294,7 +294,7 @@ function IlloSidebar({
                 </button>
                 {canEdit && (
                   <button onClick={(e) => { e.stopPropagation(); onRemove(item.id); }} title="메뉴에서 빼기"
-                    className="absolute right-2 top-1/2 -translate-y-1/2 text-neutral-300 opacity-0 group-hover/item:opacity-100 hover:text-rose-500 active:scale-90 transition-all">
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-stone-300 opacity-0 group-hover/item:opacity-100 hover:text-rose-500 active:scale-90 transition-all">
                     <X className="w-3.5 h-3.5" />
                   </button>
                 )}
@@ -304,18 +304,18 @@ function IlloSidebar({
         </div>
 
         <button onClick={() => onView("features")}
-          className="w-full mt-2 flex items-center gap-2 px-3 py-2.5 rounded-xl text-[13px] text-neutral-500 dark:text-neutral-400 hover:text-[#E8832E] hover:bg-[#FFF5EB] dark:hover:bg-orange-950/20 transition-colors border border-dashed border-neutral-300 dark:border-zinc-700">
+          className="w-full mt-2 flex items-center gap-2 px-3 py-2.5 rounded-xl text-[13px] text-stone-500 dark:text-stone-400 hover:text-[#E8832E] hover:bg-[#FBEEE7] dark:hover:bg-orange-950/20 transition-colors border border-dashed border-stone-300 dark:border-zinc-700">
           <Plus className="w-4 h-4" /> 기능 추가 · 관리
         </button>
       </nav>
 
-      <div className="p-3 border-t border-neutral-100 dark:border-zinc-800 space-y-2">
-        <div className="flex items-center gap-1 p-1 rounded-xl bg-neutral-100 dark:bg-zinc-900">
+      <div className="p-3 border-t border-stone-100 dark:border-zinc-800 space-y-2">
+        <div className="flex items-center gap-1 p-1 rounded-xl bg-stone-100 dark:bg-zinc-900">
           {(["light", "dark"] as const).map((t) => {
             const on = mounted && resolvedTheme === t;
             return (
               <button key={t} onClick={() => setTheme(t)}
-                className={"flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all " + (on ? "bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white shadow-sm" : "text-neutral-400 hover:text-neutral-600 dark:hover:text-neutral-300")}>
+                className={"flex-1 flex items-center justify-center gap-1.5 py-1.5 rounded-lg text-xs font-medium transition-all " + (on ? "bg-white dark:bg-zinc-800 text-stone-900 dark:text-white shadow-sm" : "text-stone-400 hover:text-stone-600 dark:hover:text-stone-300")}>
                 {t === "light" ? <Sun className="w-3.5 h-3.5" /> : <Moon className="w-3.5 h-3.5" />}
                 {t === "light" ? "화이트" : "다크"}
               </button>
@@ -324,14 +324,14 @@ function IlloSidebar({
         </div>
         <div className="flex items-center justify-between gap-2 px-1">
           <div className="min-w-0">
-            <div className="text-[12px] text-neutral-700 dark:text-neutral-200 font-semibold truncate">{userName}</div>
-            <div className="text-[10px] text-neutral-400 truncate">{userEmail}</div>
+            <div className="text-[12px] text-stone-700 dark:text-stone-200 font-semibold truncate">{userName}</div>
+            <div className="text-[10px] text-stone-400 truncate">{userEmail}</div>
           </div>
-          <button onClick={onLogout} title="로그아웃" className="shrink-0 text-neutral-400 hover:text-rose-500 p-1.5 rounded-lg hover:bg-neutral-100 dark:hover:bg-zinc-800 transition-colors">
+          <button onClick={onLogout} title="로그아웃" className="shrink-0 text-stone-400 hover:text-rose-500 p-1.5 rounded-lg hover:bg-stone-100 dark:hover:bg-zinc-800 transition-colors">
             <LogOut className="w-4 h-4" />
           </button>
         </div>
-        <div className="px-1 text-[10px] text-neutral-300 dark:text-zinc-600">워크일로 웹 · by illo</div>
+        <div className="px-1 text-[10px] text-stone-300 dark:text-zinc-600">워크일로 웹 · by illo</div>
       </div>
     </aside>
   );
@@ -346,10 +346,10 @@ function ViewScroll({ children }: { children: React.ReactNode }) {
   );
 }
 function QuotaLine({ free, quota, onShowKey }: { free: boolean; quota: number | null; onShowKey: () => void }) {
-  if (!free) return <p className="text-sm text-neutral-500 dark:text-neutral-400">✓ 내 키로 무제한 사용 중</p>;
+  if (!free) return <p className="text-sm text-stone-500 dark:text-stone-400">✓ 내 키로 무제한 사용 중</p>;
   const left = quota ?? FREE_LIMIT;
   return (
-    <p className="text-sm text-neutral-500 dark:text-neutral-400">
+    <p className="text-sm text-stone-500 dark:text-stone-400">
       🆓 무료로 쓰는 중 · 오늘 남은 <b className={left <= 5 ? "text-rose-500" : "text-[#E8832E]"}>{left}</b>/{FREE_LIMIT}회
     </p>
   );
@@ -408,13 +408,13 @@ function Home({ enabled, onView, free, quota }: {
       case "results": {
         const n = listResults().length;
         return (
-          <button onClick={() => onView("history")} className="w-full bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 rounded-2xl px-5 py-4 flex items-center gap-3.5 hover:border-[#F9954E] transition-colors">
-            <span className="w-11 h-11 rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center text-2xl shrink-0">📚</span>
+          <button onClick={() => onView("history")} className="w-full bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 rounded-2xl px-5 py-4 flex items-center gap-3.5 hover:border-[#F9954E] transition-colors">
+            <span className="w-11 h-11 rounded-2xl bg-[#FBEEE7] dark:bg-orange-950/30 grid place-items-center text-2xl shrink-0">📚</span>
             <span className="text-left flex-1 min-w-0">
-              <span className="block font-extrabold text-[15px] text-neutral-900 dark:text-white">내 결과 보관함</span>
-              <span className="block text-[12px] text-neutral-500 dark:text-neutral-400 mt-0.5">{n > 0 ? `저장된 결과 ${n}개 · 다시 보기/복사/내보내기` : "생성한 결과가 여기에 모여요"}</span>
+              <span className="block font-extrabold text-[15px] text-stone-900 dark:text-white">내 결과 보관함</span>
+              <span className="block text-[12px] text-stone-500 dark:text-stone-400 mt-0.5">{n > 0 ? `저장된 결과 ${n}개 · 다시 보기/복사/내보내기` : "생성한 결과가 여기에 모여요"}</span>
             </span>
-            <span className="text-neutral-300 text-xl">→</span>
+            <span className="text-stone-300 text-xl">→</span>
           </button>
         );
       }
@@ -422,58 +422,58 @@ function Home({ enabled, onView, free, quota }: {
         return (
           <div className="grid grid-cols-3 gap-2.5">
             {[{ e: "📋", l: "결재대기" }, { e: "⚙️", l: "진행중" }, { e: "🧑‍💼", l: "직원" }].map((c) => (
-              <button key={c.l} onClick={() => onView("features")} className="rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-3 flex flex-col items-center gap-0.5 active:scale-95 transition">
+              <button key={c.l} onClick={() => onView("features")} className="rounded-2xl border border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-3 flex flex-col items-center gap-0.5 active:scale-95 transition">
                 <span className="text-lg leading-none mb-0.5">{c.e}</span>
-                <span className="text-xl font-extrabold leading-none text-neutral-900 dark:text-white">0</span>
-                <span className="text-[10.5px] text-neutral-400">{c.l}</span>
+                <span className="text-xl font-extrabold leading-none text-stone-900 dark:text-white">0</span>
+                <span className="text-[10.5px] text-stone-400">{c.l}</span>
               </button>
             ))}
           </div>
         );
       case "finance":
         return (
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-neutral-200 dark:border-zinc-800 p-4">
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-stone-200 dark:border-zinc-800 p-4">
             <div className="flex items-center justify-between mb-3">
-              <span className="text-[13px] font-bold text-neutral-900 dark:text-white">이번 달</span>
+              <span className="text-[13px] font-bold text-stone-900 dark:text-white">이번 달</span>
               <button onClick={() => onView("settings")} className="text-[11px] text-[#E8832E] font-semibold">자세히 →</button>
             </div>
             <div className="grid grid-cols-3 gap-2 text-center">
-              {[{ l: "수익", v: "₩0", c: "text-emerald-500" }, { l: "비용", v: "₩0", c: "text-neutral-700 dark:text-neutral-200" }, { l: "이익", v: "₩0", c: "text-[#E8832E]" }].map((f) => (
+              {[{ l: "수익", v: "₩0", c: "text-emerald-500" }, { l: "비용", v: "₩0", c: "text-stone-700 dark:text-stone-200" }, { l: "이익", v: "₩0", c: "text-[#E8832E]" }].map((f) => (
                 <div key={f.l}>
-                  <div className="text-[10.5px] text-neutral-400 mb-0.5">{f.l}</div>
+                  <div className="text-[10.5px] text-stone-400 mb-0.5">{f.l}</div>
                   <div className={"text-[13px] font-extrabold leading-tight " + f.c}>{f.v}</div>
                 </div>
               ))}
             </div>
-            <div className="mt-3 pt-3 border-t border-neutral-100 dark:border-zinc-800 flex items-center justify-between text-[12px]">
-              <span className="text-neutral-400">{free ? "오늘 남은 무료" : "내 키"}</span>
+            <div className="mt-3 pt-3 border-t border-stone-100 dark:border-zinc-800 flex items-center justify-between text-[12px]">
+              <span className="text-stone-400">{free ? "오늘 남은 무료" : "내 키"}</span>
               <span className="font-bold text-blue-500">{free ? `${quota ?? FREE_LIMIT} / ${FREE_LIMIT}회` : "무제한"}</span>
             </div>
           </div>
         );
       case "recent":
         return (
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-neutral-200 dark:border-zinc-800 overflow-hidden">
-            <div className="px-4 py-3 flex items-center justify-between border-b border-neutral-100 dark:border-zinc-800">
-              <span className="text-[13px] font-bold text-neutral-900 dark:text-white">최근 작업</span>
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-stone-200 dark:border-zinc-800 overflow-hidden">
+            <div className="px-4 py-3 flex items-center justify-between border-b border-stone-100 dark:border-zinc-800">
+              <span className="text-[13px] font-bold text-stone-900 dark:text-white">최근 작업</span>
               <button onClick={() => onView("history")} className="text-[11px] text-[#E8832E] font-semibold">전체 →</button>
             </div>
-            <div className="px-4 py-8 text-center text-[13px] text-neutral-400">아직 작업이 없어요.</div>
+            <div className="px-4 py-8 text-center text-[13px] text-stone-400">아직 작업이 없어요.</div>
           </div>
         );
       case "quicktools": {
         const tools = enabled.map((id) => ILLO_FEATURE_BY_ID[id]).filter((f) => f && f.kind === "tool").slice(0, 18) as IlloFeature[];
         return (
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-neutral-200 dark:border-zinc-800 p-4">
-            <div className="text-[13px] font-bold text-neutral-900 dark:text-white mb-2.5">빠른 도구</div>
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-stone-200 dark:border-zinc-800 p-4">
+            <div className="text-[13px] font-bold text-stone-900 dark:text-white mb-2.5">빠른 도구</div>
             {tools.length === 0 ? (
               <button onClick={() => onView("features")} className="text-[12px] text-[#E8832E] font-semibold">🧩 보관함에서 도구 꺼내오기 →</button>
             ) : (
               <div className="grid grid-cols-6 sm:grid-cols-8 gap-1.5">
                 {tools.map((t) => (
                   <button key={t.id} onClick={() => onView(t.id)} title={t.label} className="flex flex-col items-center gap-1 active:scale-95 transition">
-                    <span className="w-full aspect-square rounded-xl bg-[#FFF5EB] dark:bg-orange-950/30 border border-neutral-100 dark:border-zinc-800 grid place-items-center text-base">{t.icon}</span>
-                    <span className="text-[9px] text-neutral-500 dark:text-neutral-400 text-center leading-tight truncate w-full">{t.label}</span>
+                    <span className="w-full aspect-square rounded-xl bg-[#FBEEE7] dark:bg-orange-950/30 border border-stone-100 dark:border-zinc-800 grid place-items-center text-base">{t.icon}</span>
+                    <span className="text-[9px] text-stone-500 dark:text-stone-400 text-center leading-tight truncate w-full">{t.label}</span>
                   </button>
                 ))}
               </div>
@@ -484,13 +484,13 @@ function Home({ enabled, onView, free, quota }: {
       case "shortcuts": {
         const items = enabled.map((id) => ILLO_FEATURE_BY_ID[id]).filter((f) => f && !["home", "features"].includes(f.id)).slice(0, 8) as IlloFeature[];
         return (
-          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-neutral-200 dark:border-zinc-800 p-4">
-            <div className="text-[13px] font-bold text-neutral-900 dark:text-white mb-2.5">메뉴 바로가기</div>
+          <div className="bg-white dark:bg-zinc-900 rounded-2xl border border-stone-200 dark:border-zinc-800 p-4">
+            <div className="text-[13px] font-bold text-stone-900 dark:text-white mb-2.5">메뉴 바로가기</div>
             <div className="grid grid-cols-4 gap-2.5">
               {items.map((f) => (
                 <button key={f.id} onClick={() => onView(f.id)} className="flex flex-col items-center gap-1.5 active:scale-95 transition">
-                  <span className="w-full aspect-square rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/30 border border-neutral-100 dark:border-zinc-800 grid place-items-center text-xl">{f.icon}</span>
-                  <span className="text-[10px] text-neutral-500 dark:text-neutral-400 text-center leading-tight truncate w-full">{f.label}</span>
+                  <span className="w-full aspect-square rounded-2xl bg-[#FBEEE7] dark:bg-orange-950/30 border border-stone-100 dark:border-zinc-800 grid place-items-center text-xl">{f.icon}</span>
+                  <span className="text-[10px] text-stone-500 dark:text-stone-400 text-center leading-tight truncate w-full">{f.label}</span>
                 </button>
               ))}
             </div>
@@ -506,17 +506,17 @@ function Home({ enabled, onView, free, quota }: {
     <div className="px-4 py-5 max-w-2xl mx-auto">
       <div className="flex items-start justify-between mb-3">
         <div>
-          <div className="text-neutral-400 text-[13px]">{greeting()}</div>
-          <h1 className="text-[22px] font-extrabold text-neutral-900 dark:text-white tracking-tight mt-0.5">오늘의 사무실</h1>
+          <div className="text-stone-400 text-[13px]">{greeting()}</div>
+          <h1 className="text-[22px] font-extrabold text-stone-900 dark:text-white tracking-tight mt-0.5">오늘의 사무실</h1>
         </div>
         <button onClick={() => setEditing((e) => !e)}
-          className={"px-3.5 py-2 rounded-xl text-[13px] font-semibold transition-colors shrink-0 " + (editing ? "bg-[#F9954E] text-white" : "bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-neutral-500 dark:text-neutral-400")}>
+          className={"px-3.5 py-2 rounded-xl text-[13px] font-semibold transition-colors shrink-0 " + (editing ? "bg-[#F9954E] text-white" : "bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 text-stone-500 dark:text-stone-400")}>
           {editing ? "✓ 완료" : "⠿ 편집"}
         </button>
       </div>
 
       {editing && (
-        <div className="text-[12px] text-[#E8832E] mb-3 bg-[#FFF5EB] dark:bg-orange-950/20 rounded-xl px-3 py-2.5 leading-relaxed">
+        <div className="text-[12px] text-[#E8832E] mb-3 bg-[#FBEEE7] dark:bg-orange-950/20 rounded-xl px-3 py-2.5 leading-relaxed">
           위젯을 <b>드래그</b>해 순서를 바꾸고, <b>✕</b>로 제거하세요. 아래 "위젯 추가"에서 카드를 꺼내올 수 있어요.
         </div>
       )}
@@ -543,15 +543,15 @@ function Home({ enabled, onView, free, quota }: {
 
       {editing && available.length > 0 && (
         <div className="mt-5">
-          <div className="text-[12px] font-semibold text-neutral-400 mb-2 px-1">＋ 위젯 추가</div>
+          <div className="text-[12px] font-semibold text-stone-400 mb-2 px-1">＋ 위젯 추가</div>
           <div className="grid grid-cols-1 gap-2.5">
             {available.map((w) => (
               <button key={w.id} onClick={() => add(w.id)}
-                className="flex items-center gap-3 p-3.5 rounded-2xl border border-dashed border-neutral-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-left active:scale-[0.98] transition">
-                <span className="text-xl w-9 h-9 rounded-xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center shrink-0">{w.icon}</span>
+                className="flex items-center gap-3 p-3.5 rounded-2xl border border-dashed border-stone-300 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-left active:scale-[0.98] transition">
+                <span className="text-xl w-9 h-9 rounded-xl bg-[#FBEEE7] dark:bg-orange-950/30 grid place-items-center shrink-0">{w.icon}</span>
                 <span className="min-w-0 flex-1">
-                  <span className="block text-[13.5px] font-bold text-neutral-900 dark:text-white">{w.label}</span>
-                  <span className="block text-[11.5px] text-neutral-400 truncate">{w.desc}</span>
+                  <span className="block text-[13.5px] font-bold text-stone-900 dark:text-white">{w.label}</span>
+                  <span className="block text-[11.5px] text-stone-400 truncate">{w.desc}</span>
                 </span>
                 <span className="text-[#F9954E] font-bold text-lg">＋</span>
               </button>
@@ -561,7 +561,7 @@ function Home({ enabled, onView, free, quota }: {
       )}
 
       {widgets.length === 0 && (
-        <div className="text-center py-12 text-neutral-400 text-[13px]">
+        <div className="text-center py-12 text-stone-400 text-[13px]">
           홈이 비어 있어요. <button onClick={() => setEditing(true)} className="text-[#E8832E] font-semibold">＋ 위젯 추가</button>
         </div>
       )}
@@ -612,10 +612,10 @@ function Assistant({ runAI, free, quota, onShowKey, userName }: {
 
   return (
     <div className="flex-1 flex flex-col min-h-0">
-      <div className="border-b border-neutral-200 dark:border-zinc-800 px-5 sm:px-8 py-3.5 flex items-center gap-2 shrink-0">
+      <div className="border-b border-stone-200 dark:border-zinc-800 px-5 sm:px-8 py-3.5 flex items-center gap-2 shrink-0">
         <span className="text-xl">🐿️</span>
-        <h1 className="font-extrabold text-neutral-900 dark:text-white">일리 <span className="text-[12px] font-normal text-neutral-400">· AI 비서 &amp; 가이드</span></h1>
-        {free && <span className="ml-auto text-[12px] text-neutral-400">오늘 남은 <b className={(quota ?? FREE_LIMIT) <= 5 ? "text-rose-500" : "text-[#E8832E]"}>{quota ?? FREE_LIMIT}</b>/{FREE_LIMIT}회</span>}
+        <h1 className="font-extrabold text-stone-900 dark:text-white">일리 <span className="text-[12px] font-normal text-stone-400">· AI 비서 &amp; 가이드</span></h1>
+        {free && <span className="ml-auto text-[12px] text-stone-400">오늘 남은 <b className={(quota ?? FREE_LIMIT) <= 5 ? "text-rose-500" : "text-[#E8832E]"}>{quota ?? FREE_LIMIT}</b>/{FREE_LIMIT}회</span>}
       </div>
 
       <div className="flex-1 overflow-y-auto px-5 sm:px-8 py-6">
@@ -623,11 +623,11 @@ function Assistant({ runAI, free, quota, onShowKey, userName }: {
           {msgs.length === 0 ? (
             <div className="text-center pt-10">
               <div className="text-5xl mb-3">🐿️</div>
-              <p className="font-bold text-neutral-900 dark:text-white mb-1">안녕하세요, 저는 일리예요!</p>
-              <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-6 break-keep">무엇이든 물어보세요. “어떤 AI를 어떻게 조합할지”도 제가 안내해드려요.</p>
+              <p className="font-bold text-stone-900 dark:text-white mb-1">안녕하세요, 저는 일리예요!</p>
+              <p className="text-sm text-stone-500 dark:text-stone-400 mb-6 break-keep">무엇이든 물어보세요. “어떤 AI를 어떻게 조합할지”도 제가 안내해드려요.</p>
               <div className="flex flex-wrap gap-2 justify-center">
                 {SUGGEST.map((s) => (
-                  <button key={s} onClick={() => send(s)} className="px-3.5 py-2 rounded-full text-[13px] font-semibold bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-300 hover:border-[#F9954E] hover:text-[#E8832E] transition-colors">
+                  <button key={s} onClick={() => send(s)} className="px-3.5 py-2 rounded-full text-[13px] font-semibold bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-700 text-stone-600 dark:text-stone-300 hover:border-[#F9954E] hover:text-[#E8832E] transition-colors">
                     {s}
                   </button>
                 ))}
@@ -640,13 +640,13 @@ function Assistant({ runAI, free, quota, onShowKey, userName }: {
                   <div className={"max-w-[85%] px-4 py-3 rounded-2xl text-sm leading-relaxed whitespace-pre-wrap break-words " + (
                     m.role === "user"
                       ? "bg-[#F9954E] text-white rounded-br-md"
-                      : "bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 text-neutral-800 dark:text-neutral-100 rounded-bl-md"
+                      : "bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 text-stone-800 dark:text-stone-100 rounded-bl-md"
                   )}>{m.content}</div>
                 </div>
               ))}
               {busy && (
                 <div className="flex justify-start">
-                  <div className="px-4 py-3 rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800"><Loader2 className="w-4 h-4 animate-spin text-[#F9954E]" /></div>
+                  <div className="px-4 py-3 rounded-2xl bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800"><Loader2 className="w-4 h-4 animate-spin text-[#F9954E]" /></div>
                 </div>
               )}
               {err && (
@@ -658,12 +658,12 @@ function Assistant({ runAI, free, quota, onShowKey, userName }: {
         </div>
       </div>
 
-      <div className="border-t border-neutral-200 dark:border-zinc-800 p-3 sm:p-4 shrink-0 bg-neutral-50 dark:bg-black">
+      <div className="border-t border-stone-200 dark:border-zinc-800 p-3 sm:p-4 shrink-0 bg-stone-50 dark:bg-black">
         <div className="max-w-2xl mx-auto flex items-end gap-2">
           <textarea value={input} onChange={(e) => setInput(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); send(); } }}
             placeholder="일리에게 물어보세요… (Shift+Enter 줄바꿈)" rows={1}
-            className="flex-1 resize-none px-4 py-3 rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-sm focus:outline-none focus:border-[#F9954E] max-h-32" />
+            className="flex-1 resize-none px-4 py-3 rounded-2xl bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-700 text-sm focus:outline-none focus:border-[#F9954E] max-h-32" />
           <button onClick={() => send()} disabled={busy || !input.trim()}
             className="shrink-0 w-11 h-11 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white grid place-items-center disabled:opacity-40 transition-colors">
             {busy ? <Loader2 className="w-5 h-5 animate-spin" /> : <Send className="w-5 h-5" />}
@@ -679,7 +679,7 @@ const NODE_W = 196;
 const NODE_H = 176;
 function nodeTint(_kind: string): string {
   // 미니멀 — 모든 노드 동일한 중립 카드. 종류는 아이콘·역할로 구분, 강조는 주황 하나로.
-  return "border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900";
+  return "border-stone-200 dark:border-zinc-700 bg-white dark:bg-zinc-900";
 }
 // 노드의 한 면(side)의 연결점 좌표.
 function sideAnchor(n: { x: number; y: number }, side: Side) {
@@ -860,16 +860,16 @@ function FlowBuilder({ runAI, userKey }: {
   if (naming) {
     return (
       <ViewScroll>
-        <button onClick={() => setNaming(null)} className="inline-flex items-center gap-1 text-[13px] text-neutral-400 hover:text-[#E8832E] mb-6"><ArrowLeft className="w-4 h-4" /> 목록으로</button>
+        <button onClick={() => setNaming(null)} className="inline-flex items-center gap-1 text-[13px] text-stone-400 hover:text-[#E8832E] mb-6"><ArrowLeft className="w-4 h-4" /> 목록으로</button>
         <div className="max-w-md">
-          <h1 className="text-xl font-extrabold text-neutral-900 dark:text-white mb-1">새 워크플로우</h1>
-          <p className="text-[13px] text-neutral-400 dark:text-neutral-500 mb-6 break-keep">이름을 먼저 정해주세요. 나중에 바꿀 수 있어요.</p>
-          <label className="block text-[12px] font-bold text-neutral-500 dark:text-neutral-400 mb-1.5">워크플로우 이름</label>
+          <h1 className="text-xl font-extrabold text-stone-900 dark:text-white mb-1">새 워크플로우</h1>
+          <p className="text-[13px] text-stone-400 dark:text-stone-500 mb-6 break-keep">이름을 먼저 정해주세요. 나중에 바꿀 수 있어요.</p>
+          <label className="block text-[12px] font-bold text-stone-500 dark:text-stone-400 mb-1.5">워크플로우 이름</label>
           <input autoFocus value={naming.name}
             onChange={(e) => setNaming({ ...naming, name: e.target.value })}
             onKeyDown={(e) => { if (e.key === "Enter" && naming.name.trim()) startNamed(); }}
             placeholder="예: 블로그 글 자동 발행"
-            className="w-full px-4 py-3 rounded-xl border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm text-neutral-900 dark:text-white focus:outline-none focus:border-[#F9954E] mb-4" />
+            className="w-full px-4 py-3 rounded-xl border border-stone-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm text-stone-900 dark:text-white focus:outline-none focus:border-[#F9954E] mb-4" />
           <button onClick={startNamed} disabled={!naming.name.trim()}
             className="w-full py-3 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold text-sm transition-colors disabled:opacity-40 disabled:cursor-not-allowed">
             만들기 → 노드 연결하기
@@ -884,32 +884,32 @@ function FlowBuilder({ runAI, userKey }: {
     return (
       <ViewScroll>
         <div className="flex items-start justify-between gap-3 mb-1">
-          <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white">🛠️ 내 워크플로우</h1>
+          <h1 className="text-2xl font-extrabold text-stone-900 dark:text-white">🛠️ 내 워크플로우</h1>
           <button onClick={createNew} className="shrink-0 flex items-center gap-1.5 text-sm font-bold px-3.5 py-2 rounded-xl bg-[#F9954E] text-white hover:bg-[#E8832E] transition-colors"><Plus className="w-4 h-4" />새로 만들기</button>
         </div>
-        <p className="text-neutral-500 dark:text-neutral-400 mb-2.5 break-keep">AI 단계를 노드로 연결해 <b>나만의 자동화</b>를 직접 설계하세요. (입력 → 조사 → 작성 → 검토 → 전송처럼)</p>
-        <div className="mb-7 rounded-2xl border border-[#FDD5A5] dark:border-[#B35E15] bg-[#FFF9F3] dark:bg-orange-950/10 px-4 py-3 text-[12.5px] text-neutral-600 dark:text-neutral-300 break-keep leading-relaxed">
+        <p className="text-stone-500 dark:text-stone-400 mb-2.5 break-keep">AI 단계를 노드로 연결해 <b>나만의 자동화</b>를 직접 설계하세요. (입력 → 조사 → 작성 → 검토 → 전송처럼)</p>
+        <div className="mb-7 rounded-2xl border border-[#FDD5A5] dark:border-[#B35E15] bg-[#FDF6F1] dark:bg-orange-950/10 px-4 py-3 text-[12.5px] text-stone-600 dark:text-stone-300 break-keep leading-relaxed">
           <b className="text-[#E8832E]">n8n 자동화의 쉬운 고급 버전이에요.</b> 복잡한 설정 없이 — <b>AI의 API 키만 넣으면 연결</b>되고, <b>노드끼리 선만 이으면</b> 내용이 자동으로 흘러갑니다. 각 노드는 <b>받은 내용 + 자기 역할</b>대로 처리해 다음 노드로 넘기기만 하면 돼요. 노드는 <b>4면 어디로든</b> 받고, <b>한 면에서 여러 갈래</b>로 보낼 수 있어요.</div>
 
         {/* 완성된 워크플로우 템플릿 — 빈 캔버스 대신 바로 시작 */}
         <div className="mb-9">
-          <h2 className="text-sm font-bold text-neutral-900 dark:text-white mb-1">✨ 완성된 워크플로우로 바로 시작</h2>
-          <p className="text-[12.5px] text-neutral-400 mb-3.5 break-keep">템플릿을 고르면 노드가 연결된 채로 열려요. 그대로 쓰거나 자유롭게 고치세요.</p>
+          <h2 className="text-sm font-bold text-stone-900 dark:text-white mb-1">✨ 완성된 워크플로우로 바로 시작</h2>
+          <p className="text-[12.5px] text-stone-400 mb-3.5 break-keep">템플릿을 고르면 노드가 연결된 채로 열려요. 그대로 쓰거나 자유롭게 고치세요.</p>
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {FLOW_TEMPLATES.map((t) => (
               <button key={t.id} onClick={() => startFromTemplate(t)}
-                className="text-left rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 hover:border-[#F9954E] hover:shadow-sm transition-all group">
+                className="text-left rounded-2xl border border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 hover:border-[#F9954E] hover:shadow-sm transition-all group">
                 <div className="flex items-center gap-2">
                   <span className="text-xl">{t.icon}</span>
-                  <span className="text-sm font-bold text-neutral-900 dark:text-white">{t.name}</span>
-                  <span className="ml-auto text-[11px] text-neutral-400 shrink-0">{t.steps.length}단계</span>
+                  <span className="text-sm font-bold text-stone-900 dark:text-white">{t.name}</span>
+                  <span className="ml-auto text-[11px] text-stone-400 shrink-0">{t.steps.length}단계</span>
                 </div>
-                <p className="text-[12px] text-neutral-500 dark:text-neutral-400 mt-1.5 break-keep leading-relaxed">{t.desc}</p>
+                <p className="text-[12px] text-stone-500 dark:text-stone-400 mt-1.5 break-keep leading-relaxed">{t.desc}</p>
                 <div className="flex flex-wrap items-center gap-y-1 mt-3">
                   {t.steps.map((st, i) => (
                     <span key={i} className="inline-flex items-center">
-                      <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-neutral-100 dark:bg-zinc-800 text-neutral-500 whitespace-nowrap">{st.icon} {st.title}</span>
-                      {i < t.steps.length - 1 && <span className="mx-0.5 text-neutral-300 dark:text-zinc-600 text-[10px]">→</span>}
+                      <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-stone-100 dark:bg-zinc-800 text-stone-500 whitespace-nowrap">{st.icon} {st.title}</span>
+                      {i < t.steps.length - 1 && <span className="mx-0.5 text-stone-300 dark:text-zinc-600 text-[10px]">→</span>}
                     </span>
                   ))}
                 </div>
@@ -922,17 +922,17 @@ function FlowBuilder({ runAI, userKey }: {
         {/* 내가 만든 워크플로우 (결합 보관한 재사용 틀) */}
         {templates.length > 0 && (
           <div className="mb-9">
-            <h2 className="text-sm font-bold text-neutral-900 dark:text-white mb-1">📦 내가 만든 워크플로우</h2>
-            <p className="text-[12.5px] text-neutral-400 mb-3.5 break-keep">결합 보관해둔 틀이에요. 누르면 새 사본으로 열려 그대로 다시 씁니다.</p>
+            <h2 className="text-sm font-bold text-stone-900 dark:text-white mb-1">📦 내가 만든 워크플로우</h2>
+            <p className="text-[12.5px] text-stone-400 mb-3.5 break-keep">결합 보관해둔 틀이에요. 누르면 새 사본으로 열려 그대로 다시 씁니다.</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {templates.map((t) => (
-                <div key={t.id} className="rounded-2xl border border-[#FDD5A5] dark:border-[#B35E15] bg-[#FFF9F3] dark:bg-orange-950/10 p-4 hover:shadow-sm transition-all">
+                <div key={t.id} className="rounded-2xl border border-[#FDD5A5] dark:border-[#B35E15] bg-[#FDF6F1] dark:bg-orange-950/10 p-4 hover:shadow-sm transition-all">
                   <div className="flex items-center justify-between gap-2">
                     <button onClick={() => startFromSaved(t)} className="min-w-0 flex-1 text-left">
-                      <div className="text-sm font-bold text-neutral-900 dark:text-white truncate">📦 {t.name}</div>
-                      <div className="text-[12px] text-neutral-400 mt-0.5">노드 {t.nodes.length}개 · 연결 {t.links.length}개</div>
+                      <div className="text-sm font-bold text-stone-900 dark:text-white truncate">📦 {t.name}</div>
+                      <div className="text-[12px] text-stone-400 mt-0.5">노드 {t.nodes.length}개 · 연결 {t.links.length}개</div>
                     </button>
-                    <button onClick={() => removeTemplate(t.id)} className="shrink-0 text-neutral-300 hover:text-rose-500 transition-colors"><X className="w-4 h-4" /></button>
+                    <button onClick={() => removeTemplate(t.id)} className="shrink-0 text-stone-300 hover:text-rose-500 transition-colors"><X className="w-4 h-4" /></button>
                   </div>
                   <div className="mt-2.5 text-[12px] font-bold text-[#E8832E] dark:text-[#FBAA60]">이 틀로 시작 →</div>
                 </div>
@@ -942,27 +942,27 @@ function FlowBuilder({ runAI, userKey }: {
         )}
 
         {/* 내 워크플로우 */}
-        <h2 className="text-sm font-bold text-neutral-900 dark:text-white mb-3">🛠️ 내 워크플로우</h2>
+        <h2 className="text-sm font-bold text-stone-900 dark:text-white mb-3">🛠️ 내 워크플로우</h2>
         {flows.length === 0 ? (
-          <div className="rounded-2xl border border-dashed border-neutral-300 dark:border-zinc-700 text-center py-10 text-neutral-400">
+          <div className="rounded-2xl border border-dashed border-stone-300 dark:border-zinc-700 text-center py-10 text-stone-400">
             <p className="text-[13px] break-keep">아직 저장한 워크플로우가 없어요. 위 템플릿으로 시작하거나 <button onClick={createNew} className="font-bold text-[#E8832E] hover:underline">빈 캔버스로 만들기</button>.</p>
           </div>
         ) : (
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             {flows.map((f) => (
-              <div key={f.id} className="rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 hover:border-[#F9954E]/50 hover:shadow-sm transition-all">
+              <div key={f.id} className="rounded-2xl border border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 hover:border-[#F9954E]/50 hover:shadow-sm transition-all">
                 <div className="flex items-center justify-between gap-2">
                   <button onClick={() => openFlow(f)} className="min-w-0 flex-1 text-left">
-                    <div className="text-sm font-bold text-neutral-900 dark:text-white truncate">{f.name || "(이름 없음)"}</div>
-                    <div className="text-[12px] text-neutral-400 mt-0.5">노드 {f.nodes.length}개 · 연결 {f.links.length}개</div>
+                    <div className="text-sm font-bold text-stone-900 dark:text-white truncate">{f.name || "(이름 없음)"}</div>
+                    <div className="text-[12px] text-stone-400 mt-0.5">노드 {f.nodes.length}개 · 연결 {f.links.length}개</div>
                   </button>
-                  <button onClick={() => removeFlow(f.id)} className="shrink-0 text-neutral-300 hover:text-rose-500 transition-colors"><X className="w-4 h-4" /></button>
+                  <button onClick={() => removeFlow(f.id)} className="shrink-0 text-stone-300 hover:text-rose-500 transition-colors"><X className="w-4 h-4" /></button>
                 </div>
                 <div className="flex flex-wrap gap-1 mt-3">
                   {f.nodes.slice(0, 6).map((n) => (
-                    <span key={n.id} className="text-[10px] px-1.5 py-0.5 rounded-md bg-neutral-100 dark:bg-zinc-800 text-neutral-500">{n.icon} {n.title}</span>
+                    <span key={n.id} className="text-[10px] px-1.5 py-0.5 rounded-md bg-stone-100 dark:bg-zinc-800 text-stone-500">{n.icon} {n.title}</span>
                   ))}
-                  {f.nodes.length > 6 && <span className="text-[10px] text-neutral-400">+{f.nodes.length - 6}</span>}
+                  {f.nodes.length > 6 && <span className="text-[10px] text-stone-400">+{f.nodes.length - 6}</span>}
                 </div>
               </div>
             ))}
@@ -978,26 +978,26 @@ function FlowBuilder({ runAI, userKey }: {
       {/* 실행 결과 모달 */}
       {runResult && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setRunResult(null)}>
-          <div className="w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-2xl border border-neutral-200 dark:border-zinc-800 shadow-xl p-5 max-h-[88vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+          <div className="w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-2xl border border-stone-200 dark:border-zinc-800 shadow-xl p-5 max-h-[88vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-bold text-neutral-900 dark:text-white">✅ 실행 결과</h3>
-              <button onClick={() => setRunResult(null)} className="text-neutral-400 hover:text-rose-500"><X className="w-4 h-4" /></button>
+              <h3 className="text-sm font-bold text-stone-900 dark:text-white">✅ 실행 결과</h3>
+              <button onClick={() => setRunResult(null)} className="text-stone-400 hover:text-rose-500"><X className="w-4 h-4" /></button>
             </div>
             <div className="overflow-y-auto flex-1 space-y-2">
               {runResult.steps.map((s, i) => (
-                <details key={i} className="rounded-lg border border-neutral-200 dark:border-zinc-800">
-                  <summary className="cursor-pointer px-3 py-2 text-[12.5px] font-bold text-neutral-700 dark:text-neutral-200">{i + 1}. {s.icon} {s.title}</summary>
-                  <div className="px-3 pb-2.5 text-[12px] text-neutral-600 dark:text-neutral-300 whitespace-pre-wrap break-words leading-relaxed">{s.out}</div>
+                <details key={i} className="rounded-lg border border-stone-200 dark:border-zinc-800">
+                  <summary className="cursor-pointer px-3 py-2 text-[12.5px] font-bold text-stone-700 dark:text-stone-200">{i + 1}. {s.icon} {s.title}</summary>
+                  <div className="px-3 pb-2.5 text-[12px] text-stone-600 dark:text-stone-300 whitespace-pre-wrap break-words leading-relaxed">{s.out}</div>
                 </details>
               ))}
-              <div className="rounded-xl border border-[#F9954E] bg-[#FFF9F3] dark:bg-orange-950/10 p-3 mt-1">
+              <div className="rounded-xl border border-[#F9954E] bg-[#FDF6F1] dark:bg-orange-950/10 p-3 mt-1">
                 <div className="text-[11px] font-bold text-[#E8832E] mb-1">최종 결과</div>
-                <div className="text-[13px] text-neutral-800 dark:text-neutral-100 whitespace-pre-wrap break-words leading-relaxed max-h-[40vh] overflow-y-auto">{runResult.final}</div>
+                <div className="text-[13px] text-stone-800 dark:text-stone-100 whitespace-pre-wrap break-words leading-relaxed max-h-[40vh] overflow-y-auto">{runResult.final}</div>
               </div>
             </div>
             <div className="flex items-center gap-2 mt-3 flex-wrap">
-              <span className="text-[11px] text-neutral-400 mr-auto">📁 자료함에 자동 저장됨</span>
-              <button onClick={() => { try { navigator.clipboard?.writeText(runResult.final); } catch {} }} className="text-[12px] font-bold px-3 py-2 rounded-lg border border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-300 hover:border-[#F9954E]">복사</button>
+              <span className="text-[11px] text-stone-400 mr-auto">📁 자료함에 자동 저장됨</span>
+              <button onClick={() => { try { navigator.clipboard?.writeText(runResult.final); } catch {} }} className="text-[12px] font-bold px-3 py-2 rounded-lg border border-stone-200 dark:border-zinc-700 text-stone-600 dark:text-stone-300 hover:border-[#F9954E]">복사</button>
               {runResult.deliver && (
                 <button onClick={() => {
                   const d = runResult.deliver;
@@ -1006,7 +1006,7 @@ function FlowBuilder({ runAI, userKey }: {
                   else { alert(`${d.channel} 전송은 채널 연결 후 자동 발송됩니다. 지금은 복사/자료함으로 보내주세요.`); }
                 }} className="text-[12px] font-bold px-3 py-2 rounded-lg bg-[#F9954E] text-white hover:bg-[#E8832E] flex items-center gap-1"><Send className="w-3.5 h-3.5" /> {runResult.deliver.channel}(으)로 전송</button>
               )}
-              <button onClick={() => setRunResult(null)} className="text-[12px] px-3 py-2 text-neutral-500">닫기</button>
+              <button onClick={() => setRunResult(null)} className="text-[12px] px-3 py-2 text-stone-500">닫기</button>
             </div>
           </div>
         </div>
@@ -1018,25 +1018,25 @@ function FlowBuilder({ runAI, userKey }: {
         const curModel = pickModelFor.model || defaultModelFor(pickModelFor);
         return (
           <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setPickModelFor(null)}>
-            <div className="w-full max-w-sm bg-white dark:bg-zinc-900 rounded-2xl border border-neutral-200 dark:border-zinc-800 shadow-xl p-4 max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="w-full max-w-sm bg-white dark:bg-zinc-900 rounded-2xl border border-stone-200 dark:border-zinc-800 shadow-xl p-4 max-h-[80vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
               <div className="flex items-center justify-between mb-1">
-                <h3 className="text-sm font-bold text-neutral-900 dark:text-white truncate">{pickModelFor.icon} {pickModelFor.title}</h3>
-                <button onClick={() => setPickModelFor(null)} className="text-neutral-400 hover:text-rose-500"><X className="w-4 h-4" /></button>
+                <h3 className="text-sm font-bold text-stone-900 dark:text-white truncate">{pickModelFor.icon} {pickModelFor.title}</h3>
+                <button onClick={() => setPickModelFor(null)} className="text-stone-400 hover:text-rose-500"><X className="w-4 h-4" /></button>
               </div>
-              <p className="text-[11.5px] text-neutral-400 mb-3 break-keep">이 노드를 어떤 AI·모델로 처리할지 골라요 — <b className="text-[#E8832E]">{slot ? SLOT_LABEL[slot] : ""}</b></p>
+              <p className="text-[11.5px] text-stone-400 mb-3 break-keep">이 노드를 어떤 AI·모델로 처리할지 골라요 — <b className="text-[#E8832E]">{slot ? SLOT_LABEL[slot] : ""}</b></p>
               <div className="space-y-2">
                 {optionsForNode(pickModelFor).map((opt) => {
                   const selProvider = curModel === opt.id;
                   const curVariant = pickModelFor.variant || opt.models[0] || "";
                   return (
                     <div key={opt.id}
-                      className={"rounded-xl border p-3 transition-colors " + (selProvider ? "border-[#F9954E] bg-[#FFF5EB] dark:bg-orange-950/20" : "border-neutral-200 dark:border-zinc-700")}>
+                      className={"rounded-xl border p-3 transition-colors " + (selProvider ? "border-[#F9954E] bg-[#FBEEE7] dark:bg-orange-950/20" : "border-stone-200 dark:border-zinc-700")}>
                       <button onClick={() => { updateNode(pickModelFor.id, { model: opt.id, variant: opt.models[0] || "" }); setPickModelFor(null); }} className="w-full text-left">
                         <div className="flex items-center gap-2">
-                          <span className="text-[13px] font-bold text-neutral-900 dark:text-white">{opt.name}</span>
+                          <span className="text-[13px] font-bold text-stone-900 dark:text-white">{opt.name}</span>
                           {selProvider && <Check className="w-3.5 h-3.5 text-[#F9954E] ml-auto shrink-0" />}
                         </div>
-                        <div className="text-[12px] text-neutral-500 dark:text-neutral-400 mt-0.5 break-keep leading-relaxed">{opt.desc}</div>
+                        <div className="text-[12px] text-stone-500 dark:text-stone-400 mt-0.5 break-keep leading-relaxed">{opt.desc}</div>
                       </button>
                       {opt.models.length > 0 && (
                         <div className="flex flex-wrap gap-1.5 mt-2.5">
@@ -1044,7 +1044,7 @@ function FlowBuilder({ runAI, userKey }: {
                             const selV = selProvider && curVariant === m;
                             return (
                               <button key={m} onClick={() => { updateNode(pickModelFor.id, { model: opt.id, variant: m }); setPickModelFor(null); }}
-                                className={"text-[11px] font-medium px-2 py-0.5 rounded-md border transition-colors " + (selV ? "border-[#F9954E] bg-[#F9954E] text-white" : "border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-300 hover:border-[#F9954E]")}>
+                                className={"text-[11px] font-medium px-2 py-0.5 rounded-md border transition-colors " + (selV ? "border-[#F9954E] bg-[#F9954E] text-white" : "border-stone-200 dark:border-zinc-700 text-stone-600 dark:text-stone-300 hover:border-[#F9954E]")}>
                                 {m}
                               </button>
                             );
@@ -1060,23 +1060,23 @@ function FlowBuilder({ runAI, userKey }: {
         );
       })()}
       {/* 툴바 */}
-      <div className="flex items-center gap-2 px-4 py-2.5 border-b border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shrink-0">
-        <button onClick={() => { setCur(null); setFlows(listUserFlows()); }} className="p-1.5 -ml-1 text-neutral-500 hover:text-[#E8832E]"><ArrowLeft className="w-5 h-5" /></button>
+      <div className="flex items-center gap-2 px-4 py-2.5 border-b border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shrink-0">
+        <button onClick={() => { setCur(null); setFlows(listUserFlows()); }} className="p-1.5 -ml-1 text-stone-500 hover:text-[#E8832E]"><ArrowLeft className="w-5 h-5" /></button>
         <input value={cur.name} onChange={(e) => setCur({ ...cur, name: e.target.value })}
-          className="min-w-0 flex-1 max-w-xs bg-transparent text-sm font-bold text-neutral-900 dark:text-white focus:outline-none border-b border-transparent focus:border-[#F9954E] py-1" placeholder="워크플로우 이름" />
-        <span className="ml-auto text-[11px] text-neutral-400 hidden sm:inline">노드 {cur.nodes.length} · 연결 {cur.links.length}</span>
-        <button onClick={() => removeFlow(cur.id)} className="text-[12px] text-neutral-400 hover:text-rose-500 px-2 py-1.5">삭제</button>
-        <button onClick={saveAsTemplate} title="완성한 노드들을 재사용 틀로 결합 보관" className="text-[12px] font-bold px-2.5 py-1.5 rounded-lg border border-[#F9954E] text-[#E8832E] hover:bg-[#FFF5EB] dark:hover:bg-orange-950/30">📦 결합 보관</button>
+          className="min-w-0 flex-1 max-w-xs bg-transparent text-sm font-bold text-stone-900 dark:text-white focus:outline-none border-b border-transparent focus:border-[#F9954E] py-1" placeholder="워크플로우 이름" />
+        <span className="ml-auto text-[11px] text-stone-400 hidden sm:inline">노드 {cur.nodes.length} · 연결 {cur.links.length}</span>
+        <button onClick={() => removeFlow(cur.id)} className="text-[12px] text-stone-400 hover:text-rose-500 px-2 py-1.5">삭제</button>
+        <button onClick={saveAsTemplate} title="완성한 노드들을 재사용 틀로 결합 보관" className="text-[12px] font-bold px-2.5 py-1.5 rounded-lg border border-[#F9954E] text-[#E8832E] hover:bg-[#FBEEE7] dark:hover:bg-orange-950/30">📦 결합 보관</button>
         <button onClick={save} className="text-[12px] font-bold px-3.5 py-1.5 rounded-lg bg-[#F9954E] text-white hover:bg-[#E8832E]">저장</button>
       </div>
 
       {/* 최상단 명령 바 — 요청 입력하고 실행 */}
-      <div className="shrink-0 px-4 py-2.5 border-b border-neutral-200 dark:border-zinc-800 bg-neutral-50 dark:bg-zinc-950">
+      <div className="shrink-0 px-4 py-2.5 border-b border-stone-200 dark:border-zinc-800 bg-stone-50 dark:bg-zinc-950">
         <div className="flex items-center gap-2">
           <input value={command} onChange={(e) => setCommand(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter" && !running) runFlow(); }}
             placeholder="이 워크플로우에 요청을 입력하세요… (예: 6월 신제품으로 블로그 글 써줘)"
-            className="flex-1 min-w-0 px-3.5 py-2 rounded-xl border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm text-neutral-900 dark:text-white focus:outline-none focus:border-[#F9954E]" />
+            className="flex-1 min-w-0 px-3.5 py-2 rounded-xl border border-stone-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm text-stone-900 dark:text-white focus:outline-none focus:border-[#F9954E]" />
           <button onClick={runFlow} disabled={running}
             className="shrink-0 flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-white text-[13px] font-extrabold transition-colors disabled:opacity-50">
             {running ? <><Loader2 className="w-4 h-4 animate-spin" /> 실행 중…</> : <>▶ 실행</>}
@@ -1087,12 +1087,12 @@ function FlowBuilder({ runAI, userKey }: {
 
       <div className="relative flex flex-1 min-h-0">
         {/* 노드 팔레트 */}
-        <div className="w-[150px] shrink-0 border-r border-neutral-200 dark:border-zinc-800 bg-neutral-50 dark:bg-zinc-950 overflow-y-auto p-2.5">
-          <div className="text-[10px] font-bold text-neutral-400 mb-2 px-0.5">＋ 노드 추가</div>
+        <div className="w-[150px] shrink-0 border-r border-stone-200 dark:border-zinc-800 bg-stone-50 dark:bg-zinc-950 overflow-y-auto p-2.5">
+          <div className="text-[10px] font-bold text-stone-400 mb-2 px-0.5">＋ 노드 추가</div>
           <div className="flex flex-col gap-1.5">
             {STEP_PALETTE.map((opt, k) => (
               <button key={k} onClick={() => addNode(opt)}
-                className="text-left text-[11px] px-2 py-1.5 rounded-lg border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 hover:border-[#F9954E] hover:text-[#E8832E] text-neutral-600 dark:text-neutral-300 transition-colors break-keep">
+                className="text-left text-[11px] px-2 py-1.5 rounded-lg border border-stone-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 hover:border-[#F9954E] hover:text-[#E8832E] text-stone-600 dark:text-stone-300 transition-colors break-keep">
                 {opt.icon} {opt.title}
               </button>
             ))}
@@ -1100,9 +1100,9 @@ function FlowBuilder({ runAI, userKey }: {
         </div>
 
         {/* 캔버스 */}
-        <div className="relative flex-1 min-w-0 overflow-auto bg-neutral-100 dark:bg-zinc-900" onMouseMove={onMove} onMouseUp={endDrag} onMouseLeave={endDrag}>
+        <div className="relative flex-1 min-w-0 overflow-auto bg-stone-100 dark:bg-zinc-900" onMouseMove={onMove} onMouseUp={endDrag} onMouseLeave={endDrag}>
           {connectFrom && (
-            <div className="sticky top-2 left-2 z-30 inline-block ml-2 mt-2 text-[11px] font-semibold text-[#E8832E] bg-[#FFF5EB] dark:bg-orange-950/40 px-2.5 py-1 rounded-lg shadow-sm">
+            <div className="sticky top-2 left-2 z-30 inline-block ml-2 mt-2 text-[11px] font-semibold text-[#E8832E] bg-[#FBEEE7] dark:bg-orange-950/40 px-2.5 py-1 rounded-lg shadow-sm">
 연결할 <b>다음 노드의 점(아무 면이나)</b>을 클릭하세요 · <button onClick={() => setConnectFrom(null)} className="underline">취소</button>
             </div>
           )}
@@ -1152,16 +1152,16 @@ function FlowBuilder({ runAI, userKey }: {
                   <span className="flex items-center gap-1 min-w-0 flex-1">
                     <span className="text-[12px] shrink-0">{n.icon}</span>
                     <input value={n.title} onChange={(e) => updateNode(n.id, { title: e.target.value })} onMouseDown={(e) => e.stopPropagation()} placeholder="이름" title="노드 이름 (클릭해서 수정)"
-                      className="min-w-0 flex-1 bg-transparent text-[12px] font-bold text-neutral-900 dark:text-white focus:outline-none border-b border-transparent focus:border-[#F9954E] cursor-text" />
+                      className="min-w-0 flex-1 bg-transparent text-[12px] font-bold text-stone-900 dark:text-white focus:outline-none border-b border-transparent focus:border-[#F9954E] cursor-text" />
                   </span>
-                  <button onMouseDown={(e) => e.stopPropagation()} onClick={() => delNode(n.id)} className="shrink-0 text-neutral-300 hover:text-rose-500"><X className="w-3.5 h-3.5" /></button>
+                  <button onMouseDown={(e) => e.stopPropagation()} onClick={() => delNode(n.id)} className="shrink-0 text-stone-300 hover:text-rose-500"><X className="w-3.5 h-3.5" /></button>
                 </div>
                 {n.role && <div className="px-2.5 text-[9px] text-[#E8832E] font-semibold shrink-0">{n.role}</div>}
                 {/* 이 노드를 처리할 AI·모델 — 클릭해 바꾸기 */}
                 {slotForNode(n) && (
                   <button onMouseDown={(e) => e.stopPropagation()} onClick={() => setPickModelFor(n)}
                     title="이 노드를 처리할 AI·모델 바꾸기"
-                    className="mx-2 mt-1 shrink-0 flex items-center gap-1 w-fit max-w-[calc(100%-16px)] text-[9px] font-bold text-neutral-600 dark:text-neutral-300 bg-neutral-100 dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 rounded-md px-1.5 py-0.5 hover:border-[#F9954E] hover:text-[#E8832E] cursor-pointer">
+                    className="mx-2 mt-1 shrink-0 flex items-center gap-1 w-fit max-w-[calc(100%-16px)] text-[9px] font-bold text-stone-600 dark:text-stone-300 bg-stone-100 dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 rounded-md px-1.5 py-0.5 hover:border-[#F9954E] hover:text-[#E8832E] cursor-pointer">
                     <span className="truncate">🤖 {modelLabel(n, n.model, n.variant)}</span>
                     <ChevronDown className="w-2.5 h-2.5 shrink-0" />
                   </button>
@@ -1172,7 +1172,7 @@ function FlowBuilder({ runAI, userKey }: {
                     onChange={(e) => updateNode(n.id, { instruction: e.target.value })}
                     onMouseDown={(e) => e.stopPropagation()}
                     placeholder={n.detail || "이 노드가 할 일(명령)을 적어요"}
-                    className="w-full h-full resize-none bg-white/70 dark:bg-zinc-950/40 border border-neutral-200/70 dark:border-zinc-700 rounded-md px-1.5 py-1 text-[9.5px] leading-snug text-neutral-700 dark:text-neutral-200 placeholder:text-neutral-400 focus:outline-none focus:border-[#F9954E] cursor-text" />
+                    className="w-full h-full resize-none bg-white/70 dark:bg-zinc-950/40 border border-stone-200/70 dark:border-zinc-700 rounded-md px-1.5 py-1 text-[9.5px] leading-snug text-stone-700 dark:text-stone-200 placeholder:text-stone-400 focus:outline-none focus:border-[#F9954E] cursor-text" />
                 </div>
               </div>
             ))}
@@ -1181,16 +1181,16 @@ function FlowBuilder({ runAI, userKey }: {
         {/* 플로팅 가이드 — 우측 하단 */}
         <div className="absolute bottom-4 right-4 z-30 max-w-[290px]">
           {showGuide ? (
-            <div className="rounded-xl border border-neutral-200 dark:border-zinc-700 bg-white/95 dark:bg-zinc-900/95 backdrop-blur shadow-lg p-3 text-[11px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+            <div className="rounded-xl border border-stone-200 dark:border-zinc-700 bg-white/95 dark:bg-zinc-900/95 backdrop-blur shadow-lg p-3 text-[11px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep">
               <div className="flex items-center justify-between mb-1.5">
-                <span className="font-bold text-neutral-700 dark:text-neutral-200">💡 사용법</span>
-                <button onClick={() => setShowGuide(false)} className="text-neutral-400 hover:text-rose-500"><X className="w-3.5 h-3.5" /></button>
+                <span className="font-bold text-stone-700 dark:text-stone-200">💡 사용법</span>
+                <button onClick={() => setShowGuide(false)} className="text-stone-400 hover:text-rose-500"><X className="w-3.5 h-3.5" /></button>
               </div>
               노드를 <b>아무 데나 잡고 드래그</b>해 옮기고, 가장자리 <b>4면 점</b>을 클릭 → 다음 노드의 점을 클릭하면 <b>연결</b>(한 면에서 여러 갈래 OK). 노드의 <b>🤖 AI</b>로 모델을 고르고, <b>명령</b> 칸에 할 일을 적어요. 다 만들면 <b>저장</b>, 재사용은 <b>📦 결합 보관</b>.
             </div>
           ) : (
             <button onClick={() => setShowGuide(true)} title="사용법 보기"
-              className="w-9 h-9 rounded-full border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-lg flex items-center justify-center text-[15px] hover:border-[#F9954E] transition-colors">💡</button>
+              className="w-9 h-9 rounded-full border border-stone-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 shadow-lg flex items-center justify-center text-[15px] hover:border-[#F9954E] transition-colors">💡</button>
           )}
         </div>
       </div>
@@ -1236,15 +1236,15 @@ function Workspace({ userKey }: { userKey: string }) {
 
   const chip = (active: boolean) =>
     "px-3 py-1.5 rounded-lg text-[13px] font-bold border transition-colors " +
-    (active ? "border-[#F9954E] bg-[#FFF5EB] text-[#E8832E] dark:bg-orange-950/20" : "border-neutral-200 dark:border-zinc-700 text-neutral-500 dark:text-neutral-400 hover:border-[#F9954E]");
+    (active ? "border-[#F9954E] bg-[#FBEEE7] text-[#E8832E] dark:bg-orange-950/20" : "border-stone-200 dark:border-zinc-700 text-stone-500 dark:text-stone-400 hover:border-[#F9954E]");
 
   return (
     <ViewScroll>
       <div className="flex items-start justify-between gap-3 mb-1">
-        <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white">📁 자료함</h1>
+        <h1 className="text-2xl font-extrabold text-stone-900 dark:text-white">📁 자료함</h1>
         <button onClick={newDoc} className="shrink-0 flex items-center gap-1.5 text-sm font-bold px-3.5 py-2 rounded-xl bg-[#F9954E] text-white hover:bg-[#E8832E] transition-colors"><Plus className="w-4 h-4" />새 문서</button>
       </div>
-      <p className="text-[13px] text-neutral-400 dark:text-neutral-500 mb-6 break-keep">HTML을 저장해두고 언제든 열어봐요. <b>부서</b>를 만들어 사업체처럼 정리할 수 있어요. <span className="text-neutral-400">(이 계정 전용)</span></p>
+      <p className="text-[13px] text-stone-400 dark:text-stone-500 mb-6 break-keep">HTML을 저장해두고 언제든 열어봐요. <b>부서</b>를 만들어 사업체처럼 정리할 수 있어요. <span className="text-stone-400">(이 계정 전용)</span></p>
 
       {/* 부서 폴더 */}
       <div className="flex flex-wrap items-center gap-2 mb-6">
@@ -1253,7 +1253,7 @@ function Workspace({ userKey }: { userKey: string }) {
         {depts.map((d) => (
           <span key={d.id} className={"group inline-flex items-center gap-1 " + chip(sel === d.id)}>
             <button onClick={() => setSel(d.id)}>{d.emoji} {d.name}</button>
-            <button onClick={() => removeDept(d.id)} title="부서 삭제" className="text-neutral-300 hover:text-rose-500"><X className="w-3 h-3" /></button>
+            <button onClick={() => removeDept(d.id)} title="부서 삭제" className="text-stone-300 hover:text-rose-500"><X className="w-3 h-3" /></button>
           </span>
         ))}
         {addDept ? (
@@ -1263,34 +1263,34 @@ function Workspace({ userKey }: { userKey: string }) {
             </select>
             <input autoFocus value={newDeptName} onChange={(e) => setNewDeptName(e.target.value)}
               onKeyDown={(e) => { if (e.key === "Enter") addDeptDo(); if (e.key === "Escape") setAddDept(false); }}
-              placeholder="부서 이름" className="w-24 bg-transparent text-[13px] focus:outline-none text-neutral-900 dark:text-white" />
+              placeholder="부서 이름" className="w-24 bg-transparent text-[13px] focus:outline-none text-stone-900 dark:text-white" />
             <button onClick={addDeptDo} className="text-[12px] font-bold text-[#E8832E]">추가</button>
           </span>
         ) : (
-          <button onClick={() => setAddDept(true)} className="px-3 py-1.5 rounded-lg text-[13px] font-bold border border-dashed border-neutral-300 dark:border-zinc-600 text-neutral-400 hover:border-[#F9954E] hover:text-[#E8832E]">+ 부서 만들기</button>
+          <button onClick={() => setAddDept(true)} className="px-3 py-1.5 rounded-lg text-[13px] font-bold border border-dashed border-stone-300 dark:border-zinc-600 text-stone-400 hover:border-[#F9954E] hover:text-[#E8832E]">+ 부서 만들기</button>
         )}
       </div>
 
       {/* 문서 목록 */}
       {shown.length === 0 ? (
-        <div className="rounded-2xl border border-dashed border-neutral-300 dark:border-zinc-700 text-center py-14 text-neutral-400">
+        <div className="rounded-2xl border border-dashed border-stone-300 dark:border-zinc-700 text-center py-14 text-stone-400">
           <div className="text-3xl mb-2">📄</div>
           <p className="text-[13px] break-keep">저장된 문서가 없어요. <button onClick={newDoc} className="font-bold text-[#E8832E] hover:underline">새 문서</button>로 HTML을 저장해보세요.</p>
         </div>
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
           {shown.map((d) => (
-            <div key={d.id} className="rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 hover:border-[#F9954E]/50 transition-colors">
+            <div key={d.id} className="rounded-2xl border border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4 hover:border-[#F9954E]/50 transition-colors">
               <div className="flex items-center justify-between gap-2">
                 <button onClick={() => setViewing(d)} className="min-w-0 flex-1 text-left">
-                  <div className="text-sm font-bold text-neutral-900 dark:text-white truncate">{d.name}</div>
-                  <div className="text-[11px] text-neutral-400 mt-0.5">{deptEmoji(d.dept)} {deptName(d.dept)} · {(d.html.length / 1024).toFixed(1)}KB</div>
+                  <div className="text-sm font-bold text-stone-900 dark:text-white truncate">{d.name}</div>
+                  <div className="text-[11px] text-stone-400 mt-0.5">{deptEmoji(d.dept)} {deptName(d.dept)} · {(d.html.length / 1024).toFixed(1)}KB</div>
                 </button>
-                <button onClick={() => { deleteDoc(userKey, d.id); refresh(); }} className="shrink-0 text-neutral-300 hover:text-rose-500"><X className="w-4 h-4" /></button>
+                <button onClick={() => { deleteDoc(userKey, d.id); refresh(); }} className="shrink-0 text-stone-300 hover:text-rose-500"><X className="w-4 h-4" /></button>
               </div>
               <div className="flex gap-3 mt-3">
                 <button onClick={() => setViewing(d)} className="text-[12px] font-bold text-[#E8832E] hover:underline">열어보기 →</button>
-                <button onClick={() => setEditing(d)} className="text-[12px] text-neutral-400 hover:text-[#E8832E]">편집</button>
+                <button onClick={() => setEditing(d)} className="text-[12px] text-stone-400 hover:text-[#E8832E]">편집</button>
               </div>
             </div>
           ))}
@@ -1300,23 +1300,23 @@ function Workspace({ userKey }: { userKey: string }) {
       {/* 편집/작성 모달 */}
       {editing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/40 p-4" onClick={() => setEditing(null)}>
-          <div className="w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-2xl border border-neutral-200 dark:border-zinc-800 shadow-xl p-5 max-h-[88vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
+          <div className="w-full max-w-2xl bg-white dark:bg-zinc-900 rounded-2xl border border-stone-200 dark:border-zinc-800 shadow-xl p-5 max-h-[88vh] flex flex-col" onClick={(e) => e.stopPropagation()}>
             <div className="flex items-center justify-between mb-3">
-              <h3 className="text-sm font-bold text-neutral-900 dark:text-white">{editing.id ? "문서 편집" : "새 HTML 문서"}</h3>
-              <button onClick={() => setEditing(null)} className="text-neutral-400 hover:text-rose-500"><X className="w-4 h-4" /></button>
+              <h3 className="text-sm font-bold text-stone-900 dark:text-white">{editing.id ? "문서 편집" : "새 HTML 문서"}</h3>
+              <button onClick={() => setEditing(null)} className="text-stone-400 hover:text-rose-500"><X className="w-4 h-4" /></button>
             </div>
             <div className="flex gap-2 mb-3">
-              <input value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} placeholder="문서 이름 (예: 이벤트 랜딩)" className="flex-1 px-3 py-2 rounded-lg border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm text-neutral-900 dark:text-white focus:outline-none focus:border-[#F9954E]" />
-              <select value={editing.dept} onChange={(e) => setEditing({ ...editing, dept: e.target.value })} className="px-3 py-2 rounded-lg border border-neutral-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm focus:outline-none">
+              <input value={editing.name} onChange={(e) => setEditing({ ...editing, name: e.target.value })} placeholder="문서 이름 (예: 이벤트 랜딩)" className="flex-1 px-3 py-2 rounded-lg border border-stone-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm text-stone-900 dark:text-white focus:outline-none focus:border-[#F9954E]" />
+              <select value={editing.dept} onChange={(e) => setEditing({ ...editing, dept: e.target.value })} className="px-3 py-2 rounded-lg border border-stone-200 dark:border-zinc-700 bg-white dark:bg-zinc-900 text-sm focus:outline-none">
                 <option value="">미분류</option>
                 {depts.map((d) => <option key={d.id} value={d.id}>{d.emoji} {d.name}</option>)}
               </select>
             </div>
             <textarea value={editing.html} onChange={(e) => setEditing({ ...editing, html: e.target.value })} placeholder="<!DOCTYPE html> … HTML을 붙여넣으세요" spellCheck={false}
-              className="flex-1 min-h-[240px] w-full px-3 py-2 rounded-lg border border-neutral-200 dark:border-zinc-700 bg-neutral-50 dark:bg-zinc-950 text-[12px] font-mono text-neutral-800 dark:text-neutral-200 focus:outline-none focus:border-[#F9954E] resize-none" />
+              className="flex-1 min-h-[240px] w-full px-3 py-2 rounded-lg border border-stone-200 dark:border-zinc-700 bg-stone-50 dark:bg-zinc-950 text-[12px] font-mono text-stone-800 dark:text-stone-200 focus:outline-none focus:border-[#F9954E] resize-none" />
             <div className="flex items-center justify-end gap-2 mt-3">
-              {editing.id && <button onClick={() => removeDoc(editing.id)} className="mr-auto text-[13px] text-neutral-400 hover:text-rose-500">삭제</button>}
-              <button onClick={() => setEditing(null)} className="text-[13px] px-3 py-2 text-neutral-500">취소</button>
+              {editing.id && <button onClick={() => removeDoc(editing.id)} className="mr-auto text-[13px] text-stone-400 hover:text-rose-500">삭제</button>}
+              <button onClick={() => setEditing(null)} className="text-[13px] px-3 py-2 text-stone-500">취소</button>
               <button onClick={saveEditing} className="text-[13px] font-bold px-4 py-2 rounded-lg bg-[#F9954E] text-white hover:bg-[#E8832E]">저장</button>
             </div>
           </div>
@@ -1326,13 +1326,13 @@ function Workspace({ userKey }: { userKey: string }) {
       {/* 미리보기 모달 */}
       {viewing && (
         <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4" onClick={() => setViewing(null)}>
-          <div className="w-full max-w-4xl h-[86vh] bg-white dark:bg-zinc-900 rounded-2xl border border-neutral-200 dark:border-zinc-800 shadow-xl flex flex-col overflow-hidden" onClick={(e) => e.stopPropagation()}>
-            <div className="flex items-center gap-2 px-4 py-2.5 border-b border-neutral-200 dark:border-zinc-800 shrink-0">
-              <span className="text-sm font-bold text-neutral-900 dark:text-white truncate">{viewing.name}</span>
-              <span className="text-[11px] text-neutral-400 shrink-0">{deptEmoji(viewing.dept)} {deptName(viewing.dept)}</span>
+          <div className="w-full max-w-4xl h-[86vh] bg-white dark:bg-zinc-900 rounded-2xl border border-stone-200 dark:border-zinc-800 shadow-xl flex flex-col overflow-hidden" onClick={(e) => e.stopPropagation()}>
+            <div className="flex items-center gap-2 px-4 py-2.5 border-b border-stone-200 dark:border-zinc-800 shrink-0">
+              <span className="text-sm font-bold text-stone-900 dark:text-white truncate">{viewing.name}</span>
+              <span className="text-[11px] text-stone-400 shrink-0">{deptEmoji(viewing.dept)} {deptName(viewing.dept)}</span>
               <button onClick={() => downloadText(viewing.name + ".html", viewing.html)} className="ml-auto shrink-0 text-[12px] font-bold text-[#E8832E] flex items-center gap-1"><Download className="w-3.5 h-3.5" />다운로드</button>
-              <button onClick={() => { const d = viewing; setViewing(null); setEditing(d); }} className="shrink-0 text-[12px] text-neutral-400 hover:text-[#E8832E]">편집</button>
-              <button onClick={() => setViewing(null)} className="shrink-0 text-neutral-400 hover:text-rose-500"><X className="w-4 h-4" /></button>
+              <button onClick={() => { const d = viewing; setViewing(null); setEditing(d); }} className="shrink-0 text-[12px] text-stone-400 hover:text-[#E8832E]">편집</button>
+              <button onClick={() => setViewing(null)} className="shrink-0 text-stone-400 hover:text-rose-500"><X className="w-4 h-4" /></button>
             </div>
             <iframe srcDoc={viewing.html} sandbox="allow-scripts allow-popups allow-forms" title={viewing.name} className="flex-1 w-full bg-white" />
           </div>
@@ -1344,9 +1344,9 @@ function Workspace({ userKey }: { userKey: string }) {
 
 /* ─────────────────── API 카탈로그 (키 발급 가이드) ─────────────────── */
 function roleBadgeClass(role: ApiEntry["role"]): string {
-  if (role === "pick") return "bg-[#FFF5EB] text-[#E8832E] border-[#FDD5A5] dark:bg-orange-950/30 dark:border-[#B35E15]";
+  if (role === "pick") return "bg-[#FBEEE7] text-[#E8832E] border-[#FDD5A5] dark:bg-orange-950/30 dark:border-[#B35E15]";
   if (role === "warn") return "bg-rose-50 text-rose-500 border-rose-200 dark:bg-rose-950/20 dark:border-rose-900";
-  return "bg-neutral-100 text-neutral-500 border-neutral-200 dark:bg-zinc-800 dark:border-zinc-700";
+  return "bg-stone-100 text-stone-500 border-stone-200 dark:bg-zinc-800 dark:border-zinc-700";
 }
 function ApiCatalog() {
   const [open, setOpen] = useState<string | null>(null);
@@ -1354,37 +1354,37 @@ function ApiCatalog() {
   const hasDetail = (e: ApiEntry) => !!(e.keySteps || e.keyUrl || e.free || e.topup || e.note);
   return (
     <ViewScroll>
-      <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white mb-1">📖 가이드</h1>
-      <p className="text-neutral-500 dark:text-neutral-400 mb-2 break-keep">
+      <h1 className="text-2xl font-extrabold text-stone-900 dark:text-white mb-1">📖 가이드</h1>
+      <p className="text-stone-500 dark:text-stone-400 mb-2 break-keep">
         “어떤 API가 있고, 뭐가 다르고, 키는 어디서 받는지” — 목적별로 정리했어요. 카드를 누르면 <b>키 발급 단계</b>와 무료 크레딧·최소 충전을 볼 수 있어요.
       </p>
-      <p className="text-[12px] text-neutral-400 mb-6 break-keep">※ 가격·정책은 제공사 사정으로 자주 바뀌어요. 정확한 최신 정보는 각 발급 페이지에서 확인하세요.</p>
+      <p className="text-[12px] text-stone-400 mb-6 break-keep">※ 가격·정책은 제공사 사정으로 자주 바뀌어요. 정확한 최신 정보는 각 발급 페이지에서 확인하세요.</p>
 
       <div className="flex flex-wrap gap-2 mb-6 text-[11.5px]">
-        <span className="px-2 py-0.5 rounded-full border bg-[#FFF5EB] text-[#E8832E] border-[#FDD5A5] dark:bg-orange-950/30 dark:border-[#B35E15]">★ 지정 — 직접 고른 핵심</span>
-        <span className="px-2 py-0.5 rounded-full border bg-neutral-100 text-neutral-500 border-neutral-200 dark:bg-zinc-800 dark:border-zinc-700">추천 — 함께 제안</span>
+        <span className="px-2 py-0.5 rounded-full border bg-[#FBEEE7] text-[#E8832E] border-[#FDD5A5] dark:bg-orange-950/30 dark:border-[#B35E15]">★ 지정 — 직접 고른 핵심</span>
+        <span className="px-2 py-0.5 rounded-full border bg-stone-100 text-stone-500 border-stone-200 dark:bg-zinc-800 dark:border-zinc-700">추천 — 함께 제안</span>
         <span className="px-2 py-0.5 rounded-full border bg-rose-50 text-rose-500 border-rose-200 dark:bg-rose-950/20 dark:border-rose-900">⚠ 주의</span>
       </div>
 
       {/* 초기 비용 줄이는 법 */}
-      <div className="rounded-2xl border border-[#FDD5A5] dark:border-[#B35E15] bg-[#FFF9F3] dark:bg-orange-950/10 p-5 mb-8">
-        <div className="text-sm font-bold text-neutral-900 dark:text-white mb-1">💡 초기 비용, 이렇게 줄여요</div>
-        <p className="text-[12.5px] text-neutral-500 dark:text-neutral-400 mb-3 break-keep">API마다 최소 충전($5~10)이 있어요. 한 번에 다 넣을 필요 없습니다.</p>
+      <div className="rounded-2xl border border-[#FDD5A5] dark:border-[#B35E15] bg-[#FDF6F1] dark:bg-orange-950/10 p-5 mb-8">
+        <div className="text-sm font-bold text-stone-900 dark:text-white mb-1">💡 초기 비용, 이렇게 줄여요</div>
+        <p className="text-[12.5px] text-stone-500 dark:text-stone-400 mb-3 break-keep">API마다 최소 충전($5~10)이 있어요. 한 번에 다 넣을 필요 없습니다.</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
           {COST_TIPS.map((t) => (
-            <div key={t.tag} className="rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 p-3">
+            <div key={t.tag} className="rounded-xl bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 p-3">
               <div className="text-[10px] font-bold text-[#E8832E] font-mono mb-1">{t.tag}</div>
-              <div className="text-[13px] font-bold text-neutral-900 dark:text-white mb-0.5">{t.title}</div>
-              <div className="text-[12px] text-neutral-500 dark:text-neutral-400 break-keep leading-relaxed">{t.body}</div>
+              <div className="text-[13px] font-bold text-stone-900 dark:text-white mb-0.5">{t.title}</div>
+              <div className="text-[12px] text-stone-500 dark:text-stone-400 break-keep leading-relaxed">{t.body}</div>
             </div>
           ))}
         </div>
-        <div className="mt-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 p-3">
+        <div className="mt-2.5 rounded-xl bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 p-3">
           <div className="flex items-center gap-2 mb-1 flex-wrap">
-            <span className="text-[13px] font-bold text-neutral-900 dark:text-white">🔗 {ROUTER_TIP.name}로 글 모델 묶기</span>
+            <span className="text-[13px] font-bold text-stone-900 dark:text-white">🔗 {ROUTER_TIP.name}로 글 모델 묶기</span>
             <a href={ROUTER_TIP.keyUrl} target="_blank" rel="noopener noreferrer" className="sm:ml-auto inline-flex items-center gap-1 text-[11px] font-bold text-[#E8832E] hover:underline">키 발급 <ExternalLink className="w-3 h-3" /></a>
           </div>
-          <div className="text-[12px] text-neutral-500 dark:text-neutral-400 break-keep">{ROUTER_TIP.desc}</div>
+          <div className="text-[12px] text-stone-500 dark:text-stone-400 break-keep">{ROUTER_TIP.desc}</div>
         </div>
       </div>
 
@@ -1393,35 +1393,35 @@ function ApiCatalog() {
           <div key={cat.id}>
             <div className="flex items-baseline gap-2 mb-1">
               <span className="text-lg">{cat.icon}</span>
-              <h2 className="text-base font-bold text-neutral-900 dark:text-white">{cat.name}</h2>
-              <span className="text-[10px] font-mono uppercase tracking-wider text-neutral-400">{cat.en}</span>
+              <h2 className="text-base font-bold text-stone-900 dark:text-white">{cat.name}</h2>
+              <span className="text-[10px] font-mono uppercase tracking-wider text-stone-400">{cat.en}</span>
             </div>
-            <p className="text-[12.5px] text-neutral-500 dark:text-neutral-400 mb-3 break-keep">{cat.desc}</p>
+            <p className="text-[12.5px] text-stone-500 dark:text-stone-400 mb-3 break-keep">{cat.desc}</p>
             <div className="space-y-2">
               {cat.entries.map((e) => {
                 const k = cat.id + ":" + e.name;
                 const detail = hasDetail(e);
                 const isOpen = open === k;
                 return (
-                  <div key={k} className="rounded-xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden">
+                  <div key={k} className="rounded-xl border border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden">
                     <button disabled={!detail} onClick={() => detail && toggle(k)}
-                      className={"w-full flex items-center gap-2.5 px-4 py-3 text-left " + (detail ? "hover:bg-neutral-50 dark:hover:bg-zinc-800/50 transition-colors" : "cursor-default")}>
+                      className={"w-full flex items-center gap-2.5 px-4 py-3 text-left " + (detail ? "hover:bg-stone-50 dark:hover:bg-zinc-800/50 transition-colors" : "cursor-default")}>
                       <span className={"shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md border " + roleBadgeClass(e.role)}>{ROLE_LABEL[e.role]}</span>
-                      <span className="shrink-0 text-[13.5px] font-bold text-neutral-900 dark:text-white">{e.name}</span>
-                      <span className="min-w-0 flex-1 text-[12px] text-neutral-500 dark:text-neutral-400 break-keep">{e.use}</span>
-                      {detail && <ChevronDown className={"ml-1 shrink-0 w-4 h-4 text-neutral-400 transition-transform " + (isOpen ? "rotate-180" : "")} />}
+                      <span className="shrink-0 text-[13.5px] font-bold text-stone-900 dark:text-white">{e.name}</span>
+                      <span className="min-w-0 flex-1 text-[12px] text-stone-500 dark:text-stone-400 break-keep">{e.use}</span>
+                      {detail && <ChevronDown className={"ml-1 shrink-0 w-4 h-4 text-stone-400 transition-transform " + (isOpen ? "rotate-180" : "")} />}
                     </button>
                     {detail && isOpen && (
-                      <div className="px-4 pb-4 pt-1 border-t border-neutral-100 dark:border-zinc-800 text-[12.5px] space-y-2">
-                        {e.free && <div className="flex gap-2"><span className="shrink-0 font-bold text-[#149074] dark:text-emerald-400">무료</span><span className="text-neutral-600 dark:text-neutral-300 break-keep">{e.free}</span></div>}
-                        {e.topup && <div className="flex gap-2"><span className="shrink-0 font-bold text-[#E8832E]">충전</span><span className="text-neutral-600 dark:text-neutral-300 break-keep">{e.topup}</span></div>}
-                        {e.note && <div className="flex gap-2"><span className="shrink-0 font-bold text-neutral-400">참고</span><span className="text-neutral-500 dark:text-neutral-400 break-keep">{e.note}</span></div>}
+                      <div className="px-4 pb-4 pt-1 border-t border-stone-100 dark:border-zinc-800 text-[12.5px] space-y-2">
+                        {e.free && <div className="flex gap-2"><span className="shrink-0 font-bold text-[#149074] dark:text-emerald-400">무료</span><span className="text-stone-600 dark:text-stone-300 break-keep">{e.free}</span></div>}
+                        {e.topup && <div className="flex gap-2"><span className="shrink-0 font-bold text-[#E8832E]">충전</span><span className="text-stone-600 dark:text-stone-300 break-keep">{e.topup}</span></div>}
+                        {e.note && <div className="flex gap-2"><span className="shrink-0 font-bold text-stone-400">참고</span><span className="text-stone-500 dark:text-stone-400 break-keep">{e.note}</span></div>}
                         {e.keySteps && (
                           <div className="pt-1">
-                            <div className="flex items-center gap-1.5 font-bold text-neutral-900 dark:text-white mb-1.5"><KeyRound className="w-3.5 h-3.5 text-[#F9954E]" /> 키 발급 방법</div>
+                            <div className="flex items-center gap-1.5 font-bold text-stone-900 dark:text-white mb-1.5"><KeyRound className="w-3.5 h-3.5 text-[#F9954E]" /> 키 발급 방법</div>
                             <ol className="space-y-1">
                               {e.keySteps.map((s, i) => (
-                                <li key={i} className="flex gap-2 text-neutral-600 dark:text-neutral-300 break-keep">
+                                <li key={i} className="flex gap-2 text-stone-600 dark:text-stone-300 break-keep">
                                   <span className="shrink-0 w-4 h-4 rounded-full bg-[#F9954E] text-white text-[9px] font-bold flex items-center justify-center mt-0.5">{i + 1}</span>
                                   <span>{s}</span>
                                 </li>
@@ -1440,12 +1440,12 @@ function ApiCatalog() {
                 );
               })}
             </div>
-            {cat.catNote && <p className="text-[12px] text-neutral-600 dark:text-neutral-300 mt-2.5 break-keep bg-neutral-50 dark:bg-zinc-900/50 rounded-lg px-3 py-2">{cat.catNote}</p>}
+            {cat.catNote && <p className="text-[12px] text-stone-600 dark:text-stone-300 mt-2.5 break-keep bg-stone-50 dark:bg-zinc-900/50 rounded-lg px-3 py-2">{cat.catNote}</p>}
           </div>
         ))}
       </div>
 
-      <p className="text-[12px] text-neutral-400 mt-8 break-keep text-center">발급한 키는 <b className="text-[#E8832E]">설정 → AI 키</b>에 넣으면 워크플로우·도구가 바로 그 키로 동작해요.</p>
+      <p className="text-[12px] text-stone-400 mt-8 break-keep text-center">발급한 키는 <b className="text-[#E8832E]">설정 → AI 키</b>에 넣으면 워크플로우·도구가 바로 그 키로 동작해요.</p>
     </ViewScroll>
   );
 }
@@ -1472,23 +1472,23 @@ function FeatureManager({ enabled, onToggle, onView }: {
 
   return (
     <ViewScroll>
-      <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white mb-1">🧩 기능 보관함</h1>
-      <p className="text-neutral-500 dark:text-neutral-400 mb-4 break-keep">필요한 기능만 켜서 왼쪽 메뉴에 추가하세요. 안 쓰는 건 꺼두면 깔끔해요.</p>
+      <h1 className="text-2xl font-extrabold text-stone-900 dark:text-white mb-1">🧩 기능 보관함</h1>
+      <p className="text-stone-500 dark:text-stone-400 mb-4 break-keep">필요한 기능만 켜서 왼쪽 메뉴에 추가하세요. 안 쓰는 건 꺼두면 깔끔해요.</p>
 
       {/* 검색 */}
       <div className="relative mb-6">
-        <Search className="w-4 h-4 text-neutral-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
+        <Search className="w-4 h-4 text-stone-400 absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" />
         <input value={q} onChange={(e) => setQ(e.target.value)}
           placeholder="기능 검색… (이름·설명, 초성 ㄱㄴㄷ 가능)"
-          className="w-full pl-10 pr-9 py-2.5 rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-sm focus:outline-none focus:border-[#F9954E]" />
+          className="w-full pl-10 pr-9 py-2.5 rounded-2xl bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-700 text-sm focus:outline-none focus:border-[#F9954E]" />
         {q && (
           <button onClick={() => setQ("")} title="지우기"
-            className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 grid place-items-center rounded-full text-neutral-400 hover:text-neutral-700 dark:hover:text-white hover:bg-neutral-100 dark:hover:bg-zinc-800">✕</button>
+            className="absolute right-3 top-1/2 -translate-y-1/2 w-5 h-5 grid place-items-center rounded-full text-stone-400 hover:text-stone-700 dark:hover:text-white hover:bg-stone-100 dark:hover:bg-zinc-800">✕</button>
         )}
       </div>
-      {query && <p className="-mt-3 mb-5 text-[12px] text-neutral-400">검색 결과 <b className="text-[#E8832E]">{matchCount}</b>개</p>}
+      {query && <p className="-mt-3 mb-5 text-[12px] text-stone-400">검색 결과 <b className="text-[#E8832E]">{matchCount}</b>개</p>}
       {query && matchCount === 0 && (
-        <div className="text-center py-16 text-neutral-400">
+        <div className="text-center py-16 text-stone-400">
           <div className="text-3xl mb-2">🔍</div>
           <p className="text-sm">'{query}'에 맞는 기능이 없어요.</p>
         </div>
@@ -1500,7 +1500,7 @@ function FeatureManager({ enabled, onToggle, onView }: {
         if (!feats.length) return null;
         return (
           <section key={group} className="mb-8">
-            <h2 className="text-sm font-bold text-neutral-400 mb-3">{group}</h2>
+            <h2 className="text-sm font-bold text-stone-400 mb-3">{group}</h2>
             <div className="flex flex-col gap-2">
               {feats.map((f, idx) => {
                 const on = enabled.includes(f.id);
@@ -1513,44 +1513,44 @@ function FeatureManager({ enabled, onToggle, onView }: {
                   {showHeader && (
                     <div className="flex items-center gap-2 mt-3 first:mt-0 mb-0.5 px-0.5">
                       <span className="w-6 h-6 rounded-lg bg-[#F9954E]/12 text-[#E8832E] text-[12px] font-extrabold grid place-items-center">{ini}</span>
-                      <span className="h-px flex-1 bg-neutral-100 dark:bg-zinc-800" />
+                      <span className="h-px flex-1 bg-stone-100 dark:bg-zinc-800" />
                     </div>
                   )}
-                  <div className={"rounded-2xl border bg-white dark:bg-zinc-900 transition-all hover:shadow-sm " + (on ? "border-[#F9954E]/60" : "border-neutral-200 dark:border-zinc-800 hover:border-[#F9954E]/40")}>
+                  <div className={"rounded-2xl border bg-white dark:bg-zinc-900 transition-all hover:shadow-sm " + (on ? "border-[#F9954E]/60" : "border-stone-200 dark:border-zinc-800 hover:border-[#F9954E]/40")}>
                     <div className="flex items-center gap-3 p-3.5">
-                      <span className="w-10 h-10 rounded-xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center text-lg shrink-0">{f.icon}</span>
+                      <span className="w-10 h-10 rounded-xl bg-[#FBEEE7] dark:bg-orange-950/30 grid place-items-center text-lg shrink-0">{f.icon}</span>
                       <div className="min-w-0 flex-1">
-                        <div className="text-sm font-bold text-neutral-900 dark:text-white flex items-center gap-1.5">{f.label}{on && hasCustomFlow(f.id) && <span className="text-[9.5px] text-neutral-400 font-normal">수정됨</span>}</div>
-                        <div className="text-[12px] text-neutral-500 dark:text-neutral-400 truncate">{f.desc}</div>
+                        <div className="text-sm font-bold text-stone-900 dark:text-white flex items-center gap-1.5">{f.label}{on && hasCustomFlow(f.id) && <span className="text-[9.5px] text-stone-400 font-normal">수정됨</span>}</div>
+                        <div className="text-[12px] text-stone-500 dark:text-stone-400 truncate">{f.desc}</div>
                       </div>
                       <button onClick={() => toggleFlow(f.id)} title="어떤 AI들이 연결됐는지 보기"
-                        className={"shrink-0 text-[11px] font-semibold px-2 py-1.5 rounded-lg whitespace-nowrap transition-colors " + (open ? "text-[#E8832E] bg-[#FFF5EB] dark:bg-orange-950/30" : "text-neutral-400 hover:text-[#E8832E]")}>
+                        className={"shrink-0 text-[11px] font-semibold px-2 py-1.5 rounded-lg whitespace-nowrap transition-colors " + (open ? "text-[#E8832E] bg-[#FBEEE7] dark:bg-orange-950/30" : "text-stone-400 hover:text-[#E8832E]")}>
                         {open ? "접기 ▴" : "AI 보기 ▾"}
                       </button>
                       <button onClick={() => onToggle(f.id)}
-                        className={"shrink-0 text-[12px] font-bold px-3 py-1.5 rounded-lg transition-colors " + (on ? "bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400 hover:text-rose-500" : "bg-[#F9954E] text-white hover:bg-[#E8832E]")}>
+                        className={"shrink-0 text-[12px] font-bold px-3 py-1.5 rounded-lg transition-colors " + (on ? "bg-stone-100 dark:bg-zinc-800 text-stone-500 dark:text-stone-400 hover:text-rose-500" : "bg-[#F9954E] text-white hover:bg-[#E8832E]")}>
                         {on ? "끄기" : "추가"}
                       </button>
                     </div>
                     <div className={"overflow-hidden transition-all duration-300 ease-out " + (open ? "max-h-[40rem]" : "max-h-0")}>
-                      <div className="px-3.5 pb-3.5 pt-3 border-t border-neutral-100 dark:border-zinc-800">
-                        <div className="text-[10.5px] font-semibold text-neutral-400 mb-2.5">⚙️ 워크플로우 · {steps.length}단계 — 이 AI들이 협업해요</div>
+                      <div className="px-3.5 pb-3.5 pt-3 border-t border-stone-100 dark:border-zinc-800">
+                        <div className="text-[10.5px] font-semibold text-stone-400 mb-2.5">⚙️ 워크플로우 · {steps.length}단계 — 이 AI들이 협업해요</div>
                         <div className="relative">
                           {steps.map((s, i) => (
                             <div key={i} className="flex gap-3 pb-3 last:pb-0 relative">
-                              {i < steps.length - 1 && <span className="absolute left-[9px] top-[18px] bottom-0 w-px bg-neutral-200 dark:bg-zinc-700" />}
+                              {i < steps.length - 1 && <span className="absolute left-[9px] top-[18px] bottom-0 w-px bg-stone-200 dark:bg-zinc-700" />}
                               <span className="shrink-0 w-[18px] h-[18px] rounded-full bg-[#F9954E]/15 text-[#E8832E] text-[10px] font-bold grid place-items-center z-10 mt-0.5">{i + 1}</span>
                               <div className="min-w-0 flex-1">
                                 <div className="flex items-center gap-1.5">
-                                  <span className="text-[12.5px] font-semibold text-neutral-900 dark:text-white">{s.icon} {s.title}</span>
-                                  {s.role && <span className="text-[9.5px] text-neutral-400">{s.role}</span>}
+                                  <span className="text-[12.5px] font-semibold text-stone-900 dark:text-white">{s.icon} {s.title}</span>
+                                  {s.role && <span className="text-[9.5px] text-stone-400">{s.role}</span>}
                                 </div>
-                                <div className="text-[11px] text-neutral-400 dark:text-neutral-500 leading-snug break-keep mt-0.5">{s.detail}</div>
+                                <div className="text-[11px] text-stone-400 dark:text-stone-500 leading-snug break-keep mt-0.5">{s.detail}</div>
                               </div>
                             </div>
                           ))}
                         </div>
-                        <p className="mt-2.5 text-[10.5px] text-neutral-400 break-keep">＊ 편집(단계 추가·삭제)은 <b>추가</b> 후 왼쪽 메뉴에서 이 도구를 열면 가능해요.</p>
+                        <p className="mt-2.5 text-[10.5px] text-stone-400 break-keep">＊ 편집(단계 추가·삭제)은 <b>추가</b> 후 왼쪽 메뉴에서 이 도구를 열면 가능해요.</p>
                       </div>
                     </div>
                   </div>
@@ -1561,7 +1561,7 @@ function FeatureManager({ enabled, onToggle, onView }: {
           </section>
         );
       })}
-      <p className="text-[11px] text-neutral-400 dark:text-zinc-600 mt-4 text-center break-keep">
+      <p className="text-[11px] text-stone-400 dark:text-zinc-600 mt-4 text-center break-keep">
         <b>AI 보기</b>로 어떤 AI들이 연계됐는지 확인하세요. 편집(단계 추가·삭제)은 추가한 뒤 도구 안에서.<br />더 많은 기능(이미지·영상·음성·자동화)은 완성되는 대로 하나씩 열려요. 🔜
       </p>
     </ViewScroll>
@@ -1579,33 +1579,33 @@ function HistoryView({ onBack }: { onBack: () => void }) {
   async function copy(t: string, id: string) { try { await navigator.clipboard.writeText(t); setCopiedId(id); setTimeout(() => setCopiedId(null), 1500); } catch { /* */ } }
   return (
     <ViewScroll>
-      <button onClick={onBack} className="inline-flex items-center gap-1.5 text-sm font-semibold text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] mb-4"><ArrowLeft className="w-4 h-4" /> 홈</button>
+      <button onClick={onBack} className="inline-flex items-center gap-1.5 text-sm font-semibold text-stone-500 dark:text-stone-400 hover:text-[#F9954E] mb-4"><ArrowLeft className="w-4 h-4" /> 홈</button>
       <div className="flex items-center justify-between mb-1">
-        <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white">📚 내 결과 보관함</h1>
-        {items.length > 0 && <button onClick={() => { clearResults(); refresh(); }} className="text-[12px] text-neutral-400 hover:text-rose-500">전체 삭제</button>}
+        <h1 className="text-2xl font-extrabold text-stone-900 dark:text-white">📚 내 결과 보관함</h1>
+        {items.length > 0 && <button onClick={() => { clearResults(); refresh(); }} className="text-[12px] text-stone-400 hover:text-rose-500">전체 삭제</button>}
       </div>
-      <p className="text-neutral-500 dark:text-neutral-400 mb-6 text-sm break-keep">도구·일리에서 만든 결과가 자동 저장돼요 (이 브라우저, 최근 100개).</p>
+      <p className="text-stone-500 dark:text-stone-400 mb-6 text-sm break-keep">도구·일리에서 만든 결과가 자동 저장돼요 (이 브라우저, 최근 100개).</p>
       {items.length === 0 ? (
-        <div className="text-center py-16 text-neutral-400 text-sm break-keep">아직 저장된 결과가 없어요.<br />도구나 일리에게 무언가 만들어보세요.</div>
+        <div className="text-center py-16 text-stone-400 text-sm break-keep">아직 저장된 결과가 없어요.<br />도구나 일리에게 무언가 만들어보세요.</div>
       ) : (
         <div className="space-y-2.5">
           {items.map((it) => {
             const open = openId === it.id;
             return (
-              <div key={it.id} className="rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden">
+              <div key={it.id} className="rounded-2xl border border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden">
                 <button onClick={() => setOpenId(open ? null : it.id)} className="w-full flex items-center gap-2 p-3.5 text-left">
-                  <span className="text-[11px] font-bold text-[#E8832E] bg-[#FFF5EB] dark:bg-orange-950/30 px-2 py-0.5 rounded shrink-0">{it.toolLabel}</span>
-                  <span className="text-[11px] text-neutral-400 shrink-0">{fmt(it.ts)}</span>
-                  <span className="text-[12.5px] text-neutral-500 dark:text-neutral-400 truncate flex-1 min-w-0">{it.output.replace(/\s+/g, " ").slice(0, 70)}</span>
-                  <span className="text-[11px] text-neutral-400 shrink-0">{open ? "▴" : "▾"}</span>
+                  <span className="text-[11px] font-bold text-[#E8832E] bg-[#FBEEE7] dark:bg-orange-950/30 px-2 py-0.5 rounded shrink-0">{it.toolLabel}</span>
+                  <span className="text-[11px] text-stone-400 shrink-0">{fmt(it.ts)}</span>
+                  <span className="text-[12.5px] text-stone-500 dark:text-stone-400 truncate flex-1 min-w-0">{it.output.replace(/\s+/g, " ").slice(0, 70)}</span>
+                  <span className="text-[11px] text-stone-400 shrink-0">{open ? "▴" : "▾"}</span>
                 </button>
                 {open && (
                   <div className="px-3.5 pb-3.5">
-                    <pre className="text-[13px] text-neutral-800 dark:text-neutral-200 whitespace-pre-wrap break-words font-sans leading-relaxed bg-neutral-50 dark:bg-zinc-800/50 rounded-xl p-3">{it.output}</pre>
+                    <pre className="text-[13px] text-stone-800 dark:text-stone-200 whitespace-pre-wrap break-words font-sans leading-relaxed bg-stone-50 dark:bg-zinc-800/50 rounded-xl p-3">{it.output}</pre>
                     <div className="flex items-center gap-3 mt-2.5">
                       <button onClick={() => copy(it.output, it.id)} className="inline-flex items-center gap-1.5 text-xs font-bold text-[#F9954E]">{copiedId === it.id ? <><Check className="w-3.5 h-3.5" /> 복사됨</> : <><Copy className="w-3.5 h-3.5" /> 복사</>}</button>
-                      <button onClick={() => downloadText(`${it.toolLabel}.txt`, it.output)} className="inline-flex items-center gap-1.5 text-xs font-bold text-neutral-400 hover:text-[#F9954E]"><Download className="w-3.5 h-3.5" /> 다운로드</button>
-                      <button onClick={() => { deleteResult(it.id); refresh(); }} className="ml-auto inline-flex items-center gap-1.5 text-xs font-bold text-neutral-400 hover:text-rose-500"><X className="w-3.5 h-3.5" /> 삭제</button>
+                      <button onClick={() => downloadText(`${it.toolLabel}.txt`, it.output)} className="inline-flex items-center gap-1.5 text-xs font-bold text-stone-400 hover:text-[#F9954E]"><Download className="w-3.5 h-3.5" /> 다운로드</button>
+                      <button onClick={() => { deleteResult(it.id); refresh(); }} className="ml-auto inline-flex items-center gap-1.5 text-xs font-bold text-stone-400 hover:text-rose-500"><X className="w-3.5 h-3.5" /> 삭제</button>
                     </div>
                   </div>
                 )}
@@ -1630,13 +1630,13 @@ function Settings({ keyVal, free, onShowKey, onRemoveKey, onLogout, userName, us
 
   return (
     <ViewScroll>
-      <h1 className="text-2xl font-extrabold text-neutral-900 dark:text-white mb-7">⚙️ 설정</h1>
+      <h1 className="text-2xl font-extrabold text-stone-900 dark:text-white mb-7">⚙️ 설정</h1>
 
       <Section title="계정">
         <div className="flex items-center justify-between">
           <div>
-            <div className="font-bold text-neutral-900 dark:text-white">{userName}</div>
-            <div className="text-[13px] text-neutral-500 dark:text-neutral-400">{userEmail}</div>
+            <div className="font-bold text-stone-900 dark:text-white">{userName}</div>
+            <div className="text-[13px] text-stone-500 dark:text-stone-400">{userEmail}</div>
           </div>
           <button onClick={onLogout} className="text-[13px] font-bold text-rose-500 border border-rose-200 dark:border-rose-900/50 rounded-lg px-3 py-1.5 hover:bg-rose-50 dark:hover:bg-rose-950/30">로그아웃</button>
         </div>
@@ -1647,17 +1647,17 @@ function Settings({ keyVal, free, onShowKey, onRemoveKey, onLogout, userName, us
           {PLANS.map((p) => {
             const current = (free ? "free" : "pro") === p.id;
             return (
-              <div key={p.id} className={"rounded-2xl border p-4 " + (current ? "border-[#F9954E] bg-[#FFF9F3] dark:bg-orange-950/10" : "border-neutral-200 dark:border-zinc-800")}>
+              <div key={p.id} className={"rounded-2xl border p-4 " + (current ? "border-[#F9954E] bg-[#FDF6F1] dark:bg-orange-950/10" : "border-stone-200 dark:border-zinc-800")}>
                 <div className="flex items-center justify-between mb-1">
-                  <span className="text-sm font-extrabold text-neutral-900 dark:text-white">{p.label}</span>
+                  <span className="text-sm font-extrabold text-stone-900 dark:text-white">{p.label}</span>
                   {current ? <span className="text-[10px] font-bold text-white bg-[#F9954E] rounded-full px-2 py-0.5">사용 중</span>
                     : p.highlight ? <span className="text-[10px] font-bold text-[#E8832E]">추천</span> : null}
                 </div>
-                <div className="text-[13px] font-bold text-neutral-700 dark:text-neutral-200">{p.price}</div>
-                <div className="text-[11px] text-neutral-400 mb-2.5">{p.limit} · {p.model}</div>
+                <div className="text-[13px] font-bold text-stone-700 dark:text-stone-200">{p.price}</div>
+                <div className="text-[11px] text-stone-400 mb-2.5">{p.limit} · {p.model}</div>
                 <ul className="space-y-1">
                   {p.perks.map((perk, i) => (
-                    <li key={i} className="text-[11.5px] text-neutral-600 dark:text-neutral-300 flex gap-1.5 break-keep"><span className="text-[#E8832E]">✓</span>{perk}</li>
+                    <li key={i} className="text-[11.5px] text-stone-600 dark:text-stone-300 flex gap-1.5 break-keep"><span className="text-[#E8832E]">✓</span>{perk}</li>
                   ))}
                 </ul>
                 {p.id === "pro" && !current && (
@@ -1667,18 +1667,18 @@ function Settings({ keyVal, free, onShowKey, onRemoveKey, onLogout, userName, us
             );
           })}
         </div>
-        <p className="text-[11px] text-neutral-400 mt-3 break-keep">
+        <p className="text-[11px] text-stone-400 mt-3 break-keep">
           🤖 AI는 작업에 가장 잘 맞는 모델로 <b>자동 연결</b>돼요(설정 불필요). 결제(카드)는 준비 중이라, 지금은 <b>본인 API 키</b>를 넣으면 프로처럼 무제한·고급 모델로 쓸 수 있어요.
         </p>
       </Section>
 
       <Section title="테마">
-        <div className="flex items-center gap-1 p-1 rounded-xl bg-neutral-100 dark:bg-zinc-900 max-w-xs">
+        <div className="flex items-center gap-1 p-1 rounded-xl bg-stone-100 dark:bg-zinc-900 max-w-xs">
           {(["light", "dark"] as const).map((t) => {
             const on = mounted && resolvedTheme === t;
             return (
               <button key={t} onClick={() => setTheme(t)}
-                className={"flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[13px] font-medium transition-all " + (on ? "bg-white dark:bg-zinc-800 text-neutral-900 dark:text-white shadow-sm" : "text-neutral-400")}>
+                className={"flex-1 flex items-center justify-center gap-1.5 py-2 rounded-lg text-[13px] font-medium transition-all " + (on ? "bg-white dark:bg-zinc-800 text-stone-900 dark:text-white shadow-sm" : "text-stone-400")}>
                 {t === "light" ? <Sun className="w-4 h-4" /> : <Moon className="w-4 h-4" />}{t === "light" ? "화이트" : "다크"}
               </button>
             );
@@ -1687,7 +1687,7 @@ function Settings({ keyVal, free, onShowKey, onRemoveKey, onLogout, userName, us
       </Section>
 
       <Section title="앞으로">
-        <p className="text-[13px] text-neutral-600 dark:text-neutral-300 break-keep">
+        <p className="text-[13px] text-stone-600 dark:text-stone-300 break-keep">
           지금은 일리(AI 비서)·워크플로우·가이드·글쓰기 도구부터 시작해요. 이미지·영상·음성·자동화 같은 기능은 <b>완성되는 대로 하나씩</b> 열립니다. 🔜
         </p>
         <Link href="/illo" className="inline-block mt-3 text-[13px] font-bold text-[#E8832E] dark:text-[#FBAA60] hover:underline">워크일로 소개 보기 →</Link>
@@ -1698,8 +1698,8 @@ function Settings({ keyVal, free, onShowKey, onRemoveKey, onLogout, userName, us
 function Section({ title, children }: { title: string; children: React.ReactNode }) {
   return (
     <section className="mb-5">
-      <h2 className="text-sm font-bold text-neutral-400 mb-2.5">{title}</h2>
-      <div className="rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-800 p-4">{children}</div>
+      <h2 className="text-sm font-bold text-stone-400 mb-2.5">{title}</h2>
+      <div className="rounded-2xl bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 p-4">{children}</div>
     </section>
   );
 }
@@ -1734,17 +1734,17 @@ function BasicGen({ kind, free, quota, setQuota }: {
   return (
     <ViewScroll>
       <div className="flex items-center gap-3 mb-5">
-        <span className="w-11 h-11 rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center text-xl">{isImg ? "🎨" : "🎬"}</span>
+        <span className="w-11 h-11 rounded-2xl bg-[#FBEEE7] dark:bg-orange-950/30 grid place-items-center text-xl">{isImg ? "🎨" : "🎬"}</span>
         <div>
-          <h1 className="text-lg font-extrabold text-neutral-900 dark:text-white leading-tight">{isImg ? "이미지 생성" : "영상 생성"}</h1>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400">글로 설명하면 {isImg ? "이미지를" : "짧은 영상을"} 만들어드려요</p>
+          <h1 className="text-lg font-extrabold text-stone-900 dark:text-white leading-tight">{isImg ? "이미지 생성" : "영상 생성"}</h1>
+          <p className="text-xs text-stone-500 dark:text-stone-400">글로 설명하면 {isImg ? "이미지를" : "짧은 영상을"} 만들어드려요</p>
         </div>
       </div>
-      <label className="block text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-2">{isImg ? "어떤 이미지를 원하세요?" : "어떤 영상을 원하세요?"}</label>
+      <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2">{isImg ? "어떤 이미지를 원하세요?" : "어떤 영상을 원하세요?"}</label>
       <textarea value={input} onChange={(e) => setInput(e.target.value)} rows={4}
         placeholder={isImg ? "예) 따뜻한 감성의 홈카페 디저트 사진, 부드러운 자연광" : "예) 빵이 오븐에서 부풀어 오르는 클로즈업, 따뜻한 조명"}
-        className="w-full px-4 py-3 rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-sm focus:outline-none focus:border-[#F9954E] resize-y mb-4" />
-      {free && <p className="text-[12px] text-neutral-400 mb-2 text-center">🆓 무료 · 오늘 남은 <b className={(quota ?? FREE_LIMIT) <= 5 ? "text-rose-500" : "text-[#E8832E]"}>{quota ?? FREE_LIMIT}</b> / {FREE_LIMIT}회</p>}
+        className="w-full px-4 py-3 rounded-2xl bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-700 text-sm focus:outline-none focus:border-[#F9954E] resize-y mb-4" />
+      {free && <p className="text-[12px] text-stone-400 mb-2 text-center">🆓 무료 · 오늘 남은 <b className={(quota ?? FREE_LIMIT) <= 5 ? "text-rose-500" : "text-[#E8832E]"}>{quota ?? FREE_LIMIT}</b> / {FREE_LIMIT}회</p>}
       <button onClick={run} disabled={busy || !input.trim()}
         className="w-full py-3.5 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold flex items-center justify-center gap-2 disabled:opacity-50 transition-colors">
         {busy ? <><Loader2 className="w-5 h-5 animate-spin" /> 생성 중…{!isImg && " (영상은 1~2분)"}</> : <><Sparkles className="w-5 h-5" /> {isImg ? "이미지 생성" : "영상 생성"}</>}
@@ -1753,8 +1753,8 @@ function BasicGen({ kind, free, quota, setQuota }: {
       {out && (
         <div className="mt-6">
           {isImg
-            ? <img src={out} alt="생성 이미지" className="w-full max-w-lg rounded-2xl border border-neutral-200 dark:border-zinc-800" />
-            : <video src={out} controls className="w-full max-w-lg rounded-2xl border border-neutral-200 dark:border-zinc-800" />}
+            ? <img src={out} alt="생성 이미지" className="w-full max-w-lg rounded-2xl border border-stone-200 dark:border-zinc-800" />
+            : <video src={out} controls className="w-full max-w-lg rounded-2xl border border-stone-200 dark:border-zinc-800" />}
           <a href={out} target="_blank" rel="noreferrer" className="inline-block mt-2 text-[12px] font-bold text-[#E8832E] hover:underline">원본 다운로드/열기 ↗</a>
         </div>
       )}
@@ -1818,26 +1818,26 @@ function ToolView({ tool, runAI, free, quota, onShowKey, onBack }: {
 
   return (
     <ViewScroll>
-      <button onClick={onBack} className="inline-flex items-center gap-1.5 text-sm font-semibold text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] mb-5">
+      <button onClick={onBack} className="inline-flex items-center gap-1.5 text-sm font-semibold text-stone-500 dark:text-stone-400 hover:text-[#F9954E] mb-5">
         <ArrowLeft className="w-4 h-4" /> 홈
       </button>
       <div className="flex items-center gap-3 mb-5">
-        <span className="w-11 h-11 rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center text-xl">{tool.icon}</span>
+        <span className="w-11 h-11 rounded-2xl bg-[#FBEEE7] dark:bg-orange-950/30 grid place-items-center text-xl">{tool.icon}</span>
         <div>
-          <h1 className="text-lg font-extrabold text-neutral-900 dark:text-white leading-tight">{tool.title}</h1>
-          <p className="text-xs text-neutral-500 dark:text-neutral-400">{tool.desc}</p>
+          <h1 className="text-lg font-extrabold text-stone-900 dark:text-white leading-tight">{tool.title}</h1>
+          <p className="text-xs text-stone-500 dark:text-stone-400">{tool.desc}</p>
         </div>
       </div>
 
-      <label className="block text-sm font-bold text-neutral-700 dark:text-neutral-300 mb-2">{tool.inputLabel}</label>
+      <label className="block text-sm font-bold text-stone-700 dark:text-stone-300 mb-2">{tool.inputLabel}</label>
       <textarea value={input} onChange={(e) => setInput(e.target.value)} placeholder={tool.placeholder} rows={5}
-        className="w-full px-4 py-3 rounded-2xl bg-white dark:bg-zinc-900 border border-neutral-200 dark:border-zinc-700 text-sm focus:outline-none focus:border-[#F9954E] resize-y mb-4" />
+        className="w-full px-4 py-3 rounded-2xl bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-700 text-sm focus:outline-none focus:border-[#F9954E] resize-y mb-4" />
 
       {tool.aspects && (
         <div className="flex flex-wrap gap-2 mb-5">
           {tool.aspects.map((a) => (
             <button key={a} onClick={() => togglePick(a)}
-              className={"px-3 py-1.5 rounded-full text-[13px] font-semibold border transition-colors " + (picked.includes(a) ? "bg-[#F9954E] border-[#F9954E] text-white" : "bg-white dark:bg-zinc-900 border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-400")}>
+              className={"px-3 py-1.5 rounded-full text-[13px] font-semibold border transition-colors " + (picked.includes(a) ? "bg-[#F9954E] border-[#F9954E] text-white" : "bg-white dark:bg-zinc-900 border-stone-200 dark:border-zinc-700 text-stone-600 dark:text-stone-400")}>
               {a}
             </button>
           ))}
@@ -1846,11 +1846,11 @@ function ToolView({ tool, runAI, free, quota, onShowKey, onBack }: {
 
       {tool.lengthOptions && (
         <div className="mb-5">
-          <div className="text-[11px] font-semibold text-neutral-400 mb-1.5">길이 <span className="font-normal">(하나만 선택)</span></div>
+          <div className="text-[11px] font-semibold text-stone-400 mb-1.5">길이 <span className="font-normal">(하나만 선택)</span></div>
           <div className="flex flex-wrap gap-2">
             {tool.lengthOptions.map((l) => (
               <button key={l} onClick={() => setLength(length === l ? "" : l)}
-                className={"px-3 py-1.5 rounded-full text-[13px] font-semibold border transition-colors " + (length === l ? "bg-[#F9954E] border-[#F9954E] text-white" : "bg-white dark:bg-zinc-900 border-neutral-200 dark:border-zinc-700 text-neutral-600 dark:text-neutral-400")}>
+                className={"px-3 py-1.5 rounded-full text-[13px] font-semibold border transition-colors " + (length === l ? "bg-[#F9954E] border-[#F9954E] text-white" : "bg-white dark:bg-zinc-900 border-stone-200 dark:border-zinc-700 text-stone-600 dark:text-stone-400")}>
                 {l}
               </button>
             ))}
@@ -1862,21 +1862,21 @@ function ToolView({ tool, runAI, free, quota, onShowKey, onBack }: {
       {toneOpen ? (
         <div className="mb-4">
           <div className="flex items-center justify-between mb-1.5">
-            <label className="text-[12px] font-bold text-neutral-600 dark:text-neutral-300">✍️ 내 고정 말투·스타일 <span className="font-normal text-neutral-400">— 매번 자동 적용</span></label>
-            <button onClick={() => { setToneText(""); saveTone(tool.id, ""); setToneOpen(false); }} className="text-[11px] text-neutral-400 hover:text-rose-500">제거</button>
+            <label className="text-[12px] font-bold text-stone-600 dark:text-stone-300">✍️ 내 고정 말투·스타일 <span className="font-normal text-stone-400">— 매번 자동 적용</span></label>
+            <button onClick={() => { setToneText(""); saveTone(tool.id, ""); setToneOpen(false); }} className="text-[11px] text-stone-400 hover:text-rose-500">제거</button>
           </div>
           <textarea value={tone} onChange={(e) => { setToneText(e.target.value); saveTone(tool.id, e.target.value); }} rows={2}
             placeholder="예) 항상 정중한 존댓말, 이모지 적게, 브랜드명 '워크일로' 사용, 너무 길지 않게"
-            className="w-full px-3.5 py-2.5 rounded-xl bg-[#FFF8F1] dark:bg-orange-950/10 border border-[#F9954E]/40 text-[13px] focus:outline-none focus:border-[#F9954E] resize-y" />
+            className="w-full px-3.5 py-2.5 rounded-xl bg-[#FBEEE7] dark:bg-orange-950/10 border border-[#F9954E]/40 text-[13px] focus:outline-none focus:border-[#F9954E] resize-y" />
         </div>
       ) : (
-        <button onClick={() => setToneOpen(true)} className="mb-4 inline-flex items-center gap-1.5 text-[12px] font-semibold text-neutral-400 hover:text-[#E8832E] border border-dashed border-neutral-300 dark:border-zinc-700 rounded-lg px-3 py-1.5">
+        <button onClick={() => setToneOpen(true)} className="mb-4 inline-flex items-center gap-1.5 text-[12px] font-semibold text-stone-400 hover:text-[#E8832E] border border-dashed border-stone-300 dark:border-zinc-700 rounded-lg px-3 py-1.5">
           <Plus className="w-3.5 h-3.5" /> 내 고정 말투·스타일 추가
         </button>
       )}
 
-      {free && <p className="text-[12px] text-neutral-400 dark:text-zinc-500 mb-2 text-center">🆓 무료 · 오늘 남은 <b className={(quota ?? FREE_LIMIT) <= 5 ? "text-rose-500" : "text-[#E8832E]"}>{quota ?? FREE_LIMIT}</b> / {FREE_LIMIT}회</p>}
-      {busy && <p className="text-[11px] text-neutral-400 mt-2 text-center break-keep">여러 AI가 순서대로 작업 중이에요 — 리서치 → 작성 → 검토 → 이미지/영상. 잠시만요…</p>}
+      {free && <p className="text-[12px] text-stone-400 dark:text-zinc-500 mb-2 text-center">🆓 무료 · 오늘 남은 <b className={(quota ?? FREE_LIMIT) <= 5 ? "text-rose-500" : "text-[#E8832E]"}>{quota ?? FREE_LIMIT}</b> / {FREE_LIMIT}회</p>}
+      {busy && <p className="text-[11px] text-stone-400 mt-2 text-center break-keep">여러 AI가 순서대로 작업 중이에요 — 리서치 → 작성 → 검토 → 이미지/영상. 잠시만요…</p>}
       <button onClick={run} disabled={busy || !input.trim()}
         className="w-full py-3.5 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold flex items-center justify-center gap-2 disabled:opacity-50 transition-colors">
         {busy ? <><Loader2 className="w-5 h-5 animate-spin" /> 생성 중…</> : <><Sparkles className="w-5 h-5" /> {tool.cta}</>}
@@ -1885,11 +1885,11 @@ function ToolView({ tool, runAI, free, quota, onShowKey, onBack }: {
       {err && <p className="text-sm text-rose-500 mt-4 leading-relaxed break-keep">{err}</p>}
 
       {result && (
-        <div className="mt-6 rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden">
-          <div className="flex items-center justify-between px-4 py-2.5 border-b border-neutral-100 dark:border-zinc-800">
-            <span className="text-xs font-bold text-neutral-400">결과 · 보관함에 저장됨</span>
+        <div className="mt-6 rounded-2xl border border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 overflow-hidden">
+          <div className="flex items-center justify-between px-4 py-2.5 border-b border-stone-100 dark:border-zinc-800">
+            <span className="text-xs font-bold text-stone-400">결과 · 보관함에 저장됨</span>
             <span className="flex items-center gap-3">
-              <button onClick={() => downloadText(`${tool.title}.txt`, result)} className="inline-flex items-center gap-1.5 text-xs font-bold text-neutral-400 hover:text-[#F9954E]">
+              <button onClick={() => downloadText(`${tool.title}.txt`, result)} className="inline-flex items-center gap-1.5 text-xs font-bold text-stone-400 hover:text-[#F9954E]">
                 <Download className="w-3.5 h-3.5" /> 다운로드
               </button>
               <button onClick={copyResult} className="inline-flex items-center gap-1.5 text-xs font-bold text-[#F9954E]">
@@ -1900,22 +1900,22 @@ function ToolView({ tool, runAI, free, quota, onShowKey, onBack }: {
           {steps.length > 0 && (
             <div className="flex flex-wrap gap-1.5 px-4 pt-3">
               {steps.map((s, i) => (
-                <span key={i} className="text-[10.5px] font-semibold text-[#E8832E] bg-[#FFF5EB] dark:bg-orange-950/30 rounded-full px-2 py-0.5">{s}</span>
+                <span key={i} className="text-[10.5px] font-semibold text-[#E8832E] bg-[#FBEEE7] dark:bg-orange-950/30 rounded-full px-2 py-0.5">{s}</span>
               ))}
             </div>
           )}
-          <pre className="px-4 py-4 text-sm text-neutral-800 dark:text-neutral-200 whitespace-pre-wrap break-words font-sans leading-relaxed">{result}</pre>
+          <pre className="px-4 py-4 text-sm text-stone-800 dark:text-stone-200 whitespace-pre-wrap break-words font-sans leading-relaxed">{result}</pre>
           {image && (
             <div className="px-4 pb-4">
-              <div className="text-[11px] font-bold text-neutral-400 mb-1.5">🎨 생성된 이미지 (fal.ai)</div>
-              <img src={image} alt="생성 이미지" className="w-full max-w-md rounded-xl border border-neutral-200 dark:border-zinc-800" />
+              <div className="text-[11px] font-bold text-stone-400 mb-1.5">🎨 생성된 이미지 (fal.ai)</div>
+              <img src={image} alt="생성 이미지" className="w-full max-w-md rounded-xl border border-stone-200 dark:border-zinc-800" />
               <a href={image} target="_blank" rel="noreferrer" className="inline-block mt-1.5 text-[11px] text-[#E8832E] hover:underline">원본 열기 ↗</a>
             </div>
           )}
           {video && (
             <div className="px-4 pb-4">
-              <div className="text-[11px] font-bold text-neutral-400 mb-1.5">🎬 생성된 영상 (fal.ai)</div>
-              <video src={video} controls className="w-full max-w-md rounded-xl border border-neutral-200 dark:border-zinc-800" />
+              <div className="text-[11px] font-bold text-stone-400 mb-1.5">🎬 생성된 영상 (fal.ai)</div>
+              <video src={video} controls className="w-full max-w-md rounded-xl border border-stone-200 dark:border-zinc-800" />
               <a href={video} target="_blank" rel="noreferrer" className="inline-block mt-1.5 text-[11px] text-[#E8832E] hover:underline">원본 열기 ↗</a>
             </div>
           )}
@@ -1923,12 +1923,12 @@ function ToolView({ tool, runAI, free, quota, onShowKey, onBack }: {
       )}
 
       {/* 이 도구의 AI 워크플로우 — 보기 + 편집 (등록한 도구에서만) */}
-      <div className="mt-8 rounded-2xl border border-neutral-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4">
+      <div className="mt-8 rounded-2xl border border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-900 p-4">
         <div className="flex items-center justify-between mb-3">
-          <span className="text-[12px] font-bold text-neutral-500 dark:text-neutral-300">⚙️ 이 작업의 AI 워크플로우 · {flow.length}단계</span>
+          <span className="text-[12px] font-bold text-stone-500 dark:text-stone-300">⚙️ 이 작업의 AI 워크플로우 · {flow.length}단계</span>
           <span className="flex items-center gap-3 shrink-0">
-            {hasCustomFlow(tool.id) && <button onClick={resetWf} className="text-[11px] text-neutral-400 hover:text-rose-500">기본값</button>}
-            <button onClick={() => setWfEdit((v) => !v)} className={"text-[11px] font-semibold " + (wfEdit ? "text-[#E8832E]" : "text-neutral-400 hover:text-[#E8832E]")}>{wfEdit ? "완료" : "편집"}</button>
+            {hasCustomFlow(tool.id) && <button onClick={resetWf} className="text-[11px] text-stone-400 hover:text-rose-500">기본값</button>}
+            <button onClick={() => setWfEdit((v) => !v)} className={"text-[11px] font-semibold " + (wfEdit ? "text-[#E8832E]" : "text-stone-400 hover:text-[#E8832E]")}>{wfEdit ? "완료" : "편집"}</button>
           </span>
         </div>
         <div className="relative">
@@ -1939,17 +1939,17 @@ function ToolView({ tool, runAI, free, quota, onShowKey, onBack }: {
               onDragOver={(e) => { if (wfEdit) e.preventDefault(); }}
               onDrop={() => { const f = wfDrag.current; if (f != null && f !== i) { const s2 = [...flow]; const [m] = s2.splice(f, 1); s2.splice(i, 0, m); writeWf(s2); } wfDrag.current = null; }}
               className={"flex gap-3 pb-3 last:pb-0 relative " + (wfEdit ? "cursor-grab active:cursor-grabbing" : "")}>
-              {!wfEdit && i < flow.length - 1 && <span className="absolute left-[9px] top-[18px] bottom-0 w-px bg-neutral-200 dark:bg-zinc-700" />}
+              {!wfEdit && i < flow.length - 1 && <span className="absolute left-[9px] top-[18px] bottom-0 w-px bg-stone-200 dark:bg-zinc-700" />}
               <span className="shrink-0 w-[18px] h-[18px] rounded-full bg-[#F9954E]/15 text-[#E8832E] text-[10px] font-bold grid place-items-center z-10 mt-0.5">{i + 1}</span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">
-                  <span className="text-[12.5px] font-semibold text-neutral-900 dark:text-white">{s.icon} {s.title}</span>
-                  {s.role && <span className="text-[9.5px] text-neutral-400">{s.role}</span>}
+                  <span className="text-[12.5px] font-semibold text-stone-900 dark:text-white">{s.icon} {s.title}</span>
+                  {s.role && <span className="text-[9.5px] text-stone-400">{s.role}</span>}
                 </div>
-                <div className="text-[11px] text-neutral-400 dark:text-neutral-500 leading-snug break-keep mt-0.5">{s.detail}</div>
+                <div className="text-[11px] text-stone-400 dark:text-stone-500 leading-snug break-keep mt-0.5">{s.detail}</div>
               </div>
               {wfEdit && (
-                <span className="shrink-0 flex items-start gap-1.5 text-neutral-300 dark:text-zinc-600 pt-0.5">
+                <span className="shrink-0 flex items-start gap-1.5 text-stone-300 dark:text-zinc-600 pt-0.5">
                   <button onClick={() => moveWf(i, -1)} disabled={i === 0} className="hover:text-[#E8832E] disabled:opacity-25 transition-colors"><ChevronUp className="w-3.5 h-3.5" /></button>
                   <button onClick={() => moveWf(i, 1)} disabled={i === flow.length - 1} className="hover:text-[#E8832E] disabled:opacity-25 transition-colors"><ChevronDown className="w-3.5 h-3.5" /></button>
                   <button onClick={() => removeWf(i)} className="hover:text-rose-500 transition-colors"><X className="w-3.5 h-3.5" /></button>
@@ -1959,11 +1959,11 @@ function ToolView({ tool, runAI, free, quota, onShowKey, onBack }: {
           ))}
         </div>
         {wfEdit && (
-          <div className="mt-2 pt-3 border-t border-dashed border-neutral-200 dark:border-zinc-800">
-            <div className="text-[10px] text-neutral-400 mb-2">＋ 단계 추가</div>
+          <div className="mt-2 pt-3 border-t border-dashed border-stone-200 dark:border-zinc-800">
+            <div className="text-[10px] text-stone-400 mb-2">＋ 단계 추가</div>
             <div className="flex flex-wrap gap-1.5">
               {STEP_PALETTE.map((opt, k) => (
-                <button key={k} onClick={() => addWf(opt)} className="text-[11px] text-neutral-500 dark:text-neutral-400 px-2 py-1 rounded-md border border-neutral-200 dark:border-zinc-700 hover:border-[#F9954E] hover:text-[#E8832E] transition-colors">+ {opt.icon} {opt.title}</button>
+                <button key={k} onClick={() => addWf(opt)} className="text-[11px] text-stone-500 dark:text-stone-400 px-2 py-1 rounded-md border border-stone-200 dark:border-zinc-700 hover:border-[#F9954E] hover:text-[#E8832E] transition-colors">+ {opt.icon} {opt.title}</button>
               ))}
             </div>
           </div>
@@ -2009,22 +2009,22 @@ function IlloLogin({ onShowGuide, onDevPreview }: { onShowGuide: () => void; onD
     } catch { /* */ }
   }
 
-  const inputCls = "w-full px-4 py-3 rounded-xl bg-neutral-50 dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700 text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none focus:border-[#F9954E]";
+  const inputCls = "w-full px-4 py-3 rounded-xl bg-stone-50 dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700 text-sm text-stone-900 dark:text-white placeholder:text-stone-400 focus:outline-none focus:border-[#F9954E]";
 
   return (
-    <div className="w-full max-w-sm bg-white dark:bg-zinc-900 rounded-3xl border border-neutral-200 dark:border-zinc-800 shadow-xl p-8">
+    <div className="w-full max-w-sm bg-white dark:bg-zinc-900 rounded-3xl border border-stone-200 dark:border-zinc-800 shadow-xl p-8">
       <div className="flex flex-col items-center mb-6">
         <img src="/illo-logo.png" alt="AI비서" className="w-14 h-14 rounded-2xl shadow-md mb-3" />
         <div className="text-xl font-extrabold text-[#F9954E] leading-none">AI비서</div>
-        <div className="text-[13px] text-neutral-500 dark:text-neutral-400 mt-2">
+        <div className="text-[13px] text-stone-500 dark:text-stone-400 mt-2">
           {isSignup ? "계정을 만들고 바로 시작하세요" : "혼자서도 일이 되는 곳"}
         </div>
       </div>
 
-      <div className="flex gap-1 p-1 mb-4 rounded-xl bg-neutral-100 dark:bg-zinc-800 border border-neutral-200 dark:border-zinc-700">
+      <div className="flex gap-1 p-1 mb-4 rounded-xl bg-stone-100 dark:bg-zinc-800 border border-stone-200 dark:border-zinc-700">
         {(["login", "signup"] as const).map((m) => (
           <button key={m} onClick={() => switchMode(m)}
-            className={"flex-1 py-2 rounded-lg text-[13px] font-semibold transition-all " + (mode === m ? "bg-white dark:bg-zinc-900 text-[#E8832E] shadow-sm" : "text-neutral-500 dark:text-neutral-400")}>
+            className={"flex-1 py-2 rounded-lg text-[13px] font-semibold transition-all " + (mode === m ? "bg-white dark:bg-zinc-900 text-[#E8832E] shadow-sm" : "text-stone-500 dark:text-stone-400")}>
             {m === "login" ? "로그인" : "회원가입"}
           </button>
         ))}
@@ -2034,13 +2034,13 @@ function IlloLogin({ onShowGuide, onDevPreview }: { onShowGuide: () => void; onD
       <input type="password" value={pw} onChange={(e) => setPw(e.target.value)} onKeyDown={(e) => e.key === "Enter" && submit()} placeholder={isSignup ? "비밀번호 (6자 이상)" : "비밀번호"} className={inputCls + (isSignup ? " mb-2.5" : " mb-3")} />
       {isSignup && (
         <input type="password" value={pw2} onChange={(e) => setPw2(e.target.value)} onKeyDown={(e) => e.key === "Enter" && submit()} placeholder="비밀번호 확인 (한 번 더 입력)"
-          className={"w-full mb-3 px-4 py-3 rounded-xl bg-neutral-50 dark:bg-zinc-800 border text-sm text-neutral-900 dark:text-white placeholder:text-neutral-400 focus:outline-none " + (pw2 && pw !== pw2 ? "border-rose-400 focus:border-rose-500" : "border-neutral-200 dark:border-zinc-700 focus:border-[#F9954E]")} />
+          className={"w-full mb-3 px-4 py-3 rounded-xl bg-stone-50 dark:bg-zinc-800 border text-sm text-stone-900 dark:text-white placeholder:text-stone-400 focus:outline-none " + (pw2 && pw !== pw2 ? "border-rose-400 focus:border-rose-500" : "border-stone-200 dark:border-zinc-700 focus:border-[#F9954E]")} />
       )}
 
       {!isSignup && (
         <label className="flex items-center gap-2 mb-3.5 px-1 cursor-pointer select-none">
           <input type="checkbox" checked={remember} onChange={(e) => setRemember(e.target.checked)} className="w-4 h-4 rounded accent-[#F9954E] cursor-pointer" />
-          <span className="text-[12.5px] text-neutral-600 dark:text-neutral-300">아이디 저장</span>
+          <span className="text-[12.5px] text-stone-600 dark:text-stone-300">아이디 저장</span>
         </label>
       )}
 
@@ -2050,17 +2050,17 @@ function IlloLogin({ onShowGuide, onDevPreview }: { onShowGuide: () => void; onD
 
       {err && <div className="text-[12px] text-rose-500 text-center mt-3 leading-relaxed">{err}</div>}
 
-      <div className="text-[12px] text-neutral-500 dark:text-neutral-400 text-center mt-5">
+      <div className="text-[12px] text-stone-500 dark:text-stone-400 text-center mt-5">
         {isSignup ? (
           <>이미 계정이 있으신가요?{" "}<button onClick={() => switchMode("login")} className="text-[#E8832E] dark:text-[#FBAA60] font-semibold hover:underline">로그인</button></>
         ) : (
-          <>계정이 없으신가요?{" "}<button onClick={() => switchMode("signup")} className="text-[#E8832E] dark:text-[#FBAA60] font-semibold hover:underline">회원가입</button>{" · "}<Link href="/" className="text-neutral-400 hover:underline">사이트</Link></>
+          <>계정이 없으신가요?{" "}<button onClick={() => switchMode("signup")} className="text-[#E8832E] dark:text-[#FBAA60] font-semibold hover:underline">회원가입</button>{" · "}<Link href="/" className="text-stone-400 hover:underline">사이트</Link></>
         )}
       </div>
       <button onClick={onShowGuide} className="block mx-auto mt-4 text-[12.5px] font-bold text-[#E8832E] dark:text-[#FBAA60]">🔰 워크일로가 처음이신가요? 시작 가이드</button>
-      <p className="text-[11px] text-neutral-400 dark:text-zinc-600 text-center mt-3 leading-relaxed">로그인하면 AI 도구를 하루 50회 무료로 쓸 수 있어요.</p>
+      <p className="text-[11px] text-stone-400 dark:text-zinc-600 text-center mt-3 leading-relaxed">로그인하면 AI 도구를 하루 50회 무료로 쓸 수 있어요.</p>
       {onDevPreview && (
-        <button onClick={onDevPreview} className="block w-full mt-4 py-2 rounded-xl border border-dashed border-neutral-300 dark:border-zinc-700 text-[12px] font-semibold text-neutral-400 hover:text-[#E8832E] hover:border-[#F9954E] transition-colors">
+        <button onClick={onDevPreview} className="block w-full mt-4 py-2 rounded-xl border border-dashed border-stone-300 dark:border-zinc-700 text-[12px] font-semibold text-stone-400 hover:text-[#E8832E] hover:border-[#F9954E] transition-colors">
           🔧 로그인 없이 미리보기 (개발용 · localhost)
         </button>
       )}
@@ -2069,7 +2069,7 @@ function IlloLogin({ onShowGuide, onDevPreview }: { onShowGuide: () => void; onD
 }
 
 function Centered({ children }: { children: React.ReactNode }) {
-  return <main className="w-full min-h-screen grid place-items-center bg-neutral-50 dark:bg-black px-5 font-sans">{children}</main>;
+  return <main className="w-full min-h-screen grid place-items-center bg-stone-50 dark:bg-black px-5 font-sans">{children}</main>;
 }
 
 function Step({ n, title, children }: { n: string; title: string; children: React.ReactNode }) {
@@ -2077,8 +2077,8 @@ function Step({ n, title, children }: { n: string; title: string; children: Reac
     <div className="flex gap-3">
       <div className="w-7 h-7 rounded-full bg-[#F9954E] text-white text-[13px] font-extrabold grid place-items-center shrink-0">{n}</div>
       <div className="min-w-0">
-        <div className="font-bold text-neutral-900 dark:text-white mb-1">{title}</div>
-        <div className="text-[13.5px] text-neutral-600 dark:text-neutral-400 leading-relaxed break-keep space-y-1">{children}</div>
+        <div className="font-bold text-stone-900 dark:text-white mb-1">{title}</div>
+        <div className="text-[13.5px] text-stone-600 dark:text-stone-400 leading-relaxed break-keep space-y-1">{children}</div>
       </div>
     </div>
   );
@@ -2089,7 +2089,7 @@ function GuideSection({ icon, title, children }: { icon: string; title: string; 
     <section>
       <div className="flex items-center gap-2 mb-3">
         <span className="text-lg leading-none">{icon}</span>
-        <h3 className="font-extrabold text-neutral-900 dark:text-white text-[15px]">{title}</h3>
+        <h3 className="font-extrabold text-stone-900 dark:text-white text-[15px]">{title}</h3>
       </div>
       <div className="space-y-3">{children}</div>
     </section>
@@ -2098,10 +2098,10 @@ function GuideSection({ icon, title, children }: { icon: string; title: string; 
 function GuideRow({ icon, title, children }: { icon: string; title: string; children: React.ReactNode }) {
   return (
     <div className="flex gap-3">
-      <span className="w-8 h-8 rounded-xl bg-[#FFF5EB] dark:bg-orange-950/30 grid place-items-center text-base shrink-0">{icon}</span>
+      <span className="w-8 h-8 rounded-xl bg-[#FBEEE7] dark:bg-orange-950/30 grid place-items-center text-base shrink-0">{icon}</span>
       <div className="min-w-0">
-        <div className="text-[13.5px] font-bold text-neutral-900 dark:text-white">{title}</div>
-        <div className="text-[12.5px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">{children}</div>
+        <div className="text-[13.5px] font-bold text-stone-900 dark:text-white">{title}</div>
+        <div className="text-[12.5px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep">{children}</div>
       </div>
     </div>
   );
@@ -2111,15 +2111,15 @@ function GuideOverlay({ onClose }: { onClose: () => void }) {
   return (
     <div className="fixed inset-0 z-[60] bg-black/50 backdrop-blur-sm flex items-end sm:items-center justify-center sm:p-4" onClick={onClose}>
       <div className="bg-white dark:bg-zinc-900 w-full sm:max-w-lg max-h-[92vh] rounded-t-3xl sm:rounded-3xl shadow-2xl flex flex-col overflow-hidden" onClick={(e) => e.stopPropagation()}>
-        <div className="flex items-center justify-between px-5 py-4 border-b border-neutral-100 dark:border-zinc-800 shrink-0">
-          <span className="font-extrabold text-neutral-900 dark:text-white">🔰 워크일로 시작 가이드</span>
-          <button onClick={onClose} aria-label="닫기" className="w-8 h-8 grid place-items-center rounded-lg text-neutral-400 hover:text-neutral-700 dark:hover:text-white text-lg">✕</button>
+        <div className="flex items-center justify-between px-5 py-4 border-b border-stone-100 dark:border-zinc-800 shrink-0">
+          <span className="font-extrabold text-stone-900 dark:text-white">🔰 워크일로 시작 가이드</span>
+          <button onClick={onClose} aria-label="닫기" className="w-8 h-8 grid place-items-center rounded-lg text-stone-400 hover:text-stone-700 dark:hover:text-white text-lg">✕</button>
         </div>
 
         <div className="overflow-y-auto px-5 py-6 space-y-8">
           {/* 소개 */}
-          <div className="rounded-2xl bg-[#FFF5EB] dark:bg-orange-950/20 p-4">
-            <p className="text-[13.5px] text-neutral-700 dark:text-neutral-300 leading-relaxed break-keep">
+          <div className="rounded-2xl bg-[#FBEEE7] dark:bg-orange-950/20 p-4">
+            <p className="text-[13.5px] text-stone-700 dark:text-stone-300 leading-relaxed break-keep">
               <b className="text-[#E8832E] dark:text-[#FBAA60]">워크일로</b>는 AI에게 글쓰기·SNS·카피·상품설명·답변·요약을 맡기고, 비서에게 무엇이든 물어보는 <b>1인용 AI 사무실</b>이에요. <b>로그인만 하면 하루 50회까지 무료</b>로 바로 쓸 수 있어요!
             </p>
           </div>
@@ -2150,9 +2150,9 @@ function GuideOverlay({ onClose }: { onClose: () => void }) {
 
           {/* 일리 */}
           <GuideSection icon="🐿️" title="일리 — 뭐든 물어보기">
-            <p className="text-[12.5px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+            <p className="text-[12.5px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep">
               채팅처럼 자유롭게 대화해요. 예) <b>“블로그 글엔 어떤 AI 조합이 좋아?”</b>, <b>“API 키는 어디서 받아?”</b>, <b>“이 글 더 매끄럽게 다듬어줘”</b>.<br />
-              <span className="text-neutral-400">일리(🐿️)는 답도 해주고, 필요하면 알맞은 API·워크플로우 템플릿도 짚어줘요. <b>Enter</b> 전송, <b>Shift+Enter</b> 줄바꿈.</span>
+              <span className="text-stone-400">일리(🐿️)는 답도 해주고, 필요하면 알맞은 API·워크플로우 템플릿도 짚어줘요. <b>Enter</b> 전송, <b>Shift+Enter</b> 줄바꿈.</span>
             </p>
           </GuideSection>
 
@@ -2179,7 +2179,7 @@ function GuideOverlay({ onClose }: { onClose: () => void }) {
 
           {/* 무료 vs 내 키 */}
           <GuideSection icon="🔑" title="무료 50회 vs 내 키(무제한)">
-            <div className="rounded-2xl border border-neutral-200 dark:border-zinc-800 p-3.5 text-[12.5px] text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep">
+            <div className="rounded-2xl border border-stone-200 dark:border-zinc-800 p-3.5 text-[12.5px] text-stone-600 dark:text-stone-300 leading-relaxed break-keep">
               <b className="text-[#E8832E]">🆓 무료</b> — 로그인만 하면 하루 50회. 키·결제 불필요.<br />
               <b className="text-[#E8832E]">🔑 내 키</b> — 하루 50회로 부족하면 내 Claude 키를 넣어 <b>무제한</b>. 키는 <b>내 브라우저에만</b> 저장돼요(서버에 안 보냄).
             </div>
@@ -2198,15 +2198,15 @@ function GuideOverlay({ onClose }: { onClose: () => void }) {
 
           {/* 앞으로 */}
           <GuideSection icon="🔜" title="곧 추가될 기능">
-            <p className="text-[12.5px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+            <p className="text-[12.5px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep">
               지금은 <b>일리 + 가이드 + 워크플로우 템플릿 + 글쓰기 도구</b>부터 시작해요. <b>이미지·영상·음성·작곡·자동화 실행</b> 같은 기능은 완성되는 대로 하나씩 열립니다. 설치 없이 브라우저에서 어디서나 쓰세요.
             </p>
           </GuideSection>
 
           {/* 팁 */}
-          <div className="rounded-2xl bg-neutral-50 dark:bg-zinc-800/50 border border-neutral-200 dark:border-zinc-800 p-4">
-            <div className="text-[13px] font-bold text-neutral-900 dark:text-white mb-1.5">💡 알아두면 좋은 팁</div>
-            <ul className="text-[12.5px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep list-disc pl-4 space-y-1">
+          <div className="rounded-2xl bg-stone-50 dark:bg-zinc-800/50 border border-stone-200 dark:border-zinc-800 p-4">
+            <div className="text-[13px] font-bold text-stone-900 dark:text-white mb-1.5">💡 알아두면 좋은 팁</div>
+            <ul className="text-[12.5px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep list-disc pl-4 space-y-1">
               <li>결과가 아쉬우면 비서에게 <b>“더 짧게/격식 있게/친근하게”</b> 라고 이어서 말하면 돼요.</li>
               <li>화면이 눈부시면 <b>설정 → 테마</b>에서 다크로 바꿀 수 있어요.</li>
               <li>한 번 넣은 키와 메뉴 구성은 <b>다음에 와도 그대로</b> 유지돼요.</li>
@@ -2214,7 +2214,7 @@ function GuideOverlay({ onClose }: { onClose: () => void }) {
           </div>
         </div>
 
-        <div className="px-5 py-4 border-t border-neutral-100 dark:border-zinc-800 shrink-0">
+        <div className="px-5 py-4 border-t border-stone-100 dark:border-zinc-800 shrink-0">
           <button onClick={onClose} className="w-full py-3 rounded-2xl bg-[#F9954E] hover:bg-[#E8832E] text-white font-bold text-sm">무료로 바로 시작 →</button>
         </div>
       </div>

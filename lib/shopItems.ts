@@ -31,7 +31,7 @@ export interface ShopItem {
 
 // ─── 희귀도 메타 ───────────────────────────────────────────────
 export const RARITY_META: Record<Rarity, { label: string; color: string; badge: string }> = {
-  normal: { label: "노멀", color: "#9ca3af", badge: "bg-neutral-100 dark:bg-zinc-800 text-neutral-500 dark:text-neutral-400" },
+  normal: { label: "노멀", color: "#9ca3af", badge: "bg-stone-100 dark:bg-zinc-800 text-stone-500 dark:text-stone-400" },
   rare: { label: "레어", color: "#3b82f6", badge: "bg-blue-500/10 text-blue-500" },
   epic: { label: "에픽", color: "#a855f7", badge: "bg-purple-500/10 text-purple-500" },
   legend: { label: "레전드", color: "#f59e0b", badge: "bg-amber-500/10 text-amber-500" },
@@ -52,7 +52,7 @@ export const SHOP_ITEMS: ShopItem[] = [
   { id: "galaxy", slot: "bg", name: "갤럭시", desc: "기본 배경", price: 0, rarity: "normal", grad: "bg-gradient-to-br from-indigo-600/30 via-purple-600/20 to-slate-900/40" },
   { id: "night", slot: "bg", name: "나이트", desc: "기본 배경", price: 0, rarity: "normal", grad: "bg-gradient-to-br from-indigo-600/20 to-slate-800/35" },
   { id: "gold", slot: "bg", name: "골드", desc: "기본 배경", price: 0, rarity: "normal", grad: "bg-gradient-to-br from-amber-300/35 to-yellow-600/20" },
-  { id: "mono", slot: "bg", name: "모노", desc: "기본 배경", price: 0, rarity: "normal", grad: "bg-gradient-to-br from-neutral-400/15 to-neutral-600/10" },
+  { id: "mono", slot: "bg", name: "모노", desc: "기본 배경", price: 0, rarity: "normal", grad: "bg-gradient-to-br from-stone-400/15 to-stone-600/10" },
   { id: "coral", slot: "bg", name: "코랄", desc: "기본 배경", price: 0, rarity: "normal", grad: "bg-gradient-to-br from-rose-400/25 to-orange-300/20" },
   { id: "lime", slot: "bg", name: "라임", desc: "기본 배경", price: 0, rarity: "normal", grad: "bg-gradient-to-br from-lime-300/30 to-green-400/15" },
   { id: "plum", slot: "bg", name: "플럼", desc: "기본 배경", price: 0, rarity: "normal", grad: "bg-gradient-to-br from-violet-400/25 to-purple-500/15" },
@@ -206,7 +206,7 @@ export const SHOP_ITEMS: ShopItem[] = [
   { id: "bg_cherry", slot: "bg", name: "체리", desc: "기본 배경", price: 0, rarity: "normal", grad: "bg-gradient-to-br from-red-400/25 to-rose-500/20" },
   { id: "bg_indigo", slot: "bg", name: "인디고", desc: "기본 배경", price: 0, rarity: "normal", grad: "bg-gradient-to-br from-indigo-400/25 to-blue-600/20" },
   { id: "bg_sand", slot: "bg", name: "샌드", desc: "기본 배경", price: 0, rarity: "normal", grad: "bg-gradient-to-br from-amber-200/30 to-stone-400/15" },
-  { id: "bg_pearl", slot: "bg", name: "펄", desc: "기본 배경", price: 0, rarity: "normal", grad: "bg-gradient-to-br from-slate-200/20 to-neutral-300/15" },
+  { id: "bg_pearl", slot: "bg", name: "펄", desc: "기본 배경", price: 0, rarity: "normal", grad: "bg-gradient-to-br from-slate-200/20 to-stone-300/15" },
   { id: "bg_sunrise", slot: "bg", name: "선라이즈", desc: "기본 배경", price: 0, rarity: "normal", grad: "bg-gradient-to-br from-orange-300/25 to-yellow-300/20" },
   { id: "bg_cloud", slot: "bg", name: "클라우드", desc: "기본 배경", price: 0, rarity: "normal", grad: "bg-gradient-to-br from-sky-200/25 to-slate-300/15" },
   // ──── 배경 추가 : 유료(메시 · 고급) ────

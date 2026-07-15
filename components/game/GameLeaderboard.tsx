@@ -45,12 +45,12 @@ export default function GameLeaderboard({
 
   // 톤별 색
   const c = dark
-    ? { card: "bg-white/[0.04] border-white/10", head: "text-yellow-300", sub: "text-neutral-400",
-        rowTop: "bg-white/[0.06]", rowDim: "bg-white/[0.02]", name: "text-neutral-100",
-        rank: "text-neutral-500", score: "text-yellow-400", empty: "text-neutral-500" }
-    : { card: "bg-black/[0.02] border-black/10", head: "text-[#C77C2E]", sub: "text-neutral-400",
-        rowTop: "bg-black/[0.04]", rowDim: "bg-black/[0.015]", name: "text-neutral-800",
-        rank: "text-neutral-400", score: "text-[#E8832E]", empty: "text-neutral-400" };
+    ? { card: "bg-white/[0.04] border-white/10", head: "text-yellow-300", sub: "text-stone-400",
+        rowTop: "bg-white/[0.06]", rowDim: "bg-white/[0.02]", name: "text-stone-100",
+        rank: "text-stone-500", score: "text-yellow-400", empty: "text-stone-500" }
+    : { card: "bg-black/[0.02] border-black/10", head: "text-[#C77C2E]", sub: "text-stone-400",
+        rowTop: "bg-black/[0.04]", rowDim: "bg-black/[0.015]", name: "text-stone-800",
+        rank: "text-stone-400", score: "text-[#E8832E]", empty: "text-stone-400" };
 
   return (
     <div className={`rounded-2xl border p-3 ${c.card} ${className}`}>

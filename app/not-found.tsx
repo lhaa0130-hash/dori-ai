@@ -13,7 +13,7 @@ export default function NotFound() {
       <h1 className="mt-4 text-2xl font-bold text-foreground">
         앗, 페이지를 찾을 수 없어요
       </h1>
-      <p className="mt-2 text-neutral-500 dark:text-neutral-400">
+      <p className="mt-2 text-stone-500 dark:text-stone-400">
         주소가 바뀌었거나 삭제된 페이지일 수 있어요. 아래에서 원하는 곳으로 이동해 보세요.
       </p>
 
@@ -26,13 +26,13 @@ export default function NotFound() {
         </Link>
         <Link
           href="/insight"
-          className="px-5 py-2.5 rounded-full border border-neutral-300 dark:border-neutral-700 text-sm font-bold hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors"
+          className="px-5 py-2.5 rounded-full border border-stone-300 dark:border-stone-700 text-sm font-bold hover:bg-stone-50 dark:hover:bg-stone-900 transition-colors"
         >
           AI 인사이트
         </Link>
         <Link
           href="/ai-tools"
-          className="px-5 py-2.5 rounded-full border border-neutral-300 dark:border-neutral-700 text-sm font-bold hover:bg-neutral-50 dark:hover:bg-neutral-900 transition-colors"
+          className="px-5 py-2.5 rounded-full border border-stone-300 dark:border-stone-700 text-sm font-bold hover:bg-stone-50 dark:hover:bg-stone-900 transition-colors"
         >
           AI 도구 모음
         </Link>

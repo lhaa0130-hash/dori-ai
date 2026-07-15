@@ -199,20 +199,20 @@ export default function SnakeGame() {
             <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(249,149,78,0.07),transparent)]" />
 
             <header className="w-full max-w-md flex items-center justify-between mb-6">
-                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-500 hover:text-white transition-colors">
+                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-stone-500 hover:text-white transition-colors">
                     <ArrowLeft className="w-4 h-4" />
                     미니게임
                 </Link>
                 <div className="text-[15px] font-extrabold tracking-tight text-white">🐍 스네이크</div>
                 <div className="flex items-center gap-2">
                     <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
-                        <div className="text-[9px] uppercase tracking-widest text-neutral-500">SCORE</div>
+                        <div className="text-[9px] uppercase tracking-widest text-stone-500">SCORE</div>
                         <div key={score} className="arcade-pop inline-block text-sm font-bold text-white">
                             <CountUp value={score} className="tabular-nums" />
                         </div>
                     </div>
                     <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
-                        <div className="flex items-center justify-center gap-1 text-[9px] uppercase tracking-widest text-neutral-500"><Trophy className="w-2.5 h-2.5" />BEST</div>
+                        <div className="flex items-center justify-center gap-1 text-[9px] uppercase tracking-widest text-stone-500"><Trophy className="w-2.5 h-2.5" />BEST</div>
                         <div key={highScore} className="arcade-pop inline-block text-sm font-bold text-[#F9954E]">
                             <CountUp value={highScore} className="tabular-nums" />
                         </div>
@@ -245,7 +245,7 @@ export default function SnakeGame() {
                 {gameState === "READY" && (
                     <div className="arcade-pop-in absolute inset-0 bg-black/70 backdrop-blur-sm flex flex-col items-center justify-center">
                         <h1 className="arcade-float text-4xl font-extrabold tracking-tight text-white mb-2">🐍 스네이크</h1>
-                        <p className="text-sm text-neutral-400 mb-6">스와이프 또는 방향키로 조작하세요</p>
+                        <p className="text-sm text-stone-400 mb-6">스와이프 또는 방향키로 조작하세요</p>
                         <button
                             onClick={initGame}
                             className="arcade-shine arcade-glow rounded-xl bg-gradient-to-b from-[#F9954E] to-[#E8832E] text-white font-bold shadow-lg shadow-[#F9954E]/20 active:scale-[0.97] transition-transform px-8 py-3 flex items-center gap-2"
@@ -265,7 +265,7 @@ export default function SnakeGame() {
                                     <Trophy className="w-3 h-3" /> 신기록 달성!
                                 </div>
                             )}
-                            <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">SCORE</div>
+                            <div className="text-[10px] uppercase tracking-widest text-stone-500 mb-1">SCORE</div>
                             <div className="arcade-grad-text text-5xl font-black tabular-nums mb-6">
                                 <CountUp value={score} />
                             </div>

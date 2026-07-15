@@ -16,8 +16,8 @@ const MENUS = [
 
 export default function QuickMenu() {
   return (
-    <section className="py-6 border-b border-neutral-100 dark:border-zinc-900">
-      <p className="text-[11px] font-bold text-neutral-400 uppercase tracking-widest mb-5">
+    <section className="py-6 border-b border-stone-100 dark:border-zinc-900">
+      <p className="text-[11px] font-bold text-stone-400 uppercase tracking-widest mb-5">
         바로가기
       </p>
 
@@ -28,10 +28,10 @@ export default function QuickMenu() {
             href={item.href}
             className="flex flex-col items-center gap-2 group"
           >
-            <div className="w-12 h-12 rounded-2xl bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-[22px] group-active:bg-[#F9954E]/10 transition-colors">
+            <div className="w-12 h-12 rounded-2xl bg-stone-100 dark:bg-zinc-800 flex items-center justify-center text-[22px] group-active:bg-[#F9954E]/10 transition-colors">
               {item.emoji}
             </div>
-            <span className="text-[11px] font-semibold text-neutral-600 dark:text-neutral-400 group-active:text-[#F9954E] transition-colors">
+            <span className="text-[11px] font-semibold text-stone-600 dark:text-stone-400 group-active:text-[#F9954E] transition-colors">
               {item.label}
             </span>
           </Link>

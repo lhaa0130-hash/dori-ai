@@ -122,13 +122,13 @@ export default function AnimalDetail({ params }: { params: { id: string } }) {
             <table className="w-full text-left mb-6 border-collapse">
               <tbody>
                 {info.map((row, i) => (
-                  <tr key={i} className="border-b border-neutral-200 dark:border-neutral-800">
+                  <tr key={i} className="border-b border-stone-200 dark:border-stone-800">
                     <th className="py-2 pr-4 font-semibold whitespace-nowrap align-top">{row[0]} {row[1]}</th>
                     <td className="py-2">{row[2]}</td>
                   </tr>
                 ))}
                 {card.taxonomy && (
-                  <tr className="border-b border-neutral-200 dark:border-neutral-800">
+                  <tr className="border-b border-stone-200 dark:border-stone-800">
                     <th className="py-2 pr-4 font-semibold whitespace-nowrap align-top">🗂️ 분류</th>
                     <td className="py-2">{card.taxonomy}</td>
                   </tr>
@@ -159,12 +159,12 @@ export default function AnimalDetail({ params }: { params: { id: string } }) {
           )}
 
           {related.length > 0 && (
-            <section className="mb-6 mt-10 pt-6 border-t border-neutral-200 dark:border-neutral-800">
+            <section className="mb-6 mt-10 pt-6 border-t border-stone-200 dark:border-stone-800">
               <h2 className="text-xl font-bold mb-4">🐾 관련 동물</h2>
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
                 {related.map((r) => (
                   <Link key={r.no} href={`/animal/${r.no}`} className="group block" title={`${r.animal_name} 알아보기`}>
-                    <div className="rounded-xl overflow-hidden relative w-full bg-neutral-100 dark:bg-zinc-900" style={{ aspectRatio: "1 / 1" }}>
+                    <div className="rounded-xl overflow-hidden relative w-full bg-stone-100 dark:bg-zinc-900" style={{ aspectRatio: "1 / 1" }}>
                       {r.image_path && <Image src={r.image_path} alt={`${r.animal_name} 이미지`} fill sizes="140px" style={{ objectFit: "cover" }} className="group-hover:scale-105 transition-transform" />}
                     </div>
                     <div className="text-[13px] font-semibold mt-1.5 text-center truncate group-hover:text-orange-500">{r.animal_name}</div>
@@ -174,7 +174,7 @@ export default function AnimalDetail({ params }: { params: { id: string } }) {
             </section>
           )}
 
-          <nav className="flex items-center justify-between mt-10 pt-6 border-t border-neutral-200 dark:border-neutral-800 text-sm">
+          <nav className="flex items-center justify-between mt-10 pt-6 border-t border-stone-200 dark:border-stone-800 text-sm">
             {prev ? <Link href={`/animal/${prev.no}`} className="hover:underline">← {prev.animal_name}</Link> : <span />}
             <Link href="/animal" className="font-semibold text-orange-500 hover:underline">몽글로 : 동물도감 전체 보기</Link>
             {next ? <Link href={`/animal/${next.no}`} className="hover:underline">{next.animal_name} →</Link> : <span />}

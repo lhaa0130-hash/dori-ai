@@ -38,7 +38,7 @@ export default function CategorySection({
             <h2 className="text-xl md:text-2xl font-extrabold text-foreground">
               {emoji} {title}
             </h2>
-            <p className="text-xs text-neutral-500 dark:text-neutral-400 mt-1 font-medium">
+            <p className="text-xs text-stone-500 dark:text-stone-400 mt-1 font-medium">
               {subtitle}
             </p>
           </div>
@@ -57,7 +57,7 @@ export default function CategorySection({
             <Link
               key={post.slug}
               href={`/insight/article/${post.slug}`}
-              className="group block bg-white dark:bg-neutral-900 rounded-2xl border border-neutral-100 dark:border-neutral-800 overflow-hidden hover:border-[#F9954E] dark:hover:border-[#F9954E] hover:shadow-lg hover:shadow-[#F9954E]/5 transition-all duration-300 hover:-translate-y-0.5"
+              className="group block bg-white dark:bg-stone-900 rounded-2xl border border-stone-100 dark:border-stone-800 overflow-hidden hover:border-[#F9954E] dark:hover:border-[#F9954E] hover:shadow-lg hover:shadow-[#F9954E]/5 transition-all duration-300 hover:-translate-y-0.5"
             >
               {/* 썸네일 */}
               <div className="relative w-full h-[140px] bg-gradient-to-br from-[#F9954E]/10 to-[#FF7B54]/5 overflow-hidden">
@@ -85,16 +85,16 @@ export default function CategorySection({
 
               {/* 콘텐츠 */}
               <div className="p-4">
-                <h3 className="text-sm font-bold text-neutral-900 dark:text-white leading-tight mb-2 line-clamp-2 group-hover:text-[#F9954E] transition-colors">
+                <h3 className="text-sm font-bold text-stone-900 dark:text-white leading-tight mb-2 line-clamp-2 group-hover:text-[#F9954E] transition-colors">
                   {post.title}
                 </h3>
-                <p className="text-xs text-neutral-500 dark:text-neutral-400 leading-relaxed line-clamp-2 mb-3">
+                <p className="text-xs text-stone-500 dark:text-stone-400 leading-relaxed line-clamp-2 mb-3">
                   {post.description}
                 </p>
 
                 {/* 메타 정보 */}
                 <div className="flex items-center justify-between">
-                  <div className="flex items-center gap-1 text-[10px] text-neutral-400">
+                  <div className="flex items-center gap-1 text-[10px] text-stone-400">
                     <Calendar className="w-3 h-3" />
                     <time dateTime={post.date}>
                       {new Date(post.date).toLocaleDateString("ko-KR", {
@@ -105,8 +105,8 @@ export default function CategorySection({
                   </div>
                   {post.tags && post.tags.length > 0 && (
                     <div className="flex items-center gap-1">
-                      <Tag className="w-3 h-3 text-neutral-400" />
-                      <span className="text-[10px] text-neutral-400 line-clamp-1 max-w-[120px]">
+                      <Tag className="w-3 h-3 text-stone-400" />
+                      <span className="text-[10px] text-stone-400 line-clamp-1 max-w-[120px]">
                         {post.tags.slice(0, 2).join(", ")}
                       </span>
                     </div>

@@ -197,12 +197,12 @@ export default function FAQClient() {
             />
 
             {/* 히어로 */}
-            <section className="pt-8 pb-10 border-b border-neutral-100 dark:border-zinc-900">
+            <section className="pt-8 pb-10 border-b border-stone-100 dark:border-zinc-900">
                 <p className="text-[12px] font-semibold text-[#F9954E] mb-3">FAQ</p>
-                <h1 className="text-[36px] sm:text-[48px] font-extrabold text-neutral-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
+                <h1 className="text-[36px] sm:text-[48px] font-extrabold text-stone-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
                     자주 묻는 질문
                 </h1>
-                <p className="text-[14px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+                <p className="text-[14px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep">
                     궁금한 점이 있으신가요? 아래에서 답변을 찾아보세요.
                 </p>
             </section>
@@ -217,8 +217,8 @@ export default function FAQClient() {
                                 <span className="text-[11px] font-semibold text-[#F9954E]">
                                     {section.category}
                                 </span>
-                                <div className="flex-1 h-px bg-neutral-100 dark:bg-zinc-900" />
-                                <span className="text-[10px] font-medium text-neutral-300 dark:text-zinc-600">
+                                <div className="flex-1 h-px bg-stone-100 dark:bg-zinc-900" />
+                                <span className="text-[10px] font-medium text-stone-300 dark:text-zinc-600">
                                     {section.items.length}
                                 </span>
                             </div>
@@ -228,18 +228,18 @@ export default function FAQClient() {
                                 {section.items.map((item, qIdx) => (
                                     <details
                                         key={qIdx}
-                                        className="group rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 overflow-hidden"
+                                        className="group rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 overflow-hidden"
                                     >
                                         <summary className="cursor-pointer list-none flex items-center justify-between gap-4 p-5">
-                                            <span className="font-bold text-[15px] text-neutral-900 dark:text-white leading-snug">
+                                            <span className="font-bold text-[15px] text-stone-900 dark:text-white leading-snug">
                                                 {item.q}
                                             </span>
-                                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-[#F9954E] text-sm font-semibold transition-transform duration-200 group-open:rotate-45">
+                                            <span className="flex-shrink-0 w-6 h-6 rounded-full bg-stone-100 dark:bg-zinc-800 flex items-center justify-center text-[#F9954E] text-sm font-semibold transition-transform duration-200 group-open:rotate-45">
                                                 +
                                             </span>
                                         </summary>
                                         <div
-                                            className="px-5 pb-5 text-sm text-neutral-600 dark:text-neutral-400 leading-[1.85]"
+                                            className="px-5 pb-5 text-sm text-stone-600 dark:text-stone-400 leading-[1.85]"
                                             style={{ whiteSpace: "pre-line" }}
                                         >
                                             {item.a}
@@ -252,8 +252,8 @@ export default function FAQClient() {
                 </div>
 
                 {/* 하단 안내 */}
-                <div className="mt-12 pt-8 border-t border-neutral-100 dark:border-zinc-900 text-center">
-                    <p className="text-sm text-neutral-400 mb-4">
+                <div className="mt-12 pt-8 border-t border-stone-100 dark:border-zinc-900 text-center">
+                    <p className="text-sm text-stone-400 mb-4">
                         원하는 답변을 찾지 못하셨나요?
                     </p>
                     <a

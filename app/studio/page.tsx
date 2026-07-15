@@ -156,12 +156,12 @@ export default function StudioPage() {
     <main className="bg-white dark:bg-black min-h-screen">
 
       {/* ── Toss 히어로 ── */}
-      <section className="pt-8 pb-10 border-b border-neutral-100 dark:border-zinc-900">
+      <section className="pt-8 pb-10 border-b border-stone-100 dark:border-zinc-900">
         <p className="text-[12px] font-semibold text-[#F9954E] mb-3">AI 랭킹</p>
-        <h1 className="text-[36px] sm:text-[48px] font-extrabold text-neutral-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
+        <h1 className="text-[36px] sm:text-[48px] font-extrabold text-stone-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
           AI Tools Ranking
         </h1>
-        <p className="text-[14px] text-neutral-500 dark:text-neutral-400 leading-relaxed">
+        <p className="text-[14px] text-stone-500 dark:text-stone-400 leading-relaxed">
           엄선된 AI 툴 데이터베이스와 생생한 유저 리뷰
         </p>
       </section>

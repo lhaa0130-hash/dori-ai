@@ -54,9 +54,9 @@ export default function RangeVenn({ groups, friends }: { groups: VennGroup[]; fr
 
   if (gs.length === 0) {
     return (
-      <div className="rounded-2xl border border-dashed border-neutral-200 dark:border-zinc-800 px-4 py-10 text-center">
+      <div className="rounded-2xl border border-dashed border-stone-200 dark:border-zinc-800 px-4 py-10 text-center">
         <div className="text-3xl mb-2 opacity-30">⭕</div>
-        <p className="text-[13px] text-neutral-500 dark:text-neutral-400">범위를 만들면 여기에 다이어그램이 나타나요.</p>
+        <p className="text-[13px] text-stone-500 dark:text-stone-400">범위를 만들면 여기에 다이어그램이 나타나요.</p>
       </div>
     );
   }
@@ -104,7 +104,7 @@ export default function RangeVenn({ groups, friends }: { groups: VennGroup[]; fr
           <span
             key={f.uid}
             title={f.name}
-            className="absolute -translate-x-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white dark:bg-zinc-800 ring-2 ring-white dark:ring-zinc-900 shadow flex items-center justify-center text-[11px] font-extrabold text-neutral-700 dark:text-neutral-100"
+            className="absolute -translate-x-1/2 -translate-y-1/2 w-7 h-7 rounded-full bg-white dark:bg-zinc-800 ring-2 ring-white dark:ring-zinc-900 shadow flex items-center justify-center text-[11px] font-extrabold text-stone-700 dark:text-stone-100"
             style={{ left: `${x}%`, top: `${y}%` }}
           >
             {(f.name || "?").trim().charAt(0) || "?"}
@@ -115,16 +115,16 @@ export default function RangeVenn({ groups, friends }: { groups: VennGroup[]; fr
       {/* 범례(색·이름·인원) */}
       <div className="mt-3 flex flex-wrap justify-center gap-x-3 gap-y-1.5">
         {gs.map((g) => (
-          <span key={g.id} className="inline-flex items-center gap-1.5 text-[12px] font-bold text-neutral-600 dark:text-neutral-300">
+          <span key={g.id} className="inline-flex items-center gap-1.5 text-[12px] font-bold text-stone-600 dark:text-stone-300">
             <span className="w-2.5 h-2.5 rounded-full" style={{ backgroundColor: g.color }} />
-            {g.name} <span className="text-neutral-400 font-semibold">{g.memberUids.length}</span>
+            {g.name} <span className="text-stone-400 font-semibold">{g.memberUids.length}</span>
           </span>
         ))}
       </div>
 
       {/* 범위 미지정 */}
       {unassigned.length > 0 && (
-        <p className="mt-2 text-center text-[11px] text-neutral-400">
+        <p className="mt-2 text-center text-[11px] text-stone-400">
           범위 미지정 친구 {unassigned.length}명 — 아래에서 범위에 넣어보세요
         </p>
       )}

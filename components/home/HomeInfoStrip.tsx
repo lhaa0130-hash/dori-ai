@@ -11,18 +11,18 @@ function RankCard({ title, href, rows }: { title: string; href: string; rows: Ro
   return (
     <Link
       href={href}
-      className="group w-[212px] shrink-0 rounded-2xl bg-neutral-50 dark:bg-zinc-900/50 p-3.5 active:opacity-80 transition-opacity"
+      className="group w-[212px] shrink-0 rounded-2xl bg-stone-50 dark:bg-zinc-900/50 p-3.5 active:opacity-80 transition-opacity"
     >
-      <p className="text-[11px] font-bold text-neutral-400 dark:text-neutral-500 mb-2 flex items-center justify-between gap-1">
+      <p className="text-[11px] font-bold text-stone-400 dark:text-stone-500 mb-2 flex items-center justify-between gap-1">
         <span className="truncate">{title}</span>
         <ArrowRight className="w-3 h-3 flex-shrink-0 opacity-0 -translate-x-1 group-hover:opacity-100 group-hover:translate-x-0 transition-all text-[#F9954E]" />
       </p>
       <ol className="space-y-[7px]">
         {rows.map((r, i) => (
           <li key={r.name + i} className="flex items-center gap-2">
-            <span className={`w-3 text-[10px] font-extrabold text-center flex-shrink-0 ${i < 3 ? "text-[#F9954E]" : "text-neutral-300 dark:text-neutral-600"}`}>{i + 1}</span>
-            <span className="flex-1 min-w-0 truncate text-[12px] font-semibold text-neutral-700 dark:text-neutral-200">{r.name}</span>
-            {r.val && <span className="text-[10.5px] text-neutral-400 tabular-nums flex-shrink-0">{r.val}</span>}
+            <span className={`w-3 text-[10px] font-extrabold text-center flex-shrink-0 ${i < 3 ? "text-[#F9954E]" : "text-stone-300 dark:text-stone-600"}`}>{i + 1}</span>
+            <span className="flex-1 min-w-0 truncate text-[12px] font-semibold text-stone-700 dark:text-stone-200">{r.name}</span>
+            {r.val && <span className="text-[10.5px] text-stone-400 tabular-nums flex-shrink-0">{r.val}</span>}
           </li>
         ))}
       </ol>
@@ -56,7 +56,7 @@ export default function HomeInfoStrip({
   const hTools = en ? "/en/ai-tools" : "/ai-tools";
 
   return (
-    <section className="py-4 border-b border-neutral-100 dark:border-zinc-900">
+    <section className="py-4 border-b border-stone-100 dark:border-zinc-900">
       <div className="-mx-4 px-4 overflow-x-auto scrollbar-hide">
         <div className="flex gap-2.5 w-max items-stretch">
 
@@ -70,13 +70,13 @@ export default function HomeInfoStrip({
             rows={topTools.map((tl) => ({ name: tl.name }))} />
 
           {/* 도리 현황 — 행마다 개별 링크 */}
-          <div className="w-[212px] shrink-0 rounded-2xl bg-neutral-50 dark:bg-zinc-900/50 p-3.5">
-            <p className="text-[11px] font-bold text-neutral-400 dark:text-neutral-500 mb-2">{t.today}</p>
+          <div className="w-[212px] shrink-0 rounded-2xl bg-stone-50 dark:bg-zinc-900/50 p-3.5">
+            <p className="text-[11px] font-bold text-stone-400 dark:text-stone-500 mb-2">{t.today}</p>
             <ul className="space-y-[7px]">
-              <li><Link href={en ? "/insight" : "/insight"} className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-neutral-700 dark:text-neutral-200">{t.insight}</span><b className="text-neutral-900 dark:text-white tabular-nums">{insightCount}{t.cnt}</b></Link></li>
-              {animalCount > 0 && <li><Link href="/animal" className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-neutral-700 dark:text-neutral-200">{t.animal}</span><b className="text-neutral-900 dark:text-white tabular-nums">{animalCount}{t.spec}</b></Link></li>}
-              <li><Link href="/minigame" className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-neutral-700 dark:text-neutral-200">{t.game}</span><span className="text-[10.5px] text-neutral-400">{t.play}</span></Link></li>
-              <li><Link href="/community" className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-neutral-700 dark:text-neutral-200">{t.community}</span><span className="text-[10.5px] text-neutral-400">{t.talk}</span></Link></li>
+              <li><Link href={en ? "/insight" : "/insight"} className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-stone-700 dark:text-stone-200">{t.insight}</span><b className="text-stone-900 dark:text-white tabular-nums">{insightCount}{t.cnt}</b></Link></li>
+              {animalCount > 0 && <li><Link href="/animal" className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-stone-700 dark:text-stone-200">{t.animal}</span><b className="text-stone-900 dark:text-white tabular-nums">{animalCount}{t.spec}</b></Link></li>}
+              <li><Link href="/minigame" className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-stone-700 dark:text-stone-200">{t.game}</span><span className="text-[10.5px] text-stone-400">{t.play}</span></Link></li>
+              <li><Link href="/community" className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-stone-700 dark:text-stone-200">{t.community}</span><span className="text-[10.5px] text-stone-400">{t.talk}</span></Link></li>
             </ul>
           </div>
 

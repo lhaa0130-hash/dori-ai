@@ -9,11 +9,11 @@ export default function TrendPreview({ trends }: { trends: TrendPost[] }) {
   const [featured, ...rest] = trends.slice(0, 10);
 
   return (
-    <section className="py-5 border-b border-neutral-100 dark:border-zinc-900">
+    <section className="py-5 border-b border-stone-100 dark:border-zinc-900">
 
       {/* 섹션 헤더 */}
       <div className="flex items-center justify-between mb-4">
-        <p className="text-[14px] font-extrabold text-neutral-950 dark:text-white">AI 트렌드</p>
+        <p className="text-[14px] font-extrabold text-stone-950 dark:text-white">AI 트렌드</p>
         <Link href="/insight" className="flex items-center gap-1 text-[13px] font-semibold text-[#F9954E]">
           전체 <ArrowRight className="w-3.5 h-3.5" />
         </Link>
@@ -24,7 +24,7 @@ export default function TrendPreview({ trends }: { trends: TrendPost[] }) {
         href={`/insight/article/${featured.slug}`}
         className="toss-fade-up block rounded-2xl overflow-hidden mb-3 active:opacity-80 transition-opacity"
       >
-        <div className="relative w-full h-[190px] bg-neutral-100 dark:bg-zinc-900">
+        <div className="relative w-full h-[190px] bg-stone-100 dark:bg-zinc-900">
           {featured.thumbnail ? (
             <Image
               src={featured.thumbnail}
@@ -55,14 +55,14 @@ export default function TrendPreview({ trends }: { trends: TrendPost[] }) {
       </Link>
 
       {/* 나머지 — 컴팩트 리스트 */}
-      <div className="divide-y divide-neutral-100 dark:divide-white/[0.06]">
+      <div className="divide-y divide-stone-100 dark:divide-white/[0.06]">
         {rest.map((trend) => (
           <Link
             key={trend.slug}
             href={`/insight/article/${trend.slug}`}
             className="flex items-center gap-3 py-3.5 active:opacity-60 transition-opacity"
           >
-            <div className="relative w-[42px] h-[42px] rounded-xl overflow-hidden bg-neutral-100 dark:bg-white/10 flex-shrink-0">
+            <div className="relative w-[42px] h-[42px] rounded-xl overflow-hidden bg-stone-100 dark:bg-white/10 flex-shrink-0">
               {trend.thumbnail ? (
                 <Image src={trend.thumbnail} alt={trend.title} fill style={{ objectFit: "cover" }} sizes="42px" />
               ) : (
@@ -70,17 +70,17 @@ export default function TrendPreview({ trends }: { trends: TrendPost[] }) {
               )}
             </div>
             <div className="flex-1 min-w-0">
-              <p className="text-neutral-900 dark:text-white font-semibold text-[13px] line-clamp-1 break-keep">
+              <p className="text-stone-900 dark:text-white font-semibold text-[13px] line-clamp-1 break-keep">
                 {trend.title}
               </p>
-              <p className="text-neutral-400 text-[11px] mt-0.5">
+              <p className="text-stone-400 text-[11px] mt-0.5">
                 {new Date(trend.date).toLocaleDateString("ko-KR", { month: "short", day: "numeric" })}
                 {/T\d|\d{1,2}:\d{2}/.test(String(trend.date)) && (
                   <span className="ml-1 opacity-70">{new Date(trend.date).toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" })}</span>
                 )}
               </p>
             </div>
-            <ArrowRight className="w-3.5 h-3.5 text-neutral-300 dark:text-white/20 flex-shrink-0" />
+            <ArrowRight className="w-3.5 h-3.5 text-stone-300 dark:text-white/20 flex-shrink-0" />
           </Link>
         ))}
       </div>

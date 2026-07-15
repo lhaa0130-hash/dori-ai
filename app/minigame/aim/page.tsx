@@ -192,7 +192,7 @@ export default function AimGame() {
         <header className="sticky top-0 z-50 flex items-center justify-between border-b border-white/10 bg-[#09090e]/80 p-4 backdrop-blur-md">
           <Link
             href="/minigame"
-            className="inline-flex items-center gap-1.5 text-[13px] text-neutral-500 transition-colors hover:text-white"
+            className="inline-flex items-center gap-1.5 text-[13px] text-stone-500 transition-colors hover:text-white"
           >
             <ArrowLeft className="h-4 w-4" />
             뒤로
@@ -202,7 +202,7 @@ export default function AimGame() {
             과녁 클릭
           </div>
           <div className="rounded-xl border border-white/10 bg-white/[0.05] px-3 py-1.5 text-center">
-            <div className="text-[9px] uppercase tracking-widest text-neutral-500">Score</div>
+            <div className="text-[9px] uppercase tracking-widest text-stone-500">Score</div>
             <div className="text-sm font-bold tabular-nums text-white">
               <CountUp value={score} className="tabular-nums" />
             </div>
@@ -213,20 +213,20 @@ export default function AimGame() {
           {/* 상태 칩 (남은시간 / 명중 / 최고) */}
           <div className="grid grid-cols-3 gap-2">
             <div className="arcade-card rounded-xl border border-white/10 bg-white/[0.05] px-3 py-2 text-center">
-              <div className="text-[9px] uppercase tracking-widest text-neutral-500">남은시간</div>
+              <div className="text-[9px] uppercase tracking-widest text-stone-500">남은시간</div>
               <div className={`inline-flex items-center justify-center gap-1 text-sm font-bold tabular-nums ${timeColor}`}>
                 <Timer className="h-3 w-3" />
                 {timeLeft}초
               </div>
             </div>
             <div className="arcade-card rounded-xl border border-white/10 bg-white/[0.05] px-3 py-2 text-center">
-              <div className="text-[9px] uppercase tracking-widest text-neutral-500">명중</div>
+              <div className="text-[9px] uppercase tracking-widest text-stone-500">명중</div>
               <div className="text-sm font-bold tabular-nums text-[#F9954E]">
                 <CountUp value={score} className="tabular-nums" />
               </div>
             </div>
             <div className="arcade-card rounded-xl border border-white/10 bg-white/[0.05] px-3 py-2 text-center">
-              <div className="text-[9px] uppercase tracking-widest text-neutral-500">최고</div>
+              <div className="text-[9px] uppercase tracking-widest text-stone-500">최고</div>
               <div className="text-sm font-bold tabular-nums text-white">
                 <CountUp value={best} className="tabular-nums" />
               </div>
@@ -301,7 +301,7 @@ export default function AimGame() {
                 <Target className="arcade-float h-16 w-16 text-[#F9954E]" />
                 <div>
                   <h2 className="arcade-grad-text text-2xl font-extrabold tracking-tight">과녁 클릭</h2>
-                  <p className="mt-2 text-[13px] leading-relaxed text-neutral-400">
+                  <p className="mt-2 text-[13px] leading-relaxed text-stone-400">
                     30초 동안 나타나는 과녁을
                     <br />
                     최대한 빠르고 정확하게 맞혀보세요!
@@ -326,11 +326,11 @@ export default function AimGame() {
                     {isNewBest ? "신기록 달성!" : "게임 종료"}
                   </h2>
                   <div className="mt-3 rounded-2xl border border-white/10 bg-white/[0.04] px-8 py-4">
-                    <div className="text-[10px] uppercase tracking-widest text-neutral-500">최종 명중</div>
+                    <div className="text-[10px] uppercase tracking-widest text-stone-500">최종 명중</div>
                     <div className="arcade-grad-text text-5xl font-black tabular-nums">
                       <CountUp value={score} className="tabular-nums" />
                     </div>
-                    <div className="mt-1 text-[11px] text-neutral-400">최고 {best.toLocaleString()}점</div>
+                    <div className="mt-1 text-[11px] text-stone-400">최고 {best.toLocaleString()}점</div>
                   </div>
                 </div>
                 <div className="flex w-full max-w-[260px] gap-2">
@@ -343,7 +343,7 @@ export default function AimGame() {
                   </button>
                   <button
                     onClick={reset}
-                    className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3 font-semibold text-neutral-200 transition-transform hover:bg-white/[0.1] active:scale-[0.97]"
+                    className="inline-flex items-center justify-center rounded-xl border border-white/10 bg-white/[0.06] px-4 py-3 font-semibold text-stone-200 transition-transform hover:bg-white/[0.1] active:scale-[0.97]"
                     aria-label="처음으로"
                   >
                     <RotateCcw className="h-5 w-5" />

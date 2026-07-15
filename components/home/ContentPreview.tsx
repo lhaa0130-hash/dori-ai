@@ -58,14 +58,14 @@ function ToolCarousel({ category, tools }: { category: string; tools: typeof AI_
                 <div className="flex gap-1.5">
                     <button
                         onClick={() => scroll("left")}
-                        className="p-1.5 rounded-lg bg-card border border-border hover:border-[#F9954E] hover:bg-[#FFF5EB] dark:hover:bg-[#8F4B10]/10 transition-colors"
+                        className="p-1.5 rounded-lg bg-card border border-border hover:border-[#F9954E] hover:bg-[#FBEEE7] dark:hover:bg-[#8F4B10]/10 transition-colors"
                         aria-label="이전"
                     >
                         <ChevronLeft className="w-3.5 h-3.5 text-muted-foreground" />
                     </button>
                     <button
                         onClick={() => scroll("right")}
-                        className="p-1.5 rounded-lg bg-card border border-border hover:border-[#F9954E] hover:bg-[#FFF5EB] dark:hover:bg-[#8F4B10]/10 transition-colors"
+                        className="p-1.5 rounded-lg bg-card border border-border hover:border-[#F9954E] hover:bg-[#FBEEE7] dark:hover:bg-[#8F4B10]/10 transition-colors"
                         aria-label="다음"
                     >
                         <ChevronRight className="w-3.5 h-3.5 text-muted-foreground" />
@@ -116,7 +116,7 @@ function ToolCarousel({ category, tools }: { category: string; tools: typeof AI_
                                         <h4 className="text-sm font-semibold text-card-foreground group-hover:text-[#F9954E] transition-colors line-clamp-1 leading-tight">
                                             {tool.name}
                                         </h4>
-                                        <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-[#FFF5EB] dark:bg-[#8F4B10]/20 text-[#E8832E] dark:text-[#FBAA60] inline-block mt-1">
+                                        <span className="text-[10px] font-medium px-1.5 py-0.5 rounded bg-[#FBEEE7] dark:bg-[#8F4B10]/20 text-[#E8832E] dark:text-[#FBAA60] inline-block mt-1">
                                             {tool.tags?.[0] || "AI"}
                                         </span>
                                     </div>

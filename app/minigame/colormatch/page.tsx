@@ -110,13 +110,13 @@ export default function ColorMatchPage() {
         <main className="relative overflow-hidden min-h-screen bg-[#09090e] text-white">
             <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(249,149,78,0.07),transparent)]" />
             <header className="fixed top-0 left-0 w-full h-16 bg-[#09090e]/80 backdrop-blur-md border-b border-white/10 z-50 flex items-center justify-between px-6">
-                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-500 hover:text-white transition-colors">
+                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-stone-500 hover:text-white transition-colors">
                     <ArrowLeft className="w-4 h-4" />
                     미니게임
                 </Link>
                 <h1 className="text-[15px] font-extrabold tracking-tight text-white">🎨 색깔 맞추기</h1>
                 <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
-                    <div className="text-[9px] uppercase tracking-widest text-neutral-500">SCORE</div>
+                    <div className="text-[9px] uppercase tracking-widest text-stone-500">SCORE</div>
                     <div className="text-sm font-bold text-white tabular-nums">
                         <CountUp value={score} className="tabular-nums" />
                     </div>
@@ -135,7 +135,7 @@ export default function ColorMatchPage() {
                             >
                                 <Palette className="arcade-float w-16 h-16 mx-auto mb-4 text-[#F9954E]" />
                                 <h2 className="text-2xl font-extrabold tracking-tight mb-4 text-white">색깔 맞추기 게임</h2>
-                                <p className="text-neutral-400 mb-8">
+                                <p className="text-stone-400 mb-8">
                                     <strong className="text-[#F9954E]" style={{ color: textColor }}>{displayText || "색깔"}</strong>의 <strong className="text-white">실제 색상</strong>을 선택하세요!<br />
                                     <span className="text-sm">(글자의 색이 아닌, 글자가 뜻하는 색을 고르세요)</span>
                                 </p>
@@ -158,7 +158,7 @@ export default function ColorMatchPage() {
                                 {/* Stats */}
                                 <div className="grid grid-cols-2 gap-4 mb-8">
                                     <div className="arcade-card arcade-rise-1 text-center p-4 rounded-2xl bg-white/[0.04] border border-white/10">
-                                        <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">점수</div>
+                                        <div className="text-[10px] uppercase tracking-widest text-stone-500 mb-1">점수</div>
                                         <div className="text-4xl font-bold text-[#F9954E] tabular-nums">
                                             <span key={score} className="arcade-pop inline-block">
                                                 <CountUp value={score} className="tabular-nums" />
@@ -166,7 +166,7 @@ export default function ColorMatchPage() {
                                         </div>
                                     </div>
                                     <div className="arcade-card arcade-rise-2 text-center p-4 rounded-2xl bg-white/[0.04] border border-white/10">
-                                        <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">남은 시간</div>
+                                        <div className="text-[10px] uppercase tracking-widest text-stone-500 mb-1">남은 시간</div>
                                         <div className="text-4xl font-bold text-white tabular-nums">
                                             <CountUp value={timeLeft} className="tabular-nums" />초
                                         </div>
@@ -175,7 +175,7 @@ export default function ColorMatchPage() {
 
                                 {/* Question */}
                                 <div className="arcade-card arcade-rise-3 mb-8 p-8 rounded-2xl bg-white/[0.04] border border-white/10 text-center">
-                                    <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-3">
+                                    <div className="text-[10px] uppercase tracking-widest text-stone-500 mb-3">
                                         이 글자의 실제 색상은?
                                     </div>
                                     <div
@@ -216,14 +216,14 @@ export default function ColorMatchPage() {
                                 <h2 className="text-3xl font-extrabold tracking-tight mb-4 text-white">게임 종료!</h2>
 
                                 <div className="arcade-card mb-8 p-8 rounded-3xl bg-[#101016] border border-white/10">
-                                    <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-2">최종 점수</div>
+                                    <div className="text-[10px] uppercase tracking-widest text-stone-500 mb-2">최종 점수</div>
                                     <div className="text-6xl font-black arcade-grad-text tabular-nums">
                                         <CountUp value={score} className="tabular-nums" />
                                     </div>
                                 </div>
 
                                 <div className="mb-8 p-4 rounded-2xl bg-white/[0.04] border border-white/10">
-                                    <p className="text-lg font-medium text-neutral-200">
+                                    <p className="text-lg font-medium text-stone-200">
                                         {score >= 20 ? "🌟 완벽해요!" : score >= 15 ? "🚀 훌륭해요!" : score >= 10 ? "💫 잘했어요!" : "📚 조금만 더 연습해 볼까요?"}
                                     </p>
                                 </div>
@@ -237,7 +237,7 @@ export default function ColorMatchPage() {
                                     </button>
                                     <button
                                         onClick={reset}
-                                        className="px-6 py-3 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] font-semibold active:scale-[0.97] transition-transform"
+                                        className="px-6 py-3 rounded-xl bg-white/[0.06] border border-white/10 text-stone-200 hover:bg-white/[0.1] font-semibold active:scale-[0.97] transition-transform"
                                     >
                                         <RotateCcw className="w-5 h-5" />
                                     </button>

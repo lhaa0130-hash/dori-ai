@@ -43,21 +43,21 @@ function CountUp({ target, suffix, delay }: { target: number; suffix: string; de
 
 export default function StatsStrip() {
   return (
-    <section className="py-12 border-b border-neutral-100 dark:border-zinc-900">
+    <section className="py-12 border-b border-stone-100 dark:border-zinc-900">
       <div className="scroll-reveal grid grid-cols-3">
         {STATS.map((s, i) => (
           <div
             key={s.label}
             className={`flex flex-col items-center gap-2 ${
-              i !== 0 ? "border-l border-neutral-100 dark:border-zinc-900" : ""
+              i !== 0 ? "border-l border-stone-100 dark:border-zinc-900" : ""
             }`}
           >
             {/* 큰 숫자 */}
-            <span className="text-[44px] font-extrabold text-neutral-950 dark:text-white tracking-tight leading-none">
+            <span className="text-[44px] font-extrabold text-stone-950 dark:text-white tracking-tight leading-none">
               <CountUp target={s.target} suffix={s.suffix} delay={s.delay} />
             </span>
             {/* 라벨 */}
-            <span className="text-[12px] font-semibold text-neutral-400 dark:text-neutral-500">
+            <span className="text-[12px] font-semibold text-stone-400 dark:text-stone-500">
               {s.label}
             </span>
           </div>

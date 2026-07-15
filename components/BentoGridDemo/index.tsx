@@ -29,10 +29,10 @@ export const BentoGridDemo = () => {
         viewport={{ once: true }}
         className="text-center mb-16"
       >
-        <h2 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-neutral-500 mb-4 tracking-tight">
+        <h2 className="text-3xl md:text-5xl font-bold bg-clip-text text-transparent bg-gradient-to-b from-white to-stone-500 mb-4 tracking-tight">
           Curated Projects
         </h2>
-        <p className="text-neutral-400 max-w-lg mx-auto text-lg">
+        <p className="text-stone-400 max-w-lg mx-auto text-lg">
           AI와 크리에이티브가 만나는 다양한 프로젝트를 경험해보세요.
         </p>
       </motion.div>
@@ -85,7 +85,7 @@ const items = [
         </div>
       </HeaderPlaceholder>
     ),
-    icon: <Globe className="h-4 w-4 text-neutral-400" />,
+    icon: <Globe className="h-4 w-4 text-stone-400" />,
     className: "md:col-span-2 md:row-span-2",
   },
   {
@@ -100,7 +100,7 @@ const items = [
         </div>
       </HeaderPlaceholder>
     ),
-    icon: <Newspaper className="h-4 w-4 text-neutral-400" />,
+    icon: <Newspaper className="h-4 w-4 text-stone-400" />,
     className: "md:col-span-1",
   },
   {
@@ -111,7 +111,7 @@ const items = [
         <Play className="w-10 h-10 text-red-500/50 fill-red-500/20" />
       </HeaderPlaceholder>
     ),
-    icon: <Youtube className="h-4 w-4 text-neutral-400" />,
+    icon: <Youtube className="h-4 w-4 text-stone-400" />,
     className: "md:col-span-1",
   },
   {
@@ -122,7 +122,7 @@ const items = [
         <div className="w-12 h-12 rounded-2xl bg-gradient-to-tr from-purple-500 to-pink-500 opacity-60 rotate-3 group-hover:rotate-6 transition-transform" />
       </HeaderPlaceholder>
     ),
-    icon: <Youtube className="h-4 w-4 text-neutral-400" />,
+    icon: <Youtube className="h-4 w-4 text-stone-400" />,
     className: "md:col-span-1",
   },
   {
@@ -133,7 +133,7 @@ const items = [
         <Smartphone className="w-10 h-10 text-sky-500/50" />
       </HeaderPlaceholder>
     ),
-    icon: <Smartphone className="h-4 w-4 text-neutral-400" />,
+    icon: <Smartphone className="h-4 w-4 text-stone-400" />,
     className: "md:col-span-1",
   },
   {
@@ -144,7 +144,7 @@ const items = [
         <Book className="w-10 h-10 text-yellow-500/50" />
       </HeaderPlaceholder>
     ),
-    icon: <Book className="h-4 w-4 text-neutral-400" />,
+    icon: <Book className="h-4 w-4 text-stone-400" />,
     className: "md:col-span-1",
   },
   {
@@ -152,10 +152,10 @@ const items = [
     description: "우리가 만들어가는 미래.",
     header: (
       <HeaderPlaceholder color="white">
-        <Rocket className="w-10 h-10 text-neutral-400" />
+        <Rocket className="w-10 h-10 text-stone-400" />
       </HeaderPlaceholder>
     ),
-    icon: <Rocket className="h-4 w-4 text-neutral-400" />,
+    icon: <Rocket className="h-4 w-4 text-stone-400" />,
     className: "md:col-span-1",
   },
 ];

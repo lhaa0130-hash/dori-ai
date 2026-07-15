@@ -23,17 +23,17 @@ export default function LegalAccordion({ label, title, subtitle, date, sections 
   return (
     <main className="w-full min-h-screen">
       {/* 히어로 (FAQ 스타일) */}
-      <section className="pt-8 pb-8 border-b border-neutral-100 dark:border-zinc-900">
+      <section className="pt-8 pb-8 border-b border-stone-100 dark:border-zinc-900">
         {label && <p className="text-[12px] font-semibold text-[#F9954E] mb-3">{label}</p>}
-        <h1 className="text-[36px] sm:text-[48px] font-extrabold text-neutral-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
+        <h1 className="text-[36px] sm:text-[48px] font-extrabold text-stone-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
           {title}
         </h1>
         {subtitle && (
-          <p className="text-[14px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+          <p className="text-[14px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep">
             {subtitle}
           </p>
         )}
-        {date && <p className="text-[12px] text-neutral-400 dark:text-neutral-500 mt-2">{date}</p>}
+        {date && <p className="text-[12px] text-stone-400 dark:text-stone-500 mt-2">{date}</p>}
       </section>
 
       {/* 조항 아코디언 */}
@@ -42,18 +42,18 @@ export default function LegalAccordion({ label, title, subtitle, date, sections 
           {sections.map((item, i) => (
             <details
               key={i}
-              className="group rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 overflow-hidden"
+              className="group rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 overflow-hidden"
             >
               <summary className="cursor-pointer list-none flex items-center justify-between gap-4 p-5">
-                <span className="font-bold text-[15px] text-neutral-900 dark:text-white leading-snug break-keep">
+                <span className="font-bold text-[15px] text-stone-900 dark:text-white leading-snug break-keep">
                   {item.q}
                 </span>
-                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-[#F9954E] text-sm font-semibold transition-transform duration-200 group-open:rotate-45">
+                <span className="flex-shrink-0 w-6 h-6 rounded-full bg-stone-100 dark:bg-zinc-800 flex items-center justify-center text-[#F9954E] text-sm font-semibold transition-transform duration-200 group-open:rotate-45">
                   +
                 </span>
               </summary>
               <div
-                className="px-5 pb-5 text-sm text-neutral-600 dark:text-neutral-400 leading-[1.85]"
+                className="px-5 pb-5 text-sm text-stone-600 dark:text-stone-400 leading-[1.85]"
                 style={{ whiteSpace: "pre-line" }}
               >
                 {item.a}
@@ -65,7 +65,7 @@ export default function LegalAccordion({ label, title, subtitle, date, sections 
         <div className="mt-10">
           <Link
             href="/"
-            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-neutral-300 text-sm font-medium hover:bg-[#FFF5EB] dark:hover:bg-orange-950/20 hover:text-[#E8832E] dark:hover:text-[#FBAA60] transition-all duration-200"
+            className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-stone-100 dark:bg-zinc-800 text-stone-600 dark:text-stone-300 text-sm font-medium hover:bg-[#FBEEE7] dark:hover:bg-orange-950/20 hover:text-[#E8832E] dark:hover:text-[#FBAA60] transition-all duration-200"
           >
             ← 홈으로 돌아가기
           </Link>

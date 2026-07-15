@@ -20,22 +20,22 @@ export default function LegalPageLayout({ title, subtitle, badge, date, intro, c
   return (
     <main className="w-full min-h-screen">
       {/* 히어로 (FAQ 스타일) */}
-      <section className="pt-8 pb-8 border-b border-neutral-100 dark:border-zinc-900">
+      <section className="pt-8 pb-8 border-b border-stone-100 dark:border-zinc-900">
         {badge && <p className="text-[12px] font-semibold text-[#F9954E] mb-3">{badge}</p>}
-        <h1 className="text-[36px] sm:text-[48px] font-extrabold text-neutral-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
+        <h1 className="text-[36px] sm:text-[48px] font-extrabold text-stone-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
           {title}
         </h1>
         {subtitle && (
-          <p className="text-[14px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+          <p className="text-[14px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep">
             {subtitle}
           </p>
         )}
-        {date && <p className="text-[12px] text-neutral-400 dark:text-neutral-500 mt-2">{date}</p>}
+        {date && <p className="text-[12px] text-stone-400 dark:text-stone-500 mt-2">{date}</p>}
       </section>
 
       {/* 안내 배너 (선택) */}
       {intro && (
-        <div className="mt-6 p-4 rounded-2xl bg-[#FFF5EB]/60 dark:bg-orange-950/10 border border-[#FDD5A5]/50 dark:border-[#B35E15]/30 text-[13px] text-neutral-600 dark:text-neutral-400 leading-relaxed break-keep">
+        <div className="mt-6 p-4 rounded-2xl bg-[#FBEEE7]/60 dark:bg-orange-950/10 border border-[#FDD5A5]/50 dark:border-[#B35E15]/30 text-[13px] text-stone-600 dark:text-stone-400 leading-relaxed break-keep">
           {intro}
         </div>
       )}
@@ -46,7 +46,7 @@ export default function LegalPageLayout({ title, subtitle, badge, date, intro, c
       <div className="pb-20">
         <Link
           href="/"
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-600 dark:text-neutral-300 text-sm font-medium hover:bg-[#FFF5EB] dark:hover:bg-orange-950/20 hover:text-[#E8832E] dark:hover:text-[#FBAA60] transition-all duration-200"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-stone-100 dark:bg-zinc-800 text-stone-600 dark:text-stone-300 text-sm font-medium hover:bg-[#FBEEE7] dark:hover:bg-orange-950/20 hover:text-[#E8832E] dark:hover:text-[#FBAA60] transition-all duration-200"
         >
           ← 홈으로 돌아가기
         </Link>

@@ -347,7 +347,7 @@ export default function FlappyGame() {
         <header className="mb-5 flex w-full items-center justify-between">
           <Link
             href="/minigame"
-            className="inline-flex items-center gap-1.5 text-[13px] text-neutral-500 transition-colors hover:text-white"
+            className="inline-flex items-center gap-1.5 text-[13px] text-stone-500 transition-colors hover:text-white"
           >
             <ArrowLeft className="h-4 w-4" />
             뒤로
@@ -358,7 +358,7 @@ export default function FlappyGame() {
               플래피 도리
             </span>
             <div className="rounded-xl border border-white/10 bg-white/[0.05] px-3 py-1.5 text-center">
-              <div className="text-[9px] uppercase tracking-widest text-neutral-500">SCORE</div>
+              <div className="text-[9px] uppercase tracking-widest text-stone-500">SCORE</div>
               <div key={score} className="arcade-pop text-sm font-bold tabular-nums text-white">
                 <CountUp value={score} className="tabular-nums" />
               </div>
@@ -389,7 +389,7 @@ export default function FlappyGame() {
                 <Bird className="h-8 w-8 text-[#F9954E]" />
               </div>
               <h1 className="text-2xl font-extrabold tracking-tight">플래피 도리</h1>
-              <p className="mb-6 mt-1.5 px-6 text-center text-[12px] leading-relaxed text-neutral-400">
+              <p className="mb-6 mt-1.5 px-6 text-center text-[12px] leading-relaxed text-stone-400">
                 탭 · 클릭 · Space로 날아오르세요.<br />파이프 사이를 통과할 때마다 +1점!
               </p>
               <button
@@ -412,11 +412,11 @@ export default function FlappyGame() {
                     <Trophy className="h-3 w-3" /> 신기록 달성!
                   </div>
                 )}
-                <div className="mb-1 text-[10px] uppercase tracking-widest text-neutral-500">통과한 파이프</div>
+                <div className="mb-1 text-[10px] uppercase tracking-widest text-stone-500">통과한 파이프</div>
                 <div className="arcade-grad-text mb-2 text-5xl font-black tabular-nums">
                   <CountUp value={score} />
                 </div>
-                <div className="mb-6 inline-flex items-center gap-1 text-[11px] text-neutral-500">
+                <div className="mb-6 inline-flex items-center gap-1 text-[11px] text-stone-500">
                   <Trophy className="h-3 w-3 text-[#F9954E]" />
                   최고 {best}{UNIT}
                 </div>
@@ -432,7 +432,7 @@ export default function FlappyGame() {
           )}
         </div>
 
-        <p className="mt-3 text-center text-[11px] text-neutral-600">
+        <p className="mt-3 text-center text-[11px] text-stone-600">
           화면을 탭하거나 Space를 눌러 새를 띄우세요
         </p>
 

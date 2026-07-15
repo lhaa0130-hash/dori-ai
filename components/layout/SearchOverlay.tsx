@@ -49,17 +49,17 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
   return (
     <div className="fixed inset-0 z-[100]">
       <div className="absolute inset-0 bg-black/40 backdrop-blur-sm" onClick={onClose} />
-      <div className="absolute left-1/2 top-[11vh] -translate-x-1/2 w-[92vw] max-w-[560px] bg-white dark:bg-zinc-950 rounded-2xl shadow-2xl border border-neutral-200 dark:border-zinc-800 overflow-hidden">
-        <form onSubmit={onSubmit} className="flex items-center gap-2.5 px-4 py-3.5 border-b border-neutral-100 dark:border-zinc-800">
-          <Search className="w-[18px] h-[18px] text-neutral-400 flex-shrink-0" />
+      <div className="absolute left-1/2 top-[11vh] -translate-x-1/2 w-[92vw] max-w-[560px] bg-white dark:bg-zinc-950 rounded-2xl shadow-2xl border border-stone-200 dark:border-zinc-800 overflow-hidden">
+        <form onSubmit={onSubmit} className="flex items-center gap-2.5 px-4 py-3.5 border-b border-stone-100 dark:border-zinc-800">
+          <Search className="w-[18px] h-[18px] text-stone-400 flex-shrink-0" />
           <input
             ref={inputRef}
             value={q}
             onChange={(e) => setQ(e.target.value)}
             placeholder="글·메뉴 검색"
-            className="flex-1 bg-transparent outline-none text-[15px] text-neutral-900 dark:text-white placeholder:text-neutral-400"
+            className="flex-1 bg-transparent outline-none text-[15px] text-stone-900 dark:text-white placeholder:text-stone-400"
           />
-          <button type="button" onClick={onClose} aria-label="닫기" className="text-neutral-400 hover:text-neutral-700 dark:hover:text-white flex-shrink-0">
+          <button type="button" onClick={onClose} aria-label="닫기" className="text-stone-400 hover:text-stone-700 dark:hover:text-white flex-shrink-0">
             <X className="w-4 h-4" />
           </button>
         </form>
@@ -67,10 +67,10 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
         <div className="max-h-[58vh] overflow-y-auto p-2">
           {shortcutHits.length > 0 && (
             <>
-              <p className="px-2.5 py-1.5 text-[10px] font-bold tracking-widest uppercase text-neutral-400">바로가기</p>
+              <p className="px-2.5 py-1.5 text-[10px] font-bold tracking-widest uppercase text-stone-400">바로가기</p>
               {shortcutHits.map((s) => (
-                <button key={s.href} onClick={() => go(s.href)} className="w-full flex items-center gap-2 px-2.5 py-2.5 rounded-xl text-left hover:bg-neutral-50 dark:hover:bg-zinc-900 transition-colors">
-                  <span className="text-[13.5px] font-semibold text-neutral-800 dark:text-neutral-100">{s.t}</span>
+                <button key={s.href} onClick={() => go(s.href)} className="w-full flex items-center gap-2 px-2.5 py-2.5 rounded-xl text-left hover:bg-stone-50 dark:hover:bg-zinc-900 transition-colors">
+                  <span className="text-[13.5px] font-semibold text-stone-800 dark:text-stone-100">{s.t}</span>
                 </button>
               ))}
             </>
@@ -78,18 +78,18 @@ export default function SearchOverlay({ open, onClose }: { open: boolean; onClos
 
           {articleHits.length > 0 && (
             <>
-              <p className="px-2.5 py-1.5 mt-1 text-[10px] font-bold tracking-widest uppercase text-neutral-400">인사이트 글</p>
+              <p className="px-2.5 py-1.5 mt-1 text-[10px] font-bold tracking-widest uppercase text-stone-400">인사이트 글</p>
               {articleHits.map((a) => (
-                <button key={a.s} onClick={() => go(`/insight/article/${a.s}`)} className="w-full flex items-center gap-2.5 px-2.5 py-2.5 rounded-xl text-left hover:bg-neutral-50 dark:hover:bg-zinc-900 transition-colors">
+                <button key={a.s} onClick={() => go(`/insight/article/${a.s}`)} className="w-full flex items-center gap-2.5 px-2.5 py-2.5 rounded-xl text-left hover:bg-stone-50 dark:hover:bg-zinc-900 transition-colors">
                   <span className="text-[10px] font-bold text-[#F9954E] bg-[#FFF1E3] dark:bg-[#F9954E]/15 rounded px-1.5 py-0.5 flex-shrink-0">{a.c}</span>
-                  <span className="text-[13px] text-neutral-700 dark:text-neutral-200 line-clamp-1">{a.t}</span>
+                  <span className="text-[13px] text-stone-700 dark:text-stone-200 line-clamp-1">{a.t}</span>
                 </button>
               ))}
             </>
           )}
 
           {term && articleHits.length === 0 && shortcutHits.length === 0 && (
-            <p className="text-center text-[13px] text-neutral-400 py-10">‘{q}’ 검색 결과가 없어요</p>
+            <p className="text-center text-[13px] text-stone-400 py-10">‘{q}’ 검색 결과가 없어요</p>
           )}
         </div>
       </div>

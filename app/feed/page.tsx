@@ -36,7 +36,7 @@ function FeedAdCard({ index }: { index: number }) {
   return (
     <li className="rounded-2xl border border-[#F9954E]/20 bg-[#FFF8EE] dark:bg-[#1a0d00] p-4">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-[10px] font-bold text-neutral-400 dark:text-neutral-500 tracking-wide">스폰서</span>
+        <span className="text-[10px] font-bold text-stone-400 dark:text-stone-500 tracking-wide">스폰서</span>
         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${src.cls}`}>{src.label}</span>
       </div>
       <a href={buildMarketUrl(p)} target="_blank" rel="sponsored noopener noreferrer" className="flex items-center gap-3 group">
@@ -44,8 +44,8 @@ function FeedAdCard({ index }: { index: number }) {
           {p.emoji || CATEGORY_EMOJI[p.category] || "🛍️"}
         </div>
         <div className="flex-1 min-w-0">
-          <p className="text-[13px] font-extrabold text-neutral-900 dark:text-white truncate group-hover:text-[#F9954E] transition-colors">{p.name}</p>
-          <p className="text-[11px] text-neutral-500 dark:text-neutral-400 line-clamp-1 mt-0.5">{p.summary}</p>
+          <p className="text-[13px] font-extrabold text-stone-900 dark:text-white truncate group-hover:text-[#F9954E] transition-colors">{p.name}</p>
+          <p className="text-[11px] text-stone-500 dark:text-stone-400 line-clamp-1 mt-0.5">{p.summary}</p>
         </div>
         <span className="text-[12px] font-bold text-[#F9954E] flex-shrink-0">보기 →</span>
       </a>
@@ -263,16 +263,16 @@ export default function FeedPage() {
           <p className="text-[11px] font-bold tracking-wide" style={{ color: POINT }}>
             FEED
           </p>
-          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-neutral-900 dark:text-white">
+          <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-stone-900 dark:text-white">
             피드
           </h1>
-          <p className="mt-1 text-sm text-neutral-500 dark:text-neutral-400">
+          <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
             사진·영상과 함께 소식을 남기고 공개 범위를 골라보세요.
           </p>
         </div>
 
         {/* 추천 / 팔로잉 탭 */}
-        <div className="mb-5 flex gap-1 p-1 rounded-2xl bg-neutral-100 dark:bg-zinc-900">
+        <div className="mb-5 flex gap-1 p-1 rounded-2xl bg-stone-100 dark:bg-zinc-900">
           {([["recommend", "추천"], ["following", "팔로잉"]] as const).map(([id, label]) => (
             <button
               key={id}
@@ -282,7 +282,7 @@ export default function FeedPage() {
                 "flex-1 text-center py-2 rounded-xl text-[13px] font-extrabold transition-colors " +
                 (tab === id
                   ? "bg-white dark:bg-zinc-800 text-[#F9954E] shadow-sm"
-                  : "text-neutral-500 dark:text-neutral-400 active:opacity-70")
+                  : "text-stone-500 dark:text-stone-400 active:opacity-70")
               }
             >
               {label}
@@ -292,20 +292,20 @@ export default function FeedPage() {
 
         {/* 글쓰기 박스 / 로그인 유도 */}
         {isLoggedIn ? (
-          <div className="rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-4 mb-6">
+          <div className="rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-4 mb-6">
             <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
               placeholder="무슨 생각을 하고 있나요?"
               rows={3}
               maxLength={1000}
-              className="w-full resize-none bg-transparent text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 outline-none"
+              className="w-full resize-none bg-transparent text-sm text-stone-900 dark:text-stone-100 placeholder:text-stone-400 dark:placeholder:text-stone-600 outline-none"
             />
 
             {/* 미디어 미리보기 */}
             {uploading && (
-              <div className="mt-2 flex items-center gap-2 text-sm text-neutral-500 dark:text-neutral-400">
-                <span className="inline-block h-4 w-4 rounded-full border-2 border-neutral-300 border-t-[#F9954E] animate-spin" />
+              <div className="mt-2 flex items-center gap-2 text-sm text-stone-500 dark:text-stone-400">
+                <span className="inline-block h-4 w-4 rounded-full border-2 border-stone-300 border-t-[#F9954E] animate-spin" />
                 업로드 중...
               </div>
             )}
@@ -343,7 +343,7 @@ export default function FeedPage() {
                       "text-xs font-semibold rounded-full px-3 py-1.5 active:opacity-85 transition " +
                       (active
                         ? "bg-[#F9954E] text-white"
-                        : "bg-neutral-100 dark:bg-zinc-900 text-neutral-600 dark:text-neutral-300")
+                        : "bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300")
                     }
                   >
                     {v === "public" ? "전체공개" : v === "friends" ? "친구공개" : "범위선택"}
@@ -354,9 +354,9 @@ export default function FeedPage() {
 
             {/* 범위(그룹) 체크박스 */}
             {visibility === "groups" && (
-              <div className="mt-3 rounded-xl bg-neutral-100 dark:bg-zinc-900 p-3">
+              <div className="mt-3 rounded-xl bg-stone-100 dark:bg-zinc-900 p-3">
                 {groups.length === 0 ? (
-                  <p className="text-xs text-neutral-500 dark:text-neutral-400">
+                  <p className="text-xs text-stone-500 dark:text-stone-400">
                     만든 범위가 없어요.{" "}
                     <Link href="/messages" className="underline" style={{ color: POINT }}>
                       메시지 &gt; 범위
@@ -366,7 +366,7 @@ export default function FeedPage() {
                 ) : (
                   <div className="flex flex-col gap-2">
                     {groups.map((g) => (
-                      <label key={g.id} className="flex items-center gap-2 text-sm text-neutral-700 dark:text-neutral-200">
+                      <label key={g.id} className="flex items-center gap-2 text-sm text-stone-700 dark:text-stone-200">
                         <input
                           type="checkbox"
                           checked={selectedGroupIds.includes(g.id)}
@@ -374,7 +374,7 @@ export default function FeedPage() {
                           className="h-4 w-4 accent-[#F9954E]"
                         />
                         <span className="truncate">{g.name}</span>
-                        <span className="text-[11px] text-neutral-400">({g.memberUids.length}명)</span>
+                        <span className="text-[11px] text-stone-400">({g.memberUids.length}명)</span>
                       </label>
                     ))}
                   </div>
@@ -385,7 +385,7 @@ export default function FeedPage() {
             {/* 하단 액션 */}
             <div className="flex items-center justify-between mt-3">
               <div className="flex items-center gap-3">
-                <label className="cursor-pointer text-sm font-medium text-neutral-500 dark:text-neutral-400 hover:text-[#F9954E] active:opacity-85 transition inline-flex items-center gap-1.5">
+                <label className="cursor-pointer text-sm font-medium text-stone-500 dark:text-stone-400 hover:text-[#F9954E] active:opacity-85 transition inline-flex items-center gap-1.5">
                   <span aria-hidden>📷</span>
                   <span>사진·영상</span>
                   <input
@@ -396,7 +396,7 @@ export default function FeedPage() {
                     className="hidden"
                   />
                 </label>
-                <span className="text-[11px] text-neutral-400">{text.length}/1000</span>
+                <span className="text-[11px] text-stone-400">{text.length}/1000</span>
               </div>
               <button
                 type="button"
@@ -409,8 +409,8 @@ export default function FeedPage() {
             </div>
           </div>
         ) : (
-          <div className="rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5 mb-6 text-center">
-            <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-3">
+          <div className="rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5 mb-6 text-center">
+            <p className="text-sm text-stone-500 dark:text-stone-400 mb-3">
               글을 남기려면 로그인이 필요해요.
             </p>
             <Link
@@ -428,15 +428,15 @@ export default function FeedPage() {
             {[0, 1, 2].map((i) => (
               <div
                 key={i}
-                className="rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-4 animate-pulse h-24"
+                className="rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-4 animate-pulse h-24"
               />
             ))}
           </div>
         ) : shownPosts.length === 0 ? (
-          <div className="rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-10 text-center">
+          <div className="rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-10 text-center">
             {tab === "following" ? (
               <>
-                <p className="text-sm text-neutral-500 dark:text-neutral-400 mb-3">
+                <p className="text-sm text-stone-500 dark:text-stone-400 mb-3">
                   {isLoggedIn ? "아직 팔로우한 사람의 글이 없어요." : "팔로우한 사람들의 글이 여기에 모여요."}
                 </p>
                 <button
@@ -448,7 +448,7 @@ export default function FeedPage() {
                 </button>
               </>
             ) : (
-              <p className="text-sm text-neutral-500 dark:text-neutral-400">첫 글을 남겨보세요.</p>
+              <p className="text-sm text-stone-500 dark:text-stone-400">첫 글을 남겨보세요.</p>
             )}
           </div>
         ) : (
@@ -462,22 +462,22 @@ export default function FeedPage() {
                   )}
                 <li
                   key={post.id}
-                  className="rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-4"
+                  className="rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-4"
                 >
                   <div className="flex items-start justify-between gap-3">
                     <div className="min-w-0">
                       <div className="flex items-center gap-2">
                         <Link
                           href={`/profile?uid=${post.uid}`}
-                          className="font-bold text-sm text-neutral-900 dark:text-white hover:underline truncate inline-block max-w-[160px] align-bottom"
+                          className="font-bold text-sm text-stone-900 dark:text-white hover:underline truncate inline-block max-w-[160px] align-bottom"
                         >
                           {post.name}
                         </Link>
-                        <span className="text-[10px] font-semibold rounded-full px-2 py-0.5 bg-neutral-100 dark:bg-zinc-900 text-neutral-500 dark:text-neutral-400">
+                        <span className="text-[10px] font-semibold rounded-full px-2 py-0.5 bg-stone-100 dark:bg-zinc-900 text-stone-500 dark:text-stone-400">
                           {VIS_LABEL[post.visibility] || "전체"}
                         </span>
                       </div>
-                      <p className="text-[11px] text-neutral-400 mt-0.5">
+                      <p className="text-[11px] text-stone-400 mt-0.5">
                         {post.at ? new Date(post.at).toLocaleString("ko-KR") : ""}
                       </p>
                     </div>
@@ -485,7 +485,7 @@ export default function FeedPage() {
                       <button
                         type="button"
                         onClick={() => handleDelete(post.id)}
-                        className="text-[11px] text-neutral-400 hover:text-red-500 active:opacity-85 flex-shrink-0"
+                        className="text-[11px] text-stone-400 hover:text-red-500 active:opacity-85 flex-shrink-0"
                       >
                         삭제
                       </button>
@@ -493,7 +493,7 @@ export default function FeedPage() {
                   </div>
 
                   {post.text && (
-                    <p className="mt-2 text-sm text-neutral-700 dark:text-neutral-300 whitespace-pre-line break-words">
+                    <p className="mt-2 text-sm text-stone-700 dark:text-stone-300 whitespace-pre-line break-words">
                       {post.text}
                     </p>
                   )}
@@ -513,7 +513,7 @@ export default function FeedPage() {
                     <button
                       type="button"
                       onClick={() => handleLike(post)}
-                      className="inline-flex items-center gap-1.5 text-sm rounded-full px-3 py-1.5 bg-neutral-100 dark:bg-zinc-900 active:opacity-85 transition"
+                      className="inline-flex items-center gap-1.5 text-sm rounded-full px-3 py-1.5 bg-stone-100 dark:bg-zinc-900 active:opacity-85 transition"
                       aria-pressed={post.likedByMe}
                     >
                       <span style={{ color: post.likedByMe ? POINT : undefined }}>
@@ -530,7 +530,7 @@ export default function FeedPage() {
                     <button
                       type="button"
                       onClick={() => toggleComments(post)}
-                      className="inline-flex items-center gap-1.5 text-sm rounded-full px-3 py-1.5 bg-neutral-100 dark:bg-zinc-900 active:opacity-85 transition text-neutral-600 dark:text-neutral-300"
+                      className="inline-flex items-center gap-1.5 text-sm rounded-full px-3 py-1.5 bg-stone-100 dark:bg-zinc-900 active:opacity-85 transition text-stone-600 dark:text-stone-300"
                       aria-expanded={getCState(post.id).open}
                     >
                       <span aria-hidden>💬</span>
@@ -540,13 +540,13 @@ export default function FeedPage() {
 
                   {/* 댓글 영역 — 글별 독립 토글 */}
                   {getCState(post.id).open && (
-                    <div className="mt-3 border-t border-neutral-100 dark:border-zinc-900 pt-3">
+                    <div className="mt-3 border-t border-stone-100 dark:border-zinc-900 pt-3">
                       {getCState(post.id).loading ? (
-                        <p className="text-xs text-neutral-400">댓글 불러오는 중...</p>
+                        <p className="text-xs text-stone-400">댓글 불러오는 중...</p>
                       ) : (
                         <>
                           {getCState(post.id).items.length === 0 ? (
-                            <p className="text-xs text-neutral-400">아직 댓글이 없어요.</p>
+                            <p className="text-xs text-stone-400">아직 댓글이 없어요.</p>
                           ) : (
                             <ul className="space-y-3">
                               {getCState(post.id).items.map((c) => {
@@ -557,15 +557,15 @@ export default function FeedPage() {
                                       <div className="flex items-center gap-2">
                                         <Link
                                           href={`/profile?uid=${c.uid}`}
-                                          className="font-bold text-xs text-neutral-900 dark:text-white hover:underline truncate inline-block max-w-[140px] align-bottom"
+                                          className="font-bold text-xs text-stone-900 dark:text-white hover:underline truncate inline-block max-w-[140px] align-bottom"
                                         >
                                           {c.name}
                                         </Link>
-                                        <span className="text-[10px] text-neutral-400">
+                                        <span className="text-[10px] text-stone-400">
                                           {c.at ? new Date(c.at).toLocaleString("ko-KR") : ""}
                                         </span>
                                       </div>
-                                      <p className="mt-0.5 text-sm text-neutral-700 dark:text-neutral-300 whitespace-pre-line break-words">
+                                      <p className="mt-0.5 text-sm text-stone-700 dark:text-stone-300 whitespace-pre-line break-words">
                                         {c.text}
                                       </p>
                                     </div>
@@ -573,7 +573,7 @@ export default function FeedPage() {
                                       <button
                                         type="button"
                                         onClick={() => handleDeleteComment(post, c.id)}
-                                        className="text-[11px] text-neutral-400 hover:text-red-500 active:opacity-85 flex-shrink-0"
+                                        className="text-[11px] text-stone-400 hover:text-red-500 active:opacity-85 flex-shrink-0"
                                       >
                                         삭제
                                       </button>
@@ -599,7 +599,7 @@ export default function FeedPage() {
                                 }}
                                 placeholder="댓글을 입력하세요"
                                 maxLength={500}
-                                className="flex-1 min-w-0 rounded-full bg-neutral-100 dark:bg-zinc-900 px-4 py-2 text-sm text-neutral-900 dark:text-neutral-100 placeholder:text-neutral-400 dark:placeholder:text-neutral-600 outline-none"
+                                className="flex-1 min-w-0 rounded-full bg-stone-100 dark:bg-zinc-900 px-4 py-2 text-sm text-stone-900 dark:text-stone-100 placeholder:text-stone-400 dark:placeholder:text-stone-600 outline-none"
                               />
                               <button
                                 type="button"
@@ -611,7 +611,7 @@ export default function FeedPage() {
                               </button>
                             </div>
                           ) : (
-                            <p className="mt-3 text-xs text-neutral-400">
+                            <p className="mt-3 text-xs text-stone-400">
                               <Link href="/login" className="underline" style={{ color: POINT }}>
                                 로그인
                               </Link>{" "}

@@ -71,8 +71,8 @@ export default function FlatFormClient() {
       <>
         <ProjectTopBar name="건축일로" emoji="📐" />
         <div className="fixed left-0 right-0 bottom-0 top-12 z-[9999] flex flex-col items-center justify-center gap-3 bg-white dark:bg-black">
-          <div className="w-7 h-7 rounded-full border-2 border-neutral-200 dark:border-zinc-700 border-t-[#F9954E] animate-spin" />
-          <p className="text-[13px] text-neutral-400">내 설계 불러오는 중…</p>
+          <div className="w-7 h-7 rounded-full border-2 border-stone-200 dark:border-zinc-700 border-t-[#F9954E] animate-spin" />
+          <p className="text-[13px] text-stone-400">내 설계 불러오는 중…</p>
         </div>
       </>
     );

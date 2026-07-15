@@ -74,10 +74,10 @@ const notices: NoticeItem[] = [
 export default function NoticeClient() {
     const getTypeBadge = (t: NoticeType) => {
         switch (t) {
-            case "공지":    return "bg-[#FFF5EB] text-[#F9954E] dark:bg-[#F9954E]/10 dark:text-[#F9954E]";
-            case "업데이트": return "bg-neutral-100 text-neutral-500 dark:bg-zinc-800 dark:text-neutral-400";
-            case "이벤트":  return "bg-neutral-100 text-neutral-500 dark:bg-zinc-800 dark:text-neutral-400";
-            case "점검":    return "bg-neutral-100 text-neutral-500 dark:bg-zinc-800 dark:text-neutral-400";
+            case "공지":    return "bg-[#FBEEE7] text-[#F9954E] dark:bg-[#F9954E]/10 dark:text-[#F9954E]";
+            case "업데이트": return "bg-stone-100 text-stone-500 dark:bg-zinc-800 dark:text-stone-400";
+            case "이벤트":  return "bg-stone-100 text-stone-500 dark:bg-zinc-800 dark:text-stone-400";
+            case "점검":    return "bg-stone-100 text-stone-500 dark:bg-zinc-800 dark:text-stone-400";
         }
     };
 
@@ -91,19 +91,19 @@ export default function NoticeClient() {
         <main className="w-full min-h-screen">
 
             {/* 히어로 */}
-            <section className="pt-8 pb-10 border-b border-neutral-100 dark:border-zinc-900">
+            <section className="pt-8 pb-10 border-b border-stone-100 dark:border-zinc-900">
                 <p className="text-[12px] font-semibold text-[#F9954E] mb-3">공지사항</p>
-                <h1 className="text-[36px] sm:text-[48px] font-extrabold text-neutral-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
+                <h1 className="text-[36px] sm:text-[48px] font-extrabold text-stone-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
                     공지사항
                 </h1>
-                <p className="text-[14px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">
+                <p className="text-[14px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep">
                     illo의 최신 소식과 버전 업데이트를 확인하세요.
                 </p>
             </section>
 
             {/* 공지사항 목록 */}
             <section className="py-6 pb-20">
-                <p className="text-[12px] font-medium text-neutral-400 mb-4">
+                <p className="text-[12px] font-medium text-stone-400 mb-4">
                     총 {notices.length}건의 공지사항
                 </p>
 
@@ -113,8 +113,8 @@ export default function NoticeClient() {
                             key={item.id}
                             className={`group rounded-2xl border overflow-hidden transition-colors ${
                                 item.pinned
-                                    ? "border-[#F9954E]/30 bg-[#FFF5EB]/40 dark:bg-[#F9954E]/5 dark:border-[#F9954E]/20"
-                                    : "border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950"
+                                    ? "border-[#F9954E]/30 bg-[#FBEEE7]/40 dark:bg-[#F9954E]/5 dark:border-[#F9954E]/20"
+                                    : "border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950"
                             }`}
                         >
                             <summary className="cursor-pointer list-none p-5">
@@ -128,29 +128,29 @@ export default function NoticeClient() {
                                                 {item.type}
                                             </span>
                                             {item.version && (
-                                                <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-neutral-100 dark:bg-zinc-800 text-neutral-500 flex items-center gap-1">
+                                                <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-stone-100 dark:bg-zinc-800 text-stone-500 flex items-center gap-1">
                                                     <Tag className="w-2.5 h-2.5" />
                                                     {item.version}
                                                 </span>
                                             )}
                                         </div>
-                                        <h3 className="font-bold text-[15px] text-neutral-900 dark:text-white leading-snug">
+                                        <h3 className="font-bold text-[15px] text-stone-900 dark:text-white leading-snug">
                                             {item.title}
                                         </h3>
-                                        <div className="flex items-center gap-1.5 mt-2 text-[12px] text-neutral-400">
+                                        <div className="flex items-center gap-1.5 mt-2 text-[12px] text-stone-400">
                                             <Clock className="w-3 h-3" />
                                             <span>{new Date(item.date).toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })}</span>
                                         </div>
                                     </div>
-                                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-neutral-100 dark:bg-zinc-800 flex items-center justify-center text-[#F9954E] text-sm font-semibold mt-1 transition-transform duration-200 group-open:rotate-45">
+                                    <span className="flex-shrink-0 w-6 h-6 rounded-full bg-stone-100 dark:bg-zinc-800 flex items-center justify-center text-[#F9954E] text-sm font-semibold mt-1 transition-transform duration-200 group-open:rotate-45">
                                         +
                                     </span>
                                 </div>
                             </summary>
                             <div className="px-5 pb-5">
-                                <div className="pt-4 border-t border-neutral-100 dark:border-zinc-800">
+                                <div className="pt-4 border-t border-stone-100 dark:border-zinc-800">
                                     <p
-                                        className="text-sm text-neutral-600 dark:text-neutral-400 leading-[1.85]"
+                                        className="text-sm text-stone-600 dark:text-stone-400 leading-[1.85]"
                                         style={{ whiteSpace: "pre-line" }}
                                     >
                                         {item.content}

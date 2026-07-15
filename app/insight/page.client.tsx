@@ -74,14 +74,14 @@ export default function InsightPageClient({ initialPosts = [], locale = 'ko' }: 
     <div className="w-full min-h-screen">
 
       {/* 헤더 */}
-      <section className="pt-6 pb-5 border-b border-neutral-100 dark:border-zinc-900">
-        <h1 className="text-[28px] sm:text-[36px] font-extrabold text-neutral-950 dark:text-white tracking-tight break-keep">
+      <section className="pt-6 pb-5 border-b border-stone-100 dark:border-zinc-900">
+        <h1 className="text-[28px] sm:text-[36px] font-extrabold text-stone-950 dark:text-white tracking-tight break-keep">
           {en ? 'AI Insights' : 'AI 인사이트'}
         </h1>
       </section>
 
       {/* 카테고리 */}
-      <div className="-mx-6 px-6 overflow-x-auto scrollbar-hide border-b border-neutral-100 dark:border-zinc-900">
+      <div className="-mx-6 px-6 overflow-x-auto scrollbar-hide border-b border-stone-100 dark:border-zinc-900">
         <div className="flex gap-1 w-max py-3">
           {CATEGORIES.map(cat => (
             <button
@@ -89,8 +89,8 @@ export default function InsightPageClient({ initialPosts = [], locale = 'ko' }: 
               onClick={() => setSelected(cat)}
               className={`px-3 py-1 rounded-full text-[12px] font-semibold transition-colors whitespace-nowrap ${
                 selected === cat
-                  ? 'bg-neutral-950 dark:bg-white text-white dark:text-neutral-950'
-                  : 'text-neutral-500 dark:text-neutral-400 hover:text-neutral-900 dark:hover:text-white'
+                  ? 'bg-stone-950 dark:bg-white text-white dark:text-stone-950'
+                  : 'text-stone-500 dark:text-stone-400 hover:text-stone-900 dark:hover:text-white'
               }`}
             >
               {en ? (CAT_LABEL_EN[cat] || cat) : cat}
@@ -110,12 +110,12 @@ export default function InsightPageClient({ initialPosts = [], locale = 'ko' }: 
             const desc = getDesc(post.content, post.summary);
 
             return (
-              <li key={pid} className="border-b border-neutral-100 dark:border-zinc-900 last:border-0">
+              <li key={pid} className="border-b border-stone-100 dark:border-zinc-900 last:border-0">
                 <Link href={`${articleBase}${post.slug || post.id}`} className="group flex items-start gap-3 py-3">
 
                   {/* 썸네일 */}
                   {post.thumbnail_url && (
-                    <div className="w-[60px] h-[46px] rounded-lg overflow-hidden flex-shrink-0 bg-neutral-100 dark:bg-zinc-800">
+                    <div className="w-[60px] h-[46px] rounded-lg overflow-hidden flex-shrink-0 bg-stone-100 dark:bg-zinc-800">
                       <img
                         src={post.thumbnail_url}
                         alt=""
@@ -131,17 +131,17 @@ export default function InsightPageClient({ initialPosts = [], locale = 'ko' }: 
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
                       {cat && <span className="text-[10px] font-bold text-[#F9954E]">{cat}</span>}
-                      <span className="text-[11px] text-neutral-400 dark:text-neutral-500" suppressHydrationWarning>
+                      <span className="text-[11px] text-stone-400 dark:text-stone-500" suppressHydrationWarning>
                         {fmtDate(post.created_at, en)}
                       </span>
                     </div>
-                    <h3 className="text-[13.5px] sm:text-[14.5px] font-bold text-neutral-900 dark:text-white leading-snug break-keep line-clamp-2 group-hover:text-[#F9954E] transition-colors">
+                    <h3 className="text-[13.5px] sm:text-[14.5px] font-bold text-stone-900 dark:text-white leading-snug break-keep line-clamp-2 group-hover:text-[#F9954E] transition-colors">
                       {post.title || (en ? 'Untitled' : '제목 없음')}
                     </h3>
                     <button
                       type="button"
                       onClick={(e) => handleLike(e, pid, likes)}
-                      className="mt-1 flex items-center gap-1 text-[11px] text-neutral-400 dark:text-neutral-500 hover:text-[#F9954E] transition-colors"
+                      className="mt-1 flex items-center gap-1 text-[11px] text-stone-400 dark:text-stone-500 hover:text-[#F9954E] transition-colors"
                     >
                       <span>{isLiked ? '❤️' : '♡'}</span>
                       <span className={isLiked ? 'text-[#F9954E]' : ''}>{likes}</span>
@@ -153,7 +153,7 @@ export default function InsightPageClient({ initialPosts = [], locale = 'ko' }: 
           })}
         </ul>
       ) : (
-        <p className="py-20 text-center text-[13px] text-neutral-400 dark:text-neutral-500">{en ? 'No articles yet.' : '아직 게시글이 없습니다.'}</p>
+        <p className="py-20 text-center text-[13px] text-stone-400 dark:text-stone-500">{en ? 'No articles yet.' : '아직 게시글이 없습니다.'}</p>
       )}
     </div>
   );

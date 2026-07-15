@@ -176,18 +176,18 @@ export function ProjectListSection() {
                                 className="group"
                             >
                                 <Link href={project.href} className="flex flex-col h-full">
-                                    <div className="relative h-full bg-white dark:bg-neutral-900 rounded-2xl p-6 md:p-8 
-                                        border border-neutral-200 dark:border-neutral-800 
+                                    <div className="relative h-full bg-white dark:bg-stone-900 rounded-2xl p-6 md:p-8 
+                                        border border-stone-200 dark:border-stone-800 
                                         transition-all duration-300 
                                         hover:border-[#F9954E] dark:hover:border-[#F9954E] 
                                         hover:shadow-lg hover:shadow-[#F9954E]/5
                                         group-hover:-translate-y-1">
 
                                         <div className="flex justify-between items-start mb-6">
-                                            <div className="w-12 h-12 rounded-xl bg-[#FFF5EB] dark:bg-[#F9954E]/10 text-[#F9954E] flex items-center justify-center transition-colors group-hover:bg-[#F9954E] group-hover:text-white">
+                                            <div className="w-12 h-12 rounded-xl bg-[#FBEEE7] dark:bg-[#F9954E]/10 text-[#F9954E] flex items-center justify-center transition-colors group-hover:bg-[#F9954E] group-hover:text-white">
                                                 <project.icon className="w-6 h-6" strokeWidth={1.5} />
                                             </div>
-                                            <ArrowUpRight className="w-5 h-5 text-neutral-300 group-hover:text-[#F9954E] transition-colors" />
+                                            <ArrowUpRight className="w-5 h-5 text-stone-300 group-hover:text-[#F9954E] transition-colors" />
                                         </div>
 
                                         <div className="space-y-2">
@@ -195,11 +195,11 @@ export function ProjectListSection() {
                                                 {project.category}
                                             </span>
 
-                                            <h3 className="text-xl font-bold text-neutral-900 dark:text-white">
+                                            <h3 className="text-xl font-bold text-stone-900 dark:text-white">
                                                 {project.title}
                                             </h3>
 
-                                            <p className="text-sm text-neutral-500 dark:text-neutral-400 leading-relaxed font-medium">
+                                            <p className="text-sm text-stone-500 dark:text-stone-400 leading-relaxed font-medium">
                                                 {project.description}
                                             </p>
                                         </div>
@@ -217,8 +217,8 @@ export function ProjectListSection() {
                     animate="visible"
                 >
                     <div className="flex items-center gap-3 mb-6 mt-12">
-                        <span className="w-1.5 h-1.5 rounded-full bg-neutral-300 dark:bg-neutral-700" />
-                        <span className="text-xs font-bold tracking-widest text-neutral-400 uppercase">
+                        <span className="w-1.5 h-1.5 rounded-full bg-stone-300 dark:bg-stone-700" />
+                        <span className="text-xs font-bold tracking-widest text-stone-400 uppercase">
                             Coming Soon
                         </span>
                     </div>
@@ -230,21 +230,21 @@ export function ProjectListSection() {
                                 variants={itemVariants}
                                 className="group opacity-70 hover:opacity-100 transition-opacity duration-300"
                             >
-                                <div className="h-full bg-neutral-50 dark:bg-neutral-900/50 rounded-2xl p-6 
-                                    border border-neutral-100 dark:border-neutral-800 
-                                    transition-colors hover:bg-white dark:hover:bg-neutral-900">
+                                <div className="h-full bg-stone-50 dark:bg-stone-900/50 rounded-2xl p-6 
+                                    border border-stone-100 dark:border-stone-800 
+                                    transition-colors hover:bg-white dark:hover:bg-stone-900">
 
                                     <div className="mb-4">
-                                        <div className="w-10 h-10 rounded-lg bg-neutral-100 dark:bg-neutral-800 text-neutral-400 flex items-center justify-center group-hover:text-[#F9954E] transition-colors">
+                                        <div className="w-10 h-10 rounded-lg bg-stone-100 dark:bg-stone-800 text-stone-400 flex items-center justify-center group-hover:text-[#F9954E] transition-colors">
                                             <project.icon className="w-5 h-5" strokeWidth={1.5} />
                                         </div>
                                     </div>
 
                                     <div className="space-y-1">
-                                        <h3 className="text-base font-bold text-neutral-600 dark:text-neutral-400 group-hover:text-neutral-900 dark:group-hover:text-white transition-colors">
+                                        <h3 className="text-base font-bold text-stone-600 dark:text-stone-400 group-hover:text-stone-900 dark:group-hover:text-white transition-colors">
                                             {project.title}
                                         </h3>
-                                        <p className="text-xs text-neutral-400 leading-relaxed">
+                                        <p className="text-xs text-stone-400 leading-relaxed">
                                             {project.description}
                                         </p>
                                     </div>

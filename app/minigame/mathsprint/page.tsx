@@ -248,7 +248,7 @@ export default function MathSprintPage() {
             <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(249,149,78,0.07),transparent)]" />
 
             <header className="fixed top-0 left-0 w-full h-16 bg-[#09090e]/80 backdrop-blur-md border-b border-white/10 z-50 flex items-center justify-between px-4 sm:px-6">
-                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] text-neutral-500 hover:text-white transition-colors">
+                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] text-stone-500 hover:text-white transition-colors">
                     <ArrowLeft className="w-4 h-4" />
                     뒤로
                 </Link>
@@ -257,7 +257,7 @@ export default function MathSprintPage() {
                     빠른 계산
                 </h1>
                 <div className="arcade-card rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center min-w-[64px]">
-                    <div className="text-[9px] uppercase tracking-widest text-neutral-500">SCORE</div>
+                    <div className="text-[9px] uppercase tracking-widest text-stone-500">SCORE</div>
                     <div className="text-sm font-bold text-white tabular-nums">
                         <CountUp value={score} className="tabular-nums" />
                     </div>
@@ -275,16 +275,16 @@ export default function MathSprintPage() {
                     >
                         <Calculator className="arcade-float w-16 h-16 mx-auto mb-4 text-[#F9954E]" />
                         <h2 className="text-2xl font-extrabold tracking-tight mb-3">60초 빠른 계산</h2>
-                        <p className="text-neutral-400 text-sm leading-relaxed mb-2">
+                        <p className="text-stone-400 text-sm leading-relaxed mb-2">
                             제한 시간 안에 사칙연산 문제를 최대한 많이 맞혀보세요.
                         </p>
-                        <p className="text-neutral-500 text-[13px] mb-7">
+                        <p className="text-stone-500 text-[13px] mb-7">
                             보기를 탭하거나 직접 숫자를 입력하세요. 정답 +1점, 오답은 감점 없음!
                         </p>
 
                         {best > 0 && (
                             <div className="inline-flex items-center gap-2 mb-7 rounded-full bg-white/[0.05] border border-white/10 px-4 py-1.5 text-[13px]">
-                                <span className="text-neutral-500">내 최고 기록</span>
+                                <span className="text-stone-500">내 최고 기록</span>
                                 <span className="font-bold arcade-grad-text tabular-nums">{best}{UNIT}</span>
                             </div>
                         )}
@@ -306,10 +306,10 @@ export default function MathSprintPage() {
                         {/* 타이머 바 + 정보 */}
                         <div className="mb-5">
                             <div className="flex items-center justify-between mb-2 text-[13px]">
-                                <span className={`font-bold tabular-nums ${urgent ? "text-red-400 arcade-pop" : "text-neutral-300"}`}>
+                                <span className={`font-bold tabular-nums ${urgent ? "text-red-400 arcade-pop" : "text-stone-300"}`}>
                                     ⏱ {timeLeft}s
                                 </span>
-                                <span className="text-neutral-500">
+                                <span className="text-stone-500">
                                     연속 <span className="font-bold text-[#F9954E] tabular-nums">{streak}</span>
                                 </span>
                             </div>
@@ -332,10 +332,10 @@ export default function MathSprintPage() {
                             transition={{ duration: 0.28 }}
                             className="relative mb-6 rounded-2xl bg-white/[0.04] border border-white/10 py-8 text-center"
                         >
-                            <div className="text-[11px] uppercase tracking-widest text-neutral-500 mb-1">문제</div>
+                            <div className="text-[11px] uppercase tracking-widest text-stone-500 mb-1">문제</div>
                             <div className="text-4xl sm:text-5xl font-black tabular-nums arcade-grad-text">
                                 {problem.text}
-                                <span className="text-neutral-500"> = ?</span>
+                                <span className="text-stone-500"> = ?</span>
                             </div>
 
                             <AnimatePresence>
@@ -385,7 +385,7 @@ export default function MathSprintPage() {
                                 onChange={(e) => setTyped(e.target.value)}
                                 onKeyDown={onTypeKey}
                                 placeholder="직접 입력"
-                                className="flex-1 min-w-0 rounded-xl bg-white/[0.06] border border-white/10 px-4 py-3 text-lg font-bold tabular-nums text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#F9954E]/60 transition-colors"
+                                className="flex-1 min-w-0 rounded-xl bg-white/[0.06] border border-white/10 px-4 py-3 text-lg font-bold tabular-nums text-white placeholder:text-stone-600 focus:outline-none focus:border-[#F9954E]/60 transition-colors"
                             />
                             <button
                                 onClick={submitTyped}
@@ -413,20 +413,20 @@ export default function MathSprintPage() {
                         )}
 
                         <div className="my-6">
-                            <div className="text-[11px] uppercase tracking-widest text-neutral-500 mb-1">최종 점수</div>
+                            <div className="text-[11px] uppercase tracking-widest text-stone-500 mb-1">최종 점수</div>
                             <div className="text-6xl font-black arcade-grad-text tabular-nums">
                                 <CountUp value={score} className="tabular-nums" />
                             </div>
-                            <div className="text-[11px] uppercase tracking-widest text-neutral-500 mt-1">{UNIT}</div>
+                            <div className="text-[11px] uppercase tracking-widest text-stone-500 mt-1">{UNIT}</div>
                         </div>
 
                         <div className="grid grid-cols-2 gap-3 mb-7 text-sm">
                             <div className="rounded-xl bg-white/[0.04] border border-white/10 py-3">
-                                <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">내 최고</div>
+                                <div className="text-[10px] uppercase tracking-widest text-stone-500 mb-1">내 최고</div>
                                 <div className="font-bold text-white tabular-nums">{best}{UNIT}</div>
                             </div>
                             <div className="rounded-xl bg-white/[0.04] border border-white/10 py-3">
-                                <div className="text-[10px] uppercase tracking-widest text-neutral-500 mb-1">평가</div>
+                                <div className="text-[10px] uppercase tracking-widest text-stone-500 mb-1">평가</div>
                                 <div className="font-bold text-white">
                                     {score >= 30 ? "🚀 천재" : score >= 20 ? "⚡ 빠름" : score >= 10 ? "👍 좋아요" : "💪 도전!"}
                                 </div>
@@ -434,7 +434,7 @@ export default function MathSprintPage() {
                         </div>
 
                         {!session?.user?.email && (
-                            <p className="text-[12px] text-neutral-500 mb-4">
+                            <p className="text-[12px] text-stone-500 mb-4">
                                 로그인하면 명예의 전당에 기록이 등록돼요.
                             </p>
                         )}
@@ -448,7 +448,7 @@ export default function MathSprintPage() {
                             </button>
                             <button
                                 onClick={reset}
-                                className="px-5 py-3 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] font-semibold transition-transform active:scale-[0.97]"
+                                className="px-5 py-3 rounded-xl bg-white/[0.06] border border-white/10 text-stone-200 hover:bg-white/[0.1] font-semibold transition-transform active:scale-[0.97]"
                                 aria-label="처음으로"
                             >
                                 <RotateCcw className="w-5 h-5" />

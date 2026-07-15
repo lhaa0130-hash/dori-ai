@@ -15,7 +15,7 @@ export default function MiniGameSection() {
     <section className="py-6 pb-12">
 
       <div className="flex items-center justify-between mb-4">
-        <p className="text-[14px] font-extrabold text-neutral-950 dark:text-white">미니게임</p>
+        <p className="text-[14px] font-extrabold text-stone-950 dark:text-white">미니게임</p>
         <Link href="/minigame" className="flex items-center gap-1 text-[13px] font-semibold text-[#F9954E]">
           전체 <ArrowRight className="w-3.5 h-3.5" />
         </Link>
@@ -26,11 +26,11 @@ export default function MiniGameSection() {
           <div key={game.href} className={`scroll-reveal-item scroll-delay-${i + 1}`}>
             <Link
               href={game.href}
-              className="toss-card flex flex-col p-4 rounded-2xl border border-neutral-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 active:opacity-75"
+              className="toss-card flex flex-col p-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 active:opacity-75"
             >
               <span className="text-[26px] mb-3 leading-none">{game.emoji}</span>
-              <p className="text-[13px] font-bold text-neutral-900 dark:text-white mb-1">{game.title}</p>
-              <p className="text-[11px] text-neutral-400 leading-snug break-keep">{game.desc}</p>
+              <p className="text-[13px] font-bold text-stone-900 dark:text-white mb-1">{game.title}</p>
+              <p className="text-[11px] text-stone-400 leading-snug break-keep">{game.desc}</p>
             </Link>
           </div>
         ))}

@@ -220,7 +220,7 @@ export default function SimonPage() {
 
       {/* 상단바 */}
       <header className="fixed top-0 left-0 w-full h-16 bg-[#09090e]/80 backdrop-blur-md border-b border-white/10 z-50 flex items-center justify-between px-5 sm:px-6">
-        <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] text-neutral-500 hover:text-white transition-colors">
+        <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] text-stone-500 hover:text-white transition-colors">
           <ArrowLeft className="w-4 h-4" />
           뒤로
         </Link>
@@ -229,7 +229,7 @@ export default function SimonPage() {
           순서 기억
         </h1>
         <div className="rounded-xl bg-white/[0.05] border border-white/10 px-3 py-1.5 text-center">
-          <div className="text-[9px] uppercase tracking-widest text-neutral-500">LEVEL</div>
+          <div className="text-[9px] uppercase tracking-widest text-stone-500">LEVEL</div>
           <div className="text-sm font-bold text-white tabular-nums">
             <CountUp value={level} className="tabular-nums" />
           </div>
@@ -242,7 +242,7 @@ export default function SimonPage() {
           {/* 상태/통계 바 */}
           <div className="grid grid-cols-2 gap-3 mb-5">
             <div className="arcade-card text-center p-3 rounded-xl bg-white/[0.04] border border-white/10">
-              <div className="text-[9px] uppercase tracking-widest text-neutral-500 mb-1">현재 레벨</div>
+              <div className="text-[9px] uppercase tracking-widest text-stone-500 mb-1">현재 레벨</div>
               <div className="text-3xl font-black text-[#F9954E] tabular-nums">
                 <span key={level} className="arcade-pop inline-block">
                   <CountUp value={level} className="tabular-nums" />
@@ -250,7 +250,7 @@ export default function SimonPage() {
               </div>
             </div>
             <div className="arcade-card text-center p-3 rounded-xl bg-white/[0.04] border border-white/10">
-              <div className="text-[9px] uppercase tracking-widest text-neutral-500 mb-1">최고 기록</div>
+              <div className="text-[9px] uppercase tracking-widest text-stone-500 mb-1">최고 기록</div>
               <div className="text-3xl font-black text-white tabular-nums">
                 <CountUp value={best} className="tabular-nums" />
               </div>
@@ -267,7 +267,7 @@ export default function SimonPage() {
                 {statusText}
               </span>
             ) : (
-              <span className="text-[11px] text-neutral-500">4색 순서를 기억하고 따라 누르세요</span>
+              <span className="text-[11px] text-stone-500">4색 순서를 기억하고 따라 누르세요</span>
             )}
           </div>
 
@@ -325,7 +325,7 @@ export default function SimonPage() {
                 {phase === "idle" ? (
                   <div className="text-center px-4">
                     <Brain className="arcade-float w-12 h-12 mx-auto mb-3 text-[#F9954E]" />
-                    <p className="text-sm text-neutral-300 mb-5 leading-relaxed">
+                    <p className="text-sm text-stone-300 mb-5 leading-relaxed">
                       깜빡이는 <strong className="text-white">색의 순서</strong>를 기억하고<br />
                       같은 순서로 눌러보세요!
                     </p>
@@ -346,11 +346,11 @@ export default function SimonPage() {
                       </div>
                     )}
                     <h2 className="text-xl font-extrabold text-white mb-1">게임 종료!</h2>
-                    <div className="mb-1 text-[10px] uppercase tracking-widest text-neutral-500">도달 레벨</div>
+                    <div className="mb-1 text-[10px] uppercase tracking-widest text-stone-500">도달 레벨</div>
                     <div className="text-5xl font-black arcade-grad-text tabular-nums mb-2">
                       <CountUp value={level} className="tabular-nums" />
                     </div>
-                    <p className="text-xs text-neutral-300 mb-5">{verdict}</p>
+                    <p className="text-xs text-stone-300 mb-5">{verdict}</p>
                     <div className="flex gap-2 justify-center">
                       <button
                         onClick={startGame}
@@ -361,7 +361,7 @@ export default function SimonPage() {
                       <button
                         onClick={reset}
                         aria-label="처음으로"
-                        className="px-4 py-2.5 rounded-xl bg-white/[0.06] border border-white/10 text-neutral-200 hover:bg-white/[0.1] active:scale-[0.97] transition-transform"
+                        className="px-4 py-2.5 rounded-xl bg-white/[0.06] border border-white/10 text-stone-200 hover:bg-white/[0.1] active:scale-[0.97] transition-transform"
                       >
                         <RotateCcw className="w-5 h-5" />
                       </button>

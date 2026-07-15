@@ -152,13 +152,13 @@ export default function GuessNumberPage() {
             <div aria-hidden className="pointer-events-none absolute inset-x-0 top-0 h-72 bg-[radial-gradient(60%_60%_at_50%_0%,rgba(249,149,78,0.07),transparent)]" />
             {/* Header */}
             <header className="relative max-w-2xl mx-auto flex items-center justify-between px-4 pt-6 pb-2">
-                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-neutral-500 hover:text-white transition-colors">
+                <Link href="/minigame" className="inline-flex items-center gap-1.5 text-[13px] font-medium text-stone-500 hover:text-white transition-colors">
                     <ArrowLeft className="w-4 h-4" />
                     미니게임
                 </Link>
                 <h1 className="text-[15px] font-extrabold tracking-tight text-white">🎯 숫자 맞추기</h1>
                 <div className="arcade-card rounded-xl px-3 py-1.5 text-center">
-                    <div className="text-[9px] uppercase tracking-widest text-neutral-500">TRY</div>
+                    <div className="text-[9px] uppercase tracking-widest text-stone-500">TRY</div>
                     <div className="text-sm font-bold text-white">
                         <CountUp value={attempts.length} className="tabular-nums" />
                     </div>
@@ -179,7 +179,7 @@ export default function GuessNumberPage() {
                                 <div className="text-center mb-8">
                                     <Target className="arcade-float w-16 h-16 mx-auto mb-4 text-[#F9954E]" />
                                     <h2 className="text-2xl font-extrabold tracking-tight mb-2">난이도 선택</h2>
-                                    <p className="text-neutral-400">
+                                    <p className="text-stone-400">
                                         숫자를 맞출 범위를 선택하세요
                                     </p>
                                 </div>
@@ -197,7 +197,7 @@ export default function GuessNumberPage() {
                                             <div className="font-bold text-lg mb-1 text-white">
                                                 {DIFFICULTY_CONFIG[d].name}
                                             </div>
-                                            <div className="text-sm text-neutral-400 tabular-nums">
+                                            <div className="text-sm text-stone-400 tabular-nums">
                                                 1 ~ {DIFFICULTY_CONFIG[d].max}
                                             </div>
                                         </button>
@@ -228,7 +228,7 @@ export default function GuessNumberPage() {
                                                 <CountUp value={attempts.length} className="tabular-nums" />
                                             </span>
                                         </div>
-                                        <div className="text-sm text-neutral-500 dark:text-zinc-400">
+                                        <div className="text-sm text-stone-500 dark:text-zinc-400">
                                             시도 횟수
                                         </div>
                                     </div>
@@ -237,7 +237,7 @@ export default function GuessNumberPage() {
                                         <div className="text-4xl font-bold text-[#F9954E]">
                                             <CountUp value={DIFFICULTY_CONFIG[difficulty].max} className="tabular-nums" />
                                         </div>
-                                        <div className="text-sm text-neutral-500 dark:text-zinc-400">
+                                        <div className="text-sm text-stone-500 dark:text-zinc-400">
                                             최대 숫자
                                         </div>
                                     </div>
@@ -258,7 +258,7 @@ export default function GuessNumberPage() {
                                         onChange={(e) => setCurrentGuess(e.target.value)}
                                         onKeyDown={(e) => e.key === "Enter" && submitGuess()}
                                         placeholder="숫자 입력"
-                                        className="flex-1 bg-white/[0.04] border-2 border-white/10 rounded-xl px-6 py-4 text-center text-2xl font-bold text-white placeholder:text-neutral-600 focus:outline-none focus:border-[#F9954E] transition-colors"
+                                        className="flex-1 bg-white/[0.04] border-2 border-white/10 rounded-xl px-6 py-4 text-center text-2xl font-bold text-white placeholder:text-stone-600 focus:outline-none focus:border-[#F9954E] transition-colors"
                                     />
                                     <button
                                         onClick={submitGuess}
@@ -293,7 +293,7 @@ export default function GuessNumberPage() {
                                 {/* Give Up Button */}
                                 <button
                                     onClick={resetGame}
-                                    className="w-full mt-6 py-3 bg-white/[0.06] border border-white/10 hover:bg-white/[0.12] text-neutral-200 rounded-xl font-medium transition-all text-sm active:scale-[0.97]"
+                                    className="w-full mt-6 py-3 bg-white/[0.06] border border-white/10 hover:bg-white/[0.12] text-stone-200 rounded-xl font-medium transition-all text-sm active:scale-[0.97]"
                                 >
                                     포기하기
                                 </button>
@@ -309,7 +309,7 @@ export default function GuessNumberPage() {
                             >
                                 <Trophy className="arcade-float w-20 h-20 mx-auto mb-6 text-yellow-500" />
                                 <h2 className="text-3xl font-bold mb-2">축하합니다!</h2>
-                                <p className="text-xl mb-6 text-neutral-600 dark:text-zinc-400">
+                                <p className="text-xl mb-6 text-stone-600 dark:text-zinc-400">
                                     정답은 <span className="font-bold text-purple-500 tabular-nums">{secretNumber}</span>
                                 </p>
 

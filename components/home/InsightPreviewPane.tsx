@@ -32,10 +32,10 @@ export default function InsightPreviewPane({ item, locale = "ko" }: { item: Prev
   const isVideo = item.category === "영상";
 
   return (
-    <div className="rounded-2xl border border-neutral-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden">
+    <div className="rounded-2xl border border-stone-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 overflow-hidden">
       {/* 썸네일 — 16:9 고정 크기로 통일(어떤 이미지든 글 위치 동일). object-cover */}
       {item.thumbnail ? (
-        <div className="w-full aspect-video bg-neutral-100 dark:bg-zinc-900 overflow-hidden">
+        <div className="w-full aspect-video bg-stone-100 dark:bg-zinc-900 overflow-hidden">
           <img
             src={item.thumbnail}
             alt={item.title}
@@ -53,26 +53,26 @@ export default function InsightPreviewPane({ item, locale = "ko" }: { item: Prev
         <div className="flex items-center gap-2 mb-2 flex-wrap">
           <span className="text-[11px] font-bold text-[#F9954E] bg-[#FFF1E3] dark:bg-[#F9954E]/15 rounded px-2 py-0.5">{EMOJI[item.category] || "📝"} {catLabel(item.category)}</span>
           {isVideo && item.videoDate ? (
-            <span className="text-[11px] text-neutral-500 dark:text-neutral-400">
-              {item.channel && <b className="text-neutral-700 dark:text-neutral-200">{item.channel}</b>}
+            <span className="text-[11px] text-stone-500 dark:text-stone-400">
+              {item.channel && <b className="text-stone-700 dark:text-stone-200">{item.channel}</b>}
               {item.channel ? " · " : ""}📺 {fmtVideoDate(item.videoDate, en)}{en ? " uploaded" : " 업로드"}
             </span>
           ) : (
-            <span className="text-[11px] text-neutral-400">{dateStr}</span>
+            <span className="text-[11px] text-stone-400">{dateStr}</span>
           )}
         </div>
 
         {/* 제목 */}
-        <h3 className="text-[18px] font-extrabold text-neutral-950 dark:text-white leading-snug break-keep mb-2">{item.title}</h3>
+        <h3 className="text-[18px] font-extrabold text-stone-950 dark:text-white leading-snug break-keep mb-2">{item.title}</h3>
 
         {/* 요약(리드) */}
         {item.summary && (
-          <p className="text-[13px] font-medium text-neutral-600 dark:text-neutral-300 leading-relaxed break-keep line-clamp-3 mb-2.5">{item.summary}</p>
+          <p className="text-[13px] font-medium text-stone-600 dark:text-stone-300 leading-relaxed break-keep line-clamp-3 mb-2.5">{item.summary}</p>
         )}
 
         {/* 본문 일부 미리보기 */}
         {item.excerpt && (
-          <p className="text-[12.5px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep line-clamp-[7] mb-4">{item.excerpt}…</p>
+          <p className="text-[12.5px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep line-clamp-[7] mb-4">{item.excerpt}…</p>
         )}
 
         {/* 전체 보기 */}

@@ -182,7 +182,7 @@ const AiToolsCard = React.memo(function AiToolsCard({ tool, rank }: AiToolsCardP
         <div className="flex flex-row items-center px-4 py-2 gap-3 relative z-20 h-14 sm:h-16">
 
           {/* 1. 이미지 (작게) */}
-          <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-lg overflow-hidden border flex-shrink-0 bg-[#FFF5EB]/50 dark:bg-[#8F4B10]/10 border-[#FEEBD0]/50 dark:border-[#8F4B10]/20">
+          <div className="relative w-9 h-9 sm:w-10 sm:h-10 rounded-lg overflow-hidden border flex-shrink-0 bg-[#FBEEE7]/50 dark:bg-[#8F4B10]/10 border-[#FEEBD0]/50 dark:border-[#8F4B10]/20">
             {imageSrc ? (
               <Image
                 src={imageUrl}
@@ -203,21 +203,21 @@ const AiToolsCard = React.memo(function AiToolsCard({ tool, rank }: AiToolsCardP
           <div className="flex items-center flex-1 min-w-0 gap-3">
             {/* 이름 & 카테고리 */}
             <div className="flex items-center gap-2 flex-shrink-0">
-              <h3 className={`text-sm sm:text-base font-bold truncate max-w-[120px] sm:max-w-[200px] transition-colors ${isDark ? "text-white" : "text-neutral-900"}`}>
+              <h3 className={`text-sm sm:text-base font-bold truncate max-w-[120px] sm:max-w-[200px] transition-colors ${isDark ? "text-white" : "text-stone-900"}`}>
                 {tool.name}
               </h3>
-              <span className={`text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap hidden sm:inline-block bg-[#FFF5EB] dark:bg-[#8F4B10]/20 text-[#E8832E] dark:text-[#FBAA60] border-[#FEEBD0] dark:border-[#8F4B10]/30`}>
+              <span className={`text-[10px] px-1.5 py-0.5 rounded border whitespace-nowrap hidden sm:inline-block bg-[#FBEEE7] dark:bg-[#8F4B10]/20 text-[#E8832E] dark:text-[#FBAA60] border-[#FEEBD0] dark:border-[#8F4B10]/30`}>
                 {CATEGORY_LABELS[tool.category] || tool.category}
               </span>
             </div>
 
             {/* 설명 (가장 넓게 차지, 한 줄 말줄임) */}
-            <p className={`text-xs truncate flex-1 opacity-60 hidden md:block ${isDark ? "text-neutral-300" : "text-neutral-600"}`}>
+            <p className={`text-xs truncate flex-1 opacity-60 hidden md:block ${isDark ? "text-stone-300" : "text-stone-600"}`}>
               {tool.summary}
             </p>
 
             {/* 평점 (우측 정렬 전) */}
-            <div className="flex items-center gap-0.5 ml-auto sm:ml-0 bg-[#FFF5EB] dark:bg-[#8F4B10]/20 px-1.5 rounded-sm flex-shrink-0 border border-[#FEEBD0]/50 dark:border-[#8F4B10]/30">
+            <div className="flex items-center gap-0.5 ml-auto sm:ml-0 bg-[#FBEEE7] dark:bg-[#8F4B10]/20 px-1.5 rounded-sm flex-shrink-0 border border-[#FEEBD0]/50 dark:border-[#8F4B10]/30">
               <span className="text-[#FBAA60] text-[10px]">★</span>
               <span className={`text-[10px] font-bold ${isDark ? "text-[#FBAA60]" : "text-[#E8832E]"}`}>
                 {currentRating > 0 ? currentRating.toFixed(1) : "0.0"}
@@ -232,7 +232,7 @@ const AiToolsCard = React.memo(function AiToolsCard({ tool, rank }: AiToolsCardP
                 e.stopPropagation();
                 setIsOpen(!isOpen);
               }}
-              className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:bg-[#F9954E] hover:text-white ${isOpen ? "text-[#F9954E] bg-[#FFF5EB] dark:bg-[#8F4B10]/20" : "text-neutral-500 dark:text-neutral-400 bg-neutral-100 dark:bg-neutral-900"}`}
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:bg-[#F9954E] hover:text-white ${isOpen ? "text-[#F9954E] bg-[#FBEEE7] dark:bg-[#8F4B10]/20" : "text-stone-500 dark:text-stone-400 bg-stone-100 dark:bg-stone-900"}`}
               title="평가·리뷰 보기"
             >
               <span>평가하기</span>
@@ -245,7 +245,7 @@ const AiToolsCard = React.memo(function AiToolsCard({ tool, rank }: AiToolsCardP
               target="_blank"
               rel="noopener noreferrer"
               onClick={(e) => e.stopPropagation()}
-              className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:bg-[#F9954E] hover:text-white ${isDark ? "bg-neutral-900 text-neutral-300" : "bg-neutral-100 text-neutral-600"}`}
+              className={`flex items-center gap-1 px-3 py-1.5 rounded-full text-xs font-bold transition-all duration-300 hover:bg-[#F9954E] hover:text-white ${isDark ? "bg-stone-900 text-stone-300" : "bg-stone-100 text-stone-600"}`}
             >
               <span className="whitespace-nowrap hidden sm:inline">바로가기</span>
               <svg xmlns="http://www.w3.org/2000/svg" width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
@@ -257,12 +257,12 @@ const AiToolsCard = React.memo(function AiToolsCard({ tool, rank }: AiToolsCardP
 
         {/* ⭐ 확장 영역: 리뷰 및 상세 (애니메이션) */}
         <div
-          className={`transition-all duration-300 ease-in-out bg-neutral-50 dark:bg-neutral-900/50 border-t border-dashed border-neutral-200 dark:border-neutral-800 overflow-hidden ${isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}`}
+          className={`transition-all duration-300 ease-in-out bg-stone-50 dark:bg-stone-900/50 border-t border-dashed border-stone-200 dark:border-stone-800 overflow-hidden ${isOpen ? "max-h-[500px] opacity-100" : "max-h-0 opacity-0"}`}
         >
           <div className="p-4 flex flex-col gap-4 relative z-20">
             {/* 베스트 댓글 3개 */}
             <div className="flex-1">
-              <h4 className={`text-[10px] font-bold mb-2 uppercase tracking-wider ${isDark ? "text-neutral-400" : "text-neutral-500"}`}>
+              <h4 className={`text-[10px] font-bold mb-2 uppercase tracking-wider ${isDark ? "text-stone-400" : "text-stone-500"}`}>
                 베스트 댓글
               </h4>
               <div className="flex flex-col gap-2">
@@ -272,15 +272,15 @@ const AiToolsCard = React.memo(function AiToolsCard({ tool, rank }: AiToolsCardP
                   bestComments.map((comment) => (
                     <div
                       key={comment.id}
-                      className="rounded-lg border p-2.5 border-neutral-200 dark:border-neutral-700 bg-white dark:bg-black"
+                      className="rounded-lg border p-2.5 border-stone-200 dark:border-stone-700 bg-white dark:bg-black"
                     >
                       <div className="flex justify-between items-start mb-1">
-                        <span className={`text-xs font-bold ${isDark ? "text-neutral-200" : "text-neutral-900"}`}>{comment.userName}</span>
+                        <span className={`text-xs font-bold ${isDark ? "text-stone-200" : "text-stone-900"}`}>{comment.userName}</span>
                         <span className="text-[10px] text-gray-400">
                           {new Date(comment.createdAt).toLocaleDateString('ko-KR', { month: 'short', day: 'numeric' })}
                         </span>
                       </div>
-                      <p className={`text-xs leading-relaxed opacity-90 ${isDark ? "text-neutral-300" : "text-neutral-700"}`}>
+                      <p className={`text-xs leading-relaxed opacity-90 ${isDark ? "text-stone-300" : "text-stone-700"}`}>
                         {comment.content}
                       </p>
                     </div>
@@ -290,7 +290,7 @@ const AiToolsCard = React.memo(function AiToolsCard({ tool, rank }: AiToolsCardP
             </div>
 
             {/* 인터랙티브 컴포넌트 */}
-            <div className="flex flex-col gap-4 pt-2 border-t border-neutral-200 dark:border-neutral-800">
+            <div className="flex flex-col gap-4 pt-2 border-t border-stone-200 dark:border-stone-800">
               <AiToolsRating
                 toolId={tool.id}
                 initialRating={tool.rating}
