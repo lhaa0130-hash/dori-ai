@@ -369,7 +369,7 @@ export default function MartGame() {
           <h1 id="mart-rule-title">같은 상품 3개를 모아<br />주문을 완성하세요</h1>
         </div>
         <div className="mart-rule-step mart-rule-place" aria-hidden="true">
-          <span className="mart-rule-target"><i /></span>
+          <span className="mart-rule-arrow">↘</span>
           <strong><b>2</b> 같은 상품 위 또는 빈 칸</strong>
         </div>
       </section>
@@ -437,21 +437,16 @@ export default function MartGame() {
             {shelf.locked ? (
               <span className="mart-lock"><LockKeyhole aria-hidden="true" /><small>{level.unlockAfterSets}세트 후 열림</small></span>
             ) : (
-              <>
-                <span className="mart-product-stack">
-                  {[0, 1, 2].map((slot) => {
-                    const productId = shelf.items[slot];
-                    return (
-                      <span key={slot} className={`mart-slot mart-slot-${slot + 1}`}>
-                        {productId && <ProductToken productId={productId} isFront={slot === shelf.items.length - 1} peek={peek} />}
-                      </span>
-                    );
-                  })}
-                </span>
-                {shelf.items.length === 0 && (
-                  <span className="mart-empty-target" aria-hidden="true"><i>↓</i><strong>여기에 놓기</strong></span>
-                )}
-              </>
+              <span className="mart-product-stack">
+                {[0, 1, 2].map((slot) => {
+                  const productId = shelf.items[slot];
+                  return (
+                    <span key={slot} className={`mart-slot mart-slot-${slot + 1}`}>
+                      {productId && <ProductToken productId={productId} isFront={slot === shelf.items.length - 1} peek={peek} />}
+                    </span>
+                  );
+                })}
+              </span>
             )}
             <span className="mart-shelf-base" />
           </button>

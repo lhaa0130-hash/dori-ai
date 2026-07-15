@@ -1652,6 +1652,187 @@ body:has(.illo-game-shell) {
   .mart-booster-row button small { right: -3px; top: -9px; min-width: 27px; height: 27px; padding: 0 3px; border-width: 2px; font-size: 8px; }
 }
 
+/* Stock depth matches the reference crop: front item low-left, stock recedes up-right. */
+.mart-product-stack {
+  inset: 27px 0 34px;
+  overflow: visible;
+}
+.mart-slot {
+  right: auto;
+  width: 74%;
+  height: 100%;
+  align-items: flex-end;
+  transform-origin: bottom center;
+}
+.mart-slot-1 {
+  left: 61%;
+  bottom: 29px;
+  z-index: 1;
+  transform: translateX(-50%) scale(.80);
+  filter: brightness(.68) saturate(.72);
+}
+.mart-slot-2 {
+  left: 53%;
+  bottom: 15px;
+  z-index: 2;
+  transform: translateX(-50%) scale(.90);
+  filter: brightness(.84) saturate(.86);
+}
+.mart-slot-3 {
+  left: 44%;
+  bottom: 0;
+  z-index: 3;
+  transform: translateX(-50%) scale(1);
+  filter: none;
+}
+.mart-slot:has(.mart-product.is-front) {
+  left: 44%;
+  bottom: 0;
+  z-index: 4;
+  transform: translateX(-50%) scale(1);
+  filter: none;
+}
+.mart-product.is-back:not(.is-peeking) {
+  opacity: 1;
+  filter: drop-shadow(0 7px 5px rgba(20,10,4,.36));
+}
+
+@media (max-width: 900px) {
+  .mart-product-stack { inset: 27px 0 33px; }
+  .mart-slot-1 { left: 61%; bottom: 27px; transform: translateX(-50%) scale(.79); }
+  .mart-slot-2 { left: 53%; bottom: 14px; transform: translateX(-50%) scale(.89); }
+  .mart-slot-3,
+  .mart-slot:has(.mart-product.is-front) { left: 43%; bottom: 0; transform: translateX(-50%) scale(1); }
+}
+
+/* Continuous back shelf: no cubbies, no empty-slot card, one product row. */
+.mart-store-scene .mart-shelves {
+  padding-inline: 20px;
+  background:
+    linear-gradient(180deg,rgba(24,11,4,.52),rgba(75,34,10,.12) 72%),
+    radial-gradient(ellipse at 50% 82%,rgba(194,111,40,.24),transparent 64%),
+    linear-gradient(180deg,#6c3513,#824619 72%,#a86226 72%);
+  box-shadow: 0 9px 0 #603411,0 22px 30px rgba(57,31,12,.28),inset 0 18px 28px rgba(20,8,2,.5);
+}
+.mart-store-scene .mart-shelves::after {
+  content: "";
+  position: absolute;
+  z-index: 14;
+  left: 12px;
+  right: 12px;
+  bottom: 15px;
+  height: 20px;
+  border-radius: 5px;
+  background: linear-gradient(180deg,#e0a35b 0 26%,#a85d23 27% 72%,#713612 73%);
+  box-shadow: 0 7px 0 #4f250d,0 -3px 8px rgba(255,186,91,.25);
+  pointer-events: none;
+}
+.mart-store-scene .mart-shelf,
+.mart-store-scene .mart-shelf:hover,
+.mart-store-scene .mart-shelf:active,
+.mart-store-scene .mart-shelf:focus,
+.mart-store-scene .mart-shelf.is-selected,
+.mart-store-scene .mart-shelf.is-valid-target,
+.mart-store-scene .mart-shelf.is-hint-from,
+.mart-store-scene .mart-shelf.is-hint-to,
+.mart-store-scene .mart-shelf.is-basket {
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: none;
+}
+.mart-store-scene .mart-shelf::after {
+  content: "";
+  position: absolute;
+  z-index: 13;
+  top: 6%;
+  right: -4px;
+  bottom: 22px;
+  width: 8px;
+  display: block !important;
+  border: 0;
+  border-radius: 3px;
+  background: linear-gradient(90deg,#5e2b0d,#a65b20 48%,#71340f);
+  box-shadow: 2px 0 5px rgba(25,10,2,.38),inset 1px 0 rgba(255,184,89,.17);
+  pointer-events: none;
+}
+.mart-store-scene .mart-shelf:nth-child(2n):not(:last-child)::after { display: block !important; }
+.mart-store-scene .mart-shelf:last-child::after { display: none !important; }
+.mart-store-scene .mart-shelf::before {
+  content: "";
+  position: absolute;
+  z-index: 5;
+  left: 15%;
+  right: 15%;
+  bottom: 27px;
+  height: 13px;
+  border-radius: 50%;
+  opacity: 0;
+  background: rgba(102,245,205,.72);
+  filter: blur(7px);
+  transition: opacity 160ms ease;
+  pointer-events: none;
+}
+.mart-store-scene .mart-shelf.is-valid-target::before,
+.mart-store-scene .mart-shelf.is-hint-to::before { opacity: 1; }
+.mart-shelf-number,
+.mart-shelf-base,
+.mart-empty-target { display: none !important; }
+
+.mart-product-stack {
+  inset: 34px 0 34px;
+  overflow: visible;
+  perspective: none;
+}
+.mart-slot {
+  left: 50%;
+  right: auto;
+  bottom: 0;
+  width: 72%;
+  height: 100%;
+  align-items: flex-end;
+  transform-origin: bottom center;
+}
+.mart-slot-1 {
+  z-index: 1;
+  left: 42%;
+  transform: translateX(-50%) scale(.88);
+  filter: brightness(.78) saturate(.84);
+}
+.mart-slot-2 {
+  z-index: 2;
+  left: 50%;
+  transform: translateX(-50%) scale(.94);
+  filter: brightness(.9) saturate(.94);
+}
+.mart-slot-3 {
+  z-index: 3;
+  left: 58%;
+  right: auto;
+  transform: translateX(-50%);
+}
+.mart-product,
+.mart-product-bottle,
+.mart-product-can,
+.mart-product-bag,
+.mart-product-box,
+.mart-product-cup,
+.mart-product-pump {
+  width: clamp(86px,8vw,126px);
+  height: clamp(98px,9.1vw,143px);
+}
+
+@media (max-width: 900px) {
+  .mart-store-scene .mart-shelves { padding-inline: 8px; }
+  .mart-store-scene .mart-shelves::after { left: 6px; right: 6px; }
+  .mart-product-stack { inset: 30px 0 33px; }
+  .mart-slot-1 { left: 41%; transform: translateX(-50%) scale(.87); }
+  .mart-slot-2 { left: 50%; transform: translateX(-50%) scale(.93); }
+  .mart-slot-3 { left: 59%; transform: translateX(-50%); }
+}
+
 /* Play flow mirrors the reference: instruction -> one continuous shelf -> boosters. */
 .mart-store-scene .mart-order-card { display: none !important; }
 .mart-store-scene {
@@ -1849,4 +2030,147 @@ body:has(.illo-game-shell) {
   .mart-slot-1 { left: 8%; transform: translateY(-16px) translateZ(-36px) scale(.79) rotate(-2deg); }
   .mart-slot-2 { left: 23%; transform: translateY(-9px) translateZ(-18px) scale(.89) rotate(1deg); }
   .mart-slot-3 { right: 3%; }
+}
+
+/* FINAL MART shelf geometry — keep this block last. */
+.mart-store-scene .mart-order-card { display: none !important; }
+.mart-store-scene { grid-template-areas: "cabinet" "rule" "guide" "shelves" "checkout"; }
+.mart-store-scene .mart-shelves {
+  grid-template-columns: repeat(var(--shelf-count), minmax(0,1fr));
+  min-height: 330px;
+  padding: 24px 20px 28px;
+  background: linear-gradient(180deg,rgba(24,11,4,.48),rgba(81,38,12,.08) 72%),linear-gradient(180deg,#673111,#824519 72%,#a86226 72%);
+  box-shadow: 0 9px 0 #603411,0 22px 30px rgba(57,31,12,.28),inset 0 18px 30px rgba(20,8,2,.52);
+}
+.mart-store-scene .mart-shelves::after {
+  content: "";
+  position: absolute;
+  z-index: 14;
+  left: 12px;
+  right: 12px;
+  bottom: 14px;
+  height: 20px;
+  border-radius: 5px;
+  background: linear-gradient(180deg,#e0a35b 0 26%,#a85d23 27% 72%,#713612 73%);
+  box-shadow: 0 7px 0 #4f250d,0 -3px 8px rgba(255,186,91,.25);
+  pointer-events: none;
+}
+.mart-store-scene .mart-shelf,
+.mart-store-scene .mart-shelf:hover,
+.mart-store-scene .mart-shelf:active,
+.mart-store-scene .mart-shelf:focus,
+.mart-store-scene .mart-shelf.is-selected,
+.mart-store-scene .mart-shelf.is-valid-target,
+.mart-store-scene .mart-shelf.is-hint-from,
+.mart-store-scene .mart-shelf.is-hint-to,
+.mart-store-scene .mart-shelf.is-basket {
+  border: 0 !important;
+  border-radius: 0 !important;
+  outline: 0 !important;
+  background: transparent !important;
+  box-shadow: none !important;
+  transform: none;
+}
+.mart-store-scene .mart-shelf::after,
+.mart-store-scene .mart-shelf:last-child::after,
+.mart-store-scene .mart-shelf:nth-child(2n)::after { display: none !important; }
+.mart-store-scene .mart-shelf::before {
+  content: "";
+  position: absolute;
+  z-index: 5;
+  left: 18%;
+  right: 18%;
+  bottom: 28px;
+  height: 12px;
+  border-radius: 50%;
+  opacity: 0;
+  background: rgba(102,245,205,.7);
+  filter: blur(7px);
+  transition: opacity 160ms ease;
+  pointer-events: none;
+}
+.mart-store-scene .mart-shelf.is-valid-target::before,
+.mart-store-scene .mart-shelf.is-hint-to::before { opacity: 1; }
+.mart-shelf-number,
+.mart-shelf-base,
+.mart-empty-target { display: none !important; }
+
+.mart-product-stack {
+  inset: 27px 0 34px !important;
+  overflow: visible;
+  perspective: none;
+  transform-style: flat;
+}
+.mart-slot {
+  right: auto !important;
+  width: 74%;
+  height: 100%;
+  align-items: flex-end;
+  transform-origin: bottom center;
+}
+.mart-slot-1 {
+  left: 39% !important;
+  bottom: 29px;
+  z-index: 1;
+  transform: translateX(-50%) scale(.80) !important;
+  filter: brightness(.68) saturate(.72);
+}
+.mart-slot-2 {
+  left: 47% !important;
+  bottom: 15px;
+  z-index: 2;
+  transform: translateX(-50%) scale(.90) !important;
+  filter: brightness(.84) saturate(.86);
+}
+.mart-slot-3 {
+  left: 56% !important;
+  right: auto !important;
+  bottom: 0;
+  z-index: 3;
+  transform: translateX(-50%) scale(1) !important;
+  filter: none;
+}
+.mart-slot:has(.mart-product.is-front) {
+  left: 56% !important;
+  bottom: 0;
+  z-index: 4;
+  transform: translateX(-50%) scale(1) !important;
+  filter: none;
+}
+.mart-product.is-back:not(.is-peeking) {
+  opacity: 1;
+  filter: drop-shadow(0 7px 5px rgba(20,10,4,.36));
+}
+
+@media (max-width: 900px) {
+  .mart-store-scene .mart-shelves {
+    width: 100%;
+    min-height: 320px;
+    height: 320px;
+    grid-template-columns: none;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(132px,42vw);
+    padding-inline: 8px;
+    overflow-x: auto;
+    overflow-y: hidden;
+  }
+  .mart-product-stack { inset: 27px 0 33px !important; }
+  .mart-slot-1 { left: 38% !important; bottom: 27px; transform: translateX(-50%) scale(.79) !important; }
+  .mart-slot-2 { left: 47% !important; bottom: 14px; transform: translateX(-50%) scale(.89) !important; }
+  .mart-slot-3,
+  .mart-slot:has(.mart-product.is-front) { left: 57% !important; bottom: 0; transform: translateX(-50%) scale(1) !important; }
+}
+
+.mart-rule-target { display: none !important; }
+.mart-rule-arrow {
+  width: 88px;
+  height: 64px;
+  display: grid;
+  place-items: center;
+  color: #58a98f;
+  font-size: 62px;
+  font-weight: 950;
+  line-height: 1;
+  transform: rotate(-8deg);
+  filter: drop-shadow(0 4px 0 rgba(49,116,93,.14));
 }
