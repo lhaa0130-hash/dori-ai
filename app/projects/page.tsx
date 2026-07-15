@@ -1,12 +1,12 @@
 "use client";
 
 import Link from "next/link";
-import { ArrowRight, Lock } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import { PROJECTS } from "@/constants/projectsData";
 import { useAuth } from "@/contexts/AuthContext";
 import { isAdminEmail } from "@/lib/admin";
 
-// 관리자만 들어갈 수 있는 프로젝트(슬러그) — 카드는 보이되 CTA를 잠근다.
+// 관리자 전용 프로젝트(슬러그) — 비활성화: 비관리자에겐 목록에서 아예 숨긴다. (접근은 RequireAdmin이 별도 차단)
 const ADMIN_ONLY_SLUGS = new Set(["illo"]);
 
 const STATUS_STYLE: Record<string, string> = {
@@ -21,8 +21,10 @@ const STATUS_STYLE: Record<string, string> = {
 export default function ProjectsPage() {
   const { session } = useAuth();
   const isAdmin = isAdminEmail(session?.user?.email);
-  const active = PROJECTS.filter((p) => p.isActive);
-  const soon   = PROJECTS.filter((p) => !p.isActive);
+  // 관리자 전용 프로젝트는 비관리자에게 노출하지 않는다(비활성). 관리자에게만 보이고 들어갈 수 있음.
+  const visible = PROJECTS.filter((p) => isAdmin || !ADMIN_ONLY_SLUGS.has(p.slug));
+  const active = visible.filter((p) => p.isActive);
+  const soon   = visible.filter((p) => !p.isActive);
 
   return (
     <main className="w-full min-h-screen">
@@ -91,11 +93,7 @@ export default function ProjectsPage() {
 
                 {/* CTA */}
                 <div className="px-5 pb-5">
-                  {ADMIN_ONLY_SLUGS.has(p.slug) && !isAdmin ? (
-                    <div className="flex items-center justify-center gap-1.5 w-full py-3 rounded-xl bg-neutral-50 dark:bg-zinc-900 text-neutral-400 dark:text-zinc-500 text-[13px] font-bold cursor-not-allowed">
-                      <Lock className="w-3.5 h-3.5" /> 관리자 전용
-                    </div>
-                  ) : p.launchHref && isOpen ? (
+                  {p.launchHref && isOpen ? (
                     <Link
                       href={p.launchHref}
                       className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#F9954E]/10 dark:bg-[#F9954E]/10 text-[#F9954E] text-[13px] font-extrabold transition-colors hover:bg-[#F9954E]/20 dark:hover:bg-[#F9954E]/20"
