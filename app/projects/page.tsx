@@ -21,8 +21,9 @@ const STATUS_STYLE: Record<string, string> = {
 export default function ProjectsPage() {
   const { session } = useAuth();
   const isAdmin = isAdminEmail(session?.user?.email);
-  // 관리자 전용 프로젝트는 비관리자에게 노출하지 않는다(비활성). 관리자에게만 보이고 들어갈 수 있음.
-  const visible = PROJECTS.filter((p) => isAdmin || !ADMIN_ONLY_SLUGS.has(p.slug));
+  // 프로젝트 페이지엔 main 카테고리만 — 키즈(몽글로 등)는 키즈 메뉴에만 노출.
+  // 관리자 전용 프로젝트는 비관리자에게 숨김(비활성). 관리자에게만 보이고 들어갈 수 있음.
+  const visible = PROJECTS.filter((p) => p.category === "main" && (isAdmin || !ADMIN_ONLY_SLUGS.has(p.slug)));
   const active = visible.filter((p) => p.isActive);
   const soon   = visible.filter((p) => !p.isActive);
 
