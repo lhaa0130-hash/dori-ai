@@ -71,7 +71,9 @@ export default function ProjectsPage() {
                         <span className="text-[10px] text-neutral-400 dark:text-zinc-500">{p.tag}</span>
                       </div>
                     </div>
-                    <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full shrink-0 ${STATUS_STYLE[p.status] ?? ""}`}>{p.status}</span>
+                    {ADMIN_ONLY_SLUGS.has(p.slug)
+                      ? <span className="text-[10px] font-bold px-2.5 py-1 rounded-full shrink-0 text-[#F9954E] bg-[#F9954E]/10">🔒 관리자 전용</span>
+                      : <span className={`text-[10px] font-bold px-2.5 py-1 rounded-full shrink-0 ${STATUS_STYLE[p.status] ?? ""}`}>{p.status}</span>}
                   </div>
                   <p className="text-[13px] text-neutral-500 dark:text-neutral-400 leading-relaxed break-keep">{p.desc}</p>
                 </div>
