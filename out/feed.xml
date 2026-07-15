@@ -6,7 +6,31 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 14 Jul 2026 23:00:40 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 15 Jul 2026 00:03:09 GMT</lastBuildDate>
+    <item>
+      <title>[코딩] LLM을 처음부터 끝까지 만드는 과정</title>
+      <link>https://illo.im/insight/article/video-71</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-71</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <description>LLM의 기초부터 구현까지 상세히 설명합니다.</description>
+    </item>
+    <item>
+      <title>[정책] AI국부론 저자 초청 강연 요약</title>
+      <link>https://illo.im/insight/article/video-72</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-72</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <description>AI 시대의 공공AX 확산 전략을 다룹니다.</description>
+    </item>
+    <item>
+      <title>[도구] 구글 Flow 사용법 안내</title>
+      <link>https://illo.im/insight/article/video-73</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-73</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 14 Jul 2026 00:00:00 GMT</pubDate>
+      <description>Google Flow의 다양한 기능을 실습해봅니다.</description>
+    </item>
     <item>
       <title>백악관, AI 전력 비용 절감 위해 대규모 협력 추진</title>
       <link>https://illo.im/insight/article/trend-189</link>
@@ -302,30 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Thu, 02 Jul 2026 00:00:00 GMT</pubDate>
       <description>구글 제미나이를 활용한 영상 제작 방법을 소개합니다.</description>
-    </item>
-    <item>
-      <title>FigureAI Rose 200시간 시연: 챗봇을 넘어 창고로 들어가는 피지컬 AI</title>
-      <link>https://illo.im/insight/article/analysis-11</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/analysis-11</guid>
-      <category>분석</category>
-      <pubDate>Wed, 01 Jul 2026 05:03:40 GMT</pubDate>
-      <description>휴머노이드 로봇이 실험실을 벗어나 물류·제조·서비스 현장으로 이동하고 있다. 핵심은 더 똑똑한 챗봇이 아니라, 오래 버티고 안전하게 움직이며 기존 업무 흐름에 붙는 AI다.</description>
-    </item>
-    <item>
-      <title>OpenAI 토큰 비용 압박·SK하이닉스 HBM4·피지컬 AI: 비용 효율이 돈길을 바꾼 한 주</title>
-      <link>https://illo.im/insight/article/report-8</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/report-8</guid>
-      <category>리포트</category>
-      <pubDate>Wed, 01 Jul 2026 02:03:42 GMT</pubDate>
-      <description>이번 주 AI 산업의 핵심은 더 큰 모델이 아니라 더 싼 사용료, 더 빠른 메모리, 더 현실적인 로봇이었다. 자금은 과시적 모델 경쟁에서 인프라 병목과 실제 업무 자동화로 이동하고 있다.</description>
-    </item>
-    <item>
-      <title>[모델] AI는 정말 생각할 수 있을까? 추론 모델 설명</title>
-      <link>https://illo.im/insight/article/video-41</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-41</guid>
-      <category>큐레이션</category>
-      <pubDate>Wed, 01 Jul 2026 00:00:00 GMT</pubDate>
-      <description>AI의 사고 능력과 추론 모델의 발전을 설명합니다.</description>
     </item>
   </channel>
 </rss>

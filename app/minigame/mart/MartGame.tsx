@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
-import { Eye, Lightbulb, LockKeyhole, PackagePlus, RotateCcw, Volume2, VolumeX, Vibrate } from "lucide-react";
+import { ArrowLeft, Eye, Lightbulb, LockKeyhole, PackagePlus, Pause, RotateCcw, Settings, Volume2, VolumeX, Vibrate } from "lucide-react";
 import IlloGameShell from "@/components/game/illo-play/IlloGameShell";
 import IlloGameDialog from "@/components/game/illo-play/IlloGameDialog";
 import IlloGameResult from "@/components/game/illo-play/IlloGameResult";
@@ -111,7 +111,13 @@ export default function MartGame() {
     const apply = (loaded: IlloPlayProgress) => {
       if (!active) return;
       const run = readLocalRun<SavedRun>() || loaded.currentRun as SavedRun | undefined;
-      if (run?.level && run.level >= 1 && run.level <= 30 && run.state?.status === "playing") {
+      if (
+        run?.level
+        && run.level >= 1
+        && run.level <= 30
+        && run.state?.status === "playing"
+        && run.state.shelves?.length === LEVELS[run.level - 1].shelfCount
+      ) {
         setLevelNumber(run.level);
         setState(run.state);
       } else {
@@ -310,6 +316,8 @@ export default function MartGame() {
   const recommendation = getMiniGame("mart")?.relatedGame === "illo-tower"
     ? { name: "illo tower", path: "/minigame/illo-tower" }
     : undefined;
+  const moveCount = level.moveLimit === null ? state.moves : Math.max(0, level.moveLimit - state.moves);
+  const moveCaption = level.moveLimit === null ? "MOVES" : "LEFT";
 
   if (!level) {
     return <div className="mart-fatal">레벨을 불러오지 못했어요. 잠시 후 다시 시도해주세요.</div>;
@@ -339,6 +347,18 @@ export default function MartGame() {
       )}
     >
       <div className="mart-store-scene">
+      <header className="mart-cabinet-header">
+        <button type="button" className="mart-cabinet-back" onClick={() => router.push("/minigame")} aria-label="미니게임 목록으로 돌아가기">
+          <ArrowLeft aria-hidden="true" />
+        </button>
+        <div className="mart-level-plaque"><span>LEVEL</span><strong>{level.id}</strong></div>
+        <div className="mart-cabinet-logo" aria-label="illo MART"><b>illo</b><i>:</i><strong>MART</strong></div>
+        <div className="mart-moves-plaque"><strong>{moveCount}</strong><span>{moveCaption}</span></div>
+        <div className="mart-cabinet-actions">
+          <button type="button" onClick={() => setSettingsOpen(true)} aria-label="설정 열기"><Settings aria-hidden="true" /></button>
+          <button type="button" onClick={() => setPaused(true)} aria-label="게임 일시정지"><Pause aria-hidden="true" /></button>
+        </div>
+      </header>
       <section className="mart-rule-banner" aria-labelledby="mart-rule-title">
         <div className="mart-rule-step mart-rule-pick" aria-hidden="true">
           <span className="mart-rule-products"><i /><i /><i /></span>
@@ -399,7 +419,11 @@ export default function MartGame() {
           : <>가장 앞쪽 상품을 눌러 시작하세요</>}
       </div>
 
-      <section className="mart-shelves" aria-label="상품 선반">
+      <section
+        className="mart-shelves"
+        aria-label="상품 선반"
+        style={{ "--shelf-count": Math.min(state.shelves.length, 8) } as React.CSSProperties}
+      >
         {state.shelves.map((shelf, index) => (
           <button
             type="button"
@@ -413,16 +437,21 @@ export default function MartGame() {
             {shelf.locked ? (
               <span className="mart-lock"><LockKeyhole aria-hidden="true" /><small>{level.unlockAfterSets}세트 후 열림</small></span>
             ) : (
-              <span className="mart-product-stack">
-                {[0, 1, 2].map((slot) => {
-                  const productId = shelf.items[slot];
-                  return (
-                    <span key={slot} className={`mart-slot mart-slot-${slot + 1}`}>
-                      {productId && <ProductToken productId={productId} isFront={slot === shelf.items.length - 1} peek={peek} />}
-                    </span>
-                  );
-                })}
-              </span>
+              <>
+                <span className="mart-product-stack">
+                  {[0, 1, 2].map((slot) => {
+                    const productId = shelf.items[slot];
+                    return (
+                      <span key={slot} className={`mart-slot mart-slot-${slot + 1}`}>
+                        {productId && <ProductToken productId={productId} isFront={slot === shelf.items.length - 1} peek={peek} />}
+                      </span>
+                    );
+                  })}
+                </span>
+                {shelf.items.length === 0 && (
+                  <span className="mart-empty-target" aria-hidden="true"><i>↓</i><strong>여기에 놓기</strong></span>
+                )}
+              </>
             )}
             <span className="mart-shelf-base" />
           </button>
