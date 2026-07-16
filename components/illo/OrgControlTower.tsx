@@ -314,9 +314,24 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
             );
           })}
         </div>
-        {/* 본문: 좌측 레일 + 캔버스 */}
+        {/* 임베드(앱 안)일 때 — 3번째 칸 대신 상단 툴바로 (캔버스 전체 폭 확보) */}
+        {embedded && (
+          <div className="shrink-0 flex items-center gap-2 px-4 py-2.5 border-b border-border bg-card/40 flex-wrap">
+            <button onClick={addBu} className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-primary-foreground px-3 py-2 text-[13px] font-semibold transition hover:opacity-90"><Plus className="w-4 h-4" /> 부서 만들기</button>
+            <button onClick={addTeam} disabled={!bu} className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-2 text-[13px] font-medium text-foreground transition enabled:hover:border-primary disabled:opacity-40 disabled:cursor-not-allowed"><Plus className="w-3.5 h-3.5" /> 팀 만들기</button>
+            <button onClick={addMember} disabled={!team} className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-2 text-[13px] font-medium text-foreground transition enabled:hover:border-primary disabled:opacity-40 disabled:cursor-not-allowed"><Plus className="w-3.5 h-3.5" /> 직원 추가</button>
+            <span className="text-[12px] text-muted-foreground ml-1 hidden md:inline">부서 {divisions.length} · 팀 {teamsCount} · 직원 {membersCount}</span>
+            <div className="ml-auto flex items-center gap-2">
+              <input type="range" min={55} max={130} step={5} value={zoom} onChange={(e) => setZoom(Number(e.target.value))} className="w-24 sm:w-32 accent-[hsl(var(--primary))]" />
+              <span className="text-[12px] text-muted-foreground w-9 text-right tabular-nums">{zoom}%</span>
+              <button onClick={reset} className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-2 text-[12.5px] text-muted-foreground transition hover:text-foreground hover:bg-muted"><Trash2 className="w-3.5 h-3.5" /> 비우기</button>
+            </div>
+          </div>
+        )}
+        {/* 본문: (전체화면) 좌측 레일 + 캔버스 / (임베드) 캔버스만 */}
         <div className="flex flex-1 min-h-0">
-        {/* 좌측 컨트롤 레일 */}
+        {/* 좌측 컨트롤 레일 — 전체화면(standalone)에서만 */}
+        {!embedded && (
         <aside className="w-[250px] shrink-0 border-r border-border bg-card overflow-y-auto flex flex-col gap-6 p-4">
           <div>
             <h2 className="text-[11.5px] font-bold uppercase tracking-wider text-muted-foreground mb-3">이렇게 만들어요</h2>
@@ -349,6 +364,7 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
             </Link>
           </div>
         </aside>
+        )}
 
         {/* 캔버스 */}
         <div className="relative flex-1 min-w-0 overflow-auto" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, hsl(var(--border)) 1px, transparent 0)", backgroundSize: "24px 24px" }}>

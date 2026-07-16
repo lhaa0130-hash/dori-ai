@@ -2,7 +2,6 @@
 
 import { useEffect, useRef, useState, Fragment, type MouseEvent as ReactMouseEvent } from "react";
 import Link from "next/link";
-import { useRouter } from "next/navigation";
 import { useTheme } from "next-themes";
 import { useAuth } from "@/contexts/AuthContext";
 import { getFirebaseAuth } from "@/lib/firebase";
@@ -31,6 +30,7 @@ import { listDocs, saveDoc, deleteDoc, listDepts, saveDept, deleteDept, DEPT_EMO
 import { PLANS } from "@/lib/illo/plan";
 import { getTone, saveTone } from "@/lib/illo/tone";
 import ProjectTopBar from "@/components/layout/ProjectTopBar";
+import OrgControlTower from "@/components/illo/OrgControlTower";
 import {
   ArrowLeft, KeyRound, Loader2, Copy, Check, Sparkles, Download,
   Menu, X, Pencil, Plus, LogOut, Sun, Moon, Send, Lock, GripVertical, ChevronUp, ChevronDown, Search, ExternalLink,
@@ -41,7 +41,6 @@ const FREE_LIMIT = 30; // 무료 하루 호출 수
 export default function IlloWebClient() {
   const { status, session, logout } = useAuth();
   const { setTheme } = useTheme();
-  const router = useRouter();
 
   // EXE처럼 라이트가 기본 — 첫 방문 시 라이트로 맞춤(이후 사용자가 바꾸면 그 선택 유지)
   useEffect(() => {
@@ -100,12 +99,7 @@ export default function IlloWebClient() {
     return r;
   }
 
-  function goView(id: string) {
-    setMobileNav(false);
-    // 'AI 직원' 은 전체화면 관제탑으로 이동 (앱 내 3칸 임베드 대신 넓은 전용 화면)
-    if (id === "builder") { router.push("/ai-assistant/control-tower"); return; }
-    setView(id);
-  }
+  function goView(id: string) { setView(id); setMobileNav(false); }
 
   function toggleFeature(id: string) {
     const f = ILLO_FEATURE_BY_ID[id];
@@ -225,7 +219,7 @@ export default function IlloWebClient() {
         {view === "features" && <FeatureManager enabled={enabled} onToggle={toggleFeature} onView={goView} />}
         {view === "image" && <BasicGen kind="image" free={free} quota={quota} setQuota={setQuota} />}
         {view === "video" && <BasicGen kind="video" free={free} quota={quota} setQuota={setQuota} />}
-        {view === "builder" && <FlowBuilder runAI={runAI} userKey={session?.user?.email || "local"} />}
+        {view === "builder" && <OrgControlTower embedded />}
         {view === "catalog" && <ApiCatalog />}
         {view === "docs" && <Workspace userKey={session?.user?.email || "local"} />}
         {view === "history" && <HistoryView onBack={() => goView("home")} />}
