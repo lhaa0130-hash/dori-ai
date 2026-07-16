@@ -1,5 +1,57 @@
 [
   {
+    "id": "mk16-1",
+    "name": "오리온 닥터유 단백질바",
+    "category": "living",
+    "source": "coupang",
+    "query": "오리온 닥터유 단백질바",
+    "emoji": "🍫",
+    "priceHint": "1~2만원대",
+    "summary": "달달한 단백질 간식",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/fqeCJujPOu"
+  },
+  {
+    "id": "mk16-2",
+    "name": "산과들에 하루견과 원데이",
+    "category": "living",
+    "source": "coupang",
+    "query": "산과들에 하루견과 원데이",
+    "emoji": "🥜",
+    "priceHint": "1~3만원대",
+    "summary": "손 안 가는 견과 간식",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/fqeCJwSxae"
+  },
+  {
+    "id": "mk16-3",
+    "name": "곰곰 반숙란",
+    "category": "living",
+    "source": "coupang",
+    "query": "곰곰 반숙란",
+    "emoji": "🥚",
+    "priceHint": "1만원대",
+    "summary": "냉장고용 든든 간식",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/fqeCJz55lk"
+  },
+  {
+    "id": "mk16-4",
+    "name": "매일유업 셀렉스 프로틴 음료",
+    "category": "living",
+    "source": "coupang",
+    "query": "매일유업 셀렉스 프로틴 음료",
+    "emoji": "🥤",
+    "priceHint": "2~4만원대",
+    "summary": "마시는 단백질 보충",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/fqeCJDffNY"
+  },
+  {
     "id": "mk15-1",
     "name": "베베숲 시그니처 블루 아기물티슈",
     "category": "kids",
@@ -9,7 +61,7 @@
     "priceHint": "1~3만원대",
     "summary": "매일 쓰는 기본 소모품",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/fmUOElhJWC"
   },
   {
@@ -22,7 +74,7 @@
     "priceHint": "1~3만원대",
     "summary": "외출 물컵 입문용",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/fmUOEpbrVY"
   },
   {
@@ -35,7 +87,7 @@
     "priceHint": "1만원대",
     "summary": "외출 수유 설거지 줄이기",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/fmUOEsJnRA"
   },
   {
@@ -48,7 +100,7 @@
     "priceHint": "1만원대",
     "summary": "걸음마 시기 안전 보강",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/fmUOEuEveK"
   },
   {
