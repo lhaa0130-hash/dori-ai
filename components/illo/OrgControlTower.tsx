@@ -21,7 +21,7 @@ import {
 
 const LV_W = [178, 200, 200, 268];
 const COL_X = [26, 304, 596, 888];
-const H = { master: 74, div: 84, team: 78, member: 122, add: 58 };
+const H = { master: 104, div: 104, team: 104, member: 132, add: 58 };
 const GAP = 20;
 const PAD = 26;
 
@@ -179,7 +179,11 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
     team.members.forEach((m) => edges.push({ a: `tm-${team.id}`, b: `mb-${m.id}`, dash: false }));
     edges.push({ a: `tm-${team.id}`, b: "add-mb", dash: true });
   }
-  const canvasW = COL_X[3] + LV_W[3] + 30;
+  // 실제로 노드가 있는 가장 오른쪽 컬럼까지만 폭을 잡는다(빈 상태에서 우측 여백/잘림 방지)
+  const usedCol = columns.reduce((m, col, i) => (col.length ? i : m), 0);
+  // 빈 상태 안내 말풍선(left-322 · max-w-236)이 캔버스 밖으로 잘리지 않도록 폭 확보
+  const hintRight = divisions.length === 0 ? 322 + 236 + PAD : 0;
+  const canvasW = Math.max(COL_X[usedCol] + LV_W[usedCol] + 30, hintRight);
   const canvasH = Math.max(PAD + 200, ...nodes.map((n) => n.pos.y + n.pos.h + PAD));
 
   let teamsCount = 0, membersCount = 0;
