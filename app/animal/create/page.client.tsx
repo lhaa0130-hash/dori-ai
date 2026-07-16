@@ -67,30 +67,46 @@ function Inner() {
     if (!r.ok) { setError(r.error); if (typeof r.remaining === "number") setRemaining(r.remaining); return; }
     setResult({ animal: r.animal, falUrl: r.imageUrl }); setRemaining(r.remaining);
   }
-  async function ensurePerm(): Promise<string | null> {
-    if (permUrl) return permUrl;
-    if (!result) return null;
-    const u = await persistImage(result.falUrl);
-    if (u) setPermUrl(u);
-    return u;
+  // 이미지 영구 저장(1회만) — 실패 사유를 함께 돌려줌
+  async function ensurePerm(): Promise<{ url: string | null; error?: string }> {
+    if (permUrl) return { url: permUrl };
+    if (!result) return { url: null, error: "먼저 동물을 만들어 주세요." };
+    const r = await persistImage(result.falUrl);
+    if (r.url) setPermUrl(r.url);
+    return r;
   }
+  // ⚠️finally로 busy를 반드시 해제 — 예외/지연 시 버튼이 "저장 중…"에 갇히던 버그
   async function onRegister() {
     if (!result || busy) return;
     setBusy("profile"); setError("");
-    const url = await ensurePerm();
-    if (!url) { setError("이미지 저장에 실패했어요."); setBusy(""); return; }
-    const id = await registerCreation(result.animal, url, prompt.trim(), authorName);
-    if (id) setDone((d) => ({ ...d, profile: true })); else setError("등록에 실패했어요.");
-    setBusy("");
+    try {
+      const r = await ensurePerm();
+      if (!r.url) { setError(r.error || "이미지 저장에 실패했어요."); return; }
+      const id = await registerCreation(result.animal, r.url, prompt.trim(), authorName);
+      if (id) setDone((d) => ({ ...d, profile: true }));
+      else setError("등록에 실패했어요. 잠시 후 다시 시도해 주세요.");
+    } catch (e) {
+      console.warn("[create-animal] 프로필 등록 오류:", e);
+      setError("문제가 생겼어요. 잠시 후 다시 시도해 주세요.");
+    } finally {
+      setBusy("");
+    }
   }
   async function onShare() {
     if (!result || busy) return;
     setBusy("feed"); setError("");
-    const url = await ensurePerm();
-    if (!url) { setError("이미지 저장에 실패했어요."); setBusy(""); return; }
-    const ok = await shareCreationToFeed(result.animal, url, authorName);
-    if (ok) setDone((d) => ({ ...d, feed: true })); else setError("피드 공유에 실패했어요.");
-    setBusy("");
+    try {
+      const r = await ensurePerm();
+      if (!r.url) { setError(r.error || "이미지 저장에 실패했어요."); return; }
+      const ok = await shareCreationToFeed(result.animal, r.url, authorName);
+      if (ok) setDone((d) => ({ ...d, feed: true }));
+      else setError("피드 공유에 실패했어요. 잠시 후 다시 시도해 주세요.");
+    } catch (e) {
+      console.warn("[create-animal] 피드 공유 오류:", e);
+      setError("문제가 생겼어요. 잠시 후 다시 시도해 주세요.");
+    } finally {
+      setBusy("");
+    }
   }
 
   const noQuota = remaining !== null && remaining <= 0 && !result;

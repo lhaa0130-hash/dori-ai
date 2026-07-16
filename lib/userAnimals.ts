@@ -38,15 +38,26 @@ export async function generateAnimal(prompt: string): Promise<{ ok: true; animal
   } catch { return { ok: false, error: "네트워크 오류예요. 잠시 후 다시 시도해 주세요." }; }
 }
 
-/** fal 임시 이미지를 Firebase Storage로 재업로드해 영구 URL 확보 */
-export async function persistImage(falUrl: string): Promise<string | null> {
+/** fal 임시 이미지를 Firebase Storage로 재업로드해 영구 URL 확보.
+ *  ⚠️타임아웃 필수: Storage SDK는 실패 시 기본 최대 10분까지 조용히 재시도해 UI가 멈춘 것처럼 보임.
+ *  실패 사유(error)를 함께 돌려줘야 사용자가 원인을 볼 수 있음. */
+export async function persistImage(falUrl: string): Promise<{ url: string | null; error?: string }> {
+  const withTimeout = <T,>(p: Promise<T>, ms: number, msg: string) =>
+    Promise.race([p, new Promise<T>((_, rej) => setTimeout(() => rej(new Error(msg)), ms))]);
   try {
-    const res = await fetch(falUrl);
+    const ctrl = new AbortController();
+    const timer = setTimeout(() => ctrl.abort(), 20000);
+    let res: Response;
+    try { res = await fetch(falUrl, { signal: ctrl.signal }); } finally { clearTimeout(timer); }
+    if (!res.ok) return { url: null, error: `이미지를 가져오지 못했어요. (${res.status})` };
     const blob = await res.blob();
     const file = new File([blob], `myanimal_${Date.now()}.jpg`, { type: "image/jpeg" });
-    const up = await uploadFeedMedia(file);
-    return up.ok ? up.result.url : null;
-  } catch { return null; }
+    const up = await withTimeout(uploadFeedMedia(file), 45000, "업로드가 너무 오래 걸려요. 잠시 후 다시 시도해 주세요.");
+    return up.ok ? { url: up.result.url } : { url: null, error: up.error };
+  } catch (e: any) {
+    if (e?.name === "AbortError") return { url: null, error: "이미지를 가져오는 데 시간이 너무 걸렸어요. 다시 시도해 주세요." };
+    return { url: null, error: e?.message || "이미지 저장에 실패했어요." };
+  }
 }
 
 /** 프로필/갤러리에 등록 → animalCreations 문서 생성. imageUrl은 영구(Storage) URL 권장 */
@@ -62,13 +73,21 @@ export async function registerCreation(a: GenAnimal, imageUrl: string, prompt: s
       createdAt: serverTimestamp(), likeCount: 0, likedBy: [],
     });
     return ref.id;
-  } catch { return null; }
+  } catch (e) {
+    console.warn("[userAnimals] 프로필 등록 실패:", e);
+    return null;
+  }
 }
 
 /** 피드에 자랑 → 이미지+캡션 글 작성 */
 export async function shareCreationToFeed(a: GenAnimal, imageUrl: string, authorName: string): Promise<boolean> {
-  const caption = `🐣 내가 만든 동물 "${a.animal_name}"\n${a.search_nickname ? `— ${a.search_nickname}\n` : ""}${a.kid_friendly_desc}`.slice(0, 1000);
-  return addPost(authorName, caption, { mediaUrl: imageUrl, mediaType: "image", visibility: "public" });
+  try {
+    const caption = `🐣 내가 만든 동물 "${a.animal_name}"\n${a.search_nickname ? `— ${a.search_nickname}\n` : ""}${a.kid_friendly_desc}`.slice(0, 1000);
+    return await addPost(authorName, caption, { mediaUrl: imageUrl, mediaType: "image", visibility: "public" });
+  } catch (e) {
+    console.warn("[userAnimals] 피드 공유 실패:", e);
+    return false;
+  }
 }
 
 function mapCreation(id: string, x: any): Creation {
