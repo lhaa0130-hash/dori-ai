@@ -54,7 +54,7 @@ export const PROJECTS: ProjectItem[] = [
   },
   {
     slug: "illo",
-    name: "AI 비서",
+    name: "대리인 : AI비서",
     emoji: "🟧",
     image: "/illo-logo.png",
     tag: "오픈 베타",

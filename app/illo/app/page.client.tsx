@@ -57,7 +57,7 @@ export default function IlloWebClient() {
   const [pulling, setPulling] = useState(false);
 
   const [enabled, setEnabled] = useState<string[]>(ILLO_DEFAULT_ENABLED);
-  const [view, setView] = useState<string>("home");
+  const [view, setView] = useState<string>("builder"); // 메인 = AI 비서 관제탑
   const [mobileNav, setMobileNav] = useState(false);
 
   const [quota, setQuota] = useState<number | null>(null);
@@ -178,7 +178,7 @@ export default function IlloWebClient() {
   // ── 메인 셸 (EXE와 동일 구조: 사이드바 + 뷰) ──
   return (
     <>
-    <ProjectTopBar name="AI비서" emoji="🟧" />
+    <ProjectTopBar name="대리인" emoji="🟧" />
     <div className="flex h-[calc(100vh-3rem)] mt-12 w-full bg-stone-50 dark:bg-black font-sans overflow-hidden">
       {/* 데스크톱 사이드바 */}
       <div className="hidden md:flex">
@@ -209,8 +209,8 @@ export default function IlloWebClient() {
         {/* 모바일 상단바 */}
         <header className="md:hidden flex items-center gap-2 px-4 h-14 border-b border-stone-200 dark:border-zinc-800 bg-white dark:bg-zinc-950 shrink-0">
           <button onClick={() => setMobileNav(true)} className="p-1.5 -ml-1.5 text-stone-600 dark:text-stone-300"><Menu className="w-5 h-5" /></button>
-          <img src="/illo-logo.png" alt="AI비서" className="w-7 h-7 rounded-lg" />
-          <span className="font-extrabold text-[#F9954E]">AI비서</span>
+          <img src="/illo-logo.png" alt="대리인" className="w-7 h-7 rounded-lg" />
+          <span className="font-extrabold text-[#F9954E]">대리인</span>
           {free && <span className="ml-auto text-[11px] font-semibold text-stone-400">남은 <b className="text-[#E8832E]">{quota ?? FREE_LIMIT}</b>/{FREE_LIMIT}</span>}
         </header>
 
@@ -255,7 +255,7 @@ function IlloSidebar({
         <div className="flex items-center gap-2.5">
           <img src="/illo-logo.png" alt="워크일로" className="w-9 h-9 rounded-xl shadow-sm" />
           <div className="flex-1 min-w-0">
-            <div className="text-base font-extrabold leading-none text-[#F9954E]">AI비서</div>
+            <div className="text-base font-extrabold leading-none text-[#F9954E]">대리인</div>
             <Link href="/" className="text-[10px] text-stone-400 mt-1 tracking-wide hover:text-[#F9954E] transition-colors inline-block">← illo 홈</Link>
           </div>
         </div>
@@ -2008,8 +2008,8 @@ function IlloLogin({ onShowGuide, onDevPreview }: { onShowGuide: () => void; onD
   return (
     <div className="w-full max-w-sm bg-white dark:bg-zinc-900 rounded-3xl border border-stone-200 dark:border-zinc-800 shadow-xl p-8">
       <div className="flex flex-col items-center mb-6">
-        <img src="/illo-logo.png" alt="AI비서" className="w-14 h-14 rounded-2xl shadow-md mb-3" />
-        <div className="text-xl font-extrabold text-[#F9954E] leading-none">AI비서</div>
+        <img src="/illo-logo.png" alt="대리인" className="w-14 h-14 rounded-2xl shadow-md mb-3" />
+        <div className="text-xl font-extrabold text-[#F9954E] leading-none">대리인</div>
         <div className="text-[13px] text-stone-500 dark:text-stone-400 mt-2">
           {isSignup ? "계정을 만들고 바로 시작하세요" : "혼자서도 일이 되는 곳"}
         </div>
