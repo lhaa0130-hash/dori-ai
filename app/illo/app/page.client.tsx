@@ -882,7 +882,7 @@ function FlowBuilder({ runAI, userKey }: {
           <button onClick={createNew} className="shrink-0 flex items-center gap-1.5 text-sm font-bold px-3.5 py-2 rounded-xl bg-primary text-white hover:bg-primary/90 transition-colors"><Plus className="w-4 h-4" />새로 만들기</button>
         </div>
         <p className="text-muted-foreground mb-2.5 break-keep">AI 단계를 노드로 연결해 <b>나만의 자동화</b>를 직접 설계하세요. (입력 → 조사 → 작성 → 검토 → 전송처럼)</p>
-        <div className="mb-7 rounded-2xl border border-[#FDD5A5] dark:border-[#B35E15] bg-[#FDF6F1] dark:bg-orange-950/10 px-4 py-3 text-[12.5px] text-muted-foreground break-keep leading-relaxed">
+        <div className="mb-7 rounded-2xl border border-primary/25 dark:border-[#B35E15] bg-primary/5 dark:bg-orange-950/10 px-4 py-3 text-[12.5px] text-muted-foreground break-keep leading-relaxed">
           <b className="text-primary">n8n 자동화의 쉬운 고급 버전이에요.</b> 복잡한 설정 없이 — <b>AI의 API 키만 넣으면 연결</b>되고, <b>노드끼리 선만 이으면</b> 내용이 자동으로 흘러갑니다. 각 노드는 <b>받은 내용 + 자기 역할</b>대로 처리해 다음 노드로 넘기기만 하면 돼요. 노드는 <b>4면 어디로든</b> 받고, <b>한 면에서 여러 갈래</b>로 보낼 수 있어요.</div>
 
         {/* 완성된 워크플로우 템플릿 — 빈 캔버스 대신 바로 시작 */}
@@ -920,7 +920,7 @@ function FlowBuilder({ runAI, userKey }: {
             <p className="text-[12.5px] text-muted-foreground mb-3.5 break-keep">결합 보관해둔 틀이에요. 누르면 새 사본으로 열려 그대로 다시 씁니다.</p>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
               {templates.map((t) => (
-                <div key={t.id} className="rounded-2xl border border-[#FDD5A5] dark:border-[#B35E15] bg-[#FDF6F1] dark:bg-orange-950/10 p-4 hover:shadow-sm transition-all">
+                <div key={t.id} className="rounded-2xl border border-primary/25 dark:border-[#B35E15] bg-primary/5 dark:bg-orange-950/10 p-4 hover:shadow-sm transition-all">
                   <div className="flex items-center justify-between gap-2">
                     <button onClick={() => startFromSaved(t)} className="min-w-0 flex-1 text-left">
                       <div className="text-sm font-bold text-foreground truncate">📦 {t.name}</div>
@@ -984,7 +984,7 @@ function FlowBuilder({ runAI, userKey }: {
                   <div className="px-3 pb-2.5 text-[12px] text-muted-foreground whitespace-pre-wrap break-words leading-relaxed">{s.out}</div>
                 </details>
               ))}
-              <div className="rounded-xl border border-primary bg-[#FDF6F1] dark:bg-orange-950/10 p-3 mt-1">
+              <div className="rounded-xl border border-primary bg-primary/5 dark:bg-orange-950/10 p-3 mt-1">
                 <div className="text-[11px] font-bold text-primary mb-1">최종 결과</div>
                 <div className="text-[13px] text-foreground whitespace-pre-wrap break-words leading-relaxed max-h-[40vh] overflow-y-auto">{runResult.final}</div>
               </div>
@@ -1065,7 +1065,7 @@ function FlowBuilder({ runAI, userKey }: {
       </div>
 
       {/* 최상단 명령 바 — 요청 입력하고 실행 */}
-      <div className="shrink-0 px-4 py-2.5 border-b border-border bg-stone-50 dark:bg-zinc-950">
+      <div className="shrink-0 px-4 py-2.5 border-b border-border bg-muted/40">
         <div className="flex items-center gap-2">
           <input value={command} onChange={(e) => setCommand(e.target.value)}
             onKeyDown={(e) => { if (e.key === "Enter" && !running) runFlow(); }}
@@ -1081,7 +1081,7 @@ function FlowBuilder({ runAI, userKey }: {
 
       <div className="relative flex flex-1 min-h-0">
         {/* 노드 팔레트 */}
-        <div className="w-[150px] shrink-0 border-r border-border bg-stone-50 dark:bg-zinc-950 overflow-y-auto p-2.5">
+        <div className="w-[150px] shrink-0 border-r border-border bg-muted/40 overflow-y-auto p-2.5">
           <div className="text-[10px] font-bold text-muted-foreground mb-2 px-0.5">＋ 노드 추가</div>
           <div className="flex flex-col gap-1.5">
             {STEP_PALETTE.map((opt, k) => (
@@ -1166,7 +1166,7 @@ function FlowBuilder({ runAI, userKey }: {
                     onChange={(e) => updateNode(n.id, { instruction: e.target.value })}
                     onMouseDown={(e) => e.stopPropagation()}
                     placeholder={n.detail || "이 노드가 할 일(명령)을 적어요"}
-                    className="w-full h-full resize-none bg-white/70 dark:bg-zinc-950/40 border border-stone-200/70 dark:border-zinc-700 rounded-md px-1.5 py-1 text-[9.5px] leading-snug text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary cursor-text" />
+                    className="w-full h-full resize-none bg-card/60 border border-border rounded-md px-1.5 py-1 text-[9.5px] leading-snug text-foreground placeholder:text-muted-foreground focus:outline-none focus:border-primary cursor-text" />
                 </div>
               </div>
             ))}
@@ -1175,7 +1175,7 @@ function FlowBuilder({ runAI, userKey }: {
         {/* 플로팅 가이드 — 우측 하단 */}
         <div className="absolute bottom-4 right-4 z-30 max-w-[290px]">
           {showGuide ? (
-            <div className="rounded-xl border border-border bg-white/95 dark:bg-zinc-900/95 backdrop-blur shadow-lg p-3 text-[11px] text-muted-foreground leading-relaxed break-keep">
+            <div className="rounded-xl border border-border bg-card/95 backdrop-blur shadow-lg p-3 text-[11px] text-muted-foreground leading-relaxed break-keep">
               <div className="flex items-center justify-between mb-1.5">
                 <span className="font-bold text-foreground">💡 사용법</span>
                 <button onClick={() => setShowGuide(false)} className="text-muted-foreground hover:text-rose-500"><X className="w-3.5 h-3.5" /></button>
@@ -1261,7 +1261,7 @@ function Workspace({ userKey }: { userKey: string }) {
             <button onClick={addDeptDo} className="text-[12px] font-bold text-primary">추가</button>
           </span>
         ) : (
-          <button onClick={() => setAddDept(true)} className="px-3 py-1.5 rounded-lg text-[13px] font-bold border border-dashed border-stone-300 dark:border-zinc-600 text-muted-foreground hover:border-primary hover:text-primary">+ 부서 만들기</button>
+          <button onClick={() => setAddDept(true)} className="px-3 py-1.5 rounded-lg text-[13px] font-bold border border-dashed border-border text-muted-foreground hover:border-primary hover:text-primary">+ 부서 만들기</button>
         )}
       </div>
 
@@ -1307,7 +1307,7 @@ function Workspace({ userKey }: { userKey: string }) {
               </select>
             </div>
             <textarea value={editing.html} onChange={(e) => setEditing({ ...editing, html: e.target.value })} placeholder="<!DOCTYPE html> … HTML을 붙여넣으세요" spellCheck={false}
-              className="flex-1 min-h-[240px] w-full px-3 py-2 rounded-lg border border-border bg-stone-50 dark:bg-zinc-950 text-[12px] font-mono text-stone-800 dark:text-foreground focus:outline-none focus:border-primary resize-none" />
+              className="flex-1 min-h-[240px] w-full px-3 py-2 rounded-lg border border-border bg-muted/40 text-[12px] font-mono text-foreground focus:outline-none focus:border-primary resize-none" />
             <div className="flex items-center justify-end gap-2 mt-3">
               {editing.id && <button onClick={() => removeDoc(editing.id)} className="mr-auto text-[13px] text-muted-foreground hover:text-rose-500">삭제</button>}
               <button onClick={() => setEditing(null)} className="text-[13px] px-3 py-2 text-muted-foreground">취소</button>
@@ -1338,9 +1338,9 @@ function Workspace({ userKey }: { userKey: string }) {
 
 /* ─────────────────── API 카탈로그 (키 발급 가이드) ─────────────────── */
 function roleBadgeClass(role: ApiEntry["role"]): string {
-  if (role === "pick") return "bg-primary/10 text-primary border-[#FDD5A5] dark:bg-orange-950/30 dark:border-[#B35E15]";
+  if (role === "pick") return "bg-primary/10 text-primary border-primary/25 dark:bg-orange-950/30 dark:border-[#B35E15]";
   if (role === "warn") return "bg-rose-50 text-rose-500 border-rose-200 dark:bg-rose-950/20 dark:border-rose-900";
-  return "bg-stone-100 text-muted-foreground border-stone-200 dark:bg-zinc-800 dark:border-zinc-700";
+  return "bg-muted text-muted-foreground border-border";
 }
 function ApiCatalog() {
   const [open, setOpen] = useState<string | null>(null);
@@ -1355,13 +1355,13 @@ function ApiCatalog() {
       <p className="text-[12px] text-muted-foreground mb-6 break-keep">※ 가격·정책은 제공사 사정으로 자주 바뀌어요. 정확한 최신 정보는 각 발급 페이지에서 확인하세요.</p>
 
       <div className="flex flex-wrap gap-2 mb-6 text-[11.5px]">
-        <span className="px-2 py-0.5 rounded-full border bg-primary/10 text-primary border-[#FDD5A5] dark:bg-orange-950/30 dark:border-[#B35E15]">★ 지정 — 직접 고른 핵심</span>
-        <span className="px-2 py-0.5 rounded-full border bg-stone-100 text-muted-foreground border-stone-200 dark:bg-zinc-800 dark:border-zinc-700">추천 — 함께 제안</span>
+        <span className="px-2 py-0.5 rounded-full border bg-primary/10 text-primary border-primary/25 dark:bg-orange-950/30 dark:border-[#B35E15]">★ 지정 — 직접 고른 핵심</span>
+        <span className="px-2 py-0.5 rounded-full border bg-muted text-muted-foreground border-border">추천 — 함께 제안</span>
         <span className="px-2 py-0.5 rounded-full border bg-rose-50 text-rose-500 border-rose-200 dark:bg-rose-950/20 dark:border-rose-900">⚠ 주의</span>
       </div>
 
       {/* 초기 비용 줄이는 법 */}
-      <div className="rounded-2xl border border-[#FDD5A5] dark:border-[#B35E15] bg-[#FDF6F1] dark:bg-orange-950/10 p-5 mb-8">
+      <div className="rounded-2xl border border-primary/25 dark:border-[#B35E15] bg-primary/5 dark:bg-orange-950/10 p-5 mb-8">
         <div className="text-sm font-bold text-foreground mb-1">💡 초기 비용, 이렇게 줄여요</div>
         <p className="text-[12.5px] text-muted-foreground mb-3 break-keep">API마다 최소 충전($5~10)이 있어요. 한 번에 다 넣을 필요 없습니다.</p>
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -1399,7 +1399,7 @@ function ApiCatalog() {
                 return (
                   <div key={k} className="rounded-xl border border-border bg-card overflow-hidden">
                     <button disabled={!detail} onClick={() => detail && toggle(k)}
-                      className={"w-full flex items-center gap-2.5 px-4 py-3 text-left " + (detail ? "hover:bg-stone-50 dark:hover:bg-zinc-800/50 transition-colors" : "cursor-default")}>
+                      className={"w-full flex items-center gap-2.5 px-4 py-3 text-left " + (detail ? "hover:bg-accent transition-colors" : "cursor-default")}>
                       <span className={"shrink-0 text-[10px] font-bold px-1.5 py-0.5 rounded-md border " + roleBadgeClass(e.role)}>{ROLE_LABEL[e.role]}</span>
                       <span className="shrink-0 text-[13.5px] font-bold text-foreground">{e.name}</span>
                       <span className="min-w-0 flex-1 text-[12px] text-muted-foreground break-keep">{e.use}</span>
@@ -1434,7 +1434,7 @@ function ApiCatalog() {
                 );
               })}
             </div>
-            {cat.catNote && <p className="text-[12px] text-muted-foreground mt-2.5 break-keep bg-stone-50 dark:bg-zinc-900/50 rounded-lg px-3 py-2">{cat.catNote}</p>}
+            {cat.catNote && <p className="text-[12px] text-muted-foreground mt-2.5 break-keep bg-muted/40 rounded-lg px-3 py-2">{cat.catNote}</p>}
           </div>
         ))}
       </div>
@@ -1532,7 +1532,7 @@ function FeatureManager({ enabled, onToggle, onView }: {
                         <div className="relative">
                           {steps.map((s, i) => (
                             <div key={i} className="flex gap-3 pb-3 last:pb-0 relative">
-                              {i < steps.length - 1 && <span className="absolute left-[9px] top-[18px] bottom-0 w-px bg-stone-200 dark:bg-zinc-700" />}
+                              {i < steps.length - 1 && <span className="absolute left-[9px] top-[18px] bottom-0 w-px bg-border" />}
                               <span className="shrink-0 w-[18px] h-[18px] rounded-full bg-primary/15 text-primary text-[10px] font-bold grid place-items-center z-10 mt-0.5">{i + 1}</span>
                               <div className="min-w-0 flex-1">
                                 <div className="flex items-center gap-1.5">
@@ -1595,7 +1595,7 @@ function HistoryView({ onBack }: { onBack: () => void }) {
                 </button>
                 {open && (
                   <div className="px-3.5 pb-3.5">
-                    <pre className="text-[13px] text-stone-800 dark:text-foreground whitespace-pre-wrap break-words font-sans leading-relaxed bg-muted/50 rounded-xl p-3">{it.output}</pre>
+                    <pre className="text-[13px] text-foreground whitespace-pre-wrap break-words font-sans leading-relaxed bg-muted/50 rounded-xl p-3">{it.output}</pre>
                     <div className="flex items-center gap-3 mt-2.5">
                       <button onClick={() => copy(it.output, it.id)} className="inline-flex items-center gap-1.5 text-xs font-bold text-primary">{copiedId === it.id ? <><Check className="w-3.5 h-3.5" /> 복사됨</> : <><Copy className="w-3.5 h-3.5" /> 복사</>}</button>
                       <button onClick={() => downloadText(`${it.toolLabel}.txt`, it.output)} className="inline-flex items-center gap-1.5 text-xs font-bold text-muted-foreground hover:text-primary"><Download className="w-3.5 h-3.5" /> 다운로드</button>
@@ -1641,7 +1641,7 @@ function Settings({ keyVal, free, onShowKey, onRemoveKey, onLogout, userName, us
           {PLANS.map((p) => {
             const current = (free ? "free" : "pro") === p.id;
             return (
-              <div key={p.id} className={"rounded-2xl border p-4 " + (current ? "border-primary bg-[#FDF6F1] dark:bg-orange-950/10" : "border-border")}>
+              <div key={p.id} className={"rounded-2xl border p-4 " + (current ? "border-primary bg-primary/5 dark:bg-orange-950/10" : "border-border")}>
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-sm font-extrabold text-foreground">{p.label}</span>
                   {current ? <span className="text-[10px] font-bold text-white bg-primary rounded-full px-2 py-0.5">사용 중</span>
@@ -1869,7 +1869,7 @@ function ToolView({ tool, runAI, free, quota, onShowKey, onBack }: {
         </button>
       )}
 
-      {free && <p className="text-[12px] text-muted-foreground dark:text-zinc-500 mb-2 text-center">🆓 무료 · 오늘 남은 <b className={(quota ?? FREE_LIMIT) <= 5 ? "text-rose-500" : "text-primary"}>{quota ?? FREE_LIMIT}</b> / {FREE_LIMIT}회</p>}
+      {free && <p className="text-[12px] text-muted-foreground mb-2 text-center">🆓 무료 · 오늘 남은 <b className={(quota ?? FREE_LIMIT) <= 5 ? "text-rose-500" : "text-primary"}>{quota ?? FREE_LIMIT}</b> / {FREE_LIMIT}회</p>}
       {busy && <p className="text-[11px] text-muted-foreground mt-2 text-center break-keep">여러 AI가 순서대로 작업 중이에요 — 리서치 → 작성 → 검토 → 이미지/영상. 잠시만요…</p>}
       <button onClick={run} disabled={busy || !input.trim()}
         className="w-full py-3.5 rounded-2xl bg-primary hover:bg-primary/90 text-white font-bold flex items-center justify-center gap-2 disabled:opacity-50 transition-colors">
@@ -1898,7 +1898,7 @@ function ToolView({ tool, runAI, free, quota, onShowKey, onBack }: {
               ))}
             </div>
           )}
-          <pre className="px-4 py-4 text-sm text-stone-800 dark:text-foreground whitespace-pre-wrap break-words font-sans leading-relaxed">{result}</pre>
+          <pre className="px-4 py-4 text-sm text-foreground whitespace-pre-wrap break-words font-sans leading-relaxed">{result}</pre>
           {image && (
             <div className="px-4 pb-4">
               <div className="text-[11px] font-bold text-muted-foreground mb-1.5">🎨 생성된 이미지 (fal.ai)</div>
@@ -1933,7 +1933,7 @@ function ToolView({ tool, runAI, free, quota, onShowKey, onBack }: {
               onDragOver={(e) => { if (wfEdit) e.preventDefault(); }}
               onDrop={() => { const f = wfDrag.current; if (f != null && f !== i) { const s2 = [...flow]; const [m] = s2.splice(f, 1); s2.splice(i, 0, m); writeWf(s2); } wfDrag.current = null; }}
               className={"flex gap-3 pb-3 last:pb-0 relative " + (wfEdit ? "cursor-grab active:cursor-grabbing" : "")}>
-              {!wfEdit && i < flow.length - 1 && <span className="absolute left-[9px] top-[18px] bottom-0 w-px bg-stone-200 dark:bg-zinc-700" />}
+              {!wfEdit && i < flow.length - 1 && <span className="absolute left-[9px] top-[18px] bottom-0 w-px bg-border" />}
               <span className="shrink-0 w-[18px] h-[18px] rounded-full bg-primary/15 text-primary text-[10px] font-bold grid place-items-center z-10 mt-0.5">{i + 1}</span>
               <div className="min-w-0 flex-1">
                 <div className="flex items-center gap-1.5">

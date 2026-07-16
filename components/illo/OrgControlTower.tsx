@@ -19,11 +19,13 @@ import {
   Trash2, Sparkles, ArrowLeft,
 } from "lucide-react";
 
-const LV_W = [178, 200, 200, 268];
-const COL_X = [26, 304, 596, 888];
-const H = { master: 104, div: 104, team: 104, member: 132, add: 58 };
-const GAP = 20;
-const PAD = 26;
+// 상하(위→아래) 조직도: 레벨은 아래로 내려가고(ROW_Y), 형제 노드는 가로로 나열된다.
+const W = [200, 200, 200, 264];   // 레벨별 노드 폭(마스터/부서/팀/직원)
+const ADD_W = 152;                 // '만들기' 노드 폭
+const H = { master: 104, div: 104, team: 104, member: 132, add: 56 };
+const ROW_GAP = 58;                // 레벨(행) 사이 세로 간격 — 연결선 공간
+const GAP = 22;                    // 같은 행 형제 사이 가로 간격
+const PAD = 28;
 
 const DIV_ICON: Record<OrgIcon, typeof Lightbulb> = {
   bulb: Lightbulb, code: Code2, palette: Palette, message: MessageSquare, megaphone: Megaphone, network: Network,
@@ -140,33 +142,55 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
     commit([]); setOpenBu(null); setOpenTeam(null); setZoom(100);
   }
 
-  // ── 레이아웃 계산 ──
+  // ── 레이아웃 계산 (상하 배치: 마스터 → 부서 → 팀 → 직원, 위에서 아래로) ──
   const nodes: Node[] = [];
   const pos: Record<string, Pos> = {};
-  const columns: Node[][] = [[], [], [], []];
-  columns[0].push({ key: "master", kind: "master", pos: { x: 0, y: 0, w: 0, h: 0 } });
-  divisions.forEach((d) => columns[1].push({ key: `bu-${d.id}`, kind: "div", div: d, pos: { x: 0, y: 0, w: 0, h: 0 } }));
-  columns[1].push({ key: "add-bu", kind: "add", addType: "bu", label: "부서 만들기", pos: { x: 0, y: 0, w: 0, h: 0 } });
+  const rows: Node[][] = [[], [], [], []];
+  rows[0].push({ key: "master", kind: "master", pos: { x: 0, y: 0, w: 0, h: 0 } });
+  divisions.forEach((d) => rows[1].push({ key: `bu-${d.id}`, kind: "div", div: d, pos: { x: 0, y: 0, w: 0, h: 0 } }));
+  rows[1].push({ key: "add-bu", kind: "add", addType: "bu", label: "부서 만들기", pos: { x: 0, y: 0, w: 0, h: 0 } });
   if (bu) {
-    bu.teams.forEach((t) => columns[2].push({ key: `tm-${t.id}`, kind: "team", div: bu, team: t, pos: { x: 0, y: 0, w: 0, h: 0 } }));
-    columns[2].push({ key: "add-tm", kind: "add", addType: "team", label: "팀 만들기", pos: { x: 0, y: 0, w: 0, h: 0 } });
+    bu.teams.forEach((t) => rows[2].push({ key: `tm-${t.id}`, kind: "team", div: bu, team: t, pos: { x: 0, y: 0, w: 0, h: 0 } }));
+    rows[2].push({ key: "add-tm", kind: "add", addType: "team", label: "팀 만들기", pos: { x: 0, y: 0, w: 0, h: 0 } });
   }
   if (bu && team) {
-    team.members.forEach((m, ti) => columns[3].push({ key: `mb-${m.id}`, kind: "member", div: bu, team, member: m, ti, pos: { x: 0, y: 0, w: 0, h: 0 } }));
-    columns[3].push({ key: "add-mb", kind: "add", addType: "member", label: "직원 추가", pos: { x: 0, y: 0, w: 0, h: 0 } });
+    team.members.forEach((m, ti) => rows[3].push({ key: `mb-${m.id}`, kind: "member", div: bu, team, member: m, ti, pos: { x: 0, y: 0, w: 0, h: 0 } }));
+    rows[3].push({ key: "add-mb", kind: "add", addType: "member", label: "직원 추가", pos: { x: 0, y: 0, w: 0, h: 0 } });
   }
   const hOf = (n: Node) => n.kind === "master" ? H.master : n.kind === "div" ? H.div : n.kind === "team" ? H.team : n.kind === "member" ? H.member : H.add;
-  columns.forEach((col, lv) => {
-    let y = PAD;
-    col.forEach((n) => { n.pos = { x: COL_X[lv], y, w: LV_W[lv], h: hOf(n) }; pos[n.key] = n.pos; y += n.pos.h + GAP; });
-  });
-  // 마스터를 부서 컬럼 높이에 맞춰 세로 중앙 정렬
-  if (columns[1].length) {
-    const first = columns[1][0].pos, last = columns[1][columns[1].length - 1].pos;
-    const cy = (first.y + last.y + last.h) / 2 - H.master / 2;
-    columns[0][0].pos.y = Math.max(PAD, cy);
+  const wOf = (n: Node, lv: number) => n.kind === "add" ? ADD_W : W[lv];
+  // 레벨별 세로 위치(행): 마스터 → 부서 → 팀 → 직원
+  const ROW_Y = [
+    PAD,
+    PAD + H.master + ROW_GAP,
+    PAD + H.master + H.div + 2 * ROW_GAP,
+    PAD + H.master + H.div + H.team + 3 * ROW_GAP,
+  ];
+  const rowWidth = (col: Node[], lv: number) => col.reduce((s, n) => s + wOf(n, lv), 0) + Math.max(0, col.length - 1) * GAP;
+  const layRow = (col: Node[], lv: number, startX: number) => {
+    let x = startX;
+    col.forEach((n) => { n.pos = { x, y: ROW_Y[lv], w: wOf(n, lv), h: hOf(n) }; pos[n.key] = n.pos; x += n.pos.w + GAP; });
+  };
+  const rowCenter = (col: Node[]) => { const f = col[0].pos, l = col[col.length - 1].pos; return (f.x + l.x + l.w) / 2; };
+  // 1) 부서 행: 좌측 여백부터 가로로 배치
+  layRow(rows[1], 1, PAD);
+  const divCenter = rows[1].length ? rowCenter(rows[1]) : PAD + W[0] / 2;
+  // 2) 마스터: 부서 행 위에 가로 중앙 정렬
+  rows[0][0].pos = { x: Math.max(PAD, divCenter - W[0] / 2), y: ROW_Y[0], w: W[0], h: H.master };
+  pos["master"] = rows[0][0].pos;
+  // 3) 팀 행: 선택된 부서 바로 아래 중앙 정렬
+  if (rows[2].length) {
+    const p = bu ? pos[`bu-${bu.id}`] : null;
+    const cx = p ? p.x + p.w / 2 : divCenter;
+    layRow(rows[2], 2, Math.max(PAD, cx - rowWidth(rows[2], 2) / 2));
   }
-  columns.forEach((col) => col.forEach((n) => nodes.push(n)));
+  // 4) 직원 행: 선택된 팀 바로 아래 중앙 정렬
+  if (rows[3].length) {
+    const p = team ? pos[`tm-${team.id}`] : null;
+    const cx = p ? p.x + p.w / 2 : (rows[2].length ? rowCenter(rows[2]) : divCenter);
+    layRow(rows[3], 3, Math.max(PAD, cx - rowWidth(rows[3], 3) / 2));
+  }
+  rows.forEach((col) => col.forEach((n) => nodes.push(n)));
 
   const edges: { a: string; b: string; dash: boolean }[] = [];
   edges.push({ a: "master", b: "add-bu", dash: true });
@@ -179,12 +203,11 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
     team.members.forEach((m) => edges.push({ a: `tm-${team.id}`, b: `mb-${m.id}`, dash: false }));
     edges.push({ a: `tm-${team.id}`, b: "add-mb", dash: true });
   }
-  // 실제로 노드가 있는 가장 오른쪽 컬럼까지만 폭을 잡는다(빈 상태에서 우측 여백/잘림 방지)
-  const usedCol = columns.reduce((m, col, i) => (col.length ? i : m), 0);
-  // 빈 상태 안내 말풍선(left-322 · max-w-236)이 캔버스 밖으로 잘리지 않도록 폭 확보
-  const hintRight = divisions.length === 0 ? 322 + 236 + PAD : 0;
-  const canvasW = Math.max(COL_X[usedCol] + LV_W[usedCol] + 30, hintRight);
-  const canvasH = Math.max(PAD + 200, ...nodes.map((n) => n.pos.y + n.pos.h + PAD));
+  const rightMost = Math.max(300, ...nodes.map((n) => n.pos.x + n.pos.w));
+  const bottomMost = Math.max(200, ...nodes.map((n) => n.pos.y + n.pos.h));
+  // 빈 상태 안내 말풍선(마스터 오른쪽)이 들어갈 여유 폭 확보
+  const canvasW = rightMost + (divisions.length === 0 ? 300 : PAD);
+  const canvasH = bottomMost + PAD;
 
   let teamsCount = 0, membersCount = 0;
   divisions.forEach((d) => { teamsCount += d.teams.length; d.teams.forEach((t) => (membersCount += t.members.length)); });
@@ -192,8 +215,8 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
   const nameRef = (id: string) => (el: HTMLInputElement | null) => { if (el) inputMap.current.set(id, el); else inputMap.current.delete(id); };
   const stop = (e: SyntheticEvent) => e.stopPropagation();
 
-  const Handle = ({ side }: { side: "l" | "r" }) => (
-    <span className={`absolute top-1/2 -translate-y-1/2 w-2.5 h-2.5 rounded-full bg-primary border-2 border-background z-10 ${side === "l" ? "-left-[5px]" : "-right-[5px]"}`} />
+  const Handle = ({ side }: { side: "t" | "b" }) => (
+    <span className={`absolute left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-primary border-2 border-background z-10 ${side === "t" ? "-top-[5px]" : "-bottom-[5px]"}`} />
   );
 
   function renderNode(n: Node): ReactNode {
@@ -203,7 +226,7 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
       return (
         <button key={n.key} type="button" onClick={fn} style={style}
           className="absolute flex items-center justify-center gap-2.5 rounded-xl border-[1.6px] border-dashed border-border text-muted-foreground text-[13.5px] font-semibold transition hover:border-primary hover:text-primary hover:bg-primary/5 group">
-          <span className="absolute top-1/2 -translate-y-1/2 -left-[5px] w-2.5 h-2.5 rounded-full bg-primary border-2 border-background" />
+          <span className="absolute left-1/2 -translate-x-1/2 -top-[5px] w-2.5 h-2.5 rounded-full bg-primary border-2 border-background" />
           <span className="w-6 h-6 rounded-md bg-muted text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground flex items-center justify-center transition"><Plus className="w-4 h-4" /></span>
           {n.label}
         </button>
@@ -223,7 +246,7 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
               </div>
               <div className="mt-2.5 flex items-center gap-1.5 text-[12.5px] text-muted-foreground"><Users className="w-3.5 h-3.5" /> {divisions.length}개 부서</div>
             </div>
-            <Handle side="r" />
+            <Handle side="b" />
           </div>
         </div>
       );
@@ -244,7 +267,7 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
               </div>
               <div className="mt-2.5 flex items-center gap-1.5 text-[12.5px] text-muted-foreground"><Users className="w-3.5 h-3.5" /> {d.teams.length}개 팀</div>
             </div>
-            <Handle side="l" /><Handle side="r" />
+            <Handle side="t" /><Handle side="b" />
           </div>
         </div>
       );
@@ -265,7 +288,7 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
               </div>
               <div className="mt-2.5 flex items-center gap-1.5 text-[12.5px] text-muted-foreground"><User className="w-3.5 h-3.5" /> {t.members.length}명</div>
             </div>
-            <Handle side="l" /><Handle side="r" />
+            <Handle side="t" /><Handle side="b" />
           </div>
         </div>
       );
@@ -297,7 +320,7 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
               {MODEL_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
             </select>
           </div>
-          <Handle side="l" />
+          <Handle side="t" />
         </div>
       </div>
     );
@@ -305,7 +328,7 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
 
   return (
     <div className={(embedded ? "h-full flex flex-col" : "min-h-screen") + " bg-background text-foreground"}>
-      {!embedded && <ProjectTopBar name="AI 직원 관제탑" emoji="🗂️" />}
+      {!embedded && <ProjectTopBar name="대리인 : AI비서" emoji="🟧" />}
       <div className={embedded ? "flex flex-col flex-1 min-h-0" : "pt-12 flex flex-col h-screen"}>
         {/* 상태 범례 — 작업중/검수중/완료/대기/확인 필요 (색+글자 이중 표시) */}
         <div className="shrink-0 flex items-center justify-end gap-1.5 px-4 py-2 border-b border-border flex-wrap bg-card/40">
@@ -377,21 +400,23 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
               {edges.map((e, i) => {
                 const p = pos[e.a], q = pos[e.b];
                 if (!p || !q) return null;
-                const x1 = p.x + p.w, y1 = p.y + p.h / 2, x2 = q.x, y2 = q.y + q.h / 2;
-                const dx = Math.max(38, (x2 - x1) / 2);
-                return <path key={i} d={`M${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`} fill="none"
+                // 부모 아래 중앙 → 자식 위 중앙 (세로 S커브)
+                const x1 = p.x + p.w / 2, y1 = p.y + p.h, x2 = q.x + q.w / 2, y2 = q.y;
+                const dy = Math.max(28, (y2 - y1) / 2);
+                return <path key={i} d={`M${x1} ${y1} C ${x1} ${y1 + dy}, ${x2} ${y2 - dy}, ${x2} ${y2}`} fill="none"
                   style={{ stroke: "hsl(var(--muted-foreground))", opacity: e.dash ? 0.4 : 0.7 }} strokeWidth={2} strokeDasharray={e.dash ? "5 5" : undefined} />;
               })}
             </svg>
             {nodes.map(renderNode)}
-          </div>
 
-          {divisions.length === 0 && (
-            <div className="absolute top-6 left-[322px] max-w-[236px] rounded-xl border border-border bg-card shadow-md px-4 py-3 flex gap-2.5 text-[13.5px] text-muted-foreground">
-              <Plus className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-              <div>마스터는 기본이에요. <b className="text-foreground font-medium">‘부서 만들기’</b>부터 눌러 시작하세요.</div>
-            </div>
-          )}
+            {divisions.length === 0 && (
+              <div className="absolute rounded-xl border border-border bg-card shadow-md px-4 py-3 flex gap-2.5 text-[13.5px] text-muted-foreground"
+                style={{ left: (pos["add-bu"]?.x ?? PAD) + (pos["add-bu"]?.w ?? ADD_W) + 44, top: ROW_Y[1] - 12, width: 236 }}>
+                <Plus className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+                <div>마스터는 기본이에요. <b className="text-foreground font-medium">‘부서 만들기’</b>부터 눌러 시작하세요.</div>
+              </div>
+            )}
+          </div>
         </div>
         </div>
       </div>

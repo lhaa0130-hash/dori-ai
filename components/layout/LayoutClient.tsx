@@ -38,6 +38,12 @@ export default function LayoutClient({ children }: LayoutClientProps) {
     return <>{children}</>;
   }
 
+  // 대리인 : AI비서 앱(/ai-assistant)도 독립 전체화면 — 사이트 헤더·좌우 광고·여백 없이
+  // 통째로 렌더. (자체 ProjectTopBar·사이드바로 illo와 연결) flat-form·미니게임과 동일 패턴.
+  if (pathname?.startsWith("/ai-assistant")) {
+    return <>{children}</>;
+  }
+
   // Flat-Form(/flat-form)도 전체화면 도구 — 사이트 헤더/좌우 사이드 광고 없이 렌더
   // (페이지 자체에서 iframe + 하단 소형 광고를 직접 배치)
   if (pathname?.startsWith("/flat-form")) {
