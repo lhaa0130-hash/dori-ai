@@ -31,6 +31,7 @@ import { PLANS } from "@/lib/illo/plan";
 import { getTone, saveTone } from "@/lib/illo/tone";
 import ProjectTopBar from "@/components/layout/ProjectTopBar";
 import OrgControlTower from "@/components/illo/OrgControlTower";
+import Automation from "@/components/illo/Automation";
 import {
   ArrowLeft, KeyRound, Loader2, Copy, Check, Sparkles, Download,
   Menu, X, Pencil, Plus, LogOut, Sun, Moon, Send, Lock, GripVertical, ChevronUp, ChevronDown, Search, ExternalLink,
@@ -97,6 +98,19 @@ export default function IlloWebClient() {
     });
     if (typeof r.quotaRemaining === "number") setQuota(r.quotaRemaining);
     return r;
+  }
+
+  // ── 자동화 전용 실행 ──
+  // 게이트웨이(runAI)는 기능(featureId)별로 모델이 고정돼 있어서, 직원마다 모델이 다른 자동화엔 맞지 않는다.
+  // 여기선 직원에게 배정된 모델을 그대로 지정해 호출: 본인 키가 있으면 브라우저에서 Claude 직접 호출(무제한),
+  // 키가 없으면 로그인 토큰으로 무료 프록시(하루 한도).
+  async function callModel(prompt: string, model: string, maxTokens = 2000): Promise<string> {
+    const u = getFirebaseAuth().currentUser;
+    const idToken = u ? await u.getIdToken() : undefined;
+    if (!key && !idToken) throw new Error("LOGIN_REQUIRED");
+    const r = await callClaude({ apiKey: key || undefined, idToken, prompt, model, maxTokens });
+    if (typeof r.quotaRemaining === "number") setQuota(r.quotaRemaining);
+    return r.text;
   }
 
   function goView(id: string) { setView(id); setMobileNav(false); }
@@ -220,6 +234,15 @@ export default function IlloWebClient() {
         {view === "image" && <BasicGen kind="image" free={free} quota={quota} setQuota={setQuota} />}
         {view === "video" && <BasicGen kind="video" free={free} quota={quota} setQuota={setQuota} />}
         {view === "builder" && <OrgControlTower embedded />}
+        {view === "automation" && (
+          <Automation
+            userKey={session?.user?.email || "local"}
+            callModel={callModel}
+            free={free} quota={quota}
+            onShowKey={() => setShowKey(true)}
+            onView={goView}
+          />
+        )}
         {view === "catalog" && <ApiCatalog />}
         {view === "docs" && <Workspace userKey={session?.user?.email || "local"} />}
         {view === "history" && <HistoryView onBack={() => goView("home")} />}
