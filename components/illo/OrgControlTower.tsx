@@ -10,7 +10,7 @@ import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import ProjectTopBar from "@/components/layout/ProjectTopBar";
 import {
-  loadOrg, saveOrg, newId, ORG_PALETTE, MODEL_OPTIONS, STATUS_META,
+  loadOrg, saveOrg, syncOrg, saveOrgCloudDebounced, newId, ORG_PALETTE, MODEL_OPTIONS, STATUS_META,
   type OrgDivision, type OrgTeam, type OrgMember, type OrgStatus, type OrgColor, type OrgIcon,
 } from "@/lib/illo/orgchart";
 import {
@@ -78,10 +78,20 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
   const focusId = useRef<string | null>(null);
 
   useEffect(() => {
+    // 1) 로컬 먼저 — 즉시 화면에 뜨게(첫 페인트·오프라인)
     const loaded = loadOrg(userKey);
     setDivisions(loaded);
     setOpenBu(loaded[0]?.id ?? null);
     setOpenTeam(loaded[0]?.teams[0]?.id ?? null);
+    // 2) 그다음 클라우드 — 계정 기준 source of truth(다른 기기·자동화 서버가 같은 조직도를 본다)
+    let cancelled = false;
+    void syncOrg(userKey).then((d) => {
+      if (cancelled) return;
+      setDivisions(d);
+      setOpenBu(d[0]?.id ?? null);
+      setOpenTeam(d[0]?.teams[0]?.id ?? null);
+    });
+    return () => { cancelled = true; };
   }, [userKey]);
 
   useEffect(() => {
@@ -94,7 +104,8 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
 
   function commit(next: OrgDivision[]) {
     setDivisions(next);
-    saveOrg(userKey, next);
+    saveOrg(userKey, next);          // 즉시(로컬)
+    saveOrgCloudDebounced(next);     // 잠시 뒤 한 번만(계정)
   }
 
   const bu = divisions.find((d) => d.id === openBu) || null;

@@ -10,7 +10,7 @@ import {
   Check, Loader2, Trash2, ArrowDown, Info,
 } from "lucide-react";
 import {
-  loadOrg, saveOrg, MODEL_OPTIONS,
+  loadOrg, saveOrg, syncOrg, saveOrgCloudDebounced, MODEL_OPTIONS,
   type OrgDivision, type OrgTeam, type OrgMember, type OrgStatus,
 } from "@/lib/illo/orgchart";
 import { saveResult } from "@/lib/illo/history";
@@ -63,7 +63,12 @@ export default function Automation({
   const stopRef = useRef(false);
   const logEndRef = useRef<HTMLDivElement | null>(null);
 
-  useEffect(() => { setDivisions(loadOrg(userKey)); }, [userKey]);
+  useEffect(() => {
+    setDivisions(loadOrg(userKey));                       // 즉시(로컬)
+    let cancelled = false;
+    void syncOrg(userKey).then((d) => { if (!cancelled) setDivisions(d); }); // 계정 기준으로 맞춤
+    return () => { cancelled = true; };
+  }, [userKey]);
   useEffect(() => { logEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" }); }, [log]);
 
   // 실행 가능한(직원이 1명 이상인) 팀만 노출
@@ -81,6 +86,7 @@ export default function Automation({
         }),
       });
       saveOrg(userKey, next);
+      saveOrgCloudDebounced(next);   // 실행 중 상태(작업중→완료)도 계정에 반영
       return next;
     });
   }
