@@ -86,15 +86,33 @@ export default function IlloWebClient() {
   // 무료 사용자는 서버 프록시가 Haiku로 고정(비용 관리). 내 키/유료는 매트릭스대로.
   // 모든 실행은 게이트웨이 경유 — 패키지는 여러 AI(리서치→작성→검토→이미지/영상)를 연쇄.
   async function runAI(prompt: string, featureId: string, rawInput?: string) {
+    const isAssistant = featureId === "assistant";
+    const maxTokens = isAssistant ? 2000 : 4096;
+
+    // ── ① 본인 키가 있으면: 게이트웨이를 우회해 Claude 직접 호출 ──
+    // 게이트웨이는 운영자 공용 키로 돌아 (a) 하루 한도에 묶이고 (b) 그 키가 막히면 전 기능이 함께 죽는다.
+    // 본인 키는 사용자가 비용을 직접 부담하므로 한도가 없다 → UI의 "내 키로 무제한"이 실제로 성립.
+    // 모델은 modelForFeature가 기능별로 고른다(대부분 Haiku=저렴). 비-Claude 기능은 Haiku로 폴백.
+    // ⚠️ 직접 경로는 텍스트만 — 게이트웨이의 '패키지'(리서치→작성→검토→이미지) 연쇄는 타지 않는다.
+    if (key) {
+      const r = await callClaude({
+        apiKey: key,
+        prompt: rawInput ? `${prompt}\n\n--- 입력 ---\n${rawInput}` : prompt,
+        model: modelForFeature(featureId),
+        maxTokens,
+      });
+      return { text: r.text, image: null, video: null };
+    }
+
+    // ── ② 키가 없으면: 무료 공용 게이트웨이(운영자 키) — 로그인 토큰으로 하루 한도 내 ──
     const u = getFirebaseAuth().currentUser;
     const idToken = u ? await u.getIdToken() : undefined;
     if (!idToken) throw new Error("LOGIN_REQUIRED");
-    const isAssistant = featureId === "assistant";
     const r = await callGateway({
       idToken, featureId, prompt,
       kind: isAssistant ? "text" : "package",
       input: rawInput || "",
-      maxTokens: isAssistant ? 2000 : 4096,
+      maxTokens,
     });
     if (typeof r.quotaRemaining === "number") setQuota(r.quotaRemaining);
     return r;

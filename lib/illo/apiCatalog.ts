@@ -44,7 +44,15 @@ export const API_CATALOG: ApiCategory[] = [
       },
       { name: "Perplexity", role: "recommend", use: "출처(링크)까지 붙여주는 검색·답변. Sonar API 제공." },
       { name: "Exa", role: "recommend", use: "의미 기반(임베딩) 검색 — 키워드보다 '비슷한 내용' 찾기에 강함." },
-      { name: "Brave Search", role: "recommend", use: "독립 검색 인덱스, 비교적 저렴. 무료 구간 있음." },
+      {
+        name: "Brave Search",
+        role: "warn",
+        use: "독립 검색 인덱스. 2026년 2월 무료 티어(월 2,000건)가 폐지됨 — 지금은 무료 구간이 없다.",
+        free: "무료 티어 없음 — 종량제에 월 $5 크레딧이 얹히는 구조(Search 기준 $5.00/1,000건 ≈ 월 1,000건분)",
+        topup: "가입 시 카드 필수. 크레딧 소진 후에는 차단이 아니라 카드로 자동 청구되고, 명시된 지출 상한이 없음.",
+        note: "⚠️ 자동 청구 + 지출 상한 없음 — 쓰려면 대시보드에서 사용량을 직접 감시할 것.",
+        keyUrl: "https://api-dashboard.search.brave.com/",
+      },
     ],
   },
   {
