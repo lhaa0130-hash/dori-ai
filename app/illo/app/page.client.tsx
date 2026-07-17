@@ -56,6 +56,7 @@ export default function IlloWebClient() {
   const [key, setKey] = useState("");
   const [keyInput, setKeyInput] = useState("");
   const [pulling, setPulling] = useState(false);
+  const [savingKey, setSavingKey] = useState(false); // 키 저장 전 실제 호출로 검증하는 동안
 
   const [enabled, setEnabled] = useState<string[]>(ILLO_DEFAULT_ENABLED);
   const [view, setView] = useState<string>("builder"); // 메인 = AI 비서 관제탑
@@ -135,7 +136,7 @@ export default function IlloWebClient() {
 
   function toggleFeature(id: string) {
     const f = ILLO_FEATURE_BY_ID[id];
-    if (!f || f.core || f.kind === "pc") return;
+    if (!f || f.core) return;
     setEnabled((prev) => {
       const has = prev.includes(id);
       const next = has ? prev.filter((x) => x !== id) : [...prev, id];
@@ -154,10 +155,20 @@ export default function IlloWebClient() {
     });
   }
 
-  function saveKey() {
+  // 키는 이제 실제 실행 경로다(runAI가 본인 키로 직접 호출) — 틀린 키를 저장하면 도구 전부가
+  // 조용히 죽고 사용자는 원인을 모른다. 그래서 저장 전에 최소 호출로 실제 동작을 확인한다.
+  async function saveKey() {
     const k = keyInput.trim();
-    if (!k) return;
-    setLocalKey(k); setKey(k); setKeyInput(""); setShowKey(false); setKeyErr("");
+    if (!k || savingKey) return;
+    setSavingKey(true); setKeyErr("");
+    try {
+      await callClaude({ apiKey: k, prompt: "hi", model: "claude-haiku-4-5", maxTokens: 1 });
+      setLocalKey(k); setKey(k); setKeyInput(""); setShowKey(false); setKeyErr("");
+    } catch (e) {
+      setKeyErr((e as Error).message || "이 키로 호출하지 못했어요. 키를 다시 확인해 주세요.");
+    } finally {
+      setSavingKey(false);
+    }
   }
   function removeKey() { setLocalKey(""); setKey(""); }
   async function tryPull() {
@@ -183,7 +194,10 @@ export default function IlloWebClient() {
               {pulling ? <Loader2 className="w-4 h-4 animate-spin" /> : <Download className="w-4 h-4" />} 다른 기기에서 저장한 키 불러오기
             </button>
             <input type="password" value={keyInput} onChange={(e) => setKeyInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && saveKey()} placeholder="sk-ant-... (키 붙여넣기)" className="w-full mb-2 px-4 py-3 rounded-xl bg-white dark:bg-zinc-800 border border-border text-sm font-mono focus:outline-none focus:border-primary" />
-            <button onClick={saveKey} className="w-full py-3 rounded-2xl bg-primary hover:bg-primary/90 text-white font-bold text-sm">저장</button>
+            <button onClick={saveKey} disabled={savingKey || !keyInput.trim()}
+              className="w-full py-3 rounded-2xl bg-primary hover:bg-primary/90 text-white font-bold text-sm flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed">
+              {savingKey ? <><Loader2 className="w-4 h-4 animate-spin" /> 키 확인 중…</> : "저장"}
+            </button>
             {keyErr && <p className="text-xs text-rose-500 mt-3 text-center leading-relaxed">{keyErr}</p>}
           </div>
         </div>
@@ -1610,7 +1624,12 @@ function HistoryView({ onBack }: { onBack: () => void }) {
   const [copiedId, setCopiedId] = useState<string | null>(null);
   useEffect(() => { setItems(listResults()); }, []);
   const refresh = () => setItems(listResults());
-  function fmt(ts: number) { const d = new Date(ts); return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`; }
+  // IlloResult.createdAt은 ISO 문자열 — 숫자 타임스탬프도 함께 받는다(과거 데이터 호환).
+  function fmt(ts: string | number) {
+    const d = new Date(ts);
+    if (isNaN(d.getTime())) return "";
+    return `${d.getMonth() + 1}/${d.getDate()} ${String(d.getHours()).padStart(2, "0")}:${String(d.getMinutes()).padStart(2, "0")}`;
+  }
   async function copy(t: string, id: string) { try { await navigator.clipboard.writeText(t); setCopiedId(id); setTimeout(() => setCopiedId(null), 1500); } catch { /* */ } }
   return (
     <ViewScroll>
@@ -1630,7 +1649,7 @@ function HistoryView({ onBack }: { onBack: () => void }) {
               <div key={it.id} className="rounded-2xl border border-border bg-card overflow-hidden">
                 <button onClick={() => setOpenId(open ? null : it.id)} className="w-full flex items-center gap-2 p-3.5 text-left">
                   <span className="text-[11px] font-bold text-primary bg-primary/10 dark:bg-orange-950/30 px-2 py-0.5 rounded shrink-0">{it.toolLabel}</span>
-                  <span className="text-[11px] text-muted-foreground shrink-0">{fmt(it.ts)}</span>
+                  <span className="text-[11px] text-muted-foreground shrink-0">{fmt(it.createdAt)}</span>
                   <span className="text-[12.5px] text-muted-foreground truncate flex-1 min-w-0">{it.output.replace(/\s+/g, " ").slice(0, 70)}</span>
                   <span className="text-[11px] text-muted-foreground shrink-0">{open ? "▴" : "▾"}</span>
                 </button>
