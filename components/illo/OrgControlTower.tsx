@@ -1,30 +1,33 @@
 "use client";
 
-// AI 직원 관제탑 — 부서 → 팀 → 팀원을 노드 캔버스로 만들고, 팀원별 AI 모델을 고른다.
-// 마스터는 기본. '부서 만들기'로 부서를 하나씩 추가하고 이름을 입력, 그 아래 팀·직원을 붙인다.
-// 저장: workspace.ts와 동일하게 회원별 localStorage(브라우저) — 계정마다 분리.
-// 디자인: repo 디자인 토큰(--primary 주황 등) + lucide + next-themes 자동 다크모드.
+// AI 비서 — 조직도(부서 → 팀 → 직원)가 곧 홈 화면.
+// 일은 "역순"으로 올라간다: 직원이 각자 역할대로 일함 → 팀장이 팀원 결과를 검토 →
+// 부서장이 팀 검토를 검토 → 마스터가 최종 검토. 결과는 노드 안이 아니라 '하단 패널'에 펼친다
+// (노드 높이를 고정해 조직도를 미니멀하게 유지하기 위함).
+// 저장: 계정별(projectSaves/illoOrg/users/{uid}) + 로컬 미러 — lib/illo/orgchart.ts
 
 import { useEffect, useRef, useState, type ReactNode, type CSSProperties, type SyntheticEvent } from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import ProjectTopBar from "@/components/layout/ProjectTopBar";
 import {
-  loadOrg, saveOrg, syncOrg, saveOrgCloudDebounced, newId, ORG_PALETTE, MODEL_OPTIONS, STATUS_META,
-  type OrgDivision, type OrgTeam, type OrgMember, type OrgStatus, type OrgColor, type OrgIcon,
+  loadOrg, saveOrg, syncOrg, saveOrgCloudDebounced, newId, ORG_PALETTE, STATUS_META,
+  AI_TOOLS, modelsFor, toolLabel, modelLabelOf, isRunnable, DEFAULT_TOOL, DEFAULT_MODEL,
+  EMOJI_CHOICES, ORG_PRESETS, buildPreset,
+  type OrgDivision, type OrgTeam, type OrgMember, type OrgStatus, type OrgColor, type OrgIcon, type AiTool,
 } from "@/lib/illo/orgchart";
 import {
   ShieldCheck, Lightbulb, Code2, Palette, MessageSquare, Megaphone, Network,
-  Users, User, Play, Eye, Check, Clock, AlertTriangle, Plus, ChevronRight,
-  Trash2, Sparkles, ArrowLeft,
+  Users, User, Play, Eye, Check, Clock, AlertTriangle, Plus, ChevronRight, ChevronDown,
+  Trash2, ArrowLeft, Loader2, X, Wand2,
 } from "lucide-react";
 
 // 상하(위→아래) 조직도: 레벨은 아래로 내려가고(ROW_Y), 형제 노드는 가로로 나열된다.
-const W = [200, 200, 200, 264];   // 레벨별 노드 폭(마스터/부서/팀/직원)
-const ADD_W = 152;                 // '만들기' 노드 폭
-const H = { master: 104, div: 104, team: 104, member: 132, add: 56 };
-const ROW_GAP = 58;                // 레벨(행) 사이 세로 간격 — 연결선 공간
-const GAP = 22;                    // 같은 행 형제 사이 가로 간격
+const W = [188, 196, 196, 284];   // 레벨별 노드 폭(마스터/부서/팀/직원)
+const ADD_W = 146;
+const H = { master: 88, div: 88, team: 88, member: 152, add: 52 };
+const ROW_GAP = 54;
+const GAP = 20;
 const PAD = 28;
 
 const DIV_ICON: Record<OrgIcon, typeof Lightbulb> = {
@@ -33,15 +36,8 @@ const DIV_ICON: Record<OrgIcon, typeof Lightbulb> = {
 const COLOR_BG: Record<OrgColor, string> = {
   blue: "bg-blue-500", teal: "bg-teal-500", violet: "bg-violet-500", pink: "bg-pink-500", cyan: "bg-cyan-500", slate: "bg-slate-500",
 };
-const COLOR_TEXT: Record<OrgColor, string> = {
-  blue: "text-blue-500", teal: "text-teal-500", violet: "text-violet-500", pink: "text-pink-500", cyan: "text-cyan-500", slate: "text-slate-500",
-};
-const STATUS_CLS: Record<OrgStatus, string> = {
-  work: "text-blue-600 dark:text-blue-400 bg-blue-500/10",
-  review: "text-amber-600 dark:text-amber-400 bg-amber-500/10",
-  done: "text-emerald-600 dark:text-emerald-400 bg-emerald-500/10",
-  wait: "text-muted-foreground bg-muted",
-  alert: "text-red-600 dark:text-red-400 bg-red-500/10",
+const STATUS_DOT: Record<OrgStatus, string> = {
+  work: "bg-blue-500", review: "bg-amber-500", done: "bg-emerald-500", wait: "bg-muted-foreground/40", alert: "bg-red-500",
 };
 const STATUS_ICON: Record<OrgStatus, typeof Play> = {
   work: Play, review: Eye, done: Check, wait: Clock, alert: AlertTriangle,
@@ -52,20 +48,23 @@ type Node =
   | { key: string; kind: "master"; pos: Pos }
   | { key: string; kind: "div"; pos: Pos; div: OrgDivision }
   | { key: string; kind: "team"; pos: Pos; div: OrgDivision; team: OrgTeam }
-  | { key: string; kind: "member"; pos: Pos; div: OrgDivision; team: OrgTeam; member: OrgMember; ti: number }
+  | { key: string; kind: "member"; pos: Pos; div: OrgDivision; team: OrgTeam; member: OrgMember }
   | { key: string; kind: "add"; pos: Pos; addType: "bu" | "team" | "member"; label: string };
 
-function StatusPill({ status }: { status: OrgStatus }) {
-  const Icon = STATUS_ICON[status];
-  return (
-    <span className={`inline-flex items-center gap-1 rounded-full px-2 py-0.5 text-[11.5px] font-semibold ${STATUS_CLS[status]}`}>
-      <Icon className="w-3 h-3" /> {STATUS_META[status].label}
-    </span>
-  );
-}
+// 하단 패널에 띄울 대상
+type Panel =
+  | { kind: "member"; divId: string; teamId: string; memberId: string }
+  | { kind: "team"; divId: string; teamId: string }
+  | { kind: "div"; divId: string }
+  | { kind: "master" };
 
-// embedded=true: AI 비서 앱의 '워크플로우' 자리에 끼워 넣을 때(자체 상단바 생략, 부모 높이에 맞춤)
-export default function OrgControlTower({ embedded = false }: { embedded?: boolean }) {
+export default function OrgControlTower({
+  embedded = false, callModel,
+}: {
+  embedded?: boolean;
+  /** 없으면 실행 버튼이 비활성 — 전체화면 단독 페이지 등 */
+  callModel?: (prompt: string, model: string, maxTokens?: number) => Promise<string>;
+}) {
   const { session } = useAuth();
   const userKey = session?.user?.email || "local";
 
@@ -73,17 +72,19 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
   const [openBu, setOpenBu] = useState<string | null>(null);
   const [openTeam, setOpenTeam] = useState<string | null>(null);
   const [zoom, setZoom] = useState(100);
+  const [panel, setPanel] = useState<Panel | null>(null);
+  const [busyId, setBusyId] = useState<string | null>(null);   // 실행/검토 중인 노드 id
+  const [err, setErr] = useState("");
+  const [emojiFor, setEmojiFor] = useState<string | null>(null); // 이모지 고르는 중인 노드 key
 
   const inputMap = useRef<Map<string, HTMLInputElement>>(new Map());
   const focusId = useRef<string | null>(null);
 
   useEffect(() => {
-    // 1) 로컬 먼저 — 즉시 화면에 뜨게(첫 페인트·오프라인)
     const loaded = loadOrg(userKey);
     setDivisions(loaded);
     setOpenBu(loaded[0]?.id ?? null);
     setOpenTeam(loaded[0]?.teams[0]?.id ?? null);
-    // 2) 그다음 클라우드 — 계정 기준 source of truth(다른 기기·자동화 서버가 같은 조직도를 본다)
     let cancelled = false;
     void syncOrg(userKey).then((d) => {
       if (cancelled) return;
@@ -104,19 +105,26 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
 
   function commit(next: OrgDivision[]) {
     setDivisions(next);
-    saveOrg(userKey, next);          // 즉시(로컬)
-    saveOrgCloudDebounced(next);     // 잠시 뒤 한 번만(계정)
+    saveOrg(userKey, next);
+    saveOrgCloudDebounced(next);
   }
 
   const bu = divisions.find((d) => d.id === openBu) || null;
   const team = bu?.teams.find((t) => t.id === openTeam) || null;
 
-  // ── 조작 ──
+  /* ── 조작 ── */
   function addBu() {
     const { color, icon } = ORG_PALETTE[divisions.length % ORG_PALETTE.length];
     const id = newId("bu");
     commit([...divisions, { id, name: "", color, icon, teams: [] }]);
     setOpenBu(id); setOpenTeam(null); focusId.current = `bu-${id}`;
+  }
+  function addPreset(presetId: string) {
+    const p = ORG_PRESETS.find((x) => x.id === presetId);
+    if (!p) return;
+    const d = buildPreset(p);
+    commit([...divisions, d]);
+    setOpenBu(d.id); setOpenTeam(d.teams[0]?.id ?? null);
   }
   function addTeam() {
     if (!bu) return;
@@ -128,15 +136,17 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
     if (!bu || !team) return;
     const id = newId("mb");
     commit(divisions.map((d) => d.id === bu.id ? {
-      ...d, teams: d.teams.map((t) => t.id === team.id ? { ...t, members: [...t.members, { id, name: "", role: "", status: "wait" as OrgStatus, model: "sonnet" }] } : t),
+      ...d, teams: d.teams.map((t) => t.id === team.id ? {
+        ...t, members: [...t.members, { id, name: "", role: "", status: "wait" as OrgStatus, tool: DEFAULT_TOOL, model: DEFAULT_MODEL }],
+      } : t),
     } : d));
     focusId.current = `mb-${id}`;
   }
-  function setDivName(id: string, name: string) {
-    commit(divisions.map((d) => d.id === id ? { ...d, name } : d));
+  function patchDiv(id: string, patch: Partial<OrgDivision>) {
+    commit(divisions.map((d) => d.id === id ? { ...d, ...patch } : d));
   }
-  function setTeamName(buId: string, tId: string, name: string) {
-    commit(divisions.map((d) => d.id === buId ? { ...d, teams: d.teams.map((t) => t.id === tId ? { ...t, name } : t) } : d));
+  function patchTeam(buId: string, tId: string, patch: Partial<OrgTeam>) {
+    commit(divisions.map((d) => d.id === buId ? { ...d, teams: d.teams.map((t) => t.id === tId ? { ...t, ...patch } : t) } : d));
   }
   function patchMember(buId: string, tId: string, mId: string, patch: Partial<OrgMember>) {
     commit(divisions.map((d) => d.id === buId ? {
@@ -149,11 +159,98 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
     const d = divisions.find((x) => x.id === id);
     setOpenTeam(was ? null : (d?.teams[0]?.id ?? null));
   }
-  function reset() {
-    commit([]); setOpenBu(null); setOpenTeam(null); setZoom(100);
+  function reset() { commit([]); setOpenBu(null); setOpenTeam(null); setZoom(100); setPanel(null); }
+
+  /* ── 실행: 역순으로 올라간다 ──
+   * 직원 = 자기 역할대로 일함 → 팀장 = 팀원 결과 검토 → 부서장 = 팀 검토 검토 → 마스터 = 최종 검토
+   */
+  const canRun = !!callModel;
+  const runModel = (m: OrgMember) => (isRunnable(m.tool) ? m.model : DEFAULT_MODEL);
+
+  async function runMember(d: OrgDivision, t: OrgTeam, m: OrgMember) {
+    if (!callModel || busyId) return;
+    setBusyId(m.id); setErr("");
+    patchMember(d.id, t.id, m.id, { status: "work" });
+    try {
+      const prompt = [
+        `당신은 '${d.name || "부서"}' 부서 '${t.name || "팀"}' 팀의 직원 '${m.name || "담당자"}'입니다.`,
+        `맡은 역할: ${m.role || "(역할 미지정 — 팀 이름과 부서 이름에 맞게 판단해서 처리)"}`,
+        "",
+        "당신의 역할에 해당하는 일을 실제로 수행해서 결과물만 내주세요.",
+        "이 결과는 상급자(팀장)에게 그대로 올라갑니다. 인사말·설명 없이 결과 자체만 작성하세요.",
+      ].join("\n");
+      const text = await callModel(prompt, runModel(m), 2000);
+      patchMember(d.id, t.id, m.id, { status: "done", result: text, resultAt: new Date().toISOString() });
+      setPanel({ kind: "member", divId: d.id, teamId: t.id, memberId: m.id });
+    } catch (e) {
+      patchMember(d.id, t.id, m.id, { status: "alert" });
+      setErr((e as Error).message || "실행에 실패했어요.");
+    } finally { setBusyId(null); }
   }
 
-  // ── 레이아웃 계산 (상하 배치: 마스터 → 부서 → 팀 → 직원, 위에서 아래로) ──
+  async function reviewTeam(d: OrgDivision, t: OrgTeam) {
+    if (!callModel || busyId) return;
+    const done = t.members.filter((m) => m.result);
+    if (!done.length) { setErr("먼저 팀원이 일을 해야 검토할 수 있어요. 직원 카드의 '실행'을 눌러주세요."); return; }
+    setBusyId(t.id); setErr("");
+    try {
+      const prompt = [
+        `당신은 '${d.name || "부서"}' 부서 '${t.name || "팀"}' 팀의 팀장입니다.`,
+        "아래는 팀원들이 각자 역할대로 해온 결과입니다. 팀장으로서 검토해 주세요.",
+        "빠진 것·틀린 것·서로 안 맞는 부분을 짚고, 팀의 최종 결과물로 정리해 주세요.",
+        "",
+        ...done.map((m) => `--- ${m.name || "담당자"}${m.role ? ` (${m.role})` : ""} ---\n${m.result}`),
+      ].join("\n");
+      const text = await callModel(prompt, DEFAULT_MODEL, 2000);
+      patchTeam(d.id, t.id, { review: text, reviewAt: new Date().toISOString() });
+      setPanel({ kind: "team", divId: d.id, teamId: t.id });
+    } catch (e) {
+      setErr((e as Error).message || "검토에 실패했어요.");
+    } finally { setBusyId(null); }
+  }
+
+  async function reviewDiv(d: OrgDivision) {
+    if (!callModel || busyId) return;
+    const done = d.teams.filter((t) => t.review);
+    if (!done.length) { setErr("먼저 팀장이 검토를 마쳐야 부서장이 검토할 수 있어요."); return; }
+    setBusyId(d.id); setErr("");
+    try {
+      const prompt = [
+        `당신은 '${d.name || "부서"}' 부서의 부서장입니다.`,
+        "아래는 각 팀장이 정리해 올린 검토 결과입니다. 부서장으로서 최종 검토해 주세요.",
+        "",
+        ...done.map((t) => `--- ${t.name || "팀"} ---\n${t.review}`),
+      ].join("\n");
+      const text = await callModel(prompt, DEFAULT_MODEL, 2000);
+      patchDiv(d.id, { review: text, reviewAt: new Date().toISOString() });
+      setPanel({ kind: "div", divId: d.id });
+    } catch (e) {
+      setErr((e as Error).message || "검토에 실패했어요.");
+    } finally { setBusyId(null); }
+  }
+
+  const [masterReview, setMasterReview] = useState<string>("");
+  async function reviewMaster() {
+    if (!callModel || busyId) return;
+    const done = divisions.filter((d) => d.review);
+    if (!done.length) { setErr("먼저 부서장이 검토를 마쳐야 마스터가 최종 검토할 수 있어요."); return; }
+    setBusyId("master"); setErr("");
+    try {
+      const prompt = [
+        "당신은 이 조직의 마스터(최종 감독)입니다.",
+        "아래는 각 부서장이 올린 검토 결과입니다. 최종 감독으로서 종합 검수해 주세요.",
+        "",
+        ...done.map((d) => `--- ${d.name || "부서"} ---\n${d.review}`),
+      ].join("\n");
+      const text = await callModel(prompt, DEFAULT_MODEL, 2000);
+      setMasterReview(text);
+      setPanel({ kind: "master" });
+    } catch (e) {
+      setErr((e as Error).message || "검토에 실패했어요.");
+    } finally { setBusyId(null); }
+  }
+
+  /* ── 레이아웃 (상하) ── */
   const nodes: Node[] = [];
   const pos: Record<string, Pos> = {};
   const rows: Node[][] = [[], [], [], []];
@@ -165,12 +262,11 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
     rows[2].push({ key: "add-tm", kind: "add", addType: "team", label: "팀 만들기", pos: { x: 0, y: 0, w: 0, h: 0 } });
   }
   if (bu && team) {
-    team.members.forEach((m, ti) => rows[3].push({ key: `mb-${m.id}`, kind: "member", div: bu, team, member: m, ti, pos: { x: 0, y: 0, w: 0, h: 0 } }));
+    team.members.forEach((m) => rows[3].push({ key: `mb-${m.id}`, kind: "member", div: bu, team, member: m, pos: { x: 0, y: 0, w: 0, h: 0 } }));
     rows[3].push({ key: "add-mb", kind: "add", addType: "member", label: "직원 추가", pos: { x: 0, y: 0, w: 0, h: 0 } });
   }
   const hOf = (n: Node) => n.kind === "master" ? H.master : n.kind === "div" ? H.div : n.kind === "team" ? H.team : n.kind === "member" ? H.member : H.add;
   const wOf = (n: Node, lv: number) => n.kind === "add" ? ADD_W : W[lv];
-  // 레벨별 세로 위치(행): 마스터 → 부서 → 팀 → 직원
   const ROW_Y = [
     PAD,
     PAD + H.master + ROW_GAP,
@@ -183,19 +279,15 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
     col.forEach((n) => { n.pos = { x, y: ROW_Y[lv], w: wOf(n, lv), h: hOf(n) }; pos[n.key] = n.pos; x += n.pos.w + GAP; });
   };
   const rowCenter = (col: Node[]) => { const f = col[0].pos, l = col[col.length - 1].pos; return (f.x + l.x + l.w) / 2; };
-  // 1) 부서 행: 좌측 여백부터 가로로 배치
   layRow(rows[1], 1, PAD);
   const divCenter = rows[1].length ? rowCenter(rows[1]) : PAD + W[0] / 2;
-  // 2) 마스터: 부서 행 위에 가로 중앙 정렬
   rows[0][0].pos = { x: Math.max(PAD, divCenter - W[0] / 2), y: ROW_Y[0], w: W[0], h: H.master };
   pos["master"] = rows[0][0].pos;
-  // 3) 팀 행: 선택된 부서 바로 아래 중앙 정렬
   if (rows[2].length) {
     const p = bu ? pos[`bu-${bu.id}`] : null;
     const cx = p ? p.x + p.w / 2 : divCenter;
     layRow(rows[2], 2, Math.max(PAD, cx - rowWidth(rows[2], 2) / 2));
   }
-  // 4) 직원 행: 선택된 팀 바로 아래 중앙 정렬
   if (rows[3].length) {
     const p = team ? pos[`tm-${team.id}`] : null;
     const cx = p ? p.x + p.w / 2 : (rows[2].length ? rowCenter(rows[2]) : divCenter);
@@ -216,7 +308,6 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
   }
   const rightMost = Math.max(300, ...nodes.map((n) => n.pos.x + n.pos.w));
   const bottomMost = Math.max(200, ...nodes.map((n) => n.pos.y + n.pos.h));
-  // 빈 상태 안내 말풍선(마스터 오른쪽)이 들어갈 여유 폭 확보
   const canvasW = rightMost + (divisions.length === 0 ? 300 : PAD);
   const canvasH = bottomMost + PAD;
 
@@ -225,111 +316,215 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
 
   const nameRef = (id: string) => (el: HTMLInputElement | null) => { if (el) inputMap.current.set(id, el); else inputMap.current.delete(id); };
   const stop = (e: SyntheticEvent) => e.stopPropagation();
-
   const Handle = ({ side }: { side: "t" | "b" }) => (
-    <span className={`absolute left-1/2 -translate-x-1/2 w-2.5 h-2.5 rounded-full bg-primary border-2 border-background z-10 ${side === "t" ? "-top-[5px]" : "-bottom-[5px]"}`} />
+    <span className={`absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-primary/70 border-2 border-background ${side === "t" ? "-top-1" : "-bottom-1"}`} />
   );
 
+  /* ── 이모지 고르기 ── */
+  function EmojiPicker({ nodeKey, current, onPick }: { nodeKey: string; current: string; onPick: (e: string) => void }) {
+    const open = emojiFor === nodeKey;
+    return (
+      <span className="relative shrink-0">
+        <button onClick={(e) => { stop(e); setEmojiFor(open ? null : nodeKey); }} onMouseDown={stop}
+          title="이모지 바꾸기"
+          className="w-7 h-7 rounded-lg bg-muted grid place-items-center text-[15px] leading-none transition hover:bg-primary/10">
+          {current}
+        </button>
+        {open && (
+          <span onClick={stop} onMouseDown={stop}
+            className="absolute z-30 top-8 left-0 w-[184px] rounded-xl border border-border bg-card shadow-lg p-1.5 grid grid-cols-8 gap-0.5">
+            {EMOJI_CHOICES.map((em) => (
+              <button key={em} onClick={(e) => { stop(e); onPick(em); setEmojiFor(null); }}
+                className="w-[21px] h-[21px] rounded grid place-items-center text-[13px] leading-none hover:bg-primary/10">{em}</button>
+            ))}
+          </span>
+        )}
+      </span>
+    );
+  }
+
+  /* ── 노드 ── */
   function renderNode(n: Node): ReactNode {
     const style = { left: n.pos.x, top: n.pos.y, width: n.pos.w, height: n.pos.h } as CSSProperties;
+
     if (n.kind === "add") {
       const fn = n.addType === "bu" ? addBu : n.addType === "team" ? addTeam : addMember;
       return (
         <button key={n.key} type="button" onClick={fn} style={style}
-          className="absolute flex items-center justify-center gap-2.5 rounded-xl border-[1.6px] border-dashed border-border text-muted-foreground text-[13.5px] font-semibold transition hover:border-primary hover:text-primary hover:bg-primary/5 group">
-          <span className="absolute left-1/2 -translate-x-1/2 -top-[5px] w-2.5 h-2.5 rounded-full bg-primary border-2 border-background" />
-          <span className="w-6 h-6 rounded-md bg-muted text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground flex items-center justify-center transition"><Plus className="w-4 h-4" /></span>
-          {n.label}
+          className="absolute flex items-center justify-center gap-1.5 rounded-lg border border-dashed border-border text-muted-foreground text-[12.5px] font-medium transition hover:border-primary hover:text-primary">
+          <Handle side="t" />
+          <Plus className="w-3.5 h-3.5" /> {n.label}
         </button>
       );
     }
+
     if (n.kind === "master") {
+      const busy = busyId === "master";
       return (
         <div key={n.key} style={style} className="absolute">
-          <div className="relative h-full rounded-xl bg-card border border-primary shadow-sm ring-2 ring-primary/60">
-            <div className="px-3.5 py-3">
-              <div className="flex items-center gap-2.5">
-                <span className="w-8 h-8 rounded-lg bg-primary text-primary-foreground flex items-center justify-center"><ShieldCheck className="w-[18px] h-[18px]" /></span>
-                <div>
-                  <div className="font-semibold text-[15px] leading-tight">마스터</div>
-                  <div className="text-[12.5px] text-muted-foreground">감독 · 검수</div>
-                </div>
-              </div>
-              <div className="mt-2.5 flex items-center gap-1.5 text-[12.5px] text-muted-foreground"><Users className="w-3.5 h-3.5" /> {divisions.length}개 부서</div>
+          <div className="relative h-full rounded-xl bg-card border border-primary/60 px-3 py-2.5 flex flex-col">
+            <div className="flex items-center gap-2">
+              <span className="w-6 h-6 rounded-md bg-primary/10 text-primary grid place-items-center shrink-0"><ShieldCheck className="w-3.5 h-3.5" /></span>
+              <span className="font-semibold text-[13.5px]">마스터</span>
+              <span className="ml-auto text-[11px] text-muted-foreground">{divisions.length}개 부서</span>
+            </div>
+            <div className="mt-auto flex items-center gap-1">
+              <button onClick={reviewMaster} disabled={!canRun || !!busyId}
+                className="flex-1 h-6 rounded-md bg-primary/10 text-primary text-[11.5px] font-semibold transition enabled:hover:bg-primary/20 disabled:opacity-40 inline-flex items-center justify-center gap-1">
+                {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : <Eye className="w-3 h-3" />} 최종 검토
+              </button>
+              {masterReview && (
+                <button onClick={() => setPanel({ kind: "master" })}
+                  className="h-6 px-1.5 rounded-md border border-border text-[11px] text-muted-foreground hover:text-foreground inline-flex items-center gap-0.5">
+                  결과<ChevronDown className="w-3 h-3" />
+                </button>
+              )}
             </div>
             <Handle side="b" />
           </div>
         </div>
       );
     }
+
     if (n.kind === "div") {
-      const d = n.div; const Icon = DIV_ICON[d.icon]; const open = d.id === openBu;
+      const d = n.div; const Icon = DIV_ICON[d.icon]; const open = d.id === openBu; const busy = busyId === d.id;
       return (
         <div key={n.key} style={style} className="absolute cursor-pointer group" onClick={() => toggleBu(d.id)}>
-          <div className={`relative h-full rounded-xl bg-card border shadow-sm transition ${open ? "border-primary ring-2 ring-primary/60" : "border-border group-hover:border-muted-foreground/40"}`}>
-            <div className="px-3.5 py-3">
-              <div className="flex items-center gap-2.5">
-                <span className={`w-8 h-8 rounded-lg ${COLOR_BG[d.color]} text-white flex items-center justify-center`}><Icon className="w-[18px] h-[18px]" /></span>
-                <input ref={nameRef(`bu-${d.id}`)} value={d.name} placeholder="부서 이름"
-                  onChange={(e) => setDivName(d.id, e.target.value)} onClick={stop} onMouseDown={stop}
-                  onKeyDown={(e) => { e.stopPropagation(); if (e.key === "Enter") (e.target as HTMLInputElement).blur(); }}
-                  className="flex-1 min-w-0 bg-transparent border-b-[1.5px] border-transparent hover:border-border focus:border-primary outline-none font-semibold text-[15px] py-0.5 placeholder:text-muted-foreground placeholder:font-medium" />
-                <ChevronRight className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform ${open ? "rotate-90" : ""}`} />
-              </div>
-              <div className="mt-2.5 flex items-center gap-1.5 text-[12.5px] text-muted-foreground"><Users className="w-3.5 h-3.5" /> {d.teams.length}개 팀</div>
+          <div className={`relative h-full rounded-xl bg-card border px-3 py-2.5 flex flex-col transition ${open ? "border-primary" : "border-border group-hover:border-muted-foreground/30"}`}>
+            <div className="flex items-center gap-2">
+              {d.emoji
+                ? <EmojiPicker nodeKey={n.key} current={d.emoji} onPick={(em) => patchDiv(d.id, { emoji: em })} />
+                : <button onClick={(e) => { stop(e); setEmojiFor(emojiFor === n.key ? null : n.key); }} onMouseDown={stop} title="이모지 바꾸기"
+                    className={`w-7 h-7 rounded-lg ${COLOR_BG[d.color]} text-white grid place-items-center shrink-0 transition hover:opacity-80`}>
+                    <Icon className="w-3.5 h-3.5" />
+                  </button>}
+              {!d.emoji && emojiFor === n.key && (
+                <span onClick={stop} onMouseDown={stop} className="absolute z-30 top-11 left-3 w-[184px] rounded-xl border border-border bg-card shadow-lg p-1.5 grid grid-cols-8 gap-0.5">
+                  {EMOJI_CHOICES.map((em) => (
+                    <button key={em} onClick={(e) => { stop(e); patchDiv(d.id, { emoji: em }); setEmojiFor(null); }}
+                      className="w-[21px] h-[21px] rounded grid place-items-center text-[13px] leading-none hover:bg-primary/10">{em}</button>
+                  ))}
+                </span>
+              )}
+              <input ref={nameRef(`bu-${d.id}`)} value={d.name} placeholder="부서 이름"
+                onChange={(e) => patchDiv(d.id, { name: e.target.value })} onClick={stop} onMouseDown={stop}
+                onKeyDown={(e) => { e.stopPropagation(); if (e.key === "Enter") (e.target as HTMLInputElement).blur(); }}
+                className="flex-1 min-w-0 bg-transparent border-b border-transparent hover:border-border focus:border-primary outline-none font-semibold text-[13.5px] py-0.5 placeholder:text-muted-foreground/60 placeholder:font-normal" />
+              <ChevronRight className={`w-3.5 h-3.5 text-muted-foreground/50 shrink-0 transition-transform ${open ? "rotate-90" : ""}`} />
+            </div>
+            <div className="mt-auto flex items-center gap-1">
+              <span className="text-[11px] text-muted-foreground mr-auto">{d.teams.length}개 팀</span>
+              <button onClick={(e) => { stop(e); void reviewDiv(d); }} disabled={!canRun || !!busyId}
+                className="h-6 px-2 rounded-md bg-primary/10 text-primary text-[11px] font-semibold transition enabled:hover:bg-primary/20 disabled:opacity-40 inline-flex items-center gap-1">
+                {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : <Eye className="w-3 h-3" />} 검토
+              </button>
+              {d.review && (
+                <button onClick={(e) => { stop(e); setPanel({ kind: "div", divId: d.id }); }}
+                  className="h-6 px-1.5 rounded-md border border-border text-[11px] text-muted-foreground hover:text-foreground inline-flex items-center gap-0.5">
+                  결과<ChevronDown className="w-3 h-3" />
+                </button>
+              )}
             </div>
             <Handle side="t" /><Handle side="b" />
           </div>
         </div>
       );
     }
+
     if (n.kind === "team") {
-      const t = n.team; const open = t.id === openTeam;
+      const t = n.team; const open = t.id === openTeam; const busy = busyId === t.id;
+      const doneCount = t.members.filter((m) => m.result).length;
       return (
         <div key={n.key} style={style} className="absolute cursor-pointer group" onClick={() => setOpenTeam(open ? null : t.id)}>
-          <div className={`relative h-full rounded-xl bg-card border shadow-sm transition ${open ? "border-primary ring-2 ring-primary/60" : "border-border group-hover:border-muted-foreground/40"}`}>
-            <div className="px-3.5 py-3">
-              <div className="flex items-center gap-2.5">
-                <span className={`w-8 h-8 rounded-full ${COLOR_BG[n.div.color]} text-white flex items-center justify-center`}><Users className="w-4 h-4" /></span>
-                <input ref={nameRef(`tm-${t.id}`)} value={t.name} placeholder="팀 이름"
-                  onChange={(e) => setTeamName(n.div.id, t.id, e.target.value)} onClick={stop} onMouseDown={stop}
-                  onKeyDown={(e) => { e.stopPropagation(); if (e.key === "Enter") (e.target as HTMLInputElement).blur(); }}
-                  className="flex-1 min-w-0 bg-transparent border-b-[1.5px] border-transparent hover:border-border focus:border-primary outline-none font-semibold text-[15px] py-0.5 placeholder:text-muted-foreground placeholder:font-medium" />
-                <ChevronRight className={`w-4 h-4 text-muted-foreground shrink-0 transition-transform ${open ? "rotate-90" : ""}`} />
-              </div>
-              <div className="mt-2.5 flex items-center gap-1.5 text-[12.5px] text-muted-foreground"><User className="w-3.5 h-3.5" /> {t.members.length}명</div>
+          <div className={`relative h-full rounded-xl bg-card border px-3 py-2.5 flex flex-col transition ${open ? "border-primary" : "border-border group-hover:border-muted-foreground/30"}`}>
+            <div className="flex items-center gap-2">
+              {t.emoji
+                ? <EmojiPicker nodeKey={n.key} current={t.emoji} onPick={(em) => patchTeam(n.div.id, t.id, { emoji: em })} />
+                : <button onClick={(e) => { stop(e); setEmojiFor(emojiFor === n.key ? null : n.key); }} onMouseDown={stop} title="이모지 바꾸기"
+                    className={`w-7 h-7 rounded-full ${COLOR_BG[n.div.color]} text-white grid place-items-center shrink-0 transition hover:opacity-80`}>
+                    <Users className="w-3.5 h-3.5" />
+                  </button>}
+              {!t.emoji && emojiFor === n.key && (
+                <span onClick={stop} onMouseDown={stop} className="absolute z-30 top-11 left-3 w-[184px] rounded-xl border border-border bg-card shadow-lg p-1.5 grid grid-cols-8 gap-0.5">
+                  {EMOJI_CHOICES.map((em) => (
+                    <button key={em} onClick={(e) => { stop(e); patchTeam(n.div.id, t.id, { emoji: em }); setEmojiFor(null); }}
+                      className="w-[21px] h-[21px] rounded grid place-items-center text-[13px] leading-none hover:bg-primary/10">{em}</button>
+                  ))}
+                </span>
+              )}
+              <input ref={nameRef(`tm-${t.id}`)} value={t.name} placeholder="팀 이름"
+                onChange={(e) => patchTeam(n.div.id, t.id, { name: e.target.value })} onClick={stop} onMouseDown={stop}
+                onKeyDown={(e) => { e.stopPropagation(); if (e.key === "Enter") (e.target as HTMLInputElement).blur(); }}
+                className="flex-1 min-w-0 bg-transparent border-b border-transparent hover:border-border focus:border-primary outline-none font-semibold text-[13.5px] py-0.5 placeholder:text-muted-foreground/60 placeholder:font-normal" />
+              <ChevronRight className={`w-3.5 h-3.5 text-muted-foreground/50 shrink-0 transition-transform ${open ? "rotate-90" : ""}`} />
+            </div>
+            <div className="mt-auto flex items-center gap-1">
+              <span className="text-[11px] text-muted-foreground mr-auto">
+                {t.members.length}명{doneCount > 0 && <span className="text-emerald-600 dark:text-emerald-400"> · {doneCount} 완료</span>}
+              </span>
+              <button onClick={(e) => { stop(e); void reviewTeam(n.div, t); }} disabled={!canRun || !!busyId}
+                className="h-6 px-2 rounded-md bg-primary/10 text-primary text-[11px] font-semibold transition enabled:hover:bg-primary/20 disabled:opacity-40 inline-flex items-center gap-1">
+                {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : <Eye className="w-3 h-3" />} 검토
+              </button>
+              {t.review && (
+                <button onClick={(e) => { stop(e); setPanel({ kind: "team", divId: n.div.id, teamId: t.id }); }}
+                  className="h-6 px-1.5 rounded-md border border-border text-[11px] text-muted-foreground hover:text-foreground inline-flex items-center gap-0.5">
+                  결과<ChevronDown className="w-3 h-3" />
+                </button>
+              )}
             </div>
             <Handle side="t" /><Handle side="b" />
           </div>
         </div>
       );
     }
-    // member
+
+    // ── 직원 ──
     const m = n.member;
+    const busy = busyId === m.id;
+    const models = modelsFor(m.tool);
     return (
       <div key={n.key} style={style} className="absolute">
-        <div className="relative h-full rounded-xl bg-card border border-border shadow-sm overflow-hidden flex">
-          <div className="flex-1 min-w-0 p-3">
-            <div className="flex items-center gap-2.5">
-              <span className={`w-8 h-8 rounded-full bg-muted border border-border ${COLOR_TEXT[n.div.color]} flex items-center justify-center shrink-0`}><User className="w-4 h-4" /></span>
-              <div className="flex-1 min-w-0">
-                <input ref={nameRef(`mb-${m.id}`)} value={m.name} placeholder="직원 이름"
-                  onChange={(e) => patchMember(n.div.id, n.team.id, m.id, { name: e.target.value })} onClick={stop} onMouseDown={stop}
-                  onKeyDown={(e) => { e.stopPropagation(); if (e.key === "Enter") (e.target as HTMLInputElement).blur(); }}
-                  className="w-full bg-transparent border-b-[1.5px] border-transparent hover:border-border focus:border-primary outline-none font-semibold text-[15px] py-0.5 placeholder:text-muted-foreground placeholder:font-medium" />
-                <input value={m.role} placeholder="역할 (예: 자료조사)"
-                  onChange={(e) => patchMember(n.div.id, n.team.id, m.id, { role: e.target.value })} onClick={stop} onMouseDown={stop} onKeyDown={stop}
-                  className="w-full bg-transparent border-b-[1.5px] border-transparent hover:border-border focus:border-primary outline-none text-[12.5px] font-medium text-muted-foreground mt-0.5 py-0.5 placeholder:text-muted-foreground/70" />
-              </div>
-            </div>
-            <div className="mt-2"><StatusPill status={m.status} /></div>
+        <div className="relative h-full rounded-xl bg-card border border-border px-3 py-2.5 flex flex-col gap-1.5">
+          <div className="flex items-center gap-2">
+            <span className={`w-2 h-2 rounded-full shrink-0 ${STATUS_DOT[m.status]}`} title={STATUS_META[m.status].label} />
+            <input ref={nameRef(`mb-${m.id}`)} value={m.name} placeholder="직원 이름"
+              onChange={(e) => patchMember(n.div.id, n.team.id, m.id, { name: e.target.value })} onClick={stop} onMouseDown={stop}
+              onKeyDown={(e) => { e.stopPropagation(); if (e.key === "Enter") (e.target as HTMLInputElement).blur(); }}
+              className="flex-1 min-w-0 bg-transparent border-b border-transparent hover:border-border focus:border-primary outline-none font-semibold text-[13.5px] py-0.5 placeholder:text-muted-foreground/60 placeholder:font-normal" />
           </div>
-          <div className="w-[130px] shrink-0 border-l border-border bg-muted/40 p-3 flex flex-col gap-1.5 justify-center">
-            <label className="text-[10.5px] font-bold uppercase tracking-wide text-muted-foreground flex items-center gap-1"><Sparkles className="w-3 h-3" /> AI 모델</label>
-            <select value={m.model} onChange={(e) => patchMember(n.div.id, n.team.id, m.id, { model: e.target.value })}
-              className="w-full text-[12.5px] rounded-md border border-border bg-card px-2 py-1.5 outline-none focus:border-primary cursor-pointer">
-              {MODEL_OPTIONS.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+          <input value={m.role} placeholder="역할 (예: 자료조사)"
+            onChange={(e) => patchMember(n.div.id, n.team.id, m.id, { role: e.target.value })} onClick={stop} onMouseDown={stop} onKeyDown={stop}
+            className="w-full bg-transparent border-b border-transparent hover:border-border focus:border-primary outline-none text-[11.5px] text-muted-foreground py-0.5 placeholder:text-muted-foreground/50" />
+
+          {/* AI 모델 — 2단계: 도구 → 상세모델 */}
+          <div className="flex items-center gap-1">
+            <select value={m.tool} onClick={stop} onMouseDown={stop}
+              onChange={(e) => {
+                const tool = e.target.value as AiTool;
+                patchMember(n.div.id, n.team.id, m.id, { tool, model: modelsFor(tool)[0].value });
+              }}
+              className="w-[86px] shrink-0 text-[11px] rounded-md border border-border bg-background px-1.5 py-1 outline-none focus:border-primary cursor-pointer">
+              {AI_TOOLS.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
             </select>
+            <select value={m.model} onClick={stop} onMouseDown={stop}
+              onChange={(e) => patchMember(n.div.id, n.team.id, m.id, { model: e.target.value })}
+              className="flex-1 min-w-0 text-[11px] rounded-md border border-border bg-background px-1.5 py-1 outline-none focus:border-primary cursor-pointer">
+              {models.map((o) => <option key={o.value} value={o.value}>{o.label}</option>)}
+            </select>
+          </div>
+
+          <div className="mt-auto flex items-center gap-1">
+            <button onClick={() => void runMember(n.div, n.team, m)} disabled={!canRun || !!busyId}
+              className="flex-1 h-6 rounded-md bg-primary text-primary-foreground text-[11.5px] font-semibold transition enabled:hover:opacity-90 disabled:opacity-40 inline-flex items-center justify-center gap-1">
+              {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : <Play className="w-3 h-3" />} 실행
+            </button>
+            {m.result && (
+              <button onClick={() => setPanel({ kind: "member", divId: n.div.id, teamId: n.team.id, memberId: m.id })}
+                className="h-6 px-1.5 rounded-md border border-border text-[11px] text-muted-foreground hover:text-foreground inline-flex items-center gap-0.5">
+                결과보기<ChevronDown className="w-3 h-3" />
+              </button>
+            )}
           </div>
           <Handle side="t" />
         </div>
@@ -337,110 +532,130 @@ export default function OrgControlTower({ embedded = false }: { embedded?: boole
     );
   }
 
+  /* ── 하단 패널 내용 ── */
+  function panelData(): { title: string; sub: string; body: string } | null {
+    if (!panel) return null;
+    if (panel.kind === "master") return { title: "마스터 · 최종 검토", sub: "부서장 검토를 종합", body: masterReview };
+    const d = divisions.find((x) => x.id === (panel as { divId: string }).divId);
+    if (!d) return null;
+    if (panel.kind === "div") return { title: `${d.emoji || ""} ${d.name || "부서"} · 부서장 검토`, sub: "팀장 검토를 종합", body: d.review || "" };
+    const t = d.teams.find((x) => x.id === (panel as { teamId: string }).teamId);
+    if (!t) return null;
+    if (panel.kind === "team") return { title: `${t.name || "팀"} · 팀장 검토`, sub: "팀원 결과를 종합", body: t.review || "" };
+    const m = t.members.find((x) => x.id === panel.memberId);
+    if (!m) return null;
+    return {
+      title: `${m.name || "담당자"}${m.role ? ` · ${m.role}` : ""}`,
+      sub: `${toolLabel(m.tool)} · ${modelLabelOf(m.tool, m.model)}${isRunnable(m.tool) ? "" : " (Claude로 대체 실행)"}`,
+      body: m.result || "",
+    };
+  }
+  const pd = panelData();
+
   return (
     <div className={(embedded ? "h-full flex flex-col" : "min-h-screen") + " bg-background text-foreground"}>
       {!embedded && <ProjectTopBar name="대리인 : AI비서" emoji="🟧" />}
       <div className={embedded ? "flex flex-col flex-1 min-h-0" : "pt-12 flex flex-col h-screen"}>
-        {/* 상태 범례 — 작업중/검수중/완료/대기/확인 필요 (색+글자 이중 표시) */}
-        <div className="shrink-0 flex items-center justify-end gap-1.5 px-4 py-2 border-b border-border flex-wrap bg-card/40">
-          {(["work", "review", "done", "wait", "alert"] as OrgStatus[]).map((s) => {
-            const dot = s === "work" ? "bg-blue-500" : s === "review" ? "bg-amber-500" : s === "done" ? "bg-emerald-500" : s === "alert" ? "bg-red-500" : "bg-muted-foreground";
-            return (
-              <span key={s} className="inline-flex items-center gap-1.5 rounded-full border border-border px-2.5 py-1 text-[12px] text-muted-foreground">
-                <span className={"w-2 h-2 rounded-full " + dot} /> {STATUS_META[s].label}
-              </span>
-            );
-          })}
-        </div>
-        {/* 임베드(앱 안)일 때 — 3번째 칸 대신 상단 툴바로 (캔버스 전체 폭 확보) */}
-        {embedded && (
-          <div className="shrink-0 flex items-center gap-2 px-4 py-2.5 border-b border-border bg-card/40 flex-wrap">
-            <button onClick={addBu} className="inline-flex items-center gap-1.5 rounded-lg bg-primary text-primary-foreground px-3 py-2 text-[13px] font-semibold transition hover:opacity-90"><Plus className="w-4 h-4" /> 부서 만들기</button>
-            <button onClick={addTeam} disabled={!bu} className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-2 text-[13px] font-medium text-foreground transition enabled:hover:border-primary disabled:opacity-40 disabled:cursor-not-allowed"><Plus className="w-3.5 h-3.5" /> 팀 만들기</button>
-            <button onClick={addMember} disabled={!team} className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-3 py-2 text-[13px] font-medium text-foreground transition enabled:hover:border-primary disabled:opacity-40 disabled:cursor-not-allowed"><Plus className="w-3.5 h-3.5" /> 직원 추가</button>
-            <span className="text-[12px] text-muted-foreground ml-1 hidden md:inline">부서 {divisions.length} · 팀 {teamsCount} · 직원 {membersCount}</span>
+
+        {/* 상단 툴바 */}
+        <div className="shrink-0 border-b border-border bg-card/40">
+          <div className="flex items-center gap-1.5 px-4 py-2 flex-wrap">
+            <button onClick={addBu} className="inline-flex items-center gap-1 rounded-md bg-primary text-primary-foreground px-2.5 py-1.5 text-[12.5px] font-semibold transition hover:opacity-90"><Plus className="w-3.5 h-3.5" /> 부서</button>
+            <button onClick={addTeam} disabled={!bu} className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2.5 py-1.5 text-[12.5px] transition enabled:hover:border-primary disabled:opacity-40"><Plus className="w-3 h-3" /> 팀</button>
+            <button onClick={addMember} disabled={!team} className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2.5 py-1.5 text-[12.5px] transition enabled:hover:border-primary disabled:opacity-40"><Plus className="w-3 h-3" /> 직원</button>
+
+            <span className="w-px h-4 bg-border mx-1" />
+            <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground mr-0.5"><Wand2 className="w-3 h-3" /> 바로 만들기</span>
+            {ORG_PRESETS.map((p) => (
+              <button key={p.id} onClick={() => addPreset(p.id)} title={`${p.team} · ${p.members.length}명이 세팅된 부서를 만듭니다`}
+                className="inline-flex items-center gap-1 rounded-md border border-dashed border-border bg-card px-2 py-1.5 text-[12px] text-muted-foreground transition hover:border-primary hover:text-primary">
+                <span>{p.emoji}</span> {p.label}
+              </button>
+            ))}
+
             <div className="ml-auto flex items-center gap-2">
-              <input type="range" min={55} max={130} step={5} value={zoom} onChange={(e) => setZoom(Number(e.target.value))} className="w-24 sm:w-32 accent-[hsl(var(--primary))]" />
-              <span className="text-[12px] text-muted-foreground w-9 text-right tabular-nums">{zoom}%</span>
-              <button onClick={reset} className="inline-flex items-center gap-1.5 rounded-lg border border-border bg-card px-2.5 py-2 text-[12.5px] text-muted-foreground transition hover:text-foreground hover:bg-muted"><Trash2 className="w-3.5 h-3.5" /> 비우기</button>
+              <span className="text-[11px] text-muted-foreground hidden md:inline">부서 {divisions.length} · 팀 {teamsCount} · 직원 {membersCount}</span>
+              <input type="range" min={55} max={130} step={5} value={zoom} onChange={(e) => setZoom(Number(e.target.value))} className="w-20 accent-[hsl(var(--primary))]" />
+              <span className="text-[11px] text-muted-foreground w-8 text-right tabular-nums">{zoom}%</span>
+              <button onClick={reset} title="전체 비우기" className="p-1.5 rounded-md border border-border text-muted-foreground transition hover:text-rose-500"><Trash2 className="w-3.5 h-3.5" /></button>
             </div>
           </div>
-        )}
-        {/* 본문: (전체화면) 좌측 레일 + 캔버스 / (임베드) 캔버스만 */}
+          {err && (
+            <div className="flex items-start gap-1.5 px-4 pb-2 text-[12px] text-rose-600 dark:text-rose-400">
+              <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-0.5" /> {err}
+              <button onClick={() => setErr("")} className="ml-auto shrink-0 text-muted-foreground hover:text-foreground"><X className="w-3.5 h-3.5" /></button>
+            </div>
+          )}
+        </div>
+
         <div className="flex flex-1 min-h-0">
-        {/* 좌측 컨트롤 레일 — 전체화면(standalone)에서만 */}
-        {!embedded && (
-        <aside className="w-[250px] shrink-0 border-r border-border bg-card overflow-y-auto flex flex-col gap-6 p-4">
-          <div>
-            <h2 className="text-[11.5px] font-bold uppercase tracking-wider text-muted-foreground mb-3">이렇게 만들어요</h2>
-            <button onClick={addBu} className="w-full flex items-center gap-3 rounded-lg bg-primary text-primary-foreground px-3 py-2.5 mb-2 text-left transition hover:opacity-90">
-              <span className="w-6 h-6 rounded-full bg-white/25 flex items-center justify-center text-[12.5px] font-bold">1</span>
-              <span className="text-[14.5px] font-medium">부서 만들기<span className="block text-[11.5px] font-normal text-primary-foreground/80">이름을 직접 입력</span></span>
-            </button>
-            <StepButton n={2} label="팀 만들기" sub={bu ? `"${bu.name || "새 부서"}" 아래` : "부서를 먼저 선택"} disabled={!bu} onClick={addTeam} />
-            <StepButton n={3} label="직원 추가" sub={team ? `"${team.name || "새 팀"}" 아래` : "팀을 먼저 선택"} disabled={!team} onClick={addMember} />
-          </div>
-          <div>
-            <h2 className="text-[11.5px] font-bold uppercase tracking-wider text-muted-foreground mb-3">보기</h2>
-            <div className="flex items-center gap-2.5">
-              <input type="range" min={55} max={130} step={5} value={zoom} onChange={(e) => setZoom(Number(e.target.value))} className="flex-1 accent-[hsl(var(--primary))]" />
-              <span className="text-[12.5px] text-muted-foreground w-[38px] text-right tabular-nums">{zoom}%</span>
-            </div>
-            <button onClick={reset} className="mt-3 inline-flex items-center gap-2 rounded-lg border border-border bg-card px-3 py-2 text-[13px] text-muted-foreground transition hover:text-foreground hover:bg-muted">
-              <Trash2 className="w-3.5 h-3.5" /> 전체 비우기
-            </button>
-          </div>
-          <div className="mt-auto">
-            <h2 className="text-[11.5px] font-bold uppercase tracking-wider text-muted-foreground mb-3">지금 조직</h2>
-            <div className="space-y-1 text-[13.5px] text-muted-foreground">
-              <div className="flex items-center gap-2"><Network className="w-4 h-4 text-primary" /> 부서 {divisions.length}개</div>
-              <div className="flex items-center gap-2"><Users className="w-4 h-4 text-teal-500" /> 팀 {teamsCount}개</div>
-              <div className="flex items-center gap-2"><User className="w-4 h-4 text-blue-500" /> 직원 {membersCount}명</div>
-            </div>
-            <Link href="/ai-assistant" className="mt-4 inline-flex items-center gap-1.5 text-[13px] text-muted-foreground hover:text-foreground">
-              <ArrowLeft className="w-3.5 h-3.5" /> AI 비서로 돌아가기
-            </Link>
-          </div>
-        </aside>
-        )}
-
-        {/* 캔버스 */}
-        <div className="relative flex-1 min-w-0 overflow-auto" style={{ backgroundImage: "radial-gradient(circle at 1px 1px, hsl(var(--border)) 1px, transparent 0)", backgroundSize: "24px 24px" }}>
-          <div className="relative origin-top-left transition-transform" style={{ transform: `scale(${zoom / 100})`, width: canvasW, height: canvasH }}>
-            <svg className="absolute top-0 left-0 overflow-visible" width={canvasW} height={canvasH}>
-              {edges.map((e, i) => {
-                const p = pos[e.a], q = pos[e.b];
-                if (!p || !q) return null;
-                // 부모 아래 중앙 → 자식 위 중앙 (세로 S커브)
-                const x1 = p.x + p.w / 2, y1 = p.y + p.h, x2 = q.x + q.w / 2, y2 = q.y;
-                const dy = Math.max(28, (y2 - y1) / 2);
-                return <path key={i} d={`M${x1} ${y1} C ${x1} ${y1 + dy}, ${x2} ${y2 - dy}, ${x2} ${y2}`} fill="none"
-                  style={{ stroke: "hsl(var(--muted-foreground))", opacity: e.dash ? 0.4 : 0.7 }} strokeWidth={2} strokeDasharray={e.dash ? "5 5" : undefined} />;
-              })}
-            </svg>
-            {nodes.map(renderNode)}
-
-            {divisions.length === 0 && (
-              <div className="absolute rounded-xl border border-border bg-card shadow-md px-4 py-3 flex gap-2.5 text-[13.5px] text-muted-foreground"
-                style={{ left: (pos["add-bu"]?.x ?? PAD) + (pos["add-bu"]?.w ?? ADD_W) + 44, top: ROW_Y[1] - 12, width: 236 }}>
-                <Plus className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                <div>마스터는 기본이에요. <b className="text-foreground font-medium">‘부서 만들기’</b>부터 눌러 시작하세요.</div>
+          {!embedded && (
+            <aside className="w-[230px] shrink-0 border-r border-border bg-card overflow-y-auto p-4 flex flex-col gap-5">
+              <div>
+                <h2 className="text-[11px] font-bold uppercase tracking-wider text-muted-foreground mb-2">일하는 순서</h2>
+                <ol className="space-y-1.5 text-[12.5px] text-muted-foreground">
+                  <li><b className="text-foreground">1.</b> 직원에게 역할을 준다</li>
+                  <li><b className="text-foreground">2.</b> 직원이 <b className="text-foreground">실행</b> → 일함</li>
+                  <li><b className="text-foreground">3.</b> 팀장이 <b className="text-foreground">검토</b></li>
+                  <li><b className="text-foreground">4.</b> 부서장 → 마스터로 올라감</li>
+                </ol>
               </div>
-            )}
+              <div className="mt-auto">
+                <div className="space-y-1 text-[12.5px] text-muted-foreground">
+                  <div className="flex items-center gap-2"><Network className="w-3.5 h-3.5 text-primary" /> 부서 {divisions.length}개</div>
+                  <div className="flex items-center gap-2"><Users className="w-3.5 h-3.5 text-teal-500" /> 팀 {teamsCount}개</div>
+                  <div className="flex items-center gap-2"><User className="w-3.5 h-3.5 text-blue-500" /> 직원 {membersCount}명</div>
+                </div>
+                <Link href="/ai-assistant" className="mt-3 inline-flex items-center gap-1.5 text-[12.5px] text-muted-foreground hover:text-foreground">
+                  <ArrowLeft className="w-3.5 h-3.5" /> 대리인으로 돌아가기
+                </Link>
+              </div>
+            </aside>
+          )}
+
+          {/* 캔버스 */}
+          <div className="relative flex-1 min-w-0 overflow-auto" onClick={() => setEmojiFor(null)}
+            style={{ backgroundImage: "radial-gradient(circle at 1px 1px, hsl(var(--border)) 1px, transparent 0)", backgroundSize: "24px 24px" }}>
+            <div className="relative origin-top-left transition-transform" style={{ transform: `scale(${zoom / 100})`, width: canvasW, height: canvasH }}>
+              <svg className="absolute top-0 left-0 overflow-visible" width={canvasW} height={canvasH}>
+                {edges.map((e, i) => {
+                  const p = pos[e.a], q = pos[e.b];
+                  if (!p || !q) return null;
+                  const x1 = p.x + p.w / 2, y1 = p.y + p.h, x2 = q.x + q.w / 2, y2 = q.y;
+                  const dy = Math.max(24, (y2 - y1) / 2);
+                  return <path key={i} d={`M${x1} ${y1} C ${x1} ${y1 + dy}, ${x2} ${y2 - dy}, ${x2} ${y2}`} fill="none"
+                    style={{ stroke: "hsl(var(--border))", opacity: e.dash ? 0.8 : 1 }} strokeWidth={1.5} strokeDasharray={e.dash ? "4 4" : undefined} />;
+                })}
+              </svg>
+              {nodes.map(renderNode)}
+
+              {divisions.length === 0 && (
+                <div className="absolute rounded-xl border border-border bg-card shadow-sm px-3.5 py-2.5 flex gap-2 text-[12.5px] text-muted-foreground"
+                  style={{ left: (pos["add-bu"]?.x ?? PAD) + (pos["add-bu"]?.w ?? ADD_W) + 40, top: ROW_Y[1] - 10, width: 236 }}>
+                  <Wand2 className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
+                  <div>위 <b className="text-foreground font-medium">‘바로 만들기’</b>를 누르면 부서·팀·직원이 세팅된 채로 한 번에 만들어져요.</div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
-        </div>
+
+        {/* 하단 결과 패널 — 직원이 한 일 / 상급자 검토 */}
+        {pd && (
+          <div className="shrink-0 border-t border-border bg-card max-h-[38%] flex flex-col">
+            <div className="flex items-center gap-2 px-4 py-2 border-b border-border shrink-0">
+              <span className="font-semibold text-[13px] truncate">{pd.title}</span>
+              <span className="text-[11px] text-muted-foreground truncate hidden sm:inline">{pd.sub}</span>
+              <button onClick={() => setPanel(null)} className="ml-auto shrink-0 p-1 rounded text-muted-foreground hover:text-foreground"><X className="w-4 h-4" /></button>
+            </div>
+            <div className="overflow-y-auto px-4 py-3">
+              {pd.body
+                ? <pre className="whitespace-pre-wrap break-words font-sans text-[13px] leading-relaxed">{pd.body}</pre>
+                : <p className="text-[12.5px] text-muted-foreground">아직 결과가 없어요.</p>}
+            </div>
+          </div>
+        )}
       </div>
     </div>
-  );
-}
-
-function StepButton({ n, label, sub, disabled, onClick }: { n: number; label: string; sub: string; disabled: boolean; onClick: () => void }) {
-  return (
-    <button onClick={onClick} disabled={disabled}
-      className="w-full flex items-center gap-3 rounded-lg border border-border bg-card px-3 py-2.5 mb-2 text-left transition enabled:hover:border-primary enabled:hover:bg-primary/5 disabled:opacity-50 disabled:cursor-not-allowed group">
-      <span className="w-6 h-6 rounded-full bg-muted text-muted-foreground group-hover:bg-primary group-hover:text-primary-foreground flex items-center justify-center text-[12.5px] font-bold transition">{n}</span>
-      <span className="text-[14.5px] font-medium">{label}<span className="block text-[11.5px] font-normal text-muted-foreground">{sub}</span></span>
-    </button>
   );
 }

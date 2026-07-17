@@ -10,15 +10,28 @@ export type OrgMember = {
   name: string;
   role: string;
   status: OrgStatus;
-  model: string; // MODEL_OPTIONS의 value
+  tool: AiTool;   // 1단계: 도구(Claude/GPT/Gemini/Grok)
+  model: string;  // 2단계: 그 도구의 상세 모델 id
+  result?: string;      // 이 직원이 낸 결과물 (결과보기▼)
+  resultAt?: string;    // 실행 시각(ISO)
 };
-export type OrgTeam = { id: string; name: string; members: OrgMember[] };
+export type OrgTeam = {
+  id: string;
+  name: string;
+  emoji?: string;   // 없으면 부서 색 + 기본 아이콘
+  members: OrgMember[];
+  review?: string;    // 팀원 결과를 모아 상급자(팀장)가 검토한 내용
+  reviewAt?: string;
+};
 export type OrgDivision = {
   id: string;
   name: string;
   color: OrgColor;
-  icon: OrgIcon;
+  icon: OrgIcon;    // 구버전 호환(이모지가 없을 때 사용)
+  emoji?: string;   // 좌측 뱃지 — 클릭해서 바로 변경
   teams: OrgTeam[];
+  review?: string;    // 팀 검토들을 모아 부서장이 검토한 내용
+  reviewAt?: string;
 };
 
 export type OrgColor = "blue" | "teal" | "violet" | "pink" | "cyan" | "slate";
@@ -34,15 +47,64 @@ export const ORG_PALETTE: { color: OrgColor; icon: OrgIcon }[] = [
   { color: "slate", icon: "network" },
 ];
 
-// 팀원에게 붙일 수 있는 AI 모델(도구) 목록.
-export const MODEL_OPTIONS: { value: string; label: string }[] = [
-  { value: "opus", label: "Claude Opus 4.8" },
-  { value: "sonnet", label: "Claude Sonnet 5" },
-  { value: "haiku", label: "Claude Haiku 4.5" },
-  { value: "gpt4o", label: "GPT-4o" },
-  { value: "gemini", label: "Gemini 2.5" },
-  { value: "fal", label: "fal · 이미지" },
-  { value: "gimg", label: "gpt-image · 이미지" },
+/* ─────────────── AI 모델 선택 — 2단계(도구 → 상세모델) ───────────────
+ * 1단계에서 도구(브랜드)를 고르면 2단계에 그 도구의 모델만 나온다.
+ *
+ * ⚠️ 실행 현실: 본인 키 직접 호출 경로는 Claude만 가능하다(lib/illo/claude.ts).
+ *    Claude가 아닌 도구를 고르면 실행 시 동급 Claude(Haiku)로 폴백되고 화면에 안내가 뜬다.
+ *    Claude 모델 id는 공식 문서 기준으로 확인된 값이고, 그 외 도구의 모델명은
+ *    lib/illo/modelMatrix.ts(운영자 큐레이션 목록)에서 가져온 값이다.
+ */
+export type AiTool = "claude" | "gpt" | "gemini" | "grok";
+
+export const AI_TOOLS: { value: AiTool; label: string; emoji: string; runnable: boolean }[] = [
+  { value: "claude", label: "Claude",  emoji: "🟧", runnable: true  },
+  { value: "gpt",    label: "GPT",     emoji: "🟩", runnable: false },
+  { value: "gemini", label: "Gemini",  emoji: "🔷", runnable: false },
+  { value: "grok",   label: "Grok",    emoji: "⬛", runnable: false },
+];
+
+export const TOOL_MODELS: Record<AiTool, { value: string; label: string }[]> = {
+  claude: [
+    { value: "claude-opus-4-8",   label: "Opus 4.8 · 최고급" },
+    { value: "claude-sonnet-5",   label: "Sonnet 5 · 균형" },
+    { value: "claude-haiku-4-5",  label: "Haiku 4.5 · 빠르고 저렴" },
+  ],
+  gpt: [
+    { value: "gpt-5.5",       label: "GPT-5.5 · 범용" },
+    { value: "gpt-5.4-mini",  label: "GPT-5.4 mini · 저렴" },
+  ],
+  gemini: [
+    { value: "gemini-2.5-pro",   label: "Gemini 2.5 Pro · 고급" },
+    { value: "gemini-2.5-flash", label: "Gemini 2.5 Flash · 초저가" },
+  ],
+  grok: [
+    { value: "grok-4",      label: "Grok 4" },
+    { value: "grok-4-mini", label: "Grok 4 mini · 저렴" },
+  ],
+};
+
+export const DEFAULT_TOOL: AiTool = "claude";
+export const DEFAULT_MODEL = "claude-haiku-4-5"; // 기본은 가장 저렴한 모델
+
+export function modelsFor(tool: AiTool) {
+  return TOOL_MODELS[tool] || TOOL_MODELS.claude;
+}
+export function toolLabel(tool: AiTool): string {
+  return AI_TOOLS.find((t) => t.value === tool)?.label || tool;
+}
+export function modelLabelOf(tool: AiTool, model: string): string {
+  return modelsFor(tool).find((m) => m.value === model)?.label || model;
+}
+export function isRunnable(tool: AiTool): boolean {
+  return !!AI_TOOLS.find((t) => t.value === tool)?.runnable;
+}
+
+// 부서·팀 뱃지에서 고를 수 있는 이모지 (클릭 → 그리드에서 바로 교체)
+export const EMOJI_CHOICES = [
+  "🗂️", "💡", "✍️", "📣", "🎨", "💻", "📊", "🔍",
+  "🤝", "💰", "📦", "🚀", "🧪", "📸", "🎬", "🎧",
+  "🧠", "⚙️", "📝", "🌐", "❤️", "⭐", "🔥", "🌱",
 ];
 
 export const STATUS_META: Record<OrgStatus, { label: string }> = {
@@ -57,16 +119,116 @@ export function newId(p: string): string {
   return `${p}_${Date.now().toString(36)}_${Math.floor(Math.random() * 1e6).toString(36)}`;
 }
 
+/* ─────────────── 세팅된 자료(프리셋) ───────────────
+ * 버튼 한 번에 "부서 → 팀 → 직원(역할·모델까지)"이 통째로 만들어진다.
+ * 직원 순서 = 일하는 순서(아래에서 위로 올라가며 상급자가 검토).
+ * 기본 모델은 전부 저렴한 Haiku — 원가가 새지 않게.
+ */
+export type OrgPreset = {
+  id: string;
+  label: string;
+  emoji: string;
+  color: OrgColor;
+  icon: OrgIcon;
+  team: string;
+  members: { name: string; role: string; model?: string }[];
+};
+
+export const ORG_PRESETS: OrgPreset[] = [
+  {
+    id: "blog", label: "블로그 글 생성", emoji: "✍️", color: "blue", icon: "bulb", team: "콘텐츠팀",
+    members: [
+      { name: "조사원", role: "주제의 핵심 사실·최신 트렌드·검색 키워드를 조사해 정리" },
+      { name: "작가",   role: "조사 내용을 검색 잘 되는 블로그 글로 작성(제목·소제목 포함)" },
+      { name: "검수자", role: "사실 오류·어색한 문장·과장 표현을 잡아 다듬기" },
+    ],
+  },
+  {
+    id: "sns", label: "SNS 게시물", emoji: "📣", color: "pink", icon: "megaphone", team: "SNS팀",
+    members: [
+      { name: "기획자", role: "타깃과 후킹 포인트를 잡고 게시물 컨셉 정하기" },
+      { name: "카피라이터", role: "인스타·페북용 짧고 임팩트 있는 카피 작성(해시태그 포함)" },
+    ],
+  },
+  {
+    id: "product", label: "상품 상세페이지", emoji: "📦", color: "teal", icon: "code", team: "상품팀",
+    members: [
+      { name: "분석가", role: "상품의 강점·경쟁 상품과의 차별점 정리" },
+      { name: "작가",   role: "구매 욕구를 자극하는 상세페이지 문구 작성" },
+      { name: "검수자", role: "과장·허위 표현을 걸러내고 표현 다듬기" },
+    ],
+  },
+  {
+    id: "reply", label: "고객 응대", emoji: "🤝", color: "violet", icon: "message", team: "CS팀",
+    members: [
+      { name: "분석가", role: "문의·후기의 의도와 감정을 파악해 요점 정리" },
+      { name: "상담원", role: "정중하고 신뢰가 가는 답변 작성" },
+    ],
+  },
+];
+
+/** 프리셋 → 실제 부서 객체 */
+export function buildPreset(p: OrgPreset): OrgDivision {
+  return {
+    id: newId("bu"),
+    name: p.label,
+    color: p.color,
+    icon: p.icon,
+    emoji: p.emoji,
+    teams: [{
+      id: newId("tm"),
+      name: p.team,
+      members: p.members.map((m) => ({
+        id: newId("mb"),
+        name: m.name,
+        role: m.role,
+        status: "wait" as OrgStatus,
+        tool: DEFAULT_TOOL,
+        model: m.model || DEFAULT_MODEL,
+      })),
+    }],
+  };
+}
+
 function orgKey(userKey: string): string {
   return `illo_orgchart_v1__${userKey || "local"}`;
+}
+
+// 구버전 → 신버전 정규화.
+// 예전 직원은 tool이 없고 model이 평면 값("sonnet","gpt4o",…)이었다. 그대로 두면
+// 2단계 선택(도구→모델)에서 매칭이 안 돼 조직도가 깨진다. 읽는 시점에 한 번 변환한다.
+const LEGACY_MODEL: Record<string, { tool: AiTool; model: string }> = {
+  opus:   { tool: "claude", model: "claude-opus-4-8" },
+  sonnet: { tool: "claude", model: "claude-sonnet-5" },
+  haiku:  { tool: "claude", model: "claude-haiku-4-5" },
+  gpt4o:  { tool: "gpt",    model: "gpt-5.5" },
+  gemini: { tool: "gemini", model: "gemini-2.5-flash" },
+  fal:    { tool: "claude", model: DEFAULT_MODEL }, // 이미지 모델은 조직도에서 제외됨
+  gimg:   { tool: "claude", model: DEFAULT_MODEL },
+};
+
+export function normalizeOrg(arr: unknown): OrgDivision[] {
+  if (!Array.isArray(arr)) return [];
+  return (arr as OrgDivision[]).map((d) => ({
+    ...d,
+    teams: (d.teams || []).map((t) => ({
+      ...t,
+      members: (t.members || []).map((m) => {
+        const raw = m as OrgMember & { tool?: AiTool };
+        if (raw.tool && modelsFor(raw.tool).some((x) => x.value === raw.model)) return raw;
+        const legacy = LEGACY_MODEL[raw.model as string];
+        if (legacy) return { ...raw, tool: legacy.tool, model: legacy.model };
+        return { ...raw, tool: DEFAULT_TOOL, model: DEFAULT_MODEL };
+      }),
+    })),
+  }));
 }
 
 export function loadOrg(userKey: string): OrgDivision[] {
   if (typeof window === "undefined") return [];
   try {
     const raw = localStorage.getItem(orgKey(userKey));
-    const arr = raw ? JSON.parse(raw) : [];
-    return Array.isArray(arr) ? (arr as OrgDivision[]) : [];
+    return normalizeOrg(raw ? JSON.parse(raw) : []);
   } catch {
     return [];
   }
@@ -99,7 +261,7 @@ export async function loadOrgCloud(): Promise<OrgDivision[] | null> {
     const raw = await loadProject(ORG_PROJECT);
     if (!raw) return null;
     const arr = JSON.parse(raw);
-    return Array.isArray(arr) ? (arr as OrgDivision[]) : null;
+    return Array.isArray(arr) ? normalizeOrg(arr) : null;
   } catch {
     return null;
   }

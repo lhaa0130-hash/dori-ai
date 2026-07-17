@@ -141,7 +141,7 @@ export default function IlloWebClient() {
       const has = prev.includes(id);
       const next = has ? prev.filter((x) => x !== id) : [...prev, id];
       saveIlloEnabled(next);
-      if (has && view === id) setView("home");
+      if (has && view === id) setView("builder");
       return next;
     });
   }
@@ -260,12 +260,11 @@ export default function IlloWebClient() {
           {free && <span className="ml-auto text-[11px] font-semibold text-muted-foreground">남은 <b className="text-primary">{quota ?? FREE_LIMIT}</b>/{FREE_LIMIT}</span>}
         </header>
 
-        {view === "home" && <Home userName={userName} enabled={enabled} onView={goView} free={free} quota={quota} onShowKey={() => setShowKey(true)} />}
         {view === "assistant" && <Assistant runAI={runAI} free={free} quota={quota} onShowKey={() => setShowKey(true)} userName={userName} />}
         {view === "features" && <FeatureManager enabled={enabled} onToggle={toggleFeature} onView={goView} />}
         {view === "image" && <BasicGen kind="image" free={free} quota={quota} setQuota={setQuota} />}
         {view === "video" && <BasicGen kind="video" free={free} quota={quota} setQuota={setQuota} />}
-        {view === "builder" && <OrgControlTower embedded />}
+        {view === "builder" && <OrgControlTower embedded callModel={callModel} />}
         {view === "automation" && (
           <Automation
             userKey={session?.user?.email || "local"}
@@ -277,9 +276,9 @@ export default function IlloWebClient() {
         )}
         {view === "catalog" && <ApiCatalog />}
         {view === "docs" && <Workspace userKey={session?.user?.email || "local"} />}
-        {view === "history" && <HistoryView onBack={() => goView("home")} />}
+        {view === "history" && <HistoryView onBack={() => goView("builder")} />}
         {view === "settings" && <Settings keyVal={key} free={free} onShowKey={() => setShowKey(true)} onRemoveKey={removeKey} onLogout={logout} userName={userName} userEmail={session?.user?.email || ""} />}
-        {tool && <ToolView key={view} tool={tool} runAI={runAI} free={free} quota={quota} onShowKey={() => setShowKey(true)} onBack={() => goView("home")} />}
+        {tool && <ToolView key={view} tool={tool} runAI={runAI} free={free} quota={quota} onShowKey={() => setShowKey(true)} onBack={() => goView("builder")} />}
       </main>
 
       {overlays}

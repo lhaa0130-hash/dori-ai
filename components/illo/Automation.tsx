@@ -10,27 +10,19 @@ import {
   Check, Loader2, Trash2, ArrowDown, Info,
 } from "lucide-react";
 import {
-  loadOrg, saveOrg, syncOrg, saveOrgCloudDebounced, MODEL_OPTIONS,
+  loadOrg, saveOrg, syncOrg, saveOrgCloudDebounced,
+  isRunnable, toolLabel, modelLabelOf, DEFAULT_MODEL,
   type OrgDivision, type OrgTeam, type OrgMember, type OrgStatus,
 } from "@/lib/illo/orgchart";
 import { saveResult } from "@/lib/illo/history";
 
-// 직원에게 배정된 모델(MODEL_OPTIONS) → 실제 Claude API 모델 ID.
-// 비-Claude(gpt4o/gemini/이미지)는 현재 자동화 실행 경로가 Claude 직접 호출이라 Sonnet으로 대체한다.
-const MODEL_MAP: Record<string, string> = {
-  opus: "claude-opus-4-8",
-  sonnet: "claude-sonnet-5",
-  haiku: "claude-haiku-4-5",
-};
-const CLAUDE_FALLBACK = "claude-sonnet-5";
-function toClaudeModel(m: string): string {
-  return MODEL_MAP[m] || CLAUDE_FALLBACK;
+// 직원의 (도구, 상세모델) → 실제 호출 모델.
+// 실행 경로는 Claude 직접 호출뿐이라, Claude가 아닌 도구는 저렴한 Claude(Haiku)로 폴백한다.
+function toClaudeModel(m: OrgMember): string {
+  return isRunnable(m.tool) ? m.model : DEFAULT_MODEL;
 }
-function isClaude(m: string): boolean {
-  return !!MODEL_MAP[m];
-}
-function modelLabel(v: string): string {
-  return MODEL_OPTIONS.find((o) => o.value === v)?.label || v;
+function memberModelLabel(m: OrgMember): string {
+  return `${toolLabel(m.tool)} · ${modelLabelOf(m.tool, m.model)}`;
 }
 
 type LogEntry = {
@@ -121,15 +113,15 @@ export default function Automation({
           if (stopRef.current) throw new Error("__STOP__");
           setMemberStatus(div.id, team.id, m.id, "work");
           try {
-            const text = await callModel(buildPrompt(div, team, m, context, r, total), toClaudeModel(m.model), 2000);
+            const text = await callModel(buildPrompt(div, team, m, context, r, total), toClaudeModel(m), 2000);
             context = text;
             last = text;
-            setLog((p) => [...p, { round: r, memberName: m.name || "담당자", role: m.role || "", model: m.model, text }]);
+            setLog((p) => [...p, { round: r, memberName: m.name || "담당자", role: m.role || "", model: memberModelLabel(m), text }]);
             setMemberStatus(div.id, team.id, m.id, "done");
           } catch (e) {
             if ((e as Error).message === "__STOP__") throw e;
             const msg = (e as Error).message || "실행 실패";
-            setLog((p) => [...p, { round: r, memberName: m.name || "담당자", role: m.role || "", model: m.model, text: msg, error: true }]);
+            setLog((p) => [...p, { round: r, memberName: m.name || "담당자", role: m.role || "", model: memberModelLabel(m), text: msg, error: true }]);
             setMemberStatus(div.id, team.id, m.id, "alert");
             throw e;
           }
@@ -152,7 +144,7 @@ export default function Automation({
           toolLabel: `자동화 · ${div.name || "부서"} / ${team.name || "팀"}`,
           input: goal.trim(),
           output: last,
-          steps: team.members.map((m) => `${m.name || "담당자"}${m.role ? ` (${m.role})` : ""} · ${modelLabel(m.model)}`),
+          steps: team.members.map((m) => `${m.name || "담당자"}${m.role ? ` (${m.role})` : ""} · ${memberModelLabel(m)}`),
         });
       }
     } catch (e) {
@@ -269,11 +261,11 @@ export default function Automation({
         </div>
 
         {/* 비-Claude 모델 안내 */}
-        {sel && sel.team.members.some((m) => !isClaude(m.model)) && (
+        {sel && sel.team.members.some((m) => !isRunnable(m.tool)) && (
           <div className="mt-3 flex gap-2 rounded-xl border border-primary/25 bg-primary/5 px-3.5 py-2.5 text-[12.5px] text-muted-foreground leading-relaxed break-keep">
             <Info className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
             <span>
-              {sel.team.members.filter((m) => !isClaude(m.model)).map((m) => m.name || "담당자").join(", ")} 님에게 배정된 모델
+              {sel.team.members.filter((m) => !isRunnable(m.tool)).map((m) => m.name || "담당자").join(", ")} 님에게 배정된 모델
               (GPT · Gemini · 이미지)은 아직 자동화 실행이 안 돼서 <b className="text-foreground">Claude Sonnet 5</b>로 대신 실행돼요.
             </span>
           </div>
@@ -338,7 +330,7 @@ export default function Automation({
                       <span className="font-bold text-[14px]">{e.memberName}</span>
                       {e.role && <span className="text-[12px] text-muted-foreground">· {e.role}</span>}
                       <span className="ml-auto inline-flex items-center gap-1 text-[11px] text-muted-foreground">
-                        <Sparkles className="w-3 h-3" /> {modelLabel(e.model)}
+                        <Sparkles className="w-3 h-3" /> {e.model}
                       </span>
                     </div>
                     <pre className={"mt-2.5 whitespace-pre-wrap break-words font-sans text-[13px] leading-relaxed " + (e.error ? "text-rose-600 dark:text-rose-400" : "text-foreground")}>{e.text}</pre>
