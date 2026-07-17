@@ -57,6 +57,7 @@ export default function IlloWebClient() {
   const [keyInput, setKeyInput] = useState("");
   const [pulling, setPulling] = useState(false);
   const [savingKey, setSavingKey] = useState(false); // 키 저장 전 실제 호출로 검증하는 동안
+  const [autoPick, setAutoPick] = useState<{ divId: string; teamId: string } | null>(null); // 조직도 → 자동화로 넘길 팀
 
   const [enabled, setEnabled] = useState<string[]>(ILLO_DEFAULT_ENABLED);
   const [view, setView] = useState<string>("builder"); // 메인 = AI 비서 관제탑
@@ -264,7 +265,10 @@ export default function IlloWebClient() {
         {view === "features" && <FeatureManager enabled={enabled} onToggle={toggleFeature} onView={goView} />}
         {view === "image" && <BasicGen kind="image" free={free} quota={quota} setQuota={setQuota} />}
         {view === "video" && <BasicGen kind="video" free={free} quota={quota} setQuota={setQuota} />}
-        {view === "builder" && <OrgControlTower embedded callModel={callModel} />}
+        {view === "builder" && (
+          <OrgControlTower embedded callModel={callModel}
+            onAutomate={(divId, teamId) => { setAutoPick({ divId, teamId }); goView("automation"); }} />
+        )}
         {view === "automation" && (
           <Automation
             userKey={session?.user?.email || "local"}
@@ -272,6 +276,7 @@ export default function IlloWebClient() {
             free={free} quota={quota}
             onShowKey={() => setShowKey(true)}
             onView={goView}
+            initialPick={autoPick}
           />
         )}
         {view === "catalog" && <ApiCatalog />}

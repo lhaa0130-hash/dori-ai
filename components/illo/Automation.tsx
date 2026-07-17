@@ -11,7 +11,7 @@ import {
 } from "lucide-react";
 import {
   loadOrg, saveOrg, syncOrg, saveOrgCloudDebounced,
-  isRunnable, toolLabel, modelLabelOf, DEFAULT_MODEL,
+  isRunnable, toolLabelOf, modelLabelOf, kindEmoji, DEFAULT_MODEL,
   type OrgDivision, type OrgTeam, type OrgMember, type OrgStatus,
 } from "@/lib/illo/orgchart";
 import { saveResult } from "@/lib/illo/history";
@@ -19,10 +19,10 @@ import { saveResult } from "@/lib/illo/history";
 // 직원의 (도구, 상세모델) → 실제 호출 모델.
 // 실행 경로는 Claude 직접 호출뿐이라, Claude가 아닌 도구는 저렴한 Claude(Haiku)로 폴백한다.
 function toClaudeModel(m: OrgMember): string {
-  return isRunnable(m.tool) ? m.model : DEFAULT_MODEL;
+  return m.kind === "llm" && isRunnable(m.kind, m.tool) ? m.model : DEFAULT_MODEL;
 }
 function memberModelLabel(m: OrgMember): string {
-  return `${toolLabel(m.tool)} · ${modelLabelOf(m.tool, m.model)}`;
+  return `${kindEmoji(m.kind)} ${toolLabelOf(m.kind, m.tool)} · ${modelLabelOf(m.kind, m.tool, m.model)}`;
 }
 
 type LogEntry = {
@@ -35,7 +35,7 @@ type LogEntry = {
 };
 
 export default function Automation({
-  userKey, callModel, free, quota, onShowKey, onView,
+  userKey, callModel, free, quota, onShowKey, onView, initialPick,
 }: {
   userKey: string;
   callModel: (prompt: string, model: string, maxTokens?: number) => Promise<string>;
@@ -43,9 +43,11 @@ export default function Automation({
   quota: number | null;
   onShowKey: () => void;
   onView: (id: string) => void;
+  /** AI 비서(조직도)에서 '자동화'로 넘어올 때 미리 선택할 팀 */
+  initialPick?: { divId: string; teamId: string } | null;
 }) {
   const [divisions, setDivisions] = useState<OrgDivision[]>([]);
-  const [pick, setPick] = useState<{ divId: string; teamId: string } | null>(null);
+  const [pick, setPick] = useState<{ divId: string; teamId: string } | null>(initialPick ?? null);
   const [goal, setGoal] = useState("");
   const [loop, setLoop] = useState(false);
   const [rounds, setRounds] = useState(3);
@@ -62,6 +64,8 @@ export default function Automation({
     return () => { cancelled = true; };
   }, [userKey]);
   useEffect(() => { logEndRef.current?.scrollIntoView({ behavior: "smooth", block: "end" }); }, [log]);
+  // 조직도에서 '자동화'를 눌러 넘어오면 그 팀을 선택된 채로 연다
+  useEffect(() => { if (initialPick) setPick(initialPick); }, [initialPick?.divId, initialPick?.teamId]);
 
   // 실행 가능한(직원이 1명 이상인) 팀만 노출
   const ready: { div: OrgDivision; team: OrgTeam }[] = [];
@@ -261,11 +265,11 @@ export default function Automation({
         </div>
 
         {/* 비-Claude 모델 안내 */}
-        {sel && sel.team.members.some((m) => !isRunnable(m.tool)) && (
+        {sel && sel.team.members.some((m) => !isRunnable(m.kind, m.tool)) && (
           <div className="mt-3 flex gap-2 rounded-xl border border-primary/25 bg-primary/5 px-3.5 py-2.5 text-[12.5px] text-muted-foreground leading-relaxed break-keep">
             <Info className="w-3.5 h-3.5 text-primary shrink-0 mt-0.5" />
             <span>
-              {sel.team.members.filter((m) => !isRunnable(m.tool)).map((m) => m.name || "담당자").join(", ")} 님에게 배정된 모델
+              {sel.team.members.filter((m) => !isRunnable(m.kind, m.tool)).map((m) => m.name || "담당자").join(", ")} 님에게 배정된 모델
               (GPT · Gemini · 이미지)은 아직 자동화 실행이 안 돼서 <b className="text-foreground">Claude Sonnet 5</b>로 대신 실행돼요.
             </span>
           </div>

@@ -12,15 +12,15 @@ import { useAuth } from "@/contexts/AuthContext";
 import ProjectTopBar from "@/components/layout/ProjectTopBar";
 import {
   loadOrg, saveOrg, syncOrg, saveOrgCloudDebounced, newId, ORG_PALETTE, STATUS_META,
-  AI_TOOLS, DELIVER_TOOLS, modelsFor, toolLabel, modelLabelOf, isRunnable, isDeliver, deliverInfo, toolEmoji,
-  DEFAULT_TOOL, DEFAULT_MODEL, EMOJI_CHOICES, ORG_PRESETS, buildPreset,
+  MEMBER_KINDS, toolsFor, toolDef, modelsOf, kindEmoji, modelLabelOf, toolLabelOf, isRunnable, isDeliverKind, toolNote,
+  DEFAULT_KIND, DEFAULT_TOOL, DEFAULT_MODEL, EMOJI_CHOICES, ORG_PRESETS, buildPreset,
   type OrgDivision, type OrgTeam, type OrgMember, type OrgStatus, type OrgColor, type OrgIcon,
-  type MemberTool, type DeliverTool,
+  type MemberKind,
 } from "@/lib/illo/orgchart";
 import {
   ShieldCheck, Lightbulb, Code2, Palette, MessageSquare, Megaphone, Network,
   Users, User, Play, Eye, Check, Clock, AlertTriangle, Plus, ChevronRight, ChevronDown,
-  Trash2, ArrowLeft, Loader2, X, Wand2, Send,
+  Trash2, ArrowLeft, Loader2, X, Wand2, Send, RotateCw,
 } from "lucide-react";
 
 // 상하(위→아래) 조직도: 레벨은 아래로 내려가고(ROW_Y), 형제 노드는 가로로 나열된다.
@@ -60,11 +60,13 @@ type Panel =
   | { kind: "master" };
 
 export default function OrgControlTower({
-  embedded = false, callModel,
+  embedded = false, callModel, onAutomate,
 }: {
   embedded?: boolean;
   /** 없으면 실행 버튼이 비활성 — 전체화면 단독 페이지 등 */
   callModel?: (prompt: string, model: string, maxTokens?: number) => Promise<string>;
+  /** 세팅 끝난 팀을 자동화 화면으로 넘긴다 (그 팀이 선택된 채로 열림) */
+  onAutomate?: (divId: string, teamId: string) => void;
 }) {
   const { session } = useAuth();
   const userKey = session?.user?.email || "local";
@@ -138,7 +140,7 @@ export default function OrgControlTower({
     const id = newId("mb");
     commit(divisions.map((d) => d.id === bu.id ? {
       ...d, teams: d.teams.map((t) => t.id === team.id ? {
-        ...t, members: [...t.members, { id, name: "", role: "", status: "wait" as OrgStatus, tool: DEFAULT_TOOL, model: DEFAULT_MODEL }],
+        ...t, members: [...t.members, { id, name: "", role: "", status: "wait" as OrgStatus, kind: DEFAULT_KIND, tool: DEFAULT_TOOL, model: DEFAULT_MODEL }],
       } : t),
     } : d));
     focusId.current = `mb-${id}`;
@@ -166,15 +168,15 @@ export default function OrgControlTower({
    * 직원 = 자기 역할대로 일함 → 팀장 = 팀원 결과 검토 → 부서장 = 팀 검토 검토 → 마스터 = 최종 검토
    */
   const canRun = !!callModel;
-  const runModel = (m: OrgMember) => (isRunnable(m.tool) ? m.model : DEFAULT_MODEL);
+  const runModel = (m: OrgMember) => (isRunnable(m.kind, m.tool) ? m.model : DEFAULT_MODEL);
 
   /** 배포 직원의 실행 — 팀 결과(팀장 검토 우선, 없으면 팀원 결과 모음)를 채널로 내보낸다 */
   function runDeliver(d: OrgDivision, t: OrgTeam, m: OrgMember) {
     const payload = t.review || t.members.filter((x) => x.result).map((x) => `[${x.name || "담당자"}]\n${x.result}`).join("\n\n");
     if (!payload) { setErr("보낼 내용이 없어요. 먼저 팀원이 일을 하거나 팀장이 검토해야 합니다."); return; }
-    const info = deliverInfo(m.tool as DeliverTool);
+    const info = toolDef(m.kind, m.tool);
     if (!info.ready) {
-      setErr(`${info.emoji} ${info.label}은 아직 연결 전이에요 — ${info.note}. 지금은 이메일만 실제로 보내집니다.`);
+      setErr(`${info.label}은(는) 아직 연결 전이에요 — ${info.note}. 지금은 이메일만 실제로 보내집니다.`);
       patchMember(d.id, t.id, m.id, { status: "alert" });
       return;
     }
@@ -187,7 +189,7 @@ export default function OrgControlTower({
 
   async function runMember(d: OrgDivision, t: OrgTeam, m: OrgMember) {
     if (busyId) return;
-    if (isDeliver(m.tool)) { setErr(""); runDeliver(d, t, m); return; }
+    if (isDeliverKind(m.kind)) { setErr(""); runDeliver(d, t, m); return; }
     if (!callModel) return;
     setBusyId(m.id); setErr("");
     patchMember(d.id, t.id, m.id, { status: "work" });
@@ -484,6 +486,13 @@ export default function OrgControlTower({
               <span className="text-[11px] text-muted-foreground mr-auto">
                 {t.members.length}명{doneCount > 0 && <span className="text-emerald-600 dark:text-emerald-400"> · {doneCount} 완료</span>}
               </span>
+              {onAutomate && t.members.length > 0 && (
+                <button onClick={(e) => { stop(e); onAutomate(n.div.id, t.id); }}
+                  title="이 팀을 자동화로 보내기 — 업무를 지시하면 직원들이 순서대로 처리하고, 루프로 반복도 됩니다"
+                  className="h-6 px-2 rounded-md border border-border text-[11px] text-muted-foreground transition hover:border-primary hover:text-primary inline-flex items-center gap-1">
+                  <RotateCw className="w-3 h-3" /> 자동화
+                </button>
+              )}
               <button onClick={(e) => { stop(e); void reviewTeam(n.div, t); }} disabled={!canRun || !!busyId}
                 className="h-6 px-2 rounded-md bg-primary/10 text-primary text-[11px] font-semibold transition enabled:hover:bg-primary/20 disabled:opacity-40 inline-flex items-center gap-1">
                 {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : <Eye className="w-3 h-3" />} 검토
@@ -504,14 +513,14 @@ export default function OrgControlTower({
     // ── 직원 ──
     const m = n.member;
     const busy = busyId === m.id;
-    const models = modelsFor(m.tool);
-    const deliver = isDeliver(m.tool);   // 배포 담당 직원 — AI가 아니라 결과를 밖으로 내보낸다
+    const models = modelsOf(m.kind, m.tool);
+    const deliver = isDeliverKind(m.kind);   // 배포 담당 직원 — AI가 아니라 결과를 밖으로 내보낸다
     return (
       <div key={n.key} style={style} className="absolute">
         <div className={"relative h-full rounded-xl bg-card border px-3 py-2.5 flex flex-col gap-1.5 " + (deliver ? "border-teal-500/40" : "border-border")}>
           <div className="flex items-center gap-2">
             <span className={`w-2 h-2 rounded-full shrink-0 ${STATUS_DOT[m.status]}`} title={STATUS_META[m.status].label} />
-            {deliver && <span className="text-[11px] leading-none shrink-0" title="배포 담당">{toolEmoji(m.tool)}</span>}
+            <span className="text-[11px] leading-none shrink-0" title={kindEmoji(m.kind)}>{kindEmoji(m.kind)}</span>
             <input ref={nameRef(`mb-${m.id}`)} value={m.name} placeholder="직원 이름"
               onChange={(e) => patchMember(n.div.id, n.team.id, m.id, { name: e.target.value })} onClick={stop} onMouseDown={stop}
               onKeyDown={(e) => { e.stopPropagation(); if (e.key === "Enter") (e.target as HTMLInputElement).blur(); }}
@@ -522,20 +531,24 @@ export default function OrgControlTower({
             onChange={(e) => patchMember(n.div.id, n.team.id, m.id, { role: e.target.value })} onClick={stop} onMouseDown={stop} onKeyDown={stop}
             className="w-full bg-transparent border-b border-dashed border-muted-foreground/20 hover:border-solid hover:border-primary/50 focus:border-solid focus:border-primary outline-none text-[11.5px] text-muted-foreground py-0.5 cursor-text placeholder:text-muted-foreground/50" />
 
-          {/* 2단계 선택 — 1단계: AI 도구 또는 배포 채널 / 2단계: 상세모델 또는 보낼 대상 */}
+          {/* 3단계 선택 — 역할 → 도구 → 모델. 한 줄에 3개는 답답해서 역할을 위, 도구·모델을 아래로. */}
+          <select value={m.kind} onClick={stop} onMouseDown={stop}
+            onChange={(e) => {
+              const kind = e.target.value as MemberKind;
+              const t = toolsFor(kind)[0];
+              patchMember(n.div.id, n.team.id, m.id, { kind, tool: t.value, model: t.models[0].value });
+            }}
+            className="w-full text-[11px] rounded-md border border-border bg-background px-1.5 py-1 outline-none focus:border-primary cursor-pointer">
+            {MEMBER_KINDS.map((k) => <option key={k.value} value={k.value}>{k.emoji} {k.label}</option>)}
+          </select>
           <div className="flex items-center gap-1">
             <select value={m.tool} onClick={stop} onMouseDown={stop}
               onChange={(e) => {
-                const tool = e.target.value as MemberTool;
-                patchMember(n.div.id, n.team.id, m.id, { tool, model: modelsFor(tool)[0].value });
+                const tool = e.target.value;
+                patchMember(n.div.id, n.team.id, m.id, { tool, model: modelsOf(m.kind, tool)[0].value });
               }}
-              className="w-[86px] shrink-0 text-[11px] rounded-md border border-border bg-background px-1.5 py-1 outline-none focus:border-primary cursor-pointer">
-              <optgroup label="AI 모델">
-                {AI_TOOLS.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
-              </optgroup>
-              <optgroup label="배포 · 전송">
-                {DELIVER_TOOLS.map((t) => <option key={t.value} value={t.value}>{t.emoji} {t.label}</option>)}
-              </optgroup>
+              className="w-[92px] shrink-0 text-[11px] rounded-md border border-border bg-background px-1.5 py-1 outline-none focus:border-primary cursor-pointer">
+              {toolsFor(m.kind).map((t) => <option key={t.value} value={t.value}>{t.ready ? t.label : `${t.label} ⚠`}</option>)}
             </select>
             <select value={m.model} onClick={stop} onMouseDown={stop}
               onChange={(e) => patchMember(n.div.id, n.team.id, m.id, { model: e.target.value })}
@@ -546,11 +559,11 @@ export default function OrgControlTower({
 
           <div className="mt-auto flex items-center gap-1">
             <button onClick={() => void runMember(n.div, n.team, m)} disabled={(!canRun && !deliver) || !!busyId}
-              title={deliver && !isRunnable(m.tool) ? deliverInfo(m.tool as DeliverTool).note : undefined}
+              title={deliver && !isRunnable(m.kind, m.tool) ? toolNote(m.kind, m.tool) : undefined}
               className={"flex-1 h-6 rounded-md text-[11.5px] font-semibold transition enabled:hover:opacity-90 disabled:opacity-40 inline-flex items-center justify-center gap-1 "
-                + (deliver ? (isRunnable(m.tool) ? "bg-teal-600 text-white" : "bg-muted text-muted-foreground border border-dashed border-border") : "bg-primary text-primary-foreground")}>
+                + (deliver ? (isRunnable(m.kind, m.tool) ? "bg-teal-600 text-white" : "bg-muted text-muted-foreground border border-dashed border-border") : "bg-primary text-primary-foreground")}>
               {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : deliver ? <Send className="w-3 h-3" /> : <Play className="w-3 h-3" />}
-              {deliver ? (isRunnable(m.tool) ? "보내기" : "연결 필요") : "실행"}
+              {deliver ? (isRunnable(m.kind, m.tool) ? "보내기" : "연결 필요") : "실행"}
             </button>
             {m.result && (
               <button onClick={() => setPanel({ kind: "member", divId: n.div.id, teamId: n.team.id, memberId: m.id })}
@@ -579,7 +592,7 @@ export default function OrgControlTower({
     if (!m) return null;
     return {
       title: `${m.name || "담당자"}${m.role ? ` · ${m.role}` : ""}`,
-      sub: `${toolLabel(m.tool)} · ${modelLabelOf(m.tool, m.model)}${isRunnable(m.tool) ? "" : " (Claude로 대체 실행)"}`,
+      sub: `${kindEmoji(m.kind)} ${toolLabelOf(m.kind, m.tool)} · ${modelLabelOf(m.kind, m.tool, m.model)}${isRunnable(m.kind, m.tool) ? "" : " — 연결 필요"}`,
       body: m.result || "",
     };
   }
