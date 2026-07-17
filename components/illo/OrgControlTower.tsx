@@ -12,14 +12,15 @@ import { useAuth } from "@/contexts/AuthContext";
 import ProjectTopBar from "@/components/layout/ProjectTopBar";
 import {
   loadOrg, saveOrg, syncOrg, saveOrgCloudDebounced, newId, ORG_PALETTE, STATUS_META,
-  AI_TOOLS, modelsFor, toolLabel, modelLabelOf, isRunnable, DEFAULT_TOOL, DEFAULT_MODEL,
-  EMOJI_CHOICES, ORG_PRESETS, buildPreset,
-  type OrgDivision, type OrgTeam, type OrgMember, type OrgStatus, type OrgColor, type OrgIcon, type AiTool,
+  AI_TOOLS, DELIVER_TOOLS, modelsFor, toolLabel, modelLabelOf, isRunnable, isDeliver, deliverInfo, toolEmoji,
+  DEFAULT_TOOL, DEFAULT_MODEL, EMOJI_CHOICES, ORG_PRESETS, buildPreset,
+  type OrgDivision, type OrgTeam, type OrgMember, type OrgStatus, type OrgColor, type OrgIcon,
+  type MemberTool, type DeliverTool,
 } from "@/lib/illo/orgchart";
 import {
   ShieldCheck, Lightbulb, Code2, Palette, MessageSquare, Megaphone, Network,
   Users, User, Play, Eye, Check, Clock, AlertTriangle, Plus, ChevronRight, ChevronDown,
-  Trash2, ArrowLeft, Loader2, X, Wand2,
+  Trash2, ArrowLeft, Loader2, X, Wand2, Send,
 } from "lucide-react";
 
 // 상하(위→아래) 조직도: 레벨은 아래로 내려가고(ROW_Y), 형제 노드는 가로로 나열된다.
@@ -167,8 +168,27 @@ export default function OrgControlTower({
   const canRun = !!callModel;
   const runModel = (m: OrgMember) => (isRunnable(m.tool) ? m.model : DEFAULT_MODEL);
 
+  /** 배포 직원의 실행 — 팀 결과(팀장 검토 우선, 없으면 팀원 결과 모음)를 채널로 내보낸다 */
+  function runDeliver(d: OrgDivision, t: OrgTeam, m: OrgMember) {
+    const payload = t.review || t.members.filter((x) => x.result).map((x) => `[${x.name || "담당자"}]\n${x.result}`).join("\n\n");
+    if (!payload) { setErr("보낼 내용이 없어요. 먼저 팀원이 일을 하거나 팀장이 검토해야 합니다."); return; }
+    const info = deliverInfo(m.tool as DeliverTool);
+    if (!info.ready) {
+      setErr(`${info.emoji} ${info.label}은 아직 연결 전이에요 — ${info.note}. 지금은 이메일만 실제로 보내집니다.`);
+      patchMember(d.id, t.id, m.id, { status: "alert" });
+      return;
+    }
+    // 이메일: 메일 앱을 열고 제목·본문을 채워준다(실제 동작하는 유일한 채널)
+    const subject = `${d.name || "부서"} · ${t.name || "팀"} 결과`;
+    window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(payload)}`;
+    patchMember(d.id, t.id, m.id, { status: "done", result: `📧 메일 작성 창을 열었습니다.\n\n제목: ${subject}\n\n--- 보낸 내용 ---\n${payload}`, resultAt: new Date().toISOString() });
+    setPanel({ kind: "member", divId: d.id, teamId: t.id, memberId: m.id });
+  }
+
   async function runMember(d: OrgDivision, t: OrgTeam, m: OrgMember) {
-    if (!callModel || busyId) return;
+    if (busyId) return;
+    if (isDeliver(m.tool)) { setErr(""); runDeliver(d, t, m); return; }
+    if (!callModel) return;
     setBusyId(m.id); setErr("");
     patchMember(d.id, t.id, m.id, { status: "work" });
     try {
@@ -409,7 +429,8 @@ export default function OrgControlTower({
               <input ref={nameRef(`bu-${d.id}`)} value={d.name} placeholder="부서 이름"
                 onChange={(e) => patchDiv(d.id, { name: e.target.value })} onClick={stop} onMouseDown={stop}
                 onKeyDown={(e) => { e.stopPropagation(); if (e.key === "Enter") (e.target as HTMLInputElement).blur(); }}
-                className="flex-1 min-w-0 bg-transparent border-b border-transparent hover:border-border focus:border-primary outline-none font-semibold text-[13.5px] py-0.5 placeholder:text-muted-foreground/60 placeholder:font-normal" />
+                title="클릭해서 이름 바꾸기"
+                className="flex-1 min-w-0 bg-transparent border-b border-dashed border-muted-foreground/25 hover:border-solid hover:border-primary/60 focus:border-solid focus:border-primary outline-none font-semibold text-[13.5px] py-0.5 cursor-text placeholder:text-muted-foreground/60 placeholder:font-normal" />
               <ChevronRight className={`w-3.5 h-3.5 text-muted-foreground/50 shrink-0 transition-transform ${open ? "rotate-90" : ""}`} />
             </div>
             <div className="mt-auto flex items-center gap-1">
@@ -455,7 +476,8 @@ export default function OrgControlTower({
               <input ref={nameRef(`tm-${t.id}`)} value={t.name} placeholder="팀 이름"
                 onChange={(e) => patchTeam(n.div.id, t.id, { name: e.target.value })} onClick={stop} onMouseDown={stop}
                 onKeyDown={(e) => { e.stopPropagation(); if (e.key === "Enter") (e.target as HTMLInputElement).blur(); }}
-                className="flex-1 min-w-0 bg-transparent border-b border-transparent hover:border-border focus:border-primary outline-none font-semibold text-[13.5px] py-0.5 placeholder:text-muted-foreground/60 placeholder:font-normal" />
+                title="클릭해서 이름 바꾸기"
+                className="flex-1 min-w-0 bg-transparent border-b border-dashed border-muted-foreground/25 hover:border-solid hover:border-primary/60 focus:border-solid focus:border-primary outline-none font-semibold text-[13.5px] py-0.5 cursor-text placeholder:text-muted-foreground/60 placeholder:font-normal" />
               <ChevronRight className={`w-3.5 h-3.5 text-muted-foreground/50 shrink-0 transition-transform ${open ? "rotate-90" : ""}`} />
             </div>
             <div className="mt-auto flex items-center gap-1">
@@ -483,29 +505,37 @@ export default function OrgControlTower({
     const m = n.member;
     const busy = busyId === m.id;
     const models = modelsFor(m.tool);
+    const deliver = isDeliver(m.tool);   // 배포 담당 직원 — AI가 아니라 결과를 밖으로 내보낸다
     return (
       <div key={n.key} style={style} className="absolute">
-        <div className="relative h-full rounded-xl bg-card border border-border px-3 py-2.5 flex flex-col gap-1.5">
+        <div className={"relative h-full rounded-xl bg-card border px-3 py-2.5 flex flex-col gap-1.5 " + (deliver ? "border-teal-500/40" : "border-border")}>
           <div className="flex items-center gap-2">
             <span className={`w-2 h-2 rounded-full shrink-0 ${STATUS_DOT[m.status]}`} title={STATUS_META[m.status].label} />
+            {deliver && <span className="text-[11px] leading-none shrink-0" title="배포 담당">{toolEmoji(m.tool)}</span>}
             <input ref={nameRef(`mb-${m.id}`)} value={m.name} placeholder="직원 이름"
               onChange={(e) => patchMember(n.div.id, n.team.id, m.id, { name: e.target.value })} onClick={stop} onMouseDown={stop}
               onKeyDown={(e) => { e.stopPropagation(); if (e.key === "Enter") (e.target as HTMLInputElement).blur(); }}
-              className="flex-1 min-w-0 bg-transparent border-b border-transparent hover:border-border focus:border-primary outline-none font-semibold text-[13.5px] py-0.5 placeholder:text-muted-foreground/60 placeholder:font-normal" />
+              title="클릭해서 이름 바꾸기"
+              className="flex-1 min-w-0 bg-transparent border-b border-dashed border-muted-foreground/25 hover:border-solid hover:border-primary/60 focus:border-solid focus:border-primary outline-none font-semibold text-[13.5px] py-0.5 cursor-text placeholder:text-muted-foreground/60 placeholder:font-normal" />
           </div>
-          <input value={m.role} placeholder="역할 (예: 자료조사)"
+          <input value={m.role} placeholder="역할 (예: 자료조사)" title="클릭해서 역할 바꾸기"
             onChange={(e) => patchMember(n.div.id, n.team.id, m.id, { role: e.target.value })} onClick={stop} onMouseDown={stop} onKeyDown={stop}
-            className="w-full bg-transparent border-b border-transparent hover:border-border focus:border-primary outline-none text-[11.5px] text-muted-foreground py-0.5 placeholder:text-muted-foreground/50" />
+            className="w-full bg-transparent border-b border-dashed border-muted-foreground/20 hover:border-solid hover:border-primary/50 focus:border-solid focus:border-primary outline-none text-[11.5px] text-muted-foreground py-0.5 cursor-text placeholder:text-muted-foreground/50" />
 
-          {/* AI 모델 — 2단계: 도구 → 상세모델 */}
+          {/* 2단계 선택 — 1단계: AI 도구 또는 배포 채널 / 2단계: 상세모델 또는 보낼 대상 */}
           <div className="flex items-center gap-1">
             <select value={m.tool} onClick={stop} onMouseDown={stop}
               onChange={(e) => {
-                const tool = e.target.value as AiTool;
+                const tool = e.target.value as MemberTool;
                 patchMember(n.div.id, n.team.id, m.id, { tool, model: modelsFor(tool)[0].value });
               }}
               className="w-[86px] shrink-0 text-[11px] rounded-md border border-border bg-background px-1.5 py-1 outline-none focus:border-primary cursor-pointer">
-              {AI_TOOLS.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
+              <optgroup label="AI 모델">
+                {AI_TOOLS.map((t) => <option key={t.value} value={t.value}>{t.label}</option>)}
+              </optgroup>
+              <optgroup label="배포 · 전송">
+                {DELIVER_TOOLS.map((t) => <option key={t.value} value={t.value}>{t.emoji} {t.label}</option>)}
+              </optgroup>
             </select>
             <select value={m.model} onClick={stop} onMouseDown={stop}
               onChange={(e) => patchMember(n.div.id, n.team.id, m.id, { model: e.target.value })}
@@ -515,9 +545,12 @@ export default function OrgControlTower({
           </div>
 
           <div className="mt-auto flex items-center gap-1">
-            <button onClick={() => void runMember(n.div, n.team, m)} disabled={!canRun || !!busyId}
-              className="flex-1 h-6 rounded-md bg-primary text-primary-foreground text-[11.5px] font-semibold transition enabled:hover:opacity-90 disabled:opacity-40 inline-flex items-center justify-center gap-1">
-              {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : <Play className="w-3 h-3" />} 실행
+            <button onClick={() => void runMember(n.div, n.team, m)} disabled={(!canRun && !deliver) || !!busyId}
+              title={deliver && !isRunnable(m.tool) ? deliverInfo(m.tool as DeliverTool).note : undefined}
+              className={"flex-1 h-6 rounded-md text-[11.5px] font-semibold transition enabled:hover:opacity-90 disabled:opacity-40 inline-flex items-center justify-center gap-1 "
+                + (deliver ? (isRunnable(m.tool) ? "bg-teal-600 text-white" : "bg-muted text-muted-foreground border border-dashed border-border") : "bg-primary text-primary-foreground")}>
+              {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : deliver ? <Send className="w-3 h-3" /> : <Play className="w-3 h-3" />}
+              {deliver ? (isRunnable(m.tool) ? "보내기" : "연결 필요") : "실행"}
             </button>
             {m.result && (
               <button onClick={() => setPanel({ kind: "member", divId: n.div.id, teamId: n.team.id, memberId: m.id })}
@@ -560,14 +593,11 @@ export default function OrgControlTower({
         {/* 상단 툴바 */}
         <div className="shrink-0 border-b border-border bg-card/40">
           <div className="flex items-center gap-1.5 px-4 py-2 flex-wrap">
-            <button onClick={addBu} className="inline-flex items-center gap-1 rounded-md bg-primary text-primary-foreground px-2.5 py-1.5 text-[12.5px] font-semibold transition hover:opacity-90"><Plus className="w-3.5 h-3.5" /> 부서</button>
-            <button onClick={addTeam} disabled={!bu} className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2.5 py-1.5 text-[12.5px] transition enabled:hover:border-primary disabled:opacity-40"><Plus className="w-3 h-3" /> 팀</button>
-            <button onClick={addMember} disabled={!team} className="inline-flex items-center gap-1 rounded-md border border-border bg-card px-2.5 py-1.5 text-[12.5px] transition enabled:hover:border-primary disabled:opacity-40"><Plus className="w-3 h-3" /> 직원</button>
-
-            <span className="w-px h-4 bg-border mx-1" />
+            {/* +부서/+팀/+직원은 캔버스의 '만들기' 노드로 하므로 툴바에선 뺀다(중복) */}
             <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground mr-0.5"><Wand2 className="w-3 h-3" /> 바로 만들기</span>
             {ORG_PRESETS.map((p) => (
-              <button key={p.id} onClick={() => addPreset(p.id)} title={`${p.team} · ${p.members.length}명이 세팅된 부서를 만듭니다`}
+              <button key={p.id} onClick={() => addPreset(p.id)}
+                title={`'${p.dept}' 부서를 만듭니다 — ${p.team} · ${p.members.map((m) => m.name).join(" → ")}`}
                 className="inline-flex items-center gap-1 rounded-md border border-dashed border-border bg-card px-2 py-1.5 text-[12px] text-muted-foreground transition hover:border-primary hover:text-primary">
                 <span>{p.emoji}</span> {p.label}
               </button>

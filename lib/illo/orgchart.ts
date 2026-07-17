@@ -10,8 +10,8 @@ export type OrgMember = {
   name: string;
   role: string;
   status: OrgStatus;
-  tool: AiTool;   // 1단계: 도구(Claude/GPT/Gemini/Grok)
-  model: string;  // 2단계: 그 도구의 상세 모델 id
+  tool: MemberTool; // 1단계: AI 도구(Claude/GPT/…) 또는 배포 채널(이메일/깃허브/…)
+  model: string;    // 2단계: AI면 상세모델 id, 배포면 보낼 대상
   result?: string;      // 이 직원이 낸 결과물 (결과보기▼)
   resultAt?: string;    // 실행 시각(ISO)
 };
@@ -64,6 +64,39 @@ export const AI_TOOLS: { value: AiTool; label: string; emoji: string; runnable: 
   { value: "grok",   label: "Grok",    emoji: "⬛", runnable: false },
 ];
 
+/* ─────────────── 배포·전송 직원 ───────────────
+ * 모든 직원이 AI인 건 아니다. 팀이 만든 결과물을 밖으로 내보내는 '배포 담당'도 직원이다.
+ * 이 직원의 '실행'은 AI 호출이 아니라 — 같은 팀의 결과(팀장 검토 우선, 없으면 팀원 결과)를
+ * 지정한 채널로 내보내는 것이다.
+ *
+ * ⚠️ ready=false 는 아직 실제 연결이 없다는 뜻. 버튼만 있고 안 되는 걸 숨기지 않는다.
+ */
+export type DeliverTool = "email" | "github" | "sns" | "telegram" | "kakao";
+export type MemberTool = AiTool | DeliverTool;
+
+export const DELIVER_TOOLS: { value: DeliverTool; label: string; emoji: string; ready: boolean; note: string }[] = [
+  { value: "email",    label: "이메일",   emoji: "📧", ready: true,  note: "메일 앱이 열리고 제목·본문이 채워집니다" },
+  { value: "github",   label: "깃허브",   emoji: "🐙", ready: false, note: "저장소·토큰 연결이 필요합니다(미연동)" },
+  { value: "sns",      label: "SNS",      emoji: "📱", ready: false, note: "계정 연동·앱 심사가 필요합니다(미연동)" },
+  { value: "telegram", label: "텔레그램", emoji: "✈️", ready: false, note: "봇 토큰 연결이 필요합니다(미연동)" },
+  { value: "kakao",    label: "카톡",     emoji: "💬", ready: false, note: "카카오 연동이 필요합니다(미연동)" },
+];
+
+export const DELIVER_TARGETS: Record<DeliverTool, { value: string; label: string }[]> = {
+  email:    [{ value: "compose", label: "메일 작성 열기" }],
+  github:   [{ value: "commit", label: "저장소에 커밋" }, { value: "pr", label: "PR 만들기" }],
+  sns:      [{ value: "instagram", label: "인스타그램" }, { value: "x", label: "X (트위터)" }, { value: "facebook", label: "페이스북" }, { value: "threads", label: "스레드" }],
+  telegram: [{ value: "bot", label: "봇으로 보내기" }],
+  kakao:    [{ value: "me", label: "나에게 보내기" }],
+};
+
+export function isDeliver(tool: string): tool is DeliverTool {
+  return DELIVER_TOOLS.some((t) => t.value === tool);
+}
+export function deliverInfo(tool: DeliverTool) {
+  return DELIVER_TOOLS.find((t) => t.value === tool) || DELIVER_TOOLS[0];
+}
+
 export const TOOL_MODELS: Record<AiTool, { value: string; label: string }[]> = {
   claude: [
     { value: "claude-opus-4-8",   label: "Opus 4.8 · 최고급" },
@@ -87,16 +120,25 @@ export const TOOL_MODELS: Record<AiTool, { value: string; label: string }[]> = {
 export const DEFAULT_TOOL: AiTool = "claude";
 export const DEFAULT_MODEL = "claude-haiku-4-5"; // 기본은 가장 저렴한 모델
 
-export function modelsFor(tool: AiTool) {
-  return TOOL_MODELS[tool] || TOOL_MODELS.claude;
+/** 2단계 목록 — AI 도구면 상세모델, 배포 도구면 보낼 대상 */
+export function modelsFor(tool: MemberTool): { value: string; label: string }[] {
+  if (isDeliver(tool)) return DELIVER_TARGETS[tool];
+  return TOOL_MODELS[tool as AiTool] || TOOL_MODELS.claude;
 }
-export function toolLabel(tool: AiTool): string {
+export function toolLabel(tool: MemberTool): string {
+  if (isDeliver(tool)) return deliverInfo(tool).label;
   return AI_TOOLS.find((t) => t.value === tool)?.label || tool;
 }
-export function modelLabelOf(tool: AiTool, model: string): string {
+export function modelLabelOf(tool: MemberTool, model: string): string {
   return modelsFor(tool).find((m) => m.value === model)?.label || model;
 }
-export function isRunnable(tool: AiTool): boolean {
+export function toolEmoji(tool: MemberTool): string {
+  if (isDeliver(tool)) return deliverInfo(tool).emoji;
+  return AI_TOOLS.find((t) => t.value === tool)?.emoji || "🟧";
+}
+/** 실제로 실행되는가 — AI는 Claude만(직접 호출 경로), 배포는 연결된 채널만 */
+export function isRunnable(tool: MemberTool): boolean {
+  if (isDeliver(tool)) return deliverInfo(tool).ready;
   return !!AI_TOOLS.find((t) => t.value === tool)?.runnable;
 }
 
@@ -126,7 +168,8 @@ export function newId(p: string): string {
  */
 export type OrgPreset = {
   id: string;
-  label: string;
+  label: string;   // 버튼에 보이는 작업 이름 ("블로그 글 생성")
+  dept: string;    // 실제로 만들어질 부서 이름 ("블로그 생성부") — 라벨과 다르다
   emoji: string;
   color: OrgColor;
   icon: OrgIcon;
@@ -136,7 +179,7 @@ export type OrgPreset = {
 
 export const ORG_PRESETS: OrgPreset[] = [
   {
-    id: "blog", label: "블로그 글 생성", emoji: "✍️", color: "blue", icon: "bulb", team: "콘텐츠팀",
+    id: "blog", label: "블로그 글 생성", dept: "블로그 생성부", emoji: "✍️", color: "blue", icon: "bulb", team: "콘텐츠팀",
     members: [
       { name: "조사원", role: "주제의 핵심 사실·최신 트렌드·검색 키워드를 조사해 정리" },
       { name: "작가",   role: "조사 내용을 검색 잘 되는 블로그 글로 작성(제목·소제목 포함)" },
@@ -144,14 +187,14 @@ export const ORG_PRESETS: OrgPreset[] = [
     ],
   },
   {
-    id: "sns", label: "SNS 게시물", emoji: "📣", color: "pink", icon: "megaphone", team: "SNS팀",
+    id: "sns", label: "SNS 게시물", dept: "SNS 홍보부", emoji: "📣", color: "pink", icon: "megaphone", team: "SNS팀",
     members: [
       { name: "기획자", role: "타깃과 후킹 포인트를 잡고 게시물 컨셉 정하기" },
       { name: "카피라이터", role: "인스타·페북용 짧고 임팩트 있는 카피 작성(해시태그 포함)" },
     ],
   },
   {
-    id: "product", label: "상품 상세페이지", emoji: "📦", color: "teal", icon: "code", team: "상품팀",
+    id: "product", label: "상품 상세페이지", dept: "상품 기획부", emoji: "📦", color: "teal", icon: "code", team: "상품팀",
     members: [
       { name: "분석가", role: "상품의 강점·경쟁 상품과의 차별점 정리" },
       { name: "작가",   role: "구매 욕구를 자극하는 상세페이지 문구 작성" },
@@ -159,7 +202,7 @@ export const ORG_PRESETS: OrgPreset[] = [
     ],
   },
   {
-    id: "reply", label: "고객 응대", emoji: "🤝", color: "violet", icon: "message", team: "CS팀",
+    id: "reply", label: "고객 응대", dept: "고객 응대부", emoji: "🤝", color: "violet", icon: "message", team: "CS팀",
     members: [
       { name: "분석가", role: "문의·후기의 의도와 감정을 파악해 요점 정리" },
       { name: "상담원", role: "정중하고 신뢰가 가는 답변 작성" },
@@ -167,11 +210,11 @@ export const ORG_PRESETS: OrgPreset[] = [
   },
 ];
 
-/** 프리셋 → 실제 부서 객체 */
+/** 프리셋 → 실제 부서 객체 (부서·팀·직원이 역할까지 세팅된 채로) */
 export function buildPreset(p: OrgPreset): OrgDivision {
   return {
     id: newId("bu"),
-    name: p.label,
+    name: p.dept,
     color: p.color,
     icon: p.icon,
     emoji: p.emoji,
