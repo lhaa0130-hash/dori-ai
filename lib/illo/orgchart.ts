@@ -110,6 +110,19 @@ export const KIND_TOOLS: Record<MemberKind, ToolDef[]> = {
       { value: "deepseek-chat", label: "Chat · 가성비" },
       { value: "deepseek-reasoner", label: "Reasoner · 추론" },
     ]},
+    { value: "mistral", label: "Mistral", ready: false, note: "라우팅 미연동 — Claude(Haiku)로 대체 실행됩니다", models: [
+      { value: "mistral-large", label: "Large · 고급" },
+      { value: "mistral-small", label: "Small · 저렴" },
+    ]},
+    // 로컬 AI — 내 PC에서 도는 무료 모델. 원가 0원이지만 제약이 크다(아래 note).
+    { value: "local", label: "로컬(무료)", ready: false,
+      note: "내 PC에 Ollama 설치 + CORS 허용 필요. HTTPS 사이트에서 http://localhost 호출은 브라우저가 막을 수 있음 — 가이드 참고", models: [
+      { value: "llama3.3", label: "Llama 3.3 · 범용" },
+      { value: "qwen2.5", label: "Qwen 2.5 · 다국어" },
+      { value: "exaone3.5:7.8b", label: "EXAONE 3.5 · 한국어" },
+      { value: "gemma2", label: "Gemma 2 · 가벼움" },
+      { value: "deepseek-r1", label: "DeepSeek-R1 · 추론" },
+    ]},
   ],
   search: [
     { value: "tavily", label: "Tavily", ready: false, note: "검색 API 연결이 필요합니다", models: [{ value: "search", label: "웹 검색" }] },
