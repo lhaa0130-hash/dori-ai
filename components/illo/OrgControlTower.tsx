@@ -20,11 +20,11 @@ import {
 import {
   ShieldCheck, Lightbulb, Code2, Palette, MessageSquare, Megaphone, Network,
   Users, User, Play, Eye, Check, Clock, AlertTriangle, Plus, ChevronLeft, ChevronRight, ChevronDown,
-  Trash2, ArrowLeft, Loader2, X, Wand2, Send, RotateCw,
+  Trash2, ArrowLeft, Loader2, X, Wand2, Send, RotateCw, FlaskConical,
 } from "lucide-react";
 
 // 상하(위→아래) 조직도: 레벨은 아래로 내려가고(ROW_Y), 형제 노드는 가로로 나열된다.
-const W = [188, 196, 196, 284];   // 레벨별 노드 폭(마스터/부서/팀/직원)
+const W = [188, 196, 216, 284];   // 레벨별 노드 폭(마스터/부서/팀/직원) — 팀은 버튼이 많아 조금 넓게
 const ADD_W = 146;
 const H = { master: 88, div: 88, team: 88, member: 160, add: 52 };
 const ROW_GAP = 54;
@@ -269,7 +269,7 @@ export default function OrgControlTower({
   async function reviewTeam(d: OrgDivision, t: OrgTeam) {
     if (!callModel || busyId) return;
     const done = t.members.filter((m) => m.result);
-    if (!done.length) { setErr("먼저 팀원이 일을 해야 검토할 수 있어요. 직원 카드의 '실행'을 눌러주세요."); return; }
+    if (!done.length) { setErr("먼저 팀원이 일을 해야 검토할 수 있어요. 팀의 '실행'(또는 직원 카드의 '테스트')을 먼저 눌러주세요."); return; }
     setBusyId(t.id); setErr("");
     try {
       const prompt = [
@@ -548,34 +548,36 @@ export default function OrgControlTower({
                 onKeyDown={(e) => { e.stopPropagation(); if (e.key === "Enter") (e.target as HTMLInputElement).blur(); }}
                 title="클릭해서 이름 바꾸기"
                 className="flex-1 min-w-0 bg-transparent border-b border-dashed border-muted-foreground/25 hover:border-solid hover:border-primary/60 focus:border-solid focus:border-primary outline-none font-semibold text-[13.5px] py-0.5 cursor-text placeholder:text-muted-foreground/60 placeholder:font-normal" />
+              <span className="text-[10.5px] text-muted-foreground shrink-0 whitespace-nowrap">
+                {t.members.length}명{doneCount > 0 && <span className="text-emerald-600 dark:text-emerald-400">·{doneCount}완료</span>}
+              </span>
               <ChevronRight className={`w-3.5 h-3.5 text-muted-foreground/50 shrink-0 transition-transform ${open ? "rotate-90" : ""}`} />
             </div>
-            <div className="mt-auto flex items-center gap-1">
-              <span className="text-[11px] text-muted-foreground mr-auto">
-                {t.members.length}명{doneCount > 0 && <span className="text-emerald-600 dark:text-emerald-400"> · {doneCount} 완료</span>}
-              </span>
+            <div className="mt-auto flex items-center gap-1 justify-end">
               {t.members.length > 0 && (
                 <button onClick={(e) => { stop(e); void runAllMembers(n.div, t); }} disabled={!canRun || !!busyId}
-                  title="팀원 전원에게 '같은 일'을 시킵니다 — 같은 업무를 Claude·GPT·Gemini에게 동시에 시켜 비교할 때"
-                  className="h-6 px-2 rounded-md bg-primary text-primary-foreground text-[11px] font-semibold transition enabled:hover:opacity-90 disabled:opacity-40 inline-flex items-center gap-1">
-                  <Play className="w-3 h-3" /> 전원
-                </button>
-              )}
-              {onAutomate && t.members.length > 0 && (
-                <button onClick={(e) => { stop(e); onAutomate(n.div.id, t.id); }}
-                  title="이 팀을 자동화로 보내기 — 앞 직원 결과가 다음 직원에게 넘어가는 순차 처리 + 루프 반복"
-                  className="h-6 px-2 rounded-md border border-border text-[11px] text-muted-foreground transition hover:border-primary hover:text-primary inline-flex items-center gap-1">
-                  <RotateCw className="w-3 h-3" /> 자동화
+                  title="팀장이 팀원 전체에게 '이번에 시킬 일'을 지시합니다 — 각 팀원이 자기 역할대로 처리해요(같은 업무를 여러 모델에 시켜 비교도 가능). 직원 카드의 '테스트'는 혼자 돌려보는 용도예요."
+                  className="h-6 px-2 rounded-md bg-primary text-primary-foreground text-[11px] font-semibold transition enabled:hover:opacity-90 disabled:opacity-40 inline-flex items-center gap-1 whitespace-nowrap shrink-0">
+                  <Play className="w-3 h-3" /> 실행
                 </button>
               )}
               <button onClick={(e) => { stop(e); void reviewTeam(n.div, t); }} disabled={!canRun || !!busyId}
-                className="h-6 px-2 rounded-md bg-primary/10 text-primary text-[11px] font-semibold transition enabled:hover:bg-primary/20 disabled:opacity-40 inline-flex items-center gap-1">
+                title="팀장이 팀원들의 결과를 모아 검토합니다"
+                className="h-6 px-2 rounded-md bg-primary/10 text-primary text-[11px] font-semibold transition enabled:hover:bg-primary/20 disabled:opacity-40 inline-flex items-center gap-1 whitespace-nowrap shrink-0">
                 {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : <Eye className="w-3 h-3" />} 검토
               </button>
+              {onAutomate && t.members.length > 0 && (
+                <button onClick={(e) => { stop(e); onAutomate(n.div.id, t.id); }}
+                  title="자동화로 보내기 — 앞 직원 결과가 다음 직원 입력으로 넘어가는 순차 처리 + 루프 반복"
+                  className="h-6 w-6 rounded-md border border-border text-muted-foreground transition hover:border-primary hover:text-primary grid place-items-center shrink-0">
+                  <RotateCw className="w-3 h-3" />
+                </button>
+              )}
               {t.review && (
                 <button onClick={(e) => { stop(e); setPanel({ kind: "team", divId: n.div.id, teamId: t.id }); }}
-                  className="h-6 px-1.5 rounded-md border border-border text-[11px] text-muted-foreground hover:text-foreground inline-flex items-center gap-0.5">
-                  결과<ChevronDown className="w-3 h-3" />
+                  title="팀장 검토 결과 보기"
+                  className="h-6 w-6 rounded-md border border-border text-muted-foreground hover:text-foreground grid place-items-center shrink-0">
+                  <ChevronDown className="w-3 h-3" />
                 </button>
               )}
             </div>
@@ -653,15 +655,17 @@ export default function OrgControlTower({
 
           <div className="mt-auto flex items-center gap-1">
             <button onClick={() => void runMember(n.div, n.team, m)} disabled={(!canRun && !deliver) || !!busyId}
-              title={deliver && !isRunnable(m.kind, m.tool) ? toolNote(m.kind, m.tool) : undefined}
-              className={"flex-1 h-6 rounded-md text-[11.5px] font-semibold transition enabled:hover:opacity-90 disabled:opacity-40 inline-flex items-center justify-center gap-1 "
-                + (deliver ? (isRunnable(m.kind, m.tool) ? "bg-teal-600 text-white" : "bg-muted text-muted-foreground border border-dashed border-border") : "bg-primary text-primary-foreground")}>
-              {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : deliver ? <Send className="w-3 h-3" /> : <Play className="w-3 h-3" />}
-              {deliver ? (isRunnable(m.kind, m.tool) ? "보내기" : "연결 필요") : "실행"}
+              title={deliver
+                ? (isRunnable(m.kind, m.tool) ? "결과물을 실제로 내보냅니다" : toolNote(m.kind, m.tool))
+                : "이 직원 혼자 테스트로 돌려봅니다 — 실제 업무 지시는 팀 노드의 '실행'(팀장)으로 하세요"}
+              className={"flex-1 h-6 rounded-md text-[11.5px] font-semibold transition enabled:hover:opacity-90 disabled:opacity-40 inline-flex items-center justify-center gap-1 whitespace-nowrap "
+                + (deliver ? (isRunnable(m.kind, m.tool) ? "bg-teal-600 text-white" : "bg-muted text-muted-foreground border border-dashed border-border") : "bg-muted text-foreground border border-border")}>
+              {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : deliver ? <Send className="w-3 h-3" /> : <FlaskConical className="w-3 h-3" />}
+              {deliver ? (isRunnable(m.kind, m.tool) ? "보내기" : "연결 필요") : "테스트"}
             </button>
             {m.result && (
               <button onClick={() => setPanel({ kind: "member", divId: n.div.id, teamId: n.team.id, memberId: m.id })}
-                className="h-6 px-1.5 rounded-md border border-border text-[11px] text-muted-foreground hover:text-foreground inline-flex items-center gap-0.5">
+                className="h-6 px-1.5 rounded-md border border-border text-[11px] text-muted-foreground hover:text-foreground inline-flex items-center gap-0.5 whitespace-nowrap shrink-0">
                 결과보기<ChevronDown className="w-3 h-3" />
               </button>
             )}
