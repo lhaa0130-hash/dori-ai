@@ -81,6 +81,8 @@ export default function OrgControlTower({
   const [divisions, setDivisions] = useState<OrgDivision[]>([]);
   const [openBu, setOpenBu] = useState<string | null>(null);
   const [openTeam, setOpenTeam] = useState<string | null>(null);
+  // 팀을 클릭하면 그 팀만 넓게 펼치는 '상세 화면'으로 전환된다(직원·연결·실행 집중).
+  const [focusTeamId, setFocusTeamId] = useState<string | null>(null);
   const [zoom, setZoom] = useState(100);
   const [panel, setPanel] = useState<Panel | null>(null);
   const [busyId, setBusyId] = useState<string | null>(null);   // 실행/검토 중인 노드 id
@@ -152,6 +154,10 @@ export default function OrgControlTower({
 
   const bu = divisions.find((d) => d.id === openBu) || null;
   const team = bu?.teams.find((t) => t.id === openTeam) || null;
+  // 상세 화면 = 특정 팀에 포커스. 진입 시 openBu/openTeam도 그 팀으로 맞춰 team/링크가 그 팀을 가리킨다.
+  const detailMode = !!focusTeamId && !!team && team.id === focusTeamId;
+  function openDetail(d: OrgDivision, t: OrgTeam) { setOpenBu(d.id); setOpenTeam(t.id); setFocusTeamId(t.id); setPanel(null); setErr(""); }
+  function closeDetail() { setFocusTeamId(null); setPanel(null); }
 
   /* ── 조작 ── */
   function addBu() {
@@ -453,29 +459,12 @@ export default function OrgControlTower({
     } finally { setBusyId(null); }
   }
 
-  /* ── 레이아웃 (상하) ── */
+  /* ── 레이아웃 ── */
   const nodes: Node[] = [];
   const pos: Record<string, Pos> = {};
-  const rows: Node[][] = [[], [], [], []];
-  rows[0].push({ key: "master", kind: "master", pos: { x: 0, y: 0, w: 0, h: 0 } });
-  divisions.forEach((d) => rows[1].push({ key: `bu-${d.id}`, kind: "div", div: d, pos: { x: 0, y: 0, w: 0, h: 0 } }));
-  rows[1].push({ key: "add-bu", kind: "add", addType: "bu", label: "부서 만들기", pos: { x: 0, y: 0, w: 0, h: 0 } });
-  if (bu) {
-    bu.teams.forEach((t) => rows[2].push({ key: `tm-${t.id}`, kind: "team", div: bu, team: t, pos: { x: 0, y: 0, w: 0, h: 0 } }));
-    rows[2].push({ key: "add-tm", kind: "add", addType: "team", label: "팀 만들기", pos: { x: 0, y: 0, w: 0, h: 0 } });
-  }
-  if (bu && team) {
-    team.members.forEach((m) => rows[3].push({ key: `mb-${m.id}`, kind: "member", div: bu, team, member: m, pos: { x: 0, y: 0, w: 0, h: 0 } }));
-    rows[3].push({ key: "add-mb", kind: "add", addType: "member", label: "직원 추가", pos: { x: 0, y: 0, w: 0, h: 0 } });
-  }
   const hOf = (n: Node) => n.kind === "master" ? H.master : n.kind === "div" ? H.div : n.kind === "team" ? H.team : n.kind === "member" ? H.member : H.add;
   const wOf = (n: Node, lv: number) => n.kind === "add" ? ADD_W : W[lv];
-  const ROW_Y = [
-    PAD,
-    PAD + H.master + ROW_GAP,
-    PAD + H.master + H.div + 2 * ROW_GAP,
-    PAD + H.master + H.div + H.team + 3 * ROW_GAP,
-  ];
+  const ROW_Y = [PAD, PAD + H.master + ROW_GAP, PAD + H.master + H.div + 2 * ROW_GAP];
   const rowWidth = (col: Node[], lv: number) => col.reduce((s, n) => s + wOf(n, lv), 0) + Math.max(0, col.length - 1) * GAP;
   const layRow = (col: Node[], lv: number, startX: number) => {
     let x = startX;
@@ -483,7 +472,6 @@ export default function OrgControlTower({
   };
   const rowCenter = (col: Node[]) => { const f = col[0].pos, l = col[col.length - 1].pos; return (f.x + l.x + l.w) / 2; };
   // 자유 이동: 드래그 중이면 실시간 좌표, 아니면 저장된 좌표로 자동 배치를 덮어쓴다.
-  // 부모(부서/팀)를 먼저 덮어써야 그 아래 자식 행이 부모의 '옮긴 위치'를 기준으로 배치된다.
   const applyStored = (n: Node) => {
     const p = pos[n.key];
     if (!p) return;
@@ -491,39 +479,49 @@ export default function OrgControlTower({
     const s = n.kind === "div" ? n.div : n.kind === "team" ? n.team : n.kind === "member" ? n.member : null;
     if (s && s.x != null && s.y != null) { p.x = s.x; p.y = s.y; }
   };
-  layRow(rows[1], 1, PAD);
-  rows[1].forEach(applyStored);
-  const divCenter = rows[1].length ? rowCenter(rows[1]) : PAD + W[0] / 2;
-  rows[0][0].pos = { x: Math.max(PAD, divCenter - W[0] / 2), y: ROW_Y[0], w: W[0], h: H.master };
-  pos["master"] = rows[0][0].pos;
-  if (rows[2].length) {
-    const p = bu ? pos[`bu-${bu.id}`] : null;
-    const cx = p ? p.x + p.w / 2 : divCenter;
-    const cy = p ? p.y + p.h + ROW_GAP : ROW_Y[2];
-    layRow(rows[2], 2, Math.max(PAD, cx - rowWidth(rows[2], 2) / 2));
-    rows[2].forEach((n) => { const q = pos[n.key]; if (q) q.y = cy; });   // 옮긴 부서 바로 아래로
-    rows[2].forEach(applyStored);
-  }
-  if (rows[3].length) {
-    const p = team ? pos[`tm-${team.id}`] : null;
-    const cx = p ? p.x + p.w / 2 : (rows[2].length ? rowCenter(rows[2]) : divCenter);
-    const cy = p ? p.y + p.h + ROW_GAP : ROW_Y[3];
-    layRow(rows[3], 3, Math.max(PAD, cx - rowWidth(rows[3], 3) / 2));
-    rows[3].forEach((n) => { const q = pos[n.key]; if (q) q.y = cy; });
-    rows[3].forEach(applyStored);
-  }
-  rows.forEach((col) => col.forEach((n) => nodes.push(n)));
-
   const edges: { a: string; b: string; dash: boolean }[] = [];
-  edges.push({ a: "master", b: "add-bu", dash: true });
-  divisions.forEach((d) => edges.push({ a: "master", b: `bu-${d.id}`, dash: false }));
-  if (bu) {
-    bu.teams.forEach((t) => edges.push({ a: `bu-${bu.id}`, b: `tm-${t.id}`, dash: false }));
-    edges.push({ a: `bu-${bu.id}`, b: "add-tm", dash: true });
-  }
-  if (bu && team) {
-    team.members.forEach((m) => edges.push({ a: `tm-${team.id}`, b: `mb-${m.id}`, dash: false }));
-    edges.push({ a: `tm-${team.id}`, b: "add-mb", dash: true });
+
+  if (detailMode && bu && team) {
+    // ── 팀 상세: 그 팀 직원만 한 줄로 넉넉히(연결·테스트 넓게 보이도록) ──
+    const DTOP = PAD + 4, DGAP = 60;
+    let x = PAD;
+    team.members.forEach((m) => {
+      const n: Node = { key: `mb-${m.id}`, kind: "member", div: bu, team, member: m, pos: { x, y: DTOP, w: W[3], h: H.member } };
+      pos[n.key] = n.pos; nodes.push(n); x += W[3] + DGAP;
+    });
+    const addN: Node = { key: "add-mb", kind: "add", addType: "member", label: "직원 추가", pos: { x, y: DTOP + (H.member - H.add) / 2, w: ADD_W, h: H.add } };
+    pos[addN.key] = addN.pos; nodes.push(addN);
+    nodes.forEach(applyStored);   // 직원 자유 이동 반영 (흐름 연결선은 flowLinks에서 그림)
+  } else {
+    // ── 조직 개요: 마스터 → 부서 → 팀 (직원은 팀 상세에서) ──
+    const rows: Node[][] = [[], [], []];
+    rows[0].push({ key: "master", kind: "master", pos: { x: 0, y: 0, w: 0, h: 0 } });
+    divisions.forEach((d) => rows[1].push({ key: `bu-${d.id}`, kind: "div", div: d, pos: { x: 0, y: 0, w: 0, h: 0 } }));
+    rows[1].push({ key: "add-bu", kind: "add", addType: "bu", label: "부서 만들기", pos: { x: 0, y: 0, w: 0, h: 0 } });
+    if (bu) {
+      bu.teams.forEach((t) => rows[2].push({ key: `tm-${t.id}`, kind: "team", div: bu, team: t, pos: { x: 0, y: 0, w: 0, h: 0 } }));
+      rows[2].push({ key: "add-tm", kind: "add", addType: "team", label: "팀 만들기", pos: { x: 0, y: 0, w: 0, h: 0 } });
+    }
+    layRow(rows[1], 1, PAD);
+    rows[1].forEach(applyStored);
+    const divCenter = rows[1].length ? rowCenter(rows[1]) : PAD + W[0] / 2;
+    rows[0][0].pos = { x: Math.max(PAD, divCenter - W[0] / 2), y: ROW_Y[0], w: W[0], h: H.master };
+    pos["master"] = rows[0][0].pos;
+    if (rows[2].length) {
+      const p = bu ? pos[`bu-${bu.id}`] : null;
+      const cx = p ? p.x + p.w / 2 : divCenter;
+      const cy = p ? p.y + p.h + ROW_GAP : ROW_Y[2];
+      layRow(rows[2], 2, Math.max(PAD, cx - rowWidth(rows[2], 2) / 2));
+      rows[2].forEach((n) => { const q = pos[n.key]; if (q) q.y = cy; });   // 옮긴 부서 바로 아래로
+      rows[2].forEach(applyStored);
+    }
+    rows.forEach((col) => col.forEach((n) => nodes.push(n)));
+    edges.push({ a: "master", b: "add-bu", dash: true });
+    divisions.forEach((d) => edges.push({ a: "master", b: `bu-${d.id}`, dash: false }));
+    if (bu) {
+      bu.teams.forEach((t) => edges.push({ a: `bu-${bu.id}`, b: `tm-${t.id}`, dash: false }));
+      edges.push({ a: `bu-${bu.id}`, b: "add-tm", dash: true });
+    }
   }
   const rightMost = Math.max(300, ...nodes.map((n) => n.pos.x + n.pos.w));
   const bottomMost = Math.max(200, ...nodes.map((n) => n.pos.y + n.pos.h));
@@ -692,7 +690,7 @@ export default function OrgControlTower({
       const doneCount = t.members.filter((m) => m.result).length;
       const bad = teamIncomplete(t);   // 이름이 없거나 직원이 0명 = 미완성
       return (
-        <div key={n.key} data-node style={style} className="absolute cursor-pointer group" onClick={() => setOpenTeam(open ? null : t.id)}>
+        <div key={n.key} data-node style={style} className="absolute cursor-pointer group" onClick={() => openDetail(n.div, t)} title="클릭하면 이 팀 상세로 들어갑니다(직원·연결·실행)">
           <Grip n={n} />
           <button onClick={(e) => { stop(e); delTeam(n.div.id, t.id); }} title="팀 삭제"
             className="absolute -top-1.5 -right-1.5 z-20 w-5 h-5 rounded-full bg-card border border-border text-muted-foreground opacity-0 group-hover:opacity-100 hover:border-rose-400 hover:text-rose-500 grid place-items-center transition">
@@ -723,35 +721,13 @@ export default function OrgControlTower({
               <span className="text-[10.5px] text-muted-foreground shrink-0 whitespace-nowrap">
                 {t.members.length}명{doneCount > 0 && <span className="text-emerald-600 dark:text-emerald-400">·{doneCount}완료</span>}
               </span>
-              <ChevronRight className={`w-3.5 h-3.5 text-muted-foreground/50 shrink-0 transition-transform ${open ? "rotate-90" : ""}`} />
+              <ChevronRight className="w-3.5 h-3.5 text-primary/70 shrink-0" />{/* 클릭하면 상세로 들어감 */}
             </div>
-            <div className="mt-auto flex items-center gap-1 justify-end">
-              {t.members.length > 0 && (
-                <button onClick={(e) => { stop(e); void runAllMembers(n.div, t); }} disabled={!canRun || !!busyId}
-                  title="팀장이 팀원 전체에게 '이번에 시킬 일'을 지시합니다 — 각 팀원이 자기 역할대로 처리해요(같은 업무를 여러 모델에 시켜 비교도 가능). 직원 카드의 '테스트'는 혼자 돌려보는 용도예요."
-                  className="h-6 px-2 rounded-md bg-primary text-primary-foreground text-[11px] font-semibold transition enabled:hover:opacity-90 disabled:opacity-40 inline-flex items-center gap-1 whitespace-nowrap shrink-0">
-                  <Play className="w-3 h-3" /> 실행
-                </button>
-              )}
-              <button onClick={(e) => { stop(e); void reviewTeam(n.div, t); }} disabled={!canRun || !!busyId}
-                title="팀장이 팀원들의 결과를 모아 검토합니다"
-                className="h-6 px-2 rounded-md bg-primary/10 text-primary text-[11px] font-semibold transition enabled:hover:bg-primary/20 disabled:opacity-40 inline-flex items-center gap-1 whitespace-nowrap shrink-0">
-                {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : <Eye className="w-3 h-3" />} 검토
-              </button>
-              {onAutomate && t.members.length > 0 && (
-                <button onClick={(e) => { stop(e); onAutomate(n.div.id, t.id); }}
-                  title="자동화로 보내기 — 앞 직원 결과가 다음 직원 입력으로 넘어가는 순차 처리 + 루프 반복"
-                  className="h-6 w-6 rounded-md border border-border text-muted-foreground transition hover:border-primary hover:text-primary grid place-items-center shrink-0">
-                  <RotateCw className="w-3 h-3" />
-                </button>
-              )}
-              {t.review && (
-                <button onClick={(e) => { stop(e); setPanel({ kind: "team", divId: n.div.id, teamId: t.id }); }}
-                  title="팀장 검토 결과 보기"
-                  className="h-6 w-6 rounded-md border border-border text-muted-foreground hover:text-foreground grid place-items-center shrink-0">
-                  <ChevronDown className="w-3 h-3" />
-                </button>
-              )}
+            <div className="mt-auto flex items-center gap-1">
+              <span className="text-[11px] text-muted-foreground inline-flex items-center gap-1">
+                {t.review ? <span className="text-emerald-600 dark:text-emerald-400 inline-flex items-center gap-0.5"><Check className="w-3 h-3" /> 검토됨</span> : "클릭해서 상세로"}
+              </span>
+              <span className="ml-auto text-[11px] text-primary font-medium inline-flex items-center gap-0.5">열기 <ChevronRight className="w-3 h-3" /></span>
             </div>
             <Handle side="t" /><Handle side="b" />
           </div>
@@ -766,6 +742,9 @@ export default function OrgControlTower({
     const deliver = isDeliverKind(m.kind);   // 배포 담당 직원 — AI가 아니라 결과를 밖으로 내보낸다
     const bad = memberIncomplete(m);          // 이름·역할이 비면 실행해도 의미가 없다
     const idx = n.team.members.findIndex((x) => x.id === m.id);
+    const mlinks = n.team.links || [];
+    const hasIn = mlinks.some((l) => l.to === m.id);    // 들어오는 연결 있음(연결 확인용)
+    const hasOut = mlinks.some((l) => l.from === m.id);  // 나가는 연결 있음
     return (
       <div key={n.key} data-node style={style} className="absolute group">
         <button onClick={(e) => { stop(e); delMember(n.div.id, n.team.id, m.id); }} title="직원 삭제"
@@ -846,15 +825,18 @@ export default function OrgControlTower({
               </button>
             )}
           </div>
-          {/* 입력 포트(왼쪽) — 다른 직원의 결과가 들어오는 드롭 지점 */}
+          {/* 입력 포트(왼쪽) — 다른 직원의 결과가 들어오는 드롭 지점. 연결되면 꽉 찬 원. */}
           <span data-port-in data-member={m.id} data-team={n.team.id}
-            title="다른 직원의 결과가 여기로 들어옵니다"
-            className="absolute top-1/2 -translate-y-1/2 -left-1.5 w-3 h-3 rounded-full bg-background border-2 border-primary/60 z-10" />
-          {/* 출력 포트(오른쪽) — 여기서 드래그해 다음 직원의 왼쪽 점에 놓으면 결과가 넘어간다 */}
+            title={hasIn ? "다른 직원의 결과를 받는 중" : "다른 직원의 결과가 여기로 들어옵니다"}
+            className={"absolute top-1/2 -translate-y-1/2 -left-2 w-4 h-4 rounded-full border-2 z-10 transition "
+              + (hasIn ? "bg-primary border-background ring-2 ring-primary/30" : "bg-background border-primary/60")} />
+          {/* 출력 포트(오른쪽) — 끌어서 다음 직원 왼쪽 점에 놓으면 결과가 넘어간다. 여러 명에게 연결 가능. */}
           <span onMouseDown={(e) => startLink(e, n.team.id, m.id)}
-            title="여기서 드래그해 다음 직원의 왼쪽 점에 놓으세요 — 이 직원 결과가 그 직원에게 넘어갑니다"
-            className={"absolute top-1/2 -translate-y-1/2 -right-1.5 w-3 h-3 rounded-full border-2 border-background z-10 cursor-crosshair hover:scale-125 transition "
-              + (linkDrag?.from === m.id ? "bg-primary scale-125 ring-2 ring-primary/40" : "bg-primary/80")} />
+            title="여기서 끌어 다음 직원의 왼쪽 점에 놓으세요 — 여러 직원에게 연결할 수 있어요"
+            className={"absolute top-1/2 -translate-y-1/2 -right-2 w-4 h-4 rounded-full border-2 border-background z-10 cursor-crosshair hover:scale-125 grid place-items-center transition "
+              + (linkDrag?.from === m.id ? "bg-primary scale-125 ring-2 ring-primary/40" : hasOut ? "bg-primary ring-2 ring-primary/30" : "bg-primary/80")}>
+            <Plus className="w-2.5 h-2.5 text-primary-foreground" />
+          </span>
         </div>
       </div>
     );
@@ -887,41 +869,76 @@ export default function OrgControlTower({
 
         {/* 상단 툴바 */}
         <div className="shrink-0 border-b border-border bg-card/40">
-          {/* 이번에 시킬 일 — 부서·팀마다 다르므로 '지금 열린 팀'에 저장된다 */}
-          <div className="flex items-center gap-2 px-4 pt-2.5 pb-1.5">
-            <span className="text-[11px] font-bold text-muted-foreground shrink-0">
-              시킬 일{team && <span className="text-primary"> · {team.name || "팀"}</span>}
-            </span>
-            {team ? (
-              <>
-                <input value={team.task || ""} onChange={(e) => patchTeam(bu!.id, team.id, { task: e.target.value })}
+          {detailMode && bu && team ? (
+            <>
+              {/* 브레드크럼 — 어디에 있는지 + 조직도로 돌아가기 */}
+              <div className="flex items-center gap-2 px-4 pt-2.5 pb-1.5">
+                <button onClick={closeDetail} title="조직도(마스터·부서·팀)로 돌아가기"
+                  className="inline-flex items-center gap-1 rounded-md border border-border px-2 py-1 text-[12px] text-muted-foreground hover:border-primary hover:text-primary transition">
+                  <ArrowLeft className="w-3.5 h-3.5" /> 조직도
+                </button>
+                <span className="text-[12.5px] truncate min-w-0">
+                  <span className="text-muted-foreground">{bu.emoji || ""} {bu.name || "부서"}</span>
+                  <ChevronRight className="inline w-3.5 h-3.5 text-muted-foreground/40 align-middle" />
+                  <b className="text-foreground">{team.emoji || "👥"} {team.name || "팀"}</b>
+                </span>
+                <div className="ml-auto flex items-center gap-2 shrink-0">
+                  <input type="range" min={55} max={130} step={5} value={zoom} onChange={(e) => setZoom(Number(e.target.value))} className="w-20 accent-[hsl(var(--primary))]" />
+                  <span className="text-[11px] text-muted-foreground w-8 text-right tabular-nums">{zoom}%</span>
+                </div>
+              </div>
+              {/* 시킬 일 + 팀 실행/검토 */}
+              <div className="flex items-center gap-2 px-4 pb-1.5">
+                <span className="text-[11px] font-bold text-muted-foreground shrink-0">시킬 일</span>
+                <input value={team.task || ""} onChange={(e) => patchTeam(bu.id, team.id, { task: e.target.value })}
                   placeholder={`'${team.name || "이 팀"}'에 시킬 일 — 예) 신제품 출시 소식 콘텐츠를 만들어줘`}
                   className={"flex-1 min-w-0 text-[12.5px] rounded-md border bg-background px-2.5 py-1.5 outline-none transition placeholder:text-muted-foreground/50 "
                     + ((team.task || "").trim() ? "border-border focus:border-primary" : "border-rose-400/70 focus:border-rose-500")} />
-                {!(team.task || "").trim() && <span className="text-[11px] text-rose-500 shrink-0 hidden sm:inline">← 없으면 실행 불가</span>}
-              </>
-            ) : (
-              <span className="text-[12px] text-muted-foreground">부서·팀을 먼저 열면, 그 팀에 시킬 일을 여기서 적을 수 있어요.</span>
-            )}
-          </div>
-          <div className="flex items-center gap-1.5 px-4 pb-2 flex-wrap">
-            {/* +부서/+팀/+직원은 캔버스의 '만들기' 노드로 하므로 툴바에선 뺀다(중복) */}
-            <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground mr-0.5"><Wand2 className="w-3 h-3" /> 바로 만들기</span>
-            {ORG_PRESETS.map((p) => (
-              <button key={p.id} onClick={() => addPreset(p.id)}
-                title={`'${p.dept}' 부서를 만듭니다 — ${p.team} · ${p.members.map((m) => m.name).join(" → ")}`}
-                className="inline-flex items-center gap-1 rounded-md border border-dashed border-border bg-card px-2 py-1.5 text-[12px] text-muted-foreground transition hover:border-primary hover:text-primary">
-                <span>{p.emoji}</span> {p.label}
-              </button>
-            ))}
-
-            <div className="ml-auto flex items-center gap-2">
-              <span className="text-[11px] text-muted-foreground hidden md:inline">부서 {divisions.length} · 팀 {teamsCount} · 직원 {membersCount}</span>
-              <input type="range" min={55} max={130} step={5} value={zoom} onChange={(e) => setZoom(Number(e.target.value))} className="w-20 accent-[hsl(var(--primary))]" />
-              <span className="text-[11px] text-muted-foreground w-8 text-right tabular-nums">{zoom}%</span>
-              <button onClick={reset} title="전체 비우기" className="p-1.5 rounded-md border border-border text-muted-foreground transition hover:text-rose-500"><Trash2 className="w-3.5 h-3.5" /></button>
-            </div>
-          </div>
+                <button onClick={() => void runAllMembers(bu, team)} disabled={!canRun || !!busyId}
+                  title="팀장이 팀원 전체에게 이 업무를 지시합니다"
+                  className="h-7 px-2.5 rounded-md bg-primary text-primary-foreground text-[12px] font-semibold transition enabled:hover:opacity-90 disabled:opacity-40 inline-flex items-center gap-1 shrink-0 whitespace-nowrap">
+                  <Play className="w-3 h-3" /> 실행
+                </button>
+                <button onClick={() => void reviewTeam(bu, team)} disabled={!canRun || !!busyId}
+                  title="팀장이 팀원 결과를 모아 검토"
+                  className="h-7 px-2.5 rounded-md bg-primary/10 text-primary text-[12px] font-semibold transition enabled:hover:bg-primary/20 disabled:opacity-40 inline-flex items-center gap-1 shrink-0 whitespace-nowrap">
+                  <Eye className="w-3 h-3" /> 검토
+                </button>
+                {onAutomate && (
+                  <button onClick={() => onAutomate(bu.id, team.id)} title="자동화로 보내기(순차 파이프라인 + 루프)"
+                    className="h-7 w-7 rounded-md border border-border text-muted-foreground hover:border-primary hover:text-primary grid place-items-center shrink-0 transition">
+                    <RotateCw className="w-3.5 h-3.5" />
+                  </button>
+                )}
+              </div>
+              <div className="px-4 pb-2 text-[11px] text-muted-foreground leading-snug">
+                💡 직원 <b className="text-foreground">오른쪽 ⊕점</b>을 끌어 다음 직원 <b className="text-foreground">왼쪽 점</b>에 놓으면 연결(여러 명 가능) · 연결선 클릭=삭제 · <b className="text-foreground">⠿</b>로 이동 · <b className="text-foreground">테스트</b>=직원 혼자 돌려보기
+              </div>
+            </>
+          ) : (
+            <>
+              {/* 조직 개요 — 프리셋으로 바로 만들기 */}
+              <div className="flex items-center gap-1.5 px-4 pt-2.5 pb-1.5 flex-wrap">
+                <span className="inline-flex items-center gap-1 text-[11px] text-muted-foreground mr-0.5"><Wand2 className="w-3 h-3" /> 바로 만들기</span>
+                {ORG_PRESETS.map((p) => (
+                  <button key={p.id} onClick={() => addPreset(p.id)}
+                    title={`'${p.dept}' 부서를 만듭니다 — ${p.team} · ${p.members.map((m) => m.name).join(" → ")}`}
+                    className="inline-flex items-center gap-1 rounded-md border border-dashed border-border bg-card px-2 py-1.5 text-[12px] text-muted-foreground transition hover:border-primary hover:text-primary">
+                    <span>{p.emoji}</span> {p.label}
+                  </button>
+                ))}
+                <div className="ml-auto flex items-center gap-2">
+                  <span className="text-[11px] text-muted-foreground hidden md:inline">부서 {divisions.length} · 팀 {teamsCount} · 직원 {membersCount}</span>
+                  <input type="range" min={55} max={130} step={5} value={zoom} onChange={(e) => setZoom(Number(e.target.value))} className="w-20 accent-[hsl(var(--primary))]" />
+                  <span className="text-[11px] text-muted-foreground w-8 text-right tabular-nums">{zoom}%</span>
+                  <button onClick={reset} title="전체 비우기" className="p-1.5 rounded-md border border-border text-muted-foreground transition hover:text-rose-500"><Trash2 className="w-3.5 h-3.5" /></button>
+                </div>
+              </div>
+              <div className="px-4 pb-2 text-[11px] text-muted-foreground">
+                💡 <b className="text-foreground">팀</b>을 클릭하면 그 팀 상세(직원·연결·테스트·실행)로 들어갑니다.
+              </div>
+            </>
+          )}
         </div>
 
         <div className="relative flex flex-1 min-h-0">
