@@ -20,7 +20,7 @@ import {
 import {
   ShieldCheck, Lightbulb, Code2, Palette, MessageSquare, Megaphone, Network,
   Users, User, Play, Eye, Check, Clock, AlertTriangle, Plus, ChevronLeft, ChevronRight, ChevronDown,
-  Trash2, ArrowLeft, Loader2, X, Wand2, Send, RotateCw, FlaskConical,
+  Trash2, ArrowLeft, Loader2, X, Wand2, Send, RotateCw, FlaskConical, GripVertical,
 } from "lucide-react";
 
 // 상하(위→아래) 조직도: 레벨은 아래로 내려가고(ROW_Y), 형제 노드는 가로로 나열된다.
@@ -43,6 +43,13 @@ const STATUS_DOT: Record<OrgStatus, string> = {
 const STATUS_ICON: Record<OrgStatus, typeof Play> = {
   work: Play, review: Eye, done: Check, wait: Clock, alert: AlertTriangle,
 };
+
+// 마스터 최종 검토는 서로 다른 3개 LLM이 각자 본다(현재 실제 실행되는 건 Claude 계열 3티어).
+const MASTER_REVIEWERS = [
+  { model: "claude-opus-4-8", label: "Claude Opus 4.8" },
+  { model: "claude-sonnet-5", label: "Claude Sonnet 5" },
+  { model: "claude-haiku-4-5", label: "Claude Haiku 4.5" },
+];
 
 type Pos = { x: number; y: number; w: number; h: number };
 type Node =
@@ -79,10 +86,10 @@ export default function OrgControlTower({
   const [busyId, setBusyId] = useState<string | null>(null);   // 실행/검토 중인 노드 id
   const [err, setErr] = useState("");
   const [emojiFor, setEmojiFor] = useState<string | null>(null); // 이모지 고르는 중인 노드 key
-  // 이번에 시킬 일 — 이게 없으면 직원이 "무엇에 대해" 일할지 알 수 없어 실행이 무의미하다.
-  const [task, setTask] = useState("");
   // 드래그로 잇는 직원 간 흐름 연결 (출력 포트에서 끌기 시작 → 다른 직원 입력 포트에 놓기)
   const [linkDrag, setLinkDrag] = useState<{ teamId: string; from: string; x: number; y: number } | null>(null);
+  // 노드 자유 이동 — 드래그 중인 노드의 실시간 좌표(놓을 때 데이터에 저장). 이동은 그립(⠿)에서만 시작.
+  const [drag, setDrag] = useState<{ key: string; x: number; y: number } | null>(null);
 
   const inputMap = useRef<Map<string, HTMLInputElement>>(new Map());
   const focusId = useRef<string | null>(null);
@@ -237,6 +244,49 @@ export default function OrgControlTower({
       teams: d.teams.map((t) => t.id !== tId ? t : { ...t, links: (t.links || []).filter((l) => !(l.from === from && l.to === to)) }),
     })));
   }
+  /* ── 노드 자유 이동 ── */
+  function nodeIds(n: Node): { kind: string; buId?: string; tId?: string; mId?: string } {
+    if (n.kind === "div") return { kind: "div", buId: n.div.id };
+    if (n.kind === "team") return { kind: "team", buId: n.div.id, tId: n.team.id };
+    if (n.kind === "member") return { kind: "member", buId: n.div.id, tId: n.team.id, mId: n.member.id };
+    return { kind: n.kind };
+  }
+  /** 그립(⠿)에서 드래그 시작 — 캔버스 좌표(확대 보정)로 옮기고 놓을 때 데이터에 저장 */
+  function startNodeDrag(e: ReactMouseEvent, n: Node) {
+    e.stopPropagation(); e.preventDefault();
+    const inner = canvasRef.current;
+    const nodeEl = (e.target as HTMLElement).closest("[data-node]") as HTMLElement | null;
+    if (!inner || !nodeEl) return;
+    const scale = zoom / 100;
+    const cr = inner.getBoundingClientRect();
+    const nr = nodeEl.getBoundingClientRect();
+    const baseX = (nr.left - cr.left) / scale, baseY = (nr.top - cr.top) / scale;
+    const grabDX = (e.clientX - cr.left) / scale - baseX;
+    const grabDY = (e.clientY - cr.top) / scale - baseY;
+    const ids = nodeIds(n);
+    let moved = false;
+    const onMove = (ev: MouseEvent) => {
+      const nx = Math.max(0, (ev.clientX - cr.left) / scale - grabDX);
+      const ny = Math.max(0, (ev.clientY - cr.top) / scale - grabDY);
+      if (!moved && Math.abs(nx - baseX) + Math.abs(ny - baseY) > 3) moved = true;
+      if (moved) setDrag({ key: n.key, x: nx, y: ny });
+    };
+    const onUp = (ev: MouseEvent) => {
+      window.removeEventListener("mousemove", onMove);
+      window.removeEventListener("mouseup", onUp);
+      if (moved) {
+        const nx = Math.max(0, (ev.clientX - cr.left) / scale - grabDX);
+        const ny = Math.max(0, (ev.clientY - cr.top) / scale - grabDY);
+        if (ids.kind === "div") patchDiv(ids.buId!, { x: nx, y: ny });
+        else if (ids.kind === "team") patchTeam(ids.buId!, ids.tId!, { x: nx, y: ny });
+        else if (ids.kind === "member") patchMember(ids.buId!, ids.tId!, ids.mId!, { x: nx, y: ny });
+      }
+      setDrag(null);
+    };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+  }
+
   /** 출력 포트에서 드래그 시작 — 캔버스 좌표계(확대 보정)로 변환해 둔다 */
   function startLink(e: ReactMouseEvent, teamId: string, from: string) {
     e.stopPropagation(); e.preventDefault();
@@ -269,6 +319,14 @@ export default function OrgControlTower({
    */
   const canRun = !!callModel;
   const runModel = (m: OrgMember) => (isRunnable(m.kind, m.tool) ? m.model : DEFAULT_MODEL);
+  /** 실행 실패 메시지를 사람이 읽을 수 있게 — 원인을 몰라 "아무 일도 안 일어난다"고 느끼는 걸 막는다 */
+  function humanErr(e: unknown): string {
+    const msg = (e as Error)?.message || "";
+    if (/LOGIN_REQUIRED/i.test(msg)) return "실행하려면 로그인하거나 본인 API 키를 저장해야 해요 — 우측 상단 설정에서 Anthropic 키를 넣어주세요.";
+    if (/\b401\b|unauthor|invalid.*key|api key/i.test(msg)) return "API 키가 없거나 잘못됐어요 — 본인 Anthropic 키를 저장해 주세요(공용 키는 막혀 있어요).";
+    if (/quota|\b429\b|rate.?limit/i.test(msg)) return "잠깐 한도에 걸렸어요. 잠시 후 다시 시도해 주세요.";
+    return msg || "실행에 실패했어요.";
+  }
 
   /** 배포 직원의 실행 — 팀 결과(팀장 검토 우선, 없으면 팀원 결과 모음)를 채널로 내보낸다 */
   function runDeliver(d: OrgDivision, t: OrgTeam, m: OrgMember) {
@@ -291,7 +349,8 @@ export default function OrgControlTower({
     if (busyId) return;
     if (isDeliverKind(m.kind)) { setErr(""); runDeliver(d, t, m); return; }
     if (!callModel) return;
-    if (!task.trim()) { setErr("먼저 위에 '이번에 시킬 일'을 적어주세요 — 그게 없으면 직원이 무엇에 대해 일할지 알 수 없어요."); return; }
+    const job = (t.task || "").trim();
+    if (!job) { setErr(`'${t.name || "이 팀"}'에 시킬 일이 비어 있어요 — 위 '시킬 일' 칸에 무엇을 할지 먼저 적어주세요.`); return; }
     setBusyId(m.id); setErr("");
     patchMember(d.id, t.id, m.id, { status: "work" });
     try {
@@ -300,7 +359,7 @@ export default function OrgControlTower({
         `맡은 역할: ${m.role || "(역할 미지정 — 팀 이름과 부서 이름에 맞게 판단해서 처리)"}`,
         "",
         "--- 이번에 시킬 일 ---",
-        task.trim(),
+        job,
         "",
         "위 업무를 당신의 역할에 맞게 실제로 수행해서 결과물만 내주세요.",
         "이 결과는 상급자(팀장)에게 그대로 올라갑니다. 인사말·설명 없이 결과 자체만 작성하세요.",
@@ -310,7 +369,7 @@ export default function OrgControlTower({
       setPanel({ kind: "member", divId: d.id, teamId: t.id, memberId: m.id });
     } catch (e) {
       patchMember(d.id, t.id, m.id, { status: "alert" });
-      setErr((e as Error).message || "실행에 실패했어요.");
+      setErr(humanErr(e));
     } finally { setBusyId(null); }
   }
 
@@ -319,7 +378,7 @@ export default function OrgControlTower({
    *  (순차 파이프라인 = 앞 결과가 다음 직원 입력으로 넘어가는 방식은 '자동화' 화면) */
   async function runAllMembers(d: OrgDivision, t: OrgTeam) {
     if (!callModel || busyId) return;
-    if (!task.trim()) { setErr("먼저 위에 '이번에 시킬 일'을 적어주세요."); return; }
+    if (!(t.task || "").trim()) { setErr(`'${t.name || "이 팀"}'에 시킬 일을 먼저 적어주세요.`); return; }
     const targets = t.members.filter((m) => !isDeliverKind(m.kind));
     if (!targets.length) { setErr("실행할 직원이 없어요."); return; }
     for (const m of targets) {
@@ -344,7 +403,7 @@ export default function OrgControlTower({
       patchTeam(d.id, t.id, { review: text, reviewAt: new Date().toISOString() });
       setPanel({ kind: "team", divId: d.id, teamId: t.id });
     } catch (e) {
-      setErr((e as Error).message || "검토에 실패했어요.");
+      setErr(humanErr(e));
     } finally { setBusyId(null); }
   }
 
@@ -364,28 +423,33 @@ export default function OrgControlTower({
       patchDiv(d.id, { review: text, reviewAt: new Date().toISOString() });
       setPanel({ kind: "div", divId: d.id });
     } catch (e) {
-      setErr((e as Error).message || "검토에 실패했어요.");
+      setErr(humanErr(e));
     } finally { setBusyId(null); }
   }
 
   const [masterReview, setMasterReview] = useState<string>("");
   async function reviewMaster() {
     if (!callModel || busyId) return;
+    const cm = callModel;
     const done = divisions.filter((d) => d.review);
     if (!done.length) { setErr("먼저 부서장이 검토를 마쳐야 마스터가 최종 검토할 수 있어요."); return; }
     setBusyId("master"); setErr("");
+    const prompt = [
+      "당신은 이 조직의 마스터(최종 감독)입니다.",
+      "아래는 각 부서장이 올린 검토 결과입니다. 최종 감독으로서 빠진 것·틀린 것·리스크를 짚고 종합 검수해 주세요.",
+      "",
+      ...done.map((d) => `--- ${d.name || "부서"} ---\n${d.review}`),
+    ].join("\n");
     try {
-      const prompt = [
-        "당신은 이 조직의 마스터(최종 감독)입니다.",
-        "아래는 각 부서장이 올린 검토 결과입니다. 최종 감독으로서 종합 검수해 주세요.",
-        "",
-        ...done.map((d) => `--- ${d.name || "부서"} ---\n${d.review}`),
-      ].join("\n");
-      const text = await callModel(prompt, DEFAULT_MODEL, 2000);
-      setMasterReview(text);
+      // 서로 다른 3개 LLM이 각자 최종 검토 → 한 화면에 세 관점을 나란히 (하나 실패해도 나머지는 진행)
+      const results = await Promise.all(MASTER_REVIEWERS.map(async (mm) => {
+        try { return `### 🧠 ${mm.label}\n${await cm(prompt, mm.model, 2000)}`; }
+        catch (e) { return `### 🧠 ${mm.label}\n⚠️ ${humanErr(e)}`; }
+      }));
+      setMasterReview(results.join("\n\n————————\n\n"));
       setPanel({ kind: "master" });
     } catch (e) {
-      setErr((e as Error).message || "검토에 실패했어요.");
+      setErr(humanErr(e));
     } finally { setBusyId(null); }
   }
 
@@ -418,19 +482,35 @@ export default function OrgControlTower({
     col.forEach((n) => { n.pos = { x, y: ROW_Y[lv], w: wOf(n, lv), h: hOf(n) }; pos[n.key] = n.pos; x += n.pos.w + GAP; });
   };
   const rowCenter = (col: Node[]) => { const f = col[0].pos, l = col[col.length - 1].pos; return (f.x + l.x + l.w) / 2; };
+  // 자유 이동: 드래그 중이면 실시간 좌표, 아니면 저장된 좌표로 자동 배치를 덮어쓴다.
+  // 부모(부서/팀)를 먼저 덮어써야 그 아래 자식 행이 부모의 '옮긴 위치'를 기준으로 배치된다.
+  const applyStored = (n: Node) => {
+    const p = pos[n.key];
+    if (!p) return;
+    if (drag && drag.key === n.key) { p.x = drag.x; p.y = drag.y; return; }
+    const s = n.kind === "div" ? n.div : n.kind === "team" ? n.team : n.kind === "member" ? n.member : null;
+    if (s && s.x != null && s.y != null) { p.x = s.x; p.y = s.y; }
+  };
   layRow(rows[1], 1, PAD);
+  rows[1].forEach(applyStored);
   const divCenter = rows[1].length ? rowCenter(rows[1]) : PAD + W[0] / 2;
   rows[0][0].pos = { x: Math.max(PAD, divCenter - W[0] / 2), y: ROW_Y[0], w: W[0], h: H.master };
   pos["master"] = rows[0][0].pos;
   if (rows[2].length) {
     const p = bu ? pos[`bu-${bu.id}`] : null;
     const cx = p ? p.x + p.w / 2 : divCenter;
+    const cy = p ? p.y + p.h + ROW_GAP : ROW_Y[2];
     layRow(rows[2], 2, Math.max(PAD, cx - rowWidth(rows[2], 2) / 2));
+    rows[2].forEach((n) => { const q = pos[n.key]; if (q) q.y = cy; });   // 옮긴 부서 바로 아래로
+    rows[2].forEach(applyStored);
   }
   if (rows[3].length) {
     const p = team ? pos[`tm-${team.id}`] : null;
     const cx = p ? p.x + p.w / 2 : (rows[2].length ? rowCenter(rows[2]) : divCenter);
+    const cy = p ? p.y + p.h + ROW_GAP : ROW_Y[3];
     layRow(rows[3], 3, Math.max(PAD, cx - rowWidth(rows[3], 3) / 2));
+    rows[3].forEach((n) => { const q = pos[n.key]; if (q) q.y = cy; });
+    rows[3].forEach(applyStored);
   }
   rows.forEach((col) => col.forEach((n) => nodes.push(n)));
 
@@ -478,6 +558,13 @@ export default function OrgControlTower({
   const stop = (e: SyntheticEvent) => e.stopPropagation();
   const Handle = ({ side }: { side: "t" | "b" }) => (
     <span className={`absolute left-1/2 -translate-x-1/2 w-2 h-2 rounded-full bg-primary/70 border-2 border-background ${side === "t" ? "-top-1" : "-bottom-1"}`} />
+  );
+  // 드래그 손잡이(⠿) — 여기서만 노드 이동이 시작된다(본문 클릭·입력과 충돌 없음)
+  const Grip = ({ n }: { n: Node }) => (
+    <button onMouseDown={(e) => startNodeDrag(e, n)} onClick={stop} title="드래그해서 자유롭게 이동"
+      className="absolute -top-1.5 left-1.5 z-20 w-5 h-5 rounded-full bg-card border border-border text-muted-foreground opacity-0 group-hover:opacity-100 hover:border-primary hover:text-primary grid place-items-center cursor-grab active:cursor-grabbing transition">
+      <GripVertical className="w-3 h-3" />
+    </button>
   );
 
   /* ── 이모지 고르기 ── */
@@ -530,8 +617,9 @@ export default function OrgControlTower({
             </div>
             <div className="mt-auto flex items-center gap-1">
               <button onClick={reviewMaster} disabled={!canRun || !!busyId}
+                title="서로 다른 3개 LLM(Opus·Sonnet·Haiku)이 각자 최종 검토합니다"
                 className="flex-1 h-6 rounded-md bg-primary/10 text-primary text-[11.5px] font-semibold transition enabled:hover:bg-primary/20 disabled:opacity-40 inline-flex items-center justify-center gap-1">
-                {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : <Eye className="w-3 h-3" />} 최종 검토
+                {busy ? <Loader2 className="w-3 h-3 animate-spin" /> : <Eye className="w-3 h-3" />} 최종 검토 <span className="text-[9px] opacity-70">3 LLM</span>
               </button>
               {masterReview && (
                 <button onClick={() => setPanel({ kind: "master" })}
@@ -550,7 +638,8 @@ export default function OrgControlTower({
       const d = n.div; const Icon = DIV_ICON[d.icon]; const open = d.id === openBu; const busy = busyId === d.id;
       const bad = divIncomplete(d);   // 이름이 없거나 팀이 0개 = 미완성
       return (
-        <div key={n.key} style={style} className="absolute cursor-pointer group" onClick={() => toggleBu(d.id)}>
+        <div key={n.key} data-node style={style} className="absolute cursor-pointer group" onClick={() => toggleBu(d.id)}>
+          <Grip n={n} />
           <button onClick={(e) => { stop(e); delBu(d.id); }} title="부서 삭제"
             className="absolute -top-1.5 -right-1.5 z-20 w-5 h-5 rounded-full bg-card border border-border text-muted-foreground opacity-0 group-hover:opacity-100 hover:border-rose-400 hover:text-rose-500 grid place-items-center transition">
             <X className="w-3 h-3" />
@@ -603,7 +692,8 @@ export default function OrgControlTower({
       const doneCount = t.members.filter((m) => m.result).length;
       const bad = teamIncomplete(t);   // 이름이 없거나 직원이 0명 = 미완성
       return (
-        <div key={n.key} style={style} className="absolute cursor-pointer group" onClick={() => setOpenTeam(open ? null : t.id)}>
+        <div key={n.key} data-node style={style} className="absolute cursor-pointer group" onClick={() => setOpenTeam(open ? null : t.id)}>
+          <Grip n={n} />
           <button onClick={(e) => { stop(e); delTeam(n.div.id, t.id); }} title="팀 삭제"
             className="absolute -top-1.5 -right-1.5 z-20 w-5 h-5 rounded-full bg-card border border-border text-muted-foreground opacity-0 group-hover:opacity-100 hover:border-rose-400 hover:text-rose-500 grid place-items-center transition">
             <X className="w-3 h-3" />
@@ -677,13 +767,17 @@ export default function OrgControlTower({
     const bad = memberIncomplete(m);          // 이름·역할이 비면 실행해도 의미가 없다
     const idx = n.team.members.findIndex((x) => x.id === m.id);
     return (
-      <div key={n.key} style={style} className="absolute group">
+      <div key={n.key} data-node style={style} className="absolute group">
         <button onClick={(e) => { stop(e); delMember(n.div.id, n.team.id, m.id); }} title="직원 삭제"
           className="absolute -top-1.5 -right-1.5 z-20 w-5 h-5 rounded-full bg-card border border-border text-muted-foreground opacity-0 group-hover:opacity-100 hover:border-rose-400 hover:text-rose-500 grid place-items-center transition">
           <X className="w-3 h-3" />
         </button>
-        {/* 직원 순서 = 일하는 순서 */}
-        <div className="absolute -top-1.5 left-2 z-20 flex gap-0.5 opacity-0 group-hover:opacity-100 transition">
+        {/* 이동 손잡이 + 순서(일하는 순서) */}
+        <div className="absolute -top-1.5 left-1.5 z-20 flex gap-0.5 opacity-0 group-hover:opacity-100 transition">
+          <button onMouseDown={(e) => startNodeDrag(e, n)} onClick={stop} title="드래그해서 자유롭게 이동"
+            className="w-5 h-5 rounded bg-card border border-border text-muted-foreground grid place-items-center hover:border-primary hover:text-primary cursor-grab active:cursor-grabbing transition">
+            <GripVertical className="w-3 h-3" />
+          </button>
           <button onClick={(e) => { stop(e); moveMember(n.div.id, n.team.id, m.id, -1); }} disabled={idx === 0} title="앞으로 (먼저 일함)"
             className="w-5 h-5 rounded bg-card border border-border text-muted-foreground grid place-items-center hover:border-primary hover:text-primary disabled:opacity-30 transition">
             <ChevronLeft className="w-3 h-3" />
@@ -769,7 +863,7 @@ export default function OrgControlTower({
   /* ── 하단 패널 내용 ── */
   function panelData(): { title: string; sub: string; body: string } | null {
     if (!panel) return null;
-    if (panel.kind === "master") return { title: "마스터 · 최종 검토", sub: "부서장 검토를 종합", body: masterReview };
+    if (panel.kind === "master") return { title: "마스터 · 최종 검토", sub: "서로 다른 3개 LLM이 각자 검토", body: masterReview };
     const d = divisions.find((x) => x.id === (panel as { divId: string }).divId);
     if (!d) return null;
     if (panel.kind === "div") return { title: `${d.emoji || ""} ${d.name || "부서"} · 부서장 검토`, sub: "팀장 검토를 종합", body: d.review || "" };
@@ -793,14 +887,22 @@ export default function OrgControlTower({
 
         {/* 상단 툴바 */}
         <div className="shrink-0 border-b border-border bg-card/40">
-          {/* 이번에 시킬 일 — 모든 직원 실행이 이 업무를 받는다 */}
+          {/* 이번에 시킬 일 — 부서·팀마다 다르므로 '지금 열린 팀'에 저장된다 */}
           <div className="flex items-center gap-2 px-4 pt-2.5 pb-1.5">
-            <span className="text-[11px] font-bold text-muted-foreground shrink-0">이번에 시킬 일</span>
-            <input value={task} onChange={(e) => setTask(e.target.value)}
-              placeholder="예) 신제품 '몽글로 동물도감' 출시 소식을 알릴 콘텐츠를 만들어줘"
-              className={"flex-1 min-w-0 text-[12.5px] rounded-md border bg-background px-2.5 py-1.5 outline-none transition placeholder:text-muted-foreground/50 "
-                + (task.trim() ? "border-border focus:border-primary" : "border-rose-400/70 focus:border-rose-500")} />
-            {!task.trim() && <span className="text-[11px] text-rose-500 shrink-0 hidden sm:inline">← 없으면 실행 불가</span>}
+            <span className="text-[11px] font-bold text-muted-foreground shrink-0">
+              시킬 일{team && <span className="text-primary"> · {team.name || "팀"}</span>}
+            </span>
+            {team ? (
+              <>
+                <input value={team.task || ""} onChange={(e) => patchTeam(bu!.id, team.id, { task: e.target.value })}
+                  placeholder={`'${team.name || "이 팀"}'에 시킬 일 — 예) 신제품 출시 소식 콘텐츠를 만들어줘`}
+                  className={"flex-1 min-w-0 text-[12.5px] rounded-md border bg-background px-2.5 py-1.5 outline-none transition placeholder:text-muted-foreground/50 "
+                    + ((team.task || "").trim() ? "border-border focus:border-primary" : "border-rose-400/70 focus:border-rose-500")} />
+                {!(team.task || "").trim() && <span className="text-[11px] text-rose-500 shrink-0 hidden sm:inline">← 없으면 실행 불가</span>}
+              </>
+            ) : (
+              <span className="text-[12px] text-muted-foreground">부서·팀을 먼저 열면, 그 팀에 시킬 일을 여기서 적을 수 있어요.</span>
+            )}
           </div>
           <div className="flex items-center gap-1.5 px-4 pb-2 flex-wrap">
             {/* +부서/+팀/+직원은 캔버스의 '만들기' 노드로 하므로 툴바에선 뺀다(중복) */}
@@ -820,15 +922,17 @@ export default function OrgControlTower({
               <button onClick={reset} title="전체 비우기" className="p-1.5 rounded-md border border-border text-muted-foreground transition hover:text-rose-500"><Trash2 className="w-3.5 h-3.5" /></button>
             </div>
           </div>
-          {err && (
-            <div className="flex items-start gap-1.5 px-4 pb-2 text-[12px] text-rose-600 dark:text-rose-400">
-              <AlertTriangle className="w-3.5 h-3.5 shrink-0 mt-0.5" /> {err}
-              <button onClick={() => setErr("")} className="ml-auto shrink-0 text-muted-foreground hover:text-foreground"><X className="w-3.5 h-3.5" /></button>
-            </div>
-          )}
         </div>
 
-        <div className="flex flex-1 min-h-0">
+        <div className="relative flex flex-1 min-h-0">
+          {/* 실행 에러 — 캔버스 어디를 보고 있든 항상 보이도록 하단 중앙에 띄운다 */}
+          {err && (
+            <div className="absolute bottom-4 left-1/2 -translate-x-1/2 z-40 max-w-[90%] flex items-start gap-2 rounded-xl border border-rose-400/60 bg-card px-4 py-2.5 shadow-lg text-[12.5px] text-rose-600 dark:text-rose-400">
+              <AlertTriangle className="w-4 h-4 shrink-0 mt-0.5" />
+              <span className="leading-snug">{err}</span>
+              <button onClick={() => setErr("")} className="shrink-0 -mr-1 text-muted-foreground hover:text-foreground"><X className="w-4 h-4" /></button>
+            </div>
+          )}
           {!embedded && (
             <aside className="w-[230px] shrink-0 border-r border-border bg-card overflow-y-auto p-4 flex flex-col gap-5">
               <div>

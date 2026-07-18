@@ -15,6 +15,7 @@ export type OrgMember = {
   model: string;    // 3단계: 그 도구의 상세 모델·대상
   result?: string;      // 이 직원이 낸 결과물 (결과보기▼)
   resultAt?: string;    // 실행 시각(ISO)
+  x?: number; y?: number;   // 자유 이동으로 지정한 캔버스 좌표(없으면 자동 배치)
 };
 /** 직원 → 직원 업무 흐름: from 직원의 결과가 to 직원에게 넘어간다(드래그로 연결). */
 export type MemberLink = { from: string; to: string };
@@ -24,8 +25,10 @@ export type OrgTeam = {
   emoji?: string;   // 없으면 부서 색 + 기본 아이콘
   members: OrgMember[];
   links?: MemberLink[];   // 직원 간 흐름(누가 누구에게 결과를 넘기는지) — 없으면 그냥 배열 순서
+  task?: string;      // 이 팀에 이번에 시킬 일 — 부서·팀마다 다르므로 팀별로 저장
   review?: string;    // 팀원 결과를 모아 상급자(팀장)가 검토한 내용
   reviewAt?: string;
+  x?: number; y?: number;   // 자유 이동 좌표
 };
 export type OrgDivision = {
   id: string;
@@ -36,6 +39,7 @@ export type OrgDivision = {
   teams: OrgTeam[];
   review?: string;    // 팀 검토들을 모아 부서장이 검토한 내용
   reviewAt?: string;
+  x?: number; y?: number;   // 자유 이동 좌표
 };
 
 export type OrgColor = "blue" | "teal" | "violet" | "pink" | "cyan" | "slate";
