@@ -16,11 +16,14 @@ export type OrgMember = {
   result?: string;      // 이 직원이 낸 결과물 (결과보기▼)
   resultAt?: string;    // 실행 시각(ISO)
 };
+/** 직원 → 직원 업무 흐름: from 직원의 결과가 to 직원에게 넘어간다(드래그로 연결). */
+export type MemberLink = { from: string; to: string };
 export type OrgTeam = {
   id: string;
   name: string;
   emoji?: string;   // 없으면 부서 색 + 기본 아이콘
   members: OrgMember[];
+  links?: MemberLink[];   // 직원 간 흐름(누가 누구에게 결과를 넘기는지) — 없으면 그냥 배열 순서
   review?: string;    // 팀원 결과를 모아 상급자(팀장)가 검토한 내용
   reviewAt?: string;
 };
@@ -314,9 +317,8 @@ export function normalizeOrg(arr: unknown): OrgDivision[] {
   if (!Array.isArray(arr)) return [];
   return (arr as OrgDivision[]).map((d) => ({
     ...d,
-    teams: (d.teams || []).map((t) => ({
-      ...t,
-      members: (t.members || []).map((m) => {
+    teams: (d.teams || []).map((t) => {
+      const members = (t.members || []).map((m) => {
         const raw = m as OrgMember & { kind?: MemberKind; tool?: string };
         // 이미 3단계로 저장돼 있고 값이 유효하면 그대로
         if (raw.kind && raw.tool && modelsOf(raw.kind, raw.tool).some((x) => x.value === raw.model)) return raw;
@@ -330,8 +332,18 @@ export function normalizeOrg(arr: unknown): OrgDivision[] {
         const legacy = LEGACY_MODEL[raw.model as string];
         if (legacy) return { ...raw, kind: legacy.kind, tool: legacy.tool, model: legacy.model };
         return { ...raw, kind: DEFAULT_KIND, tool: DEFAULT_TOOL, model: DEFAULT_MODEL };
-      }),
-    })),
+      });
+      // 흐름 링크 정리: 없는 직원 참조·자기연결·중복 제거
+      const ids = new Set(members.map((m) => m.id));
+      const seen = new Set<string>();
+      const links = (t.links || []).filter((l) => {
+        if (!l || l.from === l.to || !ids.has(l.from) || !ids.has(l.to)) return false;
+        const k = `${l.from}>${l.to}`;
+        if (seen.has(k)) return false;
+        seen.add(k); return true;
+      });
+      return { ...t, members, links };
+    }),
   }));
 }
 

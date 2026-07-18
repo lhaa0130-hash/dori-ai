@@ -6,7 +6,7 @@
 // (노드 높이를 고정해 조직도를 미니멀하게 유지하기 위함).
 // 저장: 계정별(projectSaves/illoOrg/users/{uid}) + 로컬 미러 — lib/illo/orgchart.ts
 
-import { useEffect, useRef, useState, type ReactNode, type CSSProperties, type SyntheticEvent } from "react";
+import { useEffect, useRef, useState, type ReactNode, type CSSProperties, type SyntheticEvent, type MouseEvent as ReactMouseEvent } from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import ProjectTopBar from "@/components/layout/ProjectTopBar";
@@ -81,9 +81,14 @@ export default function OrgControlTower({
   const [emojiFor, setEmojiFor] = useState<string | null>(null); // 이모지 고르는 중인 노드 key
   // 이번에 시킬 일 — 이게 없으면 직원이 "무엇에 대해" 일할지 알 수 없어 실행이 무의미하다.
   const [task, setTask] = useState("");
+  // 드래그로 잇는 직원 간 흐름 연결 (출력 포트에서 끌기 시작 → 다른 직원 입력 포트에 놓기)
+  const [linkDrag, setLinkDrag] = useState<{ teamId: string; from: string; x: number; y: number } | null>(null);
 
   const inputMap = useRef<Map<string, HTMLInputElement>>(new Map());
   const focusId = useRef<string | null>(null);
+  const canvasRef = useRef<HTMLDivElement>(null);   // 확대(scale) 적용된 캔버스 — 좌표 변환용
+  const divisionsRef = useRef<OrgDivision[]>([]);   // 드래그 종료 시 최신 상태 참조
+  divisionsRef.current = divisions;
 
   useEffect(() => {
     const loaded = loadOrg(userKey);
@@ -107,6 +112,30 @@ export default function OrgControlTower({
       focusId.current = null;
     }
   });
+
+  // 드래그 중: 마우스를 따라 고무줄 선을 그리고, 놓은 지점이 다른 직원의 입력 포트면 연결한다
+  useEffect(() => {
+    if (!linkDrag) return;
+    const scale = zoom / 100;
+    const onMove = (e: MouseEvent) => {
+      const inner = canvasRef.current; if (!inner) return;
+      const r = inner.getBoundingClientRect();
+      setLinkDrag((prev) => prev ? { ...prev, x: (e.clientX - r.left) / scale, y: (e.clientY - r.top) / scale } : prev);
+    };
+    const onUp = (e: MouseEvent) => {
+      const el = document.elementFromPoint(e.clientX, e.clientY) as HTMLElement | null;
+      const port = el?.closest("[data-port-in]") as HTMLElement | null;
+      if (port) {
+        const to = port.getAttribute("data-member") || "";
+        const tid = port.getAttribute("data-team") || "";
+        if (to && tid === linkDrag.teamId && to !== linkDrag.from) addLink(tid, linkDrag.from, to);
+      }
+      setLinkDrag(null);
+    };
+    window.addEventListener("mousemove", onMove);
+    window.addEventListener("mouseup", onUp);
+    return () => { window.removeEventListener("mousemove", onMove); window.removeEventListener("mouseup", onUp); };
+  }, [linkDrag, zoom]);
 
   function commit(next: OrgDivision[]) {
     setDivisions(next);
@@ -179,9 +208,41 @@ export default function OrgControlTower({
   }
   function delMember(buId: string, tId: string, mId: string) {
     commit(divisions.map((d) => d.id === buId ? {
-      ...d, teams: d.teams.map((t) => t.id === tId ? { ...t, members: t.members.filter((m) => m.id !== mId) } : t),
+      ...d, teams: d.teams.map((t) => t.id === tId ? {
+        ...t,
+        members: t.members.filter((m) => m.id !== mId),
+        links: (t.links || []).filter((l) => l.from !== mId && l.to !== mId),   // 삭제된 직원의 흐름선 정리
+      } : t),
     } : d));
     setPanel(null);
+  }
+
+  /* ── 직원 간 흐름 연결 (드래그) ── */
+  function addLink(tId: string, from: string, to: string) {
+    if (from === to) return;
+    commit(divisionsRef.current.map((d) => ({
+      ...d,
+      teams: d.teams.map((t) => {
+        if (t.id !== tId) return t;
+        const links = t.links || [];
+        if (links.some((l) => l.from === from && l.to === to)) return t;          // 이미 있는 연결
+        const cleaned = links.filter((l) => !(l.from === to && l.to === from));   // 반대 방향은 제거(흐름은 한 방향)
+        return { ...t, links: [...cleaned, { from, to }] };
+      }),
+    })));
+  }
+  function delLink(tId: string, from: string, to: string) {
+    commit(divisionsRef.current.map((d) => ({
+      ...d,
+      teams: d.teams.map((t) => t.id !== tId ? t : { ...t, links: (t.links || []).filter((l) => !(l.from === from && l.to === to)) }),
+    })));
+  }
+  /** 출력 포트에서 드래그 시작 — 캔버스 좌표계(확대 보정)로 변환해 둔다 */
+  function startLink(e: ReactMouseEvent, teamId: string, from: string) {
+    e.stopPropagation(); e.preventDefault();
+    const inner = canvasRef.current; if (!inner) return;
+    const r = inner.getBoundingClientRect(); const scale = zoom / 100;
+    setLinkDrag({ teamId, from, x: (e.clientX - r.left) / scale, y: (e.clientY - r.top) / scale });
   }
   /** 직원 순서 = 일하는 순서 — 좌우로 옮긴다 */
   function moveMember(buId: string, tId: string, mId: string, dir: -1 | 1) {
@@ -388,6 +449,27 @@ export default function OrgControlTower({
   const bottomMost = Math.max(200, ...nodes.map((n) => n.pos.y + n.pos.h));
   const canvasW = rightMost + (divisions.length === 0 ? 300 : PAD);
   const canvasH = bottomMost + PAD;
+
+  // 직원 간 흐름선(열린 팀만 좌표가 있으므로 그 팀 링크만 그린다) — 출력(오른쪽)→입력(왼쪽)
+  const flowLinks: { tid: string; from: string; to: string; d: string }[] = [];
+  if (team) {
+    (team.links || []).forEach((l) => {
+      const p = pos[`mb-${l.from}`], q = pos[`mb-${l.to}`];
+      if (!p || !q) return;
+      const x1 = p.x + p.w, y1 = p.y + p.h / 2, x2 = q.x, y2 = q.y + q.h / 2;
+      const dx = Math.max(24, Math.abs(x2 - x1) / 2);
+      flowLinks.push({ tid: team.id, from: l.from, to: l.to, d: `M${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}` });
+    });
+  }
+  let rubber: string | null = null;   // 드래그 중 고무줄 선
+  if (linkDrag) {
+    const p = pos[`mb-${linkDrag.from}`];
+    if (p) {
+      const x1 = p.x + p.w, y1 = p.y + p.h / 2, x2 = linkDrag.x, y2 = linkDrag.y;
+      const dx = Math.max(24, Math.abs(x2 - x1) / 2);
+      rubber = `M${x1} ${y1} C ${x1 + dx} ${y1}, ${x2 - dx} ${y2}, ${x2} ${y2}`;
+    }
+  }
 
   let teamsCount = 0, membersCount = 0;
   divisions.forEach((d) => { teamsCount += d.teams.length; d.teams.forEach((t) => (membersCount += t.members.length)); });
@@ -670,7 +752,15 @@ export default function OrgControlTower({
               </button>
             )}
           </div>
-          <Handle side="t" />
+          {/* 입력 포트(왼쪽) — 다른 직원의 결과가 들어오는 드롭 지점 */}
+          <span data-port-in data-member={m.id} data-team={n.team.id}
+            title="다른 직원의 결과가 여기로 들어옵니다"
+            className="absolute top-1/2 -translate-y-1/2 -left-1.5 w-3 h-3 rounded-full bg-background border-2 border-primary/60 z-10" />
+          {/* 출력 포트(오른쪽) — 여기서 드래그해 다음 직원의 왼쪽 점에 놓으면 결과가 넘어간다 */}
+          <span onMouseDown={(e) => startLink(e, n.team.id, m.id)}
+            title="여기서 드래그해 다음 직원의 왼쪽 점에 놓으세요 — 이 직원 결과가 그 직원에게 넘어갑니다"
+            className={"absolute top-1/2 -translate-y-1/2 -right-1.5 w-3 h-3 rounded-full border-2 border-background z-10 cursor-crosshair hover:scale-125 transition "
+              + (linkDrag?.from === m.id ? "bg-primary scale-125 ring-2 ring-primary/40" : "bg-primary/80")} />
         </div>
       </div>
     );
@@ -766,7 +856,8 @@ export default function OrgControlTower({
           {/* 캔버스 */}
           <div className="relative flex-1 min-w-0 overflow-auto" onClick={() => setEmojiFor(null)}
             style={{ backgroundImage: "radial-gradient(circle at 1px 1px, hsl(var(--border)) 1px, transparent 0)", backgroundSize: "24px 24px" }}>
-            <div className="relative origin-top-left transition-transform" style={{ transform: `scale(${zoom / 100})`, width: canvasW, height: canvasH }}>
+            <div ref={canvasRef} className="relative origin-top-left transition-transform" style={{ transform: `scale(${zoom / 100})`, width: canvasW, height: canvasH }}>
+              {/* 뒤쪽: 상하관계 자동 연결선 */}
               <svg className="absolute top-0 left-0 overflow-visible" width={canvasW} height={canvasH}>
                 {edges.map((e, i) => {
                   const p = pos[e.a], q = pos[e.b];
@@ -778,6 +869,24 @@ export default function OrgControlTower({
                 })}
               </svg>
               {nodes.map(renderNode)}
+
+              {/* 앞쪽: 직원 간 흐름선(드래그로 그린 것) — 클릭하면 삭제. svg 자체는 클릭 통과, 선만 잡는다 */}
+              <svg className="absolute top-0 left-0 overflow-visible pointer-events-none" width={canvasW} height={canvasH}>
+                <defs>
+                  <marker id="flowhead" markerWidth="9" markerHeight="9" refX="7" refY="3" orient="auto" markerUnits="userSpaceOnUse">
+                    <path d="M0,0 L7,3 L0,6 Z" fill="hsl(var(--primary))" />
+                  </marker>
+                </defs>
+                {flowLinks.map((fl) => (
+                  <g key={`${fl.from}>${fl.to}`} className="pointer-events-auto cursor-pointer" onClick={() => delLink(fl.tid, fl.from, fl.to)}>
+                    <path d={fl.d} fill="none" stroke="transparent" strokeWidth={14} />
+                    <path d={fl.d} fill="none" stroke="hsl(var(--primary))" strokeWidth={2} markerEnd="url(#flowhead)">
+                      <title>클릭하면 이 연결을 삭제합니다</title>
+                    </path>
+                  </g>
+                ))}
+                {rubber && <path d={rubber} fill="none" stroke="hsl(var(--primary))" strokeWidth={2} strokeDasharray="5 4" opacity={0.7} markerEnd="url(#flowhead)" />}
+              </svg>
 
               {divisions.length === 0 && (
                 <div className="absolute rounded-xl border border-border bg-card shadow-sm px-3.5 py-2.5 flex gap-2 text-[12.5px] text-muted-foreground"
