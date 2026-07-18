@@ -1,5 +1,44 @@
 [
   {
+    "id": "mk17-1",
+    "name": "코멧 홈 사계절 러그",
+    "category": "furniture",
+    "source": "coupang",
+    "query": "코멧 홈 사계절 러그",
+    "emoji": "🧶",
+    "priceHint": "1~3만원대",
+    "summary": "바닥 분위기 빠른 전환",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/ftyqfjjYNE"
+  },
+  {
+    "id": "mk17-2",
+    "name": "데코뷰 내츄럴 광목 쿠션커버",
+    "category": "furniture",
+    "source": "coupang",
+    "query": "데코뷰 내츄럴 광목 쿠션커버",
+    "emoji": "🛋️",
+    "priceHint": "1만원대",
+    "summary": "소파 인상 바꾸는 소품",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/ftyqfl4DMi"
+  },
+  {
+    "id": "mk17-3",
+    "name": "마켓비 OLLSON 사이드테이블",
+    "category": "furniture",
+    "source": "coupang",
+    "query": "마켓비 OLLSON 사이드테이블",
+    "emoji": "☕",
+    "priceHint": "3~5만원대",
+    "summary": "침대 옆 작은 보조공간",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/ftyqfpnPsy"
+  },
+  {
     "id": "mk16-1",
     "name": "오리온 닥터유 단백질바",
     "category": "living",
@@ -9,7 +48,7 @@
     "priceHint": "1~2만원대",
     "summary": "달달한 단백질 간식",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/fqeCJujPOu"
   },
   {
@@ -22,7 +61,7 @@
     "priceHint": "1~3만원대",
     "summary": "손 안 가는 견과 간식",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/fqeCJwSxae"
   },
   {
@@ -35,7 +74,7 @@
     "priceHint": "1만원대",
     "summary": "냉장고용 든든 간식",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/fqeCJz55lk"
   },
   {
@@ -48,7 +87,7 @@
     "priceHint": "2~4만원대",
     "summary": "마시는 단백질 보충",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/fqeCJDffNY"
   },
   {
