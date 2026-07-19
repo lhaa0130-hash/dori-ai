@@ -89,12 +89,20 @@ export interface CallOpts {
   model?: string;
   maxTokens?: number;
 }
+/** 실제로 쓴 토큰. 워크플로우 원가 실측의 근거라 반드시 흘려보내야 한다. */
+export interface CallUsage {
+  inputTokens: number;
+  outputTokens: number;
+  cacheReadTokens: number;   // 캐시에서 읽은 입력(약 1/10 가격)
+  cacheWriteTokens: number;  // 캐시에 쓴 입력(약 1.25배 가격)
+}
 export interface CallResult {
   text: string;
   quotaRemaining?: number; // 무료 모드일 때 오늘 남은 호출 수
   image?: string | null;   // 패키지 결과 이미지 URL(fal.ai)
   video?: string | null;   // 패키지 결과 영상 URL(fal.ai)
   steps?: string[];        // 실제로 돌아간 AI 단계(소비자 표시용)
+  usage?: CallUsage;       // 직접 호출(BYOK)일 때만 채워짐 — 프록시는 안 줌
 }
 
 /** Claude 호출. 실패 시 사용자용 한국어 에러를 throw (무료 한도 초과는 'FREE_QUOTA_EXCEEDED'). */
@@ -140,5 +148,12 @@ export async function callClaude(opts: CallOpts): Promise<CallResult> {
   const text = Array.isArray(data?.content)
     ? data.content.filter((b: { type?: string }) => b?.type === 'text').map((b: { text?: string }) => b.text || '').join('')
     : '';
-  return { text: text || '(빈 응답)', quotaRemaining };
+  const u = data?.usage;
+  const usage: CallUsage | undefined = u ? {
+    inputTokens: Number(u.input_tokens) || 0,
+    outputTokens: Number(u.output_tokens) || 0,
+    cacheReadTokens: Number(u.cache_read_input_tokens) || 0,
+    cacheWriteTokens: Number(u.cache_creation_input_tokens) || 0,
+  } : undefined;
+  return { text: text || '(빈 응답)', quotaRemaining, usage };
 }
