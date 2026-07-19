@@ -31,8 +31,8 @@ function RankCard({ title, href, rows }: { title: string; href: string; rows: Ro
 }
 
 const T = {
-  ko: { usage: "🤖 많이 쓰는 AI 모델", intel: "🧠 똑똑한 AI 모델", speed: "⚡ 빠른 AI 모델", tools: "🔧 추천 AI 도구", today: "✨ 오늘의 도리", insight: "📰 오늘 인사이트", animal: "🐾 몽글로", game: "🎮 미니게임", community: "💬 커뮤니티", play: "바로가기", talk: "이야기", cnt: "건", spec: "종", pts: "점" },
-  en: { usage: "🤖 Most-used AI Models", intel: "🧠 Smartest AI Models", speed: "⚡ Fastest AI Models", tools: "🔧 Recommended AI Tools", today: "✨ Today on illo", insight: "📰 Today's insights", animal: "🐾 Animal Encyclopedia", game: "🎮 Mini Games", community: "💬 Community", play: "Play", talk: "Talk", cnt: "", spec: "", pts: " pts" },
+  ko: { usage: "🤖 많이 쓰는 AI 모델", intel: "🧠 똑똑한 AI 모델", speed: "⚡ 빠른 AI 모델", price: "💰 저렴한 AI 모델", tools: "🔧 추천 AI 도구", today: "✨ 오늘의 도리", insight: "📰 오늘 인사이트", animal: "🐾 몽글로", game: "🎮 미니게임", community: "💬 커뮤니티", play: "바로가기", talk: "이야기", cnt: "건", spec: "종", pts: "점", free: "무료" },
+  en: { usage: "🤖 Most-used AI Models", intel: "🧠 Smartest AI Models", speed: "⚡ Fastest AI Models", price: "💰 Cheapest AI Models", tools: "🔧 Recommended AI Tools", today: "✨ Today on illo", insight: "📰 Today's insights", animal: "🐾 Animal Encyclopedia", game: "🎮 Mini Games", community: "💬 Community", play: "Play", talk: "Talk", cnt: "", spec: "", pts: " pts", free: "Free" },
 };
 
 export default function HomeInfoStrip({
@@ -51,6 +51,8 @@ export default function HomeInfoStrip({
   const t = T[locale];
   const en = locale === "en";
   const usageVal = (reqM: number) => (en ? `${reqM}M` : `${Math.round(reqM * 100).toLocaleString()}만`);
+  // 입력 100만 토큰당 단가. 0이면 무료 표기
+  const priceVal = (pin: number) => (pin <= 0 ? t.free : `$${pin.toFixed(2)}/M`);
   const L = (p: string) => (en ? `/en${p}` : p); // 영어판 있는 페이지만 /en
   const hModels = en ? "/en/ai-models" : "/ai-models";
   const hTools = en ? "/en/ai-tools" : "/ai-tools";
@@ -66,6 +68,8 @@ export default function HomeInfoStrip({
             rows={orLists.intel.map((m) => ({ name: m.name, val: `${m.score}${t.pts}` }))} />
           <RankCard title={t.speed} href={hModels}
             rows={orLists.speed.map((m) => ({ name: m.name, val: `${m.tps}tps` }))} />
+          <RankCard title={t.price} href={hModels}
+            rows={orLists.price.map((m) => ({ name: m.name, val: priceVal(m.pin) }))} />
           <RankCard title={t.tools} href={hTools}
             rows={topTools.map((tl) => ({ name: tl.name }))} />
 

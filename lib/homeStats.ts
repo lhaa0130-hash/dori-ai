@@ -58,6 +58,7 @@ export type OrLists = {
   usage: { name: string; reqM: number }[];
   intel: { name: string; score: number }[];
   speed: { name: string; tps: number }[];
+  price: { name: string; pin: number }[]; // 100만 토큰당 입력 가격(USD). 0이면 무료
 };
 export function getOrLists(n = 5): OrLists {
   try {
@@ -69,9 +70,10 @@ export function getOrLists(n = 5): OrLists {
       usage: take(j.usageTop, (x) => ({ name: shortModel(String(x.name)), reqM: Number(x.reqM) || 0 })),
       intel: take(j.intelTop, (x) => ({ name: shortModel(String(x.name)), score: Number(x.score) || 0 })),
       speed: take(j.speedTop, (x) => ({ name: shortModel(String(x.name)), tps: Number(x.tps) || 0 })),
+      price: take(j.priceTop, (x) => ({ name: shortModel(String(x.name)), pin: Number(x.pin) || 0 })),
     };
   } catch {
-    return { usage: [], intel: [], speed: [] };
+    return { usage: [], intel: [], speed: [], price: [] };
   }
 }
 
