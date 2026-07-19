@@ -6,7 +6,7 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 19 Jul 2026 10:03:12 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 19 Jul 2026 10:52:21 GMT</lastBuildDate>
     <item>
       <title>[AI 학습] AI 학습의 도파민 함정</title>
       <link>https://illo.im/insight/article/video-74</link>
@@ -56,12 +56,28 @@
       <description>백악관이 AI 전력 비용 절감을 위해 주요 유틸리티 업체와 데이터 센터 운영사들을 동원하는 계획을 발표했습니다. 이 움직임은 AI 기술의 확산과 함께 급증하는 에너지 수요를 조절하기 위한 것으로, 향후 기술 및 산업 판도에 큰 영향을 미칠 전망입니다.</description>
     </item>
     <item>
+      <title>AI Studio Revolution: Public Access to Generative AI Tools in Cheongju</title>
+      <link>https://illo.im/insight/article/analysis-14-en</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/analysis-14-en</guid>
+      <category>분석</category>
+      <pubDate>Mon, 13 Jul 2026 05:03:34 GMT</pubDate>
+      <description>Cheongju pioneers AI as public infrastructure with a community-driven AI Studio.</description>
+    </item>
+    <item>
       <title>Claude·Gemini·Runway·Suno AI 편집 스튜디오: 지방정부가 AI 접근권을 공공 인프라로 만드는 이유</title>
       <link>https://illo.im/insight/article/analysis-14</link>
       <guid isPermaLink="true">https://illo.im/insight/article/analysis-14</guid>
       <category>분석</category>
       <pubDate>Mon, 13 Jul 2026 05:03:34 GMT</pubDate>
       <description>청주시가 주관하고 청주시문화산업진흥재단이 운영하는 충북콘텐츠코리아랩의 AI 편집 스튜디오는 단순한 체험 공간이 아니다. 생성형 AI가 개인 구독 상품을 넘어 지역 창작·교육·소상공인 생산성의 공공 인프라로 재정의되는 신호다.</description>
+    </item>
+    <item>
+      <title>The AI Compute Battle: How Free Resources and Infrastructure Deals Are Shaping the Future</title>
+      <link>https://illo.im/insight/article/report-11-en</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/report-11-en</guid>
+      <category>리포트</category>
+      <pubDate>Mon, 13 Jul 2026 02:04:45 GMT</pubDate>
+      <description>AI giants offer free compute resources to startups as infrastructure investments overshadow model development.</description>
     </item>
     <item>
       <title>삼성전자 충격과 무료 컴퓨트 전쟁: AI 자금이 모델보다 인프라로 더 깊게 흐른 한 주</title>
@@ -160,6 +176,14 @@
       <description>구글 플로우로 사진을 AI 영상으로 변환하는 방법을 소개합니다.</description>
     </item>
     <item>
+      <title>Meta Ventures into AI Cloud: Challenging the Big Three with Excess Computing Power</title>
+      <link>https://illo.im/insight/article/analysis-13-en</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/analysis-13-en</guid>
+      <category>분석</category>
+      <pubDate>Wed, 08 Jul 2026 05:03:02 GMT</pubDate>
+      <description>Meta enters the AI cloud arena, disrupting AWS, Azure, and Google Cloud with surplus computing resources.</description>
+    </item>
+    <item>
       <title>Meta AI 클라우드 진출: AWS·Azure의 성벽을 흔드는 ‘남는 컴퓨팅’의 경제학</title>
       <link>https://illo.im/insight/article/analysis-13</link>
       <guid isPermaLink="true">https://illo.im/insight/article/analysis-13</guid>
@@ -174,6 +198,14 @@
       <category>큐레이션</category>
       <pubDate>Wed, 08 Jul 2026 00:00:00 GMT</pubDate>
       <description>AI 시대에 인간이 증명해야 할 것과 미래 전망을 다룹니다.</description>
+    </item>
+    <item>
+      <title>Discover the Best Free AI Writing Tools for 2023</title>
+      <link>https://illo.im/insight/article/curation-17-en</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/curation-17-en</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 07 Jul 2026 23:08:11 GMT</pubDate>
+      <description>Explore 8 top free AI writing tools for diverse needs, from blogs to marketing.</description>
     </item>
     <item>
       <title>AI 글쓰기 사이트 무료 추천 BEST 8: 한국어 글쓰기까지 쓸 만한 도구 정리</title>
@@ -192,12 +224,28 @@
       <description>경량 하강법을 통해 기계 학습 모델 최적화를 설명합니다.</description>
     </item>
     <item>
+      <title>The End of Free AI: Pricing Wars and Monetization in the AI Industry</title>
+      <link>https://illo.im/insight/article/analysis-12-en</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/analysis-12-en</guid>
+      <category>분석</category>
+      <pubDate>Mon, 06 Jul 2026 05:03:20 GMT</pubDate>
+      <description>AI companies shift focus to monetization as pricing competition intensifies.</description>
+    </item>
+    <item>
       <title>OpenAI ChatGPT Go와 Anthropic 기업 공략: ‘공짜 AI’ 시대가 끝나는 이유</title>
       <link>https://illo.im/insight/article/analysis-12</link>
       <guid isPermaLink="true">https://illo.im/insight/article/analysis-12</guid>
       <category>분석</category>
       <pubDate>Mon, 06 Jul 2026 05:03:20 GMT</pubDate>
       <description>AI 모델 가격 경쟁은 심해지고 있지만, AI 기업의 돈 버는 방식은 더 복잡해지고 있다. OpenAI의 저가 요금제와 광고 테스트 계획, Anthropic의 기업 시장 공략은 생성형 AI 경쟁의 중심이 성능에서 유통·신뢰·수익화로 이동하고 있음을 보여준다.</description>
+    </item>
+    <item>
+      <title>AI's New Frontier: From Compute Leasing to Government Contracts</title>
+      <link>https://illo.im/insight/article/report-10-en</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/report-10-en</guid>
+      <category>리포트</category>
+      <pubDate>Mon, 06 Jul 2026 02:03:16 GMT</pubDate>
+      <description>AI companies shift focus from model development to compute power and government contracts.</description>
     </item>
     <item>
       <title>xAI·Anthropic·미 국방부·롯데이노베이트: 컴퓨트, 안보, 피지컬 AI로 이동한 돈길</title>
@@ -222,6 +270,14 @@
       <category>큐레이션</category>
       <pubDate>Mon, 06 Jul 2026 00:00:00 GMT</pubDate>
       <description>구글 제미나이 3.5의 활용 방법을 소개합니다.</description>
+    </item>
+    <item>
+      <title>Top 7 Free AI Translation Tools: Best Options for Different Needs</title>
+      <link>https://illo.im/insight/article/curation-16-en</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/curation-16-en</guid>
+      <category>큐레이션</category>
+      <pubDate>Sun, 05 Jul 2026 23:02:02 GMT</pubDate>
+      <description>Explore the best free AI translation tools for natural accuracy, tone adjustment, and more to suit your specific needs.</description>
     </item>
     <item>
       <title>무료 AI 번역 사이트 추천 BEST 7: 한국어 지원·장단점·상황별 선택 가이드</title>
@@ -270,62 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Sun, 05 Jul 2026 00:00:00 GMT</pubDate>
       <description>Manus AI를 활용해 다양한 업무를 자동화하는 방법을 소개합니다.</description>
-    </item>
-    <item>
-      <title>[LLM] KV 캐시가 LLM 속도를 높이는 방법</title>
-      <link>https://illo.im/insight/article/video-48</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-48</guid>
-      <category>큐레이션</category>
-      <pubDate>Sat, 04 Jul 2026 00:00:00 GMT</pubDate>
-      <description>KV 캐시를 통해 LLM의 속도를 개선하는 방법을 설명합니다.</description>
-    </item>
-    <item>
-      <title>[AI 교육] AI 배우기 위한 필수 지식</title>
-      <link>https://illo.im/insight/article/video-49</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-49</guid>
-      <category>큐레이션</category>
-      <pubDate>Sat, 04 Jul 2026 00:00:00 GMT</pubDate>
-      <description>AI를 배우기 위한 기초 지식과 방향성을 제시합니다.</description>
-    </item>
-    <item>
-      <title>[AI 원리] 생성형 AI 원리와 활용법</title>
-      <link>https://illo.im/insight/article/video-50</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-50</guid>
-      <category>큐레이션</category>
-      <pubDate>Sat, 04 Jul 2026 00:00:00 GMT</pubDate>
-      <description>생성형 AI의 원리와 활용 방법을 심층적으로 다룹니다.</description>
-    </item>
-    <item>
-      <title>OpenAI 저가요금제·SK하이닉스 EUV·Figure AI: AI 돈길이 모델에서 물리 인프라로 넓어진다</title>
-      <link>https://illo.im/insight/article/report-9</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/report-9</guid>
-      <category>리포트</category>
-      <pubDate>Fri, 03 Jul 2026 02:03:18 GMT</pubDate>
-      <description>이번 주 AI 산업의 핵심은 모델 성능 경쟁보다 비용, 인프라, 표준, 로봇 상용화로 돈이 이동하고 있다는 점입니다. 저가형 AI 서비스, HBM 생산설비, 피지컬 AI 투자가 함께 움직이며 다음 성장 구간의 주도권을 가르고 있습니다.</description>
-    </item>
-    <item>
-      <title>[영상] AI 영상 제작 활용법 5가지</title>
-      <link>https://illo.im/insight/article/video-46</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-46</guid>
-      <category>큐레이션</category>
-      <pubDate>Fri, 03 Jul 2026 00:00:00 GMT</pubDate>
-      <description>구글 Flow를 활용한 AI 영상 제작 방법을 소개합니다.</description>
-    </item>
-    <item>
-      <title>[반도체] 빅테크의 AI 반도체 공유와 전망</title>
-      <link>https://illo.im/insight/article/video-47</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-47</guid>
-      <category>큐레이션</category>
-      <pubDate>Fri, 03 Jul 2026 00:00:00 GMT</pubDate>
-      <description>AI 인프라 과잉 공급과 반도체 시장의 변화를 분석합니다.</description>
-    </item>
-    <item>
-      <title>생성형 AI 종류 총정리: 텍스트·이미지·영상·음성·코딩 AI 한눈에 보기</title>
-      <link>https://illo.im/insight/article/curation-15</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/curation-15</guid>
-      <category>큐레이션</category>
-      <pubDate>Thu, 02 Jul 2026 23:01:57 GMT</pubDate>
-      <description>생성형 AI의 정의부터 텍스트, 이미지, 영상, 음성, 코딩, 에이전트형 AI까지 종류별 차이와 대표 도구, 활용처, 선택 기준을 한 번에 정리했습니다.</description>
     </item>
   </channel>
 </rss>

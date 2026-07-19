@@ -20,7 +20,7 @@ import {
 import {
   ShieldCheck, Lightbulb, Code2, Palette, MessageSquare, Megaphone, Network,
   Users, User, Play, Eye, Check, Clock, AlertTriangle, Plus, ChevronLeft, ChevronRight, ChevronDown,
-  Trash2, ArrowLeft, Loader2, X, Wand2, Send, RotateCw, FlaskConical, GripVertical,
+  Trash2, ArrowLeft, Loader2, X, Wand2, Send, RotateCw, FlaskConical, GripVertical, LayoutGrid,
 } from "lucide-react";
 
 // 상하(위→아래) 조직도: 레벨은 아래로 내려가고(ROW_Y), 형제 노드는 가로로 나열된다.
@@ -250,6 +250,30 @@ export default function OrgControlTower({
       teams: d.teams.map((t) => t.id !== tId ? t : { ...t, links: (t.links || []).filter((l) => !(l.from === from && l.to === to)) }),
     })));
   }
+  /** 정렬 — 지금 배치한 '좌우 순서'는 그대로 살리고, 좌표만 지워 자동 정렬에 맡긴다.
+   *  (n8n의 Tidy와 같은 목적: 내가 옮겨둔 기준으로 깔끔하게 다시 줄 세우기)
+   *  직원은 순서가 곧 일하는 순서라, 정렬하면 실행 순서도 화면과 같아진다. */
+  function tidy() {
+    const px = (k: string) => pos[k]?.x ?? 0;
+    if (detailMode && bu && team) {
+      const sorted = [...team.members].sort((a, b) => px(`mb-${a.id}`) - px(`mb-${b.id}`));
+      commit(divisions.map((d) => d.id !== bu.id ? d : {
+        ...d,
+        teams: d.teams.map((t) => t.id !== team.id ? t : {
+          ...t, members: sorted.map((m) => ({ ...m, x: undefined, y: undefined })),
+        }),
+      }));
+      return;
+    }
+    const sortedDivs = [...divisions].sort((a, b) => px(`bu-${a.id}`) - px(`bu-${b.id}`));
+    commit(sortedDivs.map((d) => ({
+      ...d, x: undefined, y: undefined,
+      teams: [...d.teams]
+        .sort((a, b) => px(`tm-${a.id}`) - px(`tm-${b.id}`))
+        .map((t) => ({ ...t, x: undefined, y: undefined })),
+    })));
+  }
+
   /* ── 노드 자유 이동 ── */
   function nodeIds(n: Node): { kind: string; buId?: string; tId?: string; mId?: string } {
     if (n.kind === "div") return { kind: "div", buId: n.div.id };
@@ -883,6 +907,10 @@ export default function OrgControlTower({
                   <b className="text-foreground">{team.emoji || "👥"} {team.name || "팀"}</b>
                 </span>
                 <div className="ml-auto flex items-center gap-2 shrink-0">
+                  <button onClick={tidy} title="정렬 — 지금 배치한 좌우 순서를 살려 깔끔하게 줄 세웁니다(직원은 일하는 순서도 같이 맞춰집니다)"
+                    className="h-7 px-2 rounded-md border border-border text-[12px] text-muted-foreground hover:border-primary hover:text-primary inline-flex items-center gap-1 transition">
+                    <LayoutGrid className="w-3.5 h-3.5" /> 정렬
+                  </button>
                   <input type="range" min={55} max={130} step={5} value={zoom} onChange={(e) => setZoom(Number(e.target.value))} className="w-20 accent-[hsl(var(--primary))]" />
                   <span className="text-[11px] text-muted-foreground w-8 text-right tabular-nums">{zoom}%</span>
                 </div>
@@ -929,6 +957,10 @@ export default function OrgControlTower({
                 ))}
                 <div className="ml-auto flex items-center gap-2">
                   <span className="text-[11px] text-muted-foreground hidden md:inline">부서 {divisions.length} · 팀 {teamsCount} · 직원 {membersCount}</span>
+                  <button onClick={tidy} title="정렬 — 지금 배치한 좌우 순서를 살려 부서·팀을 깔끔하게 줄 세웁니다"
+                    className="h-7 px-2 rounded-md border border-border text-[12px] text-muted-foreground hover:border-primary hover:text-primary inline-flex items-center gap-1 transition">
+                    <LayoutGrid className="w-3.5 h-3.5" /> 정렬
+                  </button>
                   <input type="range" min={55} max={130} step={5} value={zoom} onChange={(e) => setZoom(Number(e.target.value))} className="w-20 accent-[hsl(var(--primary))]" />
                   <span className="text-[11px] text-muted-foreground w-8 text-right tabular-nums">{zoom}%</span>
                   <button onClick={reset} title="전체 비우기" className="p-1.5 rounded-md border border-border text-muted-foreground transition hover:text-rose-500"><Trash2 className="w-3.5 h-3.5" /></button>
