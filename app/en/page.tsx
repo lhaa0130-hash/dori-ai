@@ -1,6 +1,6 @@
 // app/en/page.tsx — 영어 홈: 한국어 메인과 동일 레이아웃을 영어로 렌더 (locale="en")
 import Link from "next/link";
-import { MessagesSquare, Newspaper, Wrench, BarChart3, Gamepad2, PawPrint, ShoppingBag, FolderKanban, Rss, Store, Bell, HelpCircle } from "lucide-react";
+import { MessagesSquare, Newspaper, Wrench, BarChart3, Gamepad2, PawPrint, FolderKanban, Rss, Bell, HelpCircle } from "lucide-react";
 import Hero from "@/components/home/Hero";
 import HomeClient from "@/components/home/HomeClient";
 import HomeInfoStrip from "@/components/home/HomeInfoStrip";
@@ -9,19 +9,18 @@ import { getInsightFeed } from "@/lib/insightFeed";
 import { getTopTools, getAnimalCount, getOrLists } from "@/lib/homeStats";
 import { createMetadata } from "@/lib/seo";
 
+// ⚠️영어판이 있는 페이지만 노출 — 한글 페이지로 새지 않게. (마켓·상점·커뮤니티·피드는 영어판 없어 제외)
 const SECTIONS = [
-  { label: "Community", href: "/community", Icon: MessagesSquare },
-  { label: "Feed", href: "/feed", Icon: Rss },
-  { label: "Insight", href: "/insight", Icon: Newspaper },
+  { label: "Insight", href: "/en/insight", Icon: Newspaper },
   { label: "AI Tools", href: "/en/ai-tools", Icon: Wrench },
   { label: "AI Models", href: "/en/ai-models", Icon: BarChart3 },
-  { label: "Mini Games", href: "/minigame", Icon: Gamepad2 },
-  { label: "Animal Encyclopedia", href: "/animal", Icon: PawPrint },
-  { label: "Market", href: "/market", Icon: ShoppingBag },
-  { label: "Shop", href: "/shop", Icon: Store },
-  { label: "Projects", href: "/projects", Icon: FolderKanban },
-  { label: "Notice", href: "/notice", Icon: Bell },
-  { label: "FAQ", href: "/faq", Icon: HelpCircle },
+  { label: "AI News", href: "/en/ai-news", Icon: Rss },
+  { label: "Projects", href: "/en/projects", Icon: FolderKanban },
+  { label: "Animal Encyclopedia", href: "/en/animal", Icon: PawPrint },
+  { label: "Mini Games", href: "/en/minigame", Icon: Gamepad2 },
+  { label: "Psych Tests", href: "/en/psychtest", Icon: MessagesSquare },
+  { label: "Notice", href: "/en/notice", Icon: Bell },
+  { label: "FAQ", href: "/en/faq", Icon: HelpCircle },
 ];
 
 export const metadata = createMetadata({

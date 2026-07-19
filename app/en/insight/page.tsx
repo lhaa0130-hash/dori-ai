@@ -22,8 +22,8 @@ export default async function EnInsightPage() {
     const guides = en(getAllGuides());
     const analyses = en(getAllAnalyses());
     const reports = en(getAllReports());
-    // 영상(영상 카테고리)은 언어중립이라 영어 목록에도 노출
-    const curations = getAllCurations().filter((x: any) => x.lang === 'en' || x.category === '영상');
+    // ⚠️영어 목록은 영어로 쓴 글만 — 영상·트렌드 제외(사용자 방침)
+    const curations = en(getAllCurations()).filter((x: any) => x.category !== '영상');
 
     const map = (arr: any[], prefix: string, fallbackCat: string) =>
       arr.map((item, index) => ({

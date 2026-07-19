@@ -5,17 +5,18 @@ import { usePathname } from "next/navigation";
 import SocialLinks from "@/components/layout/SocialLinks";
 
 // 헤더 네비와 중복되는 콘텐츠 링크는 제외. 푸터는 회사·고객지원·법적 링크 중심.
+// enOk: 영어판(/en+href)이 있는 링크. 영어 모드에선 enOk만 노출하고 /en 접두어를 붙인다.
 const LINKS = [
-  { label: "회사 소개", labelEn: "About", href: "/legal/about" },
-  { label: "공지사항", labelEn: "Notice", href: "/notice" },
-  { label: "FAQ", labelEn: "FAQ", href: "/faq" },
-  { label: "건의사항", labelEn: "Feedback", href: "/suggestion" },
-  { label: "코지홈", labelEn: "Cozy Home", href: "/profile" },
-  { label: "개인정보처리방침", labelEn: "Privacy Policy", href: "/legal/privacy" },
-  { label: "이용약관", labelEn: "Terms", href: "/legal/terms" },
-  { label: "저작권·라이선스", labelEn: "Copyright & License", href: "/legal/copyright" },
-  { label: "청소년보호정책", labelEn: "Youth Protection", href: "/legal/youth" },
-  { label: "사업자정보", labelEn: "Business Info", href: "/legal/business" },
+  { label: "회사 소개", labelEn: "About", href: "/legal/about", enOk: true },
+  { label: "공지사항", labelEn: "Notice", href: "/notice", enOk: true },
+  { label: "FAQ", labelEn: "FAQ", href: "/faq", enOk: true },
+  { label: "건의사항", labelEn: "Feedback", href: "/suggestion", enOk: false },
+  { label: "코지홈", labelEn: "Cozy Home", href: "/profile", enOk: false },
+  { label: "개인정보처리방침", labelEn: "Privacy Policy", href: "/legal/privacy", enOk: true },
+  { label: "이용약관", labelEn: "Terms", href: "/legal/terms", enOk: true },
+  { label: "저작권·라이선스", labelEn: "Copyright & License", href: "/legal/copyright", enOk: true },
+  { label: "청소년보호정책", labelEn: "Youth Protection", href: "/legal/youth", enOk: true },
+  { label: "사업자정보", labelEn: "Business Info", href: "/legal/business", enOk: true },
 ];
 
 export default function Footer() {
@@ -55,10 +56,10 @@ export default function Footer() {
 
         {/* 링크 */}
         <nav className="flex flex-wrap gap-x-5 gap-y-3 mb-7">
-          {LINKS.map((l) => (
+          {LINKS.filter((l) => !isEn || l.enOk).map((l) => (
             <Link
               key={l.href}
-              href={l.href}
+              href={isEn ? `/en${l.href}` : l.href}
               className="text-[12.5px] text-stone-500 dark:text-stone-400 hover:text-[#F9954E] transition-colors"
             >
               {isEn ? l.labelEn : l.label}

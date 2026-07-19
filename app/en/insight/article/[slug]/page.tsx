@@ -189,14 +189,14 @@ export async function generateStaticParams() {
     const { getAllReports } = await import('@/lib/reports');
     const { getAllCurations } = await import('@/lib/curation');
 
-    const isEn = (p: any) => p?.lang === 'en';
-    const isEnOrVideo = (p: any) => p?.lang === 'en' || p?.category === '영상'; // 영상은 언어중립이라 en에도 노출
+    // ⚠️영어 기사 라우트는 영어로 쓴 글만 — 영상·트렌드 제외(사용자 방침)
+    const isEn = (p: any) => p?.lang === 'en' && p?.category !== '영상';
     const params: { slug: string }[] = [];
     [
       ...getAllGuides().filter(isEn),
       ...getAllAnalyses().filter(isEn),
       ...getAllReports().filter(isEn),
-      ...getAllCurations().filter(isEnOrVideo),
+      ...getAllCurations().filter(isEn),
     ].forEach((item) => params.push({ slug: item.slug }));
 
     if (params.length === 0) return [{ slug: 'placeholder' }];

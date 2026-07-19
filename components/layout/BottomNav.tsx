@@ -19,7 +19,7 @@ const TABS = [
     ),
   },
   {
-    id: "insight", label: "인사이트", labelEn: "Insight", href: "/insight",
+    id: "insight", label: "인사이트", labelEn: "Insight", href: "/insight", hrefEn: "/en/insight",
     icon: (a: boolean) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={a ? "#F9954E" : "#9CA3AF"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
@@ -35,7 +35,7 @@ const TABS = [
     ),
   },
   {
-    id: "game", label: "게임", labelEn: "Games", href: "/minigame",
+    id: "game", label: "게임", labelEn: "Games", href: "/minigame", hrefEn: "/en/minigame",
     icon: (a: boolean) => (
       <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke={a ? "#F9954E" : "#9CA3AF"} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
         <rect x="2" y="6" width="20" height="12" rx="6"/>
@@ -57,18 +57,19 @@ const TABS = [
 ];
 
 // 건의사항은 더보기에서 숨김 (푸터에만 노출), 마켓은 노출
+// hrefEn 없는 항목은 영어판이 없다는 뜻 → 영어 모드에선 숨김(한글 페이지로 새지 않게)
 const MORE_ITEMS = [
   { name: "AI 모델 비교", nameEn: "AI Models", href: "/ai-models", hrefEn: "/en/ai-models", emoji: "📊" },
-  { name: "AI 소식",   nameEn: "AI News",   href: "/ai-news",    emoji: "📰" },
-  { name: "공지사항",  nameEn: "Notice",    href: "/notice",     emoji: "📢" },
-  { name: "커뮤니티",  nameEn: "Community", href: "/community",  emoji: "💬" },
-  { name: "마켓",      nameEn: "Market",    href: "/market",     emoji: "🛒" },
-  { name: "프로젝트",  nameEn: "Projects",  href: "/projects",   emoji: "🚀" },
-  { name: "FAQ",       nameEn: "FAQ",       href: "/faq",        emoji: "❓" },
+  { name: "AI 소식",   nameEn: "AI News",   href: "/ai-news",   hrefEn: "/en/ai-news",  emoji: "📰" },
+  { name: "공지사항",  nameEn: "Notice",    href: "/notice",    hrefEn: "/en/notice",   emoji: "📢" },
+  { name: "커뮤니티",  nameEn: "Community", href: "/community",                          emoji: "💬" },
+  { name: "마켓",      nameEn: "Market",    href: "/market",                             emoji: "🛒" },
+  { name: "프로젝트",  nameEn: "Projects",  href: "/projects",  hrefEn: "/en/projects", emoji: "🚀" },
+  { name: "FAQ",       nameEn: "FAQ",       href: "/faq",       hrefEn: "/en/faq",      emoji: "❓" },
 ];
 
 const PROJECTS = [
-  { name: "몽글로 : 동물도감",  nameEn: "Animal Encyclopedia",  emoji: "🐾", image: "",               href: "/animal",   desc: "다양한 동물을 몽글로에서" },
+  { name: "몽글로 : 동물도감",  nameEn: "Animal Encyclopedia",  emoji: "🐾", image: "", href: "/animal", hrefEn: "/en/animal", desc: "다양한 동물을 몽글로에서", descEn: "Hundreds of animals, made for kids" },
 ];
 
 export default function BottomNav() {
@@ -175,7 +176,7 @@ export default function BottomNav() {
 
           {/* 메뉴 */}
           <div className="py-2">
-            {MORE_ITEMS.map((item) => (
+            {MORE_ITEMS.filter((item) => !isEn || (item as any).hrefEn).map((item) => (
               <Link key={item.name} href={isEn ? ((item as any).hrefEn ?? item.href) : item.href} className="flex items-center justify-between py-4 border-b border-stone-50 dark:border-zinc-900 last:border-0">
                 <div className="flex items-center gap-3">
                   <span className="text-lg">{item.emoji}</span>
@@ -196,7 +197,7 @@ export default function BottomNav() {
           <div className="border-t border-stone-100 dark:border-zinc-900 pt-4">
             <p className="text-[11px] font-bold text-stone-400 uppercase tracking-widest mb-3">Projects</p>
             {PROJECTS.map((p) => (
-              <Link key={p.name} href={p.href} className="flex items-center gap-3 py-3 border-b border-stone-50 dark:border-zinc-900 last:border-0">
+              <Link key={p.name} href={isEn ? ((p as any).hrefEn ?? p.href) : p.href} className="flex items-center gap-3 py-3 border-b border-stone-50 dark:border-zinc-900 last:border-0">
                 <div className="w-10 h-10 rounded-2xl bg-stone-100 dark:bg-zinc-800 flex items-center justify-center text-lg flex-shrink-0 overflow-hidden">
                   {p.image ? <img src={p.image} alt={p.name} loading="lazy" className="w-full h-full object-cover" /> : p.emoji}
                 </div>

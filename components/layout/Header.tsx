@@ -39,24 +39,25 @@ export default function Header() {
   const isEn = (pathname || "").startsWith("/en");
   const navItems: NavItem[] = isEn
     ? [
+        // ⚠️영어 네비는 영어판이 있는 페이지만 노출(한글 페이지로 새지 않게). 마켓은 영어판 없어 제외.
         {
           name: "AI Hub", emoji: "🤖", children: [
             { name: "AI Tools", href: "/en/ai-tools", emoji: "🔧" },
             { name: "AI Models", href: "/en/ai-models", emoji: "📊" },
-            { name: "AI News", href: "/ai-news", emoji: "📰" },
+            { name: "AI News", href: "/en/ai-news", emoji: "📰" },
           ],
         },
-        { name: "Insight", href: "/insight", emoji: "🧠" },
-        { name: "Market", href: "/market", emoji: "🛒" },
+        { name: "Insight", href: "/en/insight", emoji: "🧠" },
+        { name: "Projects", href: "/en/projects", emoji: "📁" },
         {
           name: "Kids", emoji: "🧸", children: [
-            { name: "Animal Encyclopedia", href: "/animal", emoji: "🐾" },
+            { name: "Animal Encyclopedia", href: "/en/animal", emoji: "🐾" },
           ],
         },
         {
           name: "Play", emoji: "🎡", children: [
-            { name: "Mini Games", href: "/minigame", emoji: "🎮" },
-            { name: "Psych Tests", href: "/psychtest", emoji: "🧩" },
+            { name: "Mini Games", href: "/en/minigame", emoji: "🎮" },
+            { name: "Psych Tests", href: "/en/psychtest", emoji: "🧩" },
           ],
         },
       ]
@@ -86,7 +87,7 @@ export default function Header() {
       ];
 
   // 언어 토글(세그먼트): 현재 페이지의 ko/en URL을 각각 계산. 영어판 있는 페이지에서만 표시.
-  const EN_AVAILABLE = ["/", "/ai-tools", "/ai-models", "/insight", "/psychtest", "/animal", "/faq", "/notice", "/legal/about", "/legal/privacy", "/legal/terms", "/legal/contact", "/legal/copyright", "/legal/business", "/legal/youth"];
+  const EN_AVAILABLE = ["/", "/ai-tools", "/ai-models", "/ai-news", "/insight", "/projects", "/minigame", "/psychtest", "/animal", "/faq", "/notice", "/legal/about", "/legal/privacy", "/legal/terms", "/legal/contact", "/legal/copyright", "/legal/business", "/legal/youth"];
   const koUrl = isEn ? ((pathname || "/en").replace(/^\/en/, "") || "/") : (pathname || "/");
   const enUrl = isEn ? (pathname || "/en") : (EN_AVAILABLE.includes(pathname || "") ? "/en" + pathname : null);
   const showLang = isEn || !!enUrl;

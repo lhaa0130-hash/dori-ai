@@ -80,16 +80,8 @@ export function getInsightFeed(perCategory = 12, lang?: "ko" | "en"): InsightFee
   items.sort((a, b) => new Date(b.date || 0).getTime() - new Date(a.date || 0).getTime());
 
   // 언어 필터(한글=ko페이지, 영어=en페이지). 상한 적용 전에 걸러야 카테고리별 개수가 올바름.
-  // 영상(영상 카테고리)은 언어중립(유튜브)이라 양쪽에 노출 — en에선 영어 제목(titleEn)으로 스왑.
-  const src = lang ? items.filter((it) => it.lang === lang || it.category === "영상") : items;
-  if (lang === "en") {
-    for (const it of src) {
-      if (it.titleEn) it.title = it.titleEn;
-      if (it.summaryEn) it.summary = it.summaryEn;
-      // 영상은 본문(발췌)이 한글이라 영어 페이지에선 숨김 — 영어 제목·요약만 노출
-      if (it.category === "영상") it.excerpt = undefined;
-    }
-  }
+  // ⚠️영어 페이지는 트렌드·영상 제외(사용자 방침) — 영어로 쓴 글만 노출.
+  const src = lang ? items.filter((it) => it.lang === lang && it.category !== "영상" && it.category !== "트렌드") : items;
 
   // 카테고리별 상한 적용(페이로드 절약)
   const byCat: Record<string, InsightFeedItem[]> = {};
