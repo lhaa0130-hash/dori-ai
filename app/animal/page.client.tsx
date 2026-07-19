@@ -26,6 +26,91 @@ export interface AnimalCard {
   filters: Record<string, string[]>;
 }
 
+// ── 영어판(/en/animal) 오버레이 타입 ────────────────────────────────
+// locale="en"일 때만 사용. 값이 없으면 en/sci·숫자 등 언어중립 값으로 degrade.
+export interface AnimalEn {
+  name?: string;
+  nickname?: string;
+  desc?: string;
+  statusLabel?: string;
+  taxonomy?: string;
+  info?: Record<string, string>;
+  facts?: string[];
+}
+type Locale = "ko" | "en";
+
+// 필터 태그·정보 라벨은 데이터가 한글 키라 내부 값은 그대로 두고 "표시만" 영어로 변환한다.
+const TAG_EN: Record<string, string> = {
+  // 종류
+  "포유류": "Mammals", "조류": "Birds", "파충류": "Reptiles", "어류": "Fish",
+  "양서류": "Amphibians", "곤충": "Insects", "갑각류": "Crustaceans", "연체동물": "Molluscs",
+  // 필터 카테고리 라벨
+  "종류": "Type", "먹이": "Diet", "수명": "Lifespan", "몸무게": "Weight", "몸길이": "Length", "서식지": "Habitat",
+  // 먹이
+  "초식": "Herbivore", "육식": "Carnivore", "잡식": "Omnivore", "곤충을 먹는": "Insectivore",
+  "물고기를 먹는": "Fish eater", "플랑크톤을 먹는": "Plankton feeder", "꿀을 먹는": "Nectar feeder",
+  "씨앗을 먹는": "Seed eater", "썩은 것 먹는": "Scavenger",
+  // 수명
+  "1년 이하": "Under 1 yr", "1~5년": "1–5 yrs", "5~20년": "5–20 yrs", "20~50년": "20–50 yrs", "50년 이상": "50+ yrs",
+  // 몸무게
+  "100g 이하": "Under 100 g", "100g~1kg": "100 g–1 kg", "1~10kg": "1–10 kg", "10~50kg": "10–50 kg",
+  "50~200kg": "50–200 kg", "200kg~1톤": "200 kg–1 t", "1톤 이상": "Over 1 t",
+  // 몸길이
+  "10cm 이하": "Under 10 cm", "10~30cm": "10–30 cm", "30~100cm": "30–100 cm", "100~200cm": "100–200 cm",
+  "2~5m": "2–5 m", "5~10m": "5–10 m", "10m 이상": "Over 10 m",
+  // 서식지(대륙·대양)
+  "아시아": "Asia", "아프리카": "Africa", "유럽": "Europe", "북아메리카": "North America",
+  "남아메리카": "South America", "오세아니아": "Oceania", "태평양": "Pacific", "대서양": "Atlantic",
+  "인도양": "Indian Ocean", "북극해": "Arctic Ocean", "남극해": "Southern Ocean",
+};
+
+const STRINGS = {
+  ko: {
+    eyebrow: "몽글로 · 동물도감",
+    h1a: "300종 동물을", h1b: "아이 눈높이로 탐험해요",
+    lead: "이름으로 찾거나 종류 · 먹이 · 수명 · 몸무게 · 몸길이 · 서식지로 골라보세요",
+    searchPh: "동물 이름이나 별명으로 찾아보세요",
+    clearSearch: "검색어 지우기",
+    reset: "초기화", resetAll: "전체 초기화", sortLabel: "정렬",
+    sortName: "가나다순", sortNo: "번호순",
+    found: (n: number) => `${n}마리를 찾았어요`, total: (n: number) => `전체 ${n}마리`,
+    emptyTitle: "동물 데이터를 채우는 중이에요",
+    noneTitle: "조건에 맞는 친구가 없어요", noneSub: "조건을 조금 줄이면 더 많이 찾을 수 있어요",
+    prev: "이전", next: "다음", prevBlock: "이전 10페이지", nextBlock: "다음 10페이지",
+    pageNav: "페이지",
+    pageInfo: (p: number, t: number, n: number) => `${p} / ${t} 페이지 · 전체 ${n}마리`,
+    zoom: "크게 보기", zoomAria: "이미지 크게 보기", close: "닫기",
+    prevAnimal: "이전 동물", nextAnimal: "다음 동물",
+    facts: "🔎 알고 보면 더 흥미로운",
+    taxonomy: "분류 ", subspecies: "하위종 ",
+    bannerTitle: "동물 친구가 계속 늘어나요",
+    bannerBody: "매일 새로운 동물 카드가 추가되고 있어요. 자주 들러서 새 친구를 만나보세요!",
+    rarity: "희귀도",
+  },
+  en: {
+    eyebrow: "Monglo · Animal Encyclopedia",
+    h1a: "Explore hundreds of animals", h1b: "at a kid's eye level",
+    lead: "Search by name, or filter by type · diet · lifespan · weight · length · habitat",
+    searchPh: "Search by animal name or nickname",
+    clearSearch: "Clear search",
+    reset: "Reset", resetAll: "Reset all", sortLabel: "Sort",
+    sortName: "A–Z", sortNo: "By number",
+    found: (n: number) => `${n} animals found`, total: (n: number) => `${n} animals in total`,
+    emptyTitle: "We're still filling in the animal data",
+    noneTitle: "No animals match these filters", noneSub: "Try removing a filter or two to see more",
+    prev: "Prev", next: "Next", prevBlock: "Previous 10 pages", nextBlock: "Next 10 pages",
+    pageNav: "Pagination",
+    pageInfo: (p: number, t: number, n: number) => `Page ${p} of ${t} · ${n} animals`,
+    zoom: "View larger", zoomAria: "View larger image", close: "Close",
+    prevAnimal: "Previous animal", nextAnimal: "Next animal",
+    facts: "🔎 Fun facts worth knowing",
+    taxonomy: "Classification ", subspecies: "Subspecies ",
+    bannerTitle: "New animal friends keep arriving",
+    bannerBody: "New animal cards are added every day. Drop by often to meet new friends!",
+    rarity: "Rarity",
+  },
+} as const;
+
 // ── 종류(타입) 단일 소스 ─────────────────────────────────────────────
 const TYPES: { label: string; hex: string; emoji: string }[] = [
   { label: "포유류", hex: "#B5764A", emoji: "🦊" },
@@ -106,7 +191,25 @@ function imgUrl(p?: string) {
   return BUSTED_SLUGS.has(slug) ? `${p}?v=5` : p;
 }
 
-export default function AnimalPageClient({ cards: allCards = [] }: { cards?: AnimalCard[] }) {
+export default function AnimalPageClient({
+  cards: allCards = [],
+  locale = "ko",
+  enMap = {},
+}: {
+  cards?: AnimalCard[];
+  locale?: Locale;
+  enMap?: Record<string, AnimalEn>;
+}) {
+  const isEn = locale === "en";
+  const T = STRINGS[locale];
+  // 태그·라벨 표시 변환(한글 로케일은 그대로)
+  const tl = (s: string) => (isEn ? TAG_EN[s] || s : s);
+  const enOf = (c: AnimalCard): AnimalEn => (isEn && c.no ? enMap[c.no] || {} : {});
+  // 표시용 이름 — en 값이 없으면 영문 일반명 → 학명 → 한글명 순으로 degrade
+  const nameOf = (c: AnimalCard) => (isEn ? enOf(c).name || c.en || c.sci || c.animal_name : c.animal_name);
+  // 카드 부제 — 영어 별명이 없으면 학명으로 degrade
+  const subOf = (c: AnimalCard) => (isEn ? enOf(c).nickname || c.sci || "" : c.search_nickname);
+
   const [selected, setSelected] = useState<Record<string, Set<string>>>({});
   const [detail, setDetail] = useState<AnimalCard | null>(null);
   const [zoomImg, setZoomImg] = useState<{ src: string; name: string } | null>(null);
@@ -173,7 +276,11 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
   const q = query.trim().toLowerCase();
   const matched = cards.filter((card) => {
     if (q) {
-      const hay = (card.animal_name + " " + card.search_nickname + " " + (card.en || "")).toLowerCase();
+      const e = enOf(card);
+      const hay = (
+        card.animal_name + " " + card.search_nickname + " " + (card.en || "") + " " + (card.sci || "") +
+        " " + (e.name || "") + " " + (e.nickname || "")
+      ).toLowerCase();
       if (!hay.includes(q)) return false;
     }
     // taxonomy
@@ -200,7 +307,7 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
 
   const sorted = [...matched].sort((a, b) =>
     sort === "name"
-      ? a.animal_name.localeCompare(b.animal_name, "ko")
+      ? nameOf(a).localeCompare(nameOf(b), isEn ? "en" : "ko")
       : (a.no || "9999").localeCompare(b.no || "9999")
   );
 
@@ -242,13 +349,15 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
 
         {/* ── 히어로 ── */}
         <section className="pb-6 border-b border-stone-100 dark:border-zinc-900 mb-6">
-          <p className="text-[11px] font-bold text-[#F9954E] mb-3 tracking-wide uppercase">몽글로 · 동물도감</p>
+          <p className="text-[11px] font-bold text-[#F9954E] mb-3 tracking-wide uppercase">{T.eyebrow}</p>
           <h1 className="text-[30px] sm:text-[40px] font-extrabold text-stone-950 dark:text-white leading-[1.12] tracking-tight mb-2 break-keep">
-            300종 동물을<br />아이 눈높이로 탐험해요
+            {T.h1a}<br />{T.h1b}
           </h1>
           <p className="text-[14px] text-stone-400 dark:text-stone-500 leading-relaxed break-keep">
-            이름으로 찾거나 종류 · 먹이 · 수명 · 몸무게 · 몸길이 · 서식지로 골라보세요
+            {T.lead}
           </p>
+          {/* 만들기·창작 갤러리는 한글 전용 페이지라 영어판에서는 숨김 */}
+          {!isEn && (
           <div className="mt-4 flex flex-wrap gap-2">
             <a href="/animal/create" className="inline-flex items-center gap-1.5 rounded-full bg-gradient-to-r from-[#F9954E] to-[#f97e6d] px-4 py-2 text-[13px] font-bold text-white shadow-sm hover:shadow-md hover:brightness-105 transition">
               🐣 나만의 동물 만들기
@@ -257,6 +366,7 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
               🖼️ 친구들이 만든 동물
             </a>
           </div>
+          )}
         </section>
 
         {/* ── 검색바 (sticky) ── */}
@@ -266,11 +376,11 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
             <input
               value={query}
               onChange={(e) => setQuery(e.target.value)}
-              placeholder="동물 이름이나 별명으로 찾아보세요"
+              placeholder={T.searchPh}
               className="w-full pl-12 pr-11 py-3.5 rounded-2xl bg-white dark:bg-zinc-900 border-2 border-stone-200 dark:border-zinc-700 text-base text-stone-800 dark:text-stone-100 placeholder:text-stone-400 focus:outline-none focus:border-[#F9954E] focus:ring-4 focus:ring-[#F9954E]/15 transition shadow-sm"
             />
             {query && (
-              <button onClick={() => setQuery("")} aria-label="검색어 지우기" className="absolute right-3 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center rounded-full text-stone-400 hover:bg-stone-100 dark:hover:bg-zinc-800 hover:text-red-500 transition">
+              <button onClick={() => setQuery("")} aria-label={T.clearSearch} className="absolute right-3 top-1/2 -translate-y-1/2 w-7 h-7 flex items-center justify-center rounded-full text-stone-400 hover:bg-stone-100 dark:hover:bg-zinc-800 hover:text-red-500 transition">
                 <X className="w-4 h-4" />
               </button>
             )}
@@ -282,7 +392,7 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
           <div className="flex items-center gap-3.5">
             <div className="flex items-center justify-end gap-1 w-[64px] flex-shrink-0 text-right">
               <span className="text-sm">🐾</span>
-              <span className="text-[11px] font-bold text-stone-400 dark:text-stone-500">종류</span>
+              <span className="text-[11px] font-bold text-stone-400 dark:text-stone-500">{tl("종류")}</span>
             </div>
             <div className="flex flex-nowrap gap-1.5 overflow-x-auto pb-1">
             {TYPES.map((t) => {
@@ -301,7 +411,7 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
                 >
                   {sel && "✓ "}
                   <span className="text-[12px] leading-none">{t.emoji}</span>
-                  {t.label}
+                  {tl(t.label)}
                   <span
                     className="text-[10px] font-bold px-1 rounded-full leading-none"
                     style={sel ? { background: "rgba(255,255,255,.25)", color: "#fff" } : { background: t.hex + "26", color: t.hex }}
@@ -317,7 +427,7 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
             <div key={f.id} className="flex items-center gap-3.5">
               <div className="flex items-center justify-end gap-1 w-[64px] flex-shrink-0 text-right">
                 <span className="text-sm">{f.emoji}</span>
-                <span className="text-[11px] font-bold text-stone-400 dark:text-stone-500">{f.label}</span>
+                <span className="text-[11px] font-bold text-stone-400 dark:text-stone-500">{tl(f.label)}</span>
               </div>
               <div className="flex flex-nowrap gap-1.5 overflow-x-auto pb-1">
                 {f.tags.map((tag) => {
@@ -333,7 +443,7 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
                           : f.chipCls + " hover:shadow-sm"
                       } ${cnt === 0 && !sel ? "opacity-45" : ""}`}
                     >
-                      {sel && "✓ "}{tag}
+                      {sel && "✓ "}{tl(tag)}
                       <span className={`text-[10px] font-bold px-1 rounded-full leading-none ${sel ? "bg-white/25 text-white" : "bg-black/10 dark:bg-white/10"}`}>
                         {cnt}
                       </span>
@@ -350,24 +460,24 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
           <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-4">
             <div>
               <h2 className="text-xl font-extrabold text-stone-900 dark:text-white">
-                🐾 {hasFilter ? `${sorted.length}마리를 찾았어요` : `전체 ${cards.length}마리`}
+                🐾 {hasFilter ? T.found(sorted.length) : T.total(cards.length)}
               </h2>
             </div>
             <div className="flex items-center gap-2 flex-shrink-0">
               {hasFilter && (
                 <button onClick={clearAll} className="inline-flex items-center gap-1 text-[13px] font-bold text-stone-500 dark:text-stone-400 hover:text-red-500 transition-colors">
-                  <RotateCcw className="w-3.5 h-3.5" /> 초기화
+                  <RotateCcw className="w-3.5 h-3.5" /> {T.reset}
                 </button>
               )}
               <div className="relative">
                 <select
                   value={sort}
                   onChange={(e) => setSort(e.target.value as "no" | "name")}
-                  aria-label="정렬"
+                  aria-label={T.sortLabel}
                   className="appearance-none pl-3 pr-8 py-2 rounded-xl bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-700 text-[13px] font-bold text-stone-700 dark:text-stone-200 focus:outline-none focus:border-[#F9954E] cursor-pointer"
                 >
-                  <option value="name">가나다순</option>
-                  <option value="no">번호순</option>
+                  <option value="name">{T.sortName}</option>
+                  <option value="no">{T.sortNo}</option>
                 </select>
                 <ChevronDown className="absolute right-2.5 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-stone-400 pointer-events-none" />
               </div>
@@ -387,7 +497,7 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
                       className="inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full text-white border transition"
                       style={tm ? { background: tm.hex, borderColor: tm.hex } : {}}
                     >
-                      {tm?.emoji} {tag} <X className="w-2.5 h-2.5" />
+                      {tm?.emoji} {tl(tag)} <X className="w-2.5 h-2.5" />
                     </button>
                   );
                 }
@@ -398,7 +508,7 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
                     onClick={() => toggleTag(catId, tag)}
                     className={`inline-flex items-center gap-1 text-[11px] font-bold px-2.5 py-1 rounded-full border transition ${f?.cls || ""}`}
                   >
-                    {f?.emoji} {tag} <X className="w-2.5 h-2.5" />
+                    {f?.emoji} {tl(tag)} <X className="w-2.5 h-2.5" />
                   </button>
                 );
               })}
@@ -408,14 +518,14 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
           {cards.length === 0 ? (
             <div className="text-center py-20 bg-stone-50 dark:bg-zinc-900/50 rounded-2xl border border-dashed border-stone-200 dark:border-zinc-700">
               <div className="text-5xl mb-3">🐣</div>
-              <p className="text-stone-500 dark:text-stone-400 font-medium">동물 데이터를 채우는 중이에요</p>
+              <p className="text-stone-500 dark:text-stone-400 font-medium">{T.emptyTitle}</p>
             </div>
           ) : sorted.length === 0 ? (
             <div className="text-center py-20 bg-stone-50 dark:bg-zinc-900/50 rounded-2xl border border-dashed border-stone-200 dark:border-zinc-700">
               <div className="text-5xl mb-3">🔍</div>
-              <p className="text-stone-600 dark:text-stone-300 font-bold mb-1">조건에 맞는 친구가 없어요</p>
-              <p className="text-stone-400 dark:text-stone-500 text-sm mb-4">조건을 조금 줄이면 더 많이 찾을 수 있어요</p>
-              <button onClick={clearAll} className="text-sm font-bold text-[#E8832E] dark:text-[#FBAA60] hover:underline">전체 초기화</button>
+              <p className="text-stone-600 dark:text-stone-300 font-bold mb-1">{T.noneTitle}</p>
+              <p className="text-stone-400 dark:text-stone-500 text-sm mb-4">{T.noneSub}</p>
+              <button onClick={clearAll} className="text-sm font-bold text-[#E8832E] dark:text-[#FBAA60] hover:underline">{T.resetAll}</button>
             </div>
           ) : (
             <>
@@ -434,21 +544,21 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
                     >
                       <div className="relative aspect-[4/5] overflow-hidden bg-stone-100 dark:bg-zinc-800">
                         {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img src={imgUrl(card.image_path)} alt={card.animal_name} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
+                        <img src={imgUrl(card.image_path)} alt={nameOf(card)} loading="lazy" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
                         {card.no && <span className="absolute top-2 left-2 text-[10px] font-extrabold px-2 py-0.5 rounded-full bg-black/55 text-[#f0d28a] backdrop-blur-sm">No.{card.no}</span>}
                         {card.status?.code && <span className="absolute top-2 right-2 text-[10px] font-extrabold px-2 py-0.5 rounded-full text-white shadow" style={{ background: card.status.color }}>{card.status.code}</span>}
                         {tax && tm && (
                           <span className="absolute bottom-2 left-2 inline-flex items-center gap-1 text-[10px] font-extrabold px-2 py-0.5 rounded-full text-white shadow" style={{ background: tm.hex }}>
-                            {tm.emoji} {tax}
+                            {tm.emoji} {tl(tax)}
                           </span>
                         )}
                       </div>
                       <div className="p-3">
                         <div className="flex items-center justify-between gap-1 mb-0.5">
-                          <div className="font-bold text-sm text-stone-900 dark:text-white truncate">{card.animal_name}</div>
+                          <div className="font-bold text-sm text-stone-900 dark:text-white truncate">{nameOf(card)}</div>
                           {typeof card.rarity === "number" && <span className="text-[10px] text-[#F9954E] shrink-0 tracking-tighter">{"★".repeat(card.rarity)}{"☆".repeat(5 - card.rarity)}</span>}
                         </div>
-                        <div className="text-[11px] text-stone-500 dark:text-stone-400 leading-snug line-clamp-2 break-keep">{card.search_nickname}</div>
+                        <div className="text-[11px] text-stone-500 dark:text-stone-400 leading-snug line-clamp-2 break-keep">{subOf(card)}</div>
                       </div>
                     </motion.button>
                   );
@@ -456,14 +566,14 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
               </div>
 
               {pageCount > 1 && (
-                <nav className="flex flex-wrap items-center justify-center gap-1.5 mt-9" aria-label="페이지">
+                <nav className="flex flex-wrap items-center justify-center gap-1.5 mt-9" aria-label={T.pageNav}>
                   <button
                     onClick={() => goPage(blockStart - 1)}
                     disabled={blockStart === 1}
-                    aria-label="이전 10페이지"
+                    aria-label={T.prevBlock}
                     className="inline-flex items-center gap-0.5 h-9 pl-2 pr-3 rounded-xl text-[13px] font-bold border border-stone-200 dark:border-zinc-700 text-stone-600 dark:text-stone-300 enabled:hover:border-[#F9954E] enabled:hover:text-[#E8832E] disabled:opacity-40 disabled:cursor-not-allowed transition"
                   >
-                    <ChevronLeft className="w-4 h-4" /> 이전
+                    <ChevronLeft className="w-4 h-4" /> {T.prev}
                   </button>
                   {pageNumbers.map((p) => (
                     <button
@@ -482,16 +592,16 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
                   <button
                     onClick={() => goPage(blockEnd + 1)}
                     disabled={blockEnd === pageCount}
-                    aria-label="다음 10페이지"
+                    aria-label={T.nextBlock}
                     className="inline-flex items-center gap-0.5 h-9 pl-3 pr-2 rounded-xl text-[13px] font-bold border border-stone-200 dark:border-zinc-700 text-stone-600 dark:text-stone-300 enabled:hover:border-[#F9954E] enabled:hover:text-[#E8832E] disabled:opacity-40 disabled:cursor-not-allowed transition"
                   >
-                    다음 <ChevronRight className="w-4 h-4" />
+                    {T.next} <ChevronRight className="w-4 h-4" />
                   </button>
                 </nav>
               )}
               {pageCount > 1 && (
                 <p className="text-center text-[12px] text-stone-400 dark:text-stone-500 mt-3">
-                  {safePage} / {pageCount} 페이지 · 전체 {sorted.length}마리
+                  {T.pageInfo(safePage, pageCount, sorted.length)}
                 </p>
               )}
             </>
@@ -502,9 +612,9 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
         <section>
           <div className="bg-gradient-to-br from-[#FBEEE7] to-[#FEEBD0] dark:from-orange-950/30 dark:to-orange-900/10 border border-[#FDD5A5] dark:border-orange-800/30 rounded-3xl p-8 text-center">
             <div className="text-4xl mb-3">🐾</div>
-            <h2 className="text-xl font-extrabold text-stone-900 dark:text-white mb-2">동물 친구가 계속 늘어나요</h2>
+            <h2 className="text-xl font-extrabold text-stone-900 dark:text-white mb-2">{T.bannerTitle}</h2>
             <p className="text-stone-600 dark:text-stone-400 text-sm leading-relaxed max-w-md mx-auto break-keep">
-              매일 새로운 동물 카드가 추가되고 있어요. 자주 들러서 새 친구를 만나보세요!
+              {T.bannerBody}
             </p>
           </div>
         </section>
@@ -514,12 +624,12 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
       {detail && (
         <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm" onClick={() => setDetail(null)}>
           {detailIdx > 0 && (
-            <button onClick={(e) => { e.stopPropagation(); goDetail(-1); }} aria-label="이전 동물" className="fixed left-2 sm:left-4 top-1/2 -translate-y-1/2 z-[60] w-11 h-11 flex items-center justify-center rounded-full bg-white/90 dark:bg-zinc-800/90 text-stone-700 dark:text-stone-200 shadow-lg hover:bg-[#F9954E] hover:text-white transition active:scale-90">
+            <button onClick={(e) => { e.stopPropagation(); goDetail(-1); }} aria-label={T.prevAnimal} className="fixed left-2 sm:left-4 top-1/2 -translate-y-1/2 z-[60] w-11 h-11 flex items-center justify-center rounded-full bg-white/90 dark:bg-zinc-800/90 text-stone-700 dark:text-stone-200 shadow-lg hover:bg-[#F9954E] hover:text-white transition active:scale-90">
               <ChevronLeft className="w-6 h-6" />
             </button>
           )}
           {detailIdx >= 0 && detailIdx < sorted.length - 1 && (
-            <button onClick={(e) => { e.stopPropagation(); goDetail(1); }} aria-label="다음 동물" className="fixed right-2 sm:right-4 top-1/2 -translate-y-1/2 z-[60] w-11 h-11 flex items-center justify-center rounded-full bg-white/90 dark:bg-zinc-800/90 text-stone-700 dark:text-stone-200 shadow-lg hover:bg-[#F9954E] hover:text-white transition active:scale-90">
+            <button onClick={(e) => { e.stopPropagation(); goDetail(1); }} aria-label={T.nextAnimal} className="fixed right-2 sm:right-4 top-1/2 -translate-y-1/2 z-[60] w-11 h-11 flex items-center justify-center rounded-full bg-white/90 dark:bg-zinc-800/90 text-stone-700 dark:text-stone-200 shadow-lg hover:bg-[#F9954E] hover:text-white transition active:scale-90">
               <ChevronRight className="w-6 h-6" />
             </button>
           )}
@@ -538,14 +648,14 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
               {/* 이미지 */}
               <button
                 type="button"
-                onClick={() => setZoomImg({ src: detail.image_path, name: detail.animal_name })}
+                onClick={() => setZoomImg({ src: detail.image_path, name: nameOf(detail) })}
                 className="group/img relative w-full aspect-[3/4] md:aspect-auto md:h-full bg-stone-100 dark:bg-zinc-800 cursor-zoom-in overflow-hidden md:rounded-l-3xl"
-                aria-label="이미지 크게 보기"
+                aria-label={T.zoomAria}
               >
                 {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img src={imgUrl(detail.image_path)} alt={detail.animal_name} className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover/img:scale-105" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
+                <img src={imgUrl(detail.image_path)} alt={nameOf(detail)} className="absolute inset-0 w-full h-full object-cover transition-transform duration-300 group-hover/img:scale-105" onError={(e) => { e.currentTarget.style.opacity = "0.15"; }} />
                 <span className="absolute bottom-3 left-3 inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-black/55 text-white text-[11px] font-bold backdrop-blur-sm opacity-90 group-hover/img:bg-black/70 transition">
-                  <Maximize2 className="w-3 h-3" /> 크게 보기
+                  <Maximize2 className="w-3 h-3" /> {T.zoom}
                 </span>
               </button>
 
@@ -557,32 +667,48 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
                     No.{detail.no || "—"}
                   </div>
                   {typeof detail.rarity === "number" && (
-                    <span className="text-[12px] text-[#F9954E] tracking-tighter" title="희귀도">{"★".repeat(detail.rarity)}{"☆".repeat(5 - detail.rarity)}</span>
+                    <span className="text-[12px] text-[#F9954E] tracking-tighter" title={T.rarity}>{"★".repeat(detail.rarity)}{"☆".repeat(5 - detail.rarity)}</span>
                   )}
                 </div>
-                <h3 className="text-2xl font-black text-stone-900 dark:text-white">{detail.animal_name}</h3>
-                {detail.sci && <p className="italic text-sm text-stone-500 dark:text-stone-400">{detail.sci}{detail.en ? ` · ${detail.en}` : ""}</p>}
-                <p className="text-[#E8832E] dark:text-[#FBAA60] text-sm font-bold mt-1.5 mb-3 break-keep">&ldquo;{detail.search_nickname}&rdquo;</p>
+                <h3 className="text-2xl font-black text-stone-900 dark:text-white">{nameOf(detail)}</h3>
+                {detail.sci && (
+                  <p className="italic text-sm text-stone-500 dark:text-stone-400">
+                    {detail.sci}{!isEn && detail.en ? ` · ${detail.en}` : ""}
+                  </p>
+                )}
+                {/* 영어판은 번역된 별명이 있을 때만 표시(없으면 생략) */}
+                {(isEn ? enOf(detail).nickname : detail.search_nickname) && (
+                  <p className="text-[#E8832E] dark:text-[#FBAA60] text-sm font-bold mt-1.5 mb-3 break-keep">
+                    &ldquo;{isEn ? enOf(detail).nickname : detail.search_nickname}&rdquo;
+                  </p>
+                )}
                 {detail.status && (
                   <span className="inline-block text-[11px] font-extrabold px-2.5 py-1 rounded-full text-white mb-3 w-fit" style={{ background: detail.status.color }}>
-                    {detail.status.label} · IUCN {detail.status.code}
+                    {(isEn ? enOf(detail).statusLabel : detail.status.label) || `IUCN ${detail.status.code}`} · IUCN {detail.status.code}
                   </span>
                 )}
-                <p className="text-sm text-stone-700 dark:text-stone-300 leading-relaxed mb-4 break-keep">{detail.kid_friendly_desc}</p>
+                {(isEn ? enOf(detail).desc : detail.kid_friendly_desc) && (
+                  <p className="text-sm text-stone-700 dark:text-stone-300 leading-relaxed mb-4 break-keep">
+                    {isEn ? enOf(detail).desc : detail.kid_friendly_desc}
+                  </p>
+                )}
 
                 {/* 기본 정보 — 항상 서식지·먹이·크기·수명 4개 동일 */}
                 {(() => {
                   const infoMap: Record<string, { ic: string; val: string }> = {};
                   for (const [ic, k, v] of (detail.info || [])) infoMap[k] = { ic, val: v };
+                  const enInfo = enOf(detail).info || {};
                   return (
                     <div className="bg-stone-50 dark:bg-zinc-800/50 rounded-2xl p-3.5 mb-4">
                       {STD_INFO.map(({ key, emoji }) => {
                         const entry = infoMap[key];
+                        // 영어판은 번역된 값만 노출(한글 원문이 새어나가지 않게), 없으면 "—"
+                        const val = isEn ? enInfo[key] : entry?.val;
                         return (
                           <div key={key} className="flex items-start gap-3 py-2 border-b border-stone-200 dark:border-zinc-700 last:border-0">
                             <span className="text-base flex-shrink-0 w-5 text-center leading-none mt-0.5">{entry?.ic || emoji}</span>
-                            <span className="text-[11.5px] font-bold text-stone-500 dark:text-stone-400 w-10 flex-shrink-0 mt-0.5">{key}</span>
-                            <span className="text-[12.5px] text-stone-700 dark:text-stone-300 break-keep leading-relaxed">{entry?.val || "—"}</span>
+                            <span className={`text-[11.5px] font-bold text-stone-500 dark:text-stone-400 flex-shrink-0 mt-0.5 ${isEn ? "w-16" : "w-10"}`}>{tl(key)}</span>
+                            <span className="text-[12.5px] text-stone-700 dark:text-stone-300 break-keep leading-relaxed">{val || "—"}</span>
                           </div>
                         );
                       })}
@@ -590,27 +716,30 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
                   );
                 })()}
 
-                {/* 재미있는 사실 */}
-                {detail.facts && detail.facts.length > 0 && (
+                {/* 재미있는 사실 — 영어판은 번역본이 있을 때만 */}
+                {(() => {
+                  const facts = isEn ? enOf(detail).facts : detail.facts;
+                  return facts && facts.length > 0 ? (
                   <div className="bg-[#FFF9F0] dark:bg-orange-950/20 border border-[#FDE3C0] dark:border-orange-900/30 rounded-2xl p-3.5 mb-4">
-                    <p className="text-[11px] font-extrabold text-[#E8832E] dark:text-[#FBAA60] mb-2">🔎 알고 보면 더 흥미로운</p>
+                    <p className="text-[11px] font-extrabold text-[#E8832E] dark:text-[#FBAA60] mb-2">{T.facts}</p>
                     <ul className="space-y-1.5">
-                      {detail.facts.map((f, idx) => (
+                      {facts.map((f, idx) => (
                         <li key={idx} className="text-[12.5px] text-stone-600 dark:text-stone-300 leading-snug break-keep pl-3 relative before:content-[&apos;•&apos;] before:absolute before:left-0 before:text-[#F9954E]">{f}</li>
                       ))}
                     </ul>
                   </div>
-                )}
+                  ) : null;
+                })()}
 
-                {/* 분류 */}
-                {detail.taxonomy && (
+                {/* 분류 — 영어판은 번역된 분류 문자열이 있을 때만(학명은 위에 이미 표시) */}
+                {(isEn ? enOf(detail).taxonomy : detail.taxonomy) && (
                   <p className="text-[11px] text-stone-400 dark:text-stone-500 mb-1 leading-relaxed break-keep">
-                    <b className="text-stone-500 dark:text-stone-400">분류 </b>{detail.taxonomy}
+                    <b className="text-stone-500 dark:text-stone-400">{T.taxonomy}</b>{isEn ? enOf(detail).taxonomy : detail.taxonomy}
                   </p>
                 )}
-                {detail.subspecies && (
+                {!isEn && detail.subspecies && (
                   <p className="text-[11px] text-stone-400 dark:text-stone-500 mb-4 leading-relaxed break-keep">
-                    <b className="text-stone-500 dark:text-stone-400">하위종 </b>{detail.subspecies}
+                    <b className="text-stone-500 dark:text-stone-400">{T.subspecies}</b>{detail.subspecies}
                   </p>
                 )}
                 {/* 종류·먹이 분류칩은 위 정보(먹이 설명·분류)와 중복이라 공개 화면에서 숨김 — 검색 필터·관리자 검수에서만 사용 */}
@@ -623,7 +752,7 @@ export default function AnimalPageClient({ cards: allCards = [] }: { cards?: Ani
       {/* ── 이미지 크게 보기 ── */}
       {zoomImg && (
         <div className="fixed inset-0 z-[60] flex items-center justify-center p-4 bg-black/85 backdrop-blur-sm" onClick={() => setZoomImg(null)}>
-          <button onClick={() => setZoomImg(null)} aria-label="닫기" className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white/15 text-white hover:bg-white/30 transition">
+          <button onClick={() => setZoomImg(null)} aria-label={T.close} className="absolute top-4 right-4 z-10 w-10 h-10 flex items-center justify-center rounded-full bg-white/15 text-white hover:bg-white/30 transition">
             <X className="w-6 h-6" />
           </button>
           <motion.div

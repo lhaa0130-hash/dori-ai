@@ -17,9 +17,13 @@ interface LegalAccordionProps {
   subtitle?: string;
   date?: string;
   sections: Section[];
+  /** 기본 ko — 영어(/en) 페이지에서만 "en" 전달 */
+  locale?: "ko" | "en";
 }
 
-export default function LegalAccordion({ label, title, subtitle, date, sections }: LegalAccordionProps) {
+export default function LegalAccordion({ label, title, subtitle, date, sections, locale = "ko" }: LegalAccordionProps) {
+  const homeHref = locale === "en" ? "/en" : "/";
+  const homeLabel = locale === "en" ? "← Back to home" : "← 홈으로 돌아가기";
   return (
     <main className="w-full min-h-screen">
       {/* 히어로 (FAQ 스타일) */}
@@ -64,10 +68,10 @@ export default function LegalAccordion({ label, title, subtitle, date, sections 
 
         <div className="mt-10">
           <Link
-            href="/"
+            href={homeHref}
             className="inline-flex items-center gap-2 px-5 py-2.5 rounded-full bg-stone-100 dark:bg-zinc-800 text-stone-600 dark:text-stone-300 text-sm font-medium hover:bg-[#FBEEE7] dark:hover:bg-orange-950/20 hover:text-[#E8832E] dark:hover:text-[#FBAA60] transition-all duration-200"
           >
-            ← 홈으로 돌아가기
+            {homeLabel}
           </Link>
         </div>
       </section>

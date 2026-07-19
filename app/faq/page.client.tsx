@@ -1,7 +1,31 @@
 "use client";
 
-export default function FAQClient() {
-    const faqSections = [
+export interface FaqSection {
+    category: string;
+    items: { q: string; a: string }[];
+}
+
+interface FAQClientProps {
+    /** 미지정 시 한글 기본 데이터 사용 */
+    sections?: FaqSection[];
+    label?: string;
+    title?: string;
+    subtitle?: string;
+    ctaHint?: string;
+    ctaLabel?: string;
+    ctaHref?: string;
+}
+
+export default function FAQClient({
+    sections,
+    label = "FAQ",
+    title = "자주 묻는 질문",
+    subtitle = "궁금한 점이 있으신가요? 아래에서 답변을 찾아보세요.",
+    ctaHint = "원하는 답변을 찾지 못하셨나요?",
+    ctaLabel = "건의사항 남기기 →",
+    ctaHref = "/suggestion",
+}: FAQClientProps = {}) {
+    const koFaqSections: FaqSection[] = [
         {
             category: "서비스 소개",
             items: [
@@ -171,6 +195,8 @@ export default function FAQClient() {
         },
     ];
 
+    const faqSections: FaqSection[] = sections ?? koFaqSections;
+
     // ✅ FAQPage 구조화 데이터 (검색결과 리치 스니펫)
     const faqJsonLd = {
         "@context": "https://schema.org",
@@ -198,12 +224,12 @@ export default function FAQClient() {
 
             {/* 히어로 */}
             <section className="pt-8 pb-10 border-b border-stone-100 dark:border-zinc-900">
-                <p className="text-[12px] font-semibold text-[#F9954E] mb-3">FAQ</p>
+                <p className="text-[12px] font-semibold text-[#F9954E] mb-3">{label}</p>
                 <h1 className="text-[36px] sm:text-[48px] font-extrabold text-stone-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
-                    자주 묻는 질문
+                    {title}
                 </h1>
                 <p className="text-[14px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep">
-                    궁금한 점이 있으신가요? 아래에서 답변을 찾아보세요.
+                    {subtitle}
                 </p>
             </section>
 
@@ -254,13 +280,13 @@ export default function FAQClient() {
                 {/* 하단 안내 */}
                 <div className="mt-12 pt-8 border-t border-stone-100 dark:border-zinc-900 text-center">
                     <p className="text-sm text-stone-400 mb-4">
-                        원하는 답변을 찾지 못하셨나요?
+                        {ctaHint}
                     </p>
                     <a
-                        href="/suggestion"
+                        href={ctaHref}
                         className="inline-flex items-center gap-1.5 px-5 py-3 rounded-full bg-[#F9954E] text-white text-[14px] font-bold active:opacity-85 transition-opacity"
                     >
-                        건의사항 남기기 →
+                        {ctaLabel}
                     </a>
                 </div>
             </section>

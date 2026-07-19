@@ -4,7 +4,7 @@ import LegalPageLayout from "../components/LegalPageLayout";
 export const metadata: Metadata = {
   title: "문의하기 | illo",
   description: "illo에 제휴, 광고, 콘텐츠 제보, 오류 신고 등 문의를 남겨주세요.",
-  alternates: { canonical: "https://illo.im/legal/contact" },
+  alternates: { canonical: "https://illo.im/legal/contact", languages: { "ko-KR": "https://illo.im/legal/contact", en: "https://illo.im/en/legal/contact", "x-default": "https://illo.im/legal/contact" } },
 };
 
 export default function ContactPage() {

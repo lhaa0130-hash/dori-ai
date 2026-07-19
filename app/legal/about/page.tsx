@@ -4,7 +4,7 @@ import LegalPageLayout from "../components/LegalPageLayout";
 export const metadata: Metadata = {
   title: "회사 소개 | illo",
   description: "illo는 매일 AI 트렌드를, 매주 큐레이션·분석·리포트를 제공하며, 누구나 쉽게 AI를 활용하도록 돕는 커뮤니티 플랫폼입니다. 제작·운영은 illo가 맡고 있습니다.",
-  alternates: { canonical: "https://illo.im/legal/about" },
+  alternates: { canonical: "https://illo.im/legal/about", languages: { "ko-KR": "https://illo.im/legal/about", en: "https://illo.im/en/legal/about", "x-default": "https://illo.im/legal/about" } },
 };
 
 export default function AboutPage() {

@@ -2,9 +2,9 @@
 
 import { Pin, Clock, Tag } from "lucide-react";
 
-type NoticeType = "공지" | "업데이트" | "이벤트" | "점검";
+export type NoticeType = "공지" | "업데이트" | "이벤트" | "점검";
 
-interface NoticeItem {
+export interface NoticeItem {
     id: number;
     type: NoticeType;
     version?: string;
@@ -14,7 +14,7 @@ interface NoticeItem {
     pinned?: boolean;
 }
 
-const notices: NoticeItem[] = [
+const KO_NOTICES: NoticeItem[] = [
     {
         id: 8,
         type: "업데이트",
@@ -71,7 +71,30 @@ const notices: NoticeItem[] = [
     },
 ];
 
-export default function NoticeClient() {
+interface NoticeClientProps {
+    /** 미지정 시 한글 기본 공지 목록 사용 */
+    items?: NoticeItem[];
+    label?: string;
+    title?: string;
+    subtitle?: string;
+    /** {n} 자리에 건수가 들어감 */
+    countTemplate?: string;
+    /** 배지에 표시할 유형명(미지정 시 한글 원문 그대로) */
+    typeLabels?: Record<NoticeType, string>;
+    dateLocale?: string;
+}
+
+export default function NoticeClient({
+    items,
+    label = "공지사항",
+    title = "공지사항",
+    subtitle = "illo의 최신 소식과 버전 업데이트를 확인하세요.",
+    countTemplate = "총 {n}건의 공지사항",
+    typeLabels,
+    dateLocale = "ko-KR",
+}: NoticeClientProps = {}) {
+    const notices: NoticeItem[] = items ?? KO_NOTICES;
+
     const getTypeBadge = (t: NoticeType) => {
         switch (t) {
             case "공지":    return "bg-[#FBEEE7] text-[#F9954E] dark:bg-[#F9954E]/10 dark:text-[#F9954E]";
@@ -92,19 +115,19 @@ export default function NoticeClient() {
 
             {/* 히어로 */}
             <section className="pt-8 pb-10 border-b border-stone-100 dark:border-zinc-900">
-                <p className="text-[12px] font-semibold text-[#F9954E] mb-3">공지사항</p>
+                <p className="text-[12px] font-semibold text-[#F9954E] mb-3">{label}</p>
                 <h1 className="text-[36px] sm:text-[48px] font-extrabold text-stone-950 dark:text-white leading-[1.15] tracking-tight mb-3 break-keep">
-                    공지사항
+                    {title}
                 </h1>
                 <p className="text-[14px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep">
-                    illo의 최신 소식과 버전 업데이트를 확인하세요.
+                    {subtitle}
                 </p>
             </section>
 
             {/* 공지사항 목록 */}
             <section className="py-6 pb-20">
                 <p className="text-[12px] font-medium text-stone-400 mb-4">
-                    총 {notices.length}건의 공지사항
+                    {countTemplate.replace("{n}", String(notices.length))}
                 </p>
 
                 <div className="space-y-3">
@@ -125,7 +148,7 @@ export default function NoticeClient() {
                                                 <Pin className="w-3 h-3 text-[#F9954E] flex-shrink-0" />
                                             )}
                                             <span className={`px-2.5 py-0.5 text-[11px] font-bold rounded-full ${getTypeBadge(item.type)}`}>
-                                                {item.type}
+                                                {typeLabels ? typeLabels[item.type] : item.type}
                                             </span>
                                             {item.version && (
                                                 <span className="px-2 py-0.5 text-[10px] font-semibold rounded-full bg-stone-100 dark:bg-zinc-800 text-stone-500 flex items-center gap-1">
@@ -139,7 +162,7 @@ export default function NoticeClient() {
                                         </h3>
                                         <div className="flex items-center gap-1.5 mt-2 text-[12px] text-stone-400">
                                             <Clock className="w-3 h-3" />
-                                            <span>{new Date(item.date).toLocaleDateString("ko-KR", { year: "numeric", month: "long", day: "numeric" })}</span>
+                                            <span>{new Date(item.date).toLocaleDateString(dateLocale, { year: "numeric", month: "long", day: "numeric" })}</span>
                                         </div>
                                     </div>
                                     <span className="flex-shrink-0 w-6 h-6 rounded-full bg-stone-100 dark:bg-zinc-800 flex items-center justify-center text-[#F9954E] text-sm font-semibold mt-1 transition-transform duration-200 group-open:rotate-45">

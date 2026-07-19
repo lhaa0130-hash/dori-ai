@@ -5,7 +5,7 @@ import LegalPageLayout from "../components/LegalPageLayout";
 export const metadata: Metadata = {
   title: "사업자 정보 | illo",
   description: "illo의 사업자 신원정보, 통신판매업 신고 안내, 호스팅 제공자 및 개인정보보호책임자 정보입니다.",
-  alternates: { canonical: "https://illo.im/legal/business" },
+  alternates: { canonical: "https://illo.im/legal/business", languages: { "ko-KR": "https://illo.im/legal/business", en: "https://illo.im/en/legal/business", "x-default": "https://illo.im/legal/business" } },
 };
 
 const rows: { k: string; v: ReactNode; pending?: boolean }[] = [
