@@ -35,6 +35,17 @@ function getRawMarkdown(slug: string): string {
   return '';
 }
 
+// 영어판(-en) 존재 여부 — 있을 때만 hreflang 상호 연결(없는 URL 가리키지 않게)
+function hasEnglishVersion(slug: string): boolean {
+  const s = `${slug}-en`;
+  return [
+    path.join(process.cwd(), 'content/analysis', `${s}.md`),
+    path.join(process.cwd(), 'content/curation', `${s}.md`),
+    path.join(process.cwd(), 'content/reports', `${s}.md`),
+    path.join(process.cwd(), 'content/guides', `${s}.md`),
+  ].some((p) => fs.existsSync(p));
+}
+
 const SITE_URL = "https://illo.im";
 
 // ✅ 아티클별 개별 메타데이터 생성 (SEO 핵심)
@@ -53,7 +64,12 @@ export async function generateMetadata(
       title: `${title} | illo`,
       description,
       keywords: ["AI 트렌드", "인공지능", "illo", "AI 인사이트", ...tags].join(", "),
-      alternates: { canonical: url },
+      alternates: {
+        canonical: url,
+        ...(hasEnglishVersion(params.slug)
+          ? { languages: { "ko-KR": url, en: `${SITE_URL}/en/insight/article/${params.slug}-en`, "x-default": url } }
+          : {}),
+      },
       openGraph: {
         title: `${title} | illo`,
         description,
@@ -256,12 +272,16 @@ export async function generateStaticParams() {
 
     let params: { slug: string }[] = [];
 
+    // 영어(lang:en) 콘텐츠는 /en/insight 전용 — 한글 라우트에서 제외(중복 색인 방지)
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const isKo = (p: any) => ((p?.lang as string) || "ko") !== "en";
+
     posts.forEach((post) => params.push({ slug: String(post.id) }));
-    trends.forEach((trend) => params.push({ slug: trend.slug }));
-    guides.forEach((guide) => params.push({ slug: guide.slug }));
-    analyses.forEach((item) => params.push({ slug: item.slug }));
-    reports.forEach((item) => params.push({ slug: item.slug }));
-    curations.forEach((item) => params.push({ slug: item.slug }));
+    trends.filter(isKo).forEach((trend) => params.push({ slug: trend.slug }));
+    guides.filter(isKo).forEach((guide) => params.push({ slug: guide.slug }));
+    analyses.filter(isKo).forEach((item) => params.push({ slug: item.slug }));
+    reports.filter(isKo).forEach((item) => params.push({ slug: item.slug }));
+    curations.filter(isKo).forEach((item) => params.push({ slug: item.slug }));
     studios.forEach((item) => params.push({ slug: item.slug }));
     marketPosts.forEach((item) => params.push({ slug: item.slug }));
 

@@ -36,7 +36,7 @@ export async function generateMetadata(
       alternates: {
         canonical: url,
         languages: {
-          "ko-KR": `${SITE_URL}/insight/article/${params.slug}`,
+          "ko-KR": `${SITE_URL}/insight/article/${params.slug.replace(/-en$/, "")}`,
           en: url,
           "x-default": url,
         },
