@@ -913,17 +913,44 @@ function setOwnedShopCache(email: string, keys: string[]): void {
  * ownedItems 에 추가한다(잔액 음수/이중차감 방지). 성공 시 로컬 캐시 동기화.
  * itemKeyStr = "slot::id".
  */
+// 구매 결과 안내 문구. 영어판(/en/shop)에서도 같은 함수를 쓰므로 로케일을 받는다.
+// ⚠️ 히스토리 reason("상점 구매: …")은 저장되는 데이터 값이라 한글 고정 — 번역 대상 아님.
+const BUY_MSG = {
+  ko: {
+    cannot: "구매할 수 없습니다.",
+    needLogin: "로그인이 필요합니다.",
+    alreadyOwned: "이미 보유한 아이템입니다.",
+    premiumFree: "💎 프리미엄 혜택으로 무료 획득!",
+    short: (bal: number, price: number) => `솜사탕이 부족해요. (보유 ${bal.toLocaleString()} / 필요 ${price.toLocaleString()})`,
+    failed: "구매에 실패했어요.",
+    done: "구매 완료!",
+    network: "네트워크 오류로 구매에 실패했어요. 잠시 후 다시 시도해주세요.",
+  },
+  en: {
+    cannot: "Purchase is unavailable.",
+    needLogin: "Please sign in first.",
+    alreadyOwned: "You already own this item.",
+    premiumFree: "💎 Claimed free with your premium benefit!",
+    short: (bal: number, price: number) => `Not enough cotton candy. (You have ${bal.toLocaleString()} / need ${price.toLocaleString()})`,
+    failed: "Purchase failed.",
+    done: "Purchase complete!",
+    network: "Purchase failed due to a network error. Please try again in a moment.",
+  },
+} as const;
+
 export async function purchaseShopItem(
   email: string,
   itemKeyStr: string,
-  price: number
+  price: number,
+  locale: "ko" | "en" = "ko"
 ): Promise<{ success: boolean; message: string; balance: number }> {
-  if (typeof window === "undefined") return { success: false, message: "구매할 수 없습니다.", balance: 0 };
-  if (!email) return { success: false, message: "로그인이 필요합니다.", balance: 0 };
+  const m = BUY_MSG[locale] || BUY_MSG.ko;
+  if (typeof window === "undefined") return { success: false, message: m.cannot, balance: 0 };
+  if (!email) return { success: false, message: m.needLogin, balance: 0 };
 
   const owned = getOwnedShopItems(email);
   if (owned.includes(itemKeyStr)) {
-    return { success: true, message: "이미 보유한 아이템입니다.", balance: getCottonCandyBalance(email) };
+    return { success: true, message: m.alreadyOwned, balance: getCottonCandyBalance(email) };
   }
 
   // 💎 프리미엄 회원: 무료 지급
@@ -937,19 +964,19 @@ export async function purchaseShopItem(
       } catch { /* 캐시는 이미 반영됨 */ }
     }
     window.dispatchEvent(new Event("dori-gamedata-synced"));
-    return { success: true, message: "💎 프리미엄 혜택으로 무료 획득!", balance: getCottonCandyBalance(email) };
+    return { success: true, message: m.premiumFree, balance: getCottonCandyBalance(email) };
   }
 
   const uid = currentUid();
   // 로그인은 됐지만 uid 를 못 읽는 예외 상황 — 로컬 잔액으로라도 처리(차선)
   if (!uid) {
     const bal = getCottonCandyBalance(email);
-    if (bal < price) return { success: false, message: `솜사탕이 부족해요. (보유 ${bal.toLocaleString()} / 필요 ${price.toLocaleString()})`, balance: bal };
+    if (bal < price) return { success: false, message: m.short(bal, price), balance: bal };
     const ok = spendCottonCandy(email, price, `상점 구매: ${itemKeyStr}`);
-    if (!ok) return { success: false, message: "구매에 실패했어요.", balance: bal };
+    if (!ok) return { success: false, message: m.failed, balance: bal };
     setOwnedShopCache(email, [...owned, itemKeyStr]);
     window.dispatchEvent(new Event("dori-gamedata-synced"));
-    return { success: true, message: "구매 완료!", balance: getCottonCandyBalance(email) };
+    return { success: true, message: m.done, balance: getCottonCandyBalance(email) };
   }
 
   // 정상 경로: Firestore 트랜잭션 (서버 잔액 기준 원자적 차감 + 보유 추가)
@@ -977,13 +1004,13 @@ export async function purchaseShopItem(
       localStorage.setItem(CANDY_HISTORY_KEY(email), JSON.stringify(history));
     } catch { /* noop */ }
     window.dispatchEvent(new Event("dori-gamedata-synced"));
-    return { success: true, message: "구매 완료!", balance: newBalance };
+    return { success: true, message: m.done, balance: newBalance };
   } catch (e: unknown) {
     const bal = getCottonCandyBalance(email);
     if (e instanceof Error && e.message === "INSUFFICIENT") {
-      return { success: false, message: `솜사탕이 부족해요. (보유 ${bal.toLocaleString()} / 필요 ${price.toLocaleString()})`, balance: bal };
+      return { success: false, message: m.short(bal, price), balance: bal };
     }
-    return { success: false, message: "네트워크 오류로 구매에 실패했어요. 잠시 후 다시 시도해주세요.", balance: bal };
+    return { success: false, message: m.network, balance: bal };
   }
 }
 

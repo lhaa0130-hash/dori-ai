@@ -2,7 +2,7 @@
 
 import { Suspense, useCallback, useEffect, useMemo, useRef, useState } from "react";
 import Link from "next/link";
-import { useSearchParams } from "next/navigation";
+import { usePathname, useSearchParams } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   currentUid,
@@ -32,13 +32,132 @@ import {
 } from "@/lib/social";
 import RangeVenn from "@/components/social/RangeVenn";
 
+const T = {
+  ko: {
+    loginRequiredTitle: "로그인이 필요해요",
+    loginRequiredL1: "친구·범위·메시지는 로그인 후",
+    loginRequiredL2: "이용하실 수 있습니다.",
+    loginCta: "로그인하러 가기",
+    loading: "불러오는 중입니다",
+    findFriends: "친구 찾기",
+    findFriendsPlaceholder: "이름으로 친구 찾기",
+    findFriendsHint: "검색하지 않으면 추천 친구를 보여줘요.",
+    searching: "찾는 중…",
+    noSearchResults: "검색 결과가 없어요.",
+    noSuggested: "추천할 친구가 아직 없어요.",
+    alreadyFriend: "친구",
+    requested: "요청됨",
+    addFriendRequest: "친구 요청",
+    incomingRequests: "받은 친구 요청",
+    accept: "수락",
+    reject: "거절",
+    addFriend: "친구 추가",
+    noAddable: "추가할 수 있는 대화 상대가 없어요.",
+    addFriendHint: "다른 회원의 코지홈(프로필)에서도 친구 추가할 수 있어요.",
+    myFriends: "내 친구",
+    noFriends: "아직 친구가 없어요.",
+    chatBtn: "대화",
+    removeFriend: "삭제",
+    rangeDiagram: "범위 다이어그램",
+    rangeDiagramHint: "한 친구를 여러 범위에 넣으면 겹치는 자리(교집합)에 모여요. 아래 ‘멤버 관리’에서 넣고 빼보세요.",
+    createRange: "범위 만들기",
+    maxCountLabel: (n: number) => `최대 ${n}개`,
+    rangeNamePlaceholder: "범위 이름 (예: 회사동료, 남자, 설계)",
+    create: "만들기",
+    rangeLimitReached: (n: number) => `범위는 최대 ${n}개까지예요.`,
+    rangeExplain: "범위는 친구를 묶는 그룹이에요. 한 친구를 여러 범위에 넣을 수 있어요. ‘피드 공개’를 끄면 이 범위는 내 친구공개 피드를 볼 수 없어요.",
+    noRanges: "아직 만든 범위가 없어요.",
+    save: "저장",
+    renameBtn: "이름수정",
+    deleteRange: "삭제",
+    feedVisible: "피드 공개",
+    memberCount: (n: number) => `멤버 ${n}명`,
+    closeMemberManage: "멤버 관리 닫기",
+    memberManage: "멤버 관리",
+    addFriendFirst: "먼저 친구를 추가해 주세요.",
+    conversations: "대화",
+    noConversations: "아직 대화가 없어요.",
+    newConversation: "새 대화",
+    selectPeer: "친구나 대화 목록에서 상대를 선택해 주세요.",
+    backToList: "목록으로",
+    startConversation: "첫 메시지를 보내 대화를 시작해 보세요.",
+    messagePlaceholder: "메시지를 입력하세요",
+    send: "전송",
+    pageTitle: "메시지",
+    pageSubtitle: "친구를 맺고 범위로 묶어, 1:1로 대화를 나눠보세요.",
+    tabFriends: "친구",
+    tabRanges: "범위",
+    tabChat: "대화",
+    rangeCreateLimitMsg: (n: number) => `범위는 최대 ${n}개까지 만들 수 있어요.`,
+    rangeCreateFailed: "범위 생성에 실패했어요.",
+  },
+  en: {
+    loginRequiredTitle: "Sign in required",
+    loginRequiredL1: "Friends, ranges, and messages",
+    loginRequiredL2: "are available after signing in.",
+    loginCta: "Sign in",
+    loading: "Loading",
+    findFriends: "Find friends",
+    findFriendsPlaceholder: "Search friends by name",
+    findFriendsHint: "Leave it blank to see suggested friends.",
+    searching: "Searching…",
+    noSearchResults: "No results found.",
+    noSuggested: "No suggested friends yet.",
+    alreadyFriend: "Friend",
+    requested: "Requested",
+    addFriendRequest: "Add friend",
+    incomingRequests: "Friend requests",
+    accept: "Accept",
+    reject: "Decline",
+    addFriend: "Add friend",
+    noAddable: "No chat partners to add yet.",
+    addFriendHint: "You can also add friends from another member's Cozy Home (profile).",
+    myFriends: "My friends",
+    noFriends: "No friends yet.",
+    chatBtn: "Chat",
+    removeFriend: "Remove",
+    rangeDiagram: "Range diagram",
+    rangeDiagramHint: "Put a friend in multiple ranges and they'll cluster where the ranges overlap. Use ‘Manage members’ below to add or remove them.",
+    createRange: "Create a range",
+    maxCountLabel: (n: number) => `Up to ${n}`,
+    rangeNamePlaceholder: "Range name (e.g. coworkers, men, design)",
+    create: "Create",
+    rangeLimitReached: (n: number) => `You can have up to ${n} ranges.`,
+    rangeExplain: "A range groups your friends. A friend can belong to multiple ranges. Turn off ‘Feed visible’ to hide your friends-only feed from this range.",
+    noRanges: "You haven't created any ranges yet.",
+    save: "Save",
+    renameBtn: "Rename",
+    deleteRange: "Delete",
+    feedVisible: "Feed visible",
+    memberCount: (n: number) => `${n} members`,
+    closeMemberManage: "Close member management",
+    memberManage: "Manage members",
+    addFriendFirst: "Add a friend first.",
+    conversations: "Chats",
+    noConversations: "No chats yet.",
+    newConversation: "New chat",
+    selectPeer: "Choose someone from your friends or chat list.",
+    backToList: "Back to list",
+    startConversation: "Send the first message to start chatting.",
+    messagePlaceholder: "Type a message…",
+    send: "Send",
+    pageTitle: "Messages",
+    pageSubtitle: "Add friends, group them into ranges, and chat one-on-one.",
+    tabFriends: "Friends",
+    tabRanges: "Ranges",
+    tabChat: "Chat",
+    rangeCreateLimitMsg: (n: number) => `You can create up to ${n} ranges.`,
+    rangeCreateFailed: "Couldn't create the range.",
+  },
+} as const;
+
 // 범위 색상 팔레트(최대 5)
 const GROUP_COLORS = ["#F9954E", "#5B8DEF", "#37C2A8", "#C77DFF", "#FF6B9D"];
 
-function formatTime(ms: number): string {
+function formatTime(ms: number, en?: boolean): string {
   if (!ms) return "";
   try {
-    return new Date(ms).toLocaleTimeString("ko-KR", { hour: "2-digit", minute: "2-digit" });
+    return new Date(ms).toLocaleTimeString(en ? "en-US" : "ko-KR", { hour: "2-digit", minute: "2-digit" });
   } catch {
     return "";
   }
@@ -57,6 +176,9 @@ const CARD =
 function MessagesInner() {
   const { session, status } = useAuth();
   const searchParams = useSearchParams();
+  const pathname = usePathname();
+  const isEn = (pathname || "").startsWith("/en");
+  const tr = T[isEn ? "en" : "ko"];
 
   const [myUid, setMyUid] = useState<string | null>(null);
   const [tab, setTab] = useState<TabKey>("friends");
@@ -251,9 +373,9 @@ function MessagesInner() {
     setGroupMsg("");
     const res = await createGroup(name);
     if (res === "ok") setNewGroupName("");
-    else if (res === "full") setGroupMsg(`범위는 최대 ${MAX_GROUPS}개까지 만들 수 있어요.`);
-    else setGroupMsg("범위 생성에 실패했어요.");
-  }, [newGroupName]);
+    else if (res === "full") setGroupMsg(tr.rangeCreateLimitMsg(MAX_GROUPS));
+    else setGroupMsg(tr.rangeCreateFailed);
+  }, [newGroupName, tr]);
 
   const startEditGroup = useCallback((g: FriendGroup) => {
     setEditingGroupId(g.id);
@@ -286,16 +408,16 @@ function MessagesInner() {
             💬
           </div>
           <h2 className="text-[20px] font-extrabold tracking-tight text-stone-900 dark:text-white mb-2">
-            로그인이 필요해요
+            {tr.loginRequiredTitle}
           </h2>
           <p className="text-[14px] text-stone-500 dark:text-stone-400 mb-7 leading-relaxed">
-            친구·범위·메시지는 로그인 후<br />이용하실 수 있습니다.
+            {tr.loginRequiredL1}<br />{tr.loginRequiredL2}
           </p>
           <Link
             href="/login"
             className="w-full py-3.5 rounded-full bg-[#F9954E] text-white font-bold text-[14px] active:opacity-85 transition-opacity text-center"
           >
-            로그인하러 가기
+            {tr.loginCta}
           </Link>
         </div>
       </main>
@@ -307,7 +429,7 @@ function MessagesInner() {
     return (
       <main className="w-full min-h-screen flex flex-col items-center justify-center">
         <div className="w-10 h-10 border-4 border-stone-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-5" />
-        <p className="text-[14px] text-stone-400 font-semibold">불러오는 중입니다</p>
+        <p className="text-[14px] text-stone-400 font-semibold">{tr.loading}</p>
       </main>
     );
   }
@@ -318,25 +440,25 @@ function MessagesInner() {
       {/* 친구 찾기 */}
       <div className={`${CARD} overflow-hidden`}>
         <div className="px-4 py-3 border-b border-stone-100 dark:border-zinc-900">
-          <span className="text-[11px] font-semibold text-[#F9954E]">친구 찾기</span>
+          <span className="text-[11px] font-semibold text-[#F9954E]">{tr.findFriends}</span>
         </div>
         <div className="px-3 py-3">
           <input
             type="text"
             value={searchQ}
             onChange={(e) => setSearchQ(e.target.value)}
-            placeholder="이름으로 친구 찾기"
+            placeholder={tr.findFriendsPlaceholder}
             maxLength={20}
             className="w-full px-4 py-2.5 rounded-full bg-stone-100 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white placeholder:text-stone-400 outline-none focus:ring-2 focus:ring-[#F9954E]/40"
           />
           {!searchQ.trim() && (
-            <p className="mt-2 px-1 text-[11px] text-stone-400">검색하지 않으면 추천 친구를 보여줘요.</p>
+            <p className="mt-2 px-1 text-[11px] text-stone-400">{tr.findFriendsHint}</p>
           )}
         </div>
         <div className="divide-y divide-stone-50 dark:divide-zinc-900/60 max-h-72 overflow-y-auto">
           {findResults.length === 0 ? (
             <p className="px-4 py-4 text-[12px] text-stone-500 dark:text-stone-400">
-              {searchQ.trim() ? (searching ? "찾는 중…" : "검색 결과가 없어요.") : "추천할 친구가 아직 없어요."}
+              {searchQ.trim() ? (searching ? tr.searching : tr.noSearchResults) : tr.noSuggested}
             </p>
           ) : (
             findResults.map((u) => {
@@ -364,7 +486,7 @@ function MessagesInner() {
                         : "bg-[#F9954E] text-white active:opacity-85"
                     }`}
                   >
-                    {already ? "친구" : reqd ? "요청됨" : "친구 요청"}
+                    {already ? tr.alreadyFriend : reqd ? tr.requested : tr.addFriendRequest}
                   </button>
                 </div>
               );
@@ -377,7 +499,7 @@ function MessagesInner() {
       {requests.length > 0 && (
         <div className={`${CARD} overflow-hidden`}>
           <div className="px-4 py-3 border-b border-stone-100 dark:border-zinc-900">
-            <span className="text-[11px] font-semibold text-[#F9954E]">받은 친구 요청</span>
+            <span className="text-[11px] font-semibold text-[#F9954E]">{tr.incomingRequests}</span>
           </div>
           <div className="divide-y divide-stone-50 dark:divide-zinc-900/60">
             {requests.map((r) => (
@@ -390,13 +512,13 @@ function MessagesInner() {
                     onClick={() => handleAccept(r)}
                     className="px-3 py-1.5 rounded-full bg-[#F9954E] text-white font-bold text-[12px] active:opacity-85 transition-opacity"
                   >
-                    수락
+                    {tr.accept}
                   </button>
                   <button
                     onClick={() => rejectFriendRequest(r.fromUid)}
                     className="px-3 py-1.5 rounded-full bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300 font-bold text-[12px] active:opacity-85 transition-opacity"
                   >
-                    거절
+                    {tr.reject}
                   </button>
                 </div>
               </div>
@@ -408,7 +530,7 @@ function MessagesInner() {
       {/* 친구 추가 (대화 상대 중 비친구) */}
       <div className={`${CARD} overflow-hidden`}>
         <div className="px-4 py-3 border-b border-stone-100 dark:border-zinc-900">
-          <span className="text-[11px] font-semibold text-[#F9954E]">친구 추가</span>
+          <span className="text-[11px] font-semibold text-[#F9954E]">{tr.addFriend}</span>
         </div>
         {addableFromThreads.length > 0 ? (
           <div className="divide-y divide-stone-50 dark:divide-zinc-900/60">
@@ -421,7 +543,7 @@ function MessagesInner() {
                   onClick={() => handleAddFriend(t.otherUid)}
                   className="px-3 py-1.5 rounded-full bg-stone-100 dark:bg-zinc-900 text-stone-700 dark:text-stone-200 font-bold text-[12px] active:opacity-85 transition-opacity shrink-0"
                 >
-                  친구 추가
+                  {tr.addFriend}
                 </button>
               </div>
             ))}
@@ -429,13 +551,13 @@ function MessagesInner() {
         ) : (
           <div className="px-4 py-4">
             <p className="text-[12px] text-stone-500 dark:text-stone-400 leading-relaxed">
-              추가할 수 있는 대화 상대가 없어요.
+              {tr.noAddable}
             </p>
           </div>
         )}
         <div className="px-4 py-3 border-t border-stone-100 dark:border-zinc-900">
           <p className="text-[12px] text-stone-400 dark:text-stone-500 leading-relaxed">
-            다른 회원의 코지홈(프로필)에서도 친구 추가할 수 있어요.
+            {tr.addFriendHint}
           </p>
         </div>
       </div>
@@ -443,12 +565,12 @@ function MessagesInner() {
       {/* 내 친구 목록 */}
       <div className={`${CARD} overflow-hidden`}>
         <div className="px-4 py-3 border-b border-stone-100 dark:border-zinc-900">
-          <span className="text-[11px] font-semibold text-[#F9954E]">내 친구</span>
+          <span className="text-[11px] font-semibold text-[#F9954E]">{tr.myFriends}</span>
         </div>
         {friends.length === 0 ? (
           <div className="px-4 py-12 text-center">
             <div className="text-3xl mb-3 opacity-30">🧑‍🤝‍🧑</div>
-            <p className="text-[13px] text-stone-500 dark:text-stone-400">아직 친구가 없어요.</p>
+            <p className="text-[13px] text-stone-500 dark:text-stone-400">{tr.noFriends}</p>
           </div>
         ) : (
           <div className="divide-y divide-stone-50 dark:divide-zinc-900/60">
@@ -462,13 +584,13 @@ function MessagesInner() {
                     onClick={() => openChat(f.uid, f.name)}
                     className="px-3 py-1.5 rounded-full bg-[#F9954E] text-white font-bold text-[12px] active:opacity-85 transition-opacity"
                   >
-                    대화
+                    {tr.chatBtn}
                   </button>
                   <button
                     onClick={() => removeFriend(f.uid)}
                     className="px-3 py-1.5 rounded-full bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300 font-bold text-[12px] active:opacity-85 transition-opacity"
                   >
-                    삭제
+                    {tr.removeFriend}
                   </button>
                 </div>
               </div>
@@ -485,13 +607,13 @@ function MessagesInner() {
       {/* 범위 다이어그램(교집합·합집합 시각화) */}
       <div className={`${CARD} overflow-hidden`}>
         <div className="px-4 py-3 border-b border-stone-100 dark:border-zinc-900 flex items-center justify-between">
-          <span className="text-[11px] font-semibold text-[#F9954E]">범위 다이어그램</span>
+          <span className="text-[11px] font-semibold text-[#F9954E]">{tr.rangeDiagram}</span>
           <span className="text-[11px] text-stone-400">{groups.length}/{MAX_GROUPS}</span>
         </div>
         <div className="px-4 py-5">
           <RangeVenn groups={groupsColored} friends={friends} />
           <p className="mt-3 text-center text-[11px] text-stone-400 leading-relaxed">
-            한 친구를 여러 범위에 넣으면 겹치는 자리(교집합)에 모여요. 아래 &lsquo;멤버 관리&rsquo;에서 넣고 빼보세요.
+            {tr.rangeDiagramHint}
           </p>
         </div>
       </div>
@@ -499,8 +621,8 @@ function MessagesInner() {
       {/* 범위 만들기 */}
       <div className={`${CARD} overflow-hidden`}>
         <div className="px-4 py-3 border-b border-stone-100 dark:border-zinc-900 flex items-center justify-between">
-          <span className="text-[11px] font-semibold text-[#F9954E]">범위 만들기</span>
-          <span className="text-[11px] text-stone-400">최대 {MAX_GROUPS}개</span>
+          <span className="text-[11px] font-semibold text-[#F9954E]">{tr.createRange}</span>
+          <span className="text-[11px] text-stone-400">{tr.maxCountLabel(MAX_GROUPS)}</span>
         </div>
         <div className="flex items-center gap-2 px-3 py-3">
           <input
@@ -513,7 +635,7 @@ function MessagesInner() {
                 handleCreateGroup();
               }
             }}
-            placeholder="범위 이름 (예: 회사동료, 남자, 설계)"
+            placeholder={tr.rangeNamePlaceholder}
             maxLength={20}
             className="flex-1 px-4 py-2.5 rounded-full bg-stone-100 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white placeholder:text-stone-400 outline-none focus:ring-2 focus:ring-[#F9954E]/40 disabled:opacity-50"
             disabled={groups.length >= MAX_GROUPS}
@@ -523,16 +645,16 @@ function MessagesInner() {
             disabled={!newGroupName.trim() || groups.length >= MAX_GROUPS}
             className="px-5 py-2.5 rounded-full bg-[#F9954E] text-white font-bold text-[14px] active:opacity-85 transition-opacity disabled:opacity-40 shrink-0"
           >
-            만들기
+            {tr.create}
           </button>
         </div>
         <div className="px-4 pb-3">
           {groupMsg && <p className="text-[12px] text-red-500 mb-1">{groupMsg}</p>}
           {groups.length >= MAX_GROUPS && !groupMsg && (
-            <p className="text-[12px] text-stone-400 mb-1">범위는 최대 {MAX_GROUPS}개까지예요.</p>
+            <p className="text-[12px] text-stone-400 mb-1">{tr.rangeLimitReached(MAX_GROUPS)}</p>
           )}
           <p className="text-[12px] text-stone-400 dark:text-stone-500 leading-relaxed">
-            범위는 친구를 묶는 그룹이에요. 한 친구를 여러 범위에 넣을 수 있어요. &lsquo;피드 공개&rsquo;를 끄면 이 범위는 내 친구공개 피드를 볼 수 없어요.
+            {tr.rangeExplain}
           </p>
         </div>
       </div>
@@ -541,7 +663,7 @@ function MessagesInner() {
       {groups.length === 0 ? (
         <div className={`${CARD} px-4 py-12 text-center`}>
           <div className="text-3xl mb-3 opacity-30">🗂️</div>
-          <p className="text-[13px] text-stone-500 dark:text-stone-400">아직 만든 범위가 없어요.</p>
+          <p className="text-[13px] text-stone-500 dark:text-stone-400">{tr.noRanges}</p>
         </div>
       ) : (
         groupsColored.map((g) => (
@@ -574,21 +696,21 @@ function MessagesInner() {
                     onClick={saveEditGroup}
                     className="px-3 py-1.5 rounded-full bg-[#F9954E] text-white font-bold text-[12px] active:opacity-85 transition-opacity"
                   >
-                    저장
+                    {tr.save}
                   </button>
                 ) : (
                   <button
                     onClick={() => startEditGroup(g)}
                     className="px-3 py-1.5 rounded-full bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300 font-bold text-[12px] active:opacity-85 transition-opacity"
                   >
-                    이름수정
+                    {tr.renameBtn}
                   </button>
                 )}
                 <button
                   onClick={() => deleteGroup(g.id)}
                   className="px-3 py-1.5 rounded-full bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300 font-bold text-[12px] active:opacity-85 transition-opacity"
                 >
-                  삭제
+                  {tr.deleteRange}
                 </button>
               </div>
             </div>
@@ -596,9 +718,9 @@ function MessagesInner() {
             {/* 피드 공개 토글 + 멤버 수 */}
             <div className="flex items-center justify-between gap-2 px-4 py-3">
               <div>
-                <p className="text-[13px] font-semibold text-stone-800 dark:text-stone-200">피드 공개</p>
+                <p className="text-[13px] font-semibold text-stone-800 dark:text-stone-200">{tr.feedVisible}</p>
                 <p className="text-[12px] text-stone-400 dark:text-stone-500">
-                  멤버 {g.memberUids.length}명
+                  {tr.memberCount(g.memberUids.length)}
                 </p>
               </div>
               <button
@@ -623,13 +745,13 @@ function MessagesInner() {
                 onClick={() => setMemberEditId(memberEditId === g.id ? null : g.id)}
                 className="w-full py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-stone-700 dark:text-stone-200 font-bold text-[13px] active:opacity-85 transition-opacity"
               >
-                {memberEditId === g.id ? "멤버 관리 닫기" : "멤버 관리"}
+                {memberEditId === g.id ? tr.closeMemberManage : tr.memberManage}
               </button>
               {memberEditId === g.id && (
                 <div className="mt-3">
                   {friends.length === 0 ? (
                     <p className="text-[12px] text-stone-400 dark:text-stone-500 py-2">
-                      먼저 친구를 추가해 주세요.
+                      {tr.addFriendFirst}
                     </p>
                   ) : (
                     <div className="flex flex-col gap-1">
@@ -667,13 +789,13 @@ function MessagesInner() {
   const threadsList = (
     <div className={`${CARD} overflow-hidden flex flex-col`}>
       <div className="px-4 py-3 border-b border-stone-100 dark:border-zinc-900">
-        <span className="text-[11px] font-semibold text-[#F9954E]">대화</span>
+        <span className="text-[11px] font-semibold text-[#F9954E]">{tr.conversations}</span>
       </div>
       <div className="flex-1 overflow-y-auto">
         {threads.length === 0 ? (
           <div className="px-4 py-16 text-center">
             <div className="text-3xl mb-3 opacity-30">📭</div>
-            <p className="text-[13px] text-stone-500 dark:text-stone-400">아직 대화가 없어요.</p>
+            <p className="text-[13px] text-stone-500 dark:text-stone-400">{tr.noConversations}</p>
           </div>
         ) : (
           threads.map((t) => {
@@ -692,10 +814,10 @@ function MessagesInner() {
                   <span className="text-[14px] font-bold text-stone-900 dark:text-white truncate">
                     {t.otherName}
                   </span>
-                  <span className="text-[10px] text-stone-400 shrink-0">{formatTime(t.lastAt)}</span>
+                  <span className="text-[10px] text-stone-400 shrink-0">{formatTime(t.lastAt, isEn)}</span>
                 </div>
                 <p className="text-[12px] text-stone-500 dark:text-stone-400 truncate">
-                  {t.lastText || "새 대화"}
+                  {t.lastText || tr.newConversation}
                 </p>
               </button>
             );
@@ -712,7 +834,7 @@ function MessagesInner() {
         <div className="flex-1 flex flex-col items-center justify-center text-center px-6 py-16">
           <div className="text-4xl mb-3 opacity-30">💬</div>
           <p className="text-[14px] text-stone-500 dark:text-stone-400">
-            친구나 대화 목록에서 상대를 선택해 주세요.
+            {tr.selectPeer}
           </p>
         </div>
       ) : (
@@ -722,7 +844,7 @@ function MessagesInner() {
             <button
               onClick={() => setActive(null)}
               className="sm:hidden -ml-1 px-2 py-1 rounded-lg text-stone-500 dark:text-stone-400 active:opacity-60"
-              aria-label="목록으로"
+              aria-label={tr.backToList}
             >
               ←
             </button>
@@ -736,7 +858,7 @@ function MessagesInner() {
             {msgs.length === 0 ? (
               <div className="h-full flex flex-col items-center justify-center text-center">
                 <p className="text-[13px] text-stone-400 dark:text-stone-500">
-                  첫 메시지를 보내 대화를 시작해 보세요.
+                  {tr.startConversation}
                 </p>
               </div>
             ) : (
@@ -757,7 +879,7 @@ function MessagesInner() {
                           mine ? "text-white/70" : "text-stone-400"
                         }`}
                       >
-                        {formatTime(m.at)}
+                        {formatTime(m.at, isEn)}
                       </span>
                     </div>
                   </div>
@@ -774,7 +896,7 @@ function MessagesInner() {
               value={draft}
               onChange={(e) => setDraft(e.target.value)}
               onKeyDown={onKeyDown}
-              placeholder="메시지를 입력하세요"
+              placeholder={tr.messagePlaceholder}
               className="flex-1 px-4 py-2.5 rounded-full bg-stone-100 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white placeholder:text-stone-400 outline-none focus:ring-2 focus:ring-[#F9954E]/40"
             />
             <button
@@ -782,7 +904,7 @@ function MessagesInner() {
               disabled={!draft.trim() || sending}
               className="px-5 py-2.5 rounded-full bg-[#F9954E] text-white font-bold text-[14px] active:opacity-85 transition-opacity disabled:opacity-40"
             >
-              전송
+              {tr.send}
             </button>
           </div>
         </>
@@ -791,9 +913,9 @@ function MessagesInner() {
   );
 
   const tabs: { key: TabKey; label: string }[] = [
-    { key: "friends", label: "친구" },
-    { key: "groups", label: "범위" },
-    { key: "chat", label: "대화" },
+    { key: "friends", label: tr.tabFriends },
+    { key: "groups", label: tr.tabRanges },
+    { key: "chat", label: tr.tabChat },
   ];
 
   return (
@@ -801,10 +923,10 @@ function MessagesInner() {
       <section className="max-w-5xl mx-auto px-4 sm:px-6 pt-24 pb-10">
         <p className="text-[11px] font-semibold text-[#F9954E] mb-1">FRIENDS &amp; MESSAGE</p>
         <h1 className="text-[28px] sm:text-[32px] font-extrabold tracking-tight text-stone-950 dark:text-white mb-1">
-          메시지
+          {tr.pageTitle}
         </h1>
         <p className="text-[14px] text-stone-500 dark:text-stone-400 mb-6">
-          친구를 맺고 범위로 묶어, 1:1로 대화를 나눠보세요.
+          {tr.pageSubtitle}
         </p>
 
         {/* 모바일 탭 */}

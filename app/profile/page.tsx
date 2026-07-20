@@ -2,6 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, type ReactNode } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import MyAnimalsSection from "@/components/animal/MyAnimalsSection";
 import {
@@ -64,10 +65,306 @@ const MOODS = ["😎", "🥰", "😴", "🔥", "🎮", "✨", "😌", "🤔", "�
 const STICKER_CHOICES = FREE_STICKERS; // 무료 기본 스티커(lib/shopItems 단일 출처)
 const INTEREST_SUGGESTIONS = ["AI", "코딩", "게임", "음악", "영화", "그림", "글쓰기", "사진", "독서", "운동", "요리", "여행", "주식", "디자인", "반려동물"];
 
-function fmtDate(at: number): string {
+// 프로필(코지홈) 페이지 문구 — /en 경로에서는 영어로 표시
+const T = {
+  ko: {
+    defaultUserName: "사용자",
+    buyAtShop: "상점에서 구매",
+    photoUploadFailed: "사진 업로드에 실패했습니다.",
+    friendRequestFailed: "친구 요청에 실패했습니다. 다시 시도해주세요.",
+    loginRequired: "로그인이 필요해요.",
+    shareTitle: (name: string) => `${name} 님의 코지홈`,
+    cozyHomeFallbackName: "코지홈",
+    copyLinkPrompt: "이 링크를 복사해 공유하세요",
+    followers: "팔로워",
+    following: "팔로잉",
+    saveFailed: "저장에 실패했습니다. 다시 시도해주세요.",
+    guestbookFailed: "방명록 작성에 실패했습니다.",
+    diarySaveFailed: "다이어리 저장에 실패했습니다.",
+    confirmDeleteAI: "이 AI 페이지를 삭제할까요?",
+    handleSaveSuccess: "저장됐어요! 이제 내 AI 주소가 깔끔해져요.",
+    saveFailedShort: "저장 실패",
+    handleAvailable: "사용 가능한 이름이에요 ✓",
+    handleUnavailable: "사용 불가",
+    loginPromptTitle: "코지홈을 보려면 로그인하세요",
+    loginPromptBody1: "로그인하면 나만의 코지홈을",
+    loginPromptBody2: "꾸미고 방명록을 받을 수 있어요.",
+    goToLogin: "로그인하러 가기",
+    loadingCozyHome: "코지홈을 불러오는 중입니다",
+    followListEmpty: "아직 없어요",
+    cozyHomeTab: "🏠 코지홈",
+    accountTab: "⚙️ 계정·활동",
+    shopTab: "🛍 상점",
+    changePhotoAria: "프로필 사진 변경",
+    changePhotoLine1: "사진",
+    changePhotoLine2: "변경",
+    tierFallback: (tier: number) => `등급 ${tier}`,
+    noStatusMessage: "상태메시지가 없어요",
+    greetingLabel: "대문",
+    posts: "게시물",
+    closeCustomize: "꾸미기 닫기",
+    customize: "✏️ 꾸미기",
+    linkCopied: "✓ 링크 복사됨",
+    share: "🔗 공유",
+    followBtn: "+ 팔로우",
+    messageBtn: "💬 메시지",
+    friendBadge: "✓ 친구",
+    requested: "요청됨",
+    addFriend: "친구 추가",
+    customizeCozyHome: "코지홈 꾸미기",
+    getItemsFromShop: "🍬 상점에서 아이템 받기 →",
+    shareAddressLabel: "공유 주소 (영문 핸들)",
+    shareAddressHint: "내 AI 페이지 주소가 깔끔해져요",
+    save: "저장",
+    handleHint: "영문 소문자·숫자·밑줄(_) 3~20자 · 미설정 시 임시 주소가 쓰여요",
+    greetingFieldLabel: "대문 인사말",
+    greetingFieldHint: "방문자에게 보이는 한마디",
+    greetingPlaceholder: "예) 놀러와줘서 고마워요! 방명록 남겨주세요 :)",
+    statusMsgLabel: "상태메시지",
+    statusMsgPlaceholder: "한 줄 상태메시지",
+    bioLabel: "소개",
+    bioPlaceholder: "자기소개를 적어보세요",
+    moodLabel: "오늘의 기분",
+    moodHint: "이름 옆에 표시돼요",
+    none: "없음",
+    titleLabel: "칭호",
+    titleHint: "이름 아래 표시돼요",
+    titlePlaceholder: "예) 도리 덕후 · AI 탐험가",
+    colorLabel: "대표색",
+    colorAria: (c: string) => `색상 ${c}`,
+    frameLabel: "아바타 테두리",
+    bgLabel: "배경",
+    nameEffectLabel: "이름 효과",
+    nameEffectHint: "이름 글씨에 적용돼요",
+    namePreview: "도리",
+    bannerEffectLabel: "배너 효과",
+    bannerEffectHint: "배너에 움직이는 효과",
+    petLabel: "펫 · 캐릭터",
+    petHint: "코지홈에 함께 살아요",
+    interestsLabel: "관심사",
+    interestsHint: "최대 8개",
+    interestInputPlaceholder: "직접 추가 (예: 그림)",
+    addBtn: "추가",
+    stickerLabel: "배너 스티커",
+    stickerHint: "최대 6개",
+    getStickersFromShop: "상점에서 스티커 더 받기",
+    stickerShopHint: "상점에서 동물·우주·디저트 스티커를 더 받을 수 있어요",
+    saving: "저장 중...",
+    saveButtonFull: "저장하기",
+    myAIsHeading: "🤖 내가 만든 AI",
+    close: "닫기",
+    showOffAI: "+ AI 자랑하기",
+    handleTip: (customizeBtn: ReactNode): ReactNode => (
+      <>
+        💡 아래 {customizeBtn}에서 <b>영문 주소(핸들)</b>를 정하면
+        <br />
+        <span className="font-mono text-[11px]">illo.im/u/<b>내이름</b>/AI</span> 처럼 깔끔한 주소로 공유돼요.
+      </>
+    ),
+    editingInProgress: "✏️ 수정 중",
+    aiNamePlaceholder: "AI 이름 (예: 우리집 강아지 알려주는 AI)",
+    aiDescPlaceholder: "한 줄 소개 (예: 사진 속 동물 이름을 맞혀줘요)",
+    categorySelectPlaceholder: "분류 선택",
+    toolPlaceholder: "만든 도구 (예: ChatGPT, 스크래치)",
+    aiBodyPlaceholder: "자세한 소개 — 어떤 AI인지, 왜 만들었는지, 무엇을 할 수 있는지 마음껏 적어보세요!",
+    aiHowtoPlaceholder: "사용법 (선택) — 이렇게 써보세요!",
+    aiTagsPlaceholder: "태그 (쉼표로 구분, 예: 동물, 사진, 초등학생)",
+    aiUrlPlaceholder: "체험 링크 (선택) — 직접 써볼 수 있는 주소",
+    aiImagesPlaceholder: "스크린샷 이미지 주소 (선택, 한 줄에 하나씩)",
+    cancel: "취소",
+    uploading: "올리는 중...",
+    editComplete: "수정 완료",
+    createAIPage: "AI 페이지 만들기",
+    showOffYourAI: "내가 만든 AI를 자랑해보세요! 🎉",
+    noAIYet: "아직 자랑한 AI가 없어요",
+    edit: "수정",
+    delete: "삭제",
+    aiPageLink: "🏠 AI 페이지",
+    tryIt: "▶ 써보기",
+    copied: "✓ 복사됨",
+    diaryHeading: "📖 다이어리",
+    diaryPlaceholder: "오늘 하루, 한 줄 일기를 남겨보세요",
+    posting: "남기는 중...",
+    addDiary: "일기 남기기",
+    noDiaryYet: "아직 일기가 없어요",
+    myTierHeading: "내 등급",
+    collapse: "접기",
+    viewTierTable: "등급표 보기",
+    tierProgress: (nextName: string, remain: number, exp: number) =>
+      `${nextName}까지 ${remain.toLocaleString()}점 · 현재 ${exp.toLocaleString()}점`,
+    tierMax: (exp: number) => `최고 등급! · ${exp.toLocaleString()}점`,
+    points: (n: number) => `${n.toLocaleString()}점`,
+    badgeHeading: "뱃지",
+    gamerLevelBadge: (n: number) => `🎮 게이머 Lv.${n}`,
+    noBadgesYet: "기록을 쌓으면 뱃지가 생겨요",
+    psychReportHeading: "🧩 심리 리포트",
+    goTakeTest: "테스트 하러 가기 →",
+    recordsHeading: "전적",
+    noRecordsYet: "아직 기록 없음",
+    recentPostsHeading: "최근 글",
+    noPostsYet: "아직 작성한 글이 없어요",
+    guestbookHeading: "방명록",
+    guestbookPlaceholderOwner: "내 코지홈에 한마디",
+    guestbookPlaceholderVisitor: "방명록을 남겨보세요",
+    postGuestbook: "남기기",
+    loginWord: "로그인",
+    guestbookLoginPrompt: (loginLink: ReactNode): ReactNode => (
+      <>방명록을 남기려면{" "}{loginLink}하세요.</>
+    ),
+    emptyGuestbook: "아직 방명록이 없어요",
+  },
+  en: {
+    defaultUserName: "User",
+    buyAtShop: "Buy in shop",
+    photoUploadFailed: "Failed to upload photo.",
+    friendRequestFailed: "Failed to send friend request. Please try again.",
+    loginRequired: "Please log in.",
+    shareTitle: (name: string) => `${name}'s Cozy Home`,
+    cozyHomeFallbackName: "Cozy Home",
+    copyLinkPrompt: "Copy this link to share",
+    followers: "Followers",
+    following: "Following",
+    saveFailed: "Failed to save. Please try again.",
+    guestbookFailed: "Failed to post to the guestbook.",
+    diarySaveFailed: "Failed to save your diary entry.",
+    confirmDeleteAI: "Delete this AI page?",
+    handleSaveSuccess: "Saved! Your AI page address is now cleaner.",
+    saveFailedShort: "Save failed",
+    handleAvailable: "This name is available ✓",
+    handleUnavailable: "Not available",
+    loginPromptTitle: "Log in to view Cozy Home",
+    loginPromptBody1: "Log in to customize your own Cozy Home",
+    loginPromptBody2: "and receive guestbook messages.",
+    goToLogin: "Log in",
+    loadingCozyHome: "Loading Cozy Home...",
+    followListEmpty: "No one yet",
+    cozyHomeTab: "🏠 Cozy Home",
+    accountTab: "⚙️ Account",
+    shopTab: "🛍 Shop",
+    changePhotoAria: "Change profile photo",
+    changePhotoLine1: "Change",
+    changePhotoLine2: "photo",
+    tierFallback: (tier: number) => `Tier ${tier}`,
+    noStatusMessage: "No status message yet",
+    greetingLabel: "Greeting",
+    posts: "Posts",
+    closeCustomize: "Close customize",
+    customize: "✏️ Customize",
+    linkCopied: "✓ Link copied",
+    share: "🔗 Share",
+    followBtn: "+ Follow",
+    messageBtn: "💬 Message",
+    friendBadge: "✓ Friend",
+    requested: "Requested",
+    addFriend: "Add friend",
+    customizeCozyHome: "Customize Cozy Home",
+    getItemsFromShop: "🍬 Get items from the shop →",
+    shareAddressLabel: "Share address (handle)",
+    shareAddressHint: "Makes your AI page address cleaner",
+    save: "Save",
+    handleHint: "Lowercase letters, numbers, underscores (_), 3-20 characters · A temporary address is used until set",
+    greetingFieldLabel: "Greeting",
+    greetingFieldHint: "A short message visitors will see",
+    greetingPlaceholder: "e.g. Thanks for stopping by! Leave me a note :)",
+    statusMsgLabel: "Status message",
+    statusMsgPlaceholder: "A one-line status message",
+    bioLabel: "About",
+    bioPlaceholder: "Write a short bio about yourself",
+    moodLabel: "Today's mood",
+    moodHint: "Shown next to your name",
+    none: "None",
+    titleLabel: "Title",
+    titleHint: "Shown below your name",
+    titlePlaceholder: "e.g. AI enthusiast · Explorer",
+    colorLabel: "Accent color",
+    colorAria: (c: string) => `Color ${c}`,
+    frameLabel: "Avatar frame",
+    bgLabel: "Background",
+    nameEffectLabel: "Name effect",
+    nameEffectHint: "Applied to your name text",
+    namePreview: "Dori",
+    bannerEffectLabel: "Banner effect",
+    bannerEffectHint: "An animated effect on your banner",
+    petLabel: "Pet · Character",
+    petHint: "Lives with you in Cozy Home",
+    interestsLabel: "Interests",
+    interestsHint: "Up to 8",
+    interestInputPlaceholder: "Add your own (e.g. Drawing)",
+    addBtn: "Add",
+    stickerLabel: "Banner stickers",
+    stickerHint: "Up to 6",
+    getStickersFromShop: "Get more stickers in the shop",
+    stickerShopHint: "Get more animal, space, and dessert stickers in the shop",
+    saving: "Saving...",
+    saveButtonFull: "Save",
+    myAIsHeading: "🤖 My AI creations",
+    close: "Close",
+    showOffAI: "+ Show off an AI",
+    handleTip: (customizeBtn: ReactNode): ReactNode => (
+      <>
+        💡 Set an <b>English handle</b> in {customizeBtn} below,
+        <br />
+        and share a clean address like <span className="font-mono text-[11px]">illo.im/u/<b>your-name</b>/AI</span>.
+      </>
+    ),
+    editingInProgress: "✏️ Editing",
+    aiNamePlaceholder: "AI name (e.g. An AI that IDs my dog's breed)",
+    aiDescPlaceholder: "One-line description (e.g. Guesses the animal in your photo)",
+    categorySelectPlaceholder: "Select a category",
+    toolPlaceholder: "Tool used (e.g. ChatGPT, Scratch)",
+    aiBodyPlaceholder: "Full description — what it is, why you made it, what it can do. Write as much as you like!",
+    aiHowtoPlaceholder: "How to use (optional) — try it like this!",
+    aiTagsPlaceholder: "Tags (comma-separated, e.g. animals, photo, kids)",
+    aiUrlPlaceholder: "Try-it link (optional) — a URL people can use directly",
+    aiImagesPlaceholder: "Screenshot image URLs (optional, one per line)",
+    cancel: "Cancel",
+    uploading: "Uploading...",
+    editComplete: "Edit complete",
+    createAIPage: "Create AI page",
+    showOffYourAI: "Show off an AI you made! 🎉",
+    noAIYet: "No AI creations shared yet",
+    edit: "Edit",
+    delete: "Delete",
+    aiPageLink: "🏠 AI page",
+    tryIt: "▶ Try it",
+    copied: "✓ Copied",
+    diaryHeading: "📖 Diary",
+    diaryPlaceholder: "Write a line about your day",
+    posting: "Posting...",
+    addDiary: "Add diary entry",
+    noDiaryYet: "No diary entries yet",
+    myTierHeading: "My tier",
+    collapse: "Collapse",
+    viewTierTable: "View tier table",
+    tierProgress: (nextName: string, remain: number, exp: number) =>
+      `${remain.toLocaleString()} pts to ${nextName} · ${exp.toLocaleString()} pts now`,
+    tierMax: (exp: number) => `Max tier! · ${exp.toLocaleString()} pts`,
+    points: (n: number) => `${n.toLocaleString()} pts`,
+    badgeHeading: "Badges",
+    gamerLevelBadge: (n: number) => `🎮 Gamer Lv.${n}`,
+    noBadgesYet: "Play to earn badges",
+    psychReportHeading: "🧩 Psych reports",
+    goTakeTest: "Take a test →",
+    recordsHeading: "Records",
+    noRecordsYet: "No records yet",
+    recentPostsHeading: "Recent posts",
+    noPostsYet: "No posts yet",
+    guestbookHeading: "Guestbook",
+    guestbookPlaceholderOwner: "Leave a note on your Cozy Home",
+    guestbookPlaceholderVisitor: "Leave a guestbook message",
+    postGuestbook: "Post",
+    loginWord: "Log in",
+    guestbookLoginPrompt: (loginLink: ReactNode): ReactNode => (
+      <>{loginLink} to leave a guestbook message.</>
+    ),
+    emptyGuestbook: "No guestbook messages yet",
+  },
+} as const;
+
+function fmtDate(at: number, locale: string = "ko-KR"): string {
   if (!at) return "";
   try {
-    return new Date(at).toLocaleDateString("ko-KR");
+    return new Date(at).toLocaleDateString(locale);
   } catch {
     return "";
   }
@@ -79,6 +376,8 @@ function PickTile({
 }: {
   owned: boolean; selected: boolean; price: number; label: string; onSelect: () => void; children: ReactNode;
 }) {
+  const pathname = usePathname();
+  const t = T[(pathname || "").startsWith("/en") ? "en" : "ko"];
   const cls = `relative h-16 rounded-xl border overflow-hidden flex flex-col text-left transition-all ${
     selected ? "border-[#F9954E] ring-1 ring-[#F9954E]/50" : "border-stone-100 dark:border-zinc-900"
   } ${!owned ? "opacity-80 hover:opacity-100" : ""}`;
@@ -101,13 +400,17 @@ function PickTile({
   return owned ? (
     <button type="button" onClick={onSelect} className={cls}>{inner}</button>
   ) : (
-    <Link href="/shop" className={cls} title="상점에서 구매">{inner}</Link>
+    <Link href="/shop" className={cls} title={t.buyAtShop}>{inner}</Link>
   );
 }
 
 export default function ProfilePage() {
   const { session, status } = useAuth();
-  const myName = session?.user?.name || "사용자";
+  const pathname = usePathname();
+  const lang = (pathname || "").startsWith("/en") ? "en" : "ko";
+  const t = T[lang];
+  const dateLocale = lang === "en" ? "en-US" : "ko-KR";
+  const myName = session?.user?.name || t.defaultUserName;
 
   const [mounted, setMounted] = useState(false);
   const [myUid, setMyUid] = useState<string | null>(null);
@@ -321,7 +624,7 @@ export default function ProfilePage() {
       await saveMyProfile({ photoURL: res.url } as Parameters<typeof saveMyProfile>[0]);
       await loadAll(targetUid);
     } else {
-      setPhotoError(res.error || "사진 업로드에 실패했습니다.");
+      setPhotoError(res.error || t.photoUploadFailed);
     }
     setPhotoUploading(false);
   };
@@ -332,19 +635,19 @@ export default function ProfilePage() {
     const ok = await sendFriendRequest(targetUid, myName);
     if (!ok) {
       setFriendState("none");
-      alert("친구 요청에 실패했습니다. 다시 시도해주세요.");
+      alert(t.friendRequestFailed);
     }
   };
 
   const handleToggleFollow = async () => {
     if (!targetUid || isOwner || followBusy) return;
-    if (!myUid) { alert("로그인이 필요해요."); return; }
+    if (!myUid) { alert(t.loginRequired); return; }
     setFollowBusy(true);
     const wasFollowing = followState === "following";
     // 낙관적 업데이트
     setFollowState(wasFollowing ? "none" : "following");
     setCounts((c) => ({ ...c, followers: Math.max(0, c.followers + (wasFollowing ? -1 : 1)) }));
-    const ok = wasFollowing ? await unfollowUser(targetUid) : await followUser(targetUid, profile?.name || "사용자", myName);
+    const ok = wasFollowing ? await unfollowUser(targetUid) : await followUser(targetUid, profile?.name || t.defaultUserName, myName);
     if (!ok) {
       setFollowState(wasFollowing ? "following" : "none");
       setCounts((c) => ({ ...c, followers: Math.max(0, c.followers + (wasFollowing ? 1 : -1)) }));
@@ -355,7 +658,7 @@ export default function ProfilePage() {
   const handleShare = async () => {
     if (!targetUid) return;
     const url = `${window.location.origin}/profile?uid=${targetUid}`;
-    const title = `${profile?.name || "코지홈"} 님의 코지홈`;
+    const title = t.shareTitle(profile?.name || t.cozyHomeFallbackName);
     try {
       if (navigator.share) { await navigator.share({ title, url }); return; }
     } catch { /* 사용자가 공유 취소 → 무시 */ }
@@ -364,15 +667,15 @@ export default function ProfilePage() {
       setShared(true);
       setTimeout(() => setShared(false), 1800);
     } catch {
-      window.prompt("이 링크를 복사해 공유하세요", url);
+      window.prompt(t.copyLinkPrompt, url);
     }
   };
 
   const openFollowList = async (type: "followers" | "following") => {
     if (!targetUid) return;
-    setFollowModal({ title: type === "followers" ? "팔로워" : "팔로잉", users: [] });
+    setFollowModal({ title: type === "followers" ? t.followers : t.following, users: [] });
     const users = type === "followers" ? await listFollowers(targetUid) : await listFollowing(targetUid);
-    setFollowModal({ title: type === "followers" ? "팔로워" : "팔로잉", users: users.map((u) => ({ uid: u.uid, name: u.name })) });
+    setFollowModal({ title: type === "followers" ? t.followers : t.following, users: users.map((u) => ({ uid: u.uid, name: u.name })) });
   };
 
   const handleSave = async () => {
@@ -398,7 +701,7 @@ export default function ProfilePage() {
       setEditing(false);
       await loadAll(targetUid);
     } else {
-      alert("저장에 실패했습니다. 다시 시도해주세요.");
+      alert(t.saveFailed);
     }
   };
 
@@ -412,7 +715,7 @@ export default function ProfilePage() {
       const gb = await listGuestbook(targetUid, 50);
       setGuestbook(gb);
     } else {
-      alert("방명록 작성에 실패했습니다.");
+      alert(t.guestbookFailed);
     }
   };
 
@@ -435,7 +738,7 @@ export default function ProfilePage() {
       setDiaryMood("");
       setProfile((p) => (p ? { ...p, diary: next } : p));
     } else {
-      alert("다이어리 저장에 실패했습니다.");
+      alert(t.diarySaveFailed);
     }
   };
 
@@ -458,7 +761,7 @@ export default function ProfilePage() {
       setAiEditId(null);
       setAiFormOpen(false);
     } else {
-      alert("저장에 실패했습니다. 다시 시도해주세요.");
+      alert(t.saveFailed);
     }
   };
 
@@ -474,7 +777,7 @@ export default function ProfilePage() {
 
   const handleDeleteAI = async (id: string) => {
     if (!isOwner) return;
-    if (!confirm("이 AI 페이지를 삭제할까요?")) return;
+    if (!confirm(t.confirmDeleteAI)) return;
     const ok = await deleteMyAI(id);
     if (ok) setProfile((p) => (p ? { ...p, myAIs: (p.myAIs || []).filter((a) => a.id !== id) } : p));
   };
@@ -502,22 +805,22 @@ export default function ProfilePage() {
     setHandleBusy(false);
     if (res.ok) {
       setProfile((p) => (p ? { ...p, handle: res.handle || v } : p));
-      setHandleMsg(res.warn ? { ok: false, text: res.warn } : { ok: true, text: "저장됐어요! 이제 내 AI 주소가 깔끔해져요." });
+      setHandleMsg(res.warn ? { ok: false, text: res.warn } : { ok: true, text: t.handleSaveSuccess });
     } else {
-      setHandleMsg({ ok: false, text: res.error || "저장 실패" });
+      setHandleMsg({ ok: false, text: res.error || t.saveFailedShort });
     }
   };
   // 입력마다 비동기 중복확인 — 마지막 입력의 응답만 반영(out-of-order/스테일 방지)
   const handleReqRef = useRef("");
   const handleCheckHandle = async (v: string) => {
     setHandleInput(v);
-    const t = v.trim().toLowerCase();
-    handleReqRef.current = t;
+    const trimmed = v.trim().toLowerCase();
+    handleReqRef.current = trimmed;
     setHandleMsg(null); // 입력 변경 즉시 이전 결과 제거(저장 버튼이 스테일 ok로 켜지는 것 방지)
-    if (!t) return;
-    const res = await checkHandle(t);
-    if (handleReqRef.current !== t) return; // 더 최신 입력이 있으면 무시
-    setHandleMsg(res.ok ? { ok: true, text: "사용 가능한 이름이에요 ✓" } : { ok: false, text: res.reason || "사용 불가" });
+    if (!trimmed) return;
+    const res = await checkHandle(trimmed);
+    if (handleReqRef.current !== trimmed) return; // 더 최신 입력이 있으면 무시
+    setHandleMsg(res.ok ? { ok: true, text: t.handleAvailable } : { ok: false, text: res.reason || t.handleUnavailable });
   };
 
   // 뱃지(전적 기반 단순 산출)
@@ -546,18 +849,18 @@ export default function ProfilePage() {
             🏠
           </div>
           <h2 className="text-[20px] font-extrabold tracking-tight text-stone-900 dark:text-white mb-2">
-            코지홈을 보려면 로그인하세요
+            {t.loginPromptTitle}
           </h2>
           <p className="text-[14px] text-stone-500 dark:text-stone-400 mb-7 leading-relaxed">
-            로그인하면 나만의 코지홈을
+            {t.loginPromptBody1}
             <br />
-            꾸미고 방명록을 받을 수 있어요.
+            {t.loginPromptBody2}
           </p>
           <Link
             href="/login"
             className="w-full py-3.5 rounded-full bg-[#F9954E] text-white font-bold text-[14px] active:opacity-85 text-center"
           >
-            로그인하러 가기
+            {t.goToLogin}
           </Link>
         </div>
       </main>
@@ -569,7 +872,7 @@ export default function ProfilePage() {
     return (
       <main className="w-full min-h-screen flex flex-col items-center justify-center">
         <div className="w-10 h-10 border-4 border-stone-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-5" />
-        <p className="text-[14px] text-stone-400 font-semibold">코지홈을 불러오는 중입니다</p>
+        <p className="text-[14px] text-stone-400 font-semibold">{t.loadingCozyHome}</p>
       </main>
     );
   }
@@ -591,7 +894,7 @@ export default function ProfilePage() {
             </div>
             <div className="overflow-y-auto p-2">
               {followModal.users.length === 0 ? (
-                <p className="text-[13px] text-stone-400 text-center py-8">아직 없어요</p>
+                <p className="text-[13px] text-stone-400 text-center py-8">{t.followListEmpty}</p>
               ) : (
                 followModal.users.map((u) => (
                   <Link
@@ -625,7 +928,7 @@ export default function ProfilePage() {
                   : "text-stone-500 dark:text-stone-400 active:opacity-70"
               }`}
             >
-              🏠 코지홈
+              {t.cozyHomeTab}
             </button>
             <button
               type="button"
@@ -636,13 +939,13 @@ export default function ProfilePage() {
                   : "text-stone-500 dark:text-stone-400 active:opacity-70"
               }`}
             >
-              ⚙️ 계정·활동
+              {t.accountTab}
             </button>
             <Link
               href="/shop"
               className="flex-1 text-center py-2 rounded-xl text-[13px] font-extrabold transition-colors text-stone-500 dark:text-stone-400 active:opacity-70"
             >
-              🛍 상점
+              {t.shopTab}
             </Link>
           </div>
         </div>
@@ -688,7 +991,7 @@ export default function ProfilePage() {
                 {isOwner && (
                   <label
                     className="absolute inset-0 rounded-full flex items-center justify-center cursor-pointer bg-black/0 hover:bg-black/40 active:bg-black/40 transition-colors group"
-                    aria-label="프로필 사진 변경"
+                    aria-label={t.changePhotoAria}
                   >
                     {photoUploading ? (
                       <span className="absolute inset-0 rounded-full flex items-center justify-center bg-black/45">
@@ -696,7 +999,7 @@ export default function ProfilePage() {
                       </span>
                     ) : (
                       <span className="text-[10px] font-bold text-white opacity-0 group-hover:opacity-100 transition-opacity text-center leading-tight px-1">
-                        사진<br />변경
+                        {t.changePhotoLine1}<br />{t.changePhotoLine2}
                       </span>
                     )}
                     <input
@@ -732,7 +1035,7 @@ export default function ProfilePage() {
                     style={{ color: accent, backgroundColor: `${accent}1A` }}
                   >
                     <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: accent }} />
-                    {TIER_INFO[profile.tier as UserTier]?.name || `등급 ${profile.tier}`}
+                    {TIER_INFO[profile.tier as UserTier]?.name || t.tierFallback(profile.tier)}
                   </span>
                   <span className="inline-flex items-center rounded-full px-2 py-0.5 text-[11px] font-bold bg-stone-100 dark:bg-zinc-900 text-stone-700 dark:text-stone-200 tabular-nums">
                     Lv.{profile.level}
@@ -743,7 +1046,7 @@ export default function ProfilePage() {
                     {profile.statusMsg}
                   </p>
                 ) : (
-                  <p className="text-[13px] mt-0.5 text-stone-400 dark:text-stone-500">상태메시지가 없어요</p>
+                  <p className="text-[13px] mt-0.5 text-stone-400 dark:text-stone-500">{t.noStatusMessage}</p>
                 )}
               </div>
 
@@ -772,7 +1075,7 @@ export default function ProfilePage() {
             {/* 대문 인사말 */}
             {profile.greeting && (
               <div className="mt-4 rounded-2xl bg-white/70 dark:bg-zinc-900/70 backdrop-blur ring-1 ring-[#F9954E]/30 px-4 py-3">
-                <p className="text-[10px] font-bold text-[#F9954E] mb-1 tracking-wide">대문</p>
+                <p className="text-[10px] font-bold text-[#F9954E] mb-1 tracking-wide">{t.greetingLabel}</p>
                 <p className="text-[14px] font-semibold text-stone-800 dark:text-stone-100 leading-relaxed break-keep">
                   “{profile.greeting}”
                 </p>
@@ -812,15 +1115,15 @@ export default function ProfilePage() {
             <div className="mt-4 flex items-center gap-5">
               <div className="text-center">
                 <p className="text-[16px] font-extrabold text-stone-900 dark:text-white tabular-nums leading-none">{counts.posts.toLocaleString()}</p>
-                <p className="text-[11px] text-stone-400 mt-0.5">게시물</p>
+                <p className="text-[11px] text-stone-400 mt-0.5">{t.posts}</p>
               </div>
               <button onClick={() => openFollowList("followers")} className="text-center active:opacity-70">
                 <p className="text-[16px] font-extrabold text-stone-900 dark:text-white tabular-nums leading-none">{counts.followers.toLocaleString()}</p>
-                <p className="text-[11px] text-stone-400 mt-0.5">팔로워</p>
+                <p className="text-[11px] text-stone-400 mt-0.5">{t.followers}</p>
               </button>
               <button onClick={() => openFollowList("following")} className="text-center active:opacity-70">
                 <p className="text-[16px] font-extrabold text-stone-900 dark:text-white tabular-nums leading-none">{counts.following.toLocaleString()}</p>
-                <p className="text-[11px] text-stone-400 mt-0.5">팔로잉</p>
+                <p className="text-[11px] text-stone-400 mt-0.5">{t.following}</p>
               </button>
             </div>
 
@@ -831,7 +1134,7 @@ export default function ProfilePage() {
                   onClick={() => setEditing((v) => !v)}
                   className="px-4 py-2 rounded-full bg-[#F9954E] text-white text-[13px] font-bold active:opacity-85"
                 >
-                  {editing ? "꾸미기 닫기" : "✏️ 꾸미기"}
+                  {editing ? t.closeCustomize : t.customize}
                 </button>
               )}
               {isOwner && (
@@ -839,7 +1142,7 @@ export default function ProfilePage() {
                   onClick={handleShare}
                   className="px-4 py-2 rounded-full bg-stone-100 dark:bg-zinc-900 text-stone-700 dark:text-stone-200 text-[13px] font-bold active:opacity-85"
                 >
-                  {shared ? "✓ 링크 복사됨" : "🔗 공유"}
+                  {shared ? t.linkCopied : t.share}
                 </button>
               )}
               {canMessage && (
@@ -852,7 +1155,7 @@ export default function ProfilePage() {
                       : "bg-[#F9954E] text-white"
                   }`}
                 >
-                  {followState === "following" ? "팔로잉" : "+ 팔로우"}
+                  {followState === "following" ? t.following : t.followBtn}
                 </button>
               )}
               {canMessage && (
@@ -860,13 +1163,13 @@ export default function ProfilePage() {
                   href={messageHref}
                   className="px-4 py-2 rounded-full bg-stone-100 dark:bg-zinc-900 text-stone-700 dark:text-stone-200 text-[13px] font-bold active:opacity-85"
                 >
-                  💬 메시지
+                  {t.messageBtn}
                 </Link>
               )}
               {canMessage && (
                 friendState === "friend" ? (
                   <span className="px-4 py-2 rounded-full bg-stone-100 dark:bg-zinc-900 text-stone-700 dark:text-stone-200 text-[13px] font-bold">
-                    ✓ 친구
+                    {t.friendBadge}
                   </span>
                 ) : (
                   <button
@@ -874,7 +1177,7 @@ export default function ProfilePage() {
                     disabled={friendState === "requested" || friendState === "loading"}
                     className="px-4 py-2 rounded-full bg-stone-100 dark:bg-zinc-900 text-stone-700 dark:text-stone-200 text-[13px] font-bold active:opacity-85 disabled:opacity-50"
                   >
-                    {friendState === "requested" ? "요청됨" : "친구 추가"}
+                    {friendState === "requested" ? t.requested : t.addFriend}
                   </button>
                 )
               )}
@@ -886,15 +1189,15 @@ export default function ProfilePage() {
         {isOwner && editing && (
           <div className="mt-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-[11px] text-[#F9954E] font-bold">코지홈 꾸미기</p>
+              <p className="text-[11px] text-[#F9954E] font-bold">{t.customizeCozyHome}</p>
               <Link href="/shop" className="text-[11px] font-bold text-[#F9954E] inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FBEEE7] dark:bg-[#F9954E]/10">
-                🍬 상점에서 아이템 받기 →
+                {t.getItemsFromShop}
               </Link>
             </div>
 
             {/* 공유 주소(핸들) — 내 AI 페이지/코지홈 주소 */}
             <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-1">
-              공유 주소 (영문 핸들) <span className="font-normal text-stone-400">내 AI 페이지 주소가 깔끔해져요</span>
+              {t.shareAddressLabel} <span className="font-normal text-stone-400">{t.shareAddressHint}</span>
             </label>
             <div className="flex items-stretch gap-2 mb-1">
               <span className="inline-flex items-center px-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[12px] text-stone-400 font-mono shrink-0">illo.im/u/</span>
@@ -910,50 +1213,50 @@ export default function ProfilePage() {
                 disabled={handleBusy || !handleInput.trim() || !(handleMsg && handleMsg.ok)}
                 className="px-4 rounded-xl bg-[#F9954E] text-white text-[13px] font-bold active:opacity-85 disabled:opacity-50 shrink-0"
               >
-                {handleBusy ? "..." : "저장"}
+                {handleBusy ? "..." : t.save}
               </button>
             </div>
             {handleMsg && (
               <p className={`text-[11px] mb-1 ${handleMsg.ok ? "text-emerald-500" : "text-red-500"}`}>{handleMsg.text}</p>
             )}
-            <p className="text-[11px] text-stone-400 mb-4">영문 소문자·숫자·밑줄(_) 3~20자 · 미설정 시 임시 주소가 쓰여요</p>
+            <p className="text-[11px] text-stone-400 mb-4">{t.handleHint}</p>
 
             <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-1">
-              대문 인사말 <span className="font-normal text-stone-400">방문자에게 보이는 한마디</span>
+              {t.greetingFieldLabel} <span className="font-normal text-stone-400">{t.greetingFieldHint}</span>
             </label>
             <input
               value={editGreeting}
               onChange={(e) => setEditGreeting(e.target.value)}
               maxLength={60}
-              placeholder="예) 놀러와줘서 고마워요! 방명록 남겨주세요 :)"
+              placeholder={t.greetingPlaceholder}
               className="w-full mb-4 px-3 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
             />
 
             <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-1">
-              상태메시지
+              {t.statusMsgLabel}
             </label>
             <input
               value={editStatus}
               onChange={(e) => setEditStatus(e.target.value)}
               maxLength={80}
-              placeholder="한 줄 상태메시지"
+              placeholder={t.statusMsgPlaceholder}
               className="w-full mb-4 px-3 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
             />
 
             <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-1">
-              소개
+              {t.bioLabel}
             </label>
             <textarea
               value={editBio}
               onChange={(e) => setEditBio(e.target.value)}
               maxLength={300}
               rows={3}
-              placeholder="자기소개를 적어보세요"
+              placeholder={t.bioPlaceholder}
               className="w-full mb-4 px-3 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40"
             />
 
             <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-2">
-              오늘의 기분 <span className="font-normal text-stone-400">이름 옆에 표시돼요</span>
+              {t.moodLabel} <span className="font-normal text-stone-400">{t.moodHint}</span>
             </label>
             <div className="flex flex-wrap gap-1.5 mb-4">
               <button
@@ -962,7 +1265,7 @@ export default function ProfilePage() {
                   editMood === "" ? "bg-[#F9954E] text-white" : "bg-stone-100 dark:bg-zinc-900 text-stone-400"
                 }`}
               >
-                없음
+                {t.none}
               </button>
               {MOODS.map((m) => (
                 <button
@@ -978,13 +1281,13 @@ export default function ProfilePage() {
             </div>
 
             <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-1">
-              칭호 <span className="font-normal text-stone-400">이름 아래 표시돼요</span>
+              {t.titleLabel} <span className="font-normal text-stone-400">{t.titleHint}</span>
             </label>
             <input
               value={editTitle}
               onChange={(e) => setEditTitle(e.target.value)}
               maxLength={24}
-              placeholder="예) 도리 덕후 · AI 탐험가"
+              placeholder={t.titlePlaceholder}
               className="w-full mb-2 px-3 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
             />
             {itemsBySlot("title").some((t) => isItemOwned(t)) && (
@@ -1005,14 +1308,14 @@ export default function ProfilePage() {
             {!itemsBySlot("title").some((t) => isItemOwned(t)) && <div className="mb-2" />}
 
             <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-2">
-              대표색
+              {t.colorLabel}
             </label>
             <div className="flex flex-wrap gap-2 mb-4">
               {COLOR_PRESETS.map((c) => (
                 <button
                   key={c}
                   onClick={() => setEditColor(c)}
-                  aria-label={`색상 ${c}`}
+                  aria-label={t.colorAria(c)}
                   className={`w-8 h-8 rounded-full transition-transform ${
                     editColor === c ? "ring-2 ring-offset-2 ring-stone-400 dark:ring-offset-zinc-950 scale-110" : ""
                   }`}
@@ -1022,7 +1325,7 @@ export default function ProfilePage() {
             </div>
 
             <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-2">
-              아바타 테두리
+              {t.frameLabel}
             </label>
             <div className="grid grid-cols-3 gap-2 mb-4">
               {itemsBySlot("frame").map((f) => (
@@ -1035,7 +1338,7 @@ export default function ProfilePage() {
             </div>
 
             <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-2">
-              배경
+              {t.bgLabel}
             </label>
             <div className="grid grid-cols-3 gap-2 mb-4">
               {itemsBySlot("bg").map((p) => (
@@ -1046,20 +1349,20 @@ export default function ProfilePage() {
             </div>
 
             <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-2">
-              이름 효과 <span className="font-normal text-stone-400">이름 글씨에 적용돼요</span>
+              {t.nameEffectLabel} <span className="font-normal text-stone-400">{t.nameEffectHint}</span>
             </label>
             <div className="grid grid-cols-3 gap-2 mb-4">
               {itemsBySlot("nameEffect").map((n) => (
                 <PickTile key={n.id} owned={isItemOwned(n)} selected={editNameEffect === n.id} price={n.price} label={n.name} onSelect={() => setEditNameEffect(n.id)}>
                   <div className="w-full h-full flex items-center justify-center bg-stone-50 dark:bg-zinc-900/50">
-                    <span className={`text-[17px] font-extrabold ${n.nameClass || "text-stone-700 dark:text-white"}`}>도리</span>
+                    <span className={`text-[17px] font-extrabold ${n.nameClass || "text-stone-700 dark:text-white"}`}>{t.namePreview}</span>
                   </div>
                 </PickTile>
               ))}
             </div>
 
             <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-2">
-              배너 효과 <span className="font-normal text-stone-400">배너에 움직이는 효과</span>
+              {t.bannerEffectLabel} <span className="font-normal text-stone-400">{t.bannerEffectHint}</span>
             </label>
             <div className="grid grid-cols-3 gap-2 mb-5">
               {itemsBySlot("bannerEffect").map((b) => (
@@ -1068,14 +1371,14 @@ export default function ProfilePage() {
                   {b.fx && b.fx !== "none" ? (
                     <BannerFx fx={b.fx} count={5} />
                   ) : (
-                    <span className="absolute inset-0 flex items-center justify-center text-[10px] text-stone-400">없음</span>
+                    <span className="absolute inset-0 flex items-center justify-center text-[10px] text-stone-400">{t.none}</span>
                   )}
                 </PickTile>
               ))}
             </div>
 
             <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-2">
-              펫 · 캐릭터 <span className="font-normal text-stone-400">코지홈에 함께 살아요</span>
+              {t.petLabel} <span className="font-normal text-stone-400">{t.petHint}</span>
             </label>
             <div className="grid grid-cols-4 gap-2 mb-5">
               <button
@@ -1085,7 +1388,7 @@ export default function ProfilePage() {
                   editPet === "" ? "border-[#F9954E] ring-1 ring-[#F9954E]/50 text-[#F9954E]" : "border-stone-100 dark:border-zinc-900 text-stone-400"
                 }`}
               >
-                없음
+                {t.none}
               </button>
               {itemsBySlot("pet").map((p) => (
                 <PickTile key={p.id} owned={isItemOwned(p)} selected={editPet === p.id} price={p.price} label={p.name} onSelect={() => setEditPet(p.id)}>
@@ -1095,7 +1398,7 @@ export default function ProfilePage() {
             </div>
 
             <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-2">
-              관심사 <span className="font-normal text-stone-400">최대 8개</span>
+              {t.interestsLabel} <span className="font-normal text-stone-400">{t.interestsHint}</span>
             </label>
             <div className="flex gap-2 mb-2">
               <input
@@ -1109,14 +1412,14 @@ export default function ProfilePage() {
                   }
                 }}
                 maxLength={12}
-                placeholder="직접 추가 (예: 그림)"
+                placeholder={t.interestInputPlaceholder}
                 className="flex-1 px-3 py-2 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[13px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
               />
               <button
                 onClick={() => { toggleInterest(interestInput); setInterestInput(""); }}
                 className="px-4 rounded-xl bg-stone-200 dark:bg-zinc-800 text-stone-700 dark:text-stone-200 text-[13px] font-bold active:opacity-85"
               >
-                추가
+                {t.addBtn}
               </button>
             </div>
             <div className="flex flex-wrap gap-1.5 mb-4">
@@ -1137,7 +1440,7 @@ export default function ProfilePage() {
             </div>
 
             <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-2">
-              배너 스티커 <span className="font-normal text-stone-400">최대 6개</span>
+              {t.stickerLabel} <span className="font-normal text-stone-400">{t.stickerHint}</span>
             </label>
             <div className="flex flex-wrap gap-1.5 mb-2">
               {Array.from(new Set([...STICKER_CHOICES, ...itemsBySlot("sticker").filter((s) => isItemOwned(s)).map((s) => s.emoji!)])).map((s) => {
@@ -1157,19 +1460,19 @@ export default function ProfilePage() {
               <Link
                 href="/shop"
                 className="w-9 h-9 rounded-xl text-[16px] flex items-center justify-center bg-stone-100 dark:bg-zinc-900 text-stone-400 border border-dashed border-stone-300 dark:border-zinc-700"
-                title="상점에서 스티커 더 받기"
+                title={t.getStickersFromShop}
               >
                 +
               </Link>
             </div>
-            <p className="text-[11px] text-stone-400 mb-5">상점에서 동물·우주·디저트 스티커를 더 받을 수 있어요</p>
+            <p className="text-[11px] text-stone-400 mb-5">{t.stickerShopHint}</p>
 
             <button
               onClick={handleSave}
               disabled={saving}
               className="w-full py-3 rounded-xl bg-[#F9954E] text-white text-[14px] font-bold active:opacity-85 disabled:opacity-50"
             >
-              {saving ? "저장 중..." : "저장하기"}
+              {saving ? t.saving : t.saveButtonFull}
             </button>
           </div>
         )}
@@ -1181,13 +1484,13 @@ export default function ProfilePage() {
         {(isOwner || profile.myAIs.length > 0) && (
           <div className="mt-4 rounded-2xl border border-[#F9954E]/30 dark:border-[#F9954E]/20 bg-white dark:bg-zinc-950 p-5">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-[12px] font-extrabold text-stone-900 dark:text-white">🤖 내가 만든 AI {profile.myAIs.length > 0 && <span className="text-[#F9954E]">{profile.myAIs.length}</span>}</p>
+              <p className="text-[12px] font-extrabold text-stone-900 dark:text-white">{t.myAIsHeading} {profile.myAIs.length > 0 && <span className="text-[#F9954E]">{profile.myAIs.length}</span>}</p>
               {isOwner && (
                 <button
                   onClick={() => { setAiEditId(null); setAiForm({ ...EMPTY_AI }); setAiFormOpen((v) => !v); }}
                   className="text-[11px] font-bold text-white bg-[#F9954E] rounded-full px-3 py-1 active:opacity-85"
                 >
-                  {aiFormOpen ? "닫기" : "+ AI 자랑하기"}
+                  {aiFormOpen ? t.close : t.showOffAI}
                 </button>
               )}
             </div>
@@ -1195,14 +1498,15 @@ export default function ProfilePage() {
             {/* 공유 주소(핸들) 안내 — 미설정 시 노출 */}
             {isOwner && !profile.handle && (
               <div className="mb-3 rounded-xl bg-[#FBEEE7] dark:bg-[#F9954E]/5 px-3.5 py-3 text-[12px] text-stone-600 dark:text-stone-300 leading-relaxed">
-                💡 아래 <button onClick={() => setEditing(true)} className="font-bold text-[#F9954E] underline underline-offset-2">코지홈 꾸미기</button>에서 <b>영문 주소(핸들)</b>를 정하면
-                <br /><span className="font-mono text-[11px]">illo.im/u/<b>내이름</b>/AI</span> 처럼 깔끔한 주소로 공유돼요.
+                {t.handleTip(
+                  <button onClick={() => setEditing(true)} className="font-bold text-[#F9954E] underline underline-offset-2">{t.customizeCozyHome}</button>
+                )}
               </div>
             )}
 
             {isOwner && aiFormOpen && (
               <div className="mb-4 rounded-2xl bg-[#FBEEE7] dark:bg-[#F9954E]/5 p-4 space-y-2.5">
-                {aiEditId && <p className="text-[11px] font-bold text-[#F9954E]">✏️ 수정 중</p>}
+                {aiEditId && <p className="text-[11px] font-bold text-[#F9954E]">{t.editingInProgress}</p>}
                 <div className="flex flex-wrap gap-1.5">
                   {["🤖", "🧠", "💬", "🎨", "🎮", "📷", "🎵", "🔢", "🦾", "✨", "📝", "🐱"].map((em) => (
                     <button
@@ -1214,37 +1518,37 @@ export default function ProfilePage() {
                     </button>
                   ))}
                 </div>
-                <input value={aiForm.name} onChange={(e) => setAiForm((f) => ({ ...f, name: e.target.value }))} maxLength={40} placeholder="AI 이름 (예: 우리집 강아지 알려주는 AI)"
+                <input value={aiForm.name} onChange={(e) => setAiForm((f) => ({ ...f, name: e.target.value }))} maxLength={40} placeholder={t.aiNamePlaceholder}
                   className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
-                <input value={aiForm.desc} onChange={(e) => setAiForm((f) => ({ ...f, desc: e.target.value }))} maxLength={300} placeholder="한 줄 소개 (예: 사진 속 동물 이름을 맞혀줘요)"
+                <input value={aiForm.desc} onChange={(e) => setAiForm((f) => ({ ...f, desc: e.target.value }))} maxLength={300} placeholder={t.aiDescPlaceholder}
                   className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
                 <div className="flex gap-2">
                   <select value={aiForm.category} onChange={(e) => setAiForm((f) => ({ ...f, category: e.target.value }))}
                     className="w-1/2 px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40">
-                    <option value="">분류 선택</option>
+                    <option value="">{t.categorySelectPlaceholder}</option>
                     {["챗봇", "그림", "글쓰기", "게임", "교육", "음악", "기타"].map((c) => <option key={c} value={c}>{c}</option>)}
                   </select>
-                  <input value={aiForm.tool} onChange={(e) => setAiForm((f) => ({ ...f, tool: e.target.value }))} maxLength={30} placeholder="만든 도구 (예: ChatGPT, 스크래치)"
+                  <input value={aiForm.tool} onChange={(e) => setAiForm((f) => ({ ...f, tool: e.target.value }))} maxLength={30} placeholder={t.toolPlaceholder}
                     className="w-1/2 px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
                 </div>
-                <textarea value={aiForm.body} onChange={(e) => setAiForm((f) => ({ ...f, body: e.target.value }))} maxLength={4000} rows={4} placeholder="자세한 소개 — 어떤 AI인지, 왜 만들었는지, 무엇을 할 수 있는지 마음껏 적어보세요!"
+                <textarea value={aiForm.body} onChange={(e) => setAiForm((f) => ({ ...f, body: e.target.value }))} maxLength={4000} rows={4} placeholder={t.aiBodyPlaceholder}
                   className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40" />
-                <textarea value={aiForm.howto} onChange={(e) => setAiForm((f) => ({ ...f, howto: e.target.value }))} maxLength={1500} rows={2} placeholder="사용법 (선택) — 이렇게 써보세요!"
+                <textarea value={aiForm.howto} onChange={(e) => setAiForm((f) => ({ ...f, howto: e.target.value }))} maxLength={1500} rows={2} placeholder={t.aiHowtoPlaceholder}
                   className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-stone-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40" />
-                <input value={aiForm.tags} onChange={(e) => setAiForm((f) => ({ ...f, tags: e.target.value }))} placeholder="태그 (쉼표로 구분, 예: 동물, 사진, 초등학생)"
+                <input value={aiForm.tags} onChange={(e) => setAiForm((f) => ({ ...f, tags: e.target.value }))} placeholder={t.aiTagsPlaceholder}
                   className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
-                <input value={aiForm.url} onChange={(e) => setAiForm((f) => ({ ...f, url: e.target.value }))} maxLength={500} placeholder="체험 링크 (선택) — 직접 써볼 수 있는 주소"
+                <input value={aiForm.url} onChange={(e) => setAiForm((f) => ({ ...f, url: e.target.value }))} maxLength={500} placeholder={t.aiUrlPlaceholder}
                   className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
-                <textarea value={aiForm.images} onChange={(e) => setAiForm((f) => ({ ...f, images: e.target.value }))} rows={2} placeholder="스크린샷 이미지 주소 (선택, 한 줄에 하나씩)"
+                <textarea value={aiForm.images} onChange={(e) => setAiForm((f) => ({ ...f, images: e.target.value }))} rows={2} placeholder={t.aiImagesPlaceholder}
                   className="w-full px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[12px] text-stone-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40" />
                 <div className="flex justify-end gap-2">
                   {aiEditId && (
                     <button onClick={() => { setAiEditId(null); setAiForm({ ...EMPTY_AI }); setAiFormOpen(false); }} className="px-4 py-2 rounded-full bg-stone-200 dark:bg-zinc-800 text-stone-600 dark:text-stone-300 text-[13px] font-bold active:opacity-85">
-                      취소
+                      {t.cancel}
                     </button>
                   )}
                   <button onClick={handleSubmitAI} disabled={aiBusy || !aiForm.name.trim()} className="px-5 py-2 rounded-full bg-[#F9954E] text-white text-[13px] font-bold active:opacity-85 disabled:opacity-50">
-                    {aiBusy ? "올리는 중..." : aiEditId ? "수정 완료" : "AI 페이지 만들기"}
+                    {aiBusy ? t.uploading : aiEditId ? t.editComplete : t.createAIPage}
                   </button>
                 </div>
               </div>
@@ -1252,7 +1556,7 @@ export default function ProfilePage() {
 
             {profile.myAIs.length === 0 ? (
               <p className="text-[14px] text-stone-500 dark:text-stone-400">
-                {isOwner ? "내가 만든 AI를 자랑해보세요! 🎉" : "아직 자랑한 AI가 없어요"}
+                {isOwner ? t.showOffYourAI : t.noAIYet}
               </p>
             ) : (
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
@@ -1269,23 +1573,23 @@ export default function ProfilePage() {
                       </div>
                       {isOwner && (
                         <div className="flex gap-2 shrink-0">
-                          <button onClick={() => startEditAI(ai)} className="text-[11px] text-stone-400 hover:text-[#F9954E] font-bold">수정</button>
-                          <button onClick={() => handleDeleteAI(ai.id)} className="text-[11px] text-stone-400 hover:text-red-500 font-bold">삭제</button>
+                          <button onClick={() => startEditAI(ai)} className="text-[11px] text-stone-400 hover:text-[#F9954E] font-bold">{t.edit}</button>
+                          <button onClick={() => handleDeleteAI(ai.id)} className="text-[11px] text-stone-400 hover:text-red-500 font-bold">{t.delete}</button>
                         </div>
                       )}
                     </div>
                     {ai.desc && <p className="mt-2.5 text-[13px] text-stone-600 dark:text-stone-300 leading-relaxed whitespace-pre-wrap break-keep">{ai.desc}</p>}
                     <div className="mt-3 flex flex-wrap items-center gap-2">
                       <a href={`/u/${profile.handle || profile.uid}/${encodeURIComponent(ai.slug)}`} className="inline-flex items-center gap-1 text-[12px] font-bold text-white bg-[#F9954E] rounded-full px-3 py-1.5 active:opacity-85">
-                        🏠 AI 페이지
+                        {t.aiPageLink}
                       </a>
                       {ai.url && (
                         <a href={ai.url} target="_blank" rel="noopener noreferrer nofollow" className="inline-flex items-center gap-1 text-[12px] font-bold text-[#F9954E] active:opacity-70">
-                          ▶ 써보기
+                          {t.tryIt}
                         </a>
                       )}
                       <button onClick={() => copyAiShare(ai)} className="ml-auto inline-flex items-center gap-1 text-[12px] font-bold text-stone-500 dark:text-stone-400 active:opacity-70">
-                        {aiCopied === ai.id ? "✓ 복사됨" : "🔗 공유"}
+                        {aiCopied === ai.id ? t.copied : t.share}
                       </button>
                     </div>
                   </div>
@@ -1298,7 +1602,7 @@ export default function ProfilePage() {
         {/* 3.5) 다이어리(일기장) */}
         {(isOwner || profile.diary.length > 0) && (
           <div className="mt-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
-            <p className="text-[11px] text-[#F9954E] font-bold mb-3">📖 다이어리</p>
+            <p className="text-[11px] text-[#F9954E] font-bold mb-3">{t.diaryHeading}</p>
 
             {isOwner && (
               <div className="mb-4">
@@ -1320,7 +1624,7 @@ export default function ProfilePage() {
                   onChange={(e) => setDiaryInput(e.target.value)}
                   maxLength={500}
                   rows={2}
-                  placeholder="오늘 하루, 한 줄 일기를 남겨보세요"
+                  placeholder={t.diaryPlaceholder}
                   className="w-full px-3 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40"
                 />
                 <div className="mt-2 flex justify-end">
@@ -1329,22 +1633,22 @@ export default function ProfilePage() {
                     disabled={diaryBusy || !diaryInput.trim()}
                     className="px-4 py-2 rounded-full bg-[#F9954E] text-white text-[13px] font-bold active:opacity-85 disabled:opacity-50"
                   >
-                    {diaryBusy ? "남기는 중..." : "일기 남기기"}
+                    {diaryBusy ? t.posting : t.addDiary}
                   </button>
                 </div>
               </div>
             )}
 
             {profile.diary.length === 0 ? (
-              <p className="text-[14px] text-stone-500 dark:text-stone-400">아직 일기가 없어요</p>
+              <p className="text-[14px] text-stone-500 dark:text-stone-400">{t.noDiaryYet}</p>
             ) : (
               <ul className="space-y-2.5">
                 {profile.diary.map((e) => (
                   <li key={e.at} className="rounded-xl bg-stone-50 dark:bg-zinc-900 p-3.5 border-l-2 border-[#F9954E]/40">
                     <div className="flex items-center justify-between gap-2 mb-1">
-                      <span className="text-[12px] text-stone-400">{e.mood && <span className="mr-1 text-[14px]">{e.mood}</span>}{fmtDate(e.at)}</span>
+                      <span className="text-[12px] text-stone-400">{e.mood && <span className="mr-1 text-[14px]">{e.mood}</span>}{fmtDate(e.at, dateLocale)}</span>
                       {isOwner && (
-                        <button onClick={() => handleDeleteDiary(e.at)} className="text-[11px] text-stone-400 hover:text-red-500 font-bold">삭제</button>
+                        <button onClick={() => handleDeleteDiary(e.at)} className="text-[11px] text-stone-400 hover:text-red-500 font-bold">{t.delete}</button>
                       )}
                     </div>
                     <p className="text-[14px] text-stone-700 dark:text-stone-300 whitespace-pre-wrap leading-relaxed break-keep">{e.text}</p>

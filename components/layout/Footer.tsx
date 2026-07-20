@@ -11,7 +11,7 @@ const LINKS = [
   { label: "공지사항", labelEn: "Notice", href: "/notice", enOk: true },
   { label: "FAQ", labelEn: "FAQ", href: "/faq", enOk: true },
   { label: "건의사항", labelEn: "Feedback", href: "/suggestion", enOk: false },
-  { label: "코지홈", labelEn: "Cozy Home", href: "/profile", enOk: false },
+  { label: "코지홈", labelEn: "Cozy Home", href: "/profile", enOk: true },
   { label: "개인정보처리방침", labelEn: "Privacy Policy", href: "/legal/privacy", enOk: true },
   { label: "이용약관", labelEn: "Terms", href: "/legal/terms", enOk: true },
   { label: "저작권·라이선스", labelEn: "Copyright & License", href: "/legal/copyright", enOk: true },

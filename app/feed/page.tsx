@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   listFeed,
@@ -26,17 +27,104 @@ import { MARKET_PRODUCTS, SOURCE_META, CATEGORY_EMOJI, buildMarketUrl } from "@/
 
 const POINT = "#F9954E";
 
+const T = {
+  ko: {
+    sponsor: "스폰서",
+    viewMore: "보기 →",
+    visPublic: "전체",
+    visFriends: "친구",
+    visGroups: "범위",
+    title: "피드",
+    subtitle: "사진·영상과 함께 소식을 남기고 공개 범위를 골라보세요.",
+    tabRecommend: "추천",
+    tabFollowing: "팔로잉",
+    composerPlaceholder: "무슨 생각을 하고 있나요?",
+    uploading: "업로드 중...",
+    mediaPreviewAlt: "첨부 미리보기",
+    remove: "제거",
+    visPublicOption: "전체공개",
+    visFriendsOption: "친구공개",
+    visGroupsOption: "범위선택",
+    noGroupsPrefix: "만든 범위가 없어요.",
+    messagesGroupsLink: "메시지 > 범위",
+    noGroupsSuffix: "에서 범위를 추가해 보세요.",
+    memberCount: (n: number) => `(${n}명)`,
+    photoVideo: "사진·영상",
+    posting: "올리는 중...",
+    post: "올리기",
+    loginRequired: "글을 남기려면 로그인이 필요해요.",
+    loginCta: "로그인하기",
+    emptyFollowingLoggedIn: "아직 팔로우한 사람의 글이 없어요.",
+    emptyFollowingLoggedOut: "팔로우한 사람들의 글이 여기에 모여요.",
+    browseRecommend: "추천에서 둘러보기",
+    emptyFirstPost: "첫 글을 남겨보세요.",
+    delete: "삭제",
+    feedImageAlt: (name: string) => `${name}님의 피드 이미지`,
+    commentsLabel: (n: number) => `댓글 ${n}`,
+    loadingComments: "댓글 불러오는 중...",
+    noComments: "아직 댓글이 없어요.",
+    commentPlaceholder: "댓글을 입력하세요",
+    commentSubmit: "등록",
+    loginLinkText: "로그인",
+    loginCommentSuffix: "후 댓글을 남길 수 있어요.",
+    dateLocale: "ko-KR",
+  },
+  en: {
+    sponsor: "Sponsored",
+    viewMore: "View →",
+    visPublic: "Public",
+    visFriends: "Friends",
+    visGroups: "Custom",
+    title: "Feed",
+    subtitle: "Share photos and videos, and choose who gets to see them.",
+    tabRecommend: "For You",
+    tabFollowing: "Following",
+    composerPlaceholder: "What's on your mind?",
+    uploading: "Uploading...",
+    mediaPreviewAlt: "Attachment preview",
+    remove: "Remove",
+    visPublicOption: "Public",
+    visFriendsOption: "Friends only",
+    visGroupsOption: "Custom",
+    noGroupsPrefix: "You haven't created a custom group yet. Add one in",
+    messagesGroupsLink: "Messages > Groups",
+    noGroupsSuffix: ".",
+    memberCount: (n: number) => `(${n} members)`,
+    photoVideo: "Photo/Video",
+    posting: "Posting...",
+    post: "Post",
+    loginRequired: "Log in to write a post.",
+    loginCta: "Log in",
+    emptyFollowingLoggedIn: "No posts yet from people you follow.",
+    emptyFollowingLoggedOut: "Posts from people you follow will show up here.",
+    browseRecommend: "Browse For You",
+    emptyFirstPost: "Be the first to post.",
+    delete: "Delete",
+    feedImageAlt: (name: string) => `${name}'s feed image`,
+    commentsLabel: (n: number) => `${n} comments`,
+    loadingComments: "Loading comments...",
+    noComments: "No comments yet.",
+    commentPlaceholder: "Write a comment...",
+    commentSubmit: "Post",
+    loginLinkText: "Log in",
+    loginCommentSuffix: "to leave a comment.",
+    dateLocale: "en-US",
+  },
+} as const;
+
+type Dict = (typeof T)[keyof typeof T];
+
 // 피드 광고용 상품 풀 (hot 우선, 최대 6개 순환)
 const AD_PRODUCTS = [...MARKET_PRODUCTS.filter(p => p.hot), ...MARKET_PRODUCTS.filter(p => !p.hot)].slice(0, 6);
 
-function FeedAdCard({ index }: { index: number }) {
+function FeedAdCard({ index, t }: { index: number; t: Dict }) {
   const p = AD_PRODUCTS[index % AD_PRODUCTS.length];
   if (!p) return null;
   const src = SOURCE_META[p.source];
   return (
     <li className="rounded-2xl border border-[#F9954E]/20 bg-[#FFF8EE] dark:bg-[#1a0d00] p-4">
       <div className="flex items-center justify-between mb-2">
-        <span className="text-[10px] font-bold text-stone-400 dark:text-stone-500 tracking-wide">스폰서</span>
+        <span className="text-[10px] font-bold text-stone-400 dark:text-stone-500 tracking-wide">{t.sponsor}</span>
         <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full ${src.cls}`}>{src.label}</span>
       </div>
       <a href={buildMarketUrl(p)} target="_blank" rel="sponsored noopener noreferrer" className="flex items-center gap-3 group">
@@ -47,21 +135,17 @@ function FeedAdCard({ index }: { index: number }) {
           <p className="text-[13px] font-extrabold text-stone-900 dark:text-white truncate group-hover:text-[#F9954E] transition-colors">{p.name}</p>
           <p className="text-[11px] text-stone-500 dark:text-stone-400 line-clamp-1 mt-0.5">{p.summary}</p>
         </div>
-        <span className="text-[12px] font-bold text-[#F9954E] flex-shrink-0">보기 →</span>
+        <span className="text-[12px] font-bold text-[#F9954E] flex-shrink-0">{t.viewMore}</span>
       </a>
     </li>
   );
 }
 
-const VIS_LABEL: Record<FeedVisibility, string> = {
-  public: "전체",
-  friends: "친구",
-  groups: "범위",
-};
-
 type Media = { url: string; type: "image" | "video" };
 
 export default function FeedPage() {
+  const pathname = usePathname();
+  const t = T[(pathname || "").startsWith("/en") ? "en" : "ko"];
   const { session } = useAuth();
   const [posts, setPosts] = useState<FeedPost[]>([]);
   const [loading, setLoading] = useState(true);
@@ -104,8 +188,15 @@ export default function FeedPage() {
   const [groups, setGroups] = useState<FriendGroup[]>([]);
   const [selectedGroupIds, setSelectedGroupIds] = useState<string[]>([]);
 
+  // ⚠️ 로케일에 따라 바꾸지 않는다. 이 값은 addPost/addComment로 Firestore에 작성자 이름으로
+  //    저장돼 다른(한글) 사용자에게도 그대로 보인다. 메시지 페이지의 "나"/"상대" 폴백과 같은 기준.
   const myName = session?.user?.name || session?.user?.email?.split("@")[0] || "나";
   const isLoggedIn = !!session?.user;
+  const VIS_LABEL: Record<FeedVisibility, string> = {
+    public: t.visPublic,
+    friends: t.visFriends,
+    groups: t.visGroups,
+  };
 
   const refresh = useCallback(async () => {
     const list = await listFeed(60);
@@ -264,16 +355,16 @@ export default function FeedPage() {
             FEED
           </p>
           <h1 className="text-2xl sm:text-3xl font-extrabold tracking-tight text-stone-900 dark:text-white">
-            피드
+            {t.title}
           </h1>
           <p className="mt-1 text-sm text-stone-500 dark:text-stone-400">
-            사진·영상과 함께 소식을 남기고 공개 범위를 골라보세요.
+            {t.subtitle}
           </p>
         </div>
 
         {/* 추천 / 팔로잉 탭 */}
         <div className="mb-5 flex gap-1 p-1 rounded-2xl bg-stone-100 dark:bg-zinc-900">
-          {([["recommend", "추천"], ["following", "팔로잉"]] as const).map(([id, label]) => (
+          {([["recommend", t.tabRecommend], ["following", t.tabFollowing]] as ["recommend" | "following", string][]).map(([id, label]) => (
             <button
               key={id}
               type="button"
@@ -296,7 +387,7 @@ export default function FeedPage() {
             <textarea
               value={text}
               onChange={(e) => setText(e.target.value)}
-              placeholder="무슨 생각을 하고 있나요?"
+              placeholder={t.composerPlaceholder}
               rows={3}
               maxLength={1000}
               className="w-full resize-none bg-transparent text-sm text-stone-900 dark:text-stone-100 placeholder:text-stone-400 dark:placeholder:text-stone-600 outline-none"
@@ -306,7 +397,7 @@ export default function FeedPage() {
             {uploading && (
               <div className="mt-2 flex items-center gap-2 text-sm text-stone-500 dark:text-stone-400">
                 <span className="inline-block h-4 w-4 rounded-full border-2 border-stone-300 border-t-[#F9954E] animate-spin" />
-                업로드 중...
+                {t.uploading}
               </div>
             )}
             {uploadError && (
@@ -318,14 +409,14 @@ export default function FeedPage() {
                   <video src={media.url} controls className="rounded-xl w-full max-h-80" />
                 ) : (
                   // eslint-disable-next-line @next/next/no-img-element
-                  <img src={media.url} alt="첨부 미리보기" className="rounded-xl w-full max-h-80 object-cover" />
+                  <img src={media.url} alt={t.mediaPreviewAlt} className="rounded-xl w-full max-h-80 object-cover" />
                 )}
                 <button
                   type="button"
                   onClick={() => setMedia(null)}
                   className="absolute top-2 right-2 bg-black/60 text-white text-xs rounded-full px-2.5 py-1 active:opacity-85"
                 >
-                  제거
+                  {t.remove}
                 </button>
               </div>
             )}
@@ -346,7 +437,7 @@ export default function FeedPage() {
                         : "bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300")
                     }
                   >
-                    {v === "public" ? "전체공개" : v === "friends" ? "친구공개" : "범위선택"}
+                    {v === "public" ? t.visPublicOption : v === "friends" ? t.visFriendsOption : t.visGroupsOption}
                   </button>
                 );
               })}
@@ -357,11 +448,11 @@ export default function FeedPage() {
               <div className="mt-3 rounded-xl bg-stone-100 dark:bg-zinc-900 p-3">
                 {groups.length === 0 ? (
                   <p className="text-xs text-stone-500 dark:text-stone-400">
-                    만든 범위가 없어요.{" "}
+                    {t.noGroupsPrefix}{" "}
                     <Link href="/messages" className="underline" style={{ color: POINT }}>
-                      메시지 &gt; 범위
+                      {t.messagesGroupsLink}
                     </Link>
-                    에서 범위를 추가해 보세요.
+                    {t.noGroupsSuffix}
                   </p>
                 ) : (
                   <div className="flex flex-col gap-2">
@@ -374,7 +465,7 @@ export default function FeedPage() {
                           className="h-4 w-4 accent-[#F9954E]"
                         />
                         <span className="truncate">{g.name}</span>
-                        <span className="text-[11px] text-stone-400">({g.memberUids.length}명)</span>
+                        <span className="text-[11px] text-stone-400">{t.memberCount(g.memberUids.length)}</span>
                       </label>
                     ))}
                   </div>
@@ -387,7 +478,7 @@ export default function FeedPage() {
               <div className="flex items-center gap-3">
                 <label className="cursor-pointer text-sm font-medium text-stone-500 dark:text-stone-400 hover:text-[#F9954E] active:opacity-85 transition inline-flex items-center gap-1.5">
                   <span aria-hidden>📷</span>
-                  <span>사진·영상</span>
+                  <span>{t.photoVideo}</span>
                   <input
                     type="file"
                     accept="image/*,video/*"
@@ -404,20 +495,20 @@ export default function FeedPage() {
                 disabled={!canPost}
                 className="bg-[#F9954E] text-white text-sm font-semibold rounded-full px-5 py-2 active:opacity-85 disabled:opacity-40 transition"
               >
-                {posting ? "올리는 중..." : "올리기"}
+                {posting ? t.posting : t.post}
               </button>
             </div>
           </div>
         ) : (
           <div className="rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5 mb-6 text-center">
             <p className="text-sm text-stone-500 dark:text-stone-400 mb-3">
-              글을 남기려면 로그인이 필요해요.
+              {t.loginRequired}
             </p>
             <Link
               href="/login"
               className="inline-block bg-[#F9954E] text-white text-sm font-semibold rounded-full px-5 py-2 active:opacity-85"
             >
-              로그인하기
+              {t.loginCta}
             </Link>
           </div>
         )}
@@ -437,18 +528,18 @@ export default function FeedPage() {
             {tab === "following" ? (
               <>
                 <p className="text-sm text-stone-500 dark:text-stone-400 mb-3">
-                  {isLoggedIn ? "아직 팔로우한 사람의 글이 없어요." : "팔로우한 사람들의 글이 여기에 모여요."}
+                  {isLoggedIn ? t.emptyFollowingLoggedIn : t.emptyFollowingLoggedOut}
                 </p>
                 <button
                   type="button"
                   onClick={() => setTab("recommend")}
                   className="inline-block bg-[#F9954E] text-white text-sm font-semibold rounded-full px-5 py-2 active:opacity-85"
                 >
-                  추천에서 둘러보기
+                  {t.browseRecommend}
                 </button>
               </>
             ) : (
-              <p className="text-sm text-stone-500 dark:text-stone-400">첫 글을 남겨보세요.</p>
+              <p className="text-sm text-stone-500 dark:text-stone-400">{t.emptyFirstPost}</p>
             )}
           </div>
         ) : (
@@ -458,7 +549,7 @@ export default function FeedPage() {
               return (
                 <>
                   {idx > 0 && idx % 5 === 0 && AD_PRODUCTS.length > 0 && (
-                    <FeedAdCard key={`ad-${idx}`} index={Math.floor(idx / 5) - 1} />
+                    <FeedAdCard key={`ad-${idx}`} index={Math.floor(idx / 5) - 1} t={t} />
                   )}
                 <li
                   key={post.id}
@@ -474,11 +565,11 @@ export default function FeedPage() {
                           {post.name}
                         </Link>
                         <span className="text-[10px] font-semibold rounded-full px-2 py-0.5 bg-stone-100 dark:bg-zinc-900 text-stone-500 dark:text-stone-400">
-                          {VIS_LABEL[post.visibility] || "전체"}
+                          {VIS_LABEL[post.visibility] || t.visPublic}
                         </span>
                       </div>
                       <p className="text-[11px] text-stone-400 mt-0.5">
-                        {post.at ? new Date(post.at).toLocaleString("ko-KR") : ""}
+                        {post.at ? new Date(post.at).toLocaleString(t.dateLocale) : ""}
                       </p>
                     </div>
                     {mine && (
@@ -487,7 +578,7 @@ export default function FeedPage() {
                         onClick={() => handleDelete(post.id)}
                         className="text-[11px] text-stone-400 hover:text-red-500 active:opacity-85 flex-shrink-0"
                       >
-                        삭제
+                        {t.delete}
                       </button>
                     )}
                   </div>
@@ -504,7 +595,7 @@ export default function FeedPage() {
                         <video src={post.mediaUrl} controls className="rounded-xl w-full" />
                       ) : (
                         // eslint-disable-next-line @next/next/no-img-element
-                        <img src={post.mediaUrl} alt={`${post.name}님의 피드 이미지`} className="rounded-xl w-full" />
+                        <img src={post.mediaUrl} alt={t.feedImageAlt(post.name)} className="rounded-xl w-full" />
                       )}
                     </div>
                   )}
@@ -534,7 +625,7 @@ export default function FeedPage() {
                       aria-expanded={getCState(post.id).open}
                     >
                       <span aria-hidden>💬</span>
-                      <span className="font-semibold">댓글 {post.commentCount}</span>
+                      <span className="font-semibold">{t.commentsLabel(post.commentCount)}</span>
                     </button>
                   </div>
 
@@ -542,11 +633,11 @@ export default function FeedPage() {
                   {getCState(post.id).open && (
                     <div className="mt-3 border-t border-stone-100 dark:border-zinc-900 pt-3">
                       {getCState(post.id).loading ? (
-                        <p className="text-xs text-stone-400">댓글 불러오는 중...</p>
+                        <p className="text-xs text-stone-400">{t.loadingComments}</p>
                       ) : (
                         <>
                           {getCState(post.id).items.length === 0 ? (
-                            <p className="text-xs text-stone-400">아직 댓글이 없어요.</p>
+                            <p className="text-xs text-stone-400">{t.noComments}</p>
                           ) : (
                             <ul className="space-y-3">
                               {getCState(post.id).items.map((c) => {
@@ -562,7 +653,7 @@ export default function FeedPage() {
                                           {c.name}
                                         </Link>
                                         <span className="text-[10px] text-stone-400">
-                                          {c.at ? new Date(c.at).toLocaleString("ko-KR") : ""}
+                                          {c.at ? new Date(c.at).toLocaleString(t.dateLocale) : ""}
                                         </span>
                                       </div>
                                       <p className="mt-0.5 text-sm text-stone-700 dark:text-stone-300 whitespace-pre-line break-words">
@@ -575,7 +666,7 @@ export default function FeedPage() {
                                         onClick={() => handleDeleteComment(post, c.id)}
                                         className="text-[11px] text-stone-400 hover:text-red-500 active:opacity-85 flex-shrink-0"
                                       >
-                                        삭제
+                                        {t.delete}
                                       </button>
                                     )}
                                   </li>
@@ -597,7 +688,7 @@ export default function FeedPage() {
                                     handleAddComment(post);
                                   }
                                 }}
-                                placeholder="댓글을 입력하세요"
+                                placeholder={t.commentPlaceholder}
                                 maxLength={500}
                                 className="flex-1 min-w-0 rounded-full bg-stone-100 dark:bg-zinc-900 px-4 py-2 text-sm text-stone-900 dark:text-stone-100 placeholder:text-stone-400 dark:placeholder:text-stone-600 outline-none"
                               />
@@ -607,15 +698,15 @@ export default function FeedPage() {
                                 disabled={!getCState(post.id).draft.trim() || getCState(post.id).submitting}
                                 className="bg-[#F9954E] text-white text-sm font-semibold rounded-full px-4 py-2 active:opacity-85 disabled:opacity-40 transition flex-shrink-0"
                               >
-                                {getCState(post.id).submitting ? "..." : "등록"}
+                                {getCState(post.id).submitting ? "..." : t.commentSubmit}
                               </button>
                             </div>
                           ) : (
                             <p className="mt-3 text-xs text-stone-400">
                               <Link href="/login" className="underline" style={{ color: POINT }}>
-                                로그인
+                                {t.loginLinkText}
                               </Link>{" "}
-                              후 댓글을 남길 수 있어요.
+                              {t.loginCommentSuffix}
                             </p>
                           )}
                         </>
