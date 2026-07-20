@@ -8,7 +8,14 @@
       "몸길이": "8–10 cm",
       "몸무게": "0.2–0.4 kg",
       "수명": "8–10 years"
-    }
+    },
+    "nickname": "Purple crab of the forest",
+    "desc": "The purple land crab is a purple land-dwelling crab that lives in island forests of the Indian and Pacific Oceans. Its whole body is a deep purple colour. It digs a burrow in the ground and comes out at night to search for food.",
+    "facts": [
+      "Its entire body is a deep purple colour.",
+      "It digs a burrow in the forest floor.",
+      "It is nocturnal, active at night."
+    ]
   },
   "1001": {
     "name": "Vampire Crab",
@@ -19,7 +26,14 @@
       "몸길이": "2–2.5 cm",
       "몸무게": "2–4 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "Little yellow-eyed crab",
+    "desc": "The vampire crab is a tiny freshwater crab that lives in the forests of Java, Indonesia. Its yellow eyes and purple body give it a vampire-like look, which is how it got its name. It develops its eggs inside its body and gives birth to fully formed baby crabs, rather than laying eggs.",
+    "facts": [
+      "Its glowing yellow eyes give it a vampire-like appearance.",
+      "It develops its eggs inside its body and gives birth to tiny baby crabs.",
+      "It is a popular pet crab kept in terrariums."
+    ]
   },
   "1002": {
     "name": "Boxer Crab",
@@ -30,7 +44,14 @@
       "몸길이": "1–2 cm",
       "몸무게": "1 g",
       "수명": "1–2 years"
-    }
+    },
+    "nickname": "Anemone boxing-glove crab",
+    "desc": "The boxer crab is a very tiny crab that lives on coral reefs in the Indian and Pacific Oceans. It carries a small anemone in each claw. It waves these anemones around like boxing gloves to chase away enemies.",
+    "facts": [
+      "It carries anemones in its claws and uses them like boxing gloves.",
+      "It uses the anemone's stinging tentacles to fend off enemies.",
+      "The crab shares in the food that the anemone catches."
+    ]
   },
   "1003": {
     "name": "Decorator Crab",
@@ -41,7 +62,14 @@
       "몸길이": "3–5 cm",
       "몸무게": "5–10 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "The crab that disguises itself",
+    "desc": "The decorator crab lives in the Indian and Pacific Oceans. It disguises itself by attaching seaweed, coral and small fragments to its body. This makes it hard to spot underwater.",
+    "facts": [
+      "It disguises itself by attaching seaweed and fragments to its body.",
+      "The decorations it wears help it stay hidden from predators.",
+      "It uses hair-like hooks to attach the decorations to its body."
+    ]
   },
   "1004": {
     "name": "Chinese Mitten Crab",
@@ -52,7 +80,14 @@
       "몸길이": "5–8 cm",
       "몸무게": "100–200 g",
       "수명": "3–5 years"
-    }
+    },
+    "nickname": "The crab wearing mittens",
+    "desc": "The Chinese mitten crab lives in rivers across China and East Asia. Its claws are covered in fluffy hair that makes them look like mittens. It moves between rivers and the sea, and has spread to many other countries.",
+    "facts": [
+      "Its claws are covered in hair, making them look like mittens.",
+      "It lives in rivers but travels down to the sea to lay its eggs.",
+      "It has spread to other countries, where it is a troublesome invasive species."
+    ]
   },
   "1005": {
     "name": "Coral Guard Crab",
@@ -63,7 +98,14 @@
       "몸길이": "1–2 cm",
       "몸무게": "1 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "Guardian crab of the coral",
+    "desc": "The coral guard crab is a small crab that lives among the branches of coral in the Indian and Pacific Oceans. It makes the coral its home and protects it. When a coral-eating starfish approaches, it drives it away with its claws.",
+    "facts": [
+      "It makes the coral its home and lives inside it.",
+      "It uses its claws to fight off coral-eating starfish.",
+      "The coral and the crab live together, helping each other."
+    ]
   },
   "1006": {
     "name": "Sally Lightfoot Spray Crab",
@@ -74,7 +116,14 @@
       "몸길이": "3–4 cm",
       "몸무게": "5–10 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "The nimble rock crab",
+    "desc": "This flat-bodied crab moves extremely fast over warm shoreline rocks. It darts quickly across rocks battered by waves. It has spread widely and lives in many seas around the world.",
+    "facts": [
+      "It darts extremely fast across wave-swept rocks.",
+      "Its flat body lets it squeeze into narrow rock crevices easily.",
+      "It is also an invasive species that has spread to many seas."
+    ]
   },
   "1007": {
     "name": "Copepod",
@@ -85,7 +134,14 @@
       "몸길이": "2–4 m",
       "몸무게": "1 g",
       "수명": "1 years"
-    }
+    },
+    "nickname": "The mini crustacean that feeds the sea",
+    "desc": "The copepod is a tiny crustacean living in the cold North Atlantic. It is barely visible to the eye, yet exists in enormous numbers. It is an important food source for whales and fish.",
+    "facts": [
+      "Although tiny, it is one of the most numerous animals in the ocean.",
+      "It is an important food source for whales and fish.",
+      "In winter it descends into the deep sea and rests in a sleep-like state."
+    ]
   },
   "1008": {
     "name": "Cyclops Copepod",
@@ -96,7 +152,14 @@
       "몸길이": "1–3 m",
       "몸무게": "1 g",
       "수명": "1 years"
-    }
+    },
+    "nickname": "Cousin of the one-eyed water flea",
+    "desc": "The cyclops copepod is a very tiny crustacean that lives in fresh water. It appears to have only one eye, so it is named after the one-eyed giant of legend. It carries two egg sacs, one on each side of its body.",
+    "facts": [
+      "It appears to have a single eye, giving it the name of the one-eyed giant, Cyclops.",
+      "It carries two egg sacs, one on each side of its body.",
+      "It serves as food for fish and tadpoles."
+    ]
   },
   "1009": {
     "name": "Fish Louse",
@@ -106,7 +169,14 @@
       "먹이": "Carnivore",
       "몸길이": "0.5–1 cm",
       "몸무게": "1 g"
-    }
+    },
+    "nickname": "Flat bug that sticks to fish",
+    "desc": "The fish louse is a small, flat crustacean that attaches itself to freshwater fish. It sucks blood and body fluids from the fish. It clings tightly to the fish's body using a sucker.",
+    "facts": [
+      "It clings tightly to a fish's body using a sucker.",
+      "It is a parasite that feeds on the fish's blood and body fluids.",
+      "It can swim off and attach itself to a different fish."
+    ]
   },
   "1010": {
     "name": "Acorn Barnacle",
@@ -117,7 +187,14 @@
       "몸길이": "1–1.5 cm",
       "몸무게": "1 g",
       "수명": "3–5 years"
-    }
+    },
+    "nickname": "Barnacle that lives stuck to rocks",
+    "desc": "The acorn barnacle attaches firmly to rocks on northern shores. It looks like a shellfish on the outside, but it is actually a crustacean. When water covers it, it reaches out its legs to catch plankton.",
+    "facts": [
+      "Although it looks like a shellfish, it is actually a crustacean related to crabs and shrimp.",
+      "Once it attaches to a rock, it never moves again for the rest of its life.",
+      "It extends feathery legs to catch plankton."
+    ]
   },
   "1011": {
     "name": "Common Acorn Barnacle",
@@ -128,7 +205,14 @@
       "몸길이": "1–2 cm",
       "몸무게": "1 g",
       "수명": "5–10 years"
-    }
+    },
+    "nickname": "Common barnacle shaped like an acorn",
+    "desc": "The common acorn barnacle is very common on rocks along the west coast of North America. Its white shell is shaped like an acorn. It lives densely packed together on wave-battered rocks.",
+    "facts": [
+      "Its white shell is shaped like an acorn.",
+      "It lives packed tightly together in large groups on rocks.",
+      "When the tide goes out, it closes its lid to keep the water inside its body."
+    ]
   },
   "1012": {
     "name": "Whale Barnacle",
@@ -138,7 +222,14 @@
       "먹이": "Plankton feeder",
       "몸길이": "4–5 cm",
       "몸무게": "5–20 g"
-    }
+    },
+    "nickname": "Barnacle that rides on a whale's back",
+    "desc": "The whale barnacle attaches to the skin of large whales such as the humpback whale. It travels across the wide ocean by riding on the whale. As the whale swims, the barnacle filters passing plankton to eat.",
+    "facts": [
+      "It travels across the vast ocean by attaching to a whale's skin.",
+      "It filters plankton carried past it as the whale swims.",
+      "Hundreds of them can attach to a single humpback whale."
+    ]
   },
   "1013": {
     "name": "Giant Rose Barnacle",
@@ -149,7 +240,14 @@
       "몸길이": "2–5 cm",
       "몸무게": "10–30 g",
       "수명": "5–10 years"
-    }
+    },
+    "nickname": "Volcano stuck to the rock",
+    "desc": "The giant rose barnacle is a crustacean that lives inside a hard shell shaped like a volcano. It attaches firmly to rocks or the hulls of ships and stays in the same spot for its entire life. It reaches feathery legs out of its shell to filter food from the water.",
+    "facts": [
+      "It stays attached to one spot for its whole life without ever moving.",
+      "It spreads its feathery legs like a net to filter plankton from the water.",
+      "It has an extremely long reproductive organ relative to its body size."
+    ]
   },
   "1014": {
     "name": "Sea Slater",
@@ -160,7 +258,14 @@
       "몸길이": "2.5–3 cm",
       "몸무게": "1 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "Nimble cleaner of the shore",
+    "desc": "The sea slater is a large woodlouse-like creature that lives in cracks in shoreline rocks. It comes out at night to eat dead seaweed and debris, keeping the shore clean. When it senses danger, it flees extremely quickly.",
+    "facts": [
+      "It lives in the open air on shoreline rocks, not underwater.",
+      "It is active at night, cleaning the shore by eating dead matter.",
+      "It has 14 legs, which let it run extremely fast."
+    ]
   },
   "1015": {
     "name": "Common Pill Bug",
@@ -171,7 +276,14 @@
       "몸길이": "1–1.8 cm",
       "몸무게": "0.1 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "The bug that curls into a ball",
+    "desc": "This small crustacean curls into a round ball when it senses danger. It is commonly known as the pill bug. It lives in damp soil, feeding on fallen leaves and decaying matter.",
+    "facts": [
+      "When it senses danger, it curls its body into a complete ball shape.",
+      "It evolved from sea-dwelling ancestors but now lives on land.",
+      "It breathes through gills, so it prefers damp places."
+    ]
   },
   "1016": {
     "name": "Common Rough Woodlouse",
@@ -182,7 +294,14 @@
       "몸길이": "1.2–1.7 cm",
       "몸무게": "0.08 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "The bumpy leaf-litter dweller",
+    "desc": "This small crustacean has a bumpy, rough back. Unlike the pill bug, it cannot curl into a complete ball. It lives in damp spots in gardens and forests, eating fallen leaves and enriching the soil.",
+    "facts": [
+      "Its rough, bumpy back surface is how it got its name.",
+      "It eats fallen leaves and returns them to the soil, enriching the earth.",
+      "It dies if it dries out, so it always hides in damp places."
+    ]
   },
   "1017": {
     "name": "Tongue-eating Louse",
@@ -192,7 +311,14 @@
       "먹이": "Carnivore",
       "몸길이": "2–3 cm",
       "몸무게": "0.5 g"
-    }
+    },
+    "nickname": "The parasite that becomes a fish's tongue",
+    "desc": "This astonishing crustacean enters a fish's mouth, eats away its tongue, and then attaches itself in its place, acting as the fish's new tongue. It lives there, feeding on the fish's blood and mucus. It is known as the only parasite that replaces a body part in a vertebrate host.",
+    "facts": [
+      "After eating a fish's tongue, it takes over and functions as the tongue itself.",
+      "It is the only known parasite that replaces an organ in its host's body.",
+      "It causes no serious harm to humans."
+    ]
   },
   "1018": {
     "name": "Sand Hopper",
@@ -203,7 +329,14 @@
       "몸길이": "1–1.8 cm",
       "몸무게": "0.05 g",
       "수명": "1–2 years"
-    }
+    },
+    "nickname": "Jump king of the sandy beach",
+    "desc": "The sand hopper is a small crustacean that lives on sandy beaches. When in danger, it hops around like a flea. It hides in the sand during the day and comes out at night to eat washed-up seaweed.",
+    "facts": [
+      "It can flick its body to jump dozens of times its own body length.",
+      "It hides in burrows in the sand during the day and comes out at night to find food.",
+      "It finds its way back to the sea by using the position of the sun and moon."
+    ]
   },
   "1019": {
     "name": "Skeleton Shrimp",
@@ -214,7 +347,14 @@
       "몸길이": "2–5 cm",
       "몸무게": "0.1 g",
       "수명": "1 years"
-    }
+    },
+    "nickname": "Ghost twig of the sea",
+    "desc": "The skeleton shrimp gets its name because it is so thin it looks like nothing but bones. It clings to seaweed or ropes, holding up its front legs like a praying mantis. It snatches small prey that passes by.",
+    "facts": [
+      "Its thin body makes it look like a walking twig.",
+      "It holds up its front legs like a praying mantis to snatch prey.",
+      "It originally lived in Asian seas but has spread worldwide by hitching rides on ships."
+    ]
   },
   "1020": {
     "name": "Zebra Mantis Shrimp",
@@ -225,7 +365,14 @@
       "몸길이": "20–40 cm",
       "몸무게": "200–350 g",
       "수명": "10–20 years"
-    }
+    },
+    "nickname": "The striped ambush hunter",
+    "desc": "The zebra mantis shrimp is a very large mantis shrimp with zebra-like stripes. It hides in a burrow dug into the sand and spears passing fish in an instant with its spear-like front legs. It is one of the largest species of mantis shrimp.",
+    "facts": [
+      "It is one of the largest mantis shrimp species, growing up to 40 centimetres long.",
+      "It hides in its burrow and spears prey with its spear-like front legs.",
+      "A mated pair lives together in the same burrow for a long time."
+    ]
   },
   "1021": {
     "name": "Mediterranean Mantis Shrimp",
@@ -14369,7 +14516,14 @@
       "몸길이": "12 cm",
       "몸무게": "0.01 kg",
       "수명": "About 5–8 years"
-    }
+    },
+    "nickname": "Sweet shrimp of the north",
+    "desc": "The northern shrimp lives in cold northern seas. It tastes so sweet that it is also called sweet shrimp. It is born male and later changes into a female.",
+    "facts": [
+      "It is called sweet shrimp because of its sweet taste.",
+      "It lives in cold northern seas.",
+      "It is born male and later becomes female."
+    ]
   },
   "0933": {
     "name": "Pistol Shrimp",
@@ -14380,7 +14534,14 @@
       "몸길이": "5 cm",
       "몸무게": "0.005 kg",
       "수명": "About 3–4 years"
-    }
+    },
+    "nickname": "The snapping gunslinger",
+    "desc": "The pistol shrimp makes a loud snapping sound with its oversized claw. The sound is so powerful it can stun small prey. It is one of the loudest animals in the sea.",
+    "facts": [
+      "It makes a loud snapping sound with its claw.",
+      "The sound is strong enough to stun small prey.",
+      "It is one of the loudest animals underwater."
+    ]
   },
   "0934": {
     "name": "Mysid Shrimp",
@@ -14391,7 +14552,14 @@
       "몸길이": "1–2 cm",
       "몸무게": "0.0005 kg",
       "수명": "About 1 year"
-    }
+    },
+    "nickname": "The shrimp look-alike",
+    "desc": "The mysid shrimp is a small animal that looks a lot like a shrimp. But it is not actually a true shrimp. The mother carries her young in a small pouch on her belly.",
+    "facts": [
+      "It looks like a shrimp but is not a true shrimp.",
+      "The mother carries her young in a pouch on her belly.",
+      "It is an important food source for fish."
+    ]
   },
   "0938": {
     "name": "Red Swamp Crayfish",
@@ -14402,7 +14570,14 @@
       "몸길이": "8–12 cm",
       "몸무게": "30 g",
       "수명": "About 2–5 years"
-    }
+    },
+    "nickname": "Red swamp crayfish",
+    "desc": "This large, strong crayfish has a red body. It originally lived in the United States but has spread to many countries. It eats almost anything and is a tough animal that can survive difficult conditions.",
+    "facts": [
+      "Its red body gives it the name red swamp crayfish.",
+      "When water dries up, it digs a burrow in the mud to hide.",
+      "It has spread to other countries and can threaten native species there."
+    ]
   },
   "0955": {
     "name": "Peacock Mantis Shrimp",
@@ -14413,7 +14588,14 @@
       "몸길이": "3–18 cm",
       "몸무게": "0.1 kg",
       "수명": "About 3–6 years"
-    }
+    },
+    "nickname": "The bullet-punching colour champion",
+    "desc": "The peacock mantis shrimp has a body coloured as brightly as a rainbow. It throws a punch with its front legs so fast it can smash open a thick shell. It has the most complex eyes of any animal in the world.",
+    "facts": [
+      "Its front-leg punch is so fast it can crack open thick shells.",
+      "With 16 types of colour-sensing cells, it sees a far wider range of colours than humans.",
+      "Its punch is so fast that it briefly creates flashes of light and heat in the water."
+    ]
   },
   "0967": {
     "name": "Red Swamp Crayfish",
@@ -14424,7 +14606,14 @@
       "몸길이": "5–12 cm",
       "몸무게": "30–50 g",
       "수명": "2–5 years"
-    }
+    },
+    "nickname": "Pioneer of the red swamp",
+    "desc": "This tough, red-bodied crayfish thrives in swamps and rice paddies. It has spread around the world because it is popular as a food ingredient, but that same success makes it an invasive species that threatens native wildlife.",
+    "facts": [
+      "It is tough enough to dig a burrow in the mud and survive when the water dries up.",
+      "It is raised worldwide, famous as the crayfish used in Southern US 'crawfish' dishes.",
+      "Its strong ability to reproduce has made it a problematic invasive species in many countries."
+    ]
   },
   "0977": {
     "name": "Norway Lobster",
@@ -14435,7 +14624,14 @@
       "몸길이": "18–25 cm",
       "몸무게": "60–120 g",
       "수명": "About 10–15 years"
-    }
+    },
+    "nickname": "The slender pink lobster",
+    "desc": "The Norway lobster is a small lobster with slender, pink claws. It digs a burrow in the muddy sea floor and lives inside it. It is very famous as a cooking ingredient known as scampi or langoustine.",
+    "facts": [
+      "It digs a long burrow in the muddy floor and hides inside it.",
+      "It is widely used in European cooking under the names 'scampi' or 'langoustine'.",
+      "Its thin, long claws are unusually elongated compared to its body."
+    ]
   },
   "0978": {
     "name": "Whiteleg Shrimp",
@@ -14446,7 +14642,14 @@
       "몸길이": "15–20 cm",
       "몸무게": "20–30 g",
       "수명": "About 1–2 years"
-    }
+    },
+    "nickname": "Star of the dinner table",
+    "desc": "The whiteleg shrimp, named for its white legs, is the most widely farmed food shrimp in the world. It is originally native to the Pacific waters of the Americas. It grows quickly and copes well with difficult conditions, making it the top choice for shrimp farming.",
+    "facts": [
+      "It is the most widely farmed food shrimp in the world.",
+      "It gets its name 'whiteleg shrimp' from the white colour of its legs.",
+      "It grows fast and resists disease well, making it excellent for farming."
+    ]
   },
   "0981": {
     "name": "Northern Shrimp",
@@ -14457,7 +14660,14 @@
       "몸길이": "8–16 cm",
       "몸무게": "5–15 g",
       "수명": "About 5–8 years"
-    }
+    },
+    "nickname": "Pink one of the cold sea",
+    "desc": "This small pink shrimp lives in cold northern seas. It is well known to us as the sweet shrimp we often eat. It is a remarkable shrimp that starts life as a male and later changes into a female as it grows.",
+    "facts": [
+      "It starts life as a male and changes sex to female as it grows.",
+      "It is loved under the name 'sweet shrimp' because of its sweet taste.",
+      "It lives in large groups in cold seas."
+    ]
   },
   "0982": {
     "name": "Scarlet Cleaner Shrimp",
@@ -14468,7 +14678,14 @@
       "몸길이": "5–6 cm",
       "몸무게": "2–4 g",
       "수명": "About 2–3 years"
-    }
+    },
+    "nickname": "Barber of the sea",
+    "desc": "The scarlet cleaner shrimp is a coral reef shrimp with pretty red and white stripes. It goes right inside the mouths of large fish to clean out parasites and leftover bits. Even the fish being cleaned leave this shrimp alone and let it work.",
+    "facts": [
+      "It acts as a cleaner, tidying up fish bodies and even the insides of their mouths.",
+      "Large fish being cleaned do not eat this shrimp, even though they easily could.",
+      "It waves its white antennae to signal 'I'll clean you'."
+    ]
   },
   "0983": {
     "name": "Banded Coral Shrimp",
@@ -14479,7 +14696,14 @@
       "몸길이": "5–7 cm",
       "몸무게": "2–4 g",
       "수명": "About 2–3 years"
-    }
+    },
+    "nickname": "The red-striped fighter",
+    "desc": "The banded coral shrimp is a coral reef shrimp with red and white bands and long claws. It is called the boxer shrimp because it holds up its claws like boxing gloves. Like other cleaner shrimp, it is a friendly helper that cleans parasites off fish.",
+    "facts": [
+      "It holds up its long claws like boxing gloves, which is how it got the name boxer shrimp.",
+      "It also acts as a cleaner, removing parasites from fish.",
+      "It usually lives as a mated pair, sharing a single burrow."
+    ]
   },
   "0984": {
     "name": "Cherry Shrimp",
@@ -14490,7 +14714,14 @@
       "몸길이": "2–3 cm",
       "몸무게": "0.1 g",
       "수명": "About 1–2 years"
-    }
+    },
+    "nickname": "Little red cherry shrimp",
+    "desc": "The cherry shrimp is a small freshwater shrimp with a body as red as a cherry. It is very popular in aquariums because it is pretty and easy to keep. It works hard eating algae and debris off water plants.",
+    "facts": [
+      "Its deep red colour, like a cherry, gives it the name cherry shrimp.",
+      "It works hard cleaning algae and debris from the tank.",
+      "It is easy to care for, making it a popular ornamental shrimp for beginners."
+    ]
   },
   "0987": {
     "name": "Randall's Pistol Shrimp",
@@ -14501,7 +14732,14 @@
       "몸길이": "3–5 cm",
       "몸무게": "1–2 g",
       "수명": "About 2–3 years"
-    }
+    },
+    "nickname": "The snapping shrimp",
+    "desc": "Randall's pistol shrimp is a small shrimp that snaps one claw shut to make a gunshot-like sound. The sound, along with the shockwave it produces, stuns its prey. It teams up with a nearly blind goby, sharing a burrow and helping each other out.",
+    "facts": [
+      "It snaps its large claw shut in an instant, producing a loud crack and a shockwave.",
+      "It uses that shockwave to stun and catch small prey.",
+      "It pairs up with a poor-sighted goby, sharing a burrow and watching out for each other."
+    ]
   },
   "0990": {
     "name": "Anemone Shrimp",
@@ -14512,7 +14750,14 @@
       "몸길이": "2–3 cm",
       "몸무게": "1 g",
       "수명": "About 1–2 years"
-    }
+    },
+    "nickname": "Glass shrimp of the anemone",
+    "desc": "The anemone shrimp is a tiny, transparent shrimp that hides among sea anemones. It has small white spots on its body. It stays safe among the anemone's stinging tentacles.",
+    "facts": [
+      "It hides among the anemone's stinging tentacles to avoid predators.",
+      "Its body is nearly transparent, making it hard to spot.",
+      "It sometimes picks parasites off other fish."
+    ]
   },
   "0995": {
     "name": "Florida Stone Crab",
@@ -14523,7 +14768,14 @@
       "몸길이": "10–13 cm",
       "몸무게": "0.3–0.5 kg",
       "수명": "About 7–8 years"
-    }
+    },
+    "nickname": "The crab with regrowing claws",
+    "desc": "The Florida stone crab is a tough crab that lives along the Florida coast. It has very large, powerful claws. Remarkably, if it loses a claw, a new one grows back.",
+    "facts": [
+      "If it loses a claw, a new one grows back.",
+      "Its claws are so strong they can crack open hard shellfish.",
+      "People sometimes take only the claw for food and release the crab to grow another."
+    ]
   },
   "0101": {
     "name": "Siberian Musk Deer",
@@ -20367,7 +20619,14 @@
       "몸길이": "4 cm",
       "몸무게": "0.002 kg",
       "수명": "1 years"
-    }
+    },
+    "nickname": "Sparkling cherry blossom shrimp",
+    "desc": "This small shrimp has a pretty pink body, just like cherry blossoms. It has glittering spots that give off light. It stays in deep water during the day and rises up at night.",
+    "facts": [
+      "Its body is pink like cherry blossoms.",
+      "It has spots on its body that give off light.",
+      "It rises toward the surface of the sea at night."
+    ]
   },
   "0935": {
     "name": "Antarctic Krill",
@@ -20378,7 +20637,14 @@
       "몸길이": "6 cm",
       "몸무게": "0.002 kg",
       "수명": "5–6 years"
-    }
+    },
+    "nickname": "Rice grains of the sea",
+    "desc": "Krill are tiny animals that look like shrimp. They live in huge swarms in the cold seas of Antarctica. Whales and penguins love to eat them.",
+    "facts": [
+      "It lives in enormous swarms in the cold Antarctic sea.",
+      "Whales and penguins love to eat it.",
+      "It can also give off light from its body."
+    ]
   },
   "0936": {
     "name": "Oriental River Prawn",
@@ -20389,7 +20655,14 @@
       "몸길이": "6–9 cm",
       "몸무게": "10 g",
       "수명": "1–2 years"
-    }
+    },
+    "nickname": "Long-armed river shrimp",
+    "desc": "The oriental river prawn is a freshwater shrimp that lives in rivers and streams. It has two very long, large claws. It comes out at night to search for food.",
+    "facts": [
+      "Its claws can sometimes be longer than its body.",
+      "It is active at night.",
+      "It can commonly be found in Korean rivers."
+    ]
   },
   "0937": {
     "name": "Korean Crayfish",
@@ -20400,7 +20673,14 @@
       "몸길이": "5–7 cm",
       "몸무게": "15 g",
       "수명": "3–5 years"
-    }
+    },
+    "nickname": "Guardian of clean water",
+    "desc": "The Korean crayfish is a small freshwater animal that lives only in clean mountain streams. It uses its large claws to catch food and defend itself. It cannot survive in dirty water, so protecting nature is important for it.",
+    "facts": [
+      "Because it only lives in clean water, it shows whether the water is pure.",
+      "When in danger, it flicks its tail to dart quickly backward.",
+      "It grows by shedding its shell."
+    ]
   },
   "0939": {
     "name": "European Crayfish",
@@ -20411,7 +20691,14 @@
       "몸길이": "10–16 cm",
       "몸무게": "90 g",
       "수명": "15–20 years"
-    }
+    },
+    "nickname": "Europe's prized crayfish",
+    "desc": "The European crayfish lives in clean rivers and lakes across Europe. It has a large body and strong claws. A disease has caused its numbers to drop, so it now needs protection.",
+    "facts": [
+      "People in Europe have eaten this crayfish since ancient times.",
+      "A disease called crayfish plague has greatly reduced its numbers.",
+      "It comes out at night to look for food."
+    ]
   },
   "0940": {
     "name": "Barnacle",
@@ -20422,7 +20709,14 @@
       "몸길이": "1–2 cm",
       "몸무게": "2 g",
       "수명": "1–5 years"
-    }
+    },
+    "nickname": "Volcano stuck to the rock",
+    "desc": "The barnacle is a small crustacean that sticks firmly to rocks on the shore. It hides inside a hard shell shaped like a tiny volcano. When water covers it, it reaches out feathery legs to catch food.",
+    "facts": [
+      "Once it attaches, it lives in that same spot for its whole life.",
+      "It is a crustacean relative of shrimp and crabs.",
+      "It spreads its legs like a net to filter food from the water."
+    ]
   },
   "0941": {
     "name": "Japanese Goose Barnacle",
@@ -20433,7 +20727,14 @@
       "몸길이": "3–5 cm",
       "몸무게": "5 g",
       "수명": "3–5 years"
-    }
+    },
+    "nickname": "Shaped like a turtle's claw",
+    "desc": "As its name suggests, the Japanese goose barnacle looks like a turtle's hand or claw. Many of them cluster together in cracks in shoreline rocks. When the water rises, they reach out feathery legs to catch food.",
+    "facts": [
+      "It gets its name because it looks like a turtle's claw.",
+      "Like the barnacle, it is a crustacean that sticks to rocks.",
+      "In Korea it is sometimes eaten as a delicacy."
+    ]
   },
   "0942": {
     "name": "Common Pill Bug",
@@ -20444,7 +20745,14 @@
       "몸길이": "1 cm",
       "몸무게": "0.1 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "The rolling ball bug",
+    "desc": "The common pill bug is a small animal that curls into a round ball when it is startled. It looks like an insect, but it is actually a crustacean like shrimp and crabs. It likes damp, dark places.",
+    "facts": [
+      "When in danger, it curls its body into a round ball.",
+      "It is not an insect but a crustacean, related to shrimp.",
+      "It breathes with gills, so it lives in damp places."
+    ]
   },
   "0943": {
     "name": "Common Rough Woodlouse",
@@ -20455,7 +20763,14 @@
       "몸길이": "1–1.5 cm",
       "몸무게": "0.1 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "Leaf-litter cleaner",
+    "desc": "The common rough woodlouse is a small crustacean that lives in damp places. It looks similar to the pill bug, but it cannot curl into a full ball. It is a natural cleaner that eats rotting leaves.",
+    "facts": [
+      "Unlike the pill bug, it cannot curl into a complete ball.",
+      "It eats rotting leaves, which helps keep the soil healthy.",
+      "It breathes with gills, just like sea creatures."
+    ]
   },
   "0944": {
     "name": "Sea Slater",
@@ -20466,7 +20781,14 @@
       "몸길이": "3–4 cm",
       "몸무게": "1 g",
       "수명": "1–2 years"
-    }
+    },
+    "nickname": "Fast feet of the shore",
+    "desc": "The sea slater is a crustacean that lives on rocks along the shore. It has many legs and runs so fast that it is hard to catch. It eats dead creatures and algae, keeping the shore clean.",
+    "facts": [
+      "It has many legs and can run extremely fast.",
+      "It acts as a cleaner along the shoreline.",
+      "When it senses danger, it instantly hides in a crack in the rocks."
+    ]
   },
   "0945": {
     "name": "Water Flea",
@@ -20475,7 +20797,14 @@
       "서식지": "River & lake · Asia · Europe · North America",
       "먹이": "Plankton feeder",
       "몸길이": "0.2 cm"
-    }
+    },
+    "nickname": "The bouncy water flea",
+    "desc": "The water flea is a tiny crustacean, so small it is hard to see with the naked eye. It swims through the water with a bouncing, jerky motion. Fish love to eat it.",
+    "facts": [
+      "Its body is transparent, so you can see straight through it.",
+      "It gets its name because it swims with a bouncing motion, like a flea.",
+      "It is a great food source for fish and tadpoles."
+    ]
   },
   "0946": {
     "name": "Fairy Shrimp",
@@ -20484,7 +20813,14 @@
       "서식지": "River & lake · Asia",
       "먹이": "Plankton feeder",
       "몸길이": "1.5–2 cm"
-    }
+    },
+    "nickname": "The upside-down swimmer",
+    "desc": "The fairy shrimp is a small shrimp that lives in rice paddies and puddles. It swims upside down, with its belly facing up. When the water dries up, it survives as an egg and hatches again when the rain comes.",
+    "facts": [
+      "It swims upside down, with its belly facing upward.",
+      "Its eggs can survive in dry soil for a long time and hatch when rain comes.",
+      "It is called fairy shrimp because a paddy full of them was thought to mean a good harvest."
+    ]
   },
   "0947": {
     "name": "Tadpole Shrimp",
@@ -20494,7 +20830,14 @@
       "먹이": "Omnivore",
       "몸길이": "2–4 cm",
       "몸무게": "1 g"
-    }
+    },
+    "nickname": "Living fossil",
+    "desc": "The tadpole shrimp wears a hard shell on its head that looks like a helmet. It has barely changed since the age of the dinosaurs, so it is called a living fossil. It crawls along the bottom of rice paddies and puddles.",
+    "facts": [
+      "It is a living fossil that has hardly changed since the age of the dinosaurs.",
+      "It has dozens of pairs of legs.",
+      "Its eggs can survive dry for years and hatch when rain comes."
+    ]
   },
   "0948": {
     "name": "Scud",
@@ -20504,7 +20847,14 @@
       "먹이": "Scavenger",
       "몸길이": "1–2 cm",
       "수명": "1 years"
-    }
+    },
+    "nickname": "The sideways swimmer",
+    "desc": "The scud is a tiny crustacean that swims lying on its side. It lives in large numbers under stones in clean water. It eats dead leaves, which helps keep the water clean.",
+    "facts": [
+      "It is called a sideways swimmer because it swims lying on its side.",
+      "It lives in clean water in large numbers, showing that the water is pure.",
+      "It is a food source that fish enjoy."
+    ]
   },
   "0949": {
     "name": "Mud Shrimp",
@@ -20515,7 +20865,14 @@
       "몸길이": "7–10 cm",
       "몸무게": "10 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "Champion mudflat digger",
+    "desc": "The mud shrimp is a shrimp-like animal that digs a deep burrow in mudflats and lives inside it. It builds a long, Y-shaped burrow to hide in. It filters small food particles from the water.",
+    "facts": [
+      "It digs a deep, Y-shaped burrow in the mudflats.",
+      "It filters food by drawing water through its burrow.",
+      "It is famous for being caught using a bit of soybean paste to lure it out."
+    ]
   },
   "0950": {
     "name": "Ghost Shrimp",
@@ -20526,7 +20883,14 @@
       "몸길이": "5–8 cm",
       "몸무게": "8 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "Ghost shrimp of the mudflats",
+    "desc": "This shrimp-like animal digs a burrow in the sand of mudflats. Its body is soft and see-through, which is why it is called ghost shrimp. One of its claws is noticeably larger than the other.",
+    "facts": [
+      "Its soft, see-through body earns it the name ghost shrimp.",
+      "One claw is much larger than the other.",
+      "It digs a deep burrow in the sand and hides inside."
+    ]
   },
   "0951": {
     "name": "Coconut Crab",
@@ -20537,7 +20901,14 @@
       "몸길이": "90 cm",
       "몸무게": "3–4 kg",
       "수명": "40–60 years"
-    }
+    },
+    "nickname": "World's largest land crab",
+    "desc": "The coconut crab is the largest crustacean that lives on land. Its extremely strong claws can crack open a hard coconut shell to eat what's inside. When young, it carries a shell on its back just like a hermit crab.",
+    "facts": [
+      "It is the largest land-dwelling crustacean, with an incredibly strong grip.",
+      "It uses its powerful claws to crack open hard coconut shells and eat the inside.",
+      "As an adult it can no longer breathe underwater, so it lives only on land."
+    ]
   },
   "0952": {
     "name": "Japanese Spider Crab",
@@ -20548,7 +20919,14 @@
       "몸길이": "3.7 m",
       "몸무게": "15–19 kg",
       "수명": "100 years"
-    }
+    },
+    "nickname": "The crab with the longest legs in the world",
+    "desc": "This is the world's largest crab — with its legs stretched out, it is far taller than a person. It walks slowly across the deep sea floor on its long legs. It eats dead animals and shellfish.",
+    "facts": [
+      "With its legs spread, it can span more than 3 metres, giving it the widest leg span of any crab.",
+      "It lives on the dark sea floor, deeper than 200 metres.",
+      "It is known to live an extremely long time, up to 100 years."
+    ]
   },
   "0953": {
     "name": "Christmas Island Red Crab",
@@ -20559,7 +20937,14 @@
       "몸길이": "11 cm",
       "몸무게": "0.5 kg",
       "수명": "20–30 years"
-    }
+    },
+    "nickname": "The crab of the great red migration",
+    "desc": "The Christmas Island red crab is a bright red land crab that lives in the island's forests. Millions of them march to the sea together to lay their eggs, creating an amazing spectacle. It eats leaves and fruit.",
+    "facts": [
+      "During breeding season, millions of crabs migrate to the sea together.",
+      "During migration, special crab bridges and tunnels are built over roads to protect them.",
+      "It is a forest cleaner that eats fallen leaves, keeping the soil healthy."
+    ]
   },
   "0954": {
     "name": "Sally Lightfoot Crab",
@@ -20570,7 +20955,14 @@
       "몸길이": "8 cm",
       "몸무게": "0.2 kg",
       "수명": "10 years"
-    }
+    },
+    "nickname": "The colourful crab that darts over the rocks",
+    "desc": "The Sally Lightfoot crab is a shoreline crab brightly coloured in red, orange and yellow. It darts incredibly quickly across rocks battered by waves. It eats algae and dead animals off the rocks.",
+    "facts": [
+      "It glides and dashes extremely fast across wave-swept rocks.",
+      "It is black when young and turns brightly coloured as it grows.",
+      "It grazes algae off the rocks, helping keep the shore clean."
+    ]
   },
   "0956": {
     "name": "Dungeness Crab",
@@ -20581,7 +20973,14 @@
       "몸길이": "20 cm",
       "몸무게": "1 kg",
       "수명": "8–13 years"
-    }
+    },
+    "nickname": "The North Pacific's favourite table crab",
+    "desc": "The Dungeness crab is a large crab that lives in the waters off the west coast of North America. It buries itself in sandy sea floors. It hunts shellfish and small fish.",
+    "facts": [
+      "It buries its body in the sand, leaving only its eyes poking out.",
+      "It is a very popular food crab along the west coast of North America.",
+      "It sheds its hard shell repeatedly as it grows."
+    ]
   },
   "0957": {
     "name": "Blue Crab",
@@ -20592,7 +20991,14 @@
       "몸길이": "18 cm",
       "몸무게": "0.2 kg",
       "수명": "3–4 years"
-    }
+    },
+    "nickname": "The swimmer with blue claws",
+    "desc": "The blue crab is an Atlantic swimming crab with pretty blue claws. Its back pair of legs is flat like a paddle, making it an excellent swimmer. It eats shellfish, small fish and dead animals.",
+    "facts": [
+      "Its back legs are flat like paddles, making it a strong swimmer.",
+      "The species name 'sapidus' means 'tasty'.",
+      "It moves between salty seawater and river water where the two mix."
+    ]
   },
   "0958": {
     "name": "European Green Crab",
@@ -20603,7 +21009,14 @@
       "몸길이": "6–8 cm",
       "몸무게": "0.05 kg",
       "수명": "4–6 years"
-    }
+    },
+    "nickname": "The green crab that conquered the world",
+    "desc": "This small green crab originally lived in Europe, but it has famously spread around the world by hitching rides on ships. It eats almost anything and copes well with change, which has made it a troublesome pest in seas far from home.",
+    "facts": [
+      "It is a classic example of a species that spread worldwide aboard ships.",
+      "It eats almost anything and tolerates changes in its environment well.",
+      "In other regions it can cause problems by eating large numbers of native shellfish."
+    ]
   },
   "0959": {
     "name": "Poli's Stellate Barnacle",
@@ -20614,7 +21027,14 @@
       "몸길이": "1 cm",
       "몸무게": "0.001 kg",
       "수명": "1–3 years"
-    }
+    },
+    "nickname": "Tiny volcano stuck to the rock",
+    "desc": "Poli's stellate barnacle is a small barnacle that clings firmly to shoreline rocks. It hides inside a star-shaped shell and reaches out its legs to filter food when the water rises. It spends its whole life stuck in one spot.",
+    "facts": [
+      "It is a crustacean related to crabs and shrimp, yet it stays attached to a rock its whole life.",
+      "When water covers it, it extends feathery legs to filter out plankton.",
+      "When the water recedes, it seals its shell tightly shut to keep from drying out."
+    ]
   },
   "0960": {
     "name": "Goose Barnacle",
@@ -20625,7 +21045,14 @@
       "몸길이": "5 cm",
       "몸무게": "0.01 kg",
       "수명": "1–3 years"
-    }
+    },
+    "nickname": "The long-necked barnacle that drifts and grows",
+    "desc": "The goose barnacle is an unusual barnacle with a shell attached to the end of a long stalk. It attaches to floating driftwood or the bottoms of ships and travels across the ocean. It reaches out its legs to filter plankton from the water.",
+    "facts": [
+      "It travels the ocean by attaching its long stalk to floating objects.",
+      "Long ago, people in Europe mistakenly believed that geese hatched from this barnacle.",
+      "It extends hook-like legs to filter food from the water."
+    ]
   },
   "0961": {
     "name": "Giant Isopod",
@@ -20635,7 +21062,14 @@
       "먹이": "Scavenger",
       "몸길이": "20–40 cm",
       "몸무게": "1–1.7 kg"
-    }
+    },
+    "nickname": "Giant pill bug of the deep sea",
+    "desc": "The giant isopod is a huge sea-dwelling relative of the pill bug we all know. It crawls along the dark, deep sea floor. It cleans up dead animals that sink down from above.",
+    "facts": [
+      "It is related to the tiny pill bug but can grow over 30 centimetres long.",
+      "When in danger, it curls its body into a round ball.",
+      "Food is scarce in the deep sea, so it can survive for years on a single meal."
+    ]
   },
   "0962": {
     "name": "Antarctic Krill",
@@ -20646,7 +21080,14 @@
       "몸길이": "6 cm",
       "몸무게": "0.002 kg",
       "수명": "5–6 years"
-    }
+    },
+    "nickname": "The shrimp that feeds the Antarctic sea",
+    "desc": "Antarctic krill are small shrimp-like crustaceans found in huge numbers in the Antarctic sea. Whales, penguins and seals all rely on krill for food. They filter tiny plankton from the water.",
+    "facts": [
+      "Combined, they form one of the heaviest groups of animals on Earth.",
+      "As the most important food for whales, penguins and seals, krill are a pillar of the Antarctic ecosystem.",
+      "It has light-producing organs that let it glow."
+    ]
   },
   "0963": {
     "name": "Brine Shrimp",
@@ -20656,7 +21097,14 @@
       "먹이": "Plankton feeder",
       "몸길이": "1 cm",
       "몸무게": "0.01 g"
-    }
+    },
+    "nickname": "Fairy of the salt water",
+    "desc": "The brine shrimp is a tiny shrimp that lives in extremely salty lakes. It is often raised as fish food and is also known by the name Sea-Monkeys. Its dried eggs can survive for a long time and hatch when they meet water.",
+    "facts": [
+      "Its dried eggs, called cysts, can survive for years and hatch as soon as they are placed in water.",
+      "It is remarkably good at regulating the salt levels inside its body, even in very salty water.",
+      "It is raised around the world as food for baby fish and ornamental fish."
+    ]
   },
   "0964": {
     "name": "Water Flea",
@@ -20666,7 +21114,14 @@
       "먹이": "Plankton feeder",
       "몸길이": "2–5 m",
       "몸무게": "0.001 g"
-    }
+    },
+    "nickname": "The bean bug of the water",
+    "desc": "This is a very tiny water flea that lives in ponds and lakes. Its body is so transparent you can even see its heart beating. It gets the name water flea because it swims with a bouncing motion.",
+    "facts": [
+      "Its body is transparent, so you can see its heart beating inside.",
+      "When conditions are good, females can reproduce alone without a mate.",
+      "It is widely used in experiments to test water pollution."
+    ]
   },
   "0965": {
     "name": "Longtail Tadpole Shrimp",
@@ -20676,7 +21131,14 @@
       "먹이": "Omnivore",
       "몸길이": "3–5 cm",
       "몸무게": "1 g"
-    }
+    },
+    "nickname": "Living fossil",
+    "desc": "This shrimp wears a helmet-like shell on its head and lives in rice paddies and puddles. It looks the same as it did hundreds of millions of years ago, earning it the name living fossil. It swims with its back upward, digging through mud to find food.",
+    "facts": [
+      "It has barely changed in over 300 million years, which is why it is called a living fossil.",
+      "Its eggs can survive for years in dry soil and hatch once water fills the area.",
+      "It has three eyes on its back, which is why its scientific name 'Triops' means 'three eyes'."
+    ]
   },
   "0966": {
     "name": "Signal Crayfish",
@@ -20687,7 +21149,14 @@
       "몸길이": "6–16 cm",
       "몸무게": "60–110 g",
       "수명": "20 years"
-    }
+    },
+    "nickname": "The waving invader",
+    "desc": "The signal crayfish has white patches on the joints of its claws that look like a waving signal, giving it its name. It is native to North America but has spread to Europe, where it has become a pest that pushes out native crayfish.",
+    "facts": [
+      "The white patch near the top of its claw looks like a signal, giving it the name 'signal crayfish'.",
+      "It is an invasive species in Europe that spreads disease to native crayfish.",
+      "It is mostly active at night and hides in burrows."
+    ]
   },
   "0968": {
     "name": "Marbled Crayfish",
@@ -20698,7 +21167,14 @@
       "몸길이": "4–10 cm",
       "몸무게": "20–30 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "The self-cloning crayfish",
+    "desc": "The marbled crayfish is an unusual crayfish with marble-like patterns on its body. Females have the remarkable ability to produce offspring that are genetically identical to themselves, without a mate. It is a very young species, first discovered in home aquariums.",
+    "facts": [
+      "Females reproduce alone, producing offspring that are genetically identical to themselves.",
+      "It is a very young species, first appearing in ornamental aquariums in the 1990s.",
+      "Its incredible reproductive power has let it spread into the wild in places like Madagascar."
+    ]
   },
   "0969": {
     "name": "Redclaw Crayfish",
@@ -20709,7 +21185,14 @@
       "몸길이": "20–25 cm",
       "몸무게": "250–500 g",
       "수명": "5 years"
-    }
+    },
+    "nickname": "Chief of the red claws",
+    "desc": "This is a large freshwater crayfish with bright red tips on the male's claws. It lives in the warm rivers of northern Australia. Because it grows large and tastes good, it is farmed in many countries.",
+    "facts": [
+      "Adult males have red-tipped claws, which is why it is called the redclaw crayfish.",
+      "It prefers warm water and is widely farmed for food in tropical regions.",
+      "It is one of the larger freshwater crayfish, with individuals growing bigger than a hand."
+    ]
   },
   "0970": {
     "name": "Yabby",
@@ -20720,7 +21203,14 @@
       "몸길이": "10–20 cm",
       "몸무게": "100–300 g",
       "수명": "4–7 years"
-    }
+    },
+    "nickname": "The rascal of rural Australia",
+    "desc": "The yabby is a common freshwater crayfish found in rivers and puddles across Australia. When the water dries up, it digs deep burrows underground to survive. It is so good at burrowing into banks that its scientific name even means 'destroyer'.",
+    "facts": [
+      "During droughts, it digs deep burrows in the mud and can survive for months.",
+      "It is so skilled at digging holes in banks and paddies that its scientific name includes the word 'destroyer'.",
+      "It is a very familiar crayfish in Australia, used for fishing bait and food."
+    ]
   },
   "0971": {
     "name": "Noble Crayfish",
@@ -20731,7 +21221,14 @@
       "몸길이": "10–16 cm",
       "몸무게": "100–150 g",
       "수명": "20 years"
-    }
+    },
+    "nickname": "Europe's noble crayfish",
+    "desc": "The noble crayfish is a native European freshwater crayfish that has long been prized as food. It lives only in clean water, making it an indicator of water quality. In recent times, disease and invasive species have caused its numbers to drop sharply.",
+    "facts": [
+      "It lives only in very clean water, making it a sign of a healthy environment.",
+      "A disease called crayfish plague, spread by invasive crayfish, has drastically reduced its numbers.",
+      "It has long been prized as a valuable food ingredient in Europe."
+    ]
   },
   "0972": {
     "name": "Marron",
@@ -20742,7 +21239,14 @@
       "몸길이": "20–38 cm",
       "몸무게": "300–2000 g",
       "수명": "10 years"
-    }
+    },
+    "nickname": "The big hand of Western Australia",
+    "desc": "The marron is a large and prized freshwater crayfish found only in southwestern Australia. It is popular because it is among the largest freshwater crayfish in the world. It needs clean, cool water, so its habitat is shrinking.",
+    "facts": [
+      "It is one of the largest freshwater crayfish in the world, weighing close to 2 kilograms.",
+      "It occurs naturally only in southwestern Australia.",
+      "It needs clean, cool water, and as its habitat shrinks it increasingly needs protection."
+    ]
   },
   "0973": {
     "name": "American Lobster",
@@ -20753,7 +21257,14 @@
       "몸길이": "25–50 cm",
       "몸무게": "0.7–2 kg",
       "수명": "50 years"
-    }
+    },
+    "nickname": "King of the claw",
+    "desc": "The American lobster is a large, powerful sea lobster that lives on the floor of the cold Atlantic Ocean. It uses its two big claws to crush food and defend itself. It is a remarkable animal that lives a very long time and keeps growing throughout its life.",
+    "facts": [
+      "The heaviest one ever caught weighed about 20 kilograms.",
+      "It keeps growing a little at a time throughout its life by moulting its shell.",
+      "Its two claws are shaped differently — one is used for crushing and the other for cutting."
+    ]
   },
   "0974": {
     "name": "European Lobster",
@@ -20764,7 +21275,14 @@
       "몸길이": "30–60 cm",
       "몸무게": "1–3 kg",
       "수명": "30–50 years"
-    }
+    },
+    "nickname": "Knight of the blue sea",
+    "desc": "The European lobster is a deep blue lobster that lives in European seas. It is blue while alive but turns red when cooked. It uses its large claws to crush and eat shellfish.",
+    "facts": [
+      "It is deep blue while alive, but turns red when cooked.",
+      "It hides in rock crevices during the day and comes out at night to search for food.",
+      "It is a highly prized seafood in Europe."
+    ]
   },
   "0975": {
     "name": "Caribbean Spiny Lobster",
@@ -20775,7 +21293,14 @@
       "몸길이": "20–45 cm",
       "몸무게": "1–3 kg",
       "수명": "15–20 years"
-    }
+    },
+    "nickname": "The traveller in spiny armour",
+    "desc": "The Caribbean spiny lobster lives in the warm Caribbean Sea and has no large claws. Its body is covered in sharp spines, and it has long antennae. It is famous for marching along the sea floor in long single-file lines in autumn.",
+    "facts": [
+      "Instead of large claws, it protects itself with sharp spines covering its body.",
+      "It is famous for migrating across the sea floor in single-file lines of dozens of individuals.",
+      "It rubs its long antennae together to make sounds that startle enemies."
+    ]
   },
   "0976": {
     "name": "Mediterranean Slipper Lobster",
@@ -20786,7 +21311,14 @@
       "몸길이": "30–45 cm",
       "몸무게": "1–2 kg",
       "수명": "10–15 years"
-    }
+    },
+    "nickname": "The flat slipper lobster",
+    "desc": "The Mediterranean slipper lobster is a flat-bodied lobster living in the Mediterranean Sea. Its broad, flat antennae look like slippers, which gives it its name. It has no claws and crawls slowly along the sea floor.",
+    "facts": [
+      "Its broad, flat antennae look like slippers, which is how it got its name.",
+      "Without claws, it must pry open hard shellfish using brute force.",
+      "It hides in rocky burrows during the day and comes out at night to feed."
+    ]
   },
   "0979": {
     "name": "Giant Tiger Prawn",
@@ -20797,7 +21329,14 @@
       "몸길이": "20–33 cm",
       "몸무게": "100–250 g",
       "수명": "1–2 years"
-    }
+    },
+    "nickname": "The striped giant shrimp",
+    "desc": "The giant tiger prawn is a very large shrimp with tiger-like stripes on its body. It is native to the tropical seas of Asia and is one of the largest of all shrimp species. Thanks to its size and flavour, it is widely farmed.",
+    "facts": [
+      "Its tiger-like stripes are the reason for the name 'tiger prawn'.",
+      "It is one of the largest farmed shrimp species, sometimes growing over 30 centimetres long.",
+      "It is an important farmed shrimp in many Asian countries."
+    ]
   },
   "0980": {
     "name": "Kuruma Prawn",
@@ -20808,7 +21347,14 @@
       "몸길이": "15–25 cm",
       "몸무게": "30–80 g",
       "수명": "1–2 years"
-    }
+    },
+    "nickname": "The wheel-patterned shrimp",
+    "desc": "The kuruma prawn has pretty yellow and blue patterns on its tail. Because its body stripes look like a cartwheel, it is called 'kuruma' (wheel) in Japan. It is highly popular as an ingredient for sushi and tempura.",
+    "facts": [
+      "Its body stripes look like a cartwheel, giving it the Japanese name 'kuruma'.",
+      "It buries itself in sand during the day and becomes active at night.",
+      "It is treated as a premium shrimp for sushi and tempura."
+    ]
   },
   "0985": {
     "name": "Amano Shrimp",
@@ -20819,7 +21365,14 @@
       "몸길이": "3–5 cm",
       "몸무게": "0.2 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "Cleaner of the tank",
+    "desc": "The Amano shrimp is a freshwater shrimp with a transparent, spotted body. It eats algae extremely well, keeping aquariums clean. It is named after the famous aquatic plant expert Takashi Amano.",
+    "facts": [
+      "It is famous as a tank cleaner because it eats algae so effectively.",
+      "Its name comes from the Japanese aquatic plant expert Takashi Amano.",
+      "Its young must develop in salt water, so it rarely breeds successfully inside a home tank."
+    ]
   },
   "0986": {
     "name": "Harlequin Shrimp",
@@ -20830,7 +21383,14 @@
       "몸길이": "3–5 cm",
       "몸무게": "1–2 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "Starfish hunter",
+    "desc": "The harlequin shrimp is a beautiful shrimp with colourful patterns like a clown's costume. It is a specialised hunter that eats almost nothing but starfish. It usually hunts starfish together with its mate.",
+    "facts": [
+      "It is an extremely picky eater, feeding on little else but starfish.",
+      "Its colourful, patchwork pattern resembles a harlequin's costume, giving it its name.",
+      "A mated pair works together to hunt starfish much larger than themselves."
+    ]
   },
   "0988": {
     "name": "Giant River Prawn",
@@ -20841,7 +21401,14 @@
       "몸길이": "30 cm",
       "몸무게": "200–300 g",
       "수명": "3–4 years"
-    }
+    },
+    "nickname": "Freshwater's long-armed shrimp",
+    "desc": "The giant river prawn is a very large freshwater shrimp that lives in the rivers and estuaries of Southeast Asia. Males have long, blue claws. People enjoy eating it, so it is widely farmed.",
+    "facts": [
+      "It is one of the largest freshwater shrimp in the world.",
+      "Its young must grow in salt water in order to survive.",
+      "A male's blue claws can grow longer than its own body."
+    ]
   },
   "0989": {
     "name": "Camel Shrimp",
@@ -20852,7 +21419,14 @@
       "몸길이": "3–4 cm",
       "몸무게": "1–2 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "The humpbacked camel shrimp",
+    "desc": "The camel shrimp is a small shrimp living in the warm coral reefs of the Indian and Pacific Oceans. Its arched back looks like a camel's hump, which is how it gets its name. It has pretty red and white stripes.",
+    "facts": [
+      "Its back is arched like a camel's hump.",
+      "It is more active at night.",
+      "It is popular as an ornamental shrimp in aquariums."
+    ]
   },
   "0991": {
     "name": "Marble Shrimp",
@@ -20863,7 +21437,14 @@
       "몸길이": "5–7 cm",
       "몸무게": "3–5 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "The furry marbled shrimp",
+    "desc": "The marble shrimp lives on coral reefs in the Indian and Pacific Oceans. Its body has marble-like patterns and small, hair-like bumps. It hides in rock crevices during the day and comes out at night.",
+    "facts": [
+      "Its body has marble-like patterns.",
+      "It has hair-like bumps on its legs and back.",
+      "It comes out at night to look for food."
+    ]
   },
   "0992": {
     "name": "Ghost Shrimp",
@@ -20874,7 +21455,14 @@
       "몸길이": "2–4 cm",
       "몸무게": "1 g",
       "수명": "1 years"
-    }
+    },
+    "nickname": "See-through ghost shrimp",
+    "desc": "This tiny, extremely transparent shrimp lives in North American fresh water. Its body is as clear as glass, which is how it gets the name ghost shrimp. It eats debris in the water, helping to keep it clean.",
+    "facts": [
+      "Its body is so transparent that you can see the food it has eaten inside.",
+      "It is raised in aquariums as fish food or as a cleaner.",
+      "It eats debris in the water, helping to keep it clean."
+    ]
   },
   "0993": {
     "name": "Peppermint Shrimp",
@@ -20885,7 +21473,14 @@
       "몸길이": "3–5 cm",
       "몸무게": "1–2 g",
       "수명": "1–2 years"
-    }
+    },
+    "nickname": "Red-striped cleaner shrimp",
+    "desc": "The peppermint shrimp is a small shrimp living in warm Atlantic waters. The red stripes on its body give it the name peppermint shrimp. It is popular in aquariums because it eats troublesome pest anemones.",
+    "facts": [
+      "It eats pest anemones that can become a nuisance in aquariums.",
+      "It is more active at night.",
+      "It is an unusual shrimp that carries the reproductive traits of both sexes at once."
+    ]
   },
   "0994": {
     "name": "Red Rock Crab",
@@ -20896,7 +21491,14 @@
       "몸길이": "15–20 cm",
       "몸무게": "0.5–0.9 kg",
       "수명": "5–6 years"
-    }
+    },
+    "nickname": "Red claws in the rock crevice",
+    "desc": "The red rock crab is a red crab that lives in rock crevices along the west coast of North America. As an adult, its whole body turns brick red. It uses its strong claws to crack open shellfish and barnacles.",
+    "facts": [
+      "Its pattern varies when young but turns solidly red as it matures.",
+      "It uses its strong claws to crack open shellfish.",
+      "When in danger, it darts quickly into a crack in the rocks."
+    ]
   },
   "0996": {
     "name": "Tasmanian Giant Crab",
@@ -20907,7 +21509,14 @@
       "몸길이": "40–46 cm",
       "몸무게": "10–13 kg",
       "수명": "30 years"
-    }
+    },
+    "nickname": "World's heaviest crab",
+    "desc": "The Tasmanian giant crab is a huge crab living in the deep waters off Tasmania, Australia. It is one of the heaviest crabs in the world, weighing an enormous amount. One of its claws is especially large and powerful.",
+    "facts": [
+      "It is one of the heaviest crabs in the world.",
+      "One large claw is much bigger than the other.",
+      "It moves slowly along the deep sea floor."
+    ]
   },
   "0997": {
     "name": "Blue Land Crab",
@@ -20918,7 +21527,14 @@
       "몸길이": "10–13 cm",
       "몸무게": "0.3–0.5 kg",
       "수명": "10–13 years"
-    }
+    },
+    "nickname": "The burrowing blue land crab",
+    "desc": "The blue land crab is a large crab that lives on land near the shores of the Caribbean and the southeastern United States. Its body has a bluish tint. It digs deep burrows on land, but travels to the sea to lay its eggs.",
+    "facts": [
+      "It digs a very deep burrow on land.",
+      "Although it lives on land, it travels to the sea to lay its eggs.",
+      "Its blue colour is deep when young and fades as it grows."
+    ]
   },
   "0998": {
     "name": "Rainbow Crab",
@@ -20929,7 +21545,14 @@
       "몸길이": "8–13 cm",
       "몸무게": "0.2–0.4 kg",
       "수명": "8–10 years"
-    }
+    },
+    "nickname": "The colourful rainbow land crab",
+    "desc": "The rainbow crab is a colourful crab that lives on land near the coast of West Africa. It has rainbow-like colours including blue, purple, red and orange. It digs burrows in the ground.",
+    "facts": [
+      "Its body is as colourful as a rainbow.",
+      "It digs burrows in the ground on land.",
+      "It is a popular land crab kept as a pet."
+    ]
   },
   "0999": {
     "name": "Halloween Moon Crab",
@@ -20940,6 +21563,13 @@
       "몸길이": "5–8 cm",
       "몸무게": "100–200 g",
       "수명": "5–8 years"
-    }
+    },
+    "nickname": "Orange-legged Halloween crab",
+    "desc": "The Halloween moon crab is a colourful land crab that lives along the Pacific coast of Central America. Its black shell, orange legs and yellow spots around its eyes look like Halloween colours. It digs burrows in the ground.",
+    "facts": [
+      "Its black, orange and purple colours resemble Halloween.",
+      "It is nocturnal, coming out at night to search for food.",
+      "It lives on land but travels to the sea to lay its eggs."
+    ]
   }
 }
