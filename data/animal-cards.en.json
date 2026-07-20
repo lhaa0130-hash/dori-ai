@@ -5756,7 +5756,14 @@
       "몸길이": "33–41 cm",
       "몸무게": "400 g",
       "수명": "50–80 years"
-    }
+    },
+    "nickname": "The clever grey parrot",
+    "desc": "Grey parrots are intelligent birds that live in Africa's tropical rainforests. Their feathers are grey but their tails are red. They are remarkably good at copying human speech, so they make wonderful companions.",
+    "facts": [
+      "Grey parrots are highly intelligent, comparable to a four- to six-year-old child.",
+      "They can harm themselves when stress builds up.",
+      "They can learn 100 words and identify 50 different objects."
+    ]
   },
   "0202": {
     "name": "Budgerigar",
@@ -5767,7 +5774,14 @@
       "몸길이": "18–20 cm",
       "몸무게": "30–40 g",
       "수명": "4 years"
-    }
+    },
+    "nickname": "The little parrot",
+    "desc": "Budgerigars are small parrots that come in many colours. They can copy human speech, so they make good friends. They come from Australia and grow up eating seeds.",
+    "facts": [
+      "Budgerigars can imitate human speech.",
+      "They have been bred into many different colour varieties.",
+      "They are intelligent and can learn many behaviours through training."
+    ]
   },
   "0203": {
     "name": "Lilian's Lovebird",
@@ -5777,7 +5791,14 @@
       "먹이": "Seed eater",
       "몸길이": "13–15 cm",
       "몸무게": "40–60 g"
-    }
+    },
+    "nickname": "The lovebird",
+    "desc": "Lovebirds are small and endearing parrots. Green and orange blend beautifully across their bodies. They eat seeds and build nests in tree crevices to lay their eggs. They really are friendly little parrots!",
+    "facts": [
+      "Lilian's lovebird is one of the smallest parrots in Africa.",
+      "They come in a variety of colour patterns.",
+      "Once they warm to their keeper, they become very attached."
+    ]
   },
   "0204": {
     "name": "Gentoo Penguin",
@@ -5788,7 +5809,14 @@
       "몸길이": "75–90 cm",
       "몸무게": "5–6.5 kg",
       "수명": "15–20 years"
-    }
+    },
+    "nickname": "The turban penguin",
+    "desc": "Gentoo penguins are endearing penguins with a white patch on the head. They are the third largest penguin after the emperor and king penguins, and they live on fish. They are wonderful friends who spend most of their lives at sea.",
+    "facts": [
+      "The gentoo is the third-largest penguin, after the emperor and king penguins.",
+      "The white patch on its head is said to resemble a turban.",
+      "Its scientific name 'papua' is a misnomer — it refers to New Guinea."
+    ]
   },
   "0205": {
     "name": "Kakapo",
@@ -5799,7 +5827,14 @@
       "몸길이": "58–64 cm",
       "몸무게": "2–4 kg",
       "수명": "Avg. 60–90 years"
-    }
+    },
+    "nickname": "The owl parrot",
+    "desc": "Kakapos are very special parrots that live in New Zealand. They cannot fly, but they live a long time and eat seeds. Kakapos are nocturnal, active at night.",
+    "facts": [
+      "The kakapo is a flightless parrot.",
+      "It is one of the longest-lived birds in the world.",
+      "Every single kakapo alive has its own name."
+    ]
   },
   "0206": {
     "name": "Lesser Frigatebird",
@@ -5810,7 +5845,14 @@
       "몸길이": "71–81 cm",
       "몸무게": "0.8–1.5 kg",
       "수명": "Avg. 15–25 years"
-    }
+    },
+    "nickname": "Pirate of the skies",
+    "desc": "Frigatebirds are birds with enormous wings. They live mainly near warm islands and eat fish and squid. In the breeding season the pouch at the throat swells up bright red.",
+    "facts": [
+      "A frigatebird's wingspan reaches 2.5 metres.",
+      "Males inflate a bright red throat pouch in the breeding season.",
+      "They sometimes snatch food that other birds have caught."
+    ]
   },
   "0207": {
     "name": "Bald Eagle",
@@ -5821,7 +5863,14 @@
       "몸길이": "70–102 cm",
       "몸무게": "3–6 kg",
       "수명": "Avg. 20–30 years"
-    }
+    },
+    "nickname": "The white-headed eagle",
+    "desc": "Bald eagles are large birds that symbolise the United States. Their heads and tails are white and their bodies brown. They are excellent at catching fish, and they build enormous nests.",
+    "facts": [
+      "The bald eagle is the national bird of the United States.",
+      "It builds the largest nests of any bird in North America.",
+      "Adults have brown bodies, white head and tail, and bright yellow eyes."
+    ]
   },
   "0208": {
     "name": "Osprey",
@@ -5832,7 +5881,14 @@
       "몸길이": "50–66 cm",
       "몸무게": "1.4–2 kg",
       "수명": "Avg. 7–10 years"
-    }
+    },
+    "nickname": "The fish hawk",
+    "desc": "Ospreys are special birds that are very good at catching fish. They live near water, and with wings spread they reach 1.8 metres across. Their heads are white, with a handsome brown band around the eyes.",
+    "facts": [
+      "Ospreys have specially adapted toes for gripping fish.",
+      "They live along rivers, lakes and coasts all over the world.",
+      "Their wingspan can reach 1.8 metres."
+    ]
   },
   "0209": {
     "name": "Black Kite",
@@ -5843,7 +5899,14 @@
       "몸길이": "55–60 cm",
       "몸무게": "0.6–0.9 kg",
       "수명": "Avg. 24 years"
-    }
+    },
+    "nickname": "Cleaner of the skies",
+    "desc": "Black kites spread their broad wings and glide across the sky. They eat mainly carrion and dead fish, and they live in groups. They live about 24 years, and they look magnificent circling for food.",
+    "facts": [
+      "Black kites eat mainly carrion and dead fish.",
+      "They circle high on spread wings while searching for food.",
+      "They live in groups, and some populations migrate."
+    ]
   },
   "0210": {
     "name": "Golden Eagle",
@@ -5854,7 +5917,14 @@
       "몸길이": "70–90 cm",
       "몸무게": "3–6 kg",
       "수명": "Avg. 15–20 years"
-    }
+    },
+    "nickname": "The golden raptor",
+    "desc": "Golden eagles are large birds that fly very fast. The golden sheen on their heads and necks is their trademark. They eat mostly small animals like rabbits and squirrels, and they build their nests high up.",
+    "facts": [
+      "Golden eagles can reach speeds of 240 km/h in a dive.",
+      "They nest mainly on cliffs, in trees, or on utility poles.",
+      "They sometimes hunt large mammals and birds."
+    ]
   },
   "0211": {
     "name": "King Penguin",
@@ -5865,7 +5935,14 @@
       "몸길이": "85–95 cm",
       "몸무게": "9–15 kg",
       "수명": "Avg. 15–20 years"
-    }
+    },
+    "nickname": "The king penguin",
+    "desc": "King penguins are tall, magnificent penguins. They live mainly on islands near Antarctica, eating squid and small fish. They cannot fly, but they swim beautifully underwater!",
+    "facts": [
+      "The king penguin is the second-largest penguin, after the emperor.",
+      "It eats mainly squid and krill.",
+      "It cannot fly, but it is a superb swimmer."
+    ]
   },
   "0212": {
     "name": "Siberian Pipit",
@@ -5876,7 +5953,14 @@
       "몸길이": "14–17 cm",
       "몸무게": "100 g",
       "수명": "Avg. 2–3 years"
-    }
+    },
+    "nickname": "The buff-bellied pipit",
+    "desc": "Pipits are small birds that eat mostly insects. In summer their undersides are pink; in winter their streaks darken. They live mainly in grassland and move to warmer places for winter.",
+    "facts": [
+      "Pipits feed mainly on insects.",
+      "In summer the underside turns a pale pink.",
+      "They winter in southeastern China, Korea and Japan."
+    ]
   },
   "0213": {
     "name": "Secretary Bird",
@@ -5887,7 +5971,14 @@
       "몸길이": "120–150 cm",
       "몸무게": "3.4–4.3 kg",
       "수명": "10–15 years"
-    }
+    },
+    "nickname": "Kick-boxer of the savanna",
+    "desc": "This is a large bird that strides across the grassland on long legs, hunting snakes. It is a very special hunter that catches prey by stamping hard with its feet.",
+    "facts": [
+      "It is called the 'secretary bird' because its head plumes resemble quill pens once tucked behind a clerk's ear.",
+      "It stamps on snakes several times a second with powerful feet to stun them.",
+      "It is a bird of prey, yet it spends most of its time hunting on foot."
+    ]
   },
   "0215": {
     "name": "Resplendent Quetzal",
@@ -5898,7 +5989,14 @@
       "몸길이": "36–40 cm",
       "몸무게": "0.2 kg",
       "수명": "About 20–25 years"
-    }
+    },
+    "nickname": "Jewel of the cloud forest",
+    "desc": "This is a beautiful bird with shimmering green feathers and a very long tail. It lives in the cloud forests of Central America.",
+    "facts": [
+      "The male's tail streamers are far longer than his body, reaching up to 90 cm.",
+      "The ancient Maya and Aztecs considered this bird sacred.",
+      "It is the national bird of Guatemala, whose currency is also called the quetzal."
+    ]
   },
   "0216": {
     "name": "Laughing Kookaburra",
@@ -5909,7 +6007,14 @@
       "몸길이": "40–45 cm",
       "몸무게": "0.3 kg",
       "수명": "About 20 years"
-    }
+    },
+    "nickname": "The laughter of the forest",
+    "desc": "This is a bird whose call sounds like a person laughing out loud. It calls 'wa-ha-ha' through the Australian bush at dawn and dusk.",
+    "facts": [
+      "Its laughing call announces its group's territory.",
+      "Despite the name, it prefers insects and reptiles to fish.",
+      "It beats prey hard against a branch before swallowing it."
+    ]
   },
   "0221": {
     "name": "Northern Gannet",
@@ -5920,7 +6025,14 @@
       "몸길이": "87–100 cm",
       "몸무게": "2.3–3.6 kg",
       "수명": "About 17–25 years"
-    }
+    },
+    "nickname": "The plunge-diving champion",
+    "desc": "This is a large seabird that drops from high in the sky into the sea like an arrow to catch fish. It lives in colonies on the cliffs of the North Atlantic.",
+    "facts": [
+      "It dives into the sea from up to 40 metres at 100 km/h.",
+      "Air sacs in its face and chest cushion the impact.",
+      "Thousands gather on a single cliff to form an enormous breeding colony."
+    ]
   },
   "0222": {
     "name": "European Robin",
@@ -5931,7 +6043,14 @@
       "몸길이": "12.5–14 cm",
       "몸무게": "0.016–0.022 kg",
       "수명": "About 2 years"
-    }
+    },
+    "nickname": "The red-breasted garden friend",
+    "desc": "This is a small, round bird with an orange breast. It lives in the gardens and woods of Europe, singing a clear song.",
+    "facts": [
+      "Both males and females have the orange breast.",
+      "It is famous for singing at night under streetlights.",
+      "In Europe it is loved as a symbol of Christmas."
+    ]
   },
   "0223": {
     "name": "European Goldfinch",
@@ -5942,7 +6061,14 @@
       "몸길이": "12–13 cm",
       "몸무게": "0.014–0.019 kg",
       "수명": "About 2–3 years"
-    }
+    },
+    "nickname": "The red-faced singer",
+    "desc": "This is a small bird with a pretty red face and yellow wing bars. It loves thistle seeds and sings in clear, bright notes.",
+    "facts": [
+      "It picks thistle seeds out with its sharply pointed bill.",
+      "A flock of goldfinches is called a 'charm'.",
+      "It is loved for its bright mix of red, yellow and black."
+    ]
   },
   "0224": {
     "name": "Eurasian Jay",
@@ -5953,7 +6079,14 @@
       "몸길이": "32–35 cm",
       "몸무게": "0.14–0.19 kg",
       "수명": "About 4–5 years"
-    }
+    },
+    "nickname": "The acorn-planting forest keeper",
+    "desc": "This is a relative of the crow, with a pinkish body and beautiful blue wing patches. It is famous for burying acorns in the ground.",
+    "facts": [
+      "It buries thousands of acorns in the ground to prepare for winter.",
+      "Acorns it forgets sprout into trees, helping the forest spread.",
+      "It is very good at mimicking the calls of other birds and animals."
+    ]
   },
   "0225": {
     "name": "Superb Lyrebird",
@@ -5964,7 +6097,14 @@
       "몸길이": "80–100 cm",
       "몸무게": "0.9–1.1 kg",
       "수명": "About 15–30 years"
-    }
+    },
+    "nickname": "Genius of mimicry",
+    "desc": "This is a bird with an extraordinary talent for copying sounds exactly. The male fans out a magnificent tail shaped like a harp to show off.",
+    "facts": [
+      "It imitates camera shutters, chainsaws and other birds with astonishing accuracy.",
+      "The male fans a spectacular tail shaped like a lyre to court females.",
+      "It rakes the soil with its feet to find insects among the leaf litter."
+    ]
   },
   "0226": {
     "name": "Rainbow Lorikeet",
@@ -5975,7 +6115,14 @@
       "몸길이": "25–30 cm",
       "몸무게": "0.1–0.14 kg",
       "수명": "About 7–9 years"
-    }
+    },
+    "nickname": "The flying rainbow",
+    "desc": "This is a brilliantly coloured parrot in blue, green and orange. It laps up nectar from flowers with a brush-tipped tongue.",
+    "facts": [
+      "The tip of its tongue is split like a brush, ideal for sweeping up nectar.",
+      "It moves noisily through the trees in flocks.",
+      "Its whole body is rainbow-coloured, which is how it got its name."
+    ]
   },
   "0227": {
     "name": "Cockatiel",
@@ -5986,7 +6133,14 @@
       "몸길이": "30–33 cm",
       "몸무게": "0.08–0.1 kg",
       "수명": "About 10–15 years"
-    }
+    },
+    "nickname": "The rosy-cheeked parrot",
+    "desc": "This is a small parrot with a pointed crest on the head and orange cheek patches. It lives in the Australian interior and is a very popular pet.",
+    "facts": [
+      "It raises or lowers the crest on its head according to its mood.",
+      "It is the smallest member of the cockatoo family.",
+      "Flocks travel across the interior in search of waterholes."
+    ]
   },
   "0228": {
     "name": "Snowy Owl",
@@ -5997,7 +6151,14 @@
       "몸길이": "52–71 cm",
       "몸무게": "1.6–2.9 kg",
       "수명": "About 9–10 years"
-    }
+    },
+    "nickname": "The snow-white hunter",
+    "desc": "This is a large owl with feathers as white as snow. It lives on the cold Arctic tundra and hunts even in daylight.",
+    "facts": [
+      "Unlike most owls, it hunts actively during the day.",
+      "It can catch more than ten lemmings in a single day.",
+      "Feathers cover even its toes, so it withstands the cold well."
+    ]
   },
   "0229": {
     "name": "Great Blue Heron",
@@ -6008,7 +6169,14 @@
       "몸길이": "91–137 cm",
       "몸무게": "2.1–2.5 kg",
       "수명": "About 15 years"
-    }
+    },
+    "nickname": "The long-necked angler",
+    "desc": "This is a large blue-grey bird with a long neck and legs. It stands motionless at the water's edge and spears fish with its pointed bill.",
+    "facts": [
+      "It is the largest heron in North America.",
+      "It folds its neck into an S and shoots it out like lightning to seize prey.",
+      "In flight it tucks its neck into an S and trails its legs straight behind."
+    ]
   },
   "0230": {
     "name": "African Sacred Ibis",
@@ -6019,7 +6187,14 @@
       "몸길이": "65–89 cm",
       "몸무게": "1.4–1.5 kg",
       "수명": "About 20 years"
-    }
+    },
+    "nickname": "The sacred bird of antiquity",
+    "desc": "This is a bird with a white body, black head and a downward-curving bill. It was considered sacred in ancient Egypt.",
+    "facts": [
+      "In ancient Egypt it symbolised Thoth, the god of wisdom.",
+      "It probes for food in the mud with its long, curved bill.",
+      "It was held so sacred that mummified ibises were offered to the gods."
+    ]
   },
   "0231": {
     "name": "Scarlet Ibis",
@@ -6030,7 +6205,14 @@
       "몸길이": "55–63 cm",
       "몸무게": "0.5–0.65 kg",
       "수명": "About 15–20 years"
-    }
+    },
+    "nickname": "The scarlet jewel of the wetlands",
+    "desc": "This is a beautiful bird whose whole body is a dazzling red. It lives in flocks in the wetlands of South America.",
+    "facts": [
+      "Its red feathers come from pigments in the crabs and shrimp it eats.",
+      "It is one of the national birds of Trinidad and Tobago.",
+      "When hundreds fly together the sky looks stained red."
+    ]
   },
   "0233": {
     "name": "Marabou Stork",
@@ -6041,7 +6223,14 @@
       "몸길이": "115–152 cm",
       "몸무게": "4–9 kg",
       "수명": "About 25 years"
-    }
+    },
+    "nickname": "Cleaner of the savanna",
+    "desc": "This is a large stork with a bald head and a big pouch at the throat. It eats dead animals and keeps the grassland clean.",
+    "facts": [
+      "Being bald keeps its feathers clean while it feeds on carrion.",
+      "Its wingspan exceeds three metres, among the largest of any bird.",
+      "It uses the drooping pink throat pouch to make sounds and to display."
+    ]
   },
   "0235": {
     "name": "California Quail",
@@ -6052,7 +6241,14 @@
       "몸길이": "24–27 cm",
       "몸무게": "0.14–0.23 kg",
       "수명": "About 2–3 years"
-    }
+    },
+    "nickname": "The bird with a teardrop plume",
+    "desc": "This is an endearing small bird with a teardrop-shaped plume curling forward over its head. It scurries through the scrub of the western United States.",
+    "facts": [
+      "The forward-curling teardrop plume on its forehead is its trademark.",
+      "It is the state bird of California.",
+      "In danger it prefers to run into the brush rather than fly."
+    ]
   },
   "0236": {
     "name": "Golden Pheasant",
@@ -6063,7 +6259,14 @@
       "몸길이": "90–105 cm",
       "몸무게": "0.6–0.8 kg",
       "수명": "About 5–6 years"
-    }
+    },
+    "nickname": "The golden-maned pheasant",
+    "desc": "This is a spectacular pheasant with a golden crest and a blend of red, yellow and blue. It lives in the mountain forests of China.",
+    "facts": [
+      "The male is dazzling, with a golden mane and rainbow-coloured body.",
+      "Its long tail makes up more than half its total length.",
+      "Despite its showy looks it is timid and stays hidden in the forest."
+    ]
   },
   "0237": {
     "name": "Tawny Frogmouth",
@@ -6074,7 +6277,14 @@
       "몸길이": "34–53 cm",
       "몸무게": "0.35 kg",
       "수명": "About 10–14 years"
-    }
+    },
+    "nickname": "The night bird that plays at being a tree",
+    "desc": "This is a night-active bird with a wide mouth and bark-like plumage. By day it stays perfectly still, pretending to be a branch.",
+    "facts": [
+      "Its bark-like feathers disguise it so well that it looks like a broken branch.",
+      "It is often mistaken for an owl, but it is actually related to nightjars.",
+      "At night it opens its wide mouth to catch flying insects."
+    ]
   },
   "0238": {
     "name": "Oilbird",
@@ -6085,7 +6295,14 @@
       "몸길이": "40–49 cm",
       "몸무게": "350–475 g",
       "수명": "About 10–15 years"
-    }
+    },
+    "nickname": "Night explorer of the caves",
+    "desc": "The oilbird is a night bird that lives in flocks deep inside the dark caves of South America. Like a bat, it makes sounds to find its way in the darkness, and at night it flies out to pick ripe fruit.",
+    "facts": [
+      "It is one of the very few birds that uses echolocation to fly inside dark caves.",
+      "It is one of the few nocturnal birds that eats only fruit.",
+      "The chicks grow plump on very oily fruit, which is how the 'oilbird' got its name."
+    ]
   },
   "0239": {
     "name": "European Bee-eater",
@@ -6096,7 +6313,14 @@
       "몸길이": "27–29 cm",
       "몸무게": "44–78 g",
       "수명": "About 5–6 years"
-    }
+    },
+    "nickname": "The rainbow bee hunter",
+    "desc": "The European bee-eater is a lovely bird with rainbow-coloured plumage. It catches bees and dragonflies in flight, and digs a burrow in a riverbank to nest.",
+    "facts": [
+      "To avoid being stung, it rubs a captured bee against a branch to remove the sting before eating it.",
+      "It is a migratory bird, travelling all the way to Africa for the winter.",
+      "It digs a tunnel one to two metres long in a riverbank for its nest."
+    ]
   },
   "0240": {
     "name": "Blue Jay",
@@ -6107,7 +6331,14 @@
       "몸길이": "22–30 cm",
       "몸무게": "70–100 g",
       "수명": "About 7 years"
-    }
+    },
+    "nickname": "The blue-feathered chatterbox",
+    "desc": "The blue jay is a clever blue bird found in the woods and parks of North America. It has a talent for mimicking other birds and animals, and it hides acorns in the ground to eat through winter.",
+    "facts": [
+      "It imitates the call of a hawk to startle other birds.",
+      "It buries acorns, and the ones it forgets grow into new trees.",
+      "It has a crest that it raises or lowers depending on its mood."
+    ]
   },
   "0242": {
     "name": "Sulphur-crested Cockatoo",
@@ -6118,7 +6349,14 @@
       "몸길이": "45–55 cm",
       "몸무게": "700–900 g",
       "수명": "20–40 years"
-    }
+    },
+    "nickname": "The yellow-crested parrot",
+    "desc": "The sulphur-crested cockatoo is a large parrot with a snow-white body and a yellow crest. It calls very loudly and is clever enough to copy human speech, and it lives in big flocks across Australia.",
+    "facts": [
+      "It fans its yellow crest wide when excited or startled.",
+      "It is very intelligent, mimicking speech and even using tools.",
+      "One bird in the flock acts as a sentry, watching for danger."
+    ]
   },
   "0243": {
     "name": "Crimson Rosella",
@@ -6129,7 +6367,14 @@
       "몸길이": "32–36 cm",
       "몸무게": "115–170 g",
       "수명": "About 10–20 years"
-    }
+    },
+    "nickname": "The red-and-blue paint bird",
+    "desc": "The crimson rosella is a beautiful parrot with a scarlet body and blue cheeks and wings. It lives in Australian forests eating seeds and fruit, and it starts life green before turning red as it grows.",
+    "facts": [
+      "Young birds are greenish and gradually turn red as they mature.",
+      "The blend of red and blue has earned it the nickname 'living paint'.",
+      "It visits gardens and parks readily, so people know it well."
+    ]
   },
   "0245": {
     "name": "Victoria Crowned Pigeon",
@@ -6140,7 +6385,14 @@
       "몸길이": "73–75 cm",
       "몸무게": "2.4 kg",
       "수명": "About 20 years"
-    }
+    },
+    "nickname": "The lace-crowned pigeon",
+    "desc": "The Victoria crowned pigeon is a very large pigeon wearing a spectacular blue crest like lace. It is one of the largest pigeons in the world, walking the forest floor of New Guinea and picking up fallen fruit.",
+    "facts": [
+      "It is one of the largest pigeons in the world, about the size of a turkey.",
+      "It wears a fan-shaped blue crest that looks like lace.",
+      "It walks slowly across the forest floor gathering fallen fruit."
+    ]
   },
   "0246": {
     "name": "Nicobar Pigeon",
@@ -6151,7 +6403,14 @@
       "몸길이": "40 cm",
       "몸무게": "500–600 g",
       "수명": "About 8–12 years"
-    }
+    },
+    "nickname": "The rainbow-maned pigeon",
+    "desc": "The Nicobar pigeon is a spectacular pigeon with long, glossy hackles trailing from its neck. It shines green, blue and copper, and it is the closest living relative of the extinct dodo.",
+    "facts": [
+      "It is known as the closest living relative of the extinct dodo.",
+      "The hackles on its neck shimmer like a rainbow as the light shifts.",
+      "It travels in flocks between small islands."
+    ]
   },
   "0248": {
     "name": "Humboldt Penguin",
@@ -6162,7 +6421,14 @@
       "몸길이": "56–70 cm",
       "몸무게": "3.6–5.9 kg",
       "수명": "About 15–20 years"
-    }
+    },
+    "nickname": "The warm-water penguin",
+    "desc": "The Humboldt penguin lives in the warm coastal regions of western South America. It catches fish in the cold Humboldt Current and nests among rocks or in burrows to raise its chicks.",
+    "facts": [
+      "It is named after the cold Humboldt Current where it feeds.",
+      "It is said to recognise other individuals by the black band across the chest.",
+      "Living somewhere warm, it releases heat through the bare skin on its face to cool down."
+    ]
   },
   "0250": {
     "name": "Yellow-eyed Penguin",
@@ -6173,7 +6439,14 @@
       "몸길이": "62–79 cm",
       "몸무게": "5–6 kg",
       "수명": "About 20 years"
-    }
+    },
+    "nickname": "The rare yellow-eyed penguin",
+    "desc": "The yellow-eyed penguin has yellow eyes and a yellow band around its head. It is a very rare penguin found only in New Zealand, and unlike other penguins it does not form colonies, nesting quietly in the forest instead.",
+    "facts": [
+      "It is one of the rarest penguins in the world, found only in New Zealand.",
+      "Unlike other penguins it prefers quiet places where nests are out of sight of one another.",
+      "The yellow eyes and the yellow band around the head give it its name."
+    ]
   },
   "0252": {
     "name": "Andean Condor",
@@ -6184,7 +6457,14 @@
       "몸길이": "100–130 cm",
       "몸무게": "11–15 kg",
       "수명": "About 50 years"
-    }
+    },
+    "nickname": "King of the Andean sky",
+    "desc": "The Andean condor has a wingspan of over three metres, making it one of the largest flying birds in the world. It glides through the high skies of the South American Andes with barely a wingbeat, searching for dead animals to eat.",
+    "facts": [
+      "With a wingspan over three metres, it is among the largest flying birds.",
+      "It rides warm updraughts and can stay aloft for hours with almost no wingbeats.",
+      "By clearing away dead animals it acts as nature's cleaner of the skies."
+    ]
   },
   "0254": {
     "name": "African Fish Eagle",
@@ -6195,7 +6475,14 @@
       "몸길이": "63–75 cm",
       "몸무게": "2–3.6 kg",
       "수명": "About 12–24 years"
-    }
+    },
+    "nickname": "The angler of Africa's rivers",
+    "desc": "The African fish eagle is famous for its white head and ringing call. It flies over rivers and lakes and snatches fish with its talons, and its call carries so far that it is known as the voice of Africa.",
+    "facts": [
+      "Its ringing call carries so far it is called 'the voice of Africa'.",
+      "It flies low over the water and seizes fish with sharp talons.",
+      "It is a very close relative of America's bald eagle."
+    ]
   },
   "0255": {
     "name": "Harpy Eagle",
@@ -6206,7 +6493,14 @@
       "몸길이": "86–107 cm",
       "몸무게": "6–9 kg",
       "수명": "About 25–35 years"
-    }
+    },
+    "nickname": "Strongest hunter of the jungle",
+    "desc": "The harpy eagle lives in the rainforests of the Americas and is one of the most powerful eagles in the world. It has a crest of feathers on its head, and with talons as strong as a bear's claws it hunts monkeys and sloths in the trees.",
+    "facts": [
+      "Its talons are as large as a big bear's claws, letting it snatch a monkey in one strike.",
+      "It is one of the most powerful birds of prey in the world.",
+      "When startled or focused it raises the feathers on its head like a crown."
+    ]
   },
   "0256": {
     "name": "Red-tailed Hawk",
@@ -6217,7 +6511,14 @@
       "몸길이": "45–65 cm",
       "몸무게": "0.7–1.5 kg",
       "수명": "About 10–20 years"
-    }
+    },
+    "nickname": "The red-tailed sky hunter",
+    "desc": "The red-tailed hawk is a very common raptor across North America. Its tail is red, just as the name says, and it circles high in the sky looking for small animals like mice and rabbits on the ground.",
+    "facts": [
+      "The ringing hawk cry heard in films and cartoons is usually this bird's call.",
+      "It adapts to many environments and is very common across North America.",
+      "Its superb eyesight lets it spot prey from an enormous distance while circling."
+    ]
   },
   "0257": {
     "name": "American Kestrel",
@@ -6228,7 +6529,14 @@
       "몸길이": "22–31 cm",
       "몸무게": "80–165 g",
       "수명": "About 5 years"
-    }
+    },
+    "nickname": "The palm-sized falcon",
+    "desc": "The American kestrel is the smallest falcon in the Americas, about the size of a pigeon. Its plumage is prettily patterned, and it hovers in mid-air on beating wings before dropping on insects and mice.",
+    "facts": [
+      "It is the smallest falcon in the Americas, about pigeon-sized.",
+      "It beats its wings rapidly to hover in one spot while watching for prey.",
+      "It is said to spot the ultraviolet traces of mouse urine to find the trails prey use."
+    ]
   },
   "0258": {
     "name": "Eurasian Sparrowhawk",
@@ -6239,7 +6547,14 @@
       "몸길이": "28–40 cm",
       "몸무게": "110–200 g",
       "수명": "About 4–10 years"
-    }
+    },
+    "nickname": "The nimble forest hawk",
+    "desc": "The sparrowhawk is a small, quick hawk that lives in woodland and near villages. It flies swiftly between the trees hunting small birds, and the male is far smaller than the female.",
+    "facts": [
+      "It weaves rapidly between trees in pursuit of small birds.",
+      "The male is considerably smaller than the female.",
+      "In Korea it is protected as a natural monument, seen as both a winter visitor and a resident."
+    ]
   },
   "0259": {
     "name": "Burrowing Owl",
@@ -6250,7 +6565,14 @@
       "몸길이": "19–28 cm",
       "몸무게": "140–240 g",
       "수명": "About 6–8 years"
-    }
+    },
+    "nickname": "The owl that lives underground",
+    "desc": "The burrowing owl is an unusual owl that lives in a hole in the ground rather than a tree. It has long legs and is active by day, and it borrows burrows dug by other animals — or digs its own — to nest inside.",
+    "facts": [
+      "Unlike most owls it lives in a burrow in the ground rather than a tree.",
+      "Its long legs let it dash about on the ground catching insects.",
+      "When danger approaches it can imitate a rattlesnake to drive enemies away."
+    ]
   },
   "0260": {
     "name": "Barn Owl",
@@ -6261,7 +6583,14 @@
       "몸길이": "33–39 cm",
       "몸무게": "250–480 g",
       "수명": "About 4–10 years"
-    }
+    },
+    "nickname": "The heart-faced night hunter",
+    "desc": "The barn owl is an owl with a white, heart-shaped face. It flies silently at night and can pinpoint a mouse from the faintest sound, and it lives all over the world.",
+    "facts": [
+      "Its heart-shaped face acts as a dish, funnelling sound to its ears.",
+      "Its soft feathers make its flight almost completely silent.",
+      "Living on every continent except Antarctica, it is one of the most widespread birds in the world."
+    ]
   },
   "0261": {
     "name": "Great Grey Owl",
@@ -6272,7 +6601,14 @@
       "몸길이": "61–84 cm",
       "몸무게": "0.7–1.7 kg",
       "수명": "About 10–15 years"
-    }
+    },
+    "nickname": "Great ghost of the northern forest",
+    "desc": "The great grey owl is a very large owl with grey plumage and an enormous face. It looks bulky, but most of that is thick feathering, so it is light. It can hear a mouse hidden under the snow and punch straight through to catch it.",
+    "facts": [
+      "It is the longest of all owls, though most of that is feathers, so it is lighter than it looks.",
+      "It can hear a mouse beneath more than 50 cm of snow and plunge through to catch it.",
+      "Its huge facial disc funnels even the faintest sounds to its ears."
+    ]
   },
   "0262": {
     "name": "Northern Cardinal",
@@ -6283,7 +6619,14 @@
       "몸길이": "21–23 cm",
       "몸무게": "42–48 g",
       "수명": "About 3–15 years"
-    }
+    },
+    "nickname": "The scarlet crested singer",
+    "desc": "The northern cardinal is a beautiful bird, entirely scarlet with a pointed crest. Males are a striking red while females are a soft brown, and it is famous for its clear, lovely song.",
+    "facts": [
+      "The male is bright scarlet while the female is an inconspicuous soft brown.",
+      "Both males and females sing beautifully, answering one another.",
+      "It is so loved in the United States that several states have made it their state bird."
+    ]
   },
   "0263": {
     "name": "Eastern Bluebird",
@@ -6294,7 +6637,14 @@
       "몸길이": "16–21 cm",
       "몸무게": "27–34 g",
       "수명": "6–10 years"
-    }
+    },
+    "nickname": "The bluebird of happiness",
+    "desc": "This is a small, endearing bird with a blue back and an orange breast. It nests in tree holes or nest boxes and eats insects. Americans are very fond of it.",
+    "facts": [
+      "It readily moves into nest boxes, so people love to watch it.",
+      "It sometimes raises two or three broods in a single year.",
+      "Several US states have made it their state bird."
+    ]
   },
   "0264": {
     "name": "American Robin",
@@ -6305,7 +6655,14 @@
       "몸길이": "23–28 cm",
       "몸무게": "77 g",
       "수명": "2–6 years"
-    }
+    },
+    "nickname": "The bird that announces spring",
+    "desc": "This is a common bird with an orange belly and a grey-brown back. You often see it hopping across lawns hunting earthworms. When spring comes it sings beautifully in the morning.",
+    "facts": [
+      "It walks across lawns, cocking its head as it searches for earthworms.",
+      "It is one of the first birds to sing in spring.",
+      "Its eggs are a lovely sky blue."
+    ]
   },
   "0265": {
     "name": "Red Warbler",
@@ -6316,7 +6673,14 @@
       "몸길이": "12–13 cm",
       "몸무게": "8 g",
       "수명": "About 3–5 years"
-    }
+    },
+    "nickname": "The scarlet mountain sprite",
+    "desc": "This is a tiny bird, entirely scarlet with a white spot on each cheek. It lives only in the high pine forests of Mexico. It works busily through the branches catching insects.",
+    "facts": [
+      "It is found only in the highlands of Mexico.",
+      "Its all-red plumage makes it stand out sharply in the forest.",
+      "The white cheek spot is its trademark."
+    ]
   },
   "0267": {
     "name": "Sword-billed Hummingbird",
@@ -6327,7 +6691,14 @@
       "몸길이": "13–14 cm",
       "몸무게": "12 g",
       "수명": "About 5–8 years"
-    }
+    },
+    "nickname": "The bill longer than its body",
+    "desc": "This is a remarkable hummingbird whose bill is longer than its own body. It is the only bird in the world with a bill longer than its body. That long bill lets it reach nectar deep inside flowers.",
+    "facts": [
+      "It is the only bird whose bill is longer than its body.",
+      "Its bill is so long it has to use its feet to scratch and preen.",
+      "It lives in partnership with flowers that have long tubular blooms."
+    ]
   },
   "0268": {
     "name": "American Goldfinch",
@@ -6338,7 +6709,14 @@
       "몸길이": "11–14 cm",
       "몸무게": "12–18 g",
       "수명": "3–6 years"
-    }
+    },
+    "nickname": "The yellow spring butterfly bird",
+    "desc": "This is a small bird that turns bright yellow all over in summer. It loves seeds and cracks them expertly with its bill. It flies in a bouncing, up-and-down pattern.",
+    "facts": [
+      "It nests late, in high summer, when seeds are plentiful.",
+      "It is one of the rare birds that eats almost nothing but seeds.",
+      "Its plumage changes colour dramatically with the seasons."
+    ]
   },
   "0269": {
     "name": "House Finch",
@@ -6349,7 +6727,14 @@
       "몸길이": "12–15 cm",
       "몸무게": "16–27 g",
       "수명": "2–6 years"
-    }
+    },
+    "nickname": "The red singer of the city",
+    "desc": "This is a small bird whose male has a head and breast that look painted red. It is very common around towns and cities where people live. It chirps cheerfully all day long.",
+    "facts": [
+      "The male's red colour comes from its diet, so it deepens with what he eats.",
+      "It originally lived in the west but has spread widely across the east.",
+      "It will nest under building eaves and even in flowerpots."
+    ]
   },
   "0270": {
     "name": "Eurasian Nuthatch",
@@ -6360,7 +6745,14 @@
       "몸길이": "12–14 cm",
       "몸무게": "17–28 g",
       "수명": "2–4 years"
-    }
+    },
+    "nickname": "The bird that walks down head-first",
+    "desc": "This is a remarkable bird that can walk head-first down a tree trunk. With its sturdy bill it picks insects out from under the bark. It wedges acorns into crevices and hammers them open.",
+    "facts": [
+      "It is one of the few birds that can climb down a tree head-first.",
+      "If the nest hole is too big it plasters the entrance with mud to shrink it.",
+      "It hides food in crevices to prepare for winter."
+    ]
   },
   "0271": {
     "name": "Eurasian Treecreeper",
@@ -6371,7 +6763,14 @@
       "몸길이": "12–14 cm",
       "몸무게": "7–13 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "The little tree climber",
+    "desc": "This is a small brown bird that spirals its way up a tree trunk. Its colour matches the bark so well that it is hard to spot. With a fine curved bill it pulls insects out of the bark.",
+    "facts": [
+      "It spirals around the trunk, always climbing upward.",
+      "Its colouring matches tree bark exactly, so it hides very well.",
+      "It braces itself against the trunk with its stiff tail."
+    ]
   },
   "0272": {
     "name": "Red-rumped Swallow",
@@ -6382,7 +6781,14 @@
       "몸길이": "16–18 cm",
       "몸무게": "19–23 g",
       "수명": "About 4–7 years"
-    }
+    },
+    "nickname": "The red-rumped swallow",
+    "desc": "This is a swallow that looks as if it is wearing a red belt around its waist. It flies quickly through the sky, catching flying insects with its mouth open. It builds a nest of mud shaped like a jar.",
+    "facts": [
+      "It builds a jar-shaped mud nest with a long entrance tunnel.",
+      "It is a migratory bird that travels great distances.",
+      "The red band across the rump distinguishes it from the common swallow."
+    ]
   },
   "0273": {
     "name": "Common Swift",
@@ -6393,7 +6799,14 @@
       "몸길이": "16–17 cm",
       "몸무게": "36–50 g",
       "수명": "5–10 years"
-    }
+    },
+    "nickname": "The bird that never leaves the sky",
+    "desc": "This is an astonishing bird that spends almost its entire life in the air. It eats, drinks and even sleeps on the wing. Its legs are so short it can barely land on the ground, but in the air it is supreme.",
+    "facts": [
+      "It can fly for months without ever touching the ground.",
+      "It takes brief naps while still flying.",
+      "It is among the fastest flying birds of all."
+    ]
   },
   "0274": {
     "name": "Grey Nightjar",
@@ -6404,7 +6817,14 @@
       "몸길이": "28–32 cm",
       "몸무게": "65–110 g",
       "수명": "About 4–6 years"
-    }
+    },
+    "nickname": "Champion of hide-and-seek in the leaves",
+    "desc": "This is a night bird that presses itself against a branch or the ground by day, hidden perfectly among the fallen leaves. After sunset it flies with its wide mouth open, catching moths.",
+    "facts": [
+      "Its plumage matches dead leaves so exactly that it is nearly invisible by day.",
+      "At night it opens its wide mouth to catch insects.",
+      "It builds no nest, laying its eggs directly on the ground."
+    ]
   },
   "0275": {
     "name": "Great Bustard",
@@ -6415,7 +6835,14 @@
       "몸길이": "90–105 cm",
       "몸무게": "10–16 kg",
       "수명": "10–15 years"
-    }
+    },
+    "nickname": "Giant of the grassland",
+    "desc": "This is a large bird, among the heaviest that can still fly. It strides across the wide grassland. The male is spectacular in the breeding season, puffing up his feathers until he looks like a great white flower.",
+    "facts": [
+      "It is among the heaviest birds still capable of flight.",
+      "In the breeding season the male puffs his whole body up until he turns white.",
+      "As its habitat shrinks it has become a globally protected bird."
+    ]
   },
   "0276": {
     "name": "White-naped Crane",
@@ -6426,7 +6853,14 @@
       "몸길이": "120–150 cm",
       "몸무게": "5.6 kg",
       "수명": "About 20–30 years"
-    }
+    },
+    "nickname": "The crane in a grey coat",
+    "desc": "This is an elegant crane with a white nape and a grey body. It has red patches around the eyes. In winter it is a precious visitor to the riverside wetlands of Korea.",
+    "facts": [
+      "It is a rare migratory bird that visits Korea in winter.",
+      "Bare red skin shows around its eyes.",
+      "It travels together in family groups."
+    ]
   },
   "0277": {
     "name": "Common Crane",
@@ -6437,7 +6871,14 @@
       "몸길이": "100–130 cm",
       "몸무게": "4.5–6 kg",
       "수명": "About 20–30 years"
-    }
+    },
+    "nickname": "The black-necked traveller",
+    "desc": "This is a crane with a black neck and head and a red patch on the crown. It flies in V-shaped flocks and travels very long distances. It calls with a ringing, trumpet-like sound.",
+    "facts": [
+      "Thousands sometimes travel together in a single flock.",
+      "Paired birds leap and sing together as though dancing.",
+      "It has a red patch on the crown of its head."
+    ]
   },
   "0278": {
     "name": "Grey Crowned Crane",
@@ -6448,7 +6889,14 @@
       "몸길이": "100–110 cm",
       "몸무게": "3–4 kg",
       "수명": "About 20–25 years"
-    }
+    },
+    "nickname": "The golden-crowned crane",
+    "desc": "This is a beautiful crane with stiff golden feathers rising from its head like a crown. It lives on the African grasslands. White and red markings on its cheeks make it very striking.",
+    "facts": [
+      "The golden feather crown on its head is its most distinctive feature.",
+      "It stamps the ground with its feet to startle insects into moving, then catches them.",
+      "It is the national bird of Uganda and appears on the country's flag."
+    ]
   },
   "0280": {
     "name": "Black-winged Stilt",
@@ -6459,7 +6907,14 @@
       "몸길이": "33–40 cm",
       "몸무게": "160–200 g",
       "수명": "About 5–12 years"
-    }
+    },
+    "nickname": "The pink stilt legs",
+    "desc": "This is an elegant bird with extremely long pink legs for its size. It strides through shallow water on those long legs looking for food. Its white body contrasts crisply with black wings.",
+    "facts": [
+      "It has among the longest legs of any bird relative to its body size.",
+      "It strides through shallow water catching food.",
+      "It calls loudly to drive away anything that comes near its nest."
+    ]
   },
   "0281": {
     "name": "Pied Avocet",
@@ -6470,7 +6925,14 @@
       "몸길이": "42–46 cm",
       "몸무게": "250–400 g",
       "수명": "About 10–15 years"
-    }
+    },
+    "nickname": "The upturned bill",
+    "desc": "This is a distinctive bird whose bill curves gently upward. It is a neat-looking bird in white and black. It sweeps its bill from side to side through shallow water to filter out food.",
+    "facts": [
+      "Its upturned bill is ideal for sweeping through water.",
+      "It filters food by swinging its bill from side to side.",
+      "It nests in noisy colonies that defend the site together."
+    ]
   },
   "0282": {
     "name": "Northern Lapwing",
@@ -6481,7 +6943,14 @@
       "몸길이": "28–31 cm",
       "몸무게": "128–330 g",
       "수명": "About 4–10 years"
-    }
+    },
+    "nickname": "The bird with a horn crest",
+    "desc": "This is a bird with a fine, long feather rising from the back of its head like a horn. Its back shines green. In flight it flaps its broad wings in a tumbling, acrobatic style.",
+    "facts": [
+      "The long crest rising from the back of the head is its trademark.",
+      "When an enemy approaches it feigns injury to lure them away from the nest.",
+      "It flaps its rounded wings in an acrobatic, tumbling flight."
+    ]
   },
   "0284": {
     "name": "Black-headed Gull",
@@ -6492,7 +6961,14 @@
       "몸길이": "34–37 cm",
       "몸무게": "200–350 g",
       "수명": "About 10–15 years"
-    }
+    },
+    "nickname": "The chocolate-headed gull of summer",
+    "desc": "This is a small gull with a red bill and legs whose head turns chocolate-coloured in summer. It lives in flocks along rivers and coasts. In winter its head turns white again.",
+    "facts": [
+      "In summer its head turns chocolate brown.",
+      "It lives in noisy flocks, calling together.",
+      "It is good at finding food close to people."
+    ]
   },
   "0285": {
     "name": "Common Tern",
@@ -6503,7 +6979,14 @@
       "몸길이": "31–35 cm",
       "몸무게": "110–145 g",
       "수명": "About 12–20 years"
-    }
+    },
+    "nickname": "The diving champion",
+    "desc": "This is a slim seabird with a forked tail like a swallow's. When it spots a fish it dives from the sky into the water like an arrow to catch it. Its pointed wings and quick movements are magnificent.",
+    "facts": [
+      "It plunges from the sky into the water to catch fish.",
+      "Its tail is deeply forked like a swallow's.",
+      "It is a migratory bird that travels very long distances."
+    ]
   },
   "0287": {
     "name": "Great Cormorant",
@@ -6514,7 +6997,14 @@
       "몸길이": "80–100 cm",
       "몸무게": "2.1–2.5 kg",
       "수명": "About 11–20 years"
-    }
+    },
+    "nickname": "The diving fisher",
+    "desc": "This is a black water bird that dives underwater and chases fish. When it finishes swimming it spreads its wings wide to dry its wet feathers. It swims across the surface with its neck stretched long.",
+    "facts": [
+      "It dives underwater and pursues fish to catch them.",
+      "Its feathers get wet, so it spreads its wings to dry them in the sun.",
+      "In old China and Japan people used this bird to catch fish."
+    ]
   },
   "0288": {
     "name": "Great Crested Grebe",
@@ -6525,7 +7015,14 @@
       "몸길이": "46–51 cm",
       "몸무게": "0.6–1.5 kg",
       "수명": "About 10–15 years"
-    }
+    },
+    "nickname": "Master diver of the water",
+    "desc": "This is a water bird with horn-like feather tufts on its head. It slips underwater to catch fish. In the breeding season it is famous for dancing face to face with its mate.",
+    "facts": [
+      "It carries its chicks on its back while swimming.",
+      "In courtship a pair face each other holding waterweed and dance.",
+      "In danger it dives underwater to escape rather than flying away."
+    ]
   },
   "0289": {
     "name": "Common Loon",
@@ -6536,7 +7033,14 @@
       "몸길이": "66–91 cm",
       "몸무게": "2.7–6.3 kg",
       "수명": "About 20–30 years"
-    }
+    },
+    "nickname": "Diver of the northern lakes",
+    "desc": "This is a large water bird with a sharply pointed bill that is excellent at catching fish underwater. Its call is haunting and carries a long way. Its legs sit far back on its body, so it swims well but walks poorly on land.",
+    "facts": [
+      "Its heavy bones make diving easy.",
+      "It sometimes dives more than 60 metres deep.",
+      "With its legs set far back it walks awkwardly on land."
+    ]
   },
   "0290": {
     "name": "Common Shelduck",
@@ -6547,7 +7051,14 @@
       "몸길이": "58–67 cm",
       "몸무게": "0.8–1.5 kg",
       "수명": "About 10–15 years"
-    }
+    },
+    "nickname": "The red-billed dandy",
+    "desc": "This is a duck with a white body, a dark greenish-black head and a chestnut band across the breast. The male has a red knob above the bill. It filters small creatures from tidal mud.",
+    "facts": [
+      "The male's red knob above the bill swells in the breeding season.",
+      "It sometimes nests in rabbit burrows or tree holes.",
+      "Several families may pool their ducklings and raise them together."
+    ]
   },
   "0291": {
     "name": "Mallard",
@@ -6558,7 +7069,14 @@
       "몸길이": "50–65 cm",
       "몸무게": "0.7–1.6 kg",
       "수명": "About 5–10 years"
-    }
+    },
+    "nickname": "The green-headed chief",
+    "desc": "This is the duck we see most often of all. The male has a glossy green head and the female is brown. It is the ancestor of the domestic duck, and it eats waterweed, seeds and insects alike.",
+    "facts": [
+      "It is the ancestor of most domestic ducks.",
+      "It feeds by tipping head-down into the water with its tail in the air.",
+      "The male's glossy green head shifts colour depending on the light."
+    ]
   },
   "0292": {
     "name": "Northern Pintail",
@@ -6569,7 +7087,14 @@
       "몸길이": "51–66 cm",
       "몸무게": "0.5–1.3 kg",
       "수명": "About 10–15 years"
-    }
+    },
+    "nickname": "The needle-tailed gentleman",
+    "desc": "This is a duck with a long neck and a tail as long and fine as a needle. The male is handsome, with a chocolate head and a white neck. It is a migratory bird that travels very long distances.",
+    "facts": [
+      "The male's needle-like tail is what gives the pintail its name.",
+      "It makes very long migrations that span much of the globe.",
+      "Its long neck lets it reach food deeper below the surface."
+    ]
   },
   "0293": {
     "name": "Northern Shoveler",
@@ -6580,7 +7105,14 @@
       "몸길이": "44–52 cm",
       "몸무게": "0.4–0.8 kg",
       "수명": "About 10 years"
-    }
+    },
+    "nickname": "The spoon-billed duck",
+    "desc": "This duck is easy to recognise by its broad, spoon-shaped bill. It uses that wide bill to strain small creatures from the water. The male has a green head and a white breast.",
+    "facts": [
+      "It strains the water for food with its broad, spoon-like bill.",
+      "Comb-like ridges inside the bill filter out tiny food items.",
+      "It swims in circles to stir the water and bring food to the surface."
+    ]
   },
   "0294": {
     "name": "Common Goldeneye",
@@ -6591,7 +7123,14 @@
       "몸길이": "40–50 cm",
       "몸무게": "0.5–1.3 kg",
       "수명": "About 10–15 years"
-    }
+    },
+    "nickname": "The golden-eyed diving duck",
+    "desc": "It is called the goldeneye because its eyes are a golden yellow. The male has a black head with a round white spot on the cheek. It dives underwater to catch shellfish and insects.",
+    "facts": [
+      "Its golden eyes are what give the goldeneye its name.",
+      "It nests in tree holes, and the ducklings leap out as soon as they hatch.",
+      "It dives to catch shellfish and insects on the bottom."
+    ]
   },
   "0295": {
     "name": "Mute Swan",
@@ -6602,7 +7141,14 @@
       "몸길이": "125–170 cm",
       "몸무게": "8.5–12 kg",
       "수명": "About 10–20 years"
-    }
+    },
+    "nickname": "The elegant white swan",
+    "desc": "This is a large bird, pure white all over with a long, elegant neck. It has a black knob above its orange bill. It looks beautiful gliding across the water.",
+    "facts": [
+      "It is one of the heaviest flying birds.",
+      "The black knob above the bill distinguishes it from other swans.",
+      "Its long neck lets it graze on plants deep below the surface."
+    ]
   },
   "0298": {
     "name": "Black-capped Kingfisher",
@@ -6613,7 +7159,14 @@
       "몸길이": "28–30 cm",
       "몸무게": "0.07–0.09 kg",
       "수명": "About 6–10 years"
-    }
+    },
+    "nickname": "The black-capped kingfisher",
+    "desc": "This is a beautiful kingfisher with a black head, glossy blue back and wings, and a bright red bill. It waits by the water and snatches up fish and frogs in an instant.",
+    "facts": [
+      "The red bill, black head and blue wings make it very striking.",
+      "It watches from the waterside and seizes prey in an instant.",
+      "It digs a burrow into an earth bank to nest."
+    ]
   },
   "0299": {
     "name": "Grey-headed Woodpecker",
@@ -6624,7 +7177,14 @@
       "몸길이": "25–28 cm",
       "몸무게": "0.11–0.17 kg",
       "수명": "About 5–10 years"
-    }
+    },
+    "nickname": "The green-backed tree doctor",
+    "desc": "This is a woodpecker with a green back and a grey head. It taps at trees with its bill to catch the insects living inside. It is especially fond of ants.",
+    "facts": [
+      "It extends its long tongue to hook ants out from inside the wood.",
+      "It drums on trees with its bill to announce its territory.",
+      "The male has a red spot on the forehead."
+    ]
   },
   "0300": {
     "name": "Goldcrest",
@@ -6635,7 +7195,14 @@
       "몸길이": "8.5–9.5 cm",
       "몸무게": "0.005–0.007 kg",
       "수명": "About 2–4 years"
-    }
+    },
+    "nickname": "Europe's baby bird",
+    "desc": "This is one of the smallest birds in Europe. It has a yellow and orange stripe on the crown of its head. It is so tiny that it darts quickly between branches catching small insects.",
+    "facts": [
+      "It is one of the smallest birds in Europe.",
+      "It raises the yellow stripe on its crown to show how it feels.",
+      "Being so tiny, it huddles together in groups to survive the cold."
+    ]
   },
   "0301": {
     "name": "Green Sea Turtle",
@@ -10538,7 +11105,14 @@
       "몸길이": "110–140 cm",
       "몸무게": "4–7 kg",
       "수명": "30–50 years"
-    }
+    },
+    "nickname": "The shoe-billed bird",
+    "desc": "This is a large bird with a bill shaped like an enormous shoe. It stands perfectly still in the swamp and then snatches up a fish in one go.",
+    "facts": [
+      "Its bill looks like a wooden clog, which gives the shoebill its name.",
+      "It can stand as still as a statue for hours while waiting for prey.",
+      "Shoebills greet one another by clattering their bills together."
+    ]
   },
   "0217": {
     "name": "Mandarin Duck",
@@ -10549,7 +11123,14 @@
       "몸길이": "41–49 cm",
       "몸무게": "0.4–0.7 kg",
       "수명": "6–12 years"
-    }
+    },
+    "nickname": "The colourful duck on the water",
+    "desc": "This is a small duck whose male has plumage as bright as a rainbow. It lives happily alongside its mate on ponds and riverbanks.",
+    "facts": [
+      "The male has distinctive orange 'sail' feathers that rise from the wings.",
+      "Known for devotion to its mate, it has long symbolised marital harmony.",
+      "It nests in tree holes, and the ducklings leap from a great height to reach the water."
+    ]
   },
   "0218": {
     "name": "Wood Duck",
@@ -10560,7 +11141,14 @@
       "몸길이": "47–54 cm",
       "몸무게": "0.5–0.9 kg",
       "수명": "3–5 years"
-    }
+    },
+    "nickname": "The colourful forest duck",
+    "desc": "This is a duck with a glossy green head and beautifully patterned plumage. It lives in the ponds and swamps of North American woodland.",
+    "facts": [
+      "It is one of the few ducks that nests in tree holes.",
+      "Newly hatched ducklings leap from the high nest and head for the water.",
+      "It has claws, which let it perch on branches."
+    ]
   },
   "0219": {
     "name": "Muscovy Duck",
@@ -10571,7 +11159,14 @@
       "몸길이": "66–84 cm",
       "몸무게": "1.1–4 kg",
       "수명": "8–12 years"
-    }
+    },
+    "nickname": "The knobby-faced duck",
+    "desc": "This is a large duck with red, fleshy growths on its face. It lives along the rivers and forests of Central and South America, and people keep it too.",
+    "facts": [
+      "The red facial caruncles make it easy to tell apart from other ducks.",
+      "Unlike other ducks it does not quack, making a quiet hiss instead.",
+      "Its claws let it grip trees and perch on branches."
+    ]
   },
   "0220": {
     "name": "Atlantic Puffin",
@@ -10582,7 +11177,14 @@
       "몸길이": "28–30 cm",
       "몸무게": "0.4 kg",
       "수명": "20–25 years"
-    }
+    },
+    "nickname": "Clown of the sea",
+    "desc": "This is an endearing seabird with a large, brightly coloured bill. It digs a burrow in the cliffs and swims underwater to catch fish.",
+    "facts": [
+      "In the breeding season its bill turns a vivid orange and yellow.",
+      "It can carry several fish in its bill at once.",
+      "It 'flies' underwater with its wings and dives over 60 metres deep."
+    ]
   },
   "0232": {
     "name": "Roseate Spoonbill",
@@ -10593,7 +11195,14 @@
       "몸길이": "71–86 cm",
       "몸무게": "1.2–1.8 kg",
       "수명": "10–15 years"
-    }
+    },
+    "nickname": "The pink spoon-billed bird",
+    "desc": "This is a bird with a spoon-shaped bill and pink plumage. It sweeps its bill through shallow water to catch food.",
+    "facts": [
+      "It swings its spoon-shaped bill side to side underwater to find food.",
+      "Its pink colour comes from pigments in its food.",
+      "It is often confused with flamingos, but the bill shape is completely different."
+    ]
   },
   "0234": {
     "name": "Helmeted Guineafowl",
@@ -10604,7 +11213,14 @@
       "몸길이": "53–63 cm",
       "몸무게": "1.3 kg",
       "수명": "10–15 years"
-    }
+    },
+    "nickname": "The helmeted grassland fowl",
+    "desc": "This is a bird with a horn-like helmet on its head and a body covered in white spots. It walks the African grasslands in flocks.",
+    "facts": [
+      "The bony helmet (casque) on its head is what gives it the name 'helmeted'.",
+      "It is prized on farms for eating ticks and pest insects.",
+      "When it senses danger it alerts the flock with a loud, harsh call."
+    ]
   },
   "0241": {
     "name": "King Bird-of-paradise",
@@ -10615,7 +11231,14 @@
       "몸길이": "16 cm",
       "몸무게": "45–65 g",
       "수명": "5–8 years"
-    }
+    },
+    "nickname": "The red jewel of the forest",
+    "desc": "The king bird-of-paradise is a tiny, brilliant bird-of-paradise from the rainforests of New Guinea. It has scarlet feathers with curled green discs at the tail tips, and the male dances beautifully for the female.",
+    "facts": [
+      "It is one of the smallest of all birds-of-paradise.",
+      "Two curled green feather discs decorate the tips of its tail.",
+      "The male hangs from a branch and spreads his feathers in an elaborate courtship dance."
+    ]
   },
   "0244": {
     "name": "Great Argus",
@@ -10626,7 +11249,14 @@
       "몸길이": "160–200 cm",
       "몸무게": "2.0–2.7 kg",
       "수명": "15 years"
-    }
+    },
+    "nickname": "The eye-spotted pheasant",
+    "desc": "The great argus is a very large pheasant from the rainforests of Southeast Asia. The male's wings are covered in round, eye-like markings, and he spreads them like an enormous fan before the female.",
+    "facts": [
+      "The many eye-spots on its wings earned it the name of Argus, the many-eyed giant of Greek myth.",
+      "The male clears a patch of forest floor as a stage and spreads his wings in a courtship dance.",
+      "The eye-spots catch the light so they look three-dimensional, as if they stand out from the wing."
+    ]
   },
   "0247": {
     "name": "Tufted Puffin",
@@ -10637,7 +11267,14 @@
       "몸길이": "35–40 cm",
       "몸무게": "700–900 g",
       "수명": "15–20 years"
-    }
+    },
+    "nickname": "The yellow-tufted sea clown",
+    "desc": "The tufted puffin is an endearing seabird with a big orange bill and golden tufts trailing back from above its eyes. It swims underwater to catch fish and raises its chick in a burrow on the cliffs.",
+    "facts": [
+      "In the breeding season long golden tufts grow above its eyes.",
+      "It swims with its wings and can carry several fish in its bill at once.",
+      "It digs a burrow into the cliff soil to lay its egg and raise its chick."
+    ]
   },
   "0249": {
     "name": "Macaroni Penguin",
@@ -10648,7 +11285,14 @@
       "몸길이": "70 cm",
       "몸무게": "5–6 kg",
       "수명": "8–15 years"
-    }
+    },
+    "nickname": "The yellow-browed dandy penguin",
+    "desc": "The macaroni penguin is a penguin with showy yellow plumes sweeping back above its eyes. It catches krill and fish in the seas near Antarctica, and it is one of the most numerous penguins in the world.",
+    "facts": [
+      "It is named after 'macaroni', an old word for a flamboyantly dressed dandy.",
+      "Orange-yellow plumes sweeping back above the eyes are its trademark.",
+      "It is among the most numerous penguin species, though its numbers have declined recently."
+    ]
   },
   "0251": {
     "name": "Little Penguin",
@@ -10659,7 +11303,14 @@
       "몸길이": "30–33 cm",
       "몸무게": "1–1.5 kg",
       "수명": "6–7 years"
-    }
+    },
+    "nickname": "The smallest penguin on Earth",
+    "desc": "The little penguin is the smallest penguin in the world, standing only about two hand-spans tall. Its blue back makes it hard to see underwater, and at night it comes out of the sea and waddles back to its beach burrow.",
+    "facts": [
+      "It is the smallest penguin in the world, standing no higher than an adult's knee.",
+      "Its bluish back has earned it the name 'blue penguin'.",
+      "At night it comes ashore in groups and waddles back to its burrow."
+    ]
   },
   "0253": {
     "name": "Bearded Vulture",
@@ -10670,7 +11321,14 @@
       "몸길이": "94–125 cm",
       "몸무게": "4.5–7.8 kg",
       "수명": "20–40 years"
-    }
+    },
+    "nickname": "The bone-eating vulture",
+    "desc": "The bearded vulture is a large vulture with black bristles like a beard beneath its bill. Unusually, it eats mostly bone — it carries large bones high into the air, drops them onto rock to crack them, and eats the marrow inside.",
+    "facts": [
+      "It is one of the very few birds whose diet is mostly bone.",
+      "It carries large bones high up and drops them onto rock to crack them open for the marrow.",
+      "It enjoys dust baths, which can stain its white feathers a rusty red."
+    ]
   },
   "0266": {
     "name": "Ruby-throated Hummingbird",
@@ -10681,7 +11339,14 @@
       "몸길이": "7–9 cm",
       "몸무게": "3 g",
       "수명": "3–5 years"
-    }
+    },
+    "nickname": "The ruby-throated hummingbird",
+    "desc": "This is a tiny hummingbird whose male has a throat that glows ruby red. It beats its wings dozens of times a second so it can hold still in the air. It sips nectar from flowers with its long bill.",
+    "facts": [
+      "It crosses the Gulf of Mexico in a single non-stop flight.",
+      "It beats its wings more than 50 times a second.",
+      "It weighs less than a single coin."
+    ]
   },
   "0279": {
     "name": "Pheasant-tailed Jacana",
@@ -10692,7 +11357,14 @@
       "몸길이": "39–58 cm",
       "몸무게": "120–230 g",
       "수명": "5–7 years"
-    }
+    },
+    "nickname": "The bird that walks on lily pads",
+    "desc": "This is a bird with such long toes that it can walk across lily pads floating on the water. In summer it grows a long tail like a pheasant's. Remarkably, it is the father who incubates the eggs and cares for the chicks.",
+    "facts": [
+      "Its long toes let it walk across lily pads on the water.",
+      "The male incubates the eggs and raises the chicks.",
+      "In summer it grows a long tail like a pheasant's."
+    ]
   },
   "0283": {
     "name": "Eurasian Curlew",
@@ -10703,7 +11375,14 @@
       "몸길이": "50–60 cm",
       "몸무게": "600–1000 g",
       "수명": "10–20 years"
-    }
+    },
+    "nickname": "The long downcurved bill",
+    "desc": "This is a large wader with a very long, downcurved bill. It pushes that bill deep into tidal mud to pull out crabs and worms. It calls with a plaintive, curling cry.",
+    "facts": [
+      "It pulls food from the mud with its long, curved bill.",
+      "It is among the largest waders in Europe.",
+      "Its numbers are falling as tidal flats disappear."
+    ]
   },
   "0286": {
     "name": "Arctic Tern",
@@ -10714,7 +11393,14 @@
       "몸길이": "33–39 cm",
       "몸무게": "85–130 g",
       "수명": "20–30 years"
-    }
+    },
+    "nickname": "Champion traveller of the Earth",
+    "desc": "This is the bird that travels the greatest distance on Earth. It goes from the Arctic to the Antarctic and back again. As a result it enjoys more summer and more daylight than any other bird all year round.",
+    "facts": [
+      "Travelling between the Arctic and Antarctic, it migrates farther than any animal on Earth.",
+      "Over a lifetime it flies the equivalent of several round trips to the Moon.",
+      "It sees more daylight and more summer than any other bird on Earth."
+    ]
   },
   "0296": {
     "name": "Greater White-fronted Goose",
@@ -10725,7 +11411,14 @@
       "몸길이": "64–81 cm",
       "몸무게": "1.9–3.3 kg",
       "수명": "15–20 years"
-    }
+    },
+    "nickname": "The white-fronted goose",
+    "desc": "This goose is recognised by the white patch on the forehead above the bill. Its belly carries black barring. In winter it arrives in Korea's rice fields and wetlands in great flocks.",
+    "facts": [
+      "The white forehead is what gives this goose its name.",
+      "It is one of the best-known winter migrants to Korea.",
+      "It travels together in family groups."
+    ]
   },
   "0297": {
     "name": "Brant Goose",
@@ -10736,7 +11429,14 @@
       "몸길이": "55–66 cm",
       "몸무게": "1.2–2.2 kg",
       "수명": "15–20 years"
-    }
+    },
+    "nickname": "The black goose of the shore",
+    "desc": "This is a small goose with a black head and neck. It has a small white necklace marking on the throat. It is well known for feeding on seaweed along the shore.",
+    "facts": [
+      "Unlike other geese it feeds mainly on coastal seaweed.",
+      "It raises its young on the Arctic tundra and comes south for winter.",
+      "It wears a small white necklace marking on the neck."
+    ]
   },
   "0304": {
     "name": "Chameleon",
