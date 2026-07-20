@@ -74,7 +74,7 @@ export const PROVIDERS: ProviderConfig[] = [
     ],
   },
   {
-    id: "mock", name: "모의(테스트)", enabled: false, apiKeyConfigured: true,
+    id: "mock", name: "모의(테스트)", enabled: true, apiKeyConfigured: true,
     models: [
       { id: "mock-model", name: "Mock", providerId: "mock", active: true,
         inputCost: 0, outputCost: 0, capabilities: cap({ fast: true, writing: true, reasoning: true, structuredOutput: true, longContext: true }) },
@@ -102,10 +102,12 @@ export function isUsable(ref: ModelRef): boolean {
 
 /** 프리셋 = 역할(ModelClass)마다 후보 모델을 우선순위로 나열한 것 */
 export type Preset = {
-  id: "economy" | "standard" | "premium";
+  id: string;
   label: string;
   desc: string;
   bind: Record<ModelClass, ModelRef[]>;
+  /** 사용자에게 보여줄 프리셋인가 (mock은 숨김) */
+  selectable?: boolean;
 };
 
 const A = (modelId: string): ModelRef => ({ providerId: "anthropic", modelId });
@@ -146,9 +148,19 @@ export const PRESETS: Preset[] = [
   },
 ];
 
+const M = (): ModelRef => ({ providerId: "mock", modelId: "mock-model" });
+/** 키 없이 전체 흐름을 돌려보는 프리셋 — UI 목록에는 안 보인다 */
+export const MOCK_PRESET: Preset = {
+  id: "mock", label: "모의 실행", desc: "키 없이 흐름만 검증", selectable: false,
+  bind: { fast: [M()], balanced: [M()], writing: [M()], reasoning: [M()], judge: [M()] },
+};
+
 export function presetById(id: string): Preset {
+  if (id === "mock") return MOCK_PRESET;
   return PRESETS.find((p) => p.id === id) || PRESETS[1];
 }
+/** 화면 드롭다운에 노출할 프리셋 */
+export const SELECTABLE_PRESETS = PRESETS;
 
 /**
  * 역할 → 실제로 쓸 모델 목록(1순위 + 폴백들).

@@ -1,90 +1,165 @@
-// Workflow = 하나의 AI가 아니라 "AI 회사".
-// 여러 Agent가 각자 역할·모델을 갖고 협업하며, Judge 판정에 따라 되돌아가 다시 일한다.
-// ⚠️ 절대 "Workflow = 모델 호출 한 번"으로 구현하지 말 것 (기획서 핵심 원칙).
+// Workflow = 여러 역할 노드 + 여러 모델 + 외부 API + 조건 분기 + 반복.
+// 이 타입들은 블로그 전용이 아니다 — 어떤 워크플로우든 같은 엔진으로 돈다.
 
-import type { ModelPick, Provider } from "./providers";
+import type { ModelClass, ModelRef, ProviderId } from "./models";
+import type { SearchResult } from "./search";
 
-/** 이 Agent가 하려면 무엇이 연결돼 있어야 하는가 */
-export type Capability = "llm" | "search" | "publish" | "deliver";
+export type NodeKind = "llm" | "search" | "code";
 
-export type AgentDef = {
+/** 노드가 프롬프트/질의/코드를 만들 때 받는 것 */
+export type NodeCtx = {
+  /** 사용자가 넣은 원본 입력 */
+  userInput: Record<string, unknown>;
+  /** 지금까지의 노드 결과 (id → 파싱된 값 또는 문자열) */
+  out: Record<string, unknown>;
+  /** 실행 설정 */
+  settings: RunSettings;
+};
+
+export type NodeDef = {
   id: string;
-  label: string;         // 화면 표시 (기획 / 조사 / 작성 …)
+  /** 관리자용 실제 노드명 */
+  label: string;
+  /** 일반 사용자에게 보여줄 이름 (모델·내부구조 숨김) */
+  userLabel: string;
   emoji?: string;
-  capability: Capability;
-  /** 이 Agent의 정체성 */
-  role: string;
-  /** 실제로 할 일 */
-  instruction: string;
-  /** 참조할 앞 Agent들의 결과 */
-  inputs?: string[];
-  /** 기획서의 Priority 1/2/3 — 연결된 첫 번째가 선택된다 */
-  models: ModelPick[];
+  kind: NodeKind;
+  /** llm 노드 — 역할만 선언한다. 실제 모델은 프리셋이 정한다 */
+  modelClass?: ModelClass;
+  temperature?: number;
   maxTokens?: number;
-  /** Judge Agent — 점수가 min 미만이면 retryFrom부터 다시 실행 */
-  judge?: {
-    min: number;         // 통과 기준 점수(100점 만점)
-    retryFrom: string;   // 다시 시작할 Agent id
-    maxRetry: number;    // 최대 재작업 횟수 (비용 폭주 방지)
-  };
+  /** JSON 출력을 기대 → 파싱 실패 시 같은 모델 1회 재시도 후 폴백 */
+  json?: boolean;
+  /** 이 노드가 쓴 provider는 피한다 (Writer≠Judge 원칙) */
+  avoidProviderOf?: string;
+  prompt?: (ctx: NodeCtx) => string;
+  /** search 노드가 던질 질의들 */
+  queries?: (ctx: NodeCtx) => string[];
+  /** code 노드 — LLM 없이 조합만 */
+  run?: (ctx: NodeCtx) => unknown;
+  /** 심사 노드 — 기준 미달이면 rewriteNode로 보냈다가 다시 돌아온다.
+   *  contentNodes: 심사 대상 본문이 담긴 노드들(뒤쪽 우선). 최고 점수 본문을 보존하는 데 쓴다. */
+  judge?: { passScore: number; rewriteNode: string; maxRewrite: number; contentNodes?: string[] };
+  /** 재작성 노드 — 평상시엔 건너뛰고, 심사 탈락 때만 실행 */
+  onlyWhenRewrite?: boolean;
+};
+
+export type RunSettings = {
+  tone: string;
+  targetLength: number;
+  outputFormat: "markdown" | "html" | "text";
+  articleType: string;
+  passScore: number;
+  maxRewriteCount: number;
+  language: string;
+};
+
+export const DEFAULT_SETTINGS: RunSettings = {
+  tone: "친근하지만 전문적인 문체",
+  targetLength: 2500,
+  outputFormat: "markdown",
+  articleType: "information",
+  passScore: 90,
+  maxRewriteCount: 2,
+  language: "ko",
 };
 
 export type WorkflowDef = {
   id: string;
   label: string;
-  /** 사용자에게 보이는 한 줄 — 내부 Agent 구성은 보여주지 않는다 */
   description: string;
-  inputLabel: string;
-  inputPlaceholder: string;
-  agents: AgentDef[];
+  /** 사용자 입력 폼 정의 */
+  fields: InputField[];
+  nodes: NodeDef[];
+  defaultSettings: RunSettings;
 };
 
-export type NodeStatus = "wait" | "run" | "done" | "error" | "skip";
+export type InputField = {
+  key: string;
+  label: string;
+  placeholder?: string;
+  required?: boolean;
+  type: "text" | "textarea" | "number" | "select";
+  options?: { value: string; label: string }[];
+};
 
-/** Agent 1개의 실행 기록 — 원가·시간 실측의 단위 */
-export type NodeRun = {
+export type NodeStatus = "pending" | "running" | "completed" | "failed" | "skipped";
+
+/** 노드 1회 실행 기록 — 저장·재실행·원가 분석의 단위 */
+export type NodeExecution = {
+  id: string;
+  executionId: string;
   nodeId: string;
   status: NodeStatus;
-  provider?: Provider;
-  model?: string;
-  output?: string;
+  provider?: ProviderId;
+  modelId?: string;
+  fallbackUsed?: boolean;
+  input?: unknown;
+  output?: unknown;
   error?: string;
-  /** 미연동이라 건너뛴 이유 */
   skipReason?: string;
-  /** Judge 재작업으로 여러 번 돌았을 수 있다 */
-  attempts?: number;
-  score?: number;        // Judge만
-  ms?: number;           // 누적
-  inputTokens?: number;  // 누적
-  outputTokens?: number; // 누적
-  cacheReadTokens?: number;
-  cacheWriteTokens?: number;
-  costKrw?: number;      // 누적
+  promptTokens?: number;
+  completionTokens?: number;
+  estimatedCost?: number;   // KRW
+  latencyMs?: number;
+  retryCount?: number;
+  attempts?: number;        // 재작성 등으로 여러 번 돈 횟수
+  startedAt?: string;
+  completedAt?: string;
 };
 
-export type RunStatus = "idle" | "running" | "done" | "error" | "canceled";
+export type JudgeIssue = {
+  category: string;
+  targetSectionId?: string;
+  severity?: "low" | "medium" | "high";
+  message: string;
+  recommendedAction?: string;
+};
+export type JudgeResult = {
+  totalScore: number;
+  passed?: boolean;
+  scores?: Record<string, number>;
+  issues?: JudgeIssue[];
+};
 
-export type RunState = {
+export type FinalOutput = {
+  title: string;
+  content: string;
+  metaTitle: string;
+  metaDescription: string;
+  slug: string;
+  tags: string[];
+  imagePrompt: string;
+  qualityScore: number;
+  qualityDetails: Record<string, unknown>;
+  sources: SearchResult[];
+  executionSummary: {
+    totalNodes: number;
+    completedNodes: number;
+    rewriteCount: number;
+    totalTokens: number;
+    estimatedCost: number;
+    durationMs: number;
+  };
+};
+
+export type ExecutionStatus = "idle" | "running" | "completed" | "failed" | "canceled";
+
+export type ExecutionState = {
+  id: string;
   workflowId: string;
-  input: string;
-  status: RunStatus;
-  runs: NodeRun[];          // agents와 같은 순서
-  totalMs: number;
-  totalCostKrw: number;
-  totalInputTokens: number;
-  totalOutputTokens: number;
-  /** Judge가 되돌린 횟수 — 원가가 뛰는 주된 원인이라 따로 센다 */
-  rewrites: number;
+  presetId: string;
+  input: Record<string, unknown>;
+  settings: RunSettings;
+  status: ExecutionStatus;
+  nodes: NodeExecution[];
+  rewriteCount: number;
+  bestScore?: number;
+  qualityWarning?: string;
+  totalTokens: number;
+  estimatedCost: number;   // KRW
+  durationMs: number;
   error?: string;
-  finalOutput?: string;
+  final?: FinalOutput;
+  startedAt: string;
 };
-
-/** 엔진이 모델을 부르는 유일한 통로 — 나중에 서버(Worker)에서도 같은 시그니처로 갈아끼운다 */
-export type ModelCaller = (args: {
-  prompt: string;
-  model: string;
-  maxTokens: number;
-}) => Promise<{
-  text: string;
-  usage?: { inputTokens: number; outputTokens: number; cacheReadTokens?: number; cacheWriteTokens?: number };
-}>;

@@ -1,169 +1,256 @@
-// Workflow 실행기 — "AI 회사"를 돌린다.
-// 직선 파이프라인이 아니다: Judge가 점수를 매기고, 기준 미달이면 앞 Agent로 되돌아가 다시 일한다.
-//
-// 설계 원칙
-//  1) 모델 호출은 ModelCaller 하나로만 → 브라우저(BYOK)든 서버(Worker)든 이 함수만 교체
-//  2) Agent는 모델을 '우선순위'로만 선언 → 엔진이 연결된 것 중 첫 번째를 고름(기획서 Fallback)
-//  3) 연결 안 된 능력(검색·발행·전송)은 건너뛰되 '왜 건너뛰었는지'를 남긴다 — 조용히 빠지면 거짓말이 된다
-//  4) Agent마다 토큰·시간·원가를 누적 기록 → 재작업이 원가를 얼마나 밀어올리는지 그대로 보인다
+// 범용 Workflow 실행기 — 블로그 전용이 아니다.
+// 노드는 역할(ModelClass)만 선언하고, 실제 모델은 프리셋이 정하며, 실패하면 폴백한다.
+// 심사 노드가 기준 미달이면 '부분 재작성' 노드로 보냈다가 다시 심사로 돌아온다.
 
-import type { ModelCaller, NodeRun, RunState, WorkflowDef } from "./types";
+import type {
+  ExecutionState, JudgeResult, NodeCtx, NodeDef, NodeExecution, RunSettings, WorkflowDef,
+} from "./types";
+import { presetById, resolveChain, type ModelRef, type ProviderId } from "./models";
 import { costKrw } from "./cost";
-import { isConnected, resolveModel, PROVIDER_LABEL, type Provider } from "./providers";
+import type { AdapterRegistry } from "./llm";
+import type { SearchProvider } from "./search";
 
-function emptyRun(def: WorkflowDef, input: string): RunState {
-  return {
-    workflowId: def.id,
-    input,
-    status: "idle",
-    runs: def.agents.map((a) => ({ nodeId: a.id, status: "wait" as const })),
-    totalMs: 0,
-    totalCostKrw: 0,
-    totalInputTokens: 0,
-    totalOutputTokens: 0,
-    rewrites: 0,
-  };
-}
+let seq = 0;
+const uid = (p: string) => `${p}_${Date.now().toString(36)}_${(seq++).toString(36)}`;
 
-function buildContext(def: WorkflowDef, runs: NodeRun[], inputs: string[] | undefined): string {
-  if (!inputs?.length) return "";
-  const parts: string[] = [];
-  inputs.forEach((id) => {
-    const idx = def.agents.findIndex((a) => a.id === id);
-    if (idx < 0) return;
-    const r = runs[idx];
-    if (!r?.output) return;
-    parts.push(`--- ${def.agents[idx].label} ---\n${r.output}`);
-  });
-  return parts.join("\n\n");
-}
-
-/** Judge 응답에서 점수를 뽑는다. 못 뽑으면 null(=통과 처리, 무한루프 방지). */
-export function parseScore(text: string): number | null {
-  const m = text.match(/점수\s*[:：]?\s*(\d{1,3})/) || text.match(/^\s*(\d{1,3})\s*(?:점|\/\s*100)/m);
-  if (!m) return null;
-  const n = parseInt(m[1], 10);
-  return Number.isFinite(n) && n >= 0 && n <= 100 ? n : null;
+/** 코드펜스/잡담이 섞여도 JSON을 건져낸다 */
+export function parseJson<T = unknown>(text: string): T | null {
+  const cleaned = text.replace(/```json\s*/gi, "").replace(/```/g, "").trim();
+  const tryParse = (s: string): T | null => { try { return JSON.parse(s) as T; } catch { return null; } };
+  const direct = tryParse(cleaned);
+  if (direct) return direct;
+  const s = cleaned.indexOf("{"), e = cleaned.lastIndexOf("}");
+  if (s >= 0 && e > s) return tryParse(cleaned.slice(s, e + 1));
+  const as = cleaned.indexOf("["), ae = cleaned.lastIndexOf("]");
+  if (as >= 0 && ae > as) return tryParse(cleaned.slice(as, ae + 1));
+  return null;
 }
 
 export type RunOptions = {
   def: WorkflowDef;
-  input: string;
-  call: ModelCaller;
-  onUpdate?: (state: RunState) => void;
+  input: Record<string, unknown>;
+  settings?: Partial<RunSettings>;
+  presetId?: string;
+  adapters: AdapterRegistry;
+  search: SearchProvider;
+  onUpdate?: (s: ExecutionState) => void;
   signal?: AbortSignal;
 };
 
-export async function runWorkflow(opts: RunOptions): Promise<RunState> {
-  const { def, input, call, onUpdate, signal } = opts;
-  const state = emptyRun(def, input);
-  state.status = "running";
+export async function runWorkflow(opts: RunOptions): Promise<ExecutionState> {
+  const { def, input, adapters, search, onUpdate, signal } = opts;
+  const settings: RunSettings = { ...def.defaultSettings, ...(opts.settings || {}) };
+  const preset = presetById(opts.presetId || "standard");
+  const execId = uid("exec");
   const t0 = Date.now();
-  const emit = () => onUpdate?.({ ...state, runs: state.runs.map((r) => ({ ...r })) });
+
+  const state: ExecutionState = {
+    id: execId, workflowId: def.id, presetId: preset.id, input, settings,
+    status: "running",
+    nodes: def.nodes.map((n) => ({ id: uid("ne"), executionId: execId, nodeId: n.id, status: "pending" })),
+    rewriteCount: 0, totalTokens: 0, estimatedCost: 0, durationMs: 0,
+    startedAt: new Date().toISOString(),
+  };
+  const out: Record<string, unknown> = {};
+  const emit = () => onUpdate?.({ ...state, nodes: state.nodes.map((n) => ({ ...n })) });
   emit();
 
+  const idx = (id: string) => def.nodes.findIndex((n) => n.id === id);
+  const ctx = (): NodeCtx => ({ userInput: input, out, settings });
+  const providerOf = (nodeId: string): ProviderId | null =>
+    state.nodes.find((n) => n.nodeId === nodeId)?.provider ?? null;
+
   let i = 0;
-  let guard = 0;                        // 어떤 경우에도 무한루프를 막는 최후 방어선
-  const maxSteps = def.agents.length * 6 + 20;
+  let pendingReturn: number | null = null;   // 재작성 후 돌아갈 심사 노드 index
+  let best: { score: number; content: unknown; details: JudgeResult } | null = null;
+  let guard = 0;
+  const maxSteps = def.nodes.length + settings.maxRewriteCount * 4 + 20;
 
-  while (i < def.agents.length) {
+  while (i < def.nodes.length) {
     if (signal?.aborted) { state.status = "canceled"; break; }
-    if (++guard > maxSteps) { state.status = "error"; state.error = "재작업이 너무 많이 반복돼 중단했어요."; break; }
+    if (++guard > maxSteps) { state.error = "반복이 너무 많아 중단했습니다."; state.status = "failed"; break; }
 
-    const a = def.agents[i];
-    const prev = state.runs[i];
+    const node = def.nodes[i];
+    const rec = state.nodes[i];
 
-    // ── 1) 이 Agent가 돌 수 있는가 ──
-    if (a.capability !== "llm" && !isConnected(a.capability as Provider)) {
-      state.runs[i] = {
-        nodeId: a.id, status: "skip",
-        skipReason: `${PROVIDER_LABEL[a.capability as Provider]} 연동 전이라 건너뜀`,
-      };
-      emit(); i++; continue;
-    }
-    const pick = resolveModel(a.models);
-    if (!pick) {
-      state.runs[i] = { nodeId: a.id, status: "skip", skipReason: "쓸 수 있는 모델이 아직 연결되지 않음" };
+    // 재작성 전용 노드는 평소엔 건너뛴다
+    if (node.onlyWhenRewrite && pendingReturn === null) {
+      if (rec.status === "pending") { rec.status = "skipped"; rec.skipReason = "심사를 통과해 재작성 불필요"; }
       emit(); i++; continue;
     }
 
-    state.runs[i] = { ...prev, nodeId: a.id, status: "run", provider: pick.provider, model: pick.model };
+    rec.status = "running";
+    rec.startedAt = new Date().toISOString();
     emit();
-
-    // ── 2) 프롬프트: [공용 재료] → [이 Agent 지시] (앞부분은 나중에 캐싱 대상) ──
-    const context = buildContext(def, state.runs, a.inputs);
-    const prompt = [
-      context ? `아래는 앞 단계 담당자들이 넘긴 자료입니다.\n\n${context}` : "",
-      `[의뢰 내용]\n${input}`,
-      `[당신의 역할]\n${a.role}`,
-      `[할 일]\n${a.instruction}`,
-      a.judge
-        ? `반드시 첫 줄에 "점수: NN" (0~100)을 쓰고, 그 아래에 감점 사유와 고칠 점을 구체적으로 쓰세요.`
-        : "설명·인사말 없이 결과물만 작성하세요.",
-    ].filter(Boolean).join("\n\n");
-
     const start = Date.now();
-    try {
-      const r = await call({ prompt, model: pick.model, maxTokens: a.maxTokens ?? 2000 });
-      const u = r.usage;
-      const cost = u ? costKrw(pick.model, u) : 0;
-      const score = a.judge ? parseScore(r.text) : null;
 
-      // 재작업이면 누적한다 (원가가 실제로 얼마나 늘었는지 보이도록)
-      state.runs[i] = {
-        nodeId: a.id, status: "done",
-        provider: pick.provider, model: pick.model,
-        output: r.text,
-        attempts: (prev?.attempts || 0) + 1,
-        score: score ?? undefined,
-        ms: (prev?.ms || 0) + (Date.now() - start),
-        inputTokens: (prev?.inputTokens || 0) + (u?.inputTokens || 0),
-        outputTokens: (prev?.outputTokens || 0) + (u?.outputTokens || 0),
-        cacheReadTokens: (prev?.cacheReadTokens || 0) + (u?.cacheReadTokens || 0),
-        cacheWriteTokens: (prev?.cacheWriteTokens || 0) + (u?.cacheWriteTokens || 0),
-        costKrw: (prev?.costKrw || 0) + cost,
-      };
-      state.totalCostKrw += cost;
-      state.totalInputTokens += u?.inputTokens || 0;
-      state.totalOutputTokens += u?.outputTokens || 0;
-      if (!a.judge) state.finalOutput = r.text;
+    try {
+      // ── code 노드 ──
+      if (node.kind === "code") {
+        const v = node.run ? node.run(ctx()) : null;
+        out[node.id] = v;
+        Object.assign(rec, {
+          status: "completed", output: v, latencyMs: Date.now() - start,
+          completedAt: new Date().toISOString(), attempts: (rec.attempts || 0) + 1,
+        });
+        emit(); i++; continue;
+      }
+
+      // ── search 노드 ──
+      if (node.kind === "search") {
+        const qs = node.queries ? node.queries(ctx()) : [];
+        const results = (await Promise.all(
+          qs.slice(0, 4).map((q) => search.search(q, { maxResults: 3, signal }).catch(() => [])),
+        )).flat();
+        out[node.id] = results;
+        Object.assign(rec, {
+          status: "completed", provider: undefined, modelId: search.id,
+          input: qs, output: results, latencyMs: Date.now() - start,
+          completedAt: new Date().toISOString(), attempts: (rec.attempts || 0) + 1,
+          skipReason: search.live ? undefined : "실제 검색 API 미연결 — 모의 결과",
+        });
+        emit(); i++; continue;
+      }
+
+      // ── llm 노드: 역할 → 후보 모델 목록 → 순서대로 시도 ──
+      const avoid = node.avoidProviderOf ? providerOf(node.avoidProviderOf) : null;
+      const chain: ModelRef[] = resolveChain(node.modelClass || "balanced", preset, avoid)
+        .filter((r) => !!adapters[r.providerId]);
+
+      if (!chain.length) {
+        Object.assign(rec, {
+          status: "skipped", skipReason: "이 역할에 쓸 수 있는 모델이 연결되지 않음",
+          latencyMs: Date.now() - start, completedAt: new Date().toISOString(),
+        });
+        emit(); i++; continue;
+      }
+
+      const prompt = node.prompt ? node.prompt(ctx()) : "";
+      let done = false;
+      let lastErr = "";
+      let retries = 0;
+
+      for (let c = 0; c < chain.length && !done; c++) {
+        const ref = chain[c];
+        const adapter = adapters[ref.providerId]!;
+        // JSON 기대 노드는 파싱 실패 시 같은 모델로 1회 더 시도한 뒤 폴백
+        const attempts = node.json ? 2 : 1;
+        for (let a = 0; a < attempts && !done; a++) {
+          try {
+            const r = await adapter.complete({
+              modelId: ref.modelId, prompt, temperature: node.temperature,
+              maxTokens: node.maxTokens ?? 2000, signal,
+            });
+            let value: unknown = r.text;
+            if (node.json) {
+              const parsed = parseJson(r.text);
+              if (!parsed) { retries++; lastErr = "JSON 파싱 실패"; continue; }
+              value = parsed;
+            } else if (!r.text.trim()) {
+              retries++; lastErr = "빈 응답"; continue;
+            }
+            const usage = r.usage || { inputTokens: 0, outputTokens: 0 };
+            const cost = costKrw(ref, usage);
+            out[node.id] = value;
+            state.totalTokens += usage.inputTokens + usage.outputTokens;
+            state.estimatedCost += cost;
+            Object.assign(rec, {
+              status: "completed", provider: ref.providerId, modelId: ref.modelId,
+              fallbackUsed: c > 0, input: prompt, output: value,
+              promptTokens: (rec.promptTokens || 0) + usage.inputTokens,
+              completionTokens: (rec.completionTokens || 0) + usage.outputTokens,
+              estimatedCost: (rec.estimatedCost || 0) + cost,
+              latencyMs: (rec.latencyMs || 0) + (Date.now() - start),
+              retryCount: retries, attempts: (rec.attempts || 0) + 1,
+              completedAt: new Date().toISOString(), error: undefined,
+            });
+            done = true;
+          } catch (e) {
+            lastErr = (e as Error)?.message || "호출 실패";
+            retries++;
+            break;   // API 오류/타임아웃 → 같은 모델 재시도 없이 다음 후보로
+          }
+        }
+      }
+
+      if (!done) {
+        Object.assign(rec, {
+          status: "failed", error: lastErr || "모든 폴백 실패",
+          latencyMs: (rec.latencyMs || 0) + (Date.now() - start),
+          retryCount: retries, completedAt: new Date().toISOString(),
+        });
+        state.status = "failed"; state.error = `${node.label}: ${lastErr}`;
+        state.durationMs = Date.now() - t0;
+        emit();
+        return state;
+      }
       emit();
 
-      // ── 3) Judge 판정 — 미달이면 되돌아가 다시 일한다 ──
-      if (a.judge && score != null && score < a.judge.min && state.rewrites < a.judge.maxRetry) {
-        const back = def.agents.findIndex((x) => x.id === a.judge!.retryFrom);
-        if (back >= 0) {
-          state.rewrites++;
-          i = back;
+      // ── 심사 판정 ──
+      if (node.judge) {
+        const jr = (out[node.id] || {}) as JudgeResult;
+        const score = Number(jr.totalScore) || 0;
+        // 이번 라운드의 본문(재작성본이 있으면 그것). 최고 점수 본문을 따로 보존한다.
+        const cur = (node.judge.contentNodes || [])
+          .map((id) => out[id])
+          .filter((v): v is string => typeof v === "string" && !!v.trim())
+          .pop() ?? null;
+        if (!best || score > best.score) {
+          best = { score, content: cur, details: jr };
+          out.__best__ = cur;
+          out.__bestScore__ = score;
+          out.__bestDetails__ = jr;
+        }
+        state.bestScore = best.score;
+        const pass = score >= (node.judge.passScore ?? settings.passScore);
+        if (!pass && state.rewriteCount < (node.judge.maxRewrite ?? settings.maxRewriteCount)) {
+          state.rewriteCount++;
+          pendingReturn = i;                 // 재작성 후 이 심사로 복귀
+          i = idx(node.judge.rewriteNode);
           emit();
           continue;
         }
+        if (!pass) {
+          state.qualityWarning =
+            `품질 기준(${node.judge.passScore}점)에 도달하지 못했습니다. 최고 점수 ${best.score}점 결과를 사용합니다.`;
+        }
+      }
+
+      // 재작성 노드를 막 끝냈으면 심사로 복귀
+      if (node.onlyWhenRewrite && pendingReturn !== null) {
+        i = pendingReturn; pendingReturn = null; emit(); continue;
       }
     } catch (e) {
-      state.runs[i] = {
-        ...state.runs[i], nodeId: a.id, status: "error",
-        ms: (prev?.ms || 0) + (Date.now() - start),
-        error: (e as Error)?.message || "실행 실패",
-      };
-      state.status = "error";
-      state.error = (e as Error)?.message || "실행 실패";
-      state.totalMs = Date.now() - t0;
+      Object.assign(rec, {
+        status: "failed", error: (e as Error)?.message || "실패",
+        latencyMs: Date.now() - start, completedAt: new Date().toISOString(),
+      });
+      state.status = "failed"; state.error = (e as Error)?.message || "실패";
+      state.durationMs = Date.now() - t0;
       emit();
       return state;
     }
     i++;
   }
 
-  if (state.status === "running") state.status = "done";
-  // 최종 결과물 = 마지막으로 성공한 non-judge Agent의 출력
-  if (!state.finalOutput) {
-    for (let k = state.runs.length - 1; k >= 0; k--) {
-      if (state.runs[k].status === "done" && state.runs[k].output && !def.agents[k].judge) {
-        state.finalOutput = state.runs[k].output; break;
-      }
+  if (state.status === "running") state.status = "completed";
+  state.durationMs = Date.now() - t0;
+  // 마지막 code 노드(Final Output)의 결과를 최종 산출물로 본다
+  for (let k = def.nodes.length - 1; k >= 0; k--) {
+    if (def.nodes[k].kind === "code" && out[def.nodes[k].id]) {
+      const f = out[def.nodes[k].id] as NonNullable<ExecutionState["final"]>;
+      f.executionSummary = {
+        totalNodes: def.nodes.length,
+        completedNodes: state.nodes.filter((n) => n.status === "completed").length,
+        rewriteCount: state.rewriteCount,
+        totalTokens: state.totalTokens,
+        estimatedCost: Math.round(state.estimatedCost * 100) / 100,
+        durationMs: state.durationMs,
+      };
+      state.final = f;
+      break;
     }
   }
-  state.totalMs = Date.now() - t0;
   emit();
   return state;
 }

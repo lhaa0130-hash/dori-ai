@@ -32,7 +32,7 @@ import { getTone, saveTone } from "@/lib/illo/tone";
 import ProjectTopBar from "@/components/layout/ProjectTopBar";
 import OrgControlTower from "@/components/illo/OrgControlTower";
 import WorkflowRunner from "@/components/illo/WorkflowRunner";
-import type { ModelCaller } from "@/lib/illo/workflow/types";
+import type { ClaudeCaller } from "@/lib/illo/workflow/llm";
 import Automation from "@/components/illo/Automation";
 import {
   ArrowLeft, KeyRound, Loader2, Copy, Check, Sparkles, Download,
@@ -137,7 +137,7 @@ export default function IlloWebClient() {
 
   /** 워크플로우 엔진용 — callModel과 달리 토큰 사용량(usage)까지 넘겨 원가를 실측한다.
    *  본인 키(BYOK)로 직접 호출할 때만 usage가 채워진다. */
-  const callWorkflow: ModelCaller = async ({ prompt, model, maxTokens }) => {
+  const callWorkflow: ClaudeCaller = async ({ prompt, model, maxTokens }) => {
     const u = getFirebaseAuth().currentUser;
     const idToken = u ? await u.getIdToken() : undefined;
     if (!key && !idToken) throw new Error("LOGIN_REQUIRED");
