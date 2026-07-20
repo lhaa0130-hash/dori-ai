@@ -17,6 +17,7 @@ interface Post {
 }
 
 const CATEGORIES = ['전체', '트렌드', '가이드', '분석', '리포트', '큐레이션', '영상'];
+// ⚠️ 카테고리 값은 한글 키 그대로 저장·필터링에 쓰인다(selected 비교). 표시만 영어로 바꾼다.
 const CAT_LABEL_EN: Record<string, string> = { 전체: 'All', 트렌드: 'Trends', 가이드: 'Guides', 분석: 'Analysis', 리포트: 'Reports', 큐레이션: 'Curation', 영상: 'Videos' };
 
 function getCat(cat?: string) {
@@ -24,6 +25,7 @@ function getCat(cat?: string) {
   if (cat.toLowerCase() === 'trend') return '트렌드';
   return cat;
 }
+
 
 function getDesc(content?: string, summary?: string) {
   if (summary) return summary.slice(0, 100);
@@ -130,7 +132,7 @@ export default function InsightPageClient({ initialPosts = [], locale = 'ko' }: 
                   {/* 텍스트 */}
                   <div className="flex-1 min-w-0">
                     <div className="flex items-center gap-2 mb-0.5">
-                      {cat && <span className="text-[10px] font-bold text-[#F9954E]">{cat}</span>}
+                      {cat && <span className="text-[10px] font-bold text-[#F9954E]">{en ? (CAT_LABEL_EN[cat] || cat) : cat}</span>}
                       <span className="text-[11px] text-stone-400 dark:text-stone-500" suppressHydrationWarning>
                         {fmtDate(post.created_at, en)}
                       </span>

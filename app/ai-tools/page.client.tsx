@@ -80,7 +80,7 @@ export default function AiToolsClient({ locale = "ko", toolsData }: { locale?: L
 
       {/* ── AI 모델 랭킹 (사용량/지능/가격 3열 동시) ── */}
       <section className="w-full pt-4 pb-1">
-        <OpenRouterRanking />
+        <OpenRouterRanking locale={locale} />
         <Link href={modelsHref} className="mt-2 flex items-center gap-1.5 text-[12px] text-stone-400 hover:text-[#F9954E] transition-colors">
           {tt.compare}
         </Link>

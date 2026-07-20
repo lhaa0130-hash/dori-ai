@@ -15,6 +15,19 @@ export const AI_NEWS_CATEGORIES_EN: Record<string, { label: string; desc: string
   learn: { label: "Learning & Tutorials", desc: "Resources to learn AI, from fundamentals to production" },
 };
 
+// 한글 사이트명 → 영어 표기(로마자/공식 영문명). 영어 독자가 읽을 수 있게 카드 제목에 쓴다.
+// ⚠️ 키(한글 사이트명)는 aiNewsData.ts 의 name 과 매칭용이므로 그대로 유지.
+export const AI_SITE_NAME_EN: Record<string, string> = {
+  "AI타임스": "AI Times",
+  "인공지능신문": "AI Times Korea (Ingongjineung Sinmun)",
+  "요즘IT": "Yozm IT",
+  "바이라인네트워크": "Byline Network",
+  "더밀크": "The Miilk",
+  "AI 포스트": "AI Post",
+  "디스콰이엇": "Disquiet",
+  "모두의연구소": "Modulabs",
+};
+
 // 사이트명 → 영어 설명
 export const AI_SITE_DESC_EN: Record<string, string> = {
   // 한국 AI 소식

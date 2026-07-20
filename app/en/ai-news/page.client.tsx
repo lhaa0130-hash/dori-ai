@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { ArrowUpRight, Newspaper } from "lucide-react";
 import { AI_NEWS_CATEGORIES, faviconOf, type AiSource } from "@/constants/aiNewsData";
-import { AI_NEWS_CATEGORIES_EN, AI_SITE_DESC_EN } from "@/constants/aiNewsData.en";
+import { AI_NEWS_CATEGORIES_EN, AI_SITE_DESC_EN, AI_SITE_NAME_EN } from "@/constants/aiNewsData.en";
 
 const BADGE_CLS: Record<string, string> = {
   KR: "bg-[#FBEEE7] text-[#E8832E] dark:bg-[#F9954E]/10 dark:text-[#FBAA60]",
@@ -13,8 +13,10 @@ const BADGE_CLS: Record<string, string> = {
 
 function SiteCard({ s }: { s: AiSource }) {
   const fav = faviconOf(s.url);
-  const initial = s.name.replace(/[^A-Za-z0-9가-힣]/g, "").slice(0, 1).toUpperCase() || "?";
   const desc = AI_SITE_DESC_EN[s.name] || s.desc;
+  const nameEn = AI_SITE_NAME_EN[s.name] || s.name;
+  // 아바타 이니셜도 영어 표기 기준으로 뽑는다(한글 매체는 로마자 첫 글자).
+  const initial = nameEn.replace(/[^A-Za-z0-9가-힣]/g, "").slice(0, 1).toUpperCase() || "?";
   return (
     <a
       href={s.url}
@@ -46,7 +48,7 @@ function SiteCard({ s }: { s: AiSource }) {
       <div className="flex-1 min-w-0">
         <div className="flex items-center gap-1.5">
           <h3 className="text-[14px] font-extrabold text-stone-900 dark:text-white leading-tight truncate group-hover:text-[#E8832E] dark:group-hover:text-[#FBAA60] transition-colors">
-            {s.name}
+            {nameEn}
           </h3>
           {s.badge && (
             <span className={`text-[9px] font-black rounded-full px-1.5 py-0.5 flex-shrink-0 ${BADGE_CLS[s.badge]}`}>

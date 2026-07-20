@@ -1,7 +1,7 @@
 // app/en/ai-news/page.tsx — English AI news source directory (/en/ai-news)
 import { createMetadata } from "@/lib/seo";
 import { AI_NEWS_CATEGORIES } from "@/constants/aiNewsData";
-import { AI_SITE_DESC_EN } from "@/constants/aiNewsData.en";
+import { AI_SITE_DESC_EN, AI_SITE_NAME_EN } from "@/constants/aiNewsData.en";
 import AiNewsEnClient from "./page.client";
 
 const SITE_URL = "https://illo.im";
@@ -40,7 +40,7 @@ const itemListLd = {
   itemListElement: AI_NEWS_CATEGORIES.flatMap((c) => c.sites).map((s, i) => ({
     "@type": "ListItem",
     position: i + 1,
-    name: s.name,
+    name: AI_SITE_NAME_EN[s.name] || s.name,
     url: s.url,
     description: AI_SITE_DESC_EN[s.name] || s.desc,
   })),

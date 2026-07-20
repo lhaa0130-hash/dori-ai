@@ -387,7 +387,9 @@ export default function AiToolsList({ filters, sectionRefs, locale = "ko", tools
         .slice(0, 20)
         .map((a: any) => {
           const dKo = a.descKo || ((a.desc || "").replace(/\s*\S*$/, "") + "…");
-          const d = locale === "en" ? (a.desc || dKo) : dKo;
+          // ⚠️ 영어판에서 descKo 로 폴백하면 한글이 새어나온다(n8n 데이터에 desc 가 비는 항목이 있음).
+          //    영어 설명이 없으면 중립적인 영어 문구를 쓴다.
+          const d = locale === "en" ? (a.desc || "A top AI agent by real-world usage on OpenRouter") : dKo;
           return {
             id: "orapp-" + norm(a.title), name: a.title, category: "agent",
             summary: d, strength: d,
