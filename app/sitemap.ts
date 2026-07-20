@@ -33,6 +33,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/en`,        lastModified: now, changeFrequency: "daily",   priority: 0.9 },
     { url: `${baseUrl}/insight`,   lastModified: now, changeFrequency: "daily",   priority: 0.9 },
     { url: `${baseUrl}/en/insight`, lastModified: now, changeFrequency: "daily",  priority: 0.8 },
+    { url: `${baseUrl}/en/ai-news`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
+    { url: `${baseUrl}/en/projects`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${baseUrl}/en/minigame`, lastModified: now, changeFrequency: "monthly", priority: 0.6 },
+    { url: `${baseUrl}/en/animal`,  lastModified: now, changeFrequency: "daily",  priority: 0.8 },
+    { url: `${baseUrl}/en/psychtest`, lastModified: now, changeFrequency: "weekly", priority: 0.7 },
+    { url: `${baseUrl}/en/faq`,     lastModified: now, changeFrequency: "monthly", priority: 0.4 },
+    { url: `${baseUrl}/en/notice`,  lastModified: now, changeFrequency: "weekly", priority: 0.4 },
     { url: `${baseUrl}/ai-tools`,  lastModified: now, changeFrequency: "weekly",  priority: 0.9 },
     { url: `${baseUrl}/en/ai-tools`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${baseUrl}/ai-models`, lastModified: now, changeFrequency: "daily",   priority: 0.9 },
@@ -66,12 +73,13 @@ export default function sitemap(): MetadataRoute.Sitemap {
   ];
 
   // 2) 아티클 페이지 수집 헬퍼 — 언어별 경로 분리(한글=/insight/article, 영어=/en/insight/article)
-  type Post = { slug: string; date?: string; lang?: string };
+  type Post = { slug: string; date?: string; lang?: string; category?: string };
   const collect = (
     posts: Post[],
     priority: number
   ): MetadataRoute.Sitemap =>
-    posts.map((p) => ({
+    // 영어 영상 글은 /en에서 노출하지 않는 방침이라 사이트맵에서도 제외
+    posts.filter((p) => !(p.lang === "en" && p.category === "영상")).map((p) => ({
       url: `${baseUrl}${p.lang === "en" ? "/en/insight/article/" : "/insight/article/"}${p.slug}`,
       lastModified: p.date ? new Date(p.date) : now,
       changeFrequency: "monthly" as const, // 발행 후 자주 바뀌지 않음
