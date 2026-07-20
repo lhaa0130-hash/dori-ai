@@ -47,6 +47,8 @@ import {
   nameClassOf,
   petEmojiOf,
   itemsBySlot,
+  itemName,
+  itemText,
   itemKey,
   FREE_STICKERS,
   type ShopItem,
@@ -1295,12 +1297,12 @@ export default function ProfilePage() {
                 {itemsBySlot("title").filter((t) => isItemOwned(t)).map((t) => (
                   <button
                     key={t.id}
-                    onClick={() => setEditTitle(t.text || "")}
+                    onClick={() => setEditTitle(itemText(t, lang === "en"))}
                     className={`px-2.5 py-1 rounded-full text-[12px] font-bold transition-colors ${
-                      editTitle === t.text ? "bg-[#F9954E] text-white" : "bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300"
+                      editTitle === itemText(t, lang === "en") ? "bg-[#F9954E] text-white" : "bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300"
                     }`}
                   >
-                    {t.text}
+                    {itemText(t, lang === "en")}
                   </button>
                 ))}
               </div>
@@ -1329,7 +1331,7 @@ export default function ProfilePage() {
             </label>
             <div className="grid grid-cols-3 gap-2 mb-4">
               {itemsBySlot("frame").map((f) => (
-                <PickTile key={f.id} owned={isItemOwned(f)} selected={editFrame === f.id} price={f.price} label={f.name} onSelect={() => setEditFrame(f.id)}>
+                <PickTile key={f.id} owned={isItemOwned(f)} selected={editFrame === f.id} price={f.price} label={itemName(f, lang === "en")} onSelect={() => setEditFrame(f.id)}>
                   <div className="w-full h-full flex items-center justify-center bg-stone-50 dark:bg-zinc-900/50">
                     <div className={`w-8 h-8 rounded-full bg-stone-200 dark:bg-zinc-700 ring-offset-2 ring-offset-stone-50 dark:ring-offset-zinc-900 ${frameRingOf(f.id)}`} />
                   </div>
@@ -1342,7 +1344,7 @@ export default function ProfilePage() {
             </label>
             <div className="grid grid-cols-3 gap-2 mb-4">
               {itemsBySlot("bg").map((p) => (
-                <PickTile key={p.id} owned={isItemOwned(p)} selected={editBg === p.id} price={p.price} label={p.name} onSelect={() => setEditBg(p.id)}>
+                <PickTile key={p.id} owned={isItemOwned(p)} selected={editBg === p.id} price={p.price} label={itemName(p, lang === "en")} onSelect={() => setEditBg(p.id)}>
                   <span className={`absolute inset-0 ${p.grad || ""}`} aria-hidden />
                 </PickTile>
               ))}
@@ -1353,7 +1355,7 @@ export default function ProfilePage() {
             </label>
             <div className="grid grid-cols-3 gap-2 mb-4">
               {itemsBySlot("nameEffect").map((n) => (
-                <PickTile key={n.id} owned={isItemOwned(n)} selected={editNameEffect === n.id} price={n.price} label={n.name} onSelect={() => setEditNameEffect(n.id)}>
+                <PickTile key={n.id} owned={isItemOwned(n)} selected={editNameEffect === n.id} price={n.price} label={itemName(n, lang === "en")} onSelect={() => setEditNameEffect(n.id)}>
                   <div className="w-full h-full flex items-center justify-center bg-stone-50 dark:bg-zinc-900/50">
                     <span className={`text-[17px] font-extrabold ${n.nameClass || "text-stone-700 dark:text-white"}`}>{t.namePreview}</span>
                   </div>
@@ -1366,7 +1368,7 @@ export default function ProfilePage() {
             </label>
             <div className="grid grid-cols-3 gap-2 mb-5">
               {itemsBySlot("bannerEffect").map((b) => (
-                <PickTile key={b.id} owned={isItemOwned(b)} selected={editBannerEffect === b.id} price={b.price} label={b.name} onSelect={() => setEditBannerEffect(b.id)}>
+                <PickTile key={b.id} owned={isItemOwned(b)} selected={editBannerEffect === b.id} price={b.price} label={itemName(b, lang === "en")} onSelect={() => setEditBannerEffect(b.id)}>
                   <span className="absolute inset-0 bg-gradient-to-br from-[#F9954E]/15 to-sky-400/10" aria-hidden />
                   {b.fx && b.fx !== "none" ? (
                     <BannerFx fx={b.fx} count={5} />
@@ -1391,7 +1393,7 @@ export default function ProfilePage() {
                 {t.none}
               </button>
               {itemsBySlot("pet").map((p) => (
-                <PickTile key={p.id} owned={isItemOwned(p)} selected={editPet === p.id} price={p.price} label={p.name} onSelect={() => setEditPet(p.id)}>
+                <PickTile key={p.id} owned={isItemOwned(p)} selected={editPet === p.id} price={p.price} label={itemName(p, lang === "en")} onSelect={() => setEditPet(p.id)}>
                   <div className="w-full h-full flex items-center justify-center text-[28px] bg-stone-50 dark:bg-zinc-900/50">{p.emoji}</div>
                 </PickTile>
               ))}
@@ -1672,9 +1674,9 @@ export default function ProfilePage() {
             return (
               <>
                 <div className="flex items-center justify-between mb-2">
-                  <p className="text-[11px] text-[#F9954E] font-bold">내 등급</p>
+                  <p className="text-[11px] text-[#F9954E] font-bold">{t.myTierHeading}</p>
                   <button onClick={() => setTierOpen((v) => !v)} className="text-[11px] font-bold text-stone-400 hover:text-[#F9954E]">
-                    {tierOpen ? "접기" : "등급표 보기"}
+                    {tierOpen ? t.collapse : t.viewTierTable}
                   </button>
                 </div>
 
@@ -1695,23 +1697,23 @@ export default function ProfilePage() {
                   </div>
                   <p className="mt-1 text-[10px] text-stone-400 tabular-nums">
                     {nextThr
-                      ? `${TIER_INFO[nextT as UserTier].name}까지 ${Math.max(0, nextThr - exp).toLocaleString()}점 · 현재 ${exp.toLocaleString()}점`
-                      : `최고 등급! · ${exp.toLocaleString()}점`}
+                      ? t.tierProgress(TIER_INFO[nextT as UserTier].name, Math.max(0, nextThr - exp), exp)
+                      : t.tierMax(exp)}
                   </p>
                 </div>
 
                 {/* 등급표 */}
                 {tierOpen && (
                   <div className="mt-3 pt-3 border-t border-stone-100 dark:border-zinc-900 space-y-0.5">
-                    {([1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as UserTier[]).map((t) => {
-                      const ti = TIER_INFO[t];
-                      const isMe = t === ct;
+                    {([1, 2, 3, 4, 5, 6, 7, 8, 9, 10] as UserTier[]).map((tier) => {
+                      const ti = TIER_INFO[tier];
+                      const isMe = tier === ct;
                       return (
-                        <div key={t} className={`flex items-center gap-2 px-2 py-1 rounded-lg ${isMe ? "bg-[#FBEEE7] dark:bg-[#F9954E]/10" : ""}`}>
+                        <div key={tier} className={`flex items-center gap-2 px-2 py-1 rounded-lg ${isMe ? "bg-[#FBEEE7] dark:bg-[#F9954E]/10" : ""}`}>
                           <span className="w-2 h-2 rounded-full shrink-0" style={{ backgroundColor: ti.color }} />
                           <span className="text-[12px] font-bold text-stone-800 dark:text-stone-100">{ti.name}</span>
                           <span className="text-[11px] text-stone-400 truncate">{ti.description}</span>
-                          <span className="ml-auto text-[11px] text-stone-400 tabular-nums shrink-0">{TIER_THRESHOLDS[t].toLocaleString()}점</span>
+                          <span className="ml-auto text-[11px] text-stone-400 tabular-nums shrink-0">{t.points(TIER_THRESHOLDS[tier])}</span>
                           {isMe && <span className="text-[10px] font-extrabold text-[#F9954E] shrink-0">●</span>}
                         </div>
                       );
@@ -1725,17 +1727,17 @@ export default function ProfilePage() {
 
         {/* 4) 뱃지 */}
         <div className="mt-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
-          <p className="text-[11px] text-[#F9954E] font-bold mb-3">뱃지</p>
+          <p className="text-[11px] text-[#F9954E] font-bold mb-3">{t.badgeHeading}</p>
           <div className="flex flex-wrap items-center gap-2">
             <span
               className="px-3 py-1.5 rounded-full text-[12px] font-bold text-white"
               style={{ backgroundColor: accent }}
             >
-              🎮 게이머 Lv.{gamerLevel}
+              {t.gamerLevelBadge(gamerLevel)}
             </span>
             {records.length === 0 ? (
               <span className="text-[13px] text-stone-400 dark:text-stone-500">
-                기록을 쌓으면 뱃지가 생겨요
+                {t.noBadgesYet}
               </span>
             ) : (
               records.map((r) => (
@@ -1754,8 +1756,8 @@ export default function ProfilePage() {
         {profile?.psychResults && profile.psychResults.length > 0 && (
           <div className="mt-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
             <div className="flex items-center justify-between mb-3">
-              <p className="text-[11px] text-[#F9954E] font-bold">🧩 심리 리포트</p>
-              <a href="/psychtest" className="text-[11px] font-bold text-stone-400 hover:text-[#F9954E]">테스트 하러 가기 →</a>
+              <p className="text-[11px] text-[#F9954E] font-bold">{t.psychReportHeading}</p>
+              <a href="/psychtest" className="text-[11px] font-bold text-stone-400 hover:text-[#F9954E]">{t.goTakeTest}</a>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {profile.psychResults.map((r) => (
@@ -1774,9 +1776,9 @@ export default function ProfilePage() {
 
         {/* 3) 전적 */}
         <div className="mt-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
-          <p className="text-[11px] text-[#F9954E] font-bold mb-3">전적</p>
+          <p className="text-[11px] text-[#F9954E] font-bold mb-3">{t.recordsHeading}</p>
           {records.length === 0 ? (
-            <p className="text-[14px] text-stone-500 dark:text-stone-400">아직 기록 없음</p>
+            <p className="text-[14px] text-stone-500 dark:text-stone-400">{t.noRecordsYet}</p>
           ) : (
             <div className="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
               {records.map((r) => (
@@ -1797,9 +1799,9 @@ export default function ProfilePage() {
 
         {/* 6) 본인 피드 */}
         <div className="mt-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
-          <p className="text-[11px] text-[#F9954E] font-bold mb-3">최근 글</p>
+          <p className="text-[11px] text-[#F9954E] font-bold mb-3">{t.recentPostsHeading}</p>
           {feed.length === 0 ? (
-            <p className="text-[14px] text-stone-500 dark:text-stone-400">아직 작성한 글이 없어요</p>
+            <p className="text-[14px] text-stone-500 dark:text-stone-400">{t.noPostsYet}</p>
           ) : (
             <ul className="space-y-3">
               {feed.map((p) => (
@@ -1811,7 +1813,7 @@ export default function ProfilePage() {
                     {p.text}
                   </p>
                   <div className="mt-2 flex items-center gap-3 text-[12px] text-stone-400">
-                    {fmtDate(p.at) && <span>{fmtDate(p.at)}</span>}
+                    {fmtDate(p.at, dateLocale) && <span>{fmtDate(p.at, dateLocale)}</span>}
                     <span>❤️ {p.likeCount.toLocaleString()}</span>
                   </div>
                 </li>
@@ -1822,7 +1824,7 @@ export default function ProfilePage() {
 
         {/* 5) 방명록 */}
         <div className="mt-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
-          <p className="text-[11px] text-[#F9954E] font-bold mb-3">방명록</p>
+          <p className="text-[11px] text-[#F9954E] font-bold mb-3">{t.guestbookHeading}</p>
 
           {myUid ? (
             <div className="mb-4">
@@ -1831,7 +1833,7 @@ export default function ProfilePage() {
                 onChange={(e) => setGbMsg(e.target.value)}
                 maxLength={500}
                 rows={2}
-                placeholder={isOwner ? "내 코지홈에 한마디" : "방명록을 남겨보세요"}
+                placeholder={isOwner ? t.guestbookPlaceholderOwner : t.guestbookPlaceholderVisitor}
                 className="w-full px-3 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none resize-none focus:ring-2 focus:ring-[#F9954E]/40"
               />
               <div className="mt-2 flex justify-end">
@@ -1840,22 +1842,22 @@ export default function ProfilePage() {
                   disabled={gbSending || !gbMsg.trim()}
                   className="px-4 py-2 rounded-full bg-[#F9954E] text-white text-[13px] font-bold active:opacity-85 disabled:opacity-50"
                 >
-                  {gbSending ? "남기는 중..." : "남기기"}
+                  {gbSending ? t.posting : t.postGuestbook}
                 </button>
               </div>
             </div>
           ) : (
             <div className="mb-4 rounded-xl bg-stone-100 dark:bg-zinc-900 p-3.5 text-[13px] text-stone-500 dark:text-stone-400">
-              방명록을 남기려면{" "}
-              <Link href="/login" className="font-bold text-[#F9954E]">
-                로그인
-              </Link>
-              하세요.
+              {t.guestbookLoginPrompt(
+                <Link href="/login" className="font-bold text-[#F9954E]">
+                  {t.loginWord}
+                </Link>
+              )}
             </div>
           )}
 
           {guestbook.length === 0 ? (
-            <p className="text-[14px] text-stone-500 dark:text-stone-400">아직 방명록이 없어요</p>
+            <p className="text-[14px] text-stone-500 dark:text-stone-400">{t.emptyGuestbook}</p>
           ) : (
             <ul className="space-y-3">
               {guestbook.map((g) => (
@@ -1874,15 +1876,15 @@ export default function ProfilePage() {
                       </span>
                     )}
                     <div className="flex items-center gap-2 shrink-0">
-                      {fmtDate(g.at) && (
-                        <span className="text-[11px] text-stone-400">{fmtDate(g.at)}</span>
+                      {fmtDate(g.at, dateLocale) && (
+                        <span className="text-[11px] text-stone-400">{fmtDate(g.at, dateLocale)}</span>
                       )}
                       {isOwner && (
                         <button
                           onClick={() => handleDeleteGuestbook(g.id)}
                           className="text-[11px] text-stone-400 hover:text-red-500 font-bold"
                         >
-                          삭제
+                          {t.delete}
                         </button>
                       )}
                     </div>
