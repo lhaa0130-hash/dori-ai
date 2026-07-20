@@ -28,7 +28,12 @@ export default function Header() {
     return () => { document.body.style.overflow = ""; };
   }, [mobileOpen]);
 
-  const handleSignIn = () => { router.push("/login"); setMobileOpen(false); };
+  // 영어 사용자는 로그인 화면도 영어로(?lang=en) + 로그인 후 영어 홈으로 복귀
+  const handleSignIn = () => {
+    const isEnNow = (pathname || "").startsWith("/en");
+    router.push(isEnNow ? `/login?lang=en&next=${encodeURIComponent(pathname || "/en")}` : "/login");
+    setMobileOpen(false);
+  };
   const handleSignOut = () => { logout(); router.push("/"); setMobileOpen(false); };
 
   // 공지사항·건의사항은 메인 네비에서 숨김(푸터에 노출됨), 마켓은 노출

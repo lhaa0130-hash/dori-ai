@@ -10,6 +10,52 @@ import CottonCandy from "@/components/icons/CottonCandy";
 
 type AuthMode = "login" | "signup";
 
+// 로그인/가입 화면 문구 — 영어 사용자(?lang=en 또는 next=/en...)에게 영어로 표시
+const T = {
+  ko: {
+    tabLogin: "로그인", tabSignup: "회원가입",
+    welcome: "Welcome Back", createAcc: "Create Account",
+    subLogin: "illo에 오신 것을 환영합니다.", subSignup: "이메일로 간편하게 가입하고 시작하세요.",
+    email: "이메일", emailPh: "example@email.com",
+    password: "비밀번호", passwordPh: "비밀번호 입력",
+    passwordMin: "비밀번호 (6자 이상)", passwordConfirm: "비밀번호 재입력",
+    name: "이름", namePh: "사이트에서 사용할 이름",
+    gender: "성별", male: "남성", female: "여성", optional: "선택",
+    age: "연령대", ages: ["10대", "20대", "30대", "40대", "50대", "60대 이상"],
+    or: "또는", google: "Google로 계속하기", connecting: "연결 중...",
+    agree1: "가입 시 ", agreeTerms: "이용약관", agree2: " 및 ", agreePrivacy: "개인정보처리방침", agree3: "에 동의합니다.",
+    errFields: "모든 필드를 입력해주세요.",
+    errEmailPw: "이메일과 비밀번호를 입력해주세요.",
+    errPwMin: "비밀번호는 6자 이상이어야 합니다.",
+    errPwMatch: "비밀번호가 일치하지 않습니다.",
+    errLogin: "로그인에 실패했습니다.",
+    errSignup: "회원가입에 실패했습니다.",
+    errGoogle: "Google 로그인에 실패했습니다.",
+    pwWeak: "약함", pwFair: "보통", pwGood: "좋음", pwStrong: "강력",
+  },
+  en: {
+    tabLogin: "Sign in", tabSignup: "Sign up",
+    welcome: "Welcome back", createAcc: "Create account",
+    subLogin: "Welcome to illo.", subSignup: "Sign up with your email and get started.",
+    email: "Email", emailPh: "example@email.com",
+    password: "Password", passwordPh: "Enter your password",
+    passwordMin: "Password (6+ characters)", passwordConfirm: "Re-enter password",
+    name: "Name", namePh: "The name shown on illo",
+    gender: "Gender", male: "Male", female: "Female", optional: "Optional",
+    age: "Age group", ages: ["Under 20", "20s", "30s", "40s", "50s", "60+"],
+    or: "or", google: "Continue with Google", connecting: "Connecting...",
+    agree1: "By signing up you agree to our ", agreeTerms: "Terms", agree2: " and ", agreePrivacy: "Privacy Policy", agree3: ".",
+    errFields: "Please fill in all fields.",
+    errEmailPw: "Please enter your email and password.",
+    errPwMin: "Password must be at least 6 characters.",
+    errPwMatch: "Passwords don't match.",
+    errLogin: "Sign-in failed.",
+    errSignup: "Sign-up failed.",
+    errGoogle: "Google sign-in failed.",
+    pwWeak: "Weak", pwFair: "Fair", pwGood: "Good", pwStrong: "Strong",
+  },
+};
+
 export default function LoginPage() {
   const { login, loginWithGoogle, signup, session } = useAuth();
   const router = useRouter();
@@ -35,13 +81,27 @@ export default function LoginPage() {
   const [gender, setGender] = useState<"male" | "female" | "">("");
   const [ageGroup, setAgeGroup] = useState<"10s" | "20s" | "30s" | "40s" | "50s" | "60s+" | "">("");
 
+  // 영어 사용자 판별 — ?lang=en 이거나 돌아갈 곳(next)이 /en 이면 영어로 표시
+  const [isEn, setIsEn] = useState(false);
+  const t = isEn ? T.en : T.ko;
+
   useEffect(() => setMounted(true), []);
 
-  // 로그인/가입 후 돌아갈 곳 — ?next=/flat-form 처럼 보호 페이지에서 넘어온 경우 그 곳으로
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const p = new URLSearchParams(window.location.search);
+    const n = p.get("next") || "";
+    setIsEn(p.get("lang") === "en" || n === "/en" || n.startsWith("/en/"));
+  }, []);
+
+  // 로그인/가입 후 돌아갈 곳 — ?next=/flat-form 처럼 보호 페이지에서 넘어온 경우 그 곳으로.
+  // 영어 사용자가 next 없이 온 경우엔 영어 홈(/en)으로 돌려보낸다.
   const nextDest = () => {
     if (typeof window === "undefined") return "/";
-    const n = new URLSearchParams(window.location.search).get("next");
-    return n && n.startsWith("/") ? n : "/";
+    const p = new URLSearchParams(window.location.search);
+    const n = p.get("next");
+    if (n && n.startsWith("/")) return n;
+    return p.get("lang") === "en" ? "/en" : "/";
   };
 
   // 이미 로그인한 경우 메인으로 리다이렉트
@@ -67,7 +127,7 @@ export default function LoginPage() {
     setIsLoading(true);
 
     if (!email || !password) {
-      setError("이메일과 비밀번호를 입력해주세요.");
+      setError(t.errEmailPw);
       setIsLoading(false);
       return;
     }
@@ -76,7 +136,7 @@ export default function LoginPage() {
     if (result.success) {
       router.push(nextDest());
     } else {
-      setError(result.error || "로그인에 실패했습니다.");
+      setError(result.error || t.errLogin);
     }
     setIsLoading(false);
   };
@@ -87,17 +147,17 @@ export default function LoginPage() {
     setIsLoading(true);
 
     if (!signupEmail || !signupPassword || !name || !gender || !ageGroup) {
-      setError("모든 필드를 입력해주세요.");
+      setError(t.errFields);
       setIsLoading(false);
       return;
     }
     if (signupPassword.length < 6) {
-      setError("비밀번호는 6자 이상이어야 합니다.");
+      setError(t.errPwMin);
       setIsLoading(false);
       return;
     }
     if (signupPassword !== confirmPassword) {
-      setError("비밀번호가 일치하지 않습니다.");
+      setError(t.errPwMatch);
       setIsLoading(false);
       return;
     }
@@ -113,7 +173,7 @@ export default function LoginPage() {
     if (result.success) {
       router.push(nextDest());
     } else {
-      setError(result.error || "회원가입에 실패했습니다.");
+      setError(result.error || t.errSignup);
     }
     setIsLoading(false);
   };
@@ -125,7 +185,7 @@ export default function LoginPage() {
     if (result.success) {
       router.push(nextDest());
     } else {
-      setError(result.error || "Google 로그인에 실패했습니다.");
+      setError(result.error || t.errGoogle);
     }
     setIsGoogleLoading(false);
   };
@@ -145,10 +205,10 @@ export default function LoginPage() {
     if (/[A-Z]/.test(pw)) score++;
     if (/[0-9]/.test(pw)) score++;
     if (/[^A-Za-z0-9]/.test(pw)) score++;
-    if (score <= 1) return { level: 1, label: "약함", color: "#ef4444" };
-    if (score <= 2) return { level: 2, label: "보통", color: "#f59e0b" };
-    if (score <= 3) return { level: 3, label: "좋음", color: "#22c55e" };
-    return { level: 4, label: "강력", color: "#10b981" };
+    if (score <= 1) return { level: 1, label: t.pwWeak, color: "#ef4444" };
+    if (score <= 2) return { level: 2, label: t.pwFair, color: "#f59e0b" };
+    if (score <= 3) return { level: 3, label: t.pwGood, color: "#22c55e" };
+    return { level: 4, label: t.pwStrong, color: "#10b981" };
   };
 
   const passwordStrength = getPasswordStrength(signupPassword);
@@ -235,7 +295,7 @@ export default function LoginPage() {
                 fontFamily: "inherit",
               }}
             >
-              로그인
+              {t.tabLogin}
             </button>
             <button
               onClick={() => switchMode("signup")}
@@ -268,7 +328,7 @@ export default function LoginPage() {
                 fontFamily: "inherit",
               }}
             >
-              회원가입
+              {t.tabSignup}
             </button>
           </div>
 
@@ -283,7 +343,7 @@ export default function LoginPage() {
                 letterSpacing: "-0.02em",
               }}
             >
-              {mode === "login" ? "Welcome Back" : "Create Account"}
+              {mode === "login" ? t.welcome : t.createAcc}
             </h1>
             <p
               style={{
@@ -293,8 +353,8 @@ export default function LoginPage() {
               }}
             >
               {mode === "login"
-                ? "illo에 오신 것을 환영합니다."
-                : "이메일로 간편하게 가입하고 시작하세요."}
+                ? t.subLogin
+                : t.subSignup}
             </p>
           </div>
 
@@ -354,7 +414,7 @@ export default function LoginPage() {
                     letterSpacing: "0.05em",
                   }}
                 >
-                  이메일
+                  {t.email}
                 </label>
                 <div style={{ position: "relative" }}>
                   <Mail
@@ -369,7 +429,7 @@ export default function LoginPage() {
                   />
                   <input
                     type="email"
-                    placeholder="example@email.com"
+                    placeholder={t.emailPh}
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={isLoading}
@@ -411,7 +471,7 @@ export default function LoginPage() {
                     letterSpacing: "0.05em",
                   }}
                 >
-                  비밀번호
+                  {t.password}
                 </label>
                 <div style={{ position: "relative" }}>
                   <Lock
@@ -426,7 +486,7 @@ export default function LoginPage() {
                   />
                   <input
                     type={showPassword ? "text" : "password"}
-                    placeholder="비밀번호 입력"
+                    placeholder={t.passwordPh}
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     disabled={isLoading}
@@ -513,7 +573,7 @@ export default function LoginPage() {
                   </>
                 ) : (
                   <>
-                    로그인
+                    {t.tabLogin}
                     <ChevronRight size={18} />
                   </>
                 )}
@@ -531,7 +591,7 @@ export default function LoginPage() {
             }}
           >
             <div style={{ flex: 1, height: "1px", background: isDark ? "rgba(255,255,255,0.1)" : "#e5e7eb" }} />
-            <span style={{ fontSize: "12px", fontWeight: 600, color: isDark ? "rgba(255,255,255,0.4)" : "#aaa" }}>또는</span>
+            <span style={{ fontSize: "12px", fontWeight: 600, color: isDark ? "rgba(255,255,255,0.4)" : "#aaa" }}>{t.or}</span>
             <div style={{ flex: 1, height: "1px", background: isDark ? "rgba(255,255,255,0.1)" : "#e5e7eb" }} />
           </div>
 
@@ -580,7 +640,7 @@ export default function LoginPage() {
                     display: "inline-block",
                   }}
                 />
-                연결 중...
+                {t.connecting}
               </>
             ) : (
               <>
@@ -590,7 +650,7 @@ export default function LoginPage() {
                   <path d="M3.964 10.706A5.41 5.41 0 0 1 3.682 9c0-.593.102-1.17.282-1.706V4.962H.957A8.997 8.997 0 0 0 0 9c0 1.452.348 2.827.957 4.038l3.007-2.332Z" fill="#FBBC05" />
                   <path d="M9 3.58c1.321 0 2.508.454 3.44 1.345l2.582-2.58C13.463.891 11.426 0 9 0A8.997 8.997 0 0 0 .957 4.962L3.964 7.294C4.672 5.167 6.656 3.58 9 3.58Z" fill="#EA4335" />
                 </svg>
-                Google로 계속하기
+                {t.google}
               </>
             )}
           </button>
@@ -629,7 +689,7 @@ export default function LoginPage() {
                   />
                   <input
                     type="text"
-                    placeholder="사이트에서 사용할 이름"
+                    placeholder={t.namePh}
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     disabled={isLoading}
@@ -671,7 +731,7 @@ export default function LoginPage() {
                     letterSpacing: "0.05em",
                   }}
                 >
-                  이메일
+                  {t.email}
                 </label>
                 <div style={{ position: "relative" }}>
                   <Mail
@@ -686,7 +746,7 @@ export default function LoginPage() {
                   />
                   <input
                     type="email"
-                    placeholder="example@email.com"
+                    placeholder={t.emailPh}
                     value={signupEmail}
                     onChange={(e) => setSignupEmail(e.target.value)}
                     disabled={isLoading}
@@ -728,7 +788,7 @@ export default function LoginPage() {
                     letterSpacing: "0.05em",
                   }}
                 >
-                  비밀번호
+                  {t.password}
                 </label>
                 <div style={{ position: "relative" }}>
                   <Lock
@@ -743,7 +803,7 @@ export default function LoginPage() {
                   />
                   <input
                     type={showSignupPassword ? "text" : "password"}
-                    placeholder="비밀번호 (6자 이상)"
+                    placeholder={t.passwordMin}
                     value={signupPassword}
                     onChange={(e) => setSignupPassword(e.target.value)}
                     disabled={isLoading}
@@ -829,7 +889,7 @@ export default function LoginPage() {
                     letterSpacing: "0.05em",
                   }}
                 >
-                  비밀번호 확인
+                  {t.passwordConfirm}
                 </label>
                 <div style={{ position: "relative" }}>
                   <Lock
@@ -844,7 +904,7 @@ export default function LoginPage() {
                   />
                   <input
                     type="password"
-                    placeholder="비밀번호 재입력"
+                    placeholder={t.passwordConfirm}
                     value={confirmPassword}
                     onChange={(e) => setConfirmPassword(e.target.value)}
                     disabled={isLoading}
@@ -902,12 +962,12 @@ export default function LoginPage() {
                       letterSpacing: "0.05em",
                     }}
                   >
-                    성별
+                    {t.gender}
                   </label>
                   <div style={{ display: "flex", gap: "8px" }}>
                     {[
-                      { value: "male", label: "남성" },
-                      { value: "female", label: "여성" },
+                      { value: "male", label: t.male },
+                      { value: "female", label: t.female },
                     ].map((opt) => (
                       <button
                         key={opt.value}
@@ -962,7 +1022,7 @@ export default function LoginPage() {
                       letterSpacing: "0.05em",
                     }}
                   >
-                    연령대
+                    {t.age}
                   </label>
                   <select
                     value={ageGroup}
@@ -991,13 +1051,13 @@ export default function LoginPage() {
                       appearance: "none",
                     }}
                   >
-                    <option value="">선택</option>
-                    <option value="10s">10대</option>
-                    <option value="20s">20대</option>
-                    <option value="30s">30대</option>
-                    <option value="40s">40대</option>
-                    <option value="50s">50대</option>
-                    <option value="60s+">60대 이상</option>
+                    <option value="">{t.optional}</option>
+                    <option value="10s">{t.ages[0]}</option>
+                    <option value="20s">{t.ages[1]}</option>
+                    <option value="30s">{t.ages[2]}</option>
+                    <option value="40s">{t.ages[3]}</option>
+                    <option value="50s">{t.ages[4]}</option>
+                    <option value="60s+">{t.ages[5]}</option>
                   </select>
                 </div>
               </div>
@@ -1061,21 +1121,21 @@ export default function LoginPage() {
             color: isDark ? "rgba(255,255,255,0.3)" : "#aaa",
           }}
         >
-          가입 시{" "}
+          {t.agree1}
           <Link
-            href="/legal/terms"
+            href={isEn ? "/en/legal/terms" : "/legal/terms"}
             style={{ color: isDark ? "rgba(255,255,255,0.5)" : "#888", textDecoration: "underline" }}
           >
-            이용약관
-          </Link>{" "}
-          및{" "}
-          <Link
-            href="/legal/privacy"
-            style={{ color: isDark ? "rgba(255,255,255,0.5)" : "#888", textDecoration: "underline" }}
-          >
-            개인정보처리방침
+            {t.agreeTerms}
           </Link>
-          에 동의합니다.
+          {t.agree2}
+          <Link
+            href={isEn ? "/en/legal/privacy" : "/legal/privacy"}
+            style={{ color: isDark ? "rgba(255,255,255,0.5)" : "#888", textDecoration: "underline" }}
+          >
+            {t.agreePrivacy}
+          </Link>
+          {t.agree3}
         </p>
       </div>
 
