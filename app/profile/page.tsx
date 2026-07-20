@@ -54,6 +54,7 @@ import {
   type ShopItem,
 } from "@/lib/shopItems";
 import BannerFx from "@/components/cozy/BannerFx";
+import { summarizeToday } from "@/lib/aiDiary";
 import MyDashboard from "@/components/my/MyDashboard";
 
 // 배경/테두리/이름효과/배너효과/스티커는 lib/shopItems.ts 카탈로그에서 가져온다.
@@ -201,6 +202,8 @@ const T = {
     posting: "남기는 중...",
     addDiary: "일기 남기기",
     noDiaryYet: "아직 일기가 없어요",
+    autoDiary: "✨ 오늘의 하루 자동 정리",
+    autoDiaryHint: "오늘 한 활동을 모아 일기 초안을 만들어드려요. 확인하고 저장하세요.",
     myTierHeading: "내 등급",
     collapse: "접기",
     viewTierTable: "등급표 보기",
@@ -347,6 +350,8 @@ const T = {
     posting: "Posting...",
     addDiary: "Add diary entry",
     noDiaryYet: "No diary entries yet",
+    autoDiary: "✨ Sum up my day",
+    autoDiaryHint: "We'll pull together what you did today into a draft. Review it, then save.",
     myTierHeading: "My tier",
     collapse: "Collapse",
     viewTierTable: "View tier table",
@@ -742,6 +747,22 @@ export default function ProfilePage() {
   };
 
   // ── 다이어리(주인 본인만 작성) ──
+  // ✨ 오늘의 하루 자동 정리 — 이미 쌓인 활동 내역을 요약해 입력창에 채운다(비용 0).
+  //    자동 저장하지 않고 사용자가 확인·수정 후 '일기 남기기'를 누르게 한다.
+  const handleAutoDiary = () => {
+    const email = session?.user?.email;
+    if (!isOwner || !email) return;
+    // 오늘 작성한 피드 글만 카운트(feed 는 최근 10개 — createdAt 기준 오늘 것만)
+    const startOfToday = new Date(); startOfToday.setHours(0, 0, 0, 0);
+    const todayPosts = feed.filter((f: any) => {
+      const t = typeof f?.createdAt === "number" ? f.createdAt : Date.parse(f?.createdAt || "");
+      return Number.isFinite(t) && t >= startOfToday.getTime();
+    }).length;
+    const s = summarizeToday(email, lang, { posts: todayPosts });
+    setDiaryInput(s.text);
+    if (s.mood && !diaryMood) setDiaryMood(s.mood);
+  };
+
   const handleAddDiary = async () => {
     if (!isOwner || !diaryInput.trim() || diaryBusy) return;
     setDiaryBusy(true);
@@ -1620,6 +1641,14 @@ export default function ProfilePage() {
 
             {isOwner && (
               <div className="mb-4">
+                {/* ✨ 오늘의 하루 자동 정리 — 활동 내역을 모아 초안 생성(비용 0) */}
+                <button
+                  onClick={handleAutoDiary}
+                  title={t.autoDiaryHint}
+                  className="mb-2 inline-flex items-center gap-1.5 px-3 py-1.5 rounded-full bg-[#F9954E]/10 text-[#E8832E] dark:text-[#FBAA60] text-[12px] font-bold hover:bg-[#F9954E]/20 active:scale-95 transition"
+                >
+                  {t.autoDiary}
+                </button>
                 <div className="flex flex-wrap gap-1 mb-2">
                   {MOODS.map((m) => (
                     <button
