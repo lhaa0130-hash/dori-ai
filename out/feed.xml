@@ -6,7 +6,23 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 20 Jul 2026 05:00:32 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 20 Jul 2026 06:00:39 GMT</lastBuildDate>
+    <item>
+      <title>AI in Homework: The Race Between Students and School Regulations</title>
+      <link>https://illo.im/insight/article/analysis-15-en</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/analysis-15-en</guid>
+      <category>분석</category>
+      <pubDate>Mon, 20 Jul 2026 05:03:43 GMT</pubDate>
+      <description>As students embrace AI for homework, schools struggle to keep up with appropriate guidelines.</description>
+    </item>
+    <item>
+      <title>학생 AI 숙제 사용 확산: 학교 규칙은 왜 따라오지 못하나</title>
+      <link>https://illo.im/insight/article/analysis-15</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/analysis-15</guid>
+      <category>분석</category>
+      <pubDate>Mon, 20 Jul 2026 05:03:43 GMT</pubDate>
+      <description>학생들은 이미 생성형 AI를 숙제의 기본 도구로 쓰기 시작했지만, 학교의 규칙은 따라오지 못하고 있다. 이 격차는 단순한 부정행위 문제가 아니라 평가, 교사 권한, 교육 불평등을 다시 설계해야 하는 신호다.</description>
+    </item>
     <item>
       <title>AI Industry Faces New Challenges: Infrastructure Investments and Security Concerns</title>
       <link>https://illo.im/insight/article/report-12-en</link>
@@ -310,22 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Mon, 06 Jul 2026 00:00:00 GMT</pubDate>
       <description>AI 토큰 사용의 복잡성을 설명하는 영상입니다.</description>
-    </item>
-    <item>
-      <title>[구글] 제미나이 3.5 인공지능 기능 사용법</title>
-      <link>https://illo.im/insight/article/video-57</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-57</guid>
-      <category>큐레이션</category>
-      <pubDate>Mon, 06 Jul 2026 00:00:00 GMT</pubDate>
-      <description>구글 제미나이 3.5의 활용 방법을 소개합니다.</description>
-    </item>
-    <item>
-      <title>Top 7 Free AI Translation Tools: Best Options for Different Needs</title>
-      <link>https://illo.im/insight/article/curation-16-en</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/curation-16-en</guid>
-      <category>큐레이션</category>
-      <pubDate>Sun, 05 Jul 2026 23:02:02 GMT</pubDate>
-      <description>Explore the best free AI translation tools for natural accuracy, tone adjustment, and more to suit your specific needs.</description>
     </item>
   </channel>
 </rss>
