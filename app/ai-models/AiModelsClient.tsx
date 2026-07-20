@@ -93,6 +93,7 @@ const STRINGS: Record<Locale, {
 
 export default function AiModelsClient({ locale = "ko" }: { locale?: Locale }) {
   const t = STRINGS[locale];
+  const isEn = locale === "en";
   const [stats, setStats] = useState<Stats | null>(null);
   const [err, setErr] = useState(false);
   const [inTok, setInTok] = useState(1000);
@@ -297,8 +298,8 @@ export default function AiModelsClient({ locale = "ko" }: { locale?: Locale }) {
             <p className="text-[10.5px] text-stone-400 mt-3">{t.dataNote}</p>
 
             <div className="mt-6 flex flex-wrap gap-2">
-              <Link href="/ai-tools" className="inline-flex items-center gap-1 rounded-full bg-[#F9954E] text-white text-[12.5px] font-bold px-4 py-2">{t.ctaTools(343)}</Link>
-              <Link href="/insight" className="inline-flex items-center gap-1 rounded-full border border-stone-200 dark:border-zinc-700 text-stone-600 dark:text-stone-300 text-[12.5px] font-bold px-4 py-2">{t.ctaInsight}</Link>
+              <Link href={isEn ? "/en/ai-tools" : "/ai-tools"} className="inline-flex items-center gap-1 rounded-full bg-[#F9954E] text-white text-[12.5px] font-bold px-4 py-2">{t.ctaTools(343)}</Link>
+              <Link href={isEn ? "/en/insight" : "/insight"} className="inline-flex items-center gap-1 rounded-full border border-stone-200 dark:border-zinc-700 text-stone-600 dark:text-stone-300 text-[12.5px] font-bold px-4 py-2">{t.ctaInsight}</Link>
             </div>
 
             {/* FAQ (사람용 — JSON-LD는 서버에서 별도 주입) */}

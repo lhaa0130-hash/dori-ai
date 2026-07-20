@@ -2,7 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import Link from "next/link";
 import { Eye, EyeOff, Mail, Lock, User, ChevronRight } from "lucide-react";
@@ -81,8 +81,11 @@ export default function LoginPage() {
   const [gender, setGender] = useState<"male" | "female" | "">("");
   const [ageGroup, setAgeGroup] = useState<"10s" | "20s" | "30s" | "40s" | "50s" | "60s+" | "">("");
 
-  // 영어 사용자 판별 — ?lang=en 이거나 돌아갈 곳(next)이 /en 이면 영어로 표시
-  const [isEn, setIsEn] = useState(false);
+  // 영어 사용자 판별 — /en/login 경로이거나, ?lang=en, 또는 돌아갈 곳(next)이 /en 이면 영어.
+  // ⚠️ 경로 판별은 '렌더 중'에 해야 한다. useEffect로만 세팅하면 /en/login 첫 화면이 한글로
+  //    그려졌다가 영어로 바뀌는 깜빡임이 생기고, 크롤러는 한글 상태만 보게 된다.
+  const pathname = usePathname();
+  const [isEn, setIsEn] = useState((pathname || "").startsWith("/en/"));
   const t = isEn ? T.en : T.ko;
 
   useEffect(() => setMounted(true), []);
