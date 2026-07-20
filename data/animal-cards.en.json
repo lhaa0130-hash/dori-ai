@@ -3220,7 +3220,14 @@
       "몸길이": "7–8.5 m",
       "몸무게": "5–6 t",
       "수명": "Avg. 30–40 years"
-    }
+    },
+    "nickname": "Hunter of the sea",
+    "desc": "Orcas are among the largest whales, and they hunt fish and sea lions. They live in family pods and talk to one another with special calls. You can find orcas in oceans all around the world.",
+    "facts": [
+      "Orcas are apex predators that hunt a wide range of prey.",
+      "They are famous for their complex social structure and distinctive songs.",
+      "They live in every ocean, from the poles to the tropics."
+    ]
   },
   "0052": {
     "name": "Beluga Whale",
@@ -3231,7 +3238,14 @@
       "몸길이": "3.5–4.5 m",
       "몸무게": "1.5 t",
       "수명": "Avg. 40–60 years"
-    }
+    },
+    "nickname": "The white whale",
+    "desc": "Belugas are white whales that live near the Arctic. They travel in groups and can make wonderfully high-pitched sounds. Young belugas are grey and turn white as they grow up.",
+    "facts": [
+      "Belugas are nicknamed 'canaries of the sea' for their high-pitched calls.",
+      "A thick layer of blubber keeps them warm.",
+      "Their neck bones let them turn their heads freely."
+    ]
   },
   "0053": {
     "name": "Korean Sea Lion",
@@ -3242,7 +3256,14 @@
       "몸길이": "164–250 cm",
       "몸무게": "250 kg",
       "수명": "Avg. 25–30 years"
-    }
+    },
+    "nickname": "The Dokdo sea lion",
+    "desc": "Sea lions were large animals that lived in the sea and ate squid and fish. They once gathered in great numbers around Dokdo, but they are now extinct. They lived in groups and were hunted heavily for their hide and oil.",
+    "facts": [
+      "The Korean sea lion was declared extinct in 1994.",
+      "Its natural predators were sharks and orcas.",
+      "Dokdo was once a major breeding ground for these sea lions."
+    ]
   },
   "0054": {
     "name": "Spotted Seal",
@@ -3253,7 +3274,14 @@
       "몸길이": "160–170 cm",
       "몸무게": "70–130 kg",
       "수명": "About 30 years"
-    }
+    },
+    "nickname": "The spotted swimmer",
+    "desc": "Spotted seals live in the sea and have grey bodies covered in patterned spots. They live in the cold waters of the North Pacific and mostly eat fish and other sea creatures. Newborn pups are covered in soft white fur.",
+    "facts": [
+      "Spotted seals give birth and raise their pups on drifting ice.",
+      "Adults are silver-grey with oval spots.",
+      "Pups are born with white fur that works as camouflage."
+    ]
   },
   "0055": {
     "name": "Walrus",
@@ -3264,7 +3292,14 @@
       "몸길이": "3–3.8 m",
       "몸무게": "1 t",
       "수명": "Avg. 70 years"
-    }
+    },
+    "nickname": "Giant of the Arctic",
+    "desc": "Walruses are huge animals that live in the cold Arctic seas. They are named for the long tusks that remind people of an elephant's. They gather in big groups with their companions and feed on shellfish.",
+    "facts": [
+      "A male walrus's ivory tusks can reach a metre long.",
+      "Among pinnipeds, only elephant seals are bigger.",
+      "They use their tusks to haul themselves up onto the ice."
+    ]
   },
   "0056": {
     "name": "Raccoon Dog",
@@ -3275,7 +3310,14 @@
       "몸길이": "50–68 cm",
       "몸무게": "4–10 kg",
       "수명": "Avg. 4–6 years"
-    }
+    },
+    "nickname": "The raccoon look-alike",
+    "desc": "Raccoon dogs are about the size of a cat and mostly live on grassland. They are omnivores that eat all sorts of food, and they are the only members of the dog family that sleep through winter. They look like raccoons, but they are a different animal.",
+    "facts": [
+      "The raccoon dog is the only canid that hibernates.",
+      "It looks like a raccoon but is only distantly related.",
+      "It is an omnivore that eats a wide variety of food."
+    ]
   },
   "0057": {
     "name": "Raccoon",
@@ -3286,7 +3328,14 @@
       "몸길이": "40–70 cm",
       "몸무게": "5–12 kg",
       "수명": "Avg. 7–10 years"
-    }
+    },
+    "nickname": "The mischief-maker",
+    "desc": "Raccoons are endearing animals with fur that looks like a mask across their faces. They come out at night, climb well and are wonderfully nimble with their paws. They eat all kinds of food and can even be found near cities.",
+    "facts": [
+      "Raccoons are remarkably skilled at handling objects with their front paws.",
+      "The black mask-like fur around their eyes gives them a mischievous look.",
+      "They climb well and can move surprisingly fast."
+    ]
   },
   "0058": {
     "name": "Skunk",
@@ -3297,7 +3346,14 @@
       "몸길이": "33–38 cm",
       "몸무게": "2–4 kg",
       "수명": "Avg. 3–5 years"
-    }
+    },
+    "nickname": "The stink bomb",
+    "desc": "Skunks are animals with black and white stripes. When they sense danger they spray a terribly smelly liquid to defend themselves. They can live in forests, on grassland and even near cities.",
+    "facts": [
+      "When threatened, a skunk sprays a foul-smelling liquid to defend itself.",
+      "Its black and white stripes work as a warning colour.",
+      "Skunks live in many habitats and sometimes dig burrows."
+    ]
   },
   "0059": {
     "name": "Asian Badger",
@@ -3308,7 +3364,14 @@
       "몸길이": "50–70 cm",
       "몸무게": "7–13 kg",
       "수명": "Avg. 2–4 years"
-    }
+    },
+    "nickname": "The furry badger",
+    "desc": "Badgers are endearing little animals that come out mostly at night. They sleep for a long stretch through winter and wake in spring. Badgers swim well and love resting in the undergrowth.",
+    "facts": [
+      "Badgers hibernate, sleeping right through from December to March.",
+      "A keen sense of smell helps them find food.",
+      "They enjoy swimming and often take to the water in summer."
+    ]
   },
   "0060": {
     "name": "Siberian Weasel",
@@ -3319,7 +3382,14 @@
       "몸길이": "28–39 cm",
       "몸무게": "0.5–0.8 kg",
       "수명": "About 7 years"
-    }
+    },
+    "nickname": "The long, slender weasel",
+    "desc": "Weasels are animals with long, slim bodies. They have glossy yellowish-brown fur and love to climb trees. Weasels eat a wide variety of food.",
+    "facts": [
+      "Their long, slender bodies let them slip through narrow spaces.",
+      "Their yellowish-brown fur is glossy, with white on the chin and lips.",
+      "Weasels are keen climbers."
+    ]
   },
   "0061": {
     "name": "Yellow-throated Marten",
@@ -3330,7 +3400,14 @@
       "몸길이": "45–65 cm",
       "몸무게": "2–3 kg",
       "수명": "Avg. 8–10 years"
-    }
+    },
+    "nickname": "The yellow-throated climber",
+    "desc": "Martens are about the size of a cat. Their throats are yellow, which gives the yellow-throated marten its name. They live happily up in the trees, move about in groups and eat many kinds of food.",
+    "facts": [
+      "Martens are equally at home living up in the trees.",
+      "Their colouring varies, but the throat is distinctively yellow.",
+      "They live mainly across Asia."
+    ]
   },
   "0062": {
     "name": "Mongoose",
@@ -3341,7 +3418,14 @@
       "몸길이": "36–45 cm",
       "몸무게": "0.9–1.7 kg",
       "수명": "Avg. 4–10 years"
-    }
+    },
+    "nickname": "The cat-like weasel",
+    "desc": "Mongooses look rather like cats. They are famous for bravely taking on snakes, but they mostly eat mice and birds' eggs. They have long tails and grey bodies, and they are lively animals active by day and night.",
+    "facts": [
+      "Mongooses are famous snake fighters, but they prefer mice and birds' eggs.",
+      "They move with astonishing speed and agility when facing a snake.",
+      "They are fierce by nature but can be tamed."
+    ]
   },
   "0063": {
     "name": "Jaguar",
@@ -3352,7 +3436,14 @@
       "몸길이": "112–185 cm",
       "몸무게": "56–100 kg",
       "수명": "Avg. 12–15 years"
-    }
+    },
+    "nickname": "The spotted swimmer cat",
+    "desc": "Jaguars are big cats that live in the Americas. They have large dark rosettes on their coats and prefer to live alone. They swim well and catch prey easily with their powerful jaws.",
+    "facts": [
+      "The jaguar is the largest cat in the Americas.",
+      "Jaguars swim well and often hunt near water.",
+      "Their bite is so powerful they can subdue prey in a single go."
+    ]
   },
   "0064": {
     "name": "Puma",
@@ -3363,7 +3454,14 @@
       "몸길이": "100–150 cm",
       "몸무게": "40–80 kg",
       "수명": "10–20 years"
-    }
+    },
+    "nickname": "The mountain lion",
+    "desc": "Pumas are big cats that live across the Americas. They mostly hunt deer and smaller animals, and they rarely attack people. Pumas are wonderfully quick and agile!",
+    "facts": [
+      "Pumas do not see humans as prey, and attacks are rare.",
+      "Cubs are born with dark spots that fade after about three months.",
+      "They are so agile they can defend themselves from most predators."
+    ]
   },
   "0065": {
     "name": "Eurasian Lynx",
@@ -3374,7 +3472,14 @@
       "몸길이": "80–130 cm",
       "몸무게": "18–30 kg",
       "수명": "Avg. 8–13 years"
-    }
+    },
+    "nickname": "Hunter of the snow",
+    "desc": "Lynx look like large cats. The long tufts on the tips of their ears help them hear extremely well. They mostly live alone in forests, hunting smaller animals.",
+    "facts": [
+      "Lynx have strikingly distinct spotted markings.",
+      "The long tufts on their ear tips sharpen their hearing.",
+      "They live alone and hold their own territories."
+    ]
   },
   "0066": {
     "name": "Snow Leopard",
@@ -3385,7 +3490,14 @@
       "몸길이": "100–130 cm",
       "몸무게": "25–55 kg",
       "수명": "Avg. 16–20 years"
-    }
+    },
+    "nickname": "Ghost of the mountains",
+    "desc": "Snow leopards are magnificent cats that live high in the mountains of Central Asia. They balance with their long tails, and their grey coats hide them beautifully in the snow. They hunt animals such as wild sheep and hares.",
+    "facts": [
+      "Snow leopards use their long tails to balance on cliff edges.",
+      "Their grey coats camouflage them in snowy terrain.",
+      "They live high in the mountains of Central Asia."
+    ]
   },
   "0067": {
     "name": "Hyena",
@@ -3396,7 +3508,14 @@
       "몸길이": "95–160 cm",
       "몸무게": "40–70 kg",
       "수명": "Avg. 10–19 years"
-    }
+    },
+    "nickname": "The laughing hunter",
+    "desc": "Hyenas live on the plains of Africa. They move in groups and their jaws are strong enough to crush bone. Among spotted hyenas the females are larger and lead the clan.",
+    "facts": [
+      "Hyenas are related to cats and civets, but behave much like dogs.",
+      "Female spotted hyenas are larger than males and dominate the clan.",
+      "Their powerful jaws and teeth can crush bone."
+    ]
   },
   "0068": {
     "name": "Coyote",
@@ -3407,7 +3526,14 @@
       "몸길이": "75–100 cm",
       "몸무게": "9–18 kg",
       "수명": "Avg. 10–14 years"
-    }
+    },
+    "nickname": "The prairie wolf",
+    "desc": "Coyotes look much like dogs. They are mostly active at night and hunt smaller animals. They live across North and Central America.",
+    "facts": [
+      "Coyotes can run at 64 km/h.",
+      "A pup born to a coyote and a dog is called a coydog.",
+      "They are found widely across North and Central America."
+    ]
   },
   "0069": {
     "name": "Jackal",
@@ -3418,7 +3544,14 @@
       "몸길이": "60–85 cm",
       "몸무게": "7–11 kg",
       "수명": "Avg. 8–15 years"
-    }
+    },
+    "nickname": "The little wolf",
+    "desc": "Jackals look like small wolves. They live in Africa, southern Asia and Europe. Jackals usually live with family rather than alone, and they will eat what other animals leave behind.",
+    "facts": [
+      "Jackals generally live in monogamous pairs.",
+      "They mark their territory with urine and droppings.",
+      "They act largely as scavengers, feeding on carcasses."
+    ]
   },
   "0070": {
     "name": "Dingo",
@@ -3429,7 +3562,14 @@
       "몸길이": "86–97 cm",
       "몸무게": "13–20 kg",
       "수명": "Avg. 10–16 years"
-    }
+    },
+    "nickname": "Australia's wild dog",
+    "desc": "Dingoes are wild dogs that live in Australia. Their coats come in many shades — tan, dark brown, cream and white. Dingoes live in family groups and are mostly found on open grassland.",
+    "facts": [
+      "The dingo is Australia's wild dog, sometimes classed as a subspecies of the grey wolf.",
+      "It lives in open country such as grassland, in family groups.",
+      "Coats are usually tan or dark brown, with many colour variations."
+    ]
   },
   "0071": {
     "name": "Brown Bear",
@@ -3440,7 +3580,14 @@
       "몸길이": "180–280 cm",
       "몸무게": "150–350 kg",
       "수명": "Avg. 25 years"
-    }
+    },
+    "nickname": "The big bear",
+    "desc": "Brown bears are large bears. Their fur comes in many shades and they mostly live in forests. They prefer to live alone, though mothers stay with their cubs. Brown bears are omnivores that eat both plants and animals.",
+    "facts": [
+      "Brown bears adapt to a wide range of environments.",
+      "They dig for food with powerful front paws.",
+      "They live alone, except when raising cubs."
+    ]
   },
   "0072": {
     "name": "Asian Black Bear",
@@ -3451,7 +3598,14 @@
       "몸길이": "120–190 cm",
       "몸무게": "90–150 kg",
       "수명": "About 25 years"
-    }
+    },
+    "nickname": "The moon bear",
+    "desc": "Asian black bears have a white V-shape on their chests. They live in forests and mountains and mostly eat plants and fruit. They hibernate through the winter, too!",
+    "facts": [
+      "They are named for the white V-shaped patch on the chest.",
+      "They hibernate, and eat mostly grasses, fruit and nuts.",
+      "Once widespread across the Korean peninsula, they are now a protected endangered species."
+    ]
   },
   "0073": {
     "name": "Japanese Macaque",
@@ -3462,7 +3616,14 @@
       "몸길이": "47–60 cm",
       "몸무게": "8–14 kg",
       "수명": "32 years"
-    }
+    },
+    "nickname": "The snow monkey",
+    "desc": "Japanese macaques are remarkable monkeys that live in Japan. They cope well with bitter cold and even play in the snow. They groom one another's fur and get along happily with their friends.",
+    "facts": [
+      "Japanese macaques can endure temperatures of -20°C.",
+      "They can swim more than 500 metres.",
+      "Females stay in the group they were born into for life."
+    ]
   },
   "0074": {
     "name": "Baboon",
@@ -3473,7 +3634,14 @@
       "몸길이": "50–115 cm",
       "몸무게": "14–40 kg",
       "수명": "Avg. 20–30 years"
-    }
+    },
+    "nickname": "The dog-faced monkey",
+    "desc": "Baboons are large monkeys that live in Africa. They move in troops and eat all kinds of food. Amusingly, they have pouches inside their mouths for storing food.",
+    "facts": [
+      "Baboons can store food in their large cheek pouches.",
+      "They are known for the colouring on their rumps and legs.",
+      "A chacma baboon can weigh up to 40 kg."
+    ]
   },
   "0075": {
     "name": "Mandrill",
@@ -3484,7 +3652,14 @@
       "몸길이": "61–76 cm",
       "몸무게": "12–33 kg",
       "수명": "Avg. 20–27 years"
-    }
+    },
+    "nickname": "The colourful monkey",
+    "desc": "Mandrills are monkeys with wonderfully vivid colours. A male's face and rump are blue and red. They live in troops and eat fruit and insects. Rafiki from The Lion King is a mandrill, too.",
+    "facts": [
+      "Male mandrills have extraordinarily vivid colouring.",
+      "They live in the forests of West Africa.",
+      "The colour on their rumps grows brighter when they are excited."
+    ]
   },
   "0076": {
     "name": "Lemur",
@@ -3495,7 +3670,14 @@
       "몸길이": "30–45 cm",
       "몸무게": "2–2.5 kg",
       "수명": "Avg. 15–20 years"
-    }
+    },
+    "nickname": "The fox-faced primate",
+    "desc": "Lemurs are remarkable primates found only on the island of Madagascar. They have long tails and are active at night. They live in the trees, eating fruit and insects.",
+    "facts": [
+      "Lemurs are found nowhere in the world except Madagascar.",
+      "They are nocturnal, active through the night.",
+      "One toe on each hind foot is a specialised grooming claw."
+    ]
   },
   "0077": {
     "name": "Spider Monkey",
@@ -3506,7 +3688,14 @@
       "몸길이": "33–63 cm",
       "몸무게": "6–9 kg",
       "수명": "Avg. 20–25 years"
-    }
+    },
+    "nickname": "Acrobat of the treetops",
+    "desc": "Spider monkeys live in the trees and can grip branches with their tails. They eat fruit and nuts and live in troops of 20 to 30. Their coats come in many colours.",
+    "facts": [
+      "Spider monkeys can grip branches with their tails.",
+      "They move through the treetops with remarkable agility.",
+      "They have almost no thumbs."
+    ]
   },
   "0078": {
     "name": "Tarsier",
@@ -3517,7 +3706,14 @@
       "몸길이": "9–16 cm",
       "몸무게": "120 g",
       "수명": "Avg. 14–26 years"
-    }
+    },
+    "nickname": "The tiny night traveller",
+    "desc": "Tarsiers are very small primates that come out at night. They cannot move their eyes, so they turn their heads to look around. Pads on their fingertips help them cling to trees.",
+    "facts": [
+      "Tarsiers cannot move their eyes, so they rotate their heads up to 180°.",
+      "Pads on their fingertips grip trees firmly.",
+      "They sleep by day and are active at night."
+    ]
   },
   "0079": {
     "name": "Gibbon",
@@ -3528,7 +3724,14 @@
       "몸길이": "44–64 cm",
       "몸무게": "5–8 kg",
       "수명": "Avg. 20–30 years"
-    }
+    },
+    "nickname": "The long-armed ape",
+    "desc": "Gibbons have such long arms that they swing between trees beautifully. They live in tropical rainforest and spend most of their lives up in the canopy. They are small apes, and rather charming ones.",
+    "facts": [
+      "Gibbons swing rapidly between trees using their arms.",
+      "They are classified as lesser apes.",
+      "They live in the rainforests of India and Southeast Asia."
+    ]
   },
   "0080": {
     "name": "Wild Boar",
@@ -3539,7 +3742,14 @@
       "몸길이": "90–200 cm",
       "몸무게": "50–100 kg",
       "수명": "Avg. 8–18 years"
-    }
+    },
+    "nickname": "The wild pig",
+    "desc": "Wild boar are pigs that live in the wild, mostly in forests and hills. They are omnivores and will eat fruit and roots. Their piglets have stripes that help them hide in the forest.",
+    "facts": [
+      "Wild boar are among the most widely distributed mammals on Earth.",
+      "Their canine teeth keep growing throughout life, forming large tusks.",
+      "Piglets have yellow and white stripes that act as camouflage."
+    ]
   },
   "0081": {
     "name": "Pangolin",
@@ -3550,7 +3760,14 @@
       "몸길이": "30–90 cm",
       "몸무게": "5–10 kg",
       "수명": "Avg. 5–7 years"
-    }
+    },
+    "nickname": "The walking pinecone",
+    "desc": "Pangolins are remarkable animals covered in scales. The scales are so tough they keep the pangolin safe. Pangolins catch ants with their long tongues, and they are active at night.",
+    "facts": [
+      "Pangolins roll into a ball to defend themselves.",
+      "Their scales are made of keratin, like our fingernails.",
+      "They catch ants and termites with their long tongues."
+    ]
   },
   "0082": {
     "name": "Dugong",
@@ -3561,7 +3778,14 @@
       "몸길이": "240–340 cm",
       "몸무게": "250–400 kg",
       "수명": "About 70 years"
-    }
+    },
+    "nickname": "Cow of the sea",
+    "desc": "Dugongs are large animals that live in the sea. They feed on seagrass, and their tails look rather like a whale's. People are fond of dugongs, but they are now endangered, and many are working hard to protect them.",
+    "facts": [
+      "The dugong is the only surviving plant-eating marine mammal in its order.",
+      "Its whale-like fluked tail sets it apart from other sirenians.",
+      "It grazes on seagrass, tearing it up with its lips."
+    ]
   },
   "0083": {
     "name": "Manatee",
@@ -3572,7 +3796,14 @@
       "몸길이": "250–450 cm",
       "몸무게": "400–550 kg",
       "수명": "60 years"
-    }
+    },
+    "nickname": "Mermaid of the sea",
+    "desc": "Manatees are big sea animals. They are herbivores that eat great quantities of sea plants. Now and then they rise to the surface for a breath. People have nicknamed them 'mermaids of the sea'.",
+    "facts": [
+      "Manatees nurse their young at the surface, which earned them the 'mermaid' nickname.",
+      "A manatee can eat up to 50 kg of water plants a day.",
+      "They took to the sea largely to escape predators on land."
+    ]
   },
   "0084": {
     "name": "Gazelle",
@@ -3583,7 +3814,14 @@
       "몸길이": "90–150 cm",
       "몸무게": "20–30 kg",
       "수명": "Avg. 10–12 years"
-    }
+    },
+    "nickname": "Dancer of the dry plains",
+    "desc": "Gazelles are graceful animals that can run beautifully across the plains. They mostly eat grass and cope well even in dry places like deserts. Their tails are tipped with black and their coats carry handsome markings.",
+    "facts": [
+      "Gazelles live mainly in dry country such as savannah and desert.",
+      "They get their water from plants, browsing on shoots and grass in the evening.",
+      "Both males and females carry lyre-shaped horns."
+    ]
   },
   "0085": {
     "name": "Impala",
@@ -3594,7 +3832,14 @@
       "몸길이": "120–160 cm",
       "몸무게": "40–60 kg",
       "수명": "Avg. 12–15 years"
-    }
+    },
+    "nickname": "The champion jumper",
+    "desc": "Impalas are handsome animals of the grasslands. They are active during the day and can leap high on their long legs. Impalas eat grass and fruit and move about with the herd.",
+    "facts": [
+      "Impalas are superb jumpers, which helps them escape predators.",
+      "They are active by day and live in a range of habitats.",
+      "There are two subspecies, one of which is the black-faced impala."
+    ]
   },
   "0086": {
     "name": "Wildebeest",
@@ -3605,7 +3850,14 @@
       "몸길이": "170–240 cm",
       "몸무게": "150–250 kg",
       "수명": "Avg. 5 years"
-    }
+    },
+    "nickname": "The horned runner",
+    "desc": "Wildebeest are large animals of the African plains. They gather in herds alongside zebras and travel great distances. They have dark grey bodies and distinctive curving horns.",
+    "facts": [
+      "Wildebeest often herd together with zebras.",
+      "Both males and females have horns, curved into a distinctive shape.",
+      "They travel up to 2,000 km in search of grass."
+    ]
   },
   "0087": {
     "name": "American Bison",
@@ -3616,7 +3868,14 @@
       "몸길이": "2.1–3.5 m",
       "몸무게": "500–900 kg",
       "수명": "Avg. 9–15 years"
-    }
+    },
+    "nickname": "The great plains bison",
+    "desc": "American bison are enormous animals that live on the plains of North America. They have shaggy coats, move in herds and graze on grass. They were once close to extinction, but their numbers have recovered.",
+    "facts": [
+      "Bison once numbered over 60 million, but fell to just 541 in the 19th century.",
+      "They were a vital resource on the North American plains.",
+      "Bison now live again across the United States, Canada and Mexico."
+    ]
   },
   "0088": {
     "name": "Water Buffalo",
@@ -3627,7 +3886,14 @@
       "몸길이": "240–300 cm",
       "몸무게": "500–900 kg",
       "수명": "Avg. 20 years"
-    }
+    },
+    "nickname": "The mud-bathing strongman",
+    "desc": "Water buffalo are animals with great horns and powerful bodies. They live in herds around lakes and marshes, and they bathe in mud to get rid of parasites. They also help people with farm work.",
+    "facts": [
+      "A water buffalo's horns can grow up to two metres long.",
+      "They bathe in mud to remove parasites.",
+      "Their milk is rich in fat and highly nutritious."
+    ]
   },
   "0089": {
     "name": "Yak",
@@ -3638,7 +3904,14 @@
       "몸길이": "2.5–3.3 m",
       "몸무게": "300–500 kg",
       "수명": "Avg. 20 years"
-    }
+    },
+    "nickname": "The shaggy highland ox",
+    "desc": "Yaks look like large cattle and live high in mountains such as the Himalayas. Their coats are so long and warm that they cope well with the cold. Yaks can carry heavy loads a long way, which is a great help to people.",
+    "facts": [
+      "Long hair lets yaks endure the cold of high mountains.",
+      "A yak can carry a heavy load up to 32 km in a day.",
+      "Yak milk is very rich, and the meat is dried or grilled."
+    ]
   },
   "0090": {
     "name": "Long-tailed Goral",
@@ -3649,7 +3922,14 @@
       "몸길이": "80–130 cm",
       "몸무게": "22–35 kg",
       "수명": "Avg. 10–15 years"
-    }
+    },
+    "nickname": "The long-tailed mountain goat",
+    "desc": "Gorals live in the mountains. Their sturdy legs carry them up steep ground, and they live in small groups. They graze on grass and sometimes come down closer to people.",
+    "facts": [
+      "Gorals live mostly among rugged rocks and caves.",
+      "In Korea they are protected as a natural monument.",
+      "Sharp sight, hearing and smell let them navigate their territory precisely."
+    ]
   },
   "0091": {
     "name": "Chinchilla",
@@ -3660,7 +3940,14 @@
       "몸길이": "22–38 cm",
       "몸무게": "0.5 kg",
       "수명": "Avg. 8–10 years"
-    }
+    },
+    "nickname": "The fluffy jumper",
+    "desc": "Chinchillas are small animals from the Andes of South America. Their fur is so soft and thick that stroking it feels wonderful. They jump so well they sometimes look like little rabbits. Chinchillas must never be bathed in water — they take dust baths instead.",
+    "facts": [
+      "Chinchilla fur is so dense they must bathe in dust rather than water.",
+      "Pikachu was modelled on a chinchilla.",
+      "Short front legs and long hind legs make them excellent jumpers."
+    ]
   },
   "0092": {
     "name": "Marmot",
@@ -3670,7 +3957,14 @@
       "먹이": "Herbivore",
       "몸길이": "30–60 cm",
       "몸무게": "3–7 kg"
-    }
+    },
+    "nickname": "The mountain squirrel",
+    "desc": "Marmots are squirrel relatives that live in the mountains. They sleep through winter, and they whistle loudly to warn the others of danger. They live on grass and leaves.",
+    "facts": [
+      "Marmots hibernate through the winter.",
+      "They whistle loudly to signal danger to the rest of the colony.",
+      "They dig burrows or shelter among rocks."
+    ]
   },
   "0093": {
     "name": "African Porcupine",
@@ -3681,7 +3975,14 @@
       "몸길이": "60–93 cm",
       "몸무게": "15 kg",
       "수명": "Avg. 2–3 years"
-    }
+    },
+    "nickname": "The quill-covered forager",
+    "desc": "Porcupines are animals covered in quills. They defend themselves with those quills and eat nuts and roots. They are active mostly at night and hide away in burrows during the day.",
+    "facts": [
+      "A porcupine's quills detach easily and lodge in an attacker's skin.",
+      "Lost quills grow back over time.",
+      "They drive off attackers with their quills to defend themselves."
+    ]
   },
   "0094": {
     "name": "Civet",
@@ -3692,7 +3993,14 @@
       "몸길이": "45–85 cm",
       "몸무게": "2–5 kg",
       "수명": "Avg. 10–15 years"
-    }
+    },
+    "nickname": "The musk cat",
+    "desc": "Civets look rather like cats. They live mostly up in the trees and eat many kinds of food. They have the unusual ability to produce a distinctive scent called musk.",
+    "facts": [
+      "Civets are sometimes farmed for the musk scent they produce.",
+      "Most civets spend their lives in the trees.",
+      "They adapt well to a variety of environments."
+    ]
   },
   "0095": {
     "name": "Opossum",
@@ -3703,7 +4011,14 @@
       "몸길이": "33–55 cm",
       "몸무게": "1–3 kg",
       "수명": "Avg. 2–4 years"
-    }
+    },
+    "nickname": "The pouch carrier",
+    "desc": "Opossums carry their babies in a pouch. They mostly live on grassland and eat all sorts of food. About the size of a cat, they get along perfectly well on their own.",
+    "facts": [
+      "As marsupials, opossums raise their young in a pouch on the belly.",
+      "Their predators include pumas, jaguars and ocelots.",
+      "They survive in a wide range of environments."
+    ]
   },
   "0096": {
     "name": "Wombat",
@@ -3714,7 +4029,14 @@
       "몸길이": "70–120 cm",
       "몸무게": "26 kg",
       "수명": "Avg. 5–8 years"
-    }
+    },
+    "nickname": "The champion burrower",
+    "desc": "Wombats are endearing animals from Australia. They are stocky, dig superb burrows and live on grass. Curiously, their droppings come out cube-shaped.",
+    "facts": [
+      "Wombat droppings are unusually cube-shaped.",
+      "Wombats glow under ultraviolet light.",
+      "They dig long burrows with powerful claws."
+    ]
   },
   "0097": {
     "name": "Tasmanian Devil",
@@ -3725,7 +4047,14 @@
       "몸길이": "50–80 cm",
       "몸무게": "6–12 kg",
       "수명": "6–7 years"
-    }
+    },
+    "nickname": "The little devil",
+    "desc": "Tasmanian devils are small animals from the island of Tasmania. They have black fur with white markings. They are active at night and eat many kinds of food. A facial cancer cut their numbers sharply, though more resistant animals are now appearing.",
+    "facts": [
+      "The Tasmanian devil is the largest carnivorous marsupial.",
+      "Its unsettling cry earned it the name 'devil'.",
+      "Devil facial tumour disease has pushed it towards extinction."
+    ]
   },
   "0098": {
     "name": "Platypus",
@@ -3736,7 +4065,14 @@
       "몸길이": "40–55 cm",
       "몸무게": "1–2 kg",
       "수명": "Avg. 6–10 years"
-    }
+    },
+    "nickname": "The duck-billed puzzle",
+    "desc": "Platypuses are wonderfully odd animals with a bill like a duck's and a tail like a beaver's. They lay eggs and swim beautifully. Platypuses live in Australia.",
+    "facts": [
+      "The platypus is a monotreme — a mammal that lays eggs.",
+      "Males carry venom in a spur on their hind legs.",
+      "It combines features of a duck, a beaver and an otter."
+    ]
   },
   "0099": {
     "name": "Echidna",
@@ -3747,7 +4083,14 @@
       "몸길이": "30–45 cm",
       "몸무게": "2–7 kg",
       "수명": "Avg. 3–5 years"
-    }
+    },
+    "nickname": "The spiny anteater",
+    "desc": "Echidnas are remarkable mammals that lay eggs. Their spiny bodies protect them well from predators. They eat mostly ants and termites, and they live in Australia and Papua New Guinea.",
+    "facts": [
+      "As a monotreme, it is one of the very few mammals that lay eggs.",
+      "Electroreceptors in its snout help it find food.",
+      "It curls into a ball and defends itself with its spines."
+    ]
   },
   "0100": {
     "name": "Tapir",
@@ -3758,7 +4101,14 @@
       "몸길이": "180–250 cm",
       "몸무게": "150–300 kg",
       "수명": "Avg. 7–9 years"
-    }
+    },
+    "nickname": "The charming long-nose",
+    "desc": "Tapirs are endearing animals with long noses. They live alone in the forest, eating leaves and fruit. Newborn tapirs are covered in white stripes.",
+    "facts": [
+      "Newborn tapirs have white stripes, rather like wild boar piglets.",
+      "Tapirs love to swim.",
+      "The nose is a short, flexible trunk they can move freely."
+    ]
   },
   "0102": {
     "name": "Guinea Pig",
@@ -3769,7 +4119,14 @@
       "몸길이": "20–40 cm",
       "몸무게": "0.7–1.2 kg",
       "수명": "Avg. 5–7 years"
-    }
+    },
+    "nickname": "The little companion",
+    "desc": "Guinea pigs are small animals that came from South America. They love company and whistle to talk with their friends. Their soft fur and gentle nature make them lovely pets for children.",
+    "facts": [
+      "Guinea pigs are social animals that live in groups.",
+      "Their eyes are set wide apart, letting them see behind themselves.",
+      "They communicate with distinctive whistling sounds."
+    ]
   },
   "0103": {
     "name": "Mouse",
@@ -3780,7 +4137,14 @@
       "몸길이": "6.5–10 cm",
       "몸무게": "20 g",
       "수명": "Avg. 2–3 years"
-    }
+    },
+    "nickname": "The little mouse",
+    "desc": "House mice are small, endearing rodents found almost everywhere in the world except the poles. They are active mostly at night, and their tiny bodies run and climb remarkably well. Mice live close to people and come in many coat colours.",
+    "facts": [
+      "House mice live close to people, across nearly every region except the poles.",
+      "They are most active at dusk and through the night.",
+      "Their coats come in many colours, and albino mice exist too."
+    ]
   },
   "0104": {
     "name": "Brown Rat",
@@ -3791,7 +4155,14 @@
       "몸길이": "20–28 cm",
       "몸무게": "200–400 g",
       "수명": "Avg. 1.5–2 years"
-    }
+    },
+    "nickname": "The city rat",
+    "desc": "Brown rats are the rats you often see in cities. They have brown or grey fur and are mostly active at night. They move in groups and eat many kinds of food.",
+    "facts": [
+      "Brown rats live wherever people live, all around the world.",
+      "They are omnivores that eat almost anything, but grain matters most.",
+      "Males lead the group, which can reach up to 200 rats."
+    ]
   },
   "0105": {
     "name": "Kangaroo Rat",
@@ -3802,7 +4173,14 @@
       "몸길이": "10–20 cm",
       "몸무게": "35–180 g",
       "수명": "Avg. 2–4 years"
-    }
+    },
+    "nickname": "The hopping desert mouse",
+    "desc": "Kangaroo rats are small rodents that stand on two legs and bound along in hops. They live in western North America and mostly eat seeds. Snakes sometimes hunt them.",
+    "facts": [
+      "Kangaroo rats hop along much like a full-sized kangaroo.",
+      "They are found mainly in western North America.",
+      "Snakes are their main predator."
+    ]
   },
   "0107": {
     "name": "Common Squirrel Monkey",
@@ -3813,7 +4191,14 @@
       "몸길이": "25–37 cm",
       "몸무게": "0.7–1.1 kg",
       "수명": "Avg. 8–10 years"
-    }
+    },
+    "nickname": "The little forest monkey",
+    "desc": "Squirrel monkeys are small monkeys that live in the trees of the rainforest. They eat fruit and insects and scamper up and down branches at speed. Living in troops, they enjoy adventures together.",
+    "facts": [
+      "Squirrel monkeys have the largest brain-to-body ratio of any primate.",
+      "They move through the branches remarkably quickly.",
+      "They mark their territory by rubbing urine on their bodies."
+    ]
   },
   "0108": {
     "name": "Capuchin Monkey",
@@ -3824,7 +4209,14 @@
       "몸길이": "30–57 cm",
       "몸무게": "2–4 kg",
       "수명": "Avg. 15–23 years"
-    }
+    },
+    "nickname": "The curly-tailed monkey",
+    "desc": "Capuchin monkeys are small monkeys that live in the forests of Central and South America. They are highly intelligent and can eat a wide range of foods. They travel in troops and live up in the trees, foraging by day and sleeping in the branches at night.",
+    "facts": [
+      "Capuchins eat an extremely varied diet.",
+      "They live across Central and South America.",
+      "They are clever and highly adaptable."
+    ]
   },
   "0109": {
     "name": "Bonobo",
@@ -3835,7 +4227,14 @@
       "몸길이": "70–83 cm",
       "몸무게": "30–50 kg",
       "수명": "About 40 years"
-    }
+    },
+    "nickname": "The gentle chimpanzee",
+    "desc": "Bonobos are among our closest living relatives. They have long arms and legs and are especially fond of fruit. They live in the forests of Central Africa.",
+    "facts": [
+      "Bonobos are one of our closest living relatives.",
+      "They eat mostly fruit, with a diet different from chimpanzees'.",
+      "They live only in the Congo Basin of Central Africa."
+    ]
   },
   "0110": {
     "name": "Galago",
@@ -3846,7 +4245,14 @@
       "몸길이": "15–20 cm",
       "몸무게": "200–300 g",
       "수명": "Avg. 6–8 years"
-    }
+    },
+    "nickname": "The bushbaby",
+    "desc": "Galagos are small primates that come out at night. They also go by the charming nickname 'bushbaby'. They live in the rainforests of Africa.",
+    "facts": [
+      "Galagos are active mainly at night.",
+      "The nickname 'bushbaby' comes from their call.",
+      "They live in the rainforests of the African continent."
+    ]
   },
   "0111": {
     "name": "Slow Loris",
@@ -3857,7 +4263,14 @@
       "몸길이": "27–38 cm",
       "몸무게": "0.8–1.3 kg",
       "수명": "Avg. 16–24 years"
-    }
+    },
+    "nickname": "The venomous slowcoach",
+    "desc": "Slow lorises are small primates from Southeast Asia. They move slowly and have big eyes that make them look endearing. But do be careful — the slow loris is a venomous primate!",
+    "facts": [
+      "The slow loris is the only venomous primate.",
+      "It moves slowly and has strikingly large eyes.",
+      "It is prized in traditional medicine, which puts it at risk from hunting."
+    ]
   },
   "0112": {
     "name": "Aye-aye",
@@ -3868,7 +4281,14 @@
       "몸길이": "30–37 cm",
       "몸무게": "2–3 kg",
       "수명": "Avg. 17–20 years"
-    }
+    },
+    "nickname": "The magic-fingered primate",
+    "desc": "Aye-ayes are remarkable primates from Madagascar. They are active at night, tapping on wood to find grubs to eat. Their long, sharp fingers let them dig insects out of the trees.",
+    "facts": [
+      "The aye-aye is the world's largest nocturnal primate.",
+      "It taps on wood to locate grubs — a hunting method all its own.",
+      "Its unusual look and behaviour make some locals treat it as a bad omen."
+    ]
   },
   "0114": {
     "name": "Kinkajou",
@@ -3879,7 +4299,14 @@
       "몸길이": "40–60 cm",
       "몸무게": "1.5–3 kg",
       "수명": "Avg. 8–10 years"
-    }
+    },
+    "nickname": "The tree-climbing honey bear",
+    "desc": "Kinkajous are animals that live in the trees and come out at night. They live in tropical rainforest and love fruit. About the size of a cat, they are wonderfully charming.",
+    "facts": [
+      "Kinkajous are often mistaken for ferrets or monkeys, but are related to neither.",
+      "They are arboreal, spending their lives in the trees.",
+      "They have been hunted for their fur."
+    ]
   },
   "0115": {
     "name": "Wolverine",
@@ -3890,7 +4317,14 @@
       "몸길이": "65–87 cm",
       "몸무게": "11–18 kg",
       "수명": "Avg. 8–10 years"
-    }
+    },
+    "nickname": "The little bear",
+    "desc": "Wolverines are the largest members of the weasel family, with sturdy bodies and powerful claws. They live mostly on the tundra and hunt a wide range of animals. Their special coats keep them comfortable even in bitter cold.",
+    "facts": [
+      "The wolverine is the largest land member of the weasel family.",
+      "Its thick coat keeps out cold and frost.",
+      "It is strong enough to hunt animals far larger than itself."
+    ]
   },
   "0116": {
     "name": "Mink",
@@ -3901,7 +4335,14 @@
       "몸길이": "30–45 cm",
       "몸무게": "0.7–1.5 kg",
       "수명": "Avg. 3–4 years"
-    }
+    },
+    "nickname": "The little water weasel",
+    "desc": "Minks are small animals in the weasel family. They live near water and mostly catch mice and fish. Their fur is wonderfully soft, which people prize.",
+    "facts": [
+      "Minks live mainly near water.",
+      "They have a habit of catching more prey than they can eat.",
+      "Their fur is so valuable that minks are farmed."
+    ]
   },
   "0117": {
     "name": "Ferret",
@@ -3912,7 +4353,14 @@
       "몸길이": "33–45 cm",
       "몸무게": "0.7–2 kg",
       "수명": "7–10 years"
-    }
+    },
+    "nickname": "The playful polecat",
+    "desc": "Ferrets are endearing pets in the weasel family. They sleep for most of the day, but play energetically when awake. Being carnivores, they need a special diet.",
+    "facts": [
+      "Ferrets are domesticated and cannot survive in the wild.",
+      "They sleep 15–18 hours a day.",
+      "They are even more strictly carnivorous than cats."
+    ]
   },
   "0118": {
     "name": "Northern Fur Seal",
@@ -3923,7 +4371,14 @@
       "몸길이": "120–210 cm",
       "몸무게": "50–150 kg",
       "수명": "About 25 years"
-    }
+    },
+    "nickname": "The fur-coated swimmer",
+    "desc": "Fur seals are endearing animals of the sea. Males have a handsome mane around the neck. They eat fish and squid and swim swiftly through the ocean.",
+    "facts": [
+      "Males develop a mane over the neck and shoulders.",
+      "They form harems, with 30–50 females to a single male.",
+      "They live about 25 years."
+    ]
   },
   "0119": {
     "name": "Harp Seal",
@@ -3934,7 +4389,14 @@
       "몸길이": "150–190 cm",
       "몸무게": "120–135 kg",
       "수명": "30 years"
-    }
+    },
+    "nickname": "The harp-marked seal",
+    "desc": "Harp seals are seals that live in the sea. They are named for the harp-shaped marking on their bodies. Harp seal pups are born covered in white fur and look wonderfully sweet. They hunt underwater and can live up to 30 years.",
+    "facts": [
+      "Harp seals are named for the harp-shaped marking on their backs.",
+      "Pups are born covered in soft white fur.",
+      "Males tend to grow larger than females."
+    ]
   },
   "0120": {
     "name": "Narwhal",
@@ -3945,7 +4407,14 @@
       "몸길이": "4–4.7 m",
       "몸무게": "0.8–1.6 t",
       "수명": "Avg. 60 years"
-    }
+    },
+    "nickname": "Unicorn of the sea",
+    "desc": "Narwhals are remarkable whales of the Arctic Ocean. They carry a tusk that looks like a long horn, which is why they are called 'unicorns of the sea'. They eat mostly fish and travel together in pods.",
+    "facts": [
+      "A narwhal's tusk is actually a hugely elongated canine tooth.",
+      "They live in the cold waters of the Arctic.",
+      "Orcas and polar bears are their main predators."
+    ]
   },
   "0121": {
     "name": "Sperm Whale",
@@ -3956,7 +4425,14 @@
       "몸길이": "16–18 m",
       "몸무게": "35 t",
       "수명": "70 years"
-    }
+    },
+    "nickname": "The great-headed whale",
+    "desc": "Sperm whales are whales with enormous heads. They can dive to great depths of the ocean. They eat squid and fish and can live more than 70 years.",
+    "facts": [
+      "The sperm whale has the largest brain of any animal on Earth.",
+      "It can dive to depths of 2,250 metres.",
+      "It makes the loudest sound of any animal underwater."
+    ]
   },
   "0122": {
     "name": "Blue Whale",
@@ -3967,7 +4443,14 @@
       "몸길이": "24–30 m",
       "몸무게": "150 t",
       "수명": "80–90 years"
-    }
+    },
+    "nickname": "The largest whale of all",
+    "desc": "Blue whales are the largest animals in the world. They live on krill and small fish in the ocean. Blue whales can live a very long time — some more than 100 years.",
+    "facts": [
+      "The blue whale is the largest animal that has ever lived.",
+      "It feeds mainly on krill.",
+      "It can swim at up to 48 km/h."
+    ]
   },
   "0123": {
     "name": "Harbor Porpoise",
@@ -3978,7 +4461,14 @@
       "몸길이": "140–190 cm",
       "몸무게": "45–65 kg",
       "수명": "Avg. 40–50 years"
-    }
+    },
+    "nickname": "The little round-backed dolphin",
+    "desc": "Harbour porpoises are small whales with short snouts and a charming look. They swim alone or in small groups and eat fish. Females grow a little larger than males.",
+    "facts": [
+      "Harbour porpoises usually live alone or in small groups rather than large pods.",
+      "Females are larger, reaching up to 1.7 m.",
+      "They are found mainly in shallow coastal waters."
+    ]
   },
   "0124": {
     "name": "Nutria",
@@ -3989,7 +4479,14 @@
       "몸길이": "40–63 cm",
       "몸무게": "5–9 kg",
       "수명": "Avg. 4–8 years"
-    }
+    },
+    "nickname": "The big water rat",
+    "desc": "Nutria look rather like large rats. They swim beautifully and live on plants. Their fur is warm and has been used to make clothing.",
+    "facts": [
+      "Nutria are large rodents, growing up to 100 cm long.",
+      "They live in the water and are skilled swimmers and divers.",
+      "Their fur is warm and hard-wearing, and used for fur products."
+    ]
   },
   "0125": {
     "name": "Elephant Shrew",
@@ -4000,7 +4497,14 @@
       "몸길이": "10–30 cm",
       "몸무게": "30–70 g",
       "수명": "Avg. 12 years"
-    }
+    },
+    "nickname": "The little elephant-nosed one",
+    "desc": "Elephant shrews are small animals from Africa. Despite the name, they are not related to elephants at all — but their noses do look rather like a trunk. They eat mostly insects and can move remarkably fast.",
+    "facts": [
+      "Elephant shrews are not actually related to elephants.",
+      "They move very fast, which helps them escape predators.",
+      "They live mainly on insects."
+    ]
   },
   "0126": {
     "name": "Agouti",
@@ -4011,7 +4515,14 @@
       "몸길이": "38–52 cm",
       "몸무게": "3–4 kg",
       "수명": "Avg. 7 years"
-    }
+    },
+    "nickname": "The deer-like rodent",
+    "desc": "Agoutis are rodents that look rather like small deer. They grow to about 60 cm and have short tails. They live in the forest, eating nuts and leaves.",
+    "facts": [
+      "The agouti gave its name to a gene that determines coat colour.",
+      "Agouti young are born already furred and with their eyes open.",
+      "Their bounding run looks much like a deer's."
+    ]
   },
   "0127": {
     "name": "Saiga Antelope",
@@ -4022,7 +4533,14 @@
       "몸길이": "100–146 cm",
       "몸무게": "30–50 kg",
       "수명": "Avg. 10–15 years"
-    }
+    },
+    "nickname": "The bulbous-nosed antelope",
+    "desc": "Saiga are animals with a truly remarkable nose. They live mainly on the steppe, grazing on grass. That distinctive nose makes them easy to recognise.",
+    "facts": [
+      "The saiga has a uniquely shaped, bulbous nose.",
+      "It lives mainly on open steppe.",
+      "It grazes mostly on grasses."
+    ]
   },
   "0128": {
     "name": "Kudu",
@@ -4033,7 +4551,14 @@
       "몸길이": "190–245 cm",
       "몸무게": "120–315 kg",
       "수명": "Avg. 12–15 years"
-    }
+    },
+    "nickname": "The spiral-horned antelope",
+    "desc": "Kudu are magnificent antelope from Africa. They carry long, spiralling horns. Their brown coats and stripes hide them well among the trees.",
+    "facts": [
+      "Kudu carry long, spiralling horns.",
+      "Their brown coats and stripes help camouflage them.",
+      "They live mainly in acacia and commiphora scrubland."
+    ]
   },
   "0129": {
     "name": "Oryx",
@@ -4044,7 +4569,14 @@
       "몸길이": "160–235 cm",
       "몸무게": "100–240 kg",
       "수명": "Avg. 15–20 years"
-    }
+    },
+    "nickname": "The sabre-horned antelope",
+    "desc": "Oryx are antelope that live in the desert. The black markings on their faces and bodies make them look magnificent. They get by beautifully on very little water!",
+    "facts": [
+      "Oryx are adapted to the desert and can survive a long time without water.",
+      "They are marked by white faces with black striping.",
+      "Their long horns serve as a means of defence."
+    ]
   },
   "0130": {
     "name": "Springbok",
@@ -4055,7 +4587,14 @@
       "몸길이": "120–150 cm",
       "몸무게": "30–45 kg",
       "수명": "Avg. 8–10 years"
-    }
+    },
+    "nickname": "The leaping gazelle",
+    "desc": "Springbok are fast animals from Africa. They live mainly on grassland eating grass, and can run at 88 km/h. Their name comes from the word for 'to leap'.",
+    "facts": [
+      "Springbok can run at 88 km/h, making them remarkably fast.",
+      "Their name comes from the word meaning 'to leap'.",
+      "They can bound up to 4 m into the air."
+    ]
   },
   "0131": {
     "name": "Alpine Ibex",
@@ -4066,7 +4605,14 @@
       "몸길이": "130–160 cm",
       "몸무게": "60–120 kg",
       "수명": "Avg. 7–9 years"
-    }
+    },
+    "nickname": "The Alpine goat",
+    "desc": "Ibex are goats that live high in the mountains. Males carry great horns, and their coats are brown and grey. They bound about with ease even on high ground.",
+    "facts": [
+      "The ibex is a mammal with impressively large horns.",
+      "Males are larger, with sweeping curved horns.",
+      "They live high in the Alps."
+    ]
   },
   "0132": {
     "name": "Gaur",
@@ -4077,7 +4623,14 @@
       "몸길이": "250–330 cm",
       "몸무게": "600–1,200 kg",
       "수명": "Avg. 6–8 years"
-    }
+    },
+    "nickname": "The great wild ox",
+    "desc": "Gaur look like enormous cattle. They live mostly in forests and grassland, eating grass and leaves. They move in herds and are wonderfully strong.",
+    "facts": [
+      "The gaur is the largest wild cattle species in the world.",
+      "It lives in the forests and grasslands of Asia.",
+      "It feeds mainly on grass and leaves."
+    ]
   },
   "0133": {
     "name": "European Bison",
@@ -4088,7 +4641,14 @@
       "몸길이": "210–300 cm",
       "몸무게": "400–900 kg",
       "수명": "Avg. 12–15 years"
-    }
+    },
+    "nickname": "Giant of the European forest",
+    "desc": "European bison are the heaviest animals in Europe. They roam the forests with their great bodies and long horns. They were once hunted heavily, but are specially protected today.",
+    "facts": [
+      "The European bison is the heaviest land mammal in Europe.",
+      "Most now roam in forests.",
+      "A past population bottleneck leaves them vulnerable to certain diseases."
+    ]
   },
   "0134": {
     "name": "Takin",
@@ -4099,7 +4659,14 @@
       "몸길이": "160–220 cm",
       "몸무게": "250–350 kg",
       "수명": "Avg. 10–15 years"
-    }
+    },
+    "nickname": "The gnu goat",
+    "desc": "Takin look rather like large goats. Look at the flag of Bhutan and you will find a takin on it. They live high in the mountains and gather in family herds.",
+    "facts": [
+      "The takin is the national animal of Bhutan.",
+      "In summer, takin gather in herds of up to 300.",
+      "Their coat length changes with the seasons."
+    ]
   },
   "0135": {
     "name": "Pronghorn",
@@ -4110,7 +4677,14 @@
       "몸길이": "130–150 cm",
       "몸무게": "40–60 kg",
       "수명": "Avg. 10–12 years"
-    }
+    },
+    "nickname": "The pronghorn",
+    "desc": "Pronghorn are animals of the open plains. Their coats are reddish-brown with white around the tail. They are related to giraffes, though they look like antelope. Pumas, coyotes and wolves are their predators.",
+    "facts": [
+      "Pronghorn live on the prairies of North America.",
+      "Their closest relatives are giraffes and okapi.",
+      "Both sexes have horns, and the sheaths are shed each year."
+    ]
   },
   "0136": {
     "name": "Okapi",
@@ -4121,7 +4695,14 @@
       "몸길이": "190–210 cm",
       "몸무게": "200–350 kg",
       "수명": "Avg. 30 years"
-    }
+    },
+    "nickname": "The forest giraffe",
+    "desc": "Okapi are relatives of the giraffe. The stripes on their legs make them look rather like zebras. They pull leaves down with long tongues and live in the forests of the Congo.",
+    "facts": [
+      "The okapi belongs to the giraffe family and is closest to the giraffe.",
+      "Its striped legs cause it to be mistaken for a zebra.",
+      "Its long tongue lets it reach leaves high above."
+    ]
   },
   "0137": {
     "name": "Wallaby",
@@ -4132,7 +4713,14 @@
       "몸길이": "65–92 cm",
       "몸무게": "10–20 kg",
       "수명": "20–14 years"
-    }
+    },
+    "nickname": "The little kangaroo",
+    "desc": "Wallabies are smaller members of the kangaroo family. They mostly eat grass and plants and bound high on powerful hind legs. A young wallaby is called a joey.",
+    "facts": [
+      "Wallabies leap high on powerful hind legs.",
+      "They are herbivores that eat a variety of grasses and plants.",
+      "A young wallaby is called a joey."
+    ]
   },
   "0138": {
     "name": "Quokka",
@@ -4143,7 +4731,14 @@
       "몸길이": "40–54 cm",
       "몸무게": "2.5–5 kg",
       "수명": "Avg. 15 years"
-    }
+    },
+    "nickname": "The happiest animal",
+    "desc": "Quokkas are famous for faces that always look like they are smiling. They live only on small islands in Australia. They are active mostly at night and live on grass.",
+    "facts": [
+      "The quokka's permanent smile earned it the nickname 'happiest animal in the world'.",
+      "It is found only on Rottnest Island and a few other spots in Australia.",
+      "It is nocturnal, active mainly at night."
+    ]
   },
   "0139": {
     "name": "Greater Bilby",
@@ -4154,7 +4749,14 @@
       "몸길이": "29–55 cm",
       "몸무게": "1–2.5 kg",
       "수명": "Avg. 8 years"
-    }
+    },
+    "nickname": "The long-nosed bandicoot",
+    "desc": "Bilbies are endearing animals that live in the desert. Their long ears and noses help them explore their surroundings. They are active at night and eat many kinds of food.",
+    "facts": [
+      "The bilby is a desert-dwelling marsupial.",
+      "It is known for its long ears and nose, and is active mainly at night.",
+      "There were once two species, but only one survives today."
+    ]
   },
   "0140": {
     "name": "Sugar Glider",
@@ -4165,7 +4767,14 @@
       "몸길이": "16–21 cm",
       "몸무게": "130 g",
       "수명": "12–16 years"
-    }
+    },
+    "nickname": "The gliding marsupial",
+    "desc": "Sugar gliders are small animals active at night. They live in the trees and can glide a long way. They look much like flying squirrels, but they are quite different animals.",
+    "facts": [
+      "Sugar gliders are lively and live up in the trees.",
+      "Convergent evolution gave them a look much like flying squirrels'.",
+      "Despite their small size, they can glide considerable distances."
+    ]
   },
   "0141": {
     "name": "Elephant Seal",
@@ -4176,7 +4785,14 @@
       "몸길이": "4–6 m",
       "몸무게": "600 kg",
       "수명": "Avg. 14 years"
-    }
+    },
+    "nickname": "The elephant-nosed seal",
+    "desc": "Elephant seals are sea animals with big noses and bodies, just as the name suggests. They spend most of their time at sea, eating fish and squid. Males fight one another to win mates.",
+    "facts": [
+      "Elephant seals dive longer than any other mammal, staying under for up to 80 minutes.",
+      "Males fight fiercely for mates, and the winner breeds with many females.",
+      "They are named for their size and their large, trunk-like noses."
+    ]
   },
   "0142": {
     "name": "Star-nosed Mole",
@@ -4187,7 +4803,14 @@
       "몸길이": "15–20 cm",
       "몸무게": "55 g",
       "수명": "Avg. 3–4 years"
-    }
+    },
+    "nickname": "The star-nosed digger",
+    "desc": "Star-nosed moles are remarkable moles with a star-shaped nose. They live in damp places across Canada and the United States. These small animals eat insects, using that nose to find food astonishingly fast.",
+    "facts": [
+      "The star-shaped nose is made up of 22 touch-sensitive appendages.",
+      "They can even hunt underwater.",
+      "They are among the fastest foragers in the world."
+    ]
   },
   "0143": {
     "name": "White-winged Flying Fox",
@@ -4198,7 +4821,14 @@
       "몸길이": "20–23 cm",
       "몸무게": "0.6–1.5 kg",
       "수명": "Avg. 15–20 years"
-    }
+    },
+    "nickname": "The white-winged fruit bat",
+    "desc": "Flying foxes are remarkable bats with white wings. They live only in the Philippines and feed on fruit. Their fox-like faces are wonderfully endearing!",
+    "facts": [
+      "They have faces that look much like a fox's.",
+      "They are named for their white wings.",
+      "They are found only in the Philippines."
+    ]
   },
   "0144": {
     "name": "Vicuña",
@@ -4209,7 +4839,14 @@
       "몸길이": "150–180 cm",
       "몸무게": "35–65 kg",
       "수명": "Avg. 15–20 years"
-    }
+    },
+    "nickname": "The little camel",
+    "desc": "Vicuñas look like small camels. They have no humps and wonderfully soft fleece. They live in herds high in the mountains, grazing on grass. Their fleece is so fine it is used for luxury clothing.",
+    "facts": [
+      "The vicuña is the smallest camelid and has no hump.",
+      "In the Inca Empire, vicuña wool was reserved for nobility.",
+      "Declared endangered in 1974, numbers have since recovered to about 125,000."
+    ]
   },
   "0145": {
     "name": "Howler Monkey",
@@ -4220,7 +4857,14 @@
       "몸길이": "56–92 cm",
       "몸무게": "5–10 kg",
       "수명": "Avg. 15–20 years"
-    }
+    },
+    "nickname": "The roaring monkey",
+    "desc": "Howler monkeys are large monkeys from the forests of South and Central America. They are famous for their tremendously loud calls. They live in troops of around 18.",
+    "facts": [
+      "Howler monkeys are the largest of the New World monkeys.",
+      "They are famous for their extremely loud calls.",
+      "Poaching has put them at risk."
+    ]
   },
   "0146": {
     "name": "Colugo",
@@ -4231,7 +4875,14 @@
       "몸길이": "33–42 cm",
       "몸무게": "1–2 kg",
       "수명": "Avg. 10–15 years"
-    }
+    },
+    "nickname": "The gliding lemur",
+    "desc": "Colugos are remarkable animals that glide from tree to tree. They look rather like a cross between a lemur and a flying squirrel. They live in the forests of Southeast Asia.",
+    "facts": [
+      "They glide between trees much like flying squirrels.",
+      "They are close relatives of the primates.",
+      "They are found mainly in the rainforests of Southeast Asia."
+    ]
   },
   "0147": {
     "name": "Giant Otter",
@@ -4242,7 +4893,14 @@
       "몸길이": "96–123 cm",
       "몸무게": "22–32 kg",
       "수명": "Avg. 10–12 years"
-    }
+    },
+    "nickname": "The great river otter",
+    "desc": "Giant otters are large otters from South America. They travel in family groups and catch fish in the rivers. They talk to one another with calls, and their coats are specially built to shed water.",
+    "facts": [
+      "The giant otter has the longest body of any member of the weasel family.",
+      "It is famous for its complex calls, with distinct sounds for communicating.",
+      "Its coat is specially adapted to keep water out."
+    ]
   },
   "0148": {
     "name": "Korean Hare",
@@ -4253,7 +4911,14 @@
       "몸길이": "43–59 cm",
       "몸무게": "2–3 kg",
       "수명": "Avg. 3–5 years"
-    }
+    },
+    "nickname": "The mountain hare",
+    "desc": "Korean hares live on the Korean peninsula and in northeastern China. Their coats change with the seasons — white in winter and brown in summer. They come out mostly in the evening to graze and roam.",
+    "facts": [
+      "Korean hares moult to white in winter and brown in summer.",
+      "Leverets can open their eyes and walk as soon as they are born.",
+      "They are active mainly in the evening and feed on plants."
+    ]
   },
   "0149": {
     "name": "Naked Mole Rat",
@@ -4264,7 +4929,14 @@
       "몸길이": "8–10 cm",
       "몸무게": "35 g",
       "수명": "Avg. 10–30 years"
-    }
+    },
+    "nickname": "The bare-skinned burrower",
+    "desc": "Naked mole-rats are small animals with almost no hair and smooth, bare skin. They dig tunnels underground and live together in large colonies. They are found in East Africa.",
+    "facts": [
+      "Naked mole-rats have almost no hair and wrinkled skin.",
+      "They live in colonies with a social structure inside their burrows.",
+      "Remarkably, they feel almost no pain."
+    ]
   },
   "0150": {
     "name": "Javan Lutung",
@@ -4275,7 +4947,14 @@
       "몸길이": "44–65 cm",
       "몸무게": "6 kg",
       "수명": "Avg. 20 years"
-    }
+    },
+    "nickname": "The Javan langur",
+    "desc": "Javan lutungs live mainly on the island of Java in Indonesia. They have long tails and black fur. They live in the trees, eating leaves and fruit. Their babies are born with orange fur!",
+    "facts": [
+      "Javan lutungs live mostly in the trees.",
+      "Infants are born with orange fur.",
+      "A specialised stomach lets them digest leaves."
+    ]
   },
   "0151": {
     "name": "Emperor Penguin",
@@ -4286,7 +4965,14 @@
       "몸길이": "110–120 cm",
       "몸무게": "23–45 kg",
       "수명": "Avg. 20 years"
-    }
+    },
+    "nickname": "Emperor of Antarctica",
+    "desc": "Emperor penguins are the largest and heaviest of all penguins. They live in Antarctica, and the fathers are magnificent — guarding their eggs through the bitterest winter. Emperor penguins live together in enormous colonies.",
+    "facts": [
+      "Emperor penguins are the largest and heaviest of all penguins.",
+      "They are the only penguin that lays eggs during the Antarctic winter.",
+      "The male balances the egg on his feet and keeps it warm for about four months."
+    ]
   },
   "0152": {
     "name": "Cinereous Vulture",
@@ -4297,7 +4983,14 @@
       "몸길이": "100–115 cm",
       "몸무게": "7–14 kg",
       "수명": "Avg. 20–30 years"
-    }
+    },
+    "nickname": "The great black vulture",
+    "desc": "Vultures are very large birds. They mostly keep to themselves, though small groups gather in winter. They are not good hunters and feed mainly on carcasses. In Korea they are specially protected.",
+    "facts": [
+      "Vultures remember nests they have used and return to them.",
+      "In Korea they are protected as a natural monument.",
+      "They do not hunt, feeding instead on carrion."
+    ]
   },
   "0153": {
     "name": "Peregrine Falcon",
@@ -4308,7 +5001,14 @@
       "몸길이": "34–58 cm",
       "몸무게": "0.5–1.5 kg",
       "수명": "Avg. 15–20 years"
-    }
+    },
+    "nickname": "Master of the skies",
+    "desc": "Peregrine falcons are the fastest-flying birds in the sky. Their wingspan reaches 120 cm, and they can spot prey from a great distance. They nest on high coastal cliffs all around the world.",
+    "facts": [
+      "A falcon's eyesight is about eight times sharper than ours.",
+      "They catch prey in dives exceeding 300 km/h.",
+      "They are found across the entire world."
+    ]
   },
   "0154": {
     "name": "Himalayan Owl",
@@ -4319,7 +5019,14 @@
       "몸길이": "35–40 cm",
       "몸무게": "0.7–1.2 kg",
       "수명": "Avg. 10–15 years"
-    }
+    },
+    "nickname": "Hunter of the night",
+    "desc": "Owls are birds that come out at night. They live in forests across Asia, from the Himalayas to Korea. Owls have wonderfully distinctive calls.",
+    "facts": [
+      "Owls hunt mainly at night.",
+      "They live in forests from the Himalayas to Korea and Taiwan.",
+      "Their distinctive call sets them apart from related species."
+    ]
   },
   "0155": {
     "name": "Eurasian Eagle-owl",
@@ -4330,7 +5037,14 @@
       "몸길이": "59–75 cm",
       "몸무게": "2–4 kg",
       "수명": "Avg. 10–20 years"
-    }
+    },
+    "nickname": "The horned night hunter",
+    "desc": "Eagle-owls are large birds active at night. The ear-like tufts on their heads look magnificent. They live mostly in mountains and along rivers, hunting small animals.",
+    "facts": [
+      "The eagle-owl is known for its ear-like tufts.",
+      "It is nocturnal, active mainly at night.",
+      "Its cat-like face earned it an old Korean name meaning 'cat-headed hawk'."
+    ]
   },
   "0156": {
     "name": "Parrot",
@@ -4341,7 +5055,14 @@
       "몸길이": "18–100 cm",
       "몸무게": "0.3–0.5 kg",
       "수명": "20 years"
-    }
+    },
+    "nickname": "The talking bird",
+    "desc": "Parrots are birds with beautiful colours. They can copy human speech, which makes them wonderful companions. Some parrots live a remarkably long time!",
+    "facts": [
+      "Parrots can imitate human speech.",
+      "Their intelligence is comparable to a two- or three-year-old child's.",
+      "Some parrots have lived to 120 years old."
+    ]
   },
   "0157": {
     "name": "Flamingo",
@@ -4352,7 +5073,14 @@
       "몸길이": "90–150 cm",
       "몸무게": "2–4 kg",
       "수명": "15–20 years"
-    }
+    },
+    "nickname": "The long-legged pink bird",
+    "desc": "Flamingos are birds that live by the water, with long legs and long necks. Their bodies are pink or red, and they have the amusing habit of standing on one leg. They live in flocks and eat small creatures and plants.",
+    "facts": [
+      "Flamingos have the distinctive habit of standing on one leg.",
+      "Their bright colour comes mainly from their diet.",
+      "They live together in enormous flocks."
+    ]
   },
   "0158": {
     "name": "Peacock",
@@ -4363,7 +5091,14 @@
       "몸길이": "100–120 cm",
       "몸무게": "4–6 kg",
       "수명": "Avg. 15–20 years"
-    }
+    },
+    "nickname": "The splendid one",
+    "desc": "Peacocks are large birds with magnificent feathers. They spend most of their time on the ground, though they can fly. Males fan out their beautiful trains and dance.",
+    "facts": [
+      "Male peacocks fan their spectacular trains to attract females.",
+      "The pattern on the feathers looks like a series of eyes.",
+      "Peacocks can fly, but spend most of their lives on the ground."
+    ]
   },
   "0159": {
     "name": "Common Ostrich",
@@ -4374,7 +5109,14 @@
       "몸길이": "210–275 cm",
       "몸무게": "100–150 kg",
       "수명": "Avg. 30–40 years"
-    }
+    },
+    "nickname": "Africa's running champion",
+    "desc": "Ostriches are large birds that live in Africa. They cannot fly, but they can run astonishingly fast. An ostrich egg is among the largest eggs in the world. Ostriches live together in groups.",
+    "facts": [
+      "Ostriches cannot fly, but they run at over 90 km/h.",
+      "The ostrich egg is the largest of any living bird.",
+      "They outrun lions and have more stamina than cheetahs."
+    ]
   },
   "0160": {
     "name": "Kiwi",
@@ -4385,7 +5127,14 @@
       "몸길이": "40–80 cm",
       "몸무게": "1.5–3.5 kg",
       "수명": "Avg. 20–30 years"
-    }
+    },
+    "nickname": "New Zealand's little friend",
+    "desc": "Kiwis are endearing birds from New Zealand. They cannot fly, but they scurry about the ground beautifully. They are active at night and probe for food with their pointed bills.",
+    "facts": [
+      "The kiwi is a flightless bird.",
+      "It is nocturnal, active mainly at night.",
+      "It is the symbol of New Zealand."
+    ]
   },
   "0161": {
     "name": "Hummingbird",
@@ -4396,7 +5145,14 @@
       "몸길이": "5–22 cm",
       "몸무게": "5 g",
       "수명": "Avg. 2–3 years"
-    }
+    },
+    "nickname": "The tiny aerial dancer",
+    "desc": "Hummingbirds are very small birds that drink nectar from flowers. Like bees, they can hold perfectly still in mid-air. Their feathers shimmer beautifully.",
+    "facts": [
+      "Hummingbirds are the smallest birds in the world.",
+      "They are the only birds that can hover in place.",
+      "Their feathers carry a strong metallic sheen."
+    ]
   },
   "0162": {
     "name": "Woodpecker",
@@ -4407,7 +5163,14 @@
       "몸길이": "10–50 cm",
       "몸무게": "100 g",
       "수명": "Avg. 15–20 years"
-    }
+    },
+    "nickname": "The tree drummer",
+    "desc": "Woodpeckers drill holes in trees to catch the insects inside. They live in forests and woodlands, and a few even in deserts. Their long tongues let them pull food easily out of the wood.",
+    "facts": [
+      "Woodpeckers use powerful bills to drill into wood.",
+      "Their tongues are very long and sticky, ideal for catching insects inside trees.",
+      "They often appear in popular culture — Woody Woodpecker being the most famous."
+    ]
   },
   "0163": {
     "name": "Carrion Crow",
@@ -4418,7 +5181,14 @@
       "몸길이": "45–55 cm",
       "몸무게": "0.4–0.6 kg",
       "수명": "Avg. 20–30 years"
-    }
+    },
+    "nickname": "The clever crow",
+    "desc": "Crows are intelligent birds. Their black feathers gleam, and they live in groups. Crows build nests in trees and on buildings to lay their eggs. You can find them in many parts of the world.",
+    "facts": [
+      "Crows are highly intelligent and can remember individual people.",
+      "The origin of the Korean dish yaksik is linked to a crow.",
+      "The legendary three-legged crow is thought to be based on the bird."
+    ]
   },
   "0164": {
     "name": "Tundra Swan",
@@ -4429,7 +5199,14 @@
       "몸길이": "120–150 cm",
       "몸무게": "6–9 kg",
       "수명": "Avg. 20–30 years"
-    }
+    },
+    "nickname": "The white water bird",
+    "desc": "Swans are large birds that live on water. Their white feathers and long necks make them easy to spot from far away. In winter they travel to warmer places. Swans stay with their families and look after one another well.",
+    "facts": [
+      "Swans are protected in Korea as a natural monument.",
+      "They are strongly territorial and can be aggressive.",
+      "They keep strong bonds within the family."
+    ]
   },
   "0165": {
     "name": "Duck",
@@ -4440,7 +5217,14 @@
       "몸길이": "30–100 cm",
       "몸무게": "1–2 kg",
       "수명": "Avg. 6–8 years"
-    }
+    },
+    "nickname": "The bird that plays on water",
+    "desc": "Ducks are birds that play on the water. Their webbed feet make them fine swimmers, and they sift the water with their bills to find food. Drakes show off colourful plumage to attract a mate.",
+    "facts": [
+      "Webbed feet make ducks strong swimmers and divers.",
+      "Drakes attract females with colourful plumage in the breeding season.",
+      "Ducks look elegant on water but waddle on land."
+    ]
   },
   "0166": {
     "name": "Chicken",
@@ -4451,7 +5235,14 @@
       "몸길이": "40–70 cm",
       "몸무게": "1.5–3 kg",
       "수명": "7–12 years"
-    }
+    },
+    "nickname": "The clucking friend",
+    "desc": "Chickens are animals we see all the time. They are important farm animals because they give us eggs and meat. The red comb on a chicken's head makes it easy to recognise.",
+    "facts": [
+      "Chickens are among the most widely kept farm animals in the world.",
+      "Depending on the breed, a hen lays around 200 eggs a year.",
+      "Their intelligence is comparable to a seven-year-old child's."
+    ]
   },
   "0167": {
     "name": "Pelican",
@@ -4462,7 +5253,14 @@
       "몸길이": "140–180 cm",
       "몸무게": "5–9 kg",
       "수명": "Avg. 15–30 years"
-    }
+    },
+    "nickname": "The great-billed fisher",
+    "desc": "Pelicans are birds known for their enormous bills and the pouch beneath. They mostly eat fish and live around rivers and lakes. Pelicans lay eggs and bring food back up from their throats to feed their chicks.",
+    "facts": [
+      "The large pouch under the bill makes catching fish easy.",
+      "There are eight species of pelican worldwide.",
+      "They regurgitate food from the pouch to feed their young."
+    ]
   },
   "0168": {
     "name": "Common Gull",
@@ -4473,7 +5271,14 @@
       "몸길이": "40–46 cm",
       "몸무게": "400 g",
       "수명": "24 years"
-    }
+    },
+    "nickname": "The sea cat",
+    "desc": "Gulls are birds you often see by the sea. Their bodies are white and their wings grey. In winter, brown streaks appear on their heads. They eat fish, squid and insects.",
+    "facts": [
+      "Gulls filter salt from seawater through glands above their eyes.",
+      "In Korea they are seen mainly as winter visitors.",
+      "The gull is the official bird of Busan."
+    ]
   },
   "0169": {
     "name": "Albatross",
@@ -4483,7 +5288,14 @@
       "먹이": "Fish eater",
       "몸길이": "80–135 cm",
       "몸무게": "6–12 kg"
-    }
+    },
+    "nickname": "Giant of the open sea",
+    "desc": "Albatrosses are large birds that fly over the ocean. Their wings are so long they can travel enormous distances. They live together in colonies.",
+    "facts": [
+      "The albatross has one of the largest wingspans of any bird.",
+      "It travels vast distances gliding over the sea.",
+      "Albatrosses pair for life."
+    ]
   },
   "0170": {
     "name": "Red-crowned Crane",
@@ -4494,7 +5306,14 @@
       "몸길이": "136–140 cm",
       "몸무게": "7–10 kg",
       "수명": "30–50 years"
-    }
+    },
+    "nickname": "The dancing crane",
+    "desc": "Red-crowned cranes are large birds with long necks and legs, white bodies and a red crown. They communicate by dancing and live together in family groups.",
+    "facts": [
+      "Red-crowned cranes live in family groups.",
+      "They court one another by dancing.",
+      "Apart from humans, they have almost no predators."
+    ]
   },
   "0171": {
     "name": "Oriental Stork",
@@ -4505,7 +5324,14 @@
       "몸길이": "110–115 cm",
       "몸무게": "4–5 kg",
       "수명": "Avg. 20–40 years"
-    }
+    },
+    "nickname": "The great white stork",
+    "desc": "Storks are large birds. Their bodies are white with black wingtips. They live in wetlands and eat fish and small animals. Storks lay eggs and care for their chicks.",
+    "facts": [
+      "The oriental stork is protected in Korea as a natural monument.",
+      "It lives mainly in wetlands.",
+      "It is a carnivore that eats a wide range of animals."
+    ]
   },
   "0172": {
     "name": "Grey Heron",
@@ -4516,7 +5342,14 @@
       "몸길이": "84–102 cm",
       "몸무게": "1–2 kg",
       "수명": "Avg. 10–20 years"
-    }
+    },
+    "nickname": "The long-legged heron",
+    "desc": "Grey herons are large birds with long legs and necks. They stand by the water catching fish and frogs. In Korea you often see them in summer.",
+    "facts": [
+      "Herons use their long legs and necks to catch food at the water's edge.",
+      "In the breeding season their bills and legs turn bright red.",
+      "They are a common summer sight in Korea."
+    ]
   },
   "0174": {
     "name": "Common Kingfisher",
@@ -4527,7 +5360,14 @@
       "몸길이": "16–17 cm",
       "몸무게": "40 g",
       "수명": "Avg. 8–10 years"
-    }
+    },
+    "nickname": "The blue jewel",
+    "desc": "Kingfishers are small, beautiful birds with brilliant blue bodies. They dive swiftly into the water to catch fish. In Korea they lay eggs in spring and travel to warmer places in autumn.",
+    "facts": [
+      "A protective membrane shields their eyes as they dive for fish.",
+      "Males court females by presenting them with a fish.",
+      "They feed their chicks around 50 fish a day."
+    ]
   },
   "0175": {
     "name": "Barn Swallow",
@@ -4538,7 +5378,14 @@
       "몸길이": "15–19 cm",
       "몸무게": "19 g",
       "수명": "Avg. 3–4 years"
-    }
+    },
+    "nickname": "Acrobat of the sky",
+    "desc": "Swallows are birds that catch insects on the wing. They build their nests from mud and plant material. There is an old saying that when swallows fly low, rain is coming.",
+    "facts": [
+      "Swallows build their nests from mud and plant matter.",
+      "An old saying holds that swallows flying low means rain.",
+      "They repair and reuse the same nest year after year."
+    ]
   },
   "0176": {
     "name": "Eurasian Tree Sparrow",
@@ -4549,7 +5396,14 @@
       "몸길이": "14–15 cm",
       "몸무게": "22 g",
       "수명": "Avg. 2–3 years"
-    }
+    },
+    "nickname": "The little brown friend",
+    "desc": "Sparrows are small brown birds you can find anywhere, in cities and countryside alike. They mostly eat seeds, and they catch pest insects too. You can watch them build nests, lay eggs and raise their chicks.",
+    "facts": [
+      "Sparrows are resident birds, usually found near where people live.",
+      "They can damage crops, but they also help farming by eating pests.",
+      "Pairs build the nest together in the breeding season."
+    ]
   },
   "0177": {
     "name": "Pigeon",
@@ -4560,7 +5414,14 @@
       "몸길이": "29–36 cm",
       "몸무게": "350 g",
       "수명": "Avg. 3–5 years"
-    }
+    },
+    "nickname": "Bird of peace",
+    "desc": "Pigeons are birds you can easily spot around us. They eat seeds and beat their wings across the sky. Pigeons are also well known as a symbol of peace.",
+    "facts": [
+      "The pigeon is often used as a symbol of peace.",
+      "Pigeons feed their young a special 'crop milk'.",
+      "City pigeons are sometimes considered a nuisance."
+    ]
   },
   "0178": {
     "name": "Magpie",
@@ -4571,7 +5432,14 @@
       "몸길이": "40–48 cm",
       "몸무게": "220 g",
       "수명": "Avg. 10–15 years"
-    }
+    },
+    "nickname": "The lucky magpie",
+    "desc": "Magpies are birds with black and white feathers. Their long black tails make them easy to recognise. Magpies eat fruit and insects, and sometimes help people out. In Korea, a calling magpie is said to bring good news.",
+    "facts": [
+      "Magpies have intelligence comparable to a six-year-old child's.",
+      "In Korea the magpie is considered a bird of good fortune.",
+      "It was the first non-mammal shown to recognise itself in a mirror."
+    ]
   },
   "0179": {
     "name": "Common Cuckoo",
@@ -4582,7 +5450,14 @@
       "몸길이": "32–36 cm",
       "몸무게": "110 g",
       "수명": "Avg. 1–2 years"
-    }
+    },
+    "nickname": "The cuckoo",
+    "desc": "Cuckoos slip their eggs into other birds' nests. You can hear a cuckoo's call in a cuckoo clock. When a cuckoo chick grows up, it lays its own eggs in another bird's nest in turn.",
+    "facts": [
+      "Cuckoos practise brood parasitism, leaving eggs in other birds' nests.",
+      "Their call is used as the hourly chime in cuckoo clocks.",
+      "After hatching, the chick pushes the host's eggs and young out of the nest."
+    ]
   },
   "0180": {
     "name": "Turkey",
@@ -4593,7 +5468,14 @@
       "몸길이": "100–125 cm",
       "몸무게": "5–10 kg",
       "수명": "Avg. 7–9 years"
-    }
+    },
+    "nickname": "The colour-changing bird",
+    "desc": "Turkeys are large birds originally from North America and Mexico. Amusingly, the colour of their skin can change. In the United States, turkey is eaten at Thanksgiving.",
+    "facts": [
+      "Turkeys are native to North America and Mexico.",
+      "Males have fleshy, stretchable growths on the head.",
+      "In the United States it is traditional to eat turkey at Thanksgiving."
+    ]
   },
   "0181": {
     "name": "Domestic Goose",
@@ -4604,7 +5486,14 @@
       "몸길이": "75–90 cm",
       "몸무게": "4–6 kg",
       "수명": "10–20 years"
-    }
+    },
+    "nickname": "The long-necked goose",
+    "desc": "Geese are birds with long necks and white bodies. They usually live alongside people, and they call out when a stranger approaches. Geese can live nearly 20 years and will eat almost anything!",
+    "facts": [
+      "Geese are omnivores that will eat almost anything.",
+      "Their down is so warm it is used in duvets and winter clothing.",
+      "They call out at strangers, acting rather like guards."
+    ]
   },
   "0185": {
     "name": "Emu",
@@ -4615,7 +5504,14 @@
       "몸길이": "150–190 cm",
       "몸무게": "30–50 kg",
       "수명": "Avg. 10–20 years"
-    }
+    },
+    "nickname": "Australia's giant bird",
+    "desc": "Emus are large birds that live in Australia. They cannot fly, but they run and swim beautifully. Emus eat fruit and insects and live in groups. Their plumage is dark greyish-brown and their necks are long.",
+    "facts": [
+      "The emu is flightless and the second-largest bird after the ostrich.",
+      "Its feathers are coarse, rather like animal hair.",
+      "It appears on Australia's coat of arms alongside the kangaroo."
+    ]
   },
   "0186": {
     "name": "Macaw",
@@ -4626,7 +5522,14 @@
       "몸길이": "80–100 cm",
       "몸무게": "1 kg",
       "수명": "Avg. 40–50 years"
-    }
+    },
+    "nickname": "The brilliant macaw",
+    "desc": "Macaws are large parrots with wonderfully vivid colours. They often live in flocks and eat a variety of seeds and fruit. Macaws recognise one another by the unique feather patterns on their faces.",
+    "facts": [
+      "Each macaw has a unique facial feather pattern that identifies it.",
+      "They eat a wide range of foods, including seeds, fruit and bark.",
+      "They lick clay to take in sodium."
+    ]
   },
   "0187": {
     "name": "Adelie Penguin",
@@ -4637,7 +5540,14 @@
       "몸길이": "46–75 cm",
       "몸무게": "4–5 kg",
       "수명": "Avg. 15–20 years"
-    }
+    },
+    "nickname": "Little gentleman of Antarctica",
+    "desc": "Adélie penguins are endearing penguins that live in Antarctica. They eat mostly krill and build nests on thick ice in summer. The white rings around their eyes make them easy to recognise.",
+    "facts": [
+      "Adélie penguins have the widest range of any penguin on the Antarctic continent.",
+      "They eat mostly krill, along with fish and cephalopods.",
+      "White rings around the eyes are their distinguishing feature."
+    ]
   },
   "0188": {
     "name": "Andean Condor",
@@ -4648,7 +5558,14 @@
       "몸길이": "100–130 cm",
       "몸무게": "9–15 kg",
       "수명": "Avg. 50–70 years"
-    }
+    },
+    "nickname": "The great-winged condor",
+    "desc": "Condors are very large birds. With wings spread they reach three metres across. They live mainly in the Andes and feed on carrion. They look magnificent in flight!",
+    "facts": [
+      "A condor's wingspan reaches about three metres.",
+      "It lives mainly in the Andes of South America.",
+      "It acts as a scavenger, feeding on carrion."
+    ]
   },
   "0189": {
     "name": "Eurasian Hoopoe",
@@ -4659,7 +5576,14 @@
       "몸길이": "25–32 cm",
       "몸무게": "60 g",
       "수명": "Avg. 3–5 years"
-    }
+    },
+    "nickname": "The crested hoopoe",
+    "desc": "Hoopoes are birds with a magnificent crest on the head. Black and white striped wings and tails are their trademark. They search the ground for insects, and when attacked they can release a distinctive smell.",
+    "facts": [
+      "It has a striking crest of feathers on its head.",
+      "Its wings and tail carry black and white stripes.",
+      "When attacked it secretes a foul-smelling liquid."
+    ]
   },
   "0190": {
     "name": "Eurasian Skylark",
@@ -4670,7 +5594,14 @@
       "몸길이": "16–20 cm",
       "몸무게": "35 g",
       "수명": "Avg. 4–6 years"
-    }
+    },
+    "nickname": "Singer of the sky",
+    "desc": "Skylarks are small brown birds, with white edges showing at the wingtips when they spread their wings. They build nests on the ground and lay their eggs there. In winter they gather in flocks.",
+    "facts": [
+      "Skylarks raise their crest when excited.",
+      "They build their nests on the ground.",
+      "They gather in flocks through the winter."
+    ]
   },
   "0192": {
     "name": "Toucan",
@@ -4681,7 +5612,14 @@
       "몸길이": "45–65 cm",
       "몸무게": "500–700 g",
       "수명": "Avg. 30 years"
-    }
+    },
+    "nickname": "The great-billed toucan",
+    "desc": "Toucans are birds with enormous bills. They live mostly in the trees and eat seeds. They lay several white eggs at a time.",
+    "facts": [
+      "Toucans are famous for their enormous bills.",
+      "They live mainly up in the trees.",
+      "They usually lay two to four white eggs in the nest."
+    ]
   },
   "0193": {
     "name": "Bird-of-paradise",
@@ -4692,7 +5630,14 @@
       "몸길이": "30–45 cm",
       "몸무게": "100–300 g",
       "수명": "10–40 years"
-    }
+    },
+    "nickname": "The splendid one",
+    "desc": "Birds-of-paradise have wonderfully splendid plumage. They live mainly on the island of New Guinea, laying eggs and raising their chicks. They are so special they appear on the flag of Papua New Guinea.",
+    "facts": [
+      "Birds-of-paradise are famous for their splendid plumage and symbolise Papua New Guinea.",
+      "When first brought to Europe in the 16th century they were called 'birds of heaven'.",
+      "Their feathers are used in traditional New Guinean decoration."
+    ]
   },
   "0194": {
     "name": "Oriental Dollarbird",
@@ -4703,7 +5648,14 @@
       "몸길이": "27–30 cm",
       "몸무게": "100–150 g",
       "수명": "Avg. 5 years"
-    }
+    },
+    "nickname": "The bird of good fortune",
+    "desc": "Dollarbirds visit Korea in summer. They catch insects from the treetops, and their blue and green bodies are beautiful. With wings spread they look wonderful in flight.",
+    "facts": [
+      "Dollarbirds live mainly in the treetops, catching insects.",
+      "In Korea they are summer migrants only.",
+      "Their flight has a distinctive rolling, tumbling motion."
+    ]
   },
   "0196": {
     "name": "Japanese White-eye",
@@ -4714,7 +5666,14 @@
       "몸길이": "10–11 cm",
       "몸무게": "10–13 g",
       "수명": "Avg. 2 years"
-    }
+    },
+    "nickname": "The white-eyed bird",
+    "desc": "White-eyes are small green birds with a white ring around each eye. They mostly drink nectar from flowers and build nests in the trees. You can see many of them on Jeju and Ulleung islands.",
+    "facts": [
+      "White-eyes live alongside camellias, drinking nectar and pollinating the flowers.",
+      "The white ring around the eye makes them easy to identify.",
+      "They build basket-shaped nests on branches."
+    ]
   },
   "0197": {
     "name": "Eurasian Wren",
@@ -4725,7 +5684,14 @@
       "몸길이": "9–10 cm",
       "몸무게": "8–13 g",
       "수명": "3–5 years"
-    }
+    },
+    "nickname": "The tiny forest bird",
+    "desc": "Wrens are very small birds, no bigger than the palm of your hand. In summer they live in the mountains, and in winter they come closer to houses. They eat small insects, and they slip through the undergrowth, so they are hard to spot.",
+    "facts": [
+      "The wren is a tiny bird, about 10 cm long.",
+      "It lives in the mountains in summer and near houses in winter.",
+      "It sings softly and stays in the undergrowth, so it is easily missed."
+    ]
   },
   "0198": {
     "name": "White-cheeked Starling",
@@ -4736,7 +5702,14 @@
       "몸길이": "21–24 cm",
       "몸무게": "70–90 g",
       "수명": "Avg. 2 years"
-    }
+    },
+    "nickname": "The white-cheeked starling",
+    "desc": "Starlings are small birds in grey and black. They have white feathers around the face and live in flocks. They nest in trees and eat earthworms and berries.",
+    "facts": [
+      "Starlings tend to live in flocks.",
+      "In the breeding season they sing in clear, high notes.",
+      "Males and females take turns incubating the eggs."
+    ]
   },
   "0199": {
     "name": "Common Hill Myna",
@@ -4747,7 +5720,14 @@
       "몸길이": "25–29 cm",
       "몸무게": "180–260 g",
       "수명": "Avg. 3 years"
-    }
+    },
+    "nickname": "The talking myna",
+    "desc": "Hill mynas are amusing birds that copy human speech. Their bodies are black with white patches on the wings. They mostly eat fruit and insects and live in forests.",
+    "facts": [
+      "Hill mynas are excellent mimics of human speech.",
+      "Their black plumage has a purple sheen, with white patches on the wings.",
+      "They are native to India, Southeast Asia and China."
+    ]
   },
   "0200": {
     "name": "Cinereous Tit",
@@ -4758,7 +5738,14 @@
       "몸길이": "13–14 cm",
       "몸무게": "14–22 g",
       "수명": "Avg. 3 years"
-    }
+    },
+    "nickname": "The little songbird",
+    "desc": "Tits are small, endearing birds. You often see them near towns. They eat insects and tend to move about in flocks.",
+    "facts": [
+      "Tits adapt well to a wide range of environments.",
+      "They are often found close to people, even in cities.",
+      "They live mainly on insects."
+    ]
   },
   "0201": {
     "name": "Grey Parrot",
@@ -9389,7 +10376,14 @@
       "몸길이": "80–100 cm",
       "몸무게": "7–17 kg",
       "수명": "Avg. 8–12 years"
-    }
+    },
+    "nickname": "The fragrant deer",
+    "desc": "Musk deer are deer with a remarkable scent. Instead of antlers they have long, handsome tusks. They live high in the mountains, grazing on grass and moss.",
+    "facts": [
+      "Musk deer have long canine tusks instead of antlers.",
+      "Males have a musk gland on the belly that releases their scent.",
+      "The musk is used as an animal perfume and is extremely valuable."
+    ]
   },
   "0106": {
     "name": "Proboscis Monkey",
@@ -9400,7 +10394,14 @@
       "몸길이": "53–76 cm",
       "몸무게": "16–20 kg",
       "수명": "Avg. 20–25 years"
-    }
+    },
+    "nickname": "The long-nosed monkey",
+    "desc": "Proboscis monkeys have long noses and reddish-brown coats. They live mostly in the trees and are found in mangrove forests and near water. They live in troops, and males can call loudly through their long noses.",
+    "facts": [
+      "A male's nose can hang down as much as 10 cm.",
+      "Proboscis monkeys climb up and down trees skilfully.",
+      "They love water and are strong swimmers."
+    ]
   },
   "0113": {
     "name": "Coati",
@@ -9411,7 +10412,14 @@
       "몸길이": "41–67 cm",
       "몸무게": "4–5 kg",
       "수명": "Avg. 15–20 years"
-    }
+    },
+    "nickname": "The long-nosed raccoon",
+    "desc": "Coatis are endearing animals from South America. Their long noses help them sniff out food. They play happily in the trees and move about in groups.",
+    "facts": [
+      "Coatis use their long noses to find food.",
+      "They climb well and live mostly in the trees.",
+      "They are highly social and live in groups."
+    ]
   },
   "0173": {
     "name": "Crested Ibis",
@@ -9422,7 +10430,14 @@
       "몸길이": "55–78 cm",
       "몸무게": "1.7 kg",
       "수명": "Avg. 5–7 years"
-    }
+    },
+    "nickname": "The red-faced ibis",
+    "desc": "Crested ibises have red faces and white feathers. In spring and summer the undersides of their wings turn pink. They lay eggs and probe the mud for food with their long bills.",
+    "facts": [
+      "Their plumage changes colour around the breeding season.",
+      "Highly sensitive bills let them find food buried in mud.",
+      "They were once widespread across East Asia."
+    ]
   },
   "0182": {
     "name": "Common Pheasant",
@@ -9433,7 +10448,14 @@
       "몸길이": "60–90 cm",
       "몸무게": "1–1.5 kg",
       "수명": "Avg. 4–6 years"
-    }
+    },
+    "nickname": "The splendid cock pheasant",
+    "desc": "Pheasants are birds with magnificent plumage. They live in farmland and grassland, eating grain and small insects. Pheasants can fly quickly, but not very far.",
+    "facts": [
+      "Males have magnificent, colourful plumage.",
+      "Females are camouflaged in ochre and dark brown patterning.",
+      "They fly at around 60 km/h."
+    ]
   },
   "0183": {
     "name": "Japanese Quail",
@@ -9444,7 +10466,14 @@
       "몸길이": "18–20 cm",
       "몸무게": "100 g",
       "수명": "Avg. 3–4 years"
-    }
+    },
+    "nickname": "The little quail",
+    "desc": "Quails are small brown birds. They pass through Korea in winter, eating seeds and insects. Quail eggs are a well-loved delicacy.",
+    "facts": [
+      "Quails pass through Korea as winter migrants.",
+      "They are yellowish-brown with brown and black mottling.",
+      "Their call is a distinctive rolling trill."
+    ]
   },
   "0184": {
     "name": "Cassowary",
@@ -9455,7 +10484,14 @@
       "몸길이": "130–170 cm",
       "몸무게": "30–60 kg",
       "수명": "Avg. 5–8 years"
-    }
+    },
+    "nickname": "The helmeted forest giant",
+    "desc": "Cassowaries are very large birds. They cannot fly, but they run fast. They live mainly in tropical rainforest, eating fruit and small animals. Cassowaries play an important role by spreading seeds far and wide.",
+    "facts": [
+      "The cassowary is the third-largest bird on Earth.",
+      "It has a horn-like crest known as a casque.",
+      "It plays a vital role spreading seeds through the rainforest."
+    ]
   },
   "0191": {
     "name": "Rhinoceros Hornbill",
@@ -9466,7 +10502,14 @@
       "몸길이": "100–130 cm",
       "몸무게": "2–3 kg",
       "수명": "35 years"
-    }
+    },
+    "nickname": "The great hornbill",
+    "desc": "Hornbills are very large birds. They have white bills topped with a casque and live mainly in tropical rainforest. This bird also represents the Malaysian state of Sarawak.",
+    "facts": [
+      "The rhinoceros hornbill is known for its white bill and casque.",
+      "It lives on the Malay Peninsula, Sumatra, Java and Borneo.",
+      "It is the state bird of Sarawak."
+    ]
   },
   "0195": {
     "name": "Brown-eared Bulbul",
@@ -9477,7 +10520,14 @@
       "몸길이": "27–29 cm",
       "몸무게": "70–100 g",
       "수명": "20–40 years"
-    }
+    },
+    "nickname": "The brown-eared bulbul",
+    "desc": "Brown-eared bulbuls are birds you often see in Korea. They are named for the brown patch by the ear. They live in the trees, eating insects and fruit. In spring they lay eggs and care for their chicks.",
+    "facts": [
+      "The brown cheek patch makes them easy to identify.",
+      "They live mainly in trees and are common even in cities.",
+      "They eat a varied diet, and are especially fond of persimmons and insects."
+    ]
   },
   "0214": {
     "name": "Shoebill",
