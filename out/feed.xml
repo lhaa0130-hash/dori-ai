@@ -6,7 +6,23 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Mon, 20 Jul 2026 02:00:32 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 20 Jul 2026 03:00:39 GMT</lastBuildDate>
+    <item>
+      <title>AI Industry Faces New Challenges: Infrastructure Investments and Security Concerns</title>
+      <link>https://illo.im/insight/article/report-12-en</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/report-12-en</guid>
+      <category>리포트</category>
+      <pubDate>Mon, 20 Jul 2026 02:03:48 GMT</pubDate>
+      <description>AI's growth spotlight shifts from innovation to infrastructure and security.</description>
+    </item>
+    <item>
+      <title>TSMC 투자 보도·IBM 변동성·기업 에이전트 리스크: AI 돈길이 성과 검증대로 간다</title>
+      <link>https://illo.im/insight/article/report-12</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/report-12</guid>
+      <category>리포트</category>
+      <pubDate>Mon, 20 Jul 2026 02:03:48 GMT</pubDate>
+      <description>이번 주 AI 산업의 핵심은 더 많은 모델 출시가 아니라, AI를 돌리는 비용과 보안, 반도체 공급망, 데이터센터 투자 회수 가능성으로 이동했다. TSMC의 미국 투자 논의와 IBM을 둘러싼 실적 우려, 기업 에이전트 사고 가능성은 AI 자본시장이 ‘성장 서사’에서 ‘증명 가능한 수익성’으로 넘어가고 있음을 보여준다.</description>
+    </item>
     <item>
       <title>Top 8 AI-Powered PPT Creation Tools: A Comprehensive Guide</title>
       <link>https://illo.im/insight/article/curation-18-en</link>
@@ -310,22 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Sun, 05 Jul 2026 23:02:02 GMT</pubDate>
       <description>Explore the best free AI translation tools for natural accuracy, tone adjustment, and more to suit your specific needs.</description>
-    </item>
-    <item>
-      <title>무료 AI 번역 사이트 추천 BEST 7: 한국어 지원·장단점·상황별 선택 가이드</title>
-      <link>https://illo.im/insight/article/curation-16</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/curation-16</guid>
-      <category>큐레이션</category>
-      <pubDate>Sun, 05 Jul 2026 23:02:02 GMT</pubDate>
-      <description>무료로 쓸 수 있는 AI 번역 사이트 7가지를 한국어 지원, 무료 사용 가능 여부, 장단점, 추천 대상 기준으로 비교했습니다. 문서 번역, 자연스러운 의역, 업무용 번역까지 상황별 최종 픽도 정리했습니다.</description>
-    </item>
-    <item>
-      <title>[업무 자동화] AI 업무 치트키 '3가지'</title>
-      <link>https://illo.im/insight/article/video-51</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-51</guid>
-      <category>큐레이션</category>
-      <pubDate>Sun, 05 Jul 2026 00:00:00 GMT</pubDate>
-      <description>AI를 활용해 업무 시간을 90% 이상 줄이는 방법을 소개합니다.</description>
     </item>
   </channel>
 </rss>
