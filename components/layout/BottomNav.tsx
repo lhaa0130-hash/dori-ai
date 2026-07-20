@@ -69,7 +69,7 @@ const MORE_ITEMS = [
 ];
 
 const PROJECTS = [
-  { name: "몽글로 : 동물도감",  nameEn: "Animal Encyclopedia",  emoji: "🐾", image: "", href: "/animal", hrefEn: "/en/animal", desc: "다양한 동물을 몽글로에서", descEn: "Hundreds of animals, made for kids" },
+  { name: "몽글로 : 동물도감",  nameEn: "Monglo",  emoji: "🐾", image: "", href: "/animal", hrefEn: "/en/animal", desc: "다양한 동물을 몽글로에서", descEn: "Hundreds of animals, made for kids" },
 ];
 
 export default function BottomNav() {

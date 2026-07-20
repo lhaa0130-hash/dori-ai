@@ -7,7 +7,7 @@ const SITE_URL = "https://illo.im";
 
 // createMetadata의 x-default는 ko라서, 영어판 규약(x-default=en)에 맞게 alternates만 덮어씀
 const base = createMetadata({
-  title: "Animal Encyclopedia — kid-friendly guide to hundreds of animals",
+  title: "Monglo — kid-friendly animal encyclopedia with hundreds of species",
   description:
     "Browse hundreds of animals with photos, IUCN status, size, lifespan, diet and habitat. Filter by type, diet, lifespan, weight, length and region — written for kids.",
   path: "/en/animal",

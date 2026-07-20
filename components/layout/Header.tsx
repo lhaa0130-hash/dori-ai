@@ -51,7 +51,7 @@ export default function Header() {
         { name: "Projects", href: "/en/projects", emoji: "📁" },
         {
           name: "Kids", emoji: "🧸", children: [
-            { name: "Animal Encyclopedia", href: "/en/animal", emoji: "🐾" },
+            { name: "Monglo", href: "/en/animal", emoji: "🐾" },
           ],
         },
         {

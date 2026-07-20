@@ -16,7 +16,7 @@ const SECTIONS = [
   { label: "AI Models", href: "/en/ai-models", Icon: BarChart3 },
   { label: "AI News", href: "/en/ai-news", Icon: Rss },
   { label: "Projects", href: "/en/projects", Icon: FolderKanban },
-  { label: "Animal Encyclopedia", href: "/en/animal", Icon: PawPrint },
+  { label: "Monglo", href: "/en/animal", Icon: PawPrint },
   { label: "Mini Games", href: "/en/minigame", Icon: Gamepad2 },
   { label: "Psych Tests", href: "/en/psychtest", Icon: MessagesSquare },
   { label: "Notice", href: "/en/notice", Icon: Bell },

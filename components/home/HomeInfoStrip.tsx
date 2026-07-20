@@ -32,7 +32,7 @@ function RankCard({ title, href, rows }: { title: string; href: string; rows: Ro
 
 const T = {
   ko: { usage: "🤖 많이 쓰는 AI 모델", intel: "🧠 똑똑한 AI 모델", speed: "⚡ 빠른 AI 모델", price: "💰 저렴한 AI 모델", tools: "🔧 추천 AI 도구", today: "✨ 오늘의 도리", insight: "📰 오늘 인사이트", animal: "🐾 몽글로", game: "🎮 미니게임", community: "💬 커뮤니티", play: "바로가기", talk: "이야기", cnt: "건", spec: "종", pts: "점", free: "무료" },
-  en: { usage: "🤖 Most-used AI Models", intel: "🧠 Smartest AI Models", speed: "⚡ Fastest AI Models", price: "💰 Cheapest AI Models", tools: "🔧 Recommended AI Tools", today: "✨ Today on illo", insight: "📰 Today's insights", animal: "🐾 Animal Encyclopedia", game: "🎮 Mini Games", community: "💬 Community", play: "Play", talk: "Talk", cnt: "", spec: "", pts: " pts", free: "Free" },
+  en: { usage: "🤖 Most-used AI Models", intel: "🧠 Smartest AI Models", speed: "⚡ Fastest AI Models", price: "💰 Cheapest AI Models", tools: "🔧 Recommended AI Tools", today: "✨ Today on illo", insight: "📰 Today's insights", animal: "🐾 Monglo", game: "🎮 Mini Games", community: "💬 Community", play: "Play", talk: "Talk", cnt: "", spec: "", pts: " pts", free: "Free" },
 };
 
 export default function HomeInfoStrip({
