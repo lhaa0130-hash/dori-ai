@@ -729,6 +729,8 @@ export interface Achievement {
   emoji: string;
   name: string;
   description: string;
+  nameEn: string;        // 영어판(/en/*) 표기 — 값 자체는 id 로 저장되므로 표시용
+  descriptionEn: string;
   reward: number;
   condition: (stats: AchievementStats) => boolean;
 }
@@ -746,16 +748,16 @@ export interface AchievementStats {
 }
 
 export const ACHIEVEMENTS: Achievement[] = [
-  { id: "first_visit",   emoji: "🎉", name: "첫 방문",          description: "illo에 처음 방문",           reward: 10,   condition: () => true },
-  { id: "first_post",    emoji: "📝", name: "첫 글쓰기",        description: "커뮤니티 글 1개 작성",           reward: 50,   condition: (s) => s.totalPosts >= 1 },
-  { id: "comment_king",  emoji: "💬", name: "댓글왕",           description: "댓글 10개 달기",                 reward: 100,  condition: (s) => s.totalComments >= 10 },
-  { id: "streak_3",      emoji: "🔥", name: "3일 연속 출석",    description: "3일 연속으로 출석",              reward: 100,  condition: (s) => s.streak >= 3 },
-  { id: "streak_7",      emoji: "📅", name: "7일 연속 출석",    description: "7일 연속으로 출석",              reward: 300,  condition: (s) => s.streak >= 7 },
-  { id: "streak_30",     emoji: "🏆", name: "한 달 개근",       description: "30일 연속으로 출석",             reward: 1000, condition: (s) => s.streak >= 30 },
-  { id: "popular",       emoji: "👍", name: "인기쟁이",         description: "받은 좋아요 10개",               reward: 150,  condition: (s) => s.totalReceivedLikes >= 10 },
-  { id: "game_king",     emoji: "🎮", name: "게임왕",           description: "미니게임 10판 플레이",           reward: 200,  condition: (s) => s.minigamePlays >= 10 },
-  { id: "quiz_master",   emoji: "🤓", name: "퀴즈마스터",       description: "퀴즈 20문제 정답",               reward: 250,  condition: (s) => s.quizCorrect >= 20 },
-  { id: "level_10",      emoji: "💎", name: "레벨 10 달성",     description: "레벨 10에 도달",                 reward: 500,  condition: (s) => s.level >= 10 },
+  { id: "first_visit",   emoji: "🎉", name: "첫 방문",          description: "illo에 처음 방문", nameEn: "First visit", descriptionEn: "Visited illo for the first time",           reward: 10,   condition: () => true },
+  { id: "first_post",    emoji: "📝", name: "첫 글쓰기",        description: "커뮤니티 글 1개 작성", nameEn: "First post", descriptionEn: "Wrote your first community post",           reward: 50,   condition: (s) => s.totalPosts >= 1 },
+  { id: "comment_king",  emoji: "💬", name: "댓글왕",           description: "댓글 10개 달기", nameEn: "Comment king", descriptionEn: "Left 10 comments",                 reward: 100,  condition: (s) => s.totalComments >= 10 },
+  { id: "streak_3",      emoji: "🔥", name: "3일 연속 출석",    description: "3일 연속으로 출석", nameEn: "3-day streak", descriptionEn: "Checked in 3 days in a row",              reward: 100,  condition: (s) => s.streak >= 3 },
+  { id: "streak_7",      emoji: "📅", name: "7일 연속 출석",    description: "7일 연속으로 출석", nameEn: "7-day streak", descriptionEn: "Checked in 7 days in a row",              reward: 300,  condition: (s) => s.streak >= 7 },
+  { id: "streak_30",     emoji: "🏆", name: "한 달 개근",       description: "30일 연속으로 출석", nameEn: "Perfect month", descriptionEn: "Checked in 30 days in a row",             reward: 1000, condition: (s) => s.streak >= 30 },
+  { id: "popular",       emoji: "👍", name: "인기쟁이",         description: "받은 좋아요 10개", nameEn: "Crowd pleaser", descriptionEn: "Received 10 likes",               reward: 150,  condition: (s) => s.totalReceivedLikes >= 10 },
+  { id: "game_king",     emoji: "🎮", name: "게임왕",           description: "미니게임 10판 플레이", nameEn: "Game king", descriptionEn: "Played 10 mini-games",           reward: 200,  condition: (s) => s.minigamePlays >= 10 },
+  { id: "quiz_master",   emoji: "🤓", name: "퀴즈마스터",       description: "퀴즈 20문제 정답", nameEn: "Quiz master", descriptionEn: "Answered 20 quiz questions correctly",               reward: 250,  condition: (s) => s.quizCorrect >= 20 },
+  { id: "level_10",      emoji: "💎", name: "레벨 10 달성",     description: "레벨 10에 도달", nameEn: "Level 10", descriptionEn: "Reached level 10",                 reward: 500,  condition: (s) => s.level >= 10 },
 ];
 
 const ACHIEVEMENT_CLAIMED_KEY = (email: string) => `dori_achievements_${email}`;

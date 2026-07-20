@@ -66,6 +66,18 @@ const COLOR_PRESETS = ["#F9954E", "#22c55e", "#3b82f6", "#a855f7", "#ef4444", "#
 const MOODS = ["😎", "🥰", "😴", "🔥", "🎮", "✨", "😌", "🤔", "💪", "🍀", "🌙", "☕"];
 const STICKER_CHOICES = FREE_STICKERS; // 무료 기본 스티커(lib/shopItems 단일 출처)
 const INTEREST_SUGGESTIONS = ["AI", "코딩", "게임", "음악", "영화", "그림", "글쓰기", "사진", "독서", "운동", "요리", "여행", "주식", "디자인", "반려동물"];
+// ⚠️ 관심사·AI 분류는 '값'이 한글 그대로 profile.interests / aiForm.category 에 저장된다.
+//    (기존 회원 데이터와 맞춰야 하므로 값은 절대 바꾸지 않고, 영어판에서 표시만 바꾼다.)
+const INTEREST_EN: Record<string, string> = {
+  "코딩": "Coding", "게임": "Gaming", "음악": "Music", "영화": "Film", "그림": "Art",
+  "글쓰기": "Writing", "사진": "Photography", "독서": "Reading", "운동": "Fitness",
+  "요리": "Cooking", "여행": "Travel", "주식": "Investing", "디자인": "Design", "반려동물": "Pets",
+};
+const AI_CATEGORY_EN: Record<string, string> = {
+  "챗봇": "Chatbot", "그림": "Art", "글쓰기": "Writing", "게임": "Game",
+  "교육": "Education", "음악": "Music", "기타": "Other",
+};
+const enLabel = (map: Record<string, string>, v: string, isEn: boolean) => (isEn ? map[v] || v : v);
 
 // 프로필(코지홈) 페이지 문구 — /en 경로에서는 영어로 표시
 const T = {
@@ -402,7 +414,7 @@ function PickTile({
   return owned ? (
     <button type="button" onClick={onSelect} className={cls}>{inner}</button>
   ) : (
-    <Link href="/shop" className={cls} title={t.buyAtShop}>{inner}</Link>
+    <Link href={(pathname || "").startsWith("/en") ? "/en/shop" : "/shop"} className={cls} title={t.buyAtShop}>{inner}</Link>
   );
 }
 
@@ -839,7 +851,7 @@ export default function ProfilePage() {
 
   const messageHref = useMemo(() => {
     if (!targetUid || !profile) return lang === "en" ? "/en/login" : "/login";
-    return `/messages?to=${encodeURIComponent(targetUid)}&name=${encodeURIComponent(profile.name)}`;
+    return `${lang === "en" ? "/en/messages" : "/messages"}?to=${encodeURIComponent(targetUid)}&name=${encodeURIComponent(profile.name)}`;
   }, [targetUid, profile]);
 
   // ── 비로그인 + 대상 미지정 → 로그인 유도 ───────────────────────
@@ -901,7 +913,7 @@ export default function ProfilePage() {
                 followModal.users.map((u) => (
                   <Link
                     key={u.uid}
-                    href={`/profile?uid=${u.uid}`}
+                    href={`${lang === "en" ? "/en/profile" : "/profile"}?uid=${u.uid}`}
                     onClick={() => setFollowModal(null)}
                     className="flex items-center gap-3 px-3 py-2.5 rounded-xl hover:bg-stone-50 dark:hover:bg-zinc-800"
                   >
@@ -944,7 +956,7 @@ export default function ProfilePage() {
               {t.accountTab}
             </button>
             <Link
-              href="/shop"
+              href={lang === "en" ? "/en/shop" : "/shop"}
               className="flex-1 text-center py-2 rounded-xl text-[13px] font-extrabold transition-colors text-stone-500 dark:text-stone-400 active:opacity-70"
             >
               {t.shopTab}
@@ -1098,7 +1110,7 @@ export default function ProfilePage() {
                     key={it}
                     className="inline-flex items-center rounded-full px-2.5 py-1 text-[12px] font-semibold bg-white/70 dark:bg-zinc-900/70 backdrop-blur text-stone-700 dark:text-stone-200 ring-1 ring-black/5 dark:ring-white/10"
                   >
-                    #{it}
+                    #{enLabel(INTEREST_EN, it, lang === "en")}
                   </span>
                 ))}
               </div>
@@ -1192,7 +1204,7 @@ export default function ProfilePage() {
           <div className="mt-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
             <div className="flex items-center justify-between mb-3">
               <p className="text-[11px] text-[#F9954E] font-bold">{t.customizeCozyHome}</p>
-              <Link href="/shop" className="text-[11px] font-bold text-[#F9954E] inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FBEEE7] dark:bg-[#F9954E]/10">
+              <Link href={lang === "en" ? "/en/shop" : "/shop"} className="text-[11px] font-bold text-[#F9954E] inline-flex items-center gap-1 px-2.5 py-1 rounded-full bg-[#FBEEE7] dark:bg-[#F9954E]/10">
                 {t.getItemsFromShop}
               </Link>
             </div>
@@ -1435,7 +1447,7 @@ export default function ProfilePage() {
                       on ? "bg-[#F9954E] text-white" : "bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300"
                     }`}
                   >
-                    #{tag}
+                    #{enLabel(INTEREST_EN, tag, lang === "en")}
                   </button>
                 );
               })}
@@ -1460,7 +1472,7 @@ export default function ProfilePage() {
                 );
               })}
               <Link
-                href="/shop"
+                href={lang === "en" ? "/en/shop" : "/shop"}
                 className="w-9 h-9 rounded-xl text-[16px] flex items-center justify-center bg-stone-100 dark:bg-zinc-900 text-stone-400 border border-dashed border-stone-300 dark:border-zinc-700"
                 title={t.getStickersFromShop}
               >
@@ -1528,7 +1540,7 @@ export default function ProfilePage() {
                   <select value={aiForm.category} onChange={(e) => setAiForm((f) => ({ ...f, category: e.target.value }))}
                     className="w-1/2 px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40">
                     <option value="">{t.categorySelectPlaceholder}</option>
-                    {["챗봇", "그림", "글쓰기", "게임", "교육", "음악", "기타"].map((c) => <option key={c} value={c}>{c}</option>)}
+                    {["챗봇", "그림", "글쓰기", "게임", "교육", "음악", "기타"].map((c) => <option key={c} value={c}>{enLabel(AI_CATEGORY_EN, c, lang === "en")}</option>)}
                   </select>
                   <input value={aiForm.tool} onChange={(e) => setAiForm((f) => ({ ...f, tool: e.target.value }))} maxLength={30} placeholder={t.toolPlaceholder}
                     className="w-1/2 px-3 py-2.5 rounded-xl bg-white dark:bg-zinc-900 text-[13px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40" />
@@ -1757,7 +1769,7 @@ export default function ProfilePage() {
           <div className="mt-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
             <div className="flex items-center justify-between mb-3">
               <p className="text-[11px] text-[#F9954E] font-bold">{t.psychReportHeading}</p>
-              <a href="/psychtest" className="text-[11px] font-bold text-stone-400 hover:text-[#F9954E]">{t.goTakeTest}</a>
+              <a href={lang === "en" ? "/en/psychtest" : "/psychtest"} className="text-[11px] font-bold text-stone-400 hover:text-[#F9954E]">{t.goTakeTest}</a>
             </div>
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-2.5">
               {profile.psychResults.map((r) => (
@@ -1867,7 +1879,7 @@ export default function ProfilePage() {
                 >
                   <div className="flex items-center justify-between gap-2">
                     {g.fromUid ? (
-                      <Link href={`/profile?uid=${g.fromUid}`} className="text-[13px] font-bold text-stone-800 dark:text-stone-100 truncate hover:text-[#F9954E] hover:underline">
+                      <Link href={`${lang === "en" ? "/en/profile" : "/profile"}?uid=${g.fromUid}`} className="text-[13px] font-bold text-stone-800 dark:text-stone-100 truncate hover:text-[#F9954E] hover:underline">
                         {g.fromName}
                       </Link>
                     ) : (

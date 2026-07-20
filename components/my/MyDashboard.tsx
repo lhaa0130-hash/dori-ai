@@ -4,7 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import { useTheme } from "next-themes";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import ProfileHero from "@/components/my/ProfileHero";
 import { UserProfile, createDefaultProfile, calculateTier, calculateLevel, ACTIVITY_SCORES } from "@/lib/userProfile";
 import CottonCandy from "@/components/icons/CottonCandy";
@@ -29,7 +29,109 @@ import {
   type CottonCandyHistoryEntry,
 } from "@/lib/cottonCandy";
 
+const T = {
+  ko: {
+    loadingUser: "사용자 정보를 불러오는 중입니다",
+    loginRequiredTitle: "로그인이 필요해요",
+    loginRequiredL1: "마이페이지는 로그인 후",
+    loginRequiredL2: "이용하실 수 있습니다.",
+    goLogin: "로그인하러 가기",
+    loadingProfile: "프로필을 로드하는 중입니다",
+    userNotFound: "사용자 정보를 찾을 수 없습니다.",
+    reLogin: "다시 로그인하기",
+    toastPrefix: "🏆 업적 달성!",
+    missionAlreadyDone: "오늘 이미 완료한 미션입니다!",
+    attendanceDoneToast: "출석 체크 완료!",
+    missionDone: (label: string) => `${label} 완료!`,
+    eyebrow: "계정 · 활동",
+    pageTitle: "내 프로필",
+    pageSubtitle: "나의 활동과 프로필 정보를 관리합니다.",
+    notifications: "알림",
+    notiUnread: (n: number) => `읽지 않은 알림 ${n}개`,
+    notiDefault: "친구 요청·좋아요·댓글·방명록·메시지를 한곳에서",
+    myCandy: "내 솜사탕",
+    unitPiece: "개",
+    todayLabel: "오늘 획득: ",
+    monthLabel: "이번 달: ",
+    streakLabel: "연속 출석: ",
+    streakUnit: (n: number) => `${n}일`,
+    viewHistory: "획득 내역 보기",
+    pointShop: "포인트 상점 →",
+    activityHistory: "활동 히스토리",
+    tabPosts: "작성한 글",
+    tabComments: "댓글 내역",
+    tabSparked: "받은 유레카",
+    tabBookmarked: "북마크",
+    tabRecent: "최근 본 글",
+    tabMissions: "미션/업적",
+    tabCandyHistory: "포인트 내역",
+    dailyMissions: "일일 미션",
+    resetDaily: "매일 자정 초기화",
+    doneBadge: "✓ 완료",
+    claim: "받기",
+    achievements: "업적",
+    achievementProgress: (claimed: number, total: number) => `${claimed}/${total} 달성`,
+    noCandyHistory: "아직 솜사탕 내역이 없네요!",
+    noCandyHistoryHint: "미션을 완료하고 솜사탕을 모아보세요.",
+    dateLocale: "ko-KR",
+    noActivity: "아직 활동 정보가 없네요!",
+    firstPost: "첫 게시글 작성하러 가기 →",
+    freeTag: "자유",
+  },
+  en: {
+    loadingUser: "Loading your info",
+    loginRequiredTitle: "Log in required",
+    loginRequiredL1: "Log in to access",
+    loginRequiredL2: "your My Page.",
+    goLogin: "Go to log in",
+    loadingProfile: "Loading your profile",
+    userNotFound: "Couldn't find your user info.",
+    reLogin: "Log in again",
+    toastPrefix: "🏆 Achievement unlocked!",
+    missionAlreadyDone: "You've already completed this mission today!",
+    attendanceDoneToast: "Check-in complete!",
+    missionDone: (label: string) => `${label} complete!`,
+    eyebrow: "Account · Activity",
+    pageTitle: "My profile",
+    pageSubtitle: "Manage your activity and profile info.",
+    notifications: "Notifications",
+    notiUnread: (n: number) => `${n} unread notification${n === 1 ? "" : "s"}`,
+    notiDefault: "Friend requests, likes, comments, guestbook, and messages in one place",
+    myCandy: "My cotton candy",
+    unitPiece: "",
+    todayLabel: "Today: ",
+    monthLabel: "This month: ",
+    streakLabel: "Streak: ",
+    streakUnit: (n: number) => `${n} day${n === 1 ? "" : "s"}`,
+    viewHistory: "View history",
+    pointShop: "Point shop →",
+    activityHistory: "Activity history",
+    tabPosts: "Posts",
+    tabComments: "Comments",
+    tabSparked: "Eureka received",
+    tabBookmarked: "Bookmarks",
+    tabRecent: "Recently viewed",
+    tabMissions: "Missions/Achievements",
+    tabCandyHistory: "Point history",
+    dailyMissions: "Daily missions",
+    resetDaily: "Resets daily at midnight",
+    doneBadge: "✓ Done",
+    claim: "Claim",
+    achievements: "Achievements",
+    achievementProgress: (claimed: number, total: number) => `${claimed}/${total} unlocked`,
+    noCandyHistory: "No cotton candy history yet!",
+    noCandyHistoryHint: "Complete missions to start earning cotton candy.",
+    dateLocale: "en-US",
+    noActivity: "No activity yet!",
+    firstPost: "Write your first post →",
+    freeTag: "General",
+  },
+} as const;
+
 export default function MyDashboard() {
+  const pathname = usePathname();
+  const isEn = (pathname || "").startsWith("/en");
+  const t = T[isEn ? "en" : "ko"];
   const { session, status, update } = useAuth();
   const user = session?.user || null;
   const { theme } = useTheme();
@@ -75,12 +177,12 @@ export default function MyDashboard() {
 
   // 일일 미션 정의
   const DAILY_MISSIONS = [
-    { id: "attendance", label: "출석 체크", reward: 50, emoji: "📅" },
-    { id: "read_trend", label: "트렌드 기사 읽기", reward: 30, emoji: "📰" },
-    { id: "write_post", label: "커뮤니티 글쓰기", reward: 80, emoji: "📝" },
-    { id: "write_comment", label: "댓글 달기", reward: 30, emoji: "💬" },
-    { id: "play_minigame", label: "미니게임 1판", reward: 40, emoji: "🎮" },
-    { id: "quiz_correct", label: "AI 퀴즈 풀기", reward: 50, emoji: "🧠" },
+    { id: "attendance", label: "출석 체크", labelEn: "Daily check-in", reward: 50, emoji: "📅" },
+    { id: "read_trend", label: "트렌드 기사 읽기", labelEn: "Read a trend article", reward: 30, emoji: "📰" },
+    { id: "write_post", label: "커뮤니티 글쓰기", labelEn: "Write a community post", reward: 80, emoji: "📝" },
+    { id: "write_comment", label: "댓글 달기", labelEn: "Leave a comment", reward: 30, emoji: "💬" },
+    { id: "play_minigame", label: "미니게임 1판", labelEn: "Play a minigame", reward: 40, emoji: "🎮" },
+    { id: "quiz_correct", label: "AI 퀴즈 풀기", labelEn: "Solve an AI quiz", reward: 50, emoji: "🧠" },
   ];
 
   useEffect(() => setMounted(true), []);
@@ -126,7 +228,7 @@ export default function MyDashboard() {
       newAchievements.forEach((ach) => {
         const reward = claimAchievement(email, ach.id);
         if (reward > 0) {
-          setAchievementToast({ name: ach.name, reward });
+          setAchievementToast({ name: isEn ? ach.nameEn : ach.name, reward });
           setTimeout(() => setAchievementToast(null), 4000);
         }
       });
@@ -135,15 +237,15 @@ export default function MyDashboard() {
   }, [mounted, user?.email, profile, myPosts, myComments, attendanceStreak, candyBalance, loadCandyData]);
 
   // 미션 완료 처리
-  const handleMissionClaim = (missionId: string, reward: number, label: string) => {
+  const handleMissionClaim = (missionId: string, reward: number, label: string, displayLabel?: string) => {
     if (!user?.email) return;
     const done = completeMission(user.email, missionId, reward, `미션 완료: ${label}`);
     if (done) {
       loadCandyData(); // 잔액 즉시 갱신
-      setAchievementToast({ name: `${label} 완료!`, reward });
+      setAchievementToast({ name: t.missionDone(displayLabel || label), reward });
       setTimeout(() => setAchievementToast(null), 3000);
     } else {
-      alert("오늘 이미 완료한 미션입니다!");
+      alert(t.missionAlreadyDone);
     }
   };
 
@@ -155,7 +257,7 @@ export default function MyDashboard() {
       setAttendanceDone(true);
       setAttendanceStreak(prev => prev + 1);
       loadCandyData();
-      setAchievementToast({ name: "출석 체크 완료!", reward: result.earned });
+      setAchievementToast({ name: t.attendanceDoneToast, reward: result.earned });
       setTimeout(() => setAchievementToast(null), 3000);
     }
   };
@@ -376,7 +478,7 @@ export default function MyDashboard() {
       <main className="w-full min-h-screen bg-white dark:bg-black flex flex-col items-center justify-center">
         <div className="flex flex-col items-center">
           <div className="w-10 h-10 border-4 border-stone-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-5" />
-          <p className="text-[14px] text-stone-400 font-semibold">사용자 정보를 불러오는 중입니다</p>
+          <p className="text-[14px] text-stone-400 font-semibold">{t.loadingUser}</p>
         </div>
       </main>
     );
@@ -390,15 +492,15 @@ export default function MyDashboard() {
           <div className="w-14 h-14 rounded-2xl bg-[#FBEEE7] dark:bg-[#F9954E]/10 flex items-center justify-center text-2xl mb-5">
             🔒
           </div>
-          <h2 className="text-[20px] font-extrabold text-stone-900 dark:text-white mb-2">로그인이 필요해요</h2>
+          <h2 className="text-[20px] font-extrabold text-stone-900 dark:text-white mb-2">{t.loginRequiredTitle}</h2>
           <p className="text-[14px] text-stone-500 dark:text-stone-400 mb-7 leading-relaxed">
-            마이페이지는 로그인 후<br />이용하실 수 있습니다.
+            {t.loginRequiredL1}<br />{t.loginRequiredL2}
           </p>
           <Link
             href="/login"
             className="w-full py-3.5 rounded-full bg-[#F9954E] text-white font-bold text-[14px] active:opacity-85 transition-opacity text-center"
           >
-            로그인하러 가기
+            {t.goLogin}
           </Link>
         </div>
       </main>
@@ -411,7 +513,7 @@ export default function MyDashboard() {
       <main className="w-full min-h-screen bg-white dark:bg-black flex flex-col items-center justify-center">
         <div className="flex flex-col items-center">
           <div className="w-10 h-10 border-4 border-stone-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-5" />
-          <p className="text-[14px] text-stone-400 font-semibold">프로필을 로드하는 중입니다</p>
+          <p className="text-[14px] text-stone-400 font-semibold">{t.loadingProfile}</p>
         </div>
       </main>
     );
@@ -430,9 +532,9 @@ export default function MyDashboard() {
     return (
       <main className="w-full min-h-screen pt-20 flex flex-col items-center justify-center bg-white dark:bg-black">
         <div className="text-center p-8 bg-stone-50 dark:bg-zinc-900 rounded-3xl border border-stone-200 dark:border-zinc-800 shadow-sm">
-          <p className="text-stone-500 dark:text-zinc-400 font-medium mb-6">사용자 정보를 찾을 수 없습니다.</p>
+          <p className="text-stone-500 dark:text-zinc-400 font-medium mb-6">{t.userNotFound}</p>
           <Link href="/login" className="px-6 py-3 rounded-full bg-[#F9954E] text-white font-bold hover:bg-[#E8832E] transition-all">
-            다시 로그인하기
+            {t.reLogin}
           </Link>
         </div>
       </main>
@@ -444,18 +546,18 @@ export default function MyDashboard() {
       {/* 업적 달성 토스트 */}
       {achievementToast && (
         <div className="fixed top-24 left-1/2 -translate-x-1/2 z-50 bg-[#F9954E] text-white px-6 py-3 rounded-2xl font-bold text-sm shadow-xl flex items-center gap-2">
-          🏆 업적 달성! {achievementToast.name} +{achievementToast.reward} <CottonCandy className="w-4 h-4 inline-block align-[-0.15em]" />
+          {t.toastPrefix} {achievementToast.name} +{achievementToast.reward} <CottonCandy className="w-4 h-4 inline-block align-[-0.15em]" />
         </div>
       )}
 
       {/* Hero Section */}
       <section className="pt-2 pb-6 px-6">
-        <p className="text-[12px] font-semibold text-[#F9954E] mb-2">계정 · 활동</p>
+        <p className="text-[12px] font-semibold text-[#F9954E] mb-2">{t.eyebrow}</p>
         <h1 className="text-[32px] font-extrabold tracking-tight text-stone-950 dark:text-white mb-1">
-          내 프로필
+          {t.pageTitle}
         </h1>
         <p className="text-[14px] text-stone-500 dark:text-stone-400">
-          나의 활동과 프로필 정보를 관리합니다.
+          {t.pageSubtitle}
         </p>
       </section>
 
@@ -492,9 +594,9 @@ export default function MyDashboard() {
             )}
           </span>
           <div className="flex-1 min-w-0">
-            <p className="text-[15px] font-extrabold text-stone-900 dark:text-white">알림</p>
+            <p className="text-[15px] font-extrabold text-stone-900 dark:text-white">{t.notifications}</p>
             <p className="text-[12.5px] text-stone-500 dark:text-stone-400">
-              {unreadNoti > 0 ? `읽지 않은 알림 ${unreadNoti}개` : "친구 요청·좋아요·댓글·방명록·메시지를 한곳에서"}
+              {unreadNoti > 0 ? t.notiUnread(unreadNoti) : t.notiDefault}
             </p>
           </div>
           <ChevronRight className="w-5 h-5 text-stone-300 dark:text-zinc-600 group-hover:text-[#F9954E] transition-colors" />
@@ -506,16 +608,16 @@ export default function MyDashboard() {
             <div>
               <div className="flex items-center gap-2 mb-1">
                 <CottonCandy className="w-7 h-7" />
-                <h3 className="text-lg font-extrabold text-stone-900 dark:text-white">내 솜사탕</h3>
+                <h3 className="text-lg font-extrabold text-stone-900 dark:text-white">{t.myCandy}</h3>
               </div>
               <p className="text-3xl font-extrabold text-[#F9954E]">
-                {candyBalance.toLocaleString()}개
+                {candyBalance.toLocaleString()}{t.unitPiece}
               </p>
               <div className="flex gap-4 mt-2 text-xs font-bold text-stone-500 dark:text-zinc-400">
-                <span>오늘 획득: <span className="text-[#F9954E]">+{todayEarned}</span>개</span>
-                <span>이번 달: <span className="text-[#F9954E]">+{monthEarned.toLocaleString()}</span>개</span>
+                <span>{t.todayLabel}<span className="text-[#F9954E]">+{todayEarned}</span>{t.unitPiece}</span>
+                <span>{t.monthLabel}<span className="text-[#F9954E]">+{monthEarned.toLocaleString()}</span>{t.unitPiece}</span>
                 {attendanceStreak > 0 && (
-                  <span>연속 출석: <span className="text-[#F9954E]">🔥 {attendanceStreak}일</span></span>
+                  <span>{t.streakLabel}<span className="text-[#F9954E]">🔥 {t.streakUnit(attendanceStreak)}</span></span>
                 )}
               </div>
             </div>
@@ -524,13 +626,13 @@ export default function MyDashboard() {
                 onClick={() => setActiveTab("candy_history")}
                 className="px-4 py-2 rounded-xl border border-orange-200 dark:border-orange-800 text-[#F9954E] text-xs font-extrabold hover:bg-orange-50 dark:hover:bg-orange-950/30 transition-all"
               >
-                획득 내역 보기
+                {t.viewHistory}
               </button>
               <Link
                 href="/shop"
                 className="px-4 py-2 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-white text-xs font-extrabold transition-all shadow-sm shadow-orange-500/20"
               >
-                포인트 상점 →
+                {t.pointShop}
               </Link>
             </div>
           </div>
@@ -541,20 +643,20 @@ export default function MyDashboard() {
           <div className="flex items-center justify-between mb-8">
             <h3 className="text-xl font-extrabold text-stone-900 dark:text-white flex items-center gap-2">
               <span className="w-1.5 h-6 bg-[#F9954E] rounded-full" />
-              활동 히스토리
+              {t.activityHistory}
             </h3>
           </div>
 
           {/* Refined Tab UI */}
           <div className="flex gap-4 border-b border-stone-100 dark:border-zinc-800 mb-10 overflow-x-auto whitespace-nowrap scrollbar-hide pb-1">
             {[
-              { id: "posts", label: "작성한 글", count: myPosts.length },
-              { id: "comments", label: "댓글 내역", count: myComments.length },
-              { id: "sparked", label: "받은 유레카", count: sparkedPosts.length },
-              { id: "bookmarked", label: "북마크", count: bookmarkedPosts.length },
-              { id: "recent", label: "최근 본 글", count: recentViews.length },
-              { id: "missions", label: "미션/업적", count: null },
-              { id: "candy_history", label: "포인트 내역", count: null },
+              { id: "posts", label: t.tabPosts, count: myPosts.length },
+              { id: "comments", label: t.tabComments, count: myComments.length },
+              { id: "sparked", label: t.tabSparked, count: sparkedPosts.length },
+              { id: "bookmarked", label: t.tabBookmarked, count: bookmarkedPosts.length },
+              { id: "recent", label: t.tabRecent, count: recentViews.length },
+              { id: "missions", label: t.tabMissions, count: null },
+              { id: "candy_history", label: t.tabCandyHistory, count: null },
             ].map((tab) => (
               <button
                 key={tab.id}
@@ -581,8 +683,8 @@ export default function MyDashboard() {
               {/* 일일 미션 */}
               <div>
                 <h4 className="text-base font-extrabold text-stone-900 dark:text-white mb-4 flex items-center gap-2">
-                  <span>📋</span> 일일 미션
-                  <span className="text-xs font-medium text-stone-400 dark:text-zinc-500 ml-1">매일 자정 초기화</span>
+                  <span>📋</span> {t.dailyMissions}
+                  <span className="text-xs font-medium text-stone-400 dark:text-zinc-500 ml-1">{t.resetDaily}</span>
                 </h4>
                 <div className="grid gap-3">
                   {DAILY_MISSIONS.map((mission) => {
@@ -602,25 +704,25 @@ export default function MyDashboard() {
                           <span className="text-xl">{mission.emoji}</span>
                           <div>
                             <p className={`text-sm font-bold ${done ? "text-stone-400 dark:text-zinc-500 line-through" : "text-stone-800 dark:text-white"}`}>
-                              {mission.label}
+                              {isEn ? mission.labelEn : mission.label}
                             </p>
                             <p className="text-[11px] font-extrabold text-[#F9954E] flex items-center gap-1"><CottonCandy className="w-3.5 h-3.5" /> +{mission.reward}</p>
                           </div>
                         </div>
                         {done ? (
-                          <span className="text-[#F9954E] text-xs font-extrabold flex items-center gap-1">✓ 완료</span>
+                          <span className="text-[#F9954E] text-xs font-extrabold flex items-center gap-1">{t.doneBadge}</span>
                         ) : (
                           <button
                             onClick={() => {
                               if (mission.id === "attendance") {
                                 handleAttendance();
                               } else {
-                                handleMissionClaim(mission.id, mission.reward, mission.label);
+                                handleMissionClaim(mission.id, mission.reward, mission.label, mission.labelEn);
                               }
                             }}
                             className="px-3 py-1.5 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-white text-xs font-extrabold transition-all active:scale-95"
                           >
-                            받기
+                            {t.claim}
                           </button>
                         )}
                       </div>
@@ -632,8 +734,8 @@ export default function MyDashboard() {
               {/* 업적 */}
               <div>
                 <h4 className="text-base font-extrabold text-stone-900 dark:text-white mb-4 flex items-center gap-2">
-                  <span>🏆</span> 업적
-                  <span className="text-xs font-medium text-stone-400 dark:text-zinc-500 ml-1">{claimedAchievements.length}/{ACHIEVEMENTS.length} 달성</span>
+                  <span>🏆</span> {t.achievements}
+                  <span className="text-xs font-medium text-stone-400 dark:text-zinc-500 ml-1">{t.achievementProgress(claimedAchievements.length, ACHIEVEMENTS.length)}</span>
                 </h4>
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
                   {ACHIEVEMENTS.map((ach) => {
@@ -649,8 +751,8 @@ export default function MyDashboard() {
                       >
                         <span className="text-2xl">{ach.emoji}</span>
                         <div className="flex-1 min-w-0">
-                          <p className="text-sm font-bold text-stone-800 dark:text-white">{ach.name}</p>
-                          <p className="text-[11px] text-stone-500 dark:text-zinc-400 truncate">{ach.description}</p>
+                          <p className="text-sm font-bold text-stone-800 dark:text-white">{isEn ? ach.nameEn : ach.name}</p>
+                          <p className="text-[11px] text-stone-500 dark:text-zinc-400 truncate">{isEn ? ach.descriptionEn : ach.description}</p>
                           <p className="text-[11px] font-extrabold text-[#F9954E] flex items-center gap-1"><CottonCandy className="w-3.5 h-3.5" /> +{ach.reward}</p>
                         </div>
                         {claimed && (
@@ -670,8 +772,8 @@ export default function MyDashboard() {
               {candyHistory.length === 0 ? (
                 <div className="text-center py-20 bg-stone-50/50 dark:bg-zinc-950/20 rounded-3xl border border-dashed border-stone-200 dark:border-zinc-800">
                   <div className="mb-4 opacity-20 flex justify-center"><CottonCandy className="w-9 h-9" /></div>
-                  <p className="text-stone-400 dark:text-zinc-500 font-medium">아직 솜사탕 내역이 없네요!</p>
-                  <p className="text-xs text-stone-400 dark:text-zinc-600 mt-2">미션을 완료하고 솜사탕을 모아보세요.</p>
+                  <p className="text-stone-400 dark:text-zinc-500 font-medium">{t.noCandyHistory}</p>
+                  <p className="text-xs text-stone-400 dark:text-zinc-600 mt-2">{t.noCandyHistoryHint}</p>
                 </div>
               ) : (
                 candyHistory.map((entry, idx) => (
@@ -682,7 +784,7 @@ export default function MyDashboard() {
                     <div>
                       <p className="text-sm font-bold text-stone-800 dark:text-white">{entry.reason}</p>
                       <p className="text-[11px] text-stone-400 dark:text-zinc-500">
-                        {new Date(entry.date).toLocaleString("ko-KR", {
+                        {new Date(entry.date).toLocaleString(t.dateLocale, {
                           month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
                         })}
                       </p>
@@ -702,9 +804,9 @@ export default function MyDashboard() {
               {displayList.length === 0 ? (
                 <div className="text-center py-20 bg-stone-50/50 dark:bg-zinc-950/20 rounded-3xl border border-dashed border-stone-200 dark:border-zinc-800">
                   <div className="text-4xl mb-4 opacity-20">📭</div>
-                  <p className="text-stone-400 dark:text-zinc-500 font-medium mb-6">아직 활동 정보가 없네요!</p>
+                  <p className="text-stone-400 dark:text-zinc-500 font-medium mb-6">{t.noActivity}</p>
                   <Link href="/community" className="text-[#F9954E] font-bold text-sm hover:underline">
-                    첫 게시글 작성하러 가기 →
+                    {t.firstPost}
                   </Link>
                 </div>
               ) : activeTab === "comments" ? (
@@ -739,7 +841,7 @@ export default function MyDashboard() {
                         <div className="flex-1 min-w-0">
                           <div className="flex items-center gap-2 mb-1">
                             <span className="text-[#F9954E] text-[9px] font-extrabold uppercase tracking-tighter">
-                              {post.tag || "자유"}
+                              {post.tag || t.freeTag}
                             </span>
                             <span className="text-[9px] font-bold text-stone-400 uppercase tracking-tighter">
                               {post.date || 'RECENT'}

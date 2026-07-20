@@ -1,9 +1,37 @@
 "use client";
 import { useEffect, useState } from "react";
+import { usePathname } from "next/navigation";
 import { listMyCreations, deleteCreation, type Creation } from "@/lib/userAnimals";
+
+const T = {
+  ko: {
+    title: "🐣 내가 만든 동물",
+    create: "+ 만들기",
+    empty: "아직 만든 동물이 없어요. ",
+    emptyCta: "상상한 동물을 만들어보세요 →",
+    remove: "삭제",
+    confirmRemove: (name: string) => `"${name}"을(를) 삭제할까요?`,
+  },
+  en: {
+    title: "🐣 Animals I made",
+    create: "+ Create",
+    empty: "You haven't made any animals yet. ",
+    emptyCta: "Make one from your imagination →",
+    remove: "Delete",
+    confirmRemove: (name: string) => `Delete "${name}"?`,
+  },
+} as const;
 
 /** 프로필 '내가 만든 동물' 섹션 — 해당 유저가 등록한 창작 동물 그리드 */
 export default function MyAnimalsSection({ uid, isOwner }: { uid: string; isOwner: boolean }) {
+  // ⚠️ 훅은 아래 조기 return(items === null 등)보다 앞에 있어야 한다.
+  const pathname = usePathname();
+  const isEn = (pathname || "").startsWith("/en");
+  const t = T[isEn ? "en" : "ko"];
+  // ⚠️ 만들기 화면은 아직 영어판이 없다. 생성 API(functions/api/create-animal.ts)가
+  //    "한국어로" 생성하도록 고정돼 있어 영어 UI만 만들면 결과가 한글로 나온다.
+  //    API를 로케일 대응할 때 /en/animal/create 를 함께 만든다.
+  const createHref = "/animal/create";
   const [items, setItems] = useState<Creation[] | null>(null);
   const [open, setOpen] = useState<Creation | null>(null);
 
@@ -13,7 +41,7 @@ export default function MyAnimalsSection({ uid, isOwner }: { uid: string; isOwne
   if (items.length === 0 && !isOwner) return null;
 
   async function remove(c: Creation) {
-    if (!confirm(`"${c.animal_name}"을(를) 삭제할까요?`)) return;
+    if (!confirm(t.confirmRemove(c.animal_name))) return;
     await deleteCreation(c.id);
     setItems((arr) => arr?.filter((x) => x.id !== c.id) || arr);
     setOpen(null);
@@ -22,12 +50,12 @@ export default function MyAnimalsSection({ uid, isOwner }: { uid: string; isOwne
   return (
     <div className="mt-4 rounded-2xl border border-[#F9954E]/30 dark:border-[#F9954E]/20 bg-white dark:bg-zinc-950 p-5">
       <div className="flex items-center justify-between mb-3">
-        <p className="text-[12px] font-extrabold text-stone-900 dark:text-white">🐣 내가 만든 동물 {items.length > 0 && <span className="text-[#F9954E]">{items.length}</span>}</p>
-        {isOwner && <a href="/animal/create" className="text-[11px] font-bold text-white bg-[#F9954E] rounded-full px-3 py-1 active:opacity-85">+ 만들기</a>}
+        <p className="text-[12px] font-extrabold text-stone-900 dark:text-white">{t.title} {items.length > 0 && <span className="text-[#F9954E]">{items.length}</span>}</p>
+        {isOwner && <a href={createHref} className="text-[11px] font-bold text-white bg-[#F9954E] rounded-full px-3 py-1 active:opacity-85">{t.create}</a>}
       </div>
 
       {items.length === 0 ? (
-        <p className="text-[12px] text-stone-400 py-3 text-center">아직 만든 동물이 없어요. <a href="/animal/create" className="font-bold text-[#F9954E]">상상한 동물을 만들어보세요 →</a></p>
+        <p className="text-[12px] text-stone-400 py-3 text-center">{t.empty}<a href={createHref} className="font-bold text-[#F9954E]">{t.emptyCta}</a></p>
       ) : (
         <div className="grid grid-cols-3 sm:grid-cols-4 gap-2.5">
           {items.map((c) => (
@@ -62,7 +90,7 @@ export default function MyAnimalsSection({ uid, isOwner }: { uid: string; isOwne
                   </div>
                 ))}
               </div>
-              {isOwner && <button onClick={() => remove(open)} className="mt-4 w-full rounded-2xl border border-red-200 dark:border-red-900/50 text-red-500 py-2.5 text-[13px] font-bold hover:bg-red-50 dark:hover:bg-red-950/30 transition">삭제</button>}
+              {isOwner && <button onClick={() => remove(open)} className="mt-4 w-full rounded-2xl border border-red-200 dark:border-red-900/50 text-red-500 py-2.5 text-[13px] font-bold hover:bg-red-50 dark:hover:bg-red-950/30 transition">{t.remove}</button>}
             </div>
           </div>
         </div>
