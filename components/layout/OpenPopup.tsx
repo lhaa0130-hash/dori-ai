@@ -2,11 +2,33 @@
 
 import { useState, useEffect } from "react";
 import { useTheme } from "next-themes";
+import { usePathname } from "next/navigation";
 import { X, PartyPopper } from "lucide-react";
 import { motion, AnimatePresence } from "framer-motion";
 
+const T = {
+  ko: {
+    title: "illo에 오신 것을 환영합니다!",
+    l1: "AI 활용 방법을 함께 연구하고 실전으로 적용해보는",
+    l2: "최신 트렌드와 인사이트를 공유하며 함께 성장하는",
+    l3: "커뮤니티 플랫폼입니다",
+    close: "닫기",
+    hideToday: "오늘 하루 보지 않기",
+  },
+  en: {
+    title: "Welcome to illo!",
+    l1: "Explore practical ways to put AI to work,",
+    l2: "share the latest trends and insights,",
+    l3: "and grow together as a community",
+    close: "Close",
+    hideToday: "Don't show again today",
+  },
+} as const;
+
 export default function OpenPopup() {
   const { theme } = useTheme();
+  const pathname = usePathname();
+  const t = T[(pathname || "").startsWith("/en") ? "en" : "ko"];
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
@@ -92,13 +114,13 @@ export default function OpenPopup() {
 
               {/* Text Content */}
               <h2 className="text-xl font-bold text-foreground mb-3 tracking-tight">
-                illo에 오신 것을 환영합니다!
+                {t.title}
               </h2>
 
               <div className="text-sm text-muted-foreground leading-relaxed space-y-1 mb-8">
-                <p>AI 활용 방법을 함께 연구하고 실전으로 적용해보는</p>
-                <p>최신 트렌드와 인사이트를 공유하며 함께 성장하는</p>
-                <p className="font-medium text-[#E8832E] dark:text-[#FBAA60]">커뮤니티 플랫폼입니다</p>
+                <p>{t.l1}</p>
+                <p>{t.l2}</p>
+                <p className="font-medium text-[#E8832E] dark:text-[#FBAA60]">{t.l3}</p>
               </div>
 
               {/* Actions */}
@@ -106,15 +128,11 @@ export default function OpenPopup() {
                 <button
                   onClick={handleClose}
                   className="w-full py-3 rounded-xl bg-gradient-to-r from-[#F9954E] to-[#E8832E] text-white font-semibold text-sm shadow-lg shadow-[#F9954E]/20 hover:shadow-[#F9954E]/30 hover:scale-[1.02] active:scale-[0.98] transition-all"
-                >
-                  닫기
-                </button>
+                >{t.close}</button>
                 <button
                   onClick={handleHideToday}
                   className="w-full py-3 rounded-xl bg-secondary/50 hover:bg-secondary text-foreground font-medium text-sm transition-colors"
-                >
-                  오늘 하루 보지 않기
-                </button>
+                >{t.hideToday}</button>
               </div>
             </div>
           </motion.div>
