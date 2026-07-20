@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import { currentUid, watchNotifications, markAllNotiRead, type Noti, type NotiType } from "@/lib/social";
 
@@ -26,20 +27,51 @@ function emojiFor(type: NotiType): string {
   return TYPE_EMOJI[type] || "🔔";
 }
 
+const T = {
+  ko: {
+    loginRequiredTitle: "로그인이 필요해요",
+    loginRequiredL1: "알림은 로그인 후",
+    loginRequiredL2: "확인하실 수 있습니다.",
+    goLogin: "로그인하러 가기",
+    loading: "불러오는 중입니다",
+    title: "알림",
+    empty: "새 알림이 없어요",
+    justNow: "방금 전",
+    minutesAgo: (n: number) => `${n}분 전`,
+    hoursAgo: (n: number) => `${n}시간 전`,
+    daysAgo: (n: number) => `${n}일 전`,
+    dateLocale: "ko-KR",
+  },
+  en: {
+    loginRequiredTitle: "Log in required",
+    loginRequiredL1: "Log in to view",
+    loginRequiredL2: "your notifications.",
+    goLogin: "Go to log in",
+    loading: "Loading",
+    title: "Notifications",
+    empty: "No notifications yet",
+    justNow: "Just now",
+    minutesAgo: (n: number) => `${n} minute${n === 1 ? "" : "s"} ago`,
+    hoursAgo: (n: number) => `${n} hour${n === 1 ? "" : "s"} ago`,
+    daysAgo: (n: number) => `${n} day${n === 1 ? "" : "s"} ago`,
+    dateLocale: "en-US",
+  },
+} as const;
+
 /** 상대시간(방금/분/시간/일) 또는 날짜 */
-function formatTime(ms: number): string {
+function formatTime(ms: number, t: (typeof T)["ko"] | (typeof T)["en"]): string {
   if (!ms) return "";
   try {
     const diff = Date.now() - ms;
-    if (diff < 0) return "방금 전";
+    if (diff < 0) return t.justNow;
     const min = Math.floor(diff / 60000);
-    if (min < 1) return "방금 전";
-    if (min < 60) return `${min}분 전`;
+    if (min < 1) return t.justNow;
+    if (min < 60) return t.minutesAgo(min);
     const hr = Math.floor(min / 60);
-    if (hr < 24) return `${hr}시간 전`;
+    if (hr < 24) return t.hoursAgo(hr);
     const day = Math.floor(hr / 24);
-    if (day < 7) return `${day}일 전`;
-    return new Date(ms).toLocaleString("ko-KR", {
+    if (day < 7) return t.daysAgo(day);
+    return new Date(ms).toLocaleString(t.dateLocale, {
       year: "numeric",
       month: "long",
       day: "numeric",
@@ -50,6 +82,9 @@ function formatTime(ms: number): string {
 }
 
 export default function NotificationsPage() {
+  const pathname = usePathname();
+  const isEn = (pathname || "").startsWith("/en");
+  const t = T[isEn ? "en" : "ko"];
   const { session, status } = useAuth();
   const [myUid, setMyUid] = useState<string | null>(null);
   const [items, setItems] = useState<Noti[]>([]);
@@ -88,16 +123,16 @@ export default function NotificationsPage() {
             🔔
           </div>
           <h2 className="text-[20px] font-extrabold tracking-tight text-stone-900 dark:text-white mb-2">
-            로그인이 필요해요
+            {t.loginRequiredTitle}
           </h2>
           <p className="text-[14px] text-stone-500 dark:text-stone-400 mb-7 leading-relaxed">
-            알림은 로그인 후<br />확인하실 수 있습니다.
+            {t.loginRequiredL1}<br />{t.loginRequiredL2}
           </p>
           <Link
-            href="/login"
+            href={isEn ? "/en/login" : "/login"}
             className="w-full py-3.5 rounded-full bg-[#F9954E] text-white font-bold text-[14px] active:opacity-85 transition-opacity text-center"
           >
-            로그인하러 가기
+            {t.goLogin}
           </Link>
         </div>
       </main>
@@ -109,7 +144,7 @@ export default function NotificationsPage() {
     return (
       <main className="w-full min-h-screen flex flex-col items-center justify-center">
         <div className="w-10 h-10 border-4 border-stone-100 dark:border-zinc-800 border-t-[#F9954E] rounded-full animate-spin mb-5" />
-        <p className="text-[14px] text-stone-400 font-semibold">불러오는 중입니다</p>
+        <p className="text-[14px] text-stone-400 font-semibold">{t.loading}</p>
       </main>
     );
   }
@@ -119,13 +154,13 @@ export default function NotificationsPage() {
       <section className="max-w-2xl mx-auto px-4 sm:px-6 pt-24 pb-10">
         <p className="text-[11px] font-semibold text-[#F9954E] mb-1">NOTIFICATIONS</p>
         <h1 className="text-[28px] sm:text-[32px] font-extrabold tracking-tight text-stone-950 dark:text-white mb-6">
-          알림
+          {t.title}
         </h1>
 
         {items.length === 0 ? (
           <div className={`${CARD} px-4 py-16 text-center`}>
             <div className="text-3xl mb-3 opacity-30">🔔</div>
-            <p className="text-[13px] text-stone-500 dark:text-stone-400">새 알림이 없어요</p>
+            <p className="text-[13px] text-stone-500 dark:text-stone-400">{t.empty}</p>
           </div>
         ) : (
           <div className={`${CARD} overflow-hidden divide-y divide-stone-50 dark:divide-zinc-900/60`}>
@@ -153,7 +188,7 @@ export default function NotificationsPage() {
                     {item.text}
                   </p>
                   <p className="text-[11px] text-stone-400 dark:text-stone-500 mt-0.5">
-                    {formatTime(item.at)}
+                    {formatTime(item.at, t)}
                   </p>
                 </div>
               </Link>

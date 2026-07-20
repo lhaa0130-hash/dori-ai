@@ -3,9 +3,29 @@
 import { useTheme } from "next-themes";
 import { useState, useEffect } from "react";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import ProfileImageSelector from "./ProfileImageSelector";
 import { UserProfile, UserTier, TIER_INFO, calculateLevel, getNextLevelExp, getNextTierExp, getCurrentLevelStartExp, calculateLevelProgress } from "@/lib/userProfile";
 import CottonCandy from "@/components/icons/CottonCandy";
+
+const T = {
+  ko: {
+    defaultNickname: "사용자",
+    edit: "편집",
+    defaultBio: "새로운 AI 시대를 함께 열어가는 illo 크리에이터입니다.",
+    cottonCandy: "솜사탕",
+    meltAlert: "솜사탕 녹이기 팝업을 준비 중입니다!",
+    melt: "녹이기",
+  },
+  en: {
+    defaultNickname: "User",
+    edit: "Edit",
+    defaultBio: "An illo creator helping shape the new age of AI.",
+    cottonCandy: "Cotton candy",
+    meltAlert: "The cotton candy melt feature is coming soon!",
+    melt: "Melt",
+  },
+} as const;
 
 interface ProfileHeroProps {
   profile: UserProfile;
@@ -30,6 +50,9 @@ export default function ProfileHero({
   activityStats,
 }: ProfileHeroProps) {
   const { theme } = useTheme();
+  const pathname = usePathname();
+  const isEn = (pathname || "").startsWith("/en");
+  const t = T[isEn ? "en" : "ko"];
   const [mounted, setMounted] = useState(false);
 
   useEffect(() => {
@@ -43,7 +66,7 @@ export default function ProfileHero({
     tier: profile?.tier || 1,
     doriExp: profile?.doriExp || 0,
     level: profile?.level || 1,
-    nickname: profile?.nickname || "사용자",
+    nickname: profile?.nickname || t.defaultNickname,
     bio: profile?.bio || "",
     statusMessage: profile?.statusMessage || "",
     profileImageUrl: profile?.profileImageUrl,
@@ -94,13 +117,13 @@ export default function ProfileHero({
 
             <div className="flex items-center gap-2">
               <Link
-                href="/my/edit"
+                href={isEn ? "/en/my/edit" : "/my/edit"}
                 className={`px-3 py-1 rounded-full text-[10px] font-bold border transition-all duration-200 ${isDark
                     ? "bg-zinc-800 border-zinc-700 text-zinc-400 hover:text-white"
                     : "bg-stone-50 border-stone-200 text-stone-500 hover:bg-stone-100 hover:text-stone-900"
                   }`}
               >
-                편집
+                {t.edit}
               </Link>
               {isAdmin && (
                 <span className="px-3 py-1 rounded-full bg-red-500/10 text-red-500 text-[10px] font-bold border border-red-500/20">
@@ -125,7 +148,7 @@ export default function ProfileHero({
           {/* Intro Text */}
           <div className="mb-8 max-w-2xl mx-auto md:mx-0">
             <p className={`text-sm leading-relaxed font-medium ${isDark ? "text-zinc-400" : "text-stone-500"}`}>
-              {safeProfile.bio || "새로운 AI 시대를 함께 열어가는 illo 크리에이터입니다."}
+              {safeProfile.bio || t.defaultBio}
             </p>
             {safeProfile.statusMessage && (
               <p className="mt-2 text-xs font-bold text-[#F9954E]/80">
@@ -144,17 +167,17 @@ export default function ProfileHero({
             </div>
 
             <div className="flex flex-col relative group">
-              <span className="text-[9px] font-bold text-stone-400 dark:text-zinc-500 uppercase tracking-tighter mb-1 select-none">솜사탕</span>
+              <span className="text-[9px] font-bold text-stone-400 dark:text-zinc-500 uppercase tracking-tighter mb-1 select-none">{t.cottonCandy}</span>
               <div className="flex items-center gap-2">
                 <span className="text-xl font-black text-pink-400 dark:text-pink-300 inline-flex items-center gap-1">
                   {safeProfile.cottonCandy.toLocaleString()}
                   <CottonCandy className="w-4 h-4" />
                 </span>
                 <button
-                  onClick={() => alert('솜사탕 녹이기 팝업을 준비 중입니다!')}
+                  onClick={() => alert(t.meltAlert)}
                   className="px-2.5 py-1 bg-pink-50 hover:bg-pink-100 dark:bg-pink-500/10 dark:hover:bg-pink-500/20 text-pink-500 text-[10px] font-bold rounded-full transition-colors border border-pink-100 dark:border-pink-500/20"
                 >
-                  녹이기
+                  {t.melt}
                 </button>
               </div>
             </div>

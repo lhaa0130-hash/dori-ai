@@ -2,13 +2,69 @@
 
 import { useEffect, useState } from "react";
 import { useAuth } from "@/contexts/AuthContext";
-import { useRouter } from "next/navigation";
+import { useRouter, usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import Header from "@/components/layout/Header";
 import ProfileImageSelector from "@/components/my/ProfileImageSelector";
 import { UserProfile, createDefaultProfile } from "@/lib/userProfile";
 
+const T = {
+  ko: {
+    loginRequired: "로그인이 필요합니다.",
+    loading: "로딩 중...",
+    pageTitle: "프로필 수정",
+    profileImageLabel: "프로필 이미지",
+    nicknameLabel: "닉네임 *",
+    nicknamePlaceholder: "닉네임을 입력하세요",
+    bioLabel: "한 줄 소개 (최대 80자)",
+    bioPlaceholder: "자신을 소개하는 한 줄을 입력하세요",
+    statusLabel: "상태 메시지 (최대 20자)",
+    statusPlaceholder: "예: AI 실무 적용 중",
+    readonlyTitle: "수정 불가 항목",
+    emailLabel: "이메일",
+    joinedLabel: "가입일",
+    expLabel: "DORI EXP",
+    cancel: "취소",
+    saving: "저장 중...",
+    save: "저장하기",
+    alertNicknameRequired: "닉네임을 입력해주세요.",
+    alertBioTooLong: "한 줄 소개는 80자 이하여야 합니다.",
+    alertStatusTooLong: "상태 메시지는 20자 이하여야 합니다.",
+    alertSaved: "프로필이 저장되었습니다.",
+    alertSaveErrorFallback: "프로필 저장 중 오류가 발생했습니다.",
+    dateLocale: "ko-KR",
+  },
+  en: {
+    loginRequired: "Please log in to continue.",
+    loading: "Loading...",
+    pageTitle: "Edit profile",
+    profileImageLabel: "Profile photo",
+    nicknameLabel: "Nickname *",
+    nicknamePlaceholder: "Enter a nickname",
+    bioLabel: "Bio (up to 80 characters)",
+    bioPlaceholder: "Write a short bio about yourself",
+    statusLabel: "Status message (up to 20 characters)",
+    statusPlaceholder: "e.g. Applying AI at work",
+    readonlyTitle: "Can't be changed",
+    emailLabel: "Email",
+    joinedLabel: "Joined",
+    expLabel: "DORI EXP",
+    cancel: "Cancel",
+    saving: "Saving...",
+    save: "Save",
+    alertNicknameRequired: "Please enter a nickname.",
+    alertBioTooLong: "Bio must be 80 characters or fewer.",
+    alertStatusTooLong: "Status message must be 20 characters or fewer.",
+    alertSaved: "Profile saved.",
+    alertSaveErrorFallback: "Something went wrong while saving your profile.",
+    dateLocale: "en-US",
+  },
+} as const;
+
 export default function EditProfilePage() {
+  const pathname = usePathname();
+  const isEn = (pathname || "").startsWith("/en");
+  const t = T[isEn ? "en" : "ko"];
   const { session, update } = useAuth();
   const user = session?.user || null;
   const { theme } = useTheme();
@@ -67,15 +123,15 @@ export default function EditProfilePage() {
   const handleSave = async () => {
     if (!user?.email || !profile) return;
     if (!nickname.trim()) {
-      alert("닉네임을 입력해주세요.");
+      alert(t.alertNicknameRequired);
       return;
     }
     if (bio.length > 80) {
-      alert("한 줄 소개는 80자 이하여야 합니다.");
+      alert(t.alertBioTooLong);
       return;
     }
     if (statusMessage.length > 20) {
-      alert("상태 메시지는 20자 이하여야 합니다.");
+      alert(t.alertStatusTooLong);
       return;
     }
 
@@ -136,12 +192,12 @@ export default function EditProfilePage() {
       router.refresh();
 
       setIsSaving(false);
-      alert("프로필이 저장되었습니다.");
-      router.push("/my");
+      alert(t.alertSaved);
+      router.push(isEn ? "/en/my" : "/my");
     } catch (error) {
       console.error("프로필 저장 오류:", error);
       setIsSaving(false);
-      alert(error instanceof Error ? error.message : "프로필 저장 중 오류가 발생했습니다.");
+      alert(error instanceof Error ? error.message : t.alertSaveErrorFallback);
     }
   };
 
@@ -159,7 +215,7 @@ export default function EditProfilePage() {
       }}>
         <Header />
         <div style={{ textAlign: 'center' }}>
-          <p>로그인이 필요합니다.</p>
+          <p>{t.loginRequired}</p>
         </div>
       </main>
     );
@@ -176,7 +232,7 @@ export default function EditProfilePage() {
         justifyContent: 'center',
       }}>
         <Header />
-        <div>로딩 중...</div>
+        <div>{t.loading}</div>
       </main>
     );
   }
@@ -218,7 +274,7 @@ export default function EditProfilePage() {
             color: isDark ? '#ffffff' : '#1d1d1f',
             marginBottom: '2rem',
           }}>
-            프로필 수정
+            {t.pageTitle}
           </h1>
 
           {/* 프로필 이미지 */}
@@ -230,7 +286,7 @@ export default function EditProfilePage() {
               color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
               marginBottom: '1rem',
             }}>
-              프로필 이미지
+              {t.profileImageLabel}
             </label>
             <div style={{ display: 'flex', justifyContent: 'center' }}>
               <ProfileImageSelector
@@ -257,13 +313,13 @@ export default function EditProfilePage() {
               color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
               marginBottom: '0.5rem',
             }}>
-              닉네임 *
+              {t.nicknameLabel}
             </label>
             <input
               type="text"
               value={nickname}
               onChange={(e) => setNickname(e.target.value)}
-              placeholder="닉네임을 입력하세요"
+              placeholder={t.nicknamePlaceholder}
               maxLength={20}
               style={{
                 width: '100%',
@@ -288,12 +344,12 @@ export default function EditProfilePage() {
               color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
               marginBottom: '0.5rem',
             }}>
-              한 줄 소개 (최대 80자)
+              {t.bioLabel}
             </label>
             <textarea
               value={bio}
               onChange={(e) => setBio(e.target.value)}
-              placeholder="자신을 소개하는 한 줄을 입력하세요"
+              placeholder={t.bioPlaceholder}
               maxLength={80}
               rows={3}
               style={{
@@ -328,13 +384,13 @@ export default function EditProfilePage() {
               color: isDark ? 'rgba(255, 255, 255, 0.8)' : 'rgba(0, 0, 0, 0.7)',
               marginBottom: '0.5rem',
             }}>
-              상태 메시지 (최대 20자)
+              {t.statusLabel}
             </label>
             <input
               type="text"
               value={statusMessage}
               onChange={(e) => setStatusMessage(e.target.value)}
-              placeholder="예: AI 실무 적용 중"
+              placeholder={t.statusPlaceholder}
               maxLength={20}
               style={{
                 width: '100%',
@@ -372,7 +428,7 @@ export default function EditProfilePage() {
               color: isDark ? 'rgba(255, 255, 255, 0.6)' : 'rgba(0, 0, 0, 0.5)',
               marginBottom: '1rem',
             }}>
-              수정 불가 항목
+              {t.readonlyTitle}
             </h3>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
               <div>
@@ -381,7 +437,7 @@ export default function EditProfilePage() {
                   color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
                   marginBottom: '0.25rem',
                 }}>
-                  이메일
+                  {t.emailLabel}
                 </div>
                 <div style={{
                   fontSize: '0.9375rem',
@@ -397,14 +453,14 @@ export default function EditProfilePage() {
                   color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
                   marginBottom: '0.25rem',
                 }}>
-                  가입일
+                  {t.joinedLabel}
                 </div>
                 <div style={{
                   fontSize: '0.9375rem',
                   color: isDark ? '#ffffff' : '#1d1d1f',
                   fontWeight: '500',
                 }}>
-                  {new Date(profile.createdAt).toLocaleDateString('ko-KR')}
+                  {new Date(profile.createdAt).toLocaleDateString(t.dateLocale)}
                 </div>
               </div>
               <div>
@@ -413,7 +469,7 @@ export default function EditProfilePage() {
                   color: isDark ? 'rgba(255, 255, 255, 0.5)' : 'rgba(0, 0, 0, 0.5)',
                   marginBottom: '0.25rem',
                 }}>
-                  DORI EXP
+                  {t.expLabel}
                 </div>
                 <div style={{
                   fontSize: '0.9375rem',
@@ -467,7 +523,7 @@ export default function EditProfilePage() {
                 e.currentTarget.style.transform = 'translateY(0)';
               }}
             >
-              취소
+              {t.cancel}
             </button>
             <button
               onClick={handleSave}
@@ -501,7 +557,7 @@ export default function EditProfilePage() {
                 e.currentTarget.style.boxShadow = isSaving ? 'none' : '0 4px 12px rgba(37, 99, 235, 0.3)';
               }}
             >
-              {isSaving ? '저장 중...' : '저장하기'}
+              {isSaving ? t.saving : t.save}
             </button>
           </div>
         </div>

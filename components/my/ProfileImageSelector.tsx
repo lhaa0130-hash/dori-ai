@@ -3,11 +3,46 @@
 import { useState, useRef, useEffect } from "react";
 import { createPortal } from "react-dom";
 import { useTheme } from "next-themes";
+import { usePathname } from "next/navigation";
 
 interface ProfileImageSelectorProps {
   currentImageUrl?: string;
   onImageChange: (imageUrl: string) => void;
 }
+
+const T = {
+  ko: {
+    fileTooLarge: "파일 크기는 2MB 이하여야 합니다.",
+    fileTypeUnsupported: "jpg, png, webp 형식만 지원합니다.",
+    title: "프로필 이미지 선택",
+    subtitle: "업로드하거나 아바타를 선택하세요",
+    uploadButton: "📷 이미지 업로드 (최대 2MB)",
+    allCategories: "전체",
+    close: "닫기",
+  },
+  en: {
+    fileTooLarge: "Files must be 2MB or smaller.",
+    fileTypeUnsupported: "Only jpg, png and webp files are supported.",
+    title: "Choose a profile picture",
+    subtitle: "Upload one, or pick an avatar",
+    uploadButton: "📷 Upload an image (max 2MB)",
+    allCategories: "All",
+    close: "Close",
+  },
+} as const;
+
+const CATEGORY_EN: Record<string, string> = {
+  "미니멀": "Minimal",
+  "캐릭터": "Characters",
+  "추상": "Abstract",
+  "자연": "Nature",
+  "음식": "Food",
+  "음악": "Music",
+  "스포츠": "Sports",
+  "여행": "Travel",
+  "기술": "Tech",
+  "감정": "Emotion",
+};
 
 // 사이트 제공 아바타 목록
 const AVATAR_OPTIONS = [
@@ -139,6 +174,9 @@ const AVATAR_OPTIONS = [
 
 export default function ProfileImageSelector({ currentImageUrl, onImageChange }: ProfileImageSelectorProps) {
   const { theme } = useTheme();
+  const pathname = usePathname();
+  const isEn = (pathname || "").startsWith("/en");
+  const t = T[isEn ? "en" : "ko"];
   const [isOpen, setIsOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string | null>(null);
   const [mounted, setMounted] = useState(false);
@@ -155,13 +193,13 @@ export default function ProfileImageSelector({ currentImageUrl, onImageChange }:
 
     // 파일 크기 체크 (2MB)
     if (file.size > 2 * 1024 * 1024) {
-      alert("파일 크기는 2MB 이하여야 합니다.");
+      alert(t.fileTooLarge);
       return;
     }
 
     // 파일 타입 체크
     if (!file.type.match(/^image\/(jpeg|jpg|png|webp)$/)) {
-      alert("jpg, png, webp 형식만 지원합니다.");
+      alert(t.fileTypeUnsupported);
       return;
     }
 
@@ -233,13 +271,13 @@ export default function ProfileImageSelector({ currentImageUrl, onImageChange }:
             color: isDark ? "#ffffff" : "#1d1d1f",
             marginBottom: "0.375rem",
           }}>
-            프로필 이미지 선택
+            {t.title}
           </h3>
           <p style={{
             fontSize: "0.8125rem",
             color: isDark ? "rgba(255, 255, 255, 0.6)" : "rgba(0, 0, 0, 0.6)",
           }}>
-            업로드하거나 아바타를 선택하세요
+            {t.subtitle}
           </p>
         </div>
 
@@ -267,7 +305,7 @@ export default function ProfileImageSelector({ currentImageUrl, onImageChange }:
             e.currentTarget.style.background = isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.05)";
           }}
         >
-          📷 이미지 업로드 (최대 2MB)
+          {t.uploadButton}
         </button>
         <input
           ref={fileInputRef}
@@ -319,7 +357,7 @@ export default function ProfileImageSelector({ currentImageUrl, onImageChange }:
               }
             }}
           >
-            전체
+            {t.allCategories}
           </button>
           {categories.map((cat) => (
             <button
@@ -353,7 +391,7 @@ export default function ProfileImageSelector({ currentImageUrl, onImageChange }:
                 }
               }}
             >
-              {cat}
+              {isEn ? (CATEGORY_EN[cat] || cat) : cat}
             </button>
           ))}
         </div>
@@ -446,7 +484,7 @@ export default function ProfileImageSelector({ currentImageUrl, onImageChange }:
             e.currentTarget.style.background = isDark ? "rgba(255, 255, 255, 0.1)" : "rgba(0, 0, 0, 0.05)";
           }}
         >
-          닫기
+          {t.close}
         </button>
       </div>
     </>

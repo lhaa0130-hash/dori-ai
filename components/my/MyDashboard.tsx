@@ -128,6 +128,35 @@ const T = {
   },
 } as const;
 
+// 솜사탕 내역 사유는 한글 그대로 저장된다(기존 회원 데이터와 맞춰야 하므로 값은 불변).
+// 영어판에서는 '표시할 때만' 옮긴다. 이미 쌓인 내역도 그대로 영어로 보인다.
+const REASON_PREFIX_EN: [RegExp, (rest: string) => string][] = [
+  [/^업적 달성: (.+)$/, (n) => `Achievement: ${ACHIEVEMENT_NAME_EN[n] || n}`],
+  [/^미션 완료: (.+)$/, (n) => `Mission complete: ${MISSION_NAME_EN[n] || n}`],
+  [/^상점 구매: (.+)$/, (n) => `Shop purchase: ${n}`],
+  [/^레벨 (\d+) 달성 보상$/, (n) => `Level ${n} reward`],
+  [/^출석 체크 \((\d+)일 연속 보너스 포함\)$/, (n) => `Daily check-in (${n}-day streak bonus)`],
+  [/^출석 체크$/, () => "Daily check-in"],
+];
+const ACHIEVEMENT_NAME_EN: Record<string, string> = {
+  "첫 방문": "First visit", "첫 글쓰기": "First post", "댓글왕": "Comment king",
+  "3일 연속 출석": "3-day streak", "7일 연속 출석": "7-day streak", "한 달 개근": "Perfect month",
+  "인기쟁이": "Crowd pleaser", "게임왕": "Game king", "퀴즈마스터": "Quiz master", "레벨 10 달성": "Level 10",
+};
+const MISSION_NAME_EN: Record<string, string> = {
+  "출석 체크": "Daily check-in", "트렌드 기사 읽기": "Read a trend article",
+  "커뮤니티 글쓰기": "Write a community post", "댓글 달기": "Leave a comment",
+  "미니게임 1판": "Play a minigame", "AI 퀴즈 풀기": "Solve an AI quiz",
+};
+function reasonLabel(reason: string, isEn: boolean): string {
+  if (!isEn) return reason;
+  for (const [re, fmt] of REASON_PREFIX_EN) {
+    const m = reason.match(re);
+    if (m) return fmt(m[1] ?? "");
+  }
+  return reason; // 매칭 안 되면 원문 유지(새 사유가 생겨도 깨지지 않게)
+}
+
 export default function MyDashboard() {
   const pathname = usePathname();
   const isEn = (pathname || "").startsWith("/en");
@@ -582,7 +611,7 @@ export default function MyDashboard() {
         {/* ── 내 코지홈 바로가기 (마이페이지 ↔ 코지홈 연동) ── */}
         {/* ── 알림 ── */}
         <Link
-          href="/notifications"
+          href={isEn ? "/en/notifications" : "/notifications"}
           className="mb-8 flex items-center gap-4 p-5 rounded-3xl bg-white dark:bg-zinc-950 border border-stone-100 dark:border-zinc-900 hover:border-[#F9954E]/40 transition-colors group"
         >
           <span className="relative flex-shrink-0 w-11 h-11 rounded-2xl bg-[#FBEEE7] dark:bg-[#F9954E]/10 flex items-center justify-center">
@@ -629,7 +658,7 @@ export default function MyDashboard() {
                 {t.viewHistory}
               </button>
               <Link
-                href="/shop"
+                href={isEn ? "/en/shop" : "/shop"}
                 className="px-4 py-2 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-white text-xs font-extrabold transition-all shadow-sm shadow-orange-500/20"
               >
                 {t.pointShop}
@@ -782,7 +811,7 @@ export default function MyDashboard() {
                     className="flex items-center justify-between p-4 rounded-2xl border bg-white dark:bg-zinc-900/30 border-stone-100 dark:border-zinc-800/50"
                   >
                     <div>
-                      <p className="text-sm font-bold text-stone-800 dark:text-white">{entry.reason}</p>
+                      <p className="text-sm font-bold text-stone-800 dark:text-white">{reasonLabel(entry.reason, isEn)}</p>
                       <p className="text-[11px] text-stone-400 dark:text-zinc-500">
                         {new Date(entry.date).toLocaleString(t.dateLocale, {
                           month: "short", day: "numeric", hour: "2-digit", minute: "2-digit"
@@ -805,7 +834,7 @@ export default function MyDashboard() {
                 <div className="text-center py-20 bg-stone-50/50 dark:bg-zinc-950/20 rounded-3xl border border-dashed border-stone-200 dark:border-zinc-800">
                   <div className="text-4xl mb-4 opacity-20">📭</div>
                   <p className="text-stone-400 dark:text-zinc-500 font-medium mb-6">{t.noActivity}</p>
-                  <Link href="/community" className="text-[#F9954E] font-bold text-sm hover:underline">
+                  <Link href={isEn ? "/en/feed" : "/community"} className="text-[#F9954E] font-bold text-sm hover:underline">
                     {t.firstPost}
                   </Link>
                 </div>
