@@ -189,7 +189,7 @@ export default function EnFAQPage() {
       subtitle="Have a question? Find your answer below."
       ctaHint="Didn't find the answer you were looking for?"
       ctaLabel="Leave a suggestion →"
-      ctaHref="/suggestion"
+      ctaHref="/en/suggestion"
     />
   );
 }
