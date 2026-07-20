@@ -1,4 +1,562 @@
 {
+  "1000": {
+    "name": "Purple Land Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Asia · Indian Ocean · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "8–10 cm",
+      "몸무게": "0.2–0.4 kg",
+      "수명": "8–10 years"
+    }
+  },
+  "1001": {
+    "name": "Vampire Crab",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Rainforest · River & lake · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "2–2.5 cm",
+      "몸무게": "2–4 g",
+      "수명": "2–3 years"
+    }
+  },
+  "1002": {
+    "name": "Boxer Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Indian Ocean · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "1–2 cm",
+      "몸무게": "1 g",
+      "수명": "1–2 years"
+    }
+  },
+  "1003": {
+    "name": "Decorator Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Indian Ocean · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "3–5 cm",
+      "몸무게": "5–10 g",
+      "수명": "2–3 years"
+    }
+  },
+  "1004": {
+    "name": "Chinese Mitten Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "5–8 cm",
+      "몸무게": "100–200 g",
+      "수명": "3–5 years"
+    }
+  },
+  "1005": {
+    "name": "Coral Guard Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Indian Ocean · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "1–2 cm",
+      "몸무게": "1 g",
+      "수명": "2–3 years"
+    }
+  },
+  "1006": {
+    "name": "Sally Lightfoot Spray Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean · Pacific Ocean",
+      "먹이": "Herbivore",
+      "몸길이": "3–4 cm",
+      "몸무게": "5–10 g",
+      "수명": "2–3 years"
+    }
+  },
+  "1007": {
+    "name": "Copepod",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Polar region · Atlantic Ocean · Arctic Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "2–4 m",
+      "몸무게": "1 g",
+      "수명": "1 years"
+    }
+  },
+  "1008": {
+    "name": "Cyclops Copepod",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia · Europe · North America",
+      "먹이": "Omnivore",
+      "몸길이": "1–3 m",
+      "몸무게": "1 g",
+      "수명": "1 years"
+    }
+  },
+  "1009": {
+    "name": "Fish Louse",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Europe · Asia",
+      "먹이": "Carnivore",
+      "몸길이": "0.5–1 cm",
+      "몸무게": "1 g"
+    }
+  },
+  "1010": {
+    "name": "Acorn Barnacle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Polar region · Atlantic Ocean · Pacific Ocean · Arctic Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "1–1.5 cm",
+      "몸무게": "1 g",
+      "수명": "3–5 years"
+    }
+  },
+  "1011": {
+    "name": "Common Acorn Barnacle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · North America",
+      "먹이": "Plankton feeder",
+      "몸길이": "1–2 cm",
+      "몸무게": "1 g",
+      "수명": "5–10 years"
+    }
+  },
+  "1012": {
+    "name": "Whale Barnacle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Atlantic Ocean · Indian Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "4–5 cm",
+      "몸무게": "5–20 g"
+    }
+  },
+  "1013": {
+    "name": "Giant Rose Barnacle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Atlantic Ocean · Indian Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "2–5 cm",
+      "몸무게": "10–30 g",
+      "수명": "5–10 years"
+    }
+  },
+  "1014": {
+    "name": "Sea Slater",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Near cities · Atlantic Ocean · Europe",
+      "먹이": "Scavenger",
+      "몸길이": "2.5–3 cm",
+      "몸무게": "1 g",
+      "수명": "2–3 years"
+    }
+  },
+  "1015": {
+    "name": "Common Pill Bug",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Near cities · Grassland · Europe · Asia · North America",
+      "먹이": "Scavenger",
+      "몸길이": "1–1.8 cm",
+      "몸무게": "0.1 g",
+      "수명": "2–3 years"
+    }
+  },
+  "1016": {
+    "name": "Common Rough Woodlouse",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Near cities · Rainforest · Europe · North America · Asia",
+      "먹이": "Scavenger",
+      "몸길이": "1.2–1.7 cm",
+      "몸무게": "0.08 g",
+      "수명": "2–3 years"
+    }
+  },
+  "1017": {
+    "name": "Tongue-eating Louse",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Atlantic Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "2–3 cm",
+      "몸무게": "0.5 g"
+    }
+  },
+  "1018": {
+    "name": "Sand Hopper",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean · Europe",
+      "먹이": "Scavenger",
+      "몸길이": "1–1.8 cm",
+      "몸무게": "0.05 g",
+      "수명": "1–2 years"
+    }
+  },
+  "1019": {
+    "name": "Skeleton Shrimp",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Atlantic Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "2–5 cm",
+      "몸무게": "0.1 g",
+      "수명": "1 years"
+    }
+  },
+  "1020": {
+    "name": "Zebra Mantis Shrimp",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Indian Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "20–40 cm",
+      "몸무게": "200–350 g",
+      "수명": "10–20 years"
+    }
+  },
+  "1021": {
+    "name": "Mediterranean Mantis Shrimp",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean · Europe · Africa",
+      "먹이": "Carnivore",
+      "몸길이": "15–20 cm",
+      "몸무게": "50–80 g",
+      "수명": "3–4 years"
+    }
+  },
+  "1022": {
+    "name": "Horned Ghost Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Indian Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "5–8 cm",
+      "몸무게": "20–40 g",
+      "수명": "3 years"
+    }
+  },
+  "1023": {
+    "name": "Atlantic Ghost Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean · North America · South America",
+      "먹이": "Omnivore",
+      "몸길이": "3–5 cm",
+      "몸무게": "10–30 g",
+      "수명": "3 years"
+    }
+  },
+  "1024": {
+    "name": "Atlantic Sand Fiddler Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean · North America",
+      "먹이": "Scavenger",
+      "몸길이": "2–2.5 cm",
+      "몸무게": "3–6 g",
+      "수명": "1.5–2 years"
+    }
+  },
+  "1025": {
+    "name": "Fiddler Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Indian Ocean · Pacific Ocean · Asia",
+      "먹이": "Scavenger",
+      "몸길이": "2–3 cm",
+      "몸무게": "4–8 g",
+      "수명": "2 years"
+    }
+  },
+  "1026": {
+    "name": "Caribbean Hermit Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Rainforest · Atlantic Ocean · North America",
+      "먹이": "Omnivore",
+      "몸길이": "2–4 cm",
+      "몸무게": "30–80 g",
+      "수명": "20–30 years"
+    }
+  },
+  "1027": {
+    "name": "Strawberry Hermit Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Indian Ocean · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "2–5 cm",
+      "몸무게": "40–100 g",
+      "수명": "20–30 years"
+    }
+  },
+  "1028": {
+    "name": "Ecuadorian Hermit Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · North America · South America",
+      "먹이": "Omnivore",
+      "몸길이": "1–3 cm",
+      "몸무게": "10–40 g",
+      "수명": "10–20 years"
+    }
+  },
+  "1029": {
+    "name": "White-spotted Hermit Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Indian Ocean · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "10–15 cm",
+      "몸무게": "150–300 g",
+      "수명": "10–15 years"
+    }
+  },
+  "1030": {
+    "name": "Anemone Hermit Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Indian Ocean · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "5–10 cm",
+      "몸무게": "60–150 g",
+      "수명": "10 years"
+    }
+  },
+  "1031": {
+    "name": "Blue-legged Hermit Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean · North America",
+      "먹이": "Omnivore",
+      "몸길이": "1–2 cm",
+      "몸무게": "3–8 g",
+      "수명": "2–4 years"
+    }
+  },
+  "1032": {
+    "name": "Giant Hermit Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean · North America · South America",
+      "먹이": "Omnivore",
+      "몸길이": "10–30 cm",
+      "몸무게": "200–500 g",
+      "수명": "10–15 years"
+    }
+  },
+  "1033": {
+    "name": "Red King Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Polar region · Pacific Ocean · Arctic Ocean · Asia · North America",
+      "먹이": "Omnivore",
+      "몸길이": "1.5 m",
+      "몸무게": "5–10 kg",
+      "수명": "20–30 years"
+    }
+  },
+  "1034": {
+    "name": "Blue King Crab",
+    "statusLabel": "Near Threatened",
+    "info": {
+      "서식지": "Ocean · Polar region · Pacific Ocean · Arctic Ocean · Asia · North America",
+      "먹이": "Omnivore",
+      "몸길이": "1.4 m",
+      "몸무게": "4–8 kg",
+      "수명": "20–25 years"
+    }
+  },
+  "1035": {
+    "name": "Golden King Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Asia · North America",
+      "먹이": "Omnivore",
+      "몸길이": "1 m",
+      "몸무게": "2–4 kg",
+      "수명": "20 years"
+    }
+  },
+  "1036": {
+    "name": "Snow Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Polar region · Pacific Ocean · Atlantic Ocean · Arctic Ocean · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "10–15 cm",
+      "몸무게": "0.5–1.5 kg",
+      "수명": "15–20 years"
+    }
+  },
+  "1037": {
+    "name": "Blue Swimmer Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Indian Ocean · Pacific Ocean · Asia · Oceania",
+      "먹이": "Omnivore",
+      "몸길이": "15–20 cm",
+      "몸무게": "0.3–0.8 kg",
+      "수명": "3–4 years"
+    }
+  },
+  "1038": {
+    "name": "Mud Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Africa · Oceania · Indian Ocean · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "15–25 cm",
+      "몸무게": "2–3 kg",
+      "수명": "3–4 years"
+    }
+  },
+  "1039": {
+    "name": "Calico Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · North America · Atlantic Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "5–7 cm",
+      "몸무게": "60–100 g",
+      "수명": "3–4 years"
+    }
+  },
+  "1040": {
+    "name": "Yellowline Arrow Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · North America · South America · Atlantic Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "8–10 cm",
+      "몸무게": "10–20 g",
+      "수명": "2–3 years"
+    }
+  },
+  "1041": {
+    "name": "Umbrella Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · North America · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "4–6 cm",
+      "몸무게": "40–80 g",
+      "수명": "4–6 years"
+    }
+  },
+  "1042": {
+    "name": "Graceful Decorator Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · North America · Asia · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "3–5 cm",
+      "몸무게": "20–40 g",
+      "수명": "3–5 years"
+    }
+  },
+  "1043": {
+    "name": "Porcelain Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Oceania · Pacific Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "1.5–2 cm",
+      "몸무게": "2–5 g",
+      "수명": "2–3 years"
+    }
+  },
+  "1044": {
+    "name": "Common Hermit Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Europe · Atlantic Ocean",
+      "먹이": "Scavenger",
+      "몸길이": "3–10 cm",
+      "몸무게": "10–30 g",
+      "수명": "4 years"
+    }
+  },
+  "1045": {
+    "name": "Porcelain Anemone Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Oceania · Indian Ocean · Pacific Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "1.5–2.5 cm",
+      "몸무게": "3–6 g",
+      "수명": "2–4 years"
+    }
+  },
+  "1046": {
+    "name": "Mud Shrimp",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Europe · Atlantic Ocean",
+      "먹이": "Scavenger",
+      "몸길이": "3–5 cm",
+      "몸무게": "1–3 g",
+      "수명": "2–3 years"
+    }
+  },
+  "1047": {
+    "name": "Porcupine Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean · Arctic Ocean",
+      "먹이": "Scavenger",
+      "몸길이": "30–50 cm",
+      "몸무게": "1–2 kg",
+      "수명": "10 years"
+    }
+  },
+  "1048": {
+    "name": "Red Reef Lobster",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Africa · Oceania · Indian Ocean · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "10–13 cm",
+      "몸무게": "50–120 g",
+      "수명": "5–7 years"
+    }
+  },
+  "1049": {
+    "name": "Japanese Fan Lobster",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "15–20 cm",
+      "몸무게": "150–250 g",
+      "수명": "5–7 years"
+    }
+  },
+  "1050": {
+    "name": "Flathead Lobster",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Africa · Oceania · Indian Ocean · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "15–25 cm",
+      "몸무게": "150–300 g",
+      "수명": "5–8 years"
+    }
+  },
   "1051": {
     "name": "Giant Pacific Octopus",
     "statusLabel": "Data Deficient",
@@ -19,6 +577,28 @@
       "몸길이": "20–30 cm",
       "몸무게": "1 kg",
       "수명": "Avg. 1–2 years"
+    }
+  },
+  "1053": {
+    "name": "Horned Turban Snail",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean",
+      "먹이": "Herbivore",
+      "몸길이": "8–12 cm",
+      "몸무게": "200 g",
+      "수명": "Avg. 5–10 years"
+    }
+  },
+  "1054": {
+    "name": "Abalone",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Pacific Ocean · Atlantic Ocean · Indian Ocean",
+      "먹이": "Herbivore",
+      "몸길이": "10–20 cm",
+      "몸무게": "200 g",
+      "수명": "Avg. 10–20 years"
     }
   },
   "1055": {
@@ -43,6 +623,17 @@
       "수명": "Avg. 3–5 years"
     }
   },
+  "1057": {
+    "name": "Common Cuttlefish",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean · Europe · Africa",
+      "먹이": "Carnivore",
+      "몸길이": "15–25 cm",
+      "몸무게": "1–3 kg",
+      "수명": "Avg. 1 years"
+    }
+  },
   "1058": {
     "name": "Sea Slug",
     "statusLabel": "Data Deficient",
@@ -52,6 +643,28 @@
       "몸길이": "2–15 cm",
       "몸무게": "50 g",
       "수명": "1 year"
+    }
+  },
+  "1059": {
+    "name": "Chambered Nautilus",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "16–26 cm",
+      "몸무게": "0.5 kg",
+      "수명": "Avg. 15–20 years"
+    }
+  },
+  "1060": {
+    "name": "Blue-ringed Octopus",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Indian Ocean · Oceania",
+      "먹이": "Carnivore",
+      "몸길이": "4–5 cm",
+      "몸무게": "30 g",
+      "수명": "Avg. 2–3 years"
     }
   },
   "1061": {
@@ -73,6 +686,479 @@
       "먹이": "Carnivore",
       "몸길이": "1–3 cm",
       "몸무게": "100 g"
+    }
+  },
+  "1063": {
+    "name": "Bigfin Reef Squid",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean · Indian Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "30–40 cm",
+      "몸무게": "1.5 kg",
+      "수명": "1 years"
+    }
+  },
+  "1064": {
+    "name": "Spear Squid",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "30–40 cm",
+      "몸무게": "0.4 kg",
+      "수명": "1 years"
+    }
+  },
+  "1065": {
+    "name": "Swordtip Squid",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "30 cm",
+      "몸무게": "0.3 kg",
+      "수명": "1 years"
+    }
+  },
+  "1066": {
+    "name": "White Squid",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "20 cm",
+      "몸무게": "0.2 kg",
+      "수명": "1 years"
+    }
+  },
+  "1067": {
+    "name": "Firefly Squid",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "7 cm",
+      "몸무게": "0.01 kg",
+      "수명": "1 years"
+    }
+  },
+  "1068": {
+    "name": "Mussel",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean · Atlantic Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "7 cm",
+      "몸무게": "0.03 kg",
+      "수명": "10 years"
+    }
+  },
+  "1069": {
+    "name": "Mediterranean Mussel",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Europe · Asia · Atlantic Ocean · Pacific Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "8 cm",
+      "몸무게": "0.03 kg",
+      "수명": "10 years"
+    }
+  },
+  "1070": {
+    "name": "Pen Shell",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "20 cm",
+      "몸무게": "0.3 kg",
+      "수명": "10 years"
+    }
+  },
+  "1071": {
+    "name": "Grand Jackknife Clam",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "12 cm",
+      "몸무게": "0.03 kg",
+      "수명": "5 years"
+    }
+  },
+  "1072": {
+    "name": "Chinese Cyclina",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "4 cm",
+      "몸무게": "0.02 kg",
+      "수명": "5 years"
+    }
+  },
+  "1073": {
+    "name": "Surf Clam",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "4 cm",
+      "몸무게": "0.02 kg",
+      "수명": "5 years"
+    }
+  },
+  "1074": {
+    "name": "Common Orient Clam",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "8 cm",
+      "몸무게": "0.06 kg",
+      "수명": "10 years"
+    }
+  },
+  "1075": {
+    "name": "Jedo Venus Clam",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "5 cm",
+      "몸무게": "0.03 kg",
+      "수명": "7 years"
+    }
+  },
+  "1076": {
+    "name": "Softshell Clam",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "10 cm",
+      "몸무게": "100 g",
+      "수명": "10–12 years"
+    }
+  },
+  "1077": {
+    "name": "Geoduck",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · North America",
+      "먹이": "Plankton feeder",
+      "몸길이": "20 cm",
+      "몸무게": "1.5 kg",
+      "수명": "100–140 years"
+    }
+  },
+  "1078": {
+    "name": "Button Top Shell",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Scavenger",
+      "몸길이": "2 cm",
+      "몸무게": "3 g",
+      "수명": "2–3 years"
+    }
+  },
+  "1079": {
+    "name": "Triton's Trumpet",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean · Indian Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "40 cm",
+      "몸무게": "2 kg",
+      "수명": "10–20 years"
+    }
+  },
+  "1080": {
+    "name": "Keyhole Limpet",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Herbivore",
+      "몸길이": "3 cm",
+      "몸무게": "5 g",
+      "수명": "3–5 years"
+    }
+  },
+  "1081": {
+    "name": "Turban Snail",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Herbivore",
+      "몸길이": "3 cm",
+      "몸무게": "8 g",
+      "수명": "3–5 years"
+    }
+  },
+  "1082": {
+    "name": "Toothed Top Shell",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Herbivore",
+      "몸길이": "2.5 cm",
+      "몸무게": "6 g",
+      "수명": "3–4 years"
+    }
+  },
+  "1083": {
+    "name": "Rock Shell",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "3 cm",
+      "몸무게": "10 g",
+      "수명": "3–5 years"
+    }
+  },
+  "1084": {
+    "name": "Knobbed Rock Shell",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "4 cm",
+      "몸무게": "15 g",
+      "수명": "3–5 years"
+    }
+  },
+  "1085": {
+    "name": "Top Shell",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Herbivore",
+      "몸길이": "3 cm",
+      "몸무게": "10 g",
+      "수명": "3–5 years"
+    }
+  },
+  "1086": {
+    "name": "Chestnut Top Shell",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Herbivore",
+      "몸길이": "3 cm",
+      "몸무게": "12 g",
+      "수명": "3–5 years"
+    }
+  },
+  "1087": {
+    "name": "Mud Creeper",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Scavenger",
+      "몸길이": "3 cm",
+      "몸무게": "5 g",
+      "수명": "2–3 years"
+    }
+  },
+  "1088": {
+    "name": "Bladder Moon Snail",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "7 cm",
+      "몸무게": "80 g",
+      "수명": "3–5 years"
+    }
+  },
+  "1089": {
+    "name": "Chinese Mystery Snail",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "4–5 cm",
+      "몸무게": "10 g",
+      "수명": "3–5 years"
+    }
+  },
+  "1090": {
+    "name": "Korean Land Snail",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "3–4 cm",
+      "몸무게": "5 g",
+      "수명": "5–7 years"
+    }
+  },
+  "1091": {
+    "name": "Asian Land Snail",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "2–3 cm",
+      "몸무게": "3 g",
+      "수명": "3–5 years"
+    }
+  },
+  "1092": {
+    "name": "Onchidium Sea Slug",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Herbivore",
+      "몸길이": "3–5 cm",
+      "몸무게": "8 g",
+      "수명": "2–3 years"
+    }
+  },
+  "1093": {
+    "name": "Green Chiton",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Herbivore",
+      "몸길이": "2–3 cm",
+      "몸무게": "4 g",
+      "수명": "3–5 years"
+    }
+  },
+  "1094": {
+    "name": "Japanese Chiton",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Herbivore",
+      "몸길이": "5–7 cm",
+      "몸무게": "20 g",
+      "수명": "5–8 years"
+    }
+  },
+  "1095": {
+    "name": "Shipworm",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean · Atlantic Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "20–30 cm",
+      "몸무게": "5 g",
+      "수명": "1–3 years"
+    }
+  },
+  "1096": {
+    "name": "Half-crenate Ark Shell",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "4–5 cm",
+      "몸무게": "15 g",
+      "수명": "3–5 years"
+    }
+  },
+  "1097": {
+    "name": "Blood Cockle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "8–12 cm",
+      "몸무게": "100 g",
+      "수명": "5–7 years"
+    }
+  },
+  "1098": {
+    "name": "Whelk",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "8–12 cm",
+      "몸무게": "80 g",
+      "수명": "10 years"
+    }
+  },
+  "1099": {
+    "name": "Horned Turban",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Herbivore",
+      "몸길이": "8–10 cm",
+      "몸무게": "150 g",
+      "수명": "7–8 years"
+    }
+  },
+  "1100": {
+    "name": "Golden Apple Snail",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · South America · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "5–8 cm",
+      "몸무게": "30 g",
+      "수명": "2–4 years"
+    }
+  },
+  "1101": {
+    "name": "Giant Squid",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Atlantic Ocean · Indian Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "10–13 m",
+      "몸무게": "200–275 kg",
+      "수명": "5 years"
+    }
+  },
+  "1102": {
+    "name": "Colossal Squid",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Polar region · Southern Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "10–14 m",
+      "몸무게": "450–500 kg",
+      "수명": "2 years"
+    }
+  },
+  "1103": {
+    "name": "Humboldt Squid",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · North America · South America · Pacific Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "1–1.5 m",
+      "몸무게": "20–50 kg",
+      "수명": "1–2 years"
+    }
+  },
+  "1104": {
+    "name": "European Squid",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Europe · Africa · Atlantic Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "30–40 cm",
+      "몸무게": "0.5–1.5 kg",
+      "수명": "1–2 years"
+    }
+  },
+  "1105": {
+    "name": "Northern Shortfin Squid",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · North America · Atlantic Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "20–30 cm",
+      "몸무게": "0.2–0.5 kg",
+      "수명": "1 years"
     }
   },
   "1106": {
@@ -8292,6 +9378,4113 @@
       "몸길이": "10–13 cm",
       "몸무게": "0.3–0.5 kg",
       "수명": "About 7–8 years"
+    }
+  },
+  "0101": {
+    "name": "Siberian Musk Deer",
+    "statusLabel": "Endangered",
+    "info": {
+      "서식지": "Asia",
+      "먹이": "Herbivore",
+      "몸길이": "80–100 cm",
+      "몸무게": "7–17 kg",
+      "수명": "Avg. 8–12 years"
+    }
+  },
+  "0106": {
+    "name": "Proboscis Monkey",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "53–76 cm",
+      "몸무게": "16–20 kg",
+      "수명": "Avg. 20–25 years"
+    }
+  },
+  "0113": {
+    "name": "Coati",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Rainforest · South America · North America",
+      "먹이": "Omnivore",
+      "몸길이": "41–67 cm",
+      "몸무게": "4–5 kg",
+      "수명": "Avg. 15–20 years"
+    }
+  },
+  "0173": {
+    "name": "Crested Ibis",
+    "statusLabel": "Near Threatened",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "55–78 cm",
+      "몸무게": "1.7 kg",
+      "수명": "Avg. 5–7 years"
+    }
+  },
+  "0182": {
+    "name": "Common Pheasant",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia · Europe",
+      "먹이": "Omnivore",
+      "몸길이": "60–90 cm",
+      "몸무게": "1–1.5 kg",
+      "수명": "Avg. 4–6 years"
+    }
+  },
+  "0183": {
+    "name": "Japanese Quail",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Seed eater",
+      "몸길이": "18–20 cm",
+      "몸무게": "100 g",
+      "수명": "Avg. 3–4 years"
+    }
+  },
+  "0184": {
+    "name": "Cassowary",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "Rainforest · Oceania · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "130–170 cm",
+      "몸무게": "30–60 kg",
+      "수명": "Avg. 5–8 years"
+    }
+  },
+  "0191": {
+    "name": "Rhinoceros Hornbill",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "100–130 cm",
+      "몸무게": "2–3 kg",
+      "수명": "35 years"
+    }
+  },
+  "0195": {
+    "name": "Brown-eared Bulbul",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Near cities · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "27–29 cm",
+      "몸무게": "70–100 g",
+      "수명": "20–40 years"
+    }
+  },
+  "0214": {
+    "name": "Shoebill",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "River & lake · Africa",
+      "먹이": "Fish eater",
+      "몸길이": "110–140 cm",
+      "몸무게": "4–7 kg",
+      "수명": "30–50 years"
+    }
+  },
+  "0217": {
+    "name": "Mandarin Duck",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "41–49 cm",
+      "몸무게": "0.4–0.7 kg",
+      "수명": "6–12 years"
+    }
+  },
+  "0218": {
+    "name": "Wood Duck",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · North America",
+      "먹이": "Omnivore",
+      "몸길이": "47–54 cm",
+      "몸무게": "0.5–0.9 kg",
+      "수명": "3–5 years"
+    }
+  },
+  "0219": {
+    "name": "Muscovy Duck",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · South America · North America",
+      "먹이": "Omnivore",
+      "몸길이": "66–84 cm",
+      "몸무게": "1.1–4 kg",
+      "수명": "8–12 years"
+    }
+  },
+  "0220": {
+    "name": "Atlantic Puffin",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean · Arctic Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "28–30 cm",
+      "몸무게": "0.4 kg",
+      "수명": "20–25 years"
+    }
+  },
+  "0232": {
+    "name": "Roseate Spoonbill",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Ocean · North America · South America",
+      "먹이": "Fish eater",
+      "몸길이": "71–86 cm",
+      "몸무게": "1.2–1.8 kg",
+      "수명": "10–15 years"
+    }
+  },
+  "0234": {
+    "name": "Helmeted Guineafowl",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Africa",
+      "먹이": "Omnivore",
+      "몸길이": "53–63 cm",
+      "몸무게": "1.3 kg",
+      "수명": "10–15 years"
+    }
+  },
+  "0241": {
+    "name": "King Bird-of-paradise",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Oceania",
+      "먹이": "Omnivore",
+      "몸길이": "16 cm",
+      "몸무게": "45–65 g",
+      "수명": "5–8 years"
+    }
+  },
+  "0244": {
+    "name": "Great Argus",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "160–200 cm",
+      "몸무게": "2.0–2.7 kg",
+      "수명": "15 years"
+    }
+  },
+  "0247": {
+    "name": "Tufted Puffin",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "35–40 cm",
+      "몸무게": "700–900 g",
+      "수명": "15–20 years"
+    }
+  },
+  "0249": {
+    "name": "Macaroni Penguin",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "Ocean · Polar region · Southern Ocean · Atlantic Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "70 cm",
+      "몸무게": "5–6 kg",
+      "수명": "8–15 years"
+    }
+  },
+  "0251": {
+    "name": "Little Penguin",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Oceania · Pacific Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "30–33 cm",
+      "몸무게": "1–1.5 kg",
+      "수명": "6–7 years"
+    }
+  },
+  "0253": {
+    "name": "Bearded Vulture",
+    "statusLabel": "Near Threatened",
+    "info": {
+      "서식지": "Grassland · Europe · Asia · Africa",
+      "먹이": "Scavenger",
+      "몸길이": "94–125 cm",
+      "몸무게": "4.5–7.8 kg",
+      "수명": "20–40 years"
+    }
+  },
+  "0266": {
+    "name": "Ruby-throated Hummingbird",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Near cities · North America",
+      "먹이": "Nectar feeder",
+      "몸길이": "7–9 cm",
+      "몸무게": "3 g",
+      "수명": "3–5 years"
+    }
+  },
+  "0279": {
+    "name": "Pheasant-tailed Jacana",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "39–58 cm",
+      "몸무게": "120–230 g",
+      "수명": "5–7 years"
+    }
+  },
+  "0283": {
+    "name": "Eurasian Curlew",
+    "statusLabel": "Near Threatened",
+    "info": {
+      "서식지": "Ocean · Grassland · Europe · Asia · Africa",
+      "먹이": "Carnivore",
+      "몸길이": "50–60 cm",
+      "몸무게": "600–1000 g",
+      "수명": "10–20 years"
+    }
+  },
+  "0286": {
+    "name": "Arctic Tern",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Polar region · Arctic Ocean · Southern Ocean · Atlantic Ocean · Pacific Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "33–39 cm",
+      "몸무게": "85–130 g",
+      "수명": "20–30 years"
+    }
+  },
+  "0296": {
+    "name": "Greater White-fronted Goose",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Grassland · Asia · Europe · North America",
+      "먹이": "Herbivore",
+      "몸길이": "64–81 cm",
+      "몸무게": "1.9–3.3 kg",
+      "수명": "15–20 years"
+    }
+  },
+  "0297": {
+    "name": "Brant Goose",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Polar region · Asia · Europe · North America · Arctic Ocean",
+      "먹이": "Herbivore",
+      "몸길이": "55–66 cm",
+      "몸무게": "1.2–2.2 kg",
+      "수명": "15–20 years"
+    }
+  },
+  "0304": {
+    "name": "Chameleon",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Rainforest · Africa · Europe · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "15–80 cm",
+      "몸무게": "100–200 g",
+      "수명": "Avg. 5–10 years"
+    }
+  },
+  "0306": {
+    "name": "Komodo Dragon",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Carnivore",
+      "몸길이": "2–3 m",
+      "몸무게": "70–90 kg",
+      "수명": "30 years"
+    }
+  },
+  "0307": {
+    "name": "Snake",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Asia · Europe · North America · South America · Africa · Oceania",
+      "먹이": "Carnivore",
+      "몸길이": "10 cm",
+      "몸무게": "4–6 kg",
+      "수명": "Avg. 10 years"
+    }
+  },
+  "0309": {
+    "name": "Amur Softshell Turtle",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Carnivore",
+      "몸길이": "20–35 cm",
+      "몸무게": "1–2 kg",
+      "수명": "Avg. 20–40 years"
+    }
+  },
+  "0311": {
+    "name": "Rattlesnake",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Desert · North America · South America",
+      "먹이": "Carnivore",
+      "몸길이": "60–150 cm",
+      "몸무게": "1–2 kg",
+      "수명": "Avg. 6–8 years"
+    }
+  },
+  "0323": {
+    "name": "Frilled Lizard",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Grassland · Oceania",
+      "먹이": "Insectivore",
+      "몸길이": "70–90 cm",
+      "몸무게": "400–600 g",
+      "수명": "Avg. 10–15 years"
+    }
+  },
+  "0326": {
+    "name": "Komodo Dragon",
+    "statusLabel": "Endangered",
+    "info": {
+      "서식지": "Grassland · Rainforest · Asia",
+      "먹이": "Carnivore",
+      "몸길이": "250–300 cm",
+      "몸무게": "70–90 kg",
+      "수명": "Avg. 30–40 years"
+    }
+  },
+  "0327": {
+    "name": "Frilled-necked Lizard",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Grassland · Oceania",
+      "먹이": "Insectivore",
+      "몸길이": "70–90 cm",
+      "몸무게": "400–600 g",
+      "수명": "Avg. 10–15 years"
+    }
+  },
+  "0328": {
+    "name": "Blue-tongued Skink",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Oceania",
+      "먹이": "Omnivore",
+      "몸길이": "45–60 cm",
+      "몸무게": "300–500 g",
+      "수명": "Avg. 15–20 years"
+    }
+  },
+  "0329": {
+    "name": "Skink",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Desert · Near cities · Asia · Africa · Oceania",
+      "먹이": "Insectivore",
+      "몸길이": "10–35 cm",
+      "몸무게": "20–100 g",
+      "수명": "Avg. 5–10 years"
+    }
+  },
+  "0331": {
+    "name": "Amur Rat Snake",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "Grassland · Near cities · Asia",
+      "먹이": "Carnivore",
+      "몸길이": "150–200 cm",
+      "몸무게": "1–2 kg",
+      "수명": "Avg. 10–20 years"
+    }
+  },
+  "0339": {
+    "name": "Milk Snake",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · North America · South America",
+      "먹이": "Carnivore",
+      "수명": "15–20 years"
+    }
+  },
+  "0340": {
+    "name": "Garter Snake",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Near cities · North America",
+      "먹이": "Carnivore",
+      "수명": "5–10 years"
+    }
+  },
+  "0341": {
+    "name": "Red-backed Rat Snake",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Carnivore",
+      "수명": "10 years"
+    }
+  },
+  "0343": {
+    "name": "Red-eared Slider",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Near cities · North America",
+      "먹이": "Omnivore",
+      "수명": "20–30 years"
+    }
+  },
+  "0350": {
+    "name": "Tuatara",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Oceania",
+      "먹이": "Insectivore",
+      "수명": "60–100 years"
+    }
+  },
+  "0374": {
+    "name": "Spiny Softshell Turtle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · North America",
+      "먹이": "Fish eater",
+      "몸길이": "50 cm",
+      "몸무게": "5 kg",
+      "수명": "25 years"
+    }
+  },
+  "0405": {
+    "name": "Green Basilisk",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · River & lake · North America",
+      "먹이": "Omnivore",
+      "몸길이": "60–90 cm",
+      "몸무게": "200–500 g",
+      "수명": "7 years"
+    }
+  },
+  "0410": {
+    "name": "Flying Dragon",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "20 cm",
+      "몸무게": "5–8 g",
+      "수명": "5–8 years"
+    }
+  },
+  "0423": {
+    "name": "Eastern Blue-tongued Skink",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Oceania",
+      "먹이": "Omnivore",
+      "몸길이": "40–60 cm",
+      "몸무게": "0.3–0.5 kg",
+      "수명": "15–20 years"
+    }
+  },
+  "0434": {
+    "name": "Common Krait",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Asia",
+      "먹이": "Carnivore",
+      "몸길이": "0.9–1.5 m",
+      "몸무게": "0.3–0.8 kg",
+      "수명": "10–15 years"
+    }
+  },
+  "0435": {
+    "name": "Coastal Taipan",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Oceania",
+      "먹이": "Carnivore",
+      "몸길이": "2–2.5 m",
+      "몸무게": "1.5–3 kg",
+      "수명": "10–15 years"
+    }
+  },
+  "0436": {
+    "name": "Eastern Coral Snake",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · North America",
+      "먹이": "Carnivore",
+      "몸길이": "60–90 cm",
+      "몸무게": "0.1–0.3 kg",
+      "수명": "7–10 years"
+    }
+  },
+  "0449": {
+    "name": "Brahminy Blind Snake",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Near cities · Asia · Africa",
+      "먹이": "Insectivore",
+      "몸길이": "5–10 cm",
+      "몸무게": "1–2 g"
+    }
+  },
+  "0450": {
+    "name": "Paradise Flying Snake",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Carnivore",
+      "몸길이": "1–1.2 m",
+      "몸무게": "250–800 g",
+      "수명": "10 years"
+    }
+  },
+  "0463": {
+    "name": "Ocean Sunfish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Atlantic Ocean · Indian Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "180–330 cm",
+      "몸무게": "1 t",
+      "수명": "Avg. 6–10 years"
+    }
+  },
+  "0466": {
+    "name": "Chinese Sturgeon",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Carnivore",
+      "몸길이": "200–350 cm",
+      "몸무게": "100–300 kg",
+      "수명": "Avg. 24–30 years"
+    }
+  },
+  "0474": {
+    "name": "Smooth Hammerhead",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Atlantic Ocean · Indian Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "3–4 m",
+      "몸무게": "80 kg",
+      "수명": "Avg. 20–30 years"
+    }
+  },
+  "0476": {
+    "name": "Oarfish",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Atlantic Ocean · Indian Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "3–8 m",
+      "몸무게": "100 kg",
+      "수명": "Avg. 10–15 years"
+    }
+  },
+  "0477": {
+    "name": "Swordfish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Atlantic Ocean · Indian Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "3–4.5 m",
+      "몸무게": "150 kg",
+      "수명": "Avg. 9 years"
+    }
+  },
+  "0493": {
+    "name": "Wrasse",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "15–25 cm",
+      "몸무게": "100 g",
+      "수명": "5–10 years"
+    }
+  },
+  "0495": {
+    "name": "Bluefin Searobin",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "30–40 cm",
+      "몸무게": "500 g",
+      "수명": "5–10 years"
+    }
+  },
+  "0497": {
+    "name": "Righteye Flounder",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "20–40 cm",
+      "몸무게": "400 g",
+      "수명": "10–20 years"
+    }
+  },
+  "0499": {
+    "name": "Mandarinfish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Rainforest · Asia · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "6 cm",
+      "몸무게": "10 g",
+      "수명": "10–15 years"
+    }
+  },
+  "0502": {
+    "name": "Yellow Boxfish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Indian Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "15–45 cm",
+      "몸무게": "0.3–1 kg",
+      "수명": "8 years"
+    }
+  },
+  "0504": {
+    "name": "Japanese Sillago",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "20–30 cm",
+      "몸무게": "0.1–0.2 kg",
+      "수명": "5–6 years"
+    }
+  },
+  "0507": {
+    "name": "Japanese Halfbeak",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "25–40 cm",
+      "몸무게": "0.05–0.15 kg",
+      "수명": "2–3 years"
+    }
+  },
+  "0509": {
+    "name": "Korean Rockfish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "30–50 cm",
+      "몸무게": "0.7–1.5 kg",
+      "수명": "15 years"
+    }
+  },
+  "0510": {
+    "name": "Fat Greenling",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "25–40 cm",
+      "몸무게": "0.3–0.8 kg",
+      "수명": "8 years"
+    }
+  },
+  "0512": {
+    "name": "Sea Raven",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "30–40 cm",
+      "몸무게": "1–2 kg",
+      "수명": "8–10 years"
+    }
+  },
+  "0513": {
+    "name": "Japanese Pufferfish",
+    "statusLabel": "Near Threatened",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "40–70 cm",
+      "몸무게": "2–5 kg",
+      "수명": "10 years"
+    }
+  },
+  "0515": {
+    "name": "Clark's Anemonefish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Indian Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "10–15 cm",
+      "몸무게": "0.03–0.06 kg",
+      "수명": "10–13 years"
+    }
+  },
+  "0516": {
+    "name": "Striated Frogfish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Atlantic Ocean · Indian Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "10–25 cm",
+      "몸무게": "0.1–0.4 kg",
+      "수명": "7 years"
+    }
+  },
+  "0517": {
+    "name": "Red Stingray",
+    "statusLabel": "Near Threatened",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "40–60 cm",
+      "몸무게": "3–10 kg",
+      "수명": "15 years"
+    }
+  },
+  "0519": {
+    "name": "West African Lungfish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Africa",
+      "먹이": "Carnivore",
+      "몸길이": "60–100 cm",
+      "몸무게": "1–4 kg",
+      "수명": "20 years"
+    }
+  },
+  "0521": {
+    "name": "Silver Arowana",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Rainforest · South America",
+      "먹이": "Carnivore",
+      "몸길이": "60–90 cm",
+      "몸무게": "4–6 kg",
+      "수명": "10–15 years"
+    }
+  },
+  "0522": {
+    "name": "Asian Arowana",
+    "statusLabel": "Endangered",
+    "info": {
+      "서식지": "River & lake · Rainforest · Asia",
+      "먹이": "Carnivore",
+      "몸길이": "60–90 cm",
+      "몸무게": "4–7 kg",
+      "수명": "15–20 years"
+    }
+  },
+  "0525": {
+    "name": "Freshwater Angelfish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Rainforest · South America",
+      "먹이": "Omnivore",
+      "몸길이": "12–15 cm",
+      "몸무게": "0.05–0.1 kg",
+      "수명": "10 years"
+    }
+  },
+  "0526": {
+    "name": "Siamese Fighting Fish",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "6–7 cm",
+      "몸무게": "1.5 g",
+      "수명": "2–4 years"
+    }
+  },
+  "0527": {
+    "name": "Redtail Catfish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · South America",
+      "먹이": "Omnivore",
+      "몸길이": "1.3 m",
+      "몸무게": "40–50 kg",
+      "수명": "15 years"
+    }
+  },
+  "0534": {
+    "name": "Big-scaled Redfin",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Ocean · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "30–45 cm",
+      "몸무게": "0.5–1 kg",
+      "수명": "8–10 years"
+    }
+  },
+  "0535": {
+    "name": "Red-bellied Piranha",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · South America",
+      "먹이": "Carnivore",
+      "몸길이": "20–30 cm",
+      "몸무게": "1–3.5 kg",
+      "수명": "8–10 years"
+    }
+  },
+  "0536": {
+    "name": "Humpback Anglerfish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Atlantic Ocean · Indian Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "3–18 cm",
+      "몸무게": "30–100 g"
+    }
+  },
+  "0537": {
+    "name": "Blobfish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "30 cm",
+      "몸무게": "1–2 kg"
+    }
+  },
+  "0538": {
+    "name": "Red-lipped Batfish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "20 cm",
+      "몸무게": "100–200 g",
+      "수명": "10–12 years"
+    }
+  },
+  "0542": {
+    "name": "Lemon Shark",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean · Pacific Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "2.4–3 m",
+      "몸무게": "90–180 kg",
+      "수명": "25–30 years"
+    }
+  },
+  "0547": {
+    "name": "Japanese Bullhead Shark",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "60–120 cm",
+      "몸무게": "3–5 kg",
+      "수명": "12 years"
+    }
+  },
+  "0548": {
+    "name": "Spotted Wobbegong",
+    "statusLabel": "Near Threatened",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Indian Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "1.5–3 m",
+      "몸무게": "20–30 kg",
+      "수명": "20 years"
+    }
+  },
+  "0551": {
+    "name": "Japanese Sawshark",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "1.3–1.5 m",
+      "몸무게": "6–8 kg",
+      "수명": "15 years"
+    }
+  },
+  "0552": {
+    "name": "Smalltooth Sawfish",
+    "statusLabel": "Critically Endangered",
+    "info": {
+      "서식지": "Ocean · River & lake · Atlantic Ocean · North America",
+      "먹이": "Fish eater",
+      "몸길이": "5.5 m",
+      "몸무게": "200–350 kg",
+      "수명": "30 years"
+    }
+  },
+  "0553": {
+    "name": "Common Torpedo",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Europe · Africa · Atlantic Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "30–40 cm",
+      "몸무게": "1–3 kg",
+      "수명": "12 years"
+    }
+  },
+  "0556": {
+    "name": "Ocellate Spot Skate",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "40–60 cm",
+      "몸무게": "1–3 kg",
+      "수명": "10 years"
+    }
+  },
+  "0557": {
+    "name": "Giant Oceanic Manta Ray",
+    "statusLabel": "Endangered",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Atlantic Ocean · Indian Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "7 m",
+      "몸무게": "400 kg",
+      "수명": "40 years"
+    }
+  },
+  "0561": {
+    "name": "Bulgyhead Wrasse",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "60–80 cm",
+      "몸무게": "5–15 kg",
+      "수명": "20 years"
+    }
+  },
+  "0562": {
+    "name": "Oriental Butterflyfish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "15–20 cm",
+      "몸무게": "0.1–0.2 kg",
+      "수명": "8–10 years"
+    }
+  },
+  "0563": {
+    "name": "Pennant Coralfish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Rainforest · Indian Ocean · Pacific Ocean · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "20–25 cm",
+      "몸무게": "0.2–0.3 kg",
+      "수명": "8–10 years"
+    }
+  },
+  "0564": {
+    "name": "Queen Angelfish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Rainforest · Atlantic Ocean · North America · South America",
+      "먹이": "Omnivore",
+      "몸길이": "30–45 cm",
+      "몸무게": "1–1.6 kg",
+      "수명": "15 years"
+    }
+  },
+  "0565": {
+    "name": "Emperor Angelfish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Rainforest · Indian Ocean · Pacific Ocean · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "30–40 cm",
+      "몸무게": "1–1.5 kg",
+      "수명": "15–20 years"
+    }
+  },
+  "0568": {
+    "name": "Moorish Idol",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Rainforest · Indian Ocean · Pacific Ocean · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "16–22 cm",
+      "몸무게": "0.2–0.3 kg",
+      "수명": "5–10 years"
+    }
+  },
+  "0569": {
+    "name": "Sapphire Devil",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Rainforest · Indian Ocean · Pacific Ocean · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "6–8 cm",
+      "몸무게": "0.01–0.02 kg",
+      "수명": "3–5 years"
+    }
+  },
+  "0571": {
+    "name": "Bluestreak Cleaner Wrasse",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Rainforest · Indian Ocean · Pacific Ocean · Asia",
+      "먹이": "Carnivore",
+      "몸길이": "8–11 cm",
+      "몸무게": "0.01–0.02 kg",
+      "수명": "4 years"
+    }
+  },
+  "0572": {
+    "name": "Threespot Dascyllus",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Rainforest · Indian Ocean · Pacific Ocean · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "10–14 cm",
+      "몸무게": "0.03–0.08 kg",
+      "수명": "5–10 years"
+    }
+  },
+  "0573": {
+    "name": "Common Bluestripe Snapper",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Rainforest · Indian Ocean · Pacific Ocean · Asia",
+      "먹이": "Carnivore",
+      "몸길이": "25–35 cm",
+      "몸무게": "0.3–0.6 kg",
+      "수명": "10 years"
+    }
+  },
+  "0574": {
+    "name": "Laced Moray",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Rainforest · Indian Ocean · Pacific Ocean · Asia",
+      "먹이": "Fish eater",
+      "몸길이": "1.5–2 m",
+      "몸무게": "5–10 kg",
+      "수명": "15–20 years"
+    }
+  },
+  "0575": {
+    "name": "Green Moray",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean · North America · South America",
+      "먹이": "Fish eater",
+      "몸길이": "1.8–2.5 m",
+      "몸무게": "15–30 kg",
+      "수명": "20 years"
+    }
+  },
+  "0576": {
+    "name": "Ribbon Eel",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Rainforest · Pacific Ocean · Indian Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "100–130 cm",
+      "몸무게": "0.1–0.2 kg",
+      "수명": "20 years"
+    }
+  },
+  "0577": {
+    "name": "Spotted Garden Eel",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Indian Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "35–40 cm",
+      "몸무게": "0.02 kg",
+      "수명": "35–40 years"
+    }
+  },
+  "0582": {
+    "name": "Barred Knifejaw",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "30–50 cm",
+      "몸무게": "1–3 kg",
+      "수명": "8 years"
+    }
+  },
+  "0586": {
+    "name": "Longtooth Grouper",
+    "statusLabel": "Endangered",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "100–130 cm",
+      "몸무게": "20–40 kg",
+      "수명": "30 years"
+    }
+  },
+  "0588": {
+    "name": "Malabar Grouper",
+    "statusLabel": "Near Threatened",
+    "info": {
+      "서식지": "Ocean · River & lake · Rainforest · Indian Ocean · Pacific Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "100–120 cm",
+      "몸무게": "20–50 kg",
+      "수명": "30 years"
+    }
+  },
+  "0589": {
+    "name": "Yellowtail Amberjack",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Atlantic Ocean · Indian Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "90–150 cm",
+      "몸무게": "5–40 kg",
+      "수명": "12 years"
+    }
+  },
+  "0593": {
+    "name": "Live Sharksucker",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Rainforest · Pacific Ocean · Atlantic Ocean · Indian Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "60–100 cm",
+      "몸무게": "0.5–1.2 kg",
+      "수명": "8 years"
+    }
+  },
+  "0594": {
+    "name": "African Pompano",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Atlantic Ocean · Indian Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "50–110 cm",
+      "몸무게": "2–15 kg",
+      "수명": "10 years"
+    }
+  },
+  "0595": {
+    "name": "Skipjack Tuna",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Atlantic Ocean · Indian Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "50–80 cm",
+      "몸무게": "3–10 kg",
+      "수명": "8–12 years"
+    }
+  },
+  "0596": {
+    "name": "Yellowfin Tuna",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Atlantic Ocean · Indian Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "100–200 cm",
+      "몸무게": "30–150 kg",
+      "수명": "8 years"
+    }
+  },
+  "0597": {
+    "name": "Albacore",
+    "statusLabel": "Near Threatened",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Atlantic Ocean · Indian Ocean",
+      "먹이": "Fish eater",
+      "몸길이": "80–120 cm",
+      "몸무게": "15–40 kg",
+      "수명": "11 years"
+    }
+  },
+  "0599": {
+    "name": "Thread-sail Filefish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "15–25 cm",
+      "몸무게": "0.1–0.3 kg",
+      "수명": "5 years"
+    }
+  },
+  "0600": {
+    "name": "Black Scraper",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "25–35 cm",
+      "몸무게": "0.3–0.6 kg",
+      "수명": "6 years"
+    }
+  },
+  "0604": {
+    "name": "Salamander",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "North America · South America · Europe · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "10–20 cm",
+      "몸무게": "50 g",
+      "수명": "Avg. 4–8 years"
+    }
+  },
+  "0608": {
+    "name": "Newt",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "River & lake · Asia · Europe · North America",
+      "먹이": "Insectivore",
+      "몸길이": "7–15 cm",
+      "몸무게": "10–30 g"
+    }
+  },
+  "0617": {
+    "name": "Spectacled Salamander",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Europe",
+      "먹이": "Insectivore",
+      "몸길이": "10 cm",
+      "몸무게": "4 g",
+      "수명": "10 years"
+    }
+  },
+  "0627": {
+    "name": "Argentine Horned Frog",
+    "statusLabel": "Near Threatened",
+    "info": {
+      "서식지": "Grassland · River & lake · South America",
+      "먹이": "Carnivore",
+      "몸길이": "10–16 cm",
+      "몸무게": "0.4 kg",
+      "수명": "6–10 years"
+    }
+  },
+  "0628": {
+    "name": "Amazonian Horned Frog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · South America",
+      "먹이": "Carnivore",
+      "몸길이": "10–15 cm",
+      "몸무게": "0.3 kg",
+      "수명": "6–10 years"
+    }
+  },
+  "0629": {
+    "name": "African Common Toad",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Africa",
+      "먹이": "Insectivore",
+      "몸길이": "6–13 cm",
+      "몸무게": "40 g",
+      "수명": "5–10 years"
+    }
+  },
+  "0631": {
+    "name": "Titicaca Water Frog",
+    "statusLabel": "Endangered",
+    "info": {
+      "서식지": "River & lake · South America",
+      "먹이": "Carnivore",
+      "몸길이": "14–20 cm",
+      "몸무게": "0.15 kg",
+      "수명": "15 years"
+    }
+  },
+  "0632": {
+    "name": "Darwin's Frog",
+    "statusLabel": "Endangered",
+    "info": {
+      "서식지": "Rainforest · South America",
+      "먹이": "Insectivore",
+      "몸길이": "2.5–3.5 cm",
+      "몸무게": "2 g",
+      "수명": "10–15 years"
+    }
+  },
+  "0633": {
+    "name": "Gastric-brooding Frog",
+    "statusLabel": "Extinct",
+    "info": {
+      "서식지": "River & lake · Oceania",
+      "먹이": "Insectivore",
+      "몸길이": "3–5 cm",
+      "몸무게": "5 g"
+    }
+  },
+  "0636": {
+    "name": "Common Toad",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Europe",
+      "먹이": "Insectivore",
+      "몸길이": "8–13 cm",
+      "몸무게": "50 g",
+      "수명": "10–12 years"
+    }
+  },
+  "0637": {
+    "name": "European Green Toad",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Desert · Europe · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "6–10 cm",
+      "몸무게": "30 g",
+      "수명": "7–10 years"
+    }
+  },
+  "0638": {
+    "name": "Toad",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Insectivore",
+      "수명": "10 years"
+    }
+  },
+  "0641": {
+    "name": "Black-spotted Pond Frog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Insectivore",
+      "수명": "6 years"
+    }
+  },
+  "0642": {
+    "name": "Seoul Pond Frog",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Insectivore",
+      "수명": "6 years"
+    }
+  },
+  "0643": {
+    "name": "Oriental Fire-bellied Toad",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Insectivore",
+      "수명": "15 years"
+    }
+  },
+  "0646": {
+    "name": "Tomato Frog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Africa",
+      "먹이": "Insectivore",
+      "수명": "8 years"
+    }
+  },
+  "0649": {
+    "name": "Surinam Toad",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · South America",
+      "먹이": "Fish eater",
+      "수명": "8 years"
+    }
+  },
+  "0650": {
+    "name": "Goliath Frog",
+    "statusLabel": "Endangered",
+    "info": {
+      "서식지": "River & lake · Africa",
+      "먹이": "Insectivore",
+      "수명": "15 years"
+    }
+  },
+  "0651": {
+    "name": "American Toad",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · North America",
+      "먹이": "Insectivore",
+      "몸길이": "5–9 cm",
+      "몸무게": "20–30 g",
+      "수명": "5–10 years"
+    }
+  },
+  "0652": {
+    "name": "Tiger Salamander",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · River & lake · North America",
+      "먹이": "Insectivore",
+      "몸길이": "15–35 cm",
+      "몸무게": "100–150 g",
+      "수명": "10–16 years"
+    }
+  },
+  "0655": {
+    "name": "Hellbender",
+    "statusLabel": "Near Threatened",
+    "info": {
+      "서식지": "River & lake · North America",
+      "먹이": "Carnivore",
+      "몸길이": "30–60 cm",
+      "몸무게": "1.5–2.5 kg",
+      "수명": "25–30 years"
+    }
+  },
+  "0656": {
+    "name": "Japanese Fire-bellied Newt",
+    "statusLabel": "Near Threatened",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "8–13 cm",
+      "몸무게": "5–10 g",
+      "수명": "20 years"
+    }
+  },
+  "0657": {
+    "name": "Chinese Fire-bellied Newt",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "6–10 cm",
+      "몸무게": "3–7 g",
+      "수명": "10–15 years"
+    }
+  },
+  "0658": {
+    "name": "Cranwell's Horned Frog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · South America",
+      "먹이": "Carnivore",
+      "몸길이": "7–13 cm",
+      "몸무게": "300–500 g",
+      "수명": "10 years"
+    }
+  },
+  "0659": {
+    "name": "Ornate Horned Frog",
+    "statusLabel": "Near Threatened",
+    "info": {
+      "서식지": "Grassland · South America",
+      "먹이": "Carnivore",
+      "몸길이": "8–13 cm",
+      "몸무게": "300–600 g",
+      "수명": "6–10 years"
+    }
+  },
+  "0660": {
+    "name": "Gliding Leaf Frog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · South America · North America",
+      "먹이": "Insectivore",
+      "몸길이": "5–8 cm",
+      "몸무게": "6–12 g",
+      "수명": "5 years"
+    }
+  },
+  "0662": {
+    "name": "Eastern Newt",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Rainforest · North America",
+      "먹이": "Insectivore",
+      "몸길이": "7–12 cm",
+      "몸무게": "3–8 g",
+      "수명": "12–15 years"
+    }
+  },
+  "0663": {
+    "name": "Northern Crested Newt",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Europe",
+      "먹이": "Insectivore",
+      "몸길이": "13–16 cm",
+      "몸무게": "6–10 g",
+      "수명": "7–10 years"
+    }
+  },
+  "0664": {
+    "name": "Smooth Newt",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Europe",
+      "먹이": "Insectivore",
+      "몸길이": "8–11 cm",
+      "몸무게": "2–4 g",
+      "수명": "6–9 years"
+    }
+  },
+  "0665": {
+    "name": "Alpine Newt",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Europe",
+      "먹이": "Insectivore",
+      "몸길이": "9–12 cm",
+      "몸무게": "3–6 g",
+      "수명": "10–15 years"
+    }
+  },
+  "0666": {
+    "name": "Marbled Newt",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Europe",
+      "먹이": "Insectivore",
+      "몸길이": "13–16 cm",
+      "몸무게": "6–9 g",
+      "수명": "7–10 years"
+    }
+  },
+  "0667": {
+    "name": "Fire Salamander",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Europe",
+      "먹이": "Insectivore",
+      "몸길이": "15–25 cm",
+      "몸무게": "20–40 g",
+      "수명": "15–20 years"
+    }
+  },
+  "0668": {
+    "name": "Northern Spectacled Salamander",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Europe",
+      "먹이": "Insectivore",
+      "몸길이": "8–11 cm",
+      "몸무게": "1–2 g",
+      "수명": "8–10 years"
+    }
+  },
+  "0669": {
+    "name": "Olm",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "Cave · River & lake · Europe",
+      "먹이": "Carnivore",
+      "몸길이": "20–30 cm",
+      "몸무게": "15–20 g",
+      "수명": "60 years"
+    }
+  },
+  "0673": {
+    "name": "Common Mudpuppy",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · North America",
+      "먹이": "Carnivore",
+      "몸길이": "20–33 cm",
+      "몸무게": "30–90 g",
+      "수명": "11–20 years"
+    }
+  },
+  "0674": {
+    "name": "Greater Siren",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · North America",
+      "먹이": "Omnivore",
+      "몸길이": "50–90 cm",
+      "몸무게": "100–500 g",
+      "수명": "15–25 years"
+    }
+  },
+  "0675": {
+    "name": "Two-toed Amphiuma",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · North America",
+      "먹이": "Carnivore",
+      "몸길이": "65–100 cm",
+      "몸무게": "200–500 g",
+      "수명": "14–27 years"
+    }
+  },
+  "0679": {
+    "name": "Gray Treefrog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · North America",
+      "먹이": "Insectivore",
+      "몸길이": "3–5 cm",
+      "몸무게": "5–9 g",
+      "수명": "7–9 years"
+    }
+  },
+  "0681": {
+    "name": "Cuban Treefrog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Near cities · North America",
+      "먹이": "Carnivore",
+      "몸길이": "6–13 cm",
+      "몸무게": "20–60 g",
+      "수명": "5–10 years"
+    }
+  },
+  "0682": {
+    "name": "White's Treefrog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Near cities · Oceania",
+      "먹이": "Insectivore",
+      "몸길이": "7–11 cm",
+      "몸무게": "30–60 g",
+      "수명": "10–15 years"
+    }
+  },
+  "0683": {
+    "name": "Red-eyed Treefrog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · North America",
+      "먹이": "Insectivore",
+      "몸길이": "5–7 cm",
+      "몸무게": "6–15 g",
+      "수명": "5 years"
+    }
+  },
+  "0684": {
+    "name": "Spring Peeper",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · North America",
+      "먹이": "Insectivore",
+      "몸길이": "2–4 cm",
+      "몸무게": "3–5 g",
+      "수명": "3–4 years"
+    }
+  },
+  "0687": {
+    "name": "Wallace's Flying Frog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "8–10 cm",
+      "몸무게": "20–35 g",
+      "수명": "5–10 years"
+    }
+  },
+  "0690": {
+    "name": "African Clawed Frog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Africa",
+      "먹이": "Carnivore",
+      "몸길이": "6–12 cm",
+      "몸무게": "30–200 g",
+      "수명": "8–15 years"
+    }
+  },
+  "0691": {
+    "name": "Dwarf Clawed Frog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Africa",
+      "먹이": "Carnivore",
+      "몸길이": "2.5–4 cm",
+      "몸무게": "2–5 g",
+      "수명": "4–5 years"
+    }
+  },
+  "0692": {
+    "name": "Edible Frog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Europe",
+      "먹이": "Insectivore",
+      "몸길이": "6–11 cm",
+      "몸무게": "20–60 g",
+      "수명": "6–10 years"
+    }
+  },
+  "0707": {
+    "name": "European Green Toad",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Desert · Europe · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "6–10 cm",
+      "몸무게": "20–60 g",
+      "수명": "7–12 years"
+    }
+  },
+  "0708": {
+    "name": "Rice Field Frog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Grassland · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "4–6 cm",
+      "몸무게": "8–20 g",
+      "수명": "3–5 years"
+    }
+  },
+  "0709": {
+    "name": "Indian Bullfrog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Grassland · Asia",
+      "먹이": "Carnivore",
+      "몸길이": "12–17 cm",
+      "몸무게": "100–250 g",
+      "수명": "6–10 years"
+    }
+  },
+  "0711": {
+    "name": "Common Midwife Toad",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · River & lake · Europe",
+      "먹이": "Insectivore",
+      "몸길이": "3.5–5.5 cm",
+      "몸무게": "5–15 g",
+      "수명": "5–8 years"
+    }
+  },
+  "0712": {
+    "name": "Common Spadefoot",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Desert · Grassland · Europe · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "4–8 cm",
+      "몸무게": "10–30 g",
+      "수명": "8–12 years"
+    }
+  },
+  "0713": {
+    "name": "Eastern Spadefoot",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · North America",
+      "먹이": "Insectivore",
+      "몸길이": "4–7 cm",
+      "몸무게": "10–30 g",
+      "수명": "8–12 years"
+    }
+  },
+  "0714": {
+    "name": "Painted Frog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Africa · Europe",
+      "먹이": "Insectivore",
+      "몸길이": "5–7 cm",
+      "몸무게": "8–20 g",
+      "수명": "5–8 years"
+    }
+  },
+  "0715": {
+    "name": "Yellow-bellied Toad",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Europe",
+      "먹이": "Insectivore",
+      "몸길이": "3.5–5 cm",
+      "몸무게": "5–10 g",
+      "수명": "8–15 years"
+    }
+  },
+  "0716": {
+    "name": "European Fire-bellied Toad",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Europe",
+      "먹이": "Insectivore",
+      "몸길이": "4–5 cm",
+      "몸무게": "5–12 g",
+      "수명": "10–15 years"
+    }
+  },
+  "0718": {
+    "name": "Desert Rain Frog",
+    "statusLabel": "Near Threatened",
+    "info": {
+      "서식지": "Desert · Africa",
+      "먹이": "Insectivore",
+      "몸길이": "4–6 cm",
+      "몸무게": "8–15 g",
+      "수명": "4–10 years"
+    }
+  },
+  "0719": {
+    "name": "Asian Painted Frog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Near cities · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "5.5–8 cm",
+      "몸무게": "20–50 g",
+      "수명": "8–10 years"
+    }
+  },
+  "0720": {
+    "name": "Eastern Narrow-mouthed Toad",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Grassland · North America",
+      "먹이": "Insectivore",
+      "몸길이": "2–3.5 cm",
+      "몸무게": "3–7 g",
+      "수명": "5–7 years"
+    }
+  },
+  "0722": {
+    "name": "Dyeing Poison Frog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · South America",
+      "먹이": "Insectivore",
+      "몸길이": "4–5 cm",
+      "몸무게": "5–8 g",
+      "수명": "10 years"
+    }
+  },
+  "0723": {
+    "name": "Strawberry Poison Frog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · North America",
+      "먹이": "Insectivore",
+      "몸길이": "1.7–2.4 cm",
+      "몸무게": "1–2 g",
+      "수명": "4–6 years"
+    }
+  },
+  "0724": {
+    "name": "Phantasmal Poison Frog",
+    "statusLabel": "Endangered",
+    "info": {
+      "서식지": "Rainforest · South America",
+      "먹이": "Insectivore",
+      "몸길이": "2–2.7 cm",
+      "몸무게": "1–2 g",
+      "수명": "5–7 years"
+    }
+  },
+  "0725": {
+    "name": "Golden Mantella",
+    "statusLabel": "Critically Endangered",
+    "info": {
+      "서식지": "Rainforest · Africa",
+      "먹이": "Insectivore",
+      "몸길이": "2–2.5 cm",
+      "몸무게": "1–2 g",
+      "수명": "5–8 years"
+    }
+  },
+  "0726": {
+    "name": "Baron's Mantella",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Africa",
+      "먹이": "Insectivore",
+      "몸길이": "2.5–3 cm",
+      "몸무게": "2–4 g",
+      "수명": "5–8 years"
+    }
+  },
+  "0730": {
+    "name": "Red-spotted Toad",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Desert · North America",
+      "먹이": "Insectivore",
+      "몸길이": "3.5–7.5 cm",
+      "몸무게": "8–30 g",
+      "수명": "5–10 years"
+    }
+  },
+  "0731": {
+    "name": "Malagasy Rainbow Frog",
+    "statusLabel": "Endangered",
+    "info": {
+      "서식지": "Rainforest · Africa",
+      "먹이": "Insectivore",
+      "몸길이": "2.5–4 cm",
+      "몸무게": "3–8 g",
+      "수명": "5–8 years"
+    }
+  },
+  "0733": {
+    "name": "Purple Frog",
+    "statusLabel": "Endangered",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "5–9 cm",
+      "몸무게": "30–180 g",
+      "수명": "5–10 years"
+    }
+  },
+  "0734": {
+    "name": "Solomon Island Leaf Frog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Oceania",
+      "먹이": "Insectivore",
+      "몸길이": "6–9 cm",
+      "몸무게": "20–50 g",
+      "수명": "5–8 years"
+    }
+  },
+  "0735": {
+    "name": "Senegal Running Frog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · River & lake · Africa",
+      "먹이": "Insectivore",
+      "몸길이": "3.5–4.9 cm",
+      "몸무게": "4–10 g",
+      "수명": "5–8 years"
+    }
+  },
+  "0738": {
+    "name": "Madagascar Mantella",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "Rainforest · Africa",
+      "먹이": "Insectivore",
+      "몸길이": "2.5–3 cm",
+      "몸무게": "2–4 g",
+      "수명": "8 years"
+    }
+  },
+  "0739": {
+    "name": "Long-toed Salamander",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Grassland · North America",
+      "먹이": "Insectivore",
+      "몸길이": "10–17 cm",
+      "몸무게": "5–10 g",
+      "수명": "6–10 years"
+    }
+  },
+  "0740": {
+    "name": "Coastal Giant Salamander",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Rainforest · North America",
+      "먹이": "Carnivore",
+      "몸길이": "17–30 cm",
+      "몸무게": "30–120 g",
+      "수명": "10 years"
+    }
+  },
+  "0741": {
+    "name": "Arboreal Salamander",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · North America",
+      "먹이": "Insectivore",
+      "몸길이": "10–18 cm",
+      "몸무게": "4–8 g",
+      "수명": "5–10 years"
+    }
+  },
+  "0742": {
+    "name": "Northern Two-lined Salamander",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · North America",
+      "먹이": "Insectivore",
+      "몸길이": "6–12 cm",
+      "몸무게": "1–3 g",
+      "수명": "3–6 years"
+    }
+  },
+  "0743": {
+    "name": "Spring Salamander",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · North America",
+      "먹이": "Carnivore",
+      "몸길이": "12–19 cm",
+      "몸무게": "5–12 g",
+      "수명": "10 years"
+    }
+  },
+  "0744": {
+    "name": "Ceylon Caecilian",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "25–40 cm",
+      "몸무게": "15–40 g"
+    }
+  },
+  "0745": {
+    "name": "Ringed Caecilian",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · South America",
+      "먹이": "Insectivore",
+      "몸길이": "28–45 cm",
+      "몸무게": "20–50 g"
+    }
+  },
+  "0746": {
+    "name": "Kallar Dancing Frog",
+    "statusLabel": "Endangered",
+    "info": {
+      "서식지": "River & lake · Rainforest · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "2–3 cm",
+      "몸무게": "1–2 g"
+    }
+  },
+  "0747": {
+    "name": "Pumpkin Toadlet",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · South America",
+      "먹이": "Insectivore",
+      "몸길이": "1–2 cm",
+      "몸무게": "0.5–1 g"
+    }
+  },
+  "0748": {
+    "name": "Giant Leaf Frog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · South America",
+      "먹이": "Insectivore",
+      "몸길이": "9–12 cm",
+      "몸무게": "15–30 g",
+      "수명": "5–10 years"
+    }
+  },
+  "0749": {
+    "name": "Bushveld Rain Frog",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Desert · Africa",
+      "먹이": "Insectivore",
+      "몸길이": "4–6 cm",
+      "몸무게": "10–20 g",
+      "수명": "4–10 years"
+    }
+  },
+  "0755": {
+    "name": "Cicada",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Asia · Africa · Europe · North America · South America · Oceania",
+      "먹이": "Herbivore",
+      "몸길이": "2–5 cm",
+      "몸무게": "2 g"
+    }
+  },
+  "0756": {
+    "name": "Stag Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "3–7.7 cm",
+      "몸무게": "6 g",
+      "수명": "2–3 years"
+    }
+  },
+  "0761": {
+    "name": "Stick Insect",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "8–10 cm",
+      "몸무게": "1–3 g",
+      "수명": "Avg. 1–2 years"
+    }
+  },
+  "0762": {
+    "name": "Praying Mantis",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Grassland · Near cities · Asia · Africa · Europe · North America",
+      "먹이": "Carnivore",
+      "몸길이": "7–9 cm",
+      "몸무게": "1–5 g",
+      "수명": "Avg. 1 years"
+    }
+  },
+  "0764": {
+    "name": "Longhorn Beetle",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Asia · Europe · North America",
+      "먹이": "Herbivore",
+      "몸길이": "2–6 cm",
+      "몸무게": "1–3 g"
+    }
+  },
+  "0766": {
+    "name": "Oriental Longheaded Locust",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "4–8 cm",
+      "몸무게": "2–4 g",
+      "수명": "Avg. 1 years"
+    }
+  },
+  "0767": {
+    "name": "Earwig",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Grassland · Asia · Europe · Africa · North America",
+      "먹이": "Omnivore",
+      "몸길이": "1–3 cm",
+      "몸무게": "0.5 g",
+      "수명": "Avg. 1 years"
+    }
+  },
+  "0773": {
+    "name": "Whirligig Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Carnivore",
+      "몸길이": "0.7 cm",
+      "몸무게": "0.05 g",
+      "수명": "1 years"
+    }
+  },
+  "0774": {
+    "name": "Water Scorpion",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Carnivore",
+      "몸길이": "4 cm",
+      "몸무게": "0.3 g",
+      "수명": "1 years"
+    }
+  },
+  "0775": {
+    "name": "Giant Water Bug",
+    "statusLabel": "Endangered",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Carnivore",
+      "몸길이": "6 cm",
+      "몸무게": "3 g",
+      "수명": "1 years"
+    }
+  },
+  "0776": {
+    "name": "Dung Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Scavenger",
+      "몸길이": "1 cm",
+      "몸무게": "0.3 g",
+      "수명": "1 years"
+    }
+  },
+  "0777": {
+    "name": "Stag Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Grassland · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "5 cm",
+      "몸무게": "5 g",
+      "수명": "2–3 years"
+    }
+  },
+  "0778": {
+    "name": "Sawtooth Stag Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "4.5 cm",
+      "몸무게": "3 g",
+      "수명": "1 years"
+    }
+  },
+  "0780": {
+    "name": "Cabbage White Butterfly",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Asia · Europe · North America",
+      "먹이": "Nectar feeder",
+      "몸길이": "5 cm",
+      "몸무게": "0.1 g"
+    }
+  },
+  "0781": {
+    "name": "Asian Swallowtail",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "9 cm",
+      "몸무게": "0.3 g"
+    }
+  },
+  "0782": {
+    "name": "Chinese Peacock Butterfly",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "10 cm",
+      "몸무게": "0.4 g"
+    }
+  },
+  "0783": {
+    "name": "Small Copper",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia · Europe · North America",
+      "먹이": "Nectar feeder",
+      "몸길이": "3 cm",
+      "몸무게": "0.05 g"
+    }
+  },
+  "0784": {
+    "name": "Eastern Pale Clouded Yellow",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia · Europe",
+      "먹이": "Nectar feeder",
+      "몸길이": "5 cm",
+      "몸무게": "0.1 g"
+    }
+  },
+  "0786": {
+    "name": "Asiatic Bluetail",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "3 cm"
+    }
+  },
+  "0787": {
+    "name": "Wandering Glider",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Near cities · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "5 cm"
+    }
+  },
+  "0788": {
+    "name": "Scorpionfly",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Scavenger",
+      "몸길이": "2 cm"
+    }
+  },
+  "0790": {
+    "name": "Rice Grasshopper",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "5 cm",
+      "수명": "1 years"
+    }
+  },
+  "0791": {
+    "name": "Band-winged Grasshopper",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "3.5 cm",
+      "수명": "1 years"
+    }
+  },
+  "0792": {
+    "name": "Pygmy Grasshopper",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "3 cm",
+      "수명": "1 years"
+    }
+  },
+  "0793": {
+    "name": "Luehdorf's Apollo",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "5 cm",
+      "수명": "1 years"
+    }
+  },
+  "0794": {
+    "name": "Robust Cicada",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Near cities · Rainforest · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "3.5 cm"
+    }
+  },
+  "0795": {
+    "name": "Large Brown Cicada",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Near cities · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "4 cm"
+    }
+  },
+  "0796": {
+    "name": "Black Cicada",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Near cities · Rainforest · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "6.5 cm"
+    }
+  },
+  "0797": {
+    "name": "Meadow Katydid",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "2.5 cm",
+      "수명": "1 years"
+    }
+  },
+  "0798": {
+    "name": "White-spotted Longhorn Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "3.5 cm",
+      "수명": "1–2 years"
+    }
+  },
+  "0799": {
+    "name": "Migratory Locust",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia · Africa",
+      "먹이": "Herbivore",
+      "몸길이": "6 cm",
+      "수명": "1 years"
+    }
+  },
+  "0800": {
+    "name": "Tiger Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · River & lake · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "2 cm",
+      "수명": "1–2 years"
+    }
+  },
+  "0802": {
+    "name": "Painted Lady",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Asia · Africa · Europe · North America",
+      "먹이": "Nectar feeder",
+      "몸길이": "5–7 cm",
+      "몸무게": "0.3 g"
+    }
+  },
+  "0803": {
+    "name": "Red Admiral",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Asia · Europe · North America",
+      "먹이": "Nectar feeder",
+      "몸길이": "5–6 cm",
+      "몸무게": "0.3 g"
+    }
+  },
+  "0804": {
+    "name": "European Peacock",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Europe · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "5–6 cm",
+      "몸무게": "0.3 g",
+      "수명": "1 years"
+    }
+  },
+  "0805": {
+    "name": "Asian Comma",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "4–5 cm",
+      "몸무게": "0.2 g"
+    }
+  },
+  "0806": {
+    "name": "Old World Swallowtail",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia · Europe · North America",
+      "먹이": "Nectar feeder",
+      "몸길이": "6–9 cm",
+      "몸무게": "0.5 g"
+    }
+  },
+  "0807": {
+    "name": "Common Bluebottle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Near cities · Asia · Oceania",
+      "먹이": "Nectar feeder",
+      "몸길이": "6–8 cm",
+      "몸무게": "0.4 g"
+    }
+  },
+  "0808": {
+    "name": "Great Mormon",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Near cities · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "10–15 cm",
+      "몸무게": "0.7 g"
+    }
+  },
+  "0809": {
+    "name": "Chestnut Tiger",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Rainforest · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "8–10 cm",
+      "몸무게": "0.5 g"
+    }
+  },
+  "0810": {
+    "name": "Silver-washed Fritillary",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Grassland · Europe · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "5–7 cm",
+      "몸무게": "0.3 g"
+    }
+  },
+  "0811": {
+    "name": "Indian Fritillary",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "6–8 cm",
+      "몸무게": "0.4 g"
+    }
+  },
+  "0812": {
+    "name": "Dryad",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Europe · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "5–7 cm",
+      "몸무게": "0.3 g"
+    }
+  },
+  "0813": {
+    "name": "Meadow Brown",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Europe · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "4–6 cm",
+      "몸무게": "0.1 g"
+    }
+  },
+  "0814": {
+    "name": "Diana Treebrown",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Grassland · Asia",
+      "먹이": "Scavenger",
+      "몸길이": "4.5–5.5 cm",
+      "몸무게": "0.1 g"
+    }
+  },
+  "0815": {
+    "name": "Gotama Bushbrown",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Rainforest · Asia",
+      "먹이": "Scavenger",
+      "몸길이": "4–5 cm",
+      "몸무게": "0.1 g"
+    }
+  },
+  "0816": {
+    "name": "Common Brimstone",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Grassland · Europe · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "5–6 cm",
+      "몸무게": "0.1 g",
+      "수명": "1 years"
+    }
+  },
+  "0817": {
+    "name": "Lesser Brimstone",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "4.5–5.5 cm",
+      "몸무게": "0.1 g",
+      "수명": "1 years"
+    }
+  },
+  "0818": {
+    "name": "Yellow Tip",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "4–5 cm",
+      "몸무게": "0.1 g"
+    }
+  },
+  "0819": {
+    "name": "Indian Cabbage White",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "4.5–5.5 cm",
+      "몸무게": "0.1 g"
+    }
+  },
+  "0820": {
+    "name": "Green-veined White",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Rainforest · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "5–6 cm",
+      "몸무게": "0.1 g"
+    }
+  },
+  "0821": {
+    "name": "Common Grass Yellow",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Rainforest · Asia · Africa · Oceania",
+      "먹이": "Nectar feeder",
+      "몸길이": "3.5–4.5 cm",
+      "몸무게": "0.1 g"
+    }
+  },
+  "0822": {
+    "name": "Common Five-ring",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Rainforest · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "3–4 cm",
+      "몸무게": "0.1 g"
+    }
+  },
+  "0823": {
+    "name": "Small Branded Swift",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "3–3.5 cm",
+      "몸무게": "0.1 g"
+    }
+  },
+  "0824": {
+    "name": "Large Skipper",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Rainforest · Europe · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "3–3.5 cm",
+      "몸무게": "0.1 g"
+    }
+  },
+  "0825": {
+    "name": "Great Purple Emperor",
+    "statusLabel": "Near Threatened",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Scavenger",
+      "몸길이": "8–10 cm",
+      "몸무게": "0.5 g"
+    }
+  },
+  "0826": {
+    "name": "Freyer's Purple Emperor",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Rainforest · Europe · Asia",
+      "먹이": "Scavenger",
+      "몸길이": "5.5–6.5 cm",
+      "몸무게": "0.3 g"
+    }
+  },
+  "0827": {
+    "name": "Red Ring Skirt",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Scavenger",
+      "몸길이": "6.5–8 cm",
+      "몸무게": "0.3 g"
+    }
+  },
+  "0828": {
+    "name": "False Heath Fritillary",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Europe · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "3.5–4.5 cm",
+      "몸무게": "0.1 g"
+    }
+  },
+  "0829": {
+    "name": "Convolvulus Hawk-moth",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Europe · Asia · Africa · Oceania",
+      "먹이": "Nectar feeder",
+      "몸길이": "8–12 cm",
+      "몸무게": "1–2 g"
+    }
+  },
+  "0830": {
+    "name": "Lesser Death's Head Hawkmoth",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "9–11 cm",
+      "몸무게": "1.5–2.5 g"
+    }
+  },
+  "0831": {
+    "name": "Hummingbird Hawk-moth",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Europe · Asia · Africa",
+      "먹이": "Nectar feeder",
+      "몸길이": "4–5 cm",
+      "몸무게": "0.3 g"
+    }
+  },
+  "0832": {
+    "name": "Elephant Hawk Moth",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Rainforest · Europe · Asia",
+      "먹이": "Nectar feeder",
+      "몸길이": "5–7 cm",
+      "몸무게": "0.5 g"
+    }
+  },
+  "0833": {
+    "name": "Chinese Oak Silkmoth",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "11–15 cm",
+      "몸무게": "3–5 g"
+    }
+  },
+  "0834": {
+    "name": "Silkworm Moth",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Near cities · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "4–5 cm",
+      "몸무게": "0.5–1 g"
+    }
+  },
+  "0835": {
+    "name": "Japanese Giant Silkmoth",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "11–15 cm",
+      "몸무게": "3–5 g"
+    }
+  },
+  "0836": {
+    "name": "Chinese Moon Moth",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "9–12 cm",
+      "몸무게": "2–4 g"
+    }
+  },
+  "0837": {
+    "name": "Gypsy Moth",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Near cities · Europe · Asia · North America",
+      "먹이": "Herbivore",
+      "몸길이": "3–4 cm",
+      "몸무게": "0.5–1 g"
+    }
+  },
+  "0838": {
+    "name": "Garden Tiger Moth",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Europe · Asia · North America",
+      "먹이": "Herbivore",
+      "몸길이": "45–65 m",
+      "몸무게": "0.5 g",
+      "수명": "1 years"
+    }
+  },
+  "0839": {
+    "name": "Crimson Speckled Moth",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Europe · Africa · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "29–42 m",
+      "몸무게": "0.2 g"
+    }
+  },
+  "0840": {
+    "name": "Owl Moth",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "90–120 m",
+      "몸무게": "1 g"
+    }
+  },
+  "0841": {
+    "name": "Oriental Moth",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "30–35 m",
+      "몸무게": "0.2 g",
+      "수명": "1 years"
+    }
+  },
+  "0842": {
+    "name": "Fall Webworm Moth",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Near cities · Grassland · North America · Asia · Europe",
+      "먹이": "Herbivore",
+      "몸길이": "25–35 m",
+      "몸무게": "0.2 g"
+    }
+  },
+  "0843": {
+    "name": "Relict Longhorn Beetle",
+    "statusLabel": "Endangered",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "65–110 m",
+      "몸무게": "8–15 g",
+      "수명": "3–5 years"
+    }
+  },
+  "0844": {
+    "name": "Mulberry Longhorn Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "34–46 m",
+      "몸무게": "2–3 g",
+      "수명": "2 years"
+    }
+  },
+  "0845": {
+    "name": "Rosalia Longicorn",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "15–30 m",
+      "몸무게": "0.5–1 g",
+      "수명": "2–3 years"
+    }
+  },
+  "0846": {
+    "name": "Hemp Longhorn Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "10–16 m",
+      "몸무게": "0.1–0.3 g",
+      "수명": "1 years"
+    }
+  },
+  "0847": {
+    "name": "Tuberculate Longhorn Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "19–27 m",
+      "몸무게": "0.5–1 g",
+      "수명": "1–2 years"
+    }
+  },
+  "0848": {
+    "name": "European Stag Beetle",
+    "statusLabel": "Near Threatened",
+    "info": {
+      "서식지": "Grassland · Europe",
+      "먹이": "Herbivore",
+      "몸길이": "35–75 m",
+      "몸무게": "2–6 g",
+      "수명": "3–6 years"
+    }
+  },
+  "0849": {
+    "name": "Giant Stag Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Grassland · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "40–90 m",
+      "몸무게": "3–8 g",
+      "수명": "1–2 years"
+    }
+  },
+  "0850": {
+    "name": "Astacoides Stag Beetle",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "Rainforest · Grassland · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "30–65 m",
+      "몸무게": "2–5 g",
+      "수명": "1–2 years"
+    }
+  },
+  "0851": {
+    "name": "Small Stag Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "17–46 m",
+      "몸무게": "0.5–2 g",
+      "수명": "1–2 years"
+    }
+  },
+  "0852": {
+    "name": "Caucasus Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "50–130 m",
+      "몸무게": "8–20 g",
+      "수명": "1.5–2 years"
+    }
+  },
+  "0853": {
+    "name": "Hercules Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · South America · North America",
+      "먹이": "Herbivore",
+      "몸길이": "170 m",
+      "몸무게": "10–30 g",
+      "수명": "1.5–2 years"
+    }
+  },
+  "0854": {
+    "name": "Elephant Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · South America · North America",
+      "먹이": "Herbivore",
+      "몸길이": "70–130 m",
+      "몸무게": "15–35 g",
+      "수명": "1.5–2 years"
+    }
+  },
+  "0855": {
+    "name": "Goliath Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Africa",
+      "먹이": "Herbivore",
+      "몸길이": "60–110 m",
+      "몸무게": "40–100 g",
+      "수명": "1 years"
+    }
+  },
+  "0856": {
+    "name": "Rose Chafer",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Europe · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "14–20 m",
+      "몸무게": "0.5–1 g",
+      "수명": "1–2 years"
+    }
+  },
+  "0857": {
+    "name": "White-spotted Flower Chafer",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "17–24 m",
+      "몸무게": "1–2 g",
+      "수명": "1 years"
+    }
+  },
+  "0859": {
+    "name": "Cupreous Chafer",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "15–22 m",
+      "몸무게": "0.5–1 g",
+      "수명": "1 years"
+    }
+  },
+  "0860": {
+    "name": "Common Cockchafer",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Europe",
+      "먹이": "Herbivore",
+      "몸길이": "25–35 m",
+      "몸무게": "1–1.5 g",
+      "수명": "3–4 years"
+    }
+  },
+  "0861": {
+    "name": "Korean Black Chafer",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "17–22 m",
+      "몸무게": "0.5–1 g",
+      "수명": "1–2 years"
+    }
+  },
+  "0862": {
+    "name": "Colorado Potato Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · North America · Europe · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "9–11 m",
+      "몸무게": "0.1–0.2 g",
+      "수명": "1 years"
+    }
+  },
+  "0863": {
+    "name": "Tansy Beetle",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "River & lake · Grassland · Europe · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "8–11 m",
+      "몸무게": "1 g",
+      "수명": "1 years"
+    }
+  },
+  "0864": {
+    "name": "Blue Alder Leaf Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "6–8 m",
+      "몸무게": "1 g",
+      "수명": "1 years"
+    }
+  },
+  "0867": {
+    "name": "22-spot Ladybird",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Near cities · Europe · Asia",
+      "먹이": "Scavenger",
+      "몸길이": "3–4 m",
+      "몸무게": "1 g",
+      "수명": "1 years"
+    }
+  },
+  "0868": {
+    "name": "Sap-feeding Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "10–14 m",
+      "몸무게": "1 g",
+      "수명": "1 years"
+    }
+  },
+  "0869": {
+    "name": "Mealworm Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Near cities · Asia · Europe · North America · Africa",
+      "먹이": "Omnivore",
+      "몸길이": "12–18 m",
+      "몸무게": "1 g",
+      "수명": "1 years"
+    }
+  },
+  "0870": {
+    "name": "Bombardier Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Grassland · Asia",
+      "먹이": "Carnivore",
+      "몸길이": "11–18 m",
+      "몸무게": "1 g",
+      "수명": "1 years"
+    }
+  },
+  "0871": {
+    "name": "Ground Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Carnivore",
+      "몸길이": "30–40 m",
+      "몸무게": "0.5 g",
+      "수명": "1–2 years"
+    }
+  },
+  "0872": {
+    "name": "Giant Water Scavenger Beetle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "33–40 m",
+      "몸무게": "1 g",
+      "수명": "1–2 years"
+    }
+  },
+  "0873": {
+    "name": "Chestnut Weevil",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "6–10 m",
+      "몸무게": "1 g",
+      "수명": "1 years"
+    }
+  },
+  "0874": {
+    "name": "Poplar-and-willow Borer",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · River & lake · Asia · Europe · North America",
+      "먹이": "Herbivore",
+      "몸길이": "8–10 m",
+      "몸무게": "1 g",
+      "수명": "1–2 years"
+    }
+  },
+  "0875": {
+    "name": "Giraffe Weevil",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "8–12 m",
+      "몸무게": "1 g",
+      "수명": "1 years"
+    }
+  },
+  "0877": {
+    "name": "Yellow-legged Hornet",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Near cities · Asia · Europe",
+      "먹이": "Carnivore",
+      "몸길이": "20–30 m",
+      "몸무게": "1 g",
+      "수명": "1 years"
+    }
+  },
+  "0878": {
+    "name": "Paper Wasp",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Near cities · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "18–26 m",
+      "몸무게": "1 g",
+      "수명": "1 years"
+    }
+  },
+  "0887": {
+    "name": "Yellow Waxtail",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Carnivore",
+      "몸길이": "35–45 m",
+      "몸무게": "1 g"
+    }
+  },
+  "0888": {
+    "name": "Scarlet Skimmer",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "4–5 cm",
+      "몸무게": "0.3 g"
+    }
+  },
+  "0889": {
+    "name": "Spotted Darter",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia · Europe",
+      "먹이": "Insectivore",
+      "몸길이": "3–4 cm",
+      "몸무게": "0.2 g"
+    }
+  },
+  "0890": {
+    "name": "Banded Darter",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia · Europe",
+      "먹이": "Insectivore",
+      "몸길이": "3–4 cm",
+      "몸무게": "0.2 g"
+    }
+  },
+  "0891": {
+    "name": "Asiatic Bluetail",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "3 cm",
+      "몸무게": "0.05 g"
+    }
+  },
+  "0892": {
+    "name": "Lesser Emperor",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia · Europe · Africa",
+      "먹이": "Insectivore",
+      "몸길이": "6–7 cm",
+      "몸무게": "1 g"
+    }
+  },
+  "0893": {
+    "name": "White-tailed Skimmer",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia · Europe",
+      "먹이": "Insectivore",
+      "몸길이": "5 cm",
+      "몸무게": "0.4 g"
+    }
+  },
+  "0894": {
+    "name": "Sedakov's Bush-cricket",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "3–4 cm",
+      "몸무게": "1 g"
+    }
+  },
+  "0895": {
+    "name": "Japanese Conehead Katydid",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "2–3 cm",
+      "몸무게": "0.5 g"
+    }
+  },
+  "0897": {
+    "name": "Japanese Rice Grasshopper",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · River & lake · Asia",
+      "먹이": "Herbivore",
+      "몸길이": "3 cm",
+      "몸무게": "0.5 g"
+    }
+  },
+  "0898": {
+    "name": "Marbled Grasshopper",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Asia · Oceania",
+      "먹이": "Herbivore",
+      "몸길이": "4–5 cm",
+      "몸무게": "1 g"
+    }
+  },
+  "0899": {
+    "name": "Common Backswimmer",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Europe · Asia",
+      "먹이": "Insectivore",
+      "몸길이": "1.5 cm",
+      "몸무게": "0.1 g",
+      "수명": "1 years"
+    }
+  },
+  "0900": {
+    "name": "European Striped Shield Bug",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Grassland · Europe",
+      "먹이": "Herbivore",
+      "몸길이": "1 cm",
+      "몸무게": "0.05 g",
+      "수명": "1 years"
+    }
+  },
+  "0905": {
+    "name": "Japanese Mantis Shrimp",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "12–18.5 cm",
+      "몸무게": "50 g",
+      "수명": "Avg. 6–10 years"
+    }
+  },
+  "0906": {
+    "name": "Swimming Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "15 cm",
+      "몸무게": "300 g",
+      "수명": "3 years"
+    }
+  },
+  "0907": {
+    "name": "Snow Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "70 cm",
+      "몸무게": "1 kg",
+      "수명": "15 years"
+    }
+  },
+  "0908": {
+    "name": "Red Snow Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "60 cm",
+      "몸무게": "800 g",
+      "수명": "15 years"
+    }
+  },
+  "0909": {
+    "name": "Hair Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "12 cm",
+      "몸무게": "500 g",
+      "수명": "10 years"
+    }
+  },
+  "0910": {
+    "name": "King Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Polar region · Asia · North America · Pacific Ocean · Arctic Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "150 cm",
+      "몸무게": "5 kg",
+      "수명": "20 years"
+    }
+  },
+  "0912": {
+    "name": "Chinese Mitten Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "7 cm",
+      "몸무게": "100 g",
+      "수명": "3 years"
+    }
+  },
+  "0914": {
+    "name": "Ghost Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "2.5 cm",
+      "몸무게": "15 g",
+      "수명": "3 years"
+    }
+  },
+  "0916": {
+    "name": "Mud Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Oceania · Indian Ocean · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "20 cm",
+      "몸무게": "1.5 kg",
+      "수명": "4 years"
+    }
+  },
+  "0917": {
+    "name": "Pea Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "1.5 cm",
+      "몸무게": "5 g",
+      "수명": "2 years"
+    }
+  },
+  "0919": {
+    "name": "Serrated Mud Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Oceania · Indian Ocean · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "22 cm",
+      "몸무게": "2 kg",
+      "수명": "4 years"
+    }
+  },
+  "0922": {
+    "name": "Red King Crab",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Polar region · Asia · Pacific Ocean · Arctic Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "180 cm",
+      "몸무게": "10 kg",
+      "수명": "20–30 years"
+    }
+  },
+  "0924": {
+    "name": "Sentinel Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "1 cm",
+      "몸무게": "0.005 kg",
+      "수명": "1–2 years"
+    }
+  },
+  "0925": {
+    "name": "Fleshy Prawn",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "20 cm",
+      "몸무게": "0.05 kg",
+      "수명": "1–2 years"
+    }
+  },
+  "0926": {
+    "name": "Kuruma Prawn",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean · Indian Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "20 cm",
+      "몸무게": "0.04 kg",
+      "수명": "1–2 years"
+    }
+  },
+  "0929": {
+    "name": "Dokdo Shrimp",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "15–20 cm",
+      "몸무게": "0.03 kg",
+      "수명": "5–6 years"
+    }
+  },
+  "0931": {
+    "name": "Sakura Shrimp",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "4 cm",
+      "몸무게": "0.002 kg",
+      "수명": "1 years"
+    }
+  },
+  "0935": {
+    "name": "Antarctic Krill",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Polar region · Southern Ocean · Pacific Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "6 cm",
+      "몸무게": "0.002 kg",
+      "수명": "5–6 years"
+    }
+  },
+  "0936": {
+    "name": "Oriental River Prawn",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "6–9 cm",
+      "몸무게": "10 g",
+      "수명": "1–2 years"
+    }
+  },
+  "0937": {
+    "name": "Korean Crayfish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "5–7 cm",
+      "몸무게": "15 g",
+      "수명": "3–5 years"
+    }
+  },
+  "0939": {
+    "name": "European Crayfish",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "River & lake · Europe",
+      "먹이": "Omnivore",
+      "몸길이": "10–16 cm",
+      "몸무게": "90 g",
+      "수명": "15–20 years"
+    }
+  },
+  "0940": {
+    "name": "Barnacle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Atlantic Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "1–2 cm",
+      "몸무게": "2 g",
+      "수명": "1–5 years"
+    }
+  },
+  "0941": {
+    "name": "Japanese Goose Barnacle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "3–5 cm",
+      "몸무게": "5 g",
+      "수명": "3–5 years"
+    }
+  },
+  "0942": {
+    "name": "Common Pill Bug",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Near cities · Europe · Asia",
+      "먹이": "Scavenger",
+      "몸길이": "1 cm",
+      "몸무게": "0.1 g",
+      "수명": "2–3 years"
+    }
+  },
+  "0943": {
+    "name": "Common Rough Woodlouse",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Near cities · Europe · Asia",
+      "먹이": "Scavenger",
+      "몸길이": "1–1.5 cm",
+      "몸무게": "0.1 g",
+      "수명": "2–3 years"
+    }
+  },
+  "0944": {
+    "name": "Sea Slater",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Scavenger",
+      "몸길이": "3–4 cm",
+      "몸무게": "1 g",
+      "수명": "1–2 years"
+    }
+  },
+  "0945": {
+    "name": "Water Flea",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia · Europe · North America",
+      "먹이": "Plankton feeder",
+      "몸길이": "0.2 cm"
+    }
+  },
+  "0946": {
+    "name": "Fairy Shrimp",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Plankton feeder",
+      "몸길이": "1.5–2 cm"
+    }
+  },
+  "0947": {
+    "name": "Tadpole Shrimp",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia · North America",
+      "먹이": "Omnivore",
+      "몸길이": "2–4 cm",
+      "몸무게": "1 g"
+    }
+  },
+  "0948": {
+    "name": "Scud",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Ocean · Asia · Europe · North America",
+      "먹이": "Scavenger",
+      "몸길이": "1–2 cm",
+      "수명": "1 years"
+    }
+  },
+  "0949": {
+    "name": "Mud Shrimp",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "7–10 cm",
+      "몸무게": "10 g",
+      "수명": "2–3 years"
+    }
+  },
+  "0950": {
+    "name": "Ghost Shrimp",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Asia · Pacific Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "5–8 cm",
+      "몸무게": "8 g",
+      "수명": "2–3 years"
+    }
+  },
+  "0951": {
+    "name": "Coconut Crab",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "Rainforest · Ocean · Pacific Ocean · Indian Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "90 cm",
+      "몸무게": "3–4 kg",
+      "수명": "40–60 years"
+    }
+  },
+  "0952": {
+    "name": "Japanese Spider Crab",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "3.7 m",
+      "몸무게": "15–19 kg",
+      "수명": "100 years"
+    }
+  },
+  "0953": {
+    "name": "Christmas Island Red Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Indian Ocean",
+      "먹이": "Herbivore",
+      "몸길이": "11 cm",
+      "몸무게": "0.5 kg",
+      "수명": "20–30 years"
+    }
+  },
+  "0954": {
+    "name": "Sally Lightfoot Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · Atlantic Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "8 cm",
+      "몸무게": "0.2 kg",
+      "수명": "10 years"
+    }
+  },
+  "0956": {
+    "name": "Dungeness Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · North America",
+      "먹이": "Carnivore",
+      "몸길이": "20 cm",
+      "몸무게": "1 kg",
+      "수명": "8–13 years"
+    }
+  },
+  "0957": {
+    "name": "Blue Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · River & lake · Atlantic Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "18 cm",
+      "몸무게": "0.2 kg",
+      "수명": "3–4 years"
+    }
+  },
+  "0958": {
+    "name": "European Green Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean · Europe",
+      "먹이": "Omnivore",
+      "몸길이": "6–8 cm",
+      "몸무게": "0.05 kg",
+      "수명": "4–6 years"
+    }
+  },
+  "0959": {
+    "name": "Poli's Stellate Barnacle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean · Europe",
+      "먹이": "Plankton feeder",
+      "몸길이": "1 cm",
+      "몸무게": "0.001 kg",
+      "수명": "1–3 years"
+    }
+  },
+  "0960": {
+    "name": "Goose Barnacle",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean · Pacific Ocean · Indian Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "5 cm",
+      "몸무게": "0.01 kg",
+      "수명": "1–3 years"
+    }
+  },
+  "0961": {
+    "name": "Giant Isopod",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean",
+      "먹이": "Scavenger",
+      "몸길이": "20–40 cm",
+      "몸무게": "1–1.7 kg"
+    }
+  },
+  "0962": {
+    "name": "Antarctic Krill",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Polar region · Southern Ocean",
+      "먹이": "Plankton feeder",
+      "몸길이": "6 cm",
+      "몸무게": "0.002 kg",
+      "수명": "5–6 years"
+    }
+  },
+  "0963": {
+    "name": "Brine Shrimp",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia · Africa · Europe · North America",
+      "먹이": "Plankton feeder",
+      "몸길이": "1 cm",
+      "몸무게": "0.01 g"
+    }
+  },
+  "0964": {
+    "name": "Water Flea",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia · Europe · North America",
+      "먹이": "Plankton feeder",
+      "몸길이": "2–5 m",
+      "몸무게": "0.001 g"
+    }
+  },
+  "0965": {
+    "name": "Longtail Tadpole Shrimp",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · North America · South America · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "3–5 cm",
+      "몸무게": "1 g"
+    }
+  },
+  "0966": {
+    "name": "Signal Crayfish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · North America · Europe",
+      "먹이": "Omnivore",
+      "몸길이": "6–16 cm",
+      "몸무게": "60–110 g",
+      "수명": "20 years"
+    }
+  },
+  "0968": {
+    "name": "Marbled Crayfish",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "River & lake · Europe · Africa",
+      "먹이": "Omnivore",
+      "몸길이": "4–10 cm",
+      "몸무게": "20–30 g",
+      "수명": "2–3 years"
+    }
+  },
+  "0969": {
+    "name": "Redclaw Crayfish",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Oceania",
+      "먹이": "Omnivore",
+      "몸길이": "20–25 cm",
+      "몸무게": "250–500 g",
+      "수명": "5 years"
+    }
+  },
+  "0970": {
+    "name": "Yabby",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Oceania",
+      "먹이": "Omnivore",
+      "몸길이": "10–20 cm",
+      "몸무게": "100–300 g",
+      "수명": "4–7 years"
+    }
+  },
+  "0971": {
+    "name": "Noble Crayfish",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "River & lake · Europe",
+      "먹이": "Omnivore",
+      "몸길이": "10–16 cm",
+      "몸무게": "100–150 g",
+      "수명": "20 years"
+    }
+  },
+  "0972": {
+    "name": "Marron",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "River & lake · Oceania",
+      "먹이": "Omnivore",
+      "몸길이": "20–38 cm",
+      "몸무게": "300–2000 g",
+      "수명": "10 years"
+    }
+  },
+  "0973": {
+    "name": "American Lobster",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean · North America",
+      "먹이": "Carnivore",
+      "몸길이": "25–50 cm",
+      "몸무게": "0.7–2 kg",
+      "수명": "50 years"
+    }
+  },
+  "0974": {
+    "name": "European Lobster",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean · Europe",
+      "먹이": "Carnivore",
+      "몸길이": "30–60 cm",
+      "몸무게": "1–3 kg",
+      "수명": "30–50 years"
+    }
+  },
+  "0975": {
+    "name": "Caribbean Spiny Lobster",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean · North America",
+      "먹이": "Carnivore",
+      "몸길이": "20–45 cm",
+      "몸무게": "1–3 kg",
+      "수명": "15–20 years"
+    }
+  },
+  "0976": {
+    "name": "Mediterranean Slipper Lobster",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean · Europe · Africa",
+      "먹이": "Carnivore",
+      "몸길이": "30–45 cm",
+      "몸무게": "1–2 kg",
+      "수명": "10–15 years"
+    }
+  },
+  "0979": {
+    "name": "Giant Tiger Prawn",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Indian Ocean · Pacific Ocean · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "20–33 cm",
+      "몸무게": "100–250 g",
+      "수명": "1–2 years"
+    }
+  },
+  "0980": {
+    "name": "Kuruma Prawn",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Indian Ocean · Pacific Ocean · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "15–25 cm",
+      "몸무게": "30–80 g",
+      "수명": "1–2 years"
+    }
+  },
+  "0985": {
+    "name": "Amano Shrimp",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "3–5 cm",
+      "몸무게": "0.2 g",
+      "수명": "2–3 years"
+    }
+  },
+  "0986": {
+    "name": "Harlequin Shrimp",
+    "statusLabel": "Data Deficient",
+    "info": {
+      "서식지": "Ocean · Indian Ocean · Pacific Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "3–5 cm",
+      "몸무게": "1–2 g",
+      "수명": "2–3 years"
+    }
+  },
+  "0988": {
+    "name": "Giant River Prawn",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · Asia",
+      "먹이": "Omnivore",
+      "몸길이": "30 cm",
+      "몸무게": "200–300 g",
+      "수명": "3–4 years"
+    }
+  },
+  "0989": {
+    "name": "Camel Shrimp",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Indian Ocean · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "3–4 cm",
+      "몸무게": "1–2 g",
+      "수명": "2–3 years"
+    }
+  },
+  "0991": {
+    "name": "Marble Shrimp",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Indian Ocean · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "5–7 cm",
+      "몸무게": "3–5 g",
+      "수명": "2–3 years"
+    }
+  },
+  "0992": {
+    "name": "Ghost Shrimp",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "River & lake · North America",
+      "먹이": "Omnivore",
+      "몸길이": "2–4 cm",
+      "몸무게": "1 g",
+      "수명": "1 years"
+    }
+  },
+  "0993": {
+    "name": "Peppermint Shrimp",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Atlantic Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "3–5 cm",
+      "몸무게": "1–2 g",
+      "수명": "1–2 years"
+    }
+  },
+  "0994": {
+    "name": "Red Rock Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Ocean · Pacific Ocean · North America",
+      "먹이": "Carnivore",
+      "몸길이": "15–20 cm",
+      "몸무게": "0.5–0.9 kg",
+      "수명": "5–6 years"
+    }
+  },
+  "0996": {
+    "name": "Tasmanian Giant Crab",
+    "statusLabel": "Vulnerable",
+    "info": {
+      "서식지": "Ocean · Oceania · Pacific Ocean · Indian Ocean",
+      "먹이": "Carnivore",
+      "몸길이": "40–46 cm",
+      "몸무게": "10–13 kg",
+      "수명": "30 years"
+    }
+  },
+  "0997": {
+    "name": "Blue Land Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Near cities · North America · Atlantic Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "10–13 cm",
+      "몸무게": "0.3–0.5 kg",
+      "수명": "10–13 years"
+    }
+  },
+  "0998": {
+    "name": "Rainbow Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Near cities · Africa · Atlantic Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "8–13 cm",
+      "몸무게": "0.2–0.4 kg",
+      "수명": "8–10 years"
+    }
+  },
+  "0999": {
+    "name": "Halloween Moon Crab",
+    "statusLabel": "Least Concern",
+    "info": {
+      "서식지": "Rainforest · Near cities · North America · Pacific Ocean",
+      "먹이": "Omnivore",
+      "몸길이": "5–8 cm",
+      "몸무게": "100–200 g",
+      "수명": "5–8 years"
     }
   }
 }
