@@ -236,7 +236,14 @@
       "몸길이": "15–20 cm",
       "몸무게": "50–80 g",
       "수명": "3–4 years"
-    }
+    },
+    "nickname": "Mantis of the muddy seabed",
+    "desc": "This mantis shrimp lives in the Mediterranean and the Atlantic. It digs a burrow in the muddy seabed and uses its mantis-like front legs to snatch small fish and shrimp. In Europe, people enjoy eating it as seafood.",
+    "facts": [
+      "It digs a U-shaped burrow in the muddy seabed.",
+      "It snatches prey in a flash with its mantis-like front legs.",
+      "It is a popular seafood in the Mediterranean region."
+    ]
   },
   "1022": {
     "name": "Horned Ghost Crab",
@@ -247,7 +254,14 @@
       "몸길이": "5–8 cm",
       "몸무게": "20–40 g",
       "수명": "3 years"
-    }
+    },
+    "nickname": "Ghost of the night sands",
+    "desc": "This crab has horn-like bumps above its eyes. Its sandy colour makes it almost invisible in daylight, which is why it's called a ghost crab. It dashes sideways at high speed and cleans the beach at night.",
+    "facts": [
+      "Sharp, horn-like bumps rise above its eyes.",
+      "It is one of the fastest crabs, dashing tens of centimetres per second.",
+      "It is a hardworking cleaner that tidies the beach at night."
+    ]
   },
   "1023": {
     "name": "Atlantic Ghost Crab",
@@ -258,7 +272,14 @@
       "몸길이": "3–5 cm",
       "몸무게": "10–30 g",
       "수명": "3 years"
-    }
+    },
+    "nickname": "Sprinter of the Atlantic sands",
+    "desc": "This pale, sand-coloured crab lives along Atlantic beaches. It digs a deep burrow in the sand and comes out at night to search for food. If danger appears, it vanishes into its burrow in the blink of an eye.",
+    "facts": [
+      "Its colour matches the sand so closely that it is almost invisible by day.",
+      "It digs a burrow in the sand more than a metre deep.",
+      "It signals to others by bubbling sounds and rubbing its legs together."
+    ]
   },
   "1024": {
     "name": "Atlantic Sand Fiddler Crab",
@@ -269,7 +290,14 @@
       "몸길이": "2–2.5 cm",
       "몸무게": "3–6 g",
       "수명": "1.5–2 years"
-    }
+    },
+    "nickname": "The one big-claw waver",
+    "desc": "This funny crab has males with one huge claw and one tiny claw. It waves its big claw to call a mate and chase off rival males. It eats mud from the flats, filtering out only the tiny bits of food.",
+    "facts": [
+      "In males, one claw grows as large as its entire body.",
+      "It waves its big claw like playing a violin to call a mate.",
+      "It scoops mud into its mouth, filters out the food, and spits out little round balls of mud."
+    ]
   },
   "1025": {
     "name": "Fiddler Crab",
@@ -280,7 +308,14 @@
       "몸길이": "2–3 cm",
       "몸무게": "4–8 g",
       "수명": "2 years"
-    }
+    },
+    "nickname": "The waving crab of the mudflats",
+    "desc": "This fiddler crab lives on mudflats across the Indian and Pacific Oceans. Males wave their big claw up and down to call a mate and show off their territory. It survives by filtering tiny food out of the mudflat's soil.",
+    "facts": [
+      "When a male waves its big claw, it looks just like waving hello.",
+      "It digs a burrow in the mud and hides inside when the tide comes in.",
+      "By turning over the mud, it helps keep the mudflat healthy."
+    ]
   },
   "1026": {
     "name": "Caribbean Hermit Crab",
@@ -291,7 +326,14 @@
       "몸길이": "2–4 cm",
       "몸무게": "30–80 g",
       "수명": "20–30 years"
-    }
+    },
+    "nickname": "Landlord of an empty shell",
+    "desc": "This land hermit crab lives in the Caribbean. It carries an empty shell on its back to protect its soft belly. As it grows, it moves into a bigger shell. It is also popular as a pet.",
+    "facts": [
+      "It uses an empty shell as its home, carrying it on its back.",
+      "As its body grows, it finds and moves into a bigger shell.",
+      "It lives on land rather than in water, but its gills must stay damp for it to breathe."
+    ]
   },
   "1027": {
     "name": "Strawberry Hermit Crab",
@@ -302,7 +344,14 @@
       "몸길이": "2–5 cm",
       "몸무게": "40–100 g",
       "수명": "20–30 years"
-    }
+    },
+    "nickname": "Red as a strawberry",
+    "desc": "This pretty land hermit crab is strawberry-red all over with white spots. It lives on island shores across the Indian and Pacific Oceans. It makes its home in an empty shell and comes out at night to look for food.",
+    "facts": [
+      "Its strawberry-red body is dotted with small white spots.",
+      "It needs to drink both salt water and fresh water to stay healthy.",
+      "As it grows larger, it moves into a much bigger shell."
+    ]
   },
   "1028": {
     "name": "Ecuadorian Hermit Crab",
@@ -313,7 +362,14 @@
       "몸길이": "1–3 cm",
       "몸무게": "10–40 g",
       "수명": "10–20 years"
-    }
+    },
+    "nickname": "The small, busy hermit",
+    "desc": "This small land hermit crab lives along the Pacific coasts of Central and South America. Being one of the smallest hermit crabs, it is a popular pet. It stays busy and active, cleaning up scraps along the shore.",
+    "facts": [
+      "It is one of the smallest hermit crabs kept as pets.",
+      "It is very active and often moves around even during the day.",
+      "It eats dead matter along the shore, helping keep the beach clean."
+    ]
   },
   "1029": {
     "name": "White-spotted Hermit Crab",
@@ -324,7 +380,14 @@
       "몸길이": "10–15 cm",
       "몸무게": "150–300 g",
       "수명": "10–15 years"
-    }
+    },
+    "nickname": "Red claws dotted white",
+    "desc": "This large marine hermit crab has a red body dotted with white spots. It lives on coral reefs across the Indian and Pacific Oceans. It makes its home in a large shell and comes out at night to search for food.",
+    "facts": [
+      "Its red body with white spots makes it easy to spot.",
+      "It is one of the largest hermit crabs in the Indian and Pacific Oceans.",
+      "Active at night, it eats dead matter and helps clean the sea."
+    ]
   },
   "1030": {
     "name": "Anemone Hermit Crab",
@@ -335,7 +398,14 @@
       "몸길이": "5–10 cm",
       "몸무게": "60–150 g",
       "수명": "10 years"
-    }
+    },
+    "nickname": "The hermit that carries an anemone",
+    "desc": "This clever hermit crab carries a sea anemone on top of its shell. The anemone's stinging tentacles keep enemies away, while the anemone gets to share the crab's leftover food. They are true partners who help each other.",
+    "facts": [
+      "It carries an anemone on its shell like a living shield.",
+      "When it moves to a new shell, it carefully carries the anemone along too.",
+      "It and the anemone are good partners who help each other survive."
+    ]
   },
   "1031": {
     "name": "Blue-legged Hermit Crab",
@@ -346,7 +416,14 @@
       "몸길이": "1–2 cm",
       "몸무게": "3–8 g",
       "수명": "2–4 years"
-    }
+    },
+    "nickname": "The tiny blue-legged cleaner",
+    "desc": "This tiny, colourful marine hermit crab has blue legs with red joints. It lives on Caribbean coral reefs. It is a popular aquarium cleaner because it happily eats algae.",
+    "facts": [
+      "Its blue legs with red joints make it very colourful.",
+      "As an aquarium cleaner, it busily eats up algae.",
+      "Being very small, it uses tiny shells as its home."
+    ]
   },
   "1032": {
     "name": "Giant Hermit Crab",
@@ -357,7 +434,14 @@
       "몸길이": "10–30 cm",
       "몸무게": "200–500 g",
       "수명": "10–15 years"
-    }
+    },
+    "nickname": "The biggest marine hermit",
+    "desc": "This very large marine hermit crab lives in the western Atlantic. It makes its home in a big shell, especially favouring queen conch shells. It can even crack open clams with its powerful claws.",
+    "facts": [
+      "It is the largest hermit crab in the Atlantic, growing up to 30 centimetres.",
+      "It likes to use large queen conch shells as its home.",
+      "It cracks open clam shells with its strong claws to eat what's inside."
+    ]
   },
   "1033": {
     "name": "Red King Crab",
@@ -368,7 +452,14 @@
       "몸길이": "1.5 m",
       "몸무게": "5–10 kg",
       "수명": "20–30 years"
-    }
+    },
+    "nickname": "King of the cold seas",
+    "desc": "With its legs spread wide, this is one of the largest crab-like crustaceans of all. It lives in the cold waters of the North Pacific. Its long legs are packed with meat, making it one of people's favourite crabs. Although it's called a crab, it is actually more closely related to hermit crabs.",
+    "facts": [
+      "With its legs spread out, it can measure more than 1.5 metres across.",
+      "Though called a crab, it is actually a closer relative of hermit crabs.",
+      "Young king crabs huddle together in a ball to avoid danger."
+    ]
   },
   "1034": {
     "name": "Blue King Crab",
@@ -379,7 +470,14 @@
       "몸길이": "1.4 m",
       "몸무게": "4–8 kg",
       "수명": "20–25 years"
-    }
+    },
+    "nickname": "The blue-tinted northern king",
+    "desc": "This king crab has a bluish tint to its body. A close relative of the red king crab, it lives in even colder waters further north. Its large, meaty legs make it a prized seafood.",
+    "facts": [
+      "True to its name, its shell has a slight blue tint.",
+      "It lives in colder waters further north than the red king crab.",
+      "It is found in large numbers only around a few islands in the Bering Sea."
+    ]
   },
   "1035": {
     "name": "Golden King Crab",
@@ -390,7 +488,14 @@
       "몸길이": "1 m",
       "몸무게": "2–4 kg",
       "수명": "20 years"
-    }
+    },
+    "nickname": "The golden king of the deep",
+    "desc": "This king crab shines gold all over its body. It lives in deeper waters than other king crabs. Though a bit smaller, it is a popular seafood prized for its sweet taste.",
+    "facts": [
+      "Its name comes from its body shining a golden colour.",
+      "It lives much deeper in the sea than other king crabs.",
+      "Its shell is covered in sharp, pointed spines."
+    ]
   },
   "1036": {
     "name": "Snow Crab",
@@ -401,7 +506,14 @@
       "몸길이": "10–15 cm",
       "몸무게": "0.5–1.5 kg",
       "수명": "15–20 years"
-    }
+    },
+    "nickname": "The cold sea's long-legged crab",
+    "desc": "This crab from cold seas has long, slender legs. It is called snow crab because its meat is as white as snow. It lives on the seabed of the cold North Pacific and North Atlantic and is a popular seafood.",
+    "facts": [
+      "Living only in cold seawater, it has meat as white as snow.",
+      "With its long, thin legs, it belongs to the group of long-legged crabs.",
+      "After hatching, the young drift through the water as they grow."
+    ]
   },
   "1037": {
     "name": "Blue Swimmer Crab",
@@ -412,7 +524,14 @@
       "몸길이": "15–20 cm",
       "몸무게": "0.3–0.8 kg",
       "수명": "3–4 years"
-    }
+    },
+    "nickname": "The blue swimming crab",
+    "desc": "This crab has paddle-shaped back legs that make it a strong swimmer. Males are blue and females are brown. It lives in the warm waters of the Indian and Pacific Oceans and is a favourite food for people.",
+    "facts": [
+      "Its paddle-shaped back legs let it swim well through the sea.",
+      "Males are blue and females are brown, so you can tell them apart by colour.",
+      "It hides in the sand by day and comes out to hunt at night."
+    ]
   },
   "1038": {
     "name": "Mud Crab",
@@ -423,7 +542,14 @@
       "몸길이": "15–25 cm",
       "몸무게": "2–3 kg",
       "수명": "3–4 years"
-    }
+    },
+    "nickname": "The mudflat's mighty claws",
+    "desc": "This large crab lives in warm coastal mudflats and mangrove forests. Its claws are so strong they can crack open shells. It is also well known as a delicious crab enjoyed by people.",
+    "facts": [
+      "Its claws are so powerful they can crush even hard shells.",
+      "It moves between mangrove forests and mudflats.",
+      "It is a popular edible crab across Asia."
+    ]
   },
   "1039": {
     "name": "Calico Crab",
@@ -434,7 +560,14 @@
       "몸길이": "5–7 cm",
       "몸무게": "60–100 g",
       "수명": "3–4 years"
-    }
+    },
+    "nickname": "The calico-patterned crab",
+    "desc": "This pretty crab has a shell covered in colourful red spots. It lives buried in the sand. It can be found on the warm sandy seabeds of the Atlantic.",
+    "facts": [
+      "The red spots on its shell are strikingly colourful.",
+      "It is skilled at digging into sand to hide its body.",
+      "It sometimes carries a sea anemone on its back."
+    ]
   },
   "1040": {
     "name": "Yellowline Arrow Crab",
@@ -445,7 +578,14 @@
       "몸길이": "8–10 cm",
       "몸무게": "10–20 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "The spider-legged crab",
+    "desc": "This crab has a small body but very long, thin legs that make it look like a spider. It's called an arrow crab because the front of its head comes to a sharp, arrowhead point. It tiptoes gracefully among the coral reefs.",
+    "facts": [
+      "Its legs are extremely long and thin, just like a spider's.",
+      "The front of its head is shaped like a sharp arrowhead.",
+      "It becomes more active at night."
+    ]
   },
   "1041": {
     "name": "Umbrella Crab",
@@ -456,7 +596,14 @@
       "몸길이": "4–6 cm",
       "몸무게": "40–80 g",
       "수명": "4–6 years"
-    }
+    },
+    "nickname": "The umbrella-shelled crab",
+    "desc": "This curious crab has a wide shell that spreads out like an umbrella, covering its legs. Seen from above, its legs are almost invisible. It lives on the rocky seabeds of the cold North Pacific.",
+    "facts": [
+      "Its wide shell covers its legs like an umbrella.",
+      "Seen from above, its legs are barely visible.",
+      "Its colour matches the rocks, helping it hide well."
+    ]
   },
   "1042": {
     "name": "Graceful Decorator Crab",
@@ -467,7 +614,14 @@
       "몸길이": "3–5 cm",
       "몸무게": "20–40 g",
       "수명": "3–5 years"
-    }
+    },
+    "nickname": "The crab that decorates itself",
+    "desc": "This crab disguises itself by attaching seaweed and tiny creatures to its body. When it stays still, it's hard to tell it's even a crab. It lives in the cold waters of the North Pacific.",
+    "facts": [
+      "It disguises itself by attaching seaweed to its body.",
+      "When it holds still, it's hard to recognise it as a crab at all.",
+      "Its slender, long legs give it a graceful look."
+    ]
   },
   "1043": {
     "name": "Porcelain Crab",
@@ -478,7 +632,14 @@
       "몸길이": "1.5–2 cm",
       "몸무게": "2–5 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "Smooth as porcelain",
+    "desc": "This small crab has a smooth, flat body like porcelain. It's so easily startled that it will snap off a leg and flee if frightened. It lives in groups among the rocky crevices near New Zealand.",
+    "facts": [
+      "Its body is as smooth as porcelain.",
+      "It uses fan-like mouthparts to filter food from the water.",
+      "When startled, it will shed a leg on its own and flee."
+    ]
   },
   "1044": {
     "name": "Common Hermit Crab",
@@ -489,7 +650,14 @@
       "몸길이": "3–10 cm",
       "몸무게": "10–30 g",
       "수명": "4 years"
-    }
+    },
+    "nickname": "The whelk-shell dweller",
+    "desc": "This hermit crab carries an empty whelk shell on its back like a house to protect its soft belly. As it grows bigger, it moves into a larger shell. It is very common along European shores.",
+    "facts": [
+      "It carries an empty whelk shell as its home.",
+      "As it grows, it moves into a bigger shell.",
+      "It sometimes carries a sea anemone on its shell and lives alongside it."
+    ]
   },
   "1045": {
     "name": "Porcelain Anemone Crab",
@@ -500,7 +668,14 @@
       "몸길이": "1.5–2.5 cm",
       "몸무게": "3–6 g",
       "수명": "2–4 years"
-    }
+    },
+    "nickname": "The tiny crab in the anemone",
+    "desc": "This small, pretty crab lives hidden among the tentacles of a sea anemone. Its body has a special way of avoiding the anemone's stinging cells. It uses fan-like mouthparts to filter food from the water.",
+    "facts": [
+      "It lives hidden among the tentacles of a sea anemone.",
+      "It is not harmed by the anemone's sting.",
+      "It filters food from the water using fan-like mouthparts."
+    ]
   },
   "1046": {
     "name": "Mud Shrimp",
@@ -511,7 +686,14 @@
       "몸길이": "3–5 cm",
       "몸무게": "1–3 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "The burrowing shrimp of the mudflats",
+    "desc": "This shrimp digs a deep burrow in the mud of the flats and lives inside it. Because it spends all day underground digging, it is rarely seen. Its body is soft and see-through.",
+    "facts": [
+      "It digs a deep burrow in the mud and lives inside.",
+      "Its body is soft and semi-transparent.",
+      "Because it lives underground, it is hard to spot."
+    ]
   },
   "1047": {
     "name": "Porcupine Crab",
@@ -522,7 +704,14 @@
       "몸길이": "30–50 cm",
       "몸무게": "1–2 kg",
       "수명": "10 years"
-    }
+    },
+    "nickname": "Covered in spines",
+    "desc": "This large crab has sharp spines covering its body and legs. It lives on the seabed of very deep, cold waters. Thanks to its spines, predators think twice before attacking.",
+    "facts": [
+      "Its whole body is covered in sharp spines.",
+      "It lives deep on the ocean floor.",
+      "Its spines act as a shield to protect its body."
+    ]
   },
   "1048": {
     "name": "Red Reef Lobster",
@@ -533,7 +722,14 @@
       "몸길이": "10–13 cm",
       "몸무게": "50–120 g",
       "수명": "5–7 years"
-    }
+    },
+    "nickname": "The bright red reef lobster",
+    "desc": "This small lobster is bright red all over with white spots. By day it hides in a coral reef crevice, coming out at night to search for food. It's also a popular choice for aquariums.",
+    "facts": [
+      "Its whole body is bright red with white spots.",
+      "It hides in its burrow by day and is active at night.",
+      "It acts as a cleaner on the coral reef."
+    ]
   },
   "1049": {
     "name": "Japanese Fan Lobster",
@@ -544,7 +740,14 @@
       "몸길이": "15–20 cm",
       "몸무게": "150–250 g",
       "수명": "5–7 years"
-    }
+    },
+    "nickname": "The flat fan-shaped lobster",
+    "desc": "This lobster has a flat, broad body shaped like a fan. Instead of claws, it uses its wide body to bury itself in the sand. It's a tasty lobster caught in the seas near Japan.",
+    "facts": [
+      "Its flat body is shaped like a fan.",
+      "It is skilled at burying itself in the sand.",
+      "It has no claws, but instead has a broad, flat body."
+    ]
   },
   "1050": {
     "name": "Flathead Lobster",
@@ -555,7 +758,14 @@
       "몸길이": "15–25 cm",
       "몸무게": "150–300 g",
       "수명": "5–8 years"
-    }
+    },
+    "nickname": "The flat-headed lobster",
+    "desc": "This lobster has a flat, fan-shaped head and body. It glides across the sandy seabed as it moves. It lives in the warm waters of the Indian and Pacific Oceans and is caught for food.",
+    "facts": [
+      "Its head and body are flat and fan-shaped.",
+      "It glides smoothly across the sandy seabed.",
+      "It is a lobster enjoyed as food across Asia."
+    ]
   },
   "1051": {
     "name": "Giant Pacific Octopus",
@@ -566,7 +776,14 @@
       "몸길이": "3–5 m",
       "몸무게": "15 kg",
       "수명": "Avg. 1–3 years"
-    }
+    },
+    "nickname": "Our octopus friend",
+    "desc": "The octopus is a remarkable animal that lives in the sea. It has eight arms and can squirt ink to escape from predators. It can even change colour to hide. It's truly a clever creature!",
+    "facts": [
+      "The octopus has three hearts.",
+      "It can freely change both the colour and texture of its skin.",
+      "It can taste things using its suckers."
+    ]
   },
   "1052": {
     "name": "Squid",
@@ -577,7 +794,14 @@
       "몸길이": "20–30 cm",
       "몸무게": "1 kg",
       "수명": "Avg. 1–2 years"
-    }
+    },
+    "nickname": "The sea's sparkler",
+    "desc": "The squid is a fascinating creature of the sea. It can change the colour of its body and even glow with light. After mating, a squid's life comes to an end.",
+    "facts": [
+      "A squid's life ends after it mates.",
+      "It can change the colour of its body.",
+      "It has the ability to glow with light."
+    ]
   },
   "1053": {
     "name": "Horned Turban Snail",
@@ -588,7 +812,14 @@
       "몸길이": "8–12 cm",
       "몸무게": "200 g",
       "수명": "Avg. 5–10 years"
-    }
+    },
+    "nickname": "The sea's turban shell",
+    "desc": "The turban snail is a sea creature that looks a bit like a clam. Its shell is thick and hard. It hides during the day and comes out at night to eat seaweed. If you ever eat one, you need to be careful with its shell.",
+    "facts": [
+      "Its shell is made of thick, hard calcium.",
+      "It hides in the shade of rocks by day and becomes active at night.",
+      "Its salivary glands contain a toxin, so care must be taken."
+    ]
   },
   "1054": {
     "name": "Abalone",
@@ -599,7 +830,14 @@
       "몸길이": "10–20 cm",
       "몸무게": "200 g",
       "수명": "Avg. 10–20 years"
-    }
+    },
+    "nickname": "The ear-shaped shell",
+    "desc": "The abalone is an interesting sea creature. Its shell is shaped like an ear, which is why it is sometimes called an ear-shell. It clings to rocks and lives on seaweed. On Jeju Island, abalone is used to make many delicious dishes.",
+    "facts": [
+      "It is also called an ear-shell.",
+      "It clings to rocks and grazes on seaweed.",
+      "Jeju Island's abalone is listed in the Ark of Taste."
+    ]
   },
   "1055": {
     "name": "Land Snail",
@@ -610,7 +848,14 @@
       "몸길이": "2–4 cm",
       "몸무게": "10 g",
       "수명": "Avg. 1–7 years"
-    }
+    },
+    "nickname": "Our slow friend",
+    "desc": "The snail is a slow-moving animal with a small shell. It lives in meadows, eating plants and leaving a trail of slime as it crawls. It has two pairs of tentacles.",
+    "facts": [
+      "It releases slime to reduce friction as it moves.",
+      "It has two pairs of tentacles, with eyes at the tips of the upper pair.",
+      "It has a highly developed nervous system, which lets it learn and remember."
+    ]
   },
   "1056": {
     "name": "Scallop",
@@ -621,7 +866,14 @@
       "몸길이": "10–18 cm",
       "몸무게": "150 g",
       "수명": "Avg. 3–5 years"
-    }
+    },
+    "nickname": "The fan-shaped shell",
+    "desc": "The scallop is a sea clam with a fan-shaped shell. It can dart away quickly by opening and closing its shell. It watches the world around it with many tiny eyes.",
+    "facts": [
+      "By opening and closing its shell to jet water backward, it can move quickly.",
+      "It has many tiny eyes along the inner edge of its shell.",
+      "Its shell has long been used as a symbol for pilgrims."
+    ]
   },
   "1057": {
     "name": "Common Cuttlefish",
@@ -632,7 +884,14 @@
       "몸길이": "15–25 cm",
       "몸무게": "1–3 kg",
       "수명": "Avg. 1 years"
-    }
+    },
+    "nickname": "The sea's magician",
+    "desc": "The cuttlefish is a remarkable sea animal. It can change the colour of its body, making it a master at hide-and-seek. With eight arms, it easily catches crabs and fish. The cuttlefish is like an amazing magician!",
+    "facts": [
+      "It has an unmatched ability to camouflage, changing its colour and pattern to match its surroundings.",
+      "It hunts a wide range of sea creatures, even venomous blue-ringed octopuses and baby pufferfish.",
+      "Its bone is rich in calcium and is often given to pet birds."
+    ]
   },
   "1058": {
     "name": "Sea Slug",
@@ -643,7 +902,14 @@
       "몸길이": "2–15 cm",
       "몸무게": "50 g",
       "수명": "1 year"
-    }
+    },
+    "nickname": "The sea's little cleaner",
+    "desc": "The sea slug is a small, snail-like creature that lives in the sea. Its bright, colourful body warns other animals not to eat it. It wanders across the seafloor, feeding on shellfish or seaweed.",
+    "facts": [
+      "Its bright colours warn predators that it may be toxic.",
+      "It is a hermaphrodite, but it does not fertilise itself.",
+      "Some sea slugs store toxins from their prey inside their own bodies for defence."
+    ]
   },
   "1059": {
     "name": "Chambered Nautilus",
@@ -654,7 +920,14 @@
       "몸길이": "16–26 cm",
       "몸무게": "0.5 kg",
       "수명": "Avg. 15–20 years"
-    }
+    },
+    "nickname": "Explorer of the deep sea",
+    "desc": "The chambered nautilus is an ancient sea creature. Its shell is divided into many chambers, which is why it's sometimes called the 'chambered shell'. It lives in the deep sea and is famous for its striking appearance.",
+    "facts": [
+      "It is often called a living fossil.",
+      "It lives in the deep sea, mostly in the Pacific region.",
+      "It is a distant relative of squid and octopuses."
+    ]
   },
   "1060": {
     "name": "Blue-ringed Octopus",
@@ -665,7 +938,14 @@
       "몸길이": "4–5 cm",
       "몸무게": "30 g",
       "수명": "Avg. 2–3 years"
-    }
+    },
+    "nickname": "Small, beautiful, and deadly",
+    "desc": "The blue-ringed octopus is small with beautiful patterns. But you should never touch one — its venom can be dangerous. It usually lives alone in the sea, eating small fish and crabs.",
+    "facts": [
+      "Its venom is extremely strong and can be deadly to humans.",
+      "When it feels threatened, its skin colour changes suddenly as a warning.",
+      "Its body is so flexible that it can squeeze into tiny cracks to hide."
+    ]
   },
   "1061": {
     "name": "Pen Shell",
@@ -676,7 +956,14 @@
       "몸길이": "20–30 cm",
       "몸무게": "100 g",
       "수명": "Avg. 5–10 years"
-    }
+    },
+    "nickname": "Giant of the mudflats",
+    "desc": "The pen shell is a large clam that lives in the sea. Its shell grows more than 20 centimetres long, and it has a tasty part that people enjoy eating. It lives in the sea, feeding and growing on tiny plankton.",
+    "facts": [
+      "Its shell grows to more than 20 centimetres long.",
+      "It has a tasty part called the adductor muscle, prized as food.",
+      "It is widely farmed for food."
+    ]
   },
   "1062": {
     "name": "Sea Spider",
@@ -686,7 +973,14 @@
       "먹이": "Carnivore",
       "몸길이": "1–3 cm",
       "몸무게": "100 g"
-    }
+    },
+    "nickname": "The sea's spider",
+    "desc": "The sea spider is a small sea creature with long legs. It mostly survives by feeding on the body fluids of other sea animals. There are about 1,000 known species of sea spiders around the world.",
+    "facts": [
+      "It walks slowly through the water on its long legs.",
+      "It mainly feeds by sucking the body fluids of other sea animals.",
+      "About 1,000 species are known worldwide."
+    ]
   },
   "1063": {
     "name": "Bigfin Reef Squid",
@@ -697,7 +991,14 @@
       "몸길이": "30–40 cm",
       "몸무게": "1.5 kg",
       "수명": "1 years"
-    }
+    },
+    "nickname": "The wide-finned reef squid",
+    "desc": "This squid has large fins along both sides of its body, making it look a bit like a cuttlefish. It can change its colour and pattern in an instant. It hunts small fish and shrimp in shallow waters.",
+    "facts": [
+      "It is known for the wide fins running along both sides of its body.",
+      "It changes its colour and pattern extremely quickly.",
+      "Its entire life cycle lasts only about a year."
+    ]
   },
   "1064": {
     "name": "Spear Squid",
@@ -708,7 +1009,14 @@
       "몸길이": "30–40 cm",
       "몸무게": "0.4 kg",
       "수명": "1 years"
-    }
+    },
+    "nickname": "Fast as an arrow",
+    "desc": "This squid has a long, pointed body shaped like an arrow. It swims very fast to catch small fish. It tends to gather around lights at night.",
+    "facts": [
+      "Its body is pointed like an arrow.",
+      "It gathers around lights at night.",
+      "It swims together in groups."
+    ]
   },
   "1065": {
     "name": "Swordtip Squid",
@@ -719,7 +1027,14 @@
       "몸길이": "30 cm",
       "몸무게": "0.3 kg",
       "수명": "1 years"
-    }
+    },
+    "nickname": "Sharp as a spear tip",
+    "desc": "This squid has a tail that comes to a sharp, spear-like point. Its body is semi-transparent, so you can faintly see through it. It becomes active at night, hunting small fish.",
+    "facts": [
+      "The tip of its tail is as sharp as a spear.",
+      "Its body is semi-transparent.",
+      "It is more active at night."
+    ]
   },
   "1066": {
     "name": "White Squid",
@@ -730,7 +1045,14 @@
       "몸길이": "20 cm",
       "몸무게": "0.2 kg",
       "수명": "1 years"
-    }
+    },
+    "nickname": "The pale little squid",
+    "desc": "This small squid has a pale, almost see-through body. Like other squid, it catches food with its arms. When it senses danger, it squirts ink and flees.",
+    "facts": [
+      "Its body looks pale and see-through.",
+      "It squirts ink to escape.",
+      "It catches food with its arms."
+    ]
   },
   "1067": {
     "name": "Firefly Squid",
@@ -741,7 +1063,14 @@
       "몸길이": "7 cm",
       "몸무게": "0.01 kg",
       "수명": "1 years"
-    }
+    },
+    "nickname": "Firefly of the deep sea",
+    "desc": "This tiny squid glows blue from its body. It lives in the deep sea but rises to shallow water to lay its eggs. When countless firefly squid glow together, the whole sea sparkles.",
+    "facts": [
+      "Its body glows with a blue light.",
+      "It lives in the deep sea.",
+      "In spring, it gathers in glowing swarms."
+    ]
   },
   "1068": {
     "name": "Mussel",
@@ -752,7 +1081,14 @@
       "몸길이": "7 cm",
       "몸무게": "0.03 kg",
       "수명": "10 years"
-    }
+    },
+    "nickname": "Our mussel friend",
+    "desc": "This clam has a black shell and clings tightly to rocks with sticky threads. It filters tiny food out of the water to eat. You can see them clustered together on rocks along the shore.",
+    "facts": [
+      "It clings to rocks using sticky threads.",
+      "It filters water to catch its food.",
+      "It lives clustered together in groups on rocks."
+    ]
   },
   "1069": {
     "name": "Mediterranean Mussel",
@@ -763,7 +1099,14 @@
       "몸길이": "8 cm",
       "몸무게": "0.03 kg",
       "수명": "10 years"
-    }
+    },
+    "nickname": "The traveling mussel of the Mediterranean",
+    "desc": "This is the dark blue-shelled mussel we often eat. It originally lived only in the Mediterranean but has now spread to seas across the world. It clings to rocks, filtering tiny food from the water.",
+    "facts": [
+      "It is the mussel most commonly eaten by people.",
+      "It originally lived in the Mediterranean.",
+      "It has since spread to seas around the world."
+    ]
   },
   "1070": {
     "name": "Pen Shell",
@@ -774,7 +1117,14 @@
       "몸길이": "20 cm",
       "몸무게": "0.3 kg",
       "수명": "10 years"
-    }
+    },
+    "nickname": "Shaped like a fan",
+    "desc": "Its large, triangular shell resembles a fan or a winnowing tray used for grain. It lives half-buried in the mudflat, with its pointed end stuck into the bottom. It draws in water to filter out tiny food.",
+    "facts": [
+      "Its shell is large, triangular, and fan-shaped.",
+      "It lives with its pointed end stuck into the seabed.",
+      "It filters water to catch its food."
+    ]
   },
   "1071": {
     "name": "Grand Jackknife Clam",
@@ -785,7 +1135,14 @@
       "몸길이": "12 cm",
       "몸무게": "0.03 kg",
       "수명": "5 years"
-    }
+    },
+    "nickname": "The long razor clam",
+    "desc": "This clam has a long shell shaped like a bamboo tube. It digs a vertical burrow in the mudflat and hides inside. When it senses danger, it quickly disappears deep into the sand.",
+    "facts": [
+      "Its shell is long, like a bamboo stem.",
+      "It digs a burrow in the mudflat and lives inside.",
+      "When in danger, it hides deep in the sand."
+    ]
   },
   "1072": {
     "name": "Chinese Cyclina",
@@ -796,7 +1153,14 @@
       "몸길이": "4 cm",
       "몸무게": "0.02 kg",
       "수명": "5 years"
-    }
+    },
+    "nickname": "The little black clam",
+    "desc": "This small clam has a round, black shell. It lives buried just under the surface of the mudflat. Its broth has a refreshing taste, so people love to eat it in soup.",
+    "facts": [
+      "Its shell is black and round.",
+      "It lives buried in the mudflat's mud.",
+      "When cooked in soup, it gives a refreshing taste."
+    ]
   },
   "1073": {
     "name": "Surf Clam",
@@ -807,7 +1171,14 @@
       "몸길이": "4 cm",
       "몸무게": "0.02 kg",
       "수명": "5 years"
-    }
+    },
+    "nickname": "The round mudflat clam",
+    "desc": "This common mudflat clam has a round, plump shell. It lives buried just below the surface in mudflats where sand and mud mix. It draws in water to filter out tiny food.",
+    "facts": [
+      "Its shell is round and plump.",
+      "It is very common on mudflats.",
+      "It filters water to catch its food."
+    ]
   },
   "1074": {
     "name": "Common Orient Clam",
@@ -818,7 +1189,14 @@
       "몸길이": "8 cm",
       "몸무게": "0.06 kg",
       "수명": "10 years"
-    }
+    },
+    "nickname": "Queen of the clams",
+    "desc": "This clam has a smooth shell with beautiful patterns. It is said to have a hundred different patterns, which is why its Korean name means 'hundred lily'. It lives buried in the sand of the mudflats and is prized for its delicious taste.",
+    "facts": [
+      "No two shells have exactly the same pattern.",
+      "Its name comes from the idea that it has a hundred different patterns.",
+      "It is a prized clam known for its delicious taste."
+    ]
   },
   "1075": {
     "name": "Jedo Venus Clam",
@@ -829,7 +1207,14 @@
       "몸길이": "5 cm",
       "몸무게": "0.03 kg",
       "수명": "7 years"
-    }
+    },
+    "nickname": "The plump mudflat clam",
+    "desc": "This clam has a shell with bumpy, ridged stripes. Its Korean name means 'meaty clam' because it is packed with plump flesh. It lives buried in the sand and gravel of mudflats, filtering water for food.",
+    "facts": [
+      "Its shell has bumpy, ridged stripes.",
+      "It's called 'meaty clam' because its flesh is so plump.",
+      "It lives buried in the sand of the mudflats."
+    ]
   },
   "1076": {
     "name": "Softshell Clam",
@@ -840,7 +1225,14 @@
       "몸길이": "10 cm",
       "몸무게": "100 g",
       "수명": "10–12 years"
-    }
+    },
+    "nickname": "The mud's little squirt-gun",
+    "desc": "This clam hides deep in the mud of the flats. It stretches out a long siphon to draw in water and filter out food. When startled, it squirts out a jet of water, earning it the nickname 'squirt clam'.",
+    "facts": [
+      "It stretches its long siphon out of the mud to filter water for food.",
+      "When startled, it squirts out a jet of water.",
+      "Its shell is thin and breaks easily."
+    ]
   },
   "1077": {
     "name": "Geoduck",
@@ -851,7 +1243,14 @@
       "몸길이": "20 cm",
       "몸무게": "1.5 kg",
       "수명": "100–140 years"
-    }
+    },
+    "nickname": "The long-nosed clam",
+    "desc": "The geoduck is a giant clam with a very long siphon that stretches out like an elephant's trunk. Its body is so large it can't fit entirely inside its shell. It hides deep in the sand and lives for a remarkably long time.",
+    "facts": [
+      "It is an extremely long-lived clam that can live for over 100 years.",
+      "Its long siphon looks just like an elephant's trunk.",
+      "It is one of the largest burrowing clams in the world."
+    ]
   },
   "1078": {
     "name": "Button Top Shell",
@@ -862,7 +1261,14 @@
       "몸길이": "2 cm",
       "몸무게": "3 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "The button-shaped snail",
+    "desc": "This small snail has a pretty, round, flat shell. It slips smoothly into the sand to hide. Its colourful patterned shell looks just like a button.",
+    "facts": [
+      "Its shell is round and flat, shaped like a button.",
+      "It quickly burrows into the sand.",
+      "Each shell's colour pattern is different."
+    ]
   },
   "1079": {
     "name": "Triton's Trumpet",
@@ -873,7 +1279,14 @@
       "몸길이": "40 cm",
       "몸무게": "2 kg",
       "수명": "10–20 years"
-    }
+    },
+    "nickname": "The sea's trumpet",
+    "desc": "Triton's trumpet is a sea snail famous for its huge shell. Blowing into the shell makes a trumpet-like sound, so people have used it that way since ancient times. It is a guardian of the sea, hunting the fearsome crown-of-thorns starfish.",
+    "facts": [
+      "Blowing into its shell makes a trumpet-like sound.",
+      "It preys on the starfish that damage coral reefs.",
+      "It is a protected species in Korea."
+    ]
   },
   "1080": {
     "name": "Keyhole Limpet",
@@ -884,7 +1297,14 @@
       "몸길이": "3 cm",
       "몸무게": "5 g",
       "수명": "3–5 years"
-    }
+    },
+    "nickname": "The limpet with a keyhole",
+    "desc": "The keyhole limpet has a cone-shaped shell with a small hole at the top. It uses the hole to release water and waste. It clings tightly to rocks, grazing on algae.",
+    "facts": [
+      "Its shell has a small hole at the top.",
+      "It releases water through that hole.",
+      "It clings very tightly to rocks."
+    ]
   },
   "1081": {
     "name": "Turban Snail",
@@ -895,7 +1315,14 @@
       "몸길이": "3 cm",
       "몸무게": "8 g",
       "수명": "3–5 years"
-    }
+    },
+    "nickname": "The eyeball-lidded snail",
+    "desc": "This snail has a hard lid sealing its shell's opening that looks just like an eyeball. When in danger, it closes the lid and hides. It clings to rocks, grazing on algae.",
+    "facts": [
+      "Its round lid looks just like an eyeball.",
+      "When in danger, it snaps its lid shut.",
+      "It is commonly found on rocks along the shore."
+    ]
   },
   "1082": {
     "name": "Toothed Top Shell",
@@ -906,7 +1333,14 @@
       "몸길이": "2.5 cm",
       "몸무게": "6 g",
       "수명": "3–4 years"
-    }
+    },
+    "nickname": "The one-tooth snail",
+    "desc": "This small snail has a single tooth-like bump at the opening of its shell. Its bumpy shell is sturdy and tough. It crawls over shoreline rocks, grazing on algae.",
+    "facts": [
+      "There is a tooth-like bump at the opening of its shell.",
+      "Its shell is bumpy and sturdy.",
+      "It is very common on rocks along the shore."
+    ]
   },
   "1083": {
     "name": "Rock Shell",
@@ -917,7 +1351,14 @@
       "몸길이": "3 cm",
       "몸무게": "10 g",
       "수명": "3–5 years"
-    }
+    },
+    "nickname": "Hunter of the rocks",
+    "desc": "This rock shell is a hunter that preys on other shellfish. It drills a hole through a hard shell to eat the soft flesh inside. Its own shell is covered in bumpy ridges.",
+    "facts": [
+      "It drills a hole through another shellfish's shell to eat it.",
+      "Its shell is covered in bumpy ridges.",
+      "It is considered a pest at oyster farms."
+    ]
   },
   "1084": {
     "name": "Knobbed Rock Shell",
@@ -928,7 +1369,14 @@
       "몸길이": "4 cm",
       "몸무게": "15 g",
       "수명": "3–5 years"
-    }
+    },
+    "nickname": "The lumpy-shelled snail",
+    "desc": "This snail has a shell covered in bumps like a rash. Like the rock shell, it preys on other shellfish. It is commonly found among rocks along the shore.",
+    "facts": [
+      "Its shell is covered in lumpy bumps.",
+      "It drills through other shellfish to eat them.",
+      "Its name comes from the bumpy, knobbly pattern on its shell."
+    ]
   },
   "1085": {
     "name": "Top Shell",
@@ -939,7 +1387,14 @@
       "몸길이": "3 cm",
       "몸무게": "10 g",
       "수명": "3–5 years"
-    }
+    },
+    "nickname": "The spinning-top snail",
+    "desc": "This snail's shell is pointed and round like a spinning top. The inside of its shell shines like pearl. It lives on shoreline rocks, grazing on algae.",
+    "facts": [
+      "Its shell is pointed like a spinning top.",
+      "The inside of its shell shines with a pearly glow.",
+      "It is commonly found on rocks along the shore."
+    ]
   },
   "1086": {
     "name": "Chestnut Top Shell",
@@ -950,7 +1405,14 @@
       "몸길이": "3 cm",
       "몸무게": "12 g",
       "수명": "3–5 years"
-    }
+    },
+    "nickname": "The chestnut-black snail",
+    "desc": "This snail's shell is black and round like a chestnut. The inside of its shell shines silver. It clings to shoreline rocks, grazing on algae.",
+    "facts": [
+      "Its shell is black and round, like a chestnut.",
+      "The inside of its shell shines silver.",
+      "It is a common sea snail often boiled and eaten."
+    ]
   },
   "1087": {
     "name": "Mud Creeper",
@@ -961,7 +1423,14 @@
       "몸길이": "3 cm",
       "몸무게": "5 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "The pointy mudflat crawler",
+    "desc": "This mudflat snail has a long, pointed shell. It crawls slowly across the mud. It acts as a cleaner, feeding on scraps and algae on the mudflat's surface.",
+    "facts": [
+      "Its shell is long and pointed.",
+      "It acts as a cleaner of the mudflat.",
+      "It crawls across the mudflat in groups."
+    ]
   },
   "1088": {
     "name": "Bladder Moon Snail",
@@ -972,7 +1441,14 @@
       "몸길이": "7 cm",
       "몸무게": "80 g",
       "수명": "3–5 years"
-    }
+    },
+    "nickname": "The moon that drills clams",
+    "desc": "This snail has a shell round like a marble. It wraps its wide foot around a clam buried in the sand, drills a round hole through its shell, and eats what's inside. It builds a doughnut-shaped egg case out of sand.",
+    "facts": [
+      "It drills a round hole through a clam's shell to eat it.",
+      "It builds a doughnut-shaped egg case out of sand.",
+      "It wraps its wide foot around shells larger than its own body."
+    ]
   },
   "1089": {
     "name": "Chinese Mystery Snail",
@@ -983,7 +1459,14 @@
       "몸길이": "4–5 cm",
       "몸무게": "10 g",
       "수명": "3–5 years"
-    }
+    },
+    "nickname": "The paddy-field snail",
+    "desc": "This large snail lives in rice paddies and ponds. Instead of laying eggs, it grows its babies inside its body and gives birth to live young. People have caught and eaten it since ancient times.",
+    "facts": [
+      "Instead of laying eggs, it grows its young inside its body and gives birth to live baby snails.",
+      "By eating algae and scraps in the water, it helps keep the water clean.",
+      "It protects itself by sealing the opening of its hard shell with a lid."
+    ]
   },
   "1090": {
     "name": "Korean Land Snail",
@@ -994,7 +1477,14 @@
       "몸길이": "3–4 cm",
       "몸무게": "5 g",
       "수명": "5–7 years"
-    }
+    },
+    "nickname": "Korea's big land snail",
+    "desc": "This large snail lives in Korea's forests. It carries a round shell on its back and crawls along slowly. It often comes out on damp, rainy days.",
+    "facts": [
+      "It is one of the larger snails found in Korea.",
+      "It prefers damp places to keep its body from drying out.",
+      "Its tongue is covered in tiny teeth that it uses to graze on leaves."
+    ]
   },
   "1091": {
     "name": "Asian Land Snail",
@@ -1005,7 +1495,14 @@
       "몸길이": "2–3 cm",
       "몸무게": "3 g",
       "수명": "3–5 years"
-    }
+    },
+    "nickname": "The land snail of Asia",
+    "desc": "This land snail lives across Asia. It crawls slowly through damp forests and meadows. When in danger, it quickly pulls its body into its shell.",
+    "facts": [
+      "Its eyes sit at the tips of the tentacles on its head.",
+      "It glides along, leaving a trail of slippery slime.",
+      "When in danger, it tucks its body safely into its shell."
+    ]
   },
   "1092": {
     "name": "Onchidium Sea Slug",
@@ -1016,7 +1513,14 @@
       "몸길이": "3–5 cm",
       "몸무게": "8 g",
       "수명": "2–3 years"
-    }
+    },
+    "nickname": "The shell-less mudflat snail",
+    "desc": "This unusual snail lives on coastal mudflats. Unlike other snails, it has no hard shell — just a soft back. It crawls across the mudflat once the tide goes out.",
+    "facts": [
+      "Although it is a snail, it has no hard shell.",
+      "It crawls across the mudflat at low tide, searching for food.",
+      "Its soft back can have several tiny eyes."
+    ]
   },
   "1093": {
     "name": "Green Chiton",
@@ -1027,7 +1531,14 @@
       "몸길이": "2–3 cm",
       "몸무게": "4 g",
       "수명": "3–5 years"
-    }
+    },
+    "nickname": "Eight green plates",
+    "desc": "This creature clings tightly to rocks along the shore. Its back is lined with eight hard plates that make it look like it's wearing armour. When in danger, it can curl its body into a ball.",
+    "facts": [
+      "Its back is lined with eight hard plates.",
+      "It clings so tightly to rocks that even waves cannot pull it off.",
+      "It scrapes algae off rocks with its tongue to eat."
+    ]
   },
   "1094": {
     "name": "Japanese Chiton",
@@ -1038,7 +1549,14 @@
       "몸길이": "5–7 cm",
       "몸무게": "20 g",
       "수명": "5–8 years"
-    }
+    },
+    "nickname": "The big armoured chiton",
+    "desc": "This large chiton clings to rocks along the shore. Its back is lined with eight hard plates, like a suit of armour. It crawls out at night to graze on algae on the rocks.",
+    "facts": [
+      "It is a large chiton commonly found along Korea's shores.",
+      "A bumpy border rings the edge of its body.",
+      "It hides by day and comes out to feed at night."
+    ]
   },
   "1095": {
     "name": "Shipworm",
@@ -1049,7 +1567,14 @@
       "몸길이": "20–30 cm",
       "몸무게": "5 g",
       "수명": "1–3 years"
-    }
+    },
+    "nickname": "The wood-boring clam",
+    "desc": "Although its name says worm, the shipworm is actually a long, slender clam. It burrows into wood underwater and lives inside. In the past, it was a real nuisance for drilling holes into wooden ships.",
+    "facts": [
+      "Despite its name, it is actually a clam, not a worm.",
+      "It uses its small shell to gnaw a tunnel through wood.",
+      "It once drilled holes into wooden ships, which sailors greatly feared."
+    ]
   },
   "1096": {
     "name": "Half-crenate Ark Shell",
@@ -1060,7 +1585,14 @@
       "몸길이": "4–5 cm",
       "몸무게": "15 g",
       "수명": "3–5 years"
-    }
+    },
+    "nickname": "The ribbed mudflat clam",
+    "desc": "This clam lives in the mud of the flats. Its shell is etched with ridges that fan out like spokes. People enjoy boiling it to eat as a side dish.",
+    "facts": [
+      "Its shell is etched with fan-like ridges.",
+      "It draws in water and filters out tiny food.",
+      "It is commonly found on mudflats in southern Korea."
+    ]
   },
   "1097": {
     "name": "Blood Cockle",
@@ -1071,7 +1603,14 @@
       "몸길이": "8–12 cm",
       "몸무게": "100 g",
       "수명": "5–7 years"
-    }
+    },
+    "nickname": "The clam with red blood",
+    "desc": "The blood cockle is an unusual clam with red blood inside its body. Most clams don't have red blood, but this one is as red as ours. It lives in the mud of the flats and is a favourite food for people.",
+    "facts": [
+      "Red blood flows through its body, just like ours.",
+      "It is one of the largest members of the cockle family.",
+      "Its shell is etched with many thick ridges."
+    ]
   },
   "1098": {
     "name": "Whelk",
@@ -1082,7 +1621,14 @@
       "몸길이": "8–12 cm",
       "몸무게": "80 g",
       "수명": "10 years"
-    }
+    },
+    "nickname": "The spiral sea snail",
+    "desc": "This snail lives in the sea. Its shell spirals round and round like a spinning wheel. It is a hunter that preys on other shellfish and small animals.",
+    "facts": [
+      "Its shell spirals round and round like a spinning wheel.",
+      "It is a hunter that uses its long snout to prey on other shellfish.",
+      "It favours cold water and can be found deep in the sea."
+    ]
   },
   "1099": {
     "name": "Horned Turban",
@@ -1093,7 +1639,14 @@
       "몸길이": "8–10 cm",
       "몸무게": "150 g",
       "수명": "7–8 years"
-    }
+    },
+    "nickname": "The horned turban shell",
+    "desc": "This turban shell has sharp horns growing from its shell. It clings to underwater rocks, grazing on algae. It seals the opening of its shell tightly with a hard lid.",
+    "facts": [
+      "Its shell has several sharp horns growing from it.",
+      "It protects itself by sealing the opening with a hard lid.",
+      "It grazes on sea algae and kelp."
+    ]
   },
   "1100": {
     "name": "Golden Apple Snail",
@@ -1104,7 +1657,14 @@
       "몸길이": "5–8 cm",
       "몸무게": "30 g",
       "수명": "2–4 years"
-    }
+    },
+    "nickname": "The snail with pink eggs",
+    "desc": "This very large snail originally came from South America. It lays clusters of bright pink eggs on water plant stems. Farmers sometimes raise it to eat weeds in rice paddies, but it can become a problem when it eats the rice plants too.",
+    "facts": [
+      "It lays clusters of pink eggs on plant stems above the water.",
+      "Originally from South America, it was later introduced to Korea.",
+      "It can help by eating weeds, but it also eats rice plants, which causes problems."
+    ]
   },
   "1101": {
     "name": "Giant Squid",
@@ -1115,7 +1675,14 @@
       "몸길이": "10–13 m",
       "몸무게": "200–275 kg",
       "수명": "5 years"
-    }
+    },
+    "nickname": "Giant of the deep sea",
+    "desc": "The giant squid can grow to over ten metres long. It sees through the pitch-black depths with eyes as big as dinner plates. Scars from battles with sperm whales have even been found on its body.",
+    "facts": [
+      "Its eyes are as big as dinner plates, among the largest of any animal.",
+      "It is a favourite prey of sperm whales.",
+      "Because it lives so deep in the sea, it is rarely seen alive."
+    ]
   },
   "1102": {
     "name": "Colossal Squid",
@@ -1126,7 +1693,14 @@
       "몸길이": "10–14 m",
       "몸무게": "450–500 kg",
       "수명": "2 years"
-    }
+    },
+    "nickname": "The heaviest squid in the world",
+    "desc": "The colossal squid, weighing close to half a tonne, is the heaviest squid in the world. Its tentacles are lined with rotating hooks that grip prey tightly. It lives in the freezing waters around Antarctica.",
+    "facts": [
+      "It is the heaviest squid in the world.",
+      "Its tentacles are lined with rotating hooks.",
+      "Its eyes are the largest of any animal, about the size of a football."
+    ]
   },
   "1103": {
     "name": "Humboldt Squid",
@@ -1137,7 +1711,14 @@
       "몸길이": "1–1.5 m",
       "몸무게": "20–50 kg",
       "수명": "1–2 years"
-    }
+    },
+    "nickname": "The red devil squid",
+    "desc": "This fierce squid flashes red when it becomes agitated. It hunts in packs of hundreds. It lives in the waters off the west coast of the Americas, where the Humboldt Current flows.",
+    "facts": [
+      "When agitated, its body flashes red.",
+      "It hunts in packs of hundreds.",
+      "Fishermen sometimes call it the 'red devil'."
+    ]
   },
   "1104": {
     "name": "European Squid",
@@ -1148,7 +1729,14 @@
       "몸길이": "30–40 cm",
       "몸무게": "0.5–1.5 kg",
       "수명": "1–2 years"
-    }
+    },
+    "nickname": "The common squid of Europe",
+    "desc": "This squid is commonly found in the Mediterranean and the Atlantic. It has a long body and fins shaped like arrowheads. It can even change colour to show its mood.",
+    "facts": [
+      "It can change the colour of its body in an instant.",
+      "Its fins are as pointed as arrowheads.",
+      "It is a squid commonly eaten across Europe."
+    ]
   },
   "1105": {
     "name": "Northern Shortfin Squid",
@@ -1159,7 +1747,14 @@
       "몸길이": "20–30 cm",
       "몸무게": "0.2–0.5 kg",
       "수명": "1 years"
-    }
+    },
+    "nickname": "The fast swimmer",
+    "desc": "This squid swims swiftly through the cold waters of the North Atlantic. Its fins are short and its body is streamlined. It travels long distances in large schools.",
+    "facts": [
+      "Its fins are short and its body is sleek and streamlined.",
+      "It travels long distances in large schools.",
+      "It is caught in large numbers and often appears on dinner tables."
+    ]
   },
   "1106": {
     "name": "Japanese Flying Squid",
@@ -1170,7 +1765,14 @@
       "몸길이": "20–30 cm",
       "몸무게": "0.3–0.6 kg",
       "수명": "About 1 year"
-    }
+    },
+    "nickname": "The squid that flies over water",
+    "desc": "This squid shoots a powerful jet of water to briefly launch itself above the waves. It is caught in huge numbers in the seas around Korea and Japan. It gathers around lights at night.",
+    "facts": [
+      "It jets water to briefly leap above the sea's surface.",
+      "It is caught in huge numbers in Korea and Japan.",
+      "It gathers around lights at night."
+    ]
   },
   "1107": {
     "name": "Firefly Squid",
@@ -1181,7 +1783,14 @@
       "몸길이": "6–7 cm",
       "몸무게": "8–15 g",
       "수명": "About 1 year"
-    }
+    },
+    "nickname": "Sparkling star of the sea",
+    "desc": "This tiny squid glows blue from small light organs on its body. In spring, huge numbers of firefly squid gather and light up the sea in blue. Toyama Bay in Japan is famous for this sight.",
+    "facts": [
+      "It glows blue from tiny light organs on its body.",
+      "In spring, it gathers in huge numbers and lights up the sea.",
+      "It is one of the rare animals that can distinguish colours."
+    ]
   },
   "1108": {
     "name": "Vampire Squid",
@@ -1192,7 +1801,14 @@
       "몸길이": "15–30 cm",
       "몸무게": "50–100 g",
       "수명": "About 8 years"
-    }
+    },
+    "nickname": "The little vampire of the dark",
+    "desc": "This creature gets its name from the black, cape-like webbing between its arms. It lives deep in the sea where oxygen is scarce. Despite its scary looks, it's actually a gentle animal that only eats dead scraps.",
+    "facts": [
+      "It has black, cape-like webbing between its arms.",
+      "It can survive deep in the sea where oxygen is scarce.",
+      "Despite its scary looks, it only eats dead scraps."
+    ]
   },
   "1109": {
     "name": "Caribbean Reef Squid",
@@ -1203,7 +1819,14 @@
       "몸길이": "12–20 cm",
       "몸무게": "100–200 g",
       "수명": "About 1 year"
-    }
+    },
+    "nickname": "Colour magician of the reef",
+    "desc": "This clever squid changes its colour and pattern in an instant to signal to its companions. It travels in small groups near Caribbean coral reefs. It drifts gracefully through the water.",
+    "facts": [
+      "It changes colour to send signals to its companions.",
+      "It travels together in small groups.",
+      "It swims as if drifting gracefully through the water."
+    ]
   },
   "1110": {
     "name": "Bigfin Reef Squid",
@@ -1214,7 +1837,14 @@
       "몸길이": "20–33 cm",
       "몸무게": "0.4–1.5 kg",
       "수명": "About 1 year"
-    }
+    },
+    "nickname": "Fins like a cuttlefish",
+    "desc": "This squid has wide fins running the length of its body, making it look like a cuttlefish. It lives in the warm coral reef waters of the Indian and Pacific Oceans. It changes colour to express its mood.",
+    "facts": [
+      "Wide fins run the entire length of its body.",
+      "It changes colour to express its mood.",
+      "It grows quickly, lives a short life, and lays many eggs."
+    ]
   },
   "1111": {
     "name": "Common Cuttlefish",
