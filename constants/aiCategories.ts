@@ -1,4 +1,5 @@
 export const DISPLAY_CATEGORIES = [
+    "free",
     "agent",
     "llm",
     "image-generation",
@@ -21,6 +22,7 @@ export const DISPLAY_CATEGORIES = [
 ] as const;
 
 export const CATEGORY_LABELS: Record<string, string> = {
+    "free": "무료 AI",
     "agent": "AI 에이전트",
     "llm": "LLM",
     "image-generation": "이미지",
@@ -43,6 +45,7 @@ export const CATEGORY_LABELS: Record<string, string> = {
 };
 
 export const CATEGORY_LABELS_EN: Record<string, string> = {
+    "free": "Free AI",
     "agent": "AI Agents",
     "llm": "LLMs",
     "image-generation": "Image",
@@ -65,6 +68,7 @@ export const CATEGORY_LABELS_EN: Record<string, string> = {
 };
 
 export const CATEGORY_DESCRIPTIONS_EN: Record<string, string> = {
+    "free": "Genuinely free AI you can use today — with each service's daily free allowance",
     "agent": "Next-gen AI agents that plan and execute tasks autonomously",
     "llm": "The AI standard — the most capable, all-round conversational models",
     "image-generation": "Everything AI image — generation, editing, background removal",
@@ -87,6 +91,7 @@ export const CATEGORY_DESCRIPTIONS_EN: Record<string, string> = {
 };
 
 export const CATEGORY_DESCRIPTIONS: Record<string, string> = {
+    "free": "가입만 하면 오늘 바로 쓰는 무료 AI, 하루 사용량까지 한눈에",
     "agent": "자율적으로 작업을 계획하고 실행하는 차세대 AI 에이전트",
     "llm": "AI의 표준, 가장 무난하고 강력한 대화형 모델",
     "image-generation": "이미지 생성·편집·배경 제거까지, AI 이미지의 모든 것",

@@ -47,7 +47,7 @@ export type AiTool = {
   id: string;
   name: string;
   // 👇 [수정] 세분화된 카테고리
-  category: "agent" | "llm" | "image-generation" | "image-editing" | "video-generation" | "video-editing" | "coding" | "voice-tts" | "3d" | "automation" | "music" | "presentation" | "meeting-notes" | "marketing" | "writing" | "education" | "chatbot" | "avatar" | "web-builder" | "game" | "etc";
+  category: "free" | "agent" | "llm" | "image-generation" | "image-editing" | "video-generation" | "video-editing" | "coding" | "voice-tts" | "3d" | "automation" | "music" | "presentation" | "meeting-notes" | "marketing" | "writing" | "education" | "chatbot" | "avatar" | "web-builder" | "game" | "etc";
   summary: string;
   description: string;
   releaseDate?: string;

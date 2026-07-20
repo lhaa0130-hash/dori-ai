@@ -6,7 +6,180 @@ import { AiTool } from "@/types/content";
  */
 export const AI_TOOLS_DATA: AiTool[] = [
   // ===========================================
-  // 0. AI AGENTS (최상단)
+  // 0. 무료 AI (최상단) — 하루 무료 사용량 기준으로 정리
+  // ⚠️ 무료 한도는 각 서비스가 수시로 바꾼다. 분기마다 공식 요금제 페이지로 재확인할 것.
+  // ===========================================
+  {
+    id: "free-google-ai-studio", name: "Google AI Studio", category: "free",
+    summary: "제미나이 최신 모델을 하루 수백 번 무료로. 무료 AI 중 한도 최고",
+    description: "구글이 제공하는 무료 AI 실험실로, 제미나이 최신 모델을 별도 결제 없이 웹에서 바로 씁니다. 하루 요청 한도가 다른 무료 서비스보다 훨씬 넉넉해 장문 요약·코드 분석 같은 무거운 작업도 부담 없이 돌릴 수 있습니다. 무료 API 키까지 발급돼 개인 프로젝트에 그대로 연결할 수 있는 것이 가장 큰 장점입니다.",
+    website: "https://aistudio.google.com",
+    thumbnail: "https://logo.clearbit.com/google.com",
+    company: "Google", pricing: "무료", priceType: "무료",
+    strength: "하루 무료 요청 수백 건 + 무료 API 키",
+    rating: 0, ratingCount: 0, userRatings: [], comments: [],
+    pros: ["무료 서비스 중 하루 한도가 가장 넉넉함", "무료 API 키 발급으로 개인 프로젝트 연동 가능", "초장문 컨텍스트로 긴 문서도 한 번에 처리"],
+    cons: ["입력 데이터가 모델 개선에 쓰일 수 있음(무료 등급)", "인터페이스가 개발자 중심이라 처음엔 낯섦"],
+    userReview: "API 키까지 공짜로 주는 게 말이 안 됩니다. 무료 AI는 여기부터 시작하세요.",
+    topPick: true, topRank: 1
+  },
+  {
+    id: "free-chatgpt", name: "ChatGPT (무료 플랜)", category: "free",
+    summary: "최신 모델을 하루 일정 횟수까지. 한도 소진 후엔 경량 모델로 계속",
+    description: "가입만 하면 최신 모델을 하루 정해진 횟수까지 무료로 쓸 수 있고, 한도를 다 쓰면 경량 모델로 자동 전환돼 대화는 끊기지 않습니다. 무료 플랜에서도 이미지 인식·파일 업로드·웹 검색이 열려 있어 일상 업무 대부분을 소화합니다. 사용자가 가장 많은 만큼 참고할 활용법과 프롬프트 자료가 압도적으로 풍부합니다.",
+    website: "https://chat.openai.com",
+    thumbnail: "https://logo.clearbit.com/openai.com",
+    company: "OpenAI", pricing: "무료 (유료 $20/월)", priceType: "부분 유료",
+    strength: "무료로도 이미지 인식·파일 업로드·웹 검색까지",
+    rating: 0, ratingCount: 0, userRatings: [], comments: [],
+    pros: ["한도를 다 써도 경량 모델로 대화 계속 가능", "무료 플랜에 파일 업로드·웹 검색 포함", "활용법·프롬프트 자료가 가장 많음"],
+    cons: ["최신 모델 무료 횟수가 하루 기준으로 빠듯함", "혼잡 시간대엔 응답이 느려짐"],
+    userReview: "무료로도 충분히 쓸 만해요. 한도 넘어도 대화가 안 끊기는 게 좋습니다.",
+    topPick: true, topRank: 2
+  },
+  {
+    id: "free-claude", name: "Claude (무료 플랜)", category: "free",
+    summary: "글쓰기·문서 분석 최강. 몇 시간마다 무료 한도가 다시 채워짐",
+    description: "긴 문서 이해와 자연스러운 글쓰기에서 특히 강점을 보이는 AI로, 무료 플랜에서도 최신 모델을 일정량 사용할 수 있습니다. 한도는 하루 단위가 아니라 몇 시간 주기로 다시 채워져 하루에 여러 번 나눠 쓰기에 적합합니다. 보고서 초안, 계약서 검토, 논문 요약처럼 길고 정확해야 하는 작업에서 만족도가 높습니다.",
+    website: "https://claude.ai",
+    thumbnail: "https://logo.clearbit.com/anthropic.com",
+    company: "Anthropic", pricing: "무료 (유료 $20/월)", priceType: "부분 유료",
+    strength: "긴 문서 이해·글쓰기 품질, 한도 주기적 리셋",
+    rating: 0, ratingCount: 0, userRatings: [], comments: [],
+    pros: ["무료 플랜에서도 최신 모델 사용 가능", "한도가 몇 시간마다 리셋돼 나눠 쓰기 좋음", "긴 문서 요약·검토 정확도가 높음"],
+    cons: ["한 번에 몰아 쓰면 한도가 금방 소진됨", "이미지 생성은 지원하지 않음"],
+    userReview: "보고서 초안은 여기가 제일 낫습니다. 문장이 사람이 쓴 것 같아요.",
+    topPick: false
+  },
+  {
+    id: "free-perplexity", name: "Perplexity (무료 플랜)", category: "free",
+    summary: "출처 붙은 AI 검색. 무료로도 기본 검색은 사실상 무제한",
+    description: "질문하면 웹을 실시간으로 뒤져 답변마다 출처 링크를 달아 주는 AI 검색 서비스입니다. 기본 검색은 무료로 사실상 제한 없이 쓸 수 있고, 더 깊게 파고드는 고급 검색만 하루 몇 회로 제한됩니다. 답변의 근거를 바로 확인할 수 있어 리서치나 사실 확인이 필요한 작업에서 특히 신뢰도가 높습니다.",
+    website: "https://www.perplexity.ai",
+    thumbnail: "https://logo.clearbit.com/perplexity.ai",
+    company: "Perplexity AI", pricing: "무료 (유료 $20/월)", priceType: "부분 유료",
+    strength: "모든 답변에 출처 링크, 기본 검색 무제한급",
+    rating: 0, ratingCount: 0, userRatings: [], comments: [],
+    pros: ["답변마다 출처가 붙어 사실 확인이 쉬움", "기본 검색은 무료로 거의 무제한", "최신 정보 반영이 빠름"],
+    cons: ["고급 검색은 하루 몇 회로 제한", "긴 창작 글쓰기에는 적합하지 않음"],
+    userReview: "구글 대신 여기서 검색해요. 출처가 붙으니 그대로 인용하기 편합니다.",
+    topPick: true, topRank: 3
+  },
+  {
+    id: "free-deepseek", name: "DeepSeek", category: "free",
+    summary: "고성능 추론 모델을 사실상 무제한 무료로. 수학·코딩에 강함",
+    description: "중국 딥시크가 공개한 고성능 AI로, 웹 채팅은 별도 한도 없이 무료로 열려 있습니다. 수학 문제 풀이와 코드 작성에서 유료 모델에 근접한 성능을 내면서 비용이 들지 않아 학습·개발 용도로 인기가 높습니다. 모델 가중치가 오픈소스로 공개돼 직접 서버에 설치해 쓰는 것도 가능합니다.",
+    website: "https://chat.deepseek.com",
+    thumbnail: "https://logo.clearbit.com/deepseek.com",
+    company: "DeepSeek", pricing: "무료", priceType: "무료",
+    strength: "무제한급 무료 + 수학·코딩 추론 성능",
+    rating: 0, ratingCount: 0, userRatings: [], comments: [],
+    pros: ["웹 채팅에 사실상 사용 한도가 없음", "수학·코딩 추론 성능이 유료 모델급", "오픈소스라 자체 서버 설치도 가능"],
+    cons: ["데이터가 중국 서버에 저장돼 민감 정보는 부적합", "정치·역사 등 일부 주제에 답변 제약"],
+    userReview: "코딩 문제 풀 때 씁니다. 공짜인데 성능이 이 정도라 놀랐어요.",
+    topPick: false
+  },
+  {
+    id: "free-copilot", name: "Microsoft Copilot", category: "free",
+    summary: "GPT 기반 챗봇 + 이미지 생성. 하루 무료 이미지 크레딧 제공",
+    description: "마이크로소프트가 윈도우와 엣지에 기본 탑재한 무료 AI 비서로, 대화형 답변과 이미지 생성을 함께 제공합니다. 이미지 생성은 하루치 고속 크레딧이 주어지고, 크레딧을 다 쓰면 속도만 느려질 뿐 계속 만들 수 있습니다. 윈도우 작업 표시줄과 오피스 문서에서 바로 불러 쓸 수 있어 접근성이 가장 좋습니다.",
+    website: "https://copilot.microsoft.com",
+    thumbnail: "https://logo.clearbit.com/microsoft.com",
+    company: "Microsoft", pricing: "무료 (유료 $20/월)", priceType: "부분 유료",
+    strength: "채팅·이미지 생성 통합, 윈도우 기본 탑재",
+    rating: 0, ratingCount: 0, userRatings: [], comments: [],
+    pros: ["하루 무료 이미지 크레딧 제공", "크레딧 소진 후에도 느리게나마 계속 사용 가능", "윈도우·엣지·오피스에 기본 내장"],
+    cons: ["답변 길이와 창작 자유도가 제한적", "광고성 링크가 섞여 나올 때가 있음"],
+    userReview: "윈도우에 이미 깔려 있어서 제일 자주 씁니다. 이미지도 공짜로 나와요.",
+    topPick: false
+  },
+  {
+    id: "free-grok", name: "Grok (무료 플랜)", category: "free",
+    summary: "X(트위터) 실시간 정보에 강함. 몇 시간마다 무료 횟수 리셋",
+    description: "xAI가 만든 AI로, X(구 트위터)의 실시간 게시물을 직접 참조해 지금 벌어지는 일에 대한 답변에 강합니다. 무료 플랜은 일정 횟수를 쓰면 잠기고 몇 시간 뒤 다시 열리는 방식이라 하루에 나눠 쓰기 좋습니다. 이미지 생성도 무료 범위에 포함돼 있습니다.",
+    website: "https://grok.com",
+    thumbnail: "https://logo.clearbit.com/x.ai",
+    company: "xAI", pricing: "무료 (유료 구독)", priceType: "부분 유료",
+    strength: "X 실시간 정보 반영, 이미지 생성 무료 포함",
+    rating: 0, ratingCount: 0, userRatings: [], comments: [],
+    pros: ["지금 이 순간의 X 게시물을 반영한 답변", "무료 횟수가 몇 시간마다 리셋", "이미지 생성도 무료 범위에 포함"],
+    cons: ["무료 횟수가 한 번에 쓰기엔 적음", "출처가 SNS라 사실 확인이 필요함"],
+    userReview: "실시간 이슈 물어볼 때만큼은 다른 AI보다 확실히 빠릅니다.",
+    topPick: false
+  },
+  {
+    id: "free-leonardo", name: "Leonardo.Ai", category: "free",
+    summary: "이미지 생성 무료 AI의 기준. 하루 150 토큰이 매일 충전",
+    description: "매일 일정량의 토큰이 자동 충전되는 이미지 생성 AI로, 결제 없이 하루 수십 장을 만들 수 있습니다. 화풍별 전용 모델과 캐릭터 일관성 유지 기능을 갖춰 게임 에셋·일러스트 작업에 특히 많이 쓰입니다. 생성한 이미지의 상업적 이용도 무료 플랜에서 허용됩니다.",
+    website: "https://leonardo.ai",
+    thumbnail: "https://logo.clearbit.com/leonardo.ai",
+    company: "Leonardo.Ai", pricing: "무료 (유료 플랜 별도)", priceType: "부분 유료",
+    strength: "매일 자동 충전되는 토큰 + 상업적 이용 허용",
+    rating: 0, ratingCount: 0, userRatings: [], comments: [],
+    pros: ["매일 토큰이 자동 충전돼 꾸준히 쓸 수 있음", "무료 플랜에서도 상업적 이용 허용", "캐릭터 일관성 유지 기능 제공"],
+    cons: ["고해상도·고급 모델은 토큰을 빠르게 소모", "무료 플랜 결과물은 공개 갤러리에 노출됨"],
+    userReview: "매일 토큰이 차니까 부담 없이 계속 시도해볼 수 있어요.",
+    topPick: false
+  },
+  {
+    id: "free-suno", name: "Suno", category: "free",
+    summary: "가사만 넣으면 노래 완성. 하루 무료 크레딧으로 매일 몇 곡씩",
+    description: "가사와 장르만 입력하면 보컬까지 붙은 완성곡을 만들어 주는 AI 작곡 서비스입니다. 무료 플랜은 매일 크레딧이 충전돼 하루 몇 곡씩 꾸준히 만들 수 있습니다. 다만 무료로 만든 곡은 비상업적 용도로만 쓸 수 있어 수익 콘텐츠에 쓰려면 유료 전환이 필요합니다.",
+    website: "https://suno.com",
+    thumbnail: "https://logo.clearbit.com/suno.com",
+    company: "Suno", pricing: "무료 (유료 플랜 별도)", priceType: "부분 유료",
+    strength: "매일 충전되는 크레딧으로 보컬곡 생성",
+    rating: 0, ratingCount: 0, userRatings: [], comments: [],
+    pros: ["가사만 있으면 보컬 포함 완성곡 생성", "크레딧이 매일 충전됨", "장르·분위기 지정이 직관적"],
+    cons: ["무료 생성곡은 상업적 이용 불가", "긴 곡은 크레딧 소모가 큼"],
+    userReview: "쇼츠 배경음악 만들려고 씁니다. 하루 몇 곡이면 충분해요.",
+    topPick: false
+  },
+  {
+    id: "free-canva-ai", name: "Canva Magic Studio", category: "free",
+    summary: "디자인 툴에 AI 내장. 무료 계정도 매달 마법 도구 사용량 제공",
+    description: "이미 익숙한 디자인 툴 안에서 텍스트로 이미지 생성, 배경 제거, 문구 자동 작성을 바로 쓸 수 있습니다. 무료 계정에도 마법 도구 사용량이 주기적으로 주어져 카드뉴스나 썸네일 작업에 충분합니다. 별도 프로그램 설치 없이 브라우저에서 끝나 비전문가 진입 장벽이 가장 낮습니다.",
+    website: "https://www.canva.com/magic-studio",
+    thumbnail: "https://logo.clearbit.com/canva.com",
+    company: "Canva", pricing: "무료 (유료 플랜 별도)", priceType: "부분 유료",
+    strength: "디자인·AI 통합, 비전문가도 바로 사용",
+    rating: 0, ratingCount: 0, userRatings: [], comments: [],
+    pros: ["디자인 작업과 AI 생성이 한 화면에서 해결", "무료 계정에도 마법 도구 사용량 제공", "템플릿이 많아 결과물 완성도가 높음"],
+    cons: ["고급 AI 기능 대부분은 유료 전환 필요", "무료 사용량은 하루가 아닌 월 단위로 리셋"],
+    userReview: "썸네일 만들 때 제일 빠릅니다. 배경 제거만으로도 값어치를 해요.",
+    topPick: false
+  },
+  {
+    id: "free-colab", name: "Google Colab", category: "free",
+    summary: "무료 GPU를 하루 몇 시간씩. AI 직접 돌려보고 싶다면 필수",
+    description: "브라우저에서 파이썬 코드를 실행할 수 있는 구글의 무료 개발 환경으로, GPU까지 무료로 배정됩니다. 하루 사용 가능한 GPU 시간에 제한이 있고 유휴 상태가 길면 세션이 끊기지만, 오픈소스 AI 모델을 직접 돌려보기에는 충분합니다. 설치가 전혀 필요 없어 AI 학습 입문 환경으로 가장 많이 추천됩니다.",
+    website: "https://colab.research.google.com",
+    thumbnail: "https://logo.clearbit.com/google.com",
+    company: "Google", pricing: "무료 (유료 Pro 별도)", priceType: "부분 유료",
+    strength: "설치 없이 무료 GPU, 오픈소스 모델 직접 실행",
+    rating: 0, ratingCount: 0, userRatings: [], comments: [],
+    pros: ["GPU를 무료로 배정받아 모델 실행 가능", "설치 없이 브라우저에서 바로 시작", "학습 자료와 예제 노트북이 풍부함"],
+    cons: ["하루 GPU 사용 시간이 제한됨", "오래 방치하면 세션이 끊겨 작업이 날아감"],
+    userReview: "AI 처음 배울 때 여기서 다 해봤어요. 공짜 GPU가 이렇게 고마울 줄이야.",
+    topPick: false
+  },
+  {
+    id: "free-huggingface", name: "Hugging Face Spaces", category: "free",
+    summary: "남이 만든 AI 수만 개를 로그인 없이 무료 체험",
+    description: "전 세계 개발자가 올린 AI 데모 수만 개를 브라우저에서 바로 써볼 수 있는 공간입니다. 이미지 생성, 음성 변환, 배경 제거 같은 도구를 대부분 로그인 없이 무료로 시험해볼 수 있습니다. 인기 있는 데모는 대기열이 생기지만, 유료 결제 전에 여러 AI를 비교해보기에 가장 좋은 곳입니다.",
+    website: "https://huggingface.co/spaces",
+    thumbnail: "https://logo.clearbit.com/huggingface.co",
+    company: "Hugging Face", pricing: "무료", priceType: "무료",
+    strength: "수만 개 AI 데모를 로그인 없이 무료 체험",
+    rating: 0, ratingCount: 0, userRatings: [], comments: [],
+    pros: ["로그인 없이 바로 체험 가능한 데모가 대부분", "결제 전에 여러 AI를 비교하기 좋음", "최신 오픈소스 모델이 가장 빨리 올라옴"],
+    cons: ["인기 데모는 대기열이 길어질 수 있음", "제작자가 내리면 갑자기 사라지기도 함"],
+    userReview: "돈 쓰기 전에 여기서 먼저 써봅니다. 없는 AI가 없어요.",
+    topPick: false
+  },
+
+  // ===========================================
+  // 0. AI AGENTS
   // ===========================================
   {
     id: "agent-cursor", name: "Cursor", category: "coding",
