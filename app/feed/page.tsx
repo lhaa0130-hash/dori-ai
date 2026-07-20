@@ -505,7 +505,7 @@ export default function FeedPage() {
               {t.loginRequired}
             </p>
             <Link
-              href="/login"
+              href={(pathname || "").startsWith("/en") ? "/en/login" : "/login"}
               className="inline-block bg-[#F9954E] text-white text-sm font-semibold rounded-full px-5 py-2 active:opacity-85"
             >
               {t.loginCta}
@@ -703,7 +703,7 @@ export default function FeedPage() {
                             </div>
                           ) : (
                             <p className="mt-3 text-xs text-stone-400">
-                              <Link href="/login" className="underline" style={{ color: POINT }}>
+                              <Link href={(pathname || "").startsWith("/en") ? "/en/login" : "/login"} className="underline" style={{ color: POINT }}>
                                 {t.loginLinkText}
                               </Link>{" "}
                               {t.loginCommentSuffix}

@@ -414,7 +414,7 @@ function MessagesInner() {
             {tr.loginRequiredL1}<br />{tr.loginRequiredL2}
           </p>
           <Link
-            href="/login"
+            href={isEn ? "/en/login" : "/login"}
             className="w-full py-3.5 rounded-full bg-[#F9954E] text-white font-bold text-[14px] active:opacity-85 transition-opacity text-center"
           >
             {tr.loginCta}

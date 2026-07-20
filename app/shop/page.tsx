@@ -499,7 +499,7 @@ export default function ShopPage() {
         ) : (
           <div className="flex items-center justify-between p-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-stone-50/60 dark:bg-zinc-950">
             <span className="text-[13px] font-medium text-stone-500 dark:text-stone-400 break-keep">{t.loginToBuy}</span>
-            <Link href="/login" className="px-4 py-2.5 rounded-xl bg-[#F9954E] text-white text-[12px] font-bold flex-shrink-0">{t.login}</Link>
+            <Link href={isEn ? "/en/login" : "/login"} className="px-4 py-2.5 rounded-xl bg-[#F9954E] text-white text-[12px] font-bold flex-shrink-0">{t.login}</Link>
           </div>
         )}
       </section>

@@ -39,6 +39,11 @@ export default function MinigameEnClient() {
         <p className="text-[14px] text-stone-500 dark:text-stone-400 leading-relaxed">
           🏆 Your scores are saved to the Hall of Fame (TOP 5). Cotton candy rewards come from Galaxy Merge, Boss Clicker and Cute 2048.
         </p>
+        {/* 게임 라우트는 한글판과 공용 — 인게임 UI는 아직 한글이라 미리 알려준다. */}
+        <p className="mt-3 inline-flex items-start gap-2 rounded-xl bg-stone-50 dark:bg-zinc-900 px-3 py-2 text-[12.5px] text-stone-500 dark:text-stone-400 leading-relaxed">
+          <span aria-hidden="true">🈯</span>
+          <span>Heads up: these descriptions are in English, but the games themselves are still in Korean. They are simple enough to play without reading — scores and rewards work exactly the same.</span>
+        </p>
       </section>
 
       {/* 게임 리스트 */}

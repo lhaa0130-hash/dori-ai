@@ -91,7 +91,9 @@ export default function LoginPage() {
     if (typeof window === "undefined") return;
     const p = new URLSearchParams(window.location.search);
     const n = p.get("next") || "";
-    setIsEn(p.get("lang") === "en" || n === "/en" || n.startsWith("/en/"));
+    // /en/login 으로 직접 들어온 경우도 영어. (?lang=en · next=/en… 은 기존 경로)
+    const onEnRoute = window.location.pathname.startsWith("/en/");
+    setIsEn(onEnRoute || p.get("lang") === "en" || n === "/en" || n.startsWith("/en/"));
   }, []);
 
   // 로그인/가입 후 돌아갈 곳 — ?next=/flat-form 처럼 보호 페이지에서 넘어온 경우 그 곳으로.

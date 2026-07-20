@@ -329,7 +329,7 @@ export default function QuickBar() {
                 </p>
               ) : (
                 <p className="text-[11px] text-stone-500 dark:text-stone-400 leading-snug">
-                  <Link href="/login" className="font-bold text-[#E8832E] dark:text-[#F9954E] hover:underline">{qt.login}</Link>
+                  <Link href={isEn ? "/en/login" : "/login"} className="font-bold text-[#E8832E] dark:text-[#F9954E] hover:underline">{qt.login}</Link>
                   {qt.loginHintTail}
                 </p>
               )}

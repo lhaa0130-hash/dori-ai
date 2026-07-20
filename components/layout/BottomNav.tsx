@@ -166,7 +166,7 @@ export default function BottomNav() {
               </div>
             ) : (
               <button
-                onClick={() => { router.push(isEn ? `/login?lang=en&next=${encodeURIComponent(pathname || "/en")}` : "/login"); setOpen(false); }}
+                onClick={() => { router.push(isEn ? `/en/login?next=${encodeURIComponent(pathname || "/en")}` : "/login"); setOpen(false); }}
                 className="w-full py-4 rounded-2xl bg-[#F9954E] text-[14px] font-black text-white active:opacity-80 transition-opacity"
               >
                 {isEn ? "Sign in / Sign up" : "로그인 / 회원가입"}

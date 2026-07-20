@@ -31,7 +31,7 @@ export default function Header() {
   // 영어 사용자는 로그인 화면도 영어로(?lang=en) + 로그인 후 영어 홈으로 복귀
   const handleSignIn = () => {
     const isEnNow = (pathname || "").startsWith("/en");
-    router.push(isEnNow ? `/login?lang=en&next=${encodeURIComponent(pathname || "/en")}` : "/login");
+    router.push(isEnNow ? `/en/login?next=${encodeURIComponent(pathname || "/en")}` : "/login");
     setMobileOpen(false);
   };
   const handleSignOut = () => { logout(); router.push("/"); setMobileOpen(false); };

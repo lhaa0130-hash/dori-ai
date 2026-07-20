@@ -838,7 +838,7 @@ export default function ProfilePage() {
   const isItemOwned = (it: ShopItem) => it.price === 0 || ownedSet.has(itemKey(it.slot, it.id));
 
   const messageHref = useMemo(() => {
-    if (!targetUid || !profile) return "/login";
+    if (!targetUid || !profile) return lang === "en" ? "/en/login" : "/login";
     return `/messages?to=${encodeURIComponent(targetUid)}&name=${encodeURIComponent(profile.name)}`;
   }, [targetUid, profile]);
 
@@ -859,7 +859,7 @@ export default function ProfilePage() {
             {t.loginPromptBody2}
           </p>
           <Link
-            href="/login"
+            href={lang === "en" ? "/en/login" : "/login"}
             className="w-full py-3.5 rounded-full bg-[#F9954E] text-white font-bold text-[14px] active:opacity-85 text-center"
           >
             {t.goToLogin}
@@ -1849,7 +1849,7 @@ export default function ProfilePage() {
           ) : (
             <div className="mb-4 rounded-xl bg-stone-100 dark:bg-zinc-900 p-3.5 text-[13px] text-stone-500 dark:text-stone-400">
               {t.guestbookLoginPrompt(
-                <Link href="/login" className="font-bold text-[#F9954E]">
+                <Link href={lang === "en" ? "/en/login" : "/login"} className="font-bold text-[#F9954E]">
                   {t.loginWord}
                 </Link>
               )}
