@@ -6,7 +6,39 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 19 Jul 2026 23:02:58 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 20 Jul 2026 00:00:30 GMT</lastBuildDate>
+    <item>
+      <title>Top 8 AI-Powered PPT Creation Tools: A Comprehensive Guide</title>
+      <link>https://illo.im/insight/article/curation-18-en</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/curation-18-en</guid>
+      <category>큐레이션</category>
+      <pubDate>Sun, 19 Jul 2026 23:02:22 GMT</pubDate>
+      <description>Explore the best AI tools for creating presentations, comparing features, language support, and user recommendations.</description>
+    </item>
+    <item>
+      <title>AI PPT 자동 생성 사이트 BEST 8: 무료 한도·한국어 지원·추천 대상 비교</title>
+      <link>https://illo.im/insight/article/curation-18</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/curation-18</guid>
+      <category>큐레이션</category>
+      <pubDate>Sun, 19 Jul 2026 23:02:22 GMT</pubDate>
+      <description>발표 주제만 입력하면 초안, 슬라이드 구성, 디자인까지 만들어주는 AI PPT 자동 생성 사이트를 비교했습니다. 무료 사용 가능 여부, 한국어 입력, 장단점, 추천 대상을 한눈에 정리합니다.</description>
+    </item>
+    <item>
+      <title>Introduction to the Inkling Model</title>
+      <link>https://illo.im/insight/article/video-76-en</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-76-en</guid>
+      <category>큐레이션</category>
+      <pubDate>Sun, 19 Jul 2026 00:00:00 GMT</pubDate>
+      <description>Explaining the concept and significance of the Inkling model.</description>
+    </item>
+    <item>
+      <title>[모델] Inkling 모델 설명</title>
+      <link>https://illo.im/insight/article/video-76</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-76</guid>
+      <category>큐레이션</category>
+      <pubDate>Sun, 19 Jul 2026 00:00:00 GMT</pubDate>
+      <description>Inkling 모델의 개념과 중요성을 설명합니다.</description>
+    </item>
     <item>
       <title>[AI 학습] AI 학습의 도파민 함정</title>
       <link>https://illo.im/insight/article/video-74</link>
@@ -294,38 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Sun, 05 Jul 2026 00:00:00 GMT</pubDate>
       <description>AI를 활용해 업무 시간을 90% 이상 줄이는 방법을 소개합니다.</description>
-    </item>
-    <item>
-      <title>[영상 제작] AI 영상 만드는 법</title>
-      <link>https://illo.im/insight/article/video-52</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-52</guid>
-      <category>큐레이션</category>
-      <pubDate>Sun, 05 Jul 2026 00:00:00 GMT</pubDate>
-      <description>AI를 활용해 간편하게 영상을 만드는 방법을 소개합니다.</description>
-    </item>
-    <item>
-      <title>[딥러닝] 딥러닝 기초 배우기</title>
-      <link>https://illo.im/insight/article/video-53</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-53</guid>
-      <category>큐레이션</category>
-      <pubDate>Sun, 05 Jul 2026 00:00:00 GMT</pubDate>
-      <description>딥러닝의 기초 개념을 쉽게 설명합니다.</description>
-    </item>
-    <item>
-      <title>[업무 자동화] 구글 Flow 사용법</title>
-      <link>https://illo.im/insight/article/video-54</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-54</guid>
-      <category>큐레이션</category>
-      <pubDate>Sun, 05 Jul 2026 00:00:00 GMT</pubDate>
-      <description>구글 Flow를 쉽게 활용하는 방법을 소개합니다.</description>
-    </item>
-    <item>
-      <title>[업무 자동화] Manus AI로 업무 자동화</title>
-      <link>https://illo.im/insight/article/video-55</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-55</guid>
-      <category>큐레이션</category>
-      <pubDate>Sun, 05 Jul 2026 00:00:00 GMT</pubDate>
-      <description>Manus AI를 활용해 다양한 업무를 자동화하는 방법을 소개합니다.</description>
     </item>
   </channel>
 </rss>
