@@ -15,9 +15,11 @@ service cloud.firestore {
     }
 
     // 회원 — 본인 또는 관리자만 수정 (공개 읽기 O, 단 PII는 userPrivate로 분리)
+    // ⚠️ 공개 문서라 PII(email·gender·ageGroup·provider)를 다시 쓰지 못하게 차단(회귀 방지).
     match /users/{userId} {
       allow read: if true;
-      allow write: if request.auth != null && (request.auth.uid == userId || isAdmin());
+      allow write: if request.auth != null && (request.auth.uid == userId || isAdmin())
+        && !request.resource.data.keys().hasAny(['email', 'gender', 'ageGroup', 'provider']);
 
       // 친구 목록 — 본인 또는 '자신을 추가하는' 상대(수락 시 양방향)
       match /friends/{friendUid} {
