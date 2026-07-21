@@ -128,8 +128,9 @@ const T = {
     addFriend: "친구 추가",
     customizeCozyHome: "코지홈 꾸미기",
     getItemsFromShop: "🍬 상점에서 아이템 받기 →",
-    shareAddressLabel: "공유 주소 (영문 핸들)",
-    shareAddressHint: "내 AI 페이지 주소가 깔끔해져요",
+    shareAddressLabel: "내 아이디 (개인 홈 주소)",
+    shareAddressHint: "illo.im/@아이디 로 내 홈이 열려요",
+    urlPreviewLabel: "내 홈 주소:",
     save: "저장",
     handleHint: "영문 소문자·숫자·밑줄(_) 3~20자 · 미설정 시 임시 주소가 쓰여요",
     greetingFieldLabel: "대문 인사말",
@@ -276,8 +277,9 @@ const T = {
     addFriend: "Add friend",
     customizeCozyHome: "Customize Cozy Home",
     getItemsFromShop: "🍬 Get items from the shop →",
-    shareAddressLabel: "Share address (handle)",
-    shareAddressHint: "Makes your AI page address cleaner",
+    shareAddressLabel: "Your ID (personal home address)",
+    shareAddressHint: "Opens your home at illo.im/@id",
+    urlPreviewLabel: "Your home:",
     save: "Save",
     handleHint: "Lowercase letters, numbers, underscores (_), 3-20 characters · A temporary address is used until set",
     greetingFieldLabel: "Greeting",
@@ -1235,12 +1237,12 @@ export default function ProfilePage() {
               {t.shareAddressLabel} <span className="font-normal text-stone-400">{t.shareAddressHint}</span>
             </label>
             <div className="flex items-stretch gap-2 mb-1">
-              <span className="inline-flex items-center px-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[12px] text-stone-400 font-mono shrink-0">illo.im/u/</span>
+              <span className="inline-flex items-center px-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[12px] text-stone-400 font-mono shrink-0">illo.im/@</span>
               <input
                 value={handleInput}
                 onChange={(e) => handleCheckHandle(e.target.value)}
                 maxLength={20}
-                placeholder="user04"
+                placeholder="dori"
                 className="flex-1 min-w-0 px-3 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40 font-mono lowercase"
               />
               <button
@@ -1251,6 +1253,12 @@ export default function ProfilePage() {
                 {handleBusy ? "..." : t.save}
               </button>
             </div>
+            {/* 실제 생성될 URL 미리보기 — 입력 즉시 반영 */}
+            {handleInput.trim() && (
+              <p className="text-[11px] text-stone-500 dark:text-stone-400 mb-1">
+                {t.urlPreviewLabel} <span className="font-mono font-bold text-[#E8832E] dark:text-[#FBAA60]">illo.im/@{handleInput.trim().replace(/^@+/, "").toLowerCase()}</span>
+              </p>
+            )}
             {handleMsg && (
               <p className={`text-[11px] mb-1 ${handleMsg.ok ? "text-emerald-500" : "text-red-500"}`}>{handleMsg.text}</p>
             )}

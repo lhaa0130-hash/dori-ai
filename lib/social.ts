@@ -21,6 +21,12 @@ import {
   getCountFromServer,
 } from "firebase/firestore";
 import { getFirebaseFirestore, getFirebaseAuth } from "@/lib/firebase";
+import { isReservedHandle } from "@/lib/reservedHandles";
+
+/** 핸들 정규화 — 앞의 @ 제거 + 공백 제거 + 소문자. 사용자가 "@dori"로 입력해도 "dori"로 취급. */
+export function normalizeHandle(raw: string): string {
+  return (raw || "").trim().replace(/^@+/, "").toLowerCase();
+}
 
 function db() { return getFirebaseFirestore(); }
 export function currentUid(): string | null {
@@ -437,17 +443,14 @@ export async function deleteMyAI(idOrAt: string | number): Promise<boolean> {
   } catch { return false; }
 }
 
-// ─── 핸들(공유 URL용 영문 주소) — users/{uid}.handle (규칙 변경 불필요) ───
-const RESERVED_HANDLES = new Set([
-  "admin", "api", "u", "www", "root", "null", "undefined", "dori", "doriai", "dori-ai",
-  "me", "my", "profile", "shop", "feed", "explore", "login", "signup", "notice", "minigame",
-]);
+// ─── 핸들(@아이디, 공유 URL용 영문 주소) — users/{uid}.handle (규칙 변경 불필요) ───
+// 예약어는 lib/reservedHandles.ts에서 단일 관리(스펙 예약어 + 실제 라우트명).
 
-/** 핸들 형식·중복 확인 (true=사용 가능) */
+/** 핸들 형식·예약어·중복 확인 (true=사용 가능). @ 접두어 입력도 허용(정규화). */
 export async function checkHandle(raw: string): Promise<{ ok: boolean; reason?: string }> {
-  const handle = (raw || "").trim().toLowerCase();
+  const handle = normalizeHandle(raw);
   if (!/^[a-z0-9_]{3,20}$/.test(handle)) return { ok: false, reason: "영문 소문자·숫자·밑줄(_) 3~20자" };
-  if (RESERVED_HANDLES.has(handle)) return { ok: false, reason: "사용할 수 없는 이름이에요" };
+  if (isReservedHandle(handle)) return { ok: false, reason: "사용할 수 없는 이름이에요" };
   try {
     const me = currentUid();
     const qs = await getDocs(query(collection(db(), "users"), where("handle", "==", handle), limit(1)));
@@ -460,7 +463,7 @@ export async function checkHandle(raw: string): Promise<{ ok: boolean; reason?: 
 export async function setMyHandle(raw: string): Promise<{ ok: boolean; error?: string; handle?: string; warn?: string }> {
   const uid = currentUid();
   if (!uid) return { ok: false, error: "로그인이 필요해요" };
-  const handle = (raw || "").trim().toLowerCase();
+  const handle = normalizeHandle(raw);
   const chk = await checkHandle(handle);
   if (!chk.ok) return { ok: false, error: chk.reason };
   try {
@@ -478,15 +481,19 @@ export async function setMyHandle(raw: string): Promise<{ ok: boolean; error?: s
 
 /** handle 또는 uid → 프로필 (handle 우선, 없으면 uid 폴백) */
 export async function getProfileByHandle(handleOrUid: string): Promise<Profile | null> {
-  const key = (handleOrUid || "").trim();
-  if (!key) return null;
+  const raw = (handleOrUid || "").trim();
+  if (!raw) return null;
+  // @dori · dori 모두 허용. 핸들은 소문자 정규화해 조회.
+  const key = normalizeHandle(raw);
   try {
-    const qs = await getDocs(query(collection(db(), "users"), where("handle", "==", key.toLowerCase()), limit(1)));
+    const qs = await getDocs(query(collection(db(), "users"), where("handle", "==", key), limit(1)));
     if (!qs.empty) return await getProfile(qs.docs[0].id);
   } catch { /* handle 인덱스/권한 문제 시 uid 폴백 */ }
+  // uid 폴백은 대소문자를 보존해야 한다(Firebase uid는 대소문자 구분). @만 제거.
+  const uidKey = raw.replace(/^@+/, "");
   try {
-    const s = await getDoc(doc(db(), "users", key));
-    if (s.exists()) return await getProfile(key);
+    const s = await getDoc(doc(db(), "users", uidKey));
+    if (s.exists()) return await getProfile(uidKey);
   } catch { /* ignore */ }
   return null;
 }
