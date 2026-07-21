@@ -133,6 +133,7 @@ const T = {
     urlPreviewLabel: "내 홈 주소:",
     save: "저장",
     handleHint: "영문 소문자·숫자·밑줄(_) 3~20자 · 미설정 시 임시 주소가 쓰여요",
+    handleChangeWarn: "아이디를 변경하면 기존 개인 홈 주소가 달라집니다.",
     greetingFieldLabel: "대문 인사말",
     greetingFieldHint: "방문자에게 보이는 한마디",
     greetingPlaceholder: "예) 놀러와줘서 고마워요! 방명록 남겨주세요 :)",
@@ -282,6 +283,7 @@ const T = {
     urlPreviewLabel: "Your home:",
     save: "Save",
     handleHint: "Lowercase letters, numbers, underscores (_), 3-20 characters · A temporary address is used until set",
+    handleChangeWarn: "Changing your ID will change your personal home address.",
     greetingFieldLabel: "Greeting",
     greetingFieldHint: "A short message visitors will see",
     greetingPlaceholder: "e.g. Thanks for stopping by! Leave me a note :)",
@@ -1261,6 +1263,9 @@ export default function ProfilePage() {
             )}
             {handleMsg && (
               <p className={`text-[11px] mb-1 ${handleMsg.ok ? "text-emerald-500" : "text-red-500"}`}>{handleMsg.text}</p>
+            )}
+            {profile.handle && handleInput.trim().replace(/^@+/, "").toLowerCase() !== profile.handle && (
+              <p className="text-[11px] text-amber-500 mb-1">⚠️ {t.handleChangeWarn}</p>
             )}
             <p className="text-[11px] text-stone-400 mb-4">{t.handleHint}</p>
 

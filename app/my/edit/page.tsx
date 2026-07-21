@@ -1,12 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { useRouter, usePathname } from "next/navigation";
 import { useTheme } from "next-themes";
 import Header from "@/components/layout/Header";
 import ProfileImageSelector from "@/components/my/ProfileImageSelector";
 import { UserProfile, createDefaultProfile } from "@/lib/userProfile";
+// 03단계: 프로필 편집이 /@handle 홈(Firestore)에 반영되도록 저장 함수·핸들 함수 재사용
+import { saveMyProfile, getProfile, currentUid, checkHandle, setMyHandle } from "@/lib/social";
 
 const T = {
   ko: {
@@ -77,8 +80,23 @@ export default function EditProfilePage() {
   const [statusMessage, setStatusMessage] = useState("");
   const [profileImageUrl, setProfileImageUrl] = useState<string | undefined>(undefined);
   const [isSaving, setIsSaving] = useState(false);
+  // 03단계: 고유 아이디(handle) — Firestore에서 로드, 기존 checkHandle/setMyHandle 재사용
+  const [handleInput, setHandleInput] = useState("");
+  const [savedHandle, setSavedHandle] = useState("");
+  const [handleMsg, setHandleMsg] = useState<{ ok: boolean; text: string } | null>(null);
+  const [handleBusy, setHandleBusy] = useState(false);
+  const handleInputRef = useRef(""); // 비동기 검증 스테일 응답 방지용
 
   useEffect(() => setMounted(true), []);
+
+  // 03단계: Firestore에서 현재 handle 로드(공개 홈 주소). localStorage와 별개로 서버 기준.
+  useEffect(() => {
+    const uid = currentUid();
+    if (!uid) return;
+    let alive = true;
+    getProfile(uid).then((p) => { if (alive) { setSavedHandle(p.handle || ""); setHandleInput(p.handle || ""); } }).catch(() => {});
+    return () => { alive = false; };
+  }, [user?.email]);
 
   // 프로필 데이터 로드
   useEffect(() => {
@@ -148,6 +166,15 @@ export default function EditProfilePage() {
         profileImageUrl,
       };
 
+      // ⭐ 03단계: Firestore users/{uid} 에도 저장 → /@handle 개인 홈에 즉시 반영.
+      //    (기존엔 localStorage만 저장돼 개인 홈에 반영되지 않던 문제 해결)
+      //    photoURL은 여기서 다루지 않음 — 홈 대표 사진은 코지홈(/profile) 실제 업로드로 관리.
+      await saveMyProfile({
+        name: nickname.trim(),
+        bio: bio.trim(),
+        statusMsg: statusMessage.trim(),
+      });
+
       // 2. localStorage에 저장 (클라이언트 캐시)
       localStorage.setItem(`dori_profile_${user.email}`, JSON.stringify(updated));
       localStorage.setItem(`dori_user_name_${user.email}`, nickname.trim());
@@ -198,6 +225,37 @@ export default function EditProfilePage() {
       console.error("프로필 저장 오류:", error);
       setIsSaving(false);
       alert(error instanceof Error ? error.message : t.alertSaveErrorFallback);
+    }
+  };
+
+  // 03단계: 고유 아이디(handle) 실시간 검증 — 기존 checkHandle 재사용(@제거·예약어·중복·형식)
+  const onHandleChange = (raw: string) => {
+    const v = raw.replace(/^@+/, "").toLowerCase();
+    setHandleInput(v);
+    handleInputRef.current = v;
+    setHandleMsg(null);
+    if (!v.trim() || v === savedHandle) return;
+    const reqId = v;
+    checkHandle(v).then((res) => {
+      // 입력이 그새 바뀌면 무시(스테일 응답 방지)
+      if (reqId !== handleInputRef.current) return;
+      setHandleMsg(res.ok ? { ok: true, text: "사용할 수 있는 아이디예요" } : { ok: false, text: res.reason || "사용할 수 없어요" });
+    });
+  };
+
+  // 03단계: 아이디 저장 — 기존 setMyHandle 재사용(본인만·서버 재검증·중복 방지)
+  const onSaveHandle = async () => {
+    const v = handleInput.replace(/^@+/, "").toLowerCase().trim();
+    if (!v || v === savedHandle || handleBusy) return;
+    setHandleBusy(true);
+    const res = await setMyHandle(v);
+    setHandleBusy(false);
+    if (res.ok && res.handle) {
+      setSavedHandle(res.handle);
+      setHandleInput(res.handle);
+      setHandleMsg({ ok: true, text: res.warn || "아이디를 저장했어요" });
+    } else {
+      setHandleMsg({ ok: false, text: res.error || "저장에 실패했어요" });
     }
   };
 
@@ -333,6 +391,48 @@ export default function EditProfilePage() {
                 outline: 'none',
               }}
             />
+          </div>
+
+          {/* 03단계: 고유 아이디(handle) — 개인 홈 주소. 기존 checkHandle/setMyHandle 재사용 */}
+          <div style={{ marginBottom: '2rem' }}>
+            <label style={{ display: 'block', fontSize: '0.9375rem', fontWeight: '600', color: isDark ? 'rgba(255,255,255,0.8)' : 'rgba(0,0,0,0.7)', marginBottom: '0.5rem' }}>
+              내 아이디 (개인 홈 주소)
+            </label>
+            <div style={{ display: 'flex', gap: '0.5rem' }}>
+              <span style={{ display: 'inline-flex', alignItems: 'center', padding: '0 0.6rem', borderRadius: '0.75rem', background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)', color: '#9ca3af', fontSize: '0.85rem', fontFamily: 'monospace', flexShrink: 0 }}>illo.im/@</span>
+              <input
+                type="text" value={handleInput} onChange={(e) => onHandleChange(e.target.value)} maxLength={20} placeholder="dori"
+                aria-label="고유 아이디"
+                style={{ flex: 1, minWidth: 0, padding: '0.875rem 1rem', borderRadius: '0.75rem', background: isDark ? 'rgba(255,255,255,0.05)' : 'rgba(0,0,0,0.03)', border: `1px solid ${isDark ? 'rgba(255,255,255,0.2)' : 'rgba(0,0,0,0.1)'}`, color: isDark ? '#fff' : '#1d1d1f', fontSize: '1rem', fontFamily: 'monospace', outline: 'none', textTransform: 'lowercase' }}
+              />
+              <button
+                onClick={onSaveHandle}
+                disabled={handleBusy || !handleInput.trim() || handleInput === savedHandle || !(handleMsg && handleMsg.ok)}
+                style={{ padding: '0 1rem', borderRadius: '0.75rem', background: '#F9954E', border: 'none', color: '#fff', fontWeight: 700, fontSize: '0.85rem', cursor: (handleBusy || handleInput === savedHandle) ? 'not-allowed' : 'pointer', opacity: (handleBusy || !handleInput.trim() || handleInput === savedHandle || !(handleMsg && handleMsg.ok)) ? 0.5 : 1, flexShrink: 0, fontFamily: 'inherit' }}
+              >
+                {handleBusy ? '...' : '저장'}
+              </button>
+            </div>
+            {/* 실제 URL 미리보기 */}
+            {handleInput.trim() && (
+              <p style={{ marginTop: '0.4rem', fontSize: '0.75rem', color: '#9ca3af' }}>
+                내 홈 주소: <span style={{ fontFamily: 'monospace', fontWeight: 700, color: '#E8832E' }}>illo.im/@{handleInput.replace(/^@+/, '').toLowerCase()}</span>
+              </p>
+            )}
+            {handleMsg && (
+              <p style={{ marginTop: '0.3rem', fontSize: '0.75rem', color: handleMsg.ok ? '#10b981' : '#ef4444' }}>{handleMsg.text}</p>
+            )}
+            {/* 변경 경고 */}
+            {savedHandle && handleInput !== savedHandle && (
+              <p style={{ marginTop: '0.3rem', fontSize: '0.72rem', color: '#f59e0b' }}>⚠️ 아이디를 변경하면 기존 개인 홈 주소가 달라집니다.</p>
+            )}
+            {/* 내 홈 보기 (핸들 있을 때) */}
+            {savedHandle && (
+              <p style={{ marginTop: '0.5rem', fontSize: '0.8rem' }}>
+                <Link href={`/@${savedHandle}`} style={{ color: '#F9954E', fontWeight: 700 }}>내 홈 보기 →</Link>
+                <Link href="/profile" style={{ color: '#9ca3af', fontWeight: 600, marginLeft: '0.75rem' }}>홈 배경·색 꾸미기 →</Link>
+              </p>
+            )}
           </div>
 
           {/* 한 줄 소개 */}

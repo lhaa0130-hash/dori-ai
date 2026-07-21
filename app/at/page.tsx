@@ -240,9 +240,9 @@ export default function AtHomePage() {
             )}
           </section>
 
-          {/* 7) 대표 작품 — myAIs 재사용(공개). 없으면 빈 상태 */}
+          {/* 7) 나의 AI — myAIs(AI 캐릭터) 재사용(공개). 작품 포트폴리오와는 별개(후속 단계). 없으면 빈 상태 */}
           <section>
-            <p className="text-[11px] font-bold text-[#F9954E] mb-2">대표 작품</p>
+            <p className="text-[11px] font-bold text-[#F9954E] mb-2">나의 AI</p>
             {p.myAIs && p.myAIs.length > 0 ? (
               <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5">
                 {p.myAIs.slice(0, 4).map((ai) => (
@@ -254,7 +254,7 @@ export default function AtHomePage() {
                 ))}
               </div>
             ) : (
-              <p className="text-[13px] text-stone-400">{isOwner ? "아직 등록한 작품이 없습니다. 작품 기능은 곧 추가될 예정입니다." : "아직 공개된 작품이 없습니다."}</p>
+              <p className="text-[13px] text-stone-400">{isOwner ? "아직 만든 AI가 없어요. 작품 포트폴리오는 곧 추가될 예정이에요." : "아직 공개된 AI가 없습니다."}</p>
             )}
           </section>
 
