@@ -2,6 +2,8 @@
 # 정적 export라 사전 생성이 불가하므로 클라이언트가 경로를 읽어 Firestore에서 내용을 불러온다.
 /u/*  /u.html  200
 
-# 사용자 개인 홈 — /@<username> 을 단일 렌더러(/at.html)로 rewrite (사용자 홈 01단계).
-# 사용자에게 보이는 URL은 /@username 그대로 유지. at.html이 경로를 읽어 공개 프로필 조회.
-/@*  /at.html  200
+# 사용자 개인 홈 — /@<username> 을 단일 렌더러(/at)로 rewrite (사용자 홈 01단계).
+# ⚠️ 목적지는 .html 없는 pretty URL(/at)이어야 한다. /at.html 로 두면 Cloudflare Pages가
+#    자동으로 /at 로 308 리디렉션해 원본 /@username 경로가 사라진다(브라우저 URL이 /at 로 변경).
+#    /at(확장자 없음)이면 200 rewrite로 at.html 내용을 원본 URL 그대로 서빙 → JS가 경로 파싱 가능.
+/@*  /at  200
