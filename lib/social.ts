@@ -86,6 +86,7 @@ export interface Profile {
   diary: DiaryEntry[];  // 다이어리(일기장) — 주인 본인이 남기는 기록, users/{uid}.diary 배열
   myAIs: AIShowcase[];  // 내가 만든 AI 자랑 — users/{uid}.myAIs 배열
   psychResults: PsychResult[]; // 심리테스트 결과 뱃지 — users/{uid}.psychResults 배열
+  createdAt?: number;   // 가입일(ms) — users/{uid}.createdAt (공개 홈 활동 시작일 표시용)
 }
 
 // 다이어리 한 칸
@@ -205,6 +206,7 @@ async function fetchProfile(uid: string): Promise<Profile> {
           .sort((a, b) => b.at - a.at)
           .slice(0, 12)
       : [],
+    createdAt: d.createdAt ? tsToMillis(d.createdAt) : undefined,
   };
 }
 
