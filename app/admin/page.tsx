@@ -217,15 +217,22 @@ export default function AdminPage() {
       console.warn("[admin] 동물검수 상태 로드 실패:", e);
     }
 
-    // 사용자 목록: Firestore users 컬렉션
+    // 사용자 목록: Firestore users 컬렉션(공개) + userPrivate(관리자만, 이메일)
     try {
       const db = getFirebaseFirestore();
       const snap = await getDocs(collection(db, "users"));
+      // 이메일은 userPrivate로 분리됨(공개 users엔 없음). 관리자는 userPrivate 전체를 읽을 수 있다.
+      // 폴백: 아직 마이그레이션 안 된 유저는 공개 users.email 사용.
+      const emailByUid: Record<string, string> = {};
+      try {
+        const psnap = await getDocs(collection(db, "userPrivate"));
+        psnap.forEach((p) => { const e = (p.data() as Record<string, unknown>).email as string; if (e) emailByUid[p.id] = e; });
+      } catch (e) { console.warn("[admin] userPrivate 로드 실패(폴백 사용):", e); }
       const userList: UserData[] = [];
       const premiumList: string[] = [];
       snap.forEach((d) => {
         const data = d.data() as Record<string, unknown>;
-        const email = (data.email as string) || d.id;
+        const email = emailByUid[d.id] || (data.email as string) || d.id;
         userList.push({ email, ...data, uid: d.id } as UserData);
         if (data.isPremium) premiumList.push(email);
       });

@@ -7,7 +7,14 @@ service cloud.firestore {
       return request.auth != null && request.auth.token.email == 'lhaa0130@gmail.com';
     }
 
-    // 회원 — 본인 또는 관리자만 수정
+    // ⚠️ 비공개 계정 정보(이메일·성별·연령대·provider) — 본인과 관리자만 읽고 쓴다.
+    //    users/{uid}는 공개 읽기(read:if true)라 이메일 등 PII를 여기 두면 안 된다.
+    //    (01-A단계: 이메일 공개 노출 차단 — PII를 users 밖 이 컬렉션으로 분리)
+    match /userPrivate/{userId} {
+      allow read, write: if request.auth != null && (request.auth.uid == userId || isAdmin());
+    }
+
+    // 회원 — 본인 또는 관리자만 수정 (공개 읽기 O, 단 PII는 userPrivate로 분리)
     match /users/{userId} {
       allow read: if true;
       allow write: if request.auth != null && (request.auth.uid == userId || isAdmin());

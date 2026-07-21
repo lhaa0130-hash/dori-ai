@@ -12,6 +12,7 @@ import {
 } from "firebase/auth";
 import { doc, setDoc, getDoc, serverTimestamp } from "firebase/firestore";
 import { getFirebaseAuth, getFirebaseFirestore, getGoogleProvider } from "@/lib/firebase";
+import { saveMyPrivate } from "@/lib/userPrivate";
 import { hydrateGameData } from "@/lib/cottonCandy";
 
 interface AuthUser {
@@ -79,22 +80,27 @@ async function ensureProfile(fu: FirebaseUser, extra?: Partial<SignupData>) {
         const ref = doc(db, "users", fu.uid);
         const snap = await getDoc(ref);
         if (!snap.exists()) {
+            // ⚠️ 공개 users 문서에는 PII(email·gender·ageGroup·provider)를 저장하지 않는다.
+            //    users는 read:if true(공개)라 PII가 노출된다. → 비공개 정보는 userPrivate로.
             await setDoc(ref, {
                 uid: fu.uid,
-                email: fu.email || "",
                 name: fu.displayName || extra?.name || (fu.email ? fu.email.split("@")[0] : "사용자"),
-                gender: extra?.gender || null,
-                ageGroup: extra?.ageGroup || null,
                 tier: 1,
                 level: 1,
                 doriExp: 0,
                 cottonCandy: 100, // 가입 환영 솜사탕
                 cottonCandyTotal: 100,
                 attendance: { lastChecked: "", streak: 0, weekDays: [], totalDays: 0 },
-                provider: fu.providerData[0]?.providerId || "password",
                 createdAt: serverTimestamp(),
             });
         }
+        // 비공개 계정 정보는 별도 컬렉션에 저장(본인·관리자만 read). 기존 문서 유무와 무관하게 보장.
+        await saveMyPrivate({
+            email: fu.email || "",
+            gender: extra?.gender ?? null,
+            ageGroup: extra?.ageGroup ?? null,
+            provider: fu.providerData[0]?.providerId || "password",
+        });
         // 로컬 프로필 호환 (기존 컴포넌트들이 참조)
         if (typeof window !== "undefined" && fu.email) {
             localStorage.setItem(`dori_user_name_${fu.email}`, fu.displayName || extra?.name || fu.email.split("@")[0]);
