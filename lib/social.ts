@@ -17,8 +17,8 @@
 
 import {
   doc, getDoc, setDoc, updateDoc, addDoc, deleteDoc, collection, query, where,
-  orderBy, limit, getDocs, onSnapshot, serverTimestamp, increment, arrayUnion, arrayRemove,
-  getCountFromServer,
+  orderBy, limit, startAfter, Timestamp, getDocs, onSnapshot, serverTimestamp, increment, arrayUnion, arrayRemove,
+  getCountFromServer, type QueryConstraint,
 } from "firebase/firestore";
 import { getFirebaseFirestore, getFirebaseAuth } from "@/lib/firebase";
 import { isReservedHandle } from "@/lib/reservedHandles";
@@ -649,13 +649,39 @@ export function watchMessages(threadId: string, cb: (msgs: DMMessage[]) => void)
 }
 
 // ─── 피드(글 + 이미지/영상 + 공개범위) ──────────────────────────
+// ⭐ 게시물 = 이 `feed` 컬렉션이 단일 원본이다(별도 posts 컬렉션 없음).
+//   /@handle 홈·/feed 커뮤니티·/profile 코지홈이 모두 재사용한다.
+//   공개범위 모델은 public + friends/groups(allowedUids 기반)의 상위집합.
+//   04-1 스펙의 public|private 중 private(=작성자 전용)은 non-public 게시물로 매핑된다.
 export type FeedVisibility = "public" | "friends" | "groups";
 export type MediaType = "image" | "video";
+// 04-1: 게시물 스펙 타입 — 공개조회/보안 판단용(외부 소비 지향)
+export type PostVisibility = "public" | "private"; // private = 작성자 전용(내부 friends/groups로 저장)
+export type PostStatus = "published" | "deleted";  // 소프트삭제 대비(현재는 하드삭제, 미설정=published)
+
+// 게시물 검증 상수 — 작성 API가 붙기 전에도 공유되는 단일 기준
+export const POST_MAX_LEN = 1000;      // 본문 최대 길이(기존 addPost slice 기준과 일치)
+export const POST_IMAGE_MAX = 4;       // 이미지 첨부 최대 개수
+export const POST_VISIBILITIES: readonly FeedVisibility[] = ["public", "friends", "groups"];
+
+/** 게시물 본문/이미지 입력 검증 — 빈 본문은 이미지가 있으면 허용. 실패 시 {ok:false, error}. */
+export function validatePostInput(content: string, imageUrls: string[] = []): { ok: boolean; error?: string } {
+  const text = (content || "").trim();
+  const imgs = Array.isArray(imageUrls) ? imageUrls : [];
+  if (!text && imgs.length === 0) return { ok: false, error: "내용이나 이미지를 입력해 주세요." };
+  if (text.length > POST_MAX_LEN) return { ok: false, error: `본문은 ${POST_MAX_LEN}자 이하여야 합니다.` };
+  if (imgs.length > POST_IMAGE_MAX) return { ok: false, error: `이미지는 최대 ${POST_IMAGE_MAX}장까지 가능합니다.` };
+  return { ok: true };
+}
+
 export interface FeedPost {
   id: string; uid: string; name: string; text: string; at: number;
   likeCount: number; likedByMe: boolean; commentCount: number;
   mediaUrl?: string; mediaType?: MediaType;
+  imageUrls?: string[];          // 다중 이미지(전방 호환) — 없으면 mediaUrl 단일에서 파생
   visibility: FeedVisibility;
+  status: PostStatus;            // 미설정 문서는 "published"로 해석(하위호환)
+  isPublic: boolean;             // visibility === "public" 편의 플래그
 }
 export interface NewPostOpts {
   mediaUrl?: string; mediaType?: MediaType;
@@ -666,13 +692,20 @@ export interface NewPostOpts {
 function mapPost(id: string, x: Record<string, unknown>): FeedPost {
   const me = currentUid();
   const likedBy = (x.likedBy as string[]) || [];
+  const visibility = (x.visibility as FeedVisibility) || "public";
+  const imageUrls = Array.isArray(x.imageUrls)
+    ? (x.imageUrls as unknown[]).map(String).slice(0, POST_IMAGE_MAX)
+    : (x.mediaUrl ? [String(x.mediaUrl)] : undefined);
   return {
     id, uid: String(x.uid || ""), name: String(x.name || "익명"), text: String(x.text || ""),
     at: tsToMillis(x.createdAt), likeCount: Number(x.likeCount || 0), likedByMe: !!me && likedBy.includes(me),
     commentCount: Number(x.commentCount || 0),
     mediaUrl: x.mediaUrl ? String(x.mediaUrl) : undefined,
     mediaType: (x.mediaType as MediaType) || undefined,
-    visibility: (x.visibility as FeedVisibility) || "public",
+    imageUrls,
+    visibility,
+    status: (x.status as PostStatus) === "deleted" ? "deleted" : "published",
+    isPublic: visibility === "public",
   };
 }
 
@@ -699,15 +732,95 @@ export async function listUserFeed(uid: string, n = 50): Promise<FeedPost[]> {
   return all.filter((p) => p.uid === uid).slice(0, n);
 }
 
+// ─── 04-1: 게시물 공개 조회 기반 (작성/수정/삭제·좋아요·댓글 UI는 후속 단계) ─────
+//   기존 `feed` 컬렉션 재사용. 삭제는 하드삭제(문서 제거)라 status 미설정=published로 해석.
+//   공개(public)는 비로그인 포함 누구나, 비공개(friends/groups=private)는 작성자·허용자만.
+
+/** 특정 유저의 "공개(public)" 게시물만 최신순. /@handle 홈 최근 게시물 영역용.
+ *  비로그인 포함 누구나 호출 가능(규칙이 public read 허용). 삭제글 제외. */
+export async function listPublicPostsByUser(uid: string, n = 3): Promise<FeedPost[]> {
+  if (!uid) return [];
+  const cap = Math.max(1, Math.min(n * 4, 60));
+  try {
+    // (uid, visibility) 복합 인덱스 존재 → 서버측 필터. 정렬은 메모리(유저당 문서 수 적음).
+    const snap = await getDocs(query(
+      collection(db(), "feed"),
+      where("uid", "==", uid),
+      where("visibility", "==", "public"),
+      limit(cap),
+    ));
+    const arr: FeedPost[] = [];
+    snap.forEach((d) => arr.push(mapPost(d.id, d.data() as Record<string, unknown>)));
+    return arr.filter((p) => p.status !== "deleted").sort((a, b) => b.at - a.at).slice(0, n);
+  } catch { return []; }
+}
+
+/** 현재 로그인 사용자의 전체 게시물(공개+비공개) 최신순. 기본은 삭제글 제외. */
+export async function listMyPosts(n = 50, opts: { includeDeleted?: boolean } = {}): Promise<FeedPost[]> {
+  const me = currentUid();
+  if (!me) return [];
+  const cap = Math.max(1, Math.min(n * 2, 200));
+  try {
+    const snap = await getDocs(query(
+      collection(db(), "feed"),
+      where("uid", "==", me),
+      limit(cap),
+    ));
+    const arr: FeedPost[] = [];
+    snap.forEach((d) => arr.push(mapPost(d.id, d.data() as Record<string, unknown>)));
+    return arr
+      .filter((p) => opts.includeDeleted || p.status !== "deleted")
+      .sort((a, b) => b.at - a.at)
+      .slice(0, n);
+  } catch { return []; }
+}
+
+/** 단일 게시물 조회 — public은 누구나, 비공개는 작성자 본인만, 삭제글은 null. */
+export async function getPost(postId: string): Promise<FeedPost | null> {
+  if (!postId) return null;
+  try {
+    const s = await getDoc(doc(db(), "feed", postId));
+    if (!s.exists()) return null;
+    const p = mapPost(s.id, s.data() as Record<string, unknown>);
+    if (p.status === "deleted") return null;
+    if (!p.isPublic) {
+      const me = currentUid();
+      if (!me || me !== p.uid) return null; // 비공개는 작성자 본인만(친구 열람은 후속 단계)
+    }
+    return p;
+  } catch { return null; }
+}
+
+/** 전체 공개 피드 — public·삭제제외·최신순. createdAt 밀리초 커서 페이지네이션.
+ *  ⚠️ 커서는 ms 정밀도라 동일 ms 경계에서 드물게 중복 가능 → 소비 측에서 id로 dedupe 권장. */
+export async function listPublicFeed(n = 20, cursor?: number): Promise<{ posts: FeedPost[]; nextCursor: number | null }> {
+  const cap = Math.max(1, Math.min(n, 50));
+  try {
+    const constraints: QueryConstraint[] = [where("visibility", "==", "public"), orderBy("createdAt", "desc")];
+    if (cursor && Number.isFinite(cursor)) constraints.push(startAfter(Timestamp.fromMillis(cursor)));
+    constraints.push(limit(cap));
+    const snap = await getDocs(query(collection(db(), "feed"), ...constraints));
+    const arr: FeedPost[] = [];
+    snap.forEach((d) => arr.push(mapPost(d.id, d.data() as Record<string, unknown>)));
+    // 반환 개수가 요청 상한 미만이면 더 없음 → nextCursor null
+    const nextCursor = arr.length >= cap && arr.length > 0 ? arr[arr.length - 1].at : null;
+    return { posts: arr.filter((p) => p.status !== "deleted"), nextCursor };
+  } catch { return { posts: [], nextCursor: null }; }
+}
+
 export async function addPost(name: string, text: string, opts: NewPostOpts = {}): Promise<boolean> {
   const uid = currentUid();
-  if (!uid || (!text.trim() && !opts.mediaUrl)) return false;
+  if (!uid) return false;
+  // 검증 상수/함수 단일 기준 재사용(빈 본문은 이미지 있으면 허용)
+  const v = validatePostInput(text, opts.mediaUrl ? [opts.mediaUrl] : []);
+  if (!v.ok) return false;
   try {
-    const visibility: FeedVisibility = opts.visibility || "public";
+    const visibility: FeedVisibility = POST_VISIBILITIES.includes(opts.visibility as FeedVisibility) ? (opts.visibility as FeedVisibility) : "public";
     const allowedUids = visibility === "public" ? [] : Array.from(new Set([uid, ...(opts.allowedUids || [])]));
     const data: Record<string, unknown> = {
-      uid, name: (name || "익명").slice(0, 20), text: text.trim().slice(0, 1000),
-      visibility, allowedUids, createdAt: serverTimestamp(), likeCount: 0, likedBy: [],
+      uid, name: (name || "익명").slice(0, 20), text: text.trim().slice(0, POST_MAX_LEN),
+      visibility, allowedUids, status: "published", createdAt: serverTimestamp(),
+      likeCount: 0, likedBy: [], commentCount: 0,
     };
     if (opts.mediaUrl) { data.mediaUrl = opts.mediaUrl; data.mediaType = opts.mediaType || "image"; }
     await addDoc(collection(db(), "feed"), data);

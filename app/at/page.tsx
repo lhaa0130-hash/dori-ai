@@ -7,13 +7,13 @@
 // ⚠️ 02단계 범위: SNS 프로필 + 미니홈피 중간 느낌의 '골격'.
 //   커버·프로필·통계·액션·탭·소개·대표작품·최근게시물·AI영역까지 화면만 완성.
 //   게시물/작품/팔로우/친구/메시지의 실제 CRUD·소셜 동작은 만들지 않음(준비 중/빈 상태).
-//   기존 함수 재사용: getProfileByHandle·getSocialCounts·getVisitStats·listFriends·listUserFeed.
+//   기존 함수 재사용: getProfileByHandle·getSocialCounts·getVisitStats·listFriends·listPublicPostsByUser.
 //   AI 일기(diary)는 본인 전용(비공개)이라 isOwner 일 때만 노출.
 
 import { useEffect, useState } from "react";
 import Link from "next/link";
 import {
-  getProfileByHandle, currentUid, getSocialCounts, getVisitStats, listFriends, listUserFeed,
+  getProfileByHandle, currentUid, getSocialCounts, getVisitStats, listFriends, listPublicPostsByUser,
   type Profile, type FeedPost,
 } from "@/lib/social";
 import { bgGradOf } from "@/lib/shopItems";
@@ -90,7 +90,8 @@ export default function AtHomePage() {
         followers: counts.followers, following: counts.following, posts: counts.posts,
         friends: friends.length, visitors: visits.total, works: (p.myAIs || []).length,
       });
-      const feed = await listUserFeed(p.uid, 3).catch(() => []);
+      // 04-1: 공개(public) 게시물만·삭제제외·최신순. 홈은 공개 프로필이라 공개글만 노출.
+      const feed = await listPublicPostsByUser(p.uid, 3).catch(() => []);
       if (alive) setPosts(feed);
     })();
     return () => { alive = false; };
@@ -258,7 +259,7 @@ export default function AtHomePage() {
             )}
           </section>
 
-          {/* 8) 최근 게시물 — listUserFeed(공개글). 없으면 빈 상태. CRUD 없음 */}
+          {/* 8) 최근 게시물 — listPublicPostsByUser(공개글만·삭제제외). 없으면 빈 상태. CRUD 없음 */}
           <section>
             <p className="text-[11px] font-bold text-[#F9954E] mb-2">최근 게시물</p>
             {posts === null ? (

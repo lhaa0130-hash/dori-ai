@@ -124,16 +124,26 @@ service cloud.firestore {
     }
 
     // 소셜 — 피드 (공개범위: public=전체 / 그 외=allowedUids 에 포함된 사람만)
+    //  status: 미설정=published 로 해석(하위호환). deleted 공개글은 익명 조회에서 제외.
     match /feed/{postId} {
-      allow read: if resource.data.visibility == 'public'
+      allow read: if (resource.data.visibility == 'public'
+                       && resource.data.get('status', 'published') != 'deleted')
                   || (request.auth != null && (request.auth.uid == resource.data.uid
                        || request.auth.uid in resource.data.allowedUids));
-      allow create: if request.auth != null && request.auth.uid == request.resource.data.uid;
-      // 소유자는 전체 수정, 타인은 좋아요/댓글수 필드만(본문·공개범위 등 무단 수정 차단)
-      allow update: if request.auth != null && (
-        request.auth.uid == resource.data.uid ||
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likeCount', 'likedBy', 'commentCount'])
-      );
+      // 작성: authorId=본인 uid 강제 + visibility 화이트리스트 + status는 published 로만 생성
+      allow create: if request.auth != null
+                    && request.resource.data.uid == request.auth.uid
+                    && request.resource.data.visibility in ['public', 'friends', 'groups']
+                    && request.resource.data.get('status', 'published') == 'published';
+      // 수정: authorId 변경 불가(모든 경로) + visibility 화이트리스트 유지.
+      //  소유자는 전체 수정, 타인은 좋아요/댓글수 필드만(본문·공개범위 등 무단 수정 차단)
+      allow update: if request.auth != null
+                    && request.resource.data.uid == resource.data.uid
+                    && request.resource.data.visibility in ['public', 'friends', 'groups']
+                    && (
+                      request.auth.uid == resource.data.uid ||
+                      request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likeCount', 'likedBy', 'commentCount'])
+                    );
       allow delete: if request.auth != null && request.auth.uid == resource.data.uid;
 
       // 댓글 — 글을 볼 수 있는 사람만 읽기/작성, 본인 또는 글주인이 삭제
