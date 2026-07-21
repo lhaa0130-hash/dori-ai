@@ -89,7 +89,9 @@ export default function sitemap(): MetadataRoute.Sitemap {
   let articleUrls: MetadataRoute.Sitemap = [];
   try {
     articleUrls = [
-      ...collect(getAllTrends(),    0.8),
+      // ⚠️ 트렌드(구버전)는 사실 근거가 약해 임시 색인 제외 → 사이트맵에서도 뺀다.
+      //    사실 근거 규칙으로 재생성된 뒤 다시 포함할 것. (기사 페이지 robots noindex와 짝)
+      // ...collect(getAllTrends(),    0.8),
       ...collect(getAllCurations(), 0.7),
       ...collect(getAllAnalyses(),  0.7),
       ...collect(getAllReports(),   0.7),

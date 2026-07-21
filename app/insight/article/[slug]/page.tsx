@@ -60,10 +60,16 @@ export async function generateMetadata(
     const url = `${SITE_URL}/insight/article/${params.slug}`;
     const tags = post.tags || [];
 
+    // ⚠️ 트렌드 기사(구버전)는 사실 근거가 약해 애드센스 '가치 없는 콘텐츠' 위험 →
+    //    사실 근거 규칙으로 재생성될 때까지 임시 색인 제외(follow는 유지해 링크는 따라감).
+    //    삭제하지 않고 사이트엔 그대로 남김. slug·카테고리 이중 판별.
+    const isLegacyTrend = params.slug.startsWith("trend-") || post.category === "트렌드";
+
     return {
       title: `${title} | illo`,
       description,
       keywords: ["AI 트렌드", "인공지능", "illo", "AI 인사이트", ...tags].join(", "),
+      ...(isLegacyTrend ? { robots: { index: false, follow: true } } : {}),
       alternates: {
         canonical: url,
         ...(hasEnglishVersion(params.slug)
