@@ -8,6 +8,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { CheckCircle2, Circle, Gift } from 'lucide-react';
 import { UserProfile, TIER_INFO, calculateTier, calculateLevel, getNextLevelExp, getNextTierExp, getCurrentLevelStartExp, TIER_THRESHOLDS, calculateLevelProgress } from "@/lib/userProfile";
 import { getCachedGameProfile } from "@/lib/cottonCandy";
+import { getProfile, currentUid } from "@/lib/social";
 
 // 아바타 옵션 (ProfileImageSelector와 동일 - 전체 목록)
 const AVATAR_OPTIONS = [
@@ -158,6 +159,8 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
   const [userPoints, setUserPoints] = useState(points);
   const [userProfile, setUserProfile] = useState<UserProfile | null>(null);
   const [profileImageUrl, setProfileImageUrl] = useState<string | undefined>(undefined);
+  // 공개 프로필 사진의 단일 원본 = Firestore users/{uid}.photoURL (공식 편집화면 /profile이 저장).
+  const [firestorePhoto, setFirestorePhoto] = useState<string | undefined>(undefined);
 
   // 미션 데이터
   const [missions, setMissions] = useState([
@@ -171,6 +174,28 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
   const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => setMounted(true), []);
+
+  // 공개 프로필 사진(Firestore photoURL)을 헤더 아바타의 단일 원본으로 사용.
+  //  /profile(공식 편집화면)에서 사진을 바꾸면 profileImageUpdated/profileUpdated 신호로 즉시 재조회.
+  //  photoURL이 없으면 아래 로컬(레거시 이모지/이미지) 값으로 폴백한다.
+  useEffect(() => {
+    if (!mounted || !user?.email) return;
+    let alive = true;
+    const load = () => {
+      const uid = currentUid();
+      if (!uid) return;
+      getProfile(uid).then((p) => { if (alive) setFirestorePhoto(p.photoURL || undefined); }).catch(() => {});
+    };
+    load();
+    const onUpd = () => load();
+    window.addEventListener("profileUpdated", onUpd);
+    window.addEventListener("profileImageUpdated", onUpd);
+    return () => {
+      alive = false;
+      window.removeEventListener("profileUpdated", onUpd);
+      window.removeEventListener("profileImageUpdated", onUpd);
+    };
+  }, [mounted, user?.email]);
 
   // 경험치/레벨/등급 실시간 반영: addExp가 쏘는 'dori-gamedata-synced' 이벤트로 재렌더
   const [, setSyncTick] = useState(0);
@@ -401,6 +426,8 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
   if (!mounted) return null;
 
   const isDark = theme === 'dark';
+  // 표시용 아바타: 공개 원본(Firestore photoURL) 우선, 없으면 레거시 로컬 아바타(이모지/이미지) 폴백.
+  const shownImage = firestorePhoto || profileImageUrl;
 
   // 프로필 정보 계산 (raw exp 일관 사용)
   // 경험치/레벨/등급의 단일 소스 = 게임 프로필 캐시(addExp가 갱신). 없으면 userProfile fallback.
@@ -431,21 +458,21 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
         <div
           className="w-8 h-8 rounded-full flex items-center justify-center text-sm font-semibold text-white flex-shrink-0 overflow-hidden"
           style={{
-            background: profileImageUrl?.startsWith("avatar:")
+            background: shownImage?.startsWith("avatar:")
               ? (isDark
                 ? "linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(168, 85, 247, 0.2))"
                 : "linear-gradient(135deg, #eef6ff, #f3e8ff)")
-              : profileImageUrl
-                ? `url(${profileImageUrl}) center/cover`
+              : shownImage
+                ? `url(${shownImage}) center/cover`
                 : 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
             border: `2px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'}`,
           }}
         >
-          {profileImageUrl?.startsWith("avatar:") ? (
+          {shownImage?.startsWith("avatar:") ? (
             <span style={{ fontSize: '1rem' }}>
-              {AVATAR_OPTIONS.find(a => a.id === profileImageUrl.replace("avatar:", ""))?.emoji || "👤"}
+              {AVATAR_OPTIONS.find(a => a.id === shownImage.replace("avatar:", ""))?.emoji || "👤"}
             </span>
-          ) : profileImageUrl ? null : (
+          ) : shownImage ? null : (
             displayName?.[0]?.toUpperCase() || "U"
           )}
         </div>
@@ -502,22 +529,22 @@ export default function AccountMenu({ user, displayName, points = 0, level = 1, 
                 <div
                   className="w-12 h-12 rounded-full flex items-center justify-center text-base font-bold text-white flex-shrink-0 overflow-hidden"
                   style={{
-                    background: profileImageUrl?.startsWith("avatar:")
+                    background: shownImage?.startsWith("avatar:")
                       ? (isDark
                         ? "linear-gradient(135deg, rgba(96, 165, 250, 0.2), rgba(168, 85, 247, 0.2))"
                         : "linear-gradient(135deg, #eef6ff, #f3e8ff)")
-                      : profileImageUrl
-                        ? `url(${profileImageUrl}) center/cover`
+                      : shownImage
+                        ? `url(${shownImage}) center/cover`
                         : 'linear-gradient(135deg, #3b82f6, #8b5cf6)',
                     boxShadow: '0 4px 12px rgba(59, 130, 246, 0.3)',
                     border: `2px solid ${isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.05)'}`,
                   }}
                 >
-                  {profileImageUrl?.startsWith("avatar:") ? (
+                  {shownImage?.startsWith("avatar:") ? (
                     <span style={{ fontSize: '1.5rem' }}>
-                      {AVATAR_OPTIONS.find(a => a.id === profileImageUrl.replace("avatar:", ""))?.emoji || "👤"}
+                      {AVATAR_OPTIONS.find(a => a.id === shownImage.replace("avatar:", ""))?.emoji || "👤"}
                     </span>
-                  ) : profileImageUrl ? null : (
+                  ) : shownImage ? null : (
                     displayName?.[0]?.toUpperCase() || "사"
                   )}
                 </div>

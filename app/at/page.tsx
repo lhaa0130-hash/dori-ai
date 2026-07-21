@@ -184,7 +184,7 @@ export default function AtHomePage() {
         <div className="mt-4 flex items-center gap-2">
           {isOwner ? (
             <>
-              <Link href="/my/edit" className="flex-1 text-center px-4 py-2.5 rounded-xl bg-[#F9954E] text-white text-[13px] font-bold active:scale-95 transition">프로필 편집</Link>
+              <Link href="/profile?edit=1" className="flex-1 text-center px-4 py-2.5 rounded-xl bg-[#F9954E] text-white text-[13px] font-bold active:scale-95 transition">프로필 편집</Link>
               <button type="button" disabled title={soon} className="flex-1 px-4 py-2.5 rounded-xl border border-stone-200 dark:border-zinc-700 text-stone-400 text-[13px] font-bold cursor-not-allowed">홈 꾸미기 · 준비 중</button>
             </>
           ) : (
@@ -233,7 +233,7 @@ export default function AtHomePage() {
             ) : isOwner ? (
               <div className="rounded-2xl border border-dashed border-stone-200 dark:border-zinc-800 p-4 text-center">
                 <p className="text-[13px] text-stone-500 dark:text-stone-400">아직 소개가 없습니다.<br />나를 소개하는 글을 작성해보세요.</p>
-                <Link href="/my/edit" className="inline-block mt-2 text-[12px] font-bold text-[#F9954E]">소개 작성 →</Link>
+                <Link href="/profile?edit=1" className="inline-block mt-2 text-[12px] font-bold text-[#F9954E]">소개 작성 →</Link>
               </div>
             ) : (
               <p className="text-[13px] text-stone-400">아직 소개가 없습니다.</p>

@@ -117,7 +117,7 @@ export default function ProfileHero({
 
             <div className="flex items-center gap-2">
               <Link
-                href={isEn ? "/en/my/edit" : "/my/edit"}
+                href={isEn ? "/en/profile?edit=1" : "/profile?edit=1"}
                 className={`px-3 py-1 rounded-full text-[10px] font-bold border transition-all duration-200 ${isDark
                     ? "bg-zinc-800 border-zinc-700 text-zinc-400 hover:text-white"
                     : "bg-stone-50 border-stone-200 text-stone-500 hover:bg-stone-100 hover:text-stone-900"

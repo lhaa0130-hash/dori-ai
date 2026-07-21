@@ -128,6 +128,11 @@ const T = {
     addFriend: "친구 추가",
     customizeCozyHome: "코지홈 꾸미기",
     getItemsFromShop: "🍬 상점에서 아이템 받기 →",
+    editHubHint: "프로필 사진·이름·아이디·소개를 모두 여기서 바꿔요.",
+    nameEditLabel: "표시 이름",
+    nameEditHint: "홈·헤더·글에 보이는 이름",
+    nameEditPlaceholder: "이름을 입력하세요",
+    nameRequired: "이름을 입력해주세요.",
     shareAddressLabel: "내 아이디 (개인 홈 주소)",
     shareAddressHint: "illo.im/@아이디 로 내 홈이 열려요",
     urlPreviewLabel: "내 홈 주소:",
@@ -278,6 +283,11 @@ const T = {
     addFriend: "Add friend",
     customizeCozyHome: "Customize Cozy Home",
     getItemsFromShop: "🍬 Get items from the shop →",
+    editHubHint: "Change your photo, name, ID, and bio all in one place.",
+    nameEditLabel: "Display name",
+    nameEditHint: "Shown on your home, header, and posts",
+    nameEditPlaceholder: "Enter your name",
+    nameRequired: "Please enter your name.",
     shareAddressLabel: "Your ID (personal home address)",
     shareAddressHint: "Opens your home at illo.im/@id",
     urlPreviewLabel: "Your home:",
@@ -428,7 +438,7 @@ function PickTile({
 }
 
 export default function ProfilePage() {
-  const { session, status } = useAuth();
+  const { session, status, update } = useAuth();
   const pathname = usePathname();
   const lang = (pathname || "").startsWith("/en") ? "en" : "ko";
   const t = T[lang];
@@ -447,6 +457,8 @@ export default function ProfilePage() {
 
   // 꾸미기(편집) 상태
   const [editing, setEditing] = useState(false);
+  const [autoEditReq, setAutoEditReq] = useState(false); // ?edit=1 자동 오픈 요청
+  const [editName, setEditName] = useState("");
   const [editBio, setEditBio] = useState("");
   const [editStatus, setEditStatus] = useState("");
   const [editColor, setEditColor] = useState("#F9954E");
@@ -531,9 +543,21 @@ export default function ProfilePage() {
       fromUrl = null;
     }
     setTargetUid(fromUrl && fromUrl.trim() ? fromUrl.trim() : mine);
+    // ?edit=1 (구 /my/edit 리다이렉트) → 내 코지홈이면 꾸미기 패널 자동 오픈
+    try {
+      if (new URLSearchParams(window.location.search).get("edit") === "1") setAutoEditReq(true);
+    } catch { /* 무시 */ }
   }, [status]);
 
   const isOwner = !!myUid && !!targetUid && myUid === targetUid;
+
+  // 자동 편집 요청(?edit=1)이 있고 본인 코지홈이 로드되면 한 번만 편집 패널을 연다.
+  useEffect(() => {
+    if (autoEditReq && isOwner && profile) {
+      setEditing(true);
+      setAutoEditReq(false);
+    }
+  }, [autoEditReq, isOwner, profile]);
 
   const loadAll = useCallback(async (uid: string) => {
     setLoading(true);
@@ -550,6 +574,7 @@ export default function ProfilePage() {
       setGuestbook(gb);
       setFeed(uf);
       setCounts(c);
+      setEditName(p.name || "");
       setEditBio(p.bio);
       setEditStatus(p.statusMsg);
       setEditColor(p.themeColor || "#F9954E");
@@ -645,6 +670,11 @@ export default function ProfilePage() {
     if (res.ok) {
       // photoURL은 Profile에 존재하지만 saveMyProfile의 patch 타입엔 빠져있어 타입 안전하게 전달
       await saveMyProfile({ photoURL: res.url } as Parameters<typeof saveMyProfile>[0]);
+      // 헤더(AccountMenu)가 공개 프로필 사진(Firestore photoURL)을 즉시 다시 읽도록 신호
+      if (typeof window !== "undefined") {
+        window.dispatchEvent(new CustomEvent("profileImageUpdated", { detail: { imageUrl: res.url, email: session?.user?.email } }));
+        window.dispatchEvent(new CustomEvent("profileUpdated"));
+      }
       await loadAll(targetUid);
     } else {
       setPhotoError(res.error || t.photoUploadFailed);
@@ -703,8 +733,12 @@ export default function ProfilePage() {
 
   const handleSave = async () => {
     if (!isOwner || !targetUid) return;
+    const trimmedName = editName.trim();
+    if (!trimmedName) { alert(t.nameRequired); return; }
     setSaving(true);
+    const nameChanged = trimmedName.slice(0, 20) !== (profile?.name || "");
     const ok = await saveMyProfile({
+      name: trimmedName.slice(0, 20),
       bio: editBio.slice(0, 300),
       statusMsg: editStatus.slice(0, 80),
       themeColor: editColor,
@@ -721,6 +755,15 @@ export default function ProfilePage() {
     });
     setSaving(false);
     if (ok) {
+      // 표시 이름을 Firebase Auth displayName·세션·헤더 캐시에도 동기화
+      //  (단일 원본은 Firestore users/{uid}.name — localStorage는 헤더 즉시반영용 UI 캐시)
+      if (nameChanged) {
+        try { await update({ name: trimmedName.slice(0, 20) }); } catch { /* 세션 반영 실패는 무시(다음 로드시 복구) */ }
+        const em = session?.user?.email;
+        if (em) { try { localStorage.setItem(`dori_user_name_${em}`, trimmedName.slice(0, 20)); } catch { /* 무시 */ } }
+      }
+      // 헤더(AccountMenu)가 Firestore 프로필을 다시 읽도록 신호
+      if (typeof window !== "undefined") window.dispatchEvent(new CustomEvent("profileUpdated"));
       setEditing(false);
       await loadAll(targetUid);
     } else {
@@ -1233,6 +1276,21 @@ export default function ProfilePage() {
                 {t.getItemsFromShop}
               </Link>
             </div>
+
+            {/* 프로필 편집 허브 안내 — 사진·이름·아이디·소개를 한 곳에서 */}
+            <p className="text-[11px] text-stone-400 mb-3">{t.editHubHint}</p>
+
+            {/* 표시 이름 — 홈·헤더·글에 보이는 이름(Firestore users/{uid}.name 단일 원본) */}
+            <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-1">
+              {t.nameEditLabel} <span className="font-normal text-stone-400">{t.nameEditHint}</span>
+            </label>
+            <input
+              value={editName}
+              onChange={(e) => setEditName(e.target.value)}
+              maxLength={20}
+              placeholder={t.nameEditPlaceholder}
+              className="w-full mb-4 px-3 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
+            />
 
             {/* 공유 주소(핸들) — 내 AI 페이지/코지홈 주소 */}
             <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-1">
