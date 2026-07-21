@@ -1,3 +1,7 @@
 # 회원 AI 호스팅 페이지 — /u/<handle>/<slug> 같은 동적 경로를 단일 렌더러(/u.html)로 rewrite.
 # 정적 export라 사전 생성이 불가하므로 클라이언트가 경로를 읽어 Firestore에서 내용을 불러온다.
 /u/*  /u.html  200
+
+# 사용자 개인 홈 — /@<username> 을 단일 렌더러(/at.html)로 rewrite (사용자 홈 01단계).
+# 사용자에게 보이는 URL은 /@username 그대로 유지. at.html이 경로를 읽어 공개 프로필 조회.
+/@*  /at.html  200
