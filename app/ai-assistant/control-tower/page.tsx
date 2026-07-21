@@ -7,6 +7,7 @@ export const metadata = createMetadata({
   description:
     "부서·팀·팀원을 노드로 만들고 팀원마다 AI 모델을 지정하는 AI 직원 조직도. illo.im 계정으로 로그인해 사용합니다.",
   path: "/ai-assistant/control-tower",
+  noIndex: true, // 로그인 필요 앱 셸 — 크롤러엔 로딩 상태만 보임
 });
 
 export default function ControlTowerPage() {

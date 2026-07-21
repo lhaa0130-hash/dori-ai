@@ -78,6 +78,18 @@ export default function RootLayout({
         />
         {/* RSS 피드 자동 발견 (구글·빙·뉴스 리더) */}
         <link rel="alternate" type="application/rss+xml" title="illo 최신 인사이트" href="https://illo.im/feed.xml" />
+        {/* AdSense 사이트 소유권 확인 메타태그. 신규 도메인(illo.im) 심사가 '준비 중'에서
+            넘어가지 않는 흔한 원인 — 스크립트만으로는 소유권 확인이 지연될 수 있어 병행. */}
+        <meta name="google-adsense-account" content="ca-pub-1868839951780851" />
+        {/* ⚠️ AdSense 로더는 raw HTML <head>에 직접 둔다. next/script(lazyOnload)로 넣으면
+            JS 실행 후에야 주입돼 검증 크롤러(=심사자)가 스크립트를 못 봐 '준비 중'에서 멈춘다.
+            여기 두면 SSR HTML에 그대로 들어가 검증·광고 서빙 모두 정상 동작. */}
+        {/* eslint-disable-next-line @next/next/no-sync-scripts */}
+        <script
+          async
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1868839951780851"
+          crossOrigin="anonymous"
+        />
         <StructuredData />
       </head>
       {/* [핵심 수정] 
@@ -91,13 +103,7 @@ export default function RootLayout({
         style={{ fontFamily: '"Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Noto Sans KR", "Malgun Gothic", "맑은 고딕", sans-serif' }}
       >
         {/* 분석 스크립트(GA4·Clarity)는 AnalyticsScripts 컴포넌트에서 로드 — 관리자 본인은 제외.
-            광고(AdSense)는 모든 방문자에게 노출되어야 하므로 여기서 그대로 로드. lazyOnload로 지연. */}
-        <Script
-          async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1868839951780851"
-          crossOrigin="anonymous"
-          strategy="lazyOnload"
-        />
+            AdSense 로더는 위 <head>에서 raw script로 직접 로드한다(검증 크롤러 가시성). */}
 
         <Providers>
           <AnalyticsScripts />

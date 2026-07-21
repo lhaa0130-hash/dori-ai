@@ -10,6 +10,7 @@ export const metadata = createMetadata({
   title: "AI비서 (비서일로) — 브라우저에서 바로 쓰는 AI 도구",
   description: "설치 없이 브라우저에서 바로 쓰는 AI비서. 내 API 키로 블로그·SNS·카피·상품설명·답변·요약을 즉시 생성하세요.",
   path: "/illo/app",
+  noIndex: true, // 로그인 필요 앱 셸 — 크롤러엔 로딩 상태만 보임
 });
 
 export default function IlloWebPage() {

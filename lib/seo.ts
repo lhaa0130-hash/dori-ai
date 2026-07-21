@@ -12,6 +12,8 @@ interface CreateMetadataProps {
   locale?: "ko" | "en";
   // 다국어 대응 페이지면 ko/en 경로를 주면 hreflang 상호 링크를 생성
   hreflang?: { ko: string; en: string };
+  // 로그인 필요·앱 셸 등 크롤러엔 빈 페이지로 보이는 화면 → 색인 제외(애드센스 '가치 없는 콘텐츠' 방지)
+  noIndex?: boolean;
 }
 
 export function createMetadata({
@@ -22,7 +24,15 @@ export function createMetadata({
   keywords,
   locale = "ko",
   hreflang,
+  noIndex = false,
 }: CreateMetadataProps & { keywords?: string[] }): Metadata {
+  const robots = noIndex
+    ? { index: false, follow: false, googleBot: { index: false, follow: false } }
+    : {
+        index: true,
+        follow: true,
+        googleBot: { index: true, follow: true, "max-video-preview": -1, "max-image-preview": "large" as const, "max-snippet": -1 },
+      };
   const fullUrl = `${SITE_URL}${path}`;
   const languages = hreflang
     ? {
@@ -88,16 +98,6 @@ export function createMetadata({
       images: [image],
       creator: "@illo",
     },
-    robots: {
-      index: true,
-      follow: true,
-      googleBot: {
-        index: true,
-        follow: true,
-        "max-video-preview": -1,
-        "max-image-preview": "large",
-        "max-snippet": -1,
-      },
-    },
+    robots,
   };
 }
