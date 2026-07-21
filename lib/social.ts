@@ -655,8 +655,9 @@ export function watchMessages(threadId: string, cb: (msgs: DMMessage[]) => void)
 //   04-1 스펙의 public|private 중 private(=작성자 전용)은 non-public 게시물로 매핑된다.
 export type FeedVisibility = "public" | "friends" | "groups";
 export type MediaType = "image" | "video";
-// 04-1: 게시물 스펙 타입 — 공개조회/보안 판단용(외부 소비 지향)
-export type PostVisibility = "public" | "private"; // private = 작성자 전용(내부 friends/groups로 저장)
+// 04-1A: 공개범위 타입은 FeedVisibility 하나로 통일(중복 PostVisibility 제거).
+//   "private"(작성자 전용)는 별도 DB 값으로 도입하지 않음 — 필요 시 non-public(friends/groups,
+//   allowedUids=[self])로 표현 가능. private 도입은 후속 설계 사항.
 export type PostStatus = "published" | "deleted";  // 소프트삭제 대비(현재는 하드삭제, 미설정=published)
 
 // 게시물 검증 상수 — 작성 API가 붙기 전에도 공유되는 단일 기준
@@ -740,18 +741,20 @@ export async function listUserFeed(uid: string, n = 50): Promise<FeedPost[]> {
  *  비로그인 포함 누구나 호출 가능(규칙이 public read 허용). 삭제글 제외. */
 export async function listPublicPostsByUser(uid: string, n = 3): Promise<FeedPost[]> {
   if (!uid) return [];
-  const cap = Math.max(1, Math.min(n * 4, 60));
+  const cap = Math.max(1, Math.min(n, 30));
   try {
-    // (uid, visibility) 복합 인덱스 존재 → 서버측 필터. 정렬은 메모리(유저당 문서 수 적음).
+    // (uid ASC, visibility ASC, createdAt DESC) 복합 인덱스로 서버측 정렬·제한.
+    //  status는 메모리 필터(미설정=published라 where status== 를 쓰면 레거시 문서가 누락됨).
     const snap = await getDocs(query(
       collection(db(), "feed"),
       where("uid", "==", uid),
       where("visibility", "==", "public"),
+      orderBy("createdAt", "desc"),
       limit(cap),
     ));
     const arr: FeedPost[] = [];
     snap.forEach((d) => arr.push(mapPost(d.id, d.data() as Record<string, unknown>)));
-    return arr.filter((p) => p.status !== "deleted").sort((a, b) => b.at - a.at).slice(0, n);
+    return arr.filter((p) => p.status !== "deleted").slice(0, n);
   } catch { return []; }
 }
 

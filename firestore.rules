@@ -123,6 +123,43 @@ service cloud.firestore {
              || (request.auth != null && (request.auth.uid == p.uid || request.auth.uid in p.allowedUids));
     }
 
+    // 타인의 좋아요 토글만 허용: 본인 uid 하나만 추가/제거 + likeCount 정확히 ±1(음수 금지).
+    //  다른 사람 uid 를 배열에 넣거나 빼거나, likeCount 를 임의 값으로 바꾸는 것을 차단.
+    function feedLikeToggleOnly() {
+      let b = resource.data;
+      let a = request.resource.data;
+      let uid = request.auth.uid;
+      return a.diff(b).affectedKeys().hasOnly(['likeCount', 'likedBy'])
+             && a.likeCount >= 0
+             && (
+               // 좋아요 추가
+               ( !(uid in b.likedBy)
+                 && a.likedBy.hasAll(b.likedBy)
+                 && a.likedBy.size() == b.likedBy.size() + 1
+                 && (uid in a.likedBy)
+                 && a.likeCount == b.likeCount + 1 )
+               ||
+               // 좋아요 취소
+               ( (uid in b.likedBy)
+                 && b.likedBy.hasAll(a.likedBy)
+                 && a.likedBy.size() == b.likedBy.size() - 1
+                 && !(uid in a.likedBy)
+                 && a.likeCount == b.likeCount - 1 )
+             );
+    }
+
+    // 타인의 댓글수 갱신: commentCount 만 정확히 ±1(음수 금지). 임의 값 설정 차단.
+    //  ⚠️ 실제 댓글 작성 여부와 원자적으로 묶을 수 없어(서브컬렉션 별도 쓰기) 반복 ±1 조작은
+    //     남아있음 → 정확한 집계는 후속(feed/{id}/likes·comments 파생) 단계 과제.
+    function feedCommentCountNudge() {
+      let b = resource.data;
+      let a = request.resource.data;
+      return a.diff(b).affectedKeys().hasOnly(['commentCount'])
+             && a.commentCount >= 0
+             && ( a.commentCount == b.get('commentCount', 0) + 1
+                  || a.commentCount == b.get('commentCount', 0) - 1 );
+    }
+
     // 소셜 — 피드 (공개범위: public=전체 / 그 외=allowedUids 에 포함된 사람만)
     //  status: 미설정=published 로 해석(하위호환). deleted 공개글은 익명 조회에서 제외.
     match /feed/{postId} {
@@ -130,19 +167,28 @@ service cloud.firestore {
                        && resource.data.get('status', 'published') != 'deleted')
                   || (request.auth != null && (request.auth.uid == resource.data.uid
                        || request.auth.uid in resource.data.allowedUids));
-      // 작성: authorId=본인 uid 강제 + visibility 화이트리스트 + status는 published 로만 생성
+      // 작성: authorId=본인 uid 강제 + visibility 화이트리스트 + status=published + 집계값 0 시작
       allow create: if request.auth != null
                     && request.resource.data.uid == request.auth.uid
                     && request.resource.data.visibility in ['public', 'friends', 'groups']
-                    && request.resource.data.get('status', 'published') == 'published';
-      // 수정: authorId 변경 불가(모든 경로) + visibility 화이트리스트 유지.
-      //  소유자는 전체 수정, 타인은 좋아요/댓글수 필드만(본문·공개범위 등 무단 수정 차단)
+                    && request.resource.data.get('status', 'published') == 'published'
+                    && request.resource.data.likeCount == 0
+                    && request.resource.data.likedBy.size() == 0
+                    && request.resource.data.get('commentCount', 0) == 0;
+      // 수정: 불변식(모든 경로) — authorId·작성일 변경 불가, visibility 화이트리스트,
+      //  status 는 published/deleted 만, 집계값 음수 금지. 그 위에서:
+      //  · 소유자: 본문·공개범위 등 자유 수정  · 타인: 본인 좋아요 토글 또는 댓글수 ±1 만.
       allow update: if request.auth != null
                     && request.resource.data.uid == resource.data.uid
+                    && request.resource.data.createdAt == resource.data.createdAt
                     && request.resource.data.visibility in ['public', 'friends', 'groups']
+                    && request.resource.data.get('status', 'published') in ['published', 'deleted']
+                    && request.resource.data.likeCount >= 0
+                    && request.resource.data.get('commentCount', 0) >= 0
                     && (
-                      request.auth.uid == resource.data.uid ||
-                      request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likeCount', 'likedBy', 'commentCount'])
+                      request.auth.uid == resource.data.uid
+                      || feedLikeToggleOnly()
+                      || feedCommentCountNudge()
                     );
       allow delete: if request.auth != null && request.auth.uid == resource.data.uid;
 
