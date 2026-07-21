@@ -96,7 +96,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
         return Number.isFinite(n) && n >= 190;
       }), 0.8),
       ...collect(getAllCurations(), 0.7),
-      ...collect(getAllAnalyses(),  0.7),
+      ...collect(getAllAnalyses().filter((a) => !(a as { noindex?: boolean }).noindex),  0.7),
       ...collect(getAllReports(),   0.7),
       ...collect(getAllStudios(),   0.8),
       ...collect(getAllMarketPosts(), 0.8),

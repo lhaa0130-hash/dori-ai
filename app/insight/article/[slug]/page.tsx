@@ -66,12 +66,15 @@ export async function generateMetadata(
     const TREND_INDEX_FROM = 190;
     const trendNum = params.slug.startsWith("trend-") ? parseInt(params.slug.slice(6), 10) : NaN;
     const isLegacyTrend = Number.isFinite(trendNum) && trendNum < TREND_INDEX_FROM;
+    // 개별 기사 frontmatter에 noindex:true 를 달면 그 글만 색인 제외(허구 통계 등 개별 대응).
+    const flaggedNoindex = post.noindex === true || post.noindex === "true";
+    const noIndexThis = isLegacyTrend || flaggedNoindex;
 
     return {
       title: `${title} | illo`,
       description,
       keywords: ["AI 트렌드", "인공지능", "illo", "AI 인사이트", ...tags].join(", "),
-      ...(isLegacyTrend ? { robots: { index: false, follow: true } } : {}),
+      ...(noIndexThis ? { robots: { index: false, follow: true } } : {}),
       alternates: {
         canonical: url,
         ...(hasEnglishVersion(params.slug)

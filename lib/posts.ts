@@ -155,6 +155,7 @@ export async function getPostData(id: string) {
       author: analysis.author,
       thumbnail_url: analysis.thumbnail,
       tags: analysis.tags,
+      noindex: analysis.noindex, // frontmatter noindex 통과(색인 제외 개별 대응)
     } as any;
   }
 

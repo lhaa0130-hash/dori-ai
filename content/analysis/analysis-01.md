@@ -6,7 +6,10 @@ author: illo
 category: 분석
 thumbnail: "/thumbnails/analysis/analysis-01.jpg?v=2"
 tags: [AI분석, 한국AI, 사용통계, 트렌드분석, 2026]
+noindex: true
 ---
+
+<!-- noindex 사유: 출처 없는 허구 설문 통계(3,000명·연령대별 %) — 애드센스 위험, 임시 색인 제외 -->
 
 ## 핵심 요약
 

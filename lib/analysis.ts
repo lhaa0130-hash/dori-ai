@@ -14,6 +14,7 @@ export interface AnalysisPost {
   lang?: "ko" | "en";
   tags?: string[];
   thumbnail?: string;
+  noindex?: boolean; // frontmatter noindex:true → 색인 제외(허구 통계 등 개별 대응)
 }
 
 // 📌 Frontmatter 파싱 함수 (가이드와 동일한 방식)
@@ -114,6 +115,7 @@ export function getAnalysisBySlug(slug: string): AnalysisPost | null {
     lang: metadata.lang === "en" ? "en" : "ko",
     tags: Array.isArray(metadata.tags) ? metadata.tags : (metadata.tags ? [metadata.tags] : []),
     thumbnail: metadata.thumbnail || metadata.image,
+    noindex: metadata.noindex === true || metadata.noindex === "true",
   };
 }
 
