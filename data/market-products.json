@@ -1,5 +1,57 @@
 [
   {
+    "id": "mk18-1",
+    "name": "시스맥스 마이룸 포르타 데스크 오거나이저",
+    "category": "living",
+    "source": "coupang",
+    "query": "시스맥스 마이룸 포르타",
+    "emoji": "🗂️",
+    "priceHint": "1만원대",
+    "summary": "책상 위 잡동사니 정리",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/fyw9ywaIdE"
+  },
+  {
+    "id": "mk18-2",
+    "name": "스테들러 트리플러스 화인라이너 세트",
+    "category": "living",
+    "source": "coupang",
+    "query": "스테들러 트리플러스 화인라이너",
+    "emoji": "✍️",
+    "priceHint": "1~2만원대",
+    "summary": "필기와 꾸미기 겸용 펜",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/fyw9yzciLQ"
+  },
+  {
+    "id": "mk18-3",
+    "name": "톰보 플레이컬러 K 트윈펜 세트",
+    "category": "living",
+    "source": "coupang",
+    "query": "톰보 플레이컬러 K 트윈펜",
+    "emoji": "🎨",
+    "priceHint": "1~2만원대",
+    "summary": "취미 손글씨 입문용",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/fyw9yClteu"
+  },
+  {
+    "id": "mk18-4",
+    "name": "카즈미 캠핑 설거지통",
+    "category": "living",
+    "source": "coupang",
+    "query": "카즈미 캠핑 설거지통",
+    "emoji": "🏕️",
+    "priceHint": "1~2만원대",
+    "summary": "캠핑 뒷정리 실용템",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/fyw9yFCNPM"
+  },
+  {
     "id": "mk17-1",
     "name": "코멧 홈 사계절 러그",
     "category": "furniture",
@@ -9,7 +61,7 @@
     "priceHint": "1~3만원대",
     "summary": "바닥 분위기 빠른 전환",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/ftyqfjjYNE"
   },
   {
@@ -22,7 +74,7 @@
     "priceHint": "1만원대",
     "summary": "소파 인상 바꾸는 소품",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/ftyqfl4DMi"
   },
   {
@@ -35,7 +87,7 @@
     "priceHint": "3~5만원대",
     "summary": "침대 옆 작은 보조공간",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/ftyqfpnPsy"
   },
   {
