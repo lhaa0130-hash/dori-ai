@@ -6,7 +6,39 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Tue, 21 Jul 2026 23:00:34 GMT</lastBuildDate>
+    <lastBuildDate>Wed, 22 Jul 2026 00:00:34 GMT</lastBuildDate>
+    <item>
+      <title>[AI Careers] How to Start a Frontline Deployment Engineering Job in 30 Days</title>
+      <link>https://illo.im/insight/article/video-77-en</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-77-en</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 21 Jul 2026 00:00:00 GMT</pubDate>
+      <description>Explore how to start a career in AI Frontline Deployment Engineering in 30 days.</description>
+    </item>
+    <item>
+      <title>[AI 직업] AI 전방 배치 엔지니어링 직업 설명</title>
+      <link>https://illo.im/insight/article/video-77</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-77</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 21 Jul 2026 00:00:00 GMT</pubDate>
+      <description>AI 전방 배치 엔지니어링 직업을 30일 내에 시작하는 방법을 설명합니다.</description>
+    </item>
+    <item>
+      <title>[이미지 생성] ComfyUI 공식 템플릿 탐색</title>
+      <link>https://illo.im/insight/article/video-78</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-78</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 21 Jul 2026 00:00:00 GMT</pubDate>
+      <description>ComfyUI의 주요 이미지 워크플로우를 시연합니다.</description>
+    </item>
+    <item>
+      <title>[스토리보드] 구글 Flow로 스토리보드 만들기</title>
+      <link>https://illo.im/insight/article/video-79</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-79</guid>
+      <category>큐레이션</category>
+      <pubDate>Tue, 21 Jul 2026 00:00:00 GMT</pubDate>
+      <description>구글 Flow의 스토리보드 스튜디오 기능을 소개합니다.</description>
+    </item>
     <item>
       <title>AI in Homework: The Race Between Students and School Regulations</title>
       <link>https://illo.im/insight/article/analysis-15-en</link>
@@ -294,38 +326,6 @@
       <category>분석</category>
       <pubDate>Mon, 06 Jul 2026 05:03:20 GMT</pubDate>
       <description>AI companies shift focus to monetization as pricing competition intensifies.</description>
-    </item>
-    <item>
-      <title>OpenAI ChatGPT Go와 Anthropic 기업 공략: ‘공짜 AI’ 시대가 끝나는 이유</title>
-      <link>https://illo.im/insight/article/analysis-12</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/analysis-12</guid>
-      <category>분석</category>
-      <pubDate>Mon, 06 Jul 2026 05:03:20 GMT</pubDate>
-      <description>AI 모델 가격 경쟁은 심해지고 있지만, AI 기업의 돈 버는 방식은 더 복잡해지고 있다. OpenAI의 저가 요금제와 광고 테스트 계획, Anthropic의 기업 시장 공략은 생성형 AI 경쟁의 중심이 성능에서 유통·신뢰·수익화로 이동하고 있음을 보여준다.</description>
-    </item>
-    <item>
-      <title>AI's New Frontier: From Compute Leasing to Government Contracts</title>
-      <link>https://illo.im/insight/article/report-10-en</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/report-10-en</guid>
-      <category>리포트</category>
-      <pubDate>Mon, 06 Jul 2026 02:03:16 GMT</pubDate>
-      <description>AI companies shift focus from model development to compute power and government contracts.</description>
-    </item>
-    <item>
-      <title>xAI·Anthropic·미 국방부·롯데이노베이트: 컴퓨트, 안보, 피지컬 AI로 이동한 돈길</title>
-      <link>https://illo.im/insight/article/report-10</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/report-10</guid>
-      <category>리포트</category>
-      <pubDate>Mon, 06 Jul 2026 02:03:16 GMT</pubDate>
-      <description>이번 주 AI 산업의 핵심은 모델 성능 경쟁보다 컴퓨트 접근권, 정부 조달, 현장형 로봇 인프라에 있었다. xAI의 데이터센터 컴퓨트 임대, 미 국방부의 기밀 AI 계약, 국내 피지컬 AI 확산을 통해 자본이 어디로 이동하는지 짚었다.</description>
-    </item>
-    <item>
-      <title>[토큰] AI 토큰의 높은 가격 이유</title>
-      <link>https://illo.im/insight/article/video-56</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-56</guid>
-      <category>큐레이션</category>
-      <pubDate>Mon, 06 Jul 2026 00:00:00 GMT</pubDate>
-      <description>AI 토큰 사용의 복잡성을 설명하는 영상입니다.</description>
     </item>
   </channel>
 </rss>
