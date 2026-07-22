@@ -90,6 +90,7 @@ const T = {
     replaceMedia: "사진·영상 교체",
     removeMedia: "첨부 제거",
     deleteConfirm: "이 게시물을 삭제할까요?\n삭제하면 피드와 사용자 홈에서 보이지 않습니다.",
+    deleted: "삭제되었어요.",
     deleteFailed: "삭제하지 못했어요. 잠시 후 다시 시도해 주세요.",
     editGroupsKeepHint: "공개 범위를 그대로 두면 기존 공유 대상이 유지돼요. 바꾸려면 범위를 다시 선택하세요.",
   },
@@ -152,6 +153,7 @@ const T = {
     replaceMedia: "Replace photo/video",
     removeMedia: "Remove attachment",
     deleteConfirm: "Delete this post?\nIt will no longer appear in the feed or on user home.",
+    deleted: "Deleted.",
     deleteFailed: "Couldn't delete. Please try again in a moment.",
     editGroupsKeepHint: "Leaving the visibility unchanged keeps the current audience. Re-select groups to change it.",
   },
@@ -407,7 +409,7 @@ export default function FeedPage() {
     setDeletingId(null);
     if (res.ok) {
       setPosts((prev) => prev.filter((p) => p.id !== postId));
-      setManageMsg(t.editSaved === "수정되었어요." ? "삭제되었어요." : "Deleted.");
+      setManageMsg(t.deleted);
       setTimeout(() => setManageMsg(""), 2500);
     } else {
       setManageMsg(res.error || t.deleteFailed);
@@ -741,6 +743,11 @@ export default function FeedPage() {
           </div>
         )}
 
+        {/* 수정/삭제 결과 안내(실제 성공/실패 후에만) */}
+        {manageMsg && (
+          <p role="status" aria-live="polite" className="mb-3 text-center text-[13px] font-semibold" style={{ color: POINT }}>{manageMsg}</p>
+        )}
+
         {/* 목록 */}
         {loading ? (
           <div className="space-y-3">
@@ -800,17 +807,102 @@ export default function FeedPage() {
                         {post.at ? new Date(post.at).toLocaleString(t.dateLocale) : ""}
                       </p>
                     </div>
-                    {mine && (
-                      <button
-                        type="button"
-                        onClick={() => handleDelete(post.id)}
-                        className="text-[11px] text-stone-400 hover:text-red-500 active:opacity-85 flex-shrink-0"
-                      >
-                        {t.delete}
-                      </button>
+                    {mine && post.status !== "deleted" && editingId !== post.id && (
+                      <div className="relative flex-shrink-0" ref={menuOpenId === post.id ? menuRef : undefined}>
+                        <button
+                          type="button"
+                          onClick={() => setMenuOpenId(menuOpenId === post.id ? null : post.id)}
+                          aria-haspopup="menu"
+                          aria-expanded={menuOpenId === post.id}
+                          aria-label={t.manageMenu}
+                          className="w-9 h-9 -mr-1.5 -mt-1 rounded-full flex items-center justify-center text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-zinc-900 active:opacity-85"
+                        >
+                          <span aria-hidden className="text-lg leading-none">⋯</span>
+                        </button>
+                        {menuOpenId === post.id && (
+                          <div role="menu" className="absolute right-0 top-9 z-20 w-28 rounded-xl border border-stone-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-lg py-1">
+                            <button role="menuitem" type="button" onClick={() => startEdit(post)} className="w-full text-left px-3.5 py-2.5 text-[13px] font-medium text-stone-700 dark:text-stone-200 hover:bg-stone-50 dark:hover:bg-zinc-900">{t.edit}</button>
+                            <button role="menuitem" type="button" onClick={() => handleSoftDelete(post.id)} disabled={deletingId === post.id} className="w-full text-left px-3.5 py-2.5 text-[13px] font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 disabled:opacity-50">{deletingId === post.id ? "..." : t.delete}</button>
+                          </div>
+                        )}
+                      </div>
                     )}
                   </div>
 
+                  {editingId === post.id ? (
+                    /* 04-4 인라인 수정 — 작성 컴포저를 복사하지 않고 카드 내부에서 최소 편집 */
+                    <div className="mt-2">
+                      <textarea
+                        value={editText}
+                        onChange={(e) => { setEditText(e.target.value); if (editError) setEditError(""); }}
+                        aria-label={t.composerLabel}
+                        rows={3}
+                        maxLength={POST_MAX_LEN}
+                        className="w-full resize-none rounded-xl bg-stone-100 dark:bg-zinc-900 px-3 py-2.5 text-sm text-stone-900 dark:text-stone-100 placeholder:text-stone-400 outline-none focus:ring-2 focus:ring-[#F9954E]/40"
+                      />
+                      {editUploading && (
+                        <div role="status" aria-live="polite" className="mt-2 flex items-center gap-2 text-sm text-stone-500 dark:text-stone-400">
+                          <span className="inline-block h-4 w-4 rounded-full border-2 border-stone-300 border-t-[#F9954E] animate-spin" />{t.uploading}
+                        </div>
+                      )}
+                      {editMedia && !editUploading && (
+                        <div className="mt-2 relative">
+                          {editMedia.type === "video" ? (
+                            <video src={editMedia.url} controls className="rounded-xl w-full max-h-72" />
+                          ) : (
+                            // eslint-disable-next-line @next/next/no-img-element
+                            <img src={editMedia.url} alt={t.mediaPreviewAlt} className="rounded-xl w-full max-h-72 object-cover" />
+                          )}
+                          <button type="button" onClick={() => setEditMedia(null)} className="absolute top-2 right-2 bg-black/60 text-white text-xs rounded-full px-2.5 py-1 active:opacity-85">{t.removeMedia}</button>
+                        </div>
+                      )}
+                      {/* 공개범위 칩 */}
+                      <div className="mt-3 flex flex-wrap items-center gap-2">
+                        {(["public", "friends", "groups"] as FeedVisibility[]).map((v) => (
+                          <button key={v} type="button" onClick={() => setEditVis(v)} aria-pressed={editVis === v}
+                            className={"text-xs font-semibold rounded-full px-3 py-1.5 active:opacity-85 transition " + (editVis === v ? "bg-[#F9954E] text-white" : "bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300")}>
+                            {v === "public" ? t.visPublicOption : v === "friends" ? t.visFriendsOption : t.visGroupsOption}
+                          </button>
+                        ))}
+                      </div>
+                      {editVis === "friends" && <p className="mt-2 text-[11px] text-stone-400">{t.friendsHint}</p>}
+                      {editVis === "groups" && (
+                        <div className="mt-2 rounded-xl bg-stone-100 dark:bg-zinc-900 p-3">
+                          {groups.length === 0 ? (
+                            <p className="text-xs text-stone-500 dark:text-stone-400">{t.noGroupsPrefix}{" "}<Link href="/messages" className="underline" style={{ color: POINT }}>{t.messagesGroupsLink}</Link>{t.noGroupsSuffix}</p>
+                          ) : (
+                            <div className="flex flex-col gap-2">
+                              {groups.map((g) => (
+                                <label key={g.id} className="flex items-center gap-2 text-sm text-stone-700 dark:text-stone-200">
+                                  <input type="checkbox" checked={editGroupIds.includes(g.id)} onChange={() => toggleEditGroup(g.id)} className="h-4 w-4 accent-[#F9954E]" />
+                                  <span className="truncate">{g.name}</span>
+                                  <span className="text-[11px] text-stone-400">{t.memberCount(g.memberUids.length)}</span>
+                                </label>
+                              ))}
+                              {post.visibility === "groups" && editGroupIds.length === 0 && (
+                                <p className="text-[11px] text-stone-400">{t.editGroupsKeepHint}</p>
+                              )}
+                            </div>
+                          )}
+                        </div>
+                      )}
+                      {editError && <p role="alert" className="mt-2 text-xs text-red-500">{editError}</p>}
+                      <div className="mt-3 flex items-center justify-between">
+                        <label className="cursor-pointer text-sm font-medium text-stone-500 dark:text-stone-400 hover:text-[#F9954E] active:opacity-85 transition inline-flex items-center gap-1.5">
+                          <span aria-hidden>📷</span><span>{editMedia ? t.replaceMedia : t.photoVideo}</span>
+                          <input type="file" accept="image/*,video/*" onChange={onPickEditFile} disabled={editUploading} aria-label={t.replaceMedia} className="hidden" />
+                        </label>
+                        <div className="flex items-center gap-2">
+                          <span className="text-[11px] text-stone-400" aria-hidden>{editText.length}/{POST_MAX_LEN}</span>
+                          <button type="button" onClick={() => cancelEdit(post)} disabled={editSaving} className="text-sm font-semibold rounded-full px-4 py-2 bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300 active:opacity-85 disabled:opacity-40 transition">{t.editCancel}</button>
+                          <button type="button" onClick={() => saveEdit(post)}
+                            disabled={editSaving || editUploading || !validatePostInput(editText, editMedia ? [editMedia.url] : []).ok || (editVis === "groups" && post.visibility !== "groups" && editGroupIds.length === 0)}
+                            className="bg-[#F9954E] text-white text-sm font-semibold rounded-full px-5 py-2 active:opacity-85 disabled:opacity-40 transition">{editSaving ? t.posting : t.editSave}</button>
+                        </div>
+                      </div>
+                    </div>
+                  ) : (
+                  <>
                   {post.text && (
                     <p className="mt-2 text-sm text-stone-700 dark:text-stone-300 whitespace-pre-line break-words">
                       {post.text}
@@ -940,6 +1032,8 @@ export default function FeedPage() {
                         </>
                       )}
                     </div>
+                  )}
+                  </>
                   )}
                 </li>
                 </>
