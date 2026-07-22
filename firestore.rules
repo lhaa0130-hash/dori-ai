@@ -183,10 +183,16 @@ service cloud.firestore {
     // 소셜 — 피드 (공개범위: public=전체 / 그 외=allowedUids 에 포함된 사람만)
     //  status: 미설정=published 로 해석(하위호환). deleted 공개글은 익명 조회에서 제외.
     match /feed/{postId} {
-      allow read: if (resource.data.visibility == 'public'
-                       && resource.data.get('status', 'published') != 'deleted')
-                  || (request.auth != null && (request.auth.uid == resource.data.uid
-                       || request.auth.uid in resource.data.allowedUids));
+      // 04-5: 삭제글은 작성자 포함 누구도 단건 조회 불가. 그 외에는
+      //  public=전체 / friends·groups=작성자 또는 allowedUids 포함자.
+      //  ⚠️ 목록(list) 쿼리에는 문서별 조건이 강제되지 않아 삭제글이 반환될 수 있으므로
+      //     조회 함수들이 메모리에서 status!=deleted 로 한 번 더 거른다(04-4).
+      allow read: if resource.data.get('status', 'published') != 'deleted'
+                  && (
+                    resource.data.visibility == 'public'
+                    || (request.auth != null && (request.auth.uid == resource.data.uid
+                         || request.auth.uid in resource.data.allowedUids))
+                  );
       // 작성: authorId=본인 uid 강제 + visibility 화이트리스트 + status=published + 집계값 0 시작
       allow create: if request.auth != null
                     && request.resource.data.uid == request.auth.uid

@@ -7,3 +7,7 @@
 #    자동으로 /at 로 308 리디렉션해 원본 /@username 경로가 사라진다(브라우저 URL이 /at 로 변경).
 #    /at(확장자 없음)이면 200 rewrite로 at.html 내용을 원본 URL 그대로 서빙 → JS가 경로 파싱 가능.
 /@*  /at  200
+
+# 게시물 상세 — /post/<postId> 를 단일 렌더러(/post)로 rewrite (게시물 04-5단계).
+# ⚠️ /@* 와 같은 이유로 목적지는 확장자 없는 /post 여야 한다(/post.html 은 308로 경로 유실).
+/post/*  /post  200

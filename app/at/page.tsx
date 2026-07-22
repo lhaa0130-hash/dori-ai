@@ -46,7 +46,12 @@ const POSTS_PAGE = 10; // 게시물 탭 더보기 페이지 크기
 function PostItem({ post, clamp = false }: { post: FeedPost; clamp?: boolean }) {
   return (
     <li className="rounded-2xl border border-stone-100 dark:border-zinc-800 p-3.5">
-      <p className="text-[11px] text-stone-400 mb-1">{fmtDate(post.at)}</p>
+      {/* 04-5: 작성시간이 게시물 상세(/post/<id>) 링크 */}
+      <p className="text-[11px] text-stone-400 mb-1">
+        <Link href={`/post/${post.id}`} aria-label="게시물 자세히 보기" className="hover:underline hover:text-[#F9954E]">
+          {fmtDate(post.at) || "자세히 보기"}
+        </Link>
+      </p>
       {post.text && (
         <p className={`text-[13.5px] text-stone-700 dark:text-stone-300 break-keep whitespace-pre-wrap ${clamp ? "line-clamp-3" : ""}`}>{post.text}</p>
       )}

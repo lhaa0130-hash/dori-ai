@@ -683,6 +683,7 @@ export interface FeedPost {
   visibility: FeedVisibility;
   status: PostStatus;            // 미설정 문서는 "published"로 해석(하위호환)
   isPublic: boolean;             // visibility === "public" 편의 플래그
+  updatedAt?: number;            // 04-5: 수정 시각(있을 때만) — 상세에서 '수정됨' 표시용
 }
 export interface NewPostOpts {
   mediaUrl?: string; mediaType?: MediaType;
@@ -707,6 +708,7 @@ function mapPost(id: string, x: Record<string, unknown>): FeedPost {
     visibility,
     status: (x.status as PostStatus) === "deleted" ? "deleted" : "published",
     isPublic: visibility === "public",
+    updatedAt: x.updatedAt ? tsToMillis(x.updatedAt) : undefined,
   };
 }
 
@@ -804,17 +806,21 @@ export async function listMyPosts(n = 50, opts: { includeDeleted?: boolean } = {
   } catch { return []; }
 }
 
-/** 단일 게시물 조회 — public은 누구나, 비공개는 작성자 본인만, 삭제글은 null. */
+/** 단일 게시물 조회(상세 페이지용) — 규칙과 동일 기준으로 판단.
+ *  public=누구나 / friends·groups=작성자 또는 allowedUids 포함자 / 삭제글=누구에게도 null.
+ *  ⚠️ 1차 차단은 Firestore 규칙(단건 read)에서 이뤄지고, 여기서는 동일 조건을 한 번 더 확인한다. */
 export async function getPost(postId: string): Promise<FeedPost | null> {
   if (!postId) return null;
   try {
     const s = await getDoc(doc(db(), "feed", postId));
     if (!s.exists()) return null;
-    const p = mapPost(s.id, s.data() as Record<string, unknown>);
+    const x = s.data() as Record<string, unknown>;
+    const p = mapPost(s.id, x);
     if (p.status === "deleted") return null;
     if (!p.isPublic) {
       const me = currentUid();
-      if (!me || me !== p.uid) return null; // 비공개는 작성자 본인만(친구 열람은 후속 단계)
+      const allowed = Array.isArray(x.allowedUids) ? (x.allowedUids as string[]) : [];
+      if (!me || (me !== p.uid && !allowed.includes(me))) return null;
     }
     return p;
   } catch { return null; }

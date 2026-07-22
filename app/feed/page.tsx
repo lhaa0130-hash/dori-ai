@@ -91,6 +91,7 @@ const T = {
     removeMedia: "첨부 제거",
     deleteConfirm: "이 게시물을 삭제할까요?\n삭제하면 피드와 사용자 홈에서 보이지 않습니다.",
     deleted: "삭제되었어요.",
+    openDetail: "게시물 자세히 보기",
     deleteFailed: "삭제하지 못했어요. 잠시 후 다시 시도해 주세요.",
     editGroupsKeepHint: "공개 범위를 그대로 두면 기존 공유 대상이 유지돼요. 바꾸려면 범위를 다시 선택하세요.",
   },
@@ -154,6 +155,7 @@ const T = {
     removeMedia: "Remove attachment",
     deleteConfirm: "Delete this post?\nIt will no longer appear in the feed or on user home.",
     deleted: "Deleted.",
+    openDetail: "View post detail",
     deleteFailed: "Couldn't delete. Please try again in a moment.",
     editGroupsKeepHint: "Leaving the visibility unchanged keeps the current audience. Re-select groups to change it.",
   },
@@ -289,6 +291,23 @@ export default function FeedPage() {
     myFollowingSet().then((s) => { if (alive) setFollowingSet(s); });
     return () => { alive = false; };
   }, [isLoggedIn, session]);
+
+  // 04-5: /post 상세의 '수정'이 ?edit=<postId> 로 들어오면 해당 글을 인라인 수정 모드로 연다.
+  //  (수정 폼을 복사하지 않고 기존 /feed 편집 UI 재사용)
+  const editReqRef = useRef<string | null>(null);
+  useEffect(() => {
+    try { editReqRef.current = new URLSearchParams(window.location.search).get("edit"); } catch { editReqRef.current = null; }
+  }, []);
+  useEffect(() => {
+    const want = editReqRef.current;
+    if (!want || editingId || !uid || posts.length === 0) return;
+    const target = posts.find((p) => p.id === want && p.uid === uid);
+    if (target) {
+      editReqRef.current = null;
+      startEdit(target);
+      try { window.history.replaceState(null, "", "/feed"); } catch { /* */ }
+    }
+  }, [posts, uid, editingId]);
 
   // 04-4 관리 메뉴(⋯) — 외부 클릭·Escape 로 닫기
   useEffect(() => {
@@ -803,8 +822,11 @@ export default function FeedPage() {
                           {VIS_LABEL[post.visibility] || t.visPublic}
                         </span>
                       </div>
+                      {/* 04-5: 작성시간을 상세 링크로(카드 전체를 감싸지 않아 버튼과 충돌 없음) */}
                       <p className="text-[11px] text-stone-400 mt-0.5">
-                        {post.at ? new Date(post.at).toLocaleString(t.dateLocale) : ""}
+                        <Link href={`/post/${post.id}`} aria-label={t.openDetail} className="hover:underline hover:text-[#F9954E]">
+                          {post.at ? new Date(post.at).toLocaleString(t.dateLocale) : t.openDetail}
+                        </Link>
                       </p>
                     </div>
                     {mine && post.status !== "deleted" && editingId !== post.id && (

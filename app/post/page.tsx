@@ -1,0 +1,257 @@
+"use client";
+
+// 게시물 상세 — illo.im/post/<postId> (게시물 04-5단계)
+// 정적 export + Cloudflare _redirects(/post/* → /post 200)로 어떤 postId 경로든 이 페이지가 받아
+// window.location 경로를 파싱해 Firestore에서 게시물을 불러온다(/@handle 렌더러와 동일 방식).
+//
+// ⚠️ 범위: 상세 조회 + 작성자 정보 + 본인 삭제만. 좋아요·댓글·공유·신고는 만들지 않는다.
+//   수정은 기존 폼 복사를 피해 /feed?edit=<id> 로 이동시켜 기존 인라인 수정 UI를 재사용한다.
+//   비공개(friends/groups) 판단은 Firestore 규칙이 1차 차단하고 getPost 가 동일 조건을 재확인한다.
+
+import { useEffect, useState, useCallback, useRef } from "react";
+import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { getPost, getProfile, currentUid, softDeletePost, type FeedPost, type Profile, type FeedVisibility } from "@/lib/social";
+
+type View =
+  | { kind: "loading" }
+  | { kind: "denied" }              // 없음/삭제됨/권한없음 — 구분하지 않고 동일 화면(존재 여부 비노출)
+  | { kind: "error" }
+  | { kind: "ok"; post: FeedPost };
+
+const VIS_LABEL: Record<FeedVisibility, string> = {
+  public: "전체 공개",
+  friends: "친구 공개",
+  groups: "그룹 공개",
+};
+
+function fmtDateTime(ms?: number): string {
+  if (!ms) return "";
+  const d = new Date(ms);
+  const p = (n: number) => String(n).padStart(2, "0");
+  return `${d.getFullYear()}.${p(d.getMonth() + 1)}.${p(d.getDate())} ${p(d.getHours())}:${p(d.getMinutes())}`;
+}
+
+export default function PostDetailPage() {
+  const router = useRouter();
+  const [postId, setPostId] = useState<string | null>(null);
+  const [view, setView] = useState<View>({ kind: "loading" });
+  const [author, setAuthor] = useState<Profile | null>(null);
+  const [me, setMe] = useState<string | null>(null);
+  const [menuOpen, setMenuOpen] = useState(false);
+  const [deleting, setDeleting] = useState(false);
+  const [actionError, setActionError] = useState("");
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
+  // 경로에서 postId 파싱 (/post/<id>) — 쿼리스트링 방식은 쓰지 않지만 ?id= 는 로컬 검증용 폴백
+  useEffect(() => {
+    let id = "";
+    try {
+      const segs = window.location.pathname.split("/").filter(Boolean); // ["post", "<id>"]
+      if (segs[0] === "post" && segs[1]) id = decodeURIComponent(segs[1]);
+      if (!id) id = new URLSearchParams(window.location.search).get("id") || "";
+    } catch { /* ignore */ }
+    setPostId(id.trim() || null);
+  }, []);
+
+  const load = useCallback(async (id: string, alive: () => boolean) => {
+    setView({ kind: "loading" });
+    setAuthor(null);
+    try {
+      const p = await getPost(id);
+      if (!alive()) return;
+      if (!p) { setView({ kind: "denied" }); return; }
+      setView({ kind: "ok", post: p });
+      // 작성자 공개 프로필(users/{uid})을 우선 사용. userPrivate 는 절대 읽지 않는다.
+      try {
+        const prof = await getProfile(p.uid);
+        if (alive()) setAuthor(prof);
+      } catch { /* 스냅샷 이름으로 폴백 */ }
+    } catch {
+      if (alive()) setView({ kind: "error" });
+    }
+  }, []);
+
+  useEffect(() => {
+    setMe(currentUid());
+    if (postId === null) return;
+    if (!postId) { setView({ kind: "denied" }); return; }
+    let ok = true;
+    load(postId, () => ok);
+    return () => { ok = false; };
+  }, [postId, load]);
+
+  // 공개글일 때만 제목/설명을 넣는다(비공개 글 내용이 문서 제목에 새지 않도록).
+  useEffect(() => {
+    if (view.kind !== "ok") return;
+    const p = view.post;
+    try {
+      if (p.isPublic) {
+        const who = author?.name || p.name;
+        document.title = `${who}님의 게시물 | illo`;
+        const desc = (p.text || "").replace(/\s+/g, " ").trim().slice(0, 120);
+        if (desc) {
+          let m = document.querySelector('meta[name="description"]');
+          if (!m) { m = document.createElement("meta"); m.setAttribute("name", "description"); document.head.appendChild(m); }
+          m.setAttribute("content", desc);
+        }
+      } else {
+        document.title = "게시물 | illo";
+      }
+    } catch { /* */ }
+  }, [view, author]);
+
+  // 관리 메뉴 — 외부 클릭·Escape 닫기
+  useEffect(() => {
+    if (!menuOpen) return;
+    const onDown = (e: MouseEvent) => { if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOpen(false); };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setMenuOpen(false); };
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => { document.removeEventListener("mousedown", onDown); document.removeEventListener("keydown", onKey); };
+  }, [menuOpen]);
+
+  const goBack = () => {
+    if (typeof window !== "undefined" && window.history.length > 1) router.back();
+    else router.push("/feed");
+  };
+
+  const handleDelete = async () => {
+    if (view.kind !== "ok" || deleting) return;
+    setMenuOpen(false);
+    if (!window.confirm("이 게시물을 삭제할까요?\n삭제하면 피드와 사용자 홈에서 보이지 않습니다.")) return;
+    setDeleting(true);
+    const res = await softDeletePost(view.post.id);
+    setDeleting(false);
+    if (res.ok) router.push("/feed"); // 실제 성공 후에만 이동
+    else setActionError(res.error || "삭제하지 못했어요. 잠시 후 다시 시도해 주세요.");
+  };
+
+  // ── 상태 화면 ───────────────────────────────────────────────
+  if (view.kind === "loading") {
+    return (
+      <main className="w-full max-w-2xl mx-auto px-5 py-16 text-center">
+        <p role="status" aria-live="polite" className="text-[13px] text-stone-400 animate-pulse">게시물을 불러오는 중…</p>
+      </main>
+    );
+  }
+
+  if (view.kind === "error") {
+    return (
+      <main className="w-full max-w-2xl mx-auto px-5 py-16 text-center">
+        <p role="alert" className="text-[14px] font-bold text-stone-700 dark:text-stone-200 mb-1">게시물을 불러오지 못했습니다.</p>
+        <p className="text-[13px] text-stone-500 dark:text-stone-400 mb-5">잠시 후 다시 시도해 주세요.</p>
+        <div className="flex items-center justify-center gap-2">
+          <button type="button" onClick={() => postId && load(postId, () => true)} className="px-4 py-2.5 rounded-full bg-[#F9954E] text-white text-[13px] font-bold active:scale-95 transition">다시 시도</button>
+          <Link href="/feed" className="px-4 py-2.5 rounded-full border border-stone-200 dark:border-zinc-700 text-[13px] font-bold text-stone-600 dark:text-stone-300">피드로 가기</Link>
+        </div>
+      </main>
+    );
+  }
+
+  if (view.kind === "denied") {
+    return (
+      <main className="w-full max-w-2xl mx-auto px-5 py-16 text-center">
+        <div className="w-16 h-16 rounded-2xl bg-stone-100 dark:bg-zinc-900 flex items-center justify-center text-3xl mb-5 mx-auto" aria-hidden>🔒</div>
+        <h1 className="text-[18px] font-extrabold text-stone-900 dark:text-white mb-2">게시물을 볼 수 없습니다.</h1>
+        <p className="text-[13.5px] text-stone-500 dark:text-stone-400 mb-6 break-keep">삭제되었거나 공개 범위가 제한된 게시물입니다.</p>
+        <div className="flex items-center justify-center gap-2">
+          <button type="button" onClick={goBack} className="px-4 py-2.5 rounded-full border border-stone-200 dark:border-zinc-700 text-[13px] font-bold text-stone-600 dark:text-stone-300">뒤로</button>
+          <Link href="/feed" className="px-5 py-2.5 rounded-full bg-[#F9954E] text-white text-[13px] font-bold active:scale-95 transition">피드로 가기</Link>
+        </div>
+      </main>
+    );
+  }
+
+  const p = view.post;
+  const mine = !!me && me === p.uid;
+  const displayName = author?.name || p.name || "사용자";
+  const handle = author?.handle || "";
+  const photo = author?.photoURL || "";
+  const edited = !!p.updatedAt && !!p.at && p.updatedAt > p.at + 1000; // 1초 이상 차이면 수정으로 간주
+
+  return (
+    <main className="w-full max-w-2xl mx-auto px-5 pt-4 pb-24">
+      {/* 상단 — 뒤로가기 / 관리 메뉴 */}
+      <div className="flex items-center justify-between gap-3 mb-4">
+        <button type="button" onClick={goBack} aria-label="이전 화면으로 돌아가기"
+          className="inline-flex items-center gap-1.5 h-9 px-3 -ml-2 rounded-full text-[13px] font-bold text-stone-500 dark:text-stone-400 hover:bg-stone-100 dark:hover:bg-zinc-900 active:opacity-85">
+          <span aria-hidden>←</span> 뒤로
+        </button>
+        {mine && (
+          <div className="relative flex-shrink-0" ref={menuRef}>
+            <button type="button" onClick={() => setMenuOpen((v) => !v)}
+              aria-haspopup="menu" aria-expanded={menuOpen} aria-label="게시물 관리 메뉴 열기"
+              className="w-9 h-9 rounded-full flex items-center justify-center text-stone-400 hover:text-stone-700 dark:hover:text-stone-200 hover:bg-stone-100 dark:hover:bg-zinc-900 active:opacity-85">
+              <span aria-hidden className="text-lg leading-none">⋯</span>
+            </button>
+            {menuOpen && (
+              <div role="menu" className="absolute right-0 top-10 z-20 w-28 rounded-xl border border-stone-100 dark:border-zinc-800 bg-white dark:bg-zinc-950 shadow-lg py-1">
+                {/* 수정 폼을 복사하지 않고 /feed 인라인 수정 UI 재사용 */}
+                <Link role="menuitem" href={`/feed?edit=${encodeURIComponent(p.id)}`} onClick={() => setMenuOpen(false)}
+                  className="block w-full text-left px-3.5 py-2.5 text-[13px] font-medium text-stone-700 dark:text-stone-200 hover:bg-stone-50 dark:hover:bg-zinc-900">수정</Link>
+                <button role="menuitem" type="button" onClick={handleDelete} disabled={deleting}
+                  className="w-full text-left px-3.5 py-2.5 text-[13px] font-medium text-red-500 hover:bg-red-50 dark:hover:bg-red-500/10 disabled:opacity-50">{deleting ? "..." : "삭제"}</button>
+              </div>
+            )}
+          </div>
+        )}
+      </div>
+
+      {actionError && <p role="alert" className="mb-3 text-xs text-red-500">{actionError}</p>}
+
+      <article className="rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
+        {/* 작성자 */}
+        <header className="flex items-center gap-3 mb-3">
+          <div className="w-11 h-11 rounded-full overflow-hidden bg-stone-100 dark:bg-zinc-900 flex items-center justify-center text-lg font-extrabold text-[#E8832E] shrink-0">
+            {photo
+              // eslint-disable-next-line @next/next/no-img-element
+              ? <img src={photo} alt={`${displayName} 프로필 이미지`} className="w-full h-full object-cover" />
+              : <span aria-hidden>{(displayName || "?").trim().charAt(0) || "?"}</span>}
+          </div>
+          <div className="min-w-0 flex-1">
+            {handle ? (
+              <Link href={`/@${handle}`} aria-label={`${displayName}님의 홈으로 이동`} className="block min-w-0 group">
+                <p className="text-[14px] font-extrabold text-stone-900 dark:text-white truncate group-hover:underline">{displayName}</p>
+                <p className="text-[12px] font-mono text-[#E8832E] dark:text-[#FBAA60] truncate">@{handle}</p>
+              </Link>
+            ) : (
+              <p className="text-[14px] font-extrabold text-stone-900 dark:text-white truncate">{displayName}</p>
+            )}
+          </div>
+          <span className="shrink-0 text-[10px] font-semibold rounded-full px-2 py-0.5 bg-stone-100 dark:bg-zinc-900 text-stone-500 dark:text-stone-400">
+            {VIS_LABEL[p.visibility] || VIS_LABEL.public}
+          </span>
+        </header>
+
+        <p className="text-[11.5px] text-stone-400 mb-3">
+          {fmtDateTime(p.at)}
+          {edited && <span className="ml-1.5">· 수정됨 {fmtDateTime(p.updatedAt)}</span>}
+        </p>
+
+        {/* 본문 — 전체 표시(clamp 없음), 줄바꿈 유지, 긴 단어·URL 줄바꿈 */}
+        {p.text && (
+          <p className="text-[15px] leading-relaxed text-stone-800 dark:text-stone-200 whitespace-pre-wrap break-words [overflow-wrap:anywhere]">
+            {p.text}
+          </p>
+        )}
+
+        {/* 미디어 */}
+        {p.mediaUrl && (
+          <div className="mt-4">
+            {p.mediaType === "video" ? (
+              <video src={p.mediaUrl} controls className="rounded-xl w-full max-w-full" />
+            ) : (
+              // eslint-disable-next-line @next/next/no-img-element
+              <img src={p.mediaUrl} alt="게시물 이미지" loading="lazy" className="rounded-xl w-full max-w-full h-auto" />
+            )}
+          </div>
+        )}
+      </article>
+
+      <div className="mt-4 text-center">
+        <Link href="/feed" className="text-[12.5px] font-bold text-[#F9954E]">피드로 가기 →</Link>
+      </div>
+    </main>
+  );
+}
