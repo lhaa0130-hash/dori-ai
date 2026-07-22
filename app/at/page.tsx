@@ -10,7 +10,7 @@
 //   기존 함수 재사용: getProfileByHandle·getSocialCounts·getVisitStats·listFriends·listPublicPostsByUser.
 //   AI 일기(diary)는 본인 전용(비공개)이라 isOwner 일 때만 노출.
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import {
   getProfileByHandle, currentUid, getSocialCounts, getVisitStats, listFriends, listPublicPostsByUser,
@@ -39,11 +39,47 @@ function fmtDate(ms?: number): string {
   return `${d.getFullYear()}.${String(d.getMonth() + 1).padStart(2, "0")}.${String(d.getDate()).padStart(2, "0")}`;
 }
 
+const POSTS_PAGE = 10; // 게시물 탭 더보기 페이지 크기
+
+// 공개 게시물 카드 — 작성시간·본문·이미지만(좋아요·댓글·수정·삭제 없음).
+//   홈 '최근 게시물'과 '게시물' 탭이 함께 재사용(복사 방지). clamp=홈 미리보기용 3줄 제한.
+function PostItem({ post, clamp = false }: { post: FeedPost; clamp?: boolean }) {
+  return (
+    <li className="rounded-2xl border border-stone-100 dark:border-zinc-800 p-3.5">
+      <p className="text-[11px] text-stone-400 mb-1">{fmtDate(post.at)}</p>
+      {post.text && (
+        <p className={`text-[13.5px] text-stone-700 dark:text-stone-300 break-keep whitespace-pre-wrap ${clamp ? "line-clamp-3" : ""}`}>{post.text}</p>
+      )}
+      {post.mediaUrl && post.mediaType === "image" && (
+        // eslint-disable-next-line @next/next/no-img-element
+        <img src={post.mediaUrl} alt="게시물 이미지" className="mt-2 w-full max-h-52 object-cover rounded-xl" loading="lazy" />
+      )}
+    </li>
+  );
+}
+
 export default function AtHomePage() {
   const [view, setView] = useState<View>({ kind: "loading" });
   const [tab, setTab] = useState<HomeTab>("home");
   const [stats, setStats] = useState<Stats | null>(null);
   const [posts, setPosts] = useState<FeedPost[] | null>(null);
+
+  // 게시물 탭 — 공개글 전체 목록(10개씩 더보기, cursor 기반). 홈 최근게시물(posts)과 별개.
+  const [tabPosts, setTabPosts] = useState<FeedPost[]>([]);
+  const [tabCursor, setTabCursor] = useState<number | undefined>(undefined);
+  const [tabLoading, setTabLoading] = useState(false);
+  const [tabHasMore, setTabHasMore] = useState(true);
+  const [tabLoaded, setTabLoaded] = useState(false);
+
+  const loadTabPosts = useCallback(async (uid: string, cursor?: number) => {
+    setTabLoading(true);
+    const page = await listPublicPostsByUser(uid, POSTS_PAGE, cursor).catch(() => []);
+    setTabPosts((prev) => (cursor ? [...prev, ...page] : page));
+    setTabHasMore(page.length === POSTS_PAGE);
+    if (page.length) setTabCursor(page[page.length - 1].at);
+    setTabLoading(false);
+    setTabLoaded(true);
+  }, []);
 
   useEffect(() => {
     let handle = "";
@@ -96,6 +132,13 @@ export default function AtHomePage() {
     })();
     return () => { alive = false; };
   }, []);
+
+  // 게시물 탭을 처음 열 때만 첫 10개 로드(지연 로딩)
+  useEffect(() => {
+    if (tab === "posts" && view.kind === "profile" && !tabLoaded && !tabLoading) {
+      loadTabPosts(view.profile.uid);
+    }
+  }, [tab, view, tabLoaded, tabLoading, loadTabPosts]);
 
   // ── 상태별 화면 ──────────────────────────────────────────────
   if (view.kind === "loading") {
@@ -219,7 +262,36 @@ export default function AtHomePage() {
       </nav>
 
       {/* 탭 콘텐츠 */}
-      {tab !== "home" ? (
+      {tab === "posts" ? (
+        /* 게시물 탭 — 공개글 전체 목록(최신순, 10개씩 더보기). 좋아요·댓글·수정·삭제 없음 */
+        <section className="px-5 pt-5">
+          <p className="text-[11px] font-bold text-[#F9954E] mb-2">게시물</p>
+          {!tabLoaded && tabLoading ? (
+            <p className="text-[13px] text-stone-400 animate-pulse" role="status">불러오는 중…</p>
+          ) : tabPosts.length === 0 ? (
+            <p className="text-[13px] text-stone-400">{isOwner ? "아직 작성한 게시물이 없습니다." : "아직 공개된 게시물이 없습니다."}</p>
+          ) : (
+            <>
+              <ul className="space-y-2.5">
+                {tabPosts.map((post) => <PostItem key={post.id} post={post} />)}
+              </ul>
+              {tabHasMore && (
+                <div className="mt-4 text-center">
+                  <button
+                    type="button"
+                    onClick={() => loadTabPosts(p.uid, tabCursor)}
+                    disabled={tabLoading}
+                    aria-label="게시물 더 보기"
+                    className="px-5 py-2.5 rounded-full border border-stone-200 dark:border-zinc-700 text-[13px] font-bold text-stone-600 dark:text-stone-300 active:scale-95 transition disabled:opacity-50"
+                  >
+                    {tabLoading ? "불러오는 중…" : "더 보기"}
+                  </button>
+                </div>
+              )}
+            </>
+          )}
+        </section>
+      ) : tab !== "home" ? (
         <section className="px-5 py-16 text-center">
           <div className="text-3xl mb-3 opacity-30">🚧</div>
           <p className="text-[14px] font-bold text-stone-500 dark:text-stone-400">{TABS.find((t) => t.id === tab)?.label} 탭은 {soon}</p>
@@ -266,15 +338,7 @@ export default function AtHomePage() {
               <p className="text-[13px] text-stone-400 animate-pulse">불러오는 중…</p>
             ) : posts.length > 0 ? (
               <ul className="space-y-2.5">
-                {posts.map((post) => (
-                  <li key={post.id} className="rounded-2xl border border-stone-100 dark:border-zinc-800 p-3.5">
-                    <p className="text-[11px] text-stone-400 mb-1">{fmtDate(post.at)}</p>
-                    <p className="text-[13.5px] text-stone-700 dark:text-stone-300 break-keep line-clamp-3 whitespace-pre-wrap">{post.text}</p>
-                    {post.mediaUrl && post.mediaType === "image" && (
-                      <img src={post.mediaUrl} alt="게시물 이미지" className="mt-2 w-full max-h-52 object-cover rounded-xl" loading="lazy" />
-                    )}
-                  </li>
-                ))}
+                {posts.map((post) => <PostItem key={post.id} post={post} clamp />)}
               </ul>
             ) : (
               <p className="text-[13px] text-stone-400">{isOwner ? "아직 작성한 게시물이 없습니다." : "아직 공개된 게시물이 없습니다."}</p>

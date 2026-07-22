@@ -739,19 +739,21 @@ export async function listUserFeed(uid: string, n = 50): Promise<FeedPost[]> {
 
 /** 특정 유저의 "공개(public)" 게시물만 최신순. /@handle 홈 최근 게시물 영역용.
  *  비로그인 포함 누구나 호출 가능(규칙이 public read 허용). 삭제글 제외. */
-export async function listPublicPostsByUser(uid: string, n = 3): Promise<FeedPost[]> {
+export async function listPublicPostsByUser(uid: string, n = 3, cursor?: number): Promise<FeedPost[]> {
   if (!uid) return [];
   const cap = Math.max(1, Math.min(n, 30));
   try {
     // (uid ASC, visibility ASC, createdAt DESC) 복합 인덱스로 서버측 정렬·제한.
     //  status는 메모리 필터(미설정=published라 where status== 를 쓰면 레거시 문서가 누락됨).
-    const snap = await getDocs(query(
-      collection(db(), "feed"),
+    //  cursor(createdAt ms)로 '더 보기' 페이지네이션 — listPublicFeed 와 동일 방식.
+    const constraints: QueryConstraint[] = [
       where("uid", "==", uid),
       where("visibility", "==", "public"),
       orderBy("createdAt", "desc"),
-      limit(cap),
-    ));
+    ];
+    if (cursor && Number.isFinite(cursor)) constraints.push(startAfter(Timestamp.fromMillis(cursor)));
+    constraints.push(limit(cap));
+    const snap = await getDocs(query(collection(db(), "feed"), ...constraints));
     const arr: FeedPost[] = [];
     snap.forEach((d) => arr.push(mapPost(d.id, d.data() as Record<string, unknown>)));
     return arr.filter((p) => p.status !== "deleted").slice(0, n);
