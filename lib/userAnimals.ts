@@ -8,6 +8,10 @@ import { getFirebaseFirestore, getFirebaseAuth } from "@/lib/firebase";
 import { uploadFeedMedia } from "@/lib/storage";
 import { addPost } from "@/lib/social";
 
+// ⚠️ info 는 [icon, key, value] 3요소 튜플의 배열 — 동물 시스템 전체(공식 도감+창작물)가 쓰는 UI 표준.
+//    그런데 Firestore 는 '배열 안의 배열'을 저장할 수 없어(INVALID_ARGUMENT) animalCreations 등록이
+//    항상 실패했다(04-12). 저장할 때만 {icon,key,value} 객체 배열로 바꾸고, 읽을 때 다시 튜플로 되돌려
+//    UI 렌더러(4곳)는 그대로 튜플을 받게 한다. => GenAnimal/Creation.info 의 튜플 타입은 유지.
 export interface GenAnimal {
   animal_name: string; en: string; search_nickname: string; kid_friendly_desc: string;
   status: { label: string; code: string; color: string };
@@ -20,9 +24,79 @@ export interface Creation extends GenAnimal {
   at: number; likeCount: number; likedByMe: boolean;
 }
 
+/** Firestore 에 실제로 저장되는 info 항목 형태(중첩 배열 회피). */
+export interface StoredInfoItem { icon: string; key: string; value: string; }
+
+export const CREATION_INFO_MAX = 12;   // info 항목 최대 개수
+export const CREATION_FACTS_MAX = 6;   // facts 최대 개수
+export const CREATION_FILTER_VALUES_MAX = 12;
+const INFO_STR_MAX = 80;
+const FACT_STR_MAX = 200;
+
 const db = () => getFirebaseFirestore();
 const uid = () => { try { return getFirebaseAuth().currentUser?.uid || null; } catch { return null; } };
 const tsToMs = (t: any) => (t && typeof t.toMillis === "function" ? t.toMillis() : Number(t) || 0);
+
+const cleanStr = (v: unknown, max: number): string =>
+  typeof v === "string" ? v.trim().slice(0, max) : "";
+
+/**
+ * 04-12: info 를 Firestore 저장 가능한 {icon,key,value}[] 로 정규화.
+ *  - 원본을 mutate 하지 않는다.
+ *  - 현재/과거 튜플 [icon,key,value] 와 이미 객체인 형태를 모두 받는다.
+ *  - 문자열이 아니거나 key·value 가 모두 비면 그 항목만 제외(전체 실패 아님).
+ *  - 문자열 길이·항목 개수 상한 적용.
+ */
+export function normalizeCreationInfo(input: unknown): StoredInfoItem[] {
+  if (!Array.isArray(input)) return [];
+  const out: StoredInfoItem[] = [];
+  for (const item of input) {
+    let icon: unknown, key: unknown, value: unknown;
+    if (Array.isArray(item)) { [icon, key, value] = item; }          // 튜플
+    else if (item && typeof item === "object") {                     // 객체
+      const o = item as Record<string, unknown>;
+      icon = o.icon; key = o.key; value = o.value;
+    } else { continue; }
+    const norm: StoredInfoItem = { icon: cleanStr(icon, INFO_STR_MAX), key: cleanStr(key, INFO_STR_MAX), value: cleanStr(value, INFO_STR_MAX) };
+    if (!norm.key && !norm.value) continue;                          // 의미 없는 항목 제외
+    out.push(norm);
+    if (out.length >= CREATION_INFO_MAX) break;
+  }
+  return out;
+}
+
+/** 저장된 info(객체 배열, 혹은 과거 튜플)를 UI 가 기대하는 [icon,key,value][] 튜플로 되돌린다. */
+function infoToTuples(raw: unknown): [string, string, string][] {
+  if (!Array.isArray(raw)) return [];
+  const out: [string, string, string][] = [];
+  for (const item of raw) {
+    if (Array.isArray(item)) {                                       // 과거 튜플(방어적)
+      out.push([String(item[0] ?? ""), String(item[1] ?? ""), String(item[2] ?? "")]);
+    } else if (item && typeof item === "object") {                  // 신규 객체
+      const o = item as Record<string, unknown>;
+      out.push([String(o.icon ?? ""), String(o.key ?? ""), String(o.value ?? "")]);
+    }
+  }
+  return out;
+}
+
+/** facts(문자열 배열) 정규화 — 문자열만, trim, 빈 항목 제거, 개수·길이 상한. */
+function normalizeFacts(input: unknown): string[] {
+  if (!Array.isArray(input)) return [];
+  return input.map((f) => cleanStr(f, FACT_STR_MAX)).filter(Boolean).slice(0, CREATION_FACTS_MAX);
+}
+
+/** filters(Record<string,string[]>) 정규화 — 값 배열은 문자열만·개수 상한, Firestore 미지원 값 제거. */
+function normalizeFilters(input: unknown): Record<string, string[]> {
+  if (!input || typeof input !== "object" || Array.isArray(input)) return {};
+  const out: Record<string, string[]> = {};
+  for (const [k, v] of Object.entries(input as Record<string, unknown>)) {
+    if (!Array.isArray(v)) continue;
+    const vals = v.map((x) => cleanStr(x, INFO_STR_MAX)).filter(Boolean).slice(0, CREATION_FILTER_VALUES_MAX);
+    out[cleanStr(k, INFO_STR_MAX)] = vals;
+  }
+  return out;
+}
 
 /** CF 엣지 함수로 AI 생성. 성공 시 { animal, imageUrl(fal 임시URL), remaining } */
 export async function generateAnimal(prompt: string): Promise<{ ok: true; animal: GenAnimal; imageUrl: string; remaining: number; limit: number } | { ok: false; error: string; remaining?: number }> {
@@ -60,23 +134,41 @@ export async function persistImage(falUrl: string): Promise<{ url: string | null
   }
 }
 
-/** 프로필/갤러리에 등록 → animalCreations 문서 생성. imageUrl은 영구(Storage) URL 권장 */
-export async function registerCreation(a: GenAnimal, imageUrl: string, prompt: string, authorName: string): Promise<string | null> {
+/**
+ * 프로필/갤러리에 등록 → animalCreations 문서 생성. imageUrl 은 영구(Storage) URL 권장.
+ * 04-12: info 를 {icon,key,value}[] 로 정규화(중첩 배열 저장 실패 해결). facts·filters 도 정규화.
+ *  집계·작성자·시각은 클라이언트 입력을 신뢰하지 않고 서버/현재 세션 값으로 강제한다.
+ * @returns 생성된 문서 ID
+ * @throws 로그인 오류·저장 실패(가짜 성공 금지 — 호출부에서 일반화)
+ */
+export async function registerCreation(a: GenAnimal, imageUrl: string, prompt: string, authorName: string): Promise<string> {
   const u = uid();
-  if (!u) return null;
-  try {
-    const ref = await addDoc(collection(db(), "animalCreations"), {
-      uid: u, authorName: (authorName || "익명").slice(0, 20), imageUrl, prompt: prompt.slice(0, 400),
-      animal_name: a.animal_name, en: a.en, search_nickname: a.search_nickname, kid_friendly_desc: a.kid_friendly_desc,
-      status: a.status, rarity: a.rarity, taxonomy_group: a.taxonomy_group,
-      info: a.info, facts: a.facts, filters: a.filters,
-      createdAt: serverTimestamp(), likeCount: 0, likedBy: [],
-    });
-    return ref.id;
-  } catch (e) {
-    console.warn("[userAnimals] 프로필 등록 실패:", e);
-    return null;
-  }
+  if (!u) throw new Error("creation/auth-required");
+  const img = cleanStr(imageUrl, 2000);
+  if (!img) throw new Error("creation/no-image");
+
+  const status = (a.status && typeof a.status === "object")
+    ? { label: cleanStr(a.status.label, INFO_STR_MAX), code: cleanStr(a.status.code, 8), color: cleanStr(a.status.color, 16) }
+    : { label: "관심대상", code: "LC", color: "#5BA86B" };
+  const rarity = Number.isFinite(a.rarity) ? Math.max(0, Math.min(5, Math.round(a.rarity))) : 2; // NaN/Infinity 방어
+
+  const ref = await addDoc(collection(db(), "animalCreations"), {
+    uid: u,                                            // 작성자는 현재 세션(입력값 무시)
+    authorName: cleanStr(authorName, 20) || "익명",
+    imageUrl: img,
+    prompt: cleanStr(prompt, 400),
+    animal_name: cleanStr(a.animal_name, 40),
+    en: cleanStr(a.en, 60),
+    search_nickname: cleanStr(a.search_nickname, 40),
+    kid_friendly_desc: cleanStr(a.kid_friendly_desc, 400),
+    status, rarity, taxonomy_group: cleanStr(a.taxonomy_group, 40) || "기타",
+    info: normalizeCreationInfo(a.info),               // ← 핵심: 튜플 → 객체 배열
+    facts: normalizeFacts(a.facts),
+    filters: normalizeFilters(a.filters),
+    createdAt: serverTimestamp(),                      // 서버 시각(입력값 무시)
+    likeCount: 0, likedBy: [],                         // 집계 초기값 강제
+  });
+  return ref.id;
 }
 
 /** 피드에 자랑 → 이미지+캡션 글 작성 */
@@ -100,7 +192,7 @@ function mapCreation(id: string, x: any): Creation {
     animal_name: String(x.animal_name || ""), en: String(x.en || ""), search_nickname: String(x.search_nickname || ""),
     kid_friendly_desc: String(x.kid_friendly_desc || ""), status: x.status || { label: "관심대상", code: "LC", color: "#5BA86B" },
     rarity: Number(x.rarity || 2), taxonomy_group: String(x.taxonomy_group || "기타"),
-    info: (x.info as [string, string, string][]) || [], facts: (x.facts as string[]) || [], filters: x.filters || {},
+    info: infoToTuples(x.info), facts: Array.isArray(x.facts) ? (x.facts as string[]) : [], filters: (x.filters && typeof x.filters === "object" && !Array.isArray(x.filters)) ? x.filters : {},
   };
 }
 

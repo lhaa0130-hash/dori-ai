@@ -330,9 +330,28 @@ service cloud.firestore {
                   .hasAny(['likeCount', 'likedBy', 'uid', 'createdAt']);
     }
 
+    // 04-12 생성 검증 — 작성자·집계·시각을 클라이언트 입력으로 신뢰하지 않고 타입/초기값을 강제한다.
+    //  info 는 list 여야 한다(과거엔 중첩 배열을 저장하려다 클라이언트 단에서 실패했지만, 규칙에서도
+    //  타입을 못박아 '문자열 info' 같은 위조를 차단). 실제 항목 shape 는 클라이언트 normalize 가 보장.
+    function acCreateValid() {
+      let d = request.resource.data;
+      return d.uid == request.auth.uid
+             && d.createdAt == request.time
+             && d.likeCount == 0
+             && d.likedBy is list && d.likedBy.size() == 0
+             && d.authorName is string && d.authorName.size() <= 20
+             && d.imageUrl is string && d.imageUrl.size() > 0 && d.imageUrl.size() <= 2000
+             && d.prompt is string && d.prompt.size() <= 400
+             && d.animal_name is string && d.animal_name.size() <= 40
+             && d.info is list && d.info.size() <= 20
+             && d.facts is list && d.facts.size() <= 10
+             && d.filters is map
+             && d.status is map;
+    }
+
     match /animalCreations/{id} {
       allow read: if true;
-      allow create: if request.auth != null && request.auth.uid == request.resource.data.uid;
+      allow create: if request.auth != null && acCreateValid();
       allow update: if request.auth != null && (acOwnerEdit() || acLikeToggleOnly());
       allow delete: if request.auth != null && (request.auth.uid == resource.data.uid || isAdmin());
     }

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import RequireAuth from "@/components/auth/RequireAuth";
 import { useAuth } from "@/contexts/AuthContext";
 import { generateAnimal, persistImage, registerCreation, shareCreationToFeed, getRemainingQuota, type GenAnimal } from "@/lib/userAnimals";
@@ -56,6 +56,9 @@ function Inner() {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState("");
   const [done, setDone] = useState<{ profile: boolean; feed: boolean }>({ profile: false, feed: false });
+  // ⚠️ busy(state)만으로는 같은 렌더 사이클의 연속 클릭을 못 막는다(04-11에서 실측).
+  //    등록/공유는 addDoc·addPost 로 새 문서를 만들어 중복 제출 시 문서가 여러 개 생긴다 → ref 로 동기 차단.
+  const submittingRef = useRef(false);
 
   useEffect(() => { getRemainingQuota().then(setRemaining); }, []);
 
@@ -77,23 +80,26 @@ function Inner() {
   }
   // ⚠️finally로 busy를 반드시 해제 — 예외/지연 시 버튼이 "저장 중…"에 갇히던 버그
   async function onRegister() {
-    if (!result || busy) return;
+    if (!result || submittingRef.current) return; // 동기 중복 제출 차단
+    submittingRef.current = true;
     setBusy("profile"); setError("");
     try {
       const r = await ensurePerm();
       if (!r.url) { setError(r.error || "이미지 저장에 실패했어요."); return; }
-      const id = await registerCreation(result.animal, r.url, prompt.trim(), authorName);
-      if (id) setDone((d) => ({ ...d, profile: true }));
-      else setError("등록에 실패했어요. 잠시 후 다시 시도해 주세요.");
+      // 04-12: registerCreation 은 성공 시 문서 ID 를 돌려주고 실패하면 throw 한다(가짜 성공 금지).
+      await registerCreation(result.animal, r.url, prompt.trim(), authorName);
+      setDone((d) => ({ ...d, profile: true }));
     } catch (e) {
       console.warn("[create-animal] 프로필 등록 오류:", e);
-      setError("문제가 생겼어요. 잠시 후 다시 시도해 주세요.");
+      setError("등록에 실패했어요. 잠시 후 다시 시도해 주세요."); // 입력·결과 유지, 가짜 성공 없음
     } finally {
+      submittingRef.current = false;
       setBusy("");
     }
   }
   async function onShare() {
-    if (!result || busy) return;
+    if (!result || submittingRef.current) return; // 동기 중복 제출 차단(피드 중복 게시 방지)
+    submittingRef.current = true;
     setBusy("feed"); setError("");
     try {
       const r = await ensurePerm();
@@ -105,6 +111,7 @@ function Inner() {
       console.warn("[create-animal] 피드 공유 오류:", e);
       setError("문제가 생겼어요. 잠시 후 다시 시도해 주세요.");
     } finally {
+      submittingRef.current = false;
       setBusy("");
     }
   }
@@ -139,7 +146,7 @@ function Inner() {
         >
           {gen ? "🎨 만드는 중… (5~10초)" : noQuota ? "오늘 횟수를 다 썼어요" : "✨ 동물 만들기"}
         </button>
-        {error && <p className="mt-2 text-[13px] font-bold text-red-500 break-keep">{error}</p>}
+        {error && <p role="alert" className="mt-2 text-[13px] font-bold text-red-500 break-keep">{error}</p>}
       </div>
 
       {gen && <div className="mt-6 rounded-3xl aspect-[4/5] max-w-xs mx-auto bg-stone-100 dark:bg-zinc-900 animate-pulse" />}
@@ -158,7 +165,7 @@ function Inner() {
             </button>
           </div>
           {(done.profile || done.feed) && (
-            <p className="mt-3 text-center text-[12px] text-stone-500">
+            <p role="status" className="mt-3 text-center text-[12px] text-stone-500">
               {done.profile && <a href="/profile" className="font-bold text-[#F9954E] hover:underline">내 프로필 보기</a>}
               {done.profile && done.feed && " · "}
               {done.feed && <a href="/feed" className="font-bold text-[#F9954E] hover:underline">피드 보기</a>}
