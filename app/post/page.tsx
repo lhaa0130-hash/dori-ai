@@ -11,7 +11,12 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { getPost, getProfile, currentUid, softDeletePost, toggleLike, type FeedPost, type Profile, type FeedVisibility } from "@/lib/social";
+import {
+  getPost, getProfile, currentUid, softDeletePost, toggleLike,
+  listComments, addComment, deleteComment,
+  type FeedPost, type Profile, type FeedVisibility, type Comment,
+} from "@/lib/social";
+import { useAuth } from "@/contexts/AuthContext";
 
 type View =
   | { kind: "loading" }
@@ -49,6 +54,16 @@ export default function PostDetailPage() {
   const [likeCount, setLikeCount] = useState(0);
   const [likeBusy, setLikeBusy] = useState(false);
   const [likeError, setLikeError] = useState("");
+  // 04-7 댓글 — feed/{postId}/comments 서브컬렉션 + 기존 listComments/addComment/deleteComment 재사용
+  const { session } = useAuth();
+  const [comments, setComments] = useState<Comment[] | null>(null); // null=아직 로드 전
+  const [commentCount, setCommentCount] = useState(0);
+  const [commentsError, setCommentsError] = useState("");
+  const [draft, setDraft] = useState("");
+  const [submitting, setSubmitting] = useState(false);
+  const [commentActionError, setCommentActionError] = useState("");
+  const [deletingCommentId, setDeletingCommentId] = useState<string | null>(null);
+  const composingRef = useRef(false); // 한글 IME 조합 중 Enter 제출 방지
 
   // 경로에서 postId 파싱 (/post/<id>) — 쿼리스트링 방식은 쓰지 않지만 ?id= 는 로컬 검증용 폴백
   useEffect(() => {
@@ -73,6 +88,16 @@ export default function PostDetailPage() {
       setLiked(!!p.likedByMe);
       setLikeCount(Math.max(0, Number(p.likeCount) || 0));
       setLikeError("");
+      // 댓글 초기화 후 별도 로드(실패해도 게시물 본문은 유지)
+      setComments(null);
+      setCommentCount(Math.max(0, Number(p.commentCount) || 0));
+      setCommentsError(""); setCommentActionError(""); setDraft("");
+      try {
+        const list = await listComments(id);
+        if (alive()) setComments(list);
+      } catch {
+        if (alive()) { setComments([]); setCommentsError("댓글을 불러오지 못했습니다."); }
+      }
       // 작성자 공개 프로필(users/{uid})을 우선 사용. userPrivate 는 절대 읽지 않는다.
       try {
         const prof = await getProfile(p.uid);
@@ -146,6 +171,46 @@ export default function PostDetailPage() {
       setLiked(wasLiked);
       setLikeCount(prevCount);
       setLikeError("좋아요 처리에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+    }
+  };
+
+  // ⚠️ 작성자 이름은 로케일과 무관하게 저장된다(/feed 와 동일 기준).
+  const myName = session?.user?.name || session?.user?.email?.split("@")[0] || "나";
+
+  // 댓글 등록 — /feed 와 동일하게 '실제 저장 성공 후 반영'(낙관적 추가 아님)
+  const handleAddComment = async () => {
+    if (view.kind !== "ok" || submitting) return;
+    if (!me) { setCommentActionError("로그인이 필요합니다."); return; }
+    const body = draft.trim();
+    if (!body) return;
+    setSubmitting(true);
+    setCommentActionError("");
+    const ok = await addComment(view.post.id, view.post.uid, myName, body);
+    if (ok) {
+      const list = await listComments(view.post.id).catch(() => null);
+      if (list) setComments(list);
+      setCommentCount((n) => Math.max(0, n + 1));
+      setDraft("");
+    } else {
+      // 실패 → 입력값 유지 + 안내(가짜 성공 금지)
+      setCommentActionError("댓글 등록에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+    }
+    setSubmitting(false);
+  };
+
+  // 본인 댓글 삭제 — 성공 후에만 목록·카운트 반영
+  const handleDeleteComment = async (c: Comment) => {
+    if (view.kind !== "ok" || deletingCommentId) return;
+    if (!window.confirm("이 댓글을 삭제할까요?")) return;
+    setDeletingCommentId(c.id);
+    setCommentActionError("");
+    const ok = await deleteComment(view.post.id, c.id);
+    setDeletingCommentId(null);
+    if (ok) {
+      setComments((prev) => (prev || []).filter((x) => x.id !== c.id));
+      setCommentCount((n) => Math.max(0, n - 1));
+    } else {
+      setCommentActionError("댓글 삭제에 실패했습니다.");
     }
   };
 
@@ -304,6 +369,92 @@ export default function PostDetailPage() {
         </div>
         {likeError && <p role="alert" className="mt-2 text-xs text-red-500">{likeError}</p>}
       </article>
+
+      {/* 04-7 댓글 — feed/{postId}/comments 재사용. 대댓글·댓글수정·댓글좋아요 없음 */}
+      <section aria-labelledby="comments-heading" className="mt-4 rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-5">
+        <h2 id="comments-heading" className="text-[13px] font-extrabold text-stone-900 dark:text-white mb-3">
+          댓글 <span className="tabular-nums" style={{ color: POINT }}>{commentCount}</span>
+        </h2>
+
+        {/* 입력 — 로그인 시에만 활성. 비로그인은 안내만(쓰기 시도 없음) */}
+        {me ? (
+          <div className="flex items-start gap-2">
+            <label htmlFor="comment-input" className="sr-only">댓글 입력</label>
+            <input
+              id="comment-input"
+              type="text"
+              value={draft}
+              onChange={(e) => { setDraft(e.target.value); if (commentActionError) setCommentActionError(""); }}
+              onCompositionStart={() => { composingRef.current = true; }}
+              onCompositionEnd={() => { composingRef.current = false; }}
+              onKeyDown={(e) => {
+                // 한글 IME 조합 중 Enter 는 제출하지 않는다(중복 등록 방지)
+                if (e.key === "Enter" && !e.shiftKey && !composingRef.current && !(e.nativeEvent as unknown as { isComposing?: boolean }).isComposing) {
+                  e.preventDefault();
+                  handleAddComment();
+                }
+              }}
+              placeholder="댓글을 입력하세요"
+              maxLength={500}
+              disabled={submitting}
+              className="flex-1 min-w-0 rounded-full bg-stone-100 dark:bg-zinc-900 px-4 py-2.5 text-sm text-stone-900 dark:text-stone-100 placeholder:text-stone-400 outline-none focus:ring-2 focus:ring-[#F9954E]/40 disabled:opacity-60"
+            />
+            <button
+              type="button"
+              onClick={handleAddComment}
+              disabled={!draft.trim() || submitting}
+              aria-label="댓글 등록"
+              className="shrink-0 bg-[#F9954E] text-white text-sm font-semibold rounded-full px-4 py-2.5 active:opacity-85 disabled:opacity-40 transition"
+            >
+              {submitting ? "..." : "등록"}
+            </button>
+          </div>
+        ) : (
+          <p className="text-[12.5px] text-stone-400">
+            <Link href="/login" className="underline font-semibold" style={{ color: POINT }}>로그인</Link> 후 댓글을 남길 수 있어요.
+          </p>
+        )}
+        {draft.length > 0 && <p className="mt-1 text-[11px] text-stone-400 text-right" aria-hidden>{draft.length}/500</p>}
+        {commentActionError && <p role="alert" className="mt-2 text-xs text-red-500">{commentActionError}</p>}
+        {commentsError && <p role="alert" className="mt-2 text-xs text-red-500">{commentsError}</p>}
+
+        {/* 목록 — 기존 정렬(오래된 순) 유지 */}
+        <div className="mt-4">
+          {comments === null ? (
+            <p role="status" aria-live="polite" className="text-[13px] text-stone-400 animate-pulse">댓글을 불러오는 중…</p>
+          ) : comments.length === 0 ? (
+            <p className="text-[13px] text-stone-400">아직 댓글이 없습니다.{me ? " 첫 댓글을 남겨보세요." : ""}</p>
+          ) : (
+            <ul className="space-y-3">
+              {comments.map((c) => {
+                const mineComment = !!me && c.uid === me;
+                return (
+                  <li key={c.id} className="flex items-start justify-between gap-2">
+                    <div className="min-w-0">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <span className="font-bold text-[12.5px] text-stone-900 dark:text-white truncate max-w-[160px]">{c.name}</span>
+                        <span className="text-[11px] text-stone-400">{fmtDateTime(c.at)}</span>
+                      </div>
+                      <p className="mt-0.5 text-[13.5px] text-stone-700 dark:text-stone-300 whitespace-pre-wrap break-words [overflow-wrap:anywhere]">{c.text}</p>
+                    </div>
+                    {mineComment && (
+                      <button
+                        type="button"
+                        onClick={() => handleDeleteComment(c)}
+                        disabled={deletingCommentId === c.id}
+                        aria-label="내 댓글 삭제"
+                        className="shrink-0 text-[11px] text-stone-400 hover:text-red-500 active:opacity-85 disabled:opacity-50 px-2 py-1"
+                      >
+                        {deletingCommentId === c.id ? "..." : "삭제"}
+                      </button>
+                    )}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
+        </div>
+      </section>
 
       <div className="mt-4 text-center">
         <Link href="/feed" className="text-[12.5px] font-bold text-[#F9954E]">피드로 가기 →</Link>

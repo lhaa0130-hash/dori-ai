@@ -117,17 +117,19 @@ service cloud.firestore {
     }
 
     // 글을 읽을 수 있는 사람인지 판단(댓글 권한에 재사용)
+    // 04-7: 삭제된 글(status:deleted)에는 댓글 조회·작성 모두 불가(작성자 포함).
     function canReadPost(postId) {
       let p = get(/databases/$(database)/documents/feed/$(postId)).data;
-      return p.visibility == 'public'
-             || (request.auth != null && (request.auth.uid == p.uid || request.auth.uid in p.allowedUids));
+      return p.get('status', 'published') != 'deleted'
+             && ( p.visibility == 'public'
+                  || (request.auth != null && (request.auth.uid == p.uid || request.auth.uid in p.allowedUids)) );
     }
 
     // 타인의 좋아요 토글만 허용: 본인 uid 하나만 추가/제거 + likeCount 정확히 ±1(음수 금지).
     //  다른 사람 uid 를 배열에 넣거나 빼거나, likeCount 를 임의 값으로 바꾸는 것을 차단.
-    // 04-6: 좋아요는 '그 게시물을 읽을 수 있는 사람'만 가능.
-    //  삭제글(status:deleted)과 접근 권한 없는 friends/groups 글에는 좋아요를 달 수 없다.
-    function feedLikeAllowedOn(b) {
+    // 04-6/04-7: 좋아요·댓글수 갱신은 '그 게시물을 읽을 수 있는 사람'만 가능.
+    //  삭제글(status:deleted)과 접근 권한 없는 friends/groups 글에는 반응을 남길 수 없다.
+    function feedEngageAllowedOn(b) {
       return b.get('status', 'published') != 'deleted'
              && ( b.visibility == 'public'
                   || request.auth.uid == b.uid
@@ -138,7 +140,7 @@ service cloud.firestore {
       let b = resource.data;
       let a = request.resource.data;
       let uid = request.auth.uid;
-      return feedLikeAllowedOn(b)
+      return feedEngageAllowedOn(b)
              && a.diff(b).affectedKeys().hasOnly(['likeCount', 'likedBy'])
              && a.likeCount >= 0
              && (
@@ -164,7 +166,8 @@ service cloud.firestore {
     function feedCommentCountNudge() {
       let b = resource.data;
       let a = request.resource.data;
-      return a.diff(b).affectedKeys().hasOnly(['commentCount'])
+      return feedEngageAllowedOn(b)
+             && a.diff(b).affectedKeys().hasOnly(['commentCount'])
              && a.commentCount >= 0
              && ( a.commentCount == b.get('commentCount', 0) + 1
                   || a.commentCount == b.get('commentCount', 0) - 1 );
@@ -231,9 +234,20 @@ service cloud.firestore {
       allow delete: if request.auth != null && request.auth.uid == resource.data.uid;
 
       // 댓글 — 글을 볼 수 있는 사람만 읽기/작성, 본인 또는 글주인이 삭제
+      // 댓글 — 글을 볼 수 있는 사람만 읽기/작성, 본인 또는 글주인이 삭제. 수정(update)은 허용하지 않음.
+      //  04-7: 작성 시 허용 필드만·본문 문자열/길이/공백만 입력 차단을 규칙에서도 검증.
       match /comments/{commentId} {
         allow read:   if canReadPost(postId);
-        allow create: if request.auth != null && request.auth.uid == request.resource.data.uid && canReadPost(postId);
+        allow create: if request.auth != null
+                      && request.auth.uid == request.resource.data.uid
+                      && canReadPost(postId)
+                      && request.resource.data.keys().hasOnly(['uid', 'name', 'text', 'createdAt'])
+                      && request.resource.data.text is string
+                      && request.resource.data.text.size() > 0
+                      && request.resource.data.text.size() <= 500
+                      && request.resource.data.text.matches('.*\\S.*')
+                      && request.resource.data.name is string
+                      && request.resource.data.name.size() <= 20;
         allow delete: if request.auth != null && (request.auth.uid == resource.data.uid
                        || request.auth.uid == get(/databases/$(database)/documents/feed/$(postId)).data.uid);
       }
