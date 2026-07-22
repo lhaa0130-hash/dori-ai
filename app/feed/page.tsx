@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef, Fragment } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
@@ -15,7 +15,9 @@ import {
   watchGroups,
   feedVisibleAudience,
   audienceForGroups,
-  listComments,
+  listCommentsPage,
+  mergeComments,
+  localComment,
   addComment,
   deleteComment,
   validatePostInput,
@@ -24,6 +26,7 @@ import {
   type FeedVisibility,
   type FriendGroup,
   type Comment,
+  type CommentCursor,
 } from "@/lib/social";
 import { uploadFeedMedia } from "@/lib/storage";
 import { MARKET_PRODUCTS, SOURCE_META, CATEGORY_EMOJI, buildMarketUrl } from "@/constants/marketData";
@@ -75,6 +78,7 @@ const T = {
     loadingComments: "댓글 불러오는 중...",
     noComments: "아직 댓글이 없어요.",
     retry: "다시 시도",
+    moreComments: "댓글 더보기",
     commentPlaceholder: "댓글을 입력하세요",
     commentSubmit: "등록",
     loginLinkText: "로그인",
@@ -140,6 +144,7 @@ const T = {
     loadingComments: "Loading comments...",
     noComments: "No comments yet.",
     retry: "Retry",
+    moreComments: "Load more comments",
     commentPlaceholder: "Write a comment...",
     commentSubmit: "Post",
     loginLinkText: "Log in",
@@ -217,15 +222,36 @@ export default function FeedPage() {
     submitting: boolean;
     error: string;       // 조회 실패 메시지(빈 문자열이면 정상) — '댓글 0개'와 구분한다
     actionError: string; // 작성·삭제 실패 메시지
+    // 04-10 페이지네이션(게시물별 독립) — cursor·더보기 상태·추가 조회 오류
+    nextCursor: CommentCursor | null;
+    hasMore: boolean;
+    loadingMore: boolean;
+    loadMoreError: string;
   };
   const [commentMap, setCommentMap] = useState<Record<string, CommentState>>({});
+  // 04-10: 더보기 콜백이 최신 cursor 를 읽도록 미러 ref 를 둔다(stale closure 방지)
+  const commentMapRef = useRef<Record<string, CommentState>>({});
+  useEffect(() => { commentMapRef.current = commentMap; }, [commentMap]);
+  // 04-10 접근성: 더보기 버튼이 로딩 중 disabled 되면 포커스가 body 로 빠진다.
+  //  카드별 버튼 ref 를 두고 로딩이 끝나면 원래 버튼으로 포커스를 되돌린다.
+  const moreBtnRefs = useRef<Record<string, HTMLButtonElement | null>>({});
+  const moreFocusPostRef = useRef<string | null>(null);
+  useEffect(() => {
+    const pid = moreFocusPostRef.current;
+    if (!pid) return;
+    const s = commentMap[pid];
+    if (!s || s.loadingMore) return;
+    moreFocusPostRef.current = null;
+    const btn = moreBtnRefs.current[pid];
+    if (btn && !btn.disabled) btn.focus();
+  }, [commentMap]);
 
   const getCState = (postId: string): CommentState =>
-    commentMap[postId] || { open: false, items: [], loaded: false, loading: false, draft: "", submitting: false, error: "", actionError: "" };
+    commentMap[postId] || { open: false, items: [], loaded: false, loading: false, draft: "", submitting: false, error: "", actionError: "", nextCursor: null, hasMore: false, loadingMore: false, loadMoreError: "" };
 
   const patchCState = useCallback((postId: string, patch: Partial<CommentState>) => {
     setCommentMap((prev) => {
-      const cur = prev[postId] || { open: false, items: [], loaded: false, loading: false, draft: "", submitting: false, error: "", actionError: "" };
+      const cur = prev[postId] || { open: false, items: [], loaded: false, loading: false, draft: "", submitting: false, error: "", actionError: "", nextCursor: null, hasMore: false, loadingMore: false, loadMoreError: "" };
       return { ...prev, [postId]: { ...cur, ...patch } };
     });
   }, []);
@@ -272,6 +298,17 @@ export default function FeedPage() {
     const list = await listFeed(60);
     setPosts(list);
     setLoading(false);
+    // 04-10: 목록이 갈리면 이전 cursor 는 더 이상 유효하지 않다.
+    //  사라진 게시물(삭제 등)의 댓글 상태를 버리고, 남은 글은 다음에 열 때 첫 페이지부터 받는다.
+    const alive = new Set(list.map((p) => p.id));
+    setCommentMap((prev) => {
+      const next: Record<string, CommentState> = {};
+      for (const [pid, s] of Object.entries(prev)) {
+        if (!alive.has(pid)) continue; // 삭제된 게시물의 댓글 state 정리
+        next[pid] = { ...s, items: [], loaded: false, nextCursor: null, hasMore: false, loadingMore: false, loadMoreError: "", error: "" };
+      }
+      return next;
+    });
   }, []);
 
   useEffect(() => {
@@ -526,15 +563,55 @@ export default function FeedPage() {
 
   // 댓글 목록 조회 — 04-9: 실패를 빈 목록으로 숨기지 않고 그 글의 error 상태로만 표시한다.
   const loadComments = useCallback(async (postId: string) => {
-    patchCState(postId, { loading: true, error: "" });
+    // 04-10: 첫 페이지부터 다시 — cursor·더보기 오류도 함께 초기화한다
+    patchCState(postId, { loading: true, error: "", loadMoreError: "" });
     try {
-      const items = await listComments(postId);
-      patchCState(postId, { items, loaded: true, loading: false, error: "" });
+      const page = await listCommentsPage(postId);
+      patchCState(postId, {
+        items: page.comments, loaded: true, loading: false, error: "",
+        nextCursor: page.nextCursor, hasMore: page.hasMore,
+      });
     } catch {
       // 이 글의 댓글만 오류 — 다른 글과 피드 전체는 그대로 둔다(내부 오류 코드 미노출)
       patchCState(postId, { loading: false, loaded: false, error: "댓글을 불러오지 못했습니다." });
     }
   }, [patchCState]);
+
+  // 04-10 게시물별 댓글 더보기 — 카드 A 의 추가 조회가 카드 B 에 영향을 주지 않는다.
+  //  실패해도 이미 불러온 댓글과 cursor 를 유지해 같은 페이지를 다시 요청할 수 있게 한다.
+  const loadMoreComments = useCallback(async (postId: string, visibility?: FeedVisibility) => {
+    const cur = commentMapRef.current[postId];
+    if (!cur || cur.loadingMore || !cur.hasMore || !cur.nextCursor) return;
+    if (document.activeElement === moreBtnRefs.current[postId]) moreFocusPostRef.current = postId;
+    patchCState(postId, { loadingMore: true, loadMoreError: "" });
+    try {
+      const page = await listCommentsPage(postId, { cursor: cur.nextCursor });
+      setCommentMap((prev) => {
+        const s = prev[postId];
+        if (!s) return prev;
+        return {
+          ...prev,
+          [postId]: {
+            ...s,
+            items: mergeComments(s.items, page.comments), // ID 기준 dedupe
+            nextCursor: page.nextCursor,
+            hasMore: page.hasMore,
+            loadingMore: false,
+            loadMoreError: "",
+          },
+        };
+      });
+    } catch {
+      // 04-10 보안: 비공개 글이면 권한 상실일 수 있다. 이미 렌더된 비공개 댓글이 남지 않도록
+      //  피드를 다시 불러와(권한 없는 글은 목록에서 빠진다) 카드 자체를 정리한다.
+      if (visibility && visibility !== "public") {
+        patchCState(postId, { loadingMore: false, loadMoreError: "", items: [], loaded: false, open: false });
+        refresh();
+        return;
+      }
+      patchCState(postId, { loadingMore: false, loadMoreError: "댓글을 더 불러오지 못했습니다." });
+    }
+  }, [patchCState, refresh]);
 
   // 댓글 영역 토글 — 처음 펼칠 때(또는 이전에 실패했을 때) 목록 로드
   const toggleComments = async (post: FeedPost) => {
@@ -551,12 +628,18 @@ export default function FeedPage() {
     patchCState(post.id, { submitting: true, actionError: "" });
     try {
       // 04-9: 댓글 문서와 commentCount +1 이 하나의 batch 로 커밋된다(부분 반영 없음)
-      await addComment(post.id, post.uid, myName, body);
-      patchCState(post.id, { draft: "", submitting: false });
+      const newId = await addComment(post.id, post.uid, myName, body);
+      // 04-10: 전체 재조회 대신 방금 쓴 댓글만 맨 뒤에 붙인다(/post 와 동일 정책).
+      //  아직 안 불러온 중간 페이지가 있어도 '더보기' 때 mergeComments 가 제자리에 끼워 넣는다.
+      setCommentMap((prev) => {
+        const s = prev[post.id];
+        if (!s) return prev;
+        const mine = localComment(newId, uid || "", myName, body, s.items);
+        return { ...prev, [post.id]: { ...s, items: mergeComments(s.items, [mine]), draft: "", submitting: false } };
+      });
       setPosts((prev) =>
         prev.map((p) => (p.id === post.id ? { ...p, commentCount: p.commentCount + 1 } : p))
       );
-      await loadComments(post.id); // 저장 성공 후 재조회(재조회 실패는 목록 오류로만 표시)
     } catch {
       // 실패 → 입력 유지·목록 유지·count 유지(가짜 성공 금지)
       patchCState(post.id, { submitting: false, actionError: "댓글 등록에 실패했습니다. 잠시 후 다시 시도해 주세요." });
@@ -820,7 +903,9 @@ export default function FeedPage() {
             {shownPosts.map((post, idx) => {
               const mine = !!uid && post.uid === uid;
               return (
-                <>
+                // 04-10: map 이 반환하는 루트는 key 가 필요하다. key 없는 <> 라서 개발 모드에서
+                //  React key 경고가 났다(04-9에서 발견). 안정적인 post.id 를 key 로 준다.
+                <Fragment key={post.id}>
                   {idx > 0 && idx % 5 === 0 && AD_PRODUCTS.length > 0 && (
                     <FeedAdCard key={`ad-${idx}`} index={Math.floor(idx / 5) - 1} t={t} />
                   )}
@@ -1081,6 +1166,30 @@ export default function FeedPage() {
                               </button>
                             </div>
                           ) : null}
+                          {/* 04-10 게시물별 댓글 더보기 — 추가 조회 실패는 기존 목록을 지우지 않는다 */}
+                          {(getCState(post.id).hasMore || getCState(post.id).loadMoreError) && (
+                            <div className="mt-3">
+                              {getCState(post.id).loadMoreError && (
+                                <p role="alert" className="mb-2 text-xs text-red-500 break-words">
+                                  {getCState(post.id).loadMoreError}
+                                </p>
+                              )}
+                              <button
+                                ref={(el) => { moreBtnRefs.current[post.id] = el; }}
+                                type="button"
+                                onClick={() => loadMoreComments(post.id, post.visibility)}
+                                disabled={getCState(post.id).loadingMore || !getCState(post.id).hasMore}
+                                aria-label={getCState(post.id).loadMoreError ? "댓글 더보기 다시 시도" : "댓글 더보기"}
+                                className="w-full rounded-full bg-stone-100 dark:bg-zinc-900 text-stone-700 dark:text-stone-200 text-xs font-semibold px-3 py-2.5 active:opacity-85 disabled:opacity-50 transition"
+                              >
+                                {getCState(post.id).loadingMore ? t.loadingComments
+                                  : getCState(post.id).loadMoreError ? t.retry : t.moreComments}
+                              </button>
+                              {getCState(post.id).loadingMore && (
+                                <p role="status" aria-live="polite" className="sr-only">댓글을 더 불러오는 중입니다.</p>
+                              )}
+                            </div>
+                          )}
                           {/* 04-9: 이 글의 댓글 작성·삭제 실패 안내(가짜 성공 금지) */}
                           {getCState(post.id).actionError && (
                             <p role="alert" className="mt-2 text-xs text-red-500 break-words">
@@ -1102,7 +1211,7 @@ export default function FeedPage() {
                   </>
                   )}
                 </li>
-                </>
+                </Fragment>
               );
             })}
           </ul>

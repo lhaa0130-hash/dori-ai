@@ -13,7 +13,8 @@ import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
   getPost, getProfile, currentUid, softDeletePost, toggleLike,
-  listComments, addComment, deleteComment,
+  listCommentsPage, mergeComments, localComment, addComment, deleteComment,
+  type CommentCursor,
   type FeedPost, type Profile, type FeedVisibility, type Comment,
 } from "@/lib/social";
 import { useAuth } from "@/contexts/AuthContext";
@@ -63,8 +64,17 @@ export default function PostDetailPage() {
   const [submitting, setSubmitting] = useState(false);
   const [commentActionError, setCommentActionError] = useState("");
   const [commentsRetrying, setCommentsRetrying] = useState(false); // 04-9 재시도 중(중복 클릭 방지)
+  // 04-10 댓글 페이지네이션 — 초기 조회 오류(commentsError)와 추가 조회 오류(loadMoreError)를 구분한다
+  const [commentCursor, setCommentCursor] = useState<CommentCursor | null>(null);
+  const [commentsHasMore, setCommentsHasMore] = useState(false);
+  const [loadingMore, setLoadingMore] = useState(false);
+  const [loadMoreError, setLoadMoreError] = useState("");
   const [deletingCommentId, setDeletingCommentId] = useState<string | null>(null);
   const composingRef = useRef(false); // 한글 IME 조합 중 Enter 제출 방지
+  // 04-10 접근성: 더보기 버튼이 로딩 중 disabled 되면 포커스가 body 로 빠진다(키보드 사용자가 위치를 잃음).
+  //  로딩이 끝나고 버튼이 남아 있으면 포커스를 되돌린다.
+  const moreBtnRef = useRef<HTMLButtonElement | null>(null);
+  const moreHadFocusRef = useRef(false);
 
   // 경로에서 postId 파싱 (/post/<id>) — 쿼리스트링 방식은 쓰지 않지만 ?id= 는 로컬 검증용 폴백
   useEffect(() => {
@@ -93,9 +103,11 @@ export default function PostDetailPage() {
       setComments(null);
       setCommentCount(Math.max(0, Number(p.commentCount) || 0));
       setCommentsError(""); setCommentActionError(""); setDraft("");
+      // 04-10: 이전 게시물의 페이지네이션 상태가 새 게시물에 남지 않게 전부 초기화한다
+      setCommentCursor(null); setCommentsHasMore(false); setLoadingMore(false); setLoadMoreError("");
       try {
-        const list = await listComments(id);
-        if (alive()) setComments(list);
+        const page = await listCommentsPage(id);
+        if (alive()) { setComments(page.comments); setCommentCursor(page.nextCursor); setCommentsHasMore(page.hasMore); }
       } catch {
         // 04-9: 조회 실패는 '댓글 0개'가 아니다. comments 는 null 로 두고 오류 상태로 표시한다.
         //  (내부 오류 코드·uid 는 사용자에게 노출하지 않는다)
@@ -190,14 +202,71 @@ export default function PostDetailPage() {
     if (view.kind !== "ok" || commentsRetrying) return;
     setCommentsRetrying(true);
     try {
-      const list = await listComments(view.post.id);
-      setComments(list);
+      // 04-10: 초기 조회 재시도는 첫 페이지부터 다시 — cursor 도 함께 초기화한다
+      const page = await listCommentsPage(view.post.id);
+      setComments(page.comments);
+      setCommentCursor(page.nextCursor);
+      setCommentsHasMore(page.hasMore);
       setCommentsError(""); // 성공하면 오류 제거
+      setLoadMoreError("");
     } catch {
-      setComments(null);
-      setCommentsError("댓글을 불러오지 못했습니다.");
+      const lost = await revalidateAccessAfterFailure(view.post);
+      if (!lost) { setComments(null); setCommentsError("댓글을 불러오지 못했습니다."); }
     }
     setCommentsRetrying(false);
+  };
+
+  /**
+   * 04-10 보안: 비공개 글(friends/groups)에서 댓글 조회가 실패하면 '권한을 잃은 것'일 수 있다.
+   *  이때 이미 렌더된 비공개 본문·댓글을 그대로 두면 접근 권한이 사라진 뒤에도 민감 내용이 화면에 남는다.
+   *  → 접근 상태를 다시 확인해서 못 읽게 됐으면 댓글을 지우고 일반 접근 불가 화면으로 전환한다.
+   *  공개 글은 일시적 네트워크 오류가 대부분이라 기존 재시도 UX 를 유지한다.
+   * @returns 접근을 잃어 화면을 전환했으면 true
+   */
+  const revalidateAccessAfterFailure = useCallback(async (post: FeedPost): Promise<boolean> => {
+    if (post.visibility === "public") return false;
+    try {
+      const still = await getPost(post.id);
+      if (still) return false; // 여전히 읽을 수 있음 → 일시적 오류
+    } catch {
+      return false; // 확인 자체가 실패하면 섣불리 지우지 않는다
+    }
+    setComments(null);
+    setCommentCount(0);
+    setCommentCursor(null);
+    setCommentsHasMore(false);
+    setLoadMoreError("");
+    setCommentsError("");
+    setDraft("");
+    setView({ kind: "denied" });
+    return true;
+  }, []);
+
+  // 04-10 접근성: 로딩이 끝난 뒤 (버튼이 아직 있다면) 포커스를 되돌린다
+  useEffect(() => {
+    if (loadingMore || !moreHadFocusRef.current) return;
+    moreHadFocusRef.current = false;
+    if (moreBtnRef.current && !moreBtnRef.current.disabled) moreBtnRef.current.focus();
+  }, [loadingMore, comments]);
+
+  // 04-10 댓글 더보기 — 실패해도 이미 불러온 댓글과 cursor 를 그대로 유지해
+  //  '다시 시도'가 실패했던 같은 페이지를 다시 요청하게 한다.
+  const loadMoreComments = async () => {
+    if (view.kind !== "ok" || loadingMore || !commentsHasMore || !commentCursor) return;
+    moreHadFocusRef.current = document.activeElement === moreBtnRef.current;
+    setLoadingMore(true);
+    setLoadMoreError("");
+    try {
+      const page = await listCommentsPage(view.post.id, { cursor: commentCursor });
+      setComments((prev) => mergeComments(prev || [], page.comments)); // ID 기준 dedupe
+      setCommentCursor(page.nextCursor);
+      setCommentsHasMore(page.hasMore);
+    } catch {
+      // 비공개 글이면 권한 상실일 수 있다 — 확인해서 그렇다면 화면 전체를 접근 불가로 전환
+      const lost = await revalidateAccessAfterFailure(view.post);
+      if (!lost) setLoadMoreError("댓글을 더 불러오지 못했습니다."); // 기존 목록·cursor 유지
+    }
+    setLoadingMore(false);
   };
 
   // 댓글 등록 — /feed 와 동일하게 '실제 저장 성공 후 반영'(낙관적 추가 아님)
@@ -210,19 +279,19 @@ export default function PostDetailPage() {
     setSubmitting(true);
     setCommentActionError("");
     try {
-      await addComment(view.post.id, view.post.uid, myName, body);
+      const newId = await addComment(view.post.id, view.post.uid, myName, body);
       // 여기 도달 = 댓글 문서와 commentCount +1 이 함께 커밋된 상태
       setCommentCount((n) => Math.max(0, n + 1));
       setDraft("");
-      try {
-        const list = await listComments(view.post.id);
-        setComments(list);
-        setCommentsError("");
-      } catch {
-        // 저장은 성공했는데 재조회만 실패 — 저장을 실패로 표시하지 않고 목록만 오류 처리
-        setComments(null);
-        setCommentsError("댓글을 불러오지 못했습니다.");
-      }
+      // 04-10: 전체 재조회 대신 방금 쓴 댓글만 목록 맨 뒤에 붙인다.
+      //  정렬이 오래된 순이라 새 댓글은 항상 마지막이고, 아직 안 불러온 중간 페이지가 있어도
+      //  이후 '더보기' 병합 때 mergeComments 가 ID dedupe + 정렬로 올바른 위치를 잡는다.
+      //  (전체 재조회는 아직 안 본 중간 댓글을 건너뛰거나 방금 쓴 댓글이 안 보이는 문제가 생긴다)
+      setComments((prev) => {
+        const list = prev || [];
+        return mergeComments(list, [localComment(newId, me, myName, body, list)]);
+      });
+      setCommentsError("");
     } catch {
       // 실패 → 입력값·목록·count 유지 + 안내(가짜 성공 금지)
       setCommentActionError("댓글 등록에 실패했습니다. 잠시 후 다시 시도해 주세요.");
@@ -501,6 +570,29 @@ export default function PostDetailPage() {
                 );
               })}
             </ul>
+          )}
+
+          {/* 04-10 더보기 — 초기 조회에 성공했고 남은 댓글이 있을 때만.
+              추가 조회 실패는 기존 목록을 지우지 않고 목록 아래에만 표시한다. */}
+          {!commentsError && comments !== null && (commentsHasMore || loadMoreError) && (
+            <div className="mt-4">
+              {loadMoreError && (
+                <p role="alert" className="mb-2 text-[13px] text-red-500 break-words">{loadMoreError}</p>
+              )}
+              <button
+                ref={moreBtnRef}
+                type="button"
+                onClick={loadMoreComments}
+                disabled={loadingMore || !commentsHasMore}
+                aria-label={loadMoreError ? "댓글 더보기 다시 시도" : "댓글 더보기"}
+                className="w-full rounded-full bg-stone-100 dark:bg-zinc-900 text-stone-700 dark:text-stone-200 text-[13px] font-semibold px-4 py-2.5 active:opacity-85 disabled:opacity-50 transition"
+              >
+                {loadingMore ? "불러오는 중…" : loadMoreError ? "다시 시도" : "댓글 더보기"}
+              </button>
+              {loadingMore && (
+                <p role="status" aria-live="polite" className="sr-only">댓글을 더 불러오는 중입니다.</p>
+              )}
+            </div>
           )}
         </div>
       </section>

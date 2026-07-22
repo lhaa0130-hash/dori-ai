@@ -18,7 +18,7 @@
 import {
   doc, getDoc, setDoc, updateDoc, addDoc, deleteDoc, collection, query, where,
   orderBy, limit, startAfter, Timestamp, getDocs, onSnapshot, serverTimestamp, increment, arrayUnion, arrayRemove,
-  deleteField, getCountFromServer, writeBatch, runTransaction, type QueryConstraint,
+  deleteField, getCountFromServer, writeBatch, runTransaction, documentId, type QueryConstraint,
 } from "firebase/firestore";
 import { getFirebaseFirestore, getFirebaseAuth } from "@/lib/firebase";
 import { isReservedHandle } from "@/lib/reservedHandles";
@@ -1195,18 +1195,88 @@ export async function markAllNotiRead(ids: string[]): Promise<void> {
 //   feed/{postId}/comments/{id}  { uid, name, text, createdAt }
 export interface Comment { id: string; uid: string; name: string; text: string; at: number; }
 
+/** 04-10 댓글 한 페이지 크기. /feed·/post 가 같은 값을 쓴다(화면마다 다르게 쓰지 않는다). */
+export const COMMENT_PAGE_SIZE = 20;
+
 /**
- * 댓글 목록(오래된 순, 최대 n건).
+ * 04-10 댓글 cursor — '마지막으로 읽은 댓글'을 (작성시각, 문서ID) 쌍으로 가리킨다.
+ *  ⚠️ createdAt 만으로는 같은 시각 댓글이 여러 개일 때 중복·누락이 생긴다.
+ *     정렬을 (createdAt asc, __name__ asc) 로 안정화하고 cursor 도 두 값을 함께 쓴다.
+ *  ⚠️ DocumentSnapshot 을 밖으로 노출하지 않는다(직렬화 가능한 값만) — React state 에 그대로 담아도 안전.
+ */
+export interface CommentCursor { at: number; id: string; }
+export interface CommentPage { comments: Comment[]; nextCursor: CommentCursor | null; hasMore: boolean; }
+
+function toComment(id: string, x: Record<string, unknown>): Comment {
+  return { id, uid: String(x.uid || ""), name: String(x.name || "익명"), text: String(x.text || ""), at: tsToMillis(x.createdAt) };
+}
+
+/**
+ * 댓글 한 페이지(오래된 순). /feed·/post 가 공유하는 유일한 조회 함수.
+ *  · 정렬 = createdAt asc + __name__ asc (동일 시각 안정화). 자동 단일필드 인덱스로 충분해
+ *    복합 인덱스가 필요 없다(firestore.indexes.json 무변경).
+ *  · hasMore 판별 = pageSize+1 건을 읽어 초과분 존재 여부로 확인하고, 반환은 pageSize 건까지만.
+ *    → 댓글 수가 페이지 크기와 정확히 같을 때 빈 '더보기'가 남지 않는다.
+ *  · 오류는 04-9 정책대로 그대로 throw(빈 배열은 '진짜 0건'일 때만).
+ *  ⚠️ createdAt 이 없는 문서는 Firestore orderBy 특성상 결과에서 제외된다(자동 보정하지 않는다).
+ */
+export async function listCommentsPage(
+  postId: string,
+  options?: { pageSize?: number; cursor?: CommentCursor | null },
+): Promise<CommentPage> {
+  const pageSize = Math.max(1, options?.pageSize ?? COMMENT_PAGE_SIZE);
+  const cursor = options?.cursor ?? null;
+
+  const constraints: QueryConstraint[] = [orderBy("createdAt", "asc"), orderBy(documentId(), "asc")];
+  if (cursor && Number.isFinite(cursor.at) && cursor.id) {
+    constraints.push(startAfter(Timestamp.fromMillis(cursor.at), cursor.id));
+  }
+  constraints.push(limit(pageSize + 1)); // +1 = 다음 페이지 존재 확인용(반환하지 않는다)
+
+  const snap = await getDocs(query(collection(db(), "feed", postId, "comments"), ...constraints));
+  const docs = snap.docs;
+  const hasMore = docs.length > pageSize;
+  const page = hasMore ? docs.slice(0, pageSize) : docs;
+  const comments = page.map((d) => toComment(d.id, d.data() as Record<string, unknown>));
+  const last = comments[comments.length - 1];
+
+  return { comments, nextCursor: hasMore && last ? { at: last.at, id: last.id } : null, hasMore };
+}
+
+/**
+ * 댓글 목록(오래된 순, 최대 n건) — 04-10 이전부터 있던 호환 래퍼.
+ *  내부적으로 listCommentsPage 를 쓰되 기존 계약(배열 반환, 최대 n건)을 그대로 유지한다.
  * ⚠️ 04-9: 오류를 삼키지 않는다. 정상 조회 결과가 0건일 때만 빈 배열이고,
  *    권한·네트워크·서버 오류는 그대로 throw 해서 호출부가 '실패'와 '댓글 없음'을 구분하게 한다.
- *    (이전에는 catch 로 [] 를 반환해 조회 실패가 '댓글 0개'로 보였다.)
  */
 export async function listComments(postId: string, n = 100): Promise<Comment[]> {
-  const q = query(collection(db(), "feed", postId, "comments"), orderBy("createdAt", "asc"), limit(n));
-  const s = await getDocs(q);
-  const a: Comment[] = [];
-  s.forEach((d) => { const x = d.data() as Record<string, unknown>; a.push({ id: d.id, uid: String(x.uid || ""), name: String(x.name || "익명"), text: String(x.text || ""), at: tsToMillis(x.createdAt) }); });
-  return a;
+  const { comments } = await listCommentsPage(postId, { pageSize: n });
+  return comments;
+}
+
+/**
+ * 04-10 댓글 목록 병합 — 페이지 경계 중복·작성 직후 겹침을 ID 기준으로 제거한다.
+ *  · 같은 ID 는 한 번만 남기고 값은 **최신 조회값**으로 갱신한다(서버 값을 신뢰).
+ *  · 서버와 같은 정렬 키 (createdAt asc, id asc) 로 재정렬한다. 정렬 정책이 그대로이므로
+ *    '기존 순서 유지'와 결과가 같고, 나중에 로드된 중간 페이지가 올바른 위치에 끼워진다.
+ */
+export function mergeComments(existing: Comment[], incoming: Comment[]): Comment[] {
+  if (incoming.length === 0) return existing;
+  const byId = new Map<string, Comment>();
+  for (const c of existing) byId.set(c.id, c);
+  for (const c of incoming) byId.set(c.id, c); // 동일 ID 는 최신값으로 덮어씀
+  return Array.from(byId.values()).sort((a, b) => (a.at - b.at) || (a.id < b.id ? -1 : a.id > b.id ? 1 : 0));
+}
+
+/**
+ * 04-10 방금 쓴 댓글의 로컬 표시용 객체.
+ *  addComment 는 commentId 만 돌려주고 createdAt 은 serverTimestamp 라 클라이언트가 실제 값을 모른다.
+ *  정렬이 오래된 순이므로 **항상 맨 뒤**여야 하는데, 클라이언트 시계가 뒤처지면 중간에 낄 수 있다.
+ *  → 현재 목록 마지막보다 반드시 큰 값을 주어 위치를 고정한다(새로고침하면 서버 값으로 교정된다).
+ */
+export function localComment(id: string, uid: string, name: string, text: string, list: Comment[]): Comment {
+  const lastAt = list.length ? list[list.length - 1].at : 0;
+  return { id, uid, name: (name || "익명").slice(0, 20), text, at: Math.max(Date.now(), lastAt + 1) };
 }
 
 /**
