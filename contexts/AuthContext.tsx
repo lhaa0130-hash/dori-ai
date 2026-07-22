@@ -43,7 +43,7 @@ export interface SignupData {
     ageGroup?: "10s" | "20s" | "30s" | "40s" | "50s" | "60s+";
 }
 
-const AuthContext = createContext<AuthContextType | undefined>(undefined);
+export const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 // Firebase User → 세션 형식 매핑
 function mapUser(fu: FirebaseUser): AuthSession {
