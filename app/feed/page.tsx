@@ -17,6 +17,8 @@ import {
   listComments,
   addComment,
   deleteComment,
+  validatePostInput,
+  POST_MAX_LEN,
   type FeedPost,
   type FeedVisibility,
   type FriendGroup,
@@ -52,6 +54,14 @@ const T = {
     photoVideo: "사진·영상",
     posting: "올리는 중...",
     post: "올리기",
+    cancel: "취소",
+    composerLabel: "새 게시물 본문",
+    addPhotoAria: "사진 또는 영상 첨부",
+    posted: "게시되었어요.",
+    postFailed: "게시하지 못했어요. 잠시 후 다시 시도해 주세요.",
+    discardConfirm: "작성 중인 내용을 지울까요?",
+    groupsPickHint: "공유할 범위를 하나 이상 선택하세요.",
+    friendsHint: "피드 공개로 설정한 범위의 멤버에게만 보여요.",
     loginRequired: "글을 남기려면 로그인이 필요해요.",
     loginCta: "로그인하기",
     emptyFollowingLoggedIn: "아직 팔로우한 사람의 글이 없어요.",
@@ -67,7 +77,7 @@ const T = {
     commentSubmit: "등록",
     loginLinkText: "로그인",
     loginCommentSuffix: "후 댓글을 남길 수 있어요.",
-    dateLocale: "ko-KR",
+    dateLocale: "ko-KR",
   },
   en: {
     sponsor: "Sponsored",
@@ -93,6 +103,14 @@ const T = {
     photoVideo: "Photo/Video",
     posting: "Posting...",
     post: "Post",
+    cancel: "Cancel",
+    composerLabel: "New post body",
+    addPhotoAria: "Attach a photo or video",
+    posted: "Posted.",
+    postFailed: "Couldn't post. Please try again in a moment.",
+    discardConfirm: "Discard your draft?",
+    groupsPickHint: "Pick at least one group to share with.",
+    friendsHint: "Only members of your feed-visible groups can see this.",
     loginRequired: "Log in to write a post.",
     loginCta: "Log in",
     emptyFollowingLoggedIn: "No posts yet from people you follow.",
@@ -108,7 +126,7 @@ const T = {
     commentSubmit: "Post",
     loginLinkText: "Log in",
     loginCommentSuffix: "to leave a comment.",
-    dateLocale: "en-US",
+    dateLocale: "en-US",
   },
 } as const;
 
@@ -182,6 +200,8 @@ export default function FeedPage() {
   const [media, setMedia] = useState<Media | null>(null);
   const [uploading, setUploading] = useState(false);
   const [uploadError, setUploadError] = useState("");
+  const [justPosted, setJustPosted] = useState(false); // 실제 저장 성공 후에만 true(가짜 성공 금지)
+  const [postError, setPostError] = useState("");
 
   // 공개범위 상태
   const [visibility, setVisibility] = useState<FeedVisibility>("public");
@@ -254,10 +274,21 @@ export default function FeedPage() {
     );
   };
 
+  // 범위(groups) 공개인데 아무 범위도 고르지 않은 상태 — 게시 차단 대상
+  const groupsMissing = visibility === "groups" && selectedGroupIds.length === 0;
+  // 작성 중인 내용이 있는지(취소/이탈 확인용)
+  const hasDraft = !!text.trim() || !!media || selectedGroupIds.length > 0;
+
   const handlePost = async () => {
+    if (posting || uploading) return;
     const body = text.trim();
-    if ((!body && !media) || posting) return;
+    // 빈 본문/길이 정책은 기존 검증 함수 단일 기준 사용
+    const v = validatePostInput(body, media ? [media.url] : []);
+    if (!v.ok) { setPostError(v.error || t.postFailed); return; }
+    if (groupsMissing) { setPostError(t.groupsPickHint); return; }
     setPosting(true);
+    setPostError("");
+    setJustPosted(false);
 
     let allowedUids: string[] | undefined;
     if (visibility === "friends") {
@@ -274,13 +305,30 @@ export default function FeedPage() {
     });
     setPosting(false);
     if (ok) {
+      // 실제 Firestore 저장 성공 후에만 초기화·성공 안내
       setText("");
       setMedia(null);
       setUploadError("");
       setVisibility("public");
       setSelectedGroupIds([]);
+      setJustPosted(true);
+      setTimeout(() => setJustPosted(false), 2500);
       await refresh();
+    } else {
+      // 실패 시 본문 유지 + 실제 오류 안내(가짜 성공 금지)
+      setPostError(t.postFailed);
     }
+  };
+
+  // 취소: 작성 내용이 있으면 확인 후 폼 초기화(브라우저 종료 방지는 과도하므로 미구현)
+  const handleCancel = () => {
+    if (hasDraft && !window.confirm(t.discardConfirm)) return;
+    setText("");
+    setMedia(null);
+    setUploadError("");
+    setPostError("");
+    setVisibility("public");
+    setSelectedGroupIds([]);
   };
 
   const handleLike = async (post: FeedPost) => {
@@ -344,7 +392,7 @@ export default function FeedPage() {
     }
   };
 
-  const canPost = (!!text.trim() || !!media) && !posting && !uploading;
+  const canPost = validatePostInput(text, media ? [media.url] : []).ok && !groupsMissing && !posting && !uploading;
 
   return (
     <main className="w-full min-h-screen">
@@ -386,22 +434,23 @@ export default function FeedPage() {
           <div className="rounded-2xl border border-stone-100 dark:border-zinc-900 bg-white dark:bg-zinc-950 p-4 mb-6">
             <textarea
               value={text}
-              onChange={(e) => setText(e.target.value)}
+              onChange={(e) => { setText(e.target.value); if (postError) setPostError(""); }}
               placeholder={t.composerPlaceholder}
+              aria-label={t.composerLabel}
               rows={3}
-              maxLength={1000}
+              maxLength={POST_MAX_LEN}
               className="w-full resize-none bg-transparent text-sm text-stone-900 dark:text-stone-100 placeholder:text-stone-400 dark:placeholder:text-stone-600 outline-none"
             />
 
             {/* 미디어 미리보기 */}
             {uploading && (
-              <div className="mt-2 flex items-center gap-2 text-sm text-stone-500 dark:text-stone-400">
+              <div role="status" aria-live="polite" className="mt-2 flex items-center gap-2 text-sm text-stone-500 dark:text-stone-400">
                 <span className="inline-block h-4 w-4 rounded-full border-2 border-stone-300 border-t-[#F9954E] animate-spin" />
                 {t.uploading}
               </div>
             )}
             {uploadError && (
-              <p className="mt-2 text-xs text-red-500">{uploadError}</p>
+              <p role="alert" className="mt-2 text-xs text-red-500">{uploadError}</p>
             )}
             {media && !uploading && (
               <div className="mt-3 relative">
@@ -430,6 +479,7 @@ export default function FeedPage() {
                     key={v}
                     type="button"
                     onClick={() => setVisibility(v)}
+                    aria-pressed={active}
                     className={
                       "text-xs font-semibold rounded-full px-3 py-1.5 active:opacity-85 transition " +
                       (active
@@ -442,6 +492,11 @@ export default function FeedPage() {
                 );
               })}
             </div>
+
+            {/* 친구 공개 안내 — friends=피드공개 범위 멤버 대상(친구 서브컬렉션 아님) */}
+            {visibility === "friends" && (
+              <p className="mt-2 text-[11px] text-stone-400">{t.friendsHint}</p>
+            )}
 
             {/* 범위(그룹) 체크박스 */}
             {visibility === "groups" && (
@@ -468,9 +523,20 @@ export default function FeedPage() {
                         <span className="text-[11px] text-stone-400">{t.memberCount(g.memberUids.length)}</span>
                       </label>
                     ))}
+                    {selectedGroupIds.length === 0 && (
+                      <p className="text-[11px] text-amber-500">{t.groupsPickHint}</p>
+                    )}
                   </div>
                 )}
               </div>
+            )}
+
+            {/* 게시 실패/성공 안내 — 실제 결과에만 표시(가짜 성공 금지) */}
+            {postError && (
+              <p role="alert" className="mt-3 text-xs text-red-500">{postError}</p>
+            )}
+            {justPosted && (
+              <p role="status" aria-live="polite" className="mt-3 text-xs font-semibold" style={{ color: POINT }}>✓ {t.posted}</p>
             )}
 
             {/* 하단 액션 */}
@@ -484,19 +550,32 @@ export default function FeedPage() {
                     accept="image/*,video/*"
                     onChange={onPickFile}
                     disabled={uploading}
+                    aria-label={t.addPhotoAria}
                     className="hidden"
                   />
                 </label>
-                <span className="text-[11px] text-stone-400">{text.length}/1000</span>
+                <span className="text-[11px] text-stone-400" aria-hidden>{text.length}/{POST_MAX_LEN}</span>
               </div>
-              <button
-                type="button"
-                onClick={handlePost}
-                disabled={!canPost}
-                className="bg-[#F9954E] text-white text-sm font-semibold rounded-full px-5 py-2 active:opacity-85 disabled:opacity-40 transition"
-              >
-                {posting ? t.posting : t.post}
-              </button>
+              <div className="flex items-center gap-2">
+                {hasDraft && (
+                  <button
+                    type="button"
+                    onClick={handleCancel}
+                    disabled={posting}
+                    className="text-sm font-semibold rounded-full px-4 py-2 bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300 active:opacity-85 disabled:opacity-40 transition"
+                  >
+                    {t.cancel}
+                  </button>
+                )}
+                <button
+                  type="button"
+                  onClick={handlePost}
+                  disabled={!canPost}
+                  className="bg-[#F9954E] text-white text-sm font-semibold rounded-full px-5 py-2 active:opacity-85 disabled:opacity-40 transition"
+                >
+                  {posting ? t.posting : t.post}
+                </button>
+              </div>
             </div>
           </div>
         ) : (
