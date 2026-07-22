@@ -1025,7 +1025,12 @@ export default function FeedPage() {
                                 value={getCState(post.id).draft}
                                 onChange={(e) => patchCState(post.id, { draft: e.target.value })}
                                 onKeyDown={(e) => {
-                                  if (e.key === "Enter" && !e.shiftKey) {
+                                  // 04-8: 한글 IME 조합 중 Enter 는 제출하지 않는다(미완성 한글·중복 등록 방지).
+                                  //  상세 페이지(/post)와 동일한 가드.
+                                  if (
+                                    e.key === "Enter" && !e.shiftKey &&
+                                    !(e.nativeEvent as unknown as { isComposing?: boolean }).isComposing
+                                  ) {
                                     e.preventDefault();
                                     handleAddComment(post);
                                   }
