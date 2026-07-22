@@ -73,10 +73,16 @@ export default function AtHomePage() {
 
   const loadTabPosts = useCallback(async (uid: string, cursor?: number) => {
     setTabLoading(true);
-    const page = await listPublicPostsByUser(uid, POSTS_PAGE, cursor).catch(() => []);
-    setTabPosts((prev) => (cursor ? [...prev, ...page] : page));
-    setTabHasMore(page.length === POSTS_PAGE);
-    if (page.length) setTabCursor(page[page.length - 1].at);
+    // 04-4: {posts,nextCursor,hasMore} — 삭제글 섞여도 hasMore 로 조기종료 방지, nextCursor 로 이어감.
+    const { posts: page, nextCursor, hasMore } = await listPublicPostsByUser(uid, POSTS_PAGE, cursor)
+      .catch(() => ({ posts: [] as FeedPost[], nextCursor: null, hasMore: false }));
+    setTabPosts((prev) => {
+      if (!cursor) return page;
+      const ids = new Set(prev.map((p) => p.id)); // ms 커서 경계 중복 방지(id dedupe)
+      return [...prev, ...page.filter((p) => !ids.has(p.id))];
+    });
+    setTabHasMore(hasMore);
+    setTabCursor(nextCursor ?? undefined);
     setTabLoading(false);
     setTabLoaded(true);
   }, []);
@@ -127,7 +133,7 @@ export default function AtHomePage() {
         friends: friends.length, visitors: visits.total, works: (p.myAIs || []).length,
       });
       // 04-1: 공개(public) 게시물만·삭제제외·최신순. 홈은 공개 프로필이라 공개글만 노출.
-      const feed = await listPublicPostsByUser(p.uid, 3).catch(() => []);
+      const feed = await listPublicPostsByUser(p.uid, 3).then((r) => r.posts).catch(() => []);
       if (alive) setPosts(feed);
     })();
     return () => { alive = false; };

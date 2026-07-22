@@ -1,13 +1,14 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   listFeed,
   addPost,
-  deletePost,
+  updatePost,
+  softDeletePost,
   toggleLike,
   currentUid,
   myFollowingSet,
@@ -78,6 +79,19 @@ const T = {
     loginLinkText: "로그인",
     loginCommentSuffix: "후 댓글을 남길 수 있어요.",
     dateLocale: "ko-KR",
+    manageMenu: "게시물 관리 메뉴 열기",
+    edit: "수정",
+    editSave: "저장",
+    editCancel: "취소",
+    editSaved: "수정되었어요.",
+    editFailed: "수정하지 못했어요. 잠시 후 다시 시도해 주세요.",
+    editDiscardConfirm: "수정 중인 내용을 취소할까요?",
+    keepMedia: "기존 첨부 유지",
+    replaceMedia: "사진·영상 교체",
+    removeMedia: "첨부 제거",
+    deleteConfirm: "이 게시물을 삭제할까요?\n삭제하면 피드와 사용자 홈에서 보이지 않습니다.",
+    deleteFailed: "삭제하지 못했어요. 잠시 후 다시 시도해 주세요.",
+    editGroupsKeepHint: "공개 범위를 그대로 두면 기존 공유 대상이 유지돼요. 바꾸려면 범위를 다시 선택하세요.",
   },
   en: {
     sponsor: "Sponsored",
@@ -127,6 +141,19 @@ const T = {
     loginLinkText: "Log in",
     loginCommentSuffix: "to leave a comment.",
     dateLocale: "en-US",
+    manageMenu: "Open post options",
+    edit: "Edit",
+    editSave: "Save",
+    editCancel: "Cancel",
+    editSaved: "Post updated.",
+    editFailed: "Couldn't update. Please try again in a moment.",
+    editDiscardConfirm: "Discard your changes?",
+    keepMedia: "Keep current attachment",
+    replaceMedia: "Replace photo/video",
+    removeMedia: "Remove attachment",
+    deleteConfirm: "Delete this post?\nIt will no longer appear in the feed or on user home.",
+    deleteFailed: "Couldn't delete. Please try again in a moment.",
+    editGroupsKeepHint: "Leaving the visibility unchanged keeps the current audience. Re-select groups to change it.",
   },
 } as const;
 
@@ -208,6 +235,20 @@ export default function FeedPage() {
   const [groups, setGroups] = useState<FriendGroup[]>([]);
   const [selectedGroupIds, setSelectedGroupIds] = useState<string[]>([]);
 
+  // 04-4 본인 게시물 관리(⋯ 메뉴 / 인라인 수정 / 소프트삭제)
+  const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
+  const [deletingId, setDeletingId] = useState<string | null>(null);
+  const [editingId, setEditingId] = useState<string | null>(null);
+  const [editText, setEditText] = useState("");
+  const [editVis, setEditVis] = useState<FeedVisibility>("public");
+  const [editGroupIds, setEditGroupIds] = useState<string[]>([]);
+  const [editMedia, setEditMedia] = useState<Media | null>(null);
+  const [editUploading, setEditUploading] = useState(false);
+  const [editSaving, setEditSaving] = useState(false);
+  const [editError, setEditError] = useState("");
+  const [manageMsg, setManageMsg] = useState(""); // 수정/삭제 성공 안내(실제 성공 후에만)
+  const menuRef = useRef<HTMLDivElement | null>(null);
+
   // ⚠️ 로케일에 따라 바꾸지 않는다. 이 값은 addPost/addComment로 Firestore에 작성자 이름으로
   //    저장돼 다른(한글) 사용자에게도 그대로 보인다. 메시지 페이지의 "나"/"상대" 폴백과 같은 기준.
   const myName = session?.user?.name || session?.user?.email?.split("@")[0] || "나";
@@ -246,6 +287,18 @@ export default function FeedPage() {
     myFollowingSet().then((s) => { if (alive) setFollowingSet(s); });
     return () => { alive = false; };
   }, [isLoggedIn, session]);
+
+  // 04-4 관리 메뉴(⋯) — 외부 클릭·Escape 로 닫기
+  useEffect(() => {
+    if (!menuOpenId) return;
+    const onDown = (e: MouseEvent) => {
+      if (menuRef.current && !menuRef.current.contains(e.target as Node)) setMenuOpenId(null);
+    };
+    const onKey = (e: KeyboardEvent) => { if (e.key === "Escape") setMenuOpenId(null); };
+    document.addEventListener("mousedown", onDown);
+    document.addEventListener("keydown", onKey);
+    return () => { document.removeEventListener("mousedown", onDown); document.removeEventListener("keydown", onKey); };
+  }, [menuOpenId]);
 
   // 화면에 보일 글 — 추천=전체, 팔로잉=내가 팔로우한 사람(+내 글)
   const shownPosts =
@@ -344,9 +397,105 @@ export default function FeedPage() {
     if (!ok) await refresh();
   };
 
-  const handleDelete = async (postId: string) => {
-    const ok = await deletePost(postId);
-    if (ok) setPosts((prev) => prev.filter((p) => p.id !== postId));
+  // 04-4 소프트삭제(하드삭제 아님) — 확인 후 status:deleted 로. 성공 시에만 카드 제거.
+  const handleSoftDelete = async (postId: string) => {
+    if (deletingId) return;
+    setMenuOpenId(null);
+    if (!window.confirm(t.deleteConfirm)) return;
+    setDeletingId(postId);
+    const res = await softDeletePost(postId);
+    setDeletingId(null);
+    if (res.ok) {
+      setPosts((prev) => prev.filter((p) => p.id !== postId));
+      setManageMsg(t.editSaved === "수정되었어요." ? "삭제되었어요." : "Deleted.");
+      setTimeout(() => setManageMsg(""), 2500);
+    } else {
+      setManageMsg(res.error || t.deleteFailed);
+      setTimeout(() => setManageMsg(""), 3000);
+    }
+  };
+
+  // 인라인 수정 시작 — 카드 값으로 폼 프리필(그룹ID는 저장값에서 복원 불가 → 빈 선택으로 시작)
+  const startEdit = (post: FeedPost) => {
+    setMenuOpenId(null);
+    setEditingId(post.id);
+    setEditText(post.text || "");
+    setEditVis(post.visibility);
+    setEditGroupIds([]);
+    setEditMedia(post.mediaUrl ? { url: post.mediaUrl, type: post.mediaType || "image" } : null);
+    setEditError("");
+  };
+
+  const cancelEdit = (post: FeedPost) => {
+    const changed = editText !== (post.text || "") || editVis !== post.visibility ||
+      (editMedia?.url || null) !== (post.mediaUrl || null) || editGroupIds.length > 0;
+    if (changed && !window.confirm(t.editDiscardConfirm)) return;
+    setEditingId(null);
+    setEditError("");
+  };
+
+  const onPickEditFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    e.target.value = "";
+    if (!file) return;
+    setEditError("");
+    setEditUploading(true);
+    const res = await uploadFeedMedia(file);
+    setEditUploading(false);
+    if (res.ok) setEditMedia({ url: res.result.url, type: res.result.type });
+    else setEditError(res.error);
+  };
+
+  const toggleEditGroup = (id: string) => {
+    setEditGroupIds((prev) => (prev.includes(id) ? prev.filter((g) => g !== id) : [...prev, id]));
+  };
+
+  const saveEdit = async (post: FeedPost) => {
+    if (editSaving || editUploading) return;
+    const v = validatePostInput(editText, editMedia ? [editMedia.url] : []);
+    if (!v.ok) { setEditError(v.error || t.editFailed); return; }
+    // 새로 groups 로 바꾸는데 범위 미선택이면 차단
+    const switchingToGroups = editVis === "groups" && post.visibility !== "groups";
+    if (switchingToGroups && editGroupIds.length === 0) { setEditError(t.groupsPickHint); return; }
+    setEditSaving(true);
+    setEditError("");
+
+    // allowedUids: 공개범위 그대로면 유지(undefined). 바뀌면 재계산.
+    let allowedUids: string[] | undefined;
+    if (editVis === post.visibility) {
+      if (editVis === "groups" && editGroupIds.length > 0) allowedUids = await audienceForGroups(editGroupIds);
+      else allowedUids = undefined; // 유지
+    } else if (editVis === "friends") {
+      allowedUids = await feedVisibleAudience();
+    } else if (editVis === "groups") {
+      allowedUids = await audienceForGroups(editGroupIds);
+    } else {
+      allowedUids = []; // public
+    }
+
+    // 미디어: 그대로면 undefined(유지) / 제거면 null / 다른 URL이면 교체
+    let mediaUrl: string | null | undefined;
+    let mediaType: "image" | "video" | null | undefined;
+    if (!editMedia && post.mediaUrl) { mediaUrl = null; mediaType = null; }
+    else if (editMedia && editMedia.url !== post.mediaUrl) { mediaUrl = editMedia.url; mediaType = editMedia.type; }
+    else { mediaUrl = undefined; mediaType = undefined; }
+
+    const res = await updatePost(post.id, { text: editText, visibility: editVis, allowedUids, mediaUrl, mediaType });
+    setEditSaving(false);
+    if (res.ok) {
+      // 실제 성공 후에만 카드에 반영 + 수정 종료
+      setPosts((prev) => prev.map((p) => p.id === post.id ? {
+        ...p, text: editText.trim(), visibility: editVis,
+        mediaUrl: mediaUrl === null ? undefined : (typeof mediaUrl === "string" ? mediaUrl : p.mediaUrl),
+        mediaType: mediaUrl === null ? undefined : (typeof mediaUrl === "string" ? (mediaType as "image" | "video") : p.mediaType),
+      } : p));
+      setEditingId(null);
+      setManageMsg(t.editSaved);
+      setTimeout(() => setManageMsg(""), 2500);
+      refresh();
+    } else {
+      setEditError(res.error || t.editFailed); // 실패 시 입력 유지
+    }
   };
 
   // 댓글 영역 토글 — 처음 펼칠 때 목록 로드

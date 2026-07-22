@@ -18,7 +18,7 @@
 import {
   doc, getDoc, setDoc, updateDoc, addDoc, deleteDoc, collection, query, where,
   orderBy, limit, startAfter, Timestamp, getDocs, onSnapshot, serverTimestamp, increment, arrayUnion, arrayRemove,
-  getCountFromServer, type QueryConstraint,
+  deleteField, getCountFromServer, type QueryConstraint,
 } from "firebase/firestore";
 import { getFirebaseFirestore, getFirebaseAuth } from "@/lib/firebase";
 import { isReservedHandle } from "@/lib/reservedHandles";
@@ -717,7 +717,8 @@ async function fetchFeed(n: number, me: string | null): Promise<FeedPost[]> {
   const snaps = await Promise.all(tasks);
   const map = new Map<string, FeedPost>();
   snaps.forEach((s) => s.forEach((d) => { if (!map.has(d.id)) map.set(d.id, mapPost(d.id, d.data() as Record<string, unknown>)); }));
-  return Array.from(map.values()).sort((a, b) => b.at - a.at).slice(0, n);
+  // 소프트삭제(status:"deleted") 글은 피드·코지홈에서 제외(미설정=published는 표시).
+  return Array.from(map.values()).filter((p) => p.status !== "deleted").sort((a, b) => b.at - a.at).slice(0, n);
 }
 
 /** 보안규칙 안전 쿼리: 공개글 + 내가 볼 수 있는 글, 최신순. 20초 캐시(네비게이션 중복 읽기 방지). */
@@ -737,27 +738,50 @@ export async function listUserFeed(uid: string, n = 50): Promise<FeedPost[]> {
 //   기존 `feed` 컬렉션 재사용. 삭제는 하드삭제(문서 제거)라 status 미설정=published로 해석.
 //   공개(public)는 비로그인 포함 누구나, 비공개(friends/groups=private)는 작성자·허용자만.
 
-/** 특정 유저의 "공개(public)" 게시물만 최신순. /@handle 홈 최근 게시물 영역용.
- *  비로그인 포함 누구나 호출 가능(규칙이 public read 허용). 삭제글 제외. */
-export async function listPublicPostsByUser(uid: string, n = 3, cursor?: number): Promise<FeedPost[]> {
-  if (!uid) return [];
-  const cap = Math.max(1, Math.min(n, 30));
+export interface PostPage { posts: FeedPost[]; nextCursor: number | null; hasMore: boolean; }
+
+/** 공개(public)·정상(status!=deleted) 게시물을 최신순으로 targetN개 채워 반환.
+ *  04-4: 소프트삭제글이 섞여 반환 개수가 줄어도 '조기 종료'하지 않도록, 마지막으로 '읽은'
+ *  Firestore 문서(삭제글 포함)의 createdAt 을 커서로 targetN개가 찰 때까지 반복 조회한다.
+ *  - cursor 는 실제 마지막 읽은 문서 기준(중복/누락 방지, seen 으로 dedupe)
+ *  - MAX_ITER 로 무한 루프 방지. hasMore=true 면 nextCursor 로 이어서 더 조회 가능. */
+async function paginatePublicPosts(extraWhere: QueryConstraint[], targetN: number, cursor?: number): Promise<PostPage> {
+  const cap = Math.max(1, Math.min(targetN, 50));
+  const seen = new Set<string>();
+  const posts: FeedPost[] = [];
+  let cur = cursor;
+  let moreInDb = true;
+  const MAX_ITER = 6; // 안전 상한(최대 cap*6 문서까지만 훑음)
   try {
-    // (uid ASC, visibility ASC, createdAt DESC) 복합 인덱스로 서버측 정렬·제한.
-    //  status는 메모리 필터(미설정=published라 where status== 를 쓰면 레거시 문서가 누락됨).
-    //  cursor(createdAt ms)로 '더 보기' 페이지네이션 — listPublicFeed 와 동일 방식.
-    const constraints: QueryConstraint[] = [
-      where("uid", "==", uid),
-      where("visibility", "==", "public"),
-      orderBy("createdAt", "desc"),
-    ];
-    if (cursor && Number.isFinite(cursor)) constraints.push(startAfter(Timestamp.fromMillis(cursor)));
-    constraints.push(limit(cap));
-    const snap = await getDocs(query(collection(db(), "feed"), ...constraints));
-    const arr: FeedPost[] = [];
-    snap.forEach((d) => arr.push(mapPost(d.id, d.data() as Record<string, unknown>)));
-    return arr.filter((p) => p.status !== "deleted").slice(0, n);
-  } catch { return []; }
+    for (let iter = 0; iter < MAX_ITER && posts.length < cap; iter++) {
+      const constraints: QueryConstraint[] = [...extraWhere, where("visibility", "==", "public"), orderBy("createdAt", "desc")];
+      if (cur && Number.isFinite(cur)) constraints.push(startAfter(Timestamp.fromMillis(cur)));
+      constraints.push(limit(cap));
+      const snap = await getDocs(query(collection(db(), "feed"), ...constraints));
+      if (snap.empty) { moreInDb = false; break; }
+      let filled = false;
+      for (const d of snap.docs) {
+        if (seen.has(d.id)) continue;
+        seen.add(d.id);
+        const p = mapPost(d.id, d.data() as Record<string, unknown>);
+        cur = p.at; // 마지막으로 '처리한' 문서(삭제글이든 정상글이든) 기준 커서
+        if (p.status !== "deleted") {
+          posts.push(p);
+          if (posts.length >= cap) { filled = true; break; }
+        }
+      }
+      if (filled) { moreInDb = true; break; }        // 목표 채움 → 더 있을 수 있음
+      if (snap.docs.length < cap) { moreInDb = false; break; } // 이 페이지가 마지막(DB 소진)
+    }
+    return { posts, nextCursor: moreInDb ? (cur ?? null) : null, hasMore: moreInDb };
+  } catch { return { posts: [], nextCursor: null, hasMore: false }; }
+}
+
+/** 특정 유저의 "공개(public)·정상" 게시물만 최신순. /@handle 홈 최근 게시물·게시물 탭용.
+ *  비로그인 포함 누구나 호출 가능(규칙이 public read 허용). 삭제글 제외 + 조기종료 방지. */
+export async function listPublicPostsByUser(uid: string, n = 3, cursor?: number): Promise<PostPage> {
+  if (!uid) return { posts: [], nextCursor: null, hasMore: false };
+  return paginatePublicPosts([where("uid", "==", uid)], n, cursor);
 }
 
 /** 현재 로그인 사용자의 전체 게시물(공개+비공개) 최신순. 기본은 삭제글 제외. */
@@ -797,20 +821,10 @@ export async function getPost(postId: string): Promise<FeedPost | null> {
 }
 
 /** 전체 공개 피드 — public·삭제제외·최신순. createdAt 밀리초 커서 페이지네이션.
+ *  04-4: 삭제글이 섞여도 조기종료하지 않도록 fill-loop(paginatePublicPosts) 재사용.
  *  ⚠️ 커서는 ms 정밀도라 동일 ms 경계에서 드물게 중복 가능 → 소비 측에서 id로 dedupe 권장. */
-export async function listPublicFeed(n = 20, cursor?: number): Promise<{ posts: FeedPost[]; nextCursor: number | null }> {
-  const cap = Math.max(1, Math.min(n, 50));
-  try {
-    const constraints: QueryConstraint[] = [where("visibility", "==", "public"), orderBy("createdAt", "desc")];
-    if (cursor && Number.isFinite(cursor)) constraints.push(startAfter(Timestamp.fromMillis(cursor)));
-    constraints.push(limit(cap));
-    const snap = await getDocs(query(collection(db(), "feed"), ...constraints));
-    const arr: FeedPost[] = [];
-    snap.forEach((d) => arr.push(mapPost(d.id, d.data() as Record<string, unknown>)));
-    // 반환 개수가 요청 상한 미만이면 더 없음 → nextCursor null
-    const nextCursor = arr.length >= cap && arr.length > 0 ? arr[arr.length - 1].at : null;
-    return { posts: arr.filter((p) => p.status !== "deleted"), nextCursor };
-  } catch { return { posts: [], nextCursor: null }; }
+export async function listPublicFeed(n = 20, cursor?: number): Promise<PostPage> {
+  return paginatePublicPosts([], n, cursor);
 }
 
 export async function addPost(name: string, text: string, opts: NewPostOpts = {}): Promise<boolean> {
@@ -835,8 +849,88 @@ export async function addPost(name: string, text: string, opts: NewPostOpts = {}
   } catch { return false; }
 }
 
+/** 하드삭제(문서 제거) — 관리자/정리용. 일반 사용자 UI 는 softDeletePost 사용(04-4). */
 export async function deletePost(postId: string): Promise<boolean> {
   try { await deleteDoc(doc(db(), "feed", postId)); bustCache("feed:"); return true; } catch { return false; }
+}
+
+// 04-4: 게시물 수정 — 본문·공개범위·미디어(유지/제거/교체)만. uid·createdAt·집계·status 는 불변.
+//   mediaUrl: undefined=기존 유지 / null=제거 / string=교체(uploadFeedMedia 로 올린 URL).
+export interface UpdatePostInput {
+  text: string;
+  visibility: FeedVisibility;
+  allowedUids?: string[];               // friends/groups 대상(자신 제외; 저장 시 자신 자동 포함)
+  mediaUrl?: string | null;
+  mediaType?: MediaType | null;
+}
+
+export async function updatePost(postId: string, input: UpdatePostInput): Promise<{ ok: boolean; error?: string }> {
+  const me = currentUid();
+  if (!me) return { ok: false, error: "로그인이 필요합니다." };
+  if (!postId) return { ok: false, error: "잘못된 요청입니다." };
+  try {
+    const ref = doc(db(), "feed", postId);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) return { ok: false, error: "게시물을 찾을 수 없어요." };
+    const cur = snap.data() as Record<string, unknown>;
+    if (String(cur.uid) !== me) return { ok: false, error: "본인 게시물만 수정할 수 있어요." };
+    if ((cur.status as string) === "deleted") return { ok: false, error: "삭제된 게시물은 수정할 수 없어요." };
+
+    const visibility: FeedVisibility = POST_VISIBILITIES.includes(input.visibility) ? input.visibility : "public";
+    // allowedUids: 공개범위 그대로 + 새 대상 미지정(undefined) 이면 기존 대상 유지
+    //  (friends/groups 는 저장값이 멤버 합집합이라 클라에서 그룹ID 복원 불가 → 유지가 안전).
+    //  그 외에는 재계산; groups 인데 대상이 비면 차단.
+    const keepAudience = visibility === (cur.visibility as FeedVisibility) && input.allowedUids === undefined;
+    let allowedUids: string[];
+    if (keepAudience) {
+      allowedUids = Array.isArray(cur.allowedUids) ? (cur.allowedUids as string[]) : [];
+    } else if (visibility === "public") {
+      allowedUids = [];
+    } else {
+      if ((input.allowedUids || []).length === 0) return { ok: false, error: "공유할 범위를 선택하세요." };
+      allowedUids = Array.from(new Set([me, ...(input.allowedUids || [])]));
+    }
+    // 미디어 결정: undefined=유지 / null=제거 / string=교체
+    const removeMedia = input.mediaUrl === null;
+    const replaceMedia = typeof input.mediaUrl === "string";
+    const effectiveMediaUrl = removeMedia ? undefined : replaceMedia ? input.mediaUrl! : (cur.mediaUrl ? String(cur.mediaUrl) : undefined);
+
+    const v = validatePostInput(input.text, effectiveMediaUrl ? [effectiveMediaUrl] : []);
+    if (!v.ok) return { ok: false, error: v.error };
+
+    const patch: Record<string, unknown> = {
+      text: input.text.trim().slice(0, POST_MAX_LEN),
+      visibility,
+      allowedUids,
+      updatedAt: serverTimestamp(),
+    };
+    // Firestore 에 undefined 저장 금지 — 제거는 deleteField(), 교체는 값, 유지는 미포함.
+    if (removeMedia) { patch.mediaUrl = deleteField(); patch.mediaType = deleteField(); }
+    else if (replaceMedia) { patch.mediaUrl = input.mediaUrl; patch.mediaType = input.mediaType || "image"; }
+
+    await updateDoc(ref, patch);
+    bustCache("feed:");
+    return { ok: true };
+  } catch { return { ok: false, error: "수정에 실패했어요. 잠시 후 다시 시도해 주세요." }; }
+}
+
+// 04-4: 소프트삭제 — status 를 published→deleted 로만 바꾼다. 본문·작성자·집계·작성일 불변.
+export async function softDeletePost(postId: string): Promise<{ ok: boolean; error?: string }> {
+  const me = currentUid();
+  if (!me) return { ok: false, error: "로그인이 필요합니다." };
+  if (!postId) return { ok: false, error: "잘못된 요청입니다." };
+  try {
+    const ref = doc(db(), "feed", postId);
+    const snap = await getDoc(ref);
+    if (!snap.exists()) return { ok: false, error: "게시물을 찾을 수 없어요." };
+    const cur = snap.data() as Record<string, unknown>;
+    if (String(cur.uid) !== me) return { ok: false, error: "본인 게시물만 삭제할 수 있어요." };
+    if ((cur.status as string) === "deleted") return { ok: true }; // 이미 삭제됨 → 성공 취급
+    await updateDoc(ref, { status: "deleted", deletedAt: serverTimestamp(), updatedAt: serverTimestamp() });
+    bustCache("feed:");
+    if (me) bustCache(`counts:${me}`);
+    return { ok: true };
+  } catch { return { ok: false, error: "삭제에 실패했어요. 잠시 후 다시 시도해 주세요." }; }
 }
 
 export async function toggleLike(postId: string, liked: boolean, myName = "회원"): Promise<boolean> {
