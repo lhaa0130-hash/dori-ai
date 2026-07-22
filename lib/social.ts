@@ -18,7 +18,7 @@
 import {
   doc, getDoc, setDoc, updateDoc, addDoc, deleteDoc, collection, query, where,
   orderBy, limit, startAfter, Timestamp, getDocs, onSnapshot, serverTimestamp, increment, arrayUnion, arrayRemove,
-  deleteField, getCountFromServer, type QueryConstraint,
+  deleteField, getCountFromServer, writeBatch, runTransaction, type QueryConstraint,
 } from "firebase/firestore";
 import { getFirebaseFirestore, getFirebaseAuth } from "@/lib/firebase";
 import { isReservedHandle } from "@/lib/reservedHandles";
@@ -1195,34 +1195,77 @@ export async function markAllNotiRead(ids: string[]): Promise<void> {
 //   feed/{postId}/comments/{id}  { uid, name, text, createdAt }
 export interface Comment { id: string; uid: string; name: string; text: string; at: number; }
 
+/**
+ * 댓글 목록(오래된 순, 최대 n건).
+ * ⚠️ 04-9: 오류를 삼키지 않는다. 정상 조회 결과가 0건일 때만 빈 배열이고,
+ *    권한·네트워크·서버 오류는 그대로 throw 해서 호출부가 '실패'와 '댓글 없음'을 구분하게 한다.
+ *    (이전에는 catch 로 [] 를 반환해 조회 실패가 '댓글 0개'로 보였다.)
+ */
 export async function listComments(postId: string, n = 100): Promise<Comment[]> {
-  try {
-    const q = query(collection(db(), "feed", postId, "comments"), orderBy("createdAt", "asc"), limit(n));
-    const s = await getDocs(q);
-    const a: Comment[] = [];
-    s.forEach((d) => { const x = d.data() as Record<string, unknown>; a.push({ id: d.id, uid: String(x.uid || ""), name: String(x.name || "익명"), text: String(x.text || ""), at: tsToMillis(x.createdAt) }); });
-    return a;
-  } catch { return []; }
+  const q = query(collection(db(), "feed", postId, "comments"), orderBy("createdAt", "asc"), limit(n));
+  const s = await getDocs(q);
+  const a: Comment[] = [];
+  s.forEach((d) => { const x = d.data() as Record<string, unknown>; a.push({ id: d.id, uid: String(x.uid || ""), name: String(x.name || "익명"), text: String(x.text || ""), at: tsToMillis(x.createdAt) }); });
+  return a;
 }
 
-/** 댓글 작성 + 글 주인에게 알림 + commentCount 증가 */
-export async function addComment(postId: string, postOwnerUid: string, name: string, text: string): Promise<boolean> {
+/**
+ * 댓글 작성 — 04-9: 댓글 문서 생성과 부모 feed.commentCount +1 을 **하나의 batch 로 원자 커밋**.
+ *  · 이전에는 addDoc 후 별도 updateDoc(...).catch(()=>{}) 라서 '댓글은 있는데 count 는 그대로'가 가능했다.
+ *  · batch 는 전부 성공하거나 전부 실패하므로 중간 상태가 남지 않는다.
+ *  · 부모 글이 없으면 update 대상이 없어 batch 자체가 실패한다(존재하지 않는 글 댓글 차단).
+ * @returns 생성된 댓글 문서 ID
+ * @throws  로그인/입력 오류, 권한 오류, 커밋 실패 — 호출부에서 사용자 메시지로 일반화할 것
+ */
+export async function addComment(postId: string, postOwnerUid: string, name: string, text: string): Promise<string> {
   const me = currentUid();
-  if (!me || !text.trim()) return false;
-  try {
-    await addDoc(collection(db(), "feed", postId, "comments"), { uid: me, name: (name || "익명").slice(0, 20), text: text.trim().slice(0, 500), createdAt: serverTimestamp() });
-    updateDoc(doc(db(), "feed", postId), { commentCount: increment(1) }).catch(() => {});
-    notify(postOwnerUid, { type: "comment", fromName: name, text: "회원님 글에 댓글을 남겼어요.", link: "/feed" });
-    return true;
-  } catch { return false; }
+  if (!me) throw new Error("comment/auth-required");
+  const body = text.trim().slice(0, 500);
+  if (!body) throw new Error("comment/empty");
+
+  const d = db();
+  const postRef = doc(d, "feed", postId);
+  const commentRef = doc(collection(d, "feed", postId, "comments")); // ID 를 미리 만들어 batch 에 넣는다
+
+  const batch = writeBatch(d);
+  batch.set(commentRef, {
+    uid: me,
+    name: (name || "익명").slice(0, 20),
+    text: body,
+    createdAt: serverTimestamp(),
+  });
+  batch.update(postRef, { commentCount: increment(1) });
+  await batch.commit(); // 실패하면 댓글·count 모두 반영되지 않는다
+
+  // 알림은 댓글 저장의 성립 조건이 아니다(실패해도 댓글은 유효) → 원자 커밋 밖에서 부가 처리
+  notify(postOwnerUid, { type: "comment", fromName: name, text: "회원님 글에 댓글을 남겼어요.", link: "/feed" });
+  return commentRef.id;
 }
 
-export async function deleteComment(postId: string, commentId: string): Promise<boolean> {
-  try {
-    await deleteDoc(doc(db(), "feed", postId, "comments", commentId));
-    updateDoc(doc(db(), "feed", postId), { commentCount: increment(-1) }).catch(() => {});
-    return true;
-  } catch { return false; }
+/**
+ * 댓글 삭제 — 04-9: 댓글 문서 삭제와 부모 feed.commentCount -1 을 **하나의 transaction 으로 원자 커밋**.
+ *  · increment(-1) 대신 트랜잭션에서 현재 값을 읽어 내려쓰기 때문에 count 가 음수가 되지 않는다
+ *    (이미 0이면 count 는 건드리지 않고 댓글만 지운다).
+ *  · 이미 없는 댓글은 idempotent — 목표 상태(그 댓글 없음)가 이미 성립하므로 count 를 건드리지 않고 정상 종료.
+ *  · 삭제 권한(본인 또는 글 작성자)은 기존 Firestore 규칙이 그대로 강제한다.
+ * @throws 로그인 오류, 권한 오류, 커밋 실패
+ */
+export async function deleteComment(postId: string, commentId: string): Promise<void> {
+  const me = currentUid();
+  if (!me) throw new Error("comment/auth-required");
+
+  const d = db();
+  const postRef = doc(d, "feed", postId);
+  const commentRef = doc(d, "feed", postId, "comments", commentId);
+
+  await runTransaction(d, async (tx) => {
+    const cSnap = await tx.get(commentRef);
+    if (!cSnap.exists()) return; // 이미 삭제됨 — count 를 또 깎지 않는다
+    const pSnap = await tx.get(postRef);
+    const cur = Math.max(0, Number(pSnap.data()?.commentCount) || 0);
+    tx.delete(commentRef);
+    if (cur > 0) tx.update(postRef, { commentCount: cur - 1 }); // 0 이면 감소 자체를 생략(음수 방지)
+  });
 }
 
 // ─── 코지홈 방문자 카운터(투데이/투탈) ───────────────────────────

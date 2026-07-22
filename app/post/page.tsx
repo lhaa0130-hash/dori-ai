@@ -62,6 +62,7 @@ export default function PostDetailPage() {
   const [draft, setDraft] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [commentActionError, setCommentActionError] = useState("");
+  const [commentsRetrying, setCommentsRetrying] = useState(false); // 04-9 재시도 중(중복 클릭 방지)
   const [deletingCommentId, setDeletingCommentId] = useState<string | null>(null);
   const composingRef = useRef(false); // 한글 IME 조합 중 Enter 제출 방지
 
@@ -96,7 +97,9 @@ export default function PostDetailPage() {
         const list = await listComments(id);
         if (alive()) setComments(list);
       } catch {
-        if (alive()) { setComments([]); setCommentsError("댓글을 불러오지 못했습니다."); }
+        // 04-9: 조회 실패는 '댓글 0개'가 아니다. comments 는 null 로 두고 오류 상태로 표시한다.
+        //  (내부 오류 코드·uid 는 사용자에게 노출하지 않는다)
+        if (alive()) { setComments(null); setCommentsError("댓글을 불러오지 못했습니다."); }
       }
       // 작성자 공개 프로필(users/{uid})을 우선 사용. userPrivate 는 절대 읽지 않는다.
       try {
@@ -182,7 +185,23 @@ export default function PostDetailPage() {
   // ⚠️ 작성자 이름은 로케일과 무관하게 저장된다(/feed 와 동일 기준).
   const myName = session?.user?.name || session?.user?.email?.split("@")[0] || "나";
 
+  // 04-9 댓글 목록 재조회(초기 실패 후 '다시 시도') — 중복 클릭은 commentsRetrying 로 막는다
+  const retryComments = async () => {
+    if (view.kind !== "ok" || commentsRetrying) return;
+    setCommentsRetrying(true);
+    try {
+      const list = await listComments(view.post.id);
+      setComments(list);
+      setCommentsError(""); // 성공하면 오류 제거
+    } catch {
+      setComments(null);
+      setCommentsError("댓글을 불러오지 못했습니다.");
+    }
+    setCommentsRetrying(false);
+  };
+
   // 댓글 등록 — /feed 와 동일하게 '실제 저장 성공 후 반영'(낙관적 추가 아님)
+  //  04-9: addComment 는 댓글+count 를 원자 커밋하고 실패하면 throw 한다.
   const handleAddComment = async () => {
     if (view.kind !== "ok" || submitting) return;
     if (!me) { setCommentActionError("로그인이 필요합니다."); return; }
@@ -190,14 +209,22 @@ export default function PostDetailPage() {
     if (!body) return;
     setSubmitting(true);
     setCommentActionError("");
-    const ok = await addComment(view.post.id, view.post.uid, myName, body);
-    if (ok) {
-      const list = await listComments(view.post.id).catch(() => null);
-      if (list) setComments(list);
+    try {
+      await addComment(view.post.id, view.post.uid, myName, body);
+      // 여기 도달 = 댓글 문서와 commentCount +1 이 함께 커밋된 상태
       setCommentCount((n) => Math.max(0, n + 1));
       setDraft("");
-    } else {
-      // 실패 → 입력값 유지 + 안내(가짜 성공 금지)
+      try {
+        const list = await listComments(view.post.id);
+        setComments(list);
+        setCommentsError("");
+      } catch {
+        // 저장은 성공했는데 재조회만 실패 — 저장을 실패로 표시하지 않고 목록만 오류 처리
+        setComments(null);
+        setCommentsError("댓글을 불러오지 못했습니다.");
+      }
+    } catch {
+      // 실패 → 입력값·목록·count 유지 + 안내(가짜 성공 금지)
       setCommentActionError("댓글 등록에 실패했습니다. 잠시 후 다시 시도해 주세요.");
     }
     setSubmitting(false);
@@ -209,14 +236,15 @@ export default function PostDetailPage() {
     if (!window.confirm("이 댓글을 삭제할까요?")) return;
     setDeletingCommentId(c.id);
     setCommentActionError("");
-    const ok = await deleteComment(view.post.id, c.id);
-    setDeletingCommentId(null);
-    if (ok) {
+    try {
+      // 04-9: 댓글 삭제와 commentCount -1 이 하나의 트랜잭션. 실패하면 둘 다 그대로다.
+      await deleteComment(view.post.id, c.id);
       setComments((prev) => (prev || []).filter((x) => x.id !== c.id));
       setCommentCount((n) => Math.max(0, n - 1));
-    } else {
-      setCommentActionError("댓글 삭제에 실패했습니다.");
+    } catch {
+      setCommentActionError("댓글 삭제에 실패했습니다."); // 목록·count 유지
     }
+    setDeletingCommentId(null);
   };
 
   const handleDelete = async () => {
@@ -421,11 +449,27 @@ export default function PostDetailPage() {
         )}
         {draft.length > 0 && <p className="mt-1 text-[11px] text-stone-400 text-right" aria-hidden>{draft.length}/500</p>}
         {commentActionError && <p role="alert" className="mt-2 text-xs text-red-500">{commentActionError}</p>}
-        {commentsError && <p role="alert" className="mt-2 text-xs text-red-500">{commentsError}</p>}
 
-        {/* 목록 — 기존 정렬(오래된 순) 유지 */}
+        {/* 목록 — 기존 정렬(오래된 순) 유지.
+            04-9: 조회 실패 / 로딩 / 0건을 서로 다른 상태로 표시한다(실패를 '댓글 없음'으로 보이지 않게). */}
         <div className="mt-4">
-          {comments === null ? (
+          {commentsError ? (
+            <div className="rounded-xl bg-stone-50 dark:bg-zinc-900 px-4 py-3">
+              <p role="alert" className="text-[13px] text-red-500 break-words">{commentsError}</p>
+              <button
+                type="button"
+                onClick={retryComments}
+                disabled={commentsRetrying}
+                aria-label="댓글 다시 불러오기"
+                className="mt-2 rounded-full bg-stone-200 dark:bg-zinc-800 text-stone-800 dark:text-stone-100 text-xs font-semibold px-4 py-2 active:opacity-85 disabled:opacity-50 transition"
+              >
+                {commentsRetrying ? "불러오는 중…" : "다시 시도"}
+              </button>
+              {commentsRetrying && (
+                <p role="status" aria-live="polite" className="sr-only">댓글을 다시 불러오는 중입니다.</p>
+              )}
+            </div>
+          ) : comments === null ? (
             <p role="status" aria-live="polite" className="text-[13px] text-stone-400 animate-pulse">댓글을 불러오는 중…</p>
           ) : comments.length === 0 ? (
             <p className="text-[13px] text-stone-400">아직 댓글이 없습니다.{me ? " 첫 댓글을 남겨보세요." : ""}</p>

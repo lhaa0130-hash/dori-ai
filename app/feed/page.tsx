@@ -74,6 +74,7 @@ const T = {
     commentsLabel: (n: number) => `댓글 ${n}`,
     loadingComments: "댓글 불러오는 중...",
     noComments: "아직 댓글이 없어요.",
+    retry: "다시 시도",
     commentPlaceholder: "댓글을 입력하세요",
     commentSubmit: "등록",
     loginLinkText: "로그인",
@@ -138,6 +139,7 @@ const T = {
     commentsLabel: (n: number) => `${n} comments`,
     loadingComments: "Loading comments...",
     noComments: "No comments yet.",
+    retry: "Retry",
     commentPlaceholder: "Write a comment...",
     commentSubmit: "Post",
     loginLinkText: "Log in",
@@ -205,6 +207,7 @@ export default function FeedPage() {
   const [followingSet, setFollowingSet] = useState<Set<string>>(new Set());
 
   // 댓글 상태 — 글별 독립(열림여부/목록/로딩/입력)
+  // 04-9: 게시물마다 독립된 댓글 상태. 한 글의 조회 실패가 다른 글이나 피드 전체에 영향을 주지 않는다.
   type CommentState = {
     open: boolean;
     items: Comment[];
@@ -212,15 +215,17 @@ export default function FeedPage() {
     loading: boolean;
     draft: string;
     submitting: boolean;
+    error: string;       // 조회 실패 메시지(빈 문자열이면 정상) — '댓글 0개'와 구분한다
+    actionError: string; // 작성·삭제 실패 메시지
   };
   const [commentMap, setCommentMap] = useState<Record<string, CommentState>>({});
 
   const getCState = (postId: string): CommentState =>
-    commentMap[postId] || { open: false, items: [], loaded: false, loading: false, draft: "", submitting: false };
+    commentMap[postId] || { open: false, items: [], loaded: false, loading: false, draft: "", submitting: false, error: "", actionError: "" };
 
   const patchCState = useCallback((postId: string, patch: Partial<CommentState>) => {
     setCommentMap((prev) => {
-      const cur = prev[postId] || { open: false, items: [], loaded: false, loading: false, draft: "", submitting: false };
+      const cur = prev[postId] || { open: false, items: [], loaded: false, loading: false, draft: "", submitting: false, error: "", actionError: "" };
       return { ...prev, [postId]: { ...cur, ...patch } };
     });
   }, []);
@@ -519,38 +524,50 @@ export default function FeedPage() {
     }
   };
 
-  // 댓글 영역 토글 — 처음 펼칠 때 목록 로드
+  // 댓글 목록 조회 — 04-9: 실패를 빈 목록으로 숨기지 않고 그 글의 error 상태로만 표시한다.
+  const loadComments = useCallback(async (postId: string) => {
+    patchCState(postId, { loading: true, error: "" });
+    try {
+      const items = await listComments(postId);
+      patchCState(postId, { items, loaded: true, loading: false, error: "" });
+    } catch {
+      // 이 글의 댓글만 오류 — 다른 글과 피드 전체는 그대로 둔다(내부 오류 코드 미노출)
+      patchCState(postId, { loading: false, loaded: false, error: "댓글을 불러오지 못했습니다." });
+    }
+  }, [patchCState]);
+
+  // 댓글 영역 토글 — 처음 펼칠 때(또는 이전에 실패했을 때) 목록 로드
   const toggleComments = async (post: FeedPost) => {
     const cur = getCState(post.id);
     const nextOpen = !cur.open;
     patchCState(post.id, { open: nextOpen });
-    if (nextOpen && !cur.loaded && !cur.loading) {
-      patchCState(post.id, { loading: true });
-      const items = await listComments(post.id);
-      patchCState(post.id, { items, loaded: true, loading: false });
-    }
+    if (nextOpen && !cur.loaded && !cur.loading) await loadComments(post.id);
   };
 
   const handleAddComment = async (post: FeedPost) => {
     const cur = getCState(post.id);
     const body = cur.draft.trim();
     if (!body || cur.submitting) return;
-    patchCState(post.id, { submitting: true });
-    const ok = await addComment(post.id, post.uid, myName, body);
-    if (ok) {
-      const items = await listComments(post.id);
-      patchCState(post.id, { items, loaded: true, draft: "", submitting: false });
+    patchCState(post.id, { submitting: true, actionError: "" });
+    try {
+      // 04-9: 댓글 문서와 commentCount +1 이 하나의 batch 로 커밋된다(부분 반영 없음)
+      await addComment(post.id, post.uid, myName, body);
+      patchCState(post.id, { draft: "", submitting: false });
       setPosts((prev) =>
         prev.map((p) => (p.id === post.id ? { ...p, commentCount: p.commentCount + 1 } : p))
       );
-    } else {
-      patchCState(post.id, { submitting: false });
+      await loadComments(post.id); // 저장 성공 후 재조회(재조회 실패는 목록 오류로만 표시)
+    } catch {
+      // 실패 → 입력 유지·목록 유지·count 유지(가짜 성공 금지)
+      patchCState(post.id, { submitting: false, actionError: "댓글 등록에 실패했습니다. 잠시 후 다시 시도해 주세요." });
     }
   };
 
   const handleDeleteComment = async (post: FeedPost, commentId: string) => {
-    const ok = await deleteComment(post.id, commentId);
-    if (ok) {
+    patchCState(post.id, { actionError: "" });
+    try {
+      // 04-9: 댓글 삭제와 commentCount -1 이 하나의 트랜잭션(음수 방지 포함)
+      await deleteComment(post.id, commentId);
       setCommentMap((prev) => {
         const cur = prev[post.id];
         if (!cur) return prev;
@@ -559,6 +576,8 @@ export default function FeedPage() {
       setPosts((prev) =>
         prev.map((p) => (p.id === post.id ? { ...p, commentCount: Math.max(0, p.commentCount - 1) } : p))
       );
+    } catch {
+      patchCState(post.id, { actionError: "댓글 삭제에 실패했습니다." }); // 댓글·count 유지
     }
   };
 
@@ -975,7 +994,20 @@ export default function FeedPage() {
                   {getCState(post.id).open && (
                     <div className="mt-3 border-t border-stone-100 dark:border-zinc-900 pt-3">
                       {getCState(post.id).loading ? (
-                        <p className="text-xs text-stone-400">{t.loadingComments}</p>
+                        <p role="status" aria-live="polite" className="text-xs text-stone-400">{t.loadingComments}</p>
+                      ) : getCState(post.id).error ? (
+                        /* 04-9: 이 글의 댓글 조회 실패 — 다른 글·피드 전체는 영향 없음 */
+                        <div className="rounded-xl bg-stone-50 dark:bg-zinc-900 px-3 py-2.5">
+                          <p role="alert" className="text-xs text-red-500 break-words">{getCState(post.id).error}</p>
+                          <button
+                            type="button"
+                            onClick={() => loadComments(post.id)}
+                            aria-label="댓글 다시 불러오기"
+                            className="mt-2 rounded-full bg-stone-200 dark:bg-zinc-800 text-stone-800 dark:text-stone-100 text-[11px] font-semibold px-3 py-2 active:opacity-85 transition"
+                          >
+                            {t.retry}
+                          </button>
+                        </div>
                       ) : (
                         <>
                           {getCState(post.id).items.length === 0 ? (
@@ -1048,7 +1080,14 @@ export default function FeedPage() {
                                 {getCState(post.id).submitting ? "..." : t.commentSubmit}
                               </button>
                             </div>
-                          ) : (
+                          ) : null}
+                          {/* 04-9: 이 글의 댓글 작성·삭제 실패 안내(가짜 성공 금지) */}
+                          {getCState(post.id).actionError && (
+                            <p role="alert" className="mt-2 text-xs text-red-500 break-words">
+                              {getCState(post.id).actionError}
+                            </p>
+                          )}
+                          {!isLoggedIn && (
                             <p className="mt-3 text-xs text-stone-400">
                               <Link href={(pathname || "").startsWith("/en") ? "/en/login" : "/login"} className="underline" style={{ color: POINT }}>
                                 {t.loginLinkText}
