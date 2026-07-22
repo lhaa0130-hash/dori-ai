@@ -125,11 +125,21 @@ service cloud.firestore {
 
     // 타인의 좋아요 토글만 허용: 본인 uid 하나만 추가/제거 + likeCount 정확히 ±1(음수 금지).
     //  다른 사람 uid 를 배열에 넣거나 빼거나, likeCount 를 임의 값으로 바꾸는 것을 차단.
+    // 04-6: 좋아요는 '그 게시물을 읽을 수 있는 사람'만 가능.
+    //  삭제글(status:deleted)과 접근 권한 없는 friends/groups 글에는 좋아요를 달 수 없다.
+    function feedLikeAllowedOn(b) {
+      return b.get('status', 'published') != 'deleted'
+             && ( b.visibility == 'public'
+                  || request.auth.uid == b.uid
+                  || request.auth.uid in b.allowedUids );
+    }
+
     function feedLikeToggleOnly() {
       let b = resource.data;
       let a = request.resource.data;
       let uid = request.auth.uid;
-      return a.diff(b).affectedKeys().hasOnly(['likeCount', 'likedBy'])
+      return feedLikeAllowedOn(b)
+             && a.diff(b).affectedKeys().hasOnly(['likeCount', 'likedBy'])
              && a.likeCount >= 0
              && (
                // 좋아요 추가

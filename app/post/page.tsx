@@ -11,13 +11,15 @@
 import { useEffect, useState, useCallback, useRef } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { getPost, getProfile, currentUid, softDeletePost, type FeedPost, type Profile, type FeedVisibility } from "@/lib/social";
+import { getPost, getProfile, currentUid, softDeletePost, toggleLike, type FeedPost, type Profile, type FeedVisibility } from "@/lib/social";
 
 type View =
   | { kind: "loading" }
   | { kind: "denied" }              // 없음/삭제됨/권한없음 — 구분하지 않고 동일 화면(존재 여부 비노출)
   | { kind: "error" }
   | { kind: "ok"; post: FeedPost };
+
+const POINT = "#F9954E";
 
 const VIS_LABEL: Record<FeedVisibility, string> = {
   public: "전체 공개",
@@ -42,6 +44,11 @@ export default function PostDetailPage() {
   const [deleting, setDeleting] = useState(false);
   const [actionError, setActionError] = useState("");
   const menuRef = useRef<HTMLDivElement | null>(null);
+  // 04-6 좋아요 — 기존 feed.likeCount/likedBy 구조와 toggleLike 재사용(새 컬렉션·새 API 없음)
+  const [liked, setLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
+  const [likeBusy, setLikeBusy] = useState(false);
+  const [likeError, setLikeError] = useState("");
 
   // 경로에서 postId 파싱 (/post/<id>) — 쿼리스트링 방식은 쓰지 않지만 ?id= 는 로컬 검증용 폴백
   useEffect(() => {
@@ -62,6 +69,10 @@ export default function PostDetailPage() {
       if (!alive()) return;
       if (!p) { setView({ kind: "denied" }); return; }
       setView({ kind: "ok", post: p });
+      // 좋아요 초기 상태 — 잘못된 데이터에도 UI가 깨지지 않도록 방어적으로 해석
+      setLiked(!!p.likedByMe);
+      setLikeCount(Math.max(0, Number(p.likeCount) || 0));
+      setLikeError("");
       // 작성자 공개 프로필(users/{uid})을 우선 사용. userPrivate 는 절대 읽지 않는다.
       try {
         const prof = await getProfile(p.uid);
@@ -114,6 +125,28 @@ export default function PostDetailPage() {
   const goBack = () => {
     if (typeof window !== "undefined" && window.history.length > 1) router.back();
     else router.push("/feed");
+  };
+
+  // 좋아요 토글 — /feed 와 동일한 낙관적 업데이트 정책(실패 시 rollback + 안내).
+  //  비로그인은 실제 쓰기를 시도하지 않고 로그인 안내만 표시(likeCount/likedBy 변경 없음).
+  const handleLike = async () => {
+    if (view.kind !== "ok" || likeBusy) return;
+    if (!me) { setLikeError("로그인이 필요합니다."); return; }
+    const wasLiked = liked;
+    const prevCount = likeCount;
+    setLikeBusy(true);
+    setLikeError("");
+    // 낙관적 반영
+    setLiked(!wasLiked);
+    setLikeCount(Math.max(0, prevCount + (wasLiked ? -1 : 1)));
+    const ok = await toggleLike(view.post.id, wasLiked);
+    setLikeBusy(false);
+    if (!ok) {
+      // 실패 → 이전 상태 복구(삭제·권한 변경 등으로 규칙이 막은 경우 포함)
+      setLiked(wasLiked);
+      setLikeCount(prevCount);
+      setLikeError("좋아요 처리에 실패했습니다. 잠시 후 다시 시도해 주세요.");
+    }
   };
 
   const handleDelete = async () => {
@@ -247,6 +280,29 @@ export default function PostDetailPage() {
             )}
           </div>
         )}
+
+        {/* 04-6 좋아요 — /feed 와 같은 표현·같은 함수(toggleLike). 좋아요한 사람 목록은 노출하지 않음 */}
+        <div className="mt-4 pt-3 border-t border-stone-100 dark:border-zinc-900 flex flex-wrap items-center gap-2">
+          <button
+            type="button"
+            onClick={handleLike}
+            disabled={likeBusy}
+            aria-pressed={liked}
+            aria-label={liked ? "좋아요 취소" : "좋아요 추가"}
+            className="inline-flex items-center gap-1.5 min-h-[40px] px-3.5 rounded-full bg-stone-100 dark:bg-zinc-900 text-sm active:opacity-85 disabled:opacity-50 transition"
+          >
+            <span aria-hidden style={{ color: liked ? POINT : undefined }}>{liked ? "♥" : "♡"}</span>
+            <span className="font-semibold" style={{ color: liked ? POINT : undefined }}>
+              좋아요 <span className="tabular-nums">{likeCount}</span>
+            </span>
+          </button>
+          {!me && (
+            <span className="text-[12px] text-stone-400">
+              <Link href="/login" className="underline font-semibold" style={{ color: POINT }}>로그인</Link> 후 좋아요를 남길 수 있어요.
+            </span>
+          )}
+        </div>
+        {likeError && <p role="alert" className="mt-2 text-xs text-red-500">{likeError}</p>}
       </article>
 
       <div className="mt-4 text-center">
