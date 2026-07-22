@@ -284,14 +284,56 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
-    // 나만의 동물(유저 창작) — 공개 갤러리·프로필용. 누구나 읽기, 본인만 생성, 소유자 수정 또는 좋아요 필드만, 소유자·관리자 삭제
+    // 나만의 동물(유저 창작) — 공개 갤러리·프로필용. 누구나 읽기, 본인만 생성, 소유자·관리자 삭제.
+    //  ⚠️ 이 컬렉션에는 공개범위·삭제상태 필드가 없다(하드 삭제, read 전체 공개).
+    //     문서의 `status` 는 IUCN 보전등급 객체({label,code,color})이지 공개/삭제 상태가 아니다.
+    //
+    // 04-11: 좋아요 업데이트가 '어떤 필드를 바꿨나'만 보고 '어떤 값으로 바꿨나'를 보지 않아
+    //  likeCount 임의 증감·타인 uid 조작·다중 uid·타입 위조가 전부 통과했다(에뮬레이터에서 12건 실증).
+    //  feed 의 feedLikeToggleOnly 와 같은 수준으로 값까지 검증한다.
+
+    // 좋아요 토글만 허용: 본인 uid 하나만 추가/제거 + likeCount 정확히 ±1(음수·타입 위조 차단).
+    //  레거시 문서(필드 없음)는 likeCount=0 / likedBy=[] 로 해석해 첫 좋아요를 허용한다.
+    function acLikeToggleOnly() {
+      let b = resource.data;
+      let a = request.resource.data;
+      let uid = request.auth.uid;
+      let before = b.get('likedBy', []);
+      let after = a.get('likedBy', []);
+      let beforeCount = b.get('likeCount', 0);
+      return a.diff(b).affectedKeys().hasOnly(['likeCount', 'likedBy'])
+             && after is list
+             && a.likeCount is int
+             && a.likeCount >= 0
+             && (
+               // 좋아요 추가 — 기존 uid 전부 유지 + 내 uid 하나만 늘어남
+               ( !(uid in before)
+                 && (uid in after)
+                 && after.hasAll(before)
+                 && after.size() == before.size() + 1
+                 && a.likeCount == beforeCount + 1 )
+               ||
+               // 좋아요 취소 — 남은 uid 는 전부 기존에 있던 것 + 내 uid 하나만 줄어듦
+               ( (uid in before)
+                 && !(uid in after)
+                 && before.hasAll(after)
+                 && after.size() == before.size() - 1
+                 && a.likeCount == beforeCount - 1 )
+             );
+    }
+
+    // 작성자 일반 수정 — 집계·작성자·작성일은 건드릴 수 없다(작성자도 좋아요 수를 임의로 못 바꾼다).
+    function acOwnerEdit() {
+      let b = resource.data;
+      return request.auth.uid == b.uid
+             && !request.resource.data.diff(b).affectedKeys()
+                  .hasAny(['likeCount', 'likedBy', 'uid', 'createdAt']);
+    }
+
     match /animalCreations/{id} {
       allow read: if true;
       allow create: if request.auth != null && request.auth.uid == request.resource.data.uid;
-      allow update: if request.auth != null && (
-        request.auth.uid == resource.data.uid ||
-        request.resource.data.diff(resource.data).affectedKeys().hasOnly(['likeCount', 'likedBy'])
-      );
+      allow update: if request.auth != null && (acOwnerEdit() || acLikeToggleOnly());
       allow delete: if request.auth != null && (request.auth.uid == resource.data.uid || isAdmin());
     }
 

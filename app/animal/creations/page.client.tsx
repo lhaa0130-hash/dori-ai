@@ -1,5 +1,5 @@
 "use client";
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { listPublicCreations, likeCreation, deleteCreation, type Creation } from "@/lib/userAnimals";
 import { getFirebaseAuth } from "@/lib/firebase";
@@ -10,18 +10,44 @@ export default function CreationsClient() {
   const { session, status } = useAuth();
   const [items, setItems] = useState<Creation[] | null>(null);
   const [detail, setDetail] = useState<Creation | null>(null);
+  // 04-11: 요청 중인 창작물 id — 응답 전 재클릭을 막는다.
+  //  arrayUnion 은 uid 중복을 막아주지만 increment 는 누를 때마다 더해져 count 가 어긋난다.
+  //  ⚠️ 가드를 state 로만 두면 같은 렌더 사이클의 연속 클릭을 못 막는다(setState 가 비동기라
+  //     두 번째 클릭 핸들러가 아직 비어 있는 이전 state 를 본다 — 실측으로 4회 클릭이 전부 통과했다).
+  //     그래서 판정은 ref 로 즉시 하고, state 는 버튼 disabled 표시용으로만 함께 갱신한다.
+  const likeBusyRef = useRef<Set<string>>(new Set());
+  const [likeBusy, setLikeBusy] = useState<Set<string>>(new Set());
+  const [likeError, setLikeError] = useState("");
   const isAdmin = session?.user?.email?.toLowerCase() === ADMIN_EMAIL;
   const myUid = (() => { try { return getFirebaseAuth().currentUser?.uid || null; } catch { return null; } })();
 
   const load = useCallback(async () => { setItems(await listPublicCreations(80)); }, []);
-  useEffect(() => { load(); }, [load]);
+  // ⚠️ Firebase 세션 복원은 비동기라 마운트 직후에는 currentUser 가 null 이다.
+  //    그 시점에 계산한 likedByMe 는 전부 false 가 되어 '내가 누른 좋아요'가 안 보인다.
+  //    session 이 확정될 때마다 다시 불러 상태를 맞춘다(04-8B 상세 페이지와 같은 부류의 문제).
+  useEffect(() => { load(); }, [load, session]);
 
   async function toggleLike(c: Creation) {
     if (status !== "authenticated") { window.location.href = "/login?next=/animal/creations"; return; }
+    if (likeBusyRef.current.has(c.id)) return; // 응답 전 재클릭 차단(동기 판정)
     const like = !c.likedByMe;
-    setItems((arr) => arr?.map((x) => x.id === c.id ? { ...x, likedByMe: like, likeCount: x.likeCount + (like ? 1 : -1) } : x) || arr);
-    setDetail((d) => d && d.id === c.id ? { ...d, likedByMe: like, likeCount: d.likeCount + (like ? 1 : -1) } : d);
-    await likeCreation(c.id, like);
+    const delta = like ? 1 : -1;
+    likeBusyRef.current.add(c.id);
+    setLikeBusy(new Set(likeBusyRef.current));
+    setLikeError("");
+    // 낙관적 반영 — 실패하면 아래에서 정확히 되돌린다
+    const apply = (d: number, liked: boolean) => {
+      setItems((arr) => arr?.map((x) => x.id === c.id ? { ...x, likedByMe: liked, likeCount: Math.max(0, x.likeCount + d) } : x) || arr);
+      setDetail((dd) => dd && dd.id === c.id ? { ...dd, likedByMe: liked, likeCount: Math.max(0, dd.likeCount + d) } : dd);
+    };
+    apply(delta, like);
+    const ok = await likeCreation(c.id, like);
+    if (!ok) {
+      apply(-delta, !like); // rollback — 카운트·상태 원복
+      setLikeError("좋아요 처리에 실패했어요. 잠시 후 다시 시도해 주세요.");
+    }
+    likeBusyRef.current.delete(c.id);
+    setLikeBusy(new Set(likeBusyRef.current));
   }
   async function remove(c: Creation) {
     if (!confirm(`"${c.animal_name}"을(를) 삭제할까요?`)) return;
@@ -64,7 +90,14 @@ export default function CreationsClient() {
                   <div className="text-[11px] text-stone-400 truncate">by {c.authorName}</div>
                 </div>
               </button>
-              <button onClick={() => toggleLike(c)} className="w-full flex items-center justify-center gap-1 pb-2 text-[12px] font-bold transition" style={{ color: c.likedByMe ? "#F9954E" : undefined }}>
+              <button
+                onClick={() => toggleLike(c)}
+                disabled={likeBusy.has(c.id)}
+                aria-pressed={c.likedByMe}
+                aria-label={`${c.animal_name} ${c.likedByMe ? "좋아요 취소" : "좋아요"} (현재 ${c.likeCount}개)`}
+                className="w-full min-h-11 flex items-center justify-center gap-1 py-2.5 text-[12px] font-bold transition disabled:opacity-50"
+                style={{ color: c.likedByMe ? "#F9954E" : undefined }}
+              >
                 <span className={c.likedByMe ? "" : "text-stone-400"}>{c.likedByMe ? "❤️" : "🤍"}</span>
                 <span className={c.likedByMe ? "text-[#F9954E]" : "text-stone-400"}>{c.likeCount}</span>
               </button>
@@ -104,16 +137,29 @@ export default function CreationsClient() {
                 </ul>
               )}
               <div className="mt-4 flex items-center gap-2">
-                <button onClick={() => toggleLike(detail)} className="flex-1 rounded-2xl border border-stone-200 dark:border-zinc-800 py-2.5 text-[13px] font-bold transition" style={{ color: detail.likedByMe ? "#F9954E" : undefined, borderColor: detail.likedByMe ? "#F9954E" : undefined }}>
+                <button
+                  onClick={() => toggleLike(detail)}
+                  disabled={likeBusy.has(detail.id)}
+                  aria-pressed={detail.likedByMe}
+                  aria-label={detail.likedByMe ? `좋아요 취소 (현재 ${detail.likeCount}개)` : `좋아요 (현재 ${detail.likeCount}개)`}
+                  className="flex-1 min-h-11 rounded-2xl border border-stone-200 dark:border-zinc-800 py-2.5 text-[13px] font-bold transition disabled:opacity-50"
+                  style={{ color: detail.likedByMe ? "#F9954E" : undefined, borderColor: detail.likedByMe ? "#F9954E" : undefined }}
+                >
                   {detail.likedByMe ? "❤️" : "🤍"} 좋아요 {detail.likeCount}
                 </button>
                 {(isAdmin || (myUid && myUid === detail.uid)) && (
                   <button onClick={() => remove(detail)} className="rounded-2xl border border-red-200 dark:border-red-900/50 text-red-500 px-4 py-2.5 text-[13px] font-bold hover:bg-red-50 dark:hover:bg-red-950/30 transition">삭제</button>
                 )}
               </div>
+              {/* 04-11: 좋아요 실패를 조용히 넘기지 않는다(가짜 성공 금지) */}
+              {likeError && <p role="alert" className="mt-2 text-[12px] text-red-500 break-words">{likeError}</p>}
             </div>
           </div>
         </div>
+      )}
+      {/* 목록에서 좋아요가 실패한 경우의 안내(모달이 닫혀 있을 때) */}
+      {likeError && !detail && (
+        <p role="alert" className="mt-6 text-center text-[13px] text-red-500 break-words">{likeError}</p>
       )}
     </main>
   );
