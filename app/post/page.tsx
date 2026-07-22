@@ -289,7 +289,7 @@ export default function PostDetailPage() {
             disabled={likeBusy}
             aria-pressed={liked}
             aria-label={liked ? "좋아요 취소" : "좋아요 추가"}
-            className="inline-flex items-center gap-1.5 min-h-[40px] px-3.5 rounded-full bg-stone-100 dark:bg-zinc-900 text-sm active:opacity-85 disabled:opacity-50 transition"
+            className="inline-flex items-center gap-1.5 px-3.5 py-2.5 rounded-full bg-stone-100 dark:bg-zinc-900 text-sm active:opacity-85 disabled:opacity-50 transition"
           >
             <span aria-hidden style={{ color: liked ? POINT : undefined }}>{liked ? "♥" : "♡"}</span>
             <span className="font-semibold" style={{ color: liked ? POINT : undefined }}>
