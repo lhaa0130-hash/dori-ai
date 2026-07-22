@@ -108,6 +108,11 @@ export default function PostDetailPage() {
     }
   }, []);
 
+  // ⚠️ Firebase 세션 복원은 비동기라 최초 렌더에는 currentUid() 가 null 이다.
+  //    한 번만 읽으면 로그인 사용자가 비로그인으로 취급돼 좋아요·댓글 입력·작성자 관리 메뉴가
+  //    모두 막힌다(04-8B 에뮬레이터 로그인 검증에서 재현). session 확정 시마다 재평가한다(/feed 와 동일).
+  useEffect(() => { setMe(currentUid()); }, [session]);
+
   useEffect(() => {
     setMe(currentUid());
     if (postId === null) return;
