@@ -2,7 +2,11 @@
 // 데이터 프로젝트는 dori-ai-0130(=users/rewardClaims 가 실제로 있는 곳). SA 프로젝트와 무관.
 
 export const FIRESTORE_PROJECT_ID = "dori-ai-0130";
+// 엔드포인트 URL(:batchGet 등)에 쓰는 전체 https 주소.
 export const FS_BASE = `https://firestore.googleapis.com/v1/projects/${FIRESTORE_PROJECT_ID}/databases/(default)/documents`;
+// ⚠️ 요청 '본문' 안의 문서 이름은 호스트 없는 리소스 이름이어야 한다(batchGet documents[], commit update.name).
+//    호스트(https://firestore.googleapis.com/v1/)를 붙이면 400 → 실환경에서만 드러난 버그(04-18).
+export const DOC_NAME_PREFIX = `projects/${FIRESTORE_PROJECT_ID}/databases/(default)/documents`;
 
 // ── 값 인코딩(JS → Firestore REST Value) ──
 export function encodeValue(v: unknown): any {
@@ -43,7 +47,8 @@ export function decodeFields(fields: Record<string, any>): Record<string, unknow
   return out;
 }
 
-export function docPath(rel: string): string { return `${FS_BASE}/${rel}`; }
+export function docPath(rel: string): string { return `${FS_BASE}/${rel}`; }      // GET 엔드포인트용(전체 URL)
+export function docName(rel: string): string { return `${DOC_NAME_PREFIX}/${rel}`; } // 요청 본문용(리소스 이름)
 
 type H = Record<string, string>;
 const authH = (token: string): H => ({ Authorization: `Bearer ${token}`, "Content-Type": "application/json" });
@@ -62,13 +67,13 @@ export async function batchGet(
 ): Promise<Record<string, { exists: boolean; fields: Record<string, unknown> }>> {
   const r = await fetchImpl(`${FS_BASE}:batchGet`, {
     method: "POST", headers: authH(token),
-    body: JSON.stringify({ documents: relPaths.map(docPath), transaction }),
+    body: JSON.stringify({ documents: relPaths.map(docName), transaction }),
   });
   if (!r.ok) throw { code: "batchget_failed", status: r.status };
   const arr = (await r.json()) as any[];
   const out: Record<string, { exists: boolean; fields: Record<string, unknown> }> = {};
   for (const rel of relPaths) {
-    const full = docPath(rel);
+    const full = docName(rel);
     const hit = arr.find((d) => (d.found && d.found.name === full) || (d.missing === full));
     if (hit && hit.found) out[rel] = { exists: true, fields: decodeFields(hit.found.fields || {}) };
     else out[rel] = { exists: false, fields: {} };
@@ -90,7 +95,7 @@ export async function commit(
   const body = {
     transaction,
     writes: writes.map((w) => {
-      const write: any = { update: { name: docPath(w.rel), fields: encodeFields(w.fields) } };
+      const write: any = { update: { name: docName(w.rel), fields: encodeFields(w.fields) } };
       if (w.updateMask) write.updateMask = { fieldPaths: w.updateMask };
       if (w.requireNotExists) write.currentDocument = { exists: false };
       return write;
