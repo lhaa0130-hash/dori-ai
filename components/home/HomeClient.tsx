@@ -1,14 +1,15 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import {
   getCottonCandyBalance,
   getAttendanceData,
-  checkAttendance,
+  hydrateGameData,
   getCachedGameProfile,
 } from "@/lib/cottonCandy";
+import { claimDailyAttendance } from "@/lib/claimReward";
 import { TIER_INFO, calculateLevelProgress, type UserTier } from "@/lib/userProfile";
 import CottonCandy from "@/components/icons/CottonCandy";
 
@@ -26,6 +27,8 @@ export default function HomeClient({ locale = "ko" }: { locale?: "ko" | "en" }) 
   const [level, setLevel] = useState(1);
   const [tier, setTier] = useState(1);
   const [exp, setExp] = useState(0);
+  const [attError, setAttError] = useState(false);
+  const claimingRef = useRef(false); // 동기 중복 클릭 가드(state 가드는 같은 렌더 연타를 못 막음)
 
   const refresh = (email: string) => {
     const att = getAttendanceData(email);
@@ -50,12 +53,27 @@ export default function HomeClient({ locale = "ko" }: { locale?: "ko" | "en" }) 
     return () => window.removeEventListener("dori-gamedata-synced", onSync);
   }, [session?.user?.email]);
 
-  const handleAttendance = () => {
-    if (!session?.user?.email || checkedToday || checking) return;
+  // 출석 = 신뢰 서버 게이트 호출. 클라이언트가 재화를 직접 올리지 않는다.
+  //  상태: idle → claiming → granted/already_claimed/legacy_recognized(=출석완료) / error(재시도).
+  const handleAttendance = async () => {
+    const email = session?.user?.email;
+    if (!email || checkedToday || checking || claimingRef.current) return;
+    claimingRef.current = true;
     setChecking(true);
-    const result = checkAttendance(session.user.email);
-    if (result.success) refresh(session.user.email);
-    setChecking(false);
+    setAttError(false);
+    try {
+      const r = await claimDailyAttendance();
+      if (r.status === "granted" || r.status === "already_claimed" || r.status === "legacy_recognized") {
+        setCheckedToday(true);
+        await hydrateGameData(); // 서버 원본 → localStorage 표시 캐시 동기화
+        refresh(email);
+      } else {
+        setAttError(true); // 네트워크 실패 시 거짓 성공 금지 — 재시도 가능
+      }
+    } finally {
+      claimingRef.current = false;
+      setChecking(false);
+    }
   };
 
   /* ── 로딩 중: 스켈레톤 ── */
@@ -113,9 +131,15 @@ export default function HomeClient({ locale = "ko" }: { locale?: "ko" | "en" }) 
           <button
             onClick={(e) => { e.preventDefault(); handleAttendance(); }}
             disabled={checking}
-            className="px-3.5 py-1.5 rounded-xl bg-[#F9954E] text-white text-[12px] font-black active:opacity-80 transition-opacity disabled:opacity-50 flex-shrink-0"
+            aria-label={en ? "Check in for daily reward" : "출석하고 보상 받기"}
+            title={attError ? (en ? "Failed. Tap to retry." : "실패했어요. 다시 눌러 주세요.") : undefined}
+            className={`px-3.5 py-1.5 rounded-xl text-white text-[12px] font-black active:opacity-80 transition-opacity disabled:opacity-50 flex-shrink-0 ${attError ? "bg-red-500" : "bg-[#F9954E]"}`}
           >
-            {checking ? "..." : <>{en ? "Check in" : "출석"} +50 <CottonCandy className="w-3.5 h-3.5 inline-block align-[-0.15em]" /></>}
+            {checking
+              ? "..."
+              : attError
+                ? (en ? "Retry" : "다시")
+                : <>{en ? "Check in" : "출석"} +50 <CottonCandy className="w-3.5 h-3.5 inline-block align-[-0.15em]" /></>}
           </button>
         )}
       </div>

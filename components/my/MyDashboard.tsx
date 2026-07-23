@@ -1,12 +1,13 @@
 "use client";
 
-import { useEffect, useState, useCallback } from "react";
+import { useEffect, useState, useCallback, useRef } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import Link from "next/link";
 import { useTheme } from "next-themes";
 import { useRouter, usePathname } from "next/navigation";
 import ProfileHero from "@/components/my/ProfileHero";
 import { UserProfile, createDefaultProfile, calculateTier, calculateLevel, ACTIVITY_SCORES } from "@/lib/userProfile";
+import { claimDailyAttendance } from "@/lib/claimReward";
 import CottonCandy from "@/components/icons/CottonCandy";
 import { Bell, ChevronRight } from "lucide-react";
 import { watchNotifications } from "@/lib/social";
@@ -18,7 +19,7 @@ import {
   getMonthEarned,
   getCottonCandyHistory,
   getAttendanceData,
-  checkAttendance,
+  hydrateGameData,
   isMissionCompletedToday,
   completeMission,
   ACHIEVEMENTS,
@@ -42,6 +43,7 @@ const T = {
     toastPrefix: "🏆 업적 달성!",
     missionAlreadyDone: "오늘 이미 완료한 미션입니다!",
     attendanceDoneToast: "출석 체크 완료!",
+    attendanceFailToast: "출석 처리에 실패했어요. 잠시 후 다시 시도해 주세요.",
     missionDone: (label: string) => `${label} 완료!`,
     eyebrow: "계정 · 활동",
     pageTitle: "내 프로필",
@@ -90,6 +92,7 @@ const T = {
     toastPrefix: "🏆 Achievement unlocked!",
     missionAlreadyDone: "You've already completed this mission today!",
     attendanceDoneToast: "Check-in complete!",
+    attendanceFailToast: "Check-in failed. Please try again in a moment.",
     missionDone: (label: string) => `${label} complete!`,
     eyebrow: "Account · Activity",
     pageTitle: "My profile",
@@ -194,6 +197,7 @@ export default function MyDashboard() {
   const [achievementToast, setAchievementToast] = useState<{ name: string; reward: number } | null>(null);
   const [attendanceStreak, setAttendanceStreak] = useState(0);
   const [attendanceDone, setAttendanceDone] = useState(false);
+  const claimingRef = useRef(false); // 출석 동기 중복 클릭 가드
   // Firestore 동기화(다른 기기 로그인 등) 완료 시 화면 갱신용 트리거
   const [syncTick, setSyncTick] = useState(0);
 
@@ -278,16 +282,28 @@ export default function MyDashboard() {
     }
   };
 
-  // 출석 체크
-  const handleAttendance = () => {
-    if (!user?.email || attendanceDone) return;
-    const result = checkAttendance(user.email);
-    if (result.success) {
-      setAttendanceDone(true);
-      setAttendanceStreak(prev => prev + 1);
-      loadCandyData();
-      setAchievementToast({ name: t.attendanceDoneToast, reward: result.earned });
-      setTimeout(() => setAchievementToast(null), 3000);
+  // 출석 체크 = 신뢰 서버 게이트 호출. 클라이언트가 재화를 직접 올리지 않는다.
+  const handleAttendance = async () => {
+    if (!user?.email || attendanceDone || claimingRef.current) return;
+    claimingRef.current = true;
+    try {
+      const r = await claimDailyAttendance();
+      if (r.status === "granted") {
+        setAttendanceDone(true);
+        await hydrateGameData();     // 서버 원본 → localStorage 표시 캐시
+        loadCandyData();             // 스트릭·완료·잔액 표시 갱신
+        setAchievementToast({ name: t.attendanceDoneToast, reward: r.cottonCandy });
+        setTimeout(() => setAchievementToast(null), 3000);
+      } else if (r.status === "already_claimed" || r.status === "legacy_recognized") {
+        setAttendanceDone(true);
+        await hydrateGameData();
+        loadCandyData();
+      } else {
+        setAchievementToast({ name: t.attendanceFailToast, reward: 0 });
+        setTimeout(() => setAchievementToast(null), 3000);
+      }
+    } finally {
+      claimingRef.current = false;
     }
   };
 
