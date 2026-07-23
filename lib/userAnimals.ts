@@ -4,9 +4,10 @@ import {
   collection, addDoc, getDocs, getDoc, doc, query, where, orderBy, limit as fbLimit,
   serverTimestamp, updateDoc, deleteDoc, arrayUnion, arrayRemove, increment,
 } from "firebase/firestore";
-import { getFirebaseFirestore, getFirebaseAuth } from "@/lib/firebase";
+import { getFirebaseFirestore, getFirebaseAuth, getFirebaseStorage } from "@/lib/firebase";
 import { uploadFeedMedia } from "@/lib/storage";
 import { addPost } from "@/lib/social";
+import { ref as storageRef, deleteObject } from "firebase/storage";
 
 // ⚠️ info 는 [icon, key, value] 3요소 튜플의 배열 — 동물 시스템 전체(공식 도감+창작물)가 쓰는 UI 표준.
 //    그런데 Firestore 는 '배열 안의 배열'을 저장할 수 없어(INVALID_ARGUMENT) animalCreations 등록이
@@ -112,10 +113,22 @@ export async function generateAnimal(prompt: string): Promise<{ ok: true; animal
   } catch { return { ok: false, error: "네트워크 오류예요. 잠시 후 다시 시도해 주세요." }; }
 }
 
+/**
+ * 04-13: persist 결과 계약.
+ *  - url: 저장된 이미지 다운로드 URL
+ *  - storagePath: 이번 요청이 새로 업로드한 Storage fullPath(보상 삭제용). 신규 업로드가 아니면 null.
+ *  - createdByThisRequest: 이번 요청에서 새로 업로드했는가(=삭제해도 되는가).
+ *  ⚠️ StorageReference 같은 SDK 객체를 밖으로 내보내지 않는다(직렬화 가능한 값만).
+ */
+export interface PersistedImage { url: string; storagePath: string | null; createdByThisRequest: boolean; }
+
 /** fal 임시 이미지를 Firebase Storage로 재업로드해 영구 URL 확보.
  *  ⚠️타임아웃 필수: Storage SDK는 실패 시 기본 최대 10분까지 조용히 재시도해 UI가 멈춘 것처럼 보임.
- *  실패 사유(error)를 함께 돌려줘야 사용자가 원인을 볼 수 있음. */
-export async function persistImage(falUrl: string): Promise<{ url: string | null; error?: string }> {
+ *  실패 사유(error)를 함께 돌려줘야 사용자가 원인을 볼 수 있음.
+ *  04-13: 성공 시 storagePath 를 함께 돌려줘 등록 실패 시 이 파일만 삭제할 수 있게 한다.
+ *   이 함수는 항상 '새 업로드'라 createdByThisRequest=true(fal 외부 URL 을 받아 새 파일로 올림).
+ *   getDownloadURL 은 uploadFeedMedia 내부에서 이뤄지고 실패 시 파일이 안 남으므로 여기서 별도 정리 불필요. */
+export async function persistImage(falUrl: string): Promise<{ image: PersistedImage | null; error?: string }> {
   const withTimeout = <T,>(p: Promise<T>, ms: number, msg: string) =>
     Promise.race([p, new Promise<T>((_, rej) => setTimeout(() => rej(new Error(msg)), ms))]);
   try {
@@ -123,14 +136,42 @@ export async function persistImage(falUrl: string): Promise<{ url: string | null
     const timer = setTimeout(() => ctrl.abort(), 20000);
     let res: Response;
     try { res = await fetch(falUrl, { signal: ctrl.signal }); } finally { clearTimeout(timer); }
-    if (!res.ok) return { url: null, error: `이미지를 가져오지 못했어요. (${res.status})` };
+    if (!res.ok) return { image: null, error: `이미지를 가져오지 못했어요. (${res.status})` };
     const blob = await res.blob();
     const file = new File([blob], `myanimal_${Date.now()}.jpg`, { type: "image/jpeg" });
     const up = await withTimeout(uploadFeedMedia(file), 45000, "업로드가 너무 오래 걸려요. 잠시 후 다시 시도해 주세요.");
-    return up.ok ? { url: up.result.url } : { url: null, error: up.error };
+    if (!up.ok) return { image: null, error: up.error };
+    return { image: { url: up.result.url, storagePath: up.result.storagePath, createdByThisRequest: true } };
   } catch (e: any) {
-    if (e?.name === "AbortError") return { url: null, error: "이미지를 가져오는 데 시간이 너무 걸렸어요. 다시 시도해 주세요." };
-    return { url: null, error: e?.message || "이미지 저장에 실패했어요." };
+    if (e?.name === "AbortError") return { image: null, error: "이미지를 가져오는 데 시간이 너무 걸렸어요. 다시 시도해 주세요." };
+    return { image: null, error: e?.message || "이미지 저장에 실패했어요." };
+  }
+}
+
+/**
+ * 04-13: 이번 요청에서 새로 업로드한 이미지를 보상 삭제한다(등록 실패 시).
+ *  - createdByThisRequest 가 아니거나 storagePath 가 없으면 아무것도 하지 않는다(외부/기존 URL 오삭제 방지).
+ *  - 반드시 현재 로그인 사용자의 업로드 prefix(feed/{uid}/) 안의 '파일'만 삭제한다.
+ *    루트·상위폴더·경로 traversal·타인 경로는 전부 거부.
+ *  - 이미 없는 파일(object-not-found)은 목표 상태가 이미 성립 → idempotent 성공.
+ *  - 권한 오류 등은 throw(호출부가 '보상 실패'로 기록하되 원래 등록 오류를 덮지 않는다).
+ */
+export async function removePersistedImage(image: PersistedImage | null): Promise<void> {
+  if (!image || !image.createdByThisRequest || !image.storagePath) return;
+  const me = uid();
+  if (!me) return; // 로그아웃 상태면 어차피 규칙이 막는다 — 조용히 종료
+  const path = image.storagePath;
+  const allowedPrefix = `feed/${me}/`;
+  // 허용 prefix 안의 단일 파일만: prefix 로 시작 + 파일명에 '/' 없음(하위폴더 방지) + '..' 없음
+  const rest = path.slice(allowedPrefix.length);
+  if (!path.startsWith(allowedPrefix) || rest.length === 0 || rest.includes("/") || path.includes("..")) {
+    throw new Error("cleanup/path-not-allowed");
+  }
+  try {
+    await deleteObject(storageRef(getFirebaseStorage(), path));
+  } catch (e: any) {
+    if (e?.code === "storage/object-not-found") return; // 이미 없음 → 성공으로 간주
+    throw e;
   }
 }
 

@@ -2,7 +2,7 @@
 import { useState, useEffect, useRef } from "react";
 import RequireAuth from "@/components/auth/RequireAuth";
 import { useAuth } from "@/contexts/AuthContext";
-import { generateAnimal, persistImage, registerCreation, shareCreationToFeed, getRemainingQuota, type GenAnimal } from "@/lib/userAnimals";
+import { generateAnimal, persistImage, removePersistedImage, registerCreation, shareCreationToFeed, getRemainingQuota, type GenAnimal, type PersistedImage } from "@/lib/userAnimals";
 
 const EXAMPLES = [
   "구름 위에 사는 솜사탕 여우",
@@ -59,24 +59,40 @@ function Inner() {
   // ⚠️ busy(state)만으로는 같은 렌더 사이클의 연속 클릭을 못 막는다(04-11에서 실측).
   //    등록/공유는 addDoc·addPost 로 새 문서를 만들어 중복 제출 시 문서가 여러 개 생긴다 → ref 로 동기 차단.
   const submittingRef = useRef(false);
+  // 04-13 이미지 소유권 추적:
+  //  persistedRef  = 이번에 업로드한 이미지(url·storagePath). 등록/공유가 재사용(중복 업로드 방지).
+  //  claimedRef    = 등록 또는 공유가 성공해 이 파일을 참조하게 됐는가. true 면 절대 삭제하지 않는다
+  //                  (문서/피드가 소유권을 확정 — 잘못된 교차 cleanup 방지).
+  const persistedRef = useRef<PersistedImage | null>(null);
+  const claimedRef = useRef(false);
 
   useEffect(() => { getRemainingQuota().then(setRemaining); }, []);
 
   async function onGenerate() {
     if (!prompt.trim() || gen) return;
     setGen(true); setError(""); setResult(null); setPermUrl(null); setDone({ profile: false, feed: false });
+    persistedRef.current = null; claimedRef.current = false; // 새 동물 = 새 이미지
     const r = await generateAnimal(prompt.trim());
     setGen(false);
     if (!r.ok) { setError(r.error); if (typeof r.remaining === "number") setRemaining(r.remaining); return; }
     setResult({ animal: r.animal, falUrl: r.imageUrl }); setRemaining(r.remaining);
   }
-  // 이미지 영구 저장(1회만) — 실패 사유를 함께 돌려줌
-  async function ensurePerm(): Promise<{ url: string | null; error?: string }> {
-    if (permUrl) return { url: permUrl };
-    if (!result) return { url: null, error: "먼저 동물을 만들어 주세요." };
+  // 이미지 영구 저장(1회만) — 실패 사유를 함께 돌려줌. 성공하면 persistedRef 에 보관해 재사용.
+  async function ensurePerm(): Promise<{ image: PersistedImage | null; error?: string }> {
+    if (persistedRef.current) return { image: persistedRef.current };
+    if (!result) return { image: null, error: "먼저 동물을 만들어 주세요." };
     const r = await persistImage(result.falUrl);
-    if (r.url) setPermUrl(r.url);
+    if (r.image) { persistedRef.current = r.image; setPermUrl(r.image.url); }
     return r;
+  }
+  // 04-13 보상: 아직 아무 성공도 참조하지 않은 '이번 요청 신규 업로드'만 삭제.
+  //  삭제 실패는 내부 기록만 하고 삼킨다(원래 등록/공유 오류를 덮지 않기 위해).
+  async function cleanupUnclaimedUpload() {
+    const img = persistedRef.current;
+    if (!img?.createdByThisRequest || claimedRef.current) return;
+    try { await removePersistedImage(img); }
+    catch { if (process.env.NODE_ENV !== "production") console.warn("[create-animal] uploaded image cleanup failed"); }
+    persistedRef.current = null; setPermUrl(null); // 삭제된 URL 을 화면·다음 등록에 재사용하지 않음 → 재시도 시 재업로드
   }
   // ⚠️finally로 busy를 반드시 해제 — 예외/지연 시 버튼이 "저장 중…"에 갇히던 버그
   async function onRegister() {
@@ -85,12 +101,15 @@ function Inner() {
     setBusy("profile"); setError("");
     try {
       const r = await ensurePerm();
-      if (!r.url) { setError(r.error || "이미지 저장에 실패했어요."); return; }
+      if (!r.image) { setError(r.error || "이미지 저장에 실패했어요."); return; }
       // 04-12: registerCreation 은 성공 시 문서 ID 를 돌려주고 실패하면 throw 한다(가짜 성공 금지).
-      await registerCreation(result.animal, r.url, prompt.trim(), authorName);
+      await registerCreation(result.animal, r.image.url, prompt.trim(), authorName);
+      claimedRef.current = true; // 문서 생성 성공 → 파일 소유권 확정(이후 삭제 금지)
       setDone((d) => ({ ...d, profile: true }));
     } catch (e) {
-      console.warn("[create-animal] 프로필 등록 오류:", e);
+      if (process.env.NODE_ENV !== "production") console.warn("[create-animal] animal creation registration failed");
+      // 04-13 보상: 이번에 새로 올린 이미지가 고아로 남지 않게 삭제(cleanup 실패는 삼켜 원래 오류 유지)
+      await cleanupUnclaimedUpload();
       setError("등록에 실패했어요. 잠시 후 다시 시도해 주세요."); // 입력·결과 유지, 가짜 성공 없음
     } finally {
       submittingRef.current = false;
@@ -103,12 +122,16 @@ function Inner() {
     setBusy("feed"); setError("");
     try {
       const r = await ensurePerm();
-      if (!r.url) { setError(r.error || "이미지 저장에 실패했어요."); return; }
-      const ok = await shareCreationToFeed(result.animal, r.url, authorName);
-      if (ok) setDone((d) => ({ ...d, feed: true }));
-      else setError("피드 공유에 실패했어요. 잠시 후 다시 시도해 주세요.");
+      if (!r.image) { setError(r.error || "이미지 저장에 실패했어요."); return; }
+      const ok = await shareCreationToFeed(result.animal, r.image.url, authorName);
+      if (ok) { claimedRef.current = true; setDone((d) => ({ ...d, feed: true })); } // 피드가 이미지 참조 → 소유권 확정
+      else {
+        await cleanupUnclaimedUpload(); // 아직 아무 성공도 참조 안 했으면 신규 업로드 정리(claimed 면 no-op)
+        setError("피드 공유에 실패했어요. 잠시 후 다시 시도해 주세요.");
+      }
     } catch (e) {
-      console.warn("[create-animal] 피드 공유 오류:", e);
+      if (process.env.NODE_ENV !== "production") console.warn("[create-animal] feed share failed");
+      await cleanupUnclaimedUpload();
       setError("문제가 생겼어요. 잠시 후 다시 시도해 주세요.");
     } finally {
       submittingRef.current = false;

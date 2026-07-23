@@ -11,7 +11,9 @@ import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 import { getFirebaseStorage, getFirebaseAuth } from "@/lib/firebase";
 
 export type MediaType = "image" | "video";
-export interface UploadResult { url: string; type: MediaType; }
+// 04-13: 업로드 실패 보상 삭제를 위해 storagePath(fullPath)를 함께 돌려준다.
+//  URL 문자열만으로는 어떤 파일을 지워야 할지 안전하게 특정할 수 없다.
+export interface UploadResult { url: string; type: MediaType; storagePath: string; }
 
 const MAX_IMAGE = 10 * 1024 * 1024; // 10MB
 const MAX_VIDEO = 50 * 1024 * 1024; // 50MB
@@ -42,7 +44,7 @@ export async function uploadFeedMedia(
     const r = ref(getFirebaseStorage(), path);
     await uploadBytes(r, file, { contentType: file.type });
     const url = await getDownloadURL(r);
-    return { ok: true, result: { url, type } };
+    return { ok: true, result: { url, type, storagePath: r.fullPath } };
   } catch (e) {
     const msg = (e as { code?: string })?.code === "storage/unauthorized"
       ? "업로드 권한이 없어요. (콘솔에서 Storage 활성화/규칙 게시 필요)"
