@@ -20,7 +20,8 @@ import {
   orderBy, limit, startAfter, Timestamp, getDocs, onSnapshot, serverTimestamp, increment, arrayUnion, arrayRemove,
   deleteField, getCountFromServer, writeBatch, runTransaction, documentId, type QueryConstraint,
 } from "firebase/firestore";
-import { getFirebaseFirestore, getFirebaseAuth } from "@/lib/firebase";
+import { getFirebaseFirestore, getFirebaseAuth, getFirebaseStorage } from "@/lib/firebase";
+import { ref as storageRef, deleteObject } from "firebase/storage";
 import { isReservedHandle } from "@/lib/reservedHandles";
 
 /** 핸들 정규화 — 앞의 @ 제거 + 공백 제거 + 소문자. 사용자가 "@dori"로 입력해도 "dori"로 취급. */
@@ -687,6 +688,7 @@ export interface FeedPost {
 }
 export interface NewPostOpts {
   mediaUrl?: string; mediaType?: MediaType;
+  storagePath?: string;          // 04-15: 글 삭제 시 미디어를 정확히 지우기 위한 Storage 경로(uploadFeedMedia 반환)
   visibility?: FeedVisibility;   // 기본 public
   allowedUids?: string[];        // friends/groups 공개 시 볼 수 있는 uid (자신 자동 포함)
 }
@@ -833,6 +835,76 @@ export async function listPublicFeed(n = 20, cursor?: number): Promise<PostPage>
   return paginatePublicPosts([], n, cursor);
 }
 
+// ─── 04-15: Feed 미디어 Storage 정리(마지막 참조 삭제) ───────────────
+/** 본인 업로드 경로(feed/{uid}/단일파일)만 통과시켜 반환. 아니면 null(삭제/저장 금지).
+ *  루트·하위폴더·traversal·타인 경로·빈 파일명·과도한 길이를 전부 거른다. */
+function ownStoragePathOrNull(me: string, path: string | null | undefined): string | null {
+  if (typeof path !== "string" || !path || path.length > 2000) return null;
+  const prefix = `feed/${me}/`;
+  if (!path.startsWith(prefix)) return null;
+  const rest = path.slice(prefix.length);
+  if (rest.length === 0 || rest.includes("/") || path.includes("..")) return null;
+  return path;
+}
+
+/** Firebase Storage 다운로드 URL 에서 storagePath 를 SDK 로 확보(우선) 후, 실패 시 null.
+ *  ⚠️ split/replace 추정 금지 — Firebase SDK ref 로 파싱하고, 그마저 안 되면 삭제하지 않는다. */
+function storagePathFromMediaUrl(url: string): string | null {
+  if (typeof url !== "string" || !url) return null;
+  try {
+    // ref(storage, httpsDownloadUrl) 은 Firebase 다운로드 URL 을 파싱해 fullPath 를 준다.
+    const r = storageRef(getFirebaseStorage(), url);
+    return r.fullPath || null;
+  } catch { return null; }
+}
+
+/** 이 파일(mediaUrl/storagePath)을 '살아있는' 다른 문서가 아직 참조하는지 확인.
+ *  · 대상 글(excludePostId)과 다른 소프트삭제(status:deleted) feed 글은 참조로 치지 않는다(tombstone).
+ *  · 같은 사용자의 feed·animalCreations 만 확인(그 파일은 규칙상 본인 문서만 참조 가능).
+ *  · storagePath 정확 일치 또는 mediaUrl/imageUrl 정확 일치면 참조 존재.
+ *  ⚠️ 쿼리 실패 시 '참조 있음'으로 보수 판단(파일 보존, 오삭제 방지). */
+async function mediaStillReferenced(me: string, mediaUrl: string, storagePath: string | null, excludePostId: string): Promise<boolean> {
+  const matches = (docStoragePath: unknown, docMediaUrl: unknown) =>
+    (storagePath && typeof docStoragePath === "string" && docStoragePath === storagePath) ||
+    (!!mediaUrl && String(docMediaUrl || "") === mediaUrl);
+  try {
+    const feedSnap = await getDocs(query(collection(db(), "feed"), where("uid", "==", me), limit(200)));
+    for (const d of feedSnap.docs) {
+      if (d.id === excludePostId) continue;
+      const x = d.data() as Record<string, unknown>;
+      if ((x.status as string) === "deleted") continue; // tombstone 은 참조 아님
+      if (matches(x.storagePath, x.mediaUrl)) return true;
+    }
+    const acSnap = await getDocs(query(collection(db(), "animalCreations"), where("uid", "==", me), limit(200)));
+    for (const d of acSnap.docs) {
+      const x = d.data() as Record<string, unknown>;
+      if (matches(x.storagePath, x.imageUrl)) return true;
+    }
+    return false;
+  } catch {
+    return true; // 확인 불가 → 보존
+  }
+}
+
+/** 04-15: Feed 글의 미디어 파일이 더 이상 어떤 살아있는 문서에서도 참조되지 않으면 삭제.
+ *  @returns 'deleted' 실제 삭제 / 'retained' 유지(공유·외부·경로불명) / 'failed' Storage 삭제 실패(문서 삭제 중단해야) */
+async function cleanupFeedMediaIfLastRef(me: string, post: Record<string, unknown>, postId: string): Promise<"deleted" | "retained" | "failed"> {
+  const mediaUrl = String(post.mediaUrl || "");
+  if (!mediaUrl) return "retained"; // 미디어 없음
+  // 경로 확보: 저장된 storagePath 우선, 없으면 URL 에서 SDK 로 역산.
+  const stored = ownStoragePathOrNull(me, typeof post.storagePath === "string" ? post.storagePath : null);
+  const path = stored || ownStoragePathOrNull(me, storagePathFromMediaUrl(mediaUrl));
+  if (!path) return "retained"; // 외부 URL·경로불명·타인 경로 → 파일 유지
+  if (await mediaStillReferenced(me, mediaUrl, path, postId)) return "retained"; // 다른 참조 존재
+  try {
+    await deleteObject(storageRef(getFirebaseStorage(), path));
+    return "deleted";
+  } catch (e: unknown) {
+    if ((e as { code?: string })?.code === "storage/object-not-found") return "deleted"; // 이미 없음 = 목표 달성
+    return "failed"; // 실제 실패 → 호출부가 문서 삭제를 중단
+  }
+}
+
 export async function addPost(name: string, text: string, opts: NewPostOpts = {}): Promise<boolean> {
   const uid = currentUid();
   if (!uid) return false;
@@ -847,7 +919,12 @@ export async function addPost(name: string, text: string, opts: NewPostOpts = {}
       visibility, allowedUids, status: "published", createdAt: serverTimestamp(),
       likeCount: 0, likedBy: [], commentCount: 0,
     };
-    if (opts.mediaUrl) { data.mediaUrl = opts.mediaUrl; data.mediaType = opts.mediaType || "image"; }
+    if (opts.mediaUrl) {
+      data.mediaUrl = opts.mediaUrl; data.mediaType = opts.mediaType || "image";
+      // 04-15: 본인 업로드 경로(feed/{uid}/단일파일)만 저장. 외부·형식불일치는 저장 안 함 → 삭제 시 파일 유지.
+      const sp = ownStoragePathOrNull(uid, opts.storagePath);
+      if (sp) data.storagePath = sp;
+    }
     await addDoc(collection(db(), "feed"), data);
     bustCache("feed:");
     if (uid) bustCache(`counts:${uid}`);
@@ -932,6 +1009,11 @@ export async function softDeletePost(postId: string): Promise<{ ok: boolean; err
     const cur = snap.data() as Record<string, unknown>;
     if (String(cur.uid) !== me) return { ok: false, error: "본인 게시물만 삭제할 수 있어요." };
     if ((cur.status as string) === "deleted") return { ok: true }; // 이미 삭제됨 → 성공 취급
+    // 04-15: 소프트삭제는 복원 불가(published→deleted만). 이 글의 미디어를 더 이상 어떤 살아있는 문서도
+    //  참조하지 않으면 Storage 파일을 먼저 지운다. Storage 삭제가 실패하면(권한 등) 글을 삭제하지 않고
+    //  재시도하게 한다(문서만 지워 고아를 남기지 않는다). 공유·외부 URL 은 파일을 유지한 채 글만 삭제.
+    const media = await cleanupFeedMediaIfLastRef(me, cur, postId);
+    if (media === "failed") return { ok: false, error: "삭제에 실패했어요. 잠시 후 다시 시도해 주세요." };
     await updateDoc(ref, { status: "deleted", deletedAt: serverTimestamp(), updatedAt: serverTimestamp() });
     bustCache("feed:");
     if (me) bustCache(`counts:${me}`);

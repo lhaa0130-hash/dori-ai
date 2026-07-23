@@ -220,10 +220,11 @@ export async function registerCreation(a: GenAnimal, imageUrl: string, prompt: s
 }
 
 /** 피드에 자랑 → 이미지+캡션 글 작성 */
-export async function shareCreationToFeed(a: GenAnimal, imageUrl: string, authorName: string): Promise<boolean> {
+export async function shareCreationToFeed(a: GenAnimal, imageUrl: string, authorName: string, storagePath?: string | null): Promise<boolean> {
   try {
     const caption = `🐣 내가 만든 동물 "${a.animal_name}"\n${a.search_nickname ? `— ${a.search_nickname}\n` : ""}${a.kid_friendly_desc}`.slice(0, 1000);
-    return await addPost(authorName, caption, { mediaUrl: imageUrl, mediaType: "image", visibility: "public" });
+    // 04-15: 창작물 공유 글도 storagePath 를 남겨 글 삭제 시 미디어 정리가 정확하게 동작하도록.
+    return await addPost(authorName, caption, { mediaUrl: imageUrl, mediaType: "image", visibility: "public", storagePath: storagePath || undefined });
   } catch (e) {
     console.warn("[userAnimals] 피드 공유 실패:", e);
     return false;

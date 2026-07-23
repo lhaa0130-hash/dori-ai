@@ -48,6 +48,7 @@ export default function PostDetailPage() {
   const [me, setMe] = useState<string | null>(null);
   const [menuOpen, setMenuOpen] = useState(false);
   const [deleting, setDeleting] = useState(false);
+  const deletingRef = useRef(false); // 04-15: 동기 중복삭제 가드
   const [actionError, setActionError] = useState("");
   const menuRef = useRef<HTMLDivElement | null>(null);
   // 04-6 좋아요 — 기존 feed.likeCount/likedBy 구조와 toggleLike 재사용(새 컬렉션·새 API 없음)
@@ -317,11 +318,13 @@ export default function PostDetailPage() {
   };
 
   const handleDelete = async () => {
-    if (view.kind !== "ok" || deleting) return;
+    if (view.kind !== "ok" || deletingRef.current) return; // 동기 중복 차단
     setMenuOpen(false);
     if (!window.confirm("이 게시물을 삭제할까요?\n삭제하면 피드와 사용자 홈에서 보이지 않습니다.")) return;
+    deletingRef.current = true;
     setDeleting(true);
-    const res = await softDeletePost(view.post.id);
+    const res = await softDeletePost(view.post.id); // 04-15: 마지막 참조면 Storage 이미지도 정리
+    deletingRef.current = false;
     setDeleting(false);
     if (res.ok) router.push("/feed"); // 실제 성공 후에만 이동
     else setActionError(res.error || "삭제하지 못했어요. 잠시 후 다시 시도해 주세요.");

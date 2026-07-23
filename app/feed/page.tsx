@@ -197,7 +197,7 @@ function FeedAdCard({ index, t }: { index: number; t: Dict }) {
   );
 }
 
-type Media = { url: string; type: "image" | "video" };
+type Media = { url: string; type: "image" | "video"; storagePath?: string };
 
 export default function FeedPage() {
   const pathname = usePathname();
@@ -273,6 +273,7 @@ export default function FeedPage() {
   // 04-4 본인 게시물 관리(⋯ 메뉴 / 인라인 수정 / 소프트삭제)
   const [menuOpenId, setMenuOpenId] = useState<string | null>(null);
   const [deletingId, setDeletingId] = useState<string | null>(null);
+  const deletingRef = useRef<Set<string>>(new Set()); // 04-15: 동기 중복삭제 가드(state 는 같은 렌더 연타를 못 막음)
   const [editingId, setEditingId] = useState<string | null>(null);
   const [editText, setEditText] = useState("");
   const [editVis, setEditVis] = useState<FeedVisibility>("public");
@@ -378,7 +379,8 @@ export default function FeedPage() {
     const res = await uploadFeedMedia(file);
     setUploading(false);
     if (res.ok) {
-      setMedia({ url: res.result.url, type: res.result.type });
+      // 04-15: storagePath 도 담아 addPost 로 넘긴다(글 삭제 시 미디어 정리용).
+      setMedia({ url: res.result.url, type: res.result.type, storagePath: res.result.storagePath });
     } else {
       setUploadError(res.error);
     }
@@ -416,6 +418,7 @@ export default function FeedPage() {
     const ok = await addPost(myName, body, {
       mediaUrl: media?.url,
       mediaType: media?.type,
+      storagePath: media?.storagePath, // 04-15: 삭제 시 미디어 정리용 경로
       visibility,
       allowedUids,
     });
@@ -462,11 +465,13 @@ export default function FeedPage() {
 
   // 04-4 소프트삭제(하드삭제 아님) — 확인 후 status:deleted 로. 성공 시에만 카드 제거.
   const handleSoftDelete = async (postId: string) => {
-    if (deletingId) return;
+    if (deletingRef.current.has(postId)) return; // 동기 중복 차단
     setMenuOpenId(null);
     if (!window.confirm(t.deleteConfirm)) return;
+    deletingRef.current.add(postId);
     setDeletingId(postId);
-    const res = await softDeletePost(postId);
+    const res = await softDeletePost(postId); // 04-15: 마지막 참조면 Storage 이미지도 정리
+    deletingRef.current.delete(postId);
     setDeletingId(null);
     if (res.ok) {
       setPosts((prev) => prev.filter((p) => p.id !== postId));

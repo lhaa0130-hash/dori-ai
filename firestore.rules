@@ -213,7 +213,12 @@ service cloud.firestore {
                     && request.resource.data.get('status', 'published') == 'published'
                     && request.resource.data.likeCount == 0
                     && request.resource.data.likedBy.size() == 0
-                    && request.resource.data.get('commentCount', 0) == 0;
+                    && request.resource.data.get('commentCount', 0) == 0
+                    // 04-15: storagePath 는 있으면 문자열(≤2000) + 본인 경로(feed/{uid}/) 여야. 없어도 됨(레거시·외부 URL).
+                    && (!('storagePath' in request.resource.data)
+                        || (request.resource.data.storagePath is string
+                            && request.resource.data.storagePath.size() <= 2000
+                            && request.resource.data.storagePath.matches('feed/' + request.auth.uid + '/[^/]+')));
       // 수정: 불변식(모든 경로) — authorId·작성일 변경 불가, visibility 화이트리스트,
       //  status 는 published/deleted 만, 집계값 음수 금지. 그 위에서:
       //  · 소유자: 일반수정(feedOwnerEdit) 또는 소프트삭제(feedOwnerSoftDelete)

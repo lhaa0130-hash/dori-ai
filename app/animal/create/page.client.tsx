@@ -123,7 +123,7 @@ function Inner() {
     try {
       const r = await ensurePerm();
       if (!r.image) { setError(r.error || "이미지 저장에 실패했어요."); return; }
-      const ok = await shareCreationToFeed(result.animal, r.image.url, authorName);
+      const ok = await shareCreationToFeed(result.animal, r.image.url, authorName, r.image.storagePath); // 04-15: 삭제 정리용 경로
       if (ok) { claimedRef.current = true; setDone((d) => ({ ...d, feed: true })); } // 피드가 이미지 참조 → 소유권 확정
       else {
         await cleanupUnclaimedUpload(); // 아직 아무 성공도 참조 안 했으면 신규 업로드 정리(claimed 면 no-op)
