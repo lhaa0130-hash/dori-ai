@@ -18,6 +18,10 @@ export default function CreationsClient() {
   const likeBusyRef = useRef<Set<string>>(new Set());
   const [likeBusy, setLikeBusy] = useState<Set<string>>(new Set());
   const [likeError, setLikeError] = useState("");
+  // 04-14 삭제 상태 — ref 로 동기 중복삭제 차단, state 로 진행/오류 안내
+  const deletingRef = useRef<Set<string>>(new Set());
+  const [deleting, setDeleting] = useState<Set<string>>(new Set());
+  const [deleteError, setDeleteError] = useState("");
   const isAdmin = session?.user?.email?.toLowerCase() === ADMIN_EMAIL;
   const myUid = (() => { try { return getFirebaseAuth().currentUser?.uid || null; } catch { return null; } })();
 
@@ -50,10 +54,20 @@ export default function CreationsClient() {
     setLikeBusy(new Set(likeBusyRef.current));
   }
   async function remove(c: Creation) {
+    if (deletingRef.current.has(c.id)) return; // 동기 중복삭제 차단
     if (!confirm(`"${c.animal_name}"을(를) 삭제할까요?`)) return;
-    await deleteCreation(c.id);
-    setItems((arr) => arr?.filter((x) => x.id !== c.id) || arr);
-    setDetail(null);
+    deletingRef.current.add(c.id);
+    setDeleting(new Set(deletingRef.current));
+    setDeleteError("");
+    const ok = await deleteCreation(c.id); // 04-14: Storage 이미지까지 안전 삭제(공유 파일은 유지)
+    if (ok) {
+      setItems((arr) => arr?.filter((x) => x.id !== c.id) || arr);
+      setDetail(null);
+    } else {
+      setDeleteError("삭제하지 못했어요. 잠시 후 다시 시도해 주세요."); // 목록·모달 유지 → 재시도 가능
+    }
+    deletingRef.current.delete(c.id);
+    setDeleting(new Set(deletingRef.current));
   }
 
   return (
@@ -148,11 +162,20 @@ export default function CreationsClient() {
                   {detail.likedByMe ? "❤️" : "🤍"} 좋아요 {detail.likeCount}
                 </button>
                 {(isAdmin || (myUid && myUid === detail.uid)) && (
-                  <button onClick={() => remove(detail)} className="rounded-2xl border border-red-200 dark:border-red-900/50 text-red-500 px-4 py-2.5 text-[13px] font-bold hover:bg-red-50 dark:hover:bg-red-950/30 transition">삭제</button>
+                  <button
+                    onClick={() => remove(detail)}
+                    disabled={deleting.has(detail.id)}
+                    aria-label={`${detail.animal_name} 삭제`}
+                    className="rounded-2xl border border-red-200 dark:border-red-900/50 text-red-500 px-4 py-2.5 text-[13px] font-bold hover:bg-red-50 dark:hover:bg-red-950/30 transition disabled:opacity-50"
+                  >
+                    {deleting.has(detail.id) ? "삭제 중…" : "삭제"}
+                  </button>
                 )}
               </div>
+              {deleting.has(detail.id) && <p role="status" className="mt-2 text-[12px] text-stone-400">삭제하는 중이에요…</p>}
               {/* 04-11: 좋아요 실패를 조용히 넘기지 않는다(가짜 성공 금지) */}
               {likeError && <p role="alert" className="mt-2 text-[12px] text-red-500 break-words">{likeError}</p>}
+              {deleteError && <p role="alert" className="mt-2 text-[12px] text-red-500 break-words">{deleteError}</p>}
             </div>
           </div>
         </div>

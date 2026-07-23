@@ -327,7 +327,7 @@ service cloud.firestore {
       let b = resource.data;
       return request.auth.uid == b.uid
              && !request.resource.data.diff(b).affectedKeys()
-                  .hasAny(['likeCount', 'likedBy', 'uid', 'createdAt']);
+                  .hasAny(['likeCount', 'likedBy', 'uid', 'createdAt', 'storagePath', 'imageUrl']);
     }
 
     // 04-12 생성 검증 — 작성자·집계·시각을 클라이언트 입력으로 신뢰하지 않고 타입/초기값을 강제한다.
@@ -346,7 +346,9 @@ service cloud.firestore {
              && d.info is list && d.info.size() <= 20
              && d.facts is list && d.facts.size() <= 10
              && d.filters is map
-             && d.status is map;
+             && d.status is map
+             // 04-14: storagePath 는 있으면 문자열이어야(삭제 대상 경로). 없어도 됨(레거시·외부 URL).
+             && (!('storagePath' in d) || (d.storagePath is string && d.storagePath.size() <= 2000));
     }
 
     match /animalCreations/{id} {

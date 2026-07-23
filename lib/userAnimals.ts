@@ -182,7 +182,7 @@ export async function removePersistedImage(image: PersistedImage | null): Promis
  * @returns 생성된 문서 ID
  * @throws 로그인 오류·저장 실패(가짜 성공 금지 — 호출부에서 일반화)
  */
-export async function registerCreation(a: GenAnimal, imageUrl: string, prompt: string, authorName: string): Promise<string> {
+export async function registerCreation(a: GenAnimal, imageUrl: string, prompt: string, authorName: string, storagePath?: string | null): Promise<string> {
   const u = uid();
   if (!u) throw new Error("creation/auth-required");
   const img = cleanStr(imageUrl, 2000);
@@ -193,7 +193,9 @@ export async function registerCreation(a: GenAnimal, imageUrl: string, prompt: s
     : { label: "관심대상", code: "LC", color: "#5BA86B" };
   const rarity = Number.isFinite(a.rarity) ? Math.max(0, Math.min(5, Math.round(a.rarity))) : 2; // NaN/Infinity 방어
 
-  const ref = await addDoc(collection(db(), "animalCreations"), {
+  // 04-14: 삭제 시 이 창작물이 올린 Storage 파일을 정확히 지우려면 경로가 필요하다.
+  //  본인 업로드 경로(feed/{uid}/…)만 저장(외부 URL 이거나 형식이 다르면 저장하지 않음 → 삭제 시 파일 유지).
+  const doc: Record<string, unknown> = {
     uid: u,                                            // 작성자는 현재 세션(입력값 무시)
     authorName: cleanStr(authorName, 20) || "익명",
     imageUrl: img,
@@ -208,7 +210,12 @@ export async function registerCreation(a: GenAnimal, imageUrl: string, prompt: s
     filters: normalizeFilters(a.filters),
     createdAt: serverTimestamp(),                      // 서버 시각(입력값 무시)
     likeCount: 0, likedBy: [],                         // 집계 초기값 강제
-  });
+  };
+  const sp = cleanStr(storagePath, 2000);
+  if (sp && sp.startsWith(`feed/${u}/`) && !sp.slice(`feed/${u}/`.length).includes("/") && !sp.includes("..")) {
+    doc.storagePath = sp; // 본인 업로드 단일 파일만
+  }
+  const ref = await addDoc(collection(db(), "animalCreations"), doc);
   return ref.id;
 }
 
@@ -261,8 +268,72 @@ export async function likeCreation(id: string, like: boolean): Promise<boolean> 
   } catch { return false; }
 }
 
+/** Firebase Storage 다운로드 URL 에서 storagePath(feed/{uid}/{file})를 역산.
+ *  프로덕션(firebasestorage.googleapis.com)·에뮬(127.0.0.1:9199) 둘 다 `/o/<encodedPath>?…` 형식.
+ *  Firebase Storage URL 이 아니면(외부 URL) null → 삭제하지 않는다. */
+function storagePathFromUrl(url: string): string | null {
+  try {
+    const u = new URL(url);
+    if (!/firebasestorage\.googleapis\.com$/.test(u.hostname) && !/^(127\.0\.0\.1|localhost)$/.test(u.hostname)) return null;
+    const m = u.pathname.match(/\/o\/([^/?]+)/);
+    if (!m) return null;
+    return decodeURIComponent(m[1]);
+  } catch { return null; }
+}
+
+/** 이 창작물의 이미지를 내 feed 글이 아직 참조하는지 확인(공유 파일 보호).
+ *  ⚠️ 조회 자체가 실패하면 '참조 있을 수 있음'으로 보수적으로 판단(파일 유지)해 오삭제를 막는다. */
+async function imageStillReferencedInFeed(me: string, imageUrl: string): Promise<boolean> {
+  try {
+    const snap = await getDocs(query(collection(db(), "feed"), where("uid", "==", me), fbLimit(100)));
+    return snap.docs.some((d) => String((d.data() as Record<string, unknown>).mediaUrl || "") === imageUrl);
+  } catch {
+    return true; // 확인 불가 → 파일 보존(안전 우선)
+  }
+}
+
+/**
+ * 04-14: 창작물 삭제 시 이 창작물이 올린 Storage 이미지까지 안전하게 함께 삭제(정책 B).
+ *  순서: 문서 조회 → 작성자 확인 → Storage 삭제 대상 판단 → (필요 시) Storage 삭제 → Firestore 삭제.
+ *  · 본인 소유(feed/{me}/) 파일만 삭제. 외부 URL·경로 불명·타인 경로는 문서만 삭제(파일 유지).
+ *  · 내 feed 글이 같은 이미지를 참조하면(등록+공유 공유 파일) 문서만 삭제(파일 유지).
+ *  · Storage 삭제가 실패하면(권한 등) 문서를 남긴다 → 재시도 가능(고아·깨진참조 방지).
+ *  · object-not-found 는 이미 지워진 것 → 정상으로 보고 문서 삭제 진행.
+ * @returns 삭제 성공 여부
+ */
 export async function deleteCreation(id: string): Promise<boolean> {
-  try { await deleteDoc(doc(db(), "animalCreations", id)); return true; } catch { return false; }
+  const me = uid();
+  if (!me) return false;
+  let data: Record<string, unknown> | null = null;
+  try {
+    const snap = await getDoc(doc(db(), "animalCreations", id));
+    if (!snap.exists()) return true; // 이미 없음 = 목표 달성
+    data = snap.data() as Record<string, unknown>;
+  } catch { return false; }
+
+  if (String(data.uid || "") !== me) return false; // 작성자만(규칙도 강제하나 클라에서도 차단)
+
+  // 삭제 대상 경로 판단: 저장된 storagePath 우선, 없으면 imageUrl 역산.
+  const imageUrl = String(data.imageUrl || "");
+  let path: string | null = typeof data.storagePath === "string" ? data.storagePath : null;
+  if (!path) path = storagePathFromUrl(imageUrl);
+
+  const prefix = `feed/${me}/`;
+  const isOwnFile = !!path && path.startsWith(prefix) && !path.slice(prefix.length).includes("/") && path.slice(prefix.length).length > 0 && !path.includes("..");
+
+  if (isOwnFile) {
+    const shared = await imageStillReferencedInFeed(me, imageUrl); // 공유 파일이면 유지
+    if (!shared) {
+      try {
+        await deleteObject(storageRef(getFirebaseStorage(), path!));
+      } catch (e: any) {
+        if (e?.code !== "storage/object-not-found") return false; // 실제 실패 → 문서 유지(재시도)
+      }
+    }
+  }
+
+  try { await deleteDoc(doc(db(), "animalCreations", id)); return true; }
+  catch { return false; }
 }
 
 /** 오늘 남은 생성 횟수 표시용(참고값 — 실제 제한은 서버가 강제) */

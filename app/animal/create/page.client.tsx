@@ -103,7 +103,7 @@ function Inner() {
       const r = await ensurePerm();
       if (!r.image) { setError(r.error || "이미지 저장에 실패했어요."); return; }
       // 04-12: registerCreation 은 성공 시 문서 ID 를 돌려주고 실패하면 throw 한다(가짜 성공 금지).
-      await registerCreation(result.animal, r.image.url, prompt.trim(), authorName);
+      await registerCreation(result.animal, r.image.url, prompt.trim(), authorName, r.image.storagePath); // 04-14: 삭제용 경로 저장
       claimedRef.current = true; // 문서 생성 성공 → 파일 소유권 확정(이후 삭제 금지)
       setDone((d) => ({ ...d, profile: true }));
     } catch (e) {
