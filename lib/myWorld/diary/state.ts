@@ -31,7 +31,8 @@ function normalizeEntry(raw: unknown): DiaryEntry | null {
     createdAt,
     icon: typeof r.icon === "string" ? r.icon : "✨",
     color: typeof r.color === "string" ? r.color : "#94a3b8",
-    metadata: r.metadata && typeof r.metadata === "object" ? (r.metadata as Record<string, unknown>) : undefined,
+    // ⚠️ Firestore 는 undefined 를 거부하므로, metadata 가 없으면 빈 객체로 채운다(키를 undefined 로 두지 않는다).
+    metadata: r.metadata && typeof r.metadata === "object" ? (r.metadata as Record<string, unknown>) : {},
   };
 }
 

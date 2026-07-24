@@ -147,6 +147,32 @@ test("defends against corrupted queue/cache payloads", () => {
   assert.deepEqual(recovered?.recent, []);
 });
 
+test("serialized state contains no undefined values (Firestore rejects them)", () => {
+  // 회귀 방지: roomItemId 가 없는 상호작용(터치/쓰다듬기 등)에서 undefined 키가 남으면
+  // setDoc 이 invalid-argument 로 실패하고, 저장이 조용히 오프라인 큐로 밀린다.
+  const withoutRoomItem = {
+    id: "e1", type: "pet", source: "pointer", characterId: "dori", at: AT,
+    emotion: "love", animation: "pet", speech: "hi", affinityDelta: 2, expDelta: 2, metadata: {},
+  };
+  const withRoomItem = { ...withoutRoomItem, id: "e2", type: "room_item", roomItemId: "bed-basic" };
+  const state = normalizeInteractionState({ recent: [withoutRoomItem, withRoomItem] }, AT);
+
+  const plain = state.recent.find((e) => e.id === "e1")!;
+  assert.equal("roomItemId" in plain, false, "roomItemId 키 자체가 없어야 한다");
+  assert.equal(state.recent.find((e) => e.id === "e2")!.roomItemId, "bed-basic");
+
+  const walk = (value: unknown, path = "$"): void => {
+    assert.notEqual(value, undefined, `undefined 발견: ${path}`);
+    if (value && typeof value === "object") {
+      for (const [k, v] of Object.entries(value as Record<string, unknown>)) walk(v, `${path}.${k}`);
+    }
+  };
+  walk(JSON.parse(JSON.stringify(state)));
+  for (const event of state.recent) {
+    for (const [k, v] of Object.entries(event)) assert.notEqual(v, undefined, `recent.${k} 가 undefined`);
+  }
+});
+
 test("keeps local state when it is newer and adopts the server state otherwise", () => {
   const local = stateAt({ affinity: 20, lastInteraction: AT + 5_000 });
   const remote = stateAt({ affinity: 8, lastInteraction: AT });

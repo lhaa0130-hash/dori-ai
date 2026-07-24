@@ -35,12 +35,15 @@ function normalizeEvent(raw: unknown): InteractionEvent | null {
   if (!raw || typeof raw !== "object") return null;
   const r = raw as Record<string, unknown>;
   if (typeof r.id !== "string" || typeof r.characterId !== "string" || !TYPES.has(r.type as InteractionType)) return null;
+  // ⚠️ Firestore 는 undefined 값을 거부한다(setDoc → invalid-argument).
+  //    roomItemId 는 방 가구 상호작용에서만 존재하므로 없을 때는 **키 자체를 넣지 않는다**.
+  const roomItemId = typeof r.roomItemId === "string" ? { roomItemId: r.roomItemId } : {};
   return {
     id: r.id,
     type: r.type as InteractionType,
     source: SOURCES.has(r.source as InteractionSource) ? r.source as InteractionSource : "system",
     characterId: r.characterId,
-    roomItemId: typeof r.roomItemId === "string" ? r.roomItemId : undefined,
+    ...roomItemId,
     at: number(r.at, Date.now()),
     emotion: EMOTIONS.has(r.emotion as Emotion) ? r.emotion as Emotion : "normal",
     animation: ANIMATIONS.has(r.animation as AnimationType) ? r.animation as AnimationType : "idle",
