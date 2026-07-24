@@ -16,6 +16,7 @@ import ReadingProgress from '@/components/article/ReadingProgress';
 import RelatedArticles from '@/components/article/RelatedArticles';
 import ArticleSocial from '@/components/article/ArticleSocial';
 import AdminArticleBar from '@/components/admin/AdminArticleBar';
+import AdUnit from '@/components/ads/AdUnit';
 import fs from 'fs';
 import path from 'path';
 
@@ -33,6 +34,25 @@ function getRawMarkdown(slug: string): string {
     if (fs.existsSync(p)) return fs.readFileSync(p, 'utf-8');
   }
   return '';
+}
+
+/**
+ * 본문 중간 광고를 끼워 넣을 지점에서 HTML을 두 조각으로 자른다.
+ * 사이드 광고(LeftSideAd/RightSideAd)는 `hidden xl:flex`라 모바일에선 폭 0 → 광고 요청이 아예
+ * 발생하지 않는다. 한국 트래픽 대부분이 모바일이라 AdSense가 "광고 요청 없는 사이트"로 보고
+ * 사이트 심사가 '준비 중'에서 넘어가지 않는다. 본문 인라인 슬롯으로 전 기기 노출을 만든다.
+ * 자를 곳: 두 번째 <h2> 앞 → 없으면 문단 중간 → 그것도 없으면 자르지 않음(하단 광고만).
+ */
+function splitForAd(html: string): [string, string] {
+  const h2s = Array.from(html.matchAll(/<h2[\s>]/g)).map((m) => m.index ?? -1).filter((i) => i > 0);
+  if (h2s.length >= 2) return [html.slice(0, h2s[1]), html.slice(h2s[1])];
+
+  const paraEnds = Array.from(html.matchAll(/<\/p>/g)).map((m) => (m.index ?? 0) + 4);
+  if (paraEnds.length >= 4) {
+    const mid = paraEnds[Math.floor(paraEnds.length / 2)];
+    return [html.slice(0, mid), html.slice(mid)];
+  }
+  return [html, ''];
 }
 
 // 영어판(-en) 존재 여부 — 있을 때만 hreflang 상호 연결(없는 URL 가리키지 않게)
@@ -181,6 +201,9 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
     .process(post.content || '')
     .then((f) => String(f));
 
+  // 본문을 둘로 쪼개 사이에 인라인 광고를 넣는다
+  const [bodyTop, bodyBottom] = splitForAd(contentHtml);
+
   return (
     <Suspense fallback={<div>Loading...</div>}>
       {/* JSON-LD 구조화 데이터 */}
@@ -228,11 +251,21 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
             <ShareButtons url={articleUrl} title={post.title || 'illo 기사'} />
           </div>
 
-          {/* 기사 본문 */}
+          {/* 기사 본문 — 중간에 인라인 광고 1개(모바일 포함 전 기기 노출) */}
           <div
             className="prose-premium max-w-none"
-            dangerouslySetInnerHTML={{ __html: contentHtml }}
+            dangerouslySetInnerHTML={{ __html: bodyTop }}
           />
+          <AdUnit />
+          {bodyBottom && (
+            <div
+              className="prose-premium max-w-none"
+              dangerouslySetInnerHTML={{ __html: bodyBottom }}
+            />
+          )}
+
+          {/* 본문 끝 광고 */}
+          <AdUnit className="mt-10" />
 
           {/* 하단 공유 버튼 */}
           <div className="mt-10 pt-6 border-t border-stone-200 dark:border-stone-800">
