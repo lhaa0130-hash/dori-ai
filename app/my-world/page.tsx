@@ -26,6 +26,8 @@ import { getCharacter } from "@/lib/myWorld/character/registry";
 import { CharacterProvider, useCharacter } from "@/contexts/CharacterContext";
 import { DiaryProvider, useDiary } from "@/contexts/DiaryContext";
 import { RoomProvider } from "@/contexts/RoomContext";
+import { InteractionProvider } from "@/contexts/InteractionContext";
+import { InteractionAudioProvider } from "@/contexts/InteractionAudioContext";
 import { buildCharacterSelectedEntry } from "@/lib/myWorld/diary/constants";
 import CottonCandy from "@/components/icons/CottonCandy";
 import BackgroundHero from "@/components/my-world/BackgroundHero";
@@ -36,6 +38,7 @@ import DiaryCard from "@/components/my-world/DiaryCard";
 import RoomPreviewCard from "@/components/my-world/room/RoomPreviewCard";
 import CreationsCard from "@/components/my-world/CreationsCard";
 import AchievementsCard from "@/components/my-world/AchievementsCard";
+import CharacterInteractionStage from "@/components/my-world/interaction/CharacterInteractionStage";
 
 // 오늘의 한마디 — 저장 없이 날짜 기반 결정적 선택.
 const HELLOS = [
@@ -57,7 +60,11 @@ export default function MyWorldPage() {
     <CharacterProvider>
       <DiaryProvider>
         <RoomProvider>
-          <MyWorldContent />
+          <InteractionAudioProvider>
+            <InteractionProvider>
+              <MyWorldContent />
+            </InteractionProvider>
+          </InteractionAudioProvider>
         </RoomProvider>
       </DiaryProvider>
     </CharacterProvider>
@@ -166,6 +173,7 @@ function MyWorldContent() {
 
       {/* ── 카드 섹션 ── */}
       <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+        <div className="sm:col-span-2"><CharacterInteractionStage /></div>
         <div className="sm:col-span-2"><RecentActivityCard /></div>
         <div className="sm:col-span-2"><DiaryCard /></div>
         <div className="sm:col-span-2"><RoomPreviewCard /></div>

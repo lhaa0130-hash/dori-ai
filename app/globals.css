@@ -783,3 +783,33 @@ h6 {
   .cozy-fall, .cozy-rise, .cozy-twinkle { animation: none; opacity: 0.5; }
   .cozy-bg-animate { animation: none; }
 }
+/* My World Interaction (05-06) — renderer-agnostic CSS fallback animations. */
+@keyframes mw-bounce { 0%,100%{transform:translateY(0) scale(1)} 40%{transform:translateY(-14%) scale(1.05)} 70%{transform:translateY(0) scale(.97)} }
+@keyframes mw-spin { 0%{transform:rotate(0) scale(1)} 45%{transform:rotate(190deg) scale(1.08)} 100%{transform:rotate(360deg) scale(1)} }
+@keyframes mw-wave { 0%,100%{transform:rotate(0)} 25%{transform:rotate(-9deg)} 55%{transform:rotate(10deg)} 80%{transform:rotate(-5deg)} }
+@keyframes mw-pet { 0%,100%{transform:scale(1)} 45%{transform:scale(.92) translateY(3%)} 70%{transform:scale(1.04)} }
+@keyframes mw-love { 0%,100%{transform:scale(1)} 30%{transform:scale(1.12) rotate(-4deg)} 60%{transform:scale(1.08) rotate(4deg)} }
+@keyframes mw-eat { 0%,100%{transform:translateY(0)} 30%,70%{transform:translateY(4%) scaleY(.94)} 50%{transform:translateY(-4%) scale(1.06)} }
+@keyframes mw-sleep { 0%,100%{transform:rotate(-3deg) translateY(2%)} 50%{transform:rotate(3deg) translateY(5%) scale(.98)} }
+@keyframes mw-look { 0%,100%{transform:translateX(0)} 35%{transform:translateX(-7%)} 70%{transform:translateX(7%)} }
+@keyframes mw-walk { 0%,100%{transform:translateX(-6%) rotate(-3deg)} 50%{transform:translateX(6%) rotate(3deg)} }
+@keyframes mw-blink { 0%,42%,58%,100%{transform:scaleY(1)} 50%{transform:scaleY(.86)} }
+@keyframes mw-notice-in { from{opacity:0;transform:translateY(8px) scale(.96)} to{opacity:1;transform:translateY(0) scale(1)} }
+
+.mw-character { transform-origin: 50% 88%; will-change: transform; }
+.mw-anim-bounce { animation: mw-bounce .9s cubic-bezier(.2,.8,.2,1); }
+.mw-anim-spin { animation: mw-spin 1.05s cubic-bezier(.3,.8,.3,1); }
+.mw-anim-wave { animation: mw-wave 1.1s ease-in-out; }
+.mw-anim-pet { animation: mw-pet 1.2s ease-in-out; }
+.mw-anim-love { animation: mw-love 1.35s ease-in-out; }
+.mw-anim-eat { animation: mw-eat 1.4s ease-in-out; }
+.mw-anim-sleep { animation: mw-sleep 2.2s ease-in-out infinite; }
+.mw-anim-look,.mw-anim-think { animation: mw-look 1.1s ease-in-out; }
+.mw-anim-walk { animation: mw-walk 1.5s ease-in-out; }
+.mw-anim-blink,.mw-anim-idle,.mw-anim-sit { animation: mw-blink 2.8s ease-in-out; }
+.mw-anim-sad { transform:translateY(5%) scale(.96); }
+.mw-anim-angry { animation: mw-wave .45s ease-in-out 2; }
+
+@media (prefers-reduced-motion: reduce) {
+  .mw-character { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+}

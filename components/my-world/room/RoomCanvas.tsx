@@ -21,6 +21,7 @@ interface CanvasProps {
   onNudge?: (id: string, dx: number, dy: number) => void;
   onDeleteSelected?: (id: string) => void;
   compact?: boolean; // preview(작게) — 선택 UI 없음
+  hideCharacter?: boolean; // interaction stage가 자체 애니메이션 캐릭터 레이어를 렌더할 때
 }
 
 const RoomItemView = memo(function RoomItemView({
@@ -102,7 +103,7 @@ const RoomItemView = memo(function RoomItemView({
   );
 });
 
-function RoomCanvasInner({ room, editable = false, selectedItemId = null, onSelect, onMove, onNudge, onDeleteSelected, compact = false }: CanvasProps) {
+function RoomCanvasInner({ room, editable = false, selectedItemId = null, onSelect, onMove, onNudge, onDeleteSelected, compact = false, hideCharacter = false }: CanvasProps) {
   const { character } = useCharacter();
   const canvasRef = useRef<HTMLDivElement>(null);
   const wall = getRoomWall(room.wallId);
@@ -157,7 +158,7 @@ function RoomCanvasInner({ room, editable = false, selectedItemId = null, onSele
       ))}
 
       {/* 캐릭터(별도 레이어, 중앙 하단, 드래그 불가). CharacterAvatar placeholder 구조 재사용(이미지 우선→이모지). */}
-      <div
+      {!hideCharacter && <div
         className="pointer-events-none absolute"
         style={{ left: "50%", top: "84%", width: charSize, transform: "translate(-50%, -50%)", zIndex: 900 }}
         aria-label={`${character.name} 캐릭터`}
@@ -180,7 +181,7 @@ function RoomCanvasInner({ room, editable = false, selectedItemId = null, onSele
             </svg>
           )}
         </div>
-      </div>
+      </div>}
     </div>
   );
 }

@@ -2,6 +2,7 @@
 // ⚠️ AI 생성 아님 — 정해진 자동 문장(placeholder)만. 향후 이 빌더의 content 를 AI 결과로 교체 가능.
 import type { Character } from "@/lib/myWorld/character/types";
 import type { DiaryEntryInput, DiaryEntryType } from "@/lib/myWorld/diary/types";
+import type { InteractionEvent } from "@/lib/myWorld/interaction/types";
 import { josaEulReul, josaWaGwa } from "@/lib/myWorld/diary/utils";
 
 // 타입별 기본 아이콘/색/라벨(캐릭터가 있으면 캐릭터 이모지/테마색 우선).
@@ -60,6 +61,30 @@ export function buildVisitEntry(character: Character): DiaryEntryInput {
     title: "오늘의 방문",
     content: `${character.name}${josaWaGwa(character.name)} 새로운 하루를 시작했어요.`,
     metadata: {},
+  };
+}
+
+/** Interaction notable moment — first meeting, reunion, milestone, first pet/gift of the day. */
+export function buildInteractionEntry(
+  character: Character,
+  event: InteractionEvent,
+  flags: { firstMeeting?: boolean; longAbsence?: boolean; milestone?: number | null } = {},
+): DiaryEntryInput {
+  let title = "함께한 순간";
+  let content = `${character.name}${josaWaGwa(character.name)} 마음을 나눴어요.`;
+  if (flags.firstMeeting) { title = "첫 만남"; content = `${character.name}${josaWaGwa(character.name)} 처음으로 인사를 나눴어요.`; }
+  else if (flags.longAbsence) { title = "오랜만의 만남"; content = `오랜만에 ${character.name}${josaEulReul(character.name)} 만나 반갑게 인사했어요.`; }
+  else if (flags.milestone) { title = "친밀도 상승"; content = `${character.name}${josaWaGwa(character.name)} 친밀도 ${flags.milestone}에 도달했어요.`; }
+  else if (event.type === "pet") { title = "토닥토닥"; content = `${character.name}${josaEulReul(character.name)} 다정하게 쓰다듬어 줬어요.`; }
+  else if (event.type === "gift") { title = "마음을 담은 선물"; content = `${character.name}에게 작은 선물을 건넸어요.`; }
+  return {
+    type: "interaction",
+    characterId: character.id,
+    icon: event.type === "gift" ? "🎁" : "💗",
+    color: character.themeColor,
+    title,
+    content,
+    metadata: { eventId: event.id, interactionType: event.type, affinityDelta: event.affinityDelta, milestone: flags.milestone ?? null },
   };
 }
 
