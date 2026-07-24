@@ -12,7 +12,8 @@ export type DiaryEntryType =
   | "reward"              // 보상(향후 훅)
   | "manual"              // 사용자 직접 작성(향후)
   | "system"             // 시스템(방문 등)
-  | "visit";              // My World 방문(자동)
+  | "visit"               // My World 방문(자동)
+  | "room_updated";       // 내 방 저장(자동, 05-05)
 
 export interface DiaryEntry {
   id: string;

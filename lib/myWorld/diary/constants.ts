@@ -16,6 +16,7 @@ export const DIARY_TYPE_META: Record<DiaryEntryType, { icon: string; color: stri
   manual:             { icon: "✍️", color: "#94a3b8", label: "일기" },
   system:             { icon: "✨", color: "#a78bfa", label: "시스템" },
   visit:              { icon: "🌤️", color: "#F9954E", label: "방문" },
+  room_updated:       { icon: "🏠", color: "#E5A663", label: "내 방" },
 };
 
 export const DIARY_UI_LIMIT = 10;      // 타임라인 표시 개수
@@ -33,6 +34,19 @@ export function buildCharacterSelectedEntry(character: Character): DiaryEntryInp
     title: "새로운 친구",
     content: `${character.name}${josaWaGwa(character.name)} 함께하기 시작했어요.`,
     metadata: { characterName: character.name },
+  };
+}
+
+/** 내 방 저장 — 자동(방 저장 성공 후 1건, 05-05). */
+export function buildRoomUpdatedEntry(character: Character): DiaryEntryInput {
+  return {
+    type: "room_updated",
+    characterId: character.id,
+    icon: DIARY_TYPE_META.room_updated.icon,
+    color: DIARY_TYPE_META.room_updated.color,
+    title: "내 방 꾸미기",
+    content: `${character.name}${josaWaGwa(character.name)} 함께 지낼 방을 새롭게 꾸몄어요.`,
+    metadata: {},
   };
 }
 

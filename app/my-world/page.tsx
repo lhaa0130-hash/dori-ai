@@ -25,6 +25,7 @@ import { RARITY_STYLE } from "@/lib/myWorld/character/utils";
 import { getCharacter } from "@/lib/myWorld/character/registry";
 import { CharacterProvider, useCharacter } from "@/contexts/CharacterContext";
 import { DiaryProvider, useDiary } from "@/contexts/DiaryContext";
+import { RoomProvider } from "@/contexts/RoomContext";
 import { buildCharacterSelectedEntry } from "@/lib/myWorld/diary/constants";
 import CottonCandy from "@/components/icons/CottonCandy";
 import BackgroundHero from "@/components/my-world/BackgroundHero";
@@ -32,7 +33,7 @@ import CharacterCard from "@/components/my-world/CharacterCard";
 import CharacterSelectModal from "@/components/my-world/CharacterSelectModal";
 import RecentActivityCard from "@/components/my-world/RecentActivityCard";
 import DiaryCard from "@/components/my-world/DiaryCard";
-import MyRoomCard from "@/components/my-world/MyRoomCard";
+import RoomPreviewCard from "@/components/my-world/room/RoomPreviewCard";
 import CreationsCard from "@/components/my-world/CreationsCard";
 import AchievementsCard from "@/components/my-world/AchievementsCard";
 
@@ -50,12 +51,14 @@ function todaysHello(): string {
   return HELLOS[idx];
 }
 
-// Provider 로 감싸 useCharacter/useDiary 사용.
+// Provider 로 감싸 useCharacter/useDiary/useRoom 사용. Room 은 Character·Diary 에 의존(캐릭터 레이어·저장 시 일기).
 export default function MyWorldPage() {
   return (
     <CharacterProvider>
       <DiaryProvider>
-        <MyWorldContent />
+        <RoomProvider>
+          <MyWorldContent />
+        </RoomProvider>
       </DiaryProvider>
     </CharacterProvider>
   );
@@ -165,7 +168,7 @@ function MyWorldContent() {
       <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="sm:col-span-2"><RecentActivityCard /></div>
         <div className="sm:col-span-2"><DiaryCard /></div>
-        <MyRoomCard />
+        <div className="sm:col-span-2"><RoomPreviewCard /></div>
         <div className="sm:col-span-2"><CreationsCard /></div>
         <div className="sm:col-span-2"><AchievementsCard /></div>
       </div>

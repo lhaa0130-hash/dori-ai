@@ -10,7 +10,7 @@ import { makeEntryId } from "@/lib/myWorld/diary/utils";
 
 const VALID_TYPES = new Set([
   "attendance", "character_selected", "character_growth", "interaction",
-  "mission", "game", "reward", "manual", "system", "visit",
+  "mission", "game", "reward", "manual", "system", "visit", "room_updated",
 ]);
 
 /** 원소 하나 정규화(깨진 값 방어). 유효하지 않으면 null. */
