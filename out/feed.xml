@@ -6,7 +6,39 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Thu, 23 Jul 2026 23:00:16 GMT</lastBuildDate>
+    <lastBuildDate>Fri, 24 Jul 2026 00:00:24 GMT</lastBuildDate>
+    <item>
+      <title>[AI 기능] AI로 결과 확 달라지는 질문 공식</title>
+      <link>https://illo.im/insight/article/video-85</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-85</guid>
+      <category>큐레이션</category>
+      <pubDate>Thu, 23 Jul 2026 00:00:00 GMT</pubDate>
+      <description>AI 활용을 극대화하는 질문 공식과 팁을 소개합니다.</description>
+    </item>
+    <item>
+      <title>[Codex] OpenAI 내부자가 알려주는 GPT-5.6과 Codex 활용법</title>
+      <link>https://illo.im/insight/article/video-86</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-86</guid>
+      <category>큐레이션</category>
+      <pubDate>Thu, 23 Jul 2026 00:00:00 GMT</pubDate>
+      <description>GPT-5.6과 Codex의 실전 활용법을 배울 수 있습니다.</description>
+    </item>
+    <item>
+      <title>[영화 제작] AI로 영화를 만들 수 있을까</title>
+      <link>https://illo.im/insight/article/video-87</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-87</guid>
+      <category>큐레이션</category>
+      <pubDate>Thu, 23 Jul 2026 00:00:00 GMT</pubDate>
+      <description>AI를 활용한 영화 제작 과정을 소개합니다.</description>
+    </item>
+    <item>
+      <title>[AI 개념] Kimi K3의 등장과 인공지능 개념 이해하기</title>
+      <link>https://illo.im/insight/article/video-88</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/video-88</guid>
+      <category>큐레이션</category>
+      <pubDate>Thu, 23 Jul 2026 00:00:00 GMT</pubDate>
+      <description>Kimi K3 관련 뉴스와 AI 기본 개념을 설명합니다.</description>
+    </item>
     <item>
       <title>[경제] 미국의 AI 독점이 가져올 경제적 영향</title>
       <link>https://illo.im/insight/article/video-80</link>
@@ -294,38 +326,6 @@
       <category>큐레이션</category>
       <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
       <description>AI 시대에 살아남기 위한 사람의 특징을 설명합니다.</description>
-    </item>
-    <item>
-      <title>[AI 결제] AI 프로토콜과 금융 결제 시스템의 혁신</title>
-      <link>https://illo.im/insight/article/video-64</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-64</guid>
-      <category>큐레이션</category>
-      <pubDate>Sat, 11 Jul 2026 00:00:00 GMT</pubDate>
-      <description>AI 결제 시스템의 혁신과 Quant Network의 역할을 설명합니다.</description>
-    </item>
-    <item>
-      <title>[모델] Grok 4.5 모델의 설명과 특징</title>
-      <link>https://illo.im/insight/article/video-61</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-61</guid>
-      <category>큐레이션</category>
-      <pubDate>Fri, 10 Jul 2026 00:00:00 GMT</pubDate>
-      <description>Grok 4.5 모델의 주요 특징과 경쟁력을 간단히 소개합니다.</description>
-    </item>
-    <item>
-      <title>[교육법] AI 활용법과 자녀 교육법 총정리</title>
-      <link>https://illo.im/insight/article/video-62</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-62</guid>
-      <category>큐레이션</category>
-      <pubDate>Fri, 10 Jul 2026 00:00:00 GMT</pubDate>
-      <description>AI 시대에 필요한 활용법과 자녀 교육법을 소개합니다.</description>
-    </item>
-    <item>
-      <title>[영상] 사진 한 장으로 움직이는 영상을 무료로 만드는 방법</title>
-      <link>https://illo.im/insight/article/video-60</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/video-60</guid>
-      <category>큐레이션</category>
-      <pubDate>Thu, 09 Jul 2026 00:00:00 GMT</pubDate>
-      <description>구글 플로우로 사진을 AI 영상으로 변환하는 방법을 소개합니다.</description>
     </item>
   </channel>
 </rss>
