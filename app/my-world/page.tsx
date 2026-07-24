@@ -6,9 +6,10 @@
 //  · 방·일기·업적·작품·활동은 UI placeholder(기능 미구현). Firestore/API 변경 없음.
 //  · 향후 연결 지점은 각 컴포넌트 주석 참조.
 // ─────────────────────────────────────────────────────────────────────────────
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
+import { getFirebaseAuth } from "@/lib/firebase";
 import {
   getCottonCandyBalance,
   getCachedGameProfile,
@@ -21,9 +22,17 @@ import {
   getCurrentLevelStartExp,
   type UserTier,
 } from "@/lib/userProfile";
+import { getCharacter, DEFAULT_CHARACTER_ID } from "@/lib/myWorld/characters";
+import {
+  getMyCharacterState,
+  selectMyCharacter,
+  getCachedCharacter,
+  setCachedCharacter,
+} from "@/lib/myWorld/characterState";
 import CottonCandy from "@/components/icons/CottonCandy";
 import BackgroundHero from "@/components/my-world/BackgroundHero";
 import CharacterCard from "@/components/my-world/CharacterCard";
+import CharacterSelectModal from "@/components/my-world/CharacterSelectModal";
 import RecentActivityCard from "@/components/my-world/RecentActivityCard";
 import AiDiaryCard from "@/components/my-world/AiDiaryCard";
 import MyRoomCard from "@/components/my-world/MyRoomCard";
@@ -51,6 +60,13 @@ export default function MyWorldPage() {
   const [tier, setTier] = useState(1);
   const [exp, setExp] = useState(0);
   const [candy, setCandy] = useState(0);
+  // ── 대표 캐릭터 ──
+  const [selectedId, setSelectedId] = useState(DEFAULT_CHARACTER_ID);
+  const [modalOpen, setModalOpen] = useState(false);
+  const [saving, setSaving] = useState(false);
+  const savingRef = useRef(false);
+
+  const uid = () => { try { return getFirebaseAuth().currentUser?.uid || null; } catch { return null; } };
 
   const refresh = (email: string) => {
     const gp = getCachedGameProfile(email);
@@ -76,6 +92,32 @@ export default function MyWorldPage() {
     return () => window.removeEventListener("dori-gamedata-synced", onSync);
   }, [session?.user?.email]);
 
+  // 대표 캐릭터 로드: 캐시(즉시) → Firestore(원본). 세션 복원 비동기 대비해 session 의존.
+  useEffect(() => {
+    const u = uid();
+    if (!u) { setSelectedId(DEFAULT_CHARACTER_ID); return; }
+    const cached = getCachedCharacter(u);
+    if (cached) setSelectedId(cached.selectedId);
+    getMyCharacterState(u)
+      .then((st) => { setSelectedId(st.selectedId); setCachedCharacter(u, st); })
+      .catch(() => {});
+  }, [session?.user?.email]);
+
+  // 대표 캐릭터 변경 — Hero 즉시 반영 + Firestore 저장 + 캐시.
+  const handleSelectCharacter = async (id: string) => {
+    if (savingRef.current) return;
+    setSelectedId(id);          // Hero 즉시 반영
+    setModalOpen(false);
+    const u = uid();
+    if (!u) return;             // 비로그인: 로컬 표시만(저장 없음)
+    setCachedCharacter(u, { selectedId: id, owned: [DEFAULT_CHARACTER_ID, id] });
+    savingRef.current = true; setSaving(true);
+    try { await selectMyCharacter(u, id); }
+    catch { /* 저장 실패는 조용히 — 표시는 유지, 다음 로드에서 원본으로 정정 */ }
+    finally { savingRef.current = false; setSaving(false); }
+  };
+
+  const selectedChar = getCharacter(selectedId);
   const tierInfo = TIER_INFO[(tier >= 1 && tier <= 10 ? tier : 1) as UserTier];
   const progress = calculateLevelProgress(exp, level);
   const nextTotal = getCurrentLevelStartExp(level) + getNextLevelExp(level);
@@ -84,9 +126,9 @@ export default function MyWorldPage() {
   return (
     <main className="mx-auto w-full max-w-2xl px-4 pb-16 pt-4 sm:pt-6">
       {/* ── Hero ── */}
-      <BackgroundHero>
+      <BackgroundHero gradient={selectedChar.defaultBackground}>
         <div className="flex flex-col items-center px-5 pb-6 pt-8 text-center">
-          <CharacterCard size={104} />
+          <CharacterCard size={104} characterId={selectedId} onEdit={() => setModalOpen(true)} />
           <div className="mt-3 flex items-center gap-2">
             <span
               className="rounded-full px-2.5 py-0.5 text-[11px] font-black"
@@ -150,6 +192,16 @@ export default function MyWorldPage() {
           <AchievementsCard />
         </div>
       </div>
+
+      {/* 대표 캐릭터 선택 모달 */}
+      <CharacterSelectModal
+        open={modalOpen}
+        onClose={() => setModalOpen(false)}
+        selectedId={selectedId}
+        userLevel={level}
+        saving={saving}
+        onSelect={handleSelectCharacter}
+      />
     </main>
   );
 }

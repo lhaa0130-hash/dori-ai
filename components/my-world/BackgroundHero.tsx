@@ -4,26 +4,27 @@
 // 향후 연결: AI 생성 배경 이미지 URL 을 backgroundUrl prop 으로 받아 <img> 로 교체.
 import { ReactNode } from "react";
 
+const DEFAULT_GRADIENT = "linear-gradient(135deg, #FFE7CF 0%, #FFD1A6 35%, #F9954E 100%)";
+
 export default function BackgroundHero({
   children,
   backgroundUrl,
+  gradient,
 }: {
   children?: ReactNode;
   backgroundUrl?: string; // 향후 AI 생성 배경 연결 지점
+  gradient?: string;      // 선택 캐릭터의 defaultBackground(데이터 기반, AI 아님)
 }) {
   return (
     <div className="relative overflow-hidden rounded-3xl">
-      {/* 배경 레이어 — 기본 그라데이션(향후 AI 배경으로 교체) */}
+      {/* 배경 레이어 — 캐릭터 그라데이션(없으면 기본, 향후 AI 배경 이미지로 교체) */}
       {backgroundUrl ? (
         // eslint-disable-next-line @next/next/no-img-element
         <img src={backgroundUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
       ) : (
         <div
-          className="absolute inset-0"
-          style={{
-            background:
-              "linear-gradient(135deg, #FFE7CF 0%, #FFD1A6 35%, #F9954E 100%)",
-          }}
+          className="absolute inset-0 transition-[background] duration-500"
+          style={{ background: gradient || DEFAULT_GRADIENT }}
         />
       )}
       {/* 부드러운 장식(과한 애니메이션 없음) */}
