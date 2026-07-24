@@ -54,3 +54,10 @@ build_galaxy.log
 
 # 빌드·배포 동시실행 방지 락(deploy.js) — 커밋 금지
 .deploy.lock
+
+# firebase emulator 실행 산출물
+firestore-debug.log
+ui-debug.log
+database-debug.log
+firebase-debug.log
+.firebase/
