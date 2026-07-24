@@ -20,10 +20,33 @@ const REACTIONS: Record<InteractionIntent["type"], ReactionDefinition> = {
   idle: { emotion: "normal", animation: "blink", audio: "tap", durationMs: 1_000, lines: ["오늘은 뭘 해볼까?", "창밖을 잠깐 보고 있었어.", "네가 오길 기다리고 있었어."] },
 };
 
+// 방 가구별 상호작용 매핑(Room Registry 아이템 id → 반응). 스펙 최소 매핑 구현.
+//  없는 id 는 기본 room_item 반응으로 폴백.
+interface RoomItemReaction { emotion: Emotion; animation: AnimationType; lines: string[] }
+const ROOM_ITEM_REACTIONS: Record<string, RoomItemReaction> = {
+  "bed-basic": { emotion: "sleepy", animation: "sleep", lines: ["폭신한 침대에 누워볼까?", "여기서 잠깐 낮잠 자면 좋겠다.", "침대는 언제나 포근해."] },
+  "desk-basic": { emotion: "thinking", animation: "think", lines: ["책상에서 뭘 해볼까?", "여기서 공부하면 집중이 잘 돼.", "골똘히 생각 중이야."] },
+  "chair-basic": { emotion: "normal", animation: "sit", lines: ["의자에 앉아 쉴래.", "여기 앉으면 편안해.", "잠깐 앉아 있을게."] },
+  "table-basic": { emotion: "normal", animation: "sit", lines: ["테이블 앞에 앉았어.", "여기서 간식 먹을까?", "도란도란 이야기하기 좋아."] },
+  "bookshelf-basic": { emotion: "thinking", animation: "think", lines: ["어떤 책을 읽어볼까?", "책이 정말 많다!", "이야기 속으로 빠져들 것 같아."] },
+  "toybox-basic": { emotion: "excited", animation: "bounce", lines: ["장난감 상자다! 놀자!", "안에 뭐가 들어있을까?", "신나는 게 가득해!"] },
+  "plant-basic": { emotion: "happy", animation: "look", lines: ["화분을 가만히 관찰하는 중이야.", "새싹이 무럭무럭 자라고 있어!", "식물을 보면 마음이 편안해져."] },
+  "lamp-basic": { emotion: "normal", animation: "look", lines: ["조명을 가만히 바라봐.", "따뜻한 불빛이 참 좋아.", "은은한 빛에 마음이 놓여."] },
+  "doll-basic": { emotion: "love", animation: "love", lines: ["인형을 꼭 안았어.", "포근한 친구야.", "같이 꼭 안고 있을래."] },
+  "rug-basic": { emotion: "normal", animation: "sit", lines: ["러그 위에 앉아 쉬는 중.", "폭신한 러그가 좋아.", "여기서 뒹굴뒹굴하고 싶어."] },
+  "cushion-basic": { emotion: "sleepy", animation: "sit", lines: ["쿠션에 기대 쉴래.", "폭신폭신 편안해.", "여기 기대면 스르르 잠이 와."] },
+  "frame-basic": { emotion: "happy", animation: "look", lines: ["액자를 바라보고 있어.", "좋은 추억이 담긴 것 같아.", "그림을 보니 기분이 좋아져."] },
+};
+
 function hash(input: string): number {
   let value = 0;
   for (let i = 0; i < input.length; i += 1) value = (value * 31 + input.charCodeAt(i)) >>> 0;
   return value;
+}
+
+/** 방 가구 id 에 매핑된 반응(없으면 null). UI/테스트 재사용. */
+export function roomItemReaction(itemId?: string): RoomItemReaction | null {
+  return itemId && ROOM_ITEM_REACTIONS[itemId] ? ROOM_ITEM_REACTIONS[itemId] : null;
 }
 
 export function relationshipFor(affinity: number): "new" | "familiar" | "close" | "best_friend" {
@@ -34,7 +57,12 @@ export function relationshipFor(affinity: number): "new" | "familiar" | "close" 
 }
 
 export function resolveReaction(intent: InteractionIntent, state: InteractionState, now: number): ReactionDefinition & { speech: string } {
-  const base = REACTIONS[intent.type];
+  let base = REACTIONS[intent.type];
+  // 방 가구별 상호작용: 매핑이 있으면 감정/애니메이션/대사를 가구에 맞게 대체(스펙 Room Hook).
+  if (intent.type === "room_item") {
+    const mapped = roomItemReaction(intent.roomItemId);
+    if (mapped) base = { ...base, emotion: mapped.emotion, animation: mapped.animation, lines: mapped.lines };
+  }
   const relation = relationshipFor(state.affinity);
   const hour = new Date(now).getHours();
   let lines = base.lines;
