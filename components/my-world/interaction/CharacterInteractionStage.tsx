@@ -24,7 +24,7 @@ const ACTIONS = [
 export default function CharacterInteractionStage() {
   const { character } = useCharacter();
   const { savedRoom } = useRoom();
-  const { state, loading, syncing, offline, currentAnimation, speech, notices, perform, previewReaction, dismissNotice } = useInteraction();
+  const { state, loading, syncing, offline, emotion: displayEmotion, signedIn, currentAnimation, speech, notices, perform, previewReaction, dismissNotice } = useInteraction();
   const { muted, volume, setMuted, setVolume } = useInteractionAudio();
   const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const singleTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -78,7 +78,7 @@ export default function CharacterInteractionStage() {
     perform({ type: "touch", source: "keyboard" });
   };
 
-  const emotion = EMOTION_META[state.emotion];
+  const emotion = EMOTION_META[displayEmotion];
 
   return (
     <section className="rounded-3xl border border-stone-100 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950 sm:p-5" aria-labelledby="interaction-heading">
@@ -145,7 +145,7 @@ export default function CharacterInteractionStage() {
       </div>
 
       <div className="mt-3 flex items-center gap-3 rounded-2xl bg-stone-50 px-3 py-2.5 dark:bg-zinc-900">
-        <AffinityMeter affinity={state.affinity} />
+        <AffinityMeter affinity={state.affinity} guest={!signedIn} />
         <span className="shrink-0 rounded-full px-2.5 py-1 text-[11px] font-black text-white" style={{ backgroundColor: emotion.color }} title={`현재 감정: ${emotion.label}`}>
           <span aria-hidden>{emotion.emoji}</span> {emotion.label}
         </span>

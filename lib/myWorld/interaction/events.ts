@@ -1,5 +1,6 @@
-import { relationshipFor } from "@/lib/myWorld/interaction/catalog";
-import type { AIInteractionContext, InteractionEvent } from "@/lib/myWorld/interaction/types";
+// 상대 경로 import — node:test 에서 별칭 없이 직접 로드할 수 있도록 유지한다.
+import { relationshipFor } from "./catalog.ts";
+import type { AIInteractionContext, InteractionEvent } from "./types.ts";
 
 export const MY_WORLD_INTERACTION_EVENT = "my-world:interaction";
 

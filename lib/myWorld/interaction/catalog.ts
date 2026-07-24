@@ -24,7 +24,7 @@ const REACTIONS: Record<InteractionIntent["type"], ReactionDefinition> = {
 //  없는 id 는 기본 room_item 반응으로 폴백.
 interface RoomItemReaction { emotion: Emotion; animation: AnimationType; lines: string[] }
 const ROOM_ITEM_REACTIONS: Record<string, RoomItemReaction> = {
-  "bed-basic": { emotion: "sleepy", animation: "sleep", lines: ["폭신한 침대에 누워볼까?", "여기서 잠깐 낮잠 자면 좋겠다.", "침대는 언제나 포근해."] },
+  "bed-basic": { emotion: "sleepy", animation: "sleep", lines: ["폭신한 침대에 누워볼까?", "침대에서 잠깐 낮잠 자면 좋겠다.", "침대는 언제나 포근해."] },
   "desk-basic": { emotion: "thinking", animation: "think", lines: ["책상에서 뭘 해볼까?", "여기서 공부하면 집중이 잘 돼.", "골똘히 생각 중이야."] },
   "chair-basic": { emotion: "normal", animation: "sit", lines: ["의자에 앉아 쉴래.", "여기 앉으면 편안해.", "잠깐 앉아 있을게."] },
   "table-basic": { emotion: "normal", animation: "sit", lines: ["테이블 앞에 앉았어.", "여기서 간식 먹을까?", "도란도란 이야기하기 좋아."] },
