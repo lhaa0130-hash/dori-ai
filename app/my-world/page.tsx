@@ -1,15 +1,14 @@
 "use client";
 
 // ─────────────────────────────────────────────────────────────────────────────
-// My World — "AI와 함께 살아가는 나만의 세계" 홈 (05-01 MVP, UI 골격).
-//  · 데이터는 기존 소스(게임 프로필/솜사탕/레벨)를 '읽기 전용'으로만 사용.
-//  · 방·일기·업적·작품·활동은 UI placeholder(기능 미구현). Firestore/API 변경 없음.
-//  · 향후 연결 지점은 각 컴포넌트 주석 참조.
+// My World — "AI와 함께 살아가는 나만의 세계" 홈.
+//  · 대표 캐릭터는 CharacterProvider/useCharacter(공용)로 관리 → Profile·Diary·Room 재사용.
+//  · 레벨/EXP/Candy 는 기존 게임 프로필 '읽기 전용'. 방·일기·업적·작품은 placeholder.
+//  · Firestore/API/출석/레벨 변경 없음.
 // ─────────────────────────────────────────────────────────────────────────────
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
-import { getFirebaseAuth } from "@/lib/firebase";
 import {
   getCottonCandyBalance,
   getCachedGameProfile,
@@ -22,13 +21,8 @@ import {
   getCurrentLevelStartExp,
   type UserTier,
 } from "@/lib/userProfile";
-import { getCharacter, DEFAULT_CHARACTER_ID } from "@/lib/myWorld/characters";
-import {
-  getMyCharacterState,
-  selectMyCharacter,
-  getCachedCharacter,
-  setCachedCharacter,
-} from "@/lib/myWorld/characterState";
+import { RARITY_STYLE } from "@/lib/myWorld/character/utils";
+import { CharacterProvider, useCharacter } from "@/contexts/CharacterContext";
 import CottonCandy from "@/components/icons/CottonCandy";
 import BackgroundHero from "@/components/my-world/BackgroundHero";
 import CharacterCard from "@/components/my-world/CharacterCard";
@@ -53,20 +47,24 @@ function todaysHello(): string {
   return HELLOS[idx];
 }
 
+// Provider 로 감싸 useCharacter 사용.
 export default function MyWorldPage() {
+  return (
+    <CharacterProvider>
+      <MyWorldContent />
+    </CharacterProvider>
+  );
+}
+
+function MyWorldContent() {
   const { session, status } = useAuth();
+  const { character, selectCharacter, saving } = useCharacter();
   const [nickname, setNickname] = useState("나");
   const [level, setLevel] = useState(1);
   const [tier, setTier] = useState(1);
   const [exp, setExp] = useState(0);
   const [candy, setCandy] = useState(0);
-  // ── 대표 캐릭터 ──
-  const [selectedId, setSelectedId] = useState(DEFAULT_CHARACTER_ID);
   const [modalOpen, setModalOpen] = useState(false);
-  const [saving, setSaving] = useState(false);
-  const savingRef = useRef(false);
-
-  const uid = () => { try { return getFirebaseAuth().currentUser?.uid || null; } catch { return null; } };
 
   const refresh = (email: string) => {
     const gp = getCachedGameProfile(email);
@@ -81,7 +79,6 @@ export default function MyWorldPage() {
     if (!email) return;
     setNickname(session?.user?.name || "나");
     refresh(email);
-    // 서버 원본 → localStorage 표시 캐시 동기화(읽기용). 값 지급/변경 없음.
     hydrateGameData().then(() => refresh(email)).catch(() => {});
   }, [session?.user?.email, session?.user?.name]);
 
@@ -92,58 +89,35 @@ export default function MyWorldPage() {
     return () => window.removeEventListener("dori-gamedata-synced", onSync);
   }, [session?.user?.email]);
 
-  // 대표 캐릭터 로드: 캐시(즉시) → Firestore(원본). 세션 복원 비동기 대비해 session 의존.
-  useEffect(() => {
-    const u = uid();
-    if (!u) { setSelectedId(DEFAULT_CHARACTER_ID); return; }
-    const cached = getCachedCharacter(u);
-    if (cached) setSelectedId(cached.selectedId);
-    getMyCharacterState(u)
-      .then((st) => { setSelectedId(st.selectedId); setCachedCharacter(u, st); })
-      .catch(() => {});
-  }, [session?.user?.email]);
-
-  // 대표 캐릭터 변경 — Hero 즉시 반영 + Firestore 저장 + 캐시.
-  const handleSelectCharacter = async (id: string) => {
-    if (savingRef.current) return;
-    setSelectedId(id);          // Hero 즉시 반영
-    setModalOpen(false);
-    const u = uid();
-    if (!u) return;             // 비로그인: 로컬 표시만(저장 없음)
-    setCachedCharacter(u, { selectedId: id, owned: [DEFAULT_CHARACTER_ID, id] });
-    savingRef.current = true; setSaving(true);
-    try { await selectMyCharacter(u, id); }
-    catch { /* 저장 실패는 조용히 — 표시는 유지, 다음 로드에서 원본으로 정정 */ }
-    finally { savingRef.current = false; setSaving(false); }
-  };
-
-  const selectedChar = getCharacter(selectedId);
   const tierInfo = TIER_INFO[(tier >= 1 && tier <= 10 ? tier : 1) as UserTier];
   const progress = calculateLevelProgress(exp, level);
   const nextTotal = getCurrentLevelStartExp(level) + getNextLevelExp(level);
   const loggedIn = status === "authenticated";
+  const rarity = RARITY_STYLE[character.rarity];
+
+  const handleSelect = (id: string) => { selectCharacter(id); setModalOpen(false); };
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 pb-16 pt-4 sm:pt-6">
       {/* ── Hero ── */}
-      <BackgroundHero gradient={selectedChar.defaultBackground}>
+      <BackgroundHero gradient={character.defaultBackground}>
         <div className="flex flex-col items-center px-5 pb-6 pt-8 text-center">
-          <CharacterCard size={104} characterId={selectedId} onEdit={() => setModalOpen(true)} />
-          <div className="mt-3 flex items-center gap-2">
-            <span
-              className="rounded-full px-2.5 py-0.5 text-[11px] font-black"
-              style={{ color: "#fff", backgroundColor: "rgba(0,0,0,0.28)" }}
-            >
+          <CharacterCard size={104} character={character} onEdit={() => setModalOpen(true)} />
+
+          {/* 캐릭터 이름 · 희귀도 */}
+          <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-black/25 px-3 py-1">
+            <span className="text-[13px] font-black text-white">{character.name}</span>
+            <span className="text-[10px] font-bold" style={{ color: "#fff", opacity: 0.85 }}>· {rarity.label}</span>
+          </div>
+
+          <div className="mt-2 flex items-center gap-2">
+            <span className="rounded-full px-2.5 py-0.5 text-[11px] font-black" style={{ color: "#fff", backgroundColor: "rgba(0,0,0,0.28)" }}>
               {tierInfo.name}
             </span>
             <span className="text-[15px] font-black text-white drop-shadow-sm">Lv.{level}</span>
           </div>
-          <h1 className="mt-1.5 text-[20px] font-extrabold text-white drop-shadow-sm">
-            {nickname}
-          </h1>
-          <p className="mt-0.5 text-[13px] font-medium text-white/90 drop-shadow-sm">
-            “{todaysHello()}”
-          </p>
+          <h1 className="mt-1.5 text-[20px] font-extrabold text-white drop-shadow-sm">{nickname}</h1>
+          <p className="mt-0.5 text-[13px] font-medium text-white/90 drop-shadow-sm">“{todaysHello()}”</p>
 
           {/* EXP progress */}
           <div className="mt-4 w-full max-w-xs">
@@ -172,35 +146,26 @@ export default function MyWorldPage() {
           <span className="text-[13px] font-semibold text-stone-500 dark:text-stone-400">
             로그인하면 나만의 My World가 채워져요
           </span>
-          <Link href="/login" className="rounded-xl bg-[#F9954E] px-3.5 py-1.5 text-[12px] font-black text-white">
-            로그인
-          </Link>
+          <Link href="/login" className="rounded-xl bg-[#F9954E] px-3.5 py-1.5 text-[12px] font-black text-white">로그인</Link>
         </div>
       )}
 
       {/* ── 카드 섹션 ── */}
       <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="sm:col-span-2">
-          <RecentActivityCard />
-        </div>
+        <div className="sm:col-span-2"><RecentActivityCard /></div>
         <AiDiaryCard />
         <MyRoomCard />
-        <div className="sm:col-span-2">
-          <CreationsCard />
-        </div>
-        <div className="sm:col-span-2">
-          <AchievementsCard />
-        </div>
+        <div className="sm:col-span-2"><CreationsCard /></div>
+        <div className="sm:col-span-2"><AchievementsCard /></div>
       </div>
 
       {/* 대표 캐릭터 선택 모달 */}
       <CharacterSelectModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
-        selectedId={selectedId}
-        userLevel={level}
+        selectedId={character.id}
         saving={saving}
-        onSelect={handleSelectCharacter}
+        onSelect={handleSelect}
       />
     </main>
   );

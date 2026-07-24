@@ -1,33 +1,36 @@
 "use client";
 
-// My World — 대표 캐릭터 표시(공용 컴포넌트, My World·Profile 재사용).
-//  characterId 로 캐릭터 데이터(이모지/이름)를 해석해 표시. 클릭 시 선택 모달 열기(onEdit).
-//  ⚠️ 향후: avatar 를 이미지/스프라이트로 교체, 표정/포즈 오버레이 추가 가능(이번 단계 미사용).
-import { getCharacter, DEFAULT_CHARACTER_ID } from "@/lib/myWorld/characters";
+// My World — 대표 캐릭터 카드(공용, My World·Profile·Showcase 재사용). (05-03)
+//  CharacterAvatar(placeholder 이미지 구조) + 테마 컬러 링 + 편집 진입.
+//  characterId(string) 또는 character(객체) 둘 다 허용. 클릭 시 onEdit(선택 모달).
+import type { Character } from "@/lib/myWorld/character/types";
+import { getCharacter, DEFAULT_CHARACTER_ID } from "@/lib/myWorld/character/registry";
+import CharacterAvatar from "@/components/my-world/CharacterAvatar";
 
 export default function CharacterCard({
-  characterId = DEFAULT_CHARACTER_ID,
+  character,
+  characterId,
   size = 96,
   onEdit,
 }: {
+  character?: Character;
   characterId?: string;
   size?: number;
-  onEdit?: () => void; // 있으면 클릭으로 대표 캐릭터 변경 모달 열기
+  onEdit?: () => void;
 }) {
-  const c = getCharacter(characterId);
+  const c = character || getCharacter(characterId ?? DEFAULT_CHARACTER_ID);
   const clickable = typeof onEdit === "function";
 
   const inner = (
     <div
-      className="relative flex items-center justify-center rounded-full bg-white shadow-lg ring-4 ring-white/70"
-      style={{ width: size, height: size }}
-      aria-label={c.name}
-      role="img"
+      className="relative rounded-full bg-white p-1 shadow-lg ring-4 ring-white/70"
+      style={{ boxShadow: `0 8px 24px ${c.themeColor}33` }}
     >
-      <span style={{ fontSize: size * 0.55, lineHeight: 1 }}>{c.avatar}</span>
+      <CharacterAvatar character={c} size={size} />
       {clickable && (
         <span
-          className="absolute -bottom-1 -right-1 flex h-7 w-7 items-center justify-center rounded-full bg-[#F9954E] text-[13px] text-white shadow ring-2 ring-white"
+          className="absolute -bottom-0.5 -right-0.5 flex h-7 w-7 items-center justify-center rounded-full text-[13px] text-white shadow ring-2 ring-white"
+          style={{ backgroundColor: c.themeColor }}
           aria-hidden
         >
           ✎
