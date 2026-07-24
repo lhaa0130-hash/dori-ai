@@ -12,6 +12,7 @@ import { affinityMilestoneCrossed, defaultInteractionState, processInteraction }
 import { publishInteraction } from "@/lib/myWorld/interaction/events";
 import { enqueueAnimationCommand } from "@/lib/myWorld/interaction/animation";
 import { evaluateDiaryTrigger } from "@/lib/myWorld/interaction/diaryTrigger";
+import { canLoadRemote, canPersistFor, resolveMyWorldIdentity } from "@/lib/myWorld/identity";
 import {
   TRANSIENT_EMOTION_MS,
   idleHungerEmotion,
@@ -69,7 +70,7 @@ function command(type: AnimationType, priority = 1, durationMs = 1_100): Animati
 }
 
 export function InteractionProvider({ children }: { children: ReactNode }) {
-  const { session } = useAuth();
+  const { session, status } = useAuth();
   const { character } = useCharacter();
   const { addEntry } = useDiary();
   const { playCue } = useInteractionAudio();
@@ -93,11 +94,25 @@ export function InteractionProvider({ children }: { children: ReactNode }) {
 
   useEffect(() => { stateRef.current = state; }, [state]);
 
-  const signedIn = !!session?.user?.email;
-
   const uid = useCallback(() => {
     try { return getFirebaseAuth().currentUser?.uid || null; } catch { return null; }
   }, []);
+
+  // ── 단일 Identity Gate ────────────────────────────────────────────────
+  // Firestore 문서 ID 의 유일한 기준은 Firebase UID 다. 세션 이메일은 신원 판정에 쓰지 않는다.
+  // ready 가 아니면 원격 read/write/flush 를 전부 금지한다.
+  const identity = useMemo(
+    () => resolveMyWorldIdentity({ authStatus: status, firebaseUid: uid() }),
+    // session 이 바뀌면(로그인·로그아웃·계정전환) currentUser 도 바뀌므로 함께 재계산한다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [status, session?.user?.email, uid],
+  );
+  const identityRef = useRef(identity);
+  useEffect(() => { identityRef.current = identity; }, [identity]);
+  // 해당 사용자의 서버 상태 로드가 끝났는지 — 끝나기 전에는 서버에 쓰지 않는다(게스트 상태 귀속 방지).
+  const remoteLoadedRef = useRef(false);
+
+  const signedIn = identity.status === "ready";
 
   const enqueueAnimation = useCallback((next: AnimationCommand) => {
     setAnimationQueue((queue) => enqueueAnimationCommand(queue, next));
@@ -145,11 +160,18 @@ export function InteractionProvider({ children }: { children: ReactNode }) {
   }, [dismissNotice]);
 
   const persistSoon = useCallback((next: InteractionState) => {
-    const u = uid();
-    if (!u) return;
+    // 1) 예약 시점 게이트: ready 가 아니면(게스트·판정중·Firebase 미준비) 서버에 아무것도 쓰지 않는다.
+    const scheduled = identityRef.current;
+    if (!scheduled.canWriteRemote || !scheduled.firebaseUid) return;
+    // 2) 서버 상태 로드 전에는 쓰지 않는다 — 게스트/기본 상태가 계정 데이터를 덮어쓰는 것을 막는다.
+    if (!remoteLoadedRef.current) return;
+    const u = scheduled.firebaseUid;
     setCachedInteractionState(u, next);
     if (saveTimer.current) clearTimeout(saveTimer.current);
     saveTimer.current = setTimeout(() => {
+      // 3) 실행 시점 재검증: 로그아웃·계정전환이면 이전 사용자 문서에 쓰지 않고 취소한다.
+      //    (큐 적재도 하지 않는다 — 다음 로그인 때 잘못된 상태가 flush 되는 것을 막는다)
+      if (!canPersistFor(u, identityRef.current)) return;
       if (typeof navigator !== "undefined" && !navigator.onLine) {
         queueInteractionSync(u, stateRef.current);
         setOffline(true);
@@ -158,16 +180,32 @@ export function InteractionProvider({ children }: { children: ReactNode }) {
       setSyncing(true);
       saveChain.current = saveChain.current
         .catch(() => undefined)
-        .then(() => saveInteractionState(u, stateRef.current))
-        .catch(() => { queueInteractionSync(u, stateRef.current); setOffline(true); })
+        .then(() => {
+          if (!canPersistFor(u, identityRef.current)) return; // 체인 대기 중 전환된 경우
+          return saveInteractionState(u, stateRef.current);
+        })
+        .catch(() => {
+          if (!canPersistFor(u, identityRef.current)) return;
+          queueInteractionSync(u, stateRef.current); setOffline(true);
+        })
         .finally(() => setSyncing(false));
     }, 450);
-  }, [uid]);
+  }, []);
 
   useEffect(() => {
     let alive = true;
-    const u = uid();
-    if (!u) { const fresh = defaultInteractionState(); setState(fresh); stateRef.current = fresh; setLoading(false); return; }
+    // 신원이 바뀌면(로그아웃·계정전환) 이전 사용자로 예약된 저장을 먼저 취소한다.
+    if (saveTimer.current) { clearTimeout(saveTimer.current); saveTimer.current = null; }
+    remoteLoadedRef.current = false;
+
+    // ready 가 아니면 원격 로드 금지 — 게스트/판정중에는 로컬 기본 상태만 보여준다.
+    if (!canLoadRemote(identity)) {
+      const fresh = defaultInteractionState();
+      setState(fresh); stateRef.current = fresh;   // 이전 사용자 상태가 화면에 남지 않도록 초기화
+      setLoading(identity.status === "loading");
+      return () => { alive = false; };
+    }
+    const u = identity.firebaseUid!;
     const cached = getCachedInteractionState(u);
     const queued = getQueuedInteractionState(u);
     const optimistic = queued ?? cached;
@@ -191,20 +229,33 @@ export function InteractionProvider({ children }: { children: ReactNode }) {
         }
       })
       .catch(() => setOffline(true))
-      .finally(() => { if (alive) setLoading(false); });
-    return () => { alive = false; };
-  }, [session?.user?.email, uid]);
+      .finally(() => {
+        if (!alive) return;
+        setLoading(false);
+        // 이 사용자의 서버 상태가 도착한 뒤에만 서버 쓰기를 허용한다.
+        remoteLoadedRef.current = true;
+      });
+    return () => {
+      alive = false;
+      // 신원이 바뀌면 이전 사용자로 예약된 저장을 취소한다.
+      if (saveTimer.current) { clearTimeout(saveTimer.current); saveTimer.current = null; }
+      remoteLoadedRef.current = false;
+    };
+  }, [identity.status, identity.firebaseUid]);
 
   useEffect(() => {
     const update = () => setOffline(!navigator.onLine);
     const flush = async () => {
       update();
-      const u = uid();
-      if (!u || !navigator.onLine || !hasQueuedInteractionSync(u)) return;
+      // ready 인 사용자만 자신의 큐를 flush 한다(로그아웃·계정전환 중에는 전송 금지).
+      const current = identityRef.current;
+      const u = current.firebaseUid;
+      if (!current.canWriteRemote || !u || !navigator.onLine || !hasQueuedInteractionSync(u)) return;
       setSyncing(true);
       try {
         const synced = await flushInteractionQueue(u);
-        if (synced) { setState(synced); stateRef.current = synced; }
+        // flush 완료 사이에 사용자가 바뀌었으면 화면 상태를 덮지 않는다.
+        if (synced && canPersistFor(u, identityRef.current)) { setState(synced); stateRef.current = synced; }
       } catch { setOffline(true); }
       finally { setSyncing(false); }
     };
