@@ -1,6 +1,7 @@
 // Cloudflare Pages Function — POST /api/claim-reward (04-18)
 // 신뢰 서버 출석 보상 게이트: 클라이언트는 rewardType 만 보낸다. 금액·날짜·uid 는 서버가 결정.
-//  인증: 사용자 ID 토큰(소유권은 Firestore로 실검증) → allowlist(REWARD_TEST_UIDS, Preview 전용)
+//  인증: 사용자 ID 토큰(소유권은 Firestore로 실검증). 환경 정책: production=인증 사용자 허용 /
+//        preview·불명=REWARD_TEST_UIDS allowlist 강제(fail-closed)
 //  쓰기: 서비스 계정 OAuth → Firestore REST 트랜잭션(멱등·원자·legacy 인식).
 // ⚠️ Secret(개인키·토큰)·전체 users 문서·stack 을 응답/로그에 노출하지 않는다. Production 은 Secret 부재로 fail-closed.
 
@@ -35,12 +36,16 @@ export const onRequestPost: any = async (context: any) => {
   try {
     const { request, env } = context;
 
-    // ── fail-closed: 필수 Secret 부재(=Production) 즉시 차단 ──
+    // ── 필수 Secret 부재 시 fail-closed ──
     const clientEmail = String(env.FIREBASE_SA_CLIENT_EMAIL || "");
     const privateKey = String(env.FIREBASE_SA_PRIVATE_KEY || "");
     const allow = parseAllowlist(env.REWARD_TEST_UIDS);
+    // 환경 정책: REWARD_ENV==="production" → allowlist 없이 인증 사용자 허용.
+    //  그 외(preview·미설정·불명) → allowlist 강제. 환경 판별이 명확치 않으면 지급하지 않는다(fail-closed).
+    const isProduction = String(env.REWARD_ENV || "").trim().toLowerCase() === "production";
     if (!clientEmail || !privateKey) return J({ ok: false, error: "dependency_unavailable" }, 503);
-    if (allow.size === 0) return J({ ok: false, error: "forbidden" }, 403); // allowlist 없으면 전면 차단
+    // preview/불명 환경에서 allowlist 가 비어 있으면 전면 차단(=Production Secret 미설정 상태의 안전판)
+    if (!isProduction && allow.size === 0) return J({ ok: false, error: "forbidden" }, 403);
 
     // ── 요청 파싱·정제 ──
     const raw = await request.text();
@@ -63,8 +68,8 @@ export const onRequestPost: any = async (context: any) => {
     if (!decoded.exp || decoded.exp * 1000 < Date.now()) return J({ ok: false, error: "unauthenticated" }, 401);
 
     const uid = decoded.uid;
-    // ── allowlist(Firestore 접근 전) ──
-    if (!allow.has(uid)) return J({ ok: false, error: "forbidden" }, 403);
+    // ── allowlist(preview 전용, Firestore 접근 전). production 은 인증 사용자면 통과 ──
+    if (!isProduction && !allow.has(uid)) return J({ ok: false, error: "forbidden" }, 403);
 
     // ── 토큰 소유권 실검증(Firestore가 토큰 검증) ──
     const own = await verifyIdTokenOwnsUid(idToken, uid);
