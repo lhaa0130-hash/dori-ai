@@ -22,13 +22,16 @@ import {
   type UserTier,
 } from "@/lib/userProfile";
 import { RARITY_STYLE } from "@/lib/myWorld/character/utils";
+import { getCharacter } from "@/lib/myWorld/character/registry";
 import { CharacterProvider, useCharacter } from "@/contexts/CharacterContext";
+import { DiaryProvider, useDiary } from "@/contexts/DiaryContext";
+import { buildCharacterSelectedEntry } from "@/lib/myWorld/diary/constants";
 import CottonCandy from "@/components/icons/CottonCandy";
 import BackgroundHero from "@/components/my-world/BackgroundHero";
 import CharacterCard from "@/components/my-world/CharacterCard";
 import CharacterSelectModal from "@/components/my-world/CharacterSelectModal";
 import RecentActivityCard from "@/components/my-world/RecentActivityCard";
-import AiDiaryCard from "@/components/my-world/AiDiaryCard";
+import DiaryCard from "@/components/my-world/DiaryCard";
 import MyRoomCard from "@/components/my-world/MyRoomCard";
 import CreationsCard from "@/components/my-world/CreationsCard";
 import AchievementsCard from "@/components/my-world/AchievementsCard";
@@ -47,11 +50,13 @@ function todaysHello(): string {
   return HELLOS[idx];
 }
 
-// Provider 로 감싸 useCharacter 사용.
+// Provider 로 감싸 useCharacter/useDiary 사용.
 export default function MyWorldPage() {
   return (
     <CharacterProvider>
-      <MyWorldContent />
+      <DiaryProvider>
+        <MyWorldContent />
+      </DiaryProvider>
     </CharacterProvider>
   );
 }
@@ -59,6 +64,7 @@ export default function MyWorldPage() {
 function MyWorldContent() {
   const { session, status } = useAuth();
   const { character, selectCharacter, saving } = useCharacter();
+  const { addEntry } = useDiary();
   const [nickname, setNickname] = useState("나");
   const [level, setLevel] = useState(1);
   const [tier, setTier] = useState(1);
@@ -95,7 +101,12 @@ function MyWorldContent() {
   const loggedIn = status === "authenticated";
   const rarity = RARITY_STYLE[character.rarity];
 
-  const handleSelect = (id: string) => { selectCharacter(id); setModalOpen(false); };
+  const handleSelect = (id: string) => {
+    // 실제 대표 캐릭터가 바뀔 때만 자동 기록(§5). 로그인 아니면 addEntry 내부에서 무시.
+    if (id !== character.id) addEntry(buildCharacterSelectedEntry(getCharacter(id)));
+    selectCharacter(id);
+    setModalOpen(false);
+  };
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 pb-16 pt-4 sm:pt-6">
@@ -153,7 +164,7 @@ function MyWorldContent() {
       {/* ── 카드 섹션 ── */}
       <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
         <div className="sm:col-span-2"><RecentActivityCard /></div>
-        <AiDiaryCard />
+        <div className="sm:col-span-2"><DiaryCard /></div>
         <MyRoomCard />
         <div className="sm:col-span-2"><CreationsCard /></div>
         <div className="sm:col-span-2"><AchievementsCard /></div>
