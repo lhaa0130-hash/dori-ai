@@ -53,6 +53,12 @@ service cloud.firestore {
         allow read:  if request.auth != null && request.auth.uid == userId;
         allow write: if false;
       }
+      //  · reward operation ledger(05-06F) — 서버(SA)만 기록. 클라이언트는 자기 것만 읽고 쓰지 못한다.
+      //    멱등 보상 원장이므로 클라 create/update/delete 를 전면 차단(위조·중복지급 방지).
+      match /rewardOperations/{operationId} {
+        allow read:  if request.auth != null && request.auth.uid == userId;
+        allow write: if false;
+      }
     }
 
     // 친구 요청 — 받는 사람이 읽기, 보내는 사람이 생성, 둘 다 삭제(수락/거절/취소)

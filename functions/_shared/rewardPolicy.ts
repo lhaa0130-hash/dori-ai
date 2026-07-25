@@ -3,7 +3,63 @@
 //   functions/ 아래 _ 접두 폴더라 CF Pages 가 라우트로 노출하지 않음(비라우트 모듈).
 
 export type RewardCurrency = "cottonCandy";
-export type RewardType = "daily_attendance";
+export type RewardType = "daily_attendance" | "my_world_interaction";
+
+// ── my_world_interaction: operationId 멱등 EXP 보상 (05-06F) ──────────────
+// 서버가 xp 표와 일일 상한을 소유한다(클라이언트는 kind + operationId 만 보낸다).
+// interaction 엔진 상수와 값이 같지만 **권위는 서버**다(클라 조작 무효).
+export type InteractionKind = "touch" | "pet" | "double_tap" | "long_press" | "greet" | "gift" | "sleep" | "room_item";
+export const MY_WORLD_INTERACTION_XP: Record<InteractionKind, number> = {
+  touch: 1, pet: 2, double_tap: 2, long_press: 3, greet: 2, gift: 5, sleep: 1, room_item: 2,
+};
+export const MY_WORLD_DAILY_EXP_CAP = 40;
+
+export function isInteractionKind(v: unknown): v is InteractionKind {
+  return typeof v === "string" && Object.prototype.hasOwnProperty.call(MY_WORLD_INTERACTION_XP, v);
+}
+
+/** operationId 형식: mwi_ 접두 + 8~120 안전문자. 클라이언트가 임의 남발해도 형식이 안 맞으면 거부. */
+const OP_ID_RE = /^mwi_[A-Za-z0-9_-]{8,120}$/;
+export function isValidOperationId(v: unknown): v is string {
+  return typeof v === "string" && OP_ID_RE.test(v);
+}
+
+/** 서버가 이번 operation 의 지급 EXP 를 계산(순수). 일일 상한 초과분은 0. */
+export function computeInteractionExp(kind: InteractionKind, dailyExpEarned: number): number {
+  const base = MY_WORLD_INTERACTION_XP[kind];
+  const earned = Number.isFinite(dailyExpEarned) && dailyExpEarned >= 0 ? Math.floor(dailyExpEarned) : 0;
+  return Math.max(0, Math.min(base, MY_WORLD_DAILY_EXP_CAP - earned));
+}
+
+/** 멱등 reward operation 적용(순수). ledger 에 operationId 가 있으면 이전 결과를 그대로 반환. */
+export interface RewardOperationInput {
+  operationId: string;
+  kind: InteractionKind;
+  serverExp: number;          // 서버의 현재 doriExp(권위)
+  dailyExpEarned: number;     // 서버 기준 오늘 적립 EXP
+  ledgerRecord: { awardedExp: number; resultingExp: number } | null; // 이미 처리됐다면 존재
+}
+export interface RewardOperationResult {
+  alreadyProcessed: boolean;
+  awardedExp: number;
+  resultingExp: number;
+  level: number;
+  tier: number;
+  newDailyExpEarned: number;
+}
+export function applyRewardOperation(input: RewardOperationInput): RewardOperationResult {
+  const serverExp = Number.isFinite(input.serverExp) && input.serverExp >= 0 ? Math.floor(input.serverExp) : 0;
+  // 멱등: 이미 처리된 operationId → 저장된 결과 반환(추가 지급 없음).
+  if (input.ledgerRecord) {
+    const resultingExp = Number.isFinite(input.ledgerRecord.resultingExp) ? input.ledgerRecord.resultingExp : serverExp;
+    const { level, tier } = levelTierFromExp(resultingExp);
+    return { alreadyProcessed: true, awardedExp: input.ledgerRecord.awardedExp, resultingExp, level, tier, newDailyExpEarned: input.dailyExpEarned };
+  }
+  const awardedExp = computeInteractionExp(input.kind, input.dailyExpEarned);
+  const resultingExp = serverExp + awardedExp;                 // ⚠️ 서버 값 기준(로컬 캐시 무시)
+  const { level, tier } = levelTierFromExp(resultingExp);
+  return { alreadyProcessed: false, awardedExp, resultingExp, level, tier, newDailyExpEarned: input.dailyExpEarned + awardedExp };
+}
 
 export interface RewardPolicy {
   type: RewardType; currency: RewardCurrency;
@@ -12,7 +68,8 @@ export interface RewardPolicy {
   cooldown: "daily"; idempotencyScope: "user-day"; timezone: "Asia/Seoul";
 }
 
-export const REWARD_POLICIES: Record<RewardType, RewardPolicy> = {
+// my_world_interaction 은 별도 정책(xp 표 + cap)이라 이 맵에 포함하지 않는다.
+export const REWARD_POLICIES: Record<"daily_attendance", RewardPolicy> = {
   daily_attendance: {
     type: "daily_attendance", currency: "cottonCandy",
     baseAmount: 50, xp: 5, streakBonusEvery: 7, streakBonusAmount: 200,
@@ -21,7 +78,26 @@ export const REWARD_POLICIES: Record<RewardType, RewardPolicy> = {
 };
 
 export function isKnownRewardType(v: unknown): v is RewardType {
-  return v === "daily_attendance";
+  return v === "daily_attendance" || v === "my_world_interaction";
+}
+
+/**
+ * my_world_interaction 요청 정제 — rewardType + operationId + kind 만 허용.
+ * amount/xp/uid/email/exp 등 권위 값은 '있으면 거부'(오용 신호). 서버가 xp·cap 을 결정한다.
+ */
+export function sanitizeInteractionRewardRequest(
+  body: unknown,
+): { ok: true; operationId: string; kind: InteractionKind } | { ok: false; error: string } {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return { ok: false, error: "invalid_request" };
+  const b = body as Record<string, unknown>;
+  const forbidden = ["amount", "xp", "doriExp", "exp", "uid", "email", "level", "tier", "balance", "affinity", "cottonCandy"];
+  for (const k of forbidden) if (k in b) return { ok: false, error: `forbidden_field:${k}` };
+  const allowed = new Set(["rewardType", "idToken", "operationId", "kind"]);
+  for (const k of Object.keys(b)) if (!allowed.has(k)) return { ok: false, error: `unexpected_field:${k}` };
+  if (b.rewardType !== "my_world_interaction") return { ok: false, error: "unknown_reward_type" };
+  if (!isValidOperationId(b.operationId)) return { ok: false, error: "invalid_operation_id" };
+  if (!isInteractionKind(b.kind)) return { ok: false, error: "invalid_kind" };
+  return { ok: true, operationId: b.operationId, kind: b.kind };
 }
 
 /** 서버 시간(now)에서 KST 'YYYY-MM-DD'. now 주입으로 자정 경계 테스트 가능. */
