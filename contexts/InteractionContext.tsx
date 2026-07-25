@@ -13,6 +13,7 @@ import { publishInteraction } from "@/lib/myWorld/interaction/events";
 import { enqueueAnimationCommand } from "@/lib/myWorld/interaction/animation";
 import { evaluateDiaryTrigger } from "@/lib/myWorld/interaction/diaryTrigger";
 import { canLoadRemote, canPersistFor, resolveMyWorldIdentity } from "@/lib/myWorld/identity";
+import { createAuthenticatedScope } from "@/lib/myWorld/storageScope";
 import {
   TRANSIENT_EMOTION_MS,
   idleHungerEmotion,
@@ -305,16 +306,22 @@ export function InteractionProvider({ children }: { children: ReactNode }) {
 
     if (event.affinityDelta > 0) notify({ emoji: "💗", label: `친밀도 +${event.affinityDelta}`, tone: "affinity" });
     if (event.expDelta > 0) {
-      const email = session?.user?.email;
-      if (email) {
-        // 로그인 사용자만 실제 EXP 적립 + 적립 알림.
+      // EXP 적립도 Identity Gate 로 판정한다. uid·email 을 **같은 currentUser** 에서 원자적으로 얻어
+      // account switch/guest/판정중에 다른 계정으로 적립되는 것을 막는다(세션 이메일 클로저에 의존하지 않음).
+      let cu: { uid: string; email: string | null } | null = null;
+      try { const c = getFirebaseAuth().currentUser; if (c) cu = { uid: c.uid, email: c.email }; } catch { /* noop */ }
+      const scope = createAuthenticatedScope(identityRef.current, cu);
+      if (scope && scope.legacyEmail) {
+        // ⚠️ EXP 캐시는 게임 전체가 공유하는 email-namespaced 캐시라 이번 단계에서 UID 로 옮기지 않는다(범위 밖).
+        //    다만 email 은 현재 ready 사용자의 currentUser.email 이라 uid 와 항상 동일 계정을 가리킨다.
         notify({ emoji: "✨", label: `EXP +${event.expDelta}`, tone: "exp" });
-        addExp(email, event.expDelta, `My World ${event.type}`);
-      } else if (!guestNoticeShown.current) {
-        // 비로그인: 적립되지 않으므로 EXP 알림 대신 1회만 안내(매번 반복하지 않음).
+        addExp(scope.legacyEmail, event.expDelta, `My World ${event.type}`);
+      } else if (identityRef.current.status === "guest" && !guestNoticeShown.current) {
+        // 진짜 게스트일 때만 1회 안내(loading/mismatch 에서는 반복 안내하지 않음).
         guestNoticeShown.current = true;
         notify({ emoji: "🔒", label: "로그인하면 친밀도와 EXP가 저장돼요", tone: "info" });
       }
+      // ready 인데 email 없음/uid 불일치이면 조용히 적립 생략(잘못된 계정 적립 방지).
     }
     if (result.reason === "daily_limit") notify({ emoji: "🌙", label: "오늘의 친밀도·EXP 보상을 모두 받았어요", tone: "info" });
 
