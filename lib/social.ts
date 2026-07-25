@@ -23,6 +23,7 @@ import {
 import { getFirebaseFirestore, getFirebaseAuth, getFirebaseStorage } from "@/lib/firebase";
 import { ref as storageRef, deleteObject } from "firebase/storage";
 import { isReservedHandle } from "@/lib/reservedHandles";
+import { reportSocialWriteFailure } from "@/lib/socialWriteErrors";
 
 /** 핸들 정규화 — 앞의 @ 제거 + 공백 제거 + 소문자. 사용자가 "@dori"로 입력해도 "dori"로 취급. */
 export function normalizeHandle(raw: string): string {
@@ -925,11 +926,18 @@ export async function addPost(name: string, text: string, opts: NewPostOpts = {}
       const sp = ownStoragePathOrNull(uid, opts.storagePath);
       if (sp) data.storagePath = sp;
     }
-    await addDoc(collection(db(), "feed"), data);
+    const ref = await addDoc(collection(db(), "feed"), data);
     bustCache("feed:");
     if (uid) bustCache(`counts:${uid}`);
+    // 경험치(글 작성) — 서버 권위 청구. ⚠️ 저장이 성공한 뒤에만 청구한다(실패 시 청구 0회).
+    //   sourceId=feed 문서 id 로 서버가 존재·작성자 UID 일치를 검증한다.
+    void import("./gameReward").then((m) => m.submitGameReward("community_post", { sourceId: ref.id })).catch(() => {});
     return true;
-  } catch { return false; }
+  } catch (e) {
+    // ⚠️ 예전엔 원인을 통째로 삼켰다(catch { return false }). 이제 안전한 code/분류만 남긴다.
+    reportSocialWriteFailure("addPost", e);
+    return false;
+  }
 }
 
 /** 하드삭제(문서 제거) — 관리자/정리용. 일반 사용자 UI 는 softDeletePost 사용(04-4). */
@@ -1387,7 +1395,17 @@ export async function addComment(postId: string, postOwnerUid: string, name: str
     createdAt: serverTimestamp(),
   });
   batch.update(postRef, { commentCount: increment(1) });
-  await batch.commit(); // 실패하면 댓글·count 모두 반영되지 않는다
+  // 실패하면 댓글·count 모두 반영되지 않는다. 원인은 안전한 code 로 남기고 그대로 throw(호출부가 UI 처리).
+  try {
+    await batch.commit();
+  } catch (e) {
+    reportSocialWriteFailure("addComment", e);
+    throw e;
+  }
+
+  // 경험치(댓글) — 서버 권위 청구. ⚠️ 커밋 성공 후에만 청구한다(실패 시 청구 0회).
+  //   sourceId={postId}__{commentId} 로 서버가 feed 소스 존재·소유를 검증한다.
+  void import("./gameReward").then((m) => m.submitGameReward("community_comment", { sourceId: `${postId}__${commentRef.id}` })).catch(() => {});
 
   // 알림은 댓글 저장의 성립 조건이 아니다(실패해도 댓글은 유효) → 원자 커밋 밖에서 부가 처리
   notify(postOwnerUid, { type: "comment", fromName: name, text: "회원님 글에 댓글을 남겼어요.", link: "/feed" });

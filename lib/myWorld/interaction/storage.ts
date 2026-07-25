@@ -148,23 +148,37 @@ export function buildInteractionMergePayload(state: InteractionState, updatedAt:
   return { myWorld: { interaction: { ...serializeInteractionState(state), updatedAt } } };
 }
 
+/** 큐 원문 스냅샷(compare-and-delete 지문). 정규화된 직렬화라 같은 논리 상태 = 같은 문자열. */
+function queueSnapshot(storage: KeyValueStorage | null, uid: string): string | null {
+  if (!storage) return null;
+  try { return storage.getItem(queueKey(uid)); } catch { return null; }
+}
+
 /**
- * 큐에 남은 상태를 전송한다. 성공하면 큐를 비우고, 실패하면 **큐를 유지**해 다음 기회에 재시도한다.
- * persist 를 주입받으므로 Firestore 없이도 성공·실패 경로를 검증할 수 있다.
+ * 큐에 남은 상태를 전송한다. 성공 시 **전송 당시 스냅샷과 큐가 동일할 때만** 삭제한다(compare-and-delete).
+ *  → 전송 중 새 interaction 이 큐에 기록되면(지문 불일치) 큐를 지우지 않아 유실을 막는다(§12 race).
+ *  실패 시 큐를 유지해 재시도한다. persist 주입으로 Firestore 없이 검증 가능.
  */
 export async function flushQueuedState(
   storage: KeyValueStorage | null,
   uid: string,
   persist: (state: InteractionState) => Promise<unknown>,
-): Promise<{ flushed: InteractionState | null; kept: boolean }> {
-  const queued = readQueuedState(storage, uid);
-  if (!queued) return { flushed: null, kept: false };
+): Promise<{ flushed: InteractionState | null; kept: boolean; superseded: boolean }> {
+  const snapshot = queueSnapshot(storage, uid);
+  const queued = snapshot ? readState(storage, queueKey(uid), Date.now()) : null;
+  if (!queued) return { flushed: null, kept: false, superseded: false };
   try {
     await persist(queued);
-    clearQueuedState(storage, uid);
-    return { flushed: queued, kept: false };
+    // 전송 중 큐가 바뀌었는지(더 최신 interaction 적재) 확인.
+    const now = queueSnapshot(storage, uid);
+    if (now === snapshot) {
+      clearQueuedState(storage, uid);
+      return { flushed: queued, kept: false, superseded: false };
+    }
+    // 지문 불일치: 더 최신 큐가 있으므로 삭제하지 않는다. 다음 flush 가 이어서 처리.
+    return { flushed: queued, kept: true, superseded: true };
   } catch {
-    return { flushed: null, kept: true }; // 큐 유지 → 재시도 가능
+    return { flushed: null, kept: true, superseded: false }; // 큐 유지 → 재시도 가능
   }
 }
 

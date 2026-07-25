@@ -714,6 +714,7 @@ export default function FeedPage() {
               onChange={(e) => { setText(e.target.value); if (postError) setPostError(""); }}
               placeholder={t.composerPlaceholder}
               aria-label={t.composerLabel}
+              data-testid="feed-post-editor"
               rows={3}
               maxLength={POST_MAX_LEN}
               className="w-full resize-none bg-transparent text-sm text-stone-900 dark:text-stone-100 placeholder:text-stone-400 dark:placeholder:text-stone-600 outline-none"
@@ -847,6 +848,7 @@ export default function FeedPage() {
                 <button
                   type="button"
                   onClick={handlePost}
+                  data-testid="feed-post-submit"
                   disabled={!canPost}
                   className="bg-[#F9954E] text-white text-sm font-semibold rounded-full px-5 py-2 active:opacity-85 disabled:opacity-40 transition"
                 >
@@ -1158,12 +1160,14 @@ export default function FeedPage() {
                                   }
                                 }}
                                 placeholder={t.commentPlaceholder}
+                                data-testid="feed-comment-input"
                                 maxLength={500}
                                 className="flex-1 min-w-0 rounded-full bg-stone-100 dark:bg-zinc-900 px-4 py-2 text-sm text-stone-900 dark:text-stone-100 placeholder:text-stone-400 dark:placeholder:text-stone-600 outline-none"
                               />
                               <button
                                 type="button"
                                 onClick={() => handleAddComment(post)}
+                                data-testid="feed-comment-submit"
                                 disabled={!getCState(post.id).draft.trim() || getCState(post.id).submitting}
                                 className="bg-[#F9954E] text-white text-sm font-semibold rounded-full px-4 py-2 active:opacity-85 disabled:opacity-40 transition flex-shrink-0"
                               >

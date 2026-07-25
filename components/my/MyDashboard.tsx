@@ -14,7 +14,6 @@ import { watchNotifications } from "@/lib/social";
 import {
   getCottonCandyBalance,
   getCachedGameProfile,
-  ensureExpAtLeast,
   getTodayEarned,
   getMonthEarned,
   getCottonCandyHistory,
@@ -432,8 +431,8 @@ export default function MyDashboard() {
       const gp = getCachedGameProfile(user.email);
       const finalDoriExp = Math.max(profile.doriExp || 0, doriExp, gp?.doriExp || 0);
 
-      // 활동 기반 경험치를 전역(헤더·Firestore)에도 백필 — 마이페이지/헤더 수치 일치
-      ensureExpAtLeast(user.email, finalDoriExp);
+      // ⚠️ P0(05-06H): 클라이언트가 계산한 절대 EXP 를 서버에 백필하지 않는다(조작 표면 제거).
+      //   헤더 EXP 는 서버 권위 청구 결과(hydrateGameData)만 반영한다. 여기서는 마이페이지 로컬 표시만 유지.
 
       // 레벨 및 등급 자동 계산 (경험치 기반, raw exp 일관 사용)
       const newTier = calculateTier(finalDoriExp);
@@ -705,6 +704,7 @@ export default function MyDashboard() {
             ].map((tab) => (
               <button
                 key={tab.id}
+                data-testid={`dashboard-tab-${tab.id}`}
                 onClick={() => setActiveTab(tab.id)}
                 className={`relative pb-3 text-sm font-bold transition-all ${activeTab === tab.id
                   ? "text-[#F9954E]"
@@ -758,6 +758,7 @@ export default function MyDashboard() {
                           <span className="text-[#F9954E] text-xs font-extrabold flex items-center gap-1">{t.doneBadge}</span>
                         ) : (
                           <button
+                            data-testid={`mission-action-${mission.id}`}
                             onClick={() => {
                               if (mission.id === "attendance") {
                                 handleAttendance();
