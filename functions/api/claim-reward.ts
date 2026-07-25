@@ -12,8 +12,8 @@ import {
   todayKST, claimIdFor, computeAttendanceReward, levelTierFromExp, parseAllowlist,
 } from "../_shared/rewardPolicy";
 import {
-  isExtendedRewardType, sanitizeExtendedRewardRequest, computeExtendedExp,
-  type ExtendedRewardPolicy,
+  isExtendedRewardType, sanitizeExtendedRewardRequest, computeExtendedExp, computeExtendedCandy,
+  levelFromSource, type ExtendedRewardPolicy,
 } from "../_shared/rewardTypes";
 import { getAccessToken } from "../_shared/googleAuth";
 import {
@@ -261,6 +261,7 @@ async function runExtendedReward(
   const opRel = `users/${uid}/rewardOperations/${intent.operationId}`;
   const dateField = `rewardTypeDate_${rt}`;
   const expField = `rewardTypeExp_${rt}`;
+  const candyField = `rewardTypeCandy_${rt}`;   // 05-07: 타입별 일일 솜사탕 집계(EXP 와 독립)
   const nowIso = new Date().toISOString();
 
   // community 타입: 검증할 feed 소스 문서 경로. 형식 불량이면 즉시 거부(무결한 sourceId 만 통과).
@@ -283,7 +284,8 @@ async function runExtendedReward(
       if (op.exists) {
         await rollback(target, token, tx);
         const of = op.fields as Record<string, any>;
-        return J({ ok: true, duplicate: true, rewardType: rt, awardedExp: Number(of?.awardedExp) || 0, doriExp: Number(of?.resultingExp) || 0, level: Number(of?.resultingLevel) || 0, tier: of?.resultingTier });
+        return J({ ok: true, duplicate: true, rewardType: rt, awardedExp: Number(of?.awardedExp) || 0, doriExp: Number(of?.resultingExp) || 0, level: Number(of?.resultingLevel) || 0, tier: of?.resultingTier,
+          awardedCandy: 0, cottonCandy: Number((user.fields as Record<string, any>)?.cottonCandy) || 0 });
       }
 
       // ── Community 소유권 검증: feed 소스가 실제 존재 + 작성자 UID == 토큰 UID ──
@@ -296,19 +298,51 @@ async function runExtendedReward(
 
       const u = user.fields as Record<string, any>;
       const serverExp = typeof u.doriExp === "number" && u.doriExp >= 0 ? Math.floor(u.doriExp) : 0;
+
+      // ── 레벨 보상 검증: 클라이언트 주장이 아니라 **서버 EXP 로 재계산한 레벨**로 판정한다.
+      if (rt === "level_reward") {
+        const wanted = levelFromSource(intent.sourceId);
+        if (wanted === null) { await rollback(target, token, tx); return J({ ok: false, error: "invalid_source" }, 400); }
+        if (levelTierFromExp(serverExp).level < wanted) {
+          await rollback(target, token, tx);
+          return J({ ok: false, error: "level_not_reached" }, 403);
+        }
+      }
+
       const typeEarned = u[dateField] === today && typeof u[expField] === "number" && u[expField] >= 0 ? Math.floor(u[expField]) : 0;
       const award = computeExtendedExp(intent.policy, typeEarned);
       const resultingExp = serverExp + award;
       const { level, tier } = levelTierFromExp(resultingExp);
       const newTypeEarned = typeEarned + award;
 
+      // ── 솜사탕(재화) — 05-07. 금액은 서버 정책표만 사용하고, 타입별 일일 상한을 별도 집계한다.
+      //    날짜 필드는 EXP 와 공유하므로 날짜가 바뀌면 두 집계가 함께 리셋된다.
+      const sameDay = u[dateField] === today;
+      const typeCandy = sameDay && typeof u[candyField] === "number" && u[candyField] >= 0 ? Math.floor(u[candyField]) : 0;
+      const candyAward = computeExtendedCandy(intent.policy, typeCandy, intent.sourceId);
+      const serverCandy = typeof u.cottonCandy === "number" && u.cottonCandy >= 0 ? Math.floor(u.cottonCandy) : 0;
+      const serverCandyTotal = typeof u.cottonCandyTotal === "number" && u.cottonCandyTotal >= 0 ? Math.floor(u.cottonCandyTotal) : 0;
+      const resultingCandy = serverCandy + candyAward;
+      const newTypeCandy = typeCandy + candyAward;
+
+      const userMask = ["doriExp", "level", "tier", dateField, expField];
+      const userFields: Record<string, any> = { doriExp: resultingExp, level, tier, [dateField]: today, [expField]: newTypeEarned };
+      if (candyAward > 0 || newTypeCandy !== typeCandy || !sameDay) {
+        userMask.push(candyField);
+        userFields[candyField] = newTypeCandy;
+      }
+      if (candyAward > 0) {
+        userMask.push("cottonCandy", "cottonCandyTotal");
+        userFields.cottonCandy = resultingCandy;
+        userFields.cottonCandyTotal = serverCandyTotal + candyAward;
+      }
+
       await commit(target, token, tx, [
         { rel: opRel, requireNotExists: true,
-          fields: { uid, rewardType: rt, ...(intent.sourceId ? { sourceId: intent.sourceId } : {}), awardedExp: award, resultingExp, resultingLevel: level, resultingTier: tier, createdAt: nowIso, schemaVersion: 1 } },
-        { rel: userRel, updateMask: ["doriExp", "level", "tier", dateField, expField],
-          fields: { doriExp: resultingExp, level, tier, [dateField]: today, [expField]: newTypeEarned } },
+          fields: { uid, rewardType: rt, ...(intent.sourceId ? { sourceId: intent.sourceId } : {}), awardedExp: award, resultingExp, resultingLevel: level, resultingTier: tier, awardedCandy: candyAward, resultingCandy, createdAt: nowIso, schemaVersion: 2 } },
+        { rel: userRel, updateMask: userMask, fields: userFields },
       ]);
-      return J({ ok: true, duplicate: false, rewardType: rt, awardedExp: award, doriExp: resultingExp, level, tier });
+      return J({ ok: true, duplicate: false, rewardType: rt, awardedExp: award, doriExp: resultingExp, level, tier, awardedCandy: candyAward, cottonCandy: resultingCandy });
     } catch (e: any) {
       await rollback(target, token, tx);
       if (e?.code === "firestore_forbidden") return J({ ok: false, error: "internal_error", detail: "firestore_permission" }, 500);

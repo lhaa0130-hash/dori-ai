@@ -47,24 +47,13 @@ function currentUid(): string | null {
   }
 }
 
-function fsAddCandy(amount: number) {
-  const uid = currentUid();
-  if (!uid || amount === 0) return;
-  try {
-    const db = getFirebaseFirestore();
-    setDoc(
-      doc(db, "users", uid),
-      {
-        cottonCandy: increment(amount),
-        ...(amount > 0 ? { cottonCandyTotal: increment(amount) } : {}),
-        lastActiveAt: serverTimestamp(),
-      },
-      { merge: true }
-    ).catch(() => {});
-  } catch {
-    /* noop */
-  }
-}
+// ⚠️ P0 보안(05-07): 클라이언트에서 cottonCandy/cottonCandyTotal 을 Firestore 에 쓰던 fsAddCandy 는 제거됐다.
+//   localStorage 게이트만 통과하면 임의 금액을 increment 할 수 있어 무한 지급이 가능했다(=P0).
+//   이제 재화 증감은 전부 서버 권위 경로만 사용한다:
+//     · 적립 → POST /api/claim-reward (금액·상한·멱등을 서버가 소유, lib/gameReward.ts)
+//     · 차감 → POST /api/purchase     (가격·프리미엄·보유판정을 서버가 소유, lib/shopClient.ts)
+//   아래 로컬 함수들은 '표시 캐시'만 갱신한다. Firestore Rules 도 cottonCandy 변경을 차단한다.
+//   (레거시 라이터가 재등장하면 tests/candy-cutover-guard.test.ts 가 실패한다.)
 
 function fsSetAttendance(att: AttendanceData) {
   const uid = currentUid();
@@ -82,146 +71,56 @@ function fsSetAttendance(att: AttendanceData) {
 }
 
 // ─── 관리자 전용: 다른 회원에게 솜사탕 지급 / 프리미엄 설정 ──────────
-// 대상 회원의 Firestore users/{uid} 문서에 직접 반영(진짜 저장소).
-// firestore.rules 에서 관리자 이메일만 타인 문서 쓰기를 허용해야 동작합니다.
-// 대상 유저는 다음 접속 시 hydrateGameData 가 Firestore→로컬 캐시로 동기화합니다.
+// ⚠️ P0(05-07): 클라이언트에서 대상 users 문서를 직접 쓰던 경로와, 실패 시
+//    notifications / visits 에 '지급 예약'을 남기고 대상이 스스로 본인 문서에 반영하던 경로를
+//    **전부 제거**했다. visits 는 방문 카운터라 규칙이 공개돼 있어, 누구나 자기 visits 문서에
+//    pendingCandy / pendingPremium 을 써서 무한 재화 + 프리미엄을 얻을 수 있었다(=P0).
+//    이제 관리자 지급은 서버가 관리자임을 확인하고 서버가 반영한다(POST /api/admin/grant).
 export type GrantResult = { mode: "instant" | "queued" | "fail"; error?: string };
-function errStr(e: unknown): string {
-  const any = e as { code?: string; message?: string };
-  return any?.code || any?.message || "알 수 없는 오류";
+
+async function adminIdToken(): Promise<string | null> {
+  try { return (await getFirebaseAuth().currentUser?.getIdToken()) ?? null; } catch { return null; }
 }
 
-// 여러 통로로 시도: ①대상 user 문서 직접(본인/관리자규칙) ②대상 알림에 예약 ③방문집계(visits, 규칙 공개) 예약
+/** 지급 요청마다 안정적인 operationId — 재시도해도 이중 지급되지 않는다. */
+function grantOperationId(): string {
+  const rnd = typeof crypto !== "undefined" && crypto.randomUUID
+    ? crypto.randomUUID().replace(/-/g, "")
+    : Math.random().toString(36).slice(2) + Date.now().toString(36);
+  return `grant_${rnd}`.slice(0, 86);
+}
+
+async function callAdminGrant(payload: Record<string, unknown>): Promise<GrantResult> {
+  const t = await adminIdToken();
+  if (!t) return { mode: "fail", error: "로그인이 필요합니다." };
+  try {
+    const res = await fetch("/api/admin/grant", {
+      method: "POST",
+      headers: { "Content-Type": "application/json", Authorization: `Bearer ${t}` },
+      body: JSON.stringify({ operationId: grantOperationId(), ...payload }),
+    });
+    const json: any = await res.json().catch(() => null);
+    if (res.status === 200 && json?.ok) return { mode: "instant" };
+    if (res.status === 403) return { mode: "fail", error: "관리자 권한이 없습니다." };
+    if (res.status === 401) return { mode: "fail", error: "인증이 만료됐습니다. 다시 로그인해 주세요." };
+    return { mode: "fail", error: String(json?.detail || json?.error || `http_${res.status}`) };
+  } catch {
+    return { mode: "fail", error: "network" };
+  }
+}
+
 export async function adminGrantCandy(
   targetUid: string,
   amount: number,
-  fromName = "관리자"
+  _fromName = "관리자"
 ): Promise<GrantResult> {
   if (!targetUid || !amount) return { mode: "fail", error: "대상/금액 오류" };
-  const db = getFirebaseFirestore();
-  let lastErr = "";
-
-  // 1) 직접 반영(본인 문서이거나 관리자 규칙이 게시된 경우)
-  try {
-    await setDoc(
-      doc(db, "users", targetUid),
-      { cottonCandy: increment(amount), ...(amount > 0 ? { cottonCandyTotal: increment(amount) } : {}), lastActiveAt: serverTimestamp() },
-      { merge: true }
-    );
-    return { mode: "instant" };
-  } catch (e) { lastErr = errStr(e); }
-
-  // 2) 알림으로 지급 예약(알림 생성 규칙이 게시돼 있으면 동작)
-  try {
-    await addDoc(collection(db, "notifications", targetUid, "items"), {
-      type: "candy_grant", amount, applied: false,
-      fromName: (fromName || "관리자").slice(0, 20),
-      text: `관리자가 솜사탕 ${amount.toLocaleString()}개를 지급했어요 🍭`,
-      link: "/my", read: false, createdAt: serverTimestamp(),
-    });
-    return { mode: "queued" };
-  } catch (e) { lastErr = errStr(e); }
-
-  // 3) 최후 폴백: visits 컬렉션(방문수 카운터가 실제 동작 → 규칙 공개 확인됨)에 예약 적립
-  try {
-    await setDoc(doc(db, "visits", targetUid), { pendingCandy: increment(amount) }, { merge: true });
-    return { mode: "queued" };
-  } catch (e) { lastErr = errStr(e); }
-
-  console.warn("[admin] 솜사탕 지급 실패:", lastErr);
-  return { mode: "fail", error: lastErr };
-}
-
-/**
- * 로그인/하이드레이트 시: 나에게 온 '솜사탕 지급 예약'을 본인 잔액에 적용.
- * 본인 문서 쓰기는 항상 허용되므로 규칙 변경 없이 동작. applied=true 로 중복 방지.
- */
-export async function applyPendingCandyGrants(): Promise<void> {
-  if (typeof window === "undefined") return;
-  let user;
-  try { user = getFirebaseAuth().currentUser; } catch { return; }
-  if (!user || !user.email) return;
-  const uid = user.uid;
-  const email = user.email;
-  try {
-    const db = getFirebaseFirestore();
-    const snap = await getDocs(query(collection(db, "notifications", uid, "items"), orderBy("createdAt", "desc"), limit(50)));
-    const candy: { id: string; amount: number }[] = [];
-    const premiumGrants: { id: string; premium: boolean }[] = [];
-    snap.forEach((d) => {
-      const x = d.data() as Record<string, unknown>;
-      if (x.applied === true) return;
-      if (x.type === "candy_grant") {
-        const amt = Number(x.amount) || 0;
-        if (amt > 0) candy.push({ id: d.id, amount: amt });
-      } else if (x.type === "premium_grant") {
-        premiumGrants.push({ id: d.id, premium: x.premium === true });
-      }
-    });
-    // visits 폴백 통로의 예약도 함께 적용(방문집계 컬렉션 — 규칙 공개)
-    let visitsCandy = 0;
-    let visitsPremium: boolean | undefined;
-    try {
-      const vsnap = await getDoc(doc(db, "visits", uid));
-      const v = vsnap.data() as Record<string, unknown> | undefined;
-      visitsCandy = Number(v?.pendingCandy) || 0;
-      if (typeof v?.pendingPremium === "boolean") visitsPremium = v.pendingPremium as boolean;
-    } catch { /* noop */ }
-
-    if (candy.length === 0 && premiumGrants.length === 0 && visitsCandy <= 0 && visitsPremium === undefined) return;
-
-    const total = candy.reduce((s, p) => s + p.amount, 0) + (visitsCandy > 0 ? visitsCandy : 0);
-    const userPatch: Record<string, unknown> = { lastActiveAt: serverTimestamp() };
-    if (total > 0) { userPatch.cottonCandy = increment(total); userPatch.cottonCandyTotal = increment(total); }
-    // 프리미엄은 가장 최근 예약값 적용(목록은 createdAt desc 정렬이라 첫 항목이 최신)
-    if (premiumGrants.length > 0) userPatch.isPremium = premiumGrants[0].premium;
-    else if (visitsPremium !== undefined) userPatch.isPremium = visitsPremium;
-
-    // 본인 문서에 반영(소유자 쓰기 — 항상 허용)
-    await setDoc(doc(db, "users", uid), userPatch, { merge: true });
-    // 알림 예약 applied 처리(중복 적용 방지)
-    const allIds = [...candy.map((c) => c.id), ...premiumGrants.map((p) => p.id)];
-    await Promise.all(allIds.map((id) => updateDoc(doc(db, "notifications", uid, "items", id), { applied: true, read: true }).catch(() => {})));
-    // visits 예약 차감/해제(중복 적용 방지)
-    if (visitsCandy > 0 || visitsPremium !== undefined) {
-      const vPatch: Record<string, unknown> = {};
-      if (visitsCandy > 0) vPatch.pendingCandy = increment(-visitsCandy);
-      if (visitsPremium !== undefined) vPatch.pendingPremium = null;
-      await setDoc(doc(db, "visits", uid), vPatch, { merge: true }).catch(() => {});
-    }
-    // 로컬 캐시 동기화
-    if (total > 0) {
-      localStorage.setItem(CC_KEY(email), String(getCottonCandyBalance(email) + total));
-      localStorage.setItem(CC_TOTAL_KEY(email), String(getCottonCandyTotal(email) + total));
-    }
-    window.dispatchEvent(new Event("dori-gamedata-synced"));
-  } catch (e) {
-    console.warn("[candy] 지급 예약 적용 실패:", e);
-  }
+  return await callAdminGrant({ targetUid, candy: amount });
 }
 
 export async function adminSetPremium(targetUid: string, isPremium: boolean): Promise<GrantResult> {
   if (!targetUid) return { mode: "fail", error: "대상 오류" };
-  const db = getFirebaseFirestore();
-  let lastErr = "";
-  try {
-    await setDoc(doc(db, "users", targetUid), { isPremium, lastActiveAt: serverTimestamp() }, { merge: true });
-    return { mode: "instant" };
-  } catch (e) { lastErr = errStr(e); }
-  try {
-    await addDoc(collection(db, "notifications", targetUid, "items"), {
-      type: "premium_grant", premium: isPremium, applied: false, fromName: "관리자",
-      text: isPremium ? "관리자가 프리미엄을 적용했어요 💎" : "프리미엄이 해제되었어요",
-      link: "/my", read: false, createdAt: serverTimestamp(),
-    });
-    return { mode: "queued" };
-  } catch (e) { lastErr = errStr(e); }
-  try {
-    await setDoc(doc(db, "visits", targetUid), { pendingPremium: isPremium }, { merge: true });
-    return { mode: "queued" };
-  } catch (e) { lastErr = errStr(e); }
-  console.warn("[admin] 프리미엄 설정 실패:", lastErr);
-  return { mode: "fail", error: lastErr };
+  return await callAdminGrant({ targetUid, isPremium });
 }
 
 /**
@@ -245,19 +144,14 @@ export async function hydrateGameData(): Promise<void> {
     if (!snap.exists()) return;
     const d: any = snap.data();
 
-    // ── 솜사탕 잔액: 로컬이 더 크면 (방금 출석 등 써서 아직 Firestore에 반영 전) 덮어쓰지 않음
+    // ── 솜사탕 잔액: **서버 값을 그대로 채택**한다(05-07).
+    //   예전엔 `Firestore >= 로컬일 때만` 반영해서, 로컬을 999999 로 조작하면 영원히 서버 값으로
+    //   내려오지 않았다(=표시 위조 + 상점 잔액판정 오염). EXP 와 동일하게 서버가 단일 원본이다.
     if (typeof d.cottonCandy === "number") {
-      const localCandy = getCottonCandyBalance(email);
-      // Firestore 값이 더 크거나 로컬에 없을 때만 업데이트 (race condition 방지)
-      if (d.cottonCandy >= localCandy) {
-        localStorage.setItem(CC_KEY(email), String(d.cottonCandy));
-      }
+      localStorage.setItem(CC_KEY(email), String(Math.max(0, Math.floor(d.cottonCandy))));
     }
     if (typeof d.cottonCandyTotal === "number") {
-      const localTotal = getCottonCandyTotal(email);
-      if (d.cottonCandyTotal >= localTotal) {
-        localStorage.setItem(CC_TOTAL_KEY(email), String(d.cottonCandyTotal));
-      }
+      localStorage.setItem(CC_TOTAL_KEY(email), String(Math.max(0, Math.floor(d.cottonCandyTotal))));
     }
     // ── 코지홈 아이템 보유 목록: Firestore 값과 로컬 캐시를 합집합(둘 다 보존)
     if (Array.isArray(d.ownedItems)) {
@@ -285,7 +179,7 @@ export async function hydrateGameData(): Promise<void> {
     localStorage.setItem(
       GAME_PROFILE_KEY(email),
       JSON.stringify({
-        cottonCandy: Math.max(d.cottonCandy || 0, localProfile?.cottonCandy || 0),
+        cottonCandy: Math.max(0, Math.floor(d.cottonCandy || 0)),   // 05-07: 서버 값 채택(로컬 max 금지)
         doriExp: finalExp,
         tier: calculateTier(finalExp),
         level: calculateLevel(finalExp),
@@ -297,9 +191,9 @@ export async function hydrateGameData(): Promise<void> {
     );
 
     window.dispatchEvent(new Event("dori-gamedata-synced"));
-
-    // 관리자가 보낸 '솜사탕 지급 예약'을 본인 잔액에 자동 반영(규칙 변경 불필요)
-    void applyPendingCandyGrants();
+    // ⚠️ 05-07: '지급 예약 자동 반영'(applyPendingCandyGrants) 제거.
+    //    관리자 지급은 서버(POST /api/admin/grant)가 대상 문서에 직접 반영하므로,
+    //    다음 hydrate 에서 자연히 내려온다. 클라이언트가 자기 잔액을 올릴 통로는 남기지 않는다.
   } catch (e) {
     console.warn("[cottonCandy] hydrate fail:", e);
   }
@@ -341,20 +235,26 @@ export function getDoriExp(email: string): number {
  *  · Firestore 재조회(hydrate)는 방금 커밋과 경합할 수 있어 표시가 늦는다. 응답으로 즉시 교정한다.
  *  · 조작된 캐시(예: 999999)도 이 경로에서 서버 값으로 내려간다.
  */
-export function applyServerRewardResult(result: { doriExp?: number; level?: number; tier?: number }): void {
+export function applyServerRewardResult(result: { doriExp?: number; level?: number; tier?: number; cottonCandy?: number }): void {
   if (typeof window === "undefined") return;
   const exp = typeof result?.doriExp === "number" && result.doriExp >= 0 ? Math.floor(result.doriExp) : null;
-  if (exp === null) return;
+  // 05-07: 솜사탕도 서버 응답 값을 그대로 채택한다(클라 계산·낙관적 증가 없음).
+  const candy = typeof result?.cottonCandy === "number" && result.cottonCandy >= 0 ? Math.floor(result.cottonCandy) : null;
+  if (exp === null && candy === null) return;
   try {
     const email = getFirebaseAuth().currentUser?.email;
     if (!email) return;
     const cur = getCachedGameProfile(email) || { cottonCandy: 0, doriExp: 0, tier: 1, level: 1 };
-    const next = {
-      ...cur,
-      doriExp: exp,
-      tier: typeof result.tier === "number" ? result.tier : calculateTier(exp),
-      level: typeof result.level === "number" ? result.level : calculateLevel(exp),
-    };
+    const next = { ...cur };
+    if (exp !== null) {
+      next.doriExp = exp;
+      next.tier = typeof result.tier === "number" ? result.tier : calculateTier(exp);
+      next.level = typeof result.level === "number" ? result.level : calculateLevel(exp);
+    }
+    if (candy !== null) {
+      next.cottonCandy = candy;
+      localStorage.setItem(CC_KEY(email), String(candy));
+    }
     localStorage.setItem(GAME_PROFILE_KEY(email), JSON.stringify(next));
     window.dispatchEvent(new Event("dori-gamedata-synced"));
   } catch { /* noop */ }
@@ -395,39 +295,26 @@ export function getCottonCandyTotal(email: string): number {
   }
 }
 
-/** 솜사탕 지급. 업데이트된 잔액 반환 */
-export function addCottonCandy(email: string, amount: number, reason: string): number {
-  if (typeof window === "undefined") return 0;
-  if (amount <= 0) return getCottonCandyBalance(email);
-
+/**
+ * 서버가 확정한 지급을 **내역/오늘 획득량 표시**에만 기록한다(05-07). 잔액은 건드리지 않는다.
+ * 잔액의 단일 원본은 서버 응답(applyServerRewardResult) → hydrateGameData 다.
+ */
+export function recordCandyHistory(email: string, amount: number, reason: string): void {
+  if (typeof window === "undefined" || !email || amount <= 0) return;
   try {
-    const newBalance = getCottonCandyBalance(email) + amount;
-    localStorage.setItem(CC_KEY(email), String(newBalance));
-    localStorage.setItem(CC_TOTAL_KEY(email), String(getCottonCandyTotal(email) + amount));
-
-    // 히스토리 추가
     const historyRaw = localStorage.getItem(CANDY_HISTORY_KEY(email));
     const history: CottonCandyHistoryEntry[] = historyRaw ? JSON.parse(historyRaw) : [];
     history.unshift({ date: new Date().toISOString(), amount, reason });
     if (history.length > 200) history.splice(200);
     localStorage.setItem(CANDY_HISTORY_KEY(email), JSON.stringify(history));
 
-    // 오늘 획득량
     const todayStr = getTodayDateStr();
     const todayRaw = localStorage.getItem(TODAY_EARNED_KEY(email));
     const todayData = todayRaw ? JSON.parse(todayRaw) : {};
-    if (todayData.date !== todayStr) {
-      todayData.date = todayStr;
-      todayData.earned = 0;
-    }
+    if (todayData.date !== todayStr) { todayData.date = todayStr; todayData.earned = 0; }
     todayData.earned = (todayData.earned || 0) + amount;
     localStorage.setItem(TODAY_EARNED_KEY(email), JSON.stringify(todayData));
-
-    fsAddCandy(amount); // Firestore 영구 저장
-    return newBalance;
-  } catch {
-    return getCottonCandyBalance(email);
-  }
+  } catch { /* noop */ }
 }
 
 /** 플레이타임 보상: 1분 이상 플레이 시 1일 1회 솜사탕 지급 (게임 공용) */
@@ -442,26 +329,43 @@ export function hasClaimedPlaytimeToday(email: string): boolean {
   }
 }
 
-export function grantPlaytimeReward(
+/**
+ * 플레이타임 보상 청구(05-07 — 서버 권위).
+ *  · 금액(`_amount`)은 더 이상 클라이언트가 정하지 않는다. 서버 정책표(minigame_play)가 소유한다.
+ *  · **서버가 지급을 확정한 뒤에만** granted=true 를 돌려준다("지급 전 성공 표시 금지").
+ *  · 로컬 날짜 키는 중복 요청을 줄이는 힌트일 뿐, 실제 1일 1회 보장은 서버 원장(operationId)이 한다.
+ */
+export async function grantPlaytimeReward(
   email: string,
-  amount = 50
-): { granted: boolean; amount: number } {
+  _amount = 50
+): Promise<{ granted: boolean; amount: number }> {
   if (typeof window === "undefined" || !email) return { granted: false, amount: 0 };
+  const todayStr = getTodayDateStr();
   try {
-    if (localStorage.getItem(PLAYTIME_REWARD_KEY(email)) === getTodayDateStr()) {
+    if (localStorage.getItem(PLAYTIME_REWARD_KEY(email)) === todayStr) {
       return { granted: false, amount: 0 };
     }
-    localStorage.setItem(PLAYTIME_REWARD_KEY(email), getTodayDateStr());
-    addCottonCandy(email, amount, "1분 이상 플레이 보상");
-    // 경험치는 서버 권위 청구로(하루 1회 게이트와 동일하게 sourceId=날짜 → 자연 멱등).
-    void import("./gameReward").then((m) => m.submitGameReward("minigame_play", { sourceId: `playtime_${getTodayDateStr()}` })).catch(() => {});
-    return { granted: true, amount };
+    const m = await import("./gameReward");
+    const outcome = await m.claimGameReward("minigame_play", { sourceId: `playtime_${todayStr}` });
+    if (outcome.status !== "applied" && outcome.status !== "duplicate") {
+      return { granted: false, amount: 0 }; // 미지급 → 로컬 키도 남기지 않는다(다음에 재시도)
+    }
+    localStorage.setItem(PLAYTIME_REWARD_KEY(email), todayStr);
+    const awarded = Number(outcome.result?.awardedCandy) || 0;
+    // 잔액 캐시는 applyServerRewardResult 가 서버 값으로 이미 확정했다.
+    if (awarded > 0) recordCandyHistory(email, awarded, "1분 이상 플레이 보상");
+    // 05-07: 일일 미션 '미니게임 1판'도 **실제 플레이가 확인된 이 자리**에서만 완료 처리한다.
+    void completeMission(email, "play_minigame");
+    return { granted: awarded > 0, amount: awarded };
   } catch {
     return { granted: false, amount: 0 };
   }
 }
 
-/** 솜사탕 차감. 잔액 부족 시 false 반환 */
+/**
+ * 솜사탕 차감 **표시 캐시**만 반영(05-07). Firestore 를 쓰지 않는다.
+ * 실제 차감은 서버(POST /api/purchase)가 한다 — 클라 차감은 화면 지연을 없애기 위한 것뿐이다.
+ */
 export function spendCottonCandy(email: string, amount: number, reason: string): boolean {
   if (typeof window === "undefined") return false;
   if (amount <= 0) return true;
@@ -479,7 +383,6 @@ export function spendCottonCandy(email: string, amount: number, reason: string):
     if (history.length > 200) history.splice(200);
     localStorage.setItem(CANDY_HISTORY_KEY(email), JSON.stringify(history));
 
-    fsAddCandy(-amount); // Firestore 영구 저장
     return true;
   } catch {
     return false;
@@ -562,6 +465,7 @@ export function getAttendanceData(email: string): AttendanceData {
   }
 }
 
+/** @deprecated 05-07 — 호출부 없음. 출석 지급은 claimDailyAttendance(서버 권위)만 사용한다. */
 export function checkAttendance(email: string): { success: boolean; bonus: boolean; message: string; earned: number } {
   if (typeof window === "undefined") return { success: false, bonus: false, message: "서버 환경", earned: 0 };
 
@@ -625,25 +529,9 @@ export function checkAttendance(email: string): { success: boolean; bonus: boole
   todayEarnedData.earned = (todayEarnedData.earned || 0) + earned;
   localStorage.setItem(TODAY_EARNED_KEY(email), JSON.stringify(todayEarnedData));
 
-  // ── Firestore: 출석 + 솜사탕을 단일 write로 처리 (race condition 방지)
-  const uid = currentUid();
-  if (uid) {
-    try {
-      const db = getFirebaseFirestore();
-      setDoc(
-        doc(db, "users", uid),
-        {
-          attendance: newData,
-          cottonCandy: increment(earned),
-          cottonCandyTotal: increment(earned),
-          lastActiveAt: serverTimestamp(),
-        },
-        { merge: true }
-      ).catch((e) => console.warn("[출석] Firestore 저장 실패:", e));
-    } catch (e) {
-      console.warn("[출석] Firestore 저장 예외:", e);
-    }
-  }
+  // ⚠️ P0(05-07): 여기서 하던 Firestore cottonCandy/cottonCandyTotal increment 를 제거했다.
+  //   실제 출석 지급은 서버 권위 경로(claimDailyAttendance → POST /api/claim-reward)가 소유한다.
+  //   이 함수는 현재 호출부가 없는 레거시이며, 로컬 표시 계산만 남긴다.
 
   // ── 경험치 적립: 서버 권위 청구(daily_attendance). 클라이언트는 금액을 정하지 않는다.
   //    (레거시 addExp(+5) 제거 — 서버가 출석 EXP·상한·멱등을 소유)
@@ -678,15 +566,34 @@ export function isMissionCompletedToday(email: string, missionId: string): boole
   return statuses.some((s) => s.id === missionId && s.completedDate === todayStr);
 }
 
-export function completeMission(email: string, missionId: string, reward: number, reason: string): boolean {
-  if (isMissionCompletedToday(email, missionId)) return false;
-
+/**
+ * 미션 완료 청구(05-07 — 서버 권위).
+ *  · ⚠️ 이 함수는 **실제 활동이 일어난 그 자리**에서만 호출한다. '받기' 버튼으로 호출하지 않는다.
+ *    (예전엔 /my 의 받기 버튼이 활동 없이 클라 인자 reward 만큼 지급했다 = P0)
+ *  · 금액은 서버 정책표(MISSION_CANDY)가 소유한다. 클라이언트는 missionId 와 날짜만 보낸다.
+ *  · operationId = mission_{missionId}_{날짜} → 미션당 1일 1회를 서버 원장이 보장한다.
+ *    (localStorage 를 지워도 재수령되지 않는다.)
+ */
+export async function completeMission(
+  email: string, missionId: string, reason = `미션 완료: ${missionId}`,
+): Promise<{ granted: boolean; amount: number }> {
+  if (typeof window === "undefined" || !email) return { granted: false, amount: 0 };
   const todayStr = getTodayDateStr();
-  const statuses = getMissionStatuses(email).filter((s) => s.id !== missionId);
-  statuses.push({ id: missionId, completedDate: todayStr });
-  localStorage.setItem(MISSIONS_KEY(email), JSON.stringify(statuses));
-  addCottonCandy(email, reward, reason);
-  return true;
+  if (isMissionCompletedToday(email, missionId)) return { granted: false, amount: 0 };
+  try {
+    const m = await import("./gameReward");
+    const outcome = await m.claimGameReward("mission_complete", { sourceId: `${missionId}_${todayStr}` });
+    if (outcome.status !== "applied" && outcome.status !== "duplicate") return { granted: false, amount: 0 };
+
+    const statuses = getMissionStatuses(email).filter((s) => s.id !== missionId);
+    statuses.push({ id: missionId, completedDate: todayStr });
+    localStorage.setItem(MISSIONS_KEY(email), JSON.stringify(statuses));
+    const awarded = Number(outcome.result?.awardedCandy) || 0;
+    if (awarded > 0) recordCandyHistory(email, awarded, reason);
+    return { granted: awarded > 0, amount: awarded };
+  } catch {
+    return { granted: false, amount: 0 };
+  }
 }
 
 // ─── 업적 시스템 ───────────────────────────────────────────────────
@@ -748,18 +655,31 @@ export function checkNewAchievements(email: string, stats: AchievementStats): Ac
   );
 }
 
-/** 업적 수령 처리 */
-export function claimAchievement(email: string, achievementId: string): number {
+/**
+ * 업적 수령(05-07 — 서버 권위). 금액은 서버 표(ACHIEVEMENT_CANDY)가 소유하고,
+ * 원장(ach_{id})이 **평생 1회**를 보장한다. 지급된 뒤에만 로컬 수령 표시를 남긴다.
+ */
+export async function claimAchievement(email: string, achievementId: string): Promise<number> {
+  if (typeof window === "undefined" || !email) return 0;
   const achievement = ACHIEVEMENTS.find((a) => a.id === achievementId);
   if (!achievement) return 0;
 
   const claimed = getClaimedAchievements(email);
   if (claimed.includes(achievementId)) return 0;
 
-  claimed.push(achievementId);
-  localStorage.setItem(ACHIEVEMENT_CLAIMED_KEY(email), JSON.stringify(claimed));
-  addCottonCandy(email, achievement.reward, `업적 달성: ${achievement.name}`);
-  return achievement.reward;
+  try {
+    const m = await import("./gameReward");
+    const outcome = await m.claimGameReward("achievement_claim", { sourceId: achievementId });
+    if (outcome.status !== "applied" && outcome.status !== "duplicate") return 0;
+
+    claimed.push(achievementId);
+    localStorage.setItem(ACHIEVEMENT_CLAIMED_KEY(email), JSON.stringify(claimed));
+    const awarded = Number(outcome.result?.awardedCandy) || 0;
+    if (awarded > 0) recordCandyHistory(email, awarded, `업적 달성: ${achievement.name}`);
+    return awarded;
+  } catch {
+    return 0;
+  }
 }
 
 // ─── 레벨업 보상 시스템 ────────────────────────────────────────────
@@ -792,17 +712,32 @@ export function getClaimedLevelRewards(email: string): number[] {
   }
 }
 
-export function claimLevelReward(email: string, level: number): number {
+/**
+ * 레벨 보상 수령(05-07 — 서버 권위·서버 검증).
+ * 서버가 users.doriExp 로 레벨을 **재계산**해 도달 여부를 확인하므로,
+ * 로컬 캐시 레벨을 조작해도 지급되지 않는다(level_not_reached).
+ */
+export async function claimLevelReward(email: string, level: number): Promise<number> {
+  if (typeof window === "undefined" || !email) return 0;
   const rewardEntry = LEVEL_REWARDS.find((r) => r.level === level);
   if (!rewardEntry) return 0;
 
   const claimed = getClaimedLevelRewards(email);
   if (claimed.includes(level)) return 0;
 
-  claimed.push(level);
-  localStorage.setItem(LEVEL_REWARD_KEY(email), JSON.stringify(claimed));
-  addCottonCandy(email, rewardEntry.reward, `레벨 ${level} 달성 보상`);
-  return rewardEntry.reward;
+  try {
+    const m = await import("./gameReward");
+    const outcome = await m.claimGameReward("level_reward", { sourceId: String(level) });
+    if (outcome.status !== "applied" && outcome.status !== "duplicate") return 0;
+
+    claimed.push(level);
+    localStorage.setItem(LEVEL_REWARD_KEY(email), JSON.stringify(claimed));
+    const awarded = Number(outcome.result?.awardedCandy) || 0;
+    if (awarded > 0) recordCandyHistory(email, awarded, `레벨 ${level} 달성 보상`);
+    return awarded;
+  } catch {
+    return 0;
+  }
 }
 
 // ─── 상점 시스템 ───────────────────────────────────────────────────
@@ -820,20 +755,22 @@ export function getPurchasedItems(email: string): string[] {
   }
 }
 
-/** 프리미엄(무료 이용) 여부 확인 */
+/**
+ * 프리미엄 여부 — **표시 전용**(05-07).
+ *  · 결제 판정에 쓰지 않는다. 무료 지급 여부는 서버(POST /api/purchase)가 users/{uid}.isPremium 으로만 정한다.
+ *  · 값의 출처를 hydrateGameData 가 Firestore 에서 받아 넣은 게임 프로필 캐시로 좁혔다.
+ *    (예전엔 사용자가 자유롭게 쓰는 PROFILE_KEY 블롭도 봤다 → 로컬 플래그 하나로 전 품목 무료였음)
+ */
 export function isPremiumUser(email: string): boolean {
   if (typeof window === "undefined") return false;
   try {
-    const cached = getCachedGameProfile(email) as any;
-    if (cached?.isPremium === true) return true;
-    const raw = localStorage.getItem(PROFILE_KEY(email));
-    if (!raw) return false;
-    return JSON.parse(raw)?.isPremium === true;
+    return (getCachedGameProfile(email) as any)?.isPremium === true;
   } catch {
     return false;
   }
 }
 
+/** @deprecated 05-07 — 호출부 없음. 상점 구매는 purchaseShopItem(서버 권위)만 사용한다. */
 export function purchaseItem(email: string, itemId: string, price: number): { success: boolean; message: string } {
   const purchased = getPurchasedItems(email);
   if (purchased.includes(itemId)) {
@@ -907,80 +844,53 @@ const BUY_MSG = {
   },
 } as const;
 
+/**
+ * 상점 구매 — 서버 권위 경로(POST /api/purchase)로만 처리한다. (05-07 P0)
+ *
+ * ⚠️ 이 함수가 예전에 가지고 있던 취약점(전부 제거됨):
+ *   1) `price` 를 클라이언트 인자로 받아 그대로 차감 → 0 으로 호출하면 무료였다.
+ *   2) `isPremiumUser()` 가 localStorage 만 보고 무료 지급 + `ownedItems` 를 Firestore 에 직접 기록
+ *      → 로컬 플래그 위조만으로 전 품목 영구 획득이 가능했다.
+ *   3) uid 를 못 읽을 때 로컬 잔액만으로 구매를 성립시키는 폴백이 있었다.
+ * 이제 가격·프리미엄·보유판정·차감·지급은 **서버 트랜잭션**이 전담하고,
+ * 클라이언트는 itemKey 만 보내며 서버가 돌려준 잔액을 그대로 채택한다.
+ *
+ * ⚠️ price 파라미터는 호출부 호환을 위해 남겨두지만 **전송하지 않으며 판정에도 쓰지 않는다.**
+ */
 export async function purchaseShopItem(
   email: string,
   itemKeyStr: string,
-  price: number,
+  _price?: number,
   locale: "ko" | "en" = "ko"
 ): Promise<{ success: boolean; message: string; balance: number }> {
   const m = BUY_MSG[locale] || BUY_MSG.ko;
   if (typeof window === "undefined") return { success: false, message: m.cannot, balance: 0 };
   if (!email) return { success: false, message: m.needLogin, balance: 0 };
 
-  const owned = getOwnedShopItems(email);
-  if (owned.includes(itemKeyStr)) {
-    return { success: true, message: m.alreadyOwned, balance: getCottonCandyBalance(email) };
-  }
+  const { purchaseItemOnServer } = await import("./shopClient");
+  const r = await purchaseItemOnServer(itemKeyStr);
 
-  // 💎 프리미엄 회원: 무료 지급
-  if (isPremiumUser(email)) {
-    const next = [...owned, itemKeyStr];
-    setOwnedShopCache(email, next);
-    const uid = currentUid();
-    if (uid) {
+  if (r.status === "ok") {
+    // 서버 응답이 최종값 — 로컬 캐시는 여기서만 수렴시킨다.
+    try { localStorage.setItem(CC_KEY(email), String(r.balance)); } catch { /* noop */ }
+    setOwnedShopCache(email, Array.from(new Set([...getOwnedShopItems(email), itemKeyStr])));
+    if (r.charged > 0) {
       try {
-        await setDoc(doc(getFirebaseFirestore(), "users", uid), { ownedItems: arrayUnion(itemKeyStr), lastActiveAt: serverTimestamp() }, { merge: true });
-      } catch { /* 캐시는 이미 반영됨 */ }
+        const hraw = localStorage.getItem(CANDY_HISTORY_KEY(email));
+        const history: CottonCandyHistoryEntry[] = hraw ? JSON.parse(hraw) : [];
+        history.unshift({ date: new Date().toISOString(), amount: -r.charged, reason: `상점 구매: ${itemKeyStr}` });
+        if (history.length > 200) history.splice(200);
+        localStorage.setItem(CANDY_HISTORY_KEY(email), JSON.stringify(history));
+      } catch { /* noop */ }
     }
     window.dispatchEvent(new Event("dori-gamedata-synced"));
-    return { success: true, message: m.premiumFree, balance: getCottonCandyBalance(email) };
+    const msg = r.duplicate ? m.alreadyOwned : r.premiumGrant ? m.premiumFree : m.done;
+    return { success: true, message: msg, balance: r.balance };
   }
-
-  const uid = currentUid();
-  // 로그인은 됐지만 uid 를 못 읽는 예외 상황 — 로컬 잔액으로라도 처리(차선)
-  if (!uid) {
-    const bal = getCottonCandyBalance(email);
-    if (bal < price) return { success: false, message: m.short(bal, price), balance: bal };
-    const ok = spendCottonCandy(email, price, `상점 구매: ${itemKeyStr}`);
-    if (!ok) return { success: false, message: m.failed, balance: bal };
-    setOwnedShopCache(email, [...owned, itemKeyStr]);
-    window.dispatchEvent(new Event("dori-gamedata-synced"));
-    return { success: true, message: m.done, balance: getCottonCandyBalance(email) };
-  }
-
-  // 정상 경로: Firestore 트랜잭션 (서버 잔액 기준 원자적 차감 + 보유 추가)
-  try {
-    const db = getFirebaseFirestore();
-    const ref = doc(db, "users", uid);
-    let newBalance = 0;
-    await runTransaction(db, async (tx) => {
-      const snap = await tx.get(ref);
-      const cur = Number(snap.data()?.cottonCandy ?? getCottonCandyBalance(email));
-      const already: string[] = Array.isArray(snap.data()?.ownedItems) ? (snap.data()!.ownedItems as string[]) : [];
-      if (already.includes(itemKeyStr)) { newBalance = cur; return; } // 다른 기기에서 이미 구매
-      if (cur < price) throw new Error("INSUFFICIENT");
-      newBalance = cur - price;
-      tx.set(ref, { cottonCandy: newBalance, ownedItems: arrayUnion(itemKeyStr), lastActiveAt: serverTimestamp() }, { merge: true });
-    });
-    // 로컬 캐시 동기화 (잔액 + 보유 + 히스토리)
-    localStorage.setItem(CC_KEY(email), String(newBalance));
-    setOwnedShopCache(email, [...owned, itemKeyStr]);
-    try {
-      const hraw = localStorage.getItem(CANDY_HISTORY_KEY(email));
-      const history: CottonCandyHistoryEntry[] = hraw ? JSON.parse(hraw) : [];
-      history.unshift({ date: new Date().toISOString(), amount: -price, reason: `상점 구매: ${itemKeyStr}` });
-      if (history.length > 200) history.splice(200);
-      localStorage.setItem(CANDY_HISTORY_KEY(email), JSON.stringify(history));
-    } catch { /* noop */ }
-    window.dispatchEvent(new Event("dori-gamedata-synced"));
-    return { success: true, message: m.done, balance: newBalance };
-  } catch (e: unknown) {
-    const bal = getCottonCandyBalance(email);
-    if (e instanceof Error && e.message === "INSUFFICIENT") {
-      return { success: false, message: m.short(bal, price), balance: bal };
-    }
-    return { success: false, message: m.network, balance: bal };
-  }
+  if (r.status === "insufficient") return { success: false, message: m.short(r.balance, r.price), balance: r.balance };
+  if (r.status === "unauthenticated") return { success: false, message: m.needLogin, balance: getCottonCandyBalance(email) };
+  if (r.status === "retry") return { success: false, message: m.network, balance: getCottonCandyBalance(email) };
+  return { success: false, message: m.failed, balance: getCottonCandyBalance(email) };
 }
 
 // ─── 미니게임 / 퀴즈 통계 ─────────────────────────────────────────

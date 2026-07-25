@@ -20,7 +20,7 @@ test("cottonCandy no longer defines or calls the client-authoritative EXP writer
   assert.equal(/\bfsSetExp\b/.test(src), false, "fsSetExp(유일한 Firestore doriExp 라이터) 제거");
   assert.equal(/\bwriteGameProfile\b/.test(src), false, "writeGameProfile 제거");
   assert.equal(/\bensureExpAtLeast\b/.test(src), false, "ensureExpAtLeast 제거");
-  assert.ok(src.includes('submitGameReward("minigame_play"'), "미니게임 보상은 서버 청구로 전환");
+  assert.ok(src.includes('claimGameReward("minigame_play"'), "미니게임 보상은 서버 청구로 전환");
 });
 
 test("no production caller invokes addExp(email, amount) anymore", () => {

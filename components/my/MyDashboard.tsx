@@ -20,7 +20,6 @@ import {
   getAttendanceData,
   hydrateGameData,
   isMissionCompletedToday,
-  completeMission,
   ACHIEVEMENTS,
   getClaimedAchievements,
   claimAchievement,
@@ -70,6 +69,7 @@ const T = {
     resetDaily: "매일 자정 초기화",
     doneBadge: "✓ 완료",
     claim: "받기",
+    goDoIt: "하러 가기",
     achievements: "업적",
     achievementProgress: (claimed: number, total: number) => `${claimed}/${total} 달성`,
     noCandyHistory: "아직 솜사탕 내역이 없네요!",
@@ -119,6 +119,7 @@ const T = {
     resetDaily: "Resets daily at midnight",
     doneBadge: "✓ Done",
     claim: "Claim",
+    goDoIt: "Go do it",
     achievements: "Achievements",
     achievementProgress: (claimed: number, total: number) => `${claimed}/${total} unlocked`,
     noCandyHistory: "No cotton candy history yet!",
@@ -208,13 +209,15 @@ export default function MyDashboard() {
   }, []);
 
   // 일일 미션 정의
+  // ⚠️ reward 는 **표시용**이다. 실제 지급액은 서버 정책표(MISSION_CANDY)가 소유한다.
+  //   href = 해당 활동을 실제로 하러 가는 곳. 출석만 이 화면에서 직접 처리한다(서버 검증됨).
   const DAILY_MISSIONS = [
-    { id: "attendance", label: "출석 체크", labelEn: "Daily check-in", reward: 50, emoji: "📅" },
-    { id: "read_trend", label: "트렌드 기사 읽기", labelEn: "Read a trend article", reward: 30, emoji: "📰" },
-    { id: "write_post", label: "커뮤니티 글쓰기", labelEn: "Write a community post", reward: 80, emoji: "📝" },
-    { id: "write_comment", label: "댓글 달기", labelEn: "Leave a comment", reward: 30, emoji: "💬" },
-    { id: "play_minigame", label: "미니게임 1판", labelEn: "Play a minigame", reward: 40, emoji: "🎮" },
-    { id: "quiz_correct", label: "AI 퀴즈 풀기", labelEn: "Solve an AI quiz", reward: 50, emoji: "🧠" },
+    { id: "attendance", label: "출석 체크", labelEn: "Daily check-in", reward: 50, emoji: "📅", href: "" },
+    { id: "read_trend", label: "트렌드 기사 읽기", labelEn: "Read a trend article", reward: 30, emoji: "📰", href: "/insight" },
+    { id: "write_post", label: "커뮤니티 글쓰기", labelEn: "Write a community post", reward: 80, emoji: "📝", href: "/community" },
+    { id: "write_comment", label: "댓글 달기", labelEn: "Leave a comment", reward: 30, emoji: "💬", href: "/community" },
+    { id: "play_minigame", label: "미니게임 1판", labelEn: "Play a minigame", reward: 40, emoji: "🎮", href: "/minigame" },
+    { id: "quiz_correct", label: "AI 퀴즈 풀기", labelEn: "Solve an AI quiz", reward: 50, emoji: "🧠", href: "/minigame/quiz" },
   ];
 
   useEffect(() => setMounted(true), []);
@@ -257,29 +260,24 @@ export default function MyDashboard() {
     };
     const newAchievements = checkNewAchievements(email, stats);
     if (newAchievements.length > 0) {
-      newAchievements.forEach((ach) => {
-        const reward = claimAchievement(email, ach.id);
-        if (reward > 0) {
-          setAchievementToast({ name: isEn ? ach.nameEn : ach.name, reward });
-          setTimeout(() => setAchievementToast(null), 4000);
+      // 05-07: 서버 권위 청구. 지급이 확정된 뒤에만 토스트를 띄우고, 금액도 서버 값을 쓴다.
+      void (async () => {
+        for (const ach of newAchievements) {
+          const reward = await claimAchievement(email, ach.id);
+          if (reward > 0) {
+            setAchievementToast({ name: isEn ? ach.nameEn : ach.name, reward });
+            setTimeout(() => setAchievementToast(null), 4000);
+          }
         }
-      });
-      loadCandyData();
+        loadCandyData();
+      })();
     }
   }, [mounted, user?.email, profile, myPosts, myComments, attendanceStreak, candyBalance, loadCandyData]);
 
-  // 미션 완료 처리
-  const handleMissionClaim = (missionId: string, reward: number, label: string, displayLabel?: string) => {
-    if (!user?.email) return;
-    const done = completeMission(user.email, missionId, reward, `미션 완료: ${label}`);
-    if (done) {
-      loadCandyData(); // 잔액 즉시 갱신
-      setAchievementToast({ name: t.missionDone(displayLabel || label), reward });
-      setTimeout(() => setAchievementToast(null), 3000);
-    } else {
-      alert(t.missionAlreadyDone);
-    }
-  };
+  // ⚠️ P0(05-07): '받기' 버튼으로 미션을 완료시키는 핸들러를 제거했다.
+  //   활동을 하지 않고 버튼만 눌러도 지급되던 흐름이 무한 재화 획득의 입구였다.
+  //   이제 미션은 활동이 실제로 일어난 자리(글 저장·댓글 저장·게임 플레이·기사 열람·퀴즈 정답)에서
+  //   claimDailyMission() 이 서버에 청구하고, 이 화면은 '하러 가기' 링크와 완료 상태만 보여준다.
 
   // 출석 체크 = 신뢰 서버 게이트 호출. 클라이언트가 재화를 직접 올리지 않는다.
   const handleAttendance = async () => {
@@ -756,20 +754,23 @@ export default function MyDashboard() {
                         </div>
                         {done ? (
                           <span className="text-[#F9954E] text-xs font-extrabold flex items-center gap-1">{t.doneBadge}</span>
-                        ) : (
+                        ) : mission.id === "attendance" ? (
                           <button
                             data-testid={`mission-action-${mission.id}`}
-                            onClick={() => {
-                              if (mission.id === "attendance") {
-                                handleAttendance();
-                              } else {
-                                handleMissionClaim(mission.id, mission.reward, mission.label, mission.labelEn);
-                              }
-                            }}
+                            onClick={handleAttendance}
                             className="px-3 py-1.5 rounded-xl bg-[#F9954E] hover:bg-[#E8832E] text-white text-xs font-extrabold transition-all active:scale-95"
                           >
                             {t.claim}
                           </button>
+                        ) : (
+                          /* 05-07: 활동 없이 지급되던 '받기' 버튼 제거 — 활동 지점으로 보내기만 한다. */
+                          <Link
+                            href={mission.href}
+                            data-testid={`mission-action-${mission.id}`}
+                            className="px-3 py-1.5 rounded-xl border border-[#F9954E] text-[#F9954E] hover:bg-[#F9954E]/10 text-xs font-extrabold transition-all active:scale-95"
+                          >
+                            {t.goDoIt}
+                          </Link>
                         )}
                       </div>
                     );

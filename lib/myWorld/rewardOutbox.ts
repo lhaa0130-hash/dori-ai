@@ -16,12 +16,14 @@ const BACKOFF_CAP_MS = 5 * 60_000;
 
 export type AllowedRewardType =
   | "my_world_interaction"
-  | "community_post" | "community_comment" | "mission_complete" | "minigame_play" | "game_activity";
+  | "community_post" | "community_comment" | "mission_complete" | "minigame_play" | "game_activity"
+  | "achievement_claim" | "level_reward";   // 05-07: 업적·레벨 보상도 서버 권위로 이관
 const REWARD_TYPES = new Set<AllowedRewardType>([
   "my_world_interaction", "community_post", "community_comment", "mission_complete", "minigame_play", "game_activity",
+  "achievement_claim", "level_reward",
 ]);
-// operationId 접두: mwi(interaction)·post·comment·mission·minigame·act(activity). 서버가 최종 재검증.
-const OP_ID_RE = /^(mwi|post|comment|mission|minigame|act)_[A-Za-z0-9_-]{1,120}$/;
+// operationId 접두: mwi(interaction)·post·comment·mission·minigame·act(activity)·ach(업적)·lv(레벨). 서버가 최종 재검증.
+const OP_ID_RE = /^(mwi|post|comment|mission|minigame|act|ach|lv)_[A-Za-z0-9_-]{1,120}$/;
 const KIND_RE = /^[a-z_]{1,24}$/;
 const SOURCE_RE = /^[A-Za-z0-9_-]{1,64}$/;
 

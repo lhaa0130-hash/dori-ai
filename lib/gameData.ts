@@ -59,35 +59,18 @@ export async function getCottonCandyBalance(): Promise<number> {
     return g?.cottonCandy || 0;
 }
 
-// 솜사탕 적립
-export async function addCottonCandy(amount: number, _reason?: string): Promise<number> {
-    const uid = currentUid();
-    if (!uid || amount <= 0) return await getCottonCandyBalance();
-    try {
-        const db = getFirebaseFirestore();
-        await updateDoc(doc(db, "users", uid), { cottonCandy: increment(amount) });
-    } catch (e) {
-        console.warn("[gameData] addCandy fail:", e);
-    }
-    return await getCottonCandyBalance();
+// ⚠️ P0 보안(05-07): 클라이언트에서 cottonCandy 를 Firestore 에 직접 increment 하던 라이터 2종을
+//   무력화했다(addExp 와 동일 처리). 재화 증감은 서버 권위 경로만 담당한다:
+//     적립 = POST /api/claim-reward, 차감 = POST /api/purchase, 관리자 = POST /api/admin/grant.
+//   (이 모듈은 현재 import 되지 않는 레거시다. Firestore Rules 도 cottonCandy 변경을 차단한다.)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function addCottonCandy(_amount: number, _reason?: string): Promise<number> {
+    return await getCottonCandyBalance(); // no-op — 서버 권위로 이관됨
 }
 
-// 솜사탕 소비 (잔액 부족 시 false)
-export async function spendCottonCandy(amount: number, _reason?: string): Promise<boolean> {
-    const uid = currentUid();
-    if (!uid || amount <= 0) return false;
-    try {
-        const db = getFirebaseFirestore();
-        const ref = doc(db, "users", uid);
-        const snap = await getDoc(ref);
-        const cur = snap.data()?.cottonCandy || 0;
-        if (cur < amount) return false;
-        await updateDoc(ref, { cottonCandy: increment(-amount) });
-        return true;
-    } catch (e) {
-        console.warn("[gameData] spend fail:", e);
-        return false;
-    }
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function spendCottonCandy(_amount: number, _reason?: string): Promise<boolean> {
+    return false; // no-op — 차감은 서버(/api/purchase)만 수행
 }
 
 // ⚠️ P0 보안(05-06H): 클라이언트에서 doriExp/tier/level 을 Firestore 에 직접 쓰지 않는다.
@@ -142,8 +125,8 @@ export async function checkAttendance(): Promise<{ success: boolean; earned: num
         if (newStreak > 0 && newStreak % 7 === 0) { earned += 200; bonus = true; }
 
         // ⚠️ P0(05-06H): doriExp/tier/level 은 서버 권위 엔드포인트만 갱신한다(여기서 쓰지 않음).
+        // ⚠️ P0(05-07): cottonCandy increment 도 제거 — 출석 지급은 서버(claimDailyAttendance)가 소유한다.
         await updateDoc(ref, {
-            cottonCandy: increment(earned),
             attendance: {
                 lastChecked: today,
                 streak: newStreak,

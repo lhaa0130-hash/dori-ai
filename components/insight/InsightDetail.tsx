@@ -1,8 +1,20 @@
 "use client";
 
 import Link from "next/link";
+import { useEffect } from "react";
+import { claimDailyMission } from "@/lib/dailyMission";
+
+const READ_DWELL_MS = 20_000; // 이 시간 이상 기사에 머물러야 '읽었다'로 본다
 
 export default function InsightDetail({ postData }: { postData: any }) {
+  // 05-07: 일일 미션 '트렌드 기사 읽기'는 **기사 화면에 실제로 머문 뒤**에만 완료 처리한다.
+  //   (예전엔 /my 의 '받기' 버튼만 눌러도 지급됐다 = P0)
+  //   금액·1일 1회는 서버가 소유하므로, 여러 기사를 봐도 하루 한 번만 지급된다.
+  useEffect(() => {
+    const t = setTimeout(() => { void claimDailyMission("read_trend"); }, READ_DWELL_MS);
+    return () => clearTimeout(t);
+  }, [postData?.slug]);
+
   return (
     <div className="page-wrapper">
       <div className="scroll-spacer" />
