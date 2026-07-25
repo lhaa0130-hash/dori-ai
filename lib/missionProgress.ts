@@ -2,6 +2,14 @@
 
 import { getTodayDateKey } from "./missions";
 
+// 미션 완료 서버 보상(05-06H). 로컬 dori_profile_ 캐시(표시용)와 별개로, 완료 시 1일 1회
+// 서버 권위 mission_complete 를 청구한다. sourceId=미션키_날짜 → operationId 로 자연 멱등.
+// 동적 import 로 순환/SSR 을 피한다(비로그인/ready 아님이면 브리지가 조용히 스킵).
+function fireMissionReward(missionKey: string): void {
+  const sourceId = `${missionKey}_${getTodayDateKey()}`;
+  void import("./gameReward").then((m) => m.submitGameReward("mission_complete", { sourceId })).catch(() => {});
+}
+
 /**
  * 오늘의 미션 진행도 가져오기
  */
@@ -52,9 +60,10 @@ export async function handleCheckinMission(userEmail?: string): Promise<void> {
   
   // 출석체크 완료 표시
   localStorage.setItem(key, 'true');
-  
-  // DORI EXP 증가 (미션 완료는 경험치로)
+
+  // DORI EXP 증가 (미션 완료는 경험치로) — 로컬 표시 + 서버 권위 청구
   await addDoriExp(10, '출석체크 미션 완료', userEmail);
+  fireMissionReward('checkin');
 }
 
 /**
@@ -74,8 +83,9 @@ export async function handlePostMission(): Promise<void> {
     const todayKey = getTodayDateKey();
     const completedKey = `mission_completed_post_${todayKey}`;
     localStorage.setItem(completedKey, 'true');
-    // 미션 완료 보너스 경험치
+    // 미션 완료 보너스 경험치 (로컬 표시 + 서버 권위 청구)
     await addDoriExp(30, '글 3개 작성 미션 완료');
+    fireMissionReward('postset');
   }
 }
 
@@ -96,8 +106,9 @@ export async function handleCommentMission(): Promise<void> {
     const todayKey = getTodayDateKey();
     const completedKey = `mission_completed_comment_${todayKey}`;
     localStorage.setItem(completedKey, 'true');
-    // 미션 완료 보너스 경험치
+    // 미션 완료 보너스 경험치 (로컬 표시 + 서버 권위 청구)
     await addDoriExp(10, '댓글 5회 작성 미션 완료');
+    fireMissionReward('commentset');
   }
 }
 
@@ -117,8 +128,9 @@ export async function handleLikeMission(): Promise<void> {
     const todayKey = getTodayDateKey();
     const completedKey = `mission_completed_like_${todayKey}`;
     localStorage.setItem(completedKey, 'true');
-    // 미션 완료 보너스 경험치
+    // 미션 완료 보너스 경험치 (로컬 표시 + 서버 권위 청구)
     await addDoriExp(10, '좋아요 10개 미션 완료');
+    fireMissionReward('likeset');
   }
 }
 
@@ -136,9 +148,10 @@ export async function handleShareMission(): Promise<void> {
   
   // 공유 완료 표시
   localStorage.setItem(key, 'true');
-  
-  // DORI EXP 증가 (미션 완료는 경험치로)
+
+  // DORI EXP 증가 (미션 완료는 경험치로) — 로컬 표시 + 서버 권위 청구
   await addDoriExp(10, '사이트 공유 미션 완료');
+  fireMissionReward('share');
 }
 
 /**

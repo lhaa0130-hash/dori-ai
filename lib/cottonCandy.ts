@@ -322,77 +322,16 @@ export function getCachedGameProfile(
 // 솜사탕과 동일하게 localStorage 캐시(GAME_PROFILE) 우선 + Firestore 동기화.
 // 화면(ProfileHero·AccountMenu·HomeClient)은 getCachedGameProfile()를 읽으므로 즉시 반영됨.
 
-function writeGameProfile(
-  email: string,
-  patch: Partial<{ cottonCandy: number; doriExp: number; tier: number; level: number }>
-) {
-  const cur = getCachedGameProfile(email) || {
-    cottonCandy: getCottonCandyBalance(email),
-    doriExp: 0,
-    tier: 1,
-    level: 1,
-  };
-  const next = { ...cur, ...patch };
-  try { localStorage.setItem(GAME_PROFILE_KEY(email), JSON.stringify(next)); } catch {}
-  return next;
-}
+// ⚠️ P0 보안(05-06H): 클라이언트는 더 이상 doriExp/level/tier 를 Firestore 에 쓰지 않는다.
+//   과거의 클라이언트 EXP 라이터 4종(경험치 적립·절대 끌어올림·게임프로필 기록·Firestore EXP set)은
+//   localStorage 캐시를 근거로 서버 EXP 를 절대값 merge 로 덮어써 조작에 취약했다(=P0). 전부 제거됨.
+//   이제 EXP 적립은 전부 서버 권위 엔드포인트(POST /api/claim-reward)를 통한다
+//   — lib/gameReward.ts 의 submitGameReward 참고. 화면 수치는 서버 응답 후 hydrateGameData 가 재동기화.
+//   (레거시 라이터가 재등장하면 tests/reward-cutover-guard.test.ts 가 실패한다.)
 
-function fsSetExp(exp: number, tier: number, level: number) {
-  const uid = currentUid();
-  if (!uid) return;
-  try {
-    const db = getFirebaseFirestore();
-    setDoc(
-      doc(db, "users", uid),
-      { doriExp: exp, tier, level, lastActiveAt: serverTimestamp() },
-      { merge: true }
-    ).catch(() => {});
-  } catch { /* noop */ }
-}
-
-/** 현재 경험치(동기, 캐시 기준) */
+/** 현재 경험치(동기, 캐시 기준 — 읽기 전용). */
 export function getDoriExp(email: string): number {
   return getCachedGameProfile(email)?.doriExp || 0;
-}
-
-export interface ExpResult {
-  exp: number;
-  level: number;
-  tier: number;
-  gained: number;
-  leveledUp: boolean;
-  tierUp: boolean;
-}
-
-/**
- * 경험치 적립(+티어/레벨 자동 재계산). 활동 시점에 호출.
- * localStorage 즉시 반영 + Firestore fire-and-forget + 'dori-gamedata-synced' 이벤트.
- */
-export function addExp(email: string, amount: number, reason = "활동"): ExpResult {
-  const empty: ExpResult = { exp: getDoriExp(email), level: 1, tier: 1, gained: 0, leveledUp: false, tierUp: false };
-  if (typeof window === "undefined" || !email || !amount) return empty;
-
-  const cur = getCachedGameProfile(email) || {
-    cottonCandy: getCottonCandyBalance(email), doriExp: 0, tier: 1, level: 1,
-  };
-  const oldLevel = cur.level || 1;
-  const oldTier = cur.tier || 1;
-  const newExp = Math.max(0, (cur.doriExp || 0) + amount);
-  const tier = calculateTier(newExp);
-  const level = calculateLevel(newExp);
-
-  writeGameProfile(email, { doriExp: newExp, tier, level });
-  fsSetExp(newExp, tier, level);
-  try { window.dispatchEvent(new Event("dori-gamedata-synced")); } catch {}
-
-  return { exp: newExp, level, tier, gained: amount, leveledUp: level > oldLevel, tierUp: tier > oldTier };
-}
-
-/** 절대 경험치로 끌어올림(내리지 않음) — 활동량 기반 백필용(마이페이지) */
-export function ensureExpAtLeast(email: string, exp: number): ExpResult | null {
-  const cur = getDoriExp(email);
-  if (exp > cur) return addExp(email, exp - cur, "활동 반영");
-  return null;
 }
 
 // ⚠️ 중복 제거: hydrateGameData()는 AuthContext.tsx의 onAuthStateChanged에서 이미 호출됨
@@ -488,7 +427,8 @@ export function grantPlaytimeReward(
     }
     localStorage.setItem(PLAYTIME_REWARD_KEY(email), getTodayDateStr());
     addCottonCandy(email, amount, "1분 이상 플레이 보상");
-    addExp(email, 5, "미니게임 플레이"); // 경험치 적립
+    // 경험치는 서버 권위 청구로(하루 1회 게이트와 동일하게 sourceId=날짜 → 자연 멱등).
+    void import("./gameReward").then((m) => m.submitGameReward("minigame_play", { sourceId: `playtime_${getTodayDateStr()}` })).catch(() => {});
     return { granted: true, amount };
   } catch {
     return { granted: false, amount: 0 };
@@ -679,8 +619,9 @@ export function checkAttendance(email: string): { success: boolean; bonus: boole
     }
   }
 
-  // ── 경험치 적립 (출석 +5) — 등급/레벨 활성화
-  addExp(email, 5, "출석 체크");
+  // ── 경험치 적립: 서버 권위 청구(daily_attendance). 클라이언트는 금액을 정하지 않는다.
+  //    (레거시 addExp(+5) 제거 — 서버가 출석 EXP·상한·멱등을 소유)
+  void import("./gameReward").then((m) => m.submitGameReward("game_activity", { seed: `attendance_${todayStr}`, kind: "attendance" })).catch(() => {});
 
   return { success: true, bonus, message: "출석 완료!", earned };
 }

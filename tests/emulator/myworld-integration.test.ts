@@ -3,7 +3,7 @@
 import assert from "node:assert/strict";
 import test, { after, before, beforeEach } from "node:test";
 import {
-  clearFirestore, installBrowserShim, prepareEmulatorEnv, shutdownFirebase, signInTestUser, uninstallBrowserShim, waitFor,
+  clearFirestore, installBrowserShim, prepareEmulatorEnv, shutdownFirebase, signInTestUser, uninstallBrowserShim,
 } from "./harness.ts";
 
 let fs: typeof import("firebase/firestore");
@@ -52,12 +52,11 @@ const readUser = async () => (await fs.getDoc(userDoc())).data() as Record<strin
 
 /** 다른 기능이 이미 써 둔 데이터를 흉내 낸다(보존 검증용). */
 async function seedUnrelatedData() {
+  // ⚠️ 05-06H: doriExp/level/tier 는 클라이언트가 쓸 수 없다(Rules 차단) → 시드에서 제외.
+  //   서버 권위 필드는 SA REST 만 쓰므로 에뮬 클라이언트 시드는 비보상 필드만 넣는다.
   await fs.setDoc(userDoc(), {
     nickname: "도리팬",
     cottonCandy: 120,
-    doriExp: 40,
-    level: 2,
-    tier: 1,
     attendance: { lastChecked: "2026-07-24", streak: 3, totalDays: 10, weekDays: ["mon"] },
     myWorld: {
       character: { selectedId: "bomi", owned: ["dori", "bomi"], expression: "happy" },
@@ -152,28 +151,27 @@ test("stored interaction payload contains no PII", async () => {
   }
 });
 
-// ── D. EXP 실제 갱신 ───────────────────────────────────────────────────
-test("addExp updates doriExp/level/tier on the server and emits the sync event", async () => {
+// ── D. EXP 서버 권위 — 클라이언트 직접 쓰기 차단(05-06H) ─────────────────
+test("client cannot write doriExp/level/tier directly (rules deny); unrelated game data is preserved", async () => {
   await seedUnrelatedData();
-  const cottonCandy = await import("@/lib/cottonCandy");
+  const fs = await import("firebase/firestore");
 
-  const result = cottonCandy.addExp(user.email, 30, "My World pet");
-  assert.equal(result.gained, 30);
+  // 클라이언트가 doriExp 를 직접 올리려는 시도 → Rules 가 거부(서버 권위).
+  await assert.rejects(
+    fs.setDoc(fs.doc(db, "users", user.uid), { doriExp: 30, level: 5, tier: 3 }, { merge: true }),
+    (e: { code?: string }) => String(e.code || e).includes("permission-denied"),
+    "클라이언트 직접 EXP 쓰기는 거부돼야 한다",
+  );
 
-  // fire-and-forget 서버 반영을 조건 기반으로 대기(임의 sleep 금지)
-  const persisted = await waitFor(async () => {
-    const raw = await readUser();
-    return raw?.doriExp === result.exp ? raw : null;
-  }, { label: "doriExp propagation" });
+  // 거부돼도 기존 게임 데이터(솜사탕·캐릭터·myWorld)는 그대로 보존.
+  const raw = await readUser();
+  assert.equal(raw?.doriExp ?? 0, 0, "직접 쓰기 실패 후 서버 EXP 는 그대로");
+  assert.equal(raw?.cottonCandy, 120);
+  assert.equal(raw?.myWorld.character.selectedId, "bomi");
 
-  assert.equal(persisted.doriExp, result.exp);
-  assert.equal(persisted.level, result.level);
-  assert.equal(persisted.tier, result.tier);
-  assert.ok(shim.events.includes("dori-gamedata-synced"), "dori-gamedata-synced 이벤트가 발생해야 한다");
-
-  // 기존 게임 데이터 보존
-  assert.equal(persisted.cottonCandy, 120);
-  assert.equal(persisted.myWorld.character.selectedId, "bomi");
+  // 정상 저장(솜사탕/myWorld 등 비보상 필드)은 여전히 허용됨을 함께 확인.
+  await fs.setDoc(fs.doc(db, "users", user.uid), { cottonCandy: 130 }, { merge: true });
+  assert.equal((await readUser())?.cottonCandy, 130, "비보상 필드 저장은 정상 통과해야 한다");
 });
 
 test("EXP is not written for rejected interactions", async () => {

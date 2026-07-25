@@ -105,6 +105,11 @@ if (USE_EMULATOR && typeof window !== "undefined") {
             }
         },
         currentUid: () => getFirebaseAuth().currentUser?.uid ?? null,
+        currentEmail: () => getFirebaseAuth().currentUser?.email ?? null,
+        signOutTestUser: async () => {
+            const { signOut } = await import("firebase/auth");
+            await signOut(getFirebaseAuth());
+        },
     };
 }
 
