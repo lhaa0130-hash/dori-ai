@@ -932,10 +932,14 @@ export async function addPost(name: string, text: string, opts: NewPostOpts = {}
     if (uid) bustCache(`counts:${uid}`);
     // 경험치(글 작성) — 서버 권위 청구. ⚠️ 저장이 성공한 뒤에만 청구한다(실패 시 청구 0회).
     //   sourceId=feed 문서 id 로 서버가 존재·작성자 UID 일치를 검증한다.
-    void import("./gameReward").then((m) => m.submitGameReward("community_post", { sourceId: ref.id })).catch(() => {});
-    // 05-07: 일일 미션 '커뮤니티 글쓰기'는 **실제 글이 저장된 이 자리**에서만 완료 처리한다.
+    // 05-07: 일일 미션 '커뮤니티 글쓰기'도 **실제 글이 저장된 이 자리**에서만 완료 처리한다.
     //   (예전엔 /my 의 '받기' 버튼이 글을 안 써도 지급했다 = P0)
-    void claimDailyMission("write_post");
+    //   ⚠️ 두 청구는 같은 users 문서를 갱신하므로 **순차로** 발행한다. 동시에 쏘면 서버 트랜잭션이
+    //      서로 충돌해 재시도를 소진하고 둘 다 outbox 로 밀린다(지급 지연).
+    void import("./gameReward")
+      .then((m) => m.claimGameReward("community_post", { sourceId: ref.id }))
+      .then(() => claimDailyMission("write_post"))
+      .catch(() => {});
     return true;
   } catch (e) {
     // ⚠️ 예전엔 원인을 통째로 삼켰다(catch { return false }). 이제 안전한 code/분류만 남긴다.
@@ -1409,9 +1413,11 @@ export async function addComment(postId: string, postOwnerUid: string, name: str
 
   // 경험치(댓글) — 서버 권위 청구. ⚠️ 커밋 성공 후에만 청구한다(실패 시 청구 0회).
   //   sourceId={postId}__{commentId} 로 서버가 feed 소스 존재·소유를 검증한다.
-  void import("./gameReward").then((m) => m.submitGameReward("community_comment", { sourceId: `${postId}__${commentRef.id}` })).catch(() => {});
-  // 05-07: 일일 미션 '댓글 달기'는 실제 댓글이 저장된 이 자리에서만 완료 처리한다.
-  void claimDailyMission("write_comment");
+  // 05-07: 일일 미션 '댓글 달기'도 실제 댓글이 저장된 이 자리에서만 완료 처리한다(순차 발행 — 위 주석 참고).
+  void import("./gameReward")
+    .then((m) => m.claimGameReward("community_comment", { sourceId: `${postId}__${commentRef.id}` }))
+    .then(() => claimDailyMission("write_comment"))
+    .catch(() => {});
 
   // 알림은 댓글 저장의 성립 조건이 아니다(실패해도 댓글은 유효) → 원자 커밋 밖에서 부가 처리
   notify(postOwnerUid, { type: "comment", fromName: name, text: "회원님 글에 댓글을 남겼어요.", link: "/feed" });
