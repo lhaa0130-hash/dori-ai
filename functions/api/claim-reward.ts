@@ -6,7 +6,8 @@
 // ⚠️ Secret(개인키·토큰)·전체 users 문서·stack 을 응답/로그에 노출하지 않는다. Production 은 Secret 부재로 fail-closed.
 
 import {
-  sanitizeRewardRequest, todayKST, claimIdFor, computeAttendanceReward, levelTierFromExp, parseAllowlist,
+  sanitizeRewardRequest, sanitizeInteractionRewardRequest, applyRewardOperation,
+  todayKST, claimIdFor, computeAttendanceReward, levelTierFromExp, parseAllowlist,
 } from "../_shared/rewardPolicy";
 import { getAccessToken } from "../_shared/googleAuth";
 import {
@@ -52,8 +53,17 @@ export const onRequestPost: any = async (context: any) => {
     if (raw.length > MAX_BODY) return J({ ok: false, error: "invalid_request" }, 400);
     let body: unknown;
     try { body = JSON.parse(raw); } catch { return J({ ok: false, error: "invalid_request" }, 400); }
-    const clean = sanitizeRewardRequest(body);
-    if (!clean.ok) return J({ ok: false, error: "invalid_request", detail: clean.error }, 400);
+    // rewardType 별 요청 정제. my_world_interaction 은 operationId 멱등 경로로 분기.
+    const rewardType = (body as { rewardType?: unknown } | null)?.rewardType;
+    let interaction: { operationId: string; kind: string } | null = null;
+    if (rewardType === "my_world_interaction") {
+      const ci = sanitizeInteractionRewardRequest(body);
+      if (!ci.ok) return J({ ok: false, error: "invalid_request", detail: ci.error }, 400);
+      interaction = { operationId: ci.operationId, kind: ci.kind };
+    } else {
+      const clean = sanitizeRewardRequest(body);
+      if (!clean.ok) return J({ ok: false, error: "invalid_request", detail: clean.error }, 400);
+    }
 
     // ── 인증: Authorization: Bearer <ID token> ──
     const authz = String(request.headers.get("Authorization") || "");
@@ -82,6 +92,10 @@ export const onRequestPost: any = async (context: any) => {
     const token = at.token;
 
     const today = todayKST(new Date());
+
+    // ── my_world_interaction: operationId 멱등 EXP 보상(서버 권위) ──
+    if (interaction) return await runInteractionReward(token, uid, today, interaction, cid);
+
     const claimId = claimIdFor("daily_attendance", today);
     const userRel = `users/${uid}`;
     const claimRel = `users/${uid}/rewardClaims/${claimId}`;
@@ -145,6 +159,61 @@ export const onRequestPost: any = async (context: any) => {
     return J({ ok: false, error: "internal_error", cid }, 500);
   }
 };
+
+// ── my_world_interaction 트랜잭션(멱등·원자·서버 권위) ──
+//   ⚠️ EDGE RUNTIME E2E: NOT VERIFIED — 로컬 wrangler 부재로 실제 엣지 실행은 미검증.
+//   서버 결정: awardedExp(정책 xp표+일일40상한) / resultingExp(서버 doriExp 기준) / level·tier.
+//   멱등: rewardOperations/{operationId} 존재 시 저장된 결과 반환(재지급 없음).
+//   일일 카운터: 사용자 문서 평면 필드 rewardDailyDate/rewardDailyExp(서버만 갱신).
+async function runInteractionReward(
+  token: string, uid: string, today: string, intent: { operationId: string; kind: string }, cid: string,
+): Promise<Response> {
+  const userRel = `users/${uid}`;
+  const opRel = `users/${uid}/rewardOperations/${intent.operationId}`;
+  const nowIso = new Date().toISOString();
+
+  for (let attempt = 0; attempt < 3; attempt++) {
+    let tx: string;
+    try { tx = await beginTransaction(token); }
+    catch (e: any) { if (e?.status === 403) return J({ ok: false, error: "internal_error", detail: "firestore_permission" }, 500); continue; }
+    try {
+      const got = await batchGet(token, tx, [userRel, opRel]);
+      const user = got[userRel];
+      const op = got[opRel];
+      if (!user.exists) { await rollback(token, tx); return J({ ok: false, error: "user_not_found" }, 404); }
+
+      const u = user.fields as Record<string, any>;
+      const serverExp = typeof u.doriExp === "number" && u.doriExp >= 0 ? Math.floor(u.doriExp) : 0;
+      const dailyDate = typeof u.rewardDailyDate === "string" ? u.rewardDailyDate : "";
+      const dailyExpEarned = dailyDate === today && typeof u.rewardDailyExp === "number" && u.rewardDailyExp >= 0 ? Math.floor(u.rewardDailyExp) : 0;
+
+      const ledgerRecord = op.exists
+        ? { awardedExp: Number((op.fields as any)?.awardedExp) || 0, resultingExp: Number((op.fields as any)?.resultingExp) || serverExp }
+        : null;
+
+      const r = applyRewardOperation({ operationId: intent.operationId, kind: intent.kind as any, serverExp, dailyExpEarned, ledgerRecord });
+
+      if (r.alreadyProcessed) {
+        await rollback(token, tx);
+        return J({ ok: true, duplicate: true, awardedExp: r.awardedExp, doriExp: r.resultingExp, level: r.level, tier: r.tier });
+      }
+
+      await commit(token, tx, [
+        { rel: opRel, requireNotExists: true,
+          fields: { uid, rewardType: "my_world_interaction", kind: intent.kind, awardedExp: r.awardedExp, resultingExp: r.resultingExp, resultingLevel: r.level, resultingTier: r.tier, createdAt: nowIso, schemaVersion: 1 } },
+        { rel: userRel, updateMask: ["doriExp", "level", "tier", "rewardDailyDate", "rewardDailyExp"],
+          fields: { doriExp: r.resultingExp, level: r.level, tier: r.tier, rewardDailyDate: today, rewardDailyExp: r.newDailyExpEarned } },
+      ]);
+      return J({ ok: true, duplicate: false, awardedExp: r.awardedExp, doriExp: r.resultingExp, level: r.level, tier: r.tier });
+    } catch (e: any) {
+      await rollback(token, tx);
+      if (e?.code === "firestore_forbidden") return J({ ok: false, error: "internal_error", detail: "firestore_permission" }, 500);
+      if (e?.code === "commit_conflict") continue; // 동시요청 → 다음 루프서 duplicate 반환
+      return J({ ok: false, error: "internal_error", cid }, 500);
+    }
+  }
+  return J({ ok: false, error: "retryable_conflict", cid }, 409);
+}
 
 // POST 외 메서드 → 405
 export const onRequest: any = async (context: any) => {
