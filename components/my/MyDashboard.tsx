@@ -704,6 +704,7 @@ export default function MyDashboard() {
             ].map((tab) => (
               <button
                 key={tab.id}
+                data-testid={`dashboard-tab-${tab.id}`}
                 onClick={() => setActiveTab(tab.id)}
                 className={`relative pb-3 text-sm font-bold transition-all ${activeTab === tab.id
                   ? "text-[#F9954E]"
