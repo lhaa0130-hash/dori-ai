@@ -1015,6 +1015,7 @@ export default function ProfilePage() {
             <button
               type="button"
               onClick={() => setHomeTab("account")}
+              data-testid="profile-activity-tab"
               className={`flex-1 text-center py-2 rounded-xl text-[13px] font-extrabold transition-colors ${
                 homeTab === "account"
                   ? "bg-white dark:bg-zinc-800 text-[#F9954E] shadow-sm"

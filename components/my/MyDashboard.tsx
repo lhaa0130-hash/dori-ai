@@ -757,6 +757,7 @@ export default function MyDashboard() {
                           <span className="text-[#F9954E] text-xs font-extrabold flex items-center gap-1">{t.doneBadge}</span>
                         ) : (
                           <button
+                            data-testid={`mission-action-${mission.id}`}
                             onClick={() => {
                               if (mission.id === "attendance") {
                                 handleAttendance();
