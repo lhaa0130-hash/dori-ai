@@ -86,6 +86,7 @@ export function InteractionProvider({ children }: { children: ReactNode }) {
   const [animationQueue, setAnimationQueue] = useState<AnimationCommand[]>([]);
   const [activeCommand, setActiveCommand] = useState<AnimationCommand | null>(null);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
+  const flushingRef = useRef(false); // single-flight: 동시 flush 방지(online 이벤트 다중 발생)
   const saveChain = useRef<Promise<unknown>>(Promise.resolve());
   // 일시 감정(hungry/sad/angry) — 저장하지 않으며 타이머로 자동 회복.
   const [transient, setTransient] = useState<TransientEmotion | null>(null);
@@ -252,13 +253,15 @@ export function InteractionProvider({ children }: { children: ReactNode }) {
       const current = identityRef.current;
       const u = current.firebaseUid;
       if (!current.canWriteRemote || !u || !navigator.onLine || !hasQueuedInteractionSync(u)) return;
+      if (flushingRef.current) return; // single-flight: 이미 진행 중이면 재진입 금지
+      flushingRef.current = true;
       setSyncing(true);
       try {
         const synced = await flushInteractionQueue(u);
         // flush 완료 사이에 사용자가 바뀌었으면 화면 상태를 덮지 않는다.
         if (synced && canPersistFor(u, identityRef.current)) { setState(synced); stateRef.current = synced; }
       } catch { setOffline(true); }
-      finally { setSyncing(false); }
+      finally { flushingRef.current = false; setSyncing(false); }
     };
     update();
     window.addEventListener("online", flush);

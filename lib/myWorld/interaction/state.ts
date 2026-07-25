@@ -72,7 +72,16 @@ export async function saveInteractionState(uid: string, state: InteractionState)
 }
 
 /** 온라인 복귀 시 호출. 성공하면 큐를 비우고, 실패하면 큐를 유지해 다음 기회에 재시도한다. */
+/**
+ * 온라인 복귀 시 호출. 전송 중 새 interaction 이 큐에 쌓이면(superseded) 최신까지 이어서 전송한다.
+ * saveInteractionState 는 같은 상태 merge 라 재전송해도 서버 중복이 없다(idempotent).
+ */
 export async function flushInteractionQueue(uid: string): Promise<InteractionState | null> {
-  const { flushed } = await flushQueuedState(browserStorage(), uid, (queued) => saveInteractionState(uid, queued));
-  return flushed;
+  let last: InteractionState | null = null;
+  for (let i = 0; i < 5; i += 1) {
+    const { flushed, superseded } = await flushQueuedState(browserStorage(), uid, (queued) => saveInteractionState(uid, queued));
+    if (flushed) last = flushed;
+    if (!superseded) break; // 큐가 비었거나 최신 상태까지 전송 완료
+  }
+  return last;
 }

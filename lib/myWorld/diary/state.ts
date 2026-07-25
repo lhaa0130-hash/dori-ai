@@ -77,9 +77,23 @@ async function persistEntries(uid: string, entries: DiaryEntry[]): Promise<void>
  * 기록 추가 — 읽기-수정-쓰기(최신 상태 위에 prepend 후 100개로 trim).
  *  서버가 id/userId/createdAt 채움. 반환: 갱신된 DiaryState(추가된 엔트리 포함, desc).
  */
+/** metadata.eventId 로 이미 기록된 항목이 있으면 그 id 를 반환(멱등 키). */
+function existingByEventId(entries: DiaryEntry[], eventId: unknown): DiaryEntry | undefined {
+  if (typeof eventId !== "string" || !eventId) return undefined;
+  return entries.find((e) => (e.metadata as Record<string, unknown> | undefined)?.eventId === eventId);
+}
+
+/**
+ * 일기 1건 추가. **멱등**: 같은 metadata.eventId(상호작용 operation id)로 이미 기록된 항목이 있으면
+ * 새로 만들지 않고 현재 상태를 그대로 반환한다 → 오프라인 재전송·중복 호출에도 중복 생성 없음(§13).
+ */
 export async function addDiaryEntry(uid: string, input: DiaryEntryInput): Promise<DiaryState> {
   if (!uid) return emptyDiaryState();
   const current = await getDiaryState(uid);
+
+  const eventId = (input.metadata as Record<string, unknown> | undefined)?.eventId;
+  if (existingByEventId(current.entries, eventId)) return current; // 이미 기록됨 → no-op
+
   const entry: DiaryEntry = {
     ...input,
     id: makeEntryId(),
