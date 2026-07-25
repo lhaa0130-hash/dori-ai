@@ -261,11 +261,259 @@ async function main() {
   // ── console/네트워크 위생 ──
   const claimStatuses = claimCalls.map((c) => c.status);
   ok("claim 응답에 5xx 없음", claimStatuses.filter((s) => s >= 500).length === 0, `statuses=${claimStatuses.join(",")}`);
+  // ── 나머지 화면 실제 DOM 클릭 시나리오(각각 독립 UID) ──
+  await feedPostSection();
+  await feedCommentSection();
+  await attendanceSection();
+  await missionSection();
+  await minigameSection();
+
   // 오프라인 구간에서 의도적으로 발생하는 네트워크 오류와 빈 메시지는 제외.
   const realErrors = consoleErrors.filter((e) => e && e.trim() && !/favicon|ERR_INTERNET_DISCONNECTED|ERR_NETWORK|Failed to fetch|NetworkError/i.test(e));
   ok("페이지 console error 0(오프라인 구간 네트워크 오류 제외)", realErrors.length === 0, realErrors.slice(0, 2).join(" | "));
 
   finish();
+}
+
+// ── 공통 헬퍼 ──────────────────────────────────────────────────────────
+/** 새 사용자 + users 문서 초기화 + 브라우저에서 로그인(시나리오 독립성). */
+async function freshUser(tag) {
+  const user = await makeUser(`ui-${tag}@test.dev`);
+  await fsSet(`users/${user.uid}`, { doriExp: I(0), cottonCandy: I(0), tier: I(1), level: I(1), name: S(tag) });
+  return user;
+}
+async function signInBrowser(user) {
+  await waitFor(`typeof window.__illoTestSignIn === 'function'`, { timeout: 25000, label: "seam" });
+  const uid = await evaljs(`window.__illoTestSignIn(${JSON.stringify(user.email)},${JSON.stringify(user.password)}).then(c=>c.user.uid).catch(e=>'ERR:'+e.code)`);
+  return uid === user.uid;
+}
+const expOf = async (uid) => num((await fsGet(`users/${uid}`)).doriExp) ?? 0;
+/** 서버 EXP 가 목표만큼 오를 때까지 폴링. */
+async function waitExp(uid, from, timeout = 20000) {
+  const s = Date.now();
+  let v = from;
+  while (Date.now() - s < timeout) { v = await expOf(uid); if (v > from) return v; await sleep(700); }
+  return v;
+}
+/** 최근 claim 요청 개수 스냅샷(시나리오별 증가분 확인용). */
+const claimCount = () => claimCalls.length;
+/** 특정 rewardType 의 원장 문서를 찾는다. */
+async function ledgerFor(uid, prefix) {
+  const docs = await fsList(`users/${uid}/rewardOperations`);
+  return docs.filter((d) => String(d.name).split("/").pop().startsWith(prefix));
+}
+
+/** 실제 키보드 입력(CDP Input.insertText) — 요소를 포커스한 뒤 사용자처럼 타이핑. */
+async function typeInto(selector, text) {
+  const focused = await evaljs(`(()=>{const el=document.querySelector(${JSON.stringify(selector)});if(!el)return false;el.scrollIntoView({block:'center'});el.focus();el.click();return document.activeElement===el})()`);
+  if (!focused) return false;
+  await send("Input.insertText", { text });
+  await sleep(500);
+  return (await evaljs(`(()=>{const el=document.querySelector(${JSON.stringify(selector)});return el&&el.value?el.value.length:0})()`)) > 0;
+}
+
+// ── Feed 글 작성: 실제 작성 화면에서 textarea 입력 + '올리기' 클릭 ──
+async function feedPostSection() {
+  const u = await freshUser("feedpost");
+  await goto(`${BASE}/feed`, 5000);
+  if (!(await signInBrowser(u))) { ok("feed post: 로그인", false); return; }
+  await goto(`${BASE}/feed`, 6000);
+  const composer = await waitFor(`!!document.querySelector('textarea[aria-label="새 게시물 본문"]')`, { timeout: 25000, label: "composer" }).catch(() => false);
+  ok("feed post: 실제 글쓰기 화면(textarea) 렌더", composer === true);
+  if (!composer) return;
+
+  const before = await expOf(u.uid);
+  const c0 = claimCount();
+  // React 제어 컴포넌트에 실제 입력 이벤트를 발생시킨다(값 직접 대입만으로는 state 가 안 바뀜).
+  const typed = await typeInto('textarea[aria-label="새 게시물 본문"]', "UI E2E auto post");
+  ok("feed post: 본문 실제 키보드 입력", typed === true);
+  const clicked = await clickByText("올리기");
+  ok("feed post: '올리기' 버튼 실제 클릭", clicked === "clicked", `res=${clicked}`);
+
+  // Firestore feed 문서 생성 확인
+  let posts = [];
+  { const s = Date.now(); while (Date.now() - s < 20000) { posts = await fsList("feed"); if (posts.some((d) => d.fields?.uid?.stringValue === u.uid)) break; await sleep(700); } }
+  const mine = posts.find((d) => d.fields?.uid?.stringValue === u.uid);
+  const postId = mine ? String(mine.name).split("/").pop() : null;
+  ok("feed post: Firestore feed 문서 생성", !!postId, `postId=${postId}`);
+  if (!postId) return;
+
+  const after = await waitExp(u.uid, before);
+  ok("feed post: /api/claim-reward 요청 발생", claimCount() > c0, `+${claimCount() - c0}건`);
+  ok("feed post: 서버 EXP 가 정책값(15)만 증가", after - before === 15, `${before}→${after}`);
+  const led = await ledgerFor(u.uid, "post_");
+  ok("feed post: 원장 sourceId 가 실제 post ID", led.length === 1 && led[0].fields?.sourceId?.stringValue === postId,
+    `ledger=${led.length} src=${led[0]?.fields?.sourceId?.stringValue}`);
+  ok("feed post: rewardType=community_post", led[0]?.fields?.rewardType?.stringValue === "community_post");
+
+  // 같은 source 재청구(직접 HTTP) → 중복 없음 / 다른 UID 가 청구 → 403
+  const dup = await claimAs({ rewardType: "community_post", operationId: `post_${postId}`, sourceId: postId }, u);
+  ok("feed post: 같은 source 재청구 → duplicate(추가 지급 없음)", dup.json?.duplicate === true && (await expOf(u.uid)) === after);
+  const other = await freshUser("feedpost-other");
+  const stolen = await claimAs({ rewardType: "community_post", operationId: `post_${postId}`, sourceId: postId }, other);
+  ok("feed post: 다른 UID 가 남의 post 청구 → 403 source_not_owned", stolen.status === 403 && stolen.json?.error === "source_not_owned",
+    `status=${stolen.status} err=${stolen.json?.error}`);
+}
+
+/** 사용자 토큰으로 엔드포인트 직접 호출(중복·소유권 검증용). */
+async function claimAs(body, user) {
+  const r = await fetch(`http://${AUTH_HOST}/identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=fake-api-key`, {
+    method: "POST", headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ email: user.email, password: user.password, returnSecureToken: true }),
+  });
+  const { idToken } = await r.json();
+  const res = await fetch(`${API_BASE}/api/claim-reward`, {
+    method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` },
+    body: JSON.stringify(body),
+  });
+  let json = null; try { json = await res.json(); } catch { /* */ }
+  return { status: res.status, json };
+}
+
+// ── Feed 댓글: 실제 피드에서 댓글 열기 → 입력 → '등록' 클릭 ──
+async function feedCommentSection() {
+  const u = await freshUser("feedcmt");
+  // 댓글 달 대상 글을 미리 준비(내 글) — 댓글 작성 자체가 이 시나리오의 UI 대상.
+  const postId = "uicmtpost1";
+  await fsSet(`feed/${postId}`, { uid: S(u.uid), name: S("feedcmt"), text: S("댓글 대상 글"), status: S("published"), visibility: S("public"), likeCount: I(0), commentCount: I(0), createdAt: { timestampValue: new Date().toISOString() } });
+  await goto(`${BASE}/feed`, 5000);
+  if (!(await signInBrowser(u))) { ok("feed comment: 로그인", false); return; }
+  await goto(`${BASE}/feed`, 7000);
+
+  const opened = await evaljs(`(()=>{const b=[...document.querySelectorAll('button')].find(x=>/댓글\\s*\\d+/.test(x.textContent||''));if(!b)return 'notfound';b.scrollIntoView({block:'center'});b.click();return 'clicked';})()`);
+  ok("feed comment: 댓글 영역 열기 클릭", opened === "clicked", `res=${opened}`);
+  const inputReady = await waitFor(`!!document.querySelector('input[placeholder="댓글을 입력하세요"]')`, { timeout: 15000, label: "comment input" }).catch(() => false);
+  ok("feed comment: 실제 댓글 입력창 렌더", inputReady === true);
+  if (!inputReady) return;
+
+  const before = await expOf(u.uid);
+  const c0 = claimCount();
+  const typedC = await typeInto('input[placeholder="댓글을 입력하세요"]', "UI E2E auto comment");
+  ok("feed comment: 댓글 실제 키보드 입력", typedC === true);
+  const clicked = await clickByText("^등록$");
+  ok("feed comment: '등록' 버튼 실제 클릭", clicked === "clicked", `res=${clicked}`);
+
+  let comments = [];
+  { const s = Date.now(); while (Date.now() - s < 20000) { comments = await fsList(`feed/${postId}/comments`); if (comments.length) break; await sleep(700); } }
+  const commentId = comments.length ? String(comments[0].name).split("/").pop() : null;
+  ok("feed comment: Firestore 댓글 문서 생성", !!commentId, `id=${commentId}`);
+  if (!commentId) return;
+
+  const after = await waitExp(u.uid, before);
+  ok("feed comment: /api/claim-reward 요청 발생", claimCount() > c0, `+${claimCount() - c0}건`);
+  ok("feed comment: 서버 EXP 가 정책값(5)만 증가", after - before === 5, `${before}→${after}`);
+  const led = await ledgerFor(u.uid, "comment_");
+  ok("feed comment: 원장 sourceId = {postId}__{commentId}", led[0]?.fields?.sourceId?.stringValue === `${postId}__${commentId}`,
+    `src=${led[0]?.fields?.sourceId?.stringValue}`);
+  const dup = await claimAs({ rewardType: "community_comment", operationId: `comment_${postId}__${commentId}`, sourceId: `${postId}__${commentId}` }, u);
+  ok("feed comment: 같은 댓글 재청구 → duplicate", dup.json?.duplicate === true && (await expOf(u.uid)) === after);
+  const other = await freshUser("feedcmt-other");
+  const stolen = await claimAs({ rewardType: "community_comment", operationId: `comment_${postId}__${commentId}`, sourceId: `${postId}__${commentId}` }, other);
+  ok("feed comment: 타인 댓글 청구 → 403 source_not_owned", stolen.status === 403 && stolen.json?.error === "source_not_owned", `status=${stolen.status}`);
+
+  // reload 후 UI 와 서버 상태 일치
+  await goto(`${BASE}/feed`, 6000);
+  const cacheExp = await evaljs(`(()=>{try{const k=Object.keys(localStorage).find(x=>x.startsWith('dori_game_profile_'));return k?JSON.parse(localStorage.getItem(k)).doriExp:null}catch(e){return null}})()`);
+  ok("feed comment: reload 후 UI 캐시 == 서버 EXP", cacheExp === after, `cache=${cacheExp} server=${after}`);
+}
+
+// ── 출석: /my 대시보드에서 '출석 체크' 받기 버튼 클릭 ──
+async function attendanceSection() {
+  const u = await freshUser("attend");
+  await goto(`${BASE}/profile`, 5000);
+  if (!(await signInBrowser(u))) { ok("attendance: 로그인", false); return; }
+  await goto(`${BASE}/profile`, 8000);
+  await evaljs(`(()=>{const b=[...document.querySelectorAll('button')].find(x=>/계정|활동/.test(x.textContent||''));if(b)b.click();return 1})()`);
+  await sleep(2500);
+  const found = await waitFor(`(()=>{const rows=[...document.querySelectorAll('div')].filter(d=>/출석 체크/.test(d.textContent||''));return rows.length>0})()`, { timeout: 25000, label: "attendance row" }).catch(() => false);
+  ok("attendance: 대시보드에 출석 미션 렌더", found === true);
+  if (!found) return;
+
+  const before = await expOf(u.uid);
+  const c0 = claimCount();
+  // '출석 체크' 행 안의 받기 버튼만 클릭(다른 미션 버튼과 혼동 방지).
+  const clicked = await evaljs(`(()=>{const rows=[...document.querySelectorAll('div')].filter(d=>/출석 체크/.test(d.textContent||'')&&d.querySelector('button'));
+    if(!rows.length)return 'notfound';const row=rows[rows.length-1];const b=row.querySelector('button');b.scrollIntoView({block:'center'});b.click();return 'clicked';})()`);
+  ok("attendance: 출석 버튼 실제 클릭", clicked === "clicked", `res=${clicked}`);
+
+  const after = await waitExp(u.uid, before);
+  ok("attendance: /api/claim-reward(daily_attendance) 요청 발생", claimCount() > c0, `+${claimCount() - c0}건`);
+  ok("attendance: 서버 기준 지급됨(EXP 증가)", after > before, `${before}→${after}`);
+  const claims = await fsList(`users/${u.uid}/rewardClaims`);
+  ok("attendance: rewardClaims 원장 1건(서버 날짜 기준)", claims.length === 1, `claims=${claims.length}`);
+
+  // 재클릭 + reload → 중복 없음
+  await evaljs(`(()=>{const rows=[...document.querySelectorAll('div')].filter(d=>/출석 체크/.test(d.textContent||'')&&d.querySelector('button'));if(rows.length){rows[rows.length-1].querySelector('button').click();}return 1})()`);
+  await sleep(3000);
+  await goto(`${BASE}/profile`, 7000);
+  await evaljs(`(()=>{const b=[...document.querySelectorAll('button')].find(x=>/계정|활동/.test(x.textContent||''));if(b)b.click();return 1})()`);
+  await sleep(2500);
+  await sleep(2000);
+  ok("attendance: 재클릭·reload 해도 중복 지급 없음", (await expOf(u.uid)) === after && (await fsList(`users/${u.uid}/rewardClaims`)).length === 1,
+    `exp=${await expOf(u.uid)} claims=${(await fsList(`users/${u.uid}/rewardClaims`)).length}`);
+  // 직접 재청구도 already_claimed
+  const again = await claimAs({ rewardType: "daily_attendance" }, u);
+  ok("attendance: 같은 날 재청구 → already_claimed", again.json?.status === "already_claimed" || again.json?.status === "legacy_recognized", `st=${again.json?.status}`);
+}
+
+// ── 미션: 계정 메뉴의 '로그인 출석체크' 미션 완료 버튼 클릭 ──
+async function missionSection() {
+  const u = await freshUser("mission");
+  await goto(`${BASE}/`, 5000);
+  if (!(await signInBrowser(u))) { ok("mission: 로그인", false); return; }
+  await goto(`${BASE}/`, 6000);
+  // alert() 가 뜨면 CDP 평가가 멈추므로 미리 무력화한다(UI 클릭 자체는 그대로 수행).
+  await evaljs(`window.alert=function(){};1`);
+
+  const before = await expOf(u.uid);
+  const c0 = claimCount();
+  // 계정 메뉴 열기 → 미션 목록의 '출석체크' 완료 버튼 클릭
+  const opened = await evaljs(`(()=>{const b=document.querySelector('button[aria-label="Account menu"]');if(!b)return 'notfound';b.click();return 'clicked';})()`);
+  await sleep(2000);
+  // 미션 목록의 첫 '수행하기' = 로그인 출석체크 미션(mission.id===1)
+  const clicked = await evaljs(`(()=>{const b=[...document.querySelectorAll('button')].find(x=>/수행하기/.test(x.textContent||''));if(!b)return 'notfound';b.scrollIntoView({block:'center'});b.click();return 'clicked';})()`);
+  ok("mission: 계정 메뉴 미션 UI 접근", opened === "clicked", `menu=${opened}`);
+  ok("mission: 미션 완료 버튼 실제 클릭", clicked === "clicked", `res=${clicked}`);
+  if (clicked !== "clicked") return;
+
+  const after = await waitExp(u.uid, before);
+  ok("mission: /api/claim-reward(mission_complete) 요청 발생", claimCount() > c0, `+${claimCount() - c0}건`);
+  ok("mission: 서버 고정 EXP(10) 지급", after - before === 10, `${before}→${after}`);
+  const led = await ledgerFor(u.uid, "mission_");
+  ok("mission: 원장에 실제 missionId 기록", led.length === 1 && /checkin_/.test(led[0].fields?.sourceId?.stringValue || ""),
+    `src=${led[0]?.fields?.sourceId?.stringValue}`);
+  const dup = await claimAs({ rewardType: "mission_complete", operationId: led[0]?.fields ? `mission_${led[0].fields.sourceId.stringValue}` : "mission_x", sourceId: led[0]?.fields?.sourceId?.stringValue || "x" }, u);
+  ok("mission: 같은 mission 재청구 → duplicate(재지급 없음)", dup.json?.duplicate === true && (await expOf(u.uid)) === after);
+}
+
+// ── 미니게임: EmbeddedGame 의 실제 통합 계약(게임 iframe → postMessage {score})으로 보상 트리거 ──
+//   ⚠️ 게임 본체는 Unity/iframe 이라 실제 플레이 자동화가 불가능하다. 대신 프로덕션에서 게임이
+//      실제로 쓰는 window message 이벤트를 그대로 발생시켜 페이지의 리스너를 구동한다(직접 함수호출 아님).
+async function minigameSection() {
+  const GAMES = ["boss", "cute2048", "gem"];
+  for (const game of GAMES) {
+    const u = await freshUser(`mg-${game}`);
+    await goto(`${BASE}/minigame/${game}`, 6000);
+    if (!(await signInBrowser(u))) { ok(`minigame(${game}): 로그인`, false); continue; }
+    await goto(`${BASE}/minigame/${game}`, 8000);
+    const mounted = await waitFor(`!!document.querySelector('iframe')`, { timeout: 25000, label: `${game} iframe` }).catch(() => false);
+    ok(`minigame(${game}): 실제 게임 화면(iframe) 렌더`, mounted === true);
+    if (!mounted) continue;
+
+    const before = await expOf(u.uid);
+    const c0 = claimCount();
+    // 게임 종료 이벤트(프로덕션 계약과 동일한 postMessage). score 를 크게 조작해도 서버 보상은 고정이어야 한다.
+    await evaljs(`window.postMessage({type:'dori-game',event:'gameover',score:999999},window.location.origin);1`);
+    const after = await waitExp(u.uid, before);
+    ok(`minigame(${game}): 게임 종료 이벤트 → claim 요청 발생`, claimCount() > c0, `+${claimCount() - c0}건`);
+    ok(`minigame(${game}): 서버 고정 EXP(5) — score 999999 조작 무효`, after - before === 5, `${before}→${after}`);
+    const led = await ledgerFor(u.uid, "minigame_");
+    ok(`minigame(${game}): 원장 1건(playtime 소스)`, led.length === 1, `ledger=${led.length} src=${led[0]?.fields?.sourceId?.stringValue}`);
+    // 같은 play 재전송 → 중복 없음(클라 일일 게이트 + 서버 멱등)
+    await evaljs(`window.postMessage({type:'dori-game',event:'gameover',score:12345},window.location.origin);1`);
+    await sleep(3000);
+    ok(`minigame(${game}): 같은 날 재플레이 → 중복 지급 없음(daily cap)`, (await expOf(u.uid)) === after, `exp=${await expOf(u.uid)}`);
+  }
 }
 
 function finish() {
