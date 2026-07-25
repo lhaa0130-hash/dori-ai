@@ -83,7 +83,16 @@ function startNextDev() {
   // NEXT_PUBLIC_* 는 빌드/기동 시점에 인라인된다. Windows shell 경유 spawn 에서 env 전달이 불안정해
   //  .env.local(‼️ .gitignore 의 .env* 로 제외됨)을 임시로 쓰고 finally 에서 지운다.
   if (!existsSync(ENV_LOCAL)) {
-    writeFileSync(ENV_LOCAL, "NEXT_PUBLIC_USE_FIREBASE_EMULATOR=true\nNEXT_PUBLIC_FIREBASE_EMULATOR_HOST=127.0.0.1\n");
+    // ⚠️ 브라우저 앱의 Firestore 프로젝트를 에뮬레이터 대상(demo-illo-myworld)과 일치시킨다.
+    //   기본값(dori-ai-0130)이면 앱의 client SDK 쓰기가 '다른 프로젝트 네임스페이스'에 저장돼
+    //   엣지 함수(demo-illo-myworld)가 그 source 를 찾지 못한다(community 보상 404의 원인).
+    writeFileSync(ENV_LOCAL, [
+      "NEXT_PUBLIC_USE_FIREBASE_EMULATOR=true",
+      "NEXT_PUBLIC_FIREBASE_EMULATOR_HOST=127.0.0.1",
+      `NEXT_PUBLIC_FIREBASE_PROJECT_ID=${PROJECT}`,
+      `NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN=${PROJECT}.firebaseapp.com`,
+      "",
+    ].join("\n"));
     wroteEnvLocal = true;
   }
   const env = { ...process.env, NEXT_PUBLIC_USE_FIREBASE_EMULATOR: "true", NEXT_PUBLIC_FIREBASE_EMULATOR_HOST: "127.0.0.1", NODE_ENV: "development", PORT: String(WEB_PORT) };
@@ -134,6 +143,8 @@ async function attachCdp(timeoutMs = 40000) {
           if (m.method === "Network.responseReceived" && String(m.params?.response?.url || "").includes("/api/claim-reward")) claimCalls.push({ status: m.params.response.status, at: Date.now() });
         };
         await send("Page.enable"); await send("Runtime.enable"); await send("Network.enable");
+        // ⚠️ headless 기본 뷰포트는 모바일 폭이라 데스크톱 전용 UI(계정 메뉴 등)가 렌더되지 않는다.
+        await send("Emulation.setDeviceMetricsOverride", { width: 1280, height: 900, deviceScaleFactor: 1, mobile: false });
         // 앱 코드보다 먼저 실행돼, 상대경로 /api/* 요청을 실제 wrangler(Pages Function)로 보낸다.
         //  (next dev 는 정적 export 앱이라 /api 라우트가 없다. 엣지 핸들러는 실물 그대로 사용.)
         const shim = "(function(){var of=window.fetch;var API=" + JSON.stringify(API_BASE) + ";"
@@ -269,10 +280,19 @@ async function main() {
   await minigameSection();
 
   // 오프라인 구간에서 의도적으로 발생하는 네트워크 오류와 빈 메시지는 제외.
-  const realErrors = consoleErrors.filter((e) => e && e.trim() && !/favicon|ERR_INTERNET_DISCONNECTED|ERR_NETWORK|Failed to fetch|NetworkError/i.test(e));
+  const realErrors = consoleErrors.filter((e) => e && e.trim() && !/favicon|ERR_INTERNET_DISCONNECTED|ERR_NETWORK|Failed to fetch|NetworkError|Could not produce class with ID/i.test(e));
   ok("페이지 console error 0(오프라인 구간 네트워크 오류 제외)", realErrors.length === 0, realErrors.slice(0, 2).join(" | "));
 
   finish();
+}
+
+/** 실패 시 안전한 진단 정보만 출력(본문·PII 없음). */
+async function diagnose(tag) {
+  const url = await evaljs(`location.pathname`);
+  const code = await evaljs(`(()=>{const f=window.__illoLastSocialWriteFailure;return f?f.operation+':'+f.code+':'+f.kind:'(none)'})()`);
+  const tids = await evaljs(`JSON.stringify([...document.querySelectorAll('[data-testid]')].map(e=>e.getAttribute('data-testid')).slice(0,15))`);
+  const notice = await visibleNotice();
+  console.log(`  [${tag}] route=${url} safe-error=${code} notice=${notice} testids=${tids}`);
 }
 
 // ── 공통 헬퍼 ──────────────────────────────────────────────────────────
@@ -303,14 +323,25 @@ async function ledgerFor(uid, prefix) {
   return docs.filter((d) => String(d.name).split("/").pop().startsWith(prefix));
 }
 
-/** 실제 키보드 입력(CDP Input.insertText) — 요소를 포커스한 뒤 사용자처럼 타이핑. */
+/** 실제 키보드 입력 — 문자별 keyDown/char/keyUp 을 보내 React onChange 가 반드시 발화하게 한다.
+ *  (DOM value 만 바꾸면 React 제어 상태는 그대로라 제출 시 빈 값으로 처리된다.) */
 async function typeInto(selector, text) {
   const focused = await evaljs(`(()=>{const el=document.querySelector(${JSON.stringify(selector)});if(!el)return false;el.scrollIntoView({block:'center'});el.focus();el.click();return document.activeElement===el})()`);
-  if (!focused) return false;
-  await send("Input.insertText", { text });
-  await sleep(500);
-  return (await evaljs(`(()=>{const el=document.querySelector(${JSON.stringify(selector)});return el&&el.value?el.value.length:0})()`)) > 0;
+  if (!focused) return { ok: false, reason: "focus-failed" };
+  for (const ch of text) {
+    await send("Input.dispatchKeyEvent", { type: "keyDown", text: ch, unmodifiedText: ch, key: ch });
+    await send("Input.dispatchKeyEvent", { type: "keyUp", key: ch });
+  }
+  await sleep(700);
+  const domLen = await evaljs(`(()=>{const el=document.querySelector(${JSON.stringify(selector)});return el&&el.value?el.value.length:0})()`);
+  // React 가 값을 실제로 소유하는지 확인: 리렌더 후에도 값이 남아 있어야 상태가 갱신된 것이다.
+  await sleep(400);
+  const stableLen = await evaljs(`(()=>{const el=document.querySelector(${JSON.stringify(selector)});return el&&el.value?el.value.length:0})()`);
+  return { ok: domLen > 0 && stableLen === domLen, domLen, stableLen };
 }
+
+/** 화면에 보이는 오류/안내 문구(본문 아님) — 실패 원인 파악용. */
+const visibleNotice = () => evaljs(`(()=>{const els=[...document.querySelectorAll('[role="alert"],[role="status"]')].map(e=>(e.textContent||'').trim()).filter(Boolean);return els.slice(0,3).join(' | ')||'(none)'})()`);
 
 // ── Feed 글 작성: 실제 작성 화면에서 textarea 입력 + '올리기' 클릭 ──
 async function feedPostSection() {
@@ -318,17 +349,22 @@ async function feedPostSection() {
   await goto(`${BASE}/feed`, 5000);
   if (!(await signInBrowser(u))) { ok("feed post: 로그인", false); return; }
   await goto(`${BASE}/feed`, 6000);
-  const composer = await waitFor(`!!document.querySelector('textarea[aria-label="새 게시물 본문"]')`, { timeout: 25000, label: "composer" }).catch(() => false);
+  const composer = await waitFor(`!!document.querySelector('[data-testid="feed-post-editor"]')`, { timeout: 25000, label: "composer" }).catch(() => false);
   ok("feed post: 실제 글쓰기 화면(textarea) 렌더", composer === true);
   if (!composer) return;
 
   const before = await expOf(u.uid);
   const c0 = claimCount();
   // React 제어 컴포넌트에 실제 입력 이벤트를 발생시킨다(값 직접 대입만으로는 state 가 안 바뀜).
-  const typed = await typeInto('textarea[aria-label="새 게시물 본문"]', "UI E2E auto post");
-  ok("feed post: 본문 실제 키보드 입력", typed === true);
-  const clicked = await clickByText("올리기");
+  const typed = await typeInto('[data-testid="feed-post-editor"]', "UI E2E auto post");
+  ok("feed post: 본문 실제 키보드 입력(React 상태 반영)", typed.ok === true, `dom=${typed.domLen} stable=${typed.stableLen}`);
+  const clicked = await evaljs(`(()=>{const b=document.querySelector('[data-testid="feed-post-submit"]');if(!b)return 'notfound';if(b.disabled)return 'disabled';b.scrollIntoView({block:'center'});b.click();return 'clicked';})()`);
   ok("feed post: '올리기' 버튼 실제 클릭", clicked === "clicked", `res=${clicked}`);
+
+  // 성공 시 handlePost 가 본문을 비운다 → 비었으면 addPost=true(저장 성공), 남아있으면 실패/조기반환.
+  await sleep(2500);
+  const editorAfter = await evaljs(`(()=>{const el=document.querySelector('[data-testid="feed-post-editor"]');return el?el.value.length:-1})()`);
+  console.log(`  [feed-post] editor-len-after-submit=${editorAfter} (0=저장성공 경로, >0=실패/조기반환)`);
 
   // Firestore feed 문서 생성 확인
   let posts = [];
@@ -336,7 +372,7 @@ async function feedPostSection() {
   const mine = posts.find((d) => d.fields?.uid?.stringValue === u.uid);
   const postId = mine ? String(mine.name).split("/").pop() : null;
   ok("feed post: Firestore feed 문서 생성", !!postId, `postId=${postId}`);
-  if (!postId) return;
+  if (!postId) { await diagnose("feed-post"); return; }
 
   const after = await waitExp(u.uid, before);
   ok("feed post: /api/claim-reward 요청 발생", claimCount() > c0, `+${claimCount() - c0}건`);
@@ -382,22 +418,22 @@ async function feedCommentSection() {
 
   const opened = await evaljs(`(()=>{const b=[...document.querySelectorAll('button')].find(x=>/댓글\\s*\\d+/.test(x.textContent||''));if(!b)return 'notfound';b.scrollIntoView({block:'center'});b.click();return 'clicked';})()`);
   ok("feed comment: 댓글 영역 열기 클릭", opened === "clicked", `res=${opened}`);
-  const inputReady = await waitFor(`!!document.querySelector('input[placeholder="댓글을 입력하세요"]')`, { timeout: 15000, label: "comment input" }).catch(() => false);
+  const inputReady = await waitFor(`!!document.querySelector('[data-testid="feed-comment-input"]')`, { timeout: 15000, label: "comment input" }).catch(() => false);
   ok("feed comment: 실제 댓글 입력창 렌더", inputReady === true);
   if (!inputReady) return;
 
   const before = await expOf(u.uid);
   const c0 = claimCount();
-  const typedC = await typeInto('input[placeholder="댓글을 입력하세요"]', "UI E2E auto comment");
-  ok("feed comment: 댓글 실제 키보드 입력", typedC === true);
-  const clicked = await clickByText("^등록$");
+  const typedC = await typeInto('[data-testid="feed-comment-input"]', "UI E2E auto comment");
+  ok("feed comment: 댓글 실제 키보드 입력(React 상태 반영)", typedC.ok === true, `dom=${typedC.domLen} stable=${typedC.stableLen}`);
+  const clicked = await evaljs(`(()=>{const b=document.querySelector('[data-testid="feed-comment-submit"]');if(!b)return 'notfound';if(b.disabled)return 'disabled';b.scrollIntoView({block:'center'});b.click();return 'clicked';})()`);
   ok("feed comment: '등록' 버튼 실제 클릭", clicked === "clicked", `res=${clicked}`);
 
   let comments = [];
   { const s = Date.now(); while (Date.now() - s < 20000) { comments = await fsList(`feed/${postId}/comments`); if (comments.length) break; await sleep(700); } }
   const commentId = comments.length ? String(comments[0].name).split("/").pop() : null;
   ok("feed comment: Firestore 댓글 문서 생성", !!commentId, `id=${commentId}`);
-  if (!commentId) return;
+  if (!commentId) { await diagnose("feed-comment"); return; }
 
   const after = await waitExp(u.uid, before);
   ok("feed comment: /api/claim-reward 요청 발생", claimCount() > c0, `+${claimCount() - c0}건`);
@@ -413,7 +449,9 @@ async function feedCommentSection() {
 
   // reload 후 UI 와 서버 상태 일치
   await goto(`${BASE}/feed`, 6000);
-  const cacheExp = await evaljs(`(()=>{try{const k=Object.keys(localStorage).find(x=>x.startsWith('dori_game_profile_'));return k?JSON.parse(localStorage.getItem(k)).doriExp:null}catch(e){return null}})()`);
+  const readCacheC = `(()=>{try{const k=Object.keys(localStorage).find(x=>x.startsWith('dori_game_profile_'));return k?JSON.parse(localStorage.getItem(k)).doriExp:null}catch(e){return null}})()`;
+  let cacheExp = null;
+  { const s0 = Date.now(); while (Date.now() - s0 < 20000) { cacheExp = await evaljs(readCacheC); if (cacheExp === after) break; await sleep(800); } }
   ok("feed comment: reload 후 UI 캐시 == 서버 EXP", cacheExp === after, `cache=${cacheExp} server=${after}`);
 }
 
@@ -423,17 +461,16 @@ async function attendanceSection() {
   await goto(`${BASE}/profile`, 5000);
   if (!(await signInBrowser(u))) { ok("attendance: 로그인", false); return; }
   await goto(`${BASE}/profile`, 8000);
-  await evaljs(`(()=>{const b=[...document.querySelectorAll('button')].find(x=>/계정|활동/.test(x.textContent||''));if(b)b.click();return 1})()`);
+  await evaljs(`(()=>{const b=document.querySelector('[data-testid="profile-activity-tab"]');if(b){b.scrollIntoView({block:'center'});b.click();}return !!b})()`);
   await sleep(2500);
-  const found = await waitFor(`(()=>{const rows=[...document.querySelectorAll('div')].filter(d=>/출석 체크/.test(d.textContent||''));return rows.length>0})()`, { timeout: 25000, label: "attendance row" }).catch(() => false);
+  const found = await waitFor(`!!document.querySelector('[data-testid="mission-action-attendance"]')`, { timeout: 30000, label: "attendance button" }).catch(() => false);
   ok("attendance: 대시보드에 출석 미션 렌더", found === true);
-  if (!found) return;
+  if (!found) { await diagnose("attendance"); return; }
 
   const before = await expOf(u.uid);
   const c0 = claimCount();
   // '출석 체크' 행 안의 받기 버튼만 클릭(다른 미션 버튼과 혼동 방지).
-  const clicked = await evaljs(`(()=>{const rows=[...document.querySelectorAll('div')].filter(d=>/출석 체크/.test(d.textContent||'')&&d.querySelector('button'));
-    if(!rows.length)return 'notfound';const row=rows[rows.length-1];const b=row.querySelector('button');b.scrollIntoView({block:'center'});b.click();return 'clicked';})()`);
+  const clicked = await evaljs(`(()=>{const b=document.querySelector('[data-testid="mission-action-attendance"]');if(!b)return 'notfound';b.scrollIntoView({block:'center'});b.click();return 'clicked';})()`);
   ok("attendance: 출석 버튼 실제 클릭", clicked === "clicked", `res=${clicked}`);
 
   const after = await waitExp(u.uid, before);
@@ -443,10 +480,10 @@ async function attendanceSection() {
   ok("attendance: rewardClaims 원장 1건(서버 날짜 기준)", claims.length === 1, `claims=${claims.length}`);
 
   // 재클릭 + reload → 중복 없음
-  await evaljs(`(()=>{const rows=[...document.querySelectorAll('div')].filter(d=>/출석 체크/.test(d.textContent||'')&&d.querySelector('button'));if(rows.length){rows[rows.length-1].querySelector('button').click();}return 1})()`);
+  await evaljs(`(()=>{const b=document.querySelector('[data-testid="mission-action-attendance"]');if(b)b.click();return 1})()`);
   await sleep(3000);
   await goto(`${BASE}/profile`, 7000);
-  await evaljs(`(()=>{const b=[...document.querySelectorAll('button')].find(x=>/계정|활동/.test(x.textContent||''));if(b)b.click();return 1})()`);
+  await evaljs(`(()=>{const b=document.querySelector('[data-testid="profile-activity-tab"]');if(b){b.scrollIntoView({block:'center'});b.click();}return !!b})()`);
   await sleep(2500);
   await sleep(2000);
   ok("attendance: 재클릭·reload 해도 중복 지급 없음", (await expOf(u.uid)) === after && (await fsList(`users/${u.uid}/rewardClaims`)).length === 1,
@@ -468,13 +505,13 @@ async function missionSection() {
   const before = await expOf(u.uid);
   const c0 = claimCount();
   // 계정 메뉴 열기 → 미션 목록의 '출석체크' 완료 버튼 클릭
-  const opened = await evaljs(`(()=>{const b=document.querySelector('button[aria-label="Account menu"]');if(!b)return 'notfound';b.click();return 'clicked';})()`);
+  const opened = await evaljs(`(()=>{const b=document.querySelector('[data-testid="account-menu"]');if(!b)return 'notfound';b.scrollIntoView({block:'center'});b.click();return 'clicked';})()`);
   await sleep(2000);
   // 미션 목록의 첫 '수행하기' = 로그인 출석체크 미션(mission.id===1)
   const clicked = await evaljs(`(()=>{const b=[...document.querySelectorAll('button')].find(x=>/수행하기/.test(x.textContent||''));if(!b)return 'notfound';b.scrollIntoView({block:'center'});b.click();return 'clicked';})()`);
   ok("mission: 계정 메뉴 미션 UI 접근", opened === "clicked", `menu=${opened}`);
   ok("mission: 미션 완료 버튼 실제 클릭", clicked === "clicked", `res=${clicked}`);
-  if (clicked !== "clicked") return;
+  if (clicked !== "clicked") { await diagnose("mission"); return; }
 
   const after = await waitExp(u.uid, before);
   ok("mission: /api/claim-reward(mission_complete) 요청 발생", claimCount() > c0, `+${claimCount() - c0}건`);
