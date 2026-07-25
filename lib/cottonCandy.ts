@@ -276,11 +276,12 @@ export async function hydrateGameData(): Promise<void> {
     }
 
     // 마이페이지/프로필 카드용 캐시 (티어·레벨·경험치)
-    // 경험치는 로컬이 더 높으면(방금 활동으로 적립, 아직 FS 반영 전) 유지 — 절대 내리지 않음
+    // ⚠️ P0(05-06K): EXP 는 서버가 유일한 권위다. 예전엔 Math.max(서버, 로컬)로 "절대 내리지 않음"
+    //   이었는데(클라 적립이 서버보다 앞설 수 있었던 시절의 규칙), 이제 클라는 EXP 를 만들지 않는다.
+    //   그 규칙을 남겨두면 조작된 로컬 캐시(예: 999999)가 영원히 화면에 남아 서버 값으로 복구되지 않는다.
+    //   → 서버 값을 그대로 채택한다(조작 캐시 자동 교정).
     const localProfile = getCachedGameProfile(email);
-    const fsExp = d.doriExp || 0;
-    const localExp = localProfile?.doriExp || 0;
-    const finalExp = Math.max(fsExp, localExp);
+    const finalExp = d.doriExp || 0;
     localStorage.setItem(
       GAME_PROFILE_KEY(email),
       JSON.stringify({
@@ -332,6 +333,31 @@ export function getCachedGameProfile(
 /** 현재 경험치(동기, 캐시 기준 — 읽기 전용). */
 export function getDoriExp(email: string): number {
   return getCachedGameProfile(email)?.doriExp || 0;
+}
+
+/**
+ * 서버 보상 응답(권위 값)을 화면 캐시에 그대로 반영한다(05-06K).
+ *  · 클라이언트는 EXP 를 계산하지 않는다 — 서버가 준 doriExp/level/tier 를 받아쓰기만 한다.
+ *  · Firestore 재조회(hydrate)는 방금 커밋과 경합할 수 있어 표시가 늦는다. 응답으로 즉시 교정한다.
+ *  · 조작된 캐시(예: 999999)도 이 경로에서 서버 값으로 내려간다.
+ */
+export function applyServerRewardResult(result: { doriExp?: number; level?: number; tier?: number }): void {
+  if (typeof window === "undefined") return;
+  const exp = typeof result?.doriExp === "number" && result.doriExp >= 0 ? Math.floor(result.doriExp) : null;
+  if (exp === null) return;
+  try {
+    const email = getFirebaseAuth().currentUser?.email;
+    if (!email) return;
+    const cur = getCachedGameProfile(email) || { cottonCandy: 0, doriExp: 0, tier: 1, level: 1 };
+    const next = {
+      ...cur,
+      doriExp: exp,
+      tier: typeof result.tier === "number" ? result.tier : calculateTier(exp),
+      level: typeof result.level === "number" ? result.level : calculateLevel(exp),
+    };
+    localStorage.setItem(GAME_PROFILE_KEY(email), JSON.stringify(next));
+    window.dispatchEvent(new Event("dori-gamedata-synced"));
+  } catch { /* noop */ }
 }
 
 // ⚠️ 중복 제거: hydrateGameData()는 AuthContext.tsx의 onAuthStateChanged에서 이미 호출됨

@@ -65,3 +65,5 @@ firebase-debug.log
 # 05-06I edge E2E 임시 작업 디렉터리(wrangler 격리 실행)
 .edge-e2e-tmp/
 .wrangler/
+.ui-e2e-tmp*/
+.diag-profile/

@@ -38,8 +38,16 @@ function buildDeps(): ClaimDeps {
     storage: typeof window !== "undefined" ? window.localStorage : null,
     online: typeof navigator === "undefined" || navigator.onLine,
     now: Date.now(),
-    // 서버 결과로만 캐시 재동기화(헤더 EXP/레벨/티어). 동적 import 로 순환 방지.
-    onApplied: () => { void import("@/lib/cottonCandy").then((m) => m.hydrateGameData()).catch(() => {}); },
+    // 서버 결과로만 캐시 갱신: ①응답 값을 즉시 반영(권위) ②이어서 hydrate 로 나머지 필드 동기화.
+    //  동적 import 로 cottonCandy 와의 순환 방지.
+    //  ⚠️ 순서 주의: hydrate(Firestore 재조회)는 방금 커밋과 경합해 옛 EXP 를 읽을 수 있다.
+    //     따라서 hydrate 를 먼저 돌리고(솜사탕 등 갱신), '마지막에' 응답 값으로 EXP 를 확정한다.
+    onApplied: (result) => {
+      void import("@/lib/cottonCandy").then(async (m) => {
+        try { await m.hydrateGameData(); } catch { /* 무시 */ }
+        m.applyServerRewardResult(result);      // doriExp/level/tier = 서버 응답(권위)로 확정
+      }).catch(() => {});
+    },
   };
 }
 

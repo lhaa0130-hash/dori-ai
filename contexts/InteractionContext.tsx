@@ -5,7 +5,7 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCharacter } from "@/contexts/CharacterContext";
 import { useDiary } from "@/contexts/DiaryContext";
 import { useInteractionAudio } from "@/contexts/InteractionAudioContext";
-import { hydrateGameData } from "@/lib/cottonCandy";
+import { applyServerRewardResult, hydrateGameData } from "@/lib/cottonCandy";
 import { claimReward, createFetchTransport, deriveOperationId, flushRewardOutbox } from "@/lib/rewardClient";
 import { getFirebaseAuth } from "@/lib/firebase";
 import { audioCueFor } from "@/lib/myWorld/interaction/catalog";
@@ -115,7 +115,15 @@ export function InteractionProvider({ children }: { children: ReactNode }) {
       storage: typeof window !== "undefined" ? window.localStorage : null,
       online: typeof navigator === "undefined" || navigator.onLine,
       now: Date.now(),
-      onApplied: () => { void hydrateGameData().catch(() => {}); }, // 서버 결과로 Hero(EXP/레벨/티어) 재동기화
+      // 서버 결과로 Hero(EXP/레벨/티어) 갱신: 응답 값을 즉시 반영(권위) 후 hydrate 로 나머지 동기화.
+      //  (hydrate 단독은 방금 커밋과 경합해 표시가 늦을 수 있다.)
+      // ⚠️ 순서: hydrate(재조회) → 응답 값 확정. hydrate 가 방금 커밋 이전 EXP 를 읽어도 덮이지 않는다.
+      onApplied: (result: { doriExp?: number; level?: number; tier?: number }) => {
+        void (async () => {
+          try { await hydrateGameData(); } catch { /* 무시 */ }
+          applyServerRewardResult(result);
+        })();
+      },
     };
   }, []);
 

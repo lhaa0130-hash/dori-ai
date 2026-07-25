@@ -1,7 +1,7 @@
 // 타입은 `type` 지시자로 분리해 값 import 와 섞이지 않게 한다.
 // (Next 번들러 외에 Node 의 TypeScript 타입 스트리핑으로도 로드 가능해야 emulator 통합 테스트가 돌아간다)
 import { initializeApp, getApps, type FirebaseApp } from "firebase/app";
-import { getAuth, GoogleAuthProvider, connectAuthEmulator, type Auth } from "firebase/auth";
+import { getAuth, GoogleAuthProvider, connectAuthEmulator, signInWithEmailAndPassword, type Auth } from "firebase/auth";
 import { getFirestore, connectFirestoreEmulator, type Firestore } from "firebase/firestore";
 import { getStorage, type FirebaseStorage } from "firebase/storage";
 
@@ -55,6 +55,14 @@ function getFirebaseAuth(): Auth {
         if (USE_EMULATOR && !authEmulatorConnected) {
             authEmulatorConnected = true;
             connectAuthEmulator(auth, `http://${EMULATOR_HOST}:${EMULATOR_AUTH_PORT}`, { disableWarnings: true });
+        }
+        // ⚠️ dev 전용 로그인 seam(에뮬레이터 UI E2E 전용).
+        //    process.env.NODE_ENV 를 이 자리에서 직접 비교해야 번들러(DefinePlugin)가 프로덕션 빌드에서
+        //    블록 전체를 제거한다 — 모듈 상수(USE_EMULATOR)로만 감싸면 문자열이 번들에 남는다.
+        if (process.env.NODE_ENV !== "production" && USE_EMULATOR
+            && typeof window !== "undefined" && !(window as unknown as Record<string, unknown>).__illoTestSignIn) {
+            (window as unknown as Record<string, unknown>).__illoTestSignIn = (email: string, pw: string) =>
+                signInWithEmailAndPassword(auth as Auth, email, pw);
         }
     }
     return auth;
