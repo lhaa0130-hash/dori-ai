@@ -5,7 +5,8 @@ import { useAuth } from "@/contexts/AuthContext";
 import { useCharacter } from "@/contexts/CharacterContext";
 import { useDiary } from "@/contexts/DiaryContext";
 import { useInteractionAudio } from "@/contexts/InteractionAudioContext";
-import { addExp } from "@/lib/cottonCandy";
+import { hydrateGameData } from "@/lib/cottonCandy";
+import { claimReward, createFetchTransport, deriveOperationId, flushRewardOutbox } from "@/lib/rewardClient";
 import { getFirebaseAuth } from "@/lib/firebase";
 import { audioCueFor } from "@/lib/myWorld/interaction/catalog";
 import { affinityMilestoneCrossed, defaultInteractionState, processInteraction } from "@/lib/myWorld/interaction/engine";
@@ -87,6 +88,8 @@ export function InteractionProvider({ children }: { children: ReactNode }) {
   const [activeCommand, setActiveCommand] = useState<AnimationCommand | null>(null);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const flushingRef = useRef(false); // single-flight: 동시 flush 방지(online 이벤트 다중 발생)
+  const rewardTransport = useRef(createFetchTransport()); // POST /api/claim-reward
+  const rewardFlushingRef = useRef(false);
   const saveChain = useRef<Promise<unknown>>(Promise.resolve());
   // 일시 감정(hungry/sad/angry) — 저장하지 않으며 타이머로 자동 회복.
   const [transient, setTransient] = useState<TransientEmotion | null>(null);
@@ -98,6 +101,22 @@ export function InteractionProvider({ children }: { children: ReactNode }) {
 
   const uid = useCallback(() => {
     try { return getFirebaseAuth().currentUser?.uid || null; } catch { return null; }
+  }, []);
+
+  // 서버 권위 보상 청구 deps. uid·email 은 같은 currentUser 에서, 반영은 hydrateGameData 로 재동기화.
+  const buildClaimDeps = useCallback(() => {
+    let cu: { uid: string; email: string | null } | null = null;
+    try { const c = getFirebaseAuth().currentUser; if (c) cu = { uid: c.uid, email: c.email }; } catch { /* noop */ }
+    return {
+      identity: identityRef.current,
+      currentUser: cu,
+      getIdToken: async () => { try { return (await getFirebaseAuth().currentUser?.getIdToken()) ?? null; } catch { return null; } },
+      transport: rewardTransport.current,
+      storage: typeof window !== "undefined" ? window.localStorage : null,
+      online: typeof navigator === "undefined" || navigator.onLine,
+      now: Date.now(),
+      onApplied: () => { void hydrateGameData().catch(() => {}); }, // 서버 결과로 Hero(EXP/레벨/티어) 재동기화
+    };
   }, []);
 
   // ── 단일 Identity Gate ────────────────────────────────────────────────
@@ -252,22 +271,29 @@ export function InteractionProvider({ children }: { children: ReactNode }) {
       // ready 인 사용자만 자신의 큐를 flush 한다(로그아웃·계정전환 중에는 전송 금지).
       const current = identityRef.current;
       const u = current.firebaseUid;
-      if (!current.canWriteRemote || !u || !navigator.onLine || !hasQueuedInteractionSync(u)) return;
-      if (flushingRef.current) return; // single-flight: 이미 진행 중이면 재진입 금지
-      flushingRef.current = true;
-      setSyncing(true);
-      try {
-        const synced = await flushInteractionQueue(u);
-        // flush 완료 사이에 사용자가 바뀌었으면 화면 상태를 덮지 않는다.
-        if (synced && canPersistFor(u, identityRef.current)) { setState(synced); stateRef.current = synced; }
-      } catch { setOffline(true); }
-      finally { flushingRef.current = false; setSyncing(false); }
+      if (!current.canWriteRemote || !u || !navigator.onLine) return;
+      // interaction 상태 큐 flush(single-flight)
+      if (hasQueuedInteractionSync(u) && !flushingRef.current) {
+        flushingRef.current = true;
+        setSyncing(true);
+        try {
+          const synced = await flushInteractionQueue(u);
+          if (synced && canPersistFor(u, identityRef.current)) { setState(synced); stateRef.current = synced; }
+        } catch { setOffline(true); }
+        finally { flushingRef.current = false; setSyncing(false); }
+      }
+      // 보상 outbox flush(single-flight, ready 인 본인 큐만·계정 전환 시 중단은 rewardClient 처리)
+      if (!rewardFlushingRef.current) {
+        rewardFlushingRef.current = true;
+        try { await flushRewardOutbox(buildClaimDeps()); } catch { /* 실패 시 큐 유지 */ }
+        finally { rewardFlushingRef.current = false; }
+      }
     };
     update();
     window.addEventListener("online", flush);
     window.addEventListener("offline", update);
     return () => { window.removeEventListener("online", flush); window.removeEventListener("offline", update); };
-  }, [uid]);
+  }, [uid, buildClaimDeps]);
 
   useEffect(() => () => {
     if (speechTimer.current) clearTimeout(speechTimer.current);
@@ -314,11 +340,16 @@ export function InteractionProvider({ children }: { children: ReactNode }) {
       let cu: { uid: string; email: string | null } | null = null;
       try { const c = getFirebaseAuth().currentUser; if (c) cu = { uid: c.uid, email: c.email }; } catch { /* noop */ }
       const scope = createAuthenticatedScope(identityRef.current, cu);
-      if (scope && scope.legacyEmail) {
-        // ⚠️ EXP 캐시는 게임 전체가 공유하는 email-namespaced 캐시라 이번 단계에서 UID 로 옮기지 않는다(범위 밖).
-        //    다만 email 은 현재 ready 사용자의 currentUser.email 이라 uid 와 항상 동일 계정을 가리킨다.
+      if (scope) {
+        // 서버 권위 보상 청구(operationId 멱등). 클라이언트는 금액을 결정하지 않으며,
+        // 서버 결과로만 Hero 를 갱신한다. "EXP +N" 은 낙관적 표시(서버 반영 완료 표시 아님).
+        // ⚠️ 실제 엣지 엔드포인트는 EDGE RUNTIME E2E: NOT VERIFIED.
         notify({ emoji: "✨", label: `EXP +${event.expDelta}`, tone: "exp" });
-        addExp(scope.legacyEmail, event.expDelta, `My World ${event.type}`);
+        void claimReward(buildClaimDeps(), {
+          rewardType: "my_world_interaction",
+          operationId: deriveOperationId(event.id),
+          kind: event.type,
+        }).catch(() => {});
       } else if (identityRef.current.status === "guest" && !guestNoticeShown.current) {
         // 진짜 게스트일 때만 1회 안내(loading/mismatch 에서는 반복 안내하지 않음).
         guestNoticeShown.current = true;
@@ -340,7 +371,7 @@ export function InteractionProvider({ children }: { children: ReactNode }) {
       })).catch(() => {});
     }
     return result;
-  }, [addEntry, character, clearTransient, enqueueAnimation, notify, persistSoon, playCue, session?.user?.email, showSpeech, showTransient]);
+  }, [addEntry, buildClaimDeps, character, clearTransient, enqueueAnimation, notify, persistSoon, playCue, session?.user?.email, showSpeech, showTransient]);
 
   // Idle scheduler: lightweight local reactions only; it never awards or writes.
   useEffect(() => {
