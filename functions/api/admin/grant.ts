@@ -2,11 +2,13 @@
 // 관리자 솜사탕/프리미엄 지급의 유일한 권위 경로.
 //
 // ⚠️ 이 엔드포인트가 닫는 P0:
-//   예전 adminGrantCandy 는 실패 시 `visits/{uid}.pendingCandy` 에 '예약'을 남기고,
-//   applyPendingCandyGrants 가 그걸 읽어 **본인 문서**에 cottonCandy/isPremium 을 반영했다.
-//   visits 는 방문 카운터라 규칙이 공개돼 있어, 누구나 자기 visits 문서에 pendingCandy/
-//   pendingPremium 을 써서 무한 재화 + 프리미엄(=전 상점 무료)을 얻을 수 있었다.
-//   → 예약 통로를 전부 제거하고, 관리자 여부를 서버가 확인한 뒤 서버가 직접 지급한다.
+//   예전 adminGrantCandy 는 실패 시 `notifications/{uid}/items` 에 candy_grant '예약'을 남기고,
+//   대상 클라이언트의 applyPendingCandyGrants 가 그걸 읽어 **본인 문서**의 cottonCandy/isPremium 을
+//   올렸다. 그런데 알림 생성 규칙은 `fromUid == auth.uid && fromUid != uid` 만 요구하므로,
+//   임의의 사용자가 **다른 uid 의 알림함**에 amount 를 마음대로 적은 candy_grant 를 넣을 수 있었다.
+//   계정 두 개만 있으면 A→B 로 무한 재화·프리미엄(=전 상점 무료)을 스스로 지급할 수 있었다.
+//   (visits 폴백 경로는 이미 Rules 가 pendingCandy/pendingPremium 을 막고 있었다.)
+//   → 예약·자기적용 통로를 전부 제거하고, 관리자 여부를 서버가 확인한 뒤 서버가 직접 지급한다.
 //
 // 권한: 호출자 ID 토큰을 Firestore 로 실검증(서명·만료·uid) 한 뒤, 같은 토큰의 email 클레임이
 //      ADMIN_EMAIL 과 일치할 때만 통과. 클라이언트가 보낸 email/uid 는 신뢰하지 않는다.

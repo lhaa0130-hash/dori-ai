@@ -71,10 +71,10 @@ function fsSetAttendance(att: AttendanceData) {
 }
 
 // ─── 관리자 전용: 다른 회원에게 솜사탕 지급 / 프리미엄 설정 ──────────
-// ⚠️ P0(05-07): 클라이언트에서 대상 users 문서를 직접 쓰던 경로와, 실패 시
-//    notifications / visits 에 '지급 예약'을 남기고 대상이 스스로 본인 문서에 반영하던 경로를
-//    **전부 제거**했다. visits 는 방문 카운터라 규칙이 공개돼 있어, 누구나 자기 visits 문서에
-//    pendingCandy / pendingPremium 을 써서 무한 재화 + 프리미엄을 얻을 수 있었다(=P0).
+// ⚠️ P0(05-07): 클라이언트에서 대상 users 문서를 직접 쓰던 경로와, 실패 시 notifications 에
+//    '지급 예약'을 남기고 대상이 스스로 본인 문서에 반영하던 경로를 **전부 제거**했다.
+//    알림 생성 규칙은 `fromUid == auth.uid && fromUid != uid` 만 요구하므로, 누구나 **다른 uid 의
+//    알림함**에 금액을 마음대로 적은 candy_grant 를 넣을 수 있었다 → 계정 두 개로 무한 재화·프리미엄(=P0).
 //    이제 관리자 지급은 서버가 관리자임을 확인하고 서버가 반영한다(POST /api/admin/grant).
 export type GrantResult = { mode: "instant" | "queued" | "fail"; error?: string };
 

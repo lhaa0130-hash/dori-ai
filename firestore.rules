@@ -11,30 +11,45 @@ service cloud.firestore {
     //   있고 이후 절대 변경할 수 없다. 실제 EXP/레벨/티어/일일카운터 갱신은 서비스 계정(Firestore REST)이
     //   Rules 를 우회해 POST /api/claim-reward 안에서만 수행한다.
     //   과거 addExp→fsSetExp 가 localStorage 캐시값으로 doriExp 를 절대 merge 해 조작 가능했다(=P0).
+    // ⚠️ 05-07: EXP 뿐 아니라 **재화(cottonCandy)·보유 아이템(ownedItems)·프리미엄(isPremium)** 도 잠근다.
+    //    이 필드들의 유일한 라이터는 서버(SA, Rules 우회)다:
+    //      적립 = /api/claim-reward · 차감 = /api/purchase · 관리자 지급 = /api/admin/grant
+    //    관리자(isAdmin)도 예외가 아니다 — 관리자 지급은 서버 엔드포인트를 통한다.
     function rewardFieldNames() {
       return ['doriExp', 'level', 'tier', 'rewardDailyDate', 'rewardDailyExp',
-        'rewardTypeDate_community_post', 'rewardTypeExp_community_post',
-        'rewardTypeDate_community_comment', 'rewardTypeExp_community_comment',
-        'rewardTypeDate_mission_complete', 'rewardTypeExp_mission_complete',
-        'rewardTypeDate_minigame_play', 'rewardTypeExp_minigame_play',
-        'rewardTypeDate_game_activity', 'rewardTypeExp_game_activity'];
+        'cottonCandy', 'cottonCandyTotal', 'ownedItems', 'isPremium',
+        'rewardTypeDate_community_post', 'rewardTypeExp_community_post', 'rewardTypeCandy_community_post',
+        'rewardTypeDate_community_comment', 'rewardTypeExp_community_comment', 'rewardTypeCandy_community_comment',
+        'rewardTypeDate_mission_complete', 'rewardTypeExp_mission_complete', 'rewardTypeCandy_mission_complete',
+        'rewardTypeDate_minigame_play', 'rewardTypeExp_minigame_play', 'rewardTypeCandy_minigame_play',
+        'rewardTypeDate_game_activity', 'rewardTypeExp_game_activity', 'rewardTypeCandy_game_activity',
+        'rewardTypeDate_achievement_claim', 'rewardTypeExp_achievement_claim', 'rewardTypeCandy_achievement_claim',
+        'rewardTypeDate_level_reward', 'rewardTypeExp_level_reward', 'rewardTypeCandy_level_reward'];
     }
     // 업데이트: 위 보상 필드가 하나라도 값이 바뀌면 거부(같은 값 재전송은 affectedKeys 에서 제외돼 허용).
     function usersRewardsUnchangedOnUpdate() {
       return !request.resource.data.diff(resource.data).affectedKeys().hasAny(rewardFieldNames());
     }
     // 생성: doriExp 는 0, level/tier 는 ≤1(가입 기본값), 일일 카운터 필드는 아예 없어야 한다.
+    // 05-07: 재화도 가입 환영 보너스(100)까지만 허용하고, 보유 아이템·프리미엄은 비어 있어야 한다.
+    //   문서를 지우고 다시 만들어도 100 으로 '재설정'될 뿐 누적되지 않으므로 파밍이 불가능하다.
     function usersRewardsSafeOnCreate() {
       let d = request.resource.data;
       return d.get('doriExp', 0) == 0
         && d.get('level', 1) <= 1
         && d.get('tier', 1) <= 1
+        && d.get('cottonCandy', 0) <= 100
+        && d.get('cottonCandyTotal', 0) <= 100
+        && d.get('isPremium', false) == false
+        && d.get('ownedItems', []).size() == 0
         && !d.keys().hasAny(['rewardDailyDate', 'rewardDailyExp',
-            'rewardTypeDate_community_post', 'rewardTypeExp_community_post',
-            'rewardTypeDate_community_comment', 'rewardTypeExp_community_comment',
-            'rewardTypeDate_mission_complete', 'rewardTypeExp_mission_complete',
-            'rewardTypeDate_minigame_play', 'rewardTypeExp_minigame_play',
-            'rewardTypeDate_game_activity', 'rewardTypeExp_game_activity']);
+            'rewardTypeDate_community_post', 'rewardTypeExp_community_post', 'rewardTypeCandy_community_post',
+            'rewardTypeDate_community_comment', 'rewardTypeExp_community_comment', 'rewardTypeCandy_community_comment',
+            'rewardTypeDate_mission_complete', 'rewardTypeExp_mission_complete', 'rewardTypeCandy_mission_complete',
+            'rewardTypeDate_minigame_play', 'rewardTypeExp_minigame_play', 'rewardTypeCandy_minigame_play',
+            'rewardTypeDate_game_activity', 'rewardTypeExp_game_activity', 'rewardTypeCandy_game_activity',
+            'rewardTypeDate_achievement_claim', 'rewardTypeExp_achievement_claim', 'rewardTypeCandy_achievement_claim',
+            'rewardTypeDate_level_reward', 'rewardTypeExp_level_reward', 'rewardTypeCandy_level_reward']);
     }
     // PII 회귀 차단(공개 users 문서에 email·gender·ageGroup·provider 저장 금지).
     function usersNoPii() {
@@ -98,6 +113,16 @@ service cloud.firestore {
       //    멱등 보상 원장이므로 클라 create/update/delete 를 전면 차단(위조·중복지급 방지).
       match /rewardOperations/{operationId} {
         allow read:  if request.auth != null && request.auth.uid == userId;
+        allow write: if false;
+      }
+      //  · 구매 원장(05-07) — /api/purchase 가 SA 로만 기록. 본인 구매 이력만 읽을 수 있다.
+      match /purchases/{operationId} {
+        allow read:  if request.auth != null && request.auth.uid == userId;
+        allow write: if false;
+      }
+      //  · 관리자 지급 원장(05-07) — /api/admin/grant 가 SA 로만 기록. 본인/관리자만 읽는다.
+      match /grants/{operationId} {
+        allow read:  if request.auth != null && (request.auth.uid == userId || isAdmin());
         allow write: if false;
       }
     }

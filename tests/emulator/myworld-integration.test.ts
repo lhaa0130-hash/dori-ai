@@ -53,10 +53,11 @@ const readUser = async () => (await fs.getDoc(userDoc())).data() as Record<strin
 /** 다른 기능이 이미 써 둔 데이터를 흉내 낸다(보존 검증용). */
 async function seedUnrelatedData() {
   // ⚠️ 05-06H: doriExp/level/tier 는 클라이언트가 쓸 수 없다(Rules 차단) → 시드에서 제외.
+  //   ⚠️ 05-07: cottonCandy 도 잠겼다. create 는 가입 환영 보너스(≤100)까지만 허용되므로 100 으로 시드한다.
   //   서버 권위 필드는 SA REST 만 쓰므로 에뮬 클라이언트 시드는 비보상 필드만 넣는다.
   await fs.setDoc(userDoc(), {
     nickname: "도리팬",
-    cottonCandy: 120,
+    cottonCandy: 100,
     attendance: { lastChecked: "2026-07-24", streak: 3, totalDays: 10, weekDays: ["mon"] },
     myWorld: {
       character: { selectedId: "bomi", owned: ["dori", "bomi"], expression: "happy" },
@@ -131,7 +132,7 @@ test("merge save preserves character, room, diary and account fields", async () 
 
   const after = await readUser();
   assert.equal(after.nickname, "도리팬");
-  assert.equal(after.cottonCandy, 120);
+  assert.equal(after.cottonCandy, 100);
   assert.equal(after.doriExp, before.doriExp);
   assert.deepEqual(after.attendance, before.attendance);
   assert.equal(after.myWorld.character.selectedId, "bomi");
@@ -166,12 +167,19 @@ test("client cannot write doriExp/level/tier directly (rules deny); unrelated ga
   // 거부돼도 기존 게임 데이터(솜사탕·캐릭터·myWorld)는 그대로 보존.
   const raw = await readUser();
   assert.equal(raw?.doriExp ?? 0, 0, "직접 쓰기 실패 후 서버 EXP 는 그대로");
-  assert.equal(raw?.cottonCandy, 120);
+  assert.equal(raw?.cottonCandy, 100);
   assert.equal(raw?.myWorld.character.selectedId, "bomi");
 
-  // 정상 저장(솜사탕/myWorld 등 비보상 필드)은 여전히 허용됨을 함께 확인.
-  await fs.setDoc(fs.doc(db, "users", user.uid), { cottonCandy: 130 }, { merge: true });
-  assert.equal((await readUser())?.cottonCandy, 130, "비보상 필드 저장은 정상 통과해야 한다");
+  // ⚠️ 05-07: cottonCandy 도 서버 권위가 됐다 — 클라이언트 직접 쓰기는 이제 거부된다.
+  await assert.rejects(
+    fs.setDoc(fs.doc(db, "users", user.uid), { cottonCandy: 130 }, { merge: true }),
+    (e: { code?: string }) => String(e.code || e).includes("permission-denied"),
+    "클라이언트 직접 재화 쓰기도 거부돼야 한다",
+  );
+  // 비보상 필드 저장은 여전히 허용됨을 함께 확인(회귀 방지).
+  await fs.setDoc(fs.doc(db, "users", user.uid), { nickname: "도리팬2" }, { merge: true });
+  assert.equal((await readUser())?.nickname, "도리팬2", "비보상 필드 저장은 정상 통과해야 한다");
+  assert.equal((await readUser())?.cottonCandy, 100, "재화는 그대로");
 });
 
 test("EXP is not written for rejected interactions", async () => {

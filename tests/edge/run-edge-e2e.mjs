@@ -180,6 +180,11 @@ async function main() {
   const inj = await claim({ rewardType: "my_world_interaction", operationId: "mwi_inj_final", kind: "pet", currentExp: 999999, finalExp: 999999 }, u.idToken);
   ok("body 의 currentExp/finalExp 주입 무시(sanitize 400)", inj.status === 400);
 
+  // ── 05-07: 재화(솜사탕)·구매·관리자 지급 서버 권위 ──
+  await candySection();
+  await purchaseSection();
+  await adminGrantSection();
+
   // ── Client → Edge → Emulator: 실제 lib/rewardClient 코드로 구동(오프라인 큐·flush·조작무효·계정격리) ──
   await clientEdgeSection();
 
@@ -187,6 +192,162 @@ async function main() {
   await canarySection();
 
   finish();
+}
+
+// ── 05-07 헬퍼: /api/purchase, /api/admin/grant ──
+async function post(pathname, body, idToken, method = "POST") {
+  const headers = { "Content-Type": "application/json", ...(idToken ? { Authorization: `Bearer ${idToken}` } : {}) };
+  const r = await fetch(`${BASE}${pathname}`, { method, headers, body: body === undefined ? undefined : JSON.stringify(body) });
+  let json = null; try { json = await r.json(); } catch { /* non-json */ }
+  return { status: r.status, json };
+}
+
+// 재화 지급이 서버 소유인지 — 미션 금액표·일일 상한·멱등·레벨 검증.
+async function candySection() {
+  const u = await makeUser("edge-candy@test.dev");
+  await fsSet(`users/${u.uid}`, { doriExp: I(0), cottonCandy: I(0), cottonCandyTotal: I(0), tier: I(1), level: I(1) });
+  const today = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10); // KST
+
+  // 미션: 서버 표(write_post=80)가 금액을 정한다. 클라이언트는 금액을 보내지 않는다.
+  const m1 = await claim({ rewardType: "mission_complete", operationId: `mission_write_post_${today}`, sourceId: `write_post_${today}` }, u.idToken);
+  ok("mission_complete 지급 시 서버 표 금액(80)이 적용", m1.status === 200 && m1.json?.awardedCandy === 80, `awarded=${m1.json?.awardedCandy}`);
+
+  // 같은 미션 재청구 → 멱등(추가 지급 0)
+  const m2 = await claim({ rewardType: "mission_complete", operationId: `mission_write_post_${today}`, sourceId: `write_post_${today}` }, u.idToken);
+  const afterDup = await fsGet(`users/${u.uid}`);
+  ok("같은 미션 재청구는 멱등(추가 지급 없음)", m2.status === 200 && m2.json?.duplicate === true && num(afterDup.cottonCandy) === 80,
+    `dup=${m2.json?.duplicate} candy=${num(afterDup.cottonCandy)}`);
+
+  // 표에 없는 미션 id → 0 지급(임의 미션 위조 차단)
+  const m3 = await claim({ rewardType: "mission_complete", operationId: `mission_hack_${today}`, sourceId: `hack_${today}` }, u.idToken);
+  ok("알 수 없는 미션 id 는 재화 0", m3.status === 200 && m3.json?.awardedCandy === 0, `awarded=${m3.json?.awardedCandy}`);
+
+  // 클라이언트가 금액을 실어 보내면 400
+  const m4 = await claim({ rewardType: "mission_complete", operationId: `mission_read_trend_${today}`, sourceId: `read_trend_${today}`, amount: 99999 }, u.idToken);
+  ok("클라이언트 amount 주입은 400 으로 거부", m4.status === 400);
+
+  // 레벨 보상: 서버가 users.doriExp 로 레벨을 재계산해 검증 → 미달이면 403
+  const lv = await claim({ rewardType: "level_reward", operationId: "lv_50", sourceId: "50" }, u.idToken);
+  ok("레벨 미달 상태의 level_reward 는 403 level_not_reached", lv.status === 403 && lv.json?.error === "level_not_reached", `status=${lv.status} err=${lv.json?.error}`);
+
+  // 표에 없는 레벨 → 400
+  const lvBad = await claim({ rewardType: "level_reward", operationId: "lv_7", sourceId: "7" }, u.idToken);
+  ok("보상표에 없는 레벨은 400 거부", lvBad.status === 400, `status=${lvBad.status}`);
+
+  // 업적: 서버 표 금액(first_post=50), 평생 1회
+  const a1 = await claim({ rewardType: "achievement_claim", operationId: "ach_first_post", sourceId: "first_post" }, u.idToken);
+  const a2 = await claim({ rewardType: "achievement_claim", operationId: "ach_first_post", sourceId: "first_post" }, u.idToken);
+  const afterAch = await fsGet(`users/${u.uid}`);
+  ok("업적 지급은 서버 표 금액 + 평생 1회", a1.json?.awardedCandy === 50 && a2.json?.duplicate === true && num(afterAch.cottonCandy) === 130,
+    `a1=${a1.json?.awardedCandy} candy=${num(afterAch.cottonCandy)}`);
+
+  // 알 수 없는 업적 id → 0
+  const a3 = await claim({ rewardType: "achievement_claim", operationId: "ach_fake", sourceId: "fake" }, u.idToken);
+  ok("알 수 없는 업적 id 는 재화 0", a3.json?.awardedCandy === 0);
+
+  // 누적 획득량도 서버가 기록
+  ok("cottonCandyTotal 이 서버에서 누적", num(afterAch.cottonCandyTotal) === 130, `total=${num(afterAch.cottonCandyTotal)}`);
+}
+
+// 구매: 가격·프리미엄·잔액 판정이 전부 서버.
+async function purchaseSection() {
+  const { SHOP_ITEMS, itemKey } = await import("../../lib/shopItems.ts");
+  const paid = SHOP_ITEMS.find((i) => i.price > 0);
+  const free = SHOP_ITEMS.find((i) => i.price === 0);
+  const key = itemKey(paid.slot, paid.id);
+
+  // 1) 잔액 부족 → 422
+  const poor = await makeUser("edge-buy-poor@test.dev");
+  await fsSet(`users/${poor.uid}`, { cottonCandy: I(0), cottonCandyTotal: I(0), doriExp: I(0), tier: I(1), level: I(1) });
+  const r422 = await post("/api/purchase", { itemKey: key }, poor.idToken);
+  ok("잔액 부족 구매는 422 insufficient_balance", r422.status === 422 && r422.json?.error === "insufficient_balance", `status=${r422.status}`);
+
+  // 2) 정상 구매 → 서버 가격만큼 차감 + ownedItems 추가
+  const rich = await makeUser("edge-buy-rich@test.dev");
+  await fsSet(`users/${rich.uid}`, { cottonCandy: I(paid.price + 500), cottonCandyTotal: I(paid.price + 500), doriExp: I(0), tier: I(1), level: I(1) });
+  const buy = await post("/api/purchase", { itemKey: key }, rich.idToken);
+  const afterBuy = await fsGet(`users/${rich.uid}`);
+  ok("정상 구매는 서버 가격만큼만 차감", buy.status === 200 && buy.json?.charged === paid.price && num(afterBuy.cottonCandy) === 500,
+    `charged=${buy.json?.charged} balance=${num(afterBuy.cottonCandy)}`);
+  ok("구매 후 ownedItems 에 아이템이 추가된다",
+    (afterBuy.ownedItems?.arrayValue?.values || []).some((v) => v.stringValue === key));
+
+  // 3) 재구매는 멱등(추가 차감 없음)
+  const buy2 = await post("/api/purchase", { itemKey: key }, rich.idToken);
+  const afterBuy2 = await fsGet(`users/${rich.uid}`);
+  ok("같은 아이템 재구매는 멱등(이중 차감 없음)", buy2.json?.duplicate === true && num(afterBuy2.cottonCandy) === 500);
+
+  // 4) 클라이언트가 price 를 보내면 400 (가격 위조 차단)
+  const forge = await post("/api/purchase", { itemKey: key, price: 0 }, rich.idToken);
+  ok("클라이언트 price 주입은 400 으로 거부", forge.status === 400, `status=${forge.status}`);
+
+  // 5) 존재하지 않는/무료 아이템 → 400
+  const unknown = await post("/api/purchase", { itemKey: "bg::__nope__" }, rich.idToken);
+  ok("존재하지 않는 아이템은 400", unknown.status === 400);
+  if (free) {
+    const freeBuy = await post("/api/purchase", { itemKey: itemKey(free.slot, free.id) }, rich.idToken);
+    ok("무료(기본 제공) 아이템은 구매 대상이 아니다", freeBuy.status === 400);
+  }
+
+  // 6) 비인증 → 401
+  const anon = await post("/api/purchase", { itemKey: key }, null);
+  ok("비인증 구매는 401", anon.status === 401);
+
+  // 7) ⭐ 프리미엄은 서버 문서로만 판정 — 서버가 isPremium=true 면 무료
+  const prem = await makeUser("edge-buy-premium@test.dev");
+  await fsSet(`users/${prem.uid}`, { cottonCandy: I(10), cottonCandyTotal: I(10), doriExp: I(0), tier: I(1), level: I(1), isPremium: { booleanValue: true } });
+  const premBuy = await post("/api/purchase", { itemKey: key }, prem.idToken);
+  const afterPrem = await fsGet(`users/${prem.uid}`);
+  ok("서버 문서 isPremium=true 면 무료 지급(잔액 불변)", premBuy.status === 200 && premBuy.json?.charged === 0 && num(afterPrem.cottonCandy) === 10,
+    `charged=${premBuy.json?.charged} balance=${num(afterPrem.cottonCandy)}`);
+
+  // 8) 클라이언트가 isPremium 을 주장해도 400(요청 자체 거부)
+  const fakePrem = await post("/api/purchase", { itemKey: key, isPremium: true }, poor.idToken);
+  ok("클라이언트 isPremium 주장은 400 으로 거부", fakePrem.status === 400);
+
+  // 9) 메서드 가드
+  const getRes = await post("/api/purchase", undefined, rich.idToken, "GET");
+  ok("/api/purchase 는 POST 외 405", getRes.status === 405);
+}
+
+// 관리자 지급: 서버가 관리자 여부를 판정한다(비관리자는 403).
+async function adminGrantSection() {
+  const admin = await makeUser("lhaa0130@gmail.com");
+  const notAdmin = await makeUser("edge-not-admin@test.dev");
+  const target = await makeUser("edge-grant-target@test.dev");
+  for (const u of [admin, notAdmin, target]) {
+    await fsSet(`users/${u.uid}`, { cottonCandy: I(0), cottonCandyTotal: I(0), doriExp: I(0), tier: I(1), level: I(1) });
+  }
+
+  // 비관리자 → 403
+  const denied = await post("/api/admin/grant", { targetUid: target.uid, candy: 5000, operationId: "grant_notadmin000001" }, notAdmin.idToken);
+  ok("비관리자의 지급 요청은 403", denied.status === 403, `status=${denied.status}`);
+  ok("비관리자 거부 후 대상 잔액 불변", num((await fsGet(`users/${target.uid}`)).cottonCandy) === 0);
+
+  // 비인증 → 401
+  const anon = await post("/api/admin/grant", { targetUid: target.uid, candy: 100, operationId: "grant_anon00000001" }, null);
+  ok("비인증 지급 요청은 401", anon.status === 401);
+
+  // 관리자 → 지급 성공
+  const granted = await post("/api/admin/grant", { targetUid: target.uid, candy: 300, operationId: "grant_ok0000000001" }, admin.idToken);
+  const afterGrant = await fsGet(`users/${target.uid}`);
+  ok("관리자 지급은 성공하고 서버가 반영", granted.status === 200 && num(afterGrant.cottonCandy) === 300, `status=${granted.status} candy=${num(afterGrant.cottonCandy)}`);
+
+  // 같은 operationId 재요청 → 멱등
+  const again = await post("/api/admin/grant", { targetUid: target.uid, candy: 300, operationId: "grant_ok0000000001" }, admin.idToken);
+  ok("같은 operationId 재요청은 멱등(이중 지급 없음)", again.json?.duplicate === true && num((await fsGet(`users/${target.uid}`)).cottonCandy) === 300);
+
+  // 회수(음수)는 0 미만으로 내려가지 않는다
+  await post("/api/admin/grant", { targetUid: target.uid, candy: -100000, operationId: "grant_take000000001" }, admin.idToken);
+  ok("회수 시 잔액이 음수가 되지 않는다", num((await fsGet(`users/${target.uid}`)).cottonCandy) === 0);
+
+  // 상한 초과 금액은 400
+  const tooBig = await post("/api/admin/grant", { targetUid: target.uid, candy: 99999999, operationId: "grant_big00000001" }, admin.idToken);
+  ok("과대 금액은 400 으로 거부", tooBig.status === 400);
+
+  // 프리미엄 설정도 서버만
+  const prem = await post("/api/admin/grant", { targetUid: target.uid, isPremium: true, operationId: "grant_prem0000001" }, admin.idToken);
+  ok("관리자만 프리미엄을 켤 수 있다", prem.status === 200 && (await fsGet(`users/${target.uid}`)).isPremium?.booleanValue === true);
 }
 
 // canary 롤아웃: allowlist UID 만 지급, 나머지는 rollout_disabled(구분되는 code). 실제 HTTP 로 검증.
