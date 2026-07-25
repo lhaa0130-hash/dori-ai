@@ -72,6 +72,13 @@ test("a 5xx failure is queued for retry", async () => {
   assert.equal(readOutbox(d.storage, UID_A).length, 1);
 });
 
+test("a 404 (endpoint not deployed) is queued, NOT silently dropped (§12)", async () => {
+  const d = deps({ transport: async () => ({ status: 404, json: { ok: false } }) });
+  const out = await claimReward(d, intent(1));
+  assert.equal(out.status, "queued", "미배포 엔드포인트 404 는 재시도 대상이어야 한다");
+  assert.deepEqual(readOutbox(d.storage, UID_A).map((i) => i.operationId), [op(1)]);
+});
+
 test("claims are skipped when identity is not ready or uid mismatches", async () => {
   assert.equal((await claimReward(deps({ identity: resolveMyWorldIdentity({ authStatus: "loading", firebaseUid: UID_A }) }), intent(1))).status, "skipped");
   assert.equal((await claimReward(deps({ identity: resolveMyWorldIdentity({ authStatus: "unauthenticated", firebaseUid: null }), currentUser: null }), intent(1))).status, "skipped");

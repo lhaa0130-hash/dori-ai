@@ -86,9 +86,10 @@ test("permanent failures are dropped; retryable failures back off then drop afte
   assert.equal(readOutbox(s, UID_A).length, 0, "재시도 상한 초과 후 폐기");
 });
 
-test("failure classification", () => {
-  for (const s of [401, 403, 400, 404, 422]) assert.equal(classifyClaimFailure(s), "permanent");
-  for (const s of [0, 500, 502, 503, 429]) assert.equal(classifyClaimFailure(s), "retryable");
+test("failure classification: only policy/validation is permanent; 404/401 stay retryable (§12)", () => {
+  for (const s of [400, 403, 422]) assert.equal(classifyClaimFailure(s), "permanent");
+  // 404(endpoint 미배포/라우팅) 를 영구로 처리하면 보상이 조용히 사라진다 → retryable.
+  for (const s of [0, 401, 404, 409, 429, 500, 502, 503]) assert.equal(classifyClaimFailure(s), "retryable");
 });
 
 test("backoff grows exponentially and is capped", () => {

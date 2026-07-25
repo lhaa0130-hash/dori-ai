@@ -104,9 +104,15 @@ export function removeReward(storage: KeyValueStorage | null, uid: string, opera
 
 /** 재시도 실패 기록: 영구 실패면 제거, 재시도 가능이면 attempts++ 와 backoff 시각 갱신. */
 export type ClaimFailure = "permanent" | "retryable";
+/**
+ * 실패 분류(§12). 정책/검증 실패만 영구, 나머지는 재시도(무한 삭제 금지).
+ *  · permanent: 400(malformed)·403(정책 거부)·422(invalid state) — 재시도해도 실패.
+ *  · retryable: 0(network)·401(token refresh 후)·404(엔드포인트 미배포/라우팅/일시)·409(conflict)·429·5xx.
+ * ⚠️ 404 를 영구 실패로 취급하면 endpoint 미배포 시 보상 요청이 조용히 사라진다(silent loss).
+ */
 export function classifyClaimFailure(status: number): ClaimFailure {
-  if (status === 401 || status === 403 || status === 400 || status === 404 || status === 422) return "permanent";
-  return "retryable"; // network(0)·5xx·429 등
+  if (status === 400 || status === 403 || status === 422) return "permanent";
+  return "retryable"; // 0·401·404·409·429·5xx
 }
 export function backoffDelay(attempts: number): number {
   return Math.min(BACKOFF_CAP_MS, BACKOFF_BASE_MS * 2 ** Math.max(0, attempts));
