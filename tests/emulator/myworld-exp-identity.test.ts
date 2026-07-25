@@ -1,16 +1,16 @@
-// 05-06E — My World EXP 적립이 Identity Gate 를 따르는지 (Auth/Firestore 에뮬레이터, 실제 SDK).
-// InteractionContext 의 적립 규칙(ready + currentUser uid 일치 시에만, 같은 계정의 email 로)을
-// 순수 경계(createAuthenticatedScope)와 실제 addExp/서버 문서로 검증한다.
+// 05-06E/05-06H — My World EXP 적립 게이트가 Identity Gate 를 따르고, EXP 영속화는 서버 권위임을 검증.
+//  · 클라이언트는 scope(ready + currentUser uid 일치)일 때만 서버 보상을 청구한다(순수 경계).
+//  · 실제 doriExp 는 클라이언트가 Firestore 에 못 쓴다(Rules 차단) — 서버(SA REST)만 갱신.
+//  (과거엔 cottonCandy.addExp 가 클라이언트에서 doriExp 를 직접 썼고 그게 P0 였다 → 제거됨.)
 import assert from "node:assert/strict";
 import test, { after, before, beforeEach } from "node:test";
-import { clearFirestore, installBrowserShim, prepareEmulatorEnv, shutdownFirebase, signInTestUser, uninstallBrowserShim, waitFor } from "./harness.ts";
+import { clearFirestore, installBrowserShim, prepareEmulatorEnv, shutdownFirebase, signInTestUser, uninstallBrowserShim } from "./harness.ts";
 import { createAuthenticatedScope } from "@/lib/myWorld/storageScope";
 import { resolveMyWorldIdentity } from "@/lib/myWorld/identity";
 
 let fs: typeof import("firebase/firestore");
 let db: import("firebase/firestore").Firestore;
 let auth: import("firebase/auth").Auth;
-let cottonCandy: typeof import("@/lib/cottonCandy");
 let shim: { storage: Map<string, string>; events: string[] };
 
 const readDoc = async (uid: string) => (await fs.getDoc(fs.doc(db, "users", uid))).data() as Record<string, any> | undefined;
@@ -24,65 +24,52 @@ before(async () => {
   fs = await import("firebase/firestore");
   auth = firebase.getFirebaseAuth();
   db = firebase.getFirebaseFirestore();
-  cottonCandy = await import("@/lib/cottonCandy");
 });
 after(async () => { await shutdownFirebase(); uninstallBrowserShim(); });
 beforeEach(async () => { await clearFirestore(); shim.storage.clear(); shim.events.length = 0; });
 
-/** InteractionContext 의 적립 게이트를 그대로 재현한 헬퍼. */
-function awardExpLikeMyWorld(identity: ReturnType<typeof ready>, amount: number): "awarded" | "skipped" {
-  const scope = createAuthenticatedScope(identity, currentUser());
-  if (scope && scope.legacyEmail) { cottonCandy.addExp(scope.legacyEmail, amount, "My World pet"); return "awarded"; }
-  return "skipped";
+/** 클라이언트가 보상을 '청구할지' 결정하는 순수 게이트(서버 청구 경로가 실제로 쓰는 판정). Firestore 를 건드리지 않는다. */
+function wouldClaim(identity: ReturnType<typeof ready>): "awarded" | "skipped" {
+  return createAuthenticatedScope(identity, currentUser()) ? "awarded" : "skipped";
 }
+/** 클라이언트가 직접 서버 EXP 를 쓰려는 시도(반드시 Rules 로 거부돼야 한다). */
+const directExpWrite = (uid: string, exp: number) => fs.setDoc(fs.doc(db, "users", uid), { doriExp: exp }, { merge: true });
+const isDenied = (e: { code?: string }) => String(e.code || e).includes("permission-denied");
 
-test("My World EXP is written to the signed-in user's own document", async () => {
+test("본인 scope 는 청구 허용 — 그러나 클라이언트의 직접 doriExp 쓰기는 Rules 가 거부(서버 권위)", async () => {
   const a = await signInTestUser(auth, "exp-a");
-  assert.equal(awardExpLikeMyWorld(ready(a.uid), 20), "awarded");
-  const persisted = await waitFor(async () => { const d = await readDoc(a.uid); return d?.doriExp === 20 ? d : null; }, { label: "exp propagate" });
-  assert.equal(persisted.doriExp, 20);
-  assert.ok(shim.events.includes("dori-gamedata-synced"));
+  await fs.setDoc(fs.doc(db, "users", a.uid), { doriExp: 0, level: 1, tier: 1 }, { merge: true }); // 가입 기본값(허용)
+  assert.equal(wouldClaim(ready(a.uid)), "awarded");
+  // 서버 권위: 클라이언트가 doriExp 를 직접 올리는 것은 차단.
+  await assert.rejects(directExpWrite(a.uid, 20), isDenied, "클라이언트 직접 doriExp 쓰기는 거부돼야 한다");
+  const d = await readDoc(a.uid);
+  assert.equal(d?.doriExp, 0, "직접 쓰기 실패 후에도 서버 EXP 는 그대로 0");
 });
 
-test("after switching from A to B, an A-scoped award is refused and never touches B's document", async () => {
+test("A→B 전환 후 A-scope 청구는 skip, 두 문서 모두 클라이언트가 EXP 를 못 바꾼다", async () => {
   const a = await signInTestUser(auth, "sw-a");
   const b = await signInTestUser(auth, "sw-b");   // 현재 로그인 = B
 
-  // A 의 신원으로 적립을 시도하지만 currentUser 는 B → 스코프가 생성되지 않아 적립 거부.
-  assert.equal(awardExpLikeMyWorld(ready(a.uid), 50), "skipped");
-
-  // B 문서·A 문서 모두 이 적립으로 변하지 않아야 한다.
-  const bDoc = await readDoc(b.uid);
-  assert.equal(bDoc?.doriExp ?? 0, 0, "A 적립이 B 문서에 들어가면 안 된다");
-
-  // B 자신의 적립은 정상 → B 문서에만
-  assert.equal(awardExpLikeMyWorld(ready(b.uid), 7), "awarded");
-  const bAfter = await waitFor(async () => { const d = await readDoc(b.uid); return d?.doriExp === 7 ? d : null; }, { label: "b exp" });
-  assert.equal(bAfter.doriExp, 7);
-  const aDoc = await readDoc(a.uid);
-  assert.equal(aDoc?.doriExp ?? 0, 0, "B 적립이 A 문서로 새면 안 된다");
+  // A 신원 + currentUser=B → scope 불일치 → 청구하지 않음.
+  assert.equal(wouldClaim(ready(a.uid)), "skipped");
+  // B 자신은 청구 허용(게이트 통과)이지만, 그래도 직접 EXP 쓰기는 Rules 가 막는다.
+  assert.equal(wouldClaim(ready(b.uid)), "awarded");
+  await assert.rejects(directExpWrite(b.uid, 7), isDenied);
+  await assert.rejects(directExpWrite(a.uid, 50), isDenied); // 타인 문서도 당연히 거부
+  assert.equal((await readDoc(a.uid))?.doriExp ?? 0, 0);
+  assert.equal((await readDoc(b.uid))?.doriExp ?? 0, 0);
 });
 
-test("EXP is not awarded while the identity is guest, loading, or mismatched", async () => {
+test("guest·loading·mismatch 신원은 청구하지 않는다", async () => {
   await signInTestUser(auth, "gate-a");
-  // guest
-  assert.equal(awardExpLikeMyWorld(resolveMyWorldIdentity({ authStatus: "unauthenticated", firebaseUid: null }), 10), "skipped");
-  // loading (currentUser 있어도 status loading)
-  assert.equal(awardExpLikeMyWorld(resolveMyWorldIdentity({ authStatus: "loading", firebaseUid: auth.currentUser!.uid }), 10), "skipped");
-  // mismatch (ready 이지만 다른 uid)
-  assert.equal(awardExpLikeMyWorld(ready("some-other-uid"), 10), "skipped");
-
-  const doc = await readDoc(auth.currentUser!.uid);
-  assert.equal(doc?.doriExp ?? 0, 0, "게이트를 통과하지 못하면 서버에 EXP 가 없어야 한다");
+  assert.equal(wouldClaim(resolveMyWorldIdentity({ authStatus: "unauthenticated", firebaseUid: null })), "skipped");
+  assert.equal(wouldClaim(resolveMyWorldIdentity({ authStatus: "loading", firebaseUid: auth.currentUser!.uid })), "skipped");
+  assert.equal(wouldClaim(ready("some-other-uid")), "skipped");
 });
 
-test("firestore rules still reject writing EXP into another user's document", async () => {
+test("firestore rules 는 타인 문서로의 EXP 쓰기를 거부한다", async () => {
   const a = await signInTestUser(auth, "rule-a");
   const b = await signInTestUser(auth, "rule-b"); // 현재 = B
-  // B 세션에서 A 문서에 직접 EXP 쓰기 시도 → 규칙이 거부
-  await assert.rejects(
-    fs.setDoc(fs.doc(db, "users", a.uid), { doriExp: 999 }, { merge: true }),
-    (e: { code?: string }) => String(e.code || e).includes("permission-denied"),
-  );
+  await assert.rejects(directExpWrite(a.uid, 999), isDenied);
   assert.ok(b.uid);
 });

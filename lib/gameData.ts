@@ -90,23 +90,13 @@ export async function spendCottonCandy(amount: number, _reason?: string): Promis
     }
 }
 
-// 경험치 적립 (+ 티어/레벨 자동 재계산)
-export async function addExp(amount: number): Promise<void> {
-    const uid = currentUid();
-    if (!uid || amount === 0) return;
-    try {
-        const db = getFirebaseFirestore();
-        const ref = doc(db, "users", uid);
-        const snap = await getDoc(ref);
-        const newExp = Math.max(0, (snap.data()?.doriExp || 0) + amount);
-        await updateDoc(ref, {
-            doriExp: newExp,
-            tier: calculateTier(newExp),
-            level: calculateLevel(newExp),
-        });
-    } catch (e) {
-        console.warn("[gameData] addExp fail:", e);
-    }
+// ⚠️ P0 보안(05-06H): 클라이언트에서 doriExp/tier/level 을 Firestore 에 직접 쓰지 않는다.
+//   EXP 적립은 서버 권위 엔드포인트(POST /api/claim-reward, lib/gameReward.ts)만 담당한다.
+//   과거 이 함수는 클라이언트 계산값을 절대 write 해 조작에 취약했다 → 무력화(no-op).
+//   (이 모듈은 현재 import 되지 않는 레거시다. Firestore Rules 도 doriExp/level/tier 변경을 차단한다.)
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+export async function addExp(_amount: number): Promise<void> {
+    return; // no-op — 서버 권위로 이관됨
 }
 
 // 활동 보상 (글/댓글/가이드 등) — 경험치 적립 헬퍼
@@ -151,12 +141,9 @@ export async function checkAttendance(): Promise<{ success: boolean; earned: num
         let bonus = false;
         if (newStreak > 0 && newStreak % 7 === 0) { earned += 200; bonus = true; }
 
-        const newExp = (data.doriExp || 0) + (ACTIVITY_SCORES.attendance || 5);
+        // ⚠️ P0(05-06H): doriExp/tier/level 은 서버 권위 엔드포인트만 갱신한다(여기서 쓰지 않음).
         await updateDoc(ref, {
             cottonCandy: increment(earned),
-            doriExp: newExp,
-            tier: calculateTier(newExp),
-            level: calculateLevel(newExp),
             attendance: {
                 lastChecked: today,
                 streak: newStreak,

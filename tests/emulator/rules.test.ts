@@ -64,9 +64,16 @@ test("the real interaction payload passes the rules", async () => {
   await assert.doesNotReject(fs.setDoc(fs.doc(db, "users", userA.uid), payload, { merge: true }));
 });
 
-test("the real EXP payload passes the rules", async () => {
-  await assert.doesNotReject(
+test("05-06H: the client can NO LONGER write EXP fields — rules deny doriExp/level/tier", async () => {
+  // 서버 권위(POST /api/claim-reward, SA REST 만 씀)로 이관 → 클라이언트 직접 쓰기는 전면 거부.
+  await denied(
     fs.setDoc(fs.doc(db, "users", userA.uid), { doriExp: 25, level: 2, tier: 1 }, { merge: true }),
+    "doriExp/level/tier client write must be denied",
+  );
+  // 일일·타입 카운터(상한 우회 방지)도 거부.
+  await denied(
+    fs.setDoc(fs.doc(db, "users", userA.uid), { rewardDailyExp: 0, rewardTypeExp_minigame_play: 0 }, { merge: true }),
+    "reward counter client write must be denied",
   );
 });
 

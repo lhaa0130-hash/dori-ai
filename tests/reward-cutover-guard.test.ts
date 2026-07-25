@@ -1,54 +1,72 @@
-// 05-06G 정적 회귀 가드 — 직접 EXP 쓰기 패턴을 감시한다.
-// My World 는 서버 청구로 전환됐어야 하고(회귀 금지), 아직 미전환인 호출자는 명시적 allowlist 로
-// 고정한다 → 새 직접 쓰기 호출자가 들어오면 실패한다(SECURITY HARDENING INCOMPLETE 추적).
+// 05-06H 정적 회귀 가드 — P0 종결 상태를 고정한다.
+//  게임 전체 보상이 서버 권위 엔드포인트로 전환됐고, 클라이언트 직접 EXP 쓰기가 제거됐으며,
+//  Firestore Rules 가 보상 필드를 잠갔음을 정적으로 검증한다.
+//  ⚠️ 레거시 직접 EXP 라이터(addExp(email,amount)·fsSetExp·client doriExp write)가 재등장하면 실패한다.
 import assert from "node:assert/strict";
 import { readFileSync } from "node:fs";
 import test from "node:test";
 
 const read = (p: string) => readFileSync(new URL(`../${p}`, import.meta.url), "utf8");
 
-test("My World interaction context no longer calls the client-authoritative addExp", () => {
+test("My World interaction context is on the server claim path (no client-authoritative addExp)", () => {
   const src = read("contexts/InteractionContext.tsx");
   assert.ok(src.includes("claimReward("), "서버 청구(claimReward)로 전환되어 있어야 한다");
   assert.equal(/\baddExp\s*\(/.test(src), false, "My World 가 addExp 로 회귀하면 안 된다");
 });
 
-test("client-authoritative addExp callers are a known, tracked set (still INCOMPLETE)", () => {
-  // 아직 서버로 전환되지 않은 addExp(email, amount) 직접 호출자. 전환 시 이 목록에서 제거.
-  const EXPECTED_REMAINING = [
-    "app/community/page.client.tsx",      // 댓글 +5
-    "app/community/write/page.client.tsx",// 글 +15
-    "lib/cottonCandy.ts",                 // ensureExpAtLeast / grantPlaytimeReward / checkAttendance 내부
-  ];
-  for (const file of EXPECTED_REMAINING) {
-    assert.ok(/\baddExp\s*\(/.test(read(file)), `${file} 는 여전히 직접 addExp 를 호출한다(추적됨)`);
+test("cottonCandy no longer defines or calls the client-authoritative EXP writers", () => {
+  const src = read("lib/cottonCandy.ts");
+  assert.equal(/export function addExp\b/.test(src), false, "addExp 정의 제거");
+  assert.equal(/\bfsSetExp\b/.test(src), false, "fsSetExp(유일한 Firestore doriExp 라이터) 제거");
+  assert.equal(/\bwriteGameProfile\b/.test(src), false, "writeGameProfile 제거");
+  assert.equal(/\bensureExpAtLeast\b/.test(src), false, "ensureExpAtLeast 제거");
+  assert.ok(src.includes('submitGameReward("minigame_play"'), "미니게임 보상은 서버 청구로 전환");
+});
+
+test("no production caller invokes addExp(email, amount) anymore", () => {
+  for (const file of [
+    "app/community/write/page.client.tsx",
+    "app/community/page.client.tsx",
+    "components/my/MyDashboard.tsx",
+  ]) {
+    const src = read(file);
+    assert.equal(/\baddExp\s*\(/.test(src), false, `${file} 는 더 이상 addExp 를 호출하지 않는다`);
+    assert.equal(/\bensureExpAtLeast\s*\(/.test(src), false, `${file} 는 ensureExpAtLeast 를 호출하지 않는다`);
   }
+  assert.ok(read("app/community/write/page.client.tsx").includes("submitGameReward('community_post'"), "글 작성 → community_post");
+  assert.ok(read("app/community/page.client.tsx").includes("submitGameReward('community_comment'"), "댓글 → community_comment");
+});
+
+test("the legacy gameData EXP writers are neutralized (no client Firestore doriExp write)", () => {
+  const src = read("lib/gameData.ts").replace(/\/\/.*$/gm, ""); // 주석 제거 후 검사
+  assert.equal(/updateDoc\([\s\S]*?doriExp/.test(src), false, "gameData 가 doriExp 를 Firestore 로 쓰면 안 된다");
+});
+
+test("mission completion routes to the server claim (mission_complete)", () => {
+  const src = read("lib/missionProgress.ts");
+  assert.ok(src.includes('submitGameReward("mission_complete"'), "미션 완료 → 서버 mission_complete 청구");
 });
 
 test("the reward server owns amounts; the client request schema forbids client-supplied EXP", () => {
   const policy = read("functions/_shared/rewardPolicy.ts");
-  assert.ok(policy.includes("MY_WORLD_INTERACTION_XP"), "서버가 xp 표를 소유");
-  assert.ok(policy.includes("sanitizeInteractionRewardRequest"), "요청 정제 존재");
-  // 클라이언트 reward API 가 금액/최종 EXP 를 전송하지 않는지(코드 상 forbidden).
+  assert.ok(policy.includes("MY_WORLD_INTERACTION_XP"), "서버가 interaction xp 표를 소유");
+  const ext = read("functions/_shared/rewardTypes.ts");
+  assert.ok(ext.includes("EXTENDED_REWARD_POLICIES"), "서버가 확장 타입 금액·상한을 소유");
+  assert.ok(ext.includes("sanitizeExtendedRewardRequest"), "확장 요청 정제(금액/uid 거부) 존재");
   const client = read("lib/rewardClient.ts");
   assert.equal(/body:\s*\{[^}]*amount/.test(client), false, "클라이언트가 amount 를 전송하면 안 된다");
 });
 
-test("Firestore rules still block client writes to the reward ledger", () => {
+test("Firestore rules lock the reward fields (doriExp/level/tier + daily/type counters)", () => {
   const rules = read("firestore.rules");
   assert.ok(rules.includes("rewardOperations"), "rewardOperations 원장 규칙 존재");
-  const block = rules.slice(rules.indexOf("rewardOperations"));
-  assert.match(block.slice(0, 200), /allow write:\s*if false/, "원장 client write 차단");
-});
-
-// ⚠️ 아직 하지 않은 것(=SECURITY HARDENING INCOMPLETE):
-//   · firestore.rules 의 users.doriExp/level/tier 직접 client write 차단(전 콜러 전환 선결)
-//   · community/minigame(grantPlaytimeReward)/attendance/mission 서버 전환
-// 이 가드는 그 사실을 테스트로 고정한다.
-test("EXP fields are NOT yet locked in rules (documents the remaining P0 surface)", () => {
-  const rules = read("firestore.rules");
-  const usersBlock = rules.slice(rules.indexOf("match /users/{userId}"), rules.indexOf("match /users/{userId}") + 400);
-  // 아직 doriExp 불변 조건이 없다 → 잠그면 미전환 콜러가 깨지므로 의도적으로 미적용.
-  assert.equal(usersBlock.includes("doriExp"), false,
-    "현재는 doriExp 잠금 없음(전 콜러 전환 후 잠가야 함). 잠금이 생기면 이 테스트를 갱신하고 콜러 전환을 확인할 것.");
+  assert.ok(rules.includes("rewardFieldNames"), "보상 필드 목록 함수 존재");
+  assert.ok(rules.includes("usersRewardsUnchangedOnUpdate"), "update 시 보상 필드 불변 강제");
+  assert.ok(rules.includes("usersRewardsSafeOnCreate"), "create 시 보상 필드 기본값 강제");
+  const usersBlock = rules.slice(rules.indexOf("match /users/{userId}"), rules.indexOf("match /users/{userId}") + 900);
+  assert.match(usersBlock, /allow update:[\s\S]*usersRewardsUnchangedOnUpdate\(\)/, "users update 에 잠금 적용");
+  assert.match(usersBlock, /allow create:[\s\S]*usersRewardsSafeOnCreate\(\)/, "users create 에 잠금 적용");
+  for (const f of ["doriExp", "level", "tier", "rewardDailyExp", "rewardTypeExp_minigame_play"]) {
+    assert.ok(rules.includes(`'${f}'`), `잠금 목록에 ${f} 포함`);
+  }
 });

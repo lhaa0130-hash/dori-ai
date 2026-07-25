@@ -3,7 +3,8 @@
 import Link from 'next/link';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
-import { addExp, getCachedGameProfile } from '@/lib/cottonCandy';
+import { getCachedGameProfile } from '@/lib/cottonCandy';
+import { submitGameReward } from '@/lib/gameReward';
 import { TIER_INFO, type UserTier } from '@/lib/userProfile';
 import { PlusCircle, MessageCircle, TrendingUp, Clock, X, Share2, Send, Trash2 } from 'lucide-react';
 
@@ -175,8 +176,8 @@ function PostModal({
       setComments(updated);
       setCommentInput('');
       onUpdatePost({ ...post, comments: updated.length, commentsList: updated });
-      // 경험치 적립 (댓글 +5)
-      if (myEmail) addExp(myEmail, 5, '커뮤니티 댓글');
+      // 경험치 적립 (댓글) — 서버 권위 청구. 금액·상한·멱등은 서버가 결정.
+      if (myEmail) submitGameReward('community_comment', { sourceId: newComment.id });
       setIsSubmitting(false);
       setTimeout(() => commentEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
     }, 250);

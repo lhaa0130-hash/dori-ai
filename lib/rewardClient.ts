@@ -39,6 +39,23 @@ export function deriveOperationId(eventId: string): string {
   return `mwi_${safe}`;
 }
 
+// 확장 타입 operationId 파생. 서버 operationIdFor 와 동일 규약({prefix}_{sourceId}) — 서버가 재검증.
+const REWARD_TYPE_PREFIX: Record<Exclude<AllowedRewardType, "my_world_interaction" | "game_activity">, string> = {
+  community_post: "post", community_comment: "comment", mission_complete: "mission", minigame_play: "minigame",
+};
+/** source 기반 타입(글/댓글/미션/게임)의 안정 operationId — 같은 source 는 항상 동일(자연 멱등). */
+export function sourceOperationId(
+  rewardType: Exclude<AllowedRewardType, "my_world_interaction" | "game_activity">, sourceId: string,
+): string {
+  const safe = String(sourceId).replace(/[^A-Za-z0-9_-]/g, "").slice(0, 80);
+  return `${REWARD_TYPE_PREFIX[rewardType]}_${safe}`;
+}
+/** source 가 없는 game_activity 용 operationId(act_). 안정 seed 를 넘겨 재시도 시 동일하게 유지. */
+export function activityOperationId(seed: string): string {
+  const safe = String(seed).replace(/[^A-Za-z0-9_-]/g, "").slice(0, 110) || "x";
+  return `act_${safe}`;
+}
+
 export type ClaimOutcome =
   | { status: "applied"; result: ClaimServerResult }
   | { status: "duplicate"; result: ClaimServerResult }

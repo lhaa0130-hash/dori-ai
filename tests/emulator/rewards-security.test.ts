@@ -1,7 +1,7 @@
 // 05-06F — 보상 신뢰경계 & 멱등 (Auth/Firestore 에뮬레이터, 실제 SDK).
 import assert from "node:assert/strict";
 import test, { after, before, beforeEach } from "node:test";
-import { clearFirestore, installBrowserShim, prepareEmulatorEnv, shutdownFirebase, signInTestUser, uninstallBrowserShim, waitFor } from "./harness.ts";
+import { clearFirestore, installBrowserShim, prepareEmulatorEnv, shutdownFirebase, signInTestUser, uninstallBrowserShim } from "./harness.ts";
 
 let fs: typeof import("firebase/firestore");
 let db: import("firebase/firestore").Firestore;
@@ -24,20 +24,43 @@ after(async () => { await shutdownFirebase(); uninstallBrowserShim(); });
 beforeEach(async () => { await clearFirestore(); shim.storage.clear(); shim.events.length = 0; });
 
 const readDoc = async (uid: string) => (await fs.getDoc(fs.doc(db, "users", uid))).data() as Record<string, any> | undefined;
+const isDenied = (e: { code?: string }) => String(e.code || e).includes("permission-denied");
 
-// ── P0 재현: 조작된 localStorage 로 서버 EXP 를 임의 증가 ──────────────
-test("REPRODUCTION: tampered localStorage cache lets the client inflate server EXP", async () => {
+// ── P0 CLOSED: 클라이언트 EXP 라이터 제거 + 캐시 조작 무효 + 직접 쓰기 Rules 거부 ──────────────
+test("P0 CLOSED: the client-authoritative addExp writer is gone", () => {
+  // 과거 취약점의 진원지. 이제 EXP 적립은 서버 권위 엔드포인트만 담당한다.
+  assert.equal((cottonCandy as Record<string, unknown>).addExp, undefined, "cottonCandy.addExp 는 제거돼야 한다");
+  assert.equal((cottonCandy as Record<string, unknown>).ensureExpAtLeast, undefined, "ensureExpAtLeast 도 제거");
+});
+
+test("P0 CLOSED: tampering the localStorage cache has no server effect (rules deny direct EXP writes)", async () => {
   const u = await signInTestUser(auth, "p0");
-  await fs.setDoc(fs.doc(db, "users", u.uid), { doriExp: 10, cottonCandy: 0, tier: 1, level: 1 }, { merge: true });
+  // 가입 기본값(create 규칙이 허용하는 doriExp=0). 클라이언트는 애초에 0 이 아닌 값으로 시드할 수 없다.
+  await fs.setDoc(fs.doc(db, "users", u.uid), { doriExp: 0, cottonCandy: 0, tier: 1, level: 1 }, { merge: true });
 
-  // 공격: 캐시의 doriExp 를 999999 로 조작한 뒤, 정상적으로 EXP 를 주는 행동을 1회 수행.
+  // 공격 재현: 캐시의 doriExp 를 999999 로 조작.
   shim.storage.set(`dori_game_profile_${u.email}`, JSON.stringify({ doriExp: 999999, cottonCandy: 0, tier: 1, level: 1 }));
-  cottonCandy.addExp(u.email, 2, "My World pet");
 
-  const doc = await waitFor(async () => { const d = await readDoc(u.uid); return d && d.doriExp !== 10 ? d : null; }, { label: "exp write" });
-  // 현재(취약) 동작: 서버 doriExp 가 10+2=12 가 아니라 조작값 기반 1000001 이 된다.
-  assert.equal(doc.doriExp, 1000001,
-    "P0 확인: addExp 가 로컬 캐시값으로 서버 EXP 를 계산·덮어씀. 서버 권위화 전까지 유효한 취약점.");
+  // 조작된 캐시값을 서버에 직접 반영하려는 유일한 방법(직접 setDoc)은 Rules 가 거부한다.
+  await assert.rejects(
+    fs.setDoc(fs.doc(db, "users", u.uid), { doriExp: 1000001, tier: 9, level: 9 }, { merge: true }),
+    isDenied, "클라이언트의 doriExp/level/tier 직접 쓰기는 Rules 로 차단",
+  );
+  // 서버 EXP 는 원래 값 그대로. 캐시 조작이 서버에 전혀 영향 없음.
+  const doc = await readDoc(u.uid);
+  assert.equal(doc!.doriExp, 0, "캐시 조작 후에도 서버 doriExp 는 0 그대로(조작 무효)");
+});
+
+test("P0 CLOSED: rules also block the reward daily/type counter fields (no cap bypass)", async () => {
+  const u = await signInTestUser(auth, "p0-cap");
+  await fs.setDoc(fs.doc(db, "users", u.uid), { doriExp: 0, tier: 1, level: 1 }, { merge: true });
+  // 일일 카운터를 0 으로 리셋해 서버 상한을 우회하려는 시도 → 거부.
+  for (const field of ["rewardDailyExp", "rewardTypeExp_community_post", "rewardTypeExp_minigame_play"]) {
+    await assert.rejects(
+      fs.setDoc(fs.doc(db, "users", u.uid), { [field]: 0 }, { merge: true }),
+      isDenied, `${field} 클라이언트 쓰기는 거부돼야 한다`,
+    );
+  }
 });
 
 // ── reward operation ledger 규칙: 클라이언트는 원장을 위조할 수 없다 ──

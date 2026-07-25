@@ -9,6 +9,10 @@ import {
   sanitizeRewardRequest, sanitizeInteractionRewardRequest, applyRewardOperation,
   todayKST, claimIdFor, computeAttendanceReward, levelTierFromExp, parseAllowlist,
 } from "../_shared/rewardPolicy";
+import {
+  isExtendedRewardType, sanitizeExtendedRewardRequest, computeExtendedExp,
+  type ExtendedRewardPolicy,
+} from "../_shared/rewardTypes";
 import { getAccessToken } from "../_shared/googleAuth";
 import {
   beginTransaction, batchGet, commit, rollback, verifyIdTokenOwnsUid,
@@ -56,10 +60,16 @@ export const onRequestPost: any = async (context: any) => {
     // rewardType 별 요청 정제. my_world_interaction 은 operationId 멱등 경로로 분기.
     const rewardType = (body as { rewardType?: unknown } | null)?.rewardType;
     let interaction: { operationId: string; kind: string } | null = null;
+    let extended: { policy: ExtendedRewardPolicy; operationId: string; sourceId?: string } | null = null;
     if (rewardType === "my_world_interaction") {
       const ci = sanitizeInteractionRewardRequest(body);
       if (!ci.ok) return J({ ok: false, error: "invalid_request", detail: ci.error }, 400);
       interaction = { operationId: ci.operationId, kind: ci.kind };
+    } else if (isExtendedRewardType(rewardType)) {
+      // community_post·community_comment·mission_complete·minigame_play·game_activity
+      const ce = sanitizeExtendedRewardRequest(body);
+      if (!ce.ok) return J({ ok: false, error: "invalid_request", detail: ce.error }, 400);
+      extended = { policy: ce.policy, operationId: ce.operationId, sourceId: ce.sourceId };
     } else {
       const clean = sanitizeRewardRequest(body);
       if (!clean.ok) return J({ ok: false, error: "invalid_request", detail: clean.error }, 400);
@@ -95,6 +105,8 @@ export const onRequestPost: any = async (context: any) => {
 
     // ── my_world_interaction: operationId 멱등 EXP 보상(서버 권위) ──
     if (interaction) return await runInteractionReward(token, uid, today, interaction, cid);
+    // ── 확장 타입(community/mission/minigame/activity): 타입별 독립 일일상한 + operationId 멱등 ──
+    if (extended) return await runExtendedReward(token, uid, today, extended, cid);
 
     const claimId = claimIdFor("daily_attendance", today);
     const userRel = `users/${uid}`;
@@ -205,6 +217,66 @@ async function runInteractionReward(
           fields: { doriExp: r.resultingExp, level: r.level, tier: r.tier, rewardDailyDate: today, rewardDailyExp: r.newDailyExpEarned } },
       ]);
       return J({ ok: true, duplicate: false, awardedExp: r.awardedExp, doriExp: r.resultingExp, level: r.level, tier: r.tier });
+    } catch (e: any) {
+      await rollback(token, tx);
+      if (e?.code === "firestore_forbidden") return J({ ok: false, error: "internal_error", detail: "firestore_permission" }, 500);
+      if (e?.code === "commit_conflict") continue; // 동시요청 → 다음 루프서 duplicate 반환
+      return J({ ok: false, error: "internal_error", cid }, 500);
+    }
+  }
+  return J({ ok: false, error: "retryable_conflict", cid }, 409);
+}
+
+// ── 확장 타입 트랜잭션(멱등·원자·서버 권위, 타입별 독립 일일상한) ──
+//   서버 결정: awardedExp(정책 고정 xp + 타입별 일일상한) / resultingExp(서버 doriExp 기준) / level·tier.
+//   멱등: rewardOperations/{operationId} 존재 시 저장된 결과 반환(재지급 없음).
+//        source 필요 타입은 operationId={prefix}_{sourceId} 라 같은 글/댓글/미션/게임은 자연히 1회.
+//   일일 카운터: 타입별 평면 필드 rewardTypeDate_{type}/rewardTypeExp_{type}(타입 간 간섭 없음, 롤오버 시 자기 필드만 리셋).
+//   ⚠️ EDGE RUNTIME E2E: NOT VERIFIED — 로컬 wrangler 로 검증 예정.
+async function runExtendedReward(
+  token: string, uid: string, today: string,
+  intent: { policy: ExtendedRewardPolicy; operationId: string; sourceId?: string }, cid: string,
+): Promise<Response> {
+  const rt = intent.policy.rewardType;
+  const userRel = `users/${uid}`;
+  const opRel = `users/${uid}/rewardOperations/${intent.operationId}`;
+  const dateField = `rewardTypeDate_${rt}`;
+  const expField = `rewardTypeExp_${rt}`;
+  const nowIso = new Date().toISOString();
+
+  for (let attempt = 0; attempt < 3; attempt++) {
+    let tx: string;
+    try { tx = await beginTransaction(token); }
+    catch (e: any) { if (e?.status === 403) return J({ ok: false, error: "internal_error", detail: "firestore_permission" }, 500); continue; }
+    try {
+      const got = await batchGet(token, tx, [userRel, opRel]);
+      const user = got[userRel];
+      const op = got[opRel];
+      if (!user.exists) { await rollback(token, tx); return J({ ok: false, error: "user_not_found" }, 404); }
+
+      // 멱등: 이미 지급된 operationId → 저장된 결과 반환(재지급 없음)
+      if (op.exists) {
+        await rollback(token, tx);
+        const of = op.fields as Record<string, any>;
+        return J({ ok: true, duplicate: true, rewardType: rt, awardedExp: Number(of?.awardedExp) || 0, doriExp: Number(of?.resultingExp) || 0, level: Number(of?.resultingLevel) || 0, tier: of?.resultingTier });
+      }
+
+      const u = user.fields as Record<string, any>;
+      const serverExp = typeof u.doriExp === "number" && u.doriExp >= 0 ? Math.floor(u.doriExp) : 0;
+      // 타입별 독립 카운터: 이 타입의 날짜가 오늘일 때만 누적분을 인정(롤오버 시 0)
+      const typeEarned = u[dateField] === today && typeof u[expField] === "number" && u[expField] >= 0 ? Math.floor(u[expField]) : 0;
+      const award = computeExtendedExp(intent.policy, typeEarned);
+      const resultingExp = serverExp + award;
+      const { level, tier } = levelTierFromExp(resultingExp);
+      const newTypeEarned = typeEarned + award;
+
+      await commit(token, tx, [
+        { rel: opRel, requireNotExists: true,
+          fields: { uid, rewardType: rt, ...(intent.sourceId ? { sourceId: intent.sourceId } : {}), awardedExp: award, resultingExp, resultingLevel: level, resultingTier: tier, createdAt: nowIso, schemaVersion: 1 } },
+        { rel: userRel, updateMask: ["doriExp", "level", "tier", dateField, expField],
+          fields: { doriExp: resultingExp, level, tier, [dateField]: today, [expField]: newTypeEarned } },
+      ]);
+      return J({ ok: true, duplicate: false, rewardType: rt, awardedExp: award, doriExp: resultingExp, level, tier });
     } catch (e: any) {
       await rollback(token, tx);
       if (e?.code === "firestore_forbidden") return J({ ok: false, error: "internal_error", detail: "firestore_permission" }, 500);

@@ -4,7 +4,8 @@ import { useState, useRef, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { useAuth } from '@/contexts/AuthContext';
-import { addExp, getCachedGameProfile } from '@/lib/cottonCandy';
+import { getCachedGameProfile } from '@/lib/cottonCandy';
+import { submitGameReward } from '@/lib/gameReward';
 import { ChevronLeft, Image as ImageIcon, MoreHorizontal, HelpCircle, Sparkles } from 'lucide-react';
 import Quill from 'quill';
 import "quill/dist/quill.snow.css";
@@ -242,8 +243,8 @@ export default function WriteClient() {
                 const updatedPosts = [newPost, ...posts];
                 localStorage.setItem('dori_community_posts', JSON.stringify(updatedPosts));
 
-                // 경험치 적립 (글 작성 +15)
-                if (email) addExp(email, 15, '커뮤니티 글 작성');
+                // 경험치 적립 (글 작성) — 서버 권위 청구. 금액·상한·멱등은 서버가 결정.
+                if (email) submitGameReward('community_post', { sourceId: newPost.id });
 
                 router.push('/community');
                 router.refresh();
