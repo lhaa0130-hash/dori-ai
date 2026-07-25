@@ -449,7 +449,9 @@ async function feedCommentSection() {
 
   // reload 후 UI 와 서버 상태 일치
   await goto(`${BASE}/feed`, 6000);
-  const readCacheC = `(()=>{try{const k=Object.keys(localStorage).find(x=>x.startsWith('dori_game_profile_'));return k?JSON.parse(localStorage.getItem(k)).doriExp:null}catch(e){return null}})()`;
+  // ⚠️ 브라우저 프로필을 시나리오 간 공유하므로 이전 사용자의 dori_game_profile_* 키가 남아 있다.
+  //   '첫 번째 매칭 키'가 아니라 반드시 현재 로그인 사용자의 키를 읽어야 한다.
+  const readCacheC = `(()=>{try{const raw=localStorage.getItem('dori_game_profile_'+${JSON.stringify(u.email)});return raw?JSON.parse(raw).doriExp:null}catch(e){return null}})()`;
   let cacheExp = null;
   { const s0 = Date.now(); while (Date.now() - s0 < 20000) { cacheExp = await evaljs(readCacheC); if (cacheExp === after) break; await sleep(800); } }
   ok("feed comment: reload 후 UI 캐시 == 서버 EXP", cacheExp === after, `cache=${cacheExp} server=${after}`);
@@ -463,6 +465,10 @@ async function attendanceSection() {
   await goto(`${BASE}/profile`, 8000);
   await evaljs(`(()=>{const b=document.querySelector('[data-testid="profile-activity-tab"]');if(b){b.scrollIntoView({block:'center'});b.click();}return !!b})()`);
   await sleep(2500);
+  // 실제 계약: /profile → 계정·활동 탭 → MyDashboard 의 '미션/업적' 내부 탭 → 출석 카드의 받기 버튼.
+  await waitFor(`!!document.querySelector('[data-testid="dashboard-tab-missions"]')`, { timeout: 30000, label: "dashboard tabs" }).catch(() => {});
+  await evaljs(`(()=>{const b=document.querySelector('[data-testid="dashboard-tab-missions"]');if(b){b.scrollIntoView({block:'center'});b.click();}return !!b})()`);
+  await sleep(1500);
   const found = await waitFor(`!!document.querySelector('[data-testid="mission-action-attendance"]')`, { timeout: 30000, label: "attendance button" }).catch(() => false);
   ok("attendance: 대시보드에 출석 미션 렌더", found === true);
   if (!found) { await diagnose("attendance"); return; }
@@ -493,34 +499,31 @@ async function attendanceSection() {
   ok("attendance: 같은 날 재청구 → already_claimed", again.json?.status === "already_claimed" || again.json?.status === "legacy_recognized", `st=${again.json?.status}`);
 }
 
-// ── 미션: 계정 메뉴의 '로그인 출석체크' 미션 완료 버튼 클릭 ──
+// ── 미션 ──────────────────────────────────────────────────────────────
+//  ⚠️ 제품 계약 확인 결과: 미션 목록 UI(계정 메뉴의 '수행하기' → handleCheckinMission)를 담은
+//     components/layout/AccountMenu.tsx 는 **어디에서도 렌더되지 않는 죽은 코드**다
+//     (<AccountMenu ... /> 사용처 0건; app/profile 과 MyDashboard 는 import 만 하고 쓰지 않는다).
+//     따라서 '미션 완료 버튼을 클릭한다'는 사용자 흐름은 현재 제품에 존재하지 않는다.
+//     존재하지 않는 UX 를 새로 만들지 않는다는 규칙에 따라, 여기서는 그 사실만 검증한다.
+//     실제로 도달 가능한 mission_complete 트리거는 콘텐츠 행동의 '세트 완료' 시점
+//     (handlePostMission/handleCommentMission/handleLikeMission/handleShareMission)이며,
+//     서버 계약(고정 EXP·missionId 멱등·임의 ID 거부)은 edge E2E 에서 이미 검증됐다.
 async function missionSection() {
   const u = await freshUser("mission");
   await goto(`${BASE}/`, 5000);
   if (!(await signInBrowser(u))) { ok("mission: 로그인", false); return; }
   await goto(`${BASE}/`, 6000);
-  // alert() 가 뜨면 CDP 평가가 멈추므로 미리 무력화한다(UI 클릭 자체는 그대로 수행).
-  await evaljs(`window.alert=function(){};1`);
-
+  const menuPresent = await evaljs(`!!document.querySelector('[data-testid="account-menu"]')`);
+  ok("mission: 계정 메뉴 미션 UI 는 제품에 렌더되지 않음(죽은 코드 확인)", menuPresent === false,
+    `account-menu present=${menuPresent}`);
+  // 서버 계약은 그대로 유지되는지 확인: 임의 missionId 도 정책상 고정 EXP 만 지급되고 재청구는 멱등.
+  const src = `checkin_${new Date().toISOString().slice(0, 10)}`;
   const before = await expOf(u.uid);
-  const c0 = claimCount();
-  // 계정 메뉴 열기 → 미션 목록의 '출석체크' 완료 버튼 클릭
-  const opened = await evaljs(`(()=>{const b=document.querySelector('[data-testid="account-menu"]');if(!b)return 'notfound';b.scrollIntoView({block:'center'});b.click();return 'clicked';})()`);
-  await sleep(2000);
-  // 미션 목록의 첫 '수행하기' = 로그인 출석체크 미션(mission.id===1)
-  const clicked = await evaljs(`(()=>{const b=[...document.querySelectorAll('button')].find(x=>/수행하기/.test(x.textContent||''));if(!b)return 'notfound';b.scrollIntoView({block:'center'});b.click();return 'clicked';})()`);
-  ok("mission: 계정 메뉴 미션 UI 접근", opened === "clicked", `menu=${opened}`);
-  ok("mission: 미션 완료 버튼 실제 클릭", clicked === "clicked", `res=${clicked}`);
-  if (clicked !== "clicked") { await diagnose("mission"); return; }
-
+  const first = await claimAs({ rewardType: "mission_complete", operationId: `mission_${src}`, sourceId: src }, u);
   const after = await waitExp(u.uid, before);
-  ok("mission: /api/claim-reward(mission_complete) 요청 발생", claimCount() > c0, `+${claimCount() - c0}건`);
-  ok("mission: 서버 고정 EXP(10) 지급", after - before === 10, `${before}→${after}`);
-  const led = await ledgerFor(u.uid, "mission_");
-  ok("mission: 원장에 실제 missionId 기록", led.length === 1 && /checkin_/.test(led[0].fields?.sourceId?.stringValue || ""),
-    `src=${led[0]?.fields?.sourceId?.stringValue}`);
-  const dup = await claimAs({ rewardType: "mission_complete", operationId: led[0]?.fields ? `mission_${led[0].fields.sourceId.stringValue}` : "mission_x", sourceId: led[0]?.fields?.sourceId?.stringValue || "x" }, u);
-  ok("mission: 같은 mission 재청구 → duplicate(재지급 없음)", dup.json?.duplicate === true && (await expOf(u.uid)) === after);
+  ok("mission: 서버 mission_complete 고정 EXP(10) 지급", first.status === 200 && after - before === 10, `${before}→${after}`);
+  const dup = await claimAs({ rewardType: "mission_complete", operationId: `mission_${src}`, sourceId: src }, u);
+  ok("mission: 같은 missionId 재청구 → duplicate(재지급 없음)", dup.json?.duplicate === true && (await expOf(u.uid)) === after);
 }
 
 // ── 미니게임: EmbeddedGame 의 실제 통합 계약(게임 iframe → postMessage {score})으로 보상 트리거 ──
