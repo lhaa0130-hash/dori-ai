@@ -1,5 +1,57 @@
 [
   {
+    "id": "mk19-1",
+    "name": "샤오미 미지아 LCD 전자노트",
+    "category": "digital",
+    "source": "coupang",
+    "query": "샤오미 미지아 LCD 전자노트",
+    "emoji": "✍️",
+    "priceHint": "1~3만원대",
+    "summary": "종이 메모 줄이는 필기판",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/fFaJEAfzzx"
+  },
+  {
+    "id": "mk19-2",
+    "name": "유그린 USB-C to USB-C 고속충전 케이블",
+    "category": "digital",
+    "source": "coupang",
+    "query": "유그린 USB C to C 케이블",
+    "emoji": "🔌",
+    "priceHint": "1만원대",
+    "summary": "가방에 넣는 예비 케이블",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/fFaJEDLEqa"
+  },
+  {
+    "id": "mk19-3",
+    "name": "엘라고 마그네틱 케이블 홀더",
+    "category": "digital",
+    "source": "coupang",
+    "query": "엘라고 마그네틱 케이블 홀더",
+    "emoji": "🧲",
+    "priceHint": "1만원대",
+    "summary": "케이블 끝을 잡아주는 정리템",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/fFaJEHkz9w"
+  },
+  {
+    "id": "mk19-4",
+    "name": "홈플래닛 USB 탁상용 선풍기",
+    "category": "digital",
+    "source": "coupang",
+    "query": "홈플래닛 USB 탁상용 선풍기",
+    "emoji": "🌬️",
+    "priceHint": "1~2만원대",
+    "summary": "책상 위 작은 바람 보조템",
+    "hot": true,
+    "weekly": true,
+    "url": "https://link.coupang.com/a/fFaJEKwxeC"
+  },
+  {
     "id": "mk18-1",
     "name": "시스맥스 마이룸 포르타 데스크 오거나이저",
     "category": "living",
@@ -9,7 +61,7 @@
     "priceHint": "1만원대",
     "summary": "책상 위 잡동사니 정리",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/fyw9ywaIdE"
   },
   {
@@ -22,7 +74,7 @@
     "priceHint": "1~2만원대",
     "summary": "필기와 꾸미기 겸용 펜",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/fyw9yzciLQ"
   },
   {
@@ -35,7 +87,7 @@
     "priceHint": "1~2만원대",
     "summary": "취미 손글씨 입문용",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/fyw9yClteu"
   },
   {
@@ -48,7 +100,7 @@
     "priceHint": "1~2만원대",
     "summary": "캠핑 뒷정리 실용템",
     "hot": true,
-    "weekly": true,
+    "weekly": false,
     "url": "https://link.coupang.com/a/fyw9yFCNPM"
   },
   {
