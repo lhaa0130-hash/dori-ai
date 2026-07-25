@@ -1,8 +1,9 @@
 // Cloudflare Pages Function — POST /api/claim-reward (04-18 · 05-06H · 05-06I)
 // 신뢰 서버 보상 게이트: 클라이언트는 rewardType(+operationId/sourceId) 만 보낸다. 금액·날짜·uid 는 서버가 결정.
-//  인증: 사용자 ID 토큰(소유권은 Firestore/Auth 로 실검증). 환경 정책:
-//        production → 인증 사용자 허용 / restricted(preview·불명) → REWARD_TEST_UIDS allowlist 강제 /
-//        emulator(로컬 전용, fail-closed) → demo- 프로젝트 + loopback 만.
+//  인증: 사용자 ID 토큰(소유권은 Firestore/Auth 로 실검증).
+//  환경(REWARD_ENV): emulator(로컬 전용, demo-+loopback) / 그 외=운영 Firestore.
+//  롤아웃(REWARD_ROLLOUT_MODE): canary(REWARD_TEST_UIDS allowlist 만·나머지 rollout_disabled) /
+//        all(전체 인증 사용자·인증/소유권/상한/원장 검증 유지). 미설정·오타 → fail-closed(rollout_mode_invalid).
 //  쓰기: production=SA OAuth, emulator=owner. Firestore REST 트랜잭션(멱등·원자·legacy 인식).
 //  Community(community_post/comment): Firestore feed 소스 존재 + 작성자 UID 일치를 서버가 검증.
 // ⚠️ Secret(개인키·토큰)·전체 users 문서·stack 을 응답/로그에 노출하지 않는다.
@@ -60,20 +61,22 @@ export const onRequestPost: any = async (context: any) => {
   try {
     const { request, env } = context;
 
-    // ── 실행 환경 해석(fail-closed). emulator 는 로컬 안전장치 통과 시에만. ──
+    // ── 실행 환경 + 롤아웃 정책 해석(fail-closed). config 오류는 machine-readable code 로 반환. ──
     const renv = resolveRewardEnv(env);
-    if (!renv.ok) return J({ ok: false, error: renv.error.startsWith("emulator") || renv.error.includes("misconfigured") ? "dependency_unavailable" : "forbidden" }, renv.status);
-    const mode = renv.env.mode;
+    if (!renv.ok) return J({ ok: false, error: renv.error }, renv.status); // 예: rollout_mode_invalid, emulator_requires_demo_project
+    const mode = renv.env.mode;                 // "production" | "emulator"
+    const rollout = renv.env.rollout;           // "canary" | "all"
     const target: FirestoreTarget = renv.env.target;
     const expectedProject = mode === "emulator" ? (renv.env as { projectId: string }).projectId : PROD_PROJECT_ID;
     const allow = parseAllowlist(env.REWARD_TEST_UIDS);
 
-    // production/restricted 는 SA Secret 필요. restricted 는 allowlist 도 필요.
-    if (mode !== "emulator") {
+    // 운영 경로는 SA Secret 필요.
+    if (mode === "production") {
       const { clientEmail, privateKey } = renv.env as { clientEmail: string; privateKey: string };
       if (!clientEmail || !privateKey) return J({ ok: false, error: "dependency_unavailable" }, 503);
-      if (mode === "restricted" && allow.size === 0) return J({ ok: false, error: "forbidden" }, 403);
     }
+    // canary 롤아웃은 allowlist 가 반드시 있어야 한다(비면 config 오류로 fail-closed).
+    if (rollout === "canary" && allow.size === 0) return J({ ok: false, error: "canary_requires_allowlist" }, 503);
 
     // ── 요청 파싱·정제 ──
     const raw = await request.text();
@@ -109,8 +112,9 @@ export const onRequestPost: any = async (context: any) => {
     if (!decoded.exp || decoded.exp * 1000 < Date.now()) return J({ ok: false, error: "unauthenticated" }, 401);
 
     const uid = decoded.uid;
-    // ── allowlist(restricted 전용). production·emulator 는 인증 사용자면 통과 ──
-    if (mode === "restricted" && !allow.has(uid)) return J({ ok: false, error: "forbidden" }, 403);
+    // ── 롤아웃 게이트: canary 는 allowlist UID 만. 나머지는 rollout_disabled(정책거부·소유권거부와 구분되는 코드).
+    //    all 은 canary UID 제한만 해제 — 인증/소유권/상한/원장 검증은 아래에서 그대로 수행된다.
+    if (rollout === "canary" && !allow.has(uid)) return J({ ok: false, error: "rollout_disabled" }, 403);
 
     // ── 토큰 소유권 실검증(Firestore/Auth 에뮬레이터가 토큰 검증) ──
     const own = await verifyIdTokenOwnsUid(target, idToken, uid);

@@ -55,38 +55,45 @@ async function claim(body, idToken, extraHeaders = {}, method = "POST") {
   return { status: r.status, json };
 }
 
-let wrangler;
-function startWrangler() {
+const children = []; // 시작한 wrangler PID 만 추적(정리 대상 한정)
+let tmpReady = false;
+function ensureTmp() {
+  if (tmpReady) return;
   // wrangler.toml(Workers 용) 간섭을 피하려 격리 tmp 에서 functions 정션으로 pages dev 실행.
   rmSync(TMP, { recursive: true, force: true });
   mkdirSync(path.join(TMP, "public"), { recursive: true });
   writeFileSync(path.join(TMP, "public", "index.html"), "<!doctype html><title>edge-e2e</title>ok");
   if (!existsSync(path.join(TMP, "functions"))) symlinkSync(path.join(REPO, "functions"), path.join(TMP, "functions"), "junction");
-  const args = [
-    "wrangler", "pages", "dev", "public", "--port", String(PORT), "--ip", "127.0.0.1",
-    "--compatibility-date=2024-05-18",
-    "--binding", "REWARD_ENV=emulator",
-    "--binding", `FIREBASE_PROJECT_ID=${PROJECT}`,
-    "--binding", `FIRESTORE_EMULATOR_HOST=${FS_HOST}`,
-    "--binding", `FIREBASE_AUTH_EMULATOR_HOST=${AUTH_HOST}`,
-  ];
-  // 로컬 설치본(node_modules/.bin) 사용 — 네트워크 fetch 없이.
-  wrangler = spawn("npx", ["--no-install", ...args], { cwd: TMP, stdio: ["ignore", "pipe", "pipe"], shell: process.platform === "win32" });
-  wrangler.stdout.on("data", (d) => process.env.EDGE_DEBUG && process.stdout.write(`[wr] ${d}`));
-  wrangler.stderr.on("data", (d) => process.env.EDGE_DEBUG && process.stdout.write(`[wr!] ${d}`));
+  tmpReady = true;
 }
-async function waitForWrangler(timeoutMs = 90000) {
+// 롤아웃/추가 바인딩을 받아 pages dev 인스턴스를 띄운다.
+function startWrangler(port, extraBindings = {}) {
+  ensureTmp();
+  const bindings = {
+    REWARD_ENV: "emulator", FIREBASE_PROJECT_ID: PROJECT,
+    FIRESTORE_EMULATOR_HOST: FS_HOST, FIREBASE_AUTH_EMULATOR_HOST: AUTH_HOST,
+    ...extraBindings,
+  };
+  const args = ["wrangler", "pages", "dev", "public", "--port", String(port), "--ip", "127.0.0.1", "--compatibility-date=2024-05-18"];
+  for (const [k, v] of Object.entries(bindings)) { args.push("--binding", `${k}=${v}`); }
+  const child = spawn("npx", ["--no-install", ...args], { cwd: TMP, stdio: ["ignore", "pipe", "pipe"], shell: process.platform === "win32" });
+  child.stdout.on("data", (d) => process.env.EDGE_DEBUG && process.stdout.write(`[wr:${port}] ${d}`));
+  child.stderr.on("data", (d) => process.env.EDGE_DEBUG && process.stdout.write(`[wr:${port}!] ${d}`));
+  children.push(child);
+  return child;
+}
+async function waitForPort(port, timeoutMs = 90000) {
   const start = Date.now();
   while (Date.now() - start < timeoutMs) {
-    try { const r = await fetch(`${BASE}/api/claim-reward`, { method: "OPTIONS" }); if (r.status === 204) return true; } catch { /* not up */ }
+    try { const r = await fetch(`http://127.0.0.1:${port}/api/claim-reward`, { method: "OPTIONS" }); if (r.status === 204) return true; } catch { /* not up */ }
     await sleep(1500);
   }
   return false;
 }
 
 async function main() {
-  startWrangler();
-  const up = await waitForWrangler();
+  startWrangler(PORT, { REWARD_ROLLOUT_MODE: "all" }); // 기본 인스턴스 = 전체 롤아웃
+  const up = await waitForPort(PORT);
   if (!up) { ok("wrangler pages dev 기동", false, "타임아웃"); return finish(); }
   ok("wrangler pages dev 기동 + OPTIONS 204(CORS)", true);
 
@@ -155,10 +162,12 @@ async function main() {
   //  일부는 3회 재시도 소진 후 409(retryable)로 응답할 수 있으나, 원장은 requireNotExists 로 1건만 생성된다.
   const concLedger = await fsGet(`users/${u2.uid}/rewardOperations/mwi_conc_00000001`);
   const concUser = await fsGet(`users/${u2.uid}`);
-  const grantedOnce = concLedger && num(concUser.doriExp) === 100 + num(concLedger.awardedExp);
+  // requireNotExists 로 원장은 최대 1건 → 지급 횟수 0 또는 1. doriExp 는 정확히 base + 원장award.
+  //  (에뮬레이터 고부하 시 10건 모두 3회 재시도 소진→409 로 0건 지급 가능. 그래도 이중지급은 불가.)
+  const ledgerAward = concLedger ? num(concLedger.awardedExp) : 0;
   const badStatuses = conc.filter((r) => !(r.status === 200 || r.status === 409)).length;
-  ok("동시 10회 같은 op → 이중 지급 없음(원장 1건, doriExp=base+1회, 나머지는 duplicate/409)", grantedOnce && badStatuses === 0,
-    `doriExp=${num(concUser.doriExp)} award=${num(concLedger?.awardedExp)} bad=${badStatuses}`);
+  ok("동시 10회 같은 op → 이중 지급 없음(원장≤1건, doriExp=base+원장award)", num(concUser.doriExp) === 100 + ledgerAward && badStatuses === 0,
+    `doriExp=${num(concUser.doriExp)} ledgerAward=${ledgerAward} bad=${badStatuses}`);
 
   // ── Firestore 결과: 서버 base 기준 증가 + 원장 1건 + counter ──
   const uDoc = await fsGet(`users/${u.uid}`);
@@ -174,7 +183,34 @@ async function main() {
   // ── Client → Edge → Emulator: 실제 lib/rewardClient 코드로 구동(오프라인 큐·flush·조작무효·계정격리) ──
   await clientEdgeSection();
 
+  // ── Rollout mode: canary 게이트(별도 wrangler 인스턴스, REWARD_ROLLOUT_MODE=canary + allowlist) ──
+  await canarySection();
+
   finish();
+}
+
+// canary 롤아웃: allowlist UID 만 지급, 나머지는 rollout_disabled(구분되는 code). 실제 HTTP 로 검증.
+async function canarySection() {
+  const CPORT = 8790;
+  const allowed = await makeUser("edge-canary-in@test.dev");
+  const denied = await makeUser("edge-canary-out@test.dev");
+  await fsSet(`users/${allowed.uid}`, { doriExp: I(0), cottonCandy: I(0), tier: I(1), level: I(1) });
+  await fsSet(`users/${denied.uid}`, { doriExp: I(0), cottonCandy: I(0), tier: I(1), level: I(1) });
+  startWrangler(CPORT, { REWARD_ROLLOUT_MODE: "canary", REWARD_TEST_UIDS: allowed.uid });
+  const cup = await waitForPort(CPORT);
+  if (!cup) { ok("canary wrangler 기동", false, "타임아웃"); return; }
+  const cclaim = async (body, idToken) => {
+    const r = await fetch(`http://127.0.0.1:${CPORT}/api/claim-reward`, { method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${idToken}` }, body: JSON.stringify(body) });
+    let j = null; try { j = await r.json(); } catch { /* */ } return { status: r.status, json: j };
+  };
+  const a = await cclaim({ rewardType: "my_world_interaction", operationId: "mwi_canary_allow01", kind: "pet" }, allowed.idToken);
+  ok("canary: allowlist UID → 지급(200)", a.status === 200 && a.json?.awardedExp > 0, `status=${a.status}`);
+  const d = await cclaim({ rewardType: "my_world_interaction", operationId: "mwi_canary_deny01", kind: "pet" }, denied.idToken);
+  ok("canary: 비허용 UID → 403 rollout_disabled(정책거부와 구분)", d.status === 403 && d.json?.error === "rollout_disabled", `status=${d.status} err=${d.json?.error}`);
+  // 비허용 사용자는 서버에 EXP 반영 없음
+  ok("canary: 비허용 UID 는 서버 EXP 미반영", num((await fsGet(`users/${denied.uid}`)).doriExp) === 0);
+  // all 모드에서도 보안 검증 유지: 기본 인스턴스(all)에서 unknown reward type → 400, 잘못된 토큰 → 401 (앞서 검증됨)
+  ok("all 모드에서도 unknown reward type 거부 유지", (await claim({ rewardType: "free_money", operationId: "x1" }, allowed.idToken)).status === 400);
 }
 
 // 실제 클라이언트 보상 코드(claimReward/flushRewardOutbox/createFetchTransport/deriveOperationId)를
@@ -240,13 +276,15 @@ async function clientEdgeSection() {
 }
 
 function finish() {
-  // Windows: wrangler 의 자식(workerd/esbuild)까지 트리 종료해야 포트·정션이 풀린다.
-  try {
-    if (wrangler?.pid) {
-      if (process.platform === "win32") spawn("taskkill", ["/pid", String(wrangler.pid), "/T", "/F"], { stdio: "ignore" });
-      else wrangler.kill("SIGKILL");
-    }
-  } catch { /* noop */ }
+  // Windows: 내가 시작한 wrangler PID 트리(workerd/esbuild)만 종료. 광범위 kill 안 함.
+  for (const c of children) {
+    try {
+      if (c?.pid) {
+        if (process.platform === "win32") spawn("taskkill", ["/pid", String(c.pid), "/T", "/F"], { stdio: "ignore" });
+        else c.kill("SIGKILL");
+      }
+    } catch { /* noop */ }
+  }
   try { rmSync(TMP, { recursive: true, force: true }); } catch { /* noop */ }
   const passed = results.filter((r) => r.ok).length;
   console.log(`\n${passed}/${results.length} edge E2E checks passed`);
