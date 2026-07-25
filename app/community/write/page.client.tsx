@@ -5,7 +5,6 @@ import { useRouter } from 'next/navigation';
 import { useTheme } from 'next-themes';
 import { useAuth } from '@/contexts/AuthContext';
 import { getCachedGameProfile } from '@/lib/cottonCandy';
-import { submitGameReward } from '@/lib/gameReward';
 import { ChevronLeft, Image as ImageIcon, MoreHorizontal, HelpCircle, Sparkles } from 'lucide-react';
 import Quill from 'quill';
 import "quill/dist/quill.snow.css";
@@ -243,8 +242,8 @@ export default function WriteClient() {
                 const updatedPosts = [newPost, ...posts];
                 localStorage.setItem('dori_community_posts', JSON.stringify(updatedPosts));
 
-                // 경험치 적립 (글 작성) — 서버 권위 청구. 금액·상한·멱등은 서버가 결정.
-                if (email) submitGameReward('community_post', { sourceId: newPost.id });
+                // ⚠️ 이 화면(/community)의 글은 localStorage 전용 보드라 서버가 소스를 검증할 수 없다.
+                //   경험치는 Firestore feed 에 실제로 작성되는 SNS 글/댓글(lib/social.ts)만 서버 권위로 지급한다.
 
                 router.push('/community');
                 router.refresh();

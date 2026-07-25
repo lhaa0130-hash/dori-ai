@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useState, useEffect, useRef, useMemo } from 'react';
 import { useAuth } from '@/contexts/AuthContext';
 import { getCachedGameProfile } from '@/lib/cottonCandy';
-import { submitGameReward } from '@/lib/gameReward';
 import { TIER_INFO, type UserTier } from '@/lib/userProfile';
 import { PlusCircle, MessageCircle, TrendingUp, Clock, X, Share2, Send, Trash2 } from 'lucide-react';
 
@@ -176,8 +175,8 @@ function PostModal({
       setComments(updated);
       setCommentInput('');
       onUpdatePost({ ...post, comments: updated.length, commentsList: updated });
-      // 경험치 적립 (댓글) — 서버 권위 청구. 금액·상한·멱등은 서버가 결정.
-      if (myEmail) submitGameReward('community_comment', { sourceId: newComment.id });
+      // ⚠️ 이 화면(/community)의 댓글은 localStorage 전용 보드라 서버가 소스를 검증할 수 없다.
+      //   경험치는 Firestore feed 댓글(lib/social.ts addComment)만 서버 권위로 지급한다.
       setIsSubmitting(false);
       setTimeout(() => commentEndRef.current?.scrollIntoView({ behavior: 'smooth' }), 100);
     }, 250);

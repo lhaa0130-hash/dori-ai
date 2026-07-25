@@ -925,9 +925,11 @@ export async function addPost(name: string, text: string, opts: NewPostOpts = {}
       const sp = ownStoragePathOrNull(uid, opts.storagePath);
       if (sp) data.storagePath = sp;
     }
-    await addDoc(collection(db(), "feed"), data);
+    const ref = await addDoc(collection(db(), "feed"), data);
     bustCache("feed:");
     if (uid) bustCache(`counts:${uid}`);
+    // 경험치(글 작성) — 서버 권위 청구. sourceId=feed 문서 id 로 서버가 존재·작성자 UID 일치 검증.
+    void import("./gameReward").then((m) => m.submitGameReward("community_post", { sourceId: ref.id })).catch(() => {});
     return true;
   } catch { return false; }
 }
@@ -1388,6 +1390,9 @@ export async function addComment(postId: string, postOwnerUid: string, name: str
   });
   batch.update(postRef, { commentCount: increment(1) });
   await batch.commit(); // 실패하면 댓글·count 모두 반영되지 않는다
+
+  // 경험치(댓글) — 서버 권위 청구. sourceId={postId}__{commentId} 로 서버가 feed 소스 존재·소유 검증.
+  void import("./gameReward").then((m) => m.submitGameReward("community_comment", { sourceId: `${postId}__${commentRef.id}` })).catch(() => {});
 
   // 알림은 댓글 저장의 성립 조건이 아니다(실패해도 댓글은 유효) → 원자 커밋 밖에서 부가 처리
   notify(postOwnerUid, { type: "comment", fromName: name, text: "회원님 글에 댓글을 남겼어요.", link: "/feed" });

@@ -33,8 +33,13 @@ test("no production caller invokes addExp(email, amount) anymore", () => {
     assert.equal(/\baddExp\s*\(/.test(src), false, `${file} 는 더 이상 addExp 를 호출하지 않는다`);
     assert.equal(/\bensureExpAtLeast\s*\(/.test(src), false, `${file} 는 ensureExpAtLeast 를 호출하지 않는다`);
   }
-  assert.ok(read("app/community/write/page.client.tsx").includes("submitGameReward('community_post'"), "글 작성 → community_post");
-  assert.ok(read("app/community/page.client.tsx").includes("submitGameReward('community_comment'"), "댓글 → community_comment");
+  // Community 보상은 서버 검증 가능한 Firestore feed 소스(lib/social.ts)에서만 발행한다.
+  const social = read("lib/social.ts");
+  assert.ok(social.includes('submitGameReward("community_post"'), "feed 글 작성 → community_post");
+  assert.ok(social.includes('submitGameReward("community_comment"'), "feed 댓글 → community_comment");
+  // localStorage 전용 /community 보드는 서버 EXP 를 발행하지 않는다(소스 검증 불가).
+  assert.equal(/submitGameReward/.test(read("app/community/write/page.client.tsx")), false, "board 글은 서버 보상 없음");
+  assert.equal(/submitGameReward/.test(read("app/community/page.client.tsx")), false, "board 댓글은 서버 보상 없음");
 });
 
 test("the legacy gameData EXP writers are neutralized (no client Firestore doriExp write)", () => {
