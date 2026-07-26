@@ -1,7 +1,11 @@
 "use client";
 
 // My World — Room Canvas(공용 렌더러). Preview(editable=false)·Editor(editable) 동일 렌더.
-//  레이어: 벽 → 바닥 → 가구(zIndex 순) → 캐릭터 → 선택 UI. 좌표=퍼센트(고정 4:3 → 기기 무관).
+//  레이어: 벽 → 바닥 → 접지 그림자 → 가구(zIndex 순) → 캐릭터 → 선택 UI. 좌표=퍼센트(고정 4:3 → 기기 무관).
+//
+//  깊이감: 가구와 캐릭터가 배경 위에 "떠 있는" 데모처럼 보이던 문제를 해결하기 위해
+//  ① 벽 하단 그라데이션 ② 벽/바닥 접합선 ③ 바닥 원근 하이라이트 ④ 물체별 접지 타원 그림자
+//  ⑤ 모서리 비네트를 더한다. 좌표계·저장 형식·가구 정의는 그대로다(시각 레이어만 추가).
 import { memo, useCallback, useRef, useState, type RefObject, type PointerEvent as RPointerEvent, type KeyboardEvent as RKeyboardEvent } from "react";
 import { useCharacter } from "@/contexts/CharacterContext";
 import { CHARACTER_ASSETS_READY, themeTint } from "@/lib/myWorld/character/utils";
@@ -150,14 +154,82 @@ function RoomCanvasInner({ room, editable = false, selectedItemId = null, onSele
       onKeyDown={onKeyDown}
       tabIndex={editable ? 0 : -1}
       className="relative w-full overflow-hidden rounded-2xl outline-none"
-      style={{ aspectRatio: ROOM_ASPECT, background: wall.background }}
+      // isolate: 캔버스 내부 z-index(그림자·비네트)를 캔버스 안에 가둔다.
+      // 없으면 비네트(z 950)가 무대의 캐릭터 버튼(z 40)보다 위에 그려진다.
+      style={{ aspectRatio: ROOM_ASPECT, background: wall.background, isolation: "isolate" }}
     >
+      {/* 벽 하단 그라데이션 — 위로 열린 공간감 */}
+      <div
+        data-canvas-bg="1"
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0"
+        style={{ height: `${100 - FLOOR_BAND_PERCENT}%`, background: "linear-gradient(180deg, rgba(0,0,0,0.05) 0%, rgba(0,0,0,0) 45%, rgba(0,0,0,0.05) 100%)" }}
+      />
+
       {/* 바닥 밴드 */}
       <div
         data-canvas-bg="1"
         className="absolute inset-x-0 bottom-0"
         style={{ height: `${FLOOR_BAND_PERCENT}%`, background: floor.background, boxShadow: "inset 0 1px 0 rgba(0,0,0,0.06)" }}
       />
+
+      {/* 벽/바닥 접합 — 굽도리 선 + 바닥으로 떨어지는 그림자 */}
+      <div
+        data-canvas-bg="1"
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0"
+        style={{
+          bottom: `${FLOOR_BAND_PERCENT}%`,
+          height: "3%",
+          background: "linear-gradient(180deg, rgba(0,0,0,0) 0%, rgba(90,60,40,0.16) 100%)",
+        }}
+      />
+      <div
+        data-canvas-bg="1"
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0"
+        style={{
+          bottom: `${FLOOR_BAND_PERCENT}%`,
+          height: "6%",
+          background: "linear-gradient(180deg, rgba(90,60,40,0.20) 0%, rgba(90,60,40,0) 100%)",
+          transform: "translateY(100%)",
+        }}
+      />
+
+      {/* 바닥 원근 하이라이트 — 앞쪽이 밝아 바닥이 눕혀 보인다 */}
+      <div
+        data-canvas-bg="1"
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0"
+        style={{
+          height: `${FLOOR_BAND_PERCENT}%`,
+          background: "radial-gradient(120% 90% at 50% 115%, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0) 60%)",
+        }}
+      />
+
+      {/* 가구 접지 그림자 — 물체가 바닥에 놓여 있게 보이도록 별도 레이어로 깐다.
+          가구 박스는 회전/반전 transform 을 갖기 때문에 그림자를 자식으로 두면 함께 돌아간다. */}
+      {ordered.map((it) => {
+        const def = getRoomItem(it.itemId);
+        if (!def || def.layer >= 3) return null; // 벽걸이(액자 등)는 바닥 그림자가 없다
+        const { w, h } = itemBoxPercent(def, it.scale);
+        return (
+          <div
+            key={`shadow-${it.instanceId}`}
+            aria-hidden
+            className="pointer-events-none absolute"
+            style={{
+              left: `${it.x}%`,
+              top: `${it.y + h / 2}%`,
+              width: `${w * 0.86}%`,
+              height: `${Math.max(2.4, h * 0.16)}%`,
+              transform: "translate(-50%, -60%)",
+              zIndex: it.zIndex + 9,
+              background: "radial-gradient(50% 50% at 50% 50%, rgba(70,45,30,0.28) 0%, rgba(70,45,30,0) 72%)",
+            }}
+          />
+        );
+      })}
 
       {/* 가구 */}
       {ordered.map((it) => (
@@ -171,6 +243,23 @@ function RoomCanvasInner({ room, editable = false, selectedItemId = null, onSele
           onMove={onMove}
         />
       ))}
+
+      {/* 캐릭터 접지 그림자 — hideCharacter 인 경우는 무대(CharacterInteractionStage)가 자체로 깐다. */}
+      {!hideCharacter && (
+        <div
+          aria-hidden
+          className="pointer-events-none absolute"
+          style={{
+            left: "50%",
+            top: `calc(84% + ${compact ? 8 : 10}%)`,
+            width: compact ? "16%" : "20%",
+            height: "4%",
+            transform: "translate(-50%, -50%)",
+            zIndex: 890,
+            background: "radial-gradient(50% 50% at 50% 50%, rgba(70,45,30,0.30) 0%, rgba(70,45,30,0) 72%)",
+          }}
+        />
+      )}
 
       {/* 캐릭터(별도 레이어, 중앙 하단, 드래그 불가). CharacterAvatar placeholder 구조 재사용(이미지 우선→이모지). */}
       {!hideCharacter && <div
@@ -197,6 +286,13 @@ function RoomCanvasInner({ room, editable = false, selectedItemId = null, onSele
           )}
         </div>
       </div>}
+
+      {/* 모서리 비네트 — 장면을 안쪽으로 모아준다 */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-0"
+        style={{ zIndex: 950, background: "radial-gradient(120% 100% at 50% 45%, rgba(0,0,0,0) 55%, rgba(60,40,25,0.10) 100%)" }}
+      />
     </div>
   );
 }
