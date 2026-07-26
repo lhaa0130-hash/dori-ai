@@ -2,26 +2,17 @@
 
 // ─────────────────────────────────────────────────────────────────────────────
 // My World — "AI와 함께 살아가는 나만의 세계" 홈.
+//  이 파일의 책임은 **조립뿐**이다: Provider 중첩 · 화면 순서 · 대표 캐릭터 선택 모달 연결.
+//  마크업(Hero)·게임 프로필 조회·상태 표시는 각각 WorldHero / useGameProfile / 카드가 맡는다.
+//
+//  화면 순서는 사용 빈도 순이다.
+//   1) 현재 상태(Hero) → 2) 함께 놀기 → 3) 내 방 → 4) 기록(일기) → 5) 부가(접힘)
+//
 //  · 대표 캐릭터는 CharacterProvider/useCharacter(공용)로 관리 → Profile·Diary·Room 재사용.
-//  · 레벨/EXP/Candy 는 기존 게임 프로필 '읽기 전용'. 방·일기·업적·작품은 placeholder.
-//  · Firestore/API/출석/레벨 변경 없음.
+//  · 레벨/EXP/Candy 는 기존 게임 프로필 '읽기 전용'. Firestore/API/출석/레벨 변경 없음.
 // ─────────────────────────────────────────────────────────────────────────────
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import Link from "next/link";
-import { useAuth } from "@/contexts/AuthContext";
-import {
-  getCottonCandyBalance,
-  getCachedGameProfile,
-  hydrateGameData,
-} from "@/lib/cottonCandy";
-import {
-  TIER_INFO,
-  calculateLevelProgress,
-  getNextLevelExp,
-  getCurrentLevelStartExp,
-  type UserTier,
-} from "@/lib/userProfile";
-import { RARITY_STYLE } from "@/lib/myWorld/character/utils";
 import { getCharacter } from "@/lib/myWorld/character/registry";
 import { CharacterProvider, useCharacter } from "@/contexts/CharacterContext";
 import { DiaryProvider, useDiary } from "@/contexts/DiaryContext";
@@ -29,30 +20,14 @@ import { RoomProvider } from "@/contexts/RoomContext";
 import { InteractionProvider } from "@/contexts/InteractionContext";
 import { InteractionAudioProvider } from "@/contexts/InteractionAudioContext";
 import { buildCharacterSelectedEntry } from "@/lib/myWorld/diary/constants";
-import CottonCandy from "@/components/icons/CottonCandy";
-import BackgroundHero from "@/components/my-world/BackgroundHero";
-import CharacterCard from "@/components/my-world/CharacterCard";
+import { useGameProfile } from "@/hooks/my-world/useGameProfile";
+import WorldHero from "@/components/my-world/WorldHero";
+import WorldExtras from "@/components/my-world/WorldExtras";
+import WorldSectionBoundary from "@/components/my-world/WorldSectionBoundary";
 import CharacterSelectModal from "@/components/my-world/CharacterSelectModal";
-import RecentActivityCard from "@/components/my-world/RecentActivityCard";
 import DiaryCard from "@/components/my-world/DiaryCard";
 import RoomPreviewCard from "@/components/my-world/room/RoomPreviewCard";
-import CreationsCard from "@/components/my-world/CreationsCard";
-import AchievementsCard from "@/components/my-world/AchievementsCard";
 import CharacterInteractionStage from "@/components/my-world/interaction/CharacterInteractionStage";
-
-// 오늘의 한마디 — 저장 없이 날짜 기반 결정적 선택.
-const HELLOS = [
-  "오늘도 하나 만들어보자.",
-  "작은 세계가 조금씩 자라고 있어요.",
-  "오늘의 나를 기록해볼까요?",
-  "새로운 친구를 만들어봐요.",
-  "천천히, 나만의 속도로.",
-];
-function todaysHello(): string {
-  const d = new Date();
-  const idx = (d.getFullYear() * 372 + (d.getMonth() + 1) * 31 + d.getDate()) % HELLOS.length;
-  return HELLOS[idx];
-}
 
 // Provider 로 감싸 useCharacter/useDiary/useRoom 사용. Room 은 Character·Diary 에 의존(캐릭터 레이어·저장 시 일기).
 export default function MyWorldPage() {
@@ -72,116 +47,52 @@ export default function MyWorldPage() {
 }
 
 function MyWorldContent() {
-  const { session, status } = useAuth();
   const { character, selectCharacter, saving } = useCharacter();
   const { addEntry } = useDiary();
-  const [nickname, setNickname] = useState("나");
-  const [level, setLevel] = useState(1);
-  const [tier, setTier] = useState(1);
-  const [exp, setExp] = useState(0);
-  const [candy, setCandy] = useState(0);
+  const profile = useGameProfile();
   const [modalOpen, setModalOpen] = useState(false);
-
-  const refresh = (email: string) => {
-    const gp = getCachedGameProfile(email);
-    setLevel(gp?.level || 1);
-    setTier(gp?.tier || 1);
-    setExp(gp?.doriExp || 0);
-    setCandy(getCottonCandyBalance(email));
-  };
-
-  useEffect(() => {
-    const email = session?.user?.email;
-    if (!email) return;
-    setNickname(session?.user?.name || "나");
-    refresh(email);
-    hydrateGameData().then(() => refresh(email)).catch(() => {});
-  }, [session?.user?.email, session?.user?.name]);
-
-  useEffect(() => {
-    if (typeof window === "undefined") return;
-    const onSync = () => { if (session?.user?.email) refresh(session.user.email); };
-    window.addEventListener("dori-gamedata-synced", onSync);
-    return () => window.removeEventListener("dori-gamedata-synced", onSync);
-  }, [session?.user?.email]);
-
-  const tierInfo = TIER_INFO[(tier >= 1 && tier <= 10 ? tier : 1) as UserTier];
-  const progress = calculateLevelProgress(exp, level);
-  const nextTotal = getCurrentLevelStartExp(level) + getNextLevelExp(level);
-  const loggedIn = status === "authenticated";
-  const rarity = RARITY_STYLE[character.rarity];
 
   const handleSelect = (id: string) => {
     // 실제 대표 캐릭터가 바뀔 때만 자동 기록(§5). 로그인 아니면 addEntry 내부에서 무시.
-    if (id !== character.id) addEntry(buildCharacterSelectedEntry(getCharacter(id)));
-    selectCharacter(id);
+    if (id !== character.id) void addEntry(buildCharacterSelectedEntry(getCharacter(id)));
+    void selectCharacter(id);
     setModalOpen(false);
   };
 
   return (
     <main className="mx-auto w-full max-w-2xl px-4 pb-16 pt-4 sm:pt-6">
-      {/* ── Hero ── */}
-      <BackgroundHero gradient={character.defaultBackground}>
-        <div className="flex flex-col items-center px-5 pb-6 pt-8 text-center">
-          <CharacterCard size={104} character={character} onEdit={() => setModalOpen(true)} />
+      <WorldHero character={character} profile={profile} onEditCharacter={() => setModalOpen(true)} />
 
-          {/* 캐릭터 이름 · 희귀도 */}
-          <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-black/25 px-3 py-1">
-            <span className="text-[13px] font-black text-white">{character.name}</span>
-            <span className="text-[10px] font-bold" style={{ color: "#fff", opacity: 0.85 }}>· {rarity.label}</span>
-          </div>
-
-          <div className="mt-2 flex items-center gap-2">
-            <span className="rounded-full px-2.5 py-0.5 text-[11px] font-black" style={{ color: "#fff", backgroundColor: "rgba(0,0,0,0.28)" }}>
-              {tierInfo.name}
-            </span>
-            <span className="text-[15px] font-black text-white drop-shadow-sm">Lv.{level}</span>
-          </div>
-          <h1 className="mt-1.5 text-[20px] font-extrabold text-white drop-shadow-sm">{nickname}</h1>
-          <p className="mt-0.5 text-[13px] font-medium text-white/90 drop-shadow-sm">“{todaysHello()}”</p>
-
-          {/* EXP progress */}
-          <div className="mt-4 w-full max-w-xs">
-            <div className="mb-1 flex items-center justify-between text-[11px] font-bold text-white/90">
-              <span>EXP</span>
-              <span>{exp.toLocaleString()} / {nextTotal.toLocaleString()}</span>
-            </div>
-            <div className="relative h-2 overflow-hidden rounded-full bg-white/35">
-              <div
-                className="absolute left-0 top-0 h-full rounded-full bg-white transition-all duration-500"
-                style={{ width: `${Math.min(Math.max(progress, 0), 100)}%` }}
-              />
-            </div>
-          </div>
-
-          {/* Candy */}
-          <div className="mt-3 inline-flex items-center gap-1.5 rounded-full bg-white/90 px-3.5 py-1.5 shadow-sm">
-            <CottonCandy className="h-4 w-4" />
-            <span className="text-[13px] font-black text-stone-800">{candy.toLocaleString()}</span>
-          </div>
-        </div>
-      </BackgroundHero>
-
-      {!loggedIn && (
-        <div className="mt-4 flex items-center justify-between rounded-2xl border border-stone-100 bg-stone-50 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900/50">
-          <span className="text-[13px] font-semibold text-stone-500 dark:text-stone-400">
+      {!profile.loggedIn && (
+        <div className="mt-4 flex items-center justify-between gap-3 rounded-2xl border border-stone-100 bg-stone-50 px-4 py-3 dark:border-zinc-800 dark:bg-zinc-900/50">
+          <span className="min-w-0 break-keep text-[13px] font-semibold text-stone-500 dark:text-stone-400">
             로그인하면 나만의 My World가 채워져요
           </span>
-          <Link href="/login" className="rounded-xl bg-[#F9954E] px-3.5 py-1.5 text-[12px] font-black text-white">로그인</Link>
+          <Link
+            href="/login?next=/my-world"
+            className="flex min-h-[44px] flex-none items-center justify-center whitespace-nowrap rounded-xl bg-[#F9954E] px-4 text-[13px] font-black text-white transition hover:bg-[#f0862f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E]"
+          >
+            로그인
+          </Link>
         </div>
       )}
 
-      {/* ── 카드 섹션 ── */}
-      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="sm:col-span-2"><CharacterInteractionStage /></div>
-        <div className="sm:col-span-2"><RecentActivityCard /></div>
-        <div className="sm:col-span-2"><DiaryCard /></div>
-        <div className="sm:col-span-2"><RoomPreviewCard /></div>
-        <div className="sm:col-span-2"><CreationsCard /></div>
-        <div className="sm:col-span-2"><AchievementsCard /></div>
+      {/* 섹션마다 오류 경계를 둬, 한 카드가 실패해도 나머지 My World 는 그대로 쓸 수 있게 한다. */}
+      <div className="mt-4 space-y-3">
+        <WorldSectionBoundary title={`${character.name}와 함께 놀기`}>
+          <CharacterInteractionStage profile={profile} />
+        </WorldSectionBoundary>
+        <WorldSectionBoundary title="내 방">
+          <RoomPreviewCard />
+        </WorldSectionBoundary>
+        <WorldSectionBoundary title="AI 일기">
+          <DiaryCard />
+        </WorldSectionBoundary>
+        <WorldSectionBoundary title="기록과 설정">
+          <WorldExtras />
+        </WorldSectionBoundary>
       </div>
 
-      {/* 대표 캐릭터 선택 모달 */}
       <CharacterSelectModal
         open={modalOpen}
         onClose={() => setModalOpen(false)}
