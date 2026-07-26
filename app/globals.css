@@ -812,4 +812,6 @@ h6 {
 
 @media (prefers-reduced-motion: reduce) {
   .mw-character { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
+  /* 보상 피드백 등장 애니메이션도 함께 끈다 — 캐릭터만 끄면 화면 일부만 움직여 더 산만해진다. */
+  .animate-\[mw-notice-in_180ms_ease-out\] { animation: none !important; }
 }

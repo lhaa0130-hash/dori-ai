@@ -1,31 +1,34 @@
 "use client";
 
-import { useEffect, useRef, type PointerEvent as ReactPointerEvent } from "react";
+// My World — 캐릭터와 함께 놀기.
+//  이 컴포넌트의 책임은 셋으로 줄였다: 무대 렌더 · 포인터 제스처 · 하위 조립.
+//   · 상태 표시(EXP·친밀도·감정) → CharacterStatus
+//   · 행동 버튼 + cooldown      → InteractionActions
+//   · 보상/안내 피드백          → WorldFeedback (무대 밖 — 캐릭터를 가리지 않는다)
+import { useEffect, useMemo, useRef, type PointerEvent as ReactPointerEvent } from "react";
 import { useCharacter } from "@/contexts/CharacterContext";
 import { useInteraction } from "@/contexts/InteractionContext";
 import { useInteractionAudio } from "@/contexts/InteractionAudioContext";
 import { useRoom } from "@/contexts/RoomContext";
 import RoomCanvas from "@/components/my-world/room/RoomCanvas";
-import AffinityMeter from "@/components/my-world/interaction/AffinityMeter";
-import InteractionNotices from "@/components/my-world/interaction/InteractionNotices";
+import CharacterStatus from "@/components/my-world/interaction/CharacterStatus";
+import InteractionActions, { type ActionDefinition } from "@/components/my-world/interaction/InteractionActions";
 import SpeechBubble from "@/components/my-world/interaction/SpeechBubble";
-import { EMOTION_META } from "@/lib/myWorld/interaction/catalog";
+import WorldFeedback from "@/components/my-world/interaction/WorldFeedback";
+import { dailyRewardProgress } from "@/lib/myWorld/interaction/availability";
 import { CHARACTER_ASSETS_READY } from "@/lib/myWorld/character/utils";
 import { getRoomItem } from "@/lib/myWorld/room/registry";
 import { itemBoxPercent } from "@/lib/myWorld/room/utils";
+import type { GameProfileView } from "@/hooks/my-world/useGameProfile";
 
-const ACTIONS = [
-  { type: "pet" as const, icon: "🫳", label: "쓰다듬기" },
-  { type: "greet" as const, icon: "👋", label: "인사하기" },
-  { type: "gift" as const, icon: "🎁", label: "선물하기" },
-  { type: "sleep" as const, icon: "🌙", label: "재우기" },
-];
-
-export default function CharacterInteractionStage() {
+export default function CharacterInteractionStage({ profile }: { profile: GameProfileView }) {
   const { character } = useCharacter();
   const { savedRoom } = useRoom();
-  const { state, loading, syncing, offline, emotion: displayEmotion, signedIn, currentAnimation, speech, notices, perform, previewReaction, dismissNotice } = useInteraction();
-  const { muted, volume, setMuted, setVolume } = useInteractionAudio();
+  const {
+    state, loading, syncing, offline, emotion: displayEmotion, signedIn,
+    currentAnimation, speech, notices, perform, previewReaction, dismissNotice,
+  } = useInteraction();
+  const { muted, setMuted } = useInteractionAudio();
   const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const singleTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastTapAt = useRef(0);
@@ -78,18 +81,34 @@ export default function CharacterInteractionStage() {
     perform({ type: "touch", source: "keyboard" });
   };
 
-  const emotion = EMOTION_META[displayEmotion];
+  const handleAction = (type: ActionDefinition["type"], keyboard: boolean) => {
+    perform({ type, source: keyboard ? "keyboard" : "pointer" });
+  };
+
+  // 동기화 배지 — 오프라인과 저장 지연을 구분해 표시한다(둘 다 아니면 자리를 차지하지 않는다).
+  const syncBadge = offline ? "오프라인 · 기기에 저장 중" : syncing ? "저장 중" : null;
+  const daily = useMemo(() => dailyRewardProgress(state), [state]);
 
   return (
     <section className="rounded-3xl border border-stone-100 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950 sm:p-5" aria-labelledby="interaction-heading">
-      <div className="mb-3 flex flex-wrap items-center justify-between gap-2">
-        <div>
-          <h2 id="interaction-heading" className="text-[16px] font-extrabold text-stone-900 dark:text-white">{character.name}와 함께 놀기</h2>
+      <div className="mb-3 flex flex-wrap items-start justify-between gap-2">
+        <div className="min-w-0">
+          <h2 id="interaction-heading" className="text-[15px] font-extrabold text-stone-900 dark:text-white">{character.name}와 함께 놀기</h2>
           <p className="mt-0.5 text-[11px] font-medium text-stone-500 dark:text-zinc-400">터치하거나 길게 눌러 반응을 만나보세요.</p>
         </div>
-        <div className="flex items-center gap-1.5">
-          {(offline || syncing) && <span className="rounded-full bg-stone-100 px-2 py-1 text-[10px] font-bold text-stone-500 dark:bg-zinc-800 dark:text-zinc-300">{offline ? "오프라인 저장 중" : "동기화 중"}</span>}
-          <button type="button" onClick={() => setMuted(!muted)} aria-pressed={muted} aria-label={muted ? "효과음 켜기" : "효과음 끄기"} className="flex h-8 w-8 items-center justify-center rounded-full bg-stone-100 text-sm transition hover:bg-stone-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#F9954E] dark:bg-zinc-800 dark:hover:bg-zinc-700">
+        <div className="flex flex-none items-center gap-1.5">
+          {syncBadge && (
+            <span className="rounded-full bg-stone-100 px-2 py-1 text-[10px] font-bold text-stone-500 dark:bg-zinc-800 dark:text-zinc-300">
+              {syncBadge}
+            </span>
+          )}
+          <button
+            type="button"
+            onClick={() => setMuted(!muted)}
+            aria-pressed={muted}
+            aria-label={muted ? "효과음 켜기" : "효과음 끄기"}
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-stone-100 text-base transition hover:bg-stone-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E] dark:bg-zinc-800 dark:hover:bg-zinc-700"
+          >
             <span aria-hidden>{muted ? "🔇" : "🔊"}</span>
           </button>
         </div>
@@ -140,39 +159,23 @@ export default function CharacterInteractionStage() {
             )}
           </span>
         </button>
-
-        <InteractionNotices notices={notices} onDismiss={dismissNotice} />
       </div>
 
-      <div className="mt-3 flex items-center gap-3 rounded-2xl bg-stone-50 px-3 py-2.5 dark:bg-zinc-900">
-        <AffinityMeter affinity={state.affinity} guest={!signedIn} />
-        <span className="shrink-0 rounded-full px-2.5 py-1 text-[11px] font-black text-white" style={{ backgroundColor: emotion.color }} title={`현재 감정: ${emotion.label}`}>
-          <span aria-hidden>{emotion.emoji}</span> {emotion.label}
-        </span>
-      </div>
+      {/* 보상·안내는 무대 밖에서 — 캐릭터를 가리지 않는다. */}
+      <WorldFeedback notices={notices} onDismiss={dismissNotice} />
 
-      <div className="mt-3 grid grid-cols-2 gap-2 sm:grid-cols-4" aria-label="상호작용 메뉴">
-        {ACTIONS.map((action) => (
-          <button
-            key={action.type}
-            type="button"
-            disabled={loading}
-            onClick={(event) => perform({ type: action.type, source: event.detail === 0 ? "keyboard" : "pointer" })}
-            className="rounded-2xl border border-stone-100 bg-white px-2 py-2.5 text-[12px] font-black text-stone-700 shadow-sm transition hover:-translate-y-0.5 hover:border-[#F9954E]/40 hover:shadow focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#F9954E] active:translate-y-0 disabled:opacity-50 dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100"
-          >
-            <span className="mr-1" aria-hidden>{action.icon}</span>{action.label}
-          </button>
-        ))}
-      </div>
+      <CharacterStatus
+        exp={profile.exp}
+        nextTotal={profile.nextTotal}
+        progress={profile.progress}
+        level={profile.level}
+        affinity={state.affinity}
+        emotion={displayEmotion}
+        guest={!signedIn}
+        daily={daily}
+      />
 
-      <details className="mt-3 text-[11px] text-stone-500 dark:text-zinc-400">
-        <summary className="cursor-pointer select-none font-bold">효과음 설정</summary>
-        <label className="mt-2 flex items-center gap-2">
-          <span>볼륨</span>
-          <input type="range" min="0" max="1" step="0.05" value={volume} disabled={muted} onChange={(event) => setVolume(Number(event.target.value))} className="w-full accent-[#F9954E]" aria-label="상호작용 효과음 볼륨" />
-          <span className="w-8 text-right">{Math.round(volume * 100)}%</span>
-        </label>
-      </details>
+      <InteractionActions state={state} loading={loading} onPerform={handleAction} />
     </section>
   );
 }
