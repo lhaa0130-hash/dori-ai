@@ -17,7 +17,10 @@ service cloud.firestore {
     //    관리자(isAdmin)도 예외가 아니다 — 관리자 지급은 서버 엔드포인트를 통한다.
     function rewardFieldNames() {
       return ['doriExp', 'level', 'tier', 'rewardDailyDate', 'rewardDailyExp',
-        'cottonCandy', 'cottonCandyTotal', 'ownedItems', 'isPremium',
+        'cottonCandy', 'cottonCandyTotal', 'candyDailyDate', 'candyDailyTotal',
+        'ownedItems', 'inventory', 'purchasedItems', 'unlockedItems',
+        // 권한·등급 계열은 서버(SA)만 쓴다. 클라이언트가 스스로 승격하지 못하게 전부 잠근다.
+        'isPremium', 'premium', 'premiumUntil', 'membership', 'plan', 'role', 'isAdmin', 'grade', 'vip',
         'rewardTypeDate_community_post', 'rewardTypeExp_community_post', 'rewardTypeCandy_community_post',
         'rewardTypeDate_community_comment', 'rewardTypeExp_community_comment', 'rewardTypeCandy_community_comment',
         'rewardTypeDate_mission_complete', 'rewardTypeExp_mission_complete', 'rewardTypeCandy_mission_complete',
@@ -40,8 +43,11 @@ service cloud.firestore {
         && d.get('tier', 1) <= 1
         && d.get('cottonCandy', 0) <= 100
         && d.get('cottonCandyTotal', 0) <= 100
-        && d.get('isPremium', false) == false
-        && d.get('ownedItems', []).size() == 0
+        // 권한·보유 계열은 가입 시 아예 실을 수 없다(있기만 해도 거부 — 기본값 우회 방지).
+        && !d.keys().hasAny(['isPremium', 'premium', 'premiumUntil', 'membership', 'plan',
+                             'role', 'isAdmin', 'grade', 'vip',
+                             'ownedItems', 'inventory', 'purchasedItems', 'unlockedItems',
+                             'candyDailyDate', 'candyDailyTotal'])
         && !d.keys().hasAny(['rewardDailyDate', 'rewardDailyExp',
             'rewardTypeDate_community_post', 'rewardTypeExp_community_post', 'rewardTypeCandy_community_post',
             'rewardTypeDate_community_comment', 'rewardTypeExp_community_comment', 'rewardTypeCandy_community_comment',
@@ -340,9 +346,20 @@ service cloud.firestore {
     }
 
     // 알림 — 받는 사람만 읽기/정리. 관리자는 그대로(솜사탕·프리미엄 지급 알림 등), 일반 사용자는 '자기 이름으로'만 생성(익명 스팸·발신자 위조 차단)
+    // ⚠️ 05-07B: 알림은 '남의 알림함에 문서를 만들 수 있는' 구조다(fromUid==나, 대상은 남).
+    //   예전엔 그 알림에 amount 를 적어 두면 대상 클라이언트가 자기 잔액에 반영했다(=P0, 계정 2개면 무한 지급).
+    //   소비 코드는 제거했지만, **위조 자체를 규칙에서도 막아** 잔존 구버전 탭·복구 시나리오까지 차단한다.
+    //   type 은 소셜 알림만 허용하고, 재화·프리미엄 성격 필드는 아예 실을 수 없다.
+    function notificationIsSafe() {
+      let d = request.resource.data;
+      return !d.keys().hasAny(['amount', 'candy', 'cottonCandy', 'reward', 'premium', 'isPremium',
+                               'applied', 'grant', 'items', 'ownedItems'])
+        && d.get('type', '') in ['comment', 'like', 'dm', 'follow', 'friend_request', 'friend_accept',
+                                 'guestbook', 'spark', 'mention', 'system'];
+    }
     match /notifications/{uid}/items/{itemId} {
       allow read:           if request.auth != null && request.auth.uid == uid;
-      allow create:         if request.auth != null && (
+      allow create:         if request.auth != null && notificationIsSafe() && (
                                isAdmin() ||
                                (request.resource.data.fromUid == request.auth.uid && request.resource.data.fromUid != uid)
                              );

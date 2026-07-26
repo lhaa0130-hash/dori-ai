@@ -149,9 +149,11 @@ async function main() {
   ok("daily_attendance 지급(granted)", att.status === 200 && att.json?.ok === true, `status=${att.status} st=${att.json?.status}`);
   const attDup = await claim({ rewardType: "daily_attendance" }, u.idToken);
   ok("daily_attendance 재청구 → already_claimed(하루 1회)", attDup.json?.status === "already_claimed" || attDup.json?.status === "legacy_recognized");
-  const ms = await claim({ rewardType: "mission_complete", operationId: "mission_checkin_2026-07-25", missionId: "checkin_2026-07-25" }, u.idToken);
+  // ⚠️ 05-07B: sourceId 의 날짜는 서버 오늘과 일치해야 한다(과거 날짜 하드코딩 금지).
+  const svrToday = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+  const ms = await claim({ rewardType: "mission_complete", operationId: `mission_attendance_${svrToday}`, missionId: `attendance_${svrToday}` }, u.idToken);
   ok("mission_complete 지급 = 10 (BOUNDED)", ms.status === 200 && ms.json?.awardedExp === 10, `award=${ms.json?.awardedExp}`);
-  const mg = await claim({ rewardType: "minigame_play", operationId: "minigame_playtime_2026-07-25", gameId: "playtime_2026-07-25" }, u.idToken);
+  const mg = await claim({ rewardType: "minigame_play", operationId: `minigame_playtime_${svrToday}`, gameId: `playtime_${svrToday}` }, u.idToken);
   ok("minigame_play 지급 = 5 (BOUNDED)", mg.status === 200 && mg.json?.awardedExp === 5, `award=${mg.json?.awardedExp}`);
 
   // ── 동시 10회 같은 operationId → 정확히 1회 지급 ──
@@ -184,6 +186,10 @@ async function main() {
   await candySection();
   await purchaseSection();
   await adminGrantSection();
+  // ── 05-07B: 적대적 감사에서 발견한 우회 경로 차단 확인 ──
+  await hardeningSection();
+  await candyGateSection();
+  await adminFailClosedSection();
 
   // ── Client → Edge → Emulator: 실제 lib/rewardClient 코드로 구동(오프라인 큐·flush·조작무효·계정격리) ──
   await clientEdgeSection();
@@ -202,6 +208,110 @@ async function post(pathname, body, idToken, method = "POST") {
   return { status: r.status, json };
 }
 
+// 05-07B 적대적 검증 — 1차 구현에서 실제로 뚫렸던 경로를 실 HTTP 로 재현·차단 확인.
+async function hardeningSection() {
+  const u = await makeUser("edge-harden@test.dev");
+  await fsSet(`users/${u.uid}`, { doriExp: I(0), cottonCandy: I(0), cottonCandyTotal: I(0), tier: I(1), level: I(1) });
+  const today = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+
+  // ⭐ 날짜 조작으로 '1일 1회'를 우회하던 경로
+  const future = await claim({ rewardType: "mission_complete", operationId: "mission_write_post_2099-01-01", sourceId: "write_post_2099-01-01" }, u.idToken);
+  ok("⭐ 미래 날짜 sourceId 로 미션 재청구 → 400 invalid_source_date",
+    future.status === 400 && future.json?.error === "invalid_source_date", `status=${future.status} err=${future.json?.error}`);
+  const past = await claim({ rewardType: "mission_complete", operationId: "mission_write_post_2020-01-01", sourceId: "write_post_2020-01-01" }, u.idToken);
+  ok("⭐ 과거 날짜 sourceId 도 거부", past.status === 400, `status=${past.status}`);
+  const nodate = await claim({ rewardType: "minigame_play", operationId: "minigame_playtime", sourceId: "playtime" }, u.idToken);
+  ok("⭐ 날짜 없는 playtime sourceId 도 거부", nodate.status === 400, `status=${nodate.status}`);
+  ok("날짜 조작 시도 후에도 잔액 0", num((await fsGet(`users/${u.uid}`)).cottonCandy) === undefined || num((await fsGet(`users/${u.uid}`)).cottonCandy) === 0);
+
+  // ⭐ allowlist 밖 미션/업적 id → 400 (원장 쓰레기도 안 생김)
+  const badMission = await claim({ rewardType: "mission_complete", operationId: `mission_hack_${today}`, sourceId: `hack_${today}` }, u.idToken);
+  ok("⭐ 알 수 없는 missionId → 400 unknown_source", badMission.status === 400 && badMission.json?.error === "unknown_source", `err=${badMission.json?.error}`);
+  const badAch = await claim({ rewardType: "achievement_claim", operationId: "ach_fake_one", sourceId: "fake_one" }, u.idToken);
+  ok("⭐ 알 수 없는 achievementId → 400", badAch.status === 400, `status=${badAch.status}`);
+  ok("거부된 요청은 원장을 남기지 않는다", (await fsGet(`users/${u.uid}/rewardOperations/mission_hack_${today}`)) === null);
+
+  // ⭐ lv_010 / lv_10 중복 수령
+  const lvZero = await claim({ rewardType: "level_reward", operationId: "lv_010", sourceId: "010" }, u.idToken);
+  ok("⭐ 앞자리 0 레벨(lv_010)은 거부 — 같은 마일스톤 중복 수령 차단", lvZero.status === 400, `status=${lvZero.status}`);
+
+  // ⭐ 전역 일일 상한: 미션을 전부 받은 뒤 상한 초과분은 0
+  const missions = ["attendance", "read_trend", "write_post", "write_comment", "play_minigame", "quiz_correct"];
+  let granted = 0;
+  for (const m of missions) {
+    const r = await claim({ rewardType: "mission_complete", operationId: `mission_${m}_${today}`, sourceId: `${m}_${today}` }, u.idToken);
+    if (r.status === 200) granted += Number(r.json?.awardedCandy) || 0;
+  }
+  const afterMissions = await fsGet(`users/${u.uid}`);
+  ok("미션 전량 수령은 정상 동작(정상 사용자가 상한에 안 걸림)", granted === 280 && num(afterMissions.cottonCandy) === 280, `granted=${granted} candy=${num(afterMissions.cottonCandy)}`);
+  ok("전역 일일 집계가 서버 날짜로 기록", afterMissions.candyDailyDate?.stringValue === today && num(afterMissions.candyDailyTotal) === 280);
+
+  // 전역 상한(600)까지 채운 뒤 초과 지급 0 — 업적으로 채운다.
+  for (const a of ["streak_30", "level_10", "quiz_master", "game_king", "popular", "comment_king"]) {
+    await claim({ rewardType: "achievement_claim", operationId: `ach_${a}`, sourceId: a }, u.idToken);
+  }
+  const capped = await fsGet(`users/${u.uid}`);
+  ok("⭐ 전역 일일 상한 600 을 넘지 않는다", num(capped.candyDailyTotal) <= 600 && num(capped.cottonCandy) <= 600,
+    `total=${num(capped.candyDailyTotal)} candy=${num(capped.cottonCandy)}`);
+
+  // 클라이언트가 집계 필드를 실어 보내면 400
+  const forgeCounter = await claim({ rewardType: "mission_complete", operationId: `mission_read_trend_${today}`, sourceId: `read_trend_${today}`, candyDailyTotal: 0 }, u.idToken);
+  ok("전역 집계 필드 주입은 400", forgeCounter.status === 400, `status=${forgeCounter.status}`);
+}
+
+// 재화 게이트(CANDY_ROLLOUT_MODE) 분리 — 별도 wrangler 인스턴스로 실제 HTTP 검증.
+async function candyGateSection() {
+  const GPORT = 8792;
+  const u = await makeUser("edge-candygate@test.dev");
+  await fsSet(`users/${u.uid}`, { doriExp: I(0), cottonCandy: I(0), cottonCandyTotal: I(0), tier: I(1), level: I(1) });
+  const today = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+  // REWARD_ROLLOUT_MODE=all 이지만 CANDY_ROLLOUT_MODE=off → EXP 는 지급, 재화는 0 이어야 한다.
+  startWrangler(GPORT, { REWARD_ROLLOUT_MODE: "all", CANDY_ROLLOUT_MODE: "off" });
+  const up = await waitForPort(GPORT);
+  if (!up) { ok("candy gate wrangler 기동", false, "타임아웃"); return; }
+
+  const r = await fetch(`http://127.0.0.1:${GPORT}/api/claim-reward`, {
+    method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${u.idToken}` },
+    body: JSON.stringify({ rewardType: "mission_complete", operationId: `mission_write_post_${today}`, sourceId: `write_post_${today}` }),
+  });
+  const j = await r.json().catch(() => null);
+  ok("⭐ CANDY_ROLLOUT_MODE=off → EXP 는 지급되고 재화만 0", r.status === 200 && j?.awardedExp === 10 && j?.awardedCandy === 0,
+    `status=${r.status} exp=${j?.awardedExp} candy=${j?.awardedCandy}`);
+  const doc = await fsGet(`users/${u.uid}`);
+  ok("off 상태에서 서버 잔액이 오르지 않는다", (num(doc.cottonCandy) || 0) === 0, `candy=${num(doc.cottonCandy)}`);
+  ok("off 상태에서도 EXP 는 정상(기존 기능 무영향)", num(doc.doriExp) === 10, `exp=${num(doc.doriExp)}`);
+
+  // 구매는 게이트가 닫히면 전면 거부
+  const { SHOP_ITEMS, itemKey } = await import("../../lib/shopItems.ts");
+  const paid = SHOP_ITEMS.find((i) => i.price > 0);
+  const pr = await fetch(`http://127.0.0.1:${GPORT}/api/purchase`, {
+    method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${u.idToken}` },
+    body: JSON.stringify({ itemKey: itemKey(paid.slot, paid.id) }),
+  });
+  const pj = await pr.json().catch(() => null);
+  ok("⭐ 게이트 off 면 구매는 403 candy_rollout_disabled", pr.status === 403 && pj?.error === "candy_rollout_disabled", `status=${pr.status} err=${pj?.error}`);
+}
+
+// 관리자 지급 fail-closed — allowlist 미설정이면 엔드포인트 자체가 비활성.
+async function adminFailClosedSection() {
+  const APORT = 8793;
+  const admin = await makeUser("lhaa0130+failclosed@gmail.com");
+  const target = await makeUser("edge-fc-target@test.dev");
+  await fsSet(`users/${target.uid}`, { cottonCandy: I(0), doriExp: I(0), tier: I(1), level: I(1) });
+  // REWARD_ADMIN_UIDS 미설정 인스턴스
+  startWrangler(APORT, { REWARD_ROLLOUT_MODE: "all", CANDY_ROLLOUT_MODE: "all" });
+  const up = await waitForPort(APORT);
+  if (!up) { ok("admin fail-closed wrangler 기동", false, "타임아웃"); return; }
+  const r = await fetch(`http://127.0.0.1:${APORT}/api/admin/grant`, {
+    method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${admin.idToken}` },
+    body: JSON.stringify({ targetUid: target.uid, candy: 1000, operationId: "grant_failclosed001" }),
+  });
+  const j = await r.json().catch(() => null);
+  ok("⭐ REWARD_ADMIN_UIDS 미설정 → 503 admin_grant_disabled(fail-closed)",
+    r.status === 503 && j?.error === "admin_grant_disabled", `status=${r.status} err=${j?.error}`);
+  ok("fail-closed 상태에서 대상 잔액 불변", (num((await fsGet(`users/${target.uid}`)).cottonCandy) || 0) === 0);
+}
+
 // 재화 지급이 서버 소유인지 — 미션 금액표·일일 상한·멱등·레벨 검증.
 async function candySection() {
   const u = await makeUser("edge-candy@test.dev");
@@ -218,9 +328,9 @@ async function candySection() {
   ok("같은 미션 재청구는 멱등(추가 지급 없음)", m2.status === 200 && m2.json?.duplicate === true && num(afterDup.cottonCandy) === 80,
     `dup=${m2.json?.duplicate} candy=${num(afterDup.cottonCandy)}`);
 
-  // 표에 없는 미션 id → 0 지급(임의 미션 위조 차단)
+  // 표에 없는 미션 id → 05-07B 부터 아예 400 거부(원장 쓰레기도 안 남김)
   const m3 = await claim({ rewardType: "mission_complete", operationId: `mission_hack_${today}`, sourceId: `hack_${today}` }, u.idToken);
-  ok("알 수 없는 미션 id 는 재화 0", m3.status === 200 && m3.json?.awardedCandy === 0, `awarded=${m3.json?.awardedCandy}`);
+  ok("알 수 없는 미션 id 는 400 거부", m3.status === 400 && m3.json?.error === "unknown_source", `status=${m3.status} err=${m3.json?.error}`);
 
   // 클라이언트가 금액을 실어 보내면 400
   const m4 = await claim({ rewardType: "mission_complete", operationId: `mission_read_trend_${today}`, sourceId: `read_trend_${today}`, amount: 99999 }, u.idToken);
@@ -241,9 +351,9 @@ async function candySection() {
   ok("업적 지급은 서버 표 금액 + 평생 1회", a1.json?.awardedCandy === 50 && a2.json?.duplicate === true && num(afterAch.cottonCandy) === 130,
     `a1=${a1.json?.awardedCandy} candy=${num(afterAch.cottonCandy)}`);
 
-  // 알 수 없는 업적 id → 0
+  // 알 수 없는 업적 id → 05-07B 부터 400 거부
   const a3 = await claim({ rewardType: "achievement_claim", operationId: "ach_fake", sourceId: "fake" }, u.idToken);
-  ok("알 수 없는 업적 id 는 재화 0", a3.json?.awardedCandy === 0);
+  ok("알 수 없는 업적 id 는 400 거부", a3.status === 400 && a3.json?.error === "unknown_source", `status=${a3.status}`);
 
   // 누적 획득량도 서버가 기록
   ok("cottonCandyTotal 이 서버에서 누적", num(afterAch.cottonCandyTotal) === 130, `total=${num(afterAch.cottonCandyTotal)}`);
@@ -312,12 +422,31 @@ async function purchaseSection() {
 
 // 관리자 지급: 서버가 관리자 여부를 판정한다(비관리자는 403).
 async function adminGrantSection() {
+  const MPORT = 8794;
   const admin = await makeUser("lhaa0130@gmail.com");
   const notAdmin = await makeUser("edge-not-admin@test.dev");
   const target = await makeUser("edge-grant-target@test.dev");
   for (const u of [admin, notAdmin, target]) {
     await fsSet(`users/${u.uid}`, { cottonCandy: I(0), cottonCandyTotal: I(0), doriExp: I(0), tier: I(1), level: I(1) });
   }
+  // ⚠️ 05-07B: 관리자 지급은 **서버 allowlist(REWARD_ADMIN_UIDS)** 가 있어야만 활성화된다.
+  //   admin 의 email 이 맞아도 uid 가 목록에 없으면 거부된다(email 단독 판정 금지).
+  startWrangler(MPORT, { REWARD_ROLLOUT_MODE: "all", CANDY_ROLLOUT_MODE: "all", REWARD_ADMIN_UIDS: admin.uid });
+  const mup = await waitForPort(MPORT);
+  if (!mup) { ok("admin grant wrangler 기동", false, "타임아웃"); return; }
+  const post = async (pathname, body, idToken) => {
+    const r = await fetch(`http://127.0.0.1:${MPORT}${pathname}`, {
+      method: "POST", headers: { "Content-Type": "application/json", ...(idToken ? { Authorization: `Bearer ${idToken}` } : {}) },
+      body: body === undefined ? undefined : JSON.stringify(body),
+    });
+    let json = null; try { json = await r.json(); } catch { /* non-json */ }
+    return { status: r.status, json };
+  };
+
+  // ⭐ allowlist 에 없는 UID 는 email 이 관리자여도 거부 — 별도 인스턴스로 확인
+  const notListed = await makeUser("lhaa0130+notlisted@gmail.com");
+  const nl = await post("/api/admin/grant", { targetUid: target.uid, candy: 100, operationId: "grant_notlisted0001" }, notListed.idToken);
+  ok("⭐ allowlist 밖 UID 는 email 이 비슷해도 403", nl.status === 403, `status=${nl.status}`);
 
   // 비관리자 → 403
   const denied = await post("/api/admin/grant", { targetUid: target.uid, candy: 5000, operationId: "grant_notadmin000001" }, notAdmin.idToken);
@@ -348,6 +477,22 @@ async function adminGrantSection() {
   // 프리미엄 설정도 서버만
   const prem = await post("/api/admin/grant", { targetUid: target.uid, isPremium: true, operationId: "grant_prem0000001" }, admin.idToken);
   ok("관리자만 프리미엄을 켤 수 있다", prem.status === 200 && (await fsGet(`users/${target.uid}`)).isPremium?.booleanValue === true);
+
+  // ⭐ 같은 operationId 를 다른 금액으로 재사용 → 409(멱등 키 재활용 차단)
+  const reuse = await post("/api/admin/grant", { targetUid: target.uid, candy: 77777, operationId: "grant_ok0000000001" }, admin.idToken);
+  ok("⭐ 같은 operationId 를 다른 금액으로 재사용하면 409", reuse.status === 409 && reuse.json?.error === "operation_id_reused",
+    `status=${reuse.status} err=${reuse.json?.error}`);
+
+  // ⭐ 관리자 self-grant 금지(감사 추적 무력화 방지)
+  await fsSet(`users/${admin.uid}`, { cottonCandy: I(0), doriExp: I(0), tier: I(1), level: I(1) });
+  const self = await post("/api/admin/grant", { targetUid: admin.uid, candy: 999, operationId: "grant_self00000001" }, admin.idToken);
+  ok("⭐ 관리자 self-grant 는 403", self.status === 403 && self.json?.error === "self_grant_forbidden", `status=${self.status} err=${self.json?.error}`);
+
+  // 소수·NaN·문자열 금액 거부
+  for (const bad of [{ candy: 1.5 }, { candy: "100" }, { candy: null }, { candy: 0 }]) {
+    const r = await post("/api/admin/grant", { targetUid: target.uid, ...bad, operationId: "grant_badamt00001" }, admin.idToken);
+    ok(`잘못된 금액 거부 ${JSON.stringify(bad)}`, r.status === 400, `status=${r.status}`);
+  }
 }
 
 // canary 롤아웃: allowlist UID 만 지급, 나머지는 rollout_disabled(구분되는 code). 실제 HTTP 로 검증.

@@ -52,9 +52,14 @@ export const ACHIEVEMENT_CANDY: Record<string, number> = {
 export const LEVEL_REWARD_CANDY: Record<number, number> = {
   5: 100, 10: 300, 15: 200, 20: 500, 30: 400, 40: 600, 50: 1000,
 };
-/** level_reward 의 sourceId 는 `{level}` 숫자 문자열. 표에 없는 레벨은 null(거부). */
+/**
+ * level_reward 의 sourceId 는 `{level}` 숫자 문자열. 표에 없는 레벨은 null(거부).
+ * ⚠️ 05-07B: 앞자리 0 을 금지한다. `lv_010` 과 `lv_10` 은 **서로 다른 operationId** 인데 둘 다
+ *   레벨 10 으로 해석돼 같은 마일스톤을 두 번 받을 수 있었다(원장 멱등 우회).
+ *   정규 표기(앞자리 0 없음) 하나만 허용해 레벨↔operationId 를 1:1 로 만든다.
+ */
 export function levelFromSource(sourceId: string | undefined): number | null {
-  if (!sourceId || !/^\d{1,3}$/.test(sourceId)) return null;
+  if (!sourceId || !/^[1-9]\d{0,2}$/.test(sourceId)) return null;
   const n = Number(sourceId);
   return Object.prototype.hasOwnProperty.call(LEVEL_REWARD_CANDY, n) ? n : null;
 }
@@ -73,11 +78,21 @@ export const MISSION_CANDY: Record<string, number> = {
   play_minigame:  40,
   quiz_correct:   50,
 };
-/** 미션 sourceId 는 `{missionId}_{YYYY-MM-DD}` 형태다. 앞부분 missionId 를 뽑는다. */
-export function missionIdFromSource(sourceId: string | undefined): string | null {
+
+/**
+ * 재화는 주지 않지만 **EXP 는 계속 주는** 레거시 미션 id (lib/missionProgress.ts 가 발행).
+ * ⚠️ 05-07B: allowlist 를 도입하면서 이 id 들이 400 으로 막혀 기존 EXP 적립이 회귀했다.
+ *   기존 동작을 보존하려면 '알려진 미션'에는 포함시키되 재화 금액만 0 으로 둔다.
+ */
+export const MISSION_EXP_ONLY = new Set(["checkin", "postset", "commentset", "likeset", "share"]);
+/** 미션 sourceId 는 `{missionId}_{YYYY-MM-DD}` 형태다. missionId 와 날짜를 분리한다. */
+export function parseMissionSource(sourceId: string | undefined): { missionId: string; date: string } | null {
   if (!sourceId) return null;
   const m = /^([a-z_]{1,32})_(\d{4}-\d{2}-\d{2})$/.exec(sourceId);
-  return m ? m[1] : null;
+  return m ? { missionId: m[1], date: m[2] } : null;
+}
+export function missionIdFromSource(sourceId: string | undefined): string | null {
+  return parseMissionSource(sourceId)?.missionId ?? null;
 }
 /** 알려진 미션만 지급한다(임의 missionId 거부). */
 export function missionCandyFor(sourceId: string | undefined): number {
@@ -85,6 +100,45 @@ export function missionCandyFor(sourceId: string | undefined): number {
   if (!id) return 0;
   return Object.prototype.hasOwnProperty.call(MISSION_CANDY, id) ? MISSION_CANDY[id] : 0;
 }
+
+/**
+ * ⚠️ 05-07B 보안 수정: sourceId 안의 **날짜는 클라이언트가 정한다**.
+ *   operationId = `{prefix}_{sourceId}` 이므로, 날짜만 바꾸면 매번 새 operationId 가 만들어져
+ *   '미션당 1일 1회' 원장이 무력화됐다(예: `write_post_2099-01-01`).
+ *   → 서버가 계산한 오늘 날짜와 일치할 때만 통과시킨다. 서버는 요청받은 날짜를 신뢰하지 않는다.
+ *
+ * playtime(minigame_play) sourceId 도 `playtime_{YYYY-MM-DD}` 라 같은 규칙을 적용한다.
+ */
+const DATED_SOURCE_RE = /^([a-z_]{1,32})_(\d{4}-\d{2}-\d{2})$/;
+export function sourceDateMatchesServerDay(
+  rewardType: ExtendedRewardType, sourceId: string | undefined, serverToday: string,
+): boolean {
+  if (rewardType !== "mission_complete" && rewardType !== "minigame_play") return true; // 날짜를 안 쓰는 타입
+  const m = DATED_SOURCE_RE.exec(String(sourceId ?? ""));
+  if (!m) return false;          // 날짜 없는 sourceId 로 우회 금지
+  return m[2] === serverToday;   // 어제·내일·임의 날짜 전부 거부
+}
+
+/** 이 타입이 서버 allowlist 에 있는 sourceId 인지(모르는 미션/업적/레벨은 아예 거부). */
+export function isKnownSource(rewardType: ExtendedRewardType, sourceId: string | undefined): boolean {
+  if (rewardType === "mission_complete") {
+    const id = missionIdFromSource(sourceId);
+    if (!id) return false;
+    // 재화 미션 표 + EXP 전용 레거시 미션(재화 0) 둘 다 '알려진' 미션이다.
+    return Object.prototype.hasOwnProperty.call(MISSION_CANDY, id) || MISSION_EXP_ONLY.has(id);
+  }
+  if (rewardType === "achievement_claim") {
+    return !!sourceId && Object.prototype.hasOwnProperty.call(ACHIEVEMENT_CANDY, sourceId);
+  }
+  if (rewardType === "level_reward") return levelFromSource(sourceId) !== null;
+  return true;
+}
+
+/**
+ * 전체 일일 솜사탕 상한(타입 무관). 타입별 상한의 합(6,450)만으로는 총액이 너무 크다.
+ * 업적·레벨은 원장이 평생 1회를 보장하지만, 하루에 몰아서 받는 총량은 이 값으로 묶는다.
+ */
+export const DAILY_CANDY_TOTAL_CAP = 600;
 
 export function isExtendedRewardType(v: unknown): v is ExtendedRewardType {
   return typeof v === "string" && Object.prototype.hasOwnProperty.call(EXTENDED_REWARD_POLICIES, v);

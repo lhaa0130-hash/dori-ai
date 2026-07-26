@@ -542,7 +542,10 @@ async function missionSection() {
   ok("mission: 계정 메뉴 미션 UI 는 제품에 렌더되지 않음(죽은 코드 확인)", menuPresent === false,
     `account-menu present=${menuPresent}`);
   // 서버 계약은 그대로 유지되는지 확인: 임의 missionId 도 정책상 고정 EXP 만 지급되고 재청구는 멱등.
-  const src = `checkin_${new Date().toISOString().slice(0, 10)}`;
+  // ⚠️ 05-07B: sourceId 의 날짜는 **서버 KST 오늘**과 일치해야 한다(UTC 날짜 쓰면 자정 근처에 깨짐).
+  //   checkin 은 재화 없는 레거시 미션(EXP 만) — allowlist 에는 포함된다.
+  const kstToday = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+  const src = `checkin_${kstToday}`;
   const before = await expOf(u.uid);
   const first = await claimAs({ rewardType: "mission_complete", operationId: `mission_${src}`, sourceId: src }, u);
   const after = await waitExp(u.uid, before);

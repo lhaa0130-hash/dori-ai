@@ -13,13 +13,15 @@ import {
 } from "../_shared/rewardPolicy";
 import {
   isExtendedRewardType, sanitizeExtendedRewardRequest, computeExtendedExp, computeExtendedCandy,
-  levelFromSource, type ExtendedRewardPolicy,
+  levelFromSource, sourceDateMatchesServerDay, isKnownSource, DAILY_CANDY_TOTAL_CAP,
+  type ExtendedRewardPolicy,
 } from "../_shared/rewardTypes";
 import { getAccessToken } from "../_shared/googleAuth";
 import {
   beginTransaction, batchGet, commit, rollback, verifyIdTokenOwnsUid, type FirestoreTarget,
 } from "../_shared/firestoreRest";
 import { resolveRewardEnv } from "../_shared/rewardEnv";
+import { resolveCandyGate } from "../_shared/candyEnv";
 
 const J = (o: any, s = 200) =>
   new Response(JSON.stringify(o), { status: s, headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" } });
@@ -132,10 +134,15 @@ export const onRequestPost: any = async (context: any) => {
       token = at.token;
     }
 
+    // ⚠️ 서버 시간으로만 날짜를 정한다. 클라이언트가 보낸 날짜 문자열은 어디서도 신뢰하지 않는다.
     const today = todayKST(new Date());
 
+    // ── 재화 게이트(05-07B): EXP 와 **독립**. off/미설정이면 재화만 0 이 되고 EXP 는 정상 지급된다.
+    //    이 분리 덕분에 CANDY_ROLLOUT_MODE 를 나중에 켜도 기존 EXP 동작이 전혀 바뀌지 않는다.
+    const candyGate = resolveCandyGate(env, mode === "emulator" ? "emulator" : "production", uid, allow);
+
     if (interaction) return await runInteractionReward(target, token, uid, today, interaction, cid);
-    if (extended) return await runExtendedReward(target, token, uid, today, extended, cid);
+    if (extended) return await runExtendedReward(target, token, uid, today, extended, candyGate.ok, cid);
 
     const claimId = claimIdFor("daily_attendance", today);
     const userRel = `users/${uid}`;
@@ -254,9 +261,20 @@ async function runInteractionReward(
 //   (없는 source·타인 source 거부). mission/minigame/activity 는 BOUNDED CLIENT-ASSERTED(상한+멱등으로 방어).
 async function runExtendedReward(
   target: FirestoreTarget, token: string, uid: string, today: string,
-  intent: { policy: ExtendedRewardPolicy; operationId: string; sourceId?: string }, cid: string,
+  intent: { policy: ExtendedRewardPolicy; operationId: string; sourceId?: string },
+  candyAllowed: boolean, cid: string,
 ): Promise<Response> {
   const rt = intent.policy.rewardType;
+
+  // ── 05-07B: sourceId 안의 날짜는 클라이언트 값이다 → 서버 오늘과 일치할 때만 통과.
+  //    (날짜만 바꿔 새 operationId 를 만들어 '1일 1회'를 우회하던 경로 차단)
+  if (!sourceDateMatchesServerDay(rt, intent.sourceId, today)) {
+    return J({ ok: false, error: "invalid_source_date" }, 400);
+  }
+  // ── 05-07B: 서버 allowlist 에 없는 미션/업적/레벨 id 는 아예 거부(원장 쓰레기 생성도 막는다).
+  if (!isKnownSource(rt, intent.sourceId)) {
+    return J({ ok: false, error: "unknown_source" }, 400);
+  }
   const userRel = `users/${uid}`;
   const opRel = `users/${uid}/rewardOperations/${intent.operationId}`;
   const dateField = `rewardTypeDate_${rt}`;
@@ -319,7 +337,14 @@ async function runExtendedReward(
       //    날짜 필드는 EXP 와 공유하므로 날짜가 바뀌면 두 집계가 함께 리셋된다.
       const sameDay = u[dateField] === today;
       const typeCandy = sameDay && typeof u[candyField] === "number" && u[candyField] >= 0 ? Math.floor(u[candyField]) : 0;
-      const candyAward = computeExtendedCandy(intent.policy, typeCandy, intent.sourceId);
+      // 전역 일일 상한(타입 무관). 날짜가 바뀌면 0 부터 다시 센다.
+      const totalSameDay = u.candyDailyDate === today;
+      const totalToday = totalSameDay && typeof u.candyDailyTotal === "number" && u.candyDailyTotal >= 0 ? Math.floor(u.candyDailyTotal) : 0;
+      const globalRoom = Math.max(0, DAILY_CANDY_TOTAL_CAP - totalToday);
+      // 재화 게이트가 닫혀 있으면(CANDY_ROLLOUT_MODE=off/미설정) 재화만 0. EXP 는 그대로 지급된다.
+      const candyAward = candyAllowed
+        ? Math.min(computeExtendedCandy(intent.policy, typeCandy, intent.sourceId), globalRoom)
+        : 0;
       const serverCandy = typeof u.cottonCandy === "number" && u.cottonCandy >= 0 ? Math.floor(u.cottonCandy) : 0;
       const serverCandyTotal = typeof u.cottonCandyTotal === "number" && u.cottonCandyTotal >= 0 ? Math.floor(u.cottonCandyTotal) : 0;
       const resultingCandy = serverCandy + candyAward;
@@ -332,9 +357,11 @@ async function runExtendedReward(
         userFields[candyField] = newTypeCandy;
       }
       if (candyAward > 0) {
-        userMask.push("cottonCandy", "cottonCandyTotal");
+        userMask.push("cottonCandy", "cottonCandyTotal", "candyDailyDate", "candyDailyTotal");
         userFields.cottonCandy = resultingCandy;
         userFields.cottonCandyTotal = serverCandyTotal + candyAward;
+        userFields.candyDailyDate = today;                    // 전역 일일 집계(서버 날짜 기준)
+        userFields.candyDailyTotal = totalToday + candyAward;
       }
 
       await commit(target, token, tx, [

@@ -14,6 +14,7 @@ import { sanitizePurchaseRequest } from "../_shared/shopCatalog";
 import { getAccessToken } from "../_shared/googleAuth";
 import { beginTransaction, batchGet, commit, rollback, verifyIdTokenOwnsUid, type FirestoreTarget } from "../_shared/firestoreRest";
 import { resolveRewardEnv } from "../_shared/rewardEnv";
+import { resolveCandyGate } from "../_shared/candyEnv";
 import { parseAllowlist, todayKST } from "../_shared/rewardPolicy";
 
 const J = (o: any, s = 200) =>
@@ -76,6 +77,11 @@ export const onRequestPost: any = async (context: any) => {
     const uid = decoded.uid;
 
     if (rollout === "canary" && !allow.has(uid)) return J({ ok: false, error: "rollout_disabled" }, 403);
+
+    // ⚠️ 재화 전용 게이트(05-07B). EXP 롤아웃(all)을 재사용하면 배포 즉시 전체 개방이라 카나리가 없다.
+    //    미설정·오타·off → fail-closed. 구매는 재화를 차감하므로 EXP 와 달리 게이트가 닫히면 전면 거부한다.
+    const gate = resolveCandyGate(env, mode === "emulator" ? "emulator" : "production", uid, allow);
+    if (!gate.ok) return J({ ok: false, error: gate.error }, gate.status);
 
     const own = await verifyIdTokenOwnsUid(target, idToken, uid);
     if (own === "invalid") return J({ ok: false, error: "unauthenticated" }, 401);

@@ -10,13 +10,30 @@
 //   (visits 폴백 경로는 이미 Rules 가 pendingCandy/pendingPremium 을 막고 있었다.)
 //   → 예약·자기적용 통로를 전부 제거하고, 관리자 여부를 서버가 확인한 뒤 서버가 직접 지급한다.
 //
-// 권한: 호출자 ID 토큰을 Firestore 로 실검증(서명·만료·uid) 한 뒤, 같은 토큰의 email 클레임이
-//      ADMIN_EMAIL 과 일치할 때만 통과. 클라이언트가 보낸 email/uid 는 신뢰하지 않는다.
+// ── 권한 계약 (05-07B 적대적 감사 후 강화) ──────────────────────────────────
+// 이 엔드포인트는 **타인의 재화를 임의로 늘릴 수 있는** 유일한 경로다. 관리자 판정이 틀리면
+// 재화 보안 전체가 무의미해지므로, 다음 3가지를 **전부** 통과해야만 지급한다(AND):
+//   ① Firebase ID 토큰이 Firestore 실검증을 통과(서명·만료·uid 소유)
+//   ② uid ∈ REWARD_ADMIN_UIDS (서버 환경변수 allowlist — 클라이언트가 절대 못 바꾼다)
+//   ③ 토큰의 email 클레임 == ADMIN_EMAIL (심층 방어)
+//
+// ⚠️ **fail-closed**: REWARD_ADMIN_UIDS 가 없거나 비면 엔드포인트 전체를 비활성화한다(503).
+//    email 클레임만으로 여는 것은 거부한다 —
+//      · Firebase 는 사용자가 스스로 email 을 바꿀 수 있다(updateEmail). 현재는 관리자 주소가
+//        선점돼 있어 막히지만, 관리자 계정을 지우거나 주소를 바꾸면 그 주소가 풀린다.
+//      · email_verified 를 강제하지 않는 가입 경로에서는 미검증 주소로도 토큰이 발급된다.
+//    즉 email 단독 판정은 "지금은 우연히 안전한" 계약이라 재화 권한의 단독 근거로 쓰지 않는다.
+//    사용자 문서의 isPremium/role 같은 **일반 필드도 관리자 근거로 쓰지 않는다**(Rules 로 잠겨
+//    있더라도 권한 판정 근거로는 부적절 — 서버 환경변수가 유일한 신뢰 출처다).
+//
+// 🔜 후속: Firebase Custom Claims(admin:true)로 옮기면 env 관리 없이 더 강해진다.
+//
 // 멱등: users/{target}/grants/{operationId}. 원자: 지급과 원장 기록이 한 트랜잭션.
 // ⚠️ Secret·전체 문서·stack 을 응답/로그에 노출하지 않는다.
 import { getAccessToken } from "../../_shared/googleAuth";
 import { beginTransaction, batchGet, commit, rollback, verifyIdTokenOwnsUid, type FirestoreTarget } from "../../_shared/firestoreRest";
 import { resolveRewardEnv } from "../../_shared/rewardEnv";
+import { parseAllowlist } from "../../_shared/rewardPolicy";
 
 const J = (o: any, s = 200) =>
   new Response(JSON.stringify(o), { status: s, headers: { "Content-Type": "application/json", "Access-Control-Allow-Origin": "*" } });
@@ -52,8 +69,11 @@ function sanitize(body: unknown):
   if (typeof b.operationId !== "string" || !OP_RE.test(b.operationId)) return { ok: false, error: "invalid_operation_id" };
   let candy = 0;
   if (b.candy !== undefined) {
-    if (typeof b.candy !== "number" || !Number.isFinite(b.candy)) return { ok: false, error: "invalid_candy" };
-    candy = Math.trunc(b.candy);
+    // ⚠️ 05-07B: 예전엔 Math.trunc 로 소수를 조용히 잘랐다(1.5 → 1 로 '성공'). 실수·오타를
+    //   성공으로 처리하면 감사 원장과 실제 지급이 어긋난다 → 정수가 아니면 거부한다.
+    if (typeof b.candy !== "number" || !Number.isInteger(b.candy)) return { ok: false, error: "invalid_candy" };
+    candy = b.candy;
+    if (candy === 0) return { ok: false, error: "invalid_candy" };            // 0 지급은 무의미
     if (Math.abs(candy) > MAX_GRANT) return { ok: false, error: "candy_out_of_range" };
   }
   let premium: boolean | null = null;
@@ -76,6 +96,11 @@ export const onRequestPost: any = async (context: any) => {
     const target: FirestoreTarget = renv.env.target;
     const expectedProject = mode === "emulator" ? (renv.env as { projectId: string }).projectId : PROD_PROJECT_ID;
 
+    // ⚠️ fail-closed: 서버 관리자 allowlist 가 없으면 엔드포인트 자체를 비활성화한다.
+    //    (email 클레임만으로 여는 약한 계약을 허용하지 않는다 — 파일 상단 권한 계약 참고)
+    const adminUids = parseAllowlist(env.REWARD_ADMIN_UIDS);
+    if (adminUids.size === 0) return J({ ok: false, error: "admin_grant_disabled" }, 503);
+
     const raw = await request.text();
     if (raw.length > MAX_BODY) return J({ ok: false, error: "invalid_request" }, 400);
     let body: unknown;
@@ -93,12 +118,16 @@ export const onRequestPost: any = async (context: any) => {
     if (!decoded.iss.endsWith(expectedProject)) return J({ ok: false, error: "unauthenticated" }, 401);
     if (!decoded.exp || decoded.exp * 1000 < Date.now()) return J({ ok: false, error: "unauthenticated" }, 401);
 
-    // 토큰 서명·유효성 실검증(Firestore 가 거부하면 invalid). 이게 통과해야 email 클레임을 신뢰한다.
+    // 토큰 서명·유효성 실검증(Firestore 가 거부하면 invalid). 이게 통과해야 클레임을 신뢰한다.
     const own = await verifyIdTokenOwnsUid(target, idToken, decoded.uid);
     if (own !== "ok") return J({ ok: false, error: "unauthenticated" }, 401);
 
-    // ── 권한: 관리자만 ──
+    // ── 권한: 서버 allowlist(필수) AND 관리자 email(심층 방어) ──
+    //    allowlist 미설정 = 엔드포인트 비활성. email 만으로는 절대 열지 않는다.
+    if (!adminUids.has(decoded.uid)) return J({ ok: false, error: "forbidden" }, 403);
     if (decoded.email.trim().toLowerCase() !== ADMIN_EMAIL.toLowerCase()) return J({ ok: false, error: "forbidden" }, 403);
+    // 자기 자신에게 지급 금지(관리자라도 self-grant 는 감사 추적을 무력화한다).
+    if (clean.targetUid === decoded.uid) return J({ ok: false, error: "self_grant_forbidden" }, 403);
 
     let token: string;
     if (mode === "emulator") token = "owner";
@@ -136,6 +165,12 @@ async function runGrant(
       if (op.exists) {
         await rollback(target, token, tx);
         const of = op.fields as Record<string, any>;
+        // ⚠️ 같은 operationId 를 **다른 금액·다른 프리미엄 값**으로 재사용하면 거부한다.
+        //   (멱등 키를 재활용해 조용히 다른 지급을 밀어넣는 것을 막는다. 대상 UID 는 경로에 포함돼
+        //    있으므로 대상이 다르면 애초에 다른 문서다.)
+        const sameCandy = (Number(of?.requestedCandy) || 0) === candy;
+        const samePremium = (of?.isPremium === undefined ? null : of.isPremium === true) === premium;
+        if (!sameCandy || !samePremium) return J({ ok: false, error: "operation_id_reused" }, 409);
         return J({ ok: true, duplicate: true, balance: Number(of?.resultingBalance) || 0 });
       }
 
