@@ -315,6 +315,29 @@ async function waitExp(uid, from, timeout = 20000) {
   while (Date.now() - s < timeout) { v = await expOf(uid); if (v > from) return v; await sleep(700); }
   return v;
 }
+/**
+ * 05-07: 한 활동이 **여러 청구를 순차로** 발행하게 됐다(예: 글 작성 = community_post + 일일 미션).
+ * 첫 증가만 보고 판정하면 중간값을 읽는다. 목표치에 도달할 때까지 기다리되,
+ * 도달 후에도 안정될 때까지 확인해 '초과 지급'도 잡는다. 고정 sleep 이 아니라 조건 기반 polling.
+ */
+async function waitExpSettled(uid, from, expected, timeout = 30000) {
+  const s = Date.now();
+  let v = from;
+  while (Date.now() - s < timeout) {
+    v = await expOf(uid);
+    if (v - from >= expected) break;
+    await sleep(700);
+  }
+  // 안정 확인: 연속 3회(≈2.1s) 동일하면 확정. 늦게 도착하는 추가 지급이 있으면 값이 바뀐다.
+  let stable = 0, last = v;
+  while (stable < 3 && Date.now() - s < timeout + 8000) {
+    await sleep(700);
+    const cur = await expOf(uid);
+    stable = cur === last ? stable + 1 : 0;
+    last = cur;
+  }
+  return last;
+}
 /** 최근 claim 요청 개수 스냅샷(시나리오별 증가분 확인용). */
 const claimCount = () => claimCalls.length;
 /** 특정 rewardType 의 원장 문서를 찾는다. */
@@ -374,9 +397,10 @@ async function feedPostSection() {
   ok("feed post: Firestore feed 문서 생성", !!postId, `postId=${postId}`);
   if (!postId) { await diagnose("feed-post"); return; }
 
-  const after = await waitExp(u.uid, before);
+  // 05-07: 글 작성 = community_post(15) + 일일 미션 write_post(10) 을 순차 청구한다 → 총 25.
+  const after = await waitExpSettled(u.uid, before, 25);
   ok("feed post: /api/claim-reward 요청 발생", claimCount() > c0, `+${claimCount() - c0}건`);
-  ok("feed post: 서버 EXP 가 정책값(15)만 증가", after - before === 15, `${before}→${after}`);
+  ok("feed post: 서버 EXP 가 정책값(글15+미션10=25)만 증가", after - before === 25, `${before}→${after}`);
   const led = await ledgerFor(u.uid, "post_");
   ok("feed post: 원장 sourceId 가 실제 post ID", led.length === 1 && led[0].fields?.sourceId?.stringValue === postId,
     `ledger=${led.length} src=${led[0]?.fields?.sourceId?.stringValue}`);
@@ -435,9 +459,10 @@ async function feedCommentSection() {
   ok("feed comment: Firestore 댓글 문서 생성", !!commentId, `id=${commentId}`);
   if (!commentId) { await diagnose("feed-comment"); return; }
 
-  const after = await waitExp(u.uid, before);
+  // 05-07: 댓글 = community_comment(5) + 일일 미션 write_comment(10) 순차 청구 → 총 15.
+  const after = await waitExpSettled(u.uid, before, 15);
   ok("feed comment: /api/claim-reward 요청 발생", claimCount() > c0, `+${claimCount() - c0}건`);
-  ok("feed comment: 서버 EXP 가 정책값(5)만 증가", after - before === 5, `${before}→${after}`);
+  ok("feed comment: 서버 EXP 가 정책값(댓글5+미션10=15)만 증가", after - before === 15, `${before}→${after}`);
   const led = await ledgerFor(u.uid, "comment_");
   ok("feed comment: 원장 sourceId = {postId}__{commentId}", led[0]?.fields?.sourceId?.stringValue === `${postId}__${commentId}`,
     `src=${led[0]?.fields?.sourceId?.stringValue}`);
@@ -517,7 +542,10 @@ async function missionSection() {
   ok("mission: 계정 메뉴 미션 UI 는 제품에 렌더되지 않음(죽은 코드 확인)", menuPresent === false,
     `account-menu present=${menuPresent}`);
   // 서버 계약은 그대로 유지되는지 확인: 임의 missionId 도 정책상 고정 EXP 만 지급되고 재청구는 멱등.
-  const src = `checkin_${new Date().toISOString().slice(0, 10)}`;
+  // ⚠️ 05-07B: sourceId 의 날짜는 **서버 KST 오늘**과 일치해야 한다(UTC 날짜 쓰면 자정 근처에 깨짐).
+  //   checkin 은 재화 없는 레거시 미션(EXP 만) — allowlist 에는 포함된다.
+  const kstToday = new Date(Date.now() + 9 * 3600 * 1000).toISOString().slice(0, 10);
+  const src = `checkin_${kstToday}`;
   const before = await expOf(u.uid);
   const first = await claimAs({ rewardType: "mission_complete", operationId: `mission_${src}`, sourceId: src }, u);
   const after = await waitExp(u.uid, before);
@@ -544,9 +572,10 @@ async function minigameSection() {
     const c0 = claimCount();
     // 게임 종료 이벤트(프로덕션 계약과 동일한 postMessage). score 를 크게 조작해도 서버 보상은 고정이어야 한다.
     await evaljs(`window.postMessage({type:'dori-game',event:'gameover',score:999999},window.location.origin);1`);
-    const after = await waitExp(u.uid, before);
+    // 05-07: 플레이 보상 = minigame_play(5) + 일일 미션 play_minigame(10) 순차 청구 → 총 15.
+    const after = await waitExpSettled(u.uid, before, 15);
     ok(`minigame(${game}): 게임 종료 이벤트 → claim 요청 발생`, claimCount() > c0, `+${claimCount() - c0}건`);
-    ok(`minigame(${game}): 서버 고정 EXP(5) — score 999999 조작 무효`, after - before === 5, `${before}→${after}`);
+    ok(`minigame(${game}): 서버 고정 EXP(게임5+미션10=15) — score 999999 조작 무효`, after - before === 15, `${before}→${after}`);
     const led = await ledgerFor(u.uid, "minigame_");
     ok(`minigame(${game}): 원장 1건(playtime 소스)`, led.length === 1, `ledger=${led.length} src=${led[0]?.fields?.sourceId?.stringValue}`);
     // 같은 play 재전송 → 중복 없음(클라 일일 게이트 + 서버 멱등)

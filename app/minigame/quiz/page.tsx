@@ -11,6 +11,7 @@ import GameLeaderboard from "@/components/game/GameLeaderboard";
 import GameSuggestion from "@/components/game/GameSuggestion";
 import CountUp from "@/components/game/CountUp";
 import { burst, bigBurst } from "@/lib/juice";
+import { claimDailyMission } from "@/lib/dailyMission";
 
 export default function QuizGamePage() {
     const { theme } = useTheme();
@@ -82,6 +83,9 @@ export default function QuizGamePage() {
             burst();
             setScore(prev => prev + 1);
             setTotalScore(prev => prev + 1);
+            // 05-07: 일일 미션 'AI 퀴즈 풀기'는 **실제 정답을 맞힌 이 자리**에서만 완료 처리한다.
+            //   금액·1일 1회는 서버가 소유한다(중복 호출해도 원장이 막는다).
+            void claimDailyMission("quiz_correct");
         }
 
         setTimeout(() => {

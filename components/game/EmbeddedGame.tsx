@@ -139,7 +139,8 @@ export default function EmbeddedGame({
         : `점수 ${score.toLocaleString()} 기록 완료`;
       try {
         if (user.email) {
-          const r = grantPlaytimeReward(user.email, 50);
+          // 05-07: 서버가 지급을 확정한 뒤에만 금액을 표시한다(금액도 서버가 결정).
+          const r = await grantPlaytimeReward(user.email);
           if (r.granted) msg += ` · +${r.amount}🍬`;
         }
       } catch { /* noop */ }

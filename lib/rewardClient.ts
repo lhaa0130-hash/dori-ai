@@ -15,6 +15,8 @@ import {
 
 export interface ClaimServerResult {
   ok: boolean; duplicate?: boolean; awardedExp?: number; doriExp?: number; level?: number; tier?: number; error?: string;
+  /** 05-07: 서버가 결정한 이번 지급 솜사탕과 지급 후 잔액. 클라이언트는 이 값만 표시한다. */
+  awardedCandy?: number; cottonCandy?: number;
 }
 /** HTTP 전송 포트. status + json 을 돌려준다. 네트워크 실패는 throw 로 표현. */
 export type ClaimTransport = (body: Record<string, unknown>, idToken: string) => Promise<{ status: number; json: ClaimServerResult }>;
@@ -42,6 +44,7 @@ export function deriveOperationId(eventId: string): string {
 // 확장 타입 operationId 파생. 서버 operationIdFor 와 동일 규약({prefix}_{sourceId}) — 서버가 재검증.
 const REWARD_TYPE_PREFIX: Record<Exclude<AllowedRewardType, "my_world_interaction" | "game_activity">, string> = {
   community_post: "post", community_comment: "comment", mission_complete: "mission", minigame_play: "minigame",
+  achievement_claim: "ach", level_reward: "lv",
 };
 /** source 기반 타입(글/댓글/미션/게임)의 안정 operationId — 같은 source 는 항상 동일(자연 멱등). */
 export function sourceOperationId(

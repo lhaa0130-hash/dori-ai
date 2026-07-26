@@ -8,7 +8,7 @@
 import { getFirebaseAuth } from "@/lib/firebase";
 import {
   activityOperationId, claimReward, createFetchTransport, sourceOperationId,
-  type ClaimDeps, type ClaimIntent,
+  type ClaimDeps, type ClaimIntent, type ClaimOutcome,
 } from "@/lib/rewardClient";
 import { resolveMyWorldIdentity } from "@/lib/myWorld/identity";
 import type { AllowedRewardType } from "@/lib/myWorld/rewardOutbox";
@@ -62,13 +62,25 @@ export function submitGameReward(
   rewardType: GameRewardType,
   opts: { sourceId?: string; seed?: string; kind?: string } = {},
 ): void {
+  void claimGameReward(rewardType, opts);
+}
+
+/**
+ * submitGameReward 의 await 가능한 형태(05-07).
+ * 솜사탕은 서버가 금액을 정하므로, "얼마 받았는지"를 화면에 띄우려면 응답을 기다려야 한다.
+ * 실패해도 throw 하지 않는다 — 호출부는 status 로만 분기한다.
+ */
+export async function claimGameReward(
+  rewardType: GameRewardType,
+  opts: { sourceId?: string; seed?: string; kind?: string } = {},
+): Promise<ClaimOutcome> {
   try {
     let operationId: string;
     let sourceId: string | undefined;
     if (rewardType === "game_activity") {
       operationId = activityOperationId(opts.seed || opts.sourceId || "activity");
     } else {
-      if (!opts.sourceId) return; // source 필수 타입인데 없음 → 서버도 거부하므로 발행하지 않음
+      if (!opts.sourceId) return { status: "skipped", reason: "missing_source" }; // 서버도 거부하므로 발행하지 않음
       sourceId = opts.sourceId;
       operationId = sourceOperationId(rewardType, opts.sourceId);
     }
@@ -77,6 +89,8 @@ export function submitGameReward(
       ...(sourceId ? { sourceId } : {}),
       ...(opts.kind ? { kind: opts.kind } : {}),
     };
-    void claimReward(buildDeps(), intent).catch(() => {});
-  } catch { /* fire-and-forget */ }
+    return await claimReward(buildDeps(), intent);
+  } catch {
+    return { status: "skipped", reason: "error" };
+  }
 }

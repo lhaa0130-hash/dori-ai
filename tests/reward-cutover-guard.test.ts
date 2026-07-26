@@ -20,7 +20,7 @@ test("cottonCandy no longer defines or calls the client-authoritative EXP writer
   assert.equal(/\bfsSetExp\b/.test(src), false, "fsSetExp(유일한 Firestore doriExp 라이터) 제거");
   assert.equal(/\bwriteGameProfile\b/.test(src), false, "writeGameProfile 제거");
   assert.equal(/\bensureExpAtLeast\b/.test(src), false, "ensureExpAtLeast 제거");
-  assert.ok(src.includes('submitGameReward("minigame_play"'), "미니게임 보상은 서버 청구로 전환");
+  assert.ok(src.includes('claimGameReward("minigame_play"'), "미니게임 보상은 서버 청구로 전환");
 });
 
 test("no production caller invokes addExp(email, amount) anymore", () => {
@@ -35,8 +35,8 @@ test("no production caller invokes addExp(email, amount) anymore", () => {
   }
   // Community 보상은 서버 검증 가능한 Firestore feed 소스(lib/social.ts)에서만 발행한다.
   const social = read("lib/social.ts");
-  assert.ok(social.includes('submitGameReward("community_post"'), "feed 글 작성 → community_post");
-  assert.ok(social.includes('submitGameReward("community_comment"'), "feed 댓글 → community_comment");
+  assert.ok(social.includes('claimGameReward("community_post"'), "feed 글 작성 → community_post");
+  assert.ok(social.includes('claimGameReward("community_comment"'), "feed 댓글 → community_comment");
   // localStorage 전용 /community 보드는 서버 EXP 를 발행하지 않는다(소스 검증 불가).
   assert.equal(/submitGameReward/.test(read("app/community/write/page.client.tsx")), false, "board 글은 서버 보상 없음");
   assert.equal(/submitGameReward/.test(read("app/community/page.client.tsx")), false, "board 댓글은 서버 보상 없음");
