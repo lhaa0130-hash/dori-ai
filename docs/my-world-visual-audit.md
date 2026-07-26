@@ -185,3 +185,54 @@ public/rooms/
 
 이 항목들은 `MY-WORLD-ASSET-REQUEST.md` 의 사양대로 이미지가 준비되면
 `CHARACTER_ASSETS_READY` / `ROOM_ASSETS_READY` 플래그만 켜서 반영할 수 있다.
+
+---
+
+# Phase 4 갱신 — 자산 계약이 문서에서 코드로 옮겨졌다
+
+| 항목 | Phase 3 | Phase 4 |
+| --- | --- | --- |
+| 자산 목록의 단일 진실 공급원 | 문서(`MY-WORLD-ASSET-REQUEST.md`) | **`lib/myWorld/assets/manifest.ts`** (150개 spec) |
+| 검증 방법 | 없음 | `node scripts/verify-my-world-assets.mjs` (의존성 0, PNG/WebP 헤더 직접 파싱) |
+| 총량 | 139~141(추정) | **150** (MVP **36**) — 실측 확정 |
+| readiness 플래그 안전장치 | 없음 | **fail-safe** — 자산 없이 켜면 검증·테스트가 실패 |
+| 이미지 로드 실패 | 무대·`RoomCanvas` 의 `<img>` 에 `onError` **없음**(깨진 아이콘 노출) | 공용 `CharacterImage` 가 이모지로 폴백 |
+| 로딩 우선순위 | 미정 | manifest 에 `eager`/`lazy` 기록 + 테스트가 "첫 화면 자산만 eager" 강제 |
+| 용량 예산 | 없음 | 장별 KB 예산 + 초과 시 경고 |
+
+## 자산 상태 (변화 없음 — 여전히 0개)
+
+```
+node scripts/verify-my-world-assets.mjs
+→ 선언 150개 (MVP 36) · 존재 0 · 없음 150
+→ 플래그 CHARACTER_ASSETS_READY=false ROOM_ASSETS_READY=false
+→ PASS (플래그가 꺼져 있으므로 이모지 폴백이 쓰인다)
+```
+
+이미지 생성은 여전히 불가하다(크레딧 0). **재시도하지 않았다**(반복 호출 금지 규칙).
+
+## Phase 4 에서 시각적으로 바뀐 것
+
+이미지 없이 고칠 수 있는 것만 손댔다.
+
+| 항목 | 내용 | 근거 |
+| --- | --- | --- |
+| 대비 | AA 미달 13건 → **0건** (최저 2.23 → 4.51) | `docs/my-world-accessibility-audit.md` §3 |
+| 채워진 CTA | `#F9954E`(2.23) → `#AD5B18`(4.92) — 같은 테라코타 계열, 더 진함 | 트레이드오프 기록됨 |
+| 오렌지 텍스트 | `#E07C2E`(2.96) → `#9A4E14`(6.04) | |
+| 감정 칩 | 파스텔 + 흰 글자(2.65) → 파스텔 + 어두운 갈색 + 흰 링 | |
+| 아주 넓은 화면 | 1920px 에서 방 캔버스가 1044×783 까지 부풀던 것을 600px 상한으로 | 문서 높이 1438 → 1155 |
+| 게스트 heading | `h1` 없음 → `WorldBar` 게스트 문구를 `h1` 으로 | heading `[1,2,3,2,2,2,3]` |
+| landmark | `<main>` 중첩(2개) → `div[data-my-world="root"]`(1개) | |
+
+## 남은 시각적 한계 (이미지 없이는 불가)
+
+Phase 3 에서 적은 것과 동일하다.
+
+- 캐릭터의 **표정 변화** — 현재 감정은 후광 색·라벨·CSS 애니메이션으로만 전달된다
+- 가구의 **재질감·시점 통일** — 이모지는 기기별 폰트로 렌더돼 광원·외곽선을 통일할 수 없다
+- **빈 방·빈 일기 일러스트** — 현재는 이모지 + 문장
+
+자산이 도착하면 `CHARACTER_ASSETS_READY` / `ROOM_ASSETS_READY` 두 플래그만 켜면 반영된다.
+방 배경(`scene.webp`)과 표정 세트는 코드 1~2줄 추가가 필요하다
+(`MY-WORLD-ASSET-REQUEST.md` 부록 G 매핑표 참조).

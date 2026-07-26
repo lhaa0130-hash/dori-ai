@@ -271,3 +271,121 @@ no ground shadow baked in, no floor, no wall` 로 끝냄):
 | B. 나머지 11종 기본 (portrait+thumbnail+avatar) | 33 | 캐릭터 선택 모달 완성 |
 | C. 나머지 11종 표정 6 | 66 | 마지막 |
 | **합계** | **139–141** | |
+
+---
+
+# 부록 (Phase 4 갱신) — 제작 순서·검수 기준·구현 매핑
+
+Phase 4 에서 이 요청서를 **기계가 읽는 계약**으로 옮겼다.
+숫자의 단일 진실 공급원은 이제 `lib/myWorld/assets/manifest.ts` 이며,
+`node scripts/verify-my-world-assets.mjs` 가 실제 파일을 그 계약과 대조한다.
+
+## A. 총량 정정 (manifest 실측)
+
+| 구분 | 장수 | 비고 |
+| --- | --- | --- |
+| **MVP (착수 최소 단위)** | **36** | dori 기본 3 + dori 표정 6 + 가구 24(12종 × sprite/thumbnail) + 방 배경 1 + 빈 상태 2 |
+| 후속 전체 | 150 | 캐릭터 12종 × (기본 4 + 표정 6) = 120 · 가구 24 · 방 배경 1 · 상태·효과 5 |
+
+> 초판에 적은 "139~141" 은 표정 세트를 일부만 센 값이었다. manifest 기준 정확한 수는 **150**,
+> MVP 는 **36** 이다. (`node scripts/verify-my-world-assets.mjs` 출력이 이 수를 그대로 보여준다.)
+
+## B. 제작 순서 (앞 단계가 다음 단계의 기준이 된다)
+
+| 순서 | 범위 | 왜 이 순서인가 |
+| --- | --- | --- |
+| 1 | `dori/portrait.webp` **1장** | 스타일 기준점. 이 한 장이 통과해야 나머지가 의미 있다 |
+| 2 | `dori` 기본 3 (`avatar`·`thumbnail`) | 같은 캐릭터가 작게도 식별되는지 확인 |
+| 3 | `rooms/backgrounds/basic/scene.webp` | 가구를 얹을 바탕. **완전히 빈 방**이어야 한다 |
+| 4 | 가구 sprite 12 | 배경 위에서 시점·광원이 맞는지. 큰 것(bed·desk·bookshelf·rug) 먼저 |
+| 5 | 가구 thumbnail 12 | 팔레트용. sprite 를 그대로 축소하지 말고 여백을 정리 |
+| 6 | `dori` 표정 6 | 얼굴 일관성이 가장 어려우므로 기본이 확정된 뒤 |
+| 7 | 빈 상태 2 (`empty-room`·`empty-diary`) | 여기까지가 MVP 36장 |
+| 8 | 나머지 캐릭터 11종 기본 3 × 11 = 33 | 캐릭터 선택 모달 완성 |
+| 9 | 나머지 표정 66 · `idle` 12 · 효과 3 | 마지막 |
+
+## C. 캐릭터 일관성 검수 체크리스트 (장마다)
+
+- [ ] 머리:몸 비율이 기준 `portrait` 와 동일한가 (눈으로 겹쳐 비교)
+- [ ] 눈 모양·간격·동공 크기가 같은가
+- [ ] 털/피부 색상 코드가 같은가 (스포이드로 3곳 확인)
+- [ ] 무늬(줄무늬·반점) 위치와 개수가 같은가
+- [ ] 귀·꼬리 모양과 방향이 같은가
+- [ ] 외곽선 굵기가 같은가 (1024px 기준 약 2px)
+- [ ] 광원이 좌상단 35° 인가 (그림자가 우하단)
+- [ ] 시점이 정면에서 약 15° 돌아간 상태인가
+- [ ] 채도가 기준보다 튀지 않는가
+- [ ] 프레임 여백이 같은가 (발밑이 프레임 하단에 닿는가)
+- [ ] 표정 세트: **표정 외에 아무것도 바뀌지 않았는가**
+
+## D. Contact sheet 구성
+
+| 시트 | 배치 | 확인 목적 |
+| --- | --- | --- |
+| 캐릭터 기본 | 12종 × 1장(`portrait`), 4×3 그리드, 같은 배경(#FBF7F1), 같은 크기 | 시점·광원·채도·비율 일관성 |
+| dori 표정 | 7장(`portrait` + 표정 6), 1행, 얼굴만 확대 | 정체성 유지 여부 |
+| 가구 sprite | 12종, 방 배경 위에 실제 기본 좌표로 배치한 1장 | 서로 어울리는지·시점 충돌 없는지 |
+| 가구 thumbnail | 12종, 4×3, 48px 실제 크기 + 2배 확대 병치 | 작게도 식별되는지 |
+
+## E. 불합격 기준 (하나라도 걸리면 재생성)
+
+1. 이미지에 **글자·로고·워터마크·서명**이 있다
+2. 배경이 투명해야 하는데 흰 사각이 남았다 (검증 도구가 알파 채널로 잡는다)
+3. 방 배경에 가구·창문·문·사람이 들어갔다
+4. 시점이 top-down 또는 isometric 이다
+5. 외곽선이 검정(#000)이다 (따뜻한 near-black `#1C1917` 이어야 함)
+6. 광원 방향이 다른 자산과 반대다
+7. 표정 세트에서 얼굴 비율·색이 기준과 다르다
+8. 프레임에서 subject 가 잘렸다
+9. 요구 해상도와 다르다 (검증 도구가 헤더로 잡는다)
+10. 용량 예산을 크게 초과했다 (검증 도구가 경고)
+11. 그림자가 이미지에 구워져 있다 (코드가 접지 그림자를 따로 그린다)
+
+## F. 재생성 시 일관성 유지
+
+- 채택된 `dori/portrait` 를 **reference image** 로 함께 넣고 프롬프트에 `same character as reference` 를 명시
+- 같은 모델·같은 파라미터·같은 seed 를 기록해 둔다 (`_자산검토/<날짜>/seeds.txt`)
+- 표정 세트는 **한 번의 배치**로 함께 생성한다(따로 만들면 얼굴이 달라진다)
+- 실패한 생성물도 검토 폴더에 남긴다 (같은 실수를 반복하지 않기 위해)
+
+## G. 구현 매핑표 (파일 → 코드 → 플래그)
+
+| 자산 | 소비 코드 | 활성 플래그 | 폴백 |
+| --- | --- | --- | --- |
+| `characters/{id}/portrait.webp` | `components/my-world/CharacterImage.tsx` ← 무대·`RoomCanvas` | `CHARACTER_ASSETS_READY` | 이모지 |
+| `characters/{id}/avatar.webp` | `components/my-world/CharacterAvatar.tsx` ← `WorldBar` | `CHARACTER_ASSETS_READY` | 이모지 |
+| `characters/{id}/thumbnail.webp` | `components/my-world/CharacterSelectModal.tsx` | `CHARACTER_ASSETS_READY` | 이모지 |
+| `characters/{id}/emotion-*.webp` | 무대(감정 전환) — **코드 1~2줄 추가 필요** | `CHARACTER_ASSETS_READY` | `portrait` |
+| `rooms/items/{id}/sprite.webp` | `components/my-world/room/RoomItemSprite.tsx` | `ROOM_ASSETS_READY` | 이모지 + 후광 |
+| `rooms/items/{id}/thumbnail.webp` | `components/my-world/room/RoomItemCard.tsx` | `ROOM_ASSETS_READY` | 이모지 타일 |
+| `rooms/backgrounds/basic/scene.webp` | `components/my-world/room/RoomCanvas.tsx` — **CSS 벽/바닥 대체 코드 필요** | `ROOM_ASSETS_READY` | CSS 그라데이션 |
+| `my-world/empty-room.webp` | `components/my-world/room/RoomPreviewCard.tsx` | 없음 | 문장 안내 |
+| `my-world/empty-diary.webp` | `components/my-world/DiaryTimeline.tsx` | 없음 | 이모지 |
+| `my-world/guest-preview.webp` | `components/my-world/GuestInvite.tsx` | 없음 | 없음(미사용) |
+| `my-world/fx-*.webp` | `components/my-world/interaction/CharacterAura.tsx` | 없음 | 이모지 |
+
+## H. 용량 예산 (manifest 에 장별로 기록됨)
+
+| 종류 | 장당 예산 | 근거 |
+| --- | --- | --- |
+| 캐릭터 `portrait`·`idle`·표정 (1024²) | 120 KB | 첫 화면 eager 이므로 보수적으로 |
+| 캐릭터 `avatar`·`thumbnail` (256²) | 24 KB | |
+| 가구 `sprite` | 90 KB | 12종이 한 화면에 최대 30개 배치 가능 |
+| 가구 `thumbnail` (256²) | 20 KB | |
+| 방 배경 (1536×1152) | 180 KB | 유일한 큰 배경 |
+| 빈 상태 일러스트 | 50~80 KB | lazy |
+| 효과 (256²) | 14 KB | |
+| **MVP 36장 합계 목표** | **≈ 2.4 MB** | 초과 시 검증 도구가 장별로 경고 |
+
+## I. 검증 명령
+
+```bash
+node scripts/verify-my-world-assets.mjs          # 전체
+node scripts/verify-my-world-assets.mjs --mvp    # MVP 36장만
+node scripts/verify-my-world-assets.mjs --json   # 기계 판독
+```
+
+검사 항목: 존재 · 해상도 일치 · 알파 채널 · 중복 정의 · manifest 에 없는 파일 ·
+용량 예산 · **readiness 플래그 fail-safe**(자산 없이 플래그를 켜면 실패).
+
+현재 출력: `선언 150개 (MVP 36) · 존재 0 · 없음 150 · 플래그 둘 다 false → PASS`
