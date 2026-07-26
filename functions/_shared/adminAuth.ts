@@ -23,7 +23,7 @@ export const PROD_PROJECT_ID = "dori-ai-0130";
 /**
  * 관리자 capability. **각각 다른 환경변수**를 쓴다 — 절대 공유하지 않는다.
  *  · article : 기사 발행/삭제 (ARTICLE_ADMIN_UIDS)
- *  · reward  : 재화·프리미엄 지급 (REWARD_ADMIN_UIDS)  ← 이 브랜치에서는 사용처 없음(cottonCandy 동결)
+ *  · reward  : 재화·프리미엄 지급 (REWARD_ADMIN_UIDS) — /api/admin/grant 가 사용
  */
 export type AdminCapability = "article" | "reward";
 const CAPABILITY_ENV: Record<AdminCapability, string> = {
@@ -77,6 +77,15 @@ export function parseAdminUids(raw: unknown): Set<string> {
   if (parts.length === 0 || parts.length > MAX_ADMIN_UIDS) return new Set();
   if (parts.some((x) => !UID_RE.test(x))) return new Set();   // 하나라도 형식 위반 → 전체 무효
   return new Set(parts);
+}
+
+/**
+ * 토큰이 향해야 할 Firebase 프로젝트. 운영은 항상 dori-ai-0130 이고,
+ * 로컬 에뮬레이터(demo- 프로젝트)에서만 target 의 projectId 를 따른다.
+ * ⚠️ 운영 target 에서는 어떤 경우에도 PROD_PROJECT_ID 로 고정된다 — 우회 여지를 만들지 않는다.
+ */
+export function expectedProjectFor(target: FirestoreTarget): string {
+  return target.emulator && target.projectId.startsWith("demo-") ? target.projectId : PROD_PROJECT_ID;
 }
 
 /** 토큰 자체의 형식·대상·만료 검증(네트워크 없이 판정 가능한 부분). */
@@ -135,9 +144,10 @@ async function verifyCapability(
   target: FirestoreTarget,
   nowMs: number,
   verify: typeof verifyIdTokenOwnsUid,
+  expectedProject: string,
 ): Promise<AdminDecision> {
   const decoded = decodeIdToken(idToken);
-  if (!tokenClaimsValid(decoded, PROD_PROJECT_ID, nowMs)) {
+  if (!tokenClaimsValid(decoded, expectedProject, nowMs)) {
     return { ok: false, status: 401, reason: "invalid_token" };
   }
   const allow = parseAdminUids(env?.[CAPABILITY_ENV[capability]]);
@@ -163,14 +173,14 @@ export function verifyArticleAdmin(
   target: FirestoreTarget = productionFirestoreTarget(),
   nowMs: number = Date.now(),
   verify: typeof verifyIdTokenOwnsUid = verifyIdTokenOwnsUid,
+  expectedProject: string = expectedProjectFor(target),
 ): Promise<AdminDecision> {
-  return verifyCapability("article", idToken, env, target, nowMs, verify);
+  return verifyCapability("article", idToken, env, target, nowMs, verify, expectedProject);
 }
 
 /**
  * 재화·프리미엄 지급 관리자 검증 — **REWARD_ADMIN_UIDS 만** 사용한다.
  * ⚠️ ARTICLE_ADMIN_UIDS 로는 절대 통과하지 않는다.
- * (이 브랜치에는 사용처가 없다 — cottonCandy 작업이 동결 중이라 계약만 준비해 둔다.)
  */
 export function verifyRewardAdmin(
   idToken: string,
@@ -178,6 +188,7 @@ export function verifyRewardAdmin(
   target: FirestoreTarget = productionFirestoreTarget(),
   nowMs: number = Date.now(),
   verify: typeof verifyIdTokenOwnsUid = verifyIdTokenOwnsUid,
+  expectedProject: string = expectedProjectFor(target),
 ): Promise<AdminDecision> {
-  return verifyCapability("reward", idToken, env, target, nowMs, verify);
+  return verifyCapability("reward", idToken, env, target, nowMs, verify, expectedProject);
 }

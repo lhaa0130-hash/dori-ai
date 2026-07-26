@@ -29,24 +29,41 @@
 클라이언트가 `cottonCandy`·`cottonCandyTotal`·`ownedItems`·`isPremium` 을 Firestore 에
 쓰는 경로는 **0개**다(정적 가드 `tests/candy-cutover-guard.test.ts` 가 고정).
 
-### 2-1. 관리자 지급 권한 계약 (05-07B 강화)
+### 2-1. 관리자 권한 계약 (05-08C 최종 — capability 분리)
 
-`/api/admin/grant` 는 다음 **3가지를 전부** 통과해야 지급한다(AND):
+관리자 인증·인가는 **공통 모듈 `functions/_shared/adminAuth.ts`** 가 담당한다.
+**인증은 공유, 인가는 분리**한다.
 
-1. Firebase ID 토큰이 Firestore 실검증 통과(서명·만료·uid 소유)
-2. `uid ∈ REWARD_ADMIN_UIDS` — **서버 환경변수 allowlist**
-3. 토큰 email 클레임 == `lhaa0130@gmail.com` (심층 방어)
+**인증**(토큰이 진짜인가) — 모든 관리자 엔드포인트 공통:
+`aud == dori-ai-0130` + `iss` 확인 + `exp` 확인 → Firestore 가 서명 실검증.
 
-추가로 **self-grant 금지**(관리자가 자기 계정에 지급 불가 — 감사 추적 보존).
+**인가**(무엇을 할 수 있는가) — capability 별로 **다른 allowlist**:
 
-> ⚠️ **fail-closed**: `REWARD_ADMIN_UIDS` 가 없으면 엔드포인트 전체가 503 으로 비활성이다.
-> email 단독 판정을 쓰지 않는 이유 — Firebase 는 사용자가 스스로 email 을 바꿀 수 있고
-> (`updateEmail`), 관리자 계정을 지우거나 주소를 바꾸면 그 주소가 풀린다. `email_verified` 도
-> 강제되지 않는다. 즉 "지금은 우연히 안전한" 계약이라 재화 권한의 단독 근거로 부적합하다.
-> 사용자 문서의 `isPremium`/`role` 같은 일반 필드도 관리자 근거로 쓰지 않는다.
->
-> **이 변수를 설정하기 전까지 관리자 지급 기능은 동작하지 않는다.** 의도된 상태다.
-> 🔜 후속: Firebase Custom Claims(`admin:true`)로 옮기면 env 관리 없이 더 강해진다.
+| capability | 환경변수 | 함수 | 사용처 |
+|---|---|---|---|
+| 기사 발행/삭제 | `ARTICLE_ADMIN_UIDS` | `verifyArticleAdmin()` | `/api/admin/article` |
+| 재화·프리미엄 지급 | `REWARD_ADMIN_UIDS` | `verifyRewardAdmin()` | `/api/admin/grant` |
+
+**기사 관리자가 재화 관리자가 되지 않고, 그 반대도 아니다.**
+추가로 `/api/admin/grant` 는 **self-grant 금지**(감사 추적 보존).
+
+> ⚠️ **email 은 권한 근거가 아니다**(05-08C 에서 완전 제거). `decideAdminAccess` 는 email 을 아예
+> 보지 않는다. Firebase 는 사용자가 스스로 email 을 바꿀 수 있고(`updateEmail`), 관리자 계정을
+> 지우면 그 주소가 풀린다. "관리자 주소를 아는 것"이 권한 후보 조건이 되면 안 된다.
+> 사용자 문서의 `isPremium`/`role` 같은 일반 필드도 근거로 쓰지 않는다.
+
+**응답 계약**
+
+| 상황 | 응답 |
+|---|---|
+| 토큰 없음·형식오류·만료·다른 프로젝트 | 401 |
+| 로그인했지만 allowlist 밖 | 403 |
+| allowlist 미설정·빈값·공백·형식위반·과도한 길이/개수 | 503 `reward_admin_not_configured` |
+| 검증 서비스 오류 | 503 `verify_unavailable` |
+
+> **초기 배포에서는 `REWARD_ADMIN_UIDS` 를 설정하지 않는다** → `/api/admin/grant` 는 503 으로
+> 비활성 상태로 나간다. 의도된 상태이며 일반 사용자 재화·구매와 무관하다(§3-1).
+> 후속: Firebase Custom Claims(`admin:true`)로 옮기면 env 관리 없이 더 강해진다.
 
 ### 2-2. 프리미엄 권한 계약
 
@@ -150,24 +167,30 @@ Edge E2E 가 이 계약을 고정한다(`게이트 off 여도 출석 솜사탕�
 ### 카나리 1건
 지정 UID 로 저가 아이템 1개 구매 → 잔액이 정확히 가격만큼 감소 + `users/{uid}/purchases/{op}` 원장 1건.
 
-### 3-0. ⚠️ 먼저 확인 — merge 가 client 까지 바꾸는가?
+### 3-0. ✅ Cloudflare Build 계약 — **확정** (2026-07-26 실측)
 
-이 프로젝트는 `out/`(빌드 산출물)을 **저장소에 커밋**하고, `deploy.js` 가 매시 정각에
-`pull → npm run build → git add out/ → push` 를 돈다. 그렇다면 CF Pages 는 빌드를 하지 않고
-커밋된 `out/` 을 그대로 서빙한다는 뜻이다(그래야 `deploy.js` 가 존재할 이유가 있다).
+| 설정 | 값 |
+|---|---|
+| Build command | **비어 있음** |
+| Build output directory | **`out`** |
+| Root directory | **비어 있음**(저장소 루트) |
+| Production branch | **`main`** |
+| 배포 트리거 | **Cloudflare Git 자동배포**(main push 시) |
+| Windows `illo-deploy` 예약작업 | **Disabled 유지** |
 
-**하지만 CF Pages 의 빌드 설정은 대시보드에만 있어 저장소에서 확정할 수 없다.** 사람이 확인해야 한다.
+즉 **CF Pages 는 빌드하지 않고 커밋된 `out/` 을 그대로 서빙한다.** 결과:
 
-| CF Pages 설정 | merge push 시 | 함의 |
-|---|---|---|
-| **build command 없음 / output = `out`** (추정) | **Functions 만 새 버전, client 는 옛 `out/` 그대로** | 🎉 **진짜 카나리 구간이 생긴다.** 구 client + 신 Functions 조합(호환성 표에서 ✅ 정상)으로 안전하게 검증 후, `deploy.js` 를 돌려 client 를 따로 배포 |
-| build command = `npm run build` | Functions + client 동시 | §3-2 의 403 구간 문제를 고려해야 한다 |
+- **main push → Functions 는 즉시 새 버전, client(`out/`)는 커밋된 것 그대로**
+- client 를 바꾸려면 **`deploy.js` 로 재빌드해 `out/` 을 커밋·push** 해야 한다
+- 따라서 **Functions 만 먼저 배포하는 진짜 카나리 구간이 자연히 생긴다**
 
-> **확인 방법**: Cloudflare Dashboard → Pages → 프로젝트 → Settings → Builds & deployments →
-> "Build command" 가 비어 있는지 / "Build output directory" 가 `out` 인지.
->
-> 추정이 맞다면(build command 없음) 배포는 아래처럼 훨씬 안전해진다:
-> `canary 설정 → PR merge(=Functions만) → 지정 UID 카나리 → all 전환 → deploy.js 로 client 배포 → UI 카나리 → Rules`
+> 📌 2026-07-26 Firebase 재발 방지 PR 병합에서 이 계약이 실측 확인됐다.
+> merge 직후 `/api/admin/article` 응답이 구버전 403 → 신버전 503 으로 바뀌었고(Functions 갱신),
+> 라이브 buildId 는 그대로였다(client 미변경). 이후 `deploy.js` 를 돌리자 buildId 가 바뀌었다.
+
+**cottonCandy 권장 순서**(이 계약 기준):
+`CANDY_ROLLOUT_MODE=canary 설정 → PR merge(=Functions만) → 지정 UID 로 endpoint 카나리 →
+all 저장 + 재배포 1회 → all 적용 확인 → deploy.js 로 client 배포 → UI 카나리 → Rules 마지막`
 
 ### 3-2. ✅ 환경변수 적용 시점 — **확정**
 
@@ -269,13 +292,16 @@ Edge E2E 가 이 계약을 고정한다(`게이트 off 여도 출석 솜사탕�
 
 | 스위트 | 1차(05-07) | 2차 감사 후(05-07B) |
 |---|---|---|
-| 단위 (`npm test`) | 150/150 | **165/165** |
-| 에뮬레이터 Rules (`test:my-world:emulator`) | 42/42 | **47/47** |
-| Edge HTTP E2E (`test:reward:edge`) | 66/66 | **91/91** |
+| 단위 (`npm test`) | 150/150 | **186/186** |
+| 에뮬레이터 Rules | 42/42 | **47/47** |
+| Edge HTTP E2E | 66/66 | **92/92** |
 | 브라우저 DOM 클릭 E2E (`test:reward:ui`) | 63/63 | **63/63** |
 | 프로덕션 빌드 (`npm run build`) | PASS | **PASS** (`out/` 미커밋) |
 
-전부 `origin/main` 병합 **후** 재실행한 결과다.
+전부 최신 `origin/main`(`d1faa790f3c` — Firebase 복구·fail-closed 포함) 병합 **후** 재실행한 결과다.
+
+> UI E2E 는 3회 실행 중 1회에서 오프라인→온라인 큐 flush 2건이 타이밍으로 실패했고, 나머지 2회는 63/63 이었다.
+> 실패 항목은 CDP 네트워크 상태 전환에 의존하는 구간이며 이번 변경(관리자 인가)과 무관하다.
 
 ### 05-07B 에서 테스트 기대값을 바꾼 곳과 이유
 

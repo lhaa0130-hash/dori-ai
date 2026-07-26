@@ -318,8 +318,10 @@ async function adminFailClosedSection() {
     body: JSON.stringify({ targetUid: target.uid, candy: 1000, operationId: "grant_failclosed001" }),
   });
   const j = await r.json().catch(() => null);
-  ok("⭐ REWARD_ADMIN_UIDS 미설정 → 503 admin_grant_disabled(fail-closed)",
-    r.status === 503 && j?.error === "admin_grant_disabled", `status=${r.status} err=${j?.error}`);
+  // 05-08C: 관리자 인증이 공통 모듈로 통합되며 코드가 reward_admin_not_configured 로 바뀌었다.
+  //   (capability 별로 구분되는 이름 — 운영자가 어느 allowlist 가 비었는지 바로 안다)
+  ok("⭐ REWARD_ADMIN_UIDS 미설정 → 503 reward_admin_not_configured(fail-closed)",
+    r.status === 503 && j?.error === "reward_admin_not_configured", `status=${r.status} err=${j?.error}`);
   ok("fail-closed 상태에서 대상 잔액 불변", (num((await fsGet(`users/${target.uid}`)).cottonCandy) || 0) === 0);
 }
 

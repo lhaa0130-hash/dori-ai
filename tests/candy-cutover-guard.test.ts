@@ -47,10 +47,28 @@ test("visits/notifications 를 통한 '지급 예약' 자기지급 통로가 제
 test("관리자 지급은 서버 엔드포인트만 사용한다", () => {
   const src = code("lib/cottonCandy.ts");
   assert.ok(src.includes("/api/admin/grant"), "adminGrantCandy/adminSetPremium 는 서버 호출");
-  const server = read("functions/api/admin/grant.ts");
-  assert.ok(server.includes("ADMIN_EMAIL"), "서버가 관리자 여부를 판정");
-  assert.ok(server.includes("verifyIdTokenOwnsUid"), "토큰을 Firestore 로 실검증한 뒤 email 클레임을 신뢰");
+  const server = code("functions/api/admin/grant.ts");
+  // 05-08C: 관리자 인증·인가는 공통 모듈로 일원화됐다(로직 복제 금지).
+  assert.ok(server.includes("verifyRewardAdmin"), "재화 관리자 검증은 공통 모듈 사용");
   assert.ok(server.includes("requireNotExists: true"), "지급 원장으로 멱등 보장");
+});
+
+test("⭐ 재화 관리자 권한은 REWARD_ADMIN_UIDS 전용 — email·기사권한으로 열리지 않는다", () => {
+  const server = code("functions/api/admin/grant.ts");
+  // email 판정이 남아 있으면 안 된다(05-08C 에서 제거).
+  assert.equal(/ADMIN_EMAIL/.test(server), false, "email 상수로 권한을 판정하면 안 된다");
+  assert.equal(/decoded\.email/.test(server), false, "email 클레임을 권한 근거로 쓰면 안 된다");
+  // 기사 권한 변수로 재화가 열리면 안 된다.
+  assert.equal(/ARTICLE_ADMIN_UIDS/.test(server), false, "재화 경로가 기사 allowlist 를 참조하면 안 된다");
+  // 인증 로직을 로컬에 복제하지 않는다.
+  assert.equal(/function decodeToken\b/.test(server), false, "토큰 디코딩을 복제하지 않는다");
+
+  const shared = code("functions/_shared/adminAuth.ts");
+  assert.ok(shared.includes('reward: "REWARD_ADMIN_UIDS"'), "reward capability 는 REWARD_ADMIN_UIDS");
+  assert.ok(shared.includes('article: "ARTICLE_ADMIN_UIDS"'), "article capability 는 ARTICLE_ADMIN_UIDS");
+  // 인가 판정 함수가 email 을 보지 않는다.
+  const decide = shared.slice(shared.indexOf("export function decideAdminAccess"));
+  assert.equal(/email/.test(decide.slice(0, decide.indexOf("\n}"))), false, "decideAdminAccess 가 email 을 참조하면 안 된다");
 });
 
 test("구매는 서버 권위 경로만 — 클라이언트가 가격을 보내지 않는다", () => {
