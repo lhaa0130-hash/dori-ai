@@ -11,6 +11,7 @@ import { useInteraction } from "@/contexts/InteractionContext";
 import { useInteractionAudio } from "@/contexts/InteractionAudioContext";
 import { useRoom } from "@/contexts/RoomContext";
 import RoomCanvas from "@/components/my-world/room/RoomCanvas";
+import WorldPanel from "@/components/my-world/WorldPanel";
 import CharacterStatus from "@/components/my-world/interaction/CharacterStatus";
 import InteractionActions, { type ActionDefinition } from "@/components/my-world/interaction/InteractionActions";
 import SpeechBubble from "@/components/my-world/interaction/SpeechBubble";
@@ -21,7 +22,7 @@ import { getRoomItem } from "@/lib/myWorld/room/registry";
 import { itemBoxPercent } from "@/lib/myWorld/room/utils";
 import type { GameProfileView } from "@/hooks/my-world/useGameProfile";
 
-export default function CharacterInteractionStage({ profile }: { profile: GameProfileView }) {
+export default function CharacterInteractionStage({ profile }: { profile: GameProfileView | null }) {
   const { character } = useCharacter();
   const { savedRoom } = useRoom();
   const {
@@ -90,13 +91,16 @@ export default function CharacterInteractionStage({ profile }: { profile: GamePr
   const daily = useMemo(() => dailyRewardProgress(state), [state]);
 
   return (
-    <section className="rounded-3xl border border-stone-100 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950 sm:p-5" aria-labelledby="interaction-heading">
-      <div className="mb-3 flex flex-wrap items-start justify-between gap-2">
-        <div className="min-w-0">
-          <h2 id="interaction-heading" className="text-[15px] font-extrabold text-stone-900 dark:text-white">{character.name}와 함께 놀기</h2>
-          <p className="mt-0.5 text-[11px] font-medium text-stone-500 dark:text-zinc-400">터치하거나 길게 눌러 반응을 만나보세요.</p>
-        </div>
-        <div className="flex flex-none items-center gap-1.5">
+    <WorldPanel
+      title={`${character.name}와 함께 놀기`}
+      subtitle="터치하거나 길게 눌러 반응을 만나보세요."
+      labelledById="interaction-heading"
+      bleed
+      action={
+        <>
+          {!profile && (
+            <span className="rounded-full bg-[#F9954E]/15 px-2 py-1 text-[10px] font-black text-[#E07C2E]">체험 중</span>
+          )}
           {syncBadge && (
             <span className="rounded-full bg-stone-100 px-2 py-1 text-[10px] font-bold text-stone-500 dark:bg-zinc-800 dark:text-zinc-300">
               {syncBadge}
@@ -111,9 +115,9 @@ export default function CharacterInteractionStage({ profile }: { profile: GamePr
           >
             <span aria-hidden>{muted ? "🔇" : "🔊"}</span>
           </button>
-        </div>
-      </div>
-
+        </>
+      }
+    >
       <div className="relative overflow-hidden rounded-2xl ring-1 ring-stone-100 dark:ring-zinc-800">
         <RoomCanvas room={savedRoom} compact hideCharacter />
         <SpeechBubble speech={speech} characterName={character.name} />
@@ -135,6 +139,13 @@ export default function CharacterInteractionStage({ profile }: { profile: GamePr
             />
           );
         })}
+
+        {/* 캐릭터 접지 그림자 — 캐릭터가 바닥 위에 서 있게 보이도록. 캐릭터 아래(z-30) 레이어. */}
+        <div
+          aria-hidden
+          className="pointer-events-none absolute z-30"
+          style={{ left: "50%", top: "92.5%", width: "17%", height: "4.5%", transform: "translate(-50%, -50%)", background: "radial-gradient(50% 50% at 50% 50%, rgba(70,45,30,0.32) 0%, rgba(70,45,30,0) 72%)" }}
+        />
 
         <button
           type="button"
@@ -164,18 +175,17 @@ export default function CharacterInteractionStage({ profile }: { profile: GamePr
       {/* 보상·안내는 무대 밖에서 — 캐릭터를 가리지 않는다. */}
       <WorldFeedback notices={notices} onDismiss={dismissNotice} />
 
+      {/* 성장 수치는 "로그인 여부"(profile 존재)로만 가른다.
+          identity gate(signedIn)는 원격 read/write 를 막는 장치이며 표시 조건으로 쓰면
+          헤더(EXP 보임)와 상태 영역(EXP 숨김)이 어긋난다 — 같은 캐시 값을 보여줘야 한다. */}
       <CharacterStatus
-        exp={profile.exp}
-        nextTotal={profile.nextTotal}
-        progress={profile.progress}
-        level={profile.level}
         affinity={state.affinity}
         emotion={displayEmotion}
-        guest={!signedIn}
+        growth={profile ? { level: profile.level, exp: profile.exp, nextTotal: profile.nextTotal, progress: profile.progress } : null}
         daily={daily}
       />
 
       <InteractionActions state={state} loading={loading} onPerform={handleAction} />
-    </section>
+    </WorldPanel>
   );
 }
