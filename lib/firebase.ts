@@ -5,10 +5,53 @@ import { getAuth, GoogleAuthProvider, connectAuthEmulator, signInWithEmailAndPas
 import { getFirestore, connectFirestoreEmulator, type Firestore } from "firebase/firestore";
 import { getStorage, type FirebaseStorage } from "firebase/storage";
 
+// ⚠️ 2026-07-26 로그인 전면 장애의 재발 방지(fail-closed).
+//   과거엔 apiKey 에 **하드코딩 기본값**이 있었다. 그 키가 폐기됐는데 .env.local 에
+//   NEXT_PUBLIC_FIREBASE_API_KEY 가 없어, 빌드가 조용히 죽은 키를 실어 배포했고 로그인이 전부 깨졌다
+//   (auth/api-key-expired). 기본값이 있으면 '설정 누락'이 배포 전에 드러나지 않는다.
+//   → apiKey 기본값을 제거하고, 없으면 **빌드 단계에서 즉시 실패**시킨다.
+//
+//   나머지 항목(authDomain/projectId/…)은 프로젝트 식별자라 값이 바뀔 일이 없고,
+//   틀리면 즉시 눈에 띄므로 기본값을 유지한다. apiKey 만 회전 대상이라 다르게 취급한다.
+//
+//   ℹ️ Firebase Web API 키는 공식적으로 **공개 config** 다(클라이언트 번들에 노출되는 게 정상).
+//      보안은 Firestore Rules·App Check 가 담당한다. 노출을 이유로 폐기하면 안 된다 — 이번 장애의 원인이다.
+//      서버 비밀(Google/FAL/OpenAI/Gemini, Firebase Admin SA)과는 **완전히 다른 등급**이다.
+// 에뮬레이터(개발·테스트) 경로: Auth 에뮬레이터는 실제 키를 검증하지 않는다.
+//   플래그가 명시적으로 켜져 있고 production 빌드가 아닐 때만 placeholder 를 허용한다.
+//   ⚠️ production 빌드(NODE_ENV=production)에서는 이 분기가 절대 성립하지 않는다.
+const IS_EMULATOR_ENV =
+    process.env.NEXT_PUBLIC_USE_FIREBASE_EMULATOR === "true" &&
+    process.env.NODE_ENV !== "production";
+
+// 공백만 들어간 값도 '없음'으로 취급한다(트림 후 판정 — 우연이 아니라 의도된 계약).
+const FIREBASE_API_KEY =
+    (process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "").trim() ||
+    (IS_EMULATOR_ENV ? "demo-emulator-api-key" : "");
+if (!FIREBASE_API_KEY) {
+    throw new Error(
+        "[firebase] NEXT_PUBLIC_FIREBASE_API_KEY 가 설정되지 않았습니다.\n" +
+        "  Firebase Console → 프로젝트 설정 → 내 앱 → SDK 설정 및 구성 의 apiKey 를\n" +
+        "  .env.local 에 NEXT_PUBLIC_FIREBASE_API_KEY 로 넣으세요.\n" +
+        "  (자동: node scripts/sync-firebase-key.mjs)\n" +
+        "  (이 값이 없으면 로그인이 전부 실패합니다 — 2026-07-26 장애 재발 방지용 fail-closed)",
+    );
+}
+
+// production 빌드에 demo/emulator 프로젝트가 섞이면 즉시 실패시킨다.
+//   (테스트용 demo- 프로젝트로 빌드된 번들이 라이브로 나가면 인증·데이터가 전부 엉킨다)
+const FIREBASE_PROJECT_ID = (process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "dori-ai-0130").trim();
+if (process.env.NODE_ENV === "production" && FIREBASE_PROJECT_ID.startsWith("demo-")) {
+    throw new Error(
+        `[firebase] production 빌드에 demo 프로젝트(${FIREBASE_PROJECT_ID})가 설정됐습니다.\n` +
+        "  테스트용 .env.local 이 남아 있지 않은지 확인하세요.",
+    );
+}
+
 const firebaseConfig = {
-    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyBKrnvupYQirvspkbIS8vPrp1UqQcn7lA4",
+    apiKey: FIREBASE_API_KEY,
     authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "dori-ai-0130.firebaseapp.com",
-    projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "dori-ai-0130",
+    projectId: FIREBASE_PROJECT_ID,
     storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "dori-ai-0130.firebasestorage.app",
     messagingSenderId: process.env.NEXT_PUBLIC_FIREBASE_MESSAGING_SENDER_ID || "1023160315279",
     appId: process.env.NEXT_PUBLIC_FIREBASE_APP_ID || "1:1023160315279:web:d4de24d8893c7463642ffa",

@@ -1,10 +1,18 @@
 // Cloudflare Pages Function — 정적 사이트와 함께 배포되는 서버리스 함수
 // /api/admin/article 경로로 자동 매핑됨
 
-const ADMIN_EMAIL = 'lhaa0130@gmail.com';
-const FIREBASE_API_KEY = 'AIzaSyBKrnvupYQirvspkbIS8vPrp1UqQcn7lA4';
+import { verifyArticleAdmin } from '../../_shared/adminAuth';
+
+// git 커밋 작성자 표기용 이메일 — **권한 근거가 아니다**(인가는 ARTICLE_ADMIN_UIDS 만 사용).
+const COMMITTER_EMAIL = 'lhaa0130@gmail.com';
+
 const GITHUB_OWNER = 'lhaa0130-hash';
 const GITHUB_REPO = 'dori-ai';
+
+// ⚠️ 2026-07-26 장애: 여기에 Firebase Web API 키가 하드코딩돼 있었고, 그 키가 폐기되면서
+//   verifyAdminToken 이 항상 실패해 **관리자 기사 발행이 조용히 깨져 있었다**(로그인 장애와 동일 원인).
+//   → API 키 의존을 제거하고, 관리자 인증을 공통 모듈(_shared/adminAuth)로 일원화했다.
+//   ⚠️ Firestore 접근 성공 = '로그인한 사용자'일 뿐이다. 관리자 판정은 adminAuth 가 따로 한다.
 
 interface Env {
   GITHUB_TOKEN: string;
@@ -18,26 +26,6 @@ function getFilePath(slug: string): string | null {
   if (slug.startsWith('report-'))   return `content/reports/${slug}.md`;
   if (slug.startsWith('studio-'))   return `content/studio/${slug}.md`;
   return null;
-}
-
-// Firebase ID 토큰으로 관리자 이메일 검증
-async function verifyAdminToken(idToken: string): Promise<boolean> {
-  try {
-    const res = await fetch(
-      `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${FIREBASE_API_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idToken }),
-      }
-    );
-    if (!res.ok) return false;
-    const data: any = await res.json();
-    const email: string = data?.users?.[0]?.email || '';
-    return email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
-  } catch {
-    return false;
-  }
 }
 
 // GitHub 파일 SHA 조회
@@ -94,10 +82,15 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       return json({ error: 'GITHUB_TOKEN 환경변수 미설정. Cloudflare Pages 변수 설정 필요.' }, 500);
     }
 
-    // 관리자 인증 (Firebase ID 토큰 검증)
-    const isAdmin = await verifyAdminToken(idToken);
-    if (!isAdmin) {
-      return json({ error: '관리자 권한 없음' }, 403);
+    // 관리자 인증 — 공통 계약(_shared/adminAuth): aud/iss/exp + Firestore 실검증 + 관리자 판정.
+    //   401 = 토큰이 유효하지 않음 / 403 = 로그인은 했지만 관리자가 아님. 둘을 구분해 응답한다.
+    //   ⚠️ 내부 오류·토큰·SA 정보를 응답에 담지 않는다(reason 은 고정 문자열 코드).
+    const admin = await verifyArticleAdmin(idToken, env as unknown as Record<string, any>);
+    if (!admin.ok) {
+      const msg = admin.status === 401 ? '인증 실패'
+        : admin.status === 503 ? '기사 관리자 기능이 아직 설정되지 않았습니다.'
+        : '관리자 권한 없음';
+      return json({ error: msg, code: admin.reason }, admin.status);
     }
 
     // slug → 파일 경로 변환
@@ -132,7 +125,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
           body: JSON.stringify({
             message: `[admin] delete: ${slug}`,
             sha: fileInfo.sha,
-            committer: { name: 'illo Admin', email: ADMIN_EMAIL },
+            committer: { name: 'illo Admin', email: COMMITTER_EMAIL },
           }),
         }
       );
@@ -161,7 +154,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
             message: `[admin] update: ${slug}`,
             content: contentBase64,
             sha: fileInfo.sha,
-            committer: { name: 'illo Admin', email: ADMIN_EMAIL },
+            committer: { name: 'illo Admin', email: COMMITTER_EMAIL },
           }),
         }
       );
