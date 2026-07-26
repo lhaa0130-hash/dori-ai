@@ -1,7 +1,10 @@
 // Cloudflare Pages Function — 정적 사이트와 함께 배포되는 서버리스 함수
 // /api/admin/article 경로로 자동 매핑됨
 
-import { verifyAdmin, ADMIN_EMAIL } from '../../_shared/adminAuth';
+import { verifyArticleAdmin } from '../../_shared/adminAuth';
+
+// git 커밋 작성자 표기용 이메일 — **권한 근거가 아니다**(인가는 ARTICLE_ADMIN_UIDS 만 사용).
+const COMMITTER_EMAIL = 'lhaa0130@gmail.com';
 
 const GITHUB_OWNER = 'lhaa0130-hash';
 const GITHUB_REPO = 'dori-ai';
@@ -82,9 +85,12 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
     // 관리자 인증 — 공통 계약(_shared/adminAuth): aud/iss/exp + Firestore 실검증 + 관리자 판정.
     //   401 = 토큰이 유효하지 않음 / 403 = 로그인은 했지만 관리자가 아님. 둘을 구분해 응답한다.
     //   ⚠️ 내부 오류·토큰·SA 정보를 응답에 담지 않는다(reason 은 고정 문자열 코드).
-    const admin = await verifyAdmin(idToken, env as unknown as Record<string, any>);
+    const admin = await verifyArticleAdmin(idToken, env as unknown as Record<string, any>);
     if (!admin.ok) {
-      return json({ error: admin.status === 401 ? '인증 실패' : '관리자 권한 없음', code: admin.reason }, admin.status);
+      const msg = admin.status === 401 ? '인증 실패'
+        : admin.status === 503 ? '기사 관리자 기능이 아직 설정되지 않았습니다.'
+        : '관리자 권한 없음';
+      return json({ error: msg, code: admin.reason }, admin.status);
     }
 
     // slug → 파일 경로 변환
@@ -119,7 +125,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
           body: JSON.stringify({
             message: `[admin] delete: ${slug}`,
             sha: fileInfo.sha,
-            committer: { name: 'illo Admin', email: ADMIN_EMAIL },
+            committer: { name: 'illo Admin', email: COMMITTER_EMAIL },
           }),
         }
       );
@@ -148,7 +154,7 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
             message: `[admin] update: ${slug}`,
             content: contentBase64,
             sha: fileInfo.sha,
-            committer: { name: 'illo Admin', email: ADMIN_EMAIL },
+            committer: { name: 'illo Admin', email: COMMITTER_EMAIL },
           }),
         }
       );

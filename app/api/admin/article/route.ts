@@ -1,9 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 // ⚠️ Edge Function(functions/api/admin/article.ts)과 **동일한** 관리자 인증 계약을 쓴다.
 //   인증 로직을 복제하면 한 쪽만 약해도 전체가 뚫린다 → 서버 전용 공통 모듈을 재사용한다.
-import { verifyAdmin } from '@/functions/_shared/adminAuth';
+import { verifyArticleAdmin } from '@/functions/_shared/adminAuth';
 
-const ADMIN_EMAIL = 'lhaa0130@gmail.com';
+// git 커밋 작성자 표기용 — **권한 근거 아님**.
+const COMMITTER_EMAIL = 'lhaa0130@gmail.com';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '';
 const GITHUB_OWNER = 'lhaa0130-hash';
 const GITHUB_REPO = 'dori-ai';
@@ -51,12 +52,12 @@ export async function POST(req: NextRequest) {
 
     // 관리자 인증 — Edge Function 과 동일한 공통 계약.
     //   401 = 토큰 무효 / 403 = 로그인은 했으나 관리자 아님.
-    const admin = await verifyAdmin(idToken, process.env as unknown as Record<string, any>);
+    const admin = await verifyArticleAdmin(idToken, process.env as unknown as Record<string, any>);
     if (!admin.ok) {
-      return NextResponse.json(
-        { error: admin.status === 401 ? '인증 실패' : '관리자 권한 없음', code: admin.reason },
-        { status: admin.status },
-      );
+      const msg = admin.status === 401 ? '인증 실패'
+        : admin.status === 503 ? '기사 관리자 기능이 아직 설정되지 않았습니다.'
+        : '관리자 권한 없음';
+      return NextResponse.json({ error: msg, code: admin.reason }, { status: admin.status });
     }
 
     if (!GITHUB_TOKEN) {
@@ -90,7 +91,7 @@ export async function POST(req: NextRequest) {
           body: JSON.stringify({
             message: `[admin] delete: ${slug}`,
             sha: fileInfo.sha,
-            committer: { name: 'illo Admin', email: ADMIN_EMAIL },
+            committer: { name: 'illo Admin', email: COMMITTER_EMAIL },
           }),
         }
       );
@@ -118,7 +119,7 @@ export async function POST(req: NextRequest) {
             message: `[admin] update: ${slug}`,
             content: contentBase64,
             sha: fileInfo.sha,
-            committer: { name: 'illo Admin', email: ADMIN_EMAIL },
+            committer: { name: 'illo Admin', email: COMMITTER_EMAIL },
           }),
         }
       );

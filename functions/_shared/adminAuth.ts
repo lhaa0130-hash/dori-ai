@@ -1,12 +1,17 @@
-// 관리자 인증 공통 계약 (05-08B).
+// 관리자 인증·인가 공통 계약 (05-08C).
 //
-// ⚠️ 왜 공통 모듈인가:
-//   관리자 엔드포인트가 각자 다른 방식으로 토큰을 검증하면 한 곳만 약해도 전체가 뚫린다.
-//   /api/claim-reward 에서 이미 운영 검증된 계약(aud/iss/exp + Firestore 실검증)을 그대로 재사용한다.
+// ⚠️ 설계 원칙 — **인증(authentication)은 공유, 인가(authorization)는 분리**.
+//   토큰이 진짜인지 확인하는 절차는 한 곳에 모아 약한 복제본이 생기지 않게 한다.
+//   그러나 "무엇을 할 수 있는가"는 capability 별로 **서로 다른 allowlist** 로 판정한다.
+//   기사 발행 관리자가 재화·프리미엄까지 지급할 수 있으면 안 된다(권한 확대 = 사고 반경 확대).
 //
 // ⚠️ 핵심 구분 — "토큰이 유효한 사용자" ≠ "관리자":
-//   Firestore 접근이 성공한다는 것은 **로그인한 사용자라는 뜻일 뿐**이다(누구나 자기 userPrivate 을 읽는다).
-//   따라서 Firestore 왕복은 '토큰이 진짜인지'만 증명하고, 관리자 판정은 **별도 서버 권위 근거**로 한다.
+//   Firestore 접근 성공은 **로그인했다는 뜻일 뿐**이다(누구나 자기 userPrivate 을 읽는다).
+//   따라서 Firestore 왕복은 '토큰이 진짜인지'만 증명하고, 관리자 판정은 서버 allowlist 가 한다.
+//
+// ⚠️ **email 단독 관리자 판정은 존재하지 않는다**(05-08C 에서 완전 제거).
+//   Firebase 는 사용자가 스스로 email 을 바꿀 수 있고, 관리자 계정을 지우면 그 주소가 풀린다.
+//   "관리자 주소를 아는 것"이 권한 후보 조건이 되어서는 안 된다.
 //
 // ⚠️ 이 모듈은 서버 전용이다. functions/_shared 는 CF Pages 라우트로 노출되지 않으며
 //   client bundle 에 포함되지 않는다. 클라이언트에서 import 하지 말 것.
@@ -14,10 +19,24 @@ import { productionFirestoreTarget, verifyIdTokenOwnsUid, type FirestoreTarget }
 
 /** 운영 Firebase 프로젝트. 다른 프로젝트에서 발급된 토큰은 전부 거부한다. */
 export const PROD_PROJECT_ID = "dori-ai-0130";
-/** 보조 조건으로만 쓰는 관리자 이메일(단독 근거 아님 — 아래 decideAdminAccess 참고). */
-export const ADMIN_EMAIL = "lhaa0130@gmail.com";
 
-export interface DecodedIdToken { uid: string; email: string; aud: string; iss: string; exp: number }
+/**
+ * 관리자 capability. **각각 다른 환경변수**를 쓴다 — 절대 공유하지 않는다.
+ *  · article : 기사 발행/삭제 (ARTICLE_ADMIN_UIDS)
+ *  · reward  : 재화·프리미엄 지급 (REWARD_ADMIN_UIDS)  ← 이 브랜치에서는 사용처 없음(cottonCandy 동결)
+ */
+export type AdminCapability = "article" | "reward";
+const CAPABILITY_ENV: Record<AdminCapability, string> = {
+  article: "ARTICLE_ADMIN_UIDS",
+  reward: "REWARD_ADMIN_UIDS",
+};
+/** 설정 미완료 시 응답 코드(capability 별로 구분해 운영자가 어느 쪽인지 바로 안다). */
+const NOT_CONFIGURED: Record<AdminCapability, string> = {
+  article: "article_admin_not_configured",
+  reward: "reward_admin_not_configured",
+};
+
+export interface DecodedIdToken { uid: string; email: string; emailVerified: boolean; aud: string; iss: string; exp: number }
 
 /** ID 토큰 payload 디코딩. 서명 검증은 하지 않는다(Firestore 왕복이 담당). */
 export function decodeIdToken(idToken: unknown): DecodedIdToken | null {
@@ -31,6 +50,7 @@ export function decodeIdToken(idToken: unknown): DecodedIdToken | null {
     return {
       uid,
       email: String(j.email || ""),
+      emailVerified: j.email_verified === true,
       aud: String(j.aud || ""),
       iss: String(j.iss || ""),
       exp: Number(j.exp || 0),
@@ -38,9 +58,25 @@ export function decodeIdToken(idToken: unknown): DecodedIdToken | null {
   } catch { return null; }
 }
 
-/** 콤마 구분 UID allowlist 파싱(공백 제거, 빈 항목 무시). */
+/** UID 형식 — Firebase UID 는 영숫자/-/_ 조합. 비정상 입력은 목록에서 버린다. */
+const UID_RE = /^[A-Za-z0-9_-]{6,128}$/;
+const MAX_ADMIN_UIDS = 50;          // 과도한 목록은 오설정 신호 → fail-closed
+const MAX_RAW_LENGTH = 8000;
+
+/**
+ * allowlist 파싱. trim·빈 항목 제거·중복 제거·형식 검증.
+ * ⚠️ 비정상 입력(과도한 길이, 형식 위반 포함)은 **빈 집합**으로 취급해 fail-closed 시킨다.
+ *    (일부만 걸러 통과시키면 오설정이 조용히 넘어간다)
+ * ⚠️ UID 목록·개수를 로그에 남기지 않는다.
+ */
 export function parseAdminUids(raw: unknown): Set<string> {
-  return new Set(String(raw ?? "").split(",").map((s) => s.trim()).filter(Boolean));
+  const s = String(raw ?? "");
+  if (!s.trim()) return new Set();
+  if (s.length > MAX_RAW_LENGTH) return new Set();
+  const parts = s.split(",").map((x) => x.trim()).filter(Boolean);
+  if (parts.length === 0 || parts.length > MAX_ADMIN_UIDS) return new Set();
+  if (parts.some((x) => !UID_RE.test(x))) return new Set();   // 하나라도 형식 위반 → 전체 무효
+  return new Set(parts);
 }
 
 /** 토큰 자체의 형식·대상·만료 검증(네트워크 없이 판정 가능한 부분). */
@@ -57,63 +93,91 @@ export type AdminDecision =
   | { ok: false; status: 401 | 403 | 503; reason: string };
 
 /**
- * 관리자 판정(순수 함수 — 테스트 가능).
+ * 인가 판정(순수 함수 — 테스트 가능).
  *
  * @param decoded    디코딩된 토큰(서명은 ownership 으로 별도 증명)
  * @param ownership  Firestore 가 토큰을 실검증한 결과
- * @param adminUids  서버 환경변수 allowlist(REWARD_ADMIN_UIDS). 비어 있으면 email 계약으로 폴백.
+ * @param allow      **해당 capability 전용** allowlist
+ * @param capability 어떤 권한을 판정하는지(응답 코드 구분용)
  *
- * 권한 근거 우선순위:
- *   ① adminUids 가 설정돼 있으면 **UID allowlist 통과 + email 일치** 를 모두 요구(AND).
- *   ② allowlist 가 비어 있으면 기존 운영 계약인 email 일치만 사용한다.
- *      ⚠️ 이건 "지금은 우연히 안전한" 계약이다 — Firebase 는 이메일이 유일해서 관리자 주소를
- *         선점당하지 않지만, 관리자 계정을 지우면 그 주소가 풀린다. 그래서 ①을 권장한다.
- *      기존 동작을 깨지 않으려고 폴백을 남긴다(이 엔드포인트는 이미 운영 중이던 기능이다).
+ * 계약:
+ *   · allowlist 가 비면 → 503. 그 기능만 비활성이고 로그인·일반 서비스는 영향 없다.
+ *   · 로그인은 했지만 목록 밖 → 403.
+ *   · **email 은 판정에 쓰지 않는다.** 이 함수는 email 을 아예 보지 않는다.
  *
  * ⚠️ 클라이언트가 바꿀 수 있는 값(요청 body 의 email/uid, 사용자 문서 role/isAdmin,
- *    localStorage, UI 상태)은 **어떤 경우에도** 근거로 쓰지 않는다. 이 함수는 그런 입력을 받지 않는다.
+ *    localStorage, UI 상태)은 입력 자리 자체가 없다 — 구조적으로 차단된다.
  */
 export function decideAdminAccess(
   decoded: DecodedIdToken | null,
   ownership: "ok" | "mismatch" | "invalid",
-  adminUids: Set<string>,
+  allow: Set<string>,
+  capability: AdminCapability,
 ): AdminDecision {
   if (!decoded) return { ok: false, status: 401, reason: "invalid_token" };
   // Firestore 가 토큰을 거부했다 → 서명·만료가 유효하지 않다.
   if (ownership !== "ok") return { ok: false, status: 401, reason: "token_not_verified" };
-
-  const emailMatches = decoded.email.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase();
-
-  if (adminUids.size > 0) {
-    // 강한 계약: 서버 allowlist + email 동시 충족.
-    if (!adminUids.has(decoded.uid) || !emailMatches) return { ok: false, status: 403, reason: "not_admin" };
-    return { ok: true };
-  }
-  // 폴백(기존 운영 계약). 로그인한 일반 사용자는 여기서 403 으로 걸러진다.
-  if (!emailMatches) return { ok: false, status: 403, reason: "not_admin" };
+  // 설정 미완료 = 기능 비활성(fail-closed). email 로 우회할 길은 없다.
+  if (allow.size === 0) return { ok: false, status: 503, reason: NOT_CONFIGURED[capability] };
+  if (!allow.has(decoded.uid)) return { ok: false, status: 403, reason: "not_admin" };
   return { ok: true };
 }
 
 /**
- * 실제 검증(네트워크 포함). 토큰 claim 검사 → Firestore 실검증 → 관리자 판정.
- * 검증 서비스 오류는 fail-closed(401)로 처리한다.
+ * capability 별 관리자 검증(네트워크 포함).
+ * 토큰 claim 검사 → Firestore 실검증 → 해당 capability allowlist 판정.
+ * 검증 서비스 오류는 fail-closed(503 — 일시 장애이지 권한 부재가 아니므로 401 과 구분).
  */
-export async function verifyAdmin(
+async function verifyCapability(
+  capability: AdminCapability,
+  idToken: string,
+  env: Record<string, any>,
+  target: FirestoreTarget,
+  nowMs: number,
+  verify: typeof verifyIdTokenOwnsUid,
+): Promise<AdminDecision> {
+  const decoded = decodeIdToken(idToken);
+  if (!tokenClaimsValid(decoded, PROD_PROJECT_ID, nowMs)) {
+    return { ok: false, status: 401, reason: "invalid_token" };
+  }
+  const allow = parseAdminUids(env?.[CAPABILITY_ENV[capability]]);
+  // 설정이 없으면 네트워크 왕복 없이 즉시 503(불필요한 외부 호출도 줄인다).
+  if (allow.size === 0) return { ok: false, status: 503, reason: NOT_CONFIGURED[capability] };
+
+  let ownership: "ok" | "mismatch" | "invalid";
+  try {
+    ownership = await verify(target, idToken, (decoded as DecodedIdToken).uid);
+  } catch {
+    return { ok: false, status: 503, reason: "verify_unavailable" };   // fail-closed
+  }
+  return decideAdminAccess(decoded, ownership, allow, capability);
+}
+
+/**
+ * 기사 발행 관리자 검증 — **ARTICLE_ADMIN_UIDS 만** 사용한다.
+ * ⚠️ REWARD_ADMIN_UIDS 로는 절대 통과하지 않는다.
+ */
+export function verifyArticleAdmin(
   idToken: string,
   env: Record<string, any>,
   target: FirestoreTarget = productionFirestoreTarget(),
   nowMs: number = Date.now(),
   verify: typeof verifyIdTokenOwnsUid = verifyIdTokenOwnsUid,
 ): Promise<AdminDecision> {
-  const decoded = decodeIdToken(idToken);
-  if (!tokenClaimsValid(decoded, PROD_PROJECT_ID, nowMs)) {
-    return { ok: false, status: 401, reason: "invalid_token" };
-  }
-  let ownership: "ok" | "mismatch" | "invalid";
-  try {
-    ownership = await verify(target, idToken, (decoded as DecodedIdToken).uid);
-  } catch {
-    return { ok: false, status: 401, reason: "verify_unavailable" };   // fail-closed
-  }
-  return decideAdminAccess(decoded, ownership, parseAdminUids(env?.REWARD_ADMIN_UIDS));
+  return verifyCapability("article", idToken, env, target, nowMs, verify);
+}
+
+/**
+ * 재화·프리미엄 지급 관리자 검증 — **REWARD_ADMIN_UIDS 만** 사용한다.
+ * ⚠️ ARTICLE_ADMIN_UIDS 로는 절대 통과하지 않는다.
+ * (이 브랜치에는 사용처가 없다 — cottonCandy 작업이 동결 중이라 계약만 준비해 둔다.)
+ */
+export function verifyRewardAdmin(
+  idToken: string,
+  env: Record<string, any>,
+  target: FirestoreTarget = productionFirestoreTarget(),
+  nowMs: number = Date.now(),
+  verify: typeof verifyIdTokenOwnsUid = verifyIdTokenOwnsUid,
+): Promise<AdminDecision> {
+  return verifyCapability("reward", idToken, env, target, nowMs, verify);
 }
