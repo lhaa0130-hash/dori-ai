@@ -10,21 +10,23 @@ import { useCharacter } from "@/contexts/CharacterContext";
 import WorldPanel from "@/components/my-world/WorldPanel";
 import RoomEditorModal from "@/components/my-world/room/RoomEditorModal";
 import { MAX_PLACED_ITEMS } from "@/lib/myWorld/room/constants";
+import { resolveSaveView } from "@/lib/myWorld/view/worldView";
 
 export default function RoomPreviewCard() {
-  const { savedRoom, loading, loadError, reloadRoom, dirty, saving, loggedIn } = useRoom();
+  const { savedRoom, loading, loadError, reloadRoom, dirty, saving, error, loggedIn } = useRoom();
   const { character } = useCharacter();
   const [editorOpen, setEditorOpen] = useState(false);
   const count = savedRoom.placedItems.length;
 
-  // 저장 상태는 색만으로 전달하지 않고 아이콘 + 문장을 함께 쓴다.
-  const state = saving
-    ? { icon: "⏳", text: "저장 중", tone: "text-stone-500 dark:text-zinc-400" }
-    : dirty
-      ? { icon: "✏️", text: "저장 안 된 변경 있음", tone: "text-[#E07C2E]" }
-      : loggedIn
-        ? { icon: "✅", text: "저장됨", tone: "text-emerald-600 dark:text-emerald-400" }
-        : { icon: "🔓", text: "체험 모드 · 로그인하면 저장돼요", tone: "text-stone-500 dark:text-zinc-400" };
+  // 저장 상태는 색만으로 전달하지 않고 아이콘 + 문장을 함께 쓴다(순수 함수가 결정).
+  const save = resolveSaveView({ authState: loggedIn ? "signed" : "guest", saving, dirty, saveError: error });
+  const SAVE_TONE_CLASS: Record<string, string> = {
+    saving: "text-stone-500 dark:text-zinc-400",
+    dirty: "text-[#E07C2E]",
+    saved: "text-emerald-600 dark:text-emerald-400",
+    guest: "text-stone-500 dark:text-zinc-400",
+    failed: "text-red-600 dark:text-red-400",
+  };
 
   return (
     <WorldPanel
@@ -42,9 +44,9 @@ export default function RoomPreviewCard() {
         </button>
       }
     >
-      <p className={`flex items-center gap-1.5 text-[12px] font-bold ${state.tone}`} aria-live="polite">
-        <span aria-hidden>{state.icon}</span>
-        {state.text}
+      <p className={`flex items-center gap-1.5 text-[12px] font-bold ${SAVE_TONE_CLASS[save.tone]}`} aria-live="polite">
+        <span aria-hidden>{save.icon}</span>
+        {save.text}
       </p>
 
       {count === 0 && !loading && (

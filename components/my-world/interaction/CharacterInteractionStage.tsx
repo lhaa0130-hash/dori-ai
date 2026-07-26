@@ -19,6 +19,7 @@ import SpeechBubble from "@/components/my-world/interaction/SpeechBubble";
 import WorldFeedback from "@/components/my-world/interaction/WorldFeedback";
 import { AffinityRing, EmotionAura, RisingRewards } from "@/components/my-world/interaction/CharacterAura";
 import { dailyRewardProgress } from "@/lib/myWorld/interaction/availability";
+import { resolveSyncBadge } from "@/lib/myWorld/view/worldView";
 import { getRoomItem } from "@/lib/myWorld/room/registry";
 import { itemBoxPercent } from "@/lib/myWorld/room/utils";
 import type { GameProfileView } from "@/hooks/my-world/useGameProfile";
@@ -88,7 +89,7 @@ export default function CharacterInteractionStage({ profile }: { profile: GamePr
   };
 
   // 동기화 배지 — 오프라인과 저장 지연을 구분해 표시한다(둘 다 아니면 자리를 차지하지 않는다).
-  const syncBadge = offline ? "오프라인 · 기기에 저장 중" : syncing ? "저장 중" : null;
+  const syncBadge = resolveSyncBadge({ offline, syncing });
   const daily = useMemo(() => dailyRewardProgress(state), [state]);
 
   return (

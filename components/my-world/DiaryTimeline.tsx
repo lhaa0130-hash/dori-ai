@@ -8,6 +8,7 @@
 //  상태를 4가지로 명시한다: 로딩 · 오류 · 빈 상태 · 목록.
 //  조회 실패를 빈 상태로 위장하지 않는다("기록이 없다" 와 "불러오지 못했다" 는 다른 상태다).
 import { useDiary } from "@/contexts/DiaryContext";
+import { resolveSectionPhase, type WorldAuthState } from "@/lib/myWorld/view/worldView";
 import { PanelEmpty } from "@/components/my-world/WorldPanel";
 import { getCharacter } from "@/lib/myWorld/character/registry";
 import type { DiaryEntry } from "@/lib/myWorld/diary/types";
@@ -51,12 +52,34 @@ function DiaryRow({ entry, group }: { entry: DiaryEntry; group: DiaryGroupKey })
   );
 }
 
-export default function DiaryTimeline() {
+export default function DiaryTimeline({ authState }: { authState: WorldAuthState }) {
   const { entries, loading, error, refresh } = useDiary();
   const groups = groupEntriesByTime(entries.slice(0, DIARY_UI_LIMIT));
+  // 표시 단계는 순수 함수가 정한다(worldView) — 테스트가 이 계약을 그대로 검증한다.
+  const view = resolveSectionPhase({ authState, loading, error, count: entries.length });
+
+  if (view.phase === "checking") {
+    return (
+      <div className="space-y-3" aria-busy="true" aria-label="일기를 확인하는 중">
+        {[0, 1].map((i) => (
+          <div key={i} className="flex items-center gap-3">
+            <div className="h-9 w-9 flex-none animate-pulse rounded-full bg-[#F3E4D6] dark:bg-zinc-800" />
+            <div className="flex-1 space-y-1.5">
+              <div className="h-3 w-1/3 animate-pulse rounded bg-[#F3E4D6] dark:bg-zinc-800" />
+              <div className="h-3 w-2/3 animate-pulse rounded bg-[#F3E4D6] dark:bg-zinc-800" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (view.phase === "guest") {
+    return <PanelEmpty emoji="📖" message="일기는 로그인한 뒤부터 기록돼요." hint="함께한 순간이 자동으로 쌓입니다." />;
+  }
 
   // 로딩 — 고정 높이 스켈레톤으로 화면이 흔들리지 않게 한다.
-  if (loading && entries.length === 0) {
+  if (view.phase === "loading") {
     return (
       <div className="space-y-3" aria-busy="true" aria-label="일기를 불러오는 중">
         {[0, 1].map((i) => (
@@ -73,7 +96,7 @@ export default function DiaryTimeline() {
   }
 
   // 오류 — 빈 상태와 구별한다. Firebase 원문은 노출하지 않는다.
-  if (error && entries.length === 0) {
+  if (view.phase === "error") {
     return (
       <div className="flex flex-col items-center gap-2.5 rounded-2xl border border-amber-200 bg-amber-50 px-4 py-6 text-center dark:border-amber-900 dark:bg-amber-950/40">
         <span className="text-2xl" aria-hidden>⚠️</span>
@@ -89,14 +112,14 @@ export default function DiaryTimeline() {
     );
   }
 
-  if (entries.length === 0) {
+  if (view.phase === "empty") {
     return <PanelEmpty emoji="🌱" message="아직 기록이 없어요." hint="캐릭터와 교감하거나 방을 저장하면 자동으로 남아요." />;
   }
 
   return (
     <>
       {/* 목록이 있는데 조회가 실패한 경우 — 화면을 비우지 않고 경고만 덧붙인다. */}
-      {error && (
+      {view.staleWarning && (
         <p className="mb-2.5 flex items-center gap-1.5 rounded-xl bg-amber-50 px-3 py-2 text-[11px] font-semibold text-amber-800 dark:bg-amber-950/40 dark:text-amber-200">
           <span aria-hidden>⚠️</span> {error}
         </p>

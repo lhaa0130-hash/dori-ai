@@ -113,7 +113,7 @@ function MyWorldContent() {
 
             {loggedIn && (
               <WorldSectionBoundary title="기록">
-                <RecordsPanel profile={profile} />
+                <RecordsPanel profile={profile} authState={authState} />
               </WorldSectionBoundary>
             )}
             {confirmedGuest && (

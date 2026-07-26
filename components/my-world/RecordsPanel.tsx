@@ -13,6 +13,7 @@ import DiaryTimeline from "@/components/my-world/DiaryTimeline";
 import { relationshipFor } from "@/lib/myWorld/interaction/catalog";
 import { DIARY_UI_LIMIT } from "@/lib/myWorld/diary/constants";
 import type { GameProfileView } from "@/hooks/my-world/useGameProfile";
+import type { WorldAuthState } from "@/lib/myWorld/view/worldView";
 
 const RELATIONSHIP = {
   new: { label: "새 친구", next: "익숙한 사이", at: 25 },
@@ -21,7 +22,7 @@ const RELATIONSHIP = {
   best_friend: { label: "단짝 친구", next: null, at: 100 },
 } as const;
 
-export default function RecordsPanel({ profile }: { profile: GameProfileView | null }) {
+export default function RecordsPanel({ profile, authState }: { profile: GameProfileView | null; authState: WorldAuthState }) {
   const { state } = useInteraction();
   const { savedRoom } = useRoom();
   const { entries } = useDiary();
@@ -41,11 +42,7 @@ export default function RecordsPanel({ profile }: { profile: GameProfileView | n
           ) : undefined
         }
       >
-        {profile ? (
-          <DiaryTimeline />
-        ) : (
-          <PanelEmpty emoji="📖" message="일기는 로그인한 뒤부터 기록돼요." hint="함께한 순간이 자동으로 쌓입니다." />
-        )}
+        <DiaryTimeline authState={authState} />
       </PanelSection>
 
       <PanelSection title="성장">
