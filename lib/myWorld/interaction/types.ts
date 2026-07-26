@@ -110,6 +110,12 @@ export interface InteractionNotice {
   emoji: string;
   label: string;
   tone: "affinity" | "exp" | "info" | "limit";
+  /**
+   * 보상 알림일 때의 구조화된 값. 표시 계층이 문자열을 파싱하지 않고 같은 종류를 합쳐
+   * 한 줄로 보여줄 수 있게 한다(예: `친밀도 +2 · EXP +2`). 안내/제한 알림에는 없다.
+   */
+  metric?: "affinity" | "exp";
+  value?: number;
 }
 
 /** Stable payload consumed by a future AI-character prompt pipeline. */

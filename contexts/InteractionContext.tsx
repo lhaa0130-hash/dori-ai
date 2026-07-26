@@ -341,7 +341,7 @@ export function InteractionProvider({ children }: { children: ReactNode }) {
     // 긍정적 상호작용이 성공하면 일시 감정(배고픔/아쉬움/삐침)에서 즉시 회복.
     if (recoversTransient(event.type)) clearTransient();
 
-    if (event.affinityDelta > 0) notify({ emoji: "💗", label: `친밀도 +${event.affinityDelta}`, tone: "affinity" });
+    if (event.affinityDelta > 0) notify({ emoji: "💗", label: `친밀도 +${event.affinityDelta}`, tone: "affinity", metric: "affinity", value: event.affinityDelta });
     if (event.expDelta > 0) {
       // EXP 적립도 Identity Gate 로 판정한다. uid·email 을 **같은 currentUser** 에서 원자적으로 얻어
       // account switch/guest/판정중에 다른 계정으로 적립되는 것을 막는다(세션 이메일 클로저에 의존하지 않음).
@@ -352,7 +352,7 @@ export function InteractionProvider({ children }: { children: ReactNode }) {
         // 서버 권위 보상 청구(operationId 멱등). 클라이언트는 금액을 결정하지 않으며,
         // 서버 결과로만 Hero 를 갱신한다. "EXP +N" 은 낙관적 표시(서버 반영 완료 표시 아님).
         // ⚠️ 실제 엣지 엔드포인트는 EDGE RUNTIME E2E: NOT VERIFIED.
-        notify({ emoji: "✨", label: `EXP +${event.expDelta}`, tone: "exp" });
+        notify({ emoji: "✨", label: `EXP +${event.expDelta}`, tone: "exp", metric: "exp", value: event.expDelta });
         void claimReward(buildClaimDeps(), {
           rewardType: "my_world_interaction",
           operationId: deriveOperationId(event.id),
