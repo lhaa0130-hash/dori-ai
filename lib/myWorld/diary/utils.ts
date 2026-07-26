@@ -28,6 +28,11 @@ export function formatDiaryTime(createdAt: number): string {
   return `${hh}:${mm}`;
 }
 
+/** `<time dateTime>` 용 ISO 값 — 화면 문구와 기계 판독 값을 함께 제공한다. */
+export function diaryTimeAttr(createdAt: number): string {
+  return new Date(createdAt).toISOString();
+}
+
 function localDayKey(ms: number): string {
   const d = new Date(ms);
   return `${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
@@ -40,6 +45,16 @@ export const DIARY_GROUP_LABEL: Record<DiaryGroupKey, string> = {
   thisWeek: "이번 주",
   older: "이전",
 };
+
+/**
+ * 그룹에 맞는 시간 표기. 오늘·어제는 시각(HH:MM)으로 충분하지만, 이번 주·이전은
+ * 시각만 보여주면 어느 날인지 알 수 없다 → 날짜를 함께 쓴다.
+ */
+export function formatDiaryStamp(createdAt: number, group: DiaryGroupKey): string {
+  if (group === "today" || group === "yesterday") return formatDiaryTime(createdAt);
+  const d = new Date(createdAt);
+  return `${d.getMonth() + 1}월 ${d.getDate()}일`;
+}
 
 // entries(최신순) → 그룹별 배열(빈 그룹 제외, 순서 today→older).
 export function groupEntriesByTime(entries: DiaryEntry[], now = Date.now()): { key: DiaryGroupKey; entries: DiaryEntry[] }[] {
