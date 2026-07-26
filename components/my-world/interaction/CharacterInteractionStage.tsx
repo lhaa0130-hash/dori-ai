@@ -16,6 +16,7 @@ import CharacterStatus from "@/components/my-world/interaction/CharacterStatus";
 import InteractionActions, { type ActionDefinition } from "@/components/my-world/interaction/InteractionActions";
 import SpeechBubble from "@/components/my-world/interaction/SpeechBubble";
 import WorldFeedback from "@/components/my-world/interaction/WorldFeedback";
+import { AffinityRing, EmotionAura, RisingRewards } from "@/components/my-world/interaction/CharacterAura";
 import { dailyRewardProgress } from "@/lib/myWorld/interaction/availability";
 import { CHARACTER_ASSETS_READY } from "@/lib/myWorld/character/utils";
 import { getRoomItem } from "@/lib/myWorld/room/registry";
@@ -95,6 +96,7 @@ export default function CharacterInteractionStage({ profile }: { profile: GamePr
       title={`${character.name}와 함께 놀기`}
       subtitle="터치하거나 길게 눌러 반응을 만나보세요."
       labelledById="interaction-heading"
+      tone="bare"
       bleed
       action={
         <>
@@ -102,7 +104,7 @@ export default function CharacterInteractionStage({ profile }: { profile: GamePr
             <span className="rounded-full bg-[#F9954E]/15 px-2 py-1 text-[10px] font-black text-[#E07C2E]">체험 중</span>
           )}
           {syncBadge && (
-            <span className="rounded-full bg-stone-100 px-2 py-1 text-[10px] font-bold text-stone-500 dark:bg-zinc-800 dark:text-zinc-300">
+            <span className="rounded-full bg-white/80 px-2 py-1 text-[10px] font-bold text-stone-500 shadow-sm dark:bg-zinc-800 dark:text-zinc-300">
               {syncBadge}
             </span>
           )}
@@ -111,16 +113,21 @@ export default function CharacterInteractionStage({ profile }: { profile: GamePr
             onClick={() => setMuted(!muted)}
             aria-pressed={muted}
             aria-label={muted ? "효과음 켜기" : "효과음 끄기"}
-            className="flex h-11 w-11 items-center justify-center rounded-full bg-stone-100 text-base transition hover:bg-stone-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E] dark:bg-zinc-800 dark:hover:bg-zinc-700"
+            className="flex h-11 w-11 items-center justify-center rounded-full bg-white/80 text-base shadow-sm transition hover:bg-white focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E] dark:bg-zinc-800 dark:hover:bg-zinc-700"
           >
             <span aria-hidden>{muted ? "🔇" : "🔊"}</span>
           </button>
         </>
       }
     >
-      <div className="relative overflow-hidden rounded-2xl ring-1 ring-stone-100 dark:ring-zinc-800">
+      {/* 무대 프레임 — 우드 톤 테두리로 "방을 들여다보는 창" 처럼 만든다(흰 카드 안의 사각형 X). */}
+      <div className="relative overflow-hidden rounded-[20px] ring-1 ring-[#E3C9AE] shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] dark:ring-zinc-800">
         <RoomCanvas room={savedRoom} compact hideCharacter />
         <SpeechBubble speech={speech} characterName={character.name} />
+
+        {/* 감정은 캐릭터 뒤 후광으로, 친밀도는 발밑 링으로 읽히게 한다. */}
+        <EmotionAura emotion={displayEmotion} top="78%" size="36%" />
+        <AffinityRing affinity={state.affinity} top="94%" size="30%" />
 
         {savedRoom.placedItems.map((placed) => {
           const def = getRoomItem(placed.itemId);
@@ -144,7 +151,7 @@ export default function CharacterInteractionStage({ profile }: { profile: GamePr
         <div
           aria-hidden
           className="pointer-events-none absolute z-30"
-          style={{ left: "50%", top: "92.5%", width: "17%", height: "4.5%", transform: "translate(-50%, -50%)", background: "radial-gradient(50% 50% at 50% 50%, rgba(70,45,30,0.32) 0%, rgba(70,45,30,0) 72%)" }}
+          style={{ left: "50%", top: "93.5%", width: "21%", height: "5%", transform: "translate(-50%, -50%)", background: "radial-gradient(50% 50% at 50% 50%, rgba(70,45,30,0.32) 0%, rgba(70,45,30,0) 72%)" }}
         />
 
         <button
@@ -159,7 +166,7 @@ export default function CharacterInteractionStage({ profile }: { profile: GamePr
           onMouseEnter={() => previewReaction("look", "thinking")}
           onFocus={() => previewReaction("wave", "happy", `${character.name}, 여기 있어요!`)}
           className="absolute z-40 flex touch-manipulation select-none items-center justify-center rounded-full focus-visible:outline focus-visible:outline-4 focus-visible:outline-offset-2 focus-visible:outline-white/90"
-          style={{ left: "50%", top: "82%", width: "21%", aspectRatio: "1 / 1", transform: "translate(-50%, -50%)" }}
+          style={{ left: "50%", top: "80%", width: "26%", aspectRatio: "1 / 1", transform: "translate(-50%, -50%)" }}
         >
           <span className={`mw-character mw-anim-${currentAnimation} flex h-full w-full items-center justify-center rounded-full`} style={{ filter: `drop-shadow(0 8px 10px ${character.themeColor}45)` }}>
             {CHARACTER_ASSETS_READY && character.image ? (
@@ -170,9 +177,12 @@ export default function CharacterInteractionStage({ profile }: { profile: GamePr
             )}
           </span>
         </button>
+
+        {/* 보상 수치는 캐릭터 머리 위 여백에서 짧게 떠오른다 — 캐릭터를 덮지 않는다(실측 확인). */}
+        <RisingRewards notices={notices} top="63%" />
       </div>
 
-      {/* 보상·안내는 무대 밖에서 — 캐릭터를 가리지 않는다. */}
+      {/* 안내·제한 문구는 무대 밖에서 — 캐릭터를 가리지 않는다. */}
       <WorldFeedback notices={notices} onDismiss={dismissNotice} />
 
       {/* 성장 수치는 "로그인 여부"(profile 존재)로만 가른다.

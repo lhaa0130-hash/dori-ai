@@ -196,6 +196,22 @@ function RoomCanvasInner({ room, editable = false, selectedItemId = null, onSele
         }}
       />
 
+      {/* 바닥 나무판 — 아주 옅은 결. 이미지 에셋이 오기 전까지 "그라데이션 두 장" 느낌을 줄인다.
+          앞쪽으로 갈수록 간격이 넓어지게 두 겹을 겹쳐 원근을 흉내 낸다. */}
+      <div
+        data-canvas-bg="1"
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 bottom-0"
+        style={{
+          height: `${FLOOR_BAND_PERCENT}%`,
+          background:
+            "repeating-linear-gradient(90deg, rgba(140,100,65,0.09) 0 1px, rgba(140,100,65,0) 1px 14%)," +
+            "repeating-linear-gradient(0deg, rgba(140,100,65,0.055) 0 1px, rgba(140,100,65,0) 1px 34%)",
+          maskImage: "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,1) 100%)",
+          WebkitMaskImage: "linear-gradient(180deg, rgba(0,0,0,0.35) 0%, rgba(0,0,0,1) 100%)",
+        }}
+      />
+
       {/* 바닥 원근 하이라이트 — 앞쪽이 밝아 바닥이 눕혀 보인다 */}
       <div
         data-canvas-bg="1"
@@ -204,6 +220,18 @@ function RoomCanvasInner({ room, editable = false, selectedItemId = null, onSele
         style={{
           height: `${FLOOR_BAND_PERCENT}%`,
           background: "radial-gradient(120% 90% at 50% 115%, rgba(255,255,255,0.42) 0%, rgba(255,255,255,0) 60%)",
+        }}
+      />
+
+      {/* 벽 좌우 모서리 음영 — 벽이 평면이 아니라 공간의 안쪽처럼 보이게 한다 */}
+      <div
+        data-canvas-bg="1"
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0"
+        style={{
+          height: `${100 - FLOOR_BAND_PERCENT}%`,
+          background:
+            "linear-gradient(90deg, rgba(120,85,55,0.10) 0%, rgba(120,85,55,0) 18%, rgba(120,85,55,0) 82%, rgba(120,85,55,0.12) 100%)",
         }}
       />
 

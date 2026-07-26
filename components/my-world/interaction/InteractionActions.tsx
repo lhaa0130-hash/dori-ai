@@ -8,6 +8,7 @@
 //   · 사용할 수 없는 이유를 색·흐림이 아니라 텍스트("N초 후")로 알린다.
 import { useEffect, useState } from "react";
 import { resolveActionAvailability, type ActionAvailability } from "@/lib/myWorld/interaction/availability";
+import { INTERACTION_COOLDOWN_MS } from "@/lib/myWorld/interaction/constants";
 import type { InteractionState, InteractionType } from "@/lib/myWorld/interaction/types";
 
 export interface ActionDefinition {
@@ -16,13 +17,15 @@ export interface ActionDefinition {
   label: string;
   /** 스크린리더용 설명 — 아이콘 의미를 문자열로 보완한다. */
   hint: string;
+  /** 아이콘 버블 색(따뜻한 계열 안에서만 변주). 행동마다 정체성을 준다. */
+  bubble: string;
 }
 
 export const ACTIONS: ActionDefinition[] = [
-  { type: "pet", icon: "🫳", label: "쓰다듬기", hint: "쓰다듬어 친밀도를 올려요" },
-  { type: "greet", icon: "👋", label: "인사하기", hint: "인사를 건네요" },
-  { type: "gift", icon: "🎁", label: "선물하기", hint: "선물을 줘요" },
-  { type: "sleep", icon: "🌙", label: "재우기", hint: "잠자리에 들게 해요" },
+  { type: "pet", icon: "🫳", label: "쓰다듬기", hint: "쓰다듬어 친밀도를 올려요", bubble: "#FBE3D6" },
+  { type: "greet", icon: "👋", label: "인사하기", hint: "인사를 건네요", bubble: "#FCEEDA" },
+  { type: "gift", icon: "🎁", label: "선물하기", hint: "선물을 줘요", bubble: "#FADFE7" },
+  { type: "sleep", icon: "🌙", label: "재우기", hint: "잠자리에 들게 해요", bubble: "#E4E7F3" },
 ];
 
 /**
@@ -72,16 +75,32 @@ export default function InteractionActions({
             disabled={disabled}
             onClick={(event) => onPerform(action.type, event.detail === 0)}
             aria-label={waiting ? `${action.label} — ${availability.retryAfterSeconds}초 후에 다시 할 수 있어요` : `${action.label} — ${action.hint}`}
-            className="flex min-h-[56px] flex-col items-center justify-center rounded-2xl border border-stone-100 bg-white px-2 py-2 text-[13px] font-black text-stone-700 shadow-sm transition hover:-translate-y-0.5 hover:border-[#F9954E]/40 hover:shadow focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E] active:translate-y-0 disabled:translate-y-0 disabled:cursor-not-allowed disabled:opacity-60 disabled:shadow-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100"
+            className="relative flex min-h-[56px] flex-col items-center justify-center overflow-hidden rounded-2xl border border-[#EEDFD3] bg-[#FFFDFA] px-2 py-2 text-[13px] font-black text-stone-700 shadow-[0_1px_2px_rgba(120,80,50,0.06)] transition hover:-translate-y-0.5 hover:border-[#F9954E]/50 hover:bg-white hover:shadow-[0_4px_10px_rgba(249,149,78,0.16)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E] active:translate-y-0 disabled:translate-y-0 disabled:cursor-not-allowed disabled:border-[#EEDFD3] disabled:bg-[#FAF4ED] disabled:text-stone-400 disabled:shadow-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100"
           >
-            <span className="whitespace-nowrap">
-              <span className="mr-1" aria-hidden>{action.icon}</span>
+            <span className="flex items-center gap-1.5 whitespace-nowrap">
+              <span
+                aria-hidden
+                className="flex h-7 w-7 flex-none items-center justify-center rounded-full text-[14px] shadow-[inset_0_1px_0_rgba(255,255,255,0.7)]"
+                style={{ background: action.bubble }}
+              >
+                {action.icon}
+              </span>
               {action.label}
             </span>
             {/* 남은 시간 자리를 항상 확보한다 — 나타날 때 버튼이 커지며 아래 내용이 밀리지 않게. */}
             <span className="h-[14px] whitespace-nowrap text-[10px] font-bold leading-[14px] tabular-nums text-stone-400 dark:text-zinc-500">
               {waiting ? `${availability.retryAfterSeconds}초 후` : " "}
             </span>
+            {/* cooldown 을 조용하게 — 숫자 외에 얇은 진행 띠로도 남은 정도를 보여준다.
+                색만으로 전달하지 않도록 위의 "N초 후" 문구와 aria-label 을 함께 유지한다. */}
+            {waiting && (
+              <span aria-hidden className="absolute inset-x-0 bottom-0 h-[3px] bg-[#F3E4D6]">
+                <span
+                  className="block h-full bg-[#E0BE9C] transition-[width] duration-500"
+                  style={{ width: `${Math.min(100, Math.round((availability.retryAfterMs / INTERACTION_COOLDOWN_MS[action.type]) * 100))}%` }}
+                />
+              </span>
+            )}
           </button>
         );
       })}

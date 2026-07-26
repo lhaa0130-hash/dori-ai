@@ -29,7 +29,7 @@ interface Props {
 
 function Bar({ percent, className }: { percent: number; className: string }) {
   return (
-    <div className="h-2.5 overflow-hidden rounded-full bg-stone-100 dark:bg-zinc-800">
+    <div className="h-2.5 overflow-hidden rounded-full bg-[#F3E4D6] dark:bg-zinc-800">
       <div className={`h-full rounded-full transition-[width] duration-500 ${className}`} style={{ width: `${Math.min(Math.max(percent, 0), 100)}%` }} />
     </div>
   );
@@ -41,7 +41,7 @@ export default function CharacterStatus({ affinity, emotion, growth, daily }: Pr
   const guest = growth === null;
 
   return (
-    <div className="mt-3 rounded-2xl bg-stone-50 p-3 dark:bg-zinc-900/60">
+    <div className="mt-3 border-t border-[#EFDFD2] pt-3 dark:border-zinc-800">
       <div className="mb-2.5 flex items-center justify-between gap-2">
         <h3 className="text-[12px] font-black text-stone-500 dark:text-zinc-400">지금 상태</h3>
         <span

@@ -795,6 +795,16 @@ h6 {
 @keyframes mw-walk { 0%,100%{transform:translateX(-6%) rotate(-3deg)} 50%{transform:translateX(6%) rotate(3deg)} }
 @keyframes mw-blink { 0%,42%,58%,100%{transform:scaleY(1)} 50%{transform:scaleY(.86)} }
 @keyframes mw-notice-in { from{opacity:0;transform:translateY(8px) scale(.96)} to{opacity:1;transform:translateY(0) scale(1)} }
+/* 캐릭터 머리 위로 짧게 떠오르는 보상 피드백 */
+@keyframes mw-rise {
+  /* 아래로 내려가는 프레임을 두지 않는다 — 시작 프레임이 앵커선 아래로 내려가면
+     캐릭터 머리를 살짝 덮는다(실측 2%). 위로만 자라게 한다. */
+  0%   { opacity: 0; transform: translateY(0) scale(.9); }
+  18%  { opacity: 1; transform: translateY(-2px) scale(1); }
+  75%  { opacity: 1; transform: translateY(-18px) scale(1); }
+  100% { opacity: 0; transform: translateY(-30px) scale(.96); }
+}
+.mw-rise { animation: mw-rise 1.5s cubic-bezier(.2,.7,.3,1) forwards; }
 
 .mw-character { transform-origin: 50% 88%; will-change: transform; }
 .mw-anim-bounce { animation: mw-bounce .9s cubic-bezier(.2,.8,.2,1); }
@@ -814,4 +824,6 @@ h6 {
   .mw-character { animation-duration: .01ms !important; animation-iteration-count: 1 !important; transition-duration: .01ms !important; }
   /* 보상 피드백 등장 애니메이션도 함께 끈다 — 캐릭터만 끄면 화면 일부만 움직여 더 산만해진다. */
   .animate-\[mw-notice-in_180ms_ease-out\] { animation: none !important; }
+  /* 상승 피드백은 움직임 대신 짧게 표시만 한다(정보가 사라지지 않게 opacity 는 유지). */
+  .mw-rise { animation: none !important; opacity: 1 !important; transform: none !important; }
 }
