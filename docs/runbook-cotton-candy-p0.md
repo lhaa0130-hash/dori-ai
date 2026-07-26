@@ -169,24 +169,32 @@ Edge E2E 가 이 계약을 고정한다(`게이트 off 여도 출석 솜사탕�
 > 추정이 맞다면(build command 없음) 배포는 아래처럼 훨씬 안전해진다:
 > `canary 설정 → PR merge(=Functions만) → 지정 UID 카나리 → all 전환 → deploy.js 로 client 배포 → UI 카나리 → Rules`
 
-### 3-2. ⚠️ 환경변수 적용 시점 (배포 전 반드시 확인)
+### 3-2. ✅ 환경변수 적용 시점 — **확정**
 
-Cloudflare Pages 는 **환경변수를 저장해도 이미 떠 있는 배포에는 즉시 반영되지 않고, 다음 배포부터
-적용**되는 것이 일반적이다. 이 프로젝트에서 실제로 어느 쪽인지 대시보드에서 확인해야 순서가 정해진다.
+**Cloudflare Pages 의 환경변수 변경은 이미 떠 있는 배포에 즉시 반영되지 않는다. 다음 deployment 부터 적용된다.**
+(사용자 확인 완료 — Cloudflare 공식 문서 기준)
 
-| 경우 | 결과 | 대응 |
+따라서 `canary → all` 로 **값만 바꾸는 것으로는 아무 일도 일어나지 않는다.**
+값을 바꾼 뒤 **새 deployment 를 한 번 더 만들어야** 적용된다.
+
+#### 확정 배포 순서 (7단계)
+
+| # | 행동 | 확인 |
 |---|---|---|
-| **A. 저장 즉시 반영** | Stage 1(`canary`) → Stage 2(merge) → Stage 4(`all`) 를 그대로 밟을 수 있다. 진짜 카나리 구간이 생긴다 | 표 그대로 진행 |
-| **B. 다음 배포부터 반영** (가능성 높음) | `canary` 로 저장해도 merge 배포 시점에 함께 적용된다. 그 후 `all` 로 바꾸려면 **재배포가 한 번 더** 필요하다 | ① `canary` 저장 → ② merge(=신규 Functions+client 동시 배포, 이때 canary 적용) → ③ 지정 UID 로 카나리 → ④ `all` 저장 → ⑤ **빈 커밋 등으로 재배포 1회** → ⑥ 전체 개방 |
+| 1 | Production 에 **`CANDY_ROLLOUT_MODE=canary`** 저장 | 아직 적용 안 됨(현 배포는 이전 값). 구버전 Functions 는 이 변수를 참조하지 않으므로 영향 0 |
+| 2 | **신규 Functions deployment 생성**(PR merge) | 이 시점에 `canary` 가 처음 적용된다 |
+| 3 | **canary 검증** — 지정 UID 로 미션·중복·구매·주입거부·EXP | 5xx 0, 이중지급 0 |
+| 4 | **`CANDY_ROLLOUT_MODE=all`** 저장 | ⚠️ **아직 적용 안 됨** |
+| 5 | **같은 서버 코드로 새 deployment 를 한 번 더 생성** | `all` 이 실제로 적용되는 시점 |
+| 6 | **all 적용 확인** — 비카나리 UID 로 재화 경로 200 | 403 `candy_rollout_disabled` 가 안 나와야 함 |
+| 7 | **그 이후** 신규 client 배포 | 일반 사용자가 신규 client 를 받을 때 이미 `all` 이라 403 구간이 없다 |
 
-> ⚠️ **B 인 경우 주의**: ② 시점에 신규 client 가 이미 전체 사용자에게 나가는데 게이트는 `canary` 다.
-> 카나리 대상이 아닌 일반 사용자는 상점 구매 시 **403 `candy_rollout_disabled`** 를 받는다.
-> 이를 피하려면 둘 중 하나를 택한다:
-> - **(권장) ②에서 `all` 로 바로 시작** — 카나리를 포기하는 대신 403 구간이 없다.
->   재화 경로는 Edge 91/91·UI 63/63 으로 이미 검증됐고, 문제 시 `off` 킬스위치가 있다.
-> - **상점 UI 만 먼저 숨기고 `canary` 유지** — 별도 작업이 필요하다(이번 범위 밖).
->
-> 어느 쪽을 택할지는 사람이 결정한다. 결정 전에는 배포를 시작하지 않는다.
+> 🛑 **`canary → all` 저장만 하고 client 를 배포하면 안 된다.**
+> `all` 값이 적용된 **새 Functions deployment 가 먼저 확인**돼야 한다.
+> 그렇지 않으면 신규 client 를 받은 일반 사용자가 상점에서 403 을 맞는다.
+
+> 💡 5단계의 "새 deployment" 는 코드 변경 없이 만들 수 있다 — Cloudflare 대시보드의 **Retry deployment /
+> Rollback→재배포**, 또는 빈 커밋 push. 어느 쪽이든 **서버 코드는 동일**해야 한다(2단계와 같은 tree).
 
 ### 3-3. 오설정 시 예상 동작
 
@@ -227,8 +235,8 @@ Cloudflare Pages 는 **환경변수를 저장해도 이미 떠 있는 배포에�
 | **1** 환경 선설정 | Production `CANDY_ROLLOUT_MODE=canary`. `REWARD_ADMIN_UIDS` **미설정**. Preview 변경 0 | 구버전 영향 0(변수 참조 0건 확인됨) | 저장 후 EXP·출석에 이상 발생 | 변수 삭제 |
 | **2** merge + 신규 Functions | PR merge → CF Pages 가 Functions+static 동시 배포 | 배포 성공, 5xx 0 | 배포 실패·5xx 발생 | PR revert 후 재배포 |
 | **3** endpoint 카나리 | 지정 UID 로: 미션 1건 / 중복 1건 / 구매 1건(또는 잔액부족 안전거부) / amount·price·uid 주입 거부 / EXP 정상 | 전부 예상대로, 5xx 0 | 이중 지급·금액 불일치·5xx | `CANDY_ROLLOUT_MODE=off` |
-| **4** all 전환 | `CANDY_ROLLOUT_MODE=all` (§3-2 의 A/B 분기에 따라 시점 결정) | 일반 사용자 403 구간 0 | 403 급증 | `canary` 로 복귀 |
-| **5** client 배포 | §3-2 B 라면 2와 동일 배포. 자동배포와 겹치지 않는 시간(:05~) | `.deploy.lock` 없음, 저장소 clean, `out/` 외 파일 미포함 | lock 충돌·더티 트리 | 배포 중단, 다음 창 대기 |
+| **4** all 저장 + **재배포** | `CANDY_ROLLOUT_MODE=all` 저장 후 **같은 코드로 deployment 1회 더**(§3-2). 저장만으로는 적용 안 됨 | 비카나리 UID 로 재화 경로 200 | 403 지속(=재배포 누락) | `canary` 로 복귀 후 재배포 |
+| **5** client 배포 | **4의 all 적용 확인 후에만.** `deploy.js` 로 `out/` 갱신. 자동배포와 겹치지 않는 시간 | `.deploy.lock` 없음, 저장소 clean, `out/` 외 파일 미포함 | lock 충돌·더티 트리 | 배포 중단, 다음 창 대기 |
 | **6** 실제 UI 카나리 | 미션 실제 행동 → 지급 / localStorage 삭제·reload 후 중복 0 / 구매·아이템 표시 / My World·room·feed 글·댓글·프로필·출석·미니게임 | 전부 정상, console permission-denied 0, 5xx 0 | 중복 지급, 기능 깨짐 | `off` |
 | **7** Rules 배포(마지막) | `firebase deploy --only firestore:rules --project dori-ai-0130` | 재화·프리미엄·아이템·원장 직접쓰기 차단 + room/quickBar/프로필/feed/Diary 정상 | 정상 저장이 막힘 | **Rules 만** 이전 버전 롤백(코드는 유지 — 코드만으로도 안전) |
 | **8** 모니터링 | 4xx 사유 분류 / 5xx 0 / permission-denied 증가 / 중복 지급 0 / 구매 실패 / EXP 회귀 | 이상 없음 | 이상 발견 | 해당 단계 롤백 |
@@ -237,9 +245,18 @@ Cloudflare Pages 는 **환경변수를 저장해도 이미 떠 있는 배포에�
 
 ## 4. 롤백
 
+> ⚠️ **`CANDY_ROLLOUT_MODE=off` 는 "즉시" 킬스위치가 아니다.**
+> 환경변수는 다음 deployment 부터 적용되므로 **저장 + 재배포**가 필요하다(§3-2).
+>
+> **가장 빠른 차단은 Cloudflare Pages 의 이전 deployment 로 Rollback** 이다(대시보드 클릭 1회).
+> 이전 배포로 되돌리면 신규 재화 엔드포인트 자체가 사라진다(구버전 Functions 에는 `/api/purchase`
+> 가 없어 404). 원장(`rewardOperations`/`purchases`/`grants`)은 남으므로 재배포 후에도 이중 지급되지 않는다.
+>
+> 우선순위: ① CF Rollback(가장 빠름) → ② `CANDY_ROLLOUT_MODE=off` + 재배포 → ③ PR revert
+
 | 증상 | 조치 |
 |---|---|
-| 재화 관련 이상(과지급·오류 급증) | **`CANDY_ROLLOUT_MODE=off`** — **신규 재화 경로**(미션·업적·레벨·플레이·구매)가 즉시 차단된다. EXP 와 **출석 솜사탕은 계속 동작**한다(§2-4) |
+| 재화 관련 이상(과지급·오류 급증) | **`CANDY_ROLLOUT_MODE=off`** 저장 **+ 재배포 1회**(§3-2 — 저장만으로는 적용 안 됨). 차단 범위 = **미션·업적·레벨·플레이타임·상점 구매**. EXP 와 **출석 솜사탕은 계속 동작**한다(§2-4) |
 | 영향 범위만 줄이고 싶다 | `CANDY_ROLLOUT_MODE=canary` |
 | 관리자 지급 이상 | `REWARD_ADMIN_UIDS` 를 비우면 엔드포인트가 503 으로 닫힌다 |
 | 구매/미션이 실패(4xx·5xx 급증) | `REWARD_ROLLOUT_MODE=canary` 로 되돌려 영향 범위를 allowlist 로 축소 |
