@@ -11,13 +11,19 @@ export interface ActivityItem {
 
 export default function RecentActivityCard({ activities = [] }: { activities?: ActivityItem[] }) {
   return (
-    <section className="rounded-3xl border border-stone-100 bg-white p-5 dark:border-zinc-800 dark:bg-zinc-950">
-      <h2 className="mb-3 text-[15px] font-extrabold text-stone-900 dark:text-white">최근 활동</h2>
+    <section className="rounded-2xl bg-stone-50 p-4 dark:bg-zinc-900/60">
+      <div className="mb-3 flex items-center justify-between gap-2">
+        <h3 className="text-[13px] font-extrabold text-stone-900 dark:text-white">최근 활동</h3>
+        {activities.length === 0 && (
+          <span className="flex-none rounded-full bg-stone-200/70 px-2 py-0.5 text-[10px] font-black text-stone-500 dark:bg-zinc-800 dark:text-zinc-400">
+            준비 중
+          </span>
+        )}
+      </div>
       {activities.length === 0 ? (
-        <div className="flex flex-col items-center justify-center gap-2 py-8 text-center">
-          <span className="text-3xl">🌱</span>
-          <p className="text-[13px] font-medium text-stone-400 dark:text-stone-500">아직 활동이 없습니다.</p>
-        </div>
+        <p className="break-keep text-[12px] font-medium text-stone-500 dark:text-zinc-400">
+          피드·창작·출석 활동을 여기 모아 보여줄 예정이에요. 지금은 연결된 활동이 없어요.
+        </p>
       ) : (
         <ul className="space-y-2.5">
           {activities.map((a) => (

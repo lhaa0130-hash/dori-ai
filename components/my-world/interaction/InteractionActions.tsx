@@ -57,8 +57,10 @@ export default function InteractionActions({
 }) {
   const now = useCooldownClock(state);
 
+  // 2열이 기본. 4열은 메인 열이 충분히 넓어지는 xl 부터 — md/lg 에서는 2열 그리드의 메인 열이
+  // 400px 안팎이라 4열로 만들면 버튼이 좁아진다.
   return (
-    <div className="mt-3 grid grid-cols-2 gap-2 md:grid-cols-4" role="group" aria-label="상호작용 메뉴">
+    <div className="mt-3 grid grid-cols-2 gap-2 xl:grid-cols-4" role="group" aria-label="상호작용 메뉴">
       {ACTIONS.map((action) => {
         const availability = now === 0 ? ALWAYS_AVAILABLE : resolveActionAvailability(state, action.type, now);
         const waiting = !availability.available;

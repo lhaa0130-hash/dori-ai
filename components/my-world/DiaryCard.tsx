@@ -6,9 +6,9 @@
 //
 //  상태를 5가지로 명시한다: 비로그인 · 로딩 · 오류 · 빈 상태 · 목록.
 //  이전에는 조회 실패가 빈 상태로 위장돼 "기록이 없다"와 "불러오지 못했다"를 구별할 수 없었다.
-import Link from "next/link";
 import { useAuth } from "@/contexts/AuthContext";
 import { useDiary } from "@/contexts/DiaryContext";
+import WorldPanel, { PanelEmpty } from "@/components/my-world/WorldPanel";
 import { getCharacter } from "@/lib/myWorld/character/registry";
 import type { DiaryEntry } from "@/lib/myWorld/diary/types";
 import { DIARY_UI_LIMIT } from "@/lib/myWorld/diary/constants";
@@ -51,23 +51,10 @@ function DiaryRow({ entry, group }: { entry: DiaryEntry; group: DiaryGroupKey })
   );
 }
 
-function LoginPrompt({ message }: { message: string }) {
-  // 좁은 화면에서 문구가 버튼에 밀려 "기 / 록돼요" 처럼 글자 단위로 쪼개지던 문제 →
-  // break-keep(word-break: keep-all)으로 어절 안에서 끊기지 않게 하고, 버튼은 flex-none 으로 지킨다.
-  return (
-    <div className="flex items-center justify-between gap-3 rounded-2xl bg-stone-50 p-4 dark:bg-zinc-900/60">
-      <div className="flex min-w-0 items-center gap-3">
-        <span className="flex-none text-2xl" aria-hidden>📖</span>
-        <p className="break-keep text-[13px] leading-relaxed text-stone-500 dark:text-stone-400">{message}</p>
-      </div>
-      <Link
-        href="/login?next=/my-world"
-        className="flex min-h-[44px] flex-none items-center justify-center whitespace-nowrap rounded-xl bg-[#F9954E] px-4 text-[13px] font-black text-white transition hover:bg-[#f0862f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E]"
-      >
-        로그인
-      </Link>
-    </div>
-  );
+// 비로그인 상태의 일기 — 로그인 버튼을 여기 두지 않는다.
+// CTA 는 상단 WorldIntro 한 곳으로 통합했다(이전에는 상단·일기 등 여러 곳에서 반복됐다).
+function GuestNotice() {
+  return <PanelEmpty emoji="📖" message="일기는 로그인한 뒤부터 기록돼요." hint="함께한 순간이 자동으로 쌓입니다." />;
 }
 
 export default function DiaryCard() {
@@ -78,14 +65,16 @@ export default function DiaryCard() {
   const groups = groupEntriesByTime(visible);
 
   return (
-    <section className="rounded-3xl border border-stone-100 bg-white p-4 dark:border-zinc-800 dark:bg-zinc-950 sm:p-5" aria-labelledby="diary-heading">
-      <div className="mb-3 flex items-center justify-between gap-2">
-        <h2 id="diary-heading" className="text-[15px] font-extrabold text-stone-900 dark:text-white">AI 일기</h2>
-        <span className="flex-none rounded-full bg-[#F9954E]/15 px-2.5 py-0.5 text-[11px] font-bold text-[#F9954E]">타임라인</span>
-      </div>
-
+    <WorldPanel
+      title="AI 일기"
+      subtitle={loggedIn && entries.length > 0 ? `최근 ${Math.min(entries.length, DIARY_UI_LIMIT)}건` : undefined}
+      labelledById="diary-heading"
+      action={
+        <span className="flex-none rounded-full bg-[#F9954E]/15 px-2.5 py-0.5 text-[11px] font-bold text-[#E07C2E]">타임라인</span>
+      }
+    >
       {!loggedIn ? (
-        <LoginPrompt message="로그인하면 오늘의 추억이 기록돼요." />
+        <GuestNotice />
       ) : loading && entries.length === 0 ? (
         <div className="space-y-3" aria-busy="true" aria-label="일기를 불러오는 중">
           {[0, 1].map((i) => (
@@ -112,10 +101,7 @@ export default function DiaryCard() {
           </button>
         </div>
       ) : entries.length === 0 ? (
-        <div className="flex flex-col items-center gap-2 rounded-2xl bg-stone-50 px-4 py-8 text-center dark:bg-zinc-900/60">
-          <span className="text-3xl" aria-hidden>🌱</span>
-          <p className="break-keep text-[13px] font-semibold text-stone-500 dark:text-stone-400">오늘의 첫 추억을 만들어보세요.</p>
-        </div>
+        <PanelEmpty emoji="🌱" message="아직 기록이 없어요." hint="캐릭터와 교감하거나 방을 저장하면 자동으로 남아요." />
       ) : (
         <>
           {/* 목록이 있는데 조회가 실패한 경우 — 화면을 비우지 않고 경고만 덧붙인다. */}
@@ -136,6 +122,6 @@ export default function DiaryCard() {
           </div>
         </>
       )}
-    </section>
+    </WorldPanel>
   );
 }
