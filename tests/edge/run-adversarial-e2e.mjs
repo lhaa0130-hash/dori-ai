@@ -14,7 +14,7 @@ const PROJECT = "demo-illo-myworld";
 const FS_HOST = process.env.FIRESTORE_EMULATOR_HOST || "127.0.0.1:8080";
 const AUTH_HOST = process.env.FIREBASE_AUTH_EMULATOR_HOST || "127.0.0.1:9099";
 const REPO = path.resolve(fileURLToPath(new URL("../../", import.meta.url)));
-const TMP = path.join(REPO, ".adv-e2e-tmp");
+const TMP = path.join(REPO, ".wrangler-tmp", "adv-" + process.pid);
 
 // 인스턴스 정의 — 롤아웃/관리자 조합
 const P = { ALL: 8790, MISSING: 8791, CANARY: 8792, OFF: 8793, ARTICLE_ONLY: 8794 };
@@ -210,8 +210,8 @@ async function httpCommon(U) {
       ["boolean body", "true"],
       ["중첩 객체", jbody({ rewardType: { a: { b: { c: 1 } } }, itemKey: { x: 1 }, targetUid: { y: 1 } })],
       ["매우 긴 문자열", jbody({ rewardType: "z".repeat(9000) })],
-      ["Unicode", jbody({ rewardType: "출석🎃‮ " })],
-      ["제어문자", jbody({ rewardType: "ab" })],
+      ["Unicode(이모지·RTL override)", jbody({ rewardType: "출석🎃‮ " })],
+      ["제어문자(NUL·SOH·STX)", jbody({ rewardType: "a\u0000b\u0001\u0002" })],
       ["prototype key", '{"__proto__":{"price":0},"itemKey":"bg::x"}'],
       ["constructor key", jbody({ constructor: 1, rewardType: "daily_attendance" })],
       ["중복 JSON key", '{"rewardType":"daily_attendance","rewardType":"free_money"}'],

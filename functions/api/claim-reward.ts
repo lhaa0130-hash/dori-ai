@@ -18,7 +18,7 @@ import {
 } from "../_shared/rewardTypes";
 import { getAccessToken } from "../_shared/googleAuth";
 import {
-  beginTransaction, batchGet, commit, rollback, verifyIdTokenOwnsUid, type FirestoreTarget,
+  beginTransaction, batchGet, commit, rollback, verifyIdTokenOwnsUid, waitBeforeRetry, type FirestoreTarget,
 } from "../_shared/firestoreRest";
 import { resolveRewardEnv } from "../_shared/rewardEnv";
 import { resolveCandyGate } from "../_shared/candyEnv";
@@ -203,7 +203,7 @@ export const onRequestPost: any = async (context: any) => {
         lastErr = e;
         await rollback(target, token, tx);
         if (e?.code === "firestore_forbidden") return J({ ok: false, error: "internal_error", detail: "firestore_permission" }, 500);
-        if (e?.code === "commit_conflict") continue;
+        if (e?.code === "commit_conflict") { await waitBeforeRetry(attempt); continue; }
         return J({ ok: false, error: "internal_error", cid }, 500);
       }
     }
@@ -257,7 +257,7 @@ async function runInteractionReward(
     } catch (e: any) {
       await rollback(target, token, tx);
       if (e?.code === "firestore_forbidden") return J({ ok: false, error: "internal_error", detail: "firestore_permission" }, 500);
-      if (e?.code === "commit_conflict") continue;
+      if (e?.code === "commit_conflict") { await waitBeforeRetry(attempt); continue; }
       return J({ ok: false, error: "internal_error", cid }, 500);
     }
   }
@@ -381,7 +381,7 @@ async function runExtendedReward(
     } catch (e: any) {
       await rollback(target, token, tx);
       if (e?.code === "firestore_forbidden") return J({ ok: false, error: "internal_error", detail: "firestore_permission" }, 500);
-      if (e?.code === "commit_conflict") continue;
+      if (e?.code === "commit_conflict") { await waitBeforeRetry(attempt); continue; }
       return J({ ok: false, error: "internal_error", cid }, 500);
     }
   }

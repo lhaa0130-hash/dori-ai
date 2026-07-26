@@ -147,3 +147,27 @@ export async function verifyIdTokenOwnsUid(t: FirestoreTarget, idToken: string, 
   if (r.status === 403) return "mismatch";
   return "invalid";
 }
+
+/**
+ * 트랜잭션 충돌 재시도 대기 (05-09 감사 P2).
+ *
+ * ⚠️ 왜 필요한가 — 기존 재시도 루프는 `commit_conflict` 를 만나면 **즉시** 다음 시도를 했다.
+ *   같은 users 문서를 동시에 갱신하는 요청들이 매번 같은 타이밍에 재시도해 서로를 밀어내고,
+ *   3회를 모두 소진해 **양쪽 다 409** 로 끝났다(감사 계량: 동시 3건 중 성공 1.0건).
+ *   데이터는 안전했지만(원장↔잔액 정합 유지) 정당한 작업이 함께 실패했다.
+ *
+ * 지수 백오프 + 지터로 재시도 시점을 흩는다. attempt 는 0부터.
+ *   attempt 0 → 0~40ms, 1 → 40~120ms, 2 → 120~280ms
+ * ⚠️ 상한을 300ms 로 둔다 — Cloudflare Pages Function 의 응답 지연 예산을 넘기지 않기 위해서다.
+ */
+export function conflictBackoffMs(attempt: number, rand: number = Math.random()): number {
+  const base = Math.min(40 * Math.pow(2, attempt), 160);
+  return Math.round(base * (0.5 + rand));   // 지터 0.5x~1.5x
+}
+
+/** 충돌 재시도 전 대기. 테스트에서 sleep 을 주입할 수 있다. */
+export async function waitBeforeRetry(
+  attempt: number, sleep: (ms: number) => Promise<void> = (ms) => new Promise((r) => setTimeout(r, ms)),
+): Promise<void> {
+  await sleep(conflictBackoffMs(attempt));
+}

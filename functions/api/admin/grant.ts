@@ -28,7 +28,7 @@
 // 멱등: users/{target}/grants/{operationId}. 원자: 지급과 원장 기록이 한 트랜잭션.
 // ⚠️ Secret·전체 문서·stack 을 응답/로그에 노출하지 않는다.
 import { getAccessToken } from "../../_shared/googleAuth";
-import { beginTransaction, batchGet, commit, rollback, type FirestoreTarget } from "../../_shared/firestoreRest";
+import { beginTransaction, batchGet, commit, rollback, waitBeforeRetry, type FirestoreTarget } from "../../_shared/firestoreRest";
 import { resolveRewardEnv } from "../../_shared/rewardEnv";
 import { verifyRewardAdmin, decodeIdToken } from "../../_shared/adminAuth";
 
@@ -181,7 +181,7 @@ async function runGrant(
     } catch (e: any) {
       await rollback(target, token, tx);
       if (e?.code === "firestore_forbidden") return J({ ok: false, error: "internal_error", detail: "firestore_permission" }, 500);
-      if (e?.code === "commit_conflict") continue;
+      if (e?.code === "commit_conflict") { await waitBeforeRetry(attempt); continue; }
       return J({ ok: false, error: "internal_error", cid }, 500);
     }
   }

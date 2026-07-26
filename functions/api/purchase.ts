@@ -12,7 +12,7 @@
 // ⚠️ Secret·전체 문서·stack 을 응답/로그에 노출하지 않는다.
 import { sanitizePurchaseRequest } from "../_shared/shopCatalog";
 import { getAccessToken } from "../_shared/googleAuth";
-import { beginTransaction, batchGet, commit, rollback, verifyIdTokenOwnsUid, type FirestoreTarget } from "../_shared/firestoreRest";
+import { beginTransaction, batchGet, commit, rollback, verifyIdTokenOwnsUid, waitBeforeRetry, type FirestoreTarget } from "../_shared/firestoreRest";
 import { resolveRewardEnv } from "../_shared/rewardEnv";
 import { resolveCandyGate } from "../_shared/candyEnv";
 import { parseAllowlist, todayKST } from "../_shared/rewardPolicy";
@@ -166,7 +166,7 @@ async function runPurchase(
     } catch (e: any) {
       await rollback(target, token, tx);
       if (e?.code === "firestore_forbidden") return J({ ok: false, error: "internal_error", detail: "firestore_permission" }, 500);
-      if (e?.code === "commit_conflict") continue; // 동시 요청 → 다음 루프서 duplicate
+      if (e?.code === "commit_conflict") { await waitBeforeRetry(attempt); continue; } // 동시 요청 → 다음 루프서 duplicate
       return J({ ok: false, error: "internal_error", cid }, 500);
     }
   }

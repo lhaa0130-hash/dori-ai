@@ -23,7 +23,11 @@
     "test:my-world:all": "npm test && npm run test:my-world:emulator",
     "lint": "eslint",
     "test:adversarial:run": "node --import ./tests/emulator/register-alias.mjs tests/edge/run-adversarial-e2e.mjs",
-    "test:adversarial": "npx --yes firebase-tools@13 emulators:exec --only auth,firestore --project demo-illo-myworld \"npm run test:adversarial:run\""
+    "test:adversarial": "npx --yes firebase-tools@13 emulators:exec --only auth,firestore --project demo-illo-myworld \"npm run test:adversarial:run\"",
+    "test:concurrency:run": "node --import ./tests/emulator/register-alias.mjs tests/edge/run-concurrency-e2e.mjs",
+    "test:concurrency": "npx --yes firebase-tools@13 emulators:exec --only auth,firestore --project demo-illo-myworld \"npm run test:concurrency:run\"",
+    "probe:contention:run": "node --import ./tests/emulator/register-alias.mjs tests/edge/probe-contention.mjs",
+    "probe:contention": "npx --yes firebase-tools@13 emulators:exec --only auth,firestore --project demo-illo-myworld \"npm run probe:contention:run\""
   },
   "dependencies": {
     "@types/canvas-confetti": "^1.9.0",
