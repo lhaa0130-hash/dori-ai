@@ -59,7 +59,8 @@ export default function RoomEditorModal({ open, onClose }: { open: boolean; onCl
 
   if (!open) return null;
 
-  const status = saving ? "저장 중…" : error ? "저장 실패" : dirty ? "수정됨" : "저장됨";
+  // 색만으로 상태를 전달하지 않도록 아이콘을 함께 쓴다.
+  const status = saving ? "⏳ 저장 중…" : error ? "⚠️ 저장 실패" : dirty ? "✏️ 수정됨" : "✅ 저장됨";
   const statusTone = error ? "text-red-500" : dirty ? "text-[#F9954E]" : "text-emerald-500";
 
   const handleSave = async () => {
@@ -94,7 +95,7 @@ export default function RoomEditorModal({ open, onClose }: { open: boolean; onCl
               type="button"
               onClick={requestClose}
               aria-label="닫기"
-              className="flex h-9 w-9 items-center justify-center rounded-full bg-stone-100 text-stone-500 hover:bg-stone-200 dark:bg-zinc-800 dark:text-stone-300"
+              className="flex h-11 w-11 items-center justify-center rounded-full bg-stone-100 text-stone-500 transition hover:bg-stone-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E] dark:bg-zinc-800 dark:text-stone-300"
             >
               ✕
             </button>
@@ -121,29 +122,34 @@ export default function RoomEditorModal({ open, onClose }: { open: boolean; onCl
             </div>
           </div>
 
-          {/* 팔레트 */}
-          <div className="min-h-0 border-t border-stone-100 p-4 dark:border-zinc-800 md:w-80 md:border-l md:border-t-0">
-            <div className="h-56 md:h-full md:max-h-[60vh]">
+          {/* 팔레트 — 고정 h-56 이던 것을 화면 높이에 맞춰 늘린다(가구 행이 중간에서 잘리던 문제). */}
+          <div className="flex min-h-0 flex-1 flex-col border-t border-stone-100 p-4 dark:border-zinc-800 md:w-80 md:flex-none md:border-l md:border-t-0">
+            <div className="min-h-[224px] flex-1 md:h-full md:max-h-[60vh]">
               <RoomItemPalette />
             </div>
           </div>
         </div>
 
         {/* ── 푸터: 초기화 / 취소 / 저장 ── */}
+        {/* 저장 실패 문구는 모바일에서도 보여야 한다 — 이전에는 sm 이상에서만 노출됐다. */}
+        {error && (
+          <p role="alert" className="border-t border-red-100 bg-red-50 px-4 py-2 text-[12px] font-semibold text-red-600 dark:border-red-900 dark:bg-red-950/40 dark:text-red-300">
+            ⚠️ {error}
+          </p>
+        )}
         <footer className="flex items-center justify-between gap-2 border-t border-stone-100 px-4 py-3 dark:border-zinc-800">
           <button
             type="button"
             onClick={() => setResetConfirm(true)}
-            className="h-11 rounded-xl px-3 text-[13px] font-bold text-stone-500 hover:bg-stone-100 dark:text-stone-400 dark:hover:bg-zinc-800"
+            className="h-11 rounded-xl px-3 text-[13px] font-bold text-stone-500 transition hover:bg-stone-100 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E] dark:text-stone-400 dark:hover:bg-zinc-800"
           >
             초기화
           </button>
           <div className="flex items-center gap-2">
-            {error && <span className="hidden text-[12px] font-semibold text-red-500 sm:inline">{error}</span>}
             <button
               type="button"
               onClick={requestClose}
-              className="h-11 rounded-xl bg-stone-100 px-4 text-[13px] font-bold text-stone-600 hover:bg-stone-200 dark:bg-zinc-800 dark:text-stone-200"
+              className="h-11 rounded-xl bg-stone-100 px-4 text-[13px] font-bold text-stone-600 transition hover:bg-stone-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E] dark:bg-zinc-800 dark:text-stone-200"
             >
               닫기
             </button>
@@ -151,7 +157,7 @@ export default function RoomEditorModal({ open, onClose }: { open: boolean; onCl
               type="button"
               onClick={handleSave}
               disabled={saving}
-              className="h-11 rounded-xl bg-[#F9954E] px-5 text-[13px] font-black text-white hover:bg-[#f0862f] disabled:opacity-50"
+              className="h-11 rounded-xl bg-[#F9954E] px-5 text-[13px] font-black text-white transition hover:bg-[#f0862f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {saving ? "저장 중…" : "저장"}
             </button>

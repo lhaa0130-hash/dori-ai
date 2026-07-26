@@ -33,7 +33,7 @@ export default function RoomItemPalette() {
           onChange={(e) => setQuery(e.target.value)}
           placeholder="이름 검색"
           aria-label="가구 이름 검색"
-          className="h-8 w-28 rounded-lg border border-stone-200 bg-white px-2.5 text-[12px] outline-none focus:border-[#F9954E] dark:border-zinc-700 dark:bg-zinc-900 dark:text-white"
+          className="h-11 w-32 rounded-lg border border-stone-200 bg-white px-2.5 text-[12px] outline-none focus:border-[#F9954E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-1 focus-visible:outline-[#F9954E] dark:border-zinc-700 dark:bg-zinc-900 dark:text-white"
         />
       </div>
 
@@ -52,7 +52,8 @@ export default function RoomItemPalette() {
             onClick={() => setCategory(c.key)}
             aria-pressed={category === c.key}
             className={[
-              "flex-none rounded-full px-3 py-1.5 text-[12px] font-bold transition",
+              "flex min-h-[44px] flex-none items-center whitespace-nowrap rounded-full px-3.5 text-[12px] font-bold transition",
+              "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E]",
               category === c.key ? "bg-[#F9954E] text-white" : "bg-stone-100 text-stone-600 hover:bg-stone-200 dark:bg-zinc-800 dark:text-stone-300",
             ].join(" ")}
           >

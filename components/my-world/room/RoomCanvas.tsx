@@ -37,6 +37,7 @@ const RoomItemView = memo(function RoomItemView({
   const def = getRoomItem(placed.itemId);
   const dragRef = useRef<{ pointerId: number; offX: number; offY: number } | null>(null);
   const [dragging, setDragging] = useState(false);
+  const [focused, setFocused] = useState(false);
   if (!def) return null;
 
   const { w, h } = itemBoxPercent(def, placed.scale);
@@ -68,12 +69,25 @@ const RoomItemView = memo(function RoomItemView({
     setDragging(false);
   };
 
+  // 키보드로도 가구를 선택할 수 있어야 한다 — 이전에는 tabIndex=-1 이라 방향키 이동·삭제를
+  // 쓸 방법이 포인터뿐이었다. Enter/Space 로 선택하면 캔버스의 방향키 핸들러가 이어받는다.
+  const handleKeyDown = (e: RKeyboardEvent<HTMLDivElement>) => {
+    if (!editable) return;
+    if (e.key !== "Enter" && e.key !== " ") return;
+    e.preventDefault();
+    e.stopPropagation();
+    onSelect?.(placed.instanceId);
+  };
+
   return (
     <div
       role={editable ? "button" : undefined}
-      aria-label={editable ? def.name : undefined}
-      aria-selected={editable ? selected : undefined}
-      tabIndex={-1}
+      aria-label={editable ? `${def.name}${selected ? " — 선택됨. 방향키로 옮기고 Delete 로 지웁니다." : ". Enter 로 선택합니다."}` : undefined}
+      aria-pressed={editable ? selected : undefined}
+      tabIndex={editable ? 0 : -1}
+      onKeyDown={handleKeyDown}
+      onFocus={() => setFocused(true)}
+      onBlur={() => setFocused(false)}
       onPointerDown={handleDown}
       onPointerMove={handleMove}
       onPointerUp={endDrag}
@@ -90,7 +104,8 @@ const RoomItemView = memo(function RoomItemView({
         cursor: editable ? (dragging ? "grabbing" : "grab") : "default",
         touchAction: editable ? "none" : undefined,
         transition: dragging ? "none" : "filter 150ms ease",
-        outline: selected ? "2.5px solid #F9954E" : "none",
+        // 선택은 주황 실선, 키보드 포커스는 점선 — 둘을 구별할 수 있게 한다.
+        outline: selected ? "2.5px solid #F9954E" : focused ? "2.5px dashed #F9954E" : "none",
         outlineOffset: "2px",
         borderRadius: "16px",
         filter: selected ? "drop-shadow(0 6px 14px rgba(249,149,78,0.35))" : "none",

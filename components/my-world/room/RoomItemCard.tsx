@@ -16,7 +16,7 @@ export default function RoomItemCard({
       disabled={disabled}
       aria-label={`${def.name} 추가`}
       title={disabled ? "최대 개수에 도달했어요" : `${def.name} 추가`}
-      className="group flex w-full flex-col items-center gap-1 rounded-2xl border border-stone-100 bg-white p-2 transition hover:border-[#F9954E]/50 hover:bg-[#F9954E]/5 disabled:cursor-not-allowed disabled:opacity-40 dark:border-zinc-800 dark:bg-zinc-900"
+      className="group flex min-h-[88px] w-full flex-col items-center justify-center gap-1 rounded-2xl border border-stone-100 bg-white p-2 transition hover:border-[#F9954E]/50 hover:bg-[#F9954E]/5 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E] disabled:cursor-not-allowed disabled:opacity-40 dark:border-zinc-800 dark:bg-zinc-900"
     >
       <span className="h-12 w-12">
         <RoomItemSprite def={def} />

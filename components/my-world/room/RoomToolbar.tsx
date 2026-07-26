@@ -1,8 +1,12 @@
 "use client";
 
-// My World — Room 선택 아이템 편집 Toolbar (05-05). 회전/크기/반전/레이어/복제/삭제.
+// My World — Room 선택 아이템 편집 Toolbar (05-05). 위치/회전/크기/반전/레이어/복제/삭제.
+//  위치 이동 버튼은 드래그의 대안이다 — 모바일에서 작은 가구를 손가락으로 끌기 어렵거나
+//  키보드만 쓰는 경우에도 "선택 → 버튼으로 옮기기"로 배치를 끝낼 수 있다.
+//  (좌표계·저장 형식은 그대로다. 드래그와 같은 nudgeItem 을 쓴다.)
 import { useRoom } from "@/contexts/RoomContext";
 import { getRoomItem } from "@/lib/myWorld/room/registry";
+import { NUDGE_STEP_LARGE } from "@/lib/myWorld/room/constants";
 
 function TBtn({
   label, onClick, disabled, danger, children,
@@ -30,12 +34,12 @@ function TBtn({
 }
 
 export default function RoomToolbar() {
-  const { selectedItem, rotateItem, scaleItem, flipItem, bringForward, sendBackward, duplicateItem, removeItem, atLimit } = useRoom();
+  const { selectedItem, nudgeItem, rotateItem, scaleItem, flipItem, bringForward, sendBackward, duplicateItem, removeItem, atLimit } = useRoom();
 
   if (!selectedItem) {
     return (
-      <div className="flex h-11 items-center justify-center rounded-xl bg-stone-50 px-3 text-[12px] font-semibold text-stone-400 dark:bg-zinc-900/60">
-        가구를 선택하면 편집할 수 있어요
+      <div className="flex min-h-[44px] items-center justify-center rounded-xl bg-stone-50 px-3 text-center text-[12px] font-semibold text-stone-400 dark:bg-zinc-900/60">
+        가구를 눌러 선택하면 편집할 수 있어요
       </div>
     );
   }
@@ -54,6 +58,15 @@ export default function RoomToolbar() {
           {def.canRotate && <>{selectedItem.rotation}° · </>}{Math.round(selectedItem.scale * 100)}%
         </span>
       </div>
+      {/* 위치 — 드래그 대신 눌러서 옮기기 */}
+      <div className="mb-1.5 flex flex-wrap items-center gap-1.5">
+        <span className="px-1 text-[11px] font-bold text-stone-400">위치</span>
+        <TBtn label="왼쪽으로 옮기기" onClick={() => nudgeItem(selectedItem.instanceId, -NUDGE_STEP_LARGE, 0)}>←</TBtn>
+        <TBtn label="오른쪽으로 옮기기" onClick={() => nudgeItem(selectedItem.instanceId, NUDGE_STEP_LARGE, 0)}>→</TBtn>
+        <TBtn label="위로 옮기기" onClick={() => nudgeItem(selectedItem.instanceId, 0, -NUDGE_STEP_LARGE)}>↑</TBtn>
+        <TBtn label="아래로 옮기기" onClick={() => nudgeItem(selectedItem.instanceId, 0, NUDGE_STEP_LARGE)}>↓</TBtn>
+      </div>
+
       {/* 버튼들 */}
       <div className="flex flex-wrap gap-1.5">
         {def.canRotate && (
