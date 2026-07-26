@@ -101,8 +101,15 @@ async function callAdminGrant(payload: Record<string, unknown>): Promise<GrantRe
     });
     const json: any = await res.json().catch(() => null);
     if (res.status === 200 && json?.ok) return { mode: "instant" };
+    // 초기 배포 정책(05-07C): REWARD_ADMIN_UIDS 미설정 → 관리자 지급만 fail-closed 로 꺼둔다.
+    //   '장애'가 아니라 '의도된 비활성'이므로 관리자가 바로 알아볼 수 있게 문구를 분리한다.
+    if (res.status === 503 && json?.error === "admin_grant_disabled") {
+      return { mode: "fail", error: "관리자 지급 기능이 꺼져 있습니다(REWARD_ADMIN_UIDS 미설정). 의도된 상태입니다." };
+    }
+    if (res.status === 403 && json?.error === "self_grant_forbidden") return { mode: "fail", error: "본인 계정에는 지급할 수 없습니다." };
     if (res.status === 403) return { mode: "fail", error: "관리자 권한이 없습니다." };
     if (res.status === 401) return { mode: "fail", error: "인증이 만료됐습니다. 다시 로그인해 주세요." };
+    if (res.status === 409) return { mode: "fail", error: "같은 요청 ID가 다른 금액으로 이미 사용됐습니다." };
     return { mode: "fail", error: String(json?.detail || json?.error || `http_${res.status}`) };
   } catch {
     return { mode: "fail", error: "network" };

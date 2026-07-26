@@ -66,8 +66,26 @@
 | 미션 | 미션당 1일 1회 | 원장 `mission_{id}_{서버날짜}` |
 | 업적 | 업적당 평생 1회 | 원장 `ach_{id}` |
 | 레벨 | 마일스톤당 평생 1회 + 서버 EXP 재계산 검증 | 원장 `lv_{n}`, 앞자리 0 금지 |
+| 출석 | 1일 1회 (50, 7일차 +200) | 원장 `rewardClaims/daily_attendance_{날짜}` — **전역 상한 밖** |
 
 정상 사용자의 하루 최대 획득(미션 전량 280 + 플레이 50 = 330)은 전역 상한에 걸리지 않는다.
+
+> ⚠️ **하루 최대 재화 = 출석(최대 250) + 전역 상한(600) = 850.**
+> 출석은 전역 카운터에 포함되지 않는다(아래 게이트 범위 참고).
+
+### 2-4. ⚠️ `CANDY_ROLLOUT_MODE` 의 실제 적용 범위
+
+이 게이트는 **이번에 새로 추가한 재화 경로만** 통제한다.
+
+| 경로 | 게이트 적용 | 이유 |
+|---|---|---|
+| 미션·업적·레벨·플레이타임 (`/api/claim-reward` 확장 타입) | ✅ 적용 | 이번에 신설 |
+| 상점 구매 (`/api/purchase`) | ✅ 적용(닫히면 전면 거부) | 이번에 신설 |
+| **출석 솜사탕** (`daily_attendance`) | ❌ **미적용** | **05-06P 에서 이미 운영 배포된 기존 동작.** 게이트로 끄면 현재 사용자 기능 회귀. 금액·날짜·멱등을 서버가 이미 소유(1일 1회 원장)해 안전하다 |
+| EXP 전체 | ❌ 미적용 | 설계상 독립 |
+
+즉 `off` 는 **"신규 재화 경로 킬스위치"** 이지 "모든 솜사탕 차단"이 아니다.
+Edge E2E 가 이 계약을 고정한다(`게이트 off 여도 출석 솜사탕은 계속 지급`).
 
 ### 남은 위험(정직한 한계)
 
@@ -105,7 +123,23 @@
 
 ### 사전 확인 (값 출력 금지 — 존재 여부만)
 - 기존: `REWARD_ENV=production`, `REWARD_ROLLOUT_MODE=all`, `FIREBASE_SA_CLIENT_EMAIL`, `FIREBASE_SA_PRIVATE_KEY`
-- **신규**: `CANDY_ROLLOUT_MODE`(필수 — 없으면 재화 전부 fail-closed), `REWARD_ADMIN_UIDS`(선택)
+- **신규**: `CANDY_ROLLOUT_MODE`(필수 — 없으면 신규 재화 경로 전부 fail-closed)
+- **`REWARD_ADMIN_UIDS`: 초기 배포에서는 설정하지 않는다**(§3-1)
+
+### 3-1. 초기 배포 정책 — 관리자 지급 기능 비활성 (05-07C 확정)
+
+첫 cottonCandy 배포에서는 `REWARD_ADMIN_UIDS` 를 **설정하지 않는다.**
+
+- `/api/admin/grant` 는 **503 `admin_grant_disabled`** 로 닫힌 상태로 나간다 — 장애가 아니라 의도된 상태
+- 신규 관리자 API 를 본 기능과 동시에 개방할 이유가 없다(공격면 최소화)
+- **일반 사용자 재화 지급·상점 구매와 완전히 무관하다** — 코드 경로가 분리돼 있다
+- 영향받는 기존 기능: `/admin` 의 **솜사탕 지급 버튼**과 **프리미엄 토글** 2개뿐.
+  누르면 "관리자 지급 기능이 꺼져 있습니다(REWARD_ADMIN_UIDS 미설정). 의도된 상태입니다."
+  토스트가 뜬다. 페이지 크래시 없음, 나머지 관리자 기능(회원 조회·동물 검수·대시보드)은 정상
+- 프리미엄을 켤 수 있는 경로가 이것뿐이므로, **초기 배포 기간에는 신규 프리미엄 부여가 불가능**하다.
+  기존에 `isPremium=true` 인 사용자는 그대로 무료 구매 혜택을 받는다
+
+관리자 지급 활성화는 **cottonCandy 본 배포가 안정화된 뒤 별도 승인·별도 canary 과제**로 분리한다.
 
 ### 엔드포인트 스모크
 - `OPTIONS /api/purchase` → 204 / `GET /api/purchase` → 405 / 인증 없는 POST → 401
@@ -116,17 +150,96 @@
 ### 카나리 1건
 지정 UID 로 저가 아이템 1개 구매 → 잔액이 정확히 가격만큼 감소 + `users/{uid}/purchases/{op}` 원장 1건.
 
-### 시간 창 — 자동배포 충돌 회피
+### 3-0. ⚠️ 먼저 확인 — merge 가 client 까지 바꾸는가?
 
-`deploy.js` 가 **매시 정각~04분** 에 `pull → build → commit out/ → push` 를 돈다.
-**정각 5분 이후에 머지**하고, 다음 정각 전에 스모크까지 끝낸다. 머지 시각이 :55~:05 에
-걸리면 다음 사이클을 기다린다. (이 브랜치는 `out/` 을 커밋하지 않았다 — 정책 준수.)
+이 프로젝트는 `out/`(빌드 산출물)을 **저장소에 커밋**하고, `deploy.js` 가 매시 정각에
+`pull → npm run build → git add out/ → push` 를 돈다. 그렇다면 CF Pages 는 빌드를 하지 않고
+커밋된 `out/` 을 그대로 서빙한다는 뜻이다(그래야 `deploy.js` 가 존재할 이유가 있다).
+
+**하지만 CF Pages 의 빌드 설정은 대시보드에만 있어 저장소에서 확정할 수 없다.** 사람이 확인해야 한다.
+
+| CF Pages 설정 | merge push 시 | 함의 |
+|---|---|---|
+| **build command 없음 / output = `out`** (추정) | **Functions 만 새 버전, client 는 옛 `out/` 그대로** | 🎉 **진짜 카나리 구간이 생긴다.** 구 client + 신 Functions 조합(호환성 표에서 ✅ 정상)으로 안전하게 검증 후, `deploy.js` 를 돌려 client 를 따로 배포 |
+| build command = `npm run build` | Functions + client 동시 | §3-2 의 403 구간 문제를 고려해야 한다 |
+
+> **확인 방법**: Cloudflare Dashboard → Pages → 프로젝트 → Settings → Builds & deployments →
+> "Build command" 가 비어 있는지 / "Build output directory" 가 `out` 인지.
+>
+> 추정이 맞다면(build command 없음) 배포는 아래처럼 훨씬 안전해진다:
+> `canary 설정 → PR merge(=Functions만) → 지정 UID 카나리 → all 전환 → deploy.js 로 client 배포 → UI 카나리 → Rules`
+
+### 3-2. ⚠️ 환경변수 적용 시점 (배포 전 반드시 확인)
+
+Cloudflare Pages 는 **환경변수를 저장해도 이미 떠 있는 배포에는 즉시 반영되지 않고, 다음 배포부터
+적용**되는 것이 일반적이다. 이 프로젝트에서 실제로 어느 쪽인지 대시보드에서 확인해야 순서가 정해진다.
+
+| 경우 | 결과 | 대응 |
+|---|---|---|
+| **A. 저장 즉시 반영** | Stage 1(`canary`) → Stage 2(merge) → Stage 4(`all`) 를 그대로 밟을 수 있다. 진짜 카나리 구간이 생긴다 | 표 그대로 진행 |
+| **B. 다음 배포부터 반영** (가능성 높음) | `canary` 로 저장해도 merge 배포 시점에 함께 적용된다. 그 후 `all` 로 바꾸려면 **재배포가 한 번 더** 필요하다 | ① `canary` 저장 → ② merge(=신규 Functions+client 동시 배포, 이때 canary 적용) → ③ 지정 UID 로 카나리 → ④ `all` 저장 → ⑤ **빈 커밋 등으로 재배포 1회** → ⑥ 전체 개방 |
+
+> ⚠️ **B 인 경우 주의**: ② 시점에 신규 client 가 이미 전체 사용자에게 나가는데 게이트는 `canary` 다.
+> 카나리 대상이 아닌 일반 사용자는 상점 구매 시 **403 `candy_rollout_disabled`** 를 받는다.
+> 이를 피하려면 둘 중 하나를 택한다:
+> - **(권장) ②에서 `all` 로 바로 시작** — 카나리를 포기하는 대신 403 구간이 없다.
+>   재화 경로는 Edge 91/91·UI 63/63 으로 이미 검증됐고, 문제 시 `off` 킬스위치가 있다.
+> - **상점 UI 만 먼저 숨기고 `canary` 유지** — 별도 작업이 필요하다(이번 범위 밖).
+>
+> 어느 쪽을 택할지는 사람이 결정한다. 결정 전에는 배포를 시작하지 않는다.
+
+### 3-3. 오설정 시 예상 동작
+
+| 실수 | 결과 |
+|---|---|
+| `CANDY_ROLLOUT_MODE` 미설정 | 신규 재화 경로 전부 503 `candy_rollout_mode_invalid`. EXP·출석은 정상 |
+| 오타(`al`, `ALL ` 외 임의값) | 위와 동일(fail-closed). `ALL `/`  all` 처럼 대소문자·공백만 다른 건 정상 인식 |
+| `canary` 인데 `REWARD_TEST_UIDS` 비어 있음 | 503 `candy_canary_requires_allowlist` — 아무도 못 받는다 |
+| `canary` 인데 대상 UID 누락 | 그 사용자만 403 `candy_rollout_disabled` |
+| **Preview scope 에만 설정** | Production 은 미설정과 동일 → 전부 fail-closed. **Production scope 인지 반드시 확인** |
+| `REWARD_ADMIN_UIDS` 에 빈 문자열/공백 | allowlist size 0 → 관리자 endpoint 503(의도된 초기 상태와 동일) |
+
+### 시간 창 — 자동배포 충돌 회피 (2026-07-26 실측)
+
+| 항목 | 실측값 |
+|---|---|
+| 예약작업 `illo-deploy` | **Disabled** (2026-07-26 확인) |
+| 마지막 자동 실행 | 09:00:01 (결과 0=성공) |
+| 다음 예정 | 13:00 — **비활성이라 실행되지 않음** |
+| 최근 배포 소요 | 09:30:31 시작 → 09:34:00 완료 = **약 3분 30초** (수동 실행) |
+| lock 위치 | `D:/01. illo.im/repo/.deploy.lock` (+ `.git/index.lock`) |
+| 현재 lock | 없음 |
+| main worktree | clean (0건) |
+
+> ⚠️ **자동배포가 꺼져 있다** — 애드센스 대응 때 자동화를 멈추면서 함께 비활성화됐다.
+> 따라서 **충돌 위험은 현재 0** 이지만, 동시에 **merge 해도 `out/`(client)이 자동으로 갱신되지 않는다.**
+> client 를 배포하려면 `deploy.js` 를 수동 실행하거나 예약작업을 다시 켜야 한다.
+> (§3-0 의 추정이 맞다면 이건 오히려 장점 — Functions 와 client 를 분리 배포할 수 있다.)
+
+**안전 작업 창**: 자동배포가 꺼져 있는 동안은 **언제든 안전**하다.
+예약작업을 다시 켠 뒤라면 **:05~:45** 사이에 시작하고, lock 이 있으면 기다린다(반복 push 금지).
+
+## 3-4. 배포 단계 시뮬레이션 (실행 전 — 각 단계 중단 조건 포함)
+
+| Stage | 내용 | 성공 기준 | 🛑 중단 조건 | 롤백 |
+|---|---|---|---|---|
+| **0** 현재 | 구 client + 구 Functions. Rules 는 아직 재화 직접 writer 허용. EXP 정상 | production 변경 0건 | — | — |
+| **1** 환경 선설정 | Production `CANDY_ROLLOUT_MODE=canary`. `REWARD_ADMIN_UIDS` **미설정**. Preview 변경 0 | 구버전 영향 0(변수 참조 0건 확인됨) | 저장 후 EXP·출석에 이상 발생 | 변수 삭제 |
+| **2** merge + 신규 Functions | PR merge → CF Pages 가 Functions+static 동시 배포 | 배포 성공, 5xx 0 | 배포 실패·5xx 발생 | PR revert 후 재배포 |
+| **3** endpoint 카나리 | 지정 UID 로: 미션 1건 / 중복 1건 / 구매 1건(또는 잔액부족 안전거부) / amount·price·uid 주입 거부 / EXP 정상 | 전부 예상대로, 5xx 0 | 이중 지급·금액 불일치·5xx | `CANDY_ROLLOUT_MODE=off` |
+| **4** all 전환 | `CANDY_ROLLOUT_MODE=all` (§3-2 의 A/B 분기에 따라 시점 결정) | 일반 사용자 403 구간 0 | 403 급증 | `canary` 로 복귀 |
+| **5** client 배포 | §3-2 B 라면 2와 동일 배포. 자동배포와 겹치지 않는 시간(:05~) | `.deploy.lock` 없음, 저장소 clean, `out/` 외 파일 미포함 | lock 충돌·더티 트리 | 배포 중단, 다음 창 대기 |
+| **6** 실제 UI 카나리 | 미션 실제 행동 → 지급 / localStorage 삭제·reload 후 중복 0 / 구매·아이템 표시 / My World·room·feed 글·댓글·프로필·출석·미니게임 | 전부 정상, console permission-denied 0, 5xx 0 | 중복 지급, 기능 깨짐 | `off` |
+| **7** Rules 배포(마지막) | `firebase deploy --only firestore:rules --project dori-ai-0130` | 재화·프리미엄·아이템·원장 직접쓰기 차단 + room/quickBar/프로필/feed/Diary 정상 | 정상 저장이 막힘 | **Rules 만** 이전 버전 롤백(코드는 유지 — 코드만으로도 안전) |
+| **8** 모니터링 | 4xx 사유 분류 / 5xx 0 / permission-denied 증가 / 중복 지급 0 / 구매 실패 / EXP 회귀 | 이상 없음 | 이상 발견 | 해당 단계 롤백 |
+
+> **관리자 endpoint 의 503 은 Stage 8 에서 "이상"으로 분류하지 않는다.** 의도된 비활성 상태다(§3-1).
 
 ## 4. 롤백
 
 | 증상 | 조치 |
 |---|---|
-| 재화 관련 이상(과지급·오류 급증) | **`CANDY_ROLLOUT_MODE=off`** — 재화만 즉시 차단되고 EXP 는 계속 동작한다(가장 빠른 킬스위치) |
+| 재화 관련 이상(과지급·오류 급증) | **`CANDY_ROLLOUT_MODE=off`** — **신규 재화 경로**(미션·업적·레벨·플레이·구매)가 즉시 차단된다. EXP 와 **출석 솜사탕은 계속 동작**한다(§2-4) |
 | 영향 범위만 줄이고 싶다 | `CANDY_ROLLOUT_MODE=canary` |
 | 관리자 지급 이상 | `REWARD_ADMIN_UIDS` 를 비우면 엔드포인트가 503 으로 닫힌다 |
 | 구매/미션이 실패(4xx·5xx 급증) | `REWARD_ROLLOUT_MODE=canary` 로 되돌려 영향 범위를 allowlist 로 축소 |

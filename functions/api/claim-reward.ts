@@ -144,6 +144,14 @@ export const onRequestPost: any = async (context: any) => {
     if (interaction) return await runInteractionReward(target, token, uid, today, interaction, cid);
     if (extended) return await runExtendedReward(target, token, uid, today, extended, candyGate.ok, cid);
 
+    // ── 출석(daily_attendance) ─────────────────────────────────────────────
+    // ⚠️ 게이트 범위 명시(05-07C): 이 경로의 솜사탕(50 + 7일 보너스 200)은
+    //    **CANDY_ROLLOUT_MODE 대상이 아니다.** 이유:
+    //      · 05-06P 에서 이미 운영 배포된 기존 동작이다. 게이트로 끄면 현재 사용자에게 기능 회귀다.
+    //      · 금액·날짜·멱등을 서버가 이미 소유하고(rewardClaims 원장, 1일 1회) 안전하다.
+    //    즉 CANDY_ROLLOUT_MODE 는 **이번에 새로 추가한 재화 경로**(미션·업적·레벨·플레이타임·구매)만
+    //    통제한다. off 로 내려도 출석 솜사탕은 계속 지급된다 — 의도된 설계다.
+    //    → 하루 최대 재화 = 출석(최대 250) + 전역 상한(600) = 850. runbook 에 이 숫자로 기록.
     const claimId = claimIdFor("daily_attendance", today);
     const userRel = `users/${uid}`;
     const claimRel = `users/${uid}/rewardClaims/${claimId}`;

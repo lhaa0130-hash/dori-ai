@@ -281,6 +281,17 @@ async function candyGateSection() {
   ok("off 상태에서 서버 잔액이 오르지 않는다", (num(doc.cottonCandy) || 0) === 0, `candy=${num(doc.cottonCandy)}`);
   ok("off 상태에서도 EXP 는 정상(기존 기능 무영향)", num(doc.doriExp) === 10, `exp=${num(doc.doriExp)}`);
 
+  // ⚠️ 게이트 범위 계약: 출석 솜사탕은 기존 운영 동작이라 게이트 대상이 아니다(off 여도 지급).
+  //   이 테스트가 그 계약을 고정한다 — 실수로 게이트에 묶으면 기존 사용자 기능 회귀다.
+  const att = await fetch(`http://127.0.0.1:${GPORT}/api/claim-reward`, {
+    method: "POST", headers: { "Content-Type": "application/json", Authorization: `Bearer ${u.idToken}` },
+    body: JSON.stringify({ rewardType: "daily_attendance" }),
+  });
+  const aj = await att.json().catch(() => null);
+  ok("⭐ 게이트 off 여도 출석 솜사탕은 계속 지급(기존 동작 보존)",
+    att.status === 200 && aj?.status === "granted" && aj?.reward?.cottonCandy > 0,
+    `status=${att.status} st=${aj?.status} candy=${aj?.reward?.cottonCandy}`);
+
   // 구매는 게이트가 닫히면 전면 거부
   const { SHOP_ITEMS, itemKey } = await import("../../lib/shopItems.ts");
   const paid = SHOP_ITEMS.find((i) => i.price > 0);
