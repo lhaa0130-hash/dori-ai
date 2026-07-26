@@ -23,7 +23,7 @@
 ```
 적립 : POST /api/claim-reward   금액=서버 표, 상한=타입별+전역 일일, 멱등=rewardOperations
 차감 : POST /api/purchase       가격=서버 카탈로그, 프리미엄=서버 문서, 멱등=purchases
-관리 : POST /api/admin/grant    권한=서버 UID allowlist(+email), 멱등=grants
+관리 : POST /api/admin/grant    권한=REWARD_ADMIN_UIDS 전용(email 미사용), 멱등=grants
 ```
 
 클라이언트가 `cottonCandy`·`cottonCandyTotal`·`ownedItems`·`isPremium` 을 Firestore 에
@@ -124,19 +124,19 @@ Edge E2E 가 이 계약을 고정한다(`게이트 off 여도 출석 솜사탕�
 | 1 | Production 에 **`CANDY_ROLLOUT_MODE=canary`** 사전 설정 | 구버전 Functions 는 이 변수를 모른다 → 영향 0 |
 | 2 | (선택) **`REWARD_ADMIN_UIDS`** 설정 | 미설정이면 관리자 지급만 비활성(503). 나머지는 정상 |
 | 3 | 구버전 영향 0 확인 | EXP 출석·미션 정상, 5xx 0건 |
-| 4 | **신규 Functions 배포**(PR 머지) | CF Pages 가 Functions+static 을 함께 올린다 |
+| 4 | **PR 머지 → 신규 Functions 만 배포** | CF 는 커밋된 `out/` 을 서빙하므로 client 는 그대로(§3-0) |
 | 5 | **엔드포인트 카나리** — 지정 UID 로만 | 아래 스모크 참고 |
-| 6 | **`CANDY_ROLLOUT_MODE=all`** 전환 | ⚠️ client 배포 전에 |
-| 7 | 신규 client 배포 | (4와 같은 배포라면 6을 4보다 앞에 둔다) |
+| 6 | **`CANDY_ROLLOUT_MODE=all` 저장 + 재배포 1회** | 저장만으로는 적용 안 됨(§3-2) |
+| 7 | **`deploy.js` 로 신규 client 배포** | 6의 all 적용을 확인한 뒤에만 |
 | 8 | **실제 UI 카나리** | 미션 1건·구매 1건·출석 1건 |
 | 9 | legacy writer 0 확인 | 콘솔 permission-denied 0건 |
 | 10 | **Firestore Rules 배포** (마지막) | `firebase deploy --only firestore:rules --project dori-ai-0130` |
 | 11 | 직접 쓰기 차단 확인 | 콘솔에서 `cottonCandy` 직접 쓰기 → denied |
 | 12 | 정상 기능 회귀 | room 배치·quickBar·프로필·feed·다이어리 저장 |
 
-> ⚠️ 4와 7이 같은 배포라면(현 구성) **6을 4보다 먼저** 수행한다. 즉 실제 순서는
-> `canary 설정 → all 전환 → 머지(Functions+client 동시) → UI 카나리 → Rules`.
-> 카나리 구간을 제대로 쓰려면 Functions 만 먼저 올리는 별도 배포가 필요하다.
+> ✅ CF Build 계약이 확정돼(§3-0) **Functions 와 client 를 분리 배포**할 수 있다.
+> merge 는 Functions 만 갱신하고, client 는 `deploy.js` 를 돌려야 바뀐다.
+> 따라서 4~5 구간이 진짜 카나리이며, 일반 사용자가 403 을 받는 구간은 생기지 않는다.
 
 ### 사전 확인 (값 출력 금지 — 존재 여부만)
 - 기존: `REWARD_ENV=production`, `REWARD_ROLLOUT_MODE=all`, `FIREBASE_SA_CLIENT_EMAIL`, `FIREBASE_SA_PRIVATE_KEY`
@@ -147,7 +147,7 @@ Edge E2E 가 이 계약을 고정한다(`게이트 off 여도 출석 솜사탕�
 
 첫 cottonCandy 배포에서는 `REWARD_ADMIN_UIDS` 를 **설정하지 않는다.**
 
-- `/api/admin/grant` 는 **503 `admin_grant_disabled`** 로 닫힌 상태로 나간다 — 장애가 아니라 의도된 상태
+- `/api/admin/grant` 는 **503 `reward_admin_not_configured`** 로 닫힌 상태로 나간다 — 장애가 아니라 의도된 상태
 - 신규 관리자 API 를 본 기능과 동시에 개방할 이유가 없다(공격면 최소화)
 - **일반 사용자 재화 지급·상점 구매와 완전히 무관하다** — 코드 경로가 분리돼 있다
 - 영향받는 기존 기능: `/admin` 의 **솜사탕 지급 버튼**과 **프리미엄 토글** 2개뿐.
@@ -161,7 +161,7 @@ Edge E2E 가 이 계약을 고정한다(`게이트 off 여도 출석 솜사탕�
 ### 엔드포인트 스모크
 - `OPTIONS /api/purchase` → 204 / `GET /api/purchase` → 405 / 인증 없는 POST → 401
 - `POST /api/purchase {itemKey, price:0}` → **400** (가격 위조 거부)
-- `POST /api/admin/grant` (allowlist 미설정 시) → **503 admin_grant_disabled**
+- `POST /api/admin/grant` (allowlist 미설정 시) → **503 reward_admin_not_configured**
 - 미션 `sourceId` 를 미래 날짜로 → **400 invalid_source_date**
 
 ### 카나리 1건
