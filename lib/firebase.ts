@@ -5,8 +5,30 @@ import { getAuth, GoogleAuthProvider, connectAuthEmulator, signInWithEmailAndPas
 import { getFirestore, connectFirestoreEmulator, type Firestore } from "firebase/firestore";
 import { getStorage, type FirebaseStorage } from "firebase/storage";
 
+// ⚠️ 2026-07-26 로그인 전면 장애의 재발 방지(fail-closed).
+//   과거엔 apiKey 에 **하드코딩 기본값**이 있었다. 그 키가 폐기됐는데 .env.local 에
+//   NEXT_PUBLIC_FIREBASE_API_KEY 가 없어, 빌드가 조용히 죽은 키를 실어 배포했고 로그인이 전부 깨졌다
+//   (auth/api-key-expired). 기본값이 있으면 '설정 누락'이 배포 전에 드러나지 않는다.
+//   → apiKey 기본값을 제거하고, 없으면 **빌드 단계에서 즉시 실패**시킨다.
+//
+//   나머지 항목(authDomain/projectId/…)은 프로젝트 식별자라 값이 바뀔 일이 없고,
+//   틀리면 즉시 눈에 띄므로 기본값을 유지한다. apiKey 만 회전 대상이라 다르게 취급한다.
+//
+//   ℹ️ Firebase Web API 키는 공식적으로 **공개 config** 다(클라이언트 번들에 노출되는 게 정상).
+//      보안은 Firestore Rules·App Check 가 담당한다. 노출을 이유로 폐기하면 안 된다 — 이번 장애의 원인이다.
+//      서버 비밀(Google/FAL/OpenAI/Gemini, Firebase Admin SA)과는 **완전히 다른 등급**이다.
+const FIREBASE_API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY;
+if (!FIREBASE_API_KEY) {
+    throw new Error(
+        "[firebase] NEXT_PUBLIC_FIREBASE_API_KEY 가 설정되지 않았습니다.\n" +
+        "  Firebase Console → 프로젝트 설정 → 내 앱 → SDK 설정 및 구성 의 apiKey 를\n" +
+        "  .env.local 에 NEXT_PUBLIC_FIREBASE_API_KEY 로 넣으세요.\n" +
+        "  (이 값이 없으면 로그인이 전부 실패합니다 — 2026-07-26 장애 재발 방지용 fail-closed)",
+    );
+}
+
 const firebaseConfig = {
-    apiKey: process.env.NEXT_PUBLIC_FIREBASE_API_KEY || "AIzaSyBKrnvupYQirvspkbIS8vPrp1UqQcn7lA4",
+    apiKey: FIREBASE_API_KEY,
     authDomain: process.env.NEXT_PUBLIC_FIREBASE_AUTH_DOMAIN || "dori-ai-0130.firebaseapp.com",
     projectId: process.env.NEXT_PUBLIC_FIREBASE_PROJECT_ID || "dori-ai-0130",
     storageBucket: process.env.NEXT_PUBLIC_FIREBASE_STORAGE_BUCKET || "dori-ai-0130.firebasestorage.app",
