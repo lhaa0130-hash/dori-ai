@@ -35,14 +35,26 @@ export const ACTIONS: ActionDefinition[] = [
  */
 function useCooldownClock(state: InteractionState): number {
   const [now, setNow] = useState(0);
-  const pending = Object.values(state.cooldowns).some((until) => typeof until === "number" && until > 0);
+  const cooldowns = state.cooldowns;
 
   useEffect(() => {
     setNow(Date.now());
-    if (!pending) return;
-    const timer = setInterval(() => setNow(Date.now()), 500);
+    // ⚠️ "cooldown 값이 있는가" 로 판단하면 안 된다. state.cooldowns 에는 **지나간 타임스탬프**가
+    //    계속 남아 있어서(0 으로 리셋되지 않는다) 조건이 영구히 참이 되고 500ms interval 이
+    //    페이지를 떠날 때까지 돈다(실측: cooldown 종료 9초 후에도 interval=1).
+    //    → 미래인 cooldown 이 하나라도 있을 때만 돌리고, 전부 지나면 스스로 멈춘다.
+    const hasFuture = (at: number) =>
+      Object.values(cooldowns).some((until) => typeof until === "number" && until > at);
+
+    if (!hasFuture(Date.now())) return;
+
+    const timer = setInterval(() => {
+      const t = Date.now();
+      setNow(t);
+      if (!hasFuture(t)) clearInterval(timer);
+    }, 500);
     return () => clearInterval(timer);
-  }, [pending]);
+  }, [cooldowns]);
 
   return now;
 }
@@ -52,10 +64,13 @@ const ALWAYS_AVAILABLE: ActionAvailability = { type: "idle", available: true, re
 export default function InteractionActions({
   state,
   loading,
+  claiming = false,
   onPerform,
 }: {
   state: InteractionState;
   loading: boolean;
+  /** 서버 보상 청구 진행 중 — 누른 즉시 보이는 상태이며, 응답 전 증가량은 표시하지 않는다. */
+  claiming?: boolean;
   onPerform: (type: ActionDefinition["type"], keyboard: boolean) => void;
 }) {
   const now = useCooldownClock(state);
@@ -67,14 +82,21 @@ export default function InteractionActions({
       {ACTIONS.map((action) => {
         const availability = now === 0 ? ALWAYS_AVAILABLE : resolveActionAvailability(state, action.type, now);
         const waiting = !availability.available;
-        const disabled = loading || waiting;
+        // 요청 중에는 같은 행동을 다시 보내지 않는다(중복 요청 방지).
+        const disabled = loading || waiting || claiming;
         return (
           <button
             key={action.type}
             type="button"
             disabled={disabled}
             onClick={(event) => onPerform(action.type, event.detail === 0)}
-            aria-label={waiting ? `${action.label} — ${availability.retryAfterSeconds}초 후에 다시 할 수 있어요` : `${action.label} — ${action.hint}`}
+            aria-label={
+              claiming
+                ? `${action.label} — 보상을 적립하는 중이에요`
+                : waiting
+                  ? `${action.label} — ${availability.retryAfterSeconds}초 후에 다시 할 수 있어요`
+                  : `${action.label} — ${action.hint}`
+            }
             className="relative flex min-h-[56px] flex-col items-center justify-center overflow-hidden rounded-2xl border border-[#EEDFD3] bg-[#FFFDFA] px-2 py-2 text-[13px] font-black text-stone-700 shadow-[0_1px_2px_rgba(120,80,50,0.06)] transition hover:-translate-y-0.5 hover:border-[#F9954E]/50 hover:bg-white hover:shadow-[0_4px_10px_rgba(249,149,78,0.16)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E] active:translate-y-0 disabled:translate-y-0 disabled:cursor-not-allowed disabled:border-[#EEDFD3] disabled:bg-[#FAF4ED] disabled:text-stone-400 disabled:shadow-none dark:border-zinc-800 dark:bg-zinc-900 dark:text-zinc-100"
           >
             <span className="flex items-center gap-1.5 whitespace-nowrap">
@@ -87,9 +109,10 @@ export default function InteractionActions({
               </span>
               {action.label}
             </span>
-            {/* 남은 시간 자리를 항상 확보한다 — 나타날 때 버튼이 커지며 아래 내용이 밀리지 않게. */}
+            {/* 보조 줄의 자리를 항상 확보한다 — 나타날 때 버튼이 커지며 아래 내용이 밀리지 않게.
+                "적립 중…" 은 누른 즉시 보이는 요청 중 상태이고, 실제 증가량은 서버 응답 뒤에만 뜬다. */}
             <span className="h-[14px] whitespace-nowrap text-[10px] font-bold leading-[14px] tabular-nums text-stone-400 dark:text-zinc-500">
-              {waiting ? `${availability.retryAfterSeconds}초 후` : " "}
+              {claiming ? "적립 중…" : waiting ? `${availability.retryAfterSeconds}초 후` : " "}
             </span>
             {/* cooldown 을 조용하게 — 숫자 외에 얇은 진행 띠로도 남은 정도를 보여준다.
                 색만으로 전달하지 않도록 위의 "N초 후" 문구와 aria-label 을 함께 유지한다. */}

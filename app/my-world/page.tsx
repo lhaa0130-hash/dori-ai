@@ -74,7 +74,9 @@ function MyWorldContent() {
   return (
     // 하단 여백: 공용 레이아웃이 lg 이상에서 pb-[200px] 을 더한다(전역이라 바꾸지 않는다).
     // 이 페이지에서만 음수 마진으로 일부를 되돌린다 — 다른 페이지에 영향 없음.
-    <main className="mx-auto w-full max-w-2xl px-4 pb-4 pt-4 sm:pt-6 md:max-w-3xl lg:-mb-[120px] xl:max-w-none">
+    // ⚠️ <main> 을 쓰지 않는다 — 공용 LayoutClient 가 이미 <main> 을 렌더하므로 중첩되면
+    //    landmark 가 2개가 되어(HTML 위반) 스크린리더의 "본문으로 이동" 이 모호해진다.
+    <div data-my-world="root" className="mx-auto w-full max-w-2xl px-4 pb-4 pt-4 sm:pt-6 md:max-w-3xl lg:-mb-[120px] xl:max-w-none">
       <WorldSurface>
         <WorldBar
           character={character}
@@ -136,6 +138,6 @@ function MyWorldContent() {
         saving={saving}
         onSelect={handleSelect}
       />
-    </main>
+    </div>
   );
 }

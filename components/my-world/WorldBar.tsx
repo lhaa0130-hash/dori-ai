@@ -117,9 +117,10 @@ export default function WorldBar({
           </div>
         ) : (
           <>
-            <p className="truncate text-[14px] font-extrabold text-stone-800 dark:text-zinc-100">
+            {/* 게스트도 페이지의 h1 을 가져야 한다 — 이전에는 p 여서 heading outline 이 h2 에서 시작했다. */}
+            <h1 className="truncate text-[14px] font-extrabold text-stone-800 dark:text-zinc-100">
               {character.name}의 세계를 둘러보는 중
-            </p>
+            </h1>
             <p className="mt-0.5 break-keep text-[11px] font-medium leading-relaxed text-stone-500 dark:text-zinc-400">
               만져보고 꾸며볼 수 있어요 · 저장은 안 돼요
             </p>

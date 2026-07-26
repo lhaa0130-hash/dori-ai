@@ -60,6 +60,8 @@ interface InteractionContextValue {
   currentAnimation: AnimationType;
   speech: string | null;
   notices: InteractionNotice[];
+  /** 서버 보상 청구가 진행 중인가 — 응답 전에 증가량을 확정 표시하지 않기 위한 표시용 상태. */
+  claimingReward: boolean;
   perform: (input: PerformInput) => InteractionResult;
   previewReaction: (animation: AnimationType, emotion?: Emotion, speech?: string) => void;
   dismissNotice: (id: string) => void;
@@ -84,6 +86,9 @@ export function InteractionProvider({ children }: { children: ReactNode }) {
   const [speech, setSpeech] = useState<string | null>(null);
   const speechTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [notices, setNotices] = useState<InteractionNotice[]>([]);
+  // 서버 보상 청구가 진행 중인 개수 — 버튼을 누른 즉시 "적립 중" 을 보여주기 위한 UI 상태.
+  // ⚠️ 요청 내용·금액·판정에는 관여하지 않는다.
+  const [expClaiming, setExpClaiming] = useState(0);
   const [animationQueue, setAnimationQueue] = useState<AnimationCommand[]>([]);
   const [activeCommand, setActiveCommand] = useState<AnimationCommand | null>(null);
   const saveTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -349,15 +354,39 @@ export function InteractionProvider({ children }: { children: ReactNode }) {
       try { const c = getFirebaseAuth().currentUser; if (c) cu = { uid: c.uid, email: c.email }; } catch { /* noop */ }
       const scope = createAuthenticatedScope(identityRef.current, cu);
       if (scope) {
-        // 서버 권위 보상 청구(operationId 멱등). 클라이언트는 금액을 결정하지 않으며,
-        // 서버 결과로만 Hero 를 갱신한다. "EXP +N" 은 낙관적 표시(서버 반영 완료 표시 아님).
-        // ⚠️ 실제 엣지 엔드포인트는 EDGE RUNTIME E2E: NOT VERIFIED.
-        notify({ emoji: "✨", label: `EXP +${event.expDelta}`, tone: "exp", metric: "exp", value: event.expDelta });
+        // 서버 권위 보상 청구(operationId 멱등). 클라이언트는 금액을 결정하지 않는다.
+        // ⚠️ 요청 body·operationId·지급량·서버 판정은 건드리지 않는다 — 아래는 **UI 상태 관리만** 이다.
+        //
+        // 이전에는 응답 전에 "EXP +N"(클라이언트 예상치)을 먼저 띄웠다. 실패·중복·오프라인에도
+        // 성공처럼 보였고, 서버가 준 실제 금액과 다를 수 있었다.
+        // → 요청 중에는 "적립 중" 만 보여주고, **서버 응답 뒤에 실제 awardedExp** 를 표시한다.
+        //   ClaimOutcome 이 이미 5가지로 구분되므로(applied·duplicate·queued·rejected·skipped)
+        //   실패를 한 문구로 뭉개지 않는다.
+        setExpClaiming((n) => n + 1);
         void claimReward(buildClaimDeps(), {
           rewardType: "my_world_interaction",
           operationId: deriveOperationId(event.id),
           kind: event.type,
-        }).catch(() => {});
+        })
+          .then((outcome) => {
+            if (outcome.status === "applied") {
+              const awarded = outcome.result.awardedExp ?? 0;
+              if (awarded > 0) notify({ emoji: "✨", label: `EXP +${awarded}`, tone: "exp", metric: "exp", value: awarded });
+            } else if (outcome.status === "duplicate") {
+              // 같은 행동이 이미 반영된 경우 — 실패가 아니므로 조용히 알린다.
+              notify({ emoji: "↩️", label: "이미 반영된 보상이에요", tone: "info" });
+            } else if (outcome.status === "queued") {
+              notify({ emoji: "📦", label: "연결이 불안정해요. 연결되면 자동으로 반영돼요", tone: "info" });
+            } else if (outcome.status === "rejected") {
+              notify({ emoji: "⚠️", label: "이번 보상은 적립되지 않았어요", tone: "limit" });
+            }
+            // skipped(게스트·신원 불일치)는 알리지 않는다 — 아래 게스트 안내가 이미 담당한다.
+          })
+          .catch(() => {
+            // 예기치 못한 예외도 사용자에게는 한 줄로만 알린다(기술 메시지 노출 금지).
+            notify({ emoji: "⚠️", label: "보상을 적립하지 못했어요. 잠시 후 다시 시도해주세요", tone: "limit" });
+          })
+          .finally(() => setExpClaiming((n) => Math.max(0, n - 1)));
       } else if (identityRef.current.status === "guest" && !guestNoticeShown.current) {
         // 진짜 게스트일 때만 1회 안내(loading/mismatch 에서는 반복 안내하지 않음).
         guestNoticeShown.current = true;
@@ -415,10 +444,11 @@ export function InteractionProvider({ children }: { children: ReactNode }) {
     currentAnimation: activeCommand?.type ?? "idle",
     speech,
     notices,
+    claimingReward: expClaiming > 0,
     perform,
     previewReaction,
     dismissNotice,
-  }), [state, loading, syncing, offline, transient, signedIn, activeCommand, speech, notices, perform, previewReaction, dismissNotice]);
+  }), [state, loading, syncing, offline, transient, signedIn, activeCommand, speech, notices, expClaiming, perform, previewReaction, dismissNotice]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

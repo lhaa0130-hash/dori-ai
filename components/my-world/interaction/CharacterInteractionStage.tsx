@@ -29,7 +29,7 @@ export default function CharacterInteractionStage({ profile }: { profile: GamePr
   const { savedRoom } = useRoom();
   const {
     state, loading, syncing, offline, emotion: displayEmotion, signedIn,
-    currentAnimation, speech, notices, perform, previewReaction, dismissNotice,
+    currentAnimation, speech, notices, claimingReward, perform, previewReaction, dismissNotice,
   } = useInteraction();
   const { muted, setMuted } = useInteractionAudio();
   const longPressTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
@@ -121,8 +121,11 @@ export default function CharacterInteractionStage({ profile }: { profile: GamePr
         </>
       }
     >
-      {/* 무대 프레임 — 우드 톤 테두리로 "방을 들여다보는 창" 처럼 만든다(흰 카드 안의 사각형 X). */}
-      <div className="relative overflow-hidden rounded-[20px] ring-1 ring-[#E3C9AE] shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] dark:ring-zinc-800">
+      {/* 무대 프레임 — 우드 톤 테두리로 "방을 들여다보는 창" 처럼 만든다(흰 카드 안의 사각형 X).
+          max-w 상한: 방은 4:3 이라 폭이 커지면 높이도 같이 커진다. 1920px 에서 메인 열이 1044px 가 되어
+          캔버스가 1044x783 까지 부풀었다(문서 높이 +360px). 상한을 둬 아주 넓은 화면에서도 방이
+          화면을 삼키지 않게 한다. 좌표는 퍼센트이므로 배치는 그대로 유지된다. */}
+      <div className="relative mx-auto w-full max-w-[600px] overflow-hidden rounded-[20px] ring-1 ring-[#E3C9AE] shadow-[inset_0_1px_0_rgba(255,255,255,0.6)] dark:ring-zinc-800">
         <RoomCanvas room={savedRoom} compact hideCharacter />
         <SpeechBubble speech={speech} characterName={character.name} />
 
@@ -192,7 +195,7 @@ export default function CharacterInteractionStage({ profile }: { profile: GamePr
         daily={daily}
       />
 
-      <InteractionActions state={state} loading={loading} onPerform={handleAction} />
+      <InteractionActions state={state} loading={loading} claiming={claimingReward} onPerform={handleAction} />
     </WorldPanel>
   );
 }
