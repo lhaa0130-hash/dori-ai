@@ -26,7 +26,10 @@ interface RoomContextValue {
   loading: boolean;
   saving: boolean;
   dirty: boolean;
+  /** 저장 실패 메시지(사용자 문구). Firebase 원문은 노출하지 않는다. */
   error: string | null;
+  /** 로드 실패 메시지 — 빈 방과 "불러오지 못한 방"을 구별하기 위해 필요하다. */
+  loadError: string | null;
   loggedIn: boolean;
 
   selectedItemId: string | null;
@@ -70,6 +73,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [loadError, setLoadError] = useState<string | null>(null);
   const [selectedItemId, setSelectedItemId] = useState<string | null>(null);
   const savingRef = useRef(false);
 
@@ -81,6 +85,8 @@ export function RoomProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let alive = true;
     const u = uid();
+    // 계정 전환·로그아웃 시 이전 사용자의 방·오류가 남지 않도록 먼저 정리한다.
+    setLoadError(null); setError(null);
     if (!u) {
       const def = createDefaultRoomState();
       setSavedRoom(def); setDraftRoom(cloneRoom(def)); setSelectedItemId(null); setLoading(false);
@@ -92,9 +98,13 @@ export function RoomProvider({ children }: { children: ReactNode }) {
     loadRoomState(u)
       .then((room) => {
         if (!alive) return;
-        setSavedRoom(room); setDraftRoom(cloneRoom(room)); setCachedRoomState(u, room);
+        setSavedRoom(room); setDraftRoom(cloneRoom(room)); setCachedRoomState(u, room); setLoadError(null);
       })
-      .catch(() => {})
+      .catch(() => {
+        // 캐시가 있으면 그것으로 계속 쓰되, 최신이 아닐 수 있음을 알린다.
+        if (!alive) return;
+        setLoadError(cached ? "최신 방을 불러오지 못했어요. 기기에 저장된 방을 보여주고 있어요." : "방을 불러오지 못했어요.");
+      })
       .finally(() => { if (alive) setLoading(false); });
     return () => { alive = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -235,7 +245,8 @@ export function RoomProvider({ children }: { children: ReactNode }) {
     try {
       const room = await loadRoomState(u);
       setSavedRoom(room); setDraftRoom(cloneRoom(room)); setCachedRoomState(u, room); setSelectedItemId(null);
-    } catch { /* noop */ }
+      setLoadError(null);
+    } catch { setLoadError("방을 불러오지 못했어요. 잠시 후 다시 시도해주세요."); }
     finally { setLoading(false); }
   }, [uid]);
 
@@ -249,7 +260,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
   );
 
   const value = useMemo<RoomContextValue>(() => ({
-    savedRoom, draftRoom, loading, saving, dirty, error, loggedIn,
+    savedRoom, draftRoom, loading, saving, dirty, error, loadError, loggedIn,
     selectedItemId, selectedItem,
     itemCount: draftRoom.placedItems.length,
     atLimit: draftRoom.placedItems.length >= MAX_PLACED_ITEMS,
@@ -257,7 +268,7 @@ export function RoomProvider({ children }: { children: ReactNode }) {
     bringForward, sendBackward, duplicateItem, removeItem,
     resetDraft, discardDraft, saveRoom, reloadRoom,
   }), [
-    savedRoom, draftRoom, loading, saving, dirty, error, loggedIn, selectedItemId, selectedItem,
+    savedRoom, draftRoom, loading, saving, dirty, error, loadError, loggedIn, selectedItemId, selectedItem,
     selectItem, addItem, updateItem, moveItem, nudgeItem, rotateItem, scaleItem, flipItem,
     bringForward, sendBackward, duplicateItem, removeItem, resetDraft, discardDraft, saveRoom, reloadRoom,
   ]);
