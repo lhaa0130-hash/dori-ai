@@ -1,10 +1,16 @@
 // Cloudflare Pages Function — 정적 사이트와 함께 배포되는 서버리스 함수
 // /api/admin/article 경로로 자동 매핑됨
 
+import { productionFirestoreTarget, verifyIdTokenOwnsUid } from '../../_shared/firestoreRest';
+
 const ADMIN_EMAIL = 'lhaa0130@gmail.com';
-const FIREBASE_API_KEY = 'AIzaSyBKrnvupYQirvspkbIS8vPrp1UqQcn7lA4';
 const GITHUB_OWNER = 'lhaa0130-hash';
 const GITHUB_REPO = 'dori-ai';
+
+// ⚠️ 2026-07-26: 여기엔 Firebase Web API 키가 하드코딩돼 있었고, 그 키가 폐기되면서
+//   verifyAdminToken 이 항상 실패해 **관리자 기사 발행이 조용히 깨져 있었다**(로그인 장애와 동일 원인).
+//   → API 키 의존을 제거하고, 보상 엔드포인트와 같은 방식으로 **Firestore 가 토큰을 실검증**하게 한다.
+//     (Firestore 가 서명·만료를 검증하므로, 통과한 토큰의 email 클레임은 신뢰할 수 있다.)
 
 interface Env {
   GITHUB_TOKEN: string;
@@ -20,21 +26,33 @@ function getFilePath(slug: string): string | null {
   return null;
 }
 
-// Firebase ID 토큰으로 관리자 이메일 검증
+/** ID 토큰 payload 를 디코딩(서명 검증은 아래 Firestore 왕복이 담당). */
+function decodeToken(idToken: string): { uid: string; email: string; exp: number } | null {
+  try {
+    const p = idToken.split('.');
+    if (p.length !== 3) return null;
+    const j = JSON.parse(decodeURIComponent(escape(atob(p[1].replace(/-/g, '+').replace(/_/g, '/')))));
+    const uid = j.user_id || j.sub;
+    if (!uid || typeof uid !== 'string') return null;
+    return { uid, email: String(j.email || ''), exp: Number(j.exp || 0) };
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Firebase ID 토큰으로 관리자 검증.
+ * ⚠️ API 키를 쓰지 않는다 — Firestore 가 토큰의 서명·만료를 실검증하고(통과해야 200/404),
+ *   그 뒤에야 같은 토큰의 email 클레임을 신뢰한다. 키 폐기·회전에 영향받지 않는다.
+ */
 async function verifyAdminToken(idToken: string): Promise<boolean> {
   try {
-    const res = await fetch(
-      `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${FIREBASE_API_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idToken }),
-      }
-    );
-    if (!res.ok) return false;
-    const data: any = await res.json();
-    const email: string = data?.users?.[0]?.email || '';
-    return email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
+    const decoded = decodeToken(idToken);
+    if (!decoded) return false;
+    if (!decoded.exp || decoded.exp * 1000 < Date.now()) return false;
+    const own = await verifyIdTokenOwnsUid(productionFirestoreTarget(), idToken, decoded.uid);
+    if (own !== 'ok') return false;
+    return decoded.email.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase();
   } catch {
     return false;
   }

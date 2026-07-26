@@ -1,7 +1,10 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 const ADMIN_EMAIL = 'lhaa0130@gmail.com';
-const FIREBASE_API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY || 'AIzaSyBKrnvupYQirvspkbIS8vPrp1UqQcn7lA4';
+// ⚠️ 2026-07-26: 여기에도 폐기된 Firebase Web API 키가 하드코딩 fallback 으로 남아 있었다.
+//   `output:'export'` 라 이 라우트 핸들러는 실제로 배포되지 않고(라이브는 functions/api/admin/article.ts),
+//   그래서 죽은 키가 오래 방치됐다. fallback 을 없애 '설정 누락'이 조용히 넘어가지 않게 한다.
+const FIREBASE_API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY || '';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '';
 const GITHUB_OWNER = 'lhaa0130-hash';
 const GITHUB_REPO = 'dori-ai';
