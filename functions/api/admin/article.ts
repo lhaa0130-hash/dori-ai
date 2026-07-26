@@ -1,16 +1,15 @@
 // Cloudflare Pages Function — 정적 사이트와 함께 배포되는 서버리스 함수
 // /api/admin/article 경로로 자동 매핑됨
 
-import { productionFirestoreTarget, verifyIdTokenOwnsUid } from '../../_shared/firestoreRest';
+import { verifyAdmin, ADMIN_EMAIL } from '../../_shared/adminAuth';
 
-const ADMIN_EMAIL = 'lhaa0130@gmail.com';
 const GITHUB_OWNER = 'lhaa0130-hash';
 const GITHUB_REPO = 'dori-ai';
 
-// ⚠️ 2026-07-26: 여기엔 Firebase Web API 키가 하드코딩돼 있었고, 그 키가 폐기되면서
+// ⚠️ 2026-07-26 장애: 여기에 Firebase Web API 키가 하드코딩돼 있었고, 그 키가 폐기되면서
 //   verifyAdminToken 이 항상 실패해 **관리자 기사 발행이 조용히 깨져 있었다**(로그인 장애와 동일 원인).
-//   → API 키 의존을 제거하고, 보상 엔드포인트와 같은 방식으로 **Firestore 가 토큰을 실검증**하게 한다.
-//     (Firestore 가 서명·만료를 검증하므로, 통과한 토큰의 email 클레임은 신뢰할 수 있다.)
+//   → API 키 의존을 제거하고, 관리자 인증을 공통 모듈(_shared/adminAuth)로 일원화했다.
+//   ⚠️ Firestore 접근 성공 = '로그인한 사용자'일 뿐이다. 관리자 판정은 adminAuth 가 따로 한다.
 
 interface Env {
   GITHUB_TOKEN: string;
@@ -24,38 +23,6 @@ function getFilePath(slug: string): string | null {
   if (slug.startsWith('report-'))   return `content/reports/${slug}.md`;
   if (slug.startsWith('studio-'))   return `content/studio/${slug}.md`;
   return null;
-}
-
-/** ID 토큰 payload 를 디코딩(서명 검증은 아래 Firestore 왕복이 담당). */
-function decodeToken(idToken: string): { uid: string; email: string; exp: number } | null {
-  try {
-    const p = idToken.split('.');
-    if (p.length !== 3) return null;
-    const j = JSON.parse(decodeURIComponent(escape(atob(p[1].replace(/-/g, '+').replace(/_/g, '/')))));
-    const uid = j.user_id || j.sub;
-    if (!uid || typeof uid !== 'string') return null;
-    return { uid, email: String(j.email || ''), exp: Number(j.exp || 0) };
-  } catch {
-    return null;
-  }
-}
-
-/**
- * Firebase ID 토큰으로 관리자 검증.
- * ⚠️ API 키를 쓰지 않는다 — Firestore 가 토큰의 서명·만료를 실검증하고(통과해야 200/404),
- *   그 뒤에야 같은 토큰의 email 클레임을 신뢰한다. 키 폐기·회전에 영향받지 않는다.
- */
-async function verifyAdminToken(idToken: string): Promise<boolean> {
-  try {
-    const decoded = decodeToken(idToken);
-    if (!decoded) return false;
-    if (!decoded.exp || decoded.exp * 1000 < Date.now()) return false;
-    const own = await verifyIdTokenOwnsUid(productionFirestoreTarget(), idToken, decoded.uid);
-    if (own !== 'ok') return false;
-    return decoded.email.trim().toLowerCase() === ADMIN_EMAIL.toLowerCase();
-  } catch {
-    return false;
-  }
 }
 
 // GitHub 파일 SHA 조회
@@ -112,10 +79,12 @@ export const onRequestPost: PagesFunction<Env> = async (context) => {
       return json({ error: 'GITHUB_TOKEN 환경변수 미설정. Cloudflare Pages 변수 설정 필요.' }, 500);
     }
 
-    // 관리자 인증 (Firebase ID 토큰 검증)
-    const isAdmin = await verifyAdminToken(idToken);
-    if (!isAdmin) {
-      return json({ error: '관리자 권한 없음' }, 403);
+    // 관리자 인증 — 공통 계약(_shared/adminAuth): aud/iss/exp + Firestore 실검증 + 관리자 판정.
+    //   401 = 토큰이 유효하지 않음 / 403 = 로그인은 했지만 관리자가 아님. 둘을 구분해 응답한다.
+    //   ⚠️ 내부 오류·토큰·SA 정보를 응답에 담지 않는다(reason 은 고정 문자열 코드).
+    const admin = await verifyAdmin(idToken, env as unknown as Record<string, any>);
+    if (!admin.ok) {
+      return json({ error: admin.status === 401 ? '인증 실패' : '관리자 권한 없음', code: admin.reason }, admin.status);
     }
 
     // slug → 파일 경로 변환

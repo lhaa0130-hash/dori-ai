@@ -1,10 +1,9 @@
 import { NextRequest, NextResponse } from 'next/server';
+// ⚠️ Edge Function(functions/api/admin/article.ts)과 **동일한** 관리자 인증 계약을 쓴다.
+//   인증 로직을 복제하면 한 쪽만 약해도 전체가 뚫린다 → 서버 전용 공통 모듈을 재사용한다.
+import { verifyAdmin } from '@/functions/_shared/adminAuth';
 
 const ADMIN_EMAIL = 'lhaa0130@gmail.com';
-// ⚠️ 2026-07-26: 여기에도 폐기된 Firebase Web API 키가 하드코딩 fallback 으로 남아 있었다.
-//   `output:'export'` 라 이 라우트 핸들러는 실제로 배포되지 않고(라이브는 functions/api/admin/article.ts),
-//   그래서 죽은 키가 오래 방치됐다. fallback 을 없애 '설정 누락'이 조용히 넘어가지 않게 한다.
-const FIREBASE_API_KEY = process.env.NEXT_PUBLIC_FIREBASE_API_KEY || '';
 const GITHUB_TOKEN = process.env.GITHUB_TOKEN || '';
 const GITHUB_OWNER = 'lhaa0130-hash';
 const GITHUB_REPO = 'dori-ai';
@@ -18,27 +17,6 @@ function getFilePath(slug: string): string | null {
   return null;
 }
 
-// Firebase ID 토큰으로 이메일 검증
-async function verifyAdminToken(idToken: string): Promise<boolean> {
-  try {
-    const res = await fetch(
-      `https://identitytoolkit.googleapis.com/v1/accounts:lookup?key=${FIREBASE_API_KEY}`,
-      {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ idToken }),
-      }
-    );
-    if (!res.ok) return false;
-    const data = await res.json();
-    const email = data?.users?.[0]?.email || '';
-    return email.toLowerCase() === ADMIN_EMAIL.toLowerCase();
-  } catch {
-    return false;
-  }
-}
-
-// GitHub 파일 SHA 조회
 async function getFileSha(filePath: string): Promise<{ sha: string; content?: string } | null> {
   const res = await fetch(
     `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${filePath}`,
@@ -71,10 +49,14 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: '수정 내용 없음' }, { status: 400 });
     }
 
-    // 관리자 인증
-    const isAdmin = await verifyAdminToken(idToken);
-    if (!isAdmin) {
-      return NextResponse.json({ error: '관리자 권한 없음' }, { status: 403 });
+    // 관리자 인증 — Edge Function 과 동일한 공통 계약.
+    //   401 = 토큰 무효 / 403 = 로그인은 했으나 관리자 아님.
+    const admin = await verifyAdmin(idToken, process.env as unknown as Record<string, any>);
+    if (!admin.ok) {
+      return NextResponse.json(
+        { error: admin.status === 401 ? '인증 실패' : '관리자 권한 없음', code: admin.reason },
+        { status: admin.status },
+      );
     }
 
     if (!GITHUB_TOKEN) {
