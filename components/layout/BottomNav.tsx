@@ -59,6 +59,9 @@ const TABS = [
 // 건의사항은 더보기에서 숨김 (푸터에만 노출), 마켓은 노출
 // hrefEn 없는 항목은 영어판이 없다는 뜻 → 영어 모드에선 숨김(한글 페이지로 새지 않게)
 const MORE_ITEMS = [
+  // My World 는 사이트 어디에도 진입 링크가 없어 URL 을 직접 입력해야만 닿을 수 있었다.
+  // 여기 한 줄만 추가한다(전역 nav·헤더는 건드리지 않는다). hrefEn 이 없으므로 영어 모드에서는 숨는다.
+  { name: "My World", nameEn: "My World", href: "/my-world", emoji: "🏡" },
   { name: "AI 모델 비교", nameEn: "AI Models", href: "/ai-models", hrefEn: "/en/ai-models", emoji: "📊" },
   { name: "AI 소식",   nameEn: "AI News",   href: "/ai-news",   hrefEn: "/en/ai-news",  emoji: "📰" },
   { name: "공지사항",  nameEn: "Notice",    href: "/notice",    hrefEn: "/en/notice",   emoji: "📢" },

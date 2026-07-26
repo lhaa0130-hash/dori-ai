@@ -64,7 +64,7 @@ export default function WorldPanel({
               </h2>
             )}
             {subtitle && (
-              <p className="mt-0.5 break-keep text-[11px] font-medium text-stone-500 dark:text-zinc-400">{subtitle}</p>
+              <p className="mt-0.5 break-keep text-[11px] font-medium text-stone-600 dark:text-zinc-300">{subtitle}</p>
             )}
           </div>
           {action && <div className="flex flex-none items-center gap-1.5">{action}</div>}

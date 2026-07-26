@@ -23,7 +23,7 @@ export default function WorldGuide() {
         {GUIDE.map((g) => (
           <li key={g.keys} className="flex items-start gap-2">
             {/* 폭을 고정해 설명 문구의 왼쪽 정렬을 맞춘다(배지 길이가 달라 들쭉날쭉해 보였다). */}
-            <span className="mt-0.5 w-[72px] flex-none rounded-lg bg-white py-0.5 text-center text-[11px] font-black text-[#E07C2E] shadow-sm dark:bg-zinc-800">
+            <span className="mt-0.5 w-[72px] flex-none rounded-lg bg-white py-0.5 text-center text-[11px] font-black text-[#9A4E14] shadow-sm dark:bg-zinc-800">
               {g.keys}
             </span>
             <span className="min-w-0 break-keep text-[11px] font-medium leading-relaxed text-stone-500 dark:text-zinc-400">
@@ -32,7 +32,7 @@ export default function WorldGuide() {
           </li>
         ))}
       </ul>
-      <p className="mt-2.5 break-keep text-[11px] font-medium leading-relaxed text-stone-400 dark:text-zinc-500">
+      <p className="mt-2.5 break-keep text-[11px] font-medium leading-relaxed text-stone-500 dark:text-zinc-400">
         키보드로도 할 수 있어요 — Tab 으로 캐릭터에 이동한 뒤 Enter.
       </p>
     </WorldPanel>

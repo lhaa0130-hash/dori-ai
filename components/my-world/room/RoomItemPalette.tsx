@@ -54,7 +54,7 @@ export default function RoomItemPalette() {
             className={[
               "flex min-h-[44px] flex-none items-center whitespace-nowrap rounded-full px-3.5 text-[12px] font-bold transition",
               "focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E]",
-              category === c.key ? "bg-[#F9954E] text-white" : "bg-stone-100 text-stone-600 hover:bg-stone-200 dark:bg-zinc-800 dark:text-stone-300",
+              category === c.key ? "bg-[#AD5B18] text-white" : "bg-stone-100 text-stone-600 hover:bg-stone-200 dark:bg-zinc-800 dark:text-stone-300",
             ].join(" ")}
           >
             {c.label}

@@ -44,8 +44,10 @@ export default function CharacterStatus({ affinity, emotion, growth, daily }: Pr
     <div className="mt-3 border-t border-[#EFDFD2] pt-3 dark:border-zinc-800">
       <div className="mb-2.5 flex items-center justify-between gap-2">
         <h3 className="text-[12px] font-black text-stone-500 dark:text-zinc-400">지금 상태</h3>
+        {/* 감정 칩 — 감정색은 파스텔이라 흰 글자로는 2.65:1(AA 미달)이었다.
+            어두운 갈색 글자 + 흰 링으로 바꿔 대비를 확보하면서 감정색은 그대로 쓴다. */}
         <span
-          className="rounded-full px-2.5 py-1 text-[11px] font-black text-white"
+          className="rounded-full px-2.5 py-1 text-[11px] font-black text-[#3A2A1B] ring-1 ring-white/70"
           style={{ backgroundColor: mood.color }}
           title={`현재 감정: ${mood.label}`}
         >
@@ -58,7 +60,7 @@ export default function CharacterStatus({ affinity, emotion, growth, daily }: Pr
         <div aria-label={`친밀도 ${affinity}점 중 100점, ${relationship}`}>
           <div className="mb-1 flex items-baseline justify-between gap-2 text-[11px] font-bold">
             <span className="min-w-0 truncate text-stone-600 dark:text-zinc-300">💗 {relationship}</span>
-            <span className="flex-none tabular-nums text-pink-600 dark:text-pink-300">{affinity} / 100</span>
+            <span className="flex-none tabular-nums text-pink-700 dark:text-pink-300">{affinity} / 100</span>
           </div>
           <Bar percent={affinity} className="bg-gradient-to-r from-pink-400 to-rose-500" />
         </div>
@@ -68,7 +70,7 @@ export default function CharacterStatus({ affinity, emotion, growth, daily }: Pr
           <div aria-label={`레벨 ${growth.level}, 경험치 ${growth.exp} / ${growth.nextTotal}`}>
             <div className="mb-1 flex items-baseline justify-between gap-2 text-[11px] font-bold">
               <span className="text-stone-600 dark:text-zinc-300">✨ Lv.{growth.level} 경험치</span>
-              <span className="tabular-nums text-amber-600 dark:text-amber-300">
+              <span className="tabular-nums text-amber-700 dark:text-amber-300">
                 {growth.exp.toLocaleString()} / {growth.nextTotal.toLocaleString()}
               </span>
             </div>

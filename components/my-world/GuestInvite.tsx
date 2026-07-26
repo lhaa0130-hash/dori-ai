@@ -37,7 +37,7 @@ export default function GuestInvite() {
 
       <Link
         href="/login?next=/my-world"
-        className="mt-4 flex min-h-[48px] w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-2xl bg-[#F9954E] px-5 text-[14px] font-black text-white shadow-[0_6px_16px_rgba(249,149,78,0.32)] transition hover:bg-[#E8832E] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E] sm:w-auto"
+        className="mt-4 flex min-h-[48px] w-full items-center justify-center gap-1.5 whitespace-nowrap rounded-2xl bg-[#AD5B18] px-5 text-[14px] font-black text-white shadow-[0_6px_16px_rgba(173,91,24,0.28)] transition hover:bg-[#8F4A12] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E] sm:w-auto"
       >
         로그인하고 이어서 키우기
         <span aria-hidden>→</span>

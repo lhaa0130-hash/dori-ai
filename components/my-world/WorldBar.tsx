@@ -75,7 +75,7 @@ export default function WorldBar({
           <CharacterAvatar character={character} size={48} />
         </span>
         <span
-          className="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-[#F9954E] text-[10px] text-white shadow-sm"
+          className="absolute -bottom-0.5 -right-0.5 flex h-5 w-5 items-center justify-center rounded-full bg-[#9A4E14] text-[10px] text-white shadow-sm"
           aria-hidden
         >
           ✎
@@ -89,7 +89,7 @@ export default function WorldBar({
               <h1 className="min-w-0 truncate text-[14px] font-extrabold text-stone-800 dark:text-zinc-100">
                 {profile.nickname}의 세계
               </h1>
-              <span className="flex-none text-[11px] font-black text-[#E07C2E]">Lv.{profile.level}</span>
+              <span className="flex-none text-[11px] font-black text-[#9A4E14]">Lv.{profile.level}</span>
             </div>
             <div className="mt-1 flex items-end gap-2.5">
               <TodayMeter
@@ -97,14 +97,14 @@ export default function WorldBar({
                 value={daily.affinityGained}
                 max={daily.affinityMax}
                 className="bg-gradient-to-r from-pink-400 to-rose-500"
-                valueClassName="text-pink-600 dark:text-pink-300"
+                valueClassName="text-pink-700 dark:text-pink-300"
               />
               <TodayMeter
                 label="오늘 EXP"
                 value={daily.expGained}
                 max={daily.expMax}
                 className="bg-gradient-to-r from-amber-400 to-[#F9954E]"
-                valueClassName="text-amber-600 dark:text-amber-300"
+                valueClassName="text-amber-700 dark:text-amber-300"
               />
             </div>
           </>
@@ -121,7 +121,7 @@ export default function WorldBar({
             <h1 className="truncate text-[14px] font-extrabold text-stone-800 dark:text-zinc-100">
               {character.name}의 세계를 둘러보는 중
             </h1>
-            <p className="mt-0.5 break-keep text-[11px] font-medium leading-relaxed text-stone-500 dark:text-zinc-400">
+            <p className="mt-0.5 break-keep text-[11px] font-medium leading-relaxed text-stone-600 dark:text-zinc-300">
               만져보고 꾸며볼 수 있어요 · 저장은 안 돼요
             </p>
           </>

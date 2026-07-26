@@ -157,7 +157,7 @@ export default function RoomEditorModal({ open, onClose }: { open: boolean; onCl
               type="button"
               onClick={handleSave}
               disabled={saving}
-              className="h-11 rounded-xl bg-[#F9954E] px-5 text-[13px] font-black text-white transition hover:bg-[#f0862f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E] disabled:cursor-not-allowed disabled:opacity-50"
+              className="h-11 rounded-xl bg-[#AD5B18] px-5 text-[13px] font-black text-white transition hover:bg-[#8F4A12] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E] disabled:cursor-not-allowed disabled:opacity-50"
             >
               {saving ? "저장 중…" : "저장"}
             </button>
@@ -208,7 +208,7 @@ export default function RoomEditorModal({ open, onClose }: { open: boolean; onCl
               <button type="button" onClick={() => setLoginPrompt(false)} className="h-11 flex-1 rounded-xl bg-stone-100 text-[13px] font-bold text-stone-600 dark:bg-zinc-800 dark:text-stone-200">
                 계속 체험
               </button>
-              <Link href="/login?next=/my-world" className="flex h-11 flex-1 items-center justify-center rounded-xl bg-[#F9954E] text-[13px] font-black text-white">
+              <Link href="/login?next=/my-world" className="flex h-11 flex-1 items-center justify-center rounded-xl bg-[#AD5B18] text-[13px] font-black text-white">
                 로그인
               </Link>
             </div>

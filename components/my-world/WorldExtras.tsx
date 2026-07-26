@@ -24,12 +24,12 @@ export default function WorldExtras({ guest = false }: { guest?: boolean }) {
           <span className="block text-[15px] font-extrabold text-stone-900 dark:text-white">
             {guest ? "설정" : "더 보기"}
           </span>
-          <span className="mt-0.5 block break-keep text-[11px] font-medium text-stone-500 dark:text-zinc-400">
+          <span className="mt-0.5 block break-keep text-[11px] font-medium text-stone-600 dark:text-zinc-300">
             {guest ? "효과음" : "효과음 · 최근 활동 · 작품 · 업적(준비 중)"}
           </span>
         </span>
-        <span className="flex-none text-[12px] font-bold text-[#E07C2E] transition group-open:hidden">펼치기</span>
-        <span className="hidden flex-none text-[12px] font-bold text-[#E07C2E] group-open:inline">접기</span>
+        <span className="flex-none text-[12px] font-bold text-[#9A4E14] transition group-open:hidden">펼치기</span>
+        <span className="hidden flex-none text-[12px] font-bold text-[#9A4E14] group-open:inline">접기</span>
       </summary>
 
       <div className="space-y-3 px-4 pb-4 sm:px-5 sm:pb-5">

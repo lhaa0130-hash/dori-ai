@@ -50,7 +50,7 @@ export default function ConfirmDialog({
             onClick={onConfirm}
             className={[
               "h-11 flex-1 rounded-xl text-[13px] font-black text-white",
-              danger ? "bg-red-500 hover:bg-red-600" : "bg-[#F9954E] hover:bg-[#f0862f]",
+              danger ? "bg-red-500 hover:bg-red-600" : "bg-[#F9954E] hover:bg-[#8F4A12]",
             ].join(" ")}
           >
             {confirmLabel}

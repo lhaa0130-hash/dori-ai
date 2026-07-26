@@ -22,7 +22,7 @@ export default function RoomPreviewCard() {
   const save = resolveSaveView({ authState: loggedIn ? "signed" : "guest", saving, dirty, saveError: error });
   const SAVE_TONE_CLASS: Record<string, string> = {
     saving: "text-stone-500 dark:text-zinc-400",
-    dirty: "text-[#E07C2E]",
+    dirty: "text-[#9A4E14]",
     saved: "text-emerald-600 dark:text-emerald-400",
     guest: "text-stone-500 dark:text-zinc-400",
     failed: "text-red-600 dark:text-red-400",
@@ -38,7 +38,7 @@ export default function RoomPreviewCard() {
         <button
           type="button"
           onClick={() => setEditorOpen(true)}
-          className="flex min-h-[44px] items-center whitespace-nowrap rounded-xl bg-[#F9954E] px-4 text-[13px] font-black text-white transition hover:bg-[#f0862f] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E]"
+          className="flex min-h-[44px] items-center whitespace-nowrap rounded-xl bg-[#AD5B18] px-4 text-[13px] font-black text-white transition hover:bg-[#8F4A12] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#F9954E]"
         >
           방 꾸미기
         </button>
@@ -50,7 +50,7 @@ export default function RoomPreviewCard() {
       </p>
 
       {count === 0 && !loading && (
-        <p className="mt-2 break-keep text-[11px] font-medium text-stone-500 dark:text-zinc-400">
+        <p className="mt-2 break-keep text-[11px] font-medium text-stone-600 dark:text-zinc-300">
           아직 가구가 없어요. 침대·책상·화분을 놓아 방을 시작해보세요.
         </p>
       )}

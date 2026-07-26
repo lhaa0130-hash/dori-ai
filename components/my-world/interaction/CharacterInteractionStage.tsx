@@ -102,7 +102,7 @@ export default function CharacterInteractionStage({ profile }: { profile: GamePr
       action={
         <>
           {!profile && (
-            <span className="rounded-full bg-[#F9954E]/15 px-2 py-1 text-[10px] font-black text-[#E07C2E]">체험 중</span>
+            <span className="rounded-full bg-[#F9954E]/15 px-2 py-1 text-[10px] font-black text-[#9A4E14]">체험 중</span>
           )}
           {syncBadge && (
             <span className="rounded-full bg-white/80 px-2 py-1 text-[10px] font-bold text-stone-500 shadow-sm dark:bg-zinc-800 dark:text-zinc-300">
