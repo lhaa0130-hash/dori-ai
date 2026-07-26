@@ -31,6 +31,7 @@ export default function RoomPreviewCard() {
       title="내 방"
       subtitle={`${character.emoji} ${character.name}의 방 · 가구 ${loading ? "…" : `${count} / ${MAX_PLACED_ITEMS}`}`}
       labelledById="room-heading"
+      tone="glass"
       action={
         <button
           type="button"

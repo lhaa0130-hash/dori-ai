@@ -18,7 +18,7 @@ const GUIDE = [
 
 export default function WorldGuide() {
   return (
-    <WorldPanel title="이렇게 놀아요" tone="quiet" labelledById="guide-heading">
+    <WorldPanel title="이렇게 놀아요" tone="glass" labelledById="guide-heading">
       <ul className="space-y-2">
         {GUIDE.map((g) => (
           <li key={g.keys} className="flex items-start gap-2">
