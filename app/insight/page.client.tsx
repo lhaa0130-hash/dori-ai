@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useCallback } from "react";
+import { useState, useEffect, useCallback, useMemo } from "react";
 import Link from "next/link";
 
 interface Post {
@@ -16,7 +16,10 @@ interface Post {
   summary?: string;
 }
 
-const CATEGORIES = ['전체', '트렌드', '가이드', '분석', '리포트', '큐레이션', '영상'];
+// 카테고리 노출 순서. ⚠️ 실제 표시는 '글이 1개 이상 있는 카테고리'만 (아래 visibleCategories).
+//   빈 탭을 띄우면 눌렀을 때 아무것도 안 나와 '준비 중' 인상을 준다(애드센스 저품질 사유).
+//   글이 다시 쌓이면 탭도 자동으로 되살아난다.
+const CATEGORY_ORDER = ['전체', '트렌드', '가이드', '분석', '리포트', '큐레이션', '영상'];
 // ⚠️ 카테고리 값은 한글 키 그대로 저장·필터링에 쓰인다(selected 비교). 표시만 영어로 바꾼다.
 const CAT_LABEL_EN: Record<string, string> = { 전체: 'All', 트렌드: 'Trends', 가이드: 'Guides', 분석: 'Analysis', 리포트: 'Reports', 큐레이션: 'Curation', 영상: 'Videos' };
 
@@ -68,6 +71,17 @@ export default function InsightPageClient({ initialPosts = [], locale = 'ko' }: 
     localStorage.setItem('dori_insight_likes', JSON.stringify(nextLikes));
   }, [likedPosts, likesData]);
 
+  // 글이 실제로 존재하는 카테고리만 탭으로 노출한다('전체'는 글이 하나라도 있으면 표시).
+  const visibleCategories = useMemo(() => {
+    const present = new Set(initialPosts.map(p => getCat(p.category)));
+    return CATEGORY_ORDER.filter(c => c === '전체' ? initialPosts.length > 0 : present.has(c));
+  }, [initialPosts]);
+
+  // 선택된 카테고리가 사라졌으면(글 전부 삭제 등) '전체'로 되돌린다.
+  useEffect(() => {
+    if (selected !== '전체' && !visibleCategories.includes(selected)) setSelected('전체');
+  }, [visibleCategories, selected]);
+
   const posts = initialPosts.filter(p =>
     selected === '전체' || getCat(p.category) === selected
   );
@@ -85,7 +99,7 @@ export default function InsightPageClient({ initialPosts = [], locale = 'ko' }: 
       {/* 카테고리 */}
       <div className="-mx-6 px-6 overflow-x-auto scrollbar-hide border-b border-stone-100 dark:border-zinc-900">
         <div className="flex gap-1 w-max py-3">
-          {CATEGORIES.map(cat => (
+          {visibleCategories.map(cat => (
             <button
               key={cat}
               onClick={() => setSelected(cat)}
