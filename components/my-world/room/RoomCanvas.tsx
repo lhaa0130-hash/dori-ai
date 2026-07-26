@@ -8,8 +8,9 @@
 //  ⑤ 모서리 비네트를 더한다. 좌표계·저장 형식·가구 정의는 그대로다(시각 레이어만 추가).
 import { memo, useCallback, useRef, useState, type RefObject, type PointerEvent as RPointerEvent, type KeyboardEvent as RKeyboardEvent } from "react";
 import { useCharacter } from "@/contexts/CharacterContext";
-import { CHARACTER_ASSETS_READY, themeTint } from "@/lib/myWorld/character/utils";
+import { themeTint } from "@/lib/myWorld/character/utils";
 import RoomItemSprite from "@/components/my-world/room/RoomItemSprite";
+import CharacterImage from "@/components/my-world/CharacterImage";
 import type { PlacedRoomItem, RoomState } from "@/lib/myWorld/room/types";
 import { getRoomFloor, getRoomItem, getRoomWall } from "@/lib/myWorld/room/registry";
 import { FLOOR_BAND_PERCENT, NUDGE_STEP, NUDGE_STEP_LARGE, ROOM_ASPECT } from "@/lib/myWorld/room/constants";
@@ -304,14 +305,8 @@ function RoomCanvasInner({ room, editable = false, selectedItemId = null, onSele
             background: `radial-gradient(circle at 50% 40%, ${themeTint(character.themeColor, "40")} 0%, rgba(255,255,255,0) 74%)`,
           }}
         >
-          {CHARACTER_ASSETS_READY && character.image ? (
-            // eslint-disable-next-line @next/next/no-img-element
-            <img src={character.image} alt={character.name} className="h-full w-full object-contain" draggable={false} />
-          ) : (
-            <svg viewBox="0 0 100 100" className="h-full w-full" aria-hidden focusable="false">
-              <text x="50" y="56" textAnchor="middle" dominantBaseline="central" fontSize="62">{character.emoji}</text>
-            </svg>
-          )}
+          {/* 이미지 실패 시 깨진 아이콘 대신 이모지로 되돌린다(CharacterImage 가 담당). */}
+          <CharacterImage character={character} emojiSize="clamp(1.6rem, 9vw, 4rem)" />
         </div>
       </div>}
 

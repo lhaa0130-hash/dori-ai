@@ -24,6 +24,9 @@ interface DiaryContextValue {
    * 이를 구별하지 못하면 권한·네트워크 오류가 빈 상태로 위장된다. Firebase 원문은 노출하지 않는다.
    */
   error: string | null;
+  /** 기록 쓰기 실패(자동 기록). 조회 실패(error)와 구분한다. */
+  writeError: string | null;
+  clearWriteError: () => void;
   addEntry: (input: DiaryEntryInput) => Promise<void>;  // 자동 기록 추가(로그인 필요)
   removeEntry: (id: string) => Promise<void>;
   refresh: () => Promise<void>;
@@ -37,6 +40,7 @@ export function DiaryProvider({ children }: { children: ReactNode }) {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [writeError, setWriteError] = useState<string | null>(null);
   const savingRef = useRef(false);
 
   const uid = useCallback(() => {
@@ -46,7 +50,7 @@ export function DiaryProvider({ children }: { children: ReactNode }) {
   const load = useCallback(async () => {
     const u = uid();
     // 로그아웃·계정 전환 시 이전 사용자의 기록과 오류가 남지 않도록 초기화한다.
-    setError(null);
+    setError(null); setWriteError(null);
     if (!u) { setState(emptyDiaryState()); setLoading(false); return; }
     setLoading(true);
     try { setState(await getDiaryState(u)); setError(null); }
@@ -62,13 +66,15 @@ export function DiaryProvider({ children }: { children: ReactNode }) {
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.user?.email]);
 
+  const clearWriteError = useCallback(() => setWriteError(null), []);
+
   const addEntry = useCallback(async (input: DiaryEntryInput) => {
     const u = uid();
     if (!u) return;                 // 비로그인: 쓰기 무시(§13)
     if (savingRef.current) return;  // 동시 저장 방지
-    savingRef.current = true; setSaving(true);
+    savingRef.current = true; setSaving(true); setWriteError(null);
     try { setState(await addDiaryEntry(u, input)); }
-    catch { /* 저장 실패 조용히 — 다음 로드에서 정정 */ }
+    catch { setWriteError("일기를 기록하지 못했어요. 잠시 후 다시 시도해주세요."); }
     finally { savingRef.current = false; setSaving(false); }
   }, [uid]);
 
@@ -88,10 +94,12 @@ export function DiaryProvider({ children }: { children: ReactNode }) {
     loading,
     saving,
     error,
+    writeError,
+    clearWriteError,
     addEntry,
     removeEntry,
     refresh: load,
-  }), [state, loading, saving, error, addEntry, removeEntry, load]);
+  }), [state, loading, saving, error, writeError, clearWriteError, addEntry, removeEntry, load]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

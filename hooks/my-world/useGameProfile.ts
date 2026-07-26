@@ -17,6 +17,13 @@ import {
   type UserTier,
 } from "@/lib/userProfile";
 
+/**
+ * 화면이 구분해야 하는 세 가지 인증 상태.
+ * ⚠️ `checking` 을 `guest` 와 합치면 로그인 사용자에게 잠깐 "저장은 안 돼요" 가 보인다
+ *    (거짓 표현 + 깜빡임). 그래서 셋으로 나눈다.
+ */
+export type WorldAuthState = "checking" | "guest" | "signed";
+
 export interface GameProfileView {
   nickname: string;
   level: number;
@@ -29,6 +36,8 @@ export interface GameProfileView {
   /** 레벨 진행률 0~100 */
   progress: number;
   loggedIn: boolean;
+  /** 인증 확인 중 / 게스트 / 로그인 — 화면 분기의 단일 기준 */
+  authState: WorldAuthState;
 }
 
 interface RawProfile {
@@ -92,6 +101,7 @@ export function useGameProfile(): GameProfileView {
       nextTotal: getCurrentLevelStartExp(raw.level) + getNextLevelExp(raw.level),
       progress: calculateLevelProgress(raw.exp, raw.level),
       loggedIn: status === "authenticated",
+      authState: status === "loading" ? "checking" : status === "authenticated" ? "signed" : "guest",
     };
   }, [nickname, raw, status]);
 }

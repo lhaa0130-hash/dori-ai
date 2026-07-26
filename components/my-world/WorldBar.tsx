@@ -12,7 +12,7 @@ import CottonCandy from "@/components/icons/CottonCandy";
 import CharacterAvatar from "@/components/my-world/CharacterAvatar";
 import type { Character } from "@/lib/myWorld/character/types";
 import type { DailyRewardProgress } from "@/lib/myWorld/interaction/availability";
-import type { GameProfileView } from "@/hooks/my-world/useGameProfile";
+import type { GameProfileView, WorldAuthState } from "@/hooks/my-world/useGameProfile";
 
 /** 오늘 적립 미터 — 얇게, 수치는 작게. 색만으로 전달하지 않도록 라벨을 항상 붙인다. */
 function TodayMeter({
@@ -49,12 +49,15 @@ export default function WorldBar({
   character,
   profile,
   daily,
+  authState,
   onEditCharacter,
 }: {
   character: Character;
-  /** 비로그인이면 null — 개인 수치를 렌더하지 않는다. */
+  /** 비로그인/확인중이면 null — 개인 수치를 렌더하지 않는다. */
   profile: GameProfileView | null;
   daily: DailyRewardProgress;
+  /** checking 은 guest 와 다르게 표시한다 — "저장 안 됨" 을 성급히 말하지 않는다. */
+  authState: WorldAuthState;
   onEditCharacter: () => void;
 }) {
   return (
@@ -105,6 +108,13 @@ export default function WorldBar({
               />
             </div>
           </>
+        ) : authState === "checking" ? (
+          // 인증 확인 중 — 게스트 문구("저장 안 됨")를 쓰면 로그인 사용자에게 거짓이 된다.
+          // 같은 높이의 조용한 자리만 지킨다(전환 시 흔들림 방지).
+          <div aria-busy="true" aria-label="로그인 상태를 확인하는 중">
+            <div className="h-[17px] w-32 animate-pulse rounded bg-white/70 dark:bg-zinc-800" />
+            <div className="mt-1.5 h-[13px] w-44 animate-pulse rounded bg-white/60 dark:bg-zinc-800/70" />
+          </div>
         ) : (
           <>
             <p className="truncate text-[14px] font-extrabold text-stone-800 dark:text-zinc-100">

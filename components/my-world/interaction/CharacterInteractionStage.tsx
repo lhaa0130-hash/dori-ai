@@ -12,13 +12,13 @@ import { useInteractionAudio } from "@/contexts/InteractionAudioContext";
 import { useRoom } from "@/contexts/RoomContext";
 import RoomCanvas from "@/components/my-world/room/RoomCanvas";
 import WorldPanel from "@/components/my-world/WorldPanel";
+import CharacterImage from "@/components/my-world/CharacterImage";
 import CharacterStatus from "@/components/my-world/interaction/CharacterStatus";
 import InteractionActions, { type ActionDefinition } from "@/components/my-world/interaction/InteractionActions";
 import SpeechBubble from "@/components/my-world/interaction/SpeechBubble";
 import WorldFeedback from "@/components/my-world/interaction/WorldFeedback";
 import { AffinityRing, EmotionAura, RisingRewards } from "@/components/my-world/interaction/CharacterAura";
 import { dailyRewardProgress } from "@/lib/myWorld/interaction/availability";
-import { CHARACTER_ASSETS_READY } from "@/lib/myWorld/character/utils";
 import { getRoomItem } from "@/lib/myWorld/room/registry";
 import { itemBoxPercent } from "@/lib/myWorld/room/utils";
 import type { GameProfileView } from "@/hooks/my-world/useGameProfile";
@@ -169,12 +169,8 @@ export default function CharacterInteractionStage({ profile }: { profile: GamePr
           style={{ left: "50%", top: "80%", width: "26%", aspectRatio: "1 / 1", transform: "translate(-50%, -50%)" }}
         >
           <span className={`mw-character mw-anim-${currentAnimation} flex h-full w-full items-center justify-center rounded-full`} style={{ filter: `drop-shadow(0 8px 10px ${character.themeColor}45)` }}>
-            {CHARACTER_ASSETS_READY && character.image ? (
-              // eslint-disable-next-line @next/next/no-img-element
-              <img src={character.image} alt="" draggable={false} className="h-full w-full object-contain" />
-            ) : (
-              <span className="text-[clamp(2.6rem,11vw,5.2rem)] leading-none" aria-hidden>{character.emoji}</span>
-            )}
+            {/* 이미지 실패 시 깨진 아이콘 대신 이모지로 되돌린다(CharacterImage 가 담당). */}
+            <CharacterImage character={character} emojiSize="clamp(2.6rem, 11vw, 5.2rem)" />
           </span>
         </button>
 

@@ -26,6 +26,7 @@ import WorldBar from "@/components/my-world/WorldBar";
 import WorldExtras from "@/components/my-world/WorldExtras";
 import WorldGuide from "@/components/my-world/WorldGuide";
 import WorldSectionBoundary from "@/components/my-world/WorldSectionBoundary";
+import WorldNotices from "@/components/my-world/WorldNotices";
 import GuestInvite from "@/components/my-world/GuestInvite";
 import RecordsPanel from "@/components/my-world/RecordsPanel";
 import CharacterSelectModal from "@/components/my-world/CharacterSelectModal";
@@ -55,7 +56,12 @@ function MyWorldContent() {
   const { state } = useInteraction();
   const profile = useGameProfile();
   const [modalOpen, setModalOpen] = useState(false);
-  const loggedIn = profile.loggedIn;
+  // 인증 확인 중 / 게스트 / 로그인 을 셋으로 구분한다.
+  //  · checking 에서 게스트 화면을 보여주면 로그인 사용자에게 "저장 안 됨" 이 잠깐 보인다(거짓 + 깜빡임).
+  //  · 그래서 확인 중에는 초대 CTA·게스트 안내를 렌더하지 않고 자리만 지킨다.
+  const authState = profile.authState;
+  const loggedIn = authState === "signed";
+  const confirmedGuest = authState === "guest";
   const daily = useMemo(() => dailyRewardProgress(state), [state]);
 
   const handleSelect = (id: string) => {
@@ -74,8 +80,12 @@ function MyWorldContent() {
           character={character}
           profile={loggedIn ? profile : null}
           daily={daily}
+          authState={authState}
           onEditCharacter={() => setModalOpen(true)}
         />
+
+        {/* 저장 실패처럼 삼켜지면 거짓이 되는 알림을 월드 바 바로 아래에서 한 번만 알린다. */}
+        <WorldNotices />
 
         {/* md 이상 2열. 각 패널은 한 번만 렌더한다(중복 id·중복 aria 방지).
             모바일 흐름 = 월드 바 → 무대(캐릭터) → 방 → 기록 → 더 보기. */}
@@ -86,8 +96,9 @@ function MyWorldContent() {
               <CharacterInteractionStage profile={loggedIn ? profile : null} />
             </WorldSectionBoundary>
 
-            {/* 게스트는 체험을 해본 **뒤** 초대를 만난다 — 상단을 광고로 채우지 않는다. */}
-            {!loggedIn && (
+            {/* 게스트는 체험을 해본 **뒤** 초대를 만난다 — 상단을 광고로 채우지 않는다.
+                확인 중에는 띄우지 않는다(로그인 사용자에게 잠깐 보이면 안 된다). */}
+            {confirmedGuest && (
               <WorldSectionBoundary title="내 세계 만들기">
                 <GuestInvite />
               </WorldSectionBoundary>
@@ -100,11 +111,12 @@ function MyWorldContent() {
               <RoomPreviewCard />
             </WorldSectionBoundary>
 
-            {loggedIn ? (
+            {loggedIn && (
               <WorldSectionBoundary title="기록">
                 <RecordsPanel profile={profile} />
               </WorldSectionBoundary>
-            ) : (
+            )}
+            {confirmedGuest && (
               <WorldSectionBoundary title="이렇게 놀아요">
                 <WorldGuide />
               </WorldSectionBoundary>

@@ -26,6 +26,13 @@ interface CharacterContextValue {
   allCharacters: Character[];       // 전체 12종
   loading: boolean;
   saving: boolean;
+  /**
+   * 저장 실패 메시지(사용자 문구). 이전에는 catch {} 로 삼켜서
+   * 실패했는데 성공한 것처럼 보였다(다음 로드에서 조용히 되돌아감).
+   * Firebase 원문은 노출하지 않는다.
+   */
+  saveError: string | null;
+  clearSaveError: () => void;
   selectCharacter: (id: string) => Promise<void>; // Hero 즉시 반영 + Firestore 저장
 }
 
@@ -36,6 +43,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
   const [state, setState] = useState<MyCharacterState>(defaultCharacterState);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [saveError, setSaveError] = useState<string | null>(null);
   const savingRef = useRef(false);
 
   const uid = useCallback(() => {
@@ -46,6 +54,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     let alive = true;
     const u = uid();
+    setSaveError(null);
     if (!u) { setState(defaultCharacterState()); setLoading(false); return; }
     const cached = getCachedCharacterState(u);
     if (cached) setState(cached);
@@ -57,6 +66,8 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     return () => { alive = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [session?.user?.email]);
+
+  const clearSaveError = useCallback(() => setSaveError(null), []);
 
   const selectCharacter = useCallback(async (id: string) => {
     if (savingRef.current) return;
@@ -75,9 +86,9 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     const u = uid();
     if (!u) return; // 비로그인: 로컬 표시만
     setCachedCharacterState(u, next);
-    savingRef.current = true; setSaving(true);
+    savingRef.current = true; setSaving(true); setSaveError(null);
     try { await saveSelectedCharacter(u, ch.id); }
-    catch { /* 저장 실패는 조용히 — 다음 로드에서 원본으로 정정 */ }
+    catch { setSaveError("대표 캐릭터를 저장하지 못했어요. 잠시 후 다시 시도해주세요."); }
     finally { savingRef.current = false; setSaving(false); }
   }, [state.owned, uid]);
 
@@ -87,8 +98,10 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     allCharacters: getAllCharacters(),
     loading,
     saving,
+    saveError,
+    clearSaveError,
     selectCharacter,
-  }), [state, loading, saving, selectCharacter]);
+  }), [state, loading, saving, saveError, clearSaveError, selectCharacter]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }
