@@ -11,6 +11,7 @@
 //   AI 일기(diary)는 본인 전용(비공개)이라 isOwner 일 때만 노출.
 
 import { useEffect, useState, useCallback } from "react";
+import TitleBadge from "@/components/profile/TitleBadge";
 import Link from "next/link";
 import {
   getProfileByHandle, currentUid, getSocialCounts, getVisitStats, listFriends, listPublicPostsByUser,
@@ -207,7 +208,8 @@ export default function AtHomePage() {
           {/* 등급·레벨 배지 */}
           <div className="flex flex-col items-end gap-1 shrink-0">
             <span className="px-2.5 py-1 rounded-full bg-[#F9954E]/10 text-[#E8832E] dark:text-[#FBAA60] text-[11px] font-bold">Lv.{p.level}</span>
-            {p.title && <span className="px-2.5 py-1 rounded-full bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300 text-[11px] font-bold max-w-[140px] truncate">{p.title}</span>}
+            {/* 05-09: 공통 resolver — 미소유 복제 문자열에는 유료 배지가 붙지 않는다. */}
+            <TitleBadge source={p} />
           </div>
         </div>
 

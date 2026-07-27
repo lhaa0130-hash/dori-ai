@@ -128,7 +128,7 @@ test("빈 값으로 장착 해제 → 허용", async () => {
 test("정상 프로필 텍스트 수정 → 허용(장착 검사가 방해하지 않는다)", async () => {
   assert.equal(await try_(() => updateDoc(doc(db, "users", uid), {
     name: "새이름", bio: "소개", statusMsg: "상태", themeColor: "#123456", greeting: "안녕", mood: "😀",
-    interests: ["ai", "game"], title: "내가 직접 쓴 칭호",
+    interests: ["ai", "game"],   // ⚠️ 05-09: title 은 endpoint 전용이라 여기서 제외(별도 계약)
   })), "allowed");
 });
 

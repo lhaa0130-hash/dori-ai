@@ -31,7 +31,9 @@
     "test:concurrency": "npx --yes firebase-tools@13 emulators:exec --only auth,firestore --project demo-illo-myworld \"npm run test:concurrency:run\"",
     "test:concurrency:run": "node --import ./tests/emulator/register-alias.mjs tests/edge/run-concurrency-e2e.mjs",
     "probe:contention": "npx --yes firebase-tools@13 emulators:exec --only auth,firestore --project demo-illo-myworld \"npm run probe:contention:run\"",
-    "probe:contention:run": "node --import ./tests/emulator/register-alias.mjs tests/edge/probe-contention.mjs"
+    "probe:contention:run": "node --import ./tests/emulator/register-alias.mjs tests/edge/probe-contention.mjs",
+    "test:title:run": "node --import ./tests/emulator/register-alias.mjs tests/edge/run-title-e2e.mjs",
+    "test:title": "npx --yes firebase-tools@13 emulators:exec --only auth,firestore --project demo-illo-myworld \"npm run test:title:run\""
   },
   "dependencies": {
     "@types/canvas-confetti": "^1.9.0",

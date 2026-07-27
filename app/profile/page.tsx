@@ -4,6 +4,8 @@ import { useCallback, useEffect, useMemo, useRef, useState, type ChangeEvent, ty
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useAuth } from "@/contexts/AuthContext";
+import TitleBadge from "@/components/profile/TitleBadge";
+import { setCatalogTitle, setCustomTitle, clearTitle, titleErrorMessage } from "@/lib/titleClient";
 import MyAnimalsSection from "@/components/animal/MyAnimalsSection";
 import {
   currentUid,
@@ -51,6 +53,8 @@ import {
   itemText,
   itemKey,
   FREE_STICKERS,
+  SHOP_ITEMS,
+  RARITY_META,
   type ShopItem,
 } from "@/lib/shopItems";
 import BannerFx from "@/components/cozy/BannerFx";
@@ -465,6 +469,12 @@ export default function ProfilePage() {
   const [editBg, setEditBg] = useState<BgStyle>("aurora");
   const [editMood, setEditMood] = useState("");
   const [editTitle, setEditTitle] = useState("");
+  // ── 칭호 3분할 상태 (05-09) ──
+  //   catalog = 보유 칭호 / custom = 직접 입력 / none = 사용 안 함
+  const [titleMode, setTitleMode] = useState<"catalog" | "custom" | "none">("custom");
+  const [selectedTitleId, setSelectedTitleId] = useState("");
+  const [titleSaving, setTitleSaving] = useState(false);
+  const [titleMsg, setTitleMsg] = useState("");
   const [editFrame, setEditFrame] = useState("none");
   const [editInterests, setEditInterests] = useState<string[]>([]);
   const [editStickers, setEditStickers] = useState<string[]>([]);
@@ -580,7 +590,11 @@ export default function ProfilePage() {
       setEditColor(p.themeColor || "#F9954E");
       setEditBg(p.bg || "aurora");
       setEditMood(p.mood || "");
-      setEditTitle(p.title || "");
+      // 05-09: 현재 칭호 모드를 서버 값에서 복원한다(legacy 문서는 custom 으로 시작).
+    setEditTitle(typeof (p as any).customTitle === "string" ? (p as any).customTitle : (p.title || ""));
+    const pm = (p as any).titleMode;
+    setTitleMode(pm === "catalog" || pm === "none" || pm === "custom" ? pm : (p.title ? "custom" : "none"));
+    setSelectedTitleId(typeof (p as any).titleId === "string" ? (p as any).titleId : "");
       setEditFrame(p.frame || "none");
       setEditInterests(p.interests || []);
       setEditStickers(p.stickers || []);
@@ -731,7 +745,29 @@ export default function ProfilePage() {
     setFollowModal({ title: type === "followers" ? t.followers : t.following, users: users.map((u) => ({ uid: u.uid, name: u.name })) });
   };
 
-  const handleSave = async () => {
+    // ⚠️ 칭호는 프로필 텍스트와 **별도 저장**한다 — 서버 endpoint 를 타므로 실패 지점이 다르다.
+  //    성공하면 서버가 확정한 값으로 수렴시키고, 실패하면 이전 선택을 유지한다(중복 클릭 방지 포함).
+  const saveTitle = async () => {
+    if (!isOwner || titleSaving) return;
+    setTitleSaving(true);
+    setTitleMsg("");
+    const isEn = lang === "en";
+    const res = titleMode === "catalog"
+      ? await setCatalogTitle(selectedTitleId)
+      : titleMode === "custom"
+        ? await setCustomTitle(editTitle)
+        : await clearTitle();
+    setTitleSaving(false);
+    if (!res.ok) { setTitleMsg(titleErrorMessage(res.error, isEn)); return; }
+    setTitleMsg(isEn ? "Saved." : "저장했어요.");
+    // 서버가 확정한 값으로 수렴
+    if (res.mode) setTitleMode(res.mode);
+    setSelectedTitleId(res.titleId || "");
+    setEditTitle(res.customTitle || "");
+    setProfile((prev) => (prev ? { ...prev, title: res.title || "", titleMode: res.mode, titleId: res.titleId || "", customTitle: res.customTitle || "" } as typeof prev : prev));
+  };
+
+const handleSave = async () => {
     if (!isOwner || !targetUid) return;
     const trimmedName = editName.trim();
     if (!trimmedName) { alert(t.nameRequired); return; }
@@ -744,7 +780,6 @@ export default function ProfilePage() {
       themeColor: editColor,
       bg: editBg,
       mood: editMood,
-      title: editTitle.slice(0, 24),
       frame: editFrame,
       interests: editInterests.slice(0, 8),
       stickers: editStickers.slice(0, 6),
@@ -916,6 +951,15 @@ export default function ProfilePage() {
     [profile?.ownedItems, myEmail, mounted]
   );
   const isItemOwned = (it: ShopItem) => it.price === 0 || ownedSet.has(itemKey(it.slot, it.id));
+
+  // ⚠️ 칭호 선택지는 **서버 ownedItems 만** 기준으로 만든다.
+  //    localStorage 캐시(ownedSet)에는 조작 항목이 섞일 수 있어 칭호에는 쓰지 않는다.
+  //    최종 권한은 서버(POST /api/profile/title)가 다시 확인한다.
+  const serverOwned = useMemo(() => new Set<string>(profile?.ownedItems || []), [profile?.ownedItems]);
+  const ownedTitleItems = useMemo(
+    () => SHOP_ITEMS.filter((it: ShopItem) => it.slot === "title" && serverOwned.has(itemKey(it.slot, it.id))),
+    [serverOwned],
+  );
 
   const messageHref = useMemo(() => {
     if (!targetUid || !profile) return lang === "en" ? "/en/login" : "/login";
@@ -1103,14 +1147,10 @@ export default function ProfilePage() {
                     {profile.name}
                   </span>
                 </h1>
-                {profile.title && (
-                  <span
-                    className="inline-flex items-center rounded-full px-2 py-0.5 mt-1 text-[11px] font-bold text-white"
-                    style={{ backgroundColor: accent }}
-                  >
-                    {profile.title}
-                  </span>
-                )}
+                {/* 05-09: 칭호는 공통 resolver 결과만 렌더한다.
+                    유료 배지(◆/✦/★)는 **소유가 확인된 카탈로그 칭호**에만 붙는다 —
+                    같은 문구를 직접 입력해도 중립 스타일이라 구매 결과와 같아지지 않는다. */}
+                <TitleBadge source={profile} isEn={lang === "en"} className="mt-1" />
                 {/* 등급(티어) + 레벨 */}
                 <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
                   <span
@@ -1387,32 +1427,94 @@ export default function ProfilePage() {
               ))}
             </div>
 
-            <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-1">
+            {/* ── 칭호 (05-09) ────────────────────────────────────────────────
+                ⚠️ 칭호는 **자체 저장 버튼**을 가진 독립 섹션이다. 이름·소개와 저장 시점을
+                   분리한 이유: 칭호만 서버 endpoint(POST /api/profile/title)를 타므로
+                   한 번에 저장하면 부분 실패가 사용자에게 모호해진다.
+                ⚠️ 보유 목록은 **서버 ownedItems 만** 본다(localStorage 캐시 단독 항목 금지).
+                   최종 권한은 서버가 재확인하며, 여기 UI 는 편의일 뿐이다. */}
+            <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-2">
               {t.titleLabel} <span className="font-normal text-stone-400">{t.titleHint}</span>
             </label>
-            <input
-              value={editTitle}
-              onChange={(e) => setEditTitle(e.target.value)}
-              maxLength={24}
-              placeholder={t.titlePlaceholder}
-              className="w-full mb-2 px-3 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
-            />
-            {itemsBySlot("title").some((t) => isItemOwned(t)) && (
-              <div className="flex flex-wrap gap-1.5 mb-4">
-                {itemsBySlot("title").filter((t) => isItemOwned(t)).map((t) => (
-                  <button
-                    key={t.id}
-                    onClick={() => setEditTitle(itemText(t, lang === "en"))}
-                    className={`px-2.5 py-1 rounded-full text-[12px] font-bold transition-colors ${
-                      editTitle === itemText(t, lang === "en") ? "bg-[#F9954E] text-white" : "bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300"
-                    }`}
-                  >
-                    {itemText(t, lang === "en")}
-                  </button>
-                ))}
+
+            <div className="flex gap-1.5 mb-3" role="tablist" aria-label={t.titleLabel}>
+              {(["catalog", "custom", "none"] as const).map((m) => (
+                <button
+                  key={m}
+                  role="tab"
+                  aria-selected={titleMode === m}
+                  onClick={() => { setTitleMode(m); setTitleMsg(""); }}
+                  className={`px-3 py-1.5 rounded-xl text-[12px] font-bold transition-colors ${
+                    titleMode === m ? "bg-[#F9954E] text-white" : "bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300"
+                  }`}
+                >
+                  {m === "catalog" ? (lang === "en" ? "Owned" : "보유 칭호")
+                    : m === "custom" ? (lang === "en" ? "Custom" : "직접 입력")
+                    : (lang === "en" ? "None" : "사용 안 함")}
+                </button>
+              ))}
+            </div>
+
+            {titleMode === "catalog" && (
+              <div className="mb-3">
+                {ownedTitleItems.length === 0 ? (
+                  <p className="text-[12px] text-stone-400 mb-2">
+                    {lang === "en" ? "You don't own any titles yet." : "아직 보유한 칭호가 없어요."}{" "}
+                    <a href={lang === "en" ? "/en/shop" : "/shop"} className="text-[#F9954E] font-bold underline">
+                      {lang === "en" ? "Go to shop" : "상점 가기"}
+                    </a>
+                  </p>
+                ) : (
+                  <div className="flex flex-wrap gap-1.5">
+                    {ownedTitleItems.map((it: ShopItem) => {
+                      const key = itemKey(it.slot, it.id);
+                      return (
+                        <button
+                          key={it.id}
+                          onClick={() => setSelectedTitleId(key)}
+                          aria-pressed={selectedTitleId === key}
+                          className={`px-2.5 py-1 rounded-full text-[12px] font-bold transition-colors ${
+                            selectedTitleId === key ? "bg-[#F9954E] text-white" : "bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300"
+                          }`}
+                        >
+                          {itemText(it, lang === "en")}
+                          <span className="ml-1 opacity-70">{RARITY_META[it.rarity]?.label}</span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                )}
               </div>
             )}
-            {!itemsBySlot("title").some((t) => isItemOwned(t)) && <div className="mb-2" />}
+
+            {titleMode === "custom" && (
+              <div className="mb-3">
+                <input
+                  value={editTitle}
+                  onChange={(e) => setEditTitle(e.target.value)}
+                  maxLength={24}
+                  placeholder={t.titlePlaceholder}
+                  aria-label={t.titleLabel}
+                  className="w-full px-3 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-[14px] text-stone-900 dark:text-white outline-none focus:ring-2 focus:ring-[#F9954E]/40"
+                />
+                <p className="mt-1.5 text-[11px] text-stone-400">
+                  {lang === "en"
+                    ? "Custom titles show in a neutral style. Shop titles have their own badge."
+                    : "직접 입력한 칭호는 기본 스타일로 표시돼요. 상점 칭호에는 전용 배지가 붙어요."}
+                </p>
+              </div>
+            )}
+
+            <div className="flex items-center gap-2 mb-4">
+              <button
+                onClick={saveTitle}
+                disabled={titleSaving}
+                className="px-3.5 py-2 rounded-xl bg-stone-900 dark:bg-white text-white dark:text-stone-900 text-[12px] font-bold disabled:opacity-50"
+              >
+                {titleSaving ? (lang === "en" ? "Saving…" : "저장 중…") : (lang === "en" ? "Save title" : "칭호 저장")}
+              </button>
+              {titleMsg && <span className="text-[12px] text-stone-500 dark:text-stone-400" role="status">{titleMsg}</span>}
+            </div>
 
             <label className="block text-[12px] font-semibold text-stone-700 dark:text-stone-300 mb-2">
               {t.colorLabel}

@@ -29,9 +29,20 @@ service cloud.firestore {
         'rewardTypeDate_achievement_claim', 'rewardTypeExp_achievement_claim', 'rewardTypeCandy_achievement_claim',
         'rewardTypeDate_level_reward', 'rewardTypeExp_level_reward', 'rewardTypeCandy_level_reward'];
     }
-    // 업데이트: 위 보상 필드가 하나라도 값이 바뀌면 거부(같은 값 재전송은 affectedKeys 에서 제외돼 허용).
+    // ⚠️ 05-09: **칭호(title) 계열은 서버 endpoint 전용**이다.
+    //   유료 칭호 39종은 효과가 `text` 문자열 하나뿐이라, 자유 입력창에 같은 글자를 치면
+    //   구매 결과와 바이트 단위로 동일한 화면이 나왔다(= 구매 우회).
+    //   Rules 로는 완전 검증이 불가능하다 — string.size() 가 **UTF-8 바이트**라 "24자" 계약을
+    //   표현할 수 없고(한글 8자=24바이트, 실측), NFC 정규화·trim·멱등도 Rules 에 없다.
+    //   → 값 판정은 POST /api/profile/title 이 하고, Rules 는 **직접 쓰기를 전면 차단**한다.
+    //   (설계 근거: docs/title-authority-decision.md)
+    function titleFieldNames() {
+      return ['titleMode', 'titleId', 'customTitle', 'title'];
+    }
+    // 업데이트: 위 보상·칭호 필드가 하나라도 값이 바뀌면 거부(같은 값 재전송은 affectedKeys 에서 제외돼 허용).
     function usersRewardsUnchangedOnUpdate() {
-      return !request.resource.data.diff(resource.data).affectedKeys().hasAny(rewardFieldNames());
+      return !request.resource.data.diff(resource.data).affectedKeys().hasAny(rewardFieldNames())
+        && !request.resource.data.diff(resource.data).affectedKeys().hasAny(titleFieldNames());
     }
     // 생성: doriExp 는 0, level/tier 는 ≤1(가입 기본값), 일일 카운터 필드는 아예 없어야 한다.
     // 05-07: 재화도 가입 환영 보너스(100)까지만 허용하고, 보유 아이템·프리미엄은 비어 있어야 한다.
@@ -48,6 +59,8 @@ service cloud.firestore {
                              'role', 'isAdmin', 'grade', 'vip',
                              'ownedItems', 'inventory', 'purchasedItems', 'unlockedItems',
                              'candyDailyDate', 'candyDailyTotal'])
+        // 05-09: 가입 시 칭호를 실을 수 없다(있기만 해도 거부). 칭호는 endpoint 로만 설정한다.
+        && !d.keys().hasAny(titleFieldNames())
         && !d.keys().hasAny(['rewardDailyDate', 'rewardDailyExp',
             'rewardTypeDate_community_post', 'rewardTypeExp_community_post', 'rewardTypeCandy_community_post',
             'rewardTypeDate_community_comment', 'rewardTypeExp_community_comment', 'rewardTypeCandy_community_comment',
@@ -125,7 +138,7 @@ service cloud.firestore {
     function stickerAt(list, i) {
       return list.size() <= i
         || list[i] in freeStickerEmojis()
-        || paidStickerKeys().get(list[i], ' none') in ownedNow();
+        || paidStickerKeys().get(list[i], '\u0000none') in ownedNow();
     }
     function stickersOk(changed) {
       return !('stickers' in changed)
@@ -220,6 +233,11 @@ service cloud.firestore {
       }
       //  · 구매 원장(05-07) — /api/purchase 가 SA 로만 기록. 본인 구매 이력만 읽을 수 있다.
       match /purchases/{operationId} {
+        allow read:  if request.auth != null && request.auth.uid == userId;
+        allow write: if false;
+      }
+      //  · 칭호 변경 원장(05-09) — POST /api/profile/title 이 SA 로만 기록(멱등 키). 본인만 읽는다.
+      match /titleOps/{operationId} {
         allow read:  if request.auth != null && request.auth.uid == userId;
         allow write: if false;
       }

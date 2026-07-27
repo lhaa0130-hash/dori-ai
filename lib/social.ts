@@ -220,7 +220,10 @@ export async function getProfile(uid: string): Promise<Profile> {
 }
 
 /** 내 프로필 일부 갱신(로그인 필요, users/{uid} merge) */
-export async function saveMyProfile(patch: Partial<Pick<Profile, "bio" | "statusMsg" | "themeColor" | "bg" | "name" | "photoURL" | "mood" | "title" | "frame" | "interests" | "stickers" | "nameEffect" | "bannerEffect" | "pet" | "greeting">>): Promise<boolean> {
+// ⚠️ 05-09: `title` 은 이 경로에서 **제거**했다. 칭호는 POST /api/profile/title 만 쓸 수 있고
+//   Firestore Rules 가 클라이언트 직접 쓰기를 차단한다(유료 칭호 문자열 복제 우회 차단).
+//   → lib/titleClient.ts 의 setCatalogTitle/setCustomTitle/clearTitle 을 사용할 것.
+export async function saveMyProfile(patch: Partial<Pick<Profile, "bio" | "statusMsg" | "themeColor" | "bg" | "name" | "photoURL" | "mood" | "frame" | "interests" | "stickers" | "nameEffect" | "bannerEffect" | "pet" | "greeting">>): Promise<boolean> {
   const uid = currentUid();
   if (!uid) return false;
   try {
