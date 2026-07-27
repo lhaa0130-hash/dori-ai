@@ -67,3 +67,4 @@ firebase-debug.log
 .wrangler/
 .ui-e2e-tmp*/
 .diag-profile/
+.wrangler-tmp/

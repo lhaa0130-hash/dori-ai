@@ -62,6 +62,103 @@ service cloud.firestore {
       return !request.resource.data.keys().hasAny(['email', 'gender', 'ageGroup', 'provider']);
     }
 
+    // ⚠️ 05-09: **장착(전시) 소유권** — 잔액·보유목록을 잠가도 '효과를 공짜로 쓰는' 경로가 남아 있었다.
+    //   saveMyProfile() 이 bg/frame/nameEffect/bannerEffect/pet/stickers 를 users/{uid} 에 직접 쓰고,
+    //   /profile 의 소유 판정은 Firestore ownedItems ∪ localStorage 캐시 합집합이었다.
+    //   → 잔액 0·ownedItems 비어 있어도 유료 아이템을 장착·전시할 수 있었다(공개 문서라 타인에게도 보임).
+    //   여기서 **서버의 기존 ownedItems** 만 기준으로 판정한다.
+    //   ⚠️ request.resource.data.ownedItems 는 절대 신뢰하지 않는다 — 같은 update 에서 함께 위조당하지 않도록.
+    //   (설계 근거·범위·title 제외 사유: docs/equipment-authority-decision.md)
+    // ===== BEGIN GENERATED equip-ownership (scripts/gen-equip-rules.mjs) =====
+    // 이 블록은 lib/shopItems.ts 에서 생성됩니다. 손으로 고치지 마세요.
+
+    function freeIds_bg() { return ['aurora', 'berry', 'bg_bubblegum', 'bg_cherry', 'bg_cloud', 'bg_grape', 'bg_indigo', 'bg_lemon', 'bg_olive', 'bg_pearl', 'bg_sand', 'bg_skyblue', 'bg_sunrise', 'bg_teal', 'candy', 'coral', 'forest', 'galaxy', 'gold', 'lime', 'mint', 'mono', 'night', 'ocean', 'peach', 'plum', 'sunset']; }
+    function freeIds_frame() { return ['frame_amber', 'frame_cyan', 'frame_green', 'frame_indigo', 'frame_lime', 'frame_pink', 'frame_red', 'frame_rose', 'frame_slate', 'frame_teal', 'frame_thin', 'frame_violet', 'gold', 'mint', 'neon', 'none', 'orange', 'sky']; }
+    function freeIds_nameEffect() { return ['name_blue', 'name_green', 'name_orange', 'name_pink', 'name_purple', 'name_red', 'none']; }
+    function freeIds_bannerEffect() { return ['fx_sparkle', 'none']; }
+    function freeIds_pet() { return ['pet_cat', 'pet_chick', 'pet_dog']; }
+
+    function freeStickerEmojis() { return ['⭐', '🍊', '🐾', '🌸', '🎀', '🔥', '💎', '🍭', '🦊', '🌟', '👑', '🍀', '🤖', '💛', '🌈', '🎮', '😀', '😍', '🥳', '😎', '🤩', '👍', '✌️', '🎵', '🍰', '🐣', '🌞', '💕']; }
+
+    // 유료 스티커 이모지 → 'sticker::id'. 무료 목록과 겹치는 이모지는 제외(사실상 무료).
+    function paidStickerKeys() { return {
+      '🍎': 'sticker::st_apple', '🎈': 'sticker::st_balloon', '🛏️': 'sticker::st_bed', '🐝': 'sticker::st_bee',
+      '📚': 'sticker::st_books', '🧋': 'sticker::st_bubbletea', '🍔': 'sticker::st_burger', '🦋': 'sticker::st_butterfly',
+      '🌵': 'sticker::st_cactus', '🎂': 'sticker::st_cake', '🕯️': 'sticker::st_candle', '🐱': 'sticker::st_cat',
+      '🪑': 'sticker::st_chair', '🍒': 'sticker::st_cherry', '🐥': 'sticker::st_chick', '🍫': 'sticker::st_choco',
+      '🕰️': 'sticker::st_clock', '🥥': 'sticker::st_coconut', '☕': 'sticker::st_coffee', '💫': 'sticker::st_comet',
+      '🍪': 'sticker::st_cookie', '🦀': 'sticker::st_crab', '🔮': 'sticker::st_crystal', '🧁': 'sticker::st_cupcake',
+      '🎯': 'sticker::st_dart', '🎲': 'sticker::st_dice', '🪩': 'sticker::st_disco', '🐶': 'sticker::st_dog',
+      '🐬': 'sticker::st_dolphin', '🍩': 'sticker::st_donut', '🕊️': 'sticker::st_dove', '🐲': 'sticker::st_dragon',
+      '🐠': 'sticker::st_fish', '🦩': 'sticker::st_flamingo', '🐸': 'sticker::st_frog', '🦒': 'sticker::st_giraffe',
+      '🍇': 'sticker::st_grape2', '🐹': 'sticker::st_hamster', '🦔': 'sticker::st_hedgehog', '🌺': 'sticker::st_hibiscus',
+      '🍦': 'sticker::st_icecream', '🎏': 'sticker::st_kite', '🥝': 'sticker::st_kiwi', '🐞': 'sticker::st_ladybug',
+      '💡': 'sticker::st_lamp', '💌': 'sticker::st_letter', '🦁': 'sticker::st_lion', '🦎': 'sticker::st_lizard',
+      '🪷': 'sticker::st_lotus', '🍁': 'sticker::st_maple', '🪞': 'sticker::st_mirror', '🌙': 'sticker::st_moon',
+      '🍄': 'sticker::st_mushroom', '🐙': 'sticker::st_octopus', '🦉': 'sticker::st_owl', '🌴': 'sticker::st_palm',
+      '🐼': 'sticker::st_panda', '🦜': 'sticker::st_parrot', '🍑': 'sticker::st_peach', '🐧': 'sticker::st_penguin',
+      '🖼️': 'sticker::st_pic', '🪅': 'sticker::st_pinata', '🍍': 'sticker::st_pineapple', '🍕': 'sticker::st_pizza',
+      '🪐': 'sticker::st_planet', '🪴': 'sticker::st_plant', '🍿': 'sticker::st_popcorn', '🍮': 'sticker::st_pudding',
+      '🎃': 'sticker::st_pumpkin', '🐰': 'sticker::st_rabbit', '🌹': 'sticker::st_rose', '🦈': 'sticker::st_shark',
+      '🍧': 'sticker::st_shaved_ice', '⛄': 'sticker::st_snowman', '🛋️': 'sticker::st_sofa', '🍓': 'sticker::st_strawberry',
+      '🌻': 'sticker::st_sunflower', '🦢': 'sticker::st_swan', '🌷': 'sticker::st_tulip', '🐢': 'sticker::st_turtle',
+      '📺': 'sticker::st_tv', '🦄': 'sticker::st_unicorn', '🪄': 'sticker::st_wand', '🍉': 'sticker::st_watermelon',
+      '🌊': 'sticker::st_wave', '🐳': 'sticker::st_whale', '🪟': 'sticker::st_window', '🎄': 'sticker::st_xmas'
+    }; }
+    // ===== END GENERATED equip-ownership =====
+
+    /** 기존(서버) 보유 목록. legacy 문서엔 필드가 없을 수 있다. */
+    function ownedNow() {
+      return resource.data.get('ownedItems', []);
+    }
+    /** 슬롯 하나의 새 장착 값이 허용되는가 — 빈 값 · 무료 기본 · 실제 보유 중 하나. */
+    function equipOk(slot, value, freeList) {
+      return value == null || value == ''
+        || value in freeList
+        || (slot + '::' + value) in ownedNow();
+    }
+    /** 이 update 에서 slot 필드가 바뀌었다면 소유 검증을 통과해야 한다(안 바뀌면 검사 생략). */
+    function equipFieldOk(slot, changed, freeList) {
+      return !(slot in changed) || equipOk(slot, request.resource.data.get(slot, ''), freeList);
+    }
+    /** 스티커 i번째 원소 검사. Rules 에 반복문이 없어 인덱스로 편다(클라 상한 6과 동일). */
+    function stickerAt(list, i) {
+      return list.size() <= i
+        || list[i] in freeStickerEmojis()
+        || paidStickerKeys().get(list[i], ' none') in ownedNow();
+    }
+    function stickersOk(changed) {
+      return !('stickers' in changed)
+        || (request.resource.data.get('stickers', []).size() <= 6
+            && stickerAt(request.resource.data.get('stickers', []), 0)
+            && stickerAt(request.resource.data.get('stickers', []), 1)
+            && stickerAt(request.resource.data.get('stickers', []), 2)
+            && stickerAt(request.resource.data.get('stickers', []), 3)
+            && stickerAt(request.resource.data.get('stickers', []), 4)
+            && stickerAt(request.resource.data.get('stickers', []), 5));
+    }
+    /** update: 바뀐 장착 필드만 소유 검증. */
+    function equipOwnedOnUpdate() {
+      let changed = request.resource.data.diff(resource.data).affectedKeys();
+      return equipFieldOk('bg', changed, freeIds_bg())
+        && equipFieldOk('frame', changed, freeIds_frame())
+        && equipFieldOk('nameEffect', changed, freeIds_nameEffect())
+        && equipFieldOk('bannerEffect', changed, freeIds_bannerEffect())
+        && equipFieldOk('pet', changed, freeIds_pet())
+        && stickersOk(changed);
+    }
+    /** create: ownedItems 를 실을 수 없으므로 무료 기본값·빈 값만 허용. */
+    function equipSafeOnCreate() {
+      let d = request.resource.data;
+      return (d.get('bg', '') == '' || d.get('bg', '') in freeIds_bg())
+        && (d.get('frame', '') == '' || d.get('frame', '') in freeIds_frame())
+        && (d.get('nameEffect', '') == '' || d.get('nameEffect', '') in freeIds_nameEffect())
+        && (d.get('bannerEffect', '') == '' || d.get('bannerEffect', '') in freeIds_bannerEffect())
+        && (d.get('pet', '') == '' || d.get('pet', '') in freeIds_pet())
+        && d.get('stickers', []).size() <= 6
+        && d.get('stickers', []).toSet().hasOnly(freeStickerEmojis().toSet());
+    }
+
     // ⚠️ 비공개 계정 정보(이메일·성별·연령대·provider) — 본인과 관리자만 읽고 쓴다.
     //    users/{uid}는 공개 읽기(read:if true)라 이메일 등 PII를 여기 두면 안 된다.
     //    (01-A단계: 이메일 공개 노출 차단 — PII를 users 밖 이 컬렉션으로 분리)
@@ -75,11 +172,11 @@ service cloud.firestore {
       allow read: if true;
       // 생성: 소유자/관리자, PII 금지, 보상 필드는 안전 기본값만(doriExp=0·level/tier≤1·카운터 없음).
       allow create: if request.auth != null && (request.auth.uid == userId || isAdmin())
-        && usersNoPii() && usersRewardsSafeOnCreate();
+        && usersNoPii() && usersRewardsSafeOnCreate() && equipSafeOnCreate();
       // 수정: 소유자/관리자, PII 금지, 보상 필드(doriExp/level/tier/일일·타입 카운터) 변경 불가.
       //  → 정상 저장(프로필·myWorld·솜사탕·출석·ownedItems·quickBar 등)은 그대로 통과.
       allow update: if request.auth != null && (request.auth.uid == userId || isAdmin())
-        && usersNoPii() && usersRewardsUnchangedOnUpdate();
+        && usersNoPii() && usersRewardsUnchangedOnUpdate() && equipOwnedOnUpdate();
       // 삭제: 소유자/관리자(계정 정리). 재생성 시엔 create 규칙이 기본값을 강제한다.
       allow delete: if request.auth != null && (request.auth.uid == userId || isAdmin());
 
