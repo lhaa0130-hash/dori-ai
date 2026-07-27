@@ -172,14 +172,16 @@ export function isValidExtendedOperationId(policy: ExtendedRewardPolicy, operati
  */
 export function sanitizeExtendedRewardRequest(
   body: unknown,
-): { ok: true; policy: ExtendedRewardPolicy; operationId: string; sourceId?: string }
+): { ok: true; policy: ExtendedRewardPolicy; operationId: string; sourceId?: string; candyOwnerIsServer: boolean }
   | { ok: false; error: string } {
   if (!body || typeof body !== "object" || Array.isArray(body)) return { ok: false, error: "invalid_request" };
   const b = body as Record<string, unknown>;
   const forbidden = ["amount", "exp", "doriExp", "xp", "uid", "email", "level", "tier", "dailyExp", "currentExp", "finalExp"];
   for (const k of forbidden) if (k in b) return { ok: false, error: `forbidden_field:${k}` };
-  const allowed = new Set(["rewardType", "idToken", "operationId", "sourceId", "gameId", "missionId", "kind"]);
+  // candyOwner: 클라이언트가 "재화를 스스로 쓰지 않는다"고 선언하는 표식(05-09, 아래 참조).
+  const allowed = new Set(["rewardType", "idToken", "operationId", "sourceId", "gameId", "missionId", "kind", "candyOwner"]);
   for (const k of Object.keys(b)) if (!allowed.has(k)) return { ok: false, error: `unexpected_field:${k}` };
+  if (b.candyOwner !== undefined && b.candyOwner !== "server") return { ok: false, error: "invalid_candy_owner" };
   if (!isExtendedRewardType(b.rewardType)) return { ok: false, error: "unknown_reward_type" };
   const policy = EXTENDED_REWARD_POLICIES[b.rewardType];
   // sourceId 는 타입별 별칭(gameId/missionId)도 허용.
@@ -188,7 +190,10 @@ export function sanitizeExtendedRewardRequest(
     : typeof b.missionId === "string" ? b.missionId : undefined;
   if (policy.requiresSource && (!sourceId || !SOURCE_RE.test(sourceId))) return { ok: false, error: "missing_source" };
   if (!isValidExtendedOperationId(policy, b.operationId, sourceId)) return { ok: false, error: "invalid_operation_id" };
-  return { ok: true, policy, operationId: b.operationId as string, ...(sourceId ? { sourceId } : {}) };
+  return {
+    ok: true, policy, operationId: b.operationId as string, ...(sourceId ? { sourceId } : {}),
+    candyOwnerIsServer: b.candyOwner === "server",
+  };
 }
 
 /** 이 타입의 이번 지급 EXP(순수) — 타입별 일일 상한 초과분은 0. */

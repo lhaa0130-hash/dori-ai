@@ -87,7 +87,7 @@ export const onRequestPost: any = async (context: any) => {
     try { body = JSON.parse(raw); } catch { return J({ ok: false, error: "invalid_request" }, 400); }
     const rewardType = (body as { rewardType?: unknown } | null)?.rewardType;
     let interaction: { operationId: string; kind: string } | null = null;
-    let extended: { policy: ExtendedRewardPolicy; operationId: string; sourceId?: string } | null = null;
+    let extended: { policy: ExtendedRewardPolicy; operationId: string; sourceId?: string; candyOwnerIsServer: boolean } | null = null;
     if (rewardType === "my_world_interaction") {
       const ci = sanitizeInteractionRewardRequest(body);
       if (!ci.ok) return J({ ok: false, error: "invalid_request", detail: ci.error }, 400);
@@ -95,7 +95,7 @@ export const onRequestPost: any = async (context: any) => {
     } else if (isExtendedRewardType(rewardType)) {
       const ce = sanitizeExtendedRewardRequest(body);
       if (!ce.ok) return J({ ok: false, error: "invalid_request", detail: ce.error }, 400);
-      extended = { policy: ce.policy, operationId: ce.operationId, sourceId: ce.sourceId };
+      extended = { policy: ce.policy, operationId: ce.operationId, sourceId: ce.sourceId, candyOwnerIsServer: ce.candyOwnerIsServer };
     } else {
       const clean = sanitizeRewardRequest(body);
       if (!clean.ok) return J({ ok: false, error: "invalid_request", detail: clean.error }, 400);
@@ -269,7 +269,7 @@ async function runInteractionReward(
 //   (없는 source·타인 source 거부). mission/minigame/activity 는 BOUNDED CLIENT-ASSERTED(상한+멱등으로 방어).
 async function runExtendedReward(
   target: FirestoreTarget, token: string, uid: string, today: string,
-  intent: { policy: ExtendedRewardPolicy; operationId: string; sourceId?: string },
+  intent: { policy: ExtendedRewardPolicy; operationId: string; sourceId?: string; candyOwnerIsServer: boolean },
   candyAllowed: boolean, cid: string,
 ): Promise<Response> {
   const rt = intent.policy.rewardType;
@@ -349,8 +349,13 @@ async function runExtendedReward(
       const totalSameDay = u.candyDailyDate === today;
       const totalToday = totalSameDay && typeof u.candyDailyTotal === "number" && u.candyDailyTotal >= 0 ? Math.floor(u.candyDailyTotal) : 0;
       const globalRoom = Math.max(0, DAILY_CANDY_TOTAL_CAP - totalToday);
-      // 재화 게이트가 닫혀 있으면(CANDY_ROLLOUT_MODE=off/미설정) 재화만 0. EXP 는 그대로 지급된다.
-      const candyAward = candyAllowed
+      // ⚠️ 05-09 과도기 이중지급 차단 — 클라이언트가 재화를 **스스로 쓰는지** 로 갈린다.
+      //   구버전 client 의 grantPlaytimeReward 는 로컬 +50 을 Firestore 에 직접 쓰면서 동시에
+      //   minigame_play 를 서버에 청구했다. 신규 Functions 가 그 타입에 재화를 붙이자 **+100** 이 됐다.
+      //   서버는 요청만 보고 클라 버전을 알 수 없다 → 재화를 포기한 클라만 candyOwner:"server" 를 보낸다.
+      //   표식이 없으면 "클라가 스스로 쓴다"고 보고 **재화 0**(EXP 는 그대로) — fail-safe 방향이다.
+      //   Rules 배포 후에는 클라 직접 쓰기가 막히므로 어느 쪽이든 서버 값만 남는다.
+      const candyAward = candyAllowed && intent.candyOwnerIsServer
         ? Math.min(computeExtendedCandy(intent.policy, typeCandy, intent.sourceId), globalRoom)
         : 0;
       const serverCandy = typeof u.cottonCandy === "number" && u.cottonCandy >= 0 ? Math.floor(u.cottonCandy) : 0;

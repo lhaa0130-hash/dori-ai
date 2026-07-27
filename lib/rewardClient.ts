@@ -78,7 +78,13 @@ async function sendClaim(deps: ClaimDeps, uid: string, intent: ClaimIntent): Pro
   if (!idToken) return { status: "queued" }; // 토큰 일시 불가 → 재시도 대상
   let res: { status: number; json: ClaimServerResult };
   try {
-    res = await deps.transport({ rewardType: intent.rewardType, operationId: intent.operationId, ...(intent.kind ? { kind: intent.kind } : {}), ...(intent.sourceId ? { sourceId: intent.sourceId } : {}) }, idToken);
+    // ⚠️ candyOwner: "server" — "이 클라이언트는 솜사탕을 **스스로 쓰지 않는다**"는 선언(05-09).
+    //   구버전 client 는 grantPlaytimeReward 에서 로컬 +50 을 직접 쓰고 서버에도 minigame_play 를
+    //   청구했다. 신규 Functions 가 그 타입에 재화를 붙이면서 **이중 지급(+100)** 이 생겼다.
+    //   서버는 요청만 보고 클라 버전을 알 수 없으므로, 재화를 포기한 클라만 이 표식을 보낸다.
+    //   표식이 없으면 서버는 "클라가 스스로 쓴다"고 보고 재화를 0 으로 둔다(fail-safe).
+    //   ⚠️ 보안 경계가 아니다 — Rules 배포 후에는 클라 직접 쓰기가 막혀 어느 쪽이든 서버 값만 남는다.
+    res = await deps.transport({ rewardType: intent.rewardType, operationId: intent.operationId, candyOwner: "server", ...(intent.kind ? { kind: intent.kind } : {}), ...(intent.sourceId ? { sourceId: intent.sourceId } : {}) }, idToken);
   } catch {
     return { status: "queued" }; // 네트워크 실패
   }
