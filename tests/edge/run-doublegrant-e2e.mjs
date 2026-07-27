@@ -20,7 +20,7 @@ const FS_HOST = process.env.FIRESTORE_EMULATOR_HOST || "127.0.0.1:8080";
 const AUTH_HOST = process.env.FIREBASE_AUTH_EMULATOR_HOST || "127.0.0.1:9099";
 const REPO = path.resolve(fileURLToPath(new URL("../../", import.meta.url)));
 const TMP = path.join(REPO, ".wrangler-tmp", "dg-" + process.pid);
-const PORT = 8798;
+const PORT = 8822;   // 다른 스위트와 겹치지 않는 대역
 
 const results = [];
 let group = "";

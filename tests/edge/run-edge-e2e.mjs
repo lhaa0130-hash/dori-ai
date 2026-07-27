@@ -2,7 +2,7 @@
 //  handler core 직접 호출이 아니라, wrangler pages dev 가 띄운 실제 /api/claim-reward 를 HTTP 로 때린다.
 //  실행: firebase emulators:exec --only auth,firestore --project demo-illo-myworld "node tests/edge/run-edge-e2e.mjs"
 //  (FIRESTORE_EMULATOR_HOST / FIREBASE_AUTH_EMULATOR_HOST 는 emulators:exec 가 주입)
-import { spawn } from "node:child_process";
+import { spawn, execSync } from "node:child_process";
 import { mkdirSync, writeFileSync, rmSync, symlinkSync, existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import path from "node:path";
@@ -13,7 +13,31 @@ const AUTH_HOST = process.env.FIREBASE_AUTH_EMULATOR_HOST || "127.0.0.1:9099";
 const PORT = 8788;
 const BASE = `http://127.0.0.1:${PORT}`;
 const REPO = path.resolve(fileURLToPath(new URL("../../", import.meta.url)));
-const TMP = path.join(REPO, ".edge-e2e-tmp");
+// ⚠️ 실행마다 고유 경로 — 잠긴 핸들이 다음 실행을 막지 않게 한다(EPERM 방지).
+const TMP = path.join(REPO, ".wrangler-tmp", "edge-" + process.pid);
+
+// 신규 client 는 확장 타입 요청에 candyOwner:"server" 를 붙인다(05-09 이중지급 차단 계약).
+// my_world_interaction·daily_attendance 정제기는 미지 필드를 거부하므로 확장 타입에만 붙인다.
+const EXTENDED_TYPES = new Set(["community_post","community_comment","mission_complete","minigame_play","game_activity","achievement_claim","level_reward"]);
+function withCandyOwner(body) {
+  if (!body || typeof body !== "object" || Array.isArray(body)) return body;
+  if (!EXTENDED_TYPES.has(body.rewardType)) return body;
+  if ("candyOwner" in body) return body;
+  return { ...body, candyOwner: "server" };
+}
+
+// ⚠️ Windows 에서 spawn(shell:true) 로 띄운 npx→wrangler→workerd 트리는 child.kill() 로
+//    셸만 죽고 손자 workerd 가 살아남아 포트를 계속 점유한다. 포트 기준으로 회수한다.
+function killPort(port) {
+  try {
+    if (process.platform !== "win32") return 0;
+    const out = execSync('netstat -ano -p tcp | findstr LISTENING | findstr :' + port, { encoding: "utf8", stdio: ["ignore", "pipe", "ignore"] });
+    const pids = new Set(out.split(/\r?\n/).map((l) => l.trim().split(/\s+/).pop()).filter((p) => /^\d+$/.test(p) && p !== "0"));
+    for (const pid of pids) { try { execSync('taskkill /PID ' + pid + ' /T /F', { stdio: "ignore" }); } catch { /* noop */ } }
+    return pids.size;
+  } catch { return 0; }
+}
+function killAllEdgePorts() { let n = 0; for (const p of [8788, 8790, 8792, 8793, 8794]) n += killPort(p); return n; }
 
 const results = [];
 const ok = (n, cond, d = "") => { results.push({ n, ok: !!cond }); console.log(`${cond ? "PASS" : "FAIL"}  ${n}${d ? "  — " + d : ""}`); };
@@ -50,7 +74,7 @@ async function makeUser(email) {
 // ── 엔드포인트 호출 ──
 async function claim(body, idToken, extraHeaders = {}, method = "POST") {
   const headers = { "Content-Type": "application/json", ...(idToken ? { Authorization: `Bearer ${idToken}` } : {}), ...extraHeaders };
-  const r = await fetch(`${BASE}/api/claim-reward`, { method, headers, body: body === undefined ? undefined : (typeof body === "string" ? body : JSON.stringify(body)) });
+  const r = await fetch(`${BASE}/api/claim-reward`, { method, headers, body: body === undefined ? undefined : (typeof body === "string" ? body : JSON.stringify(withCandyOwner(body))) });
   let json = null; try { json = await r.json(); } catch { /* non-json */ }
   return { status: r.status, json };
 }
@@ -60,7 +84,7 @@ let tmpReady = false;
 function ensureTmp() {
   if (tmpReady) return;
   // wrangler.toml(Workers 용) 간섭을 피하려 격리 tmp 에서 functions 정션으로 pages dev 실행.
-  rmSync(TMP, { recursive: true, force: true });
+  try { rmSync(TMP, { recursive: true, force: true }); } catch { /* 잠긴 핸들 무시 */ }
   mkdirSync(path.join(TMP, "public"), { recursive: true });
   writeFileSync(path.join(TMP, "public", "index.html"), "<!doctype html><title>edge-e2e</title>ok");
   if (!existsSync(path.join(TMP, "functions"))) symlinkSync(path.join(REPO, "functions"), path.join(TMP, "functions"), "junction");
@@ -92,6 +116,7 @@ async function waitForPort(port, timeoutMs = 90000) {
 }
 
 async function main() {
+  killAllEdgePorts();   // 이전 실행의 유령 인스턴스에 붙는 것을 원천 차단
   startWrangler(PORT, { REWARD_ROLLOUT_MODE: "all" }); // 기본 인스턴스 = 전체 롤아웃
   const up = await waitForPort(PORT);
   if (!up) { ok("wrangler pages dev 기동", false, "타임아웃"); return finish(); }
@@ -604,10 +629,13 @@ function finish() {
       }
     } catch { /* noop */ }
   }
-  try { rmSync(TMP, { recursive: true, force: true }); } catch { /* noop */ }
+  try { try { rmSync(TMP, { recursive: true, force: true }); } catch { /* 잠긴 핸들 무시 */ } } catch { /* noop */ }
   const passed = results.filter((r) => r.ok).length;
   console.log(`\n${passed}/${results.length} edge E2E checks passed`);
-  setTimeout(() => process.exit(passed === results.length ? 0 : 1), 500);
+  // ⚠️ 검사가 **하나도 실행되지 않은 경우**(하네스 자체 오류)도 실패로 처리한다.
+  //   예전에는 0/0 이 "passed === results.length" 를 만족해 초록불로 끝났다.
+  const green = results.length > 0 && passed === results.length;
+  setTimeout(() => process.exit(green ? 0 : 1), 500);
 }
 
 main().catch((e) => { console.error("E2E harness error:", e); finish(); });
