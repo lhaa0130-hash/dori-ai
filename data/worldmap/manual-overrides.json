@@ -1,0 +1,9 @@
+{
+  "__comment": "국가별 수동 보정. __isoMapping 은 Natural Earth 의 비표준 3자 코드를 ISO 3166-1 alpha-3 로 옮기는 표다.",
+  "__isoMapping": {
+    "SDS": "SSD",
+    "PSX": "PSE",
+    "SAH": "ESH",
+    "KOS": "XKX"
+  }
+}
