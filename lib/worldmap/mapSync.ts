@@ -178,6 +178,36 @@ export class MapSyncController {
 }
 
 /**
+ * 여러 나라의 경계 상자를 하나로 합친다 (후속 지시서 §5).
+ *
+ * ⚠️ 경도를 단순히 min/max 로 묶으면 날짜변경선을 사이에 둔 조합(예: 미국+일본)이
+ *    "-170 ~ 170" 이 되어 지도가 세계 전체로 확 줄어든다. 태평양을 가로지르는 쪽이
+ *    더 좁으면 경도를 0~360 으로 옮겨서 재고, 결과만 다시 -180~180 으로 되돌린다.
+ */
+export function combinedBounds(boxes: Array<[number, number, number, number]>): [number, number, number, number] {
+  if (!boxes.length) return [-180, -85, 180, 85];
+
+  const minLat = Math.min(...boxes.map((b) => b[1]));
+  const maxLat = Math.max(...boxes.map((b) => b[3]));
+
+  // 후보 1: 그대로 -180~180 에서 묶기
+  const west = Math.min(...boxes.map((b) => b[0]));
+  const east = Math.max(...boxes.map((b) => b[2]));
+  const spanA = east - west;
+
+  // 후보 2: 음수 경도를 +360 해서 묶기 (날짜변경선을 가운데 두는 배치)
+  const shift = (lon: number) => (lon < 0 ? lon + 360 : lon);
+  const west2 = Math.min(...boxes.map((b) => shift(b[0])));
+  const east2 = Math.max(...boxes.map((b) => shift(b[2])));
+  const spanB = east2 - west2;
+
+  if (spanB < spanA) {
+    return [wrapLongitude(west2), minLat, wrapLongitude(east2) === -180 ? 180 : wrapLongitude(east2), maxLat];
+  }
+  return [west, minLat, east, maxLat];
+}
+
+/**
  * 경계 상자를 담을 수 있는 카메라를 구한다.
  * MapLibre 의 fitBounds 는 지구본에서 동작이 달라, 양쪽에 같은 값을 주려고 직접 계산한다.
  */

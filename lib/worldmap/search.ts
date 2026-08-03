@@ -3,6 +3,8 @@
 
 import type { ContinentCode, CountryRecord, SupportedLanguage, ViewMode } from "./types";
 import { CONTINENTS, VIEW_MODES } from "./types";
+import type { ComparisonSelection, WorldMapMode } from "./comparison";
+import { normalizeComparison } from "./comparison";
 
 /** 대소문자·앞뒤 공백·라틴 악센트 차이를 없앤다. 한글은 그대로 둔다. */
 export function normalize(input: string): string {
@@ -60,10 +62,19 @@ export function searchCountries(
   return [...prefix, ...contains].slice(0, SEARCH_LIMIT);
 }
 
-// ── URL 상태 (명세서 §8.3) ─────────────────────────────────────────
+// ── URL 상태 (후속 지시서 §4) ──────────────────────────────────────
+//
+//   일반 탐색 : /world-map?country=KOR
+//   비교      : /world-map?mode=compare&countries=KOR,JPN,KEN,BRA
+//
+// 비교는 더 이상 country + compare 두 칸이 아니다. 순서가 곧 색상 번호이므로
+// 목록 하나로 표현한다.
+
 export interface UrlState {
+  mode: WorldMapMode;
   country: string | null;
-  compare: string | null;
+  /** mode==="compare" 일 때만 의미가 있다. 순서 = 색상 번호. */
+  comparison: ComparisonSelection[];
   lang: SupportedLanguage | null;
   view: ViewMode;
   continent: ContinentCode | null;
@@ -72,7 +83,7 @@ export interface UrlState {
 const ISO3 = /^[A-Za-z]{3}$/;
 
 /**
- * 쿼리스트링 → 상태. 잘못된 값은 조용히 무시한다(명세서 §8.3).
+ * 쿼리스트링 → 상태. 잘못된 값은 조용히 무시한다.
  * `valid` 를 주면 실제 존재하는 ISO 인지까지 확인한다.
  */
 export function parseUrlState(params: URLSearchParams, valid?: Set<string>): UrlState {
@@ -83,20 +94,28 @@ export function parseUrlState(params: URLSearchParams, valid?: Set<string>): Url
     return upper;
   };
 
-  const country = iso(params.get("country"));
-  let compare = iso(params.get("compare"));
-  // 같은 국가를 A·B 로 둘 수 없다(명세서 §7.5-4)
-  if (compare && compare === country) compare = null;
-  // 선택 국가가 없으면 비교만 남길 수 없다
-  if (!country) compare = null;
+  const mode: WorldMapMode = params.get("mode") === "compare" ? "compare" : "explore";
+
+  // 비교 목록은 compare 모드에서만 읽는다.
+  let comparison: ComparisonSelection[] = [];
+  if (mode === "compare") {
+    const raw = params.get("countries") ?? "";
+    comparison = normalizeComparison(raw.split(","), valid);
+    // 구버전 링크(?compare=JPN) 호환 — 새 URL 을 만들 때는 쓰지 않는다.
+    if (comparison.length === 0) {
+      const legacy = [params.get("country"), params.get("compare")].filter(Boolean) as string[];
+      comparison = normalizeComparison(legacy, valid);
+    }
+  }
 
   const rawLang = params.get("lang");
   const rawView = params.get("view");
   const rawContinent = params.get("continent")?.toUpperCase() ?? null;
 
   return {
-    country,
-    compare,
+    mode,
+    country: iso(params.get("country")),
+    comparison,
     lang: rawLang === "ko" || rawLang === "en" ? rawLang : null,
     view: VIEW_MODES.includes(rawView as ViewMode) ? (rawView as ViewMode) : "split",
     continent: CONTINENTS.includes(rawContinent as ContinentCode) ? (rawContinent as ContinentCode) : null,
@@ -106,12 +125,18 @@ export function parseUrlState(params: URLSearchParams, valid?: Set<string>): Url
 /** 상태 → 쿼리스트링. 기본값은 넣지 않아 URL 을 짧게 유지한다. */
 export function buildUrlQuery(state: UrlState): string {
   const p = new URLSearchParams();
-  if (state.country) p.set("country", state.country);
-  if (state.compare && state.country && state.compare !== state.country) p.set("compare", state.compare);
+  if (state.mode === "compare") {
+    p.set("mode", "compare");
+    // 0~1개여도 tray 는 복원해야 하므로 목록이 있으면 그대로 싣는다.
+    if (state.comparison.length) p.set("countries", state.comparison.map((c) => c.iso3).join(","));
+  } else if (state.country) {
+    p.set("country", state.country);
+  }
   if (state.lang) p.set("lang", state.lang);
   if (state.view !== "split") p.set("view", state.view);
   if (state.continent) p.set("continent", state.continent);
-  const s = p.toString();
+  // 쉼표는 쿼리 값에서 그대로 써도 되는 문자다. %2C 로 인코딩되면 주소가 읽기 어려워진다.
+  const s = p.toString().replace(/%2C/g, ",");
   return s ? `?${s}` : "";
 }
 

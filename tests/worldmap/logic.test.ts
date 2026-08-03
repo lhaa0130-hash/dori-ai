@@ -8,6 +8,10 @@ import { abbreviate, compareMetrics, formatDate, formatMetric, fullNumber } from
 import { buildSearchIndex, searchCountries, normalize, parseUrlState, buildUrlQuery, worldRank } from "../../lib/worldmap/search.ts";
 import { MapSyncController, clampLatitude, wrapLongitude, normalizeCamera, cameraForBounds, type MapAdapter, type Camera } from "../../lib/worldmap/mapSync.ts";
 import { resolveLanguage } from "../../lib/worldmap/i18n.ts";
+import {
+  addComparison, removeComparison, moveComparison, clearComparison,
+  normalizeComparison, shouldShowTable, type ComparisonSelection,
+} from "../../lib/worldmap/comparison.ts";
 import type { CountryRecord, NumericMetric } from "../../lib/worldmap/types.ts";
 
 // ── 도우미 ──────────────────────────────────────────────────────
@@ -23,6 +27,7 @@ function country(over: Partial<CountryRecord> & { iso3: string }): CountryRecord
     established: { date: null, s: "missing", src: null },
     religion: { ko: null, en: null, kind: null, labelKo: "주요 종교", labelEn: "Main religion", s: "missing", src: null },
     population: num(null), area: num(null), gdp: num(null), gdpPerCapita: num(null),
+    languages: [], currencies: [], timezones: [], borderCountryIso3: [], landlocked: false, islandCountry: false,
     ...over,
   } as CountryRecord;
 }
@@ -128,41 +133,143 @@ test("결과는 최대 10개", () => {
   assert.equal(searchCountries(many, "xland").length, 10);
 });
 
-// ── URL 상태 (§8.3) ────────────────────────────────────────────
-const VALID = new Set(["KOR", "JPN", "FRA"]);
+// ── 비교 상태 (후속 지시서 §3 · §12.1) ──────────────────────────
+const isoOf = (list: ComparisonSelection[]) => list.map((c) => c.iso3);
+const slotsOf = (list: ComparisonSelection[]) => list.map((c) => c.colorSlot);
 
-test("소문자 ISO 를 대문자로 받아들인다", () => {
+test("비교 목록은 빈 상태에서 시작한다", () => {
+  assert.deepEqual(clearComparison(), []);
+  assert.equal(shouldShowTable([]), false);
+});
+
+test("국가를 추가하면 순서대로 색상 번호가 붙는다", () => {
+  let list = clearComparison();
+  for (const iso3 of ["KOR", "JPN", "KEN", "BRA"]) {
+    const r = addComparison(list, iso3);
+    assert.equal(r.status, "added");
+    list = r.list;
+  }
+  assert.deepEqual(isoOf(list), ["KOR", "JPN", "KEN", "BRA"]);
+  assert.deepEqual(slotsOf(list), [0, 1, 2, 3]);
+});
+
+test("비교 표는 2개국부터 나타난다", () => {
+  let list = addComparison(clearComparison(), "KOR").list;
+  assert.equal(shouldShowTable(list), false, "1개일 때는 표를 열지 않는다");
+  list = addComparison(list, "JPN").list;
+  assert.equal(shouldShowTable(list), true);
+});
+
+test("같은 국가를 다시 누르면 중복 추가하지 않는다", () => {
+  const list = addComparison(addComparison(clearComparison(), "KOR").list, "JPN").list;
+  const again = addComparison(list, "KOR");
+  assert.equal(again.status, "duplicate");
+  assert.equal(again.iso3, "KOR");
+  assert.deepEqual(isoOf(again.list), ["KOR", "JPN"], "목록이 바뀌면 안 된다");
+});
+
+test("5번째 국가는 추가하지 않고 알린다", () => {
+  let list = clearComparison();
+  for (const iso3 of ["KOR", "JPN", "KEN", "BRA"]) list = addComparison(list, iso3).list;
+  const fifth = addComparison(list, "FRA");
+  assert.equal(fifth.status, "full");
+  assert.deepEqual(isoOf(fifth.list), ["KOR", "JPN", "KEN", "BRA"]);
+});
+
+test("중간 국가를 제거하면 색상 번호가 다시 매겨진다", () => {
+  let list = clearComparison();
+  for (const iso3 of ["KOR", "JPN", "KEN", "BRA"]) list = addComparison(list, iso3).list;
+  const after = removeComparison(list, "JPN");
+  assert.deepEqual(isoOf(after), ["KOR", "KEN", "BRA"]);
+  assert.deepEqual(slotsOf(after), [0, 1, 2], "빈 번호가 남으면 안 된다");
+});
+
+test("없는 국가를 제거해도 목록이 그대로다", () => {
+  const list = addComparison(clearComparison(), "KOR").list;
+  assert.deepEqual(isoOf(removeComparison(list, "ZZZ")), ["KOR"]);
+});
+
+test("순서를 바꾸면 색상 번호도 같이 따라간다", () => {
+  let list = clearComparison();
+  for (const iso3 of ["KOR", "JPN", "KEN"]) list = addComparison(list, iso3).list;
+
+  const moved = moveComparison(list, "KEN", -1);
+  assert.deepEqual(isoOf(moved), ["KOR", "KEN", "JPN"]);
+  assert.deepEqual(slotsOf(moved), [0, 1, 2]);
+
+  // 양끝에서 더 밀어도 그대로
+  assert.deepEqual(isoOf(moveComparison(moved, "KOR", -1)), ["KOR", "KEN", "JPN"]);
+  assert.deepEqual(isoOf(moveComparison(moved, "JPN", 1)), ["KOR", "KEN", "JPN"]);
+});
+
+test("임의 목록을 정규화한다 — 무효·중복·초과 제거, 순서 유지", () => {
+  const valid = new Set(["KOR", "JPN", "KEN", "BRA", "FRA"]);
+  const out = normalizeComparison(["jpn", "ZZZ", "KOR", "JPN", "12", "KEN", "BRA", "FRA"], valid);
+  assert.deepEqual(isoOf(out), ["JPN", "KOR", "KEN", "BRA"], "소문자 허용·무효 제거·중복 제거·4개 제한");
+  assert.deepEqual(slotsOf(out), [0, 1, 2, 3]);
+});
+
+// ── URL 상태 (후속 지시서 §4) ──────────────────────────────────
+const VALID = new Set(["KOR", "JPN", "FRA", "KEN", "BRA"]);
+const EXPLORE = { mode: "explore" as const, country: null, comparison: [], lang: null, view: "split" as const, continent: null };
+
+test("일반 탐색 URL 은 country 하나만 쓴다", () => {
   assert.equal(parseUrlState(new URLSearchParams("country=kor"), VALID).country, "KOR");
+  assert.equal(buildUrlQuery({ ...EXPLORE, country: "KOR" }), "?country=KOR");
 });
 
 test("잘못된 ISO 와 지원하지 않는 값은 조용히 무시한다", () => {
-  const s = parseUrlState(new URLSearchParams("country=ZZZ&compare=1234&lang=fr&view=hologram"), VALID);
+  const s = parseUrlState(new URLSearchParams("country=ZZZ&lang=fr&view=hologram"), VALID);
   assert.equal(s.country, null);
-  assert.equal(s.compare, null);
   assert.equal(s.lang, null);
   assert.equal(s.view, "split");
+  assert.equal(s.mode, "explore");
 });
 
-test("같은 국가는 A·B 로 동시에 지정할 수 없다", () => {
-  assert.equal(parseUrlState(new URLSearchParams("country=KOR&compare=KOR"), VALID).compare, null);
+test("비교 URL 은 mode=compare 일 때만 countries 를 읽는다", () => {
+  const off = parseUrlState(new URLSearchParams("countries=KOR,JPN"), VALID);
+  assert.deepEqual(off.comparison, [], "mode 가 없으면 비교 목록을 만들지 않는다");
+
+  const on = parseUrlState(new URLSearchParams("mode=compare&countries=KOR,JPN"), VALID);
+  assert.deepEqual(isoOf(on.comparison), ["KOR", "JPN"]);
+  assert.equal(on.mode, "compare");
 });
 
-test("선택 국가가 없으면 비교만 남기지 않는다", () => {
-  assert.equal(parseUrlState(new URLSearchParams("compare=JPN"), VALID).compare, null);
-});
-
-test("URL 왕복이 상태를 보존한다", () => {
-  const q = buildUrlQuery({ country: "KOR", compare: "JPN", lang: "en", view: "globe", continent: "AS" });
+test("비교 URL 왕복이 순서와 색상을 보존한다", () => {
+  const comparison = normalizeComparison(["KOR", "JPN", "KEN", "BRA"], VALID);
+  const q = buildUrlQuery({ mode: "compare", country: null, comparison, lang: "en", view: "globe", continent: "AS" });
+  assert.ok(q.includes("mode=compare"));
   const back = parseUrlState(new URLSearchParams(q.slice(1)), VALID);
-  assert.equal(back.country, "KOR");
-  assert.equal(back.compare, "JPN");
+  assert.deepEqual(isoOf(back.comparison), ["KOR", "JPN", "KEN", "BRA"]);
+  assert.deepEqual(slotsOf(back.comparison), [0, 1, 2, 3]);
   assert.equal(back.lang, "en");
   assert.equal(back.view, "globe");
-  assert.equal(back.continent, "AS");
+});
+
+test("URL 의 무효·중복·5개 초과 ISO 를 정규화한다", () => {
+  const s = parseUrlState(new URLSearchParams("mode=compare&countries=KOR,ZZZ,JPN,KOR,KEN,BRA,FRA"), VALID);
+  assert.deepEqual(isoOf(s.comparison), ["KOR", "JPN", "KEN", "BRA"]);
+});
+
+test("0~1개여도 비교 모드는 유지된다 (tray 복원)", () => {
+  const zero = parseUrlState(new URLSearchParams("mode=compare"), VALID);
+  assert.equal(zero.mode, "compare");
+  assert.deepEqual(zero.comparison, []);
+
+  const one = parseUrlState(new URLSearchParams("mode=compare&countries=KOR"), VALID);
+  assert.deepEqual(isoOf(one.comparison), ["KOR"]);
+  assert.equal(shouldShowTable(one.comparison), false, "1개면 표는 열지 않는다");
+});
+
+test("구버전 compare= 링크를 한 번은 읽어 준다", () => {
+  const s = parseUrlState(new URLSearchParams("mode=compare&country=KOR&compare=JPN"), VALID);
+  assert.deepEqual(isoOf(s.comparison), ["KOR", "JPN"]);
+  // 다만 새 URL 을 만들 때는 쓰지 않는다
+  assert.ok(!buildUrlQuery({ ...EXPLORE, mode: "compare", comparison: s.comparison }).includes("compare="));
 });
 
 test("기본값은 URL 에 넣지 않는다", () => {
-  assert.equal(buildUrlQuery({ country: null, compare: null, lang: null, view: "split", continent: null }), "");
+  assert.equal(buildUrlQuery(EXPLORE), "");
 });
 
 // ── 순위 ────────────────────────────────────────────────────────
@@ -365,4 +472,68 @@ test("dispose 후에는 대기 프레임이 남지 않는다", () => {
   ctl.dispose();
   assert.equal(ctl.debugState.hasPendingFrame, false);
   assert.equal(ctl.debugState.activeSource, null);
+});
+
+// ── 어린이용 설명 (후속 지시서 §7 · §12.1) ──────────────────────
+import { buildChildSummary, buildBreadcrumb } from "../../lib/worldmap/childSummary.ts";
+
+const nameOf = (iso3: string) => ({ TZA: "탄자니아", UGA: "우간다", ETH: "에티오피아", SOM: "소말리아" }[iso3] ?? null);
+
+const KEN = country({
+  iso3: "KEN", nameKo: "케냐", nameEn: "Kenya",
+  continentCode: "AF", continentKo: "아프리카", continentEn: "Africa",
+  subregionKo: "동아프리카", subregionEn: "Eastern Africa",
+  capitalKo: "나이로비", capitalEn: "Nairobi",
+  population: num(55_000_000, 2024, "people"),
+  borderCountryIso3: ["TZA", "UGA", "ETH", "SOM"],
+  landlocked: false, islandCountry: false,
+});
+
+test("어린이용 설명은 대륙·수도인구·이웃 3문장으로 만들어진다", () => {
+  const s = buildChildSummary(KEN, "ko", nameOf);
+  assert.equal(s.length, 3);
+  assert.equal(s[0], "케냐는 아프리카의 동아프리카에 있는 나라예요.");
+  assert.equal(s[1], "수도는 나이로비이고, 약 5,500만 명이 살고 있어요.");
+  assert.match(s[2], /^탄자니아, 우간다, 에티오피아 등 여러 나라와 국경을 맞대고 있어요\.$/);
+});
+
+test("어린이용 설명은 특정 국가와 자동으로 비교하지 않는다", () => {
+  const joined = buildChildSummary(KEN, "ko", nameOf).join(" ");
+  for (const banned of ["한국", "대한민국", "우리나라", "보다 크", "보다 작"]) {
+    assert.ok(!joined.includes(banned), `자동 비교 표현이 들어갔다: ${banned}`);
+  }
+});
+
+test("받침에 따라 조사가 달라진다", () => {
+  const withFinal = buildChildSummary({ ...KEN, nameKo: "일본" } as any, "ko", nameOf)[0];
+  assert.ok(withFinal.startsWith("일본은 "), withFinal);
+  const withoutFinal = buildChildSummary({ ...KEN, nameKo: "케냐" } as any, "ko", nameOf)[0];
+  assert.ok(withoutFinal.startsWith("케냐는 "), withoutFinal);
+});
+
+test("섬나라는 이웃 문장 대신 바다 문장을 쓴다", () => {
+  const island = { ...KEN, nameKo: "일본", borderCountryIso3: [], islandCountry: true, landlocked: false } as any;
+  const s = buildChildSummary(island, "ko", nameOf);
+  assert.equal(s[2], "바다로 둘러싸여 있어서 다른 나라와 땅으로 이어져 있지 않아요.");
+});
+
+test("내륙국은 둘러싸였다고 말한다", () => {
+  const inland = { ...KEN, nameKo: "우간다", landlocked: true } as any;
+  assert.match(buildChildSummary(inland, "ko", nameOf)[2], /둘러싸인 내륙 나라예요\.$/);
+});
+
+test("재료가 없는 문장은 통째로 빠진다", () => {
+  const bare = country({ iso3: "XXX", nameKo: "무명국", continentKo: "", continentEn: "", subregionKo: null, subregionEn: null });
+  const s = buildChildSummary(bare, "ko", nameOf);
+  assert.equal(s.length, 0, `문장이 남았다: ${JSON.stringify(s)}`);
+});
+
+test("영어 설명도 같은 규칙을 따른다", () => {
+  const s = buildChildSummary(KEN, "en", (iso3) => ({ TZA: "Tanzania", UGA: "Uganda", ETH: "Ethiopia", SOM: "Somalia" }[iso3] ?? null));
+  assert.equal(s[0], "Kenya is a country in Eastern Africa, Africa.");
+  assert.match(s[1], /^Its capital is Nairobi and about 55 million people live here\.$/);
+});
+
+test("breadcrumb 은 대륙 > 지역 > 나라 순서다", () => {
+  assert.deepEqual(buildBreadcrumb(KEN, "ko"), ["아프리카", "동아프리카", "케냐"]);
 });

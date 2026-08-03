@@ -6,8 +6,12 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import type { ContinentCode, CountryDataset, CountryRecord, MetricKey, SupportedLanguage, ViewMode } from "@/lib/worldmap/types";
 import { CONTINENTS, METRIC_KEYS } from "@/lib/worldmap/types";
-import { MapSyncController, cameraForBounds } from "@/lib/worldmap/mapSync";
+import { MapSyncController, cameraForBounds, combinedBounds } from "@/lib/worldmap/mapSync";
 import { parseUrlState, buildUrlQuery } from "@/lib/worldmap/search";
+import {
+  type ComparisonSelection, type WorldMapMode,
+  addComparison, removeComparison, moveComparison, clearComparison, shouldShowTable,
+} from "@/lib/worldmap/comparison";
 import { DICT, LANG_STORAGE_KEY, QUICK_PICKS, resolveLanguage, t } from "@/lib/worldmap/i18n";
 import MapPanel from "@/components/worldmap/MapPanel";
 import SearchBox from "@/components/worldmap/SearchBox";
@@ -39,8 +43,6 @@ function buildColors(countries: CountryRecord[], metric: MetricKey): Record<stri
   return out;
 }
 
-type Panel = "detail" | "compare";
-
 export default function WorldMapClient() {
   const [dataset, setDataset] = useState<CountryDataset | null>(null);
   const [loadError, setLoadError] = useState(false);
@@ -49,8 +51,11 @@ export default function WorldMapClient() {
   const [continent, setContinent] = useState<ContinentCode | null>(null);
   const [metric, setMetric] = useState<MetricKey>("gdp");
   const [selected, setSelected] = useState<string | null>(null);
-  const [compare, setCompare] = useState<string | null>(null);
-  const [panel, setPanel] = useState<Panel>("detail");
+  // 비교 선택은 일반 선택과 완전히 별개다. 비교 모드에 들어가도 자동으로 채우지 않는다.
+  const [mode, setMode] = useState<WorldMapMode>("explore");
+  const [comparison, setComparison] = useState<ComparisonSelection[]>([]);
+  const [notice, setNotice] = useState<string | null>(null);
+  const [flashIso3, setFlashIso3] = useState<string | null>(null);
   const [isNarrow, setIsNarrow] = useState(false);
 
   // 지도 인스턴스는 재생성 비용이 크므로 컨트롤러를 한 번만 만든다.
@@ -84,8 +89,8 @@ export default function WorldMapClient() {
     setView(s.view);
     setContinent(s.continent);
     setSelected(s.country);
-    setCompare(s.compare);
-    setPanel(s.compare ? "compare" : "detail");
+    setMode(s.mode);
+    setComparison(s.comparison);
   }, [byIso]);
 
   useEffect(() => {
@@ -97,12 +102,12 @@ export default function WorldMapClient() {
   // ── 상태 → URL ─────────────────────────────────────────────────
   useEffect(() => {
     if (typeof window === "undefined" || !dataset) return;
-    const query = buildUrlQuery({ country: selected, compare, lang, view, continent });
+    const query = buildUrlQuery({ mode, country: selected, comparison, lang, view, continent });
     const next = `${window.location.pathname}${query}`;
     if (next !== `${window.location.pathname}${window.location.search}`) {
       window.history.replaceState(null, "", next);
     }
-  }, [selected, compare, lang, view, continent, dataset]);
+  }, [selected, mode, comparison, lang, view, continent, dataset]);
 
   useEffect(() => {
     if (typeof window !== "undefined") window.localStorage.setItem(LANG_STORAGE_KEY, lang);
@@ -134,19 +139,68 @@ export default function WorldMapClient() {
     if (rec) controller.moveAll(cameraForBounds(rec.bbox));
   }, [byIso, controller]);
 
+  const comparisonRecords = useMemo(
+    () => comparison.map((c) => byIso.get(c.iso3)).filter(Boolean) as CountryRecord[],
+    [comparison, byIso],
+  );
+
+  /** 비교 모드에서는 목록에 담고, 일반 탐색에서는 상세를 연다. */
   const selectCountry = useCallback((iso3: string) => {
-    if (panel === "compare" && selected && iso3 !== selected) setCompare(iso3);
-    else { setSelected(iso3); setCompare((c) => (c === iso3 ? null : c)); }
+    if (mode === "compare") {
+      setComparison((list) => {
+        const r = addComparison(list, iso3);
+        if (r.status === "duplicate") {
+          // 이미 있는 나라 — 중복으로 넣지 않고 해당 chip 을 잠깐 강조한다
+          setFlashIso3(iso3);
+          setNotice(null);
+          window.setTimeout(() => setFlashIso3(null), 900);
+        } else if (r.status === "full") {
+          setNotice(lang === "ko" ? "최대 4개 나라까지 비교할 수 있어요." : "You can compare up to four countries.");
+          window.setTimeout(() => setNotice(null), 2600);
+        } else {
+          setNotice(null);
+        }
+        return r.list;
+      });
+      // 비교 모드에서도 마지막으로 고른 나라를 기억해 둔다(비교를 끝내면 그 나라 상세를 연다)
+      setSelected(iso3);
+    } else {
+      setSelected(iso3);
+    }
     focusCountry(iso3);
-  }, [panel, selected, focusCountry]);
+  }, [mode, lang, focusCountry]);
+
+  const enterCompare = useCallback(() => {
+    // 지금 보고 있던 나라를 자동으로 넣지 않는다 — 빈 4칸에서 시작한다.
+    setMode("compare");
+    setComparison(clearComparison());
+    setNotice(null);
+  }, []);
+
+  const exitCompare = useCallback(() => {
+    setMode("explore");
+    setComparison(clearComparison());
+    setNotice(null);
+  }, []);
 
   // 지도가 준비되면 URL 에 있던 국가로 카메라를 맞춘다.
   const onMapReady = useCallback(() => {
-    if (selected) focusCountry(selected);
-  }, [selected, focusCountry]);
+    // 지도가 준비되기 전에 부른 moveAll 은 등록된 지도가 없어 그냥 사라진다.
+    // URL 로 바로 들어온 경우를 위해 준비 시점에 한 번 더 맞춘다.
+    if (mode === "compare" && comparisonRecords.length >= 2) {
+      controller.moveAll(cameraForBounds(combinedBounds(comparisonRecords.map((c) => c.bbox))));
+    } else if (selected) {
+      focusCountry(selected);
+    }
+  }, [mode, comparisonRecords, controller, selected, focusCountry]);
 
   const selectedRecord = selected ? byIso.get(selected) ?? null : null;
-  const compareRecord = compare ? byIso.get(compare) ?? null : null;
+
+  // 비교 중인 나라가 모두 보이도록 경계 상자를 합친다(후속 지시서 §5).
+  useEffect(() => {
+    if (mode !== "compare" || comparisonRecords.length < 2) return;
+    controller.moveAll(cameraForBounds(combinedBounds(comparisonRecords.map((c) => c.bbox))));
+  }, [mode, comparisonRecords, controller]);
 
   // ── 렌더 ──────────────────────────────────────────────────────
   if (loadError) {
@@ -205,6 +259,15 @@ export default function WorldMapClient() {
 
           <button
             type="button"
+            onClick={mode === "compare" ? exitCompare : enterCompare}
+            aria-pressed={mode === "compare"}
+            className={chip(mode === "compare")}
+          >
+            {mode === "compare" ? (lang === "ko" ? "비교 끝내기" : "Exit compare") : (lang === "ko" ? "비교하기" : "Compare")}
+          </button>
+
+          <button
+            type="button"
             onClick={() => setLang((l) => (l === "ko" ? "en" : "ko"))}
             className="ml-auto rounded-full border border-[#ece6e0] bg-white px-3 py-1.5 text-[13px] font-semibold text-[#40382f] transition hover:border-[#ff9966] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff9966]"
           >
@@ -240,6 +303,12 @@ export default function WorldMapClient() {
         </div>
       </div>
 
+      {notice && (
+        <p role="status" className="mt-3 inline-block rounded-lg bg-[#fdf3e2] px-3 py-1.5 text-[13px] font-semibold text-[#b6792e]">
+          {notice}
+        </p>
+      )}
+
       {/* 지도 영역 */}
       <div className={`mt-5 grid gap-4 ${view === "split" && !isNarrow ? "lg:grid-cols-2" : "grid-cols-1"}`}>
         {showFlat && (
@@ -248,7 +317,8 @@ export default function WorldMapClient() {
             {dataset && (
               <MapPanel
                 side="flat" controller={controller} geojsonUrl={GEOJSON_URL} countries={dataset.countries}
-                lang={lang} colors={colors} selectedA={selected} selectedB={compare} dimmed={dimmed}
+                lang={lang} colors={colors} selectedCountry={selected}
+                comparisonCountries={comparison} comparisonMode={mode === "compare"} dimmed={dimmed}
                 onSelect={selectCountry} onReady={onMapReady} className={mapHeight}
               />
             )}
@@ -260,7 +330,8 @@ export default function WorldMapClient() {
             {dataset && (
               <MapPanel
                 side="globe" controller={controller} geojsonUrl={GEOJSON_URL} countries={dataset.countries}
-                lang={lang} colors={colors} selectedA={selected} selectedB={compare} dimmed={dimmed}
+                lang={lang} colors={colors} selectedCountry={selected}
+                comparisonCountries={comparison} comparisonMode={mode === "compare"} dimmed={dimmed}
                 onSelect={selectCountry} onReady={onMapReady} className={mapHeight}
               />
             )}
@@ -272,7 +343,7 @@ export default function WorldMapClient() {
 
       {/* 상세 / 비교 */}
       <div className="mt-6">
-        {!selectedRecord && dataset && (
+        {!selectedRecord && dataset && mode === "explore" && (
           <div className="rounded-2xl border border-[#ece6e0] bg-white p-6">
             <p className="text-[15px] text-[#40382f]">{t("emptyState", lang)}</p>
             <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -290,20 +361,22 @@ export default function WorldMapClient() {
           </div>
         )}
 
-        {selectedRecord && dataset && panel === "detail" && (
-          <CountryDetail
-            country={selectedRecord} dataset={dataset} lang={lang}
-            allCountries={dataset.countries} onCompare={() => setPanel("compare")}
+        {dataset && mode === "compare" && (
+          <ComparePanel
+            countries={comparisonRecords} selections={comparison} dataset={dataset} lang={lang}
+            flashIso3={flashIso3}
+            onRemove={(iso3) => setComparison((l) => removeComparison(l, iso3))}
+            onMove={(iso3, d) => setComparison((l) => moveComparison(l, iso3, d))}
+            onClear={() => { setComparison(clearComparison()); setNotice(null); }}
+            onExit={exitCompare}
           />
         )}
 
-        {selectedRecord && dataset && panel === "compare" && (
-          <ComparePanel
-            a={selectedRecord} b={compareRecord} dataset={dataset} lang={lang} continent={continent}
-            onPickB={(iso3) => { setCompare(iso3); focusCountry(iso3); }}
-            onSwap={() => { if (compare) { const a = selected; setSelected(compare); setCompare(a); } }}
-            onReset={() => setCompare(null)}
-            onBack={() => { setPanel("detail"); setCompare(null); }}
+        {selectedRecord && dataset && mode === "explore" && (
+          <CountryDetail
+            country={selectedRecord} dataset={dataset} lang={lang}
+            allCountries={dataset.countries} onCompare={enterCompare}
+            onSelectCountry={selectCountry}
           />
         )}
       </div>

@@ -265,32 +265,100 @@ test("확대 중에도 선택 강조가 유지된다", async ({ page }) => {
 });
 
 // ── 비교 (§7.5) ────────────────────────────────────────────────
-test("두 국가를 비교하고 교환·초기화할 수 있다", async ({ page }) => {
+test("비교하기를 누르면 빈 4칸에서 시작한다 — 보던 나라가 자동으로 들어가지 않는다", async ({ page }) => {
   await page.goto(`${PATH}?country=KOR`);
   await waitForMaps(page);
+  await expect(page.getByRole("heading", { level: 2 })).toContainText("한국");
 
-  await page.getByRole("button", { name: "비교", exact: true }).click();
-  const compareBox = page.getByRole("combobox").last();
-  await compareBox.fill("일본");
-  await page.getByRole("option").first().click();
-
-  await expect(page).toHaveURL(/compare=JPN/);
-  await expect(page.getByText("A · 선택 국가")).toBeVisible();
-  await expect(page.getByText("B · 비교 국가")).toBeVisible();
-
-  await page.getByRole("button", { name: "A/B 교환" }).click();
-  await expect(page).toHaveURL(/country=JPN/);
-  await expect(page).toHaveURL(/compare=KOR/);
-
-  await page.getByRole("button", { name: "비교 초기화" }).click();
-  await expect(page).not.toHaveURL(/compare=/);
+  await page.getByRole("button", { name: "비교하기" }).first().click();
+  await expect(page.getByText("0/4 선택됨")).toBeVisible();
+  await expect(page.getByText("지도나 검색에서 비교할 나라를 2개 이상 선택하세요.")).toBeVisible();
+  await expect(page).toHaveURL(/mode=compare/);
+  await expect(page).not.toHaveURL(/countries=/);
 });
 
-test("같은 국가를 A·B 로 지정할 수 없다", async ({ page }) => {
-  await page.goto(`${PATH}?country=KOR&compare=KOR`);
+test("2개국부터 비교 표가 열리고 4개국까지 늘어난다", async ({ page }) => {
+  await page.goto(`${PATH}?mode=compare`);
   await waitForMaps(page);
-  await expect(page).not.toHaveURL(/compare=KOR/);
-  await expect(page).toHaveURL(/country=KOR/);
+  const box = page.getByRole("combobox").first();
+
+  const pick = async (q: string) => {
+    await box.fill(q);
+    await page.getByRole("option").first().click();
+    await page.waitForTimeout(400);
+  };
+
+  await pick("한국");
+  await expect(page.getByText("1/4 선택됨")).toBeVisible();
+  await expect(page.getByRole("table")).toHaveCount(0, { timeout: 3000 });
+
+  await pick("일본");
+  await expect(page.getByText("2/4 선택됨")).toBeVisible();
+  await expect(page.getByRole("table")).toBeVisible();
+
+  await pick("케냐");
+  await expect(page.getByText("3/4 선택됨")).toBeVisible();
+  await pick("브라질");
+  await expect(page.getByText("4/4 선택됨")).toBeVisible();
+  await expect(page).toHaveURL(/countries=KOR,JPN,KEN,BRA/);
+
+  // 다섯 번째는 막고 안내한다
+  await pick("프랑스");
+  await expect(page.getByText("최대 4개 나라까지 비교할 수 있어요.")).toBeVisible();
+  await expect(page.getByText("4/4 선택됨")).toBeVisible();
+});
+
+test("개별 제거와 순서 변경이 색상 번호까지 갱신한다", async ({ page }) => {
+  await page.goto(`${PATH}?mode=compare&countries=KOR,JPN,KEN`);
+  await waitForMaps(page);
+  await expect(page.getByText("3/4 선택됨")).toBeVisible();
+
+  await page.getByRole("button", { name: /일본 빼기|Remove Japan/ }).click();
+  await expect(page.getByText("2/4 선택됨")).toBeVisible();
+  await expect(page).toHaveURL(/countries=KOR,KEN/);
+
+  await page.getByRole("button", { name: /케냐 앞으로|Move Kenya earlier/ }).click();
+  await expect(page).toHaveURL(/countries=KEN,KOR/);
+});
+
+test("선택한 모든 나라에 값이 있는 항목만 기본 표에 나온다", async ({ page }) => {
+  await page.goto(`${PATH}?mode=compare&countries=KOR,JPN`);
+  await waitForMaps(page);
+  const table = page.getByRole("table").first();
+  await expect(table).toBeVisible();
+  // 한·일 모두 값이 있는 항목
+  await expect(table).toContainText("인구");
+  await expect(table).toContainText("언어");
+  // 기본 표에는 빈칸이 없어야 한다
+  await expect(table).not.toContainText("자료 없음");
+});
+
+test("비교 중인 나라가 모두 지도에 보인다", async ({ page }) => {
+  await page.goto(`${PATH}?mode=compare&countries=KOR,BRA`);
+  await waitForMaps(page);
+  await page.waitForTimeout(1800);
+
+  const visible = await page.evaluate(() => {
+    const m = (window as any).__worldmap.flat;
+    const b = m.getBounds();
+    const inView = (lon: number, lat: number) =>
+      lon >= b.getWest() - 1 && lon <= b.getEast() + 1 && lat >= b.getSouth() - 1 && lat <= b.getNorth() + 1;
+    return { kor: inView(127.5, 36.5), bra: inView(-54, -14) };
+  });
+  expect(visible.kor && visible.bra, `한국·브라질이 모두 보여야 한다: ${JSON.stringify(visible)}`).toBe(true);
+});
+
+test("작은 나라를 지도에서 직접 선택할 수 있다", async ({ page, viewport }) => {
+  test.skip((viewport?.width ?? 0) < 500, "데스크톱 전용");
+  await page.goto(PATH);
+  await waitForMaps(page);
+
+  for (const name of ["바티칸", "모나코", "나우루", "투발루"]) {
+    const marker = page.getByRole("button", { name, exact: true }).first();
+    await expect(marker, `${name} marker 가 지도에 있어야 한다`).toBeVisible({ timeout: 15_000 });
+    await marker.click();
+    await expect(page.getByRole("heading", { level: 2 })).toContainText(name);
+  }
 });
 
 // ── 다국어·URL (§8.3 · §13) ────────────────────────────────────
@@ -303,11 +371,10 @@ test("한국어·영어를 전환한다", async ({ page }) => {
 });
 
 test("URL 을 새로 열어도 선택·비교 상태가 복원된다", async ({ page }) => {
-  await page.goto(`${PATH}?country=KOR&compare=JPN&lang=en&view=flat`);
+  await page.goto(`${PATH}?mode=compare&countries=KOR,JPN&lang=en&view=flat`);
   await waitForMaps(page, ["flat"]);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Explore the World by Map");
-  await expect(page.getByText("A · Selected")).toBeVisible();
-  await expect(page.getByText("B · Comparison")).toBeVisible();
+  await expect(page.getByText("2/4 selected")).toBeVisible();
   // view=flat 이면 지구본 캔버스는 없다
   expect(await page.locator("canvas").count()).toBe(1);
 });
@@ -429,10 +496,10 @@ test("모바일에서 검색·상세·비교가 동작한다", async ({ page, vi
   await page.getByRole("option").first().click();
   await expect(page.getByRole("heading", { level: 2 })).toContainText("일본");
 
-  await page.getByRole("button", { name: "비교", exact: true }).click();
-  await page.getByRole("combobox").last().fill("한국");
+  await page.getByRole("button", { name: "비교하기" }).first().click();
+  await page.getByRole("combobox").first().fill("한국");
   await page.getByRole("option").first().click();
-  await expect(page).toHaveURL(/compare=KOR/);
+  await expect(page).toHaveURL(/countries=KOR/);
 });
 
 // ── 대륙 필터 (§8.2) ───────────────────────────────────────────

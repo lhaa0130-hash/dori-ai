@@ -3,9 +3,10 @@
 // 국가 상세 (명세서 §7.4). 표시 순서는 명세서가 정한 그대로다.
 // 숫자 카드마다 값·단위·기준연도·출처를 함께 둔다. 기준연도가 다른 값을 같은 해처럼 보이게 하지 않는다.
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { CountryDataset, CountryRecord, MetricKey, SupportedLanguage } from "@/lib/worldmap/types";
 import { METRIC_KEYS } from "@/lib/worldmap/types";
+import { buildChildSummary, buildBreadcrumb } from "@/lib/worldmap/childSummary";
 import { formatMetric, formatDate, NO_DATA } from "@/lib/worldmap/format";
 import { worldRank } from "@/lib/worldmap/search";
 import { t } from "@/lib/worldmap/i18n";
@@ -102,20 +103,26 @@ function TextRow({ label, value, source, lang, dataset }: {
 }
 
 export default function CountryDetail({
-  country, dataset, lang, allCountries, onCompare,
+  country, dataset, lang, allCountries, onCompare, onSelectCountry,
 }: {
   country: CountryRecord; dataset: CountryDataset; lang: SupportedLanguage;
   allCountries: CountryRecord[]; onCompare: () => void;
+  onSelectCountry: (iso3: string) => void;
 }) {
   const [showSources, setShowSources] = useState(false);
-  const region = [
-    lang === "ko" ? country.continentKo : country.continentEn,
-    lang === "ko" ? country.subregionKo : country.subregionEn,
-  ].filter(Boolean).join(" · ");
+  const byIso = useMemo(() => new Map(allCountries.map((c) => [c.iso3, c])), [allCountries]);
+  const nameOf = (iso3: string) => {
+    const c = byIso.get(iso3);
+    return c ? (lang === "ko" ? c.nameKo : c.nameEn) : null;
+  };
+
+  const crumbs = buildBreadcrumb(country, lang);
+  const story = buildChildSummary(country, lang, nameOf);
+  const neighbours = country.borderCountryIso3.map((iso3) => byIso.get(iso3)).filter(Boolean) as CountryRecord[];
 
   return (
     <section aria-label={lang === "ko" ? country.nameKo : country.nameEn} className="rounded-2xl border border-[#ece6e0] bg-white p-5">
-      {/* 1~2. 국기·이름·공식명 */}
+      {/* 1. 국기·이름·공식명 */}
       <header className="flex items-start gap-3">
         <Flag country={country} size={48} />
         <div className="min-w-0 flex-1">
@@ -131,14 +138,80 @@ export default function CountryDetail({
           onClick={onCompare}
           className="shrink-0 rounded-lg bg-[#fff0e6] px-3 py-1.5 text-[13px] font-bold text-[#f47f45] transition hover:bg-[#ffe2d2] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff9966]"
         >
-          {t("compare", lang)}
+          {lang === "ko" ? "비교하기" : "Compare"}
         </button>
       </header>
 
-      {/* 3~6. 수도·지역·지도자·수립일·종교 */}
+      {/* 2. 대륙 > 지역 > 나라 */}
+      {crumbs.length > 0 && (
+        <nav aria-label={t("region", lang)} className="mt-2 text-[12px] font-medium text-[#7d746e]">
+          {crumbs.join(" › ")}
+        </nav>
+      )}
+
+      {/* 3. 어린이용 설명 — 생성형 문장이 아니라 가진 데이터로 조립한다 */}
+      {story.length > 0 && (
+        <div className="mt-3 rounded-xl bg-[#fff8f3] p-3.5">
+          <p className="text-[12px] font-bold text-[#f47f45]">
+            {lang === "ko" ? "이 나라는 어떤 나라야?" : "About this country"}
+          </p>
+          <p className="mt-1 text-[14px] leading-relaxed text-[#40382f]">{story.join(" ")}</p>
+        </div>
+      )}
+
+      {/* 4~6. 수도·언어·통화 / 이웃 나라 / 섬나라·내륙국 */}
       <div className="mt-4">
         <TextRow label={t("capital", lang)} value={lang === "ko" ? country.capitalKo : country.capitalEn} source={null} lang={lang} dataset={dataset} />
-        <TextRow label={t("region", lang)} value={region || null} source={null} lang={lang} dataset={dataset} />
+        <TextRow
+          label={lang === "ko" ? "언어" : "Languages"}
+          value={country.languages.length ? country.languages.map((l) => (lang === "ko" ? l.ko : l.en)).join(", ") : null}
+          source={null} lang={lang} dataset={dataset}
+        />
+        <TextRow
+          label={lang === "ko" ? "통화" : "Currency"}
+          value={country.currencies.length
+            ? country.currencies.map((c) => `${lang === "ko" ? c.ko : c.en} ${c.symbol ?? ""} (${c.code})`.replace(/\s+/g, " ").trim()).join(", ")
+            : null}
+          source={null} lang={lang} dataset={dataset}
+        />
+        {country.timezones.length > 0 && (
+          <TextRow label={lang === "ko" ? "시간대" : "Time zone"} value={country.timezones.join(", ")} source="wikidata" lang={lang} dataset={dataset} />
+        )}
+
+        {/* 이웃 나라 — 눌러서 바로 이동 */}
+        <div className="flex items-start justify-between gap-3 border-b border-[#f3eee9] py-2.5">
+          <span className="shrink-0 text-[13px] font-medium text-[#7d746e]">{lang === "ko" ? "이웃 나라" : "Neighbours"}</span>
+          <span className="flex flex-wrap justify-end gap-1.5">
+            {neighbours.length > 0 ? (
+              neighbours.map((n) => (
+                <button
+                  key={n.iso3} type="button" onClick={() => onSelectCountry(n.iso3)}
+                  className="rounded-full border border-[#ece6e0] px-2 py-0.5 text-[12px] font-semibold text-[#40382f] transition hover:border-[#ff9966] hover:text-[#f47f45] focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#ff9966]"
+                >
+                  {lang === "ko" ? n.nameKo : n.nameEn}
+                </button>
+              ))
+            ) : (
+              <span className="text-[13px] text-[#a89f98]">
+                {country.islandCountry
+                  ? (lang === "ko" ? "육지 국경 없음 (섬나라)" : "No land borders (island)")
+                  : NO_DATA[lang]}
+              </span>
+            )}
+          </span>
+        </div>
+
+        {(country.islandCountry || country.landlocked) && (
+          <div className="flex items-center justify-between gap-3 border-b border-[#f3eee9] py-2.5">
+            <span className="text-[13px] font-medium text-[#7d746e]">{lang === "ko" ? "지형 특징" : "Geography"}</span>
+            <span className="rounded-full bg-[#eaf5f5] px-2.5 py-0.5 text-[13px] font-semibold text-[#3f8f8f]">
+              {country.islandCountry
+                ? (lang === "ko" ? "🏝️ 섬나라" : "🏝️ Island country")
+                : (lang === "ko" ? "⛰️ 내륙국" : "⛰️ Landlocked")}
+            </span>
+          </div>
+        )}
+
         <TextRow
           label={country.leader.titleKo && lang === "ko" ? country.leader.titleKo : country.leader.titleEn && lang === "en" ? country.leader.titleEn : t("leader", lang)}
           value={lang === "ko" ? country.leader.ko : country.leader.en}
