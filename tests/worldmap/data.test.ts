@@ -325,7 +325,8 @@ test("라벨 좌표가 나라 경계 상자 안에 있다", () => {
 
 test("브라우저용 파일이 과하게 크지 않다", () => {
   const kb = (p: string) => readFileSync(path.join(ROOT, p)).byteLength / 1024;
-  assert.ok(kb("public/worldmap/countries.json") < 400, `countries.json ${kb("public/worldmap/countries.json")}KB`);
+  // 랭킹 지표 13종이 들어가 커졌다. gzip 으로는 훨씬 작지만 상한은 둔다.
+  assert.ok(kb("public/worldmap/countries.json") < 700, `countries.json ${kb("public/worldmap/countries.json")}KB`);
   // 1:50m 경계라 110m 보다 훨씬 크다(정점 약 9배). gzip 으로는 500KB 수준.
   assert.ok(kb("public/worldmap/countries.geojson") < 2000, `geojson ${kb("public/worldmap/countries.geojson")}KB`);
 });

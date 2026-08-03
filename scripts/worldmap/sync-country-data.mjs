@@ -548,6 +548,17 @@ async function main() {
     const capKo = wd.capMap.get(r.iso3)?.capitalKo ?? null;
 
     // area 는 World Bank 대신 world-countries 값을 쓴다(정의가 안정적이고 결측이 적다)
+    // 랭킹 확장 지표 — 값이 없으면 만들지 않고 missing 으로 둔다.
+    const RANK_UNITS = {
+      gdpGrowth: "percent", lifeExpectancy: "years", internetUsageRate: "percent",
+      urbanPopulationRate: "percent", birthRate: "per_1000", childPopulationRate: "percent",
+      forestAreaRate: "percent", renewableEnergyRate: "percent", co2PerCapita: "tonnes_per_person",
+    };
+    const extra = {};
+    for (const [key, unit] of Object.entries(RANK_UNITS)) {
+      extra[key] = numeric(m[key], unit, src("worldBank", { asOf: String(m[key]?.year ?? "") }));
+    }
+
     const areaMetric = r.area
       ? { value: r.area, year: null, unit: "km2", status: "ok", source: src("restCountries") }
       : { value: null, year: null, unit: "km2", status: "missing", source: null };
@@ -624,6 +635,7 @@ async function main() {
       area: areaMetric,
       gdp: numeric(m.gdp, "current_usd", src("worldBank", { asOf: String(m.gdp?.year ?? "") })),
       gdpPerCapita: numeric(m.gdpPerCapita, "current_usd_per_person", src("worldBank", { asOf: String(m.gdpPerCapita?.year ?? "") })),
+      ...extra,
       updatedAt: FETCHED_AT,
       stale: false,
     };
@@ -632,7 +644,7 @@ async function main() {
 
   note("\n[6/7] 검증");
   const missingCount = (field) => records.filter((r) => (r[field]?.status ?? "missing") === "missing").length;
-  for (const f of ["population", "gdp", "gdpPerCapita", "area", "leader", "established", "religion"]) {
+  for (const f of ["population", "gdp", "gdpPerCapita", "area", "gdpGrowth", "lifeExpectancy", "internetUsageRate", "urbanPopulationRate", "birthRate", "childPopulationRate", "forestAreaRate", "renewableEnergyRate", "co2PerCapita"]) {
     const n = missingCount(f);
     note(`  ${f.padEnd(13)} 자료 없음 ${String(n).padStart(3)}/195`);
   }
@@ -690,6 +702,11 @@ async function main() {
       religion: txt(r.religion, { kind: r.religion.kind, labelKo: r.religion.labelKo, labelEn: r.religion.labelEn }),
       population: num(r.population), area: num(r.area),
       gdp: num(r.gdp), gdpPerCapita: num(r.gdpPerCapita),
+      gdpGrowth: num(r.gdpGrowth), lifeExpectancy: num(r.lifeExpectancy),
+      internetUsageRate: num(r.internetUsageRate), urbanPopulationRate: num(r.urbanPopulationRate),
+      birthRate: num(r.birthRate), childPopulationRate: num(r.childPopulationRate),
+      forestAreaRate: num(r.forestAreaRate), renewableEnergyRate: num(r.renewableEnergyRate),
+      co2PerCapita: num(r.co2PerCapita),
     })),
     sources: sourceTable,
   };
