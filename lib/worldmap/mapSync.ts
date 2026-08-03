@@ -211,19 +211,38 @@ export function combinedBounds(boxes: Array<[number, number, number, number]>): 
  * 경계 상자를 담을 수 있는 카메라를 구한다.
  * MapLibre 의 fitBounds 는 지구본에서 동작이 달라, 양쪽에 같은 값을 주려고 직접 계산한다.
  */
+/**
+ * 아주 작은 나라도 이 이상 확대하지 않는다.
+ * 통가·몰디브처럼 bbox 가 1° 도 안 되는 나라를 계산대로 zoom 9 까지 당기면
+ * 화면이 온통 바다가 되어 '어디인지' 를 오히려 알 수 없다.
+ * 주변 바다와 이웃이 함께 보이는 선에서 멈춘다.
+ */
+export const SMALL_COUNTRY_MAX_ZOOM = 5.6;
+
 export function cameraForBounds(
   bbox: [number, number, number, number],
   zoomRange: [number, number] = [0.6, 7],
+  maxZoom = SMALL_COUNTRY_MAX_ZOOM,
 ): Camera {
   const [minLon, minLat, maxLon, maxLat] = bbox;
 
-  // 날짜변경선을 걸친 나라(러시아·피지 등)는 경도 폭이 360 에 가깝게 잡힌다.
-  // 그럴 땐 확대하지 말고 전체가 보이게 둔다.
-  let lonSpan = maxLon - minLon;
-  let centerLon = (minLon + maxLon) / 2;
-  if (lonSpan > 180) {
-    lonSpan = 360 - lonSpan;
-    centerLon = wrapLongitude(centerLon + 180);
+  // 날짜변경선 처리.
+  // ⚠️ bbox 가 감싸진 경우(west > east, 예: 피지 176.9 ~ -178.2)를 먼저 본다.
+  //    그대로 빼면 span 이 음수가 되어 아래 보정이 걸리지 않고,
+  //    중심이 (176.9 + -178.2)/2 = -0.65 로 계산돼 아프리카 앞바다로 튄다.
+  let lonSpan: number;
+  let centerLon: number;
+  if (maxLon < minLon) {
+    lonSpan = maxLon + 360 - minLon;
+    centerLon = wrapLongitude(minLon + lonSpan / 2);
+  } else {
+    lonSpan = maxLon - minLon;
+    centerLon = minLon + lonSpan / 2;
+    // 감싸지지 않았는데도 폭이 180 을 넘으면 반대쪽 원호가 더 좁다
+    if (lonSpan > 180) {
+      lonSpan = 360 - lonSpan;
+      centerLon = wrapLongitude(centerLon + 180);
+    }
   }
   const latSpan = Math.max(maxLat - minLat, 0.5);
   const span = Math.max(lonSpan, latSpan, 0.5);
@@ -233,7 +252,7 @@ export function cameraForBounds(
 
   return {
     center: [wrapLongitude(centerLon), clampLatitude((minLat + maxLat) / 2)],
-    zoom: Math.max(zoomRange[0], Math.min(zoomRange[1], zoom)),
+    zoom: Math.max(zoomRange[0], Math.min(zoomRange[1], maxZoom, zoom)),
     bearing: 0,
   };
 }

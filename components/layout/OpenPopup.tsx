@@ -32,8 +32,13 @@ export default function OpenPopup() {
   const [mounted, setMounted] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
 
+  // 지도가 주인공인 페이지에서는 환영 팝업이 화면 전체를 덮어 첫인상을 망친다.
+  // 나라콕(/world-map, /en/world-map)에서는 띄우지 않는다.
+  const isMapPage = (pathname || "").replace(/^\/en/, "") === "/world-map";
+
   useEffect(() => {
     setMounted(true);
+    if (isMapPage) return;
 
     // localStorage에서 "오늘하루 보지않기" 확인
     const hideUntil = localStorage.getItem("dori_open_popup_hide_until");
@@ -51,7 +56,7 @@ export default function OpenPopup() {
 
     // 팝업 표시
     setIsOpen(true);
-  }, []);
+  }, [isMapPage]);
 
   const handleClose = () => {
     setIsOpen(false);

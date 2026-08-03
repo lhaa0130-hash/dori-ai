@@ -547,3 +547,18 @@ test("영어 설명도 같은 규칙을 따른다", () => {
 test("breadcrumb 은 대륙 > 지역 > 나라 순서다", () => {
   assert.deepEqual(buildBreadcrumb(KEN, "ko"), ["아프리카", "동아프리카", "케냐"]);
 });
+
+test("감싸진 bbox(west > east)에서 카메라 중심이 반대편으로 튀지 않는다", () => {
+  // 피지: 176.9°E ~ -178.2°(=181.8°E). 그대로 빼면 span 이 음수라 중심이 아프리카로 간다.
+  const cam = cameraForBounds([176.9, -21, -178.2, -12]);
+  const lng = cam.center[0];
+  const nearDateline = Math.abs(Math.abs(lng) - 179) < 4;
+  assert.ok(nearDateline, `중심 경도가 날짜변경선 근처여야 한다: ${lng}`);
+  assert.ok(cam.zoom > 2.5, `세계 전체로 축소되면 안 된다: zoom ${cam.zoom}`);
+});
+
+test("아주 작은 나라도 zoom 상한을 넘지 않는다", () => {
+  // 통가·몰디브는 계산상 zoom 9 까지 나온다 → 화면이 온통 바다가 된다
+  const cam = cameraForBounds([-175.3, -21.2, -175.1, -21.1]);
+  assert.ok(cam.zoom <= 5.6, `zoom 상한 초과: ${cam.zoom}`);
+});

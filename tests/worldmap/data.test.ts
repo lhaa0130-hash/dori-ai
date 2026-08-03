@@ -71,8 +71,10 @@ test("center 와 bbox 가 지리적으로 유효하다", () => {
     assert.ok(lon >= -180 && lon <= 180, `${c.iso3} 경도 ${lon}`);
     assert.ok(lat >= -90 && lat <= 90, `${c.iso3} 위도 ${lat}`);
     const [minLon, minLat, maxLon, maxLat] = c.bbox;
-    assert.ok(minLon <= maxLon && minLat <= maxLat, `${c.iso3} bbox 뒤집힘`);
+    // 날짜변경선을 걸친 도서국(피지·키리바시)은 west > east 로 감싸진다. 이건 정상이다.
+    assert.ok(minLat <= maxLat, `${c.iso3} bbox 위도 뒤집힘`);
     assert.ok(minLat >= -90 && maxLat <= 90, `${c.iso3} bbox 위도 범위`);
+    for (const v of [minLon, maxLon]) assert.ok(v >= -180 && v <= 180, `${c.iso3} bbox 경도 ${v}`);
   }
 });
 
@@ -315,12 +317,34 @@ test("bbox 는 본토 기준이라 해외 영토로 부풀지 않는다", () => 
 });
 
 test("라벨 좌표가 나라 경계 상자 안에 있다", () => {
+  // 날짜변경선을 걸친 bbox(west > east)는 '바깥쪽' 이 아니라 '두 구간' 으로 판정해야 한다.
+  const lonInside = (lon: number, w: number, e: number) =>
+    w <= e ? lon >= w - 0.5 && lon <= e + 0.5 : lon >= w - 0.5 || lon <= e + 0.5;
   const outside = COUNTRIES.filter((c) => {
     const [lon, lat] = c.center;
     const [w, s2, e, n] = c.bbox;
-    return lon < w - 0.5 || lon > e + 0.5 || lat < s2 - 0.5 || lat > n + 0.5;
+    return !lonInside(lon, w, e) || lat < s2 - 0.5 || lat > n + 0.5;
   }).map((c) => c.iso3);
   assert.deepEqual(outside, [], `라벨이 나라 밖: ${outside.join(", ")}`);
+});
+
+test("작은 섬나라 카메라가 바다만 보여주지 않는다", () => {
+  // 통가·몰디브 같은 나라는 가장 큰 섬 하나만 잡으면 zoom 9 까지 확대돼 온통 바다가 된다.
+  // 흩어진 섬이 함께 들어오는 bbox 를 쓰는지 확인한다.
+  const span = (c: any) => {
+    let w = c.bbox[2] - c.bbox[0];
+    if (w < 0) w += 360;                       // 날짜변경선 wrap
+    return Math.max(w, c.bbox[3] - c.bbox[1]);
+  };
+  for (const iso3 of ["TON", "CPV", "FJI"]) {
+    const c = COUNTRIES.find((x) => x.iso3 === iso3);
+    assert.ok(span(c) > 1, `${iso3} 카메라 범위가 ${span(c).toFixed(2)}° — 섬들이 함께 안 보인다`);
+  }
+  // 해외 영토 보유국은 반대로 본토만 봐야 한다
+  for (const iso3 of ["FRA", "USA"]) {
+    const c = COUNTRIES.find((x) => x.iso3 === iso3);
+    assert.ok(span(c) < 100, `${iso3} 카메라 범위 ${span(c).toFixed(0)}° — 해외 영토까지 담겼다`);
+  }
 });
 
 test("브라우저용 파일이 과하게 크지 않다", () => {
