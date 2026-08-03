@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { useIsApp } from "@/hooks/useIsApp";
 import Header from "@/components/layout/Header";
@@ -36,6 +37,16 @@ const AD_FREE_PREFIXES = [
   //    94%가 이 얇은 카드라 심사에서 사이트 전체가 얇아 보였다. 목록 화면(/animal)도 필터 UI뿐이라 함께 제외.
   //    ⛔ 내용을 두껍게 만들기 전에는 되돌리지 말 것. (알찬 인사이트 글 71편에는 광고가 그대로 붙는다)
   "/animal",
+  // ⚠️ 2026-08-03 재심사 대비 2차 정리 — 배포본 1,391개를 전수 조사해 "광고는 붙었는데 얇은"
+  //    페이지를 전부 골라냈다. 기준: 자바스크립트 렌더 후에도 본문 2,000자 미만.
+  //    (/ai-models 는 렌더 후 2,335자짜리 실시간 비용 계산기라 광고를 남겼다)
+  "/404", "/_not-found",            // 오류 화면 — 애드센스가 명시적으로 광고를 금지한다
+  "/at", "/post",                   // @사용자홈·게시물 상세 — 크롤러엔 골격만 (446·579자)
+  "/video",                         // 렌더 후에도 424자
+  "/world-map", "/my-world",        // 지도 UI — 텍스트 551·762자
+  "/projects",                      // 목록·상세 모두 864~1,236자
+  "/minigame",                      // 게임 목록 — 개별 게임은 이미 전체화면이라 광고 없음
+  "/legal",                         // 약관·정책 — 얇고, 법적 고지에 광고는 인상도 나쁘다
   "/illo/inbox", "/studio", "/academy",
 ];
 
@@ -62,6 +73,13 @@ export default function LayoutClient({ children }: LayoutClientProps) {
 
   // 10분간 비활성 시 자동 로그아웃
   useAutoLogout();
+
+  // 현재 화면이 noindex 인지 — 404 등 오류 화면 광고 차단용 (아래 adFree 주석 참고)
+  const [metaNoIndex, setMetaNoIndex] = useState(false);
+  useEffect(() => {
+    const content = document.querySelector('meta[name="robots"]')?.getAttribute("content") || "";
+    setMetaNoIndex(/noindex/i.test(content));
+  }, [pathname]);
 
   // 일로 앱(/illo/app)은 독립 전체화면 — 사이트 헤더·광고·여백 없이 통째로 렌더
   if (pathname?.startsWith("/illo/app")) {
@@ -98,7 +116,14 @@ export default function LayoutClient({ children }: LayoutClientProps) {
   }
 
   // 웹 환경: Header/Footer 표시 및 Sidebar 추가
-  const adFree = isAdFree(pathname);
+  // ⚠️ 경로 목록(AD_FREE_PREFIXES)만으로는 404를 못 막는다. 없는 주소로 들어오면 pathname이
+  //    "/this-is-wrong" 같은 임의값이라 목록에 걸리지 않는데, 화면은 오류 페이지가 뜬다.
+  //    → head의 robots 메타를 함께 본다. noindex 화면에는 광고를 붙이지 않는다는 규칙.
+  //    SSR 땐 판단할 수 없어 초기값 false(=광고 그대로 렌더)로 둔다. 정적 HTML의 광고 마크업을
+  //    보존해야 애드센스가 "광고 요청 없는 사이트"로 오해하지 않는다.
+  //    광고 컴포넌트들은 마운트 후 300ms 지연 뒤에야 adsbygoogle.push 하므로,
+  //    그 전에 언마운트되어 실제 광고 요청은 발생하지 않는다.
+  const adFree = isAdFree(pathname) || metaNoIndex;
   return (
     <div className="flex flex-col min-h-screen bg-background text-foreground transition-colors duration-300">
       <Header />
