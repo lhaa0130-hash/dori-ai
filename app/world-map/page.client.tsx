@@ -189,7 +189,12 @@ export default function WorldMapClient({ initialLang }: { initialLang?: Supporte
   // ── 국가 선택 → 양쪽 지도를 같은 duration 으로 이동 ─────────────
   const focusCountry = useCallback((iso3: string) => {
     const rec = byIso.get(iso3);
-    if (rec) controller.moveAll(cameraForBounds(rec.bbox));
+    if (!rec) return;
+    const cam = cameraForBounds(rec.bbox);
+    // 나라를 화면 정중앙이 아니라 살짝 위에 둔다 — 아래 상세 카드로 시선이 이어진다.
+    // 위도 오프셋은 확대할수록 작아져야 같은 화면 비율을 유지한다.
+    const offset = 6 / Math.pow(2, cam.zoom);
+    controller.moveAll({ ...cam, center: [cam.center[0], cam.center[1] - offset] });
   }, [byIso, controller]);
 
   const comparisonRecords = useMemo(
@@ -275,8 +280,15 @@ export default function WorldMapClient({ initialLang }: { initialLang?: Supporte
 
   // 지구본은 걷어내고 평면 지도 한 장을 화면 가득 쓴다.
   // 헤더·검색·컨트롤이 차지하는 높이를 빼고 남는 만큼 지도에 준다.
-  // 좌우는 화면 폭을 그대로 쓰고, 상하만 이전의 절반 정도로 줄인다.
-  const mapHeight = isNarrow ? "h-[52vh] min-h-[320px]" : "h-[62vh] min-h-[420px]";
+  // 지도 높이는 화면 상태에 따라 다르게 잡는다(지시서 배포1 §1).
+  // 나라를 고르면 아래 상세 카드가 길어지므로 지도를 조금 낮춰 시선이 자연스럽게 이어지게 한다.
+  const mapHeight = isNarrow
+    ? "h-[clamp(340px,48vh,480px)]"
+    : mode === "compare" || view === "ranking"
+      ? "h-[clamp(430px,56vh,640px)]"
+      : selected
+        ? "h-[clamp(390px,50vh,570px)]"
+        : "h-[clamp(420px,56vh,640px)]";
 
   const chip = (activeState: boolean) =>
     `rounded-full border px-3 py-1.5 text-[13px] font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff9966] ${

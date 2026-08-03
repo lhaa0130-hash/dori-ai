@@ -189,6 +189,48 @@ function ringCentroid(ring) {
   return [cx / (6 * a), cy / (6 * a)];
 }
 
+/**
+ * 카메라를 맞출 bbox 를 고른다.
+ *
+ * 세 가지 경우가 섞여 있어 하나의 규칙으로는 안 된다.
+ *   · 다중 도서국(통가·몰디브·카보베르데): 섬들이 가까이 흩어져 있다 → 전체를 봐야 한다.
+ *     가장 큰 섬만 잡으면 0.28° 라서 zoom 9 까지 확대돼 바다만 보인다.
+ *   · 날짜변경선 도서국(피지·키리바시): 단순 min/max 면 경도 폭이 360° 가 된다 → wrap 보정.
+ *   · 해외 영토 보유국(프랑스·미국): 본토에서 수천 km 떨어진 땅이 있다 → 본토만 봐야 한다.
+ */
+const MULTI_ISLAND_MAX_SPAN = 30;   // 이 폭 안에 다 들어오면 '흩어진 섬' 으로 본다
+
+function cameraBbox(geometry, mainland) {
+  const full = bboxOf(geometry);
+  // 경도를 날짜변경선 기준으로 다시 재본다
+  const polys = geometry.type === "Polygon" ? [geometry.coordinates] : geometry.coordinates;
+  const lons = [];
+  for (const poly of polys) for (const [lon] of poly[0] ?? []) lons.push(lon);
+  if (!lons.length) return mainland;
+
+  const plain = Math.max(...lons) - Math.min(...lons);
+  const shifted = lons.map((l) => (l < 0 ? l + 360 : l));
+  const wrapped = Math.max(...shifted) - Math.min(...shifted);
+
+  let west, east, lonSpan;
+  if (wrapped < plain) {
+    // 날짜변경선을 가운데 두는 쪽이 좁다
+    const w = Math.min(...shifted), e = Math.max(...shifted);
+    west = ((w + 180) % 360) - 180;
+    east = ((e + 180) % 360) - 180;
+    lonSpan = wrapped;
+  } else {
+    west = Math.min(...lons); east = Math.max(...lons); lonSpan = plain;
+  }
+  const latSpan = full[3] - full[1];
+
+  // 가까이 흩어진 섬들이면 전체를, 아니면 본토를 쓴다
+  if (lonSpan <= MULTI_ISLAND_MAX_SPAN && latSpan <= MULTI_ISLAND_MAX_SPAN) {
+    return [west, full[1], east, full[3]];
+  }
+  return mainland;
+}
+
 function bboxOf(geometry) {
   let minLon = 180, minLat = 90, maxLon = -180, maxLat = -90;
   const walk = (coords, depth) => {
@@ -255,7 +297,10 @@ async function buildBoundaries(registry, mapping) {
     if (f) {
       // 카메라 이동과 라벨은 본토 기준으로 잡는다(해외 영토가 있는 나라 대응).
       const ring = mainlandRing(f.geometry);
-      r.bbox = ring ? ringBbox(ring) : bboxOf(f.geometry);
+      const mainland = ring ? ringBbox(ring) : bboxOf(f.geometry);
+      // 카메라는 나라 성격(다중 도서국 / 해외 영토)에 맞춰 고른다
+      r.bbox = cameraBbox(f.geometry, mainland);
+      r.mainlandBbox = mainland;
       r.fullBbox = bboxOf(f.geometry);
       // 라벨은 본토 무게중심에 찍는다. 계산이 안 되면 경계 상자 중앙.
       const centroid = ring ? ringCentroid(ring) : null;
