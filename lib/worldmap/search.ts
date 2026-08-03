@@ -27,7 +27,8 @@ export function buildSearchIndex(countries: CountryRecord[]): SearchEntry[] {
   return countries.map((c) => ({
     iso3: c.iso3,
     continentCode: c.continentCode,
-    haystack: [c.nameKo, c.nameEn, c.officialNameEn, c.iso2, c.iso3].filter(Boolean).map(normalize),
+    haystack: [c.nameKo, c.nameEn, c.officialNameEn, c.iso2, c.iso3, ...(c.aliasesKo ?? []), ...(c.aliasesEn ?? [])]
+      .filter(Boolean).map(normalize),
   }));
 }
 

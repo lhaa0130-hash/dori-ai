@@ -577,6 +577,9 @@ async function main() {
   // 한국에서 실제로 쓰는 통용 국가명. world-countries 의 kor 번역이 공식 국명(몽골국)이거나
   // 아예 다른 이름(조선), 심지어 두 나라가 같은 이름(도미니카)으로 나오는 경우가 있다.
   const nameKoOverride = overrides.__nameKo ?? {};
+  // 표시명이 바뀌어도 기존 검색어('한국', '북한')가 계속 동작해야 한다.
+  const aliasKo = overrides.__aliasesKo ?? {};
+  const aliasEn = overrides.__aliasesEn ?? {};
 
   const records = registry.map((r) => {
     const m = wb.get(r.iso3) ?? {};
@@ -614,6 +617,8 @@ async function main() {
       ccn3: r.ccn3,
       wikidataId: null,
       nameKo: ov.nameKo ?? nameKoOverride[r.iso3] ?? r.nameKo,
+      aliasesKo: aliasKo[r.iso3] ?? [],
+      aliasesEn: aliasEn[r.iso3] ?? [],
       nameEn: r.nameEn,
       officialNameEn: r.officialNameEn,
       capitalKo: ov.capitalKo ?? capKo ?? r.capitalEn,     // 한글 없으면 영문 (명세서 §10.1)
@@ -727,6 +732,7 @@ async function main() {
     countries: records.map((r) => ({
       iso2: r.iso2, iso3: r.iso3,
       nameKo: r.nameKo, nameEn: r.nameEn, officialNameEn: r.officialNameEn,
+      aliasesKo: r.aliasesKo, aliasesEn: r.aliasesEn,
       capitalKo: r.capitalKo, capitalEn: r.capitalEn,
       continentCode: r.continentCode, continentKo: r.continentKo, continentEn: r.continentEn,
       subregionKo: r.subregionKo, subregionEn: r.subregionEn,

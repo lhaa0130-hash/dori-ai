@@ -10,7 +10,7 @@
   "__islandCountry": {},
   "__nameKoComment": "한국에서 실제로 쓰는 통용 국가명으로 보정한다. world-countries 의 kor 번역이 공식 국명이거나 오역인 경우.",
   "__nameKo": {
-    "PRK": "북한",
+    "PRK": "조선민주주의인민공화국",
     "MNG": "몽골",
     "DMA": "도미니카 연방",
     "COD": "콩고민주공화국",
@@ -35,6 +35,89 @@
     "IRN": "이란",
     "GBR": "영국",
     "USA": "미국",
-    "RUS": "러시아"
+    "RUS": "러시아",
+    "KOR": "대한민국"
+  },
+  "__aliasesKoComment": "검색 별칭. 표시명이 바뀌어도 기존 검색어가 계속 동작해야 한다.",
+  "__aliasesKo": {
+    "KOR": [
+      "한국",
+      "남한",
+      "대한민국"
+    ],
+    "PRK": [
+      "북한",
+      "조선",
+      "조선민주주의인민공화국"
+    ],
+    "USA": [
+      "미국",
+      "미합중국"
+    ],
+    "GBR": [
+      "영국",
+      "잉글랜드"
+    ],
+    "RUS": [
+      "러시아",
+      "러시아 연방"
+    ],
+    "CHN": [
+      "중국",
+      "중화인민공화국"
+    ],
+    "JPN": [
+      "일본"
+    ],
+    "DEU": [
+      "독일",
+      "도이칠란트"
+    ],
+    "NLD": [
+      "네덜란드",
+      "홀란드"
+    ],
+    "CHE": [
+      "스위스"
+    ],
+    "ARE": [
+      "아랍에미리트",
+      "UAE"
+    ],
+    "CZE": [
+      "체코",
+      "체코 공화국"
+    ]
+  },
+  "__aliasesEn": {
+    "KOR": [
+      "Korea",
+      "South Korea",
+      "Republic of Korea",
+      "ROK"
+    ],
+    "PRK": [
+      "North Korea",
+      "DPRK"
+    ],
+    "USA": [
+      "United States",
+      "America",
+      "US"
+    ],
+    "GBR": [
+      "United Kingdom",
+      "Britain",
+      "UK",
+      "England"
+    ],
+    "NLD": [
+      "Netherlands",
+      "Holland"
+    ],
+    "ARE": [
+      "UAE",
+      "Emirates"
+    ]
   }
 }

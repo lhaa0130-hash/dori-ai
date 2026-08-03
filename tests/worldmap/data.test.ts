@@ -153,7 +153,7 @@ test("모든 출처에 이름·링크·수집시각이 있다", () => {
 test("주요 국가의 값이 상식 범위 안이다", () => {
   const kor = COUNTRIES.find((c) => c.iso3 === "KOR");
   assert.ok(kor, "KOR 누락");
-  assert.equal(kor.nameKo, "한국");
+  assert.equal(kor.nameKo, "대한민국");
   assert.ok(kor.population.v > 45_000_000 && kor.population.v < 60_000_000, `한국 인구 ${kor.population.v}`);
   assert.ok(kor.area.v > 95_000 && kor.area.v < 110_000, `한국 면적 ${kor.area.v}`);
   assert.ok(kor.gdp.v > 1e12 && kor.gdp.v < 3e12, `한국 GDP ${kor.gdp.v}`);
@@ -273,9 +273,9 @@ test("작은 국가도 center 좌표를 갖는다 (지도 marker 대상)", () =>
 
 test("한국에서 쓰는 통용 국가명을 쓴다", () => {
   const name = (iso3: string) => COUNTRIES.find((c) => c.iso3 === iso3)?.nameKo;
-  assert.equal(name("PRK"), "북한", "'조선' 이 아니라 '북한'");
   assert.equal(name("MNG"), "몽골", "'몽골국' 이 아니라 '몽골'");
-  assert.equal(name("KOR"), "한국");
+  assert.equal(name("KOR"), "대한민국");
+  assert.equal(name("PRK"), "조선민주주의인민공화국");
   assert.equal(name("DMA"), "도미니카 연방");
   assert.equal(name("DOM"), "도미니카 공화국");
 });
@@ -353,4 +353,30 @@ test("브라우저용 파일이 과하게 크지 않다", () => {
   assert.ok(kb("public/worldmap/countries.json") < 700, `countries.json ${kb("public/worldmap/countries.json")}KB`);
   // 1:50m 경계라 110m 보다 훨씬 크다(정점 약 9배). gzip 으로는 500KB 수준.
   assert.ok(kb("public/worldmap/countries.geojson") < 2000, `geojson ${kb("public/worldmap/countries.geojson")}KB`);
+});
+
+// ── 정식 국가명과 검색 별칭 (지시서 07 §5) ──────────────────────
+test("대한민국·조선민주주의인민공화국을 기본 표시명으로 쓴다", () => {
+  const name = (iso3: string) => COUNTRIES.find((c) => c.iso3 === iso3)?.nameKo;
+  assert.equal(name("KOR"), "대한민국");
+  assert.equal(name("PRK"), "조선민주주의인민공화국");
+  // '조선인민공화국' 으로 줄이지 않는다
+  assert.notEqual(name("PRK"), "조선인민공화국");
+});
+
+test("표시명이 바뀌어도 기존 검색어가 살아 있다", () => {
+  const alias = (iso3: string) => COUNTRIES.find((c) => c.iso3 === iso3)?.aliasesKo ?? [];
+  assert.ok(alias("KOR").includes("한국"), "'한국' 검색 유지");
+  assert.ok(alias("PRK").includes("북한"), "'북한' 검색 유지");
+  assert.ok((COUNTRIES.find((c) => c.iso3 === "USA")?.aliasesKo ?? []).includes("미국"));
+});
+
+test("한국어 문장에 잘못된 조사가 없다", () => {
+  const bad = [/북한와/, /인구은/, /인구이 /, /GDP은/, /GDP이 /, /은\(는\)/, /이\(가\)/, /을\(를\)/];
+  const texts: string[] = [];
+  for (const c of COUNTRIES) {
+    texts.push(c.nameKo, c.capitalKo ?? "", c.subregionKo ?? "", c.religion.ko ?? "", c.leader.ko ?? "");
+  }
+  const joined = texts.join(" | ");
+  for (const re of bad) assert.ok(!re.test(joined), `잘못된 조사/병기: ${re}`);
 });
