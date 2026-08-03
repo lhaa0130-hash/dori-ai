@@ -93,7 +93,11 @@ async function buildRegistry() {
       // world-countries latlng 은 [위도, 경도] 순서 → GeoJSON 규약 [경도, 위도] 로 뒤집는다
       center: Array.isArray(c.latlng) && c.latlng.length === 2 ? [c.latlng[1], c.latlng[0]] : null,
       bbox: null,                            // 경계 단계에서 계산
-      flagUrl: c.flags?.svg || c.flags?.png || null,
+      // ⚠️ world-countries 에는 flags 필드가 없다(이모지 flag 만 있다). 실측 확인함.
+      //    ISO 3166-1 alpha-2 로 flagcdn 의 국기 이미지를 만든다(무료·키 불필요).
+      flagUrl: `https://flagcdn.com/w80/${c.cca2.toLowerCase()}.png`,
+      flagUrl2x: `https://flagcdn.com/w160/${c.cca2.toLowerCase()}.png`,
+      flagEmoji: typeof c.flag === "string" ? c.flag : null,
       area: typeof c.area === "number" && c.area > 0 ? c.area : null,
       unMember: isMember,
       // 어린이용 지리 정보 (후속 지시서 §8)
@@ -117,6 +121,7 @@ async function buildRegistry() {
 // ── 2) 경계 ────────────────────────────────────────────────────────
 // NE 110m 은 작은 나라(바티칸·모나코·싱가포르 등)를 담지 않는다. 빠진 나라만 50m 에서 보충한다.
 const NE_50M = SOURCES.naturalEarth.url.replace("110m", "50m");
+const NE_110M = SOURCES.naturalEarth.url;
 
 /**
  * NE feature → ISO3. ADM0_A3 우선이되(명세서 §6.2), 그 값이 레지스트리에 없으면
@@ -151,7 +156,11 @@ function bboxOf(geometry) {
   return [minLon, minLat, maxLon, maxLat];
 }
 
-/** 좌표 소수점을 줄여 용량을 낮춘다. 110m 축척에서 소수 3자리(≈100m)면 충분하다. */
+/**
+ * 좌표 소수점을 줄여 용량을 낮춘다.
+ * 50m 축척은 정점 자체가 촘촘하므로 소수 3자리(≈100m)로도 110m 보다 훨씬 세밀하다.
+ * 4자리로 올리면 gzip 이 600KB 를 넘어 모바일에서 체감될 만큼 무거워진다.
+ */
 function roundCoords(node, depth) {
   if (depth === 0) return [Math.round(node[0] * 1000) / 1000, Math.round(node[1] * 1000) / 1000];
   return node.map((c) => roundCoords(c, depth - 1));
@@ -181,12 +190,13 @@ async function buildBoundaries(registry, mapping) {
     note(`  ${label}: ${hit}개국 연결`);
   };
 
-  ingest(await fetchJson(SOURCES.naturalEarth.url, { timeoutMs: 180000 }), "110m");
+  // 1:50m 을 기본으로 쓴다. 110m 은 해안선이 지나치게 단순해 섬·반도가 뭉개진다.
+  ingest(await fetchJson(NE_50M, { timeoutMs: 300000 }), "50m");
 
   const missing = registry.filter((r) => !features.has(r.iso3));
   if (missing.length) {
-    note(`  110m 미포함 ${missing.length}개국 → 50m 에서 보충`);
-    ingest(await fetchJson(NE_50M, { timeoutMs: 300000 }), "50m 보충");
+    note(`  50m 미포함 ${missing.length}개국 → 110m 에서 보충`);
+    ingest(await fetchJson(SOURCES.naturalEarth.url, { timeoutMs: 180000 }), "110m 보충");
   }
 
   // bbox / center 확정
@@ -448,6 +458,9 @@ async function main() {
   // 섬나라 판정: landlocked 만으로는 안 된다(후속 지시서 §8).
   // '육지 국경이 하나도 없고 내륙국도 아닌' 나라를 섬나라로 본다. 예외는 override 로 뒤집는다.
   const islandOverride = overrides.__islandCountry ?? {};
+  // 한국에서 실제로 쓰는 통용 국가명. world-countries 의 kor 번역이 공식 국명(몽골국)이거나
+  // 아예 다른 이름(조선), 심지어 두 나라가 같은 이름(도미니카)으로 나오는 경우가 있다.
+  const nameKoOverride = overrides.__nameKo ?? {};
 
   const records = registry.map((r) => {
     const m = wb.get(r.iso3) ?? {};
@@ -473,7 +486,7 @@ async function main() {
       iso3: r.iso3,
       ccn3: r.ccn3,
       wikidataId: null,
-      nameKo: ov.nameKo ?? r.nameKo,
+      nameKo: ov.nameKo ?? nameKoOverride[r.iso3] ?? r.nameKo,
       nameEn: r.nameEn,
       officialNameEn: r.officialNameEn,
       capitalKo: ov.capitalKo ?? capKo ?? r.capitalEn,     // 한글 없으면 영문 (명세서 §10.1)
@@ -487,6 +500,8 @@ async function main() {
       bbox: r.bbox,
       hasGeometry: r.hasGeometry,
       flagUrl: r.flagUrl,
+      flagUrl2x: r.flagUrl2x,
+      flagEmoji: r.flagEmoji,
 
       // 어린이용 지리 정보. 값이 없으면 빈 배열이고, 화면에서 '자료 없음' 과
       // '육지 국경 없음' 을 구분해 보여준다.
@@ -588,6 +603,8 @@ async function main() {
       center: r.center.map((n) => Math.round(n * 100) / 100),
       bbox: r.bbox.map((n) => Math.round(n * 100) / 100),
       flagUrl: r.flagUrl,
+      flagUrl2x: r.flagUrl2x,
+      flagEmoji: r.flagEmoji,
       languages: r.languages,
       currencies: r.currencies,
       timezones: r.timezones,

@@ -15,7 +15,7 @@ import {
 import { DICT, LANG_STORAGE_KEY, QUICK_PICKS, resolveLanguage, t } from "@/lib/worldmap/i18n";
 import MapPanel from "@/components/worldmap/MapPanel";
 import SearchBox from "@/components/worldmap/SearchBox";
-import CountryDetail from "@/components/worldmap/CountryDetail";
+import CountryDetail, { Flag } from "@/components/worldmap/CountryDetail";
 import ComparePanel from "@/components/worldmap/ComparePanel";
 
 const DATA_URL = "/worldmap/countries.json";
@@ -26,13 +26,14 @@ const RAMP = ["#fff4ec", "#ffe2d2", "#ffc9ab", "#ffab7d", "#ff8b55", "#ef6b2e"];
 const NO_VALUE = "#e8e2dc";
 
 // 대륙별 색 — 서로 확실히 구분되면서 illo 의 밝고 따뜻한 톤을 벗어나지 않게 고른다.
+// 파스텔 톤 — 국가명 라벨과 선택 강조가 위에 얹히므로 배경은 연하게 둔다.
 const CONTINENT_FILL: Record<ContinentCode, string> = {
-  AS: "#ff9966",   // 오렌지
-  EU: "#6f9bd8",   // 블루
-  AF: "#6fbf95",   // 그린
-  NA: "#c493d8",   // 퍼플
-  SA: "#f0c05a",   // 옐로
-  OC: "#7fc7cc",   // 틸
+  AS: "#ffd9c2",   // 연한 오렌지
+  EU: "#cfe0f5",   // 연한 블루
+  AF: "#cfeadd",   // 연한 그린
+  NA: "#e6d7f2",   // 연한 퍼플
+  SA: "#fbeec6",   // 연한 옐로
+  OC: "#d3ecee",   // 연한 틸
 };
 
 /** 색 기준 — 숫자 지표 4종 + 대륙. */
@@ -221,6 +222,12 @@ export default function WorldMapClient() {
     controller.moveAll(cameraForBounds(combinedBounds(comparisonRecords.map((c) => c.bbox))));
   }, [mode, comparisonRecords, controller]);
 
+  // 지도 상단 배너에 띄울 나라. 비교 중이면 가장 마지막에 담은 나라를 보여준다.
+  const bannerCountry =
+    mode === "compare"
+      ? comparisonRecords[comparisonRecords.length - 1] ?? null
+      : selectedRecord;
+
   // ── 렌더 ──────────────────────────────────────────────────────
   if (loadError) {
     return (
@@ -235,7 +242,8 @@ export default function WorldMapClient() {
 
   // 지구본은 걷어내고 평면 지도 한 장을 화면 가득 쓴다.
   // 헤더·검색·컨트롤이 차지하는 높이를 빼고 남는 만큼 지도에 준다.
-  const mapHeight = isNarrow ? "h-[68vh] min-h-[420px]" : "h-[calc(100vh-260px)] min-h-[560px]";
+  // 좌우는 화면 폭을 그대로 쓰고, 상하만 이전의 절반 정도로 줄인다.
+  const mapHeight = isNarrow ? "h-[34vh] min-h-[220px]" : "h-[calc(50vh-130px)] min-h-[290px]";
 
   const chip = (activeState: boolean) =>
     `rounded-full border px-3 py-1.5 text-[13px] font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff9966] ${
@@ -323,7 +331,22 @@ export default function WorldMapClient() {
       )}
 
       {/* 지도 영역 — 평면 지도 한 장 */}
-      <div className="mt-5">
+      <div className="relative mt-5">
+        {/* 나라를 고르면 지도 위에 국기·대륙·나라 이름만 크게 띄운다 */}
+        {bannerCountry && (
+          <div className="pointer-events-none absolute left-1/2 top-3 z-20 -translate-x-1/2">
+            <div className="flex items-center gap-2.5 rounded-full bg-white/95 px-4 py-2 shadow-md ring-1 ring-[#ece6e0] backdrop-blur-sm">
+              <Flag country={bannerCountry} size={34} />
+              <span className="text-[13px] font-semibold text-[#7d746e]">
+                {lang === "ko" ? bannerCountry.continentKo : bannerCountry.continentEn}
+              </span>
+              <span className="text-[#ded5cc]">·</span>
+              <span className="text-[19px] font-extrabold leading-none text-[#201b18]">
+                {lang === "ko" ? bannerCountry.nameKo : bannerCountry.nameEn}
+              </span>
+            </div>
+          </div>
+        )}
         {dataset && (
           <MapPanel
             side="flat" controller={controller} geojsonUrl={GEOJSON_URL} countries={dataset.countries}
