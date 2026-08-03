@@ -63,6 +63,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/en/legal/business`, lastModified: now, changeFrequency: "weekly", priority: 0.4 },
     { url: `${baseUrl}/en/legal/youth`, lastModified: now, changeFrequency: "weekly", priority: 0.4 },
     { url: `${baseUrl}/minigame`,                     changeFrequency: "monthly", priority: 0.6 },
+    { url: `${baseUrl}/world-map`,                    changeFrequency: "weekly",  priority: 0.8 },
     { url: `${baseUrl}/projects`,                      changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/faq`,                          changeFrequency: "monthly", priority: 0.4 },
     { url: `${baseUrl}/help`,                         changeFrequency: "monthly", priority: 0.4 },
