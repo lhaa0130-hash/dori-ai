@@ -1,4 +1,13 @@
 import { createMetadata } from "@/lib/seo";
+import {
+  buildAnimalTitle,
+  buildAnimalDescription,
+  buildAnimalKeywords,
+  buildGlanceRows,
+  taxonProfile,
+  pickRelated,
+  pickHabitatPeers,
+} from "@/lib/animal-seo";
 import fs from "fs";
 import path from "path";
 import Link from "next/link";
@@ -30,15 +39,14 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: { params: { id: string } }) {
   const card = findCard(params.id, loadCards());
   if (!card) return createMetadata({ title: "동물 백과 — 몽글로 : 동물도감", description: "동물 백과사전 몽글로 : 동물도감", path: `/animal/${params.id}` });
-  const name = card.animal_name;
-  const en = card.en ? ` (${card.en})` : "";
-  const desc = (card.kid_friendly_desc || `${name}의 특징, 서식지, 먹이, 수명 등 정보를 알아보세요.`).replace(/\s+/g, " ").slice(0, 155);
+  // ⚠️ 제목·설명을 고정 문구로 되돌리지 말 것. 1,205개가 같은 꼬리표를 달고 있던 게
+  //    '기계로 찍어낸 페이지' 신호였다. 카드 고유값(별명·수치·속성)에서만 만든다. → lib/animal-seo.ts
   return createMetadata({
-    title: `${name}${en} — 특징·서식지·먹이·수명`,
-    description: desc,
+    title: buildAnimalTitle(card),
+    description: buildAnimalDescription(card),
     path: `/animal/${card.no}`,
     image: card.image_path ? `${SITE_URL}${card.image_path}` : undefined,
-    keywords: [name, `${name} 특징`, `${name} 수명`, `${name} 서식지`, `${name} 먹이`, card.en, card.sci, "동물 백과", "몽글로", "몽글로 : 동물도감"].filter(Boolean) as string[],
+    keywords: buildAnimalKeywords(card),
   });
 }
 
@@ -52,29 +60,22 @@ export default function AnimalDetail({ params }: { params: { id: string } }) {
   const next = idx < cards.length - 1 ? cards[idx + 1] : null;
 
   // 관련 동물 — 같은 분류군·먹이 기준 점수화(내부링크 강화: 크롤러 발견성·PageRank·회유 개선)
-  const myTax = card.filters?.taxonomy?.[0];
-  const myDiet = card.filters?.diet || [];
-  const related = cards
-    .filter((c) => c.no && c.no !== card.no && c.image_path)
-    .map((c) => {
-      let score = 0;
-      if (myTax && (c.filters?.taxonomy || []).includes(myTax)) score += 2;
-      score += (c.filters?.diet || []).filter((d) => myDiet.includes(d)).length;
-      return { c, score };
-    })
-    .filter((x) => x.score > 0)
-    .sort((a, b) => b.score - a.score)
-    .slice(0, 8)
-    .map((x) => x.c);
+  const related = pickRelated(card, cards, 8);
+  // 같은 서식지의 '다른 분류군' — 관련 동물과 겹치지 않게 골라 페이지마다 링크 묶음이 달라진다.
+  const habitatPeers = pickHabitatPeers(card, cards, related, 6);
 
   const info = Array.isArray(card.info) ? card.info : [];
   const facts = Array.isArray(card.facts) ? card.facts : [];
   const features = Array.isArray(card.key_feature) ? card.key_feature : [];
+  // filters에만 갇혀 있던 속성들을 지면으로 끌어올린다 — 동물마다 조합이 달라 내용 자체가 갈린다.
+  const glance = buildGlanceRows(card);
+  // 분류군(8종)에 따라 소제목 문구가 달라진다.
+  const heads = taxonProfile(card);
 
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "Article",
-    headline: `${card.animal_name} — 특징·서식지·먹이·수명`,
+    headline: buildAnimalTitle(card),
     description: card.kid_friendly_desc,
     image: card.image_path ? [`${SITE_URL}${card.image_path}`] : undefined,
     author: { "@type": "Organization", name: "illo", url: SITE_URL },
@@ -105,6 +106,10 @@ export default function AnimalDetail({ params }: { params: { id: string } }) {
           </nav>
 
           <h1 className="text-3xl md:text-4xl font-extrabold mb-1">{card.animal_name}</h1>
+          {/* 별명 — 카드마다 다른 한 줄(1,205개 중 1,182개가 고유값). 지면 첫인상을 동물별로 갈라준다. */}
+          {card.search_nickname && (
+            <p className="text-lg md:text-xl font-bold text-orange-500 mb-1.5">{card.search_nickname}</p>
+          )}
           <p className="text-gray-500 dark:text-gray-400 mb-5">
             {card.sci && <em>{card.sci}</em>}{card.sci && card.en ? " · " : ""}{card.en}
             {card.status?.label ? ` · 보전상태: ${card.status.label}` : ""}
@@ -137,16 +142,38 @@ export default function AnimalDetail({ params }: { params: { id: string } }) {
             </table>
           )}
 
+          {/* 한눈에 보기 — filters(먹이·크기·서식지·행동·몸·색·지역)를 지면으로 끌어올린 표.
+              값 조합이 동물마다 달라 같은 틀로도 서로 다른 내용이 나온다. */}
+          {glance.length > 0 && (
+            <section className="mb-6">
+              <h2 className="text-xl font-bold mb-3">{heads.glance}</h2>
+              <div className="flex flex-col gap-2.5">
+                {glance.map((row) => (
+                  <div key={row.label} className="flex flex-wrap items-baseline gap-x-3 gap-y-1.5">
+                    <span className="text-sm font-semibold text-stone-500 dark:text-stone-400 min-w-[76px]">{row.label}</span>
+                    <span className="flex flex-wrap gap-1.5">
+                      {row.values.map((v) => (
+                        <span key={v} className="text-sm px-2.5 py-1 rounded-full bg-stone-100 dark:bg-zinc-800 text-stone-700 dark:text-stone-300">
+                          {v}
+                        </span>
+                      ))}
+                    </span>
+                  </div>
+                ))}
+              </div>
+            </section>
+          )}
+
           {features.length > 0 && (
             <section className="mb-6">
-              <h2 className="text-xl font-bold mb-2">✨ 핵심 특징</h2>
+              <h2 className="text-xl font-bold mb-2">{heads.feature}</h2>
               <ul className="list-disc pl-5 space-y-1">{features.map((f, i) => <li key={i}>{f}</li>)}</ul>
             </section>
           )}
 
           {facts.length > 0 && (
             <section className="mb-6">
-              <h2 className="text-xl font-bold mb-2">🔎 재미있는 사실</h2>
+              <h2 className="text-xl font-bold mb-2">{heads.facts}</h2>
               <ul className="list-disc pl-5 space-y-1">{facts.map((f, i) => <li key={i}>{f}</li>)}</ul>
             </section>
           )}
@@ -160,9 +187,27 @@ export default function AnimalDetail({ params }: { params: { id: string } }) {
 
           {related.length > 0 && (
             <section className="mb-6 mt-10 pt-6 border-t border-stone-200 dark:border-stone-800">
-              <h2 className="text-xl font-bold mb-4">🐾 관련 동물</h2>
+              <h2 className="text-xl font-bold mb-4">{heads.related}</h2>
               <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
                 {related.map((r) => (
+                  <Link key={r.no} href={`/animal/${r.no}`} className="group block" title={`${r.animal_name} 알아보기`}>
+                    <div className="rounded-xl overflow-hidden relative w-full bg-stone-100 dark:bg-zinc-900" style={{ aspectRatio: "1 / 1" }}>
+                      {r.image_path && <Image src={r.image_path} alt={`${r.animal_name} 이미지`} fill sizes="140px" style={{ objectFit: "cover" }} className="group-hover:scale-105 transition-transform" />}
+                    </div>
+                    <div className="text-[13px] font-semibold mt-1.5 text-center truncate group-hover:text-orange-500">{r.animal_name}</div>
+                  </Link>
+                ))}
+              </div>
+            </section>
+          )}
+
+          {/* 같은 서식지·다른 분류군 — 위 '관련 동물'(같은 분류군)과 겹치지 않게 골라
+              페이지마다 링크 묶음이 달라지고, 분류군을 가로지르는 이동 경로가 생긴다. */}
+          {habitatPeers.length > 0 && (
+            <section className="mb-6">
+              <h2 className="text-xl font-bold mb-4">{heads.habitatPeers}</h2>
+              <div className="grid grid-cols-3 sm:grid-cols-4 gap-3">
+                {habitatPeers.map((r) => (
                   <Link key={r.no} href={`/animal/${r.no}`} className="group block" title={`${r.animal_name} 알아보기`}>
                     <div className="rounded-xl overflow-hidden relative w-full bg-stone-100 dark:bg-zinc-900" style={{ aspectRatio: "1 / 1" }}>
                       {r.image_path && <Image src={r.image_path} alt={`${r.animal_name} 이미지`} fill sizes="140px" style={{ objectFit: "cover" }} className="group-hover:scale-105 transition-transform" />}
