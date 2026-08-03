@@ -5,7 +5,9 @@
 export type SupportedLanguage = "ko" | "en";
 export type DataStatus = "ok" | "missing" | "stale";
 export type ContinentCode = "AF" | "AS" | "EU" | "NA" | "SA" | "OC";
-export type MetricUnit = "people" | "km2" | "current_usd" | "current_usd_per_person";
+export type MetricUnit =
+  | "people" | "km2" | "current_usd" | "current_usd_per_person"
+  | "percent" | "years" | "per_1000" | "tonnes_per_person";
 
 /** 숫자 지표 하나. v=값, y=기준연도, u=단위, s=상태, src=sources 표의 키. */
 export interface NumericMetric {
@@ -95,6 +97,17 @@ export interface CountryRecord {
   area: NumericMetric;
   gdp: NumericMetric;
   gdpPerCapita: NumericMetric;
+
+  // ── 랭킹 확장 지표 (World Bank) ─────────────────────────────────
+  gdpGrowth: NumericMetric;
+  lifeExpectancy: NumericMetric;
+  internetUsageRate: NumericMetric;
+  urbanPopulationRate: NumericMetric;
+  birthRate: NumericMetric;
+  childPopulationRate: NumericMetric;
+  forestAreaRate: NumericMetric;
+  renewableEnergyRate: NumericMetric;
+  co2PerCapita: NumericMetric;
 
   // ── 어린이용 지리 정보 ──────────────────────────────────────────
   languages: LocalizedName[];

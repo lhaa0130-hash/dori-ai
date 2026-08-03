@@ -1,8 +1,8 @@
 // 국가 검색과 URL 상태 (명세서 §8).
 // 검색 index 는 한 번만 만들고 입력마다 다시 만들지 않는다(명세서 §14).
 
-import type { ContinentCode, CountryRecord, SupportedLanguage, ViewMode } from "./types";
-import { CONTINENTS, VIEW_MODES } from "./types";
+import type { ContinentCode, CountryRecord, SupportedLanguage } from "./types";
+import { CONTINENTS } from "./types";
 import type { ComparisonSelection, WorldMapMode } from "./comparison";
 import { normalizeComparison } from "./comparison";
 
@@ -70,13 +70,19 @@ export function searchCountries(
 // 비교는 더 이상 country + compare 두 칸이 아니다. 순서가 곧 색상 번호이므로
 // 목록 하나로 표현한다.
 
+/** 상단 3탭 — 지도 탐색 / 세계 랭킹 / 국가 비교 (지시서 §8.1) */
+export type WorldMapView = "map" | "ranking";
+
 export interface UrlState {
+  /** view=ranking 이면 랭킹 화면. 기본은 지도 탐색. */
+  view: WorldMapView;
+  rankingMetric: string | null;
+  rankingOrder: "desc" | "asc" | null;
   mode: WorldMapMode;
   country: string | null;
   /** mode==="compare" 일 때만 의미가 있다. 순서 = 색상 번호. */
   comparison: ComparisonSelection[];
   lang: SupportedLanguage | null;
-  view: ViewMode;
   continent: ContinentCode | null;
 }
 
@@ -95,6 +101,8 @@ export function parseUrlState(params: URLSearchParams, valid?: Set<string>): Url
   };
 
   const mode: WorldMapMode = params.get("mode") === "compare" ? "compare" : "explore";
+  const view: WorldMapView = params.get("view") === "ranking" ? "ranking" : "map";
+  const rawOrder = params.get("order");
 
   // 비교 목록은 compare 모드에서만 읽는다.
   let comparison: ComparisonSelection[] = [];
@@ -109,15 +117,16 @@ export function parseUrlState(params: URLSearchParams, valid?: Set<string>): Url
   }
 
   const rawLang = params.get("lang");
-  const rawView = params.get("view");
   const rawContinent = params.get("continent")?.toUpperCase() ?? null;
 
   return {
+    view,
+    rankingMetric: params.get("metric"),
+    rankingOrder: rawOrder === "asc" || rawOrder === "desc" ? rawOrder : null,
     mode,
     country: iso(params.get("country")),
     comparison,
     lang: rawLang === "ko" || rawLang === "en" ? rawLang : null,
-    view: VIEW_MODES.includes(rawView as ViewMode) ? (rawView as ViewMode) : "split",
     continent: CONTINENTS.includes(rawContinent as ContinentCode) ? (rawContinent as ContinentCode) : null,
   };
 }
@@ -125,6 +134,15 @@ export function parseUrlState(params: URLSearchParams, valid?: Set<string>): Url
 /** 상태 → 쿼리스트링. 기본값은 넣지 않아 URL 을 짧게 유지한다. */
 export function buildUrlQuery(state: UrlState): string {
   const p = new URLSearchParams();
+  if (state.view === "ranking") {
+    p.set("view", "ranking");
+    if (state.rankingMetric) p.set("metric", state.rankingMetric);
+    if (state.rankingOrder) p.set("order", state.rankingOrder);
+    if (state.country) p.set("country", state.country);
+    if (state.continent) p.set("continent", state.continent);
+    const rs = p.toString().replace(/%2C/g, ",");
+    return rs ? `?${rs}` : "";
+  }
   if (state.mode === "compare") {
     p.set("mode", "compare");
     // 0~1개여도 tray 는 복원해야 하므로 목록이 있으면 그대로 싣는다.
@@ -133,7 +151,6 @@ export function buildUrlQuery(state: UrlState): string {
     p.set("country", state.country);
   }
   if (state.lang) p.set("lang", state.lang);
-  if (state.view !== "split") p.set("view", state.view);
   if (state.continent) p.set("continent", state.continent);
   // 쉼표는 쿼리 값에서 그대로 써도 되는 문자다. %2C 로 인코딩되면 주소가 읽기 어려워진다.
   const s = p.toString().replace(/%2C/g, ",");

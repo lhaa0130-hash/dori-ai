@@ -27,6 +27,41 @@ const HIT_PAD_PX = 9;
 const TAP_SLOP_PX = 8;
 /** 일반 국가명 라벨 상한. 작은 나라 marker·선택·비교는 여기 포함되지 않는다. */
 const MAX_PLAIN_LABELS = 40;
+/** 미니맵에 담을 위도 범위. Mercator 는 극지방이 무한히 늘어나므로 잘라야 세계가 다 들어온다. */
+const MINI_MAX_LAT = 83;
+
+/** 미니맵 위에 그릴 '현재 화면 범위' 상자. 날짜변경선을 넘으면 좌우 둘로 나눈다. */
+export interface ViewBoxRect { l: number; t: number; w: number; h: number }
+
+function computeViewBox(map: MlMap, mini: MlMap | null): ViewBoxRect[] {
+  if (!mini) return [];
+  const el = mini.getCanvas();
+  const W = el.clientWidth, H = el.clientHeight;
+  if (W <= 0 || H <= 0) return [];
+
+  const b = map.getBounds();
+  const north = Math.min(MINI_MAX_LAT, b.getNorth());
+  const south = Math.max(-MINI_MAX_LAT, b.getSouth());
+  const west = b.getWest(), east = b.getEast();
+
+  const pct = (lonW: number, lonE: number): ViewBoxRect | null => {
+    const tl = mini.project([lonW, north]);
+    const br = mini.project([lonE, south]);
+    const l = Math.max(0, Math.min(W, tl.x));
+    const r = Math.max(0, Math.min(W, br.x));
+    const t = Math.max(0, Math.min(H, tl.y));
+    const bm = Math.max(0, Math.min(H, br.y));
+    if (r - l < 1 || bm - t < 1) return null;
+    return { l: (l / W) * 100, t: (t / H) * 100, w: ((r - l) / W) * 100, h: ((bm - t) / H) * 100 };
+  };
+
+  // 날짜변경선을 넘는 화면(통가·피지·키리바시 등)은 하나의 상자로 그릴 수 없다.
+  if (east < west) {
+    return [pct(west, 180), pct(-180, east)].filter((x): x is ViewBoxRect => x !== null);
+  }
+  const one = pct(west, east);
+  return one ? [one] : [];
+}
 
 export interface MapPanelProps {
   controller: MapSyncController;
@@ -92,7 +127,7 @@ export default function MapPanel({
   /** marker 가 겹칠 때 임의로 고르지 않고 목록을 띄운다(§9-7). */
   const [overlap, setOverlap] = useState<{ x: number; y: number; list: CountryRecord[] } | null>(null);
   /** ⑨ 미니맵의 현재 보이는 범위 사각형(%) */
-  const [viewBox, setViewBox] = useState<{ l: number; t: number; w: number; h: number } | null>(null);
+  const [viewBox, setViewBox] = useState<ViewBoxRect[]>([]);
   const [miniReady, setMiniReady] = useState(false);
 
   // 콜백·데이터를 ref 로 잡아둔다. 지도는 한 번만 만들고 재생성하지 않는다.
@@ -158,16 +193,9 @@ export default function MapPanel({
     }
     setOverlays(out);
 
-    // ⑨ 미니맵에 표시할 '지금 보고 있는 범위'. 정거원통도법 비율로 환산한다.
-    const b = map.getBounds();
-    const west = b.getWest(), east = b.getEast();
-    const lonSpan = east >= west ? east - west : east + 360 - west;
-    setViewBox({
-      l: (((west + 180) % 360) / 360) * 100,
-      t: ((90 - Math.min(85, b.getNorth())) / 180) * 100,
-      w: Math.min(100, (lonSpan / 360) * 100),
-      h: Math.min(100, ((Math.min(85, b.getNorth()) - Math.max(-85, b.getSouth())) / 180) * 100),
-    });
+    // 미니맵의 '지금 보고 있는 범위'.
+    // ⚠️ 위경도를 백분율로 환산하면 Mercator 에서 위도가 어긋난다. 미니맵의 실제 project() 를 쓴다.
+    setViewBox(computeViewBox(map, miniMapRef.current));
   }, []);
 
   // ── 지도 생성 (한 번만) ────────────────────────────────────────
@@ -377,26 +405,46 @@ export default function MapPanel({
             { id: "land", type: "fill", source: SOURCE_ID, paint: { "fill-color": "#c9c0b8" } },
           ],
         },
-        center: [10, 10], zoom: -0.6, minZoom: -0.6, maxZoom: -0.6,
+        center: [0, 0], zoom: 0,
+        // 세계가 좌우로 반복되면 범위 상자가 어디를 가리키는지 알 수 없다.
+        renderWorldCopies: false,
         interactive: false, attributionControl: false,
       });
     } catch { return; }
     miniMapRef.current = mini;
-    mini.on("load", () => setMiniReady(true));
+
+    // ⚠️ 고정 zoom 을 쓰면 컨테이너 크기가 조금만 달라도 아메리카가 잘린다.
+    //    실제 캔버스 크기에 맞춰 세계 전체를 담도록 계산한다.
+    const fitWorld = () => {
+      const el = mini.getCanvas();
+      if (el.clientWidth <= 0 || el.clientHeight <= 0) return;   // 크기가 잡히기 전이면 하지 않는다
+      mini.fitBounds(
+        [[-180, MINI_MAX_LAT * -1], [180, MINI_MAX_LAT]],
+        { padding: 3, duration: 0, animate: false },
+      );
+    };
+    mini.on("load", () => { fitWorld(); setMiniReady(true); });
+
+    // 컨테이너 크기가 바뀌면 다시 맞춘다
+    const ro = typeof ResizeObserver !== "undefined"
+      ? new ResizeObserver(() => { mini.resize(); fitWorld(); paintOverlays(); })
+      : null;
+    ro?.observe(holder);
 
     // 미니맵을 누르면 주 지도를 그 지역으로 옮긴다
+    // 누른 지점을 미니맵의 실제 투영으로 되돌린다.
+    // 선형 환산(x/width→경도)은 Mercator 에서 위도가 어긋난다.
     const onClick = (e: MouseEvent) => {
       const map = mapRef.current;
       if (!map) return;
       const r = holder.getBoundingClientRect();
-      const lon = ((e.clientX - r.left) / r.width) * 360 - 180;
-      const lat = 90 - ((e.clientY - r.top) / r.height) * 180;
-      map.easeTo({ center: [lon, Math.max(-80, Math.min(80, lat))], duration: 600 });
+      const ll = mini.unproject([e.clientX - r.left, e.clientY - r.top]);
+      map.easeTo({ center: [ll.lng, ll.lat], zoom: map.getZoom(), duration: 600 });
     };
     holder.style.cursor = "pointer";
     holder.addEventListener("click", onClick);
 
-    return () => { holder.removeEventListener("click", onClick); mini.remove(); miniMapRef.current = null; };
+    return () => { ro?.disconnect(); holder.removeEventListener("click", onClick); mini.remove(); miniMapRef.current = null; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
@@ -551,16 +599,17 @@ export default function MapPanel({
 
       {/* 미니맵 — 실제 국가 도형을 대륙 색으로만 칠한 축소 지도. 클릭하면 그 지역으로 이동한다. */}
       <div className="absolute bottom-3 right-3 z-10 hidden overflow-hidden rounded-lg shadow-sm ring-1 ring-[#d9d0c8] sm:block">
-        <div ref={miniRef} style={{ width: 140, height: 90 }} aria-hidden="true" />
-        {viewBox && (
-          <span
-            className="pointer-events-none absolute rounded-[2px] border-2 border-[#f47f45] bg-[#ff9966]/15"
-            style={{
-              left: `${viewBox.l}%`, top: `${viewBox.t}%`,
-              width: `${viewBox.w}%`, height: `${viewBox.h}%`,
-            }}
-          />
-        )}
+        <div ref={miniRef} style={{ width: 156, height: 98 }} role="img" aria-label={lang === "ko" ? "세계 전체 위치 미니맵" : "World location minimap"} />
+        {/* 거의 세계 전체를 보고 있으면 상자가 미니맵을 다 덮어 의미가 없다 — 그때는 그리지 않는다 */}
+        {viewBox
+          .filter((v) => !(v.w > 92 && v.h > 92))
+          .map((v, i) => (
+            <span
+              key={i}
+              className="pointer-events-none absolute rounded-[2px] border border-[#f47f45] bg-[#ff9966]/10"
+              style={{ left: `${v.l}%`, top: `${v.t}%`, width: `${v.w}%`, height: `${v.h}%` }}
+            />
+          ))}
       </div>
 
       {/* hover tooltip — pointer 를 덮지 않게 왼쪽 위 고정 */}

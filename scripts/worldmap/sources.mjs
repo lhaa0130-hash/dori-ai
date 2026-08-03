@@ -38,11 +38,25 @@ export const SOURCES = {
   },
 };
 
-/** World Bank 지표 코드(명세서 §10.2). */
+/**
+ * World Bank 지표 코드.
+ * 랭킹에 쓰는 지표는 전부 여기서만 정의한다. 확보율이 낮으면 랭킹에서 빼되
+ * **값을 추정해 채우지 않는다.**
+ */
 export const WB_INDICATORS = {
   population: "SP.POP.TOTL",
   gdp: "NY.GDP.MKTP.CD",
   gdpPerCapita: "NY.GDP.PCAP.CD",
+  // 랭킹 확장
+  gdpGrowth: "NY.GDP.MKTP.KD.ZG",          // 연간 성장률 %
+  lifeExpectancy: "SP.DYN.LE00.IN",        // 기대수명 (년)
+  internetUsageRate: "IT.NET.USER.ZS",     // 인터넷 사용 인구 %
+  urbanPopulationRate: "SP.URB.TOTL.IN.ZS",// 도시 인구 %
+  birthRate: "SP.DYN.CBRT.IN",             // 조출생률 (인구 1000명당)
+  childPopulationRate: "SP.POP.0014.TO.ZS",// 0~14세 인구 %
+  forestAreaRate: "AG.LND.FRST.ZS",        // 산림 면적 %
+  renewableEnergyRate: "EG.FEC.RNEW.ZS",   // 재생에너지 소비 비중 %
+  co2PerCapita: "EN.GHG.CO2.PC.CE.AR5",    // 1인당 CO2 (t)
 };
 
 /** 재시도 포함 JSON fetch. 실패해도 던지지 않고 null 을 돌려 부분 장애를 흡수한다. */
