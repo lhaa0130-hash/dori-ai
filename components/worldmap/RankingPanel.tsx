@@ -10,6 +10,7 @@
 import { useMemo } from "react";
 import type { ContinentCode, CountryDataset, CountryRecord, SupportedLanguage } from "@/lib/worldmap/types";
 import { CONTINENTS } from "@/lib/worldmap/types";
+import { formatYear } from "@/lib/worldmap/display";
 import {
   buildRanking, rankOf, rankSentence, RANKING_METRICS, CATEGORY_LABEL,
   type RankingMetricId, type RankingCategory,
@@ -192,7 +193,7 @@ export default function RankingPanel({
                     <span className={`block tabular-nums font-extrabold text-[#201b18] ${top3 ? "text-[17px]" : "text-[14px]"}`} title={f.full}>
                       {f.display}
                     </span>
-                    {row.year && <span className="block text-[10px] text-[#a89f98]">{lang === "ko" ? "기준" : "as of"} {row.year}</span>}
+                    {row.year && <span className="block text-[10px] text-[#a89f98]">{formatYear(row.year, lang)}</span>}
                   </span>
                   <button
                     type="button"

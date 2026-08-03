@@ -577,6 +577,11 @@ async function main() {
   // 한국에서 실제로 쓰는 통용 국가명. world-countries 의 kor 번역이 공식 국명(몽골국)이거나
   // 아예 다른 이름(조선), 심지어 두 나라가 같은 이름(도미니카)으로 나오는 경우가 있다.
   const nameKoOverride = overrides.__nameKo ?? {};
+  // 한국어 화면에 영문이 그대로 나가던 값들의 수동 교정표 (지시서 07 §7).
+  const capitalKoOverride = overrides.__capitalKo ?? {};
+  const subregionKoOverride = overrides.__subregionKo ?? {};
+  const currencyKoOverride = overrides.__currencyKo ?? {};
+  const languageKoOverride = overrides.__languageKo ?? {};
   // 표시명이 바뀌어도 기존 검색어('한국', '북한')가 계속 동작해야 한다.
   const aliasKo = overrides.__aliasesKo ?? {};
   const aliasEn = overrides.__aliasesEn ?? {};
@@ -621,12 +626,12 @@ async function main() {
       aliasesEn: aliasEn[r.iso3] ?? [],
       nameEn: r.nameEn,
       officialNameEn: r.officialNameEn,
-      capitalKo: ov.capitalKo ?? capKo ?? r.capitalEn,     // 한글 없으면 영문 (명세서 §10.1)
+      capitalKo: ov.capitalKo ?? capitalKoOverride[r.iso3] ?? capKo ?? r.capitalEn,   // 한글 없으면 영문 (명세서 §10.1)
       capitalEn: r.capitalEn,
       continentCode: r.continentCode,
       continentKo: r.continentKo,
       continentEn: r.continentEn,
-      subregionKo: r.subregionKo,
+      subregionKo: r.subregionKo ? subregionKoOverride[r.subregionKo] ?? r.subregionKo : null,
       subregionEn: r.subregionEn,
       center: r.center,
       bbox: r.bbox,
@@ -641,12 +646,12 @@ async function main() {
       // '육지 국경 없음' 을 구분해 보여준다.
       languages: Object.entries(r.rawLanguages).map(([code, en]) => ({
         code,
-        ko: wd.langKoMap.get(code) ?? en,      // 한글 이름이 없으면 영어를 쓴다
+        ko: languageKoOverride[en] ?? wd.langKoMap.get(code) ?? en,   // 한글 이름이 없으면 영어를 쓴다
         en,
       })),
       currencies: Object.entries(r.rawCurrencies).map(([code, info]) => ({
         code,
-        ko: wd.curKoMap.get(code) ?? info?.name ?? code,
+        ko: currencyKoOverride[code] ?? wd.curKoMap.get(code) ?? info?.name ?? code,
         en: info?.name ?? code,
         symbol: info?.symbol ?? null,
       })),
@@ -735,7 +740,7 @@ async function main() {
       aliasesKo: r.aliasesKo, aliasesEn: r.aliasesEn,
       capitalKo: r.capitalKo, capitalEn: r.capitalEn,
       continentCode: r.continentCode, continentKo: r.continentKo, continentEn: r.continentEn,
-      subregionKo: r.subregionKo, subregionEn: r.subregionEn,
+      subregionKo: r.subregionKo ? subregionKoOverride[r.subregionKo] ?? r.subregionKo : null, subregionEn: r.subregionEn,
       center: r.center.map((n) => Math.round(n * 100) / 100),
       bbox: r.bbox.map((n) => Math.round(n * 100) / 100),
       capitalPoint: r.capitalPoint,

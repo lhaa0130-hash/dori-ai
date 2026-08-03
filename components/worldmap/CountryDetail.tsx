@@ -9,6 +9,7 @@ import { METRIC_KEYS } from "@/lib/worldmap/types";
 import { buildChildSummary, buildBreadcrumb } from "@/lib/worldmap/childSummary";
 import { formatMetric, formatDate, NO_DATA } from "@/lib/worldmap/format";
 import { worldRank } from "@/lib/worldmap/search";
+import { formatCurrency, formatTimezones, formatYear } from "@/lib/worldmap/display";
 import { t } from "@/lib/worldmap/i18n";
 
 export function Flag({ country, size = 40 }: { country: CountryRecord; size?: number }) {
@@ -70,9 +71,15 @@ function MetricCard({
         {f.full && <span className="sr-only"> ({f.full})</span>}
       </p>
       <div className="mt-1.5 flex flex-wrap items-center gap-x-2 gap-y-0.5 text-[11px] text-[#a89f98]">
-        {f.year && <span>{t("asOf", lang)} {f.year}</span>}
+        {f.year && <span>{formatYear(f.year, lang)}</span>}
         {metric === "gdp" && <span>{t("gdpNote", lang)}</span>}
-        {rank && <span className="font-semibold text-[#f47f45]">{t("worldRank", lang)} {rank.rank}/{rank.total}</span>}
+        {rank && (
+          <span className="font-semibold text-[#f47f45]">
+            {lang === "ko"
+              ? `세계 ${rank.rank}위 / ${rank.total}개국`
+              : `World #${rank.rank} of ${rank.total}`}
+          </span>
+        )}
         {source && (
           <a href={source.url} target="_blank" rel="noreferrer noopener" className="underline decoration-dotted hover:text-[#7d746e]">
             {source.label}
@@ -174,12 +181,12 @@ export default function CountryDetail({
         <TextRow
           label={lang === "ko" ? "통화" : "Currency"}
           value={country.currencies.length
-            ? country.currencies.map((c) => `${lang === "ko" ? c.ko : c.en} ${c.symbol ?? ""} (${c.code})`.replace(/\s+/g, " ").trim()).join(", ")
+            ? country.currencies.map((c) => formatCurrency(c, lang)).join(", ")
             : null}
           source={null} lang={lang} dataset={dataset}
         />
         {country.timezones.length > 0 && (
-          <TextRow label={lang === "ko" ? "시간대" : "Time zone"} value={country.timezones.join(", ")} source="wikidata" lang={lang} dataset={dataset} />
+          <TextRow label={lang === "ko" ? "시간대" : "Time zone"} value={formatTimezones(country.timezones, lang)} source="wikidata" lang={lang} dataset={dataset} />
         )}
 
         {/* 이웃 나라 — 눌러서 바로 이동 */}
