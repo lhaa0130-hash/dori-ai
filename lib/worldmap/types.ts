@@ -78,7 +78,12 @@ export interface CountryRecord {
   subregionEn: string | null;
   center: [number, number];
   bbox: [number, number, number, number];
+  /** ISO2 로 만든 flagcdn 국기 이미지(80px). world-countries 에는 국기 URL 이 없다. */
   flagUrl: string | null;
+  /** 고해상도 화면용 2배 이미지 */
+  flagUrl2x: string | null;
+  /** 이미지가 막혔을 때 쓰는 이모지 국기 */
+  flagEmoji: string | null;
   leader: LeaderMetric;
   established: EstablishedMetric;
   religion: ReligionMetric;

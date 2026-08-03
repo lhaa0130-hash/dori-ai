@@ -15,13 +15,15 @@ export function Flag({ country, size = 40 }: { country: CountryRecord; size?: nu
   const [broken, setBroken] = useState(false);
   // 국기 이미지가 늦거나 실패해도 레이아웃이 흔들리지 않게 영역을 고정한다(명세서 §14).
   const box = { width: size, height: Math.round((size * 2) / 3) };
+  // 이미지가 막히면 이모지 국기로, 그것도 없으면 ISO 코드로 단계적으로 내려간다.
   if (!country.flagUrl || broken) {
     return (
       <span
         style={box}
-        className="inline-flex items-center justify-center rounded border border-[#ece6e0] bg-[#f8f4f0] font-mono text-[10px] font-semibold text-[#7d746e]"
+        className="inline-flex items-center justify-center overflow-hidden rounded border border-[#ece6e0] bg-[#f8f4f0] text-[14px] font-semibold leading-none text-[#7d746e]"
+        aria-hidden="true"
       >
-        {country.iso3}
+        {country.flagEmoji ?? <span className="font-mono text-[10px]">{country.iso3}</span>}
       </span>
     );
   }
@@ -29,7 +31,9 @@ export function Flag({ country, size = 40 }: { country: CountryRecord; size?: nu
     // eslint-disable-next-line @next/next/no-img-element
     <img
       src={country.flagUrl}
+      srcSet={country.flagUrl2x ? `${country.flagUrl} 1x, ${country.flagUrl2x} 2x` : undefined}
       alt=""
+      loading="lazy"
       style={box}
       onError={() => setBroken(true)}
       className="rounded border border-[#ece6e0] object-cover"

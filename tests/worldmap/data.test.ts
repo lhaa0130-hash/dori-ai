@@ -269,8 +269,36 @@ test("작은 국가도 center 좌표를 갖는다 (지도 marker 대상)", () =>
   }
 });
 
+test("한국에서 쓰는 통용 국가명을 쓴다", () => {
+  const name = (iso3: string) => COUNTRIES.find((c) => c.iso3 === iso3)?.nameKo;
+  assert.equal(name("PRK"), "북한", "'조선' 이 아니라 '북한'");
+  assert.equal(name("MNG"), "몽골", "'몽골국' 이 아니라 '몽골'");
+  assert.equal(name("KOR"), "한국");
+  assert.equal(name("DMA"), "도미니카 연방");
+  assert.equal(name("DOM"), "도미니카 공화국");
+});
+
+test("한글 국가명이 서로 겹치지 않는다", () => {
+  const seen = new Map<string, string>();
+  const dup: string[] = [];
+  for (const c of COUNTRIES) {
+    if (seen.has(c.nameKo)) dup.push(`${c.nameKo}(${seen.get(c.nameKo)}/${c.iso3})`);
+    seen.set(c.nameKo, c.iso3);
+  }
+  assert.deepEqual(dup, [], `같은 이름을 쓰는 나라: ${dup.join(", ")}`);
+});
+
+test("경계가 1:50m 수준의 디테일을 갖는다", () => {
+  let vertices = 0;
+  const walk = (n: any, d: number) => { if (d === 0) { vertices++; return; } for (const x of n) walk(x, d - 1); };
+  for (const f of geojson.features) walk(f.geometry.coordinates, f.geometry.type === "Polygon" ? 2 : 3);
+  // 110m 은 약 1만 정점. 50m 은 그보다 크게 많아야 한다.
+  assert.ok(vertices > 50_000, `정점 ${vertices}개 — 해상도가 떨어졌다`);
+});
+
 test("브라우저용 파일이 과하게 크지 않다", () => {
   const kb = (p: string) => readFileSync(path.join(ROOT, p)).byteLength / 1024;
   assert.ok(kb("public/worldmap/countries.json") < 400, `countries.json ${kb("public/worldmap/countries.json")}KB`);
-  assert.ok(kb("public/worldmap/countries.geojson") < 600, `geojson ${kb("public/worldmap/countries.geojson")}KB`);
+  // 1:50m 경계라 110m 보다 훨씬 크다(정점 약 9배). gzip 으로는 500KB 수준.
+  assert.ok(kb("public/worldmap/countries.geojson") < 2000, `geojson ${kb("public/worldmap/countries.geojson")}KB`);
 });
