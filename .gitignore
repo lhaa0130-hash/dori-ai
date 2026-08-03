@@ -67,3 +67,9 @@ firebase-debug.log
 .wrangler/
 .ui-e2e-tmp*/
 .diag-profile/
+
+# Playwright (월드맵 E2E)
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache/

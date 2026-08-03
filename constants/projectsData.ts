@@ -30,6 +30,29 @@ export interface ProjectItem {
 
 export const PROJECTS: ProjectItem[] = [
   {
+    slug: "worldmap",
+    name: "월드맵",
+    emoji: "🌍",
+    image: "",
+    tag: "지도 · 데이터",
+    category: "main",
+    isMain: true,
+    status: "오픈",
+    isActive: true,
+    desc: "지구본과 세계지도로 나라별 핵심 지표를 한눈에 비교",
+    longDesc:
+      "지구본을 손으로 돌려보고, 평면 세계지도로 전체를 한눈에 봅니다. 나라를 누르면 면적·인구·GDP·1인당 GDP·수도·통화·언어·국가 수립일·대표 지도자·종교가 바로 나오고, 세계 순위와 인접 국가까지 이어서 볼 수 있어요. 색 기준을 바꾸면 지도 전체가 그 지표로 다시 칠해져 나라끼리 비교가 쉬워집니다. 수치는 세계은행·world-countries 공개 데이터를 기준 연도와 함께 표시합니다.",
+    tags: ["지구본", "세계지도", "GDP", "인구", "국가 비교"],
+    launchHref: "/world-map",
+    launchLabel: "지도 열기",
+    features: [
+      { icon: "🌐", title: "지구본 + 평면지도", detail: "드래그로 지구본을 돌려보고, 평면지도로 전체를 한 화면에 봅니다." },
+      { icon: "👆", title: "누르면 바로 정보", detail: "나라를 클릭하면 면적·인구·GDP·1인당 GDP·수도·통화·언어가 즉시 나와요." },
+      { icon: "🎨", title: "지표별 색칠 비교", detail: "색 기준을 바꾸면 지도가 그 지표로 다시 칠해져 나라끼리 쉽게 구분돼요." },
+      { icon: "📊", title: "세계 순위·인접국", detail: "이 나라가 몇 위인지, 어떤 나라와 붙어 있는지 이어서 탐색할 수 있어요." },
+    ],
+  },
+  {
     slug: "animal",
     name: "몽글로 : 동물도감",
     emoji: "🐾",

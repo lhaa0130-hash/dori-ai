@@ -21,7 +21,11 @@
     "test:reward:ui": "firebase emulators:exec --only auth,firestore --project demo-illo-myworld \"npm run test:reward:ui:run\"",
     "dev:edge": "wrangler pages dev out --port 8788 --compatibility-date=2024-05-18 --binding REWARD_ENV=emulator --binding FIREBASE_PROJECT_ID=demo-illo-myworld --binding FIRESTORE_EMULATOR_HOST=127.0.0.1:8080 --binding FIREBASE_AUTH_EMULATOR_HOST=127.0.0.1:9099",
     "test:my-world:all": "npm test && npm run test:my-world:emulator",
-    "lint": "eslint"
+    "lint": "eslint",
+    "sync:data": "node scripts/worldmap/sync-country-data.mjs",
+    "verify:data": "node scripts/worldmap/verify-country-data.mjs",
+    "test:worldmap": "node --import ./tests/worldmap/register.mjs --test \"tests/worldmap/*.test.ts\"",
+    "test:e2e": "playwright test"
   },
   "dependencies": {
     "@types/canvas-confetti": "^1.9.0",
@@ -44,7 +48,9 @@
     "remark-gfm": "^4.0.1",
     "remark-html": "^16.0.1",
     "tailwind-merge": "^3.4.0",
-    "tailwindcss-animate": "^1.0.7"
+    "tailwindcss-animate": "^1.0.7",
+    "maplibre-gl": "^5.9.0",
+    "zod": "^3.24.1"
   },
   "devDependencies": {
     "@opennextjs/cloudflare": "^1.15.1",
@@ -57,6 +63,7 @@
     "eslint-config-next": "14.2.4",
     "tailwindcss": "^4",
     "typescript": "^5",
-    "wrangler": "^4.60.0"
+    "wrangler": "^4.60.0",
+    "@playwright/test": "^1.49.1"
   }
 }
