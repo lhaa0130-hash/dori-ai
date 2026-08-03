@@ -243,7 +243,7 @@ export default function WorldMapClient({ initialLang }: { initialLang?: Supporte
   // 지구본은 걷어내고 평면 지도 한 장을 화면 가득 쓴다.
   // 헤더·검색·컨트롤이 차지하는 높이를 빼고 남는 만큼 지도에 준다.
   // 좌우는 화면 폭을 그대로 쓰고, 상하만 이전의 절반 정도로 줄인다.
-  const mapHeight = isNarrow ? "h-[34vh] min-h-[220px]" : "h-[calc(50vh-130px)] min-h-[290px]";
+  const mapHeight = isNarrow ? "h-[52vh] min-h-[320px]" : "h-[62vh] min-h-[420px]";
 
   const chip = (activeState: boolean) =>
     `rounded-full border px-3 py-1.5 text-[13px] font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff9966] ${
@@ -253,12 +253,14 @@ export default function WorldMapClient({ initialLang }: { initialLang?: Supporte
     }`;
 
   return (
-    <main className="mx-auto max-w-[1600px] px-4 pb-10 pt-6 sm:px-6 lg:px-10">
+    <main className="mx-auto max-w-[1600px] px-4 pb-4 pt-5 sm:px-6 lg:px-10">
       <p className="text-[11px] font-bold tracking-[0.18em] text-[#f47f45]">{DICT.eyebrow[lang]}</p>
-      <h1 className="mt-1.5 text-[32px] font-extrabold leading-[1.15] text-[#201b18] lg:text-[44px]">
-        {DICT.title[lang]}
-      </h1>
-      <p className="mt-2 max-w-2xl text-[15px] leading-relaxed text-[#7d746e]">{DICT.lead[lang]}</p>
+      <div className="mt-1 flex flex-wrap items-baseline gap-x-3">
+        <h1 className="text-[28px] font-extrabold leading-tight text-[#201b18] lg:text-[34px]">
+          {DICT.title[lang]}
+        </h1>
+        <p className="text-[14px] text-[#7d746e]">{DICT.lead[lang]}</p>
+      </div>
 
       {dataset?.stale && (
         <p role="status" className="mt-3 inline-block rounded-lg bg-[#fdf3e2] px-3 py-1.5 text-[13px] font-semibold text-[#b6792e]">
@@ -275,7 +277,20 @@ export default function WorldMapClient({ initialLang }: { initialLang?: Supporte
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          {/* ⑪ 비교하기 — 지도 위 상단에 눈에 띄게 둔다 */}
+          <button
+            type="button"
+            onClick={() => {
+              const list = dataset?.countries ?? [];
+              if (!list.length) return;
+              const pick = list[Math.floor(Math.random() * list.length)];
+              selectCountry(pick.iso3);
+            }}
+            className={chip(false)}
+          >
+            {t("randomTrip", lang)}
+          </button>
+
+          {/* 비교하기 — 지도 위 상단에 눈에 띄게 둔다 */}
           <button
             type="button"
             onClick={mode === "compare" ? exitCompare : enterCompare}
@@ -286,7 +301,9 @@ export default function WorldMapClient({ initialLang }: { initialLang?: Supporte
                 : "bg-[#fff0e6] text-[#f47f45] hover:bg-[#ffe2d2]"
             }`}
           >
-            {mode === "compare" ? (lang === "ko" ? "비교 끝내기" : "Exit compare") : (lang === "ko" ? "🔍 비교하기" : "🔍 Compare")}
+            {mode === "compare"
+              ? `${lang === "ko" ? "비교" : "Compare"} ${comparison.length}/4 · ${lang === "ko" ? "끝내기" : "exit"}`
+              : (lang === "ko" ? "🔍 비교하기" : "🔍 Compare")}
           </button>
 
           <button
@@ -380,7 +397,7 @@ export default function WorldMapClient({ initialLang }: { initialLang?: Supporte
       {!dataset && <p className="mt-6 text-[14px] text-[#7d746e]">{t("loading", lang)}</p>}
 
       {/* 상세 / 비교 */}
-      <div className="mt-4">
+      <div className="mt-3">
         {!selectedRecord && dataset && mode === "explore" && (
           <div className="rounded-2xl border border-[#ece6e0] bg-white p-6">
             <p className="text-[15px] text-[#40382f]">{t("emptyState", lang)}</p>
@@ -421,7 +438,7 @@ export default function WorldMapClient({ initialLang }: { initialLang?: Supporte
 
       {/* 데이터 출처 (명세서 §6.2 attribution) */}
       {dataset && (
-        <footer className="mt-6 border-t border-[#ece6e0] pt-4 text-[11px] leading-relaxed text-[#a89f98]">
+        <footer className="mt-4 border-t border-[#ece6e0] pt-4 text-[11px] leading-relaxed text-[#a89f98]">
           <p className="font-semibold text-[#7d746e]">{t("sources", lang)}</p>
           <p className="mt-1">
             {Object.values(dataset.sources).map((s, i) => (

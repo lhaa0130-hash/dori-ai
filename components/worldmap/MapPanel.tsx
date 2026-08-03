@@ -81,6 +81,8 @@ export default function MapPanel({
   const hoveredRef = useRef<string | null>(null);
   const hoverTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null);
   const downPointRef = useRef<{ x: number; y: number } | null>(null);
+  const miniRef = useRef<HTMLDivElement>(null);
+  const miniMapRef = useRef<MlMap | null>(null);
 
   const [failed, setFailed] = useState(false);
   const [failReason, setFailReason] = useState<string | null>(null);
@@ -91,6 +93,7 @@ export default function MapPanel({
   const [overlap, setOverlap] = useState<{ x: number; y: number; list: CountryRecord[] } | null>(null);
   /** ⑨ 미니맵의 현재 보이는 범위 사각형(%) */
   const [viewBox, setViewBox] = useState<{ l: number; t: number; w: number; h: number } | null>(null);
+  const [miniReady, setMiniReady] = useState(false);
 
   // 콜백·데이터를 ref 로 잡아둔다. 지도는 한 번만 만들고 재생성하지 않는다.
   const onSelectRef = useRef(onSelect); onSelectRef.current = onSelect;
@@ -222,7 +225,7 @@ export default function MapPanel({
               type: "circle",
               source: "capitals",
               paint: {
-                "circle-radius": ["interpolate", ["linear"], ["zoom"], 1, 1.6, 3, 2.6, 6, 4] as never,
+                "circle-radius": ["interpolate", ["linear"], ["zoom"], 1, 2, 3, 3, 6, 4.5] as never,
                 "circle-color": "#3f3a35",
                 "circle-stroke-width": 1,
                 "circle-stroke-color": "rgba(255,255,255,0.9)",
@@ -355,6 +358,59 @@ export default function MapPanel({
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
+
+  // ── 미니맵 ────────────────────────────────────────────────────
+  // 같은 GeoJSON 을 쓰되 대륙 색만 칠하고 조작은 막는다. 클릭하면 그 지역으로 이동한다.
+  useEffect(() => {
+    const holder = miniRef.current;
+    if (!holder || miniMapRef.current) return;
+    let mini: MlMap;
+    try {
+      mini = new maplibregl.Map({
+        container: holder,
+        style: {
+          version: 8,
+          projection: { type: "mercator" },
+          sources: { [SOURCE_ID]: { type: "geojson", data: geojsonUrl, promoteId: "iso3" } },
+          layers: [
+            { id: "ocean", type: "background", paint: { "background-color": "#e3eef0" } },
+            { id: "land", type: "fill", source: SOURCE_ID, paint: { "fill-color": "#c9c0b8" } },
+          ],
+        },
+        center: [10, 10], zoom: -0.6, minZoom: -0.6, maxZoom: -0.6,
+        interactive: false, attributionControl: false,
+      });
+    } catch { return; }
+    miniMapRef.current = mini;
+    mini.on("load", () => setMiniReady(true));
+
+    // 미니맵을 누르면 주 지도를 그 지역으로 옮긴다
+    const onClick = (e: MouseEvent) => {
+      const map = mapRef.current;
+      if (!map) return;
+      const r = holder.getBoundingClientRect();
+      const lon = ((e.clientX - r.left) / r.width) * 360 - 180;
+      const lat = 90 - ((e.clientY - r.top) / r.height) * 180;
+      map.easeTo({ center: [lon, Math.max(-80, Math.min(80, lat))], duration: 600 });
+    };
+    holder.style.cursor = "pointer";
+    holder.addEventListener("click", onClick);
+
+    return () => { holder.removeEventListener("click", onClick); mini.remove(); miniMapRef.current = null; };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // 미니맵도 같은 대륙 색으로 칠한다
+  useEffect(() => {
+    const mini = miniMapRef.current;
+    if (!mini || !miniReady) return;
+    const entries = Object.entries(colors);
+    if (!entries.length) return;
+    const expr: unknown[] = ["match", ["get", "iso3"]];
+    for (const [iso3, color] of entries) expr.push(iso3, color);
+    expr.push("#c9c0b8");
+    mini.setPaintProperty("land", "fill-color", expr as never);
+  }, [colors, miniReady]);
 
   // ── 색칠 갱신 ─────────────────────────────────────────────────
   useEffect(() => {
@@ -493,34 +549,19 @@ export default function MapPanel({
         </div>
       )}
 
-      {/* ⑨ 미니맵 — 우측 하단. 세계 전체 실루엣 위에 지금 보는 범위를 표시한다. */}
-      {viewBox && (
-        <div
-          className="pointer-events-none absolute bottom-3 right-3 z-10 overflow-hidden rounded-md bg-[#eaf5f5]/95 shadow-sm ring-1 ring-[#d9d0c8]"
-          style={{ width: 132, height: 66 }}
-          aria-hidden="true"
-        >
-          <svg viewBox="0 0 360 180" width="132" height="66" preserveAspectRatio="none">
-            {/* 대륙 실루엣 — 미니맵이라 아주 단순한 도형이면 충분하다 */}
-            <g fill="#c9c0b8" opacity="0.85">
-              <path d="M35 30h60l18 22-14 26-24 8-16 30-18-14-6-38z" />
-              <path d="M108 96l24-6 16 34-10 40-18 6-14-34z" />
-              <path d="M168 26l40-4 22 14-8 22-26 10-20-16z" />
-              <path d="M172 66l30 4 16 30-8 44-26 8-18-40z" />
-              <path d="M214 24l90-6 44 22-16 46-52 20-44-24-16-38z" />
-              <path d="M292 116l34-6 14 18-16 20-28-6z" />
-            </g>
-          </svg>
-          {/* 지금 보이는 범위 */}
+      {/* 미니맵 — 실제 국가 도형을 대륙 색으로만 칠한 축소 지도. 클릭하면 그 지역으로 이동한다. */}
+      <div className="absolute bottom-3 right-3 z-10 hidden overflow-hidden rounded-lg shadow-sm ring-1 ring-[#d9d0c8] sm:block">
+        <div ref={miniRef} style={{ width: 140, height: 90 }} aria-hidden="true" />
+        {viewBox && (
           <span
-            className="absolute rounded-[2px] border-2 border-[#f47f45] bg-[#ff9966]/20"
+            className="pointer-events-none absolute rounded-[2px] border-2 border-[#f47f45] bg-[#ff9966]/15"
             style={{
               left: `${viewBox.l}%`, top: `${viewBox.t}%`,
               width: `${viewBox.w}%`, height: `${viewBox.h}%`,
             }}
           />
-        </div>
-      )}
+        )}
+      </div>
 
       {/* hover tooltip — pointer 를 덮지 않게 왼쪽 위 고정 */}
       {hover && !overlap && (
