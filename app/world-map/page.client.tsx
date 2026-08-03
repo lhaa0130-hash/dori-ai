@@ -4,10 +4,12 @@
 // 상태는 URL 이 원본이다. 주소를 복사해 새 창에서 열면 같은 선택·비교가 복원된다.
 
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import type { ContinentCode, CountryDataset, CountryRecord, MetricKey, SupportedLanguage, ViewMode } from "@/lib/worldmap/types";
+import type { ContinentCode, CountryDataset, CountryRecord, MetricKey, SupportedLanguage } from "@/lib/worldmap/types";
 import { CONTINENTS, METRIC_KEYS } from "@/lib/worldmap/types";
 import { MapSyncController, cameraForBounds, combinedBounds } from "@/lib/worldmap/mapSync";
-import { parseUrlState, buildUrlQuery } from "@/lib/worldmap/search";
+import { parseUrlState, buildUrlQuery, type WorldMapView } from "@/lib/worldmap/search";
+import RankingPanel from "@/components/worldmap/RankingPanel";
+import { RANKING_BY_ID, type RankingMetricId, buildRanking } from "@/lib/worldmap/ranking";
 import {
   type ComparisonSelection, type WorldMapMode,
   addComparison, removeComparison, moveComparison, clearComparison, shouldShowTable,
@@ -67,7 +69,11 @@ export default function WorldMapClient({ initialLang }: { initialLang?: Supporte
   const [dataset, setDataset] = useState<CountryDataset | null>(null);
   const [loadError, setLoadError] = useState(false);
   const [lang, setLang] = useState<SupportedLanguage>(initialLang ?? "ko");
-  const [view, setView] = useState<ViewMode>("split");
+  const [view, setView] = useState<WorldMapView>("map");
+  const [rankMetric, setRankMetric] = useState<RankingMetricId>("area");
+  const [rankOrder, setRankOrder] = useState<"desc" | "asc">("desc");
+  const [rankShowAll, setRankShowAll] = useState(false);
+  const [hoveredIso3, setHoveredIso3] = useState<string | null>(null);
   const [continent, setContinent] = useState<ContinentCode | null>(null);
   const [metric, setMetric] = useState<ColorMode>("continent");
   const [selected, setSelected] = useState<string | null>(null);
@@ -105,8 +111,11 @@ export default function WorldMapClient({ initialLang }: { initialLang?: Supporte
     const params = new URLSearchParams(window.location.search);
     const valid = byIso.size ? new Set(byIso.keys()) : undefined;
     const s = parseUrlState(params, valid);
-    setLang(initialLang ?? resolveLanguage(s.lang, window.localStorage.getItem(LANG_STORAGE_KEY), window.navigator.language));
+    // 언어는 라우트(initialLang)가 유일한 기준이다. 저장값이 라우트를 덮어쓰지 않게 한다(§9.2).
+    setLang(initialLang ?? (s.lang === "en" ? "en" : "ko"));
     setView(s.view);
+    if (s.rankingMetric && RANKING_BY_ID.has(s.rankingMetric as RankingMetricId)) setRankMetric(s.rankingMetric as RankingMetricId);
+    if (s.rankingOrder) setRankOrder(s.rankingOrder);
     setContinent(s.continent);
     setSelected(s.country);
     setMode(s.mode);
@@ -114,6 +123,21 @@ export default function WorldMapClient({ initialLang }: { initialLang?: Supporte
   }, [byIso, initialLang]);
 
   useEffect(() => {
+    // 구형 링크 정리: /world-map?...&lang=en → /en/world-map?... (다른 상태는 그대로 둔다)
+    if (typeof window !== "undefined") {
+      const p = new URLSearchParams(window.location.search);
+      const q = p.get("lang");
+      if (q === "en" || q === "ko") {
+        p.delete("lang");
+        const rest = p.toString();
+        const path = q === "en" ? "/en/world-map" : "/world-map";
+        if (window.location.pathname !== path) {
+          window.location.replace(rest ? `${path}?${rest}` : path);
+          return;
+        }
+        window.history.replaceState(null, "", rest ? `${path}?${rest}` : path);
+      }
+    }
     applyUrl();
     window.addEventListener("popstate", applyUrl);
     return () => window.removeEventListener("popstate", applyUrl);
@@ -122,12 +146,12 @@ export default function WorldMapClient({ initialLang }: { initialLang?: Supporte
   // ── 상태 → URL ─────────────────────────────────────────────────
   useEffect(() => {
     if (typeof window === "undefined" || !dataset) return;
-    const query = buildUrlQuery({ mode, country: selected, comparison, lang, view, continent });
+    const query = buildUrlQuery({ view, rankingMetric: view === "ranking" ? rankMetric : null, rankingOrder: view === "ranking" ? rankOrder : null, mode, country: selected, comparison, lang: null, continent });
     const next = `${window.location.pathname}${query}`;
     if (next !== `${window.location.pathname}${window.location.search}`) {
       window.history.replaceState(null, "", next);
     }
-  }, [selected, mode, comparison, lang, view, continent, dataset]);
+  }, [selected, mode, comparison, lang, view, continent, rankMetric, rankOrder, dataset]);
 
   useEffect(() => {
     if (typeof window !== "undefined") window.localStorage.setItem(LANG_STORAGE_KEY, lang);
@@ -143,10 +167,19 @@ export default function WorldMapClient({ initialLang }: { initialLang?: Supporte
     return () => mq.removeEventListener("change", sync);
   }, []);
 
-  const colors = useMemo(
-    () => (dataset ? buildColors(dataset.countries, metric) : {}),
-    [dataset, metric],
-  );
+  // 랭킹 화면에서는 지도도 같은 지표로 칠한다(지시서 §7). 결측은 중립 회색.
+  const colors = useMemo(() => {
+    if (!dataset) return {};
+    if (view !== "ranking") return buildColors(dataset.countries, metric);
+    const r = buildRanking(dataset.countries, rankMetric, { order: rankOrder });
+    const out: Record<string, string> = {};
+    for (const c of dataset.countries) out[c.iso3] = NO_VALUE;
+    r.rows.forEach((row, i) => {
+      const ratio = r.rows.length > 1 ? i / (r.rows.length - 1) : 0;
+      out[row.iso3] = RAMP[Math.min(RAMP.length - 1, Math.floor((1 - ratio) * RAMP.length))];
+    });
+    return out;
+  }, [dataset, metric, view, rankMetric, rankOrder]);
 
   const dimmed = useMemo(() => {
     if (!dataset || !continent) return null;
@@ -277,6 +310,18 @@ export default function WorldMapClient({ initialLang }: { initialLang?: Supporte
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          {/* 상단 3탭 — 지도 탐색 / 세계 랭킹 / 국가 비교 (지시서 §8.1) */}
+          <div role="group" aria-label={lang === "ko" ? "탐색 방식" : "Explore mode"} className="flex gap-1.5">
+            <button type="button" onClick={() => { setView("map"); exitCompare(); }}
+              aria-pressed={view === "map" && mode === "explore"} className={chip(view === "map" && mode === "explore")}>
+              {lang === "ko" ? "지도 탐색" : "Map"}
+            </button>
+            <button type="button" onClick={() => { setView("ranking"); exitCompare(); }}
+              aria-pressed={view === "ranking"} className={chip(view === "ranking")}>
+              {lang === "ko" ? "세계 랭킹" : "Ranking"}
+            </button>
+          </div>
+
           <button
             type="button"
             onClick={() => {
@@ -306,13 +351,6 @@ export default function WorldMapClient({ initialLang }: { initialLang?: Supporte
               : (lang === "ko" ? "🔍 비교하기" : "🔍 Compare")}
           </button>
 
-          <button
-            type="button"
-            onClick={() => setLang((l) => (l === "ko" ? "en" : "ko"))}
-            className="ml-auto rounded-full border border-[#ece6e0] bg-white px-3 py-1.5 text-[13px] font-semibold text-[#40382f] transition hover:border-[#ff9966] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff9966]"
-          >
-            {t("langToggle", lang)}
-          </button>
         </div>
       </div>
 
@@ -398,7 +436,7 @@ export default function WorldMapClient({ initialLang }: { initialLang?: Supporte
 
       {/* 상세 / 비교 */}
       <div className="mt-3">
-        {!selectedRecord && dataset && mode === "explore" && (
+        {!selectedRecord && dataset && mode === "explore" && view === "map" && (
           <div className="rounded-2xl border border-[#ece6e0] bg-white p-6">
             <p className="text-[15px] text-[#40382f]">{t("emptyState", lang)}</p>
             <div className="mt-3 flex flex-wrap items-center gap-2">
@@ -416,6 +454,19 @@ export default function WorldMapClient({ initialLang }: { initialLang?: Supporte
           </div>
         )}
 
+        {dataset && view === "ranking" && mode === "explore" && (
+          <RankingPanel
+            dataset={dataset} lang={lang} metricId={rankMetric} continent={continent}
+            order={rankOrder} showAll={rankShowAll}
+            selectedIso3={selected} hoveredIso3={hoveredIso3}
+            onMetric={setRankMetric} onContinent={setContinent} onOrder={setRankOrder}
+            onShowAll={setRankShowAll}
+            onPick={(iso3) => { setSelected(iso3); focusCountry(iso3); }}
+            onHover={setHoveredIso3}
+            onCompare={(iso3) => { setView("map"); enterCompare(); setComparison((l) => addComparison(l, iso3).list); }}
+          />
+        )}
+
         {dataset && mode === "compare" && (
           <ComparePanel
             countries={comparisonRecords} selections={comparison} dataset={dataset} lang={lang}
@@ -427,7 +478,7 @@ export default function WorldMapClient({ initialLang }: { initialLang?: Supporte
           />
         )}
 
-        {selectedRecord && dataset && mode === "explore" && (
+        {selectedRecord && dataset && mode === "explore" && view === "map" && (
           <CountryDetail
             country={selectedRecord} dataset={dataset} lang={lang}
             allCountries={dataset.countries} onCompare={enterCompare}

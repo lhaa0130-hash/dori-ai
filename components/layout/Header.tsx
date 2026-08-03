@@ -94,7 +94,7 @@ export default function Header() {
       ];
 
   // 언어 토글(세그먼트): 현재 페이지의 ko/en URL을 각각 계산. 영어판 있는 페이지에서만 표시.
-  const EN_AVAILABLE = ["/", "/ai-tools", "/ai-models", "/ai-news", "/insight", "/projects", "/minigame", "/psychtest", "/animal", "/faq", "/notice", "/legal/about", "/legal/privacy", "/legal/terms", "/legal/contact", "/legal/copyright", "/legal/business", "/legal/youth", "/profile", "/feed", "/messages", "/shop"];
+  const EN_AVAILABLE = ["/", "/ai-tools", "/ai-models", "/ai-news", "/insight", "/projects", "/minigame", "/world-map", "/psychtest", "/animal", "/faq", "/notice", "/legal/about", "/legal/privacy", "/legal/terms", "/legal/contact", "/legal/copyright", "/legal/business", "/legal/youth", "/profile", "/feed", "/messages", "/shop"];
   const koUrl = isEn ? ((pathname || "/en").replace(/^\/en/, "") || "/") : (pathname || "/");
   const enUrl = isEn ? (pathname || "/en") : (EN_AVAILABLE.includes(pathname || "") ? "/en" + pathname : null);
   const showLang = isEn || !!enUrl;

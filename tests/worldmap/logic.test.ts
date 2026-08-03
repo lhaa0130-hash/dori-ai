@@ -211,7 +211,7 @@ test("임의 목록을 정규화한다 — 무효·중복·초과 제거, 순서
 
 // ── URL 상태 (후속 지시서 §4) ──────────────────────────────────
 const VALID = new Set(["KOR", "JPN", "FRA", "KEN", "BRA"]);
-const EXPLORE = { mode: "explore" as const, country: null, comparison: [], lang: null, view: "split" as const, continent: null };
+const EXPLORE = { view: "map" as const, rankingMetric: null, rankingOrder: null, mode: "explore" as const, country: null, comparison: [], lang: null, continent: null };
 
 test("일반 탐색 URL 은 country 하나만 쓴다", () => {
   assert.equal(parseUrlState(new URLSearchParams("country=kor"), VALID).country, "KOR");
@@ -222,7 +222,7 @@ test("잘못된 ISO 와 지원하지 않는 값은 조용히 무시한다", () =
   const s = parseUrlState(new URLSearchParams("country=ZZZ&lang=fr&view=hologram"), VALID);
   assert.equal(s.country, null);
   assert.equal(s.lang, null);
-  assert.equal(s.view, "split");
+  assert.equal(s.view, "map", "알 수 없는 view 값은 지도 탐색으로 떨어진다");
   assert.equal(s.mode, "explore");
 });
 
@@ -237,13 +237,23 @@ test("비교 URL 은 mode=compare 일 때만 countries 를 읽는다", () => {
 
 test("비교 URL 왕복이 순서와 색상을 보존한다", () => {
   const comparison = normalizeComparison(["KOR", "JPN", "KEN", "BRA"], VALID);
-  const q = buildUrlQuery({ mode: "compare", country: null, comparison, lang: "en", view: "globe", continent: "AS" });
+  const q = buildUrlQuery({ ...EXPLORE, mode: "compare", comparison, lang: "en", continent: "AS" });
   assert.ok(q.includes("mode=compare"));
   const back = parseUrlState(new URLSearchParams(q.slice(1)), VALID);
   assert.deepEqual(isoOf(back.comparison), ["KOR", "JPN", "KEN", "BRA"]);
   assert.deepEqual(slotsOf(back.comparison), [0, 1, 2, 3]);
   assert.equal(back.lang, "en");
-  assert.equal(back.view, "globe");
+});
+
+test("랭킹 URL 은 지표·정렬·범위를 보존한다", () => {
+  const q = buildUrlQuery({ ...EXPLORE, view: "ranking", rankingMetric: "area", rankingOrder: "asc", country: "KOR", continent: "AS" });
+  assert.ok(q.includes("view=ranking"));
+  const back = parseUrlState(new URLSearchParams(q.slice(1)), VALID);
+  assert.equal(back.view, "ranking");
+  assert.equal(back.rankingMetric, "area");
+  assert.equal(back.rankingOrder, "asc");
+  assert.equal(back.country, "KOR");
+  assert.equal(back.continent, "AS");
 });
 
 test("URL 의 무효·중복·5개 초과 ISO 를 정규화한다", () => {
