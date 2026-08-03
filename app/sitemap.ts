@@ -71,7 +71,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/en/world-map`,                 changeFrequency: "weekly",  priority: 0.7 },
     { url: `${baseUrl}/projects`,                      changeFrequency: "monthly", priority: 0.6 },
     { url: `${baseUrl}/faq`,                          changeFrequency: "monthly", priority: 0.4 },
-    { url: `${baseUrl}/help`,                         changeFrequency: "monthly", priority: 0.4 },
+    // ⚠️ /help 는 robots.ts 에서 차단 중이라 사이트맵에 넣으면 안 된다("차단됐는데 제출됨" 모순 신호).
+    //    다시 넣으려면 robots.ts 의 disallow 에서 먼저 빼라.
     { url: `${baseUrl}/legal/about`,                  changeFrequency: "monthly", priority: 0.3 },
     { url: `${baseUrl}/legal/contact`,                changeFrequency: "monthly", priority: 0.3 },
     { url: `${baseUrl}/legal/privacy`,                changeFrequency: "monthly", priority: 0.2 },

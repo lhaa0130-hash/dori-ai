@@ -4,7 +4,6 @@ import { getAllCurations } from '@/lib/curation';
 import { getAllAnalyses } from '@/lib/analysis';
 import { getAllReports } from '@/lib/reports';
 import { Suspense } from 'react';
-import Header from "@/components/layout/Header";
 import Image from 'next/image';
 import type { Metadata } from 'next';
 import { remark } from 'remark';
@@ -142,8 +141,8 @@ export default async function EnInsightArticlePage({ params }: { params: { slug:
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
       <ReadingProgress />
 
-      <main style={{ minHeight: '100vh', paddingTop: '70px' }}>
-        <Header />
+      {/* ⚠️ Header를 여기서 렌더하지 말 것 — LayoutClient가 이미 사이트 머리글과 <main>을 깐다. */}
+      <div style={{ minHeight: '100vh' }}>
         <article className="max-w-4xl mx-auto p-4 md:p-8">
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-center">
             {post.title}
@@ -174,7 +173,7 @@ export default async function EnInsightArticlePage({ params }: { params: { slug:
 
           <RelatedArticles currentSlug={params.slug} currentTags={postTags} allPosts={allPosts} locale="en" />
         </article>
-      </main>
+      </div>
 
       <AdminArticleBar slug={params.slug} title={post.title || params.slug} />
     </Suspense>

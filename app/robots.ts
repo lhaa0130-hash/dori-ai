@@ -9,7 +9,8 @@ export default function robots(): MetadataRoute.Robots {
     "/admin",
     "/admin/",
     "/studio",
-    "/my",
+    // ⚠️ "$"(URL 끝) 앵커 필수 — 그냥 "/my" 로 두면 앞글자 일치라 콘텐츠 페이지 "/my-world"까지 막힌다.
+    "/my$",
     "/my/",
     "/login",
     "/signup",
@@ -27,7 +28,9 @@ export default function robots(): MetadataRoute.Robots {
     "/profile",
     "/messages",
     "/notifications",
-    "/feed",
+    // ⚠️ "$" 없으면 RSS 피드 "/feed.xml"까지 막힌다. 회원 피드 화면만 막는 게 목적이다.
+    "/feed$",
+    "/feed/",
     "/u",
     "/explore",
     "/suggestion",

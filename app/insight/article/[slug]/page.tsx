@@ -4,7 +4,6 @@ import { getAllCurations } from '@/lib/curation';
 import { getAllAnalyses } from '@/lib/analysis';
 import { getAllReports } from '@/lib/reports';
 import { Suspense } from 'react';
-import Header from "@/components/layout/Header";
 import Image from 'next/image';
 import Link from 'next/link';
 import type { Metadata } from 'next';
@@ -218,8 +217,9 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
       {/* 읽기 진행 바 (상단 고정) */}
       <ReadingProgress />
 
-      <main style={{ minHeight: '100vh', paddingTop: '70px' }}>
-        <Header />
+      {/* ⚠️ Header를 여기서 렌더하지 말 것 — LayoutClient가 이미 사이트 머리글과 <main>을 깐다.
+          예전엔 머리글이 두 겹, <main>이 중첩, 상단 여백도 100px + 70px로 이중이었다. */}
+      <div style={{ minHeight: '100vh' }}>
         <article className="max-w-4xl mx-auto p-4 md:p-8">
           <h1 className="text-4xl md:text-5xl font-extrabold mb-4 text-center">
             {post.title}
@@ -282,7 +282,7 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
             allPosts={allPosts}
           />
         </article>
-      </main>
+      </div>
 
       {/* 관리자 전용 편집/삭제 바 */}
       <AdminArticleBar

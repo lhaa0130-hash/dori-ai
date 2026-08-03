@@ -12,7 +12,6 @@ import fs from "fs";
 import path from "path";
 import Link from "next/link";
 import Image from "next/image";
-import Header from "@/components/layout/Header";
 import { notFound } from "next/navigation";
 import type { AnimalCard } from "../page.client";
 
@@ -97,8 +96,10 @@ export default function AnimalDetail({ params }: { params: { id: string } }) {
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbLd) }} />
-      <main style={{ minHeight: "100vh", paddingTop: "70px" }}>
-        <Header />
+      {/* ⚠️ Header를 여기서 렌더하지 말 것 — LayoutClient가 이미 사이트 머리글과 <main>을 깐다.
+          예전엔 여기서 한 번 더 깔아 머리글이 두 겹(둘 다 fixed라 겹쳐 보여 눈엔 안 띄었다),
+          <main>도 중첩돼 있었다. 상단 여백도 100px + 70px로 이중이었다. */}
+      <div style={{ minHeight: "100vh" }}>
         <article className="max-w-3xl mx-auto p-4 md:p-8">
           <nav className="text-sm text-gray-500 dark:text-gray-400 mb-4">
             <Link href="/" className="hover:underline">홈</Link> ›{" "}
@@ -225,7 +226,7 @@ export default function AnimalDetail({ params }: { params: { id: string } }) {
             {next ? <Link href={`/animal/${next.no}`} className="hover:underline">{next.animal_name} →</Link> : <span />}
           </nav>
         </article>
-      </main>
+      </div>
     </>
   );
 }

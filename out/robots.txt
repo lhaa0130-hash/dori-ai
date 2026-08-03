@@ -3,7 +3,7 @@ Allow: /
 Disallow: /admin
 Disallow: /admin/
 Disallow: /studio
-Disallow: /my
+Disallow: /my$
 Disallow: /my/
 Disallow: /login
 Disallow: /signup
@@ -16,7 +16,8 @@ Disallow: /community/write
 Disallow: /profile
 Disallow: /messages
 Disallow: /notifications
-Disallow: /feed
+Disallow: /feed$
+Disallow: /feed/
 Disallow: /u
 Disallow: /explore
 Disallow: /suggestion
@@ -38,7 +39,7 @@ Allow: /
 Disallow: /admin
 Disallow: /admin/
 Disallow: /studio
-Disallow: /my
+Disallow: /my$
 Disallow: /my/
 Disallow: /login
 Disallow: /signup
@@ -51,7 +52,8 @@ Disallow: /community/write
 Disallow: /profile
 Disallow: /messages
 Disallow: /notifications
-Disallow: /feed
+Disallow: /feed$
+Disallow: /feed/
 Disallow: /u
 Disallow: /explore
 Disallow: /suggestion
