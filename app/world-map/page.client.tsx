@@ -63,10 +63,10 @@ function buildColors(countries: CountryRecord[], metric: ColorMode): Record<stri
   return out;
 }
 
-export default function WorldMapClient() {
+export default function WorldMapClient({ initialLang }: { initialLang?: SupportedLanguage } = {}) {
   const [dataset, setDataset] = useState<CountryDataset | null>(null);
   const [loadError, setLoadError] = useState(false);
-  const [lang, setLang] = useState<SupportedLanguage>("ko");
+  const [lang, setLang] = useState<SupportedLanguage>(initialLang ?? "ko");
   const [view, setView] = useState<ViewMode>("split");
   const [continent, setContinent] = useState<ContinentCode | null>(null);
   const [metric, setMetric] = useState<ColorMode>("continent");
@@ -105,13 +105,13 @@ export default function WorldMapClient() {
     const params = new URLSearchParams(window.location.search);
     const valid = byIso.size ? new Set(byIso.keys()) : undefined;
     const s = parseUrlState(params, valid);
-    setLang(resolveLanguage(s.lang, window.localStorage.getItem(LANG_STORAGE_KEY), window.navigator.language));
+    setLang(initialLang ?? resolveLanguage(s.lang, window.localStorage.getItem(LANG_STORAGE_KEY), window.navigator.language));
     setView(s.view);
     setContinent(s.continent);
     setSelected(s.country);
     setMode(s.mode);
     setComparison(s.comparison);
-  }, [byIso]);
+  }, [byIso, initialLang]);
 
   useEffect(() => {
     applyUrl();
@@ -253,7 +253,7 @@ export default function WorldMapClient() {
     }`;
 
   return (
-    <main className="mx-auto max-w-[1600px] px-4 pb-16 pt-8 sm:px-6 lg:px-10">
+    <main className="mx-auto max-w-[1600px] px-4 pb-10 pt-6 sm:px-6 lg:px-10">
       <p className="text-[11px] font-bold tracking-[0.18em] text-[#f47f45]">{DICT.eyebrow[lang]}</p>
       <h1 className="mt-1.5 text-[32px] font-extrabold leading-[1.15] text-[#201b18] lg:text-[44px]">
         {DICT.title[lang]}
@@ -275,13 +275,18 @@ export default function WorldMapClient() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
+          {/* ⑪ 비교하기 — 지도 위 상단에 눈에 띄게 둔다 */}
           <button
             type="button"
             onClick={mode === "compare" ? exitCompare : enterCompare}
             aria-pressed={mode === "compare"}
-            className={chip(mode === "compare")}
+            className={`rounded-full px-4 py-1.5 text-[13px] font-bold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff9966] ${
+              mode === "compare"
+                ? "bg-[#f47f45] text-white hover:bg-[#e06f36]"
+                : "bg-[#fff0e6] text-[#f47f45] hover:bg-[#ffe2d2]"
+            }`}
           >
-            {mode === "compare" ? (lang === "ko" ? "비교 끝내기" : "Exit compare") : (lang === "ko" ? "비교하기" : "Compare")}
+            {mode === "compare" ? (lang === "ko" ? "비교 끝내기" : "Exit compare") : (lang === "ko" ? "🔍 비교하기" : "🔍 Compare")}
           </button>
 
           <button
@@ -331,7 +336,7 @@ export default function WorldMapClient() {
       )}
 
       {/* 지도 영역 — 평면 지도 한 장 */}
-      <div className="relative mt-5">
+      <div className="relative mt-4">
         {/* 나라를 고르면 지도 위에 국기·대륙·나라 이름만 크게 띄운다 */}
         {bannerCountry && (
           <div className="pointer-events-none absolute left-1/2 top-3 z-20 -translate-x-1/2">
@@ -349,7 +354,7 @@ export default function WorldMapClient() {
         )}
         {dataset && (
           <MapPanel
-            side="flat" controller={controller} geojsonUrl={GEOJSON_URL} countries={dataset.countries}
+            controller={controller} geojsonUrl={GEOJSON_URL} countries={dataset.countries}
             lang={lang} colors={colors} selectedCountry={selected}
             comparisonCountries={comparison} comparisonMode={mode === "compare"} dimmed={dimmed}
             onSelect={selectCountry} onReady={onMapReady} className={mapHeight}
@@ -375,7 +380,7 @@ export default function WorldMapClient() {
       {!dataset && <p className="mt-6 text-[14px] text-[#7d746e]">{t("loading", lang)}</p>}
 
       {/* 상세 / 비교 */}
-      <div className="mt-6">
+      <div className="mt-4">
         {!selectedRecord && dataset && mode === "explore" && (
           <div className="rounded-2xl border border-[#ece6e0] bg-white p-6">
             <p className="text-[15px] text-[#40382f]">{t("emptyState", lang)}</p>
@@ -416,7 +421,7 @@ export default function WorldMapClient() {
 
       {/* 데이터 출처 (명세서 §6.2 attribution) */}
       {dataset && (
-        <footer className="mt-8 border-t border-[#ece6e0] pt-4 text-[11px] leading-relaxed text-[#a89f98]">
+        <footer className="mt-6 border-t border-[#ece6e0] pt-4 text-[11px] leading-relaxed text-[#a89f98]">
           <p className="font-semibold text-[#7d746e]">{t("sources", lang)}</p>
           <p className="mt-1">
             {Object.values(dataset.sources).map((s, i) => (
