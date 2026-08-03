@@ -282,13 +282,15 @@ export default function WorldMapClient({ initialLang }: { initialLang?: Supporte
   // 헤더·검색·컨트롤이 차지하는 높이를 빼고 남는 만큼 지도에 준다.
   // 지도 높이는 화면 상태에 따라 다르게 잡는다(지시서 배포1 §1).
   // 나라를 고르면 아래 상세 카드가 길어지므로 지도를 조금 낮춰 시선이 자연스럽게 이어지게 한다.
+  // ⚠️ vh 하나로 정하면 넓고 낮은 화면에서 세계 윤곽이 끝난 뒤에도 바다만 길게 남는다.
+  //    화면 높이(vh)와 지도 폭(vw)을 함께 제한해 지도 비율이 과도하게 세로로 늘어나지 않게 한다.
   const mapHeight = isNarrow
-    ? "h-[clamp(340px,48vh,480px)]"
+    ? "h-[clamp(320px,min(46vh,70vw),440px)]"
     : mode === "compare" || view === "ranking"
-      ? "h-[clamp(430px,56vh,640px)]"
+      ? "h-[clamp(400px,min(52vh,56vw),560px)]"
       : selected
-        ? "h-[clamp(390px,50vh,570px)]"
-        : "h-[clamp(420px,56vh,640px)]";
+        ? "h-[clamp(360px,min(48vh,52vw),500px)]"
+        : "h-[clamp(380px,min(52vh,56vw),540px)]";
 
   const chip = (activeState: boolean) =>
     `rounded-full border px-3 py-1.5 text-[13px] font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff9966] ${

@@ -79,6 +79,18 @@ export interface MapPanelProps {
   className?: string;
 }
 
+/** 미니맵 전용 고정 대륙색. 주 지도 색 기준과 무관하게 항상 같다. */
+const MINI_CONTINENT: Record<string, string> = {
+  AS: "#ffd9c2", EU: "#cfe0f5", AF: "#cfeadd", NA: "#e6d7f2", SA: "#fbeec6", OC: "#d3ecee",
+};
+
+function miniContinentExpr(countries: CountryRecord[]): unknown[] {
+  const expr: unknown[] = ["match", ["get", "iso3"]];
+  for (const c of countries) expr.push(c.iso3, MINI_CONTINENT[c.continentCode] ?? "#d8d0c8");
+  expr.push("#d8d0c8");
+  return expr;
+}
+
 /** 수도 좌표만 모아 점 레이어용 GeoJSON 을 만든다. */
 function capitalsGeoJson(countries: CountryRecord[]) {
   return {
@@ -104,6 +116,34 @@ interface Overlay {
   selected: boolean;
   /** 화면상 폴리곤이 너무 작아 marker 로만 누를 수 있는 나라 */
   micro: boolean;
+  /** 클릭 가능한 점을 그릴지 — 라벨과 별개다(§3.5) */
+  showMarker: boolean;
+  /** 국가명 텍스트를 그릴지 */
+  showLabel: boolean;
+}
+
+/**
+ * 확대 단계 — 세계 전체가 맞춰진 zoom(worldBaseZoom)과의 차이로 정한다.
+ *
+ * ⚠️ zoom 절대값(예: 2.6)만 쓰면 안 된다. 컨테이너 높이가 바뀌면 세계 전체가 맞는 zoom 도
+ *    달라져서, 어떤 화면에서는 처음부터 국가명이 쏟아진다.
+ */
+function labelStage(delta: number): 0 | 1 | 2 | 3 {
+  if (delta < 0.45) return 0;   // 최초 세계 보기 — 국가명 0개
+  if (delta < 1.2) return 1;    // 화면상 큰 나라만
+  if (delta < 2.2) return 2;    // 중간 크기 추가
+  return 3;                     // 작은 나라까지
+}
+
+/** 단계별로 '이 픽셀 크기 이상'인 나라만 이름을 보여준다. */
+const STAGE_MIN_PX = [Infinity, 150, 70, 26];
+
+/** 이미 놓인 라벨과 겹치는지 — 화면 사각형 목록으로 판정한다(§3.6). */
+function collides(rects: Array<[number, number, number, number]>, r: [number, number, number, number]): boolean {
+  for (const q of rects) {
+    if (r[0] < q[2] && r[2] > q[0] && r[1] < q[3] && r[3] > q[1]) return true;
+  }
+  return false;
 }
 
 
@@ -118,6 +158,8 @@ export default function MapPanel({
   const downPointRef = useRef<{ x: number; y: number } | null>(null);
   const miniRef = useRef<HTMLDivElement>(null);
   const miniMapRef = useRef<MlMap | null>(null);
+  /** 세계 전체가 맞춰진 zoom. 라벨 단계는 이 값과의 차이로 정한다(§3.3). */
+  const worldBaseZoomRef = useRef<number | null>(null);
 
   const [failed, setFailed] = useState(false);
   const [failReason, setFailReason] = useState<string | null>(null);
@@ -128,7 +170,6 @@ export default function MapPanel({
   const [overlap, setOverlap] = useState<{ x: number; y: number; list: CountryRecord[] } | null>(null);
   /** ⑨ 미니맵의 현재 보이는 범위 사각형(%) */
   const [viewBox, setViewBox] = useState<ViewBoxRect[]>([]);
-  const [miniReady, setMiniReady] = useState(false);
 
   // 콜백·데이터를 ref 로 잡아둔다. 지도는 한 번만 만들고 재생성하지 않는다.
   const onSelectRef = useRef(onSelect); onSelectRef.current = onSelect;
@@ -146,49 +187,66 @@ export default function MapPanel({
     const h = canvas.clientHeight;
     if (w <= 0 || h <= 0) return;      // 숨겨진 탭은 폭이 0 이다
 
-    const zoom = map.getZoom();
-        const { selectedCountry: sel, comparisonCountries: cmp, comparisonMode: cmpMode } = stateRef.current;
+    const stage = labelStage(map.getZoom() - (worldBaseZoomRef.current ?? map.getZoom()));
+    const minPx = STAGE_MIN_PX[stage];
+    const { selectedCountry: sel, comparisonCountries: cmp, comparisonMode: cmpMode } = stateRef.current;
     const rankOf = new Map(cmp.map((c, i) => [c.iso3, i + 1]));
-    const out: Overlay[] = [];
-    let plainLabels = 0;   // 일반 국가명 라벨 개수(상한 검사용)
 
+    // 1) 화면 안에 있는 나라를 모으고 픽셀 크기를 잰다
+    type Cand = { c: CountryRecord; x: number; y: number; sizePx: number; rank: number | null; selected: boolean; micro: boolean };
+    const cands: Cand[] = [];
     for (const c of countriesRef.current) {
       const [lon, lat] = c.center;
       const p = map.project([lon, lat]);
       if (p.x < 2 || p.y < 2 || p.x > w - 2 || p.y > h - 2) continue;
-
-      const rank = rankOf.get(c.iso3) ?? null;
-      const selected = !cmpMode && c.iso3 === sel;
-
-      // 화면상 나라 크기(경계 상자 대각선 px). 작으면 marker 를 띄워 반드시 누를 수 있게 한다.
       const a = map.project([c.bbox[0], c.bbox[1]]);
       const b = map.project([c.bbox[2], c.bbox[3]]);
       const sizePx = Math.hypot(b.x - a.x, b.y - a.y);
-      const micro = sizePx < MICRO_MIN_PX;
+      cands.push({
+        c, x: p.x, y: p.y, sizePx,
+        rank: rankOf.get(c.iso3) ?? null,
+        selected: !cmpMode && c.iso3 === sel,
+        micro: sizePx < MICRO_MIN_PX,
+      });
+    }
 
-      // 라벨이 화면을 덮지 않도록: 선택·비교·작은 나라는 항상, 나머지는 확대했을 때만.
-      if (!rank && !selected && !micro && zoom < 2.6) continue;
+    // 2) 라벨 우선순위 — 선택·비교가 가장 높고, 그다음은 화면에서 큰 나라 순.
+    //    배열 순서(알파벳)대로 자르면 특정 대륙만 이름이 붙는다(§3.4).
+    cands.sort((p, q) => {
+      const rank = (x: Cand) => (x.selected ? 2 : x.rank !== null ? 1 : 0);
+      return rank(q) - rank(p) || q.sizePx - p.sizePx;
+    });
 
-      // 작은 나라 marker·선택·비교는 라벨 상한과 무관하게 항상 넣는다.
-      // 상한에 밀려 빠지면 '지도에서 직접 선택' 자체가 불가능해진다.
-      //
-      // ⚠️ 상한 검사에 out.filter() 를 쓰면 안 된다. 이 루프는 move 이벤트마다 195번 도는데
-      //    안에서 배열을 다시 훑으면 프레임당 수만 번 연산이 되어 지도가 눈에 띄게 버벅인다.
-      //    카운터 하나로 센다.
-      const mustShow = micro || selected || rank !== null;
-      if (!mustShow) {
-        if (plainLabels >= MAX_PLAIN_LABELS) continue;
-        plainLabels++;
+    // 3) 겹치지 않는 것만 라벨을 준다
+    const placed: Array<[number, number, number, number]> = [];
+    const out: Overlay[] = [];
+    let labels = 0;
+    for (const cand of cands) {
+      const name = langRef.current === "ko" ? cand.c.nameKo : cand.c.nameEn;
+      // 마커는 라벨과 별개다 — 최초 세계 보기에서도 작은 나라는 누를 수 있어야 한다.
+      const showMarker = cand.micro;
+
+      let showLabel = false;
+      // 최초 세계 보기(stage 0)에서는 선택 국가조차 지도 안에 이름을 쓰지 않는다(§3.2).
+      if (stage > 0 && labels < MAX_PLAIN_LABELS) {
+        const big = cand.selected || cand.rank !== null || cand.sizePx >= minPx;
+        if (big) {
+          // 글자 폭 추정 — 한글은 글자당 약 11px, 영문은 약 6.5px
+          const perChar = langRef.current === "ko" ? 11 : 6.5;
+          const halfW = (name.length * perChar) / 2 + 4;
+          const rect: [number, number, number, number] = [cand.x - halfW, cand.y - 9, cand.x + halfW, cand.y + 9];
+          if (!collides(placed, rect)) { placed.push(rect); showLabel = true; labels++; }
+        }
       }
 
+      if (!showMarker && !showLabel && cand.rank === null && !cand.selected) continue;
       out.push({
-        iso3: c.iso3,
-        name: langRef.current === "ko" ? c.nameKo : c.nameEn,
-        x: p.x, y: p.y,
-        rank,
-        color: rank ? colorFor(rank - 1).fill : null,
-        selected,
-        micro,
+        iso3: cand.c.iso3, name, x: cand.x, y: cand.y,
+        rank: cand.rank,
+        color: cand.rank ? colorFor(cand.rank - 1).fill : null,
+        selected: cand.selected,
+        micro: cand.micro,
+        showMarker, showLabel,
       });
     }
     setOverlays(out);
@@ -372,7 +430,7 @@ export default function MapPanel({
       setHover(null);
     });
 
-    map.on("load", () => { setStyleReady(true); paintOverlays(); onReady?.(); });
+    map.on("load", () => { worldBaseZoomRef.current = map.getZoom(); setStyleReady(true); paintOverlays(); onReady?.(); });
     map.on("webglcontextlost", () => setFailed(true));
     map.on("error", (e) => {
       if (process.env.NODE_ENV === "development") console.warn("[worldmap]", e?.error?.message);
@@ -402,7 +460,15 @@ export default function MapPanel({
           sources: { [SOURCE_ID]: { type: "geojson", data: geojsonUrl, promoteId: "iso3" } },
           layers: [
             { id: "ocean", type: "background", paint: { "background-color": "#e3eef0" } },
-            { id: "land", type: "fill", source: SOURCE_ID, paint: { "fill-color": "#c9c0b8" } },
+            {
+              id: "land",
+              type: "fill",
+              source: SOURCE_ID,
+              // ⚠️ 미니맵은 데이터 시각화가 아니라 '지금 어디를 보고 있나' 안내다.
+              //    주 지도의 선택·비교·랭킹 색을 따라가면 미니맵 전체가 오렌지로 물들어
+              //    위치 안내라는 본래 역할을 잃는다. 생성 시 대륙색으로 한 번만 고정한다.
+              paint: { "fill-color": miniContinentExpr(countriesRef.current) as never },
+            },
           ],
         },
         center: [0, 0], zoom: 0,
@@ -423,7 +489,7 @@ export default function MapPanel({
         { padding: 3, duration: 0, animate: false },
       );
     };
-    mini.on("load", () => { fitWorld(); setMiniReady(true); });
+    mini.on("load", fitWorld);
 
     // 컨테이너 크기가 바뀌면 다시 맞춘다
     const ro = typeof ResizeObserver !== "undefined"
@@ -447,18 +513,6 @@ export default function MapPanel({
     return () => { ro?.disconnect(); holder.removeEventListener("click", onClick); mini.remove(); miniMapRef.current = null; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-
-  // 미니맵도 같은 대륙 색으로 칠한다
-  useEffect(() => {
-    const mini = miniMapRef.current;
-    if (!mini || !miniReady) return;
-    const entries = Object.entries(colors);
-    if (!entries.length) return;
-    const expr: unknown[] = ["match", ["get", "iso3"]];
-    for (const [iso3, color] of entries) expr.push(iso3, color);
-    expr.push("#c9c0b8");
-    mini.setPaintProperty("land", "fill-color", expr as never);
-  }, [colors, miniReady]);
 
   // ── 색칠 갱신 ─────────────────────────────────────────────────
   useEffect(() => {
@@ -536,7 +590,7 @@ export default function MapPanel({
       <div className="pointer-events-none absolute inset-0 overflow-hidden">
         {overlays.map((o) => (
           <div key={o.iso3} className="absolute -translate-x-1/2 -translate-y-1/2" style={{ left: o.x, top: o.y }}>
-            {o.micro && (
+            {o.showMarker && (
               // 작은 나라는 눌리는 영역을 크게 만든다: 데스크톱 32px, 터치 44px
               <button
                 type="button"
@@ -556,9 +610,10 @@ export default function MapPanel({
                 style={{ backgroundColor: o.color ?? ACCENT }}
               >
                 <span className="flex h-3.5 w-3.5 items-center justify-center rounded-full bg-white/30 text-[9px]">{o.rank}</span>
-                {o.name}
+                {/* 최초 세계 보기에서는 번호만 — 이름은 확대해야 나온다 */}
+                {o.showLabel && o.name}
               </span>
-            ) : (
+            ) : o.showLabel ? (
               <span
                 className={`whitespace-nowrap rounded px-1 text-[11px] font-semibold leading-tight ${
                   o.selected
@@ -568,7 +623,7 @@ export default function MapPanel({
               >
                 {o.name}
               </span>
-            )}
+            ) : null}
           </div>
         ))}
       </div>
