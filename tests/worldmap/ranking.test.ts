@@ -22,7 +22,7 @@ function c(iso3: string, over: Partial<Record<string, unknown>> = {}): CountryRe
     forestAreaRate: num(null), renewableEnergyRate: num(null), co2PerCapita: num(null),
     languages: [], currencies: [], timezones: [], borderCountryIso3: [], landlocked: false, islandCountry: false,
   };
-  return { ...base, ...over } as CountryRecord;
+  return { ...base, ...over } as unknown as CountryRecord;
 }
 
 test("원본 숫자로 정렬한다 — 축약 문자열 순서에 흔들리지 않는다", () => {

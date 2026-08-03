@@ -529,7 +529,7 @@ test("섬나라는 이웃 문장 대신 바다 문장을 쓴다", () => {
 
 test("내륙국은 둘러싸였다고 말한다", () => {
   const inland = { ...KEN, nameKo: "우간다", landlocked: true } as any;
-  assert.match(buildChildSummary(inland, "ko", nameOf)[2], /둘러싸인 내륙 나라예요\.$/);
+  assert.match(buildChildSummary(inland, "ko", nameOf)[2], /둘러싸인 내륙국이에요\.$/);
 });
 
 test("재료가 없는 문장은 통째로 빠진다", () => {

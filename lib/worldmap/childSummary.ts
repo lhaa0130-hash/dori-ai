@@ -5,15 +5,7 @@
 // 나라끼리의 비교는 사용자가 비교 모드에서 직접 고른 경우에만 보여준다.
 
 import type { CountryRecord, SupportedLanguage } from "./types";
-
-/** 한국어 조사 선택 — 받침이 있으면 첫 번째, 없으면 두 번째. */
-function josa(word: string, withFinal: string, withoutFinal: string): string {
-  const last = word.trim().slice(-1);
-  const code = last.charCodeAt(0);
-  // 한글 음절 영역이 아니면(영문·숫자) 받침 없는 쪽을 쓴다
-  if (Number.isNaN(code) || code < 0xac00 || code > 0xd7a3) return withoutFinal;
-  return (code - 0xac00) % 28 === 0 ? withoutFinal : withFinal;
-}
+import { withJosa, joinWithJosa } from "./korean";
 
 /** 사람 수를 아이가 읽기 쉬운 단위로. 1,000명 미만은 그대로 쓴다. */
 function peopleKo(n: number): string {
@@ -52,7 +44,7 @@ export function buildChildSummary(
   if (continent) {
     if (lang === "ko") {
       const where = subregion && subregion !== continent ? `${continent}의 ${subregion}에` : `${continent}에`;
-      sentences.push(`${name}${josa(name, "은", "는")} ${where} 있는 나라예요.`);
+      sentences.push(`${withJosa(name, "은는")} ${where} 있는 나라예요.`);
     } else {
       const where = subregion && subregion !== continent ? `${subregion}, ${continent}` : continent;
       sentences.push(`${name} is a country in ${where}.`);
@@ -67,7 +59,7 @@ export function buildChildSummary(
       if (population != null) parts.push(`약 ${peopleKo(population)} 명이 살고 있어요`);
       // 수도만 있으면 '~이고' 로 끝나 어색하다. 어미를 맞춘다.
       sentences.push(parts.length === 1 && capital && population == null
-        ? `수도는 ${capital}이에요.`
+        ? `수도는 ${withJosa(capital, "이에요예요")}.`
         : `${parts.join(", ")}.`);
     } else {
       const parts: string[] = [];
@@ -86,11 +78,12 @@ export function buildChildSummary(
     const shown = neighbourNames.slice(0, MAX_NEIGHBOURS);
     const more = neighbourNames.length > shown.length;
     if (lang === "ko") {
-      const list = shown.join(", ");
+      // 받침에 따라 '과/와' 가 달라진다. "북한와" 같은 오류를 막으려면 직접 이어 붙이지 않는다.
+      const joined = joinWithJosa(neighbourNames, "과와", { max: MAX_NEIGHBOURS });
       sentences.push(
         country.landlocked
-          ? `${list}${more ? " 등" : ""} 여러 나라에 둘러싸인 내륙 나라예요.`
-          : `${list}${more ? " 등 여러 나라와" : "와"} 국경을 맞대고 있어요.`,
+          ? `${shown.join(", ")}${more ? " 등" : ""} 여러 나라에 둘러싸인 내륙국이에요.`
+          : `${joined} 국경을 맞대고 있어요.`,
       );
     } else {
       const list = shown.join(", ");

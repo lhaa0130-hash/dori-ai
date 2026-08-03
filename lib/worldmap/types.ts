@@ -71,6 +71,9 @@ export interface CountryRecord {
   nameKo: string;
   nameEn: string;
   officialNameEn: string;
+  /** 검색 별칭 — 표시명이 바뀌어도 '한국'·'북한' 으로 계속 찾을 수 있게 한다. */
+  aliasesKo: string[];
+  aliasesEn: string[];
   capitalKo: string | null;
   capitalEn: string | null;
   continentCode: ContinentCode;

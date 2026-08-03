@@ -11,7 +11,7 @@ import { useMemo } from "react";
 import type { ContinentCode, CountryDataset, CountryRecord, SupportedLanguage } from "@/lib/worldmap/types";
 import { CONTINENTS } from "@/lib/worldmap/types";
 import {
-  buildRanking, rankOf, RANKING_METRICS, CATEGORY_LABEL,
+  buildRanking, rankOf, rankSentence, RANKING_METRICS, CATEGORY_LABEL,
   type RankingMetricId, type RankingCategory,
 } from "@/lib/worldmap/ranking";
 import { abbreviate, fullNumber } from "@/lib/worldmap/format";
@@ -235,9 +235,9 @@ export default function RankingPanel({
             </span>
           </div>
           <p className="mt-1 pl-[42px] text-[11px] text-[#7d746e]">
-            {lang === "ko"
-              ? `${scopeName}에서 ${label}이 ${selectedRow.rank}번째예요. (자료가 있는 ${result.eligibleCountryCount}개국 기준)`
-              : `${selectedRow.rank} of ${result.eligibleCountryCount} countries with data in ${scopeName}.`}
+            {/* ⚠️ 여기서 문장을 따로 조립하지 않는다. ranking.ts 의 공통 함수를 쓴다.
+                따로 만들면 "인구이 194번째" 같은 조사 오류가 한쪽에만 남는다. */}
+            {rankSentence(result, selectedRow.iso3, lang, scopeName)}
           </p>
         </div>
       )}

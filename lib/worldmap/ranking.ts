@@ -8,6 +8,7 @@
 //   · 값을 추정해 결측을 메우지 않는다.
 
 import type { ContinentCode, CountryRecord, NumericMetric, SupportedLanguage } from "./types";
+import { withJosa } from "./korean";
 
 /** 랭킹에 쓸 수 있는 지표. CountryRecord 의 숫자 지표 키와 1:1로 맞춘다. */
 export type RankingMetricId =
@@ -215,12 +216,15 @@ export function rankSentence(
 
   if (!row) {
     return lang === "ko"
-      ? `${label}은 자료가 없어 순위를 매기지 않았어요.`
+      ? `${withJosa(label, "은는")} 자료가 없어 순위를 매기지 않았어요.`
       : `No data for ${label}, so this country is not ranked.`;
   }
-  const where = scopeLabel ? (lang === "ko" ? `${scopeLabel} 중에서` : `among ${scopeLabel}`) : (lang === "ko" ? "전 세계에서" : "worldwide");
+    // '전 세계' 는 '전 세계에서', 대륙 이름은 '아시아 국가 중에서' 로 읽히게 한다.
+  const where = !scopeLabel || scopeLabel === "전 세계" || scopeLabel === "World"
+    ? (lang === "ko" ? "전 세계에서" : "worldwide")
+    : (lang === "ko" ? `${scopeLabel} 국가 중에서` : `among ${scopeLabel}`);
   return lang === "ko"
-    ? `${where} ${label}이 ${row.rank}번째예요. (자료가 있는 ${total}개국 기준)`
+    ? `${where} ${withJosa(label, "이가")} ${row.rank}번째예요. (자료가 있는 ${total}개국 기준)`
     : `${row.rank}${ordinalSuffix(row.rank)} in ${label} ${where}. (of ${total} countries with data)`;
 }
 
