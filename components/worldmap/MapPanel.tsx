@@ -9,7 +9,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import maplibregl, { type Map as MlMap, type MapGeoJSONFeature } from "maplibre-gl";
 import type { CountryRecord, SupportedLanguage } from "@/lib/worldmap/types";
-import { MapSyncController, type MapSide, type Camera } from "@/lib/worldmap/mapSync";
+import { MapSyncController, type Camera } from "@/lib/worldmap/mapSync";
 import { type ComparisonSelection, colorFor } from "@/lib/worldmap/comparison";
 import { t } from "@/lib/worldmap/i18n";
 
@@ -29,7 +29,6 @@ const TAP_SLOP_PX = 8;
 const MAX_PLAIN_LABELS = 40;
 
 export interface MapPanelProps {
-  side: MapSide;
   controller: MapSyncController;
   geojsonUrl: string;
   countries: CountryRecord[];
@@ -41,8 +40,22 @@ export interface MapPanelProps {
   comparisonMode: boolean;
   dimmed: Set<string> | null;
   onSelect: (iso3: string) => void;
-  onReady?: (side: MapSide) => void;
+  onReady?: () => void;
   className?: string;
+}
+
+/** 수도 좌표만 모아 점 레이어용 GeoJSON 을 만든다. */
+function capitalsGeoJson(countries: CountryRecord[]) {
+  return {
+    type: "FeatureCollection" as const,
+    features: countries
+      .filter((c) => Array.isArray(c.capitalPoint))
+      .map((c) => ({
+        type: "Feature" as const,
+        properties: { iso3: c.iso3 },
+        geometry: { type: "Point" as const, coordinates: c.capitalPoint as [number, number] },
+      })),
+  };
 }
 
 interface Overlay {
@@ -58,18 +71,9 @@ interface Overlay {
   micro: boolean;
 }
 
-/** 지구본은 뒷면 좌표도 화면 좌표를 돌려주므로, 실제로 보이는지 따로 확인한다. */
-function visibleOnGlobe(map: MlMap, lon: number, lat: number): boolean {
-  const c = map.getCenter();
-  const rad = Math.PI / 180;
-  const cos =
-    Math.sin(c.lat * rad) * Math.sin(lat * rad) +
-    Math.cos(c.lat * rad) * Math.cos(lat * rad) * Math.cos((lon - c.lng) * rad);
-  return cos > 0.06;
-}
 
 export default function MapPanel({
-  side, controller, geojsonUrl, countries, lang, colors,
+  controller, geojsonUrl, countries, lang, colors,
   selectedCountry, comparisonCountries, comparisonMode, dimmed, onSelect, onReady, className,
 }: MapPanelProps) {
   const holderRef = useRef<HTMLDivElement>(null);
@@ -85,6 +89,8 @@ export default function MapPanel({
   const [hover, setHover] = useState<CountryRecord | null>(null);
   /** marker 가 겹칠 때 임의로 고르지 않고 목록을 띄운다(§9-7). */
   const [overlap, setOverlap] = useState<{ x: number; y: number; list: CountryRecord[] } | null>(null);
+  /** ⑨ 미니맵의 현재 보이는 범위 사각형(%) */
+  const [viewBox, setViewBox] = useState<{ l: number; t: number; w: number; h: number } | null>(null);
 
   // 콜백·데이터를 ref 로 잡아둔다. 지도는 한 번만 만들고 재생성하지 않는다.
   const onSelectRef = useRef(onSelect); onSelectRef.current = onSelect;
@@ -103,15 +109,13 @@ export default function MapPanel({
     if (w <= 0 || h <= 0) return;      // 숨겨진 탭은 폭이 0 이다
 
     const zoom = map.getZoom();
-    const globe = side === "globe";
-    const { selectedCountry: sel, comparisonCountries: cmp, comparisonMode: cmpMode } = stateRef.current;
+        const { selectedCountry: sel, comparisonCountries: cmp, comparisonMode: cmpMode } = stateRef.current;
     const rankOf = new Map(cmp.map((c, i) => [c.iso3, i + 1]));
     const out: Overlay[] = [];
     let plainLabels = 0;   // 일반 국가명 라벨 개수(상한 검사용)
 
     for (const c of countriesRef.current) {
       const [lon, lat] = c.center;
-      if (globe && !visibleOnGlobe(map, lon, lat)) continue;
       const p = map.project([lon, lat]);
       if (p.x < 2 || p.y < 2 || p.x > w - 2 || p.y > h - 2) continue;
 
@@ -150,7 +154,18 @@ export default function MapPanel({
       });
     }
     setOverlays(out);
-  }, [side]);
+
+    // ⑨ 미니맵에 표시할 '지금 보고 있는 범위'. 정거원통도법 비율로 환산한다.
+    const b = map.getBounds();
+    const west = b.getWest(), east = b.getEast();
+    const lonSpan = east >= west ? east - west : east + 360 - west;
+    setViewBox({
+      l: (((west + 180) % 360) / 360) * 100,
+      t: ((90 - Math.min(85, b.getNorth())) / 180) * 100,
+      w: Math.min(100, (lonSpan / 360) * 100),
+      h: Math.min(100, ((Math.min(85, b.getNorth()) - Math.max(-85, b.getSouth())) / 180) * 100),
+    });
+  }, []);
 
   // ── 지도 생성 (한 번만) ────────────────────────────────────────
   useEffect(() => {
@@ -165,19 +180,31 @@ export default function MapPanel({
           version: 8,
           // ⚠️ 투영은 반드시 스타일 안에서 정한다.
           //    map.setProjection() 을 생성 직후에 부르면 스타일이 아직 로드되지 않아 던진다.
-          projection: { type: side === "globe" ? "globe" : "mercator" },
-          sources: { [SOURCE_ID]: { type: "geojson", data: geojsonUrl, promoteId: "iso3" } },
+          projection: { type: "mercator" },
+          sources: {
+            [SOURCE_ID]: { type: "geojson", data: geojsonUrl, promoteId: "iso3" },
+            // ⑧ 수도는 점 하나만 찍는다(글씨 없음). 나라 데이터에서 만든다.
+            capitals: { type: "geojson", data: capitalsGeoJson(countriesRef.current) },
+          },
           layers: [
             { id: "ocean", type: "background", paint: { "background-color": OCEAN } },
+            // ⑦ hover 한 나라를 살짝 밝게 — 어디를 가리키는지 바로 보인다
+            {
+              id: "country-hover-fill",
+              type: "fill",
+              source: SOURCE_ID,
+              filter: ["in", ["get", "iso3"], ["literal", []]] as never,
+              paint: { "fill-color": "#ffffff", "fill-opacity": 0.28 },
+            },
             { id: "country-fill", type: "fill", source: SOURCE_ID, paint: { "fill-color": LAND_DEFAULT, "fill-opacity": 1 } },
-            { id: "country-line", type: "line", source: SOURCE_ID, paint: { "line-color": BORDER, "line-width": 0.6 } },
+            { id: "country-line", type: "line", source: SOURCE_ID, paint: { "line-color": BORDER, "line-width": 0.35, "line-opacity": 0.75 } },
             // 비교 1~4번은 각각 별도 레이어로 둔다. 색이 서로 덮이지 않고 filter 만 갈아끼우면 된다.
             ...[0, 1, 2, 3].map((i) => ({
               id: `compare-${i}`,
               type: "line" as const,
               source: SOURCE_ID,
               filter: ["in", ["get", "iso3"], ["literal", []]] as never,
-              paint: { "line-color": colorFor(i).fill, "line-width": 2.6 },
+              paint: { "line-color": colorFor(i).fill, "line-width": 1.8 },
             })),
             ...[0, 1, 2, 3].map((i) => ({
               id: `compare-fill-${i}`,
@@ -186,13 +213,26 @@ export default function MapPanel({
               filter: ["in", ["get", "iso3"], ["literal", []]] as never,
               paint: { "fill-color": colorFor(i).fill, "fill-opacity": 0.28 },
             })),
-            { id: "country-selected", type: "line", source: SOURCE_ID, filter: ["in", ["get", "iso3"], ["literal", []]], paint: { "line-color": ACCENT, "line-width": 2.4 } },
+            { id: "country-selected", type: "line", source: SOURCE_ID, filter: ["in", ["get", "iso3"], ["literal", []]], paint: { "line-color": ACCENT, "line-width": 1.6 } },
             // hover 는 비교 색을 덮지 않도록 가장 얇게, 맨 위에 둔다(§10)
-            { id: "country-hover", type: "line", source: SOURCE_ID, filter: ["in", ["get", "iso3"], ["literal", []]], paint: { "line-color": ACCENT, "line-width": 1.4 } },
+            { id: "country-hover", type: "line", source: SOURCE_ID, filter: ["in", ["get", "iso3"], ["literal", []]], paint: { "line-color": ACCENT, "line-width": 1.1 } },
+            // ⑧ 수도 점 — 확대할수록 살짝 커진다. 흰 테두리로 어떤 색 위에서도 보이게.
+            {
+              id: "capital-dot",
+              type: "circle",
+              source: "capitals",
+              paint: {
+                "circle-radius": ["interpolate", ["linear"], ["zoom"], 1, 1.6, 3, 2.6, 6, 4] as never,
+                "circle-color": "#3f3a35",
+                "circle-stroke-width": 1,
+                "circle-stroke-color": "rgba(255,255,255,0.9)",
+                "circle-opacity": ["interpolate", ["linear"], ["zoom"], 0.8, 0.35, 2, 0.85] as never,
+              },
+            },
           ],
         },
         center: [10, 20],
-        zoom: side === "globe" ? 0.9 : 1.1,
+        zoom: 1.1,
         minZoom: 0.6,
         maxZoom: 7,
         pitch: 0,
@@ -202,7 +242,7 @@ export default function MapPanel({
       });
     } catch (err) {
       const message = err instanceof Error ? err.message : String(err);
-      console.error(`[worldmap:${side}] 지도 생성 실패`, err);
+      console.error("[worldmap] 지도 생성 실패", err);
       setFailReason(message);
       setFailed(true);
       return;
@@ -214,7 +254,7 @@ export default function MapPanel({
     // production 번들에는 넣지 않는다.
     if (process.env.NODE_ENV !== "production" && typeof window !== "undefined") {
       const w = window as unknown as { __worldmap?: Record<string, MlMap> };
-      w.__worldmap = { ...(w.__worldmap ?? {}), [side]: map };
+      w.__worldmap = { flat: map };
     }
 
     const adapter = {
@@ -226,26 +266,26 @@ export default function MapPanel({
       easeTo: (cam: Camera, duration: number) => map.easeTo({ center: cam.center, zoom: cam.zoom, bearing: cam.bearing, duration }),
       stop: () => map.stop(),
     };
-    controller.register(side, adapter);
+    controller.register("flat", adapter);
 
     // ⚠️ 반드시 originalEvent(실제 마우스·터치 이벤트)가 있을 때만 사용자 조작으로 인정한다.
     //    easeTo/jumpTo 같은 프로그램 이동도 zoomstart 를 쏘는데, 그걸 조작으로 오해하면
     //    beginInteraction 이 상대 지도의 stop() 을 불러 **양쪽이 서로의 이동을 죽인다.**
     const isUserGesture = (e: unknown) => !!(e as { originalEvent?: unknown } | undefined)?.originalEvent;
-    const onDown = (e: unknown) => { if (isUserGesture(e)) controller.beginInteraction(side); };
-    const onUp = (e: unknown) => { if (isUserGesture(e)) controller.endInteraction(side); };
+    const onDown = (e: unknown) => { if (isUserGesture(e)) controller.beginInteraction("flat"); };
+    const onUp = (e: unknown) => { if (isUserGesture(e)) controller.endInteraction("flat"); };
     map.on("dragstart", onDown);
     map.on("zoomstart", onDown);
     map.on("rotatestart", onDown);
     map.on("dragend", onUp);
     map.on("zoomend", onUp);
     map.on("rotateend", onUp);
-    map.on("wheel", () => controller.beginInteraction(side));
+    map.on("wheel", () => controller.beginInteraction("flat"));
 
     // 드래그가 시작되면 tooltip 을 즉시 감춘다(§10)
     map.on("dragstart", () => { setHover(null); hoveredRef.current = null; });
 
-    const onMove = () => { controller.handleMove(side, adapter.getCamera()); paintOverlays(); };
+    const onMove = () => { controller.handleMove("flat", adapter.getCamera()); paintOverlays(); };
     map.on("move", onMove);
 
     /** pointer 주변 상자로 질의해 얇고 작은 나라도 잡는다. */
@@ -286,9 +326,9 @@ export default function MapPanel({
       if (iso3 === hoveredRef.current) return;
       hoveredRef.current = iso3;
       map.getCanvas().style.cursor = iso3 ? "pointer" : "";
-      if (map.getLayer("country-hover")) {
-        map.setFilter("country-hover", ["in", ["get", "iso3"], ["literal", iso3 ? [iso3] : []]]);
-      }
+      const hoverFilter = ["in", ["get", "iso3"], ["literal", iso3 ? [iso3] : []]] as never;
+      if (map.getLayer("country-hover")) map.setFilter("country-hover", hoverFilter);
+      if (map.getLayer("country-hover-fill")) map.setFilter("country-hover-fill", hoverFilter);
       if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
       if (!iso3) { setHover(null); return; }
       hoverTimerRef.current = setTimeout(() => {
@@ -301,15 +341,15 @@ export default function MapPanel({
       setHover(null);
     });
 
-    map.on("load", () => { setStyleReady(true); paintOverlays(); onReady?.(side); });
+    map.on("load", () => { setStyleReady(true); paintOverlays(); onReady?.(); });
     map.on("webglcontextlost", () => setFailed(true));
     map.on("error", (e) => {
-      if (process.env.NODE_ENV === "development") console.warn(`[worldmap:${side}]`, e?.error?.message);
+      if (process.env.NODE_ENV === "development") console.warn("[worldmap]", e?.error?.message);
     });
 
     return () => {
       if (hoverTimerRef.current) clearTimeout(hoverTimerRef.current);
-      controller.unregister(side);
+      controller.unregister("flat");
       map.remove();
       mapRef.current = null;
     };
@@ -450,6 +490,35 @@ export default function MapPanel({
               {lang === "ko" ? c.nameKo : c.nameEn}
             </button>
           ))}
+        </div>
+      )}
+
+      {/* ⑨ 미니맵 — 우측 하단. 세계 전체 실루엣 위에 지금 보는 범위를 표시한다. */}
+      {viewBox && (
+        <div
+          className="pointer-events-none absolute bottom-3 right-3 z-10 overflow-hidden rounded-md bg-[#eaf5f5]/95 shadow-sm ring-1 ring-[#d9d0c8]"
+          style={{ width: 132, height: 66 }}
+          aria-hidden="true"
+        >
+          <svg viewBox="0 0 360 180" width="132" height="66" preserveAspectRatio="none">
+            {/* 대륙 실루엣 — 미니맵이라 아주 단순한 도형이면 충분하다 */}
+            <g fill="#c9c0b8" opacity="0.85">
+              <path d="M35 30h60l18 22-14 26-24 8-16 30-18-14-6-38z" />
+              <path d="M108 96l24-6 16 34-10 40-18 6-14-34z" />
+              <path d="M168 26l40-4 22 14-8 22-26 10-20-16z" />
+              <path d="M172 66l30 4 16 30-8 44-26 8-18-40z" />
+              <path d="M214 24l90-6 44 22-16 46-52 20-44-24-16-38z" />
+              <path d="M292 116l34-6 14 18-16 20-28-6z" />
+            </g>
+          </svg>
+          {/* 지금 보이는 범위 */}
+          <span
+            className="absolute rounded-[2px] border-2 border-[#f47f45] bg-[#ff9966]/20"
+            style={{
+              left: `${viewBox.l}%`, top: `${viewBox.t}%`,
+              width: `${viewBox.w}%`, height: `${viewBox.h}%`,
+            }}
+          />
         </div>
       )}
 

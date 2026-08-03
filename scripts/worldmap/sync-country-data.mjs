@@ -140,6 +140,55 @@ function neIso3(props, mapping, wanted) {
   return null;
 }
 
+/**
+ * 나라의 '본토' 폴리곤을 고른다 — 링 면적이 가장 큰 것.
+ *
+ * ⚠️ 프랑스는 폴리곤이 10개이고 그중 하나가 남미의 프랑스령 기아나다.
+ *    전체를 감싸는 bbox 를 쓰면 경도 -62~56, 위도 -21~51 로 지구 절반이 되어
+ *    프랑스를 클릭했을 때 카메라가 엉뚱한 곳을 비춘다.
+ *    미국(알래스카·하와이)·러시아·네덜란드·노르웨이·칠레도 같은 문제를 겪는다.
+ */
+function mainlandRing(geometry) {
+  const polys = geometry.type === "Polygon" ? [geometry.coordinates] : geometry.coordinates;
+  let best = null, bestArea = -1;
+  for (const poly of polys) {
+    const ring = poly[0];
+    if (!ring || ring.length < 4) continue;
+    // 신발끈 공식 — 부호는 무시하고 크기만 본다
+    let a = 0;
+    for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+      a += ring[j][0] * ring[i][1] - ring[i][0] * ring[j][1];
+    }
+    a = Math.abs(a) / 2;
+    if (a > bestArea) { bestArea = a; best = ring; }
+  }
+  return best;
+}
+
+/** 링 하나의 경계 상자. */
+function ringBbox(ring) {
+  let minLon = 180, minLat = 90, maxLon = -180, maxLat = -90;
+  for (const [lon, lat] of ring) {
+    if (lon < minLon) minLon = lon; if (lon > maxLon) maxLon = lon;
+    if (lat < minLat) minLat = lat; if (lat > maxLat) maxLat = lat;
+  }
+  return [minLon, minLat, maxLon, maxLat];
+}
+
+/** 링의 무게중심(폴리곤 centroid). 라벨을 나라 안쪽에 찍기 위해 쓴다. */
+function ringCentroid(ring) {
+  let a = 0, cx = 0, cy = 0;
+  for (let i = 0, j = ring.length - 1; i < ring.length; j = i++) {
+    const cross = ring[j][0] * ring[i][1] - ring[i][0] * ring[j][1];
+    a += cross;
+    cx += (ring[j][0] + ring[i][0]) * cross;
+    cy += (ring[j][1] + ring[i][1]) * cross;
+  }
+  a /= 2;
+  if (Math.abs(a) < 1e-9) return null;
+  return [cx / (6 * a), cy / (6 * a)];
+}
+
 function bboxOf(geometry) {
   let minLon = 180, minLat = 90, maxLon = -180, maxLat = -90;
   const walk = (coords, depth) => {
@@ -204,9 +253,13 @@ async function buildBoundaries(registry, mapping) {
   for (const r of registry) {
     const f = features.get(r.iso3);
     if (f) {
-      r.bbox = bboxOf(f.geometry);
-      // 레지스트리 center 가 없으면 경계 상자 중앙을 쓴다
-      if (!r.center) r.center = [(r.bbox[0] + r.bbox[2]) / 2, (r.bbox[1] + r.bbox[3]) / 2];
+      // 카메라 이동과 라벨은 본토 기준으로 잡는다(해외 영토가 있는 나라 대응).
+      const ring = mainlandRing(f.geometry);
+      r.bbox = ring ? ringBbox(ring) : bboxOf(f.geometry);
+      r.fullBbox = bboxOf(f.geometry);
+      // 라벨은 본토 무게중심에 찍는다. 계산이 안 되면 경계 상자 중앙.
+      const centroid = ring ? ringCentroid(ring) : null;
+      r.center = centroid ?? [(r.bbox[0] + r.bbox[2]) / 2, (r.bbox[1] + r.bbox[3]) / 2];
       r.hasGeometry = true;
     } else {
       // 폴리곤이 없는 초소형 국가 — 검색·마커로 접근 가능하게 둔다(명세서 §6.5)
@@ -300,6 +353,13 @@ SELECT ?iso3 ?religionKo ?religionEn WHERE {
   OPTIONAL { ?religion rdfs:label ?religionEn . FILTER(lang(?religionEn) = "en") }
 }`;
 
+// 수도 위치 — 지도에 점 하나만 찍는다(글씨 없음).
+const Q_CAPITAL_POINT = `
+SELECT ?iso3 ?coord WHERE {
+  ?country wdt:P298 ?iso3 ; wdt:P36 ?capital .
+  ?capital wdt:P625 ?coord .
+}`;
+
 const Q_CAPITAL_KO = `
 SELECT ?iso3 ?capitalKo WHERE {
   ?country wdt:P298 ?iso3 ; wdt:P36 ?capital .
@@ -352,13 +412,14 @@ function uniqueByIso3(rows, keyFields) {
 
 async function collectWikidata() {
   note("\n[4/7] Wikidata");
-  const [hog, hos, inception, official, main, capitalKo, langKo, curKo, tz] = await Promise.all([
+  const [hog, hos, inception, official, main, capitalKo, capitalPt, langKo, curKo, tz] = await Promise.all([
     sparql(Q_LEADER("P6", "P1313")),
     sparql(Q_LEADER("P35", "P1906")),
     sparql(Q_INCEPTION),
     sparql(Q_RELIGION("P3075")),
     sparql(Q_RELIGION("P140")),
     sparql(Q_CAPITAL_KO),
+    sparql(Q_CAPITAL_POINT),
     sparql(Q_LANGUAGE_KO),
     sparql(Q_CURRENCY_KO),
     sparql(Q_TIMEZONE),
@@ -395,6 +456,15 @@ async function collectWikidata() {
     for (const r of rows ?? []) if (r.code && r.ko && !m.has(r.code)) m.set(r.code, r.ko);
     return m;
   };
+  // Wikidata 좌표는 "Point(경도 위도)" 문자열이다.
+  const capPointMap = new Map();
+  for (const row of capitalPt ?? []) {
+    const m = /Point\(([-\d.]+) ([-\d.]+)\)/.exec(row.coord ?? "");
+    if (m && row.iso3 && !capPointMap.has(row.iso3)) {
+      capPointMap.set(row.iso3, [Math.round(+m[1] * 10000) / 10000, Math.round(+m[2] * 10000) / 10000]);
+    }
+  }
+
   const langKoMap = codeMap(langKo);
   const curKoMap = codeMap(curKo);
 
@@ -409,7 +479,8 @@ async function collectWikidata() {
   note(`  정부수반 ${hogMap.size} · 국가원수 ${hosMap.size} · 수립일 ${incMap.size} · 수도한글 ${capMap.size}`);
   note(`  종교: 공식 ${officialMap.size} + 대표(공식 없을 때) ${relMap.size - officialMap.size} = ${relMap.size}`);
   note(`  언어 한글명 ${langKoMap.size} · 통화 한글명 ${curKoMap.size} · 시간대 ${tzMap.size}개국`);
-  return { hogMap, hosMap, incMap, relMap, capMap, langKoMap, curKoMap, tzMap };
+  note(`  수도 좌표 ${capPointMap.size}개국`);
+  return { hogMap, hosMap, incMap, relMap, capMap, capPointMap, langKoMap, curKoMap, tzMap };
 }
 
 // ── 5~7) 조립 ──────────────────────────────────────────────────────
@@ -498,6 +569,8 @@ async function main() {
       subregionEn: r.subregionEn,
       center: r.center,
       bbox: r.bbox,
+      fullBbox: r.fullBbox ?? r.bbox,
+      capitalPoint: wd.capPointMap.get(r.iso3) ?? null,
       hasGeometry: r.hasGeometry,
       flagUrl: r.flagUrl,
       flagUrl2x: r.flagUrl2x,
@@ -602,6 +675,7 @@ async function main() {
       subregionKo: r.subregionKo, subregionEn: r.subregionEn,
       center: r.center.map((n) => Math.round(n * 100) / 100),
       bbox: r.bbox.map((n) => Math.round(n * 100) / 100),
+      capitalPoint: r.capitalPoint,
       flagUrl: r.flagUrl,
       flagUrl2x: r.flagUrl2x,
       flagEmoji: r.flagEmoji,

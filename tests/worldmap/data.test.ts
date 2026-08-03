@@ -296,6 +296,33 @@ test("경계가 1:50m 수준의 디테일을 갖는다", () => {
   assert.ok(vertices > 50_000, `정점 ${vertices}개 — 해상도가 떨어졌다`);
 });
 
+test("모든 나라에 수도 좌표가 있다 (지도의 수도 점)", () => {
+  const missing = COUNTRIES.filter((c) => !Array.isArray(c.capitalPoint)).map((c) => c.iso3);
+  assert.deepEqual(missing, [], `수도 좌표 없음: ${missing.join(", ")}`);
+  for (const c of COUNTRIES) {
+    const [lon, lat] = c.capitalPoint;
+    assert.ok(lon >= -180 && lon <= 180 && lat >= -90 && lat <= 90, `${c.iso3} 수도 좌표 ${c.capitalPoint}`);
+  }
+});
+
+test("bbox 는 본토 기준이라 해외 영토로 부풀지 않는다", () => {
+  // 프랑스령 기아나·알래스카 같은 해외 영토까지 감싸면 클릭 시 카메라가 지구 절반을 비춘다.
+  const wide = COUNTRIES.filter((c) => c.bbox[2] - c.bbox[0] > 100 && c.iso3 !== "RUS").map((c) => c.iso3);
+  assert.deepEqual(wide, [], `경도 폭이 100도를 넘는 나라: ${wide.join(", ")}`);
+  const fra = COUNTRIES.find((c) => c.iso3 === "FRA");
+  assert.ok(fra.bbox[2] - fra.bbox[0] < 20, `프랑스 bbox 폭 ${fra.bbox[2] - fra.bbox[0]}`);
+  assert.ok(fra.center[1] > 40, `프랑스 라벨이 유럽에 있어야 한다: ${fra.center}`);
+});
+
+test("라벨 좌표가 나라 경계 상자 안에 있다", () => {
+  const outside = COUNTRIES.filter((c) => {
+    const [lon, lat] = c.center;
+    const [w, s2, e, n] = c.bbox;
+    return lon < w - 0.5 || lon > e + 0.5 || lat < s2 - 0.5 || lat > n + 0.5;
+  }).map((c) => c.iso3);
+  assert.deepEqual(outside, [], `라벨이 나라 밖: ${outside.join(", ")}`);
+});
+
 test("브라우저용 파일이 과하게 크지 않다", () => {
   const kb = (p: string) => readFileSync(path.join(ROOT, p)).byteLength / 1024;
   assert.ok(kb("public/worldmap/countries.json") < 400, `countries.json ${kb("public/worldmap/countries.json")}KB`);

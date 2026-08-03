@@ -76,8 +76,12 @@ export interface CountryRecord {
   continentEn: string;
   subregionKo: string | null;
   subregionEn: string | null;
+  /** 라벨·카메라 기준점 — 본토 폴리곤의 무게중심. */
   center: [number, number];
+  /** 본토 기준 경계 상자. 해외 영토는 제외한다(프랑스령 기아나 등). */
   bbox: [number, number, number, number];
+  /** 수도 좌표 [경도, 위도]. 지도에 점 하나로 찍는다. */
+  capitalPoint: [number, number] | null;
   /** ISO2 로 만든 flagcdn 국기 이미지(80px). world-countries 에는 국기 URL 이 없다. */
   flagUrl: string | null;
   /** 고해상도 화면용 2배 이미지 */
