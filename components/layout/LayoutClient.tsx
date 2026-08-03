@@ -66,7 +66,9 @@ export default function LayoutClient({ children }: LayoutClientProps) {
 
   // 대리인 : AI비서 앱(/ai-assistant)도 독립 전체화면 — 사이트 헤더·좌우 광고·여백 없이
   // 통째로 렌더. (자체 ProjectTopBar·사이드바로 illo와 연결) flat-form·미니게임과 동일 패턴.
-  if (pathname?.startsWith("/ai-assistant")) {
+  // ⚠️ 단, /ai-assistant/intro는 공개 소개 페이지라 예외 — 앱 셸로 렌더하면 헤더·푸터가 빠져
+  //    내부 링크가 사라지고 색인 가치가 떨어진다. 일반 웹 레이아웃을 그대로 태운다.
+  if (pathname?.startsWith("/ai-assistant") && pathname !== "/ai-assistant/intro") {
     return <>{children}</>;
   }
 

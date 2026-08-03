@@ -30,6 +30,10 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // 1) 핵심 정적 페이지 (크롤 가치 높은 페이지만)
   const staticPages: MetadataRoute.Sitemap = [
     { url: `${baseUrl}/`,          lastModified: now, changeFrequency: "daily",   priority: 1.0 },
+    // ⚠️ 사업 대표 페이지. 앱 본체(/ai-assistant, /ai-assistant/control-tower)는 로그인·관리자
+    //    게이트라 noindex다 — 사이트맵에 넣으면 '제출된 URL에 noindex 태그' 오류가 난다.
+    //    크롤러에 내보내는 건 공개 소개 페이지인 이 URL 하나뿐이다.
+    { url: `${baseUrl}/ai-assistant/intro`, lastModified: now, changeFrequency: "weekly", priority: 0.9 },
     { url: `${baseUrl}/en`,        lastModified: now, changeFrequency: "daily",   priority: 0.9 },
     { url: `${baseUrl}/insight`,   lastModified: now, changeFrequency: "daily",   priority: 0.9 },
     { url: `${baseUrl}/en/insight`, lastModified: now, changeFrequency: "daily",  priority: 0.8 },

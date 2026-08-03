@@ -7,6 +7,9 @@ import SocialLinks from "@/components/layout/SocialLinks";
 // 헤더 네비와 중복되는 콘텐츠 링크는 제외. 푸터는 회사·고객지원·법적 링크 중심.
 // enOk: 영어판(/en+href)이 있는 링크. 영어 모드에선 enOk만 노출하고 /en 접두어를 붙인다.
 const LINKS = [
+  // 사이트 전체에 깔리는 유일한 내부 링크 — 신규 페이지는 여기 걸려야 크롤러가 발견한다.
+  // (/en 판은 아직 없어서 enOk:false)
+  { label: "AI 비서 소개", labelEn: "AI Assistant", href: "/ai-assistant/intro", enOk: false },
   { label: "회사 소개", labelEn: "About", href: "/legal/about", enOk: true },
   { label: "공지사항", labelEn: "Notice", href: "/notice", enOk: true },
   { label: "FAQ", labelEn: "FAQ", href: "/faq", enOk: true },
