@@ -35,6 +35,24 @@ export function fullNumber(value: number, lang: SupportedLanguage): string {
   return new Intl.NumberFormat(lang === "ko" ? "ko-KR" : "en-US").format(Math.round(value));
 }
 
+/**
+ * 한국어 인구 표기 (§6).
+ *
+ * ⚠️ `abbreviate` 를 그대로 쓰면 `5168.46만 명` 처럼 소수점이 섞여 읽기 어렵다.
+ *    인구는 만·억 단위로 끊고 자릿수 구분 기호를 넣는다. 정확한 값은 tooltip 에 남는다.
+ */
+export function koPopulation(value: number): string {
+  const n = Math.round(Math.abs(value));
+  const sep = (x: number) => new Intl.NumberFormat("ko-KR").format(x);
+  if (n >= 1e8) {
+    const eok = Math.floor(n / 1e8);
+    const man = Math.round((n % 1e8) / 1e4);
+    return man > 0 ? `약 ${sep(eok)}억 ${sep(man)}만 명` : `약 ${sep(eok)}억 명`;
+  }
+  if (n >= 1e4) return `약 ${sep(Math.round(n / 1e4))}만 명`;
+  return `약 ${sep(n)}명`;
+}
+
 export interface FormattedMetric {
   /** 화면에 크게 보이는 값. 자료가 없으면 '자료 없음'. */
   display: string;
@@ -58,7 +76,7 @@ export function formatMetric(metric: NumericMetric | undefined, lang: SupportedL
 
   switch (metric.u as MetricUnit) {
     case "people":
-      display = lang === "ko" ? `${abbreviate(v, "ko")} 명` : abbreviate(v, "en");
+      display = lang === "ko" ? koPopulation(v) : abbreviate(v, "en");
       fullText = lang === "ko" ? `${full} 명` : `${full} people`;
       break;
     case "km2":

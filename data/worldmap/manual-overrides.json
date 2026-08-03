@@ -119,5 +119,40 @@
       "UAE",
       "Emirates"
     ]
+  },
+  "__koTextComment": "한국어 화면에 영문 원문이 그대로 나오던 값들. 공인 표기가 확인된 것만 옮긴다. 확인 못 한 인명·소수 언어명은 임의 음역하지 않고 영문을 남기며, 그 사유는 reports/worldmap-korean-audit.md 에 기록한다.",
+  "__capitalKo": {
+    "BOL": "수크레",
+    "LKA": "콜롬보",
+    "PSE": "라말라",
+    "SWZ": "로밤바",
+    "YEM": "사나",
+    "ZAF": "프리토리아"
+  },
+  "__subregionKo": {
+    "Southeast Europe": "남동유럽",
+    "Central Europe": "중앙유럽"
+  },
+  "__currencyKo": {
+    "KID": "키리바시 달러",
+    "SLL": "시에라리온 레온",
+    "TVD": "투발루 달러",
+    "VES": "베네수엘라 볼리바르 소베라노",
+    "ZWB": "짐바브웨 본드",
+    "KRW": "대한민국 원",
+    "KPW": "조선민주주의인민공화국 원",
+    "JPY": "일본 엔",
+    "CNY": "중국 위안"
+  },
+  "__languageKo": {
+    "Aramaic": "아람어",
+    "Berber": "베르베르어",
+    "Comorian": "코모로어",
+    "Khoekhoe": "코이코이어",
+    "Khoisan": "코이산어",
+    "Sami": "사미어",
+    "Belizean Creole": "벨리즈 크리올어",
+    "New Zealand Sign Language": "뉴질랜드 수어",
+    "Zimbabwean Sign Language": "짐바브웨 수어"
   }
 }

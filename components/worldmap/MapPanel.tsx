@@ -27,6 +27,15 @@ const HIT_PAD_PX = 9;
 const TAP_SLOP_PX = 8;
 /** 일반 국가명 라벨 상한. 작은 나라 marker·선택·비교는 여기 포함되지 않는다. */
 const MAX_PLAIN_LABELS = 40;
+/** 수도점 지름 5px → 반지름 2.5 (§9.4). 확대해도 6px(=3)을 넘지 않는다. */
+export const CAPITAL_DOT_R = 2.5;
+const CAPITAL_DOT_R_ZOOMED = 3;
+/** 작은 나라 선택점 지름 6px. 수도점과 크기가 아니라 채움 방식으로 구분한다(§9.5). */
+export const MICRO_CORE_PX = 6;
+/** 선택·비교 표시는 core 를 키우지 않고 이 halo 로만 나타낸다. */
+const MICRO_HALO_PX = 16;
+/** 수도점과 작은 나라 점이 이 거리 안이면 겹쳐 그리지 않는다(§9.6). */
+const DOT_MERGE_PX = 8;
 /** 미니맵에 담을 위도 범위. Mercator 는 극지방이 무한히 늘어나므로 잘라야 세계가 다 들어온다. */
 const MINI_MAX_LAT = 83;
 
@@ -160,6 +169,9 @@ export default function MapPanel({
   const miniMapRef = useRef<MlMap | null>(null);
   /** 세계 전체가 맞춰진 zoom. 라벨 단계는 이 값과의 차이로 정한다(§3.3). */
   const worldBaseZoomRef = useRef<number | null>(null);
+  /** 다음 커밋의 '지도 표시' 체크박스와 이어붙일 수 있게 표시 상태를 분리해 둔다(§9.7). */
+  const capitalsVisibleRef = useRef(true);
+  const byIsoRef = useRef(new Map<string, CountryRecord>());
 
   const [failed, setFailed] = useState(false);
   const [failReason, setFailReason] = useState<string | null>(null);
@@ -174,6 +186,7 @@ export default function MapPanel({
   // 콜백·데이터를 ref 로 잡아둔다. 지도는 한 번만 만들고 재생성하지 않는다.
   const onSelectRef = useRef(onSelect); onSelectRef.current = onSelect;
   const countriesRef = useRef(countries); countriesRef.current = countries;
+  byIsoRef.current = new Map(countries.map((c) => [c.iso3, c]));
   const langRef = useRef(lang); langRef.current = lang;
   const stateRef = useRef({ selectedCountry, comparisonCountries, comparisonMode });
   stateRef.current = { selectedCountry, comparisonCountries, comparisonMode };
@@ -251,6 +264,29 @@ export default function MapPanel({
     }
     setOverlays(out);
 
+    // ── 수도점 (§9.3 · §9.6) ─────────────────────────────────────
+    // 세계 전체 보기에서는 숨기고, 한 단계 확대되면 보여준다.
+    if (map.getLayer("capital-dot")) {
+      const show = stage > 0 && capitalsVisibleRef.current;
+      map.setLayoutProperty("capital-dot", "visibility", show ? "visible" : "none");
+
+      if (show) {
+        // 작은 나라 marker 와 사실상 같은 자리에 있는 수도는 빼서 두 점이 겹치지 않게 한다.
+        // ⚠️ 195x195 전체 거리 비교를 매 프레임 돌리지 않는다. 화면에 그린 marker 만 본다.
+        const hidden: string[] = [];
+        for (const o of out) {
+          if (!o.showMarker) continue;
+          const c = byIsoRef.current.get(o.iso3);
+          if (!c?.capitalPoint) continue;
+          const cp = map.project(c.capitalPoint);
+          if (Math.hypot(cp.x - o.x, cp.y - o.y) <= DOT_MERGE_PX) hidden.push(o.iso3);
+        }
+        map.setFilter("capital-dot", hidden.length
+          ? (["!", ["in", ["get", "iso3"], ["literal", hidden]]] as never)
+          : null);
+      }
+    }
+
     // 미니맵의 '지금 보고 있는 범위'.
     // ⚠️ 위경도를 백분율로 환산하면 Mercator 에서 위도가 어긋난다. 미니맵의 실제 project() 를 쓴다.
     setViewBox(computeViewBox(map, miniMapRef.current));
@@ -310,13 +346,18 @@ export default function MapPanel({
               id: "capital-dot",
               type: "circle",
               source: "capitals",
+              // ⚠️ 연속 보간(interpolate)을 쓰면 확대할 때마다 점이 커졌다 작아져
+              //    같은 화면에서 크고 작은 점이 섞인다. 단계별 고정값만 쓴다(§9.4).
+              //    인구·면적·순위에 따라 크기를 바꾸지 않는다.
               paint: {
-                "circle-radius": ["interpolate", ["linear"], ["zoom"], 1, 2, 3, 3, 6, 4.5] as never,
+                "circle-radius": ["step", ["zoom"], CAPITAL_DOT_R, 4, CAPITAL_DOT_R_ZOOMED] as never,
                 "circle-color": "#3f3a35",
                 "circle-stroke-width": 1,
-                "circle-stroke-color": "rgba(255,255,255,0.9)",
-                "circle-opacity": ["interpolate", ["linear"], ["zoom"], 0.8, 0.35, 2, 0.85] as never,
+                "circle-stroke-color": "rgba(255,255,255,0.92)",
+                "circle-opacity": 0.9,
               },
+              // 세계 전체 보기에서는 수도점을 숨긴다 — 작은 나라 선택점과 섞이면 다시 복잡해진다.
+              layout: { visibility: "none" } as never,
             },
           ],
         },
@@ -598,9 +639,37 @@ export default function MapPanel({
                 aria-label={o.name}
                 className="pointer-events-auto absolute left-1/2 top-1/2 h-11 w-11 -translate-x-1/2 -translate-y-1/2 rounded-full focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#ff9966] sm:h-8 sm:w-8"
               >
+                {/*
+                  halo 는 core 와 분리된 별도 요소다(§9.5).
+                  ⚠️ 선택·hover 때 core 자체를 키우면 같은 화면에서 점 크기가 달라져
+                     "이 점이 왜 더 크지?" 하는 오해가 생긴다. core 는 항상 6px 이고
+                     상태는 바깥 halo·색으로만 나타낸다.
+                */}
+                {(o.selected || o.color) && (
+                  <span
+                    data-role="micro-halo"
+                    aria-hidden
+                    className="absolute left-1/2 top-1/2 block -translate-x-1/2 -translate-y-1/2 rounded-full"
+                    style={{ width: MICRO_HALO_PX, height: MICRO_HALO_PX, backgroundColor: `${o.color ?? ACCENT}59` }}
+                  />
+                )}
+                {/*
+                  ⚠️ 크기를 Tailwind 의 h-1.5 (0.375rem) 로 쓰면 안 된다. rem 은 루트 글꼴
+                     크기를 따라가는데, 모바일에서 루트가 14px 라 점이 5.25px 로 줄어든다.
+                     실제로 그렇게 측정됐다. 지시서가 요구하는 '어디서나 같은 6px' 는
+                     px 로 못박아야 지켜진다.
+                */}
                 <span
-                  className="absolute left-1/2 top-1/2 block h-2.5 w-2.5 -translate-x-1/2 -translate-y-1/2 rounded-full ring-2 ring-white"
-                  style={{ backgroundColor: o.color ?? (o.selected ? ACCENT : "#7d746e") }}
+                  data-role="micro-core"
+                  className="absolute left-1/2 top-1/2 block -translate-x-1/2 -translate-y-1/2 rounded-full border bg-white transition-colors"
+                  style={{
+                    width: MICRO_CORE_PX,
+                    height: MICRO_CORE_PX,
+                    borderWidth: 1,
+                    ...(o.color || o.selected
+                      ? { backgroundColor: o.color ?? ACCENT, borderColor: "#ffffff" }
+                      : { borderColor: "#5c534d" }),
+                  }}
                 />
               </button>
             )}

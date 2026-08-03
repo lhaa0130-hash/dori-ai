@@ -25,7 +25,8 @@
     "sync:data": "node scripts/worldmap/sync-country-data.mjs",
     "verify:data": "node scripts/worldmap/verify-country-data.mjs",
     "test:worldmap": "node --import ./tests/worldmap/register.mjs --test \"tests/worldmap/*.test.ts\"",
-    "test:e2e": "playwright test"
+    "test:e2e": "playwright test",
+    "audit:worldmap:ko": "node --import ./tests/worldmap/register.mjs scripts/worldmap/audit-korean.mjs"
   },
   "dependencies": {
     "@types/canvas-confetti": "^1.9.0",

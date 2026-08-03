@@ -13,6 +13,7 @@ import { type ComparisonSelection, colorFor, MAX_COMPARISON } from "@/lib/worldm
 import { formatMetric, formatDate, abbreviate, NO_DATA } from "@/lib/worldmap/format";
 import { t } from "@/lib/worldmap/i18n";
 import { Flag } from "./CountryDetail";
+import { formatYear } from "@/lib/worldmap/display";
 
 type FieldKey =
   | "continent" | "subregion" | "capital" | "established" | "leader" | "religion"
@@ -282,7 +283,7 @@ function Row({
                 {f.display}
                 {f.full && <span className="sr-only"> ({f.full})</span>}
               </p>
-              {f.year && <p className="text-[10px] text-[#a89f98]">{t("asOf", lang)} {f.year}</p>}
+              {f.year && <p className="text-[10px] text-[#a89f98]">{formatYear(f.year, lang)}</p>}
               <div className="mt-1 h-1.5 overflow-hidden rounded-full bg-[#f3eee9]">
                 <div
                   className="h-full rounded-full transition-[width] duration-500 motion-reduce:transition-none"
