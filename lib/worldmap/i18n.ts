@@ -3,15 +3,10 @@
 import type { SupportedLanguage } from "./types";
 
 export const DICT = {
-  eyebrow: { ko: "WORLD MAP BY ILLO", en: "WORLD MAP BY ILLO" },
-  title: { ko: "지도로 만나는 세계", en: "Explore the World by Map" },
-  lead: {
-    ko: "평면 지도와 지구본을 오가며 국가 정보를 살펴보고 비교해 보세요.",
-    en: "Pan between a flat map and a globe to explore and compare countries.",
-  },
-  flatMap: { ko: "평면 지도", en: "Flat Map" },
-  globe: { ko: "지구본", en: "Globe" },
-  split: { ko: "나란히", en: "Split" },
+  eyebrow: { ko: "NARAKOK BY ILLO", en: "NARAKOK BY ILLO" },
+  title: { ko: "나라콕", en: "NARAKOK" },
+  lead: { ko: "콕 눌러 만나는 세계", en: "Tap a Country, Meet the World" },
+  randomTrip: { ko: "🎲 랜덤 여행", en: "🎲 Random trip" },
   searchPlaceholder: { ko: "국가명 또는 ISO 코드 검색", en: "Search country name or ISO code" },
   searchLabel: { ko: "국가 검색", en: "Search countries" },
   emptyState: { ko: "지도에서 국가를 선택하거나 검색해 보세요.", en: "Select a country on the map or search by name." },
@@ -53,7 +48,7 @@ export const DICT = {
   showSources: { ko: "출처 보기", en: "Show sources" },
 
   colorBy: { ko: "색 기준", en: "Color by" },
-  webglFallback: { ko: "이 기기에서는 3D 지구본을 표시할 수 없습니다.", en: "This device cannot display the 3D globe." },
+  webglFallback: { ko: "이 기기에서는 지도를 표시할 수 없습니다.", en: "This device cannot display the map." },
   webglFallbackHint: {
     ko: "검색과 국가 정보, 비교는 그대로 사용할 수 있습니다.",
     en: "Search, country details and comparison still work.",

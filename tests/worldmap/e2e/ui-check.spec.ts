@@ -36,7 +36,7 @@ test("11개 항목 종합 확인", async ({ page }) => {
     };
   });
 
-  expect(r.globeGone, "① 지구본 완전 제거").toBe(true);
+  expect(r.globeGone, "지구본 완전 제거").toBe(true);
   expect(r.borderWidth, "② 테두리 얇게").toBeLessThanOrEqual(0.4);
   // ⑧ 수도 점 — querySourceFeatures 는 '로드된 타일' 만 세므로 세계 줌에서는 일부만 잡힌다.
   //    레이어 존재 + 실제 렌더 여부로 확인한다(데이터 195/195 는 데이터 테스트가 지킨다).
@@ -50,15 +50,22 @@ test("11개 항목 종합 확인", async ({ page }) => {
   await expect(banner).toContainText("한국");
   await expect(banner.locator("img")).toBeVisible();
 
-  // ⑨ 미니맵
-  const mini = page.locator("svg[viewBox='0 0 360 180']");
-  await expect(mini, "⑨ 미니맵").toBeVisible();
+  // 미니맵 — 실제 지도 캔버스가 2개(주 지도 + 미니맵)
+  await page.waitForFunction(() => document.querySelectorAll("canvas.maplibregl-canvas").length >= 2, undefined, { timeout: 30_000 });
+  const canvases = await page.evaluate(() =>
+    [...document.querySelectorAll("canvas.maplibregl-canvas")].map((c) => {
+      const r = c.getBoundingClientRect();
+      return { w: Math.round(r.width), h: Math.round(r.height) };
+    }),
+  );
+  const miniCv = canvases.find((c) => c.w <= 160);
+  expect(miniCv, `미니맵 캔버스 (전체: ${JSON.stringify(canvases)})`).toBeTruthy();
 
   // ⑪ 비교하기 상단
   const cmp = page.getByRole("button", { name: /비교하기/ }).first();
   await expect(cmp).toBeVisible();
   const cmpBox = (await cmp.boundingBox())!;
-  const mapBox = (await page.locator("canvas.maplibregl-canvas").boundingBox())!;
+  const mapBox = (await page.locator("canvas.maplibregl-canvas").first().boundingBox())!;
   expect(cmpBox.y, "⑪ 비교하기가 지도보다 위").toBeLessThan(mapBox.y);
 
   // ⑥ 프랑스 본토 bbox
@@ -76,6 +83,6 @@ test("11개 항목 종합 확인", async ({ page }) => {
 test("④ 영문 라우트가 영어로 뜬다", async ({ page }) => {
   await page.goto("/en/world-map");
   await ready(page);
-  await expect(page.getByRole("heading", { name: "Explore the World by Map" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "NARAKOK" })).toBeVisible();
   await expect(page.getByRole("button", { name: /Compare/ }).first()).toBeVisible();
 });

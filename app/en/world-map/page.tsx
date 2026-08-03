@@ -6,7 +6,7 @@ import "maplibre-gl/dist/maplibre-gl.css";
 // 화면은 같은 컴포넌트를 쓰고, 언어만 영어로 시작한다.
 export const metadata = {
   ...createMetadata({
-    title: "World Map | Explore and Compare Countries",
+    title: "NARAKOK | Tap a Country, Meet the World",
     description:
       "Explore all 195 countries on one large flat map. Tap a country to see its capital, languages, currency, neighbours, population, area and GDP — each with its source year — and compare up to four countries side by side.",
     path: "/en/world-map",
