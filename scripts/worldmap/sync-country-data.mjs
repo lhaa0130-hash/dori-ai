@@ -96,6 +96,11 @@ async function buildRegistry() {
       flagUrl: c.flags?.svg || c.flags?.png || null,
       area: typeof c.area === "number" && c.area > 0 ? c.area : null,
       unMember: isMember,
+      // 어린이용 지리 정보 (후속 지시서 §8)
+      rawLanguages: c.languages && typeof c.languages === "object" ? c.languages : {},
+      rawCurrencies: c.currencies && typeof c.currencies === "object" ? c.currencies : {},
+      rawBorders: Array.isArray(c.borders) ? c.borders : [],
+      landlocked: c.landlocked === true,
     });
   }
 
@@ -291,6 +296,26 @@ SELECT ?iso3 ?capitalKo WHERE {
   ?capital rdfs:label ?capitalKo . FILTER(lang(?capitalKo) = "ko")
 }`;
 
+// world-countries 는 언어·통화 이름을 영어로만 준다. 한글 이름은 표준 코드로 이어 받는다.
+//   P220 = ISO 639-3 언어 코드, P498 = ISO 4217 통화 코드
+const Q_LANGUAGE_KO = `
+SELECT ?code ?ko WHERE {
+  ?lang wdt:P220 ?code ; rdfs:label ?ko . FILTER(lang(?ko) = "ko")
+}`;
+
+const Q_CURRENCY_KO = `
+SELECT ?code ?ko WHERE {
+  ?cur wdt:P498 ?code ; rdfs:label ?ko . FILTER(lang(?ko) = "ko")
+}`;
+
+// ⚠️ world-countries 5.1.0 에는 timezones 필드가 아예 없다(250개국 전부 없음 — 실측).
+//    지어내지 않고 Wikidata P421(속한 시간대)에서 받는다.
+const Q_TIMEZONE = `
+SELECT ?iso3 ?tzLabel WHERE {
+  ?country wdt:P298 ?iso3 ; wdt:P421 ?tz .
+  ?tz rdfs:label ?tzLabel . FILTER(lang(?tzLabel) = "en")
+}`;
+
 /** iso3 별로 후보를 모으되, 값이 서로 다르게 여러 개면 임의 선택하지 않고 버린다. */
 function uniqueByIso3(rows, keyFields) {
   const bag = new Map();
@@ -317,13 +342,16 @@ function uniqueByIso3(rows, keyFields) {
 
 async function collectWikidata() {
   note("\n[4/7] Wikidata");
-  const [hog, hos, inception, official, main, capitalKo] = await Promise.all([
+  const [hog, hos, inception, official, main, capitalKo, langKo, curKo, tz] = await Promise.all([
     sparql(Q_LEADER("P6", "P1313")),
     sparql(Q_LEADER("P35", "P1906")),
     sparql(Q_INCEPTION),
     sparql(Q_RELIGION("P3075")),
     sparql(Q_RELIGION("P140")),
     sparql(Q_CAPITAL_KO),
+    sparql(Q_LANGUAGE_KO),
+    sparql(Q_CURRENCY_KO),
+    sparql(Q_TIMEZONE),
   ]);
   if (!hog) fail("wikidata", "정부수반 질의 실패");
   if (!hos) fail("wikidata", "국가원수 질의 실패");
@@ -351,9 +379,27 @@ async function collectWikidata() {
     if (!prev || d > prev) incMap.set(row.iso3, d);
   }
 
+  // 코드 → 한글 이름. 같은 코드에 여러 label 이 오면 첫 번째만 쓴다.
+  const codeMap = (rows) => {
+    const m = new Map();
+    for (const r of rows ?? []) if (r.code && r.ko && !m.has(r.code)) m.set(r.code, r.ko);
+    return m;
+  };
+  const langKoMap = codeMap(langKo);
+  const curKoMap = codeMap(curKo);
+
+  // 시간대는 나라마다 여러 개일 수 있다(미국·러시아 등). 중복만 제거하고 전부 담는다.
+  const tzMap = new Map();
+  for (const r of tz ?? []) {
+    if (!r.iso3 || !r.tzLabel) continue;
+    if (!tzMap.has(r.iso3)) tzMap.set(r.iso3, new Set());
+    tzMap.get(r.iso3).add(r.tzLabel);
+  }
+
   note(`  정부수반 ${hogMap.size} · 국가원수 ${hosMap.size} · 수립일 ${incMap.size} · 수도한글 ${capMap.size}`);
   note(`  종교: 공식 ${officialMap.size} + 대표(공식 없을 때) ${relMap.size - officialMap.size} = ${relMap.size}`);
-  return { hogMap, hosMap, incMap, relMap, capMap };
+  note(`  언어 한글명 ${langKoMap.size} · 통화 한글명 ${curKoMap.size} · 시간대 ${tzMap.size}개국`);
+  return { hogMap, hosMap, incMap, relMap, capMap, langKoMap, curKoMap, tzMap };
 }
 
 // ── 5~7) 조립 ──────────────────────────────────────────────────────
@@ -384,6 +430,24 @@ async function main() {
 
   note("\n[5/7] manual override 적용");
   let overrideCount = 0;
+
+  // 이웃 나라는 195개국 레지스트리 안에 있는 코드만 남긴다(비회원 영토는 뺀다).
+  const inRegistry = new Set(registry.map((r) => r.iso3));
+
+  // 육지 국경은 정의상 대칭이다. 한쪽에만 적힌 항목은 출처의 오류다.
+  // 예: world-countries 는 스리랑카에 인도를 국경으로 적어 두었는데(팔크 해협으로 갈린 섬나라)
+  //     인도 쪽에는 스리랑카가 없다. 그대로 두면 섬나라 판정까지 틀어진다.
+  const borderOf = new Map(registry.map((r) => [r.iso3, new Set(r.rawBorders.filter((b) => inRegistry.has(b)))]));
+  const dropped = [];
+  for (const [iso3, set] of borderOf) {
+    for (const other of [...set]) {
+      if (!borderOf.get(other)?.has(iso3)) { set.delete(other); dropped.push(`${iso3}→${other}`); }
+    }
+  }
+  if (dropped.length) note(`  한쪽에만 있던 국경 ${dropped.length}건 제거: ${dropped.join(", ")}`);
+  // 섬나라 판정: landlocked 만으로는 안 된다(후속 지시서 §8).
+  // '육지 국경이 하나도 없고 내륙국도 아닌' 나라를 섬나라로 본다. 예외는 override 로 뒤집는다.
+  const islandOverride = overrides.__islandCountry ?? {};
 
   const records = registry.map((r) => {
     const m = wb.get(r.iso3) ?? {};
@@ -423,6 +487,25 @@ async function main() {
       bbox: r.bbox,
       hasGeometry: r.hasGeometry,
       flagUrl: r.flagUrl,
+
+      // 어린이용 지리 정보. 값이 없으면 빈 배열이고, 화면에서 '자료 없음' 과
+      // '육지 국경 없음' 을 구분해 보여준다.
+      languages: Object.entries(r.rawLanguages).map(([code, en]) => ({
+        code,
+        ko: wd.langKoMap.get(code) ?? en,      // 한글 이름이 없으면 영어를 쓴다
+        en,
+      })),
+      currencies: Object.entries(r.rawCurrencies).map(([code, info]) => ({
+        code,
+        ko: wd.curKoMap.get(code) ?? info?.name ?? code,
+        en: info?.name ?? code,
+        symbol: info?.symbol ?? null,
+      })),
+      timezones: [...(wd.tzMap.get(r.iso3) ?? [])].sort(),
+      borderCountryIso3: [...(borderOf.get(r.iso3) ?? [])].sort(),
+      landlocked: r.landlocked,
+      islandCountry: islandOverride[r.iso3] ?? (!r.landlocked && (borderOf.get(r.iso3)?.size ?? 0) === 0),
+
       leader: ov.leader ?? (leaderRow
         ? {
             valueKo: leaderRow.personKo ?? leaderRow.personEn ?? null,
@@ -465,13 +548,18 @@ async function main() {
     const n = missingCount(f);
     note(`  ${f.padEnd(13)} 자료 없음 ${String(n).padStart(3)}/195`);
   }
+  const emptyList = (field) => records.filter((r) => r[field].length === 0).length;
+  for (const f of ["languages", "currencies", "timezones", "borderCountryIso3"]) {
+    note(`  ${f.padEnd(17)} 빈 배열 ${String(emptyList(f)).padStart(3)}/195`);
+  }
+  note(`  내륙국 ${records.filter((r) => r.landlocked).length} · 섬나라 ${records.filter((r) => r.islandCountry).length}`);
 
   note("\n[7/7] 저장");
   if (DRY) { note("  dry-run — 파일을 쓰지 않았습니다."); return; }
   await mkdir(DATA_DIR, { recursive: true });
   await mkdir(PUBLIC_DIR, { recursive: true });
 
-  const snapshot = { generatedAt: FETCHED_AT, stale: false, errors, countries: records };
+  const snapshot = { schemaVersion: 2, generatedAt: FETCHED_AT, stale: false, errors, countries: records };
   await writeFile(path.join(DATA_DIR, "snapshot.json"), JSON.stringify(snapshot));
   await writeFile(path.join(PUBLIC_DIR, "countries.geojson"), JSON.stringify(geojson));
 
@@ -488,6 +576,7 @@ async function main() {
   const txt = (m, extra = {}) => ({ ko: m.valueKo, en: m.valueEn, s: m.status, src: sourceId(m.source), ...extra });
 
   const compact = {
+    schemaVersion: 2,
     generatedAt: FETCHED_AT,
     stale: false,
     countries: records.map((r) => ({
@@ -499,6 +588,12 @@ async function main() {
       center: r.center.map((n) => Math.round(n * 100) / 100),
       bbox: r.bbox.map((n) => Math.round(n * 100) / 100),
       flagUrl: r.flagUrl,
+      languages: r.languages,
+      currencies: r.currencies,
+      timezones: r.timezones,
+      borderCountryIso3: r.borderCountryIso3,
+      landlocked: r.landlocked,
+      islandCountry: r.islandCountry,
       leader: txt(r.leader, { titleKo: r.leader.titleKo, titleEn: r.leader.titleEn, role: r.leader.role }),
       established: { date: r.established.date, s: r.established.status, src: sourceId(r.established.source) },
       religion: txt(r.religion, { kind: r.religion.kind, labelKo: r.religion.labelKo, labelEn: r.religion.labelEn }),

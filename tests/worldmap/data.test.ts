@@ -170,6 +170,105 @@ test("자료 결측률이 감당할 수준이다", () => {
   assert.equal(missing("area"), 0);
 });
 
+// ── 어린이용 지리 정보 (후속 지시서 §8 · §12.2) ─────────────────
+test("스키마 버전이 올라가 있다", () => {
+  assert.equal(dataset.schemaVersion, 2);
+});
+
+test("모든 국가에 languages 배열이 있다", () => {
+  for (const c of COUNTRIES) {
+    assert.ok(Array.isArray(c.languages), `${c.iso3} languages 없음`);
+    for (const l of c.languages) {
+      assert.ok(l.ko && l.en, `${c.iso3} 언어 이름 비어 있음: ${JSON.stringify(l)}`);
+      assert.ok(typeof l.code === "string" && l.code.length >= 2, `${c.iso3} 언어 코드 ${l.code}`);
+    }
+  }
+});
+
+test("통화는 코드·이름을 갖추고 정규화돼 있다", () => {
+  for (const c of COUNTRIES) {
+    assert.ok(Array.isArray(c.currencies), `${c.iso3} currencies 없음`);
+    for (const cur of c.currencies) {
+      assert.match(cur.code, /^[A-Z]{3}$/, `${c.iso3} 통화 코드 ${cur.code}`);
+      assert.ok(cur.ko && cur.en, `${c.iso3} 통화 이름 비어 있음`);
+    }
+  }
+  // 한국 원화가 제대로 들어왔는지 표본 확인
+  const kor = COUNTRIES.find((c) => c.iso3 === "KOR");
+  assert.equal(kor.currencies[0].code, "KRW");
+  assert.ok(kor.currencies[0].symbol);
+});
+
+test("이웃 나라 ISO 는 전부 195개국 레지스트리 안에 있다", () => {
+  const known = new Set(COUNTRIES.map((c) => c.iso3));
+  for (const c of COUNTRIES) {
+    assert.ok(Array.isArray(c.borderCountryIso3), `${c.iso3} 국경 배열 없음`);
+    for (const b of c.borderCountryIso3) {
+      assert.ok(known.has(b), `${c.iso3} 의 이웃 ${b} 가 레지스트리에 없다`);
+      assert.notEqual(b, c.iso3, `${c.iso3} 가 자기 자신과 국경을 맞댐`);
+    }
+  }
+});
+
+test("국경 관계는 서로 대칭이다", () => {
+  const byIso = new Map(COUNTRIES.map((c) => [c.iso3, c]));
+  const broken: string[] = [];
+  for (const c of COUNTRIES) {
+    for (const b of c.borderCountryIso3) {
+      if (!byIso.get(b)?.borderCountryIso3.includes(c.iso3)) broken.push(`${c.iso3}→${b}`);
+    }
+  }
+  assert.deepEqual(broken, [], `한쪽에만 있는 국경: ${broken.join(", ")}`);
+});
+
+test("landlocked·islandCountry 는 boolean 이고 서로 모순되지 않는다", () => {
+  for (const c of COUNTRIES) {
+    assert.equal(typeof c.landlocked, "boolean", `${c.iso3} landlocked`);
+    assert.equal(typeof c.islandCountry, "boolean", `${c.iso3} islandCountry`);
+    assert.ok(!(c.landlocked && c.islandCountry), `${c.iso3}: 내륙국이면서 섬나라일 수 없다`);
+    // 섬나라는 육지 국경이 없어야 한다 (landlocked===false 만으로 판정하지 않는다)
+    if (c.islandCountry) assert.equal(c.borderCountryIso3.length, 0, `${c.iso3} 섬나라인데 국경이 있다`);
+    // 내륙국은 반드시 이웃이 있다
+    if (c.landlocked) assert.ok(c.borderCountryIso3.length > 0, `${c.iso3} 내륙국인데 이웃이 없다`);
+  }
+});
+
+test("대표적인 섬나라·내륙국이 올바르게 분류된다", () => {
+  const get = (iso3: string) => COUNTRIES.find((c) => c.iso3 === iso3);
+  for (const iso3 of ["JPN", "NZL", "ISL", "MDG", "CUB"]) {
+    assert.equal(get(iso3).islandCountry, true, `${iso3} 는 섬나라여야 한다`);
+  }
+  for (const iso3 of ["MNG", "CHE", "AUT", "NPL", "BOL"]) {
+    assert.equal(get(iso3).landlocked, true, `${iso3} 는 내륙국이어야 한다`);
+    assert.equal(get(iso3).islandCountry, false);
+  }
+  // 한국은 북한과 육지 국경이 있으므로 섬나라가 아니다
+  assert.equal(get("KOR").islandCountry, false);
+  assert.deepEqual(get("KOR").borderCountryIso3, ["PRK"]);
+});
+
+test("시간대는 문자열 배열이다", () => {
+  let empty = 0;
+  for (const c of COUNTRIES) {
+    assert.ok(Array.isArray(c.timezones), `${c.iso3} timezones 없음`);
+    for (const t of c.timezones) assert.ok(typeof t === "string" && t.length > 0);
+    if (c.timezones.length === 0) empty++;
+  }
+  // 자료가 없는 나라가 있는 건 정상이지만, 수집이 통째로 깨지면 눈에 띄어야 한다
+  assert.ok(empty <= 10, `시간대 결측 ${empty}/195`);
+});
+
+test("작은 국가도 center 좌표를 갖는다 (지도 marker 대상)", () => {
+  const tiny = ["VAT", "MCO", "SMR", "LIE", "AND", "MLT", "SGP", "NRU", "TUV", "PLW", "MHL"];
+  for (const iso3 of tiny) {
+    const c = COUNTRIES.find((x) => x.iso3 === iso3);
+    assert.ok(c, `${iso3} 누락`);
+    const [lon, lat] = c.center;
+    assert.ok(Number.isFinite(lon) && Number.isFinite(lat), `${iso3} center ${c.center}`);
+    assert.ok(lon >= -180 && lon <= 180 && lat >= -90 && lat <= 90, `${iso3} center 범위`);
+  }
+});
+
 test("브라우저용 파일이 과하게 크지 않다", () => {
   const kb = (p: string) => readFileSync(path.join(ROOT, p)).byteLength / 1024;
   assert.ok(kb("public/worldmap/countries.json") < 400, `countries.json ${kb("public/worldmap/countries.json")}KB`);

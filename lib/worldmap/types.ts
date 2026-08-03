@@ -49,6 +49,20 @@ export interface DataSource {
   fetchedAt: string;
 }
 
+/** 언어처럼 코드 + 한/영 이름을 함께 갖는 값. 한글 이름이 없으면 ko 에 영어가 들어간다. */
+export interface LocalizedName {
+  code: string | null;
+  ko: string;
+  en: string;
+}
+
+export interface CurrencyInfo {
+  code: string;
+  ko: string;
+  en: string;
+  symbol: string | null;
+}
+
 export interface CountryRecord {
   iso2: string;
   iso3: string;
@@ -72,9 +86,24 @@ export interface CountryRecord {
   area: NumericMetric;
   gdp: NumericMetric;
   gdpPerCapita: NumericMetric;
+
+  // ── 어린이용 지리 정보 ──────────────────────────────────────────
+  languages: LocalizedName[];
+  currencies: CurrencyInfo[];
+  timezones: string[];
+  /** 육지로 맞닿은 나라들의 ISO3. 195개국 레지스트리 안의 코드만 담긴다. */
+  borderCountryIso3: string[];
+  landlocked: boolean;
+  /**
+   * 육지 국경이 하나도 없는 섬나라.
+   * landlocked === false 만으로 판정하지 않는다 — 국경 목록이 비어 있어야 한다.
+   */
+  islandCountry: boolean;
 }
 
 export interface CountryDataset {
+  /** 스키마가 바뀌면 올린다. 구버전 스냅샷을 새 화면이 잘못 읽는 것을 막는다. */
+  schemaVersion: number;
   generatedAt: string;
   stale: boolean;
   countries: CountryRecord[];

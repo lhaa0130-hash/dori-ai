@@ -5,5 +5,7 @@
     "PSX": "PSE",
     "SAH": "ESH",
     "KOS": "XKX"
-  }
+  },
+  "__islandCountryComment": "육지 국경 유무 자동 판정이 틀리는 나라만 여기서 뒤집는다(true=섬나라).",
+  "__islandCountry": {}
 }
