@@ -25,8 +25,27 @@ const GEOJSON_URL = "/worldmap/countries.geojson";
 const RAMP = ["#fff4ec", "#ffe2d2", "#ffc9ab", "#ffab7d", "#ff8b55", "#ef6b2e"];
 const NO_VALUE = "#e8e2dc";
 
+// 대륙별 색 — 서로 확실히 구분되면서 illo 의 밝고 따뜻한 톤을 벗어나지 않게 고른다.
+const CONTINENT_FILL: Record<ContinentCode, string> = {
+  AS: "#ff9966",   // 오렌지
+  EU: "#6f9bd8",   // 블루
+  AF: "#6fbf95",   // 그린
+  NA: "#c493d8",   // 퍼플
+  SA: "#f0c05a",   // 옐로
+  OC: "#7fc7cc",   // 틸
+};
+
+/** 색 기준 — 숫자 지표 4종 + 대륙. */
+type ColorMode = MetricKey | "continent";
+
 /** 지표 분포는 한쪽으로 크게 쏠려 있어 로그 눈금이라야 나라 사이 차이가 보인다. */
-function buildColors(countries: CountryRecord[], metric: MetricKey): Record<string, string> {
+function buildColors(countries: CountryRecord[], metric: ColorMode): Record<string, string> {
+  // 대륙은 눈금이 아니라 분류다. 로그 계산 없이 대륙 색을 그대로 칠한다.
+  if (metric === "continent") {
+    const out: Record<string, string> = {};
+    for (const c of countries) out[c.iso3] = CONTINENT_FILL[c.continentCode] ?? NO_VALUE;
+    return out;
+  }
   const values = countries.map((c) => c[metric]).filter((m) => m.s !== "missing" && (m.v ?? 0) > 0).map((m) => Math.log10(m.v as number));
   const out: Record<string, string> = {};
   if (!values.length) return out;
@@ -49,7 +68,7 @@ export default function WorldMapClient() {
   const [lang, setLang] = useState<SupportedLanguage>("ko");
   const [view, setView] = useState<ViewMode>("split");
   const [continent, setContinent] = useState<ContinentCode | null>(null);
-  const [metric, setMetric] = useState<MetricKey>("gdp");
+  const [metric, setMetric] = useState<ColorMode>("continent");
   const [selected, setSelected] = useState<string | null>(null);
   // 비교 선택은 일반 선택과 완전히 별개다. 비교 모드에 들어가도 자동으로 채우지 않는다.
   const [mode, setMode] = useState<WorldMapMode>("explore");
@@ -214,9 +233,9 @@ export default function WorldMapClient() {
     );
   }
 
-  const showFlat = view !== "globe";
-  const showGlobe = view !== "flat";
-  const mapHeight = isNarrow ? "h-[62vh] min-h-[380px]" : "h-[520px]";
+  // 지구본은 걷어내고 평면 지도 한 장을 화면 가득 쓴다.
+  // 헤더·검색·컨트롤이 차지하는 높이를 빼고 남는 만큼 지도에 준다.
+  const mapHeight = isNarrow ? "h-[68vh] min-h-[420px]" : "h-[calc(100vh-260px)] min-h-[560px]";
 
   const chip = (activeState: boolean) =>
     `rounded-full border px-3 py-1.5 text-[13px] font-semibold transition focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#ff9966] ${
@@ -248,15 +267,6 @@ export default function WorldMapClient() {
         </div>
 
         <div className="flex flex-wrap items-center gap-2">
-          <span className="sr-only" id="view-label">{t("flatMap", lang)} / {t("globe", lang)}</span>
-          <div role="group" aria-labelledby="view-label" className="flex gap-1.5">
-            {(["split", "flat", "globe"] as ViewMode[]).map((v) => (
-              <button key={v} type="button" onClick={() => setView(v)} aria-pressed={view === v} className={chip(view === v)}>
-                {v === "split" ? t("split", lang) : v === "flat" ? t("flatMap", lang) : t("globe", lang)}
-              </button>
-            ))}
-          </div>
-
           <button
             type="button"
             onClick={mode === "compare" ? exitCompare : enterCompare}
@@ -295,6 +305,9 @@ export default function WorldMapClient() {
 
         <div className="flex flex-wrap items-center gap-1.5">
           <span className="text-[12px] font-medium text-[#a89f98]">{t("colorBy", lang)}</span>
+          <button type="button" onClick={() => setMetric("continent")} aria-pressed={metric === "continent"} className={chip(metric === "continent")}>
+            {lang === "ko" ? "대륙" : "Continent"}
+          </button>
           {METRIC_KEYS.map((m) => (
             <button key={m} type="button" onClick={() => setMetric(m)} aria-pressed={metric === m} className={chip(metric === m)}>
               {t(m, lang)}
@@ -309,35 +322,32 @@ export default function WorldMapClient() {
         </p>
       )}
 
-      {/* 지도 영역 */}
-      <div className={`mt-5 grid gap-4 ${view === "split" && !isNarrow ? "lg:grid-cols-2" : "grid-cols-1"}`}>
-        {showFlat && (
-          <figure className="m-0">
-            <figcaption className="mb-1.5 text-[13px] font-bold text-[#40382f]">{t("flatMap", lang)}</figcaption>
-            {dataset && (
-              <MapPanel
-                side="flat" controller={controller} geojsonUrl={GEOJSON_URL} countries={dataset.countries}
-                lang={lang} colors={colors} selectedCountry={selected}
-                comparisonCountries={comparison} comparisonMode={mode === "compare"} dimmed={dimmed}
-                onSelect={selectCountry} onReady={onMapReady} className={mapHeight}
-              />
-            )}
-          </figure>
-        )}
-        {showGlobe && (
-          <figure className="m-0">
-            <figcaption className="mb-1.5 text-[13px] font-bold text-[#40382f]">{t("globe", lang)}</figcaption>
-            {dataset && (
-              <MapPanel
-                side="globe" controller={controller} geojsonUrl={GEOJSON_URL} countries={dataset.countries}
-                lang={lang} colors={colors} selectedCountry={selected}
-                comparisonCountries={comparison} comparisonMode={mode === "compare"} dimmed={dimmed}
-                onSelect={selectCountry} onReady={onMapReady} className={mapHeight}
-              />
-            )}
-          </figure>
+      {/* 지도 영역 — 평면 지도 한 장 */}
+      <div className="mt-5">
+        {dataset && (
+          <MapPanel
+            side="flat" controller={controller} geojsonUrl={GEOJSON_URL} countries={dataset.countries}
+            lang={lang} colors={colors} selectedCountry={selected}
+            comparisonCountries={comparison} comparisonMode={mode === "compare"} dimmed={dimmed}
+            onSelect={selectCountry} onReady={onMapReady} className={mapHeight}
+          />
         )}
       </div>
+
+      {/* 대륙 색 범례 — 색만으로 구분하지 않도록 이름을 함께 둔다 */}
+      {dataset && metric === "continent" && (
+        <ul className="mt-2 flex flex-wrap gap-x-3 gap-y-1">
+          {CONTINENTS.map((code) => {
+            const sample = dataset.countries.find((c) => c.continentCode === code);
+            return (
+              <li key={code} className="flex items-center gap-1.5 text-[12px] text-[#7d746e]">
+                <span className="h-3 w-3 rounded-sm" style={{ backgroundColor: CONTINENT_FILL[code] }} />
+                {lang === "ko" ? sample?.continentKo ?? code : sample?.continentEn ?? code}
+              </li>
+            );
+          })}
+        </ul>
+      )}
 
       {!dataset && <p className="mt-6 text-[14px] text-[#7d746e]">{t("loading", lang)}</p>}
 
