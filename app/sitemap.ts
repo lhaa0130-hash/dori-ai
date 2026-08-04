@@ -7,6 +7,13 @@ import { getAllReports } from "@/lib/reports";
 import { getAllStudios } from "@/lib/studio";
 import { getAllMarketPosts } from "@/lib/market-posts";
 import { getAllGuides } from "@/lib/guides";
+import { loadCountryDataset } from "@/lib/worldmap/server";
+import {
+  buildCountryRoutes, countryPath, countriesIndexPath, continentPath, rankingPath,
+  curiosityPath, metricSlug, CONTINENT_SLUG, CURIOSITY_SLUG,
+} from "@/lib/worldmap/seoRoutes";
+import { RANKING_METRICS } from "@/lib/worldmap/ranking";
+import { CURIOSITY_COLLECTIONS } from "@/lib/worldmap/curiosity";
 import fs from "fs";
 import path from "path";
 
@@ -108,7 +115,47 @@ export default function sitemap(): MetadataRoute.Sitemap {
     console.warn("[sitemap] failed to collect articles:", e);
   }
 
-  // 3) 동물 상세 페이지 (몽글로 : 동물도감 — 사이트 최대 고유 콘텐츠)
+  // 3) 나라콕 — 국가·대륙·랭킹·호기심 (지시서 10 §9.1)
+  //
+  // ⚠️ `?country=KOR` 같은 쿼리 URL 은 넣지 않는다. 그건 사용자 조작 상태이지
+  //    별도 문서가 아니다. 넣으면 같은 내용이 여러 주소로 색인된다.
+  // ⚠️ lastmod 는 데이터 스냅샷 생성일이다. 배포할 때마다 오늘로 갱신하지 않는다.
+  const worldMapUrls: MetadataRoute.Sitemap = (() => {
+    try {
+      const { countries, generatedAt } = loadCountryDataset();
+      const dataDate = new Date(generatedAt);
+      const routes = buildCountryRoutes(countries);
+      const out: MetadataRoute.Sitemap = [
+        { url: `${baseUrl}${countriesIndexPath("ko")}`, lastModified: dataDate, changeFrequency: "monthly", priority: 0.7 },
+        { url: `${baseUrl}${countriesIndexPath("en")}`, lastModified: dataDate, changeFrequency: "monthly", priority: 0.6 },
+      ];
+      // 품질 gate 를 통과한 나라만 넣는다(§4.3). 나머지는 페이지는 있어도 색인 대상이 아니다.
+      for (const r of routes) {
+        if (r.indexableKo) out.push({ url: `${baseUrl}${countryPath("ko", r.slug)}`, lastModified: dataDate, changeFrequency: "monthly", priority: 0.8 });
+        if (r.indexableEn) out.push({ url: `${baseUrl}${countryPath("en", r.slug)}`, lastModified: dataDate, changeFrequency: "monthly", priority: 0.6 });
+      }
+      for (const slug of Object.values(CONTINENT_SLUG)) {
+        out.push({ url: `${baseUrl}${continentPath("ko", slug)}`, lastModified: dataDate, changeFrequency: "monthly", priority: 0.7 });
+        out.push({ url: `${baseUrl}${continentPath("en", slug)}`, lastModified: dataDate, changeFrequency: "monthly", priority: 0.5 });
+      }
+      for (const m of RANKING_METRICS) {
+        const slug = metricSlug(m.metricId);
+        out.push({ url: `${baseUrl}${rankingPath("ko", slug)}`, lastModified: dataDate, changeFrequency: "monthly", priority: 0.7 });
+        out.push({ url: `${baseUrl}${rankingPath("en", slug)}`, lastModified: dataDate, changeFrequency: "monthly", priority: 0.5 });
+      }
+      for (const col of CURIOSITY_COLLECTIONS) {
+        const slug = CURIOSITY_SLUG[col.id];
+        out.push({ url: `${baseUrl}${curiosityPath("ko", slug)}`, lastModified: dataDate, changeFrequency: "monthly", priority: 0.6 });
+        out.push({ url: `${baseUrl}${curiosityPath("en", slug)}`, lastModified: dataDate, changeFrequency: "monthly", priority: 0.4 });
+      }
+      return out;
+    } catch (e) {
+      console.warn("[sitemap] worldmap routes failed:", e);
+      return [];
+    }
+  })();
+
+  // 4) 동물 상세 페이지 (몽글로 : 동물도감 — 사이트 최대 고유 콘텐츠)
   const animalUrls: MetadataRoute.Sitemap = getAnimalNos().map((no) => ({
     url: `${baseUrl}/animal/${no}`,
     lastModified: now,
@@ -116,5 +163,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
     priority: 0.7,
   }));
 
-  return [...staticPages, ...articleUrls, ...animalUrls];
+  return [...staticPages, ...worldMapUrls, ...articleUrls, ...animalUrls];
 }
