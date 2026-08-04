@@ -2,6 +2,7 @@
 import { useEffect, useState } from "react";
 import { usePathname } from "next/navigation";
 import { listMyCreations, deleteCreation, type Creation } from "@/lib/userAnimals";
+import { SHOW_ANIMAL } from "@/lib/publicFlags";
 
 const T = {
   ko: {
@@ -37,6 +38,8 @@ export default function MyAnimalsSection({ uid, isOwner }: { uid: string; isOwne
 
   useEffect(() => { if (uid) listMyCreations(uid, 60).then(setItems); }, [uid]);
 
+  // ⚠️ 훅(useState·useEffect) 뒤에 둘 것 — 조기 return 앞에 훅을 추가하면 렌더가 깨진다.
+  if (!SHOW_ANIMAL) return null; // 동물도감 비공개 기간엔 프로필의 '내가 만든 동물'도 감춘다
   if (items === null) return null;
   if (items.length === 0 && !isOwner) return null;
 

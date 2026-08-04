@@ -8,6 +8,7 @@ import InsightTabs from "@/components/home/InsightTabs";
 import { getInsightFeed } from "@/lib/insightFeed";
 import { getTopTools, getAnimalCount, getOrLists } from "@/lib/homeStats";
 import { createMetadata } from "@/lib/seo";
+import { SHOW_ANIMAL } from "@/lib/publicFlags";
 
 // ⚠️영어판이 있는 페이지만 노출 — 한글 페이지로 새지 않게. (마켓·상점·커뮤니티·피드는 영어판 없어 제외)
 const SECTIONS = [
@@ -21,11 +22,11 @@ const SECTIONS = [
   { label: "Psych Tests", href: "/en/psychtest", Icon: MessagesSquare },
   { label: "Notice", href: "/en/notice", Icon: Bell },
   { label: "FAQ", href: "/en/faq", Icon: HelpCircle },
-];
+].filter((s) => SHOW_ANIMAL || s.href !== "/en/animal"); // 동물도감 비공개 시 퀵 액세스에서 제외
 
 export const metadata = createMetadata({
   title: "illo — All your AI in one place",
-  description: "Discover, compare and use AI in one place. Browse 340+ AI tools by category, compare AI model pricing with a live cost calculator, and explore AI insights, an animal encyclopedia and more.",
+  description: "Discover, compare and use AI in one place. Browse 340+ AI tools by category, compare AI model pricing with a live cost calculator, and explore AI insights, mini games and more.",
   path: "/en",
   locale: "en",
   hreflang: { ko: "/", en: "/en" },

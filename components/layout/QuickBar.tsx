@@ -9,6 +9,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { SHOW_ANIMAL } from "@/lib/publicFlags";
 import {
   PawPrint, Sparkles, PencilRuler,
   Gamepad2, Wrench, BarChart3, Newspaper, Rss, MessagesSquare,
@@ -28,12 +29,13 @@ type Group = { label: string; labelEn: string; items: Cat[] };
 
 // 추가 가능한 전체 카탈로그(그룹별)
 const CATALOG: Group[] = [
-  {
+  // 동물도감 비공개 시 '프로젝트' 그룹은 항목이 없어 통째로 제외한다(빈 그룹 방지)
+  ...(SHOW_ANIMAL ? [{
     label: "프로젝트", labelEn: "Projects",
     items: [
       { key: "animal",   label: "몽글로 : 동물도감",   short: "몽글로",   labelEn: "Monglo",     shortEn: "Monglo",  enOk: true,  href: "/animal",    Icon: PawPrint },
     ],
-  },
+  }] : []),
   {
     label: "둘러보기", labelEn: "Explore",
     items: [

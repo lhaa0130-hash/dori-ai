@@ -2,6 +2,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import type { TopTool, OrLists } from "@/lib/homeStats";
+import { SHOW_ANIMAL } from "@/lib/publicFlags";
 
 type Row = { name: string; val?: string };
 type Locale = "ko" | "en";
@@ -78,7 +79,7 @@ export default function HomeInfoStrip({
             <p className="text-[11px] font-bold text-stone-400 dark:text-stone-500 mb-2">{t.today}</p>
             <ul className="space-y-[7px]">
               <li><Link href={L("/insight")} className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-stone-700 dark:text-stone-200">{t.insight}</span><b className="text-stone-900 dark:text-white tabular-nums">{insightCount}{t.cnt}</b></Link></li>
-              {animalCount > 0 && <li><Link href={L("/animal")} className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-stone-700 dark:text-stone-200">{t.animal}</span><b className="text-stone-900 dark:text-white tabular-nums">{animalCount}{t.spec}</b></Link></li>}
+              {SHOW_ANIMAL && animalCount > 0 && <li><Link href={L("/animal")} className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-stone-700 dark:text-stone-200">{t.animal}</span><b className="text-stone-900 dark:text-white tabular-nums">{animalCount}{t.spec}</b></Link></li>}
               <li><Link href={L("/minigame")} className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-stone-700 dark:text-stone-200">{t.game}</span><span className="text-[10.5px] text-stone-400">{t.play}</span></Link></li>
               {/* 커뮤니티는 영어판이 없어 영어 모드에선 숨김 */}
               {!en && <li><Link href="/community" className="flex items-center justify-between gap-2 text-[12px] hover:text-[#F9954E] transition-colors"><span className="text-stone-700 dark:text-stone-200">{t.community}</span><span className="text-[10.5px] text-stone-400">{t.talk}</span></Link></li>}

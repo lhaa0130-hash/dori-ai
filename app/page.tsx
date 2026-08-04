@@ -7,6 +7,7 @@ import HomeInfoStrip from "@/components/home/HomeInfoStrip";
 import InsightTabs from "@/components/home/InsightTabs";
 import { getInsightFeed } from "@/lib/insightFeed";
 import { getTopTools, getAnimalCount, getOrLists } from "@/lib/homeStats";
+import { SHOW_ANIMAL } from "@/lib/publicFlags";
 
 // 퀵 액세스 — 주요 섹션 바로가기(한 줄 가로 스크롤, 다양하게)
 const SECTIONS = [
@@ -22,7 +23,7 @@ const SECTIONS = [
   { label: "프로젝트", href: "/projects", Icon: FolderKanban },
   { label: "공지사항", href: "/notice", Icon: Bell },
   { label: "FAQ", href: "/faq", Icon: HelpCircle },
-];
+].filter((s) => SHOW_ANIMAL || s.href !== "/animal"); // 동물도감 비공개 시 퀵 액세스에서 제외
 
 // 영어 홈(/en)과 hreflang 상호링크 (제목·OG는 레이아웃 기본 유지, alternates만 추가)
 export const metadata = {

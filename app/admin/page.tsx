@@ -10,7 +10,7 @@ import { adminGrantCandy, adminSetPremium } from "@/lib/cottonCandy";
 import { getAnalyticsSummary, getDailyAnalytics, getTodayStr, getAdsense, saveAdsense, type DailyAnalytics, type AdsenseData } from "@/lib/analytics";
 import { getAnimalReviewStatus, approveAnimal, rejectAnimal, resetAnimal, setRejectReason } from "@/lib/animalReview";
 import animalCardsData from "@/data/animal-cards.json";
-import type { AnimalCard } from "@/app/animal/page.client";
+import type { AnimalCard } from "@/app/_animal/page.client";
 import { ADMIN_EMAIL } from "@/lib/admin";
 
 // ─── 타입 정의 ────────────────────────────────────────────────────

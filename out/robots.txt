@@ -22,6 +22,7 @@ Disallow: /u
 Disallow: /explore
 Disallow: /suggestion
 Disallow: /help
+Disallow: /animal
 Disallow: /animal/create
 Disallow: /animal/creations
 Disallow: /games/
@@ -58,6 +59,7 @@ Disallow: /u
 Disallow: /explore
 Disallow: /suggestion
 Disallow: /help
+Disallow: /animal
 Disallow: /animal/create
 Disallow: /animal/creations
 Disallow: /games/

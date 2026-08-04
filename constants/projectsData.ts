@@ -1,4 +1,6 @@
 // 프로젝트(개발 중 프로그램) 공유 데이터 — 목록/상세 페이지 공용
+import { SHOW_ANIMAL } from "@/lib/publicFlags";
+
 export type ProjectStatus = "오픈" | "테스트 중" | "준비 중" | "기획 중";
 
 export interface ProjectFeature {
@@ -28,7 +30,7 @@ export interface ProjectItem {
   features: ProjectFeature[];
 }
 
-export const PROJECTS: ProjectItem[] = [
+const ALL_PROJECTS: ProjectItem[] = [
   {
     slug: "worldmap",
     name: "나라콕",
@@ -145,6 +147,12 @@ export const PROJECTS: ProjectItem[] = [
     ],
   },
 ];
+
+// 동물도감 비공개 기간(lib/publicFlags.ts)엔 소개 페이지 /projects/animal 도 함께 감춘다.
+// 서비스가 닫혀 있는데 "동물 탐험하기" 버튼만 남으면 죽은 링크가 된다.
+export const PROJECTS: ProjectItem[] = ALL_PROJECTS.filter(
+  (p) => SHOW_ANIMAL || p.slug !== "animal"
+);
 
 export function getProjectBySlug(slug: string): ProjectItem | undefined {
   return PROJECTS.find((p) => p.slug === slug);

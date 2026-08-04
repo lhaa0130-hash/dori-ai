@@ -9,6 +9,7 @@ import { getAllMarketPosts } from "@/lib/market-posts";
 import { getAllGuides } from "@/lib/guides";
 import fs from "fs";
 import path from "path";
+import { SHOW_ANIMAL } from "@/lib/publicFlags";
 
 export const dynamic = "force-static";
 
@@ -28,7 +29,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
   const now = new Date();
 
   // 1) 핵심 정적 페이지 (크롤 가치 높은 페이지만)
-  const staticPages: MetadataRoute.Sitemap = [
+  const staticPagesAll: MetadataRoute.Sitemap = [
     { url: `${baseUrl}/`,          lastModified: now, changeFrequency: "daily",   priority: 1.0 },
     // ⚠️ 사업 대표 페이지. 앱 본체(/ai-assistant, /ai-assistant/control-tower)는 로그인·관리자
     //    게이트라 noindex다 — 사이트맵에 넣으면 '제출된 URL에 noindex 태그' 오류가 난다.
@@ -78,6 +79,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/legal/privacy`,                changeFrequency: "monthly", priority: 0.2 },
     { url: `${baseUrl}/legal/terms`,                  changeFrequency: "monthly", priority: 0.2 },
   ];
+  // 동물도감 비공개 시 /animal·/en/animal 제외 (배열 리터럴에 직접 .filter 를 붙이면
+  // changeFrequency 가 string 으로 넓어져 타입이 깨지므로 반드시 분리해서 거른다)
+  const staticPages: MetadataRoute.Sitemap = staticPagesAll.filter(
+    (p) => SHOW_ANIMAL || !/\/animal$/.test(p.url)
+  );
 
   // 2) 아티클 페이지 수집 헬퍼 — 언어별 경로 분리(한글=/insight/article, 영어=/en/insight/article)
   type Post = { slug: string; date?: string; lang?: string; category?: string };
@@ -113,13 +119,16 @@ export default function sitemap(): MetadataRoute.Sitemap {
     console.warn("[sitemap] failed to collect articles:", e);
   }
 
-  // 3) 동물 상세 페이지 (몽글로 : 동물도감 — 사이트 최대 고유 콘텐츠)
-  const animalUrls: MetadataRoute.Sitemap = getAnimalNos().map((no) => ({
-    url: `${baseUrl}/animal/${no}`,
-    lastModified: now,
-    changeFrequency: "monthly" as const,
-    priority: 0.7,
-  }));
+  // 3) 동물 상세 페이지 — 애드센스 심사 대비로 비공개 전환(lib/publicFlags.ts). 라우트가 없으므로
+  //    사이트맵에 남기면 '제출된 URL을 찾을 수 없음(404)' 오류가 1205건 발생한다.
+  const animalUrls: MetadataRoute.Sitemap = SHOW_ANIMAL
+    ? getAnimalNos().map((no) => ({
+        url: `${baseUrl}/animal/${no}`,
+        lastModified: now,
+        changeFrequency: "monthly" as const,
+        priority: 0.7,
+      }))
+    : [];
 
   return [...staticPages, ...articleUrls, ...animalUrls];
 }

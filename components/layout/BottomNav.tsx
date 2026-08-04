@@ -6,6 +6,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import ThemeToggle from "@/components/ThemeToggle";
+import { SHOW_ANIMAL } from "@/lib/publicFlags";
 
 const ADMIN_EMAIL = "lhaa0130@gmail.com";
 
@@ -68,9 +69,12 @@ const MORE_ITEMS = [
   { name: "FAQ",       nameEn: "FAQ",       href: "/faq",       hrefEn: "/en/faq",      emoji: "❓" },
 ];
 
-const PROJECTS = [
-  { name: "몽글로 : 동물도감",  nameEn: "Monglo",  emoji: "🐾", image: "", href: "/animal", hrefEn: "/en/animal", desc: "다양한 동물을 몽글로에서", descEn: "Hundreds of animals, made for kids" },
-];
+// 동물도감 비공개 시 빈 배열 → '프로젝트' 섹션 자체가 렌더되지 않는다
+const PROJECTS = SHOW_ANIMAL
+  ? [
+      { name: "몽글로 : 동물도감",  nameEn: "Monglo",  emoji: "🐾", image: "", href: "/animal", hrefEn: "/en/animal", desc: "다양한 동물을 몽글로에서", descEn: "Hundreds of animals, made for kids" },
+    ]
+  : [];
 
 export default function BottomNav() {
   const pathname = usePathname();

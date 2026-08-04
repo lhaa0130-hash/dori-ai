@@ -8,6 +8,7 @@ import { Search, ChevronDown, ChevronRight, User, LogOut, Menu, X, MessageCircle
 import { cn } from "@/lib/utils";
 import { useRouter, usePathname } from "next/navigation";
 import SearchOverlay from "@/components/layout/SearchOverlay";
+import { SHOW_ANIMAL } from "@/lib/publicFlags";
 
 const ADMIN_EMAIL = "lhaa0130@gmail.com";
 
@@ -56,11 +57,12 @@ export default function Header() {
         },
         { name: "Insight", href: "/en/insight", emoji: "🧠" },
         { name: "Projects", href: "/en/projects", emoji: "📁" },
-        {
+        // 동물도감 비공개 시 'Kids' 그룹은 항목이 없어 통째로 숨긴다(빈 드롭다운 방지)
+        ...(SHOW_ANIMAL ? [{
           name: "Kids", emoji: "🧸", children: [
             { name: "Monglo", href: "/en/animal", emoji: "🐾" },
           ],
-        },
+        }] : []),
         {
           name: "Play", emoji: "🎡", children: [
             { name: "Mini Games", href: "/en/minigame", emoji: "🎮" },
@@ -80,11 +82,12 @@ export default function Header() {
         { name: "인사이트", href: "/insight", emoji: "🧠" },
         { name: "피드", href: "/feed", emoji: "💬" },
         { name: "마켓", href: "/market", emoji: "🛒" },
-        {
+        // 동물도감 비공개 시 '키즈' 그룹은 항목이 없어 통째로 숨긴다(빈 드롭다운 방지)
+        ...(SHOW_ANIMAL ? [{
           name: "키즈", emoji: "🧸", children: [
             { name: "몽글로 : 동물도감", href: "/animal", emoji: "🐾" },
           ],
-        },
+        }] : []),
         {
           name: "놀이터", emoji: "🎡", children: [
             { name: "미니게임", href: "/minigame", emoji: "🎮" },
@@ -94,7 +97,8 @@ export default function Header() {
       ];
 
   // 언어 토글(세그먼트): 현재 페이지의 ko/en URL을 각각 계산. 영어판 있는 페이지에서만 표시.
-  const EN_AVAILABLE = ["/", "/ai-tools", "/ai-models", "/ai-news", "/insight", "/projects", "/minigame", "/world-map", "/psychtest", "/animal", "/faq", "/notice", "/legal/about", "/legal/privacy", "/legal/terms", "/legal/contact", "/legal/copyright", "/legal/business", "/legal/youth", "/profile", "/feed", "/messages", "/shop"];
+  const EN_AVAILABLE = ["/", "/ai-tools", "/ai-models", "/ai-news", "/insight", "/projects", "/minigame", "/world-map", "/psychtest", "/animal", "/faq", "/notice", "/legal/about", "/legal/privacy", "/legal/terms", "/legal/contact", "/legal/copyright", "/legal/business", "/legal/youth", "/profile", "/feed", "/messages", "/shop"]
+    .filter((p) => SHOW_ANIMAL || p !== "/animal"); // 동물도감 비공개 시 언어토글이 없는 페이지로 가지 않게
   const koUrl = isEn ? ((pathname || "/en").replace(/^\/en/, "") || "/") : (pathname || "/");
   const enUrl = isEn ? (pathname || "/en") : (EN_AVAILABLE.includes(pathname || "") ? "/en" + pathname : null);
   const showLang = isEn || !!enUrl;

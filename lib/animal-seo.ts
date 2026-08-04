@@ -9,7 +9,7 @@
 //  - filters: 먹이·색·크기·서식지·행동·몸·지역 등 11종. 목록 필터 UI에만 쓰고 상세엔 없었다.
 // 이 둘을 끌어올리면 표현이 아니라 내용 자체가 동물마다 달라진다.
 
-import type { AnimalCard } from "@/app/animal/page.client";
+import type { AnimalCard } from "@/app/_animal/page.client";
 
 // 보전상태가 이 등급이면 제목에 함께 드러낸다(실제로 검색되는 정보이자 카드마다 다른 값).
 const THREATENED = new Set(["CR", "EN", "VU"]);

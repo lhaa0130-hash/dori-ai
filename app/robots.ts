@@ -35,6 +35,10 @@ export default function robots(): MetadataRoute.Robots {
     "/explore",
     "/suggestion",
     "/help",
+    // ⚠️ 2026-08-04 애드센스 대비 — 동물도감 전체 비공개(lib/publicFlags.ts SHOW_ANIMAL=false).
+    //    라우트를 지웠으므로 크롤러가 죽은 URL 1205개를 계속 두드리지 않게 통째로 막는다.
+    //    되살릴 때 이 세 줄 중 "/animal" 만 빼면 된다.
+    "/animal",
     "/animal/create",
     "/animal/creations",
     // 유니티 게임 원시 빌드 셸(본문 10~52자) — 플레이는 /minigame/* 래퍼로 한다.
