@@ -23,7 +23,7 @@
     "test:my-world:all": "npm test && npm run test:my-world:emulator",
     "lint": "eslint",
     "sync:data": "node scripts/worldmap/sync-country-data.mjs",
-    "verify:data": "node scripts/worldmap/verify-country-data.mjs",
+    "verify:data": "node --import ./tests/worldmap/register.mjs --test tests/worldmap/data.test.ts",
     "test:worldmap": "node --import ./tests/worldmap/register.mjs --test \"tests/worldmap/*.test.ts\"",
     "test:e2e": "playwright test",
     "audit:worldmap:ko": "node --import ./tests/worldmap/register.mjs scripts/worldmap/audit-korean.mjs"
