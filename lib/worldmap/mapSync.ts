@@ -219,6 +219,46 @@ export function combinedBounds(boxes: Array<[number, number, number, number]>): 
  */
 export const SMALL_COUNTRY_MAX_ZOOM = 5.6;
 
+// ── 지도 위 '점' 의 표시 단계 (지시서 08 §2.1) ────────────────────
+//
+// 라벨 단계와 별개다. 라벨은 이름이 몇 개 붙느냐의 문제고, 점은 "지금 이 점이
+// 무엇을 뜻하는지 사용자가 알 수 있느냐" 의 문제라 경계가 다르다.
+//
+//   overview  세계 전체가 보이는 상태 — 점을 하나도 그리지 않는다
+//   context   수도점만
+//   local     수도점 + 작은 나라 선택점
+
+export type PointStage = "overview" | "context" | "local";
+
+export const POINT_STAGE_ENTER = { context: 0.55, local: 1.3 } as const;
+
+/**
+ * 경계에서 되돌아갈 때 쓰는 여유값.
+ *
+ * ⚠️ 진입·이탈 문턱이 같으면 휠을 아주 조금만 굴려도 경계 위에서 점이 켜졌다 꺼졌다
+ *    깜빡인다. 내려오는 문턱을 조금 낮춰 한 번 켜진 점이 쉽게 꺼지지 않게 한다.
+ */
+export const POINT_STAGE_HYSTERESIS = 0.1;
+
+/**
+ * 확대량과 직전 단계로 지금 단계를 정한다.
+ *
+ * `zoomDelta` 가 null 이면(= 세계 fit zoom 을 아직 못 구했으면) overview 로 본다.
+ * 모르는 채로 점을 그리면 첫 렌더 순간 점이 번쩍 나타났다 사라진다.
+ */
+export function pointStage(zoomDelta: number | null, previous: PointStage = "overview"): PointStage {
+  if (zoomDelta == null || !Number.isFinite(zoomDelta)) return "overview";
+
+  const h = POINT_STAGE_HYSTERESIS;
+  // 이미 그 단계에 있으면 조금 낮은 값까지는 유지한다.
+  const localFloor = previous === "local" ? POINT_STAGE_ENTER.local - h : POINT_STAGE_ENTER.local;
+  const contextFloor = previous === "overview" ? POINT_STAGE_ENTER.context : POINT_STAGE_ENTER.context - h;
+
+  if (zoomDelta >= localFloor) return "local";
+  if (zoomDelta >= contextFloor) return "context";
+  return "overview";
+}
+
 export function cameraForBounds(
   bbox: [number, number, number, number],
   zoomRange: [number, number] = [0.6, 7],

@@ -9,7 +9,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import maplibregl, { type Map as MlMap, type MapGeoJSONFeature } from "maplibre-gl";
 import type { CountryRecord, SupportedLanguage } from "@/lib/worldmap/types";
-import { MapSyncController, type Camera } from "@/lib/worldmap/mapSync";
+import { MapSyncController, pointStage, type Camera, type PointStage } from "@/lib/worldmap/mapSync";
 import { type ComparisonSelection, colorFor } from "@/lib/worldmap/comparison";
 import { t } from "@/lib/worldmap/i18n";
 
@@ -172,6 +172,8 @@ export default function MapPanel({
   /** 다음 커밋의 '지도 표시' 체크박스와 이어붙일 수 있게 표시 상태를 분리해 둔다(§9.7). */
   const capitalsVisibleRef = useRef(true);
   const byIsoRef = useRef(new Map<string, CountryRecord>());
+  /** 점 표시 단계. hysteresis 때문에 직전 값이 필요하다(§2.1). */
+  const pointStageRef = useRef<PointStage>("overview");
 
   const [failed, setFailed] = useState(false);
   const [failReason, setFailReason] = useState<string | null>(null);
@@ -182,6 +184,8 @@ export default function MapPanel({
   const [overlap, setOverlap] = useState<{ x: number; y: number; list: CountryRecord[] } | null>(null);
   /** ⑨ 미니맵의 현재 보이는 범위 사각형(%) */
   const [viewBox, setViewBox] = useState<ViewBoxRect[]>([]);
+  /** 범례를 그릴지 정하려면 렌더에서도 단계를 알아야 한다(§2.5). */
+  const [pointStageState, setPointStageState] = useState<PointStage>("overview");
 
   // 콜백·데이터를 ref 로 잡아둔다. 지도는 한 번만 만들고 재생성하지 않는다.
   const onSelectRef = useRef(onSelect); onSelectRef.current = onSelect;
@@ -202,6 +206,14 @@ export default function MapPanel({
 
     const stage = labelStage(map.getZoom() - (worldBaseZoomRef.current ?? map.getZoom()));
     const minPx = STAGE_MIN_PX[stage];
+
+    // 점 단계는 라벨 단계와 따로 계산한다(지시서 08 §2.1).
+    // worldBaseZoom 을 아직 모르면 delta 를 null 로 넘겨 overview 로 처리한다 —
+    // 첫 렌더에 점이 번쩍 나타났다 사라지는 것을 막는다.
+    const delta = worldBaseZoomRef.current == null ? null : map.getZoom() - worldBaseZoomRef.current;
+    const pStage = pointStage(delta, pointStageRef.current);
+    pointStageRef.current = pStage;
+    setPointStageState(pStage);
     const { selectedCountry: sel, comparisonCountries: cmp, comparisonMode: cmpMode } = stateRef.current;
     const rankOf = new Map(cmp.map((c, i) => [c.iso3, i + 1]));
 
@@ -236,8 +248,11 @@ export default function MapPanel({
     let labels = 0;
     for (const cand of cands) {
       const name = langRef.current === "ko" ? cand.c.nameKo : cand.c.nameEn;
-      // 마커는 라벨과 별개다 — 최초 세계 보기에서도 작은 나라는 누를 수 있어야 한다.
-      const showMarker = cand.micro;
+      // 작은 나라 선택점은 local 단계에서만 그린다(지시서 08 §2.2 · §2.4).
+      //
+      // ⚠️ 이전에는 세계 보기에서도 그렸다. 그러면 유럽·카리브해·태평양에 정체를 알 수
+      //    없는 빈 원이 잔뜩 깔려 세계 윤곽보다 점이 먼저 보였다. 확대해야 나오게 한다.
+      const showMarker = cand.micro && pStage === "local";
 
       let showLabel = false;
       // 최초 세계 보기(stage 0)에서는 선택 국가조차 지도 안에 이름을 쓰지 않는다(§3.2).
@@ -252,12 +267,16 @@ export default function MapPanel({
         }
       }
 
-      if (!showMarker && !showLabel && cand.rank === null && !cand.selected) continue;
+      // overview 에서는 선택·비교 국가라도 점·번호·halo 를 만들지 않는다(§2.2).
+      // 통가·모나코처럼 작은 나라라고 예외를 두지 않는다 — 위치는 상단 선택 pill 과
+      // polygon 강조, 확대 이동으로 알린다.
+      const badge = pStage !== "overview" && (cand.rank !== null || cand.selected);
+      if (!showMarker && !showLabel && !badge) continue;
       out.push({
         iso3: cand.c.iso3, name, x: cand.x, y: cand.y,
-        rank: cand.rank,
-        color: cand.rank ? colorFor(cand.rank - 1).fill : null,
-        selected: cand.selected,
+        rank: badge ? cand.rank : null,
+        color: badge && cand.rank ? colorFor(cand.rank - 1).fill : null,
+        selected: badge && cand.selected,
         micro: cand.micro,
         showMarker, showLabel,
       });
@@ -267,7 +286,7 @@ export default function MapPanel({
     // ── 수도점 (§9.3 · §9.6) ─────────────────────────────────────
     // 세계 전체 보기에서는 숨기고, 한 단계 확대되면 보여준다.
     if (map.getLayer("capital-dot")) {
-      const show = stage > 0 && capitalsVisibleRef.current;
+      const show = pStage !== "overview" && capitalsVisibleRef.current;
       map.setLayoutProperty("capital-dot", "visibility", show ? "visible" : "none");
 
       if (show) {
@@ -379,6 +398,9 @@ export default function MapPanel({
     }
 
     mapRef.current = map;
+    // 검사용 핸들. E2E 가 "지금 프레임에 수도점이 몇 개 그려졌나" 를 물어보려면 필요하다.
+    // DOM 만 세면 MapLibre 캔버스 안의 점은 보이지 않는다.
+    (window as unknown as { __wmMap?: MlMap }).__wmMap = map;
 
     // E2E 가 카메라 연동을 실제로 관찰하려면 지도 객체에 닿아야 한다(명세서 §17.4).
     // production 번들에는 넣지 않는다.
@@ -471,7 +493,12 @@ export default function MapPanel({
       setHover(null);
     });
 
-    map.on("load", () => { worldBaseZoomRef.current = map.getZoom(); setStyleReady(true); paintOverlays(); onReady?.(); });
+    map.on("load", () => {
+      worldBaseZoomRef.current = map.getZoom();
+      // 검사용 — 세계 fit zoom. E2E 가 "휠 몇 번" 이 아니라 실제 확대량으로 단계를 맞춘다.
+      (window as unknown as { __wmBaseZoom?: number }).__wmBaseZoom = map.getZoom();
+      setStyleReady(true); paintOverlays(); onReady?.();
+    });
     map.on("webglcontextlost", () => setFailed(true));
     map.on("error", (e) => {
       if (process.env.NODE_ENV === "development") console.warn("[worldmap]", e?.error?.message);
@@ -718,6 +745,33 @@ export default function MapPanel({
               {lang === "ko" ? c.nameKo : c.nameEn}
             </button>
           ))}
+        </div>
+      )}
+
+      {/*
+        점 범례 (§2.5) — 점이 실제로 하나라도 그려질 때만 나온다.
+        overview 에는 점이 0개이므로 범례도 없다. 설명할 것이 없는데 범례만 떠 있으면
+        "그런 점이 어딘가 있나?" 하고 찾게 만든다.
+        두 종류를 색이 아니라 채움 방식(속 찬 점 / 속 빈 점) + 글자로 구분한다.
+      */}
+      {pointStageState !== "overview" && (
+        <div
+          data-role="point-legend"
+          className="pointer-events-none absolute bottom-3 left-3 z-10 flex items-center gap-3 rounded-full bg-white/90 px-3 py-1.5 text-[11px] text-[#6b625c] shadow-sm ring-1 ring-[#e4dcd4]"
+        >
+          <span className="flex items-center gap-1.5">
+            <span className="inline-block rounded-full bg-[#3f3a35]" style={{ width: 5, height: 5, boxShadow: "0 0 0 1px #fff" }} />
+            {lang === "ko" ? "수도" : "Capital"}
+          </span>
+          {pointStageState === "local" && (
+            <span className="flex items-center gap-1.5" data-role="legend-micro">
+              <span
+                className="inline-block rounded-full border border-[#5c534d] bg-white"
+                style={{ width: MICRO_CORE_PX, height: MICRO_CORE_PX }}
+              />
+              {lang === "ko" ? "작은 나라 선택" : "Small country"}
+            </span>
+          )}
         </div>
       )}
 
