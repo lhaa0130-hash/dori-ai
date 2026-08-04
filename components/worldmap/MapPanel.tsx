@@ -16,6 +16,16 @@ import { t } from "@/lib/worldmap/i18n";
 const SOURCE_ID = "countries";
 const OCEAN = "#eaf5f5";
 const LAND_DEFAULT = "#eeeae4";
+/**
+ * 195개국이 아닌 육지(그린란드·서사하라·대만·속령 등)의 색.
+ *
+ * ⚠️ 이걸 안 그리면 바다와 구분이 안 돼서 지도가 틀려 보인다. 실제로 그린란드가
+ *    통째로 비어 북대서양이 바다처럼 보였다. 대륙색보다 눈에 덜 띄는 중립 회색을 써서
+ *    "여기 육지가 있다" 는 사실만 전하고, 어느 나라 땅인지는 주장하지 않는다.
+ */
+const OTHER_LAND = "#e0dcd6";
+const OTHER_LAND_LINE = "#d0cac2";
+const OTHER_LAND_SOURCE = "other-land";
 const BORDER = "#c7beb6";
 const ACCENT = "#ff8b55";
 
@@ -329,9 +339,15 @@ export default function MapPanel({
             [SOURCE_ID]: { type: "geojson", data: geojsonUrl, promoteId: "iso3" },
             // ⑧ 수도는 점 하나만 찍는다(글씨 없음). 나라 데이터에서 만든다.
             capitals: { type: "geojson", data: capitalsGeoJson(countriesRef.current) },
+            // 195개국 밖 육지. 배경일 뿐이라 promoteId 도 클릭 대상도 없다.
+            [OTHER_LAND_SOURCE]: { type: "geojson", data: "/worldmap/other-land.geojson" },
           },
           layers: [
             { id: "ocean", type: "background", paint: { "background-color": OCEAN } },
+            // 195개국 밖 육지 — 바다 바로 위, 국가 레이어 아래.
+            // 순서가 중요하다. 국가보다 위에 두면 나라 색을 덮어버린다.
+            { id: "other-land-fill", type: "fill", source: OTHER_LAND_SOURCE, paint: { "fill-color": OTHER_LAND, "fill-opacity": 1 } },
+            { id: "other-land-line", type: "line", source: OTHER_LAND_SOURCE, paint: { "line-color": OTHER_LAND_LINE, "line-width": 0.3 } },
             // ⑦ hover 한 나라를 살짝 밝게 — 어디를 가리키는지 바로 보인다
             {
               id: "country-hover-fill",
@@ -525,9 +541,15 @@ export default function MapPanel({
         style: {
           version: 8,
           projection: { type: "mercator" },
-          sources: { [SOURCE_ID]: { type: "geojson", data: geojsonUrl, promoteId: "iso3" } },
+          sources: {
+            [SOURCE_ID]: { type: "geojson", data: geojsonUrl, promoteId: "iso3" },
+            [OTHER_LAND_SOURCE]: { type: "geojson", data: "/worldmap/other-land.geojson" },
+          },
           layers: [
             { id: "ocean", type: "background", paint: { "background-color": "#e3eef0" } },
+            // 주 지도와 같은 이유로 미니맵에도 넣는다. 미니맵에서만 그린란드가 비면
+            // "내가 보는 곳이 어디지" 를 판단하는 기준 자체가 달라진다.
+            { id: "mini-other-land", type: "fill", source: OTHER_LAND_SOURCE, paint: { "fill-color": "#dcd6ce" } },
             {
               id: "land",
               type: "fill",
