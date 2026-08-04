@@ -32,12 +32,15 @@ async function landAt(page: Page, lon: number, lat: number) {
 test("그린란드·서사하라·대만 자리에 육지가 그려진다", async ({ page }) => {
   await ready(page);
 
+  // ⚠️ 좌표는 실제로 other-land 만 있는 지점이어야 한다.
+  //    (-13, 24.5) 는 서사하라처럼 보이지만 우리 모로코 폴리곤이 덮고 있어서
+  //    other-land 가 고장 나도 country-fill 때문에 통과해 버린다.
   const places: Array<[string, number, number]> = [
     ["그린란드", -42, 72],
-    ["서사하라", -13, 24.5],
+    ["서사하라", -13.5, 23.5],
     ["대만", 121, 23.7],
     ["뉴칼레도니아", 165.5, -21.3],
-    ["코소보", 20.9, 42.6],
+    ["포클랜드", -59, -51.7],
   ];
 
   for (const [name, lon, lat] of places) {
@@ -45,7 +48,9 @@ test("그린란드·서사하라·대만 자리에 육지가 그려진다", asyn
     await page.evaluate(([lo, la]) => (window as never as { __wmMap: { jumpTo(o: unknown): void } }).__wmMap.jumpTo({ center: [lo, la], zoom: 4 }), [lon, lat]);
     await page.waitForTimeout(1600);
     const hit = await landAt(page, lon, lat);
-    expect(hit.other + hit.country, `${name} 자리가 비어 있다 — 바다로 보인다`).toBeGreaterThan(0);
+    // other-land 레이어 자체를 검사한다. country 까지 합쳐서 세면 이 레이어가
+    // 통째로 사라져도 옆 나라 폴리곤 덕에 통과한다 — 실제로 그럴 뻔했다.
+    expect(hit.other, `${name} 자리에 195개국 밖 육지가 안 그려졌다`).toBeGreaterThan(0);
   }
 });
 
