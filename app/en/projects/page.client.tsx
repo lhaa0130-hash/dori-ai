@@ -10,8 +10,30 @@ import { isAdminEmail } from "@/lib/admin";
 const ADMIN_ONLY_SLUGS = new Set(["illo"]);
 
 // 영어 텍스트 오버레이 — 구조·상태·링크는 원본 PROJECTS 재사용, 문구만 영어
-type EnText = { name: string; tag: string; status: string; desc: string; launchLabel?: string; features: { title: string; detail: string }[] };
+type EnText = {
+  name: string; tag: string; status: string; desc: string; launchLabel?: string;
+  /**
+   * 영문 전용 링크. 프로젝트에 /en/ 짝이 있으면 여기로 보낸다.
+   * ⚠️ 없으면 원본 launchHref 로 가는데, 그러면 영어로 읽던 사람이 한글 화면에 떨어진다.
+   */
+  href?: string;
+  features: { title: string; detail: string }[];
+};
 const EN: Record<string, EnText> = {
+  worldmap: {
+    name: "NARAKOK",
+    tag: "Map · Data",
+    status: "Open",
+    desc: "Tap a country on the map and meet all 195 of them",
+    launchLabel: "Open the map",
+    href: "/en/world-map",
+    features: [
+      { title: "Continents at a glance", detail: "All 195 countries, coloured by continent, on a single flat map." },
+      { title: "Tap for the facts", detail: "Capital, languages, currency, neighbours, population, area and GDP appear right away." },
+      { title: "World rankings", detail: "See who leads on area, population, forest cover and more — with the reference year and source." },
+      { title: "Compare up to four", detail: "Put four countries side by side and read the same rows for each." },
+    ],
+  },
   illo: {
     name: "Agent : AI Assistant",
     tag: "Open beta",
@@ -133,8 +155,8 @@ export default function ProjectsEnClient() {
                   </div>
 
                   <div className="px-5 pb-5">
-                    {p.launchHref && isOpen ? (
-                      <Link href={p.launchHref} className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#F9954E]/10 dark:bg-[#F9954E]/10 text-[#F9954E] text-[13px] font-extrabold transition-colors hover:bg-[#F9954E]/20">
+                    {(t.href ?? p.launchHref) && isOpen ? (
+                      <Link href={t.href ?? p.launchHref!} className="flex items-center justify-center gap-2 w-full py-3 rounded-xl bg-[#F9954E]/10 dark:bg-[#F9954E]/10 text-[#F9954E] text-[13px] font-extrabold transition-colors hover:bg-[#F9954E]/20">
                         {openLabel} <ArrowRight className="w-3.5 h-3.5" />
                       </Link>
                     ) : (
