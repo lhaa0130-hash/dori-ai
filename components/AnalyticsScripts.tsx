@@ -11,8 +11,12 @@ const CLARITY_ID = "va2qmv3mwz";
 export default function AnalyticsScripts() {
   const { session, status } = useAuth();
   const isAdmin = (session?.user?.email || "").toLowerCase() === ADMIN_EMAIL;
-  // 로그인 상태 확인 전엔 대기(잠깐), 관리자면 로드 안 함
-  if (status === "loading" || isAdmin) return null;
+  // 자동화 브라우저(Playwright·Puppeteer·Selenium 등 E2E 테스트)는 GA4·Clarity를 로드하지 않는다.
+  // navigator.webdriver=true 로 감지 — 테스트 트래픽이 방문 통계에 잡히거나 애드센스 무효 트래픽으로
+  // 오인되지 않게 한다. (예: /world-map E2E가 하루 350+ '방문'으로 집계된 사고 방지)
+  const isBot = typeof navigator !== "undefined" && navigator.webdriver === true;
+  // 로그인 상태 확인 전엔 대기(잠깐), 관리자·자동화 브라우저면 로드 안 함
+  if (status === "loading" || isAdmin || isBot) return null;
   return (
     <>
       <Script src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="lazyOnload" />
