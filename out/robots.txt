@@ -22,9 +22,6 @@ Disallow: /u
 Disallow: /explore
 Disallow: /suggestion
 Disallow: /help
-Disallow: /animal
-Disallow: /animal/create
-Disallow: /animal/creations
 Disallow: /games/
 Disallow: /en/profile
 Disallow: /en/messages
@@ -59,9 +56,6 @@ Disallow: /u
 Disallow: /explore
 Disallow: /suggestion
 Disallow: /help
-Disallow: /animal
-Disallow: /animal/create
-Disallow: /animal/creations
 Disallow: /games/
 Disallow: /en/profile
 Disallow: /en/messages

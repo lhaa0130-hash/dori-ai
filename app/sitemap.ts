@@ -63,10 +63,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/market`,    lastModified: now, changeFrequency: "weekly",  priority: 0.7 },
     { url: `${baseUrl}/animal`,    lastModified: now, changeFrequency: "daily",   priority: 0.8 },
     // 영어판 페이지(hreflang 상호연결)
-    { url: `${baseUrl}/en/psychtest`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/en/animal`, lastModified: now, changeFrequency: "weekly", priority: 0.8 },
-    { url: `${baseUrl}/en/faq`, lastModified: now, changeFrequency: "weekly", priority: 0.4 },
-    { url: `${baseUrl}/en/notice`, lastModified: now, changeFrequency: "weekly", priority: 0.4 },
+    // ⚠️ /en/psychtest·/en/animal·/en/faq·/en/notice 는 위쪽 블록에 이미 있다. 여기 또 적으면
+    //    사이트맵에 같은 URL 이 두 번 실린다(2026-08-08 실측 3건 발견). 추가 전 위를 먼저 확인할 것.
     { url: `${baseUrl}/en/legal/about`, lastModified: now, changeFrequency: "weekly", priority: 0.4 },
     { url: `${baseUrl}/en/legal/privacy`, lastModified: now, changeFrequency: "weekly", priority: 0.4 },
     { url: `${baseUrl}/en/legal/terms`, lastModified: now, changeFrequency: "weekly", priority: 0.4 },
@@ -177,5 +175,14 @@ export default function sitemap(): MetadataRoute.Sitemap {
       }))
     : [];
 
-  return [...staticPages, ...worldMapUrls, ...articleUrls, ...animalUrls];
+  // 5) 최종 중복 제거 — 같은 URL 이 두 번 실리면 Search Console 이 "중복 페이지"로 잡는다.
+  //    위 목록들이 서로 겹칠 수 있으므로(수기 관리 블록 + 자동 수집), 내보내기 직전에 한 번 거른다.
+  //    먼저 나온 항목을 남긴다.
+  const all = [...staticPages, ...worldMapUrls, ...articleUrls, ...animalUrls];
+  const seen = new Set<string>();
+  return all.filter((entry) => {
+    if (seen.has(entry.url)) return false;
+    seen.add(entry.url);
+    return true;
+  });
 }

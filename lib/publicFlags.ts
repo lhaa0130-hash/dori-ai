@@ -15,5 +15,6 @@
 //          app/_animal    → app/animal
 //          app/en/_animal → app/en/animal
 //     3) app/admin/page.tsx 와 lib/animal-seo.ts 의 `@/app/_animal/page.client` import 경로도 함께 되돌린다
-//     4) robots.ts 의 "/animal" disallow 항목을 뺀다
+//     4) robots.ts 는 손댈 것 없다 — 2026-08-08 에 "/animal" disallow 를 이미 뺐다.
+//        (막아두면 구글이 404 를 못 봐서 옛 URL 이 색인에 계속 남는 문제가 있었다. robots.ts 주석 참고)
 export const SHOW_ANIMAL = false;
