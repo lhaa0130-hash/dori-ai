@@ -1,6 +1,10 @@
-# dori-ai.com (홈페이지) — Claude Code 안내
+# illo.im (홈페이지) — Claude Code 안내
 
-이 저장소는 **dori-ai.com** 정적 사이트입니다 (Next.js 14, App Router, `output:'export'`).
+이 저장소는 **illo.im** 정적 사이트입니다 (Next.js 14, App Router, `output:'export'`).
+저장소 이름(`dori-ai`)은 옛 도메인에서 온 잔재이며, 실제 서빙 도메인은 illo.im입니다.
+
+> 🏢 **조직 설계**: 두 총괄이사(컴퓨터 2대) 체제·저장소 소유권·자동화 배치는
+> [`docs/ai-org-plan.md`](docs/ai-org-plan.md) 참조. 이 저장소는 **총괄이사1(1번 PC)** 담당입니다.
 
 ## 빌드·배포 (필수 규칙) — ⚠️ 2026-06-26 변경: **커밋 ↔ 빌드·배포 분리**
 - **소스만 커밋하라**: 바뀐 소스 파일(content/·data/·public/images 등)만 `git add <경로>` → commit → `git pull --rebase` → push.
