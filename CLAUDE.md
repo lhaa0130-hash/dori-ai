@@ -5,6 +5,11 @@
 
 > 🏢 **조직 설계**: 두 총괄이사(컴퓨터 2대) 체제·저장소 소유권·자동화 배치는
 > [`docs/ai-org-plan.md`](docs/ai-org-plan.md) 참조. 이 저장소는 **총괄이사1(1번 PC)** 담당입니다.
+>
+> 🤝 **AI 협업 분담**: ChatGPT(기획·디자인·이미지·문서) / Claude Code(메인 개발) /
+> Codex(보조 개발·코드 리뷰)의 역할과 진행 절차는
+> [`docs/ai-collab-charter.md`](docs/ai-collab-charter.md) 참조.
+> **새 이미지가 필요하면 임시 에셋으로 확정하지 말고 조건을 정리해 ChatGPT에 넘길 것**(헌장 8절).
 
 ## 빌드·배포 (필수 규칙) — ⚠️ 2026-06-26 변경: **커밋 ↔ 빌드·배포 분리**
 - **소스만 커밋하라**: 바뀐 소스 파일(content/·data/·public/images 등)만 `git add <경로>` → commit → `git pull --rebase` → push.
