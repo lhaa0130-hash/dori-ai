@@ -6,7 +6,7 @@ import { useState, useEffect } from "react";
 import { useAuth } from "@/contexts/AuthContext";
 import { cn } from "@/lib/utils";
 import ThemeToggle from "@/components/ThemeToggle";
-import { SHOW_ANIMAL } from "@/lib/publicFlags";
+import { SHOW_ANIMAL, SHOW_COMMUNITY, SHOW_PROJECTS } from "@/lib/publicFlags";
 
 const ADMIN_EMAIL = "lhaa0130@gmail.com";
 
@@ -67,7 +67,10 @@ const MORE_ITEMS = [
   { name: "마켓",      nameEn: "Market",    href: "/market",                             emoji: "🛒" },
   { name: "프로젝트",  nameEn: "Projects",  href: "/projects",  hrefEn: "/en/projects", emoji: "🚀" },
   { name: "FAQ",       nameEn: "FAQ",       href: "/faq",       hrefEn: "/en/faq",      emoji: "❓" },
-];
+  // 커뮤니티 비공개(스텁) 기간엔 더보기에서 제외 — 로그아웃 방문자가 빈 화면을 만나지 않게
+]
+  .filter((m) => SHOW_COMMUNITY || m.href !== "/community")
+  .filter((m) => SHOW_PROJECTS || m.href !== "/projects"); // '운영 중 0개' 기간도 동일
 
 // 동물도감 비공개 시 빈 배열 → '프로젝트' 섹션 자체가 렌더되지 않는다
 const PROJECTS = SHOW_ANIMAL

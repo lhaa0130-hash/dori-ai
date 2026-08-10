@@ -1,5 +1,6 @@
 import { createMetadata } from "@/lib/seo";
 import Link from "next/link";
+import { SHOW_PROJECTS } from "@/lib/publicFlags";
 
 // 공개 소개 페이지 — /ai-assistant 본체는 로그인·관리자 게이트라 noindex다.
 // 크롤러가 볼 수 있는 제품 설명은 이 페이지 하나뿐이므로 전부 서버 렌더(정적 HTML)로 둔다.
@@ -155,7 +156,11 @@ export default function AiAssistantIntroPage() {
         <nav className="text-[12px] text-stone-400 dark:text-zinc-600 mb-5">
           <Link href="/" className="hover:text-[#F9954E] transition-colors">홈</Link>
           {" › "}
-          <Link href="/projects" className="hover:text-[#F9954E] transition-colors">프로젝트</Link>
+          {/* /projects 비공개 기간엔 링크 없이 텍스트로만 둔다 — 이 페이지는 사이트맵에 있어서
+              여기서 '운영 중 0개' 페이지로 넘어가는 동선이 심사원에게 열린다 */}
+          {SHOW_PROJECTS
+            ? <Link href="/projects" className="hover:text-[#F9954E] transition-colors">프로젝트</Link>
+            : <span>프로젝트</span>}
           {" › "}
           <span className="text-stone-500 dark:text-zinc-500">AI 직원 관제탑</span>
         </nav>
@@ -356,7 +361,8 @@ export default function AiAssistantIntroPage() {
               ["/ai-models", "AI 모델 비교", "어떤 모델을 어디에 붙일지 고를 때"],
               ["/ai-tools", "AI 도구 모음", "업무별로 쓸 만한 도구 목록"],
               ["/insight", "인사이트", "AI 활용 사례와 분석 글"],
-              ["/projects", "illo 프로젝트", "illo가 만들고 운영하는 서비스들"],
+              // /projects 는 '운영 중 0개' 기간 동안 추천하지 않는다(lib/publicFlags.ts 참고)
+              ...(SHOW_PROJECTS ? [["/projects", "illo 프로젝트", "illo가 만들고 운영하는 서비스들"]] : []),
             ].map(([href, title, desc]) => (
               <li key={href}>
                 <Link

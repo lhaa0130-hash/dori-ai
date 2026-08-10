@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { SHOW_COMMUNITY } from "@/lib/publicFlags";
 
 const MENUS = [
   { emoji: "📰", label: "트렌드",  href: "/insight" },
@@ -12,7 +13,8 @@ const MENUS = [
   { emoji: "🛒", label: "마켓",    href: "/market" },
   { emoji: "🏆", label: "MY",      href: "/my" },
   { emoji: "❓", label: "FAQ",     href: "/faq" },
-];
+  // 커뮤니티 비공개 시 바로가기에서 제외(스텁이라 로그아웃 방문자엔 빈 화면)
+].filter((m) => SHOW_COMMUNITY || m.href !== "/community");
 
 export default function QuickMenu() {
   return (

@@ -9,7 +9,7 @@
 import { useEffect, useRef, useState, useCallback } from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { SHOW_ANIMAL } from "@/lib/publicFlags";
+import { SHOW_ANIMAL, SHOW_COMMUNITY } from "@/lib/publicFlags";
 import {
   PawPrint, Sparkles, PencilRuler,
   Gamepad2, Wrench, BarChart3, Newspaper, Rss, MessagesSquare,
@@ -44,7 +44,8 @@ const CATALOG: Group[] = [
       { key: "aimodels",  label: "AI 모델",    short: "AI모델",   labelEn: "AI models",  shortEn: "Models",  enOk: true,  href: "/ai-models", Icon: BarChart3 },
       { key: "insight",   label: "인사이트",   short: "인사이트", labelEn: "Insight",    shortEn: "Insight", enOk: true,  href: "/insight",   Icon: Newspaper },
       { key: "feed",      label: "피드",       short: "피드",     labelEn: "Feed",       shortEn: "Feed",    enOk: true,  href: "/feed",      Icon: Rss },
-      { key: "community", label: "커뮤니티",   short: "커뮤니티", labelEn: "Community",  shortEn: "Forum",   enOk: false, href: "/community", Icon: MessagesSquare },
+      // 커뮤니티 비공개(스텁) 기간엔 퀵바에서 제외 — 로그아웃 방문자가 빈 화면을 만나지 않게
+      ...(SHOW_COMMUNITY ? [{ key: "community", label: "커뮤니티",   short: "커뮤니티", labelEn: "Community",  shortEn: "Forum",   enOk: false, href: "/community", Icon: MessagesSquare }] : []),
       { key: "market",    label: "마켓",       short: "마켓",     labelEn: "Market",     shortEn: "Market",  enOk: false, href: "/market",    Icon: ShoppingBag },
       { key: "shop",      label: "상점",       short: "상점",     labelEn: "Shop",       shortEn: "Shop",    enOk: true,  href: "/shop",      Icon: Store },
     ],

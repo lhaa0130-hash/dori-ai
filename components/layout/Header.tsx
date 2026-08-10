@@ -8,7 +8,7 @@ import { Search, ChevronDown, ChevronRight, User, LogOut, Menu, X, MessageCircle
 import { cn } from "@/lib/utils";
 import { useRouter, usePathname } from "next/navigation";
 import SearchOverlay from "@/components/layout/SearchOverlay";
-import { SHOW_ANIMAL } from "@/lib/publicFlags";
+import { SHOW_ANIMAL, SHOW_VIDEO, SHOW_WORLDMAP, SHOW_PROJECTS } from "@/lib/publicFlags";
 
 const ADMIN_EMAIL = "lhaa0130@gmail.com";
 
@@ -56,7 +56,8 @@ export default function Header() {
           ],
         },
         { name: "Insight", href: "/en/insight", emoji: "🧠" },
-        { name: "Projects", href: "/en/projects", emoji: "📁" },
+        // '운영 중 0개' 기간엔 상단 메뉴에서 제외(lib/publicFlags.ts SHOW_PROJECTS 주석 참고)
+        ...(SHOW_PROJECTS ? [{ name: "Projects", href: "/en/projects", emoji: "📁" }] : []),
         // 동물도감 비공개 시 'Kids' 그룹은 항목이 없어 통째로 숨긴다(빈 드롭다운 방지)
         ...(SHOW_ANIMAL ? [{
           name: "Kids", emoji: "🧸", children: [
@@ -75,10 +76,12 @@ export default function Header() {
           name: "AI 정보", emoji: "🤖", children: [
             { name: "AI 도구", href: "/ai-tools", emoji: "🔧" },
             { name: "AI 소식", href: "/ai-news", emoji: "📰" },
-            { name: "AI영상", href: "/video", emoji: "🎬" },
+            // /video 비공개 시 제외 — 큐레이션 삭제 후 항상 0건이라 '준비 중' 인상만 준다
+            ...(SHOW_VIDEO ? [{ name: "AI영상", href: "/video", emoji: "🎬" }] : []),
           ],
         },
-        { name: "프로젝트", href: "/projects", emoji: "🚀" },
+        // '운영 중 0개' 기간엔 상단 메뉴에서 제외(lib/publicFlags.ts SHOW_PROJECTS 주석 참고)
+        ...(SHOW_PROJECTS ? [{ name: "프로젝트", href: "/projects", emoji: "🚀" }] : []),
         { name: "인사이트", href: "/insight", emoji: "🧠" },
         { name: "피드", href: "/feed", emoji: "💬" },
         { name: "마켓", href: "/market", emoji: "🛒" },
@@ -98,7 +101,10 @@ export default function Header() {
 
   // 언어 토글(세그먼트): 현재 페이지의 ko/en URL을 각각 계산. 영어판 있는 페이지에서만 표시.
   const EN_AVAILABLE = ["/", "/ai-tools", "/ai-models", "/ai-news", "/insight", "/projects", "/minigame", "/world-map", "/psychtest", "/animal", "/faq", "/notice", "/legal/about", "/legal/privacy", "/legal/terms", "/legal/contact", "/legal/copyright", "/legal/business", "/legal/youth", "/profile", "/feed", "/messages", "/shop"]
-    .filter((p) => SHOW_ANIMAL || p !== "/animal"); // 동물도감 비공개 시 언어토글이 없는 페이지로 가지 않게
+    // 비공개 섹션은 빼둔다 — 없는 영어판으로 언어토글이 보내면 404 가 된다
+    .filter((p) => SHOW_ANIMAL || p !== "/animal")
+    .filter((p) => SHOW_WORLDMAP || p !== "/world-map")
+    .filter((p) => SHOW_PROJECTS || p !== "/projects");
   const koUrl = isEn ? ((pathname || "/en").replace(/^\/en/, "") || "/") : (pathname || "/");
   const enUrl = isEn ? (pathname || "/en") : (EN_AVAILABLE.includes(pathname || "") ? "/en" + pathname : null);
   const showLang = isEn || !!enUrl;

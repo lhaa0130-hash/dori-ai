@@ -12,12 +12,16 @@ import { createMetadata } from "@/lib/seo";
 export const metadata = {
   metadataBase: new URL("https://illo.im"),
   ...createMetadata({
-    title: "AI 활용 방법을 함께 연구하는 커뮤니티 플랫폼",
-    description: "AI 도구·트렌드·큐레이션·분석을 매일 만나는 AI 피드 플랫폼, illo.",
+    // ⚠️ 2026-08-10 문구 정정 — 이전 문구는 "AI 도구·트렌드·큐레이션·분석을 매일 만나는
+    //    AI 피드 플랫폼"이었다. 트렌드 182편·큐레이션 110편은 2026-07-26 에 삭제했고 커뮤니티는
+    //    DB 없는 스텁이라, 없는 콘텐츠를 약속하는 문구였다. 애드센스 심사에서 사이트 설명과
+    //    실제 콘텐츠가 어긋나는 것은 그 자체로 신뢰성 감점이다. **실제 있는 것만 적는다.**
+    title: "AI 도구·모델 비교와 심층 분석을 정리하는 AI 정보 플랫폼",
+    description: "AI 도구를 카테고리별로 찾아 비교하고, 주요 AI 모델의 성능·가격을 계산하고, 기술과 시장의 변화를 직접 분석한 리포트를 읽는 곳. illo.",
     path: "/",
     keywords: [
       "AI 도구",
-      "AI 커뮤니티",
+      "AI 모델 비교",
       "인공지능",
       "AI 가이드",
       "AI 트렌드",
@@ -30,7 +34,7 @@ export const metadata = {
       "무료 AI 도구",
       "AI 뉴스",
       "AI 도구 모음",
-      "AI 교육",
+      "LLM 가격 비교",
     ],
   }),
   icons: {

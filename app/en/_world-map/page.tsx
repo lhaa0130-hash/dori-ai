@@ -1,5 +1,5 @@
 import { createMetadata } from "@/lib/seo";
-import WorldMapClient from "@/app/world-map/page.client";
+import WorldMapClient from "@/app/_world-map/page.client";
 import "maplibre-gl/dist/maplibre-gl.css";
 
 // 영문 경로. 사이트의 다른 영어 페이지(app/en/*)와 같은 방식으로 별도 라우트를 둔다.

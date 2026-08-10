@@ -4,7 +4,7 @@
 import { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Search, X } from "lucide-react";
-import { SHOW_ANIMAL } from "@/lib/publicFlags";
+import { SHOW_ANIMAL, SHOW_COMMUNITY } from "@/lib/publicFlags";
 
 type Item = { t: string; c: string; s: string };
 
@@ -13,7 +13,9 @@ const SHORTCUTS: { t: string; href: string }[] = [
   { t: "AI 도구", href: "/ai-tools" }, { t: "AI 모델", href: "/ai-models" }, { t: "미니게임", href: "/minigame" },
   { t: "몽글로 : 동물도감", href: "/animal" }, { t: "마켓", href: "/market" }, { t: "상점", href: "/shop" },
   { t: "공지사항", href: "/notice" }, { t: "FAQ", href: "/faq" }, { t: "마이페이지", href: "/profile" },
-].filter((s) => SHOW_ANIMAL || s.href !== "/animal"); // 동물도감 비공개 시 검색 바로가기에서도 제외
+]
+  .filter((s) => SHOW_ANIMAL || s.href !== "/animal") // 동물도감 비공개 시 검색 바로가기에서도 제외
+  .filter((s) => SHOW_COMMUNITY || s.href !== "/community"); // 커뮤니티 스텁 기간도 동일
 
 export default function SearchOverlay({ open, onClose }: { open: boolean; onClose: () => void }) {
   const router = useRouter();

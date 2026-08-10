@@ -1,5 +1,5 @@
 // 프로젝트(개발 중 프로그램) 공유 데이터 — 목록/상세 페이지 공용
-import { SHOW_ANIMAL } from "@/lib/publicFlags";
+import { SHOW_ANIMAL, SHOW_WORLDMAP } from "@/lib/publicFlags";
 
 export type ProjectStatus = "오픈" | "테스트 중" | "준비 중" | "기획 중";
 
@@ -148,10 +148,14 @@ const ALL_PROJECTS: ProjectItem[] = [
   },
 ];
 
-// 동물도감 비공개 기간(lib/publicFlags.ts)엔 소개 페이지 /projects/animal 도 함께 감춘다.
-// 서비스가 닫혀 있는데 "동물 탐험하기" 버튼만 남으면 죽은 링크가 된다.
+// 비공개 기간(lib/publicFlags.ts)엔 소개 페이지도 함께 감춘다. 서비스가 닫혀 있는데
+// "동물 탐험하기"·"지도 열기" 버튼만 남으면 죽은 링크가 된다.
+// ⚠️ /projects·/projects/worldmap 이 라이브에서 /world-map 을 링크하는 **유일한 두 페이지**였다
+//    (2026-08-10 out/ 전수검사). 여기를 막는 것이 심사원 동선을 끊는 핵심이다.
 export const PROJECTS: ProjectItem[] = ALL_PROJECTS.filter(
-  (p) => SHOW_ANIMAL || p.slug !== "animal"
+  (p) =>
+    (SHOW_ANIMAL || p.slug !== "animal") &&
+    (SHOW_WORLDMAP || p.slug !== "worldmap")
 );
 
 export function getProjectBySlug(slug: string): ProjectItem | undefined {

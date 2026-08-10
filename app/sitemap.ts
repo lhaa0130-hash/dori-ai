@@ -16,7 +16,7 @@ import { RANKING_METRICS } from "@/lib/worldmap/ranking";
 import { CURIOSITY_COLLECTIONS } from "@/lib/worldmap/curiosity";
 import fs from "fs";
 import path from "path";
-import { SHOW_ANIMAL } from "@/lib/publicFlags";
+import { SHOW_ANIMAL, SHOW_WORLDMAP, SHOW_VIDEO, SHOW_COMMUNITY, SHOW_PROJECTS } from "@/lib/publicFlags";
 
 export const dynamic = "force-static";
 
@@ -84,10 +84,22 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${baseUrl}/legal/privacy`,                changeFrequency: "monthly", priority: 0.2 },
     { url: `${baseUrl}/legal/terms`,                  changeFrequency: "monthly", priority: 0.2 },
   ];
-  // 동물도감 비공개 시 /animal·/en/animal 제외 (배열 리터럴에 직접 .filter 를 붙이면
-  // changeFrequency 가 string 으로 넓어져 타입이 깨지므로 반드시 분리해서 거른다)
+  // 비공개 섹션 제외 (배열 리터럴에 직접 .filter 를 붙이면 changeFrequency 가 string 으로
+  // 넓어져 타입이 깨지므로 반드시 분리해서 거른다)
+  //  - /animal·/en/animal          : 2026-08-04 비공개
+  //  - /world-map·/en/world-map    : 2026-08-10 비공개
+  //  - /video                      : 2026-08-10 비공개(큐레이션 삭제 후 항상 0건)
+  //  - /community                  : 2026-08-10 제출 중단(DB 없는 스텁, 라우트는 유지)
+  //  - /projects·/en/projects      : 2026-08-10 제출 중단('운영 중 0개' 상태, 라우트는 유지)
+  // ⚠️ `$` 앵커를 쓰므로 한 줄로 ko·en 이 함께 걸린다. 라우트가 없는데 사이트맵에 남기면
+  //    Search Console 이 '제출된 URL 을 찾을 수 없음(404)' 으로 잡는다.
   const staticPages: MetadataRoute.Sitemap = staticPagesAll.filter(
-    (p) => SHOW_ANIMAL || !/\/animal$/.test(p.url)
+    (p) =>
+      (SHOW_ANIMAL || !/\/animal$/.test(p.url)) &&
+      (SHOW_WORLDMAP || !/\/world-map$/.test(p.url)) &&
+      (SHOW_VIDEO || !/\/video$/.test(p.url)) &&
+      (SHOW_COMMUNITY || !/\/community$/.test(p.url)) &&
+      (SHOW_PROJECTS || !/\/projects$/.test(p.url))
   );
 
   // 2) 아티클 페이지 수집 헬퍼 — 언어별 경로 분리(한글=/insight/article, 영어=/en/insight/article)
@@ -129,7 +141,11 @@ export default function sitemap(): MetadataRoute.Sitemap {
   // ⚠️ `?country=KOR` 같은 쿼리 URL 은 넣지 않는다. 그건 사용자 조작 상태이지
   //    별도 문서가 아니다. 넣으면 같은 내용이 여러 주소로 색인된다.
   // ⚠️ lastmod 는 데이터 스냅샷 생성일이다. 배포할 때마다 오늘로 갱신하지 않는다.
-  const worldMapUrls: MetadataRoute.Sitemap = (() => {
+  // ⚠️ 2026-08-10 비공개(lib/publicFlags.ts SHOW_WORLDMAP). 라우트를 app/_world-map 으로 내렸으므로
+  //    여기 남기면 '제출된 URL 을 찾을 수 없음(404)' 이 456건 발생한다. 되살릴 때는 품질 gate 를
+  //    통과한 소수만 다시 넣어라 — 예전엔 사이트맵 130개 + noindex 328개 구조였고, 그 noindex 가
+  //    심사에 아무 효과가 없다는 게 2차 거절의 교훈이었다.
+  const worldMapUrls: MetadataRoute.Sitemap = !SHOW_WORLDMAP ? [] : (() => {
     try {
       const { countries, generatedAt } = loadCountryDataset();
       const dataDate = new Date(generatedAt);

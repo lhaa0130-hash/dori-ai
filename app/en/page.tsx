@@ -8,7 +8,7 @@ import InsightTabs from "@/components/home/InsightTabs";
 import { getInsightFeed } from "@/lib/insightFeed";
 import { getTopTools, getAnimalCount, getOrLists } from "@/lib/homeStats";
 import { createMetadata } from "@/lib/seo";
-import { SHOW_ANIMAL } from "@/lib/publicFlags";
+import { SHOW_ANIMAL, SHOW_PROJECTS } from "@/lib/publicFlags";
 
 // ⚠️영어판이 있는 페이지만 노출 — 한글 페이지로 새지 않게. (마켓·상점·커뮤니티·피드는 영어판 없어 제외)
 const SECTIONS = [
@@ -22,7 +22,9 @@ const SECTIONS = [
   { label: "Psych Tests", href: "/en/psychtest", Icon: MessagesSquare },
   { label: "Notice", href: "/en/notice", Icon: Bell },
   { label: "FAQ", href: "/en/faq", Icon: HelpCircle },
-].filter((s) => SHOW_ANIMAL || s.href !== "/en/animal"); // 동물도감 비공개 시 퀵 액세스에서 제외
+]
+  .filter((s) => SHOW_ANIMAL || s.href !== "/en/animal") // 동물도감 비공개 시 퀵 액세스에서 제외
+  .filter((s) => SHOW_PROJECTS || s.href !== "/en/projects"); // '운영 중 0개' 기간도 동일
 
 export const metadata = createMetadata({
   title: "illo — All your AI in one place",

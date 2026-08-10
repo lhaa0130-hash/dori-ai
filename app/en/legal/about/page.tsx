@@ -35,12 +35,14 @@ export default function EnAboutPage() {
         <li><strong>AI model comparison</strong> — compare the performance, speed and price of major
           large language models (LLMs) with live data, and estimate your costs in advance with a
           cost calculator.</li>
-        <li><strong>AI insights</strong> — from daily trend summaries to curation, in-depth analysis,
-          market reports and hand-picked video recommendations, we track where AI is heading.</li>
-        <li><strong>Animal encyclopedia</strong> — original content that presents human-reviewed
-          animal information as cards.</li>
-        <li><strong>Community and extras</strong> — a message board, psychology tests, mini games and
-          other spaces where visitors can take part and have fun.</li>
+        {/* ⚠️ 2026-08-10 정정 — 삭제된 curation·video, 비공개 전환한 동물도감, 스텁인 커뮤니티를 뺐다.
+            영문 About 도 사이트맵에 제출되는 페이지라 한글판과 같은 기준으로 실제 제공물만 적는다. */}
+        <li><strong>AI insights</strong> — over 60 in-depth analyses, market reports and practical
+          guides, each written by us at several thousand words, explaining how AI technology and
+          the market are actually moving.</li>
+        <li><strong>AI news sources</strong> — a hand-picked directory of the best places to follow
+          AI, sorted into news, newsletters, leaderboards and research.</li>
+        <li><strong>Extras</strong> — psychology tests and mini games we built ourselves.</li>
       </ul>
 
       <h2>How we create and edit content</h2>
@@ -50,8 +52,9 @@ export default function EnAboutPage() {
       </p>
       <ul>
         <li>We only cover information with a clear source, and we do not publish anything unverified.</li>
-        <li>For content where factual accuracy is critical, such as the animal encyclopedia, a
-          <strong> human reviews every entry before it goes live</strong>, and only approved items are published.</li>
+        <li>For figures where accuracy is critical, such as model performance and pricing, we
+          <strong> show the reference year and the source</strong>, and a human checks them before
+          they go live.</li>
         <li>We avoid exaggeration and clickbait, and we explain difficult jargon in plain language.</li>
         <li>When an error is found after publication, we correct it promptly.</li>
       </ul>
@@ -66,14 +69,14 @@ export default function EnAboutPage() {
       <h2>Who runs illo</h2>
       <p>
         illo is planned, produced and operated directly by the illo team. The site is at
-        <strong> www.dori-ai.com</strong> (moving to illo.im), and the illo team is responsible for
-        all content and services.
+        <strong> www.illo.im</strong> (the former address, dori-ai.com, redirects here), and the
+        illo team is responsible for all content and services.
       </p>
 
       <h2>Join us · Contact</h2>
       <p>
-        As a member you can collect cotton candy through daily check-ins, missions and mini games,
-        and share AI know-how with other users in the community. For partnerships, advertising,
+        As a member you can collect cotton candy through daily check-ins, missions and mini games.
+        For partnerships, advertising,
         error reports or any other inquiry, email us at <strong>illo@illo.im</strong> and we will
         review and reply.
       </p>
