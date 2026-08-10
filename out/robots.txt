@@ -12,7 +12,10 @@ Disallow: /_next/
 Disallow: /family
 Disallow: /illo
 Disallow: /shop
+Disallow: /community
 Disallow: /community/write
+Disallow: /projects
+Disallow: /en/projects
 Disallow: /profile
 Disallow: /messages
 Disallow: /notifications
@@ -46,7 +49,10 @@ Disallow: /_next/
 Disallow: /family
 Disallow: /illo
 Disallow: /shop
+Disallow: /community
 Disallow: /community/write
+Disallow: /projects
+Disallow: /en/projects
 Disallow: /profile
 Disallow: /messages
 Disallow: /notifications
