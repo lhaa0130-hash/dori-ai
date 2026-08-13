@@ -91,11 +91,18 @@ export const SHOW_PROJECTS = false;
 //   ▶ 라우트 회수 목록 (앞의 숫자는 정리 시점의 실측 본문 한글자수)
 //        3자   app/ai-assistant/control-tower → _control-tower   (noindex, 인바운드 0)
 //        3자   app/flat-form                  → _flat-form       (noindex, 인바운드 0)
-//        5자   app/at                         → _at              (SNS 골격 잔재)
-//        9자   app/post                       → _post            (SNS 골격 잔재)
 //       24자   app/academy                    → _academy
 //      180자   app/my-world                   → _my-world
 //      348자   app/talent                     → _talent          (noindex)
+//
+//   ⛔ /at 과 /post 는 회수했다가 **같은 날 되돌렸다. 다시는 지우지 마라.**
+//      본문 5자·9자에 인바운드 링크 0이라 죽은 페이지로 보이지만, 실제로는 public/_redirects 의
+//      rewrite 목적지다.  `/@<사용자명> → /at 200`,  `/post/<id> → /post 200`
+//      즉 개인 홈과 게시물 상세를 그리는 **단일 렌더러**이고, 경로는 클라이언트가 읽어 처리한다.
+//      정적 export 라 사전 생성이 불가능해서 이런 구조를 쓴 것이다.
+//      지우는 순간 /@사용자명 과 /post/<id> 가 전부 404 가 된다(= SNS 기능 전멸).
+//      HTML 링크를 세는 감사로는 절대 안 보인다 — rewrite 는 <a href> 로 존재하지 않는다.
+//      scripts/adsense-quality-gate.mjs 검사 6 이 이걸 배포 전에 잡도록 추가해 뒀다.
 //
 //   ▶ 미니게임 5종 — 허브(/minigame)의 링크 목록에 없어 인바운드가 0이었다. 사이트맵에도 없다.
 //        app/minigame/{dungeon, illo-tower, mart, tetris, typing} → 각각 `_` 접두어

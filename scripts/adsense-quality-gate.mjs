@@ -204,6 +204,36 @@ for (const url of sitemapUrls) {
   }
 }
 
+// ── 검사 6: _redirects 의 rewrite 목적지가 실제로 배포됐는가 ──────────────────
+// ⚠️ 2026-08-13 에 실제로 사고를 낸 항목이다. 죽은 페이지를 정리하면서 /at 과 /post 를
+//    "본문 5자·9자, 인바운드 링크 0" 이라는 이유로 회수했는데, 이 둘은 고아 페이지가 아니라
+//    **_redirects 의 rewrite 목적지**였다. `/@<사용자명> → /at`, `/post/<id> → /post` 로
+//    개인 홈과 게시물 상세를 렌더하는 단일 렌더러라, 지우는 순간 SNS 기능 전체가 404 가 됐다.
+//    HTML 링크만 세는 감사로는 절대 안 보인다 — rewrite 는 <a href> 로 존재하지 않기 때문이다.
+{
+  const redirFile = [path.join(OUT, "_redirects"), "public/_redirects"].find((f) => fs.existsSync(f));
+  if (redirFile) {
+    let n = 0;
+    for (const line of fs.readFileSync(redirFile, "utf8").split(/\r?\n/)) {
+      const m = line.match(/^\s*(\S+)\s+(\S+)\s+(\d+)\s*$/);
+      if (!m) continue;                       // 주석·빈 줄
+      const [, from, to, code] = m;
+      if (!to.startsWith("/")) continue;      // 외부 절대 URL 은 대상 밖
+      n++;
+      const rel = to.replace(/^\//, "");
+      const exists = [
+        path.join(OUT, rel),                  // /u.html 처럼 확장자가 붙은 목적지
+        path.join(OUT, rel + ".html"),        // /at 처럼 확장자 없는 pretty URL
+        path.join(OUT, rel, "index.html"),
+      ].some((c) => fs.existsSync(c));
+      if (!exists) {
+        fail.push(`[rewrite 목적지 실종] _redirects 의 "${from} → ${to} ${code}" 인데 배포물에 ${to} 가 없다 — ${from} 로 들어오는 모든 요청이 404 가 된다.`);
+      }
+    }
+    info.push(`_redirects rewrite ${n}건 목적지 확인`);
+  }
+}
+
 // ── 검사 3b(선택): 외부 인용 URL 네트워크 전수 검사 ──────────────────────────
 if (CHECK_LINKS) {
   const urls = new Map();
