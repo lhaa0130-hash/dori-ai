@@ -4,7 +4,12 @@ description: AI를 서비스에 붙이면 월 얼마가 나오는지 아무도 �
 date: 2026-08-13
 author: illo
 category: 가이드
+thumbnail: "/thumbnails/guide/guide11.png?v=1"
 tags: [AI비용, API요금, 토큰, LLM가격, 비용절감]
+---
+
+![썸네일 이미지](/thumbnails/guide/guide11.png)
+
 ---
 
 ## 들어가며: "AI 붙이면 월 얼마 나와요?"
