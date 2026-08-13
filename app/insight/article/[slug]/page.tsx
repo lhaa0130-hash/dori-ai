@@ -144,12 +144,17 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
 
   // 연관 기사용 — 트렌드·큐레이션·분석·리포트 전체 교차 추천(내부링크 강화·색인 촉진)
   const safe = (fn: () => any[]) => { try { return fn() || []; } catch { return []; } };
+  // ⚠️ 반드시 한국어 글만 남긴다. 이 목록은 아래에서 **한글 경로** `/insight/article/{slug}`
+  //    로 링크되는데, 영문 글(`*-en`)은 `/en/insight/article/` 에만 존재하므로 404 가 된다.
+  //    2026-08-13 실측: 이 누락 때문에 `analysis-15-en` 이 47개 페이지에서,
+  //    `analysis-14-en` 이 39개 페이지에서 죽은 링크로 걸려 있었다(총 8종).
+  //    /en/insight 는 `x.lang === 'en'` 으로 거르고 있다 — 여기만 빠져 있었다.
   const allPosts = [
     ...safe(getAllTrends),
     ...safe(getAllCurations),
     ...safe(getAllAnalyses),
     ...safe(getAllReports),
-  ].map((p: any) => ({
+  ].filter((p: any) => p?.lang !== "en").map((p: any) => ({
     slug: p.slug,
     title: p.title,
     thumbnail: p.thumbnail || p.thumbnail_url,

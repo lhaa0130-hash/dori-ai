@@ -2,7 +2,7 @@
 title: "출근·등교 데일리 가성비 패션 잡화 비교: 반팔티·밴딩팬츠·양말·크로스백 고르는 법"
 description: "매일 입고 들기 좋은 가성비 패션 잡화를 반팔티, 밴딩팬츠, 양말, 크로스백 중심으로 비교했습니다. 튀는 유행템보다 세탁과 코디, 출근·등교 활용도를 기준으로 골랐습니다."
 date: "2026-07-09"
-author: "DORI-AI"
+author: illo
 category: "마켓"
 thumbnail: "/thumbnails/market/market-13.jpg"
 tags: ["가성비패션", "데일리룩", "출근룩", "등교룩", "패션잡화"]

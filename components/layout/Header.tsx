@@ -105,7 +105,14 @@ export default function Header() {
     .filter((p) => SHOW_ANIMAL || p !== "/animal")
     .filter((p) => SHOW_WORLDMAP || p !== "/world-map")
     .filter((p) => SHOW_PROJECTS || p !== "/projects");
-  const koUrl = isEn ? ((pathname || "/en").replace(/^\/en/, "") || "/") : (pathname || "/");
+  // ⚠️ 영문 인사이트 기사는 슬러그가 `{한글슬러그}-en` 이다. `/en` 접두어만 벗기면
+  //    슬러그 끝의 `-en` 이 남아 존재하지 않는 한글 URL 로 보낸다.
+  //      /en/insight/article/analysis-12-en → (잘못) /insight/article/analysis-12-en → 404
+  //                                        → (맞음) /insight/article/analysis-12
+  //    2026-08-13 실측: 영문 기사 8편 전부에서 "한국어로 보기"가 404 였다.
+  const koUrl = isEn
+    ? ((pathname || "/en").replace(/^\/en/, "").replace(/^(\/insight\/article\/.+)-en$/, "$1") || "/")
+    : (pathname || "/");
   const enUrl = isEn ? (pathname || "/en") : (EN_AVAILABLE.includes(pathname || "") ? "/en" + pathname : null);
   const showLang = isEn || !!enUrl;
 

@@ -202,7 +202,7 @@ export default function MarketClient({ reviews = [] }: { reviews?: MarketReview[
       <section className="pt-8 pb-5 border-b border-stone-100 dark:border-zinc-900">
         <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-[#FBEEE7] dark:bg-[#F9954E]/10 mb-4">
           <ShoppingBag className="w-3.5 h-3.5 text-[#F9954E]" />
-          <span className="text-[11px] font-bold text-[#F9954E]">DORI 마켓</span>
+          <span className="text-[11px] font-bold text-[#F9954E]">illo 마켓</span>
         </div>
         <h1 className="text-[34px] sm:text-[44px] font-extrabold text-stone-950 dark:text-white leading-[1.12] tracking-tight mb-2 break-keep">
           무엇을 찾고 있나요?

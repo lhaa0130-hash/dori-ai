@@ -2,7 +2,7 @@
 title: "xAI·Anthropic·미 국방부·롯데이노베이트: 컴퓨트, 안보, 피지컬 AI로 이동한 돈길"
 description: "이번 주 AI 산업의 핵심은 모델 성능 경쟁보다 컴퓨트 접근권, 정부 조달, 현장형 로봇 인프라에 있었다. xAI의 데이터센터 컴퓨트 임대, 미 국방부의 기밀 AI 계약, 국내 피지컬 AI 확산을 통해 자본이 어디로 이동하는지 짚었다."
 date: "2026-07-06T11:03:16+09:00"
-author: "DORI-AI"
+author: illo
 category: "리포트"
 thumbnail: "/thumbnails/reports/report-10.jpg"
 tags: ["AI인프라", "Anthropic", "xAI", "피지컬AI", "데이터센터"]

@@ -2,7 +2,7 @@
 title: "Meta AI 클라우드 진출: AWS·Azure의 성벽을 흔드는 ‘남는 컴퓨팅’의 경제학"
 description: "Meta가 초과 AI 컴퓨팅 자원과 모델 접근권을 판매하는 클라우드 인프라 사업을 추진하고 있다. 이는 단순한 사업 확장이 아니라, AI 시대 클라우드 권력이 재편되는 신호다."
 date: "2026-07-08T14:03:02+09:00"
-author: "DORI-AI"
+author: illo
 category: "분석"
 thumbnail: "/thumbnails/analysis/analysis-13.jpg"
 tags: ["Meta", "AI클라우드", "클라우드인프라", "모델독립성", "기업AI"]

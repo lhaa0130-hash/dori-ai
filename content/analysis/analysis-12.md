@@ -2,7 +2,7 @@
 title: "OpenAI ChatGPT Go와 Anthropic 기업 공략: ‘공짜 AI’ 시대가 끝나는 이유"
 description: "AI 모델 가격 경쟁은 심해지고 있지만, AI 기업의 돈 버는 방식은 더 복잡해지고 있다. OpenAI의 저가 요금제와 광고 테스트 계획, Anthropic의 기업 시장 공략은 생성형 AI 경쟁의 중심이 성능에서 유통·신뢰·수익화로 이동하고 있음을 보여준다."
 date: "2026-07-06T14:03:20+09:00"
-author: "DORI-AI"
+author: illo
 category: "분석"
 thumbnail: "/thumbnails/analysis/analysis-12.jpg"
 tags: ["OpenAI", "Anthropic", "ChatGPT Go", "AI수익화", "기업용AI"]

@@ -2,7 +2,7 @@
 title: "학생 AI 숙제 사용 확산: 학교 규칙은 왜 따라오지 못하나"
 description: "학생들은 이미 생성형 AI를 숙제의 기본 도구로 쓰기 시작했지만, 학교의 규칙은 따라오지 못하고 있다. 이 격차는 단순한 부정행위 문제가 아니라 평가, 교사 권한, 교육 불평등을 다시 설계해야 하는 신호다."
 date: "2026-07-20T14:03:43+09:00"
-author: "DORI-AI"
+author: illo
 category: "분석"
 thumbnail: "/thumbnails/analysis/analysis-15.jpg"
 tags: ["AI교육", "생성형AI", "학교정책", "숙제", "디지털격차"]

@@ -20,6 +20,10 @@ const LINKS = [
   { label: "저작권·라이선스", labelEn: "Copyright & License", href: "/legal/copyright", enOk: true },
   { label: "청소년보호정책", labelEn: "Youth Protection", href: "/legal/youth", enOk: true },
   { label: "사업자정보", labelEn: "Business Info", href: "/legal/business", enOk: true },
+  // ⚠️ 2026-08-13 추가 — /legal/contact 가 만들어져 있는데 **어디서도 링크되지 않아
+  //    고아 페이지**였다(자기 자신·영문판 제외 인바운드 0). 애드센스는 연락처 접근성을 본다.
+  //    푸터에 mailto 는 이미 있었지만, 페이지를 두고 안 거는 건 앞뒤가 안 맞는다.
+  { label: "문의하기", labelEn: "Contact", href: "/legal/contact", enOk: true },
 ];
 
 export default function Footer() {

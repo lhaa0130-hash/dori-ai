@@ -2,7 +2,7 @@
 title: "Claude·Gemini·Runway·Suno AI 편집 스튜디오: 지방정부가 AI 접근권을 공공 인프라로 만드는 이유"
 description: "청주시가 주관하고 청주시문화산업진흥재단이 운영하는 충북콘텐츠코리아랩의 AI 편집 스튜디오는 단순한 체험 공간이 아니다. 생성형 AI가 개인 구독 상품을 넘어 지역 창작·교육·소상공인 생산성의 공공 인프라로 재정의되는 신호다."
 date: "2026-07-13T14:03:34+09:00"
-author: "DORI-AI"
+author: illo
 category: "분석"
 thumbnail: "/thumbnails/analysis/analysis-14.jpg"
 tags: ["생성형AI", "AI접근권", "지역창작자", "공공인프라", "AI전환"]

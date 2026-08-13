@@ -2,7 +2,7 @@
 title: "TSMC 투자 보도·IBM 변동성·기업 에이전트 리스크: AI 돈길이 성과 검증대로 간다"
 description: "이번 주 AI 산업의 핵심은 더 많은 모델 출시가 아니라, AI를 돌리는 비용과 보안, 반도체 공급망, 데이터센터 투자 회수 가능성으로 이동했다. TSMC의 미국 투자 논의와 IBM을 둘러싼 실적 우려, 기업 에이전트 사고 가능성은 AI 자본시장이 ‘성장 서사’에서 ‘증명 가능한 수익성’으로 넘어가고 있음을 보여준다."
 date: "2026-07-20T11:03:48+09:00"
-author: "DORI-AI"
+author: illo
 category: "리포트"
 thumbnail: "/thumbnails/reports/report-12.jpg"
 tags: ["TSMC", "AI인프라", "기업에이전트", "AI투자", "피지컬AI"]
