@@ -6,7 +6,7 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Thu, 13 Aug 2026 04:00:21 GMT</lastBuildDate>
+    <lastBuildDate>Thu, 13 Aug 2026 04:08:21 GMT</lastBuildDate>
     <item>
       <title>AI in Homework: The Race Between Students and School Regulations</title>
       <link>https://illo.im/insight/article/analysis-15-en</link>
@@ -278,14 +278,6 @@
       <category>리포트</category>
       <pubDate>Sun, 26 Apr 2026 00:00:00 GMT</pubDate>
       <description>AI 성능 경쟁이 알고리즘을 넘어 전력망·반도체·클라우드 인프라 싸움으로 번진 2026년, 그 구조와 국내 영향을 완전 분석한다.</description>
-    </item>
-    <item>
-      <title>2026년 한국인의 AI 사용 실태 분석 — 누가, 얼마나, 어떻게 쓰고 있나</title>
-      <link>https://illo.im/insight/article/analysis-01</link>
-      <guid isPermaLink="true">https://illo.im/insight/article/analysis-01</guid>
-      <category>분석</category>
-      <pubDate>Wed, 22 Apr 2026 00:00:00 GMT</pubDate>
-      <description>연령대·직군·목적별 AI 도구 사용 현황을 데이터로 분석합니다. 한국인 3,000명 설문 기반의 AI 침투 현황과 변화 트렌드를 확인해 보세요.</description>
     </item>
     <item>
       <title>AI 에이전트의 시대가 온다 — 2026년 하반기 가장 주목해야 할 기술 변화 완전 분석</title>
