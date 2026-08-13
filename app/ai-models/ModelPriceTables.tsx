@@ -47,6 +47,80 @@ const usd = (n: number) =>
 
 type Locale = "ko" | "en";
 
+// ── 용도별 실사용 시나리오 ────────────────────────────────────────────────────
+// "월 얼마 드냐"에 답하려면 기준이 하나로는 부족하다. 용도마다 토큰 모양이 완전히 다르고,
+// 그래서 **같은 모델이라도 용도가 바뀌면 비용 순위가 뒤집힌다**. 그 사실을 숫자로 보여주는 게
+// 이 표의 목적이다(검색어 "ai 모델 견적"·"ai 모델 비용"이 실제로 묻는 것).
+//   문서 요약  = 입력이 압도적 → 입력 단가가 지배한다
+//   코드 생성  = 출력이 많다   → 출력 단가가 지배한다
+//   챗봇       = 둘 다 짧지만 호출이 많다
+const SCENARIOS = [
+  { id: "chat", ko: "챗봇 서비스", en: "Chat product", inTok: 500, outTok: 300, calls: 30_000,
+    koNote: "짧게 주고받지만 호출이 많다", enNote: "short turns, high call volume" },
+  { id: "summary", ko: "문서 요약", en: "Document summarising", inTok: 8_000, outTok: 500, calls: 3_000,
+    koNote: "긴 문서를 넣고 짧게 받는다", enNote: "long input, short output" },
+  { id: "code", ko: "코드 생성", en: "Code generation", inTok: 2_000, outTok: 2_000, calls: 5_000,
+    koNote: "출력이 길어 요금이 빨리 오른다", enNote: "long output drives the bill" },
+] as const;
+
+const scenarioCost = (m: Model, s: (typeof SCENARIOS)[number]) =>
+  typeof m.pin === "number" && typeof m.pout === "number"
+    ? m.pin * ((s.calls * s.inTok) / 1_000_000) + m.pout * ((s.calls * s.outTok) / 1_000_000)
+    : null;
+
+function ScenarioTable({ rows, locale }: { rows: Model[]; locale: Locale }) {
+  const priced = rows.filter((m) => typeof m.pin === "number" && typeof m.pout === "number").slice(0, 6);
+  if (!priced.length) return null;
+  const en = locale === "en";
+  return (
+    <div className="overflow-x-auto -mx-1 px-1">
+      <table className="w-full text-[13px] border-collapse">
+        <caption className="sr-only">
+          {en ? "Monthly cost by use case for the most used AI models" : "용도별 월 예상 비용 비교"}
+        </caption>
+        <thead>
+          <tr className="text-left text-stone-500 dark:text-stone-400 border-b border-stone-200 dark:border-zinc-800">
+            <th scope="col" className="py-2 pr-3 font-semibold">{en ? "Model" : "모델"}</th>
+            {SCENARIOS.map((s) => (
+              <th key={s.id} scope="col" className="py-2 pr-3 font-semibold text-right whitespace-nowrap">
+                {en ? s.en : s.ko}
+              </th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {priced.map((m) => (
+            <tr key={m.name} className="border-b border-stone-100 dark:border-zinc-900">
+              <td className="py-2 pr-3 text-stone-900 dark:text-stone-100 font-medium">{m.name}</td>
+              {SCENARIOS.map((s) => (
+                <td key={s.id} className="py-2 pr-3 text-right tabular-nums text-stone-700 dark:text-stone-200">
+                  {usd(scenarioCost(m, s) as number)}
+                </td>
+              ))}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+function ScenarioSpec({ locale }: { locale: Locale }) {
+  const en = locale === "en";
+  return (
+    <ul className="text-[12.5px] text-stone-500 dark:text-stone-400 leading-relaxed break-keep mt-2 space-y-1">
+      {SCENARIOS.map((s) => (
+        <li key={s.id}>
+          <strong>{en ? s.en : s.ko}</strong> — {en ? s.enNote : s.koNote} (
+          {en ? "per call" : "회당"} {s.inTok.toLocaleString()} / {s.outTok.toLocaleString()}
+          {en ? " tokens" : " 토큰"}, {en ? "monthly" : "월"} {s.calls.toLocaleString()}
+          {en ? " calls" : "회"})
+        </li>
+      ))}
+    </ul>
+  );
+}
+
 function PriceTable({ rows, caption, locale }: { rows: Model[]; caption: string; locale: Locale }) {
   const priced = rows.filter((m) => monthly(m) !== null);
   if (!priced.length) return null;
@@ -135,6 +209,19 @@ export default function ModelPriceTables({ locale = "ko" }: { locale?: Locale })
       <PriceTable rows={cheap} caption="입력·출력 단가가 가장 낮은 AI 모델과 월 예상 비용" locale="ko" />
 
       <h3 className="text-[15px] font-bold text-stone-900 dark:text-white mt-8 mb-2">
+        용도별로 얼마나 다른가 — 챗봇 · 문서 요약 · 코드 생성
+      </h3>
+      <p className={p}>
+        같은 모델이라도 <strong>무엇에 쓰느냐에 따라 비용 순위가 뒤집힙니다.</strong> 문서 요약은
+        입력이 압도적이라 입력 단가가 요금을 좌우하고, 코드 생성은 출력이 길어 출력 단가가
+        지배합니다. 아래는 같은 모델을 세 가지 용도에 넣었을 때의 월 예상 비용입니다.
+      </p>
+      <div className="mt-3">
+        <ScenarioTable rows={usage} locale="ko" />
+        <ScenarioSpec locale="ko" />
+      </div>
+
+      <h3 className="text-[15px] font-bold text-stone-900 dark:text-white mt-8 mb-2">
         비용을 줄이는 실전 방법
       </h3>
       <ul className={`${p} list-disc pl-5 space-y-1.5`}>
@@ -218,6 +305,18 @@ function EnTables() {
 
       <h3 className={h3}>Cheapest AI models</h3>
       <PriceTable rows={cheap} caption="AI models with the lowest input and output pricing, with estimated monthly cost" locale="en" />
+
+      <h3 className={h3}>How much it changes by use case — chat, summarising, code</h3>
+      <p className={p}>
+        The same model <strong>changes rank depending on what you use it for.</strong> Summarising is
+        dominated by input pricing because the document goes in every call; code generation is
+        dominated by output pricing because the answers are long. Below is the same set of models
+        placed into three different workloads.
+      </p>
+      <div className="mt-3">
+        <ScenarioTable rows={usage} locale="en" />
+        <ScenarioSpec locale="en" />
+      </div>
 
       <h3 className={h3}>Practical ways to cut the bill</h3>
       <ul className={`${p} list-disc pl-5 space-y-1.5`}>

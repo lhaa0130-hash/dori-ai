@@ -76,6 +76,42 @@ export default function AiToolsClient({ locale = "ko", toolsData }: { locale?: L
         <p className="text-[13px] text-stone-400 dark:text-stone-500 break-keep">
           {tt.sub}
         </p>
+
+        {/* ⚠️ 이 도입부는 장식이 아니다. 2026-08-13 Search Console 실측에서 이 페이지가
+            "ai 도구" 19위 · "ai 툴" 44위로 **사이트에서 가장 높은 순위**였는데, H1 바로 뒤에
+            카테고리 버튼만 있고 이 페이지가 무엇인지 설명하는 문장이 하나도 없었다.
+            검색엔진에도 사람에게도 첫 문단이 필요하다. 표현은 실제 검색어를 그대로 쓴다. */}
+        {locale === "en" ? (
+          <div className="mt-4 space-y-3 text-[14px] text-stone-600 dark:text-stone-300 leading-relaxed break-keep">
+            <p>
+              The hard part of choosing an AI tool is that there are simply too many of them. This
+              directory sorts <strong>340+ AI tools by what you are trying to do</strong> — writing,
+              images, coding, video, voice, automation — and notes what each one is actually good at,
+              how far its free tier goes, and whether it offers an API.
+            </p>
+            <p>
+              If you want to start without paying, begin with the <strong>free AI picks</strong> below;
+              each entry lists the real daily limit. If cost is the deciding factor, the{" "}
+              <Link href={modelsHref} className="text-[#F9954E] hover:underline">model comparison and cost calculator</Link>{" "}
+              works out what each model would actually bill you per month.
+            </p>
+          </div>
+        ) : (
+          <div className="mt-4 space-y-3 text-[14px] text-stone-600 dark:text-stone-300 leading-relaxed break-keep">
+            <p>
+              어떤 <strong>AI 도구</strong>를 써야 할지 고를 때 가장 어려운 건 종류가 너무 많다는
+              점입니다. 이 페이지는 <strong>글쓰기·이미지·코딩·영상·목소리·자동화</strong>처럼{" "}
+              <strong>하려는 일을 기준으로</strong> AI 툴 340개를 분류해 두었습니다. 도구마다 무엇을
+              잘하는지, 무료로 어디까지 되는지, API가 있는지를 함께 적었습니다.
+            </p>
+            <p>
+              돈을 안 쓰고 시작하고 싶다면 아래 <strong>무료 AI</strong>부터 보세요 — 항목마다 하루
+              사용 한도를 실제 수치로 적어 뒀습니다. 요금이 판단 기준이라면{" "}
+              <Link href={modelsHref} className="text-[#F9954E] hover:underline">AI 모델 비교·비용 계산기</Link>
+              에서 모델별 월 청구액을 계산해 볼 수 있습니다.
+            </p>
+          </div>
+        )}
       </section>
 
       {/* ── AI 모델 랭킹 (사용량/지능/가격 3열 동시) ── */}
