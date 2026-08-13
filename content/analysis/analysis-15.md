@@ -108,6 +108,6 @@ tags: ["AI교육", "생성형AI", "학교정책", "숙제", "디지털격차"]
 
 1. WTTW, "Illinois Board of Education Issues AI Guidance Written With Help From AI" (2026-07-16) — https://news.wttw.com/2026/07/16/illinois-board-education-issues-ai-guidance-written-help-ai
 
-2. Columbia Journalism Review, "How to Develop AI Guidelines" (날짜 미상) — https://news.google.com/rss/articles/CBMirwFBVV95cUxQYmpQUHZIVWdheHo0SUE2SEs0UkpjWFladFZILVhqZ2tkZVdubXF3RjdjQXBtM1BoRzVMRnlmajQydE1ZSmpuQWoyVzNPSjdSc1RpeTlxWl8zd0g0bW1tWDFCc0cycmU1Ynl6U1NZbi1ZZlBHMkxJbTBkSGRjSVFYUFBScnF0SlJpNDZDMUN5NjdaSExy
+2. Columbia Journalism Review, "How to Develop AI Guidelines" (날짜 미상)
 
-3. GovTech, "From Principles to Practice: Actionable Blueprints for Ethical AI" (날짜 미상) — https://news.google.com/rss/articles/CBMivAFBVV95cUxNd3g3SEFzb0RiNi1rVVRrM2szaU5LTFo4VDVHUldWalVGRmVjcWhnRFpwZDJtbHlCX2plTkFRcTFRT1FVeEdLNF9MWjN5Y1FIcXNYd3VKZG1iMnh4Vmo4Z0xHN1c2V3NsbFdqem5HSFlCTnFZWkxYQ0ZWODNBY3RrazZQOVllZTFDMEdZdnU4RkQtSVV4
+3. GovTech, "From Principles to Practice: Actionable Blueprints for Ethical AI" (날짜 미상)

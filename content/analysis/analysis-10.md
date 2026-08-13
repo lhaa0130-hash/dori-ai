@@ -118,4 +118,4 @@ AI 경쟁의 병목은 점점 모델 성능에서 **전력망**으로 이동하�
 
 3. Microsoft, "2024 Environmental Sustainability Report" (**2024**) — https://www.microsoft.com/en-us/corporate-responsibility/sustainability/report
 
-4. Google, "2024 Environmental Report" (**2024**) — https://sustainability.google/reports/2024-environmental-report/
+4. Google, "2024 Environmental Report" (**2024**)

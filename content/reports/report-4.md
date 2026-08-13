@@ -90,11 +90,11 @@ AI 시장은 빠르게 성장하고 있으며, 특히 클라우드 및 AI 솔루
 
 ## 출처 및 참고
 
-1. CTech, "Full list of Israeli high-tech funding rounds in 2026" (2026년 5월 25일) — [링크](https://news.google.com/rss/articles/CBMiZ0FVX3lxTE5hV1d2c0FZTk5qeF85dGpPZE95SndRQVhRRTJySkh6NjJwNklHenJzNHFKSGlodUJndy0ydzBobVYycGt3TUxHZ1k1VC0zcTI5OVdOOXhhN0JOTWpiaTJFeEpvM24yeGs?oc=5)
-2. TechCrunch, "Google just redesigned the search box for the first time in 25 years" (2026년 5월 23일) — [링크](https://news.google.com/rss/articles/CBMipwFBVV95cUxQX0lBRWZheV9vSk1vdXlnV2Jxa29menYycVN0SS1XalhaMVV4NkRHNFBGWEx3S3Z0M1JaRktPamp2UzZMRGhMem1hT0xJenFSMGRrWnFjMGloNkt1UFpSWW9vTkJrWWtqbEtfRmFWSU1mdHZnU1dySUEwcEZ1aHpKeDlMR0RRRS02cUplQ1lWeGRNV3l2)
-3. The Motley Fool, "Top 8 AI Start-ups in 2026" (2026년 5월 24일) — [링크](https://news.google.com/rss/articles/CBMipwFBVV95cUxQX0lBRWZheV9vSk1vdXlnV2Jxa29menYycVN0SS1XalhaMVV4NkRHNFBGWEx3S3Z0M1JaRktPamp2UzZMRGhMem1hT0xJenFSMGRrWnFjMGloNkt1UFpSWW9vTkJrWWtqbEtfRmFWSU1mdHZnU1dySUEwcEZ1aHpKeDlMR0RRRS02cUplQ1lWeGRNV3l2)
-4. PhocusWire, "Travel funding deal volume hits new low in Q1 2026" (2026년 5월 23일) — [링크](https://news.google.com/rss/articles/CBMijAFBVV95cUxNSHl2dUdkTmpNRTBzNXZVYWZpb3V3UTU5ZktIWG9WWXYxQkY3Nzc1QVQ3SnNQbzRUcVd5N0lkLTRIU0NzTlAzRkNmVnJZcnV5a1lsYy1JcEVDcXlzSEFhRVdLeUZqc1lWaDRVUHFqRWlGNnNMN0tHWUJZd1ZfU2ZKSGtxaTdmalVXaGhIcA?oc=5)
-5. AI Business, "UK Launches $675 Million Fund for AI Startups" (2026년 5월 24일) — [링크](https://news.google.com/rss/articles/CBMigwFBVV95cUxNTjFhdTlUUjhNZ0h3aUdENUZwaXdRVHJjR05FbnFweXM5ZmJQaHpmbENjaXpkMHYxVjliSkxNUUJEeHBuLUxsM2NhaXQzeGlPaE1DWlR0eEc3Um1wZ00tU01jSE9SUGo1MF8ydjY4NG94aEpaMi1McVZfUTRsbUJHdlIySQ?oc=5)
+1. CTech, "Full list of Israeli high-tech funding rounds in 2026" (2026년 5월 25일)
+2. TechCrunch, "Google just redesigned the search box for the first time in 25 years" (2026년 5월 23일)
+3. The Motley Fool, "Top 8 AI Start-ups in 2026" (2026년 5월 24일)
+4. PhocusWire, "Travel funding deal volume hits new low in Q1 2026" (2026년 5월 23일)
+5. AI Business, "UK Launches $675 Million Fund for AI Startups" (2026년 5월 24일)
 
 [검색 노출 최적화]
 AI 스타트업, Google, Railway, Listen Labs, 투자, 기금, 클라우드, 혁신, 데이터 보호, 윤리.

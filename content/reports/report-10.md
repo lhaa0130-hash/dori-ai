@@ -118,4 +118,4 @@ tags: ["AI인프라", "Anthropic", "xAI", "피지컬AI", "데이터센터"]
 
 4. 파이낸셜뉴스, ""이노봇 출격"…롯데이노 '아이멤버' 기반 피지컬 AI 사업 확대" — https://www.fnnews.com/news/202601121644269067?utm_source=openai
 
-5. 뉴스핌, "뉴로메카 "휴머노이드 승부수 '제로샷 AI'…EIR에 모든 역량 집중"" — https://www.newspim.com/news/view/20260211000399?utm_source=openai
+5. 뉴스핌, "뉴로메카 "휴머노이드 승부수 '제로샷 AI'…EIR에 모든 역량 집중""

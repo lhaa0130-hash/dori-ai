@@ -104,12 +104,12 @@ tags: ["AI인프라", "NVIDIA", "Micron", "기업용AI", "데이터센터"]
 
 ## 출처 및 참고
 
-1. Reuters, "Wall St Week Ahead Investors see Micron earnings as pulse check of AI rally momentum" (**2026년 6월**) — https://news.google.com/rss/articles/CBMiywFBVV95cUxOdnV3ci1pOWNMTTVNMmJCdnNUd0FoNktlcWdWZ2ZpMHEwWGdaSXZUNWpBa093RGlDN1pMdjBFNVZybUN0NUVrSWo5cVpjRm0ySG9UcUk5dW10akRXamNuUXBDamsyM3RQRDFIUEE4S0Vvd0ltd3BVQnBCSVY5WFRDazVXOG5HaW9CZ3RqQTNzcGI2TE9r
+1. Reuters, "Wall St Week Ahead Investors see Micron earnings as pulse check of AI rally momentum" (**2026년 6월**)
 
-2. Our World in Data, "NVIDIA’s revenue from data centers and AI has grown 1,300-fold in the last 12 years" (**2026년 6월**) — https://news.google.com/rss/articles/CBMivwFBVV95cUxPRE5hTE1SS2J1VG14eWdFcnFjU2p3NGh3cjA2MnNRaFA3bFk0YzNpY20zQ2hXUm8zdFhMMFV6STFURlE1QXZ1TEZZaVBhbDNPME5kemlhVkJLdEM5d21xa3lSWTB0enllbzBOYzdnSG5KYUNrTHBEQ0RCOHpmR09zaEFTM3BZY0VrVWlHT1licnJNelFF
+2. Our World in Data, "NVIDIA’s revenue from data centers and AI has grown 1,300-fold in the last 12 years" (**2026년 6월**)
 
-3. Amazon Web Services, "AWS WAF adds AI traffic monetization capability to help content owners charge AI bots for content access" (**2026년 6월**) — https://news.google.com/rss/articles/CBMi1AFBVV95cUxON3pndFVBMG8zVldrb3VBWUJjZTFXMGFHY1lwX0RaUmQ2R2pfVlBvQ09KOVJ0YWpZd2RrcUtlblJsODRweG1RbDVoNFh6VG5nN0NjMWtpcFd0REVuZk1lVVhpN2VSUHZaS3h5UlNKaUV6ZXBpazBkY19fLTVYZW5McElmNVZtbHAtWmJIUk1oWmNWakxj
+3. Amazon Web Services, "AWS WAF adds AI traffic monetization capability to help content owners charge AI bots for content access" (**2026년 6월**)
 
-4. Modern Healthcare, "UnitedHealth’s $3B AI push has bots calling doctors" (**2026년 6월**) — https://news.google.com/rss/articles/CBMiiwFBVV95cUxNbUhjZGtmN0F4S1VCMXFEdXVhNUxFclBfVGtXbkVzcThIUG1DeUhDb0t2NUYxM19BbGU1amxGbUhhM3RxWG5sMXVTNEJqT3pDSGtYMkVNQm1GLWNUYVZzbFpteHl4bjVKUUhPdzJJYUlTVk5EZmdiOVRQZEdHT3V2bWliRk8ySS1ELXl3
+4. Modern Healthcare, "UnitedHealth’s $3B AI push has bots calling doctors" (**2026년 6월**)
 
-5. CNBC, "Databricks sales growth tops 80%, but margin are shrinking from swarm of AI agents" (**2026년 6월**) — https://news.google.com/rss/articles/CBMiqwFBVV95cUxQZEpPNTBQMW5BMmlvZFl4ZGdLZ3ptNE9fejRGczVXeXgyZEVzamNYeHFsU2cyTUdXQm9vNEhzV0xBdmpLak1OVUplTmlsREw1VWdDaTdXVmdHTmVKaHR4YUY1My1ZTEdzeVhMUVBpdkxqQ3RLUUFSTGN3ZXRXTzU5Rll6RzJXUDhlUDJKT2g0c2cxUmlw
+5. CNBC, "Databricks sales growth tops 80%, but margin are shrinking from swarm of AI agents" (**2026년 6월**)

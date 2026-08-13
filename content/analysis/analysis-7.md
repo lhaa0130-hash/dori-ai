@@ -98,10 +98,10 @@ tags: ["AI반도체", "Nvidia", "Huawei", "수출통제", "미중기술경쟁"]
 
 ## 출처 및 참고
 
-1. **Brookings**, "Ball game’s over—the US is out of the AI chip market in China" (**2026-06-19**) — https://news.google.com/rss/articles/CBMinAFBVV95cUxQOHdoMzA3Y2hoYm1lcVQ5OUhVWHpCd1FPaFdvc3ZfSzRrajc2RzFmaVRPYnhOSWJQTFpvZFg3THVhZHRiLUt0Tm52QlhYbTFKNTVpaGlCTnVwV2pDM3htbVV4cTIzYWh1WnZNU044a1dtZmlTWkNKa0xmNmhWZkpSVjQzUzJfS01LbnZuRnhXRldKaXVf
+1. **Brookings**, "Ball game’s over—the US is out of the AI chip market in China" (**2026-06-19**)
 
-2. **CEPA**, "US AI Export Controls Cause Furor" (**2026-06-19**) — https://news.google.com/rss/articles/CBMia0FVX3lxTE1DODRTRFF2bmFyaVZWS28yaUdyQmpWa0Y4SkRkX0dzOW5Yb1phWjdScUJpRm9iN25xeFdPNWluSy1iUlNTc3cycDFyY2VxVTdCbXhaTl90LU1wdHpOdTdsZ21JSUJVUlRvUFpJ
+2. **CEPA**, "US AI Export Controls Cause Furor" (**2026-06-19**)
 
-3. **The Economist**, "How Europe must respond to America’s AI warning shot" (**2026-06-19**) — https://news.google.com/rss/articles/CBMipAFBVV95cUxNYVBPdjVLNFdoUzZoZE9iUG1ZZjFweWF1cjQxSW10ME5NLVh1S3Bkc1h4RzJIb3dJU2ZGWTE4QUtSM3hiYkdaQjJnV0U5YXlSRlhWcDctOFYwMHB5UDFfSzZLRGZXeXptYlIwZkZZdjhaaFBwazF4clo4TzNPQ25hM3VkcGlINWF6ZGtqSTVUU3p1RFVk
+3. **The Economist**, "How Europe must respond to America’s AI warning shot" (**2026-06-19**)
 
-4. **CNBC**, "China pushes for AI safety as G7 summit wraps up without Beijing" (**2026-06-19**) — https://news.google.com/rss/articles/CBMiowFBVV95cUxOd3ByMm03WEQxeW10LW13RzljQW0yaThqd0xoTmFGeGhhcEUtc1ctXzFLMmZjSk5CYUtIdzlEbVpZUlNJcV82UlZJNTJYMVRYeXVjbkFDZXZEeEMtNVdJZG85NEhzVmllajZBMWVEYWZ5bHl4amt2OU94OEJsYW9ZR1o2RlFPUjVtOENNeWI1eE0zclZq
+4. **CNBC**, "China pushes for AI safety as G7 summit wraps up without Beijing" (**2026-06-19**)

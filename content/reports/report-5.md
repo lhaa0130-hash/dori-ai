@@ -104,12 +104,12 @@ tags: ["AI에이전트", "AI인프라", "기업AI", "AI투자", "피지컬AI"]
 
 ## 출처 및 참고
 
-1. WSJ, "Exclusive | Databricks Releases General AI Agents for Businesses" (**2026년 6월 17일**) — https://news.google.com/rss/articles/CBMimAFBVV95cUxPY21LZG10Wjdsd2g0RDdRbm1ZaU81M1E0MUszaXJmOE02QkFEeVluNklUQ3BjVU91c2lYTWZTU0dsZkZEY3ZHaVFibFlOaXBMSFFhMUl1N3RHbk9WWUk4bWwyenpsYVk3cFRPVUk3bWJJajhGVFoxM09TZHRqUVlTc3poR2ZwTjN2RVcyNV8tU081bkRx
+1. WSJ, "Exclusive | Databricks Releases General AI Agents for Businesses" (**2026년 6월 17일**)
 
-2. Bloomberg Tax, "Anthropic CEO Floats Tax on AI Firms to Fund Universal Income" (**2026년 6월 17일**) — https://news.google.com/rss/articles/CBMivwFBVV95cUxOY09kanRXUHdmLW9NQS1MbFBwT3JIUTh1S3Q3WEotUXV1cThLQ1hBLXU0RmlNOUpHM2VXM1BSVTZtM21XSERPaE1YczIydE9BWUViWmtoMS0yTUpKNEZkQ25vR2VGcHlqM2xoYS15czJoWEFLaEVDTmE1clNpRlZRdFZIZVR2UGxhSmMzRWItV1cxQ1pv
+2. Bloomberg Tax, "Anthropic CEO Floats Tax on AI Firms to Fund Universal Income" (**2026년 6월 17일**)
 
-3. Reuters, "Oracle's AI spending blows past estimates, raising worries over growing debt" (**2026년 6월 17일**) — https://news.google.com/rss/articles/CBMilwFBVV95cUxNQlVzRm94YkVRaVFDQWVGN2dKZUhOMGIwVUI0dFlBZW5mZm5Ed0xzaWpMdXBKZUdRV0ZTd2tVR09Ddmo1YXl2SWtzazZQRGpnTExHYUZNb0oxX2xzeEloVU1mMVJuS29jTXpwOW9nLURVTFZ6S0d0VEhOZWU2SnpEdjlLcUxWNHJCUVphTUJrZUVmYU9F
+3. Reuters, "Oracle's AI spending blows past estimates, raising worries over growing debt" (**2026년 6월 17일**)
 
-4. Our World in Data, "NVIDIA’s revenue from data centers and AI has grown 1,300-fold in the last 12 years" (**2026년 6월 17일**) — https://news.google.com/rss/articles/CBMivwFBVV95cUxPRE5hTE1SS2J1VG14eWdFcnFjU2p3NGh3cjA2MnNRaFA3bFk0YzNpY20zQ2hXUm8zdFhMMFV6STFURlE1QXZ1TEZZaVBhbDNPME5kemlhVkJLdEM5d21xa3lSWTB0enllbzBOYzdnSG5KYUNrTHBEQ0RCOHpmR09zaEFTM3BZY0VrVWlHT1licnJNelFF
+4. Our World in Data, "NVIDIA’s revenue from data centers and AI has grown 1,300-fold in the last 12 years" (**2026년 6월 17일**)
 
-5. TechCrunch, "Jedify raises $24M to help companies arm AI agents with context on their business" (**2026년 6월 17일**) — https://news.google.com/rss/articles/CBMitgFBVV95cUxQSjN3dmYwT0dNWkNrZ0h3dlFLWTZyaTFTS2JoaVFCY1VuMktzeExwNzU4THFEOU1mUEx1NkxSa2J1Qkt0bjM0SXBVaEROSXJuUUl0d2plYk5ZTWx4Qy1wdXRDOW0zLWVfdVctTVEtb2wtaHlIVFpaY3VZZFRLeU9ib2lrdjltRXIwV0FyemFSNmJqSDF1
+5. TechCrunch, "Jedify raises $24M to help companies arm AI agents with context on their business" (**2026년 6월 17일**)
