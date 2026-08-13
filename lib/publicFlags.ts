@@ -80,3 +80,50 @@ export const SHOW_COMMUNITY = false;
 //       ① ADMIN_ONLY_SLUGS 에서 "illo" 를 빼서 실제 운영 중인 대리인:AI비서를 노출 → "운영 중 1개"
 //       ② 나라콕을 사람이 편집한 소수 국가로 재공개하면 자동으로 "운영 중" 항목이 돌아온다
 export const SHOW_PROJECTS = false;
+
+// ─────────────────────────────────────────────────────────────────────────────
+// [죽은 페이지 일괄 정리]  2026-08-13
+//   배포된 181개 페이지를 4개 축(본문 길이 / 사이트맵 포함 / robots 차단 / 인바운드 링크)으로
+//   전수 분류한 결과, **어디서도 링크되지 않고 robots 로도 막히지 않은** 페이지들이 나왔다.
+//   심사원이 URL 을 직접 치거나 사이트 구조를 훑다가 도달할 수 있는 자리라, 전부 라우트를 회수했다.
+//   플래그가 아니라 `_` 접두어 rename 이므로 **접두어만 지우면 그대로 복구된다.**
+//
+//   ▶ 라우트 회수 목록 (앞의 숫자는 정리 시점의 실측 본문 한글자수)
+//        3자   app/ai-assistant/control-tower → _control-tower   (noindex, 인바운드 0)
+//        3자   app/flat-form                  → _flat-form       (noindex, 인바운드 0)
+//        5자   app/at                         → _at              (SNS 골격 잔재)
+//        9자   app/post                       → _post            (SNS 골격 잔재)
+//       24자   app/academy                    → _academy
+//      180자   app/my-world                   → _my-world
+//      348자   app/talent                     → _talent          (noindex)
+//
+//   ▶ 미니게임 5종 — 허브(/minigame)의 링크 목록에 없어 인바운드가 0이었다. 사이트맵에도 없다.
+//        app/minigame/{dungeon, illo-tower, mart, tetris, typing} → 각각 `_` 접두어
+//      ⚠️ 나머지 18종(허브에서 링크되는 것)은 **그대로 둔다**. 캔버스 게임이라 본문 글자수는
+//         적지만 실제로 동작하는 기능이고, 애드센스 품질 게이트도 THIN_ALLOWED 로 예외 처리한다.
+//      ▶ 복구할 때는 접두어를 지우는 것으로 끝내지 말고 **허브 목록에 반드시 링크를 추가**해라.
+//         링크 없이 되살리면 지금과 똑같은 고아 페이지가 된다.
+//
+//   ▶ 함께 정리한 것
+//      · public/flatform-app/  → _archive/flatform-app/   (/_flat-form 이 iframe 으로만 쓰던 정적 앱.
+//                                 public 밖으로 빼서 배포에서 제외. 복구는 public/ 으로 되돌리면 끝)
+//      · components/home/MiniGameSection.tsx  삭제 — 어디서도 렌더링되지 않는 죽은 컴포넌트였고,
+//                                 하필 지금 회수한 /minigame/typing 을 링크하고 있었다.
+//      · public/thumbnails/{trend,video,curation}  삭제 (300장·48MB) — 7/26 에 지운 섹션의 잔여 이미지.
+//                                 실제로 쓰이던 1장(trend/report-01.png)만 thumbnails/reports/ 로 옮기고
+//                                 content/reports/report-01.md 의 경로도 함께 고쳤다.
+//      · content/projects/ (6편)·app/robots.txt.bak  삭제 — 이미 404 이거나 빌드에 안 들어가던 잔재.
+//
+//   ▶ public/ 안의 고아 정적 파일도 함께 정리 (라우트가 아니라서 app/ 만 봐서는 안 보인다)
+//      · public/talent/index.html  삭제 — app/talent 를 회수해도 이게 그대로 /talent 를 서빙했다.
+//        348자에 참조 0곳, robots 로도 안 막혀 있어 **심사원이 도달 가능한 상태였다.**
+//      · public/games/boss/        삭제 (41MB) — 어떤 라우트도 참조하지 않는 유니티 빌드.
+//        (/minigame/boss 가 쓰는 건 boss-clicker 다. 이름이 비슷해 남아 있던 것으로 보인다)
+//      · public/games/illo-tower/  삭제 (33MB) — 위에서 회수한 _illo-tower 전용.
+//        ▶ _illo-tower 를 되살릴 때 이것도 같이 복구해야 게임이 뜬다.
+//      ⛔ public/games 의 나머지 6종(boss-clicker·cute-2048·galaxy-merge·gem-match·quick-draw·
+//         tower-def)은 살아있는 /minigame/* 이 iframe 으로 쓴다. 지우면 게임이 깨진다.
+//
+//      ▶ 삭제분 복구:  git checkout <이 커밋의 직전 해시> -- <경로>
+//
+//   ⛔ /google4467f118f8497801 은 본문 0자지만 **절대 지우지 마라** — 서치 콘솔 소유권 확인 파일이다.
