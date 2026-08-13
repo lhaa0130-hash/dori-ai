@@ -229,6 +229,13 @@ for (const url of sitemapUrls) {
       if (!exists) {
         fail.push(`[rewrite 목적지 실종] _redirects 의 "${from} → ${to} ${code}" 인데 배포물에 ${to} 가 없다 — ${from} 로 들어오는 모든 요청이 404 가 된다.`);
       }
+      // 목적지에 .html 을 붙이면 Cloudflare Pages 가 pretty URL 로 308 리디렉션하면서
+      // **원본 경로가 통째로 날아간다.** 200 rewrite 의 목적(원본 URL 유지)이 무너지고,
+      // 경로를 읽어 렌더하는 클라이언트는 무엇을 그려야 할지 알 수 없게 된다.
+      // 2026-08-13 에 /u/* → /u.html 이 실제로 이 상태였다(/u/illo/demo → 308 → /u).
+      if (code === "200" && /\.html$/.test(to)) {
+        fail.push(`[rewrite 목적지가 .html] _redirects 의 "${from} → ${to} 200" — Cloudflare Pages 가 ${to.replace(/\.html$/, "")} 로 308 리디렉션해 원본 경로가 사라진다. 확장자를 뺀 pretty URL 로 바꿔라.`);
+      }
     }
     info.push(`_redirects rewrite ${n}건 목적지 확인`);
   }
