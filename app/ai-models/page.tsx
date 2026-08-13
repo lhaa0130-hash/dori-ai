@@ -1,5 +1,6 @@
 import { createMetadata } from "@/lib/seo";
 import AiModelsClient from "./AiModelsClient";
+import ModelPriceTables from "./ModelPriceTables";
 
 const SITE = "https://illo.im";
 
@@ -42,6 +43,9 @@ export default function Page() {
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqLd) }} />
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(appLd) }} />
       <AiModelsClient />
+      {/* ⚠️ 계산기는 클라이언트 렌더라 정적 HTML 에 모델명·가격이 하나도 안 남는다.
+          같은 데이터를 빌드 타임에 읽어 표로 서버 렌더링해야 검색엔진이 읽을 수 있다. */}
+      <ModelPriceTables />
     </>
   );
 }

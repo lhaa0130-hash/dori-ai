@@ -55,8 +55,13 @@ function bodyText(html) {
     .replace(/<style[\s\S]*?<\/style>/gi, " ")
     .replace(/<svg[\s\S]*?<\/svg>/gi, " ")
     .replace(/<head[\s\S]*?<\/head>/gi, " ");
-  const m = h.match(/<main[\s\S]*?<\/main>/i);
-  if (m) h = m[0];
+  // ⚠️ `<main>` 이 중첩된 페이지가 있다(레이아웃의 <main> 안에 클라이언트 컴포넌트가 또 <main>).
+  //    비탐욕 매칭은 **첫 </main> 에서 끊겨** 그 뒤 서버 렌더링 콘텐츠를 통째로 놓친다.
+  //    2026-08-13 /ai-models 에서 실제로 겪었다(본문을 1,900자 넘게 넣었는데 374자로 측정됨).
+  //    첫 <main> 부터 **마지막** </main> 까지를 본문으로 본다.
+  const start = h.search(/<main[\s>]/i);
+  const end = h.lastIndexOf("</main>");
+  if (start >= 0 && end > start) h = h.slice(start, end);
   return h.replace(/<[^>]+>/g, " ").replace(/&[a-z]+;|&#\d+;/gi, " ").replace(/\s+/g, " ").trim();
 }
 
