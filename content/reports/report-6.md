@@ -4,7 +4,7 @@ description: "이번 주 AI 산업의 초점은 모델 성능보다 자본 지�
 date: "2026-06-22T11:03:10+09:00"
 author: "illo"
 category: "리포트"
-thumbnail: "/thumbnails/reports/report-6.jpg?v=2""/thumbnails/reports/report-6.jpg"
+thumbnail: "/thumbnails/reports/report-6.jpg?v=2"
 tags: ["AI인프라", "NVIDIA", "Micron", "기업용AI", "데이터센터"]
 ---
 

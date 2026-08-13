@@ -4,7 +4,7 @@ description: "미국 주정부와 지방정부가 복지, 의료, 교육 행정�
 date: "2026-06-22T14:02:38+09:00"
 author: "illo"
 category: "분석"
-thumbnail: "/thumbnails/analysis/analysis-8.jpg?v=2""/thumbnails/analysis/analysis-8.jpg"
+thumbnail: "/thumbnails/analysis/analysis-8.jpg?v=2"
 tags: ["공공AI", "복지자동화", "AI거버넌스", "고위험AI", "행정자동화"]
 ---
 

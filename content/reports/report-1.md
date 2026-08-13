@@ -4,7 +4,7 @@ description: "이번 주 AI 산업에서 중요한 투자 및 혁신 사건들�
 date: "2026-05-21"
 author: "illo"
 category: "리포트"
-thumbnail: "/thumbnails/reports/report-1.jpg?v=2""/thumbnails/reports/report-1.jpg"
+thumbnail: "/thumbnails/reports/report-1.jpg?v=2"
 tags: ["AI", "투자", "스타트업", "기술 혁신"]
 ---
 
