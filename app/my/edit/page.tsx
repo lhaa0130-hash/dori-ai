@@ -19,7 +19,7 @@ export default function EditRedirectPage() {
   const t = T[isEn ? "en" : "ko"];
   useEffect(() => {
     // ?edit=1 → 코지홈이 열리면서 꾸미기(편집) 패널을 자동으로 펼친다.
-    router.replace(isEn ? "/en/profile?edit=1" : "/profile?edit=1");
+    router.replace(isEn ? "/en/my-world?tab=profile" : "/my-world?tab=profile");
   }, [router, isEn]);
   return (
     <main className="w-full min-h-screen flex flex-col items-center justify-center">

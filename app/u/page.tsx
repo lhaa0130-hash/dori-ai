@@ -97,7 +97,7 @@ export default function AIHostPage() {
         <p className="text-[13px] text-stone-500 dark:text-stone-400 mb-6 leading-relaxed">
           주소가 바뀌었거나 삭제된 AI일 수 있어요.<br />나만의 AI를 만들어 자랑해보세요!
         </p>
-        <Link href="/profile" className="px-5 py-3 rounded-full bg-[#F9954E] text-white font-bold text-[14px] active:opacity-85">
+        <Link href="/my-world" className="px-5 py-3 rounded-full bg-[#F9954E] text-white font-bold text-[14px] active:opacity-85">
           🤖 내 AI 자랑하러 가기
         </Link>
       </main>
@@ -122,7 +122,7 @@ export default function AIHostPage() {
             )}
             <div>
               <h1 className="text-[18px] font-black text-stone-900 dark:text-white leading-tight">{p.name}의 AI 모음</h1>
-              <Link href={`/profile?uid=${p.uid}`} className="text-[12px] font-semibold text-[#F9954E]">코지홈 가기 →</Link>
+              <Link href={`/@${p.handle}`} className="text-[12px] font-semibold text-[#F9954E]">공개 홈 가기 →</Link>
             </div>
           </div>
           {p.myAIs.length === 0 ? (
@@ -266,7 +266,7 @@ export default function AIHostPage() {
         <div className="mt-8 p-6 rounded-2xl bg-gradient-to-br from-[#FBAA60]/15 to-[#F9954E]/5 border border-[#F9954E]/20 text-center">
           <p className="text-[14px] font-extrabold text-stone-900 dark:text-white mb-1">나도 내가 만든 AI 자랑하기 🤖</p>
           <p className="text-[12px] text-stone-500 dark:text-stone-400 mb-4">illo에서 무료로 나만의 AI 소개 페이지를 만들어요</p>
-          <Link href="/profile" className="inline-block px-5 py-2.5 rounded-full bg-[#F9954E] text-white font-bold text-[13px] active:opacity-85">
+          <Link href="/my-world" className="inline-block px-5 py-2.5 rounded-full bg-[#F9954E] text-white font-bold text-[13px] active:opacity-85">
             내 AI 페이지 만들기 →
           </Link>
         </div>

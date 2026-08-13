@@ -932,18 +932,18 @@ function ResultActions({ card, badge, allowBadge }: { card: CardData; badge: Omi
               disabled={saveState === "saving" || saveState === "saved"}
               className="flex items-center justify-center gap-1.5 py-3 rounded-2xl bg-stone-100 dark:bg-zinc-900 text-stone-700 dark:text-stone-200 text-[13.5px] font-bold active:opacity-70 transition-opacity"
             >
-              {saveState === "saved" ? <><Check className="w-4 h-4 text-emerald-500" /> 저장됨</> : <><BookmarkPlus className="w-4 h-4" /> 코지홈에 저장</>}
+              {saveState === "saved" ? <><Check className="w-4 h-4 text-emerald-500" /> 저장됨</> : <><BookmarkPlus className="w-4 h-4" /> 마이월드에 저장</>}
             </button>
           )}
         </div>
         {saveState === "saved" && (
           <p className="text-center text-[12px] text-stone-500 dark:text-stone-400 mt-2">
-            내 <Link href="/profile" className="font-bold text-[#F9954E]">코지홈 프로필</Link>에 결과 뱃지가 추가됐어요.
+            내 <Link href="/my-world" className="font-bold text-[#F9954E]">마이월드</Link>에 결과 뱃지가 추가됐어요.
           </p>
         )}
         {saveState === "login" && (
           <p className="text-center text-[12px] text-stone-500 dark:text-stone-400 mt-2">
-            <Link href="/login?next=/psychtest" className="font-bold text-[#F9954E]">로그인</Link>하면 결과를 코지홈에 저장할 수 있어요.
+            <Link href="/login?next=/psychtest" className="font-bold text-[#F9954E]">로그인</Link>하면 결과를 마이월드에 저장할 수 있어요.
           </p>
         )}
         {saveState === "fail" && <p className="text-center text-[12px] text-rose-500 mt-2">저장에 실패했어요. 잠시 후 다시 시도해 주세요.</p>}

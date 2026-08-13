@@ -53,7 +53,7 @@ const T = {
     reject: "거절",
     addFriend: "친구 추가",
     noAddable: "추가할 수 있는 대화 상대가 없어요.",
-    addFriendHint: "다른 회원의 코지홈(프로필)에서도 친구 추가할 수 있어요.",
+    addFriendHint: "다른 회원의 공개 홈(@아이디)에서도 친구 추가할 수 있어요.",
     myFriends: "내 친구",
     noFriends: "아직 친구가 없어요.",
     chatBtn: "대화",

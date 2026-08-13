@@ -14,10 +14,13 @@ import { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
 import {
   getProfileByHandle, currentUid, getSocialCounts, getVisitStats, listFriends, listPublicPostsByUser,
+  getProfile, isFollowing, followUser, unfollowUser, isFriend, sendFriendRequest,
   type Profile, type FeedPost,
 } from "@/lib/social";
 import { bgGradOf } from "@/lib/shopItems";
 import PublicWorldCard from "@/components/my-world/PublicWorldCard";
+import GuestbookCard from "@/components/my-world/GuestbookCard";
+import GameRecordsCard from "@/components/my-world/GameRecordsCard";
 
 type Stats = { followers: number; following: number; posts: number; friends: number; visitors: number; works: number };
 type View =
@@ -29,7 +32,7 @@ type HomeTab = "home" | "posts" | "works" | "ai" | "guestbook";
 const TABS: { id: HomeTab; label: string }[] = [
   { id: "home", label: "홈" },
   { id: "posts", label: "게시물" },
-  { id: "works", label: "작품" },
+  { id: "works", label: "기록" },
   { id: "ai", label: "AI" },
   { id: "guestbook", label: "방명록" },
 ];
@@ -76,6 +79,13 @@ export default function AtHomePage() {
   const [tabLoading, setTabLoading] = useState(false);
   const [tabHasMore, setTabHasMore] = useState(true);
   const [tabLoaded, setTabLoaded] = useState(false);
+
+  // 소셜 액션(2026-08-14) — 팔로우·친구·메시지. lib/social 에 이미 있던 함수를 연결만 했다.
+  const [meUid, setMeUid] = useState<string | null>(null);
+  const [following, setFollowing] = useState(false);
+  const [friend, setFriend] = useState<"none" | "requested" | "friend">("none");
+  const [busy, setBusy] = useState<"" | "follow" | "friend">("");
+  const [actionMsg, setActionMsg] = useState<string | null>(null);
 
   const loadTabPosts = useCallback(async (uid: string, cursor?: number) => {
     setTabLoading(true);
@@ -151,6 +161,55 @@ export default function AtHomePage() {
       loadTabPosts(view.profile.uid);
     }
   }, [tab, view, tabLoaded, tabLoading, loadTabPosts]);
+
+  // 내 로그인 상태와 상대와의 관계(팔로우·친구)를 읽어 버튼 모양을 정한다.
+  useEffect(() => {
+    if (view.kind !== "profile") return;
+    const target = view.profile.uid;
+    let alive = true;
+    setMeUid(currentUid());
+    if (!currentUid() || view.isOwner) return;
+    Promise.all([
+      isFollowing(target).catch(() => false),
+      isFriend(target).catch(() => false),
+    ]).then(([f, fr]) => {
+      if (!alive) return;
+      setFollowing(f);
+      setFriend(fr ? "friend" : "none");
+    });
+    return () => { alive = false; };
+  }, [view]);
+
+  const onFollow = useCallback(async () => {
+    if (view.kind !== "profile" || busy) return;
+    const me = currentUid();
+    if (!me) return;
+    setBusy("follow");
+    setActionMsg(null);
+    try {
+      const myName = (await getProfile(me).catch(() => null))?.name || "회원";
+      const ok = following
+        ? await unfollowUser(view.profile.uid)
+        : await followUser(view.profile.uid, view.profile.name, myName);
+      if (ok) setFollowing(!following);
+      else setActionMsg("잠시 후 다시 시도해 주세요.");
+    } finally { setBusy(""); }
+  }, [view, busy, following]);
+
+  const onFriend = useCallback(async () => {
+    if (view.kind !== "profile" || busy) return;
+    const me = currentUid();
+    if (!me) return;
+    setBusy("friend");
+    setActionMsg(null);
+    try {
+      const myName = (await getProfile(me).catch(() => null))?.name || "회원";
+      const ok = await sendFriendRequest(view.profile.uid, myName);
+      // 친구는 상대가 수락해야 성립한다 — 여기서는 '요청함'까지가 끝이다.
+      if (ok) { setFriend("requested"); setActionMsg("친구 요청을 보냈어요. 상대가 수락하면 친구가 됩니다."); }
+      else setActionMsg("요청을 보내지 못했어요.");
+    } finally { setBusy(""); }
+  }, [view, busy]);
 
   // ── 상태별 화면 ──────────────────────────────────────────────
   if (view.kind === "loading") {
@@ -240,20 +299,53 @@ export default function AtHomePage() {
         <div className="mt-4 flex items-center gap-2">
           {isOwner ? (
             <>
-              <Link href="/profile?edit=1" className="flex-1 text-center px-4 py-2.5 rounded-xl bg-[#F9954E] text-white text-[13px] font-bold active:scale-95 transition">프로필 편집</Link>
+              <Link href="/my-world?tab=profile" className="flex-1 text-center px-4 py-2.5 rounded-xl bg-[#F9954E] text-white text-[13px] font-bold active:scale-95 transition">프로필 편집</Link>
               {/* 2026-08-13 — '홈 꾸미기 · 준비 중' 비활성 버튼을 My World 편집기로 연결했다.
                   아래 '세계' 섹션에 실제로 그려지는 방이 이 편집기의 결과물이다. */}
               <Link href="/my-world" className="flex-1 text-center px-4 py-2.5 rounded-xl border border-stone-200 dark:border-zinc-700 text-stone-600 dark:text-stone-300 text-[13px] font-bold active:scale-95 transition hover:border-[#F9954E]/50 hover:text-[#F9954E]">세계 꾸미기</Link>
             </>
           ) : (
+            /* 2026-08-14 — 셋 다 '준비 중' 비활성이었는데, lib/social 에 followUser·sendFriendRequest·
+               sendDM(+/messages?to=) 가 이미 다 구현돼 있었다. 없던 건 기능이 아니라 연결이었다. */
             <>
-              <button type="button" disabled title={soon} aria-label="팔로우 준비 중" className="flex-1 px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-stone-400 text-[13px] font-bold cursor-not-allowed">팔로우</button>
-              <button type="button" disabled title={soon} aria-label="친구 추가 준비 중" className="flex-1 px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-stone-400 text-[13px] font-bold cursor-not-allowed">친구</button>
-              <button type="button" disabled title={soon} aria-label="메시지 준비 중" className="flex-1 px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-stone-400 text-[13px] font-bold cursor-not-allowed">메시지</button>
+              <button
+                type="button"
+                onClick={onFollow}
+                disabled={!meUid || busy === "follow"}
+                aria-label={following ? "팔로우 취소" : "팔로우"}
+                className={`flex-1 px-4 py-2.5 rounded-xl text-[13px] font-bold transition active:scale-95 disabled:opacity-50 ${
+                  following
+                    ? "bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300"
+                    : "bg-[#F9954E] text-white"
+                }`}
+              >
+                {busy === "follow" ? "…" : following ? "팔로잉" : "팔로우"}
+              </button>
+              <button
+                type="button"
+                onClick={onFriend}
+                disabled={!meUid || friend !== "none" || busy === "friend"}
+                aria-label="친구 추가"
+                className="flex-1 px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300 text-[13px] font-bold transition active:scale-95 disabled:opacity-50"
+              >
+                {busy === "friend" ? "…" : friend === "friend" ? "친구" : friend === "requested" ? "요청함" : "친구 추가"}
+              </button>
+              <Link
+                href={`/messages?to=${encodeURIComponent(p.uid)}&name=${encodeURIComponent(p.name)}`}
+                aria-label="메시지 보내기"
+                className="flex-1 text-center px-4 py-2.5 rounded-xl bg-stone-100 dark:bg-zinc-900 text-stone-600 dark:text-stone-300 text-[13px] font-bold transition active:scale-95"
+              >
+                메시지
+              </Link>
             </>
           )}
         </div>
-        {!isOwner && <p className="mt-1.5 text-[11px] text-stone-400 text-center">팔로우·친구·메시지는 {soon}</p>}
+        {!isOwner && !meUid && (
+          <p className="mt-1.5 text-[11px] text-stone-400 text-center">
+            <Link href="/login" className="font-bold text-[#F9954E]">로그인</Link>하면 팔로우·친구·메시지를 쓸 수 있어요
+          </p>
+        )}
+        {actionMsg && <p className="mt-1.5 text-[11.5px] text-center text-stone-500 dark:text-stone-400">{actionMsg}</p>}
       </section>
 
       {/* 5) 홈 탭 — 홈만 실제. 나머지는 준비 중(상세 페이지 이동 없음). 모바일 가로 스크롤 */}
@@ -305,6 +397,17 @@ export default function AtHomePage() {
             </>
           )}
         </section>
+      ) : tab === "guestbook" ? (
+        /* 방명록 — 2026-08-14 연결. 마이월드와 같은 컴포넌트를 쓴다.
+           남이 찾아와 남기는 게 본체라 공개 홈에 있어야 제 기능을 한다. */
+        <section className="px-5 pt-5">
+          <GuestbookCard ownerUid={p.uid} ownerName={p.name} />
+        </section>
+      ) : tab === "works" ? (
+        /* 작품 = 게임 기록. 별도 포트폴리오는 아직 없으니 실제로 있는 것만 보여준다. */
+        <section className="px-5 pt-5">
+          <GameRecordsCard uid={p.uid} isOwner={isOwner} />
+        </section>
       ) : tab !== "home" ? (
         <section className="px-5 py-16 text-center">
           <div className="text-3xl mb-3 opacity-30">🚧</div>
@@ -328,7 +431,7 @@ export default function AtHomePage() {
             ) : isOwner ? (
               <div className="rounded-2xl border border-dashed border-stone-200 dark:border-zinc-800 p-4 text-center">
                 <p className="text-[13px] text-stone-500 dark:text-stone-400">아직 소개가 없습니다.<br />나를 소개하는 글을 작성해보세요.</p>
-                <Link href="/profile?edit=1" className="inline-block mt-2 text-[12px] font-bold text-[#F9954E]">소개 작성 →</Link>
+                <Link href="/my-world?tab=profile" className="inline-block mt-2 text-[12px] font-bold text-[#F9954E]">소개 작성 →</Link>
               </div>
             ) : (
               <p className="text-[13px] text-stone-400">아직 소개가 없습니다.</p>
@@ -380,11 +483,11 @@ export default function AtHomePage() {
                     </li>
                   ))}
                   <li>
-                    <Link href="/profile" className="text-[12px] font-bold text-[#F9954E]">내 코지홈에서 전체 보기 →</Link>
+                    <Link href="/my-world" className="text-[12px] font-bold text-[#F9954E]">내 마이월드에서 전체 보기 →</Link>
                   </li>
                 </ul>
               ) : (
-                <p className="text-[13px] text-stone-400">아직 AI 일기가 없어요. <Link href="/profile" className="font-bold text-[#F9954E]">코지홈</Link>에서 오늘 하루를 정리해보세요.</p>
+                <p className="text-[13px] text-stone-400">아직 AI 일기가 없어요. <Link href="/my-world" className="font-bold text-[#F9954E]">마이월드</Link>에서 오늘 하루를 정리해보세요.</p>
               )
             ) : (
               <p className="text-[13px] text-stone-400">AI 일기는 본인에게만 보여요.</p>

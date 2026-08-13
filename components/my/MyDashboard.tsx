@@ -621,7 +621,7 @@ export default function MyDashboard() {
           </div>
         )}
 
-        {/* ── 내 코지홈 바로가기 (마이페이지 ↔ 코지홈 연동) ── */}
+        {/* ── 내 마이월드 바로가기 ── */}
         {/* ── 알림 ── */}
         <Link
           href={isEn ? "/en/notifications" : "/notifications"}

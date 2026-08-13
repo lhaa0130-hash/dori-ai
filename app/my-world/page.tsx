@@ -40,6 +40,21 @@ import CreationsCard from "@/components/my-world/CreationsCard";
 import AchievementsCard from "@/components/my-world/AchievementsCard";
 import CharacterInteractionStage from "@/components/my-world/interaction/CharacterInteractionStage";
 import WorldAddressStrip from "@/components/my-world/WorldAddressStrip";
+// 2026-08-14 코지홈(/profile) 폐지 — 아래 넷이 옛 마이페이지가 하던 일을 이어받는다.
+import ProfileEditCard from "@/components/my-world/ProfileEditCard";
+import GuestbookCard from "@/components/my-world/GuestbookCard";
+import GameRecordsCard from "@/components/my-world/GameRecordsCard";
+import MyDashboard from "@/components/my/MyDashboard";
+import { currentUid } from "@/lib/social";
+
+type WorldTab = "world" | "guestbook" | "records" | "profile" | "account";
+const TABS: { id: WorldTab; label: string }[] = [
+  { id: "world", label: "세계" },
+  { id: "guestbook", label: "방명록" },
+  { id: "records", label: "기록" },
+  { id: "profile", label: "프로필" },
+  { id: "account", label: "계정" },
+];
 
 // 오늘의 한마디 — 저장 없이 날짜 기반 결정적 선택.
 const HELLOS = [
@@ -82,6 +97,19 @@ function MyWorldContent() {
   const [exp, setExp] = useState(0);
   const [candy, setCandy] = useState(0);
   const [modalOpen, setModalOpen] = useState(false);
+  const [tab, setTab] = useState<WorldTab>("world");
+  const [uid, setUid] = useState<string | null>(null);
+
+  // ?tab=profile 로 바로 들어오는 동선을 지원한다 — /@핸들 의 '프로필 편집' 이 여기로 온다.
+  // (정적 export 라 서버에서 쿼리를 못 읽으므로 클라이언트에서 한 번 읽는다)
+  useEffect(() => {
+    if (typeof window === "undefined") return;
+    const q = new URLSearchParams(window.location.search).get("tab");
+    if (q && TABS.some((t) => t.id === q)) setTab(q as WorldTab);
+  }, []);
+
+  // currentUid() 는 Firebase Auth 를 직접 읽는다 — 세션 복원이 끝난 뒤에 잡아야 null 이 아니다.
+  useEffect(() => { setUid(currentUid()); }, [session?.user?.email, status]);
 
   const refresh = (email: string) => {
     const gp = getCachedGameProfile(email);
@@ -176,15 +204,64 @@ function MyWorldContent() {
           핸들이 없으면 정하러 가는 길을 보여준다. 비로그인이면 아무것도 그리지 않는다. */}
       <WorldAddressStrip />
 
-      {/* ── 카드 섹션 ── */}
-      <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-        <div className="sm:col-span-2"><CharacterInteractionStage /></div>
-        <div className="sm:col-span-2"><RecentActivityCard /></div>
-        <div className="sm:col-span-2"><DiaryCard /></div>
-        <div className="sm:col-span-2"><RoomPreviewCard /></div>
-        <div className="sm:col-span-2"><CreationsCard /></div>
-        <div className="sm:col-span-2"><AchievementsCard /></div>
-      </div>
+      {/* ── 탭 ──
+          2026-08-14: 코지홈(/profile)을 폐지하고 마이월드가 유일한 개인 페이지가 되면서,
+          한 화면에 다 넣으면 너무 길어져 탭으로 나눴다. 기본은 '세계'(꾸미기가 주인공). */}
+      <nav className="mt-5 border-b border-stone-100 dark:border-zinc-900" aria-label="마이월드 탭">
+        <div className="scrollbar-hide flex gap-1 overflow-x-auto">
+          {TABS.map((t) => {
+            const active = tab === t.id;
+            return (
+              <button
+                key={t.id}
+                type="button"
+                onClick={() => setTab(t.id)}
+                aria-current={active ? "page" : undefined}
+                className={`shrink-0 border-b-2 px-3.5 py-2.5 text-[13px] font-bold transition-colors ${
+                  active
+                    ? "border-[#F9954E] text-[#E8832E] dark:text-[#FBAA60]"
+                    : "border-transparent text-stone-400 hover:text-stone-600 dark:hover:text-stone-200"
+                }`}
+              >
+                {t.label}
+              </button>
+            );
+          })}
+        </div>
+      </nav>
+
+      {/* ── 탭 내용 ── */}
+      {tab === "world" && (
+        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
+          <div className="sm:col-span-2"><CharacterInteractionStage /></div>
+          <div className="sm:col-span-2"><RecentActivityCard /></div>
+          <div className="sm:col-span-2"><DiaryCard /></div>
+          <div className="sm:col-span-2"><RoomPreviewCard /></div>
+          <div className="sm:col-span-2"><CreationsCard /></div>
+          <div className="sm:col-span-2"><AchievementsCard /></div>
+        </div>
+      )}
+
+      {tab === "guestbook" && (
+        <div className="mt-4">
+          {uid
+            ? <GuestbookCard ownerUid={uid} ownerName={nickname} />
+            : <p className="rounded-3xl border border-stone-100 bg-white p-5 text-[13px] text-stone-400 dark:border-zinc-800 dark:bg-zinc-950">로그인하면 방명록을 쓸 수 있어요.</p>}
+        </div>
+      )}
+
+      {tab === "records" && (
+        <div className="mt-4">
+          {uid
+            ? <GameRecordsCard uid={uid} isOwner />
+            : <p className="rounded-3xl border border-stone-100 bg-white p-5 text-[13px] text-stone-400 dark:border-zinc-800 dark:bg-zinc-950">로그인하면 게임 기록이 쌓여요.</p>}
+        </div>
+      )}
+
+      {tab === "profile" && <div className="mt-4"><ProfileEditCard /></div>}
+
+      {/* 계정·활동 — 출석·미션·리워드. 옛 마이페이지 본문이 이 컴포넌트로 이미 분리돼 있었다. */}
+      {tab === "account" && <div className="mt-4"><MyDashboard /></div>}
 
       {/* 대표 캐릭터 선택 모달 */}
       <CharacterSelectModal

@@ -1,16 +1,16 @@
 "use client";
 
-// 마이페이지는 코지홈으로 통합됨 — /profile 로 리다이렉트.
+// 마이페이지·코지홈은 2026-08-14 에 마이월드로 통합됐다 — /my-world 로 리다이렉트.
 // (기존 마이페이지 본문은 components/my/MyDashboard.tsx 로 이동, 코지홈 '계정·활동' 탭에서 렌더)
 import { useEffect } from "react";
 import { useRouter, usePathname } from "next/navigation";
 
 const T = {
   ko: {
-    redirecting: "코지홈으로 이동 중…",
+    redirecting: "마이월드로 이동 중…",
   },
   en: {
-    redirecting: "Redirecting to Cozy Home…",
+    redirecting: "Redirecting to My World…",
   },
 } as const;
 
@@ -20,7 +20,7 @@ export default function MyPage() {
   const isEn = (pathname || "").startsWith("/en");
   const t = T[isEn ? "en" : "ko"];
   useEffect(() => {
-    router.replace(isEn ? "/en/profile" : "/profile");
+    router.replace(isEn ? "/en/my-world" : "/my-world");
   }, [router, isEn]);
   return (
     <main className="w-full min-h-screen flex flex-col items-center justify-center">

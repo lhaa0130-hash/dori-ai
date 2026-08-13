@@ -44,7 +44,7 @@ export default function WorldAddressStrip() {
           아이디를 정하면 <b className="font-mono text-[#E8832E]">illo.im/@아이디</b> 로 내 세계를 보여줄 수 있어요
         </span>
         <Link
-          href="/profile?edit=1"
+          href="/my-world?tab=profile"
           className="shrink-0 rounded-xl bg-[#F9954E] px-3.5 py-1.5 text-[12px] font-black text-white active:scale-95 transition"
         >
           아이디 정하기

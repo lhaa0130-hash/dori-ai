@@ -64,7 +64,7 @@ const T = {
     buyNow: "구매하기",
     shopLabel: "상점",
     shopTitle: "솜사탕 상점",
-    shopDesc: "모은 솜사탕으로 배경·테두리·이름효과·배너효과·칭호·스티커를 사서 코지홈을 나만의 공간으로 꾸며보세요.",
+    shopDesc: "모은 솜사탕으로 배경·테두리·이름효과·배너효과·칭호·스티커를 사서 마이월드를 나만의 공간으로 꾸며보세요.",
     myCandy: "내 솜사탕",
     unit: "개",
     goDecorate: "🎨 꾸미러 가기",
@@ -72,7 +72,7 @@ const T = {
     earnMore: "더 모으기",
     loginToBuy: "로그인하면 아이템을 구매하고 꾸밀 수 있어요",
     login: "로그인",
-    myCozyHomePreview: "내 코지홈 미리보기",
+    myCozyHomePreview: "내 마이월드 미리보기",
     previewOf: "미리보기 · ",
     buy: "구매",
     equip: "장착",
@@ -84,7 +84,7 @@ const T = {
     itemCount: (n: number) => `${n}개`,
     allPaidInCategory: "이 카테고리는 모두 유료예요",
     noMatchingItems: "해당하는 아이템이 없어요",
-    freeStickerHint: "무료 스티커는 코지홈 꾸미기에서 바로 쓸 수 있어요",
+    freeStickerHint: "무료 스티커는 마이월드 꾸미기에서 바로 쓸 수 있어요",
     tryOtherCategory: "다른 카테고리를 둘러보세요",
     basic: "기본",
     equippedBadge: "장착중",
@@ -488,7 +488,7 @@ export default function ShopPage() {
               </div>
             </div>
             <div className="flex items-center gap-2">
-              <Link href="/profile" className="px-3.5 py-2.5 rounded-xl border border-[#F9954E]/40 text-[#F9954E] text-[12px] font-bold active:opacity-85">{t.goDecorate}</Link>
+              <Link href="/my-world" className="px-3.5 py-2.5 rounded-xl border border-[#F9954E]/40 text-[#F9954E] text-[12px] font-bold active:opacity-85">{t.goDecorate}</Link>
               {isPremium ? (
                 <span className="text-[11px] font-bold px-3 py-2.5 rounded-xl bg-yellow-500/10 text-yellow-500 border border-yellow-500/20">{t.premium}</span>
               ) : (

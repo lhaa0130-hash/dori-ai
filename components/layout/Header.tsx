@@ -100,7 +100,7 @@ export default function Header() {
       ];
 
   // 언어 토글(세그먼트): 현재 페이지의 ko/en URL을 각각 계산. 영어판 있는 페이지에서만 표시.
-  const EN_AVAILABLE = ["/", "/ai-tools", "/ai-models", "/ai-news", "/insight", "/projects", "/minigame", "/world-map", "/psychtest", "/animal", "/faq", "/notice", "/legal/about", "/legal/privacy", "/legal/terms", "/legal/contact", "/legal/copyright", "/legal/business", "/legal/youth", "/profile", "/feed", "/messages", "/shop"]
+  const EN_AVAILABLE = ["/", "/ai-tools", "/ai-models", "/ai-news", "/insight", "/projects", "/minigame", "/world-map", "/psychtest", "/animal", "/faq", "/notice", "/legal/about", "/legal/privacy", "/legal/terms", "/legal/contact", "/legal/copyright", "/legal/business", "/legal/youth", "/feed", "/messages", "/shop"]
     // 비공개 섹션은 빼둔다 — 없는 영어판으로 언어토글이 보내면 404 가 된다
     .filter((p) => SHOW_ANIMAL || p !== "/animal")
     .filter((p) => SHOW_WORLDMAP || p !== "/world-map")
@@ -201,7 +201,7 @@ export default function Header() {
             <div className="lg:hidden flex items-center ml-1">
               {session?.user ? (
                 <Link
-                  href={LP("/profile")}
+                  href={LP("/my-world")}
                   className="flex items-center gap-1.5 px-4 py-2 rounded-full bg-secondary hover:bg-secondary/80 text-xs font-black text-secondary-foreground transition-all active:scale-95 whitespace-nowrap"
                 >
                   <User className="w-3.5 h-3.5" />
@@ -239,14 +239,14 @@ export default function Header() {
             <div className="hidden lg:flex items-center ml-2 relative group">
               {session?.user ? (
                 <div className="relative">
-                  <Link href={LP("/profile")} className="flex items-center gap-2 px-5 py-2 rounded-full bg-secondary hover:bg-secondary/80 text-xs font-black text-secondary-foreground transition-all active:scale-95 whitespace-nowrap">
+                  <Link href={LP("/my-world")} className="flex items-center gap-2 px-5 py-2 rounded-full bg-secondary hover:bg-secondary/80 text-xs font-black text-secondary-foreground transition-all active:scale-95 whitespace-nowrap">
                     <User className="w-3.5 h-3.5" />
                     <span>{isEn ? "My page" : "마이페이지"}</span>
                     <ChevronDown className="w-3 h-3 opacity-50 group-hover:rotate-180 transition-transform duration-300" />
                   </Link>
                   <div className="absolute top-full right-0 mt-2 w-52 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
                     <div className="bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden py-1">
-                      <Link href={LP("/profile")} className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-stone-700 dark:text-stone-200 hover:bg-stone-50 dark:hover:bg-zinc-800 transition-colors">
+                      <Link href={LP("/my-world")} className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-stone-700 dark:text-stone-200 hover:bg-stone-50 dark:hover:bg-zinc-800 transition-colors">
                         <User className="w-4 h-4 text-[#F9954E]" /><span>{isEn ? "My page" : "마이페이지"}</span>
                       </Link>
                       <Link href={LP("/feed")} className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-stone-700 dark:text-stone-200 hover:bg-stone-50 dark:hover:bg-zinc-800 transition-colors">
@@ -310,7 +310,7 @@ export default function Header() {
           <div className="mb-3 pb-3 border-b border-stone-100 dark:border-zinc-800">
             {session?.user ? (
               <div className="flex flex-col gap-1.5">
-                <Link href={LP("/profile")} className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-stone-50 dark:bg-zinc-900 text-sm font-bold text-stone-900 dark:text-white">
+                <Link href={LP("/my-world")} className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-stone-50 dark:bg-zinc-900 text-sm font-bold text-stone-900 dark:text-white">
                   <User className="w-4 h-4 text-[#F9954E]" /><span>{isEn ? "My page" : "마이페이지"}</span>
                 </Link>
                 <Link href={LP("/feed")} className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-stone-50 dark:bg-zinc-900 text-sm font-bold text-stone-900 dark:text-white">
