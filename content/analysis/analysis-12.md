@@ -102,5 +102,5 @@ tags: ["OpenAI", "Anthropic", "ChatGPT Go", "AI수익화", "기업용AI"]
 
 ## 출처 및 참고
 
-1. TokenRate, “GPT-4 Pricing” — https://tokenrate.dev/models/gpt-4?utm_source=openai
-2. OpenAI, “Introducing ChatGPT Go” — https://openai.com/index/introducing-chatgpt-go/?utm_source=openai
+1. TokenRate, “GPT-4 Pricing” — https://tokenrate.dev/models/gpt-4
+2. OpenAI, “Introducing ChatGPT Go” — https://openai.com/index/introducing-chatgpt-go/

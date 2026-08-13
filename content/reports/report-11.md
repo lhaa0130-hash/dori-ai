@@ -114,5 +114,5 @@ tags: ["인공지능", "반도체", "데이터센터", "피지컬AI", "투자"]
 2. CNBC, "Chip stocks sell off after Samsung earnings fall short of high AI bar" (**2026년 7월**)
 3. The Wall Street Journal, "TeraWulf Signs $19 Billion Lease With Anthropic for AI-Infrastructure Campus" (**2026년 7월**)
 4. Investing.com, "TeraWulf jumps on $19 billion data center lease deal with Anthropic" (**2026년 7월**) — https://www.investing.com/news/stock-market-news/terawulf-jumps-on-19-billion-data-center-lease-deal-with-anthropic-4776761
-5. 조선비즈, "삼성전자·SK하이닉스, HBM ‘하이브리드 본딩’ 도입 초읽기… 반도체 장비 공급망 지각변동 예고" (**2025년 5월**) — https://biz.chosun.com/it-science/ict/2025/05/07/OFSKYCEBFJEKFHK673QBKQT6BA/?outputType=amp&utm_source=openai
+5. 조선비즈, "삼성전자·SK하이닉스, HBM ‘하이브리드 본딩’ 도입 초읽기… 반도체 장비 공급망 지각변동 예고" (**2025년 5월**) — https://biz.chosun.com/it-science/ict/2025/05/07/OFSKYCEBFJEKFHK673QBKQT6BA/?outputType=amp
 6. 뉴스핌, "뉴로메카 휴머노이드 승부수 '제로샷 AI'…EIR에 모든 역량 집중" (**2026년 2월**)

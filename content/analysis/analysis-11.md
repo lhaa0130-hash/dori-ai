@@ -100,8 +100,8 @@ tags: ["피지컬 AI", "휴머노이드", "FigureAI", "로봇 자동화", "일�
 
 ## 출처 및 참고
 
-1. 한국경제, "200시간 쉼 없이 소포 분류 생중계…피규어AI 로봇 혁명 자신감" (**2026-05-25**) — https://www.hankyung.com/article/2026052568761?utm_source=openai  
-2. Hindustan Herald, "Figure AI Rose 200-Hour Autonomous Run" — https://hindustanherald.in/figure-ai-rose-200-hour-autonomous-run/?utm_source=openai  
+1. 한국경제, "200시간 쉼 없이 소포 분류 생중계…피규어AI 로봇 혁명 자신감" (**2026-05-25**) — https://www.hankyung.com/article/2026052568761  
+2. Hindustan Herald, "Figure AI Rose 200-Hour Autonomous Run" — https://hindustanherald.in/figure-ai-rose-200-hour-autonomous-run/  
 3. 뉴스핌, "뉴로메카 '휴머노이드 승부수 제로샷 AI…EIR에 모든 역량 집중'" (**2026-02-11**)  
-4. 파이낸셜뉴스, "'이노봇 출격'…롯데이노 '아이멤버' 기반 피지컬 AI 사업 확대" (**2026-01-12**) — https://www.fnnews.com/news/202601121644269067?utm_source=openai  
+4. 파이낸셜뉴스, "'이노봇 출격'…롯데이노 '아이멤버' 기반 피지컬 AI 사업 확대" (**2026-01-12**) — https://www.fnnews.com/news/202601121644269067  
 5. 콴다 블로그, "MCP(Model Context Protocol)란? 기업 AI 도입의 새로운 표준"

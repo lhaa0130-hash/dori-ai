@@ -98,9 +98,9 @@ tags: ["Meta", "AI클라우드", "클라우드인프라", "모델독립성", "�
 
 ## 출처 및 참고
 
-1. 코리아스탠다드, "메타, AI 클라우드 인프라 사업 추진 중" — https://www.koreastandard.news/article/ai-mr26ajpc?utm_source=openai  
-2. 테크브리프, "모델 독립성 시대, 외국 프런티어 모델 의존 리스크" — https://techbrief.co.kr/%EB%AA%A8%EB%8D%B8-%EB%8F%85%EB%A6%BD%EC%84%B1/?utm_source=openai  
-3. 와우테일, "오픈AI·앤트로픽·xAI에 동시 투자하는 이유.. AI 자본 관계망 스타트업 지형도" — https://wowtale.net/2026/04/27/257777/?utm_source=openai  
-4. 전자신문, "앤트로픽, 오픈AI 제치고 기업용 AI 시장 1위 등극... ‘코딩 AI가 핵심 동력’" — https://www.etnews.com/20250801000259?utm_source=openai  
-5. Dataconomy, "Anthropic leads enterprise LLMs with 32% market share" — https://dataconomy.com/2025/08/04/anthropic-leads-enterprise-llms-with-32-market-share/?utm_source=openai  
-6. Korea Business Review, "젠슨 황 4박 5일이 남긴 것: 한국은 엔비디아 AI 공급망의 '핵심 거점'이 될 수 있나" — https://www.koreabizreview.com/articles/kbr-news-deep-analysis-ai-20260609-yf8s?utm_source=openai
+1. 코리아스탠다드, "메타, AI 클라우드 인프라 사업 추진 중" — https://www.koreastandard.news/article/ai-mr26ajpc  
+2. 테크브리프, "모델 독립성 시대, 외국 프런티어 모델 의존 리스크" — https://techbrief.co.kr/%EB%AA%A8%EB%8D%B8-%EB%8F%85%EB%A6%BD%EC%84%B1/  
+3. 와우테일, "오픈AI·앤트로픽·xAI에 동시 투자하는 이유.. AI 자본 관계망 스타트업 지형도" — https://wowtale.net/2026/04/27/257777/  
+4. 전자신문, "앤트로픽, 오픈AI 제치고 기업용 AI 시장 1위 등극... ‘코딩 AI가 핵심 동력’" — https://www.etnews.com/20250801000259  
+5. Dataconomy, "Anthropic leads enterprise LLMs with 32% market share" — https://dataconomy.com/2025/08/04/anthropic-leads-enterprise-llms-with-32-market-share/  
+6. Korea Business Review, "젠슨 황 4박 5일이 남긴 것: 한국은 엔비디아 AI 공급망의 '핵심 거점'이 될 수 있나" — https://www.koreabizreview.com/articles/kbr-news-deep-analysis-ai-20260609-yf8s

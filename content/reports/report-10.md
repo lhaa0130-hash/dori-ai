@@ -110,12 +110,12 @@ tags: ["AI인프라", "Anthropic", "xAI", "피지컬AI", "데이터센터"]
 
 ## 출처 및 참고
 
-1. KuCoin News, "xAI Leases Colossus 1 Supercomputer to Anthropic for $1.25 Billion Monthly" — https://www.kucoin.com/news/flash/xai-leases-colossus-1-supercomputer-to-anthropic-for-1-25-billion-monthly?utm_source=openai
+1. KuCoin News, "xAI Leases Colossus 1 Supercomputer to Anthropic for $1.25 Billion Monthly" — https://www.kucoin.com/news/flash/xai-leases-colossus-1-supercomputer-to-anthropic-for-1-25-billion-monthly
 
-2. AI 인사이트, "美 국방부, OpenAI·구글·MS·아마존·엔비디아·xAI·Reflection과 기밀 환경 AI 사용 계약… Anthropic은 공급망 리스크로 제외" — https://insight.ai.kr/news/pentagon-classified-ai-deals-openai-google-nvidia-not-anthropic?utm_source=openai
+2. AI 인사이트, "美 국방부, OpenAI·구글·MS·아마존·엔비디아·xAI·Reflection과 기밀 환경 AI 사용 계약… Anthropic은 공급망 리스크로 제외" — https://insight.ai.kr/news/pentagon-classified-ai-deals-openai-google-nvidia-not-anthropic
 
-3. DBR, "Big Tech Pours KRW 1 Quadrillion Into AI War" — https://dbr.donga.com/kfocus/view/donga/article_no/1954?utm_source=openai
+3. DBR, "Big Tech Pours KRW 1 Quadrillion Into AI War" — https://dbr.donga.com/kfocus/view/donga/article_no/1954
 
-4. 파이낸셜뉴스, ""이노봇 출격"…롯데이노 '아이멤버' 기반 피지컬 AI 사업 확대" — https://www.fnnews.com/news/202601121644269067?utm_source=openai
+4. 파이낸셜뉴스, ""이노봇 출격"…롯데이노 '아이멤버' 기반 피지컬 AI 사업 확대" — https://www.fnnews.com/news/202601121644269067
 
 5. 뉴스핌, "뉴로메카 "휴머노이드 승부수 '제로샷 AI'…EIR에 모든 역량 집중""

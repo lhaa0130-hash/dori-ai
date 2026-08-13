@@ -110,7 +110,7 @@ tags: ["생성형AI", "AI접근권", "지역창작자", "공공인프라", "AI�
 
 ## 출처 및 참고
 
-1. 파이낸셜뉴스, "충북콘텐츠코리아랩, 클로드·제미나이 생성형 AI 무료 이용 서비스" (**2026년 6월 17일**) — https://www.fnnews.com/news/202606171032436861?utm_source=openai
-2. 브릿지경제, "청주시, 창작자 위한 AI 편집 스튜디오 시범 운영 시작" (**2026년 6월 17일**) — https://www.viva100.com/article/20260617500852?utm_source=openai
-3. 전자신문, "채널코퍼레이션, 日 글로벌브레인 이경훈 한국 대표 CAIO로 영입" (**2026년 1월 5일**) — https://www.etnews.com/20260105000322?utm_source=openai
-4. Build AIQ, "The Major AI Companies Explained: Who’s Building What" — https://www.buildaiq.com/articles/learn-ai/ai-industry-ecosystem/the-major-ai-companies-explained-whos-building-what?utm_source=openai
+1. 파이낸셜뉴스, "충북콘텐츠코리아랩, 클로드·제미나이 생성형 AI 무료 이용 서비스" (**2026년 6월 17일**) — https://www.fnnews.com/news/202606171032436861
+2. 브릿지경제, "청주시, 창작자 위한 AI 편집 스튜디오 시범 운영 시작" (**2026년 6월 17일**) — https://www.viva100.com/article/20260617500852
+3. 전자신문, "채널코퍼레이션, 日 글로벌브레인 이경훈 한국 대표 CAIO로 영입" (**2026년 1월 5일**) — https://www.etnews.com/20260105000322
+4. Build AIQ, "The Major AI Companies Explained: Who’s Building What" — https://www.buildaiq.com/articles/learn-ai/ai-industry-ecosystem/the-major-ai-companies-explained-whos-building-what

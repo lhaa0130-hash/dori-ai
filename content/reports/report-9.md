@@ -104,6 +104,6 @@ AI 업계에서는 **MCP**, 즉 **Model Context Protocol**로 불리는 연결 �
 
 ## 출처 및 참고
 
-1. OpenAI, "Introducing ChatGPT Go" (**2026년 1월 16일**) — https://openai.com/index/introducing-chatgpt-go/?utm_source=openai
-2. 조선일보, "SK하이닉스, ASML로부터 약 11조 9,496억 원 규모 EUV 스캐너 도입 공시" (**2026년 3월 24일**) — https://www.chosun.com/economy/tech_it/2026/03/24/MZTDQNLDHE4WIMBTGI3TAZBXMM/?outputType=amp&utm_source=openai
-3. 이데일리, "피지컬 AI 전장 확대…RFM 주도권 경쟁 본격화" — https://www.edaily.co.kr/News/Read?mediaCodeNo=257&newsId=01633446645454496&utm_source=openai
+1. OpenAI, "Introducing ChatGPT Go" (**2026년 1월 16일**) — https://openai.com/index/introducing-chatgpt-go/
+2. 조선일보, "SK하이닉스, ASML로부터 약 11조 9,496억 원 규모 EUV 스캐너 도입 공시" (**2026년 3월 24일**) — https://www.chosun.com/economy/tech_it/2026/03/24/MZTDQNLDHE4WIMBTGI3TAZBXMM/?outputType=amp
+3. 이데일리, "피지컬 AI 전장 확대…RFM 주도권 경쟁 본격화" — https://www.edaily.co.kr/News/Read?mediaCodeNo=257&newsId=01633446645454496
