@@ -27,38 +27,56 @@ interface CharacterContextValue {
   loading: boolean;
   saving: boolean;
   selectCharacter: (id: string) => Promise<void>; // Hero 즉시 반영 + Firestore 저장
+  readOnly: boolean;                // 남의 세계를 보는 중이면 true(선택 불가)
 }
 
 const Ctx = createContext<CharacterContextValue | null>(null);
 
-export function CharacterProvider({ children }: { children: ReactNode }) {
+/**
+ * 캐릭터 Provider.
+ *
+ * 기본(인자 없음)은 **로그인한 본인**의 캐릭터를 읽는다 — My World 편집기가 쓰는 방식이다.
+ *
+ * ⚠️ 2026-08-13 추가 — `viewUid` 를 주면 **그 사람의** 캐릭터를 읽는다(읽기 전용).
+ *   /@핸들 공개 홈에서 남의 방을 그리려면 RoomCanvas 안의 캐릭터 레이어도 그 사람 것이어야 하는데,
+ *   RoomCanvas 는 room 을 prop 으로 받으면서 캐릭터만 이 Context 에서 꺼내 쓴다.
+ *   그래서 캔버스를 고치는 대신 Provider 가 다른 uid 를 읽을 수 있게 했다(캔버스는 그대로 재사용).
+ *   viewUid 가 있으면 selectCharacter 는 아무것도 하지 않는다 — 남의 캐릭터를 바꿀 수는 없다.
+ */
+export function CharacterProvider({ children, viewUid }: { children: ReactNode; viewUid?: string }) {
   const { session } = useAuth();
   const [state, setState] = useState<MyCharacterState>(defaultCharacterState);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const savingRef = useRef(false);
+  const readOnly = !!viewUid;
 
   const uid = useCallback(() => {
+    if (viewUid) return viewUid;
     try { return getFirebaseAuth().currentUser?.uid || null; } catch { return null; }
-  }, []);
+  }, [viewUid]);
 
   // 로드: 캐시(즉시) → Firestore(원본). 세션 복원 비동기 대비 session 의존.
+  // ⚠️ 남의 캐릭터(viewUid)는 로컬 캐시에 쓰지 않는다 — 본인 캐시를 덮어써 버린다.
   useEffect(() => {
     let alive = true;
     const u = uid();
     if (!u) { setState(defaultCharacterState()); setLoading(false); return; }
-    const cached = getCachedCharacterState(u);
-    if (cached) setState(cached);
+    if (!readOnly) {
+      const cached = getCachedCharacterState(u);
+      if (cached) setState(cached);
+    }
     setLoading(true);
     getCharacterState(u)
-      .then((st) => { if (!alive) return; setState(st); setCachedCharacterState(u, st); })
+      .then((st) => { if (!alive) return; setState(st); if (!readOnly) setCachedCharacterState(u, st); })
       .catch(() => {})
       .finally(() => { if (alive) setLoading(false); });
     return () => { alive = false; };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [session?.user?.email]);
+  }, [session?.user?.email, viewUid]);
 
   const selectCharacter = useCallback(async (id: string) => {
+    if (readOnly) return;            // 남의 세계를 보는 중 — 캐릭터를 바꿀 수 없다
     if (savingRef.current) return;
     const ch = getCharacter(id);
     // Hero 즉시 반영: 선택 캐릭터 기준으로 상태 갱신(기본값).
@@ -79,7 +97,7 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     try { await saveSelectedCharacter(u, ch.id); }
     catch { /* 저장 실패는 조용히 — 다음 로드에서 원본으로 정정 */ }
     finally { savingRef.current = false; setSaving(false); }
-  }, [state.owned, uid]);
+  }, [state.owned, uid, readOnly]);
 
   const value = useMemo<CharacterContextValue>(() => ({
     state,
@@ -88,7 +106,8 @@ export function CharacterProvider({ children }: { children: ReactNode }) {
     loading,
     saving,
     selectCharacter,
-  }), [state, loading, saving, selectCharacter]);
+    readOnly,
+  }), [state, loading, saving, selectCharacter, readOnly]);
 
   return <Ctx.Provider value={value}>{children}</Ctx.Provider>;
 }

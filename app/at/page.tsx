@@ -17,6 +17,7 @@ import {
   type Profile, type FeedPost,
 } from "@/lib/social";
 import { bgGradOf } from "@/lib/shopItems";
+import PublicWorldCard from "@/components/my-world/PublicWorldCard";
 
 type Stats = { followers: number; following: number; posts: number; friends: number; visitors: number; works: number };
 type View =
@@ -240,7 +241,9 @@ export default function AtHomePage() {
           {isOwner ? (
             <>
               <Link href="/profile?edit=1" className="flex-1 text-center px-4 py-2.5 rounded-xl bg-[#F9954E] text-white text-[13px] font-bold active:scale-95 transition">프로필 편집</Link>
-              <button type="button" disabled title={soon} className="flex-1 px-4 py-2.5 rounded-xl border border-stone-200 dark:border-zinc-700 text-stone-400 text-[13px] font-bold cursor-not-allowed">홈 꾸미기 · 준비 중</button>
+              {/* 2026-08-13 — '홈 꾸미기 · 준비 중' 비활성 버튼을 My World 편집기로 연결했다.
+                  아래 '세계' 섹션에 실제로 그려지는 방이 이 편집기의 결과물이다. */}
+              <Link href="/my-world" className="flex-1 text-center px-4 py-2.5 rounded-xl border border-stone-200 dark:border-zinc-700 text-stone-600 dark:text-stone-300 text-[13px] font-bold active:scale-95 transition hover:border-[#F9954E]/50 hover:text-[#F9954E]">세계 꾸미기</Link>
             </>
           ) : (
             <>
@@ -309,6 +312,14 @@ export default function AtHomePage() {
         </section>
       ) : (
         <div className="px-5 pt-5 space-y-6">
+          {/* 5-1) 세계 — My World(캐릭터·방)의 공개면. 2026-08-13 연결.
+              방문자가 가장 먼저 보는 자리에 둔다. 글이 없어도 '보여줄 것'이 생기는 유일한 섹션이라,
+              7명·2글인 지금 상태에서 홈이 텅 비어 보이지 않게 하는 역할도 한다. */}
+          <section>
+            <p className="text-[11px] font-bold text-[#F9954E] mb-2">{isOwner ? "내 세계" : `${p.name}님의 세계`}</p>
+            <PublicWorldCard uid={p.uid} isOwner={isOwner} />
+          </section>
+
           {/* 6) 소개 */}
           <section>
             <p className="text-[11px] font-bold text-[#F9954E] mb-2">소개</p>

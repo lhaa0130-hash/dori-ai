@@ -17,6 +17,9 @@ Disallow: /community/write
 Disallow: /projects
 Disallow: /en/projects
 Disallow: /profile
+Disallow: /my-world
+Disallow: /at
+Disallow: /@
 Disallow: /messages
 Disallow: /notifications
 Disallow: /feed$
@@ -54,6 +57,9 @@ Disallow: /community/write
 Disallow: /projects
 Disallow: /en/projects
 Disallow: /profile
+Disallow: /my-world
+Disallow: /at
+Disallow: /@
 Disallow: /messages
 Disallow: /notifications
 Disallow: /feed$
