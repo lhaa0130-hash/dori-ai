@@ -62,8 +62,8 @@ export default function AboutPage() {
       <h2>운영 주체</h2>
       <p>
         illo는 illo 운영팀이 직접 기획·제작·운영합니다. 사이트 주소는
-        <strong> www.illo.im</strong>이며(옛 주소 dori-ai.com 은 이곳으로 연결됩니다), 모든
-        콘텐츠와 서비스의 책임은 illo 운영팀에 있습니다.
+        <strong> www.illo.im</strong>이며, 모든 콘텐츠와 서비스의 책임은 illo 운영팀에
+        있습니다.
       </p>
 
       <h2>함께하기 · 문의</h2>

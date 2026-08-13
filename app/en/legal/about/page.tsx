@@ -69,8 +69,8 @@ export default function EnAboutPage() {
       <h2>Who runs illo</h2>
       <p>
         illo is planned, produced and operated directly by the illo team. The site is at
-        <strong> www.illo.im</strong> (the former address, dori-ai.com, redirects here), and the
-        illo team is responsible for all content and services.
+        <strong> www.illo.im</strong>, and the illo team is responsible for all content
+        and services.
       </p>
 
       <h2>Join us · Contact</h2>
