@@ -159,7 +159,7 @@ export default function BottomNav() {
               <div className="flex flex-col gap-2">
                 <Link href="/my" className="flex items-center justify-between py-3">
                   <div>
-                    <p className="text-[15px] font-black text-stone-900 dark:text-white">{isEn ? "My Page" : "마이페이지"}</p>
+                    <p className="text-[15px] font-black text-stone-900 dark:text-white">{isEn ? "My World" : "마이월드"}</p>
                     <p className="text-[12px] text-stone-400 mt-0.5">{session.user.email}</p>
                   </div>
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9CA3AF" strokeWidth="2.5" strokeLinecap="round"><polyline points="9 18 15 12 9 6"/></svg>

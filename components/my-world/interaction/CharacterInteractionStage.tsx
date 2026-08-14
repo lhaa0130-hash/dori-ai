@@ -1,11 +1,12 @@
 "use client";
 
-import { useEffect, useRef, type PointerEvent as ReactPointerEvent } from "react";
+import { useEffect, useRef, useState, type PointerEvent as ReactPointerEvent } from "react";
 import { useCharacter } from "@/contexts/CharacterContext";
 import { useInteraction } from "@/contexts/InteractionContext";
 import { useInteractionAudio } from "@/contexts/InteractionAudioContext";
 import { useRoom } from "@/contexts/RoomContext";
 import RoomCanvas from "@/components/my-world/room/RoomCanvas";
+import RoomEditorModal from "@/components/my-world/room/RoomEditorModal";
 import AffinityMeter from "@/components/my-world/interaction/AffinityMeter";
 import InteractionNotices from "@/components/my-world/interaction/InteractionNotices";
 import SpeechBubble from "@/components/my-world/interaction/SpeechBubble";
@@ -30,6 +31,7 @@ export default function CharacterInteractionStage() {
   const singleTapTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const lastTapAt = useRef(0);
   const longPressed = useRef(false);
+  const [editorOpen, setEditorOpen] = useState(false);   // 방 꾸미기 모달(RoomPreviewCard 통합)
 
   useEffect(() => () => {
     if (longPressTimer.current) clearTimeout(longPressTimer.current);
@@ -89,6 +91,16 @@ export default function CharacterInteractionStage() {
         </div>
         <div className="flex items-center gap-1.5">
           {(offline || syncing) && <span className="rounded-full bg-stone-100 px-2 py-1 text-[10px] font-bold text-stone-500 dark:bg-zinc-800 dark:text-zinc-300">{offline ? "오프라인 저장 중" : "동기화 중"}</span>}
+          {/* 2026-08-14 — 방 꾸미기를 여기로 합쳤다. 예전엔 이 카드 아래에 RoomPreviewCard 가 또 있어서
+              **같은 방이 한 화면에 두 번** 그려졌다(이 카드도 RoomCanvas 를 쓴다). 중복을 없애고
+              이 카드 하나가 '내 방'의 전부가 되게 한다. */}
+          <button
+            type="button"
+            onClick={() => setEditorOpen(true)}
+            className="rounded-full bg-[#F9954E] px-3 py-1.5 text-[12px] font-black text-white transition hover:bg-[#f0862f] active:scale-95"
+          >
+            방 꾸미기
+          </button>
           <button type="button" onClick={() => setMuted(!muted)} aria-pressed={muted} aria-label={muted ? "효과음 켜기" : "효과음 끄기"} className="flex h-8 w-8 items-center justify-center rounded-full bg-stone-100 text-sm transition hover:bg-stone-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-[#F9954E] dark:bg-zinc-800 dark:hover:bg-zinc-700">
             <span aria-hidden>{muted ? "🔇" : "🔊"}</span>
           </button>
@@ -173,6 +185,8 @@ export default function CharacterInteractionStage() {
           <span className="w-8 text-right">{Math.round(volume * 100)}%</span>
         </label>
       </details>
+
+      <RoomEditorModal open={editorOpen} onClose={() => setEditorOpen(false)} />
     </section>
   );
 }

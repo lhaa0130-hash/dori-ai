@@ -53,7 +53,7 @@ const CATALOG: Group[] = [
   {
     label: "내 정보", labelEn: "My info",
     items: [
-      { key: "profile",       label: "마이페이지", short: "마이",   labelEn: "My page",       shortEn: "Me",     enOk: true,  href: "/profile",       Icon: User },
+      { key: "profile",       label: "마이월드",   short: "월드",   labelEn: "My World",      shortEn: "World",  enOk: false, href: "/my-world",      Icon: User },
       { key: "notifications", label: "알림",       short: "알림",   labelEn: "Notifications", shortEn: "Alerts", enOk: false, href: "/notifications", Icon: Bell },
     ],
   },

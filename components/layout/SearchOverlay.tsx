@@ -12,7 +12,7 @@ const SHORTCUTS: { t: string; href: string }[] = [
   { t: "커뮤니티", href: "/community" }, { t: "피드", href: "/feed" }, { t: "인사이트", href: "/insight" },
   { t: "AI 도구", href: "/ai-tools" }, { t: "AI 모델", href: "/ai-models" }, { t: "미니게임", href: "/minigame" },
   { t: "몽글로 : 동물도감", href: "/animal" }, { t: "마켓", href: "/market" }, { t: "상점", href: "/shop" },
-  { t: "공지사항", href: "/notice" }, { t: "FAQ", href: "/faq" }, { t: "마이페이지", href: "/profile" },
+  { t: "공지사항", href: "/notice" }, { t: "FAQ", href: "/faq" }, { t: "마이월드", href: "/my-world" },
 ]
   .filter((s) => SHOW_ANIMAL || s.href !== "/animal") // 동물도감 비공개 시 검색 바로가기에서도 제외
   .filter((s) => SHOW_COMMUNITY || s.href !== "/community"); // 커뮤니티 스텁 기간도 동일

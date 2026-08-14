@@ -241,13 +241,13 @@ export default function Header() {
                 <div className="relative">
                   <Link href={LP("/my-world")} className="flex items-center gap-2 px-5 py-2 rounded-full bg-secondary hover:bg-secondary/80 text-xs font-black text-secondary-foreground transition-all active:scale-95 whitespace-nowrap">
                     <User className="w-3.5 h-3.5" />
-                    <span>{isEn ? "My page" : "마이페이지"}</span>
+                    <span>{isEn ? "My World" : "마이월드"}</span>
                     <ChevronDown className="w-3 h-3 opacity-50 group-hover:rotate-180 transition-transform duration-300" />
                   </Link>
                   <div className="absolute top-full right-0 mt-2 w-52 pt-2 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 translate-y-2 group-hover:translate-y-0 z-50">
                     <div className="bg-white dark:bg-zinc-900 border border-stone-200 dark:border-zinc-800 rounded-2xl shadow-xl overflow-hidden py-1">
                       <Link href={LP("/my-world")} className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-stone-700 dark:text-stone-200 hover:bg-stone-50 dark:hover:bg-zinc-800 transition-colors">
-                        <User className="w-4 h-4 text-[#F9954E]" /><span>{isEn ? "My page" : "마이페이지"}</span>
+                        <User className="w-4 h-4 text-[#F9954E]" /><span>{isEn ? "My World" : "마이월드"}</span>
                       </Link>
                       <Link href={LP("/feed")} className="w-full flex items-center gap-2.5 px-4 py-2.5 text-xs font-bold text-stone-700 dark:text-stone-200 hover:bg-stone-50 dark:hover:bg-zinc-800 transition-colors">
                         <Newspaper className="w-4 h-4 text-[#F9954E]" /><span>{isEn ? "Feed" : "피드"}</span>
@@ -311,7 +311,7 @@ export default function Header() {
             {session?.user ? (
               <div className="flex flex-col gap-1.5">
                 <Link href={LP("/my-world")} className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-stone-50 dark:bg-zinc-900 text-sm font-bold text-stone-900 dark:text-white">
-                  <User className="w-4 h-4 text-[#F9954E]" /><span>{isEn ? "My page" : "마이페이지"}</span>
+                  <User className="w-4 h-4 text-[#F9954E]" /><span>{isEn ? "My World" : "마이월드"}</span>
                 </Link>
                 <Link href={LP("/feed")} className="flex items-center gap-3 px-4 py-3 rounded-2xl bg-stone-50 dark:bg-zinc-900 text-sm font-bold text-stone-900 dark:text-white">
                   <Newspaper className="w-4 h-4 text-[#F9954E]" /><span>{isEn ? "Feed" : "피드"}</span>

@@ -33,11 +33,7 @@ import CottonCandy from "@/components/icons/CottonCandy";
 import BackgroundHero from "@/components/my-world/BackgroundHero";
 import CharacterCard from "@/components/my-world/CharacterCard";
 import CharacterSelectModal from "@/components/my-world/CharacterSelectModal";
-import RecentActivityCard from "@/components/my-world/RecentActivityCard";
 import DiaryCard from "@/components/my-world/DiaryCard";
-import RoomPreviewCard from "@/components/my-world/room/RoomPreviewCard";
-import CreationsCard from "@/components/my-world/CreationsCard";
-import AchievementsCard from "@/components/my-world/AchievementsCard";
 import CharacterInteractionStage from "@/components/my-world/interaction/CharacterInteractionStage";
 import WorldAddressStrip from "@/components/my-world/WorldAddressStrip";
 // 2026-08-14 코지홈(/profile) 폐지 — 아래 넷이 옛 마이페이지가 하던 일을 이어받는다.
@@ -231,14 +227,19 @@ function MyWorldContent() {
       </nav>
 
       {/* ── 탭 내용 ── */}
+      {/* 세계 탭 — 2026-08-14 정리. 예전엔 카드 6개가 세로로 쌓였는데 실제로 동작하는 건 둘뿐이었다.
+          걷어낸 것과 이유:
+            RoomPreviewCard   같은 방을 두 번 그렸다(위 CharacterInteractionStage 도 RoomCanvas 를 쓴다).
+                              '방 꾸미기' 버튼만 그 카드로 옮겨 하나로 합쳤다.
+            AchievementsCard  PLACEHOLDER 6개가 전부 잠긴 **가짜 UI** 였다(실제 업적 데이터 미연결,
+                              컴포넌트 주석에도 "향후 연결"이라고 적혀 있다). 채울 게 생기면 그때 붙인다.
+            CreationsCard     '오늘 만든 작품' — 만들 경로(동물 생성)가 비공개라 항상 비어 있었다.
+            RecentActivityCard 항상 "아직 활동이 없습니다". 쌓일 게 생기면 되살린다.
+          ⛔ 빈 카드를 쌓지 않는다 — 비어 있는 칸이 늘수록 페이지는 '지저분한데 아무것도 없는' 상태가 된다. */}
       {tab === "world" && (
-        <div className="mt-4 grid grid-cols-1 gap-4 sm:grid-cols-2">
-          <div className="sm:col-span-2"><CharacterInteractionStage /></div>
-          <div className="sm:col-span-2"><RecentActivityCard /></div>
-          <div className="sm:col-span-2"><DiaryCard /></div>
-          <div className="sm:col-span-2"><RoomPreviewCard /></div>
-          <div className="sm:col-span-2"><CreationsCard /></div>
-          <div className="sm:col-span-2"><AchievementsCard /></div>
+        <div className="mt-4 space-y-4">
+          <CharacterInteractionStage />
+          <DiaryCard />
         </div>
       )}
 

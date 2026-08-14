@@ -32,7 +32,7 @@ const T = {
   ko: {
     loadingUser: "사용자 정보를 불러오는 중입니다",
     loginRequiredTitle: "로그인이 필요해요",
-    loginRequiredL1: "마이페이지는 로그인 후",
+    loginRequiredL1: "마이월드는 로그인 후",
     loginRequiredL2: "이용하실 수 있습니다.",
     goLogin: "로그인하러 가기",
     loadingProfile: "프로필을 로드하는 중입니다",
