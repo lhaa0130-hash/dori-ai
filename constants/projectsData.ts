@@ -30,7 +30,21 @@ export interface ProjectItem {
   // 만든 과정을 적은 글(인사이트 기사 등). 실행 버튼 옆에 함께 놓는다.
   docHref?: string;
   docLabel?: string;
+  /**
+   * 날짜별 개발 기록. 개발노트를 매일 쓰는 프로젝트에만 있다.
+   * 상세 페이지 하단에 표로 깔린다 — 한 줄이 "그날의 글 + 그날의 게임" 한 쌍이다.
+   * ⚠️ gameHref 는 반드시 **날짜 폴더**를 가리켜야 한다. /latest/ 를 넣으면 글과 게임이 어긋난다.
+   */
+  versions?: ProjectVersion[];
   features: ProjectFeature[];
+}
+
+export interface ProjectVersion {
+  date: string;        // YYYY-MM-DD — 표의 첫 칸이자 정렬 기준
+  noteNo: string;      // "#001"
+  noteTitle: string;   // 그날 무엇을 했는지 한 줄
+  noteHref: string;    // 개발노트 글
+  gameHref: string;    // 그날 빌드(날짜 폴더). 영원히 그 버전이 실행된다
 }
 
 const ALL_PROJECTS: ProjectItem[] = [
@@ -41,28 +55,35 @@ const ALL_PROJECTS: ProjectItem[] = [
     // 게임 본체는 public/games/palhyup/index.html — 외부 요청이 하나도 없는 단일 파일이라
     // 그대로 올리면 브라우저에서 바로 돌아간다(96KB, 2,261줄).
     slug: "palhyup",
-    name: "팔협 RPG",
+    name: "싱글 RPG 게임 제작",
     emoji: "⚔️",
     image: "",
-    tag: "게임 · 자바스크립트",
+    tag: "게임 제작 · 개발일지",
     category: "main",
     isMain: true,
     status: "오픈",
     isActive: true,
-    desc: "네모 한 칸에서 시작한 조선 무협 액션 RPG — 설치 없이 브라우저에서",
+    desc: "조선 무협 + 동물 + 캐주얼을 섞은 싱글 RPG를 맨손으로 만드는 과정",
     longDesc:
-      "프로그래밍 경험 없이 시작해 이틀 만에 만든 조선 무협 캐주얼 액션 RPG입니다. 3200×2800 크기의 세계에 12개 지역과 몬스터 15종·보스 3종이 있고, 마을에서 여섯 방향으로 뻗어나갈수록 난이도가 올라갑니다. 승단(레벨)과 경지가 서로 다른 축으로 오르는 성장 구조, 6개 직업으로 갈라지는 전직, 무공 3종과 무기 6단계를 갖췄습니다. 설치나 회원가입 없이 브라우저에서 바로 실행됩니다.",
-    tags: ["무협 RPG", "브라우저 게임", "자바스크립트", "캔버스", "개발일지"],
+      "혼자 하는 싱글 RPG 게임을 처음부터 만들고 있습니다. 조선 무협의 세계관에 왕개미·산토끼·말벌·들개·삵·멧돼지 같은 동물 몬스터를 얹고, 조작은 캐주얼하게 — 세 가지를 섞은 게임입니다. 프로그래밍 경험 없이 검은 화면의 네모 한 칸에서 시작했고, 만들면서 막혔다 풀린 지점을 개발노트로 매일 남깁니다. 지금까지 12개 지역·몬스터 15종·보스 3종·무공 3종이 들어갔습니다. 설치나 회원가입 없이 브라우저에서 바로 실행됩니다.",
+    tags: ["싱글 RPG", "조선 무협", "동물 몬스터", "캐주얼", "개발일지"],
     // 프로젝트 페이지는 **늘 최신**을 보여준다. /latest/ 는 배포 때마다 덮어쓰는 경로라
     // 여기 이 줄은 앞으로 손댈 일이 없다.
     // ⚠️ 반대로 개발노트는 각자 **날짜 폴더**(/games/palhyup/2026-08-14/ 같은)를 가리킨다.
     //    글과 게임이 어긋나면 안 되기 때문이다 — 노트에 적힌 내용이 그날의 빌드다.
     //    날짜 폴더는 절대 덮어쓰지 않는다. 자세한 규칙: docs/palhyup-versions.md
-    launchHref: "/games/palhyup/latest/",
-    launchLabel: "게임 실행",
+    launchHref: "#versions",
+    launchLabel: "바로가기",
     launchDate: "2026-08-14",
-    docHref: "/insight/article/report-13",
-    docLabel: "개발노트 #001",
+    versions: [
+      {
+        date: "2026-08-14",
+        noteNo: "#001",
+        noteTitle: "네모 한 칸에서 무협 세계까지 — 세계 12지역·몬스터 15종·성장 두 축을 만들다",
+        noteHref: "/insight/article/report-13",
+        gameHref: "/games/palhyup/2026-08-14/",
+      },
+    ],
     features: [
       { icon: "🗺️", title: "12개 지역, 한 방향으로 갈수록 어려워져요", detail: "마을에서 여섯 방향으로 부채꼴이 뻗고, 안쪽·바깥 두 겹으로 나뉩니다. 지역마다 사는 몬스터가 하나씩 정해져 있어요." },
       { icon: "🥋", title: "승단과 경지, 두 개의 성장 축", detail: "레벨은 경험치로 오르지만 경지는 공격력·체력·처치수를 전부 채워야 오릅니다. 100단인데 여전히 무명일 수 있어요." },

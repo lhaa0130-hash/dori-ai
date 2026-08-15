@@ -24,11 +24,15 @@ const EN: Record<string, EnText> = {
   // ⚠️ href 는 굳이 /en/ 짝을 만들지 않았다 — 게임 자체가 언어에 거의 의존하지 않는
   //    캔버스 화면이고, 한 벌뿐인 빌드를 언어별로 복제하면 96KB 를 두 번 싣게 된다.
   palhyup: {
-    name: "Palhyup RPG",
-    tag: "Game · JavaScript",
+    name: "Building a single-player RPG",
+    tag: "Game dev · Devlog",
     status: "Open",
-    desc: "A Joseon-era martial arts action RPG that started as a single square — runs in the browser",
-    launchLabel: "Play the game",
+    desc: "Joseon-era martial arts, animal monsters and casual controls — a single-player RPG built from scratch",
+    launchLabel: "Play the latest build",
+    // ⚠️ 한글판 launchHref 는 "#versions"(상세 페이지의 개발기록 표) 인데, 영문은 상세 페이지가 없어
+    //    그 앵커가 존재하지 않는다. 그대로 두면 아무 데도 안 가는 링크가 된다.
+    //    개발노트도 한국어뿐이라, 영어로 읽는 사람에게는 게임 자체를 바로 주는 편이 낫다.
+    href: "/games/palhyup/latest/",
     features: [
       { title: "12 regions, harder as you go", detail: "Six directions fan out from the village, each split into an inner and outer ring. One monster species per region." },
       { title: "Two separate growth tracks", detail: "Levels come from experience, but rank requires attack, health and kill count all at once — you can be level 100 and still Nameless." },
