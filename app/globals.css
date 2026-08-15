@@ -351,17 +351,49 @@ h6 {
     @apply my-5 border-gray-200 dark:border-gray-800;
   }
 
-  /* Table */
-  .prose-premium table {
-    @apply w-full my-8 text-left border-collapse;
+  /* Table
+     ⚠️ 2026-08-15 — 표가 감싸는 요소 없이 w-full 만 걸려 있었다. 그러면 브라우저가 스크롤 대신
+        **칸을 욱여넣어서**, 모바일 375px 에서 8칸 표가 칸당 40px 이 되고 지명이 세로로 쪼개졌다.
+        기사 렌더러(app/insight/article/[slug]/page.tsx 의 wrapTables)가 .table-scroll 로 감싸고,
+        표에는 min-width 를 줘서 좁은 화면에서는 컨테이너가 가로 스크롤되게 한다. */
+  .prose-premium .table-scroll {
+    @apply my-8 -mx-1 overflow-x-auto;
+    /* 스크롤 가능하다는 걸 눈으로 알 수 있게 오른쪽 끝을 살짝 흐린다 */
+    mask-image: linear-gradient(to right, #000 calc(100% - 24px), transparent 100%);
+  }
+  .prose-premium .table-scroll:not(:hover) {
+    scrollbar-width: thin;
   }
 
+  /* ⚠️ min-width 고정값을 쓰면 안 된다. 칸이 8개든 2개든 같은 폭이 되어, 8칸 표는 여전히
+        칸당 38px 로 찌그러졌다(실측). 대신 내용 길이에 맞춰 표가 늘어나게 두고,
+        넘치는 만큼만 컨테이너가 스크롤한다 — 칸 수가 몇 개든 글자가 안 쪼개진다. */
+  .prose-premium table {
+    @apply text-left border-collapse;
+    width: max-content;
+    min-width: 100%;    /* 칸이 적은 표는 화면을 꽉 채우고, 많은 표만 넘쳐서 스크롤된다 */
+    max-width: 56rem;   /* 긴 문장이 든 칸이 있어도 무한정 넓어지지 않게 */
+  }
+
+  /* 헤더는 짧으니 절대 쪼개지 않는다. 본문 칸은 max-content 덕에 대개 안 쪼개지지만,
+     긴 문장이 든 칸은 표 최대폭에 걸리면 접힌다(그래야 표가 무한정 넓어지지 않는다). */
   .prose-premium th {
-    @apply bg-gray-50 dark:bg-zinc-900 p-4 font-semibold text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800;
+    @apply bg-gray-50 dark:bg-zinc-900 px-3 py-2.5 text-[13px] font-semibold whitespace-nowrap text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-800;
   }
 
   .prose-premium td {
-    @apply p-4 border-b border-gray-100 dark:border-gray-900 text-gray-700 dark:text-gray-300;
+    @apply px-3 py-2.5 text-[13.5px] border-b border-gray-100 dark:border-gray-900 text-gray-700 dark:text-gray-300;
+    overflow-wrap: break-word;
+  }
+
+  /* 숫자 칸은 자릿수가 흔들리지 않게 */
+  .prose-premium td {
+    font-variant-numeric: tabular-nums;
+  }
+
+  @screen sm {
+    .prose-premium th { @apply px-4 py-3 text-[13.5px]; }
+    .prose-premium td { @apply px-4 py-3 text-[14px]; }
   }
 }
 
