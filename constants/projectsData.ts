@@ -72,7 +72,8 @@ const ALL_PROJECTS: ProjectItem[] = [
     // ⚠️ 반대로 개발노트는 각자 **날짜 폴더**(/games/palhyup/2026-08-14/ 같은)를 가리킨다.
     //    글과 게임이 어긋나면 안 되기 때문이다 — 노트에 적힌 내용이 그날의 빌드다.
     //    날짜 폴더는 절대 덮어쓰지 않는다. 자세한 규칙: docs/palhyup-versions.md
-    launchHref: "#versions",
+    // ⚠️ 같은 페이지 앵커(#versions)로 뒀더니 눌러도 이동이 없어 보였다 → 별도 페이지로 보낸다.
+    launchHref: "/projects/palhyup/notes",
     launchLabel: "바로가기",
     launchDate: "2026-08-14",
     versions: [
