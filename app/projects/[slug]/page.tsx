@@ -81,19 +81,32 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
           ))}
         </div>
 
-        {/* 실행/체험 버튼 — 비활성(준비 중) 프로젝트는 링크 없이 '준비 중' 표시 */}
-        {project.isActive && project.launchHref ? (
-          <Link
-            href={project.launchHref}
-            className="toss-shine inline-flex items-center gap-1.5 mt-6 px-6 py-3 rounded-full bg-[#F9954E] text-white text-[14px] font-bold shadow-md shadow-[#F9954E]/25 active:opacity-85 transition-opacity"
-          >
-            {project.launchLabel || "바로가기"} <ArrowRight className="w-3.5 h-3.5" />
-          </Link>
-        ) : (
-          <div className="inline-flex items-center gap-1.5 mt-6 px-6 py-3 rounded-full bg-stone-100 dark:bg-zinc-900 text-stone-400 text-[14px] font-bold">
-            출시 준비 중이에요
-          </div>
-        )}
+        {/* 실행/체험 버튼 — 비활성(준비 중) 프로젝트는 링크 없이 '준비 중' 표시.
+            2026-08-15: 개발노트(docHref)가 있으면 옆에 함께 놓는다. 만든 과정을 읽는 것과
+            실제로 돌려보는 것은 다른 행동이라, 한쪽만 있으면 나머지로 가는 길이 사라진다. */}
+        <div className="mt-6 flex flex-wrap items-center gap-2.5">
+          {project.isActive && project.launchHref ? (
+            <Link
+              href={project.launchHref}
+              className="toss-shine inline-flex items-center gap-1.5 px-6 py-3 rounded-full bg-[#F9954E] text-white text-[14px] font-bold shadow-md shadow-[#F9954E]/25 active:opacity-85 transition-opacity"
+            >
+              {project.launchLabel || "바로가기"} <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          ) : (
+            <div className="inline-flex items-center gap-1.5 px-6 py-3 rounded-full bg-stone-100 dark:bg-zinc-900 text-stone-400 text-[14px] font-bold">
+              출시 준비 중이에요
+            </div>
+          )}
+
+          {project.docHref && (
+            <Link
+              href={project.docHref}
+              className="inline-flex items-center gap-1.5 px-6 py-3 rounded-full border border-stone-200 dark:border-zinc-700 text-stone-600 dark:text-stone-300 text-[14px] font-bold hover:border-[#F9954E]/50 hover:text-[#F9954E] transition-colors"
+            >
+              {project.docLabel || "개발노트"} <ArrowRight className="w-3.5 h-3.5" />
+            </Link>
+          )}
+        </div>
       </section>
 
       {/* 주요 기능 */}

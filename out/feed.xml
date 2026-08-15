@@ -6,7 +6,15 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Fri, 14 Aug 2026 00:41:37 GMT</lastBuildDate>
+    <lastBuildDate>Sat, 15 Aug 2026 02:53:07 GMT</lastBuildDate>
+    <item>
+      <title>네모 한 칸에서 무협 세계까지 — 프로그래밍 무경험자의 RPG 개발노트 #001</title>
+      <link>https://illo.im/insight/article/report-13</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/report-13</guid>
+      <category>리포트</category>
+      <pubDate>Fri, 14 Aug 2026 00:00:00 GMT</pubDate>
+      <description>프로그래밍 경험 없이 시작해 이틀 만에 2,000줄짜리 조선 무협 RPG를 만들었습니다. 손맛이 다섯 개의 겹침에서 나온 과정, 한글 입력에서 캐릭터가 안 움직이던 문제, 좌표계가 둘로 갈라지는 함정까지 실제로 막혔다 풀린 지점을 정리했습니다.</description>
+    </item>
     <item>
       <title>AI in Homework: The Race Between Students and School Regulations</title>
       <link>https://illo.im/insight/article/analysis-15-en</link>

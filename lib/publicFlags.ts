@@ -79,7 +79,15 @@ export const SHOW_COMMUNITY = false;
 //   ▶ 되살리는 더 좋은 방법 두 가지(둘 중 하나를 하면 SHOW_PROJECTS=true 로 되돌려도 좋다):
 //       ① ADMIN_ONLY_SLUGS 에서 "illo" 를 빼서 실제 운영 중인 대리인:AI비서를 노출 → "운영 중 1개"
 //       ② 나라콕을 사람이 편집한 소수 국가로 재공개하면 자동으로 "운영 중" 항목이 돌아온다
-export const SHOW_PROJECTS = false;
+//
+//   ✅ 2026-08-15 재공개 — 위 두 방법이 아니라 **세 번째 방법**으로 조건이 풀렸다.
+//      팔협 RPG(constants/projectsData.ts 의 slug "palhyup")를 추가했다. 실제로 실행되는 결과물이라
+//      '운영 중'이 0개가 아니게 됐고, 이 페이지를 감춘 유일한 이유가 사라졌다.
+//      게임 본체는 public/games/palhyup/index.html 이고 외부 요청이 하나도 없는 단일 파일이다.
+//      만든 과정은 인사이트 리포트(/insight/article/report-13)로 발행해 상세 페이지에서 링크한다.
+//   ⚠️ 다시 0개가 되면(팔협을 내리거나 status 를 바꾸면) 이 플래그도 함께 false 로 되돌려라 —
+//      "운영 중 · 0개"가 찍힌 페이지를 상단 메뉴에 걸어두는 것이 애초의 문제였다.
+export const SHOW_PROJECTS = true;
 
 // ─────────────────────────────────────────────────────────────────────────────
 // [죽은 페이지 일괄 정리]  2026-08-13

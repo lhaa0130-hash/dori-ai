@@ -31,12 +31,20 @@ export default function robots(): MetadataRoute.Robots {
     //    ▶ DB 연동으로 실제 글이 쌓이면 이 두 줄에서 "/community" 를 빼고 "/community/write" 만 남겨라.
     "/community",
     "/community/write",
-    // ⚠️ 2026-08-10 — /projects 도 같은 이유로 색인에서 뺀다. 나라콕·동물도감을 비공개로 내리자
-    //    '운영 중' 항목이 0개가 되어 본문이 한글 240자 + "운영 중 · 0 개" + '준비 중' 2개가 됐다.
-    //    라우트는 유지한다(맞춤 제작 의뢰 CTA·/ai-assistant/intro 내부 링크).
-    //    ▶ 운영 중 서비스가 다시 노출되면 여기서 빼고 SHOW_PROJECTS=true 로 되돌려라.
-    "/projects",
-    "/en/projects",
+    // ⚠️ 2026-08-10 — /projects 를 색인에서 뺐다가 **2026-08-15 에 풀었다.**
+    //    뺀 이유는 '운영 중 0개 + 본문 240자'였는데, 팔협 RPG(실행되는 게임)가 들어오면서
+    //    운영 중 1개 · 본문 496자가 됐다. 상단 메뉴에도 다시 걸었으므로(SHOW_PROJECTS=true)
+    //    메뉴로 링크하면서 색인은 막는 앞뒤 안 맞는 상태를 두지 않는다.
+    //
+    //    ⛔ 다만 **얇은 상세 페이지는 개별로 계속 막는다.** robots 는 접두어 매칭이라
+    //       "/projects" 를 풀면 하위가 전부 열리는데, 아래 셋은 아직 분량이 안 된다.
+    //         /projects/illo       269자 · 관리자 전용(ADMIN_ONLY_SLUGS)
+    //         /projects/flat-form  252자 · status "준비 중"
+    //         /projects/family     188자 · status "준비 중"
+    //       ▶ 각 프로젝트가 실제로 열리고 본문이 채워지면 그때 한 줄씩 뺀다.
+    "/projects/illo",
+    "/projects/flat-form",
+    "/projects/family",
     // ⚠️ 애드센스 대비: 크롤러가 보면 "로그인이 필요합니다" 한 줄뿐인 회원 전용 화면.
     //    발행 콘텐츠가 없는 페이지가 색인되면 '가치 없는 콘텐츠'로 판정될 수 있다.
     "/profile",

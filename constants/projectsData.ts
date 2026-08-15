@@ -27,10 +27,48 @@ export interface ProjectItem {
   launchHref?: string;
   launchLabel?: string;
   launchDate?: string;
+  // 만든 과정을 적은 글(인사이트 기사 등). 실행 버튼 옆에 함께 놓는다.
+  docHref?: string;
+  docLabel?: string;
   features: ProjectFeature[];
 }
 
 const ALL_PROJECTS: ProjectItem[] = [
+  {
+    // 2026-08-15 추가. 나라콕·동물도감이 비공개로 내려가면서 '운영 중'이 0개가 됐고,
+    // 그게 /projects 를 상단 메뉴에서 뺀 이유였다(publicFlags.ts SHOW_PROJECTS 주석).
+    // 팔협 RPG 는 실제로 실행되는 결과물이라 그 자리를 채운다.
+    // 게임 본체는 public/games/palhyup/index.html — 외부 요청이 하나도 없는 단일 파일이라
+    // 그대로 올리면 브라우저에서 바로 돌아간다(96KB, 2,261줄).
+    slug: "palhyup",
+    name: "팔협 RPG",
+    emoji: "⚔️",
+    image: "",
+    tag: "게임 · 자바스크립트",
+    category: "main",
+    isMain: true,
+    status: "오픈",
+    isActive: true,
+    desc: "네모 한 칸에서 시작한 조선 무협 액션 RPG — 설치 없이 브라우저에서",
+    longDesc:
+      "프로그래밍 경험 없이 시작해 이틀 만에 만든 조선 무협 캐주얼 액션 RPG입니다. 3200×2800 크기의 세계에 12개 지역과 몬스터 15종·보스 3종이 있고, 마을에서 여섯 방향으로 뻗어나갈수록 난이도가 올라갑니다. 승단(레벨)과 경지가 서로 다른 축으로 오르는 성장 구조, 6개 직업으로 갈라지는 전직, 무공 3종과 무기 6단계를 갖췄습니다. 설치나 회원가입 없이 브라우저에서 바로 실행됩니다.",
+    tags: ["무협 RPG", "브라우저 게임", "자바스크립트", "캔버스", "개발일지"],
+    // ⚠️ 날짜 고정 경로다. 개발노트를 매일 올리므로 **각 노트의 링크는 그날 빌드로 박제**되고,
+    //    여기(프로젝트 페이지)만 항상 최신 날짜를 가리킨다. 새 버전을 올릴 때 이 줄을 바꾼다.
+    //    옛 날짜 폴더는 절대 덮어쓰지 않는다 — 지난 노트가 그 파일을 가리키고 있다.
+    //    자세한 규칙: docs/palhyup-versions.md
+    launchHref: "/games/palhyup/2026-08-14/",
+    launchLabel: "게임 실행",
+    launchDate: "2026-08-14",
+    docHref: "/insight/article/report-13",
+    docLabel: "개발노트 #001",
+    features: [
+      { icon: "🗺️", title: "12개 지역, 한 방향으로 갈수록 어려워져요", detail: "마을에서 여섯 방향으로 부채꼴이 뻗고, 안쪽·바깥 두 겹으로 나뉩니다. 지역마다 사는 몬스터가 하나씩 정해져 있어요." },
+      { icon: "🥋", title: "승단과 경지, 두 개의 성장 축", detail: "레벨은 경험치로 오르지만 경지는 공격력·체력·처치수를 전부 채워야 오릅니다. 100단인데 여전히 무명일 수 있어요." },
+      { icon: "⚔️", title: "무공 3종과 준비 동작", detail: "바람베기·회전참격·그림자밟기. 공격에 준비-타격-후딜 3단계가 있어 '언제 칠지 판단하는' 전투가 됩니다." },
+      { icon: "📓", title: "개발 과정을 전부 공개", detail: "손맛을 만든 다섯 가지, 한글 입력에서 캐릭터가 안 움직이던 문제까지 개발노트로 정리했어요." },
+    ],
+  },
   {
     slug: "worldmap",
     name: "나라콕",

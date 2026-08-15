@@ -14,8 +14,9 @@ Disallow: /illo
 Disallow: /shop
 Disallow: /community
 Disallow: /community/write
-Disallow: /projects
-Disallow: /en/projects
+Disallow: /projects/illo
+Disallow: /projects/flat-form
+Disallow: /projects/family
 Disallow: /profile
 Disallow: /my-world
 Disallow: /at
@@ -54,8 +55,9 @@ Disallow: /illo
 Disallow: /shop
 Disallow: /community
 Disallow: /community/write
-Disallow: /projects
-Disallow: /en/projects
+Disallow: /projects/illo
+Disallow: /projects/flat-form
+Disallow: /projects/family
 Disallow: /profile
 Disallow: /my-world
 Disallow: /at

@@ -20,6 +20,22 @@ type EnText = {
   features: { title: string; detail: string }[];
 };
 const EN: Record<string, EnText> = {
+  // 2026-08-15 추가. 이 항목이 없으면 영어 화면에 한글 문구가 그대로 떨어진다.
+  // ⚠️ href 는 굳이 /en/ 짝을 만들지 않았다 — 게임 자체가 언어에 거의 의존하지 않는
+  //    캔버스 화면이고, 한 벌뿐인 빌드를 언어별로 복제하면 96KB 를 두 번 싣게 된다.
+  palhyup: {
+    name: "Palhyup RPG",
+    tag: "Game · JavaScript",
+    status: "Open",
+    desc: "A Joseon-era martial arts action RPG that started as a single square — runs in the browser",
+    launchLabel: "Play the game",
+    features: [
+      { title: "12 regions, harder as you go", detail: "Six directions fan out from the village, each split into an inner and outer ring. One monster species per region." },
+      { title: "Two separate growth tracks", detail: "Levels come from experience, but rank requires attack, health and kill count all at once — you can be level 100 and still Nameless." },
+      { title: "Three arts, with wind-up", detail: "Wind Slash, Spin Cut and Shadow Step. Attacks have wind-up, hit and recovery frames, so timing decides the fight." },
+      { title: "The whole build, written up", detail: "A dev note covers the five layers behind game feel and the bug where Korean IME stopped the character moving." },
+    ],
+  },
   worldmap: {
     name: "NARAKOK",
     tag: "Map · Data",
