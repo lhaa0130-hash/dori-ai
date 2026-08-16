@@ -6,7 +6,15 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Sat, 15 Aug 2026 04:07:17 GMT</lastBuildDate>
+    <lastBuildDate>Sun, 16 Aug 2026 04:29:37 GMT</lastBuildDate>
+    <item>
+      <title>네모에 그림이 입혀진 날 — 무경험자의 RPG 개발노트 #002</title>
+      <link>https://illo.im/insight/article/report-14</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/report-14</guid>
+      <category>리포트</category>
+      <pubDate>Sat, 15 Aug 2026 00:00:00 GMT</pubDate>
+      <description>하루 만에 소스 3,922줄에서 6,636줄로, 그림 0장에서 17장으로. 걸음 8프레임을 한 장에 격자로 뽑아야 하는 이유, 바닥 무늬가 지역 색을 끌고 가던 문제, 튜토리얼 중 매 프레임 지도 중앙으로 끌려가던 순간이동 버그까지 정리했다.</description>
+    </item>
     <item>
       <title>네모 한 칸에서 무협 세계까지 — 프로그래밍 무경험자의 RPG 개발노트 #001</title>
       <link>https://illo.im/insight/article/report-13</link>

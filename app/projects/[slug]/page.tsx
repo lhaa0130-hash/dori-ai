@@ -2,7 +2,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { PROJECTS, getProjectBySlug } from "@/constants/projectsData";
-import ProjectSuggestion from "@/components/projects/ProjectSuggestion";
+import TopicComments from "@/components/comments/TopicComments";
+import { topicIdOf } from "@/lib/topicComments";
 
 const SITE_URL = "https://illo.im";
 
@@ -142,9 +143,18 @@ export default function ProjectDetailPage({ params }: { params: { slug: string }
           ))}
         </div>
 
-        {/* 프로젝트별 건의사항 */}
-        <ProjectSuggestion slug={project.slug} projectName={project.name} />
       </section>
+
+      {/* 프로젝트별 공개 댓글 (2026-08-15)
+          ⚠️ 여기 있던 ProjectSuggestion 을 걷어냈다. 그 컴포넌트는 **localStorage 전용**이라
+             서버로 보내는 코드가 아예 없었다 — 사용자가 '건의사항'을 써도 자기 브라우저에만
+             남고 운영자에게 전달되지 않았다. 의견을 받는 척만 하는 상자였다.
+             지금은 Firestore 에 실제로 저장되고 다른 사람에게도 보인다. */}
+      <TopicComments
+        topicId={topicIdOf("project", project.slug)}
+        heading="이 프로젝트에 대한 의견"
+        intro={`${project.name}을(를) 만들면서 듣고 싶은 이야기입니다. 좋았던 점, 아쉬운 점, 이런 게 있으면 좋겠다 싶은 것 모두 환영합니다.`}
+      />
 
 
 

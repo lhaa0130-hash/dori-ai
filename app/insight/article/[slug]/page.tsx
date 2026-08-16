@@ -10,6 +10,8 @@ import type { Metadata } from 'next';
 import { remark } from 'remark';
 import remarkGfm from 'remark-gfm';
 import remarkHtml from 'remark-html';
+import TopicComments from "@/components/comments/TopicComments";
+import { topicIdOf } from "@/lib/topicComments";
 import ShareButtons from '@/components/article/ShareButtons';
 import ReadingProgress from '@/components/article/ReadingProgress';
 import RelatedArticles from '@/components/article/RelatedArticles';
@@ -337,6 +339,14 @@ export default async function InsightArticlePage({ params }: { params: { slug: s
 
           {/* 본문 끝 광고 */}
           <AdUnit className="mt-10" />
+
+          {/* 글에 대한 공개 댓글 (2026-08-15)
+              개발노트처럼 "만드는 과정"을 적는 글은 읽고 나서 하고 싶은 말이 생긴다.
+              그걸 받을 자리가 없으면 글이 일방적으로 끝난다. */}
+          <TopicComments
+            topicId={topicIdOf("article", params.slug)}
+            heading="이 글에 대한 의견"
+          />
 
           {/* 하단 공유 버튼 */}
           <div className="mt-10 pt-6 border-t border-stone-200 dark:border-stone-800">
