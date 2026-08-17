@@ -25,6 +25,7 @@ const CORE_FEATURES: IlloFeature[] = [
   //    붙여버린다. 그래서 core도 반드시 꺼야 사라진다.
   { id: 'home',      label: '홈',          icon: '🏠', group: '핵심', desc: '(삭제됨 — AI 비서가 홈)', kind: 'core', released: false },
   { id: 'builder',   label: 'AI 비서',      icon: '🗂️', group: '핵심', desc: '부서·팀·직원을 만들고 AI 모델을 배정하는 AI 비서 관제탑', kind: 'core', core: true, released: true },
+  { id: 'nodes',     label: '노드 워크플로우', icon: '🔗', group: '핵심', desc: '업무 종류를 끌어다 놓고 AI 도구를 결합해, 노드를 이어 업무를 자동 실행', kind: 'core', core: true, released: true },
   { id: 'automation', label: '자동화',      icon: '🔁', group: '핵심', desc: '세팅 끝난 팀에 업무를 지시해 자동 실행 · 결과를 다시 물려 반복(루프)', kind: 'core', core: true, released: true },
   { id: 'workflow',  label: '워크플로우',   icon: '⚡', group: '핵심', desc: '주제만 넣으면 여러 AI가 순서대로 협업해 결과물 하나를 완성 (본인 키로 실행)', kind: 'core', core: true, released: true },
   { id: 'catalog',   label: '가이드',      icon: '📖', group: '핵심', desc: '어떤 AI/API가 있고, 키는 어디서 받는지 안내', kind: 'core', core: true, released: true },
@@ -40,7 +41,7 @@ const CORE_FEATURES: IlloFeature[] = [
 ];
 
 // 사이드바에서 핵심 메뉴가 항상 이 순서로 보이도록 고정.
-export const CORE_SIDEBAR_ORDER = ['builder', 'workflow', 'automation', 'catalog', 'docs', 'settings'];
+export const CORE_SIDEBAR_ORDER = ['builder', 'nodes', 'workflow', 'automation', 'catalog', 'docs', 'settings'];
 
 // ── AI 자동화 도구 ── ★ 여러 AI를 단계로 엮어야 의미 있는 기능만 유지(단일 AI 도구는 제거).
 // 정의 순서는 자유 — 아래에서 라벨 가나다순으로 자동 정렬되어 노출됨.
@@ -115,7 +116,7 @@ export function isReleased(id: string): boolean {
 export const SELECTABLE_IDS = ILLO_FEATURES.filter((f) => f.released && !f.core).map((f) => f.id);
 
 // 처음 시작 시 사이드바 기본 메뉴 = AI 비서(조직도=홈)·자동화·가이드·자료함·설정.
-export const ILLO_DEFAULT_ENABLED: string[] = ['builder', 'workflow', 'automation', 'catalog', 'docs', 'settings'];
+export const ILLO_DEFAULT_ENABLED: string[] = ['builder', 'nodes', 'workflow', 'automation', 'catalog', 'docs', 'settings'];
 
 const LS_KEY = 'illo.web.enabledFeatures';
 

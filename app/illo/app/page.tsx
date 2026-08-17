@@ -4,7 +4,7 @@ import RequireAuth from "@/components/auth/RequireAuth";
 import ProjectSync from "@/components/auth/ProjectSync";
 
 // 워크일로 결과 보관함(illo_results_v1) + 홈 위젯 배치(illo_home_v1)를 계정에 저장
-const WORKILLO_KEYS = ["illo_results_v1", "illo.web.homeWidgets"];
+const WORKILLO_KEYS = ["illo_results_v1", "illo.web.homeWidgets", "illo_node_studio_v1"];
 
 export const metadata = createMetadata({
   title: "AI비서 (비서일로) — 브라우저에서 바로 쓰는 AI 도구",

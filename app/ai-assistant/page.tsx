@@ -3,7 +3,7 @@ import RequireAdmin from "@/components/auth/RequireAdmin";
 import ProjectSync from "@/components/auth/ProjectSync";
 import IlloWebClient from "@/app/illo/app/page.client";
 
-const AI_ASSISTANT_KEYS = ["illo_results_v1", "illo.web.homeWidgets"];
+const AI_ASSISTANT_KEYS = ["illo_results_v1", "illo.web.homeWidgets", "illo_node_studio_v1"];
 
 export const metadata = createMetadata({
   title: "대리인 : AI비서 — illo.im 계정으로 바로 쓰는 AI 사무실",
