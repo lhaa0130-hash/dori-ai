@@ -6,7 +6,15 @@
     <atom:link href="https://illo.im/feed.xml" rel="self" type="application/rss+xml" />
     <description>매일 업데이트되는 AI 트렌드와 인사이트</description>
     <language>ko</language>
-    <lastBuildDate>Sun, 16 Aug 2026 04:29:37 GMT</lastBuildDate>
+    <lastBuildDate>Mon, 17 Aug 2026 07:22:34 GMT</lastBuildDate>
+    <item>
+      <title>숫자를 믿기 전에 눈으로 봐라 — 무경험자의 RPG 개발노트 #003</title>
+      <link>https://illo.im/insight/article/report-15</link>
+      <guid isPermaLink="true">https://illo.im/insight/article/report-15</guid>
+      <category>리포트</category>
+      <pubDate>Sun, 16 Aug 2026 00:00:00 GMT</pubDate>
+      <description>새 기능은 거의 없다. 이미 있던 것을 제대로 만드는 데 하루를 다 썼다. 격자를 잘못 잘라 목 없는 몸이 걸어다닌 이야기, 몸 흔들림을 제멋대로 26%에서 규칙적인 5%로 잡은 과정, AI가 두 발 번갈아 걷기를 못 그리는 문제까지.</description>
+    </item>
     <item>
       <title>네모에 그림이 입혀진 날 — 무경험자의 RPG 개발노트 #002</title>
       <link>https://illo.im/insight/article/report-14</link>

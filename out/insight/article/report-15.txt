@@ -1,0 +1,315 @@
+3:I[4707,[],""]
+5:I[36423,[],""]
+6:I[26886,["3755","static/chunks/app/insight/article/error-0821bb7015865303.js"],"default"]
+7:I[5194,["7903","static/chunks/app/insight/error-97576d8bfa4e2f78.js"],"default"]
+8:I[49294,["429","static/chunks/d94474cc-acfb47db4e4258ca.js","5117","static/chunks/ebf8faf4-1636593a5b37794d.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-2f937cd159896cab.js","2837","static/chunks/2837-1b4fc2817f4d24e9.js","8136","static/chunks/8136-809a903f7d99e7b1.js","6104","static/chunks/6104-2164f5ae2bfac950.js","4501","static/chunks/4501-4b53b1658ebb6eec.js","4706","static/chunks/4706-49145d4e7f8ac1c4.js","6020","static/chunks/6020-e934c946aa549e02.js","3185","static/chunks/app/layout-347e507600480afc.js"],"Providers"]
+9:I[6884,["429","static/chunks/d94474cc-acfb47db4e4258ca.js","5117","static/chunks/ebf8faf4-1636593a5b37794d.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-2f937cd159896cab.js","2837","static/chunks/2837-1b4fc2817f4d24e9.js","8136","static/chunks/8136-809a903f7d99e7b1.js","6104","static/chunks/6104-2164f5ae2bfac950.js","4501","static/chunks/4501-4b53b1658ebb6eec.js","4706","static/chunks/4706-49145d4e7f8ac1c4.js","6020","static/chunks/6020-e934c946aa549e02.js","3185","static/chunks/app/layout-347e507600480afc.js"],"default"]
+a:I[11403,["429","static/chunks/d94474cc-acfb47db4e4258ca.js","5117","static/chunks/ebf8faf4-1636593a5b37794d.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-2f937cd159896cab.js","2837","static/chunks/2837-1b4fc2817f4d24e9.js","8136","static/chunks/8136-809a903f7d99e7b1.js","6104","static/chunks/6104-2164f5ae2bfac950.js","4501","static/chunks/4501-4b53b1658ebb6eec.js","4706","static/chunks/4706-49145d4e7f8ac1c4.js","6020","static/chunks/6020-e934c946aa549e02.js","3185","static/chunks/app/layout-347e507600480afc.js"],"default"]
+b:I[66170,["429","static/chunks/d94474cc-acfb47db4e4258ca.js","5117","static/chunks/ebf8faf4-1636593a5b37794d.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-2f937cd159896cab.js","2837","static/chunks/2837-1b4fc2817f4d24e9.js","8136","static/chunks/8136-809a903f7d99e7b1.js","6104","static/chunks/6104-2164f5ae2bfac950.js","4501","static/chunks/4501-4b53b1658ebb6eec.js","4706","static/chunks/4706-49145d4e7f8ac1c4.js","6020","static/chunks/6020-e934c946aa549e02.js","3185","static/chunks/app/layout-347e507600480afc.js"],"default"]
+c:I[28342,["429","static/chunks/d94474cc-acfb47db4e4258ca.js","5117","static/chunks/ebf8faf4-1636593a5b37794d.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-2f937cd159896cab.js","2837","static/chunks/2837-1b4fc2817f4d24e9.js","8136","static/chunks/8136-809a903f7d99e7b1.js","6104","static/chunks/6104-2164f5ae2bfac950.js","4501","static/chunks/4501-4b53b1658ebb6eec.js","4706","static/chunks/4706-49145d4e7f8ac1c4.js","6020","static/chunks/6020-e934c946aa549e02.js","3185","static/chunks/app/layout-347e507600480afc.js"],"default"]
+d:I[70904,["429","static/chunks/d94474cc-acfb47db4e4258ca.js","5117","static/chunks/ebf8faf4-1636593a5b37794d.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-2f937cd159896cab.js","2837","static/chunks/2837-1b4fc2817f4d24e9.js","8136","static/chunks/8136-809a903f7d99e7b1.js","6104","static/chunks/6104-2164f5ae2bfac950.js","4501","static/chunks/4501-4b53b1658ebb6eec.js","4706","static/chunks/4706-49145d4e7f8ac1c4.js","6020","static/chunks/6020-e934c946aa549e02.js","3185","static/chunks/app/layout-347e507600480afc.js"],"default"]
+e:I[72972,["429","static/chunks/d94474cc-acfb47db4e4258ca.js","5117","static/chunks/ebf8faf4-1636593a5b37794d.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-2f937cd159896cab.js","6041","static/chunks/6041-6bf59ffec9f1bc39.js","4501","static/chunks/4501-4b53b1658ebb6eec.js","4706","static/chunks/4706-49145d4e7f8ac1c4.js","9606","static/chunks/9606-7b41c896dd2a9d19.js","2096","static/chunks/2096-62933dd176306883.js","2511","static/chunks/app/insight/article/%5Bslug%5D/page-04697e2ab81b8542.js"],""]
+4:["slug","report-15","d"]
+0:["1GPXB3XfBV011WLRv5Hub",[[["",{"children":["insight",{"children":["article",{"children":[["slug","report-15","d"],{"children":["__PAGE__?{\"slug\":\"report-15\"}",{}]}]}]}]},"$undefined","$undefined",true],["",{"children":["insight",{"children":["article",{"children":[["slug","report-15","d"],{"children":["__PAGE__",{},[["$L1","$L2",null],null],null]},[null,["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","insight","children","article","children","$4","children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined"}]],null]},[null,["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","insight","children","article","children"],"error":"$6","errorStyles":[],"errorScripts":[],"template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined"}]],null]},[null,["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children","insight","children"],"error":"$7","errorStyles":[],"errorScripts":[],"template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":"$undefined","notFoundStyles":"$undefined"}]],null]},[[[["$","link","0",{"rel":"stylesheet","href":"/_next/static/css/c800123597ddd813.css","precedence":"next","crossOrigin":"$undefined"}]],["$","html",null,{"lang":"ko","suppressHydrationWarning":true,"children":[["$","head",null,{"children":[["$","link",null,{"rel":"preconnect","href":"https://cdn.jsdelivr.net","crossOrigin":"anonymous"}],["$","link",null,{"rel":"preconnect","href":"https://logo.clearbit.com","crossOrigin":"anonymous"}],["$","link",null,{"rel":"dns-prefetch","href":"https://www.google.com"}],["$","link",null,{"rel":"stylesheet","href":"https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css"}],["$","link",null,{"rel":"alternate","type":"application/rss+xml","title":"illo 최신 인사이트","href":"https://illo.im/feed.xml"}],["$","meta",null,{"name":"google-adsense-account","content":"ca-pub-1868839951780851"}],["$","script",null,{"async":true,"src":"https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-1868839951780851","crossOrigin":"anonymous"}],[["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\"@context\":\"https://schema.org\",\"@type\":\"Organization\",\"name\":\"illo\",\"url\":\"https://illo.im\",\"logo\":\"https://illo.im/logo.png\",\"description\":\"AI 도구와 AI 모델을 카테고리별로 비교하고, 기술·시장 변화를 심층 분석해 정리하는 AI 정보 플랫폼입니다.\",\"email\":\"illo@illo.im\",\"sameAs\":[\"https://www.instagram.com/lhaa0130/\",\"https://x.com/doriillo\",\"https://blog.naver.com/illo26\",\"https://www.reddit.com/user/illo0601/\",\"https://www.youtube.com/@lhaa0130\"],\"areaServed\":\"KR\",\"knowsAbout\":[\"AI 도구\",\"AI 모델 비교\",\"LLM 가격\",\"AI 자동화\",\"AI 시장 분석\",\"생성형 AI\"]}"}}],["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\"@context\":\"https://schema.org\",\"@type\":\"WebSite\",\"name\":\"illo\",\"url\":\"https://illo.im\",\"description\":\"AI 도구 디렉터리, AI 모델 비교, 심층 분석 인사이트를 한 곳에서 제공하는 AI 정보 플랫폼\",\"potentialAction\":{\"@type\":\"SearchAction\",\"target\":{\"@type\":\"EntryPoint\",\"urlTemplate\":\"https://illo.im/api/search?q={search_term_string}\"},\"query-input\":\"required name=search_term_string\"}}"}}]]]}],["$","body",null,{"className":"transition-colors duration-300 bg-white text-black dark:!bg-black dark:text-white","suppressHydrationWarning":true,"style":{"fontFamily":"\"Pretendard\", -apple-system, BlinkMacSystemFont, system-ui, \"Apple SD Gothic Neo\", \"Noto Sans KR\", \"Malgun Gothic\", \"맑은 고딕\", sans-serif"},"children":["$","$L8",null,{"children":[["$","$L9",null,{}],["$","$La",null,{}],["$","$Lb",null,{}],["$","$Lc",null,{}],["$","$Ld",null,{"children":["$","$L3",null,{"parallelRouterKey":"children","segmentPath":["children"],"error":"$undefined","errorStyles":"$undefined","errorScripts":"$undefined","template":["$","$L5",null,{}],"templateStyles":"$undefined","templateScripts":"$undefined","notFound":["$","main",null,{"className":"min-h-[80vh] flex flex-col items-center justify-center px-6 text-center","children":[["$","p",null,{"className":"text-7xl font-black text-[#F9954E]","children":"404"}],["$","h1",null,{"className":"mt-4 text-2xl font-bold text-foreground","children":"앗, 페이지를 찾을 수 없어요"}],["$","p",null,{"className":"mt-2 text-stone-500 dark:text-stone-400","children":"주소가 바뀌었거나 삭제된 페이지일 수 있어요. 아래에서 원하는 곳으로 이동해 보세요."}],["$","div",null,{"className":"mt-8 flex flex-wrap items-center justify-center gap-3","children":[["$","$Le",null,{"href":"/","className":"px-5 py-2.5 rounded-full bg-[#F9954E] text-white text-sm font-bold hover:bg-[#E8832E] transition-colors","children":"홈으로"}],["$","$Le",null,{"href":"/insight","className":"px-5 py-2.5 rounded-full border border-stone-300 dark:border-stone-700 text-sm font-bold hover:bg-stone-50 dark:hover:bg-stone-900 transition-colors","children":"AI 인사이트"}],["$","$Le",null,{"href":"/ai-tools","className":"px-5 py-2.5 rounded-full border border-stone-300 dark:border-stone-700 text-sm font-bold hover:bg-stone-50 dark:hover:bg-stone-900 transition-colors","children":"AI 도구 모음"}]]}]]}],"notFoundStyles":[]}]}]]}]}]]}]],null],null],["$Lf",null]]]]
+10:"$Sreact.suspense"
+11:I[60990,["429","static/chunks/d94474cc-acfb47db4e4258ca.js","5117","static/chunks/ebf8faf4-1636593a5b37794d.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-2f937cd159896cab.js","6041","static/chunks/6041-6bf59ffec9f1bc39.js","4501","static/chunks/4501-4b53b1658ebb6eec.js","4706","static/chunks/4706-49145d4e7f8ac1c4.js","9606","static/chunks/9606-7b41c896dd2a9d19.js","2096","static/chunks/2096-62933dd176306883.js","2511","static/chunks/app/insight/article/%5Bslug%5D/page-04697e2ab81b8542.js"],"default"]
+12:I[65878,["429","static/chunks/d94474cc-acfb47db4e4258ca.js","5117","static/chunks/ebf8faf4-1636593a5b37794d.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-2f937cd159896cab.js","6041","static/chunks/6041-6bf59ffec9f1bc39.js","4501","static/chunks/4501-4b53b1658ebb6eec.js","4706","static/chunks/4706-49145d4e7f8ac1c4.js","9606","static/chunks/9606-7b41c896dd2a9d19.js","2096","static/chunks/2096-62933dd176306883.js","2511","static/chunks/app/insight/article/%5Bslug%5D/page-04697e2ab81b8542.js"],"Image"]
+13:I[23004,["429","static/chunks/d94474cc-acfb47db4e4258ca.js","5117","static/chunks/ebf8faf4-1636593a5b37794d.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-2f937cd159896cab.js","6041","static/chunks/6041-6bf59ffec9f1bc39.js","4501","static/chunks/4501-4b53b1658ebb6eec.js","4706","static/chunks/4706-49145d4e7f8ac1c4.js","9606","static/chunks/9606-7b41c896dd2a9d19.js","2096","static/chunks/2096-62933dd176306883.js","2511","static/chunks/app/insight/article/%5Bslug%5D/page-04697e2ab81b8542.js"],"default"]
+15:I[8034,["429","static/chunks/d94474cc-acfb47db4e4258ca.js","5117","static/chunks/ebf8faf4-1636593a5b37794d.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-2f937cd159896cab.js","6041","static/chunks/6041-6bf59ffec9f1bc39.js","4501","static/chunks/4501-4b53b1658ebb6eec.js","4706","static/chunks/4706-49145d4e7f8ac1c4.js","9606","static/chunks/9606-7b41c896dd2a9d19.js","2096","static/chunks/2096-62933dd176306883.js","2511","static/chunks/app/insight/article/%5Bslug%5D/page-04697e2ab81b8542.js"],"default"]
+17:I[89961,["429","static/chunks/d94474cc-acfb47db4e4258ca.js","5117","static/chunks/ebf8faf4-1636593a5b37794d.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-2f937cd159896cab.js","6041","static/chunks/6041-6bf59ffec9f1bc39.js","4501","static/chunks/4501-4b53b1658ebb6eec.js","4706","static/chunks/4706-49145d4e7f8ac1c4.js","9606","static/chunks/9606-7b41c896dd2a9d19.js","2096","static/chunks/2096-62933dd176306883.js","2511","static/chunks/app/insight/article/%5Bslug%5D/page-04697e2ab81b8542.js"],"default"]
+18:I[83486,["429","static/chunks/d94474cc-acfb47db4e4258ca.js","5117","static/chunks/ebf8faf4-1636593a5b37794d.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-2f937cd159896cab.js","6041","static/chunks/6041-6bf59ffec9f1bc39.js","4501","static/chunks/4501-4b53b1658ebb6eec.js","4706","static/chunks/4706-49145d4e7f8ac1c4.js","9606","static/chunks/9606-7b41c896dd2a9d19.js","2096","static/chunks/2096-62933dd176306883.js","2511","static/chunks/app/insight/article/%5Bslug%5D/page-04697e2ab81b8542.js"],"default"]
+19:I[49577,["429","static/chunks/d94474cc-acfb47db4e4258ca.js","5117","static/chunks/ebf8faf4-1636593a5b37794d.js","2972","static/chunks/2972-e67bfd92f58dbb18.js","129","static/chunks/129-2f937cd159896cab.js","6041","static/chunks/6041-6bf59ffec9f1bc39.js","4501","static/chunks/4501-4b53b1658ebb6eec.js","4706","static/chunks/4706-49145d4e7f8ac1c4.js","9606","static/chunks/9606-7b41c896dd2a9d19.js","2096","static/chunks/2096-62933dd176306883.js","2511","static/chunks/app/insight/article/%5Bslug%5D/page-04697e2ab81b8542.js"],"default"]
+14:T623,<p><img src="/thumbnails/guide/guide18.png" alt="잘못 자른 4×3 격자에서 몸이 갈린 모습과, 발바닥이 한 줄에 맞아 규칙적으로 오르내리는 걸음을 나란히 둔 그림"></p>
+<hr>
+<blockquote>
+<p>🔒 <strong><a href="/games/palhyup/2026-08-16/">이 글 시점의 버전으로 플레이 (8월 16일)</a></strong>
+설치 없이 브라우저에서 바로 실행된다. PC는 WASD + 스페이스, 휴대폰은 화면을 끌면 조이스틱이 나온다.</p>
+<p>🔄 <a href="/games/palhyup/latest/">지금 최신 버전 →</a> · 계속 바뀐다. 아래 글 내용과 다를 수 있다.</p>
+</blockquote>
+<p>『 밤토리의 무림 』</p>
+<p>노트 <a href="/insight/article/report-14">#002</a> 다음 하루. 새 기능은 거의 없다. <strong>이미 있던 것을 제대로 만드는 데 하루를 다 썼다.</strong></p>
+<hr>
+<h2 id="sec-1">한눈에</h2>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th></th>
+<th>#002 (8/15)</th>
+<th>#003 (8/16)</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>이름</td>
+<td>팔협 RPG</td>
+<td><strong>밤토리의 무림</strong></td>
+</tr>
+<tr>
+<td>소스</td>
+<td>6,636줄</td>
+<td>6,762줄</td>
+</tr>
+<tr>
+<td>그림</td>
+<td>17장 · 810KB</td>
+<td><strong>31장 · 1,811KB</strong></td>
+</tr>
+<tr>
+<td>밤토리 동작</td>
+<td>걸음 8칸 + 벨 때</td>
+<td><strong>걸음 5방향 40칸 · 서 있기 5방향 30칸 · 주먹질 6칸 · 몸짓 8칸</strong></td>
+</tr>
+<tr>
+<td>도구</td>
+<td>4개</td>
+<td><strong>10개</strong> (재는 도구 3개 새로)</td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+16:T2979,<h2 id="sec-2">1. 이름을 바꿨다</h2>
+<p>『팔협 RPG』 → <strong>『밤토리의 무림』</strong>. 주인공도 다람검객에서 <strong>밤토리</strong>가 됐다.
+첫 화면도 새로 만들었다 — 왼쪽으로 계속 흘러도 끊기지 않는 무한 파노라마.</p>
+<p>계정 화면은 세 갈래로 정리했다. 구글 로그인 · 사이트 아이디 연동 · 게스트.
+실제 연결은 나중이고, 지금은 자리만 잡아 뒀다.</p>
+<hr>
+<h2 id="sec-3">2. 움직임 — "너무 빠르고 부자연스럽다"</h2>
+<p>가장 오래 붙든 문제. 처음엔 박자만 재고 있었다.</p>
+<p><strong>1차 — 박자</strong>
+걸음이 0.45초에 두 걸음이었다. 사람으로 치면 뛰는 속도. 숨쉬기도 0.7초라 헐떡이는 것 같았다.</p>
+<p><strong>2차 — 속도</strong>
+전체를 0.7배로 늦췄다. 몬스터·마을 사람도 같은 비율로 늦춰서 난이도는 그대로다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th></th>
+<th>전</th>
+<th>후</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>걷는 속도</td>
+<td>180px/초</td>
+<td><strong>89px/초</strong></td>
+</tr>
+<tr>
+<td>초당 제 키의</td>
+<td>1.55배</td>
+<td><strong>0.77배</strong> (사람 0.8)</td>
+</tr>
+<tr>
+<td>보폭</td>
+<td>키의 0.67배</td>
+<td><strong>0.38배</strong> (사람 0.42)</td>
+</tr>
+<tr>
+<td>구르기</td>
+<td>0.25초 87px</td>
+<td><strong>0.30초 61px</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p><strong>3차 — 그림</strong>
+그래도 부자연스러웠다. 재보니 원인은 속도가 아니라 그림이었다.</p>
+<ul>
+<li>칸마다 <strong>키가 15~22% 달랐다</strong> — 걸을 때마다 커졌다 작아졌다</li>
+<li>몸이 <strong>제멋대로 16~25% 오르내렸다</strong> (자연스러운 건 3~6%)</li>
+</ul>
+<p><strong>몸이 오르내리는 건 그림에서 지우고 코드에서 넣었다.</strong> 발바닥을 한 줄에 맞춰
+평평하게 만든 뒤, <code>WALK_BOB</code>으로 키의 3% 안쪽만 규칙적으로 흔든다.
+26.4% 제멋대로 → <strong>4.9% 규칙적인 파도</strong>, 한 바퀴에 정확히 두 번.</p>
+<hr>
+<h2 id="sec-4">3. 목 없는 몸이 걸어다녔다</h2>
+<p>휴대폰 화면을 보내주셔서 알았다. <strong>머리가 잘려 있었다.</strong></p>
+<p>원인은 내가 만든 것이었다. <code>a_down.png</code>는 <strong>6칸 × 2줄</strong>인데 4×3으로 잘랐다.
+한 칸에 얼굴만, 다음 칸에 다리만 들어갔다. 게다가 그 잘못 자른 그림으로 품질을
+재고는 "그림이 나쁘다"고 결론 내려 멀쩡한 그림을 새로 뽑기까지 했다.</p>
+<p>더 큰 문제는 그다음이었다. 격자를 고쳐도 잘림이 남았다.
+<strong>소스에서 다람쥐들이 서로 붙어 있었다.</strong> 옆모습은 12칸 전부 칸 경계를 넘었다.
+어떻게 잘라도 옆 그림의 꼬리가 딸려 들어온다.</p>
+<p><strong>그래서 격자를 버렸다.</strong> 이제 도구가 알파 채널의 빈 줄을 찾아 그림을 하나씩
+떼어낸다. 붙어 있으면 개수가 안 맞는다고 <strong>멈춘다.</strong></p>
+<hr>
+<h2 id="sec-5">4. 다시 배운 것 — 숫자를 믿기 전에 눈으로 봐라</h2>
+<p>이 버그를 못 잡은 진짜 이유는 <strong>게임 화면을 한 번도 안 봤기 때문</strong>이다.
+픽셀을 재는 검사를 돌렸는데, 그 검사가 배경(풀·등불 흔들림) 때문에
+계속 거짓 합격을 냈다. 화면을 그대로 뽑아 보니 1분 만에 보였다.</p>
+<p>지금은 <strong>배경 없이 밤토리만 그려서</strong> 잰다. 그러면 안 속는다.</p>
+<hr>
+<h2 id="sec-6">5. AI가 못 그리는 것</h2>
+<p><strong>두 발 번갈아 걷기.</strong> 여덟 칸을 시키면 5<del>8번이 1</del>4번의 복사본으로 나온다.
+"가까운 다리 / 먼 다리", "5~8번은 복사본이면 안 된다"까지 넣어 <strong>세 번</strong> 시켜도 똑같았다.</p>
+<p>반대 발 판을 따로 뽑아 이어붙여 봤다. 발은 바뀌었는데 <strong>귀 모양이 달라졌다.</strong>
+같은 문장으로 시켜도 판마다 귀와 얼굴이 미묘하게 다르다.
+기준 그림을 주는 기능은 도구가 받지 않는다.</p>
+<blockquote>
+<p>걷는 중에 귀가 바뀌는 게, 발이 안 바뀌는 것보다 훨씬 눈에 띈다.</p>
+</blockquote>
+<p><strong>그래서 한 방향은 반드시 한 장에서만 만든다.</strong> 그 여덟 칸을
+<code>벌어짐 → 중간 → 모임 → 중간</code> 두 번으로 다시 엮는다. 발은 안 바뀌지만
+얼굴·귀·옷이 절대 안 바뀌고 박자가 고르다. 옛날 2D 게임들이 쓰던 방식이다.</p>
+<hr>
+<h2 id="sec-7">6. 재는 도구를 만들었다</h2>
+<p>테일즈위버 파일이 없어도 품질은 숫자로 잴 수 있다.</p>
+<pre><code class="language-bash">python tools/check_walk.py a0_side     # 걸음이 걸음다운가
+python tools/check_gait.py a0_side     # 두 발이 번갈아 나오는가
+python tools/cmp_step.py A 4 2 B 4 1   # 두 판이 다른 발인가
+</code></pre>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th>재는 것</th>
+<th>합격</th>
+<th>뜻</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>키 흔들림</td>
+<td>3% 이하</td>
+<td>걸을 때 커졌다 작아지지 않는가</td>
+</tr>
+<tr>
+<td>발 리듬</td>
+<td>0.4 이상</td>
+<td>두 발이 벌어졌다 모이는 박자가 고른가</td>
+</tr>
+<tr>
+<td>덜컹</td>
+<td>1.6배 이하</td>
+<td>한 칸만 확 튀지 않는가</td>
+</tr>
+<tr>
+<td>여백</td>
+<td>8px 이상</td>
+<td>칸 가장자리에 안 닿는가</td>
+</tr>
+</tbody>
+</table></div>
+<p><code>check_gait.py</code>는 <strong>실루엣이 아니라 다리 밝기</strong>로 판단한다. 가까운 발은 밝고
+먼 발은 어둡게 그려지니, 앞으로 나온 다리가 밝은지 어두운지로 갈린다.
+실루엣만 보면 못 잡는다 — 이것도 한 번 속고 나서 알았다.</p>
+<hr>
+<h2 id="sec-8">7. 색이 판마다 달랐다</h2>
+<p>서 있을 때가 걸을 때보다 눈에 띄게 밝고 하얬다. <strong>다른 캐릭터처럼 보였다.</strong></p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th></th>
+<th>밝기</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>걷기</td>
+<td>138~145</td>
+</tr>
+<tr>
+<td>서 있기 · 주먹질 · 몸짓</td>
+<td>155~161</td>
+</tr>
+</tbody>
+</table></div>
+<p>다시 뽑는 대신 <strong>색을 계산해서 맞췄다.</strong> <code>--match</code>를 붙이면 이미 심어둔 그림의
+채널별 평균과 폭에 맞춰 보정한다. 밝기 차이 15 → <strong>0.7</strong>.</p>
+<hr>
+<h2 id="sec-9">8. 8방향</h2>
+<p>걸음 다섯 판(동·남·북·남동·북동)을 좌우로 뒤집어 여덟 방향을 만든다.
+<strong>서 있는 모습도 같은 다섯 판</strong>을 새로 뽑아 여덟 방향을 채웠다. 빠진 방향 0개.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th></th>
+<th>걷기</th>
+<th>서 있기</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>방향끼리 키 차이</td>
+<td><strong>0px</strong></td>
+<td>1px</td>
+</tr>
+<tr>
+<td>좌우 거울 오차</td>
+<td><strong>0.02px</strong></td>
+<td>—</td>
+</tr>
+<tr>
+<td>동작끼리 밝기 차이</td>
+<td><strong>0.7</strong></td>
+<td></td>
+</tr>
+</tbody>
+</table></div>
+<hr>
+<h2 id="sec-10">9. 방향이 뒤집혔다</h2>
+<p>대각선으로 걸으면 반대 방향이 한 번씩 튀었다.
+<strong>손가락이 조이스틱 가운데를 스칠 때</strong> 아주 작은 벡터가 아무 방향이나 가리켰고,
+그게 그대로 방향이 됐다.</p>
+<div class="table-scroll"><table>
+<thead>
+<tr>
+<th></th>
+<th>전</th>
+<th>후</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>300프레임당 뒤집힘</td>
+<td><strong>30번</strong></td>
+<td><strong>0번</strong></td>
+</tr>
+</tbody>
+</table></div>
+<p>문턱(0.4)을 두고, 각도로 서서히 돌리고, 지금 칸에서 32도 넘게 벗어나야 바꾼다.
+도는 건 여전히 빠르다 — 180도 0.20초, 90도 0.10초.</p>
+<hr>
+<h2 id="sec-11">10. 마을 바닥</h2>
+<p>十자 직선을 없애고 <strong>네 문에서 굽이쳐 들어오는 흙길</strong>로 바꿨다.
+길은 네 겹 — 길섶 그늘, 흙, 닳은 자리, 한가운데 발길 자국. 양옆에 자갈을 흩뿌렸고
+등불도 격자가 아니라 길을 따라 선다. 한가운데는 네모 광장 대신 <strong>둥근 흙마당</strong>.</p>
+<p>가로로 <strong>나지막한 층계 두 단</strong>을 넣었다. 단 위쪽은 볕을 받아 밝고 아래로 그늘이 깔린다.
+풀밭에 크고 흐린 얼룩을 34개 뿌려 <strong>같은 무늬가 반복돼 보이던 격자 자국</strong>도 죽였다.</p>
+<p>바닥은 <strong>한 번만 그려 저장</strong>해 두고 화면에 보이는 만큼만 얹는다.</p>
+<ul>
+<li>처음 그리기 2ms (한 번만) · 그 뒤 얹기 <strong>0.007ms</strong> · 한 프레임 <strong>1.08ms</strong></li>
+</ul>
+<hr>
+<h2 id="sec-12">그 밖</h2>
+<ul>
+<li><strong>0차 살아있는자는 병기를 들지 않는다.</strong> 목검은 받되 봇짐에 넣고 다니다가,
+1차 전직에서 손에 든다. 대사도 맞췄다</li>
+<li>이름표가 목을 가로지르고 있었다 — 머리 위로 올렸다</li>
+<li>칸 여백을 늘리면서 목검이 손에서 떨어졌다 — <code>HAND_FIT</code>으로 맞췄다</li>
+</ul>
+<hr>
+<h2 id="sec-13">잡은 버그</h2>
+<ul>
+<li><strong>목 없는 몸</strong> — 격자를 4×3으로 잘못 잘라 머리와 다리가 따로 잘렸다</li>
+<li><strong>좌우 걸음이 다른 속도로 보임</strong> — 머리를 기준으로 칸을 맞췄는데 머리가 105px 흔들려 몸이 앞뒤로 밀렸다</li>
+<li><strong>꼬리·손이 칸 밖으로 잘림</strong> — 소스에서 그림끼리 붙어 있었다</li>
+<li><strong>대각선에서 반대 방향이 튐</strong> — 조이스틱 가운데의 작은 벡터</li>
+<li><strong>위로 걸을 때 쩍벌다리</strong> — 뒷모습은 발이 앞뒤로 벌어지는데 가로 폭으로 골랐다</li>
+<li><strong>180도 돌면 제자리에서 멈춤</strong> — 벡터로 섞어서. 각도로 돌리게 고쳤다</li>
+<li><strong>동작마다 캐릭터가 다름</strong> — 판마다 색이 달랐다</li>
+</ul>
+<hr>
+<h2 id="sec-14">다음</h2>
+<ul>
+<li>마을 건물·나무·연못을 새 길에 맞춰 옮기기</li>
+<li>1차 전직 이후(무인) 그림도 같은 규격으로</li>
+<li>새 지역 몬스터 그림</li>
+</ul>
+<hr>
+<blockquote>
+<p>🔒 <strong><a href="/games/palhyup/2026-08-16/">이 글 시점의 버전으로 플레이 (8월 16일)</a></strong>
+🔄 <a href="/games/palhyup/latest/">지금 최신 버전 →</a></p>
+</blockquote>
+<hr>
+<p><em>개발노트 #003 · 2026-08-16</em></p>
+2:["$","$10",null,{"fallback":["$","div",null,{"children":"Loading..."}],"children":[["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\"@context\":\"https://schema.org\",\"@type\":\"NewsArticle\",\"headline\":\"숫자를 믿기 전에 눈으로 봐라 — 무경험자의 RPG 개발노트 #003\",\"description\":\"숫자를 믿기 전에 눈으로 봐라 — 무경험자의 RPG 개발노트 #003\",\"image\":[\"/thumbnails/guide/guide18.png?v=1\"],\"datePublished\":\"2026-08-16\",\"dateModified\":\"2026-08-16\",\"author\":{\"@type\":\"Organization\",\"name\":\"illo\",\"url\":\"https://illo.im\"},\"publisher\":{\"@type\":\"Organization\",\"name\":\"illo\",\"logo\":{\"@type\":\"ImageObject\",\"url\":\"https://illo.im/icon.svg\",\"width\":512,\"height\":512}},\"mainEntityOfPage\":{\"@type\":\"WebPage\",\"@id\":\"https://illo.im/insight/article/report-15\"},\"articleSection\":\"리포트\",\"isAccessibleForFree\":true,\"keywords\":\"게임개발, RPG, 애니메이션, 스프라이트, 개발일지\"}"}}],["$","script",null,{"type":"application/ld+json","dangerouslySetInnerHTML":{"__html":"{\"@context\":\"https://schema.org\",\"@type\":\"BreadcrumbList\",\"itemListElement\":[{\"@type\":\"ListItem\",\"position\":1,\"name\":\"홈\",\"item\":\"https://illo.im\"},{\"@type\":\"ListItem\",\"position\":2,\"name\":\"AI 인사이트\",\"item\":\"https://illo.im/insight\"},{\"@type\":\"ListItem\",\"position\":3,\"name\":\"숫자를 믿기 전에 눈으로 봐라 — 무경험자의 RPG 개발노트 #003\",\"item\":\"https://illo.im/insight/article/report-15\"}]}"}}],["$","$L11",null,{}],["$","div",null,{"style":{"minHeight":"100vh"},"children":["$","article",null,{"className":"max-w-4xl mx-auto p-4 md:p-8","children":[["$","h1",null,{"className":"text-4xl md:text-5xl font-extrabold mb-4 text-center","children":"숫자를 믿기 전에 눈으로 봐라 — 무경험자의 RPG 개발노트 #003"}],["$","div",null,{"className":"mb-8 rounded-lg overflow-hidden relative w-full h-[400px]","children":["$","$L12",null,{"src":"/thumbnails/guide/guide18.png?v=1","alt":"숫자를 믿기 전에 눈으로 봐라 — 무경험자의 RPG 개발노트 #003","fill":true,"style":{"objectFit":"cover"},"priority":true}]}],["$","div",null,{"className":"text-gray-600 dark:text-gray-400 text-sm text-center mb-4","children":[["$","time",null,{"dateTime":"2026-08-16","children":["2026년 8월 16일",false]}],["$","span",null,{"children":[" by ","illo"]}]]}],["$","div",null,{"className":"flex justify-center mb-8","children":["$","$L13",null,{"url":"https://illo.im/insight/article/report-15","title":"숫자를 믿기 전에 눈으로 봐라 — 무경험자의 RPG 개발노트 #003"}]}],["$","details",null,{"className":"mb-8 rounded-2xl border border-stone-100 dark:border-zinc-800 bg-stone-50/60 dark:bg-zinc-900/40 px-5 py-4","children":[["$","summary",null,{"className":"cursor-pointer select-none text-[13.5px] font-extrabold text-stone-900 dark:text-white","children":["목차 ",["$","span",null,{"className":"ml-1 font-bold text-stone-400","children":14}]]}],["$","ol",null,{"className":"mt-3 space-y-1.5","children":[["$","li","sec-1",{"className":"flex gap-2","children":[["$","span",null,{"className":"shrink-0 text-[12px] font-bold tabular-nums text-stone-300 dark:text-zinc-600","children":"01"}],["$","a",null,{"href":"#sec-1","className":"text-[13.5px] leading-relaxed text-stone-600 dark:text-stone-300 break-keep hover:text-[#F9954E] transition-colors","children":"한눈에"}]]}],["$","li","sec-2",{"className":"flex gap-2","children":[["$","span",null,{"className":"shrink-0 text-[12px] font-bold tabular-nums text-stone-300 dark:text-zinc-600","children":"02"}],["$","a",null,{"href":"#sec-2","className":"text-[13.5px] leading-relaxed text-stone-600 dark:text-stone-300 break-keep hover:text-[#F9954E] transition-colors","children":"1. 이름을 바꿨다"}]]}],["$","li","sec-3",{"className":"flex gap-2","children":[["$","span",null,{"className":"shrink-0 text-[12px] font-bold tabular-nums text-stone-300 dark:text-zinc-600","children":"03"}],["$","a",null,{"href":"#sec-3","className":"text-[13.5px] leading-relaxed text-stone-600 dark:text-stone-300 break-keep hover:text-[#F9954E] transition-colors","children":"2. 움직임 — \"너무 빠르고 부자연스럽다\""}]]}],["$","li","sec-4",{"className":"flex gap-2","children":[["$","span",null,{"className":"shrink-0 text-[12px] font-bold tabular-nums text-stone-300 dark:text-zinc-600","children":"04"}],["$","a",null,{"href":"#sec-4","className":"text-[13.5px] leading-relaxed text-stone-600 dark:text-stone-300 break-keep hover:text-[#F9954E] transition-colors","children":"3. 목 없는 몸이 걸어다녔다"}]]}],["$","li","sec-5",{"className":"flex gap-2","children":[["$","span",null,{"className":"shrink-0 text-[12px] font-bold tabular-nums text-stone-300 dark:text-zinc-600","children":"05"}],["$","a",null,{"href":"#sec-5","className":"text-[13.5px] leading-relaxed text-stone-600 dark:text-stone-300 break-keep hover:text-[#F9954E] transition-colors","children":"4. 다시 배운 것 — 숫자를 믿기 전에 눈으로 봐라"}]]}],["$","li","sec-6",{"className":"flex gap-2","children":[["$","span",null,{"className":"shrink-0 text-[12px] font-bold tabular-nums text-stone-300 dark:text-zinc-600","children":"06"}],["$","a",null,{"href":"#sec-6","className":"text-[13.5px] leading-relaxed text-stone-600 dark:text-stone-300 break-keep hover:text-[#F9954E] transition-colors","children":"5. AI가 못 그리는 것"}]]}],["$","li","sec-7",{"className":"flex gap-2","children":[["$","span",null,{"className":"shrink-0 text-[12px] font-bold tabular-nums text-stone-300 dark:text-zinc-600","children":"07"}],["$","a",null,{"href":"#sec-7","className":"text-[13.5px] leading-relaxed text-stone-600 dark:text-stone-300 break-keep hover:text-[#F9954E] transition-colors","children":"6. 재는 도구를 만들었다"}]]}],["$","li","sec-8",{"className":"flex gap-2","children":[["$","span",null,{"className":"shrink-0 text-[12px] font-bold tabular-nums text-stone-300 dark:text-zinc-600","children":"08"}],["$","a",null,{"href":"#sec-8","className":"text-[13.5px] leading-relaxed text-stone-600 dark:text-stone-300 break-keep hover:text-[#F9954E] transition-colors","children":"7. 색이 판마다 달랐다"}]]}],["$","li","sec-9",{"className":"flex gap-2","children":[["$","span",null,{"className":"shrink-0 text-[12px] font-bold tabular-nums text-stone-300 dark:text-zinc-600","children":"09"}],["$","a",null,{"href":"#sec-9","className":"text-[13.5px] leading-relaxed text-stone-600 dark:text-stone-300 break-keep hover:text-[#F9954E] transition-colors","children":"8. 8방향"}]]}],["$","li","sec-10",{"className":"flex gap-2","children":[["$","span",null,{"className":"shrink-0 text-[12px] font-bold tabular-nums text-stone-300 dark:text-zinc-600","children":"10"}],["$","a",null,{"href":"#sec-10","className":"text-[13.5px] leading-relaxed text-stone-600 dark:text-stone-300 break-keep hover:text-[#F9954E] transition-colors","children":"9. 방향이 뒤집혔다"}]]}],["$","li","sec-11",{"className":"flex gap-2","children":[["$","span",null,{"className":"shrink-0 text-[12px] font-bold tabular-nums text-stone-300 dark:text-zinc-600","children":"11"}],["$","a",null,{"href":"#sec-11","className":"text-[13.5px] leading-relaxed text-stone-600 dark:text-stone-300 break-keep hover:text-[#F9954E] transition-colors","children":"10. 마을 바닥"}]]}],["$","li","sec-12",{"className":"flex gap-2","children":[["$","span",null,{"className":"shrink-0 text-[12px] font-bold tabular-nums text-stone-300 dark:text-zinc-600","children":"12"}],["$","a",null,{"href":"#sec-12","className":"text-[13.5px] leading-relaxed text-stone-600 dark:text-stone-300 break-keep hover:text-[#F9954E] transition-colors","children":"그 밖"}]]}],["$","li","sec-13",{"className":"flex gap-2","children":[["$","span",null,{"className":"shrink-0 text-[12px] font-bold tabular-nums text-stone-300 dark:text-zinc-600","children":"13"}],["$","a",null,{"href":"#sec-13","className":"text-[13.5px] leading-relaxed text-stone-600 dark:text-stone-300 break-keep hover:text-[#F9954E] transition-colors","children":"잡은 버그"}]]}],["$","li","sec-14",{"className":"flex gap-2","children":[["$","span",null,{"className":"shrink-0 text-[12px] font-bold tabular-nums text-stone-300 dark:text-zinc-600","children":"14"}],["$","a",null,{"href":"#sec-14","className":"text-[13.5px] leading-relaxed text-stone-600 dark:text-stone-300 break-keep hover:text-[#F9954E] transition-colors","children":"다음"}]]}]]}]]}],["$","div",null,{"className":"prose-premium max-w-none","dangerouslySetInnerHTML":{"__html":"$14"}}],["$","$L15",null,{}],["$","div",null,{"className":"prose-premium max-w-none","dangerouslySetInnerHTML":{"__html":"$16"}}],["$","$L15",null,{"className":"mt-10"}],["$","$L17",null,{"topicId":"article_report-15","heading":"이 글에 대한 의견"}],["$","div",null,{"className":"mt-10 pt-6 border-t border-stone-200 dark:border-stone-800","children":["$","$L13",null,{"url":"https://illo.im/insight/article/report-15","title":"숫자를 믿기 전에 눈으로 봐라 — 무경험자의 RPG 개발노트 #003"}]}],["$","$L18",null,{"slug":"report-15","title":"숫자를 믿기 전에 눈으로 봐라 — 무경험자의 RPG 개발노트 #003"}],["$","section",null,{"className":"mt-12 pt-8 border-t border-stone-200 dark:border-stone-800","children":[["$","h2",null,{"className":"text-lg font-extrabold text-foreground mb-5","children":"이런 기사는 어떠세요? 🤔"}],["$","div",null,{"className":"grid grid-cols-1 sm:grid-cols-3 gap-4","children":[["$","$Le","report-14",{"href":"/insight/article/report-14","className":"group block bg-white dark:bg-stone-900 rounded-xl border border-stone-100 dark:border-stone-800 overflow-hidden hover:border-[#F9954E] dark:hover:border-[#F9954E] hover:shadow-md transition-all duration-300 hover:-translate-y-0.5","children":[["$","div",null,{"className":"relative w-full h-32 bg-gradient-to-br from-[#F9954E]/10 to-[#FF7B54]/5","children":["$","$L12",null,{"src":"/thumbnails/guide/guide17.png?v=1","alt":"네모에 그림이 입혀진 날 — 무경험자의 RPG 개발노트 #002","fill":true,"style":{"objectFit":"cover"},"className":"group-hover:scale-105 transition-transform duration-500","sizes":"(max-width: 640px) 100vw, 33vw"}]}],["$","div",null,{"className":"p-3","children":[["$","h3",null,{"className":"text-xs font-bold text-stone-900 dark:text-white line-clamp-2 mb-1.5 group-hover:text-[#F9954E] transition-colors","children":"네모에 그림이 입혀진 날 — 무경험자의 RPG 개발노트 #002"}],["$","div",null,{"className":"flex items-center gap-1 text-[10px] text-stone-400","children":[["$","svg",null,{"xmlns":"http://www.w3.org/2000/svg","width":24,"height":24,"viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","strokeWidth":2,"strokeLinecap":"round","strokeLinejoin":"round","className":"lucide lucide-calendar w-3 h-3","aria-hidden":"true","children":[["$","path","1cmpym",{"d":"M8 2v4"}],["$","path","4m81vk",{"d":"M16 2v4"}],["$","rect","1hopcy",{"width":"18","height":"18","x":"3","y":"4","rx":"2"}],["$","path","8toen8",{"d":"M3 10h18"}],"$undefined"]}],["$","time",null,{"dateTime":"2026-08-15","children":["8월 15일",false]}]]}]]}]]}],["$","$Le","report-13",{"href":"/insight/article/report-13","className":"group block bg-white dark:bg-stone-900 rounded-xl border border-stone-100 dark:border-stone-800 overflow-hidden hover:border-[#F9954E] dark:hover:border-[#F9954E] hover:shadow-md transition-all duration-300 hover:-translate-y-0.5","children":[["$","div",null,{"className":"relative w-full h-32 bg-gradient-to-br from-[#F9954E]/10 to-[#FF7B54]/5","children":["$","$L12",null,{"src":"/thumbnails/guide/guide16.png?v=1","alt":"네모 한 칸에서 무협 세계까지 — 프로그래밍 무경험자의 RPG 개발노트 #001","fill":true,"style":{"objectFit":"cover"},"className":"group-hover:scale-105 transition-transform duration-500","sizes":"(max-width: 640px) 100vw, 33vw"}]}],["$","div",null,{"className":"p-3","children":[["$","h3",null,{"className":"text-xs font-bold text-stone-900 dark:text-white line-clamp-2 mb-1.5 group-hover:text-[#F9954E] transition-colors","children":"네모 한 칸에서 무협 세계까지 — 프로그래밍 무경험자의 RPG 개발노트 #001"}],["$","div",null,{"className":"flex items-center gap-1 text-[10px] text-stone-400","children":[["$","svg",null,{"xmlns":"http://www.w3.org/2000/svg","width":24,"height":24,"viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","strokeWidth":2,"strokeLinecap":"round","strokeLinejoin":"round","className":"lucide lucide-calendar w-3 h-3","aria-hidden":"true","children":[["$","path","1cmpym",{"d":"M8 2v4"}],["$","path","4m81vk",{"d":"M16 2v4"}],["$","rect","1hopcy",{"width":"18","height":"18","x":"3","y":"4","rx":"2"}],["$","path","8toen8",{"d":"M3 10h18"}],"$undefined"]}],["$","time",null,{"dateTime":"2026-08-14","children":["8월 14일",false]}]]}]]}]]}],["$","$Le","analysis-15",{"href":"/insight/article/analysis-15","className":"group block bg-white dark:bg-stone-900 rounded-xl border border-stone-100 dark:border-stone-800 overflow-hidden hover:border-[#F9954E] dark:hover:border-[#F9954E] hover:shadow-md transition-all duration-300 hover:-translate-y-0.5","children":[["$","div",null,{"className":"relative w-full h-32 bg-gradient-to-br from-[#F9954E]/10 to-[#FF7B54]/5","children":["$","$L12",null,{"src":"/thumbnails/analysis/analysis-15.jpg","alt":"학생 AI 숙제 사용 확산: 학교 규칙은 왜 따라오지 못하나","fill":true,"style":{"objectFit":"cover"},"className":"group-hover:scale-105 transition-transform duration-500","sizes":"(max-width: 640px) 100vw, 33vw"}]}],["$","div",null,{"className":"p-3","children":[["$","h3",null,{"className":"text-xs font-bold text-stone-900 dark:text-white line-clamp-2 mb-1.5 group-hover:text-[#F9954E] transition-colors","children":"학생 AI 숙제 사용 확산: 학교 규칙은 왜 따라오지 못하나"}],["$","div",null,{"className":"flex items-center gap-1 text-[10px] text-stone-400","children":[["$","svg",null,{"xmlns":"http://www.w3.org/2000/svg","width":24,"height":24,"viewBox":"0 0 24 24","fill":"none","stroke":"currentColor","strokeWidth":2,"strokeLinecap":"round","strokeLinejoin":"round","className":"lucide lucide-calendar w-3 h-3","aria-hidden":"true","children":[["$","path","1cmpym",{"d":"M8 2v4"}],["$","path","4m81vk",{"d":"M16 2v4"}],["$","rect","1hopcy",{"width":"18","height":"18","x":"3","y":"4","rx":"2"}],["$","path","8toen8",{"d":"M3 10h18"}],"$undefined"]}],["$","time",null,{"dateTime":"2026-07-20T14:03:43+09:00","children":["7월 20일",["$","span",null,{"className":"ml-1 opacity-70","children":"PM 02:03"}]]}]]}]]}]]}]]}]]}]]}]}],["$","$L19",null,{"slug":"report-15","title":"숫자를 믿기 전에 눈으로 봐라 — 무경험자의 RPG 개발노트 #003"}]]}]
+f:[["$","meta","0",{"name":"viewport","content":"width=device-width, initial-scale=1, maximum-scale=1"}],["$","meta","1",{"name":"theme-color","media":"(prefers-color-scheme: light)","content":"#ffffff"}],["$","meta","2",{"name":"theme-color","media":"(prefers-color-scheme: dark)","content":"#000000"}],["$","meta","3",{"charSet":"utf-8"}],["$","title","4",{"children":"숫자를 믿기 전에 눈으로 봐라 — 무경험자의 RPG 개발노트 #003 | illo"}],["$","meta","5",{"name":"description","content":"숫자를 믿기 전에 눈으로 봐라 — 무경험자의 RPG 개발노트 #003 - illo에서 최신 AI 트렌드와 인사이트를 확인하세요."}],["$","meta","6",{"name":"application-name","content":"illo"}],["$","link","7",{"rel":"author","href":"https://illo.im"}],["$","meta","8",{"name":"author","content":"illo"}],["$","meta","9",{"name":"keywords","content":"AI 트렌드, 인공지능, illo, AI 인사이트, 게임개발, RPG, 애니메이션, 스프라이트, 개발일지"}],["$","meta","10",{"name":"creator","content":"illo"}],["$","meta","11",{"name":"publisher","content":"illo"}],["$","meta","12",{"name":"robots","content":"index, follow"}],["$","meta","13",{"name":"googlebot","content":"index, follow, max-video-preview:-1, max-image-preview:large, max-snippet:-1"}],["$","meta","14",{"name":"pretendard-font","content":"https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/pretendard-dynamic-subset.css"}],["$","meta","15",{"name":"naver-site-verification","content":"fc6aff074a85b391562bd15daa80e96e0f2a946a"}],["$","meta","16",{"name":"naver-site-verification","content":"ae3b47b353b50f9a3ac06e4c0db4ac641738faee"}],["$","meta","17",{"name":"naver-site-verification","content":"6089a4a423224f2bfbf2ba87754c73d2b5e20f82"}],["$","meta","18",{"name":"msvalidate.01","content":"DEFC5BCB96FACF7035E1444299D359B2"}],["$","link","19",{"rel":"canonical","href":"https://illo.im/insight/article/report-15"}],["$","meta","20",{"property":"og:title","content":"숫자를 믿기 전에 눈으로 봐라 — 무경험자의 RPG 개발노트 #003 | illo"}],["$","meta","21",{"property":"og:description","content":"숫자를 믿기 전에 눈으로 봐라 — 무경험자의 RPG 개발노트 #003 - illo에서 최신 AI 트렌드와 인사이트를 확인하세요."}],["$","meta","22",{"property":"og:url","content":"https://illo.im/insight/article/report-15"}],["$","meta","23",{"property":"og:site_name","content":"illo"}],["$","meta","24",{"property":"og:locale","content":"ko_KR"}],["$","meta","25",{"property":"og:image","content":"https://illo.im/thumbnails/guide/guide18.png?v=1"}],["$","meta","26",{"property":"og:image:width","content":"1200"}],["$","meta","27",{"property":"og:image:height","content":"630"}],["$","meta","28",{"property":"og:image:alt","content":"숫자를 믿기 전에 눈으로 봐라 — 무경험자의 RPG 개발노트 #003"}],["$","meta","29",{"property":"og:type","content":"article"}],["$","meta","30",{"property":"article:published_time","content":"2026-08-16"}],["$","meta","31",{"name":"twitter:card","content":"summary_large_image"}],["$","meta","32",{"name":"twitter:title","content":"숫자를 믿기 전에 눈으로 봐라 — 무경험자의 RPG 개발노트 #003 | illo"}],["$","meta","33",{"name":"twitter:description","content":"숫자를 믿기 전에 눈으로 봐라 — 무경험자의 RPG 개발노트 #003 - illo에서 최신 AI 트렌드와 인사이트를 확인하세요."}],["$","meta","34",{"name":"twitter:image","content":"https://illo.im/thumbnails/guide/guide18.png?v=1"}],["$","link","35",{"rel":"icon","href":"/favicon.ico","type":"image/x-icon","sizes":"64x64"}],["$","link","36",{"rel":"icon","href":"/icon.svg","type":"image/svg+xml"}],["$","link","37",{"rel":"icon","href":"/icon.png","type":"image/png","sizes":"512x512"}],["$","link","38",{"rel":"apple-touch-icon","href":"/apple-icon.png","type":"image/png","sizes":"180x180"}]]
+1:null
