@@ -1,0 +1,140 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="2048" height="1152" viewBox="0 0 2048 1152">
+  <title>AI만학도 채널 배너 — 벡터 버전</title>
+  <defs>
+    <!-- 캔버스 결(유화 질감) -->
+    <filter id="canvas" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.9" numOctaves="4" seed="7" result="n"/>
+      <feColorMatrix in="n" type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.11"/></feComponentTransfer>
+    </filter>
+    <!-- 붓자국(넓은 결) -->
+    <filter id="brush" x="0" y="0" width="100%" height="100%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012 0.05" numOctaves="3" seed="3" result="n"/>
+      <feColorMatrix in="n" type="saturate" values="0"/>
+      <feComponentTransfer><feFuncA type="linear" slope="0.16"/></feComponentTransfer>
+    </filter>
+
+    <linearGradient id="wall" x1="0.1" y1="0" x2="0.9" y2="1">
+      <stop offset="0"   stop-color="#F0E7D0"/>
+      <stop offset="0.55" stop-color="#E5DAC0"/>
+      <stop offset="1"   stop-color="#D3C5A6"/>
+    </linearGradient>
+    <linearGradient id="desk" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#DDCBA4"/>
+      <stop offset="1" stop-color="#CDB88D"/>
+    </linearGradient>
+    <linearGradient id="screen" x1="0" y1="0" x2="0.3" y2="1">
+      <stop offset="0" stop-color="#FBF8F0"/>
+      <stop offset="1" stop-color="#EDE6D6"/>
+    </linearGradient>
+    <radialGradient id="lamp" cx="0.18" cy="0.12" r="0.75">
+      <stop offset="0"   stop-color="#FFF3D6" stop-opacity="0.75"/>
+      <stop offset="0.6" stop-color="#FFF3D6" stop-opacity="0.12"/>
+      <stop offset="1"   stop-color="#FFF3D6" stop-opacity="0"/>
+    </radialGradient>
+    <!-- 글씨 자리 밴드 -->
+    <linearGradient id="band" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0"    stop-color="#14213D" stop-opacity="0"/>
+      <stop offset="0.18" stop-color="#14213D" stop-opacity="0.84"/>
+      <stop offset="0.82" stop-color="#14213D" stop-opacity="0.84"/>
+      <stop offset="1"    stop-color="#14213D" stop-opacity="0"/>
+    </linearGradient>
+    <linearGradient id="vig" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0"    stop-color="#0B1220" stop-opacity="0.30"/>
+      <stop offset="0.55" stop-color="#0B1220" stop-opacity="0.05"/>
+      <stop offset="1"    stop-color="#0B1220" stop-opacity="0.18"/>
+    </linearGradient>
+
+    <g id="kbd">
+      <rect x="0" y="0" width="300" height="96" rx="9" fill="#F2ECDD" stroke="#2A3244" stroke-width="5"/>
+      <g fill="#4A5468">
+        <rect x="16" y="16" width="46" height="20" rx="4"/><rect x="70" y="16" width="150" height="20" rx="4"/>
+        <rect x="228" y="16" width="56" height="20" rx="4"/>
+        <rect x="16" y="44" width="90" height="20" rx="4"/><rect x="114" y="44" width="170" height="20" rx="4"/>
+        <rect x="60" y="70" width="180" height="18" rx="4"/>
+      </g>
+      <rect x="16" y="16" width="46" height="20" rx="4" fill="#D99A2B"/>
+      <rect x="228" y="44" width="56" height="20" rx="4" fill="#4A86C8"/>
+    </g>
+    <linearGradient id="bandMaskG" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0"    stop-color="#fff" stop-opacity="1"/>
+      <stop offset="0.58" stop-color="#fff" stop-opacity="1"/>
+      <stop offset="1"    stop-color="#fff" stop-opacity="0.18"/>
+    </linearGradient>
+    <mask id="bandMask"><rect x="0" y="500" width="2048" height="300" fill="url(#bandMaskG)"/></mask>
+  </defs>
+
+  <!-- 벽 -->
+  <rect width="2048" height="1152" fill="url(#wall)"/>
+  <!-- 책상 -->
+  <rect x="0" y="560" width="2048" height="592" fill="url(#desk)"/>
+  <rect x="0" y="556" width="2048" height="10" fill="#BCA679" opacity="0.7"/>
+  <rect x="0" y="1078" width="2048" height="74" fill="#A8834F"/>
+  <rect x="0" y="1072" width="2048" height="8" fill="#8E6B3C" opacity="0.6"/>
+
+  <g opacity="0.20" fill="#5C4A2E">
+    <ellipse cx="470" cy="556" rx="330" ry="16"/>
+    <ellipse cx="1060" cy="558" rx="300" ry="17"/>
+    <ellipse cx="1690" cy="556" rx="215" ry="15"/>
+  </g>
+  <!-- 모니터 3대: 상단 2/3 에만 배치 → 글씨 자리(548~742) 침범 안 함 -->
+  <g stroke="#232B3D" stroke-width="17" stroke-linejoin="round">
+    <!-- 좌측 (약간 기울임) -->
+    <g transform="rotate(-2.2 470 330)">
+      <rect x="150" y="176" width="640" height="356" rx="12" fill="url(#screen)"/>
+      <g fill="#D9D2C0" stroke="none"><rect x="184" y="212" width="250" height="16" rx="8"/>
+        <rect x="184" y="246" width="420" height="12" rx="6"/><rect x="184" y="272" width="380" height="12" rx="6"/>
+        <rect x="184" y="298" width="440" height="12" rx="6"/><rect x="184" y="324" width="300" height="12" rx="6"/>
+        <rect x="184" y="360" width="410" height="12" rx="6"/><rect x="184" y="386" width="350" height="12" rx="6"/></g>
+      <rect x="184" y="212" width="120" height="16" rx="8" fill="#D99A2B" opacity="0.75" stroke="none"/>
+    </g>
+    <!-- 중앙 (가장 큼) -->
+    <rect x="700" y="120" width="720" height="404" rx="12" fill="url(#screen)"/>
+    <!-- 우측 (세로형) -->
+    <g transform="rotate(2.6 1690 340)">
+      <rect x="1490" y="168" width="404" height="364" rx="12" fill="url(#screen)"/>
+      <g fill="#D3DAE4" stroke="none"><rect x="1522" y="204" width="180" height="14" rx="7"/>
+        <rect x="1522" y="236" width="330" height="11" rx="5"/><rect x="1522" y="260" width="300" height="11" rx="5"/>
+        <rect x="1522" y="300" width="330" height="66" rx="8" fill="#E3D6BB"/>
+        <rect x="1522" y="384" width="280" height="11" rx="5"/><rect x="1522" y="408" width="320" height="11" rx="5"/></g>
+    </g>
+  </g>
+  <!-- 중앙 화면 내용 (테두리 밖에서 그려 선 굵기 영향 없게) -->
+  <g fill="#DAD3C1">
+    <rect x="742" y="164" width="300" height="18" rx="9"/>
+    <rect x="742" y="204" width="620" height="13" rx="6"/><rect x="742" y="232" width="560" height="13" rx="6"/>
+    <rect x="742" y="260" width="640" height="13" rx="6"/><rect x="742" y="288" width="470" height="13" rx="6"/>
+    <rect x="742" y="330" width="600" height="13" rx="6"/><rect x="742" y="358" width="520" height="13" rx="6"/>
+    <rect x="742" y="386" width="610" height="13" rx="6"/><rect x="742" y="414" width="360" height="13" rx="6"/>
+  </g>
+  <rect x="742" y="164" width="150" height="18" rx="9" fill="#D99A2B" opacity="0.8"/>
+
+  <!-- 모니터 받침 -->
+  <g fill="#232B3D">
+    <rect x="1042" y="524" width="36" height="30"/><rect x="960" y="548" width="200" height="14" rx="7"/>
+  </g>
+
+  <!-- 책상 위 소품: 글씨 자리 피해 우측·하단으로 -->
+  <use href="#kbd" x="1500" y="820"/>
+  <use href="#kbd" x="1120" y="900" transform="rotate(-1.5 1270 948)"/>
+  <ellipse cx="1900" cy="905" rx="52" ry="34" fill="#8C3B34" stroke="#2A3244" stroke-width="5"/>
+  <circle cx="300" cy="880" r="46" fill="#E9E2D0" stroke="#2A3244" stroke-width="6"/>
+  <circle cx="300" cy="880" r="16" fill="#D99A2B"/>
+
+  <!-- 벽시계 -->
+  <circle cx="1905" cy="105" r="52" fill="#EFE8D6" stroke="#2A3244" stroke-width="9"/>
+  <path d="M1905 105 L1905 74 M1905 105 L1928 118" stroke="#2A3244" stroke-width="7" stroke-linecap="round"/>
+
+  <!-- 빛 · 질감 -->
+  <rect width="2048" height="1152" fill="url(#lamp)"/>
+  <rect width="2048" height="1152" filter="url(#brush)" opacity="0.55"/>
+  <rect width="2048" height="1152" filter="url(#canvas)"/>
+  <rect width="2048" height="1152" fill="url(#vig)"/>
+
+  <!-- 글씨 밴드 + 텍스트 (검증된 좌표) -->
+  <rect x="0" y="548" width="2048" height="194" fill="url(#band)" mask="url(#bandMask)"/>
+  <g font-family="Pretendard, 'Pretendard Variable', 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', 'WenQuanYi Zen Hei', sans-serif">
+    <text x="470" y="652" font-size="100" font-weight="800" letter-spacing="-2" fill="#F5EFE0"><tspan fill="#E8A33D">AI</tspan>만학도</text>
+    <text x="474" y="710" font-size="40" font-weight="500" letter-spacing="-0.5" fill="#C9C2B4">늦게 시작해서, 직접 만들어 봅니다</text>
+  </g>
+</svg>
