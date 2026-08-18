@@ -1,0 +1,37 @@
+<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+     width="2048" height="1152" viewBox="0 0 2048 1152">
+  <title>AI만학도 유튜브 채널 배너 — A안 · 라이트</title>
+
+  <defs>
+    <!-- 밴드: 위아래 가장자리를 흐리게 빼서 유화 위에 얹어도 판때기처럼 보이지 않게 -->
+    <linearGradient id="bandFade" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0"    stop-color="#F7F1E3" stop-opacity="0"/>
+      <stop offset="0.16" stop-color="#F7F1E3" stop-opacity="0.88"/>
+      <stop offset="0.84" stop-color="#F7F1E3" stop-opacity="0.88"/>
+      <stop offset="1"    stop-color="#F7F1E3" stop-opacity="0"/>
+    </linearGradient>
+  </defs>
+
+  <!-- ▼ 배경: xlink:href 에 배너 원본(유화) 경로를 넣으세요.
+       원본이 4:3 이므로 slice 로 위아래가 잘립니다.
+       키보드가 놓인 책상 면이 y 548~742 구간에 오도록 크롭을 맞추세요. -->
+  <image id="bg" x="0" y="0" width="2048" height="1152"
+         preserveAspectRatio="xMidYMid slice" xlink:href=""/>
+
+  <!-- ▼ 하단 밴드 — 실제 위치는 안전영역(y 407~745)의 아래쪽 -->
+  <rect x="0" y="548" width="2048" height="194" fill="url(#bandFade)"/>
+
+  <!-- ▼ 텍스트 — 좌측 정렬 축 x=470 (안전영역 왼쪽 경계 406 에서 64px 안쪽) -->
+  <g font-family="Pretendard, 'Pretendard Variable', 'Noto Sans KR', 'Malgun Gothic', 'Apple SD Gothic Neo', 'WenQuanYi Zen Hei', sans-serif">
+    <text x="470" y="652" font-size="100" font-weight="800" letter-spacing="-2" fill="#1C1C1C"><tspan fill="#D99A2B">AI</tspan>만학도</text>
+    <text x="474" y="710" font-size="40" font-weight="500" letter-spacing="-0.5" fill="#4A4438">늦게 시작해서, 직접 만들어 봅니다</text>
+  </g>
+
+  <!-- ▼ 확인용 가이드 — 내보내기 전 display="none" 으로 바꾸거나 이 <g> 를 통째로 지우세요 -->
+  <g id="guides" display="inline" fill="none" stroke-dasharray="14 10" font-family="monospace">
+    <rect x="251"  y="364.5" width="1546" height="423" stroke="#3B82F6" stroke-width="3"/>
+    <rect x="406"  y="407"   width="1235" height="338" stroke="#EF4444" stroke-width="4"/>
+    <text x="251"  y="352"   fill="#3B82F6" font-size="26">데스크톱 1546 x 423</text>
+    <text x="406"  y="775"   fill="#EF4444" font-size="26">모든 기기 안전영역 1235 x 338</text>
+  </g>
+</svg>
